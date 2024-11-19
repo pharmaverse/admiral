@@ -128,7 +128,13 @@ parameter code \code{"HGHT"}.
 \item{keep_nas}{Keep observations with \code{NA}s
 
 If the argument is set to \code{TRUE}, observations are added even if some of
-the values contributing to the computed value are \code{NA}.}
+the values contributing to the computed value are \code{NA} (see Example 1b).
+
+If the argument is set to a list of variables, observations are added even
+if some of specified variables are \code{NA} (see Example 1c).
+
+\emph{Permitted Values:} \code{TRUE}, \code{FALSE}, or a list of variables created by
+\code{exprs()} e.g. \code{exprs(ADTF, ATMF)}}
 }
 \value{
 The input dataset with the new parameter added. Note, a variable will only
@@ -147,7 +153,9 @@ For each group (with respect to the variables specified for the
 \code{by_vars} parameter) an observation is added to the output dataset if the
 filtered input dataset (\code{dataset}) or the additional dataset
 (\code{dataset_add}) contains exactly one observation for each parameter code
-specified for \code{parameters}.
+specified for \code{parameters} and all contributing values like \code{AVAL.SYSBP}
+are not \code{NA}. The \code{keep_nas} can be used to specify variables for which
+\code{NA}s are acceptable. See also Example 1b and 1c.
 
 For the new observations the variables specified for \code{set_values_to} are
 set to the provided values. The values of the other variables of the input
@@ -160,17 +168,18 @@ library(lubridate)
 
 # Example 1a: Derive MAP
 advs <- tribble(
-  ~USUBJID, ~PARAMCD, ~PARAM, ~AVAL, ~AVALU, ~VISIT,
-  "01-701-1015", "DIABP", "Diastolic Blood Pressure (mmHg)", 51, "mmHg", "BASELINE",
-  "01-701-1015", "DIABP", "Diastolic Blood Pressure (mmHg)", 50, "mmHg", "WEEK 2",
-  "01-701-1015", "SYSBP", "Systolic Blood Pressure (mmHg)", 121, "mmHg", "BASELINE",
-  "01-701-1015", "SYSBP", "Systolic Blood Pressure (mmHg)", 121, "mmHg", "WEEK 2",
-  "01-701-1028", "DIABP", "Diastolic Blood Pressure (mmHg)", 79, "mmHg", "BASELINE",
-  "01-701-1028", "DIABP", "Diastolic Blood Pressure (mmHg)", 80, "mmHg", "WEEK 2",
-  "01-701-1028", "SYSBP", "Systolic Blood Pressure (mmHg)", 130, "mmHg", "BASELINE",
-  "01-701-1028", "SYSBP", "Systolic Blood Pressure (mmHg)", 132, "mmHg", "WEEK 2"
+  ~USUBJID,      ~PARAMCD, ~PARAM,                            ~AVAL, ~VISIT,
+  "01-701-1015", "DIABP",  "Diastolic Blood Pressure (mmHg)",    51, "BASELINE",
+  "01-701-1015", "DIABP",  "Diastolic Blood Pressure (mmHg)",    50, "WEEK 2",
+  "01-701-1015", "SYSBP",  "Systolic Blood Pressure (mmHg)",    121, "BASELINE",
+  "01-701-1015", "SYSBP",  "Systolic Blood Pressure (mmHg)",    121, "WEEK 2",
+  "01-701-1028", "DIABP",  "Diastolic Blood Pressure (mmHg)",    79, "BASELINE",
+  "01-701-1028", "DIABP",  "Diastolic Blood Pressure (mmHg)",    80, "WEEK 2",
+  "01-701-1028", "SYSBP",  "Systolic Blood Pressure (mmHg)",    130, "BASELINE",
+  "01-701-1028", "SYSBP",  "Systolic Blood Pressure (mmHg)",     NA, "WEEK 2"
 ) \%>\%
   mutate(
+    AVALU = "mmHg",
     ADT = case_when(
       VISIT == "BASELINE" ~ as.Date("2024-01-10"),
       VISIT == "WEEK 2" ~ as.Date("2024-01-24")
@@ -191,8 +200,8 @@ derive_param_computed(
   )
 )
 
-# Example 1b: Using option `keep_nas = TRUE` to derive MAP in the case where some/all values
-# of a variable used in the computation are missing
+# Example 1b: Using option `keep_nas = TRUE` to derive MAP in the case where some/all
+# values of a variable used in the computation are missing
 
 derive_param_computed(
   advs,
@@ -207,6 +216,24 @@ derive_param_computed(
     ADTF = ADTF.SYSBP
   ),
   keep_nas = TRUE
+)
+
+# Example 1c: Using option `keep_nas = exprs(ADTF)` to derive MAP in the case where
+# some/all values of a variable used in the computation are missing but ignoring ADTF
+
+derive_param_computed(
+  advs,
+  by_vars = exprs(USUBJID, VISIT),
+  parameters = c("SYSBP", "DIABP"),
+  set_values_to = exprs(
+    AVAL = (AVAL.SYSBP + 2 * AVAL.DIABP) / 3,
+    PARAMCD = "MAP",
+    PARAM = "Mean Arterial Pressure (mmHg)",
+    AVALU = "mmHg",
+    ADT = ADT.SYSBP,
+    ADTF = ADTF.SYSBP
+  ),
+  keep_nas = exprs(ADTF)
 )
 
 # Example 2: Derive BMI where height is measured only once

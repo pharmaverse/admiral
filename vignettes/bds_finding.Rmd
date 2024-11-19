@@ -701,6 +701,14 @@ advs <- derive_var_shift(advs,
 )
 ```
 
+```{r, eval=TRUE, echo=FALSE}
+dataset_vignette(
+  advs,
+  display_vars = exprs(USUBJID, SHIFT1, BNRIND, ANRIND, VISIT),
+  filter = PARAMCD == "DIABP" & VISIT %in% c("WEEK 2", "WEEK 8")
+)
+```
+
 If the variables should not be derived for all records, e.g., for post-baseline
 records only, `restrict_derivation()` can be used.
 

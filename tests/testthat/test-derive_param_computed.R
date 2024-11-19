@@ -399,9 +399,135 @@ test_that("derive_param_computed Test 9: compute multiple variables, keep_nas", 
   )
 })
 
+## Test 10: specify variables for keep_nas ----
+test_that("derive_param_computed Test 10: specify variables for keep_nas", {
+  advs <- tibble::tribble(
+    ~USUBJID,      ~PARAMCD, ~PARAM,                            ~AVAL, ~AVISIT,
+    "01-701-1015", "DIABP",  "Diastolic Blood Pressure (mmHg)",    51, "BASELINE",
+    "01-701-1015", "DIABP",  "Diastolic Blood Pressure (mmHg)",    50, "WEEK 2",
+    "01-701-1015", "SYSBP",  "Systolic Blood Pressure (mmHg)",    121, "BASELINE",
+    "01-701-1015", "SYSBP",  "Systolic Blood Pressure (mmHg)",    121, "WEEK 2",
+    "01-701-1028", "DIABP",  "Diastolic Blood Pressure (mmHg)",    79, "BASELINE",
+    "01-701-1028", "DIABP",  "Diastolic Blood Pressure (mmHg)",    80, "WEEK 2",
+    "01-701-1028", "SYSBP",  "Systolic Blood Pressure (mmHg)",    130, "BASELINE",
+    "01-701-1028", "SYSBP",  "Systolic Blood Pressure (mmHg)",     NA, "WEEK 2"
+  ) %>%
+    mutate(
+      ADT = case_when(
+        AVISIT == "BASELINE" ~ as.Date("2024-01-10"),
+        AVISIT == "WEEK 2" ~ as.Date("2024-01-24")
+      ),
+      ADTF = NA_character_
+    )
+
+  expected <- bind_rows(
+    advs,
+    tibble::tribble(
+      ~USUBJID,      ~AVISIT,    ~AVAL,
+      "01-701-1015", "BASELINE", (121 + 2 * 51) / 3,
+      "01-701-1015", "WEEK 2",   (121 + 2 * 50) / 3,
+      "01-701-1028", "BASELINE", (130 + 2 * 79) / 3
+    ) %>%
+      mutate(
+        PARAMCD = "MAP",
+        PARAM = "Mean Arterial Pressure (mmHg)",
+        ADT = case_when(
+          AVISIT == "BASELINE" ~ as.Date("2024-01-10"),
+          AVISIT == "WEEK 2" ~ as.Date("2024-01-24")
+        ),
+        ADTF = NA_character_
+      )
+  )
+
+  actual <- derive_param_computed(
+    advs,
+    by_vars = exprs(USUBJID, AVISIT),
+    parameters = c("SYSBP", "DIABP"),
+    set_values_to = exprs(
+      AVAL = (AVAL.SYSBP + 2 * AVAL.DIABP) / 3,
+      PARAMCD = "MAP",
+      PARAM = "Mean Arterial Pressure (mmHg)",
+      ADT = ADT.SYSBP,
+      ADTF = ADTF.SYSBP
+    ),
+    keep_nas = exprs(ADTF)
+  )
+
+  expect_dfs_equal(
+    base = expected,
+    compare = actual,
+    keys = c("USUBJID", "PARAMCD", "AVISIT")
+  )
+})
+
+## Test 11: error if keep_nas is invalid ----
+test_that("derive_param_computed Test 11: error if keep_nas is invalid", {
+  advs <- tibble::tribble(
+    ~USUBJID,      ~PARAMCD, ~PARAM,                            ~AVAL, ~AVISIT,
+    "01-701-1015", "DIABP",  "Diastolic Blood Pressure (mmHg)",    51, "BASELINE",
+    "01-701-1015", "DIABP",  "Diastolic Blood Pressure (mmHg)",    50, "WEEK 2",
+    "01-701-1015", "SYSBP",  "Systolic Blood Pressure (mmHg)",    121, "BASELINE",
+    "01-701-1015", "SYSBP",  "Systolic Blood Pressure (mmHg)",    121, "WEEK 2",
+    "01-701-1028", "DIABP",  "Diastolic Blood Pressure (mmHg)",    79, "BASELINE",
+    "01-701-1028", "DIABP",  "Diastolic Blood Pressure (mmHg)",    80, "WEEK 2",
+    "01-701-1028", "SYSBP",  "Systolic Blood Pressure (mmHg)",    130, "BASELINE",
+    "01-701-1028", "SYSBP",  "Systolic Blood Pressure (mmHg)",     NA, "WEEK 2"
+  )
+
+  expect_snapshot(
+    derive_param_computed(
+      advs,
+      by_vars = exprs(USUBJID, AVISIT),
+      parameters = c("SYSBP", "DIABP"),
+      set_values_to = exprs(
+        AVAL = (AVAL.SYSBP + 2 * AVAL.DIABP) / 3,
+        PARAMCD = "MAP",
+        PARAM = "Mean Arterial Pressure (mmHg)"
+      ),
+      keep_nas = 3
+    ),
+    error = TRUE
+  )
+})
+
+## Test 12: inform if no new records due to NAs ----
+test_that("derive_param_computed Test 12: inform if no new records due to NAs", {
+  advs <- tibble::tribble(
+    ~USUBJID,      ~PARAMCD, ~PARAM,                            ~AVAL, ~AVISIT,
+    "01-701-1015", "DIABP",  "Diastolic Blood Pressure (mmHg)",    51, "BASELINE",
+    "01-701-1015", "DIABP",  "Diastolic Blood Pressure (mmHg)",    50, "WEEK 2",
+    "01-701-1015", "SYSBP",  "Systolic Blood Pressure (mmHg)",    121, "BASELINE",
+    "01-701-1015", "SYSBP",  "Systolic Blood Pressure (mmHg)",    121, "WEEK 2",
+    "01-701-1028", "DIABP",  "Diastolic Blood Pressure (mmHg)",    79, "BASELINE",
+    "01-701-1028", "DIABP",  "Diastolic Blood Pressure (mmHg)",    80, "WEEK 2",
+    "01-701-1028", "SYSBP",  "Systolic Blood Pressure (mmHg)",    130, "BASELINE",
+    "01-701-1028", "SYSBP",  "Systolic Blood Pressure (mmHg)",     NA, "WEEK 2"
+  ) %>%
+    mutate(
+      ADT = case_when(
+        AVISIT == "BASELINE" ~ as.Date("2024-01-10"),
+        AVISIT == "WEEK 2" ~ as.Date("2024-01-24")
+      ),
+      ADTF = NA_character_
+    )
+
+  expect_snapshot(derive_param_computed(
+    advs,
+    by_vars = exprs(USUBJID, AVISIT),
+    parameters = c("SYSBP", "DIABP"),
+    set_values_to = exprs(
+      AVAL = (AVAL.SYSBP + 2 * AVAL.DIABP) / 3,
+      PARAMCD = "MAP",
+      PARAM = "Mean Arterial Pressure (mmHg)",
+      ADT = ADT.SYSBP,
+      ADTF = ADTF.SYSBP
+    )
+  ))
+})
+
 # assert_parameters_argument ----
-## Test 10: error if argument is of wrong type ----
-test_that("assert_parameters_argument Test 10: error if argument is of wrong type", {
+## Test 13: error if argument is of wrong type ----
+test_that("assert_parameters_argument Test 13: error if argument is of wrong type", {
   expect_snapshot(
     assert_parameters_argument(myparameters <- c(1, 2, 3)),
     error = TRUE
@@ -409,8 +535,8 @@ test_that("assert_parameters_argument Test 10: error if argument is of wrong typ
 })
 
 # get_hori_data ----
-## Test 11: error if variables with more than one dot ----
-test_that("get_hori_data Test 11: error if variables with more than one dot", {
+## Test 14: error if variables with more than one dot ----
+test_that("get_hori_data Test 14: error if variables with more than one dot", {
   input <- tibble::tribble(
     ~USUBJID, ~PARAMCD, ~PARAM, ~AVAL, ~AVALU, ~VISIT,
     "01-701-1015", "DIABP", "Diastolic Blood Pressure (mmHg)", 51, "mmHg", "BASELINE",
