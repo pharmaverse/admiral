@@ -150,15 +150,30 @@ derive_param_map <- function(dataset,
     )
   }
 
-  derive_param_computed(
-    dataset,
-    filter = !!filter,
-    parameters = c(sysbp_code, diabp_code, hr_code),
-    by_vars = by_vars,
-    set_values_to = exprs(
-      AVAL = !!analysis_value,
-      !!!set_values_to
-    )
+  withCallingHandlers(
+    derive_param_computed(
+      dataset,
+      filter = !!filter,
+      parameters = c(sysbp_code, diabp_code, hr_code),
+      by_vars = by_vars,
+      set_values_to = exprs(
+        AVAL = !!analysis_value,
+        !!!set_values_to
+      )
+    ),
+    derive_param_computed_all_na = function(cnd) {
+      cli_inform(
+        c(
+          paste(
+            "No computed records were added because for all potential computed",
+            "records at least one of the contributing values was {.val {NA}}."
+          ),
+          "If this is not expected, please check the input data."
+        ),
+        class = class(cnd)
+      )
+      cnd_muffle(cnd)
+    }
   )
 }
 
@@ -428,17 +443,32 @@ derive_param_bsa <- function(dataset,
     constant_parameters <- c(height_code)
   }
 
-  derive_param_computed(
-    dataset,
-    filter = !!filter,
-    parameters = parameters,
-    by_vars = by_vars,
-    set_values_to = exprs(
-      AVAL = !!bsa_formula,
-      !!!set_values_to
+  withCallingHandlers(
+    derive_param_computed(
+      dataset,
+      filter = !!filter,
+      parameters = parameters,
+      by_vars = by_vars,
+      set_values_to = exprs(
+        AVAL = !!bsa_formula,
+        !!!set_values_to
+      ),
+      constant_parameters = constant_parameters,
+      constant_by_vars = constant_by_vars
     ),
-    constant_parameters = constant_parameters,
-    constant_by_vars = constant_by_vars
+    derive_param_computed_all_na = function(cnd) {
+      cli_inform(
+        c(
+          paste(
+            "No computed records were added because for all potential computed",
+            "records at least one of the contributing values was {.val {NA}}."
+          ),
+          "If this is not expected, please check the input data."
+        ),
+        class = class(cnd)
+      )
+      cnd_muffle(cnd)
+    }
   )
 }
 
@@ -462,7 +492,7 @@ derive_param_bsa <- function(dataset,
 #'
 #'   Mosteller: sqrt(height * weight / 3600)
 #'
-#'   DuBois-DuBois: 0.20247 * (height/100) ^ 0.725 * weight ^ 0.425
+#'   DuBois-DuBois: 0.007184 * height ^ 0.725 * weight ^ 0.425
 #'
 #'   Haycock: 0.024265 * height ^ 0.3964 * weight ^ 0.5378
 #'
@@ -519,9 +549,7 @@ compute_bsa <- function(height = height,
   if (method == "Mosteller") {
     bsa <- sqrt(height * weight / 3600)
   } else if (method == "DuBois-DuBois") {
-    # The DuBois & DuBois formula expects the value of height in meters
-    # We need to convert from cm
-    bsa <- 0.20247 * (height / 100)^0.725 * weight^0.425
+    bsa <- 0.007184 * height^0.725 * weight^0.425
   } else if (method == "Haycock") {
     bsa <- 0.024265 * height^0.3964 * weight^0.5378
   } else if (method == "Gehan-George") {
@@ -718,17 +746,32 @@ derive_param_bmi <- function(dataset,
     constant_parameters <- c(height_code)
   }
 
-  derive_param_computed(
-    dataset,
-    filter = !!filter,
-    parameters = parameters,
-    by_vars = by_vars,
-    set_values_to = exprs(
-      AVAL = !!bmi_formula,
-      !!!set_values_to
+  withCallingHandlers(
+    derive_param_computed(
+      dataset,
+      filter = !!filter,
+      parameters = parameters,
+      by_vars = by_vars,
+      set_values_to = exprs(
+        AVAL = !!bmi_formula,
+        !!!set_values_to
+      ),
+      constant_parameters = constant_parameters,
+      constant_by_vars = constant_by_vars
     ),
-    constant_parameters = constant_parameters,
-    constant_by_vars = constant_by_vars
+    derive_param_computed_all_na = function(cnd) {
+      cli_inform(
+        c(
+          paste(
+            "No computed records were added because for all potential computed",
+            "records at least one of the contributing values was {.val {NA}}."
+          ),
+          "If this is not expected, please check the input data."
+        ),
+        class = class(cnd)
+      )
+      cnd_muffle(cnd)
+    }
   )
 }
 

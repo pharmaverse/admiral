@@ -5,6 +5,8 @@
 # SRCVAR, e.g., AEDECOD, AELLT, ...
 # TERMCHAR, non NULL
 
+library(dplyr) # nolint
+
 queries <- tibble::tribble(
   ~PREFIX, ~GRPNAME, ~GRPID, ~SCOPE,
   ~SCOPEN, ~SRCVAR, ~TERMCHAR, ~TERMNUM,
@@ -40,27 +42,36 @@ queries <- tibble::tribble(
   NA_integer_, "AELLTCD", NA_character_, 1L
 )
 
-adae <- tibble::tribble(
-  ~USUBJID, ~ASTDTM, ~AETERM, ~AESEQ, ~AEDECOD, ~AELLT, ~AELLTCD,
-  "01", "2020-06-02 23:59:59", "ERYTHEMA", 3,
-  "Erythema", "Localized erythema", NA_integer_,
-  "02", "2020-06-05 23:59:59", "BASEDOW'S DISEASE", 5,
-  "Basedow's disease", NA_character_, NA_integer_,
-  "02", "2020-06-05 23:59:59", "ALVEOLAR PROTEINOSIS", 1,
-  "Alveolar proteinosis", NA_character_, NA_integer_,
-  "03", "2020-06-07 23:59:59", "SOME TERM", 2,
-  "Some query", "Some term", NA_integer_,
-  "04", "2020-06-10 23:59:59", "APPLICATION SITE ERYTHEMA", 7,
-  "APPLICATION SITE ERYTHEMA", "Application site erythema", 1
+admiral:::assert_valid_queries(queries)
+
+# Get previous dataset for comparison
+queries_old <- admiral::queries
+
+#  create queries.rda in data/
+usethis::use_data(queries, overwrite = TRUE)
+
+# Compare with previous version
+diffdf::diffdf(
+  base = queries_old,
+  compare = queries,
+  keys = c("PREFIX", "TERMCHAR", "TERMNUM")
 )
-
-# try below:
-derive_vars_query(adae, queries)
-
 
 # example to use for ADMH:
 queries_mh <- queries %>%
   filter(SRCVAR %in% c("AELLT", "AEDECOD")) %>%
   mutate(SRCVAR = ifelse(SRCVAR == "AELLT", "MHLLT", "MHDECOD"))
 
-derive_vars_query(admh, queries_mh)
+admiral:::assert_valid_queries(queries)
+
+# Get previous dataset for comparison
+queries_mh_old <- admiral::queries_mh
+
+usethis::use_data(queries_mh, overwrite = TRUE)
+
+# Compare with previous version
+diffdf::diffdf(
+  base = queries_mh_old,
+  compare = queries_mh,
+  keys = c("PREFIX", "TERMCHAR", "TERMNUM")
+)

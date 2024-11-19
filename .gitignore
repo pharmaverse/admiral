@@ -54,3 +54,5 @@ admiral*.tgz
 ._.DS_Store
 
 .Rprofile
+/doc/
+/Meta/

@@ -449,6 +449,58 @@ derive_var_joined_exist_flag(
   first_cond_upper = val.join == "++",
   filter_join = val == "0" & all(val.join \%in\% c("+", "++"))
 )
+
+# flag each dose which is lower than the previous dose per subject
+ex <- tribble(
+  ~USUBJID, ~EXSTDTM,          ~EXDOSE,
+  "1",      "2024-01-01T08:00",      2,
+  "1",      "2024-01-02T08:00",      4,
+  "2",      "2024-01-01T08:30",      1,
+  "2",      "2024-01-02T08:30",      4,
+  "2",      "2024-01-03T08:30",      3,
+  "2",      "2024-01-04T08:30",      2,
+  "2",      "2024-01-05T08:30",      2
+)
+
+derive_var_joined_exist_flag(
+  ex,
+  dataset_add = ex,
+  by_vars = exprs(USUBJID),
+  order = exprs(EXSTDTM),
+  new_var = DOSREDFL,
+  tmp_obs_nr_var = tmp_dose_nr,
+  join_vars = exprs(EXDOSE),
+  join_type = "before",
+  filter_join = (
+    tmp_dose_nr == tmp_dose_nr.join + 1 # Look only at adjacent doses
+    & EXDOSE > 0 & EXDOSE.join > 0 # Both doses are valid
+    & EXDOSE < EXDOSE.join # Dose is lower than previous
+  )
+)
+
+# derive definitive deterioration flag as any deterioration (CHGCAT1 = "Worsened")
+# by parameter that is not followed by a non-deterioration
+adqs <- tribble(
+  ~USUBJID, ~PARAMCD, ~ADY, ~CHGCAT1,
+  "1",      "QS1",      10, "Improved",
+  "1",      "QS1",      21, "Improved",
+  "1",      "QS1",      23, "Improved",
+  "1",      "QS2",      32, "Worsened",
+  "1",      "QS2",      42, "Improved",
+  "2",      "QS1",      11, "Worsened",
+  "2",      "QS1",      24, "Worsened"
+)
+
+derive_var_joined_exist_flag(
+  adqs,
+  dataset_add = adqs,
+  new_var = DDETERFL,
+  by_vars = exprs(USUBJID, PARAMCD),
+  join_vars = exprs(CHGCAT1),
+  join_type = "all",
+  order = exprs(ADY),
+  filter_join = all(CHGCAT1.join == "Worsened" | ADY > ADY.join)
+)
 }
 \seealso{
 \code{\link[=filter_joined]{filter_joined()}}, \code{\link[=derive_vars_joined]{derive_vars_joined()}}
@@ -460,6 +512,7 @@ General Derivation Functions for all ADaMs that returns variable appended to dat
 \code{\link{derive_var_merged_summary}()},
 \code{\link{derive_var_obs_number}()},
 \code{\link{derive_var_relative_flag}()},
+\code{\link{derive_vars_cat}()},
 \code{\link{derive_vars_computed}()},
 \code{\link{derive_vars_joined}()},
 \code{\link{derive_vars_merged}()},

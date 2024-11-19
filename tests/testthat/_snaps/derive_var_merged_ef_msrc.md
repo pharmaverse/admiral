@@ -8,5 +8,5 @@
       Error in `derive_var_merged_ef_msrc()`:
       ! The dataset names must be included in the list specified for the `source_datasets` argument.
       i Following names were provided by `source_datasets`: cm and pro
-      i  But, `flag_events[[2]]$dataset_name = pr`
+      i But, `flag_events[[2]]$dataset_name = pr`
 

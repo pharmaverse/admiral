@@ -19,8 +19,8 @@ library(stringr)
 # For illustration purposes read in admiral test data
 
 # Load PP and Adsl
-data("pp")
-data("admiral_adsl")
+pp <- pharmaversesdtm::pp
+admiral_adsl <- admiral::admiral_adsl
 
 # When SAS datasets are imported into R using haven::read_sas(), missing
 # character values from SAS appear as "" characters in R, instead of appearing
@@ -31,51 +31,39 @@ pp <- convert_blanks_to_na(pp)
 
 # Lookup tables ----
 param_lookup <- tibble::tribble(
-  ~PPTESTCD, ~PARAMCD, ~PARAM, ~PARAMN,
-  "AUCALL", "AUCALL", "AUC All", 1,
-  "AUCIFO", "AUCIFO", "AUC Infinity Obs", 2,
-  "AUCIFOD", "AUCIFOD", "AUC Infinity Obs Norm by Dose", 3,
-  "AUCINT", "AUCINT", "AUC from T1 to T2", 4,
-  "AUCLST", "AUCLST", "AUC to Last Nonzero Conc", 5,
-  "AUCPEO", "AUCPEO", "AUC %Extrapolation Obs", 6,
-  "CEND", "CEND", "Concentration at the end of the infusion", 7, # non Cdisc Term
-  "CLO", "CLO", "Total CL Obs", 8,
-  "CLST", "CLST", "Last Nonzero Conc", 9,
-  "CMAX", "CMAX", "Max Conc", 10,
-  "CMAXD", "CMAXD", "Max Conc Norm by Dose", 11,
-  "CSF", "CSF", "CSF to Plasma Ratio", 12, # non Cdisc Term
-  "LAMZ", "LAMZ", "Lambda z", 13,
-  "LAMZHL", "LAMZHL", "Half-Life Lambda z", 14,
-  "LAMZNPT", "LAMZNPT", "Number of Points for Lambda z", 15,
-  "R2ADJ", "R2ADJ", "R Squared Adjusted", 16,
-  "TCEND", "TCEND", "Time of CEND", 17, # non Cdisc Term
-  "TLST", "TLST", "Time of Last Nonzero Conc", 18,
-  "TMAX", "TMAX", "Time of CMAX", 19,
-  "VSSO", "VSSO", "Vol Dist Steady State Obs", 20,
-  "RCAMINT", "RCAMINT", "Ae", 21,
-  "RENALCL", "RENALCL", "CLR", 22
+  ~PPTESTCD,  ~PARAMCD,                                     ~PARAM, ~PARAMN,
+  "AUCALL",   "AUCALL",                                  "AUC All",       1,
+  "AUCIFO",   "AUCIFO",                         "AUC Infinity Obs",       2,
+  "AUCIFOD", "AUCIFOD",            "AUC Infinity Obs Norm by Dose",       3,
+  "AUCINT",   "AUCINT",                        "AUC from T1 to T2",       4,
+  "AUCLST",   "AUCLST",                 "AUC to Last Nonzero Conc",       5,
+  "AUCPEO",   "AUCPEO",                   "AUC %Extrapolation Obs",       6,
+  "CEND",       "CEND", "Concentration at the end of the infusion",       7, # non Cdisc Term
+  "CLO",         "CLO",                             "Total CL Obs",       8,
+  "CLST",       "CLST",                        "Last Nonzero Conc",       9,
+  "CMAX",       "CMAX",                                 "Max Conc",      10,
+  "CMAXD",     "CMAXD",                    "Max Conc Norm by Dose",      11,
+  "CSF",         "CSF",                      "CSF to Plasma Ratio",      12, # non Cdisc Term
+  "LAMZ",       "LAMZ",                                 "Lambda z",      13,
+  "LAMZHL",   "LAMZHL",                       "Half-Life Lambda z",      14,
+  "LAMZNPT", "LAMZNPT",            "Number of Points for Lambda z",      15,
+  "R2ADJ",     "R2ADJ",                       "R Squared Adjusted",      16,
+  "TCEND",     "TCEND",                             "Time of CEND",      17, # non Cdisc Term
+  "TLST",       "TLST",                "Time of Last Nonzero Conc",      18,
+  "TMAX",       "TMAX",                             "Time of CMAX",      19,
+  "VSSO",       "VSSO",                "Vol Dist Steady State Obs",      20,
+  "RCAMINT", "RCAMINT",                                       "Ae",      21,
+  "RENALCL", "RENALCL",                                      "CLR",      22
 )
 
-# ASSIGN AVALCAT1
-avalcat_lookup <- tibble::tribble(
-  ~PARAMCD, ~AVALCA1N, ~AVALCAT1,
-  "AUCALL", 1, "< 19",
-  "AUCALL", 2, ">= 19"
+# Assign AVALCATx
+avalcax_lookup <- exprs(
+  ~PARAMCD, ~condition,       ~AVALCAT1, ~AVALCA1N,
+  "AUCALL",  AVAL < 19,           "<19",         1,
+  "AUCALL", AVAL >= 19,          ">=19",         2
 )
 
 attr(param_lookup$PPTESTCD, "label") <- "Parameter Short Name"
-
-# User defined functions ----
-
-# Here are some examples of how you can create your own functions that
-#  operates on vectors, which can be used in `mutate`.
-format_avalcat1n <- function(param, aval) {
-  case_when(
-    param == "AUCALL" & aval < 19 ~ 1,
-    param == "AUCALL" & aval >= 19 ~ 2,
-    TRUE ~ NA_real_
-  )
-}
 
 # Derivations ----
 
@@ -137,9 +125,10 @@ adpp_avisit <- adpp_aval %>%
     TRTA = TRT01A
   ) %>%
   ## Derive AVALCA1N and AVALCAT1 ----
-  mutate(AVALCA1N = format_avalcat1n(param = PARAMCD, aval = AVAL)) %>%
-  derive_vars_merged(dataset_add = avalcat_lookup, by_vars = exprs(PARAMCD, AVALCA1N))
-
+  derive_vars_cat(
+    definition = avalcax_lookup,
+    by_vars = exprs(PARAMCD)
+  )
 # Add all ADSL variables
 adpp <- adpp_avisit %>%
   derive_vars_merged(

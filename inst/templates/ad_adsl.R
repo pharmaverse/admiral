@@ -2,7 +2,7 @@
 #
 # Label: Subject Level Analysis Dataset
 #
-# Input: dm, ex, ds
+# Input: dm, ds, ex, ae, lb
 library(admiral)
 library(pharmaversesdtm) # Contains example datasets from the CDISC pilot project
 library(dplyr)
@@ -13,18 +13,19 @@ library(stringr)
 
 # Use e.g. haven::read_sas to read in .sas7bdat, or other suitable functions
 # as needed and assign to the variables below.
-# For illustration purposes read in admiral test data
+# For illustration purposes read in admiral test data.
 
-data("dm")
-data("ds")
-data("ex")
-data("ae")
-data("lb")
+dm <- pharmaversesdtm::dm
+ds <- pharmaversesdtm::ds
+ex <- pharmaversesdtm::ex
+ae <- pharmaversesdtm::ae
+lb <- pharmaversesdtm::lb
 
 # When SAS datasets are imported into R using haven::read_sas(), missing
 # character values from SAS appear as "" characters in R, instead of appearing
 # as NA values. Further details can be obtained via the following link:
 # https://pharmaverse.github.io/admiral/articles/admiral.html#handling-of-missing-values # nolint
+
 
 dm <- convert_blanks_to_na(dm)
 ds <- convert_blanks_to_na(ds)
@@ -93,27 +94,6 @@ ex_ext <- ex %>%
     new_vars_prefix = "EXEN",
     time_imputation = "last"
   )
-
-# Source objects ----
-
-# Death cause sources
-src_ae <- dthcaus_source(
-  dataset_name = "ae",
-  filter = AEOUT == "FATAL",
-  date = convert_dtc_to_dtm(AESTDTC, highest_imputation = "M"),
-  mode = "first",
-  dthcaus = AEDECOD,
-  set_values_to = exprs(DTHDOM = "AE", DTHSEQ = AESEQ)
-)
-
-src_ds <- dthcaus_source(
-  dataset_name = "ds",
-  filter = DSDECOD == "DEATH" & grepl("DEATH DUE TO", DSTERM),
-  date = DSSTDT,
-  mode = "first",
-  dthcaus = DSTERM,
-  set_values_to = exprs(DTHDOM = "DS", DTHSEQ = DSSEQ)
-)
 
 adsl <- dm %>%
   ## derive treatment variables (TRT01P, TRT01A) ----
