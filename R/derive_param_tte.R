@@ -326,7 +326,8 @@ derive_param_tte <- function(dataset = NULL,
                              check_type = "warning") {
   # Match check_type to valid admiral options
   check_type <- rlang::arg_match(check_type, c("warning", "message", "error", "none"))
-  # checking and quoting #
+
+   # checking and quoting #
   assert_data_frame(dataset, optional = TRUE)
   assert_vars(by_vars, optional = TRUE)
   start_date <- assert_symbol(enexpr(start_date))
@@ -377,6 +378,15 @@ derive_param_tte <- function(dataset = NULL,
     )
   }
 
+ #check for duplicates in dataset_adsl and source_datasets
+  combined_dataset <- bind_rows(dataset_adsl, !!!source_datasets)
+
+  signal_duplicate_records(
+    dataset = combined_dataset,
+    by_vars = expr_c(subject_keys, by_vars),
+    cnd_type = check_type
+  )
+
   tmp_event <- get_new_tmp_var(dataset)
 
   # determine events #
@@ -390,14 +400,7 @@ derive_param_tte <- function(dataset = NULL,
   ) %>%
     mutate(!!tmp_event := 1L)
 
-  # check for duplicates in event_data
-  signal_duplicate_records(
-    dataset = event_data,
-    by_vars = expr_c(by_vars, subject_keys),
-    cnd_type = check_type
-  )
-
-  # determine censoring observations #
+ # determine censoring observations #
   censor_data <- filter_date_sources(
     sources = censor_conditions,
     source_datasets = source_datasets,
@@ -408,14 +411,7 @@ derive_param_tte <- function(dataset = NULL,
   ) %>%
     mutate(!!tmp_event := 0L)
 
-  # check for duplicates in censor_data
-  signal_duplicate_records(
-    dataset = censor_data,
-    by_vars = expr_c(by_vars, subject_keys),
-    cnd_type = check_type
-  )
-
-  # determine variable to add from ADSL #
+   # determine variable to add from ADSL #
   if (create_datetime) {
     date_var <- sym("ADTM")
     start_var <- sym("STARTDTM")

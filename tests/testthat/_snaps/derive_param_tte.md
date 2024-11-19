@@ -30,6 +30,9 @@
       event_conditions = list(ttae), censor_conditions = list(eos), source_datasets = list(
         adsl = adsl, ae = ae), set_values_to = exprs(PARAMCD = "TTAE", PARCAT2 = AEDECOD))
     Condition
+      Warning:
+      Dataset contains duplicate records with respect to `STUDYID`, `USUBJID`, and `AEDECOD`
+      i Run `admiral::get_duplicates_dataset()` to access the duplicate records
       Error in `derive_param_tte()`:
       ! For some values of "PARAMCD" there is more than one value of "AEDECOD"
       i Call `admiral::get_one_to_many_dataset()` to get all one-to-many values.
@@ -43,6 +46,9 @@
         as.numeric(as.factor(AEDECOD))), PARAM = past("Time to First", AEDECOD,
         "Adverse Event"), PARCAT1 = "TTAE", PARCAT2 = AEDECOD))
     Condition
+      Warning:
+      Dataset contains duplicate records with respect to `STUDYID`, `USUBJID`, and `AEDECOD`
+      i Run `admiral::get_duplicates_dataset()` to access the duplicate records
       Error in `process_set_values_to()`:
       ! Assigning variables failed!
       * `set_values_to = exprs(PARAMCD = paste0("TTAE", as.numeric(as.factor(AEDECOD))), PARAM = past("Time to First", AEDECOD, "Adverse Event"), PARCAT1 = TTAE, PARCAT2 = AEDECOD)`
