@@ -9,6 +9,7 @@
 - Replace use of `data("sdtm")` with `sdtm <- pharmaverse::sdtm` in templates and vignettes. (#2498)
 
 - Remove `dthcaus_source()` calls in `ADSL` template because they are deprecated. (#2517)
+- Update `ADEG` template to flag `ABLFL` and `ANL01FL` based on `DTYPE == "AVERAGE"` records. (#2561)
 
 ## Updates of Existing Functions
 
@@ -64,6 +65,8 @@ example, `">2.5 x ULN"` changed to `">2.5"` for grade 3. (#2534)
 
 - `derive_locf_records()` documentation example was fixed to display LOCF records. (#2461)
 
+- `derive_var_joined_exist_flag()` documentation updated with extra examples. (#2523)
+
 ## Various
 
 <details>
@@ -71,6 +74,7 @@ example, `">2.5 x ULN"` changed to `">2.5"` for grade 3. (#2534)
 
 - Created unit tests for developer internal function `restricted_imputed_dtc_dt()` (#2495)
 - Adopted `data-raw/data` R Package Convention (#2427)
+- `compute_bsa()` now uses the more common (but equivalent) version of the DuBois-DuBois formula for BSA. The results have not changed. (#2532)  
 - Removed `.devcontainer` file (codespace) (#2524)
 
 </details>
