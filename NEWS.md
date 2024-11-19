@@ -41,6 +41,13 @@
 </details>
 
 # admiral 1.1.1
+- `check_type = "warning"` default argument added to `derive_param_tte` with an
+  `arg_match` function within the function so the user can use a valid input of 
+  `error, message, warning, or none`. `signal_duplicate_records()` has also been
+  added to the function on lines 394 and 411 to check for uniqueness of records. (#2481)
+  
+- `order()` function has been added to `event_source()` and `censor_source()` and
+  defaulted to `NULL` to allow sorting of input data. (#2481)
 
 - `derive_extreme_event()` was fixed such that `check_type = "none"` is accepted
 again. (#2462)

@@ -34,6 +34,21 @@
       ! For some values of "PARAMCD" there is more than one value of "AEDECOD"
       i Call `admiral::get_one_to_many_dataset()` to get all one-to-many values.
 
+# derive_param_tte Test 9: errors if set_values_to contains invalid expressions
+
+    Code
+      derive_param_tte(dataset_adsl = adsl, by_vars = exprs(AEDECOD), start_date = TRTSDT,
+      event_conditions = list(ttae), censor_conditions = list(eos), source_datasets = list(
+        adsl = adsl, ae = ae), set_values_to = exprs(PARAMCD = paste0("TTAE",
+        as.numeric(as.factor(AEDECOD))), PARAM = past("Time to First", AEDECOD,
+        "Adverse Event"), PARCAT1 = "TTAE", PARCAT2 = AEDECOD))
+    Condition
+      Error in `process_set_values_to()`:
+      ! Assigning variables failed!
+      * `set_values_to = exprs(PARAMCD = paste0("TTAE", as.numeric(as.factor(AEDECOD))), PARAM = past("Time to First", AEDECOD, "Adverse Event"), PARCAT1 = TTAE, PARCAT2 = AEDECOD)`
+      See error message below:
+      i In argument: `PARAM = past("Time to First", AEDECOD, "Adverse Event")`. Caused by error in `past()`: ! could not find function "past"
+
 # list_tte_source_objects Test 13: error is issued if package does not exist
 
     Code
