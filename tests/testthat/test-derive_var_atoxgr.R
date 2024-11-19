@@ -390,6 +390,7 @@ test_that("derive_var_atoxgr Test 12: CTCAEv5 Alanine aminotransferase increased
     meta_criteria = atoxgr_criteria_ctcv5,
     tox_description_var = ATOXDSCH,
     criteria_direction = "H",
+    abnormal_indicator = "HIGH",
     get_unit_expr = AVALU
   )
 
@@ -502,6 +503,7 @@ test_that("derive_var_atoxgr Test 14: CTCAEv5 Alkaline phosphatase increased", {
     meta_criteria = atoxgr_criteria_ctcv5,
     tox_description_var = ATOXDSCH,
     criteria_direction = "H",
+    abnormal_indicator = "HIGH",
     get_unit_expr = AVALU
   )
 
@@ -612,6 +614,7 @@ test_that("derive_var_atoxgr Test 16: CTCAEv5 Aspartate aminotransferase increas
     meta_criteria = atoxgr_criteria_ctcv5,
     tox_description_var = ATOXDSCH,
     criteria_direction = "H",
+    abnormal_indicator = "HIGH",
     get_unit_expr = AVALU
   )
 
@@ -709,6 +712,7 @@ test_that("derive_var_atoxgr Test 18: CTCAEv5  Blood bilirubin increased", {
     meta_criteria = atoxgr_criteria_ctcv5,
     tox_description_var = ATOXDSCH,
     criteria_direction = "H",
+    abnormal_indicator = "HIGH",
     get_unit_expr = AVALU
   )
 
@@ -1284,6 +1288,7 @@ test_that("derive_var_atoxgr Test 30: CTCAEv5 GGT increased", {
     meta_criteria = atoxgr_criteria_ctcv5,
     tox_description_var = ATOXDSCH,
     criteria_direction = "H",
+    abnormal_indicator = "HIGH",
     get_unit_expr = AVALU
   )
 

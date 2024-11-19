@@ -10,6 +10,7 @@ derive_var_atoxgr_dir(
   tox_description_var,
   meta_criteria,
   criteria_direction,
+  abnormal_indicator = NULL,
   get_unit_expr,
   signif_dig = get_admiral_option("signif_digits")
 )
@@ -51,6 +52,9 @@ based on a subset of subjects (e.g. AGE > 18 YEARS)
 \item{criteria_direction}{Direction (L= Low, H = High) of toxicity grade.
 
 Permitted Values: "L", "H"}
+
+\item{abnormal_indicator}{Value in \code{BNRIND} derivation to indicate an abnormal value. Usually "HIGH"
+for \code{criteria_direction} = "H" and "LOW" for \code{criteria_direction} = "L".}
 
 \item{get_unit_expr}{An expression providing the unit of the parameter
 
