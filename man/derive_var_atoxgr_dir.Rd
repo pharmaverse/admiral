@@ -53,8 +53,8 @@ based on a subset of subjects (e.g. AGE > 18 YEARS)
 
 Permitted Values: "L", "H"}
 
-\item{abnormal_indicator}{Value in \code{BNRIND} derivation to indicate an abnormal value. Usually "HIGH"
-for \code{criteria_direction} = "H" and "LOW" for \code{criteria_direction} = "L".}
+\item{abnormal_indicator}{Value in \code{BNRIND} derivation to indicate an abnormal value.
+Usually "HIGH" for \code{criteria_direction} = "H" and "LOW" for \code{criteria_direction} = "L".}
 
 \item{get_unit_expr}{An expression providing the unit of the parameter
 

@@ -42,8 +42,8 @@
 #'
 #' Permitted Values: "L", "H"
 #'
-#' @param abnormal_indicator Value in `BNRIND` derivation to indicate an abnormal value. Usually "HIGH"
-#' for `criteria_direction` = "H" and "LOW" for `criteria_direction` = "L".
+#' @param abnormal_indicator Value in `BNRIND` derivation to indicate an abnormal value.
+#' Usually "HIGH" for `criteria_direction` = "H" and "LOW" for `criteria_direction` = "L".
 #'
 #' @param get_unit_expr An expression providing the unit of the parameter
 #'
