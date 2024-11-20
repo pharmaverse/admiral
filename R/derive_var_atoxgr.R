@@ -45,6 +45,11 @@
 #' @param abnormal_indicator Value in `BNRIND` derivation to indicate an abnormal value.
 #' Usually "HIGH" for `criteria_direction` = "H" and "LOW" for `criteria_direction` = "L".
 #'
+#'   This is only required when `meta_criteria = atoxgr_criteria_ctcv5` and `BNRIND` is a required
+#'   variable. Currently for terms `"Alanine aminotransferase increased"`,
+#'   `"Alkaline phosphatase increased"`, `"Aspartate aminotransferase increased"`,
+#'   `"Blood bilirubin increased"` and `"GGT increased"`
+#'
 #' @param get_unit_expr An expression providing the unit of the parameter
 #'
 #'   The result is used to check the units of the input parameters. Compared with
@@ -132,7 +137,7 @@ derive_var_atoxgr_dir <- function(dataset,
   assert_character_scalar(criteria_direction, values = c("L", "H"))
 
   # check input parameter is character value
-  assert_character_scalar(abnormal_indicator, optional = TRUE)
+  assert_character_vector(abnormal_indicator, optional = TRUE)
 
   # check input parameter holding significant digits has correct value
   assert_integer_scalar(signif_dig, subset = "positive")
@@ -223,7 +228,7 @@ derive_var_atoxgr_dir <- function(dataset,
 
       if ("BNRIND" %in% list_of_vars) {
         # check input parameter is character value
-        assert_character_scalar(abnormal_indicator, optional = FALSE)
+        assert_character_vector(abnormal_indicator, optional = FALSE)
       }
 
       # apply criteria when SI unit matches

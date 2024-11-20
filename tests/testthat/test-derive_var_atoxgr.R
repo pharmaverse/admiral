@@ -595,10 +595,10 @@ test_that("derive_var_atoxgr Test 16: CTCAEv5 Aspartate aminotransferase increas
     # AVAL missing cannot grade
     "Aspartate aminotransferase Increased", NA,     40,     NA_character_,  NA,
   ) %>%
-    # set BASE to be abnormal (HIGH)  and create FLAG
+    # set BASE to be abnormal (HIGH or H)  and create FLAG
     mutate(
       ANRHI = BASE - 1,
-      BNRIND = "HIGH"
+      BNRIND = if_else(ATOXGRH %in% c("3", "4"), "H", "HIGH")
     )
 
   # combine records with baseline normal and abnormal
@@ -614,7 +614,7 @@ test_that("derive_var_atoxgr Test 16: CTCAEv5 Aspartate aminotransferase increas
     meta_criteria = atoxgr_criteria_ctcv5,
     tox_description_var = ATOXDSCH,
     criteria_direction = "H",
-    abnormal_indicator = "HIGH",
+    abnormal_indicator = c("HIGH", "H"),
     get_unit_expr = AVALU
   )
 
@@ -1269,10 +1269,11 @@ test_that("derive_var_atoxgr Test 30: CTCAEv5 GGT increased", {
     # AVAL missing cannot grade
     "GGT increased", NA,    0,      NA,     NA_character_, NA,
   ) %>%
-    # set BASE to be abnormal (HIGH) and create FLAG
+    # set BASE to be abnormal (HIGH HIGH) and create FLAG
+    # set abnormal_indicator to "HIGH HIGH" also in function call
     mutate(
       ANRHI = BASE - 1,
-      BNRIND = "HIGH"
+      BNRIND = "HIGH HIGH"
     )
 
   # combine records with baseline normal and abnormal
@@ -1288,7 +1289,7 @@ test_that("derive_var_atoxgr Test 30: CTCAEv5 GGT increased", {
     meta_criteria = atoxgr_criteria_ctcv5,
     tox_description_var = ATOXDSCH,
     criteria_direction = "H",
-    abnormal_indicator = "HIGH",
+    abnormal_indicator = "HIGH HIGH",
     get_unit_expr = AVALU
   )
 
