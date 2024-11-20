@@ -151,4 +151,3 @@ test_that("get_summary_records Test 3: Compute avg AVAL only if >2 records withi
     keys = c("USUBJID", "PARAM", "AVISIT")
   )
 })
-
