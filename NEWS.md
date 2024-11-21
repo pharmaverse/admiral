@@ -37,6 +37,8 @@ example, `">2.5 x ULN"` changed to `">2.5"` for grade 3. (#2534)
   
 - test scripts, R, and markdown files for `create_single_dose_dataset` and `occds.Rmd` updated to include a `STUDYID` column because of `get_admiral_option("subject_keys")` update above. (#2501)
 
+- In `get_summary_records()`, previously deprecated formal arguments `analysis_var` and `summary_fun` now removed from function, documentation, tests etc.
+
 ## Breaking Changes
   
 - The following function arguments are entering the next phase of the deprecation process: (#2487)
