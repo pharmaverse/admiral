@@ -377,19 +377,9 @@ derive_param_tte <- function(dataset = NULL,
       by_vars = by_vars
     )
   }
-
- #check for duplicates in dataset_adsl and source_datasets
-  combined_dataset <- bind_rows(dataset_adsl, !!!source_datasets)
-
-  signal_duplicate_records(
-    dataset = combined_dataset,
-    by_vars = expr_c(subject_keys, by_vars),
-    cnd_type = check_type
-  )
-
   tmp_event <- get_new_tmp_var(dataset)
 
-  # determine events #
+# determine events #
   event_data <- filter_date_sources(
     sources = event_conditions,
     source_datasets = source_datasets,
@@ -407,7 +397,8 @@ derive_param_tte <- function(dataset = NULL,
     by_vars = by_vars,
     create_datetime = create_datetime,
     subject_keys = subject_keys,
-    mode = "last"
+    mode = "last",
+    check_type = check_type
   ) %>%
     mutate(!!tmp_event := 0L)
 
@@ -450,7 +441,8 @@ derive_param_tte <- function(dataset = NULL,
     bind_rows(event_data, censor_data),
     by_vars = expr_c(subject_keys, by_vars),
     order = exprs(!!tmp_event),
-    mode = "last"
+    mode = "last",
+    check_type = check_type
   ) %>%
     inner_join(
       adsl,
@@ -460,7 +452,7 @@ derive_param_tte <- function(dataset = NULL,
     mutate(!!date_var := pmax(!!date_var, !!start_var, na.rm = TRUE)) %>%
     remove_tmp_vars()
 
-  if (!is.null(by_vars)) {
+   if (!is.null(by_vars)) {
     if (!is.null(set_values_to$PARAMCD)) {
       assert_one_to_one(new_param, exprs(PARAMCD), by_vars)
     }
@@ -469,7 +461,7 @@ derive_param_tte <- function(dataset = NULL,
     new_param <- select(new_param, !!!negate_vars(by_vars))
   }
 
-  # check newly created parameter(s) do not already exist
+    # check newly created parameter(s) do not already exist
   if (!is.null(set_values_to$PARAMCD) && !is.null(dataset)) {
     unique_params <- unique(new_param$PARAMCD)
     for (i in seq_along(unique_params)) {
@@ -585,14 +577,16 @@ derive_param_tte <- function(dataset = NULL,
 #'   by_vars = exprs(AEDECOD),
 #'   create_datetime = FALSE,
 #'   subject_keys = get_admiral_option("subject_keys"),
-#'   mode = "first"
+#'   mode = "first",
+#'   check_type = "none"
 #' )
 filter_date_sources <- function(sources,
                                 source_datasets,
                                 by_vars,
                                 create_datetime = FALSE,
                                 subject_keys,
-                                mode) {
+                                mode,
+                                check_type = "none") {
   assert_list_of(sources, "tte_source")
   assert_list_of(source_datasets, "data.frame")
   assert_logical_scalar(create_datetime)
@@ -627,22 +621,34 @@ filter_date_sources <- function(sources,
       var = !!source_date_var,
       dataset_name = sources[[i]]$dataset_name
     )
-    data[[i]] <- source_dataset %>%
+ # wrap filter_extreme in tryCatch to catch duplicate records and create a message
+ data[[i]] <- tryCatch(
+  {
+    source_dataset %>%
       filter_if(sources[[i]]$filter) %>%
       filter_extreme(
         order = exprs(!!source_date_var),
         by_vars = expr_c(subject_keys, by_vars),
         mode = mode,
-        check_type = "none"
+        check_type = check_type
       )
-
-    # add date variable and accompanying variables
-
-    if (create_datetime) {
-      date_derv <- exprs(!!date_var := as_datetime(!!source_date_var))
-    } else {
-      date_derv <- exprs(!!date_var := date(!!source_date_var))
+     },
+  warning = function(wrn) {
+    if (grepl("duplicate records", conditionMessage(wrn))) {
+      warning(sprintf(
+        "Duplicate records found in source dataset '%s': %s",
+        sources[[i]]$dataset_name,
+        conditionMessage(wrn)
+      ), call. = FALSE)
     }
+   }
+)
+ # add date variable and accompanying variables
+ if (create_datetime) {
+   date_derv <- exprs(!!date_var := as_datetime(!!source_date_var))
+  } else {
+   date_derv <- exprs(!!date_var := date(!!source_date_var))
+  }
 
     data[[i]] <- mutate(
       data[[i]],
@@ -663,7 +669,7 @@ filter_date_sources <- function(sources,
       by_vars = expr_c(subject_keys, by_vars),
       order = exprs(!!date_var),
       mode = mode,
-      check_type = "none"
+      check_type = check_type
     )
 }
 

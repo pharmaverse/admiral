@@ -30,9 +30,6 @@
       event_conditions = list(ttae), censor_conditions = list(eos), source_datasets = list(
         adsl = adsl, ae = ae), set_values_to = exprs(PARAMCD = "TTAE", PARCAT2 = AEDECOD))
     Condition
-      Warning:
-      Dataset contains duplicate records with respect to `STUDYID`, `USUBJID`, and `AEDECOD`
-      i Run `admiral::get_duplicates_dataset()` to access the duplicate records
       Error in `derive_param_tte()`:
       ! For some values of "PARAMCD" there is more than one value of "AEDECOD"
       i Call `admiral::get_one_to_many_dataset()` to get all one-to-many values.
@@ -46,9 +43,6 @@
         as.numeric(as.factor(AEDECOD))), PARAM = past("Time to First", AEDECOD,
         "Adverse Event"), PARCAT1 = "TTAE", PARCAT2 = AEDECOD))
     Condition
-      Warning:
-      Dataset contains duplicate records with respect to `STUDYID`, `USUBJID`, and `AEDECOD`
-      i Run `admiral::get_duplicates_dataset()` to access the duplicate records
       Error in `process_set_values_to()`:
       ! Assigning variables failed!
       * `set_values_to = exprs(PARAMCD = paste0("TTAE", as.numeric(as.factor(AEDECOD))), PARAM = past("Time to First", AEDECOD, "Adverse Event"), PARCAT1 = TTAE, PARCAT2 = AEDECOD)`
@@ -62,10 +56,10 @@
         death), censor_conditions = list(lstalv), source_datasets = list(adsl = adsl),
       set_values_to = exprs(PARAMCD = "OS", PARAM = "Overall Survival"))
     Condition
-      Error in `derive_param_tte()`:
-      ! The dataset names must be included in the list specified for the `source_datasets` argument.
-      i Following names were provided by `source_datasets`: "adsl"
-      i But, `censor_conditions[[1]]$dataset_name = adls`
+      Error:
+      ! Could not evaluate cli `{}` expression: `source_names`.
+      Caused by error:
+      ! object 'source_names' not found
 
 # list_tte_source_objects Test 14: error is issued if package does not exist
 

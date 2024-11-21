@@ -1067,7 +1067,7 @@ test_that("list_tte_source_objects Test 16: derive_param_tte produces consistent
       EVENTDESC = "AE",
       SRCDOM = "AE",
       SRCVAR = "AESTDTC",
-      SRCSEQ = "AESEQ"
+      SRCSEQ = AESEQ
     ),
     order = exprs(AESEQ)
   )
