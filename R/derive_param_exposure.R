@@ -58,6 +58,7 @@
 #' specified for the `by_vars` parameter). That is, a variable will only
 #' be populated in this new record if it is specified in `by_vars`.
 #' For each new record,
+#' + `set_values_to` lists each specified variable and computes its value,
 #' + the variable specified `analysis_var` is computed as defined by `summary_fun`,
 #' + the variable(s) specified on the LHS of `set_values_to` are set to their paired value (RHS).
 #' In addition, the start and end date are computed as the minimum/maximum dates by `by_vars`.
