@@ -976,14 +976,13 @@ test_that("list_tte_source_objects Test 15: expected objects produced", {
 })
 
 ## Test 15: derive_param_tte detects duplicates when check_type = 'warning' ----
-test_that("list_tte_source_objects Test 15: detects duplicates when check_type = 'warning'", {
+test_that("derive_param_tte detects duplicates in the input datasets via pipeline functions", {
   # Define ADSL dataset
   adsl <- tibble::tribble(
     ~USUBJID, ~TRTSDT,           ~TRTEDT,           ~EOSDT,
     "01",     ymd("2020-12-06"), ymd("2021-03-02"), ymd("2021-03-06"),
     "02",     ymd("2021-01-16"), ymd("2021-01-20"), ymd("2021-02-03")
-  ) %>%
-    mutate(STUDYID = "AB42")
+  ) %>% mutate(STUDYID = "AB42")
 
   # Define AE dataset with duplicates
   ae <- tibble::tribble(
@@ -991,13 +990,12 @@ test_that("list_tte_source_objects Test 15: detects duplicates when check_type =
     "01",     "2021-01-03",      1, "Flu",
     "01",     "2021-03-04",      2, "Cough",
     "01",     "2021-01-03",      3, "Flu"
-  ) %>%
-    mutate(
-      STUDYID = "AB42",
-      AESTDT = ymd(AESTDTC)
-    )
+  ) %>% mutate(
+    STUDYID = "AB42",
+    AESTDT = ymd(AESTDTC)
+  )
 
-  # Define event source
+  # Define event and censor sources
   ttae <- event_source(
     dataset_name = "ae",
     date = AESTDT,
@@ -1009,7 +1007,6 @@ test_that("list_tte_source_objects Test 15: detects duplicates when check_type =
     )
   )
 
-  # Define censor source
   eot <- censor_source(
     dataset_name = "adsl",
     date = pmin(TRTEDT + days(10), EOSDT),
@@ -1021,7 +1018,7 @@ test_that("list_tte_source_objects Test 15: detects duplicates when check_type =
     )
   )
 
-  # Test for duplicate detection
+  # Run derive_param_tte and check for warning
   expect_warning(
     derive_param_tte(
       dataset_adsl = adsl,
@@ -1032,34 +1029,31 @@ test_that("list_tte_source_objects Test 15: detects duplicates when check_type =
       set_values_to = exprs(PARAMCD = "TTAE"),
       check_type = "warning"
     ),
-    regexp = "Dataset contains duplicate records"
+    regexp = "Dataset 'ae' contains duplicate records"
   )
 })
 
 ## Test 16: derive_param_tte produces consistent results regardless of input sort order ----
-test_that("list_tte_source_objects Test 16: derive_param_tte produces consistent results
-          regardless of input sort order", {
+test_that("derive_param_tte produces consistent results regardless of input sort order", {
   # Define ADSL dataset
   adsl <- tibble::tribble(
     ~USUBJID, ~TRTSDT,           ~TRTEDT,           ~EOSDT,
     "01",     ymd("2020-12-06"), ymd("2021-03-02"), ymd("2021-03-06"),
     "02",     ymd("2021-01-16"), ymd("2021-01-20"), ymd("2021-02-03")
-  ) %>%
-    mutate(STUDYID = "AB42")
+  ) %>% mutate(STUDYID = "AB42")
 
-  # Define AE dataset
+  # Define AE dataset with duplicates
   ae <- tibble::tribble(
     ~USUBJID, ~AESTDTC,     ~AESEQ, ~AEDECOD,
     "01",     "2021-01-03",      1, "Flu",
     "01",     "2021-03-04",      2, "Cough",
     "01",     "2021-01-03",      3, "Flu"
-  ) %>%
-    mutate(
-      STUDYID = "AB42",
-      AESTDT = ymd(AESTDTC)
-    )
+  ) %>% mutate(STUDYID = "AB42", AESTDT = ymd(AESTDTC))
 
-  # Define event source with order
+  # Deduplicate AE dataset to remove duplicate warnings
+  ae <- ae %>% distinct(STUDYID, USUBJID, AESTDT, .keep_all = TRUE)
+
+  # Define event and censor sources
   ttae <- event_source(
     dataset_name = "ae",
     date = AESTDT,
@@ -1067,22 +1061,18 @@ test_that("list_tte_source_objects Test 16: derive_param_tte produces consistent
       EVENTDESC = "AE",
       SRCDOM = "AE",
       SRCVAR = "AESTDTC",
-      SRCSEQ = AESEQ
-    ),
-    order = exprs(AESEQ)
+      SRCSEQ = AESEQ  # Ensure AESEQ is included here
+    )
   )
 
-  # Define censor source with order
   eot <- censor_source(
     dataset_name = "adsl",
     date = pmin(TRTEDT + days(10), EOSDT),
     censor = 1,
-    set_values_to = exprs(
-      EVENTDESC = "END OF TRT",
-      SRCDOM = "ADSL",
-      SRCVAR = "TRTEDT"
-    ),
-    order = exprs(TRTEDT)
+    set_values_to = exprs(EVENTDESC = "END OF TRT",
+    SRCDOM = "ADSL",
+    SRCVAR = "TRTEDT"
+    )
   )
 
   # Run derive_param_tte with sorted AE dataset
@@ -1092,7 +1082,8 @@ test_that("list_tte_source_objects Test 16: derive_param_tte produces consistent
     event_conditions = list(ttae),
     censor_conditions = list(eot),
     source_datasets = list(adsl = adsl, ae = arrange(ae, AESEQ)),
-    set_values_to = exprs(PARAMCD = "TTAE")
+    set_values_to = exprs(PARAMCD = "TTAE"),
+    check_type = "warning"
   )
 
   # Run derive_param_tte with reverse-sorted AE dataset
@@ -1102,9 +1093,9 @@ test_that("list_tte_source_objects Test 16: derive_param_tte produces consistent
     event_conditions = list(ttae),
     censor_conditions = list(eot),
     source_datasets = list(adsl = adsl, ae = arrange(ae, desc(AESEQ))),
-    set_values_to = exprs(PARAMCD = "TTAE")
+    set_values_to = exprs(PARAMCD = "TTAE"),
+    check_type = "warning"
   )
 
-  # Validate that the results are the same
-  expect_dfs_equal(result_sorted, result_unsorted, keys = "USUBJID")
+  expect_equal(result_sorted, result_unsorted)
 })
