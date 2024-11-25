@@ -15,7 +15,7 @@
 
 - NCICTCAEv5 grading criteria (`atoxgr_criteria_ctcv5`):
 
-  - fixed for `TERM = "INR increased"`, criteria was wrongly using `x ULN`, for first part of criteria for grades 1 to 3. For example, `">2.5 x ULN"` changed to `">2.5"` for grade 3. (#2534).
+  - fix for `TERM = "INR increased"`, criteria was wrongly using `x ULN`, for first part of criteria for grades 1 to 3. For example, `">2.5 x ULN"` changed to `">2.5"` for grade 3. (#2534).
   - when looking at abnormal baseline we now use `BNRIND` instead of comparing `BASE` with `ANRHI`,  as `ANRHI` may differ within a subject and lab test due to data from different lab vendors. This effects 5 terms, namely, `Alanine aminotransferase increased`, `Alkaline phosphatase increased`, `Aspartate aminotransferase increased`, `Blood bilirubin increased` and `GGT Increased`. (#249)
   - `derive_var_atoxgr_dir()`: new argument `abnormal_indicator` to pass in value of `BNRIND` to indicate lab test is abnormal. This is only used for the 5 lab tests described above. (#249)
 
