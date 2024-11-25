@@ -208,12 +208,12 @@ adsl <- tribble(
 )
 
 advs <- tribble(
-  ~USUBJID, ~PARAMCD, ~AVISIT,    ~ABLFL, ~AVAL, ~AVALU,
-  "1",      "WEIGHT", "BASELINE", "Y",     58.7, "kg",
-  "1",      "HEIGHT", "BASELINE", "Y",    169.2, "cm",
-  "1",      "WEIGHT", "WEEK 3",   NA_character_,      59.3, "kg",
-  "2",      "WEIGHT", "BASELINE", "Y",     72.5, "kg",
-  "2",      "WEIGHT", "WEKK 3",   NA_character_,      71.9, "kg",
+  ~USUBJID, ~PARAMCD, ~AVISIT, ~ABLFL, ~AVAL, ~AVALU,
+  "1", "WEIGHT", "BASELINE", "Y", 58.7, "kg",
+  "1", "HEIGHT", "BASELINE", "Y", 169.2, "cm",
+  "1", "WEIGHT", "WEEK 3", NA_character_, 59.3, "kg",
+  "2", "WEIGHT", "BASELINE", "Y", 72.5, "kg",
+  "2", "WEIGHT", "WEKK 3", NA_character_, 71.9, "kg",
 )
 
 derive_vars_merged(

@@ -115,14 +115,14 @@ test_that("derive_var_base Test 3: only the `target` variable is added to the in
 ## Test 4: error if multiple baseline records ----
 test_that("derive_var_base Test 4: error if multiple baseline records", {
   input <- tibble::tribble(
-    ~STUDYID, ~USUBJID, ~PARAMCD,  ~AVALC,   ~ABLFL, ~BASETYPE,
-    "TEST01", "PAT01",  "PARAM01", "LOW",    "Y",    "LAST",
-    "TEST01", "PAT01",  "PARAM01", "MEDIUM", "Y",    "LAST",
-    "TEST01", "PAT01",  "PARAM01", "LOW",    NA_character_,     "LAST",
-    "TEST01", "PAT01",  "PARAM01", "MEDIUM", NA_character_,     "LAST",
-    "TEST01", "PAT02",  "PARAM02", "HIGH",   "Y",    "LAST",
-    "TEST01", "PAT02",  "PARAM02", "HIGH",   "Y",    "LAST",
-    "TEST01", "PAT02",  "PARAM02", "MEDIUM", NA_character_,     "LAST",
+    ~STUDYID, ~USUBJID, ~PARAMCD, ~AVALC, ~ABLFL, ~BASETYPE,
+    "TEST01", "PAT01", "PARAM01", "LOW", "Y", "LAST",
+    "TEST01", "PAT01", "PARAM01", "MEDIUM", "Y", "LAST",
+    "TEST01", "PAT01", "PARAM01", "LOW", NA_character_, "LAST",
+    "TEST01", "PAT01", "PARAM01", "MEDIUM", NA_character_, "LAST",
+    "TEST01", "PAT02", "PARAM02", "HIGH", "Y", "LAST",
+    "TEST01", "PAT02", "PARAM02", "HIGH", "Y", "LAST",
+    "TEST01", "PAT02", "PARAM02", "MEDIUM", NA_character_, "LAST",
   )
 
   expect_snapshot(
