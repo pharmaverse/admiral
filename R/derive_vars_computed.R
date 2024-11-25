@@ -119,7 +119,7 @@
 #'
 #' @family der_gen
 #'
-#' @keywords der_gen
+#' @keywords der_gen addition/add subtraction/difference multiply/product division/ratio logarithm exponents compute
 #'
 #' @export
 #'

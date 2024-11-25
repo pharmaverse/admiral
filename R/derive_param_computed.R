@@ -142,7 +142,7 @@
 #'
 #' @family der_prm_bds_findings
 #'
-#' @keywords der_prm_bds_findings
+#' @keywords der_prm_bds_findings addition/add subtraction/difference multiply/product division/ratio logarithm exponents compute
 #'
 #' @export
 #'
