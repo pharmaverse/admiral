@@ -200,7 +200,7 @@ navbar:
       - text: FAQ
         href: articles/faq.html
     admiraldiscovery:
-      text: "🔎 Find my admiral function"
+      text: "🔎 Find my function"
       href: https://pharmaverse.github.io/admiraldiscovery/articles/reactable.html
     history:
       icon: fa-history
