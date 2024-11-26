@@ -177,7 +177,7 @@ adeg <- adeg %>%
 adeg <- adeg %>%
   derive_summary_records(
     dataset_add = adeg,
-    by_vars = exprs(STUDYID, USUBJID, !!!adsl_vars, PARAMCD, AVISITN, AVISIT, ADT),
+    by_vars = exprs(STUDYID, USUBJID, !!!adsl_vars, PARAMCD, AVISITN, AVISIT, ADT, ADY),
     filter_add = dplyr::n() >= 2 & PARAMCD != "EGINTP",
     set_values_to = exprs(
       AVAL = mean(AVAL, na.rm = TRUE),
@@ -210,10 +210,7 @@ adeg <- adeg %>%
   # Calculate BASETYPE
   derive_basetype_records(
     basetypes = exprs(
-      "LAST: AFTER LYING DOWN FOR 5 MINUTES" = ATPTN == 815,
-      "LAST: AFTER STANDING FOR 1 MINUTE" = ATPTN == 816,
-      "LAST: AFTER STANDING FOR 3 MINUTES" = ATPTN == 817,
-      "LAST" = is.na(ATPTN)
+      "BASELINE DAY 1" = TRUE
     )
   ) %>%
   # Calculate ABLFL
@@ -226,7 +223,7 @@ adeg <- adeg %>%
       mode = "last"
     ),
     filter = ((!is.na(AVAL) | !is.na(AVALC)) &
-      ADT <= TRTSDT & !is.na(BASETYPE) & is.na(DTYPE) &
+      ADT <= TRTSDT & !is.na(BASETYPE) & DTYPE == "AVERAGE" &
       PARAMCD != "EGINTP"
     )
   )
@@ -274,7 +271,7 @@ adeg <- adeg %>%
       new_var = ANL01FL,
       mode = "last"
     ),
-    filter = !is.na(AVISITN) & ONTRTFL == "Y"
+    filter = !is.na(AVISITN) & (ONTRTFL == "Y" | ABLFL == "Y") & DTYPE == "AVERAGE"
   )
 
 ## Get treatment information ----

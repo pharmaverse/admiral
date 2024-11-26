@@ -151,25 +151,30 @@ derive_param_wbc_abs <- function(dataset,
   }
 
   # Create new parameter.
-  dataset_new <- dataset_temp %>%
-    derive_param_computed(
-      parameters = c(
-        wbc_code,
-        diff_code
-      ),
-      by_vars = by_vars,
-      set_values_to = exprs(
-        AVAL = !!analysis_value,
-        !!!set_values_to
-      )
-    ) %>%
-    filter(PARAMCD == !!set_values_to$PARAMCD) %>%
-    select(-starts_with("temp_"))
+  withCallingHandlers(
+    dataset_new <- dataset_temp %>%
+      derive_param_computed(
+        parameters = c(
+          wbc_code,
+          diff_code
+        ),
+        by_vars = by_vars,
+        set_values_to = exprs(
+          AVAL = !!analysis_value,
+          !!!set_values_to
+        )
+      ) %>%
+      filter(PARAMCD == !!set_values_to$PARAMCD) %>%
+      select(-starts_with("temp_")),
+    derive_param_computed_all_na = function(cnd) {
+      cnd_muffle(cnd)
+    }
+  )
 
   # If no new records are added, output note and return original dataset,
   # else append new records to the original input dataset.
   if (nrow(dataset_new) == 0L) {
-    message("No source records meet condition for calculation, therefore no new records created")
+    cli_inform("No source records meet condition for calculation, therefore no new records created")
     dataset
   } else {
     bind_rows(dataset, dataset_new)
