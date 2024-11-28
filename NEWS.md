@@ -10,6 +10,7 @@
 
 - Remove `dthcaus_source()` calls in `ADSL` template because they are deprecated. (#2517)
 - Update `ADEG` template to flag `ABLFL` and `ANL01FL` based on `DTYPE == "AVERAGE"` records. (#2561)
+- Update `derive_vars_period` to make it work when there is only one new variable. (#2582)
 
 ## Updates of Existing Functions
 
