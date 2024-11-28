@@ -434,8 +434,8 @@ test_that("derive_vars_period Test 13: periods", {
   )
 })
 
-## Test 14: Periods derived even when only when one period variable needed ----
-test_that("derive_vars_period Test 13: periods", {
+## Test 14: periods variable derived when only one variable needed ----
+test_that("derive_vars_period Test 14: periods variable derived when only one variable needed", {
   expected <- tibble::tribble(
     ~USUBJID, ~AP01SDT,
     "1",      "2021-01-04",

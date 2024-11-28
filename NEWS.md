@@ -10,7 +10,6 @@
 
 - Remove `dthcaus_source()` calls in `ADSL` template because they are deprecated. (#2517)
 - Update `ADEG` template to flag `ABLFL` and `ANL01FL` based on `DTYPE == "AVERAGE"` records. (#2561)
-- Update `derive_vars_period` to make it work when there is only one new variable. (#2582)
 
 ## Updates of Existing Functions
 
@@ -39,6 +38,8 @@ or that the queries dataset contains duplicates. (#2543)
 - `derive_vars_atc()` and `create_single_dose_dataset()` `by_vars` argument updated to use `get_admiral_option("subject_keys")` instead of  `USUBJID` or `STUDYID` in `bds_exposure.Rmd`. (#2501)
   
 - test scripts, R, and markdown files for `create_single_dose_dataset` and `occds.Rmd` updated to include a `STUDYID` column because of `get_admiral_option("subject_keys")` update above. (#2501)
+
+- Update `derive_vars_period()` to make it work when there is only one new variable. (#2582)
 
 ## Breaking Changes
   
