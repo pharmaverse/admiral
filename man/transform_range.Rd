@@ -2,7 +2,7 @@
 % Please edit documentation in R/transform_range.R
 \name{transform_range}
 \alias{transform_range}
-\title{Tranform Range}
+\title{Transform Range}
 \usage{
 transform_range(
   source,

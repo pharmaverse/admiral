@@ -1,4 +1,4 @@
-#' Tranform Range
+#' Transform Range
 #'
 #' Transforms results from the source range to the target range. For example,
 #' for transforming source values 1, 2, 3, 4, 5 to 0, 25, 50, 75, 100.
