@@ -65,7 +65,7 @@ transform_scale <- function(source,
   assert_logical_scalar(flip_direction)
   assert_character_scalar(outside_range, values = c("NA", "error", "warning"))
 
-  outsider <- !between(source, source_range[[1]], source_range[[2]])
+  outsider <- !(between(source, source_range[[1]], source_range[[2]]) | is.na(source))
   if (any(outsider)) {
     outside_index <- which(outsider)
     outside_value <- source[outsider]
