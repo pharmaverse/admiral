@@ -101,15 +101,12 @@ compute_scale <- function(source,
     target <- mean(source, na.rm = TRUE) # nolint: undesirable_function_linter
 
     if (!is.null(source_range) && !is.null(target_range)) {
-      scale_constant <- min(target_range) - min(source_range)
-      scale_coefficient <- (max(target_range) - min(target_range)) /
-        (max(source_range) - min(source_range))
-
-      target <- (target + scale_constant) * scale_coefficient
-
-      if (flip_direction == TRUE) {
-        target <- max(target_range) - target
-      }
+      target <- transform_scale(
+        target,
+        source_range = source_range,
+        target_range = target_range,
+        flip_direction = flip_direction
+      )
     }
   } else {
     target <- NA
