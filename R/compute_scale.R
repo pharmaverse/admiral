@@ -101,7 +101,7 @@ compute_scale <- function(source,
     target <- mean(source, na.rm = TRUE) # nolint: undesirable_function_linter
 
     if (!is.null(source_range) && !is.null(target_range)) {
-      target <- transform_scale(
+      target <- transform_range(
         target,
         source_range = source_range,
         target_range = target_range,

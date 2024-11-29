@@ -1,9 +1,9 @@
-#' Tranform Scale Parameters
+#' Tranform Range
 #'
 #' Transforms results from the source range to the target range. For example,
 #' for transforming source values 1, 2, 3, 4, 5 to 0, 25, 50, 75, 100.
 #'
-#' @param source A vector of values to be scaled
+#' @param source A vector of values to be transformed
 #'
 #'   A numeric vector is expected.
 #'
@@ -17,7 +17,7 @@
 #'   A numeric vector containing two elements is expected, representing the
 #'   lower and upper bounds of the target range.
 #'
-#' @param flip_direction Flip direction of the scale?
+#' @param flip_direction Flip direction of the range?
 #'
 #'   The transformed values will be reversed within the target range, e.g.
 #'   within the range 0 to 100, 25 would be reversed to 75.
@@ -46,14 +46,14 @@
 #' @export
 #'
 #' @examples
-#' transform_scale(
+#' transform_range(
 #'   source = c(1, 4, 3, 6, 5),
 #'   source_range = c(1, 5),
 #'   target_range = c(0, 100),
 #'   flip_direction = TRUE
 #' )
 #'
-transform_scale <- function(source,
+transform_range <- function(source,
                             source_range,
                             target_range,
                             flip_direction = FALSE,
@@ -95,11 +95,11 @@ transform_scale <- function(source,
   }
 
   # Computation
-  scale_constant <- min(target_range) - min(source_range)
-  scale_coefficient <- (max(target_range) - min(target_range)) /
+  range_constant <- min(target_range) - min(source_range)
+  range_coefficient <- (max(target_range) - min(target_range)) /
         (max(source_range) - min(source_range))
 
-  target <- (source + scale_constant) * scale_coefficient
+  target <- (source + range_constant) * range_coefficient
 
       if (flip_direction == TRUE) {
         target <- max(target_range) - target

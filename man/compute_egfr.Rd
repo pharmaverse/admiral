@@ -149,7 +149,7 @@ BDS-Findings Functions that returns a vector:
 \code{\link{compute_qual_imputation_dec}()},
 \code{\link{compute_rr}()},
 \code{\link{compute_scale}()},
-\code{\link{transform_scale}()}
+\code{\link{transform_range}()}
 }
 \concept{com_bds_findings}
 \keyword{com_bds_findings}
