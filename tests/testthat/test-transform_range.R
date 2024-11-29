@@ -3,8 +3,8 @@ test_that("transform_range Test 1: works as expected", {
   expect_equal(
     transform_range(
       c(5, 1, 6, 2, NA),
-                  source_range = c(1, 5),
-                  target_range = c(0, 100)
+      source_range = c(1, 5),
+      target_range = c(0, 100)
     ),
     c(100, 0, NA, 25, NA)
   )
@@ -15,9 +15,9 @@ test_that("transform_range Test 2: range is flipped if flip_direction == TRUE", 
   expect_equal(
     transform_range(
       c(0, 4, 8, 11),
-                  c(0, 10),
-                  c(0, 100),
-                  flip_direction = TRUE
+      c(0, 10),
+      c(0, 100),
+      flip_direction = TRUE
     ),
     c(100, 60, 20, NA)
   )
