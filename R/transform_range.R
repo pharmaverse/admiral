@@ -83,7 +83,7 @@ transform_range <- function(source,
         class = c("outside_source_range", "assert-admiral"),
         outside_index = outside_index,
         outside_value = outside_value
-        )
+      )
     } else if (outside_range == "error") {
       cli_abort(
         msg,
@@ -97,13 +97,13 @@ transform_range <- function(source,
   # Computation
   range_constant <- min(target_range) - min(source_range)
   range_coefficient <- (max(target_range) - min(target_range)) /
-        (max(source_range) - min(source_range))
+    (max(source_range) - min(source_range))
 
   target <- (source + range_constant) * range_coefficient
 
-      if (flip_direction == TRUE) {
-        target <- max(target_range) - target
-      }
+  if (flip_direction == TRUE) {
+    target <- max(target_range) - target
+  }
 
   target
 }
