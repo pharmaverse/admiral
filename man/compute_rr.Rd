@@ -37,7 +37,8 @@ BDS-Findings Functions that returns a vector:
 \code{\link{compute_qtc}()},
 \code{\link{compute_qual_imputation}()},
 \code{\link{compute_qual_imputation_dec}()},
-\code{\link{compute_scale}()}
+\code{\link{compute_scale}()},
+\code{\link{transform_scale}()}
 }
 \concept{com_bds_findings}
 \keyword{com_bds_findings}
