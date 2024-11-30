@@ -3,7 +3,7 @@
 #' Adds a parameter computed from the analysis value of other parameters. It is
 #' expected that the analysis value of the new parameter is defined by an
 #' expression using the analysis values of other parameters, such as addition/sum,
-#' subtraction/difference, multiply/product, division/ratio,
+#' subtraction/difference, multiplication/product, division/ratio,
 #' exponentiate/logarithm, or by formula.
 #' <br/><br/>
 #' For example mean arterial pressure (MAP) can be derived from systolic (SYSBP)
