@@ -13,6 +13,12 @@
 
 ## Updates of Existing Functions
 
+- NCICTCAEv5 grading criteria (`atoxgr_criteria_ctcv5`):
+
+  - fix for `TERM = "INR increased"`, criteria was wrongly using `x ULN`, for first part of criteria for grades 1 to 3. For example, `">2.5 x ULN"` changed to `">2.5"` for grade 3. (#2534).
+  - when looking at abnormal baseline we now use `BNRIND` instead of comparing `BASE` with `ANRHI`,  as `ANRHI` may differ within a subject and lab test due to data from different lab vendors. This effects 5 terms, namely, `Alanine aminotransferase increased`, `Alkaline phosphatase increased`, `Aspartate aminotransferase increased`, `Blood bilirubin increased` and `GGT Increased`. (#249)
+  - `derive_var_atoxgr_dir()`: new argument `abnormal_indicator` to pass in value of `BNRIND` to indicate lab test is abnormal. This is only used for the 5 lab tests described above. (#249)
+
 - The `keep_nas` argument of `derive_param_computed()` was enhanced such that it
 is now possible to specify a list of variables for which `NA`s are acceptable.
 I.e., records are added even if some of the specified variables are `NA`.
@@ -28,10 +34,6 @@ of the input parameters. (#2513)
 - In `derive_vars_query()` the error message was improved for the cases that
 some of the requested query variables are already present in the input dataset
 or that the queries dataset contains duplicates. (#2543)
-
-- NCICTCAEv5 grading criteria fixed for `TERM = "INR Increased"`, criteria was
-wrongly using `x ULN`, for first part of criteria for grades 1 to 3. For
-example, `">2.5 x ULN"` changed to `">2.5"` for grade 3. (#2534)
 
 - `derive_vars_atc()` and `create_single_dose_dataset()` `by_vars` argument updated to use `get_admiral_option("subject_keys")` instead of  `USUBJID` or `STUDYID` in `bds_exposure.Rmd`. (#2501)
   
