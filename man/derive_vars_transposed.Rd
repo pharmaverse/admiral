@@ -22,8 +22,9 @@ The variables specified by the \code{by_vars} argument are expected to be in the
 
 \item{dataset_merge}{Dataset to transpose and merge
 
-The variables specified by the \code{by_vars}, \code{key_var} and \code{value_var} parameters
-are expected}
+The variables specified by the \code{by_vars}, \code{id_vars}, \code{key_var} and
+\code{value_var} arguments are expected. The variables \code{by_vars}, \code{id_vars},
+\code{key_var} have to be a unique key.}
 
 \item{by_vars}{Grouping variables
 
@@ -51,8 +52,8 @@ This argument is passed to the \code{dplyr::left_join()} function. See
 \url{https://dplyr.tidyverse.org/reference/mutate-joins.html#arguments} for
 more details.
 
-Permitted Values for \code{relationship}: \code{"one-to-one"}, \code{"one-to-many"},
-\code{"many-to-one"}, \code{"many-to-many"}, \code{NULL}.}
+\emph{Permitted Values}: \code{"one-to-one"}, \code{"one-to-many"}, \code{"many-to-one"},
+\code{"many-to-many"}, \code{NULL}}
 }
 \value{
 The input dataset with transposed variables from \code{dataset_merge} added

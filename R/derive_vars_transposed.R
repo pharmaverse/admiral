@@ -7,8 +7,9 @@
 #'
 #' @param dataset_merge Dataset to transpose and merge
 #'
-#'   The variables specified by the `by_vars`, `key_var` and `value_var` parameters
-#'   are expected
+#'   The variables specified by the `by_vars`, `id_vars`, `key_var` and
+#'   `value_var` arguments are expected. The variables `by_vars`, `id_vars`,
+#'   `key_var` have to be a unique key.
 #'
 #' @param by_vars Grouping variables
 #'
@@ -35,8 +36,8 @@
 #'   <https://dplyr.tidyverse.org/reference/mutate-joins.html#arguments> for
 #'   more details.
 #'
-#'   Permitted Values for `relationship`: `"one-to-one"`, `"one-to-many"`,
-#'   `"many-to-one"`, `"many-to-many"`, `NULL`.
+#'   *Permitted Values*: `"one-to-one"`, `"one-to-many"`, `"many-to-one"`,
+#'   `"many-to-many"`, `NULL`
 #'
 #' @details
 #' After filtering `dataset_merge` based upon the condition provided in `filter`, this
