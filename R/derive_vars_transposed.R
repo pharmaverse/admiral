@@ -116,6 +116,21 @@ derive_vars_transposed <- function(dataset,
     optional = TRUE
   )
 
+  # check for duplicates in dataset_merge as these will create list columns,
+  # which is not acceptable for ADaM datasets
+  signal_duplicate_records(
+    dataset_merge,
+    by_vars = c(by_vars, id_vars, exprs(!!key_var)),
+    msg = c(
+      paste(
+        "Dataset {.arg dataset_merge} contains duplicate records with respect to",
+        "{.var {by_vars}}"
+      ),
+      "Please check data and {.arg by_vars}, {.arg id_vars}, and {.arg key_var} arguments."
+    ),
+    class = "merge_duplicates"
+  )
+
   dataset_transposed <- dataset_merge %>%
     filter_if(filter) %>%
     pivot_wider(
@@ -270,15 +285,23 @@ derive_vars_atc <- function(dataset,
   assert_data_frame(dataset, required_vars = replace_values_by_names(by_vars))
   assert_data_frame(dataset_facm, required_vars = exprs(!!!by_vars, !!value_var, FAGRPID, FATESTCD))
 
-  dataset %>%
-    derive_vars_transposed(
+  tryCatch(
+    data_transposed <- derive_vars_transposed(
+      dataset,
       select(dataset_facm, !!!unname(by_vars), !!value_var, FAGRPID, FATESTCD),
       by_vars = by_vars,
       id_vars = id_vars,
       key_var = FATESTCD,
       value_var = !!value_var,
       filter = str_detect(FATESTCD, "^CMATC[1-4](CD)?$")
-    ) %>%
+    ),
+    merge_duplicates = function(cnd) {
+      cnd$message <- str_replace(cnd$message, "dataset_merge", "dataset_facm")
+      cnd$body[[1]] <- "Please check data and `by_vars` and `id_vars` arguments."
+      rlang::cnd_signal(cnd)
+    }
+  )
+  data_transposed %>%
     select(-starts_with("FA")) %>%
     rename_with(.fn = ~ str_remove(.x, "^CM"), .cols = starts_with("CMATC"))
 }
