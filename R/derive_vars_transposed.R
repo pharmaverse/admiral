@@ -44,8 +44,9 @@
 #' dataset is transposed and subsequently merged onto `dataset` using `by_vars` as
 #' keys.
 #'
-#'
 #' @return The input dataset with transposed variables from `dataset_merge` added
+#'
+#' @seealso [derive_vars_atc()]
 #'
 #' @family der_gen
 #' @keywords der_gen
@@ -212,8 +213,9 @@ derive_vars_transposed <- function(dataset,
 #'
 #' @param dataset_facm FACM dataset
 #'
-#'   The variables specified by the `by_vars` and `value_var` parameters,
-#'   `FAGRPID` and `FATESTCD` are required
+#'   The variables specified by the `by_vars`, `id_vars`, and `value_var`
+#'   arguments and `FATESTCD` are required. The variables `by_vars`, `id_vars`,
+#'   and `FATESTCD` must be a unique key.
 #'
 #' @param by_vars Grouping variables
 #'
@@ -228,10 +230,9 @@ derive_vars_transposed <- function(dataset,
 #' @param value_var The variable of `dataset_facm` containing the values of the
 #'   transposed variables
 #'
-#'   Default: `FASTRESC`
-#'
-#'
 #' @return The input dataset with ATC variables added
+#'
+#' @seealso [derive_vars_transposed()]
 #'
 #' @family der_occds
 #' @keywords der_occds
@@ -271,7 +272,7 @@ derive_vars_transposed <- function(dataset,
 #'   "STUDY01", "BP40257-1002", "1",      "2791596", "CMATC4CD", "C03DA"
 #' )
 #'
-#' derive_vars_atc(cm, facm)
+#' derive_vars_atc(cm, facm, id_vars = exprs(FAGRPID))
 derive_vars_atc <- function(dataset,
                             dataset_facm,
                             by_vars = exprs(
@@ -284,12 +285,15 @@ derive_vars_atc <- function(dataset,
   assert_vars(by_vars)
   assert_vars(id_vars, optional = TRUE)
   assert_data_frame(dataset, required_vars = replace_values_by_names(by_vars))
-  assert_data_frame(dataset_facm, required_vars = exprs(!!!by_vars, !!value_var, FAGRPID, FATESTCD))
+  assert_data_frame(
+    dataset_facm,
+    required_vars = exprs(!!!by_vars, !!value_var, !!!id_vars, FATESTCD)
+  )
 
   tryCatch(
     data_transposed <- derive_vars_transposed(
       dataset,
-      select(dataset_facm, !!!unname(by_vars), !!value_var, FAGRPID, FATESTCD),
+      select(dataset_facm, !!!unname(by_vars), !!value_var, !!!id_vars, FATESTCD),
       by_vars = by_vars,
       id_vars = id_vars,
       key_var = FATESTCD,

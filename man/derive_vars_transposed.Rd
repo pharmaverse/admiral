@@ -111,6 +111,8 @@ cm \%>\%
   select(USUBJID, CMDECOD, starts_with("CMATC"))
 }
 \seealso{
+\code{\link[=derive_vars_atc]{derive_vars_atc()}}
+
 General Derivation Functions for all ADaMs that returns variable appended to dataset:
 \code{\link{derive_var_extreme_flag}()},
 \code{\link{derive_var_joined_exist_flag}()},

@@ -19,8 +19,9 @@ The variables specified by the \code{by_vars} argument are expected to be in the
 
 \item{dataset_facm}{FACM dataset
 
-The variables specified by the \code{by_vars} and \code{value_var} parameters,
-\code{FAGRPID} and \code{FATESTCD} are required}
+The variables specified by the \code{by_vars}, \code{id_vars}, and \code{value_var}
+arguments and \code{FATESTCD} are required. The variables \code{by_vars}, \code{id_vars},
+and \code{FATESTCD} must be a unique key.}
 
 \item{by_vars}{Grouping variables
 
@@ -34,9 +35,7 @@ Variables (excluding by_vars) that uniquely identify each observation in \code{d
 e.g. \code{exprs(USUBJID, VISIT)}}
 
 \item{value_var}{The variable of \code{dataset_facm} containing the values of the
-transposed variables
-
-Default: \code{FASTRESC}}
+transposed variables}
 }
 \value{
 The input dataset with ATC variables added
@@ -79,9 +78,11 @@ facm <- tribble(
   "STUDY01", "BP40257-1002", "1",      "2791596", "CMATC4CD", "C03DA"
 )
 
-derive_vars_atc(cm, facm)
+derive_vars_atc(cm, facm, id_vars = exprs(FAGRPID))
 }
 \seealso{
+\code{\link[=derive_vars_transposed]{derive_vars_transposed()}}
+
 OCCDS Functions: 
 \code{\link{derive_var_trtemfl}()},
 \code{\link{derive_vars_query}()},
