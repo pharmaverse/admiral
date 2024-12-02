@@ -19,7 +19,7 @@ records has been added to a dataset."><meta property="og:image" content="https:/
 
     <a class="navbar-brand me-2" href="../index.html">admiral</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.1.1.9029</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.1.1.9030</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -90,14 +90,7 @@ records has been added to a dataset.</p>
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">get_summary_records</span><span class="op">(</span></span>
-<span>  <span class="va">dataset</span>,</span>
-<span>  <span class="va">by_vars</span>,</span>
-<span>  filter <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  <span class="va">analysis_var</span>,</span>
-<span>  <span class="va">summary_fun</span>,</span>
-<span>  set_values_to <span class="op">=</span> <span class="cn">NULL</span></span>
-<span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">get_summary_records</span><span class="op">(</span><span class="va">dataset</span>, <span class="va">by_vars</span>, filter <span class="op">=</span> <span class="cn">NULL</span>, set_values_to <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -106,7 +99,7 @@ records has been added to a dataset.</p>
 
 <dl><dt id="arg-dataset">dataset<a class="anchor" aria-label="anchor" href="#arg-dataset"></a></dt>
 <dd><p>Input dataset</p>
-<p>The variables specified by the <code>by_vars</code> and <code>analysis_var</code> arguments are expected to be in the dataset.</p></dd>
+<p>The variables specified by the <code>by_vars</code> argument are expected to be in the dataset.</p></dd>
 
 
 <dt id="arg-by-vars">by_vars<a class="anchor" aria-label="anchor" href="#arg-by-vars"></a></dt>
@@ -126,19 +119,6 @@ values greater than mean of AVAL with in <code>by_vars</code>.</p></li>
 <li><p><code>filter_rows = (dplyr::n() &gt; 2)</code> will filter n count of <code>by_vars</code> greater
 than 2.</p></li>
 </ul></dd>
-
-
-<dt id="arg-analysis-var">analysis_var<a class="anchor" aria-label="anchor" href="#arg-analysis-var"></a></dt>
-<dd><p>Analysis variable.</p>
-<p><a href="https://lifecycle.r-lib.org/articles/stages.html#deprecated" class="external-link"><img src="figures/lifecycle-deprecated.svg" alt="[Deprecated]"></a> Please use <code>set_values_to</code> instead.</p></dd>
-
-
-<dt id="arg-summary-fun">summary_fun<a class="anchor" aria-label="anchor" href="#arg-summary-fun"></a></dt>
-<dd><p>Function that takes as an input the <code>analysis_var</code> and
-performs the calculation.</p>
-<p><a href="https://lifecycle.r-lib.org/articles/stages.html#deprecated" class="external-link"><img src="figures/lifecycle-deprecated.svg" alt="[Deprecated]"></a> Please use <code>set_values_to</code> instead.</p>
-<p>This can include built-in functions as well as user defined functions,
-for example <code>mean</code> or <code>function(x) mean(x, na.rm = TRUE)</code>.</p></dd>
 
 
 <dt id="arg-set-values-to">set_values_to<a class="anchor" aria-label="anchor" href="#arg-set-values-to"></a></dt>

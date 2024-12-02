@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">admiral</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.1.1.9029</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.1.1.9030</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -90,6 +90,7 @@
 <li><p>In <code><a href="../reference/derive_vars_query.html">derive_vars_query()</a></code> the error message was improved for the cases that some of the requested query variables are already present in the input dataset or that the queries dataset contains duplicates. (<a href="https://github.com/pharmaverse/admiral/issues/2543" class="external-link">#2543</a>)</p></li>
 <li><p><code><a href="../reference/derive_vars_atc.html">derive_vars_atc()</a></code> and <code><a href="../reference/create_single_dose_dataset.html">create_single_dose_dataset()</a></code> <code>by_vars</code> argument updated to use <code>get_admiral_option("subject_keys")</code> instead of <code>USUBJID</code> or <code>STUDYID</code> in <code>bds_exposure.Rmd</code>. (<a href="https://github.com/pharmaverse/admiral/issues/2501" class="external-link">#2501</a>)</p></li>
 <li><p>test scripts, R, and markdown files for <code>create_single_dose_dataset</code> and <code>occds.Rmd</code> updated to include a <code>STUDYID</code> column because of <code>get_admiral_option("subject_keys")</code> update above. (<a href="https://github.com/pharmaverse/admiral/issues/2501" class="external-link">#2501</a>)</p></li>
+<li><p>In <code><a href="../reference/get_summary_records.html">get_summary_records()</a></code>, previously deprecated formal arguments <code>analysis_var</code> and <code>summary_fun</code> now removed from function, documentation, tests etc. (<a href="https://github.com/pharmaverse/admiral/issues/2521" class="external-link">#2521</a>)</p></li>
 </ul></div>
 <div class="section level3">
 <h3 id="breaking-changes-development-version">Breaking Changes<a class="anchor" aria-label="anchor" href="#breaking-changes-development-version"></a></h3>

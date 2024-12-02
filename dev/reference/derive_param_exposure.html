@@ -9,7 +9,7 @@ start (ASTDT(M))and end date (AENDT(M)) as the minimum and maximum date by by_va
 
     <a class="navbar-brand me-2" href="../index.html">admiral</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.1.1.9029</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.1.1.9030</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -141,10 +141,10 @@ value, <code>NA</code>, or an expression.
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>The input dataset with a new record added for each group (with respect to the variables
-specified for the <code>by_vars</code> parameter). That is, a variable will only
+    <p>The input dataset with a new record added for each group (as defined
+by <code>by_vars</code> parameter). That is, a variable will only
 be populated in this new record if it is specified in <code>by_vars</code>.
-For each new record,</p><ul><li><p>the variable specified <code>analysis_var</code> is computed as defined by <code>summary_fun</code>,</p></li>
+For each new record,</p><ul><li><p><code>set_values_to</code> lists each specified variable and computes its value,</p></li>
 <li><p>the variable(s) specified on the LHS of <code>set_values_to</code> are set to their paired value (RHS).
 In addition, the start and end date are computed as the minimum/maximum dates by <code>by_vars</code>.</p></li>
 </ul><p>If the input datasets contains</p><ul><li><p>both <code>AxxDTM</code> and <code>AxxDT</code> then all <code>ASTDTM</code>,<code>AENDTM</code>, <code>ASTDT</code>, <code>AENDT</code> are computed</p></li>
