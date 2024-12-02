@@ -4,19 +4,12 @@
 \alias{get_summary_records}
 \title{Create Summary Records}
 \usage{
-get_summary_records(
-  dataset,
-  by_vars,
-  filter = NULL,
-  analysis_var,
-  summary_fun,
-  set_values_to = NULL
-)
+get_summary_records(dataset, by_vars, filter = NULL, set_values_to = NULL)
 }
 \arguments{
 \item{dataset}{Input dataset
 
-The variables specified by the \code{by_vars} and \code{analysis_var} arguments are expected to be in the dataset.}
+The variables specified by the \code{by_vars} argument are expected to be in the dataset.}
 
 \item{by_vars}{Grouping variables
 
@@ -37,18 +30,6 @@ values greater than mean of AVAL with in \code{by_vars}.
 \item \code{filter_rows = (dplyr::n() > 2)} will filter n count of \code{by_vars} greater
 than 2.
 }}
-
-\item{analysis_var}{Analysis variable.
-
-\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}} Please use \code{set_values_to} instead.}
-
-\item{summary_fun}{Function that takes as an input the \code{analysis_var} and
-performs the calculation.
-
-\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}} Please use \code{set_values_to} instead.
-
-This can include built-in functions as well as user defined functions,
-for example \code{mean} or \code{function(x) mean(x, na.rm = TRUE)}.}
 
 \item{set_values_to}{Variables to be set
 
