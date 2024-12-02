@@ -10,6 +10,7 @@ derive_var_atoxgr_dir(
   tox_description_var,
   meta_criteria,
   criteria_direction,
+  abnormal_indicator = NULL,
   get_unit_expr,
   signif_dig = get_admiral_option("signif_digits")
 )
@@ -51,6 +52,14 @@ based on a subset of subjects (e.g. AGE > 18 YEARS)
 \item{criteria_direction}{Direction (L= Low, H = High) of toxicity grade.
 
 Permitted Values: "L", "H"}
+
+\item{abnormal_indicator}{Value in \code{BNRIND} derivation to indicate an abnormal value.
+Usually "HIGH" for \code{criteria_direction} = "H" and "LOW" for \code{criteria_direction} = "L".
+
+This is only required when \code{meta_criteria = atoxgr_criteria_ctcv5} and \code{BNRIND} is a required
+variable. Currently for terms \code{"Alanine aminotransferase increased"},
+\code{"Alkaline phosphatase increased"}, \code{"Aspartate aminotransferase increased"},
+\code{"Blood bilirubin increased"} and \code{"GGT increased"}}
 
 \item{get_unit_expr}{An expression providing the unit of the parameter
 

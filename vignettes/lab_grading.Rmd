@@ -558,9 +558,14 @@ atoxgr_criteria_ctcv5 %>%
 
 For terms "Alanine aminotransferase increased", "Alkaline phosphatase increased",
 "Aspartate aminotransferase increased", "Blood bilirubin increased" and "GGT increased" the criteria
-is dependent on the Baseline Value `BASE` being normal or abnormal. For `BASE` to be abnormal we compare
-it with the Upper Limit of Normal (ULN) `ANRHI`, i.e. `BASE > ANRHI`.
-This means if `BASE` is abnormal then the grade is always zero for the baseline observation.
+is dependent on the Baseline Value being normal or abnormal. We use the variable `BNRIND` to determine
+this, and users can pass in the value(s) of `BNRIND` that indicate the baseline is abnormal via the argument
+`abnormal_indicator` in the function `derive_var_atoxgr_dir()`.
+For example, setting `abnormal_indicator = "HIGH"` would mean any observations with `BNRIND = "HIGH"` would
+be deemed to have an abnormal Baseline Value.
+Note: you can pass in multiple values, `abnormal_indicator = c("H", "HIGH")`
+
+For these 5 terms, this means if `BNRIND` is abnormal then the grade is always zero for the baseline observation.
 
 For term "INR Increased" there is the following criteria:
 
