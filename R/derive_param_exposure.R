@@ -54,8 +54,8 @@
 #' an observation is added to the output dataset and the defined values are set to the defined
 #' variables
 #'
-#' @return The input dataset with a new record added for each group (with respect to the variables
-#' specified for the `by_vars` parameter). That is, a variable will only
+#' @return The input dataset with a new record added for each group (as defined
+#' by `by_vars` parameter). That is, a variable will only
 #' be populated in this new record if it is specified in `by_vars`.
 #' For each new record,
 #' + `set_values_to` lists each specified variable and computes its value,

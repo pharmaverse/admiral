@@ -67,8 +67,8 @@ value, \code{NA}, or an expression.
 \emph{Permitted Values:} List of variable-value pairs}
 }
 \value{
-The input dataset with a new record added for each group (with respect to the variables
-specified for the \code{by_vars} parameter). That is, a variable will only
+The input dataset with a new record added for each group (as defined
+by \code{by_vars} parameter). That is, a variable will only
 be populated in this new record if it is specified in \code{by_vars}.
 For each new record,
 \itemize{
