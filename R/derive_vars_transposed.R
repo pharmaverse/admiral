@@ -303,7 +303,7 @@ derive_vars_atc <- function(dataset,
     merge_duplicates = function(cnd) {
       cnd$message <- str_replace(cnd$message, "dataset_merge", "dataset_facm")
       cnd$body[[1]] <- "Please check data and `by_vars` and `id_vars` arguments."
-      rlang::cnd_signal(cnd)
+      cnd_signal(cnd)
     }
   )
   data_transposed %>%
