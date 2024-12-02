@@ -74,7 +74,7 @@ compute_scale <- function(source,
                           flip_direction = FALSE,
                           min_n = 1) {
   # Function argument checks
-  assert_numeric_vector(source) # nolint: undesirable_function_linter
+  assert_numeric_vector(source)
   assert_numeric_vector(source_range, optional = TRUE)
   if (!is.null(target_range) && is.null(source_range)) {
     cli_abort(
@@ -97,8 +97,8 @@ compute_scale <- function(source,
   assert_integer_scalar(min_n, subset = "positive")
 
   # Computation
-  if (sum(!is.na(source)) >= min_n) { # nolint: undesirable_function_linter
-    target <- mean(source, na.rm = TRUE) # nolint: undesirable_function_linter
+  if (sum(!is.na(source)) >= min_n) {
+    target <- mean(source, na.rm = TRUE)
 
     if (!is.null(source_range) && !is.null(target_range)) {
       target <- transform_range(

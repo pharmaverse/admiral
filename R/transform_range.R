@@ -59,7 +59,7 @@ transform_range <- function(source,
                             flip_direction = FALSE,
                             outside_range = "NA") {
   # Function argument checks
-  assert_numeric_vector(source) # nolint: undesirable_function_linter
+  assert_numeric_vector(source)
   assert_numeric_vector(source_range)
   assert_numeric_vector(target_range)
   assert_logical_scalar(flip_direction)
