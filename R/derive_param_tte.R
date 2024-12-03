@@ -324,10 +324,12 @@ derive_param_tte <- function(dataset = NULL,
                              set_values_to,
                              subject_keys = get_admiral_option("subject_keys"),
                              check_type = "warning") {
-  # Match check_type to valid admiral options
-  check_type <- rlang::arg_match(check_type, c("warning", "message", "error", "none"))
-
   # checking and quoting #
+  check_type <- assert_character_scalar(
+    check_type,
+    values = c("warning", "message", "error", "none"),
+    case_sensitive = FALSE
+  )
   assert_data_frame(dataset, optional = TRUE)
   assert_vars(by_vars, optional = TRUE)
   start_date <- assert_symbol(enexpr(start_date))
@@ -512,6 +514,16 @@ derive_param_tte <- function(dataset = NULL,
 #'
 #'   Permitted Values:  `"first"`, `"last"`
 #'
+#'  @param check_type Check uniqueness?
+#'
+#'   If `"warning"`, `"message"`, or `"error"` is specified, the specified message is issued
+#'   if the observations of the input dataset are not unique with respect to the
+#'   by variables and the order.
+#' 
+#'  Default: `"none"`
+#'
+#'  Permitted Values: `"none"`, `"warning"`, `"error"`, `"message"`
+#' 
 #' @details The following steps are performed to create the output dataset:
 #'
 #'   \enumerate{ \item For each source dataset the observations as specified by
@@ -623,13 +635,13 @@ filter_date_sources <- function(sources,
       dataset_name = sources[[i]]$dataset_name
     )
     # wrap filter_extreme in tryCatch to catch duplicate records and create a message
-    data[[i]] <- tryCatch(
+    data[[i]] <- try_fetch(
       {
         source_dataset %>%
           filter_if(sources[[i]]$filter) %>%
           arrange(!!!sources[[i]]$order) %>% # Ensure order is applied
           filter_extreme(
-            order = exprs(!!source_date_var),
+            order = expr_c(exprs(!!source_date_var), sources[[i]]$order),
             by_vars = expr_c(subject_keys, by_vars),
             mode = mode,
             check_type = check_type
@@ -637,13 +649,29 @@ filter_date_sources <- function(sources,
       },
       warning = function(wrn) {
         if (grepl("duplicate records", conditionMessage(wrn))) {
-          warning(sprintf(
+          cli::cli_warn(c(
             "Dataset '%s' contains duplicate records: %s",
             sources[[i]]$dataset_name,
             conditionMessage(wrn)
           ), call. = FALSE)
         }
-        return(source_dataset)
+        source_dataset %>%
+          filter_if(sources[[i]]$filter) %>%
+          arrange(!!!sources[[i]]$order) # Return filtered dataset even if a warning occurred
+      },
+      error = function(err) {
+        cli::cli_abort(c(
+          "Duplicate records detected during processing.",
+          "x Duplicate records were found in dataset {.val {sources[[i]]$dataset_name}}.",
+          "i The duplicates were identified based on the following variables: {.val {paste(c(subject_keys, by_vars, source_date_var), collapse = ', ')}}.",
+          "i Consider reviewing your dataset or adjusting the `by_vars` or `order` argument to ensure uniqueness."
+        ))
+      },
+      message = function(msg) {
+        cli::cli_inform(c(
+        "Processing dataset '{.val {sources[[i]]$dataset_name}}'...",
+        "i Filter and order criteria: {.val {paste(c(subject_keys, by_vars, sources[[i]]$order), collapse = ', ')}}."
+        ))
       }
     )
     # add date variable and accompanying variables

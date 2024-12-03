@@ -12,6 +12,12 @@
 - Update `ADEG` template to flag `ABLFL` and `ANL01FL` based on `DTYPE == "AVERAGE"` records. (#2561)
 
 ## Updates of Existing Functions
+- added `message` as option for `check_type` argument in `filter_extreme`      function. (#2481)
+
+- Users can now specify how duplicate records are handled in `derive_param_tte` using the `check_type` argument, with options including `"error"`, `"warning"`, `"message"`, or `"none"`, allowing for greater flexibility in managing duplicate data scenarios. (#2481)
+  
+- `order` argument has been added to `event_source()` and `censor_source()` and  
+  defaulted to `NULL` to allow specifying variables in addition to the date variable. This can be used to ensure the uniqueness of the select records if there is more than one record per date.  (#2481)  
 
 - The `keep_nas` argument of `derive_param_computed()` was enhanced such that it
 is now possible to specify a list of variables for which `NA`s are acceptable.
@@ -80,15 +86,6 @@ example, `">2.5 x ULN"` changed to `">2.5"` for grade 3. (#2534)
 </details>
 
 # admiral 1.1.1
-
-- `check_type = "warning"` default argument added to `derive_param_tte` with an
-  `arg_match` function within the function so the user can use a valid input of 
-  `error, message, warning, or none`. `signal_duplicate_records()` has also been
-  added to the function on lines 394 and 411 to check for uniqueness of records. (#2481)
-  
-- `order()` function has been added to `event_source()` and `censor_source()` and
-  defaulted to `NULL` to allow sorting of input data. (#2481)
-
 - `derive_extreme_event()` was fixed such that `check_type = "none"` is accepted
 again. (#2462)
 
