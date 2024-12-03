@@ -75,7 +75,7 @@ compute_scale <- function(source,
                           min_n = 1) {
   # Function argument checks
   assert_numeric_vector(source)
-  assert_numeric_vector(source_range, optional = TRUE)
+  assert_numeric_vector(source_range, length = 2, optional = TRUE)
   if (!is.null(target_range) && is.null(source_range)) {
     cli_abort(
       c("Argument {.arg source_range} is missing with no default
@@ -84,7 +84,7 @@ compute_scale <- function(source,
       )
     )
   }
-  assert_numeric_vector(target_range, optional = TRUE)
+  assert_numeric_vector(target_range, length = 2, optional = TRUE)
   if (!is.null(source_range) && is.null(target_range)) {
     cli_abort(
       c("Argument {.arg target_range} is missing with no default

@@ -59,10 +59,15 @@ the source range are set to \code{NA}.
 transform_range(
   source = c(1, 4, 3, 6, 5),
   source_range = c(1, 5),
+  target_range = c(0, 100)
+)
+
+transform_range(
+  source = c(1, 4, 3, 6, 5),
+  source_range = c(1, 5),
   target_range = c(0, 100),
   flip_direction = TRUE
 )
-
 }
 \seealso{
 BDS-Findings Functions that returns a vector: 

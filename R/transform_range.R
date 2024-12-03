@@ -49,10 +49,15 @@
 #' transform_range(
 #'   source = c(1, 4, 3, 6, 5),
 #'   source_range = c(1, 5),
+#'   target_range = c(0, 100)
+#' )
+#'
+#' transform_range(
+#'   source = c(1, 4, 3, 6, 5),
+#'   source_range = c(1, 5),
 #'   target_range = c(0, 100),
 #'   flip_direction = TRUE
 #' )
-#'
 transform_range <- function(source,
                             source_range,
                             target_range,
@@ -60,8 +65,8 @@ transform_range <- function(source,
                             outside_range = "NA") {
   # Function argument checks
   assert_numeric_vector(source)
-  assert_numeric_vector(source_range)
-  assert_numeric_vector(target_range)
+  assert_numeric_vector(source_range, length = 2)
+  assert_numeric_vector(target_range, length = 2)
   assert_logical_scalar(flip_direction)
   assert_character_scalar(outside_range, values = c("NA", "error", "warning"))
 
