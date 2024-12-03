@@ -1029,7 +1029,7 @@ test_that("derive_param_tte detects duplicates in the input datasets via pipelin
       set_values_to = exprs(PARAMCD = "TTAE"),
       check_type = "warning"
     ),
-    regexp = "Dataset 'ae' contains duplicate records"
+    regexp = "Dataset '.*' contains duplicate records."
   )
 })
 

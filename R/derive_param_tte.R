@@ -652,7 +652,7 @@ filter_date_sources <- function(sources,
         if (grepl("duplicate records", conditionMessage(cnd))) {
           cli::cli_warn(c(
             "Dataset '{.val {sources[[i]]$dataset_name}}' contains duplicate records.",
-            "i Duplicates were identified based on variables: 
+            "i Duplicates were identified based on variables:
                {.val {paste(c(subject_keys, by_vars, source_date_var), collapse = ', ')}}."
           ))
         }

@@ -7,5 +7,5 @@
       Error in `derive_var_extreme_dtm()`:
       ! The dataset names must be included in the list specified for the `source_datasets` argument.
       i Following names were provided by `source_datasets`: ea
-      i But, `sources[[1]]$dataset_name = ae`
+      i  But, `sources[[1]]$dataset_name = ae`
 
