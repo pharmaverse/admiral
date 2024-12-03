@@ -36,7 +36,7 @@ devtools::install_github("pharmaverse/admiral")
 
 ## Release Schedule
 
-The {admiral} family has several downstream and upstream dependencies and so releases are done in two Phases:
+The `{admiral}` family has several downstream and upstream dependencies and so releases are done in two Phases:
 
 * Phase 1 release is for [{admiraldev}](https://pharmaverse.github.io/admiraldev/), [{pharmaversesdtm}](https://pharmaverse.github.io/pharmaversesdtm/), and [{admiral}](https://pharmaverse.github.io/admiral/) core
 * Phase 2 release is extension packages, e.g. [{admiralonco}](https://pharmaverse.github.io/admiralonco/), [{admiralophtha}](https://pharmaverse.github.io/admiralophtha/), [{admiralvaccine}](https://pharmaverse.github.io/admiralvaccine/) and [{pharmaverseadam}](https://pharmaverse.github.io/pharmaverseadam/).

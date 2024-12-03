@@ -72,6 +72,7 @@ are not unique. (#2563)
 ## Documentation
 
 - `derive_locf_records()` documentation example was fixed to display LOCF records. (#2461)
+- The "Find my function" and "Presentation Archive"" links were made more prominent in the website navigation bar. (#2536)
 
 - `derive_var_joined_exist_flag()` documentation updated with extra examples. (#2523)
 
