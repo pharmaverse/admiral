@@ -92,6 +92,10 @@ extract_duplicate_records <- function(dataset, by_vars) {
 #' @param msg The condition message
 #' @param cnd_type Type of condition to signal when detecting duplicate records.
 #'   One of `"message"`, `"warning"` or `"error"`. Default is `"error"`.
+#' @param class Class of the condition
+#'
+#'   The specified classes are added to the classes of the condition.
+#'   `c("duplicate_records", "assert-admiral")` is always added.
 #'
 #' @return No return value, called for side effects
 #'
@@ -113,11 +117,13 @@ signal_duplicate_records <- function(dataset,
                                        "with respect to",
                                        "{.var {replace_values_by_names(by_vars)}}"
                                      ),
-                                     cnd_type = "error") {
+                                     cnd_type = "error",
+                                     class = NULL) {
   assert_expr_list(by_vars)
   assert_data_frame(dataset, required_vars = extract_vars(by_vars), check_is_grouped = FALSE)
   assert_character_vector(msg)
   assert_character_scalar(cnd_type, values = c("message", "warning", "error"))
+  assert_character_vector(class, optional = TRUE)
 
   cnd_funs <- list(message = cli_inform, warning = cli_warn, error = cli_abort)
 
@@ -134,7 +140,11 @@ signal_duplicate_records <- function(dataset,
       msg,
       i = "Run {.run admiral::get_duplicates_dataset()} to access the duplicate records"
     )
-    cnd_funs[[cnd_type]](full_msg)
+    cnd_funs[[cnd_type]](
+      full_msg,
+      class = c(class, "duplicate_records", "assert-admiral"),
+      by_vars = by_vars
+    )
   }
 }
 

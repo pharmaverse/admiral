@@ -9,7 +9,8 @@ signal_duplicate_records(
   by_vars,
   msg = paste("Dataset contains duplicate records", "with respect to",
     "{.var {replace_values_by_names(by_vars)}}"),
-  cnd_type = "error"
+  cnd_type = "error",
+  class = NULL
 )
 }
 \arguments{
@@ -28,6 +29,11 @@ e.g. \code{exprs(USUBJID, VISIT)}}
 
 \item{cnd_type}{Type of condition to signal when detecting duplicate records.
 One of \code{"message"}, \code{"warning"} or \code{"error"}. Default is \code{"error"}.}
+
+\item{class}{Class of the condition
+
+The specified classes are added to the classes of the condition.
+\code{c("duplicate_records", "assert-admiral")} is always added.}
 }
 \value{
 No return value, called for side effects
