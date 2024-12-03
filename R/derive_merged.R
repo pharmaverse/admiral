@@ -110,7 +110,7 @@
 #'   *Permitted Values*: named list of expressions, e.g.,
 #'   `exprs(BASEC = "MISSING", BASE = -1)`
 #'
-#' 
+#'
 #'
 #'   If `"warning"` or `"error"` is specified, the specified message is issued
 #'   if the observations of the (restricted) additional dataset are not unique

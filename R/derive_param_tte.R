@@ -519,11 +519,11 @@ derive_param_tte <- function(dataset = NULL,
 #'   If `"warning"`, `"message"`, or `"error"` is specified, the specified message is issued
 #'   if the observations of the input dataset are not unique with respect to the
 #'   by variables and the order.
-#' 
+#'
 #'  Default: `"none"`
 #'
 #'  Permitted Values: `"none"`, `"warning"`, `"error"`, `"message"`
-#' 
+#'
 #' @details The following steps are performed to create the output dataset:
 #'
 #'   \enumerate{ \item For each source dataset the observations as specified by
@@ -647,13 +647,14 @@ filter_date_sources <- function(sources,
             check_type = check_type
           )
       },
-      warning = function(wrn) {
-        if (grepl("duplicate records", conditionMessage(wrn))) {
+      warning = function(cnd) {
+        # Handle warnings
+        if (grepl("duplicate records", conditionMessage(cnd))) {
           cli::cli_warn(c(
-            "Dataset '%s' contains duplicate records: %s",
-            sources[[i]]$dataset_name,
-            conditionMessage(wrn)
-          ), call. = FALSE)
+            "Dataset '{.val {sources[[i]]$dataset_name}}' contains duplicate records.",
+            "i Duplicates were identified based on variables: 
+               {.val {paste(c(subject_keys, by_vars, source_date_var), collapse = ', ')}}."
+          ))
         }
         source_dataset %>%
           filter_if(sources[[i]]$filter) %>%
@@ -663,14 +664,16 @@ filter_date_sources <- function(sources,
         cli::cli_abort(c(
           "Duplicate records detected during processing.",
           "x Duplicate records were found in dataset {.val {sources[[i]]$dataset_name}}.",
-          "i The duplicates were identified based on the following variables: {.val {paste(c(subject_keys, by_vars, source_date_var), collapse = ', ')}}.",
-          "i Consider reviewing your dataset or adjusting the `by_vars` or `order` argument to ensure uniqueness."
+          "i The duplicates were identified based on the following variables:
+            {.val {paste(c(subject_keys, by_vars, source_date_var), collapse = ', ')}}.",
+          "i Consider reviewing your `by_vars` or `order` argument to ensure uniqueness."
         ))
       },
       message = function(msg) {
         cli::cli_inform(c(
-        "Processing dataset '{.val {sources[[i]]$dataset_name}}'...",
-        "i Filter and order criteria: {.val {paste(c(subject_keys, by_vars, sources[[i]]$order), collapse = ', ')}}."
+          "Processing dataset '{.val {sources[[i]]$dataset_name}}'...",
+          "i Filter and order criteria: {.val {paste(c(subject_keys, by_vars,
+          sources[[i]]$order), collapse = ', ')}}."
         ))
       }
     )

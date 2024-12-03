@@ -1061,7 +1061,7 @@ test_that("derive_param_tte produces consistent results regardless of input sort
       EVENTDESC = "AE",
       SRCDOM = "AE",
       SRCVAR = "AESTDTC",
-      SRCSEQ = AESEQ  # Ensure AESEQ is included here
+      SRCSEQ = AESEQ # Ensure AESEQ is included here
     )
   )
 
@@ -1069,9 +1069,10 @@ test_that("derive_param_tte produces consistent results regardless of input sort
     dataset_name = "adsl",
     date = pmin(TRTEDT + days(10), EOSDT),
     censor = 1,
-    set_values_to = exprs(EVENTDESC = "END OF TRT",
-    SRCDOM = "ADSL",
-    SRCVAR = "TRTEDT"
+    set_values_to = exprs(
+      EVENTDESC = "END OF TRT",
+      SRCDOM = "ADSL",
+      SRCVAR = "TRTEDT"
     )
   )
 
