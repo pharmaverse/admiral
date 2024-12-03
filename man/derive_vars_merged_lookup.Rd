@@ -92,6 +92,14 @@ condition.
 
 \emph{Permitted Values}: a condition}
 
+\item{check_type}{Check uniqueness?
+
+If \code{"warning"}, \code{"message"}, or \code{"error"} is specified, the specified message is issued
+if the observations of the input dataset are not unique with respect to the
+by variables and the order.
+
+Default: \code{"warning"}}
+
 \item{duplicate_msg}{Message of unique check
 
 If the uniqueness check fails, the specified message is displayed.

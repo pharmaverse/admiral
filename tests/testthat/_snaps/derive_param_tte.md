@@ -56,10 +56,10 @@
         death), censor_conditions = list(lstalv), source_datasets = list(adsl = adsl),
       set_values_to = exprs(PARAMCD = "OS", PARAM = "Overall Survival"))
     Condition
-      Error:
-      ! Could not evaluate cli `{}` expression: `source_names`.
-      Caused by error:
-      ! object 'source_names' not found
+      Error in `derive_param_tte()`:
+      ! The dataset names must be included in the list specified for the `source_datasets` argument.
+      i Following names were provided by `source_datasets`: "adsl"
+      i But, `censor_conditions[[1]]$dataset_name = adls`
 
 # list_tte_source_objects Test 14: error is issued if package does not exist
 

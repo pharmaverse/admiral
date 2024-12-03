@@ -60,6 +60,14 @@
 #'
 #'   A list of symbols created using `exprs()` is expected.
 #'
+#' @param check_type Check uniqueness
+#'
+#'   If `"warning"`, `"message"`, or `"error"` is specified, the specified message is issued
+#'   if the observations of the input dataset are not unique with respect to the
+#'   by variables and the order.
+#'
+#'  Default: `"none"`
+#'
 #' @details The following steps are performed to create the observations of the
 #'   new parameter:
 #'
@@ -514,7 +522,7 @@ derive_param_tte <- function(dataset = NULL,
 #'
 #'   Permitted Values:  `"first"`, `"last"`
 #'
-#'  @param check_type Check uniqueness?
+#'  @param check_type Check uniqueness
 #'
 #'   If `"warning"`, `"message"`, or `"error"` is specified, the specified message is issued
 #'   if the observations of the input dataset are not unique with respect to the
@@ -635,7 +643,7 @@ filter_date_sources <- function(sources,
       dataset_name = sources[[i]]$dataset_name
     )
     # wrap filter_extreme in tryCatch to catch duplicate records and create a message
-    data[[i]] <- try_fetch(
+    data[[i]] <- rlang::try_fetch(
       {
         source_dataset %>%
           filter_if(sources[[i]]$filter) %>%
@@ -836,6 +844,10 @@ extend_source_datasets <- function(source_datasets,
 #'   SRCDOM = "ADSL", SRCVAR = "DTHDT")`. The values must be a symbol, a
 #'   character string, a numeric value, an expression, or `NA`.
 #'
+#' @param order Sort order
+#'
+#'   If the argument is set to a non-null value, for each by group the first or
+#'   last observation
 #'
 #' @keywords source_specifications
 #' @family source_specifications

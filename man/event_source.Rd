@@ -31,6 +31,11 @@ date from a date character vector to a date object.}
 \item{set_values_to}{A named list returned by \code{exprs()} defining the variables
 to be set for the event or censoring, e.g. \code{exprs(EVENTDESC = "DEATH", SRCDOM = "ADSL", SRCVAR = "DTHDT")}. The values must be a symbol, a
 character string, a numeric value, an expression, or \code{NA}.}
+
+\item{order}{Sort order
+
+If the argument is set to a non-null value, for each by group the first or
+last observation}
 }
 \value{
 An object of class \code{event_source}, inheriting from class \code{tte_source}

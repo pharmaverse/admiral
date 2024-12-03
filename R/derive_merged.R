@@ -122,6 +122,14 @@
 #'
 #'   *Permitted Values*: `"none"`, `"warning"`, `"error"`
 #'
+#' @param check_type Check uniqueness?
+#'
+#'   If `"warning"`, `"message"`, or `"error"` is specified, the specified message is issued
+#'   if the observations of the input dataset are not unique with respect to the
+#'   by variables and the order.
+#'
+#'    Default: `"warning"`
+#'
 #' @param duplicate_msg Message of unique check
 #'
 #'   If the uniqueness check fails, the specified message is displayed.
