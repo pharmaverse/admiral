@@ -124,10 +124,8 @@ test_that("compute_scale Test 7: error if target_range is supplied, but not sour
   expect_snapshot(
     error = TRUE,
     compute_scale(input,
-                  target_range = c(0, 100),
-                  min_n = 2
+      target_range = c(0, 100),
+      min_n = 2
     )
   )
 })
-
-
