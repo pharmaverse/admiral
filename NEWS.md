@@ -41,6 +41,8 @@ or that the queries dataset contains duplicates. (#2543)
 
 - Update `derive_vars_period()` to make it work when there is only one new variable. (#2582)
 
+- In `get_summary_records()`, previously deprecated formal arguments `analysis_var` and `summary_fun` now removed from function, documentation, tests etc. (#2521)
+
 ## Breaking Changes
   
 - The following function arguments are entering the next phase of the deprecation process: (#2487)
@@ -68,6 +70,7 @@ or that the queries dataset contains duplicates. (#2543)
 ## Documentation
 
 - `derive_locf_records()` documentation example was fixed to display LOCF records. (#2461)
+- The "Find my function" and "Presentation Archive"" links were made more prominent in the website navigation bar. (#2536)
 
 - `derive_var_joined_exist_flag()` documentation updated with extra examples. (#2523)
 
