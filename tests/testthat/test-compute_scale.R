@@ -115,12 +115,19 @@ test_that("compute_scale Test 6: error if source_range is supplied, but not targ
       min_n = 2
     )
   )
+})
+
+## Test 7: error if target_range is supplied, but not source_range ----
+test_that("compute_scale Test 7: error if target_range is supplied, but not source_range", {
+  input <- c(1, 3, 5, 5, 1, 3, 3)
 
   expect_snapshot(
     error = TRUE,
     compute_scale(input,
-      target_range = c(0, 100),
-      min_n = 2
+                  target_range = c(0, 100),
+                  min_n = 2
     )
   )
 })
+
+
