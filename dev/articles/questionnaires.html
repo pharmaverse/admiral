@@ -27,7 +27,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">admiral</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.1.1.9033</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.1.1.9034</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -197,6 +197,10 @@ finding ADaM</a>. For example:</p>
 based on time-windows, see <a href="visits_periods.html#visits">Visit
 and Period Variables</a>. And for flagging values to be used for
 analysis, see <code><a href="../reference/derive_var_extreme_flag.html">derive_var_extreme_flag()</a></code>.</p>
+</div>
+<div class="section level2">
+<h2 id="transformed-items">Transformed Items<a class="anchor" aria-label="anchor" href="#transformed-items"></a>
+</h2>
 <p>Please note that in the example data, the numeric values of the
 answers are mapped in SDTM (<code>QSSTRESN</code>) such that they can be
 used for deriving scores. Depending on the question,
@@ -206,6 +210,12 @@ ready to be used for deriving scores and require transformation, it is
 recommended that <code>QSSTRESN</code> is kept in the ADaM dataset for
 traceability, and the transformed value is stored in <code>AVAL</code>,
 since that’s what will be used for the score calculation.</p>
+<p>It may also be necessary to transform the range of the numeric values
+of the original items. For example if a scale should be derived as the
+average but the range of the contributing items varies. In this case the
+values could be linearly transformed to a unified range like
+<code>[0, 100]</code>. The computation function
+<code><a href="../reference/transform_range.html">transform_range()</a></code> can be used for the transformation.</p>
 </div>
 <div class="section level2">
 <h2 id="scales-and-scores">Scales and Scores<a class="anchor" aria-label="anchor" href="#scales-and-scores"></a>
