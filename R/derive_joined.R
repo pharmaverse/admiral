@@ -806,16 +806,18 @@ get_joined_data <- function(dataset,
 
   # join the input dataset with itself such that to each observation of the
   # input dataset all following observations are joined
+  data <- dtplyr::lazy_dt(data)
+  data_add_to_join <- dtplyr::lazy_dt(select(
+    data_add,
+    !!!by_vars,
+    !!!replace_values_by_names(extract_vars(order)),
+    !!!replace_values_by_names(join_vars),
+    !!tmp_obs_nr_var
+  ))
   data_joined <-
     left_join(
       data,
-      select(
-        data_add,
-        !!!by_vars,
-        !!!replace_values_by_names(extract_vars(order)),
-        !!!replace_values_by_names(join_vars),
-        !!tmp_obs_nr_var
-      ),
+      data_add_to_join,
       by = vars2chr(by_vars_left),
       suffix = c("", ".join")
     )
@@ -864,7 +866,7 @@ get_joined_data <- function(dataset,
   data_joined %>%
     group_by(!!!by_vars_left, !!tmp_obs_nr_left) %>%
     filter_if(filter_join) %>%
-    ungroup() %>%
+    ungroup() %>% as_tibble() %>%
     remove_tmp_vars() %>%
     select(-!!tmp_obs_nr_var_join)
 }
