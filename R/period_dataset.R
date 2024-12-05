@@ -419,6 +419,7 @@ derive_vars_period <- function(dataset,
   ref_wide <- pivot_wider(
     ref_stripped,
     names_from = vars2chr(id_vars),
+    names_glue = sprintf("{.value}_%s", paste0(sprintf("{%s}", vars2chr(id_vars)), collapse = "_")),
     values_from = unname(new_vars_chr)
   )
 

@@ -41,6 +41,8 @@ or that the queries dataset contains duplicates. (#2543)
   
 - test scripts, R, and markdown files for `create_single_dose_dataset` and `occds.Rmd` updated to include a `STUDYID` column because of `get_admiral_option("subject_keys")` update above. (#2501)
 
+- Update `derive_vars_period()` to make it work when there is only one new variable. (#2582)
+
 - In `get_summary_records()`, previously deprecated formal arguments `analysis_var` and `summary_fun` now removed from function, documentation, tests etc. (#2521)
 
 ## Breaking Changes
