@@ -635,16 +635,6 @@ test_that("derive_vars_dt Test 25: Supplying both min/max dates for highest_impu
   expect_dfs_equal(actual, expected, keys = c("ASTDT", "ASTDTF"))
 })
 
-# data for Test 26 ----
-
-date <- tibble::tribble(
-  ~XXSTDTC, ~ASTDTF,
-  "2019-07-18T15:25:40", NA_character_,
-  "2019-07-18", NA_character_,
-  "2019-02", NA_character_,
-  "2019", NA_character_,
-  "2019---07", NA_character_
-)
 
 ## Test 26: no date imputation, DTF present ----
 test_that("derive_vars_dt Test 26: no date imputation, DTF present", {
@@ -656,7 +646,7 @@ test_that("derive_vars_dt Test 26: no date imputation, DTF present", {
     "2019",                as.Date(NA),           NA_character_,
     "2019---07",           as.Date(NA),           NA_character_
   )
-
+  date <- select(expected_output, -ASTDT)
   actual_output <- derive_vars_dt(
     date,
     new_vars_prefix = "AST",
