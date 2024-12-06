@@ -806,14 +806,22 @@ get_joined_data <- function(dataset,
 
   # join the input dataset with itself such that to each observation of the
   # input dataset all following observations are joined
-  data <- dtplyr::lazy_dt(data)
-  data_add_to_join <- dtplyr::lazy_dt(select(
+  data_add_to_join <- select(
     data_add,
     !!!by_vars,
     !!!replace_values_by_names(extract_vars(order)),
     !!!replace_values_by_names(join_vars),
     !!tmp_obs_nr_var
-  ))
+  )
+
+  con <- DBI::dbConnect(RSQLite::SQLite(), "", extended_types = TRUE)
+  on.exit(DBI::dbDisconnect(con), add = TRUE)
+  copy_to(con, data)
+  copy_to(con, data_add_to_join)
+
+  data <- tbl(con, "data")
+  data_add_to_join <- tbl(con, "data_add_to_join")
+
   data_joined <-
     left_join(
       data,
@@ -866,7 +874,8 @@ get_joined_data <- function(dataset,
   data_joined %>%
     group_by(!!!by_vars_left, !!tmp_obs_nr_left) %>%
     filter_if(filter_join) %>%
-    ungroup() %>% as_tibble() %>%
+    ungroup() %>%
+    collect() %>%
     remove_tmp_vars() %>%
     select(-!!tmp_obs_nr_var_join)
 }
