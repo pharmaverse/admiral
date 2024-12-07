@@ -110,7 +110,7 @@
 #'   *Permitted Values*: named list of expressions, e.g.,
 #'   `exprs(BASEC = "MISSING", BASE = -1)`
 #'
-#' @param check_type Check uniqueness?
+#'
 #'
 #'   If `"warning"` or `"error"` is specified, the specified message is issued
 #'   if the observations of the (restricted) additional dataset are not unique
@@ -121,6 +121,14 @@
 #'    to the by variables, an error is issued.
 #'
 #'   *Permitted Values*: `"none"`, `"warning"`, `"error"`
+#'
+#' @param check_type Check uniqueness?
+#'
+#'   If `"warning"`, `"message"`, or `"error"` is specified, the specified message is issued
+#'   if the observations of the input dataset are not unique with respect to the
+#'   by variables and the order.
+#'
+#'    Default: `"warning"`
 #'
 #' @param duplicate_msg Message of unique check
 #'
