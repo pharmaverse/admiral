@@ -851,7 +851,8 @@ get_joined_data <- function(dataset,
       filter_join = filter_join
     ),
     mc.cores = num_cores,
-    SIMPLIFY = FALSE)
+    SIMPLIFY = FALSE
+  )
 
   errors <- map_lgl(joined_data, inherits, "try-error")
   if (any(errors)) {
