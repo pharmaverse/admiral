@@ -806,17 +806,84 @@ get_joined_data <- function(dataset,
 
   # join the input dataset with itself such that to each observation of the
   # input dataset all following observations are joined
+  data_add_to_join <- select(
+    data_add,
+    !!!by_vars,
+    !!!replace_values_by_names(extract_vars(order)),
+    !!!replace_values_by_names(join_vars),
+    !!tmp_obs_nr_var
+  )
+
+  if (is.null(by_vars_left)) {
+    # create batches of about 1MB input data
+    obs_per_batch <- floor(1000000 / as.numeric(object.size(data) / nrow(data)))
+    tmp_batch_nr <- get_new_tmp_var(data, prefix = "tmp_batch_nr")
+    data_list <- data %>%
+      mutate(!!tmp_batch_nr := ceiling(row_number() / obs_per_batch)) %>%
+      group_by(!!tmp_batch_nr) %>%
+      group_split(.keep = FALSE)
+    data_add_list <- list(data_add_to_join)
+  } else {
+    data_nest <- nest(data, data = everything(), .by = vars2chr(unname(by_vars_left)))
+    data_add_nest <- nest(data_add, data_add = everything(), .by = vars2chr(unname(by_vars_left)))
+    data_all_nest <- inner_join(data_nest, data_add_nest, by = vars2chr(by_vars_left))
+    data_list <- data_all_nest$data
+    data_add_list <- data_all_nest$data_add
+  }
+
+  num_cores <- if_else(
+    str_length(Sys.getenv("_R_CHECK_LIMIT_CORES_", "")) > 0,
+    2,
+    getOption("mc.cores", max(2L, parallel::detectCores()))
+  )
+
+  joined_data <- parallel::mcmapply(
+    get_joined_sub_data,
+    data_list,
+    data_add_list,
+    MoreArgs = list(
+      by_vars = by_vars_left,
+      tmp_obs_nr_var = tmp_obs_nr_var,
+      tmp_obs_nr_left = tmp_obs_nr_left,
+      join_type = join_type,
+      first_cond_upper = first_cond_upper,
+      first_cond_lower = first_cond_lower,
+      filter_join = filter_join
+    ),
+    mc.cores = num_cores,
+    SIMPLIFY = FALSE
+  )
+
+  errors <- map_lgl(joined_data, inherits, "try-error")
+  if (any(errors)) {
+    cli_abort(
+      joined_data[errors][[1]]
+    )
+  }
+
+  bind_rows(joined_data) %>%
+    remove_tmp_vars() %>%
+    select(-!!tmp_obs_nr_var_join)
+}
+
+get_joined_sub_data <- function(data,
+                                data_add,
+                                by_vars,
+                                tmp_obs_nr_var,
+                                tmp_obs_nr_left,
+                                join_type,
+                                first_cond_upper,
+                                first_cond_lower,
+                                filter_join) {
+  tmp_obs_nr_var <- enexpr(tmp_obs_nr_var)
+  first_cond_upper <- enexpr(first_cond_upper)
+  first_cond_lower <- enexpr(first_cond_lower)
+
   data_joined <-
     left_join(
       data,
-      select(
-        data_add,
-        !!!by_vars,
-        !!!replace_values_by_names(extract_vars(order)),
-        !!!replace_values_by_names(join_vars),
-        !!tmp_obs_nr_var
-      ),
-      by = vars2chr(by_vars_left),
+      data_add,
+      by = vars2chr(by_vars),
       suffix = c("", ".join")
     )
 
@@ -837,7 +904,7 @@ get_joined_data <- function(dataset,
     # select all observations up to the first confirmation observation
     data_joined <- filter_relative(
       data_joined,
-      by_vars = expr_c(by_vars_left, tmp_obs_nr_var),
+      by_vars = expr_c(by_vars, tmp_obs_nr_var),
       condition = !!first_cond_upper,
       order = exprs(!!parse_expr(paste0(as_name(tmp_obs_nr_var), ".join"))),
       mode = "first",
@@ -851,7 +918,7 @@ get_joined_data <- function(dataset,
     # select all observations up to the first confirmation observation
     data_joined <- filter_relative(
       data_joined,
-      by_vars = expr_c(by_vars_left, tmp_obs_nr_var),
+      by_vars = expr_c(by_vars, tmp_obs_nr_var),
       condition = !!first_cond_lower,
       order = exprs(!!parse_expr(paste0("desc(", as_name(tmp_obs_nr_var), ".join)"))),
       mode = "first",
@@ -862,9 +929,7 @@ get_joined_data <- function(dataset,
   }
   # apply confirmation condition, which may include summary functions
   data_joined %>%
-    group_by(!!!by_vars_left, !!tmp_obs_nr_left) %>%
-    filter_if(filter_join) %>%
-    ungroup() %>%
-    remove_tmp_vars() %>%
-    select(-!!tmp_obs_nr_var_join)
+    group_by(!!!by_vars, !!enexpr(tmp_obs_nr_left)) %>%
+    filter_if(enexpr(filter_join)) %>%
+    ungroup()
 }
