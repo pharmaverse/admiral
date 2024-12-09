@@ -30,6 +30,6 @@
 #'             str_trim
 #' @importFrom tidyr crossing drop_na fill nest pivot_longer pivot_wider unnest
 #' @importFrom tidyselect all_of any_of contains matches vars_select
-#' @importFrom utils capture.output file.edit str
+#' @importFrom utils capture.output file.edit object.size str
 #'
 "_PACKAGE"

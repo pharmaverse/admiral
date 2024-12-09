@@ -814,8 +814,6 @@ get_joined_data <- function(dataset,
     !!tmp_obs_nr_var
   )
 
-  num_cores <- parallel::detectCores()
-
   if (is.null(by_vars_left)) {
     # create batches of about 1MB input data
     obs_per_batch <- floor(1000000 / as.numeric(object.size(data) / nrow(data)))
@@ -832,6 +830,12 @@ get_joined_data <- function(dataset,
     data_list <- data_all_nest$data
     data_add_list <- data_all_nest$data_add
   }
+
+  num_cores <- if_else(
+    str_length(Sys.getenv("_R_CHECK_LIMIT_CORES_", "")) > 0,
+    2,
+    getOption("mc.cores", max(2L, parallel::detectCores()))
+  )
 
   joined_data <- parallel::mcmapply(
     get_joined_sub_data,
