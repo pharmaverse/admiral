@@ -172,7 +172,8 @@ test_that("derive_vars_transposed Test 5: ATC variables are merged properly", {
 })
 
 ## Test 6: `Relationship` argument handled by left_join  ----
-test_that("derive_vars_transposed Test 6: left_join throws error when argument specified by `relationship` is incorrect", {
+test_that("derive_vars_transposed Test 6: left_join throws error when argument specified by
+          `relationship` is incorrect", {
   cm <- tibble::tribble(
     ~STUDYID,  ~USUBJID,       ~CMGRPID, ~CMREFID,  ~CMDECOD,
     "STUDY01", "BP40257-1001", "14",     "1192056", "PARACETAMOL",
