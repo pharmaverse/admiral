@@ -6,6 +6,8 @@
 `AVALCATx` & `AVALCAxN`. (#2480)
 - New function `derive_vars_crit_flag()` for deriving criterion flag variables
 (`CRITy`, `CRITyFL`, `CRITyFLN`). (#2468)
+- New function `transform_range()`  to transform values from a source range to a
+target range. (#2571)
 - Replace use of `data("sdtm")` with `sdtm <- pharmaverse::sdtm` in templates and vignettes. (#2498)
 
 - Remove `dthcaus_source()` calls in `ADSL` template because they are deprecated. (#2517)
@@ -38,6 +40,8 @@ or that the queries dataset contains duplicates. (#2543)
 - `derive_vars_atc()` and `create_single_dose_dataset()` `by_vars` argument updated to use `get_admiral_option("subject_keys")` instead of  `USUBJID` or `STUDYID` in `bds_exposure.Rmd`. (#2501)
   
 - test scripts, R, and markdown files for `create_single_dose_dataset` and `occds.Rmd` updated to include a `STUDYID` column because of `get_admiral_option("subject_keys")` update above. (#2501)
+
+- Update `derive_vars_period()` to make it work when there is only one new variable. (#2582)
 
 - In `get_summary_records()`, previously deprecated formal arguments `analysis_var` and `summary_fun` now removed from function, documentation, tests etc. (#2521)
 
