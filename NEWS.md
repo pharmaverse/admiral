@@ -67,6 +67,8 @@ or that the queries dataset contains duplicates. (#2543)
 
 ## Documentation
 
+- `my_first_fcn()` documentation updated to improve the clarity of the `@return` description, now stating: "A string with a welcome message 'Welcome to admiral!'". (#2593)
+
 - `derive_locf_records()` documentation example was fixed to display LOCF records. (#2461)
 - The "Find my function" and "Presentation Archive"" links were made more prominent in the website navigation bar. (#2536)
 
