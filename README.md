@@ -36,7 +36,7 @@ devtools::install_github("pharmaverse/admiral")
 
 ## Release Schedule
 
-The {admiral} family has several downstream and upstream dependencies and so releases are done in two Phases:
+The `{admiral}` family has several downstream and upstream dependencies and so releases are done in two Phases:
 
 * Phase 1 release is for [{admiraldev}](https://pharmaverse.github.io/admiraldev/), [{pharmaversesdtm}](https://pharmaverse.github.io/pharmaversesdtm/), and [{admiral}](https://pharmaverse.github.io/admiral/) core
 * Phase 2 release is extension packages, e.g. [{admiralonco}](https://pharmaverse.github.io/admiralonco/), [{admiralophtha}](https://pharmaverse.github.io/admiralophtha/), [{admiralvaccine}](https://pharmaverse.github.io/admiralvaccine/) and [{pharmaverseadam}](https://pharmaverse.github.io/pharmaverseadam/).
@@ -189,4 +189,4 @@ We use the following for support and communications between user and developer c
 
 Along with the authors and contributors, thanks to the following people for their work on the package:
 
-Jaxon Abercrombie, Mahdi About, Teckla Akinyi, James Black, Claudia Carlucci, Asha Chakma, Bill Denney, Kamila Duniec, Alice Ehmann, Romain Francois, Ania Golab, Alana Harris, Declan Hodges, Anthony Howard, Shimeng Huang, Samia Kabi, James Kim, John Kirkpatrick, Leena Khatri, Robin Koeger, Konstantina Koukourikou, Pavan Kumar, Pooja Kumari, Shan Lee, Wenyi Liu, Iain McCay, Jack McGavigan, Jordanna Morrish, Syed Mubasheer, Thomas Neitmann, Yohann Omnes, Barbara O'Reilly, Hamza Rahal, Nick Ramirez, Tom Ratford, Jim Rothstein, Sukalpo Saha, Tamara Senior, Sophie Shapcott, Ondrej Slama, Andrew Smith, Daniil Stefonishin, Vignesh Thanikachalam, Michael Thorpe, Annie Yang, Ojesh Upadhyay and Franciszek Walkowiak.
+Jaxon Abercrombie, Mahdi About, Teckla Akinyi, James Black, Claudia Carlucci, Asha Chakma, Bill Denney, Kamila Duniec, Alice Ehmann, Romain Francois, Ania Golab, Alana Harris, Declan Hodges, Anthony Howard, Shimeng Huang, Samia Kabi, James Kim, John Kirkpatrick, Leena Khatri, Robin Koeger, Konstantina Koukourikou, Pavan Kumar, Pooja Kumari, Shan Lee, Wenyi Liu, Iain McCay, Jack McGavigan, Jordanna Morrish, Syed Mubasheer, Thomas Neitmann, Yohann Omnes, Barbara O'Reilly, Hamza Rahal, Nick Ramirez, Tom Ratford, Jim Rothstein, Sukalpo Saha, Tamara Senior, Sophie Shapcott, Ondrej Slama, Andrew Smith, Daniil Stefonishin, Vignesh Thanikachalam, Michael Thorpe, Annie Yang, Ojesh Upadhyay, Franciszek Walkowiak and Vladyslav Shuliar.

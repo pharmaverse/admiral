@@ -117,6 +117,8 @@ We handle unscheduled visits as normal visits. For deriving visits based on
 time-windows, see [Visit and Period Variables](visits_periods.html#visits). And
 for flagging values to be used for analysis, see `derive_var_extreme_flag()`.
 
+# Transformed Items
+
 Please note that in the example data, the numeric values of the answers are
 mapped in SDTM (`QSSTRESN`) such that they can be used for deriving scores.
 Depending on the question, `QSORRES == "YES"` is mapped to `QSSTRESN = 0` or
@@ -124,6 +126,12 @@ Depending on the question, `QSORRES == "YES"` is mapped to `QSSTRESN = 0` or
 scores and require transformation, it is recommended that `QSSTRESN` is kept in
 the ADaM dataset for traceability, and the transformed value is stored in
 `AVAL`, since that's what will be used for the score calculation.
+
+It may also be necessary to transform the range of the numeric values of the
+original items. For example if a scale should be derived as the average but the
+range of the contributing items varies. In this case the values could be
+linearly transformed to a unified range like `[0, 100]`. The computation
+function `transform_range()` can be used for the transformation.
 
 # Scales and Scores
 
