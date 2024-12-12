@@ -43,19 +43,19 @@
 #' library(tibble)
 #'
 #' dataset <- tribble(
-#'   ~STUDYID, ~USUBJID, ~PARAMCD, ~AVAL, ~AVALC, ~AVISIT, ~ABLFL, ~ANRIND,
-#'   "TEST01", "PAT01", "PARAM01", 10.12, NA, "Baseline", "Y", "NORMAL",
-#'   "TEST01", "PAT01", "PARAM01", 9.700, NA, "Day 7", NA_character_, "LOW",
-#'   "TEST01", "PAT01", "PARAM01", 15.01, NA, "Day 14", NA_character_, "HIGH",
-#'   "TEST01", "PAT01", "PARAM02", 8.350, NA, "Baseline", "Y", "LOW",
-#'   "TEST01", "PAT01", "PARAM02", NA, NA, "Day 7", NA_character_, NA,
-#'   "TEST01", "PAT01", "PARAM02", 8.350, NA, "Day 14", NA_character_, "LOW",
-#'   "TEST01", "PAT01", "PARAM03", NA, "LOW", "Baseline", "Y", NA,
-#'   "TEST01", "PAT01", "PARAM03", NA, "LOW", "Day 7", NA_character_, NA,
-#'   "TEST01", "PAT01", "PARAM03", NA, "MEDIUM", "Day 14", NA_character_, NA,
-#'   "TEST01", "PAT01", "PARAM04", NA, "HIGH", "Baseline", "Y", NA,
-#'   "TEST01", "PAT01", "PARAM04", NA, "HIGH", "Day 7", NA_character_, NA,
-#'   "TEST01", "PAT01", "PARAM04", NA, "MEDIUM", "Day 14", NA_character_, NA
+#'   ~STUDYID, ~USUBJID, ~PARAMCD, ~AVAL, ~AVALC,   ~AVISIT,    ~ABLFL, ~ANRIND,
+#'   "TEST01", "PAT01", "PARAM01", 10.12, NA,       "Baseline", "Y",    "NORMAL",
+#'   "TEST01", "PAT01", "PARAM01", 9.700, NA,       "Day 7",    NA,     "LOW",
+#'   "TEST01", "PAT01", "PARAM01", 15.01, NA,       "Day 14",   NA,     "HIGH",
+#'   "TEST01", "PAT01", "PARAM02", 8.350, NA,       "Baseline", "Y",    "LOW",
+#'   "TEST01", "PAT01", "PARAM02",    NA, NA,       "Day 7",    NA,     NA,
+#'   "TEST01", "PAT01", "PARAM02", 8.350, NA,       "Day 14",   NA,     "LOW",
+#'   "TEST01", "PAT01", "PARAM03",    NA, "LOW",    "Baseline", "Y",    NA,
+#'   "TEST01", "PAT01", "PARAM03",    NA, "LOW",    "Day 7",    NA,     NA,
+#'   "TEST01", "PAT01", "PARAM03",    NA, "MEDIUM", "Day 14",   NA,     NA,
+#'   "TEST01", "PAT01", "PARAM04",    NA, "HIGH",   "Baseline", "Y",    NA,
+#'   "TEST01", "PAT01", "PARAM04",    NA, "HIGH",   "Day 7",    NA,     NA,
+#'   "TEST01", "PAT01", "PARAM04",    NA, "MEDIUM", "Day 14",   NA,     NA
 #' )
 #'
 #' ## Derive `BASE` variable from `AVAL`
