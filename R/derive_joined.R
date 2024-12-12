@@ -833,20 +833,22 @@ get_joined_data <- function(dataset,
     data_add_list <- data_all_nest$data_add
   }
 
-  joined_data <- mapply(
-    get_joined_sub_data,
+  joined_data <- map2(
     data_list,
     data_add_list,
-    MoreArgs = list(
-      by_vars = by_vars_left,
-      tmp_obs_nr_var = tmp_obs_nr_var,
-      tmp_obs_nr_left = tmp_obs_nr_left,
-      join_type = join_type,
-      first_cond_upper = first_cond_upper,
-      first_cond_lower = first_cond_lower,
-      filter_join = filter_join
-    ),
-    SIMPLIFY = FALSE
+    function(x, y) {
+      get_joined_sub_data(
+        x,
+        y,
+        by_vars = by_vars_left,
+        tmp_obs_nr_var = tmp_obs_nr_var,
+        tmp_obs_nr_left = tmp_obs_nr_left,
+        join_type = join_type,
+        first_cond_upper = first_cond_upper,
+        first_cond_lower = first_cond_lower,
+        filter_join = filter_join
+      )
+    }
   )
 
   bind_rows(joined_data) %>%
@@ -885,10 +887,6 @@ get_joined_sub_data <- function(dataset,
                                 first_cond_upper,
                                 first_cond_lower,
                                 filter_join) {
-  tmp_obs_nr_var <- enexpr(tmp_obs_nr_var)
-  first_cond_upper <- enexpr(first_cond_upper)
-  first_cond_lower <- enexpr(first_cond_lower)
-
   data_joined <-
     left_join(
       dataset,
@@ -939,7 +937,7 @@ get_joined_sub_data <- function(dataset,
   }
   # apply confirmation condition, which may include summary functions
   data_joined %>%
-    group_by(!!!by_vars, !!enexpr(tmp_obs_nr_left)) %>%
-    filter_if(enexpr(filter_join)) %>%
+    group_by(!!!by_vars, !!tmp_obs_nr_left) %>%
+    filter_if(filter_join) %>%
     ungroup()
 }
