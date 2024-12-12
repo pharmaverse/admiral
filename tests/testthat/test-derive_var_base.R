@@ -90,13 +90,13 @@ test_that("derive_var_base Test 3: only the `target` variable is added to the in
     "TEST01", "PAT01", "PARAM02",     3,  8.35, NA_character_, "LAST", "Y"
   )
   expected_output <- tibble::tribble(
-    ~STUDYID, ~USUBJID, ~PARAMCD, ~ASEQ, ~AVAL, ~ABLFL, ~BASETYPE, ~ANL01FL, ~BASE,
-    "TEST01", "PAT01", "PARAM01",     1, 10.12, "Y",           "LAST", "Y", 10.12,
-    "TEST01", "PAT01", "PARAM01",     2,   9.7, NA_character_, "LAST", "Y", 10.12,
-    "TEST01", "PAT01", "PARAM01",     3, 15.01, NA_character_, "LAST", "Y", 10.12,
-    "TEST01", "PAT01", "PARAM02",     1,  8.35, "Y",           "LAST", "Y", 8.35,
-    "TEST01", "PAT01", "PARAM02",     2,    NA, NA_character_, "LAST", "Y", 8.35,
-    "TEST01", "PAT01", "PARAM02",     3,  8.35, NA_character_, "LAST", "Y", 8.35
+    ~STUDYID, ~USUBJID, ~PARAMCD, ~ASEQ, ~AVAL, ~ABLFL,        ~BASETYPE, ~ANL01FL, ~BASE,
+    "TEST01", "PAT01", "PARAM01",     1, 10.12, "Y",           "LAST",    "Y",      10.12,
+    "TEST01", "PAT01", "PARAM01",     2,   9.7, NA_character_, "LAST",    "Y",      10.12,
+    "TEST01", "PAT01", "PARAM01",     3, 15.01, NA_character_, "LAST",    "Y",      10.12,
+    "TEST01", "PAT01", "PARAM02",     1,  8.35, "Y",           "LAST",    "Y",       8.35,
+    "TEST01", "PAT01", "PARAM02",     2,    NA, NA_character_, "LAST",    "Y",       8.35,
+    "TEST01", "PAT01", "PARAM02",     3,  8.35, NA_character_, "LAST",    "Y",       8.35
   )
   actual_output <- derive_var_base(
     input,
