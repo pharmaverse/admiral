@@ -814,6 +814,8 @@ get_joined_data <- function(dataset,
     !!tmp_obs_nr_var
   )
 
+  # split input dataset into smaller pieces and process them separately
+  # This reduces the memory consumption.
   if (is.null(by_vars_left)) {
     # create batches of about 1MB input data
     obs_per_batch <- floor(1000000 / as.numeric(object.size(data) / nrow(data)))
@@ -831,13 +833,7 @@ get_joined_data <- function(dataset,
     data_add_list <- data_all_nest$data_add
   }
 
-  num_cores <- if_else(
-    str_length(Sys.getenv("_R_CHECK_LIMIT_CORES_", "")) > 0,
-    2,
-    getOption("mc.cores", max(2L, parallel::detectCores()))
-  )
-
-  joined_data <- parallel::mcmapply(
+  joined_data <- mapply(
     get_joined_sub_data,
     data_list,
     data_add_list,
@@ -850,24 +846,38 @@ get_joined_data <- function(dataset,
       first_cond_lower = first_cond_lower,
       filter_join = filter_join
     ),
-    mc.cores = num_cores,
     SIMPLIFY = FALSE
   )
-
-  errors <- map_lgl(joined_data, inherits, "try-error")
-  if (any(errors)) {
-    cli_abort(
-      joined_data[errors][[1]]
-    )
-  }
 
   bind_rows(joined_data) %>%
     remove_tmp_vars() %>%
     select(-!!tmp_obs_nr_var_join)
 }
 
-get_joined_sub_data <- function(data,
-                                data_add,
+#' Join Data for "joined" functions
+#'
+#' The helper function joins the data for the "joined" functions. All `.join`
+#' variables are included in the output dataset. It is called by
+#' `get_joined_data()` to process each by group separately. This reduces the
+#' memory consumption.
+#'
+#' @inheritParams get_joined_data
+#'
+#' @details
+#'
+#' 1. The input dataset (`dataset`) and the additional dataset (`dataset_add`)
+#' are left joined by the grouping variables (`by_vars`). If no grouping
+#' variables are specified, a full join is performed.
+#'
+#' 1. The joined dataset is restricted as specified by arguments `join_type`,
+#' `first_cond_upper`, and `first_cond_lower`. See argument descriptions for
+#' details.
+#'
+#' 1. The joined dataset is restricted by the `filter_join` condition.
+#'
+#' @keywords internal
+get_joined_sub_data <- function(dataset,
+                                dataset_add,
                                 by_vars,
                                 tmp_obs_nr_var,
                                 tmp_obs_nr_left,
@@ -881,8 +891,8 @@ get_joined_sub_data <- function(data,
 
   data_joined <-
     left_join(
-      data,
-      data_add,
+      dataset,
+      dataset_add,
       by = vars2chr(by_vars),
       suffix = c("", ".join")
     )
