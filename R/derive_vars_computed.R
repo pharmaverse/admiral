@@ -2,7 +2,11 @@
 #'
 #' Adds Variable(s) computed from the analysis value of one or more parameters.
 #' It is expected that the value of the new variable is defined by an expression
-#' using the analysis values of other parameters. For example Body Mass Index at
+#' using the analysis values of other parameters, such as addition/sum,
+#' subtraction/difference, multiplication/product, division/ratio,
+#' exponentiation/logarithm, or by formula.
+#' <br/><br/>
+#' For example Body Mass Index at
 #' Baseline (`BMIBL`) in `ADSL` can be derived from of HEIGHT and WEIGHT
 #' parameters in `ADVS`.
 #'
