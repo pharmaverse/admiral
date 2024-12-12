@@ -211,6 +211,7 @@ test_that("derive_var_trtemfl Test 11: error if `group_var` without `subject_key
     derive_var_trtemfl(
       adae,
       group_var = AEGRPID,
-      subject_keys = NULL)
+      subject_keys = NULL
+    )
   )
 })
