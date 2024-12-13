@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">admiral</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.1.1.9039</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.1.1.9040</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -94,6 +94,7 @@
 <li><p>test scripts, R, and markdown files for <code>create_single_dose_dataset</code> and <code>occds.Rmd</code> updated to include a <code>STUDYID</code> column because of <code>get_admiral_option("subject_keys")</code> update above. (<a href="https://github.com/pharmaverse/admiral/issues/2501" class="external-link">#2501</a>)</p></li>
 <li><p>Update <code><a href="../reference/derive_vars_period.html">derive_vars_period()</a></code> to make it work when there is only one new variable. (<a href="https://github.com/pharmaverse/admiral/issues/2582" class="external-link">#2582</a>)</p></li>
 <li><p>In <code><a href="../reference/get_summary_records.html">get_summary_records()</a></code>, previously deprecated formal arguments <code>analysis_var</code> and <code>summary_fun</code> now removed from function, documentation, tests etc. (<a href="https://github.com/pharmaverse/admiral/issues/2521" class="external-link">#2521</a>)</p></li>
+<li><p>A check was added to <code><a href="../reference/derive_vars_transposed.html">derive_vars_transposed()</a></code> and <code><a href="../reference/derive_vars_atc.html">derive_vars_atc()</a></code> which stops execution if the records in <code>dataset_merge</code> or <code>dataset_facm</code> respectively are not unique. (<a href="https://github.com/pharmaverse/admiral/issues/2563" class="external-link">#2563</a>)</p></li>
 <li><p>The functions <code><a href="../reference/derive_vars_joined.html">derive_vars_joined()</a></code>, <code><a href="../reference/derive_var_joined_exist_flag.html">derive_var_joined_exist_flag()</a></code>, <code><a href="../reference/derive_extreme_event.html">derive_extreme_event()</a></code>, and <code><a href="../reference/filter_joined.html">filter_joined()</a></code> were updated to reduce their memory consumption. (<a href="https://github.com/pharmaverse/admiral/issues/2590" class="external-link">#2590</a>)</p></li>
 </ul></div>
 <div class="section level3">

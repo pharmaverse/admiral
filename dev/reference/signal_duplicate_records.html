@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">admiral</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.1.1.9039</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.1.1.9040</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -78,7 +78,8 @@
 <span>  <span class="va">by_vars</span>,</span>
 <span>  msg <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="st">"Dataset contains duplicate records"</span>, <span class="st">"with respect to"</span>,</span>
 <span>    <span class="st">"{.var {replace_values_by_names(by_vars)}}"</span><span class="op">)</span>,</span>
-<span>  cnd_type <span class="op">=</span> <span class="st">"error"</span></span>
+<span>  cnd_type <span class="op">=</span> <span class="st">"error"</span>,</span>
+<span>  class <span class="op">=</span> <span class="cn">NULL</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -105,6 +106,12 @@ e.g. <code>exprs(USUBJID, VISIT)</code></p></dd>
 <dt id="arg-cnd-type">cnd_type<a class="anchor" aria-label="anchor" href="#arg-cnd-type"></a></dt>
 <dd><p>Type of condition to signal when detecting duplicate records.
 One of <code>"message"</code>, <code>"warning"</code> or <code>"error"</code>. Default is <code>"error"</code>.</p></dd>
+
+
+<dt id="arg-class">class<a class="anchor" aria-label="anchor" href="#arg-class"></a></dt>
+<dd><p>Class of the condition</p>
+<p>The specified classes are added to the classes of the condition.
+<code>c("duplicate_records", "assert-admiral")</code> is always added.</p></dd>
 
 </dl></div>
     <div class="section level2">

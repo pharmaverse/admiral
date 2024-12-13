@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">admiral</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.1.1.9039</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.1.1.9040</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -96,8 +96,9 @@
 
 <dt id="arg-dataset-merge">dataset_merge<a class="anchor" aria-label="anchor" href="#arg-dataset-merge"></a></dt>
 <dd><p>Dataset to transpose and merge</p>
-<p>The variables specified by the <code>by_vars</code>, <code>key_var</code> and <code>value_var</code> parameters
-are expected</p></dd>
+<p>The variables specified by the <code>by_vars</code>, <code>id_vars</code>, <code>key_var</code> and
+<code>value_var</code> arguments are expected. The variables <code>by_vars</code>, <code>id_vars</code>,
+<code>key_var</code> have to be a unique key.</p></dd>
 
 
 <dt id="arg-by-vars">by_vars<a class="anchor" aria-label="anchor" href="#arg-by-vars"></a></dt>
@@ -132,8 +133,8 @@ variable(s) in <code>dataset</code> and <code>dataset_merge</code> (after transp
 <p>This argument is passed to the <code><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html" class="external-link">dplyr::left_join()</a></code> function. See
 <a href="https://dplyr.tidyverse.org/reference/mutate-joins.html#arguments" class="external-link">https://dplyr.tidyverse.org/reference/mutate-joins.html#arguments</a> for
 more details.</p>
-<p>Permitted Values for <code>relationship</code>: <code>"one-to-one"</code>, <code>"one-to-many"</code>,
-<code>"many-to-one"</code>, <code>"many-to-many"</code>, <code>NULL</code>.</p></dd>
+<p><em>Permitted Values</em>: <code>"one-to-one"</code>, <code>"one-to-many"</code>, <code>"many-to-one"</code>,
+<code>"many-to-many"</code>, <code>NULL</code></p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -148,7 +149,8 @@ keys.</p>
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
-    <div class="dont-index"><p>General Derivation Functions for all ADaMs that returns variable appended to dataset:
+    <div class="dont-index"><p><code><a href="derive_vars_atc.html">derive_vars_atc()</a></code></p>
+<p>General Derivation Functions for all ADaMs that returns variable appended to dataset:
 <code><a href="derive_var_extreme_flag.html">derive_var_extreme_flag</a>()</code>,
 <code><a href="derive_var_joined_exist_flag.html">derive_var_joined_exist_flag</a>()</code>,
 <code><a href="derive_var_merged_ef_msrc.html">derive_var_merged_ef_msrc</a>()</code>,

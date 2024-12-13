@@ -9,7 +9,7 @@ Note: This is a wrapper function for the more generic derive_vars_transposed()."
 
     <a class="navbar-brand me-2" href="../index.html">admiral</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.1.1.9039</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.1.1.9040</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -65,7 +65,7 @@ Note: This is a wrapper function for the more generic derive_vars_transposed()."
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Derive ATC Class Variables</h1>
-      <small class="dont-index">Source: <a href="https://github.com/pharmaverse/admiral/blob/main/R/derive_vars_transposed.R" class="external-link"><code>R/derive_vars_transposed.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/pharmaverse/admiral/blob/main/R/derive_vars_atc.R" class="external-link"><code>R/derive_vars_atc.R</code></a></small>
       <div class="d-none name"><code>derive_vars_atc.Rd</code></div>
     </div>
 
@@ -96,8 +96,9 @@ Note: This is a wrapper function for the more generic derive_vars_transposed()."
 
 <dt id="arg-dataset-facm">dataset_facm<a class="anchor" aria-label="anchor" href="#arg-dataset-facm"></a></dt>
 <dd><p>FACM dataset</p>
-<p>The variables specified by the <code>by_vars</code> and <code>value_var</code> parameters,
-<code>FAGRPID</code> and <code>FATESTCD</code> are required</p></dd>
+<p>The variables specified by the <code>by_vars</code>, <code>id_vars</code>, and <code>value_var</code>
+arguments and <code>FATESTCD</code> are required. The variables <code>by_vars</code>, <code>id_vars</code>,
+and <code>FATESTCD</code> must be a unique key.</p></dd>
 
 
 <dt id="arg-by-vars">by_vars<a class="anchor" aria-label="anchor" href="#arg-by-vars"></a></dt>
@@ -114,8 +115,7 @@ e.g. <code>exprs(USUBJID, VISIT)</code></p></dd>
 
 <dt id="arg-value-var">value_var<a class="anchor" aria-label="anchor" href="#arg-value-var"></a></dt>
 <dd><p>The variable of <code>dataset_facm</code> containing the values of the
-transposed variables</p>
-<p>Default: <code>FASTRESC</code></p></dd>
+transposed variables</p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -124,7 +124,8 @@ transposed variables</p>
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
-    <div class="dont-index"><p>OCCDS Functions:
+    <div class="dont-index"><p><code><a href="derive_vars_transposed.html">derive_vars_transposed()</a></code></p>
+<p>OCCDS Functions:
 <code><a href="derive_var_trtemfl.html">derive_var_trtemfl</a>()</code>,
 <code><a href="derive_vars_query.html">derive_vars_query</a>()</code>,
 <code><a href="get_terms_from_db.html">get_terms_from_db</a>()</code></p></div>
@@ -164,22 +165,15 @@ transposed variables</p>
 <span class="r-in"><span>  <span class="st">"STUDY01"</span>, <span class="st">"BP40257-1002"</span>, <span class="st">"1"</span>,      <span class="st">"2791596"</span>, <span class="st">"CMATC4CD"</span>, <span class="st">"C03DA"</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="fu">derive_vars_atc</span><span class="op">(</span><span class="va">cm</span>, <span class="va">facm</span><span class="op">)</span></span></span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Values from `FASTRESC` are not uniquely identified; output will contain</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> list-cols.</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">•</span> Use `values_fn = list` to suppress this warning.</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">•</span> Use `values_fn = {summary_fun}` to summarise duplicates.</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">•</span> Use the following dplyr code to identify duplicates.</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span>   {data} |&gt;</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span>   dplyr::summarise(n = dplyr::n(), .by = c(STUDYID, USUBJID, FAREFID,</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span>   FATESTCD)) |&gt;</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span>   dplyr::filter(n &gt; 1L)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 3 × 9</span></span>
+<span class="r-in"><span><span class="fu">derive_vars_atc</span><span class="op">(</span><span class="va">cm</span>, <span class="va">facm</span>, id_vars <span class="op">=</span> <span class="fu"><a href="reexport-exprs.html">exprs</a></span><span class="op">(</span><span class="va">FAGRPID</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 5 × 9</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   STUDYID USUBJID      CMGRPID CMREFID CMDECOD       ATC1CD ATC2CD ATC3CD ATC4CD</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>        <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>         <span style="color: #949494; font-style: italic;">&lt;list&gt;</span> <span style="color: #949494; font-style: italic;">&lt;list&gt;</span> <span style="color: #949494; font-style: italic;">&lt;list&gt;</span> <span style="color: #949494; font-style: italic;">&lt;list&gt;</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> STUDY01 BP40257-1001 14      1192056 PARACETAMOL   <span style="color: #949494;">&lt;chr&gt;</span>  <span style="color: #949494;">&lt;chr&gt;</span>  <span style="color: #949494;">&lt;chr&gt;</span>  <span style="color: #949494;">&lt;chr&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">2</span> STUDY01 BP40257-1001 18      2007001 SOLUMEDROL    <span style="color: #949494;">&lt;chr&gt;</span>  <span style="color: #949494;">&lt;chr&gt;</span>  <span style="color: #949494;">&lt;chr&gt;</span>  <span style="color: #949494;">&lt;chr&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">3</span> STUDY01 BP40257-1002 19      2791596 SPIRONOLACTO… <span style="color: #949494;">&lt;chr&gt;</span>  <span style="color: #949494;">&lt;chr&gt;</span>  <span style="color: #949494;">&lt;chr&gt;</span>  <span style="color: #949494;">&lt;chr&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>        <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>         <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> STUDY01 BP40257-1001 14      1192056 PARACETAMOL   N      N02    N02B   N02BE </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">2</span> STUDY01 BP40257-1001 18      2007001 SOLUMEDROL    D      D10    D10A   D10AA </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">3</span> STUDY01 BP40257-1001 18      2007001 SOLUMEDROL    D      D07    D07A   D07AA </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">4</span> STUDY01 BP40257-1001 18      2007001 SOLUMEDROL    H      H02    H02A   H02AB </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">5</span> STUDY01 BP40257-1002 19      2791596 SPIRONOLACTO… C      C03    C03D   C03DA </span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
