@@ -45,6 +45,10 @@ or that the queries dataset contains duplicates. (#2543)
 
 - In `get_summary_records()`, previously deprecated formal arguments `analysis_var` and `summary_fun` now removed from function, documentation, tests etc. (#2521)
 
+- A check was added to `derive_vars_transposed()` and `derive_vars_atc()` which
+stops execution if the records in `dataset_merge` or `dataset_facm` respectively
+are not unique. (#2563)
+
 - The functions `derive_vars_joined()`, `derive_var_joined_exist_flag()`,
 `derive_extreme_event()`, and `filter_joined()` were updated to reduce their
 memory consumption. (#2590)
