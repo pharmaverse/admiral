@@ -194,7 +194,7 @@ test_that("derive_var_trtemfl Test 9: error if `intensity` without `initial_inte
 })
 
 ## Test 10: warning if both `initial_intensity` and `group_var` are specified ----
-test_that("derive_var_trtemfl Test 9: error if `intensity` without `initial_intensity`", {
+test_that("derive_var_trtemfl Test 10: error if `intensity` without `initial_intensity`", {
   expect_warning(
     derive_var_trtemfl(
       adae2,
