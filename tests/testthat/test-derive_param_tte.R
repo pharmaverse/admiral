@@ -932,51 +932,8 @@ test_that("derive_param_tte Test 13: error if dataset_name not in source_datsets
   )
 })
 
-# list_tte_source_objects ----
-## Test 14: error is issued if package does not exist ----
-test_that("list_tte_source_objects Test 14: error is issued if package does not exist", {
-  expect_snapshot(
-    list_tte_source_objects(package = "tte"),
-    error = TRUE
-  )
-})
-
-## Test 15: expected objects produced ----
-test_that("list_tte_source_objects Test 15: expected objects produced", {
-  expected_output <- tibble::tribble(
-    ~object,            ~dataset_name,                                              ~filter,
-    "ae_ser_event",            "adae",                 quote(TRTEMFL == "Y" & AESER == "Y"),
-    "ae_gr2_event",            "adae",                quote(TRTEMFL == "Y" & ATOXGR == "2"),
-    "ae_sev_event",            "adae",            quote(TRTEMFL == "Y" & AESEV == "SEVERE"),
-    "ae_gr4_event",            "adae",                quote(TRTEMFL == "Y" & ATOXGR == "4"),
-    "ae_gr3_event",            "adae",                quote(TRTEMFL == "Y" & ATOXGR == "3"),
-    "lastalive_censor",        "adsl",                                                 NULL,
-    "ae_event",                "adae",                                quote(TRTEMFL == "Y"),
-    "death_event",             "adsl",                                  quote(DTHFL == "Y"),
-    "ae_gr35_event",           "adae", quote(TRTEMFL == "Y" & ATOXGR %in% c("3", "4", "5")),
-    "ae_wd_event",             "adae",    quote(TRTEMFL == "Y" & AEACN == "DRUG WITHDRAWN"),
-    "ae_gr1_event",            "adae",                quote(TRTEMFL == "Y" & ATOXGR == "1"),
-    "ae_gr5_event",            "adae",                quote(TRTEMFL == "Y" & ATOXGR == "5")
-  ) %>%
-    mutate(
-      date = case_when(
-        object == "lastalive_censor" ~ "LSTALVDT",
-        object == "death_event" ~ "DTHDT",
-        TRUE ~ "ASTDT"
-      ),
-      censor = if_else(object == "lastalive_censor", 1, 0),
-      filter = as.character(filter),
-      censor = as.integer(censor)
-    )
-
-  observed_output <- list_tte_source_objects(package = "admiral") %>%
-    select(object, dataset_name, filter, date, censor)
-
-  expect_dfs_equal(expected_output, observed_output, keys = c("object"))
-})
-
-## Test 15: derive_param_tte detects duplicates when check_type = 'warning' ----
-test_that("derive_param_tte detects duplicates in the input datasets via pipeline functions", {
+## Test 14: derive_param_tte detects duplicates when check_type = 'warning' ----
+test_that("derive_param_tte Test 14: detects duplicates in input datasets via pipeline functions", {
   # Define ADSL dataset
   adsl <- tibble::tribble(
     ~USUBJID, ~TRTSDT,           ~TRTEDT,           ~EOSDT,
@@ -1033,8 +990,8 @@ test_that("derive_param_tte detects duplicates in the input datasets via pipelin
   )
 })
 
-## Test 16: derive_param_tte produces consistent results regardless of input sort order ----
-test_that("derive_param_tte produces consistent results regardless of input sort order", {
+## Test 15: derive_param_tte produces consistent results regardless of input sort order ----
+test_that("derive_param_tte Test 15: produces consistent results regardless of input sort order", {
   # Define ADSL dataset
   adsl <- tibble::tribble(
     ~USUBJID, ~TRTSDT,           ~TRTEDT,           ~EOSDT,
@@ -1099,4 +1056,47 @@ test_that("derive_param_tte produces consistent results regardless of input sort
   )
 
   expect_equal(result_sorted, result_unsorted)
+})
+
+# list_tte_source_objects ----
+## Test 16: error is issued if package does not exist ----
+test_that("list_tte_source_objects Test 16: error is issued if package does not exist", {
+  expect_snapshot(
+    list_tte_source_objects(package = "tte"),
+    error = TRUE
+  )
+})
+
+## Test 17: expected objects produced ----
+test_that("list_tte_source_objects Test 17: expected objects produced", {
+  expected_output <- tibble::tribble(
+    ~object,            ~dataset_name,                                              ~filter,
+    "ae_ser_event",            "adae",                 quote(TRTEMFL == "Y" & AESER == "Y"),
+    "ae_gr2_event",            "adae",                quote(TRTEMFL == "Y" & ATOXGR == "2"),
+    "ae_sev_event",            "adae",            quote(TRTEMFL == "Y" & AESEV == "SEVERE"),
+    "ae_gr4_event",            "adae",                quote(TRTEMFL == "Y" & ATOXGR == "4"),
+    "ae_gr3_event",            "adae",                quote(TRTEMFL == "Y" & ATOXGR == "3"),
+    "lastalive_censor",        "adsl",                                                 NULL,
+    "ae_event",                "adae",                                quote(TRTEMFL == "Y"),
+    "death_event",             "adsl",                                  quote(DTHFL == "Y"),
+    "ae_gr35_event",           "adae", quote(TRTEMFL == "Y" & ATOXGR %in% c("3", "4", "5")),
+    "ae_wd_event",             "adae",    quote(TRTEMFL == "Y" & AEACN == "DRUG WITHDRAWN"),
+    "ae_gr1_event",            "adae",                quote(TRTEMFL == "Y" & ATOXGR == "1"),
+    "ae_gr5_event",            "adae",                quote(TRTEMFL == "Y" & ATOXGR == "5")
+  ) %>%
+    mutate(
+      date = case_when(
+        object == "lastalive_censor" ~ "LSTALVDT",
+        object == "death_event" ~ "DTHDT",
+        TRUE ~ "ASTDT"
+      ),
+      censor = if_else(object == "lastalive_censor", 1, 0),
+      filter = as.character(filter),
+      censor = as.integer(censor)
+    )
+
+  observed_output <- list_tte_source_objects(package = "admiral") %>%
+    select(object, dataset_name, filter, date, censor)
+
+  expect_dfs_equal(expected_output, observed_output, keys = c("object"))
 })

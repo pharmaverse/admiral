@@ -12,9 +12,9 @@
 - Update `ADEG` template to flag `ABLFL` and `ANL01FL` based on `DTYPE == "AVERAGE"` records. (#2561)
 
 ## Updates of Existing Functions
-- added `message` as option for `check_type` argument in `filter_extreme`      function. (#2481)
+- added `message` as option for `check_type` argument in `filter_extreme()`      function. (#2481)
 
-- Users can now specify how duplicate records are handled in `derive_param_tte` using the `check_type` argument, with options including `"error"`, `"warning"`, `"message"`, or `"none"`, allowing for greater flexibility in managing duplicate data scenarios. (#2481)
+- Users can now specify how duplicate records are handled in `derive_param_tte()` using the `check_type` argument, with options including `"error"`, `"warning"`, `"message"`, or `"none"`, allowing for greater flexibility in managing duplicate data scenarios. (#2481)
   
 - `order` argument has been added to `event_source()` and `censor_source()` and  
   defaulted to `NULL` to allow specifying variables in addition to the date variable. This can be used to ensure the uniqueness of the select records if there is more than one record per date.  (#2481)  

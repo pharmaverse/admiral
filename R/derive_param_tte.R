@@ -556,7 +556,7 @@ derive_param_tte <- function(dataset = NULL,
 #' @return A dataset with one observation per subject as described in the
 #'   "Details" section.
 #'
-#' @noRd
+#' @keywords internal
 #'
 #' @examples
 #' library(tibble)
@@ -647,7 +647,6 @@ filter_date_sources <- function(sources,
       {
         source_dataset %>%
           filter_if(sources[[i]]$filter) %>%
-          arrange(!!!sources[[i]]$order) %>% # Ensure order is applied
           filter_extreme(
             order = expr_c(exprs(!!source_date_var), sources[[i]]$order),
             by_vars = expr_c(subject_keys, by_vars),
