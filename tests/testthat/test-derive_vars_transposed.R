@@ -40,6 +40,15 @@ test_that("derive_vars_transposed Test 2: filtering the merge dataset works", {
     "STUDY01", "P02",       31,    3,
     "STUDY01", "P03",       42,   NA
   )
+
+  dataset_merge <- tibble::tribble(
+    ~STUDYID,  ~USUBJID, ~TESTCD, ~VALUE,
+    "STUDY01", "P01",    "T01",       31,
+    "STUDY01", "P01",    "T02",        5,
+    "STUDY01", "P02",    "T01",        3,
+    "STUDY01", "P01",    "T02",        9
+  )
+
   actual_output <- derive_vars_transposed(
     dataset,
     dataset_merge,
