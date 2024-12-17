@@ -24,10 +24,10 @@
 #' advs <- tribble(
 #'   ~USUBJID, ~PARAMCD, ~AVAL, ~ABLFL, ~BASE,
 #'   "P01",    "WEIGHT", 80,    "Y",    80,
-#'   "P01",    "WEIGHT", 80.8,  "",     80,
-#'   "P01",    "WEIGHT", 81.4,  "",     80,
+#'   "P01",    "WEIGHT", 80.8,  NA,     80,
+#'   "P01",    "WEIGHT", 81.4,  NA,     80,
 #'   "P02",    "WEIGHT", 75.3,  "Y",    75.3,
-#'   "P02",    "WEIGHT", 76,    "",     75.3
+#'   "P02",    "WEIGHT", 76,    NA,     75.3
 #' )
 #' derive_var_pchg(advs)
 derive_var_pchg <- function(dataset) {

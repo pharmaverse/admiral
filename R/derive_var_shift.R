@@ -37,13 +37,13 @@
 #' library(tibble)
 #'
 #' data <- tribble(
-#'   ~USUBJID, ~PARAMCD, ~AVAL, ~ABLFL, ~BNRIND, ~ANRIND,
-#'   "P01", "ALB", 33, "Y", "LOW", "LOW",
-#'   "P01", "ALB", 38, NA, "LOW", "NORMAL",
-#'   "P01", "ALB", NA, NA, "LOW", NA,
-#'   "P02", "ALB", 37, "Y", "NORMAL", "NORMAL",
-#'   "P02", "ALB", 49, NA, "NORMAL", "HIGH",
-#'   "P02", "SODIUM", 147, "Y", "HIGH", "HIGH"
+#'   ~USUBJID, ~PARAMCD, ~AVAL, ~ABLFL, ~BNRIND,  ~ANRIND,
+#'   "P01",    "ALB",       33, "Y",    "LOW",    "LOW",
+#'   "P01",    "ALB",       38, NA,     "LOW",    "NORMAL",
+#'   "P01",    "ALB",       NA, NA,     "LOW",    NA,
+#'   "P02",    "ALB",       37, "Y",    "NORMAL", "NORMAL",
+#'   "P02",    "ALB",       49, NA,     "NORMAL", "HIGH",
+#'   "P02",    "SODIUM",   147, "Y",    "HIGH",   "HIGH"
 #' )
 #'
 #' data %>%
