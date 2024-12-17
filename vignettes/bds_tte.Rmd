@@ -37,7 +37,6 @@ The examples of this vignette require the following packages.
 library(admiral)
 library(dplyr, warn.conflicts = FALSE)
 library(pharmaversesdtm)
-library(rlang)
 ```
 
 ```{r, warning=FALSE, message=FALSE, include=FALSE}
