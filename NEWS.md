@@ -53,6 +53,8 @@ are not unique. (#2563)
 `derive_extreme_event()`, and `filter_joined()` were updated to reduce their
 memory consumption. (#2590)
 
+- The function `compute_egfr()` updated to allow missing values for sex which result in missing values for output. (#2612)
+
 ## Breaking Changes
   
 - The following function arguments are entering the next phase of the deprecation process: (#2487)
