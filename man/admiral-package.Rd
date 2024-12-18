@@ -40,6 +40,7 @@ Authors:
   \item Sadchla Mascary
   \item Gordon Miller
   \item Lina Patil
+  \item Jim Rothstein (\href{https://orcid.org/0009-0009-8659-6071}{ORCID})
   \item Sophie Shapcott
   \item Eric Simms
   \item Daniel Sjoberg (\href{https://orcid.org/0000-0003-0862-2018}{ORCID})
