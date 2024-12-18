@@ -1,8 +1,8 @@
 #' Adds a Parameter Based on First or Last Record from Multiple Sources
 #'
 #' @description
-#' `r lifecycle::badge("superseded")` The `derive_param_extreme_record()`
-#' function has been superseded in favor of `derive_extreme_event()`.
+#' `r lifecycle::badge("deprecated")` The `derive_param_extreme_record()`
+#' function has been deprecated in favor of `derive_extreme_event()`.
 #'
 #' Generates parameter based on the first or last observation from multiple
 #' source datasets, based on user-defined filter, order and by group criteria.
@@ -77,8 +77,8 @@
 #' The input dataset with the first or last observation of each by group
 #' added as new observations.
 #'
-#' @family superseded
-#' @keywords superseded
+#' @family deprecated
+#' @keywords deprecated
 #'
 #' @export
 #' @examples
