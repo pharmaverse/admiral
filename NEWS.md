@@ -90,7 +90,7 @@ memory consumption. (#2590)
 <summary>Developer Notes</summary>
 
 - Created unit tests for developer internal function `restricted_imputed_dtc_dt()` (#2495)
-- Adopted `data-raw/data` R Package Convention (#2427)
+- Adopted `data-raw/data` R Package Convention (#2427, #2584)
 - `compute_bsa()` now uses the more common (but equivalent) version of the DuBois-DuBois formula for BSA. The results have not changed. (#2532)  
 - Removed `.devcontainer` file (codespace) (#2524)
 
