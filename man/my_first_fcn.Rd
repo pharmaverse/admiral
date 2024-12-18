@@ -7,7 +7,7 @@
 my_first_fcn()
 }
 \value{
-A string with a welcome message "Welcome to admiral!"
+A string with a welcome message
 }
 \description{
 This function outputs a welcome message for onboarding purposes.
