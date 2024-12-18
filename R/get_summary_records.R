@@ -2,7 +2,7 @@
 #'
 #' @description
 #'
-#' `r lifecycle::badge("superseded")`
+#' `r lifecycle::badge("deprecated")`
 #'
 #' Development on `get_summary_records()` is complete, and for new code we recommend
 #' switching to using the `dataset_add` argument in `derive_summary_records()`.
@@ -60,9 +60,8 @@
 #'
 #' @return A data frame of derived records.
 #'
-#' @family superseded
-#'
-#' @keywords superseded
+#' @family deprecated
+#' @keywords deprecated
 #'
 #' @seealso [derive_summary_records()], [derive_var_merged_summary()]
 #'

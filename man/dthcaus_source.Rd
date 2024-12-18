@@ -49,8 +49,8 @@ the results is assigned to \code{DTHCAUS}; if a string literal, e.g. \code{"Adve
 An object of class "dthcaus_source".
 }
 \description{
-\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#superseded}{\figure{lifecycle-superseded.svg}{options: alt='[Superseded]'}}}{\strong{[Superseded]}} The \code{derive_var_dthcaus()}
-function and \code{dthcaus_source()} have been superseded in favor of
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}} The \code{derive_var_dthcaus()}
+function and \code{dthcaus_source()} have been deprecated in favor of
 \code{derive_vars_extreme_event()}.
 }
 \examples{
@@ -74,14 +74,6 @@ src_ds <- dthcaus_source(
 }
 \seealso{
 \code{\link[=derive_var_dthcaus]{derive_var_dthcaus()}}
-
-Other superseded: 
-\code{\link{date_source}()},
-\code{\link{derive_param_extreme_record}()},
-\code{\link{derive_var_dthcaus}()},
-\code{\link{derive_var_extreme_dt}()},
-\code{\link{derive_var_extreme_dtm}()},
-\code{\link{get_summary_records}()}
 }
 \concept{superseded}
 \keyword{superseded}
