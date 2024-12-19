@@ -71,17 +71,21 @@ test_that("compute_egfr Test 7: CKD-EPI calculated on input data", {
   input <- tibble::tribble(
     ~STUDYID, ~USUBJID, ~AGE, ~SEX, ~RACE, ~WTBL, ~CREATBL, ~CREATBLU,
     "P01", "P01-1001", 55, "M", "WHITE", 90.7, 96.3, "umol/L",
-    "P01", "P01-1002", 52, NA_character_, "BLACK OR AFRICAN AMERICAN", 68, 70, "umol/L",
+    "P01", "P01-1002", 52, "F", "BLACK OR AFRICAN AMERICAN", 68, 70, "umol/L",
     "P01", "P01-1003", 67, "M", "BLACK OR AFRICAN AMERICAN", 85, 77, "umol/L",
-    "P01", "P01-1004", 76, "F", "ASIAN", 60, 65, "umol/L"
+    "P01", "P01-1004", 76, "F", "ASIAN", 60, 65, "umol/L",
+    "P01", "P01-1005", 54, NA_character_, "AMERICAN INDIAN OR ALASKA NATIVE", 65, 68,
+    "umol/L",
   )
 
   expected_output <- tibble::tribble(
     ~STUDYID, ~USUBJID, ~AGE, ~SEX, ~RACE, ~WTBL, ~CREATBL, ~CREATBLU, ~EGFR,
     "P01", "P01-1001", 55, "M", "WHITE", 90.7, 96.3, "umol/L", 80.2293,
-    "P01", "P01-1002", 52, NA_character_, "BLACK OR AFRICAN AMERICAN", 68, 70, "umol/L", NA_real_,
+    "P01", "P01-1002", 52, "F", "BLACK OR AFRICAN AMERICAN", 68, 70, "umol/L", 89.7175,
     "P01", "P01-1003", 67, "M", "BLACK OR AFRICAN AMERICAN", 85, 77, "umol/L", 94.5453,
     "P01", "P01-1004", 76, "F", "ASIAN", 60, 65, "umol/L", 84.4646,
+    "P01", "P01-1005", 54, NA_character_, "AMERICAN INDIAN OR ALASKA NATIVE", 65, 68,
+    "umol/L", NA_real_,
   )
 
   egfr <- input %>%
