@@ -22,9 +22,9 @@ test_that("derive_vars_crit_flag Test 1: works with defaults", {
 test_that("derive_vars_crit_flag Test 2: create numeric flag", {
   expected <- tibble::tribble(
     ~AVAL, ~CRIT1FL,      ~CRIT1FN, ~CRIT1,
-    23,    NA_character_, NA_real_,  NA_character_,
-    42,    "Y",           1,         "AVAL > 40",
-    NA,    NA_character_, NA_real_,  NA_character_
+    23,    NA_character_, NA_real_, NA_character_,
+    42,    "Y",           1,        "AVAL > 40",
+    NA,    NA_character_, NA_real_, NA_character_
   )
 
   expect_dfs_equal(
