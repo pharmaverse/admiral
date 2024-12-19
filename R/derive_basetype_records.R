@@ -2,7 +2,7 @@
 #'
 #' Baseline Type `BASETYPE` is needed when there is more than one definition of
 #' baseline for a given Analysis Parameter `PARAM` in the same dataset.  For a
-#' given parameter, if Baseline Value `BASE` or `BASEC` are non-null, and there
+#' given parameter, if Baseline Value `BASE` or `BASEC` are derived and there
 #' is more than one definition of baseline, then `BASETYPE` must be non-null on
 #' all records of any type for that parameter. Each value of `BASETYPE` refers
 #' to a definition of baseline that characterizes the value of `BASE` on that
