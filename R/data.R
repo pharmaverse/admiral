@@ -212,13 +212,12 @@
 #'   "ST01-07", "F", "USA"
 #' )
 #'
-#' covar <- adsl %>%
+#' adsl %>%
 #'   derive_vars_merged(
 #'     dataset_add = country_code_lookup,
 #'     new_vars = exprs(COUNTRYN = country_number, COUNTRYL = country_name),
 #'     by_vars = exprs(COUNTRY = country_code)
 #'   )
-#' covar
 #'
 #' @rdname country_code_lookup
 "country_code_lookup"
