@@ -136,6 +136,17 @@ derive_param_extreme_record <- function(dataset = NULL,
                                         order,
                                         mode,
                                         set_values_to) {
+
+  deprecate_inform(
+    when = "1.1.0",
+    what = "derive_param_extreme_record()",
+    with = "derive_extreme_event()",
+    details = c(
+      x = "This message will turn into a warning with release of 1.3.0",
+      i = "https://pharmaverse.github.io/admiral/reference/derive_extreme_event.html"
+    )
+  )
+
   # Check arguments assertions
   assert_data_frame(dataset, optional = TRUE)
   assert_list_of(sources, cls = "records_source")

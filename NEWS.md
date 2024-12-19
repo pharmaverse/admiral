@@ -55,13 +55,15 @@ memory consumption. (#2590)
 
 ## Breaking Changes
   
-- The following function arguments are entering the next phase of the deprecation process: (#2487)
+- The following function arguments are entering the next phase of the deprecation process: (#2487) (#2595)
 
-### Phase 1 (warning)
+### Phase 1 (message)
 
-### Phase 2 (error)
+### Phase 2 (warning)
 
-### Phase 3 (removed)
+### Phase 3 (error)
+
+### Phase 4 (removed)
   - `consolidate_metadata(check_keys)`
   - Removed at v1.1.1 `compute_egfr(wt)`
   - Removed at v1.1.1 `derive_expected_records(dataset_expected_obs)` 
