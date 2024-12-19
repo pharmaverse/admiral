@@ -133,13 +133,25 @@ reference:
   contents:
   - has_keyword('reexport')
 
-- title: Superseded
+- title: Deprecated
   desc: |
-    Superseded functions have been replaced with better functions. However, we
-    will not be removing these functions from `{admiral}`.  We do strongly
-    encourage you to make the switch over.
+    Functions and arguments may need to be removed or replaced over time.
+    In such cases, the function or argument will enter a 3 year deprecation cycle.
+    The cycle will be tied as close as sensibly possible to a package release.
+
+    When a function is deprecated:
+
+    * In Year 1 there will be a message issued if you use the function/argument, but it will still be available to use.
+    * In Year 2 a warning will be produced if you use the function/argument, but it will still be available to use.
+    * In Year 3, an error will be produced if you use the function/argument and no longer be able to use.
+    * Finally, after 3 years, the function/argument and related documentation and tests will be removed from `{admiral}`.
+
+    *Note: Guidance on replacement functionality will be found in the message produced as well as in the function's
+    documentation*
+
+    Below, you can find a list of functions in the process of being deprecated:
   contents:
-  - has_keyword("superseded")
+  - has_keyword("deprecated")
 
 navbar:
   structure:

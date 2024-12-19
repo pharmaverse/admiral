@@ -57,7 +57,7 @@ For example:
 A data frame of derived records.
 }
 \description{
-\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#superseded}{\figure{lifecycle-superseded.svg}{options: alt='[Superseded]'}}}{\strong{[Superseded]}}
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}}
 
 Development on \code{get_summary_records()} is complete, and for new code we recommend
 switching to using the \code{dataset_add} argument in \code{derive_summary_records()}.
@@ -153,13 +153,12 @@ get_summary_records(
 \seealso{
 \code{\link[=derive_summary_records]{derive_summary_records()}}, \code{\link[=derive_var_merged_summary]{derive_var_merged_summary()}}
 
-Other superseded: 
+Other deprecated: 
 \code{\link{date_source}()},
 \code{\link{derive_param_extreme_record}()},
 \code{\link{derive_var_dthcaus}()},
 \code{\link{derive_var_extreme_dt}()},
-\code{\link{derive_var_extreme_dtm}()},
-\code{\link{dthcaus_source}()}
+\code{\link{derive_var_extreme_dtm}()}
 }
-\concept{superseded}
-\keyword{superseded}
+\concept{deprecated}
+\keyword{deprecated}
