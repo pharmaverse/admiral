@@ -2,7 +2,7 @@
 % Please edit documentation in R/derive_vars_crit_flag.R
 \name{derive_vars_crit_flag}
 \alias{derive_vars_crit_flag}
-\title{Derive Criterion Flag Variables \code{CRITy}, \code{CRITyFL}, and \code{CRITyFLN}}
+\title{Derive Criterion Flag Variables \code{CRITy}, \code{CRITyFL}, and \code{CRITyFN}}
 \usage{
 derive_vars_crit_flag(
   dataset,
@@ -51,14 +51,14 @@ Otherwise, the \code{CRITyFL} variable is set to \code{"Y"} if the condition
 
 \item{create_numeric_flag}{Create a numeric flag?
 
-If set to \code{TRUE}, the \code{CRITyFLN} variable is created. It is set to \code{1} if
+If set to \code{TRUE}, the \code{CRITyFN} variable is created. It is set to \code{1} if
 \code{CRITyFL == "Y"}, it set to \code{0} if \code{CRITyFL == "N"}, and to \code{NA} otherwise.
 
 \emph{Permitted Values}: \code{TRUE}, \code{FALSE}}
 }
 \value{
 The input dataset with the variables \code{CRITy}, \code{CRITyFL}, and
-optionally \code{CRITyFLN} added.
+optionally \code{CRITyFN} added.
 }
 \description{
 The function derives ADaM compliant criterion flags, e.g., to facilitate

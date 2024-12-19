@@ -21,7 +21,7 @@ test_that("derive_vars_crit_flag Test 1: works with defaults", {
 ## Test 2: create numeric flag ----
 test_that("derive_vars_crit_flag Test 2: create numeric flag", {
   expected <- tibble::tribble(
-    ~AVAL, ~CRIT1FL,      ~CRIT1FLN, ~CRIT1,
+    ~AVAL, ~CRIT1FL,      ~CRIT1FN, ~CRIT1,
     23,    NA_character_, NA_real_,  NA_character_,
     42,    "Y",           1,         "AVAL > 40",
     NA,    NA_character_, NA_real_,  NA_character_
@@ -42,12 +42,12 @@ test_that("derive_vars_crit_flag Test 2: create numeric flag", {
 ## Test 3: using values Y and N ----
 test_that("derive_vars_crit_flag Test 3: using values Y and N", {
   expected <- tibble::tribble(
-    ~PARAMCD, ~AVAL, ~CRIT2FL,      ~CRIT2FLN, ~CRIT2,
-    "AST",    23,    "N",           0,         "AST > 40",
-    "AST",    42,    "Y",           1,         "AST > 40",
-    "AST",    NA,    NA_character_, NA_real_,  "AST > 40",
-    "ALT",    26,    "N",           0,         "ALT > 40",
-    "ALT",    56,    "Y",           1,         "ALT > 40",
+    ~PARAMCD, ~AVAL, ~CRIT2FL,      ~CRIT2FN, ~CRIT2,
+    "AST",    23,    "N",           0,        "AST > 40",
+    "AST",    42,    "Y",           1,        "AST > 40",
+    "AST",    NA,    NA_character_, NA_real_, "AST > 40",
+    "ALT",    26,    "N",           0,        "ALT > 40",
+    "ALT",    56,    "Y",           1,        "ALT > 40",
   )
 
   expect_dfs_equal(

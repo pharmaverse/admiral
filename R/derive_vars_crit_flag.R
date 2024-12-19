@@ -1,4 +1,4 @@
-#' Derive Criterion Flag Variables `CRITy`, `CRITyFL`, and `CRITyFLN`
+#' Derive Criterion Flag Variables `CRITy`, `CRITyFL`, and `CRITyFN`
 #'
 #' @description
 #'
@@ -49,12 +49,12 @@
 #'   *Permitted Values*: `TRUE`, `FALSE`
 #' @param create_numeric_flag Create a numeric flag?
 #'
-#'   If set to `TRUE`, the `CRITyFLN` variable is created. It is set to `1` if
+#'   If set to `TRUE`, the `CRITyFN` variable is created. It is set to `1` if
 #'   `CRITyFL == "Y"`, it set to `0` if `CRITyFL == "N"`, and to `NA` otherwise.
 #'
 #'   *Permitted Values*: `TRUE`, `FALSE`
 #' @return The input dataset with the variables `CRITy`, `CRITyFL`, and
-#'   optionally `CRITyFLN` added.
+#'   optionally `CRITyFN` added.
 #'
 #' @family der_bds_findings
 #' @keywords der_bds_findings
@@ -110,10 +110,10 @@ derive_vars_crit_flag <- function(dataset,
 
   if (values_yn) {
     crityfl_no <- "N"
-    crityfln_no <- 0L
+    crityfb_no <- 0L
   } else {
     crityfl_no <- NA_character_
-    crityfln_no <- NA_integer_
+    crityfb_no <- NA_integer_
   }
 
   tryCatch(
@@ -154,9 +154,9 @@ derive_vars_crit_flag <- function(dataset,
   )
 
   if (create_numeric_flag) {
-    new_critflnvar <- paste0("CRIT", as.character(crit_nr), "FLN")
+    new_critfbvar <- paste0("CRIT", as.character(crit_nr), "FN")
     dataset <- dataset %>% mutate(
-      !!new_critflnvar := yn_to_numeric(!!sym(new_critflvar))
+      !!new_critfbvar := yn_to_numeric(!!sym(new_critflvar))
     )
   }
   dataset
