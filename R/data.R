@@ -198,7 +198,6 @@
 #' @examples
 #' library(tibble)
 #' library(dplyr, warn.conflicts = FALSE)
-#' library(lubridate)
 #'
 #' # Create reference dataset for periods
 #' adsl <- tribble(
