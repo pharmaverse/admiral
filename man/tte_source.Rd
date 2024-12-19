@@ -4,7 +4,14 @@
 \alias{tte_source}
 \title{Create a \code{tte_source} Object}
 \usage{
-tte_source(dataset_name, filter = NULL, date, censor = 0, set_values_to = NULL)
+tte_source(
+  dataset_name,
+  filter = NULL,
+  date,
+  censor = 0,
+  set_values_to = NULL,
+  order = order
+)
 }
 \arguments{
 \item{dataset_name}{The name of the source dataset
@@ -30,6 +37,11 @@ censoring.}
 \item{set_values_to}{A named list returned by \code{exprs()} defining the variables
 to be set for the event or censoring, e.g. \code{exprs(EVENTDESC = "DEATH", SRCDOM = "ADSL", SRCVAR = "DTHDT")}. The values must be a symbol, a
 character string, a numeric value, an expression, or \code{NA}.}
+
+\item{order}{Sort order
+
+If the argument is set to a non-null value, for each by group the first or
+last observation}
 }
 \value{
 An object of class \code{tte_source}

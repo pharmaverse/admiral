@@ -14,7 +14,8 @@ derive_param_tte(
   censor_conditions,
   create_datetime = FALSE,
   set_values_to,
-  subject_keys = get_admiral_option("subject_keys")
+  subject_keys = get_admiral_option("subject_keys"),
+  check_type = "warning"
 )
 }
 \arguments{
@@ -76,6 +77,14 @@ expressions, or \code{NA}.}
 \item{subject_keys}{Variables to uniquely identify a subject
 
 A list of symbols created using \code{exprs()} is expected.}
+
+\item{check_type}{Check uniqueness
+
+If \code{"warning"}, \code{"message"}, or \code{"error"} is specified, the specified message is issued
+if the observations of the input dataset are not unique with respect to the
+by variables and the order.
+
+Default: \code{"none"}}
 }
 \value{
 The input dataset with the new parameter added

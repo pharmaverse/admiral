@@ -932,17 +932,143 @@ test_that("derive_param_tte Test 13: error if dataset_name not in source_datsets
   )
 })
 
+## Test 14: derive_param_tte detects duplicates when check_type = 'warning' ----
+test_that("derive_param_tte Test 14: detects duplicates in input datasets via pipeline functions", {
+  # Define ADSL dataset
+  adsl <- tibble::tribble(
+    ~USUBJID, ~TRTSDT,           ~TRTEDT,           ~EOSDT,
+    "01",     ymd("2020-12-06"), ymd("2021-03-02"), ymd("2021-03-06"),
+    "02",     ymd("2021-01-16"), ymd("2021-01-20"), ymd("2021-02-03")
+  ) %>% mutate(STUDYID = "AB42")
+
+  # Define AE dataset with duplicates
+  ae <- tibble::tribble(
+    ~USUBJID, ~AESTDTC,     ~AESEQ, ~AEDECOD,
+    "01",     "2021-01-03",      1, "Flu",
+    "01",     "2021-03-04",      2, "Cough",
+    "01",     "2021-01-03",      3, "Flu"
+  ) %>% mutate(
+    STUDYID = "AB42",
+    AESTDT = ymd(AESTDTC)
+  )
+
+  # Define event and censor sources
+  ttae <- event_source(
+    dataset_name = "ae",
+    date = AESTDT,
+    set_values_to = exprs(
+      EVENTDESC = "AE",
+      SRCDOM = "AE",
+      SRCVAR = "AESTDTC",
+      SRCSEQ = AESEQ
+    )
+  )
+
+  eot <- censor_source(
+    dataset_name = "adsl",
+    date = pmin(TRTEDT + days(10), EOSDT),
+    censor = 1,
+    set_values_to = exprs(
+      EVENTDESC = "END OF TRT",
+      SRCDOM = "ADSL",
+      SRCVAR = "TRTEDT"
+    )
+  )
+
+  # Run derive_param_tte and check for warning
+  expect_warning(
+    derive_param_tte(
+      dataset_adsl = adsl,
+      start_date = TRTSDT,
+      event_conditions = list(ttae),
+      censor_conditions = list(eot),
+      source_datasets = list(adsl = adsl, ae = ae),
+      set_values_to = exprs(PARAMCD = "TTAE"),
+      check_type = "warning"
+    ),
+    regexp = "Dataset '.*' contains duplicate records."
+  )
+})
+
+## Test 15: derive_param_tte produces consistent results regardless of input sort order ----
+test_that("derive_param_tte Test 15: produces consistent results regardless of input sort order", {
+  # Define ADSL dataset
+  adsl <- tibble::tribble(
+    ~USUBJID, ~TRTSDT,           ~TRTEDT,           ~EOSDT,
+    "01",     ymd("2020-12-06"), ymd("2021-03-02"), ymd("2021-03-06"),
+    "02",     ymd("2021-01-16"), ymd("2021-01-20"), ymd("2021-02-03")
+  ) %>% mutate(STUDYID = "AB42")
+
+  # Define AE dataset with duplicates
+  ae <- tibble::tribble(
+    ~USUBJID, ~AESTDTC,     ~AESEQ, ~AEDECOD,
+    "01",     "2021-01-03",      1, "Flu",
+    "01",     "2021-03-04",      2, "Cough",
+    "01",     "2021-01-03",      3, "Flu"
+  ) %>% mutate(STUDYID = "AB42", AESTDT = ymd(AESTDTC))
+
+  # Deduplicate AE dataset to remove duplicate warnings
+  ae <- ae %>% distinct(STUDYID, USUBJID, AESTDT, .keep_all = TRUE)
+
+  # Define event and censor sources
+  ttae <- event_source(
+    dataset_name = "ae",
+    date = AESTDT,
+    set_values_to = exprs(
+      EVENTDESC = "AE",
+      SRCDOM = "AE",
+      SRCVAR = "AESTDTC",
+      SRCSEQ = AESEQ # Ensure AESEQ is included here
+    )
+  )
+
+  eot <- censor_source(
+    dataset_name = "adsl",
+    date = pmin(TRTEDT + days(10), EOSDT),
+    censor = 1,
+    set_values_to = exprs(
+      EVENTDESC = "END OF TRT",
+      SRCDOM = "ADSL",
+      SRCVAR = "TRTEDT"
+    )
+  )
+
+  # Run derive_param_tte with sorted AE dataset
+  result_sorted <- derive_param_tte(
+    dataset_adsl = adsl,
+    start_date = TRTSDT,
+    event_conditions = list(ttae),
+    censor_conditions = list(eot),
+    source_datasets = list(adsl = adsl, ae = arrange(ae, AESEQ)),
+    set_values_to = exprs(PARAMCD = "TTAE"),
+    check_type = "warning"
+  )
+
+  # Run derive_param_tte with reverse-sorted AE dataset
+  result_unsorted <- derive_param_tte(
+    dataset_adsl = adsl,
+    start_date = TRTSDT,
+    event_conditions = list(ttae),
+    censor_conditions = list(eot),
+    source_datasets = list(adsl = adsl, ae = arrange(ae, desc(AESEQ))),
+    set_values_to = exprs(PARAMCD = "TTAE"),
+    check_type = "warning"
+  )
+
+  expect_equal(result_sorted, result_unsorted)
+})
+
 # list_tte_source_objects ----
-## Test 14: error is issued if package does not exist ----
-test_that("list_tte_source_objects Test 14: error is issued if package does not exist", {
+## Test 16: error is issued if package does not exist ----
+test_that("list_tte_source_objects Test 16: error is issued if package does not exist", {
   expect_snapshot(
     list_tte_source_objects(package = "tte"),
     error = TRUE
   )
 })
 
-## Test 15: expected objects produced ----
-test_that("list_tte_source_objects Test 15: expected objects produced", {
+## Test 17: expected objects produced ----
+test_that("list_tte_source_objects Test 17: expected objects produced", {
   expected_output <- tibble::tribble(
     ~object,            ~dataset_name,                                              ~filter,
     "ae_ser_event",            "adae",                 quote(TRTEMFL == "Y" & AESER == "Y"),
