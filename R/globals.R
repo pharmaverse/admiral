@@ -133,5 +133,6 @@ globalVariables(c(
   "num_records",
   "worsen_date",
   "prev_intensity",
-  "srfl"
+  "srfl",
+  "dose_freq_lookup"
 ))
