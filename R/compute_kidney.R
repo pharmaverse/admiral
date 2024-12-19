@@ -139,7 +139,7 @@ compute_egfr <- function(creat, creatu = "SI", age, weight, sex, race = NULL, me
     optional = TRUE
   ))
   assert_numeric_vector(age)
-  assert_character_vector(sex, values = c("M", "F"))
+  assert_character_vector(sex, values = c("M", "F", NA_character_))
   assert_character_vector(race, optional = TRUE)
   assert_character_scalar(
     method,
@@ -159,9 +159,10 @@ compute_egfr <- function(creat, creatu = "SI", age, weight, sex, race = NULL, me
     egfr <- case_when(
       race == "BLACK OR AFRICAN AMERICAN" & sex == "F" ~ 175 * (scr^-1.154) *
         (age^-0.203) * 0.742 * 1.212,
-      race == "BLACK OR AFRICAN AMERICAN" ~ 175 * (scr^-1.154) * (age^-0.203) * 1.212,
+      race == "BLACK OR AFRICAN AMERICAN" & sex == "M" ~ 175 * (scr^-1.154) * (age^-0.203) * 1.212,
       sex == "F" ~ 175 * (scr^-1.154) * (age^-0.203) * 0.742,
-      sex == "M" ~ 175 * (scr^-1.154) * (age^-0.203)
+      sex == "M" ~ 175 * (scr^-1.154) * (age^-0.203),
+      TRUE ~ NA_real_
     )
   } else if (method == "CRCL") {
     assert_numeric_vector(weight)
@@ -172,7 +173,8 @@ compute_egfr <- function(creat, creatu = "SI", age, weight, sex, race = NULL, me
       tolower(creatu) %in% c("cv", "mg/dl") & sex == "M" ~
         ((140 - age) * weight) / (creat * 72),
       sex == "F" ~ ((140 - age) * weight * 1.04) / creat,
-      sex == "M" ~ ((140 - age) * weight * 1.23) / creat
+      sex == "M" ~ ((140 - age) * weight * 1.23) / creat,
+      TRUE ~ NA_real_
     )
   } else if (method == "CKD-EPI") {
     kappa <- case_when(
@@ -189,7 +191,8 @@ compute_egfr <- function(creat, creatu = "SI", age, weight, sex, race = NULL, me
 
     gender_coefficent <- case_when(
       sex == "F" ~ 1.012,
-      TRUE ~ 1
+      sex == "M" ~ 1,
+      TRUE ~ NA_real_
     )
 
     egfr <- 142 * pmin(scr / kappa, 1)^(alpha) *
