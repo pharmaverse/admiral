@@ -1,7 +1,6 @@
 # derive_param_extreme_record ----
 ## Test 1: Message Sent to users ----
 test_that("derive_param_extreme_record Test 1: Message Sent to users", {
-
   aevent <- tibble::tribble(
     ~STUDYID, ~USUBJID,     ~LBSTDTC, ~PARAMCD, ~PARAM,
     "1001",        "1", "2023-01-01",    "TST", "TEST",
@@ -31,44 +30,42 @@ test_that("derive_param_extreme_record Test 1: Message Sent to users", {
   )
 
   expect_snapshot(
-    derive_param_extreme_record(
-    dataset = aevent,
-    sources = list(
-      records_source(
-        dataset_name = "cm",
-        filter = CMDECOD == "ACT",
-        new_vars = exprs(
-          ADT = convert_dtc_to_dt(CMSTDTC),
-          AVALC = CMDECOD
+    df <- derive_param_extreme_record(
+      dataset = aevent,
+      sources = list(
+        records_source(
+          dataset_name = "cm",
+          filter = CMDECOD == "ACT",
+          new_vars = exprs(
+            ADT = convert_dtc_to_dt(CMSTDTC),
+            AVALC = CMDECOD
+          )
+        ),
+        records_source(
+          dataset_name = "pr",
+          filter = PRDECOD == "ACS",
+          new_vars = exprs(
+            ADT = convert_dtc_to_dt(PRSTDTC),
+            AVALC = PRDECOD
+          )
         )
       ),
-      records_source(
-        dataset_name = "pr",
-        filter = PRDECOD == "ACS",
-        new_vars = exprs(
-          ADT = convert_dtc_to_dt(PRSTDTC),
-          AVALC = PRDECOD
-        )
+      source_datasets = list(cm = cm, pr = pr),
+      by_vars = exprs(STUDYID, USUBJID),
+      order = exprs(ADT),
+      mode = "first",
+      set_values_to = exprs(
+        PARAMCD = "FIRSTACT",
+        PARAM = "First Anti-Cancer Therapy"
       )
-    ),
-    source_datasets = list(cm = cm, pr = pr),
-    by_vars = exprs(STUDYID, USUBJID),
-    order = exprs(ADT),
-    mode = "first",
-    set_values_to = exprs(
-      PARAMCD = "FIRSTACT",
-      PARAM = "First Anti-Cancer Therapy"
-    )
     )
   )
-
 })
 
 ## Test 2: Analysis date are derived correctly ----
 test_that("derive_param_extreme_record Test 2: Analysis date are derived correctly", {
-
   # Suppress lifecycle messages within the test environment
-  original_verbosity <- options(lifecycle_verbosity = "quiet")
+  withr::local_options(list(lifecycle_verbosity = "quiet"))
 
   aevent <- tibble::tribble(
     ~STUDYID, ~USUBJID,     ~LBSTDTC, ~PARAMCD, ~PARAM,
@@ -130,10 +127,8 @@ test_that("derive_param_extreme_record Test 2: Analysis date are derived correct
   expect_dfs_equal(
     expected_output,
     actual_output,
-    keys = c("USUBJID", "PARAMCD", "PARAM", "ADT", "AVALC"))
-
-  # Ensure to reset options after tests
-  on.exit(options(original_verbosity))
+    keys = c("USUBJID", "PARAMCD", "PARAM", "ADT", "AVALC")
+  )
 
 })
 
@@ -141,7 +136,7 @@ test_that("derive_param_extreme_record Test 2: Analysis date are derived correct
 test_that("derive_param_extreme_record Test 3: Error given when order variable is not inside source datasets", { # nolint
 
   # Suppress lifecycle messages within the test environment
-  original_verbosity <- options(lifecycle_verbosity = "quiet")
+  withr::local_options(list(lifecycle_verbosity = "quiet"))
 
   aevent <- tibble::tribble(
     ~STUDYID, ~USUBJID,     ~LBSTDTC, ~PARAMCD, ~PARAM,
@@ -193,16 +188,12 @@ test_that("derive_param_extreme_record Test 3: Error given when order variable i
     ),
     regexp = "Required variable `ADT2` is missing"
   )
-
-  # Ensure to reset options after tests
-  on.exit(options(original_verbosity))
 })
 
 ## Test 4: Error given when sources is not in proper list format ----
 test_that("derive_param_extreme_record Test 4: Error given when sources is not in proper list format", { # nolint
-
   # Suppress lifecycle messages within the test environment
-  original_verbosity <- options(lifecycle_verbosity = "quiet")
+  withr::local_options(list(lifecycle_verbosity = "quiet"))
 
   aevent <- tibble::tribble(
     ~STUDYID, ~USUBJID,     ~LBSTDTC, ~PARAMCD, ~PARAM,
@@ -239,16 +230,12 @@ test_that("derive_param_extreme_record Test 4: Error given when sources is not i
     ),
     class = "assert_list_of"
   )
-
-  # Ensure to reset options after tests
-  on.exit(options(original_verbosity))
 })
 
 ## Test 5: Non-existent/missing values are accounted for ----
 test_that("derive_param_extreme_record Test 5: Non-existent/missing values are accounted for", {
-
   # Suppress lifecycle messages within the test environment
-  original_verbosity <- options(lifecycle_verbosity = "quiet")
+  withr::local_options(list(lifecycle_verbosity = "quiet"))
 
   aevent <- tibble::tribble(
     ~STUDYID, ~USUBJID,     ~LBSTDTC, ~PARAMCD, ~PARAM,
@@ -295,8 +282,6 @@ test_that("derive_param_extreme_record Test 5: Non-existent/missing values are a
   expect_dfs_equal(
     expected_output,
     actual_output,
-    keys = c("USUBJID", "PARAMCD", "PARAM", "ADT", "AVALC"))
-
-  # Ensure to reset options after tests
-  on.exit(options(original_verbosity))
+    keys = c("USUBJID", "PARAMCD", "PARAM", "ADT", "AVALC")
+  )
 })

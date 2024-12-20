@@ -136,7 +136,6 @@ derive_param_extreme_record <- function(dataset = NULL,
                                         order,
                                         mode,
                                         set_values_to) {
-
   deprecate_inform(
     when = "1.2.0",
     what = "derive_param_extreme_record()",
