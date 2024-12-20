@@ -106,7 +106,7 @@ filter_extreme <- function(dataset,
   check_type <-
     assert_character_scalar(
       check_type,
-      values = c("none", "warning", "error"),
+      values = c("none", "warning", "error", "message"),
       case_sensitive = FALSE
     )
   assert_data_frame(dataset, required_vars = by_vars)

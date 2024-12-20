@@ -60,6 +60,14 @@
 #'
 #'   A list of symbols created using `exprs()` is expected.
 #'
+#' @param check_type Check uniqueness
+#'
+#'   If `"warning"`, `"message"`, or `"error"` is specified, the specified message is issued
+#'   if the observations of the input dataset are not unique with respect to the
+#'   by variables and the order.
+#'
+#'  Default: `"none"`
+#'
 #' @details The following steps are performed to create the observations of the
 #'   new parameter:
 #'
@@ -262,10 +270,10 @@
 #'   mutate(STUDYID = "AB42")
 #'
 #' ae <- tribble(
-#'   ~USUBJID, ~AESTDTC,           ~AESEQ, ~AEDECOD,
-#'   "01",     "2021-01-03T10:56", 1,      "Flu",
-#'   "01",     "2021-03-04",       2,      "Cough",
-#'   "01",     "2021",             3,      "Flu"
+#'   ~USUBJID, ~AESTDTC, ~AESEQ, ~AEDECOD,
+#'   "01", "2021-01-03T10:56", 1, "Flu",
+#'   "01", "2021-03-04", 2, "Cough",
+#'   "01", "2021-", 3, "Flu"
 #' ) %>%
 #'   mutate(STUDYID = "AB42")
 #'
@@ -313,6 +321,50 @@
 #'   )
 #' ) %>%
 #'   select(USUBJID, STARTDT, PARAMCD, PARAM, ADT, CNSR, SRCSEQ)
+#'
+#' # Resolve tie when serious AE share a date by sorting with order argument
+#' adsl <- tribble(
+#'   ~USUBJID, ~TRTSDT, ~EOSDT,
+#'   "01", ymd("2020-12-06"), ymd("2021-03-06"),
+#'   "02", ymd("2021-01-16"), ymd("2021-02-03")
+#' ) %>% mutate(STUDYID = "AB42")
+#'
+#' ae <- tribble(
+#'   ~USUBJID, ~AESTDTC, ~AESEQ, ~AESER, ~AEDECOD,
+#'   "01", "2021-01-03", 1, "Y", "Flu",
+#'   "01", "2021-01-03", 2, "Y", "cough",
+#'   "01", "2021-01-20", 3, "N", "Headache",
+#' ) %>% mutate(
+#'   AESTDT = ymd(AESTDTC),
+#'   STUDYID = "AB42"
+#' )
+#'
+#' derive_param_tte(
+#'   dataset_adsl = adsl,
+#'   start_date = TRTSDT,
+#'   source_datasets = list(adsl = adsl, ae = ae),
+#'   event_conditions = list(event_source(
+#'     dataset_name = "ae",
+#'     date = AESTDT,
+#'     set_values_to = exprs(
+#'       EVENTDESC = "Serious AE",
+#'       SRCSEQ = AESEQ
+#'     ),
+#'     filter = AESER == "Y",
+#'     order = exprs(AESTDT, AESEQ)
+#'   )),
+#'   censor_conditions = list(censor_source(
+#'     dataset_name = "adsl",
+#'     date = EOSDT,
+#'     censor = 1,
+#'     set_values_to = exprs(EVENTDESC = "End of Study")
+#'   )),
+#'   set_values_to = exprs(
+#'     PARAMCD = "TTSAE",
+#'     PARAM = "Time to First Serious AE"
+#'   )
+#' )
+#'
 derive_param_tte <- function(dataset = NULL,
                              dataset_adsl,
                              source_datasets,
@@ -322,8 +374,14 @@ derive_param_tte <- function(dataset = NULL,
                              censor_conditions,
                              create_datetime = FALSE,
                              set_values_to,
-                             subject_keys = get_admiral_option("subject_keys")) {
+                             subject_keys = get_admiral_option("subject_keys"),
+                             check_type = "warning") {
   # checking and quoting #
+  check_type <- assert_character_scalar(
+    check_type,
+    values = c("warning", "message", "error", "none"),
+    case_sensitive = FALSE
+  )
   assert_data_frame(dataset, optional = TRUE)
   assert_vars(by_vars, optional = TRUE)
   start_date <- assert_symbol(enexpr(start_date))
@@ -373,8 +431,8 @@ derive_param_tte <- function(dataset = NULL,
       by_vars = by_vars
     )
   }
-
   tmp_event <- get_new_tmp_var(dataset)
+
   # determine events #
   event_data <- filter_date_sources(
     sources = event_conditions,
@@ -382,7 +440,8 @@ derive_param_tte <- function(dataset = NULL,
     by_vars = by_vars,
     create_datetime = create_datetime,
     subject_keys = subject_keys,
-    mode = "first"
+    mode = "first",
+    check_type = check_type
   ) %>%
     mutate(!!tmp_event := 1L)
 
@@ -393,7 +452,8 @@ derive_param_tte <- function(dataset = NULL,
     by_vars = by_vars,
     create_datetime = create_datetime,
     subject_keys = subject_keys,
-    mode = "last"
+    mode = "last",
+    check_type = check_type
   ) %>%
     mutate(!!tmp_event := 0L)
 
@@ -436,7 +496,8 @@ derive_param_tte <- function(dataset = NULL,
     bind_rows(event_data, censor_data),
     by_vars = expr_c(subject_keys, by_vars),
     order = exprs(!!tmp_event),
-    mode = "last"
+    mode = "last",
+    check_type = check_type
   ) %>%
     inner_join(
       adsl,
@@ -505,6 +566,16 @@ derive_param_tte <- function(dataset = NULL,
 #'
 #'   Permitted Values:  `"first"`, `"last"`
 #'
+#'  @param check_type Check uniqueness
+#'
+#'   If `"warning"`, `"message"`, or `"error"` is specified, the specified message is issued
+#'   if the observations of the input dataset are not unique with respect to the
+#'   by variables and the order.
+#'
+#'  Default: `"none"`
+#'
+#'  Permitted Values: `"none"`, `"warning"`, `"error"`, `"message"`
+#'
 #' @details The following steps are performed to create the output dataset:
 #'
 #'   \enumerate{ \item For each source dataset the observations as specified by
@@ -529,7 +600,7 @@ derive_param_tte <- function(dataset = NULL,
 #' @return A dataset with one observation per subject as described in the
 #'   "Details" section.
 #'
-#' @noRd
+#' @keywords internal
 #'
 #' @examples
 #' library(tibble)
@@ -571,14 +642,16 @@ derive_param_tte <- function(dataset = NULL,
 #'   by_vars = exprs(AEDECOD),
 #'   create_datetime = FALSE,
 #'   subject_keys = get_admiral_option("subject_keys"),
-#'   mode = "first"
+#'   mode = "first",
+#'   check_type = "none"
 #' )
 filter_date_sources <- function(sources,
                                 source_datasets,
                                 by_vars,
                                 create_datetime = FALSE,
                                 subject_keys,
-                                mode) {
+                                mode,
+                                check_type = "none") {
   assert_list_of(sources, "tte_source")
   assert_list_of(source_datasets, "data.frame")
   assert_logical_scalar(create_datetime)
@@ -613,17 +686,49 @@ filter_date_sources <- function(sources,
       var = !!source_date_var,
       dataset_name = sources[[i]]$dataset_name
     )
-    data[[i]] <- source_dataset %>%
-      filter_if(sources[[i]]$filter) %>%
-      filter_extreme(
-        order = exprs(!!source_date_var),
-        by_vars = expr_c(subject_keys, by_vars),
-        mode = mode,
-        check_type = "none"
-      )
-
+    # wrap filter_extreme in tryCatch to catch duplicate records and create a message
+    data[[i]] <- rlang::try_fetch(
+      {
+        source_dataset %>%
+          filter_if(sources[[i]]$filter) %>%
+          filter_extreme(
+            order = expr_c(exprs(!!source_date_var), sources[[i]]$order),
+            by_vars = expr_c(subject_keys, by_vars),
+            mode = mode,
+            check_type = check_type
+          )
+      },
+      warning = function(cnd) {
+        # Handle warnings
+        if (grepl("duplicate records", conditionMessage(cnd))) {
+          cli::cli_warn(c(
+            "Dataset '{.val {sources[[i]]$dataset_name}}' contains duplicate records.",
+            "i Duplicates were identified based on variables:
+               {.val {paste(c(subject_keys, by_vars, source_date_var), collapse = ', ')}}."
+          ))
+        }
+        source_dataset %>%
+          filter_if(sources[[i]]$filter) %>%
+          arrange(!!!sources[[i]]$order) # Return filtered dataset even if a warning occurred
+      },
+      error = function(err) {
+        cli::cli_abort(c(
+          "Duplicate records detected during processing.",
+          "x Duplicate records were found in dataset {.val {sources[[i]]$dataset_name}}.",
+          "i The duplicates were identified based on the following variables:
+            {.val {paste(c(subject_keys, by_vars, source_date_var), collapse = ', ')}}.",
+          "i Consider reviewing your `by_vars` or `order` argument to ensure uniqueness."
+        ))
+      },
+      message = function(msg) {
+        cli::cli_inform(c(
+          "Processing dataset '{.val {sources[[i]]$dataset_name}}'...",
+          "i Filter and order criteria: {.val {paste(c(subject_keys, by_vars,
+          sources[[i]]$order), collapse = ', ')}}."
+        ))
+      }
+    )
     # add date variable and accompanying variables
-
     if (create_datetime) {
       date_derv <- exprs(!!date_var := as_datetime(!!source_date_var))
     } else {
@@ -649,7 +754,7 @@ filter_date_sources <- function(sources,
       by_vars = expr_c(subject_keys, by_vars),
       order = exprs(!!date_var),
       mode = mode,
-      check_type = "none"
+      check_type = check_type
     )
 }
 
@@ -782,6 +887,12 @@ extend_source_datasets <- function(source_datasets,
 #'   SRCDOM = "ADSL", SRCVAR = "DTHDT")`. The values must be a symbol, a
 #'   character string, a numeric value, an expression, or `NA`.
 #'
+#' @param order Sort order
+#'
+#'   An optional named list returned by `exprs()` defining additional variables
+#'   that the input dataset is sorted on after `date`.
+#'
+#'   Permitted Values: list of variables created by `exprs()` e.g. `exprs(ASEQ)`.
 #'
 #' @keywords source_specifications
 #' @family source_specifications
@@ -793,7 +904,8 @@ tte_source <- function(dataset_name,
                        filter = NULL,
                        date,
                        censor = 0,
-                       set_values_to = NULL) {
+                       set_values_to = NULL,
+                       order = order) {
   out <- list(
     dataset_name = assert_character_scalar(dataset_name),
     filter = assert_filter_cond(enexpr(filter), optional = TRUE),
@@ -803,7 +915,8 @@ tte_source <- function(dataset_name,
       set_values_to,
       named = TRUE,
       optional = TRUE
-    )
+    ),
+    order = order
   )
   class(out) <- c("tte_source", "source", "list")
   out
@@ -844,13 +957,15 @@ tte_source <- function(dataset_name,
 event_source <- function(dataset_name,
                          filter = NULL,
                          date,
-                         set_values_to = NULL) {
+                         set_values_to = NULL,
+                         order = NULL) {
   out <- tte_source(
     dataset_name = assert_character_scalar(dataset_name),
     filter = !!enexpr(filter),
     date = !!assert_expr(enexpr(date)),
     censor = 0,
-    set_values_to = set_values_to
+    set_values_to = set_values_to,
+    order = order
   )
   class(out) <- c("event_source", class(out))
   out
@@ -891,13 +1006,15 @@ censor_source <- function(dataset_name,
                           filter = NULL,
                           date,
                           censor = 1,
-                          set_values_to = NULL) {
+                          set_values_to = NULL,
+                          order = NULL) {
   out <- tte_source(
     dataset_name = assert_character_scalar(dataset_name),
     filter = !!enexpr(filter),
     date = !!assert_expr(enexpr(date)),
     censor = assert_integer_scalar(censor, subset = "positive"),
-    set_values_to = set_values_to
+    set_values_to = set_values_to,
+    order = order
   )
   class(out) <- c("censor_source", class(out))
   out

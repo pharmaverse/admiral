@@ -14,7 +14,8 @@ derive_param_tte(
   censor_conditions,
   create_datetime = FALSE,
   set_values_to,
-  subject_keys = get_admiral_option("subject_keys")
+  subject_keys = get_admiral_option("subject_keys"),
+  check_type = "warning"
 )
 }
 \arguments{
@@ -76,6 +77,14 @@ expressions, or \code{NA}.}
 \item{subject_keys}{Variables to uniquely identify a subject
 
 A list of symbols created using \code{exprs()} is expected.}
+
+\item{check_type}{Check uniqueness
+
+If \code{"warning"}, \code{"message"}, or \code{"error"} is specified, the specified message is issued
+if the observations of the input dataset are not unique with respect to the
+by variables and the order.
+
+Default: \code{"none"}}
 }
 \value{
 The input dataset with the new parameter added
@@ -278,10 +287,10 @@ adsl <- tribble(
   mutate(STUDYID = "AB42")
 
 ae <- tribble(
-  ~USUBJID, ~AESTDTC,           ~AESEQ, ~AEDECOD,
-  "01",     "2021-01-03T10:56", 1,      "Flu",
-  "01",     "2021-03-04",       2,      "Cough",
-  "01",     "2021",             3,      "Flu"
+  ~USUBJID, ~AESTDTC, ~AESEQ, ~AEDECOD,
+  "01", "2021-01-03T10:56", 1, "Flu",
+  "01", "2021-03-04", 2, "Cough",
+  "01", "2021-", 3, "Flu"
 ) \%>\%
   mutate(STUDYID = "AB42")
 
@@ -329,6 +338,50 @@ derive_param_tte(
   )
 ) \%>\%
   select(USUBJID, STARTDT, PARAMCD, PARAM, ADT, CNSR, SRCSEQ)
+
+# Resolve tie when serious AE share a date by sorting with order argument
+adsl <- tribble(
+  ~USUBJID, ~TRTSDT, ~EOSDT,
+  "01", ymd("2020-12-06"), ymd("2021-03-06"),
+  "02", ymd("2021-01-16"), ymd("2021-02-03")
+) \%>\% mutate(STUDYID = "AB42")
+
+ae <- tribble(
+  ~USUBJID, ~AESTDTC, ~AESEQ, ~AESER, ~AEDECOD,
+  "01", "2021-01-03", 1, "Y", "Flu",
+  "01", "2021-01-03", 2, "Y", "cough",
+  "01", "2021-01-20", 3, "N", "Headache",
+) \%>\% mutate(
+  AESTDT = ymd(AESTDTC),
+  STUDYID = "AB42"
+)
+
+derive_param_tte(
+  dataset_adsl = adsl,
+  start_date = TRTSDT,
+  source_datasets = list(adsl = adsl, ae = ae),
+  event_conditions = list(event_source(
+    dataset_name = "ae",
+    date = AESTDT,
+    set_values_to = exprs(
+      EVENTDESC = "Serious AE",
+      SRCSEQ = AESEQ
+    ),
+    filter = AESER == "Y",
+    order = exprs(AESTDT, AESEQ)
+  )),
+  censor_conditions = list(censor_source(
+    dataset_name = "adsl",
+    date = EOSDT,
+    censor = 1,
+    set_values_to = exprs(EVENTDESC = "End of Study")
+  )),
+  set_values_to = exprs(
+    PARAMCD = "TTSAE",
+    PARAM = "Time to First Serious AE"
+  )
+)
+
 }
 \seealso{
 \code{\link[=event_source]{event_source()}}, \code{\link[=censor_source]{censor_source()}}
