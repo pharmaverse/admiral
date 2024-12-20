@@ -1,8 +1,8 @@
 #' Derive Death Cause
 #'
 #' @description
-#' `r lifecycle::badge("superseded")` The `derive_var_dthcaus()`
-#' function has been superseded in favor of `derive_vars_extreme_event()`.
+#' `r lifecycle::badge("deprecated")` The `derive_var_dthcaus()`
+#' function has been deprecated in favor of `derive_vars_extreme_event()`.
 #'
 #' Derive death cause (`DTHCAUS`) and add traceability variables if required.
 #'
@@ -26,8 +26,8 @@
 #' equivalent, the first source will be kept, so the user should provide the inputs in
 #' the preferred order.
 #'
-#' @family superseded
-#' @keywords superseded
+#' @family deprecated
+#' @keywords deprecated
 #'
 #' @return The input dataset with `DTHCAUS` variable added.
 #'
@@ -247,8 +247,8 @@ derive_var_dthcaus <- function(dataset,
 #' Create a `dthcaus_source` Object
 #'
 #' @description
-#' `r lifecycle::badge("superseded")` The `derive_var_dthcaus()`
-#' function and `dthcaus_source()` have been superseded in favor of
+#' `r lifecycle::badge("deprecated")` The `derive_var_dthcaus()`
+#' function and `dthcaus_source()` have been deprecated in favor of
 #' `derive_vars_extreme_event()`.
 #'
 #' @param dataset_name The name of the dataset, i.e. a string, used to search for
@@ -282,8 +282,8 @@ derive_var_dthcaus <- function(dataset,
 #'
 #' @param set_values_to Variables to be set to trace the source dataset
 #'
-#' @family superseded
-#' @keywords superseded
+#' @family deprecated
+#' @keywords deprecated
 #'
 #'
 #' @export
@@ -317,6 +317,16 @@ dthcaus_source <- function(dataset_name,
                            mode = "first",
                            dthcaus,
                            set_values_to = NULL) {
+  deprecate_inform(
+    when = "1.2.0",
+    what = "date_source()",
+    with = "derive_vars_extreme_event()",
+    details = c(
+      x = "This message will turn into a warning with release of 1.3.0",
+      i = "https://pharmaverse.github.io/admiral/reference/derive_vars_extreme_event.html"
+    )
+  )
+
   out <- list(
     dataset_name = assert_character_scalar(dataset_name),
     filter = assert_filter_cond(enexpr(filter), optional = TRUE),
