@@ -110,10 +110,8 @@ derive_vars_crit_flag <- function(dataset,
 
   if (values_yn) {
     crityfl_no <- "N"
-    crityfn_no <- 0L
   } else {
     crityfl_no <- NA_character_
-    crityfn_no <- NA_integer_
   }
 
   tryCatch(
@@ -156,7 +154,7 @@ derive_vars_crit_flag <- function(dataset,
   if (create_numeric_flag) {
     new_critfnvar <- paste0("CRIT", as.character(crit_nr), "FN")
     dataset <- dataset %>% mutate(
-      !!new_critfnvar := yn_to_numeric(!!sym(new_critflvar))
+      !!new_critfnvar := as.integer(yn_to_numeric(!!sym(new_critflvar)))
     )
   }
   dataset
