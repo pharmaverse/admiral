@@ -34,8 +34,10 @@ character string, a numeric value, an expression, or \code{NA}.}
 
 \item{order}{Sort order
 
-If the argument is set to a non-null value, for each by group the first or
-last observation}
+An optional named list returned by \code{exprs()} defining additional variables
+that the input dataset is sorted on after \code{date}.
+
+Persmitted Values: list of variables created by \code{exprs()} e.g. \code{exprs(ASEQ)}.}
 }
 \value{
 An object of class \code{event_source}, inheriting from class \code{tte_source}

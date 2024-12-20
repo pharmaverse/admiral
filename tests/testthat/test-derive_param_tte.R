@@ -990,8 +990,68 @@ test_that("derive_param_tte Test 14: detects duplicates in input datasets via pi
   )
 })
 
-## Test 15: derive_param_tte produces consistent results regardless of input sort order ----
-test_that("derive_param_tte Test 15: produces consistent results regardless of input sort order", {
+## Test 15: derive_param_tte resolves ties using order argument when input is sorted descending
+test_that("derive_param_tte Test 15: derive_param_tte resolves ties using order argument when
+input is sorted descending", {
+  adsl <- tibble::tribble(
+    ~USUBJID, ~TRTSDT,           ~EOSDT,
+    "01",     ymd("2020-12-06"), ymd("2021-03-06"),
+    "02",     ymd("2021-01-16"), ymd("2021-02-03")
+  ) %>%
+    mutate(STUDYID = "AB42")
+
+  # Sort the input AE dataset in descending order by AESEQ
+  #to confirm that the order argument re-sorts it correctly.
+  ae <- tibble::tribble(
+    ~USUBJID, ~AESTDTC, ~AESEQ, ~AESER, ~AEDECOD,
+    "01", "2021-01-03", 2, "Y", "Cough",
+    "01", "2021-01-03", 1, "Y", "Flu",
+    "01", "2021-01-20", 3, "N", "Headache"
+  ) %>%
+    mutate(
+      STUDYID = "AB42",
+      AESTDT = ymd(AESTDTC)
+    ) %>%
+    arrange(desc(AESEQ)) # Intentionally sort descending to test the order argument
+
+ result <- derive_param_tte(
+    dataset_adsl = adsl,
+    start_date = TRTSDT,
+    event_conditions = list(event_source(
+      dataset_name = "ae",
+      date = AESTDT,
+      set_values_to = exprs(
+        EVENTDESC = "Serious AE",
+        SRCSEQ = AESEQ
+      ),
+      filter = AESER == "Y",
+      order = exprs(AESTDT, AESEQ) # Should re-sort so that AESEQ=1 (Flu) is chosen on tie
+    )),
+    censor_conditions = list(censor_source(
+      dataset_name = "adsl",
+      date = EOSDT,
+      censor = 1,
+      set_values_to = exprs(EVENTDESC = "End of Study")
+    )),
+    set_values_to = exprs(
+      PARAMCD = "TTSAE",
+      PARAM = "Time to First Serious AE"
+    ),
+    source_datasets = list(adsl = adsl, ae = ae)
+  )
+
+  # Check that for USUBJID = "01", the first serious AE selected is the one with AESEQ = 1 (Flu),
+  # despite the input AE data initially being arranged to show AESEQ=2 (Cough) first.
+  selected_seq <- result %>%
+    filter(USUBJID == "01", PARAMCD == "TTSAE") %>%
+    pull(SRCSEQ)
+
+  expect_equal(selected_seq, 1, info = "The order argument should ensure AE with AESEQ=1
+  is chosen on tie.")
+})
+
+## Test 16: derive_param_tte produces consistent results regardless of input sort order ----
+test_that("derive_param_tte Test 16: produces consistent results regardless of input sort order", {
   # Define ADSL dataset
   adsl <- tibble::tribble(
     ~USUBJID, ~TRTSDT,           ~TRTEDT,           ~EOSDT,
@@ -1059,16 +1119,16 @@ test_that("derive_param_tte Test 15: produces consistent results regardless of i
 })
 
 # list_tte_source_objects ----
-## Test 16: error is issued if package does not exist ----
-test_that("list_tte_source_objects Test 16: error is issued if package does not exist", {
+## Test 17: error is issued if package does not exist ----
+test_that("list_tte_source_objects Test 17: error is issued if package does not exist", {
   expect_snapshot(
     list_tte_source_objects(package = "tte"),
     error = TRUE
   )
 })
 
-## Test 17: expected objects produced ----
-test_that("list_tte_source_objects Test 17: expected objects produced", {
+## Test 18: expected objects produced ----
+test_that("list_tte_source_objects Test 18: expected objects produced", {
   expected_output <- tibble::tribble(
     ~object,            ~dataset_name,                                              ~filter,
     "ae_ser_event",            "adae",                 quote(TRTEMFL == "Y" & AESER == "Y"),

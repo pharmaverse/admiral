@@ -270,10 +270,10 @@
 #'   mutate(STUDYID = "AB42")
 #'
 #' ae <- tribble(
-#'   ~USUBJID, ~AESTDTC,           ~AESEQ, ~AEDECOD,
-#'   "01",     "2021-01-03T10:56", 1,      "Flu",
-#'   "01",     "2021-03-04",       2,      "Cough",
-#'   "01",     "2021",             3,      "Flu"
+#'   ~USUBJID, ~AESTDTC, ~AESEQ, ~AEDECOD,
+#'   "01", "2021-01-03T10:56", 1, "Flu",
+#'   "01", "2021-03-04", 2, "Cough",
+#'   "01", "2021-", 3, "Flu"
 #' ) %>%
 #'   mutate(STUDYID = "AB42")
 #'
@@ -321,6 +321,50 @@
 #'   )
 #' ) %>%
 #'   select(USUBJID, STARTDT, PARAMCD, PARAM, ADT, CNSR, SRCSEQ)
+#'
+#' # Resolve tie when serious AE share a date by sorting with order argument
+#' adsl <- tribble(
+#'   ~USUBJID, ~TRTSDT, ~EOSDT,
+#'   "01", ymd("2020-12-06"), ymd("2021-03-06"),
+#'   "02", ymd("2021-01-16"), ymd("2021-02-03")
+#' ) %>% mutate(STUDYID = "AB42")
+#'
+#' ae <- tribble(
+#'   ~USUBJID, ~AESTDTC, ~AESEQ, ~AESER, ~AEDECOD,
+#'   "01", "2021-01-03", 1, "Y", "Flu",
+#'   "01", "2021-01-03", 2, "Y", "cough",
+#'   "01", "2021-01-20", 3, "N", "Headache",
+#' ) %>% mutate(
+#'   AESTDT = ymd(AESTDTC),
+#'   STUDYID = "AB42"
+#' )
+#'
+#' derive_param_tte(
+#'   dataset_adsl = adsl,
+#'   start_date = TRTSDT,
+#'   source_datasets = list(adsl = adsl, ae = ae),
+#'   event_conditions = list(event_source(
+#'     dataset_name = "ae",
+#'     date = AESTDT,
+#'     set_values_to = exprs(
+#'       EVENTDESC = "Serious AE",
+#'       SRCSEQ = AESEQ
+#'     ),
+#'     filter = AESER == "Y",
+#'     order = exprs(AESTDT, AESEQ)
+#'   )),
+#'   censor_conditions = list(censor_source(
+#'     dataset_name = "adsl",
+#'     date = EOSDT,
+#'     censor = 1,
+#'     set_values_to = exprs(EVENTDESC = "End of Study")
+#'   )),
+#'   set_values_to = exprs(
+#'     PARAMCD = "TTSAE",
+#'     PARAM = "Time to First Serious AE"
+#'   )
+#' )
+#'
 derive_param_tte <- function(dataset = NULL,
                              dataset_adsl,
                              source_datasets,
@@ -845,8 +889,10 @@ extend_source_datasets <- function(source_datasets,
 #'
 #' @param order Sort order
 #'
-#'   If the argument is set to a non-null value, for each by group the first or
-#'   last observation
+#'   An optional named list returned by `exprs()` defining additional variables
+#'   that the input dataset is sorted on after `date`.
+#'
+#'   Persmitted Values: list of variables created by `exprs()` e.g. `exprs(ASEQ)`.
 #'
 #' @keywords source_specifications
 #' @family source_specifications

@@ -61,7 +61,7 @@
       i Following names were provided by `source_datasets`: "adsl"
       i But, `censor_conditions[[1]]$dataset_name = adls`
 
-# list_tte_source_objects Test 14: error is issued if package does not exist
+# list_tte_source_objects Test 16: error is issued if package does not exist
 
     Code
       list_tte_source_objects(package = "tte")
