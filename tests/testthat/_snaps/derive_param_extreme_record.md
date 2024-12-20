@@ -1,4 +1,4 @@
-# derive_param_extreme_record Test 1: Message Sent
+# derive_param_extreme_record Test 1: Message Sent to users
 
     Code
       derive_param_extreme_record(dataset = aevent, sources = list(records_source(

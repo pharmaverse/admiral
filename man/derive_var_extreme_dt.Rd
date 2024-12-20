@@ -244,6 +244,7 @@ Other deprecated:
 \code{\link{derive_param_extreme_record}()},
 \code{\link{derive_var_dthcaus}()},
 \code{\link{derive_var_extreme_dtm}()},
+\code{\link{dthcaus_source}()},
 \code{\link{get_summary_records}()}
 }
 \concept{deprecated}

@@ -74,6 +74,14 @@ src_ds <- dthcaus_source(
 }
 \seealso{
 \code{\link[=derive_var_dthcaus]{derive_var_dthcaus()}}
+
+Other deprecated: 
+\code{\link{date_source}()},
+\code{\link{derive_param_extreme_record}()},
+\code{\link{derive_var_dthcaus}()},
+\code{\link{derive_var_extreme_dt}()},
+\code{\link{derive_var_extreme_dtm}()},
+\code{\link{get_summary_records}()}
 }
-\concept{superseded}
-\keyword{superseded}
+\concept{deprecated}
+\keyword{deprecated}

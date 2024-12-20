@@ -1,6 +1,68 @@
-# dthcaus_source ----
+
+test_that("derive_var_dthcaus Test 2: Message sent to users", {
+
+  adsl <- tibble::tribble(
+    ~STUDYID, ~USUBJID,
+    "TEST01", "PAT01",
+    "TEST01", "PAT02",
+    "TEST01", "PAT03"
+  )
+
+  ae <- tibble::tribble(
+    ~STUDYID, ~USUBJID, ~AESEQ, ~AEDECOD, ~AEOUT, ~AEDTHDTC,
+    "TEST01", "PAT03", 12, "SUDDEN DEATH", "FATAL", "2021-04-04"
+  ) %>%
+    mutate(
+      AEDTHDT = ymd(AEDTHDTC)
+    )
+
+  ds <- tibble::tribble(
+    ~STUDYID, ~USUBJID, ~DSSEQ, ~DSDECOD, ~DSTERM, ~DSSTDTC,
+    "TEST01", "PAT01", 1, "INFORMED CONSENT OBTAINED", "INFORMED CONSENT OBTAINED", "2021-04-01",
+    "TEST01", "PAT01", 2, "RANDOMIZATION", "RANDOMIZATION", "2021-04-11",
+    "TEST01", "PAT01", 3, "ADVERSE EVENT", "ADVERSE EVENT", "2021-12-01",
+    "TEST01", "PAT01", 4, "DEATH", "DEATH DUE TO progression of disease", "2022-02-01",
+    "TEST01", "PAT02", 1, "INFORMED CONSENT OBTAINED", "INFORMED CONSENT OBTAINED", "2021-04-02",
+    "TEST01", "PAT02", 2, "RANDOMIZATION", "RANDOMIZATION", "2021-04-11",
+    "TEST01", "PAT02", 3, "COMPLETED", "PROTOCOL COMPLETED", "2021-12-01",
+    "TEST01", "PAT03", 1, "INFORMED CONSENT OBTAINED", "INFORMED CONSENT OBTAINED", "2021-04-03",
+    "TEST01", "PAT03", 2, "RANDOMIZATION", "RANDOMIZATION", "2021-04-11",
+    "TEST01", "PAT03", 3, "COMPLETED", "PROTOCOL COMPLETED", "2021-12-01"
+  )
+
+  expect_snapshot({
+    src_ae <- dthcaus_source(
+    dataset_name = "ae",
+    filter = AEOUT == "FATAL",
+    date = AEDTHDT,
+    mode = "first",
+    dthcaus = AEDECOD
+  )
+
+  src_ds <- dthcaus_source(
+    dataset_name = "ds",
+    filter = DSDECOD == "DEATH" & grepl("DEATH DUE TO", DSTERM),
+    date = convert_dtc_to_dt(DSSTDTC),
+    mode = "first",
+    dthcaus = str_to_upper(DSTERM)
+  )
+
+  derive_var_dthcaus(
+    adsl,
+    source_datasets = list(ae = ae, ds = ds),
+    src_ae, src_ds
+  )
+  })
+
+
+})
+
 ## Test 1: error on invalid mode ----
 test_that("dthcaus_source Test 1: error on invalid mode", {
+
+  # Suppress lifecycle messages within the test environment
+  original_verbosity <- options(lifecycle_verbosity = "quiet")
+
   expect_error(dthcaus_source(
     dataset_name = "ae",
     filter = AEOUT == "FATAL",
@@ -8,11 +70,19 @@ test_that("dthcaus_source Test 1: error on invalid mode", {
     mode = "blah",
     dthcaus = AEDECOD
   ))
+
+  # Ensure to reset options after tests
+  on.exit(options(original_verbosity))
+
 })
 
 # derive_var_dthcaus ----
 ## Test 2: DTHCAUS is added from AE and DS ----
 test_that("derive_var_dthcaus Test 2: DTHCAUS is added from AE and DS", {
+
+  # Suppress lifecycle messages within the test environment
+  original_verbosity <- options(lifecycle_verbosity = "quiet")
+
   adsl <- tibble::tribble(
     ~STUDYID, ~USUBJID,
     "TEST01", "PAT01",
@@ -72,10 +142,18 @@ test_that("derive_var_dthcaus Test 2: DTHCAUS is added from AE and DS", {
   )
 
   expect_dfs_equal(expected_output, actual_output, keys = "USUBJID")
+
+  # Ensure to reset options after tests
+  on.exit(options(original_verbosity))
+
 })
 
 ## Test 3: `dthcaus` handles symbols and string literals correctly ----
 test_that("derive_var_dthcaus Test 3: `dthcaus` handles symbols and string literals correctly", {
+
+  # Suppress lifecycle messages within the test environment
+  original_verbosity <- options(lifecycle_verbosity = "quiet")
+
   adsl <- tibble::tribble(
     ~STUDYID, ~USUBJID,
     "TEST01", "PAT01",
@@ -133,10 +211,18 @@ test_that("derive_var_dthcaus Test 3: `dthcaus` handles symbols and string liter
   )
 
   expect_dfs_equal(expected_output, actual_output, keys = "USUBJID")
+
+  # Ensure to reset options after tests
+  on.exit(options(original_verbosity))
+
 })
 
 ## Test 4: traceability variables are added from AE and DS ----
 test_that("derive_var_dthcaus Test 4: traceability variables are added from AE and DS", {
+
+  # Suppress lifecycle messages within the test environment
+  original_verbosity <- options(lifecycle_verbosity = "quiet")
+
   adsl <- tibble::tribble(
     ~STUDYID, ~USUBJID,
     "TEST01", "PAT01",
@@ -201,10 +287,18 @@ test_that("derive_var_dthcaus Test 4: traceability variables are added from AE a
   )
 
   expect_dfs_equal(expected_output, actual_output, keys = "USUBJID")
+
+  # Ensure to reset options after tests
+  on.exit(options(original_verbosity))
+
 })
 
 ## Test 5: DTHCAUS/traceabiity are added from 2 input datasets ----
 test_that("derive_var_dthcaus Test 5: DTHCAUS/traceabiity are added from 2 input datasets", {
+
+  # Suppress lifecycle messages within the test environment
+  original_verbosity <- options(lifecycle_verbosity = "quiet")
+
   adsl <- tibble::tribble(
     ~STUDYID, ~USUBJID,
     "TEST01", "PAT01",
@@ -270,10 +364,18 @@ test_that("derive_var_dthcaus Test 5: DTHCAUS/traceabiity are added from 2 input
   )
 
   expect_dfs_equal(expected_output, actual_output, keys = "USUBJID")
+
+  # Ensure to reset options after tests
+  on.exit(options(original_verbosity))
+
 })
 
 ## Test 6: DTHCAUS is added from AE and DS if filter is not specified ----
 test_that("derive_var_dthcaus Test 6: DTHCAUS is added from AE and DS if filter is not specified", {
+
+  # Suppress lifecycle messages within the test environment
+  original_verbosity <- options(lifecycle_verbosity = "quiet")
+
   # test based on covr report - the case for unspecified filter has not been tested
 
   adsl <- tibble::tribble(
@@ -338,10 +440,18 @@ test_that("derive_var_dthcaus Test 6: DTHCAUS is added from AE and DS if filter 
   )
 
   expect_dfs_equal(expected_output, actual_output, keys = "USUBJID")
+
+  # Ensure to reset options after tests
+  on.exit(options(original_verbosity))
+
 })
 
 ## Test 7: error on a dthcaus_source object with invalid order ----
 test_that("derive_var_dthcaus Test 7: error on a dthcaus_source object with invalid order", {
+
+  # Suppress lifecycle messages within the test environment
+  original_verbosity <- options(lifecycle_verbosity = "quiet")
+
   expect_error(dthcaus_source(
     dataset_name = "ae",
     filter = AEOUT == "FATAL",
@@ -350,10 +460,18 @@ test_that("derive_var_dthcaus Test 7: error on a dthcaus_source object with inva
     mode = "first",
     dthcaus = AEDECOD
   ))
+
+  # Ensure to reset options after tests
+  on.exit(options(original_verbosity))
+
 })
 
 ## Test 8: `dataset` is sorted using the `order` parameter ----
 test_that("derive_var_dthcaus Test 8: `dataset` is sorted using the `order` parameter", {
+
+  # Suppress lifecycle messages within the test environment
+  original_verbosity <- options(lifecycle_verbosity = "quiet")
+
   adsl <- tibble::tribble(
     ~STUDYID, ~USUBJID,
     "TEST01", "PAT01",
@@ -412,10 +530,18 @@ test_that("derive_var_dthcaus Test 8: `dataset` is sorted using the `order` para
   )
 
   expect_dfs_equal(expected_output, actual_output, keys = "USUBJID")
+
+  # Ensure to reset options after tests
+  on.exit(options(original_verbosity))
+
 })
 
 ## Test 9: multiple observations from different sources ----
 test_that("derive_var_dthcaus Test 9: multiple observations from different sources", {
+
+  # Suppress lifecycle messages within the test environment
+  original_verbosity <- options(lifecycle_verbosity = "quiet")
+
   expected <- tibble::tribble(
     ~STUDYID, ~USUBJID, ~DTHCAUS,
     "TEST01", "PAT01",  "SUDDEN DEATH",
@@ -468,10 +594,18 @@ test_that("derive_var_dthcaus Test 9: multiple observations from different sourc
     compare = actual,
     keys = c("USUBJID")
   )
+
+  # Ensure to reset options after tests
+  on.exit(options(original_verbosity))
+
 })
 
 ## Test 10: multiple observations with same date ----
 test_that("derive_var_dthcaus Test 10: multiple observations with same date", {
+
+  # Suppress lifecycle messages within the test environment
+  original_verbosity <- options(lifecycle_verbosity = "quiet")
+
   expected <- tibble::tribble(
     ~STUDYID, ~USUBJID, ~DTHCAUS,
     "TEST01", "PAT01",  "SUDDEN DEATH",
@@ -524,10 +658,18 @@ test_that("derive_var_dthcaus Test 10: multiple observations with same date", {
     compare = actual,
     keys = c("USUBJID")
   )
+
+  # Ensure to reset options after tests
+  on.exit(options(original_verbosity))
+
 })
 
 ## Test 11: error if source dataset is not available ----
 test_that("derive_var_dthcaus Test 11: error if source dataset is not available", {
+
+  # Suppress lifecycle messages within the test environment
+  original_verbosity <- options(lifecycle_verbosity = "quiet")
+
   adsl <- tibble::tribble(
     ~STUDYID, ~USUBJID,
     "TEST01", "PAT01",
@@ -581,4 +723,8 @@ test_that("derive_var_dthcaus Test 11: error if source dataset is not available"
     ),
     error = TRUE
   )
+
+  # Ensure to reset options after tests
+  on.exit(options(original_verbosity))
+
 })

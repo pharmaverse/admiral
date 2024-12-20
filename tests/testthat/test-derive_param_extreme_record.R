@@ -1,5 +1,6 @@
 # derive_param_extreme_record ----
-test_that("derive_param_extreme_record Test 1: Message Sent", {
+## Test 1: Message Sent to users ----
+test_that("derive_param_extreme_record Test 1: Message Sent to users", {
 
   aevent <- tibble::tribble(
     ~STUDYID, ~USUBJID,     ~LBSTDTC, ~PARAMCD, ~PARAM,
@@ -63,8 +64,8 @@ test_that("derive_param_extreme_record Test 1: Message Sent", {
 
 })
 
-## Test 1: Analysis date are derived correctly ----
-test_that("derive_param_extreme_record Test 1: Analysis date are derived correctly", {
+## Test 2: Analysis date are derived correctly ----
+test_that("derive_param_extreme_record Test 2: Analysis date are derived correctly", {
 
   # Suppress lifecycle messages within the test environment
   original_verbosity <- options(lifecycle_verbosity = "quiet")
@@ -136,8 +137,8 @@ test_that("derive_param_extreme_record Test 1: Analysis date are derived correct
 
 })
 
-## Test 2: Error given when order variable is not inside source datasets ----
-test_that("derive_param_extreme_record Test 2: Error given when order variable is not inside source datasets", { # nolint
+## Test 3: Error given when order variable is not inside source datasets ----
+test_that("derive_param_extreme_record Test 3: Error given when order variable is not inside source datasets", { # nolint
 
   # Suppress lifecycle messages within the test environment
   original_verbosity <- options(lifecycle_verbosity = "quiet")
@@ -197,8 +198,8 @@ test_that("derive_param_extreme_record Test 2: Error given when order variable i
   on.exit(options(original_verbosity))
 })
 
-## Test 3: Error given when sources is not in proper list format ----
-test_that("derive_param_extreme_record Test 3: Error given when sources is not in proper list format", { # nolint
+## Test 4: Error given when sources is not in proper list format ----
+test_that("derive_param_extreme_record Test 4: Error given when sources is not in proper list format", { # nolint
 
   # Suppress lifecycle messages within the test environment
   original_verbosity <- options(lifecycle_verbosity = "quiet")
@@ -243,8 +244,8 @@ test_that("derive_param_extreme_record Test 3: Error given when sources is not i
   on.exit(options(original_verbosity))
 })
 
-## Test 4: Non-existent/missing values are accounted for ----
-test_that("derive_param_extreme_record Test 4: Non-existent/missing values are accounted for", {
+## Test 5: Non-existent/missing values are accounted for ----
+test_that("derive_param_extreme_record Test 5: Non-existent/missing values are accounted for", {
 
   # Suppress lifecycle messages within the test environment
   original_verbosity <- options(lifecycle_verbosity = "quiet")

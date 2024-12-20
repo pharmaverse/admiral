@@ -60,7 +60,7 @@ memory consumption. (#2590)
 ### Phase 1 (message)
   
   - `derive_param_extreme_record()` is deprecated and replaced by `derive_extreme_event()`
-  
+  - `date_source()` is deprecated and replaced by `derive_vars_extreme_event()`
  
 
 ### Phase 2 (warning)
