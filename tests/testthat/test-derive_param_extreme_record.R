@@ -1,8 +1,66 @@
 # derive_param_extreme_record ----
 test_that("derive_param_extreme_record Test 1: Message Sent", {
-  expect_snapshot_error(
-    derive_param_extreme_record()
+
+  aevent <- tibble::tribble(
+    ~STUDYID, ~USUBJID,     ~LBSTDTC, ~PARAMCD, ~PARAM,
+    "1001",        "1", "2023-01-01",    "TST", "TEST",
+    "1001",        "2", "2023-01-01",    "TST", "TEST",
+    "1001",        "3", "2023-01-01",    "TST", "TEST"
   )
+
+  cm <- tibble::tribble(
+    ~STUDYID, ~USUBJID, ~CMDECOD,     ~CMSTDTC,
+    "1001",        "1",    "ACT", "2020-12-25"
+  )
+
+  pr <- tibble::tribble(
+    ~STUDYID, ~USUBJID, ~PRDECOD,     ~PRSTDTC,
+    "1001",        "1",    "ACS", "2020-12-27",
+    "1001",        "2",    "ACS", "2021-12-25",
+    "1001",        "3",    "ACS", "2022-12-25",
+  )
+  expected_output <- tibble::tribble(
+    ~STUDYID, ~USUBJID,     ~LBSTDTC,   ~PARAMCD,                      ~PARAM,                         ~ADT, ~AVALC, # nolint
+    "1001",        "1", "2023-01-01",      "TST",                      "TEST",                           NA,     NA, # nolint
+    "1001",        "2", "2023-01-01",      "TST",                      "TEST",                           NA,     NA, # nolint
+    "1001",        "3", "2023-01-01",      "TST",                      "TEST",                           NA,     NA, # nolint
+    "1001",        "1",           NA, "FIRSTACT", "First Anti-Cancer Therapy", lubridate::ymd("2020-12-25"),  "ACT", # nolint
+    "1001",        "2",           NA, "FIRSTACT", "First Anti-Cancer Therapy", lubridate::ymd("2021-12-25"),  "ACS", # nolint
+    "1001",        "3",           NA, "FIRSTACT", "First Anti-Cancer Therapy", lubridate::ymd("2022-12-25"),  "ACS" # nolint
+  )
+
+  expect_snapshot(
+    derive_param_extreme_record(
+    dataset = aevent,
+    sources = list(
+      records_source(
+        dataset_name = "cm",
+        filter = CMDECOD == "ACT",
+        new_vars = exprs(
+          ADT = convert_dtc_to_dt(CMSTDTC),
+          AVALC = CMDECOD
+        )
+      ),
+      records_source(
+        dataset_name = "pr",
+        filter = PRDECOD == "ACS",
+        new_vars = exprs(
+          ADT = convert_dtc_to_dt(PRSTDTC),
+          AVALC = PRDECOD
+        )
+      )
+    ),
+    source_datasets = list(cm = cm, pr = pr),
+    by_vars = exprs(STUDYID, USUBJID),
+    order = exprs(ADT),
+    mode = "first",
+    set_values_to = exprs(
+      PARAMCD = "FIRSTACT",
+      PARAM = "First Anti-Cancer Therapy"
+    )
+    )
+  )
+
 })
 
 ## Test 1: Analysis date are derived correctly ----
