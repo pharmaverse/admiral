@@ -1001,7 +1001,7 @@ input is sorted descending", {
     mutate(STUDYID = "AB42")
 
   # Sort the input AE dataset in descending order by AESEQ
-  #to confirm that the order argument re-sorts it correctly.
+  # to confirm that the order argument re-sorts it correctly.
   ae <- tibble::tribble(
     ~USUBJID, ~AESTDTC, ~AESEQ, ~AESER, ~AEDECOD,
     "01", "2021-01-03", 2, "Y", "Cough",
@@ -1014,7 +1014,7 @@ input is sorted descending", {
     ) %>%
     arrange(desc(AESEQ)) # Intentionally sort descending to test the order argument
 
- result <- derive_param_tte(
+  result <- derive_param_tte(
     dataset_adsl = adsl,
     start_date = TRTSDT,
     event_conditions = list(event_source(

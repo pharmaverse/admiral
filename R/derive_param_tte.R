@@ -892,7 +892,7 @@ extend_source_datasets <- function(source_datasets,
 #'   An optional named list returned by `exprs()` defining additional variables
 #'   that the input dataset is sorted on after `date`.
 #'
-#'   Persmitted Values: list of variables created by `exprs()` e.g. `exprs(ASEQ)`.
+#'   Permitted Values: list of variables created by `exprs()` e.g. `exprs(ASEQ)`.
 #'
 #' @keywords source_specifications
 #' @family source_specifications
