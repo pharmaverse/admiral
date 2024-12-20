@@ -118,6 +118,8 @@ derive_vars_transposed <- function(dataset,
     optional = TRUE
   )
 
+  dataset_merge <- filter_if(dataset_merge, filter)
+
   # check for duplicates in dataset_merge as these will create list columns,
   # which is not acceptable for ADaM datasets
   signal_duplicate_records(
@@ -134,7 +136,6 @@ derive_vars_transposed <- function(dataset,
   )
 
   dataset_transposed <- dataset_merge %>%
-    filter_if(filter) %>%
     pivot_wider(
       names_from = !!key_var,
       values_from = !!value_var,
