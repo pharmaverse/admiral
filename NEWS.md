@@ -5,7 +5,7 @@
 - New function `derive_vars_cat()` for deriving pairs of variables or more, e.g. 
 `AVALCATy` & `AVALCAyN`. (#2480)
 - New function `derive_vars_crit_flag()` for deriving criterion flag variables
-(`CRITy`, `CRITyFL`, `CRITyFLN`). (#2468)
+(`CRITy`, `CRITyFL`, `CRITyFN`). (#2468)
 - New function `transform_range()`  to transform values from a source range to a
 target range. (#2571)
 - Replace use of `data("sdtm")` with `sdtm <- pharmaverse::sdtm` in templates and vignettes. (#2498)
