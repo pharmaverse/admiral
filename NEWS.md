@@ -58,6 +58,10 @@ memory consumption. (#2590)
 - The following function arguments are entering the next phase of the deprecation process: (#2487) (#2595)
 
 ### Phase 1 (message)
+  
+  - `derive_param_extreme_record()` is deprecated and replaced by `derive_extreme_event()`
+  
+ 
 
 ### Phase 2 (warning)
 
