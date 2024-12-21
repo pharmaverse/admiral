@@ -205,11 +205,11 @@ test_that("derive_var_trtemfl Test 10: error if `intensity` without `initial_int
   )
 })
 
-## Test 11: error if `group_var` are specified without `subject_keys` ----
-test_that("derive_var_trtemfl Test 11: error if `group_var` without `subject_keys`", {
+## Test 11: error if `group_var` specified without `subject_keys` ----
+test_that("derive_var_trtemfl Test 11: error if `group_var` specified without `subject_keys`", {
   expect_snapshot(
     derive_var_trtemfl(
-      adae,
+      adae2,
       group_var = AEGRPID,
       subject_keys = NULL
     ),
