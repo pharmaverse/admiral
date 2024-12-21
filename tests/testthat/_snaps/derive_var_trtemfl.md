@@ -34,17 +34,10 @@
       ! `intensity` argument was specified but not `initial_intensity`
       Either both or none of them must be specified.
 
-<<<<<<< HEAD
 # derive_var_trtemfl Test 11: error if `group_var` specified without `subject_keys`
 
     Code
       derive_var_trtemfl(adae2, group_var = AEGRPID, subject_keys = NULL)
-=======
-# derive_var_trtemfl Test 11: error if `group_var` without `subject_keys`
-
-    Code
-      derive_var_trtemfl(adae, group_var = AEGRPID, subject_keys = NULL)
->>>>>>> main
     Condition
       Error in `derive_var_trtemfl()`:
       ! `group_var` argument was specified but not `subject_keys`
