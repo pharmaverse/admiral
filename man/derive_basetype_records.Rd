@@ -23,7 +23,7 @@ The input dataset with variable \code{BASETYPE} added
 \description{
 Baseline Type \code{BASETYPE} is needed when there is more than one definition of
 baseline for a given Analysis Parameter \code{PARAM} in the same dataset.  For a
-given parameter, if Baseline Value \code{BASE} or \code{BASEC} are non-null, and there
+given parameter, if Baseline Value \code{BASE} or \code{BASEC} are derived and there
 is more than one definition of baseline, then \code{BASETYPE} must be non-null on
 all records of any type for that parameter. Each value of \code{BASETYPE} refers
 to a definition of baseline that characterizes the value of \code{BASE} on that
