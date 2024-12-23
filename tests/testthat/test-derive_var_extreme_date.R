@@ -25,7 +25,6 @@ ae <- tibble::tribble(
 # derive_var_extreme_dt ----
 ## Test 1: Message sent to users ----
 test_that("derive_var_extreme_dt Test 1: Message sent to users", {
-
   ae_start <- date_source(
     dataset_name = "ae",
     date = AESTDTM
@@ -54,8 +53,8 @@ test_that("derive_var_extreme_dt Test 1: Message sent to users", {
       source_datasets = list(ae = ae, adsl = adsl),
       ae_start, ae_end, adsl_trtdate, adsl_dthdate,
       mode = "last"
+    )
   )
-)
 })
 
 # derive_var_extreme_dt ----
@@ -168,7 +167,6 @@ test_that("derive_var_extreme_dt Test 4: `NA` dates are excluded", {
 # derive_var_extreme_dtm ----
 ## Test 5: Message sent to users ----
 test_that("derive_var_extreme_dtm Test 5: Message sent to users", {
-
   ae_start <- date_source(
     dataset_name = "ae",
     date = convert_dtc_to_dtm(AESTDTC),
@@ -210,16 +208,15 @@ test_that("derive_var_extreme_dtm Test 5: Message sent to users", {
     )
   )
 
-expect_snapshot(
-  derive_var_extreme_dtm(
-    adsl,
-    new_var = LSTALVDTM,
-    source_datasets = list(ae = ae, adsl = adsl),
-    ae_start, ae_end, adsl_trtdate, adsl_dthdate,
-    mode = "last"
+  expect_snapshot(
+    derive_var_extreme_dtm(
+      adsl,
+      new_var = LSTALVDTM,
+      source_datasets = list(ae = ae, adsl = adsl),
+      ae_start, ae_end, adsl_trtdate, adsl_dthdate,
+      mode = "last"
+    )
   )
-)
-
 })
 
 # derive_var_extreme_dtm ----

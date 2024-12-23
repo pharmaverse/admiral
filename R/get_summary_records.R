@@ -148,6 +148,16 @@ get_summary_records <- function(dataset,
                                 by_vars,
                                 filter = NULL,
                                 set_values_to = NULL) {
+  deprecate_inform(
+    when = "1.2.0",
+    what = "get_summary_records()",
+    with = "derive_summary_records()",
+    details = c(
+      x = "This message will turn into a warning with release of 1.3.0",
+      i = "https://pharmaverse.github.io/admiral/reference/derive_summary_records.html"
+    )
+  )
+
   assert_vars(by_vars)
   filter <- assert_filter_cond(enexpr(filter), optional = TRUE)
   assert_data_frame(

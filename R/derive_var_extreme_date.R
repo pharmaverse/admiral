@@ -234,7 +234,6 @@ derive_var_extreme_dtm <- function(dataset,
                                    source_datasets,
                                    mode,
                                    subject_keys = get_admiral_option("subject_keys")) {
-
   deprecate_inform(
     when = "1.2.0",
     what = "derive_var_extreme_dtm()",
@@ -567,7 +566,6 @@ derive_var_extreme_dt <- function(dataset,
                                   source_datasets,
                                   mode,
                                   subject_keys = get_admiral_option("subject_keys")) {
-
   deprecate_inform(
     when = "1.2.0",
     what = "derive_var_extreme_dt()",
