@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">admiral</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.1.1.9048</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.1.1.9049</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -96,6 +96,7 @@
 <li><p>In <code><a href="../reference/get_summary_records.html">get_summary_records()</a></code>, previously deprecated formal arguments <code>analysis_var</code> and <code>summary_fun</code> now removed from function, documentation, tests etc. (<a href="https://github.com/pharmaverse/admiral/issues/2521" class="external-link">#2521</a>)</p></li>
 <li><p>A check was added to <code><a href="../reference/derive_vars_transposed.html">derive_vars_transposed()</a></code> and <code><a href="../reference/derive_vars_atc.html">derive_vars_atc()</a></code> which stops execution if the records in <code>dataset_merge</code> or <code>dataset_facm</code> respectively are not unique. (<a href="https://github.com/pharmaverse/admiral/issues/2563" class="external-link">#2563</a>)</p></li>
 <li><p>The functions <code><a href="../reference/derive_vars_joined.html">derive_vars_joined()</a></code>, <code><a href="../reference/derive_var_joined_exist_flag.html">derive_var_joined_exist_flag()</a></code>, <code><a href="../reference/derive_extreme_event.html">derive_extreme_event()</a></code>, and <code><a href="../reference/filter_joined.html">filter_joined()</a></code> were updated to reduce their memory consumption. (<a href="https://github.com/pharmaverse/admiral/issues/2590" class="external-link">#2590</a>)</p></li>
+<li><p>The function <code><a href="../reference/compute_egfr.html">compute_egfr()</a></code> updated to allow missing values for sex which result in missing values for output. (<a href="https://github.com/pharmaverse/admiral/issues/2612" class="external-link">#2612</a>)</p></li>
 </ul></div>
 <div class="section level3">
 <h3 id="breaking-changes-development-version">Breaking Changes<a class="anchor" aria-label="anchor" href="#breaking-changes-development-version"></a></h3>
