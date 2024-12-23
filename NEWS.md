@@ -3,9 +3,9 @@
 ## New Features
 
 - New function `derive_vars_cat()` for deriving pairs of variables or more, e.g. 
-`AVALCATx` & `AVALCAxN`. (#2480)
+`AVALCATy` & `AVALCAyN`. (#2480)
 - New function `derive_vars_crit_flag()` for deriving criterion flag variables
-(`CRITy`, `CRITyFL`, `CRITyFLN`). (#2468)
+(`CRITy`, `CRITyFL`, `CRITyFN`). (#2468)
 - New function `transform_range()`  to transform values from a source range to a
 target range. (#2571)
 - Replace use of `data("sdtm")` with `sdtm <- pharmaverse::sdtm` in templates and vignettes. (#2498)
@@ -44,6 +44,14 @@ or that the queries dataset contains duplicates. (#2543)
 - Update `derive_vars_period()` to make it work when there is only one new variable. (#2582)
 
 - In `get_summary_records()`, previously deprecated formal arguments `analysis_var` and `summary_fun` now removed from function, documentation, tests etc. (#2521)
+
+- A check was added to `derive_vars_transposed()` and `derive_vars_atc()` which
+stops execution if the records in `dataset_merge` or `dataset_facm` respectively
+are not unique. (#2563)
+
+- The functions `derive_vars_joined()`, `derive_var_joined_exist_flag()`,
+`derive_extreme_event()`, and `filter_joined()` were updated to reduce their
+memory consumption. (#2590)
 
 ## Breaking Changes
   
