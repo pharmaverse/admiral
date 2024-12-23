@@ -349,7 +349,7 @@ adsl <- tribble(
 ae <- tribble(
   ~USUBJID, ~AESTDTC, ~AESEQ, ~AESER, ~AEDECOD,
   "01", "2021-01-03", 1, "Y", "Flu",
-  "01", "2021-01-03", 2, "Y", "cough",
+  "01", "2021-01-03", 2, "Y", "Cough",
   "01", "2021-01-20", 3, "N", "Headache",
 ) \%>\% mutate(
   AESTDT = ymd(AESTDTC),
@@ -368,7 +368,7 @@ derive_param_tte(
       SRCSEQ = AESEQ
     ),
     filter = AESER == "Y",
-    order = exprs(AESTDT, AESEQ)
+    order = exprs(AESEQ)
   )),
   censor_conditions = list(censor_source(
     dataset_name = "adsl",

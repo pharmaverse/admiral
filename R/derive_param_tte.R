@@ -332,7 +332,7 @@
 #' ae <- tribble(
 #'   ~USUBJID, ~AESTDTC, ~AESEQ, ~AESER, ~AEDECOD,
 #'   "01", "2021-01-03", 1, "Y", "Flu",
-#'   "01", "2021-01-03", 2, "Y", "cough",
+#'   "01", "2021-01-03", 2, "Y", "Cough",
 #'   "01", "2021-01-20", 3, "N", "Headache",
 #' ) %>% mutate(
 #'   AESTDT = ymd(AESTDTC),
@@ -351,7 +351,7 @@
 #'       SRCSEQ = AESEQ
 #'     ),
 #'     filter = AESER == "Y",
-#'     order = exprs(AESTDT, AESEQ)
+#'     order = exprs(AESEQ)
 #'   )),
 #'   censor_conditions = list(censor_source(
 #'     dataset_name = "adsl",
@@ -636,7 +636,7 @@ derive_param_tte <- function(dataset = NULL,
 #'   )
 #' )
 #'
-#' filter_date_sources(
+#' admiral:::filter_date_sources(
 #'   sources = list(ttae),
 #'   source_datasets = list(adsl = adsl, ae = ae),
 #'   by_vars = exprs(AEDECOD),
@@ -890,9 +890,9 @@ extend_source_datasets <- function(source_datasets,
 #' @param order Sort order
 #'
 #'   An optional named list returned by `exprs()` defining additional variables
-#'   that the input dataset is sorted on after `date`.
+#'   that the source dataset is sorted on after `date`.
 #'
-#'   Permitted Values: list of variables created by `exprs()` e.g. `exprs(ASEQ)`.
+#'   *Permitted Values:* list of variables created by `exprs()` e.g. `exprs(ASEQ)`.
 #'
 #' @keywords source_specifications
 #' @family source_specifications

@@ -41,9 +41,9 @@ character string, a numeric value, an expression, or \code{NA}.}
 \item{order}{Sort order
 
 An optional named list returned by \code{exprs()} defining additional variables
-that the input dataset is sorted on after \code{date}.
+that the source dataset is sorted on after \code{date}.
 
-Permitted Values: list of variables created by \code{exprs()} e.g. \code{exprs(ASEQ)}.}
+\emph{Permitted Values:} list of variables created by \code{exprs()} e.g. \code{exprs(ASEQ)}.}
 }
 \value{
 An object of class \code{tte_source}

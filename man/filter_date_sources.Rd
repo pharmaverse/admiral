@@ -123,7 +123,7 @@ ttae <- event_source(
   )
 )
 
-filter_date_sources(
+admiral:::filter_date_sources(
   sources = list(ttae),
   source_datasets = list(adsl = adsl, ae = ae),
   by_vars = exprs(AEDECOD),

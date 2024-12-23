@@ -1025,7 +1025,7 @@ input is sorted descending", {
         SRCSEQ = AESEQ
       ),
       filter = AESER == "Y",
-      order = exprs(AESTDT, AESEQ) # Should re-sort so that AESEQ=1 (Flu) is chosen on tie
+      order = exprs(AESEQ) # Should re-sort so that AESEQ=1 (Flu) is chosen on tie
     )),
     censor_conditions = list(censor_source(
       dataset_name = "adsl",
