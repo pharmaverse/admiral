@@ -11,7 +11,7 @@ See also Wikipedia."><meta property="og:image" content="https://pharmaverse.gith
 
     <a class="navbar-brand me-2" href="../index.html">admiral</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.1.1.9046</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.1.1.9047</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -67,7 +67,7 @@ See also Wikipedia."><meta property="og:image" content="https://pharmaverse.gith
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Country Code Lookup</h1>
-      <small class="dont-index">Source: <a href="https://github.com/pharmaverse/admiral/blob/main/R/create_country_codes.R" class="external-link"><code>R/create_country_codes.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/pharmaverse/admiral/blob/main/R/data.R" class="external-link"><code>R/data.R</code></a></small>
       <div class="d-none name"><code>country_code_lookup.Rd</code></div>
     </div>
 
@@ -109,7 +109,6 @@ the 3-letter codes.</p>
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://tibble.tidyverse.org/" class="external-link">tibble</a></span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span>, warn.conflicts <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://lubridate.tidyverse.org" class="external-link">lubridate</a></span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Create reference dataset for periods</span></span></span>
 <span class="r-in"><span><span class="va">adsl</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://tibble.tidyverse.org/reference/tribble.html" class="external-link">tribble</a></span><span class="op">(</span></span></span>
@@ -123,13 +122,12 @@ the 3-letter codes.</p>
 <span class="r-in"><span>  <span class="st">"ST01-07"</span>, <span class="st">"F"</span>, <span class="st">"USA"</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="va">covar</span> <span class="op">&lt;-</span> <span class="va">adsl</span> <span class="op"><a href="pipe.html">%&gt;%</a></span></span></span>
+<span class="r-in"><span><span class="va">adsl</span> <span class="op"><a href="pipe.html">%&gt;%</a></span></span></span>
 <span class="r-in"><span>  <span class="fu"><a href="derive_vars_merged.html">derive_vars_merged</a></span><span class="op">(</span></span></span>
 <span class="r-in"><span>    dataset_add <span class="op">=</span> <span class="va">country_code_lookup</span>,</span></span>
 <span class="r-in"><span>    new_vars <span class="op">=</span> <span class="fu"><a href="reexport-exprs.html">exprs</a></span><span class="op">(</span>COUNTRYN <span class="op">=</span> <span class="va">country_number</span>, COUNTRYL <span class="op">=</span> <span class="va">country_name</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>    by_vars <span class="op">=</span> <span class="fu"><a href="reexport-exprs.html">exprs</a></span><span class="op">(</span>COUNTRY <span class="op">=</span> <span class="va">country_code</span><span class="op">)</span></span></span>
 <span class="r-in"><span>  <span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">covar</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 7 × 5</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   USUBJID SEX   COUNTRY COUNTRYN COUNTRYL                                       </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                                          </span>
@@ -148,7 +146,7 @@ the 3-letter codes.</p>
 
 
     <footer><div class="pkgdown-footer-left">
-  <p>Developed by Ben Straub, Stefan Bundfuss, Jeffrey Dickinson, Ross Farrugia, Fanny Gautier, G Gayatri, Asha Chakma, Dinakar Kulkarni, Edoardo Mancini, Sadchla Mascary, Gordon Miller, Lina Patil, Jim Rothstein, Sophie Shapcott, Eric Simms, Daniel Sjoberg, Stefan Thoma, Phillip Webster, Kangjie Zhang, Zelos Zhu, F. Hoffmann-La Roche AG, GlaxoSmithKline LLC.</p>
+  <p>Developed by Ben Straub, Stefan Bundfuss, Jeffrey Dickinson, Ross Farrugia, Fanny Gautier, Dinakar Kulkarni, Edoardo Mancini, Sadchla Mascary, Gordon Miller, Jim Rothstein, Sophie Shapcott, Eric Simms, Daniel Sjoberg, Stefan Thoma, Phillip Webster, Zelos Zhu, F. Hoffmann-La Roche AG, GlaxoSmithKline LLC.</p>
 </div>
 
 <div class="pkgdown-footer-right">
