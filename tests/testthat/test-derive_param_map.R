@@ -3,20 +3,20 @@
 ## compute_map: DBP & SBP ----
 # ((2 x DBP) + SBP) / 3
 
-## Test 26: MAP based on diastolic & systolic BP - single values ----
-test_that("compute_map Test 26: MAP based on diastolic & systolic BP - single values", {
+## Test 1: MAP based on diastolic & systolic BP - single values ----
+test_that("compute_map Test 1: MAP based on diastolic & systolic BP - single values", {
   expect_equal(round(compute_map(diabp = 51, sysbp = 121), 3L), 74.333)
 })
 
-## Test 27: MAP based on diastolic & systolic BP - vectors ----
-test_that("compute_map Test 27: MAP based on diastolic & systolic BP - vectors", {
+## Test 2: MAP based on diastolic & systolic BP - vectors ----
+test_that("compute_map Test 2: MAP based on diastolic & systolic BP - vectors", {
   expect_equal(
     round(compute_map(diabp = c(51, 61), sysbp = c(121, 141)), 3L), c(74.333, 87.667)
   )
 })
 
-## Test 28: MAP based on diastolic & systolic BP with missing values ----
-test_that("compute_map Test 28: MAP based on diastolic & systolic BP with missing values", {
+## Test 3: MAP based on diastolic & systolic BP with missing values ----
+test_that("compute_map Test 3: MAP based on diastolic & systolic BP with missing values", {
   expect_equal(
     compute_map(diabp = c(NA, 61), sysbp = c(121, NA)), c(NA_real_, NA_real_)
   )
@@ -25,23 +25,23 @@ test_that("compute_map Test 28: MAP based on diastolic & systolic BP with missin
 ## compute_map: DBP, SBP & HR ----
 # DBP + 0.01 x exp(4.14 - 40.74 / PULSE) x (SBP - DBP)
 
-## Test 29: MAP based on DBP & SBP & heart rate - single values ----
-test_that("compute_map Test 29: MAP based on DBP & SBP & heart rate - single values", {
+## Test 4: MAP based on DBP & SBP & heart rate - single values ----
+test_that("compute_map Test 4: MAP based on DBP & SBP & heart rate - single values", {
   expect_equal(
     round(compute_map(diabp = 51, sysbp = 121, hr = 59), 3L), 73.039
   )
 })
 
-## Test 30: MAP based on diastolic, systolic BP & heart rate - vectors ----
-test_that("compute_map Test 30: MAP based on diastolic, systolic BP & heart rate - vectors", {
+## Test 5: MAP based on diastolic, systolic BP & heart rate - vectors ----
+test_that("compute_map Test 5: MAP based on diastolic, systolic BP & heart rate - vectors", {
   expect_equal(
     round(compute_map(diabp = c(51, 91), sysbp = c(121, 101), hr = c(59, 62)), 3L),
     c(73.039, 94.255)
   )
 })
 
-## Test 31: MAP based on DBP, SBP & heart rate - with missing values ----
-test_that("compute_map Test 31: MAP based on DBP, SBP & heart rate - with missing values", {
+## Test 6: MAP based on DBP, SBP & heart rate - with missing values ----
+test_that("compute_map Test 6: MAP based on DBP, SBP & heart rate - with missing values", {
   expect_equal(
     compute_map(diabp = c(NA, 61, 51), sysbp = c(121, NA, 121), hr = c(59, 62, NA)),
     c(NA_real_, NA_real_, NA_real_)
@@ -52,8 +52,8 @@ test_that("compute_map Test 31: MAP based on DBP, SBP & heart rate - with missin
 
 ## derive_param_map: Error checks ----
 
-## Test 52: MAP parameter NOT added - wrong DIABP unit ----
-test_that("derive_param_map Test 52: MAP parameter NOT added - wrong DIABP unit", {
+## Test 7: MAP parameter NOT added - wrong DIABP unit ----
+test_that("derive_param_map Test 7: MAP parameter NOT added - wrong DIABP unit", {
   input <- tibble::tribble(
     ~USUBJID, ~PARAMCD, ~PARAM, ~AVAL, ~VISIT,
     "01-701-1015", "DIABP", "Diastolic Blood Pressure (mHg)", 51, "BASELINE",
@@ -70,8 +70,8 @@ test_that("derive_param_map Test 52: MAP parameter NOT added - wrong DIABP unit"
   )
 })
 
-## Test 53: MAP parameter NOT added - wrong SYSBP unit ----
-test_that("derive_param_map Test 53: MAP parameter NOT added - wrong SYSBP unit", {
+## Test 8: MAP parameter NOT added - wrong SYSBP unit ----
+test_that("derive_param_map Test 8: MAP parameter NOT added - wrong SYSBP unit", {
   input <- tibble::tribble(
     ~USUBJID,      ~PARAMCD, ~PARAM,                            ~AVAL, ~VISIT,
     "01-701-1015", "DIABP",  "Diastolic Blood Pressure (mmHg)",    51, "BASELINE",
@@ -88,8 +88,8 @@ test_that("derive_param_map Test 53: MAP parameter NOT added - wrong SYSBP unit"
   )
 })
 
-## Test 54: MAP parameter NOT added - wrong PULSE unit ----
-test_that("derive_param_map Test 54: MAP parameter NOT added - wrong PULSE unit", {
+## Test 9: MAP parameter NOT added - wrong PULSE unit ----
+test_that("derive_param_map Test 9: MAP parameter NOT added - wrong PULSE unit", {
   input <- tibble::tribble(
     ~USUBJID, ~PARAMCD, ~PARAM, ~AVAL, ~VISIT,
     "01-701-1015", "DIABP", "Diastolic Blood Pressure (mmHg)", 51, "BASELINE",
@@ -108,8 +108,8 @@ test_that("derive_param_map Test 54: MAP parameter NOT added - wrong PULSE unit"
   )
 })
 
-## Test 55: MAP parameter NOT added - PARAMCD not set ----
-test_that("derive_param_map Test 55: MAP parameter NOT added - PARAMCD not set", {
+## Test 10: MAP parameter NOT added - PARAMCD not set ----
+test_that("derive_param_map Test 10: MAP parameter NOT added - PARAMCD not set", {
   input <- tibble::tribble(
     ~USUBJID, ~PARAMCD, ~PARAM, ~AVAL, ~VISIT,
     "01-701-1015", "DIABP", "Diastolic Blood Pressure (mmHg)", 51, "BASELINE",
@@ -129,8 +129,8 @@ test_that("derive_param_map Test 55: MAP parameter NOT added - PARAMCD not set",
 
 ## derive_param_map: No obs added ----
 
-## Test 56: MAP parameter NOT added ----
-test_that("derive_param_map Test 56: MAP parameter NOT added", {
+## Test 11: MAP parameter NOT added ----
+test_that("derive_param_map Test 11: MAP parameter NOT added", {
   expected_output <- tibble::tribble(
     ~USUBJID,      ~PARAMCD, ~PARAM,                            ~AVAL, ~VISIT,
     "01-701-1015", "DIABP",  "Diastolic Blood Pressure (mmHg)",    NA, "BASELINE",
@@ -168,8 +168,8 @@ maphr <- function(sbp, dbp, hr) {
   dbp + 0.01 * exp(4.14 - 40.74 / hr) * (sbp - dbp)
 }
 
-## Test 57: MAP parameter (DBP/SBP/PULSE) is correctly added ----
-test_that("derive_param_map Test 57: MAP parameter (DBP/SBP/PULSE) is correctly added", {
+## Test 12: MAP parameter (DBP/SBP/PULSE) is correctly added ----
+test_that("derive_param_map Test 12: MAP parameter (DBP/SBP/PULSE) is correctly added", {
   expected_output <- tibble::tribble(
     ~USUBJID, ~PARAMCD, ~PARAM, ~VISIT, ~AVAL,
     "01-701-1015", "PULSE", "Pulse (beats/min)", "BASELINE", 59,
@@ -204,8 +204,8 @@ map <- function(sbp, dbp) {
   (2 * dbp + sbp) / 3
 }
 
-## Test 58: MAP parameter (DBP/SBP) is correctly added ----
-test_that("derive_param_map Test 58: MAP parameter (DBP/SBP) is correctly added", {
+## Test 13: MAP parameter (DBP/SBP) is correctly added ----
+test_that("derive_param_map Test 13: MAP parameter (DBP/SBP) is correctly added", {
   expected_output <- tibble::tribble(
     ~USUBJID, ~PARAMCD, ~PARAM, ~VISIT, ~AVAL,
     "01-701-1015", "DIABP", "Diastolic Blood Pressure (mmHg)", "BASELINE", 51,

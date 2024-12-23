@@ -28,8 +28,8 @@ test_that("compute_bmi Test 3: BMI height & weight vectors - missing values", {
 
 ## derive_param_bmi: Error checks ----
 
-## Test 32: BMI parameter NOT added - wrong hgt unit ----
-test_that("derive_param_bmi Test 32: BMI parameter NOT added - wrong hgt unit", {
+## Test 4: BMI parameter NOT added - wrong hgt unit ----
+test_that("derive_param_bmi Test 4: BMI parameter NOT added - wrong hgt unit", {
   input <- tibble::tribble(
     ~USUBJID, ~PARAMCD, ~PARAM, ~VISIT, ~VSSTRESU, ~AVAL,
     # Wrong unit for HEIGHT should be cm
@@ -43,8 +43,8 @@ test_that("derive_param_bmi Test 32: BMI parameter NOT added - wrong hgt unit", 
   )
 })
 
-## Test 33: BMI parameter NOT added - wrong wgt unit ----
-test_that("derive_param_bmi Test 33: BMI parameter NOT added - wrong wgt unit", {
+## Test 5: BMI parameter NOT added - wrong wgt unit ----
+test_that("derive_param_bmi Test 5: BMI parameter NOT added - wrong wgt unit", {
   input <- tibble::tribble(
     ~USUBJID,      ~PARAMCD, ~PARAM,        ~VISIT,     ~VSSTRESU, ~AVAL,
     "01-701-1015", "HEIGHT", "Height (cm)", "BASELINE",      "cm",   170,
@@ -58,8 +58,8 @@ test_that("derive_param_bmi Test 33: BMI parameter NOT added - wrong wgt unit", 
   )
 })
 
-## Test 34: BMI parameter NOT added - multiple unit for wgt ----
-test_that("derive_param_bmi Test 34: BMI parameter NOT added - multiple unit for wgt", {
+## Test 6: BMI parameter NOT added - multiple unit for wgt ----
+test_that("derive_param_bmi Test 6: BMI parameter NOT added - multiple unit for wgt", {
   input <- tibble::tribble(
     ~USUBJID,      ~PARAMCD, ~PARAM,        ~VISIT,     ~VSSTRESU, ~AVAL,
     "01-701-1015", "HEIGHT", "Height (cm)", "BASELINE",      "cm",   170,
@@ -74,8 +74,8 @@ test_that("derive_param_bmi Test 34: BMI parameter NOT added - multiple unit for
   )
 })
 
-## Test 35: BMI parameter NOT added - PARAMCD not set ----
-test_that("derive_param_bmi Test 35: BMI parameter NOT added - PARAMCD not set", {
+## Test 7: BMI parameter NOT added - PARAMCD not set ----
+test_that("derive_param_bmi Test 7: BMI parameter NOT added - PARAMCD not set", {
   input <- tibble::tribble(
     ~USUBJID,      ~PARAMCD, ~PARAM,        ~VISIT,     ~VSSTRESU, ~AVAL,
     "01-701-1015", "HEIGHT", "Height (cm)", "BASELINE",      "cm",   170,
@@ -95,8 +95,8 @@ test_that("derive_param_bmi Test 35: BMI parameter NOT added - PARAMCD not set",
 
 ## derive_param_bmi: No obs added  ----
 
-## Test 36: BMI parameter NOT added ----
-test_that("derive_param_bmi Test 36: BMI parameter NOT added", {
+## Test 8: BMI parameter NOT added ----
+test_that("derive_param_bmi Test 8: BMI parameter NOT added", {
   expected_output <- tibble::tribble(
     ~USUBJID, ~PARAMCD, ~PARAM, ~VISIT, ~VSSTRESU, ~AVAL,
     "01-701-1015", "HEIGHT", "Height (cm)", "BASELINE", "cm", 170,
@@ -132,8 +132,8 @@ bmi <- function(hgt, wgt) {
   wgt / (hgt / 100)^2
 }
 
-## Test 37: BMI parameter is correctly added ----
-test_that("derive_param_bmi Test 37: BMI parameter is correctly added", {
+## Test 9: BMI parameter is correctly added ----
+test_that("derive_param_bmi Test 9: BMI parameter is correctly added", {
   expected_output <- tibble::tribble(
     ~USUBJID, ~PARAMCD, ~PARAM, ~VISIT, ~VSSTRESU, ~AVAL,
     "01-701-1015", "HEIGHT", "Height (cm)", "BASELINE", "cm", 170,
@@ -161,8 +161,8 @@ test_that("derive_param_bmi Test 37: BMI parameter is correctly added", {
 
 
 # Derive BMI where height is measured only once
-## Test 38: Derive BMI where height is measured only once ----
-test_that("derive_param_bmi Test 38: Derive BMI where height is measured only once", {
+## Test 10: Derive BMI where height is measured only once ----
+test_that("derive_param_bmi Test 10: Derive BMI where height is measured only once", {
   input <- tibble::tribble(
     ~USUBJID,      ~PARAMCD, ~PARAM,        ~AVAL, ~AVALU, ~VISIT,
     "01-701-1015", "HEIGHT", "Height (cm)", 147.0, "cm",   "SCREENING",

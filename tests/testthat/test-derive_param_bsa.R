@@ -3,24 +3,24 @@
 ## compute_bsa: Mosteller method ----
 # sqrt (Height x Weight / 3600)
 
-## Test 4: Mosteller method - single height & weight values ----
-test_that("compute_bsa Test 4: Mosteller method - single height & weight values", {
+## Test 1: Mosteller method - single height & weight values ----
+test_that("compute_bsa Test 1: Mosteller method - single height & weight values", {
   expect_equal(
     round(compute_bsa(height = 170, weight = 75, method = "Mosteller"), 3L),
     1.882
   )
 })
 
-## Test 5: Mosteller method - height & weight vectors ----
-test_that("compute_bsa Test 5: Mosteller method - height & weight vectors", {
+## Test 2: Mosteller method - height & weight vectors ----
+test_that("compute_bsa Test 2: Mosteller method - height & weight vectors", {
   expect_equal(
     round(compute_bsa(height = c(170, 185), weight = c(75, 90), method = "Mosteller"), 3L),
     c(1.882, 2.151)
   )
 })
 
-## Test 6: Mosteller method - height & weight vectors - missing values ----
-test_that("compute_bsa Test 6: Mosteller method - height & weight vectors - missing values", {
+## Test 3: Mosteller method - height & weight vectors - missing values ----
+test_that("compute_bsa Test 3: Mosteller method - height & weight vectors - missing values", {
   expect_equal(
     compute_bsa(height = c(NA, 185), weight = c(75, NA), method = "Mosteller"),
     c(NA_real_, NA_real_)
@@ -30,24 +30,24 @@ test_that("compute_bsa Test 6: Mosteller method - height & weight vectors - miss
 ## compute_bsa: DuBois-DuBois method ----
 #  FORMULA : 0.007184 x (HGT)^0.725 x WGT^0.425
 
-## Test 7: DuBois-DuBois method - single height & weight values ----
-test_that("compute_bsa Test 7: DuBois-DuBois method - single height & weight values", {
+## Test 4: DuBois-DuBois method - single height & weight values ----
+test_that("compute_bsa Test 4: DuBois-DuBois method - single height & weight values", {
   expect_equal(
     round(compute_bsa(height = 170, weight = 75, method = "DuBois-DuBois"), 3L),
     1.864
   )
 })
 
-## Test 8: DuBois-DuBois method - height & weight vectors ----
-test_that("compute_bsa Test 8: DuBois-DuBois method - height & weight vectors", {
+## Test 5: DuBois-DuBois method - height & weight vectors ----
+test_that("compute_bsa Test 5: DuBois-DuBois method - height & weight vectors", {
   expect_equal(
     round(compute_bsa(height = c(170, 185), weight = c(75, 90), method = "DuBois-DuBois"), 3L),
     c(1.864, 2.141)
   )
 })
 
-## Test 9: DuBois-DuBois method - hgt and wgt vectors - missing values ----
-test_that("compute_bsa Test 9: DuBois-DuBois method - hgt and wgt vectors - missing values", {
+## Test 6: DuBois-DuBois method - hgt and wgt vectors - missing values ----
+test_that("compute_bsa Test 6: DuBois-DuBois method - hgt and wgt vectors - missing values", {
   expect_equal(
     compute_bsa(height = c(NA, 185), weight = c(75, NA), method = "DuBois-DuBois"),
     c(NA_real_, NA_real_)
@@ -57,24 +57,24 @@ test_that("compute_bsa Test 9: DuBois-DuBois method - hgt and wgt vectors - miss
 ## compute_bsa: Haycock method (Test 03.xx) ----
 # 0.024265 x HGT^0.3964 x WGT^0.5378
 
-## Test 10: Haycock method - single height & weight values ----
-test_that("compute_bsa Test 10: Haycock method - single height & weight values", {
+## Test 7: Haycock method - single height & weight values ----
+test_that("compute_bsa Test 7: Haycock method - single height & weight values", {
   expect_equal(
     round(compute_bsa(height = 170, weight = 75, method = "Haycock"), 3L),
     1.895
   )
 })
 
-## Test 11: Haycock method - height & weight vectors ----
-test_that("compute_bsa Test 11: Haycock method - height & weight vectors", {
+## Test 8: Haycock method - height & weight vectors ----
+test_that("compute_bsa Test 8: Haycock method - height & weight vectors", {
   expect_equal(
     round(compute_bsa(height = c(170, 185), weight = c(75, 90), method = "Haycock"), 3L),
     c(1.895, 2.161)
   )
 })
 
-## Test 12: Haycock method - height & weight vectors - missing values ----
-test_that("compute_bsa Test 12: Haycock method - height & weight vectors - missing values", {
+## Test 9: Haycock method - height & weight vectors - missing values ----
+test_that("compute_bsa Test 9: Haycock method - height & weight vectors - missing values", {
   expect_equal(
     compute_bsa(height = c(NA, 185), weight = c(75, NA), method = "Haycock"),
     c(NA_real_, NA_real_)
@@ -84,24 +84,24 @@ test_that("compute_bsa Test 12: Haycock method - height & weight vectors - missi
 ## compute_bsa: Gehan-George method ----
 # 0.0235 x HGT^0.42246 x WGT^0.51456
 
-## Test 13: Gehan-George method - single height & weight values ----
-test_that("compute_bsa Test 13: Gehan-George method - single height & weight values", {
+## Test 10: Gehan-George method - single height & weight values ----
+test_that("compute_bsa Test 10: Gehan-George method - single height & weight values", {
   expect_equal(
     round(compute_bsa(height = 170, weight = 75, method = "Gehan-George"), 3L),
     1.897
   )
 })
 
-## Test 14: Gehan-George method - height & weight vectors ----
-test_that("compute_bsa Test 14: Gehan-George method - height & weight vectors", {
+## Test 11: Gehan-George method - height & weight vectors ----
+test_that("compute_bsa Test 11: Gehan-George method - height & weight vectors", {
   expect_equal(
     round(compute_bsa(height = c(170, 185), weight = c(75, 90), method = "Gehan-George"), 3L),
     c(1.897, 2.16)
   )
 })
 
-## Test 15: Gehan-George method - height & weight vectors - missing values ----
-test_that("compute_bsa Test 15: Gehan-George method - height & weight vectors - missing values", {
+## Test 12: Gehan-George method - height & weight vectors - missing values ----
+test_that("compute_bsa Test 12: Gehan-George method - height & weight vectors - missing values", {
   expect_equal(
     compute_bsa(height = c(NA, 185), weight = c(75, NA), method = "Gehan-George"),
     c(NA_real_, NA_real_)
@@ -111,24 +111,24 @@ test_that("compute_bsa Test 15: Gehan-George method - height & weight vectors - 
 ## compute_bsa: Boyd method ----
 # 0.0003207 x (HGT^0.3) x (1000 x WGT)^(0.7285 - (0.0188 x log10(1000 x WGT)))
 
-## Test 16: Boyd method - single height & weight values ----
-test_that("compute_bsa Test 16: Boyd method - single height & weight values", {
+## Test 13: Boyd method - single height & weight values ----
+test_that("compute_bsa Test 13: Boyd method - single height & weight values", {
   expect_equal(
     round(compute_bsa(height = 170, weight = 75, method = "Boyd"), 3L),
     1.905
   )
 })
 
-## Test 17: Boyd method - height & weight vectors ----
-test_that("compute_bsa Test 17: Boyd method - height & weight vectors", {
+## Test 14: Boyd method - height & weight vectors ----
+test_that("compute_bsa Test 14: Boyd method - height & weight vectors", {
   expect_equal(
     round(compute_bsa(height = c(170, 185), weight = c(75, 90), method = "Boyd"), 3L),
     c(1.905, 2.158)
   )
 })
 
-## Test 18: Boyd method - height & weight vectors - missing values ----
-test_that("compute_bsa Test 18: Boyd method - height & weight vectors - missing values", {
+## Test 15: Boyd method - height & weight vectors - missing values ----
+test_that("compute_bsa Test 15: Boyd method - height & weight vectors - missing values", {
   expect_equal(
     compute_bsa(height = c(NA, 185), weight = c(75, NA), method = "Boyd"),
     c(NA_real_, NA_real_)
@@ -138,24 +138,24 @@ test_that("compute_bsa Test 18: Boyd method - height & weight vectors - missing 
 ## compute_bsa: Fujimoto method ----
 # 0.008883 x HGT^0.663 x WGT^0.444
 
-## Test 19: Fujimoto method - single height & weight values ----
-test_that("compute_bsa Test 19: Fujimoto method - single height & weight values", {
+## Test 16: Fujimoto method - single height & weight values ----
+test_that("compute_bsa Test 16: Fujimoto method - single height & weight values", {
   expect_equal(
     round(compute_bsa(height = 170, weight = 75, method = "Fujimoto"), 3L),
     1.819
   )
 })
 
-## Test 20: Fujimoto method - height & weight vectors ----
-test_that("compute_bsa Test 20: Fujimoto method - height & weight vectors", {
+## Test 17: Fujimoto method - height & weight vectors ----
+test_that("compute_bsa Test 17: Fujimoto method - height & weight vectors", {
   expect_equal(
     round(compute_bsa(height = c(170, 185), weight = c(75, 90), method = "Fujimoto"), 3L),
     c(1.819, 2.086)
   )
 })
 
-## Test 21: Fujimoto method - height & weight vectors - missing values ----
-test_that("compute_bsa Test 21: Fujimoto method - height & weight vectors - missing values", {
+## Test 18: Fujimoto method - height & weight vectors - missing values ----
+test_that("compute_bsa Test 18: Fujimoto method - height & weight vectors - missing values", {
   expect_equal(
     compute_bsa(height = c(NA, 185), weight = c(75, NA), method = "Fujimoto"),
     c(NA_real_, NA_real_)
@@ -165,24 +165,24 @@ test_that("compute_bsa Test 21: Fujimoto method - height & weight vectors - miss
 ## compute_bsa: Takahira method ----
 # 0.007241 x HGT^0.725 x WGT^0.425
 
-## Test 22: Takahira method - single height & weight values ----
-test_that("compute_bsa Test 22: Takahira method - single height & weight values", {
+## Test 19: Takahira method - single height & weight values ----
+test_that("compute_bsa Test 19: Takahira method - single height & weight values", {
   expect_equal(
     round(compute_bsa(height = 170, weight = 75, method = "Takahira"), 3L),
     1.878
   )
 })
 
-## Test 23: Takahira method - height & weight vectors ----
-test_that("compute_bsa Test 23: Takahira method - height & weight vectors", {
+## Test 20: Takahira method - height & weight vectors ----
+test_that("compute_bsa Test 20: Takahira method - height & weight vectors", {
   expect_equal(
     round(compute_bsa(height = c(170, 185), weight = c(75, 90), method = "Takahira"), 3L),
     c(1.878, 2.158)
   )
 })
 
-## Test 24: Takahira method - height & weight vectors - missing values ----
-test_that("compute_bsa Test 24: Takahira method - height & weight vectors - missing values", {
+## Test 21: Takahira method - height & weight vectors - missing values ----
+test_that("compute_bsa Test 21: Takahira method - height & weight vectors - missing values", {
   expect_equal(
     compute_bsa(height = c(NA, 185), weight = c(75, NA), method = "Takahira"),
     c(NA_real_, NA_real_)
@@ -191,8 +191,8 @@ test_that("compute_bsa Test 24: Takahira method - height & weight vectors - miss
 
 ## compute_bsa: Check error messages ----
 
-## Test 25: an error is issued if an invalid method is specified ----
-test_that("compute_bsa Test 25: an error is issued if an invalid method is specified", {
+## Test 22: an error is issued if an invalid method is specified ----
+test_that("compute_bsa Test 22: an error is issued if an invalid method is specified", {
   expect_error(
     compute_bsa(height = c(170, 185), weight = c(75, 90), method = "unknown-method"),
     class = "assert_character_scalar"
@@ -203,8 +203,8 @@ test_that("compute_bsa Test 25: an error is issued if an invalid method is speci
 
 ## derive_param_bsa: Error checks ----
 
-## Test 39: BSA parameter NOT added - wrong unit for height ----
-test_that("derive_param_bsa Test 39: BSA parameter NOT added - wrong unit for height", {
+## Test 23: BSA parameter NOT added - wrong unit for height ----
+test_that("derive_param_bsa Test 23: BSA parameter NOT added - wrong unit for height", {
   input <- tibble::tribble(
     ~USUBJID, ~PARAMCD, ~PARAM, ~VISIT, ~VSSTRESU, ~AVAL,
     # Wrong unit for HEIGHT should be cm
@@ -223,8 +223,8 @@ test_that("derive_param_bsa Test 39: BSA parameter NOT added - wrong unit for he
   )
 })
 
-## Test 40: BSA parameter NOT added - wrong unit for weight ----
-test_that("derive_param_bsa Test 40: BSA parameter NOT added - wrong unit for weight", {
+## Test 24: BSA parameter NOT added - wrong unit for weight ----
+test_that("derive_param_bsa Test 24: BSA parameter NOT added - wrong unit for weight", {
   input <- tibble::tribble(
     ~USUBJID,      ~PARAMCD, ~PARAM,        ~VISIT,     ~VSSTRESU, ~AVAL,
     "01-701-1015", "HEIGHT", "Height (cm)", "BASELINE",      "cm",   170,
@@ -243,8 +243,8 @@ test_that("derive_param_bsa Test 40: BSA parameter NOT added - wrong unit for we
   )
 })
 
-## Test 41: BSA parameter NOT added - multiple unit for weight ----
-test_that("derive_param_bsa Test 41: BSA parameter NOT added - multiple unit for weight", {
+## Test 25: BSA parameter NOT added - multiple unit for weight ----
+test_that("derive_param_bsa Test 25: BSA parameter NOT added - multiple unit for weight", {
   input <- tibble::tribble(
     ~USUBJID,      ~PARAMCD, ~PARAM,        ~VISIT,     ~VSSTRESU, ~AVAL,
     "01-701-1015", "HEIGHT", "Height (cm)", "BASELINE",      "cm",   170,
@@ -264,8 +264,8 @@ test_that("derive_param_bsa Test 41: BSA parameter NOT added - multiple unit for
   )
 })
 
-## Test 42: BSA parameter NOT added - PARAMCD not set ----
-test_that("derive_param_bsa Test 42: BSA parameter NOT added - PARAMCD not set", {
+## Test 26: BSA parameter NOT added - PARAMCD not set ----
+test_that("derive_param_bsa Test 26: BSA parameter NOT added - PARAMCD not set", {
   input <- tibble::tribble(
     ~USUBJID,      ~PARAMCD, ~PARAM,        ~VISIT,     ~VSSTRESU, ~AVAL,
     "01-701-1015", "HEIGHT", "Height (cm)", "BASELINE",      "cm",   170,
@@ -286,8 +286,8 @@ test_that("derive_param_bsa Test 42: BSA parameter NOT added - PARAMCD not set",
 
 ## derive_param_bsa: No obs added ----
 
-## Test 43: BSA parameter NOT added ----
-test_that("derive_param_bsa Test 43: BSA parameter NOT added", {
+## Test 27: BSA parameter NOT added ----
+test_that("derive_param_bsa Test 27: BSA parameter NOT added", {
   expected_output <- tibble::tribble(
     ~USUBJID, ~PARAMCD, ~PARAM, ~VISIT, ~VSSTRESU, ~AVAL,
     "01-701-1015", "HEIGHT", "Height (cm)", "BASELINE", "cm", 170,
@@ -324,8 +324,8 @@ mosteller <- function(hgt, wgt) {
   sqrt(hgt * wgt / 3600)
 }
 
-## Test 44: BSA parameter (Mosteller Method) is correctly added ----
-test_that("derive_param_bsa Test 44: BSA parameter (Mosteller Method) is correctly added", {
+## Test 28: BSA parameter (Mosteller Method) is correctly added ----
+test_that("derive_param_bsa Test 28: BSA parameter (Mosteller Method) is correctly added", {
   expected_output <- tibble::tribble(
     ~USUBJID, ~PARAMCD, ~PARAM, ~VISIT, ~VSSTRESU, ~AVAL,
     "01-701-1015", "HEIGHT", "Height (cm)", "BASELINE", "cm", 170,
@@ -359,8 +359,8 @@ dubois <- function(hgt, wgt) {
   0.007184 * hgt^0.725 * wgt^0.425
 }
 
-## Test 45: BSA parameter (DuBois-DuBois method) is correctly added ----
-test_that("derive_param_bsa Test 45: BSA parameter (DuBois-DuBois method) is correctly added", {
+## Test 29: BSA parameter (DuBois-DuBois method) is correctly added ----
+test_that("derive_param_bsa Test 29: BSA parameter (DuBois-DuBois method) is correctly added", {
   expected_output <- tibble::tribble(
     ~USUBJID, ~PARAMCD, ~PARAM, ~VISIT, ~VSSTRESU, ~AVAL,
     "01-701-1015", "HEIGHT", "Height (cm)", "BASELINE", "cm", 170,
@@ -395,8 +395,8 @@ haycock <- function(hgt, wgt) {
   0.024265 * hgt^0.3964 * wgt^0.5378
 }
 
-## Test 46: BSA parameter (Haycock method) is correctly added ----
-test_that("derive_param_bsa Test 46: BSA parameter (Haycock method) is correctly added", {
+## Test 30: BSA parameter (Haycock method) is correctly added ----
+test_that("derive_param_bsa Test 30: BSA parameter (Haycock method) is correctly added", {
   expected_output <- tibble::tribble(
     ~USUBJID, ~PARAMCD, ~PARAM, ~VISIT, ~VSSTRESU, ~AVAL,
     "01-701-1015", "HEIGHT", "Height (cm)", "BASELINE", "cm", 170,
@@ -430,8 +430,8 @@ gehan <- function(hgt, wgt) {
   0.0235 * hgt^0.42246 * wgt^0.51456
 }
 
-## Test 47: BSA parameter (Gehan-George method) is correctly added ----
-test_that("derive_param_bsa Test 47: BSA parameter (Gehan-George method) is correctly added", {
+## Test 31: BSA parameter (Gehan-George method) is correctly added ----
+test_that("derive_param_bsa Test 31: BSA parameter (Gehan-George method) is correctly added", {
   expected_output <- tibble::tribble(
     ~USUBJID, ~PARAMCD, ~PARAM, ~VISIT, ~VSSTRESU, ~AVAL,
     "01-701-1015", "HEIGHT", "Height (cm)", "BASELINE", "cm", 170,
@@ -466,8 +466,8 @@ boyd <- function(hgt, wgt) {
   0.0003207 * (hgt^0.3) * (1000 * wgt)^(0.7285 - (0.0188 * log10(1000 * wgt))) # nolint
 }
 
-## Test 48: BSA parameter (Boyd method) is correctly added ----
-test_that("derive_param_bsa Test 48: BSA parameter (Boyd method) is correctly added", {
+## Test 32: BSA parameter (Boyd method) is correctly added ----
+test_that("derive_param_bsa Test 32: BSA parameter (Boyd method) is correctly added", {
   expected_output <- tibble::tribble(
     ~USUBJID, ~PARAMCD, ~PARAM, ~VISIT, ~VSSTRESU, ~AVAL,
     "01-701-1015", "HEIGHT", "Height (cm)", "BASELINE", "cm", 170,
@@ -501,8 +501,8 @@ fujimoto <- function(hgt, wgt) {
   0.008883 * hgt^0.663 * wgt^0.444
 }
 
-## Test 49: BSA parameter (Fujimoto method) is correctly added ----
-test_that("derive_param_bsa Test 49: BSA parameter (Fujimoto method) is correctly added", {
+## Test 33: BSA parameter (Fujimoto method) is correctly added ----
+test_that("derive_param_bsa Test 33: BSA parameter (Fujimoto method) is correctly added", {
   expected_output <- tibble::tribble(
     ~USUBJID, ~PARAMCD, ~PARAM, ~VISIT, ~VSSTRESU, ~AVAL,
     "01-701-1015", "HEIGHT", "Height (cm)", "BASELINE", "cm", 170,
@@ -537,8 +537,8 @@ takahira <- function(hgt, wgt) {
   0.007241 * hgt^0.725 * wgt^0.425
 }
 
-## Test 50: BSA parameter (Takahira method) is correctly added ----
-test_that("derive_param_bsa Test 50: BSA parameter (Takahira method) is correctly added", {
+## Test 34: BSA parameter (Takahira method) is correctly added ----
+test_that("derive_param_bsa Test 34: BSA parameter (Takahira method) is correctly added", {
   expected_output <- tibble::tribble(
     ~USUBJID, ~PARAMCD, ~PARAM, ~VISIT, ~VSSTRESU, ~AVAL,
     "01-701-1015", "HEIGHT", "Height (cm)", "BASELINE", "cm", 170,
@@ -569,8 +569,8 @@ test_that("derive_param_bsa Test 50: BSA parameter (Takahira method) is correctl
   )
 })
 
-## Test 51: Derive BSA where height is measured only once ----
-test_that("derive_param_bsa Test 51: Derive BSA where height is measured only once", {
+## Test 35: Derive BSA where height is measured only once ----
+test_that("derive_param_bsa Test 35: Derive BSA where height is measured only once", {
   input <- tibble::tribble(
     ~USUBJID,      ~PARAMCD, ~PARAM,        ~AVAL, ~AVALU, ~VISIT,
     "01-701-1015", "HEIGHT", "Height (cm)", 147.0, "cm",   "SCREENING",
