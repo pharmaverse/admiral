@@ -60,11 +60,11 @@ use_ad_template <- function(adam_name = "adsl",
     cli_inform(c(v = "File {.file {save_path}} has been created successfully"))
   }
 
-  if (open) {
-    file.edit(save_path)
+  if (open) { #nocov
+    file.edit(save_path) #nocov
   }
 
-  invisible(TRUE)
+  invisible(TRUE) #nocov
 }
 
 #' List All Available ADaM Templates
