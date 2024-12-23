@@ -23,15 +23,15 @@ test_that("get_summary_records Test 1: Summarize average of triplicate ECG inter
   )
 
   expect_snapshot(
-  df <- input %>%
-    get_summary_records(
-      by_vars = exprs(USUBJID, PARAM, AVISIT),
-      set_values_to = exprs(
-        AVAL = mean(AVAL, na.rm = TRUE),
-        DTYPE = "AVERAGE"
-      )
-    ) %>%
-    dplyr::mutate(AVAL = round(AVAL))
+    df <- input %>%
+      get_summary_records(
+        by_vars = exprs(USUBJID, PARAM, AVISIT),
+        set_values_to = exprs(
+          AVAL = mean(AVAL, na.rm = TRUE),
+          DTYPE = "AVERAGE"
+        )
+      ) %>%
+      dplyr::mutate(AVAL = round(AVAL))
   )
 })
 
