@@ -140,6 +140,16 @@ derive_var_dthcaus <- function(dataset,
                                ...,
                                source_datasets,
                                subject_keys = get_admiral_option("subject_keys")) {
+  deprecate_inform(
+    when = "1.2.0",
+    what = "derive_var_dthcaus()",
+    with = "derive_vars_extreme_event()",
+    details = c(
+      x = "This message will turn into a warning with release of 1.3.0",
+      i = "https://pharmaverse.github.io/admiral/reference/derive_vars_extreme_event.html"
+    )
+  )
+
   assert_vars(subject_keys)
   assert_data_frame(dataset, required_vars = subject_keys)
   assert_list_of(source_datasets, "data.frame")

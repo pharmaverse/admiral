@@ -129,7 +129,6 @@ test_that("derive_param_extreme_record Test 2: Analysis date are derived correct
     actual_output,
     keys = c("USUBJID", "PARAMCD", "PARAM", "ADT", "AVALC")
   )
-
 })
 
 ## Test 3: Error given when order variable is not inside source datasets ----

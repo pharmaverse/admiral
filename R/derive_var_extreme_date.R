@@ -234,6 +234,17 @@ derive_var_extreme_dtm <- function(dataset,
                                    source_datasets,
                                    mode,
                                    subject_keys = get_admiral_option("subject_keys")) {
+
+  deprecate_inform(
+    when = "1.2.0",
+    what = "derive_var_extreme_dtm()",
+    with = "derive_vars_extreme_event()",
+    details = c(
+      x = "This message will turn into a warning with release of 1.3.0",
+      i = "https://pharmaverse.github.io/admiral/reference/derive_vars_extreme_event.html"
+    )
+  )
+
   assert_vars(subject_keys)
   assert_data_frame(dataset, required_vars = subject_keys)
   new_var <- assert_symbol(enexpr(new_var))
@@ -556,6 +567,18 @@ derive_var_extreme_dt <- function(dataset,
                                   source_datasets,
                                   mode,
                                   subject_keys = get_admiral_option("subject_keys")) {
+
+  deprecate_inform(
+    when = "1.2.0",
+    what = "derive_var_extreme_dt()",
+    with = "derive_vars_extreme_event()",
+    details = c(
+      x = "This message will turn into a warning with release of 1.3.0",
+      i = "https://pharmaverse.github.io/admiral/reference/derive_vars_extreme_event.html"
+    )
+  )
+
+
   new_var <- assert_symbol(enexpr(new_var))
 
   sources <- list(...)
