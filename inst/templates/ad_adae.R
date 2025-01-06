@@ -22,7 +22,7 @@ ex_single <- admiral::ex_single
 # When SAS datasets are imported into R using haven::read_sas(), missing
 # character values from SAS appear as "" characters in R, instead of appearing
 # as NA values. Further details can be obtained via the following link:
-# https://pharmaverse.github.io/admiral/articles/admiral.html#handling-of-missing-values # nolint
+# https://pharmaverse.github.io/admiral/cran-release/articles/admiral.html#handling-of-missing-values # nolint
 
 ae <- convert_blanks_to_na(ae)
 ex <- convert_blanks_to_na(ex_single)

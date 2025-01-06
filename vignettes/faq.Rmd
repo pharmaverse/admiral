@@ -64,7 +64,7 @@ knitr::opts_chunk$set(
 ##### Where a user can quickly find some **references or advice** to use a function?
 
 * A [Cheat Sheet](https://github.com/pharmaverse/admiral/blob/main/inst/cheatsheet/admiral_cheatsheet.pdf) is available, providing some examples of the many `{admiral}` functions. 
-* For more detailed description, please refer to the [Reference section](https://pharmaverse.github.io/admiral/reference/index.html). 
+* For more detailed description, please refer to the [Reference section](https://pharmaverse.github.io/admiral/cran-release/reference/index.html). 
 
 ##### Would `{admiral}` **create a whole** ADaM  dataset?
 
