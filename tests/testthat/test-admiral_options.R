@@ -8,7 +8,8 @@ test_that("get_admiral_option Test 1: get works", {
 test_that("get_admiral_option Test 2: common typo gives error to select available options", {
   expect_snapshot(
     get_admiral_option("subject_key"),
-    error = TRUE)
+    error = TRUE
+  )
 })
 
 ## Test 3: non-character argument triggers assertion error ----
