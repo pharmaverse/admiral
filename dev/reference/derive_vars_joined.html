@@ -13,7 +13,7 @@ before the current observation."><meta property="og:image" content="https://phar
 
     <a class="navbar-brand me-2" href="../index.html">admiral</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.1.1.9050</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.1.1.9051</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -344,7 +344,11 @@ observation in the joined dataset the new variables are set as specified by
 <code>missing_values</code> (or to <code>NA</code> for variables not in <code>missing_values</code>).
 Observations in the additional dataset which have no matching observation in
 the input dataset are ignored.</p></li>
-</ol></div>
+</ol><p><strong>Note:</strong> This function creates temporary datasets which may be much bigger
+than the input datasets. If this causes memory issues, please try setting
+the admiral option <code>save_memory</code> to <code>TRUE</code> (see <code><a href="set_admiral_options.html">set_admiral_options()</a></code>).
+This reduces the memory consumption but increases the run-time.</p>
+    </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
     <div class="dont-index"><p><code><a href="derive_var_joined_exist_flag.html">derive_var_joined_exist_flag()</a></code>, <code><a href="filter_joined.html">filter_joined()</a></code></p>

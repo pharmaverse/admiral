@@ -9,7 +9,7 @@ example, flagging events which need to be confirmed by a second event."><meta pr
 
     <a class="navbar-brand me-2" href="../index.html">admiral</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.1.1.9050</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.1.1.9051</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -324,6 +324,10 @@ and restricted to the observations fulfilling the condition specified by
 <p>The variable specified by <code>new_var</code> is added to the input dataset. It is
 set to <code>true_value</code> for all observations which were selected in the
 previous step. For the other observations it is set to <code>false_value</code>.</p>
+<p><strong>Note:</strong> This function creates temporary datasets which may be much bigger
+than the input datasets. If this causes memory issues, please try setting
+the admiral option <code>save_memory</code> to <code>TRUE</code> (see <code><a href="set_admiral_options.html">set_admiral_options()</a></code>).
+This reduces the memory consumption but increases the run-time.</p>
 </div>
 
     </div>
