@@ -156,6 +156,11 @@ order specified for the \code{order} parameter and the mode specified for the
 the selected observations.
 \item The observations are added to input dataset.
 }
+
+\strong{Note:} This function creates temporary datasets which may be much bigger
+than the input datasets. If this causes memory issues, please try
+\code{set_admiral_options(save_memory = TRUE)}. This reduces the memory
+consumption but increases the run-time.
 }
 \examples{
 library(tibble)

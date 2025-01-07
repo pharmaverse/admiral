@@ -198,6 +198,8 @@
 #' Observations in the additional dataset which have no matching observation in
 #' the input dataset are ignored.
 #'
+#' `r roxygen_save_memory()`
+#'
 #' @return The output dataset contains all observations and variables of the
 #'   input dataset and additionally the variables specified for `new_vars` from
 #'   the additional dataset (`dataset_add`).
@@ -814,6 +816,7 @@ get_joined_data <- function(dataset,
     !!tmp_obs_nr_var
   )
 
+  if(get_admiral_option("save_memory")) {
   # split input dataset into smaller pieces and process them separately
   # This reduces the memory consumption.
   if (is.null(by_vars_left)) {
@@ -850,6 +853,19 @@ get_joined_data <- function(dataset,
       )
     }
   )
+  } else {
+    joined_data <- get_joined_sub_data(
+      data,
+      dataset_add = data_add,
+      by_vars = by_vars_left,
+      tmp_obs_nr_var = tmp_obs_nr_var,
+      tmp_obs_nr_left = tmp_obs_nr_left,
+      join_type = join_type,
+      first_cond_upper = first_cond_upper,
+      first_cond_lower = first_cond_lower,
+      filter_join = filter_join
+    )
+  }
 
   bind_rows(joined_data) %>%
     remove_tmp_vars() %>%
