@@ -65,14 +65,15 @@ get_admiral_option <- function(option) {
   # change cli `.val` to end with OR instead of AND
   divid <- cli_div(theme = list(.val = list("vec-last" = ", or ", "vec_sep2" = " or ")))
   # Return message otherwise, catch typos
-  cli_abort(c("Invalid function argument.",
+  cli_abort(c(
+    "Invalid function argument.",
     "i" = "Select one of {.val {possible_inputs}}"
   ))
 }
 
-#' Set the Value of Admiral Options
+#' Set the Value of admiral Options
 #'
-#' Set the Values of Admiral Options That Can Be Modified for Advanced Users.
+#' Set the values of admiral options that can be modified for advanced users.
 #'
 #' @param subject_keys Variables to uniquely identify a subject, defaults to
 #'   `exprs(STUDYID, USUBJID)`. This option is used as default value for the
@@ -81,6 +82,11 @@ get_admiral_option <- function(option) {
 #' @param signif_digits Holds number of significant digits when comparing to numeric variables,
 #'  defaults to `15`. This option is used as default value for the  `signif_dig` argument in
 #'  admiral functions `derive_var_atoxgr_dir()` and `derive_var_anrind()`.
+#'
+#' @param save_memory If set to `TRUE`, an alternative algorithm is used in the
+#'   functions `derive_vars_joined()`, `derive_var_joined_exist_flag()`,
+#'   `derive_extreme_event()`, and `filter_joined()` which requires less memory
+#'   but more run-time.
 #'
 #' @details
 #' Modify an admiral option, e.g `subject_keys`, such that it automatically affects downstream
@@ -153,7 +159,7 @@ get_admiral_option <- function(option) {
 #'
 #' derive_var_anrind(advs)
 #'
-set_admiral_options <- function(subject_keys, signif_digits) {
+set_admiral_options <- function(subject_keys, signif_digits, save_memory) {
   if (!missing(subject_keys)) {
     assert_vars(subject_keys)
     admiral_environment$admiral_options$subject_keys <- subject_keys
@@ -161,6 +167,10 @@ set_admiral_options <- function(subject_keys, signif_digits) {
   if (!missing(signif_digits)) {
     assert_integer_scalar(signif_digits, subset = "positive")
     admiral_environment$admiral_options$signif_digits <- signif_digits
+  }
+  if (!missing(save_memory)) {
+    assert_logical_scalar(save_memory)
+    admiral_environment$admiral_options$save_memory <- save_memory
   }
 
   # Add future input to function formals above

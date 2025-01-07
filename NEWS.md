@@ -51,7 +51,9 @@ are not unique. (#2563)
 
 - The functions `derive_vars_joined()`, `derive_var_joined_exist_flag()`,
 `derive_extreme_event()`, and `filter_joined()` were updated to reduce their
-memory consumption. (#2590)
+memory consumption. As the new code increases the run-time, it is not used by
+default. To enable it the new admiral option `save_memory` has to be set to
+`TRUE`. (#2590)
 
 - The function `compute_egfr()` updated to allow missing values for sex which result in missing values for output. (#2612)
 

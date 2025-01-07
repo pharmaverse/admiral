@@ -196,8 +196,9 @@
 #'   set to `true_value` for all observations which were selected in the
 #'   previous step. For the other observations it is set to `false_value`.
 #'
-#' @return The input dataset with the variable specified by `new_var` added.
+#' `r roxygen_save_memory()`
 #'
+#' @return The input dataset with the variable specified by `new_var` added.
 #'
 #' @keywords der_gen
 #' @family der_gen

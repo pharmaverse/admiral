@@ -409,9 +409,83 @@ test_that("derive_vars_joined Test 12: by_vars with rename, no new_vars", {
   )
 })
 
+## Test 13: with save_memory and no by_vars ----
+test_that("derive_vars_joined Test 13: with save_memory and no by_vars", {
+  expected <- tibble::tribble(
+    ~USUBJID, ~ADY, ~AVISIT,    ~AWLO, ~AWHI,
+    "1",        -2, "BASELINE",   -30,     1,
+    "1",         3, "WEEK 1",       2,     7,
+    "1",        24, "WEEK 4",      23,    30,
+    "2",        NA, NA,            NA,    NA
+  )
+
+  windows <- tibble::tribble(
+    ~AVISIT,    ~AWLO, ~AWHI,
+    "BASELINE",   -30,     1,
+    "WEEK 1",       2,     7,
+    "WEEK 2",       8,    15,
+    "WEEK 3",      16,    22,
+    "WEEK 4",      23,    30
+  )
+
+  save_memory <- get_admiral_option("save_memory")
+  set_admiral_options(save_memory = TRUE)
+
+  expect_dfs_equal(
+    base = expected,
+    comp = derive_vars_joined(
+      select(expected, USUBJID, ADY),
+      dataset_add = windows,
+      join_vars = exprs(AWHI, AWLO),
+      join_type = "all",
+      filter_join = AWLO <= ADY & ADY <= AWHI
+    ),
+    keys = c("USUBJID", "ADY")
+  )
+  set_admiral_options(save_memory = save_memory)
+})
+
+## Test 14: save_memory with by_vars ----
+test_that("derive_vars_joined Test 14: save_memory with by_vars", {
+  expected <- tibble::tribble(
+    ~USUBJID, ~ADY, ~AVAL, ~NADIR,
+    "1",        -7,    10,     NA,
+    "1",         1,    12,     NA,
+    "1",         8,    11,     12,
+    "1",        15,     9,     11,
+    "1",        20,    14,      9,
+    "1",        24,    12,      9,
+    "2",        13,     8,     NA
+  )
+
+  adbds <- select(expected, -NADIR)
+
+  save_memory <- get_admiral_option("save_memory")
+  set_admiral_options(save_memory = TRUE)
+
+  expect_dfs_equal(
+    base = expected,
+    comp = derive_vars_joined(
+      adbds,
+      dataset_add = adbds,
+      by_vars = exprs(USUBJID),
+      order = exprs(AVAL),
+      new_vars = exprs(NADIR = AVAL),
+      join_vars = exprs(ADY),
+      join_type = "all",
+      filter_add = ADY > 0,
+      filter_join = ADY.join < ADY,
+      mode = "first",
+      check_type = "none"
+    ),
+    keys = c("USUBJID", "ADY")
+  )
+  set_admiral_options(save_memory = save_memory)
+})
+
 # get_joined_data ----
-## Test 13: `first_cond_lower` works ----
-test_that("get_joined_data Test 13: `first_cond_lower` works", {
+## Test 15: `first_cond_lower` works ----
+test_that("get_joined_data Test 15: `first_cond_lower` works", {
   data <- tribble(
     ~subj, ~day, ~val,
     "1",      1, "++",
