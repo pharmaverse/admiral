@@ -623,8 +623,8 @@ test_that("derive_var_merged_summary Test 24: by_vars with rename", {
   )
 })
 
-## Test 25: merge selected variables with relatioship as 'many-to-one' ----
-test_that("derive_var_merged_summary Test 25: merge selected variables with relatioship as 'many-to-one'", {
+## Test 25: merge relationship as 'many-to-one' ----
+test_that("derive_var_merged_summary Test 25: merge relationship as 'many-to-one'", {
   actual <- derive_vars_merged(advs,
     dataset_add = adsl,
     by_vars = exprs(USUBJID),
