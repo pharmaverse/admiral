@@ -239,7 +239,7 @@ derive_var_extreme_dtm <- function(dataset,
     what = "derive_var_extreme_dtm()",
     with = "derive_vars_extreme_event()",
     details = c(
-      x = "This message will turn into a warning with release of 1.3.0",
+      x = "This message will turn into a warning in the next release.",
       i = "https://pharmaverse.github.io/admiral/reference/derive_vars_extreme_event.html"
     )
   )
@@ -571,7 +571,7 @@ derive_var_extreme_dt <- function(dataset,
     what = "derive_var_extreme_dt()",
     with = "derive_vars_extreme_event()",
     details = c(
-      x = "This message will turn into a warning with release of 1.3.0",
+      x = "This message will turn into a warning in the next release.",
       i = "https://pharmaverse.github.io/admiral/reference/derive_vars_extreme_event.html"
     )
   )
@@ -649,15 +649,6 @@ date_source <- function(dataset_name,
                         filter = NULL,
                         date,
                         set_values_to = NULL) {
-  deprecate_inform(
-    when = "1.2.0",
-    what = "date_source()",
-    with = "derive_vars_extreme_event()",
-    details = c(
-      x = "This message will turn into a warning with release of 1.3.0",
-      i = "https://pharmaverse.github.io/admiral/reference/derive_vars_extreme_event.html"
-    )
-  )
 
   out <- list(
     dataset_name = assert_character_scalar(dataset_name),

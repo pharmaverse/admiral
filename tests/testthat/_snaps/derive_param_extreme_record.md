@@ -11,6 +11,6 @@
     Message
       `derive_param_extreme_record()` was deprecated in admiral 1.2.0.
       i Please use `derive_extreme_event()` instead.
-      x This message will turn into a warning with release of 1.3.0
+      x This message will turn into a warning in the next release.
       i https://pharmaverse.github.io/admiral/reference/derive_extreme_event.html
 

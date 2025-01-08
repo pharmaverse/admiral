@@ -141,7 +141,7 @@ derive_param_extreme_record <- function(dataset = NULL,
     what = "derive_param_extreme_record()",
     with = "derive_extreme_event()",
     details = c(
-      x = "This message will turn into a warning with release of 1.3.0",
+      x = "This message will turn into a warning in the next release.",
       i = "https://pharmaverse.github.io/admiral/reference/derive_extreme_event.html"
     )
   )

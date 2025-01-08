@@ -6,11 +6,11 @@
     Message
       `derive_var_extreme_dt()` was deprecated in admiral 1.2.0.
       i Please use `derive_vars_extreme_event()` instead.
-      x This message will turn into a warning with release of 1.3.0
+      x This message will turn into a warning in the next release.
       i https://pharmaverse.github.io/admiral/reference/derive_vars_extreme_event.html
       `derive_var_extreme_dtm()` was deprecated in admiral 1.2.0.
       i Please use `derive_vars_extreme_event()` instead.
-      x This message will turn into a warning with release of 1.3.0
+      x This message will turn into a warning in the next release.
       i https://pharmaverse.github.io/admiral/reference/derive_vars_extreme_event.html
     Output
       # A tibble: 3 x 6
@@ -28,7 +28,7 @@
     Message
       `derive_var_extreme_dtm()` was deprecated in admiral 1.2.0.
       i Please use `derive_vars_extreme_event()` instead.
-      x This message will turn into a warning with release of 1.3.0
+      x This message will turn into a warning in the next release.
       i https://pharmaverse.github.io/admiral/reference/derive_vars_extreme_event.html
     Output
       # A tibble: 3 x 9

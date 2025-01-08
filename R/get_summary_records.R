@@ -153,7 +153,7 @@ get_summary_records <- function(dataset,
     what = "get_summary_records()",
     with = "derive_summary_records()",
     details = c(
-      x = "This message will turn into a warning with release of 1.3.0",
+      x = "This message will turn into a warning in the next release.",
       i = "https://pharmaverse.github.io/admiral/reference/derive_summary_records.html"
     )
   )

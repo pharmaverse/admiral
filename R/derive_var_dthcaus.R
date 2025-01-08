@@ -145,7 +145,7 @@ derive_var_dthcaus <- function(dataset,
     what = "derive_var_dthcaus()",
     with = "derive_vars_extreme_event()",
     details = c(
-      x = "This message will turn into a warning with release of 1.3.0",
+      x = "This message will turn into a warning in the next release.",
       i = "https://pharmaverse.github.io/admiral/reference/derive_vars_extreme_event.html"
     )
   )
@@ -332,7 +332,7 @@ dthcaus_source <- function(dataset_name,
     what = "date_source()",
     with = "derive_vars_extreme_event()",
     details = c(
-      x = "This message will turn into a warning with release of 1.3.0",
+      x = "This message will turn into a warning in the next release.",
       i = "https://pharmaverse.github.io/admiral/reference/derive_vars_extreme_event.html"
     )
   )
