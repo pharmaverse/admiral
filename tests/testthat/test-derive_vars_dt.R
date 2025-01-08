@@ -654,7 +654,8 @@ test_that("derive_vars_dt Test 26: no date imputation, DTF present", {
       flag_imputation = "date",
       dtc = XXSTDTC
     ),
-    regex = "The ASTDTF variable is already present in the input dataset and will not be re-derived."
+    regex =
+      "The ASTDTF variable is already present in the input dataset and will not be re-derived."
   )
 
   expect_dfs_equal(
