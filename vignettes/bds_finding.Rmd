@@ -230,7 +230,7 @@ attr(param_lookup$VSTESTCD, "label") <- "Vital Signs Test Short Name"
 
 At this stage, only `PARAMCD` is required to perform the derivations. Additional
 derived parameters may be added, so only `PARAMCD` is joined to the datasets at
-this point. All other variables related to `PARAMCD` (e.g. `PARAM`, `PARAMCAT1`, ...)
+this point. All other variables related to `PARAMCD` (e.g. `PARAM`, `PARCAT1`, ...)
 will be added when all `PARAMCD` are derived.
 
 ```{r eval=TRUE}

@@ -51,7 +51,11 @@ are not unique. (#2563)
 
 - The functions `derive_vars_joined()`, `derive_var_joined_exist_flag()`,
 `derive_extreme_event()`, and `filter_joined()` were updated to reduce their
-memory consumption. (#2590)
+memory consumption. As the new code increases the run-time, it is not used by
+default. To enable it the new admiral option `save_memory` has to be set to
+`TRUE`. (#2590)
+
+- The function `compute_egfr()` updated to allow missing values for sex which result in missing values for output. (#2612)
 
 ## Breaking Changes
   
@@ -100,7 +104,7 @@ memory consumption. (#2590)
 <summary>Developer Notes</summary>
 
 - Created unit tests for developer internal function `restricted_imputed_dtc_dt()` (#2495)
-- Adopted `data-raw/data` R Package Convention (#2427)
+- Adopted `data-raw/data` R Package Convention (#2427, #2584)
 - `compute_bsa()` now uses the more common (but equivalent) version of the DuBois-DuBois formula for BSA. The results have not changed. (#2532)  
 - Removed `.devcontainer` file (codespace) (#2524)
 

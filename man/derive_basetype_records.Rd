@@ -23,12 +23,12 @@ The input dataset with variable \code{BASETYPE} added
 \description{
 Baseline Type \code{BASETYPE} is needed when there is more than one definition of
 baseline for a given Analysis Parameter \code{PARAM} in the same dataset.  For a
-given parameter, if Baseline Value \code{BASE} is populated, and there is more than
-one definition of baseline, then \code{BASETYPE} must be non-null on all records of
-any type for that parameter. Each value of \code{BASETYPE} refers to a definition of
-baseline that characterizes the value of \code{BASE} on that row.  Please see
-section 4.2.1.6 of the ADaM Implementation Guide, version 1.3 for further
-background.
+given parameter, if Baseline Value \code{BASE} or \code{BASEC} are derived and there
+is more than one definition of baseline, then \code{BASETYPE} must be non-null on
+all records of any type for that parameter. Each value of \code{BASETYPE} refers
+to a definition of baseline that characterizes the value of \code{BASE} on that
+row.  Please see section 4.2.1.6 of the ADaM Implementation Guide, version
+1.3 for further background.
 }
 \details{
 Adds the \code{BASETYPE} variable to a dataset and duplicates records based upon
