@@ -647,12 +647,14 @@ test_that("derive_vars_dt Test 26: no date imputation, DTF present", {
     "2019---07",           as.Date(NA),           NA_character_
   )
   date <- select(expected_output, -ASTDT)
-  actual_output <- suppressMessages(derive_vars_dt(
+  expect_message(actual_output <- derive_vars_dt(
     date,
     new_vars_prefix = "AST",
     flag_imputation = "date",
     dtc = XXSTDTC
-  ))
+    ),
+    regex = "The ASTDTF variable is already present in the input dataset and will not be re-derived."
+    )
 
   expect_dfs_equal(
     expected_output,
