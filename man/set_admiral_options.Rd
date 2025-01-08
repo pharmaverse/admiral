@@ -2,9 +2,9 @@
 % Please edit documentation in R/admiral_options.R
 \name{set_admiral_options}
 \alias{set_admiral_options}
-\title{Set the Value of Admiral Options}
+\title{Set the Value of admiral Options}
 \usage{
-set_admiral_options(subject_keys, signif_digits)
+set_admiral_options(subject_keys, signif_digits, save_memory)
 }
 \arguments{
 \item{subject_keys}{Variables to uniquely identify a subject, defaults to
@@ -14,12 +14,17 @@ set_admiral_options(subject_keys, signif_digits)
 \item{signif_digits}{Holds number of significant digits when comparing to numeric variables,
 defaults to \code{15}. This option is used as default value for the  \code{signif_dig} argument in
 admiral functions \code{derive_var_atoxgr_dir()} and \code{derive_var_anrind()}.}
+
+\item{save_memory}{If set to \code{TRUE}, an alternative algorithm is used in the
+functions \code{derive_vars_joined()}, \code{derive_var_joined_exist_flag()},
+\code{derive_extreme_event()}, and \code{filter_joined()} which requires less memory
+but more run-time.}
 }
 \value{
 No return value, called for side effects.
 }
 \description{
-Set the Values of Admiral Options That Can Be Modified for Advanced Users.
+Set the values of admiral options that can be modified for advanced users.
 }
 \details{
 Modify an admiral option, e.g \code{subject_keys}, such that it automatically affects downstream

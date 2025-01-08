@@ -205,6 +205,8 @@
 #'   The first observation of each group is selected and the `*.join` variables
 #'   are dropped.
 #'
+#' `r roxygen_save_memory()`
+#'
 #' @returns A subset of the observations of the input dataset. All variables of
 #'   the input dataset are included in the output dataset.
 #'
