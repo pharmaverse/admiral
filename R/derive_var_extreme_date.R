@@ -649,7 +649,6 @@ date_source <- function(dataset_name,
                         filter = NULL,
                         date,
                         set_values_to = NULL) {
-
   out <- list(
     dataset_name = assert_character_scalar(dataset_name),
     filter = assert_filter_cond(enexpr(filter), optional = TRUE),
