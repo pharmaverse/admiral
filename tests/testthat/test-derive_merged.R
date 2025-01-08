@@ -76,6 +76,8 @@ test_that("derive_vars_merged Test 1: merge all variables", {
     compare = actual,
     keys = c("USUBJID", "AVISIT")
   )
+
+  warning("Take care!")
 })
 
 ## Test 2: merge selected variables ----
