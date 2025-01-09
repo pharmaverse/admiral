@@ -259,7 +259,7 @@ derive_var_dthcaus <- function(dataset,
 #' @description
 #' `r lifecycle::badge("deprecated")` The `derive_var_dthcaus()`
 #' function and `dthcaus_source()` have been deprecated in favor of
-#' `derive_vars_extreme_event()`.
+#' `event()`.
 #'
 #' @param dataset_name The name of the dataset, i.e. a string, used to search for
 #'   the death cause.
