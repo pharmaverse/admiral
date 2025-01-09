@@ -597,7 +597,7 @@ derive_var_extreme_dt <- function(dataset,
 #'
 #' @description
 #' `r lifecycle::badge("deprecated")` The `date_source()`
-#' function has been deprecated in favor of `derive_vars_extreme_event()`.
+#' function has been deprecated in favor of `event()`.
 #'
 #' Create a `date_source` object as input for `derive_var_extreme_dt()` and
 #' `derive_var_extreme_dtm()`.
