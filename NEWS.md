@@ -65,8 +65,8 @@ default. To enable it the new admiral option `save_memory` has to be set to
   
   - `derive_param_extreme_record()` is deprecated and replaced by `derive_extreme_event()`
   - `derive_var_dthcaus()` is deprecated and replaced by `derive_vars_extreme_event()`
-  - `date_source()` is deprecated and replaced by `derive_vars_extreme_event()`
-  - `dthcaus_source()` is deprecated and replaced by `derive_vars_extreme_event()`
+  - `date_source()` is deprecated and replaced by `event()`
+  - `dthcaus_source()` is deprecated and replaced by `event()`
   - `derive_var_extreme_dt()` and `derive_var_extreme_dtm()` are deprecated and replaced by `derive_vars_extreme_event()`
   - `get_summary_records()` is deprecated. Please use `derive_summary_records()` with the `dataset_add` argument and without the `dataset` argument.
 
