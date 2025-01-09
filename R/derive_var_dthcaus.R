@@ -257,7 +257,7 @@ derive_var_dthcaus <- function(dataset,
 #' Create a `dthcaus_source` Object
 #'
 #' @description
-#' `r lifecycle::badge("deprecated")` The `derive_var_dthcaus()`
+#' `r lifecycle::badge("deprecated")` The `dthcaus_source()`
 #' function and `dthcaus_source()` have been deprecated in favor of
 #' `event()`.
 #'
