@@ -169,46 +169,46 @@ test_that("derive_var_extreme_dt Test 4: `NA` dates are excluded", {
 ## Test 5: Message sent to users ----
 test_that("derive_var_extreme_dtm Test 5: Message sent to users", {
   expect_snapshot({
-  ae_start <- date_source(
-    dataset_name = "ae",
-    date = convert_dtc_to_dtm(AESTDTC),
-    set_values_to = exprs(
-      LALVDOM = "AE",
-      LALVSEQ = AESEQ,
-      LALVVAR = "AESTDTC"
+    ae_start <- date_source(
+      dataset_name = "ae",
+      date = convert_dtc_to_dtm(AESTDTC),
+      set_values_to = exprs(
+        LALVDOM = "AE",
+        LALVSEQ = AESEQ,
+        LALVVAR = "AESTDTC"
+      )
     )
-  )
 
-  ae_end <- date_source(
-    dataset_name = "ae",
-    date = AEENDTM,
-    set_values_to = exprs(
-      LALVDOM = "AE",
-      LALVSEQ = AESEQ,
-      LALVVAR = "AEENDTC"
+    ae_end <- date_source(
+      dataset_name = "ae",
+      date = AEENDTM,
+      set_values_to = exprs(
+        LALVDOM = "AE",
+        LALVSEQ = AESEQ,
+        LALVVAR = "AEENDTC"
+      )
     )
-  )
 
-  adsl_trtdate <- date_source(
-    dataset_name = "adsl",
-    date = TRTEDTM,
-    set_values_to = exprs(
-      LALVDOM = "ADSL",
-      LALVSEQ = NA_integer_,
-      LALVVAR = "TRTEDTM"
+    adsl_trtdate <- date_source(
+      dataset_name = "adsl",
+      date = TRTEDTM,
+      set_values_to = exprs(
+        LALVDOM = "ADSL",
+        LALVSEQ = NA_integer_,
+        LALVVAR = "TRTEDTM"
+      )
     )
-  )
 
-  adsl_dthdate <- date_source(
-    dataset_name = "adsl",
-    date = DTHDT,
-    filter = nchar(DTHDTC) >= 10,
-    set_values_to = exprs(
-      LALVDOM = "ADSL",
-      LALVSEQ = NA_integer_,
-      LALVVAR = "DTHDTC"
+    adsl_dthdate <- date_source(
+      dataset_name = "adsl",
+      date = DTHDT,
+      filter = nchar(DTHDTC) >= 10,
+      set_values_to = exprs(
+        LALVDOM = "ADSL",
+        LALVSEQ = NA_integer_,
+        LALVVAR = "DTHDTC"
+      )
     )
-  )
 
     derive_var_extreme_dtm(
       adsl,
@@ -322,24 +322,26 @@ test_that("derive_var_extreme_dtm Test 8: error if source dataset is not availab
   # Suppress lifecycle messages within the test environment
   withr::local_options(list(lifecycle_verbosity = "quiet"))
 
-  expect_snapshot({
-  ae_start <- date_source(
-    dataset_name = "ae",
-    date = AESTDT,
-    set_values_to = exprs(
-      LALVDOM = "AE",
-      LALVSEQ = AESEQ,
-      LALVVAR = "AESTDTC"
-    )
-  )
+  expect_snapshot(
+    {
+      ae_start <- date_source(
+        dataset_name = "ae",
+        date = AESTDT,
+        set_values_to = exprs(
+          LALVDOM = "AE",
+          LALVSEQ = AESEQ,
+          LALVVAR = "AESTDTC"
+        )
+      )
 
-    derive_var_extreme_dtm(
-      adsl,
-      new_var = LSTALVDTM,
-      source_datasets = list(ea = ae),
-      ae_start,
-      mode = "last"
-    )
-  },
-  error = TRUE )
+      derive_var_extreme_dtm(
+        adsl,
+        new_var = LSTALVDTM,
+        source_datasets = list(ea = ae),
+        ae_start,
+        mode = "last"
+      )
+    },
+    error = TRUE
+  )
 })

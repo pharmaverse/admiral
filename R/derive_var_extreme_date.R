@@ -651,7 +651,6 @@ date_source <- function(dataset_name,
                         filter = NULL,
                         date,
                         set_values_to = NULL) {
-
   deprecate_inform(
     when = "1.2.0",
     what = "date_source()",
