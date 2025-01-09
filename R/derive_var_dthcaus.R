@@ -329,7 +329,7 @@ dthcaus_source <- function(dataset_name,
                            set_values_to = NULL) {
   deprecate_inform(
     when = "1.2.0",
-    what = "date_source()",
+    what = "dthcaus_source()",
     with = "event()",
     details = c(
       x = "This message will turn into a warning in the next release.",
