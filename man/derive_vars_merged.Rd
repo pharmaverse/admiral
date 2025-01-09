@@ -141,7 +141,7 @@ If the \code{order} argument is not specified, the \code{check_type} argument is
 if the observations of the (restricted) additional dataset are not unique with respect
 to the by variables, an error is issued.
 
-\emph{Permitted Values}: \code{"none"}, \code{"message"},\code{"warning"}, \code{"error"}}
+\emph{Permitted Values}: \code{"none"}, \code{"message"}, \code{"warning"}, \code{"error"}}
 
 \item{duplicate_msg}{Message of unique check
 

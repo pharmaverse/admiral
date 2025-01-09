@@ -976,7 +976,7 @@ test_that("derive_param_tte Test 14: detects duplicates in input datasets via pi
   )
 
   # Run derive_param_tte and check for warning
-  expect_warning(
+  expect_snapshot(
     derive_param_tte(
       dataset_adsl = adsl,
       start_date = TRTSDT,
@@ -985,8 +985,7 @@ test_that("derive_param_tte Test 14: detects duplicates in input datasets via pi
       source_datasets = list(adsl = adsl, ae = ae),
       set_values_to = exprs(PARAMCD = "TTAE"),
       check_type = "warning"
-    ),
-    regexp = "Dataset '.*' contains duplicate records."
+    )
   )
 })
 
@@ -1003,10 +1002,10 @@ input is sorted descending", {
   # Sort the input AE dataset in descending order by AESEQ
   # to confirm that the order argument re-sorts it correctly.
   ae <- tibble::tribble(
-    ~USUBJID, ~AESTDTC, ~AESEQ, ~AESER, ~AEDECOD,
-    "01", "2021-01-03", 2, "Y", "Cough",
-    "01", "2021-01-03", 1, "Y", "Flu",
-    "01", "2021-01-20", 3, "N", "Headache"
+    ~USUBJID, ~AESTDTC,     ~AESEQ, ~AESER, ~AEDECOD,
+    "01",     "2021-01-03",  2,     "Y",    "Cough",
+    "01",     "2021-01-03",  1,     "Y",    "Flu",
+    "01",     "2021-01-20",  3,     "N",    "Headache"
   ) %>%
     mutate(
       STUDYID = "AB42",
@@ -1061,19 +1060,17 @@ test_that("derive_param_tte Test 16: produces consistent results regardless of i
 
   # Define AE dataset with duplicates
   ae <- tibble::tribble(
-    ~USUBJID, ~AESTDTC,     ~AESEQ, ~AEDECOD,
-    "01",     "2021-01-03",      1, "Flu",
-    "01",     "2021-03-04",      2, "Cough",
-    "01",     "2021-01-03",      3, "Flu"
+    ~USUBJID, ~AESTDTC,     ~AESEQ,  ~AEDECOD,
+    "01",     "2021-01-03",      1,  "Flu",
+    "01",     "2021-03-04",      2,  "Cough",
+    "01",     "2021-01-03",      3,  "Flu"
   ) %>% mutate(STUDYID = "AB42", AESTDT = ymd(AESTDTC))
 
-  # Deduplicate AE dataset to remove duplicate warnings
-  ae <- ae %>% distinct(STUDYID, USUBJID, AESTDT, .keep_all = TRUE)
-
-  # Define event and censor sources
+   # Define event and censor sources
   ttae <- event_source(
     dataset_name = "ae",
     date = AESTDT,
+    order = exprs(AESTDT, AESEQ),
     set_values_to = exprs(
       EVENTDESC = "AE",
       SRCDOM = "AE",

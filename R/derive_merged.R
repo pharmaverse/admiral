@@ -120,7 +120,7 @@
 #'   if the observations of the (restricted) additional dataset are not unique with respect
 #'   to the by variables, an error is issued.
 #'
-#'   *Permitted Values*: `"none"`, `"message"`,`"warning"`, `"error"`
+#'   *Permitted Values*: `"none"`, `"message"`, `"warning"`, `"error"`
 #'
 #' @param duplicate_msg Message of unique check
 #'

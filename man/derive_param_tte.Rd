@@ -81,10 +81,11 @@ A list of symbols created using \code{exprs()} is expected.}
 \item{check_type}{Check uniqueness
 
 If \code{"warning"}, \code{"message"}, or \code{"error"} is specified, the specified message is issued
-if the observations of the input dataset are not unique with respect to the
-by variables and the order.
+if the observations of the source datasets are not unique with respect to the
+by variables and the date and order specified in the \code{event_source()} and
+\code{censor_source()} objects.
 
-Default: \code{"none"}}
+\emph{Permitted Values}: \code{"none"}, \code{"message"}, \code{"warning"}, \code{"error"}}
 }
 \value{
 The input dataset with the new parameter added
@@ -287,10 +288,10 @@ adsl <- tribble(
   mutate(STUDYID = "AB42")
 
 ae <- tribble(
-  ~USUBJID, ~AESTDTC, ~AESEQ, ~AEDECOD,
-  "01", "2021-01-03T10:56", 1, "Flu",
-  "01", "2021-03-04", 2, "Cough",
-  "01", "2021-", 3, "Flu"
+  ~USUBJID,   ~AESTDTC, ~AESEQ, ~AEDECOD,
+  "01",       "2021-01-03T10:56", 1, "Flu",
+  "01",       "2021-03-04", 2, "Cough",
+  "01",       "2021", 3, "Flu"
 ) \%>\%
   mutate(STUDYID = "AB42")
 
@@ -341,16 +342,16 @@ derive_param_tte(
 
 # Resolve tie when serious AE share a date by sorting with order argument
 adsl <- tribble(
-  ~USUBJID, ~TRTSDT, ~EOSDT,
-  "01", ymd("2020-12-06"), ymd("2021-03-06"),
-  "02", ymd("2021-01-16"), ymd("2021-02-03")
+  ~USUBJID,    ~TRTSDT,           ~EOSDT,
+  "01",        ymd("2020-12-06"), ymd("2021-03-06"),
+  "02",        ymd("2021-01-16"), ymd("2021-02-03")
 ) \%>\% mutate(STUDYID = "AB42")
 
 ae <- tribble(
-  ~USUBJID, ~AESTDTC, ~AESEQ, ~AESER, ~AEDECOD,
-  "01", "2021-01-03", 1, "Y", "Flu",
-  "01", "2021-01-03", 2, "Y", "Cough",
-  "01", "2021-01-20", 3, "N", "Headache",
+  ~USUBJID,  ~AESTDTC,      ~AESEQ,  ~AESER,  ~AEDECOD,
+  "01",      "2021-01-03",   1,       "Y",    "Flu",
+  "01",      "2021-01-03",   2,       "Y",    "Cough",
+  "01",      "2021-01-20",   3,       "N",    "Headache",
 ) \%>\% mutate(
   AESTDT = ymd(AESTDTC),
   STUDYID = "AB42"

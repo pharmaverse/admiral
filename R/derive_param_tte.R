@@ -63,10 +63,11 @@
 #' @param check_type Check uniqueness
 #'
 #'   If `"warning"`, `"message"`, or `"error"` is specified, the specified message is issued
-#'   if the observations of the input dataset are not unique with respect to the
-#'   by variables and the order.
+#'   if the observations of the source datasets are not unique with respect to the
+#'   by variables and the date and order specified in the `event_source()` and
+#'   `censor_source()` objects.
 #'
-#'  Default: `"none"`
+#'  *Permitted Values*: `"none"`, `"message"`, `"warning"`, `"error"`
 #'
 #' @details The following steps are performed to create the observations of the
 #'   new parameter:
@@ -270,10 +271,10 @@
 #'   mutate(STUDYID = "AB42")
 #'
 #' ae <- tribble(
-#'   ~USUBJID, ~AESTDTC, ~AESEQ, ~AEDECOD,
-#'   "01", "2021-01-03T10:56", 1, "Flu",
-#'   "01", "2021-03-04", 2, "Cough",
-#'   "01", "2021-", 3, "Flu"
+#'   ~USUBJID,   ~AESTDTC, ~AESEQ, ~AEDECOD,
+#'   "01",       "2021-01-03T10:56", 1, "Flu",
+#'   "01",       "2021-03-04", 2, "Cough",
+#'   "01",       "2021", 3, "Flu"
 #' ) %>%
 #'   mutate(STUDYID = "AB42")
 #'
@@ -324,16 +325,16 @@
 #'
 #' # Resolve tie when serious AE share a date by sorting with order argument
 #' adsl <- tribble(
-#'   ~USUBJID, ~TRTSDT, ~EOSDT,
-#'   "01", ymd("2020-12-06"), ymd("2021-03-06"),
-#'   "02", ymd("2021-01-16"), ymd("2021-02-03")
+#'   ~USUBJID,    ~TRTSDT,           ~EOSDT,
+#'   "01",        ymd("2020-12-06"), ymd("2021-03-06"),
+#'   "02",        ymd("2021-01-16"), ymd("2021-02-03")
 #' ) %>% mutate(STUDYID = "AB42")
 #'
 #' ae <- tribble(
-#'   ~USUBJID, ~AESTDTC, ~AESEQ, ~AESER, ~AEDECOD,
-#'   "01", "2021-01-03", 1, "Y", "Flu",
-#'   "01", "2021-01-03", 2, "Y", "Cough",
-#'   "01", "2021-01-20", 3, "N", "Headache",
+#'   ~USUBJID,  ~AESTDTC,      ~AESEQ,  ~AESER,  ~AEDECOD,
+#'   "01",      "2021-01-03",   1,       "Y",    "Flu",
+#'   "01",      "2021-01-03",   2,       "Y",    "Cough",
+#'   "01",      "2021-01-20",   3,       "N",    "Headache",
 #' ) %>% mutate(
 #'   AESTDT = ymd(AESTDTC),
 #'   STUDYID = "AB42"
@@ -566,14 +567,13 @@ derive_param_tte <- function(dataset = NULL,
 #'
 #'   Permitted Values:  `"first"`, `"last"`
 #'
-#'  @param check_type Check uniqueness
+#' @param check_type Check uniqueness
 #'
 #'   If `"warning"`, `"message"`, or `"error"` is specified, the specified message is issued
-#'   if the observations of the input dataset are not unique with respect to the
-#'   by variables and the order.
+#'   if the observations of the source datasets are not unique with respect to the
+#'   by variables and the date and order specified in the `tte_source()` objects.
 #'
 #'  Default: `"none"`
-#'
 #'  Permitted Values: `"none"`, `"warning"`, `"error"`, `"message"`
 #'
 #' @details The following steps are performed to create the output dataset:
@@ -698,34 +698,16 @@ filter_date_sources <- function(sources,
             check_type = check_type
           )
       },
-      warning = function(cnd) {
-        # Handle warnings
-        if (grepl("duplicate records", conditionMessage(cnd))) {
-          cli::cli_warn(c(
-            "Dataset '{.val {sources[[i]]$dataset_name}}' contains duplicate records.",
-            "i Duplicates were identified based on variables:
-               {.val {paste(c(subject_keys, by_vars, source_date_var), collapse = ', ')}}."
-          ))
-        }
-        source_dataset %>%
-          filter_if(sources[[i]]$filter) %>%
-          arrange(!!!sources[[i]]$order) # Return filtered dataset even if a warning occurred
-      },
-      error = function(err) {
-        cli::cli_abort(c(
-          "Duplicate records detected during processing.",
-          "x Duplicate records were found in dataset {.val {sources[[i]]$dataset_name}}.",
-          "i The duplicates were identified based on the following variables:
-            {.val {paste(c(subject_keys, by_vars, source_date_var), collapse = ', ')}}.",
-          "i Consider reviewing your `by_vars` or `order` argument to ensure uniqueness."
-        ))
-      },
-      message = function(msg) {
-        cli::cli_inform(c(
-          "Processing dataset '{.val {sources[[i]]$dataset_name}}'...",
-          "i Filter and order criteria: {.val {paste(c(subject_keys, by_vars,
-          sources[[i]]$order), collapse = ', ')}}."
-        ))
+      duplicate_records = function(cnd) {
+        cnd_funs <- list(message = cli_inform, warning = cli_warn, error = cli_abort)
+        cnd_funs[[check_type]](
+          paste(
+            "Dataset {.val {sources[[i]]$dataset_name}} contains duplicate records with respect to",
+            "{.var {cnd$by_vars}}"
+          ),
+          class = class(cnd))
+        cnd_muffle(cnd)
+        zap()
       }
     )
     # add date variable and accompanying variables

@@ -47,16 +47,15 @@ If \code{"first"} is specified, for each subject the first observation with
 respect to the date is included in the output dataset. If \code{"last"} is
 specified, the last observation is included in the output dataset.
 
-Permitted Values:  \code{"first"}, \code{"last"}
+Permitted Values:  \code{"first"}, \code{"last"}}
 
-@param check_type Check uniqueness
+\item{check_type}{Check uniqueness
 
 If \code{"warning"}, \code{"message"}, or \code{"error"} is specified, the specified message is issued
-if the observations of the input dataset are not unique with respect to the
-by variables and the order.
+if the observations of the source datasets are not unique with respect to the
+by variables and the date and order specified in the \code{tte_source()} objects.
 
 Default: \code{"none"}
-
 Permitted Values: \code{"none"}, \code{"warning"}, \code{"error"}, \code{"message"}}
 }
 \value{
