@@ -22,7 +22,7 @@ An object of class \code{date_source}.
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}} The \code{date_source()}
-function has been deprecated in favor of \code{derive_vars_extreme_event()}.
+function has been deprecated in favor of \code{event()}.
 
 Create a \code{date_source} object as input for \code{derive_var_extreme_dt()} and
 \code{derive_var_extreme_dtm()}.

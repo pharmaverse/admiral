@@ -146,7 +146,8 @@ derive_var_dthcaus <- function(dataset,
     with = "derive_vars_extreme_event()",
     details = c(
       x = "This message will turn into a warning in the next release.",
-      i = "https://pharmaverse.github.io/admiral/reference/derive_vars_extreme_event.html"
+      i = "See admiral's deprecation guidance:
+      https://pharmaverse.github.io/admiraldev/dev/articles/programming_strategy.html#deprecation"
     )
   )
 
@@ -333,7 +334,8 @@ dthcaus_source <- function(dataset_name,
     with = "event()",
     details = c(
       x = "This message will turn into a warning in the next release.",
-      i = "https://pharmaverse.github.io/admiral/reference/derive_vars_extreme_event.html"
+      i = "See admiral's deprecation guidance:
+      https://pharmaverse.github.io/admiraldev/dev/articles/programming_strategy.html#deprecation"
     )
   )
 

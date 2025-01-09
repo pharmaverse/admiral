@@ -61,7 +61,7 @@ default. To enable it the new admiral option `save_memory` has to be set to
   
 - The following function arguments are entering the next phase of the [deprecation process](https://pharmaverse.github.io/admiraldev/articles/programming_strategy.html#deprecation): (#2487) (#2595)
 
-### Phase 1 (message)
+**Phase 1 (message)**
   
   - `derive_param_extreme_record()` is deprecated and replaced by `derive_extreme_event()`
   - `derive_var_dthcaus()` is deprecated and replaced by `derive_vars_extreme_event()`
@@ -71,11 +71,12 @@ default. To enable it the new admiral option `save_memory` has to be set to
   - `get_summary_records()` is deprecated. Please use `derive_summary_records()` with the `dataset_add` argument and without the `dataset` argument.
 
   
-### Phase 2 (warning)
+**Phase 2 (warning)**
 
-### Phase 3 (error)
+**Phase 3 (error)**
 
-### Phase 4 (removed)
+**Phase 4 (removed)**
+
   - `consolidate_metadata(check_keys)`
   - Removed at v1.1.1 `compute_egfr(wt)`
   - Removed at v1.1.1 `derive_expected_records(dataset_expected_obs)` 

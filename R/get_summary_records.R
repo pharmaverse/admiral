@@ -2,8 +2,9 @@
 #'
 #' @description
 #'
-#' `r lifecycle::badge("deprecated")` The `get_summary_records()` has been deprecated in favor of
-#' `derive_summary_records()` (call it with the `dataset_add` argument and without the `dataset` argument).
+#' `r lifecycle::badge("deprecated")` The `get_summary_records()` has been
+#' deprecated in favor of `derive_summary_records()` (call it with the `dataset_add`
+#' argument and without the `dataset` argument).
 #'
 #' It is not uncommon to have an analysis need whereby one needs to derive an
 #' analysis value (`AVAL`) from multiple records. The ADaM basic dataset
@@ -152,7 +153,8 @@ get_summary_records <- function(dataset,
     with = "derive_summary_records()",
     details = c(
       x = "This message will turn into a warning in the next release.",
-      i = "https://pharmaverse.github.io/admiral/reference/derive_summary_records.html"
+      i = "See admiral's deprecation guidance:
+      https://pharmaverse.github.io/admiraldev/dev/articles/programming_strategy.html#deprecation"
     )
   )
 

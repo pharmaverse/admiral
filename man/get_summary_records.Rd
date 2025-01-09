@@ -57,10 +57,9 @@ For example:
 A data frame of derived records.
 }
 \description{
-\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}}
-
-Development on \code{get_summary_records()} is complete, and for new code we recommend
-switching to using the \code{dataset_add} argument in \code{derive_summary_records()}.
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}} The \code{get_summary_records()} has been
+deprecated in favor of \code{derive_summary_records()} (call it with the \code{dataset_add}
+argument and without the \code{dataset} argument).
 
 It is not uncommon to have an analysis need whereby one needs to derive an
 analysis value (\code{AVAL}) from multiple records. The ADaM basic dataset

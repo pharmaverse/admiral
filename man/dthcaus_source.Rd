@@ -49,9 +49,9 @@ the results is assigned to \code{DTHCAUS}; if a string literal, e.g. \code{"Adve
 An object of class "dthcaus_source".
 }
 \description{
-\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}} The \code{derive_var_dthcaus()}
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}} The \code{dthcaus_source()}
 function and \code{dthcaus_source()} have been deprecated in favor of
-\code{derive_vars_extreme_event()}.
+\code{event()}.
 }
 \examples{
 # Deaths sourced from AE

@@ -25,28 +25,29 @@ ae <- tibble::tribble(
 # derive_var_extreme_dt ----
 ## Test 1: Message sent to users ----
 test_that("derive_var_extreme_dt Test 1: Message sent to users", {
-  ae_start <- date_source(
-    dataset_name = "ae",
-    date = AESTDTM
-  )
+  expect_snapshot({
+    ae_start <- date_source(
+      dataset_name = "ae",
+      date = AESTDTM
+    )
 
-  ae_end <- date_source(
-    dataset_name = "ae",
-    date = AEENDTM
-  )
+    ae_end <- date_source(
+      dataset_name = "ae",
+      date = AEENDTM
+    )
 
-  adsl_trtdate <- date_source(
-    dataset_name = "adsl",
-    date = TRTEDTM
-  )
+    adsl_trtdate <- date_source(
+      dataset_name = "adsl",
+      date = TRTEDTM
+    )
 
-  adsl_dthdate <- date_source(
-    dataset_name = "adsl",
-    date = DTHDT,
-    filter = nchar(DTHDTC) >= 10
-  )
+    adsl_dthdate <- date_source(
+      dataset_name = "adsl",
+      date = DTHDT,
+      filter = nchar(DTHDTC) >= 10
+    )
 
-  expect_snapshot(
+
     derive_var_extreme_dt(
       adsl,
       new_var = LSTALVDT,
@@ -54,7 +55,7 @@ test_that("derive_var_extreme_dt Test 1: Message sent to users", {
       ae_start, ae_end, adsl_trtdate, adsl_dthdate,
       mode = "last"
     )
-  )
+  })
 })
 
 # derive_var_extreme_dt ----
@@ -167,6 +168,7 @@ test_that("derive_var_extreme_dt Test 4: `NA` dates are excluded", {
 # derive_var_extreme_dtm ----
 ## Test 5: Message sent to users ----
 test_that("derive_var_extreme_dtm Test 5: Message sent to users", {
+  expect_snapshot({
   ae_start <- date_source(
     dataset_name = "ae",
     date = convert_dtc_to_dtm(AESTDTC),
@@ -208,7 +210,6 @@ test_that("derive_var_extreme_dtm Test 5: Message sent to users", {
     )
   )
 
-  expect_snapshot(
     derive_var_extreme_dtm(
       adsl,
       new_var = LSTALVDTM,
@@ -216,7 +217,7 @@ test_that("derive_var_extreme_dtm Test 5: Message sent to users", {
       ae_start, ae_end, adsl_trtdate, adsl_dthdate,
       mode = "last"
     )
-  )
+  })
 })
 
 # derive_var_extreme_dtm ----
@@ -321,6 +322,7 @@ test_that("derive_var_extreme_dtm Test 8: error if source dataset is not availab
   # Suppress lifecycle messages within the test environment
   withr::local_options(list(lifecycle_verbosity = "quiet"))
 
+  expect_snapshot({
   ae_start <- date_source(
     dataset_name = "ae",
     date = AESTDT,
@@ -331,14 +333,13 @@ test_that("derive_var_extreme_dtm Test 8: error if source dataset is not availab
     )
   )
 
-  expect_snapshot(
     derive_var_extreme_dtm(
       adsl,
       new_var = LSTALVDTM,
       source_datasets = list(ea = ae),
       ae_start,
       mode = "last"
-    ),
-    error = TRUE
-  )
+    )
+  },
+  error = TRUE )
 })

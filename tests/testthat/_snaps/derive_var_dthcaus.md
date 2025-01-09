@@ -4,19 +4,19 @@
       src_ae <- dthcaus_source(dataset_name = "ae", filter = AEOUT == "FATAL", date = AEDTHDT,
       mode = "first", dthcaus = AEDECOD)
     Message
-      `date_source()` was deprecated in admiral 1.2.0.
-      i Please use `derive_vars_extreme_event()` instead.
+      `dthcaus_source()` was deprecated in admiral 1.2.0.
+      i Please use `event()` instead.
       x This message will turn into a warning in the next release.
-      i https://pharmaverse.github.io/admiral/reference/derive_vars_extreme_event.html
+      i See admiral's deprecation guidance: https://pharmaverse.github.io/admiraldev/dev/articles/programming_strategy.html#deprecation
     Code
       src_ds <- dthcaus_source(dataset_name = "ds", filter = DSDECOD == "DEATH" &
         grepl("DEATH DUE TO", DSTERM), date = convert_dtc_to_dt(DSSTDTC), mode = "first",
       dthcaus = str_to_upper(DSTERM))
     Message
-      `date_source()` was deprecated in admiral 1.2.0.
-      i Please use `derive_vars_extreme_event()` instead.
+      `dthcaus_source()` was deprecated in admiral 1.2.0.
+      i Please use `event()` instead.
       x This message will turn into a warning in the next release.
-      i https://pharmaverse.github.io/admiral/reference/derive_vars_extreme_event.html
+      i See admiral's deprecation guidance: https://pharmaverse.github.io/admiraldev/dev/articles/programming_strategy.html#deprecation
     Code
       derive_var_dthcaus(adsl, source_datasets = list(ae = ae, ds = ds), src_ae,
       src_ds)
@@ -24,7 +24,7 @@
       `derive_var_dthcaus()` was deprecated in admiral 1.2.0.
       i Please use `derive_vars_extreme_event()` instead.
       x This message will turn into a warning in the next release.
-      i https://pharmaverse.github.io/admiral/reference/derive_vars_extreme_event.html
+      i See admiral's deprecation guidance: https://pharmaverse.github.io/admiraldev/dev/articles/programming_strategy.html#deprecation
     Output
       # A tibble: 3 x 3
         STUDYID USUBJID DTHCAUS                            
