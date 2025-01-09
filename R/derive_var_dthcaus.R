@@ -330,7 +330,7 @@ dthcaus_source <- function(dataset_name,
   deprecate_inform(
     when = "1.2.0",
     what = "date_source()",
-    with = "derive_vars_extreme_event()",
+    with = "event()",
     details = c(
       x = "This message will turn into a warning in the next release.",
       i = "https://pharmaverse.github.io/admiral/reference/derive_vars_extreme_event.html"
