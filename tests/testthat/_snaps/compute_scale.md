@@ -7,7 +7,7 @@
       ! Argument `target_range` is missing with no default and `source_range` is not missing.
       i Either both or neither arguments should be specified.
 
----
+# compute_scale Test 7: error if target_range is supplied, but not source_range
 
     Code
       compute_scale(input, target_range = c(0, 100), min_n = 2)

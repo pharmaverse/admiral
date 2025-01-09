@@ -74,8 +74,8 @@ compute_scale <- function(source,
                           flip_direction = FALSE,
                           min_n = 1) {
   # Function argument checks
-  assert_numeric_vector(source) # nolint: undesirable_function_linter
-  assert_numeric_vector(source_range, optional = TRUE)
+  assert_numeric_vector(source)
+  assert_numeric_vector(source_range, length = 2, optional = TRUE)
   if (!is.null(target_range) && is.null(source_range)) {
     cli_abort(
       c("Argument {.arg source_range} is missing with no default
@@ -84,7 +84,7 @@ compute_scale <- function(source,
       )
     )
   }
-  assert_numeric_vector(target_range, optional = TRUE)
+  assert_numeric_vector(target_range, length = 2, optional = TRUE)
   if (!is.null(source_range) && is.null(target_range)) {
     cli_abort(
       c("Argument {.arg target_range} is missing with no default
@@ -97,19 +97,16 @@ compute_scale <- function(source,
   assert_integer_scalar(min_n, subset = "positive")
 
   # Computation
-  if (sum(!is.na(source)) >= min_n) { # nolint: undesirable_function_linter
-    target <- mean(source, na.rm = TRUE) # nolint: undesirable_function_linter
+  if (sum(!is.na(source)) >= min_n) {
+    target <- mean(source, na.rm = TRUE)
 
     if (!is.null(source_range) && !is.null(target_range)) {
-      scale_constant <- min(target_range) - min(source_range)
-      scale_coefficient <- (max(target_range) - min(target_range)) /
-        (max(source_range) - min(source_range))
-
-      target <- (target + scale_constant) * scale_coefficient
-
-      if (flip_direction == TRUE) {
-        target <- max(target_range) - target
-      }
+      target <- transform_range(
+        target,
+        source_range = source_range,
+        target_range = target_range,
+        flip_direction = flip_direction
+      )
     }
   } else {
     target <- NA

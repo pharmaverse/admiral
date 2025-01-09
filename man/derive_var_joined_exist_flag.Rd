@@ -247,6 +247,11 @@ The first observation of each group is selected
 The variable specified by \code{new_var} is added to the input dataset. It is
 set to \code{true_value} for all observations which were selected in the
 previous step. For the other observations it is set to \code{false_value}.
+
+\strong{Note:} This function creates temporary datasets which may be much bigger
+than the input datasets. If this causes memory issues, please try setting
+the admiral option \code{save_memory} to \code{TRUE} (see \code{set_admiral_options()}).
+This reduces the memory consumption but increases the run-time.
 }
 }
 \examples{

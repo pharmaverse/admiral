@@ -12,3 +12,25 @@
       2 STUDY01 P02        31     3
       3 STUDY01 P03        42    NA
 
+# derive_vars_transposed Test 4: error if `relationship` is unexpected
+
+    Code
+      cm %>% derive_vars_transposed(facm, by_vars = exprs(USUBJID, CMREFID = FAREFID),
+      id_vars = exprs(FAGRPID), key_var = FATESTCD, value_var = FASTRESC,
+      relationship = "one-to-one")
+    Condition
+      Error in `tryCatch()`:
+      ! Each row in `dataset` must match at most 1 row in the transposed `dataset_merge`.
+      i Row 2 of `dataset` matches multiple rows in the transposed `dataset_merge`.
+
+---
+
+    Code
+      cm %>% derive_vars_transposed(facm, by_vars = exprs(USUBJID, CMREFID = FAREFID),
+      id_vars = exprs(FAGRPID), key_var = FATESTCD, value_var = FASTRESC,
+      relationship = "many-to-one")
+    Condition
+      Error in `derive_vars_transposed()`:
+      ! Each row in `dataset` must match at most 1 row in the transposed `dataset_merge`.
+      i Row 2 of `dataset` matches multiple rows in the transposed `dataset_merge`.
+

@@ -198,6 +198,8 @@
 #' Observations in the additional dataset which have no matching observation in
 #' the input dataset are ignored.
 #'
+#' `r roxygen_save_memory()`
+#'
 #' @return The output dataset contains all observations and variables of the
 #'   input dataset and additionally the variables specified for `new_vars` from
 #'   the additional dataset (`dataset_add`).
@@ -806,17 +808,106 @@ get_joined_data <- function(dataset,
 
   # join the input dataset with itself such that to each observation of the
   # input dataset all following observations are joined
+  data_add_to_join <- select(
+    data_add,
+    !!!by_vars,
+    !!!replace_values_by_names(extract_vars(order)),
+    !!!replace_values_by_names(join_vars),
+    !!tmp_obs_nr_var
+  )
+
+  if (get_admiral_option("save_memory")) {
+    # split input dataset into smaller pieces and process them separately
+    # This reduces the memory consumption.
+    if (is.null(by_vars_left)) {
+      # create batches of about 1MB input data
+      obs_per_batch <- floor(1000000 / as.numeric(object.size(data) / nrow(data)))
+      tmp_batch_nr <- get_new_tmp_var(data, prefix = "tmp_batch_nr")
+      data_list <- data %>%
+        mutate(!!tmp_batch_nr := ceiling(row_number() / obs_per_batch)) %>%
+        group_by(!!tmp_batch_nr) %>%
+        group_split(.keep = FALSE)
+      data_add_list <- list(data_add_to_join)
+    } else {
+      data_nest <- nest(data, data = everything(), .by = vars2chr(unname(by_vars_left)))
+      data_add_nest <- nest(data_add, data_add = everything(), .by = vars2chr(unname(by_vars_left)))
+      data_all_nest <- inner_join(data_nest, data_add_nest, by = vars2chr(by_vars_left))
+      data_list <- data_all_nest$data
+      data_add_list <- data_all_nest$data_add
+    }
+
+    joined_data <- map2(
+      data_list,
+      data_add_list,
+      function(x, y) {
+        get_joined_sub_data(
+          x,
+          y,
+          by_vars = by_vars_left,
+          tmp_obs_nr_var = tmp_obs_nr_var,
+          tmp_obs_nr_left = tmp_obs_nr_left,
+          join_type = join_type,
+          first_cond_upper = first_cond_upper,
+          first_cond_lower = first_cond_lower,
+          filter_join = filter_join
+        )
+      }
+    )
+  } else {
+    joined_data <- get_joined_sub_data(
+      data,
+      dataset_add = data_add,
+      by_vars = by_vars_left,
+      tmp_obs_nr_var = tmp_obs_nr_var,
+      tmp_obs_nr_left = tmp_obs_nr_left,
+      join_type = join_type,
+      first_cond_upper = first_cond_upper,
+      first_cond_lower = first_cond_lower,
+      filter_join = filter_join
+    )
+  }
+
+  bind_rows(joined_data) %>%
+    remove_tmp_vars() %>%
+    select(-!!tmp_obs_nr_var_join)
+}
+
+#' Join Data for "joined" functions
+#'
+#' The helper function joins the data for the "joined" functions. All `.join`
+#' variables are included in the output dataset. It is called by
+#' `get_joined_data()` to process each by group separately. This reduces the
+#' memory consumption.
+#'
+#' @inheritParams get_joined_data
+#'
+#' @details
+#'
+#' 1. The input dataset (`dataset`) and the additional dataset (`dataset_add`)
+#' are left joined by the grouping variables (`by_vars`). If no grouping
+#' variables are specified, a full join is performed.
+#'
+#' 1. The joined dataset is restricted as specified by arguments `join_type`,
+#' `first_cond_upper`, and `first_cond_lower`. See argument descriptions for
+#' details.
+#'
+#' 1. The joined dataset is restricted by the `filter_join` condition.
+#'
+#' @keywords internal
+get_joined_sub_data <- function(dataset,
+                                dataset_add,
+                                by_vars,
+                                tmp_obs_nr_var,
+                                tmp_obs_nr_left,
+                                join_type,
+                                first_cond_upper,
+                                first_cond_lower,
+                                filter_join) {
   data_joined <-
     left_join(
-      data,
-      select(
-        data_add,
-        !!!by_vars,
-        !!!replace_values_by_names(extract_vars(order)),
-        !!!replace_values_by_names(join_vars),
-        !!tmp_obs_nr_var
-      ),
-      by = vars2chr(by_vars_left),
+      dataset,
+      dataset_add,
+      by = vars2chr(by_vars),
       suffix = c("", ".join")
     )
 
@@ -837,7 +928,7 @@ get_joined_data <- function(dataset,
     # select all observations up to the first confirmation observation
     data_joined <- filter_relative(
       data_joined,
-      by_vars = expr_c(by_vars_left, tmp_obs_nr_var),
+      by_vars = expr_c(by_vars, tmp_obs_nr_var),
       condition = !!first_cond_upper,
       order = exprs(!!parse_expr(paste0(as_name(tmp_obs_nr_var), ".join"))),
       mode = "first",
@@ -851,7 +942,7 @@ get_joined_data <- function(dataset,
     # select all observations up to the first confirmation observation
     data_joined <- filter_relative(
       data_joined,
-      by_vars = expr_c(by_vars_left, tmp_obs_nr_var),
+      by_vars = expr_c(by_vars, tmp_obs_nr_var),
       condition = !!first_cond_lower,
       order = exprs(!!parse_expr(paste0("desc(", as_name(tmp_obs_nr_var), ".join)"))),
       mode = "first",
@@ -862,9 +953,7 @@ get_joined_data <- function(dataset,
   }
   # apply confirmation condition, which may include summary functions
   data_joined %>%
-    group_by(!!!by_vars_left, !!tmp_obs_nr_left) %>%
+    group_by(!!!by_vars, !!tmp_obs_nr_left) %>%
     filter_if(filter_join) %>%
-    ungroup() %>%
-    remove_tmp_vars() %>%
-    select(-!!tmp_obs_nr_var_join)
+    ungroup()
 }
