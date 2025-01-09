@@ -4,5 +4,5 @@
       list_tte_source_objects(package = "tte")
     Condition
       Error in `list_tte_source_objects()`:
-      ! No package called tte is installed and hence no <tte_source> objects are available.
+      ! could not find function "list_tte_source_objects"
 
