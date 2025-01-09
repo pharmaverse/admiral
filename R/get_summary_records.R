@@ -2,10 +2,8 @@
 #'
 #' @description
 #'
-#' `r lifecycle::badge("deprecated")`
-#'
-#' Development on `get_summary_records()` is complete, and for new code we recommend
-#' switching to using the `dataset_add` argument in `derive_summary_records()`.
+#' `r lifecycle::badge("deprecated")` The `get_summary_records()` has been deprecated in favor of
+#' `derive_summary_records()` (call it with the `dataset_add` argument and without the `dataset` argument).
 #'
 #' It is not uncommon to have an analysis need whereby one needs to derive an
 #' analysis value (`AVAL`) from multiple records. The ADaM basic dataset
