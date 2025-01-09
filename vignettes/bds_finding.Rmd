@@ -45,7 +45,7 @@ otherwise specified.*
 * [Assign Treatment (`TRTA`, `TRTP`)](#treatment)
 * [Assign `ASEQ`](#aseq)
 * [Derive Categorization Variables (`AVALCATy`)](#cat)
-* [Derive Criterion Variables (`CRITy`, `CRITyFL`, `CRITyFLN`)](#crit_vars)
+* [Derive Criterion Variables (`CRITy`, `CRITyFL`, `CRITyFN`)](#crit_vars)
 * [Add ADSL variables](#adsl_vars)
 * [Derive New Rows](#additional)
 * [Add Labels and Attributes](#attributes)
@@ -230,7 +230,7 @@ attr(param_lookup$VSTESTCD, "label") <- "Vital Signs Test Short Name"
 
 At this stage, only `PARAMCD` is required to perform the derivations. Additional
 derived parameters may be added, so only `PARAMCD` is joined to the datasets at
-this point. All other variables related to `PARAMCD` (e.g. `PARAM`, `PARAMCAT1`, ...)
+this point. All other variables related to `PARAMCD` (e.g. `PARAM`, `PARCAT1`, ...)
 will be added when all `PARAMCD` are derived.
 
 ```{r eval=TRUE}
@@ -879,9 +879,9 @@ dataset_vignette(
 )
 ```
 
-## Derive Criterion Variables (`CRITy`, `CRITyFL`, `CRITyFLN`) {#crit_vars}
+## Derive Criterion Variables (`CRITy`, `CRITyFL`, `CRITyFN`) {#crit_vars}
 
-For deriving criterion variables (`CRITy`, `CRITyFL`, `CRITyFLN`) `{admiral}`
+For deriving criterion variables (`CRITy`, `CRITyFL`, `CRITyFN`) `{admiral}`
 provides `derive_vars_crit_flag()`. It ensures that they are derived in an
 ADaM-compliant way (see documentation of the function for details).
 
@@ -921,7 +921,7 @@ advs <- advs %>%
 ```{r, eval=TRUE, echo=FALSE}
 dataset_vignette(
   arrange(advs, USUBJID, AVISITN, ATPTN, PARAMCD),
-  display_vars = exprs(USUBJID, PARAMCD, AVAL, CHG, CRIT1, CRIT1FL, CRIT1FLN),
+  display_vars = exprs(USUBJID, PARAMCD, AVAL, CHG, CRIT1, CRIT1FL, CRIT1FN),
   filter = PARAMCD %in% c("DIABP", "SYSBP")
 )
 ```
@@ -946,7 +946,7 @@ advs <- advs %>%
 ```{r, eval=TRUE, echo=FALSE}
 dataset_vignette(
   arrange(advs, USUBJID, AVISITN, ATPTN),
-  display_vars = exprs(USUBJID, PARAMCD, AVAL, CHG, CRIT2, CRIT2FL, CRIT2FLN),
+  display_vars = exprs(USUBJID, PARAMCD, AVAL, CHG, CRIT2, CRIT2FL, CRIT2FN),
   filter = PARAMCD == "SYSBP"
 )
 ```

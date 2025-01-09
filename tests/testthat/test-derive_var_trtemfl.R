@@ -194,7 +194,7 @@ test_that("derive_var_trtemfl Test 9: error if `intensity` without `initial_inte
 })
 
 ## Test 10: warning if both `initial_intensity` and `group_var` are specified ----
-test_that("derive_var_trtemfl Test 9: error if `intensity` without `initial_intensity`", {
+test_that("derive_var_trtemfl Test 10: error if `intensity` without `initial_intensity`", {
   expect_warning(
     derive_var_trtemfl(
       adae2,
@@ -202,5 +202,17 @@ test_that("derive_var_trtemfl Test 9: error if `intensity` without `initial_inte
       group_var = AEGRPID
     ),
     "`initial_intensity` argument is ignored when `group_var` is specified"
+  )
+})
+
+## Test 11: error if `group_var` specified without `subject_keys` ----
+test_that("derive_var_trtemfl Test 11: error if `group_var` specified without `subject_keys`", {
+  expect_snapshot(
+    derive_var_trtemfl(
+      adae2,
+      group_var = AEGRPID,
+      subject_keys = NULL
+    ),
+    error = TRUE
   )
 })

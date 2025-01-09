@@ -10,7 +10,7 @@ get_admiral_option(option)
 \item{option}{A character scalar of commonly used admiral function inputs.
 
 As of now, support only available for
-"subject_keys" and "signif_digits".
+"subject_keys", "signif_digits", and "save_memory".
 See \code{set_admiral_options()} for a description of the options.}
 }
 \value{
