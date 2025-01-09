@@ -83,8 +83,6 @@ default. To enable it the new admiral option `save_memory` has to be set to
 
 ## Documentation
 
-- `my_first_fcn()` documentation updated to improve the clarity of the `@return` description, now stating: "A string with a welcome message 'Welcome to admiral!'". (#2593)
-
 - `derive_locf_records()` documentation example was fixed to display LOCF records. (#2461)
 - The "Find my function" and "Presentation Archive"" links were made more prominent in the website navigation bar. (#2536)
 
@@ -99,6 +97,9 @@ default. To enable it the new admiral option `save_memory` has to be set to
 - Adopted `data-raw/data` R Package Convention (#2427, #2584)
 - `compute_bsa()` now uses the more common (but equivalent) version of the DuBois-DuBois formula for BSA. The results have not changed. (#2532)  
 - Removed `.devcontainer` file (codespace) (#2524)
+- Restructured `derive_adeg_parms.R` and `derive_advs_parms.R` and related test files for easier findability (#2551)
+
+
 
 </details>
 
