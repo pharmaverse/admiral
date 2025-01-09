@@ -635,4 +635,34 @@ test_that("derive_vars_dt Test 25: Supplying both min/max dates for highest_impu
   expect_dfs_equal(actual, expected, keys = c("ASTDT", "ASTDTF"))
 })
 
+
+## Test 26: no date imputation, DTF present ----
+test_that("derive_vars_dt Test 26: no date imputation, DTF present", {
+  expected_output <- tibble::tribble(
+    ~XXSTDTC,              ~ASTDT,                ~ASTDTF,
+    "2019-07-18T15:25:40", as.Date("2019-07-18"), NA_character_,
+    "2019-07-18",          as.Date("2019-07-18"), NA_character_,
+    "2019-02",             as.Date(NA),           NA_character_,
+    "2019",                as.Date(NA),           NA_character_,
+    "2019---07",           as.Date(NA),           NA_character_
+  )
+  date <- select(expected_output, -ASTDT)
+  expect_message(
+    actual_output <- derive_vars_dt(
+      date,
+      new_vars_prefix = "AST",
+      flag_imputation = "date",
+      dtc = XXSTDTC
+    ),
+    regex =
+      "The ASTDTF variable is already present in the input dataset and will not be re-derived."
+  )
+
+  expect_dfs_equal(
+    expected_output,
+    actual_output,
+    "XXSTDTC"
+  )
+})
+
 rm(input, input_warnings, inputdt, inputdtc, date)

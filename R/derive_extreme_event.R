@@ -94,6 +94,7 @@
 #'   the selected observations.
 #'   1. The observations are added to input dataset.
 #'
+#' `r roxygen_save_memory()`
 #'
 #' @return The input dataset with the best or worst observation of each by group
 #'   added as new observations.
