@@ -271,10 +271,10 @@
 #'   mutate(STUDYID = "AB42")
 #'
 #' ae <- tribble(
-#'   ~USUBJID,   ~AESTDTC, ~AESEQ, ~AEDECOD,
-#'   "01",       "2021-01-03T10:56", 1, "Flu",
-#'   "01",       "2021-03-04", 2, "Cough",
-#'   "01",       "2021", 3, "Flu"
+#'   ~USUBJID, ~AESTDTC, ~AESEQ, ~AEDECOD,
+#'   "01", "2021-01-03T10:56", 1, "Flu",
+#'   "01", "2021-03-04", 2, "Cough",
+#'   "01", "2021", 3, "Flu"
 #' ) %>%
 #'   mutate(STUDYID = "AB42")
 #'
@@ -331,10 +331,10 @@
 #' ) %>% mutate(STUDYID = "AB42")
 #'
 #' ae <- tribble(
-#'   ~USUBJID,  ~AESTDTC,      ~AESEQ,  ~AESER,  ~AEDECOD,
-#'   "01",      "2021-01-03",   1,       "Y",    "Flu",
-#'   "01",      "2021-01-03",   2,       "Y",    "Cough",
-#'   "01",      "2021-01-20",   3,       "N",    "Headache",
+#'   ~USUBJID, ~AESTDTC, ~AESEQ, ~AESER, ~AEDECOD,
+#'   "01", "2021-01-03", 1, "Y", "Flu",
+#'   "01", "2021-01-03", 2, "Y", "Cough",
+#'   "01", "2021-01-20", 3, "N", "Headache",
 #' ) %>% mutate(
 #'   AESTDT = ymd(AESTDTC),
 #'   STUDYID = "AB42"

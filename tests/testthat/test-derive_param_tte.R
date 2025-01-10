@@ -1002,10 +1002,10 @@ input is sorted descending", {
   # Sort the input AE dataset in descending order by AESEQ
   # to confirm that the order argument re-sorts it correctly.
   ae <- tibble::tribble(
-    ~USUBJID, ~AESTDTC,     ~AESEQ, ~AESER, ~AEDECOD,
-    "01",     "2021-01-03",  2,     "Y",    "Cough",
-    "01",     "2021-01-03",  1,     "Y",    "Flu",
-    "01",     "2021-01-20",  3,     "N",    "Headache"
+    ~USUBJID, ~AESTDTC, ~AESEQ, ~AESER, ~AEDECOD,
+    "01", "2021-01-03", 2, "Y", "Cough",
+    "01", "2021-01-03", 1, "Y", "Flu",
+    "01", "2021-01-20", 3, "N", "Headache"
   ) %>%
     mutate(
       STUDYID = "AB42",
@@ -1066,7 +1066,7 @@ test_that("derive_param_tte Test 16: produces consistent results regardless of i
     "01",     "2021-01-03",      3,  "Flu"
   ) %>% mutate(STUDYID = "AB42", AESTDT = ymd(AESTDTC))
 
-   # Define event and censor sources
+  # Define event and censor sources
   ttae <- event_source(
     dataset_name = "ae",
     date = AESTDT,
