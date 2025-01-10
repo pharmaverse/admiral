@@ -1,4 +1,4 @@
-# get_summary_records Test 1: Summarize average of triplicate ECG interval values
+# get_summary_records Test 1: Message sent to users
 
     Code
       df <- input %>% get_summary_records(by_vars = exprs(USUBJID, PARAM, AVISIT),

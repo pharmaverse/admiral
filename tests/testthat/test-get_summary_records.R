@@ -1,5 +1,5 @@
-## Test 1: Summarize the average of the triplicate ECG interval values (AVAL) ----
-test_that("get_summary_records Test 1: Summarize average of triplicate ECG interval values", {
+## Test 1: Message sent to users ----
+test_that("get_summary_records Test 1: Message sent to users", {
   input <- tibble::tribble(
     ~USUBJID,   ~EGSEQ, ~PARAM,             ~AVISIT,    ~EGDTC,             ~AVAL, ~TRTA,
     "XYZ-1001", 1,      "QTcF Int. (msec)", "Baseline", "2016-02-24T07:50", 385,   NA_character_,
@@ -35,8 +35,8 @@ test_that("get_summary_records Test 1: Summarize average of triplicate ECG inter
   )
 })
 
-## Test 1: Summarize the average of the triplicate ECG interval values (AVAL) ----
-test_that("get_summary_records Test 1: Summarize average of triplicate ECG interval values", {
+## Test 2: Summarize average of triplicate ECG interval values ----
+test_that("get_summary_records Test 2: Summarize average of triplicate ECG interval values", {
   # Suppress lifecycle messages within the test environment
   withr::local_options(list(lifecycle_verbosity = "quiet"))
 
@@ -89,8 +89,8 @@ test_that("get_summary_records Test 1: Summarize average of triplicate ECG inter
   )
 })
 
-## Test 2: Derive more than one summary variable ----
-test_that("get_summary_records Test 2: Derive more than one summary variable", {
+## Test 3: Derive more than one summary variable ----
+test_that("get_summary_records Test 3: Derive more than one summary variable", {
   # Suppress lifecycle messages within the test environment
   withr::local_options(list(lifecycle_verbosity = "quiet"))
 
@@ -151,8 +151,8 @@ test_that("get_summary_records Test 2: Derive more than one summary variable", {
   )
 })
 
-## Test 3: Compute avg AVAL only if >2 records within by group ----
-test_that("get_summary_records Test 3: Compute avg AVAL only if >2 records within by group", {
+## Test 4: Compute avg AVAL only if >2 records within by group ----
+test_that("get_summary_records Test 4: Compute avg AVAL only if >2 records within by group", {
   # Suppress lifecycle messages within the test environment
   withr::local_options(list(lifecycle_verbosity = "quiet"))
 
