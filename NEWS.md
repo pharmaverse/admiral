@@ -14,6 +14,8 @@ target range. (#2571)
 - Update `ADEG` template to flag `ABLFL` and `ANL01FL` based on `DTYPE == "AVERAGE"` records. (#2561)
 
 ## Updates of Existing Functions
+- added `"message"` as option for `check_type` argument in `derive_var_obs_number` function. (#2481)
+
 - added `"message"` as option for `check_type` argument in `filter_extreme()` function. (#2481)
 
 - Users can now specify how duplicate records are handled in `derive_param_tte()` using the `check_type` argument, with options including `"error"`, `"warning"`, `"message"`, or `"none"`, allowing for greater flexibility in managing duplicate data scenarios. (#2481)
