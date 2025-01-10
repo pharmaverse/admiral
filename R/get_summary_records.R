@@ -152,7 +152,7 @@ get_summary_records <- function(dataset,
     what = "get_summary_records()",
     with = "derive_summary_records()",
     details = c(
-      x = "This message will turn into a warning in the next release.",
+      x = "This message will turn into a warning for at least one year.",
       i = "See admiral's deprecation guidance:
       https://pharmaverse.github.io/admiraldev/dev/articles/programming_strategy.html#deprecation"
     )

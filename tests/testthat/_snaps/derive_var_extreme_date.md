@@ -5,21 +5,21 @@
     Message
       `date_source()` was deprecated in admiral 1.2.0.
       i Please use `event()` instead.
-      x This message will turn into a warning in the next release.
+      x This message will turn into a warning for at least one year.
       i See admiral's deprecation guidance: https://pharmaverse.github.io/admiraldev/dev/articles/programming_strategy.html#deprecation
     Code
       ae_end <- date_source(dataset_name = "ae", date = AEENDTM)
     Message
       `date_source()` was deprecated in admiral 1.2.0.
       i Please use `event()` instead.
-      x This message will turn into a warning in the next release.
+      x This message will turn into a warning for at least one year.
       i See admiral's deprecation guidance: https://pharmaverse.github.io/admiraldev/dev/articles/programming_strategy.html#deprecation
     Code
       adsl_trtdate <- date_source(dataset_name = "adsl", date = TRTEDTM)
     Message
       `date_source()` was deprecated in admiral 1.2.0.
       i Please use `event()` instead.
-      x This message will turn into a warning in the next release.
+      x This message will turn into a warning for at least one year.
       i See admiral's deprecation guidance: https://pharmaverse.github.io/admiraldev/dev/articles/programming_strategy.html#deprecation
     Code
       adsl_dthdate <- date_source(dataset_name = "adsl", date = DTHDT, filter = nchar(
@@ -27,7 +27,7 @@
     Message
       `date_source()` was deprecated in admiral 1.2.0.
       i Please use `event()` instead.
-      x This message will turn into a warning in the next release.
+      x This message will turn into a warning for at least one year.
       i See admiral's deprecation guidance: https://pharmaverse.github.io/admiraldev/dev/articles/programming_strategy.html#deprecation
     Code
       derive_var_extreme_dt(adsl, new_var = LSTALVDT, source_datasets = list(ae = ae,
@@ -35,11 +35,11 @@
     Message
       `derive_var_extreme_dt()` was deprecated in admiral 1.2.0.
       i Please use `derive_vars_extreme_event()` instead.
-      x This message will turn into a warning in the next release.
+      x This message will turn into a warning for at least one year.
       i See admiral's deprecation guidance: https://pharmaverse.github.io/admiraldev/dev/articles/programming_strategy.html#deprecation
       `derive_var_extreme_dtm()` was deprecated in admiral 1.2.0.
       i Please use `derive_vars_extreme_event()` instead.
-      x This message will turn into a warning in the next release.
+      x This message will turn into a warning for at least one year.
       i See admiral's deprecation guidance: https://pharmaverse.github.io/admiraldev/dev/articles/programming_strategy.html#deprecation
     Output
       # A tibble: 3 x 6
@@ -57,7 +57,7 @@
     Message
       `date_source()` was deprecated in admiral 1.2.0.
       i Please use `event()` instead.
-      x This message will turn into a warning in the next release.
+      x This message will turn into a warning for at least one year.
       i See admiral's deprecation guidance: https://pharmaverse.github.io/admiraldev/dev/articles/programming_strategy.html#deprecation
     Code
       ae_end <- date_source(dataset_name = "ae", date = AEENDTM, set_values_to = exprs(
@@ -65,7 +65,7 @@
     Message
       `date_source()` was deprecated in admiral 1.2.0.
       i Please use `event()` instead.
-      x This message will turn into a warning in the next release.
+      x This message will turn into a warning for at least one year.
       i See admiral's deprecation guidance: https://pharmaverse.github.io/admiraldev/dev/articles/programming_strategy.html#deprecation
     Code
       adsl_trtdate <- date_source(dataset_name = "adsl", date = TRTEDTM,
@@ -73,7 +73,7 @@
     Message
       `date_source()` was deprecated in admiral 1.2.0.
       i Please use `event()` instead.
-      x This message will turn into a warning in the next release.
+      x This message will turn into a warning for at least one year.
       i See admiral's deprecation guidance: https://pharmaverse.github.io/admiraldev/dev/articles/programming_strategy.html#deprecation
     Code
       adsl_dthdate <- date_source(dataset_name = "adsl", date = DTHDT, filter = nchar(
@@ -82,7 +82,7 @@
     Message
       `date_source()` was deprecated in admiral 1.2.0.
       i Please use `event()` instead.
-      x This message will turn into a warning in the next release.
+      x This message will turn into a warning for at least one year.
       i See admiral's deprecation guidance: https://pharmaverse.github.io/admiraldev/dev/articles/programming_strategy.html#deprecation
     Code
       derive_var_extreme_dtm(adsl, new_var = LSTALVDTM, source_datasets = list(ae = ae,
@@ -90,7 +90,7 @@
     Message
       `derive_var_extreme_dtm()` was deprecated in admiral 1.2.0.
       i Please use `derive_vars_extreme_event()` instead.
-      x This message will turn into a warning in the next release.
+      x This message will turn into a warning for at least one year.
       i See admiral's deprecation guidance: https://pharmaverse.github.io/admiraldev/dev/articles/programming_strategy.html#deprecation
     Output
       # A tibble: 3 x 9
