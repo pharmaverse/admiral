@@ -72,8 +72,12 @@ default. To enable it the new admiral option `save_memory` has to be set to
 
   
     **Phase 2 (warning)**
+    
+    No functions or arguments in this Phase
 
     **Phase 3 (error)**
+    
+    No functions or arguments in this Phase
 
     **Phase 4 (removed)**
 
