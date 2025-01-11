@@ -100,11 +100,3 @@
       ! Queries dataset (`test`) contains duplicate records with respect to `PREFIX`, `GRPNAME`, `SRCVAR`, `TERMCHAR`, `GRPID`, and `TERMNUM`
       i Run `admiral::get_duplicates_dataset()` to access the duplicate records
 
-# assert_db_requirements 11: assert_db_requirements() throws error and          increases code coverage when called with no `fun` arugment provided
-
-    Code
-      assert_db_requirements()
-    Condition
-      Error in `assert_db_requirements()`:
-      ! argument "fun" is missing, with no default
-

@@ -146,3 +146,19 @@
       Error in `basket_select()`:
       ! argument "type" is missing, with no default
 
+# assert_db_requirements 24: assert_db_requirements() throws error and          increases code coverage when called with no `fun` arugment provided
+
+    Code
+      assert_db_requirements(fun = NULL)
+    Condition
+      Error in `assert_db_requirements()`:
+      ! argument "queries" is missing, with no default
+
+# assert_db_requirements 25: assert_db_requirements() throws error and          increases code coverage when called with no `queries` arugment provided
+
+    Code
+      assert_db_requirements(fun = print, version = NULL)
+    Condition
+      Error in `assert_db_requirements()`:
+      ! argument "queries" is missing, with no default
+
