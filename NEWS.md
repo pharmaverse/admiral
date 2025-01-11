@@ -61,36 +61,36 @@ default. To enable it the new admiral option `save_memory` has to be set to
   
 - The following function arguments are entering the next phase of the [deprecation process](https://pharmaverse.github.io/admiraldev/articles/programming_strategy.html#deprecation): (#2487) (#2595)
 
-**Phase 1 (message)**
+    **Phase 1 (message)**
   
-  - `derive_param_extreme_record()` is deprecated and replaced by `derive_extreme_event()`
-  - `derive_var_dthcaus()` is deprecated and replaced by `derive_vars_extreme_event()`
-  - `date_source()` is deprecated and replaced by `event()`
-  - `dthcaus_source()` is deprecated and replaced by `event()`
-  - `derive_var_extreme_dt()` and `derive_var_extreme_dtm()` are deprecated and replaced by `derive_vars_extreme_event()`
-  - `get_summary_records()` is deprecated. Please use `derive_summary_records()` with the `dataset_add` argument and without the `dataset` argument.
+    - `derive_param_extreme_record()` is deprecated and replaced by `derive_extreme_event()`
+    - `derive_var_dthcaus()` is deprecated and replaced by `derive_vars_extreme_event()`
+    - `date_source()` is deprecated and replaced by `event()`
+    - `dthcaus_source()` is deprecated and replaced by `event()`
+    - `derive_var_extreme_dt()` and `derive_var_extreme_dtm()` are deprecated and replaced by `derive_vars_extreme_event()`
+    - `get_summary_records()` is deprecated. Please use `derive_summary_records()` with the `dataset_add` argument and without the `dataset` argument.
 
   
-**Phase 2 (warning)**
+    **Phase 2 (warning)**
 
-**Phase 3 (error)**
+    **Phase 3 (error)**
 
-**Phase 4 (removed)**
+    **Phase 4 (removed)**
 
-  - `consolidate_metadata(check_keys)`
-  - Removed at v1.1.1 `compute_egfr(wt)`
-  - Removed at v1.1.1 `derive_expected_records(dataset_expected_obs)` 
-  - Removed at v1.1.1 `derive_locf_records(dataset_expected_obs)`
-  - `derive_extreme_event(ignore_event_order)`
-  - `derive_vars_merged(match_flag)`
-  - `derive_var_merged_summary(new_var, analysis_var, summary_fun)`
-  - Removed at v1.1.1 `derive_param_computed(analysis_value, analysis_var)`
-  - `derive_param_exposure(filter, analysis_var, summary_fun)`
-  - `derive_summary_records(filter)`
-  - Removed at v1.1.1 `derive_extreme_records(filter)`
-  - `derive_var_joined_exist_flag(first_cond, filter)`
-  - `event_joined(first_cond)`
-  - `filter_joined(first_cond, filter)`
+    - `consolidate_metadata(check_keys)`
+    - Removed at v1.1.1 `compute_egfr(wt)`
+    - Removed at v1.1.1 `derive_expected_records(dataset_expected_obs)` 
+    - Removed at v1.1.1 `derive_locf_records(dataset_expected_obs)`
+    - `derive_extreme_event(ignore_event_order)`
+    - `derive_vars_merged(match_flag)`
+    - `derive_var_merged_summary(new_var, analysis_var, summary_fun)`
+    - Removed at v1.1.1 `derive_param_computed(analysis_value, analysis_var)`
+    - `derive_param_exposure(filter, analysis_var, summary_fun)`
+    - `derive_summary_records(filter)`
+    - Removed at v1.1.1 `derive_extreme_records(filter)`
+    - `derive_var_joined_exist_flag(first_cond, filter)`
+    - `event_joined(first_cond)`
+    - `filter_joined(first_cond, filter)`
 
 ## Documentation
 
