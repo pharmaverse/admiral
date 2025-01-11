@@ -353,7 +353,8 @@ test_that("assert_valid_queries Test 10: assert_valid_queries checks", {
 ## Test 11: assert_db_requirements_
 test_that("assert_db_requirements 11: assert_db_requirements() throws error and
           increases code coverage when called with no `fun` arugment provided", {
-  expect_error(
-    assert_db_requirements()
-  )
+    expect_snapshot(
+      assert_db_requirements(),
+    error = TRUE
+    )
 })
