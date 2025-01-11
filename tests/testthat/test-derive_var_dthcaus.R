@@ -1,5 +1,5 @@
-## Test 1: Message sent to users ----
-test_that("derive_var_dthcaus Test 1: Message sent to users", {
+## Test 1: deprecation message if function is called ----
+test_that("derive_var_dthcaus Test 1: deprecation message if function is called", {
   adsl <- tibble::tribble(
     ~STUDYID, ~USUBJID,
     "TEST01", "PAT01",

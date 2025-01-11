@@ -1,6 +1,6 @@
 # derive_param_extreme_record ----
-## Test 1: Message Sent to users ----
-test_that("derive_param_extreme_record Test 1: Message Sent to users", {
+## Test 1: deprecation message if function is called ----
+test_that("derive_param_extreme_record Test 1: deprecation message if function is called", {
   aevent <- tibble::tribble(
     ~STUDYID, ~USUBJID,     ~LBSTDTC, ~PARAMCD, ~PARAM,
     "1001",        "1", "2023-01-01",    "TST", "TEST",

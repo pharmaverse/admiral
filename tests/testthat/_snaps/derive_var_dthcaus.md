@@ -1,4 +1,4 @@
-# derive_var_dthcaus Test 1: Message sent to users
+# derive_var_dthcaus Test 1: deprecation message if function is called
 
     Code
       src_ae <- dthcaus_source(dataset_name = "ae", filter = AEOUT == "FATAL", date = AEDTHDT,

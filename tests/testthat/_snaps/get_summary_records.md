@@ -1,4 +1,4 @@
-# get_summary_records Test 1: Message sent to users
+# get_summary_records Test 1: deprecation message if function is called
 
     Code
       df <- input %>% get_summary_records(by_vars = exprs(USUBJID, PARAM, AVISIT),

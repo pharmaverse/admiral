@@ -1,5 +1,5 @@
-## Test 1: Message sent to users ----
-test_that("get_summary_records Test 1: Message sent to users", {
+## Test 1: deprecation message if function is called ----
+test_that("get_summary_records Test 1: deprecation message if function is called", {
   input <- tibble::tribble(
     ~USUBJID,   ~EGSEQ, ~PARAM,             ~AVISIT,    ~EGDTC,             ~AVAL, ~TRTA,
     "XYZ-1001", 1,      "QTcF Int. (msec)", "Baseline", "2016-02-24T07:50", 385,   NA_character_,

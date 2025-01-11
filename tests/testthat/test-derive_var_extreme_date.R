@@ -23,8 +23,8 @@ ae <- tibble::tribble(
   )
 
 # derive_var_extreme_dt ----
-## Test 1: Message sent to users ----
-test_that("derive_var_extreme_dt Test 1: Message sent to users", {
+## Test 1: deprecation message if function is called ----
+test_that("derive_var_extreme_dt Test 1: deprecation message if function is called", {
   expect_snapshot({
     ae_start <- date_source(
       dataset_name = "ae",

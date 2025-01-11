@@ -1,4 +1,4 @@
-# derive_var_extreme_dt Test 1: Message sent to users
+# derive_var_extreme_dt Test 1: deprecation message if function is called
 
     Code
       ae_start <- date_source(dataset_name = "ae", date = AESTDTM)

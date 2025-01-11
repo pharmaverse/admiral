@@ -1,4 +1,4 @@
-# derive_param_extreme_record Test 1: Message Sent to users
+# derive_param_extreme_record Test 1: deprecation message if function is called
 
     Code
       df <- derive_param_extreme_record(dataset = aevent, sources = list(
