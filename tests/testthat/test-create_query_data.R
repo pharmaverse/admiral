@@ -578,3 +578,21 @@ test_that("format.basket_select Test 23: formatting is correct (name specified)"
     "basket_select(name = \"My SDG\", id = NULL, scope = \"NA\", type = \"sdg\")"
   )
 })
+
+# assert_db_requirements ----
+## Test 24: assert_db_requirements_
+test_that("assert_db_requirements 24: assert_db_requirements() throws error and
+          increases code coverage when called with no `fun` arugment provided", {
+  expect_snapshot(
+    assert_db_requirements(fun = NULL),
+    error = TRUE
+  )
+})
+## Test 25: assert_db_requirements_
+test_that("assert_db_requirements 25: assert_db_requirements() throws error and
+          increases code coverage when called with no `queries` arugment provided", {
+  expect_snapshot(
+    assert_db_requirements(fun = print, version = NULL),
+    error = TRUE
+  )
+})
