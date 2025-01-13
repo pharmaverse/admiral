@@ -112,6 +112,9 @@ default. To enable it the new admiral option `save_memory` has to be set to
 - Adopted `data-raw/data` R Package Convention (#2427, #2584)
 - `compute_bsa()` now uses the more common (but equivalent) version of the DuBois-DuBois formula for BSA. The results have not changed. (#2532)  
 - Removed `.devcontainer` file (codespace) (#2524)
+- Restructured `derive_adeg_parms.R` and `derive_advs_parms.R` and related test files for easier reference (#2551)
+
+
 
 </details>
 
