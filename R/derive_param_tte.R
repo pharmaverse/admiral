@@ -726,6 +726,7 @@ filter_date_sources <- function(sources,
       !!!sources[[i]]$set_values_to,
       CNSR = sources[[i]]$censor,
       !!!date_derv,
+      tmp_source_nr = i,
       .keep = "none"
     )
   }
@@ -736,10 +737,11 @@ filter_date_sources <- function(sources,
     filter(!is.na(!!date_var)) %>%
     filter_extreme(
       by_vars = expr_c(subject_keys, by_vars),
-      order = exprs(!!date_var),
+      order = exprs(!!date_var, tmp_source_nr),
       mode = mode,
       check_type = check_type
-    )
+    ) %>%
+    select(-tmp_source_nr)
 }
 
 #' Add By Groups to All Datasets if Necessary
