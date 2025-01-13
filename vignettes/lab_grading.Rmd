@@ -482,12 +482,12 @@ atoxgr_criteria_ctcv4 %>%
 
 Grading is implemented for those lab tests where a lab value is included in the grading definition,
 `{admiral}` does NOT try to read any other data to determine the grade, and only the `ADLB` dataset is used.
-The following CTCAE v5.0 SOC values were identified for grading, these are “Investigations", 
-“Metabolism and nutrition disorders” and “Blood and lymphatic system disorders”.
+The following CTCAE v5.0 SOC values were identified for grading, these are "Investigations", 
+"Metabolism and nutrition disorders" and "Blood and lymphatic system disorders".
 
 From these SOC values the following terms criteria is implemented in `{admiral}` 
 
-From SOC = “Investigations" there are 21 CTCAE v5.0 Terms:
+From SOC = "Investigations" there are 21 CTCAE v5.0 Terms:
 
   + Activated partial thromboplastin time prolonged
   + Alanine aminotransferase increased
@@ -513,7 +513,7 @@ From SOC = “Investigations" there are 21 CTCAE v5.0 Terms:
   
 Note: These are the same terms identified for NCI-CTCAEv4.
 
-From the SOC =  “Metabolism and nutrition disorders” there are 12 CTCAE v4.0 Terms:
+From the SOC =  "Metabolism and nutrition disorders" there are 12 CTCAE v4.0 Terms:
 
   + Hypercalcemia
   + Hyperkalemia
@@ -531,7 +531,7 @@ From the SOC =  “Metabolism and nutrition disorders” there are 12 CTCAE v4.0
 Note: These are the same terms identified for NCI-CTCAEv4, except "Hypophosphatemia"
 and "Hyperglycemia" which are not in NCICTCAEv5 grading criteria.
 
-From the SOC =  “Blood and lymphatic system disorders” there are 2 CTCAE v4.0 Terms:
+From the SOC =  "Blood and lymphatic system disorders" there are 2 CTCAE v4.0 Terms:
 
   + Anemia
   + Leukocytosis

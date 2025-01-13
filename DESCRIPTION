@@ -40,7 +40,7 @@ URL: https://pharmaverse.github.io/admiral/,
     https://github.com/pharmaverse/admiral
 BugReports: https://github.com/pharmaverse/admiral/issues
 Depends: 
-    R (>= 4.0)
+    R (>= 4.1)
 Imports:
     admiraldev (>= 1.1.0.9007),
     cli (>= 3.6.2),
