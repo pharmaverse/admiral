@@ -2,7 +2,7 @@
 
 <!-- badges: start -->
 
-[<img src="http://pharmaverse.org/shields/admiral.svg">](https://pharmaverse.org)
+[![pharmaverse admiral Badge](http://pharmaverse.org/shields/admiral.svg)](https://pharmaverse.org)
 [![CRAN status](https://www.r-pkg.org/badges/version/admiral)](https://CRAN.R-project.org/package=admiral)
 [![Test Coverage](https://raw.githubusercontent.com/pharmaverse/admiral/badges/main/test-coverage.svg)](https://github.com/pharmaverse/admiral/actions/workflows/code-coverage.yml)
 [![R-CMD-check](https://github.com/pharmaverse/admiral/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/pharmaverse/admiral/actions/workflows/R-CMD-check.yaml)
@@ -32,7 +32,7 @@ devtools::install_github("pharmaverse/admiral")
 
 ## Cheat Sheet
 
-<a href="https://github.com/pharmaverse/admiral/blob/main/inst/cheatsheet/admiral_cheatsheet.pdf"><img src="https://raw.githubusercontent.com/pharmaverse/admiral/main/inst/cheatsheet/cheatsheet_image.png" width="630" height="252"/></a>
+<a href="https://github.com/pharmaverse/admiral/blob/main/inst/cheatsheet/admiral_cheatsheet.pdf"><img src="https://raw.githubusercontent.com/pharmaverse/admiral/main/inst/cheatsheet/cheatsheet_image.png" width="630" height="252" alt="Admiral Cheat Sheet Image"/></a>
 
 ## Release Schedule
 
