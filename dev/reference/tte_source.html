@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">admiral</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.1.1.9055</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.1.1.9056</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -73,7 +73,14 @@
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">tte_source</span><span class="op">(</span><span class="va">dataset_name</span>, filter <span class="op">=</span> <span class="cn">NULL</span>, <span class="va">date</span>, censor <span class="op">=</span> <span class="fl">0</span>, set_values_to <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">tte_source</span><span class="op">(</span></span>
+<span>  <span class="va">dataset_name</span>,</span>
+<span>  filter <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  <span class="va">date</span>,</span>
+<span>  censor <span class="op">=</span> <span class="fl">0</span>,</span>
+<span>  set_values_to <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  order <span class="op">=</span> <span class="va">order</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -109,6 +116,13 @@ censoring.</p></dd>
 <dd><p>A named list returned by <code><a href="reexport-exprs.html">exprs()</a></code> defining the variables
 to be set for the event or censoring, e.g. <code>exprs(EVENTDESC = "DEATH", SRCDOM = "ADSL", SRCVAR = "DTHDT")</code>. The values must be a symbol, a
 character string, a numeric value, an expression, or <code>NA</code>.</p></dd>
+
+
+<dt id="arg-order">order<a class="anchor" aria-label="anchor" href="#arg-order"></a></dt>
+<dd><p>Sort order</p>
+<p>An optional named list returned by <code><a href="reexport-exprs.html">exprs()</a></code> defining additional variables
+that the source dataset is sorted on after <code>date</code>.</p>
+<p><em>Permitted Values:</em> list of variables created by <code><a href="reexport-exprs.html">exprs()</a></code> e.g. <code>exprs(ASEQ)</code>.</p></dd>
 
 </dl></div>
     <div class="section level2">

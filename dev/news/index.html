@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">admiral</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.1.1.9055</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.1.1.9056</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -79,7 +79,12 @@
 </ul></div>
 <div class="section level3">
 <h3 id="updates-of-existing-functions-development-version">Updates of Existing Functions<a class="anchor" aria-label="anchor" href="#updates-of-existing-functions-development-version"></a></h3>
-<ul><li>
+<ul><li><p>added <code>"message"</code> as option for <code>check_type</code> argument in <code><a href="../reference/derive_var_obs_number.html">derive_var_obs_number()</a></code> function. (<a href="https://github.com/pharmaverse/admiral/issues/2481" class="external-link">#2481</a>)</p></li>
+<li><p>added <code>"message"</code> as option for <code>check_type</code> argument in <code><a href="../reference/filter_extreme.html">filter_extreme()</a></code> function. (<a href="https://github.com/pharmaverse/admiral/issues/2481" class="external-link">#2481</a>)</p></li>
+<li><p>Users can now specify how duplicate records are handled in <code><a href="../reference/derive_param_tte.html">derive_param_tte()</a></code> using the <code>check_type</code> argument, with options including <code>"error"</code>, <code>"warning"</code>, <code>"message"</code>, or <code>"none"</code>, allowing for greater flexibility in managing duplicate data scenarios. (<a href="https://github.com/pharmaverse/admiral/issues/2481" class="external-link">#2481</a>)</p></li>
+<li><p><code>order</code> argument has been added to <code><a href="../reference/event_source.html">event_source()</a></code> and <code><a href="../reference/censor_source.html">censor_source()</a></code> and<br>
+defaulted to <code>NULL</code> to allow specifying variables in addition to the date variable. This can be used to ensure the uniqueness of the select records if there is more than one record per date. (<a href="https://github.com/pharmaverse/admiral/issues/2481" class="external-link">#2481</a>)</p></li>
+<li>
 <p>NCICTCAEv5 grading criteria (<code>atoxgr_criteria_ctcv5</code>):</p>
 <ul><li>fix for <code>TERM = "INR increased"</code>, criteria was wrongly using <code>x ULN</code>, for first part of criteria for grades 1 to 3. For example, <code>"&gt;2.5 x ULN"</code> changed to <code>"&gt;2.5"</code> for grade 3. (<a href="https://github.com/pharmaverse/admiral/issues/2534" class="external-link">#2534</a>).</li>
 <li>when looking at abnormal baseline we now use <code>BNRIND</code> instead of comparing <code>BASE</code> with <code>ANRHI</code>, as <code>ANRHI</code> may differ within a subject and lab test due to data from different lab vendors. This effects 5 terms, namely, <code>Alanine aminotransferase increased</code>, <code>Alkaline phosphatase increased</code>, <code>Aspartate aminotransferase increased</code>, <code>Blood bilirubin increased</code> and <code>GGT Increased</code>. (<a href="https://github.com/pharmaverse/admiral/issues/249" class="external-link">#249</a>)</li>
@@ -355,7 +360,7 @@ ignore_event_order = TRUE,</code></pre>
 <div class="section level3">
 <h3 id="documentation-1-0-0">Documentation<a class="anchor" aria-label="anchor" href="#documentation-1-0-0"></a></h3>
 <ul><li><p>The documentation of the <code>by_vars</code> and <code>constant_by_vars</code> argument was improved and unified across all functions where it is used. (<a href="https://github.com/pharmaverse/admiral/issues/2137" class="external-link">#2137</a>)</p></li>
-<li><p>The functions <code>assert_db_requirements()</code>, <code>assert_terms()</code>, <code>assert_valid_queries()</code>, <code>extend_source_datasets()</code>, <code>filter_date_sources()</code>, <code>validate_basket_select()</code>, <code>validate_query()</code> are no longer exported and have had documentation removed. (<a href="https://github.com/pharmaverse/admiral/issues/2220" class="external-link">#2220</a>)</p></li>
+<li><p>The functions <code>assert_db_requirements()</code>, <code>assert_terms()</code>, <code>assert_valid_queries()</code>, <code>extend_source_datasets()</code>, <code><a href="../reference/filter_date_sources.html">filter_date_sources()</a></code>, <code>validate_basket_select()</code>, <code>validate_query()</code> are no longer exported and have had documentation removed. (<a href="https://github.com/pharmaverse/admiral/issues/2220" class="external-link">#2220</a>)</p></li>
 <li><p>The function <code><a href="../reference/extract_duplicate_records.html">extract_duplicate_records()</a></code> has been re-classified as an <code>internal</code> function, which means that the function still appears in our help pages but not on our website. (<a href="https://github.com/pharmaverse/admiral/issues/2220" class="external-link">#2220</a>)</p></li>
 <li><p>The “Generic Functions” vignette (now “Generic Derivations”) was rewritten. Now it provides a more complete overview of the generic derivations, describe the common concepts, and makes it easier to find the appropriate function. (<a href="https://github.com/pharmaverse/admiral/issues/2230" class="external-link">#2230</a>)</p></li>
 <li><p>A way to standardize roxygen labels and descriptions for function arguments was implemented and tested. (<a href="https://github.com/pharmaverse/admiral/issues/2034" class="external-link">#2034</a>)</p></li>
@@ -961,7 +966,7 @@ ignore_event_order = TRUE,</code></pre>
 <ul><li><p>Additional explanation added to <code>derive_param_*</code> and <code>derive_derived_param</code> functions regarding which variables are populated in the additional rows (<a href="https://github.com/pharmaverse/admiral/issues/939" class="external-link">#939</a>)</p></li>
 <li><p>Updated <code>derive_var_worst_flag()</code> and <code><a href="../reference/derive_var_extreme_flag.html">derive_var_extreme_flag()</a></code> vignettes to clarify their purpose (<a href="https://github.com/pharmaverse/admiral/issues/691" class="external-link">#691</a>)</p></li>
 <li><p>Added example of ASEQ derivation in ADCM to <a href="https://pharmaverse.github.io/admiral/articles/occds.html#aseq">OCCDS vignette</a> (<a href="https://github.com/pharmaverse/admiral/issues/720" class="external-link">#720</a>)</p></li>
-<li><p>Examples have been added for <code>format_reason_default()</code>, <code>format_eoxxstt_default()</code>, <code>extend_source_datasets()</code> and <code>filter_date_sources()</code> (<a href="https://github.com/pharmaverse/admiral/issues/745" class="external-link">#745</a>)</p></li>
+<li><p>Examples have been added for <code>format_reason_default()</code>, <code>format_eoxxstt_default()</code>, <code>extend_source_datasets()</code> and <code><a href="../reference/filter_date_sources.html">filter_date_sources()</a></code> (<a href="https://github.com/pharmaverse/admiral/issues/745" class="external-link">#745</a>)</p></li>
 </ul></div>
 <div class="section level3">
 <h3 id="various-0-7-0">Various<a class="anchor" aria-label="anchor" href="#various-0-7-0"></a></h3>

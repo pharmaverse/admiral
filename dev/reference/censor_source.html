@@ -11,7 +11,7 @@ Note: This is a wrapper function for the more generic tte_source()."><meta prope
 
     <a class="navbar-brand me-2" href="../index.html">admiral</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.1.1.9055</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.1.1.9056</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -84,7 +84,8 @@ Note: This is a wrapper function for the more generic tte_source()."><meta prope
 <span>  filter <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  <span class="va">date</span>,</span>
 <span>  censor <span class="op">=</span> <span class="fl">1</span>,</span>
-<span>  set_values_to <span class="op">=</span> <span class="cn">NULL</span></span>
+<span>  set_values_to <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  order <span class="op">=</span> <span class="cn">NULL</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -121,6 +122,13 @@ censoring.</p></dd>
 <dd><p>A named list returned by <code><a href="reexport-exprs.html">exprs()</a></code> defining the variables
 to be set for the event or censoring, e.g. <code>exprs(EVENTDESC = "DEATH", SRCDOM = "ADSL", SRCVAR = "DTHDT")</code>. The values must be a symbol, a
 character string, a numeric value, an expression, or <code>NA</code>.</p></dd>
+
+
+<dt id="arg-order">order<a class="anchor" aria-label="anchor" href="#arg-order"></a></dt>
+<dd><p>Sort order</p>
+<p>An optional named list returned by <code><a href="reexport-exprs.html">exprs()</a></code> defining additional variables
+that the source dataset is sorted on after <code>date</code>.</p>
+<p><em>Permitted Values:</em> list of variables created by <code><a href="reexport-exprs.html">exprs()</a></code> e.g. <code>exprs(ASEQ)</code>.</p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -164,6 +172,7 @@ character string, a numeric value, an expression, or <code>NA</code>.</p></dd>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   EVNTDESC: "ALIVE"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   SRCDOM: "ADSL"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   SRCVAR: "LSTALVDT"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> order: NULL</span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>

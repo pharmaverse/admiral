@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">admiral</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.1.1.9055</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.1.1.9056</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -83,7 +83,8 @@
 <span>  <span class="va">censor_conditions</span>,</span>
 <span>  create_datetime <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  <span class="va">set_values_to</span>,</span>
-<span>  subject_keys <span class="op">=</span> <span class="fu"><a href="get_admiral_option.html">get_admiral_option</a></span><span class="op">(</span><span class="st">"subject_keys"</span><span class="op">)</span></span>
+<span>  subject_keys <span class="op">=</span> <span class="fu"><a href="get_admiral_option.html">get_admiral_option</a></span><span class="op">(</span><span class="st">"subject_keys"</span><span class="op">)</span>,</span>
+<span>  check_type <span class="op">=</span> <span class="st">"warning"</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -155,6 +156,15 @@ expressions, or <code>NA</code>.</p></dd>
 <dt id="arg-subject-keys">subject_keys<a class="anchor" aria-label="anchor" href="#arg-subject-keys"></a></dt>
 <dd><p>Variables to uniquely identify a subject</p>
 <p>A list of symbols created using <code><a href="reexport-exprs.html">exprs()</a></code> is expected.</p></dd>
+
+
+<dt id="arg-check-type">check_type<a class="anchor" aria-label="anchor" href="#arg-check-type"></a></dt>
+<dd><p>Check uniqueness</p>
+<p>If <code>"warning"</code>, <code>"message"</code>, or <code>"error"</code> is specified, the specified message is issued
+if the observations of the source datasets are not unique with respect to the
+by variables and the date and order specified in the <code><a href="event_source.html">event_source()</a></code> and
+<code><a href="censor_source.html">censor_source()</a></code> objects.</p>
+<p><em>Permitted Values</em>: <code>"none"</code>, <code>"message"</code>, <code>"warning"</code>, <code>"error"</code></p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -365,9 +375,9 @@ i.e., subjects with both an event or censoring and an observation in
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">ae</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://tibble.tidyverse.org/reference/tribble.html" class="external-link">tribble</a></span><span class="op">(</span></span></span>
 <span class="r-in"><span>  <span class="op">~</span><span class="va">USUBJID</span>, <span class="op">~</span><span class="va">AESTDTC</span>,           <span class="op">~</span><span class="va">AESEQ</span>, <span class="op">~</span><span class="va">AEDECOD</span>,</span></span>
-<span class="r-in"><span>  <span class="st">"01"</span>,     <span class="st">"2021-01-03T10:56"</span>, <span class="fl">1</span>,      <span class="st">"Flu"</span>,</span></span>
-<span class="r-in"><span>  <span class="st">"01"</span>,     <span class="st">"2021-03-04"</span>,       <span class="fl">2</span>,      <span class="st">"Cough"</span>,</span></span>
-<span class="r-in"><span>  <span class="st">"01"</span>,     <span class="st">"2021"</span>,             <span class="fl">3</span>,      <span class="st">"Flu"</span></span></span>
+<span class="r-in"><span>  <span class="st">"01"</span>,     <span class="st">"2021-01-03T10:56"</span>,      <span class="fl">1</span>, <span class="st">"Flu"</span>,</span></span>
+<span class="r-in"><span>  <span class="st">"01"</span>,     <span class="st">"2021-03-04"</span>,            <span class="fl">2</span>, <span class="st">"Cough"</span>,</span></span>
+<span class="r-in"><span>  <span class="st">"01"</span>,     <span class="st">"2021"</span>,                  <span class="fl">3</span>, <span class="st">"Flu"</span></span></span>
 <span class="r-in"><span><span class="op">)</span> <span class="op"><a href="pipe.html">%&gt;%</a></span></span></span>
 <span class="r-in"><span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>STUDYID <span class="op">=</span> <span class="st">"AB42"</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
@@ -422,6 +432,55 @@ i.e., subjects with both an event or censoring and an observation in
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">2</span> 01      2020-12-06 TTAE2   Time to First Flu Adverse … 2021-01-01     0      3</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">3</span> 02      2021-01-16 TTAE1   Time to First Cough Advers… 2021-02-03     1     <span style="color: #BB0000;">NA</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">4</span> 02      2021-01-16 TTAE2   Time to First Flu Adverse … 2021-02-03     1     <span style="color: #BB0000;">NA</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Resolve tie when serious AE share a date by sorting with order argument</span></span></span>
+<span class="r-in"><span><span class="va">adsl</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://tibble.tidyverse.org/reference/tribble.html" class="external-link">tribble</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>  <span class="op">~</span><span class="va">USUBJID</span>, <span class="op">~</span><span class="va">TRTSDT</span>,           <span class="op">~</span><span class="va">EOSDT</span>,</span></span>
+<span class="r-in"><span>  <span class="st">"01"</span>,     <span class="fu"><a href="https://lubridate.tidyverse.org/reference/ymd.html" class="external-link">ymd</a></span><span class="op">(</span><span class="st">"2020-12-06"</span><span class="op">)</span>, <span class="fu"><a href="https://lubridate.tidyverse.org/reference/ymd.html" class="external-link">ymd</a></span><span class="op">(</span><span class="st">"2021-03-06"</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>  <span class="st">"02"</span>,     <span class="fu"><a href="https://lubridate.tidyverse.org/reference/ymd.html" class="external-link">ymd</a></span><span class="op">(</span><span class="st">"2021-01-16"</span><span class="op">)</span>, <span class="fu"><a href="https://lubridate.tidyverse.org/reference/ymd.html" class="external-link">ymd</a></span><span class="op">(</span><span class="st">"2021-02-03"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">)</span> <span class="op"><a href="pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>STUDYID <span class="op">=</span> <span class="st">"AB42"</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">ae</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://tibble.tidyverse.org/reference/tribble.html" class="external-link">tribble</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>  <span class="op">~</span><span class="va">USUBJID</span>, <span class="op">~</span><span class="va">AESTDTC</span>,     <span class="op">~</span><span class="va">AESEQ</span>, <span class="op">~</span><span class="va">AESER</span>, <span class="op">~</span><span class="va">AEDECOD</span>,</span></span>
+<span class="r-in"><span>  <span class="st">"01"</span>,     <span class="st">"2021-01-03"</span>,      <span class="fl">1</span>, <span class="st">"Y"</span>,    <span class="st">"Flu"</span>,</span></span>
+<span class="r-in"><span>  <span class="st">"01"</span>,     <span class="st">"2021-01-03"</span>,      <span class="fl">2</span>, <span class="st">"Y"</span>,    <span class="st">"Cough"</span>,</span></span>
+<span class="r-in"><span>  <span class="st">"01"</span>,     <span class="st">"2021-01-20"</span>,      <span class="fl">3</span>, <span class="st">"N"</span>,    <span class="st">"Headache"</span></span></span>
+<span class="r-in"><span><span class="op">)</span> <span class="op"><a href="pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>  AESTDT <span class="op">=</span> <span class="fu"><a href="https://lubridate.tidyverse.org/reference/ymd.html" class="external-link">ymd</a></span><span class="op">(</span><span class="va">AESTDTC</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>  STUDYID <span class="op">=</span> <span class="st">"AB42"</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu">derive_param_tte</span><span class="op">(</span></span></span>
+<span class="r-in"><span>  dataset_adsl <span class="op">=</span> <span class="va">adsl</span>,</span></span>
+<span class="r-in"><span>  start_date <span class="op">=</span> <span class="va">TRTSDT</span>,</span></span>
+<span class="r-in"><span>  source_datasets <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>adsl <span class="op">=</span> <span class="va">adsl</span>, ae <span class="op">=</span> <span class="va">ae</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>  event_conditions <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="fu"><a href="event_source.html">event_source</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>    dataset_name <span class="op">=</span> <span class="st">"ae"</span>,</span></span>
+<span class="r-in"><span>    date <span class="op">=</span> <span class="va">AESTDT</span>,</span></span>
+<span class="r-in"><span>    set_values_to <span class="op">=</span> <span class="fu"><a href="reexport-exprs.html">exprs</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>      EVENTDESC <span class="op">=</span> <span class="st">"Serious AE"</span>,</span></span>
+<span class="r-in"><span>      SRCSEQ <span class="op">=</span> <span class="va">AESEQ</span></span></span>
+<span class="r-in"><span>    <span class="op">)</span>,</span></span>
+<span class="r-in"><span>    filter <span class="op">=</span> <span class="va">AESER</span> <span class="op">==</span> <span class="st">"Y"</span>,</span></span>
+<span class="r-in"><span>    order <span class="op">=</span> <span class="fu"><a href="reexport-exprs.html">exprs</a></span><span class="op">(</span><span class="va">AESEQ</span><span class="op">)</span></span></span>
+<span class="r-in"><span>  <span class="op">)</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>  censor_conditions <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="fu"><a href="censor_source.html">censor_source</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>    dataset_name <span class="op">=</span> <span class="st">"adsl"</span>,</span></span>
+<span class="r-in"><span>    date <span class="op">=</span> <span class="va">EOSDT</span>,</span></span>
+<span class="r-in"><span>    censor <span class="op">=</span> <span class="fl">1</span>,</span></span>
+<span class="r-in"><span>    set_values_to <span class="op">=</span> <span class="fu"><a href="reexport-exprs.html">exprs</a></span><span class="op">(</span>EVENTDESC <span class="op">=</span> <span class="st">"End of Study"</span><span class="op">)</span></span></span>
+<span class="r-in"><span>  <span class="op">)</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>  set_values_to <span class="op">=</span> <span class="fu"><a href="reexport-exprs.html">exprs</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>    PARAMCD <span class="op">=</span> <span class="st">"TTSAE"</span>,</span></span>
+<span class="r-in"><span>    PARAM <span class="op">=</span> <span class="st">"Time to First Serious AE"</span></span></span>
+<span class="r-in"><span>  <span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 2 × 9</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   USUBJID STUDYID EVENTDESC    SRCSEQ  CNSR ADT        STARTDT    PARAMCD PARAM </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>         <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> 01      AB42    Serious AE        1     0 2021-01-03 2020-12-06 TTSAE   Time …</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">2</span> 02      AB42    End of Study     <span style="color: #BB0000;">NA</span>     1 2021-02-03 2021-01-16 TTSAE   Time …</span>
+<span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
