@@ -101,7 +101,7 @@ new parameter:
 
 \enumerate{ \item For each event source dataset the observations as
 specified by the \code{filter} element are selected. Then for each patient the
-first observation (with respect to \code{date}) is selected.
+first observation (with respect to \code{date} and \code{order}) is selected.
 
 \item The \code{ADT} variable is set to the variable specified by the
 \code{date} element. If the date variable is a datetime variable, only
@@ -116,13 +116,15 @@ added.
 single dataset.
 
 \item For each patient the first observation (with respect to the \code{ADT}
-variable) from the single dataset is selected. }
+variable) from the single dataset is selected. If there is more than one
+event with the same date, the first event with respect to the order of
+events in \code{event_conditions} is selected.}
 
 \strong{Deriving the censoring observations:}
 
 \enumerate{ \item For each censoring source dataset the observations as
 specified by the \code{filter} element are selected. Then for each patient the
-last observation (with respect to \code{date}) is selected.
+last observation (with respect to \code{date} and \code{order}) is selected.
 
 \item The \code{ADT} variable is set to the variable specified by the
 \code{date} element. If the date variable is a datetime variable, only
@@ -137,7 +139,9 @@ added.
 combined into a single dataset.
 
 \item For each patient the last observation (with respect to the \code{ADT}
-variable) from the single dataset is selected. }
+variable) from the single dataset is selected.  If there is more than one
+censoring with the same date, the last censoring with respect to the order
+of censorings in \code{censor_conditions} is selected.}
 
 For each subject (as defined by the \code{subject_keys} parameter) an
 observation is selected. If an event is available, the event observation is

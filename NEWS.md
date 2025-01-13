@@ -111,6 +111,11 @@ default. To enable it the new admiral option `save_memory` has to be set to
 
 - `derive_var_joined_exist_flag()` documentation updated with extra examples. (#2523)
 
+- In the `derive_param_tte()` documentation is was clarified which
+event/censoring is selected if there is more than one at the same date (for
+events the first one specified in `event_conditions` and for censoring the last
+one in `censor_conditions`). (#2639)
+
 ## Various
 
 <details>

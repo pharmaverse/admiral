@@ -76,7 +76,7 @@
 #'
 #'   \enumerate{ \item For each event source dataset the observations as
 #'   specified by the `filter` element are selected. Then for each patient the
-#'   first observation (with respect to `date`) is selected.
+#'   first observation (with respect to `date` and `order`) is selected.
 #'
 #'   \item The `ADT` variable is set to the variable specified by the
 #'   \code{date} element. If the date variable is a datetime variable, only
@@ -91,13 +91,15 @@
 #'   single dataset.
 #'
 #'   \item For each patient the first observation (with respect to the `ADT`
-#'   variable) from the single dataset is selected. }
+#'   variable) from the single dataset is selected. If there is more than one
+#'   event with the same date, the first event with respect to the order of
+#'   events in `event_conditions` is selected.}
 #'
 #'   **Deriving the censoring observations:**
 #'
 #'   \enumerate{ \item For each censoring source dataset the observations as
 #'   specified by the `filter` element are selected. Then for each patient the
-#'   last observation (with respect to `date`) is selected.
+#'   last observation (with respect to `date` and `order`) is selected.
 #'
 #'   \item The `ADT` variable is set to the variable specified by the
 #'   \code{date} element. If the date variable is a datetime variable, only
@@ -112,7 +114,9 @@
 #'   combined into a single dataset.
 #'
 #'   \item For each patient the last observation (with respect to the `ADT`
-#'   variable) from the single dataset is selected. }
+#'   variable) from the single dataset is selected.  If there is more than one
+#'   censoring with the same date, the last censoring with respect to the order
+#'   of censorings in `censor_conditions` is selected.}
 #'
 #'   For each subject (as defined by the `subject_keys` parameter) an
 #'   observation is selected. If an event is available, the event observation is
@@ -739,7 +743,7 @@ filter_date_sources <- function(sources,
       by_vars = expr_c(subject_keys, by_vars),
       order = exprs(!!date_var, tmp_source_nr),
       mode = mode,
-      check_type = check_type
+      check_type = "none"
     ) %>%
     select(-tmp_source_nr)
 }

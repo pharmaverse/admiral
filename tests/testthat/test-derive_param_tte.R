@@ -174,7 +174,7 @@ test_that("derive_param_tte Test 2: new parameter with analysis datetime is deri
 test_that("derive_param_tte Test 3: no new observations for subjects not in ADSL", {
   adsl <- tibble::tribble(
     ~USUBJID, ~DTHFL, ~DTHDT,            ~RSPDT,
-    "01",     "Y",    ymd("2021-06-12"), ymd("2021-03-04"),
+    "01",     "Y",    ymd("2021-05-05"), ymd("2021-03-04"),
     "02",     "N",    NA,                NA,
     "03",     "Y",    ymd("2021-08-21"), NA,
     "04",     "N",    NA,                ymd("2021-04-14"),
