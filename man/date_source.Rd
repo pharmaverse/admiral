@@ -21,8 +21,8 @@ datetime can be specified. An unquoted symbol or expression is expected.}
 An object of class \code{date_source}.
 }
 \description{
-\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#superseded}{\figure{lifecycle-superseded.svg}{options: alt='[Superseded]'}}}{\strong{[Superseded]}} The \code{date_source()}
-function has been superseded in favor of \code{derive_vars_extreme_event()}.
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}} The \code{date_source()}
+function has been deprecated in favor of \code{event()}.
 
 Create a \code{date_source} object as input for \code{derive_var_extreme_dt()} and
 \code{derive_var_extreme_dtm()}.
@@ -55,7 +55,7 @@ death_date <- date_source(
 \seealso{
 \code{\link[=derive_var_extreme_dtm]{derive_var_extreme_dtm()}}, \code{\link[=derive_var_extreme_dt]{derive_var_extreme_dt()}}
 
-Other superseded: 
+Other deprecated: 
 \code{\link{derive_param_extreme_record}()},
 \code{\link{derive_var_dthcaus}()},
 \code{\link{derive_var_extreme_dt}()},
@@ -63,5 +63,5 @@ Other superseded:
 \code{\link{dthcaus_source}()},
 \code{\link{get_summary_records}()}
 }
-\concept{superseded}
-\keyword{superseded}
+\concept{deprecated}
+\keyword{deprecated}

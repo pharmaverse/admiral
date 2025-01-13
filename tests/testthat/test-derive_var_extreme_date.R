@@ -23,8 +23,47 @@ ae <- tibble::tribble(
   )
 
 # derive_var_extreme_dt ----
-## Test 1: LSTALVDT is derived ----
-test_that("derive_var_extreme_dt Test 1: LSTALVDT is derived", {
+## Test 1: deprecation message if function is called ----
+test_that("derive_var_extreme_dt Test 1: deprecation message if function is called", {
+  expect_snapshot({
+    ae_start <- date_source(
+      dataset_name = "ae",
+      date = AESTDTM
+    )
+
+    ae_end <- date_source(
+      dataset_name = "ae",
+      date = AEENDTM
+    )
+
+    adsl_trtdate <- date_source(
+      dataset_name = "adsl",
+      date = TRTEDTM
+    )
+
+    adsl_dthdate <- date_source(
+      dataset_name = "adsl",
+      date = DTHDT,
+      filter = nchar(DTHDTC) >= 10
+    )
+
+
+    derive_var_extreme_dt(
+      adsl,
+      new_var = LSTALVDT,
+      source_datasets = list(ae = ae, adsl = adsl),
+      ae_start, ae_end, adsl_trtdate, adsl_dthdate,
+      mode = "last"
+    )
+  })
+})
+
+# derive_var_extreme_dt ----
+## Test 2: LSTALVDT is derived ----
+test_that("derive_var_extreme_dt Test 2: LSTALVDT is derived", {
+  # Suppress lifecycle messages within the test environment
+  withr::local_options(list(lifecycle_verbosity = "quiet"))
+
   ae_start <- date_source(
     dataset_name = "ae",
     date = AESTDTM
@@ -63,8 +102,11 @@ test_that("derive_var_extreme_dt Test 1: LSTALVDT is derived", {
   )
 })
 
-## Test 2: LSTALVDT is derived for Date class as well ----
-test_that("derive_var_extreme_dt Test 2: LSTALVDT is derived for Date class as well", {
+## Test 3: LSTALVDT is derived for Date class as well ----
+test_that("derive_var_extreme_dt Test 3: LSTALVDT is derived for Date class as well", {
+  # Suppress lifecycle messages within the test environment
+  withr::local_options(list(lifecycle_verbosity = "quiet"))
+
   adsl <- tibble::tribble(
     ~STUDYID,  ~USUBJID, ~TRTEDTM,
     "STUDY01", "1",      ymd_hms("2020-01-01T12:00:00"),
@@ -96,8 +138,11 @@ test_that("derive_var_extreme_dt Test 2: LSTALVDT is derived for Date class as w
   )
 })
 
-## Test 3: `NA` dates are excluded ----
-test_that("derive_var_extreme_dt Test 3: `NA` dates are excluded", {
+## Test 4: `NA` dates are excluded ----
+test_that("derive_var_extreme_dt Test 4: `NA` dates are excluded", {
+  # Suppress lifecycle messages within the test environment
+  withr::local_options(list(lifecycle_verbosity = "quiet"))
+
   ae_end <- date_source(
     dataset_name = "ae",
     date = AEENDTM
@@ -121,8 +166,66 @@ test_that("derive_var_extreme_dt Test 3: `NA` dates are excluded", {
 })
 
 # derive_var_extreme_dtm ----
-## Test 4: `LSTALVDTM` and traceability variables are derived ----
-test_that("derive_var_extreme_dtm Test 4: `LSTALVDTM` and traceability variables are derived", {
+## Test 5: Message sent to users ----
+test_that("derive_var_extreme_dtm Test 5: Message sent to users", {
+  expect_snapshot({
+    ae_start <- date_source(
+      dataset_name = "ae",
+      date = convert_dtc_to_dtm(AESTDTC),
+      set_values_to = exprs(
+        LALVDOM = "AE",
+        LALVSEQ = AESEQ,
+        LALVVAR = "AESTDTC"
+      )
+    )
+
+    ae_end <- date_source(
+      dataset_name = "ae",
+      date = AEENDTM,
+      set_values_to = exprs(
+        LALVDOM = "AE",
+        LALVSEQ = AESEQ,
+        LALVVAR = "AEENDTC"
+      )
+    )
+
+    adsl_trtdate <- date_source(
+      dataset_name = "adsl",
+      date = TRTEDTM,
+      set_values_to = exprs(
+        LALVDOM = "ADSL",
+        LALVSEQ = NA_integer_,
+        LALVVAR = "TRTEDTM"
+      )
+    )
+
+    adsl_dthdate <- date_source(
+      dataset_name = "adsl",
+      date = DTHDT,
+      filter = nchar(DTHDTC) >= 10,
+      set_values_to = exprs(
+        LALVDOM = "ADSL",
+        LALVSEQ = NA_integer_,
+        LALVVAR = "DTHDTC"
+      )
+    )
+
+    derive_var_extreme_dtm(
+      adsl,
+      new_var = LSTALVDTM,
+      source_datasets = list(ae = ae, adsl = adsl),
+      ae_start, ae_end, adsl_trtdate, adsl_dthdate,
+      mode = "last"
+    )
+  })
+})
+
+# derive_var_extreme_dtm ----
+## Test 6: `LSTALVDTM` and traceability variables are derived ----
+test_that("derive_var_extreme_dtm Test 6: `LSTALVDTM` and traceability variables are derived", {
+  # Suppress lifecycle messages within the test environment
+  withr::local_options(list(lifecycle_verbosity = "quiet"))
+
   ae_start <- date_source(
     dataset_name = "ae",
     date = convert_dtc_to_dtm(AESTDTC),
@@ -187,8 +290,11 @@ test_that("derive_var_extreme_dtm Test 4: `LSTALVDTM` and traceability variables
   )
 })
 
-## Test 5: error is issued if `--DTC` variable is specified ----
-test_that("derive_var_extreme_dtm Test 5: error is issued if `--DTC` variable is specified", {
+## Test 7: error is issued if `--DTC` variable is specified ----
+test_that("derive_var_extreme_dtm Test 7: error is issued if `--DTC` variable is specified", {
+  # Suppress lifecycle messages within the test environment
+  withr::local_options(list(lifecycle_verbosity = "quiet"))
+
   ae_start <- date_source(
     dataset_name = "ae",
     date = AESTDTC,
@@ -211,26 +317,31 @@ test_that("derive_var_extreme_dtm Test 5: error is issued if `--DTC` variable is
   )
 })
 
-## Test 6: error if source dataset is not available ----
-test_that("derive_var_extreme_dtm Test 6: error if source dataset is not available", {
-  ae_start <- date_source(
-    dataset_name = "ae",
-    date = AESTDT,
-    set_values_to = exprs(
-      LALVDOM = "AE",
-      LALVSEQ = AESEQ,
-      LALVVAR = "AESTDTC"
-    )
-  )
+## Test 8: error if source dataset is not available ----
+test_that("derive_var_extreme_dtm Test 8: error if source dataset is not available", {
+  # Suppress lifecycle messages within the test environment
+  withr::local_options(list(lifecycle_verbosity = "quiet"))
 
   expect_snapshot(
-    derive_var_extreme_dtm(
-      adsl,
-      new_var = LSTALVDTM,
-      source_datasets = list(ea = ae),
-      ae_start,
-      mode = "last"
-    ),
+    {
+      ae_start <- date_source(
+        dataset_name = "ae",
+        date = AESTDT,
+        set_values_to = exprs(
+          LALVDOM = "AE",
+          LALVSEQ = AESEQ,
+          LALVVAR = "AESTDTC"
+        )
+      )
+
+      derive_var_extreme_dtm(
+        adsl,
+        new_var = LSTALVDTM,
+        source_datasets = list(ea = ae),
+        ae_start,
+        mode = "last"
+      )
+    },
     error = TRUE
   )
 })

@@ -1,8 +1,8 @@
 #' Derive First or Last Datetime from Multiple Sources
 #'
 #' @description
-#' `r lifecycle::badge("superseded")` The `derive_var_extreme_dtm()`
-#' function has been superseded in favor of `derive_vars_extreme_event()`.
+#' `r lifecycle::badge("deprecated")` The `derive_var_extreme_dtm()`
+#' function has been deprecated in favor of `derive_vars_extreme_event()`.
 #'
 #' Add the first or last datetime from multiple sources to the dataset, e.g.,
 #' the last known alive datetime (`LSTALVDTM`).
@@ -53,8 +53,8 @@
 #' @return The input dataset with the new variable added.
 #'
 #'
-#' @family superseded
-#' @keywords superseded
+#' @family deprecated
+#' @keywords deprecated
 #'
 #' @seealso [date_source()], [derive_var_extreme_dt()],
 #'   [derive_vars_merged()]
@@ -234,6 +234,17 @@ derive_var_extreme_dtm <- function(dataset,
                                    source_datasets,
                                    mode,
                                    subject_keys = get_admiral_option("subject_keys")) {
+  deprecate_inform(
+    when = "1.2.0",
+    what = "derive_var_extreme_dtm()",
+    with = "derive_vars_extreme_event()",
+    details = c(
+      x = "This message will turn into a warning at the beginning of 2026.",
+      i = "See admiral's deprecation guidance:
+      https://pharmaverse.github.io/admiraldev/dev/articles/programming_strategy.html#deprecation"
+    )
+  )
+
   assert_vars(subject_keys)
   assert_data_frame(dataset, required_vars = subject_keys)
   new_var <- assert_symbol(enexpr(new_var))
@@ -342,8 +353,8 @@ derive_var_extreme_dtm <- function(dataset,
 #' Derive First or Last Date from Multiple Sources
 #'
 #' @description
-#' `r lifecycle::badge("superseded")` The `derive_var_extreme_dt()`
-#' function has been superseded in favor of `derive_vars_extreme_event()`.
+#' `r lifecycle::badge("deprecated")` The `derive_var_extreme_dt()`
+#' function has been deprecated in favor of `derive_vars_extreme_event()`.
 #'
 #' Add the first or last date from multiple sources to the
 #' dataset, e.g., the last known alive date (`LSTALVDT`).
@@ -376,8 +387,8 @@ derive_var_extreme_dtm <- function(dataset,
 #' @return The input dataset with the new variable added.
 #'
 #'
-#' @family superseded
-#' @keywords superseded
+#' @family deprecated
+#' @keywords deprecated
 #'
 #' @seealso [date_source()], [derive_var_extreme_dtm()], [derive_vars_merged()]
 #'
@@ -556,6 +567,18 @@ derive_var_extreme_dt <- function(dataset,
                                   source_datasets,
                                   mode,
                                   subject_keys = get_admiral_option("subject_keys")) {
+  deprecate_inform(
+    when = "1.2.0",
+    what = "derive_var_extreme_dt()",
+    with = "derive_vars_extreme_event()",
+    details = c(
+      x = "This message will turn into a warning at the beginning of 2026.",
+      i = "See admiral's deprecation guidance:
+      https://pharmaverse.github.io/admiraldev/dev/articles/programming_strategy.html#deprecation"
+    )
+  )
+
+
   new_var <- assert_symbol(enexpr(new_var))
 
   sources <- list(...)
@@ -575,8 +598,8 @@ derive_var_extreme_dt <- function(dataset,
 #' Create a `date_source` object
 #'
 #' @description
-#' `r lifecycle::badge("superseded")` The `date_source()`
-#' function has been superseded in favor of `derive_vars_extreme_event()`.
+#' `r lifecycle::badge("deprecated")` The `date_source()`
+#' function has been deprecated in favor of `event()`.
 #'
 #' Create a `date_source` object as input for `derive_var_extreme_dt()` and
 #' `derive_var_extreme_dtm()`.
@@ -593,8 +616,8 @@ derive_var_extreme_dt <- function(dataset,
 #'
 #' @seealso [derive_var_extreme_dtm()], [derive_var_extreme_dt()]
 #'
-#' @family superseded
-#' @keywords superseded
+#' @family deprecated
+#' @keywords deprecated
 #'
 #' @export
 #'
@@ -628,6 +651,17 @@ date_source <- function(dataset_name,
                         filter = NULL,
                         date,
                         set_values_to = NULL) {
+  deprecate_inform(
+    when = "1.2.0",
+    what = "date_source()",
+    with = "event()",
+    details = c(
+      x = "This message will turn into a warning at the beginning of 2026.",
+      i = "See admiral's deprecation guidance:
+      https://pharmaverse.github.io/admiraldev/dev/articles/programming_strategy.html#deprecation"
+    )
+  )
+
   out <- list(
     dataset_name = assert_character_scalar(dataset_name),
     filter = assert_filter_cond(enexpr(filter), optional = TRUE),
