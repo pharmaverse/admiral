@@ -1,8 +1,8 @@
 #' Derive Death Cause
 #'
 #' @description
-#' `r lifecycle::badge("superseded")` The `derive_var_dthcaus()`
-#' function has been superseded in favor of `derive_vars_extreme_event()`.
+#' `r lifecycle::badge("deprecated")` The `derive_var_dthcaus()`
+#' function has been deprecated in favor of `derive_vars_extreme_event()`.
 #'
 #' Derive death cause (`DTHCAUS`) and add traceability variables if required.
 #'
@@ -26,8 +26,8 @@
 #' equivalent, the first source will be kept, so the user should provide the inputs in
 #' the preferred order.
 #'
-#' @family superseded
-#' @keywords superseded
+#' @family deprecated
+#' @keywords deprecated
 #'
 #' @return The input dataset with `DTHCAUS` variable added.
 #'
@@ -140,6 +140,17 @@ derive_var_dthcaus <- function(dataset,
                                ...,
                                source_datasets,
                                subject_keys = get_admiral_option("subject_keys")) {
+  deprecate_inform(
+    when = "1.2.0",
+    what = "derive_var_dthcaus()",
+    with = "derive_vars_extreme_event()",
+    details = c(
+      x = "This message will turn into a warning at the beginning of 2026.",
+      i = "See admiral's deprecation guidance:
+      https://pharmaverse.github.io/admiraldev/dev/articles/programming_strategy.html#deprecation"
+    )
+  )
+
   assert_vars(subject_keys)
   assert_data_frame(dataset, required_vars = subject_keys)
   assert_list_of(source_datasets, "data.frame")
@@ -247,9 +258,9 @@ derive_var_dthcaus <- function(dataset,
 #' Create a `dthcaus_source` Object
 #'
 #' @description
-#' `r lifecycle::badge("superseded")` The `derive_var_dthcaus()`
-#' function and `dthcaus_source()` have been superseded in favor of
-#' `derive_vars_extreme_event()`.
+#' `r lifecycle::badge("deprecated")` The `dthcaus_source()`
+#' function and `dthcaus_source()` have been deprecated in favor of
+#' `event()`.
 #'
 #' @param dataset_name The name of the dataset, i.e. a string, used to search for
 #'   the death cause.
@@ -282,8 +293,8 @@ derive_var_dthcaus <- function(dataset,
 #'
 #' @param set_values_to Variables to be set to trace the source dataset
 #'
-#' @family superseded
-#' @keywords superseded
+#' @family deprecated
+#' @keywords deprecated
 #'
 #'
 #' @export
@@ -317,6 +328,17 @@ dthcaus_source <- function(dataset_name,
                            mode = "first",
                            dthcaus,
                            set_values_to = NULL) {
+  deprecate_inform(
+    when = "1.2.0",
+    what = "dthcaus_source()",
+    with = "event()",
+    details = c(
+      x = "This message will turn into a warning at the beginning of 2026.",
+      i = "See admiral's deprecation guidance:
+      https://pharmaverse.github.io/admiraldev/dev/articles/programming_strategy.html#deprecation"
+    )
+  )
+
   out <- list(
     dataset_name = assert_character_scalar(dataset_name),
     filter = assert_filter_cond(enexpr(filter), optional = TRUE),

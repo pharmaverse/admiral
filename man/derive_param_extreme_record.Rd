@@ -75,8 +75,8 @@ The input dataset with the first or last observation of each by group
 added as new observations.
 }
 \description{
-\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#superseded}{\figure{lifecycle-superseded.svg}{options: alt='[Superseded]'}}}{\strong{[Superseded]}} The \code{derive_param_extreme_record()}
-function has been superseded in favor of \code{derive_extreme_event()}.
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}} The \code{derive_param_extreme_record()}
+function has been deprecated in favor of \code{derive_extreme_event()}.
 
 Generates parameter based on the first or last observation from multiple
 source datasets, based on user-defined filter, order and by group criteria.
@@ -145,7 +145,7 @@ derive_param_extreme_record(
 )
 }
 \seealso{
-Other superseded: 
+Other deprecated: 
 \code{\link{date_source}()},
 \code{\link{derive_var_dthcaus}()},
 \code{\link{derive_var_extreme_dt}()},
@@ -153,5 +153,5 @@ Other superseded:
 \code{\link{dthcaus_source}()},
 \code{\link{get_summary_records}()}
 }
-\concept{superseded}
-\keyword{superseded}
+\concept{deprecated}
+\keyword{deprecated}
