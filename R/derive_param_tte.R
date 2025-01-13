@@ -702,8 +702,8 @@ filter_date_sources <- function(sources,
         cnd_funs[[check_type]](
           c(
             paste(
-              "Dataset {.val {sources[[i]]$dataset_name}} contains duplicate records with respect to",
-              "{.var {cnd$by_vars}}"
+              "Dataset {.val {sources[[i]]$dataset_name}} contains duplicate",
+              "records with respect to {.var {cnd$by_vars}}"
             ),
             i = "Run {.run admiral::get_duplicates_dataset()} to access the duplicate records"
           ),
