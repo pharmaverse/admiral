@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">admiral</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.1.1.9054</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.1.1.9055</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -1154,9 +1154,13 @@
         </dt>
         <dd>rlang exprs</dd>
       </dl></div><div class="section level2">
-      <h2 id="superseded">Superseded<a class="anchor" aria-label="anchor" href="#superseded"></a></h2>
+      <h2 id="deprecated">Deprecated<a class="anchor" aria-label="anchor" href="#deprecated"></a></h2>
 
-      <div class="section-desc"><p>Superseded functions have been replaced with better functions. However, we will not be removing these functions from <a href="https://pharmaverse.github.io/admiral/">admiral</a>. We do strongly encourage you to make the switch over.</p></div>
+      <div class="section-desc"><p>Functions and arguments may need to be removed or replaced over time. In such cases, the function or argument will enter a 3 year deprecation cycle. The cycle will be tied as close as sensibly possible to a package release.</p><p>When a function is deprecated:</p><ul><li>In Year 1 there will be a message issued if you use the function/argument, but it will still be available to use.</li>
+<li>In Year 2 a warning will be produced if you use the function/argument, but it will still be available to use.</li>
+<li>In Year 3, an error will be produced if you use the function/argument and no longer be able to use.</li>
+<li>Finally, after 3 years, the function/argument and related documentation and tests will be removed from <a href="https://pharmaverse.github.io/admiral/">admiral</a>.</li>
+</ul><p><em>Note: Guidance on replacement functionality will be found in the message produced as well as in the function’s documentation</em></p><p>Below, you can find a list of functions in the process of being deprecated:</p></div>
 
 
     </div><div class="section level2">
@@ -1167,43 +1171,43 @@
       <dl><dt>
 
           <code><a href="date_source.html">date_source()</a></code>
-          <span class="badge lifecycle lifecycle-superseded">superseded</span>
+          <span class="badge lifecycle lifecycle-deprecated">deprecated</span>
         </dt>
         <dd>Create a <code>date_source</code> object</dd>
       </dl><dl><dt>
 
           <code><a href="derive_param_extreme_record.html">derive_param_extreme_record()</a></code>
-          <span class="badge lifecycle lifecycle-superseded">superseded</span>
+          <span class="badge lifecycle lifecycle-deprecated">deprecated</span>
         </dt>
         <dd>Adds a Parameter Based on First or Last Record from Multiple Sources</dd>
       </dl><dl><dt>
 
           <code><a href="derive_var_dthcaus.html">derive_var_dthcaus()</a></code>
-          <span class="badge lifecycle lifecycle-superseded">superseded</span>
+          <span class="badge lifecycle lifecycle-deprecated">deprecated</span>
         </dt>
         <dd>Derive Death Cause</dd>
       </dl><dl><dt>
 
           <code><a href="derive_var_extreme_dt.html">derive_var_extreme_dt()</a></code>
-          <span class="badge lifecycle lifecycle-superseded">superseded</span>
+          <span class="badge lifecycle lifecycle-deprecated">deprecated</span>
         </dt>
         <dd>Derive First or Last Date from Multiple Sources</dd>
       </dl><dl><dt>
 
           <code><a href="derive_var_extreme_dtm.html">derive_var_extreme_dtm()</a></code>
-          <span class="badge lifecycle lifecycle-superseded">superseded</span>
+          <span class="badge lifecycle lifecycle-deprecated">deprecated</span>
         </dt>
         <dd>Derive First or Last Datetime from Multiple Sources</dd>
       </dl><dl><dt>
 
           <code><a href="dthcaus_source.html">dthcaus_source()</a></code>
-          <span class="badge lifecycle lifecycle-superseded">superseded</span>
+          <span class="badge lifecycle lifecycle-deprecated">deprecated</span>
         </dt>
         <dd>Create a <code>dthcaus_source</code> Object</dd>
       </dl><dl><dt>
 
           <code><a href="get_summary_records.html">get_summary_records()</a></code>
-          <span class="badge lifecycle lifecycle-superseded">superseded</span>
+          <span class="badge lifecycle lifecycle-deprecated">deprecated</span>
         </dt>
         <dd>Create Summary Records</dd>
       </dl></div>

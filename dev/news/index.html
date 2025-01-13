@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">admiral</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.1.1.9054</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.1.1.9055</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -100,15 +100,31 @@
 </ul></div>
 <div class="section level3">
 <h3 id="breaking-changes-development-version">Breaking Changes<a class="anchor" aria-label="anchor" href="#breaking-changes-development-version"></a></h3>
-<ul><li>The following function arguments are entering the next phase of the deprecation process: (<a href="https://github.com/pharmaverse/admiral/issues/2487" class="external-link">#2487</a>)</li>
-</ul><div class="section level4">
-<h4 id="phase-warning-development-version">Phase 1 (warning)<a class="anchor" aria-label="anchor" href="#phase-warning-development-version"></a></h4>
-</div>
-<div class="section level4">
-<h4 id="phase-error-development-version">Phase 2 (error)<a class="anchor" aria-label="anchor" href="#phase-error-development-version"></a></h4>
-</div>
-<div class="section level4">
-<h4 id="phase-removed-development-version">Phase 3 (removed)<a class="anchor" aria-label="anchor" href="#phase-removed-development-version"></a></h4>
+<ul><li>
+<p>The following function arguments are entering the next phase of the <a href="https://pharmaverse.github.io/admiraldev/articles/programming_strategy.html#deprecation">deprecation process</a>: (<a href="https://github.com/pharmaverse/admiral/issues/2487" class="external-link">#2487</a>) (<a href="https://github.com/pharmaverse/admiral/issues/2595" class="external-link">#2595</a>)</p>
+<p><strong>Phase 1 (message)</strong></p>
+<ul><li>
+<code><a href="../reference/derive_param_extreme_record.html">derive_param_extreme_record()</a></code> is deprecated and replaced by <code><a href="../reference/derive_extreme_event.html">derive_extreme_event()</a></code>
+</li>
+<li>
+<code><a href="../reference/derive_var_dthcaus.html">derive_var_dthcaus()</a></code> is deprecated and replaced by <code><a href="../reference/derive_vars_extreme_event.html">derive_vars_extreme_event()</a></code>
+</li>
+<li>
+<code><a href="../reference/date_source.html">date_source()</a></code> is deprecated and replaced by <code><a href="../reference/event.html">event()</a></code>
+</li>
+<li>
+<code><a href="../reference/dthcaus_source.html">dthcaus_source()</a></code> is deprecated and replaced by <code><a href="../reference/event.html">event()</a></code>
+</li>
+<li>
+<code><a href="../reference/derive_var_extreme_dt.html">derive_var_extreme_dt()</a></code> and <code><a href="../reference/derive_var_extreme_dtm.html">derive_var_extreme_dtm()</a></code> are deprecated and replaced by <code><a href="../reference/derive_vars_extreme_event.html">derive_vars_extreme_event()</a></code>
+</li>
+<li>
+<code><a href="../reference/get_summary_records.html">get_summary_records()</a></code> is deprecated. Please use <code><a href="../reference/derive_summary_records.html">derive_summary_records()</a></code> with the <code>dataset_add</code> argument and without the <code>dataset</code> argument.</li>
+</ul><p><strong>Phase 2 (warning)</strong></p>
+<p>No functions or arguments in this Phase</p>
+<p><strong>Phase 3 (error)</strong></p>
+<p>No functions or arguments in this Phase</p>
+<p><strong>Phase 4 (removed)</strong></p>
 <ul><li><code>consolidate_metadata(check_keys)</code></li>
 <li>Removed at v1.1.1 <code>compute_egfr(wt)</code>
 </li>
@@ -128,8 +144,8 @@
 <li><code>derive_var_joined_exist_flag(first_cond, filter)</code></li>
 <li><code>event_joined(first_cond)</code></li>
 <li><code>filter_joined(first_cond, filter)</code></li>
+</ul></li>
 </ul></div>
-</div>
 <div class="section level3">
 <h3 id="documentation-development-version">Documentation<a class="anchor" aria-label="anchor" href="#documentation-development-version"></a></h3>
 <ul><li><p><code><a href="../reference/derive_locf_records.html">derive_locf_records()</a></code> documentation example was fixed to display LOCF records. (<a href="https://github.com/pharmaverse/admiral/issues/2461" class="external-link">#2461</a>)</p></li>
