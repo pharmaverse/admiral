@@ -67,7 +67,7 @@
 #'   by variables and the date and order specified in the `event_source()` and
 #'   `censor_source()` objects.
 #'
-#'  *Permitted Values*: `"none"`, `"message"`, `"warning"`, `"error"`
+#'   *Permitted Values*: `"none"`, `"message"`, `"warning"`, `"error"`
 #'
 #' @details The following steps are performed to create the observations of the
 #'   new parameter:
@@ -271,10 +271,10 @@
 #'   mutate(STUDYID = "AB42")
 #'
 #' ae <- tribble(
-#'   ~USUBJID, ~AESTDTC, ~AESEQ, ~AEDECOD,
-#'   "01", "2021-01-03T10:56", 1, "Flu",
-#'   "01", "2021-03-04", 2, "Cough",
-#'   "01", "2021", 3, "Flu"
+#'   ~USUBJID, ~AESTDTC,           ~AESEQ, ~AEDECOD,
+#'   "01",     "2021-01-03T10:56",      1, "Flu",
+#'   "01",     "2021-03-04",            2, "Cough",
+#'   "01",     "2021",                  3, "Flu"
 #' ) %>%
 #'   mutate(STUDYID = "AB42")
 #'
@@ -325,16 +325,16 @@
 #'
 #' # Resolve tie when serious AE share a date by sorting with order argument
 #' adsl <- tribble(
-#'   ~USUBJID,    ~TRTSDT,           ~EOSDT,
-#'   "01",        ymd("2020-12-06"), ymd("2021-03-06"),
-#'   "02",        ymd("2021-01-16"), ymd("2021-02-03")
+#'   ~USUBJID, ~TRTSDT,           ~EOSDT,
+#'   "01",     ymd("2020-12-06"), ymd("2021-03-06"),
+#'   "02",     ymd("2021-01-16"), ymd("2021-02-03")
 #' ) %>% mutate(STUDYID = "AB42")
 #'
 #' ae <- tribble(
-#'   ~USUBJID, ~AESTDTC, ~AESEQ, ~AESER, ~AEDECOD,
-#'   "01", "2021-01-03", 1, "Y", "Flu",
-#'   "01", "2021-01-03", 2, "Y", "Cough",
-#'   "01", "2021-01-20", 3, "N", "Headache",
+#'   ~USUBJID, ~AESTDTC,     ~AESEQ, ~AESER, ~AEDECOD,
+#'   "01",     "2021-01-03",      1, "Y",    "Flu",
+#'   "01",     "2021-01-03",      2, "Y",    "Cough",
+#'   "01",     "2021-01-20",      3, "N",    "Headache"
 #' ) %>% mutate(
 #'   AESTDT = ymd(AESTDTC),
 #'   STUDYID = "AB42"
@@ -565,7 +565,7 @@ derive_param_tte <- function(dataset = NULL,
 #'   respect to the date is included in the output dataset. If `"last"` is
 #'   specified, the last observation is included in the output dataset.
 #'
-#'   Permitted Values:  `"first"`, `"last"`
+#'   *Permitted Values*:  `"first"`, `"last"`
 #'
 #' @param check_type Check uniqueness
 #'
@@ -573,8 +573,7 @@ derive_param_tte <- function(dataset = NULL,
 #'   if the observations of the source datasets are not unique with respect to the
 #'   by variables and the date and order specified in the `tte_source()` objects.
 #'
-#'  Default: `"none"`
-#'  Permitted Values: `"none"`, `"warning"`, `"error"`, `"message"`
+#'   *Permitted Values*: `"none"`, `"warning"`, `"error"`, `"message"`
 #'
 #' @details The following steps are performed to create the output dataset:
 #'
@@ -701,9 +700,12 @@ filter_date_sources <- function(sources,
       duplicate_records = function(cnd) {
         cnd_funs <- list(message = cli_inform, warning = cli_warn, error = cli_abort)
         cnd_funs[[check_type]](
-          paste(
-            "Dataset {.val {sources[[i]]$dataset_name}} contains duplicate records with respect to",
-            "{.var {cnd$by_vars}}"
+          c(
+            paste(
+              "Dataset {.val {sources[[i]]$dataset_name}} contains duplicate records with respect to",
+              "{.var {cnd$by_vars}}"
+            ),
+            i = "Run {.run admiral::get_duplicates_dataset()} to access the duplicate records"
           ),
           class = class(cnd))
         cnd_muffle(cnd)

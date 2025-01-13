@@ -70,6 +70,7 @@
     Condition
       Warning:
       Dataset "ae" contains duplicate records with respect to `STUDYID`, `USUBJID`, and `AESTDT`
+      i Run `admiral::get_duplicates_dataset()` to access the duplicate records
     Output
       # A tibble: 2 x 10
         USUBJID STUDYID EVENTDESC  SRCDOM SRCVAR  SRCSEQ  CNSR ADT        STARTDT   

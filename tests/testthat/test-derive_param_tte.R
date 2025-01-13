@@ -932,7 +932,7 @@ test_that("derive_param_tte Test 13: error if dataset_name not in source_datsets
   )
 })
 
-## Test 14: derive_param_tte detects duplicates when check_type = 'warning' ----
+## Test 14: detects duplicates in input datasets via pipeline functions ----
 test_that("derive_param_tte Test 14: detects duplicates in input datasets via pipeline functions", {
   # Define ADSL dataset
   adsl <- tibble::tribble(
@@ -989,9 +989,8 @@ test_that("derive_param_tte Test 14: detects duplicates in input datasets via pi
   )
 })
 
-## Test 15: derive_param_tte resolves ties using order argument when input is sorted descending
-test_that("derive_param_tte Test 15: derive_param_tte resolves ties using order argument when
-input is sorted descending", {
+## Test 15: using order for resolving ties ----
+test_that("derive_param_tte Test 15: using order for resolving ties", {
   adsl <- tibble::tribble(
     ~USUBJID, ~TRTSDT,           ~EOSDT,
     "01",     ymd("2020-12-06"), ymd("2021-03-06"),
@@ -1049,7 +1048,7 @@ input is sorted descending", {
   is chosen on tie.")
 })
 
-## Test 16: derive_param_tte produces consistent results regardless of input sort order ----
+## Test 16: produces consistent results regardless of input sort order ----
 test_that("derive_param_tte Test 16: produces consistent results regardless of input sort order", {
   # Define ADSL dataset
   adsl <- tibble::tribble(

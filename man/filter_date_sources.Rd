@@ -47,7 +47,7 @@ If \code{"first"} is specified, for each subject the first observation with
 respect to the date is included in the output dataset. If \code{"last"} is
 specified, the last observation is included in the output dataset.
 
-Permitted Values:  \code{"first"}, \code{"last"}}
+\emph{Permitted Values}:  \code{"first"}, \code{"last"}}
 
 \item{check_type}{Check uniqueness
 
@@ -55,8 +55,7 @@ If \code{"warning"}, \code{"message"}, or \code{"error"} is specified, the speci
 if the observations of the source datasets are not unique with respect to the
 by variables and the date and order specified in the \code{tte_source()} objects.
 
-Default: \code{"none"}
-Permitted Values: \code{"none"}, \code{"warning"}, \code{"error"}, \code{"message"}}
+\emph{Permitted Values}: \code{"none"}, \code{"warning"}, \code{"error"}, \code{"message"}}
 }
 \value{
 A dataset with one observation per subject as described in the
