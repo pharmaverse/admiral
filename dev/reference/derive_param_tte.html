@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">admiral</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.1.1.9056</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.1.1.9057</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -178,7 +178,7 @@ new parameter:</p>
 <p><strong>Deriving the events:</strong></p>
 <ol><li><p>For each event source dataset the observations as
 specified by the <code>filter</code> element are selected. Then for each patient the
-first observation (with respect to <code>date</code>) is selected.</p></li>
+first observation (with respect to <code>date</code> and <code>order</code>) is selected.</p></li>
 <li><p>The <code>ADT</code> variable is set to the variable specified by the
 <code>date</code> element. If the date variable is a datetime variable, only
 the datepart is copied.</p></li>
@@ -187,12 +187,14 @@ the datepart is copied.</p></li>
 added.</p></li>
 <li><p>The selected observations of all event source datasets are combined into a
 single dataset.</p></li>
-<li><p>For each patient the first observation (with respect to the <code>ADT</code>
-variable) from the single dataset is selected.</p></li>
+<li><p>For each patient the first observation (with respect to the
+<code>ADT</code>/<code>ADTM</code> variable) from the single dataset is selected. If there is
+more than one event with the same date, the first event with respect to the
+order of events in <code>event_conditions</code> is selected.</p></li>
 </ol><p><strong>Deriving the censoring observations:</strong></p>
 <ol><li><p>For each censoring source dataset the observations as
 specified by the <code>filter</code> element are selected. Then for each patient the
-last observation (with respect to <code>date</code>) is selected.</p></li>
+last observation (with respect to <code>date</code> and <code>order</code>) is selected.</p></li>
 <li><p>The <code>ADT</code> variable is set to the variable specified by the
 <code>date</code> element. If the date variable is a datetime variable, only
 the datepart is copied.</p></li>
@@ -201,8 +203,10 @@ the datepart is copied.</p></li>
 added.</p></li>
 <li><p>The selected observations of all censoring source datasets are
 combined into a single dataset.</p></li>
-<li><p>For each patient the last observation (with respect to the <code>ADT</code>
-variable) from the single dataset is selected.</p></li>
+<li><p>For each patient the last observation (with respect to the
+<code>ADT</code>/<code>ADTM</code> variable) from the single dataset is selected.  If there is
+more than one censoring with the same date, the last censoring with respect
+to the order of censorings in <code>censor_conditions</code> is selected.</p></li>
 </ol><p>For each subject (as defined by the <code>subject_keys</code> parameter) an
 observation is selected. If an event is available, the event observation is
 selected. Otherwise the censoring observation is selected.</p>
