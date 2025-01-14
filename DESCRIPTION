@@ -42,7 +42,7 @@ BugReports: https://github.com/pharmaverse/admiral/issues
 Depends: 
     R (>= 4.1)
 Imports:
-    admiraldev (>= 1.1.0.9007),
+    admiraldev (>= 1.2.0),
     cli (>= 3.6.2),
     dplyr (>= 1.0.5),
     hms (>= 0.5.3),
@@ -69,8 +69,6 @@ Suggests:
     withr
 VignetteBuilder: 
     knitr
-Remotes: 
-    pharmaverse/admiraldev
 Config/Needs/website: gert
 Config/testthat/edition: 3
 Encoding: UTF-8
