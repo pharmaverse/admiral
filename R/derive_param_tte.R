@@ -90,10 +90,10 @@
 #'   \item The selected observations of all event source datasets are combined into a
 #'   single dataset.
 #'
-#'   \item For each patient the first observation (with respect to the `ADT`
-#'   variable) from the single dataset is selected. If there is more than one
-#'   event with the same date, the first event with respect to the order of
-#'   events in `event_conditions` is selected.}
+#'   \item For each patient the first observation (with respect to the
+#'   `ADT`/`ADTM` variable) from the single dataset is selected. If there is
+#'   more than one event with the same date, the first event with respect to the
+#'   order of events in `event_conditions` is selected.}
 #'
 #'   **Deriving the censoring observations:**
 #'
@@ -113,10 +113,10 @@
 #'   \item The selected observations of all censoring source datasets are
 #'   combined into a single dataset.
 #'
-#'   \item For each patient the last observation (with respect to the `ADT`
-#'   variable) from the single dataset is selected.  If there is more than one
-#'   censoring with the same date, the last censoring with respect to the order
-#'   of censorings in `censor_conditions` is selected.}
+#'   \item For each patient the last observation (with respect to the
+#'   `ADT`/`ADTM` variable) from the single dataset is selected.  If there is
+#'   more than one censoring with the same date, the last censoring with respect
+#'   to the order of censorings in `censor_conditions` is selected.}
 #'
 #'   For each subject (as defined by the `subject_keys` parameter) an
 #'   observation is selected. If an event is available, the event observation is
@@ -502,7 +502,7 @@ derive_param_tte <- function(dataset = NULL,
     by_vars = expr_c(subject_keys, by_vars),
     order = exprs(!!tmp_event),
     mode = "last",
-    check_type = check_type
+    check_type = "none"
   ) %>%
     inner_join(
       adsl,
