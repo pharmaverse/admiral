@@ -48,8 +48,6 @@ or that the queries dataset contains duplicates. (#2543)
 
 - Update `derive_vars_period()` to make it work when there is only one new variable. (#2582)
 
-- In `get_summary_records()`, previously deprecated formal arguments `analysis_var` and `summary_fun` now removed from function, documentation, tests etc. (#2521)
-
 - A check was added to `derive_vars_transposed()` and `derive_vars_atc()` which
 stops execution if the records in `dataset_merge` or `dataset_facm` respectively
 are not unique. (#2563)
@@ -100,6 +98,8 @@ default. To enable it the new admiral option `save_memory` has to be set to
     - `derive_var_joined_exist_flag(first_cond, filter)`
     - `event_joined(first_cond)`
     - `filter_joined(first_cond, filter)`
+    - In `get_summary_records()`, previously deprecated formal arguments `analysis_var` and   
+    `summary_fun` now removed from function, documentation, tests etc. (#2521)
 
 ## Documentation
 
