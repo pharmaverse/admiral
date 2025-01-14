@@ -170,14 +170,16 @@ test_that("derive_param_tte Test 2: new parameter with analysis datetime is deri
   )
 })
 
-## Test 3: no new observations for subjects not in ADSL ----
-test_that("derive_param_tte Test 3: no new observations for subjects not in ADSL", {
+## Test 3: no records for subjects not in ADSL, multiple events/cens ----
+test_that("derive_param_tte Test 3: no records for subjects not in ADSL, multiple events/cens", {
+  # For subject 01 both events are at the same date, for subject 04 both censorings
+  # are at the same date
   adsl <- tibble::tribble(
     ~USUBJID, ~DTHFL, ~DTHDT,            ~RSPDT,
-    "01",     "Y",    ymd("2021-06-12"), ymd("2021-03-04"),
+    "01",     "Y",    ymd("2021-05-05"), ymd("2021-03-04"),
     "02",     "N",    NA,                NA,
     "03",     "Y",    ymd("2021-08-21"), NA,
-    "04",     "N",    NA,                ymd("2021-04-14"),
+    "04",     "N",    NA,                ymd("2021-05-15"),
     "05",     "N",    NA,                NA
   ) %>%
     mutate(STUDYID = "AB42")
@@ -189,7 +191,7 @@ test_that("derive_param_tte Test 3: no new observations for subjects not in ADSL
     "01",     "PD",   ymd("2021-05-05"), 3,
     "02",     "PD",   ymd("2021-02-03"), 1,
     "04",     "SD",   ymd("2021-02-13"), 1,
-    "04",     "PR",   ymd("2021-04-14"), 2,
+    "04",     "SD",   ymd("2021-04-14"), 2,
     "04",     "CR",   ymd("2021-05-15"), 3
   ) %>%
     mutate(STUDYID = "AB42", PARAMCD = "OVR")
@@ -259,7 +261,7 @@ test_that("derive_param_tte Test 3: no new observations for subjects not in ADSL
     dataset_adsl = filter(adsl, !is.na(RSPDT)),
     start_date = RSPDT,
     event_conditions = list(pd, death),
-    censor_conditions = list(lastvisit, first_response),
+    censor_conditions = list(first_response, lastvisit),
     source_datasets = list(adsl = adsl, adrs = adrs),
     set_values_to = exprs(
       PARAMCD = "DURRSP",
