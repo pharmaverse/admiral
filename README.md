@@ -45,13 +45,13 @@ __NB:__ We strive for a regular 6 month release schedule.
 | Release Schedule | Phase 1- Date and Packages                                               | Phase 2- Date and Packages                                         |
 | ---------------- | ------------------------------------------------------------------------ | ------------------------------------------------------------------ |
 |                  |                                                                          |                                                                    |
-| Q2-2025          | mid-June                                                                 | mid-June                                                           |
+| Q2-2025          | Mid-June                                                                 | Mid-June                                                           |
 |                  | [{pharmaversesdtm}](https://pharmaverse.github.io/pharmaversesdtm/)      | [{admiralonco}](https://pharmaverse.github.io/admiralonco/)        |
 |                  | [{admiraldev}](https://pharmaverse.github.io/admiraldev/)                | [{admiralophtha}](https://pharmaverse.github.io/admiralophtha/)    |
 |                  | [{admiral}](https://pharmaverse.github.io/admiral/)                      | [{admiralvaccine}](https://pharmaverse.github.io/admiralvaccine/)  |                        
 |                  |                                                                          | [{pharmaverseadam}](https://pharmaverse.github.io/pharmaverseadam/)|
 |                  |                                                                          |                                                                    | 
-| Q4-2025/Q1 2026  | late December 2025/early January 2026                                    | late December 2025/early January 2026                              |
+| Q4-2025/Q1 2026  | Late December 2025/early January 2026                                    | Late December 2025/early January 2026                              |
 |                  | [{pharmaversesdtm}](https://pharmaverse.github.io/pharmaversesdtm/)      | [{admiralonco}](https://pharmaverse.github.io/admiralonco/)        |
 |                  | [{admiraldev}](https://pharmaverse.github.io/admiraldev/)                | [{admiralophtha}](https://pharmaverse.github.io/admiralophtha/)    |
 |                  | [{admiral}](https://pharmaverse.github.io/admiral/)                      | [{admiralvaccine}](https://pharmaverse.github.io/admiralvaccine/)  |                        
