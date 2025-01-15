@@ -1,3 +1,32 @@
+# admiral (development version)
+
+## New Features
+
+## Updates of Existing Functions
+
+## Breaking Changes
+
+- The following function arguments are entering the next phase of the [deprecation process](https://pharmaverse.github.io/admiraldev/articles/programming_strategy.html#deprecation): (#2487) (#2595)
+
+    **Phase 1 (message)**
+  
+    **Phase 2 (warning)**
+    
+    **Phase 3 (error)**
+    
+    **Phase 4 (removed)**
+
+## Documentation
+
+## Various
+
+<details>
+<summary>Developer Notes</summary>
+
+</details>
+
+
+
 # admiral 1.2.0
 
 ## New Features
