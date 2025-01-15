@@ -5,7 +5,6 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<meta name="description" content="admiral">
 <title>Programming Concepts and Conventions • admiral</title>
 <!-- favicons --><link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
 <link rel="icon" type="image/png" sizes="32x32" href="../favicon-32x32.png">
@@ -15,27 +14,21 @@
 <link rel="apple-touch-icon" type="image/png" sizes="60x60" href="../apple-touch-icon-60x60.png">
 <script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
-<script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
-<!-- bootstrap-toc --><script src="https://cdn.jsdelivr.net/gh/afeld/bootstrap-toc@v1.0.1/dist/bootstrap-toc.min.js" integrity="sha256-4veVQbu7//Lk5TSmc7YV48MxtMy98e26cf5MrgZYnwo=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.11/clipboard.min.js" integrity="sha512-7O5pXpc0oCRrxk8RUfDYFgn0nO1t+jLuIOQdOMRp4APB7uZ4vSjspzp5y6YDtDs4VzUSTbWzBFZ/LKJhnyFOKw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script><!-- search --><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Programming Concepts and Conventions">
-<meta property="og:description" content="admiral">
-<meta property="og:image" content="https://pharmaverse.github.io/admiral/logo.png">
-<!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
-<script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
-<script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
-<![endif]-->
+<script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
+<link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
+<script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><script src="../deps/MathJax-3.2.2/tex-chtml.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Programming Concepts and Conventions">
 </head>
 <body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
-    
 
-    <nav class="navbar fixed-top navbar-dark navbar-expand-lg bg-primary" data-bs-theme="dark"><div class="container">
-    
+
+    <nav class="navbar navbar-expand-lg fixed-top bg-primary" data-bs-theme="dark" aria-label="Site navigation"><div class="container">
+
     <a class="navbar-brand me-2" href="../index.html">admiral</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">1.1.1</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">1.2.0</small>
 
-    
+
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
@@ -43,80 +36,56 @@
     <div id="navbar" class="collapse navbar-collapse ms-3">
       <ul class="navbar-nav me-auto">
 <li class="nav-item dropdown">
-  <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-get-started">Get Started</a>
-  <div class="dropdown-menu" aria-labelledby="dropdown-get-started">
-    <a class="dropdown-item" href="../articles/admiral.html">Get Started</a>
-    <a class="dropdown-item" href="https://pharmaverse.github.io/admiraldiscovery/articles/reactable.html">CDISC Variables mapped to admiral functions</a>
-    <a class="external-link dropdown-item" href="https://github.com/pharmaverse/admiral/blob/main/inst/cheatsheet/admiral_cheatsheet.pdf">Cheatsheet</a>
-  </div>
+  <button class="nav-link dropdown-toggle" type="button" id="dropdown-get-started" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Get Started</button>
+  <ul class="dropdown-menu" aria-labelledby="dropdown-get-started">
+<li><a class="dropdown-item" href="../articles/admiral.html">Get Started</a></li>
+    <li><a class="external-link dropdown-item" href="https://github.com/pharmaverse/admiral/blob/main/inst/cheatsheet/admiral_cheatsheet.pdf">Cheatsheet</a></li>
+    <li><a class="dropdown-item" href="https://pharmaverse.github.io/admiraldiscovery/articles/presentation_archive.html">Presentation Archive</a></li>
+  </ul>
 </li>
-<li class="nav-item">
-  <a class="nav-link" href="../reference/">Reference</a>
-</li>
+<li class="nav-item"><a class="nav-link" href="../reference/">Reference</a></li>
 <li class="active nav-item dropdown">
-  <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-user-guides">User Guides</a>
-  <div class="dropdown-menu" aria-labelledby="dropdown-user-guides">
-    <h6 class="dropdown-header" data-toc-skip>General Guides</h6>
-    <a class="dropdown-item" href="../articles/concepts_conventions.html">Programming Concepts and Conventions</a>
-    <a class="dropdown-item" href="../articles/generic.html">Generic Derivations</a>
-    <a class="dropdown-item" href="../articles/higher_order.html">Higher Order Functions</a>
-    <div class="dropdown-divider"></div>
-    <h6 class="dropdown-header" data-toc-skip>ADaM Script Guides</h6>
-    <a class="dropdown-item" href="../articles/adsl.html">Creating a Basic ADSL</a>
-    <a class="dropdown-item" href="../articles/occds.html">Creating an OCCDS ADaM</a>
-    <a class="dropdown-item" href="../articles/bds_finding.html">Creating a BDS Findings ADAM</a>
-    <a class="dropdown-item" href="../articles/bds_exposure.html">Creating a BDS Exposure ADaM</a>
-    <a class="dropdown-item" href="../articles/bds_tte.html">Creating a BDS Time-to-Event ADaM</a>
-    <a class="dropdown-item" href="../articles/questionnaires.html">Creating Questionnaire ADaMs</a>
-    <a class="dropdown-item" href="../articles/pk_adnca.html">Creating a PK NCA or Population PK ADaM</a>
-    <a class="dropdown-item" href="../articles/hys_law.html">Hy's Law Implementation</a>
-    <div class="dropdown-divider"></div>
-    <h6 class="dropdown-header" data-toc-skip>Special Topics Guides</h6>
-    <a class="dropdown-item" href="../articles/imputation.html">Date and Time Imputation</a>
-    <a class="dropdown-item" href="../articles/visits_periods.html">Visit and Period Variables</a>
-    <a class="dropdown-item" href="../articles/queries_dataset.html">Queries Dataset Documentation</a>
-    <a class="dropdown-item" href="../articles/lab_grading.html">Lab Grading</a>
-    <div class="dropdown-divider"></div>
-    <a class="dropdown-item" href="../articles/faq.html">FAQ</a>
-  </div>
+  <button class="nav-link dropdown-toggle" type="button" id="dropdown-user-guides" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">User Guides</button>
+  <ul class="dropdown-menu" aria-labelledby="dropdown-user-guides">
+<li><h6 class="dropdown-header" data-toc-skip>General Guides</h6></li>
+    <li><a class="dropdown-item" href="../articles/concepts_conventions.html">Programming Concepts and Conventions</a></li>
+    <li><a class="dropdown-item" href="../articles/generic.html">Generic Derivations</a></li>
+    <li><a class="dropdown-item" href="../articles/higher_order.html">Higher Order Functions</a></li>
+    <li><hr class="dropdown-divider"></li>
+    <li><h6 class="dropdown-header" data-toc-skip>ADaM Script Guides</h6></li>
+    <li><a class="dropdown-item" href="../articles/adsl.html">Creating a Basic ADSL</a></li>
+    <li><a class="dropdown-item" href="../articles/occds.html">Creating an OCCDS ADaM</a></li>
+    <li><a class="dropdown-item" href="../articles/bds_finding.html">Creating a BDS Findings ADAM</a></li>
+    <li><a class="dropdown-item" href="../articles/bds_exposure.html">Creating a BDS Exposure ADaM</a></li>
+    <li><a class="dropdown-item" href="../articles/bds_tte.html">Creating a BDS Time-to-Event ADaM</a></li>
+    <li><a class="dropdown-item" href="../articles/questionnaires.html">Creating Questionnaire ADaMs</a></li>
+    <li><a class="dropdown-item" href="../articles/pk_adnca.html">Creating a PK NCA or Population PK ADaM</a></li>
+    <li><a class="dropdown-item" href="../articles/hys_law.html">Hy's Law Implementation</a></li>
+    <li><hr class="dropdown-divider"></li>
+    <li><h6 class="dropdown-header" data-toc-skip>Special Topics Guides</h6></li>
+    <li><a class="dropdown-item" href="../articles/imputation.html">Date and Time Imputation</a></li>
+    <li><a class="dropdown-item" href="../articles/visits_periods.html">Visit and Period Variables</a></li>
+    <li><a class="dropdown-item" href="../articles/queries_dataset.html">Queries Dataset Documentation</a></li>
+    <li><a class="dropdown-item" href="../articles/lab_grading.html">Lab Grading</a></li>
+    <li><hr class="dropdown-divider"></li>
+    <li><a class="dropdown-item" href="../articles/faq.html">FAQ</a></li>
+  </ul>
 </li>
-<li class="nav-item">
-  <a class="nav-link" href="../news/index.html">Changelog</a>
-</li>
+<li class="nav-item"><a class="nav-link" href="https://pharmaverse.github.io/admiraldiscovery/articles/reactable.html">🔎 Find my function</a></li>
+<li class="nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
       </ul>
-<form class="form-inline my-2 my-lg-0" role="search">
-        <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="../search.json" id="search-input" placeholder="Search for" autocomplete="off">
-</form>
-
-      <ul class="navbar-nav">
-<li class="nav-item">
-  <a class="external-link nav-link" href="https://pharmaverse.slack.com/" aria-label="Slack">
-    <span class="fa fa-slack"></span>
-     
-  </a>
-</li>
-<li class="nav-item">
-  <a class="nav-link" href="../articles/website-versions.html" aria-label="Previous Release Websites">
-    <span class="fa fa-history"></span>
-     
-  </a>
-</li>
-<li class="nav-item">
-  <a class="external-link nav-link" href="https://github.com/pharmaverse/admiral/issues/new/choose" aria-label="New Issue">
-    <span class="fa fa-bug"></span>
-     
-  </a>
-</li>
-<li class="nav-item">
-  <a class="external-link nav-link" href="https://github.com/pharmaverse/admiral/" aria-label="github">
-    <span class="fab fa fab fa-github fa-lg"></span>
-     
-  </a>
-</li>
+<ul class="navbar-nav">
+<li class="nav-item"><form class="form-inline" role="search">
+ <input class="form-control" type="search" name="search-input" id="search-input" autocomplete="off" aria-label="Search site" placeholder="Search for" data-search-index="../search.json">
+</form></li>
+<li class="nav-item"><a class="external-link nav-link" href="https://pharmaverse.slack.com/" aria-label="Slack"><span class="fa fa-slack"></span></a></li>
+<li class="nav-item"><a class="nav-link" href="../articles/website-versions.html" aria-label="Previous Release Websites"><span class="fa fa-history"></span></a></li>
+<li class="nav-item"><a class="external-link nav-link" href="https://github.com/pharmaverse/admiral/issues/new/choose" aria-label="New Issue"><span class="fa fa-bug"></span></a></li>
+<li class="nav-item"><a class="external-link nav-link" href="https://github.com/pharmaverse/admiral/" aria-label="GitHub"><span class="fa fab fa-github fa-lg"></span></a></li>
       </ul>
 </div>
 
-    
+
   </div>
 </nav><div class="container template-article">
 
@@ -248,9 +217,8 @@ comma-separated items and returns a list of expressions.</p>
 <span><span class="co"># Return the adae object</span></span>
 <span><span class="va">adae</span></span>
 <span><span class="co">#&gt;   USUBJID  AEDECOD</span></span>
-<span><span class="co">#&gt; 1   XXX-1 HEADACHE</span></span></code></pre></div>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span></span>
+<span><span class="co">#&gt; 1   XXX-1 HEADACHE</span></span>
+<span></span>
 <span><span class="co"># Return an expression</span></span>
 <span><span class="fu"><a href="https://rlang.r-lib.org/reference/expr.html" class="external-link">expr</a></span><span class="op">(</span><span class="va">adae</span><span class="op">)</span></span>
 <span><span class="co">#&gt; adae</span></span></code></pre></div>
@@ -274,7 +242,7 @@ they please. In the same vein, the user is able to create any new
 variables they wish after the merge using the <code>new_vars</code>
 argument, to which they pass a list of expressions containing “standard”
 R code.</p>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/derive_vars_merged.html">derive_vars_merged</a></span><span class="op">(</span></span>
 <span>  <span class="va">adsl</span>,</span>
 <span>  dataset_add <span class="op">=</span> <span class="va">ex</span>,</span>
@@ -297,14 +265,13 @@ R code.</p>
 pre-existing expressions. However, it’s not immediately clear how to
 achieve this because expressions inherently pause evaluation of your
 code before it’s executed:</p>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">a</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rlang.r-lib.org/reference/expr.html" class="external-link">expr</a></span><span class="op">(</span><span class="fl">2</span><span class="op">)</span></span>
 <span><span class="va">b</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rlang.r-lib.org/reference/expr.html" class="external-link">expr</a></span><span class="op">(</span><span class="fl">3</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rlang.r-lib.org/reference/expr.html" class="external-link">expr</a></span><span class="op">(</span><span class="va">a</span> <span class="op">+</span> <span class="va">b</span><span class="op">)</span></span>
-<span><span class="co">#&gt; a + b</span></span></code></pre></div>
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># NOT 2 + 3</span></span></code></pre></div>
+<span><span class="co">#&gt; a + b</span></span>
+<span><span class="co"># NOT 2 + 3</span></span></code></pre></div>
 <p>This is where <code>!!</code> (bang-bang) comes in: provided again by
 the <a href="https://rlang.r-lib.org" class="external-link">rlang</a> package, it allows you to inject the contents
 of an expression into another expression, meaning that by using
@@ -312,7 +279,7 @@ of an expression into another expression, meaning that by using
 evaluates it. By using <code>!!</code> you are
 <strong>unquoting</strong> an expression, i.e. evaluating it before you
 pass it onwards.</p>
-<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rlang.r-lib.org/reference/expr.html" class="external-link">expr</a></span><span class="op">(</span><span class="op">!</span><span class="op">!</span><span class="va">a</span> <span class="op">+</span> <span class="op">!</span><span class="op">!</span><span class="va">b</span><span class="op">)</span></span>
 <span><span class="co">#&gt; 2 + 3</span></span></code></pre></div>
 <p>You can see an example of where <code>!!</code> comes in handy within
@@ -321,7 +288,7 @@ where the contents of an expression is unquoted so that it can be passed
 to <code><a href="../reference/derive_vars_merged.html">derive_vars_merged()</a></code>.</p>
 <p><code>!!!</code> (bang-bang-bang) is the plural version of
 <code>!!</code> and can be used to unquote a list of expressions:</p>
-<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/reexport-exprs.html">exprs</a></span><span class="op">(</span><span class="op">!</span><span class="op">!</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">a</span>, <span class="va">b</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">#&gt; [[1]]</span></span>
 <span><span class="co">#&gt; [1] 2</span></span>
@@ -332,7 +299,7 @@ to <code><a href="../reference/derive_vars_merged.html">derive_vars_merged()</a>
 to unquote a list of variables (stored as expressions) to use them
 inside of an <a href="https://pharmaverse.github.io/admiral/">admiral</a> or even <a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a> call.
 One example is the <a href="https://pharmaverse.github.io/admiral/">admiral</a> subject keys:</p>
-<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/get_admiral_option.html">get_admiral_option</a></span><span class="op">(</span><span class="st">"subject_keys"</span><span class="op">)</span></span>
 <span><span class="co">#&gt; [[1]]</span></span>
 <span><span class="co">#&gt; STUDYID</span></span>
@@ -343,20 +310,18 @@ One example is the <a href="https://pharmaverse.github.io/admiral/">admiral</a> 
 <a href="https://pharmaverse.github.io/admiral/">admiral</a> option to subset a dataset, we need to use
 <code>!!!</code> to unquote this list. Let’s construct a dummy example
 to illustrate the point:</p>
-<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">adcm</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>STUDYID <span class="op">=</span> <span class="st">"XXX"</span>, USUBJID <span class="op">=</span> <span class="st">"XXX-1"</span>, CMTRT <span class="op">=</span> <span class="st">"ASPIRIN"</span><span class="op">)</span></span>
 <span><span class="va">adcm</span></span>
 <span><span class="co">#&gt;   STUDYID USUBJID   CMTRT</span></span>
-<span><span class="co">#&gt; 1     XXX   XXX-1 ASPIRIN</span></span></code></pre></div>
-<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span></span>
+<span><span class="co">#&gt; 1     XXX   XXX-1 ASPIRIN</span></span>
+<span></span>
 <span><span class="co"># This doesn't work as we are not unquoting the subject keys</span></span>
 <span><span class="va">adcm</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="fu"><a href="../reference/get_admiral_option.html">get_admiral_option</a></span><span class="op">(</span><span class="st">"subject_keys"</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #BBBB00; font-weight: bold;">Error</span><span style="font-weight: bold;"> in `select()`:</span></span></span>
 <span><span class="co">#&gt; <span style="color: #BBBB00;">!</span> Can't select columns with `get_admiral_option("subject_keys")`.</span></span>
-<span><span class="co">#&gt; <span style="color: #BB0000;">✖</span> `get_admiral_option("subject_keys")` must be numeric or character, not a list.</span></span></code></pre></div>
-<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span></span>
+<span><span class="co">#&gt; <span style="color: #BB0000;">✖</span> `get_admiral_option("subject_keys")` must be numeric or character, not a list.</span></span>
+<span></span>
 <span><span class="co"># This works because we are unquoting the subject keys</span></span>
 <span><span class="va">adcm</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="op">!</span><span class="op">!</span><span class="op">!</span><span class="fu"><a href="../reference/get_admiral_option.html">get_admiral_option</a></span><span class="op">(</span><span class="st">"subject_keys"</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">#&gt;   STUDYID USUBJID</span></span>
@@ -384,7 +349,7 @@ the concept of unquoting.</p>
 misunderstandings about their functionality. Let’s set up some dummy
 data to explore common issues that new (or experienced!) programmers may
 encounter when dealing with expressions.</p>
-<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span>, warn.conflicts <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://pharmaverse.github.io/admiral/">admiral</a></span><span class="op">)</span></span>
 <span></span>
@@ -411,7 +376,7 @@ to mistakenly pass the wrong input to an argument that expects an
 expression. For example, the code below fails because
 <code>my_expression</code> is not an expression - it is the name of an
 object in the global environment containing an expression.</p>
-<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">my_expression</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rlang.r-lib.org/reference/expr.html" class="external-link">expr</a></span><span class="op">(</span><span class="va">VSTESTCD</span> <span class="op">==</span> <span class="st">"WEIGHT"</span> <span class="op">&amp;</span> <span class="va">VISIT</span> <span class="op">==</span> <span class="st">"SCREENING"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="../reference/derive_vars_merged.html">derive_vars_merged</a></span><span class="op">(</span></span>
@@ -425,7 +390,7 @@ object in the global environment containing an expression.</p>
 <p>To fix this code, we need to <a href="#unquoting">unquote</a>
 <code>my_expression</code> so that the expression that it is holding is
 passed correctly to <code><a href="../reference/derive_vars_merged.html">derive_vars_merged()</a></code>:</p>
-<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/derive_vars_merged.html">derive_vars_merged</a></span><span class="op">(</span></span>
 <span>  <span class="va">dm</span>,</span>
 <span>  dataset_add <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">vs</span>, <span class="va">USUBJID</span>, <span class="va">VSTESTCD</span>, <span class="va">VISIT</span><span class="op">)</span>,</span>
@@ -446,7 +411,7 @@ within the dataset of interest. This may seem trivial, but it is a
 common pitfall because expressions delay evaluation of code and so can
 delay the identification of issues. For instance, consider this
 example:</p>
-<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">filter_vs_and_merge</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">my_expression</span><span class="op">)</span> <span class="op">{</span></span>
 <span>  <span class="fu"><a href="../reference/derive_vars_merged.html">derive_vars_merged</a></span><span class="op">(</span></span>
 <span>    <span class="va">dm</span>,</span>
@@ -461,9 +426,8 @@ example:</p>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 1 × 4</span></span></span>
 <span><span class="co">#&gt;   USUBJID   AGE VSTESTCD VISIT    </span></span>
 <span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> 01-1301    18 WEIGHT   SCREENING</span></span></code></pre></div>
-<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> 01-1301    18 WEIGHT   SCREENING</span></span>
+<span></span>
 <span><span class="co"># This fails</span></span>
 <span><span class="fu">filter_vs_and_merge</span><span class="op">(</span><span class="fu"><a href="https://rlang.r-lib.org/reference/expr.html" class="external-link">expr</a></span><span class="op">(</span><span class="va">VSTESTCD</span> <span class="op">==</span> <span class="st">"WEIGHT"</span> <span class="op">&amp;</span> <span class="va">VISIT</span> <span class="op">==</span> <span class="st">"SCREENING"</span> <span class="op">&amp;</span> <span class="va">VSTPT</span> <span class="op">==</span> <span class="st">"PREDOSE"</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #BBBB00; font-weight: bold;">Error</span><span style="font-weight: bold;"> in `filter()`:</span></span></span>
@@ -485,26 +449,26 @@ mention of <code>VSTPT</code>, which was dropped from <code>vs</code> in
 Strategy</a></li>
 </ul>
 </div>
-  </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
+  </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside>
 </div>
 
 
 
     <footer><div class="pkgdown-footer-left">
-  <p>Developed by Ben Straub, Stefan Bundfuss, Jeffrey Dickinson, Ross Farrugia, Fanny Gautier, G Gayatri, Asha Chakma, Dinakar Kulkarni, Edoardo Mancini, Sadchla Mascary, Gordon Miller, Lina Patil, Sophie Shapcott, Eric Simms, Daniel Sjoberg, Stefan Thoma, Phillip Webster, Kangjie Zhang, Zelos Zhu, F. Hoffmann-La Roche AG, GlaxoSmithKline LLC.</p>
+  <p>Developed by Ben Straub, Stefan Bundfuss, Jeffrey Dickinson, Ross Farrugia, Fanny Gautier, Dinakar Kulkarni, Edoardo Mancini, Sadchla Mascary, Gordon Miller, Jim Rothstein, Sophie Shapcott, Eric Simms, Daniel Sjoberg, Stefan Thoma, Phillip Webster, Zelos Zhu, F. Hoffmann-La Roche AG, GlaxoSmithKline LLC.</p>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.9.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.1.</p>
 </div>
 
     </footer>
 </div>
 
-  
 
-  
+
+
 
   </body>
 </html>
