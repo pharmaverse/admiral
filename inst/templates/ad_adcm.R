@@ -20,7 +20,7 @@ adsl <- admiral::admiral_adsl
 # When SAS datasets are imported into R using haven::read_sas(), missing
 # character values from SAS appear as "" characters in R, instead of appearing
 # as NA values. Further details can be obtained via the following link:
-# https://pharmaverse.github.io/admiral/articles/admiral.html#handling-of-missing-values # nolint
+# https://pharmaverse.github.io/admiral/cran-release/articles/admiral.html#handling-of-missing-values # nolint
 
 cm <- convert_blanks_to_na(cm)
 
@@ -106,7 +106,7 @@ adcm <- adcm %>%
 ## Derive APHASE and APHASEN Variable ----
 # Other timing variable can be derived similarly.
 # See also the "Visit and Period Variables" vignette
-# (https://pharmaverse.github.io/admiral/articles/visits_periods.html)
+# (https://pharmaverse.github.io/admiral/cran-release/articles/visits_periods.html)
 adcm <- adcm %>%
   mutate(
     APHASE = case_when(
