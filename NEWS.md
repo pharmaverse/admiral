@@ -1,4 +1,4 @@
-# admiral (development version)
+# admiral 1.2.0
 
 ## New Features
 
@@ -8,19 +8,16 @@
 (`CRITy`, `CRITyFL`, `CRITyFN`). (#2468)
 - New function `transform_range()`  to transform values from a source range to a
 target range. (#2571)
-- Replace use of `data("sdtm")` with `sdtm <- pharmaverse::sdtm` in templates and vignettes. (#2498)
-
-- Remove `dthcaus_source()` calls in `ADSL` template because they are deprecated. (#2517)
-- Update `ADEG` template to flag `ABLFL` and `ANL01FL` based on `DTYPE == "AVERAGE"` records. (#2561)
 
 ## Updates of Existing Functions
-- added `"message"` as option for `check_type` argument in `derive_var_obs_number()` function. (#2481)
 
-- added `"message"` as option for `check_type` argument in `filter_extreme()` function. (#2481)
+- Added `"message"` as option for `check_type` argument in `derive_var_obs_number()` function. (#2481)
+
+- Added `"message"` as option for `check_type` argument in `filter_extreme()` function. (#2481)
 
 - Users can now specify how duplicate records are handled in `derive_param_tte()` using the `check_type` argument, with options including `"error"`, `"warning"`, `"message"`, or `"none"`, allowing for greater flexibility in managing duplicate data scenarios. (#2481)
   
-- `order` argument has been added to `event_source()` and `censor_source()` and  
+- The `order` argument has been added to `event_source()` and `censor_source()` and  
   defaulted to `NULL` to allow specifying variables in addition to the date variable. This can be used to ensure the uniqueness of the select records if there is more than one record per date.  (#2481)  
 
 - NCICTCAEv5 grading criteria (`atoxgr_criteria_ctcv5`):
@@ -47,11 +44,9 @@ or that the queries dataset contains duplicates. (#2543)
 
 - `derive_vars_atc()` and `create_single_dose_dataset()` `by_vars` argument updated to use `get_admiral_option("subject_keys")` instead of  `USUBJID` or `STUDYID` in `bds_exposure.Rmd`. (#2501)
   
-- test scripts, R, and markdown files for `create_single_dose_dataset` and `occds.Rmd` updated to include a `STUDYID` column because of `get_admiral_option("subject_keys")` update above. (#2501)
+- The test scripts, R, and markdown files for `create_single_dose_dataset()` and `occds.Rmd` updated to include a `STUDYID` column because of `get_admiral_option("subject_keys")` update above. (#2501)
 
 - Update `derive_vars_period()` to make it work when there is only one new variable. (#2582)
-
-- In `get_summary_records()`, previously deprecated formal arguments `analysis_var` and `summary_fun` now removed from function, documentation, tests etc. (#2521)
 
 - A check was added to `derive_vars_transposed()` and `derive_vars_atc()` which
 stops execution if the records in `dataset_merge` or `dataset_facm` respectively
@@ -103,6 +98,8 @@ default. To enable it the new admiral option `save_memory` has to be set to
     - `derive_var_joined_exist_flag(first_cond, filter)`
     - `event_joined(first_cond)`
     - `filter_joined(first_cond, filter)`
+    - In `get_summary_records()`, previously deprecated formal arguments `analysis_var` and   
+    `summary_fun` now removed from function, documentation, tests etc. (#2521)
 
 ## Documentation
 
@@ -117,6 +114,10 @@ events the first one specified in `event_conditions` and for censoring the last
 one in `censor_conditions`). (#2639)
 
 ## Various
+
+- Replace use of `data("sdtm")` with `sdtm <- pharmaverse::sdtm` in templates and vignettes. (#2498)
+- Remove `dthcaus_source()` calls in `ADSL` template because they are deprecated. (#2517)
+- Update `ADEG` template to flag `ABLFL` and `ANL01FL` based on `DTYPE == "AVERAGE"` records. (#2561)
 
 <details>
 <summary>Developer Notes</summary>

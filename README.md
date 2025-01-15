@@ -26,8 +26,7 @@ install.packages("admiral")
 To install the development version of the package from GitHub run:
 
 ```r
-# install.packages("devtools")
-devtools::install_github("pharmaverse/admiral")
+pak::pkg_install("admiral", dependencies = TRUE)
 ```
 
 ## Cheat Sheet
@@ -41,18 +40,22 @@ The `{admiral}` family has several downstream and upstream dependencies and so r
 * Phase 1 release is for [{admiraldev}](https://pharmaverse.github.io/admiraldev/), [{pharmaversesdtm}](https://pharmaverse.github.io/pharmaversesdtm/), and [{admiral}](https://pharmaverse.github.io/admiral/) core
 * Phase 2 release is extension packages, e.g. [{admiralonco}](https://pharmaverse.github.io/admiralonco/), [{admiralophtha}](https://pharmaverse.github.io/admiralophtha/), [{admiralvaccine}](https://pharmaverse.github.io/admiralvaccine/) and [{pharmaverseadam}](https://pharmaverse.github.io/pharmaverseadam/).
 
-| Release Schedule | Phase 1- Date and Packages                                               | Phase 2- Date and Packages                                        |
-| ---------------- | ------------------------------------------------------------------------ | ----------------------------------------------------------------- |
-|                  |                                                                          |                                                                   |
-| Q4-2024          | December 2nd                                                             | December 9th                                                      |
-|                  | [{pharmaversesdtm}](https://pharmaverse.github.io/pharmaversesdtm/)      | [{admiralonco}](https://pharmaverse.github.io/admiralonco/)       |
-|                  | [{admiraldev}](https://pharmaverse.github.io/admiraldev/)                | [{admiralophtha}](https://pharmaverse.github.io/admiralophtha/)   |
-|                  | [{admiral}](https://pharmaverse.github.io/admiral/)                      | [{admiralvaccine}](https://pharmaverse.github.io/admiralvaccine/) |                        |                  |                                                                          | [{pharmaverseadam}](https://pharmaverse.github.io/pharmaverseadam/)  |
-|                  |                                                                          |                                                                   | 
-| Q2-2025          | June 2nd                                                                 | June 10th                                                      |
-|                  | [{pharmaversesdtm}](https://pharmaverse.github.io/pharmaversesdtm/)      | [{admiralonco}](https://pharmaverse.github.io/admiralonco/)       |
-|                  | [{admiraldev}](https://pharmaverse.github.io/admiraldev/)                | [{admiralophtha}](https://pharmaverse.github.io/admiralophtha/)   |
-|                  | [{admiral}](https://pharmaverse.github.io/admiral/)                      | [{admiralvaccine}](https://pharmaverse.github.io/admiralvaccine/) |                        |                  |                                                                          | [{pharmaverseadam}](https://pharmaverse.github.io/pharmaverseadam/)   |                                                                       
+__NB:__ We strive for a regular 6 month release schedule.
+
+| Release Schedule | Phase 1- Date and Packages                                               | Phase 2- Date and Packages                                         |
+| ---------------- | ------------------------------------------------------------------------ | ------------------------------------------------------------------ |
+|                  |                                                                          |                                                                    |
+| Q2-2025          | Mid-June                                                                 | Mid-June                                                           |
+|                  | [{pharmaversesdtm}](https://pharmaverse.github.io/pharmaversesdtm/)      | [{admiralonco}](https://pharmaverse.github.io/admiralonco/)        |
+|                  | [{admiraldev}](https://pharmaverse.github.io/admiraldev/)                | [{admiralophtha}](https://pharmaverse.github.io/admiralophtha/)    |
+|                  | [{admiral}](https://pharmaverse.github.io/admiral/)                      | [{admiralvaccine}](https://pharmaverse.github.io/admiralvaccine/)  |                        
+|                  |                                                                          | [{pharmaverseadam}](https://pharmaverse.github.io/pharmaverseadam/)|
+|                  |                                                                          |                                                                    | 
+| Q4-2025/Q1 2026  | Late December 2025/early January 2026                                    | Late December 2025/early January 2026                              |
+|                  | [{pharmaversesdtm}](https://pharmaverse.github.io/pharmaversesdtm/)      | [{admiralonco}](https://pharmaverse.github.io/admiralonco/)        |
+|                  | [{admiraldev}](https://pharmaverse.github.io/admiraldev/)                | [{admiralophtha}](https://pharmaverse.github.io/admiralophtha/)    |
+|                  | [{admiral}](https://pharmaverse.github.io/admiral/)                      | [{admiralvaccine}](https://pharmaverse.github.io/admiralvaccine/)  |                        
+|                  |                                                                          | [{pharmaverseadam}](https://pharmaverse.github.io/pharmaverseadam/)|                                                                       
 
 ## Main Goal
 
@@ -189,4 +192,4 @@ We use the following for support and communications between user and developer c
 
 Along with the authors and contributors, thanks to the following people for their work on the package:
 
-Jaxon Abercrombie, Mahdi About, Teckla Akinyi, James Black, Claudia Carlucci, Asha Chakma, Bill Denney, Kamila Duniec, Alice Ehmann, Romain Francois, G Gayatri, Ania Golab, Alana Harris, Declan Hodges, Anthony Howard, Shimeng Huang, Samia Kabi, James Kim, John Kirkpatrick, Leena Khatri, Robin Koeger, Konstantina Koukourikou, Pavan Kumar, Pooja Kumari, Shan Lee, Wenyi Liu, Iain McCay, Jack McGavigan, Jordanna Morrish, Syed Mubasheer, Thomas Neitmann, Yohann Omnes, Barbara O'Reilly, Lina Patil, Hamza Rahal, Nick Ramirez, Tom Ratford, Jim Rothstein, Sukalpo Saha, Tamara Senior, Sophie Shapcott, Vladyslav Shuliar, Ondrej Slama, Andrew Smith, Daniil Stefonishin, Steven Ting, Vignesh Thanikachalam, Michael Thorpe, Annie Yang, Ojesh Upadhyay, Franciszek Walkowiak and Kangjie Zhang.
+Anthony Arroyo, Jaxon Abercrombie, Mahdi About, Teckla Akinyi, James Black, Claudia Carlucci, Asha Chakma, Bill Denney, Kamila Duniec, Alice Ehmann, Romain Francois, G Gayatri, Ania Golab, Alana Harris, Declan Hodges, Anthony Howard, Shimeng Huang, Samia Kabi, James Kim, John Kirkpatrick, Leena Khatri, Robin Koeger, Konstantina Koukourikou, Pavan Kumar, Pooja Kumari, Shan Lee, Wenyi Liu, Iain McCay, Jack McGavigan, Jordanna Morrish, Syed Mubasheer, Thomas Neitmann, Yohann Omnes, Barbara O'Reilly, Lina Patil, Hamza Rahal, Nick Ramirez, Tom Ratford, Jim Rothstein, Sukalpo Saha, Tamara Senior, Sophie Shapcott, Vladyslav Shuliar, Ondrej Slama, Andrew Smith, Daniil Stefonishin, Steven Ting, Vignesh Thanikachalam, Michael Thorpe, Annie Yang, Ojesh Upadhyay, Franciszek Walkowiak and Kangjie Zhang.
