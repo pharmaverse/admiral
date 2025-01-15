@@ -30,7 +30,7 @@
 
     <a class="navbar-brand me-2" href="index.html">admiral</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.1.1.9057</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.2.0.9000</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -114,8 +114,7 @@
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"admiral"</span><span class="op">)</span></span></code></pre></div>
 <p>To install the development version of the package from GitHub run:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># install.packages("devtools")</span></span>
-<span><span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"pharmaverse/admiral"</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu">pak</span><span class="fu">::</span><span class="fu"><a href="https://pak.r-lib.org/reference/pkg_install.html" class="external-link">pkg_install</a></span><span class="op">(</span><span class="st">"admiral"</span>, dependencies <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="cheat-sheet">Cheat Sheet<a class="anchor" aria-label="anchor" href="#cheat-sheet"></a>
@@ -130,10 +129,11 @@
 <li>Phase 1 release is for <a href="https://pharmaverse.github.io/admiraldev/">{admiraldev}</a>, <a href="https://pharmaverse.github.io/pharmaversesdtm/" class="external-link">{pharmaversesdtm}</a>, and <a href="https://pharmaverse.github.io/admiral/">{admiral}</a> core</li>
 <li>Phase 2 release is extension packages, e.g. <a href="https://pharmaverse.github.io/admiralonco/">{admiralonco}</a>, <a href="https://pharmaverse.github.io/admiralophtha/">{admiralophtha}</a>, <a href="https://pharmaverse.github.io/admiralvaccine/">{admiralvaccine}</a> and <a href="https://pharmaverse.github.io/pharmaverseadam/" class="external-link">{pharmaverseadam}</a>.</li>
 </ul>
+<p><strong>NB:</strong> We strive for a regular 6 month release schedule.</p>
 <table class="table">
 <colgroup>
 <col width="10%">
-<col width="47%">
+<col width="46%">
 <col width="42%">
 </colgroup>
 <thead><tr class="header">
@@ -148,49 +148,59 @@
 <td></td>
 </tr>
 <tr class="even">
-<td>Q4-2024</td>
-<td>December 2nd</td>
-<td>December 9th</td>
-</tr>
-<tr class="odd">
-<td></td>
-<td><a href="https://pharmaverse.github.io/pharmaversesdtm/" class="external-link">{pharmaversesdtm}</a></td>
-<td><a href="https://pharmaverse.github.io/admiralonco/">{admiralonco}</a></td>
-</tr>
-<tr class="even">
-<td></td>
-<td><a href="https://pharmaverse.github.io/admiraldev/">{admiraldev}</a></td>
-<td><a href="https://pharmaverse.github.io/admiralophtha/">{admiralophtha}</a></td>
-</tr>
-<tr class="odd">
-<td></td>
-<td><a href="https://pharmaverse.github.io/admiral/">{admiral}</a></td>
-<td><a href="https://pharmaverse.github.io/admiralvaccine/">{admiralvaccine}</a></td>
-</tr>
-<tr class="even">
-<td></td>
-<td></td>
-<td></td>
-</tr>
-<tr class="odd">
 <td>Q2-2025</td>
-<td>June 2nd</td>
-<td>June 10th</td>
+<td>Mid-June</td>
+<td>Mid-June</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td></td>
 <td><a href="https://pharmaverse.github.io/pharmaversesdtm/" class="external-link">{pharmaversesdtm}</a></td>
 <td><a href="https://pharmaverse.github.io/admiralonco/">{admiralonco}</a></td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td></td>
 <td><a href="https://pharmaverse.github.io/admiraldev/">{admiraldev}</a></td>
 <td><a href="https://pharmaverse.github.io/admiralophtha/">{admiralophtha}</a></td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td></td>
 <td><a href="https://pharmaverse.github.io/admiral/">{admiral}</a></td>
 <td><a href="https://pharmaverse.github.io/admiralvaccine/">{admiralvaccine}</a></td>
+</tr>
+<tr class="even">
+<td></td>
+<td></td>
+<td><a href="https://pharmaverse.github.io/pharmaverseadam/" class="external-link">{pharmaverseadam}</a></td>
+</tr>
+<tr class="odd">
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="even">
+<td>Q4-2025/Q1 2026</td>
+<td>Late December 2025/early January 2026</td>
+<td>Late December 2025/early January 2026</td>
+</tr>
+<tr class="odd">
+<td></td>
+<td><a href="https://pharmaverse.github.io/pharmaversesdtm/" class="external-link">{pharmaversesdtm}</a></td>
+<td><a href="https://pharmaverse.github.io/admiralonco/">{admiralonco}</a></td>
+</tr>
+<tr class="even">
+<td></td>
+<td><a href="https://pharmaverse.github.io/admiraldev/">{admiraldev}</a></td>
+<td><a href="https://pharmaverse.github.io/admiralophtha/">{admiralophtha}</a></td>
+</tr>
+<tr class="odd">
+<td></td>
+<td><a href="https://pharmaverse.github.io/admiral/">{admiral}</a></td>
+<td><a href="https://pharmaverse.github.io/admiralvaccine/">{admiralvaccine}</a></td>
+</tr>
+<tr class="even">
+<td></td>
+<td></td>
+<td><a href="https://pharmaverse.github.io/pharmaverseadam/" class="external-link">{pharmaverseadam}</a></td>
 </tr>
 </tbody>
 </table>
@@ -332,7 +342,7 @@
 <h2 id="acknowledgments">Acknowledgments<a class="anchor" aria-label="anchor" href="#acknowledgments"></a>
 </h2>
 <p>Along with the authors and contributors, thanks to the following people for their work on the package:</p>
-<p>Jaxon Abercrombie, Mahdi About, Teckla Akinyi, James Black, Claudia Carlucci, Asha Chakma, Bill Denney, Kamila Duniec, Alice Ehmann, Romain Francois, G Gayatri, Ania Golab, Alana Harris, Declan Hodges, Anthony Howard, Shimeng Huang, Samia Kabi, James Kim, John Kirkpatrick, Leena Khatri, Robin Koeger, Konstantina Koukourikou, Pavan Kumar, Pooja Kumari, Shan Lee, Wenyi Liu, Iain McCay, Jack McGavigan, Jordanna Morrish, Syed Mubasheer, Thomas Neitmann, Yohann Omnes, Barbara O’Reilly, Lina Patil, Hamza Rahal, Nick Ramirez, Tom Ratford, Jim Rothstein, Sukalpo Saha, Tamara Senior, Sophie Shapcott, Vladyslav Shuliar, Ondrej Slama, Andrew Smith, Daniil Stefonishin, Steven Ting, Vignesh Thanikachalam, Michael Thorpe, Annie Yang, Ojesh Upadhyay, Franciszek Walkowiak and Kangjie Zhang.</p>
+<p>Anthony Arroyo, Jaxon Abercrombie, Mahdi About, Teckla Akinyi, James Black, Claudia Carlucci, Asha Chakma, Bill Denney, Kamila Duniec, Alice Ehmann, Romain Francois, G Gayatri, Ania Golab, Alana Harris, Declan Hodges, Anthony Howard, Shimeng Huang, Samia Kabi, James Kim, John Kirkpatrick, Leena Khatri, Robin Koeger, Konstantina Koukourikou, Pavan Kumar, Pooja Kumari, Shan Lee, Wenyi Liu, Iain McCay, Jack McGavigan, Jordanna Morrish, Syed Mubasheer, Thomas Neitmann, Yohann Omnes, Barbara O’Reilly, Lina Patil, Hamza Rahal, Nick Ramirez, Tom Ratford, Jim Rothstein, Sukalpo Saha, Tamara Senior, Sophie Shapcott, Vladyslav Shuliar, Ondrej Slama, Andrew Smith, Daniil Stefonishin, Steven Ting, Vignesh Thanikachalam, Michael Thorpe, Annie Yang, Ojesh Upadhyay, Franciszek Walkowiak and Kangjie Zhang.</p>
 </div>
 </div>
   </main><aside class="col-md-3"><div class="links">

@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">admiral</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.1.1.9057</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.2.0.9000</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -70,19 +70,43 @@
 <h2 class="pkg-version" data-toc-text="development version" id="admiral-development-version">admiral (development version)<a class="anchor" aria-label="anchor" href="#admiral-development-version"></a></h2>
 <div class="section level3">
 <h3 id="new-features-development-version">New Features<a class="anchor" aria-label="anchor" href="#new-features-development-version"></a></h3>
-<ul><li><p>New function <code><a href="../reference/derive_vars_cat.html">derive_vars_cat()</a></code> for deriving pairs of variables or more, e.g.  <code>AVALCATy</code> &amp; <code>AVALCAyN</code>. (<a href="https://github.com/pharmaverse/admiral/issues/2480" class="external-link">#2480</a>)</p></li>
-<li><p>New function <code><a href="../reference/derive_vars_crit_flag.html">derive_vars_crit_flag()</a></code> for deriving criterion flag variables (<code>CRITy</code>, <code>CRITyFL</code>, <code>CRITyFN</code>). (<a href="https://github.com/pharmaverse/admiral/issues/2468" class="external-link">#2468</a>)</p></li>
-<li><p>New function <code><a href="../reference/transform_range.html">transform_range()</a></code> to transform values from a source range to a target range. (<a href="https://github.com/pharmaverse/admiral/issues/2571" class="external-link">#2571</a>)</p></li>
-<li><p>Replace use of <code>data("sdtm")</code> with <code>sdtm &lt;- pharmaverse::sdtm</code> in templates and vignettes. (<a href="https://github.com/pharmaverse/admiral/issues/2498" class="external-link">#2498</a>)</p></li>
-<li><p>Remove <code><a href="../reference/dthcaus_source.html">dthcaus_source()</a></code> calls in <code>ADSL</code> template because they are deprecated. (<a href="https://github.com/pharmaverse/admiral/issues/2517" class="external-link">#2517</a>)</p></li>
-<li><p>Update <code>ADEG</code> template to flag <code>ABLFL</code> and <code>ANL01FL</code> based on <code>DTYPE == "AVERAGE"</code> records. (<a href="https://github.com/pharmaverse/admiral/issues/2561" class="external-link">#2561</a>)</p></li>
-</ul></div>
+</div>
 <div class="section level3">
 <h3 id="updates-of-existing-functions-development-version">Updates of Existing Functions<a class="anchor" aria-label="anchor" href="#updates-of-existing-functions-development-version"></a></h3>
-<ul><li><p>added <code>"message"</code> as option for <code>check_type</code> argument in <code><a href="../reference/derive_var_obs_number.html">derive_var_obs_number()</a></code> function. (<a href="https://github.com/pharmaverse/admiral/issues/2481" class="external-link">#2481</a>)</p></li>
-<li><p>added <code>"message"</code> as option for <code>check_type</code> argument in <code><a href="../reference/filter_extreme.html">filter_extreme()</a></code> function. (<a href="https://github.com/pharmaverse/admiral/issues/2481" class="external-link">#2481</a>)</p></li>
+</div>
+<div class="section level3">
+<h3 id="breaking-changes-development-version">Breaking Changes<a class="anchor" aria-label="anchor" href="#breaking-changes-development-version"></a></h3>
+<ul><li>
+<p>The following function arguments are entering the next phase of the <a href="https://pharmaverse.github.io/admiraldev/articles/programming_strategy.html#deprecation">deprecation process</a>: (<a href="https://github.com/pharmaverse/admiral/issues/2487" class="external-link">#2487</a>) (<a href="https://github.com/pharmaverse/admiral/issues/2595" class="external-link">#2595</a>)</p>
+<p><strong>Phase 1 (message)</strong></p>
+<p><strong>Phase 2 (warning)</strong></p>
+<p><strong>Phase 3 (error)</strong></p>
+<p><strong>Phase 4 (removed)</strong></p>
+</li>
+</ul></div>
+<div class="section level3">
+<h3 id="documentation-development-version">Documentation<a class="anchor" aria-label="anchor" href="#documentation-development-version"></a></h3>
+</div>
+<div class="section level3">
+<h3 id="various-development-version">Various<a class="anchor" aria-label="anchor" href="#various-development-version"></a></h3>
+<details><summary>
+Developer Notes
+</summary></details></div>
+</div>
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="1.2.0" id="admiral-120">admiral 1.2.0<a class="anchor" aria-label="anchor" href="#admiral-120"></a></h2>
+<div class="section level3">
+<h3 id="new-features-1-2-0">New Features<a class="anchor" aria-label="anchor" href="#new-features-1-2-0"></a></h3>
+<ul><li>New function <code><a href="../reference/derive_vars_cat.html">derive_vars_cat()</a></code> for deriving pairs of variables or more, e.g.  <code>AVALCATy</code> &amp; <code>AVALCAyN</code>. (<a href="https://github.com/pharmaverse/admiral/issues/2480" class="external-link">#2480</a>)</li>
+<li>New function <code><a href="../reference/derive_vars_crit_flag.html">derive_vars_crit_flag()</a></code> for deriving criterion flag variables (<code>CRITy</code>, <code>CRITyFL</code>, <code>CRITyFN</code>). (<a href="https://github.com/pharmaverse/admiral/issues/2468" class="external-link">#2468</a>)</li>
+<li>New function <code><a href="../reference/transform_range.html">transform_range()</a></code> to transform values from a source range to a target range. (<a href="https://github.com/pharmaverse/admiral/issues/2571" class="external-link">#2571</a>)</li>
+</ul></div>
+<div class="section level3">
+<h3 id="updates-of-existing-functions-1-2-0">Updates of Existing Functions<a class="anchor" aria-label="anchor" href="#updates-of-existing-functions-1-2-0"></a></h3>
+<ul><li><p>Added <code>"message"</code> as option for <code>check_type</code> argument in <code><a href="../reference/derive_var_obs_number.html">derive_var_obs_number()</a></code> function. (<a href="https://github.com/pharmaverse/admiral/issues/2481" class="external-link">#2481</a>)</p></li>
+<li><p>Added <code>"message"</code> as option for <code>check_type</code> argument in <code><a href="../reference/filter_extreme.html">filter_extreme()</a></code> function. (<a href="https://github.com/pharmaverse/admiral/issues/2481" class="external-link">#2481</a>)</p></li>
 <li><p>Users can now specify how duplicate records are handled in <code><a href="../reference/derive_param_tte.html">derive_param_tte()</a></code> using the <code>check_type</code> argument, with options including <code>"error"</code>, <code>"warning"</code>, <code>"message"</code>, or <code>"none"</code>, allowing for greater flexibility in managing duplicate data scenarios. (<a href="https://github.com/pharmaverse/admiral/issues/2481" class="external-link">#2481</a>)</p></li>
-<li><p><code>order</code> argument has been added to <code><a href="../reference/event_source.html">event_source()</a></code> and <code><a href="../reference/censor_source.html">censor_source()</a></code> and<br>
+<li><p>The <code>order</code> argument has been added to <code><a href="../reference/event_source.html">event_source()</a></code> and <code><a href="../reference/censor_source.html">censor_source()</a></code> and<br>
 defaulted to <code>NULL</code> to allow specifying variables in addition to the date variable. This can be used to ensure the uniqueness of the select records if there is more than one record per date. (<a href="https://github.com/pharmaverse/admiral/issues/2481" class="external-link">#2481</a>)</p></li>
 <li>
 <p>NCICTCAEv5 grading criteria (<code>atoxgr_criteria_ctcv5</code>):</p>
@@ -96,15 +120,14 @@ defaulted to <code>NULL</code> to allow specifying variables in addition to the 
 <li><p>The <code><a href="../reference/derive_param_qtc.html">derive_param_qtc()</a></code> function accepts now both <code>"ms"</code> and <code>"msec"</code> as unit of the input parameters. (<a href="https://github.com/pharmaverse/admiral/issues/2513" class="external-link">#2513</a>)</p></li>
 <li><p>In <code><a href="../reference/derive_vars_query.html">derive_vars_query()</a></code> the error message was improved for the cases that some of the requested query variables are already present in the input dataset or that the queries dataset contains duplicates. (<a href="https://github.com/pharmaverse/admiral/issues/2543" class="external-link">#2543</a>)</p></li>
 <li><p><code><a href="../reference/derive_vars_atc.html">derive_vars_atc()</a></code> and <code><a href="../reference/create_single_dose_dataset.html">create_single_dose_dataset()</a></code> <code>by_vars</code> argument updated to use <code>get_admiral_option("subject_keys")</code> instead of <code>USUBJID</code> or <code>STUDYID</code> in <code>bds_exposure.Rmd</code>. (<a href="https://github.com/pharmaverse/admiral/issues/2501" class="external-link">#2501</a>)</p></li>
-<li><p>test scripts, R, and markdown files for <code>create_single_dose_dataset</code> and <code>occds.Rmd</code> updated to include a <code>STUDYID</code> column because of <code>get_admiral_option("subject_keys")</code> update above. (<a href="https://github.com/pharmaverse/admiral/issues/2501" class="external-link">#2501</a>)</p></li>
+<li><p>The test scripts, R, and markdown files for <code><a href="../reference/create_single_dose_dataset.html">create_single_dose_dataset()</a></code> and <code>occds.Rmd</code> updated to include a <code>STUDYID</code> column because of <code>get_admiral_option("subject_keys")</code> update above. (<a href="https://github.com/pharmaverse/admiral/issues/2501" class="external-link">#2501</a>)</p></li>
 <li><p>Update <code><a href="../reference/derive_vars_period.html">derive_vars_period()</a></code> to make it work when there is only one new variable. (<a href="https://github.com/pharmaverse/admiral/issues/2582" class="external-link">#2582</a>)</p></li>
-<li><p>In <code><a href="../reference/get_summary_records.html">get_summary_records()</a></code>, previously deprecated formal arguments <code>analysis_var</code> and <code>summary_fun</code> now removed from function, documentation, tests etc. (<a href="https://github.com/pharmaverse/admiral/issues/2521" class="external-link">#2521</a>)</p></li>
 <li><p>A check was added to <code><a href="../reference/derive_vars_transposed.html">derive_vars_transposed()</a></code> and <code><a href="../reference/derive_vars_atc.html">derive_vars_atc()</a></code> which stops execution if the records in <code>dataset_merge</code> or <code>dataset_facm</code> respectively are not unique. (<a href="https://github.com/pharmaverse/admiral/issues/2563" class="external-link">#2563</a>)</p></li>
 <li><p>The functions <code><a href="../reference/derive_vars_joined.html">derive_vars_joined()</a></code>, <code><a href="../reference/derive_var_joined_exist_flag.html">derive_var_joined_exist_flag()</a></code>, <code><a href="../reference/derive_extreme_event.html">derive_extreme_event()</a></code>, and <code><a href="../reference/filter_joined.html">filter_joined()</a></code> were updated to reduce their memory consumption. As the new code increases the run-time, it is not used by default. To enable it the new admiral option <code>save_memory</code> has to be set to <code>TRUE</code>. (<a href="https://github.com/pharmaverse/admiral/issues/2590" class="external-link">#2590</a>)</p></li>
 <li><p>The function <code><a href="../reference/compute_egfr.html">compute_egfr()</a></code> updated to allow missing values for sex which result in missing values for output. (<a href="https://github.com/pharmaverse/admiral/issues/2612" class="external-link">#2612</a>)</p></li>
 </ul></div>
 <div class="section level3">
-<h3 id="breaking-changes-development-version">Breaking Changes<a class="anchor" aria-label="anchor" href="#breaking-changes-development-version"></a></h3>
+<h3 id="breaking-changes-1-2-0">Breaking Changes<a class="anchor" aria-label="anchor" href="#breaking-changes-1-2-0"></a></h3>
 <ul><li>
 <p>The following function arguments are entering the next phase of the <a href="https://pharmaverse.github.io/admiraldev/articles/programming_strategy.html#deprecation">deprecation process</a>: (<a href="https://github.com/pharmaverse/admiral/issues/2487" class="external-link">#2487</a>) (<a href="https://github.com/pharmaverse/admiral/issues/2595" class="external-link">#2595</a>)</p>
 <p><strong>Phase 1 (message)</strong></p>
@@ -149,18 +172,22 @@ defaulted to <code>NULL</code> to allow specifying variables in addition to the 
 <li><code>derive_var_joined_exist_flag(first_cond, filter)</code></li>
 <li><code>event_joined(first_cond)</code></li>
 <li><code>filter_joined(first_cond, filter)</code></li>
+<li>In <code><a href="../reference/get_summary_records.html">get_summary_records()</a></code>, previously deprecated formal arguments <code>analysis_var</code> and<br><code>summary_fun</code> now removed from function, documentation, tests etc. (<a href="https://github.com/pharmaverse/admiral/issues/2521" class="external-link">#2521</a>)</li>
 </ul></li>
 </ul></div>
 <div class="section level3">
-<h3 id="documentation-development-version">Documentation<a class="anchor" aria-label="anchor" href="#documentation-development-version"></a></h3>
+<h3 id="documentation-1-2-0">Documentation<a class="anchor" aria-label="anchor" href="#documentation-1-2-0"></a></h3>
 <ul><li><p><code><a href="../reference/derive_locf_records.html">derive_locf_records()</a></code> documentation example was fixed to display LOCF records. (<a href="https://github.com/pharmaverse/admiral/issues/2461" class="external-link">#2461</a>)</p></li>
 <li><p>The “Find my function” and “Presentation Archive”” links were made more prominent in the website navigation bar. (<a href="https://github.com/pharmaverse/admiral/issues/2536" class="external-link">#2536</a>)</p></li>
 <li><p><code><a href="../reference/derive_var_joined_exist_flag.html">derive_var_joined_exist_flag()</a></code> documentation updated with extra examples. (<a href="https://github.com/pharmaverse/admiral/issues/2523" class="external-link">#2523</a>)</p></li>
 <li><p>In the <code><a href="../reference/derive_param_tte.html">derive_param_tte()</a></code> documentation is was clarified which event/censoring is selected if there is more than one at the same date (for events the first one specified in <code>event_conditions</code> and for censoring the last one in <code>censor_conditions</code>). (<a href="https://github.com/pharmaverse/admiral/issues/2639" class="external-link">#2639</a>)</p></li>
 </ul></div>
 <div class="section level3">
-<h3 id="various-development-version">Various<a class="anchor" aria-label="anchor" href="#various-development-version"></a></h3>
-<details><summary>
+<h3 id="various-1-2-0">Various<a class="anchor" aria-label="anchor" href="#various-1-2-0"></a></h3>
+<ul><li>Replace use of <code>data("sdtm")</code> with <code>sdtm &lt;- pharmaverse::sdtm</code> in templates and vignettes. (<a href="https://github.com/pharmaverse/admiral/issues/2498" class="external-link">#2498</a>)</li>
+<li>Remove <code><a href="../reference/dthcaus_source.html">dthcaus_source()</a></code> calls in <code>ADSL</code> template because they are deprecated. (<a href="https://github.com/pharmaverse/admiral/issues/2517" class="external-link">#2517</a>)</li>
+<li>Update <code>ADEG</code> template to flag <code>ABLFL</code> and <code>ANL01FL</code> based on <code>DTYPE == "AVERAGE"</code> records. (<a href="https://github.com/pharmaverse/admiral/issues/2561" class="external-link">#2561</a>)</li>
+</ul><details><summary>
 Developer Notes
 </summary><ul><li>Created unit tests for developer internal function <code>restricted_imputed_dtc_dt()</code> (<a href="https://github.com/pharmaverse/admiral/issues/2495" class="external-link">#2495</a>)</li>
 <li>Adopted <code>data-raw/data</code> R Package Convention (<a href="https://github.com/pharmaverse/admiral/issues/2427" class="external-link">#2427</a>, <a href="https://github.com/pharmaverse/admiral/issues/2584" class="external-link">#2584</a>)</li>
