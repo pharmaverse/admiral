@@ -71,6 +71,7 @@ globalVariables(c(
   "time_differential_dt",
   "tmp_obs_nr_filter_relative",
   "tmp_obs_nr_match_filter_relative",
+  "tmp_source_nr",
   "PREFIX",
   "PREFIX_CD",
   "PREFIX_NAM",
@@ -133,5 +134,6 @@ globalVariables(c(
   "num_records",
   "worsen_date",
   "prev_intensity",
-  "srfl"
+  "srfl",
+  "dose_freq_lookup"
 ))

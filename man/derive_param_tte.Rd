@@ -14,7 +14,8 @@ derive_param_tte(
   censor_conditions,
   create_datetime = FALSE,
   set_values_to,
-  subject_keys = get_admiral_option("subject_keys")
+  subject_keys = get_admiral_option("subject_keys"),
+  check_type = "warning"
 )
 }
 \arguments{
@@ -76,6 +77,15 @@ expressions, or \code{NA}.}
 \item{subject_keys}{Variables to uniquely identify a subject
 
 A list of symbols created using \code{exprs()} is expected.}
+
+\item{check_type}{Check uniqueness
+
+If \code{"warning"}, \code{"message"}, or \code{"error"} is specified, the specified message is issued
+if the observations of the source datasets are not unique with respect to the
+by variables and the date and order specified in the \code{event_source()} and
+\code{censor_source()} objects.
+
+\emph{Permitted Values}: \code{"none"}, \code{"message"}, \code{"warning"}, \code{"error"}}
 }
 \value{
 The input dataset with the new parameter added
@@ -91,7 +101,7 @@ new parameter:
 
 \enumerate{ \item For each event source dataset the observations as
 specified by the \code{filter} element are selected. Then for each patient the
-first observation (with respect to \code{date}) is selected.
+first observation (with respect to \code{date} and \code{order}) is selected.
 
 \item The \code{ADT} variable is set to the variable specified by the
 \code{date} element. If the date variable is a datetime variable, only
@@ -105,14 +115,16 @@ added.
 \item The selected observations of all event source datasets are combined into a
 single dataset.
 
-\item For each patient the first observation (with respect to the \code{ADT}
-variable) from the single dataset is selected. }
+\item For each patient the first observation (with respect to the
+\code{ADT}/\code{ADTM} variable) from the single dataset is selected. If there is
+more than one event with the same date, the first event with respect to the
+order of events in \code{event_conditions} is selected.}
 
 \strong{Deriving the censoring observations:}
 
 \enumerate{ \item For each censoring source dataset the observations as
 specified by the \code{filter} element are selected. Then for each patient the
-last observation (with respect to \code{date}) is selected.
+last observation (with respect to \code{date} and \code{order}) is selected.
 
 \item The \code{ADT} variable is set to the variable specified by the
 \code{date} element. If the date variable is a datetime variable, only
@@ -126,8 +138,10 @@ added.
 \item The selected observations of all censoring source datasets are
 combined into a single dataset.
 
-\item For each patient the last observation (with respect to the \code{ADT}
-variable) from the single dataset is selected. }
+\item For each patient the last observation (with respect to the
+\code{ADT}/\code{ADTM} variable) from the single dataset is selected.  If there is
+more than one censoring with the same date, the last censoring with respect
+to the order of censorings in \code{censor_conditions} is selected.}
 
 For each subject (as defined by the \code{subject_keys} parameter) an
 observation is selected. If an event is available, the event observation is
@@ -279,9 +293,9 @@ adsl <- tribble(
 
 ae <- tribble(
   ~USUBJID, ~AESTDTC,           ~AESEQ, ~AEDECOD,
-  "01",     "2021-01-03T10:56", 1,      "Flu",
-  "01",     "2021-03-04",       2,      "Cough",
-  "01",     "2021",             3,      "Flu"
+  "01",     "2021-01-03T10:56",      1, "Flu",
+  "01",     "2021-03-04",            2, "Cough",
+  "01",     "2021",                  3, "Flu"
 ) \%>\%
   mutate(STUDYID = "AB42")
 
@@ -329,6 +343,50 @@ derive_param_tte(
   )
 ) \%>\%
   select(USUBJID, STARTDT, PARAMCD, PARAM, ADT, CNSR, SRCSEQ)
+
+# Resolve tie when serious AE share a date by sorting with order argument
+adsl <- tribble(
+  ~USUBJID, ~TRTSDT,           ~EOSDT,
+  "01",     ymd("2020-12-06"), ymd("2021-03-06"),
+  "02",     ymd("2021-01-16"), ymd("2021-02-03")
+) \%>\% mutate(STUDYID = "AB42")
+
+ae <- tribble(
+  ~USUBJID, ~AESTDTC,     ~AESEQ, ~AESER, ~AEDECOD,
+  "01",     "2021-01-03",      1, "Y",    "Flu",
+  "01",     "2021-01-03",      2, "Y",    "Cough",
+  "01",     "2021-01-20",      3, "N",    "Headache"
+) \%>\% mutate(
+  AESTDT = ymd(AESTDTC),
+  STUDYID = "AB42"
+)
+
+derive_param_tte(
+  dataset_adsl = adsl,
+  start_date = TRTSDT,
+  source_datasets = list(adsl = adsl, ae = ae),
+  event_conditions = list(event_source(
+    dataset_name = "ae",
+    date = AESTDT,
+    set_values_to = exprs(
+      EVENTDESC = "Serious AE",
+      SRCSEQ = AESEQ
+    ),
+    filter = AESER == "Y",
+    order = exprs(AESEQ)
+  )),
+  censor_conditions = list(censor_source(
+    dataset_name = "adsl",
+    date = EOSDT,
+    censor = 1,
+    set_values_to = exprs(EVENTDESC = "End of Study")
+  )),
+  set_values_to = exprs(
+    PARAMCD = "TTSAE",
+    PARAM = "Time to First Serious AE"
+  )
+)
+
 }
 \seealso{
 \code{\link[=event_source]{event_source()}}, \code{\link[=censor_source]{censor_source()}}

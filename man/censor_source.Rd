@@ -9,7 +9,8 @@ censor_source(
   filter = NULL,
   date,
   censor = 1,
-  set_values_to = NULL
+  set_values_to = NULL,
+  order = NULL
 )
 }
 \arguments{
@@ -36,6 +37,13 @@ censoring.}
 \item{set_values_to}{A named list returned by \code{exprs()} defining the variables
 to be set for the event or censoring, e.g. \code{exprs(EVENTDESC = "DEATH", SRCDOM = "ADSL", SRCVAR = "DTHDT")}. The values must be a symbol, a
 character string, a numeric value, an expression, or \code{NA}.}
+
+\item{order}{Sort order
+
+An optional named list returned by \code{exprs()} defining additional variables
+that the source dataset is sorted on after \code{date}.
+
+\emph{Permitted Values:} list of variables created by \code{exprs()} e.g. \code{exprs(ASEQ)}.}
 }
 \value{
 An object of class \code{censor_source}, inheriting from class \code{tte_source}

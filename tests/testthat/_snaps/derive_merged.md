@@ -58,7 +58,7 @@
       ! Dataset `dataset_add` contains duplicate records with respect to `STUDYID` and `ID`.
       i Run `admiral::get_duplicates_dataset()` to access the duplicate records
 
-# derive_vars_merged_lookup Test 19: merge lookup table
+# derive_vars_merged_lookup Test 18: merge lookup table
 
     Code
       actual <- derive_vars_merged_lookup(vs, dataset_add = param_lookup, by_vars = exprs(
@@ -72,7 +72,7 @@
       1 DIABP Diastolic Blood Pressure
       i Run `admiral::get_not_mapped()` to access the full list.
 
-# derive_vars_merged_lookup Test 21: by_vars with rename
+# derive_vars_merged_lookup Test 20: by_vars with rename
 
     Code
       actual <- derive_vars_merged_lookup(vs, dataset_add = param_lookup, by_vars = exprs(
@@ -86,7 +86,7 @@
       1 DIABP Diastolic Blood Pressure
       i Run `admiral::get_not_mapped()` to access the full list.
 
-# get_not_mapped Test 22: not all by_vars have records in the lookup table
+# get_not_mapped Test 21: not all by_vars have records in the lookup table
 
     Code
       act_vs_param <- derive_vars_merged_lookup(vs, dataset_add = param_lookup,
@@ -100,7 +100,7 @@
       1 DIABP Diastolic Blood Pressure
       i Run `admiral::get_not_mapped()` to access the full list.
 
-# derive_var_merged_summary Test 28: error incorrect 'one-to-one'
+# derive_var_merged_summary Test 26: error incorrect 'one-to-one'
 
     Code
       derive_vars_merged(advs, dataset_add = adsl, by_vars = exprs(USUBJID),
@@ -110,7 +110,7 @@
       ! Each row in `dataset_add` must match at most 1 row in `dataset`.
       i Row 1 of `dataset_add` matches multiple rows in `dataset`.
 
-# derive_var_merged_summary Test 29: merge sel vars 'one-to-one'
+# derive_var_merged_summary Test 27: merge sel vars 'one-to-one'
 
     Code
       derive_vars_merged(adsl, dataset_add = advs, by_vars = exprs(USUBJID),

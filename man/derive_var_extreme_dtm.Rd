@@ -42,8 +42,8 @@ A list of expressions where the expressions are symbols as returned by
 The input dataset with the new variable added.
 }
 \description{
-\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#superseded}{\figure{lifecycle-superseded.svg}{options: alt='[Superseded]'}}}{\strong{[Superseded]}} The \code{derive_var_extreme_dtm()}
-function has been superseded in favor of \code{derive_vars_extreme_event()}.
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}} The \code{derive_var_extreme_dtm()}
+function has been deprecated in favor of \code{derive_vars_extreme_event()}.
 
 Add the first or last datetime from multiple sources to the dataset, e.g.,
 the last known alive datetime (\code{LSTALVDTM}).
@@ -238,7 +238,7 @@ dm \%>\%
 \code{\link[=date_source]{date_source()}}, \code{\link[=derive_var_extreme_dt]{derive_var_extreme_dt()}},
 \code{\link[=derive_vars_merged]{derive_vars_merged()}}
 
-Other superseded: 
+Other deprecated: 
 \code{\link{date_source}()},
 \code{\link{derive_param_extreme_record}()},
 \code{\link{derive_var_dthcaus}()},
@@ -246,5 +246,5 @@ Other superseded:
 \code{\link{dthcaus_source}()},
 \code{\link{get_summary_records}()}
 }
-\concept{superseded}
-\keyword{superseded}
+\concept{deprecated}
+\keyword{deprecated}

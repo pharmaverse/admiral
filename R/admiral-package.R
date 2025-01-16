@@ -21,7 +21,7 @@
 #'   current_env .data enexpr enexprs eval_bare eval_tidy expr expr_interp exec
 #'   expr_label exprs f_lhs f_rhs  inform is_call is_expression is_missing
 #'   is_named list2 new_environment new_formula parse_expr parse_exprs set_names
-#'   sym syms type_of warn
+#'   sym syms type_of warn zap
 #' @importFrom stats setNames
 #' @importFrom stringr str_c str_count str_detect str_extract str_glue
 #'             str_length str_locate str_locate_all str_match str_remove

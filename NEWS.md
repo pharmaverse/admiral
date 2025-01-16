@@ -2,18 +2,50 @@
 
 ## New Features
 
+## Updates of Existing Functions
+
+## Breaking Changes
+
+- The following function arguments are entering the next phase of the [deprecation process](https://pharmaverse.github.io/admiraldev/articles/programming_strategy.html#deprecation): (#2487) (#2595)
+
+    **Phase 1 (message)**
+  
+    **Phase 2 (warning)**
+    
+    **Phase 3 (error)**
+    
+    **Phase 4 (removed)**
+
+## Documentation
+
+## Various
+
+<details>
+<summary>Developer Notes</summary>
+
+</details>
+
+# admiral 1.2.0
+
+## New Features
+
 - New function `derive_vars_cat()` for deriving pairs of variables or more, e.g. 
 `AVALCATy` & `AVALCAyN`. (#2480)
 - New function `derive_vars_crit_flag()` for deriving criterion flag variables
-(`CRITy`, `CRITyFL`, `CRITyFLN`). (#2468)
+(`CRITy`, `CRITyFL`, `CRITyFN`). (#2468)
 - New function `transform_range()`  to transform values from a source range to a
 target range. (#2571)
-- Replace use of `data("sdtm")` with `sdtm <- pharmaverse::sdtm` in templates and vignettes. (#2498)
-
-- Remove `dthcaus_source()` calls in `ADSL` template because they are deprecated. (#2517)
-- Update `ADEG` template to flag `ABLFL` and `ANL01FL` based on `DTYPE == "AVERAGE"` records. (#2561)
 
 ## Updates of Existing Functions
+
+- Added `"message"` as option for `check_type` argument in `derive_var_obs_number()` function. (#2481)
+
+- Added `"message"` as option for `check_type` argument in `filter_extreme()` function. (#2481)
+
+- Users can now specify how duplicate records are handled in `derive_param_tte()` using the `check_type` argument, with options including `"error"`, `"warning"`, `"message"`, or `"none"`, allowing for greater flexibility in managing duplicate data scenarios. (#2481)
+  
+- The `order` argument has been added to `event_source()` and `censor_source()` and  
+  defaulted to `NULL` to allow specifying variables in addition to the date variable. This can be used to ensure the uniqueness of the select records if there is more than one record per date.  (#2481)  
 
 - NCICTCAEv5 grading criteria (`atoxgr_criteria_ctcv5`):
 
@@ -39,11 +71,9 @@ or that the queries dataset contains duplicates. (#2543)
 
 - `derive_vars_atc()` and `create_single_dose_dataset()` `by_vars` argument updated to use `get_admiral_option("subject_keys")` instead of  `USUBJID` or `STUDYID` in `bds_exposure.Rmd`. (#2501)
   
-- test scripts, R, and markdown files for `create_single_dose_dataset` and `occds.Rmd` updated to include a `STUDYID` column because of `get_admiral_option("subject_keys")` update above. (#2501)
+- The test scripts, R, and markdown files for `create_single_dose_dataset()` and `occds.Rmd` updated to include a `STUDYID` column because of `get_admiral_option("subject_keys")` update above. (#2501)
 
 - Update `derive_vars_period()` to make it work when there is only one new variable. (#2582)
-
-- In `get_summary_records()`, previously deprecated formal arguments `analysis_var` and `summary_fun` now removed from function, documentation, tests etc. (#2521)
 
 - A check was added to `derive_vars_transposed()` and `derive_vars_atc()` which
 stops execution if the records in `dataset_merge` or `dataset_facm` respectively
@@ -51,31 +81,52 @@ are not unique. (#2563)
 
 - The functions `derive_vars_joined()`, `derive_var_joined_exist_flag()`,
 `derive_extreme_event()`, and `filter_joined()` were updated to reduce their
-memory consumption. (#2590)
+memory consumption. As the new code increases the run-time, it is not used by
+default. To enable it the new admiral option `save_memory` has to be set to
+`TRUE`. (#2590)
+
+- The function `compute_egfr()` updated to allow missing values for sex which result in missing values for output. (#2612)
 
 ## Breaking Changes
   
-- The following function arguments are entering the next phase of the deprecation process: (#2487)
+- The following function arguments are entering the next phase of the [deprecation process](https://pharmaverse.github.io/admiraldev/articles/programming_strategy.html#deprecation): (#2487) (#2595)
 
-### Phase 1 (warning)
+    **Phase 1 (message)**
+  
+    - `derive_param_extreme_record()` is deprecated and replaced by `derive_extreme_event()`
+    - `derive_var_dthcaus()` is deprecated and replaced by `derive_vars_extreme_event()`
+    - `date_source()` is deprecated and replaced by `event()`
+    - `dthcaus_source()` is deprecated and replaced by `event()`
+    - `derive_var_extreme_dt()` and `derive_var_extreme_dtm()` are deprecated and replaced by `derive_vars_extreme_event()`
+    - `get_summary_records()` is deprecated. Please use `derive_summary_records()` with the `dataset_add` argument and without the `dataset` argument.
 
-### Phase 2 (error)
+  
+    **Phase 2 (warning)**
+    
+    No functions or arguments in this Phase
 
-### Phase 3 (removed)
-  - `consolidate_metadata(check_keys)`
-  - Removed at v1.1.1 `compute_egfr(wt)`
-  - Removed at v1.1.1 `derive_expected_records(dataset_expected_obs)` 
-  - Removed at v1.1.1 `derive_locf_records(dataset_expected_obs)`
-  - `derive_extreme_event(ignore_event_order)`
-  - `derive_vars_merged(match_flag)`
-  - `derive_var_merged_summary(new_var, analysis_var, summary_fun)`
-  - Removed at v1.1.1 `derive_param_computed(analysis_value, analysis_var)`
-  - `derive_param_exposure(filter, analysis_var, summary_fun)`
-  - `derive_summary_records(filter)`
-  - Removed at v1.1.1 `derive_extreme_records(filter)`
-  - `derive_var_joined_exist_flag(first_cond, filter)`
-  - `event_joined(first_cond)`
-  - `filter_joined(first_cond, filter)`
+    **Phase 3 (error)**
+    
+    No functions or arguments in this Phase
+
+    **Phase 4 (removed)**
+
+    - `consolidate_metadata(check_keys)`
+    - Removed at v1.1.1 `compute_egfr(wt)`
+    - Removed at v1.1.1 `derive_expected_records(dataset_expected_obs)` 
+    - Removed at v1.1.1 `derive_locf_records(dataset_expected_obs)`
+    - `derive_extreme_event(ignore_event_order)`
+    - `derive_vars_merged(match_flag)`
+    - `derive_var_merged_summary(new_var, analysis_var, summary_fun)`
+    - Removed at v1.1.1 `derive_param_computed(analysis_value, analysis_var)`
+    - `derive_param_exposure(filter, analysis_var, summary_fun)`
+    - `derive_summary_records(filter)`
+    - Removed at v1.1.1 `derive_extreme_records(filter)`
+    - `derive_var_joined_exist_flag(first_cond, filter)`
+    - `event_joined(first_cond)`
+    - `filter_joined(first_cond, filter)`
+    - In `get_summary_records()`, previously deprecated formal arguments `analysis_var` and   
+    `summary_fun` now removed from function, documentation, tests etc. (#2521)
 
 ## Documentation
 
@@ -85,16 +136,27 @@ memory consumption. (#2590)
 - `derive_var_joined_exist_flag()` documentation updated with extra examples. (#2523)
 
 - Updated the Cheat Sheet to be in line with the 1.2 release of `{admiral}`. (#2458)
+- In the `derive_param_tte()` documentation is was clarified which
+event/censoring is selected if there is more than one at the same date (for
+events the first one specified in `event_conditions` and for censoring the last
+one in `censor_conditions`). (#2639)
 
 ## Various
+
+- Replace use of `data("sdtm")` with `sdtm <- pharmaverse::sdtm` in templates and vignettes. (#2498)
+- Remove `dthcaus_source()` calls in `ADSL` template because they are deprecated. (#2517)
+- Update `ADEG` template to flag `ABLFL` and `ANL01FL` based on `DTYPE == "AVERAGE"` records. (#2561)
 
 <details>
 <summary>Developer Notes</summary>
 
 - Created unit tests for developer internal function `restricted_imputed_dtc_dt()` (#2495)
-- Adopted `data-raw/data` R Package Convention (#2427)
+- Adopted `data-raw/data` R Package Convention (#2427, #2584)
 - `compute_bsa()` now uses the more common (but equivalent) version of the DuBois-DuBois formula for BSA. The results have not changed. (#2532)  
 - Removed `.devcontainer` file (codespace) (#2524)
+- Restructured `derive_adeg_parms.R` and `derive_advs_parms.R` and related test files for easier reference (#2551)
+
+
 
 </details>
 

@@ -104,7 +104,7 @@ derive_var_obs_number <- function(dataset,
   check_type <-
     assert_character_scalar(
       check_type,
-      values = c("none", "warning", "error"),
+      values = c("none", "warning", "error", "message"),
       case_sensitive = FALSE
     )
 
