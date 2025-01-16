@@ -581,27 +581,10 @@ test_that("format.basket_select Test 23: formatting is correct (name specified)"
 
 # assert_db_requirements ----
 ## Test 24: assert_db_requirements_
-test_that("assert_db_requirements 24: assert_db_requirements() throws error and
-          with no `fun` arugment provided", {
-  expect_snapshot(
-    assert_db_requirements(fun = NULL),
-    error = TRUE
-  )
-})
-## Test 25: assert_db_requirements_
-test_that("assert_db_requirements 25: assert_db_requirements() throws error and
-          when called with no `queries` argument provided", {
-  expect_snapshot(
-    assert_db_requirements(fun = print, version = NULL),
-    error = TRUE
-  )
-})
-## Test 26: assert_db_requirements_
-test_that("assert_db_requirements 25: assert_db_requirements() throws error no `fun` provided
-          `queries` arugment provided", {
+test_that("assert_db_requirements 24: assert_db_requirements() throws error no `fun` provided", {
 
  # create a query for a SMQ
-q = query(
+q <- query(
   prefix = "SMQ02",
   id = auto,
   definition = basket_select(
@@ -611,10 +594,10 @@ q = query(
   )
 )
   validate_query(q)
-  queries = list(q)
+  queries <- list(q)
 
   expect_snapshot(
-    assert_db_requirements(fun = NULL, version = NULL, queries = queries, i = 1),
+    assert_db_requirements(fun = NULL, fun_arg_name = "NULL", version = NULL, queries = queries, i = 1),
     error = TRUE
   )
 })

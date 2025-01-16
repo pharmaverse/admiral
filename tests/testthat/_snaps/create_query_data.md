@@ -146,27 +146,24 @@
       Error in `basket_select()`:
       ! argument "type" is missing, with no default
 
-# assert_db_requirements 24: assert_db_requirements() throws error and          increases code coverage when called with no `fun` arugment provided
+# assert_db_requirements 25: assert_db_requirements() throws error no `fun` provided
 
     Code
-      assert_db_requirements(fun = NULL)
+      assert_db_requirements(fun = NULL, fun_arg_name = "NULL", version = NULL,
+        queries = queries, i = 1)
     Condition
       Error in `assert_db_requirements()`:
-      ! argument "queries" is missing, with no default
-
-# assert_db_requirements 25: assert_db_requirements() throws error and          increases code coverage when called with no `queries` arugment provided
-
-    Code
-      assert_db_requirements(fun = print, version = NULL)
-    Condition
-      Error in `assert_db_requirements()`:
-      ! argument "queries" is missing, with no default
-
----
-
-    Code
-      assert_db_requirements(fun = print, version = NULL, queries = queries)
-    Condition
-      Error in `queries[[i]]`:
-      ! missing subscript
+      ! `NULL` is not specified. This is expected for baskets.
+      i A basket is requested by query 1:
+      <query> object
+      prefix: "SMQ02"
+      name: auto
+      id: auto
+      add_scope_num: FALSE
+      definition:
+        <basket_select> object
+        name: "Pregnancy and neonatal topics (SMQ)"
+        id: NULL
+        scope: "NARROW"
+        type: "smq"
 
