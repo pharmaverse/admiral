@@ -50,7 +50,7 @@ knitr::opts_chunk$set(
 ##### Admiral offers a **toolbox of functions to facilitate ADaM**. What does that mean?
 
 * Functions are usually parameter driven: 
-    * e.g. the `derive_vars_aage` has a parameterized start and end-date and a unit.
+    * e.g. the `derive_vars_aage()` has a parameterized start and end-date and a unit.
     * Depending on the parameters results may vary as does the specification.
     * Functions serve as a toolbox so the user can create their ADaM according to the requirements.
     * The principles, programming strategy and documentation of `{admiral}` are considered as a framework for users to contribute.
@@ -65,6 +65,8 @@ knitr::opts_chunk$set(
 
 * A [Cheat Sheet](https://github.com/pharmaverse/admiral/blob/main/inst/cheatsheet/admiral_cheatsheet.pdf) is available, providing some examples of the many `{admiral}` functions. 
 * For more detailed description, please refer to the [Reference section](https://pharmaverse.github.io/admiral/reference/index.html). 
+* [admiraldiscovery](https://pharmaverse.github.io/admiraldiscovery/articles/reactable.html) provides
+a way to look up common ADaM variables with recommended `{admiral}` functions to complete the derivation.
 
 ##### Would `{admiral}` **create a whole** ADaM  dataset?
 

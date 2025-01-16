@@ -8,7 +8,7 @@
 An object of class \code{tbl_df} (inherits from \code{tbl}, \code{data.frame}) with 161 rows and 11 columns.
 }
 \source{
-Created by (\url{https://github.com/pharmaverse/admiral/blob/main/inst/example_scripts/example_qs.R})
+Created by (\url{https://github.com/pharmaverse/admiral/blob/main/data-raw/create_example_qs.R})
 }
 \usage{
 example_qs

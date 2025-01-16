@@ -165,7 +165,8 @@ test_that("print.source Test 13: `source` objects are printed as intended", {
     "  EVENTDESC: \"AE\"",
     "  SRCDOM: \"AE\"",
     "  SRCVAR: \"AESTDTC\"",
-    "  SRCSEQ: AESEQ"
+    "  SRCSEQ: AESEQ",
+    "order: NULL"
   )
   expect_identical(capture.output(print(ttae)), expected_print_output)
 })

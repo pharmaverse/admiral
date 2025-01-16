@@ -1,7 +1,7 @@
 Type: Package
 Package: admiral
 Title: ADaM in R Asset Library
-Version: 1.1.1.9055
+Version: 1.2.0.9001
 Authors@R: c(
     person("Ben", "Straub", , "ben.x.straub@gsk.com", role = c("aut", "cre")),
     person("Stefan", "Bundfuss", role = "aut",
@@ -40,9 +40,9 @@ URL: https://pharmaverse.github.io/admiral/,
     https://github.com/pharmaverse/admiral
 BugReports: https://github.com/pharmaverse/admiral/issues
 Depends: 
-    R (>= 4.0)
+    R (>= 4.1)
 Imports:
-    admiraldev (>= 1.1.0.9007),
+    admiraldev (>= 1.2.0),
     cli (>= 3.6.2),
     dplyr (>= 1.0.5),
     hms (>= 0.5.3),
@@ -65,7 +65,8 @@ Suggests:
     readxl,
     rmarkdown,
     testthat (>= 3.0.0),
-    tibble
+    tibble,
+    withr
 VignetteBuilder: 
     knitr
 Remotes: 
