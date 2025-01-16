@@ -581,7 +581,7 @@ test_that("format.basket_select Test 23: formatting is correct (name specified)"
 
 # assert_db_requirements ----
 ## Test 24: assert_db_requirements_
-test_that("assert_db_requirements 24: assert_db_requirements() throws error no `fun` provided", {
+test_that("assert_db_requirements 24: assert_db_requirements() error if no `fun` provided", {
 
  # create a query for a SMQ
 q <- query(
