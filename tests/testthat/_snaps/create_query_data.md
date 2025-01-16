@@ -146,3 +146,24 @@
       Error in `basket_select()`:
       ! argument "type" is missing, with no default
 
+# assert_db_requirements 25: assert_db_requirements() throws error no `fun` provided
+
+    Code
+      assert_db_requirements(fun = NULL, fun_arg_name = "NULL", version = NULL,
+        queries = queries, i = 1)
+    Condition
+      Error in `assert_db_requirements()`:
+      ! `NULL` is not specified. This is expected for baskets.
+      i A basket is requested by query 1:
+      <query> object
+      prefix: "SMQ02"
+      name: auto
+      id: auto
+      add_scope_num: FALSE
+      definition:
+        <basket_select> object
+        name: "Pregnancy and neonatal topics (SMQ)"
+        id: NULL
+        scope: "NARROW"
+        type: "smq"
+
