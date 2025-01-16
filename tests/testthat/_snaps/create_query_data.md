@@ -162,3 +162,11 @@
       Error in `assert_db_requirements()`:
       ! argument "queries" is missing, with no default
 
+---
+
+    Code
+      assert_db_requirements(fun = print, version = NULL, queries = queries)
+    Condition
+      Error in `queries[[i]]`:
+      ! missing subscript
+

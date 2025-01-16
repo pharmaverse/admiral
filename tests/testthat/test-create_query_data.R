@@ -582,7 +582,7 @@ test_that("format.basket_select Test 23: formatting is correct (name specified)"
 # assert_db_requirements ----
 ## Test 24: assert_db_requirements_
 test_that("assert_db_requirements 24: assert_db_requirements() throws error and
-          increases code coverage when called with no `fun` arugment provided", {
+          with no `fun` arugment provided", {
   expect_snapshot(
     assert_db_requirements(fun = NULL),
     error = TRUE
@@ -590,9 +590,31 @@ test_that("assert_db_requirements 24: assert_db_requirements() throws error and
 })
 ## Test 25: assert_db_requirements_
 test_that("assert_db_requirements 25: assert_db_requirements() throws error and
-          increases code coverage when called with no `queries` arugment provided", {
+          when called with no `queries` argument provided", {
   expect_snapshot(
     assert_db_requirements(fun = print, version = NULL),
+    error = TRUE
+  )
+})
+## Test 26: assert_db_requirements_
+test_that("assert_db_requirements 25: assert_db_requirements() throws error no `fun` provided
+          `queries` arugment provided", {
+
+ # create a query for a SMQ
+q = query(
+  prefix = "SMQ02",
+  id = auto,
+  definition = basket_select(
+  name = "Pregnancy and neonatal topics (SMQ)",
+  scope = "NARROW",
+  type = "smq"
+  )
+)
+  validate_query(q)
+  queries = list(q)
+
+  expect_snapshot(
+    assert_db_requirements(fun = NULL, version = NULL, queries = queries, i = 1),
     error = TRUE
   )
 })
