@@ -4,6 +4,8 @@
 
 ## Updates of Existing Functions
 
+- The function `extract_duplicate_records()` updated to use all variables if omitted the `by_vars` (#2644)
+
 ## Breaking Changes
 
 - The following function arguments are entering the next phase of the [deprecation process](https://pharmaverse.github.io/admiraldev/articles/programming_strategy.html#deprecation): (#2487) (#2595)
