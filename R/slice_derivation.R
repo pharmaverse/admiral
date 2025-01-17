@@ -109,12 +109,7 @@ slice_derivation <- function(dataset,
     dataset,
     temp_slicenr = !!slice_call
   )
-
-  # split dataset into slices
-  dataset_split <- dataset %>%
-    group_by(temp_slicenr) %>%
-    nest()
-
+  ret <- list()
   # call derivation for each slice
   for (i in seq_along(slices)) {
     # call derivation on subset
@@ -122,35 +117,29 @@ slice_derivation <- function(dataset,
     act_args <- args[names(args) %notin% names(slices[[i]]$args)]
 
     call <- call2(derivation, expr(data), !!!act_args, !!!slices[[i]]$args)
-    obsnr <- which(dataset_split$temp_slicenr == i)
-    if (length(obsnr) > 0) {
-      # call the derivation for non-empty slices only
-      # create environment in which the call to the derivation is evaluated
-      act_env <- attr(args, "env")
-      slice_env <- attr(slices[[i]]$args, "env")
-      if (!identical(act_env, slice_env)) {
-        # prefer objects in the slice environment to object in args environment
-        # Note: objects in any of the parent environments of the slice environment are ignored.
-        eval_env <- new_environment(
-          data = c(list(data = dataset_split$data[[obsnr]]), as.list(slice_env)),
-          parent = act_env
-        )
-      } else {
-        eval_env <- new_environment(
-          data = list(data = dataset_split$data[[obsnr]]),
-          parent = act_env
-        )
-      }
-
-      dataset_split$data[[obsnr]] <-
-        eval_tidy(call, env = eval_env)
+    obsnr <- which(dataset$temp_slicenr == i)
+    # call the derivation for non-empty slices only
+    # create environment in which the call to the derivation is evaluated
+    act_env <- attr(args, "env")
+    slice_env <- attr(slices[[i]]$args, "env")
+    if (!identical(act_env, slice_env)) {
+      # prefer objects in the slice environment to object in args environment
+      # Note: objects in any of the parent environments of the slice environment are ignored.
+      eval_env <- new_environment(
+        data = c(list(data = dataset[obsnr, , drop = FALSE]), as.list(slice_env)),
+        parent = act_env
+      )
+    } else {
+      eval_env <- new_environment(
+        data = list(data = dataset[obsnr, , drop = FALSE]),
+        parent = act_env
+      )
     }
-  }
 
+    ret[[i]] <- eval_tidy(call, env = eval_env)
+  }
   # put datasets together again
-  dataset_split %>%
-    unnest(cols = c(data)) %>%
-    ungroup() %>%
+  bind_rows(ret, dataset[is.na(dataset$temp_slicenr), , drop = FALSE]) %>%
     select(-temp_slicenr)
 }
 
