@@ -596,8 +596,7 @@ test_that("assert_db_requirements 24: assert_db_requirements() error if no `fun`
   queries <- list(q)
 
   expect_snapshot(
-    assert_db_requirements(fun = NULL,
-                           fun_arg_name = "NULL", version = NULL, queries = queries, i = 1),
+    create_query_data(queries = queries),
     error = TRUE
   )
 })
