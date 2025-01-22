@@ -683,8 +683,8 @@ each condition, e.g., `AGEGR1` and `AGEGR1N`.
 
 Additionally, one needs to be careful when considering the order of the conditions in the lookup table. 
 The category is assigned based on the first match.
-That means *catch-all* conditions must come after specific conditions, e.g. `!is.na(AGE)`
-must come after `AGE < 18`.
+That means *catch-all* conditions must come after specific conditions, e.g. `!is.na(COUNTRY)`
+must come after `COUNTRY %in% c("CAN", "USA")`.
 
 ```{r eval=TRUE}
 # create lookup tables
