@@ -27,7 +27,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">admiral</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.2.0.9001</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.2.0.9002</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -750,8 +750,8 @@ created for each condition, e.g., <code>AGEGR1</code> and
 <p>Additionally, one needs to be careful when considering the order of
 the conditions in the lookup table. The category is assigned based on
 the first match. That means <em>catch-all</em> conditions must come
-after specific conditions, e.g. <code>!is.na(AGE)</code> must come after
-<code>AGE &lt; 18</code>.</p>
+after specific conditions, e.g. <code>!is.na(COUNTRY)</code> must come
+after <code>COUNTRY %in% c("CAN", "USA")</code>.</p>
 <div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># create lookup tables</span></span>
 <span><span class="va">agegr1_lookup</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/reexport-exprs.html">exprs</a></span><span class="op">(</span></span>
