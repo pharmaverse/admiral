@@ -330,8 +330,8 @@ test_that("create_query_data Test 7: issues error if SDGs without meddra_version
   )
 })
 
-## Test 8: assert_db_requirements 24: error if no `get_terms_fun` provided ----
-test_that("create_query_data Test 8: assert_db_requirements 24: error if no `get_terms_fun` provided", {
+## Test 8: error if no `get_terms_fun` provided ----
+test_that("create_query_data Test 8: error if no `get_terms_fun` provided", {
   expect_snapshot(
     create_query_data(queries = list(
       query(

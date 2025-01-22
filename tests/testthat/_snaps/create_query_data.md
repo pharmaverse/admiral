@@ -36,7 +36,7 @@
         scope: "NA"
         type: "sdg"
 
-# create_query_data Test 8: assert_db_requirements 24: error if no `get_terms_fun` provided
+# create_query_data Test 8: error if no `get_terms_fun` provided
 
     Code
       create_query_data(queries = list(query(prefix = "SMQ02", id = auto, definition = basket_select(
