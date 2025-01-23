@@ -14,7 +14,7 @@ The variables specified by the \code{by_vars} argument are expected to be in the
 \item{by_vars}{Grouping variables
 
 Defines groups of records in which to look for duplicates.
-If omitted, all variables used for defining groups.
+If omitted, all variables in the input dataset are used in the by group.
 
 \emph{Permitted Values}: list of variables created by \code{exprs()}
 e.g. \code{exprs(USUBJID, VISIT)}}
