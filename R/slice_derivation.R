@@ -41,7 +41,7 @@
 #'   the first matching slice.
 #'
 #'   - Observations with no match to any of the slices are included in the
-#'   output dataset but the derivation is not called for them.
+#'   output dataset and the derivation \strong{is} called for them.
 #'
 #' @return The input dataset with the variables derived by the derivation added
 #'

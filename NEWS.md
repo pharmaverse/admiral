@@ -4,6 +4,8 @@
 
 ## Updates of Existing Functions
 
+- In `slice_derivation`, previously the derivation is not called for empty subsets, however this can lead to issues when the input dataset is empty. Now the derivation is called for all subsets.
+
 ## Breaking Changes
 
 - The following function arguments are entering the next phase of the [deprecation process](https://pharmaverse.github.io/admiraldev/articles/programming_strategy.html#deprecation): (#2487) (#2595)
