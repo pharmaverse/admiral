@@ -1,8 +1,8 @@
 #' Adds a Parameter Based on First or Last Record from Multiple Sources
 #'
 #' @description
-#' `r lifecycle::badge("superseded")` The `derive_param_extreme_record()`
-#' function has been superseded in favor of `derive_extreme_event()`.
+#' `r lifecycle::badge("deprecated")` The `derive_param_extreme_record()`
+#' function has been deprecated in favor of `derive_extreme_event()`.
 #'
 #' Generates parameter based on the first or last observation from multiple
 #' source datasets, based on user-defined filter, order and by group criteria.
@@ -77,8 +77,8 @@
 #' The input dataset with the first or last observation of each by group
 #' added as new observations.
 #'
-#' @family superseded
-#' @keywords superseded
+#' @family deprecated
+#' @keywords deprecated
 #'
 #' @export
 #' @examples
@@ -136,6 +136,17 @@ derive_param_extreme_record <- function(dataset = NULL,
                                         order,
                                         mode,
                                         set_values_to) {
+  deprecate_inform(
+    when = "1.2.0",
+    what = "derive_param_extreme_record()",
+    with = "derive_extreme_event()",
+    details = c(
+      x = "This message will turn into a warning at the beginning of 2026.",
+      i = "See admiral's deprecation guidance:
+      https://pharmaverse.github.io/admiraldev/dev/articles/programming_strategy.html#deprecation"
+    )
+  )
+
   # Check arguments assertions
   assert_data_frame(dataset, optional = TRUE)
   assert_list_of(sources, cls = "records_source")

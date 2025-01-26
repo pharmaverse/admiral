@@ -61,7 +61,25 @@
       i Following names were provided by `source_datasets`: "adsl"
       i But, `censor_conditions[[1]]$dataset_name = adls`
 
-# list_tte_source_objects Test 14: error is issued if package does not exist
+# derive_param_tte Test 14: detects duplicates in input datasets via pipeline functions
+
+    Code
+      derive_param_tte(dataset_adsl = adsl, start_date = TRTSDT, event_conditions = list(
+        ttae), censor_conditions = list(eot), source_datasets = list(adsl = adsl, ae = ae),
+      set_values_to = exprs(PARAMCD = "TTAE"), check_type = "warning")
+    Condition
+      Warning:
+      Dataset "ae" contains duplicate records with respect to `STUDYID`, `USUBJID`, and `AESTDT`
+      i Run `admiral::get_duplicates_dataset()` to access the duplicate records
+    Output
+      # A tibble: 2 x 10
+        USUBJID STUDYID EVENTDESC  SRCDOM SRCVAR  SRCSEQ  CNSR ADT        STARTDT   
+        <chr>   <chr>   <chr>      <chr>  <chr>    <dbl> <int> <date>     <date>    
+      1 01      AB42    AE         AE     AESTDTC      1     0 2021-01-03 2020-12-06
+      2 02      AB42    END OF TRT ADSL   TRTEDT      NA     1 2021-01-30 2021-01-16
+      # i 1 more variable: PARAMCD <chr>
+
+# list_tte_source_objects Test 17: error is issued if package does not exist
 
     Code
       list_tte_source_objects(package = "tte")

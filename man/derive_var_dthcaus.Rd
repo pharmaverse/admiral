@@ -30,8 +30,8 @@ A list of expressions where the expressions are symbols as returned by
 The input dataset with \code{DTHCAUS} variable added.
 }
 \description{
-\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#superseded}{\figure{lifecycle-superseded.svg}{options: alt='[Superseded]'}}}{\strong{[Superseded]}} The \code{derive_var_dthcaus()}
-function has been superseded in favor of \code{derive_vars_extreme_event()}.
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}} The \code{derive_var_dthcaus()}
+function has been deprecated in favor of \code{derive_vars_extreme_event()}.
 
 Derive death cause (\code{DTHCAUS}) and add traceability variables if required.
 }
@@ -147,7 +147,7 @@ derive_var_dthcaus(
 \seealso{
 \code{\link[=dthcaus_source]{dthcaus_source()}}
 
-Other superseded: 
+Other deprecated: 
 \code{\link{date_source}()},
 \code{\link{derive_param_extreme_record}()},
 \code{\link{derive_var_extreme_dt}()},
@@ -155,5 +155,5 @@ Other superseded:
 \code{\link{dthcaus_source}()},
 \code{\link{get_summary_records}()}
 }
-\concept{superseded}
-\keyword{superseded}
+\concept{deprecated}
+\keyword{deprecated}

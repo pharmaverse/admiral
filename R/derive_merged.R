@@ -112,15 +112,15 @@
 #'
 #' @param check_type Check uniqueness?
 #'
-#'   If `"warning"` or `"error"` is specified, the specified message is issued
+#'   If `"warning"`, `"message"`, or `"error"` is specified, the specified message is issued
 #'   if the observations of the (restricted) additional dataset are not unique
 #'   with respect to the by variables and the order.
 #'
 #'   If the `order` argument is not specified, the `check_type` argument is ignored:
-#'    if the observations of the (restricted) additional dataset are not unique with respect
-#'    to the by variables, an error is issued.
+#'   if the observations of the (restricted) additional dataset are not unique with respect
+#'   to the by variables, an error is issued.
 #'
-#'   *Permitted Values*: `"none"`, `"warning"`, `"error"`
+#'   *Permitted Values*: `"none"`, `"message"`, `"warning"`, `"error"`
 #'
 #' @param duplicate_msg Message of unique check
 #'

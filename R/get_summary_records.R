@@ -2,10 +2,9 @@
 #'
 #' @description
 #'
-#' `r lifecycle::badge("superseded")`
-#'
-#' Development on `get_summary_records()` is complete, and for new code we recommend
-#' switching to using the `dataset_add` argument in `derive_summary_records()`.
+#' `r lifecycle::badge("deprecated")` The `get_summary_records()` has been
+#' deprecated in favor of `derive_summary_records()` (call it with the `dataset_add`
+#' argument and without the `dataset` argument).
 #'
 #' It is not uncommon to have an analysis need whereby one needs to derive an
 #' analysis value (`AVAL`) from multiple records. The ADaM basic dataset
@@ -60,9 +59,8 @@
 #'
 #' @return A data frame of derived records.
 #'
-#' @family superseded
-#'
-#' @keywords superseded
+#' @family deprecated
+#' @keywords deprecated
 #'
 #' @seealso [derive_summary_records()], [derive_var_merged_summary()]
 #'
@@ -149,6 +147,17 @@ get_summary_records <- function(dataset,
                                 by_vars,
                                 filter = NULL,
                                 set_values_to = NULL) {
+  deprecate_inform(
+    when = "1.2.0",
+    what = "get_summary_records()",
+    with = "derive_summary_records()",
+    details = c(
+      x = "This message will turn into a warning at the beginning of 2026.",
+      i = "See admiral's deprecation guidance:
+      https://pharmaverse.github.io/admiraldev/dev/articles/programming_strategy.html#deprecation"
+    )
+  )
+
   assert_vars(by_vars)
   filter <- assert_filter_cond(enexpr(filter), optional = TRUE)
   assert_data_frame(

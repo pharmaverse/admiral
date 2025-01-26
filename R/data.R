@@ -4,7 +4,7 @@
 #' @keywords datasets
 #' @family datasets
 #' @source
-#' Derived from the `ex` dataset using `{admiral}` and `{dplyr}` (\url{https://github.com/pharmaverse/admiral/blob/main/inst/example_scripts/derive_single_dose.R})
+#' Derived from the `ex` dataset using `{admiral}` and `{dplyr}` (\url{https://github.com/pharmaverse/admiral/blob/main/data-raw/create_ex_single.R})
 "ex_single"
 
 #' Example `QS` Dataset
@@ -17,7 +17,7 @@
 #' @keywords datasets
 #' @family datasets
 #' @source
-#' Created by (\url{https://github.com/pharmaverse/admiral/blob/main/inst/example_scripts/example_qs.R})
+#' Created by (\url{https://github.com/pharmaverse/admiral/blob/main/data-raw/create_example_qs.R})
 "example_qs"
 
 #' Queries Dataset
