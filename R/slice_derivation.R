@@ -39,7 +39,7 @@
 #'
 #'   - Observations that match with more than one slice are only considered for
 #'   the first matching slice.
-#' 
+#'
 #'   - The derivation is called for slices with no observations.
 #'
 #'   - Observations with no match to any of the slices are included in the
