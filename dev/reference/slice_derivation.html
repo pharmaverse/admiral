@@ -11,7 +11,7 @@ may vary depending on the slice."><meta property="og:image" content="https://pha
 
     <a class="navbar-brand me-2" href="../index.html">admiral</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.2.0.9003</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.2.0.9004</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -127,6 +127,7 @@ specified by the <code>args</code> parameter and the <code>args</code> field of 
 <code><a href="derivation_slice.html">derivation_slice()</a></code> object. If a parameter is specified for both, the
 value in <code><a href="derivation_slice.html">derivation_slice()</a></code> overwrites the one in <code>args</code>.</p><ul><li><p>Observations that match with more than one slice are only considered for
 the first matching slice.</p></li>
+<li><p>The derivation is called for slices with no observations.</p></li>
 <li><p>Observations with no match to any of the slices are included in the
 output dataset but the derivation is not called for them.</p></li>
 </ul></div>
@@ -171,8 +172,8 @@ output dataset but the derivation is not called for them.</p></li>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 2 × 5</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   USUBJID VSDTC      VSTPT            ADTM                ATMF </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>            <span style="color: #949494; font-style: italic;">&lt;dttm&gt;</span>              <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> 1       2020-04-16 <span style="color: #BB0000;">NA</span>               2020-04-16 <span style="color: #949494;">23:59:59</span> H    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">2</span> 1       2020-04-16 BEFORE TREATMENT 2020-04-16 <span style="color: #949494;">00:00:00</span> H    </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> 1       2020-04-16 BEFORE TREATMENT 2020-04-16 <span style="color: #949494;">00:00:00</span> H    </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">2</span> 1       2020-04-16 <span style="color: #BB0000;">NA</span>               2020-04-16 <span style="color: #949494;">23:59:59</span> H    </span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
