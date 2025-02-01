@@ -908,7 +908,8 @@ get_joined_sub_data <- function(dataset,
       dataset,
       dataset_add,
       by = vars2chr(by_vars),
-      suffix = c("", ".join")
+      suffix = c("", ".join"),
+      relationship = "many-to-many"
     )
 
   if (join_type != "all") {
