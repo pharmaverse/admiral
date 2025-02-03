@@ -49,6 +49,7 @@ value in \code{derivation_slice()} overwrites the one in \code{args}.
 \itemize{
 \item Observations that match with more than one slice are only considered for
 the first matching slice.
+\item The derivation is called for slices with no observations.
 \item Observations with no match to any of the slices are included in the
 output dataset but the derivation is not called for them.
 }
