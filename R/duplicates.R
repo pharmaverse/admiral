@@ -41,6 +41,9 @@ get_duplicates_dataset <- function() {
 #'  Defines groups of records in which to look for duplicates.
 #'  If omitted, all variables in the input dataset are used in the by group.
 #'
+#'  **Note:**  Omitting `by_vars` will increase the run-time, explicitly specify
+#'  the necessary grouping variables for large dataset whenever possible.
+#'
 #' `r roxygen_param_by_vars()`
 #'
 #' @return A `data.frame` of duplicate records within `dataset`
