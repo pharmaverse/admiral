@@ -16,8 +16,9 @@ The variables specified by the \code{by_vars} argument are expected to be in the
 Defines groups of records in which to look for duplicates.
 If omitted, all variables in the input dataset are used in the by group.
 
-\strong{Note:}  Omitting \code{by_vars} will increase the run-time, explicitly specify
-the necessary grouping variables for large dataset whenever possible.
+\strong{Note:}  Omitting \code{by_vars} will increase the function's run-time, so it is
+recommended to specify the necessary grouping variables for large datasets
+whenever possible.
 
 \emph{Permitted Values}: list of variables created by \code{exprs()}
 e.g. \code{exprs(USUBJID, VISIT)}}
