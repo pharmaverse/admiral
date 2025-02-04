@@ -4,6 +4,7 @@
 
 ## Updates of Existing Functions
 
+- The function `extract_duplicate_records()` was updated to consider all variables in the input dataset for the by group if the `by_vars` argument is omitted entirely. (#2644)
 - In `slice_derivation`, previously the derivation is not called for empty subsets, however this can lead to issues when the input dataset is empty. Now the derivation is called for all subsets.
 
 ## Breaking Changes

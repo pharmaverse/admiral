@@ -39,6 +39,11 @@ get_duplicates_dataset <- function() {
 #' @param by_vars Grouping variables
 #'
 #'  Defines groups of records in which to look for duplicates.
+#'  If omitted, all variables in the input dataset are used in the by group.
+#'
+#'  **Note:**  Omitting `by_vars` will increase the function's run-time, so it is
+#'  recommended to specify the necessary grouping variables for large datasets
+#'  whenever possible.
 #'
 #' `r roxygen_param_by_vars()`
 #'
@@ -55,9 +60,14 @@ get_duplicates_dataset <- function() {
 #' adsl <- rbind(admiral_adsl[1L, ], admiral_adsl)
 #'
 #' extract_duplicate_records(adsl, exprs(USUBJID))
-extract_duplicate_records <- function(dataset, by_vars) {
-  assert_expr_list(by_vars)
-  assert_data_frame(dataset, required_vars = extract_vars(by_vars), check_is_grouped = FALSE)
+extract_duplicate_records <- function(dataset, by_vars = NULL) {
+  if (is.null(by_vars)) {
+    assert_data_frame(dataset, check_is_grouped = FALSE)
+    by_vars <- exprs(!!!parse_exprs(names(dataset)))
+  } else {
+    assert_expr_list(by_vars)
+    assert_data_frame(dataset, required_vars = extract_vars(by_vars), check_is_grouped = FALSE)
+  }
 
   data_by <- dataset %>%
     ungroup() %>%
