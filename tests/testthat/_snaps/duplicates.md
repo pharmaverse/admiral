@@ -1,4 +1,4 @@
-# signal_duplicate_records Test 2: dataset of duplicate records can be accessed using `get_duplicates_dataset()`
+# signal_duplicate_records Test 3: dataset of duplicate records can be accessed using `get_duplicates_dataset()`
 
     Code
       get_duplicates_dataset()
