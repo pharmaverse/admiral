@@ -21,7 +21,11 @@ derive_extreme_records(
 )
 }
 \arguments{
-\item{dataset}{Input dataset}
+\item{dataset}{Input dataset
+
+\describe{
+\item{Default}{\code{NULL}}
+}}
 
 \item{dataset_add}{Additional dataset
 
@@ -30,27 +34,41 @@ based on the groups that exist in this dataset after being subset by \code{filte
 
 The variables specified in the \code{by_vars} and \code{filter_add} parameters are expected
 in this dataset. If \code{mode} and \code{order} are specified, the first or last observation
-within each by group, defined by \code{by_vars}, is selected.}
+within each by group, defined by \code{by_vars}, is selected.
+
+\describe{
+\item{Default}{none}
+}}
 
 \item{dataset_ref}{Reference dataset
 
 The variables specified for \code{by_vars} are expected. For each
 observation of the specified dataset a new observation is added to the
-input dataset.}
+input dataset.
+
+\describe{
+\item{Default}{\code{NULL}}
+}}
 
 \item{by_vars}{Grouping variables
 
 If \code{dataset_ref} is specified, this argument must be specified.
 
 \emph{Permitted Values}: list of variables created by \code{exprs()}
-e.g. \code{exprs(USUBJID, VISIT)}}
+e.g. \code{exprs(USUBJID, VISIT)}
+
+\describe{
+\item{Default}{\code{NULL}}
+}}
 
 \item{order}{Sort order
 
 Within each by group the observations are ordered by the specified order.
 
-\emph{Permitted Values:} list of expressions created by \code{exprs()}, e.g.,
-\code{exprs(ADT, desc(AVAL))}}
+\describe{
+\item{Permitted values}{list of expressions created by \code{exprs()}, e.g.,}
+\item{Default}{none}
+}}
 
 \item{mode}{Selection mode (first or last)
 
@@ -58,12 +76,19 @@ If \code{"first"} is specified, the first observation of each by group is added
 to the input dataset. If \code{"last"} is specified, the last observation of
 each by group is added to the input dataset.
 
-\emph{Permitted Values:} \code{"first"}, \code{"last"}}
+\describe{
+\item{Permitted values}{\code{"first"}, \code{"last"}}
+\item{Default}{\code{NULL}}
+}}
 
 \item{filter_add}{Filter for additional dataset (\code{dataset_add})
 
 Only observations in \code{dataset_add} fulfilling the specified condition are
-considered.}
+considered.
+
+\describe{
+\item{Default}{\code{NULL}}
+}}
 
 \item{check_type}{Check uniqueness?
 
@@ -71,7 +96,10 @@ If \code{"warning"} or \code{"error"} is specified, the specified message is iss
 if the observations of the (restricted) additional dataset are not unique
 with respect to the by variables and the order.
 
-\emph{Permitted Values}: \code{"none"}, \code{"warning"}, \code{"error"}}
+\describe{
+\item{Permitted values}{\code{"none"}, \code{"message"}, \code{"warning"}, \code{"error"}}
+\item{Default}{\code{"warning"}}
+}}
 
 \item{exist_flag}{Existence flag
 
@@ -84,24 +112,39 @@ For by groups with at least one observation in the additional dataset
 For all other by groups \code{exist_flag} is set to the value specified by the
 \code{false_value} argument.
 
-\emph{Permitted Values:} Variable name}
+\describe{
+\item{Permitted values}{Variable name}
+\item{Default}{\code{NULL}}
+}}
 
 \item{true_value}{True value
 
 For new observations selected from the additional dataset (\code{dataset_add}),
-\code{exist_flag} is set to the specified value.}
+\code{exist_flag} is set to the specified value.
+
+\describe{
+\item{Default}{\code{"Y"}}
+}}
 
 \item{false_value}{False value
 
 For new observations not selected from the additional dataset
-(\code{dataset_add}), \code{exist_flag} is set to the specified value.}
+(\code{dataset_add}), \code{exist_flag} is set to the specified value.
+
+\describe{
+\item{Default}{\code{NA_character_}}
+}}
 
 \item{keep_source_vars}{Variables to be kept in the new records
 
 A named list or tidyselect expressions created by \code{exprs()} defining the
 variables to be kept for the new records. The variables specified for
 \code{by_vars} and \code{set_values_to} need not be specified here as they are kept
-automatically.}
+automatically.
+
+\describe{
+\item{Default}{\code{exprs(everything())}}
+}}
 
 \item{set_values_to}{Variables to be set
 
@@ -122,7 +165,11 @@ For example:
     AVAL = sum(AVAL),
     DTYPE = "AVERAGE",
   )
-}\if{html}{\out{</div>}}}
+}\if{html}{\out{</div>}}
+
+\describe{
+\item{Default}{none}
+}}
 }
 \value{
 The input dataset with the first or last observation of each by group
@@ -154,136 +201,9 @@ arguments.
 \item The observations are added to input dataset.
 }
 }
-\examples{
-library(tibble)
-library(dplyr, warn.conflicts = FALSE)
-library(lubridate)
-
-adlb <- tribble(
-  ~USUBJID, ~AVISITN, ~AVAL, ~LBSEQ,
-  "1",      1,          113,      1,
-  "1",      2,          113,      2,
-  "1",      3,          117,      3,
-  "2",      1,          101,      1,
-  "2",      2,          101,      2,
-  "2",      3,           95,      3
-)
-
-# Add a new record for each USUBJID storing the minimum value (first AVAL).
-# If multiple records meet the minimum criterion, take the first value by
-# AVISITN. Set AVISITN = 97 and DTYPE = MINIMUM for these new records.
-# Specify the variables that need to be kept in the new records.
-derive_extreme_records(
-  adlb,
-  dataset_add = adlb,
-  by_vars = exprs(USUBJID),
-  order = exprs(AVAL, AVISITN),
-  mode = "first",
-  filter_add = !is.na(AVAL),
-  keep_source_vars = exprs(AVAL),
-  set_values_to = exprs(
-    AVISITN = 97,
-    DTYPE = "MINIMUM"
-  )
-)
-
-# Add a new record for each USUBJID storing the maximum value (last AVAL).
-# If multiple records meet the maximum criterion, take the first value by
-# AVISITN. Set AVISITN = 98 and DTYPE = MAXIMUM for these new records.
-derive_extreme_records(
-  adlb,
-  dataset_add = adlb,
-  by_vars = exprs(USUBJID),
-  order = exprs(desc(AVAL), AVISITN),
-  mode = "first",
-  filter_add = !is.na(AVAL),
-  set_values_to = exprs(
-    AVISITN = 98,
-    DTYPE = "MAXIMUM"
-  )
-)
-
-# Add a new record for each USUBJID storing for the last value.
-# Set AVISITN = 99 and DTYPE = LOV for these new records.
-derive_extreme_records(
-  adlb,
-  dataset_add = adlb,
-  by_vars = exprs(USUBJID),
-  order = exprs(AVISITN),
-  mode = "last",
-  set_values_to = exprs(
-    AVISITN = 99,
-    DTYPE = "LOV"
-  )
-)
-
-# Derive a new parameter for the first disease progression (PD)
-adsl <- tribble(
-  ~USUBJID, ~DTHDT,
-  "1",      ymd("2022-05-13"),
-  "2",      ymd(""),
-  "3",      ymd("")
-) \%>\%
-  mutate(STUDYID = "XX1234")
-
-adrs <- tribble(
-  ~USUBJID, ~ADTC,        ~AVALC,
-  "1",      "2020-01-02", "PR",
-  "1",      "2020-02-01", "CR",
-  "1",      "2020-03-01", "CR",
-  "1",      "2020-04-01", "SD",
-  "2",      "2021-06-15", "SD",
-  "2",      "2021-07-16", "PD",
-  "2",      "2021-09-14", "PD"
-) \%>\%
-  mutate(
-    STUDYID = "XX1234",
-    ADT = ymd(ADTC),
-    PARAMCD = "OVR",
-    PARAM = "Overall Response",
-    ANL01FL = "Y"
-  ) \%>\%
-  select(-ADTC)
-
-derive_extreme_records(
-  adrs,
-  dataset_ref = adsl,
-  dataset_add = adrs,
-  by_vars = exprs(STUDYID, USUBJID),
-  filter_add = PARAMCD == "OVR" & AVALC == "PD",
-  order = exprs(ADT),
-  exist_flag = AVALC,
-  true_value = "Y",
-  false_value = "N",
-  mode = "first",
-  set_values_to = exprs(
-    PARAMCD = "PD",
-    PARAM = "Disease Progression",
-    AVAL = yn_to_numeric(AVALC),
-    ANL01FL = "Y",
-    ADT = ADT
-  )
-)
-
-# derive parameter indicating death
-derive_extreme_records(
-  dataset_ref = adsl,
-  dataset_add = adsl,
-  by_vars = exprs(STUDYID, USUBJID),
-  filter_add = !is.na(DTHDT),
-  exist_flag = AVALC,
-  true_value = "Y",
-  false_value = "N",
-  mode = "first",
-  set_values_to = exprs(
-    PARAMCD = "DEATH",
-    PARAM = "Death",
-    ANL01FL = "Y",
-    ADT = DTHDT
-  )
-)
-}
 \seealso{
+\code{\link[=derive_summary_records]{derive_summary_records()}}
+
 BDS-Findings Functions for adding Parameters/Records: 
 \code{\link{default_qtc_paramcd}()},
 \code{\link{derive_expected_records}()},
@@ -304,3 +224,184 @@ BDS-Findings Functions for adding Parameters/Records:
 }
 \concept{der_prm_bds_findings}
 \keyword{der_prm_bds_findings}
+\section{Examples}{
+\subsection{Add a new record for each \code{USUBJID} storing the minimum value (first \code{AVAL})}{
+
+If multiple records meet the minimum criterion, take the first value by
+\code{AVISITN}. Set \code{AVISITN = 97} and \code{DTYPE = MINIMUM} for these new records.
+Specify the variables that need to be kept in the new records.
+
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{library(tibble)
+library(dplyr, warn.conflicts = FALSE)
+library(lubridate)
+adlb <- tribble(
+  ~USUBJID, ~AVISITN, ~AVAL, ~LBSEQ,
+  "1",      1,          113,      1,
+  "1",      2,          113,      2,
+  "1",      3,          117,      3,
+  "2",      1,          101,      1,
+  "2",      2,          101,      2,
+  "2",      3,           95,      3
+)
+derive_extreme_records(
+  adlb,
+  dataset_add = adlb,
+  by_vars = exprs(USUBJID),
+  order = exprs(AVAL, AVISITN),
+  mode = "first",
+  filter_add = !is.na(AVAL),
+  keep_source_vars = exprs(AVAL),
+  set_values_to = exprs(
+    AVISITN = 97,
+    DTYPE = "MINIMUM"
+  )
+)
+#> # A tibble: 8 × 5
+#>   USUBJID AVISITN  AVAL LBSEQ DTYPE  
+#>   <chr>     <dbl> <dbl> <dbl> <chr>  
+#> 1 1             1   113     1 <NA>   
+#> 2 1             2   113     2 <NA>   
+#> 3 1             3   117     3 <NA>   
+#> 4 2             1   101     1 <NA>   
+#> 5 2             2   101     2 <NA>   
+#> 6 2             3    95     3 <NA>   
+#> 7 1            97   113    NA MINIMUM
+#> 8 2            97    95    NA MINIMUM}\if{html}{\out{</div>}}}
+\subsection{Add a new record for each \code{USUBJID} storing the maximum value (last \code{AVAL})}{
+
+If multiple records meet the maximum criterion, take the first value by
+\code{AVISITN}. Set \code{AVISITN = 98} and \code{DTYPE = MAXIMUM} for these new records.
+
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{derive_extreme_records(
+  adlb,
+  dataset_add = adlb,
+  by_vars = exprs(USUBJID),
+  order = exprs(desc(AVAL), AVISITN),
+  mode = "first",
+  filter_add = !is.na(AVAL),
+  set_values_to = exprs(
+    AVISITN = 98,
+    DTYPE = "MAXIMUM"
+  )
+)
+#> # A tibble: 8 × 5
+#>   USUBJID AVISITN  AVAL LBSEQ DTYPE  
+#>   <chr>     <dbl> <dbl> <dbl> <chr>  
+#> 1 1             1   113     1 <NA>   
+#> 2 1             2   113     2 <NA>   
+#> 3 1             3   117     3 <NA>   
+#> 4 2             1   101     1 <NA>   
+#> 5 2             2   101     2 <NA>   
+#> 6 2             3    95     3 <NA>   
+#> 7 1            98   117     3 MAXIMUM
+#> 8 2            98   101     1 MAXIMUM}\if{html}{\out{</div>}}}
+\subsection{Add a new record for each USUBJID storing for the last value}{
+
+Set \code{AVISITN = 99} and \code{DTYPE = "LOV"} for these new records.
+
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{derive_extreme_records(
+  adlb,
+  dataset_add = adlb,
+  by_vars = exprs(USUBJID),
+  order = exprs(AVISITN),
+  mode = "last",
+  set_values_to = exprs(
+    AVISITN = 99,
+    DTYPE = "LOV"
+  )
+)
+#> # A tibble: 8 × 5
+#>   USUBJID AVISITN  AVAL LBSEQ DTYPE
+#>   <chr>     <dbl> <dbl> <dbl> <chr>
+#> 1 1             1   113     1 <NA> 
+#> 2 1             2   113     2 <NA> 
+#> 3 1             3   117     3 <NA> 
+#> 4 2             1   101     1 <NA> 
+#> 5 2             2   101     2 <NA> 
+#> 6 2             3    95     3 <NA> 
+#> 7 1            99   117     3 LOV  
+#> 8 2            99    95     3 LOV  }\if{html}{\out{</div>}}}
+\subsection{Derive a new parameter for the first disease progression (PD)}{
+
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{adsl <- tribble(
+  ~USUBJID, ~DTHDT,
+  "1",      ymd("2022-05-13"),
+  "2",      ymd(""),
+  "3",      ymd("")
+) %>%
+  mutate(STUDYID = "XX1234")
+adrs <- tribble(
+  ~USUBJID, ~ADTC,        ~AVALC,
+  "1",      "2020-01-02", "PR",
+  "1",      "2020-02-01", "CR",
+  "1",      "2020-03-01", "CR",
+  "1",      "2020-04-01", "SD",
+  "2",      "2021-06-15", "SD",
+  "2",      "2021-07-16", "PD",
+  "2",      "2021-09-14", "PD"
+) %>%
+  mutate(
+    STUDYID = "XX1234",
+    ADT = ymd(ADTC),
+    PARAMCD = "OVR",
+    PARAM = "Overall Response",
+    ANL01FL = "Y"
+  ) %>%
+  select(-ADTC)
+derive_extreme_records(
+  adrs,
+  dataset_ref = adsl,
+  dataset_add = adrs,
+  by_vars = exprs(STUDYID, USUBJID),
+  filter_add = PARAMCD == "OVR" & AVALC == "PD",
+  order = exprs(ADT),
+  exist_flag = AVALC,
+  true_value = "Y",
+  false_value = "N",
+  mode = "first",
+  set_values_to = exprs(
+    PARAMCD = "PD",
+    PARAM = "Disease Progression",
+    AVAL = yn_to_numeric(AVALC),
+    ANL01FL = "Y",
+    ADT = ADT
+  )
+)
+#> # A tibble: 10 × 8
+#>    USUBJID AVALC STUDYID ADT        PARAMCD PARAM               ANL01FL  AVAL
+#>    <chr>   <chr> <chr>   <date>     <chr>   <chr>               <chr>   <dbl>
+#>  1 1       PR    XX1234  2020-01-02 OVR     Overall Response    Y          NA
+#>  2 1       CR    XX1234  2020-02-01 OVR     Overall Response    Y          NA
+#>  3 1       CR    XX1234  2020-03-01 OVR     Overall Response    Y          NA
+#>  4 1       SD    XX1234  2020-04-01 OVR     Overall Response    Y          NA
+#>  5 2       SD    XX1234  2021-06-15 OVR     Overall Response    Y          NA
+#>  6 2       PD    XX1234  2021-07-16 OVR     Overall Response    Y          NA
+#>  7 2       PD    XX1234  2021-09-14 OVR     Overall Response    Y          NA
+#>  8 2       Y     XX1234  2021-07-16 PD      Disease Progression Y           1
+#>  9 1       N     XX1234  NA         PD      Disease Progression Y           0
+#> 10 3       N     XX1234  NA         PD      Disease Progression Y           0}\if{html}{\out{</div>}}}
+\subsection{Derive parameter indicating death}{
+
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{derive_extreme_records(
+  dataset_ref = adsl,
+  dataset_add = adsl,
+  by_vars = exprs(STUDYID, USUBJID),
+  filter_add = !is.na(DTHDT),
+  exist_flag = AVALC,
+  true_value = "Y",
+  false_value = "N",
+  mode = "first",
+  set_values_to = exprs(
+    PARAMCD = "DEATH",
+    PARAM = "Death",
+    ANL01FL = "Y",
+    ADT = DTHDT
+  )
+)
+#> # A tibble: 3 × 8
+#>   STUDYID USUBJID PARAMCD PARAM ANL01FL ADT        DTHDT      AVALC
+#>   <chr>   <chr>   <chr>   <chr> <chr>   <date>     <date>     <chr>
+#> 1 XX1234  1       DEATH   Death Y       2022-05-13 2022-05-13 Y    
+#> 2 XX1234  2       DEATH   Death Y       NA         NA         N    
+#> 3 XX1234  3       DEATH   Death Y       NA         NA         N    }\if{html}{\out{</div>}}}}
+

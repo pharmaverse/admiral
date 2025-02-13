@@ -11,9 +11,17 @@ restrict_imputed_dtc_dtm(dtc, imputed_dtc, min_dates, max_dates)
 
 A character date is expected in a format like \code{yyyy-mm-dd} or
 \code{yyyy-mm-ddThh:mm:ss}. Trailing components can be omitted and \code{-} is a
-valid "missing" value for any component.}
+valid "missing" value for any component.
 
-\item{imputed_dtc}{The imputed DTC date}
+\describe{
+\item{Default}{none}
+}}
+
+\item{imputed_dtc}{The imputed DTC date
+
+\describe{
+\item{Default}{none}
+}}
 
 \item{min_dates}{Minimum dates
 
@@ -43,7 +51,11 @@ have changed the month although it is not missing (in the \code{dtc} date).
 
 For date variables (not datetime) in the list the time is imputed to
 \code{"00:00:00"}. Specifying date variables makes sense only if the date is
-imputed. If only time is imputed, date variables do not affect the result.}
+imputed. If only time is imputed, date variables do not affect the result.
+
+\describe{
+\item{Default}{\code{NULL}}
+}}
 
 \item{max_dates}{Maximum dates
 
@@ -54,7 +66,11 @@ considered. A date or date-time object is expected.
 
 For date variables (not datetime) in the list the time is imputed to
 \code{"23:59:59"}. Specifying date variables makes sense only if the date is
-imputed. If only time is imputed, date variables do not affect the result.}
+imputed. If only time is imputed, date variables do not affect the result.
+
+\describe{
+\item{Default}{\code{NULL}}
+}}
 }
 \value{
 \itemize{

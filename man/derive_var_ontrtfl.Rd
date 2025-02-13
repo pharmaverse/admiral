@@ -21,17 +21,29 @@ derive_var_ontrtfl(
 \item{dataset}{Input dataset
 
 Required columns are \code{start_date}, \code{end_date}, \code{ref_start_date} and
-\code{ref_end_date}.}
+\code{ref_end_date}.
+
+\describe{
+\item{Default}{none}
+}}
 
 \item{new_var}{On-treatment flag variable name to be created.
 
-Default is \code{ONTRTFL}.}
+Default is \code{ONTRTFL}.
+
+\describe{
+\item{Default}{\code{ONTRTFL}}
+}}
 
 \item{start_date}{The start date (e.g. \code{AESDT}) or assessment date (e.g.
 \code{ADT}) Required; A date or date-time object column is expected.
 
 Refer to \code{derive_vars_dt()} to impute and derive a date from a date
-character vector to a date object.}
+character vector to a date object.
+
+\describe{
+\item{Default}{none}
+}}
 
 \item{end_date}{The end date of assessment/event (e.g. \code{AENDT}) A date or
 date-time object column is expected.
@@ -41,13 +53,21 @@ character vector to a date object.
 
 Optional; Default is null. If the used and date value is missing on an
 observation, it is assumed the medication is ongoing and \code{ONTRTFL} is set
-to \code{"Y"}.}
+to \code{"Y"}.
+
+\describe{
+\item{Default}{\code{NULL}}
+}}
 
 \item{ref_start_date}{The lower bound of the on-treatment period Required; A
 date or date-time object column is expected.
 
 Refer to \code{derive_vars_dt()} to impute and derive a date from a date
-character vector to a date object.}
+character vector to a date object.
+
+\describe{
+\item{Default}{none}
+}}
 
 \item{ref_end_date}{The upper bound of the on-treatment period A date or
 date-time object column is expected.
@@ -56,26 +76,46 @@ Refer to \code{derive_vars_dt()} to impute and derive a date from a date
 character vector to a date object.
 
 Optional; This can be null and everything after \code{ref_start_date} will be
-considered on-treatment. Default is \code{NULL}.}
+considered on-treatment. Default is \code{NULL}.
+
+\describe{
+\item{Default}{\code{NULL}}
+}}
 
 \item{ref_end_window}{A window to add to the upper bound \code{ref_end_date}
 measured in days (e.g. 7 if 7 days should be added to the upper bound)
-Optional; default is 0.}
+Optional; default is 0.
+
+\describe{
+\item{Default}{\code{0}}
+}}
 
 \item{ignore_time_for_ref_end_date}{If the argument is set to \code{TRUE}, the time part is ignored for checking if
 the event occurred more than \code{ref_end_window} days after reference end
 date.
 
-\emph{Permitted Values:} \code{TRUE}, \code{FALSE}}
+\emph{Permitted Values:} \code{TRUE}, \code{FALSE}
+
+\describe{
+\item{Default}{\code{TRUE}}
+}}
 
 \item{filter_pre_timepoint}{An expression to filter observations as not
 on-treatment when \code{date} = \code{ref_start_date}. For example, if observations
 where \code{VSTPT = PRE} should not be considered on-treatment when \code{date = ref_start_date}, \code{filter_pre_timepoint} should be used to denote when the
-on-treatment flag should be set to null. Optional; default is \code{NULL}.}
+on-treatment flag should be set to null. Optional; default is \code{NULL}.
+
+\describe{
+\item{Default}{\code{NULL}}
+}}
 
 \item{span_period}{A logical scalar. If \code{TRUE}, events that started
 prior to the \code{ref_start_date}and are ongoing or end after the
-\code{ref_start_date} are flagged as \code{"Y"}. Optional; default is \code{FALSE}.}
+\code{ref_start_date} are flagged as \code{"Y"}. Optional; default is \code{FALSE}.
+
+\describe{
+\item{Default}{\code{FALSE}}
+}}
 }
 \value{
 The input dataset with an additional column named \code{ONTRTFL} with a

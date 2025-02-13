@@ -23,7 +23,11 @@ A date or date-time object is expected.
 Refer to \code{derive_vars_dt()} to impute and derive a date from a date
 character vector to a date object.
 
-Refer to \code{convert_dtc_to_dt()} to obtain a vector of imputed dates.}
+Refer to \code{convert_dtc_to_dt()} to obtain a vector of imputed dates.
+
+\describe{
+\item{Default}{none}
+}}
 
 \item{end_date}{The end date
 
@@ -32,7 +36,11 @@ A date or date-time object is expected.
 Refer to \code{derive_vars_dt()} to impute and derive a date from a date
 character vector to a date object.
 
-Refer to \code{convert_dtc_to_dt()} to obtain a vector of imputed dates.}
+Refer to \code{convert_dtc_to_dt()} to obtain a vector of imputed dates.
+
+\describe{
+\item{Default}{none}
+}}
 
 \item{in_unit}{Input unit
 
@@ -50,7 +58,11 @@ For hours: \code{"hour"}, \code{"hours"}, \code{"hr"}, \code{"hrs"}, \code{"h"}
 
 For minutes: \code{"minute"}, \code{"minutes"}, \code{"min"}, \code{"mins"}
 
-For seconds: \code{"second"}, \code{"seconds"}, \code{"sec"}, \code{"secs"}, \code{"s"}}
+For seconds: \code{"second"}, \code{"seconds"}, \code{"sec"}, \code{"secs"}, \code{"s"}
+
+\describe{
+\item{Default}{\code{"days"}}
+}}
 
 \item{out_unit}{Output unit
 
@@ -70,7 +82,11 @@ For hours: \code{"hour"}, \code{"hours"}, \code{"hr"}, \code{"hrs"}, \code{"h"}
 
 For minutes: \code{"minute"}, \code{"minutes"}, \code{"min"}, \code{"mins"}
 
-For seconds: \code{"second"}, \code{"seconds"}, \code{"sec"}, \code{"secs"}, \code{"s"}}
+For seconds: \code{"second"}, \code{"seconds"}, \code{"sec"}, \code{"secs"}, \code{"s"}
+
+\describe{
+\item{Default}{\code{"days"}}
+}}
 
 \item{floor_in}{Round down input dates?
 
@@ -79,7 +95,11 @@ input unit is 'days', the time of the input dates is ignored.
 
 Default: \code{TRUE}
 
-Permitted Values: \code{TRUE}, \code{FALSE}}
+Permitted Values: \code{TRUE}, \code{FALSE}
+
+\describe{
+\item{Default}{\code{TRUE}}
+}}
 
 \item{add_one}{Add one input unit?
 
@@ -88,7 +108,11 @@ duration can not be zero.
 
 Default: \code{TRUE}
 
-Permitted Values: \code{TRUE}, \code{FALSE}}
+Permitted Values: \code{TRUE}, \code{FALSE}
+
+\describe{
+\item{Default}{\code{TRUE}}
+}}
 
 \item{trunc_out}{Return integer part
 
@@ -97,7 +121,11 @@ integer part is returned.
 
 Default: \code{FALSE}
 
-Permitted Values: \code{TRUE}, \code{FALSE}}
+Permitted Values: \code{TRUE}, \code{FALSE}
+
+\describe{
+\item{Default}{\code{FALSE}}
+}}
 
 \item{type}{lubridate duration type.
 
@@ -105,7 +133,11 @@ See below for details.
 
 Default: \code{"duration"}
 
-Permitted Values: \code{"duration"}, \code{"interval"}}
+Permitted Values: \code{"duration"}, \code{"interval"}
+
+\describe{
+\item{Default}{\code{"duration"}}
+}}
 }
 \value{
 The duration between the two date in the specified unit

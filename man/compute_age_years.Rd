@@ -9,7 +9,11 @@ compute_age_years(age, age_unit)
 \arguments{
 \item{age}{The ages to convert.
 
-A numeric vector is expected.}
+A numeric vector is expected.
+
+\describe{
+\item{Default}{none}
+}}
 
 \item{age_unit}{Age unit.
 
@@ -19,7 +23,11 @@ permitted values are cases insensitive (e.g. \code{"YEARS"} is treated the same
 as \code{"years"} and \code{"Years"}).
 
 Permitted Values: \code{"years"}, \code{"months"}, \code{"weeks"}, \code{"days"}, \code{"hours"}, \code{"minutes"},
-\code{"seconds"}, \code{NA_character_}.}
+\code{"seconds"}, \code{NA_character_}.
+
+\describe{
+\item{Default}{none}
+}}
 }
 \value{
 The ages contained in \code{age} converted to years.

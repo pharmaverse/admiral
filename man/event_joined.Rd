@@ -23,7 +23,11 @@ event. The name refers to the dataset specified for \code{source_datasets} in
 \code{derive_extreme_event()}. If the argument is not specified, the input
 dataset (\code{dataset}) of \code{derive_extreme_event()} is used.
 
-\emph{Permitted Values}: a character scalar}
+\emph{Permitted Values}: a character scalar
+
+\describe{
+\item{Default}{\code{NULL}}
+}}
 
 \item{condition}{An unquoted condition for selecting the observations, which
 will contribute to the extreme event.
@@ -37,7 +41,11 @@ for confirmed best overall response,  \code{condition = AVALC == "CR" & all(AVAL
 observations up to the confirmation observation the response is "CR" or
 "NE" and there is at most one "NE".
 
-\emph{Permitted Values}: an unquoted condition}
+\emph{Permitted Values}: an unquoted condition
+
+\describe{
+\item{Default}{none}
+}}
 
 \item{order}{If specified, the specified variables or expressions are used to
 select the first observation.
@@ -45,7 +53,11 @@ select the first observation.
 For handling of \code{NA}s in sorting variables see \href{../articles/generic.html#sort_order}{Sort Order}.
 
 \emph{Permitted Values}: list of expressions created by \code{exprs()}, e.g.,
-\code{exprs(ADT, desc(AVAL))} or \code{NULL}}
+\code{exprs(ADT, desc(AVAL))} or \code{NULL}
+
+\describe{
+\item{Default}{\code{NULL}}
+}}
 
 \item{join_vars}{Variables to keep from joined dataset
 
@@ -55,7 +67,11 @@ with suffix ".join". For example to select all observations with \code{AVALC == 
 
 The \verb{*.join} variables are not included in the output dataset.
 
-\emph{Permitted Values}: a named list of expressions, e.g., created by \code{exprs()}}
+\emph{Permitted Values}: a named list of expressions, e.g., created by \code{exprs()}
+
+\describe{
+\item{Default}{none}
+}}
 
 \item{join_type}{Observations to keep after joining
 
@@ -63,7 +79,11 @@ The argument determines which of the joined observations are kept with
 respect to the original observation. For example, if \code{join_type = "after"} is specified all observations after the original observations are
 kept.
 
-\emph{Permitted Values:} \code{"before"}, \code{"after"}, \code{"all"}}
+\emph{Permitted Values:} \code{"before"}, \code{"after"}, \code{"all"}
+
+\describe{
+\item{Default}{none}
+}}
 
 \item{first_cond_lower}{Condition for selecting range of data (before)
 
@@ -78,7 +98,11 @@ functions which should not apply to all observations but only from a
 certain observation before the current observation up to the current
 observation.
 
-\emph{Permitted Values}: an unquoted condition}
+\emph{Permitted Values}: an unquoted condition
+
+\describe{
+\item{Default}{\code{NULL}}
+}}
 
 \item{first_cond_upper}{Condition for selecting range of data (after)
 
@@ -91,13 +115,21 @@ This parameter should be specified if \code{condition} contains summary
 functions which should not apply to all observations but only up to the
 confirmation assessment.
 
-\emph{Permitted Values}: an unquoted condition}
+\emph{Permitted Values}: an unquoted condition
+
+\describe{
+\item{Default}{\code{NULL}}
+}}
 
 \item{set_values_to}{A named list returned by \code{exprs()} defining the variables
 to be set for the event, e.g. \code{exprs(PARAMCD = "WSP", PARAM  = "Worst Sleeping Problems")}. The values can be a symbol, a
 character string, a numeric value, \code{NA} or an expression.
 
-\emph{Permitted Values}: a named list of expressions, e.g., created by \code{exprs()}}
+\emph{Permitted Values}: a named list of expressions, e.g., created by \code{exprs()}
+
+\describe{
+\item{Default}{\code{NULL}}
+}}
 
 \item{keep_source_vars}{Variables to keep from the source dataset
 
@@ -106,14 +138,22 @@ variables specified for \code{by_vars} (of \code{derive_extreme_event()}) and cr
 by \code{set_values_to} are always kept.
 
 \emph{Permitted Values}: A list of expressions where each element is
-a symbol or a tidyselect expression, e.g., \code{exprs(VISIT, VISITNUM, starts_with("RS"))}.}
+a symbol or a tidyselect expression, e.g., \code{exprs(VISIT, VISITNUM, starts_with("RS"))}.
+
+\describe{
+\item{Default}{\code{NULL}}
+}}
 
 \item{description}{Description of the event
 
 The description does not affect the derivations where the event is used. It
 is intended for documentation only.
 
-\emph{Permitted Values}: a character scalar}
+\emph{Permitted Values}: a character scalar
+
+\describe{
+\item{Default}{\code{NULL}}
+}}
 }
 \value{
 An object of class \code{event_joined}

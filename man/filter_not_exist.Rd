@@ -9,7 +9,11 @@ filter_not_exist(dataset, dataset_add, by_vars, filter_add = NULL)
 \arguments{
 \item{dataset}{Input dataset
 
-The variables specified by the \code{by_vars} argument are expected to be in the dataset.}
+The variables specified by the \code{by_vars} argument are expected to be in the dataset.
+
+\describe{
+\item{Default}{none}
+}}
 
 \item{dataset_add}{Source dataset
 
@@ -17,12 +21,20 @@ The source dataset, which determines the by groups returned in the input dataset
 based on the groups that don't exist in this dataset after being subset by \code{filter_add}.
 
 The variables specified in the \code{by_vars} and \code{filter_add} parameters are expected
-in this dataset.}
+in this dataset.
+
+\describe{
+\item{Default}{none}
+}}
 
 \item{by_vars}{Grouping variables
 
 \emph{Permitted Values}: list of variables created by \code{exprs()}
-e.g. \code{exprs(USUBJID, VISIT)}}
+e.g. \code{exprs(USUBJID, VISIT)}
+
+\describe{
+\item{Default}{none}
+}}
 
 \item{filter_add}{Filter for the source dataset
 
@@ -30,7 +42,11 @@ The filter condition which will be used to subset the source dataset.
 Alternatively, if no filter condition is supplied, no subsetting of the source
 dataset will be performed.
 
-Default: \code{NULL} (i.e. no filtering will be performed)}
+Default: \code{NULL} (i.e. no filtering will be performed)
+
+\describe{
+\item{Default}{\code{NULL}}
+}}
 }
 \value{
 The records in the input dataset which are not contained within any existing by

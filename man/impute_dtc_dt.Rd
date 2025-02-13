@@ -18,7 +18,11 @@ impute_dtc_dt(
 
 A character date is expected in a format like \code{yyyy-mm-dd} or
 \code{yyyy-mm-ddThh:mm:ss}. Trailing components can be omitted and \code{-} is a
-valid "missing" value for any component.}
+valid "missing" value for any component.
+
+\describe{
+\item{Default}{none}
+}}
 
 \item{highest_imputation}{Highest imputation level
 
@@ -37,7 +41,11 @@ and \code{min_dates} or \code{max_dates} should be specified respectively. Other
 \code{NA_character_} is returned if the year component is missing.
 
 \emph{Permitted Values}: \code{"Y"} (year, highest level), \code{"M"} (month), \code{"D"}
-(day), \code{"n"} (none, lowest level)}
+(day), \code{"n"} (none, lowest level)
+
+\describe{
+\item{Default}{\code{"n"}}
+}}
 
 \item{date_imputation}{The value to impute the day/month when a datepart is
 missing.
@@ -58,7 +66,11 @@ middle of the possible range:
 }
 }
 
-The argument is ignored if \code{highest_imputation} is less then \code{"D"}.}
+The argument is ignored if \code{highest_imputation} is less then \code{"D"}.
+
+\describe{
+\item{Default}{\code{"first"}}
+}}
 
 \item{min_dates}{Minimum dates
 
@@ -84,21 +96,33 @@ For example
 returns \code{"2020-11-11T11:11:11"} because the possible dates for \code{"2020-11"}
 range from \code{"2020-11-01T00:00:00"} to \code{"2020-11-30T23:59:59"}. Therefore
 \code{"2020-12-06T12:12:12"} is ignored. Returning \code{"2020-12-06T12:12:12"} would
-have changed the month although it is not missing (in the \code{dtc} date).}
+have changed the month although it is not missing (in the \code{dtc} date).
+
+\describe{
+\item{Default}{\code{NULL}}
+}}
 
 \item{max_dates}{Maximum dates
 
 A list of dates is expected. It is ensured that the imputed date is not after
 any of the specified dates, e.g., that the imputed date is not after the data
 cut off date. Only dates which are in the range of possible dates are
-considered. A date or date-time object is expected.}
+considered. A date or date-time object is expected.
+
+\describe{
+\item{Default}{\code{NULL}}
+}}
 
 \item{preserve}{Preserve day if month is missing and day is present
 
 For example \code{"2019---07"} would return \verb{"2019-06-07} if \code{preserve = TRUE}
 (and \code{date_imputation = "MID"}).
 
-Permitted Values: \code{TRUE}, \code{FALSE}}
+Permitted Values: \code{TRUE}, \code{FALSE}
+
+\describe{
+\item{Default}{\code{FALSE}}
+}}
 }
 \value{
 A character vector

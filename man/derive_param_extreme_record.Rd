@@ -15,17 +15,29 @@ derive_param_extreme_record(
 )
 }
 \arguments{
-\item{dataset}{Input dataset}
+\item{dataset}{Input dataset
+
+\describe{
+\item{Default}{\code{NULL}}
+}}
 
 \item{sources}{Sources
 
-A list of \code{records_source()} objects is expected.}
+A list of \code{records_source()} objects is expected.
+
+\describe{
+\item{Default}{none}
+}}
 
 \item{source_datasets}{Source datasets
 
 A named list of datasets is expected. The \code{dataset_name} field of
 \code{records_source()} refers to the dataset provided in the list. The variables
-specified by the \code{order} and the \code{by_vars} arguments are expected after applying \code{new_vars}.}
+specified by the \code{order} and the \code{by_vars} arguments are expected after applying \code{new_vars}.
+
+\describe{
+\item{Default}{none}
+}}
 
 \item{by_vars}{Grouping variables
 
@@ -33,7 +45,11 @@ If the argument is specified, for each by group the observations are
 selected separately.
 
 \emph{Permitted Values}: list of variables created by \code{exprs()}
-e.g. \code{exprs(USUBJID, VISIT)}}
+e.g. \code{exprs(USUBJID, VISIT)}
+
+\describe{
+\item{Default}{\code{NULL}}
+}}
 
 \item{order}{Sort order
 
@@ -48,7 +64,11 @@ variable is \code{NA} and \code{mode = "last"}, this observation is chosen while
 observations where the variable is not \code{NA}.
 
 \emph{Permitted Values:} list of expressions created by \code{exprs()}, e.g.,
-\code{exprs(ADT, desc(AVAL))}}
+\code{exprs(ADT, desc(AVAL))}
+
+\describe{
+\item{Default}{none}
+}}
 
 \item{mode}{Selection mode (first or last)
 
@@ -56,7 +76,11 @@ If \code{"first"} is specified, for each by group the first observation with
 respect to \code{order} is included in the output dataset. If \code{"last"} is
 specified, the last observation is included in the output dataset.
 
-Permitted Values:  \code{"first"}, \code{"last"}}
+Permitted Values:  \code{"first"}, \code{"last"}
+
+\describe{
+\item{Default}{none}
+}}
 
 \item{set_values_to}{Variables to be set
 
@@ -68,6 +92,10 @@ A list of variable name-value pairs is expected.
 \item LHS refers to a variable.
 \item RHS refers to the values to set to the variable. This can be a string, a
 symbol, a numeric value or \code{NA}, e.g., \code{exprs(PARAMCD = "PD", PARAM =   "First Progressive Disease")}.
+}
+
+\describe{
+\item{Default}{none}
 }}
 }
 \value{

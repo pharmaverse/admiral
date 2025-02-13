@@ -14,12 +14,20 @@ derive_expected_records(
 \arguments{
 \item{dataset}{Input dataset
 
-The variables specified by the \code{dataset_ref} and \code{by_vars} arguments are expected to be in the dataset.}
+The variables specified by the \code{dataset_ref} and \code{by_vars} arguments are expected to be in the dataset.
+
+\describe{
+\item{Default}{none}
+}}
 
 \item{dataset_ref}{Expected observations dataset
 
 Data frame with the expected observations, e.g., all the expected
-combinations of \code{PARAMCD}, \code{PARAM}, \code{AVISIT}, \code{AVISITN}, ...}
+combinations of \code{PARAMCD}, \code{PARAM}, \code{AVISIT}, \code{AVISITN}, ...
+
+\describe{
+\item{Default}{none}
+}}
 
 \item{by_vars}{Grouping variables
 
@@ -28,7 +36,11 @@ are added to the output dataset which do not have a corresponding observation
 in the input dataset.
 
 \emph{Permitted Values}: list of variables created by \code{exprs()}
-e.g. \code{exprs(USUBJID, VISIT)}}
+e.g. \code{exprs(USUBJID, VISIT)}
+
+\describe{
+\item{Default}{\code{NULL}}
+}}
 
 \item{set_values_to}{Variables to be set
 
@@ -40,6 +52,10 @@ A list of variable name-value pairs is expected.
 \item LHS refers to a variable.
 \item RHS refers to the values to set to the variable. This can be a string, a
 symbol, a numeric value, \code{NA}, or expressions, e.g., \code{exprs(PARAMCD =   "TDOSE", PARCAT1 = "OVERALL")}.
+}
+
+\describe{
+\item{Default}{\code{NULL}}
 }}
 }
 \value{

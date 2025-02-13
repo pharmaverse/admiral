@@ -16,14 +16,22 @@ derive_param_exposure(
 \arguments{
 \item{dataset}{Input dataset
 
-The variables specified by the \code{by_vars} argument are expected to be in the dataset.}
+The variables specified by the \code{by_vars} argument are expected to be in the dataset.
+
+\describe{
+\item{Default}{\code{NULL}}
+}}
 
 \item{dataset_add}{Additional dataset
 
 The variables specified for \code{by_vars}, \code{analysis_var}, \code{PARAMCD},
 alongside either \code{ASTDTM} and \code{AENDTM} or \code{ASTDT} and \code{AENDT} are also expected.
 Observations from the specified dataset are going to be used to calculate and added
-as new records to the input dataset (\code{dataset}).}
+as new records to the input dataset (\code{dataset}).
+
+\describe{
+\item{Default}{none}
+}}
 
 \item{by_vars}{Grouping variables
 
@@ -32,14 +40,22 @@ dataset. Only variables specified in \code{by_vars} will be populated
 in the newly created records.
 
 \emph{Permitted Values}: list of variables created by \code{exprs()}
-e.g. \code{exprs(USUBJID, VISIT)}}
+e.g. \code{exprs(USUBJID, VISIT)}
+
+\describe{
+\item{Default}{none}
+}}
 
 \item{input_code}{Required parameter code
 
 The observations where \code{PARAMCD} equals the specified value are considered to compute the
 summary record.
 
-\emph{Permitted Values:} A character of \code{PARAMCD} value}
+\emph{Permitted Values:} A character of \code{PARAMCD} value
+
+\describe{
+\item{Default}{none}
+}}
 
 \item{filter_add}{Filter condition as logical expression to apply during
 summary calculation. By default, filtering expressions are computed within
@@ -52,6 +68,10 @@ For example,
 values greater than mean of \code{AVAL} with in \code{by_vars}.
 \item \code{filter_add = (dplyr::n() > 2)} will filter n count of \code{by_vars} greater
 than 2.
+}
+
+\describe{
+\item{Default}{\code{NULL}}
 }}
 
 \item{set_values_to}{Variable-value pairs
@@ -64,7 +84,11 @@ value, \code{NA}, or an expression.
 (e.g.  \code{exprs(PARAMCD = "TDOSE",PARCAT1 = "OVERALL")}).
 }
 
-\emph{Permitted Values:} List of variable-value pairs}
+\emph{Permitted Values:} List of variable-value pairs
+
+\describe{
+\item{Default}{\code{NULL}}
+}}
 }
 \value{
 The input dataset with a new record added for each group (as defined

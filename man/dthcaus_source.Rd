@@ -16,12 +16,24 @@ dthcaus_source(
 }
 \arguments{
 \item{dataset_name}{The name of the dataset, i.e. a string, used to search for
-the death cause.}
+the death cause.
 
-\item{filter}{An expression used for filtering \code{dataset}.}
+\describe{
+\item{Default}{none}
+}}
+
+\item{filter}{An expression used for filtering \code{dataset}.
+
+\describe{
+\item{Default}{none}
+}}
 
 \item{date}{A date or datetime variable or an expression to be used for
-sorting \code{dataset}.}
+sorting \code{dataset}.
+
+\describe{
+\item{Default}{none}
+}}
 
 \item{order}{Sort order
 
@@ -30,20 +42,36 @@ dataset is ordered by \code{date} and \code{order}. Can be used to avoid duplica
 record warning.
 
 \emph{Permitted Values}: list of expressions created by \code{exprs()}, e.g.,
-\code{exprs(ADT, desc(AVAL))} or \code{NULL}}
+\code{exprs(ADT, desc(AVAL))} or \code{NULL}
+
+\describe{
+\item{Default}{\code{NULL}}
+}}
 
 \item{mode}{One of \code{"first"} or \code{"last"}.
 Either the \code{"first"} or \code{"last"} observation is preserved from the \code{dataset}
-which is ordered by \code{date}.}
+which is ordered by \code{date}.
+
+\describe{
+\item{Default}{\code{"first"}}
+}}
 
 \item{dthcaus}{A variable name, an expression, or a string literal
 
 If a variable name is specified, e.g., \code{AEDECOD}, it is the variable in the
 source dataset to be used to assign values to \code{DTHCAUS}; if an expression,
 e.g., \code{str_to_upper(AEDECOD)}, it is evaluated in the source dataset and
-the results is assigned to \code{DTHCAUS}; if a string literal, e.g. \code{"Adverse Event"}, it is the fixed value to be assigned to \code{DTHCAUS}.}
+the results is assigned to \code{DTHCAUS}; if a string literal, e.g. \code{"Adverse Event"}, it is the fixed value to be assigned to \code{DTHCAUS}.
 
-\item{set_values_to}{Variables to be set to trace the source dataset}
+\describe{
+\item{Default}{none}
+}}
+
+\item{set_values_to}{Variables to be set to trace the source dataset
+
+\describe{
+\item{Default}{\code{NULL}}
+}}
 }
 \value{
 An object of class "dthcaus_source".

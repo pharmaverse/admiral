@@ -10,7 +10,11 @@ dt_level(level)
 \item{level}{Date level
 
 \emph{Permitted Values}: \code{"Y"} (year, highest level), \code{"M"} (month), \code{"D"}
-(day), \code{"n"} (none, lowest level)}
+(day), \code{"n"} (none, lowest level)
+
+\describe{
+\item{Default}{none}
+}}
 }
 \value{
 A \code{dt_level} object

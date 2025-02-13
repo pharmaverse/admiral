@@ -30,7 +30,11 @@ The variables specified by the \code{by_vars} argument are expected to be in the
 The variable specified by \code{by_vars} and \code{PARAMCD} must be a unique key of
 the input dataset after restricting it by the filter condition (\code{filter}
 parameter) and to the parameters specified by \code{sysbp_code}, \code{chol_code}
-and \code{hdl_code}.}
+and \code{hdl_code}.
+
+\describe{
+\item{Default}{none}
+}}
 
 \item{by_vars}{Grouping variables
 
@@ -38,7 +42,11 @@ Only variables specified in \code{by_vars} will be populated
 in the newly created records.
 
 \emph{Permitted Values}: list of variables created by \code{exprs()}
-e.g. \code{exprs(USUBJID, VISIT)}}
+e.g. \code{exprs(USUBJID, VISIT)}
+
+\describe{
+\item{Default}{none}
+}}
 
 \item{set_values_to}{Variables to be set
 
@@ -46,56 +54,88 @@ The specified variables are set to the specified values for the new
 observations. For example \code{exprs(PARAMCD = "MAP")} defines the parameter code
 for the new parameter.
 
-\emph{Permitted Values}: List of variable-value pairs}
+\emph{Permitted Values}: List of variable-value pairs
+
+\describe{
+\item{Default}{\code{exprs(PARAMCD = "MAP")}}
+}}
 
 \item{sysbp_code}{Systolic blood pressure parameter code
 
 The observations where \code{PARAMCD} equals the specified value are considered
 as the systolic blood pressure assessments.
 
-\emph{Permitted Values:} character value}
+\emph{Permitted Values:} character value
+
+\describe{
+\item{Default}{\code{"SYSBP"}}
+}}
 
 \item{chol_code}{Total serum cholesterol code
 
 The observations where \code{PARAMCD} equals the specified value are considered
 as the total cholesterol assessments. This must be measured in mg/dL.
 
-\emph{Permitted Values:} character value}
+\emph{Permitted Values:} character value
+
+\describe{
+\item{Default}{\code{"CHOL"}}
+}}
 
 \item{cholhdl_code}{HDL serum cholesterol code
 
 The observations where \code{PARAMCD} equals the specified value are considered
 as the HDL cholesterol assessments. This must be measured in mg/dL.
 
-\emph{Permitted Values:} character value}
+\emph{Permitted Values:} character value
+
+\describe{
+\item{Default}{\code{"CHOLHDL"}}
+}}
 
 \item{age}{Subject age
 
 A variable containing the subject's age.
 
 \emph{Permitted Values:} A numeric variable name that refers to a subject age
-column of the input dataset}
+column of the input dataset
+
+\describe{
+\item{Default}{\code{AGE}}
+}}
 
 \item{sex}{Subject sex
 
 A variable containing the subject's sex.
 
 \emph{Permitted Values:} A character variable name that refers to a subject sex
-column of the input dataset}
+column of the input dataset
+
+\describe{
+\item{Default}{\code{SEX}}
+}}
 
 \item{smokefl}{Smoking status flag
 
 A flag indicating smoking status.
 
 \emph{Permitted Values:} A character variable name that refers to a smoking status
-column of the input dataset.}
+column of the input dataset.
+
+\describe{
+\item{Default}{\code{SMOKEFL}}
+}}
 
 \item{diabetfl}{Diabetic flag
 
 A flag indicating diabetic status.
 
 \emph{Permitted Values:} A character variable name that refers to a diabetic
-status column of the input dataset}
+status column of the input dataset
+
+\describe{
+\item{Default}{\code{DIABETFL}}
+}}
 
 \item{trthypfl}{Treated with hypertension medication flag
 
@@ -103,14 +143,22 @@ A flag indicating if a subject was treated with hypertension medication.
 
 \emph{Permitted Values:} A character variable name that refers to a column that
 indicates whether a subject is treated for high blood
-pressure}
+pressure
+
+\describe{
+\item{Default}{\code{TRTHYPFL}}
+}}
 
 \item{get_unit_expr}{An expression providing the unit of the parameter
 
 The result is used to check the units of the input parameters.
 
 \emph{Permitted Values}: An expression which is evaluable in the input dataset
-and results in a character value}
+and results in a character value
+
+\describe{
+\item{Default}{none}
+}}
 
 \item{filter}{Filter condition
 
@@ -118,7 +166,11 @@ The specified condition is applied to the input dataset before deriving the
 new parameter, i.e., only observations fulfilling the condition are taken
 into account.
 
-\emph{Permitted Values:} a condition}
+\emph{Permitted Values:} a condition
+
+\describe{
+\item{Default}{\code{NULL}}
+}}
 }
 \value{
 The input dataset with the new parameter added

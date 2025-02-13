@@ -9,7 +9,11 @@ extract_duplicate_records(dataset, by_vars = NULL)
 \arguments{
 \item{dataset}{Input dataset
 
-The variables specified by the \code{by_vars} argument are expected to be in the dataset.}
+The variables specified by the \code{by_vars} argument are expected to be in the dataset.
+
+\describe{
+\item{Default}{none}
+}}
 
 \item{by_vars}{Grouping variables
 
@@ -21,7 +25,11 @@ recommended to specify the necessary grouping variables for large datasets
 whenever possible.
 
 \emph{Permitted Values}: list of variables created by \code{exprs()}
-e.g. \code{exprs(USUBJID, VISIT)}}
+e.g. \code{exprs(USUBJID, VISIT)}
+
+\describe{
+\item{Default}{\code{NULL}}
+}}
 }
 \value{
 A \code{data.frame} of duplicate records within \code{dataset}

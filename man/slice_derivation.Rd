@@ -7,7 +7,11 @@
 slice_derivation(dataset, derivation, args = NULL, ...)
 }
 \arguments{
-\item{dataset}{Input dataset}
+\item{dataset}{Input dataset
+
+\describe{
+\item{Default}{none}
+}}
 
 \item{derivation}{Derivation
 
@@ -18,11 +22,19 @@ The function must provide the \code{dataset} argument and all arguments
 specified in the \code{params()} objects passed to the \code{arg} argument.
 
 Please note that it is not possible to specify \code{{dplyr}}
-functions like \code{mutate()} or \code{summarize()}.}
+functions like \code{mutate()} or \code{summarize()}.
+
+\describe{
+\item{Default}{none}
+}}
 
 \item{args}{Arguments of the derivation
 
-A \code{params()} object is expected.}
+A \code{params()} object is expected.
+
+\describe{
+\item{Default}{\code{NULL}}
+}}
 
 \item{...}{A \code{derivation_slice()} object is expected
 
@@ -30,7 +42,11 @@ Each slice defines a subset of the input dataset and some of the parameters
 for the derivation. The derivation is called on the subset with the
 parameters specified by the \code{args} parameter and the \code{args} field of the
 \code{derivation_slice()} object. If a parameter is specified for both, the
-value in \code{derivation_slice()} overwrites the one in \code{args}.}
+value in \code{derivation_slice()} overwrites the one in \code{args}.
+
+\describe{
+\item{Default}{none}
+}}
 }
 \value{
 The input dataset with the variables derived by the derivation added

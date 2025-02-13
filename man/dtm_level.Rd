@@ -11,7 +11,11 @@ dtm_level(level)
 
 \emph{Permitted Values}: \code{"Y"} (year, highest level), \code{"M"} (month), \code{"D"}
 (day), \code{"h"} (hour), \code{"m"} (minute), \code{"s"} (second, lowest level), \code{"n"}
-(none)}
+(none)
+
+\describe{
+\item{Default}{none}
+}}
 }
 \value{
 A \code{dtm_level} object

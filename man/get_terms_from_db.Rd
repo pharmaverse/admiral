@@ -19,34 +19,66 @@ get_terms_from_db(
 \item{version}{Version
 
 The version must be non null. Otherwise, an error is issued. The value is
-passed to the access function (\code{fun}).}
+passed to the access function (\code{fun}).
+
+\describe{
+\item{Default}{none}
+}}
 
 \item{fun}{Access function
 
 The access function must be non null. Otherwise, an error is issued. The
-function is called to retrieve the terms.}
+function is called to retrieve the terms.
+
+\describe{
+\item{Default}{none}
+}}
 
 \item{queries}{Queries
 
 List of all queries passed to \code{create_query_data()}. It is used for error
-messages.}
+messages.
+
+\describe{
+\item{Default}{none}
+}}
 
 \item{definition}{Definition of the query
 
 The definition is passed to the access function. It defines which terms are
-returned.}
+returned.
 
-\item{expect_grpname}{Is \code{GRPNAME} expected in the output dataset?}
+\describe{
+\item{Default}{none}
+}}
 
-\item{expect_grpid}{Is \code{GRPID} expected in the output dataset?}
+\item{expect_grpname}{Is \code{GRPNAME} expected in the output dataset?
+
+\describe{
+\item{Default}{\code{FALSE}}
+}}
+
+\item{expect_grpid}{Is \code{GRPID} expected in the output dataset?
+
+\describe{
+\item{Default}{\code{FALSE}}
+}}
 
 \item{i}{Index of \code{definition} in \code{queries}
 
-The value is used for error messages.}
+The value is used for error messages.
+
+\describe{
+\item{Default}{none}
+}}
 
 \item{temp_env}{Temporary environment
 
-The value is passed to the access function.}
+The value is passed to the access function.
+
+\describe{
+\item{Default}{none}
+}}
 }
 \value{
 Output dataset of the access function

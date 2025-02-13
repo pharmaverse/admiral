@@ -17,19 +17,31 @@ derive_summary_records(
 \arguments{
 \item{dataset}{Input dataset
 
-The variables specified by the \code{by_vars} argument are expected to be in the dataset.}
+The variables specified by the \code{by_vars} argument are expected to be in the dataset.
+
+\describe{
+\item{Default}{\code{NULL}}
+}}
 
 \item{dataset_add}{Additional dataset
 
 The variables specified for \code{by_vars} are expected.
 Observations from the specified dataset are going to be used to calculate and added
-as new records to the input dataset (\code{dataset}).}
+as new records to the input dataset (\code{dataset}).
+
+\describe{
+\item{Default}{none}
+}}
 
 \item{dataset_ref}{Reference dataset
 
 The variables specified for \code{by_vars} are expected. For each
 observation of the specified dataset a new observation is added to the
-input dataset.}
+input dataset.
+
+\describe{
+\item{Default}{\code{NULL}}
+}}
 
 \item{by_vars}{Grouping variables
 
@@ -38,7 +50,11 @@ records. Providing the names of variables in \code{\link[=exprs]{exprs()}} will 
 groupwise summary and generate summary records for the specified groups.
 
 \emph{Permitted Values}: list of variables created by \code{exprs()}
-e.g. \code{exprs(USUBJID, VISIT)}}
+e.g. \code{exprs(USUBJID, VISIT)}
+
+\describe{
+\item{Default}{none}
+}}
 
 \item{filter_add}{Filter condition as logical expression to apply during
 summary calculation. By default, filtering expressions are computed within
@@ -51,6 +67,10 @@ For example,
 values greater than mean of \code{AVAL} with in \code{by_vars}.
 \item \code{filter_add = (dplyr::n() > 2)} will filter n count of \code{by_vars} greater
 than 2.
+}
+
+\describe{
+\item{Default}{\code{NULL}}
 }}
 
 \item{set_values_to}{Variables to be set
@@ -72,7 +92,11 @@ For example:
     AVAL = sum(AVAL),
     DTYPE = "AVERAGE",
   )
-}\if{html}{\out{</div>}}}
+}\if{html}{\out{</div>}}
+
+\describe{
+\item{Default}{none}
+}}
 
 \item{missing_values}{Values for missing summary values
 
@@ -81,7 +105,11 @@ complete mapping defined by the summarization defined in \code{set_values_to}.  
 specified for \code{set_values_to} can be specified for \code{missing_values}.
 
 \emph{Permitted Values}: named list of expressions, e.g.,
-\code{exprs(AVAL = -9999)}}
+\code{exprs(AVAL = -9999)}
+
+\describe{
+\item{Default}{\code{NULL}}
+}}
 }
 \value{
 A data frame with derived records appended to original dataset.

@@ -15,6 +15,10 @@ A character value is expected, either as a
 \item format with hour, min and sec specified as \code{"hh:mm:ss"}: e.g. \code{"00:00:00"}
 for the start of the day,
 \item or as a keyword: \code{"first"},\code{"last"} to impute to the start/end of a day.
+}
+
+\describe{
+\item{Default}{none}
 }}
 }
 \value{

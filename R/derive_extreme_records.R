@@ -41,7 +41,7 @@
 #'   to the input dataset. If `"last"` is specified, the last observation of
 #'   each by group is added to the input dataset.
 #'
-#'   *Permitted Values:* `"first"`, `"last"`
+#' @permitted [mode]
 #'
 #' @param check_type Check uniqueness?
 #'
@@ -49,7 +49,7 @@
 #'   if the observations of the (restricted) additional dataset are not unique
 #'   with respect to the by variables and the order.
 #'
-#'   *Permitted Values*: `"none"`, `"warning"`, `"error"`
+#' @permitted [msg_type]
 #'
 #' @param exist_flag Existence flag
 #'
@@ -62,7 +62,7 @@
 #'   For all other by groups `exist_flag` is set to the value specified by the
 #'   `false_value` argument.
 #'
-#'   *Permitted Values:* Variable name
+#' @permitted Variable name
 #'
 #' @param true_value True value
 #'
@@ -113,12 +113,20 @@
 #' @return The input dataset with the first or last observation of each by group
 #'   added as new observations.
 #'
+#' @seealso [derive_summary_records()]
+#'
 #' @family der_prm_bds_findings
 #' @keywords der_prm_bds_findings
 #'
 #' @export
 #'
-#' @examples
+#' @examplesx
+#'
+#' @caption Add a new record for each `USUBJID` storing the minimum value (first `AVAL`)
+#' @info If multiple records meet the minimum criterion, take the first value by
+#' `AVISITN`. Set `AVISITN = 97` and `DTYPE = MINIMUM` for these new records.
+#'  Specify the variables that need to be kept in the new records.
+#' @code
 #' library(tibble)
 #' library(dplyr, warn.conflicts = FALSE)
 #' library(lubridate)
@@ -133,10 +141,6 @@
 #'   "2",      3,           95,      3
 #' )
 #'
-#' # Add a new record for each USUBJID storing the minimum value (first AVAL).
-#' # If multiple records meet the minimum criterion, take the first value by
-#' # AVISITN. Set AVISITN = 97 and DTYPE = MINIMUM for these new records.
-#' # Specify the variables that need to be kept in the new records.
 #' derive_extreme_records(
 #'   adlb,
 #'   dataset_add = adlb,
@@ -151,9 +155,10 @@
 #'   )
 #' )
 #'
-#' # Add a new record for each USUBJID storing the maximum value (last AVAL).
-#' # If multiple records meet the maximum criterion, take the first value by
-#' # AVISITN. Set AVISITN = 98 and DTYPE = MAXIMUM for these new records.
+#' @caption Add a new record for each `USUBJID` storing the maximum value (last `AVAL`)
+#' @info If multiple records meet the maximum criterion, take the first value by
+#' `AVISITN`. Set `AVISITN = 98` and `DTYPE = MAXIMUM` for these new records.
+#' @code
 #' derive_extreme_records(
 #'   adlb,
 #'   dataset_add = adlb,
@@ -167,8 +172,9 @@
 #'   )
 #' )
 #'
-#' # Add a new record for each USUBJID storing for the last value.
-#' # Set AVISITN = 99 and DTYPE = LOV for these new records.
+#' @caption Add a new record for each USUBJID storing for the last value
+#' @info Set `AVISITN = 99` and `DTYPE = "LOV"` for these new records.
+#' @code
 #' derive_extreme_records(
 #'   adlb,
 #'   dataset_add = adlb,
@@ -181,7 +187,8 @@
 #'   )
 #' )
 #'
-#' # Derive a new parameter for the first disease progression (PD)
+#' @caption Derive a new parameter for the first disease progression (PD)
+#' @code
 #' adsl <- tribble(
 #'   ~USUBJID, ~DTHDT,
 #'   "1",      ymd("2022-05-13"),
@@ -229,7 +236,8 @@
 #'   )
 #' )
 #'
-#' # derive parameter indicating death
+#' @caption Derive parameter indicating death
+#' @code
 #' derive_extreme_records(
 #'   dataset_ref = adsl,
 #'   dataset_add = adsl,
@@ -283,12 +291,6 @@ derive_extreme_records <- function(dataset = NULL,
     case_sensitive = FALSE,
     optional = TRUE
   )
-  check_type <-
-    assert_character_scalar(
-      check_type,
-      values = c("none", "warning", "error"),
-      case_sensitive = FALSE
-    )
   exist_flag <- assert_symbol(enexpr(exist_flag), optional = TRUE)
   filter_add <- assert_filter_cond(enexpr(filter_add), optional = TRUE)
   assert_varval_list(set_values_to)

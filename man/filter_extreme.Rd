@@ -9,21 +9,29 @@ filter_extreme(dataset, by_vars = NULL, order, mode, check_type = "warning")
 \arguments{
 \item{dataset}{Input dataset
 
-The variables specified by the \code{by_vars} and \code{order} arguments are expected to be in the dataset.}
+The variables specified by the \code{by_vars} and \code{order} arguments are expected to be in the dataset.
+
+\describe{
+\item{Default}{none}
+}}
 
 \item{by_vars}{Grouping variables
 
-\emph{Default}: \code{NULL}
-
 \emph{Permitted Values}: list of variables created by \code{exprs()}
-e.g. \code{exprs(USUBJID, VISIT)}}
+e.g. \code{exprs(USUBJID, VISIT)}
+
+\describe{
+\item{Default}{\code{NULL}}
+}}
 
 \item{order}{Sort order
 
 Within each by group the observations are ordered by the specified order.
 
-\emph{Permitted Values:} list of expressions created by \code{exprs()}, e.g.,
-\code{exprs(ADT, desc(AVAL))}}
+\describe{
+\item{Permitted values}{list of expressions created by \code{exprs()}, e.g.,}
+\item{Default}{none}
+}}
 
 \item{mode}{Selection mode (first or last)
 
@@ -31,7 +39,10 @@ If \code{"first"} is specified, the first observation of each by group is
 included in the output dataset. If \code{"last"} is specified, the last
 observation of each by group is included in the output dataset.
 
-\emph{Permitted Values:}  \code{"first"}, \code{"last"}}
+\describe{
+\item{Permitted values}{\code{"first"}, \code{"last"}}
+\item{Default}{none}
+}}
 
 \item{check_type}{Check uniqueness?
 
@@ -39,9 +50,10 @@ If \code{"warning"} or \code{"error"} is specified, the specified message is iss
 if the observations of the input dataset are not unique with respect to the
 by variables and the order.
 
-\emph{Default:} \code{"warning"}
-
-\emph{Permitted Values:} \code{"none"}, \code{"warning"}, \code{"error"}}
+\describe{
+\item{Permitted values}{\code{"none"}, \code{"message"}, \code{"warning"}, \code{"error"}}
+\item{Default}{\code{"warning"}}
+}}
 }
 \value{
 A dataset containing the first or last observation of each by group

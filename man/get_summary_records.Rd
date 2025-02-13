@@ -9,14 +9,22 @@ get_summary_records(dataset, by_vars, filter = NULL, set_values_to = NULL)
 \arguments{
 \item{dataset}{Input dataset
 
-The variables specified by the \code{by_vars} argument are expected to be in the dataset.}
+The variables specified by the \code{by_vars} argument are expected to be in the dataset.
+
+\describe{
+\item{Default}{none}
+}}
 
 \item{by_vars}{Grouping variables
 
 Variables to consider for generation of groupwise summary records.
 
 \emph{Permitted Values}: list of variables created by \code{exprs()}
-e.g. \code{exprs(USUBJID, VISIT)}}
+e.g. \code{exprs(USUBJID, VISIT)}
+
+\describe{
+\item{Default}{none}
+}}
 
 \item{filter}{Filter condition as logical expression to apply during
 summary calculation. By default, filtering expressions are computed within
@@ -29,6 +37,10 @@ For example,
 values greater than mean of AVAL with in \code{by_vars}.
 \item \code{filter_rows = (dplyr::n() > 2)} will filter n count of \code{by_vars} greater
 than 2.
+}
+
+\describe{
+\item{Default}{\code{NULL}}
 }}
 
 \item{set_values_to}{Variables to be set
@@ -51,7 +63,11 @@ For example:
     PARAMCD = "TDOSE",
     PARCAT1 = "OVERALL"
   )
-}\if{html}{\out{</div>}}}
+}\if{html}{\out{</div>}}
+
+\describe{
+\item{Default}{\code{NULL}}
+}}
 }
 \value{
 A data frame of derived records.

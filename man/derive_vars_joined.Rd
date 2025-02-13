@@ -29,12 +29,20 @@ derive_vars_joined(
 \arguments{
 \item{dataset}{Input dataset
 
-The variables specified by the \code{by_vars} argument are expected to be in the dataset.}
+The variables specified by the \code{by_vars} argument are expected to be in the dataset.
+
+\describe{
+\item{Default}{none}
+}}
 
 \item{dataset_add}{Additional dataset
 
 The variables specified by the \code{by_vars}, the \code{new_vars}, the \code{join_vars},
-and the \code{order} argument are expected.}
+and the \code{order} argument are expected.
+
+\describe{
+\item{Default}{none}
+}}
 
 \item{by_vars}{Grouping variables
 
@@ -44,7 +52,11 @@ Variables can be renamed by naming the element, i.e.
 \verb{by_vars = exprs(<name in input dataset> = <name in additional dataset>)}, similar to the \code{dplyr} joins.
 
 \emph{Permitted Values}: list of variables created by \code{exprs()}
-e.g. \code{exprs(USUBJID, VISIT)}}
+e.g. \code{exprs(USUBJID, VISIT)}
+
+\describe{
+\item{Default}{\code{NULL}}
+}}
 
 \item{order}{Sort order
 
@@ -63,7 +75,11 @@ variable is not included in the output dataset.
 For handling of \code{NA}s in sorting variables see \href{../articles/generic.html#sort_order}{Sort Order}.
 
 \emph{Permitted Values}: list of expressions created by \code{exprs()}, e.g.,
-\code{exprs(ADT, desc(AVAL))} or \code{NULL}}
+\code{exprs(ADT, desc(AVAL))} or \code{NULL}
+
+\describe{
+\item{Default}{\code{NULL}}
+}}
 
 \item{new_vars}{Variables to add
 
@@ -85,7 +101,11 @@ variable \code{LASTRSP} to the dataset and sets it to the upper case value of
 If the argument is not specified or set to \code{NULL}, all variables from the
 additional dataset (\code{dataset_add}) are added.
 
-\emph{Permitted Values}: list of variables or named expressions created by \code{exprs()}}
+\emph{Permitted Values}: list of variables or named expressions created by \code{exprs()}
+
+\describe{
+\item{Default}{\code{NULL}}
+}}
 
 \item{tmp_obs_nr_var}{Temporary observation number
 
@@ -97,7 +117,11 @@ number starts with \code{1}. The variable can be used in the conditions
 used to select consecutive observations or the last observation.
 
 The variable is not included in the output dataset. To include it specify
-it for \code{new_vars}.}
+it for \code{new_vars}.
+
+\describe{
+\item{Default}{\code{NULL}}
+}}
 
 \item{join_vars}{Variables to use from additional dataset
 
@@ -114,7 +138,11 @@ output dataset.
 
 The variables are not included in the output dataset.
 
-\emph{Permitted Values}: list of variables or named expressions created by \code{exprs()}}
+\emph{Permitted Values}: list of variables or named expressions created by \code{exprs()}
+
+\describe{
+\item{Default}{\code{NULL}}
+}}
 
 \item{join_type}{Observations to keep after joining
 
@@ -130,7 +158,11 @@ Whereas, sometimes you might allow for confirmatory observations to occur
 prior to the observation. For example, to identify AEs occurring on or
 after seven days before a COVID AE. Thus \code{join_type = "all"} could be used.
 
-\emph{Permitted Values:} \code{"before"}, \code{"after"}, \code{"all"}}
+\emph{Permitted Values:} \code{"before"}, \code{"after"}, \code{"all"}
+
+\describe{
+\item{Default}{none}
+}}
 
 \item{filter_add}{Filter for additional dataset (\code{dataset_add})
 
@@ -144,7 +176,11 @@ condition.
 The condition can include summary functions like \code{all()} or \code{any()}. The
 additional dataset is grouped by the by variables (\code{by_vars}).
 
-\emph{Permitted Values}: a condition}
+\emph{Permitted Values}: a condition
+
+\describe{
+\item{Default}{\code{NULL}}
+}}
 
 \item{first_cond_lower}{Condition for selecting range of data (before)
 
@@ -157,7 +193,11 @@ considered.
 This argument should be specified if \code{filter_join} contains summary
 functions which should not apply to all observations but only from a
 certain observation before the current observation up to the current
-observation. For an example see the last example below.}
+observation. For an example see the last example below.
+
+\describe{
+\item{Default}{\code{NULL}}
+}}
 
 \item{first_cond_upper}{Condition for selecting range of data (after)
 
@@ -168,7 +208,11 @@ observations are considered.
 
 This argument should be specified if \code{filter_join} contains summary
 functions which should not apply to all observations but only up to the
-confirmation assessment. For an example see the last example below.}
+confirmation assessment. For an example see the last example below.
+
+\describe{
+\item{Default}{\code{NULL}}
+}}
 
 \item{filter_join}{Filter for the joined dataset
 
@@ -181,7 +225,11 @@ condition.
 The condition can include summary functions like \code{all()} or \code{any()}. The
 joined dataset is grouped by the original observations.
 
-\emph{Permitted Values}: a condition}
+\emph{Permitted Values}: a condition
+
+\describe{
+\item{Default}{\code{NULL}}
+}}
 
 \item{mode}{Selection mode
 
@@ -190,7 +238,11 @@ argument is specified, \code{mode} must be non-null.
 
 If the \code{order} argument is not specified, the \code{mode} argument is ignored.
 
-\emph{Permitted Values}: \code{"first"}, \code{"last"}, \code{NULL}}
+\emph{Permitted Values}: \code{"first"}, \code{"last"}, \code{NULL}
+
+\describe{
+\item{Default}{\code{NULL}}
+}}
 
 \item{exist_flag}{Exist flag
 
@@ -199,21 +251,33 @@ variable (e.g., \code{FLAG}) is added to the input dataset. This variable will
 be the value provided in \code{true_value} for all selected records from \code{dataset_add}
 which are merged into the input dataset, and the value provided in \code{false_value} otherwise.
 
-\emph{Permitted Values}: Variable name}
+\emph{Permitted Values}: Variable name
+
+\describe{
+\item{Default}{\code{NULL}}
+}}
 
 \item{true_value}{True value
 
 The value for the specified variable \code{exist_flag}, applicable to
 the first or last observation (depending on the mode) of each by group.
 
-Permitted Values: An atomic scalar}
+Permitted Values: An atomic scalar
+
+\describe{
+\item{Default}{\code{"Y"}}
+}}
 
 \item{false_value}{False value
 
 The value for the specified variable \code{exist_flag}, NOT applicable to
 the first or last observation (depending on the mode) of each by group.
 
-Permitted Values: An atomic scalar}
+Permitted Values: An atomic scalar
+
+\describe{
+\item{Default}{\code{NA_character_}}
+}}
 
 \item{missing_values}{Values for non-matching observations
 
@@ -223,7 +287,11 @@ of the specified variables are set to the specified value. Only variables
 specified for \code{new_vars} can be specified for \code{missing_values}.
 
 \emph{Permitted Values}: named list of expressions, e.g.,
-\code{exprs(BASEC = "MISSING", BASE = -1)}}
+\code{exprs(BASEC = "MISSING", BASE = -1)}
+
+\describe{
+\item{Default}{\code{NULL}}
+}}
 
 \item{check_type}{Check uniqueness?
 
@@ -236,7 +304,11 @@ is issued independent of \code{check_type} if the restricted joined dataset
 contains more than one observation for any of the observations of the input
 dataset.
 
-\emph{Permitted Values}: \code{"none"}, \code{"warning"}, \code{"error"}}
+\emph{Permitted Values}: \code{"none"}, \code{"warning"}, \code{"error"}
+
+\describe{
+\item{Default}{\code{"warning"}}
+}}
 }
 \value{
 The output dataset contains all observations and variables of the

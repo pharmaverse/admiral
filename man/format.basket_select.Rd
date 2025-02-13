@@ -7,9 +7,17 @@
 \method{format}{basket_select}(x, ...)
 }
 \arguments{
-\item{x}{A \code{basket_select()} object}
+\item{x}{A \code{basket_select()} object
 
-\item{...}{Not used}
+\describe{
+\item{Default}{none}
+}}
+
+\item{...}{Not used
+
+\describe{
+\item{Default}{none}
+}}
 }
 \value{
 A character representation of the \code{basket_select()} object
