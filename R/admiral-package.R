@@ -18,10 +18,10 @@
 #'             walk
 #' @importFrom rlang := abort arg_match as_data_mask as_function as_label
 #'   as_name as_string call2 call_name caller_env cnd_muffle cnd_signal
-#'   current_env .data enexpr enexprs eval_bare eval_tidy expr expr_interp exec
-#'   expr_deparse expr_label exprs f_lhs f_rhs global_env inform is_call
-#'   is_expression is_missing is_named list2 new_environment new_formula
-#'   parse_expr parse_exprs set_names sym syms type_of warn zap
+#'   current_env .data enexpr enexprs  eval_tidy expr exec expr_deparse
+#'   expr_label exprs global_env inform is_call is_expression is_missing
+#'   is_named list2 new_environment parse_expr parse_exprs set_names sym syms
+#'   type_of zap
 #' @importFrom roxygen2 rd_section roclet roclet_process roxy_tag roxy_tag_parse
 #'   roxy_tag_rd tag_markdown
 #' @importFrom stats setNames
