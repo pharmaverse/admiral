@@ -11,9 +11,8 @@
 #'
 #' @param dataset_ref Reference dataset
 #'
-#'   The variables specified for `by_vars` are expected. For each
-#'   observation of the specified dataset a new observation is added to the
-#'   input dataset.
+#'   The variables specified for `by_vars` are expected. For each observation of
+#'   the specified dataset a new observation is added to the input dataset.
 #'
 #' @param dataset_add Additional dataset
 #'

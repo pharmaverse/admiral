@@ -42,9 +42,8 @@ within each by group, defined by \code{by_vars}, is selected.
 
 \item{dataset_ref}{Reference dataset
 
-The variables specified for \code{by_vars} are expected. For each
-observation of the specified dataset a new observation is added to the
-input dataset.
+The variables specified for \code{by_vars} are expected. For each observation of
+the specified dataset a new observation is added to the input dataset.
 
 \describe{
 \item{Default}{\code{NULL}}

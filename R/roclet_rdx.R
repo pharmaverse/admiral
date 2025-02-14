@@ -1,3 +1,45 @@
+#' Roclet Extending the Standard rd Roclet
+#'
+#' This roclet extends the standard `rd` roclet by allowing
+#' - to add permitted values and default values to the `@param` tag and
+#' - to add a caption and a description to examples.
+#'
+#' The following tags are supported:
+#'
+#' - `@permitted`: Permitted values for the argument. Permitted value description
+#'     which are used for several arguments/functions can be stored in
+#'     `inst/roxygen/rdx_meta.R`. For example:
+#'     ```
+#'     list(
+#'       rdx_permitted_values = list(
+#'         mode = "`\"first\"`, `\"last\"`",
+#'         msg_type = "`\"none\"`, `\"message\"`, `\"warning\"`, `\"error\"`"
+#'       )
+#'     )
+#'     ```
+#'     The reference to the permitted values is done by specifying the name of
+#'     the list element in square brackets, e.g., `@permitted [mode]`.
+#' - `@default`: Default value for the argument. By default the default value
+#'   from the function formals is displayed. This can be overwritten by using
+#'   the `@default` tag.
+#'
+#' - `@examplesx`: This tag can be used to mark the beginning of the examples
+#'    section but doesn't affect the output, i.e., it can be omitted.
+#'
+#' - `@caption`: Caption for the example. The caption is displayed as a subsection
+#'   in the examples section. The caption can be followed by an arbitrary number
+#'   of `@info` and `@code` tags.
+#' - `@info`: Description of the example.
+#' - `@code`: Code of the example.
+#'
+#' To use the roclet call `roxygen2::roxygenise(roclets =
+#' "admiral::rdx_roclet")` or add to the `DESCRIPTION` file:
+#' ```
+#' Roxygen: list(markdown = TRUE, roclets = c("collate", "namespace", "admiral::rdx_roclet"))
+#' ```
+#'
+#' @keywords internal
+#'
 #' @export
 rdx_roclet <- function() {
   out <- roclet("rdx")
@@ -9,6 +51,7 @@ rdx_roclet <- function() {
 roclet_process.roclet_rdx <- function(x, blocks, env, base_path) {
   # read metadata for permitted values
   if (file.exists("./man/roxygen/rdx_meta.R")) {
+    # nolint next
     rdx_permitted_values <- source("./man/roxygen/rdx_meta.R")$value$rdx_permitted_values
   } else {
     rdx_permitted_values <- NULL
@@ -112,17 +155,10 @@ transform_examplesx <- function(block) {
         act_example$contents,
         paste(
           "\\if{html}{\\out{<div class=\"sourceCode r\">}}\\preformatted{",
-          # str_remove_all(tags[[i]]$raw, "(^\n+|\n+$)"),
           execute_example(tags[[i]]$raw, env = example_env),
           "}\\if{html}{\\out{</div>}}",
           sep = ""
         ),
-        #   paste(
-        #     "\\if{html}{\\out{<div class=\"sourceCode r\">}}\\Sexpr[stage=render,results=verbatim]{",
-        #     str_remove_all(tags[[i]]$raw, "(^\n+|\n+$)"),
-        #     "}\\if{html}{\\out{</div>}}",
-        #     sep = ""
-        #   ),
         sep = "\n\n"
       )
     } else {
@@ -173,7 +209,13 @@ roxy_tag_rd.roxy_tag_examplex <- function(x, base_path, env) {
 #' @export
 merge.rd_section_examplex <- function(x, y, ...) {
   stopifnot(identical(class(x), class(y)))
-  rd_section(x$type, list(caption = c(x$value$caption, y$value$caption), contents = c(x$value$contents, y$value$contents)))
+  rd_section(
+    x$type,
+    list(
+      caption = c(x$value$caption, y$value$caption),
+      contents = c(x$value$contents, y$value$contents)
+    )
+  )
 }
 
 #' @export
@@ -181,7 +223,6 @@ format.rd_section_examplex <- function(x, ...) {
   paste0(
     "\\section{Examples}{\n",
     paste0("\\subsection{", x$value$caption, "}{", x$value$contents, "}", collapse = "\n"),
-    # paste0("\\subsection{X example}{", x$value, "}", collapse = ""),
     "}\n"
   )
 }
