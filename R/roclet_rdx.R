@@ -129,7 +129,7 @@ get_param_tag <- function(act_param, defaults) {
       paste0("\\item{Permitted values}{", act_param$permitted, "}\n"),
       ""
     ),
-    "\\item{Default}{", act_param$default, "}\n}"
+    "\\item{Default Value}{", act_param$default, "}\n}"
   )
   tag
 }

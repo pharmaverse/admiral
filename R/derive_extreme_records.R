@@ -42,6 +42,8 @@
 #'
 #' @permitted [mode]
 #'
+#' @default Some default value
+#'
 #' @param check_type Check uniqueness?
 #'
 #'   If `"warning"` or `"error"` is specified, the specified message is issued
@@ -253,6 +255,64 @@
 #'     ADT = DTHDT
 #'   )
 #' )
+#'
+#' @section Examples:
+#'
+#' ##  Add a new record for each `USUBJID` storing the minimum value (first `AVAL`)
+#'
+#' If multiple records meet the minimum criterion, take the first value by
+#' `AVISITN`. Set `AVISITN = 97` and `DTYPE = MINIMUM` for these new records.
+#'  Specify the variables that need to be kept in the new records.
+#'
+#' ```{r}
+#' library(tibble)
+#' library(dplyr, warn.conflicts = FALSE)
+#' library(lubridate)
+#'
+#' adlb <- tribble(
+#'   ~USUBJID, ~AVISITN, ~AVAL, ~LBSEQ,
+#'   "1",      1,          113,      1,
+#'   "1",      2,          113,      2,
+#'   "1",      3,          117,      3,
+#'   "2",      1,          101,      1,
+#'   "2",      2,          101,      2,
+#'   "2",      3,           95,      3
+#' )
+#'
+#' derive_extreme_records(
+#'   adlb,
+#'   dataset_add = adlb,
+#'   by_vars = exprs(USUBJID),
+#'   order = exprs(AVAL, AVISITN),
+#'   mode = "first",
+#'   filter_add = !is.na(AVAL),
+#'   keep_source_vars = exprs(AVAL),
+#'   set_values_to = exprs(
+#'     AVISITN = 97,
+#'     DTYPE = "MINIMUM"
+#'   )
+#' )
+#' ```
+#'
+#' ## Add a new record for each `USUBJID` storing the maximum value (last `AVAL`)
+#'
+#' If multiple records meet the maximum criterion, take the first value by
+#' `AVISITN`. Set `AVISITN = 98` and `DTYPE = MAXIMUM` for these new records.
+#'
+#' ```{r}
+#' derive_extreme_records(
+#'   adlb,
+#'   dataset_add = adlb,
+#'   by_vars = exprs(USUBJID),
+#'   order = exprs(desc(AVAL), AVISITN),
+#'   mode = "first",
+#'   filter_add = !is.na(AVAL),
+#'   set_values_to = exprs(
+#'     AVISITN = 98,
+#'     DTYPE = "MAXIMUM"
+#'   )
+#' )
+#' ```
 derive_extreme_records <- function(dataset = NULL,
                                    dataset_add,
                                    dataset_ref = NULL,
