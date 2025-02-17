@@ -10,7 +10,7 @@ list_all_templates(package = "admiral")
 \item{package}{The R package in which to look for templates. By default \code{"admiral"}.
 
 \describe{
-\item{Default}{\code{"admiral"}}
+\item{Default Value}{\code{"admiral"}}
 }}
 }
 \value{

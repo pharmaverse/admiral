@@ -21,7 +21,7 @@ derive_vars_transposed(
 The variables specified by the \code{by_vars} argument are expected to be in the dataset.
 
 \describe{
-\item{Default}{none}
+\item{Default Value}{none}
 }}
 
 \item{dataset_merge}{Dataset to transpose and merge
@@ -31,7 +31,7 @@ The variables specified by the \code{by_vars}, \code{id_vars}, \code{key_var} an
 \code{key_var} have to be a unique key.
 
 \describe{
-\item{Default}{none}
+\item{Default Value}{none}
 }}
 
 \item{by_vars}{Grouping variables
@@ -39,7 +39,7 @@ The variables specified by the \code{by_vars}, \code{id_vars}, \code{key_var} an
 Keys used to merge \code{dataset_merge} with \code{dataset}.
 
 \describe{
-\item{Default}{none}
+\item{Default Value}{none}
 }}
 
 \item{id_vars}{ID variables
@@ -50,27 +50,27 @@ Variables (excluding by_vars) that uniquely identify each observation in \code{d
 e.g. \code{exprs(USUBJID, VISIT)}
 
 \describe{
-\item{Default}{\code{NULL}}
+\item{Default Value}{\code{NULL}}
 }}
 
 \item{key_var}{The variable of \code{dataset_merge} containing the names of the
 transposed variables
 
 \describe{
-\item{Default}{none}
+\item{Default Value}{none}
 }}
 
 \item{value_var}{The variable of \code{dataset_merge} containing the values of the
 transposed variables
 
 \describe{
-\item{Default}{none}
+\item{Default Value}{none}
 }}
 
 \item{filter}{Expression used to restrict the records of \code{dataset_merge} prior to transposing
 
 \describe{
-\item{Default}{\code{NULL}}
+\item{Default Value}{\code{NULL}}
 }}
 
 \item{relationship}{Expected merge-relationship between the \code{by_vars}
@@ -84,7 +84,7 @@ more details.
 \code{"many-to-many"}, \code{NULL}
 
 \describe{
-\item{Default}{\code{NULL}}
+\item{Default Value}{\code{NULL}}
 }}
 }
 \value{

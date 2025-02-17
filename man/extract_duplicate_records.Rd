@@ -12,7 +12,7 @@ extract_duplicate_records(dataset, by_vars = NULL)
 The variables specified by the \code{by_vars} argument are expected to be in the dataset.
 
 \describe{
-\item{Default}{none}
+\item{Default Value}{none}
 }}
 
 \item{by_vars}{Grouping variables
@@ -28,7 +28,7 @@ whenever possible.
 e.g. \code{exprs(USUBJID, VISIT)}
 
 \describe{
-\item{Default}{\code{NULL}}
+\item{Default Value}{\code{NULL}}
 }}
 }
 \value{

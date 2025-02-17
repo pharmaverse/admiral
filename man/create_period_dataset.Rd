@@ -18,7 +18,7 @@ For each element of \code{new_vars} at least one variable of the form of the rig
 hand side value must be available in the dataset.
 
 \describe{
-\item{Default}{none}
+\item{Default Value}{none}
 }}
 
 \item{new_vars}{New variables
@@ -37,7 +37,7 @@ variables. If period \emph{and} subperiod variables are required, separate
 reference datasets must be created.
 
 \describe{
-\item{Default}{none}
+\item{Default Value}{none}
 }}
 
 \item{subject_keys}{Variables to uniquely identify a subject
@@ -46,7 +46,7 @@ A list of expressions where the expressions are symbols as returned by
 \code{exprs()} is expected.
 
 \describe{
-\item{Default}{\code{get_admiral_option("subject_keys")}}
+\item{Default Value}{\code{get_admiral_option("subject_keys")}}
 }}
 }
 \value{

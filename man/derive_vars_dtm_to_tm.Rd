@@ -12,14 +12,14 @@ derive_vars_dtm_to_tm(dataset, source_vars)
 The variables specified by the \code{source_vars} argument are expected to be in the dataset.
 
 \describe{
-\item{Default}{none}
+\item{Default Value}{none}
 }}
 
 \item{source_vars}{A list of datetime variables created using \code{exprs()} from
 which time is to be extracted
 
 \describe{
-\item{Default}{none}
+\item{Default Value}{none}
 }}
 }
 \value{

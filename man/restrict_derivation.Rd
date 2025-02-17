@@ -10,7 +10,7 @@ restrict_derivation(dataset, derivation, args = NULL, filter)
 \item{dataset}{Input dataset
 
 \describe{
-\item{Default}{none}
+\item{Default Value}{none}
 }}
 
 \item{derivation}{Derivation
@@ -22,7 +22,7 @@ The function must provide the \code{dataset} argument and all arguments
 specified in the \code{params()} objects passed to the \code{arg} argument.
 
 \describe{
-\item{Default}{none}
+\item{Default Value}{none}
 }}
 
 \item{args}{Arguments of the derivation
@@ -30,13 +30,13 @@ specified in the \code{params()} objects passed to the \code{arg} argument.
 A \code{params()} object is expected.
 
 \describe{
-\item{Default}{\code{NULL}}
+\item{Default Value}{\code{NULL}}
 }}
 
 \item{filter}{Filter condition
 
 \describe{
-\item{Default}{none}
+\item{Default Value}{none}
 }}
 }
 \description{

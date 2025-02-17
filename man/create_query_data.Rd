@@ -13,7 +13,7 @@ create_query_data(queries, version = NULL, get_terms_fun = NULL)
 A list of \code{query()} objects is expected.
 
 \describe{
-\item{Default}{none}
+\item{Default Value}{none}
 }}
 
 \item{version}{Dictionary version
@@ -26,7 +26,7 @@ including a basket, the parameter needs to be specified.
 company-specific)
 
 \describe{
-\item{Default}{\code{NULL}}
+\item{Default Value}{\code{NULL}}
 }}
 
 \item{get_terms_fun}{Function which returns the terms
@@ -68,7 +68,7 @@ environment instead of accessing the database again.
 }
 
 \describe{
-\item{Default}{\code{NULL}}
+\item{Default Value}{\code{NULL}}
 }}
 }
 \value{

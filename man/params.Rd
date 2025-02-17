@@ -10,7 +10,7 @@ params(...)
 \item{...}{One or more named arguments
 
 \describe{
-\item{Default}{none}
+\item{Default Value}{none}
 }}
 }
 \value{

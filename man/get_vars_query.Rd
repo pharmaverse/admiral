@@ -10,7 +10,7 @@ get_vars_query(dataset, dataset_queries)
 \item{dataset}{Input dataset
 
 \describe{
-\item{Default}{none}
+\item{Default Value}{none}
 }}
 
 \item{dataset_queries}{A dataset containing required columns \code{PREFIX},
@@ -20,7 +20,7 @@ get_vars_query(dataset, dataset_queries)
 \code{create_query_data()} can be used to create the dataset.
 
 \describe{
-\item{Default}{none}
+\item{Default Value}{none}
 }}
 }
 \value{

@@ -16,7 +16,7 @@ derive_var_anrind(
 \code{A1LO} and \code{A1H1} are expected as well.
 
 \describe{
-\item{Default}{none}
+\item{Default Value}{none}
 }}
 
 \item{signif_dig}{Number of significant digits to use when comparing values.
@@ -25,14 +25,14 @@ Significant digits used to avoid floating point discrepancies when comparing num
 See blog: \href{https://pharmaverse.github.io/blog/posts/2023-10-30_floating_point/floating_point.html}{How admiral handles floating points}
 
 \describe{
-\item{Default}{\code{get_admiral_option("signif_digits")}}
+\item{Default Value}{\code{get_admiral_option("signif_digits")}}
 }}
 
 \item{use_a1hia1lo}{A logical value indicating whether to use \code{A1H1} and \code{A1LO} in
 the derivation of \code{ANRIND}.
 
 \describe{
-\item{Default}{\code{FALSE}}
+\item{Default Value}{\code{FALSE}}
 }}
 }
 \value{

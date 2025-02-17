@@ -12,7 +12,7 @@ set_admiral_options(subject_keys, signif_digits, save_memory)
 \code{subject_keys} argument in all admiral functions.
 
 \describe{
-\item{Default}{none}
+\item{Default Value}{none}
 }}
 
 \item{signif_digits}{Holds number of significant digits when comparing to numeric variables,
@@ -20,7 +20,7 @@ defaults to \code{15}. This option is used as default value for the  \code{signi
 admiral functions \code{derive_var_atoxgr_dir()} and \code{derive_var_anrind()}.
 
 \describe{
-\item{Default}{none}
+\item{Default Value}{none}
 }}
 
 \item{save_memory}{If set to \code{TRUE}, an alternative algorithm is used in the
@@ -29,7 +29,7 @@ functions \code{derive_vars_joined()}, \code{derive_var_joined_exist_flag()},
 but more run-time.
 
 \describe{
-\item{Default}{none}
+\item{Default Value}{none}
 }}
 }
 \value{

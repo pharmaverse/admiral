@@ -18,7 +18,7 @@ derive_var_obs_number(
 The variables specified by the \code{by_vars} and \code{order} arguments are expected to be in the dataset.
 
 \describe{
-\item{Default}{none}
+\item{Default Value}{none}
 }}
 
 \item{by_vars}{Grouping variables
@@ -27,7 +27,7 @@ The variables specified by the \code{by_vars} and \code{order} arguments are exp
 e.g. \code{exprs(USUBJID, VISIT)}
 
 \describe{
-\item{Default}{\code{NULL}}
+\item{Default Value}{\code{NULL}}
 }}
 
 \item{order}{Sort order
@@ -39,7 +39,7 @@ For handling of \code{NA}s in sorting variables see \href{../articles/generic.ht
 Permitted Values: list of variables or functions of variables
 
 \describe{
-\item{Default}{\code{NULL}}
+\item{Default Value}{\code{NULL}}
 }}
 
 \item{new_var}{Name of variable to create
@@ -50,7 +50,7 @@ numbering starts with 1.
 Default: \code{ASEQ}
 
 \describe{
-\item{Default}{\code{ASEQ}}
+\item{Default Value}{\code{ASEQ}}
 }}
 
 \item{check_type}{Check uniqueness?
@@ -64,7 +64,7 @@ Default: \code{"none"}
 Permitted Values: \code{"none"}, \code{"warning"}, \code{"error"}
 
 \describe{
-\item{Default}{\code{"none"}}
+\item{Default Value}{\code{"none"}}
 }}
 }
 \value{

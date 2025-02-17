@@ -14,7 +14,7 @@ dtm_level(level)
 (none)
 
 \describe{
-\item{Default}{none}
+\item{Default Value}{none}
 }}
 }
 \value{

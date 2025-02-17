@@ -22,7 +22,7 @@ convert_na_to_blanks(x)
 \item{x}{Any R object
 
 \describe{
-\item{Default}{none}
+\item{Default Value}{none}
 }}
 }
 \value{

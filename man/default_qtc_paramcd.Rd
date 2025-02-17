@@ -12,7 +12,7 @@ default_qtc_paramcd(method)
 \emph{Permitted Values}: \code{"Bazett"}, \code{"Fridericia"}, \code{"Sagie"}
 
 \describe{
-\item{Default}{none}
+\item{Default Value}{none}
 }}
 }
 \value{

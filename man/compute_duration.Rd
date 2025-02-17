@@ -26,7 +26,7 @@ character vector to a date object.
 Refer to \code{convert_dtc_to_dt()} to obtain a vector of imputed dates.
 
 \describe{
-\item{Default}{none}
+\item{Default Value}{none}
 }}
 
 \item{end_date}{The end date
@@ -39,7 +39,7 @@ character vector to a date object.
 Refer to \code{convert_dtc_to_dt()} to obtain a vector of imputed dates.
 
 \describe{
-\item{Default}{none}
+\item{Default Value}{none}
 }}
 
 \item{in_unit}{Input unit
@@ -61,7 +61,7 @@ For minutes: \code{"minute"}, \code{"minutes"}, \code{"min"}, \code{"mins"}
 For seconds: \code{"second"}, \code{"seconds"}, \code{"sec"}, \code{"secs"}, \code{"s"}
 
 \describe{
-\item{Default}{\code{"days"}}
+\item{Default Value}{\code{"days"}}
 }}
 
 \item{out_unit}{Output unit
@@ -85,7 +85,7 @@ For minutes: \code{"minute"}, \code{"minutes"}, \code{"min"}, \code{"mins"}
 For seconds: \code{"second"}, \code{"seconds"}, \code{"sec"}, \code{"secs"}, \code{"s"}
 
 \describe{
-\item{Default}{\code{"days"}}
+\item{Default Value}{\code{"days"}}
 }}
 
 \item{floor_in}{Round down input dates?
@@ -98,7 +98,7 @@ Default: \code{TRUE}
 Permitted Values: \code{TRUE}, \code{FALSE}
 
 \describe{
-\item{Default}{\code{TRUE}}
+\item{Default Value}{\code{TRUE}}
 }}
 
 \item{add_one}{Add one input unit?
@@ -111,7 +111,7 @@ Default: \code{TRUE}
 Permitted Values: \code{TRUE}, \code{FALSE}
 
 \describe{
-\item{Default}{\code{TRUE}}
+\item{Default Value}{\code{TRUE}}
 }}
 
 \item{trunc_out}{Return integer part
@@ -124,7 +124,7 @@ Default: \code{FALSE}
 Permitted Values: \code{TRUE}, \code{FALSE}
 
 \describe{
-\item{Default}{\code{FALSE}}
+\item{Default Value}{\code{FALSE}}
 }}
 
 \item{type}{lubridate duration type.
@@ -136,7 +136,7 @@ Default: \code{"duration"}
 Permitted Values: \code{"duration"}, \code{"interval"}
 
 \describe{
-\item{Default}{\code{"duration"}}
+\item{Default Value}{\code{"duration"}}
 }}
 }
 \value{

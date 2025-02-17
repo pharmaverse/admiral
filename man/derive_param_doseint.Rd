@@ -25,7 +25,7 @@ the input dataset after restricting it by the filter condition (\code{filter}
 parameter) and to the parameters specified by \code{tadm_code} and \code{padm_code}.
 
 \describe{
-\item{Default}{none}
+\item{Default Value}{none}
 }}
 
 \item{by_vars}{Grouping variables
@@ -37,7 +37,7 @@ in the newly created records.
 e.g. \code{exprs(USUBJID, VISIT)}
 
 \describe{
-\item{Default}{none}
+\item{Default Value}{none}
 }}
 
 \item{set_values_to}{Variables to be set
@@ -49,7 +49,7 @@ for the new parameter.
 \emph{Permitted Values}: List of variable-value pairs
 
 \describe{
-\item{Default}{\code{exprs(PARAMCD = "MAP")}}
+\item{Default Value}{\code{exprs(PARAMCD = "MAP")}}
 }}
 
 \item{tadm_code}{Total Doses Administered parameter code
@@ -61,7 +61,7 @@ will be the numerator of the dose intensity calculation.
 Permitted Values: character value
 
 \describe{
-\item{Default}{\code{"TNDOSE"}}
+\item{Default Value}{\code{"TNDOSE"}}
 }}
 
 \item{tpadm_code}{Total Doses Planned parameter code
@@ -73,7 +73,7 @@ will be the denominator of the dose intensity calculation.
 Permitted Values: character value
 
 \describe{
-\item{Default}{\code{"TSNDOSE"}}
+\item{Default Value}{\code{"TSNDOSE"}}
 }}
 
 \item{zero_doses}{Flag indicating logic for handling 0 planned or
@@ -104,7 +104,7 @@ If \code{zero_doses} = \code{100} :
 }
 
 \describe{
-\item{Default}{\code{"Inf"}}
+\item{Default Value}{\code{"Inf"}}
 }}
 
 \item{filter}{Filter condition
@@ -116,7 +116,7 @@ into account.
 \emph{Permitted Values:} a condition
 
 \describe{
-\item{Default}{\code{NULL}}
+\item{Default Value}{\code{NULL}}
 }}
 }
 \value{

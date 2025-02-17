@@ -14,13 +14,13 @@ A character date is expected in a format like \code{yyyy-mm-dd} or
 valid "missing" value for any component.
 
 \describe{
-\item{Default}{none}
+\item{Default Value}{none}
 }}
 
 \item{imputed_dtc}{The imputed DTC date
 
 \describe{
-\item{Default}{none}
+\item{Default Value}{none}
 }}
 
 \item{min_dates}{Minimum dates
@@ -54,7 +54,7 @@ For date variables (not datetime) in the list the time is imputed to
 imputed. If only time is imputed, date variables do not affect the result.
 
 \describe{
-\item{Default}{\code{NULL}}
+\item{Default Value}{\code{NULL}}
 }}
 
 \item{max_dates}{Maximum dates
@@ -69,7 +69,7 @@ For date variables (not datetime) in the list the time is imputed to
 imputed. If only time is imputed, date variables do not affect the result.
 
 \describe{
-\item{Default}{\code{NULL}}
+\item{Default Value}{\code{NULL}}
 }}
 }
 \value{

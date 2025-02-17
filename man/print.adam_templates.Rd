@@ -10,13 +10,13 @@
 \item{x}{A \code{adam_templates} object
 
 \describe{
-\item{Default}{none}
+\item{Default Value}{none}
 }}
 
 \item{...}{Not used
 
 \describe{
-\item{Default}{none}
+\item{Default Value}{none}
 }}
 }
 \value{

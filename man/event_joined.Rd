@@ -26,7 +26,7 @@ dataset (\code{dataset}) of \code{derive_extreme_event()} is used.
 \emph{Permitted Values}: a character scalar
 
 \describe{
-\item{Default}{\code{NULL}}
+\item{Default Value}{\code{NULL}}
 }}
 
 \item{condition}{An unquoted condition for selecting the observations, which
@@ -44,7 +44,7 @@ observations up to the confirmation observation the response is "CR" or
 \emph{Permitted Values}: an unquoted condition
 
 \describe{
-\item{Default}{none}
+\item{Default Value}{none}
 }}
 
 \item{order}{If specified, the specified variables or expressions are used to
@@ -56,7 +56,7 @@ For handling of \code{NA}s in sorting variables see \href{../articles/generic.ht
 \code{exprs(ADT, desc(AVAL))} or \code{NULL}
 
 \describe{
-\item{Default}{\code{NULL}}
+\item{Default Value}{\code{NULL}}
 }}
 
 \item{join_vars}{Variables to keep from joined dataset
@@ -70,7 +70,7 @@ The \verb{*.join} variables are not included in the output dataset.
 \emph{Permitted Values}: a named list of expressions, e.g., created by \code{exprs()}
 
 \describe{
-\item{Default}{none}
+\item{Default Value}{none}
 }}
 
 \item{join_type}{Observations to keep after joining
@@ -82,7 +82,7 @@ kept.
 \emph{Permitted Values:} \code{"before"}, \code{"after"}, \code{"all"}
 
 \describe{
-\item{Default}{none}
+\item{Default Value}{none}
 }}
 
 \item{first_cond_lower}{Condition for selecting range of data (before)
@@ -101,7 +101,7 @@ observation.
 \emph{Permitted Values}: an unquoted condition
 
 \describe{
-\item{Default}{\code{NULL}}
+\item{Default Value}{\code{NULL}}
 }}
 
 \item{first_cond_upper}{Condition for selecting range of data (after)
@@ -118,7 +118,7 @@ confirmation assessment.
 \emph{Permitted Values}: an unquoted condition
 
 \describe{
-\item{Default}{\code{NULL}}
+\item{Default Value}{\code{NULL}}
 }}
 
 \item{set_values_to}{A named list returned by \code{exprs()} defining the variables
@@ -128,7 +128,7 @@ character string, a numeric value, \code{NA} or an expression.
 \emph{Permitted Values}: a named list of expressions, e.g., created by \code{exprs()}
 
 \describe{
-\item{Default}{\code{NULL}}
+\item{Default Value}{\code{NULL}}
 }}
 
 \item{keep_source_vars}{Variables to keep from the source dataset
@@ -141,7 +141,7 @@ by \code{set_values_to} are always kept.
 a symbol or a tidyselect expression, e.g., \code{exprs(VISIT, VISITNUM, starts_with("RS"))}.
 
 \describe{
-\item{Default}{\code{NULL}}
+\item{Default Value}{\code{NULL}}
 }}
 
 \item{description}{Description of the event
@@ -152,7 +152,7 @@ is intended for documentation only.
 \emph{Permitted Values}: a character scalar
 
 \describe{
-\item{Default}{\code{NULL}}
+\item{Default Value}{\code{NULL}}
 }}
 }
 \value{

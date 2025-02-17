@@ -22,7 +22,7 @@ filter_relative(
 The variables specified by the \code{by_vars} and \code{order} arguments are expected to be in the dataset.
 
 \describe{
-\item{Default}{none}
+\item{Default Value}{none}
 }}
 
 \item{by_vars}{Grouping variables
@@ -31,7 +31,7 @@ The variables specified by the \code{by_vars} and \code{order} arguments are exp
 e.g. \code{exprs(USUBJID, VISIT)}
 
 \describe{
-\item{Default}{none}
+\item{Default Value}{none}
 }}
 
 \item{order}{Sort order
@@ -44,7 +44,7 @@ For handling of \code{NA}s in sorting variables see \href{../articles/generic.ht
 \code{exprs(ADT, desc(AVAL))}
 
 \describe{
-\item{Default}{none}
+\item{Default Value}{none}
 }}
 
 \item{condition}{Condition for Reference Observation
@@ -54,7 +54,7 @@ dataset contains all observations before or after (\code{selection} parameter)
 the reference observation.
 
 \describe{
-\item{Default}{none}
+\item{Default Value}{none}
 }}
 
 \item{mode}{Selection mode (first or last)
@@ -70,7 +70,7 @@ included in the output dataset.
 \emph{Permitted Values:} \code{"first"}, \code{"last"}
 
 \describe{
-\item{Default}{none}
+\item{Default Value}{none}
 }}
 
 \item{selection}{Select observations before or after the reference observation?
@@ -78,7 +78,7 @@ included in the output dataset.
 \emph{Permitted Values:} \code{"before"}, \code{"after"}
 
 \describe{
-\item{Default}{none}
+\item{Default Value}{none}
 }}
 
 \item{inclusive}{Include the reference observation?
@@ -86,7 +86,7 @@ included in the output dataset.
 \emph{Permitted Values:} \code{TRUE}, \code{FALSE}
 
 \describe{
-\item{Default}{none}
+\item{Default Value}{none}
 }}
 
 \item{keep_no_ref_groups}{Should by groups without reference observation be kept?
@@ -94,7 +94,7 @@ included in the output dataset.
 \emph{Permitted Values:} \code{TRUE}, \code{FALSE}
 
 \describe{
-\item{Default}{\code{TRUE}}
+\item{Default Value}{\code{TRUE}}
 }}
 
 \item{check_type}{Check uniqueness?
@@ -106,7 +106,7 @@ by variables and the order.
 \emph{Permitted Values:} \code{"none"}, \code{"warning"}, \code{"error"}
 
 \describe{
-\item{Default}{\code{"warning"}}
+\item{Default Value}{\code{"warning"}}
 }}
 }
 \value{

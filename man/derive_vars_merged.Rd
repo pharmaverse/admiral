@@ -28,7 +28,7 @@ derive_vars_merged(
 The variables specified by the \code{by_vars} argument are expected to be in the dataset.
 
 \describe{
-\item{Default}{none}
+\item{Default Value}{none}
 }}
 
 \item{dataset_add}{Additional dataset
@@ -37,7 +37,7 @@ The variables specified by the \code{by_vars}, the \code{new_vars}, and the \cod
 argument are expected.
 
 \describe{
-\item{Default}{none}
+\item{Default Value}{none}
 }}
 
 \item{by_vars}{Grouping variables
@@ -52,7 +52,7 @@ Variables can be renamed by naming the element, i.e.
 e.g. \code{exprs(USUBJID, VISIT)}
 
 \describe{
-\item{Default}{none}
+\item{Default Value}{none}
 }}
 
 \item{order}{Sort order
@@ -69,7 +69,7 @@ For handling of \code{NA}s in sorting variables see \href{../articles/generic.ht
 \code{exprs(ADT, desc(AVAL))} or \code{NULL}
 
 \describe{
-\item{Default}{\code{NULL}}
+\item{Default Value}{\code{NULL}}
 }}
 
 \item{new_vars}{Variables to add
@@ -95,7 +95,7 @@ additional dataset (\code{dataset_add}) are added.
 \emph{Permitted Values}: list of variables or named expressions created by \code{exprs()}
 
 \describe{
-\item{Default}{\code{NULL}}
+\item{Default Value}{\code{NULL}}
 }}
 
 \item{filter_add}{Filter for additional dataset (\code{dataset_add})
@@ -110,7 +110,7 @@ condition.
 \emph{Permitted Values}: a condition
 
 \describe{
-\item{Default}{\code{NULL}}
+\item{Default Value}{\code{NULL}}
 }}
 
 \item{mode}{Selection mode
@@ -123,7 +123,7 @@ If the \code{order} argument is not specified, the \code{mode} argument is ignor
 \emph{Permitted Values}: \code{"first"}, \code{"last"}, \code{NULL}
 
 \describe{
-\item{Default}{\code{NULL}}
+\item{Default Value}{\code{NULL}}
 }}
 
 \item{exist_flag}{Exist flag
@@ -136,7 +136,7 @@ which are merged into the input dataset, and the value provided in \code{false_v
 \emph{Permitted Values}: Variable name
 
 \describe{
-\item{Default}{\code{NULL}}
+\item{Default Value}{\code{NULL}}
 }}
 
 \item{true_value}{True value
@@ -147,7 +147,7 @@ the first or last observation (depending on the mode) of each by group.
 Permitted Values: An atomic scalar
 
 \describe{
-\item{Default}{\code{"Y"}}
+\item{Default Value}{\code{"Y"}}
 }}
 
 \item{false_value}{False value
@@ -158,7 +158,7 @@ the first or last observation (depending on the mode) of each by group.
 Permitted Values: An atomic scalar
 
 \describe{
-\item{Default}{\code{NA_character_}}
+\item{Default Value}{\code{NA_character_}}
 }}
 
 \item{missing_values}{Values for non-matching observations
@@ -172,7 +172,7 @@ specified for \code{new_vars} can be specified for \code{missing_values}.
 \code{exprs(BASEC = "MISSING", BASE = -1)}
 
 \describe{
-\item{Default}{\code{NULL}}
+\item{Default Value}{\code{NULL}}
 }}
 
 \item{check_type}{Check uniqueness?
@@ -188,7 +188,7 @@ to the by variables, an error is issued.
 \emph{Permitted Values}: \code{"none"}, \code{"message"}, \code{"warning"}, \code{"error"}
 
 \describe{
-\item{Default}{\code{"warning"}}
+\item{Default Value}{\code{"warning"}}
 }}
 
 \item{duplicate_msg}{Message of unique check
@@ -204,7 +204,7 @@ If the uniqueness check fails, the specified message is displayed.
 }\if{html}{\out{</div>}}
 
 \describe{
-\item{Default}{\code{NULL}}
+\item{Default Value}{\code{NULL}}
 }}
 
 \item{relationship}{Expected merge-relationship between the \code{by_vars}
@@ -218,7 +218,7 @@ more details.
 \strong{Permitted Values:} \code{"one-to-one"}, \code{"many-to-one"}, \code{NULL}.
 
 \describe{
-\item{Default}{\code{NULL}}
+\item{Default Value}{\code{NULL}}
 }}
 }
 \value{

@@ -27,7 +27,7 @@ parameter) and to the parameters specified by \code{sysbp_code}, \code{diabp_cod
 and \code{hr_code}.
 
 \describe{
-\item{Default}{none}
+\item{Default Value}{none}
 }}
 
 \item{by_vars}{Grouping variables
@@ -40,7 +40,7 @@ in the newly created records.
 e.g. \code{exprs(USUBJID, VISIT)}
 
 \describe{
-\item{Default}{none}
+\item{Default Value}{none}
 }}
 
 \item{set_values_to}{Variables to be set
@@ -52,7 +52,7 @@ for the new parameter.
 \emph{Permitted Values}: List of variable-value pairs
 
 \describe{
-\item{Default}{\code{exprs(PARAMCD = "MAP")}}
+\item{Default Value}{\code{exprs(PARAMCD = "MAP")}}
 }}
 
 \item{sysbp_code}{Systolic blood pressure parameter code
@@ -63,7 +63,7 @@ as the systolic blood pressure assessments.
 \emph{Permitted Values:} character value
 
 \describe{
-\item{Default}{\code{"SYSBP"}}
+\item{Default Value}{\code{"SYSBP"}}
 }}
 
 \item{diabp_code}{Diastolic blood pressure parameter code
@@ -74,7 +74,7 @@ as the diastolic blood pressure assessments.
 \emph{Permitted Values:} character value
 
 \describe{
-\item{Default}{\code{"DIABP"}}
+\item{Default Value}{\code{"DIABP"}}
 }}
 
 \item{hr_code}{Heart rate parameter code
@@ -85,7 +85,7 @@ as the heart rate assessments.
 \emph{Permitted Values:} character value
 
 \describe{
-\item{Default}{\code{NULL}}
+\item{Default Value}{\code{NULL}}
 }}
 
 \item{get_unit_expr}{An expression providing the unit of the parameter
@@ -96,7 +96,7 @@ The result is used to check the units of the input parameters.
 and results in a character value
 
 \describe{
-\item{Default}{none}
+\item{Default Value}{none}
 }}
 
 \item{filter}{Filter condition
@@ -108,7 +108,7 @@ into account.
 \emph{Permitted Values:} a condition
 
 \describe{
-\item{Default}{\code{NULL}}
+\item{Default Value}{\code{NULL}}
 }}
 }
 \value{

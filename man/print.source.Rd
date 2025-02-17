@@ -10,14 +10,14 @@
 \item{x}{An \code{source} object
 
 \describe{
-\item{Default}{none}
+\item{Default Value}{none}
 }}
 
 \item{...}{If \verb{indent = <numeric value>} is specified the output is indented
 by the specified number of characters.
 
 \describe{
-\item{Default}{none}
+\item{Default Value}{none}
 }}
 }
 \value{

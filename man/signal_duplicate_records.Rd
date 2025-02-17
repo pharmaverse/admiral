@@ -19,7 +19,7 @@ signal_duplicate_records(
 The variables specified by the \code{by_vars} argument are expected to be in the dataset.
 
 \describe{
-\item{Default}{none}
+\item{Default Value}{none}
 }}
 
 \item{by_vars}{Grouping variables
@@ -30,20 +30,20 @@ Defines groups of records in which to look for duplicates.
 e.g. \code{exprs(USUBJID, VISIT)}
 
 \describe{
-\item{Default}{none}
+\item{Default Value}{none}
 }}
 
 \item{msg}{The condition message
 
 \describe{
-\item{Default}{\code{paste("Dataset contains duplicate records", "with respect to", "{.var {replace_values_by_names(by_vars)}}")}}
+\item{Default Value}{\code{paste("Dataset contains duplicate records", "with respect to", "{.var {replace_values_by_names(by_vars)}}")}}
 }}
 
 \item{cnd_type}{Type of condition to signal when detecting duplicate records.
 One of \code{"message"}, \code{"warning"} or \code{"error"}. Default is \code{"error"}.
 
 \describe{
-\item{Default}{\code{"error"}}
+\item{Default Value}{\code{"error"}}
 }}
 
 \item{class}{Class of the condition
@@ -52,7 +52,7 @@ The specified classes are added to the classes of the condition.
 \code{c("duplicate_records", "assert-admiral")} is always added.
 
 \describe{
-\item{Default}{\code{NULL}}
+\item{Default Value}{\code{NULL}}
 }}
 }
 \value{

@@ -10,13 +10,13 @@
 \item{x}{A \code{basket_select()} object
 
 \describe{
-\item{Default}{none}
+\item{Default Value}{none}
 }}
 
 \item{...}{Not used
 
 \describe{
-\item{Default}{none}
+\item{Default Value}{none}
 }}
 }
 \value{

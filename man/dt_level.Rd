@@ -13,7 +13,7 @@ dt_level(level)
 (day), \code{"n"} (none, lowest level)
 
 \describe{
-\item{Default}{none}
+\item{Default Value}{none}
 }}
 }
 \value{

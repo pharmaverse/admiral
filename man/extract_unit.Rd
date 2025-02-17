@@ -10,7 +10,7 @@ extract_unit(x)
 \item{x}{A parameter description
 
 \describe{
-\item{Default}{none}
+\item{Default Value}{none}
 }}
 }
 \value{

@@ -12,7 +12,7 @@ get_hori_data(dataset, by_vars, parameters, set_values_to, filter)
 The variables specified by the \code{by_vars} argument are expected to be in the dataset.
 
 \describe{
-\item{Default}{none}
+\item{Default Value}{none}
 }}
 
 \item{by_vars}{Grouping variables
@@ -21,7 +21,7 @@ The variables specified by the \code{by_vars} argument are expected to be in the
 e.g. \code{exprs(USUBJID, VISIT)}
 
 \describe{
-\item{Default}{none}
+\item{Default Value}{none}
 }}
 
 \item{parameters}{List of parameter codes
@@ -34,7 +34,7 @@ expression the observations to select.
 \emph{Permitted Values:} A character vector of \code{PARAMCD} values or a list of expressions
 
 \describe{
-\item{Default}{none}
+\item{Default Value}{none}
 }}
 
 \item{set_values_to}{All variables of the form \verb{<variable>.<parameter>} like \code{AVAL.WEIGHT} are
@@ -45,7 +45,7 @@ the parameter. E.g., \code{AVAL.WEIGHT} is set to the value of \code{AVAL} where
 \emph{Permitted Values:} A list of expressions
 
 \describe{
-\item{Default}{none}
+\item{Default Value}{none}
 }}
 
 \item{filter}{Filter condition used for restricting the input dataset
@@ -56,7 +56,7 @@ applied to the input dataset.
 \emph{Permitted Values:} An unquoted expression
 
 \describe{
-\item{Default}{none}
+\item{Default Value}{none}
 }}
 }
 \value{

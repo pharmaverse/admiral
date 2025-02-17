@@ -21,7 +21,7 @@ derive_var_merged_ef_msrc(
 The variables specified by the \code{by_vars} argument are expected to be in the dataset.
 
 \describe{
-\item{Default}{none}
+\item{Default Value}{none}
 }}
 
 \item{by_vars}{Grouping variables
@@ -30,7 +30,7 @@ The variables specified by the \code{by_vars} argument are expected to be in the
 e.g. \code{exprs(USUBJID, VISIT)}
 
 \describe{
-\item{Default}{none}
+\item{Default Value}{none}
 }}
 
 \item{flag_events}{Flag events
@@ -41,7 +41,7 @@ A list of \code{flag_event()} objects is expected. For each event the condition
 variable is set to \code{true_value}.
 
 \describe{
-\item{Default}{none}
+\item{Default Value}{none}
 }}
 
 \item{source_datasets}{Source datasets
@@ -50,7 +50,7 @@ A named list of datasets is expected. The \code{dataset_name} field of
 \code{flag_event()} refers to the dataset provided in the list.
 
 \describe{
-\item{Default}{none}
+\item{Default Value}{none}
 }}
 
 \item{new_var}{New variable
@@ -58,7 +58,7 @@ A named list of datasets is expected. The \code{dataset_name} field of
 The specified variable is added to the input dataset.
 
 \describe{
-\item{Default}{none}
+\item{Default Value}{none}
 }}
 
 \item{true_value}{True value
@@ -71,7 +71,7 @@ The values of \code{true_value}, \code{false_value}, and \code{missing_value} mu
 the same type.
 
 \describe{
-\item{Default}{\code{"Y"}}
+\item{Default Value}{\code{"Y"}}
 }}
 
 \item{false_value}{False value
@@ -84,7 +84,7 @@ The values of \code{true_value}, \code{false_value}, and \code{missing_value} mu
 the same type.
 
 \describe{
-\item{Default}{\code{NA_character_}}
+\item{Default Value}{\code{NA_character_}}
 }}
 
 \item{missing_value}{Values used for missing information
@@ -96,7 +96,7 @@ The values of \code{true_value}, \code{false_value}, and \code{missing_value} mu
 the same type.
 
 \describe{
-\item{Default}{\code{NA_character_}}
+\item{Default Value}{\code{NA_character_}}
 }}
 }
 \value{

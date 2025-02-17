@@ -33,7 +33,7 @@ parameter) and to the parameters specified by \code{sysbp_code}, \code{chol_code
 and \code{hdl_code}.
 
 \describe{
-\item{Default}{none}
+\item{Default Value}{none}
 }}
 
 \item{by_vars}{Grouping variables
@@ -45,7 +45,7 @@ in the newly created records.
 e.g. \code{exprs(USUBJID, VISIT)}
 
 \describe{
-\item{Default}{none}
+\item{Default Value}{none}
 }}
 
 \item{set_values_to}{Variables to be set
@@ -57,7 +57,7 @@ for the new parameter.
 \emph{Permitted Values}: List of variable-value pairs
 
 \describe{
-\item{Default}{\code{exprs(PARAMCD = "MAP")}}
+\item{Default Value}{\code{exprs(PARAMCD = "MAP")}}
 }}
 
 \item{sysbp_code}{Systolic blood pressure parameter code
@@ -68,7 +68,7 @@ as the systolic blood pressure assessments.
 \emph{Permitted Values:} character value
 
 \describe{
-\item{Default}{\code{"SYSBP"}}
+\item{Default Value}{\code{"SYSBP"}}
 }}
 
 \item{chol_code}{Total serum cholesterol code
@@ -79,7 +79,7 @@ as the total cholesterol assessments. This must be measured in mg/dL.
 \emph{Permitted Values:} character value
 
 \describe{
-\item{Default}{\code{"CHOL"}}
+\item{Default Value}{\code{"CHOL"}}
 }}
 
 \item{cholhdl_code}{HDL serum cholesterol code
@@ -90,7 +90,7 @@ as the HDL cholesterol assessments. This must be measured in mg/dL.
 \emph{Permitted Values:} character value
 
 \describe{
-\item{Default}{\code{"CHOLHDL"}}
+\item{Default Value}{\code{"CHOLHDL"}}
 }}
 
 \item{age}{Subject age
@@ -101,7 +101,7 @@ A variable containing the subject's age.
 column of the input dataset
 
 \describe{
-\item{Default}{\code{AGE}}
+\item{Default Value}{\code{AGE}}
 }}
 
 \item{sex}{Subject sex
@@ -112,7 +112,7 @@ A variable containing the subject's sex.
 column of the input dataset
 
 \describe{
-\item{Default}{\code{SEX}}
+\item{Default Value}{\code{SEX}}
 }}
 
 \item{smokefl}{Smoking status flag
@@ -123,7 +123,7 @@ A flag indicating smoking status.
 column of the input dataset.
 
 \describe{
-\item{Default}{\code{SMOKEFL}}
+\item{Default Value}{\code{SMOKEFL}}
 }}
 
 \item{diabetfl}{Diabetic flag
@@ -134,7 +134,7 @@ A flag indicating diabetic status.
 status column of the input dataset
 
 \describe{
-\item{Default}{\code{DIABETFL}}
+\item{Default Value}{\code{DIABETFL}}
 }}
 
 \item{trthypfl}{Treated with hypertension medication flag
@@ -146,7 +146,7 @@ indicates whether a subject is treated for high blood
 pressure
 
 \describe{
-\item{Default}{\code{TRTHYPFL}}
+\item{Default Value}{\code{TRTHYPFL}}
 }}
 
 \item{get_unit_expr}{An expression providing the unit of the parameter
@@ -157,7 +157,7 @@ The result is used to check the units of the input parameters.
 and results in a character value
 
 \describe{
-\item{Default}{none}
+\item{Default Value}{none}
 }}
 
 \item{filter}{Filter condition
@@ -169,7 +169,7 @@ into account.
 \emph{Permitted Values:} a condition
 
 \describe{
-\item{Default}{\code{NULL}}
+\item{Default Value}{\code{NULL}}
 }}
 }
 \value{

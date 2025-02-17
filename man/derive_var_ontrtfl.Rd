@@ -24,7 +24,7 @@ Required columns are \code{start_date}, \code{end_date}, \code{ref_start_date} a
 \code{ref_end_date}.
 
 \describe{
-\item{Default}{none}
+\item{Default Value}{none}
 }}
 
 \item{new_var}{On-treatment flag variable name to be created.
@@ -32,7 +32,7 @@ Required columns are \code{start_date}, \code{end_date}, \code{ref_start_date} a
 Default is \code{ONTRTFL}.
 
 \describe{
-\item{Default}{\code{ONTRTFL}}
+\item{Default Value}{\code{ONTRTFL}}
 }}
 
 \item{start_date}{The start date (e.g. \code{AESDT}) or assessment date (e.g.
@@ -42,7 +42,7 @@ Refer to \code{derive_vars_dt()} to impute and derive a date from a date
 character vector to a date object.
 
 \describe{
-\item{Default}{none}
+\item{Default Value}{none}
 }}
 
 \item{end_date}{The end date of assessment/event (e.g. \code{AENDT}) A date or
@@ -56,7 +56,7 @@ observation, it is assumed the medication is ongoing and \code{ONTRTFL} is set
 to \code{"Y"}.
 
 \describe{
-\item{Default}{\code{NULL}}
+\item{Default Value}{\code{NULL}}
 }}
 
 \item{ref_start_date}{The lower bound of the on-treatment period Required; A
@@ -66,7 +66,7 @@ Refer to \code{derive_vars_dt()} to impute and derive a date from a date
 character vector to a date object.
 
 \describe{
-\item{Default}{none}
+\item{Default Value}{none}
 }}
 
 \item{ref_end_date}{The upper bound of the on-treatment period A date or
@@ -79,7 +79,7 @@ Optional; This can be null and everything after \code{ref_start_date} will be
 considered on-treatment. Default is \code{NULL}.
 
 \describe{
-\item{Default}{\code{NULL}}
+\item{Default Value}{\code{NULL}}
 }}
 
 \item{ref_end_window}{A window to add to the upper bound \code{ref_end_date}
@@ -87,7 +87,7 @@ measured in days (e.g. 7 if 7 days should be added to the upper bound)
 Optional; default is 0.
 
 \describe{
-\item{Default}{\code{0}}
+\item{Default Value}{\code{0}}
 }}
 
 \item{ignore_time_for_ref_end_date}{If the argument is set to \code{TRUE}, the time part is ignored for checking if
@@ -97,7 +97,7 @@ date.
 \emph{Permitted Values:} \code{TRUE}, \code{FALSE}
 
 \describe{
-\item{Default}{\code{TRUE}}
+\item{Default Value}{\code{TRUE}}
 }}
 
 \item{filter_pre_timepoint}{An expression to filter observations as not
@@ -106,7 +106,7 @@ where \code{VSTPT = PRE} should not be considered on-treatment when \code{date =
 on-treatment flag should be set to null. Optional; default is \code{NULL}.
 
 \describe{
-\item{Default}{\code{NULL}}
+\item{Default Value}{\code{NULL}}
 }}
 
 \item{span_period}{A logical scalar. If \code{TRUE}, events that started
@@ -114,7 +114,7 @@ prior to the \code{ref_start_date}and are ongoing or end after the
 \code{ref_start_date} are flagged as \code{"Y"}. Optional; default is \code{FALSE}.
 
 \describe{
-\item{Default}{\code{FALSE}}
+\item{Default Value}{\code{FALSE}}
 }}
 }
 \value{

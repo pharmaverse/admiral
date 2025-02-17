@@ -19,7 +19,7 @@ derive_vars_computed(
 \item{dataset}{The variables specified by the \code{by_vars} parameter are expected.
 
 \describe{
-\item{Default}{none}
+\item{Default Value}{none}
 }}
 
 \item{dataset_add}{Additional dataset
@@ -31,7 +31,7 @@ the additional dataset after restricting it by the filter condition
 (\code{filter_add} parameter) and to the parameters specified by \code{parameters}.
 
 \describe{
-\item{Default}{none}
+\item{Default Value}{none}
 }}
 
 \item{by_vars}{Grouping variables
@@ -42,7 +42,7 @@ Grouping variables uniquely identifying a set of records for which
 \emph{Permitted Values:} list of variables created by exprs()
 
 \describe{
-\item{Default}{none}
+\item{Default Value}{none}
 }}
 
 \item{parameters}{Required parameter codes
@@ -68,7 +68,7 @@ parameter code \code{"HGHT"}.
 \emph{Permitted Values:} A character vector of \code{PARAMCD} values or a list of expressions
 
 \describe{
-\item{Default}{none}
+\item{Default Value}{none}
 }}
 
 \item{new_vars}{Name of the newly created variables
@@ -89,7 +89,7 @@ Variable names in the expression must not contain more than one dot.
 \emph{Permitted Values:} List of variable-value pairs
 
 \describe{
-\item{Default}{none}
+\item{Default Value}{none}
 }}
 
 \item{filter_add}{Filter condition of additional dataset
@@ -101,7 +101,7 @@ condition are taken into account.
 \emph{Permitted Values:} a condition
 
 \describe{
-\item{Default}{\code{NULL}}
+\item{Default Value}{\code{NULL}}
 }}
 
 \item{constant_by_vars}{By variables for constant parameters
@@ -113,7 +113,7 @@ to the other parameters using the specified variables.
 \emph{Permitted Values:} list of variables
 
 \describe{
-\item{Default}{\code{NULL}}
+\item{Default Value}{\code{NULL}}
 }}
 
 \item{constant_parameters}{Required constant parameter codes
@@ -140,7 +140,7 @@ parameter code \code{"HGHT"}.
 \emph{Permitted Values:} A character vector of \code{PARAMCD} values or a list of expressions
 
 \describe{
-\item{Default}{\code{NULL}}
+\item{Default Value}{\code{NULL}}
 }}
 }
 \value{

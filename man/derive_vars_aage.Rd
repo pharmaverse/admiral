@@ -18,7 +18,7 @@ derive_vars_aage(
 The variables specified by the \code{start_date} and \code{end_date} arguments are expected to be in the dataset.
 
 \describe{
-\item{Default}{none}
+\item{Default Value}{none}
 }}
 
 \item{start_date}{The start date
@@ -31,7 +31,7 @@ vector to a date object.
 Default: \code{BRTHDT}
 
 \describe{
-\item{Default}{\code{BRTHDT}}
+\item{Default Value}{\code{BRTHDT}}
 }}
 
 \item{end_date}{The end date
@@ -44,7 +44,7 @@ vector to a date object.
 Default: \code{RANDDT}
 
 \describe{
-\item{Default}{\code{RANDDT}}
+\item{Default Value}{\code{RANDDT}}
 }}
 
 \item{age_unit}{Age unit
@@ -68,7 +68,7 @@ For minutes: \code{"minute"}, \code{"minutes"}, \code{"min"}, \code{"mins"}
 For seconds: \code{"second"}, \code{"seconds"}, \code{"sec"}, \code{"secs"}, \code{"s"}
 
 \describe{
-\item{Default}{\code{"YEARS"}}
+\item{Default Value}{\code{"YEARS"}}
 }}
 
 \item{type}{lubridate duration type.
@@ -80,7 +80,7 @@ Default: \code{"duration"}
 Permitted Values: \code{"duration"}, \code{"interval"}
 
 \describe{
-\item{Default}{\code{"duration"}}
+\item{Default Value}{\code{"duration"}}
 }}
 }
 \value{

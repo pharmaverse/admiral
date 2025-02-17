@@ -10,7 +10,7 @@ print_named_list(list, indent = 0)
 \item{list}{A named list
 
 \describe{
-\item{Default}{none}
+\item{Default Value}{none}
 }}
 
 \item{indent}{Indent
@@ -18,7 +18,7 @@ print_named_list(list, indent = 0)
 The output is indented by the specified number of characters.
 
 \describe{
-\item{Default}{\code{0}}
+\item{Default Value}{\code{0}}
 }}
 }
 \value{

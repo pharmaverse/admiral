@@ -14,7 +14,7 @@ event. The name refers to the dataset specified for \code{source_datasets} in
 \emph{Permitted Values}: a character scalar
 
 \describe{
-\item{Default}{none}
+\item{Default Value}{none}
 }}
 
 \item{condition}{Condition
@@ -24,7 +24,7 @@ all by groups where it evaluates as \code{TRUE} at least once the new variable
 is set to the true value (\code{true_value}).
 
 \describe{
-\item{Default}{\code{NULL}}
+\item{Default Value}{\code{NULL}}
 }}
 
 \item{by_vars}{Grouping variables
@@ -37,7 +37,7 @@ observations are grouped by the variables specified for the \code{by_vars}
 argument of \code{derive_var_merged_ef_msrc()}.
 
 \describe{
-\item{Default}{\code{NULL}}
+\item{Default Value}{\code{NULL}}
 }}
 }
 \description{

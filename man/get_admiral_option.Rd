@@ -14,7 +14,7 @@ As of now, support only available for
 See \code{set_admiral_options()} for a description of the options.
 
 \describe{
-\item{Default}{none}
+\item{Default Value}{none}
 }}
 }
 \value{

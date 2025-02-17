@@ -10,13 +10,13 @@ max_cond(var, cond)
 \item{var}{A vector
 
 \describe{
-\item{Default}{none}
+\item{Default Value}{none}
 }}
 
 \item{cond}{A condition
 
 \describe{
-\item{Default}{none}
+\item{Default Value}{none}
 }}
 }
 \description{

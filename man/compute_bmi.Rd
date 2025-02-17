@@ -14,7 +14,7 @@ It is expected that HEIGHT is in cm.
 \emph{Permitted Values:} numeric vector
 
 \describe{
-\item{Default}{none}
+\item{Default Value}{none}
 }}
 
 \item{weight}{WEIGHT value
@@ -24,7 +24,7 @@ It is expected that WEIGHT is in kg.
 \emph{Permitted Values:} numeric vector
 
 \describe{
-\item{Default}{none}
+\item{Default Value}{none}
 }}
 }
 \value{

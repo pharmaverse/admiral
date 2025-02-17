@@ -19,7 +19,7 @@ derive_var_merged_summary(
 The variables specified by the \code{by_vars} argument are expected to be in the dataset.
 
 \describe{
-\item{Default}{none}
+\item{Default Value}{none}
 }}
 
 \item{dataset_add}{Additional dataset
@@ -28,7 +28,7 @@ The variables specified by the \code{by_vars} and the variables used on the left
 hand sides of the \code{new_vars} arguments are expected.
 
 \describe{
-\item{Default}{none}
+\item{Default Value}{none}
 }}
 
 \item{by_vars}{Grouping variables
@@ -41,7 +41,7 @@ dataset (\code{dataset}) by the specified \emph{variables}.
 e.g. \code{exprs(USUBJID, VISIT)}
 
 \describe{
-\item{Default}{none}
+\item{Default Value}{none}
 }}
 
 \item{new_vars}{New variables to add
@@ -65,7 +65,7 @@ For example:
 }\if{html}{\out{</div>}}
 
 \describe{
-\item{Default}{\code{NULL}}
+\item{Default Value}{\code{NULL}}
 }}
 
 \item{filter_add}{Filter for additional dataset (\code{dataset_add})
@@ -77,7 +77,7 @@ considered.
 \emph{Permitted Values}: a condition
 
 \describe{
-\item{Default}{\code{NULL}}
+\item{Default Value}{\code{NULL}}
 }}
 
 \item{missing_values}{Values for non-matching observations
@@ -91,7 +91,7 @@ specified for \code{new_vars} can be specified for \code{missing_values}.
 \code{exprs(BASEC = "MISSING", BASE = -1)}
 
 \describe{
-\item{Default}{\code{NULL}}
+\item{Default Value}{\code{NULL}}
 }}
 }
 \value{

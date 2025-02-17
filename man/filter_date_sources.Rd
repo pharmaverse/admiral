@@ -20,7 +20,7 @@ filter_date_sources(
 A list of \code{tte_source()} objects is expected.
 
 \describe{
-\item{Default}{none}
+\item{Default Value}{none}
 }}
 
 \item{source_datasets}{Source datasets
@@ -29,7 +29,7 @@ A named list of datasets is expected. The \code{dataset_name} field of
 \code{tte_source()} refers to the dataset provided in the list.
 
 \describe{
-\item{Default}{none}
+\item{Default Value}{none}
 }}
 
 \item{by_vars}{By variables
@@ -41,7 +41,7 @@ selected separately.
 e.g. \code{exprs(USUBJID, VISIT)}
 
 \describe{
-\item{Default}{none}
+\item{Default Value}{none}
 }}
 
 \item{create_datetime}{Create datetime variable?
@@ -50,7 +50,7 @@ If set to \code{TRUE}, variables \code{ADTM} is created. Otherwise, variables \c
 is created.
 
 \describe{
-\item{Default}{\code{FALSE}}
+\item{Default Value}{\code{FALSE}}
 }}
 
 \item{subject_keys}{Variables to uniquely identify a subject
@@ -58,7 +58,7 @@ is created.
 A list of symbols created using \code{exprs()} is expected.
 
 \describe{
-\item{Default}{none}
+\item{Default Value}{none}
 }}
 
 \item{mode}{Selection mode (first or last)
@@ -70,7 +70,7 @@ specified, the last observation is included in the output dataset.
 \emph{Permitted Values}:  \code{"first"}, \code{"last"}
 
 \describe{
-\item{Default}{none}
+\item{Default Value}{none}
 }}
 
 \item{check_type}{Check uniqueness
@@ -82,7 +82,7 @@ by variables and the date and order specified in the \code{tte_source()} objects
 \emph{Permitted Values}: \code{"none"}, \code{"warning"}, \code{"error"}, \code{"message"}
 
 \describe{
-\item{Default}{\code{"none"}}
+\item{Default Value}{\code{"none"}}
 }}
 }
 \value{

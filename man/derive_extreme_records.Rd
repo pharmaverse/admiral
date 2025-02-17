@@ -24,7 +24,7 @@ derive_extreme_records(
 \item{dataset}{Input dataset
 
 \describe{
-\item{Default}{\code{NULL}}
+\item{Default Value}{\code{NULL}}
 }}
 
 \item{dataset_add}{Additional dataset
@@ -37,7 +37,7 @@ in this dataset. If \code{mode} and \code{order} are specified, the first or las
 within each by group, defined by \code{by_vars}, is selected.
 
 \describe{
-\item{Default}{none}
+\item{Default Value}{none}
 }}
 
 \item{dataset_ref}{Reference dataset
@@ -46,7 +46,7 @@ The variables specified for \code{by_vars} are expected. For each observation of
 the specified dataset a new observation is added to the input dataset.
 
 \describe{
-\item{Default}{\code{NULL}}
+\item{Default Value}{\code{NULL}}
 }}
 
 \item{by_vars}{Grouping variables
@@ -57,7 +57,7 @@ If \code{dataset_ref} is specified, this argument must be specified.
 e.g. \code{exprs(USUBJID, VISIT)}
 
 \describe{
-\item{Default}{\code{NULL}}
+\item{Default Value}{\code{NULL}}
 }}
 
 \item{order}{Sort order
@@ -66,7 +66,7 @@ Within each by group the observations are ordered by the specified order.
 
 \describe{
 \item{Permitted values}{list of expressions created by \code{exprs()}, e.g.,}
-\item{Default}{none}
+\item{Default Value}{none}
 }}
 
 \item{mode}{Selection mode (first or last)
@@ -77,7 +77,7 @@ each by group is added to the input dataset.
 
 \describe{
 \item{Permitted values}{\code{"first"}, \code{"last"}}
-\item{Default}{\code{NULL}}
+\item{Default Value}{Some default value}
 }}
 
 \item{filter_add}{Filter for additional dataset (\code{dataset_add})
@@ -86,7 +86,7 @@ Only observations in \code{dataset_add} fulfilling the specified condition are
 considered.
 
 \describe{
-\item{Default}{\code{NULL}}
+\item{Default Value}{\code{NULL}}
 }}
 
 \item{check_type}{Check uniqueness?
@@ -97,7 +97,7 @@ with respect to the by variables and the order.
 
 \describe{
 \item{Permitted values}{\code{"none"}, \code{"message"}, \code{"warning"}, \code{"error"}}
-\item{Default}{\code{"warning"}}
+\item{Default Value}{\code{"warning"}}
 }}
 
 \item{exist_flag}{Existence flag
@@ -113,7 +113,7 @@ For all other by groups \code{exist_flag} is set to the value specified by the
 
 \describe{
 \item{Permitted values}{Variable name}
-\item{Default}{\code{NULL}}
+\item{Default Value}{\code{NULL}}
 }}
 
 \item{true_value}{True value
@@ -122,7 +122,7 @@ For new observations selected from the additional dataset (\code{dataset_add}),
 \code{exist_flag} is set to the specified value.
 
 \describe{
-\item{Default}{\code{"Y"}}
+\item{Default Value}{\code{"Y"}}
 }}
 
 \item{false_value}{False value
@@ -131,7 +131,7 @@ For new observations not selected from the additional dataset
 (\code{dataset_add}), \code{exist_flag} is set to the specified value.
 
 \describe{
-\item{Default}{\code{NA_character_}}
+\item{Default Value}{\code{NA_character_}}
 }}
 
 \item{keep_source_vars}{Variables to be kept in the new records
@@ -142,7 +142,7 @@ variables to be kept for the new records. The variables specified for
 automatically.
 
 \describe{
-\item{Default}{\code{exprs(everything())}}
+\item{Default Value}{\code{exprs(everything())}}
 }}
 
 \item{set_values_to}{Variables to be set
@@ -167,7 +167,7 @@ For example:
 }\if{html}{\out{</div>}}
 
 \describe{
-\item{Default}{none}
+\item{Default Value}{none}
 }}
 }
 \value{
@@ -200,6 +200,87 @@ arguments.
 \item The observations are added to input dataset.
 }
 }
+\section{Examples}{
+
+\subsection{Add a new record for each \code{USUBJID} storing the minimum value (first \code{AVAL})}{
+
+If multiple records meet the minimum criterion, take the first value by
+\code{AVISITN}. Set \code{AVISITN = 97} and \code{DTYPE = MINIMUM} for these new records.
+Specify the variables that need to be kept in the new records.
+
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{library(tibble)
+library(dplyr, warn.conflicts = FALSE)
+library(lubridate)
+
+adlb <- tribble(
+  ~USUBJID, ~AVISITN, ~AVAL, ~LBSEQ,
+  "1",      1,          113,      1,
+  "1",      2,          113,      2,
+  "1",      3,          117,      3,
+  "2",      1,          101,      1,
+  "2",      2,          101,      2,
+  "2",      3,           95,      3
+)
+
+derive_extreme_records(
+  adlb,
+  dataset_add = adlb,
+  by_vars = exprs(USUBJID),
+  order = exprs(AVAL, AVISITN),
+  mode = "first",
+  filter_add = !is.na(AVAL),
+  keep_source_vars = exprs(AVAL),
+  set_values_to = exprs(
+    AVISITN = 97,
+    DTYPE = "MINIMUM"
+  )
+)
+#> # A tibble: 8 x 5
+#>   USUBJID AVISITN  AVAL LBSEQ DTYPE  
+#>   <chr>     <dbl> <dbl> <dbl> <chr>  
+#> 1 1             1   113     1 <NA>   
+#> 2 1             2   113     2 <NA>   
+#> 3 1             3   117     3 <NA>   
+#> 4 2             1   101     1 <NA>   
+#> 5 2             2   101     2 <NA>   
+#> 6 2             3    95     3 <NA>   
+#> 7 1            97   113    NA MINIMUM
+#> 8 2            97    95    NA MINIMUM
+}\if{html}{\out{</div>}}
+}
+
+\subsection{Add a new record for each \code{USUBJID} storing the maximum value (last \code{AVAL})}{
+
+If multiple records meet the maximum criterion, take the first value by
+\code{AVISITN}. Set \code{AVISITN = 98} and \code{DTYPE = MAXIMUM} for these new records.
+
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{derive_extreme_records(
+  adlb,
+  dataset_add = adlb,
+  by_vars = exprs(USUBJID),
+  order = exprs(desc(AVAL), AVISITN),
+  mode = "first",
+  filter_add = !is.na(AVAL),
+  set_values_to = exprs(
+    AVISITN = 98,
+    DTYPE = "MAXIMUM"
+  )
+)
+#> # A tibble: 8 x 5
+#>   USUBJID AVISITN  AVAL LBSEQ DTYPE  
+#>   <chr>     <dbl> <dbl> <dbl> <chr>  
+#> 1 1             1   113     1 <NA>   
+#> 2 1             2   113     2 <NA>   
+#> 3 1             3   117     3 <NA>   
+#> 4 2             1   101     1 <NA>   
+#> 5 2             2   101     2 <NA>   
+#> 6 2             3    95     3 <NA>   
+#> 7 1            98   117     3 MAXIMUM
+#> 8 2            98   101     1 MAXIMUM
+}\if{html}{\out{</div>}}
+}
+}
+
 \seealso{
 \code{\link[=derive_summary_records]{derive_summary_records()}}
 

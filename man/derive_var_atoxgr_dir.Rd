@@ -21,21 +21,21 @@ derive_var_atoxgr_dir(
 The variables specified by the \code{tox_description_var} argument are expected to be in the dataset.
 
 \describe{
-\item{Default}{none}
+\item{Default Value}{none}
 }}
 
 \item{new_var}{Name of the character grade variable to create, for example, \code{ATOXGRH}
 or \code{ATOXGRL}.
 
 \describe{
-\item{Default}{none}
+\item{Default Value}{none}
 }}
 
 \item{tox_description_var}{Variable containing the description of the grading
 criteria. For example: "Anemia" or "INR Increased".
 
 \describe{
-\item{Default}{none}
+\item{Default Value}{none}
 }}
 
 \item{meta_criteria}{Metadata data set holding the criteria (normally a case statement)
@@ -62,7 +62,7 @@ based on a subset of subjects (e.g. AGE > 18 YEARS)
 }
 
 \describe{
-\item{Default}{none}
+\item{Default Value}{none}
 }}
 
 \item{criteria_direction}{Direction (L= Low, H = High) of toxicity grade.
@@ -70,7 +70,7 @@ based on a subset of subjects (e.g. AGE > 18 YEARS)
 Permitted Values: "L", "H"
 
 \describe{
-\item{Default}{none}
+\item{Default Value}{none}
 }}
 
 \item{abnormal_indicator}{Value in \code{BNRIND} derivation to indicate an abnormal value.
@@ -82,7 +82,7 @@ variable. Currently for terms \code{"Alanine aminotransferase increased"},
 \code{"Blood bilirubin increased"} and \code{"GGT increased"}
 
 \describe{
-\item{Default}{\code{NULL}}
+\item{Default Value}{\code{NULL}}
 }}
 
 \item{get_unit_expr}{An expression providing the unit of the parameter
@@ -94,7 +94,7 @@ Permitted Values: A variable containing unit from the input dataset, or a functi
 for example, \code{get_unit_expr = extract_unit(PARAM)}.
 
 \describe{
-\item{Default}{none}
+\item{Default Value}{none}
 }}
 
 \item{signif_dig}{Number of significant digits to use when comparing a lab value against another
@@ -104,7 +104,7 @@ Significant digits used to avoid floating point discrepancies when comparing num
 See blog: \href{https://pharmaverse.github.io/blog/posts/2023-10-30_floating_point/floating_point.html}{How admiral handles floating points}
 
 \describe{
-\item{Default}{\code{get_admiral_option("signif_digits")}}
+\item{Default Value}{\code{get_admiral_option("signif_digits")}}
 }}
 }
 \value{

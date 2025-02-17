@@ -24,7 +24,7 @@ create_single_dose_dataset(
 The variables specified by the \code{dose_freq}, \code{start_date}, and \code{end_date} arguments are expected to be in the dataset.
 
 \describe{
-\item{Default}{none}
+\item{Default Value}{none}
 }}
 
 \item{dose_freq}{The dose frequency
@@ -34,7 +34,7 @@ The aggregate dosing frequency used for multiple doses in a row.
 Permitted Values: defined by lookup table.
 
 \describe{
-\item{Default}{\code{EXDOSFRQ}}
+\item{Default Value}{\code{EXDOSFRQ}}
 }}
 
 \item{start_date}{The start date
@@ -45,7 +45,7 @@ Refer to \code{derive_vars_dt()} to impute and derive a date from a date
 character vector to a date object.
 
 \describe{
-\item{Default}{\code{ASTDT}}
+\item{Default Value}{\code{ASTDT}}
 }}
 
 \item{start_datetime}{The start date-time
@@ -59,7 +59,7 @@ If the input dataset contains frequencies which refer to \code{DOSE_WINDOW}
 equals \code{"HOUR"} or \code{"MINUTE"}, the parameter must be specified.
 
 \describe{
-\item{Default}{\code{NULL}}
+\item{Default Value}{\code{NULL}}
 }}
 
 \item{end_date}{The end date
@@ -70,7 +70,7 @@ Refer to \code{derive_vars_dt()} to impute and derive a date from a date
 character vector to a date object.
 
 \describe{
-\item{Default}{\code{AENDT}}
+\item{Default Value}{\code{AENDT}}
 }}
 
 \item{end_datetime}{The end date-time
@@ -84,7 +84,7 @@ If the input dataset contains frequencies which refer to \code{DOSE_WINDOW}
 equals \code{"HOUR"} or \code{"MINUTE"}, the parameter must be specified.
 
 \describe{
-\item{Default}{\code{NULL}}
+\item{Default Value}{\code{NULL}}
 }}
 
 \item{lookup_table}{The dose frequency value lookup table
@@ -99,7 +99,7 @@ Permitted Values for \code{DOSE_WINDOW}: \code{"MINUTE"}, \code{"HOUR"}, \code{"
 \code{"WEEK"}, \code{"MONTH"}, \code{"YEAR"}
 
 \describe{
-\item{Default}{\code{dose_freq_lookup}}
+\item{Default Value}{\code{dose_freq_lookup}}
 }}
 
 \item{lookup_column}{The dose frequency value column in the lookup table
@@ -107,7 +107,7 @@ Permitted Values for \code{DOSE_WINDOW}: \code{"MINUTE"}, \code{"HOUR"}, \code{"
 The column of \code{lookup_table}.
 
 \describe{
-\item{Default}{\code{CDISC_VALUE}}
+\item{Default Value}{\code{CDISC_VALUE}}
 }}
 
 \item{nominal_time}{The nominal relative time from first dose (\code{NFRLT})
@@ -121,7 +121,7 @@ an \code{EXDOFRQ} of \code{"QD"} will result in the nominal_time being increment
 The value can be NULL if not needed.
 
 \describe{
-\item{Default}{\code{NULL}}
+\item{Default Value}{\code{NULL}}
 }}
 
 \item{keep_source_vars}{List of variables to be retained from source dataset
@@ -131,7 +131,7 @@ the output dataset. For example \code{EXTRT} for studies with more than one
 drug.
 
 \describe{
-\item{Default}{\code{expr_c(get_admiral_option("subject_keys"), dose_freq, start_date, start_datetime, end_date, end_datetime)}}
+\item{Default Value}{\code{expr_c(get_admiral_option("subject_keys"), dose_freq, start_date, start_datetime, end_date, end_datetime)}}
 }}
 }
 \value{

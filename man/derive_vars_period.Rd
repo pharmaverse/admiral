@@ -17,7 +17,7 @@ derive_vars_period(
 The variables specified by the \code{subject_keys} argument are expected to be in the dataset.
 
 \describe{
-\item{Default}{none}
+\item{Default Value}{none}
 }}
 
 \item{dataset_ref}{Period reference dataset
@@ -29,7 +29,7 @@ If period variables are requested. \code{APERIOD} is expected. If phase
 variables are requested, \code{APHASEN} is expected.
 
 \describe{
-\item{Default}{none}
+\item{Default Value}{none}
 }}
 
 \item{new_vars}{New variables
@@ -49,7 +49,7 @@ variables. If period \emph{and} subperiod variables are required, separate calls
 must be used.
 
 \describe{
-\item{Default}{none}
+\item{Default Value}{none}
 }}
 
 \item{subject_keys}{Variables to uniquely identify a subject
@@ -58,7 +58,7 @@ A list of expressions where the expressions are symbols as returned by
 \code{exprs()} is expected.
 
 \describe{
-\item{Default}{\code{get_admiral_option("subject_keys")}}
+\item{Default Value}{\code{get_admiral_option("subject_keys")}}
 }}
 }
 \value{

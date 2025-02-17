@@ -10,7 +10,7 @@ chr2vars(chr)
 \item{chr}{A character vector
 
 \describe{
-\item{Default}{none}
+\item{Default Value}{none}
 }}
 }
 \value{

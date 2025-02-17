@@ -18,7 +18,7 @@ convert_dtc_to_dtm(
 \item{dtc}{The \code{'--DTC'} date to convert.
 
 \describe{
-\item{Default}{none}
+\item{Default Value}{none}
 }}
 
 \item{highest_imputation}{Highest imputation level
@@ -42,7 +42,7 @@ and \code{min_dates} or \code{max_dates} should be specified respectively. Other
 level)
 
 \describe{
-\item{Default}{\code{"h"}}
+\item{Default Value}{\code{"h"}}
 }}
 
 \item{date_imputation}{The value to impute the day/month when a datepart is
@@ -67,7 +67,7 @@ middle of the possible range:
 The argument is ignored if \code{highest_imputation} is less then \code{"D"}.
 
 \describe{
-\item{Default}{\code{"first"}}
+\item{Default Value}{\code{"first"}}
 }}
 
 \item{time_imputation}{The value to impute the time when a timepart is
@@ -83,7 +83,7 @@ for the start of the day,
 The argument is ignored if \code{highest_imputation = "n"}.
 
 \describe{
-\item{Default}{\code{"first"}}
+\item{Default Value}{\code{"first"}}
 }}
 
 \item{min_dates}{Minimum dates
@@ -117,7 +117,7 @@ For date variables (not datetime) in the list the time is imputed to
 imputed. If only time is imputed, date variables do not affect the result.
 
 \describe{
-\item{Default}{\code{NULL}}
+\item{Default Value}{\code{NULL}}
 }}
 
 \item{max_dates}{Maximum dates
@@ -132,7 +132,7 @@ For date variables (not datetime) in the list the time is imputed to
 imputed. If only time is imputed, date variables do not affect the result.
 
 \describe{
-\item{Default}{\code{NULL}}
+\item{Default Value}{\code{NULL}}
 }}
 
 \item{preserve}{Preserve lower level date/time part when higher order part
@@ -145,7 +145,7 @@ For example \code{"2019---07"} would return \verb{"2019-06-07} if \code{preserve
 Permitted Values: \code{TRUE}, \code{FALSE}
 
 \describe{
-\item{Default}{\code{FALSE}}
+\item{Default Value}{\code{FALSE}}
 }}
 }
 \value{

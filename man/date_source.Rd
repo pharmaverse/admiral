@@ -11,26 +11,26 @@ date_source(dataset_name, filter = NULL, date, set_values_to = NULL)
 the date.
 
 \describe{
-\item{Default}{none}
+\item{Default Value}{none}
 }}
 
 \item{filter}{An unquoted condition for filtering \code{dataset}.
 
 \describe{
-\item{Default}{\code{NULL}}
+\item{Default Value}{\code{NULL}}
 }}
 
 \item{date}{A variable or an expression providing a date. A date or a
 datetime can be specified. An unquoted symbol or expression is expected.
 
 \describe{
-\item{Default}{none}
+\item{Default Value}{none}
 }}
 
 \item{set_values_to}{Variables to be set
 
 \describe{
-\item{Default}{\code{NULL}}
+\item{Default Value}{\code{NULL}}
 }}
 }
 \value{

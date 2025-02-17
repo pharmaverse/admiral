@@ -10,7 +10,7 @@ yn_to_numeric(arg)
 \item{arg}{Character vector
 
 \describe{
-\item{Default}{none}
+\item{Default Value}{none}
 }}
 }
 \value{

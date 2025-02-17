@@ -10,7 +10,7 @@ compute_qual_imputation_dec(character_value_decimal)
 \item{character_value_decimal}{Character value to determine decimal precision
 
 \describe{
-\item{Default}{none}
+\item{Default Value}{none}
 }}
 }
 \value{

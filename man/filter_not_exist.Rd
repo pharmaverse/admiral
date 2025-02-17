@@ -12,7 +12,7 @@ filter_not_exist(dataset, dataset_add, by_vars, filter_add = NULL)
 The variables specified by the \code{by_vars} argument are expected to be in the dataset.
 
 \describe{
-\item{Default}{none}
+\item{Default Value}{none}
 }}
 
 \item{dataset_add}{Source dataset
@@ -24,7 +24,7 @@ The variables specified in the \code{by_vars} and \code{filter_add} parameters a
 in this dataset.
 
 \describe{
-\item{Default}{none}
+\item{Default Value}{none}
 }}
 
 \item{by_vars}{Grouping variables
@@ -33,7 +33,7 @@ in this dataset.
 e.g. \code{exprs(USUBJID, VISIT)}
 
 \describe{
-\item{Default}{none}
+\item{Default Value}{none}
 }}
 
 \item{filter_add}{Filter for the source dataset
@@ -45,7 +45,7 @@ dataset will be performed.
 Default: \code{NULL} (i.e. no filtering will be performed)
 
 \describe{
-\item{Default}{\code{NULL}}
+\item{Default Value}{\code{NULL}}
 }}
 }
 \value{

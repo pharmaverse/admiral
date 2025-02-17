@@ -12,7 +12,7 @@ derive_vars_dy(dataset, reference_date, source_vars)
 The variables specified by the \code{reference_date} and \code{source_vars} arguments are expected to be in the dataset.
 
 \describe{
-\item{Default}{none}
+\item{Default Value}{none}
 }}
 
 \item{reference_date}{A date or date-time column, e.g., date of first treatment
@@ -22,7 +22,7 @@ Refer to \code{derive_vars_dt()} to impute and derive a date from a date
 character vector to a date object.
 
 \describe{
-\item{Default}{none}
+\item{Default Value}{none}
 }}
 
 \item{source_vars}{A list of datetime or date variables created using
@@ -32,7 +32,7 @@ variables e.g. \code{exprs(TRTSDTM, ASTDTM, AENDT)} or \code{exprs(TRTSDT, ASTDT
 name for the resulting \code{--DY} variable must be provided.
 
 \describe{
-\item{Default}{none}
+\item{Default Value}{none}
 }}
 }
 \value{

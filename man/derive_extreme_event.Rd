@@ -23,7 +23,7 @@ derive_extreme_event(
 The variables specified by the \code{by_vars} and \code{order} arguments are expected to be in the dataset.
 
 \describe{
-\item{Default}{none}
+\item{Default Value}{none}
 }}
 
 \item{by_vars}{Grouping variables
@@ -32,7 +32,7 @@ The variables specified by the \code{by_vars} and \code{order} arguments are exp
 e.g. \code{exprs(USUBJID, VISIT)}
 
 \describe{
-\item{Default}{\code{NULL}}
+\item{Default Value}{\code{NULL}}
 }}
 
 \item{events}{Conditions and new values defining events
@@ -47,7 +47,7 @@ For \code{event_joined()} events the observations are selected by calling
 \code{filter_joined()}. The \code{condition} field is passed to the \code{filter_join} argument.
 
 \describe{
-\item{Default}{none}
+\item{Default Value}{none}
 }}
 
 \item{tmp_event_nr_var}{Temporary event number variable
@@ -61,7 +61,7 @@ records from more than one event are selected.
 The variable is not included in the output dataset.
 
 \describe{
-\item{Default}{\code{NULL}}
+\item{Default Value}{\code{NULL}}
 }}
 
 \item{order}{Sort order
@@ -75,7 +75,7 @@ For handling of \code{NA}s in sorting variables see \href{../articles/generic.ht
 \code{exprs(ADT, desc(AVAL))}
 
 \describe{
-\item{Default}{none}
+\item{Default Value}{none}
 }}
 
 \item{mode}{Selection mode (first or last)
@@ -87,7 +87,7 @@ event sorting by \code{order}.
 \emph{Permitted Values:} \code{"first"}, \code{"last"}
 
 \describe{
-\item{Default}{none}
+\item{Default Value}{none}
 }}
 
 \item{source_datasets}{Source datasets
@@ -96,7 +96,7 @@ A named list of datasets is expected. The \code{dataset_name} field of \code{eve
 and \code{event_joined()} refers to the dataset provided in the list.
 
 \describe{
-\item{Default}{\code{NULL}}
+\item{Default Value}{\code{NULL}}
 }}
 
 \item{check_type}{Check uniqueness?
@@ -107,7 +107,7 @@ by variables and the order.
 
 \describe{
 \item{Permitted values}{\code{"none"}, \code{"message"}, \code{"warning"}, \code{"error"}}
-\item{Default}{\code{"warning"}}
+\item{Default Value}{\code{"warning"}}
 }}
 
 \item{set_values_to}{Variables to be set
@@ -132,7 +132,7 @@ For example:
 }\if{html}{\out{</div>}}
 
 \describe{
-\item{Default}{none}
+\item{Default Value}{none}
 }}
 
 \item{keep_source_vars}{Variables to keep from the source dataset
@@ -147,7 +147,7 @@ argument.
 a symbol or a tidyselect expression, e.g., \code{exprs(VISIT, VISITNUM, starts_with("RS"))}.
 
 \describe{
-\item{Default}{\code{exprs(everything())}}
+\item{Default Value}{\code{exprs(everything())}}
 }}
 }
 \value{

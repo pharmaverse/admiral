@@ -27,7 +27,7 @@ the input dataset after restricting it by the filter condition (\code{filter}
 parameter) and to the parameters specified by \code{parameters}.
 
 \describe{
-\item{Default}{\code{NULL}}
+\item{Default Value}{\code{NULL}}
 }}
 
 \item{dataset_add}{Additional dataset
@@ -43,7 +43,7 @@ are considered in addition to the observations from the input dataset
 (\code{dataset} restricted by \code{filter}).
 
 \describe{
-\item{Default}{\code{NULL}}
+\item{Default Value}{\code{NULL}}
 }}
 
 \item{by_vars}{Grouping variables
@@ -56,7 +56,7 @@ in the newly created records.
 e.g. \code{exprs(USUBJID, VISIT)}
 
 \describe{
-\item{Default}{none}
+\item{Default Value}{none}
 }}
 
 \item{parameters}{Required parameter codes
@@ -81,7 +81,7 @@ parameter code \code{"HGHT"}.
 \emph{Permitted Values:} A character vector of \code{PARAMCD} values or a list of expressions
 
 \describe{
-\item{Default}{none}
+\item{Default Value}{none}
 }}
 
 \item{set_values_to}{Variables to be set
@@ -104,7 +104,7 @@ Variable names in the expression must not contain more than one dot.
 \emph{Permitted Values:} List of variable-value pairs
 
 \describe{
-\item{Default}{none}
+\item{Default Value}{none}
 }}
 
 \item{filter}{Filter condition
@@ -116,7 +116,7 @@ into account.
 \emph{Permitted Values:} a condition
 
 \describe{
-\item{Default}{\code{NULL}}
+\item{Default Value}{\code{NULL}}
 }}
 
 \item{constant_by_vars}{By variables for constant parameters
@@ -128,7 +128,7 @@ to the other parameters using the specified variables. (Refer to Example 2)
 e.g. \code{exprs(USUBJID, VISIT)}
 
 \describe{
-\item{Default}{\code{NULL}}
+\item{Default Value}{\code{NULL}}
 }}
 
 \item{constant_parameters}{Required constant parameter codes
@@ -154,7 +154,7 @@ parameter code \code{"HGHT"}.
 \emph{Permitted Values:} A character vector of \code{PARAMCD} values or a list of expressions
 
 \describe{
-\item{Default}{\code{NULL}}
+\item{Default Value}{\code{NULL}}
 }}
 
 \item{keep_nas}{Keep observations with \code{NA}s
@@ -169,7 +169,7 @@ if some of specified variables are \code{NA} (see Example 1c).
 \code{exprs()} e.g. \code{exprs(ADTF, ATMF)}
 
 \describe{
-\item{Default}{\code{FALSE}}
+\item{Default Value}{\code{FALSE}}
 }}
 }
 \value{

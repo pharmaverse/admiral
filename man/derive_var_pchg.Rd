@@ -11,7 +11,7 @@ derive_var_pchg(dataset)
 \code{AVAL} and \code{BASE} are expected.
 
 \describe{
-\item{Default}{none}
+\item{Default Value}{none}
 }}
 }
 \value{

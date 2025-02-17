@@ -22,7 +22,7 @@ derive_var_merged_exist_flag(
 The variables specified by the \code{by_vars} argument are expected to be in the dataset.
 
 \describe{
-\item{Default}{none}
+\item{Default Value}{none}
 }}
 
 \item{dataset_add}{Additional dataset
@@ -30,7 +30,7 @@ The variables specified by the \code{by_vars} argument are expected to be in the
 The variables specified by the \code{by_vars} argument are expected.
 
 \describe{
-\item{Default}{none}
+\item{Default Value}{none}
 }}
 
 \item{by_vars}{Grouping variables
@@ -39,7 +39,7 @@ The variables specified by the \code{by_vars} argument are expected.
 e.g. \code{exprs(USUBJID, VISIT)}
 
 \describe{
-\item{Default}{none}
+\item{Default Value}{none}
 }}
 
 \item{new_var}{New variable
@@ -47,7 +47,7 @@ e.g. \code{exprs(USUBJID, VISIT)}
 The specified variable is added to the input dataset.
 
 \describe{
-\item{Default}{none}
+\item{Default Value}{none}
 }}
 
 \item{condition}{Condition
@@ -61,19 +61,19 @@ value (\code{missing_value}) for by groups not present in the additional
 dataset.
 
 \describe{
-\item{Default}{none}
+\item{Default Value}{none}
 }}
 
 \item{true_value}{True value
 
 \describe{
-\item{Default}{\code{"Y"}}
+\item{Default Value}{\code{"Y"}}
 }}
 
 \item{false_value}{False value
 
 \describe{
-\item{Default}{\code{NA_character_}}
+\item{Default Value}{\code{NA_character_}}
 }}
 
 \item{missing_value}{Values used for missing information
@@ -84,7 +84,7 @@ observations in the additional dataset.
 \emph{Permitted Value}: A character scalar
 
 \describe{
-\item{Default}{\code{NA_character_}}
+\item{Default Value}{\code{NA_character_}}
 }}
 
 \item{filter_add}{Filter for additional data
@@ -96,7 +96,7 @@ considered.
 \emph{Permitted Values}: a condition
 
 \describe{
-\item{Default}{\code{NULL}}
+\item{Default Value}{\code{NULL}}
 }}
 }
 \value{

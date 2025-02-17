@@ -11,7 +11,7 @@ derivation_slice(filter, args = NULL)
 slice
 
 \describe{
-\item{Default}{none}
+\item{Default Value}{none}
 }}
 
 \item{args}{Arguments of the derivation to be used for the slice
@@ -19,7 +19,7 @@ slice
 A \code{params()} object is expected.
 
 \describe{
-\item{Default}{\code{NULL}}
+\item{Default Value}{\code{NULL}}
 }}
 }
 \value{

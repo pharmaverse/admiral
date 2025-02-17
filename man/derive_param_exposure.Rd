@@ -19,7 +19,7 @@ derive_param_exposure(
 The variables specified by the \code{by_vars} argument are expected to be in the dataset.
 
 \describe{
-\item{Default}{\code{NULL}}
+\item{Default Value}{\code{NULL}}
 }}
 
 \item{dataset_add}{Additional dataset
@@ -30,7 +30,7 @@ Observations from the specified dataset are going to be used to calculate and ad
 as new records to the input dataset (\code{dataset}).
 
 \describe{
-\item{Default}{none}
+\item{Default Value}{none}
 }}
 
 \item{by_vars}{Grouping variables
@@ -43,7 +43,7 @@ in the newly created records.
 e.g. \code{exprs(USUBJID, VISIT)}
 
 \describe{
-\item{Default}{none}
+\item{Default Value}{none}
 }}
 
 \item{input_code}{Required parameter code
@@ -54,7 +54,7 @@ summary record.
 \emph{Permitted Values:} A character of \code{PARAMCD} value
 
 \describe{
-\item{Default}{none}
+\item{Default Value}{none}
 }}
 
 \item{filter_add}{Filter condition as logical expression to apply during
@@ -71,7 +71,7 @@ than 2.
 }
 
 \describe{
-\item{Default}{\code{NULL}}
+\item{Default Value}{\code{NULL}}
 }}
 
 \item{set_values_to}{Variable-value pairs
@@ -87,7 +87,7 @@ value, \code{NA}, or an expression.
 \emph{Permitted Values:} List of variable-value pairs
 
 \describe{
-\item{Default}{\code{NULL}}
+\item{Default Value}{\code{NULL}}
 }}
 }
 \value{

@@ -22,7 +22,7 @@ get_joined_sub_data(
 The variables specified by the \code{by_vars} argument are expected to be in the dataset.
 
 \describe{
-\item{Default}{none}
+\item{Default Value}{none}
 }}
 
 \item{dataset_add}{Additional dataset
@@ -31,7 +31,7 @@ The variables specified by the \code{by_vars}, the \code{new_vars}, the \code{jo
 and the \code{order} argument are expected.
 
 \describe{
-\item{Default}{none}
+\item{Default Value}{none}
 }}
 
 \item{by_vars}{Grouping variables
@@ -45,7 +45,7 @@ Variables can be renamed by naming the element, i.e.
 e.g. \code{exprs(USUBJID, VISIT)}
 
 \describe{
-\item{Default}{\code{NULL}}
+\item{Default Value}{\code{NULL}}
 }}
 
 \item{tmp_obs_nr_var}{Temporary observation number
@@ -58,7 +58,7 @@ number starts with \code{1}. The variable can be used in the conditions
 used to select consecutive observations or the last observation.
 
 \describe{
-\item{Default}{\code{NULL}}
+\item{Default Value}{\code{NULL}}
 }}
 
 \item{join_type}{Observations to keep after joining
@@ -78,7 +78,7 @@ after seven days before a COVID AE. Thus \code{join_type = "all"} could be used.
 \emph{Permitted Values:} \code{"before"}, \code{"after"}, \code{"all"}
 
 \describe{
-\item{Default}{none}
+\item{Default Value}{none}
 }}
 
 \item{first_cond_upper}{Condition for selecting range of data (after)
@@ -93,7 +93,7 @@ functions which should not apply to all observations but only up to the
 confirmation assessment.
 
 \describe{
-\item{Default}{\code{NULL}}
+\item{Default Value}{\code{NULL}}
 }}
 
 \item{first_cond_lower}{Condition for selecting range of data (before)
@@ -110,7 +110,7 @@ certain observation before the current observation up to the current
 observation.
 
 \describe{
-\item{Default}{\code{NULL}}
+\item{Default Value}{\code{NULL}}
 }}
 
 \item{filter_join}{Filter for the joined dataset
@@ -127,7 +127,7 @@ joined dataset is grouped by the original observations.
 \emph{Permitted Values}: a condition
 
 \describe{
-\item{Default}{\code{NULL}}
+\item{Default Value}{\code{NULL}}
 }}
 }
 \description{

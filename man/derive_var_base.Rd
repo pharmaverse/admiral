@@ -18,7 +18,7 @@ derive_var_base(
 The variables specified by the \code{by_vars} and \code{source_var} arguments are expected to be in the dataset.
 
 \describe{
-\item{Default}{none}
+\item{Default Value}{none}
 }}
 
 \item{by_vars}{Grouping variables
@@ -30,19 +30,19 @@ of records for which to calculate \code{new_var}.
 e.g. \code{exprs(USUBJID, VISIT)}
 
 \describe{
-\item{Default}{none}
+\item{Default Value}{none}
 }}
 
 \item{source_var}{The column from which to extract the baseline value, e.g. \code{AVAL}
 
 \describe{
-\item{Default}{\code{AVAL}}
+\item{Default Value}{\code{AVAL}}
 }}
 
 \item{new_var}{The name of the newly created baseline column, e.g. \code{BASE}
 
 \describe{
-\item{Default}{\code{BASE}}
+\item{Default Value}{\code{BASE}}
 }}
 
 \item{filter}{The condition used to filter \code{dataset} for baseline records.
@@ -50,7 +50,7 @@ e.g. \code{exprs(USUBJID, VISIT)}
 By default \code{ABLFL == "Y"}
 
 \describe{
-\item{Default}{\code{ABLFL == "Y"}}
+\item{Default Value}{\code{ABLFL == "Y"}}
 }}
 }
 \value{

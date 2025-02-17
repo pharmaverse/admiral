@@ -10,7 +10,7 @@ get_flagged_records(dataset, new_var, condition, filter = NULL)
 \item{dataset}{Input dataset
 
 \describe{
-\item{Default}{none}
+\item{Default Value}{none}
 }}
 
 \item{new_var}{New variable
@@ -18,7 +18,7 @@ get_flagged_records(dataset, new_var, condition, filter = NULL)
 The specified variable is added to the input dataset.
 
 \describe{
-\item{Default}{none}
+\item{Default Value}{none}
 }}
 
 \item{condition}{Condition
@@ -28,7 +28,7 @@ all rows where it evaluates as \code{TRUE} the new variable
 is set to \code{1} in the new column. Otherwise, it is set to \code{0}.
 
 \describe{
-\item{Default}{none}
+\item{Default Value}{none}
 }}
 
 \item{filter}{Filter for additional data
@@ -40,7 +40,7 @@ considered.
 \emph{Permitted Values}: a condition
 
 \describe{
-\item{Default}{\code{NULL}}
+\item{Default Value}{\code{NULL}}
 }}
 }
 \value{
