@@ -70,6 +70,7 @@ keys.
 library(tibble)
 library(dplyr, warn.conflicts = FALSE)
 
+# Adding ATC classes to CM using FACM
 cm <- tribble(
   ~USUBJID,       ~CMGRPID, ~CMREFID,  ~CMDECOD,
   "BP40257-1001", "14",     "1192056", "PARACETAMOL",
@@ -109,6 +110,22 @@ cm \%>\%
     value_var = FASTRESC
   ) \%>\%
   select(USUBJID, CMDECOD, starts_with("CMATC"))
+
+# Note: the id_vars argument here is key to uniquely identify
+# rows of dataset_merge and avoid duplicates-related errors.
+# Compare the above call with:
+
+cm \%>\%
+  derive_vars_transposed(
+    facm,
+    by_vars = exprs(USUBJID, CMREFID = FAREFID),
+    id_vars = NULL,
+    key_var = FATESTCD,
+    value_var = FASTRESC
+  )
+
+ get_duplicates_dataset()
+
 }
 \seealso{
 \code{\link[=derive_vars_atc]{derive_vars_atc()}}

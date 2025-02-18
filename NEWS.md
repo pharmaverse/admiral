@@ -21,6 +21,8 @@
 
 ## Documentation
 
+- Added an example to the `derive_vars_transposed()` reference page to showcase how duplicates-related errors can arise when records in `dataset_merge` are not uniquely identified. (#2609)
+
 ## Various
 
 <details>
