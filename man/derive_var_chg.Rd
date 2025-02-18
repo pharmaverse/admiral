@@ -10,7 +10,7 @@ derive_var_chg(dataset)
 \item{dataset}{Input dataset \code{AVAL} and \code{BASE} are expected.
 
 \describe{
-\item{Default Value}{none}
+\item{Default value}{none}
 }}
 }
 \value{

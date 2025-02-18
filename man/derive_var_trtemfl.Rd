@@ -26,13 +26,13 @@ The variables specified by \code{start_date}, \code{end_date}, \code{trt_start_d
 \code{trt_end_date}, \code{initial_intensity}, and \code{intensity} are expected.
 
 \describe{
-\item{Default Value}{none}
+\item{Default value}{none}
 }}
 
 \item{new_var}{New variable
 
 \describe{
-\item{Default Value}{\code{TRTEMFL}}
+\item{Default value}{\code{TRTEMFL}}
 }}
 
 \item{start_date}{Event start date
@@ -40,7 +40,7 @@ The variables specified by \code{start_date}, \code{end_date}, \code{trt_start_d
 \describe{
 \item{Permitted values}{A symbol referring to a date or datetime variable of
 the input dataset}
-\item{Default Value}{\code{ASTDTM}}
+\item{Default value}{\code{ASTDTM}}
 }}
 
 \item{end_date}{Event end date
@@ -48,7 +48,7 @@ the input dataset}
 \describe{
 \item{Permitted values}{A symbol referring to a date or datetime variable of
 the input dataset}
-\item{Default Value}{\code{AENDTM}}
+\item{Default value}{\code{AENDTM}}
 }}
 
 \item{trt_start_date}{Treatment start date
@@ -56,7 +56,7 @@ the input dataset}
 \describe{
 \item{Permitted values}{A symbol referring to a date or datetime variable of
 the input dataset}
-\item{Default Value}{\code{TRTSDTM}}
+\item{Default value}{\code{TRTSDTM}}
 }}
 
 \item{trt_end_date}{Treatment end date
@@ -64,7 +64,7 @@ the input dataset}
 \describe{
 \item{Permitted values}{A symbol referring to a date or datetime variable of
 the input dataset or \code{NULL}}
-\item{Default Value}{\code{NULL}}
+\item{Default value}{\code{NULL}}
 }}
 
 \item{end_window}{If the argument is specified (in 'days'), events starting more than the specified
@@ -72,7 +72,7 @@ number of days after end of treatment, are not flagged.
 
 \describe{
 \item{Permitted values}{A non-negative integer or \code{NULL}}
-\item{Default Value}{\code{NULL}}
+\item{Default value}{\code{NULL}}
 }}
 
 \item{ignore_time_for_trt_end}{If the argument is set to \code{TRUE}, the time part is ignored for checking if
@@ -80,7 +80,7 @@ the event occurred more than \code{end_window} days after end of treatment.
 
 \describe{
 \item{Permitted values}{\code{TRUE}, \code{FALSE}}
-\item{Default Value}{\code{TRUE}}
+\item{Default value}{\code{TRUE}}
 }}
 
 \item{initial_intensity}{Initial severity/intensity or toxicity
@@ -99,7 +99,7 @@ intensity \code{initial_intensity < intensity} must evaluate to \code{TRUE}.
 \describe{
 \item{Permitted values}{A symbol referring to a variable of the input dataset
 or \code{NULL}}
-\item{Default Value}{\code{NULL}}
+\item{Default value}{\code{NULL}}
 }}
 
 \item{intensity}{Severity/intensity or toxicity
@@ -115,7 +115,7 @@ intensity \code{initial_intensity < intensity} must evaluate to \code{TRUE}.
 \describe{
 \item{Permitted values}{A symbol referring to a variable of the input dataset
 or \code{NULL}}
-\item{Default Value}{\code{NULL}}
+\item{Default value}{\code{NULL}}
 }}
 
 \item{group_var}{Grouping variable
@@ -130,7 +130,7 @@ in the treatment window are flagged regardless of severity.
 \describe{
 \item{Permitted values}{A symbol referring to a variable of the input dataset
 or \code{NULL}}
-\item{Default Value}{\code{NULL}}
+\item{Default value}{\code{NULL}}
 }}
 
 \item{subject_keys}{Variables to uniquely identify a subject.
@@ -139,7 +139,7 @@ A list of symbols created using \code{exprs()} is expected. This argument is onl
 used when \code{group_var} is specified.
 
 \describe{
-\item{Default Value}{\code{get_admiral_option("subject_keys")}}
+\item{Default value}{\code{get_admiral_option("subject_keys")}}
 }}
 }
 \value{

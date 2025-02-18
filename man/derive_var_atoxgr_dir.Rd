@@ -21,21 +21,21 @@ derive_var_atoxgr_dir(
 The variables specified by the \code{tox_description_var} argument are expected to be in the dataset.
 
 \describe{
-\item{Default Value}{none}
+\item{Default value}{none}
 }}
 
 \item{new_var}{Name of the character grade variable to create, for example, \code{ATOXGRH}
 or \code{ATOXGRL}.
 
 \describe{
-\item{Default Value}{none}
+\item{Default value}{none}
 }}
 
 \item{tox_description_var}{Variable containing the description of the grading
 criteria. For example: "Anemia" or "INR Increased".
 
 \describe{
-\item{Default Value}{none}
+\item{Default value}{none}
 }}
 
 \item{meta_criteria}{Metadata data set holding the criteria (normally a case statement)
@@ -61,14 +61,14 @@ against input data that variables exist.
 \item \code{FILTER}: Required only for DAIDS grading, specifies \code{admiral} code to filter the lab data
 based on a subset of subjects (e.g. AGE > 18 YEARS)
 }}
-\item{Default Value}{none}
+\item{Default value}{none}
 }}
 
 \item{criteria_direction}{Direction (L= Low, H = High) of toxicity grade.
 
 \describe{
 \item{Permitted values}{"L", "H"}
-\item{Default Value}{none}
+\item{Default value}{none}
 }}
 
 \item{abnormal_indicator}{Value in \code{BNRIND} derivation to indicate an abnormal value.
@@ -80,7 +80,7 @@ variable. Currently for terms \code{"Alanine aminotransferase increased"},
 \code{"Blood bilirubin increased"} and \code{"GGT increased"}
 
 \describe{
-\item{Default Value}{\code{NULL}}
+\item{Default value}{\code{NULL}}
 }}
 
 \item{get_unit_expr}{An expression providing the unit of the parameter
@@ -91,7 +91,7 @@ The result is used to check the units of the input parameters. Compared with
 \describe{
 \item{Permitted values}{A variable containing unit from the input dataset, or a function call,
 for example, \code{get_unit_expr = extract_unit(PARAM)}.}
-\item{Default Value}{none}
+\item{Default value}{none}
 }}
 
 \item{signif_dig}{Number of significant digits to use when comparing a lab value against another
@@ -101,7 +101,7 @@ Significant digits used to avoid floating point discrepancies when comparing num
 See blog: \href{https://pharmaverse.github.io/blog/posts/2023-10-30_floating_point/floating_point.html}{How admiral handles floating points}
 
 \describe{
-\item{Default Value}{\code{get_admiral_option("signif_digits")}}
+\item{Default value}{\code{get_admiral_option("signif_digits")}}
 }}
 }
 \value{

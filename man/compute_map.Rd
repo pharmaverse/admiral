@@ -12,7 +12,7 @@ compute_map(diabp, sysbp, hr = NULL)
 A numeric vector is expected.
 
 \describe{
-\item{Default Value}{none}
+\item{Default value}{none}
 }}
 
 \item{sysbp}{Systolic blood pressure
@@ -20,7 +20,7 @@ A numeric vector is expected.
 A numeric vector is expected.
 
 \describe{
-\item{Default Value}{none}
+\item{Default value}{none}
 }}
 
 \item{hr}{Heart rate
@@ -28,7 +28,7 @@ A numeric vector is expected.
 A numeric vector or \code{NULL} is expected.
 
 \describe{
-\item{Default Value}{\code{NULL}}
+\item{Default value}{\code{NULL}}
 }}
 }
 \value{

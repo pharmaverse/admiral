@@ -14,7 +14,7 @@ A character date is expected in a format like \code{yyyy-mm-dd} or
 valid value for any component.
 
 \describe{
-\item{Default Value}{none}
+\item{Default value}{none}
 }}
 }
 \value{

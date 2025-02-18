@@ -12,7 +12,7 @@ get_summary_records(dataset, by_vars, filter = NULL, set_values_to = NULL)
 The variables specified by the \code{by_vars} argument are expected to be in the dataset.
 
 \describe{
-\item{Default Value}{none}
+\item{Default value}{none}
 }}
 
 \item{by_vars}{Grouping variables
@@ -20,7 +20,7 @@ The variables specified by the \code{by_vars} argument are expected to be in the
 Variables to consider for generation of groupwise summary records.
 
 \describe{
-\item{Default Value}{none}
+\item{Default value}{none}
 }}
 
 \item{filter}{Filter condition as logical expression to apply during
@@ -37,7 +37,7 @@ than 2.
 }
 
 \describe{
-\item{Default Value}{\code{NULL}}
+\item{Default value}{\code{NULL}}
 }}
 
 \item{set_values_to}{Variables to be set
@@ -63,7 +63,7 @@ For example:
 }\if{html}{\out{</div>}}
 
 \describe{
-\item{Default Value}{\code{NULL}}
+\item{Default value}{\code{NULL}}
 }}
 }
 \value{

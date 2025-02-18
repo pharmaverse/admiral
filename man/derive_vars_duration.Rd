@@ -24,20 +24,20 @@ derive_vars_duration(
 The variables specified by the \code{start_date} and \code{end_date} arguments are expected to be in the dataset.
 
 \describe{
-\item{Default Value}{none}
+\item{Default value}{none}
 }}
 
 \item{new_var}{Name of variable to create
 
 \describe{
-\item{Default Value}{none}
+\item{Default value}{none}
 }}
 
 \item{new_var_unit}{Name of the unit variable If the parameter is not
 specified, no variable for the unit is created.
 
 \describe{
-\item{Default Value}{\code{NULL}}
+\item{Default value}{\code{NULL}}
 }}
 
 \item{start_date}{The start date
@@ -50,7 +50,7 @@ character vector to a date object.
 Refer to \code{convert_dtc_to_dt()} to obtain a vector of imputed dates.
 
 \describe{
-\item{Default Value}{none}
+\item{Default value}{none}
 }}
 
 \item{end_date}{The end date
@@ -63,7 +63,7 @@ character vector to a date object.
 Refer to \code{convert_dtc_to_dt()} to obtain a vector of imputed dates.
 
 \describe{
-\item{Default Value}{none}
+\item{Default value}{none}
 }}
 
 \item{in_unit}{Input unit
@@ -85,7 +85,7 @@ For minutes: \code{"minute"}, \code{"minutes"}, \code{"min"}, \code{"mins"}
 For seconds: \code{"second"}, \code{"seconds"}, \code{"sec"}, \code{"secs"}, \code{"s"}
 
 \describe{
-\item{Default Value}{\code{"days"}}
+\item{Default value}{\code{"days"}}
 }}
 
 \item{out_unit}{Output unit
@@ -109,7 +109,7 @@ For minutes: \code{"minute"}, \code{"minutes"}, \code{"min"}, \code{"mins"}
 For seconds: \code{"second"}, \code{"seconds"}, \code{"sec"}, \code{"secs"}, \code{"s"}
 
 \describe{
-\item{Default Value}{\code{"days"}}
+\item{Default value}{\code{"days"}}
 }}
 
 \item{floor_in}{Round down input dates?
@@ -119,7 +119,7 @@ input unit is 'days', the time of the input dates is ignored.
 
 \describe{
 \item{Permitted values}{\code{TRUE}, \code{FALSE}}
-\item{Default Value}{\code{TRUE}}
+\item{Default value}{\code{TRUE}}
 }}
 
 \item{add_one}{Add one input unit?
@@ -129,7 +129,7 @@ duration can not be zero.
 
 \describe{
 \item{Permitted values}{\code{TRUE}, \code{FALSE}}
-\item{Default Value}{\code{TRUE}}
+\item{Default value}{\code{TRUE}}
 }}
 
 \item{trunc_out}{Return integer part
@@ -139,7 +139,7 @@ integer part is returned.
 
 \describe{
 \item{Permitted values}{\code{TRUE}, \code{FALSE}}
-\item{Default Value}{\code{FALSE}}
+\item{Default value}{\code{FALSE}}
 }}
 
 \item{type}{lubridate duration type.
@@ -148,7 +148,7 @@ See below for details.
 
 \describe{
 \item{Permitted values}{\code{"duration"}, \code{"interval"}}
-\item{Default Value}{\code{"duration"}}
+\item{Default value}{\code{"duration"}}
 }}
 }
 \value{

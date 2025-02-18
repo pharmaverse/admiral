@@ -17,21 +17,21 @@ The variables specified by the \code{lotox_description_var} and \code{hitox_desc
 \code{ATOXGRL}, and \code{ATOXGRH} are expected as well.
 
 \describe{
-\item{Default Value}{none}
+\item{Default value}{none}
 }}
 
 \item{lotox_description_var}{Variable containing the toxicity grade description
 for low values, eg. "Anemia"
 
 \describe{
-\item{Default Value}{\code{ATOXDSCL}}
+\item{Default value}{\code{ATOXDSCL}}
 }}
 
 \item{hitox_description_var}{Variable containing the toxicity grade description
 for high values, eg. "Hemoglobin Increased".
 
 \describe{
-\item{Default Value}{\code{ATOXDSCH}}
+\item{Default value}{\code{ATOXDSCH}}
 }}
 }
 \value{

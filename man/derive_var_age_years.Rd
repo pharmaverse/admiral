@@ -12,7 +12,7 @@ derive_var_age_years(dataset, age_var, age_unit = NULL, new_var)
 The variables specified by the \code{age_var} argument are expected to be in the dataset.
 
 \describe{
-\item{Default Value}{none}
+\item{Default value}{none}
 }}
 
 \item{age_var}{Age variable.
@@ -20,7 +20,7 @@ The variables specified by the \code{age_var} argument are expected to be in the
 A numeric object is expected.
 
 \describe{
-\item{Default Value}{none}
+\item{Default value}{none}
 }}
 
 \item{age_unit}{Age unit.
@@ -31,7 +31,7 @@ AGE to 'years' so that grouping can occur.
 
 \describe{
 \item{Permitted values}{'years', 'months', 'weeks', 'days', 'hours', 'minutes', 'seconds'}
-\item{Default Value}{\code{NULL}}
+\item{Default value}{\code{NULL}}
 }}
 
 \item{new_var}{New age variable to be created in years. The returned values are
@@ -39,7 +39,7 @@ doubles and NOT integers.
 '
 
 \describe{
-\item{Default Value}{none}
+\item{Default value}{none}
 }}
 }
 \value{

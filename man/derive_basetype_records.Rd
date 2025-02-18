@@ -12,7 +12,7 @@ derive_basetype_records(dataset, basetypes)
 The variables specified by the \code{basetypes} argument are expected to be in the dataset.
 
 \describe{
-\item{Default Value}{none}
+\item{Default value}{none}
 }}
 
 \item{basetypes}{A \emph{named} list of expressions created using the
@@ -22,7 +22,7 @@ The names corresponds to the values of the newly created \code{BASETYPE} variabl
 and the expressions are used to subset the input dataset.
 
 \describe{
-\item{Default Value}{none}
+\item{Default value}{none}
 }}
 }
 \value{

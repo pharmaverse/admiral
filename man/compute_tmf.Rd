@@ -12,7 +12,7 @@ compute_tmf(dtc, dtm, ignore_seconds_flag = FALSE)
 A character date is expected in a format like \code{yyyy-mm-ddThh:mm:ss} (partial or complete).
 
 \describe{
-\item{Default Value}{none}
+\item{Default value}{none}
 }}
 
 \item{dtm}{The Date vector to compare (\code{'--DTM'}).
@@ -20,7 +20,7 @@ A character date is expected in a format like \code{yyyy-mm-ddThh:mm:ss} (partia
 A datetime object is expected.
 
 \describe{
-\item{Default Value}{none}
+\item{Default value}{none}
 }}
 
 \item{ignore_seconds_flag}{ADaM IG states that given SDTM (\code{'--DTC'}) variable,
@@ -30,7 +30,7 @@ to \code{TRUE} so the \code{'S'} Flag is dropped from (\code{'--TMF'}).
 
 \describe{
 \item{Permitted values}{A logical value}
-\item{Default Value}{\code{FALSE}}
+\item{Default value}{\code{FALSE}}
 }}
 }
 \value{

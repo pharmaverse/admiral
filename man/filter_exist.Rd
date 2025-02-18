@@ -12,7 +12,7 @@ filter_exist(dataset, dataset_add, by_vars, filter_add = NULL)
 The variables specified by the \code{by_vars} argument are expected to be in the dataset.
 
 \describe{
-\item{Default Value}{none}
+\item{Default value}{none}
 }}
 
 \item{dataset_add}{Source dataset
@@ -24,13 +24,13 @@ The variables specified in the \code{by_vars} and \code{filter_add} parameters a
 in this dataset.
 
 \describe{
-\item{Default Value}{none}
+\item{Default value}{none}
 }}
 
 \item{by_vars}{Grouping variables
 
 \describe{
-\item{Default Value}{none}
+\item{Default value}{none}
 }}
 
 \item{filter_add}{Filter for the source dataset
@@ -40,7 +40,7 @@ Alternatively, if no filter condition is supplied, no subsetting of the source
 dataset will be performed.
 
 \describe{
-\item{Default Value}{\code{NULL}}
+\item{Default value}{\code{NULL}}
 }}
 }
 \value{

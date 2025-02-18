@@ -25,13 +25,13 @@ The variable specified by \code{by_vars} and \code{PARAMCD} must be a unique key
 the input dataset, and to the parameters specified by \code{wbc_code} and \code{diff_code}.
 
 \describe{
-\item{Default Value}{none}
+\item{Default value}{none}
 }}
 
 \item{by_vars}{Grouping variables
 
 \describe{
-\item{Default Value}{none}
+\item{Default value}{none}
 }}
 
 \item{set_values_to}{Variables to set
@@ -41,7 +41,7 @@ new parameter, e.g. \code{exprs(PARAMCD = "LYMPH", PARAM = "Lymphocytes Abs (10^
 expected.
 
 \describe{
-\item{Default Value}{none}
+\item{Default value}{none}
 }}
 
 \item{get_unit_expr}{An expression providing the unit of the parameter
@@ -51,13 +51,13 @@ The result is used to check the units of the input parameters.
 \describe{
 \item{Permitted values}{a variable containing unit from the input dataset, or a function call,
 for example, \code{get_unit_expr = extract_unit(PARAM)}.}
-\item{Default Value}{none}
+\item{Default value}{none}
 }}
 
 \item{wbc_unit}{A string containing the required unit of the WBC parameter
 
 \describe{
-\item{Default Value}{\code{"10^9/L"}}
+\item{Default value}{\code{"10^9/L"}}
 }}
 
 \item{wbc_code}{White Blood Cell (WBC) parameter
@@ -67,7 +67,7 @@ as the WBC absolute results to use for converting the differentials.
 
 \describe{
 \item{Permitted values}{character value}
-\item{Default Value}{\code{"WBC"}}
+\item{Default value}{\code{"WBC"}}
 }}
 
 \item{diff_code}{white blood differential parameter
@@ -77,14 +77,14 @@ as the white blood differential lab results in fraction or percentage value to b
 into absolute value.
 
 \describe{
-\item{Default Value}{none}
+\item{Default value}{none}
 }}
 
 \item{diff_type}{A string specifying the type of differential
 
 \describe{
 \item{Permitted values}{\code{"percent"}, \code{"fraction"}}
-\item{Default Value}{\code{"fraction"}}
+\item{Default value}{\code{"fraction"}}
 }}
 }
 \value{

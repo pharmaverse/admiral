@@ -24,7 +24,7 @@ The variables specified by the \code{by_vars} argument are expected to be in the
 \code{PARAMCD} is expected as well.
 
 \describe{
-\item{Default Value}{\code{NULL}}
+\item{Default value}{\code{NULL}}
 }}
 
 \item{dataset_ref}{Reference dataset, e.g., ADSL
@@ -35,7 +35,7 @@ the existence flag is calculated and added as a new observation to the
 input datasets (\code{dataset}).
 
 \describe{
-\item{Default Value}{none}
+\item{Default value}{none}
 }}
 
 \item{dataset_add}{Additional dataset
@@ -47,7 +47,7 @@ in the dataset fulfilling the event condition (\code{condition}) is considered
 as an event.
 
 \describe{
-\item{Default Value}{none}
+\item{Default value}{none}
 }}
 
 \item{condition}{Event condition
@@ -64,7 +64,7 @@ For all groups not present in the additional dataset \code{AVALC} is set to
 the missing value (\code{missing_value}).
 
 \describe{
-\item{Default Value}{none}
+\item{Default value}{none}
 }}
 
 \item{true_value}{True value
@@ -77,7 +77,7 @@ set to the specified value (\code{true_value}).
 
 \describe{
 \item{Permitted values}{A character scalar}
-\item{Default Value}{\code{"Y"}}
+\item{Default value}{\code{"Y"}}
 }}
 
 \item{false_value}{False value
@@ -90,7 +90,7 @@ For all groups with at least one observations in the additional dataset
 
 \describe{
 \item{Permitted values}{A character scalar}
-\item{Default Value}{\code{NA_character_}}
+\item{Default value}{\code{NA_character_}}
 }}
 
 \item{missing_value}{Values used for missing information
@@ -102,7 +102,7 @@ For all groups without an observation in the additional dataset
 
 \describe{
 \item{Permitted values}{A character scalar}
-\item{Default Value}{\code{NA_character_}}
+\item{Default value}{\code{NA_character_}}
 }}
 
 \item{filter_add}{Filter for additional data
@@ -113,13 +113,13 @@ considered.
 
 \describe{
 \item{Permitted values}{a condition}
-\item{Default Value}{\code{NULL}}
+\item{Default value}{\code{NULL}}
 }}
 
 \item{by_vars}{Grouping variables
 
 \describe{
-\item{Default Value}{\code{get_admiral_option("subject_keys")}}
+\item{Default value}{\code{get_admiral_option("subject_keys")}}
 }}
 
 \item{set_values_to}{Variables to set
@@ -129,7 +129,7 @@ new parameter, e.g. \code{exprs(PARAMCD = "MDIS", PARAM = "Measurable Disease at
 numeric values, \code{NA}, or expressions.
 
 \describe{
-\item{Default Value}{none}
+\item{Default value}{none}
 }}
 }
 \value{

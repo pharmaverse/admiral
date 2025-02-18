@@ -22,13 +22,13 @@ filter_relative(
 The variables specified by the \code{by_vars} and \code{order} arguments are expected to be in the dataset.
 
 \describe{
-\item{Default Value}{none}
+\item{Default value}{none}
 }}
 
 \item{by_vars}{Grouping variables
 
 \describe{
-\item{Default Value}{none}
+\item{Default value}{none}
 }}
 
 \item{order}{Sort order
@@ -40,7 +40,7 @@ For handling of \code{NA}s in sorting variables see \href{../articles/generic.ht
 \describe{
 \item{Permitted values}{list of expressions created by \code{exprs()}, e.g.,
 \code{exprs(ADT, desc(AVAL))}}
-\item{Default Value}{none}
+\item{Default value}{none}
 }}
 
 \item{condition}{Condition for Reference Observation
@@ -50,7 +50,7 @@ dataset contains all observations before or after (\code{selection} parameter)
 the reference observation.
 
 \describe{
-\item{Default Value}{none}
+\item{Default value}{none}
 }}
 
 \item{mode}{Selection mode (first or last)
@@ -65,28 +65,28 @@ included in the output dataset.
 
 \describe{
 \item{Permitted values}{\code{"first"}, \code{"last"}}
-\item{Default Value}{none}
+\item{Default value}{none}
 }}
 
 \item{selection}{Select observations before or after the reference observation?
 
 \describe{
 \item{Permitted values}{\code{"before"}, \code{"after"}}
-\item{Default Value}{none}
+\item{Default value}{none}
 }}
 
 \item{inclusive}{Include the reference observation?
 
 \describe{
 \item{Permitted values}{\code{TRUE}, \code{FALSE}}
-\item{Default Value}{none}
+\item{Default value}{none}
 }}
 
 \item{keep_no_ref_groups}{Should by groups without reference observation be kept?
 
 \describe{
 \item{Permitted values}{\code{TRUE}, \code{FALSE}}
-\item{Default Value}{\code{TRUE}}
+\item{Default value}{\code{TRUE}}
 }}
 
 \item{check_type}{Check uniqueness?
@@ -97,7 +97,7 @@ by variables and the order.
 
 \describe{
 \item{Permitted values}{\code{"none"}, \code{"warning"}, \code{"error"}}
-\item{Default Value}{\code{"warning"}}
+\item{Default value}{\code{"warning"}}
 }}
 }
 \value{

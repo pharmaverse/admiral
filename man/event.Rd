@@ -22,7 +22,7 @@ dataset (\code{dataset}) of \code{derive_extreme_event()} is used.
 
 \describe{
 \item{Permitted values}{a character scalar}
-\item{Default Value}{\code{NULL}}
+\item{Default value}{\code{NULL}}
 }}
 
 \item{condition}{An unquoted condition for selecting the observations, which
@@ -31,7 +31,7 @@ functions like \code{all()}, they are evaluated for each by group separately.
 
 \describe{
 \item{Permitted values}{an unquoted condition}
-\item{Default Value}{\code{NULL}}
+\item{Default value}{\code{NULL}}
 }}
 
 \item{mode}{If specified, the first or last observation with respect to \code{order} is
@@ -39,7 +39,7 @@ selected for each by group.
 
 \describe{
 \item{Permitted values}{\code{"first"}, \code{"last"}, \code{NULL}}
-\item{Default Value}{\code{NULL}}
+\item{Default value}{\code{NULL}}
 }}
 
 \item{order}{The specified variables or expressions are used to select the
@@ -50,7 +50,7 @@ For handling of \code{NA}s in sorting variables see \href{../articles/generic.ht
 \describe{
 \item{Permitted values}{list of expressions created by \code{exprs()}, e.g.,
 \code{exprs(ADT, desc(AVAL))} or \code{NULL}}
-\item{Default Value}{\code{NULL}}
+\item{Default value}{\code{NULL}}
 }}
 
 \item{set_values_to}{A named list returned by \code{exprs()} defining the variables
@@ -59,7 +59,7 @@ character string, a numeric value, \code{NA} or an expression.
 
 \describe{
 \item{Permitted values}{a named list of expressions, e.g., created by \code{exprs()}}
-\item{Default Value}{\code{NULL}}
+\item{Default value}{\code{NULL}}
 }}
 
 \item{keep_source_vars}{Variables to keep from the source dataset
@@ -71,7 +71,7 @@ by \code{set_values_to} are always kept.
 \describe{
 \item{Permitted values}{A list of expressions where each element is
 a symbol or a tidyselect expression, e.g., \code{exprs(VISIT, VISITNUM, starts_with("RS"))}.}
-\item{Default Value}{\code{NULL}}
+\item{Default value}{\code{NULL}}
 }}
 
 \item{description}{Description of the event
@@ -81,7 +81,7 @@ is intended for documentation only.
 
 \describe{
 \item{Permitted values}{a character scalar}
-\item{Default Value}{\code{NULL}}
+\item{Default value}{\code{NULL}}
 }}
 }
 \value{

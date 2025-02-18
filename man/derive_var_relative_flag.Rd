@@ -23,13 +23,13 @@ derive_var_relative_flag(
 The variables specified by the \code{by_vars} and \code{order} arguments are expected to be in the dataset.
 
 \describe{
-\item{Default Value}{none}
+\item{Default value}{none}
 }}
 
 \item{by_vars}{Grouping variables
 
 \describe{
-\item{Default Value}{none}
+\item{Default value}{none}
 }}
 
 \item{order}{Sort order
@@ -41,7 +41,7 @@ For handling of \code{NA}s in sorting variables see \href{../articles/generic.ht
 \describe{
 \item{Permitted values}{list of expressions created by \code{exprs()}, e.g.,
 \code{exprs(ADT, desc(AVAL))}}
-\item{Default Value}{none}
+\item{Default value}{none}
 }}
 
 \item{new_var}{New variable
@@ -51,7 +51,7 @@ observations before or after the condition is fulfilled. For all other
 observations it is set to \code{NA}.
 
 \describe{
-\item{Default Value}{none}
+\item{Default value}{none}
 }}
 
 \item{condition}{Condition for Reference Observation
@@ -61,7 +61,7 @@ dataset all observations before or after (\code{selection} argument)
 the reference observation are flagged.
 
 \describe{
-\item{Default Value}{none}
+\item{Default value}{none}
 }}
 
 \item{mode}{Selection mode (first or last)
@@ -76,28 +76,28 @@ flagged in the output dataset.
 
 \describe{
 \item{Permitted values}{\code{"first"}, \code{"last"}}
-\item{Default Value}{none}
+\item{Default value}{none}
 }}
 
 \item{selection}{Flag observations before or after the reference observation?
 
 \describe{
 \item{Permitted values}{\code{"before"}, \code{"after"}}
-\item{Default Value}{none}
+\item{Default value}{none}
 }}
 
 \item{inclusive}{Flag the reference observation?
 
 \describe{
 \item{Permitted values}{\code{TRUE}, \code{FALSE}}
-\item{Default Value}{none}
+\item{Default value}{none}
 }}
 
 \item{flag_no_ref_groups}{Should by groups without reference observation be flagged?
 
 \describe{
 \item{Permitted values}{\code{TRUE}, \code{FALSE}}
-\item{Default Value}{\code{TRUE}}
+\item{Default value}{\code{TRUE}}
 }}
 
 \item{check_type}{Check uniqueness?
@@ -108,7 +108,7 @@ by variables and the order.
 
 \describe{
 \item{Permitted values}{\code{"none"}, \code{"warning"}, \code{"error"}}
-\item{Default Value}{\code{"warning"}}
+\item{Default value}{\code{"warning"}}
 }}
 }
 \value{

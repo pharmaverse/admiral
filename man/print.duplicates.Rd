@@ -10,13 +10,13 @@
 \item{x}{A \code{duplicates} object
 
 \describe{
-\item{Default Value}{none}
+\item{Default value}{none}
 }}
 
 \item{...}{Not used
 
 \describe{
-\item{Default Value}{none}
+\item{Default value}{none}
 }}
 }
 \value{

@@ -33,7 +33,7 @@ parameter) and to the parameters specified by \code{sysbp_code}, \code{chol_code
 and \code{hdl_code}.
 
 \describe{
-\item{Default Value}{none}
+\item{Default value}{none}
 }}
 
 \item{by_vars}{Grouping variables
@@ -43,7 +43,7 @@ in the newly created records.
 
 \describe{
 \item{Permitted values}{list of variables created by \code{exprs()}, e.g., \code{exprs(USUBJID, VISIT)}}
-\item{Default Value}{none}
+\item{Default value}{none}
 }}
 
 \item{set_values_to}{Variables to be set
@@ -54,7 +54,7 @@ for the new parameter.
 
 \describe{
 \item{Permitted values}{List of variable-value pairs}
-\item{Default Value}{\code{exprs(PARAMCD = "MAP")}}
+\item{Default value}{\code{exprs(PARAMCD = "MAP")}}
 }}
 
 \item{sysbp_code}{Systolic blood pressure parameter code
@@ -64,7 +64,7 @@ as the systolic blood pressure assessments.
 
 \describe{
 \item{Permitted values}{a character scalar, i.e., a character vector of length one}
-\item{Default Value}{\code{"SYSBP"}}
+\item{Default value}{\code{"SYSBP"}}
 }}
 
 \item{chol_code}{Total serum cholesterol code
@@ -74,7 +74,7 @@ as the total cholesterol assessments. This must be measured in mg/dL.
 
 \describe{
 \item{Permitted values}{a character scalar, i.e., a character vector of length one}
-\item{Default Value}{\code{"CHOL"}}
+\item{Default value}{\code{"CHOL"}}
 }}
 
 \item{cholhdl_code}{HDL serum cholesterol code
@@ -84,7 +84,7 @@ as the HDL cholesterol assessments. This must be measured in mg/dL.
 
 \describe{
 \item{Permitted values}{a character scalar, i.e., a character vector of length one}
-\item{Default Value}{\code{"CHOLHDL"}}
+\item{Default value}{\code{"CHOLHDL"}}
 }}
 
 \item{age}{Subject age
@@ -94,7 +94,7 @@ A variable containing the subject's age.
 \describe{
 \item{Permitted values}{A numeric variable name that refers to a subject age
 column of the input dataset}
-\item{Default Value}{\code{AGE}}
+\item{Default value}{\code{AGE}}
 }}
 
 \item{sex}{Subject sex
@@ -104,7 +104,7 @@ A variable containing the subject's sex.
 \describe{
 \item{Permitted values}{A character variable name that refers to a subject sex
 column of the input dataset}
-\item{Default Value}{\code{SEX}}
+\item{Default value}{\code{SEX}}
 }}
 
 \item{smokefl}{Smoking status flag
@@ -114,7 +114,7 @@ A flag indicating smoking status.
 \describe{
 \item{Permitted values}{A character variable name that refers to a smoking status
 column of the input dataset.}
-\item{Default Value}{\code{SMOKEFL}}
+\item{Default value}{\code{SMOKEFL}}
 }}
 
 \item{diabetfl}{Diabetic flag
@@ -124,7 +124,7 @@ A flag indicating diabetic status.
 \describe{
 \item{Permitted values}{A character variable name that refers to a diabetic
 status column of the input dataset}
-\item{Default Value}{\code{DIABETFL}}
+\item{Default value}{\code{DIABETFL}}
 }}
 
 \item{trthypfl}{Treated with hypertension medication flag
@@ -135,7 +135,7 @@ A flag indicating if a subject was treated with hypertension medication.
 \item{Permitted values}{A character variable name that refers to a column that
 indicates whether a subject is treated for high blood
 pressure}
-\item{Default Value}{\code{TRTHYPFL}}
+\item{Default value}{\code{TRTHYPFL}}
 }}
 
 \item{get_unit_expr}{An expression providing the unit of the parameter
@@ -145,7 +145,7 @@ The result is used to check the units of the input parameters.
 \describe{
 \item{Permitted values}{An expression which is evaluable in the input dataset
 and results in a character value}
-\item{Default Value}{none}
+\item{Default value}{none}
 }}
 
 \item{filter}{Filter condition
@@ -156,7 +156,7 @@ into account.
 
 \describe{
 \item{Permitted values}{a condition}
-\item{Default Value}{\code{NULL}}
+\item{Default value}{\code{NULL}}
 }}
 }
 \value{

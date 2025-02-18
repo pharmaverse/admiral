@@ -20,7 +20,7 @@ derive_summary_records(
 The variables specified by the \code{by_vars} argument are expected to be in the dataset.
 
 \describe{
-\item{Default Value}{\code{NULL}}
+\item{Default value}{\code{NULL}}
 }}
 
 \item{dataset_add}{Additional dataset
@@ -30,7 +30,7 @@ Observations from the specified dataset are going to be used to calculate and ad
 as new records to the input dataset (\code{dataset}).
 
 \describe{
-\item{Default Value}{none}
+\item{Default value}{none}
 }}
 
 \item{dataset_ref}{Reference dataset
@@ -40,7 +40,7 @@ observation of the specified dataset a new observation is added to the
 input dataset.
 
 \describe{
-\item{Default Value}{\code{NULL}}
+\item{Default value}{\code{NULL}}
 }}
 
 \item{by_vars}{Grouping variables
@@ -50,7 +50,7 @@ records. Providing the names of variables in \code{\link[=exprs]{exprs()}} will 
 groupwise summary and generate summary records for the specified groups.
 
 \describe{
-\item{Default Value}{none}
+\item{Default value}{none}
 }}
 
 \item{filter_add}{Filter condition as logical expression to apply during
@@ -67,7 +67,7 @@ than 2.
 }
 
 \describe{
-\item{Default Value}{\code{NULL}}
+\item{Default value}{\code{NULL}}
 }}
 
 \item{set_values_to}{Variables to be set
@@ -92,7 +92,7 @@ For example:
 }\if{html}{\out{</div>}}
 
 \describe{
-\item{Default Value}{none}
+\item{Default value}{none}
 }}
 
 \item{missing_values}{Values for missing summary values
@@ -104,7 +104,7 @@ specified for \code{set_values_to} can be specified for \code{missing_values}.
 \describe{
 \item{Permitted values}{named list of expressions, e.g.,
 \code{exprs(AVAL = -9999)}}
-\item{Default Value}{\code{NULL}}
+\item{Default value}{\code{NULL}}
 }}
 }
 \value{

@@ -17,14 +17,14 @@ derive_vars_crit_flag(
 \item{dataset}{Input dataset
 
 \describe{
-\item{Default Value}{none}
+\item{Default value}{none}
 }}
 
 \item{crit_nr}{The criterion number, i.e., the \code{y} in \code{CRITy}
 
 \describe{
 \item{Permitted values}{a positive integer}
-\item{Default Value}{\code{1}}
+\item{Default value}{\code{1}}
 }}
 
 \item{condition}{Condition for flagging records
@@ -35,7 +35,7 @@ See description of the \code{values_yn} argument for details on how the
 \describe{
 \item{Permitted values}{an unquoted expression which evaluates to a logical (in
 \code{dataset})}
-\item{Default Value}{none}
+\item{Default value}{none}
 }}
 
 \item{description}{The description of the criterion
@@ -48,7 +48,7 @@ Please note that the value must be constant within a parameter.
 \describe{
 \item{Permitted values}{an unquoted expression which evaluates to a character
 (in \code{dataset})}
-\item{Default Value}{none}
+\item{Default value}{none}
 }}
 
 \item{values_yn}{Should \code{"Y"} and \code{"N"} be used for \code{CRITyFL}?
@@ -62,7 +62,7 @@ Otherwise, the \code{CRITyFL} variable is set to \code{"Y"} if the condition
 
 \describe{
 \item{Permitted values}{\code{TRUE}, \code{FALSE}}
-\item{Default Value}{\code{FALSE}}
+\item{Default value}{\code{FALSE}}
 }}
 
 \item{create_numeric_flag}{Create a numeric flag?
@@ -72,7 +72,7 @@ If set to \code{TRUE}, the \code{CRITyFN} variable is created. It is set to \cod
 
 \describe{
 \item{Permitted values}{\code{TRUE}, \code{FALSE}}
-\item{Default Value}{\code{FALSE}}
+\item{Default value}{\code{FALSE}}
 }}
 }
 \value{

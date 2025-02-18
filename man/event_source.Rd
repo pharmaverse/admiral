@@ -19,14 +19,14 @@ The name refers to the dataset provided by the \code{source_datasets} parameter
 of \code{derive_param_tte()}.
 
 \describe{
-\item{Default Value}{none}
+\item{Default value}{none}
 }}
 
 \item{filter}{An unquoted condition for selecting the observations from
 \code{dataset} which are events or possible censoring time points.
 
 \describe{
-\item{Default Value}{\code{NULL}}
+\item{Default value}{\code{NULL}}
 }}
 
 \item{date}{A variable or expression providing the date of the event or
@@ -37,7 +37,7 @@ Refer to \code{derive_vars_dt()} or \code{convert_dtc_to_dt()} to impute and der
 date from a date character vector to a date object.
 
 \describe{
-\item{Default Value}{none}
+\item{Default value}{none}
 }}
 
 \item{set_values_to}{A named list returned by \code{exprs()} defining the variables
@@ -45,7 +45,7 @@ to be set for the event or censoring, e.g. \code{exprs(EVENTDESC = "DEATH", SRCD
 character string, a numeric value, an expression, or \code{NA}.
 
 \describe{
-\item{Default Value}{\code{NULL}}
+\item{Default value}{\code{NULL}}
 }}
 
 \item{order}{Sort order
@@ -55,7 +55,7 @@ that the source dataset is sorted on after \code{date}.
 
 \describe{
 \item{Permitted values}{list of variables created by \code{exprs()} e.g. \code{exprs(ASEQ)}.}
-\item{Default Value}{\code{order}}
+\item{Default value}{\code{order}}
 }}
 }
 \value{

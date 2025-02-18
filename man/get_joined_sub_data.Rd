@@ -22,7 +22,7 @@ get_joined_sub_data(
 The variables specified by the \code{by_vars} argument are expected to be in the dataset.
 
 \describe{
-\item{Default Value}{none}
+\item{Default value}{none}
 }}
 
 \item{dataset_add}{Additional dataset
@@ -31,7 +31,7 @@ The variables specified by the \code{by_vars}, the \code{new_vars}, the \code{jo
 and the \code{order} argument are expected.
 
 \describe{
-\item{Default Value}{none}
+\item{Default value}{none}
 }}
 
 \item{by_vars}{Grouping variables
@@ -42,7 +42,7 @@ Variables can be renamed by naming the element, i.e.
 \verb{by_vars = exprs(<name in input dataset> = <name in additional dataset>)}, similar to the \code{dplyr} joins.
 
 \describe{
-\item{Default Value}{\code{NULL}}
+\item{Default value}{\code{NULL}}
 }}
 
 \item{tmp_obs_nr_var}{Temporary observation number
@@ -55,7 +55,7 @@ number starts with \code{1}. The variable can be used in the conditions
 used to select consecutive observations or the last observation.
 
 \describe{
-\item{Default Value}{\code{NULL}}
+\item{Default value}{\code{NULL}}
 }}
 
 \item{join_type}{Observations to keep after joining
@@ -74,7 +74,7 @@ after seven days before a COVID AE. Thus \code{join_type = "all"} could be used.
 
 \describe{
 \item{Permitted values}{\code{"before"}, \code{"after"}, \code{"all"}}
-\item{Default Value}{none}
+\item{Default value}{none}
 }}
 
 \item{first_cond_upper}{Condition for selecting range of data (after)
@@ -89,7 +89,7 @@ functions which should not apply to all observations but only up to the
 confirmation assessment.
 
 \describe{
-\item{Default Value}{\code{NULL}}
+\item{Default value}{\code{NULL}}
 }}
 
 \item{first_cond_lower}{Condition for selecting range of data (before)
@@ -106,7 +106,7 @@ certain observation before the current observation up to the current
 observation.
 
 \describe{
-\item{Default Value}{\code{NULL}}
+\item{Default value}{\code{NULL}}
 }}
 
 \item{filter_join}{Filter for the joined dataset
@@ -122,7 +122,7 @@ joined dataset is grouped by the original observations.
 
 \describe{
 \item{Permitted values}{a condition}
-\item{Default Value}{\code{NULL}}
+\item{Default value}{\code{NULL}}
 }}
 }
 \description{

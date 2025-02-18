@@ -19,31 +19,31 @@ dataset names
 The dataset name is case-insensitive. The default dataset name is \code{"ADSL"}.
 
 \describe{
-\item{Default Value}{\code{"adsl"}}
+\item{Default value}{\code{"adsl"}}
 }}
 
 \item{save_path}{Path to save the script.
 
 \describe{
-\item{Default Value}{\code{paste0("./", adam_name, ".R")}}
+\item{Default value}{\code{paste0("./", adam_name, ".R")}}
 }}
 
 \item{package}{The R package in which to look for templates. By default \code{"admiral"}.
 
 \describe{
-\item{Default Value}{\code{"admiral"}}
+\item{Default value}{\code{"admiral"}}
 }}
 
 \item{overwrite}{Whether to overwrite an existing file named \code{save_path}.
 
 \describe{
-\item{Default Value}{\code{FALSE}}
+\item{Default value}{\code{FALSE}}
 }}
 
 \item{open}{Whether to open the script right away.
 
 \describe{
-\item{Default Value}{\code{interactive()}}
+\item{Default value}{\code{interactive()}}
 }}
 }
 \value{

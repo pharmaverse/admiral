@@ -13,7 +13,7 @@ A numeric vector is expected. It is expected that QT is measured in ms or
 msec.
 
 \describe{
-\item{Default Value}{none}
+\item{Default value}{none}
 }}
 
 \item{rr}{RR interval
@@ -22,14 +22,14 @@ A numeric vector is expected. It is expected that RR is measured in ms or
 msec.
 
 \describe{
-\item{Default Value}{none}
+\item{Default value}{none}
 }}
 
 \item{method}{Method used to QT correction
 
 \describe{
 \item{Permitted values}{\code{"Bazett"}, \code{"Fridericia"}, \code{"Sagie"}}
-\item{Default Value}{none}
+\item{Default value}{none}
 }}
 }
 \value{

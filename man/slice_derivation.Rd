@@ -10,7 +10,7 @@ slice_derivation(dataset, derivation, args = NULL, ...)
 \item{dataset}{Input dataset
 
 \describe{
-\item{Default Value}{none}
+\item{Default value}{none}
 }}
 
 \item{derivation}{Derivation
@@ -25,7 +25,7 @@ Please note that it is not possible to specify \code{{dplyr}}
 functions like \code{mutate()} or \code{summarize()}.
 
 \describe{
-\item{Default Value}{none}
+\item{Default value}{none}
 }}
 
 \item{args}{Arguments of the derivation
@@ -33,7 +33,7 @@ functions like \code{mutate()} or \code{summarize()}.
 A \code{params()} object is expected.
 
 \describe{
-\item{Default Value}{\code{NULL}}
+\item{Default value}{\code{NULL}}
 }}
 
 \item{...}{A \code{derivation_slice()} object is expected
@@ -45,7 +45,7 @@ parameters specified by the \code{args} parameter and the \code{args} field of t
 value in \code{derivation_slice()} overwrites the one in \code{args}.
 
 \describe{
-\item{Default Value}{none}
+\item{Default value}{none}
 }}
 }
 \value{

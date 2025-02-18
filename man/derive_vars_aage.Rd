@@ -18,7 +18,7 @@ derive_vars_aage(
 The variables specified by the \code{start_date} and \code{end_date} arguments are expected to be in the dataset.
 
 \describe{
-\item{Default Value}{none}
+\item{Default value}{none}
 }}
 
 \item{start_date}{The start date
@@ -29,7 +29,7 @@ Refer to \code{derive_vars_dt()} to impute and derive a date from a date charact
 vector to a date object.
 
 \describe{
-\item{Default Value}{\code{BRTHDT}}
+\item{Default value}{\code{BRTHDT}}
 }}
 
 \item{end_date}{The end date
@@ -40,7 +40,7 @@ Refer to \code{derive_vars_dt()} to impute and derive a date from a date charact
 vector to a date object.
 
 \describe{
-\item{Default Value}{\code{RANDDT}}
+\item{Default value}{\code{RANDDT}}
 }}
 
 \item{age_unit}{Age unit
@@ -63,7 +63,7 @@ For hours: \code{"hour"}, \code{"hours"}, \code{"hr"}, \code{"hrs"}, \code{"h"}
 For minutes: \code{"minute"}, \code{"minutes"}, \code{"min"}, \code{"mins"}
 
 For seconds: \code{"second"}, \code{"seconds"}, \code{"sec"}, \code{"secs"}, \code{"s"}}
-\item{Default Value}{\code{"YEARS"}}
+\item{Default value}{\code{"YEARS"}}
 }}
 
 \item{type}{lubridate duration type.
@@ -72,7 +72,7 @@ See below for details.
 
 \describe{
 \item{Permitted values}{\code{"duration"}, \code{"interval"}}
-\item{Default Value}{\code{"duration"}}
+\item{Default value}{\code{"duration"}}
 }}
 }
 \value{

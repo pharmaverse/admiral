@@ -10,7 +10,7 @@ call_derivation(dataset = NULL, derivation, variable_params, ...)
 \item{dataset}{Input dataset
 
 \describe{
-\item{Default Value}{\code{NULL}}
+\item{Default value}{\code{NULL}}
 }}
 
 \item{derivation}{The derivation function to call
@@ -26,14 +26,14 @@ Please note that it is not possible to specify \code{{dplyr}}
 functions like \code{mutate()} or \code{summarize()}.
 
 \describe{
-\item{Default Value}{none}
+\item{Default value}{none}
 }}
 
 \item{variable_params}{A \code{list} of function arguments that are different across iterations.
 Each set of function arguments must be created using \code{\link[=params]{params()}}.
 
 \describe{
-\item{Default Value}{none}
+\item{Default value}{none}
 }}
 
 \item{...}{Any number of \emph{named} function arguments that stay the same across iterations.
@@ -41,7 +41,7 @@ If a function argument is specified both inside \code{variable_params} and \code
 the value in \code{variable_params} overwrites the one in \code{...}
 
 \describe{
-\item{Default Value}{none}
+\item{Default value}{none}
 }}
 }
 \value{

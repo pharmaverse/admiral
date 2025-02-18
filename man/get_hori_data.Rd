@@ -12,13 +12,13 @@ get_hori_data(dataset, by_vars, parameters, set_values_to, filter)
 The variables specified by the \code{by_vars} argument are expected to be in the dataset.
 
 \describe{
-\item{Default Value}{none}
+\item{Default value}{none}
 }}
 
 \item{by_vars}{Grouping variables
 
 \describe{
-\item{Default Value}{none}
+\item{Default value}{none}
 }}
 
 \item{parameters}{List of parameter codes
@@ -30,7 +30,7 @@ expression the observations to select.
 
 \describe{
 \item{Permitted values}{A character vector of \code{PARAMCD} values or a list of expressions}
-\item{Default Value}{none}
+\item{Default value}{none}
 }}
 
 \item{set_values_to}{All variables of the form \verb{<variable>.<parameter>} like \code{AVAL.WEIGHT} are
@@ -40,7 +40,7 @@ the parameter. E.g., \code{AVAL.WEIGHT} is set to the value of \code{AVAL} where
 
 \describe{
 \item{Permitted values}{A list of expressions}
-\item{Default Value}{none}
+\item{Default value}{none}
 }}
 
 \item{filter}{Filter condition used for restricting the input dataset
@@ -50,7 +50,7 @@ applied to the input dataset.
 
 \describe{
 \item{Permitted values}{An unquoted expression}
-\item{Default Value}{none}
+\item{Default value}{none}
 }}
 }
 \value{

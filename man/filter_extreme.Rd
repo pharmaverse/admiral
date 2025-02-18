@@ -12,13 +12,13 @@ filter_extreme(dataset, by_vars = NULL, order, mode, check_type = "warning")
 The variables specified by the \code{by_vars} and \code{order} arguments are expected to be in the dataset.
 
 \describe{
-\item{Default Value}{none}
+\item{Default value}{none}
 }}
 
 \item{by_vars}{Grouping variables
 
 \describe{
-\item{Default Value}{\code{NULL}}
+\item{Default value}{\code{NULL}}
 }}
 
 \item{order}{Sort order
@@ -28,7 +28,7 @@ Within each by group the observations are ordered by the specified order.
 \describe{
 \item{Permitted values}{list of expressions created by \code{exprs()}, e.g.,
 \code{exprs(ADT, desc(AVAL))}}
-\item{Default Value}{none}
+\item{Default value}{none}
 }}
 
 \item{mode}{Selection mode (first or last)
@@ -39,7 +39,7 @@ observation of each by group is included in the output dataset.
 
 \describe{
 \item{Permitted values}{\code{"first"}, \code{"last"}}
-\item{Default Value}{none}
+\item{Default value}{none}
 }}
 
 \item{check_type}{Check uniqueness?
@@ -50,7 +50,7 @@ by variables and the order.
 
 \describe{
 \item{Permitted values}{\code{"none"}, \code{"message"}, \code{"warning"}, \code{"error"}}
-\item{Default Value}{\code{"warning"}}
+\item{Default value}{\code{"warning"}}
 }}
 }
 \value{

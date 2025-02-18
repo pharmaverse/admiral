@@ -26,7 +26,7 @@ the input dataset after restricting it by the filter condition (\code{filter}
 parameter) and to the parameters specified by \code{weight_code} and \code{height_code}.
 
 \describe{
-\item{Default Value}{none}
+\item{Default value}{none}
 }}
 
 \item{by_vars}{Grouping variables
@@ -36,7 +36,7 @@ dataset. Only variables specified in \code{by_vars} will be populated
 in the newly created records.
 
 \describe{
-\item{Default Value}{none}
+\item{Default value}{none}
 }}
 
 \item{set_values_to}{Variables to be set
@@ -47,7 +47,7 @@ for the new parameter.
 
 \describe{
 \item{Permitted values}{List of variable-value pairs}
-\item{Default Value}{\code{exprs(PARAMCD = "MAP")}}
+\item{Default value}{\code{exprs(PARAMCD = "MAP")}}
 }}
 
 \item{weight_code}{WEIGHT parameter code
@@ -57,7 +57,7 @@ as the WEIGHT. It is expected that WEIGHT is measured in kg
 
 \describe{
 \item{Permitted values}{character value}
-\item{Default Value}{\code{"WEIGHT"}}
+\item{Default value}{\code{"WEIGHT"}}
 }}
 
 \item{height_code}{HEIGHT parameter code
@@ -67,7 +67,7 @@ as the HEIGHT. It is expected that HEIGHT is measured in cm
 
 \describe{
 \item{Permitted values}{logical scalar}
-\item{Default Value}{\code{"HEIGHT"}}
+\item{Default value}{\code{"HEIGHT"}}
 }}
 
 \item{get_unit_expr}{An expression providing the unit of the parameter
@@ -77,7 +77,7 @@ The result is used to check the units of the input parameters.
 \describe{
 \item{Permitted values}{An expression which is evaluable in the input dataset
 and results in a character value}
-\item{Default Value}{none}
+\item{Default value}{none}
 }}
 
 \item{filter}{Filter condition
@@ -88,7 +88,7 @@ into account.
 
 \describe{
 \item{Permitted values}{a condition}
-\item{Default Value}{\code{NULL}}
+\item{Default value}{\code{NULL}}
 }}
 
 \item{constant_by_vars}{By variables for when HEIGHT is constant
@@ -102,7 +102,7 @@ This will produce BMI at all visits where weight is measured.  Otherwise
 it will only be calculated at visits with both height and weight collected.
 
 \describe{
-\item{Default Value}{\code{NULL}}
+\item{Default value}{\code{NULL}}
 }}
 }
 \value{

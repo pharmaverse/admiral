@@ -25,7 +25,7 @@ dataset (\code{dataset}) of \code{derive_extreme_event()} is used.
 
 \describe{
 \item{Permitted values}{a character scalar}
-\item{Default Value}{\code{NULL}}
+\item{Default value}{\code{NULL}}
 }}
 
 \item{condition}{An unquoted condition for selecting the observations, which
@@ -42,7 +42,7 @@ observations up to the confirmation observation the response is "CR" or
 
 \describe{
 \item{Permitted values}{an unquoted condition}
-\item{Default Value}{none}
+\item{Default value}{none}
 }}
 
 \item{order}{If specified, the specified variables or expressions are used to
@@ -53,7 +53,7 @@ For handling of \code{NA}s in sorting variables see \href{../articles/generic.ht
 \describe{
 \item{Permitted values}{list of expressions created by \code{exprs()}, e.g.,
 \code{exprs(ADT, desc(AVAL))} or \code{NULL}}
-\item{Default Value}{\code{NULL}}
+\item{Default value}{\code{NULL}}
 }}
 
 \item{join_vars}{Variables to keep from joined dataset
@@ -66,7 +66,7 @@ The \verb{*.join} variables are not included in the output dataset.
 
 \describe{
 \item{Permitted values}{a named list of expressions, e.g., created by \code{exprs()}}
-\item{Default Value}{none}
+\item{Default value}{none}
 }}
 
 \item{join_type}{Observations to keep after joining
@@ -77,7 +77,7 @@ kept.
 
 \describe{
 \item{Permitted values}{\code{"before"}, \code{"after"}, \code{"all"}}
-\item{Default Value}{none}
+\item{Default value}{none}
 }}
 
 \item{first_cond_lower}{Condition for selecting range of data (before)
@@ -95,7 +95,7 @@ observation.
 
 \describe{
 \item{Permitted values}{an unquoted condition}
-\item{Default Value}{\code{NULL}}
+\item{Default value}{\code{NULL}}
 }}
 
 \item{first_cond_upper}{Condition for selecting range of data (after)
@@ -111,7 +111,7 @@ confirmation assessment.
 
 \describe{
 \item{Permitted values}{an unquoted condition}
-\item{Default Value}{\code{NULL}}
+\item{Default value}{\code{NULL}}
 }}
 
 \item{set_values_to}{A named list returned by \code{exprs()} defining the variables
@@ -120,7 +120,7 @@ character string, a numeric value, \code{NA} or an expression.
 
 \describe{
 \item{Permitted values}{a named list of expressions, e.g., created by \code{exprs()}}
-\item{Default Value}{\code{NULL}}
+\item{Default value}{\code{NULL}}
 }}
 
 \item{keep_source_vars}{Variables to keep from the source dataset
@@ -132,7 +132,7 @@ by \code{set_values_to} are always kept.
 \describe{
 \item{Permitted values}{A list of expressions where each element is
 a symbol or a tidyselect expression, e.g., \code{exprs(VISIT, VISITNUM, starts_with("RS"))}.}
-\item{Default Value}{\code{NULL}}
+\item{Default value}{\code{NULL}}
 }}
 
 \item{description}{Description of the event
@@ -142,7 +142,7 @@ is intended for documentation only.
 
 \describe{
 \item{Permitted values}{a character scalar}
-\item{Default Value}{\code{NULL}}
+\item{Default value}{\code{NULL}}
 }}
 }
 \value{

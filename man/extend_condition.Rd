@@ -10,19 +10,19 @@ extend_condition(cond, var, is)
 \item{cond}{A character string representing an existing condition.
 
 \describe{
-\item{Default Value}{none}
+\item{Default value}{none}
 }}
 
 \item{var}{A character string representing the name of the variable to check.
 
 \describe{
-\item{Default Value}{none}
+\item{Default value}{none}
 }}
 
 \item{is}{A character string representing the value the variable should be equal to.
 
 \describe{
-\item{Default Value}{none}
+\item{Default value}{none}
 }}
 }
 \value{

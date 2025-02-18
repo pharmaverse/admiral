@@ -18,7 +18,7 @@ for the start of the day,
 }
 
 \describe{
-\item{Default Value}{none}
+\item{Default value}{none}
 }}
 }
 \value{

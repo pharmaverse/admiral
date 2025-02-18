@@ -13,7 +13,7 @@ A numeric vector is expected. It is expected that heart rate is measured in
 beats/min.
 
 \describe{
-\item{Default Value}{none}
+\item{Default value}{none}
 }}
 }
 \value{

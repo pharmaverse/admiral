@@ -24,7 +24,7 @@ derive_vars_dtm(
 The variables specified by the \code{dtc} argument are expected to be in the dataset.
 
 \describe{
-\item{Default Value}{none}
+\item{Default value}{none}
 }}
 
 \item{new_vars_prefix}{Prefix used for the output variable(s).
@@ -35,7 +35,7 @@ imputation flag "TMF". I.e., for \code{new_vars_prefix = "AST"} the variables
 \code{ASTDT}, \code{ASTDTF}, and \code{ASTTMF} are created.
 
 \describe{
-\item{Default Value}{none}
+\item{Default value}{none}
 }}
 
 \item{dtc}{The \code{'--DTC'} date to impute
@@ -45,7 +45,7 @@ A character date is expected in a format like \code{yyyy-mm-dd} or
 valid "missing" value for any component.
 
 \describe{
-\item{Default Value}{none}
+\item{Default value}{none}
 }}
 
 \item{highest_imputation}{Highest imputation level
@@ -68,7 +68,7 @@ and \code{min_dates} or \code{max_dates} should be specified respectively. Other
 \item{Permitted values}{\code{"Y"} (year, highest level), \code{"M"} (month), \code{"D"}
 (day), \code{"h"} (hour), \code{"m"} (minute), \code{"s"} (second), \code{"n"} (none, lowest
 level)}
-\item{Default Value}{\code{"h"}}
+\item{Default value}{\code{"h"}}
 }}
 
 \item{date_imputation}{The value to impute the day/month when a datepart is
@@ -93,7 +93,7 @@ middle of the possible range:
 The argument is ignored if \code{highest_imputation} is less then \code{"D"}.
 
 \describe{
-\item{Default Value}{\code{"first"}}
+\item{Default value}{\code{"first"}}
 }}
 
 \item{time_imputation}{The value to impute the time when a timepart is
@@ -109,7 +109,7 @@ for the start of the day,
 The argument is ignored if \code{highest_imputation = "n"}.
 
 \describe{
-\item{Default Value}{\code{"first"}}
+\item{Default value}{\code{"first"}}
 }}
 
 \item{flag_imputation}{Whether the date/time imputation flag(s) must also be derived.
@@ -126,7 +126,7 @@ If \code{"none"} is specified, then no date or time imputation flag is derived.
 
 \describe{
 \item{Permitted values}{\code{"auto"}, \code{"date"}, \code{"time"}, \code{"both"}, or \code{"none"}}
-\item{Default Value}{\code{"auto"}}
+\item{Default value}{\code{"auto"}}
 }}
 
 \item{min_dates}{Minimum dates
@@ -160,7 +160,7 @@ For date variables (not datetime) in the list the time is imputed to
 imputed. If only time is imputed, date variables do not affect the result.
 
 \describe{
-\item{Default Value}{\code{NULL}}
+\item{Default value}{\code{NULL}}
 }}
 
 \item{max_dates}{Maximum dates
@@ -175,7 +175,7 @@ For date variables (not datetime) in the list the time is imputed to
 imputed. If only time is imputed, date variables do not affect the result.
 
 \describe{
-\item{Default Value}{\code{NULL}}
+\item{Default value}{\code{NULL}}
 }}
 
 \item{preserve}{Preserve lower level date/time part when higher order part
@@ -187,7 +187,7 @@ For example \code{"2019---07"} would return \verb{"2019-06-07} if \code{preserve
 
 \describe{
 \item{Permitted values}{\code{TRUE}, \code{FALSE}}
-\item{Default Value}{\code{FALSE}}
+\item{Default value}{\code{FALSE}}
 }}
 
 \item{ignore_seconds_flag}{ADaM IG states that given SDTM (\code{'--DTC'}) variable,
@@ -197,7 +197,7 @@ to \code{TRUE} so the \code{'S'} Flag is dropped from (\code{'--TMF'}).
 
 \describe{
 \item{Permitted values}{A logical value}
-\item{Default Value}{\code{FALSE}}
+\item{Default value}{\code{FALSE}}
 }}
 }
 \value{

@@ -19,37 +19,37 @@ derive_var_shift(
 The variables specified by the \code{from_var} and \code{to_var} arguments are expected to be in the dataset.
 
 \describe{
-\item{Default Value}{none}
+\item{Default value}{none}
 }}
 
 \item{new_var}{Name of the character shift variable to create.
 
 \describe{
-\item{Default Value}{none}
+\item{Default value}{none}
 }}
 
 \item{from_var}{Variable containing value to shift from.
 
 \describe{
-\item{Default Value}{none}
+\item{Default value}{none}
 }}
 
 \item{to_var}{Variable containing value to shift to.
 
 \describe{
-\item{Default Value}{none}
+\item{Default value}{none}
 }}
 
 \item{missing_value}{Character string to replace missing values in \code{from_var} or \code{to_var}.
 
 \describe{
-\item{Default Value}{\code{"NULL"}}
+\item{Default value}{\code{"NULL"}}
 }}
 
 \item{sep_val}{Character string to concatenate values of \code{from_var} and \code{to_var}.
 
 \describe{
-\item{Default Value}{\code{" to "}}
+\item{Default value}{\code{" to "}}
 }}
 }
 \value{

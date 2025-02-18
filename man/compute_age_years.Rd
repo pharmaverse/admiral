@@ -12,7 +12,7 @@ compute_age_years(age, age_unit)
 A numeric vector is expected.
 
 \describe{
-\item{Default Value}{none}
+\item{Default value}{none}
 }}
 
 \item{age_unit}{Age unit.
@@ -25,7 +25,7 @@ as \code{"years"} and \code{"Years"}).
 \describe{
 \item{Permitted values}{\code{"years"}, \code{"months"}, \code{"weeks"}, \code{"days"}, \code{"hours"}, \code{"minutes"},
 \code{"seconds"}, \code{NA_character_}.}
-\item{Default Value}{none}
+\item{Default value}{none}
 }}
 }
 \value{

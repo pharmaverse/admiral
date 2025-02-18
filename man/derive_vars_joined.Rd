@@ -32,7 +32,7 @@ derive_vars_joined(
 The variables specified by the \code{by_vars} argument are expected to be in the dataset.
 
 \describe{
-\item{Default Value}{none}
+\item{Default value}{none}
 }}
 
 \item{dataset_add}{Additional dataset
@@ -41,7 +41,7 @@ The variables specified by the \code{by_vars}, the \code{new_vars}, the \code{jo
 and the \code{order} argument are expected.
 
 \describe{
-\item{Default Value}{none}
+\item{Default value}{none}
 }}
 
 \item{by_vars}{Grouping variables
@@ -52,7 +52,7 @@ Variables can be renamed by naming the element, i.e.
 \verb{by_vars = exprs(<name in input dataset> = <name in additional dataset>)}, similar to the \code{dplyr} joins.
 
 \describe{
-\item{Default Value}{\code{NULL}}
+\item{Default value}{\code{NULL}}
 }}
 
 \item{order}{Sort order
@@ -74,7 +74,7 @@ For handling of \code{NA}s in sorting variables see \href{../articles/generic.ht
 \describe{
 \item{Permitted values}{list of expressions created by \code{exprs()}, e.g.,
 \code{exprs(ADT, desc(AVAL))} or \code{NULL}}
-\item{Default Value}{\code{NULL}}
+\item{Default value}{\code{NULL}}
 }}
 
 \item{new_vars}{Variables to add
@@ -99,7 +99,7 @@ additional dataset (\code{dataset_add}) are added.
 
 \describe{
 \item{Permitted values}{list of variables or named expressions created by \code{exprs()}}
-\item{Default Value}{\code{NULL}}
+\item{Default value}{\code{NULL}}
 }}
 
 \item{tmp_obs_nr_var}{Temporary observation number
@@ -115,7 +115,7 @@ The variable is not included in the output dataset. To include it specify
 it for \code{new_vars}.
 
 \describe{
-\item{Default Value}{\code{NULL}}
+\item{Default value}{\code{NULL}}
 }}
 
 \item{join_vars}{Variables to use from additional dataset
@@ -135,7 +135,7 @@ The variables are not included in the output dataset.
 
 \describe{
 \item{Permitted values}{list of variables or named expressions created by \code{exprs()}}
-\item{Default Value}{\code{NULL}}
+\item{Default value}{\code{NULL}}
 }}
 
 \item{join_type}{Observations to keep after joining
@@ -154,7 +154,7 @@ after seven days before a COVID AE. Thus \code{join_type = "all"} could be used.
 
 \describe{
 \item{Permitted values}{\code{"before"}, \code{"after"}, \code{"all"}}
-\item{Default Value}{none}
+\item{Default value}{none}
 }}
 
 \item{filter_add}{Filter for additional dataset (\code{dataset_add})
@@ -171,7 +171,7 @@ additional dataset is grouped by the by variables (\code{by_vars}).
 
 \describe{
 \item{Permitted values}{a condition}
-\item{Default Value}{\code{NULL}}
+\item{Default value}{\code{NULL}}
 }}
 
 \item{first_cond_lower}{Condition for selecting range of data (before)
@@ -188,7 +188,7 @@ certain observation before the current observation up to the current
 observation. For an example see the last example below.
 
 \describe{
-\item{Default Value}{\code{NULL}}
+\item{Default value}{\code{NULL}}
 }}
 
 \item{first_cond_upper}{Condition for selecting range of data (after)
@@ -203,7 +203,7 @@ functions which should not apply to all observations but only up to the
 confirmation assessment. For an example see the last example below.
 
 \describe{
-\item{Default Value}{\code{NULL}}
+\item{Default value}{\code{NULL}}
 }}
 
 \item{filter_join}{Filter for the joined dataset
@@ -219,7 +219,7 @@ joined dataset is grouped by the original observations.
 
 \describe{
 \item{Permitted values}{a condition}
-\item{Default Value}{\code{NULL}}
+\item{Default value}{\code{NULL}}
 }}
 
 \item{mode}{Selection mode
@@ -231,7 +231,7 @@ If the \code{order} argument is not specified, the \code{mode} argument is ignor
 
 \describe{
 \item{Permitted values}{\code{"first"}, \code{"last"}, \code{NULL}}
-\item{Default Value}{\code{NULL}}
+\item{Default value}{\code{NULL}}
 }}
 
 \item{exist_flag}{Exist flag
@@ -243,7 +243,7 @@ which are merged into the input dataset, and the value provided in \code{false_v
 
 \describe{
 \item{Permitted values}{Variable name}
-\item{Default Value}{\code{NULL}}
+\item{Default value}{\code{NULL}}
 }}
 
 \item{true_value}{True value
@@ -253,7 +253,7 @@ the first or last observation (depending on the mode) of each by group.
 
 \describe{
 \item{Permitted values}{An atomic scalar}
-\item{Default Value}{\code{"Y"}}
+\item{Default value}{\code{"Y"}}
 }}
 
 \item{false_value}{False value
@@ -263,7 +263,7 @@ the first or last observation (depending on the mode) of each by group.
 
 \describe{
 \item{Permitted values}{An atomic scalar}
-\item{Default Value}{\code{NA_character_}}
+\item{Default value}{\code{NA_character_}}
 }}
 
 \item{missing_values}{Values for non-matching observations
@@ -276,7 +276,7 @@ specified for \code{new_vars} can be specified for \code{missing_values}.
 \describe{
 \item{Permitted values}{named list of expressions, e.g.,
 \code{exprs(BASEC = "MISSING", BASE = -1)}}
-\item{Default Value}{\code{NULL}}
+\item{Default value}{\code{NULL}}
 }}
 
 \item{check_type}{Check uniqueness?
@@ -292,7 +292,7 @@ dataset.
 
 \describe{
 \item{Permitted values}{\code{"none"}, \code{"warning"}, \code{"error"}}
-\item{Default Value}{\code{"warning"}}
+\item{Default value}{\code{"warning"}}
 }}
 }
 \value{

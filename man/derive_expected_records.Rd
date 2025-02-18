@@ -17,7 +17,7 @@ derive_expected_records(
 The variables specified by the \code{dataset_ref} and \code{by_vars} arguments are expected to be in the dataset.
 
 \describe{
-\item{Default Value}{none}
+\item{Default value}{none}
 }}
 
 \item{dataset_ref}{Expected observations dataset
@@ -26,7 +26,7 @@ Data frame with the expected observations, e.g., all the expected
 combinations of \code{PARAMCD}, \code{PARAM}, \code{AVISIT}, \code{AVISITN}, ...
 
 \describe{
-\item{Default Value}{none}
+\item{Default value}{none}
 }}
 
 \item{by_vars}{Grouping variables
@@ -36,7 +36,7 @@ are added to the output dataset which do not have a corresponding observation
 in the input dataset.
 
 \describe{
-\item{Default Value}{\code{NULL}}
+\item{Default value}{\code{NULL}}
 }}
 
 \item{set_values_to}{Variables to be set
@@ -52,7 +52,7 @@ symbol, a numeric value, \code{NA}, or expressions, e.g., \code{exprs(PARAMCD = 
 }
 
 \describe{
-\item{Default Value}{\code{NULL}}
+\item{Default value}{\code{NULL}}
 }}
 }
 \value{

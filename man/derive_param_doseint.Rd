@@ -25,7 +25,7 @@ the input dataset after restricting it by the filter condition (\code{filter}
 parameter) and to the parameters specified by \code{tadm_code} and \code{padm_code}.
 
 \describe{
-\item{Default Value}{none}
+\item{Default value}{none}
 }}
 
 \item{by_vars}{Grouping variables
@@ -34,7 +34,7 @@ Only variables specified in \code{by_vars} will be populated
 in the newly created records.
 
 \describe{
-\item{Default Value}{none}
+\item{Default value}{none}
 }}
 
 \item{set_values_to}{Variables to be set
@@ -45,7 +45,7 @@ for the new parameter.
 
 \describe{
 \item{Permitted values}{List of variable-value pairs}
-\item{Default Value}{\code{exprs(PARAMCD = "MAP")}}
+\item{Default value}{\code{exprs(PARAMCD = "MAP")}}
 }}
 
 \item{tadm_code}{Total Doses Administered parameter code
@@ -56,7 +56,7 @@ will be the numerator of the dose intensity calculation.
 
 \describe{
 \item{Permitted values}{character value}
-\item{Default Value}{\code{"TNDOSE"}}
+\item{Default value}{\code{"TNDOSE"}}
 }}
 
 \item{tpadm_code}{Total Doses Planned parameter code
@@ -67,7 +67,7 @@ will be the denominator of the dose intensity calculation.
 
 \describe{
 \item{Permitted values}{character value}
-\item{Default Value}{\code{"TSNDOSE"}}
+\item{Default value}{\code{"TSNDOSE"}}
 }}
 
 \item{zero_doses}{Flag indicating logic for handling 0 planned or
@@ -95,7 +95,7 @@ If \code{zero_doses} = \code{100} :
 \item If the planned dose (\code{tpadm_code}) is 0 and the administered dose
 (\code{tadm_code}) is > 0, 100 is returned.
 }}
-\item{Default Value}{\code{"Inf"}}
+\item{Default value}{\code{"Inf"}}
 }}
 
 \item{filter}{Filter condition
@@ -106,7 +106,7 @@ into account.
 
 \describe{
 \item{Permitted values}{a condition}
-\item{Default Value}{\code{NULL}}
+\item{Default value}{\code{NULL}}
 }}
 }
 \value{

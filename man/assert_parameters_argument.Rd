@@ -10,14 +10,14 @@ assert_parameters_argument(parameters, optional = TRUE)
 \item{parameters}{The argument to check
 
 \describe{
-\item{Default Value}{none}
+\item{Default value}{none}
 }}
 
 \item{optional}{Is the checked argument optional? If set to \code{FALSE} and
 \code{parameters} is \code{NULL} then an error is thrown.
 
 \describe{
-\item{Default Value}{\code{TRUE}}
+\item{Default value}{\code{TRUE}}
 }}
 }
 \value{

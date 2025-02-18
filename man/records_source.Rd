@@ -13,14 +13,14 @@ The name refers to the dataset provided by the \code{source_datasets} argument
 of \code{derive_param_extreme_record()}.
 
 \describe{
-\item{Default Value}{none}
+\item{Default value}{none}
 }}
 
 \item{filter}{An unquoted condition for selecting the observations from
 \code{dataset}.
 
 \describe{
-\item{Default Value}{\code{NULL}}
+\item{Default value}{\code{NULL}}
 }}
 
 \item{new_vars}{Variables to add
@@ -39,7 +39,7 @@ And \code{new_vars = exprs(var1, new_var2 = old_var2)} takes \code{var1} and
 \describe{
 \item{Permitted values}{list of expressions created by \code{exprs()}, e.g.,
 \code{exprs(ADT, desc(AVAL))}}
-\item{Default Value}{none}
+\item{Default value}{none}
 }}
 }
 \value{

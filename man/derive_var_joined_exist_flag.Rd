@@ -28,7 +28,7 @@ derive_var_joined_exist_flag(
 The variables specified by the \code{by_vars} and \code{join_vars} arguments are expected to be in the dataset.
 
 \describe{
-\item{Default Value}{none}
+\item{Default value}{none}
 }}
 
 \item{dataset_add}{Additional dataset
@@ -37,7 +37,7 @@ The variables specified for \code{by_vars}, \code{join_vars}, and \code{order} a
 expected.
 
 \describe{
-\item{Default Value}{none}
+\item{Default value}{none}
 }}
 
 \item{by_vars}{Grouping variables
@@ -46,7 +46,7 @@ The specified variables are used for joining the input
 dataset (\code{dataset}) with the additional dataset (\code{dataset_add}).
 
 \describe{
-\item{Default Value}{none}
+\item{Default value}{none}
 }}
 
 \item{order}{Order
@@ -56,7 +56,7 @@ The observations are ordered by the specified order.
 For handling of \code{NA}s in sorting variables see \href{../articles/generic.html#sort_order}{Sort Order}.
 
 \describe{
-\item{Default Value}{none}
+\item{Default value}{none}
 }}
 
 \item{new_var}{New variable
@@ -64,7 +64,7 @@ For handling of \code{NA}s in sorting variables see \href{../articles/generic.ht
 The specified variable is added to the input dataset.
 
 \describe{
-\item{Default Value}{none}
+\item{Default value}{none}
 }}
 
 \item{tmp_obs_nr_var}{Temporary observation number
@@ -78,7 +78,7 @@ in the output dataset. It can also be used to flag consecutive observations
 or the last observation (see last example below).
 
 \describe{
-\item{Default Value}{\code{NULL}}
+\item{Default value}{\code{NULL}}
 }}
 
 \item{join_vars}{Variables to keep from joined dataset
@@ -90,7 +90,7 @@ with suffix ".join". For example to flag all observations with \code{AVALC == "Y
 The \verb{*.join} variables are not included in the output dataset.
 
 \describe{
-\item{Default Value}{none}
+\item{Default value}{none}
 }}
 
 \item{join_type}{Observations to keep after joining
@@ -109,7 +109,7 @@ after seven days before a COVID AE. Thus \code{join_type = "all"} could be used.
 
 \describe{
 \item{Permitted values}{\code{"before"}, \code{"after"}, \code{"all"}}
-\item{Default Value}{none}
+\item{Default value}{none}
 }}
 
 \item{first_cond_lower}{Condition for selecting range of data (before)
@@ -126,7 +126,7 @@ certain observation before the current observation up to the current
 observation. For an example see the last example below.
 
 \describe{
-\item{Default Value}{\code{NULL}}
+\item{Default value}{\code{NULL}}
 }}
 
 \item{first_cond_upper}{Condition for selecting range of data (after)
@@ -141,7 +141,7 @@ functions which should not apply to all observations but only up to the
 confirmation assessment. For an example see the third example below.
 
 \describe{
-\item{Default Value}{\code{NULL}}
+\item{Default value}{\code{NULL}}
 }}
 
 \item{filter_add}{Filter for additional dataset (\code{dataset_add})
@@ -158,7 +158,7 @@ additional dataset is grouped by the by variables (\code{by_vars}).
 
 \describe{
 \item{Permitted values}{a condition}
-\item{Default Value}{\code{NULL}}
+\item{Default value}{\code{NULL}}
 }}
 
 \item{filter_join}{Condition for selecting observations
@@ -173,19 +173,19 @@ confirmation observation the response is "CR" or "NE" and there is at most
 one "NE".
 
 \describe{
-\item{Default Value}{none}
+\item{Default value}{none}
 }}
 
 \item{true_value}{Value of \code{new_var} for flagged observations
 
 \describe{
-\item{Default Value}{\code{"Y"}}
+\item{Default value}{\code{"Y"}}
 }}
 
 \item{false_value}{Value of \code{new_var} for observations not flagged
 
 \describe{
-\item{Default Value}{\code{NA_character_}}
+\item{Default value}{\code{NA_character_}}
 }}
 
 \item{check_type}{Check uniqueness?
@@ -196,7 +196,7 @@ by variables and the order.
 
 \describe{
 \item{Permitted values}{\code{"none"}, \code{"warning"}, \code{"error"}}
-\item{Default Value}{\code{"warning"}}
+\item{Default value}{\code{"warning"}}
 }}
 }
 \value{

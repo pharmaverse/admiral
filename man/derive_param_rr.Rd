@@ -24,7 +24,7 @@ the input dataset after restricting it by the filter condition (\code{filter}
 argument) and to the parameters specified by \code{hr_code}.
 
 \describe{
-\item{Default Value}{none}
+\item{Default value}{none}
 }}
 
 \item{by_vars}{Grouping variables
@@ -34,7 +34,7 @@ dataset. Only variables specified in \code{by_vars} will be populated
 in the newly created records.
 
 \describe{
-\item{Default Value}{none}
+\item{Default value}{none}
 }}
 
 \item{set_values_to}{Variables to be set
@@ -45,7 +45,7 @@ for the new parameter.
 
 \describe{
 \item{Permitted values}{List of variable-value pairs}
-\item{Default Value}{\code{exprs(PARAMCD = "MAP")}}
+\item{Default value}{\code{exprs(PARAMCD = "MAP")}}
 }}
 
 \item{hr_code}{HR parameter code
@@ -55,7 +55,7 @@ as the heart rate assessments.
 
 \describe{
 \item{Permitted values}{character value}
-\item{Default Value}{\code{"HR"}}
+\item{Default value}{\code{"HR"}}
 }}
 
 \item{get_unit_expr}{An expression providing the unit of the parameter
@@ -65,7 +65,7 @@ The result is used to check the units of the input parameters.
 \describe{
 \item{Permitted values}{An expression which is evaluable in the input dataset
 and results in a character value}
-\item{Default Value}{none}
+\item{Default value}{none}
 }}
 
 \item{filter}{Filter condition
@@ -76,7 +76,7 @@ into account.
 
 \describe{
 \item{Permitted values}{a condition}
-\item{Default Value}{\code{NULL}}
+\item{Default value}{\code{NULL}}
 }}
 }
 \value{

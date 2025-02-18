@@ -10,7 +10,7 @@ list_tte_source_objects(package = "admiral")
 \item{package}{The name of the package in which to search for \code{tte_source} objects
 
 \describe{
-\item{Default Value}{\code{"admiral"}}
+\item{Default value}{\code{"admiral"}}
 }}
 }
 \value{

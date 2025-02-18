@@ -10,7 +10,7 @@ negate_vars(vars = NULL)
 \item{vars}{List of variables created by \code{exprs()}
 
 \describe{
-\item{Default Value}{\code{NULL}}
+\item{Default value}{\code{NULL}}
 }}
 }
 \value{

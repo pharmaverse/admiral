@@ -12,7 +12,7 @@ compute_egfr(creat, creatu = "SI", age, weight, sex, race = NULL, method)
 A numeric vector is expected.
 
 \describe{
-\item{Default Value}{none}
+\item{Default value}{none}
 }}
 
 \item{creatu}{Creatinine Units
@@ -22,7 +22,7 @@ A character vector is expected.
 Expected Values: \code{"SI"}, \code{"CV"}, \code{"umol/L"}, \code{"mg/dL"}
 
 \describe{
-\item{Default Value}{\code{"SI"}}
+\item{Default value}{\code{"SI"}}
 }}
 
 \item{age}{Age (years)
@@ -30,7 +30,7 @@ Expected Values: \code{"SI"}, \code{"CV"}, \code{"umol/L"}, \code{"mg/dL"}
 A numeric vector is expected.
 
 \describe{
-\item{Default Value}{none}
+\item{Default value}{none}
 }}
 
 \item{weight}{Weight (kg)
@@ -38,7 +38,7 @@ A numeric vector is expected.
 A numeric vector is expected if \code{method = "CRCL"}
 
 \describe{
-\item{Default Value}{none}
+\item{Default value}{none}
 }}
 
 \item{sex}{Gender
@@ -48,7 +48,7 @@ A character vector is expected.
 Expected Values: \code{"M"}, \code{"F"}
 
 \describe{
-\item{Default Value}{none}
+\item{Default value}{none}
 }}
 
 \item{race}{Race
@@ -58,7 +58,7 @@ A character vector is expected if \code{method = "MDRD"}
 Expected Values: \code{"BLACK OR AFRICAN AMERICAN"} and others
 
 \describe{
-\item{Default Value}{\code{NULL}}
+\item{Default value}{\code{NULL}}
 }}
 
 \item{method}{Method
@@ -68,7 +68,7 @@ A character vector is expected.
 Expected Values: \code{"CRCL"}, \code{"CKD-EPI"}, \code{"MDRD"}
 
 \describe{
-\item{Default Value}{none}
+\item{Default value}{none}
 }}
 }
 \value{

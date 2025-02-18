@@ -17,7 +17,7 @@ convert_dtc_to_dt(
 \item{dtc}{The --DTC date to convert.
 
 \describe{
-\item{Default Value}{none}
+\item{Default value}{none}
 }}
 
 \item{highest_imputation}{Highest imputation level
@@ -39,7 +39,7 @@ and \code{min_dates} or \code{max_dates} should be specified respectively. Other
 \describe{
 \item{Permitted values}{\code{"Y"} (year, highest level), \code{"M"} (month), \code{"D"}
 (day), \code{"n"} (none, lowest level)}
-\item{Default Value}{\code{"n"}}
+\item{Default value}{\code{"n"}}
 }}
 
 \item{date_imputation}{The value to impute the day/month when a datepart is
@@ -64,7 +64,7 @@ middle of the possible range:
 The argument is ignored if \code{highest_imputation} is less then \code{"D"}.
 
 \describe{
-\item{Default Value}{\code{"first"}}
+\item{Default value}{\code{"first"}}
 }}
 
 \item{min_dates}{Minimum dates
@@ -94,7 +94,7 @@ range from \code{"2020-11-01T00:00:00"} to \code{"2020-11-30T23:59:59"}. Therefo
 have changed the month although it is not missing (in the \code{dtc} date).
 
 \describe{
-\item{Default Value}{\code{NULL}}
+\item{Default value}{\code{NULL}}
 }}
 
 \item{max_dates}{Maximum dates
@@ -105,7 +105,7 @@ cut off date. Only dates which are in the range of possible dates are
 considered. A date or date-time object is expected.
 
 \describe{
-\item{Default Value}{\code{NULL}}
+\item{Default value}{\code{NULL}}
 }}
 
 \item{preserve}{Preserve day if month is missing and day is present
@@ -115,7 +115,7 @@ For example \code{"2019---07"} would return \verb{"2019-06-07} if \code{preserve
 
 \describe{
 \item{Permitted values}{\code{TRUE}, \code{FALSE}}
-\item{Default Value}{\code{FALSE}}
+\item{Default value}{\code{FALSE}}
 }}
 }
 \value{

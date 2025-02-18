@@ -28,7 +28,7 @@ derive_vars_merged(
 The variables specified by the \code{by_vars} argument are expected to be in the dataset.
 
 \describe{
-\item{Default Value}{none}
+\item{Default value}{none}
 }}
 
 \item{dataset_add}{Additional dataset
@@ -37,7 +37,7 @@ The variables specified by the \code{by_vars}, the \code{new_vars}, and the \cod
 argument are expected.
 
 \describe{
-\item{Default Value}{none}
+\item{Default value}{none}
 }}
 
 \item{by_vars}{Grouping variables
@@ -49,7 +49,7 @@ Variables can be renamed by naming the element, i.e.
 \verb{by_vars = exprs(<name in input dataset> = <name in additional dataset>)}, similar to the \code{dplyr} joins.
 
 \describe{
-\item{Default Value}{none}
+\item{Default value}{none}
 }}
 
 \item{order}{Sort order
@@ -65,7 +65,7 @@ For handling of \code{NA}s in sorting variables see \href{../articles/generic.ht
 \describe{
 \item{Permitted values}{list of expressions created by \code{exprs()}, e.g.,
 \code{exprs(ADT, desc(AVAL))} or \code{NULL}}
-\item{Default Value}{\code{NULL}}
+\item{Default value}{\code{NULL}}
 }}
 
 \item{new_vars}{Variables to add
@@ -90,7 +90,7 @@ additional dataset (\code{dataset_add}) are added.
 
 \describe{
 \item{Permitted values}{list of variables or named expressions created by \code{exprs()}}
-\item{Default Value}{\code{NULL}}
+\item{Default value}{\code{NULL}}
 }}
 
 \item{filter_add}{Filter for additional dataset (\code{dataset_add})
@@ -104,7 +104,7 @@ condition.
 
 \describe{
 \item{Permitted values}{a condition}
-\item{Default Value}{\code{NULL}}
+\item{Default value}{\code{NULL}}
 }}
 
 \item{mode}{Selection mode
@@ -116,7 +116,7 @@ If the \code{order} argument is not specified, the \code{mode} argument is ignor
 
 \describe{
 \item{Permitted values}{\code{"first"}, \code{"last"}, \code{NULL}}
-\item{Default Value}{\code{NULL}}
+\item{Default value}{\code{NULL}}
 }}
 
 \item{exist_flag}{Exist flag
@@ -128,7 +128,7 @@ which are merged into the input dataset, and the value provided in \code{false_v
 
 \describe{
 \item{Permitted values}{Variable name}
-\item{Default Value}{\code{NULL}}
+\item{Default value}{\code{NULL}}
 }}
 
 \item{true_value}{True value
@@ -138,7 +138,7 @@ the first or last observation (depending on the mode) of each by group.
 
 \describe{
 \item{Permitted values}{An atomic scalar}
-\item{Default Value}{\code{"Y"}}
+\item{Default value}{\code{"Y"}}
 }}
 
 \item{false_value}{False value
@@ -148,7 +148,7 @@ the first or last observation (depending on the mode) of each by group.
 
 \describe{
 \item{Permitted values}{An atomic scalar}
-\item{Default Value}{\code{NA_character_}}
+\item{Default value}{\code{NA_character_}}
 }}
 
 \item{missing_values}{Values for non-matching observations
@@ -161,7 +161,7 @@ specified for \code{new_vars} can be specified for \code{missing_values}.
 \describe{
 \item{Permitted values}{named list of expressions, e.g.,
 \code{exprs(BASEC = "MISSING", BASE = -1)}}
-\item{Default Value}{\code{NULL}}
+\item{Default value}{\code{NULL}}
 }}
 
 \item{check_type}{Check uniqueness?
@@ -176,7 +176,7 @@ to the by variables, an error is issued.
 
 \describe{
 \item{Permitted values}{\code{"none"}, \code{"message"}, \code{"warning"}, \code{"error"}}
-\item{Default Value}{\code{"warning"}}
+\item{Default value}{\code{"warning"}}
 }}
 
 \item{duplicate_msg}{Message of unique check
@@ -184,7 +184,7 @@ to the by variables, an error is issued.
 If the uniqueness check fails, the specified message is displayed.
 
 \describe{
-\item{Default Value}{\if{html}{\out{<div class="sourceCode r">}}\preformatted{paste(
+\item{Default value}{\if{html}{\out{<div class="sourceCode r">}}\preformatted{paste(
   "Dataset \{.arg dataset_add\} contains duplicate records with respect to",
   "\{.var \{vars2chr(by_vars)\}\}."
 )
@@ -201,7 +201,7 @@ more details.
 
 \describe{
 \item{Permitted values}{\code{"one-to-one"}, \code{"many-to-one"}, \code{NULL}.}
-\item{Default Value}{\code{NULL}}
+\item{Default value}{\code{NULL}}
 }}
 }
 \value{

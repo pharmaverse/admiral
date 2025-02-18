@@ -19,7 +19,7 @@ derive_vars_computed(
 \item{dataset}{The variables specified by the \code{by_vars} parameter are expected.
 
 \describe{
-\item{Default Value}{none}
+\item{Default value}{none}
 }}
 
 \item{dataset_add}{Additional dataset
@@ -31,7 +31,7 @@ the additional dataset after restricting it by the filter condition
 (\code{filter_add} parameter) and to the parameters specified by \code{parameters}.
 
 \describe{
-\item{Default Value}{none}
+\item{Default value}{none}
 }}
 
 \item{by_vars}{Grouping variables
@@ -41,7 +41,7 @@ Grouping variables uniquely identifying a set of records for which
 
 \describe{
 \item{Permitted values}{list of variables created by exprs()}
-\item{Default Value}{none}
+\item{Default value}{none}
 }}
 
 \item{parameters}{Required parameter codes
@@ -66,7 +66,7 @@ parameter code \code{"HGHT"}.
 
 \describe{
 \item{Permitted values}{A character vector of \code{PARAMCD} values or a list of expressions}
-\item{Default Value}{none}
+\item{Default value}{none}
 }}
 
 \item{new_vars}{Name of the newly created variables
@@ -86,7 +86,7 @@ Variable names in the expression must not contain more than one dot.
 
 \describe{
 \item{Permitted values}{List of variable-value pairs}
-\item{Default Value}{none}
+\item{Default value}{none}
 }}
 
 \item{filter_add}{Filter condition of additional dataset
@@ -97,7 +97,7 @@ condition are taken into account.
 
 \describe{
 \item{Permitted values}{a condition}
-\item{Default Value}{\code{NULL}}
+\item{Default value}{\code{NULL}}
 }}
 
 \item{constant_by_vars}{By variables for constant parameters
@@ -108,7 +108,7 @@ to the other parameters using the specified variables.
 
 \describe{
 \item{Permitted values}{list of variables}
-\item{Default Value}{\code{NULL}}
+\item{Default value}{\code{NULL}}
 }}
 
 \item{constant_parameters}{Required constant parameter codes
@@ -134,7 +134,7 @@ parameter code \code{"HGHT"}.
 
 \describe{
 \item{Permitted values}{A character vector of \code{PARAMCD} values or a list of expressions}
-\item{Default Value}{\code{NULL}}
+\item{Default value}{\code{NULL}}
 }}
 }
 \value{

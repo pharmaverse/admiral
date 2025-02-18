@@ -19,13 +19,13 @@ day/month.
 }
 
 \describe{
-\item{Default Value}{none}
+\item{Default value}{none}
 }}
 
 \item{month}{Month component of the partial date
 
 \describe{
-\item{Default Value}{none}
+\item{Default value}{none}
 }}
 }
 \value{

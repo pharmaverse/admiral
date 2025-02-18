@@ -26,7 +26,7 @@ the input dataset after restricting it by the filter condition (\code{filter}
 argument) and to the parameters specified by \code{qt_code} and \code{rr_code}.
 
 \describe{
-\item{Default Value}{none}
+\item{Default value}{none}
 }}
 
 \item{by_vars}{Grouping variables
@@ -36,7 +36,7 @@ in the newly created records.
 
 \describe{
 \item{Permitted values}{list of variables created by \code{exprs()}, e.g., \code{exprs(USUBJID, VISIT)}}
-\item{Default Value}{none}
+\item{Default value}{none}
 }}
 
 \item{method}{Method used to QT correction
@@ -45,7 +45,7 @@ See \code{\link[=compute_qtc]{compute_qtc()}} for details.
 
 \describe{
 \item{Permitted values}{\code{"Bazett"}, \code{"Fridericia"}, \code{"Sagie"}}
-\item{Default Value}{none}
+\item{Default value}{none}
 }}
 
 \item{set_values_to}{Variables to be set
@@ -56,7 +56,7 @@ for the new parameter.
 
 \describe{
 \item{Permitted values}{List of variable-value pairs}
-\item{Default Value}{\code{exprs(PARAMCD = "MAP")}}
+\item{Default value}{\code{exprs(PARAMCD = "MAP")}}
 }}
 
 \item{qt_code}{QT parameter code
@@ -67,7 +67,7 @@ msec.
 
 \describe{
 \item{Permitted values}{character value}
-\item{Default Value}{\code{"QT"}}
+\item{Default value}{\code{"QT"}}
 }}
 
 \item{rr_code}{RR parameter code
@@ -78,7 +78,7 @@ msec.
 
 \describe{
 \item{Permitted values}{character value}
-\item{Default Value}{\code{"RR"}}
+\item{Default value}{\code{"RR"}}
 }}
 
 \item{get_unit_expr}{An expression providing the unit of the parameter
@@ -88,7 +88,7 @@ The result is used to check the units of the input parameters.
 \describe{
 \item{Permitted values}{An expression which is evaluable in the input dataset
 and results in a character value}
-\item{Default Value}{none}
+\item{Default value}{none}
 }}
 
 \item{filter}{Filter condition
@@ -99,7 +99,7 @@ into account.
 
 \describe{
 \item{Permitted values}{a condition}
-\item{Default Value}{\code{NULL}}
+\item{Default value}{\code{NULL}}
 }}
 }
 \value{

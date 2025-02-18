@@ -10,7 +10,7 @@ call_user_fun(call)
 \item{call}{Call to be executed
 
 \describe{
-\item{Default Value}{none}
+\item{Default value}{none}
 }}
 }
 \value{

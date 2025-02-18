@@ -17,7 +17,7 @@ consolidate_metadata(
 
 \describe{
 \item{Permitted values}{A named list of datasets}
-\item{Default Value}{none}
+\item{Default value}{none}
 }}
 
 \item{key_vars}{Key variables
@@ -26,7 +26,7 @@ The specified variables must be a unique of all input datasets.
 
 \describe{
 \item{Permitted values}{A list of variables created by \code{exprs()}}
-\item{Default Value}{none}
+\item{Default value}{none}
 }}
 
 \item{source_var}{Source variable
@@ -36,7 +36,7 @@ of the dataset the observation is originating from.
 
 \describe{
 \item{Permitted values}{A symbol}
-\item{Default Value}{\code{SOURCE}}
+\item{Default value}{\code{SOURCE}}
 }}
 
 \item{check_vars}{Check variables?
@@ -46,7 +46,7 @@ if the variable names differ across the input datasets (\code{datasets}).
 
 \describe{
 \item{Permitted values}{\code{"none"}, \code{"message"}, \code{"warning"}, \code{"error"}}
-\item{Default Value}{\code{"warning"}}
+\item{Default value}{\code{"warning"}}
 }}
 
 \item{check_type}{Check uniqueness?
@@ -57,7 +57,7 @@ variables (\code{key_vars}) are not a unique key in all of the input datasets
 
 \describe{
 \item{Permitted values}{\code{"none"}, \code{"warning"}, \code{"error"}}
-\item{Default Value}{\code{"error"}}
+\item{Default value}{\code{"error"}}
 }}
 }
 \value{

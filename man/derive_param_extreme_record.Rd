@@ -18,7 +18,7 @@ derive_param_extreme_record(
 \item{dataset}{Input dataset
 
 \describe{
-\item{Default Value}{\code{NULL}}
+\item{Default value}{\code{NULL}}
 }}
 
 \item{sources}{Sources
@@ -26,7 +26,7 @@ derive_param_extreme_record(
 A list of \code{records_source()} objects is expected.
 
 \describe{
-\item{Default Value}{none}
+\item{Default value}{none}
 }}
 
 \item{source_datasets}{Source datasets
@@ -36,7 +36,7 @@ A named list of datasets is expected. The \code{dataset_name} field of
 specified by the \code{order} and the \code{by_vars} arguments are expected after applying \code{new_vars}.
 
 \describe{
-\item{Default Value}{none}
+\item{Default value}{none}
 }}
 
 \item{by_vars}{Grouping variables
@@ -45,7 +45,7 @@ If the argument is specified, for each by group the observations are
 selected separately.
 
 \describe{
-\item{Default Value}{\code{NULL}}
+\item{Default value}{\code{NULL}}
 }}
 
 \item{order}{Sort order
@@ -63,7 +63,7 @@ observations where the variable is not \code{NA}.
 \describe{
 \item{Permitted values}{list of expressions created by \code{exprs()}, e.g.,
 \code{exprs(ADT, desc(AVAL))}}
-\item{Default Value}{none}
+\item{Default value}{none}
 }}
 
 \item{mode}{Selection mode (first or last)
@@ -74,7 +74,7 @@ specified, the last observation is included in the output dataset.
 
 \describe{
 \item{Permitted values}{\code{"first"}, \code{"last"}}
-\item{Default Value}{none}
+\item{Default value}{none}
 }}
 
 \item{set_values_to}{Variables to be set
@@ -90,7 +90,7 @@ symbol, a numeric value or \code{NA}, e.g., \code{exprs(PARAMCD = "PD", PARAM = 
 }
 
 \describe{
-\item{Default Value}{none}
+\item{Default value}{none}
 }}
 }
 \value{

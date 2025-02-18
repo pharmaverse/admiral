@@ -19,20 +19,20 @@ dthcaus_source(
 the death cause.
 
 \describe{
-\item{Default Value}{none}
+\item{Default value}{none}
 }}
 
 \item{filter}{An expression used for filtering \code{dataset}.
 
 \describe{
-\item{Default Value}{none}
+\item{Default value}{none}
 }}
 
 \item{date}{A date or datetime variable or an expression to be used for
 sorting \code{dataset}.
 
 \describe{
-\item{Default Value}{none}
+\item{Default value}{none}
 }}
 
 \item{order}{Sort order
@@ -44,7 +44,7 @@ record warning.
 \describe{
 \item{Permitted values}{list of expressions created by \code{exprs()}, e.g.,
 \code{exprs(ADT, desc(AVAL))} or \code{NULL}}
-\item{Default Value}{\code{NULL}}
+\item{Default value}{\code{NULL}}
 }}
 
 \item{mode}{One of \code{"first"} or \code{"last"}.
@@ -52,7 +52,7 @@ Either the \code{"first"} or \code{"last"} observation is preserved from the \co
 which is ordered by \code{date}.
 
 \describe{
-\item{Default Value}{\code{"first"}}
+\item{Default value}{\code{"first"}}
 }}
 
 \item{dthcaus}{A variable name, an expression, or a string literal
@@ -63,13 +63,13 @@ e.g., \code{str_to_upper(AEDECOD)}, it is evaluated in the source dataset and
 the results is assigned to \code{DTHCAUS}; if a string literal, e.g. \code{"Adverse Event"}, it is the fixed value to be assigned to \code{DTHCAUS}.
 
 \describe{
-\item{Default Value}{none}
+\item{Default value}{none}
 }}
 
 \item{set_values_to}{Variables to be set to trace the source dataset
 
 \describe{
-\item{Default Value}{\code{NULL}}
+\item{Default value}{\code{NULL}}
 }}
 }
 \value{

@@ -18,13 +18,13 @@ derive_var_obs_number(
 The variables specified by the \code{by_vars} and \code{order} arguments are expected to be in the dataset.
 
 \describe{
-\item{Default Value}{none}
+\item{Default value}{none}
 }}
 
 \item{by_vars}{Grouping variables
 
 \describe{
-\item{Default Value}{\code{NULL}}
+\item{Default value}{\code{NULL}}
 }}
 
 \item{order}{Sort order
@@ -35,7 +35,7 @@ For handling of \code{NA}s in sorting variables see \href{../articles/generic.ht
 
 \describe{
 \item{Permitted values}{list of variables or functions of variables}
-\item{Default Value}{\code{NULL}}
+\item{Default value}{\code{NULL}}
 }}
 
 \item{new_var}{Name of variable to create
@@ -44,7 +44,7 @@ The new variable is set to the observation number for each by group. The
 numbering starts with 1.
 
 \describe{
-\item{Default Value}{\code{ASEQ}}
+\item{Default value}{\code{ASEQ}}
 }}
 
 \item{check_type}{Check uniqueness?
@@ -55,7 +55,7 @@ by variables and the order.
 
 \describe{
 \item{Permitted values}{\code{"none"}, \code{"warning"}, \code{"error"}}
-\item{Default Value}{\code{"none"}}
+\item{Default value}{\code{"none"}}
 }}
 }
 \value{

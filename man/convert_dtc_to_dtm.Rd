@@ -18,7 +18,7 @@ convert_dtc_to_dtm(
 \item{dtc}{The \code{'--DTC'} date to convert.
 
 \describe{
-\item{Default Value}{none}
+\item{Default value}{none}
 }}
 
 \item{highest_imputation}{Highest imputation level
@@ -41,7 +41,7 @@ and \code{min_dates} or \code{max_dates} should be specified respectively. Other
 \item{Permitted values}{\code{"Y"} (year, highest level), \code{"M"} (month), \code{"D"}
 (day), \code{"h"} (hour), \code{"m"} (minute), \code{"s"} (second), \code{"n"} (none, lowest
 level)}
-\item{Default Value}{\code{"h"}}
+\item{Default value}{\code{"h"}}
 }}
 
 \item{date_imputation}{The value to impute the day/month when a datepart is
@@ -66,7 +66,7 @@ middle of the possible range:
 The argument is ignored if \code{highest_imputation} is less then \code{"D"}.
 
 \describe{
-\item{Default Value}{\code{"first"}}
+\item{Default value}{\code{"first"}}
 }}
 
 \item{time_imputation}{The value to impute the time when a timepart is
@@ -82,7 +82,7 @@ for the start of the day,
 The argument is ignored if \code{highest_imputation = "n"}.
 
 \describe{
-\item{Default Value}{\code{"first"}}
+\item{Default value}{\code{"first"}}
 }}
 
 \item{min_dates}{Minimum dates
@@ -116,7 +116,7 @@ For date variables (not datetime) in the list the time is imputed to
 imputed. If only time is imputed, date variables do not affect the result.
 
 \describe{
-\item{Default Value}{\code{NULL}}
+\item{Default value}{\code{NULL}}
 }}
 
 \item{max_dates}{Maximum dates
@@ -131,7 +131,7 @@ For date variables (not datetime) in the list the time is imputed to
 imputed. If only time is imputed, date variables do not affect the result.
 
 \describe{
-\item{Default Value}{\code{NULL}}
+\item{Default value}{\code{NULL}}
 }}
 
 \item{preserve}{Preserve lower level date/time part when higher order part
@@ -143,7 +143,7 @@ For example \code{"2019---07"} would return \verb{"2019-06-07} if \code{preserve
 
 \describe{
 \item{Permitted values}{\code{TRUE}, \code{FALSE}}
-\item{Default Value}{\code{FALSE}}
+\item{Default value}{\code{FALSE}}
 }}
 }
 \value{

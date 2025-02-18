@@ -10,13 +10,13 @@ lhs \%>\% rhs
 \item{lhs}{A value or the magrittr placeholder.
 
 \describe{
-\item{Default Value}{\code{NULL}}
+\item{Default value}{\code{NULL}}
 }}
 
 \item{rhs}{A function call using the magrittr semantics.
 
 \describe{
-\item{Default Value}{\code{NULL}}
+\item{Default value}{\code{NULL}}
 }}
 }
 \description{

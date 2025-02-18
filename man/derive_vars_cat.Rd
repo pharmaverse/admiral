@@ -12,7 +12,7 @@ derive_vars_cat(dataset, definition, by_vars = NULL)
 The variables specified by the \code{by_vars} and \code{definition} arguments are expected to be in the dataset.
 
 \describe{
-\item{Default Value}{none}
+\item{Default value}{none}
 }}
 
 \item{definition}{List of expressions created by \code{exprs()}.
@@ -44,7 +44,7 @@ e.g. if \code{by_vars} is specified as \code{exprs(VSTEST)}:
 }\if{html}{\out{</div>}}
 
 \describe{
-\item{Default Value}{none}
+\item{Default value}{none}
 }}
 
 \item{by_vars}{list of expressions with one element. \code{NULL} by default.
@@ -55,7 +55,7 @@ The categorization variables are set to \code{NA} for records
 not matching any of the by groups in \code{definition}.
 
 \describe{
-\item{Default Value}{\code{NULL}}
+\item{Default value}{\code{NULL}}
 }}
 }
 \value{

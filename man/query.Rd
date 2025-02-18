@@ -11,7 +11,7 @@ query(prefix, name = auto, id = NULL, add_scope_num = FALSE, definition = NULL)
 dataset of \code{create_query_data()}, e.g., \code{"SMQ03"}
 
 \describe{
-\item{Default Value}{none}
+\item{Default value}{none}
 }}
 
 \item{name}{The value is used to populate \code{GRPNAME} in the output dataset
@@ -22,7 +22,7 @@ is set to the name of the query in the SMQ/SDG database.
 \item{Permitted values}{A character scalar or the \code{auto} keyword. The \code{auto}
 keyword is permitted only for queries which are defined by an
 \code{basket_select()} object.}
-\item{Default Value}{\code{auto}}
+\item{Default value}{\code{auto}}
 }}
 
 \item{id}{The value is used to populate \code{GRPID} in the output dataset of
@@ -33,7 +33,7 @@ set to the id of the query in the SMQ/SDG database.
 \item{Permitted values}{A integer scalar or the \code{auto} keyword. The \code{auto}
 keyword is permitted only for queries which are defined by an
 \code{basket_select()} object.}
-\item{Default Value}{\code{NULL}}
+\item{Default value}{\code{NULL}}
 }}
 
 \item{add_scope_num}{Determines if  \code{SCOPEN} in the output dataset
@@ -46,7 +46,7 @@ object.
 
 \describe{
 \item{Permitted values}{\code{TRUE}, \code{FALSE}}
-\item{Default Value}{\code{FALSE}}
+\item{Default value}{\code{FALSE}}
 }}
 
 \item{definition}{Definition of terms belonging to the query
@@ -75,7 +75,7 @@ must have the same structure as described for the previous item.
 \describe{
 \item{Permitted values}{an \code{basket_select()} object, a
 data frame, or a list of data frames and \code{basket_select()} objects.}
-\item{Default Value}{\code{NULL}}
+\item{Default value}{\code{NULL}}
 }}
 }
 \value{

@@ -14,13 +14,13 @@ A character date is expected in a format like \code{yyyy-mm-dd} or
 valid "missing" value for any component.
 
 \describe{
-\item{Default Value}{none}
+\item{Default value}{none}
 }}
 
 \item{imputed_dtc}{The imputed DTC date
 
 \describe{
-\item{Default Value}{none}
+\item{Default value}{none}
 }}
 
 \item{min_dates}{Minimum dates
@@ -50,7 +50,7 @@ range from \code{"2020-11-01T00:00:00"} to \code{"2020-11-30T23:59:59"}. Therefo
 have changed the month although it is not missing (in the \code{dtc} date).
 
 \describe{
-\item{Default Value}{\code{NULL}}
+\item{Default value}{\code{NULL}}
 }}
 
 \item{max_dates}{Maximum dates
@@ -61,7 +61,7 @@ cut off date. Only dates which are in the range of possible dates are
 considered. A date or date-time object is expected.
 
 \describe{
-\item{Default Value}{\code{NULL}}
+\item{Default value}{\code{NULL}}
 }}
 }
 \value{

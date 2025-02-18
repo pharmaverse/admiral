@@ -19,7 +19,7 @@ derive_var_merged_summary(
 The variables specified by the \code{by_vars} argument are expected to be in the dataset.
 
 \describe{
-\item{Default Value}{none}
+\item{Default value}{none}
 }}
 
 \item{dataset_add}{Additional dataset
@@ -28,7 +28,7 @@ The variables specified by the \code{by_vars} and the variables used on the left
 hand sides of the \code{new_vars} arguments are expected.
 
 \describe{
-\item{Default Value}{none}
+\item{Default value}{none}
 }}
 
 \item{by_vars}{Grouping variables
@@ -38,7 +38,7 @@ specified \emph{variables}. Then the resulting values are merged to the input
 dataset (\code{dataset}) by the specified \emph{variables}.
 
 \describe{
-\item{Default Value}{none}
+\item{Default value}{none}
 }}
 
 \item{new_vars}{New variables to add
@@ -62,7 +62,7 @@ For example:
 }\if{html}{\out{</div>}}
 
 \describe{
-\item{Default Value}{\code{NULL}}
+\item{Default value}{\code{NULL}}
 }}
 
 \item{filter_add}{Filter for additional dataset (\code{dataset_add})
@@ -73,7 +73,7 @@ considered.
 
 \describe{
 \item{Permitted values}{a condition}
-\item{Default Value}{\code{NULL}}
+\item{Default value}{\code{NULL}}
 }}
 
 \item{missing_values}{Values for non-matching observations
@@ -86,7 +86,7 @@ specified for \code{new_vars} can be specified for \code{missing_values}.
 \describe{
 \item{Permitted values}{named list of expressions, e.g.,
 \code{exprs(BASEC = "MISSING", BASE = -1)}}
-\item{Default Value}{\code{NULL}}
+\item{Default value}{\code{NULL}}
 }}
 }
 \value{

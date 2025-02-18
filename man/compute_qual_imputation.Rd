@@ -10,7 +10,7 @@ compute_qual_imputation(character_value, imputation_type = 1, factor = 0)
 \item{character_value}{Character version of value to be imputed
 
 \describe{
-\item{Default Value}{none}
+\item{Default value}{none}
 }}
 
 \item{imputation_type}{(default value=1)
@@ -22,14 +22,14 @@ of decimals associated with the character value is found and then a factor of
 If no decimals exists, a factor of 1/10 will be added/subtracted from the value.
 
 \describe{
-\item{Default Value}{\code{1}}
+\item{Default value}{\code{1}}
 }}
 
 \item{factor}{Numeric value (default=0), when using \code{imputation_type} = 1, this
 value can be added or subtracted when the qualifier is removed.
 
 \describe{
-\item{Default Value}{\code{0}}
+\item{Default value}{\code{0}}
 }}
 }
 \value{

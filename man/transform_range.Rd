@@ -18,7 +18,7 @@ transform_range(
 A numeric vector is expected.
 
 \describe{
-\item{Default Value}{none}
+\item{Default value}{none}
 }}
 
 \item{source_range}{The permitted source range
@@ -27,7 +27,7 @@ A numeric vector containing two elements is expected, representing the
 lower and upper bounds of the permitted source range.
 
 \describe{
-\item{Default Value}{none}
+\item{Default value}{none}
 }}
 
 \item{target_range}{The target range
@@ -36,7 +36,7 @@ A numeric vector containing two elements is expected, representing the
 lower and upper bounds of the target range.
 
 \describe{
-\item{Default Value}{none}
+\item{Default value}{none}
 }}
 
 \item{flip_direction}{Flip direction of the range?
@@ -46,7 +46,7 @@ within the range 0 to 100, 25 would be reversed to 75.
 
 \describe{
 \item{Permitted values}{\code{TRUE}, \code{FALSE}}
-\item{Default Value}{\code{FALSE}}
+\item{Default value}{\code{FALSE}}
 }}
 
 \item{outside_range}{Handling of values outside the source range
@@ -58,7 +58,7 @@ If \code{"warning"} or \code{"error"} is specified, a warning or error is issued
 
 \describe{
 \item{Permitted values}{\code{"NA"}, \code{"warning"}, \code{"error"}}
-\item{Default Value}{\code{"NA"}}
+\item{Default value}{\code{"NA"}}
 }}
 }
 \value{

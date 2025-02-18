@@ -27,7 +27,7 @@ the input dataset after restricting it by the filter condition (\code{filter}
 parameter) and to the parameters specified by \code{parameters}.
 
 \describe{
-\item{Default Value}{\code{NULL}}
+\item{Default value}{\code{NULL}}
 }}
 
 \item{dataset_add}{Additional dataset
@@ -43,7 +43,7 @@ are considered in addition to the observations from the input dataset
 (\code{dataset} restricted by \code{filter}).
 
 \describe{
-\item{Default Value}{\code{NULL}}
+\item{Default value}{\code{NULL}}
 }}
 
 \item{by_vars}{Grouping variables
@@ -53,7 +53,7 @@ dataset. Only variables specified in \code{by_vars} will be populated
 in the newly created records.
 
 \describe{
-\item{Default Value}{none}
+\item{Default value}{none}
 }}
 
 \item{parameters}{Required parameter codes
@@ -77,7 +77,7 @@ parameter code \code{"HGHT"}.
 
 \describe{
 \item{Permitted values}{A character vector of \code{PARAMCD} values or a list of expressions}
-\item{Default Value}{none}
+\item{Default value}{none}
 }}
 
 \item{set_values_to}{Variables to be set
@@ -99,7 +99,7 @@ Variable names in the expression must not contain more than one dot.
 
 \describe{
 \item{Permitted values}{List of variable-value pairs}
-\item{Default Value}{none}
+\item{Default value}{none}
 }}
 
 \item{filter}{Filter condition
@@ -110,7 +110,7 @@ into account.
 
 \describe{
 \item{Permitted values}{a condition}
-\item{Default Value}{\code{NULL}}
+\item{Default value}{\code{NULL}}
 }}
 
 \item{constant_by_vars}{By variables for constant parameters
@@ -119,7 +119,7 @@ The constant parameters (parameters that are measured only once) are merged
 to the other parameters using the specified variables. (Refer to Example 2)
 
 \describe{
-\item{Default Value}{\code{NULL}}
+\item{Default value}{\code{NULL}}
 }}
 
 \item{constant_parameters}{Required constant parameter codes
@@ -144,7 +144,7 @@ parameter code \code{"HGHT"}.
 
 \describe{
 \item{Permitted values}{A character vector of \code{PARAMCD} values or a list of expressions}
-\item{Default Value}{\code{NULL}}
+\item{Default value}{\code{NULL}}
 }}
 
 \item{keep_nas}{Keep observations with \code{NA}s
@@ -158,7 +158,7 @@ if some of specified variables are \code{NA} (see Example 1c).
 \describe{
 \item{Permitted values}{\code{TRUE}, \code{FALSE}, or a list of variables created by
 \code{exprs()} e.g. \code{exprs(ADTF, ATMF)}}
-\item{Default Value}{\code{FALSE}}
+\item{Default value}{\code{FALSE}}
 }}
 }
 \value{

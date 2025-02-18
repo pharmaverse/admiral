@@ -18,7 +18,7 @@ compute_scale(
 A numeric vector is expected.
 
 \describe{
-\item{Default Value}{none}
+\item{Default value}{none}
 }}
 
 \item{source_range}{The permitted source range
@@ -29,7 +29,7 @@ argument is specified for \code{source_range} and \code{target_range}, no
 transformation will be performed.
 
 \describe{
-\item{Default Value}{\code{NULL}}
+\item{Default value}{\code{NULL}}
 }}
 
 \item{target_range}{The target range
@@ -40,7 +40,7 @@ argument is specified for \code{source_range} and \code{target_range}, no
 transformation will be performed.
 
 \describe{
-\item{Default Value}{\code{NULL}}
+\item{Default value}{\code{NULL}}
 }}
 
 \item{flip_direction}{Flip direction of the scale?
@@ -53,7 +53,7 @@ specified.
 
 \describe{
 \item{Permitted values}{\code{TRUE}, \code{FALSE}}
-\item{Default Value}{\code{FALSE}}
+\item{Default value}{\code{FALSE}}
 }}
 
 \item{min_n}{Minimum number of values for computation
@@ -65,7 +65,7 @@ the result will be set to missing, i.e. \code{NA}.
 A positive integer is expected.
 
 \describe{
-\item{Default Value}{\code{1}}
+\item{Default value}{\code{1}}
 }}
 }
 \value{

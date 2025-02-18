@@ -24,7 +24,7 @@ derive_extreme_records(
 \item{dataset}{Input dataset
 
 \describe{
-\item{Default Value}{\code{NULL}}
+\item{Default value}{\code{NULL}}
 }}
 
 \item{dataset_add}{Additional dataset
@@ -37,7 +37,7 @@ in this dataset. If \code{mode} and \code{order} are specified, the first or las
 within each by group, defined by \code{by_vars}, is selected.
 
 \describe{
-\item{Default Value}{none}
+\item{Default value}{none}
 }}
 
 \item{dataset_ref}{Reference dataset
@@ -46,7 +46,7 @@ The variables specified for \code{by_vars} are expected. For each observation of
 the specified dataset a new observation is added to the input dataset.
 
 \describe{
-\item{Default Value}{\code{NULL}}
+\item{Default value}{\code{NULL}}
 }}
 
 \item{by_vars}{Grouping variables
@@ -54,7 +54,7 @@ the specified dataset a new observation is added to the input dataset.
 If \code{dataset_ref} is specified, this argument must be specified.
 
 \describe{
-\item{Default Value}{\code{NULL}}
+\item{Default value}{\code{NULL}}
 }}
 
 \item{order}{Sort order
@@ -64,7 +64,7 @@ Within each by group the observations are ordered by the specified order.
 \describe{
 \item{Permitted values}{list of expressions created by \code{exprs()}, e.g.,
 \code{exprs(ADT, desc(AVAL))}}
-\item{Default Value}{none}
+\item{Default value}{none}
 }}
 
 \item{mode}{Selection mode (first or last)
@@ -75,7 +75,7 @@ each by group is added to the input dataset.
 
 \describe{
 \item{Permitted values}{\code{"first"}, \code{"last"}}
-\item{Default Value}{Some default value}
+\item{Default value}{Some default value}
 }}
 
 \item{filter_add}{Filter for additional dataset (\code{dataset_add})
@@ -84,7 +84,7 @@ Only observations in \code{dataset_add} fulfilling the specified condition are
 considered.
 
 \describe{
-\item{Default Value}{\code{NULL}}
+\item{Default value}{\code{NULL}}
 }}
 
 \item{check_type}{Check uniqueness?
@@ -95,7 +95,7 @@ with respect to the by variables and the order.
 
 \describe{
 \item{Permitted values}{\code{"none"}, \code{"message"}, \code{"warning"}, \code{"error"}}
-\item{Default Value}{\code{"warning"}}
+\item{Default value}{\code{"warning"}}
 }}
 
 \item{exist_flag}{Existence flag
@@ -111,7 +111,7 @@ For all other by groups \code{exist_flag} is set to the value specified by the
 
 \describe{
 \item{Permitted values}{Variable name}
-\item{Default Value}{\code{NULL}}
+\item{Default value}{\code{NULL}}
 }}
 
 \item{true_value}{True value
@@ -120,7 +120,7 @@ For new observations selected from the additional dataset (\code{dataset_add}),
 \code{exist_flag} is set to the specified value.
 
 \describe{
-\item{Default Value}{\code{"Y"}}
+\item{Default value}{\code{"Y"}}
 }}
 
 \item{false_value}{False value
@@ -129,7 +129,7 @@ For new observations not selected from the additional dataset
 (\code{dataset_add}), \code{exist_flag} is set to the specified value.
 
 \describe{
-\item{Default Value}{\code{NA_character_}}
+\item{Default value}{\code{NA_character_}}
 }}
 
 \item{keep_source_vars}{Variables to be kept in the new records
@@ -140,7 +140,7 @@ variables to be kept for the new records. The variables specified for
 automatically.
 
 \describe{
-\item{Default Value}{\code{exprs(everything())}}
+\item{Default value}{\code{exprs(everything())}}
 }}
 
 \item{set_values_to}{Variables to be set
@@ -165,7 +165,7 @@ For example:
 }\if{html}{\out{</div>}}
 
 \describe{
-\item{Default Value}{none}
+\item{Default value}{none}
 }}
 }
 \value{
@@ -209,6 +209,11 @@ Specify the variables that need to be kept in the new records.
 \if{html}{\out{<div class="sourceCode r">}}\preformatted{library(tibble)
 library(dplyr, warn.conflicts = FALSE)
 library(lubridate)
+#> 
+#> Attaching package: 'lubridate'
+#> The following objects are masked from 'package:base':
+#> 
+#>     date, intersect, setdiff, union
 
 adlb <- tribble(
   ~USUBJID, ~AVISITN, ~AVAL, ~LBSEQ,

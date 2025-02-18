@@ -19,7 +19,7 @@ derive_locf_records(
 The variables specified by the \code{by_vars}, \code{analysis_var}, \code{order}, and \code{keep_vars} arguments are expected to be in the dataset.
 
 \describe{
-\item{Default Value}{none}
+\item{Default value}{none}
 }}
 
 \item{dataset_ref}{Expected observations dataset
@@ -28,7 +28,7 @@ Data frame with all the combinations of \code{PARAMCD}, \code{PARAM}, \code{AVIS
 \code{AVISITN}, ... which are expected in the dataset is expected.
 
 \describe{
-\item{Default Value}{none}
+\item{Default value}{none}
 }}
 
 \item{by_vars}{Grouping variables
@@ -39,7 +39,7 @@ in the input dataset or for which \code{analysis_var} is \code{NA} for the corre
 in the input dataset.
 
 \describe{
-\item{Default Value}{none}
+\item{Default value}{none}
 }}
 
 \item{analysis_var}{Analysis variable.
@@ -48,7 +48,7 @@ in the input dataset.
 
 \describe{
 \item{Permitted values}{a variable}
-\item{Default Value}{\code{AVAL}}
+\item{Default value}{\code{AVAL}}
 }}
 
 \item{order}{Sort order
@@ -59,7 +59,7 @@ forward (e.g. \code{AVAL}) within each \code{by_vars}.
 For handling of \code{NA}s in sorting variables see \href{../articles/generic.html#sort_order}{Sort Order}.
 
 \describe{
-\item{Default Value}{none}
+\item{Default value}{none}
 }}
 
 \item{keep_vars}{Variables that need carrying the last observation forward
@@ -69,7 +69,7 @@ Keep variables that need carrying the last observation forward other than \code{
 \code{by_vars} and \code{analysis_var} will be populated in the newly created records.
 
 \describe{
-\item{Default Value}{\code{NULL}}
+\item{Default value}{\code{NULL}}
 }}
 }
 \value{

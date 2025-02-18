@@ -13,7 +13,7 @@ event. The name refers to the dataset specified for \code{source_datasets} in
 
 \describe{
 \item{Permitted values}{a character scalar}
-\item{Default Value}{none}
+\item{Default value}{none}
 }}
 
 \item{condition}{Condition
@@ -23,7 +23,7 @@ all by groups where it evaluates as \code{TRUE} at least once the new variable
 is set to the true value (\code{true_value}).
 
 \describe{
-\item{Default Value}{\code{NULL}}
+\item{Default value}{\code{NULL}}
 }}
 
 \item{by_vars}{Grouping variables
@@ -36,7 +36,7 @@ observations are grouped by the variables specified for the \code{by_vars}
 argument of \code{derive_var_merged_ef_msrc()}.
 
 \describe{
-\item{Default Value}{\code{NULL}}
+\item{Default value}{\code{NULL}}
 }}
 }
 \description{

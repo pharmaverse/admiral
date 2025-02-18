@@ -12,7 +12,7 @@ dt_level(level)
 \describe{
 \item{Permitted values}{\code{"Y"} (year, highest level), \code{"M"} (month), \code{"D"}
 (day), \code{"n"} (none, lowest level)}
-\item{Default Value}{none}
+\item{Default value}{none}
 }}
 }
 \value{

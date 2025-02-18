@@ -10,13 +10,13 @@ count_vals(var, val)
 \item{var}{A vector
 
 \describe{
-\item{Default Value}{none}
+\item{Default value}{none}
 }}
 
 \item{val}{A value
 
 \describe{
-\item{Default Value}{none}
+\item{Default value}{none}
 }}
 }
 \description{

@@ -13,7 +13,7 @@ It is expected that HEIGHT is in cm.
 
 \describe{
 \item{Permitted values}{numeric vector}
-\item{Default Value}{\code{height}}
+\item{Default value}{\code{height}}
 }}
 
 \item{weight}{WEIGHT value
@@ -22,7 +22,7 @@ It is expected that WEIGHT is in kg.
 
 \describe{
 \item{Permitted values}{numeric vector}
-\item{Default Value}{\code{weight}}
+\item{Default value}{\code{weight}}
 }}
 
 \item{method}{Derivation method to use:
@@ -43,7 +43,7 @@ Takahira: 0.007241 * height ^ 0.725 * weight ^ 0.425
 
 \describe{
 \item{Permitted values}{character value}
-\item{Default Value}{none}
+\item{Default value}{none}
 }}
 }
 \value{

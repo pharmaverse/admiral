@@ -23,7 +23,7 @@ derive_vars_merged_lookup(
 The variables specified by the \code{by_vars} argument are expected to be in the dataset.
 
 \describe{
-\item{Default Value}{none}
+\item{Default value}{none}
 }}
 
 \item{dataset_add}{Lookup table
@@ -31,7 +31,7 @@ The variables specified by the \code{by_vars} argument are expected to be in the
 The variables specified by the \code{by_vars} argument are expected.
 
 \describe{
-\item{Default Value}{none}
+\item{Default value}{none}
 }}
 
 \item{by_vars}{Grouping variables
@@ -43,7 +43,7 @@ Variables can be renamed by naming the element, i.e.
 \verb{by_vars = exprs(<name in input dataset> = <name in additional dataset>)}, similar to the \code{dplyr} joins.
 
 \describe{
-\item{Default Value}{none}
+\item{Default value}{none}
 }}
 
 \item{order}{Sort order
@@ -59,7 +59,7 @@ For handling of \code{NA}s in sorting variables see \href{../articles/generic.ht
 \describe{
 \item{Permitted values}{list of expressions created by \code{exprs()}, e.g.,
 \code{exprs(ADT, desc(AVAL))} or \code{NULL}}
-\item{Default Value}{\code{NULL}}
+\item{Default value}{\code{NULL}}
 }}
 
 \item{new_vars}{Variables to add
@@ -84,7 +84,7 @@ additional dataset (\code{dataset_add}) are added.
 
 \describe{
 \item{Permitted values}{list of variables or named expressions created by \code{exprs()}}
-\item{Default Value}{\code{NULL}}
+\item{Default value}{\code{NULL}}
 }}
 
 \item{mode}{Selection mode
@@ -96,7 +96,7 @@ If the \code{order} argument is not specified, the \code{mode} argument is ignor
 
 \describe{
 \item{Permitted values}{\code{"first"}, \code{"last"}, \code{NULL}}
-\item{Default Value}{\code{NULL}}
+\item{Default value}{\code{NULL}}
 }}
 
 \item{filter_add}{Filter for additional dataset (\code{dataset_add})
@@ -110,7 +110,7 @@ condition.
 
 \describe{
 \item{Permitted values}{a condition}
-\item{Default Value}{\code{NULL}}
+\item{Default value}{\code{NULL}}
 }}
 
 \item{check_type}{Check uniqueness?
@@ -125,7 +125,7 @@ to the by variables, an error is issued.
 
 \describe{
 \item{Permitted values}{\code{"none"}, \code{"message"}, \code{"warning"}, \code{"error"}}
-\item{Default Value}{\code{"warning"}}
+\item{Default value}{\code{"warning"}}
 }}
 
 \item{duplicate_msg}{Message of unique check
@@ -133,7 +133,7 @@ to the by variables, an error is issued.
 If the uniqueness check fails, the specified message is displayed.
 
 \describe{
-\item{Default Value}{\if{html}{\out{<div class="sourceCode r">}}\preformatted{paste(
+\item{Default value}{\if{html}{\out{<div class="sourceCode r">}}\preformatted{paste(
   "Dataset \{.arg dataset_add\} contains duplicate records with respect to",
   "\{.var \{vars2chr(by_vars)\}\}."
 )
@@ -147,7 +147,7 @@ have corresponding records from the lookup table?
 
 \describe{
 \item{Permitted values}{\code{TRUE}, \code{FALSE}}
-\item{Default Value}{\code{TRUE}}
+\item{Default value}{\code{TRUE}}
 }}
 }
 \value{

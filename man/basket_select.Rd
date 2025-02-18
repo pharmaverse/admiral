@@ -11,14 +11,14 @@ basket_select(name = NULL, id = NULL, scope = NULL, type, ...)
 the company database.
 
 \describe{
-\item{Default Value}{\code{NULL}}
+\item{Default value}{\code{NULL}}
 }}
 
 \item{id}{Identifier of the query used to select the definition of the query
 from the company database.
 
 \describe{
-\item{Default Value}{\code{NULL}}
+\item{Default value}{\code{NULL}}
 }}
 
 \item{scope}{Scope of the query used to select the definition of the query
@@ -26,7 +26,7 @@ from the company database.
 
 \describe{
 \item{Permitted values}{\code{"BROAD"}, \code{"NARROW"}, \code{NA_character_}}
-\item{Default Value}{\code{NULL}}
+\item{Default value}{\code{NULL}}
 }}
 
 \item{type}{The type argument expects a character scalar. It is passed to the
@@ -34,7 +34,7 @@ company specific get_terms() function such that the function can determine
 which sort of basket is requested
 
 \describe{
-\item{Default Value}{none}
+\item{Default value}{none}
 }}
 
 \item{...}{Any number of \emph{named} function arguments. Can be used to pass in company
@@ -42,7 +42,7 @@ specific conditions or flags that will then be used in user-defined function tha
 passed into argument \code{get_terms_fun} for function \code{create_query_data()}.
 
 \describe{
-\item{Default Value}{none}
+\item{Default value}{none}
 }}
 }
 \value{

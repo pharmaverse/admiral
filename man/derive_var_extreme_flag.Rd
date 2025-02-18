@@ -22,13 +22,13 @@ derive_var_extreme_flag(
 The variables specified by the \code{by_vars} argument are expected to be in the dataset.
 
 \describe{
-\item{Default Value}{none}
+\item{Default value}{none}
 }}
 
 \item{by_vars}{Grouping variables
 
 \describe{
-\item{Default Value}{none}
+\item{Default value}{none}
 }}
 
 \item{order}{Sort order
@@ -40,7 +40,7 @@ For handling of \code{NA}s in sorting variables see \href{../articles/generic.ht
 
 \describe{
 \item{Permitted values}{list of variables or functions of variables}
-\item{Default Value}{none}
+\item{Default value}{none}
 }}
 
 \item{new_var}{Variable to add
@@ -50,7 +50,7 @@ set in \code{true_value} for the first or last observation (depending on the mod
 
 \describe{
 \item{Permitted values}{list of name-value pairs}
-\item{Default Value}{none}
+\item{Default value}{none}
 }}
 
 \item{mode}{Flag mode
@@ -59,7 +59,7 @@ Determines of the first or last observation is flagged.
 
 \describe{
 \item{Permitted values}{\code{"first"}, \code{"last"}}
-\item{Default Value}{none}
+\item{Default value}{none}
 }}
 
 \item{true_value}{True value
@@ -69,7 +69,7 @@ the first or last observation (depending on the mode) of each by group.
 
 \describe{
 \item{Permitted values}{An atomic scalar}
-\item{Default Value}{\code{"Y"}}
+\item{Default value}{\code{"Y"}}
 }}
 
 \item{false_value}{False value
@@ -79,7 +79,7 @@ the first or last observation (depending on the mode) of each by group.
 
 \describe{
 \item{Permitted values}{An atomic scalar}
-\item{Default Value}{\code{NA_character_}}
+\item{Default value}{\code{NA_character_}}
 }}
 
 \item{flag_all}{Flag setting
@@ -88,7 +88,7 @@ A logical value where if set to \code{TRUE}, all records are flagged
 and no error or warning is issued if the first or last record is not unique.
 
 \describe{
-\item{Default Value}{\code{FALSE}}
+\item{Default value}{\code{FALSE}}
 }}
 
 \item{check_type}{Check uniqueness?
@@ -99,7 +99,7 @@ by variables and the order.
 
 \describe{
 \item{Permitted values}{\code{"none"}, \code{"warning"}, \code{"error"}}
-\item{Default Value}{\code{"warning"}}
+\item{Default value}{\code{"warning"}}
 }}
 }
 \value{

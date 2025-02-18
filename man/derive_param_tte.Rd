@@ -23,7 +23,7 @@ derive_param_tte(
 \code{PARAMCD} is expected.
 
 \describe{
-\item{Default Value}{\code{NULL}}
+\item{Default value}{\code{NULL}}
 }}
 
 \item{dataset_adsl}{ADSL input dataset
@@ -32,7 +32,7 @@ The variables specified for \code{start_date}, and
 \code{subject_keys} are expected.
 
 \describe{
-\item{Default Value}{none}
+\item{Default value}{none}
 }}
 
 \item{source_datasets}{Source datasets
@@ -41,7 +41,7 @@ A named list of datasets is expected. The \code{dataset_name} field of
 \code{tte_source()} refers to the dataset provided in the list.
 
 \describe{
-\item{Default Value}{none}
+\item{Default value}{none}
 }}
 
 \item{by_vars}{By variables
@@ -56,7 +56,7 @@ variables.
 The by variables are not included in the output dataset.
 
 \describe{
-\item{Default Value}{\code{NULL}}
+\item{Default value}{\code{NULL}}
 }}
 
 \item{start_date}{Time to event origin date
@@ -68,7 +68,7 @@ If the event or censoring date is before the origin date, \code{ADT} is set to
 the origin date.
 
 \describe{
-\item{Default Value}{\code{TRTSDT}}
+\item{Default value}{\code{TRTSDT}}
 }}
 
 \item{event_conditions}{Sources and conditions defining events
@@ -76,7 +76,7 @@ the origin date.
 A list of \code{event_source()} objects is expected.
 
 \describe{
-\item{Default Value}{none}
+\item{Default value}{none}
 }}
 
 \item{censor_conditions}{Sources and conditions defining censorings
@@ -84,7 +84,7 @@ A list of \code{event_source()} objects is expected.
 A list of \code{censor_source()} objects is expected.
 
 \describe{
-\item{Default Value}{none}
+\item{Default value}{none}
 }}
 
 \item{create_datetime}{Create datetime variables?
@@ -93,7 +93,7 @@ If set to \code{TRUE}, variables \code{ADTM} and \code{STARTDTM} are created. Ot
 variables \code{ADT} and \code{STARTDT} are created.
 
 \describe{
-\item{Default Value}{\code{FALSE}}
+\item{Default value}{\code{FALSE}}
 }}
 
 \item{set_values_to}{Variables to set
@@ -104,7 +104,7 @@ expected. The values must be symbols, character strings, numeric values,
 expressions, or \code{NA}.
 
 \describe{
-\item{Default Value}{none}
+\item{Default value}{none}
 }}
 
 \item{subject_keys}{Variables to uniquely identify a subject
@@ -112,7 +112,7 @@ expressions, or \code{NA}.
 A list of symbols created using \code{exprs()} is expected.
 
 \describe{
-\item{Default Value}{\code{get_admiral_option("subject_keys")}}
+\item{Default value}{\code{get_admiral_option("subject_keys")}}
 }}
 
 \item{check_type}{Check uniqueness
@@ -124,7 +124,7 @@ by variables and the date and order specified in the \code{event_source()} and
 
 \describe{
 \item{Permitted values}{\code{"none"}, \code{"message"}, \code{"warning"}, \code{"error"}}
-\item{Default Value}{\code{"warning"}}
+\item{Default value}{\code{"warning"}}
 }}
 }
 \value{

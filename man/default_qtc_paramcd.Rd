@@ -11,7 +11,7 @@ default_qtc_paramcd(method)
 
 \describe{
 \item{Permitted values}{\code{"Bazett"}, \code{"Fridericia"}, \code{"Sagie"}}
-\item{Default Value}{none}
+\item{Default value}{none}
 }}
 }
 \value{

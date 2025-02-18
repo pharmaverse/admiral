@@ -13,7 +13,7 @@ dtm_level(level)
 \item{Permitted values}{\code{"Y"} (year, highest level), \code{"M"} (month), \code{"D"}
 (day), \code{"h"} (hour), \code{"m"} (minute), \code{"s"} (second, lowest level), \code{"n"}
 (none)}
-\item{Default Value}{none}
+\item{Default value}{none}
 }}
 }
 \value{
