@@ -39,9 +39,6 @@ For each group defined by \code{by_vars} an observation is added to the output
 dataset. Only variables specified in \code{by_vars} will be populated
 in the newly created records.
 
-\emph{Permitted Values}: list of variables created by \code{exprs()}
-e.g. \code{exprs(USUBJID, VISIT)}
-
 \describe{
 \item{Default Value}{none}
 }}
@@ -51,9 +48,8 @@ e.g. \code{exprs(USUBJID, VISIT)}
 The observations where \code{PARAMCD} equals the specified value are considered to compute the
 summary record.
 
-\emph{Permitted Values:} A character of \code{PARAMCD} value
-
 \describe{
+\item{Permitted values}{A character of \code{PARAMCD} value}
 \item{Default Value}{none}
 }}
 
@@ -84,9 +80,8 @@ value, \code{NA}, or an expression.
 (e.g.  \code{exprs(PARAMCD = "TDOSE",PARCAT1 = "OVERALL")}).
 }
 
-\emph{Permitted Values:} List of variable-value pairs
-
 \describe{
+\item{Permitted values}{List of variable-value pairs}
 \item{Default Value}{\code{NULL}}
 }}
 }

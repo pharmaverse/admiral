@@ -41,10 +41,9 @@ Additional variables/expressions to be used for sorting the \code{dataset}. The
 dataset is ordered by \code{date} and \code{order}. Can be used to avoid duplicate
 record warning.
 
-\emph{Permitted Values}: list of expressions created by \code{exprs()}, e.g.,
-\code{exprs(ADT, desc(AVAL))} or \code{NULL}
-
 \describe{
+\item{Permitted values}{list of expressions created by \code{exprs()}, e.g.,
+\code{exprs(ADT, desc(AVAL))} or \code{NULL}}
 \item{Default Value}{\code{NULL}}
 }}
 

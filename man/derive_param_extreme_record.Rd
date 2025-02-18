@@ -44,9 +44,6 @@ specified by the \code{order} and the \code{by_vars} arguments are expected afte
 If the argument is specified, for each by group the observations are
 selected separately.
 
-\emph{Permitted Values}: list of variables created by \code{exprs()}
-e.g. \code{exprs(USUBJID, VISIT)}
-
 \describe{
 \item{Default Value}{\code{NULL}}
 }}
@@ -63,10 +60,9 @@ variable is \code{NA} and \code{mode = "last"}, this observation is chosen while
 \code{mode = "first"} the observation is chosen only if there are no
 observations where the variable is not \code{NA}.
 
-\emph{Permitted Values:} list of expressions created by \code{exprs()}, e.g.,
-\code{exprs(ADT, desc(AVAL))}
-
 \describe{
+\item{Permitted values}{list of expressions created by \code{exprs()}, e.g.,
+\code{exprs(ADT, desc(AVAL))}}
 \item{Default Value}{none}
 }}
 
@@ -76,9 +72,8 @@ If \code{"first"} is specified, for each by group the first observation with
 respect to \code{order} is included in the output dataset. If \code{"last"} is
 specified, the last observation is included in the output dataset.
 
-Permitted Values:  \code{"first"}, \code{"last"}
-
 \describe{
+\item{Permitted values}{\code{"first"}, \code{"last"}}
 \item{Default Value}{none}
 }}
 

@@ -63,9 +63,8 @@ character string, a numeric value, an expression, or \code{NA}.
 An optional named list returned by \code{exprs()} defining additional variables
 that the source dataset is sorted on after \code{date}.
 
-\emph{Permitted Values:} list of variables created by \code{exprs()} e.g. \code{exprs(ASEQ)}.
-
 \describe{
+\item{Permitted values}{list of variables created by \code{exprs()} e.g. \code{exprs(ASEQ)}.}
 \item{Default Value}{\code{order}}
 }}
 }

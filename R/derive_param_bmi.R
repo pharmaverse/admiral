@@ -18,16 +18,16 @@
 #'   The observations where `PARAMCD` equals the specified value are considered
 #'   as the WEIGHT. It is expected that WEIGHT is measured in kg
 #'
-#'   *Permitted Values:* character value
+#' @permitted character value
 #'
 #' @param height_code HEIGHT parameter code
 #'
 #'   The observations where `PARAMCD` equals the specified value are considered
 #'   as the HEIGHT. It is expected that HEIGHT is measured in cm
 #'
-#'   *Permitted Values:* character value
+#' @permitted character value
 #'
-#'   *Permitted Values:* logical scalar
+#' @permitted logical scalar
 #'
 #' @param constant_by_vars By variables for when HEIGHT is constant
 #'
@@ -213,13 +213,13 @@ derive_param_bmi <- function(dataset,
 #'
 #'   It is expected that HEIGHT is in cm.
 #'
-#'   *Permitted Values:* numeric vector
+#' @permitted numeric vector
 #'
 #' @param weight WEIGHT value
 #'
 #'   It is expected that WEIGHT is in kg.
 #'
-#'   *Permitted Values:* numeric vector
+#' @permitted numeric vector
 #'
 #'
 #' @details Usually this computation function can not be used with `%>%`.

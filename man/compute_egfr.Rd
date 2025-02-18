@@ -19,8 +19,6 @@ A numeric vector is expected.
 
 A character vector is expected.
 
-Default: \code{"SI"}
-
 Expected Values: \code{"SI"}, \code{"CV"}, \code{"umol/L"}, \code{"mg/dL"}
 
 \describe{

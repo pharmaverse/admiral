@@ -35,9 +35,6 @@ The variables specified by the \code{by_vars} argument are expected.
 
 \item{by_vars}{Grouping variables
 
-\emph{Permitted Values}: list of variables created by \code{exprs()}
-e.g. \code{exprs(USUBJID, VISIT)}
-
 \describe{
 \item{Default Value}{none}
 }}
@@ -81,9 +78,8 @@ dataset.
 The new variable is set to the specified value for all by groups without
 observations in the additional dataset.
 
-\emph{Permitted Value}: A character scalar
-
 \describe{
+\item{Permitted values}{A character scalar}
 \item{Default Value}{\code{NA_character_}}
 }}
 
@@ -93,9 +89,8 @@ Only observations fulfilling the specified condition are taken into account
 for flagging. If the argument is not specified, all observations are
 considered.
 
-\emph{Permitted Values}: a condition
-
 \describe{
+\item{Permitted values}{a condition}
 \item{Default Value}{\code{NULL}}
 }}
 }

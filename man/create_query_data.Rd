@@ -22,10 +22,9 @@ The dictionary version used for coding the terms should be specified.
 If any of the queries is a basket (SMQ, SDG, ....) or a customized query
 including a basket, the parameter needs to be specified.
 
-\emph{Permitted Values}: A character string (the expected format is
-company-specific)
-
 \describe{
+\item{Permitted values}{A character string (the expected format is
+company-specific)}
 \item{Default Value}{\code{NULL}}
 }}
 

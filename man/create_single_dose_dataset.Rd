@@ -31,9 +31,8 @@ The variables specified by the \code{dose_freq}, \code{start_date}, and \code{en
 
 The aggregate dosing frequency used for multiple doses in a row.
 
-Permitted Values: defined by lookup table.
-
 \describe{
+\item{Permitted values}{defined by lookup table.}
 \item{Default Value}{\code{EXDOSFRQ}}
 }}
 

@@ -11,9 +11,8 @@ compute_bmi(height, weight)
 
 It is expected that HEIGHT is in cm.
 
-\emph{Permitted Values:} numeric vector
-
 \describe{
+\item{Permitted values}{numeric vector}
 \item{Default Value}{none}
 }}
 
@@ -21,9 +20,8 @@ It is expected that HEIGHT is in cm.
 
 It is expected that WEIGHT is in kg.
 
-\emph{Permitted Values:} numeric vector
-
 \describe{
+\item{Permitted values}{numeric vector}
 \item{Default Value}{none}
 }}
 }

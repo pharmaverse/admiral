@@ -11,9 +11,8 @@ compute_bsa(height = height, weight = weight, method)
 
 It is expected that HEIGHT is in cm.
 
-\emph{Permitted Values:} numeric vector
-
 \describe{
+\item{Permitted values}{numeric vector}
 \item{Default Value}{\code{height}}
 }}
 
@@ -21,9 +20,8 @@ It is expected that HEIGHT is in cm.
 
 It is expected that WEIGHT is in kg.
 
-\emph{Permitted Values:} numeric vector
-
 \describe{
+\item{Permitted values}{numeric vector}
 \item{Default Value}{\code{weight}}
 }}
 
@@ -43,9 +41,8 @@ Fujimoto: 0.008883 * height ^ 0.663 * weight ^ 0.444
 
 Takahira: 0.007241 * height ^ 0.725 * weight ^ 0.425
 
-\emph{Permitted Values:} character value
-
 \describe{
+\item{Permitted values}{character value}
 \item{Default Value}{none}
 }}
 }

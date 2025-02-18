@@ -42,15 +42,11 @@ The variables specified by the \code{from_var} and \code{to_var} arguments are e
 
 \item{missing_value}{Character string to replace missing values in \code{from_var} or \code{to_var}.
 
-Default: "NULL"
-
 \describe{
 \item{Default Value}{\code{"NULL"}}
 }}
 
 \item{sep_val}{Character string to concatenate values of \code{from_var} and \code{to_var}.
-
-Default: " to "
 
 \describe{
 \item{Default Value}{\code{" to "}}

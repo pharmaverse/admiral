@@ -53,9 +53,6 @@ the specified dataset a new observation is added to the input dataset.
 
 If \code{dataset_ref} is specified, this argument must be specified.
 
-\emph{Permitted Values}: list of variables created by \code{exprs()}
-e.g. \code{exprs(USUBJID, VISIT)}
-
 \describe{
 \item{Default Value}{\code{NULL}}
 }}
@@ -65,7 +62,8 @@ e.g. \code{exprs(USUBJID, VISIT)}
 Within each by group the observations are ordered by the specified order.
 
 \describe{
-\item{Permitted values}{list of expressions created by \code{exprs()}, e.g.,}
+\item{Permitted values}{list of expressions created by \code{exprs()}, e.g.,
+\code{exprs(ADT, desc(AVAL))}}
 \item{Default Value}{none}
 }}
 

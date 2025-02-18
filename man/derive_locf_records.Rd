@@ -38,9 +38,6 @@ are added to the output dataset which do not have a corresponding observation
 in the input dataset or for which \code{analysis_var} is \code{NA} for the corresponding observation
 in the input dataset.
 
-\emph{Permitted Values}: list of variables created by \code{exprs()}
-e.g. \code{exprs(USUBJID, VISIT)}
-
 \describe{
 \item{Default Value}{none}
 }}
@@ -49,9 +46,8 @@ e.g. \code{exprs(USUBJID, VISIT)}
 
 \emph{Default}: \code{AVAL}
 
-\emph{Permitted Values}: a variable
-
 \describe{
+\item{Permitted values}{a variable}
 \item{Default Value}{\code{AVAL}}
 }}
 

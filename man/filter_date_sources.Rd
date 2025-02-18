@@ -37,9 +37,6 @@ A named list of datasets is expected. The \code{dataset_name} field of
 If the parameter is specified, for each by group the observations are
 selected separately.
 
-\emph{Permitted Values}: list of variables created by \code{exprs()}
-e.g. \code{exprs(USUBJID, VISIT)}
-
 \describe{
 \item{Default Value}{none}
 }}
@@ -67,9 +64,8 @@ If \code{"first"} is specified, for each subject the first observation with
 respect to the date is included in the output dataset. If \code{"last"} is
 specified, the last observation is included in the output dataset.
 
-\emph{Permitted Values}:  \code{"first"}, \code{"last"}
-
 \describe{
+\item{Permitted values}{\code{"first"}, \code{"last"}}
 \item{Default Value}{none}
 }}
 
@@ -79,9 +75,8 @@ If \code{"warning"}, \code{"message"}, or \code{"error"} is specified, the speci
 if the observations of the source datasets are not unique with respect to the
 by variables and the date and order specified in the \code{tte_source()} objects.
 
-\emph{Permitted Values}: \code{"none"}, \code{"warning"}, \code{"error"}, \code{"message"}
-
 \describe{
+\item{Permitted values}{\code{"none"}, \code{"warning"}, \code{"error"}, \code{"message"}}
 \item{Default Value}{\code{"none"}}
 }}
 }

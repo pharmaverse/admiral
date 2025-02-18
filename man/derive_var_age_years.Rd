@@ -29,11 +29,8 @@ The \code{age_unit} argument is only expected when there is NOT a variable \code
 in \code{dataset}. This gives the unit of the \code{age_var} variable and is used to convert
 AGE to 'years' so that grouping can occur.
 
-Default: NULL
-
-Permitted Values: 'years', 'months', 'weeks', 'days', 'hours', 'minutes', 'seconds'
-
 \describe{
+\item{Permitted values}{'years', 'months', 'weeks', 'days', 'hours', 'minutes', 'seconds'}
 \item{Default Value}{\code{NULL}}
 }}
 

@@ -44,9 +44,8 @@ lower and upper bounds of the target range.
 The transformed values will be reversed within the target range, e.g.
 within the range 0 to 100, 25 would be reversed to 75.
 
-\emph{Permitted Values}: \code{TRUE}, \code{FALSE}
-
 \describe{
+\item{Permitted values}{\code{TRUE}, \code{FALSE}}
 \item{Default Value}{\code{FALSE}}
 }}
 
@@ -57,9 +56,8 @@ Values outside the source range (\code{source_range}) are transformed to \code{N
 If \code{"warning"} or \code{"error"} is specified, a warning or error is issued if
 \code{source} includes any values outside the source range.
 
-\emph{Permitted Values}: \code{"NA"}, \code{"warning"}, \code{"error"}
-
 \describe{
+\item{Permitted values}{\code{"NA"}, \code{"warning"}, \code{"error"}}
 \item{Default Value}{\code{"NA"}}
 }}
 }

@@ -28,9 +28,6 @@ The variables specified by the \code{by_vars} and \code{order} arguments are exp
 
 \item{by_vars}{Grouping variables
 
-\emph{Permitted Values}: list of variables created by \code{exprs()}
-e.g. \code{exprs(USUBJID, VISIT)}
-
 \describe{
 \item{Default Value}{\code{NULL}}
 }}
@@ -71,10 +68,9 @@ the event and by group, the records are ordered by the specified order.
 
 For handling of \code{NA}s in sorting variables see \href{../articles/generic.html#sort_order}{Sort Order}.
 
-\emph{Permitted Values:} list of expressions created by \code{exprs()}, e.g.,
-\code{exprs(ADT, desc(AVAL))}
-
 \describe{
+\item{Permitted values}{list of expressions created by \code{exprs()}, e.g.,
+\code{exprs(ADT, desc(AVAL))}}
 \item{Default Value}{none}
 }}
 
@@ -84,9 +80,8 @@ If a particular event from \code{events} has more than one observation,
 \code{"first"}/\code{"last"} is used to select the first/last record of this type of
 event sorting by \code{order}.
 
-\emph{Permitted Values:} \code{"first"}, \code{"last"}
-
 \describe{
+\item{Permitted values}{\code{"first"}, \code{"last"}}
 \item{Default Value}{none}
 }}
 
@@ -143,10 +138,9 @@ observations. The variables specified for \code{by_vars} and created by
 the event will take precedence over the value of the \code{keep_source_vars}
 argument.
 
-\emph{Permitted Values}: A list of expressions where each element is
-a symbol or a tidyselect expression, e.g., \code{exprs(VISIT, VISITNUM, starts_with("RS"))}.
-
 \describe{
+\item{Permitted values}{A list of expressions where each element is
+a symbol or a tidyselect expression, e.g., \code{exprs(VISIT, VISITNUM, starts_with("RS"))}.}
 \item{Default Value}{\code{exprs(everything())}}
 }}
 }

@@ -43,9 +43,6 @@ Keys used to merge \code{dataset_facm} with \code{dataset}.
 
 Variables (excluding by_vars) that uniquely identify each observation in \code{dataset_merge}.
 
-\emph{Permitted Values}: list of variables created by \code{exprs()}
-e.g. \code{exprs(USUBJID, VISIT)}
-
 \describe{
 \item{Default Value}{\code{NULL}}
 }}

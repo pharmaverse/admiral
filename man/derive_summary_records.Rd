@@ -49,9 +49,6 @@ Variables to consider for generation of groupwise summary
 records. Providing the names of variables in \code{\link[=exprs]{exprs()}} will create a
 groupwise summary and generate summary records for the specified groups.
 
-\emph{Permitted Values}: list of variables created by \code{exprs()}
-e.g. \code{exprs(USUBJID, VISIT)}
-
 \describe{
 \item{Default Value}{none}
 }}
@@ -104,10 +101,9 @@ For observations of the reference dataset (\code{dataset_ref}) which do not have
 complete mapping defined by the summarization defined in \code{set_values_to}.  Only variables
 specified for \code{set_values_to} can be specified for \code{missing_values}.
 
-\emph{Permitted Values}: named list of expressions, e.g.,
-\code{exprs(AVAL = -9999)}
-
 \describe{
+\item{Permitted values}{named list of expressions, e.g.,
+\code{exprs(AVAL = -9999)}}
 \item{Default Value}{\code{NULL}}
 }}
 }

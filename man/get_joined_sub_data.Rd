@@ -41,9 +41,6 @@ The two datasets are joined by the specified variables.
 Variables can be renamed by naming the element, i.e.
 \verb{by_vars = exprs(<name in input dataset> = <name in additional dataset>)}, similar to the \code{dplyr} joins.
 
-\emph{Permitted Values}: list of variables created by \code{exprs()}
-e.g. \code{exprs(USUBJID, VISIT)}
-
 \describe{
 \item{Default Value}{\code{NULL}}
 }}
@@ -75,9 +72,8 @@ Whereas, sometimes you might allow for confirmatory observations to occur
 prior to the observation. For example, to identify AEs occurring on or
 after seven days before a COVID AE. Thus \code{join_type = "all"} could be used.
 
-\emph{Permitted Values:} \code{"before"}, \code{"after"}, \code{"all"}
-
 \describe{
+\item{Permitted values}{\code{"before"}, \code{"after"}, \code{"all"}}
 \item{Default Value}{none}
 }}
 
@@ -124,9 +120,8 @@ condition.
 The condition can include summary functions like \code{all()} or \code{any()}. The
 joined dataset is grouped by the original observations.
 
-\emph{Permitted Values}: a condition
-
 \describe{
+\item{Permitted values}{a condition}
 \item{Default Value}{\code{NULL}}
 }}
 }

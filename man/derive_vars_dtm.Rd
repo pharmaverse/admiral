@@ -64,11 +64,10 @@ If \code{"Y"} is specified, \code{date_imputation} should be \code{"first"} or \
 and \code{min_dates} or \code{max_dates} should be specified respectively. Otherwise,
 \code{NA_character_} is returned if the year component is missing.
 
-\emph{Permitted Values}: \code{"Y"} (year, highest level), \code{"M"} (month), \code{"D"}
-(day), \code{"h"} (hour), \code{"m"} (minute), \code{"s"} (second), \code{"n"} (none, lowest
-level)
-
 \describe{
+\item{Permitted values}{\code{"Y"} (year, highest level), \code{"M"} (month), \code{"D"}
+(day), \code{"h"} (hour), \code{"m"} (minute), \code{"s"} (second), \code{"n"} (none, lowest
+level)}
 \item{Default Value}{\code{"h"}}
 }}
 
@@ -125,9 +124,8 @@ then time imputation flag is derived.
 
 If \code{"none"} is specified, then no date or time imputation flag is derived.
 
-\emph{Permitted Values}: \code{"auto"}, \code{"date"}, \code{"time"}, \code{"both"}, or \code{"none"}
-
 \describe{
+\item{Permitted values}{\code{"auto"}, \code{"date"}, \code{"time"}, \code{"both"}, or \code{"none"}}
 \item{Default Value}{\code{"auto"}}
 }}
 
@@ -187,9 +185,8 @@ preserve minute when hour is missing.
 For example \code{"2019---07"} would return \verb{"2019-06-07} if \code{preserve = TRUE}
 (and \code{date_imputation = "mid"}).
 
-Permitted Values: \code{TRUE}, \code{FALSE}
-
 \describe{
+\item{Permitted values}{\code{TRUE}, \code{FALSE}}
 \item{Default Value}{\code{FALSE}}
 }}
 
@@ -198,9 +195,8 @@ if only hours and minutes are ever collected, and seconds are imputed in
 (\code{'--DTM'}) as 00, then it is not necessary to set (\code{'--TMF'}) to \code{'S'}. A user can set this
 to \code{TRUE} so the \code{'S'} Flag is dropped from (\code{'--TMF'}).
 
-\emph{Permitted Values}: A logical value
-
 \describe{
+\item{Permitted values}{A logical value}
 \item{Default Value}{\code{FALSE}}
 }}
 }

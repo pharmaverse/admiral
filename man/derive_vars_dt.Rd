@@ -61,10 +61,9 @@ If \code{"Y"} is specified, \code{date_imputation} should be \code{"first"} or \
 and \code{min_dates} or \code{max_dates} should be specified respectively. Otherwise,
 \code{NA_character_} is returned if the year component is missing.
 
-\emph{Permitted Values}: \code{"Y"} (year, highest level), \code{"M"} (month), \code{"D"}
-(day), \code{"n"} (none, lowest level)
-
 \describe{
+\item{Permitted values}{\code{"Y"} (year, highest level), \code{"M"} (month), \code{"D"}
+(day), \code{"n"} (none, lowest level)}
 \item{Default Value}{\code{"n"}}
 }}
 
@@ -102,9 +101,8 @@ If \code{"date"} is specified, then date imputation flag is derived.
 
 If \code{"none"} is specified, then no date imputation flag is derived.
 
-\emph{Permitted Values}: \code{"auto"}, \code{"date"} or \code{"none"}
-
 \describe{
+\item{Permitted values}{\code{"auto"}, \code{"date"} or \code{"none"}}
 \item{Default Value}{\code{"auto"}}
 }}
 
@@ -154,9 +152,8 @@ considered. A date or date-time object is expected.
 For example \code{"2019---07"} would return \verb{"2019-06-07} if \code{preserve = TRUE}
 (and \code{date_imputation = "MID"}).
 
-Permitted Values: \code{TRUE}, \code{FALSE}
-
 \describe{
+\item{Permitted values}{\code{TRUE}, \code{FALSE}}
 \item{Default Value}{\code{FALSE}}
 }}
 }

@@ -36,9 +36,6 @@ For each group defined by \code{by_vars} an observation is added to the output
 dataset. Only variables specified in \code{by_vars} will be populated
 in the newly created records.
 
-\emph{Permitted Values}: list of variables created by \code{exprs()}
-e.g. \code{exprs(USUBJID, VISIT)}
-
 \describe{
 \item{Default Value}{none}
 }}
@@ -49,9 +46,8 @@ The specified variables are set to the specified values for the new
 observations. For example \code{exprs(PARAMCD = "MAP")} defines the parameter code
 for the new parameter.
 
-\emph{Permitted Values}: List of variable-value pairs
-
 \describe{
+\item{Permitted values}{List of variable-value pairs}
 \item{Default Value}{\code{exprs(PARAMCD = "MAP")}}
 }}
 
@@ -60,9 +56,8 @@ for the new parameter.
 The observations where \code{PARAMCD} equals the specified value are considered
 as the systolic blood pressure assessments.
 
-\emph{Permitted Values:} character value
-
 \describe{
+\item{Permitted values}{character value}
 \item{Default Value}{\code{"SYSBP"}}
 }}
 
@@ -71,9 +66,8 @@ as the systolic blood pressure assessments.
 The observations where \code{PARAMCD} equals the specified value are considered
 as the diastolic blood pressure assessments.
 
-\emph{Permitted Values:} character value
-
 \describe{
+\item{Permitted values}{character value}
 \item{Default Value}{\code{"DIABP"}}
 }}
 
@@ -82,9 +76,8 @@ as the diastolic blood pressure assessments.
 The observations where \code{PARAMCD} equals the specified value are considered
 as the heart rate assessments.
 
-\emph{Permitted Values:} character value
-
 \describe{
+\item{Permitted values}{character value}
 \item{Default Value}{\code{NULL}}
 }}
 
@@ -92,10 +85,9 @@ as the heart rate assessments.
 
 The result is used to check the units of the input parameters.
 
-\emph{Permitted Values}: An expression which is evaluable in the input dataset
-and results in a character value
-
 \describe{
+\item{Permitted values}{An expression which is evaluable in the input dataset
+and results in a character value}
 \item{Default Value}{none}
 }}
 
@@ -105,9 +97,8 @@ The specified condition is applied to the input dataset before deriving the
 new parameter, i.e., only observations fulfilling the condition are taken
 into account.
 
-\emph{Permitted Values:} a condition
-
 \describe{
+\item{Permitted values}{a condition}
 \item{Default Value}{\code{NULL}}
 }}
 }

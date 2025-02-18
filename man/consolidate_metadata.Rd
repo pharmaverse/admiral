@@ -15,9 +15,8 @@ consolidate_metadata(
 \arguments{
 \item{datasets}{List of datasets to consolidate
 
-\emph{Permitted Values}: A named list of datasets
-
 \describe{
+\item{Permitted values}{A named list of datasets}
 \item{Default Value}{none}
 }}
 
@@ -25,9 +24,8 @@ consolidate_metadata(
 
 The specified variables must be a unique of all input datasets.
 
-\emph{Permitted Values}: A list of variables created by \code{exprs()}
-
 \describe{
+\item{Permitted values}{A list of variables created by \code{exprs()}}
 \item{Default Value}{none}
 }}
 
@@ -36,9 +34,8 @@ The specified variables must be a unique of all input datasets.
 The specified variable is added to the output dataset. It is set the name
 of the dataset the observation is originating from.
 
-\emph{Permitted Values}: A symbol
-
 \describe{
+\item{Permitted values}{A symbol}
 \item{Default Value}{\code{SOURCE}}
 }}
 
@@ -47,9 +44,8 @@ of the dataset the observation is originating from.
 If \code{"message"}, \code{"warning"}, or \code{"error"} is specified, a message is issued
 if the variable names differ across the input datasets (\code{datasets}).
 
-\emph{Permitted Values}: \code{"none"}, \code{"message"}, \code{"warning"}, \code{"error"}
-
 \describe{
+\item{Permitted values}{\code{"none"}, \code{"message"}, \code{"warning"}, \code{"error"}}
 \item{Default Value}{\code{"warning"}}
 }}
 
@@ -59,9 +55,8 @@ If \code{"warning"} or \code{"error"} is specified, a message is issued if the k
 variables (\code{key_vars}) are not a unique key in all of the input datasets
 (\code{datasets}).
 
-\emph{Permitted Values}: \code{"none"}, \code{"warning"}, \code{"error"}
-
 \describe{
+\item{Permitted values}{\code{"none"}, \code{"warning"}, \code{"error"}}
 \item{Default Value}{\code{"error"}}
 }}
 }

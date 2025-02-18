@@ -17,9 +17,6 @@ The variables specified by the \code{by_vars} argument are expected to be in the
 
 \item{by_vars}{Grouping variables
 
-\emph{Permitted Values}: list of variables created by \code{exprs()}
-e.g. \code{exprs(USUBJID, VISIT)}
-
 \describe{
 \item{Default Value}{none}
 }}
@@ -31,9 +28,8 @@ expression is specified, a new parameter code is added to the input
 dataset. The name of the element defines the parameter code and the
 expression the observations to select.
 
-\emph{Permitted Values:} A character vector of \code{PARAMCD} values or a list of expressions
-
 \describe{
+\item{Permitted values}{A character vector of \code{PARAMCD} values or a list of expressions}
 \item{Default Value}{none}
 }}
 
@@ -42,9 +38,8 @@ added to the input dataset. They are set to the value of the variable for
 the parameter. E.g., \code{AVAL.WEIGHT} is set to the value of \code{AVAL} where
 \code{PARAMCD == "WEIGHT"}.
 
-\emph{Permitted Values:} A list of expressions
-
 \describe{
+\item{Permitted values}{A list of expressions}
 \item{Default Value}{none}
 }}
 
@@ -53,9 +48,8 @@ the parameter. E.g., \code{AVAL.WEIGHT} is set to the value of \code{AVAL} where
 The specified filter condition is used in the warnings only. It is not
 applied to the input dataset.
 
-\emph{Permitted Values:} An unquoted expression
-
 \describe{
+\item{Permitted values}{An unquoted expression}
 \item{Default Value}{none}
 }}
 }

@@ -19,9 +19,6 @@ The variables specified by the \code{by_vars} argument are expected to be in the
 
 Variables to consider for generation of groupwise summary records.
 
-\emph{Permitted Values}: list of variables created by \code{exprs()}
-e.g. \code{exprs(USUBJID, VISIT)}
-
 \describe{
 \item{Default Value}{none}
 }}

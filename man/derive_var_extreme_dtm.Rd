@@ -47,9 +47,8 @@ for the first or last date
 If \code{"first"} is specified, the first date for each subject is selected. If
 \code{"last"} is specified, the last date for each subject is selected.
 
-Permitted Values:  \code{"first"}, \code{"last"}
-
 \describe{
+\item{Permitted values}{\code{"first"}, \code{"last"}}
 \item{Default Value}{none}
 }}
 

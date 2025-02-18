@@ -42,9 +42,6 @@ expected.
 The specified variables are used as by variables for joining the input
 dataset with itself.
 
-\emph{Permitted Values}: list of variables created by \code{exprs()}
-e.g. \code{exprs(USUBJID, VISIT)}
-
 \describe{
 \item{Default Value}{none}
 }}
@@ -75,9 +72,8 @@ Whereas, sometimes you might allow for confirmatory observations to occur
 prior to the observation. For example, to identify AEs occurring on or
 after seven days before a COVID AE. Thus \code{join_type = "all"} could be used.
 
-\emph{Permitted Values:} \code{"before"}, \code{"after"}, \code{"all"}
-
 \describe{
+\item{Permitted values}{\code{"before"}, \code{"after"}, \code{"all"}}
 \item{Default Value}{none}
 }}
 
@@ -119,10 +115,9 @@ The observations are ordered by the specified order.
 
 For handling of \code{NA}s in sorting variables see \href{../articles/generic.html#sort_order}{Sort Order}.
 
-\emph{Permitted Values:} list of expressions created by \code{exprs()}, e.g.,
-\code{exprs(ADT, desc(AVAL))}
-
 \describe{
+\item{Permitted values}{list of expressions created by \code{exprs()}, e.g.,
+\code{exprs(ADT, desc(AVAL))}}
 \item{Default Value}{none}
 }}
 
@@ -176,9 +171,8 @@ If \code{"warning"} or \code{"error"} is specified, the specified message is iss
 if the observations of the input dataset are not unique with respect to the
 by variables and the order.
 
-\emph{Permitted Values:} \code{"none"}, \code{"warning"}, \code{"error"}
-
 \describe{
+\item{Permitted values}{\code{"none"}, \code{"warning"}, \code{"error"}}
 \item{Default Value}{\code{"warning"}}
 }}
 }

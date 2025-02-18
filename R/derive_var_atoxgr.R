@@ -14,7 +14,7 @@
 #'
 #' @param meta_criteria Metadata data set holding the criteria (normally a case statement)
 #'
-#' Permitted Values: `atoxgr_criteria_ctcv4`, `atoxgr_criteria_ctcv5`, `atoxgr_criteria_daids`
+#' @permitted `atoxgr_criteria_ctcv4`, `atoxgr_criteria_ctcv5`, `atoxgr_criteria_daids`
 #'
 #' - `atoxgr_criteria_ctcv4` implements [Common Terminology Criteria for Adverse Events (CTCAE)
 #'    v4.0](https://ctep.cancer.gov/protocoldevelopment/electronic_applications/ctc.htm)
@@ -40,7 +40,7 @@
 #'
 #' @param criteria_direction Direction (L= Low, H = High) of toxicity grade.
 #'
-#' Permitted Values: "L", "H"
+#' @permitted "L", "H"
 #'
 #' @param abnormal_indicator Value in `BNRIND` derivation to indicate an abnormal value.
 #' Usually "HIGH" for `criteria_direction` = "H" and "LOW" for `criteria_direction` = "L".
@@ -55,7 +55,7 @@
 #'   The result is used to check the units of the input parameters. Compared with
 #'   `SI_UNIT_CHECK` in metadata (see `meta_criteria` parameter).
 #'
-#'   Permitted Values: A variable containing unit from the input dataset, or a function call,
+#' @permitted A variable containing unit from the input dataset, or a function call,
 #'   for example, `get_unit_expr = extract_unit(PARAM)`.
 #'
 #'

@@ -37,9 +37,8 @@ Only observations fulfilling the specified condition are taken into account
 for flagging. If the argument is not specified, all observations are
 considered.
 
-\emph{Permitted Values}: a condition
-
 \describe{
+\item{Permitted values}{a condition}
 \item{Default Value}{\code{NULL}}
 }}
 }

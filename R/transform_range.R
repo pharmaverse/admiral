@@ -22,7 +22,7 @@
 #'   The transformed values will be reversed within the target range, e.g.
 #'   within the range 0 to 100, 25 would be reversed to 75.
 #'
-#'   *Permitted Values*: `TRUE`, `FALSE`
+#' @permitted `TRUE`, `FALSE`
 #'
 #' @param outside_range Handling of values outside the source range
 #'
@@ -31,7 +31,7 @@
 #'   If `"warning"` or `"error"` is specified, a warning or error is issued if
 #'   `source` includes any values outside the source range.
 #'
-#'   *Permitted Values*: `"NA"`, `"warning"`, `"error"`
+#' @permitted `"NA"`, `"warning"`, `"error"`
 #'
 #' @details Returns the values of `source` linearly transformed from the source
 #'   range (`source_range`) to the target range (`target_range`). Values outside

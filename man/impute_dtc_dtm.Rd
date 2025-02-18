@@ -41,11 +41,10 @@ If \code{"Y"} is specified, \code{date_imputation} should be \code{"first"} or \
 and \code{min_dates} or \code{max_dates} should be specified respectively. Otherwise,
 \code{NA_character_} is returned if the year component is missing.
 
-\emph{Permitted Values}: \code{"Y"} (year, highest level), \code{"M"} (month), \code{"D"}
-(day), \code{"h"} (hour), \code{"m"} (minute), \code{"s"} (second), \code{"n"} (none, lowest
-level)
-
 \describe{
+\item{Permitted values}{\code{"Y"} (year, highest level), \code{"M"} (month), \code{"D"}
+(day), \code{"h"} (hour), \code{"m"} (minute), \code{"s"} (second), \code{"n"} (none, lowest
+level)}
 \item{Default Value}{\code{"h"}}
 }}
 
@@ -146,9 +145,8 @@ preserve minute when hour is missing.
 For example \code{"2019---07"} would return \verb{"2019-06-07} if \code{preserve = TRUE}
 (and \code{date_imputation = "mid"}).
 
-Permitted Values: \code{TRUE}, \code{FALSE}
-
 \describe{
+\item{Permitted values}{\code{TRUE}, \code{FALSE}}
 \item{Default Value}{\code{FALSE}}
 }}
 }

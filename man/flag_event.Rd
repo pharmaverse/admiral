@@ -11,9 +11,8 @@ flag_event(dataset_name, condition = NULL, by_vars = NULL)
 event. The name refers to the dataset specified for \code{source_datasets} in
 \code{derive_var_merged_ef_msrc()}.
 
-\emph{Permitted Values}: a character scalar
-
 \describe{
+\item{Permitted values}{a character scalar}
 \item{Default Value}{none}
 }}
 

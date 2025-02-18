@@ -24,9 +24,8 @@ from the company database.
 \item{scope}{Scope of the query used to select the definition of the query
 from the company database.
 
-\emph{Permitted Values}: \code{"BROAD"}, \code{"NARROW"}, \code{NA_character_}
-
 \describe{
+\item{Permitted values}{\code{"BROAD"}, \code{"NARROW"}, \code{NA_character_}}
 \item{Default Value}{\code{NULL}}
 }}
 

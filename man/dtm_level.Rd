@@ -9,11 +9,10 @@ dtm_level(level)
 \arguments{
 \item{level}{Datetime level
 
-\emph{Permitted Values}: \code{"Y"} (year, highest level), \code{"M"} (month), \code{"D"}
-(day), \code{"h"} (hour), \code{"m"} (minute), \code{"s"} (second, lowest level), \code{"n"}
-(none)
-
 \describe{
+\item{Permitted values}{\code{"Y"} (year, highest level), \code{"M"} (month), \code{"D"}
+(day), \code{"h"} (hour), \code{"m"} (minute), \code{"s"} (second, lowest level), \code{"n"}
+(none)}
 \item{Default Value}{none}
 }}
 }

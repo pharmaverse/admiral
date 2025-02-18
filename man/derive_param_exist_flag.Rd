@@ -75,9 +75,8 @@ set to the specified value (\code{true_value}).
 
 \emph{Default}: \code{"Y"}
 
-\emph{Permitted Value}: A character scalar
-
 \describe{
+\item{Permitted values}{A character scalar}
 \item{Default Value}{\code{"Y"}}
 }}
 
@@ -89,9 +88,8 @@ For all groups with at least one observations in the additional dataset
 
 \emph{Default}: \code{NA_character_}
 
-\emph{Permitted Value}: A character scalar
-
 \describe{
+\item{Permitted values}{A character scalar}
 \item{Default Value}{\code{NA_character_}}
 }}
 
@@ -102,9 +100,8 @@ For all groups without an observation in the additional dataset
 
 \emph{Default}: \code{NA_character_}
 
-\emph{Permitted Value}: A character scalar
-
 \describe{
+\item{Permitted values}{A character scalar}
 \item{Default Value}{\code{NA_character_}}
 }}
 
@@ -114,16 +111,12 @@ Only observations fulfilling the specified condition are taken into account
 for flagging. If the parameter is not specified, all observations are
 considered.
 
-\emph{Permitted Values}: a condition
-
 \describe{
+\item{Permitted values}{a condition}
 \item{Default Value}{\code{NULL}}
 }}
 
 \item{by_vars}{Grouping variables
-
-\emph{Permitted Values}: list of variables created by \code{exprs()}
-e.g. \code{exprs(USUBJID, VISIT)}
 
 \describe{
 \item{Default Value}{\code{get_admiral_option("subject_keys")}}

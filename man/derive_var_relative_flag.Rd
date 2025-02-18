@@ -28,9 +28,6 @@ The variables specified by the \code{by_vars} and \code{order} arguments are exp
 
 \item{by_vars}{Grouping variables
 
-\emph{Permitted Values}: list of variables created by \code{exprs()}
-e.g. \code{exprs(USUBJID, VISIT)}
-
 \describe{
 \item{Default Value}{none}
 }}
@@ -41,10 +38,9 @@ Within each by group the observations are ordered by the specified order.
 
 For handling of \code{NA}s in sorting variables see \href{../articles/generic.html#sort_order}{Sort Order}.
 
-\emph{Permitted Values:} list of expressions created by \code{exprs()}, e.g.,
-\code{exprs(ADT, desc(AVAL))}
-
 \describe{
+\item{Permitted values}{list of expressions created by \code{exprs()}, e.g.,
+\code{exprs(ADT, desc(AVAL))}}
 \item{Default Value}{none}
 }}
 
@@ -78,33 +74,29 @@ observations before or after (\code{selection} argument) the observation where
 the condition (\code{condition} argument) is fulfilled the \emph{last} time is
 flagged in the output dataset.
 
-\emph{Permitted Values:} \code{"first"}, \code{"last"}
-
 \describe{
+\item{Permitted values}{\code{"first"}, \code{"last"}}
 \item{Default Value}{none}
 }}
 
 \item{selection}{Flag observations before or after the reference observation?
 
-\emph{Permitted Values:} \code{"before"}, \code{"after"}
-
 \describe{
+\item{Permitted values}{\code{"before"}, \code{"after"}}
 \item{Default Value}{none}
 }}
 
 \item{inclusive}{Flag the reference observation?
 
-\emph{Permitted Values:} \code{TRUE}, \code{FALSE}
-
 \describe{
+\item{Permitted values}{\code{TRUE}, \code{FALSE}}
 \item{Default Value}{none}
 }}
 
 \item{flag_no_ref_groups}{Should by groups without reference observation be flagged?
 
-\emph{Permitted Values:} \code{TRUE}, \code{FALSE}
-
 \describe{
+\item{Permitted values}{\code{TRUE}, \code{FALSE}}
 \item{Default Value}{\code{TRUE}}
 }}
 
@@ -114,9 +106,8 @@ If \code{"warning"} or \code{"error"} is specified, the specified message is iss
 if the observations of the input dataset are not unique with respect to the
 by variables and the order.
 
-\emph{Permitted Values:} \code{"none"}, \code{"warning"}, \code{"error"}
-
 \describe{
+\item{Permitted values}{\code{"none"}, \code{"warning"}, \code{"error"}}
 \item{Default Value}{\code{"warning"}}
 }}
 }

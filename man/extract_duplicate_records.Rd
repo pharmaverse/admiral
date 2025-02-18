@@ -24,10 +24,8 @@ If omitted, all variables in the input dataset are used in the by group.
 recommended to specify the necessary grouping variables for large datasets
 whenever possible.
 
-\emph{Permitted Values}: list of variables created by \code{exprs()}
-e.g. \code{exprs(USUBJID, VISIT)}
-
 \describe{
+\item{Permitted values}{list of variables created by \code{exprs()}, e.g., \code{exprs(USUBJID, VISIT)}}
 \item{Default Value}{\code{NULL}}
 }}
 }

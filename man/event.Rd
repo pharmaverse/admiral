@@ -20,9 +20,8 @@ event. The name refers to the dataset specified for \code{source_datasets} in
 \code{derive_extreme_event()}. If the argument is not specified, the input
 dataset (\code{dataset}) of \code{derive_extreme_event()} is used.
 
-\emph{Permitted Values}: a character scalar
-
 \describe{
+\item{Permitted values}{a character scalar}
 \item{Default Value}{\code{NULL}}
 }}
 
@@ -30,18 +29,16 @@ dataset (\code{dataset}) of \code{derive_extreme_event()} is used.
 will contribute to the extreme event. If the condition contains summary
 functions like \code{all()}, they are evaluated for each by group separately.
 
-\emph{Permitted Values}: an unquoted condition
-
 \describe{
+\item{Permitted values}{an unquoted condition}
 \item{Default Value}{\code{NULL}}
 }}
 
 \item{mode}{If specified, the first or last observation with respect to \code{order} is
 selected for each by group.
 
-\emph{Permitted Values}: \code{"first"}, \code{"last"}, \code{NULL}
-
 \describe{
+\item{Permitted values}{\code{"first"}, \code{"last"}, \code{NULL}}
 \item{Default Value}{\code{NULL}}
 }}
 
@@ -50,10 +47,9 @@ first or last observation if \code{mode} is specified.
 
 For handling of \code{NA}s in sorting variables see \href{../articles/generic.html#sort_order}{Sort Order}.
 
-\emph{Permitted Values}: list of expressions created by \code{exprs()}, e.g.,
-\code{exprs(ADT, desc(AVAL))} or \code{NULL}
-
 \describe{
+\item{Permitted values}{list of expressions created by \code{exprs()}, e.g.,
+\code{exprs(ADT, desc(AVAL))} or \code{NULL}}
 \item{Default Value}{\code{NULL}}
 }}
 
@@ -61,9 +57,8 @@ For handling of \code{NA}s in sorting variables see \href{../articles/generic.ht
 to be set for the event, e.g. \code{exprs(PARAMCD = "WSP", PARAM  = "Worst Sleeping Problems")}. The values can be a symbol, a
 character string, a numeric value, \code{NA} or an expression.
 
-\emph{Permitted Values}: a named list of expressions, e.g., created by \code{exprs()}
-
 \describe{
+\item{Permitted values}{a named list of expressions, e.g., created by \code{exprs()}}
 \item{Default Value}{\code{NULL}}
 }}
 
@@ -73,10 +68,9 @@ The specified variables are kept for the selected observations. The
 variables specified for \code{by_vars} (of \code{derive_extreme_event()}) and created
 by \code{set_values_to} are always kept.
 
-\emph{Permitted Values}: A list of expressions where each element is
-a symbol or a tidyselect expression, e.g., \code{exprs(VISIT, VISITNUM, starts_with("RS"))}.
-
 \describe{
+\item{Permitted values}{A list of expressions where each element is
+a symbol or a tidyselect expression, e.g., \code{exprs(VISIT, VISITNUM, starts_with("RS"))}.}
 \item{Default Value}{\code{NULL}}
 }}
 
@@ -85,9 +79,8 @@ a symbol or a tidyselect expression, e.g., \code{exprs(VISIT, VISITNUM, starts_w
 The description does not affect the derivations where the event is used. It
 is intended for documentation only.
 
-\emph{Permitted Values}: a character scalar
-
 \describe{
+\item{Permitted values}{a character scalar}
 \item{Default Value}{\code{NULL}}
 }}
 }

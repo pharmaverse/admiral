@@ -18,11 +18,10 @@ dataset of \code{create_query_data()}, e.g., \code{"SMQ03"}
 of \code{create_query_data()}. If the \code{auto} keyword is specified, the variable
 is set to the name of the query in the SMQ/SDG database.
 
-\emph{Permitted Values}: A character scalar or the \code{auto} keyword. The \code{auto}
-keyword is permitted only for queries which are defined by an
-\code{basket_select()} object.
-
 \describe{
+\item{Permitted values}{A character scalar or the \code{auto} keyword. The \code{auto}
+keyword is permitted only for queries which are defined by an
+\code{basket_select()} object.}
 \item{Default Value}{\code{auto}}
 }}
 
@@ -30,11 +29,10 @@ keyword is permitted only for queries which are defined by an
 \code{create_query_data()}. If the \code{auto} keyword is specified, the variable is
 set to the id of the query in the SMQ/SDG database.
 
-\emph{Permitted Values}: A integer scalar or the \code{auto} keyword. The \code{auto}
-keyword is permitted only for queries which are defined by an
-\code{basket_select()} object.
-
 \describe{
+\item{Permitted values}{A integer scalar or the \code{auto} keyword. The \code{auto}
+keyword is permitted only for queries which are defined by an
+\code{basket_select()} object.}
 \item{Default Value}{\code{NULL}}
 }}
 
@@ -46,9 +44,8 @@ object.
 
 \emph{Default}: \code{FALSE}
 
-\emph{Permitted Values}: \code{TRUE}, \code{FALSE}
-
 \describe{
+\item{Permitted values}{\code{TRUE}, \code{FALSE}}
 \item{Default Value}{\code{FALSE}}
 }}
 
@@ -75,10 +72,9 @@ define a customized query based on custom terms and SMQs. The data frames
 must have the same structure as described for the previous item.
 }
 
-\emph{Permitted Values}: an \code{basket_select()} object, a
-data frame, or a list of data frames and \code{basket_select()} objects.
-
 \describe{
+\item{Permitted values}{an \code{basket_select()} object, a
+data frame, or a list of data frames and \code{basket_select()} objects.}
 \item{Default Value}{\code{NULL}}
 }}
 }

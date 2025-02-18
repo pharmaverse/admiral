@@ -34,10 +34,8 @@ argument) and to the parameters specified by \code{qt_code} and \code{rr_code}.
 Only variables specified in \code{by_vars} will be populated
 in the newly created records.
 
-\emph{Permitted Values}: list of variables created by \code{exprs()}
-e.g. \code{exprs(USUBJID, VISIT)}
-
 \describe{
+\item{Permitted values}{list of variables created by \code{exprs()}, e.g., \code{exprs(USUBJID, VISIT)}}
 \item{Default Value}{none}
 }}
 
@@ -45,9 +43,8 @@ e.g. \code{exprs(USUBJID, VISIT)}
 
 See \code{\link[=compute_qtc]{compute_qtc()}} for details.
 
-\emph{Permitted Values}: \code{"Bazett"}, \code{"Fridericia"}, \code{"Sagie"}
-
 \describe{
+\item{Permitted values}{\code{"Bazett"}, \code{"Fridericia"}, \code{"Sagie"}}
 \item{Default Value}{none}
 }}
 
@@ -57,9 +54,8 @@ The specified variables are set to the specified values for the new
 observations. For example \code{exprs(PARAMCD = "MAP")} defines the parameter code
 for the new parameter.
 
-\emph{Permitted Values}: List of variable-value pairs
-
 \describe{
+\item{Permitted values}{List of variable-value pairs}
 \item{Default Value}{\code{exprs(PARAMCD = "MAP")}}
 }}
 
@@ -69,9 +65,8 @@ The observations where \code{PARAMCD} equals the specified value are considered
 as the QT interval assessments. It is expected that QT is measured in ms or
 msec.
 
-\emph{Permitted Values}: character value
-
 \describe{
+\item{Permitted values}{character value}
 \item{Default Value}{\code{"QT"}}
 }}
 
@@ -81,9 +76,8 @@ The observations where \code{PARAMCD} equals the specified value are considered
 as the RR interval assessments. It is expected that RR is measured in ms or
 msec.
 
-\emph{Permitted Values}: character value
-
 \describe{
+\item{Permitted values}{character value}
 \item{Default Value}{\code{"RR"}}
 }}
 
@@ -91,10 +85,9 @@ msec.
 
 The result is used to check the units of the input parameters.
 
-\emph{Permitted Values}: An expression which is evaluable in the input dataset
-and results in a character value
-
 \describe{
+\item{Permitted values}{An expression which is evaluable in the input dataset
+and results in a character value}
 \item{Default Value}{none}
 }}
 
@@ -104,9 +97,8 @@ The specified condition is applied to the input dataset before deriving the
 new parameter, i.e., only observations fulfilling the condition are taken
 into account.
 
-\emph{Permitted Values:} a condition
-
 \describe{
+\item{Permitted values}{a condition}
 \item{Default Value}{\code{NULL}}
 }}
 }

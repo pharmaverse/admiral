@@ -55,9 +55,6 @@ variables.
 
 The by variables are not included in the output dataset.
 
-\emph{Permitted Values}: list of variables created by \code{exprs()}
-e.g. \code{exprs(USUBJID, VISIT)}
-
 \describe{
 \item{Default Value}{\code{NULL}}
 }}
@@ -125,9 +122,8 @@ if the observations of the source datasets are not unique with respect to the
 by variables and the date and order specified in the \code{event_source()} and
 \code{censor_source()} objects.
 
-\emph{Permitted Values}: \code{"none"}, \code{"message"}, \code{"warning"}, \code{"error"}
-
 \describe{
+\item{Permitted values}{\code{"none"}, \code{"message"}, \code{"warning"}, \code{"error"}}
 \item{Default Value}{\code{"warning"}}
 }}
 }

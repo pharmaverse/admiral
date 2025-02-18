@@ -46,9 +46,6 @@ Keys used to merge \code{dataset_merge} with \code{dataset}.
 
 Variables (excluding by_vars) that uniquely identify each observation in \code{dataset_merge}.
 
-\emph{Permitted Values}: list of variables created by \code{exprs()}
-e.g. \code{exprs(USUBJID, VISIT)}
-
 \describe{
 \item{Default Value}{\code{NULL}}
 }}
@@ -80,10 +77,9 @@ This argument is passed to the \code{dplyr::left_join()} function. See
 \url{https://dplyr.tidyverse.org/reference/mutate-joins.html#arguments} for
 more details.
 
-\emph{Permitted Values}: \code{"one-to-one"}, \code{"one-to-many"}, \code{"many-to-one"},
-\code{"many-to-many"}, \code{NULL}
-
 \describe{
+\item{Permitted values}{\code{"one-to-one"}, \code{"one-to-many"}, \code{"many-to-one"},
+\code{"many-to-many"}, \code{NULL}}
 \item{Default Value}{\code{NULL}}
 }}
 }

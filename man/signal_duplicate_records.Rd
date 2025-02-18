@@ -26,10 +26,8 @@ The variables specified by the \code{by_vars} argument are expected to be in the
 
 Defines groups of records in which to look for duplicates.
 
-\emph{Permitted Values}: list of variables created by \code{exprs()}
-e.g. \code{exprs(USUBJID, VISIT)}
-
 \describe{
+\item{Permitted values}{list of variables created by \code{exprs()}, e.g., \code{exprs(USUBJID, VISIT)}}
 \item{Default Value}{none}
 }}
 
@@ -40,9 +38,9 @@ e.g. \code{exprs(USUBJID, VISIT)}
 }}
 
 \item{cnd_type}{Type of condition to signal when detecting duplicate records.
-One of \code{"message"}, \code{"warning"} or \code{"error"}. Default is \code{"error"}.
 
 \describe{
+\item{Permitted values}{\code{"message"}, \code{"warning"}, or \code{"error"}}
 \item{Default Value}{\code{"error"}}
 }}
 

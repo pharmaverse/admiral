@@ -29,9 +29,6 @@ in this dataset.
 
 \item{by_vars}{Grouping variables
 
-\emph{Permitted Values}: list of variables created by \code{exprs()}
-e.g. \code{exprs(USUBJID, VISIT)}
-
 \describe{
 \item{Default Value}{none}
 }}
@@ -41,8 +38,6 @@ e.g. \code{exprs(USUBJID, VISIT)}
 The filter condition which will be used to subset the source dataset.
 Alternatively, if no filter condition is supplied, no subsetting of the source
 dataset will be performed.
-
-Default: \code{NULL} (i.e. no filtering will be performed)
 
 \describe{
 \item{Default Value}{\code{NULL}}

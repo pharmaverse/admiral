@@ -93,11 +93,8 @@ For seconds: \code{"second"}, \code{"seconds"}, \code{"sec"}, \code{"secs"}, \co
 The input dates are round down with respect to the input unit, e.g., if the
 input unit is 'days', the time of the input dates is ignored.
 
-Default: \code{TRUE}
-
-Permitted Values: \code{TRUE}, \code{FALSE}
-
 \describe{
+\item{Permitted values}{\code{TRUE}, \code{FALSE}}
 \item{Default Value}{\code{TRUE}}
 }}
 
@@ -106,11 +103,8 @@ Permitted Values: \code{TRUE}, \code{FALSE}
 If the duration is non-negative, one input unit is added. i.e., the
 duration can not be zero.
 
-Default: \code{TRUE}
-
-Permitted Values: \code{TRUE}, \code{FALSE}
-
 \describe{
+\item{Permitted values}{\code{TRUE}, \code{FALSE}}
 \item{Default Value}{\code{TRUE}}
 }}
 
@@ -119,11 +113,8 @@ Permitted Values: \code{TRUE}, \code{FALSE}
 The fractional part of the duration (in output unit) is removed, i.e., the
 integer part is returned.
 
-Default: \code{FALSE}
-
-Permitted Values: \code{TRUE}, \code{FALSE}
-
 \describe{
+\item{Permitted values}{\code{TRUE}, \code{FALSE}}
 \item{Default Value}{\code{FALSE}}
 }}
 
@@ -131,11 +122,8 @@ Permitted Values: \code{TRUE}, \code{FALSE}
 
 See below for details.
 
-Default: \code{"duration"}
-
-Permitted Values: \code{"duration"}, \code{"interval"}
-
 \describe{
+\item{Permitted values}{\code{"duration"}, \code{"interval"}}
 \item{Default Value}{\code{"duration"}}
 }}
 }

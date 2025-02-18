@@ -20,13 +20,13 @@
 #' @param dataset Input dataset
 #' @param crit_nr The criterion number, i.e., the `y` in `CRITy`
 #'
-#'   *Permitted Values*: a positive integer
+#' @permitted a positive integer
 #' @param condition Condition for flagging records
 #'
 #'   See description of the `values_yn` argument for details on how the
 #'   `CRITyFL` variable is populated.
 #'
-#'   *Permitted Values*: an unquoted expression which evaluates to a logical (in
+#' @permitted an unquoted expression which evaluates to a logical (in
 #'    `dataset`)
 #' @param description The description of the criterion
 #'
@@ -35,7 +35,7 @@
 #'   An expression can be specified to set the value depending on the parameter.
 #'   Please note that the value must be constant within a parameter.
 #'
-#'   *Permitted Values*: an unquoted expression which evaluates to a character
+#' @permitted an unquoted expression which evaluates to a character
 #'    (in `dataset`)
 #' @param values_yn Should `"Y"` and `"N"` be used for `CRITyFL`?
 #'
@@ -46,13 +46,13 @@
 #'   Otherwise, the `CRITyFL` variable is set to `"Y"` if the condition
 #'   (`condition`) evaluates to `TRUE`, and to `NA` otherwise.
 #'
-#'   *Permitted Values*: `TRUE`, `FALSE`
+#' @permitted `TRUE`, `FALSE`
 #' @param create_numeric_flag Create a numeric flag?
 #'
 #'   If set to `TRUE`, the `CRITyFN` variable is created. It is set to `1` if
 #'   `CRITyFL == "Y"`, it set to `0` if `CRITyFL == "N"`, and to `NA` otherwise.
 #'
-#'   *Permitted Values*: `TRUE`, `FALSE`
+#' @permitted `TRUE`, `FALSE`
 #' @return The input dataset with the variables `CRITy`, `CRITyFL`, and
 #'   optionally `CRITyFN` added.
 #'

@@ -35,9 +35,6 @@ For each group defined by \code{by_vars} those observations from \code{dataset_r
 are added to the output dataset which do not have a corresponding observation
 in the input dataset.
 
-\emph{Permitted Values}: list of variables created by \code{exprs()}
-e.g. \code{exprs(USUBJID, VISIT)}
-
 \describe{
 \item{Default Value}{\code{NULL}}
 }}

@@ -27,9 +27,8 @@ msec.
 
 \item{method}{Method used to QT correction
 
-\emph{Permitted Values}: \code{"Bazett"}, \code{"Fridericia"}, \code{"Sagie"}
-
 \describe{
+\item{Permitted values}{\code{"Bazett"}, \code{"Fridericia"}, \code{"Sagie"}}
 \item{Default Value}{none}
 }}
 }

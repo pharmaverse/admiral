@@ -51,11 +51,8 @@ within the range 0 to 100, 25 would be reversed to 75.
 This argument will be ignored if \code{source_range} and \code{target_range} aren't
 specified.
 
-Default: \code{FALSE}
-
-Permitted Values: \code{TRUE}, \code{FALSE}
-
 \describe{
+\item{Permitted values}{\code{TRUE}, \code{FALSE}}
 \item{Default Value}{\code{FALSE}}
 }}
 
@@ -66,8 +63,6 @@ be carried out. If the number of non-missing values is below \code{min_n},
 the result will be set to missing, i.e. \code{NA}.
 
 A positive integer is expected.
-
-Default: 1
 
 \describe{
 \item{Default Value}{\code{1}}

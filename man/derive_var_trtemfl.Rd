@@ -37,55 +37,49 @@ The variables specified by \code{start_date}, \code{end_date}, \code{trt_start_d
 
 \item{start_date}{Event start date
 
-\emph{Permitted Values:} A symbol referring to a date or datetime variable of
-the input dataset
-
 \describe{
+\item{Permitted values}{A symbol referring to a date or datetime variable of
+the input dataset}
 \item{Default Value}{\code{ASTDTM}}
 }}
 
 \item{end_date}{Event end date
 
-\emph{Permitted Values:} A symbol referring to a date or datetime variable of
-the input dataset
-
 \describe{
+\item{Permitted values}{A symbol referring to a date or datetime variable of
+the input dataset}
 \item{Default Value}{\code{AENDTM}}
 }}
 
 \item{trt_start_date}{Treatment start date
 
-\emph{Permitted Values:} A symbol referring to a date or datetime variable of
-the input dataset
-
 \describe{
+\item{Permitted values}{A symbol referring to a date or datetime variable of
+the input dataset}
 \item{Default Value}{\code{TRTSDTM}}
 }}
 
 \item{trt_end_date}{Treatment end date
 
-\emph{Permitted Values:} A symbol referring to a date or datetime variable of
-the input dataset or \code{NULL}
-
 \describe{
+\item{Permitted values}{A symbol referring to a date or datetime variable of
+the input dataset or \code{NULL}}
 \item{Default Value}{\code{NULL}}
 }}
 
 \item{end_window}{If the argument is specified (in 'days'), events starting more than the specified
 number of days after end of treatment, are not flagged.
 
-\emph{Permitted Values:} A non-negative integer or \code{NULL}
-
 \describe{
+\item{Permitted values}{A non-negative integer or \code{NULL}}
 \item{Default Value}{\code{NULL}}
 }}
 
 \item{ignore_time_for_trt_end}{If the argument is set to \code{TRUE}, the time part is ignored for checking if
 the event occurred more than \code{end_window} days after end of treatment.
 
-\emph{Permitted Values:} \code{TRUE}, \code{FALSE}
-
 \describe{
+\item{Permitted values}{\code{TRUE}, \code{FALSE}}
 \item{Default Value}{\code{TRUE}}
 }}
 
@@ -102,10 +96,9 @@ The values of the specified variable must be comparable with the usual
 comparison operators. I.e., if the intensity is greater than the initial
 intensity \code{initial_intensity < intensity} must evaluate to \code{TRUE}.
 
-\emph{Permitted Values:} A symbol referring to a variable of the input dataset
-or \code{NULL}
-
 \describe{
+\item{Permitted values}{A symbol referring to a variable of the input dataset
+or \code{NULL}}
 \item{Default Value}{\code{NULL}}
 }}
 
@@ -119,10 +112,9 @@ The values of the specified variable must be comparable with the usual
 comparison operators. I.e., if the intensity is greater than the initial
 intensity \code{initial_intensity < intensity} must evaluate to \code{TRUE}.
 
-\emph{Permitted Values:} A symbol referring to a variable of the input dataset
-or \code{NULL}
-
 \describe{
+\item{Permitted values}{A symbol referring to a variable of the input dataset
+or \code{NULL}}
 \item{Default Value}{\code{NULL}}
 }}
 
@@ -135,10 +127,9 @@ Events starting during treatment or before treatment and worsening afterward
 are flagged. Once an AE record in a group is flagged, all subsequent records
 in the treatment window are flagged regardless of severity.
 
-\emph{Permitted Values:} A symbol referring to a variable of the input dataset
-or \code{NULL}
-
 \describe{
+\item{Permitted values}{A symbol referring to a variable of the input dataset
+or \code{NULL}}
 \item{Default Value}{\code{NULL}}
 }}
 

@@ -29,8 +29,6 @@ Required columns are \code{start_date}, \code{end_date}, \code{ref_start_date} a
 
 \item{new_var}{On-treatment flag variable name to be created.
 
-Default is \code{ONTRTFL}.
-
 \describe{
 \item{Default Value}{\code{ONTRTFL}}
 }}
@@ -75,8 +73,8 @@ date-time object column is expected.
 Refer to \code{derive_vars_dt()} to impute and derive a date from a date
 character vector to a date object.
 
-Optional; This can be null and everything after \code{ref_start_date} will be
-considered on-treatment. Default is \code{NULL}.
+If set to \code{NULL}, everything after \code{ref_start_date} will be considered
+on-treatment.
 
 \describe{
 \item{Default Value}{\code{NULL}}
@@ -84,7 +82,6 @@ considered on-treatment. Default is \code{NULL}.
 
 \item{ref_end_window}{A window to add to the upper bound \code{ref_end_date}
 measured in days (e.g. 7 if 7 days should be added to the upper bound)
-Optional; default is 0.
 
 \describe{
 \item{Default Value}{\code{0}}
@@ -94,9 +91,8 @@ Optional; default is 0.
 the event occurred more than \code{ref_end_window} days after reference end
 date.
 
-\emph{Permitted Values:} \code{TRUE}, \code{FALSE}
-
 \describe{
+\item{Permitted values}{\code{TRUE}, \code{FALSE}}
 \item{Default Value}{\code{TRUE}}
 }}
 

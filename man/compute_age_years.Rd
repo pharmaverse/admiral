@@ -22,10 +22,9 @@ vector containing the time units of each age in \code{age} is expected. Note tha
 permitted values are cases insensitive (e.g. \code{"YEARS"} is treated the same
 as \code{"years"} and \code{"Years"}).
 
-Permitted Values: \code{"years"}, \code{"months"}, \code{"weeks"}, \code{"days"}, \code{"hours"}, \code{"minutes"},
-\code{"seconds"}, \code{NA_character_}.
-
 \describe{
+\item{Permitted values}{\code{"years"}, \code{"months"}, \code{"weeks"}, \code{"days"}, \code{"hours"}, \code{"minutes"},
+\code{"seconds"}, \code{NA_character_}.}
 \item{Default Value}{none}
 }}
 }

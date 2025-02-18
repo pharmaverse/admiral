@@ -23,9 +23,8 @@ event. The name refers to the dataset specified for \code{source_datasets} in
 \code{derive_extreme_event()}. If the argument is not specified, the input
 dataset (\code{dataset}) of \code{derive_extreme_event()} is used.
 
-\emph{Permitted Values}: a character scalar
-
 \describe{
+\item{Permitted values}{a character scalar}
 \item{Default Value}{\code{NULL}}
 }}
 
@@ -41,9 +40,8 @@ for confirmed best overall response,  \code{condition = AVALC == "CR" & all(AVAL
 observations up to the confirmation observation the response is "CR" or
 "NE" and there is at most one "NE".
 
-\emph{Permitted Values}: an unquoted condition
-
 \describe{
+\item{Permitted values}{an unquoted condition}
 \item{Default Value}{none}
 }}
 
@@ -52,10 +50,9 @@ select the first observation.
 
 For handling of \code{NA}s in sorting variables see \href{../articles/generic.html#sort_order}{Sort Order}.
 
-\emph{Permitted Values}: list of expressions created by \code{exprs()}, e.g.,
-\code{exprs(ADT, desc(AVAL))} or \code{NULL}
-
 \describe{
+\item{Permitted values}{list of expressions created by \code{exprs()}, e.g.,
+\code{exprs(ADT, desc(AVAL))} or \code{NULL}}
 \item{Default Value}{\code{NULL}}
 }}
 
@@ -67,9 +64,8 @@ with suffix ".join". For example to select all observations with \code{AVALC == 
 
 The \verb{*.join} variables are not included in the output dataset.
 
-\emph{Permitted Values}: a named list of expressions, e.g., created by \code{exprs()}
-
 \describe{
+\item{Permitted values}{a named list of expressions, e.g., created by \code{exprs()}}
 \item{Default Value}{none}
 }}
 
@@ -79,9 +75,8 @@ The argument determines which of the joined observations are kept with
 respect to the original observation. For example, if \code{join_type = "after"} is specified all observations after the original observations are
 kept.
 
-\emph{Permitted Values:} \code{"before"}, \code{"after"}, \code{"all"}
-
 \describe{
+\item{Permitted values}{\code{"before"}, \code{"after"}, \code{"all"}}
 \item{Default Value}{none}
 }}
 
@@ -98,9 +93,8 @@ functions which should not apply to all observations but only from a
 certain observation before the current observation up to the current
 observation.
 
-\emph{Permitted Values}: an unquoted condition
-
 \describe{
+\item{Permitted values}{an unquoted condition}
 \item{Default Value}{\code{NULL}}
 }}
 
@@ -115,9 +109,8 @@ This parameter should be specified if \code{condition} contains summary
 functions which should not apply to all observations but only up to the
 confirmation assessment.
 
-\emph{Permitted Values}: an unquoted condition
-
 \describe{
+\item{Permitted values}{an unquoted condition}
 \item{Default Value}{\code{NULL}}
 }}
 
@@ -125,9 +118,8 @@ confirmation assessment.
 to be set for the event, e.g. \code{exprs(PARAMCD = "WSP", PARAM  = "Worst Sleeping Problems")}. The values can be a symbol, a
 character string, a numeric value, \code{NA} or an expression.
 
-\emph{Permitted Values}: a named list of expressions, e.g., created by \code{exprs()}
-
 \describe{
+\item{Permitted values}{a named list of expressions, e.g., created by \code{exprs()}}
 \item{Default Value}{\code{NULL}}
 }}
 
@@ -137,10 +129,9 @@ The specified variables are kept for the selected observations. The
 variables specified for \code{by_vars} (of \code{derive_extreme_event()}) and created
 by \code{set_values_to} are always kept.
 
-\emph{Permitted Values}: A list of expressions where each element is
-a symbol or a tidyselect expression, e.g., \code{exprs(VISIT, VISITNUM, starts_with("RS"))}.
-
 \describe{
+\item{Permitted values}{A list of expressions where each element is
+a symbol or a tidyselect expression, e.g., \code{exprs(VISIT, VISITNUM, starts_with("RS"))}.}
 \item{Default Value}{\code{NULL}}
 }}
 
@@ -149,9 +140,8 @@ a symbol or a tidyselect expression, e.g., \code{exprs(VISIT, VISITNUM, starts_w
 The description does not affect the derivations where the event is used. It
 is intended for documentation only.
 
-\emph{Permitted Values}: a character scalar
-
 \describe{
+\item{Permitted values}{a character scalar}
 \item{Default Value}{\code{NULL}}
 }}
 }

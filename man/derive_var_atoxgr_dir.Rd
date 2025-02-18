@@ -40,7 +40,8 @@ criteria. For example: "Anemia" or "INR Increased".
 
 \item{meta_criteria}{Metadata data set holding the criteria (normally a case statement)
 
-Permitted Values: \code{atoxgr_criteria_ctcv4}, \code{atoxgr_criteria_ctcv5}, \code{atoxgr_criteria_daids}
+\describe{
+\item{Permitted values}{\code{atoxgr_criteria_ctcv4}, \code{atoxgr_criteria_ctcv5}, \code{atoxgr_criteria_daids}
 \itemize{
 \item \code{atoxgr_criteria_ctcv4} implements \href{https://ctep.cancer.gov/protocoldevelopment/electronic_applications/ctc.htm}{Common Terminology Criteria for Adverse Events (CTCAE) v4.0}
 \item \code{atoxgr_criteria_ctcv5} implements \href{https://ctep.cancer.gov/protocoldevelopment/electronic_applications/ctc.htm}{Common Terminology Criteria for Adverse Events (CTCAE) v5.0}
@@ -59,17 +60,14 @@ against input data that variables exist.
 \item \code{GRADE_CRITERIA_CODE}: variable to hold code that creates grade based on defined criteria.
 \item \code{FILTER}: Required only for DAIDS grading, specifies \code{admiral} code to filter the lab data
 based on a subset of subjects (e.g. AGE > 18 YEARS)
-}
-
-\describe{
+}}
 \item{Default Value}{none}
 }}
 
 \item{criteria_direction}{Direction (L= Low, H = High) of toxicity grade.
 
-Permitted Values: "L", "H"
-
 \describe{
+\item{Permitted values}{"L", "H"}
 \item{Default Value}{none}
 }}
 
@@ -90,10 +88,9 @@ variable. Currently for terms \code{"Alanine aminotransferase increased"},
 The result is used to check the units of the input parameters. Compared with
 \code{SI_UNIT_CHECK} in metadata (see \code{meta_criteria} parameter).
 
-Permitted Values: A variable containing unit from the input dataset, or a function call,
-for example, \code{get_unit_expr = extract_unit(PARAM)}.
-
 \describe{
+\item{Permitted values}{A variable containing unit from the input dataset, or a function call,
+for example, \code{get_unit_expr = extract_unit(PARAM)}.}
 \item{Default Value}{none}
 }}
 

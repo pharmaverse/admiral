@@ -17,9 +17,6 @@ The variables specified by the \code{by_vars} and \code{order} arguments are exp
 
 \item{by_vars}{Grouping variables
 
-\emph{Permitted Values}: list of variables created by \code{exprs()}
-e.g. \code{exprs(USUBJID, VISIT)}
-
 \describe{
 \item{Default Value}{\code{NULL}}
 }}
@@ -29,7 +26,8 @@ e.g. \code{exprs(USUBJID, VISIT)}
 Within each by group the observations are ordered by the specified order.
 
 \describe{
-\item{Permitted values}{list of expressions created by \code{exprs()}, e.g.,}
+\item{Permitted values}{list of expressions created by \code{exprs()}, e.g.,
+\code{exprs(ADT, desc(AVAL))}}
 \item{Default Value}{none}
 }}
 

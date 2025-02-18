@@ -41,10 +41,8 @@ and \code{hdl_code}.
 Only variables specified in \code{by_vars} will be populated
 in the newly created records.
 
-\emph{Permitted Values}: list of variables created by \code{exprs()}
-e.g. \code{exprs(USUBJID, VISIT)}
-
 \describe{
+\item{Permitted values}{list of variables created by \code{exprs()}, e.g., \code{exprs(USUBJID, VISIT)}}
 \item{Default Value}{none}
 }}
 
@@ -54,9 +52,8 @@ The specified variables are set to the specified values for the new
 observations. For example \code{exprs(PARAMCD = "MAP")} defines the parameter code
 for the new parameter.
 
-\emph{Permitted Values}: List of variable-value pairs
-
 \describe{
+\item{Permitted values}{List of variable-value pairs}
 \item{Default Value}{\code{exprs(PARAMCD = "MAP")}}
 }}
 
@@ -65,9 +62,8 @@ for the new parameter.
 The observations where \code{PARAMCD} equals the specified value are considered
 as the systolic blood pressure assessments.
 
-\emph{Permitted Values:} character value
-
 \describe{
+\item{Permitted values}{a character scalar, i.e., a character vector of length one}
 \item{Default Value}{\code{"SYSBP"}}
 }}
 
@@ -76,9 +72,8 @@ as the systolic blood pressure assessments.
 The observations where \code{PARAMCD} equals the specified value are considered
 as the total cholesterol assessments. This must be measured in mg/dL.
 
-\emph{Permitted Values:} character value
-
 \describe{
+\item{Permitted values}{a character scalar, i.e., a character vector of length one}
 \item{Default Value}{\code{"CHOL"}}
 }}
 
@@ -87,9 +82,8 @@ as the total cholesterol assessments. This must be measured in mg/dL.
 The observations where \code{PARAMCD} equals the specified value are considered
 as the HDL cholesterol assessments. This must be measured in mg/dL.
 
-\emph{Permitted Values:} character value
-
 \describe{
+\item{Permitted values}{a character scalar, i.e., a character vector of length one}
 \item{Default Value}{\code{"CHOLHDL"}}
 }}
 
@@ -97,10 +91,9 @@ as the HDL cholesterol assessments. This must be measured in mg/dL.
 
 A variable containing the subject's age.
 
-\emph{Permitted Values:} A numeric variable name that refers to a subject age
-column of the input dataset
-
 \describe{
+\item{Permitted values}{A numeric variable name that refers to a subject age
+column of the input dataset}
 \item{Default Value}{\code{AGE}}
 }}
 
@@ -108,10 +101,9 @@ column of the input dataset
 
 A variable containing the subject's sex.
 
-\emph{Permitted Values:} A character variable name that refers to a subject sex
-column of the input dataset
-
 \describe{
+\item{Permitted values}{A character variable name that refers to a subject sex
+column of the input dataset}
 \item{Default Value}{\code{SEX}}
 }}
 
@@ -119,10 +111,9 @@ column of the input dataset
 
 A flag indicating smoking status.
 
-\emph{Permitted Values:} A character variable name that refers to a smoking status
-column of the input dataset.
-
 \describe{
+\item{Permitted values}{A character variable name that refers to a smoking status
+column of the input dataset.}
 \item{Default Value}{\code{SMOKEFL}}
 }}
 
@@ -130,10 +121,9 @@ column of the input dataset.
 
 A flag indicating diabetic status.
 
-\emph{Permitted Values:} A character variable name that refers to a diabetic
-status column of the input dataset
-
 \describe{
+\item{Permitted values}{A character variable name that refers to a diabetic
+status column of the input dataset}
 \item{Default Value}{\code{DIABETFL}}
 }}
 
@@ -141,11 +131,10 @@ status column of the input dataset
 
 A flag indicating if a subject was treated with hypertension medication.
 
-\emph{Permitted Values:} A character variable name that refers to a column that
-indicates whether a subject is treated for high blood
-pressure
-
 \describe{
+\item{Permitted values}{A character variable name that refers to a column that
+indicates whether a subject is treated for high blood
+pressure}
 \item{Default Value}{\code{TRTHYPFL}}
 }}
 
@@ -153,10 +142,9 @@ pressure
 
 The result is used to check the units of the input parameters.
 
-\emph{Permitted Values}: An expression which is evaluable in the input dataset
-and results in a character value
-
 \describe{
+\item{Permitted values}{An expression which is evaluable in the input dataset
+and results in a character value}
 \item{Default Value}{none}
 }}
 
@@ -166,9 +154,8 @@ The specified condition is applied to the input dataset before deriving the
 new parameter, i.e., only observations fulfilling the condition are taken
 into account.
 
-\emph{Permitted Values:} a condition
-
 \describe{
+\item{Permitted values}{a condition}
 \item{Default Value}{\code{NULL}}
 }}
 }

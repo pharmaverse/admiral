@@ -37,9 +37,6 @@ The expressions on the left hand sides of \code{new_vars} are evaluated by the
 specified \emph{variables}. Then the resulting values are merged to the input
 dataset (\code{dataset}) by the specified \emph{variables}.
 
-\emph{Permitted Values}: list of variables created by \code{exprs()}
-e.g. \code{exprs(USUBJID, VISIT)}
-
 \describe{
 \item{Default Value}{none}
 }}
@@ -74,9 +71,8 @@ Only observations fulfilling the specified condition are taken into account
 for summarizing. If the argument is not specified, all observations are
 considered.
 
-\emph{Permitted Values}: a condition
-
 \describe{
+\item{Permitted values}{a condition}
 \item{Default Value}{\code{NULL}}
 }}
 
@@ -87,10 +83,9 @@ matching observation in the additional dataset (\code{dataset_add}) the values
 of the specified variables are set to the specified value. Only variables
 specified for \code{new_vars} can be specified for \code{missing_values}.
 
-\emph{Permitted Values}: named list of expressions, e.g.,
-\code{exprs(BASEC = "MISSING", BASE = -1)}
-
 \describe{
+\item{Permitted values}{named list of expressions, e.g.,
+\code{exprs(BASEC = "MISSING", BASE = -1)}}
 \item{Default Value}{\code{NULL}}
 }}
 }

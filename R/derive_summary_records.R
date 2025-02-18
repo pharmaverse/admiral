@@ -70,7 +70,7 @@
 #'   complete mapping defined by the summarization defined in `set_values_to`.  Only variables
 #'   specified for `set_values_to` can be specified for `missing_values`.
 #'
-#'   *Permitted Values*: named list of expressions, e.g.,
+#' @permitted named list of expressions, e.g.,
 #'   `exprs(AVAL = -9999)`
 #'
 #' @return A data frame with derived records appended to original dataset.

@@ -33,9 +33,6 @@ parameter) and to the parameters specified by \code{tadm_code} and \code{padm_co
 Only variables specified in \code{by_vars} will be populated
 in the newly created records.
 
-\emph{Permitted Values}: list of variables created by \code{exprs()}
-e.g. \code{exprs(USUBJID, VISIT)}
-
 \describe{
 \item{Default Value}{none}
 }}
@@ -46,9 +43,8 @@ The specified variables are set to the specified values for the new
 observations. For example \code{exprs(PARAMCD = "MAP")} defines the parameter code
 for the new parameter.
 
-\emph{Permitted Values}: List of variable-value pairs
-
 \describe{
+\item{Permitted values}{List of variable-value pairs}
 \item{Default Value}{\code{exprs(PARAMCD = "MAP")}}
 }}
 
@@ -58,9 +54,8 @@ The observations where \code{PARAMCD} equals the specified value are considered
 as the total dose administered.  The \code{AVAL} associated with this \code{PARAMCD}
 will be the numerator of the dose intensity calculation.
 
-Permitted Values: character value
-
 \describe{
+\item{Permitted values}{character value}
 \item{Default Value}{\code{"TNDOSE"}}
 }}
 
@@ -70,18 +65,16 @@ The observations where \code{PARAMCD} equals the specified value are considered
 as the total planned dose.  The \code{AVAL} associated with this \code{PARAMCD}
 will be the denominator of the dose intensity calculation.
 
-Permitted Values: character value
-
 \describe{
+\item{Permitted values}{character value}
 \item{Default Value}{\code{"TSNDOSE"}}
 }}
 
 \item{zero_doses}{Flag indicating logic for handling 0 planned or
 administered doses for a \code{by_vars} group
 
-Default: \code{Inf}
-
-Permitted Values: \code{Inf}, \code{100}
+\describe{
+\item{Permitted values}{\code{Inf}, \code{100}
 
 No record is returned if either the planned (\code{tpadm_code}) or administered
 (\code{tadm_code}) \code{AVAL} are \code{NA}.  No record is returned is a record does not
@@ -101,9 +94,7 @@ If \code{zero_doses} = \code{100} :
 (\code{tadm_code}) is 0, 0 is returned.
 \item If the planned dose (\code{tpadm_code}) is 0 and the administered dose
 (\code{tadm_code}) is > 0, 100 is returned.
-}
-
-\describe{
+}}
 \item{Default Value}{\code{"Inf"}}
 }}
 
@@ -113,9 +104,8 @@ The specified condition is applied to the input dataset before deriving the
 new parameter, i.e., only observations fulfilling the condition are taken
 into account.
 
-\emph{Permitted Values:} a condition
-
 \describe{
+\item{Permitted values}{a condition}
 \item{Default Value}{\code{NULL}}
 }}
 }

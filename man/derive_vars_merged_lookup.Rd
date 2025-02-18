@@ -42,9 +42,6 @@ are merged by the specified variables.
 Variables can be renamed by naming the element, i.e.
 \verb{by_vars = exprs(<name in input dataset> = <name in additional dataset>)}, similar to the \code{dplyr} joins.
 
-\emph{Permitted Values}: list of variables created by \code{exprs()}
-e.g. \code{exprs(USUBJID, VISIT)}
-
 \describe{
 \item{Default Value}{none}
 }}
@@ -59,10 +56,9 @@ Variables defined by the \code{new_vars} argument can be used in the sort order.
 
 For handling of \code{NA}s in sorting variables see \href{../articles/generic.html#sort_order}{Sort Order}.
 
-\emph{Permitted Values}: list of expressions created by \code{exprs()}, e.g.,
-\code{exprs(ADT, desc(AVAL))} or \code{NULL}
-
 \describe{
+\item{Permitted values}{list of expressions created by \code{exprs()}, e.g.,
+\code{exprs(ADT, desc(AVAL))} or \code{NULL}}
 \item{Default Value}{\code{NULL}}
 }}
 
@@ -86,9 +82,8 @@ variable \code{LASTRSP} to the dataset and sets it to the upper case value of
 If the argument is not specified or set to \code{NULL}, all variables from the
 additional dataset (\code{dataset_add}) are added.
 
-\emph{Permitted Values}: list of variables or named expressions created by \code{exprs()}
-
 \describe{
+\item{Permitted values}{list of variables or named expressions created by \code{exprs()}}
 \item{Default Value}{\code{NULL}}
 }}
 
@@ -99,9 +94,8 @@ argument is specified, \code{mode} must be non-null.
 
 If the \code{order} argument is not specified, the \code{mode} argument is ignored.
 
-\emph{Permitted Values}: \code{"first"}, \code{"last"}, \code{NULL}
-
 \describe{
+\item{Permitted values}{\code{"first"}, \code{"last"}, \code{NULL}}
 \item{Default Value}{\code{NULL}}
 }}
 
@@ -114,9 +108,8 @@ considered.
 Variables defined by the \code{new_vars} argument can be used in the filter
 condition.
 
-\emph{Permitted Values}: a condition
-
 \describe{
+\item{Permitted values}{a condition}
 \item{Default Value}{\code{NULL}}
 }}
 
@@ -130,9 +123,8 @@ If the \code{order} argument is not specified, the \code{check_type} argument is
 if the observations of the (restricted) additional dataset are not unique with respect
 to the by variables, an error is issued.
 
-\emph{Permitted Values}: \code{"none"}, \code{"message"}, \code{"warning"}, \code{"error"}
-
 \describe{
+\item{Permitted values}{\code{"none"}, \code{"message"}, \code{"warning"}, \code{"error"}}
 \item{Default Value}{\code{"warning"}}
 }}
 
@@ -140,16 +132,12 @@ to the by variables, an error is issued.
 
 If the uniqueness check fails, the specified message is displayed.
 
-\emph{Default}:
-
-\if{html}{\out{<div class="sourceCode r">}}\preformatted{paste(
+\describe{
+\item{Default Value}{\if{html}{\out{<div class="sourceCode r">}}\preformatted{paste(
   "Dataset \{.arg dataset_add\} contains duplicate records with respect to",
   "\{.var \{vars2chr(by_vars)\}\}."
 )
-}\if{html}{\out{</div>}}
-
-\describe{
-\item{Default Value}{\code{NULL}}
+}\if{html}{\out{</div>}}}
 }}
 
 \item{print_not_mapped}{Print a list of unique \code{by_vars} values that do not
@@ -157,9 +145,8 @@ have corresponding records from the lookup table?
 
 \emph{Default}: \code{TRUE}
 
-\emph{Permitted Values}: \code{TRUE}, \code{FALSE}
-
 \describe{
+\item{Permitted values}{\code{TRUE}, \code{FALSE}}
 \item{Default Value}{\code{TRUE}}
 }}
 }
