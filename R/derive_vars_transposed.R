@@ -102,16 +102,14 @@
 #' # rows of dataset_merge and avoid duplicates-related errors.
 #' # Compare the above call with:
 #'
-#' cm %>%
-#'   derive_vars_transposed(
-#'     facm,
-#'     by_vars = exprs(USUBJID, CMREFID = FAREFID),
-#'     id_vars = NULL,
-#'     key_var = FATESTCD,
-#'     value_var = FASTRESC
-#'   )
-#'
-#'  get_duplicates_dataset()
+#' # cm %>%
+#' #   derive_vars_transposed(
+#' #     facm,
+#' #     by_vars = exprs(USUBJID, CMREFID = FAREFID),
+#' #     id_vars = NULL,
+#' #     key_var = FATESTCD,
+#' #    value_var = FASTRESC
+#' #  )
 #'
 derive_vars_transposed <- function(dataset,
                                    dataset_merge,
