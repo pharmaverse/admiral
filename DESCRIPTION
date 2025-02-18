@@ -51,7 +51,6 @@ Imports:
     magrittr (>= 1.5),
     purrr (>= 0.3.3),
     rlang (>= 0.4.4),
-    roxygen2 (>= 7.0.0),
     stringr (>= 1.4.0),
     tidyr (>= 1.0.2),
     tidyselect (>= 1.1.0)
