@@ -130,7 +130,8 @@ the output dataset. For example \code{EXTRT} for studies with more than one
 drug.
 
 \describe{
-\item{Default value}{\code{expr_c(get_admiral_option("subject_keys"), dose_freq, start_date, start_datetime, end_date, end_datetime)}}
+\item{Default value}{\code{expr_c(get_admiral_option("subject_keys"), dose_freq, start_date,
+start_datetime, end_date, end_datetime)}}
 }}
 }
 \value{

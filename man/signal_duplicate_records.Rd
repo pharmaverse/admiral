@@ -34,7 +34,8 @@ Defines groups of records in which to look for duplicates.
 \item{msg}{The condition message
 
 \describe{
-\item{Default value}{\code{paste("Dataset contains duplicate records", "with respect to", "{.var {replace_values_by_names(by_vars)}}")}}
+\item{Default value}{\code{paste("Dataset contains duplicate records", "with respect to",
+  "{.var {replace_values_by_names(by_vars)}}")}}
 }}
 
 \item{cnd_type}{Type of condition to signal when detecting duplicate records.
