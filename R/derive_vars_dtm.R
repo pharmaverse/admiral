@@ -135,7 +135,7 @@ derive_vars_dtm <- function(dataset, # nolint: cyclocomp_linter
                             min_dates = NULL,
                             max_dates = NULL,
                             preserve = FALSE,
-                            ignore_seconds_flag = FALSE) {
+                            ignore_seconds_flag = TRUE) {
   # check and quote arguments
   assert_character_scalar(new_vars_prefix)
   assert_vars(max_dates, optional = TRUE)
