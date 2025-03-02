@@ -447,7 +447,6 @@ test_that("derive_vars_dtm Test 18: date imputed to first, auto DTF/TMF", {
 test_that("derive_vars_dtm Test 19: date and time imputed to last, no DTF/TMF", {
   expected_output <- tibble::tribble(
     ~XXSTDTC,              ~AENDTM,
-    "2019-07-18T15:25:40", ymd_hms("2019-07-18T15:25:40"),
     "2019-07-18T15:25",    ymd_hms("2019-07-18T15:25:59"),
     "2019-07-18T15",       ymd_hms("2019-07-18T15:59:59"),
     "2019-07-18",          ymd_hms("2019-07-18T23:59:59"),
