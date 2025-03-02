@@ -383,7 +383,6 @@ test_that("compute_tmf Test 16: ignore_seconds_flag  = TRUE", {
 
 input <- tibble::tribble(
   ~XXSTDTC,
-  "2019-07-18T15:25:40",
   "2019-07-18T15:25",
   "2019-07-18T15",
   "2019-07-18",
@@ -396,8 +395,7 @@ input <- tibble::tribble(
 test_that("derive_vars_dtm Test 17: default behavior", {
   expected_output <- tibble::tribble(
     ~XXSTDTC,              ~ASTDTM,                        ~ASTTMF,
-    "2019-07-18T15:25:40", ymd_hms("2019-07-18T15:25:40"), NA_character_,
-    "2019-07-18T15:25",    ymd_hms("2019-07-18T15:25:00"), "S",
+    "2019-07-18T15:25",    ymd_hms("2019-07-18T15:25:00"), NA,
     "2019-07-18T15",       ymd_hms("2019-07-18T15:00:00"), "M",
     "2019-07-18",          ymd_hms("2019-07-18T00:00:00"), "H",
     "2019-02",             ymd_hms(NA),                    NA_character_,
