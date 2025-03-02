@@ -312,7 +312,7 @@ imputation flags are valid for both the datetime and the date variable.
 ```{r}
 ae <- tribble(
   ~AESTDTC,
-  "2019-08-09T12:34:56",
+  "2019-08-09T12:34",
   "2019-04-12",
   "2010-09",
   NA_character_
@@ -363,7 +363,7 @@ no date is imputed the date imputation flag is not created.
 ```{r}
 ae <- tribble(
   ~AESTDTC,
-  "2019-08-09T12:34:56",
+  "2019-08-09T12:34",
   "2019-04-12",
   "2010-09",
   NA_character_
@@ -406,7 +406,8 @@ ae <- tribble(
     highest_imputation = "M",
     date_imputation = "first",
     time_imputation = "first",
-    min_dates = exprs(TRTSDTM)
+    min_dates = exprs(TRTSDTM),
+    ignore_seconds_flag = FALSE
   )
 ```
 ```{r, echo=FALSE}
@@ -438,7 +439,8 @@ ae <- tribble(
     highest_imputation = "M",
     date_imputation = "last",
     time_imputation = "last",
-    max_dates = exprs(DTHDT, DCUTDT)
+    max_dates = exprs(DTHDT, DCUTDT),
+    ignore_seconds_flag = FALSE
   )
 ```
 ```{r, echo=FALSE}
@@ -488,7 +490,8 @@ vs <- tribble(
     derivation = derive_vars_dtm,
     args = params(
       dtc = VSDTC,
-      new_vars_prefix = "A"
+      new_vars_prefix = "A",
+      ignore_seconds_flag = FALSE
     ),
     derivation_slice(
       filter = VSTPT == "PRE-DOSE",
