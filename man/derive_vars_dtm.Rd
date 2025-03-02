@@ -15,7 +15,7 @@ derive_vars_dtm(
   min_dates = NULL,
   max_dates = NULL,
   preserve = FALSE,
-  ignore_seconds_flag = FALSE
+  ignore_seconds_flag = TRUE
 )
 }
 \arguments{
@@ -184,7 +184,7 @@ library(lubridate)
 
 mhdt <- tribble(
   ~MHSTDTC,
-  "2019-07-18T15:25:40",
+  "2019-07-18T15:25",
   "2019-07-18T15:25",
   "2019-07-18",
   "2019-02",
