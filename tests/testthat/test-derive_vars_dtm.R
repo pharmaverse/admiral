@@ -345,7 +345,8 @@ test_that("compute_tmf Test 14: compute TMF", {
   expect_equal(
     compute_tmf(
       dtc = input_dtc,
-      dtm = input_dtm
+      dtm = input_dtm,
+      ignore_seconds_flag = FALSE
     ),
     expected_output
   )
