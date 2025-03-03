@@ -1,7 +1,6 @@
 # admiral <img src="man/figures/logo.png" align="right" width="200" style="margin-left:50px;"/>
 
 <!-- badges: start -->
-
 [![pharmaverse admiral Badge](http://pharmaverse.org/shields/admiral.svg)](https://pharmaverse.org)
 [![CRAN status](https://www.r-pkg.org/badges/version/admiral)](https://CRAN.R-project.org/package=admiral)
 [![Test Coverage](https://raw.githubusercontent.com/pharmaverse/admiral/badges/main/test-coverage.svg)](https://github.com/pharmaverse/admiral/actions/workflows/code-coverage.yml)
@@ -26,7 +25,7 @@ install.packages("admiral")
 To install the development version of the package from GitHub run:
 
 ```r
-pak::pkg_install("admiral", dependencies = TRUE)
+pak::pkg_install("pharmaverse/admiral", dependencies = TRUE)
 ```
 
 ## Cheat Sheet
