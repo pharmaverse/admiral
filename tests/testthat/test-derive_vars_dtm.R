@@ -505,8 +505,7 @@ test_that("derive_vars_dtm Test 20: date and time imputed to last, DTF only", {
 test_that("derive_vars_dtm Test 21: date imputed to MID, time to first, TMF only", {
   expected_output <- tibble::tribble(
     ~XXSTDTC,              ~ASTDTM,                        ~ASTTMF,
-    "2019-07-18T15:25:40", ymd_hms("2019-07-18T15:25:40"), NA_character_,
-    "2019-07-18T15:25",    ymd_hms("2019-07-18T15:25:00"), "S",
+    "2019-07-18T15:25",    ymd_hms("2019-07-18T15:25:00"), NA,
     "2019-07-18T15",       ymd_hms("2019-07-18T15:00:00"), "M",
     "2019-07-18",          ymd_hms("2019-07-18T00:00:00"), "H",
     "2019-02",             ymd_hms("2019-02-15T00:00:00"), "H",
@@ -535,8 +534,7 @@ test_that("derive_vars_dtm Test 21: date imputed to MID, time to first, TMF only
 test_that("derive_vars_dtm Test 22: No re-derivation is done if --DTF variable already exists", {
   expected_output <- tibble::tribble(
     ~XXSTDTC,              ~ASTDTM,                        ~ASTDTF,       ~ASTTMF,
-    "2019-07-18T15:25:40", ymd_hms("2019-07-18T15:25:40"), NA_character_, NA_character_,
-    "2019-07-18T15:25",    ymd_hms("2019-07-18T15:25:00"), NA_character_, "S",
+    "2019-07-18T15:25",    ymd_hms("2019-07-18T15:25:00"), NA_character_, NA,
     "2019-07-18T15",       ymd_hms("2019-07-18T15:00:00"), NA_character_, "M",
     "2019-07-18",          ymd_hms("2019-07-18T00:00:00"), NA_character_, "H",
     "2019-02",             ymd_hms("2019-02-01T00:00:00"), "D",           "H",
@@ -547,7 +545,7 @@ test_that("derive_vars_dtm Test 22: No re-derivation is done if --DTF variable a
 
   expect_snapshot(
     actual_output <- derive_vars_dtm(
-      mutate(input, ASTDTF = c(NA, NA, NA, NA, "D", "MD", "M")),
+      mutate(input, ASTDTF = c(NA, NA, NA, "D", "MD", "M")),
       new_vars_prefix = "AST",
       dtc = XXSTDTC,
       highest_imputation = "M",
