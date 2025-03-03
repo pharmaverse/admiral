@@ -710,7 +710,7 @@ restrict_imputed_dtc_dtm <- function(dtc,
 #'
 compute_tmf <- function(dtc,
                         dtm,
-                        ignore_seconds_flag = FALSE) {
+                        ignore_seconds_flag = TRUE) {
   assert_date_vector(dtm)
   assert_character_vector(dtc)
   assert_logical_scalar(ignore_seconds_flag)
