@@ -782,7 +782,7 @@ test_that("derive_vars_dtm Test 31: catch ignore_seconds_flag error", {
       dtc = XXSTDTC,
       ignore_seconds_flag = TRUE
     ),
-    error = TRUE
+    error = FALSE
   )
 })
 
