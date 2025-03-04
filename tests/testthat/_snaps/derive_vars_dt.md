@@ -22,7 +22,7 @@
       impute_dtc_dt(dtc = input, highest_imputation = "M", date_imputation = "13-01")
     Condition
       Error in `impute_dtc_dt()`:
-      ! If `highest_impuation = "M"` is specified, `date_imputation` must be one of `'first'`, `'mid'`, `'last'` or a format with month and day specified as `'mm-dd'`: e.g. `'06-15'`
+      ! If `highest_imputation = "M"` is specified, `date_imputation` must be one of `'first'`, `'mid'`, `'last'` or a format with month and day specified as `'mm-dd'`: e.g. `'06-15'`
 
 ---
 
@@ -30,7 +30,7 @@
       impute_dtc_dt(dtc = input, highest_imputation = "M", date_imputation = "12:01")
     Condition
       Error in `impute_dtc_dt()`:
-      ! If `highest_impuation = "M"` is specified, `date_imputation` must be one of `'first'`, `'mid'`, `'last'` or a format with month and day specified as `'mm-dd'`: e.g. `'06-15'`
+      ! If `highest_imputation = "M"` is specified, `date_imputation` must be one of `'first'`, `'mid'`, `'last'` or a format with month and day specified as `'mm-dd'`: e.g. `'06-15'`
 
 ---
 
@@ -38,7 +38,7 @@
       impute_dtc_dt(dtc = input, highest_imputation = "M", date_imputation = "01")
     Condition
       Error in `impute_dtc_dt()`:
-      ! If `highest_impuation = "M"` is specified, `date_imputation` must be one of `'first'`, `'mid'`, `'last'` or a format with month and day specified as `'mm-dd'`: e.g. `'06-15'`
+      ! If `highest_imputation = "M"` is specified, `date_imputation` must be one of `'first'`, `'mid'`, `'last'` or a format with month and day specified as `'mm-dd'`: e.g. `'06-15'`
 
 ---
 
@@ -66,14 +66,7 @@
             TRTSDT))
     Condition
       Warning:
-      If `highest_impuation = "Y"` and `date_imputation = "first"` is specified, `min_dates` should be specified.
-      Warning:
-      There were 2 warnings in `mutate()`.
-      The first warning was:
-      i In argument: `ASTDT = convert_dtc_to_dt(...)`.
-      Caused by warning in `impute_dtc_dt()`:
-      ! If `highest_impuation` = "Y" is specified, `min_dates` or `max_dates` must be specified respectively.
-      i Run `dplyr::last_dplyr_warnings()` to see the 1 remaining warning.
+      If `highest_imputation = "Y"` and `date_imputation = "first"` is specified, `min_dates` should be specified.
     Output
         AESTDTC     TRTSDT ASTDT ASTDTF
       1    <NA> 2022-01-01  <NA>   <NA>
@@ -89,14 +82,7 @@
             TRTSDT))
     Condition
       Warning:
-      If `highest_impuation = "Y"` and `date_imputation = "last"` is specified, `max_dates` should be specified.
-      Warning:
-      There were 2 warnings in `mutate()`.
-      The first warning was:
-      i In argument: `ASTDT = convert_dtc_to_dt(...)`.
-      Caused by warning in `impute_dtc_dt()`:
-      ! If `highest_impuation` = "Y" is specified, `min_dates` or `max_dates` must be specified respectively.
-      i Run `dplyr::last_dplyr_warnings()` to see the 1 remaining warning.
+      If `highest_imputation = "Y"` and `date_imputation = "last"` is specified, `max_dates` should be specified.
     Output
         AESTDTC     TRTSDT ASTDT ASTDTF
       1    <NA> 2022-01-01  <NA>   <NA>
@@ -111,5 +97,5 @@
           date_imputation = "first", flag_imputation = "auto")
     Condition
       Error in `derive_vars_dt()`:
-      ! If `highest_impuation = "Y"` is specified, `min_dates` or `max_dates` must be specified respectively.
+      ! If `highest_imputation = "Y"` is specified, `min_dates` or `max_dates` must be specified respectively.
 

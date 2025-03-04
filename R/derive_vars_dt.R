@@ -159,7 +159,7 @@ derive_vars_dt <- function(dataset, # nolint: cyclocomp_linter
   if ((highest_imputation == "Y" && is.null(min_dates) && is.null(max_dates)) ||
     (highest_imputation == "Y" && length(min_dates) == 0 && length(max_dates) == 0)) {
     cli_abort(paste(
-      "If {.code highest_impuation = \"Y\"} is specified, {.arg min_dates} or",
+      "If {.code highest_imputation = \"Y\"} is specified, {.arg min_dates} or",
       "{.arg max_dates} must be specified respectively."
     ))
   }
@@ -168,13 +168,13 @@ derive_vars_dt <- function(dataset, # nolint: cyclocomp_linter
   }
   if (highest_imputation == "Y" && is.null(min_dates) && date_imputation == "first") {
     cli_warn(paste(
-      "If {.code highest_impuation = \"Y\"} and {.code date_imputation = \"first\"}",
+      "If {.code highest_imputation = \"Y\"} and {.code date_imputation = \"first\"}",
       "is specified, {.arg min_dates} should be specified."
     ))
   }
   if (highest_imputation == "Y" && is.null(max_dates) && date_imputation == "last") {
     cli_warn(paste(
-      "If {.code highest_impuation = \"Y\"} and {.code date_imputation = \"last\"}",
+      "If {.code highest_imputation = \"Y\"} and {.code date_imputation = \"last\"}",
       "is specified, {.arg max_dates} should be specified."
     ))
   }
@@ -287,7 +287,7 @@ convert_dtc_to_dt <- function(dtc,
 #'   If `"n"` is specified no imputation is performed, i.e., if any component is
 #'   missing, `NA_character_` is returned.
 #'
-#'   If `"Y"` is specified, `date_imputation` must be `"first"` or `"last"`
+#'   If `"Y"` is specified, `date_imputation` should be `"first"` or `"last"`
 #'   and `min_dates` or `max_dates` should be specified respectively. Otherwise,
 #'   `NA_character_` is returned if the year component is missing.
 #'
@@ -466,7 +466,7 @@ impute_dtc_dt <- function(dtc,
     if(!{is_mm_dd_format | is_one_of_keys}){
 
       cli_abort(paste(
-        "If {.code highest_impuation = \"M\"} is specified, {.arg date_imputation} must be",
+        "If {.code highest_imputation = \"M\"} is specified, {.arg date_imputation} must be",
         "one of `'first'`, `'mid'`, `'last'`",
         "or a format with month and day specified as `'mm-dd'`: e.g. `'06-15'`"
       ))
@@ -549,7 +549,7 @@ impute_dtc_dt <- function(dtc,
   )
 
   if (highest_imputation == "Y" && is.null(min_dates) && is.null(max_dates)) {
-    warning("If `highest_impuation` = \"Y\" is specified, `min_dates` or `max_dates` must be specified respectively.") # nolint
+    warning("If `highest_imputation` = \"Y\" is specified, `min_dates` or `max_dates` must be specified respectively.") # nolint
   }
 
   return(restricted)

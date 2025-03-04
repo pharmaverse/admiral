@@ -211,6 +211,7 @@ test_that("derive_vars_dt Test 9: max_dates length mismatch provides error", {
 ## Test 10: Warning if null min/max_dates when highest_imputation = Y ----
 test_that("derive_vars_dt Test 10: Warning if null min/max_dates when highest_imputation = Y", {
   expect_snapshot(
+    # this should for sure return NA instead of 0000-01-01
     impute_dtc_dt(
       input,
       highest_imputation = "Y"
