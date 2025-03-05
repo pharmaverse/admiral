@@ -775,15 +775,24 @@ test_that("derive_vars_dtm Test 30: Supplying both min/max dates for highest_imp
 })
 
 ## Test 31: catch ignore_seconds_flag error ----
+
+input <- tibble::tribble(
+  ~XXSTDTC,
+  "2019-07-18T15:25:40",
+  "2019-07-18T15",
+  "2019-07-18",
+  "2019-02",
+  "2019",
+  "2019---07"
+)
 test_that("derive_vars_dtm Test 31: catch ignore_seconds_flag error", {
   expect_snapshot(
     derive_vars_dtm(
       input,
       new_vars_prefix = "AST",
       dtc = XXSTDTC,
-      ignore_seconds_flag = TRUE
     ),
-    error = FALSE
+    error = TRUE
   )
 })
 
