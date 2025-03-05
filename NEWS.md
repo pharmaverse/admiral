@@ -21,6 +21,9 @@
 
 ## Documentation
 
+The "Lab Grading" vignette was updated to correct some typos and make text easier to
+read (#2623).
+
 ## Various
 
 <details>
