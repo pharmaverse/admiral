@@ -460,11 +460,11 @@ impute_dtc_dt <- function(dtc,
   }
 
   if (highest_imputation == "M") {
-
     is_mm_dd_format <- grepl("^(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])$", date_imputation)
     is_one_of_keys <- date_imputation %in% c("first", "mid", "last")
-    if(!{is_mm_dd_format | is_one_of_keys}){
-
+    if (!{
+      is_mm_dd_format || is_one_of_keys
+    }) {
       cli_abort(paste(
         "If {.code highest_imputation = \"M\"} is specified, {.arg date_imputation} must be",
         "one of `'first'`, `'mid'`, `'last'`",
@@ -475,6 +475,12 @@ impute_dtc_dt <- function(dtc,
 
   if (highest_imputation == "Y") {
     assert_character_scalar(date_imputation, values = c("first", "last"))
+    # if (is.null(min_dates) && is.null(max_dates)) {
+    #   cli_abort(paste(
+    #     "If {.code highest_imputation = \"Y\"} is specified,",
+    #     " either {.arg min_dates} or {.arg max_dates} must be specified."
+    #   ))
+    # }
   }
 
   # Parse character date ----
@@ -549,7 +555,7 @@ impute_dtc_dt <- function(dtc,
   )
 
   if (highest_imputation == "Y" && is.null(min_dates) && is.null(max_dates)) {
-    warning("If `highest_imputation` = \"Y\" is specified, `min_dates` or `max_dates` must be specified respectively.") # nolint
+    warning("If `highest_imputation` = \"Y\" is specified, `min_dates` or `max_dates` should be specified respectively.") # nolint
   }
 
   return(restricted)
@@ -598,7 +604,7 @@ restrict_imputed_dtc_dt <- function(dtc,
           )
       },
       # Suppress warning because we need to run without min/max dates but users should not
-      regexpr = "If `highest_imputation` = \"Y\" is specified, `min_dates` or `max_dates` must be specified respectively." # nolint
+      regexpr = "If `highest_imputation` = \"Y\" is specified, `min_dates` or `max_dates` should be specified respectively." # nolint
     )
   }
   if (!(is.null(min_dates) || length(min_dates) == 0)) {

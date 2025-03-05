@@ -208,14 +208,30 @@ test_that("derive_vars_dt Test 9: max_dates length mismatch provides error", {
   )
 })
 
+## Test 10: error if null min/max_dates when highest_imputation = Y ----
+# test_that("derive_vars_dt Test 10: Warning if null min/max_dates when highest_imputation = Y", {
+# expect_snapshot(
+#   # this should for sure return NA instead of 0000-01-01
+#   impute_dtc_dt(
+#     input,
+#     highest_imputation = "Y"
+#   ), error = TRUE
+# )
+# impute_dtc_dt(
+#   input,
+#   highest_imputation = "Y", date_imputation = "2016"
+#
+# )
+# })
+
 ## Test 10: Warning if null min/max_dates when highest_imputation = Y ----
 test_that("derive_vars_dt Test 10: Warning if null min/max_dates when highest_imputation = Y", {
-  expect_snapshot(
-    # this should for sure return NA instead of 0000-01-01
+  expect_warning(
     impute_dtc_dt(
       input,
       highest_imputation = "Y"
-    ), error = TRUE
+    ),
+    "If `highest_imputation` = \"Y\" is specified, `min_dates` or `max_dates` should be specified respectively." # nolint
   )
 })
 
@@ -234,14 +250,14 @@ test_that("derive_vars_dt Test 11: appropriate warnings/return object for impute
 
 ## Test 12: wrong input to `date_imputation` ----
 test_that("derive_vars_dt Test 12: wrong input to `date_imputation`", {
-
   # impossible month 13
   expect_snapshot(
     impute_dtc_dt(
       dtc = input,
       highest_imputation = "M",
       date_imputation = "13-01"
-    ), error = TRUE
+    ),
+    error = TRUE
   )
 
   # wrong format
@@ -250,7 +266,8 @@ test_that("derive_vars_dt Test 12: wrong input to `date_imputation`", {
       dtc = input,
       highest_imputation = "M",
       date_imputation = "12:01"
-    ), error = TRUE
+    ),
+    error = TRUE
   )
 
   # incomplete date_imputation
@@ -259,7 +276,8 @@ test_that("derive_vars_dt Test 12: wrong input to `date_imputation`", {
       dtc = input,
       highest_imputation = "M",
       date_imputation = "01"
-    ), error = TRUE
+    ),
+    error = TRUE
   )
 
   # not using key for date_imputation when highest_imputation = "D"
@@ -268,7 +286,8 @@ test_that("derive_vars_dt Test 12: wrong input to `date_imputation`", {
       dtc = input,
       highest_imputation = "D",
       date_imputation = "01"
-    ), error = TRUE
+    ),
+    error = TRUE
   )
   # only first or last is allowed when highest_imputation = "Y"
   expect_snapshot(
@@ -276,7 +295,8 @@ test_that("derive_vars_dt Test 12: wrong input to `date_imputation`", {
       dtc = input,
       highest_imputation = "Y",
       date_imputation = "2006-01-01"
-    ), error = TRUE
+    ),
+    error = TRUE
   )
 
   # highest_imputatio = "Y" should throw an error when min or max dates are not specified
@@ -304,7 +324,6 @@ test_that("derive_vars_dt Test 12: wrong input to `date_imputation`", {
   #     min_dates = exprs(TRTSDT),
   #     max_dates = exprs(TRTEDT)
   #   )
-
 })
 
 # convert_dtc_to_dt ----
