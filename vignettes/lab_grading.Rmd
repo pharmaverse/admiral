@@ -479,8 +479,8 @@ Here is a complete list of all assumptions in the metadata for NCI-CTCAE-v4
 <br>
 ```{r, eval=TRUE, echo=FALSE}
 atoxgr_criteria_ctcv4 %>%
-  filter(!is.na(COMMENT) & str_detect(TERM, "glycemia", negate = TRUE)
-                                      & str_detect(TERM, "calcemia", negate = TRUE)) %>%
+  filter(!is.na(COMMENT) & str_detect(TERM, "glycemia", negate = TRUE) &
+    str_detect(TERM, "calcemia", negate = TRUE)) %>%
   dataset_vignette(
     display_vars = exprs(TERM, Grade_1, Grade_2, Grade_3, Grade_4, COMMENT)
   )
@@ -856,9 +856,9 @@ Here is a complete list of all assumptions in the metadata for DAIDs
 <br>
 ```{r, eval=TRUE, echo=FALSE}
 atoxgr_criteria_daids %>%
-  filter(!is.na(COMMENT) & str_detect(COMMENT, "No criteria given", negate = TRUE)
-         & str_detect(COMMENT, "Did not grade", negate = TRUE)) %>%
-  arrange(TERM) %>% 
+  filter(!is.na(COMMENT) & str_detect(COMMENT, "No criteria given", negate = TRUE) &
+    str_detect(COMMENT, "Did not grade", negate = TRUE)) %>%
+  arrange(TERM) %>%
   dataset_vignette(
     display_vars = exprs(TERM, COMMENT)
   )
