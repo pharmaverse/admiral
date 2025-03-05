@@ -21,6 +21,8 @@
 
 ## Documentation
 
+- Improved documentation and error messages of `derive_vars_cat`. (#2654)
+
 ## Various
 
 <details>
