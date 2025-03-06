@@ -14,7 +14,11 @@ derive_vars_period(
 \arguments{
 \item{dataset}{Input dataset
 
-The variables specified by the \code{subject_keys} argument are expected to be in the dataset.}
+The variables specified by the \code{subject_keys} argument are expected to be in the dataset.
+
+\describe{
+\item{Default value}{none}
+}}
 
 \item{dataset_ref}{Period reference dataset
 
@@ -22,7 +26,11 @@ The variables specified by \code{new_vars} and \code{subject_keys} are expected.
 
 If subperiod variables are requested, \code{APERIOD} and \code{ASPER} are expected.
 If period variables are requested. \code{APERIOD} is expected. If phase
-variables are requested, \code{APHASEN} is expected.}
+variables are requested, \code{APHASEN} is expected.
+
+\describe{
+\item{Default value}{none}
+}}
 
 \item{new_vars}{New variables
 
@@ -38,12 +46,20 @@ both "xx" and "w" are used it refers to a subperiod variable.
 Only one type must be used, e.g., all left hand side values must refer to
 period variables. It is not allowed to mix for example period and subperiod
 variables. If period \emph{and} subperiod variables are required, separate calls
-must be used.}
+must be used.
+
+\describe{
+\item{Default value}{none}
+}}
 
 \item{subject_keys}{Variables to uniquely identify a subject
 
 A list of expressions where the expressions are symbols as returned by
-\code{exprs()} is expected.}
+\code{exprs()} is expected.
+
+\describe{
+\item{Default value}{\code{get_admiral_option("subject_keys")}}
+}}
 }
 \value{
 The input dataset with subperiod/period/phase variables added (see

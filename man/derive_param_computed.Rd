@@ -24,7 +24,11 @@ The variables specified by the \code{by_vars} argument are expected to be in the
 
 The variable specified by \code{by_vars} and \code{PARAMCD} must be a unique key of
 the input dataset after restricting it by the filter condition (\code{filter}
-parameter) and to the parameters specified by \code{parameters}.}
+parameter) and to the parameters specified by \code{parameters}.
+
+\describe{
+\item{Default value}{\code{NULL}}
+}}
 
 \item{dataset_add}{Additional dataset
 
@@ -36,7 +40,11 @@ the additional dataset after restricting it to the parameters specified by
 
 If the argument is specified, the observations of the additional dataset
 are considered in addition to the observations from the input dataset
-(\code{dataset} restricted by \code{filter}).}
+(\code{dataset} restricted by \code{filter}).
+
+\describe{
+\item{Default value}{\code{NULL}}
+}}
 
 \item{by_vars}{Grouping variables
 
@@ -44,8 +52,9 @@ For each group defined by \code{by_vars} an observation is added to the output
 dataset. Only variables specified in \code{by_vars} will be populated
 in the newly created records.
 
-\emph{Permitted Values}: list of variables created by \code{exprs()}
-e.g. \code{exprs(USUBJID, VISIT)}}
+\describe{
+\item{Default value}{none}
+}}
 
 \item{parameters}{Required parameter codes
 
@@ -66,7 +75,10 @@ Unnamed elements in the list of expressions are considered as parameter
 codes. For example, \code{parameters = exprs(WEIGHT, HGHT = VSTESTCD == "HEIGHT")} uses the parameter code \code{"WEIGHT"} and creates a temporary
 parameter code \code{"HGHT"}.
 
-\emph{Permitted Values:} A character vector of \code{PARAMCD} values or a list of expressions}
+\describe{
+\item{Permitted values}{A character vector of \code{PARAMCD} values or a list of expressions}
+\item{Default value}{none}
+}}
 
 \item{set_values_to}{Variables to be set
 
@@ -85,7 +97,10 @@ defines the analysis value and parameter code for the new parameter.
 
 Variable names in the expression must not contain more than one dot.
 
-\emph{Permitted Values:} List of variable-value pairs}
+\describe{
+\item{Permitted values}{List of variable-value pairs}
+\item{Default value}{none}
+}}
 
 \item{filter}{Filter condition
 
@@ -93,15 +108,19 @@ The specified condition is applied to the input dataset before deriving the
 new parameter, i.e., only observations fulfilling the condition are taken
 into account.
 
-\emph{Permitted Values:} a condition}
+\describe{
+\item{Permitted values}{a condition}
+\item{Default value}{\code{NULL}}
+}}
 
 \item{constant_by_vars}{By variables for constant parameters
 
 The constant parameters (parameters that are measured only once) are merged
 to the other parameters using the specified variables. (Refer to Example 2)
 
-\emph{Permitted Values}: list of variables created by \code{exprs()}
-e.g. \code{exprs(USUBJID, VISIT)}}
+\describe{
+\item{Default value}{\code{NULL}}
+}}
 
 \item{constant_parameters}{Required constant parameter codes
 
@@ -123,7 +142,10 @@ Unnamed elements in the list of expressions are considered as parameter
 codes. For example, \code{constant_parameters = exprs(WEIGHT, HGHT = VSTESTCD == "HEIGHT")} uses the parameter code \code{"WEIGHT"} and creates a temporary
 parameter code \code{"HGHT"}.
 
-\emph{Permitted Values:} A character vector of \code{PARAMCD} values or a list of expressions}
+\describe{
+\item{Permitted values}{A character vector of \code{PARAMCD} values or a list of expressions}
+\item{Default value}{\code{NULL}}
+}}
 
 \item{keep_nas}{Keep observations with \code{NA}s
 
@@ -133,8 +155,11 @@ the values contributing to the computed value are \code{NA} (see Example 1b).
 If the argument is set to a list of variables, observations are added even
 if some of specified variables are \code{NA} (see Example 1c).
 
-\emph{Permitted Values:} \code{TRUE}, \code{FALSE}, or a list of variables created by
+\describe{
+\item{Permitted values}{\code{TRUE}, \code{FALSE}, or a list of variables created by
 \code{exprs()} e.g. \code{exprs(ADTF, ATMF)}}
+\item{Default value}{\code{FALSE}}
+}}
 }
 \value{
 The input dataset with the new parameter added. Note, a variable will only

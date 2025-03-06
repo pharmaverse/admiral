@@ -12,34 +12,34 @@
 #'
 #'   `r roxygen_order_na_handling()`
 #'
-#'   Permitted Values: list of variables or functions of variables
+#' @permitted list of variables or functions of variables
 #'
 #' @param new_var Variable to add
 #'
 #'   The specified variable is added to the output dataset. It is set to the value
 #'   set in `true_value` for the first or last observation (depending on the mode) of each by group.
 #'
-#'   Permitted Values: list of name-value pairs
+#' @permitted list of name-value pairs
 #'
 #' @param mode Flag mode
 #'
 #'   Determines of the first or last observation is flagged.
 #'
-#'   Permitted Values: `"first"`, `"last"`
+#' @permitted `"first"`, `"last"`
 #'
 #' @param true_value True value
 #'
 #'   The value for the specified variable `new_var`, applicable to
 #'   the first or last observation (depending on the mode) of each by group.
 #'
-#'   Permitted Values: An atomic scalar
+#' @permitted An atomic scalar
 #'
 #' @param false_value False value
 #'
 #'   The value for the specified variable `new_var`, NOT applicable to
 #'   the first or last observation (depending on the mode) of each by group.
 #'
-#'   Permitted Values: An atomic scalar
+#' @permitted An atomic scalar
 #'
 #' @param flag_all Flag setting
 #'
@@ -57,9 +57,8 @@
 #'   if the observations of the input dataset are not unique with respect to the
 #'   by variables and the order.
 #'
-#'   Default: `"warning"`
 #'
-#'   Permitted Values: `"none"`, `"warning"`, `"error"`
+#' @permitted `"none"`, `"warning"`, `"error"`
 #'
 #' @details For each group (with respect to the variables specified for the
 #'   `by_vars` parameter), `new_var` is set to `"Y"` for the first or last observation

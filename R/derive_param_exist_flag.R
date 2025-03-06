@@ -45,7 +45,7 @@
 #'
 #'   *Default*: `"Y"`
 #'
-#'   *Permitted Value*: A character scalar
+#' @permitted A character scalar
 #'
 #' @param false_value False value
 #'
@@ -55,7 +55,7 @@
 #'
 #'   *Default*: `NA_character_`
 #'
-#'   *Permitted Value*: A character scalar
+#' @permitted A character scalar
 #'
 #' @param missing_value Values used for missing information
 #'
@@ -64,7 +64,7 @@
 #'
 #'   *Default*: `NA_character_`
 #'
-#'   *Permitted Value*: A character scalar
+#' @permitted A character scalar
 #'
 #' @param filter_add Filter for additional data
 #'
@@ -72,7 +72,7 @@
 #'   for flagging. If the parameter is not specified, all observations are
 #'   considered.
 #'
-#'   *Permitted Values*: a condition
+#' @permitted a condition
 #'
 #' @param set_values_to Variables to set
 #'

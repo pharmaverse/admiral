@@ -39,7 +39,7 @@
 #'   `mode = "first"` the observation is chosen only if there are no
 #'   observations where the variable is not `NA`.
 #'
-#'   *Permitted Values:* list of expressions created by `exprs()`, e.g.,
+#' @permitted list of expressions created by `exprs()`, e.g.,
 #'   `exprs(ADT, desc(AVAL))`
 #'
 #' @param mode Selection mode (first or last)
@@ -48,7 +48,7 @@
 #'   respect to `order` is included in the output dataset. If `"last"` is
 #'   specified, the last observation is included in the output dataset.
 #'
-#'   Permitted Values:  `"first"`, `"last"`
+#' @permitted  `"first"`, `"last"`
 #'
 #' @param set_values_to Variables to be set
 #'
@@ -215,7 +215,7 @@ derive_param_extreme_record <- function(dataset = NULL,
 #'   `old_var2` to `new_var2`. Expressions can be used to create new variables
 #'   (see for example `new_vars` argument in `derive_vars_merged()`).
 #'
-#'   *Permitted Values:* list of expressions created by `exprs()`, e.g.,
+#' @permitted list of expressions created by `exprs()`, e.g.,
 #'   `exprs(ADT, desc(AVAL))`
 #'
 #' @keywords source_specifications

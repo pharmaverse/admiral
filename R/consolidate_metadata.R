@@ -6,27 +6,27 @@
 #'
 #' @param datasets List of datasets to consolidate
 #'
-#'   *Permitted Values*: A named list of datasets
+#' @permitted A named list of datasets
 #'
 #' @param key_vars Key variables
 #'
 #'   The specified variables must be a unique of all input datasets.
 #'
-#'   *Permitted Values*: A list of variables created by `exprs()`
+#' @permitted A list of variables created by `exprs()`
 #'
 #' @param source_var Source variable
 #'
 #'   The specified variable is added to the output dataset. It is set the name
 #'   of the dataset the observation is originating from.
 #'
-#'   *Permitted Values*: A symbol
+#' @permitted A symbol
 #'
 #' @param check_vars Check variables?
 #'
 #'   If `"message"`, `"warning"`, or `"error"` is specified, a message is issued
 #'   if the variable names differ across the input datasets (`datasets`).
 #'
-#'   *Permitted Values*: `"none"`, `"message"`, `"warning"`, `"error"`
+#' @permitted `"none"`, `"message"`, `"warning"`, `"error"`
 #'
 #' @param check_type Check uniqueness?
 #'
@@ -34,7 +34,7 @@
 #'   variables (`key_vars`) are not a unique key in all of the input datasets
 #'   (`datasets`).
 #'
-#'   *Permitted Values*: `"none"`, `"warning"`, `"error"`
+#' @permitted `"none"`, `"warning"`, `"error"`
 #'
 #' @details All observations of the input datasets are put together into a
 #'   single dataset. If a by group (defined by `key_vars`) exists in more than

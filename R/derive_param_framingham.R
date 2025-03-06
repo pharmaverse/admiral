@@ -18,55 +18,55 @@
 #'   The observations where `PARAMCD` equals the specified value are considered
 #'   as the systolic blood pressure assessments.
 #'
-#'   \emph{Permitted Values:} character value
+#' @permitted [char_scalar]
 #'
 #' @param chol_code Total serum cholesterol code
 #'
 #'   The observations where `PARAMCD` equals the specified value are considered
 #'   as the total cholesterol assessments. This must be measured in mg/dL.
 #'
-#'   \emph{Permitted Values:} character value
+#' @permitted [char_scalar]
 #'
 #' @param cholhdl_code HDL serum cholesterol code
 #'
 #'   The observations where `PARAMCD` equals the specified value are considered
 #'   as the HDL cholesterol assessments. This must be measured in mg/dL.
 #'
-#'   \emph{Permitted Values:} character value
+#' @permitted [char_scalar]
 #'
 #' @param age Subject age
 #'
 #'   A variable containing the subject's age.
 #'
-#'   \emph{Permitted Values:} A numeric variable name that refers to a subject age
+#' @permitted A numeric variable name that refers to a subject age
 #'                     column of the input dataset
 #'
 #' @param sex Subject sex
 #'
 #'   A variable containing the subject's sex.
 #'
-#'   \emph{Permitted Values:} A character variable name that refers to a subject sex
+#' @permitted A character variable name that refers to a subject sex
 #'                     column of the input dataset
 #'
 #' @param smokefl Smoking status flag
 #'
 #'   A flag indicating smoking status.
 #'
-#'   \emph{Permitted Values:} A character variable name that refers to a smoking status
+#' @permitted A character variable name that refers to a smoking status
 #'                     column of the input dataset.
 #'
 #' @param diabetfl Diabetic flag
 #'
 #'   A flag indicating diabetic status.
 #'
-#'   \emph{Permitted Values:} A character variable name that refers to a diabetic
+#' @permitted A character variable name that refers to a diabetic
 #'                     status column of the input dataset
 #'
 #' @param trthypfl Treated with hypertension medication flag
 #'
 #'   A flag indicating if a subject was treated with hypertension medication.
 #'
-#'   \emph{Permitted Values:} A character variable name that refers to a column that
+#' @permitted A character variable name that refers to a column that
 #'                     indicates whether a subject is treated for high blood
 #'                     pressure
 #'

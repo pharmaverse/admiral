@@ -15,7 +15,11 @@ derive_vars_aage(
 \arguments{
 \item{dataset}{Input dataset
 
-The variables specified by the \code{start_date} and \code{end_date} arguments are expected to be in the dataset.}
+The variables specified by the \code{start_date} and \code{end_date} arguments are expected to be in the dataset.
+
+\describe{
+\item{Default value}{none}
+}}
 
 \item{start_date}{The start date
 
@@ -24,7 +28,9 @@ A date or date-time object is expected.
 Refer to \code{derive_vars_dt()} to impute and derive a date from a date character
 vector to a date object.
 
-Default: \code{BRTHDT}}
+\describe{
+\item{Default value}{\code{BRTHDT}}
+}}
 
 \item{end_date}{The end date
 
@@ -33,13 +39,16 @@ A date or date-time object is expected.
 Refer to \code{derive_vars_dt()} to impute and derive a date from a date character
 vector to a date object.
 
-Default: \code{RANDDT}}
+\describe{
+\item{Default value}{\code{RANDDT}}
+}}
 
 \item{age_unit}{Age unit
 
 The age is derived in the specified unit
 
-Permitted Values (case-insensitive):
+\describe{
+\item{Permitted values}{The values are considered case-insensitive.
 
 For years: \code{"year"}, \code{"years"}, \code{"yr"}, \code{"yrs"}, \code{"y"}
 
@@ -54,14 +63,17 @@ For hours: \code{"hour"}, \code{"hours"}, \code{"hr"}, \code{"hrs"}, \code{"h"}
 For minutes: \code{"minute"}, \code{"minutes"}, \code{"min"}, \code{"mins"}
 
 For seconds: \code{"second"}, \code{"seconds"}, \code{"sec"}, \code{"secs"}, \code{"s"}}
+\item{Default value}{\code{"YEARS"}}
+}}
 
 \item{type}{lubridate duration type.
 
 See below for details.
 
-Default: \code{"duration"}
-
-Permitted Values: \code{"duration"}, \code{"interval"}}
+\describe{
+\item{Permitted values}{\code{"duration"}, \code{"interval"}}
+\item{Default value}{\code{"duration"}}
+}}
 }
 \value{
 The input dataset with \code{AAGE} and \code{AAGEU} added

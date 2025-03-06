@@ -240,7 +240,7 @@ derive_var_merged_ef_msrc <- function(dataset,
 #'   event. The name refers to the dataset specified for `source_datasets` in
 #'   `derive_var_merged_ef_msrc()`.
 #'
-#'   *Permitted Values*: a character scalar
+#' @permitted a character scalar
 #'
 #' @param condition Condition
 #'

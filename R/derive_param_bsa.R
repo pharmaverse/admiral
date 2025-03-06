@@ -32,21 +32,21 @@
 #'
 #'   Takahira: `0.007241 * height ^ 0.725 * weight ^ 0.425`
 #'
-#'   *Permitted Values:* character value
+#' @permitted character value
 #'
 #' @param height_code HEIGHT parameter code
 #'
 #'   The observations where `PARAMCD` equals the specified value are considered
 #'   as the HEIGHT assessments. It is expected that HEIGHT is measured in cm.
 #'
-#'   *Permitted Values:* character value
+#' @permitted character value
 #'
 #' @param weight_code WEIGHT parameter code
 #'
 #'   The observations where `PARAMCD` equals the specified value are considered
 #'   as the WEIGHT assessments. It is expected that WEIGHT is measured in kg.
 #'
-#'   *Permitted Values:* character value
+#' @permitted character value
 #'
 #' @param constant_by_vars By variables for when HEIGHT is constant
 #'
@@ -246,13 +246,13 @@ derive_param_bsa <- function(dataset,
 #'
 #'   It is expected that HEIGHT is in cm.
 #'
-#'   *Permitted Values:* numeric vector
+#' @permitted numeric vector
 #'
 #' @param weight WEIGHT value
 #'
 #'   It is expected that WEIGHT is in kg.
 #'
-#'   *Permitted Values:* numeric vector
+#' @permitted numeric vector
 #'
 #' @param method Derivation method to use:
 #'
@@ -270,7 +270,7 @@ derive_param_bsa <- function(dataset,
 #'
 #'   Takahira: 0.007241 * height ^ 0.725 * weight ^ 0.425
 #'
-#'   *Permitted Values:* character value
+#' @permitted character value
 #'
 #'
 #' @details Usually this computation function can not be used with `%>%`.

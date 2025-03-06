@@ -21,7 +21,7 @@
 #'   The observations where `PARAMCD` equals the specified value are considered
 #'   as the heart rate assessments.
 #'
-#'   Permitted Values: character value
+#' @permitted character value
 #'
 #' @inheritParams derive_param_map
 #'

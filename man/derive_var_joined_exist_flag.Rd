@@ -25,30 +25,47 @@ derive_var_joined_exist_flag(
 \arguments{
 \item{dataset}{Input dataset
 
-The variables specified by the \code{by_vars} and \code{join_vars} arguments are expected to be in the dataset.}
+The variables specified by the \code{by_vars} and \code{join_vars} arguments are expected to be in the dataset.
+
+\describe{
+\item{Default value}{none}
+}}
 
 \item{dataset_add}{Additional dataset
 
 The variables specified for \code{by_vars}, \code{join_vars}, and \code{order} are
-expected.}
+expected.
+
+\describe{
+\item{Default value}{none}
+}}
 
 \item{by_vars}{Grouping variables
 
 The specified variables are used for joining the input
 dataset (\code{dataset}) with the additional dataset (\code{dataset_add}).
 
-\emph{Permitted Values}: list of variables created by \code{exprs()}
-e.g. \code{exprs(USUBJID, VISIT)}}
+\describe{
+\item{Default value}{none}
+}}
 
 \item{order}{Order
 
 The observations are ordered by the specified order.
 
-For handling of \code{NA}s in sorting variables see \href{../articles/generic.html#sort_order}{Sort Order}.}
+For handling of \code{NA}s in sorting variables see \href{../articles/generic.html#sort_order}{Sort Order}.
+
+\describe{
+\item{Default value}{none}
+}}
 
 \item{new_var}{New variable
 
-The specified variable is added to the input dataset.}
+The specified variable is added to the input dataset.
+
+\describe{
+\item{Default value}{none}
+}}
 
 \item{tmp_obs_nr_var}{Temporary observation number
 
@@ -58,7 +75,11 @@ with respect to \code{order}. For each by group (\code{by_vars}) the observation
 number starts with \code{1}. The variable can be used in the conditions
 (\code{filter_join}, \code{first_cond_upper}, \code{first_cond_lower}). It is not included
 in the output dataset. It can also be used to flag consecutive observations
-or the last observation (see last example below).}
+or the last observation (see last example below).
+
+\describe{
+\item{Default value}{\code{NULL}}
+}}
 
 \item{join_vars}{Variables to keep from joined dataset
 
@@ -66,7 +87,11 @@ The variables needed from the other observations should be specified
 for this parameter. The specified variables are added to the joined dataset
 with suffix ".join". For example to flag all observations with \code{AVALC == "Y"} and \code{AVALC == "Y"} for at least one subsequent visit \code{join_vars = exprs(AVALC, AVISITN)} and \code{filter_join = AVALC == "Y" & AVALC.join == "Y" & AVISITN < AVISITN.join} could be specified.
 
-The \verb{*.join} variables are not included in the output dataset.}
+The \verb{*.join} variables are not included in the output dataset.
+
+\describe{
+\item{Default value}{none}
+}}
 
 \item{join_type}{Observations to keep after joining
 
@@ -82,7 +107,10 @@ Whereas, sometimes you might allow for confirmatory observations to occur
 prior to the observation. For example, to identify AEs occurring on or
 after seven days before a COVID AE. Thus \code{join_type = "all"} could be used.
 
-\emph{Permitted Values:} \code{"before"}, \code{"after"}, \code{"all"}}
+\describe{
+\item{Permitted values}{\code{"before"}, \code{"after"}, \code{"all"}}
+\item{Default value}{none}
+}}
 
 \item{first_cond_lower}{Condition for selecting range of data (before)
 
@@ -95,7 +123,11 @@ considered, i.e., the observation is not flagged.
 This parameter should be specified if \code{filter_join} contains summary
 functions which should not apply to all observations but only from a
 certain observation before the current observation up to the current
-observation. For an example see the last example below.}
+observation. For an example see the last example below.
+
+\describe{
+\item{Default value}{\code{NULL}}
+}}
 
 \item{first_cond_upper}{Condition for selecting range of data (after)
 
@@ -106,7 +138,11 @@ observations are considered, i.e., the observation is not flagged.
 
 This parameter should be specified if \code{filter_join} contains summary
 functions which should not apply to all observations but only up to the
-confirmation assessment. For an example see the third example below.}
+confirmation assessment. For an example see the third example below.
+
+\describe{
+\item{Default value}{\code{NULL}}
+}}
 
 \item{filter_add}{Filter for additional dataset (\code{dataset_add})
 
@@ -120,7 +156,10 @@ condition.
 The condition can include summary functions like \code{all()} or \code{any()}. The
 additional dataset is grouped by the by variables (\code{by_vars}).
 
-\emph{Permitted Values}: a condition}
+\describe{
+\item{Permitted values}{a condition}
+\item{Default value}{\code{NULL}}
+}}
 
 \item{filter_join}{Condition for selecting observations
 
@@ -131,11 +170,23 @@ the summary function are applied to all observations up to the confirmation
 observation. For example, \code{filter_join = AVALC == "CR" & all(AVALC.join \%in\% c("CR", "NE")) & count_vals(var = AVALC.join, val = "NE") <= 1}
 selects observations with response "CR" and for all observations up to the
 confirmation observation the response is "CR" or "NE" and there is at most
-one "NE".}
+one "NE".
 
-\item{true_value}{Value of \code{new_var} for flagged observations}
+\describe{
+\item{Default value}{none}
+}}
 
-\item{false_value}{Value of \code{new_var} for observations not flagged}
+\item{true_value}{Value of \code{new_var} for flagged observations
+
+\describe{
+\item{Default value}{\code{"Y"}}
+}}
+
+\item{false_value}{Value of \code{new_var} for observations not flagged
+
+\describe{
+\item{Default value}{\code{NA_character_}}
+}}
 
 \item{check_type}{Check uniqueness?
 
@@ -143,7 +194,10 @@ If \code{"warning"} or \code{"error"} is specified, the specified message is iss
 if the observations of the input dataset are not unique with respect to the
 by variables and the order.
 
-\emph{Permitted Values:} \code{"none"}, \code{"warning"}, \code{"error"}}
+\describe{
+\item{Permitted values}{\code{"none"}, \code{"warning"}, \code{"error"}}
+\item{Default value}{\code{"warning"}}
+}}
 }
 \value{
 The input dataset with the variable specified by \code{new_var} added.

@@ -8,25 +8,25 @@
 #'   `derive_extreme_event()`. If the argument is not specified, the input
 #'   dataset (`dataset`) of `derive_extreme_event()` is used.
 #'
-#'   *Permitted Values*: a character scalar
+#' @permitted a character scalar
 #'
 #' @param condition An unquoted condition for selecting the observations, which
 #'   will contribute to the extreme event. If the condition contains summary
 #'   functions like `all()`, they are evaluated for each by group separately.
 #'
-#'   *Permitted Values*: an unquoted condition
+#' @permitted an unquoted condition
 #'
 #' @param mode If specified, the first or last observation with respect to `order` is
 #'   selected for each by group.
 #'
-#'   *Permitted Values*: `"first"`, `"last"`, `NULL`
+#' @permitted `"first"`, `"last"`, `NULL`
 #'
 #' @param order The specified variables or expressions are used to select the
 #'   first or last observation if `mode` is specified.
 #'
 #'   `r roxygen_order_na_handling()`
 #'
-#'   *Permitted Values*: list of expressions created by `exprs()`, e.g.,
+#' @permitted list of expressions created by `exprs()`, e.g.,
 #'   `exprs(ADT, desc(AVAL))` or `NULL`
 #'
 #' @param set_values_to A named list returned by `exprs()` defining the variables
@@ -34,7 +34,7 @@
 #'   PARAM  = "Worst Sleeping Problems")`. The values can be a symbol, a
 #'   character string, a numeric value, `NA` or an expression.
 #'
-#'   *Permitted Values*: a named list of expressions, e.g., created by `exprs()`
+#' @permitted a named list of expressions, e.g., created by `exprs()`
 #'
 #' @param keep_source_vars Variables to keep from the source dataset
 #'
@@ -42,7 +42,7 @@
 #'   variables specified for `by_vars` (of `derive_extreme_event()`) and created
 #'   by `set_values_to` are always kept.
 #'
-#'   *Permitted Values*: A list of expressions where each element is
+#' @permitted A list of expressions where each element is
 #'   a symbol or a tidyselect expression, e.g., `exprs(VISIT, VISITNUM,
 #'   starts_with("RS"))`.
 #'
@@ -51,7 +51,7 @@
 #'   The description does not affect the derivations where the event is used. It
 #'   is intended for documentation only.
 #'
-#'   *Permitted Values*: a character scalar
+#' @permitted a character scalar
 #'
 #' @keywords source_specifications
 #' @family source_specifications
@@ -109,7 +109,7 @@ event <- function(dataset_name = NULL,
 #'   `derive_extreme_event()`. If the argument is not specified, the input
 #'   dataset (`dataset`) of `derive_extreme_event()` is used.
 #'
-#'   *Permitted Values*: a character scalar
+#' @permitted a character scalar
 #'
 #' @param condition An unquoted condition for selecting the observations, which
 #'   will contribute to the extreme event.
@@ -125,7 +125,7 @@ event <- function(dataset_name = NULL,
 #'   observations up to the confirmation observation the response is "CR" or
 #'   "NE" and there is at most one "NE".
 #'
-#'   *Permitted Values*: an unquoted condition
+#' @permitted an unquoted condition
 #'
 #' @param join_vars Variables to keep from joined dataset
 #'
@@ -138,7 +138,7 @@ event <- function(dataset_name = NULL,
 #'
 #'   The `*.join` variables are not included in the output dataset.
 #'
-#'   *Permitted Values*: a named list of expressions, e.g., created by `exprs()`
+#' @permitted a named list of expressions, e.g., created by `exprs()`
 #'
 #' @param join_type Observations to keep after joining
 #'
@@ -147,7 +147,7 @@ event <- function(dataset_name = NULL,
 #'   "after"` is specified all observations after the original observations are
 #'   kept.
 #'
-#'   *Permitted Values:* `"before"`, `"after"`, `"all"`
+#' @permitted `"before"`, `"after"`, `"all"`
 #'
 #' @param first_cond_lower Condition for selecting range of data (before)
 #'
@@ -162,7 +162,7 @@ event <- function(dataset_name = NULL,
 #'   certain observation before the current observation up to the current
 #'   observation.
 #'
-#'   *Permitted Values*: an unquoted condition
+#' @permitted an unquoted condition
 #'
 #' @param first_cond_upper Condition for selecting range of data (after)
 #'
@@ -175,14 +175,14 @@ event <- function(dataset_name = NULL,
 #'   functions which should not apply to all observations but only up to the
 #'   confirmation assessment.
 #'
-#'   *Permitted Values*: an unquoted condition
+#' @permitted an unquoted condition
 #'
 #' @param order If specified, the specified variables or expressions are used to
 #'   select the first observation.
 #'
 #'   `r roxygen_order_na_handling()`
 #'
-#'   *Permitted Values*: list of expressions created by `exprs()`, e.g.,
+#' @permitted list of expressions created by `exprs()`, e.g.,
 #'   `exprs(ADT, desc(AVAL))` or `NULL`
 #'
 #' @inheritParams event
