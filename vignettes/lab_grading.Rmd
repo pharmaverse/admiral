@@ -475,6 +475,18 @@ atoxgr_criteria_ctcv4 %>%
   )
 ```
 <br>
+Here is a complete list of all assumptions in the metadata for NCI-CTCAE-v4
+<br>
+```{r, eval=TRUE, echo=FALSE}
+atoxgr_criteria_ctcv4 %>%
+  filter(!is.na(COMMENT) & str_detect(TERM, "glycemia", negate = TRUE) &
+    str_detect(TERM, "calcemia", negate = TRUE)) %>%
+  dataset_vignette(
+    display_vars = exprs(TERM, Grade_1, Grade_2, Grade_3, Grade_4, COMMENT)
+  )
+```
+<br>
+
 
 # NCI-CTCAEV5 implementation {#implement_ctcv5}
 
@@ -513,7 +525,7 @@ From SOC = "Investigations" there are 21 CTCAE v5.0 Terms:
   
 Note: These are the same terms identified for NCI-CTCAEv4.
 
-From the SOC =  "Metabolism and nutrition disorders" there are 12 CTCAE v4.0 Terms:
+From the SOC =  "Metabolism and nutrition disorders" there are 12 CTCAE v5.0 Terms:
 
   + Hypercalcemia
   + Hyperkalemia
@@ -528,10 +540,11 @@ From the SOC =  "Metabolism and nutrition disorders" there are 12 CTCAE v4.0 Ter
   + Hypomagnesemia
   + Hyponatremia
 
-Note: These are the same terms identified for NCI-CTCAEv4, except "Hypophosphatemia"
-and "Hyperglycemia" which are not in NCICTCAEv5 grading criteria.
+Note: These are the same terms identified for NCI-CTCAEv4, except “Hypophosphatemia” 
+and “Hyperglycemia” which are not gradable by quantitative lab values in NCICTCAEv5
+grading criteria.
 
-From the SOC =  "Blood and lymphatic system disorders" there are 2 CTCAE v4.0 Terms:
+From the SOC =  "Blood and lymphatic system disorders" there are 2 CTCAE v5.0 Terms:
 
   + Anemia
   + Leukocytosis
@@ -554,7 +567,7 @@ atoxgr_criteria_ctcv5 %>%
 ```
 <br>
 
-## Assumptions made when grading
+## Criteria dependent on the Baseline Value
 
 For terms "Alanine aminotransferase increased", "Alkaline phosphatase increased",
 "Aspartate aminotransferase increased", "Blood bilirubin increased" and "GGT increased" the criteria
@@ -566,6 +579,11 @@ be deemed to have an abnormal Baseline Value.
 Note: you can pass in multiple values, `abnormal_indicator = c("H", "HIGH")`
 
 For these 5 terms, this means if `BNRIND` is abnormal then the grade is always zero for the baseline observation.
+This is the conservative approach, to ensure you don't see big changes in grade for a patient after they take treatment.
+Some companies may not want the baseline observation graded at all, so would post-process, if necessary.
+
+
+## Assumptions made when grading
 
 For term "INR Increased" there is the following criteria:
 
@@ -609,7 +627,7 @@ The decision made was put in the `COMMENT` field.
 <br>
 ```{r, eval=TRUE, echo=FALSE}
 atoxgr_criteria_ctcv5 %>%
-  filter(str_detect(TERM, "INR") | str_detect(TERM, "amylase")) %>%
+  filter(str_detect(TERM, "Lipase") | str_detect(TERM, "amylase")) %>%
   dataset_vignette(
     display_vars = exprs(TERM, COMMENT)
   )
@@ -632,7 +650,7 @@ atoxgr_criteria_ctcv5 %>%
 
 A similar approach was taken for TERM "Hypokalemia" and "Hyponatremia". For "Hypokalemia",
 where Grade 1 and Grade 2 criteria is the same with respect to the lab value, then worse case
-is assumed as grade 2. For "Hyponatremia", where Grade 2 and Grade 2 criteria is the same with
+is assumed as grade 2. For "Hyponatremia", where Grade 2 and Grade 3 criteria is the same with
 respect to the lab value, then worse case is assumed as grade 3.
 The decision made was put in the `COMMENT` field.
 
@@ -645,6 +663,18 @@ atoxgr_criteria_ctcv5 %>%
   )
 ```
 <br>
+
+Here is a complete list of all assumptions in the metadata for NCI-CTCAE-v5
+<br>
+```{r, eval=TRUE, echo=FALSE}
+atoxgr_criteria_ctcv5 %>%
+  filter(!is.na(COMMENT) & str_detect(TERM, "calcemia", negate = TRUE)) %>%
+  dataset_vignette(
+    display_vars = exprs(TERM, Grade_1, Grade_2, Grade_3, Grade_4, COMMENT)
+  )
+```
+<br>
+
 
 # DAIDS implementation {#implement_daids}
 
@@ -813,14 +843,28 @@ For TERM "Direct Bilirubin, High (<= 28 days of age)" and "Uric Acid, High" the
 criteria is not given in SI unit. The conversion to SI unit is in the comment field.
 
 <br>
+
 ```{r, eval=TRUE, echo=FALSE}
 atoxgr_criteria_daids %>%
   filter(str_detect(COMMENT, "conver")) %>%
   dataset_vignette(
-    display_vars = exprs(TERM, FILTER, COMMENT)
+    display_vars = exprs(TERM, COMMENT)
   )
 ```
 <br>
+Here is a complete list of all assumptions in the metadata for DAIDs
+<br>
+```{r, eval=TRUE, echo=FALSE}
+atoxgr_criteria_daids %>%
+  filter(!is.na(COMMENT) & str_detect(COMMENT, "No criteria given", negate = TRUE) &
+    str_detect(COMMENT, "Did not grade", negate = TRUE)) %>%
+  arrange(TERM) %>%
+  dataset_vignette(
+    display_vars = exprs(TERM, COMMENT)
+  )
+```
+<br>
+
 
 
 # Conclusion
