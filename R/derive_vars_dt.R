@@ -159,7 +159,7 @@ derive_vars_dt <- function(dataset, # nolint: cyclocomp_linter
   if ((highest_imputation == "Y" && is.null(min_dates) && is.null(max_dates)) ||
     (highest_imputation == "Y" && length(min_dates) == 0 && length(max_dates) == 0)) {
     cli_abort(paste(
-      "If {.code highest_impuation = \"Y\"} is specified, {.arg min_dates} or",
+      "If {.code highest_imputation = \"Y\"} is specified, {.arg min_dates} or",
       "{.arg max_dates} must be specified respectively."
     ))
   }
@@ -168,13 +168,13 @@ derive_vars_dt <- function(dataset, # nolint: cyclocomp_linter
   }
   if (highest_imputation == "Y" && is.null(min_dates) && date_imputation == "first") {
     cli_warn(paste(
-      "If {.code highest_impuation = \"Y\"} and {.code date_imputation = \"first\"}",
+      "If {.code highest_imputation = \"Y\"} and {.code date_imputation = \"first\"}",
       "is specified, {.arg min_dates} should be specified."
     ))
   }
   if (highest_imputation == "Y" && is.null(max_dates) && date_imputation == "last") {
     cli_warn(paste(
-      "If {.code highest_impuation = \"Y\"} and {.code date_imputation = \"last\"}",
+      "If {.code highest_imputation = \"Y\"} and {.code date_imputation = \"last\"}",
       "is specified, {.arg max_dates} should be specified."
     ))
   }
@@ -297,19 +297,22 @@ convert_dtc_to_dt <- function(dtc,
 #' @param date_imputation The value to impute the day/month when a datepart is
 #'   missing.
 #'
-#'   A character value is expected, either as a
-#'   - format with month and day specified as `"mm-dd"`: e.g. `"06-15"` for the
-#'   15th of June (The year can not be specified; for imputing the year
-#'   `"first"` or `"last"` together with `min_dates` or `max_dates` argument can
-#'   be used (see examples).),
-#'   - or as a keyword: `"first"`, `"mid"`, `"last"` to impute to the first/mid/last
-#'   day/month. If `"mid"` is specified, missing components are imputed as the
-#'   middle of the possible range:
+#'   A character value is expected.
+#'    - If  `highest_imputation` is `"M"`, month and day can be
+#'      specified as `"mm-dd"`: e.g. `"06-15"` for the 15th of June
+#'    - When  `highest_imputation` is `"M"` or  `"D"`, the following keywords are available:
+#'      `"first"`, `"mid"`, `"last"` to impute to the first/mid/last
+#'      day/month. If `"mid"` is specified, missing components are imputed as the
+#'      middle of the possible range:
 #'       - If both month and day are missing, they are imputed as `"06-30"`
 #'        (middle of the year).
 #'       - If only day is missing, it is imputed as `"15"` (middle of the month).
 #'
-#'   The argument is ignored if `highest_imputation` is less then `"D"`.
+#'   The year can not be specified; for imputing the year
+#'   `"first"` or `"last"` together with `min_dates` or `max_dates` argument can
+#'   be used (see examples).),
+#'
+#'   The argument is ignored if `highest_imputation` is less than `"D"`.
 #'
 #' @param min_dates Minimum dates
 #'
@@ -452,6 +455,34 @@ impute_dtc_dt <- function(dtc,
     )
   assert_logical_scalar(preserve)
 
+  if (highest_imputation == "D") {
+    assert_character_scalar(date_imputation, values = c("first", "mid", "last"))
+  }
+
+  if (highest_imputation == "M") {
+    is_mm_dd_format <- grepl("^(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])$", date_imputation)
+    is_one_of_keys <- date_imputation %in% c("first", "mid", "last")
+    if (!{
+      is_mm_dd_format || is_one_of_keys
+    }) {
+      cli_abort(paste(
+        "If {.code highest_imputation = \"M\"} is specified, {.arg date_imputation} must be",
+        "one of `'first'`, `'mid'`, `'last'`",
+        "or a format with month and day specified as `'mm-dd'`: e.g. `'06-15'`"
+      ))
+    }
+  }
+
+  if (highest_imputation == "Y") {
+    assert_character_scalar(date_imputation, values = c("first", "last"))
+    # if (is.null(min_dates) && is.null(max_dates)) {
+    #   cli_abort(paste(
+    #     "If {.code highest_imputation = \"Y\"} is specified,",
+    #     " either {.arg min_dates} or {.arg max_dates} must be specified."
+    #   ))
+    # }
+  }
+
   # Parse character date ----
   two <- "(\\d{2}|-?)"
   partialdate <- str_match(dtc, paste0(
@@ -524,7 +555,7 @@ impute_dtc_dt <- function(dtc,
   )
 
   if (highest_imputation == "Y" && is.null(min_dates) && is.null(max_dates)) {
-    warning("If `highest_impuation` = \"Y\" is specified, `min_dates` or `max_dates` should be specified respectively.") # nolint
+    warning("If `highest_imputation` = \"Y\" is specified, `min_dates` or `max_dates` should be specified respectively.") # nolint
   }
 
   return(restricted)
@@ -573,7 +604,7 @@ restrict_imputed_dtc_dt <- function(dtc,
           )
       },
       # Suppress warning because we need to run without min/max dates but users should not
-      regexpr = "If `highest_impuation` = \"Y\" is specified, `min_dates` or `max_dates` should be specified respectively." # nolint
+      regexpr = "If `highest_imputation` = \"Y\" is specified, `min_dates` or `max_dates` should be specified respectively." # nolint
     )
   }
   if (!(is.null(min_dates) || length(min_dates) == 0)) {
