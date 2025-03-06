@@ -26,6 +26,8 @@
 <details>
 <summary>Developer Notes</summary>
 
+* Removed CODEOWNERS file from repo (#2674)
+
 </details>
 
 # admiral 1.2.0
