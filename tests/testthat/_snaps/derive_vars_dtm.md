@@ -10,8 +10,8 @@
 # derive_vars_dtm Test 22: No re-derivation is done if --DTF variable already exists
 
     Code
-      actual_output <- derive_vars_dtm(mutate(input, ASTDTF = c(NA, NA, NA, NA, "D",
-        "MD", "M")), new_vars_prefix = "AST", dtc = XXSTDTC, highest_imputation = "M",
+      actual_output <- derive_vars_dtm(mutate(input, ASTDTF = c(NA, NA, NA, "D", "MD",
+        "M")), new_vars_prefix = "AST", dtc = XXSTDTC, highest_imputation = "M",
       date_imputation = "first")
     Message
       The `ASTDTF` variable is already present in the input dataset and will not be re-derived.
@@ -64,7 +64,14 @@
     Code
       derive_vars_dtm(input, new_vars_prefix = "AST", dtc = XXSTDTC,
         ignore_seconds_flag = TRUE)
-    Condition
-      Error in `derive_vars_dtm()`:
-      ! Seconds detected in data while `ignore_seconds_flag` is invoked
+    Output
+      # A tibble: 6 x 3
+        XXSTDTC          ASTDTM              ASTTMF
+        <chr>            <dttm>              <chr> 
+      1 2019-07-18T15:25 2019-07-18 15:25:00 <NA>  
+      2 2019-07-18T15    2019-07-18 15:00:00 M     
+      3 2019-07-18       2019-07-18 00:00:00 H     
+      4 2019-02          NA                  <NA>  
+      5 2019             NA                  <NA>  
+      6 2019---07        NA                  <NA>  
 
