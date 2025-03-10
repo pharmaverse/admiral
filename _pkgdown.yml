@@ -24,7 +24,7 @@ development:
   version_label: default
 
 authors:
-  before: "We define *authors* as those who are actively maintaining the code base, and *contributors* as those who made a significant contribution in the past. For all acknowledgements, see the eponymous section in the [Home Page](https://pharmaverse.github.io/admiral/)."
+  before: "We define *authors* as those who are actively maintaining the code base, and *contributors* as those who made a significant contribution in the past. For all acknowledgements, see the eponymous section in the [Home Page](https://pharmaverse.github.io/admiral/cran-release/)."
   footer:
     roles: [aut, ctb, cre, fnd]
     text: "Developed by"
