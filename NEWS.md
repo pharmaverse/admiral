@@ -1,7 +1,7 @@
 # admiral (development version)
 
 ## New Features
-
+- New function `my_first_fcn` prints a user message (#1839)
 ## Updates of Existing Functions
 
 - The function `extract_duplicate_records()` was updated to consider all variables in the input dataset for the by group if the `by_vars` argument is omitted entirely. (#2644)
