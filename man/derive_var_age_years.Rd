@@ -9,11 +9,19 @@ derive_var_age_years(dataset, age_var, age_unit = NULL, new_var)
 \arguments{
 \item{dataset}{Input dataset
 
-The variables specified by the \code{age_var} argument are expected to be in the dataset.}
+The variables specified by the \code{age_var} argument are expected to be in the dataset.
+
+\describe{
+\item{Default value}{none}
+}}
 
 \item{age_var}{Age variable.
 
-A numeric object is expected.}
+A numeric object is expected.
+
+\describe{
+\item{Default value}{none}
+}}
 
 \item{age_unit}{Age unit.
 
@@ -21,13 +29,18 @@ The \code{age_unit} argument is only expected when there is NOT a variable \code
 in \code{dataset}. This gives the unit of the \code{age_var} variable and is used to convert
 AGE to 'years' so that grouping can occur.
 
-Default: NULL
-
-Permitted Values: 'years', 'months', 'weeks', 'days', 'hours', 'minutes', 'seconds'}
+\describe{
+\item{Permitted values}{'years', 'months', 'weeks', 'days', 'hours', 'minutes', 'seconds'}
+\item{Default value}{\code{NULL}}
+}}
 
 \item{new_var}{New age variable to be created in years. The returned values are
 doubles and NOT integers.
-'}
+'
+
+\describe{
+\item{Default value}{none}
+}}
 }
 \value{
 The input dataset (\code{dataset}) with \code{new_var} variable added in years.

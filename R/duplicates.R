@@ -47,6 +47,8 @@ get_duplicates_dataset <- function() {
 #'
 #' `r roxygen_param_by_vars()`
 #'
+#' @permitted [var_list]
+#'
 #' @return A `data.frame` of duplicate records within `dataset`
 #'
 #' @export
@@ -99,9 +101,13 @@ extract_duplicate_records <- function(dataset, by_vars = NULL) {
 #'
 #' `r roxygen_param_by_vars()`
 #'
+#' @permitted [var_list]
+#'
 #' @param msg The condition message
 #' @param cnd_type Type of condition to signal when detecting duplicate records.
-#'   One of `"message"`, `"warning"` or `"error"`. Default is `"error"`.
+#'
+#' @permitted `"message"`, `"warning"`, or `"error"`
+#'
 #' @param class Class of the condition
 #'
 #'   The specified classes are added to the classes of the condition.

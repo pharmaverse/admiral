@@ -64,35 +64,31 @@
 #'   The input dates are round down with respect to the input unit, e.g., if the
 #'   input unit is 'days', the time of the input dates is ignored.
 #'
-#'   Default: `TRUE`
 #'
-#'   Permitted Values: `TRUE`, `FALSE`
+#' @permitted `TRUE`, `FALSE`
 #'
 #' @param add_one Add one input unit?
 #'
 #'   If the duration is non-negative, one input unit is added. i.e., the
 #'   duration can not be zero.
 #'
-#'   Default: `TRUE`
 #'
-#'   Permitted Values: `TRUE`, `FALSE`
+#' @permitted `TRUE`, `FALSE`
 #'
 #' @param trunc_out Return integer part
 #'
 #'   The fractional part of the duration (in output unit) is removed, i.e., the
 #'   integer part is returned.
 #'
-#'   Default: `FALSE`
 #'
-#'   Permitted Values: `TRUE`, `FALSE`
+#' @permitted `TRUE`, `FALSE`
 #'
 #' @param type lubridate duration type.
 #'
 #'   See below for details.
 #'
-#'   Default: `"duration"`
 #'
-#'   Permitted Values: `"duration"`, `"interval"`
+#' @permitted `"duration"`, `"interval"`
 #'
 #' @details The output is a numeric vector providing the duration as time from
 #' start to end date in the specified unit. If the end date is before the start

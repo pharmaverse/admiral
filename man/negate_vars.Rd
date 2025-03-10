@@ -7,7 +7,11 @@
 negate_vars(vars = NULL)
 }
 \arguments{
-\item{vars}{List of variables created by \code{exprs()}}
+\item{vars}{List of variables created by \code{exprs()}
+
+\describe{
+\item{Default value}{\code{NULL}}
+}}
 }
 \value{
 A list of expressions

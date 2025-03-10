@@ -16,12 +16,20 @@ derive_var_merged_summary(
 \arguments{
 \item{dataset}{Input dataset
 
-The variables specified by the \code{by_vars} argument are expected to be in the dataset.}
+The variables specified by the \code{by_vars} argument are expected to be in the dataset.
+
+\describe{
+\item{Default value}{none}
+}}
 
 \item{dataset_add}{Additional dataset
 
 The variables specified by the \code{by_vars} and the variables used on the left
-hand sides of the \code{new_vars} arguments are expected.}
+hand sides of the \code{new_vars} arguments are expected.
+
+\describe{
+\item{Default value}{none}
+}}
 
 \item{by_vars}{Grouping variables
 
@@ -29,8 +37,9 @@ The expressions on the left hand sides of \code{new_vars} are evaluated by the
 specified \emph{variables}. Then the resulting values are merged to the input
 dataset (\code{dataset}) by the specified \emph{variables}.
 
-\emph{Permitted Values}: list of variables created by \code{exprs()}
-e.g. \code{exprs(USUBJID, VISIT)}}
+\describe{
+\item{Default value}{none}
+}}
 
 \item{new_vars}{New variables to add
 
@@ -50,7 +59,11 @@ For example:
     DOSESUM = sum(AVAL),
     DOSEMEAN = mean(AVAL)
   )
-}\if{html}{\out{</div>}}}
+}\if{html}{\out{</div>}}
+
+\describe{
+\item{Default value}{\code{NULL}}
+}}
 
 \item{filter_add}{Filter for additional dataset (\code{dataset_add})
 
@@ -58,7 +71,10 @@ Only observations fulfilling the specified condition are taken into account
 for summarizing. If the argument is not specified, all observations are
 considered.
 
-\emph{Permitted Values}: a condition}
+\describe{
+\item{Permitted values}{a condition}
+\item{Default value}{\code{NULL}}
+}}
 
 \item{missing_values}{Values for non-matching observations
 
@@ -67,8 +83,11 @@ matching observation in the additional dataset (\code{dataset_add}) the values
 of the specified variables are set to the specified value. Only variables
 specified for \code{new_vars} can be specified for \code{missing_values}.
 
-\emph{Permitted Values}: named list of expressions, e.g.,
+\describe{
+\item{Permitted values}{named list of expressions, e.g.,
 \code{exprs(BASEC = "MISSING", BASE = -1)}}
+\item{Default value}{\code{NULL}}
+}}
 }
 \value{
 The output dataset contains all observations and variables of the

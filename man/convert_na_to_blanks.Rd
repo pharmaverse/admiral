@@ -19,7 +19,11 @@ convert_na_to_blanks(x)
 \method{convert_na_to_blanks}{data.frame}(x)
 }
 \arguments{
-\item{x}{Any R object}
+\item{x}{Any R object
+
+\describe{
+\item{Default value}{none}
+}}
 }
 \value{
 An object of the same class as the input
