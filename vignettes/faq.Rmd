@@ -116,7 +116,7 @@ a way to look up common ADaM variables with recommended `{admiral}` functions to
 
  * Our [programming strategy](https://pharmaverse.github.io/admiraldev/articles/programming_strategy.html) serves as a framework
  for users how to create their own functions. 
- * Please see the [contribution model website](contribution_model.html) for a detailed description how to contribute
+ * Please see the [contribution model website](https://pharmaverse.github.io/admiral/CONTRIBUTING.html) for a detailed description how to contribute
 
 ##### How has `{admiral}` been **tested externally** to Roche/GSK?
 
