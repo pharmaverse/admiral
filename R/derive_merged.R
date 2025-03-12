@@ -31,7 +31,7 @@
 #'
 #'   `r roxygen_order_na_handling()`
 #'
-#'   *Permitted Values*: list of expressions created by `exprs()`, e.g.,
+#' @permitted list of expressions created by `exprs()`, e.g.,
 #'   `exprs(ADT, desc(AVAL))` or `NULL`
 #'
 #' @param new_vars Variables to add
@@ -55,7 +55,7 @@
 #'   If the argument is not specified or set to `NULL`, all variables from the
 #'   additional dataset (`dataset_add`) are added.
 #'
-#'   *Permitted Values*: list of variables or named expressions created by `exprs()`
+#' @permitted list of variables or named expressions created by `exprs()`
 #'
 #' @param filter_add Filter for additional dataset (`dataset_add`)
 #'
@@ -66,7 +66,7 @@
 #'   Variables defined by the `new_vars` argument can be used in the filter
 #'   condition.
 #'
-#'   *Permitted Values*: a condition
+#' @permitted a condition
 #'
 #' @param mode Selection mode
 #'
@@ -75,7 +75,7 @@
 #'
 #'   If the `order` argument is not specified, the `mode` argument is ignored.
 #'
-#'   *Permitted Values*: `"first"`, `"last"`, `NULL`
+#' @permitted `"first"`, `"last"`, `NULL`
 #'
 #' @param exist_flag Exist flag
 #'
@@ -84,21 +84,21 @@
 #'   be the value provided in `true_value` for all selected records from `dataset_add`
 #'   which are merged into the input dataset, and the value provided in `false_value` otherwise.
 #'
-#'   *Permitted Values*: Variable name
+#' @permitted Variable name
 #'
 #' @param true_value True value
 #'
 #'   The value for the specified variable `exist_flag`, applicable to
 #'   the first or last observation (depending on the mode) of each by group.
 #'
-#'   Permitted Values: An atomic scalar
+#' @permitted An atomic scalar
 #'
 #' @param false_value False value
 #'
 #'   The value for the specified variable `exist_flag`, NOT applicable to
 #'   the first or last observation (depending on the mode) of each by group.
 #'
-#'   Permitted Values: An atomic scalar
+#' @permitted An atomic scalar
 #'
 #' @param missing_values Values for non-matching observations
 #'
@@ -107,7 +107,7 @@
 #'   of the specified variables are set to the specified value. Only variables
 #'   specified for `new_vars` can be specified for `missing_values`.
 #'
-#'   *Permitted Values*: named list of expressions, e.g.,
+#' @permitted named list of expressions, e.g.,
 #'   `exprs(BASEC = "MISSING", BASE = -1)`
 #'
 #' @param check_type Check uniqueness?
@@ -120,13 +120,13 @@
 #'   if the observations of the (restricted) additional dataset are not unique with respect
 #'   to the by variables, an error is issued.
 #'
-#'   *Permitted Values*: `"none"`, `"message"`, `"warning"`, `"error"`
+#' @permitted `"none"`, `"message"`, `"warning"`, `"error"`
 #'
 #' @param duplicate_msg Message of unique check
 #'
 #'   If the uniqueness check fails, the specified message is displayed.
 #'
-#'   *Default*:
+#' @default
 #'
 #'   ```{r echo=TRUE, eval=FALSE}
 #'   paste(
@@ -143,7 +143,7 @@
 #'   <https://dplyr.tidyverse.org/reference/mutate-joins.html#arguments> for
 #'   more details.
 #'
-#'   **Permitted Values:** `"one-to-one"`, `"many-to-one"`, `NULL`.
+#' @permitted `"one-to-one"`, `"many-to-one"`, `NULL`.
 #'
 #' @return The output dataset contains all observations and variables of the
 #'   input dataset and additionally the variables specified for `new_vars` from
@@ -515,7 +515,7 @@ derive_vars_merged <- function(dataset,
 #'   The new variable is set to the specified value for all by groups without
 #'   observations in the additional dataset.
 #'
-#'   *Permitted Value*: A character scalar
+#' @permitted A character scalar
 #'
 #' @param filter_add Filter for additional data
 #'
@@ -523,7 +523,7 @@ derive_vars_merged <- function(dataset,
 #'   for flagging. If the argument is not specified, all observations are
 #'   considered.
 #'
-#'   *Permitted Values*: a condition
+#' @permitted a condition
 #'
 #' @inheritParams derive_vars_merged
 #'
@@ -650,7 +650,7 @@ derive_var_merged_exist_flag <- function(dataset,
 #'
 #' *Default*: `TRUE`
 #'
-#' *Permitted Values*: `TRUE`, `FALSE`
+#' @permitted `TRUE`, `FALSE`
 #'
 #' @inheritParams derive_vars_merged
 #'
@@ -827,7 +827,7 @@ get_not_mapped <- function() {
 #'   for summarizing. If the argument is not specified, all observations are
 #'   considered.
 #'
-#'   *Permitted Values*: a condition
+#' @permitted a condition
 #'
 #' @inheritParams derive_vars_merged
 #'

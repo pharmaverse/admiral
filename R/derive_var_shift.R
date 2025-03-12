@@ -15,11 +15,9 @@
 #'
 #' @param missing_value Character string to replace missing values in `from_var` or `to_var`.
 #'
-#'  Default: "NULL"
 #'
 #' @param sep_val Character string to concatenate values of `from_var` and `to_var`.
 #'
-#'  Default: " to "
 #'
 #' @details `new_var` is derived by concatenating the values of `from_var` to values of `to_var`
 #' (e.g. "NORMAL to HIGH"). When `from_var` or `to_var` has missing value, the

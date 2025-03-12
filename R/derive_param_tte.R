@@ -67,7 +67,7 @@
 #'   by variables and the date and order specified in the `event_source()` and
 #'   `censor_source()` objects.
 #'
-#'   *Permitted Values*: `"none"`, `"message"`, `"warning"`, `"error"`
+#' @permitted `"none"`, `"message"`, `"warning"`, `"error"`
 #'
 #' @details The following steps are performed to create the observations of the
 #'   new parameter:
@@ -569,7 +569,7 @@ derive_param_tte <- function(dataset = NULL,
 #'   respect to the date is included in the output dataset. If `"last"` is
 #'   specified, the last observation is included in the output dataset.
 #'
-#'   *Permitted Values*:  `"first"`, `"last"`
+#' @permitted  `"first"`, `"last"`
 #'
 #' @param check_type Check uniqueness
 #'
@@ -577,7 +577,7 @@ derive_param_tte <- function(dataset = NULL,
 #'   if the observations of the source datasets are not unique with respect to the
 #'   by variables and the date and order specified in the `tte_source()` objects.
 #'
-#'   *Permitted Values*: `"none"`, `"warning"`, `"error"`, `"message"`
+#' @permitted `"none"`, `"warning"`, `"error"`, `"message"`
 #'
 #' @details The following steps are performed to create the output dataset:
 #'
@@ -882,7 +882,7 @@ extend_source_datasets <- function(source_datasets,
 #'   An optional named list returned by `exprs()` defining additional variables
 #'   that the source dataset is sorted on after `date`.
 #'
-#'   *Permitted Values:* list of variables created by `exprs()` e.g. `exprs(ASEQ)`.
+#' @permitted list of variables created by `exprs()` e.g. `exprs(ASEQ)`.
 #'
 #' @keywords source_specifications
 #' @family source_specifications

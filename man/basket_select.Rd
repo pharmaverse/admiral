@@ -8,23 +8,42 @@ basket_select(name = NULL, id = NULL, scope = NULL, type, ...)
 }
 \arguments{
 \item{name}{Name of the query used to select the definition of the query from
-the company database.}
+the company database.
+
+\describe{
+\item{Default value}{\code{NULL}}
+}}
 
 \item{id}{Identifier of the query used to select the definition of the query
-from the company database.}
+from the company database.
+
+\describe{
+\item{Default value}{\code{NULL}}
+}}
 
 \item{scope}{Scope of the query used to select the definition of the query
 from the company database.
 
-\emph{Permitted Values}: \code{"BROAD"}, \code{"NARROW"}, \code{NA_character_}}
+\describe{
+\item{Permitted values}{\code{"BROAD"}, \code{"NARROW"}, \code{NA_character_}}
+\item{Default value}{\code{NULL}}
+}}
 
 \item{type}{The type argument expects a character scalar. It is passed to the
 company specific get_terms() function such that the function can determine
-which sort of basket is requested}
+which sort of basket is requested
+
+\describe{
+\item{Default value}{none}
+}}
 
 \item{...}{Any number of \emph{named} function arguments. Can be used to pass in company
 specific conditions or flags that will then be used in user-defined function that is
-passed into argument \code{get_terms_fun} for function \code{create_query_data()}.}
+passed into argument \code{get_terms_fun} for function \code{create_query_data()}.
+
+\describe{
+\item{Default value}{none}
+}}
 }
 \value{
 An object of class \code{basket_select}.

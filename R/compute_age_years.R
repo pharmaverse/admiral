@@ -13,7 +13,7 @@
 #'   permitted values are cases insensitive (e.g. `"YEARS"` is treated the same
 #'   as `"years"` and `"Years"`).
 #'
-#'   Permitted Values: `"years"`, `"months"`, `"weeks"`, `"days"`, `"hours"`, `"minutes"`,
+#' @permitted `"years"`, `"months"`, `"weeks"`, `"days"`, `"hours"`, `"minutes"`,
 #'   `"seconds"`, `NA_character_`.
 #'
 #' @details Returns a numeric vector of ages in years as doubles. Note

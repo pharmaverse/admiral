@@ -7,13 +7,21 @@
 derive_vars_query(dataset, dataset_queries)
 }
 \arguments{
-\item{dataset}{Input dataset}
+\item{dataset}{Input dataset
+
+\describe{
+\item{Default value}{none}
+}}
 
 \item{dataset_queries}{A dataset containing required columns \code{PREFIX},
 \code{GRPNAME}, \code{SRCVAR}, \code{TERMCHAR} and/or \code{TERMNUM}, and optional columns
 \code{GRPID}, \code{SCOPE}, \code{SCOPEN}.
 
-\code{create_query_data()} can be used to create the dataset.}
+\code{create_query_data()} can be used to create the dataset.
+
+\describe{
+\item{Default value}{none}
+}}
 }
 \value{
 The input dataset with query variables derived.

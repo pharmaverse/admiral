@@ -62,7 +62,6 @@ CTCAEv
 CVD
 Carlucci
 Chakma
-Cheatsheet
 Chemistries
 Chol
 Cockcroft
@@ -201,6 +200,7 @@ QID
 README
 Rahal
 Ratford
+Roclet
 Romain
 SCE
 SCN
@@ -327,6 +327,7 @@ repo
 reproducibility
 rlang
 roche
+roclet
 roxygen
 scalable
 signif

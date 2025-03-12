@@ -28,15 +28,9 @@ roxygen_param_by_vars <- function(rename = FALSE) {
       by_vars_text,
       "Variables can be renamed by naming the element, i.e. \n",
       "`by_vars = exprs(<name in input dataset> = <name in additional dataset>)`, ",
-      "similar to the `dplyr` joins.\n \n"
+      "similar to the `dplyr` joins."
     )
   }
-
-  by_vars_text <- paste0(
-    by_vars_text,
-    "*Permitted Values*: list of variables created by `exprs()` \n",
-    "e.g. `exprs(USUBJID, VISIT)`"
-  )
 
   return(by_vars_text)
 }

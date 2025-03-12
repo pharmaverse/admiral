@@ -11,22 +11,22 @@
 #'
 #' @param start_date Event start date
 #'
-#'   *Permitted Values:* A symbol referring to a date or datetime variable of
+#' @permitted A symbol referring to a date or datetime variable of
 #'   the input dataset
 #'
 #' @param end_date Event end date
 #'
-#'   *Permitted Values:* A symbol referring to a date or datetime variable of
+#' @permitted A symbol referring to a date or datetime variable of
 #'   the input dataset
 #'
 #' @param trt_start_date Treatment start date
 #'
-#'   *Permitted Values:* A symbol referring to a date or datetime variable of
+#' @permitted A symbol referring to a date or datetime variable of
 #'   the input dataset
 #'
 #' @param trt_end_date Treatment end date
 #'
-#'   *Permitted Values:* A symbol referring to a date or datetime variable of
+#' @permitted A symbol referring to a date or datetime variable of
 #'   the input dataset or `NULL`
 #'
 #' @param end_window
@@ -34,14 +34,14 @@
 #'    If the argument is specified (in 'days'), events starting more than the specified
 #'    number of days after end of treatment, are not flagged.
 #'
-#'    *Permitted Values:* A non-negative integer or `NULL`
+#' @permitted A non-negative integer or `NULL`
 #'
 #' @param ignore_time_for_trt_end
 #'
 #'   If the argument is set to `TRUE`, the time part is ignored for checking if
 #'   the event occurred more than `end_window` days after end of treatment.
 #'
-#'   *Permitted Values:* `TRUE`, `FALSE`
+#' @permitted `TRUE`, `FALSE`
 #'
 #' @param initial_intensity Initial severity/intensity or toxicity
 #'
@@ -56,7 +56,7 @@
 #'   comparison operators. I.e., if the intensity is greater than the initial
 #'   intensity `initial_intensity < intensity` must evaluate to `TRUE`.
 #'
-#'   *Permitted Values:* A symbol referring to a variable of the input dataset
+#' @permitted A symbol referring to a variable of the input dataset
 #'   or `NULL`
 #'
 #' @param intensity Severity/intensity or toxicity
@@ -69,7 +69,7 @@
 #'   comparison operators. I.e., if the intensity is greater than the initial
 #'   intensity `initial_intensity < intensity` must evaluate to `TRUE`.
 #'
-#'   *Permitted Values:* A symbol referring to a variable of the input dataset
+#' @permitted A symbol referring to a variable of the input dataset
 #'   or `NULL`
 #'
 #' @param group_var Grouping variable
@@ -81,7 +81,7 @@
 #'  are flagged. Once an AE record in a group is flagged, all subsequent records
 #'  in the treatment window are flagged regardless of severity.
 #'
-#'  *Permitted Values:* A symbol referring to a variable of the input dataset
+#' @permitted A symbol referring to a variable of the input dataset
 #'   or `NULL`
 #'
 #' @param subject_keys Variables to uniquely identify a subject.
