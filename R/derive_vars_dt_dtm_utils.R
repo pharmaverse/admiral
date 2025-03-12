@@ -115,7 +115,7 @@ get_imputation_target_date <- function(date_imputation,
     )
   )
 
-  return(target)
+  target
 }
 
 #' Get Time Imputation Targets
@@ -156,7 +156,7 @@ get_imputation_target_time <- function(time_imputation) {
     )
   )
 
-  return(target)
+  target
 }
 
 #' Convert a Date into a Datetime Object
