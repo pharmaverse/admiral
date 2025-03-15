@@ -47,6 +47,14 @@
 #'
 #'   For seconds: `"second"`, `"seconds"`, `"sec"`, `"secs"`, `"s"`
 #'
+#' @param type lubridate duration type
+#'
+#'   See below for details.
+#'
+#'   Default: `"interval"`
+#'
+#'   Permitted Values: `"duration"`, `"interval"`
+#'
 #' @details The duration is derived as time from start to end date in the
 #'   specified output unit. If the end date is before the start date, the duration
 #'   is negative. The start and end date variable must be present in the specified
