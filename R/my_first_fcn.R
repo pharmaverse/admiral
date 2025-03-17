@@ -1,14 +1,12 @@
-#' Onboarding dummy function
-#'
-#' @author Jian Wang
+#' Onboard dummy function
 #'
 #' @description
 #' This function displays a welcome message and return a string literal to the caller
 #'
 #' @return A character string with a welcome message
 #'
-#'@keywords utils_misc
-#'@family utils_misc
+#' @keywords utils_misc
+#' @family utils_misc
 #'
 #' @export
 #'

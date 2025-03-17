@@ -2,7 +2,7 @@
 
 ## New Features
 
-- Added `my_first_fcn()` function for developer onboarding
+- Added `my_first_fcn()` function for developer onboard
 
 ## Updates of Existing Functions
 
