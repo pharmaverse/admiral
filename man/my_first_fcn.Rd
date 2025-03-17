@@ -11,7 +11,6 @@ A character string with a welcome message
 }
 \description{
 This function displays a welcome message and return a string literal to the caller
-#'
 }
 \examples{
 my_first_fcn()
@@ -20,3 +19,5 @@ my_first_fcn()
 \author{
 Jian Wang
 }
+\concept{utils_misc}
+\keyword{utils_misc}

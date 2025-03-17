@@ -126,6 +126,10 @@ reference:
   contents:
   - has_keyword('utils_examples')
 
+- subtitle: Miscellaneous Utilities
+  contents:
+  - has_keyword("utils_misc")
+
 - title: Objects exported from other packages
   desc: |
     To maximize the user-friendliness of `{admiral}`, functions from other packages are provided

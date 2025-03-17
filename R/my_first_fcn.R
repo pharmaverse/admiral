@@ -7,8 +7,8 @@
 #'
 #' @return A character string with a welcome message
 #'
-#'@keywords der_adxx
-#'@family der_adxx
+#'@keywords utils_misc
+#'@family utils_misc
 #'
 #' @export
 #'
