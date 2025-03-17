@@ -408,7 +408,7 @@ dataset_vignette(
   adtte %>%
     select(
       STUDYID, USUBJID, PARAMCD, PARAM, STARTDT, ADT, ADTF, CNSR,
-      EVNTDESC, SRCDOM, SRCVAR
+      EVNTDESC, SRCDOM, SRCVAR, SRCSEQ
     ),
   display_vars = exprs(USUBJID, PARAMCD, STARTDT, ADT, ADTF, CNSR)
 )
