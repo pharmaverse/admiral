@@ -2,7 +2,7 @@
 % Please edit documentation in R/my_first_fcn.R
 \name{my_first_fcn}
 \alias{my_first_fcn}
-\title{Onboarding dummy function}
+\title{Onboard dummy function}
 \usage{
 my_first_fcn()
 }
@@ -15,9 +15,6 @@ This function displays a welcome message and return a string literal to the call
 \examples{
 my_first_fcn()
 
-}
-\author{
-Jian Wang
 }
 \concept{utils_misc}
 \keyword{utils_misc}
