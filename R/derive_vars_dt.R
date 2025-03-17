@@ -310,7 +310,7 @@ convert_dtc_to_dt <- function(dtc,
 #'
 #'   The year can not be specified; for imputing the year
 #'   `"first"` or `"last"` together with `min_dates` or `max_dates` argument can
-#'   be used (see examples).),
+#'   be used (see examples).
 #'
 #'   The argument is ignored if `highest_imputation` is less than `"D"`.
 #'
