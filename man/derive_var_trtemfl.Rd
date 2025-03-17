@@ -141,12 +141,24 @@ is set to \code{"Y"};
 }
 \item Otherwise it is set to \code{NA_character_}.
 }
+
+The behavior of \code{derive_var_trtemfl} is aligned with the proposed
+treatment-emergent AE assignment in the following
+\href{https://phuse.s3.eu-central-1.amazonaws.com/Deliverables/Safety+Analytics/WP-087+Recommended+Definition+of++Treatment-Emergent+Adverse+Events+in+Clinical+Trials+.pdf}{PHUSE White Paper}.
+See Example 3 in the examples section.
 }
 \examples{
 
 library(tibble)
 library(dplyr, warn.conflicts = FALSE)
 library(lubridate)
+
+# Note: Examples 1 and 2 exhaustively showcase all arguments of
+# derive_var_trtemfl(). Example 3 presents 13 more cases (some new, some similar
+# to Examples 1 and 2) which are aligned one-to-one with the scenarios
+# in the PHUSE White Paper on Treatment-Emergent AEs linked above.
+
+# Example 1a: Derive TRTEMFL without considering treatment end and worsening
 
 adae <- tribble(
   ~USUBJID, ~ASTDTM,            ~AENDTM,            ~AEITOXGR, ~AETOXGR,
@@ -180,10 +192,10 @@ adae <- tribble(
     TRTEDTM = if_else(USUBJID == "1", ymd_hm("2022-04-30T23:59"), ymd_hms(""))
   )
 
-# derive TRTEMFL without considering treatment end and worsening
 derive_var_trtemfl(adae) \%>\% select(ASTDTM, AENDTM, TRTSDTM, TRTEMFL)
 
-# derive TRTEM2FL taking treatment end and worsening into account
+# Example 1b: Derive TRTEM2FL taking treatment end and worsening into account
+
 derive_var_trtemfl(
   adae,
   new_var = TRTEM2FL,
@@ -192,6 +204,9 @@ derive_var_trtemfl(
   initial_intensity = AEITOXGR,
   intensity = AETOXGR
 ) \%>\% select(ASTDTM, AENDTM, AEITOXGR, AETOXGR, TRTEM2FL)
+
+# Example 2: Derive TRTEMFL taking treatment end and worsening into account
+# within a grouping variable
 
 adae2 <- tribble(
   ~USUBJID, ~ASTDTM, ~AENDTM, ~AEITOXGR, ~AETOXGR, ~AEGRPID,
@@ -229,7 +244,7 @@ adae2 <- tribble(
     TRTSDTM = if_else(USUBJID == "1", ymd_hm("2022-01-01T01:01"), ymd_hms("")),
     TRTEDTM = if_else(USUBJID == "1", ymd_hm("2022-04-30T23:59"), ymd_hms(""))
   )
-# derive TRTEMFL taking treatment end and worsening into account within a grouping variable
+
 derive_var_trtemfl(
   adae2,
   new_var = TRTEMFL,
@@ -238,9 +253,65 @@ derive_var_trtemfl(
   intensity = AETOXGR,
   group_var = AEGRPID
 ) \%>\% select(ASTDTM, AENDTM, AEITOXGR, AETOXGR, AEGRPID, TRTEMFL)
+
+# Example 3: PHUSE-white-paper scenarios
+
+adae3 <- tribble(
+  ~USUBJID, ~TRTSDTM,           ~TRTEDTM,           ~ASTDTM,            ~AENDTM,            ~AEITOXGR, ~AETOXGR,
+  # Patient 1: Pre-treatment AE
+  "1",      "2021-01-01T00:01", "2021-12-31T23:59", "2020-12-20T00:00", "2020-12-21T00:00", "2",       "2",
+  # Patient 2: On-treatment AE
+  "2",      "2021-01-01T00:01", "2021-12-31T23:59", "2021-12-20T00:00", "2021-12-21T00:00", "2",       "2",
+  # Patient 3: Pre-treatment AE, then on-treatment AE at same intensity
+  "3",      "2021-01-01T00:01", "2021-12-31T23:59", "2020-12-20T00:00", "2020-12-21T00:00", "2",       "2",
+  "3",      "2021-01-01T00:01", "2021-12-31T23:59", "2021-12-20T00:00", "2021-12-21T00:00", "2",       "2",
+  # Patient 4: Pre-treatment AE, then on-treatment AE at worsened intensity
+  "4",      "2021-01-01T00:01", "2021-12-31T23:59", "2020-12-20T00:00", "2020-12-21T00:00", "2",       "2",
+  "4",      "2021-01-01T00:01", "2021-12-31T23:59", "2021-12-20T00:00", "2021-12-21T00:00", "2",       "3",
+  # Patient 5: Pre-treatment AE, then on-treatment AE at improved intensity
+  "5",      "2021-01-01T00:01", "2021-12-31T23:59", "2020-12-20T00:00", "2020-12-21T00:00", "2",       "2",
+  "5",      "2021-01-01T00:01", "2021-12-31T23:59", "2021-12-20T00:00", "2021-12-21T00:00", "2",       "1",
+  # Patient 6: AE starting pre-treatment and continuing on-treatment, then second AE at same intensity
+  "6",      "2021-01-01T00:01", "2021-12-31T23:59", "2020-12-23T00:00", "2021-01-21T00:00", "2",       "2",
+  "6",      "2021-01-01T00:01", "2021-12-31T23:59", "2021-12-20T00:00", "2021-12-21T00:00", "2",       "2",
+  # Patient 7: AE starting pre-treatment and continuing on-treatment, then second AE at worsened intensity
+  "7",      "2021-01-01T00:01", "2021-12-31T23:59", "2020-12-23T00:00", "2021-01-21T00:00", "2",       "2",
+  "7",      "2021-01-01T00:01", "2021-12-31T23:59", "2021-12-20T00:00", "2021-12-21T00:00", "2",       "3",
+  # Patient 8: AE starting pre-treatment and continuing on-treatment, then second AE at improved intensity
+  "8",      "2021-01-01T00:01", "2021-12-31T23:59", "2020-12-23T00:00", "2021-01-21T00:00", "2",       "2",
+  "8",      "2021-01-01T00:01", "2021-12-31T23:59", "2021-12-20T00:00", "2021-12-21T00:00", "2",       "1",
+  # Patient 9: AE starting pre-treatment and continuing on-treatment, and no change in intensity
+  "9",      "2021-01-01T00:01", "2021-12-31T23:59", "2020-12-23T00:00", "2021-01-21T00:00", "2",       "2",
+  # Patient 10: AE starting pre-treatment and continuing on-treatment, and worsening intensity
+  "10",     "2021-01-01T00:01", "2021-12-31T23:59", "2020-12-23T00:00", "2021-01-21T00:00", "2",       "4",
+  # Patient 11: AE starting pre-treatment and continuing on-treatment, and improving intensity
+  "11",     "2021-01-01T00:01", "2021-12-31T23:59", "2020-12-23T00:00", "2021-01-21T00:00", "2",       "1",
+  # Patient 12: AE starting pre-treatment, worsening, then improving
+  "12",     "2021-01-01T00:01", "2021-12-31T23:59", "2020-12-23T00:00", "2021-01-21T00:00", "3",       "2",
+  # Patient 13: AE starting pre-treatment, improving, then worsening
+  "13",     "2021-01-01T00:01", "2021-12-31T23:59", "2020-12-23T00:00", "2021-01-21T00:00", "1",       "2",
+) \%>\%
+  mutate(
+    ASTDTM = ymd_hm(ASTDTM),
+    AENDTM = ymd_hm(AENDTM),
+    TRTSDTM = ymd_hm(TRTSDTM),
+    TRTEDTM = ymd_hm(TRTEDTM),
+  )
+
+derive_var_trtemfl(
+  adae3,
+  new_var = TRTEMFL,
+  trt_end_date = TRTEDTM,
+  end_window = 0,
+  initial_intensity = AEITOXGR,
+  intensity = AETOXGR,
+  subject_keys = exprs(USUBJID)
+) \%>\%
+  select(USUBJID, TRTSDTM, TRTEDTM, ASTDTM, AENDTM, AEITOXGR, AETOXGR, TRTEMFL)
+
 }
 \seealso{
-OCCDS Functions: 
+OCCDS Functions:
 \code{\link{derive_vars_atc}()},
 \code{\link{derive_vars_query}()},
 \code{\link{get_terms_from_db}()}
