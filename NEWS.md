@@ -1,6 +1,7 @@
 # admiral (development version)
 
 ## New Features
+* Added `my_first_fcn()` function for developer onboarding
 
 ## Updates of Existing Functions
 
