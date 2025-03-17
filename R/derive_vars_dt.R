@@ -475,12 +475,6 @@ impute_dtc_dt <- function(dtc,
 
   if (highest_imputation == "Y") {
     assert_character_scalar(date_imputation, values = c("first", "last"))
-    # if (is.null(min_dates) && is.null(max_dates)) {
-    #   cli_abort(paste(
-    #     "If {.code highest_imputation = \"Y\"} is specified,",
-    #     " either {.arg min_dates} or {.arg max_dates} must be specified."
-    #   ))
-    # }
   }
 
   # Parse character date ----

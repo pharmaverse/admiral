@@ -208,22 +208,6 @@ test_that("derive_vars_dt Test 9: max_dates length mismatch provides error", {
   )
 })
 
-## Test 10: error if null min/max_dates when highest_imputation = Y ----
-# test_that("derive_vars_dt Test 10: Warning if null min/max_dates when highest_imputation = Y", {
-# expect_snapshot(
-#   # this should for sure return NA instead of 0000-01-01
-#   impute_dtc_dt(
-#     input,
-#     highest_imputation = "Y"
-#   ), error = TRUE
-# )
-# impute_dtc_dt(
-#   input,
-#   highest_imputation = "Y", date_imputation = "2016"
-#
-# )
-# })
-
 ## Test 10: Warning if null min/max_dates when highest_imputation = Y ----
 test_that("derive_vars_dt Test 10: Warning if null min/max_dates when highest_imputation = Y", {
   expect_warning(
@@ -298,32 +282,6 @@ test_that("derive_vars_dt Test 12: wrong input to `date_imputation`", {
     ),
     error = TRUE
   )
-
-  # highest_imputatio = "Y" should throw an error when min or max dates are not specified
-  # expect_snapshot(
-  #   impute_dtc_dt(
-  #     dtc = input,
-  #     highest_imputation = "Y",
-  #     date_imputation = "first"
-  #   ), error = TRUE
-  # )
-  #
-  #
-
-  # the below gives a warning even though I think it should not, right?
-  # actual <- data.frame(
-  #   AESTDTC = c(NA_character_, NA_character_),
-  #   TRTSDT = c(ymd("2022-01-01"), NA),
-  #   TRTEDT = c(ymd("2022-01-31"), NA)
-  # ) %>%
-  #   mutate(AESTDTC = as.character(AESTDTC)) %>%
-  #   derive_vars_dt(
-  #     dtc = AESTDTC,
-  #     new_vars_prefix = "AST",
-  #     highest_imputation = "Y",
-  #     min_dates = exprs(TRTSDT),
-  #     max_dates = exprs(TRTEDT)
-  #   )
 })
 
 # convert_dtc_to_dt ----
