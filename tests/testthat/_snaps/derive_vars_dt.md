@@ -21,7 +21,7 @@
     Code
       impute_dtc_dt(dtc = input, highest_imputation = "M", date_imputation = "13-01")
     Condition
-      Error in `impute_dtc_dt()`:
+      Error in `assert_date_imputation()`:
       ! If `highest_imputation = "M"` is specified, `date_imputation` must be one of `'first'`, `'mid'`, `'last'` or a format with month and day specified as `'mm-dd'`: e.g. `'06-15'`
 
 ---
@@ -29,7 +29,7 @@
     Code
       impute_dtc_dt(dtc = input, highest_imputation = "M", date_imputation = "12:01")
     Condition
-      Error in `impute_dtc_dt()`:
+      Error in `assert_date_imputation()`:
       ! If `highest_imputation = "M"` is specified, `date_imputation` must be one of `'first'`, `'mid'`, `'last'` or a format with month and day specified as `'mm-dd'`: e.g. `'06-15'`
 
 ---
@@ -37,7 +37,7 @@
     Code
       impute_dtc_dt(dtc = input, highest_imputation = "M", date_imputation = "01")
     Condition
-      Error in `impute_dtc_dt()`:
+      Error in `assert_date_imputation()`:
       ! If `highest_imputation = "M"` is specified, `date_imputation` must be one of `'first'`, `'mid'`, `'last'` or a format with month and day specified as `'mm-dd'`: e.g. `'06-15'`
 
 ---
@@ -45,7 +45,7 @@
     Code
       impute_dtc_dt(dtc = input, highest_imputation = "D", date_imputation = "01")
     Condition
-      Error in `impute_dtc_dt()`:
+      Error in `assert_date_imputation()`:
       ! Argument `date_imputation` must be equal to one of "first", "mid", or "last".
 
 ---
@@ -53,7 +53,7 @@
     Code
       impute_dtc_dt(dtc = input, highest_imputation = "Y", date_imputation = "2006-01-01")
     Condition
-      Error in `impute_dtc_dt()`:
+      Error in `assert_date_imputation()`:
       ! Argument `date_imputation` must be equal to one of "first" or "last".
 
 # derive_vars_dt Test 21: NA imputation for highest_imputation = Y & max_dates but date_imputation = first

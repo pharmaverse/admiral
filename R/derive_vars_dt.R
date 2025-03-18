@@ -455,27 +455,8 @@ impute_dtc_dt <- function(dtc,
     )
   assert_logical_scalar(preserve)
 
-  if (highest_imputation == "D") {
-    assert_character_scalar(date_imputation, values = c("first", "mid", "last"))
-  }
-
-  if (highest_imputation == "M") {
-    is_mm_dd_format <- grepl("^(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])$", date_imputation)
-    is_one_of_keys <- date_imputation %in% c("first", "mid", "last")
-    if (!{
-      is_mm_dd_format || is_one_of_keys
-    }) {
-      cli_abort(paste(
-        "If {.code highest_imputation = \"M\"} is specified, {.arg date_imputation} must be",
-        "one of `'first'`, `'mid'`, `'last'`",
-        "or a format with month and day specified as `'mm-dd'`: e.g. `'06-15'`"
-      ))
-    }
-  }
-
-  if (highest_imputation == "Y") {
-    assert_character_scalar(date_imputation, values = c("first", "last"))
-  }
+  assert_date_imputation(highest_imputation = highest_imputation,
+                        date_imputation = date_imputation)
 
   # Parse character date ----
   two <- "(\\d{2}|-?)"
@@ -697,4 +678,41 @@ compute_dtf <- function(dtc, dt) {
     n_chr_date_portion == 7 ~ "D",
     n_chr_date_portion < 10 & location_of_double_hyphen == 8 ~ "D", # dates like "2019-07--"
   )
+}
+
+
+#' assert date imputation
+#' Applies assertions on the `date_imputation` argument to reduce
+#' cyclomatic complexity
+#'
+#' @param highest_imputation Highest imputation level
+#' @param date_imputation The value to impute the day/month when a datepart is
+#'   missing.
+#'
+#' @return Nothing
+#'
+#' @examples
+assert_date_imputation <- function(highest_imputation, date_imputation) {
+  if (highest_imputation == "D") {
+    assert_character_scalar(date_imputation, values = c("first", "mid", "last"))
+  }
+
+  if (highest_imputation == "M") {
+    is_mm_dd_format <- grepl("^(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])$", date_imputation)
+    is_one_of_keys <- date_imputation %in% c("first", "mid", "last")
+    if (!{
+      is_mm_dd_format || is_one_of_keys
+    }) {
+      cli_abort(paste(
+        "If {.code highest_imputation = \"M\"} is specified, {.arg date_imputation} must be",
+        "one of `'first'`, `'mid'`, `'last'`",
+        "or a format with month and day specified as `'mm-dd'`: e.g. `'06-15'`"
+      ))
+    }
+  }
+
+  if (highest_imputation == "Y") {
+    assert_character_scalar(date_imputation, values = c("first", "last"))
+  }
+  return(invisible(NULL))
 }
