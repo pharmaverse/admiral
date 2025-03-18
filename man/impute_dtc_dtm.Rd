@@ -61,7 +61,7 @@ middle of the possible range:
 
 The year can not be specified; for imputing the year
 \code{"first"} or \code{"last"} together with \code{min_dates} or \code{max_dates} argument can
-be used (see examples).),
+be used (see examples).
 
 The argument is ignored if \code{highest_imputation} is less than \code{"D"}.}
 
