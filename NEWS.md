@@ -21,6 +21,8 @@
 
 ## Documentation
 
+- Default value of `type` in `derive_vars_aage()` is now shown as `interval` to match the function behaviour. (#2685) 
+
 - The "Lab Grading" vignette was updated to correct some typos and make text easier to
 read (#2623).
 
@@ -47,8 +49,6 @@ read (#2623).
 target range. (#2571)
 
 ## Updates of Existing Functions
-
-- Default value of `type` in `derive_vars_aage()` is now `interval`. (#2685) 
 
 - Added `"message"` as option for `check_type` argument in `derive_var_obs_number()` function. (#2481)
 
