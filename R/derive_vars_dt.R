@@ -689,7 +689,9 @@ compute_dtf <- function(dtc, dt) {
 #' @param date_imputation The value to impute the day/month when a datepart is
 #'   missing.
 #'
-#' @return Nothing
+#' @keywords internal
+#'
+#' @return `invisible(NULL)`
 #'
 #' @examples
 assert_date_imputation <- function(highest_imputation, date_imputation) {
