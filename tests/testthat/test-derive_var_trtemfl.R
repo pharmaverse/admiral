@@ -220,7 +220,6 @@ test_that("derive_var_trtemfl Test 11: error if `group_var` specified without `s
 
 ## Test 12: Checking test cases from PHUSE White Paper on Treatment Emergent AEs  ----
 test_that("derive_var_trtemfl Test 12: Checking test cases from PHUSE White Paper on Treatment Emergent AEs", {
-
   adae_phuse <- tribble(
     ~USUBJID, ~TRTSDTM,           ~TRTEDTM,           ~ASTDTM,            ~AENDTM,            ~AEITOXGR, ~AETOXGR, ~TRTEMFL,
     # Patient 1: Pre-treatment AE
@@ -276,5 +275,4 @@ test_that("derive_var_trtemfl Test 12: Checking test cases from PHUSE White Pape
     ),
     keys = c("USUBJID", "ASTDTM", "AENDTM")
   )
-
 })
