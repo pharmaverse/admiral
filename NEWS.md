@@ -21,8 +21,10 @@
 
 ## Documentation
 
-The "Lab Grading" vignette was updated to correct some typos and make text easier to
+- The "Lab Grading" vignette was updated to correct some typos and make text easier to
 read (#2623).
+
+- The "BDS Time-to-Event" vignette was updated to include `SRCSEQ` consistently (#2658).
 
 ## Various
 
