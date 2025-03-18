@@ -1,18 +1,19 @@
 # R/admiral_verify_templates.R
 
+# TEMPLATES:   admiral/inst/templates/ad_{name}.R
+# CACHE:     "/home/jim/.config/cache/R/admiral_templates_data
+
 # Create adam by sourcing template in admiral
 source("inst/templates/ad_adae.R")
 
 # Store adam data in cache.
 theDir = tools::R_user_dir("admiral_templates_data", which = "cache")
 
-# -------   N ----
-# Step 1, gather 23 datasets from pharamaversadam ---
-
 #  This makes all ds in pkg available
 library(pharmaverseadam )
 #
 # need ?
+# ~23 datasets in pharmaverseadam
 original_datasets = data(package = "pharmaverseadam")
 original_datasets = original_datasets$results
 original_datasets = original_datasets[, "Title"]
