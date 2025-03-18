@@ -4,8 +4,6 @@
 #'
 #' **Note:** This is a wrapper function for the more generic `derive_vars_duration()`.
 #'
-#' @inheritParams derive_vars_duration
-#'
 #' @param dataset
 #'   `r roxygen_param_dataset(expected_vars = c("start_date", "end_date"))`
 #'

@@ -46,6 +46,8 @@ target range. (#2571)
 
 ## Updates of Existing Functions
 
+- Default value of `type` in `derive_vars_aage()` is now `interval`. (#2685) 
+
 - Added `"message"` as option for `check_type` argument in `derive_var_obs_number()` function. (#2481)
 
 - Added `"message"` as option for `check_type` argument in `filter_extreme()` function. (#2481)
