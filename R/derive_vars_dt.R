@@ -455,8 +455,10 @@ impute_dtc_dt <- function(dtc,
     )
   assert_logical_scalar(preserve)
 
-  assert_date_imputation(highest_imputation = highest_imputation,
-                        date_imputation = date_imputation)
+  assert_date_imputation(
+    highest_imputation = highest_imputation,
+    date_imputation = date_imputation
+  )
 
   # Parse character date ----
   two <- "(\\d{2}|-?)"
