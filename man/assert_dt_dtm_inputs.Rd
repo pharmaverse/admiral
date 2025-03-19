@@ -3,7 +3,7 @@
 \name{assert_dt_dtm_inputs}
 \alias{assert_dt_dtm_inputs}
 \title{Check input assertions for date and imputation parameters
-Used in \code{derive_vars_dt} and \code{derive_vars_dtm}.}
+Used in \code{derive_vars_dt()} and \code{derive_vars_dtm()}.}
 \usage{
 assert_dt_dtm_inputs(
   new_vars_prefix,
@@ -30,22 +30,17 @@ assert_dt_dtm_inputs(
 
 \item{date_imputation}{The value to impute the day/month
 when a date part is missing (can be \code{NULL}).}
-
-\item{dtc}{Date/time character.}
-
-\item{dataset}{Data frame to check variables in.}
 }
 \value{
 \code{invisible(NULL)}
 }
 \description{
-Applies assertions on the \code{new_vars_prefix}, \code{max_dates}, \code{min_dates}, \code{dtc},
-\code{dataset}, \code{flag_imputation}, \code{highest_imputation}, and \code{date_imputation} arguments
+Applies assertions on the \code{new_vars_prefix}, \code{max_dates}, \code{min_dates},
+\code{flag_imputation}, \code{highest_imputation}, and \code{date_imputation} arguments
 to reduce cyclomatic complexity.
 }
 \examples{
-assert_dt_dtm_inputs("PREFIX_", NULL, NULL, expr(DTC),
-  dataset = data.frame(),
+assert_dt_dtm_inputs("PREFIX_", NULL, NULL,
   flag_imputation_values = c("auto", "date", "none"),
   flag_imputation = "auto",
   highest_imputation = "Y", date_imputation = "first"

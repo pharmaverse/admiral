@@ -141,8 +141,13 @@ derive_vars_dtm <- function(dataset,
   assert_data_frame(dataset, required_vars = exprs(!!dtc))
 
   assert_dt_dtm_inputs(
-    new_vars_prefix, max_dates, min_dates, flag_imputation,
-    c("auto", "both", "date", "time", "none"), highest_imputation, date_imputation
+    new_vars_prefix = new_vars_prefix,
+    max_dates = max_dates,
+    min_dates = min_dates,
+    flag_imputation = flag_imputation,
+    flag_imputation_values = c("auto", "both", "date", "time", "none"),
+    highest_imputation = highest_imputation,
+    date_imputation = date_imputation
   )
 
   dtm <- paste0(new_vars_prefix, "DTM")

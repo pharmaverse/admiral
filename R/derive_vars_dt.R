@@ -149,8 +149,13 @@ derive_vars_dt <- function(dataset, # nolint: cyclocomp_linter
   dtc <- assert_symbol(enexpr(dtc))
   assert_data_frame(dataset, required_vars = exprs(!!dtc))
   assert_dt_dtm_inputs(
-    new_vars_prefix, max_dates, min_dates, flag_imputation,
-    c("auto", "date", "none"), highest_imputation, date_imputation
+    new_vars_prefix = new_vars_prefix,
+    max_dates = max_dates,
+    min_dates = min_dates,
+    flag_imputation = flag_imputation,
+    flag_imputation_values = c("auto", "date", "none"),
+    highest_imputation = highest_imputation,
+    date_imputation = date_imputation
   )
 
   # output varname
@@ -694,17 +699,15 @@ assert_date_imputation <- function(highest_imputation, date_imputation) {
 }
 
 #' Check input assertions for date and imputation parameters
-#' Used in `derive_vars_dt` and `derive_vars_dtm`.
+#' Used in `derive_vars_dt()` and `derive_vars_dtm()`.
 #'
-#' Applies assertions on the `new_vars_prefix`, `max_dates`, `min_dates`, `dtc`,
-#' `dataset`, `flag_imputation`, `highest_imputation`, and `date_imputation` arguments
+#' Applies assertions on the `new_vars_prefix`, `max_dates`, `min_dates`,
+#' `flag_imputation`, `highest_imputation`, and `date_imputation` arguments
 #' to reduce cyclomatic complexity.
 #'
 #' @param new_vars_prefix Prefix for new variables.
 #' @param max_dates Maximum dates of events (can be `NULL`).
 #' @param min_dates Minimum dates of events (can be `NULL`).
-#' @param dtc Date/time character.
-#' @param dataset Data frame to check variables in.
 #' @param flag_imputation_values Allowed values for the `flag_imputation` argument.
 #' @param flag_imputation The value to impute.
 #' @param highest_imputation Highest imputation level.
@@ -716,8 +719,7 @@ assert_date_imputation <- function(highest_imputation, date_imputation) {
 #' @return `invisible(NULL)`
 #'
 #' @examples
-#' assert_dt_dtm_inputs("PREFIX_", NULL, NULL, expr(DTC),
-#'   dataset = data.frame(),
+#' assert_dt_dtm_inputs("PREFIX_", NULL, NULL,
 #'   flag_imputation_values = c("auto", "date", "none"),
 #'   flag_imputation = "auto",
 #'   highest_imputation = "Y", date_imputation = "first"
