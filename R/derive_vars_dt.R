@@ -668,8 +668,6 @@ compute_dtf <- function(dtc, dt) {
 #' @keywords internal
 #'
 #' @return `invisible(NULL)`
-#'
-#' @examples
 assert_date_imputation <- function(highest_imputation, date_imputation) {
   if (highest_imputation == "D") {
     assert_character_scalar(date_imputation, values = c("first", "mid", "last"))
