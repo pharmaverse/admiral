@@ -23,10 +23,17 @@
 
 - Added an example to the `derive_vars_transposed()` reference page to showcase how duplicates-related errors can arise when records in `dataset_merge` are not uniquely identified. (#2609)
 
+- The "Lab Grading" vignette was updated to correct some typos and make text easier to
+read (#2623).
+
+- The "BDS Time-to-Event" vignette was updated to include `SRCSEQ` consistently (#2658).
+
 ## Various
 
 <details>
 <summary>Developer Notes</summary>
+
+* Removed CODEOWNERS file from repo (#2674)
 
 </details>
 

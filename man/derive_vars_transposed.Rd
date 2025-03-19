@@ -32,7 +32,8 @@ Keys used to merge \code{dataset_merge} with \code{dataset}.}
 
 \item{id_vars}{ID variables
 
-Variables (excluding by_vars) that uniquely identify each observation in \code{dataset_merge}.
+Variables (excluding \code{by_vars} and \code{key_var}) that uniquely identify each
+observation in \code{dataset_merge}.
 
 \emph{Permitted Values}: list of variables created by \code{exprs()}
 e.g. \code{exprs(USUBJID, VISIT)}}
@@ -62,9 +63,19 @@ The input dataset with transposed variables from \code{dataset_merge} added
 Adds variables from a vertical dataset after transposing it into a wide one.
 }
 \details{
-After filtering \code{dataset_merge} based upon the condition provided in \code{filter}, this
-dataset is transposed and subsequently merged onto \code{dataset} using \code{by_vars} as
-keys.
+\enumerate{
+\item The records from the dataset to transpose and merge (\code{dataset_merge}) are restricted
+to those matching the \code{filter_add} condition, if provided.
+\item \code{dataset_merge} is transposed (from "tall" to "wide"), with new variables added whose
+names come from \code{key_var} and values come from \code{value_var}.
+\item The transposed dataset is merged with the input \code{dataset} using \code{by_vars} as
+keys. If a \code{relationship} has been provided, this merge must satisfy the relationship,
+otherwise an error is thrown.
+}
+
+Note that unlike other \verb{derive_vars_*()} functions, the final step may cause new
+records to be added to the input dataset. The \code{relationship} argument can be specified
+to ensure this does not happen inadvertently.
 }
 \examples{
 library(tibble)
@@ -115,15 +126,16 @@ cm \%>\%
 # rows of dataset_merge and avoid duplicates-related errors.
 # Compare the above call with:
 
-# cm \%>\%
-#   derive_vars_transposed(
-#     facm,
-#     by_vars = exprs(USUBJID, CMREFID = FAREFID),
-#     id_vars = NULL,
-#     key_var = FATESTCD,
-#    value_var = FASTRESC
-#  )
-
+try(
+  cm \%>\%
+    derive_vars_transposed(
+      facm,
+      by_vars = exprs(USUBJID, CMREFID = FAREFID),
+      id_vars = NULL,
+      key_var = FATESTCD,
+     value_var = FASTRESC
+    )
+)
 }
 \seealso{
 \code{\link[=derive_vars_atc]{derive_vars_atc()}}
