@@ -125,7 +125,7 @@
 #'   date_imputation = "mid",
 #'   preserve = TRUE
 #' )
-derive_vars_dtm <- function(dataset, # nolint: cyclocomp_linter
+derive_vars_dtm <- function(dataset,
                             new_vars_prefix,
                             dtc,
                             highest_imputation = "h",
@@ -137,38 +137,13 @@ derive_vars_dtm <- function(dataset, # nolint: cyclocomp_linter
                             preserve = FALSE,
                             ignore_seconds_flag = FALSE) {
   # check and quote arguments
-  assert_character_scalar(new_vars_prefix)
-  assert_vars(max_dates, optional = TRUE)
-  assert_vars(min_dates, optional = TRUE)
   dtc <- assert_symbol(enexpr(dtc))
   assert_data_frame(dataset, required_vars = exprs(!!dtc))
-  assert_character_scalar(
-    flag_imputation,
-    values = c("auto", "both", "date", "time", "none"),
-    case_sensitive = FALSE
+
+  assert_dt_dtm_inputs(
+    new_vars_prefix, max_dates, min_dates, flag_imputation,
+    c("auto", "both", "date", "time", "none"), highest_imputation, date_imputation
   )
-  if ((highest_imputation == "Y" && is.null(min_dates) && is.null(max_dates)) ||
-    (highest_imputation == "Y" && length(min_dates) == 0 && length(max_dates) == 0)) {
-    cli_abort(paste(
-      "If {.code highest_impuation = \"Y\"} is specified, {.arg min_dates} or",
-      "{.arg max_dates} must be specified respectively."
-    ))
-  }
-  if (highest_imputation == "Y") {
-    assert_character_scalar(date_imputation, values = c("first", "last"))
-  }
-  if (highest_imputation == "Y" && is.null(min_dates) && date_imputation == "first") {
-    cli_warn(paste(
-      "If {.code highest_impuation = \"Y\"} and {.code date_imputation = \"first\"}",
-      "is specified, {.arg min_dates} should be specified."
-    ))
-  }
-  if (highest_imputation == "Y" && is.null(max_dates) && date_imputation == "last") {
-    cli_warn(paste(
-      "If {.code highest_impuation = \"Y\"} and {.code date_imputation = \"last\"}",
-      "is specified, {.arg max_dates} should be specified."
-    ))
-  }
 
   dtm <- paste0(new_vars_prefix, "DTM")
 
@@ -573,7 +548,7 @@ impute_dtc_dtm <- function(dtc,
   )
 
   if (highest_imputation == "Y" && is.null(min_dates) && is.null(max_dates)) {
-    warning("If `highest_impuation` = \"Y\" is specified, `min_dates` or `max_dates` should be specified respectively.") # nolint
+    warning("If `highest_imputation` = \"Y\" is specified, `min_dates` or `max_dates` should be specified respectively.") # nolint
   }
 
   return(restricted)
@@ -624,7 +599,7 @@ restrict_imputed_dtc_dtm <- function(dtc,
           )
       },
       # Suppress warning because we need to run without min/max dates but users should not
-      regexpr = "If `highest_impuation` = \"Y\" is specified, `min_dates` or `max_dates` should be specified respectively." # nolint
+      regexpr = "If `highest_imputation` = \"Y\" is specified, `min_dates` or `max_dates` should be specified respectively." # nolint
     )
   }
   if (!(is.null(min_dates) || length(min_dates) == 0)) {

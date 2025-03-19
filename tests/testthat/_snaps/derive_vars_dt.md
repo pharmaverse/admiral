@@ -96,6 +96,6 @@
         derive_vars_dt(dtc = AESTDTC, new_vars_prefix = "AST", highest_imputation = "Y",
           date_imputation = "first", flag_imputation = "auto")
     Condition
-      Error in `derive_vars_dt()`:
+      Error in `assert_dt_dtm_inputs()`:
       ! If `highest_imputation = "Y"` is specified, `min_dates` or `max_dates` must be specified respectively.
 

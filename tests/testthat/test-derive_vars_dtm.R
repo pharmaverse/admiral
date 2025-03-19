@@ -275,7 +275,7 @@ test_that("impute_dtc_dtm Test 12: Warning if null min/max_dates when highest_im
       c("2020-12", NA_character_),
       highest_imputation = "Y"
     ),
-    "If `highest_impuation` = \"Y\" is specified, `min_dates` or `max_dates` should be specified respectively." # nolint
+    "If `highest_imputation` = \"Y\" is specified, `min_dates` or `max_dates` should be specified respectively." # nolint
   )
 })
 
