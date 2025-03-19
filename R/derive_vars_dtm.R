@@ -4,6 +4,9 @@
 #' The date and time can be imputed (see `date_imputation`/`time_imputation` arguments)
 #' and the date/time imputation flag (`'--DTF'`, `'--TMF'`) can be added.
 #'
+#' NOTE: The default value for `ignore_seconds_flag` is `TRUE` (as of v 1.4?).
+#' An error will be thrown if `--DTC` contains seconds.  SEE examples.
+#'
 #' In `{admiral}` we don't allow users to pick any single part of the date/time to
 #' impute, we only enable to impute up to a highest level, i.e. you couldn't
 #' choose to say impute months, but not days.
@@ -58,7 +61,6 @@
 #'
 #' mhdt <- tribble(
 #'   ~MHSTDTC,
-#'   "2019-07-18T15:25:40",
 #'   "2019-07-18T15:25",
 #'   "2019-07-18",
 #'   "2019-02",
@@ -73,6 +75,29 @@
 #'   dtc = MHSTDTC,
 #'   highest_imputation = "M"
 #' )
+#'
+#' # Repeat, but with `ignore_seconds_flag = FALSE`
+#' derive_vars_dtm(
+#'   mhdt,
+#'   new_vars_prefix = "AST",
+#'   dtc = MHSTDTC,
+#'   highest_imputation = "M",
+#'   ignore_seconds_flag = FALSE
+#' )
+#'
+#' # Error is thrown when data includes seconds, but `ignore_seconds_flag`
+#' # is default value (TRUE)
+#' mhdt <- tribble(
+#'   ~MHSTDTC,
+#'   "2019-07-18T15:25:40",
+#' )
+#' try(
+#' derive_vars_dtm(
+#'   mhdt,
+#'   new_vars_prefix = "AST",
+#'   dtc = MHSTDTC,
+#'   highest_imputation = "M"
+#' ))
 #'
 #' # Impute AE end date to the last date and ensure that the imputed date is not
 #' # after the death or data cut off date
@@ -135,7 +160,7 @@ derive_vars_dtm <- function(dataset, # nolint: cyclocomp_linter
                             min_dates = NULL,
                             max_dates = NULL,
                             preserve = FALSE,
-                            ignore_seconds_flag = FALSE) {
+                            ignore_seconds_flag = TRUE) {
   # check and quote arguments
   assert_character_scalar(new_vars_prefix)
   assert_vars(max_dates, optional = TRUE)
@@ -711,7 +736,7 @@ restrict_imputed_dtc_dtm <- function(dtc,
 #'
 compute_tmf <- function(dtc,
                         dtm,
-                        ignore_seconds_flag = FALSE) {
+                        ignore_seconds_flag = TRUE) {
   assert_date_vector(dtm)
   assert_character_vector(dtc)
   assert_logical_scalar(ignore_seconds_flag)
