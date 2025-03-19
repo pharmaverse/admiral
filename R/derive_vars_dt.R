@@ -717,13 +717,6 @@ assert_date_imputation <- function(highest_imputation, date_imputation) {
 #' @keywords internal
 #'
 #' @return `invisible(NULL)`
-#'
-#' @examples
-#' assert_dt_dtm_inputs("PREFIX_", NULL, NULL,
-#'   flag_imputation_values = c("auto", "date", "none"),
-#'   flag_imputation = "auto",
-#'   highest_imputation = "Y", date_imputation = "first"
-#' )
 assert_dt_dtm_inputs <- function(new_vars_prefix, max_dates, min_dates, # nolint: cyclocomp_linter
                                  flag_imputation, flag_imputation_values, highest_imputation,
                                  date_imputation = NULL) {

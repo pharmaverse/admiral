@@ -39,11 +39,4 @@ Applies assertions on the \code{new_vars_prefix}, \code{max_dates}, \code{min_da
 \code{flag_imputation}, \code{highest_imputation}, and \code{date_imputation} arguments
 to reduce cyclomatic complexity.
 }
-\examples{
-assert_dt_dtm_inputs("PREFIX_", NULL, NULL,
-  flag_imputation_values = c("auto", "date", "none"),
-  flag_imputation = "auto",
-  highest_imputation = "Y", date_imputation = "first"
-)
-}
 \keyword{internal}
