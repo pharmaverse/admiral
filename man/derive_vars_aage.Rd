@@ -55,11 +55,11 @@ For minutes: \code{"minute"}, \code{"minutes"}, \code{"min"}, \code{"mins"}
 
 For seconds: \code{"second"}, \code{"seconds"}, \code{"sec"}, \code{"secs"}, \code{"s"}}
 
-\item{type}{lubridate duration type.
+\item{type}{lubridate duration type
 
 See below for details.
 
-Default: \code{"duration"}
+Default: \code{"interval"}
 
 Permitted Values: \code{"duration"}, \code{"interval"}}
 }
