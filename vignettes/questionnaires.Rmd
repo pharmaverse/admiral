@@ -259,7 +259,7 @@ and `EVNTDESC`, it makes sense to create a separate time to event dataset for
 them. However, it might be useful to create flags or categorization variables in
 `ADQS`. For example:
 ```{r}
-# Create AVALCATx lookup table
+# Create AVALCATy lookup table
 avalcat_lookup <- exprs(
   ~PARAMCD, ~condition, ~AVALCAT1, ~AVALCAT1N,
   "GDS02TS", AVAL <= 5, "Normal", 0L,
