@@ -65,7 +65,7 @@ Adds variables from a vertical dataset after transposing it into a wide one.
 \details{
 \enumerate{
 \item The records from the dataset to transpose and merge (\code{dataset_merge}) are restricted
-to those matching the \code{filter_add} condition, if provided.
+to those matching the \code{filter} condition, if provided.
 \item The records from \code{dataset_merge} are checked to ensure they are uniquely identified
 using \code{by_vars}, \code{id_vars} and \code{key_var}.
 \item \code{dataset_merge} is transposed (from "tall" to "wide"), with new variables added whose

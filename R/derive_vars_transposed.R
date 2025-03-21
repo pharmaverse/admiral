@@ -43,7 +43,7 @@
 #' @details
 #'
 #' 1. The records from the dataset to transpose and merge (`dataset_merge`) are restricted
-#'    to those matching the `filter_add` condition, if provided.
+#'    to those matching the `filter` condition, if provided.
 #'
 #' 1. The records from `dataset_merge` are checked to ensure they are uniquely identified
 #'    using `by_vars`, `id_vars` and `key_var`.
