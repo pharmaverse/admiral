@@ -116,7 +116,7 @@ facm <- tribble(
 
 cm \%>\%
   derive_vars_transposed(
-    facm,
+    dataset_merge = facm,
     by_vars = exprs(USUBJID, CMREFID = FAREFID),
     id_vars = exprs(FAGRPID),
     key_var = FATESTCD,
@@ -124,14 +124,14 @@ cm \%>\%
   ) \%>\%
   select(USUBJID, CMDECOD, starts_with("CMATC"))
 
-# Note: the id_vars argument here is key to uniquely identify
+# Note: the `id_vars` argument here is needed to uniquely identify
 # rows of dataset_merge and avoid duplicates-related errors.
-# Compare the above call with:
+# Compare the above call to when `id_vars = NULL`:
 
 try(
   cm \%>\%
     derive_vars_transposed(
-      facm,
+      dataset_merge = facm,
       by_vars = exprs(USUBJID, CMREFID = FAREFID),
       id_vars = NULL,
       key_var = FATESTCD,

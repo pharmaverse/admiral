@@ -105,7 +105,7 @@
 #'
 #' cm %>%
 #'   derive_vars_transposed(
-#'     facm,
+#'     dataset_merge = facm,
 #'     by_vars = exprs(USUBJID, CMREFID = FAREFID),
 #'     id_vars = exprs(FAGRPID),
 #'     key_var = FATESTCD,
@@ -115,12 +115,12 @@
 #'
 #' # Note: the `id_vars` argument here is needed to uniquely identify
 #' # rows of dataset_merge and avoid duplicates-related errors.
-#' # Compare the above call when `id_vars = NULL`:
+#' # Compare the above call to when `id_vars = NULL`:
 #'
 #' try(
 #'   cm %>%
 #'     derive_vars_transposed(
-#'       facm,
+#'       dataset_merge = facm,
 #'       by_vars = exprs(USUBJID, CMREFID = FAREFID),
 #'       id_vars = NULL,
 #'       key_var = FATESTCD,
