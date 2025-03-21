@@ -404,6 +404,7 @@ For investigating the issue the dataset of the duplicate source records
 can be obtained by calling \code{get_duplicates_dataset()}:
 
 \if{html}{\out{<div class="sourceCode r">}}\preformatted{get_duplicates_dataset()
+#> Duplicate records with respect to `USUBJID` and `AVAL`.
 #> # A tibble: 2 × 3
 #>   USUBJID  AVAL AVISIT
 #> * <chr>   <dbl> <chr> 
