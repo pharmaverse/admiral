@@ -21,6 +21,8 @@
 
 ## Documentation
 
+- Added an example to the `derive_vars_transposed()` reference page to showcase how duplicates-related errors can arise when records in `dataset_merge` are not uniquely identified. (#2609)
+
 - Default value of `type` in `derive_vars_aage()` is now shown as `interval` to match the function behaviour. (#2685) 
 
 - The "Lab Grading" vignette was updated to correct some typos and make text easier to
