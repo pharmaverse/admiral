@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">admiral</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.2.0.9013</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.2.0.9014</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -108,7 +108,8 @@
 
 <dt id="arg-id-vars">id_vars<a class="anchor" aria-label="anchor" href="#arg-id-vars"></a></dt>
 <dd><p>ID variables</p>
-<p>Variables (excluding by_vars) that uniquely identify each observation in <code>dataset_merge</code>.</p>
+<p>Variables (excluding <code>by_vars</code> and <code>key_var</code>) that uniquely identify each
+observation in <code>dataset_merge</code>.</p>
 <p><em>Permitted Values</em>: list of variables created by <code><a href="reexport-exprs.html">exprs()</a></code>
 e.g. <code>exprs(USUBJID, VISIT)</code></p></dd>
 
@@ -143,9 +144,19 @@ more details.</p>
     </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
-    <p>After filtering <code>dataset_merge</code> based upon the condition provided in <code>filter</code>, this
-dataset is transposed and subsequently merged onto <code>dataset</code> using <code>by_vars</code> as
-keys.</p>
+
+<ol><li><p>The records from the dataset to transpose and merge (<code>dataset_merge</code>) are restricted
+to those matching the <code>filter</code> condition, if provided.</p></li>
+<li><p>The records from <code>dataset_merge</code> are checked to ensure they are uniquely identified
+using <code>by_vars</code>, <code>id_vars</code> and <code>key_var</code>.</p></li>
+<li><p><code>dataset_merge</code> is transposed (from "tall" to "wide"), with new variables added whose
+names come from <code>key_var</code> and values come from <code>value_var</code>.</p></li>
+<li><p>The transposed dataset is merged with the input <code>dataset</code> using <code>by_vars</code> as
+keys. If a <code>relationship</code> has been provided, this merge must satisfy the relationship,
+otherwise an error is thrown.</p></li>
+</ol><p>Note that unlike other <code>derive_vars_*()</code> functions, the final step may cause new
+records to be added to the input dataset. The <code>relationship</code> argument can be specified
+to ensure this does not happen inadvertently.</p>
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
@@ -170,6 +181,7 @@ keys.</p>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://tibble.tidyverse.org/" class="external-link">tibble</a></span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span>, warn.conflicts <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Adding ATC classes to CM using FACM</span></span></span>
 <span class="r-in"><span><span class="va">cm</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://tibble.tidyverse.org/reference/tribble.html" class="external-link">tribble</a></span><span class="op">(</span></span></span>
 <span class="r-in"><span>  <span class="op">~</span><span class="va">USUBJID</span>,       <span class="op">~</span><span class="va">CMGRPID</span>, <span class="op">~</span><span class="va">CMREFID</span>,  <span class="op">~</span><span class="va">CMDECOD</span>,</span></span>
 <span class="r-in"><span>  <span class="st">"BP40257-1001"</span>, <span class="st">"14"</span>,     <span class="st">"1192056"</span>, <span class="st">"PARACETAMOL"</span>,</span></span>
@@ -202,7 +214,7 @@ keys.</p>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">cm</span> <span class="op"><a href="pipe.html">%&gt;%</a></span></span></span>
 <span class="r-in"><span>  <span class="fu">derive_vars_transposed</span><span class="op">(</span></span></span>
-<span class="r-in"><span>    <span class="va">facm</span>,</span></span>
+<span class="r-in"><span>    dataset_merge <span class="op">=</span> <span class="va">facm</span>,</span></span>
 <span class="r-in"><span>    by_vars <span class="op">=</span> <span class="fu"><a href="reexport-exprs.html">exprs</a></span><span class="op">(</span><span class="va">USUBJID</span>, CMREFID <span class="op">=</span> <span class="va">FAREFID</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>    id_vars <span class="op">=</span> <span class="fu"><a href="reexport-exprs.html">exprs</a></span><span class="op">(</span><span class="va">FAGRPID</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>    key_var <span class="op">=</span> <span class="va">FATESTCD</span>,</span></span>
@@ -217,6 +229,26 @@ keys.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">3</span> BP40257-1001 SOLUMEDROL     D        D07      D07A     D07AA   </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">4</span> BP40257-1001 SOLUMEDROL     H        H02      H02A     H02AB   </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">5</span> BP40257-1002 SPIRONOLACTONE C        C03      C03D     C03DA   </span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Note: the `id_vars` argument here is needed to uniquely identify</span></span></span>
+<span class="r-in"><span><span class="co"># rows of dataset_merge and avoid duplicates-related errors.</span></span></span>
+<span class="r-in"><span><span class="co"># Compare the above call to when `id_vars = NULL`:</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/try.html" class="external-link">try</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>  <span class="va">cm</span> <span class="op"><a href="pipe.html">%&gt;%</a></span></span></span>
+<span class="r-in"><span>    <span class="fu">derive_vars_transposed</span><span class="op">(</span></span></span>
+<span class="r-in"><span>      dataset_merge <span class="op">=</span> <span class="va">facm</span>,</span></span>
+<span class="r-in"><span>      by_vars <span class="op">=</span> <span class="fu"><a href="reexport-exprs.html">exprs</a></span><span class="op">(</span><span class="va">USUBJID</span>, CMREFID <span class="op">=</span> <span class="va">FAREFID</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>      id_vars <span class="op">=</span> <span class="cn">NULL</span>,</span></span>
+<span class="r-in"><span>      key_var <span class="op">=</span> <span class="va">FATESTCD</span>,</span></span>
+<span class="r-in"><span>      value_var <span class="op">=</span> <span class="va">FASTRESC</span></span></span>
+<span class="r-in"><span>    <span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Error in signal_duplicate_records(dataset_merge, by_vars = c(by_vars,  : </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   Dataset `dataset_merge` contains duplicate records with respect to</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> `USUBJID`, `FAREFID`, and `FATESTCD`</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Please check data and `by_vars`, `id_vars`, and `key_var` arguments.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> Run `admiral::get_duplicates_dataset()` to access the duplicate records</span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
