@@ -172,7 +172,7 @@
 #' @info The source records can be restricted by the `filter_add` argument,
 #'   e.g., to exclude visits with missing analysis value from selecting for the
 #'   last visit record:
-#' @code [expected_cnds = "condition"]
+#' @code
 #' derive_extreme_records(
 #'   adlb,
 #'   dataset_add = adlb,
@@ -193,7 +193,7 @@
 #'   achieved by specifying a reference dataset by the `dataset_ref` argument.
 #'   For example, specifying the input dataset for `dataset_ref` below ensures
 #'   that new records are added also for subject without a valid analysis value:
-#' @code [expected_cnds = "condition"]
+#' @code
 #' derive_extreme_records(
 #'   adlb,
 #'   dataset_add = adlb,
@@ -212,7 +212,7 @@
 #'   can be specified by the `keep_source_vars` argument. Variables specified by
 #'   `by_vars` or `set_values_to` don't need to be added to `keep_source_vars`
 #'   as these are always kept.
-#' @code [expected_cnds = "condition"]
+#' @code
 #' adlb <- tribble(
 #'   ~USUBJID, ~AVISIT,  ~AVAL, ~LBSEQ,
 #'   "1",      "WEEK 1",   123,      1,
@@ -238,7 +238,7 @@
 #' @info The source records are checked regarding duplicates with respect to
 #'   `by_vars` and `order`. By default, a warning is issued if any duplicates
 #'   are found.
-#' @code [expected_cnds = "condition"]
+#' @code [expected_cnds = "duplicate_records"]
 #' adlb <- tribble(
 #'   ~USUBJID, ~AVISIT,  ~AVAL,
 #'   "1",      "WEEK 1",   123,
@@ -271,7 +271,7 @@
 #' In this example it doesn't matter which of the records with the minimum value
 #' is chosen because it doesn't affect the output dataset. Thus the third option
 #' is used:
-#' @code [expected_cnds = "condition"]
+#' @code
 #' derive_extreme_records(
 #'   dataset_add = adlb,
 #'   filter_add = !is.na(AVAL),
@@ -293,7 +293,7 @@
 #'   The `dataset_ref` argument should be specified as otherwise *all* new
 #'   records originate from `dataset_add`, i.e., `exist_flag` would be set to
 #'   `true_value` for all records.
-#' @code [expected_cnds = "condition"]
+#' @code
 #' adsl <- tribble(
 #'   ~USUBJID, ~DTHDT,
 #'   "1",      ymd("2022-05-13"),
@@ -320,7 +320,7 @@
 #'   to `AVISITN` and `LBSEQ`) should be selected and added as a new record to
 #'   the input dataset. For the new records set `AVISIT = "PBL LAST"`, `AVISITN
 #'   = 99`, and `DTYPE = "LOV"`.
-#' @code [expected_cnds = "condition"]
+#' @code
 #' adlb <- tribble(
 #'   ~USUBJID, ~AVISIT,    ~AVISITN, ~PARAMCD, ~AVAL, ~LBSEQ,
 #'   "1",      "BASELINE",        1, "ABC",      120,      1,
@@ -358,7 +358,7 @@
 #'   there are multiple records meeting the minimum, the first record with
 #'   respect to `AVISIT` and `LBSEQ` should be selected. For the new records set
 #'   `AVISIT = "PBL MIN"`, `AVISITN = 97`, and `DTYPE = "MINIMUM"`.
-#' @code [expected_cnds = "condition"]
+#' @code
 #' derive_extreme_records(
 #'   adlb,
 #'   dataset_add = adlb,
@@ -379,7 +379,7 @@
 #'   there are multiple records meeting the maximum, the first record with
 #'   respect to `AVISIT` and `LBSEQ` should be selected. For the new records set
 #'   `AVISIT = "PBL MAX"`, `AVISITN = 98`, and `DTYPE = "MAXIMUM"`.
-#' @code [expected_cnds = "condition"]
+#' @code
 #' derive_extreme_records(
 #'   adlb,
 #'   dataset_add = adlb,
@@ -404,7 +404,7 @@
 #'
 #'   Here the maximum is considered worst for `PARAMCD = "ABC"` and the minimum
 #'   for `PARAMCD = "DEF"`.
-#' @code [expected_cnds = "condition"]
+#' @code
 #' derive_extreme_records(
 #'   adlb,
 #'   dataset_add = adlb,
@@ -428,7 +428,7 @@
 #'   occurred (set `AVALC = "Y"`, `AVAL = 1`) or not (set `AVALC = "N"`, `AVAL =
 #'   0`). For the new parameter set `PARAMCD = "PD"` and `PARAM = "Disease
 #'   Progression"`.
-#' @code [expected_cnds = "condition"]
+#' @code
 #' adsl <- tribble(
 #'   ~USUBJID, ~DTHDT,
 #'   "1",      ymd("2022-05-13"),
@@ -480,7 +480,7 @@
 #'   = 1`) or not (set `AVALC = "N"`, `AVAL = 0`). For the new parameter set
 #'   `PARAMCD = "DEATH"`, `PARAM = "Death"`, and `ADT` to the date of death
 #'   (`DTHDT`).
-#' @code [expected_cnds = "condition"]
+#' @code
 #' derive_extreme_records(
 #'   dataset_ref = adsl,
 #'   dataset_add = adsl,

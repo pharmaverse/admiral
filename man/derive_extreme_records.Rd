@@ -247,13 +247,6 @@ records.
 \if{html}{\out{<div class="sourceCode r">}}\preformatted{library(tibble)
 library(dplyr, warn.conflicts = FALSE)
 library(lubridate)
-#> 
-#> Attaching package: ‘lubridate’
-#> 
-#> The following objects are masked from ‘package:base’:
-#> 
-#>     date, intersect, setdiff, union
-#> 
 adlb <- tribble(
   ~USUBJID, ~AVISITN, ~AVAL,
   "1",      1,          113,
@@ -404,8 +397,8 @@ derive_extreme_records(
 #>   <chr>   <chr>   <dbl>
 #> 1 1       MINIMUM   123
 #> 2 2       MINIMUM    93
-#> Warning: [38;5;232mDataset contains duplicate records with respect to `USUBJID` and `AVAL`
-#> [36mℹ[38;5;232m Run ]8;;ide:run:admiral::get_duplicates_dataset()admiral::get_duplicates_dataset()]8;; to access the duplicate records[39m}\if{html}{\out{</div>}}
+#> Warning: Dataset contains duplicate records with respect to `USUBJID` and `AVAL`
+#> ℹ Run `admiral::get_duplicates_dataset()` to access the duplicate records}\if{html}{\out{</div>}}
 
 For investigating the issue the dataset of the duplicate source records
 can be obtained by calling \code{get_duplicates_dataset()}:
