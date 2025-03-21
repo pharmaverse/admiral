@@ -113,9 +113,9 @@
 #'   ) %>%
 #'   select(USUBJID, CMDECOD, starts_with("CMATC"))
 #'
-#' # Note: the id_vars argument here is key to uniquely identify
+#' # Note: the `id_vars` argument here is needed to uniquely identify
 #' # rows of dataset_merge and avoid duplicates-related errors.
-#' # Compare the above call with:
+#' # Compare the above call when `id_vars = NULL`:
 #'
 #' try(
 #'   cm %>%
