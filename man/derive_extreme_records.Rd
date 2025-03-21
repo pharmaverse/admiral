@@ -248,11 +248,12 @@ records.
 library(dplyr, warn.conflicts = FALSE)
 library(lubridate)
 #> 
-#> Attaching package: 'lubridate'
-#> The following objects are masked from 'package:base':
+#> Attaching package: ‘lubridate’
+#> 
+#> The following objects are masked from ‘package:base’:
 #> 
 #>     date, intersect, setdiff, union
-
+#> 
 adlb <- tribble(
   ~USUBJID, ~AVISITN, ~AVAL,
   "1",      1,          113,
@@ -261,7 +262,6 @@ adlb <- tribble(
   "2",      2,           NA,
   "3",      1,           NA,
 )
-
 derive_extreme_records(
   adlb,
   dataset_add = adlb,
@@ -359,7 +359,6 @@ as these are always kept.
   "2",      "WEEK 2",   110,      2,
   "2",      "WEEK 3",    93,      3
 )
-
 derive_extreme_records(
   dataset_add = adlb,
   filter_add = !is.na(AVAL),
@@ -390,7 +389,6 @@ are found.
   "2",      "WEEK 2",   110,
   "2",      "WEEK 3",    93,
 )
-
 derive_extreme_records(
   dataset_add = adlb,
   filter_add = !is.na(AVAL),
@@ -401,19 +399,18 @@ derive_extreme_records(
     AVISIT = "MINIMUM"
   )
 )
-#> Warning: Dataset contains duplicate records with respect to `USUBJID` and `AVAL`
-#> ℹ Run `admiral::get_duplicates_dataset()` to access the duplicate records
 #> # A tibble: 2 × 3
 #>   USUBJID AVISIT   AVAL
 #>   <chr>   <chr>   <dbl>
 #> 1 1       MINIMUM   123
-#> 2 2       MINIMUM    93}\if{html}{\out{</div>}}
+#> 2 2       MINIMUM    93
+#> Warning: [38;5;232mDataset contains duplicate records with respect to `USUBJID` and `AVAL`
+#> [36mℹ[38;5;232m Run ]8;;ide:run:admiral::get_duplicates_dataset()admiral::get_duplicates_dataset()]8;; to access the duplicate records[39m}\if{html}{\out{</div>}}
 
 For investigating the issue the dataset of the duplicate source records
 can be obtained by calling \code{get_duplicates_dataset()}:
 
 \if{html}{\out{<div class="sourceCode r">}}\preformatted{get_duplicates_dataset()
-#> Duplicate records with respect to `USUBJID` and `AVAL`.
 #> # A tibble: 2 × 3
 #>   USUBJID  AVAL AVISIT
 #> * <chr>   <dbl> <chr> 
@@ -464,7 +461,6 @@ records originate from \code{dataset_add}, i.e., \code{exist_flag} would be set 
   "2",      ymd(""),
   "3",      ymd("")
 )
-
 derive_extreme_records(
   dataset_ref = adsl,
   dataset_add = adsl,
@@ -483,7 +479,7 @@ derive_extreme_records(
 #>   <chr>   <chr>   <date>     <date>     <chr>
 #> 1 1       DEATH   2022-05-13 2022-05-13 Y    
 #> 2 2       DEATH   NA         NA         N    
-#> 3 3       DEATH   NA         NA         N}\if{html}{\out{</div>}}}
+#> 3 3       DEATH   NA         NA         N    }\if{html}{\out{</div>}}}
 \subsection{Derive \code{DTYPE = "LOV"}}{
 
 For each subject and parameter the last valid assessment (with respect
@@ -504,9 +500,8 @@ the input dataset. For the new records set \code{AVISIT = "PBL LAST"}, \code{AVI
   "2",      "BASELINE",        1, "DEF",        9,      1,
   "2",      "WEEK 1",          2, "DEF",       10,      2,
   "2",      "WEEK 2",          3, "DEF",       12,      3
-) \%>\%
+) %>%
 mutate(STUDYID = "XYZ", .before = USUBJID)
-
 derive_extreme_records(
   adlb,
   dataset_add = adlb,
@@ -538,7 +533,7 @@ derive_extreme_records(
 #> 13 XYZ     1       PBL LAST      99 ABC       117     3 LOV  
 #> 14 XYZ     1       PBL LAST      99 DEF        13     3 LOV  
 #> 15 XYZ     2       PBL LAST      99 ABC        95     3 LOV  
-#> 16 XYZ     2       PBL LAST      99 DEF        12     3 LOV}\if{html}{\out{</div>}}}
+#> 16 XYZ     2       PBL LAST      99 DEF        12     3 LOV  }\if{html}{\out{</div>}}}
 \subsection{Derive \code{DTYPE = "MINIMUM"}}{
 
 For each subject and parameter the record with the minimum analysis
@@ -665,7 +660,7 @@ for \code{PARAMCD = "DEF"}.
 #> 13 XYZ     1       PBL WORST      96 ABC       117     3 WOC  
 #> 14 XYZ     1       PBL WORST      96 DEF        13     3 WOC  
 #> 15 XYZ     2       PBL WORST      96 ABC       101     2 WOC  
-#> 16 XYZ     2       PBL WORST      96 DEF        10     2 WOC}\if{html}{\out{</div>}}}
+#> 16 XYZ     2       PBL WORST      96 DEF        10     2 WOC  }\if{html}{\out{</div>}}}
 \subsection{Derive a parameter for the first disease progression (PD)}{
 
 For each subject in the \code{ADSL} dataset a new parameter should be added
@@ -677,9 +672,8 @@ occurred (set \code{AVALC = "Y"}, \code{AVAL = 1}) or not (set \code{AVALC = "N"
   "1",      ymd("2022-05-13"),
   "2",      ymd(""),
   "3",      ymd("")
-) \%>\%
+) %>%
   mutate(STUDYID = "XX1234")
-
 adrs <- tribble(
   ~USUBJID, ~RSDTC,       ~AVALC, ~AVAL,
   "1",      "2020-01-02", "PR",       2,
@@ -688,17 +682,16 @@ adrs <- tribble(
   "2",      "2021-06-15", "SD",       3,
   "2",      "2021-07-16", "PD",       4,
   "2",      "2021-09-14", "PD",       4
-) \%>\%
+) %>%
   mutate(
     STUDYID = "XX1234", .before = USUBJID
-  ) \%>\%
+  ) %>%
   mutate(
     ADT = ymd(RSDTC),
     PARAMCD = "OVR",
     PARAM = "Overall Response",
     .after = RSDTC
   )
-
 derive_extreme_records(
   adrs,
   dataset_ref = adsl,
@@ -756,7 +749,7 @@ created which indicates whether the subject died (set \code{AVALC = "Y"}, \code{
 #>   <chr>   <chr>   <chr>   <chr> <date>     <chr>
 #> 1 XX1234  1       DEATH   Death 2022-05-13 Y    
 #> 2 XX1234  2       DEATH   Death NA         N    
-#> 3 XX1234  3       DEATH   Death NA         N}\if{html}{\out{</div>}}
+#> 3 XX1234  3       DEATH   Death NA         N    }\if{html}{\out{</div>}}
 
 The \code{keep_source_vars} argument is specified to avoid that all \code{ADLS}
 variables (like \code{DTHDT}) are copied to the parameter.}}
