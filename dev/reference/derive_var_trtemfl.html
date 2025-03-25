@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">admiral</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.2.0.9014</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.2.0.9015</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -212,7 +212,11 @@ and <code>end_date</code> is on or after <code>trt_start_date</code> or <code>en
 is set to <code>"Y"</code>;</p></li>
 </ul></li>
 <li><p>Otherwise it is set to <code>NA_character_</code>.</p></li>
-</ul></div>
+</ul><p>The behavior of <code>derive_var_trtemfl</code> is aligned with the proposed
+treatment-emergent AE assignment in the following
+<a href="https://phuse.s3.eu-central-1.amazonaws.com/Deliverables/Safety+Analytics/WP-087+Recommended+Definition+of++Treatment-Emergent+Adverse+Events+in+Clinical+Trials+.pdf" class="external-link">PHUSE White Paper</a>.
+See Example 3 in the examples section.</p>
+    </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
     <div class="dont-index"><p>OCCDS Functions:
@@ -227,6 +231,13 @@ is set to <code>"Y"</code>;</p></li>
 <span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://tibble.tidyverse.org/" class="external-link">tibble</a></span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span>, warn.conflicts <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://lubridate.tidyverse.org" class="external-link">lubridate</a></span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Note: Examples 1 and 2 exhaustively showcase all arguments of</span></span></span>
+<span class="r-in"><span><span class="co"># derive_var_trtemfl(). Example 3 presents 13 more cases (some new, some similar</span></span></span>
+<span class="r-in"><span><span class="co"># to Examples 1 and 2) which are aligned one-to-one with the scenarios</span></span></span>
+<span class="r-in"><span><span class="co"># in the PHUSE White Paper on Treatment-Emergent AEs linked above.</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Example 1a: Derive TRTEMFL without considering treatment end and worsening</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">adae</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://tibble.tidyverse.org/reference/tribble.html" class="external-link">tribble</a></span><span class="op">(</span></span></span>
 <span class="r-in"><span>  <span class="op">~</span><span class="va">USUBJID</span>, <span class="op">~</span><span class="va">ASTDTM</span>,            <span class="op">~</span><span class="va">AENDTM</span>,            <span class="op">~</span><span class="va">AEITOXGR</span>, <span class="op">~</span><span class="va">AETOXGR</span>,</span></span>
@@ -260,7 +271,6 @@ is set to <code>"Y"</code>;</p></li>
 <span class="r-in"><span>    TRTEDTM <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/if_else.html" class="external-link">if_else</a></span><span class="op">(</span><span class="va">USUBJID</span> <span class="op">==</span> <span class="st">"1"</span>, <span class="fu"><a href="https://lubridate.tidyverse.org/reference/ymd_hms.html" class="external-link">ymd_hm</a></span><span class="op">(</span><span class="st">"2022-04-30T23:59"</span><span class="op">)</span>, <span class="fu"><a href="https://lubridate.tidyverse.org/reference/ymd_hms.html" class="external-link">ymd_hms</a></span><span class="op">(</span><span class="st">""</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span>  <span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># derive TRTEMFL without considering treatment end and worsening</span></span></span>
 <span class="r-in"><span><span class="fu">derive_var_trtemfl</span><span class="op">(</span><span class="va">adae</span><span class="op">)</span> <span class="op"><a href="pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">ASTDTM</span>, <span class="va">AENDTM</span>, <span class="va">TRTSDTM</span>, <span class="va">TRTEMFL</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 16 × 4</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    ASTDTM              AENDTM              TRTSDTM             TRTEMFL</span>
@@ -282,7 +292,8 @@ is set to <code>"Y"</code>;</p></li>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">15</span> 2021-12-01 <span style="color: #949494;">12:00:00</span> 2021-12-03 <span style="color: #949494;">12:00:00</span> <span style="color: #BB0000;">NA</span>                  <span style="color: #BB0000;">NA</span>     </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">16</span> 2021-12-06 <span style="color: #949494;">18:00:00</span> <span style="color: #BB0000;">NA</span>                  <span style="color: #BB0000;">NA</span>                  <span style="color: #BB0000;">NA</span>     </span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># derive TRTEM2FL taking treatment end and worsening into account</span></span></span>
+<span class="r-in"><span><span class="co"># Example 1b: Derive TRTEM2FL taking treatment end and worsening into account</span></span></span>
+<span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu">derive_var_trtemfl</span><span class="op">(</span></span></span>
 <span class="r-in"><span>  <span class="va">adae</span>,</span></span>
 <span class="r-in"><span>  new_var <span class="op">=</span> <span class="va">TRTEM2FL</span>,</span></span>
@@ -310,6 +321,9 @@ is set to <code>"Y"</code>;</p></li>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">14</span> <span style="color: #BB0000;">NA</span>                  2021-12-03 <span style="color: #949494;">12:00:00</span> 1        2       <span style="color: #BB0000;">NA</span>      </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">15</span> 2021-12-01 <span style="color: #949494;">12:00:00</span> 2021-12-03 <span style="color: #949494;">12:00:00</span> 1        2       <span style="color: #BB0000;">NA</span>      </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">16</span> 2021-12-06 <span style="color: #949494;">18:00:00</span> <span style="color: #BB0000;">NA</span>                  1        2       <span style="color: #BB0000;">NA</span>      </span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Example 2: Derive TRTEMFL taking treatment end and worsening into account</span></span></span>
+<span class="r-in"><span><span class="co"># within a grouping variable</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">adae2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://tibble.tidyverse.org/reference/tribble.html" class="external-link">tribble</a></span><span class="op">(</span></span></span>
 <span class="r-in"><span>  <span class="op">~</span><span class="va">USUBJID</span>, <span class="op">~</span><span class="va">ASTDTM</span>, <span class="op">~</span><span class="va">AENDTM</span>, <span class="op">~</span><span class="va">AEITOXGR</span>, <span class="op">~</span><span class="va">AETOXGR</span>, <span class="op">~</span><span class="va">AEGRPID</span>,</span></span>
@@ -347,7 +361,7 @@ is set to <code>"Y"</code>;</p></li>
 <span class="r-in"><span>    TRTSDTM <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/if_else.html" class="external-link">if_else</a></span><span class="op">(</span><span class="va">USUBJID</span> <span class="op">==</span> <span class="st">"1"</span>, <span class="fu"><a href="https://lubridate.tidyverse.org/reference/ymd_hms.html" class="external-link">ymd_hm</a></span><span class="op">(</span><span class="st">"2022-01-01T01:01"</span><span class="op">)</span>, <span class="fu"><a href="https://lubridate.tidyverse.org/reference/ymd_hms.html" class="external-link">ymd_hms</a></span><span class="op">(</span><span class="st">""</span><span class="op">)</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>    TRTEDTM <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/if_else.html" class="external-link">if_else</a></span><span class="op">(</span><span class="va">USUBJID</span> <span class="op">==</span> <span class="st">"1"</span>, <span class="fu"><a href="https://lubridate.tidyverse.org/reference/ymd_hms.html" class="external-link">ymd_hm</a></span><span class="op">(</span><span class="st">"2022-04-30T23:59"</span><span class="op">)</span>, <span class="fu"><a href="https://lubridate.tidyverse.org/reference/ymd_hms.html" class="external-link">ymd_hms</a></span><span class="op">(</span><span class="st">""</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span>  <span class="op">)</span></span></span>
-<span class="r-in"><span><span class="co"># derive TRTEMFL taking treatment end and worsening into account within a grouping variable</span></span></span>
+<span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu">derive_var_trtemfl</span><span class="op">(</span></span></span>
 <span class="r-in"><span>  <span class="va">adae2</span>,</span></span>
 <span class="r-in"><span>  new_var <span class="op">=</span> <span class="va">TRTEMFL</span>,</span></span>
@@ -378,6 +392,84 @@ is set to <code>"Y"</code>;</p></li>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">17</span> <span style="color: #BB0000;">NA</span>                  2021-12-03 <span style="color: #949494;">12:00:00</span> 1        2       1       <span style="color: #BB0000;">NA</span>     </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">18</span> 2021-12-01 <span style="color: #949494;">12:00:00</span> 2021-12-03 <span style="color: #949494;">12:00:00</span> 1        2       2       <span style="color: #BB0000;">NA</span>     </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">19</span> 2021-12-06 <span style="color: #949494;">18:00:00</span> <span style="color: #BB0000;">NA</span>                  1        2       3       <span style="color: #BB0000;">NA</span>     </span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Example 3: PHUSE-white-paper scenarios</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">adae3</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://tibble.tidyverse.org/reference/tribble.html" class="external-link">tribble</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>  <span class="op">~</span><span class="va">USUBJID</span>, <span class="op">~</span><span class="va">TRTSDTM</span>, <span class="op">~</span><span class="va">TRTEDTM</span>, <span class="op">~</span><span class="va">ASTDTM</span>, <span class="op">~</span><span class="va">AENDTM</span>, <span class="op">~</span><span class="va">AEITOXGR</span>, <span class="op">~</span><span class="va">AETOXGR</span>,</span></span>
+<span class="r-in"><span>  <span class="co"># Patient 1: Pre-treatment AE</span></span></span>
+<span class="r-in"><span>  <span class="st">"1"</span>, <span class="st">"2021-01-01"</span>, <span class="st">"2021-12-31"</span>, <span class="st">"2020-12-20"</span>, <span class="st">"2020-12-21"</span>, <span class="st">"2"</span>, <span class="st">"2"</span>,</span></span>
+<span class="r-in"><span>  <span class="co"># Patient 2: On-treatment AE</span></span></span>
+<span class="r-in"><span>  <span class="st">"2"</span>, <span class="st">"2021-01-01"</span>, <span class="st">"2021-12-31"</span>, <span class="st">"2021-12-20"</span>, <span class="st">"2021-12-21"</span>, <span class="st">"2"</span>, <span class="st">"2"</span>,</span></span>
+<span class="r-in"><span>  <span class="co"># Patient 3: Pre-treatment AE, then on-treatment AE at same intensity</span></span></span>
+<span class="r-in"><span>  <span class="st">"3"</span>, <span class="st">"2021-01-01"</span>, <span class="st">"2021-12-31"</span>, <span class="st">"2020-12-20"</span>, <span class="st">"2020-12-21"</span>, <span class="st">"2"</span>, <span class="st">"2"</span>,</span></span>
+<span class="r-in"><span>  <span class="st">"3"</span>, <span class="st">"2021-01-01"</span>, <span class="st">"2021-12-31"</span>, <span class="st">"2021-12-20"</span>, <span class="st">"2021-12-21"</span>, <span class="st">"2"</span>, <span class="st">"2"</span>,</span></span>
+<span class="r-in"><span>  <span class="co"># Patient 4: Pre-treatment AE, then on-treatment AE at wors. intensity</span></span></span>
+<span class="r-in"><span>  <span class="st">"4"</span>, <span class="st">"2021-01-01"</span>, <span class="st">"2021-12-31"</span>, <span class="st">"2020-12-20"</span>, <span class="st">"2020-12-21"</span>, <span class="st">"2"</span>, <span class="st">"2"</span>,</span></span>
+<span class="r-in"><span>  <span class="st">"4"</span>, <span class="st">"2021-01-01"</span>, <span class="st">"2021-12-31"</span>, <span class="st">"2021-12-20"</span>, <span class="st">"2021-12-21"</span>, <span class="st">"2"</span>, <span class="st">"3"</span>,</span></span>
+<span class="r-in"><span>  <span class="co"># Patient 5: Pre-treatment AE, then on-treatment AE at impr. intensity</span></span></span>
+<span class="r-in"><span>  <span class="st">"5"</span>, <span class="st">"2021-01-01"</span>, <span class="st">"2021-12-31"</span>, <span class="st">"2020-12-20"</span>, <span class="st">"2020-12-21"</span>, <span class="st">"2"</span>, <span class="st">"2"</span>,</span></span>
+<span class="r-in"><span>  <span class="st">"5"</span>, <span class="st">"2021-01-01"</span>, <span class="st">"2021-12-31"</span>, <span class="st">"2021-12-20"</span>, <span class="st">"2021-12-21"</span>, <span class="st">"2"</span>, <span class="st">"1"</span>,</span></span>
+<span class="r-in"><span>  <span class="co"># Patient 6: AE starting pre-treatment, continuing on-treatment, then 2nd AE at same intensity</span></span></span>
+<span class="r-in"><span>  <span class="st">"6"</span>, <span class="st">"2021-01-01"</span>, <span class="st">"2021-12-31"</span>, <span class="st">"2020-12-23"</span>, <span class="st">"2021-01-21"</span>, <span class="st">"2"</span>, <span class="st">"2"</span>,</span></span>
+<span class="r-in"><span>  <span class="st">"6"</span>, <span class="st">"2021-01-01"</span>, <span class="st">"2021-12-31"</span>, <span class="st">"2021-12-20"</span>, <span class="st">"2021-12-21"</span>, <span class="st">"2"</span>, <span class="st">"2"</span>,</span></span>
+<span class="r-in"><span>  <span class="co"># Patient 7: AE starting pre-treatment, continuing on-treatment, then 2nd AE at wors. intensity</span></span></span>
+<span class="r-in"><span>  <span class="st">"7"</span>, <span class="st">"2021-01-01"</span>, <span class="st">"2021-12-31"</span>, <span class="st">"2020-12-23"</span>, <span class="st">"2021-01-21"</span>, <span class="st">"2"</span>, <span class="st">"2"</span>,</span></span>
+<span class="r-in"><span>  <span class="st">"7"</span>, <span class="st">"2021-01-01"</span>, <span class="st">"2021-12-31"</span>, <span class="st">"2021-12-20"</span>, <span class="st">"2021-12-21"</span>, <span class="st">"2"</span>, <span class="st">"3"</span>,</span></span>
+<span class="r-in"><span>  <span class="co"># Patient 8: AE starting pre-treatment, continuing on-treatment, then 2nd AE at impr. intensity</span></span></span>
+<span class="r-in"><span>  <span class="st">"8"</span>, <span class="st">"2021-01-01"</span>, <span class="st">"2021-12-31"</span>, <span class="st">"2020-12-23"</span>, <span class="st">"2021-01-21"</span>, <span class="st">"2"</span>, <span class="st">"2"</span>,</span></span>
+<span class="r-in"><span>  <span class="st">"8"</span>, <span class="st">"2021-01-01"</span>, <span class="st">"2021-12-31"</span>, <span class="st">"2021-12-20"</span>, <span class="st">"2021-12-21"</span>, <span class="st">"2"</span>, <span class="st">"1"</span>,</span></span>
+<span class="r-in"><span>  <span class="co"># Patient 9: AE starting pre-treatment, continuing on-treatment, and no change in intensity</span></span></span>
+<span class="r-in"><span>  <span class="st">"9"</span>, <span class="st">"2021-01-01"</span>, <span class="st">"2021-12-31"</span>, <span class="st">"2020-12-23"</span>, <span class="st">"2021-01-21"</span>, <span class="st">"2"</span>, <span class="st">"2"</span>,</span></span>
+<span class="r-in"><span>  <span class="co"># Patient 10: AE starting pre-treatment, continuing on-treatment, and wors. intensity</span></span></span>
+<span class="r-in"><span>  <span class="st">"10"</span>, <span class="st">"2021-01-01"</span>, <span class="st">"2021-12-31"</span>, <span class="st">"2020-12-23"</span>, <span class="st">"2021-01-21"</span>, <span class="st">"2"</span>, <span class="st">"4"</span>,</span></span>
+<span class="r-in"><span>  <span class="co"># Patient 11: AE starting pre-treatment, continuing on-treatment, and impr. intensity</span></span></span>
+<span class="r-in"><span>  <span class="st">"11"</span>, <span class="st">"2021-01-01"</span>, <span class="st">"2021-12-31"</span>, <span class="st">"2020-12-23"</span>, <span class="st">"2021-01-21"</span>, <span class="st">"2"</span>, <span class="st">"1"</span>,</span></span>
+<span class="r-in"><span>  <span class="co"># Patient 12: AE starting pre-treatment, worsening, then improving</span></span></span>
+<span class="r-in"><span>  <span class="st">"12"</span>, <span class="st">"2021-01-01"</span>, <span class="st">"2021-12-31"</span>, <span class="st">"2020-12-23"</span>, <span class="st">"2021-01-21"</span>, <span class="st">"3"</span>, <span class="st">"2"</span>,</span></span>
+<span class="r-in"><span>  <span class="co"># Patient 13: AE starting pre-treatment, improving, then worsening</span></span></span>
+<span class="r-in"><span>  <span class="st">"13"</span>, <span class="st">"2021-01-01"</span>, <span class="st">"2021-12-31"</span>, <span class="st">"2020-12-23"</span>, <span class="st">"2021-01-21"</span>, <span class="st">"1"</span>, <span class="st">"2"</span>,</span></span>
+<span class="r-in"><span><span class="op">)</span> <span class="op"><a href="pipe.html">%&gt;%</a></span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>    ASTDTM <span class="op">=</span> <span class="fu"><a href="https://lubridate.tidyverse.org/reference/ymd.html" class="external-link">ymd</a></span><span class="op">(</span><span class="va">ASTDTM</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>    AENDTM <span class="op">=</span> <span class="fu"><a href="https://lubridate.tidyverse.org/reference/ymd.html" class="external-link">ymd</a></span><span class="op">(</span><span class="va">AENDTM</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>    TRTSDTM <span class="op">=</span> <span class="fu"><a href="https://lubridate.tidyverse.org/reference/ymd.html" class="external-link">ymd</a></span><span class="op">(</span><span class="va">TRTSDTM</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>    TRTEDTM <span class="op">=</span> <span class="fu"><a href="https://lubridate.tidyverse.org/reference/ymd.html" class="external-link">ymd</a></span><span class="op">(</span><span class="va">TRTEDTM</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>  <span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu">derive_var_trtemfl</span><span class="op">(</span></span></span>
+<span class="r-in"><span>  <span class="va">adae3</span>,</span></span>
+<span class="r-in"><span>  new_var <span class="op">=</span> <span class="va">TRTEMFL</span>,</span></span>
+<span class="r-in"><span>  trt_end_date <span class="op">=</span> <span class="va">TRTEDTM</span>,</span></span>
+<span class="r-in"><span>  end_window <span class="op">=</span> <span class="fl">0</span>,</span></span>
+<span class="r-in"><span>  initial_intensity <span class="op">=</span> <span class="va">AEITOXGR</span>,</span></span>
+<span class="r-in"><span>  intensity <span class="op">=</span> <span class="va">AETOXGR</span>,</span></span>
+<span class="r-in"><span>  subject_keys <span class="op">=</span> <span class="fu"><a href="reexport-exprs.html">exprs</a></span><span class="op">(</span><span class="va">USUBJID</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">)</span> <span class="op"><a href="pipe.html">%&gt;%</a></span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">USUBJID</span>, <span class="va">TRTSDTM</span>, <span class="va">TRTEDTM</span>, <span class="va">ASTDTM</span>, <span class="va">AENDTM</span>, <span class="va">AEITOXGR</span>, <span class="va">AETOXGR</span>, <span class="va">TRTEMFL</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 19 × 8</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    USUBJID TRTSDTM    TRTEDTM    ASTDTM     AENDTM     AEITOXGR AETOXGR TRTEMFL</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span> 1       2021-01-01 2021-12-31 2020-12-20 2020-12-21 2        2       <span style="color: #BB0000;">NA</span>     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span> 2       2021-01-01 2021-12-31 2021-12-20 2021-12-21 2        2       Y      </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span> 3       2021-01-01 2021-12-31 2020-12-20 2020-12-21 2        2       <span style="color: #BB0000;">NA</span>     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span> 3       2021-01-01 2021-12-31 2021-12-20 2021-12-21 2        2       Y      </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span> 4       2021-01-01 2021-12-31 2020-12-20 2020-12-21 2        2       <span style="color: #BB0000;">NA</span>     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span> 4       2021-01-01 2021-12-31 2021-12-20 2021-12-21 2        3       Y      </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span> 5       2021-01-01 2021-12-31 2020-12-20 2020-12-21 2        2       <span style="color: #BB0000;">NA</span>     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span> 5       2021-01-01 2021-12-31 2021-12-20 2021-12-21 2        1       Y      </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span> 6       2021-01-01 2021-12-31 2020-12-23 2021-01-21 2        2       <span style="color: #BB0000;">NA</span>     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> 6       2021-01-01 2021-12-31 2021-12-20 2021-12-21 2        2       Y      </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">11</span> 7       2021-01-01 2021-12-31 2020-12-23 2021-01-21 2        2       <span style="color: #BB0000;">NA</span>     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">12</span> 7       2021-01-01 2021-12-31 2021-12-20 2021-12-21 2        3       Y      </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">13</span> 8       2021-01-01 2021-12-31 2020-12-23 2021-01-21 2        2       <span style="color: #BB0000;">NA</span>     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">14</span> 8       2021-01-01 2021-12-31 2021-12-20 2021-12-21 2        1       Y      </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">15</span> 9       2021-01-01 2021-12-31 2020-12-23 2021-01-21 2        2       <span style="color: #BB0000;">NA</span>     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">16</span> 10      2021-01-01 2021-12-31 2020-12-23 2021-01-21 2        4       Y      </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">17</span> 11      2021-01-01 2021-12-31 2020-12-23 2021-01-21 2        1       <span style="color: #BB0000;">NA</span>     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">18</span> 12      2021-01-01 2021-12-31 2020-12-23 2021-01-21 3        2       <span style="color: #BB0000;">NA</span>     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">19</span> 13      2021-01-01 2021-12-31 2020-12-23 2021-01-21 1        2       Y      </span>
+<span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
