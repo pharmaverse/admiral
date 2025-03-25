@@ -217,6 +217,7 @@ test_that("derive_var_trtemfl Test 11: error if `group_var` specified without `s
   )
 })
 
+# nolint start
 
 ## Test 12: Checking test cases from PHUSE White Paper on Treatment Emergent AEs  ----
 test_that("derive_var_trtemfl Test 12: Checking test cases from PHUSE White Paper on Treatment Emergent AEs", {
@@ -261,6 +262,8 @@ test_that("derive_var_trtemfl Test 12: Checking test cases from PHUSE White Pape
       TRTSDTM = lubridate::ymd_hm(TRTSDTM),
       TRTEDTM = lubridate::ymd_hm(TRTEDTM),
     )
+
+  # nolint end
 
   expect_dfs_equal(
     base = adae_phuse,
