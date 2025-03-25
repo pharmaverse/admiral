@@ -50,6 +50,7 @@ Biologics
 CDISC
 CKD
 CMD
+CODEOWNERS
 COVID
 CPK
 CQ
@@ -62,11 +63,9 @@ CTCAEv
 CVD
 Carlucci
 Chakma
-Cheatsheet
 Chemistries
 Chol
 Cockcroft
-CODEOWNERS
 Creat
 Creatine
 Creatinine
@@ -272,6 +271,7 @@ anticoagulation
 aspartate
 basetypes
 bds
+behaviour
 censorings
 chk
 codebase
