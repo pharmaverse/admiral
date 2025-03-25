@@ -119,7 +119,9 @@
 #'
 #'  The behavior of `derive_var_trtemfl` is aligned with the proposed
 #'  treatment-emergent AE assignment in the following
+# nolint start
 #'  [PHUSE White Paper](https://phuse.s3.eu-central-1.amazonaws.com/Deliverables/Safety+Analytics/WP-087+Recommended+Definition+of++Treatment-Emergent+Adverse+Events+in+Clinical+Trials+.pdf).
+# nolint end
 #'  See Example 3 in the examples section.
 #'
 #' @return The input dataset with the variable specified by `new_var` added
