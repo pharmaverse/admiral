@@ -265,26 +265,26 @@ adae3 <- tribble(
   # Patient 3: Pre-treatment AE, then on-treatment AE at same intensity
   "3", "2021-01-01", "2021-12-31", "2020-12-20", "2020-12-21", "2", "2",
   "3", "2021-01-01", "2021-12-31", "2021-12-20", "2021-12-21", "2", "2",
-  # Patient 4: Pre-treatment AE, then on-treatment AE at worsened intensity
+  # Patient 4: Pre-treatment AE, then on-treatment AE at wors. intensity
   "4", "2021-01-01", "2021-12-31", "2020-12-20", "2020-12-21", "2", "2",
   "4", "2021-01-01", "2021-12-31", "2021-12-20", "2021-12-21", "2", "3",
-  # Patient 5: Pre-treatment AE, then on-treatment AE at improved intensity
+  # Patient 5: Pre-treatment AE, then on-treatment AE at impr. intensity
   "5", "2021-01-01", "2021-12-31", "2020-12-20", "2020-12-21", "2", "2",
   "5", "2021-01-01", "2021-12-31", "2021-12-20", "2021-12-21", "2", "1",
-  # Patient 6: AE starting pre-treatment and continuing on-treatment, then second AE at same intensity
+  # Patient 6: AE starting pre-treatment, continuing on-treatment, then 2nd AE at same intensity
   "6", "2021-01-01", "2021-12-31", "2020-12-23", "2021-01-21", "2", "2",
   "6", "2021-01-01", "2021-12-31", "2021-12-20", "2021-12-21", "2", "2",
-  # Patient 7: AE starting pre-treatment and continuing on-treatment, then second AE at worsened intensity
+  # Patient 7: AE starting pre-treatment, continuing on-treatment, then 2nd AE at wors. intensity
   "7", "2021-01-01", "2021-12-31", "2020-12-23", "2021-01-21", "2", "2",
   "7", "2021-01-01", "2021-12-31", "2021-12-20", "2021-12-21", "2", "3",
-  # Patient 8: AE starting pre-treatment and continuing on-treatment, then second AE at improved intensity
+  # Patient 8: AE starting pre-treatment, continuing on-treatment, then 2nd AE at impr. intensity
   "8", "2021-01-01", "2021-12-31", "2020-12-23", "2021-01-21", "2", "2",
   "8", "2021-01-01", "2021-12-31", "2021-12-20", "2021-12-21", "2", "1",
-  # Patient 9: AE starting pre-treatment and continuing on-treatment, and no change in intensity
+  # Patient 9: AE starting pre-treatment, continuing on-treatment, and no change in intensity
   "9", "2021-01-01", "2021-12-31", "2020-12-23", "2021-01-21", "2", "2",
-  # Patient 10: AE starting pre-treatment and continuing on-treatment, and worsening intensity
+  # Patient 10: AE starting pre-treatment, continuing on-treatment, and wors. intensity
   "10", "2021-01-01", "2021-12-31", "2020-12-23", "2021-01-21", "2", "4",
-  # Patient 11: AE starting pre-treatment and continuing on-treatment, and improving intensity
+  # Patient 11: AE starting pre-treatment, continuing on-treatment, and impr. intensity
   "11", "2021-01-01", "2021-12-31", "2020-12-23", "2021-01-21", "2", "1",
   # Patient 12: AE starting pre-treatment, worsening, then improving
   "12", "2021-01-01", "2021-12-31", "2020-12-23", "2021-01-21", "3", "2",
