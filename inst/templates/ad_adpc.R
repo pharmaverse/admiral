@@ -370,8 +370,6 @@ adpc_aval <- adpc_nrrlt %>%
     # Derive AVAL
     AVAL = case_when(
       EVID == 1 ~ EXDOSE,
-      PCSTRESC == "<BLQ" & NFRLT == 0 ~ 0,
-      PCSTRESC == "<BLQ" & NFRLT > 0 ~ 0.5 * ALLOQ,
       TRUE ~ PCSTRESN
     ),
     AVALU = case_when(
@@ -387,9 +385,24 @@ adpc_aval <- adpc_nrrlt %>%
     SRCSEQ = coalesce(PCSEQ, EXSEQ)
   )
 
+# ---- Create DTYPE imputation
+
+adpc_lloq <- adpc_aval %>%
+  derive_extreme_records(
+    dataset_add = adpc_aval,
+    by_vars = exprs(USUBJID, PARAMCD, PARCAT1, AVISITN, AVISIT, ADTM, PCSEQ),
+    order = exprs(ADTM, BASETYPE, EVID, ATPTN, PARCAT1),
+    mode = "last",
+    filter_add = PCSTRESC == "<BLQ",
+    set_values_to = exprs(
+      AVAL = ALLOQ * .5,
+      DTYPE = "HALFLLOQ"
+    )
+  )
+
 # ---- Create DTYPE copy records ----
 
-dtype <- adpc_aval %>%
+dtype <- adpc_lloq %>%
   filter(NFRLT > 0 & NXRLT == 0 & EVID == 0 & !is.na(AVISIT_next)) %>%
   select(-PCRFTDT, -PCRFTTM) %>%
   # Re-derive variables in for DTYPE copy records
@@ -404,14 +417,17 @@ dtype <- adpc_aval %>%
     ATPT = "Pre-dose",
     ATPTN = -0.5,
     ABLFL = "Y",
-    DTYPE = "COPY"
+    DTYPE = case_when(
+      is.na(DTYPE) ~ "COPY",
+      DTYPE == "HALFLLOQ" ~ "COPY/HALFLLOQ"
+    )
   ) %>%
   derive_vars_dtm_to_dt(exprs(PCRFTDTM)) %>%
   derive_vars_dtm_to_tm(exprs(PCRFTDTM))
 
 # ---- Combine original records and DTYPE copy records ----
 
-adpc_dtype <- bind_rows(adpc_aval, dtype) %>%
+adpc_dtype <- bind_rows(adpc_lloq, dtype) %>%
   arrange(STUDYID, USUBJID, BASETYPE, ADTM, NFRLT) %>%
   mutate(
     # Derive MRRLT, ANL01FL and ANL02FL
@@ -424,7 +440,7 @@ adpc_dtype <- bind_rows(adpc_aval, dtype) %>%
 
 adpc_base <- adpc_dtype %>%
   derive_var_base(
-    by_vars = exprs(STUDYID, USUBJID, PARAMCD, PARCAT1, BASETYPE),
+    by_vars = exprs(STUDYID, USUBJID, PARAMCD, PARCAT1, BASETYPE, DTYPE),
     source_var = AVAL,
     new_var = BASE,
     filter = ABLFL == "Y"
