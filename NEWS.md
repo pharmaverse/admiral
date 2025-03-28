@@ -21,7 +21,7 @@
 
 ## Documentation
 
-- Improved documentation and error messages of `derive_vars_cat`. (#2654)
+- Improved documentation and error messages of `derive_vars_dt`. (#2654)
 - Default value of `type` in `derive_vars_aage()` is now shown as `interval` to match the function behaviour. (#2685) 
 - The "Lab Grading" vignette was updated to correct some typos and make text easier to
 read. (#2623)
