@@ -2,6 +2,8 @@
 
 ## New Features
 
+- create `test-my_first_fcn` as dummy practice
+
 ## Updates of Existing Functions
 
 - The function `extract_duplicate_records()` was updated to consider all variables in the input dataset for the by group if the `by_vars` argument is omitted entirely. (#2644)
