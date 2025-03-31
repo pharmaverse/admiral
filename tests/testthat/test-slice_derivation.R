@@ -193,3 +193,40 @@ test_that("slice_derivation Test 5: calling it in a function", {
     keys = "USUBJID"
   )
 })
+
+## Test 6: slice on 0-row dataset ----
+test_that("slice_derivation Test 6: slice on 0-row dataset", {
+  advs <- tibble::tribble(
+    ~USUBJID, ~VSDTC,       ~VSTPT,             ~VSSEQ,
+    "1",      "2020-04-16", NA_character_,      1,
+    "1",      "2020-04-16", "BEFORE TREATMENT", 2
+  )
+
+  actual <- slice_derivation(
+    advs[c(-1, -2), ],
+    derivation = derive_vars_dtm,
+    args = params(
+      dtc = VSDTC,
+      new_vars_prefix = "A"
+    ),
+    derivation_slice(
+      filter = str_detect(VSTPT, "PRE|BEFORE"),
+      args = params(time_imputation = "first")
+    ),
+    derivation_slice(
+      filter = TRUE,
+      args = params(time_imputation = "last")
+    )
+  )
+
+  expected <- mutate(
+    advs[c(-1, -2), ],
+    ADTM = as.POSIXct(numeric(0), tz = "UTC"),
+    ATMF = character(0)
+  )
+
+  expect_identical(
+    expected,
+    actual
+  )
+})
