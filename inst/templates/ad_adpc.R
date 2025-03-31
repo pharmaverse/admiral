@@ -339,11 +339,6 @@ adpc_aval <- adpc_nrrlt %>%
       is.na(AVISIT_prev) ~ AVISIT_next,
       TRUE ~ AVISIT_prev
     ),
-    # Derive baseline flag for pre-dose records
-    ABLFL = case_when(
-      ATPT == "Pre-dose" ~ "Y",
-      TRUE ~ NA_character_
-    ),
     # Derive BASETYPE
     BASETYPE = paste(ATPTREF, "Baseline"),
 
@@ -393,7 +388,7 @@ adpc_lloq <- adpc_aval %>%
     by_vars = exprs(USUBJID, PARAMCD, PARCAT1, AVISITN, AVISIT, ADTM, PCSEQ),
     order = exprs(ADTM, BASETYPE, EVID, ATPTN, PARCAT1),
     mode = "last",
-    filter_add = PCSTRESC == "<BLQ",
+    filter_add = PCSTRESC == "<BLQ" & is.na(AVAL),
     set_values_to = exprs(
       AVAL = ALLOQ * .5,
       DTYPE = "HALFLLOQ"
@@ -407,7 +402,6 @@ dtype <- adpc_lloq %>%
   select(-PCRFTDT, -PCRFTTM) %>%
   # Re-derive variables in for DTYPE copy records
   mutate(
-    ABLFL = NA_character_,
     ATPTREF = AVISIT_next,
     ARRLT = AXRLT,
     NRRLT = NXRLT,
@@ -416,7 +410,6 @@ dtype <- adpc_lloq %>%
     BASETYPE = paste(AVISIT_next, "Baseline"),
     ATPT = "Pre-dose",
     ATPTN = -0.5,
-    ABLFL = "Y",
     DTYPE = case_when(
       is.na(DTYPE) ~ "COPY",
       DTYPE == "HALFLLOQ" ~ "COPY/HALFLLOQ"
@@ -430,17 +423,22 @@ dtype <- adpc_lloq %>%
 adpc_dtype <- bind_rows(adpc_lloq, dtype) %>%
   arrange(STUDYID, USUBJID, BASETYPE, ADTM, NFRLT) %>%
   mutate(
+    # Derive baseline flag for pre-dose records
+    ABLFL = case_when(
+      ATPT == "Pre-dose" & !is.na(AVAL) ~ "Y",
+      TRUE ~ NA_character_
+    ),
     # Derive MRRLT, ANL01FL and ANL02FL
     MRRLT = if_else(ARRLT < 0, 0, ARRLT),
     ANL01FL = "Y",
-    ANL02FL = if_else(is.na(DTYPE), "Y", NA_character_),
+    ANL02FL = if_else(is.na(DTYPE), "Y", NA_character_)
   )
 
 # ---- Derive BASE and Calculate Change from Baseline ----
 
 adpc_base <- adpc_dtype %>%
   derive_var_base(
-    by_vars = exprs(STUDYID, USUBJID, PARAMCD, PARCAT1, BASETYPE, DTYPE),
+    by_vars = exprs(STUDYID, USUBJID, PARAMCD, PARCAT1, BASETYPE),
     source_var = AVAL,
     new_var = BASE,
     filter = ABLFL == "Y"
