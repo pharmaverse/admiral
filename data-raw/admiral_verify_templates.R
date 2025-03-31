@@ -18,13 +18,13 @@ load_rda = function(fileName) {
     get(ls()[ls() != "adlb"]) # get the new adlb dataset
 }
 # better version
-load_rda2 <- function (path,  name){
+load_rda2 <- function (dir,  name){
  # in cache dir (adlb.rda)
-  load(paste0(path,"/", name, ".rda"), envir=globalenv(), verbose=TRUE)
+  load(paste0(path,"/", dir, ".rda"), envir=globalenv(), verbose=TRUE)
 }
 
 
-save_rda = function(data, file_path, new_name) {
+save_rda <- function(data, file_path, new_name) {
   # new_name must include  .rda
   if (missing(new_name)) {
     save(data, file = file_path, compress="bzip2")
@@ -32,13 +32,12 @@ save_rda = function(data, file_path, new_name) {
 }
 
 compare = function(base, compare, keys, file){
-    tryCatch({
+   tryCatch({
       diffdf::diffdf(
         base = base,
         compare = compare,
         keys = keys,
-        file = paste0(dataset_dir,"/diff_", name, ".txt")
-     )
+        file = paste0(dataset_dir,"/diff_", file, ".txt"))
   },
       error = function(e) {
         message("Error in diffdf: ", e$message)
@@ -57,49 +56,82 @@ clean_cache = function() {
 }
 
 main = function() {
-
 clean_cache()
-packages_list = c("admiral")
 
-for (pkg in packages_list){                  # ----
+library(pharmaverseadam)
+
+# SOURCE:  Use pharmaverseadam as source for ADaM *.rda files (22 ADaM files) 
+# ignore adlbhy.rda (per Ben) 
+
+
+# REMOVE loop:   per Ben, only do "admiral"
+packages_list = c("admiral")
+for (pkg in packages_list){                  # ---- pkg ----
   sprintf("generating ADaMs for  %s package", pkg)
   library(pkg, character.only = TRUE)
 
-  # DISCUSS: ask user to update <pkg>?
+  # DISCUSS: Ask user to update <pkg>?
 
-  # gather all package templates
+  # per Ben, ignore *.rda files in admiral/data
+  source_adams=data(package= "pharmaverseadam")
+
+  # 23 ADaMs found
+  source_adams = source$results[,"Item"]
+
+  # per Ben, ignore "adlbhy"
+  #source_adams = source_adams[adam_names != "adlbhy"]
+  source_adams
+
+  # gather al templates for this pkg (12 found)
   template_path = file.path(system.file(package = pkg), "templates")
   templates = list.files(template_path, pattern = "ad_")
+  templates
 
-  # new ADaM datasets will be put in cache dir
-   dataset_dir = tools::R_user_dir(sprintf("%s_templates_data", pkg), which="cache")
+  ## BUT, Fewer templates than  ADaMs in pharmaverseadam!
+  ## Reduce number of source_adams ! 
 
-  ## DISCUSS:   templates to ignore, add  MANUALLY?
-  ## TODO:   for now, ignore templates EXCEPT these 2
+  
+  ## templates can generate these ADaMs, 12
+  names = sapply(templates, function(x) gsub("ad_|\\.R","",x ), USE.NAMES = FALSE)
+  ## name our templates
+
+
+
+  # KEEP only elments in both (now 12)
+source_adams =  source_adams[source_adams %in% names]
+  # finally name the templates vector
+  names(templates) = names 
+  templates
+
+
+  # new, generated ADaM datasets will be put in cache dir
+  dataset_dir = tools::R_user_dir(sprintf("%s_templates_data", pkg), which="cache")
+
+  # collect in list of important paths
+  path = list("templates_path" = file.path(system.file(package = pkg), "templates"),
+              "dataset_dir" = tools::R_user_dir(sprintf("%s_templates_data", pkg), which="cache")
+  )
+
+  # TODO fix, want scalar character, not named, not vector
+  names(templates) = adam_names
+  unname(templates["adae"])
+
+
+
+  ## TODO:  TESTING:   ignore all templates but these two 
   ignore_templates_pkg = templates[!(templates %in% c("ad_adlb.R", "ad_adsl.R"))]
+
+  ## AFTER Testing, this is only template to be ignored
+  #ignore_templates_pkg = templates[!(templates %in% c("ad_adlbhy.R"))]
 
     # begin tp  ----
     for (tp in templates) {
-      #if (tp == "ad_adlb.R") next  ## adlb is big, skip while debugging
+      if (tp == "ad_adlb.R") next  ## adlb is big, skip while debugging
       # Each tp creates single ADaM package
 
-      # 1st, make copy of all ADaMs in pkg
-      # DISCUSS:  put in separate environment?
-
-      # (for now) use:   adam_old
-      # TODO:  automate, use vector
-
-      if (tp == "ad_adlb.R") {
-        adam_old <- admiral::admiral_adlb
-      } else {
-        adam_old <- admiral::admiral_adsl
-      }
-
-      # extract base ADaM name (ex:  adsl)
-      # TODO: use vector
-      name = gsub("ad_", "", tp)
-      name = gsub(".R", "", name)
-      name
+      # 
+        name = gsub("ad_|\\.R", "", tp)
+        adam_old = do.call(`::`, args=list("pharmaverseadam", name))
 
       # run template, which caches new adam_new
       if(tp %in% ignore_templates_pkg) {
@@ -111,11 +143,16 @@ for (pkg in packages_list){                  # ----
       }
       # retrieve new adam from cache dir (puts into globalenv())
       load_rda2(dataset_dir, name)
+      adam_new = name
 
+      # DISCUSS
       all_results <- c()
+
+##   DISCUSS:   Ben:  use full dataset, no reduction
 
        ## DISCUSSION:   adlb.rda ADaM is large and must be reduced in size (for testing)
        ## What about other ADaMs ?  use vector
+      if (FALSE) {
        if (tp == "ad_adlb.R") {
          # Reduce size of adlb dataset for testing
          # Limit rows by selecting only these USUBJIDs
@@ -141,13 +178,17 @@ for (pkg in packages_list){                  # ----
              adam_new = admiral_adsl
        }  ## end if
 
+       }
+sin(pi)
           # Finally, save  dataset (reduced or not) in data/
           # TODO:  use vector
           if (tp == "ad_adlb.R") {
             save_rda(adam_new, file_path="data/admiral_adlb.rda")
           } else {
-            save_rda(adam_new, file_path="data/admiral_adsl.rda")
+            #save_rda(adam_new, file_path="data/admiral_adsl.rda")
+            save_rda(adam_new, file_path="~/admiral_adsl.rda")
           }
+       } ## end if
 
     ## TODO function use vectors
     sprintf("comparing ....%s", tp)
@@ -162,4 +203,4 @@ for (pkg in packages_list){                  # ----
 } ## end for packages_list
 
 print("DONE")
-}
+
