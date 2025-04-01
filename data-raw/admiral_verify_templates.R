@@ -38,10 +38,10 @@ load_rda <- function(fileName) {
 save_rda <- function(data, file_path, new_name) {
   # new_name must include  .rda
   if (missing(new_name)) {
-    save(data, file = file_path, compress="bzip2")
+    save(data, file = file_path, compress = "bzip2")
   }
 }
-compare = function(base, compare, keys, file){
+compare <- function(base, compare, keys, file) {
   tryCatch({
       diffdf::diffdf(
         base = base,
@@ -56,8 +56,8 @@ compare = function(base, compare, keys, file){
 }  ## end compare
 
 # start fresh
-clean_cache = function() {
-  dataset_dir = tools::R_user_dir("admiral_templates_data", which="cache")
+clean_cache <- function() {
+  dataset_dir <- tools::R_user_dir("admiral_templates_data", which = "cache")
   if (dir.exists(dataset_dir)) {
     unlink(dataset_dir, recursive = TRUE)
     message("Cache directory deleted: ", dataset_dir)
@@ -67,7 +67,7 @@ clean_cache = function() {
 }
 
 #  IGNORE:  not in use
-reduce = function(){
+reduce <- function(){
        ## DISCUSSION:   adlb.rda ADaM is large and must be reduced in size (for testing)
        ## What about other ADaMs ?  use vector
        if (tp == "ad_adlb.R") {
@@ -96,10 +96,10 @@ reduce = function(){
        }  ## end if
 }  ## end reduce
 
-verify_templates = function(pkg = "admiral", ignore_templates_pkg=NULL) {
+verify_templates <- function(pkg = "admiral", ignore_templates_pkg = NULL) {
 clean_cache()
 library(pharmaverseadam)
-old_option = options(error = recover)
+old_option <- options(error = recover)
 
 # TODO:  more checking
 if (pkg != "admiral") error("Curently, only admiral package is accepted.")
@@ -109,8 +109,7 @@ if (pkg != "admiral") error("Curently, only admiral package is accepted.")
   sprintf("generating ADaMs for  %s package", pkg)
   library(pkg, character.only = TRUE)
 
-  # per Ben, ignore *.rda files in admiral/data
-  source_adams=data(package= "pharmaverseadam")
+  source_adams <- data(package= "pharmaverseadam")
 
   # 23 ADaMs found
   source_adams = source_adams$results[,"Item"]
@@ -120,37 +119,36 @@ if (pkg != "admiral") error("Curently, only admiral package is accepted.")
   source_adams
 
   # gather keys (for diffdf)
-  keys_adsl = teal.data::default_cdisc_join_keys[c("ADSL")]$ADSL
+  keys_adsl <- teal.data::default_cdisc_join_keys[c("ADSL")]$ADSL
   keys_adsl
 
   # gather all templates for this pkg (12 found)
-  template_path = file.path(system.file(package = pkg), "templates")
-  templates = list.files(template_path, pattern = "ad_")
+  template_path <- file.path(system.file(package = pkg), "templates")
+  templates <- list.files(template_path, pattern = "ad_")
   templates
 
   ## BUT, Fewer templates than  ADaMs in pharmaverseadam!
   ## Reduce number of source_adams !
 
   ## templates can generate these ADaMs, 12
-  names = sapply(templates, function(x) gsub("ad_|\\.R","",x ), USE.NAMES = FALSE)
+  names <- sapply(templates, function(x) gsub("ad_|\\.R","",x ), USE.NAMES = FALSE)
   ## name our templates
 
   # KEEP only elments in both (now 12)
-  source_adams =  source_adams[source_adams %in% names]
+  source_adams <-  source_adams[source_adams %in% names]
   # finally name the templates vector
-  names(templates) = names
+  names(templates) <- names
 
-
-  # new, generated ADaM datasets will be put in cache dir
+  # now, generated ADaM datasets will be put in cache dir
 
   # list of important paths
-  path = list("templates_path" = file.path(system.file(package = pkg), "templates"),
+  path <- list("templates_path" = file.path(system.file(package = pkg), "templates"),
               dataset_dir = tools::R_user_dir("admiral_templates_data", which="cache")
   )
 
-# "ad_adlb.R",
-# For testing,
+# For testing, (omit ad_adlb.R)
   #ignore_templates_pkg = templates[!(templates %in% c("ad_adsl.R", "ad_adlb.R"))]
+
 # For real,
   ignore_templates_pkg = templates[templates == c("ad_adlbhy.R")]
 
@@ -160,10 +158,9 @@ if (pkg != "admiral") error("Curently, only admiral package is accepted.")
       #if (tp != "ad_adsl.R") next
         # get CDISC name
         name = gsub("ad_|\\.R", "", tp)
-        adam_old = do.call(`::`, args=list("pharmaverseadam", name))
+        adam_old = do.call(`::`, args = list("pharmaverseadam", name))
       # run template, which caches new adam_new
       if(tp %in% ignore_templates_pkg) {
-#        cat("Ignoring template: ", tp, "\n")
         next
       } else {
         cat("Running template: ", tp, "\n")
