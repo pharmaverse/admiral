@@ -2,9 +2,7 @@
 % Please edit documentation in R/derive_vars_dt.R
 \name{assert_date_imputation}
 \alias{assert_date_imputation}
-\title{assert date imputation
-Applies assertions on the \code{date_imputation} argument to reduce
-cyclomatic complexity}
+\title{Assert \code{date_imputation}}
 \usage{
 assert_date_imputation(highest_imputation, date_imputation)
 }
@@ -18,7 +16,6 @@ missing.}
 \code{invisible(NULL)}
 }
 \description{
-assert date imputation
 Applies assertions on the \code{date_imputation} argument to reduce
 cyclomatic complexity
 }

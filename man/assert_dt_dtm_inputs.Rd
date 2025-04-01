@@ -12,6 +12,7 @@ assert_dt_dtm_inputs(
   flag_imputation,
   flag_imputation_values,
   highest_imputation,
+  highest_imputation_values,
   date_imputation = NULL
 )
 }
@@ -27,6 +28,8 @@ assert_dt_dtm_inputs(
 \item{flag_imputation_values}{Allowed values for the \code{flag_imputation} argument.}
 
 \item{highest_imputation}{Highest imputation level.}
+
+\item{highest_imputation_values}{Allowed values for the \code{highest_imputation} argument.}
 
 \item{date_imputation}{The value to impute the day/month
 when a date part is missing (can be \code{NULL}).}
