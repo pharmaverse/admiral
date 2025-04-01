@@ -15,15 +15,8 @@
 # cache (1st version)
 load_rda = function(fileName) {
     load(fileName)
-    get(ls()[ls() != "adlb"]) # get the new adlb dataset
+    get(ls()[ls() != "fileName"]) # get the new adlb dataset
 }
-# better version
-load_rda2 <- function (dir,  name){
- # in cache dir (adlb.rda)
-  load(paste0(path,"/", dir, ".rda"), envir=globalenv(), verbose=TRUE)
-}
-
-
 save_rda <- function(data, file_path, new_name) {
   # new_name must include  .rda
   if (missing(new_name)) {
@@ -32,7 +25,9 @@ save_rda <- function(data, file_path, new_name) {
 }
 
 compare = function(base, compare, keys, file){
-   tryCatch({
+   ##:ess-bp-start::conditional@		:##
+browser(expr={		})##:ess-bp-end:##
+  tryCatch({
       diffdf::diffdf(
         base = base,
         compare = compare,
@@ -56,6 +51,7 @@ clean_cache = function() {
 }
 
 main = function() {
+rlang::global_entrace()
 clean_cache()
 
 library(pharmaverseadam)
@@ -76,10 +72,10 @@ for (pkg in packages_list){                  # ---- pkg ----
   source_adams=data(package= "pharmaverseadam")
 
   # 23 ADaMs found
-  source_adams = source$results[,"Item"]
+  source_adams = source_adams$results[,"Item"]
 
   # per Ben, ignore "adlbhy"
-  #source_adams = source_adams[adam_names != "adlbhy"]
+  #source_adams = source_adams[source_adams != "adlbhy"]
   source_adams
 
   # gather al templates for this pkg (12 found)
@@ -105,18 +101,13 @@ source_adams =  source_adams[source_adams %in% names]
 
 
   # new, generated ADaM datasets will be put in cache dir
-  dataset_dir = tools::R_user_dir(sprintf("%s_templates_data", pkg), which="cache")
+#  dataset_dir = tools::R_user_dir(sprintf("%s_templates_data", pkg), which="cache")
+#  dataset_dir = tools::R_user_dir(sprintf("%s_templates_data", pkg), which="cache")
 
   # collect in list of important paths
   path = list("templates_path" = file.path(system.file(package = pkg), "templates"),
-              "dataset_dir" = tools::R_user_dir(sprintf("%s_templates_data", pkg), which="cache")
+              dataset_dir = tools::R_user_dir("admiral_templates_data", which="cache") 
   )
-
-  # TODO fix, want scalar character, not named, not vector
-  names(templates) = adam_names
-  unname(templates["adae"])
-
-
 
   ## TODO:  TESTING:   ignore all templates but these two 
   ignore_templates_pkg = templates[!(templates %in% c("ad_adlb.R", "ad_adsl.R"))]
@@ -132,7 +123,6 @@ source_adams =  source_adams[source_adams %in% names]
       # 
         name = gsub("ad_|\\.R", "", tp)
         adam_old = do.call(`::`, args=list("pharmaverseadam", name))
-
       # run template, which caches new adam_new
       if(tp %in% ignore_templates_pkg) {
         cat("Ignoring template: ", tp, "\n")
@@ -142,8 +132,9 @@ source_adams =  source_adams[source_adams %in% names]
         source(file.path(template_path, tp), echo = TRUE) # nolint
       }
       # retrieve new adam from cache dir (puts into globalenv())
-      load_rda2(dataset_dir, name)
-      adam_new = name
+      load_rda(paste0(dataset_dir,"/", name, ".rda"))
+      browser()
+      adam_new = get(name)
 
       # DISCUSS
       all_results <- c()
@@ -179,7 +170,6 @@ source_adams =  source_adams[source_adams %in% names]
        }  ## end if
 
        }
-sin(pi)
           # Finally, save  dataset (reduced or not) in data/
           # TODO:  use vector
           if (tp == "ad_adlb.R") {
@@ -191,11 +181,15 @@ sin(pi)
        } ## end if
 
     ## TODO function use vectors
-    sprintf("comparing ....%s", tp)
+  browser()
+     sprintf("comparing ... diffdf")
+    #sprintf("comparing ....%s", tp)
     cat("comparing ...", tp, "\n")
     compare(base=adam_old,
              compare=adam_new,
-             keys= ifelse(tp == "adlb.R", c("USUBJID", "PARAMCD", "AVISIT", "ADT"), NULL),
+            keys= ifelse(tp == "adlb.R",
+                         c("USUBJID", "PARAMCD", "AVISIT", "ADT"),
+                         c("STUDYID","USUBJID"),
              file = paste0("data/diff_", name, ".txt")
                          )
 
@@ -203,4 +197,3 @@ sin(pi)
 } ## end for packages_list
 
 print("DONE")
-
