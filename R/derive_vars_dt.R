@@ -155,6 +155,7 @@ derive_vars_dt <- function(dataset, # nolint: cyclocomp_linter
     flag_imputation = flag_imputation,
     flag_imputation_values = c("auto", "date", "none"),
     highest_imputation = highest_imputation,
+    highest_imputation_values = c("Y", "M", "D", "n"),
     date_imputation = date_imputation
   )
 
@@ -712,6 +713,7 @@ assert_date_imputation <- function(highest_imputation, date_imputation) {
 #' @param flag_imputation_values Allowed values for the `flag_imputation` argument.
 #' @param flag_imputation The value to impute.
 #' @param highest_imputation Highest imputation level.
+#' @param highest_imputation_values Allowed values for the `highest_imputation` argument.
 #' @param date_imputation The value to impute the day/month
 #' when a date part is missing (can be `NULL`).
 #'
@@ -719,14 +721,14 @@ assert_date_imputation <- function(highest_imputation, date_imputation) {
 #'
 #' @return `invisible(NULL)`
 assert_dt_dtm_inputs <- function(new_vars_prefix, max_dates, min_dates, # nolint: cyclocomp_linter
-                                 flag_imputation, flag_imputation_values, highest_imputation,
+                                 flag_imputation, flag_imputation_values,
+                                 highest_imputation, highest_imputation_values,
                                  date_imputation = NULL) {
 
   assert_character_scalar(new_vars_prefix)
   assert_vars(max_dates, optional = TRUE)
   assert_vars(min_dates, optional = TRUE)
 
-  highest_imputation_values <- c("Y", "M", "D", "n")
   assert_character_scalar(
     highest_imputation,
     values = highest_imputation_values,

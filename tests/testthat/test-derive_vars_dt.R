@@ -13,7 +13,7 @@ input_warnings <- c(
 )
 
 ## Test 1: default: no date imputation ----
-test_that("derive_vars_dt Test 1: default: no date imputation", {
+test_that("impute_dtc_dt Test 1: default: no date imputation", {
   expected_output <- c(
     "2019-07-18",
     NA_character_,
@@ -27,7 +27,7 @@ test_that("derive_vars_dt Test 1: default: no date imputation", {
 })
 
 ## Test 2: impute month and day to first ----
-test_that("derive_vars_dt Test 2: impute month and day to first", {
+test_that("impute_dtc_dt Test 2: impute month and day to first", {
   expected_output <- c(
     "2019-07-18",
     NA_character_,
@@ -60,7 +60,7 @@ test_that("derive_vars_dt Test 2: impute month and day to first", {
 })
 
 ## Test 3: impute day to last ----
-test_that("derive_vars_dt Test 3: impute day to last", {
+test_that("impute_dtc_dt Test 3: impute day to last", {
   expected_output <- c(
     "2019-07-18",
     NA_character_,
@@ -80,7 +80,7 @@ test_that("derive_vars_dt Test 3: impute day to last", {
 })
 
 ## Test 4: impute month and day to last and preserve = TRUE ----
-test_that("derive_vars_dt Test 4: impute month and day to last and preserve = TRUE", {
+test_that("impute_dtc_dt Test 4: impute month and day to last and preserve = TRUE", {
   expected_output <- c(
     "2019-07-18",
     NA_character_,
@@ -101,7 +101,7 @@ test_that("derive_vars_dt Test 4: impute month and day to last and preserve = TR
 
 
 ## Test 5: impute month and day to mid ----
-test_that("derive_vars_dt Test 5: impute month and day to mid", {
+test_that("impute_dtc_dt Test 5: impute month and day to mid", {
   expected_output <- c(
     "2019-07-18",
     NA_character_,
@@ -120,7 +120,7 @@ test_that("derive_vars_dt Test 5: impute month and day to mid", {
 })
 
 ## Test 6: min_dates parameter works ----
-test_that("derive_vars_dt Test 6: min_dates parameter works", {
+test_that("impute_dtc_dt Test 6: min_dates parameter works", {
   expect_equal(
     impute_dtc_dt(
       input,
@@ -148,7 +148,7 @@ test_that("derive_vars_dt Test 6: min_dates parameter works", {
 })
 
 ## Test 7: max_dates parameter works ----
-test_that("derive_vars_dt Test 7: max_dates parameter works", {
+test_that("impute_dtc_dt Test 7: max_dates parameter works", {
   expect_equal(
     impute_dtc_dt(
       input,
@@ -177,7 +177,7 @@ test_that("derive_vars_dt Test 7: max_dates parameter works", {
 
 
 ## Test 8: min_dates length mismatch provides error ----
-test_that("derive_vars_dt Test 8: min_dates length mismatch provides error", {
+test_that("impute_dtc_dt Test 8: min_dates length mismatch provides error", {
   expect_snapshot(
     impute_dtc_dt(
       input,
@@ -193,7 +193,7 @@ test_that("derive_vars_dt Test 8: min_dates length mismatch provides error", {
 })
 
 ## Test 9: max_dates length mismatch provides error ----
-test_that("derive_vars_dt Test 9: max_dates length mismatch provides error", {
+test_that("impute_dtc_dt Test 9: max_dates length mismatch provides error", {
   expect_snapshot(
     impute_dtc_dt(
       input,
@@ -209,7 +209,7 @@ test_that("derive_vars_dt Test 9: max_dates length mismatch provides error", {
 })
 
 ## Test 10: Warning if null min/max_dates when highest_imputation = Y ----
-test_that("derive_vars_dt Test 10: Warning if null min/max_dates when highest_imputation = Y", {
+test_that("impute_dtc_dt Test 10: Warning if null min/max_dates when highest_imputation = Y", {
   expect_warning(
     impute_dtc_dt(
       input,
@@ -220,7 +220,7 @@ test_that("derive_vars_dt Test 10: Warning if null min/max_dates when highest_im
 })
 
 ## Test 11: appropriate warnings/return object for impute_dtc_dt ----
-test_that("derive_vars_dt Test 11: appropriate warnings/return object for impute_dtc_dt", {
+test_that("impute_dtc_dt Test 11: appropriate warnings/return object for impute_dtc_dt", {
   expect_warning(
     impute_dtc_dt(dtc = input_warnings),
     regexp = "incorrect datetime format"
@@ -233,7 +233,7 @@ test_that("derive_vars_dt Test 11: appropriate warnings/return object for impute
 })
 
 ## Test 12: wrong input to `date_imputation` ----
-test_that("derive_vars_dt Test 12: wrong input to `date_imputation`", {
+test_that("impute_dtc_dt Test 12: wrong input to `date_imputation`", {
   # impossible month 13
   expect_snapshot(
     impute_dtc_dt(

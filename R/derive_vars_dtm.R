@@ -147,6 +147,7 @@ derive_vars_dtm <- function(dataset,
     flag_imputation = flag_imputation,
     flag_imputation_values = c("auto", "both", "date", "time", "none"),
     highest_imputation = highest_imputation,
+    highest_imputation_values = c("Y", "M", "D", "h", "m", "s", "n"),
     date_imputation = date_imputation
   )
 
