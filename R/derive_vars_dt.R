@@ -662,7 +662,8 @@ compute_dtf <- function(dtc, dt) {
 }
 
 
-#' assert date imputation
+#' Assert `date_imputation`
+#'
 #' Applies assertions on the `date_imputation` argument to reduce
 #' cyclomatic complexity
 #'
