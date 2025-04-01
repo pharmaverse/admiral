@@ -2,11 +2,11 @@
 #
 # Generates ADaM from templates and compares to previously generated ADaM in pharmaverseadam
 # Much code taken from pharamavreseadam::
-# 
+#
 #
 # TODO:
-# - add attr to generated ADaM 
-# - where code overlaps, make pharamversadam script and this one the same. 
+# - add attr to generated ADaM
+# - where code overlaps, make pharamversadam script and this one the same.
 # - vectorize, using lapply
 
 # Assumptions/Questions:
@@ -20,18 +20,18 @@
 #' @param pkg  package (ex:  "admiral )
 #' @param name ADaM or CDISC name, without prefix or suffix  (ex:  adlb)
 #' @param adam_new  ADaM after template is run
-#' @param adam_old =  original ADaM done at early time, saved in pharamverseadam 
+#' @param adam_old =  original ADaM done at early time, saved in pharamverseadam
 
 #' @param tp   template R file  (ex: ad_adlb.R)
 #' @param templates_path path  Directory where templates where package is installed (not sourced)
 #' @param dataset_dir (cache)     ~/.config/R/admiral_templates_data   (varies by OS/configuration)
 
-#' Directories 
+#' Directories
 #' - admiral/data     not used
 #' - admiral/inst/templates/  templates to create ADaM datasets
 #' - dataset_dir  cache, where newly generated ADaM files kept and diffdf reports
 
-load_rda = function(fileName) {
+load_rda <- function(fileName) {
     load(fileName)
     get(ls()[ls() != "fileName"]) # returns dataset
 }
@@ -47,7 +47,7 @@ compare = function(base, compare, keys, file){
         base = base,
         compare = compare,
         keys = keys,
-        file = file 
+        file = file
   )},
       error = function(e) {
         message("Error in diffdf: ", e$message)
@@ -104,8 +104,8 @@ old_option = options(error = recover)
 # TODO:  more checking
 if (pkg != "admiral") error("Curently, only admiral package is accepted.")
 
-# SOURCE:  Use pharmaverseadam as source for ADaM *.rda files (22 ADaM files) 
-# ignore adlbhy.rda (per Ben) 
+# SOURCE:  Use pharmaverseadam as source for ADaM *.rda files (22 ADaM files)
+# ignore adlbhy.rda (per Ben)
   sprintf("generating ADaMs for  %s package", pkg)
   library(pkg, character.only = TRUE)
 
@@ -129,8 +129,8 @@ if (pkg != "admiral") error("Curently, only admiral package is accepted.")
   templates
 
   ## BUT, Fewer templates than  ADaMs in pharmaverseadam!
-  ## Reduce number of source_adams ! 
-  
+  ## Reduce number of source_adams !
+
   ## templates can generate these ADaMs, 12
   names = sapply(templates, function(x) gsub("ad_|\\.R","",x ), USE.NAMES = FALSE)
   ## name our templates
@@ -138,20 +138,20 @@ if (pkg != "admiral") error("Curently, only admiral package is accepted.")
   # KEEP only elments in both (now 12)
   source_adams =  source_adams[source_adams %in% names]
   # finally name the templates vector
-  names(templates) = names 
+  names(templates) = names
 
 
   # new, generated ADaM datasets will be put in cache dir
 
   # list of important paths
   path = list("templates_path" = file.path(system.file(package = pkg), "templates"),
-              dataset_dir = tools::R_user_dir("admiral_templates_data", which="cache") 
+              dataset_dir = tools::R_user_dir("admiral_templates_data", which="cache")
   )
 
 # "ad_adlb.R",
-# For testing, 
+# For testing,
   #ignore_templates_pkg = templates[!(templates %in% c("ad_adsl.R", "ad_adlb.R"))]
-# For real, 
+# For real,
   ignore_templates_pkg = templates[templates == c("ad_adlbhy.R")]
 
     # begin tp  ----
