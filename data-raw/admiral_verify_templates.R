@@ -1,21 +1,39 @@
-#  This script:  data-raw/admiral_verify_templates.R
-#  Compares ADaM datasets:   data/<package>_<name>.rda (ex: data/admiral_adlb.rda)
+# This script:  data-raw/admiral_verify_templates.R
+#
+# Generates ADaM from templates and compares to previously generated ADaM in pharmaverseadam
+# Much code taken from pharamavreseadam::
+# 
+#
+# TODO:
+# - add attr to generated ADaM 
+# - where code overlaps, make pharamversadam script and this one the same. 
+# - vectorize, using lapply
 
-#' @parma pkg  package (ex:  "admiral )
-#' @param name ADaM name, without prefix or suffix  (ex:  adlb)
-#' @param adam_new  ADaM after template is run, reduced and saved
-#' @param adam_old =  original ADaM dataset before we anything
+# Assumptions/Questions:
+# - ignore *.rda files in admiral/data (per Ben)
+# - written as standalone R script, not as package R function
+# - compares full ADaM - all rows (ie no reduction in number of rows in each dataset)
+# - change ?   in template ad_adsl.R, change variable `dir`?
+# - now using `.rda` datafiles, switch to `.rds`? (easier to program; pilot5 uses)
+# - use cli:: for messages/errors?
+#'
+#' @param pkg  package (ex:  "admiral )
+#' @param name ADaM or CDISC name, without prefix or suffix  (ex:  adlb)
+#' @param adam_new  ADaM after template is run
+#' @param adam_old =  original ADaM done at early time, saved in pharamverseadam 
 
 #' @param tp   template R file  (ex: ad_adlb.R)
-#' @templates_path path to templates where package is installed (not sourced)
-#' admiral/inst/templates/ template to create ADaM datasets
+#' @param templates_path path  Directory where templates where package is installed (not sourced)
 #' @param dataset_dir (cache)     ~/.config/R/admiral_templates_data   (varies by OS/configuration)
-# admiral/data     dir where admiral_adlb.rda will be saved
 
-# cache (1st version)
+#' Directories 
+#' - admiral/data     not used
+#' - admiral/inst/templates/  templates to create ADaM datasets
+#' - dataset_dir  cache, where newly generated ADaM files kept and diffdf reports
+
 load_rda = function(fileName) {
     load(fileName)
-    get(ls()[ls() != "fileName"]) # get the new adlb dataset
+    get(ls()[ls() != "fileName"]) # returns dataset
 }
 save_rda <- function(data, file_path, new_name) {
   # new_name must include  .rda
@@ -30,13 +48,14 @@ compare = function(base, compare, keys, file){
         compare = compare,
         keys = keys,
         file = file 
-  },
+  )},
       error = function(e) {
         message("Error in diffdf: ", e$message)
   }
 )  ## end tryCatch
 }  ## end compare
 
+# start fresh
 clean_cache = function() {
   dataset_dir = tools::R_user_dir("admiral_templates_data", which="cache")
   if (dir.exists(dataset_dir)) {
@@ -47,9 +66,8 @@ clean_cache = function() {
   }
 }
 
+#  IGNORE:  not in use
 reduce = function(){
-#  not in use
-
        ## DISCUSSION:   adlb.rda ADaM is large and must be reduced in size (for testing)
        ## What about other ADaMs ?  use vector
        if (tp == "ad_adlb.R") {
@@ -76,23 +94,20 @@ reduce = function(){
              admiral_adsl <- adsl
              adam_new = admiral_adsl
        }  ## end if
-}
+}  ## end reduce
 
-main = function() {
+verify_templates = function(pkg = "admiral", ignore_templates_pkg=NULL) {
 clean_cache()
 library(pharmaverseadam)
+old_option = options(error = recover)
+
+# TODO:  more checking
+if (pkg != "admiral") error("Curently, only admiral package is accepted.")
 
 # SOURCE:  Use pharmaverseadam as source for ADaM *.rda files (22 ADaM files) 
 # ignore adlbhy.rda (per Ben) 
-
-
-# REMOVE loop:   per Ben, only do "admiral"
-packages_list = c("admiral")
-for (pkg in packages_list){                  # ---- pkg ----
   sprintf("generating ADaMs for  %s package", pkg)
   library(pkg, character.only = TRUE)
-
-  # DISCUSS: Ask user to update <pkg>?
 
   # per Ben, ignore *.rda files in admiral/data
   source_adams=data(package= "pharmaverseadam")
@@ -127,29 +142,25 @@ for (pkg in packages_list){                  # ---- pkg ----
 
 
   # new, generated ADaM datasets will be put in cache dir
-#  dataset_dir = tools::R_user_dir(sprintf("%s_templates_data", pkg), which="cache")
-#  dataset_dir = tools::R_user_dir(sprintf("%s_templates_data", pkg), which="cache")
 
   # list of important paths
   path = list("templates_path" = file.path(system.file(package = pkg), "templates"),
               dataset_dir = tools::R_user_dir("admiral_templates_data", which="cache") 
   )
 
-  ## TODO:  TESTING:   ignore all templates but these two 
-  ignore_templates_pkg = templates[!(templates %in% c("ad_adlb.R", "ad_adsl.R"))]
-
-  ## AFTER Testing, this is only template to be ignored
-  #ignore_templates_pkg = templates[!(templates %in% c("ad_adlbhy.R"))]
+# "ad_adlb.R",
+# For testing, 
+  #ignore_templates_pkg = templates[!(templates %in% c("ad_adsl.R", "ad_adlb.R"))]
+# For real, 
+  ignore_templates_pkg = templates[templates == c("ad_adlbhy.R")]
 
     # begin tp  ----
     for (tp in templates) {
       # Each tp creates single ADaM package
-      #if (tp == "ad_adlb.R") next  ## adlb is big, skip while debugging
-      if (tp != "ad_adsl.R") next
+      #if (tp != "ad_adsl.R") next
         # get CDISC name
         name = gsub("ad_|\\.R", "", tp)
         adam_old = do.call(`::`, args=list("pharmaverseadam", name))
-        saveRDS(adam_old, "~/adam_old.rds")
       # run template, which caches new adam_new
       if(tp %in% ignore_templates_pkg) {
 #        cat("Ignoring template: ", tp, "\n")
@@ -159,47 +170,24 @@ for (pkg in packages_list){                  # ---- pkg ----
         source(file.path(template_path, tp), echo = TRUE) # nolint
       }
       # retrieve new adam from cache dir (puts into globalenv())
-      load_rda(paste0(dataset_dir,"/", name, ".rda"))
+      load_rda(paste0(path$dataset_dir,"/", name, ".rda"))
       adam_new = get(name)
-      saveRDS(adam_new, "~/adam_new.rds")
-
-      # DISCUSS
-      all_results <- c()
-
-##   DISCUSS:   Ben:  use full dataset, no reduction
-
-      # reduce dataset size?
-      # reduce()
-
-      #--------
-      # DISCUSS - why save?
-
-      if (FALSE) {
-          # Finally, save  dataset (reduced or not) in data/
-          # TODO:  use vector
-          if (tp == "ad_adlb.R") {
-            save_rda(adam_new, file_path="data/admiral_adlb.rda")
-          } else {
-            #save_rda(adam_new, file_path="data/admiral_adsl.rda")
-            save_rda(adam_new, file_path="~/admiral_adsl.rda")
-          }
-       } ## end if
-      } ## end tp loop
-      #-----
 
     ## TODO function use vectors
     sprintf("comparing ... diffdf")
     cat("comparing ...", tp, "\n")
-    compare(base=adam_old,
-             compare=adam_new,
-            keys= ifelse(tp == "adlb.R",
-                         c("USUBJID", "PARAMCD", "AVISIT", "ADT"),
-                         c("STUDYID","USUBJID")),
-             file = paste0("data/diff_", name, ".txt")
-                         )
-
+ #   compare(base=adam_old,
+ #            compare=adam_new,
+ #           keys= ifelse(tp == "adlb.R",
+ #                        c("USUBJID", "PARAMCD", "AVISIT", "ADT"),
+ #                        c("STUDYID","USUBJID")),
+ #            file = paste0("data/diff_", name, ".txt")
+      diffdf::diffdf(base = adam_old,
+                     compare = adam_new,
+                     keys = NULL,
+                     file = paste0("data/diff_", name, ".txt")
+                     )
 } ## end tp
-} ## end for packages_list
 
 print("DONE")
-
+} ## end main
