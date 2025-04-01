@@ -511,7 +511,7 @@ impute_dtc_dt <- function(dtc,
   )
 
   if (highest_imputation == "Y" && is.null(min_dates) && is.null(max_dates)) {
-    warning("If `highest_imputation` = \"Y\" is specified, `min_dates` or `max_dates` should be specified respectively.") # nolint
+    cli_warn("If `highest_imputation` = \"Y\" is specified, `min_dates` or `max_dates` should be specified respectively.") # nolint
   }
 
   return(restricted)
@@ -721,9 +721,18 @@ assert_date_imputation <- function(highest_imputation, date_imputation) {
 assert_dt_dtm_inputs <- function(new_vars_prefix, max_dates, min_dates, # nolint: cyclocomp_linter
                                  flag_imputation, flag_imputation_values, highest_imputation,
                                  date_imputation = NULL) {
+
   assert_character_scalar(new_vars_prefix)
   assert_vars(max_dates, optional = TRUE)
   assert_vars(min_dates, optional = TRUE)
+
+  highest_imputation_values <- c("Y", "M", "D", "n")
+  assert_character_scalar(
+    highest_imputation,
+    values = highest_imputation_values,
+    case_sensitive = FALSE # not sure
+  )
+
   assert_character_scalar(
     flag_imputation,
     values = flag_imputation_values,
