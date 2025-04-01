@@ -216,3 +216,66 @@ test_that("derive_var_trtemfl Test 11: error if `group_var` specified without `s
     error = TRUE
   )
 })
+
+# nolint start
+
+## Test 12: Checking test cases from PHUSE White Paper on Treatment Emergent AEs  ----
+test_that("derive_var_trtemfl Test 12: Checking test cases from PHUSE White Paper on Treatment Emergent AEs", {
+  adae_phuse <- tribble(
+    ~USUBJID, ~TRTSDTM,           ~TRTEDTM,           ~ASTDTM,            ~AENDTM,            ~AEITOXGR, ~AETOXGR, ~TRTEMFL,
+    # Patient 1: Pre-treatment AE
+    "1",      "2021-01-01T00:01", "2021-12-31T23:59", "2020-12-20T00:00", "2020-12-21T00:00", "2",       "2",      NA_character_,
+    # Patient 2: On-treatment AE
+    "2",      "2021-01-01T00:01", "2021-12-31T23:59", "2021-12-20T00:00", "2021-12-21T00:00", "2",       "2",      "Y",
+    # Patient 3: Pre-treatment AE, then on-treatment AE at same intensity
+    "3",      "2021-01-01T00:01", "2021-12-31T23:59", "2020-12-20T00:00", "2020-12-21T00:00", "2",       "2",      NA_character_,
+    "3",      "2021-01-01T00:01", "2021-12-31T23:59", "2021-12-20T00:00", "2021-12-21T00:00", "2",       "2",      "Y",
+    # Patient 4: Pre-treatment AE, then on-treatment AE at worsened intensity
+    "4",      "2021-01-01T00:01", "2021-12-31T23:59", "2020-12-20T00:00", "2020-12-21T00:00", "2",       "2",      NA_character_,
+    "4",      "2021-01-01T00:01", "2021-12-31T23:59", "2021-12-20T00:00", "2021-12-21T00:00", "2",       "3",      "Y",
+    # Patient 5: Pre-treatment AE, then on-treatment AE at improved intensity
+    "5",      "2021-01-01T00:01", "2021-12-31T23:59", "2020-12-20T00:00", "2020-12-21T00:00", "2",       "2",      NA_character_,
+    "5",      "2021-01-01T00:01", "2021-12-31T23:59", "2021-12-20T00:00", "2021-12-21T00:00", "2",       "1",      "Y",
+    # Patient 6: AE starting pre-treatment and continuing on-treatment, then second AE at same intensity
+    "6",      "2021-01-01T00:01", "2021-12-31T23:59", "2020-12-23T00:00", "2021-01-21T00:00", "2",       "2",      NA_character_,
+    "6",      "2021-01-01T00:01", "2021-12-31T23:59", "2021-12-20T00:00", "2021-12-21T00:00", "2",       "2",      "Y",
+    # Patient 7: AE starting pre-treatment and continuing on-treatment, then second AE at worsened intensity
+    "7",      "2021-01-01T00:01", "2021-12-31T23:59", "2020-12-23T00:00", "2021-01-21T00:00", "2",       "2",      NA_character_,
+    "7",      "2021-01-01T00:01", "2021-12-31T23:59", "2021-12-20T00:00", "2021-12-21T00:00", "2",       "3",      "Y",
+    # Patient 8: AE starting pre-treatment and continuing on-treatment, then second AE at improved intensity
+    "8",      "2021-01-01T00:01", "2021-12-31T23:59", "2020-12-23T00:00", "2021-01-21T00:00", "2",       "2",      NA_character_,
+    "8",      "2021-01-01T00:01", "2021-12-31T23:59", "2021-12-20T00:00", "2021-12-21T00:00", "2",       "1",      "Y",
+    # Patient 9: AE starting pre-treatment and continuing on-treatment, and no change in intensity
+    "9",      "2021-01-01T00:01", "2021-12-31T23:59", "2020-12-23T00:00", "2021-01-21T00:00", "2",       "2",      NA_character_,
+    # Patient 10: AE starting pre-treatment and continuing on-treatment, and worsening intensity
+    "10",     "2021-01-01T00:01", "2021-12-31T23:59", "2020-12-23T00:00", "2021-01-21T00:00", "2",       "4",      "Y",
+    # Patient 11: AE starting pre-treatment and continuing on-treatment, and improving intensity
+    "11",     "2021-01-01T00:01", "2021-12-31T23:59", "2020-12-23T00:00", "2021-01-21T00:00", "2",       "1",      NA_character_,
+    # Patient 12: AE starting pre-treatment, worsening, then improving
+    "12",     "2021-01-01T00:01", "2021-12-31T23:59", "2020-12-23T00:00", "2021-01-21T00:00", "3",       "2",      NA_character_,
+    # Patient 13: AE starting pre-treatment, improving, then worsening
+    "13",     "2021-01-01T00:01", "2021-12-31T23:59", "2020-12-23T00:00", "2021-01-21T00:00", "1",       "2",      "Y",
+  ) %>%
+    mutate(
+      ASTDTM = lubridate::ymd_hm(ASTDTM),
+      AENDTM = lubridate::ymd_hm(AENDTM),
+      TRTSDTM = lubridate::ymd_hm(TRTSDTM),
+      TRTEDTM = lubridate::ymd_hm(TRTEDTM),
+    )
+
+  # nolint end
+
+  expect_dfs_equal(
+    base = adae_phuse,
+    comp = derive_var_trtemfl(
+      select(adae_phuse, -TRTEMFL),
+      new_var = TRTEMFL,
+      trt_end_date = TRTEDTM,
+      end_window = 0,
+      initial_intensity = AEITOXGR,
+      intensity = AETOXGR,
+      subject_keys = exprs(USUBJID)
+    ),
+    keys = c("USUBJID", "ASTDTM", "AENDTM")
+  )
+})
