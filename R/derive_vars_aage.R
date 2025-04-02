@@ -4,8 +4,6 @@
 #'
 #' **Note:** This is a wrapper function for the more generic `derive_vars_duration()`.
 #'
-#' @inheritParams derive_vars_duration
-#'
 #' @param dataset
 #'   `r roxygen_param_dataset(expected_vars = c("start_date", "end_date"))`
 #'
@@ -46,6 +44,14 @@
 #'   For minutes: `"minute"`, `"minutes"`, `"min"`, `"mins"`
 #'
 #'   For seconds: `"second"`, `"seconds"`, `"sec"`, `"secs"`, `"s"`
+#'
+#' @param type lubridate duration type
+#'
+#'   See below for details.
+#'
+#'   Default: `"interval"`
+#'
+#'   Permitted Values: `"duration"`, `"interval"`
 #'
 #' @details The duration is derived as time from start to end date in the
 #'   specified output unit. If the end date is before the start date, the duration

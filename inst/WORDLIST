@@ -50,6 +50,7 @@ Biologics
 CDISC
 CKD
 CMD
+CODEOWNERS
 COVID
 CPK
 CQ
@@ -62,7 +63,6 @@ CTCAEv
 CVD
 Carlucci
 Chakma
-Cheatsheet
 Chemistries
 Chol
 Cockcroft
@@ -111,6 +111,7 @@ GlaxoSmithKline
 Glomerular
 Golab
 GxP
+HALFLLOQ
 HDL
 Hamza
 Haptoglobin
@@ -182,6 +183,7 @@ Ondrej
 PARAM
 PARAMCD
 PARAMN
+PHUSE
 PLDOSE
 PTT
 Param
@@ -270,6 +272,7 @@ anticoagulation
 aspartate
 basetypes
 bds
+behaviour
 censorings
 chk
 codebase
