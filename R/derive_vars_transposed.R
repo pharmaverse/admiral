@@ -17,7 +17,8 @@
 #'
 #' @param id_vars ID variables
 #'
-#'  Variables (excluding by_vars) that uniquely identify each observation in `dataset_merge`.
+#'  Variables (excluding `by_vars` and `key_var`) that uniquely identify each
+#'  observation in `dataset_merge`.
 #'
 #' `r roxygen_param_by_vars()`
 #'
@@ -40,9 +41,23 @@
 #'   `"many-to-many"`, `NULL`
 #'
 #' @details
-#' After filtering `dataset_merge` based upon the condition provided in `filter`, this
-#' dataset is transposed and subsequently merged onto `dataset` using `by_vars` as
-#' keys.
+#'
+#' 1. The records from the dataset to transpose and merge (`dataset_merge`) are restricted
+#'    to those matching the `filter` condition, if provided.
+#'
+#' 1. The records from `dataset_merge` are checked to ensure they are uniquely identified
+#'    using `by_vars`, `id_vars` and `key_var`.
+#'
+#' 1. `dataset_merge` is transposed (from "tall" to "wide"), with new variables added whose
+#'    names come from `key_var` and values come from `value_var`.
+#'
+#' 1. The transposed dataset is merged with the input `dataset` using `by_vars` as
+#'    keys. If a `relationship` has been provided, this merge must satisfy the relationship,
+#'    otherwise an error is thrown.
+#'
+#' Note that unlike other `derive_vars_*()` functions, the final step may cause new
+#' records to be added to the input dataset. The `relationship` argument can be specified
+#' to ensure this does not happen inadvertently.
 #'
 #' @return The input dataset with transposed variables from `dataset_merge` added
 #'
@@ -57,6 +72,7 @@
 #' library(tibble)
 #' library(dplyr, warn.conflicts = FALSE)
 #'
+#' # Adding ATC classes to CM using FACM
 #' cm <- tribble(
 #'   ~USUBJID,       ~CMGRPID, ~CMREFID,  ~CMDECOD,
 #'   "BP40257-1001", "14",     "1192056", "PARACETAMOL",
@@ -89,13 +105,28 @@
 #'
 #' cm %>%
 #'   derive_vars_transposed(
-#'     facm,
+#'     dataset_merge = facm,
 #'     by_vars = exprs(USUBJID, CMREFID = FAREFID),
 #'     id_vars = exprs(FAGRPID),
 #'     key_var = FATESTCD,
 #'     value_var = FASTRESC
 #'   ) %>%
 #'   select(USUBJID, CMDECOD, starts_with("CMATC"))
+#'
+#' # Note: the `id_vars` argument here is needed to uniquely identify
+#' # rows of dataset_merge and avoid duplicates-related errors.
+#' # Compare the above call to when `id_vars = NULL`:
+#'
+#' try(
+#'   cm %>%
+#'     derive_vars_transposed(
+#'       dataset_merge = facm,
+#'       by_vars = exprs(USUBJID, CMREFID = FAREFID),
+#'       id_vars = NULL,
+#'       key_var = FATESTCD,
+#'       value_var = FASTRESC
+#'     )
+#' )
 derive_vars_transposed <- function(dataset,
                                    dataset_merge,
                                    by_vars,

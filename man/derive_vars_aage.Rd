@@ -66,13 +66,16 @@ For seconds: \code{"second"}, \code{"seconds"}, \code{"sec"}, \code{"secs"}, \co
 \item{Default value}{\code{"YEARS"}}
 }}
 
-\item{type}{lubridate duration type.
+\item{type}{lubridate duration type
 
 See below for details.
 
+Default: \code{"interval"}
+
+Permitted Values: \code{"duration"}, \code{"interval"}
+
 \describe{
-\item{Permitted values}{\code{"duration"}, \code{"interval"}}
-\item{Default value}{\code{"duration"}}
+\item{Default value}{\code{"interval"}}
 }}
 }
 \value{
