@@ -1,11 +1,11 @@
 # admiral <img src="man/figures/logo.png" align="right" width="200" style="margin-left:50px;"/>
 
-<!-- badges: start -->
+<!-- start badges -->
 [![pharmaverse admiral Badge](http://pharmaverse.org/shields/admiral.svg)](https://pharmaverse.org)
 [![CRAN status](https://www.r-pkg.org/badges/version/admiral)](https://CRAN.R-project.org/package=admiral)
 [![Test Coverage](https://raw.githubusercontent.com/pharmaverse/admiral/badges/main/test-coverage.svg)](https://github.com/pharmaverse/admiral/actions/workflows/code-coverage.yml)
 [![R-CMD-check](https://github.com/pharmaverse/admiral/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/pharmaverse/admiral/actions/workflows/R-CMD-check.yaml)
-<!-- badges: end -->
+<!-- end badges -->
 
 ADaM in R Asset Library
 
