@@ -22,14 +22,13 @@
 
 ## Documentation
 
+- Improved documentation and error messages of `derive_vars_dt`. (#2654)
 - Added an example to the `derive_vars_transposed()` reference page to showcase how duplicates-related errors can arise when records in `dataset_merge` are not uniquely identified. (#2609)
-
 - Default value of `type` in `derive_vars_aage()` is now shown as `interval` to match the function behaviour. (#2685) 
-
 - The "Lab Grading" vignette was updated to correct some typos and make text easier to
-read (#2623).
+read. (#2623)
+- The "BDS Time-to-Event" vignette was updated to include `SRCSEQ` consistently. (#2658)
 
-- The "BDS Time-to-Event" vignette was updated to include `SRCSEQ` consistently (#2658).
 
 - The template for ADPC and vignette were updated to include an example of using `DTYPE` for imputed records (#2657).
 

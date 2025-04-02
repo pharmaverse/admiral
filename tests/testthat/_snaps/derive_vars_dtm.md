@@ -26,7 +26,7 @@
           max_dates = exprs(TRTSDTM)))
     Condition
       Warning:
-      If `highest_impuation = "Y"` and `date_imputation = "first"` is specified, `min_dates` should be specified.
+      If `highest_imputation = "Y"` and `date_imputation = "first"` is specified, `min_dates` should be specified.
     Output
         AESTDTC             TRTSDTM ASTDTM ASTDTF ASTTMF
       1    <NA> 2022-01-01 23:59:59   <NA>   <NA>   <NA>
@@ -42,7 +42,7 @@
           min_dates = exprs(TRTSDTM))
     Condition
       Warning:
-      If `highest_impuation = "Y"` and `date_imputation = "last"` is specified, `max_dates` should be specified.
+      If `highest_imputation = "Y"` and `date_imputation = "last"` is specified, `max_dates` should be specified.
     Output
         AESTDTC             TRTSDTM ASTDTM ASTDTF ASTTMF
       1    <NA> 2022-01-01 23:59:59   <NA>   <NA>   <NA>
@@ -56,8 +56,8 @@
         derive_vars_dtm(dtc = AESTDTC, new_vars_prefix = "AST", highest_imputation = "Y",
           date_imputation = "first", time_imputation = "first", flag_imputation = "both")
     Condition
-      Error in `derive_vars_dtm()`:
-      ! If `highest_impuation = "Y"` is specified, `min_dates` or `max_dates` must be specified respectively.
+      Error in `assert_dt_dtm_inputs()`:
+      ! If `highest_imputation = "Y"` is specified, `min_dates` or `max_dates` must be specified respectively.
 
 # derive_vars_dtm Test 31: catch ignore_seconds_flag error
 
