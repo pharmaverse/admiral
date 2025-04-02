@@ -38,8 +38,8 @@
 #'      (os dependent)
 
 load_rda <- function(fileName) {
-    load(fileName)
-    get(ls()[ls() != "fileName"]) # returns dataset
+  load(fileName)
+  get(ls()[ls() != "fileName"]) # returns dataset
 }
 save_rda <- function(data, file_path, new_name) {
   # new_name must include  .rda
@@ -48,18 +48,20 @@ save_rda <- function(data, file_path, new_name) {
   }
 }
 compare <- function(base, compare, keys, file) {
-  tryCatch({
+  tryCatch(
+    {
       diffdf::diffdf(
         base = base,
         compare = compare,
         keys = keys,
         file = file
-  )},
-      error = function(e) {
-        message("Error in diffdf: ", e$message)
-  }
-)  ## end tryCatch
-}  ## end compare
+      )
+    },
+    error = function(e) {
+      message("Error in diffdf: ", e$message)
+    }
+  ) ## end tryCatch
+} ## end compare
 
 # start fresh
 clean_cache <- function() {
@@ -73,55 +75,55 @@ clean_cache <- function() {
 }
 
 #  IGNORE:  not in use
-reduce <- function(){
-       ## DISCUSSION:   adlb.rda ADaM is large and must be reduced in size (for testing)
-       ## What about other ADaMs ?  use vector
-       if (tp == "ad_adlb.R") {
-         # Reduce size of adlb dataset for testing
-         # Limit rows by selecting only these USUBJIDs
-          usubjids <-
-            c(
-              "01-701-1015",
-              "01-701-1023",
-              "01-701-1028",
-              "01-701-1033",
-              "01-701-1034",
-              "01-701-1047",
-              "01-701-1097",
-              "01-705-1186",
-              "01-705-1292",
-              "01-705-1310",
-              "01-708-1286"
-            )
-            # small adlb
-            admiral_adlb <- dplyr::filter(adlb, USUBJID %in% usubjids)
-            adam_new = admiral_adlb
-       } else {
-             admiral_adsl <- adsl
-             adam_new = admiral_adsl
-       }  ## end if
-}  ## end reduce
+reduce <- function() {
+  ## DISCUSSION:   adlb.rda ADaM is large and must be reduced in size (for testing)
+  ## What about other ADaMs ?  use vector
+  if (tp == "ad_adlb.R") {
+    # Reduce size of adlb dataset for testing
+    # Limit rows by selecting only these USUBJIDs
+    usubjids <-
+      c(
+        "01-701-1015",
+        "01-701-1023",
+        "01-701-1028",
+        "01-701-1033",
+        "01-701-1034",
+        "01-701-1047",
+        "01-701-1097",
+        "01-705-1186",
+        "01-705-1292",
+        "01-705-1310",
+        "01-708-1286"
+      )
+    # small adlb
+    admiral_adlb <- dplyr::filter(adlb, USUBJID %in% usubjids)
+    adam_new <- admiral_adlb
+  } else {
+    admiral_adsl <- adsl
+    adam_new <- admiral_adsl
+  } ## end if
+} ## end reduce
 
 verify_templates <- function(pkg = "admiral", ignore_templates_pkg = NULL) {
-clean_cache()
-library(pharmaverseadam)
-old_option <- options(error = recover)
+  clean_cache()
+  library(pharmaverseadam)
+  old_option <- options(error = recover)
 
-# TODO:  more checking
-if (pkg != "admiral") error("Curently, only admiral package is accepted.")
+  # TODO:  more checking
+  if (pkg != "admiral") error("Curently, only admiral package is accepted.")
 
-# SOURCE:  Use pharmaverseadam as source for ADaM *.rda files (22 ADaM files)
-# ignore adlbhy.rda (per Ben)
+  # SOURCE:  Use pharmaverseadam as source for ADaM *.rda files (22 ADaM files)
+  # ignore adlbhy.rda (per Ben)
   sprintf("generating ADaMs for  %s package", pkg)
   library(pkg, character.only = TRUE)
 
-  source_adams <- data(package= "pharmaverseadam")
+  source_adams <- data(package = "pharmaverseadam")
 
   # 23 ADaMs found
-  source_adams = source_adams$results[,"Item"]
+  source_adams <- source_adams$results[, "Item"]
 
   # per Ben, ignore "adlbhy"
-  #source_adams = source_adams[source_adams != "adlbhy"]
+  # source_adams = source_adams[source_adams != "adlbhy"]
   source_adams
 
   # gather keys (for diffdf)
@@ -138,10 +140,10 @@ if (pkg != "admiral") error("Curently, only admiral package is accepted.")
   ## Match/Reduce number of source_adams !
 
   ## templates can generate these ADaMs, 12
-  names <- sapply(templates, function(x) gsub("ad_|\\.R","",x ), USE.NAMES = FALSE)
+  names <- sapply(templates, function(x) gsub("ad_|\\.R", "", x), USE.NAMES = FALSE)
 
   # KEEP only ADaMs with template (now 12)
-  source_adams <-  source_adams[source_adams %in% names]
+  source_adams <- source_adams[source_adams %in% names]
 
   #
   # finally name (ADaM or CDISC name)  the templates vector
@@ -149,53 +151,55 @@ if (pkg != "admiral") error("Curently, only admiral package is accepted.")
 
 
   # list of important paths
-  path <- list("templates_path" = file.path(system.file(package = pkg), "templates"),
-              dataset_dir = tools::R_user_dir("admiral_templates_data", which="cache")
+  path <- list(
+    "templates_path" = file.path(system.file(package = pkg), "templates"),
+    dataset_dir = tools::R_user_dir("admiral_templates_data", which = "cache")
   )
 
-# For testing, (omit ad_adlb.R)
-  #ignore_templates_pkg = templates[!(templates %in% c("ad_adsl.R", "ad_adlb.R"))]
+  # For testing, (omit ad_adlb.R)
+  # ignore_templates_pkg = templates[!(templates %in% c("ad_adsl.R", "ad_adlb.R"))]
 
-# For real,
-  ignore_templates_pkg = templates[templates == c("ad_adlbhy.R")]
+  # For real,
+  ignore_templates_pkg <- templates[templates == c("ad_adlbhy.R")]
 
   #
   # now, generate ADaM datasets and put in cache dir
   #
 
-    # begin tp  ----
-    for (tp in templates) {
-      # Each tp creates single ADaM package
-      #if (tp != "ad_adsl.R") next
-        # get CDISC name
-        name = gsub("ad_|\\.R", "", tp)
-        adam_old = do.call(`::`, args = list("pharmaverseadam", name))
-      # run template, which caches new adam_new
-      if(tp %in% ignore_templates_pkg) {
-        next
-      } else {
-        cat("Running template: ", tp, "\n")
-        source(file.path(template_path, tp), echo = TRUE) # nolint
-      }
-      # retrieve new adam from cache dir (puts into globalenv())
-      load_rda(paste0(path$dataset_dir,"/", name, ".rda"))
-      adam_new = get(name)
+  # begin tp  ----
+  for (tp in templates) {
+    # Each tp creates single ADaM package
+    # if (tp != "ad_adsl.R") next
+    # get CDISC name
+    name <- gsub("ad_|\\.R", "", tp)
+    adam_old <- do.call(`::`, args = list("pharmaverseadam", name))
+    # run template, which caches new adam_new
+    if (tp %in% ignore_templates_pkg) {
+      next
+    } else {
+      cat("Running template: ", tp, "\n")
+      source(file.path(template_path, tp), echo = TRUE) # nolint
+    }
+    # retrieve new adam from cache dir (puts into globalenv())
+    load_rda(paste0(path$dataset_dir, "/", name, ".rda"))
+    adam_new <- get(name)
 
     ## TODO function use vectors
     sprintf("comparing ... diffdf")
     cat("comparing ...", tp, "\n")
- #   compare(base=adam_old,
- #            compare=adam_new,
- #           keys= ifelse(tp == "adlb.R",
- #                        c("USUBJID", "PARAMCD", "AVISIT", "ADT"),
- #                        c("STUDYID","USUBJID")),
- #            file = paste0("data/diff_", name, ".txt")
-      diffdf::diffdf(base = adam_old,
-                     compare = adam_new,
-                     keys = NULL,
-                     file = paste0("data/diff_", name, ".txt")
-                     )
-} ## end tp
+    #   compare(base=adam_old,
+    #            compare=adam_new,
+    #           keys= ifelse(tp == "adlb.R",
+    #                        c("USUBJID", "PARAMCD", "AVISIT", "ADT"),
+    #                        c("STUDYID","USUBJID")),
+    #            file = paste0("data/diff_", name, ".txt")
+    diffdf::diffdf(
+      base = adam_old,
+      compare = adam_new,
+      keys = NULL,
+      file = paste0("data/diff_", name, ".txt")
+    )
+  } ## end tp
 
-print("DONE")
+  print("DONE")
 } ## end main
