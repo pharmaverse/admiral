@@ -1,11 +1,15 @@
 # This script:  data-raw/admiral_verify_templates.R
 #
-# Generates ADaM from templates and compares to previously generated ADaM in pharmaverseadam
-# Much code taken from pharamavreseadam::
+# Generates ADaM from templates and compares to previously generated ADaM in pharmaverseadam.
+# pharmaverseadam is the SOURCE.
 #
+# Much code taken from pharamavreseadam::create_adams_data.R (https://github.com/pharmaverse/pharmaverseadam/blob/main/data-raw/create_adams_data.R)
+#
+
+# USAGE:   verify_templates()
 #
 # TODO:
-# - add attr to generated ADaM
+# - add `attr` to generated ADaM
 # - where code overlaps, make pharamversadam script and this one the same.
 # - vectorize, using lapply
 
@@ -16,11 +20,12 @@
 # - change ?   in template ad_adsl.R, change variable `dir`?
 # - now using `.rda` datafiles, switch to `.rds`? (easier to program; pilot5 uses)
 # - use cli:: for messages/errors?
-#'
+
+#' (if added to `admiral` package)
 #' @param pkg  package (ex:  "admiral )
 #' @param name ADaM or CDISC name, without prefix or suffix  (ex:  adlb)
 #' @param adam_new  ADaM after template is run
-#' @param adam_old =  original ADaM done at early time, saved in pharamverseadam
+#' @param adam_old =  original ADaM done at earlier date, saved in pharamverseadam
 
 #' @param tp   template R file  (ex: ad_adlb.R)
 #' @param templates_path path  Directory where templates where package is installed (not sourced)
@@ -30,6 +35,7 @@
 #' - admiral/data     not used
 #' - admiral/inst/templates/  templates to create ADaM datasets
 #' - dataset_dir  cache, where newly generated ADaM files kept and diffdf reports
+#'      (os dependent)
 
 load_rda <- function(fileName) {
     load(fileName)
@@ -119,6 +125,7 @@ if (pkg != "admiral") error("Curently, only admiral package is accepted.")
   source_adams
 
   # gather keys (for diffdf)
+  # DISCUSS use of keys in CDISC
   keys_adsl <- teal.data::default_cdisc_join_keys[c("ADSL")]$ADSL
   keys_adsl
 
@@ -127,19 +134,19 @@ if (pkg != "admiral") error("Curently, only admiral package is accepted.")
   templates <- list.files(template_path, pattern = "ad_")
   templates
 
-  ## BUT, Fewer templates than  ADaMs in pharmaverseadam!
-  ## Reduce number of source_adams !
+  ## BUT, |templates|  <  |ADaMs in pharmaverseadam|   !
+  ## Match/Reduce number of source_adams !
 
   ## templates can generate these ADaMs, 12
   names <- sapply(templates, function(x) gsub("ad_|\\.R","",x ), USE.NAMES = FALSE)
-  ## name our templates
 
-  # KEEP only elments in both (now 12)
+  # KEEP only ADaMs with template (now 12)
   source_adams <-  source_adams[source_adams %in% names]
-  # finally name the templates vector
+
+  #
+  # finally name (ADaM or CDISC name)  the templates vector
   names(templates) <- names
 
-  # now, generated ADaM datasets will be put in cache dir
 
   # list of important paths
   path <- list("templates_path" = file.path(system.file(package = pkg), "templates"),
@@ -151,6 +158,10 @@ if (pkg != "admiral") error("Curently, only admiral package is accepted.")
 
 # For real,
   ignore_templates_pkg = templates[templates == c("ad_adlbhy.R")]
+
+  #
+  # now, generate ADaM datasets and put in cache dir
+  #
 
     # begin tp  ----
     for (tp in templates) {
