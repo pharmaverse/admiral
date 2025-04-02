@@ -78,6 +78,8 @@ unless otherwise specified.*
 
 -   [Derive Analysis Variables](#analysis)
 
+-   [Create `DTYPE` for Imputed records](#lloq)
+
 -   [Create Duplicated Records for Analysis](#copy)
 
 -   [Combine `ADPC` data with Duplicated Records](#combine)
@@ -622,13 +624,7 @@ pre-dose records.
 
 Analysis value `AVAL` in this example comes from `PCSTRESN` for
 concentration records. In addition we are including the dose value
-`EXDOSE` for dosing records and setting BLQ (Below Limit of
-Quantitation) records to 0 before the first dose and to 1/2 of LLOQ
-(Lower Limit of Quantitation) for records after first dose. (Additional
-tests such as whether more than 1/3 of records are BLQ may be required
-and are not done in this example.) We also create a listing-ready
-variable `AVALCAT1` which includes the "BLQ" record indicator and
-formats the numeric values to three significant digits.
+`EXDOSE` for dosing records.
 
 We derive actual dose `DOSEA` based on `EXDOSE_prev` and `EXDOSE_next`
 and planned dose `DOSEP` based on the planned treatment `TRT01P`. In
@@ -637,7 +633,7 @@ variables.
 
 ```{r eval=TRUE, echo=TRUE}
 # ---- Derive Analysis Variables ----
-# Derive ATPTN, ATPT, ATPTREF, ABLFL and BASETYPE
+# Derive ATPTN, ATPT, ATPTREF, and BASETYPE
 # Derive planned dose DOSEP, actual dose DOSEA and units
 # Derive PARAMCD and relative time units
 # Derive AVAL, AVALU and AVALCAT1
@@ -657,11 +653,6 @@ adpc_aval <- adpc_nrrlt %>%
       EVID == 1 ~ AVISIT,
       is.na(AVISIT_prev) ~ AVISIT_next,
       TRUE ~ AVISIT_prev
-    ),
-    # Derive baseline flag for pre-dose records
-    ABLFL = case_when(
-      ATPT == "Pre-dose" ~ "Y",
-      TRUE ~ NA_character_
     ),
     # Derive BASETYPE
     BASETYPE = paste(ATPTREF, "Baseline"),
@@ -689,8 +680,6 @@ adpc_aval <- adpc_nrrlt %>%
     # Derive AVAL
     AVAL = case_when(
       EVID == 1 ~ EXDOSE,
-      PCSTRESC == "<BLQ" & NFRLT == 0 ~ 0,
-      PCSTRESC == "<BLQ" & NFRLT > 0 ~ 0.5 * ALLOQ,
       TRUE ~ PCSTRESN
     ),
     AVALU = case_when(
@@ -711,7 +700,43 @@ adpc_aval <- adpc_nrrlt %>%
 dataset_vignette(
   adpc_aval,
   display_vars = exprs(
-    USUBJID, NFRLT, AVISIT, ATPT, ABLFL, ATPTREF, AVAL, AVALCAT1
+    USUBJID, NFRLT, AVISIT, ATPT, ATPTREF, AVAL, AVALCAT1
+  )
+)
+```
+
+## Create `DTYPE` for Imputed records {#lloq}
+
+For records that are BLQ (Below Limit of Quantitation), we will create
+imputed records set to 1/2 of LLOQ. `DTYPE` for these records will be
+set to "HALFLLOQ". (Additional tests such as whether more than 1/3 of
+records are BLQ may be required and are not done in this example.) We
+also create a listing-ready variable `AVALCAT1` which includes the "BLQ"
+record indicator and formats the numeric values to three significant
+digits.
+
+```{r eval=TRUE, echo=TRUE}
+# ---- Create DTYPE imputation
+
+adpc_lloq <- adpc_aval %>%
+  derive_extreme_records(
+    dataset_add = adpc_aval,
+    by_vars = exprs(USUBJID, PARAMCD, PARCAT1, AVISITN, AVISIT, ADTM, PCSEQ),
+    order = exprs(ADTM, BASETYPE, EVID, ATPTN, PARCAT1),
+    mode = "last",
+    filter_add = PCSTRESC == "<BLQ" & is.na(AVAL),
+    set_values_to = exprs(
+      AVAL = ALLOQ * .5,
+      DTYPE = "HALFLLOQ"
+    )
+  )
+```
+
+```{r, eval=TRUE, echo=FALSE}
+dataset_vignette(
+  tail(adpc_lloq),
+  display_vars = exprs(
+    USUBJID, PARAMCD, PARCAT1, AVISITN, DTYPE, PCSTRESC, AVAL,
   )
 )
 ```
@@ -740,12 +765,11 @@ baseline for the "Day 2" dose. `DOSEA` is set to `EXDOSE_next` and
 ```{r eval=TRUE, echo=TRUE}
 # ---- Create DTYPE copy records ----
 
-dtype <- adpc_aval %>%
+dtype <- adpc_lloq %>%
   filter(NFRLT > 0 & NXRLT == 0 & EVID == 0 & !is.na(AVISIT_next)) %>%
   select(-PCRFTDT, -PCRFTTM) %>%
   # Re-derive variables in for DTYPE copy records
   mutate(
-    ABLFL = NA_character_,
     ATPTREF = AVISIT_next,
     ARRLT = AXRLT,
     NRRLT = NXRLT,
@@ -755,7 +779,10 @@ dtype <- adpc_aval %>%
     ATPT = "Pre-dose",
     ATPTN = -0.5,
     ABLFL = "Y",
-    DTYPE = "COPY"
+    DTYPE = case_when(
+      is.na(DTYPE) ~ "COPY",
+      DTYPE == "HALFLLOQ" ~ "COPY/HALFLLOQ"
+    )
   ) %>%
   derive_vars_dtm_to_dt(exprs(PCRFTDTM)) %>%
   derive_vars_dtm_to_tm(exprs(PCRFTDTM))
@@ -786,20 +813,25 @@ figures, etc.
 ```{r eval=TRUE, echo=TRUE}
 # ---- Combine original records and DTYPE copy records ----
 
-adpc_dtype <- bind_rows(adpc_aval, dtype) %>%
+adpc_dtype <- bind_rows(adpc_lloq, dtype) %>%
   arrange(STUDYID, USUBJID, BASETYPE, ADTM, NFRLT) %>%
   mutate(
+    # Derive baseline flag for pre-dose records
+    ABLFL = case_when(
+      ATPT == "Pre-dose" & !is.na(AVAL) ~ "Y",
+      TRUE ~ NA_character_
+    ),
     # Derive MRRLT, ANL01FL and ANL02FL
     MRRLT = if_else(ARRLT < 0, 0, ARRLT),
     ANL01FL = "Y",
-    ANL02FL = if_else(is.na(DTYPE), "Y", NA_character_),
+    ANL02FL = if_else(is.na(DTYPE), "Y", NA_character_)
   )
 ```
 
 ```{r, eval=TRUE, echo=FALSE}
 adpc_dtype %>%
   dataset_vignette(display_vars = exprs(
-    STUDYID, USUBJID, BASETYPE, ADTM, ATPT, NFRLT, NRRLT, ARRLT, MRRLT
+    STUDYID, USUBJID, ABLFL, BASETYPE, DTYPE, ADTM, ATPT, NFRLT, NRRLT, ARRLT, MRRLT
   ))
 ```
 
@@ -917,16 +949,18 @@ Adding attributes to the `ADPC` file will be discussed
 
 # Programming Population PK (ADPPK) Analysis Data
 
-The Population PK Analysis Data (ADPPK) follows the CDISC Implementation Guide
-(<https://www.cdisc.org/standards/foundational/adam/basic-data-structure-adam-poppk-implementation-guide-v1-0>). The programming workflow for Population PK (ADPPK) Analysis Data is similar
-to the NCA Programming flow with a few key differences. Population PK
-models generally make use of nonlinear mixed effects models that require
-numeric variables. The data used in the models will include both dosing
-and concentration records, relative time variables, and numeric
-covariate variables. A `DV` or dependent variable is often expected.
-This is equivalent to the ADaM `AVAL` variable and will be included in
-addition to `AVAL` for ADPPK. The ADPPK file will not have the
-duplicated records for analysis found in the NCA.
+The Population PK Analysis Data (ADPPK) follows the CDISC Implementation
+Guide
+(<https://www.cdisc.org/standards/foundational/adam/basic-data-structure-adam-poppk-implementation-guide-v1-0>).
+The programming workflow for Population PK (ADPPK) Analysis Data is
+similar to the NCA Programming flow with a few key differences.
+Population PK models generally make use of nonlinear mixed effects
+models that require numeric variables. The data used in the models will
+include both dosing and concentration records, relative time variables,
+and numeric covariate variables. A `DV` or dependent variable is often
+expected. This is equivalent to the ADaM `AVAL` variable and will be
+included in addition to `AVAL` for ADPPK. The ADPPK file will not have
+the duplicated records for analysis found in the NCA.
 
 Here are the relative time variables we will use for the ADPPK data.
 These correspond to the names in the forthcoming CDISC Implementation
@@ -1447,12 +1481,12 @@ NOTE: All these packages are in the experimental phase, but the vision
 is to have them associated with an End to End pipeline under the
 umbrella of the [pharmaverse](https://github.com/pharmaverse). An
 example of applying metadata and perform associated checks can be found
-at the [pharmaverse E2E example](https://pharmaverse.github.io/examples/adam/adsl).
-
+at the [pharmaverse E2E
+example](https://pharmaverse.github.io/examples/adam/adsl).
 
 # Example Scripts {#example}
 
-ADaM  | Sourcing Command
------ | --------------
-ADPC  | `use_ad_template("ADPC")`
-ADPPK | `use_ad_template("ADPPK")`
+| ADaM  | Sourcing Command           |
+|-------|----------------------------|
+| ADPC  | `use_ad_template("ADPC")`  |
+| ADPPK | `use_ad_template("ADPPK")` |

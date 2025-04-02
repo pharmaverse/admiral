@@ -6,6 +6,7 @@
 
 - The function `extract_duplicate_records()` was updated to consider all variables in the input dataset for the by group if the `by_vars` argument is omitted entirely. (#2644)
 - In `slice_derivation`, previously the derivation is not called for empty subsets, however this can lead to issues when the input dataset is empty. Now the derivation is called for all subsets.
+- The examples section for the function `derive_var_trtemfl()` was enhanced to include a showcasing of all scenarios discussed in the following [PHUSE White Paper on Treatment-Emergent AEs](https://phuse.s3.eu-central-1.amazonaws.com/Deliverables/Safety+Analytics/WP-087+Recommended+Definition+of++Treatment-Emergent+Adverse+Events+in+Clinical+Trials+.pdf). (#2455)
 
 ## Breaking Changes
 
@@ -29,6 +30,9 @@
 read (#2623).
 
 - The "BDS Time-to-Event" vignette was updated to include `SRCSEQ` consistently (#2658).
+
+- The template for ADPC and vignette were updated to include an example of using `DTYPE` for imputed records (#2657).
+
 
 ## Various
 
