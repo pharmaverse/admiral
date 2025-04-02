@@ -3,7 +3,8 @@
 # Generates ADaM from templates and compares to previously generated ADaM in pharmaverseadam.
 # pharmaverseadam is the SOURCE.
 #
-# Much code taken from pharamavreseadam::create_adams_data.R (https://github.com/pharmaverse/pharmaverseadam/blob/main/data-raw/create_adams_data.R)
+# Much code taken from pharamavreseadam::create_adams_data.R
+# (https://github.com/pharmaverse/pharmaverseadam/blob/main/data-raw/create_adams_data.R)
 #
 
 # USAGE:   verify_templates()
@@ -107,7 +108,6 @@ reduce <- function() {
 verify_templates <- function(pkg = "admiral", ignore_templates_pkg = NULL) {
   clean_cache()
   library(pharmaverseadam)
-  old_option <- options(error = recover)
 
   # TODO:  more checking
   if (pkg != "admiral") error("Curently, only admiral package is accepted.")
@@ -140,7 +140,7 @@ verify_templates <- function(pkg = "admiral", ignore_templates_pkg = NULL) {
   ## Match/Reduce number of source_adams !
 
   ## templates can generate these ADaMs, 12
-  names <- sapply(templates, function(x) gsub("ad_|\\.R", "", x), USE.NAMES = FALSE)
+  names <- vapply(templates, function(x) gsub("ad_|\\.R", "", x), USE.NAMES = FALSE, character(length = 1))
 
   # KEEP only ADaMs with template (now 12)
   source_adams <- source_adams[source_adams %in% names]
