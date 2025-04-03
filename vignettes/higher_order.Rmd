@@ -326,7 +326,7 @@ slice, for example, and there would have been no difference to the result.
 However the third slice had to come last to check all remaining (i.e. not severe
 or moderate) records only.
 
-# Combining higher order functions
+# Combining Higher Order Functions
 
 It is also possible to use two or more of the higher order functions in combination.
 The most likely use case is employing `call_derivation()` to repeat similar 
@@ -335,7 +335,7 @@ the derivations on a subset of the input dataset.
 
 For instance, let's pick up VS from the `call_derivation()` example and suppose
 that we wish to derive the highest value and lowest value flags for just the 
-temperature parameter. We can do this  by ensuring that the derivation passed
+temperature parameter. We can do this by ensuring that the derivation passed to
 `restrict_derivation()` is `call_derivation()`, and that the arguments for the 
 latter are all passed through `args`.
 

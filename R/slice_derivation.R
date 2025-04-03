@@ -12,7 +12,7 @@
 #'   adds variables or observations to a dataset. The first argument of a
 #'   derivation must expect a dataset and the derivation must return a dataset.
 #'   All expected arguments for the derivation function must be provided through
-#'   the `params()` objects passed to the `args` arguments.
+#'   the `params()` object passed to the `args` argument or be provided in _every_ `derivation_slice()`.
 #'
 #' @param args Arguments of the derivation
 #'
