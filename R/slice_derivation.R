@@ -91,7 +91,7 @@ slice_derivation <- function(dataset,
                              ...) {
   # check input
   assert_data_frame(dataset)
-  assert_function(derivation, params = c("dataset"))
+  assert_function(derivation)
   assert_s3_class(args, "params", optional = TRUE)
   if (!is.null(args)) {
     assert_function(derivation, names(args))
