@@ -33,6 +33,8 @@ read (#2623).
 
 - The template for ADPC and vignette were updated to include an example of using `DTYPE` for imputed records (#2657).
 
+- The "Higher Order Functions" vignette was updated to showcase an example of two higher order functions used in combination (#2656).
+
 
 ## Various
 

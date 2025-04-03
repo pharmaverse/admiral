@@ -14,11 +14,8 @@ slice_derivation(dataset, derivation, args = NULL, ...)
 A function that performs a specific derivation is expected. A derivation
 adds variables or observations to a dataset. The first argument of a
 derivation must expect a dataset and the derivation must return a dataset.
-The function must provide the \code{dataset} argument and all arguments
-specified in the \code{params()} objects passed to the \code{arg} argument.
-
-Please note that it is not possible to specify \code{{dplyr}}
-functions like \code{mutate()} or \code{summarize()}.}
+All expected arguments for the derivation function must be provided through
+the \code{params()} objects passed to the \code{args} arguments.}
 
 \item{args}{Arguments of the derivation
 
@@ -53,6 +50,10 @@ the first matching slice.
 \item Observations with no match to any of the slices are included in the
 output dataset but the derivation is not called for them.
 }
+
+It is also possible to pass functions from outside the \code{{admiral}} package
+to \code{slice_derivation()}, e.g. an extension package function, or
+\code{dplyr::mutate()}.
 }
 \examples{
 library(tibble)
@@ -82,9 +83,10 @@ slice_derivation(
     args = params(time_imputation = "last")
   )
 )
+
 }
 \seealso{
-\code{\link[=params]{params()}} \code{\link[=restrict_derivation]{restrict_derivation()}}
+\code{\link[=params]{params()}} \code{\link[=restrict_derivation]{restrict_derivation()}} \code{\link[=call_derivation]{call_derivation()}}
 
 Higher Order Functions: 
 \code{\link{call_derivation}()},

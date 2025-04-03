@@ -11,11 +11,8 @@
 #'   A function that performs a specific derivation is expected. A derivation
 #'   adds variables or observations to a dataset. The first argument of a
 #'   derivation must expect a dataset and the derivation must return a dataset.
-#'   The function must provide the `dataset` argument and all arguments
-#'   specified in the `params()` objects passed to the `arg` argument.
-#'
-#'   Please note that it is not possible to specify `{dplyr}`
-#'   functions like `mutate()` or `summarize()`.
+#'   All expected arguments for the derivation function must be provided through
+#'   the `params()` objects passed to the `args` arguments.
 #'
 #' @param args Arguments of the derivation
 #'
@@ -45,13 +42,17 @@
 #'   - Observations with no match to any of the slices are included in the
 #'   output dataset but the derivation is not called for them.
 #'
+#'   It is also possible to pass functions from outside the `{admiral}` package
+#'   to `slice_derivation()`, e.g. an extension package function, or
+#'   `dplyr::mutate()`.
+#'
 #' @return The input dataset with the variables derived by the derivation added
 #'
 #' @family high_order_function
 #' @keywords high_order_function
 #'
 #'
-#' @seealso [params()] [restrict_derivation()]
+#' @seealso [params()] [restrict_derivation()] [call_derivation()]
 #'
 #' @export
 #'
@@ -83,6 +84,7 @@
 #'     args = params(time_imputation = "last")
 #'   )
 #' )
+#'
 slice_derivation <- function(dataset,
                              derivation,
                              args = NULL,
