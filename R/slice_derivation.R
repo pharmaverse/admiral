@@ -99,6 +99,29 @@ slice_derivation <- function(dataset,
   slices <- list2(...)
   assert_list_of(slices, "derivation_slice")
 
+  # Check that every mandatory argument to the derivation function is either passed
+  # inside args or present in every slice
+  mandatory_args <- formals(derivation) %>% keep(is_missing) %>% names()
+
+  if(length(mandatory_args > 1)){
+    mandatory_args <- mandatory_args[-1] # ignore first item, as that is the dataset
+
+    for (mandatory_arg in mandatory_args){
+
+      if (!mandatory_arg %in% names(args)){
+
+        check <- sapply(slices, function(x) mandatory_arg %in% x)
+
+        if(!all(check)){
+          cli_abort(
+            "The mandatory argument `{mandatory_arg}` of derivation function `{deparse(substitute(derivation))}`
+            has either not been passed to the `args` argument, or is not present in all derivation slices."
+          )
+        }
+      }
+    }
+  }
+
   # the variable temp_slicenr is added to the dataset which indicates to which
   # slice the observation belongs. Observations which match to more than one
   # slice are assigned to the first matching slice.
