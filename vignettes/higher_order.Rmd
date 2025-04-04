@@ -37,7 +37,8 @@ derivation may vary depending on the slice.
 The examples in this vignette all showcase the higher order functions taking other
 `{admiral}` functions as input, but in principle any functions that modify a 
 dataset (e.g. an extension package function, or `dplyr::mutate()`, etc.) can be 
-passed too.
+passed too. The only requirement for a function being passed to `derivation` is that it must take
+a dataset as its first argument and return a dataset.
 
 ## Required Packages
 

@@ -22,7 +22,8 @@
 #'
 #'   It is also possible to pass functions from outside the `{admiral}` package
 #'   to `restrict_derivation()`, e.g. an extension package function, or
-#'   `dplyr::mutate()`.
+#'   `dplyr::mutate()`. The only requirement for a function being passed to `derivation` is that
+#'   it must take a dataset as its first argument and return a dataset.
 #'
 #' @family high_order_function
 #' @keywords high_order_function
