@@ -1,4 +1,4 @@
-# slice_derivation Test 1: slice derivation
+# slice_derivation Test 7: Error if a mandatory argument is not in arg or all slices
 
     Code
       actual <- slice_derivation(advs, derivation = derive_vars_dtm, args = params(

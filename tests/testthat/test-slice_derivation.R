@@ -232,7 +232,7 @@ test_that("slice_derivation Test 6: slice on 0-row dataset", {
 })
 
 ## Test 7: Error thrown if a mandatory argument is not in arg or all slices----
-test_that("slice_derivation Test 1: slice derivation", {
+test_that("slice_derivation Test 7: Error if a mandatory argument is not in arg or all slices", {
   advs <- tibble::tribble(
     ~USUBJID, ~VSDTC,       ~VSTPT,             ~VSSEQ,
     "1",      "2020-04-16", NA_character_,      1,
