@@ -15,7 +15,8 @@ A function that performs a specific derivation is expected. A derivation
 adds variables or observations to a dataset. The first argument of a
 derivation must expect a dataset and the derivation must return a dataset.
 All expected arguments for the derivation function must be provided through
-the \code{params()} object passed to the \code{args} argument or be provided in \emph{every} \code{derivation_slice()}.}
+the \code{params()} object passed to the \code{args} argument or be provided in \emph{every}
+\code{derivation_slice()}.}
 
 \item{args}{Arguments of the derivation
 
