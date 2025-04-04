@@ -200,9 +200,9 @@ Premarketing
 QD
 QID
 README
+RStudio
 Rahal
 Ratford
-Roclet
 Romain
 SCE
 SCN
@@ -240,6 +240,7 @@ TID
 TLFs
 TMF
 TNDOSINT
+TOC
 TPDOSE
 Takahira
 Teckla
@@ -330,7 +331,6 @@ repo
 reproducibility
 rlang
 roche
-roclet
 roxygen
 scalable
 signif
