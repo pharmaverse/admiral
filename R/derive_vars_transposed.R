@@ -37,7 +37,7 @@
 #'   <https://dplyr.tidyverse.org/reference/mutate-joins.html#arguments> for
 #'   more details.
 #'
-#'   *Permitted Values*: `"one-to-one"`, `"one-to-many"`, `"many-to-one"`,
+#' @permitted `"one-to-one"`, `"one-to-many"`, `"many-to-one"`,
 #'   `"many-to-many"`, `NULL`
 #'
 #' @details

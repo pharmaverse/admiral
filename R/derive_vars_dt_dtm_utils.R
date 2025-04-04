@@ -2,7 +2,7 @@
 #'
 #' @param level Datetime level
 #'
-#'   *Permitted Values*: `"Y"` (year, highest level), `"M"` (month), `"D"`
+#' @permitted `"Y"` (year, highest level), `"M"` (month), `"D"`
 #'   (day), `"h"` (hour), `"m"` (minute), `"s"` (second, lowest level), `"n"`
 #'   (none)
 #'
@@ -29,7 +29,7 @@ dtm_level <- function(level) {
 #'
 #' @param level Date level
 #'
-#'   *Permitted Values*: `"Y"` (year, highest level), `"M"` (month), `"D"`
+#' @permitted `"Y"` (year, highest level), `"M"` (month), `"D"`
 #'   (day), `"n"` (none, lowest level)
 #'
 #' @returns A `dt_level` object

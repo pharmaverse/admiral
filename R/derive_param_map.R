@@ -19,21 +19,21 @@
 #'   The observations where `PARAMCD` equals the specified value are considered
 #'   as the systolic blood pressure assessments.
 #'
-#'   *Permitted Values:* character value
+#' @permitted character value
 #'
 #' @param diabp_code Diastolic blood pressure parameter code
 #'
 #'   The observations where `PARAMCD` equals the specified value are considered
 #'   as the diastolic blood pressure assessments.
 #'
-#'   *Permitted Values:* character value
+#' @permitted character value
 #'
 #' @param hr_code Heart rate parameter code
 #'
 #'   The observations where `PARAMCD` equals the specified value are considered
 #'   as the heart rate assessments.
 #'
-#'   *Permitted Values:* character value
+#' @permitted character value
 #'
 #' @param set_values_to Variables to be set
 #'
@@ -41,7 +41,7 @@
 #' observations. For example `exprs(PARAMCD = "MAP")` defines the parameter code
 #' for the new parameter.
 #'
-#' *Permitted Values*: List of variable-value pairs
+#' @permitted List of variable-value pairs
 #'
 #' @inheritParams derive_param_computed
 #'

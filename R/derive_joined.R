@@ -37,7 +37,7 @@
 #'
 #'   `r roxygen_order_na_handling()`
 #'
-#'   *Permitted Values*: list of expressions created by `exprs()`, e.g.,
+#' @permitted list of expressions created by `exprs()`, e.g.,
 #'    `exprs(ADT, desc(AVAL))` or `NULL`
 #'
 #' @param new_vars Variables to add
@@ -61,7 +61,7 @@
 #'   If the argument is not specified or set to `NULL`, all variables from the
 #'   additional dataset (`dataset_add`) are added.
 #'
-#'   *Permitted Values*: list of variables or named expressions created by `exprs()`
+#' @permitted list of variables or named expressions created by `exprs()`
 #'
 #' @param tmp_obs_nr_var Temporary observation number
 #'
@@ -91,7 +91,7 @@
 #'
 #'   The variables are not included in the output dataset.
 #'
-#'   *Permitted Values*: list of variables or named expressions created by `exprs()`
+#' @permitted list of variables or named expressions created by `exprs()`
 #'
 #' @param first_cond_lower Condition for selecting range of data (before)
 #'
@@ -128,7 +128,7 @@
 #'   The condition can include summary functions like `all()` or `any()`. The
 #'   joined dataset is grouped by the original observations.
 #'
-#'   *Permitted Values*: a condition
+#' @permitted a condition
 #'
 #' @param mode Selection mode
 #'
@@ -137,7 +137,7 @@
 #'
 #'   If the `order` argument is not specified, the `mode` argument is ignored.
 #'
-#'   *Permitted Values*: `"first"`, `"last"`, `NULL`
+#' @permitted `"first"`, `"last"`, `NULL`
 #'
 #' @param check_type Check uniqueness?
 #'
@@ -150,7 +150,7 @@
 #'   contains more than one observation for any of the observations of the input
 #'   dataset.
 #'
-#'   *Permitted Values*: `"none"`, `"warning"`, `"error"`
+#' @permitted `"none"`, `"warning"`, `"error"`
 #'
 #' @inheritParams get_joined_data
 #' @inheritParams derive_vars_merged
@@ -579,7 +579,7 @@ derive_vars_joined <- function(dataset,
 #'
 #'   `r roxygen_order_na_handling()`
 #'
-#'   *Permitted Values*: list of expressions created by `exprs()`, e.g.,
+#' @permitted list of expressions created by `exprs()`, e.g.,
 #'    `exprs(ADT, desc(AVAL))` or `NULL`
 #'
 #' @param join_vars Variables to use from additional dataset
@@ -598,7 +598,7 @@ derive_vars_joined <- function(dataset,
 #'
 #'   The variables are not included in the output dataset.
 #'
-#'   *Permitted Values*: list of variables or named expressions created by `exprs()`
+#' @permitted list of variables or named expressions created by `exprs()`
 #'
 #' @param join_type Observations to keep after joining
 #'
@@ -614,7 +614,7 @@ derive_vars_joined <- function(dataset,
 #'   prior to the observation. For example, to identify AEs occurring on or
 #'   after seven days before a COVID AE. Thus `join_type = "all"` could be used.
 #'
-#'   *Permitted Values:* `"before"`, `"after"`, `"all"`
+#' @permitted `"before"`, `"after"`, `"all"`
 #'
 #' @param tmp_obs_nr_var Temporary observation number
 #'
@@ -637,7 +637,7 @@ derive_vars_joined <- function(dataset,
 #'   The condition can include summary functions like `all()` or `any()`. The
 #'   additional dataset is grouped by the by variables (`by_vars`).
 #'
-#'   *Permitted Values*: a condition
+#' @permitted a condition
 #'
 #' @param first_cond_lower Condition for selecting range of data (before)
 #'
@@ -674,7 +674,7 @@ derive_vars_joined <- function(dataset,
 #'   The condition can include summary functions like `all()` or `any()`. The
 #'   joined dataset is grouped by the original observations.
 #'
-#'   *Permitted Values*: a condition
+#' @permitted a condition
 #'
 #' @param check_type Check uniqueness?
 #'
@@ -687,7 +687,7 @@ derive_vars_joined <- function(dataset,
 #'   contains more than one observation for any of the observations of the input
 #'   dataset.
 #'
-#'   *Permitted Values*: `"none"`, `"warning"`, `"error"`
+#' @permitted `"none"`, `"warning"`, `"error"`
 #'
 #'
 #' @details

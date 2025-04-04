@@ -23,7 +23,7 @@
 #'   If `"first"` is specified, the first date for each subject is selected. If
 #'   `"last"` is specified, the last date for each subject is selected.
 #'
-#'   Permitted Values:  `"first"`, `"last"`
+#' @permitted  `"first"`, `"last"`
 #'
 #' @param subject_keys Variables to uniquely identify a subject
 #'

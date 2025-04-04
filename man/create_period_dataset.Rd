@@ -15,7 +15,11 @@ create_period_dataset(
 
 The variables specified by the \code{new_vars} and \code{subject_keys} arguments are expected to be in the dataset.
 For each element of \code{new_vars} at least one variable of the form of the right
-hand side value must be available in the dataset.}
+hand side value must be available in the dataset.
+
+\describe{
+\item{Default value}{none}
+}}
 
 \item{new_vars}{New variables
 
@@ -30,12 +34,20 @@ both "xx" and "w" are used it refers to a subperiod variable.
 Only one type must be used, e.g., all right hand side values must refer to
 period variables. It is not allowed to mix for example period and subperiod
 variables. If period \emph{and} subperiod variables are required, separate
-reference datasets must be created.}
+reference datasets must be created.
+
+\describe{
+\item{Default value}{none}
+}}
 
 \item{subject_keys}{Variables to uniquely identify a subject
 
 A list of expressions where the expressions are symbols as returned by
-\code{exprs()} is expected.}
+\code{exprs()} is expected.
+
+\describe{
+\item{Default value}{\code{get_admiral_option("subject_keys")}}
+}}
 }
 \value{
 A period reference dataset (see "Details" section)

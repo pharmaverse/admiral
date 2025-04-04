@@ -26,7 +26,7 @@
 #'
 #'   *Default*: `AVAL`
 #'
-#'   *Permitted Values*: a variable
+#' @permitted a variable
 #'
 #' @param order Sort order
 #'

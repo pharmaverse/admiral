@@ -98,7 +98,7 @@
 #'   if the observations of the input dataset are not unique with respect to the
 #'   by variables and the order.
 #'
-#'   *Permitted Values:* `"none"`, `"warning"`, `"error"`
+#' @permitted `"none"`, `"warning"`, `"error"`
 #'
 #' @param true_value Value of `new_var` for flagged observations
 #'

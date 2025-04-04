@@ -17,7 +17,7 @@
 #'
 #'   `r roxygen_order_na_handling()`
 #'
-#'   *Permitted Values:* list of expressions created by `exprs()`, e.g.,
+#' @permitted list of expressions created by `exprs()`, e.g.,
 #'   `exprs(ADT, desc(AVAL))`
 #'
 #' @param condition Condition for Reference Observation
@@ -36,19 +36,19 @@
 #'   the condition (`condition` parameter) is fulfilled the *last* time is
 #'   included in the output dataset.
 #'
-#'   *Permitted Values:* `"first"`, `"last"`
+#' @permitted `"first"`, `"last"`
 #'
 #' @param selection Select observations before or after the reference observation?
 #'
-#'   *Permitted Values:* `"before"`, `"after"`
+#' @permitted `"before"`, `"after"`
 #'
 #' @param inclusive Include the reference observation?
 #'
-#'   *Permitted Values:* `TRUE`, `FALSE`
+#' @permitted `TRUE`, `FALSE`
 #'
 #' @param keep_no_ref_groups Should by groups without reference observation be kept?
 #'
-#'   *Permitted Values:* `TRUE`, `FALSE`
+#' @permitted `TRUE`, `FALSE`
 #'
 #' @param check_type Check uniqueness?
 #'
@@ -56,7 +56,7 @@
 #'   if the observations of the input dataset are not unique with respect to the
 #'   by variables and the order.
 #'
-#'   *Permitted Values:* `"none"`, `"warning"`, `"error"`
+#' @permitted `"none"`, `"warning"`, `"error"`
 #'
 #' @details For each by group ( `by_vars` parameter) the observations before or
 #'   after (`selection` parameter) the observations where the condition

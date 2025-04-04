@@ -35,7 +35,7 @@
 #'
 #'   `r roxygen_order_na_handling()`
 #'
-#'   *Permitted Values:* list of expressions created by `exprs()`, e.g.,
+#' @permitted list of expressions created by `exprs()`, e.g.,
 #'   `exprs(ADT, desc(AVAL))`
 #'
 #' @param mode Selection mode (first or last)
@@ -44,7 +44,7 @@
 #'   `"first"`/`"last"` is used to select the first/last record of this type of
 #'   event sorting by `order`.
 #'
-#'   *Permitted Values:* `"first"`, `"last"`
+#' @permitted `"first"`, `"last"`
 #'
 #' @param source_datasets Source datasets
 #'
@@ -59,7 +59,7 @@
 #'  the event will take precedence over the value of the `keep_source_vars`
 #'  argument.
 #'
-#'   *Permitted Values*: A list of expressions where each element is
+#' @permitted A list of expressions where each element is
 #'   a symbol or a tidyselect expression, e.g., `exprs(VISIT, VISITNUM,
 #'   starts_with("RS"))`.
 #'

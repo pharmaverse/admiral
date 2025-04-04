@@ -14,8 +14,6 @@
 #'   Refer to `derive_vars_dt()` to impute and derive a date from a date character
 #'   vector to a date object.
 #'
-#'   Default: `BRTHDT`
-#'
 #' @param end_date The end date
 #'
 #'   A date or date-time object is expected.
@@ -23,13 +21,11 @@
 #'   Refer to `derive_vars_dt()` to impute and derive a date from a date character
 #'   vector to a date object.
 #'
-#'   Default: `RANDDT`
-#'
 #' @param age_unit Age unit
 #'
 #'   The age is derived in the specified unit
 #'
-#'   Permitted Values (case-insensitive):
+#' @permitted The values are considered case-insensitive.
 #'
 #'   For years: `"year"`, `"years"`, `"yr"`, `"yrs"`, `"y"`
 #'
@@ -147,9 +143,8 @@ derive_vars_aage <- function(dataset,
 #'   in `dataset`. This gives the unit of the `age_var` variable and is used to convert
 #'   AGE to 'years' so that grouping can occur.
 #'
-#'   Default: NULL
 #'
-#'   Permitted Values: 'years', 'months', 'weeks', 'days', 'hours', 'minutes', 'seconds'
+#' @permitted 'years', 'months', 'weeks', 'days', 'hours', 'minutes', 'seconds'
 #'
 #' @param new_var New age variable to be created in years. The returned values are
 #'   doubles and NOT integers.

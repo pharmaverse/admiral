@@ -22,11 +22,13 @@
 #'
 #'   `r roxygen_param_by_vars()`
 #'
+#' @permitted [var_list]
+#'
 #' @param method Method used to QT correction
 #'
 #'   See [compute_qtc()] for details.
 #'
-#'   *Permitted Values*: `"Bazett"`, `"Fridericia"`, `"Sagie"`
+#' @permitted `"Bazett"`, `"Fridericia"`, `"Sagie"`
 #'
 #' @param qt_code QT parameter code
 #'
@@ -34,7 +36,7 @@
 #'   as the QT interval assessments. It is expected that QT is measured in ms or
 #'   msec.
 #'
-#'   *Permitted Values*: character value
+#' @permitted character value
 #'
 #' @param rr_code RR parameter code
 #'
@@ -42,13 +44,13 @@
 #'   as the RR interval assessments. It is expected that RR is measured in ms or
 #'   msec.
 #'
-#'   *Permitted Values*: character value
+#' @permitted character value
 #'
 #' @param get_unit_expr An expression providing the unit of the parameter
 #'
 #'   The result is used to check the units of the input parameters.
 #'
-#'   *Permitted Values*: An expression which is evaluable in the input dataset
+#' @permitted An expression which is evaluable in the input dataset
 #'   and results in a character value
 #'
 #' @inheritParams derive_param_map
@@ -186,7 +188,7 @@ derive_param_qtc <- function(dataset,
 #'
 #' @param method Method used to QT correction
 #'
-#'   *Permitted Values*: `"Bazett"`, `"Fridericia"`, `"Sagie"`
+#' @permitted `"Bazett"`, `"Fridericia"`, `"Sagie"`
 #'
 #' @return
 #' `"QTCBR"` if `method` is `"Bazett"`, `"QTCFR"` if it's `"Fridericia"` or
@@ -223,7 +225,7 @@ default_qtc_paramcd <- function(method) {
 #'
 #' @param method Method used to QT correction
 #'
-#'   *Permitted Values*: `"Bazett"`, `"Fridericia"`, `"Sagie"`
+#' @permitted `"Bazett"`, `"Fridericia"`, `"Sagie"`
 #'
 #' @return QT interval in ms
 #'

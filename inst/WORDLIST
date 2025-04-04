@@ -200,6 +200,7 @@ Premarketing
 QD
 QID
 README
+RStudio
 Rahal
 Ratford
 Romain
@@ -239,6 +240,7 @@ TID
 TLFs
 TMF
 TNDOSINT
+TOC
 TPDOSE
 Takahira
 Teckla
@@ -272,7 +274,6 @@ anticoagulation
 aspartate
 basetypes
 bds
-behaviour
 censorings
 chk
 codebase
@@ -339,6 +340,7 @@ subscale
 summarization
 th
 thromboplastin
+tibble
 tidyselect
 tidyverse
 timeframe

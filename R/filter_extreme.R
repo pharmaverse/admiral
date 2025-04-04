@@ -6,16 +6,13 @@
 #'
 #' @param by_vars Grouping variables
 #'
-#'   *Default*: `NULL`
-#'
 #'   `r roxygen_param_by_vars()`
-#'
 #'
 #' @param order Sort order
 #'
 #'   Within each by group the observations are ordered by the specified order.
 #'
-#'   *Permitted Values:* list of expressions created by `exprs()`, e.g.,
+#' @permitted list of expressions created by `exprs()`, e.g.,
 #'   `exprs(ADT, desc(AVAL))`
 #'
 #' @param mode Selection mode (first or last)
@@ -24,7 +21,7 @@
 #'   included in the output dataset. If `"last"` is specified, the last
 #'   observation of each by group is included in the output dataset.
 #'
-#'   *Permitted Values:*  `"first"`, `"last"`
+#' @permitted [mode]
 #'
 #' @param check_type Check uniqueness?
 #'
@@ -32,9 +29,7 @@
 #'   if the observations of the input dataset are not unique with respect to the
 #'   by variables and the order.
 #'
-#'   *Default:* `"warning"`
-#'
-#'   *Permitted Values:* `"none"`, `"warning"`, `"error"`
+#' @permitted [msg_type]
 #'
 #' @details For each group (with respect to the variables specified for the
 #'   `by_vars` parameter) the first or last observation (with respect to the
