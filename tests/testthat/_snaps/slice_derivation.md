@@ -1,4 +1,4 @@
-# slice_derivation Test 7: Error thrown if a mandatory argument is not in arg or all slices
+# slice_derivation Test 1: slice derivation
 
     Code
       actual <- slice_derivation(advs, derivation = derive_vars_dtm, args = params(
@@ -8,3 +8,4 @@
     Condition
       Error in `slice_derivation()`:
       ! Issue with the mandatory argument `new_vars_prefix` of derivation function `derive_vars_dtm`. It must: (1) be passed to the `args` argument, or (2) be passed to all derivation slices.
+
