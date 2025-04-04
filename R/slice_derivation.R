@@ -12,7 +12,8 @@
 #'   adds variables or observations to a dataset. The first argument of a
 #'   derivation must expect a dataset and the derivation must return a dataset.
 #'   All expected arguments for the derivation function must be provided through
-#'   the `params()` object passed to the `args` argument or be provided in _every_ `derivation_slice()`.
+#'   the `params()` object passed to the `args` argument or be provided in _every_
+#'   `derivation_slice()`.
 #'
 #' @param args Arguments of the derivation
 #'
@@ -102,22 +103,33 @@ slice_derivation <- function(dataset,
 
   # Check that every mandatory argument to the derivation function is either passed
   # inside args or present in every slice
-  mandatory_args <- formals(derivation) %>% keep(is_missing) %>% names()
+  mandatory_args <- formals(derivation) %>%
+    keep(is_missing) %>%
+    names()
 
-  if(length(mandatory_args > 1)){
-    mandatory_args <- mandatory_args[-1] # ignore first item, as that is the dataset
+  if (length(mandatory_args > 1)) {
+    # ignore first item, as that is the dataset
+    mandatory_args <- mandatory_args[-1]
+    # ignore the ... argument too, if present
+    mandatory_args <- mandatory_args[mandatory_args != "..."]
 
-    for (mandatory_arg in mandatory_args){
-
-      if (!mandatory_arg %in% names(args)){
-
-        check <- sapply(slices, function(x) mandatory_arg %in% x)
-
-        if(!all(check)){
-          cli_abort(
-            "The mandatory argument `{mandatory_arg}` of derivation function `{deparse(substitute(derivation))}`
-            has either not been passed to the `args` argument, or is not present in all derivation slices."
+    if (length(mandatory_args > 1)) {
+      for (mandatory_arg in mandatory_args) {
+        if (!mandatory_arg %in% names(args)) {
+          check <- vapply(
+            slices,
+            function(x) mandatory_arg %in% names(x$args),
+            FUN.VALUE = length(slices)
           )
+
+          if (!all(check)) {
+            cli_abort(
+              "Issue with the mandatory argument `{mandatory_arg}` of derivation
+              function `{deparse(substitute(derivation))}`. It has either: (1) not
+              been passed to the `args` argument, or (2) not been passed to all
+              derivation slices."
+            )
+          }
         }
       }
     }

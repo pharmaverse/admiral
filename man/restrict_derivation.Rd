@@ -29,7 +29,8 @@ Execute a derivation on a subset of the input dataset.
 \details{
 It is also possible to pass functions from outside the \code{{admiral}} package
 to \code{restrict_derivation()}, e.g. an extension package function, or
-\code{dplyr::mutate()}.
+\code{dplyr::mutate()}. The only requirement for a function being passed to \code{derivation} is that
+it must take a dataset as its first argument and return a dataset.
 }
 \examples{
 

@@ -15,7 +15,7 @@ A function that performs a specific derivation is expected. A derivation
 adds variables or observations to a dataset. The first argument of a
 derivation must expect a dataset and the derivation must return a dataset.
 All expected arguments for the derivation function must be provided through
-the \code{params()} objects passed to the \code{args} arguments.}
+the \code{params()} object passed to the \code{args} argument or be provided in \emph{every} \code{derivation_slice()}.}
 
 \item{args}{Arguments of the derivation
 
@@ -53,7 +53,8 @@ output dataset but the derivation is not called for them.
 
 It is also possible to pass functions from outside the \code{{admiral}} package
 to \code{slice_derivation()}, e.g. an extension package function, or
-\code{dplyr::mutate()}.
+\code{dplyr::mutate()}. The only requirement for a function being passed to \code{derivation} is that
+it must take a dataset as its first argument and return a dataset.
 }
 \examples{
 library(tibble)
