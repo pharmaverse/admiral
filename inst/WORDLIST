@@ -274,7 +274,6 @@ anticoagulation
 aspartate
 basetypes
 bds
-behaviour
 censorings
 chk
 codebase
@@ -341,6 +340,7 @@ subscale
 summarization
 th
 thromboplastin
+tibble
 tidyselect
 tidyverse
 timeframe
