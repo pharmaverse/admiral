@@ -9,6 +9,11 @@
 #'
 #' @param dataset `r roxygen_param_dataset()`
 #'
+#' If the argument is not specified (or set to `NULL`), a new dataset is
+#' created. Otherwise, the new records are appended to the specified dataset.
+#'
+#' @permitted [dataset]
+#'
 #' @param dataset_ref Reference dataset
 #'
 #'   The variables specified for `by_vars` are expected. For each observation of
@@ -17,6 +22,8 @@
 #'   For records which are added from `dataset_ref` because there are no records
 #'   in `dataset_add` for the by group only those variables are kept which are
 #'   also in `dataset_add` (and are included in `keep_source_vars`).
+#'
+#' @permitted [dataset]
 #'
 #' @param dataset_add Additional dataset
 #'
@@ -27,16 +34,22 @@
 #'   in this dataset. If `mode` and `order` are specified, the first or last observation
 #'   within each by group, defined by `by_vars`, is selected.
 #'
+#' @permitted [dataset]
+#'
 #' @param by_vars Grouping variables
 #'
 #'   If `dataset_ref` is specified, this argument must be specified.
 #'
 #'   `r roxygen_param_by_vars()`
 #'
+#' @permitted [var_list]
+#'
 #' @param filter_add Filter for additional dataset (`dataset_add`)
 #'
 #'   Only observations in `dataset_add` fulfilling the specified condition are
 #'   considered.
+#'
+#' @permitted [condition]
 #'
 #' @param mode Selection mode (first or last)
 #'
@@ -45,8 +58,6 @@
 #'   each by group is added to the input dataset.
 #'
 #' @permitted [mode]
-#'
-#' @default Some default value
 #'
 #' @param check_type Check uniqueness?
 #'
@@ -112,7 +123,8 @@
 #'   1. The variables specified by the `keep_source_vars` argument are selected
 #'   along with the variables specified in `by_vars` and `set_values_to`
 #'   arguments.
-#'   1. The observations are added to input dataset.
+#'   1. The observations are added to input dataset (`dataset`). If no input
+#'   dataset is provided, a new dataset is created.
 #'
 #'
 #' @return The input dataset with the first or last observation of each by group

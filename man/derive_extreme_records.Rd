@@ -23,7 +23,11 @@ derive_extreme_records(
 \arguments{
 \item{dataset}{Input dataset
 
+If the argument is not specified (or set to \code{NULL}), a new dataset is
+created. Otherwise, the new records are appended to the specified dataset.
+
 \describe{
+\item{Permitted values}{a dataset, i.e., a \code{data.frame} or tibble}
 \item{Default value}{\code{NULL}}
 }}
 
@@ -37,6 +41,7 @@ in this dataset. If \code{mode} and \code{order} are specified, the first or las
 within each by group, defined by \code{by_vars}, is selected.
 
 \describe{
+\item{Permitted values}{a dataset, i.e., a \code{data.frame} or tibble}
 \item{Default value}{none}
 }}
 
@@ -50,6 +55,7 @@ in \code{dataset_add} for the by group only those variables are kept which are
 also in \code{dataset_add} (and are included in \code{keep_source_vars}).
 
 \describe{
+\item{Permitted values}{a dataset, i.e., a \code{data.frame} or tibble}
 \item{Default value}{\code{NULL}}
 }}
 
@@ -58,6 +64,7 @@ also in \code{dataset_add} (and are included in \code{keep_source_vars}).
 If \code{dataset_ref} is specified, this argument must be specified.
 
 \describe{
+\item{Permitted values}{list of variables created by \code{exprs()}, e.g., \code{exprs(USUBJID, VISIT)}}
 \item{Default value}{\code{NULL}}
 }}
 
@@ -79,7 +86,7 @@ each by group is added to the input dataset.
 
 \describe{
 \item{Permitted values}{\code{"first"}, \code{"last"}}
-\item{Default value}{Some default value}
+\item{Default value}{\code{NULL}}
 }}
 
 \item{filter_add}{Filter for additional dataset (\code{dataset_add})
@@ -88,6 +95,7 @@ Only observations in \code{dataset_add} fulfilling the specified condition are
 considered.
 
 \describe{
+\item{Permitted values}{an unquoted condition, e.g., \code{AVISIT == "BASELINE"}}
 \item{Default value}{\code{NULL}}
 }}
 
@@ -199,7 +207,8 @@ the selected observations.
 \item The variables specified by the \code{keep_source_vars} argument are selected
 along with the variables specified in \code{by_vars} and \code{set_values_to}
 arguments.
-\item The observations are added to input dataset.
+\item The observations are added to input dataset (\code{dataset}). If no input
+dataset is provided, a new dataset is created.
 }
 }
 \seealso{

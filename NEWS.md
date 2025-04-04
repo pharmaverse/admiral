@@ -32,6 +32,9 @@ the derivation is called for all subsets. (#2645)
 
 ## Documentation
 
+- The examples section of the following functions was enhanced:
+`derive_extreme_records()` (#2585)
+
 - Added an example to the `derive_vars_transposed()` reference page to showcase how duplicates-related errors can arise when records in `dataset_merge` are not uniquely identified. (#2609)
 
 - Default value of `type` in `derive_vars_aage()` is now shown as `interval` to match the function behaviour. (#2685) 
