@@ -9,19 +9,21 @@
 #'   A function that performs a specific derivation is expected. A derivation
 #'   adds variables or observations to a dataset. The first argument of a
 #'   derivation must expect a dataset and the derivation must return a dataset.
-#'   The function must provide the `dataset` argument and all arguments
-#'   specified in the `params()` objects passed to the `variable_params` and
-#'   `...` argument.
-#'
-#'   Please note that it is not possible to specify `{dplyr}`
-#'   functions like `mutate()` or `summarize()`.
+#'   All expected arguments for the derivation function must be provided through
+#'   the `params()` objects passed to the `variable_params` and `...` arguments.
 #'
 #' @param variable_params A `list` of function arguments that are different across iterations.
 #'   Each set of function arguments must be created using [`params()`].
 #' @param ... Any number of *named* function arguments that stay the same across iterations.
 #'   If a function argument is specified both inside `variable_params` and `...` then
-#'   the value in `variable_params` overwrites the one in `...`
+#'   the value in `variable_params` overwrites the one in `...`.
 #'
+#'  @details
+#'
+#'   It is also possible to pass functions from outside the `{admiral}` package
+#'   to `call_derivation()`, e.g. an extension package function, or
+#'   `dplyr::mutate()`. The only requirement for a function being passed to `derivation` is that
+#'   it must take a dataset as its first argument and return a dataset.
 #'
 #' @return
 #' The input dataset with additional records/variables added depending on
@@ -32,7 +34,7 @@
 #'
 #' @export
 #'
-#' @seealso [params()]
+#' @seealso [params()] [restrict_derivation()] [call_derivation()]
 #'
 #' @examples
 #' library(dplyr, warn.conflicts = FALSE)

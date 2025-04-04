@@ -14,8 +14,8 @@ restrict_derivation(dataset, derivation, args = NULL, filter)
 A function that performs a specific derivation is expected. A derivation
 adds variables or observations to a dataset. The first argument of a
 derivation must expect a dataset and the derivation must return a dataset.
-The function must provide the \code{dataset} argument and all arguments
-specified in the \code{params()} objects passed to the \code{arg} argument.}
+All expected arguments for the derivation function must be provided through
+the \code{params()} objects passed to the \code{args} argument.}
 
 \item{args}{Arguments of the derivation
 
@@ -25,6 +25,12 @@ A \code{params()} object is expected.}
 }
 \description{
 Execute a derivation on a subset of the input dataset.
+}
+\details{
+It is also possible to pass functions from outside the \code{{admiral}} package
+to \code{restrict_derivation()}, e.g. an extension package function, or
+\code{dplyr::mutate()}. The only requirement for a function being passed to \code{derivation} is that
+it must take a dataset as its first argument and return a dataset.
 }
 \examples{
 
@@ -71,7 +77,7 @@ restrict_derivation(
   )
 }
 \seealso{
-\code{\link[=params]{params()}} \code{\link[=slice_derivation]{slice_derivation()}}
+\code{\link[=params]{params()}} \code{\link[=slice_derivation]{slice_derivation()}} \code{\link[=call_derivation]{call_derivation()}}
 
 Higher Order Functions: 
 \code{\link{call_derivation}()},
