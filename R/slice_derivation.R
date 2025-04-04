@@ -125,9 +125,8 @@ slice_derivation <- function(dataset,
           if (!all(check)) {
             cli_abort(
               "Issue with the mandatory argument `{mandatory_arg}` of derivation
-              function `{deparse(substitute(derivation))}`. It has either: (1) not
-              been passed to the `args` argument, or (2) not been passed to all
-              derivation slices."
+              function `{deparse(substitute(derivation))}`. It must: (1) be passed
+              to the `args` argument, or (2) be passed to all derivation slices."
             )
           }
         }
