@@ -146,7 +146,7 @@
 #' @code
 #' library(tibble)
 #' library(dplyr, warn.conflicts = FALSE)
-#' library(lubridate)
+#' library(lubridate, warn.conflicts = FALSE)
 #'
 #' adlb <- tribble(
 #'   ~USUBJID, ~AVISITN, ~AVAL,

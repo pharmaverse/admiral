@@ -246,7 +246,8 @@ records.
 
 \if{html}{\out{<div class="sourceCode r">}}\preformatted{library(tibble)
 library(dplyr, warn.conflicts = FALSE)
-library(lubridate)
+library(lubridate, warn.conflicts = FALSE)
+
 adlb <- tribble(
   ~USUBJID, ~AVISITN, ~AVAL,
   "1",      1,          113,
@@ -255,6 +256,7 @@ adlb <- tribble(
   "2",      2,           NA,
   "3",      1,           NA,
 )
+
 derive_extreme_records(
   adlb,
   dataset_add = adlb,
@@ -352,6 +354,7 @@ as these are always kept.
   "2",      "WEEK 2",   110,      2,
   "2",      "WEEK 3",    93,      3
 )
+
 derive_extreme_records(
   dataset_add = adlb,
   filter_add = !is.na(AVAL),
@@ -382,6 +385,7 @@ are found.
   "2",      "WEEK 2",   110,
   "2",      "WEEK 3",    93,
 )
+
 derive_extreme_records(
   dataset_add = adlb,
   filter_add = !is.na(AVAL),
@@ -455,6 +459,7 @@ records originate from \code{dataset_add}, i.e., \code{exist_flag} would be set 
   "2",      ymd(""),
   "3",      ymd("")
 )
+
 derive_extreme_records(
   dataset_ref = adsl,
   dataset_add = adsl,
@@ -496,6 +501,7 @@ the input dataset. For the new records set \code{AVISIT = "PBL LAST"}, \code{AVI
   "2",      "WEEK 2",          3, "DEF",       12,      3
 ) %>%
 mutate(STUDYID = "XYZ", .before = USUBJID)
+
 derive_extreme_records(
   adlb,
   dataset_add = adlb,
@@ -668,6 +674,7 @@ occurred (set \code{AVALC = "Y"}, \code{AVAL = 1}) or not (set \code{AVALC = "N"
   "3",      ymd("")
 ) %>%
   mutate(STUDYID = "XX1234")
+
 adrs <- tribble(
   ~USUBJID, ~RSDTC,       ~AVALC, ~AVAL,
   "1",      "2020-01-02", "PR",       2,
@@ -686,6 +693,7 @@ adrs <- tribble(
     PARAM = "Overall Response",
     .after = RSDTC
   )
+
 derive_extreme_records(
   adrs,
   dataset_ref = adsl,
