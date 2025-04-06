@@ -33,6 +33,9 @@ read (#2623).
 
 - The "BDS Time-to-Event" vignette was updated to include `SRCSEQ` consistently (#2658).
 
+- The template for ADPC and vignette were updated to include an example of using `DTYPE` for imputed records (#2657).
+
+
 ## Various
 
 <details>
