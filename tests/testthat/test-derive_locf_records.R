@@ -304,3 +304,131 @@ test_that("derive_locf_records Test 6: populate VISITNUM for LOCF records", {
     keys = c("STUDYID", "USUBJID", "PARAMCD", "PARAM", "AVISITN", "AVISIT", "DTYPE")
   )
 })
+
+
+## Test 7: analysis visits are assigned based on time windows ----
+test_that("derive_locf_records Test 7: analysis visits are assigned based on time windows", {
+  input <- tibble::tribble(
+    ~STUDYID, ~USUBJID, ~PARAMCD, ~PARAM, ~AVALC, ~AVISITN, ~AVISIT, ~VISITNUM,
+    "TEST01", "01-701-1028", "DIABP", "Diastolic Blood Pressure (mmHg)", "79", 0, "BASELINE", 0,
+    "TEST01", "01-701-1028", "SYSBP", "Systolic Blood Pressure (mmHg)", "130", 0, "BASELINE", 0
+  )
+
+  input <- tibble::tribble(
+    ~STUDYID, ~USUBJID, ~PARAMCD, ~PARAM, ~AVAL, ~AVISITN, ~AVISIT, ~ADY,
+    "TEST01", "01-701-1015", "DIABP", "Diastolic Blood Pressure (mmHg)", 51, 0, "BASELINE", 0,
+    "TEST01", "01-701-1015", "DIABP", "Diastolic Blood Pressure (mmHg)", 50, 2, "WEEK 2", 14,
+    "TEST01", "01-701-1015", "DIABP", "Diastolic Blood Pressure (mmHg)", 52, 4, "WEEK 4", 28,
+    "TEST01", "01-701-1015", "DIABP", "Diastolic Blood Pressure (mmHg)", 54, 6, "WEEK 6", 42,
+    "TEST01", "01-701-1015", "SYSBP", "Systolic Blood Pressure (mmHg)", 121, 0, "BASELINE", 0,
+    "TEST01", "01-701-1015", "SYSBP", "Systolic Blood Pressure (mmHg)", 121, 2, "WEEK 2", 14,
+    "TEST01", "01-701-1028", "DIABP", "Diastolic Blood Pressure (mmHg)", 79, 0, "BASELINE", 0,
+    "TEST01", "01-701-1028", "DIABP", "Diastolic Blood Pressure (mmHg)", 80, 2, "WEEK 2", 12,
+    "TEST01", "01-701-1028", "DIABP", "Diastolic Blood Pressure (mmHg)", NA, 4, "WEEK 4", 28,
+    "TEST01", "01-701-1028", "DIABP", "Diastolic Blood Pressure (mmHg)", NA, 6, "WEEK 6", 44,
+    "TEST01", "01-701-1028", "SYSBP", "Systolic Blood Pressure (mmHg)", 130, 0, "BASELINE", 0
+  )
+
+  advs_expected_obsv <- tibble::tribble(
+    ~PARAMCD, ~PARAM, ~AVISITN, ~AVISIT, ~ADY,
+    "DIABP", "Diastolic Blood Pressure (mmHg)", 0, "BASELINE", 0,
+    "DIABP", "Diastolic Blood Pressure (mmHg)", 2, "WEEK 2", 14,
+    "DIABP", "Diastolic Blood Pressure (mmHg)", 4, "WEEK 4", 28,
+    "DIABP", "Diastolic Blood Pressure (mmHg)", 6, "WEEK 6", 42,
+    "SYSBP", "Systolic Blood Pressure (mmHg)", 0, "BASELINE", 0,
+    "SYSBP", "Systolic Blood Pressure (mmHg)", 2, "WEEK 2", 14
+  )
+
+
+  expected_output <- bind_rows(
+    input,
+    tibble::tribble(
+      ~STUDYID, ~USUBJID, ~PARAMCD, ~PARAM, ~AVAL, ~AVISITN, ~AVISIT, ~ADY,
+      "TEST01", "01-701-1028", "DIABP", "Diastolic Blood Pressure (mmHg)", 80, 4, "WEEK 4", 28,
+      "TEST01", "01-701-1028", "DIABP", "Diastolic Blood Pressure (mmHg)", 80, 6, "WEEK 6", 42,
+      "TEST01", "01-701-1028", "SYSBP", "Systolic Blood Pressure (mmHg)", 130, 2, "WEEK 2", 14
+    ) %>%
+      mutate(DTYPE = "LOCF")
+  )
+
+
+  actual_output <- derive_locf_records(
+    input,
+    dataset_ref = advs_expected_obsv,
+    by_vars = exprs(STUDYID, USUBJID, PARAM, PARAMCD),
+    id_vars_ref = exprs(STUDYID, USUBJID, PARAM, PARAMCD, AVISITN, AVISIT),
+    order = exprs(AVISITN, AVISIT, ADY)
+  )
+
+
+  expect_dfs_equal(
+    base = expected_output,
+    compare = actual_output,
+    keys = c("STUDYID", "USUBJID", "PARAMCD", "PARAM", "AVISITN", "AVISIT", "DTYPE")
+  )
+})
+
+
+## Test 8: update records with missing values instead of new records ----
+test_that("derive_locf_records Test 8: update records with missing values instead of new records", {
+  input <- tibble::tribble(
+    ~STUDYID, ~USUBJID, ~PARAMCD, ~PARAM, ~AVALC, ~AVISITN, ~AVISIT, ~VISITNUM,
+    "TEST01", "01-701-1028", "DIABP", "Diastolic Blood Pressure (mmHg)", "79", 0, "BASELINE", 0,
+    "TEST01", "01-701-1028", "SYSBP", "Systolic Blood Pressure (mmHg)", "130", 0, "BASELINE", 0
+  )
+
+  input <- tibble::tribble(
+    ~STUDYID, ~USUBJID, ~PARAMCD, ~PARAM, ~AVAL, ~AVISITN, ~AVISIT, ~ADY,
+    "TEST01", "01-701-1015", "DIABP", "Diastolic Blood Pressure (mmHg)", 51, 0, "BASELINE", 0,
+    "TEST01", "01-701-1015", "DIABP", "Diastolic Blood Pressure (mmHg)", 50, 2, "WEEK 2", 14,
+    "TEST01", "01-701-1015", "DIABP", "Diastolic Blood Pressure (mmHg)", 52, 4, "WEEK 4", 28,
+    "TEST01", "01-701-1015", "DIABP", "Diastolic Blood Pressure (mmHg)", 54, 6, "WEEK 6", 42,
+    "TEST01", "01-701-1015", "SYSBP", "Systolic Blood Pressure (mmHg)", 121, 0, "BASELINE", 0,
+    "TEST01", "01-701-1015", "SYSBP", "Systolic Blood Pressure (mmHg)", 121, 2, "WEEK 2", 14,
+    "TEST01", "01-701-1028", "DIABP", "Diastolic Blood Pressure (mmHg)", 79, 0, "BASELINE", 0,
+    "TEST01", "01-701-1028", "DIABP", "Diastolic Blood Pressure (mmHg)", 80, 2, "WEEK 2", 12,
+    "TEST01", "01-701-1028", "DIABP", "Diastolic Blood Pressure (mmHg)", NA, 4, "WEEK 4", 28,
+    "TEST01", "01-701-1028", "DIABP", "Diastolic Blood Pressure (mmHg)", NA, 6, "WEEK 6", 44,
+    "TEST01", "01-701-1028", "SYSBP", "Systolic Blood Pressure (mmHg)", 130, 0, "BASELINE", 0
+  )
+
+  advs_expected_obsv <- tibble::tribble(
+    ~PARAMCD, ~PARAM, ~AVISITN, ~AVISIT, ~ADY,
+    "DIABP", "Diastolic Blood Pressure (mmHg)", 0, "BASELINE", 0,
+    "DIABP", "Diastolic Blood Pressure (mmHg)", 2, "WEEK 2", 14,
+    "DIABP", "Diastolic Blood Pressure (mmHg)", 4, "WEEK 4", 28,
+    "DIABP", "Diastolic Blood Pressure (mmHg)", 6, "WEEK 6", 42,
+    "SYSBP", "Systolic Blood Pressure (mmHg)", 0, "BASELINE", 0,
+    "SYSBP", "Systolic Blood Pressure (mmHg)", 2, "WEEK 2", 14
+  )
+
+
+  expected_output <- bind_rows(
+    input,
+    tibble::tribble(
+      ~STUDYID, ~USUBJID, ~PARAMCD, ~PARAM, ~AVAL, ~AVISITN, ~AVISIT, ~ADY,
+      "TEST01", "01-701-1028", "DIABP", "Diastolic Blood Pressure (mmHg)", 80, 4, "WEEK 4", 28,
+      "TEST01", "01-701-1028", "DIABP", "Diastolic Blood Pressure (mmHg)", 80, 6, "WEEK 6", 42,
+      "TEST01", "01-701-1028", "SYSBP", "Systolic Blood Pressure (mmHg)", 130, 2, "WEEK 2", 14
+    ) %>%
+      mutate(DTYPE = "LOCF")
+  ) %>%
+    filter(!(USUBJID == "01-701-1028" & PARAMCD == "DIABP" & AVISITN %in% c(4, 6) & is.na(DTYPE)))
+
+
+  actual_output <- derive_locf_records(
+    input,
+    dataset_ref = advs_expected_obsv,
+    by_vars = exprs(STUDYID, USUBJID, PARAM, PARAMCD),
+    id_vars_ref = exprs(STUDYID, USUBJID, PARAM, PARAMCD, AVISITN, AVISIT),
+    analysis_var_fill = TRUE,
+    order = exprs(AVISITN, AVISIT, ADY)
+  )
+
+
+  expect_dfs_equal(
+    base = expected_output,
+    compare = actual_output,
+    keys = c("STUDYID", "USUBJID", "PARAMCD", "PARAM", "AVISITN", "AVISIT", "DTYPE")
+  )
+})

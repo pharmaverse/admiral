@@ -22,11 +22,28 @@
 #'
 #'   `r roxygen_param_by_vars()`
 #'
+#'
+#' @param id_vars_ref Grouping variables in expected observations dataset
+#'
+#'  The variables to group by in `dataset_ref` when determining which observations should be added
+#'  to the input dataset.
+#'
+#'   *Default*: All the variables in `dataset_ref`
+#'
+#'   `r roxygen_param_by_vars()`
+#'
+#'
 #' @param analysis_var Analysis variable.
 #'
 #'   *Default*: `AVAL`
 #'
 #'   *Permitted Values*: a variable
+#'
+#' @param analysis_var_fill Update `analysis_var` when `NA` without adding new observations?
+#'
+#'   *Default*: `FALSE`
+#'
+#'   *Permitted Values:* `TRUE`, `FALSE`
 #'
 #' @param order Sort order
 #'
@@ -115,7 +132,9 @@
 derive_locf_records <- function(dataset,
                                 dataset_ref,
                                 by_vars,
+                                id_vars_ref = lapply(names(dataset_ref), sym),
                                 analysis_var = AVAL,
+                                analysis_var_fill = FALSE,
                                 order,
                                 keep_vars = NULL) {
   #### Input Checking ####
@@ -124,7 +143,9 @@ derive_locf_records <- function(dataset,
   # Check if input parameters is a valid list of variables
   assert_vars(by_vars, optional = TRUE)
   assert_vars(keep_vars, optional = TRUE)
+  assert_vars(id_vars_ref, optional = TRUE)
   assert_expr_list(order)
+  assert_logical_scalar(analysis_var_fill)
 
   # Check by_vars and order variables in input datasets
   assert_data_frame(dataset_ref)
@@ -165,11 +186,16 @@ derive_locf_records <- function(dataset,
   exp_obs_vars <- exp_obsv %>%
     colnames()
 
+  # Get the variable names from the expected observation dataset to join by
+  exp_obs_by_vars <- exp_obsv %>%
+    select(!!!by_vars, !!!id_vars_ref) %>%
+    colnames()
+
 
   # Get unique combination of visits/timepoints per parameter per subject
   # from the original input dataset (with non-missing analysis_var)
   advs_unique_original <- aval_not_missing %>%
-    select(all_of(exp_obs_vars)) %>%
+    select(all_of(exp_obs_by_vars)) %>%
     distinct()
 
 
@@ -179,7 +205,7 @@ derive_locf_records <- function(dataset,
   # dataset (with non-missing analysis_var)
   advs_exp_obsv3 <- exp_obsv %>%
     mutate(!!tmp_dtype := "LOCF") %>%
-    anti_join(advs_unique_original, by = c(exp_obs_vars))
+    anti_join(advs_unique_original, by = c(exp_obs_by_vars))
 
   # Merge the expected observations with the input dataset (with non-missing analysis_var)
   # Arrange the dataset by 'order' and group it by 'by_vars'
@@ -205,6 +231,14 @@ derive_locf_records <- function(dataset,
 
 
 
-  # Output dataset - merge the analysis_var missing with non-missing+newly added LOCF records
-  bind_rows(aval_not_missing_locf, aval_missing)
+  # Output dataset:
+  # If analysis_var_fill == FALSE, merge the analysis_var missing with non-missing+newly added LOCF
+  # records
+  # If analysis_var_fill == TRUE, keep non-missing+newly added LOCF records
+
+  if (analysis_var_fill == FALSE) {
+    bind_rows(aval_not_missing_locf, aval_missing)
+  } else {
+    aval_not_missing_locf
+  }
 }

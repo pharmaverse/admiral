@@ -8,6 +8,8 @@
 - In `slice_derivation`, previously the derivation is not called for empty subsets, however this can lead to issues when the input dataset is empty. Now the derivation is called for all subsets.
 - The examples section for the function `derive_var_trtemfl()` was enhanced to include a showcasing of all scenarios discussed in the following [PHUSE White Paper on Treatment-Emergent AEs](https://phuse.s3.eu-central-1.amazonaws.com/Deliverables/Safety+Analytics/WP-087+Recommended+Definition+of++Treatment-Emergent+Adverse+Events+in+Clinical+Trials+.pdf). (#2455)
 
+- The function `derive_locf_records()` was updated to include two new arguments: `id_vars_ref` and `analysis_var_fill`. The `id_vars_ref` argument allows users to select the variables to group by in the reference dataset (`dataset_ref`) when determining which observations to add to the input dataset. The `analysis_var_fill` argument lets users decide whether to update `analysis_var` when its value is NA, or to add a new observation instead. (#2694) (#2680)
+
 ## Breaking Changes
 
 - The following function arguments are entering the next phase of the [deprecation process](https://pharmaverse.github.io/admiraldev/articles/programming_strategy.html#deprecation): (#2487) (#2595)
