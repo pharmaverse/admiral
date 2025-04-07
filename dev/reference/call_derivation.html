@@ -9,7 +9,7 @@ iterations and others varying."><meta property="og:image" content="https://pharm
 
     <a class="navbar-brand me-2" href="../index.html">admiral</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.2.0.9015</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.2.0.9016</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -92,11 +92,8 @@ iterations and others varying.</p>
 <p>A function that performs a specific derivation is expected. A derivation
 adds variables or observations to a dataset. The first argument of a
 derivation must expect a dataset and the derivation must return a dataset.
-The function must provide the <code>dataset</code> argument and all arguments
-specified in the <code><a href="params.html">params()</a></code> objects passed to the <code>variable_params</code> and
-<code>...</code> argument.</p>
-<p>Please note that it is not possible to specify <code>{dplyr}</code>
-functions like <code><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate()</a></code> or <code><a href="https://dplyr.tidyverse.org/reference/summarise.html" class="external-link">summarize()</a></code>.</p></dd>
+All expected arguments for the derivation function must be provided through
+the <code><a href="params.html">params()</a></code> objects passed to the <code>variable_params</code> and <code>...</code> arguments.</p></dd>
 
 
 <dt id="arg-variable-params">variable_params<a class="anchor" aria-label="anchor" href="#arg-variable-params"></a></dt>
@@ -107,7 +104,12 @@ Each set of function arguments must be created using <code><a href="params.html"
 <dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
 <dd><p>Any number of <em>named</em> function arguments that stay the same across iterations.
 If a function argument is specified both inside <code>variable_params</code> and <code>...</code> then
-the value in <code>variable_params</code> overwrites the one in <code>...</code></p></dd>
+the value in <code>variable_params</code> overwrites the one in <code>...</code>.</p>
+<p>@details</p>
+<p>It is also possible to pass functions from outside the <code>{admiral}</code> package
+to <code>call_derivation()</code>, e.g. an extension package function, or
+<code><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">dplyr::mutate()</a></code>. The only requirement for a function being passed to <code>derivation</code> is that
+it must take a dataset as its first argument and return a dataset.</p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -117,7 +119,7 @@ which <code>derivation</code> has been used.</p>
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
-    <div class="dont-index"><p><code><a href="params.html">params()</a></code></p>
+    <div class="dont-index"><p><code><a href="params.html">params()</a></code> <code><a href="restrict_derivation.html">restrict_derivation()</a></code> <code>call_derivation()</code></p>
 <p>Higher Order Functions:
 <code><a href="derivation_slice.html">derivation_slice</a>()</code>,
 <code><a href="restrict_derivation.html">restrict_derivation</a>()</code>,
