@@ -33,6 +33,8 @@ read (#2623).
 
 - The template for ADPC and vignette were updated to include an example of using `DTYPE` for imputed records (#2657).
 
+- The "Higher Order Functions" vignette was updated to showcase an example of two higher order functions used in combination. The documentation for each of the higher order functions was also corrected by removing the stated requirement that the `derivation` takes a `dataset` argument (#2656).
+
 
 ## Various
 

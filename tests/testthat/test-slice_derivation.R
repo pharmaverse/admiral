@@ -230,3 +230,31 @@ test_that("slice_derivation Test 6: slice on 0-row dataset", {
     actual
   )
 })
+
+## Test 7: Error thrown if a mandatory argument is not in arg or all slices----
+test_that("slice_derivation Test 7: Error if a mandatory argument is not in arg or all slices", {
+  advs <- tibble::tribble(
+    ~USUBJID, ~VSDTC,       ~VSTPT,             ~VSSEQ,
+    "1",      "2020-04-16", NA_character_,      1,
+    "1",      "2020-04-16", "BEFORE TREATMENT", 2
+  )
+
+  expect_snapshot(
+    actual <- slice_derivation(
+      advs,
+      derivation = derive_vars_dtm,
+      args = params(
+        dtc = VSDTC
+      ),
+      derivation_slice(
+        filter = str_detect(VSTPT, "PRE|BEFORE"),
+        args = params(time_imputation = "first", new_vars_prefix = "A")
+      ),
+      derivation_slice(
+        filter = TRUE,
+        args = params(time_imputation = "last")
+      )
+    ),
+    error = TRUE
+  )
+})
