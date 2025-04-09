@@ -11,7 +11,7 @@
 #'
 #'   The aggregate dosing frequency used for multiple doses in a row.
 #'
-#'   Permitted Values: defined by lookup table.
+#' @permitted defined by lookup table.
 #'
 #' @param start_date The start date
 #'

@@ -18,7 +18,7 @@
 #'
 #'   `r roxygen_order_na_handling()`
 #'
-#'   *Permitted Values:* list of expressions created by `exprs()`, e.g.,
+#' @permitted list of expressions created by `exprs()`, e.g.,
 #'   `exprs(ADT, desc(AVAL))`
 #'
 #' @param new_var New variable
@@ -43,19 +43,19 @@
 #'   the condition (`condition` argument) is fulfilled the *last* time is
 #'   flagged in the output dataset.
 #'
-#'   *Permitted Values:* `"first"`, `"last"`
+#' @permitted `"first"`, `"last"`
 #'
 #' @param selection Flag observations before or after the reference observation?
 #'
-#'   *Permitted Values:* `"before"`, `"after"`
+#' @permitted `"before"`, `"after"`
 #'
 #' @param inclusive Flag the reference observation?
 #'
-#'   *Permitted Values:* `TRUE`, `FALSE`
+#' @permitted `TRUE`, `FALSE`
 #'
 #' @param flag_no_ref_groups Should by groups without reference observation be flagged?
 #'
-#'   *Permitted Values:* `TRUE`, `FALSE`
+#' @permitted `TRUE`, `FALSE`
 #'
 #' @param check_type Check uniqueness?
 #'
@@ -63,7 +63,7 @@
 #'   if the observations of the input dataset are not unique with respect to the
 #'   by variables and the order.
 #'
-#'   *Permitted Values:* `"none"`, `"warning"`, `"error"`
+#' @permitted `"none"`, `"warning"`, `"error"`
 #'
 #'
 #' @details For each by group (`by_vars` argument) the observations before or

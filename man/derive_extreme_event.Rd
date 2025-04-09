@@ -20,14 +20,17 @@ derive_extreme_event(
 \arguments{
 \item{dataset}{Input dataset
 
-The variables specified by the \code{by_vars} and \code{order} arguments are expected to be in the dataset.}
+The variables specified by the \code{by_vars} and \code{order} arguments are expected to be in the dataset.
+
+\describe{
+\item{Default value}{none}
+}}
 
 \item{by_vars}{Grouping variables
 
-\emph{Default}: \code{NULL}
-
-\emph{Permitted Values}: list of variables created by \code{exprs()}
-e.g. \code{exprs(USUBJID, VISIT)}}
+\describe{
+\item{Default value}{\code{NULL}}
+}}
 
 \item{events}{Conditions and new values defining events
 
@@ -38,7 +41,11 @@ record sorted by \code{order}. The data is grouped by \code{by_vars}, i.e., summ
 functions like \code{all()} or \code{any()} can be used in \code{condition}.
 
 For \code{event_joined()} events the observations are selected by calling
-\code{filter_joined()}. The \code{condition} field is passed to the \code{filter_join} argument.}
+\code{filter_joined()}. The \code{condition} field is passed to the \code{filter_join} argument.
+
+\describe{
+\item{Default value}{none}
+}}
 
 \item{tmp_event_nr_var}{Temporary event number variable
 
@@ -48,7 +55,11 @@ number of the event before selecting the records of the event.
 It can be used in \code{order} to determine which record should be used if
 records from more than one event are selected.
 
-The variable is not included in the output dataset.}
+The variable is not included in the output dataset.
+
+\describe{
+\item{Default value}{\code{NULL}}
+}}
 
 \item{order}{Sort order
 
@@ -57,8 +68,11 @@ the event and by group, the records are ordered by the specified order.
 
 For handling of \code{NA}s in sorting variables see \href{../articles/generic.html#sort_order}{Sort Order}.
 
-\emph{Permitted Values:} list of expressions created by \code{exprs()}, e.g.,
+\describe{
+\item{Permitted values}{list of expressions created by \code{exprs()}, e.g.,
 \code{exprs(ADT, desc(AVAL))}}
+\item{Default value}{none}
+}}
 
 \item{mode}{Selection mode (first or last)
 
@@ -66,12 +80,19 @@ If a particular event from \code{events} has more than one observation,
 \code{"first"}/\code{"last"} is used to select the first/last record of this type of
 event sorting by \code{order}.
 
-\emph{Permitted Values:} \code{"first"}, \code{"last"}}
+\describe{
+\item{Permitted values}{\code{"first"}, \code{"last"}}
+\item{Default value}{none}
+}}
 
 \item{source_datasets}{Source datasets
 
 A named list of datasets is expected. The \code{dataset_name} field of \code{event()}
-and \code{event_joined()} refers to the dataset provided in the list.}
+and \code{event_joined()} refers to the dataset provided in the list.
+
+\describe{
+\item{Default value}{\code{NULL}}
+}}
 
 \item{check_type}{Check uniqueness?
 
@@ -79,9 +100,10 @@ If \code{"warning"} or \code{"error"} is specified, the specified message is iss
 if the observations of the input dataset are not unique with respect to the
 by variables and the order.
 
-\emph{Default:} \code{"warning"}
-
-\emph{Permitted Values:} \code{"none"}, \code{"warning"}, \code{"error"}}
+\describe{
+\item{Permitted values}{\code{"none"}, \code{"message"}, \code{"warning"}, \code{"error"}}
+\item{Default value}{\code{"warning"}}
+}}
 
 \item{set_values_to}{Variables to be set
 
@@ -102,7 +124,11 @@ For example:
     AVAL = sum(AVAL),
     DTYPE = "AVERAGE",
   )
-}\if{html}{\out{</div>}}}
+}\if{html}{\out{</div>}}
+
+\describe{
+\item{Default value}{none}
+}}
 
 \item{keep_source_vars}{Variables to keep from the source dataset
 
@@ -112,8 +138,11 @@ observations. The variables specified for \code{by_vars} and created by
 the event will take precedence over the value of the \code{keep_source_vars}
 argument.
 
-\emph{Permitted Values}: A list of expressions where each element is
+\describe{
+\item{Permitted values}{A list of expressions where each element is
 a symbol or a tidyselect expression, e.g., \code{exprs(VISIT, VISITNUM, starts_with("RS"))}.}
+\item{Default value}{\code{exprs(everything())}}
+}}
 }
 \value{
 The input dataset with the best or worst observation of each by group

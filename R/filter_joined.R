@@ -71,7 +71,7 @@
 #'
 #'   `r roxygen_order_na_handling()`
 #'
-#'   *Permitted Values:* list of expressions created by `exprs()`, e.g.,
+#' @permitted list of expressions created by `exprs()`, e.g.,
 #'   `exprs(ADT, desc(AVAL))`
 #'
 #' @param tmp_obs_nr_var Temporary observation number
@@ -114,7 +114,7 @@
 #'   if the observations of the input dataset are not unique with respect to the
 #'   by variables and the order.
 #'
-#'   *Permitted Values:* `"none"`, `"warning"`, `"error"`
+#' @permitted `"none"`, `"warning"`, `"error"`
 #'
 #' @inheritParams get_joined_data
 #'

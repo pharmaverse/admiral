@@ -36,7 +36,7 @@
 #'   new parameter, i.e., only observations fulfilling the condition are taken
 #'   into account.
 #'
-#'   *Permitted Values:* a condition
+#' @permitted a condition
 #'
 #' @param parameters Required parameter codes
 #'
@@ -58,7 +58,7 @@
 #'   "HEIGHT")` uses the parameter code `"WEIGHT"` and creates a temporary
 #'   parameter code `"HGHT"`.
 #'
-#'   *Permitted Values:* A character vector of `PARAMCD` values or a list of expressions
+#' @permitted A character vector of `PARAMCD` values or a list of expressions
 #'
 #' @param by_vars Grouping variables
 #'
@@ -90,7 +90,7 @@
 #'   "HEIGHT")` uses the parameter code `"WEIGHT"` and creates a temporary
 #'   parameter code `"HGHT"`.
 #'
-#'   *Permitted Values:* A character vector of `PARAMCD` values or a list of expressions
+#' @permitted A character vector of `PARAMCD` values or a list of expressions
 #'
 #' @param constant_by_vars By variables for constant parameters
 #'
@@ -115,7 +115,7 @@
 #'
 #'   Variable names in the expression must not contain more than one dot.
 #'
-#'   *Permitted Values:* List of variable-value pairs
+#' @permitted List of variable-value pairs
 #'
 #' @param keep_nas Keep observations with `NA`s
 #'
@@ -125,7 +125,7 @@
 #'   If the argument is set to a list of variables, observations are added even
 #'   if some of specified variables are `NA` (see Example 1c).
 #'
-#'   *Permitted Values:* `TRUE`, `FALSE`, or a list of variables created by
+#' @permitted `TRUE`, `FALSE`, or a list of variables created by
 #'   `exprs()` e.g. `exprs(ADTF, ATMF)`
 #'
 #' @details For each group (with respect to the variables specified for the
@@ -487,7 +487,7 @@ assert_parameters_argument <- function(parameters, optional = TRUE) {
 #'   dataset. The name of the element defines the parameter code and the
 #'   expression the observations to select.
 #'
-#'   *Permitted Values:* A character vector of `PARAMCD` values or a list of expressions
+#' @permitted A character vector of `PARAMCD` values or a list of expressions
 #'
 #' @param set_values_to
 #'
@@ -496,14 +496,14 @@ assert_parameters_argument <- function(parameters, optional = TRUE) {
 #'   the parameter. E.g., `AVAL.WEIGHT` is set to the value of `AVAL` where
 #'   `PARAMCD == "WEIGHT"`.
 #'
-#'   *Permitted Values:* A list of expressions
+#' @permitted A list of expressions
 #'
 #' @param filter Filter condition used for restricting the input dataset
 #'
 #'    The specified filter condition is used in the warnings only. It is not
 #'    applied to the input dataset.
 #'
-#'   *Permitted Values:* An unquoted expression
+#' @permitted An unquoted expression
 #'
 #' @return A dataset with one observation per by group. It contains the
 #'   variables specified for `by_vars` and all variables of the form
