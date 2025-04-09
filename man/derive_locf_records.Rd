@@ -8,7 +8,9 @@ derive_locf_records(
   dataset,
   dataset_ref,
   by_vars,
+  id_vars_ref = lapply(names(dataset_ref), sym),
   analysis_var = AVAL,
+  analysis_var_fill = FALSE,
   order,
   keep_vars = NULL
 )
@@ -42,6 +44,16 @@ in the input dataset.
 \item{Default value}{none}
 }}
 
+\item{id_vars_ref}{Grouping variables in expected observations dataset
+
+The variables to group by in \code{dataset_ref} when determining which observations should be added
+to the input dataset.
+
+\emph{Default}: All the variables in \code{dataset_ref}
+
+\emph{Permitted Values}: list of variables created by \code{exprs()}
+e.g. \code{exprs(USUBJID, VISIT)}}
+
 \item{analysis_var}{Analysis variable.
 
 \emph{Default}: \code{AVAL}
@@ -50,6 +62,12 @@ in the input dataset.
 \item{Permitted values}{a variable}
 \item{Default value}{\code{AVAL}}
 }}
+
+\item{analysis_var_fill}{Update \code{analysis_var} when \code{NA} without adding new observations?
+
+\emph{Default}: \code{FALSE}
+
+\emph{Permitted Values:} \code{TRUE}, \code{FALSE}}
 
 \item{order}{Sort order
 
