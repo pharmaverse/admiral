@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">admiral</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.2.0.9016</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.2.0.9017</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -96,47 +96,99 @@
 <dl><dt id="arg-dataset">dataset<a class="anchor" aria-label="anchor" href="#arg-dataset"></a></dt>
 <dd><p>Input dataset</p>
 <p>The variables specified by <code>start_date</code>, <code>end_date</code>, <code>trt_start_date</code>,
-<code>trt_end_date</code>, <code>initial_intensity</code>, and <code>intensity</code> are expected.</p></dd>
+<code>trt_end_date</code>, <code>initial_intensity</code>, and <code>intensity</code> are expected.</p>
+<dl><dt>Default value</dt>
+<dd><p>none</p></dd>
+
+
+</dl></dd>
 
 
 <dt id="arg-new-var">new_var<a class="anchor" aria-label="anchor" href="#arg-new-var"></a></dt>
-<dd><p>New variable</p></dd>
+<dd><p>New variable</p>
+<dl><dt>Default value</dt>
+<dd><p><code>TRTEMFL</code></p></dd>
+
+
+</dl></dd>
 
 
 <dt id="arg-start-date">start_date<a class="anchor" aria-label="anchor" href="#arg-start-date"></a></dt>
 <dd><p>Event start date</p>
-<p><em>Permitted Values:</em> A symbol referring to a date or datetime variable of
+<dl><dt>Permitted values</dt>
+<dd><p>A symbol referring to a date or datetime variable of
 the input dataset</p></dd>
+
+<dt>Default value</dt>
+<dd><p><code>ASTDTM</code></p></dd>
+
+
+</dl></dd>
 
 
 <dt id="arg-end-date">end_date<a class="anchor" aria-label="anchor" href="#arg-end-date"></a></dt>
 <dd><p>Event end date</p>
-<p><em>Permitted Values:</em> A symbol referring to a date or datetime variable of
+<dl><dt>Permitted values</dt>
+<dd><p>A symbol referring to a date or datetime variable of
 the input dataset</p></dd>
+
+<dt>Default value</dt>
+<dd><p><code>AENDTM</code></p></dd>
+
+
+</dl></dd>
 
 
 <dt id="arg-trt-start-date">trt_start_date<a class="anchor" aria-label="anchor" href="#arg-trt-start-date"></a></dt>
 <dd><p>Treatment start date</p>
-<p><em>Permitted Values:</em> A symbol referring to a date or datetime variable of
+<dl><dt>Permitted values</dt>
+<dd><p>A symbol referring to a date or datetime variable of
 the input dataset</p></dd>
+
+<dt>Default value</dt>
+<dd><p><code>TRTSDTM</code></p></dd>
+
+
+</dl></dd>
 
 
 <dt id="arg-trt-end-date">trt_end_date<a class="anchor" aria-label="anchor" href="#arg-trt-end-date"></a></dt>
 <dd><p>Treatment end date</p>
-<p><em>Permitted Values:</em> A symbol referring to a date or datetime variable of
+<dl><dt>Permitted values</dt>
+<dd><p>A symbol referring to a date or datetime variable of
 the input dataset or <code>NULL</code></p></dd>
+
+<dt>Default value</dt>
+<dd><p><code>NULL</code></p></dd>
+
+
+</dl></dd>
 
 
 <dt id="arg-end-window">end_window<a class="anchor" aria-label="anchor" href="#arg-end-window"></a></dt>
 <dd><p>If the argument is specified (in 'days'), events starting more than the specified
 number of days after end of treatment, are not flagged.</p>
-<p><em>Permitted Values:</em> A non-negative integer or <code>NULL</code></p></dd>
+<dl><dt>Permitted values</dt>
+<dd><p>A non-negative integer or <code>NULL</code></p></dd>
+
+<dt>Default value</dt>
+<dd><p><code>NULL</code></p></dd>
+
+
+</dl></dd>
 
 
 <dt id="arg-ignore-time-for-trt-end">ignore_time_for_trt_end<a class="anchor" aria-label="anchor" href="#arg-ignore-time-for-trt-end"></a></dt>
 <dd><p>If the argument is set to <code>TRUE</code>, the time part is ignored for checking if
 the event occurred more than <code>end_window</code> days after end of treatment.</p>
-<p><em>Permitted Values:</em> <code>TRUE</code>, <code>FALSE</code></p></dd>
+<dl><dt>Permitted values</dt>
+<dd><p><code>TRUE</code>, <code>FALSE</code></p></dd>
+
+<dt>Default value</dt>
+<dd><p><code>TRUE</code></p></dd>
+
+
+</dl></dd>
 
 
 <dt id="arg-initial-intensity">initial_intensity<a class="anchor" aria-label="anchor" href="#arg-initial-intensity"></a></dt>
@@ -149,8 +201,15 @@ flagged.</p>
 <p>The values of the specified variable must be comparable with the usual
 comparison operators. I.e., if the intensity is greater than the initial
 intensity <code>initial_intensity &lt; intensity</code> must evaluate to <code>TRUE</code>.</p>
-<p><em>Permitted Values:</em> A symbol referring to a variable of the input dataset
+<dl><dt>Permitted values</dt>
+<dd><p>A symbol referring to a variable of the input dataset
 or <code>NULL</code></p></dd>
+
+<dt>Default value</dt>
+<dd><p><code>NULL</code></p></dd>
+
+
+</dl></dd>
 
 
 <dt id="arg-intensity">intensity<a class="anchor" aria-label="anchor" href="#arg-intensity"></a></dt>
@@ -161,8 +220,15 @@ intensity is greater than the initial intensity), are flagged.</p>
 <p>The values of the specified variable must be comparable with the usual
 comparison operators. I.e., if the intensity is greater than the initial
 intensity <code>initial_intensity &lt; intensity</code> must evaluate to <code>TRUE</code>.</p>
-<p><em>Permitted Values:</em> A symbol referring to a variable of the input dataset
+<dl><dt>Permitted values</dt>
+<dd><p>A symbol referring to a variable of the input dataset
 or <code>NULL</code></p></dd>
+
+<dt>Default value</dt>
+<dd><p><code>NULL</code></p></dd>
+
+
+</dl></dd>
 
 
 <dt id="arg-group-var">group_var<a class="anchor" aria-label="anchor" href="#arg-group-var"></a></dt>
@@ -172,14 +238,26 @@ of AE with multiple lines using a grouping variable.</p>
 <p>Events starting during treatment or before treatment and worsening afterward
 are flagged. Once an AE record in a group is flagged, all subsequent records
 in the treatment window are flagged regardless of severity.</p>
-<p><em>Permitted Values:</em> A symbol referring to a variable of the input dataset
+<dl><dt>Permitted values</dt>
+<dd><p>A symbol referring to a variable of the input dataset
 or <code>NULL</code></p></dd>
+
+<dt>Default value</dt>
+<dd><p><code>NULL</code></p></dd>
+
+
+</dl></dd>
 
 
 <dt id="arg-subject-keys">subject_keys<a class="anchor" aria-label="anchor" href="#arg-subject-keys"></a></dt>
 <dd><p>Variables to uniquely identify a subject.</p>
 <p>A list of symbols created using <code><a href="reexport-exprs.html">exprs()</a></code> is expected. This argument is only
-used when <code>group_var</code> is specified.</p></dd>
+used when <code>group_var</code> is specified.</p>
+<dl><dt>Default value</dt>
+<dd><p><code>get_admiral_option("subject_keys")</code></p></dd>
+
+
+</dl></dd>
 
 </dl></div>
     <div class="section level2">

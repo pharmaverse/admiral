@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">admiral</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.2.0.9016</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.2.0.9017</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -83,13 +83,27 @@
 <dl><dt id="arg-height">height<a class="anchor" aria-label="anchor" href="#arg-height"></a></dt>
 <dd><p>HEIGHT value</p>
 <p>It is expected that HEIGHT is in cm.</p>
-<p><em>Permitted Values:</em> numeric vector</p></dd>
+<dl><dt>Permitted values</dt>
+<dd><p>numeric vector</p></dd>
+
+<dt>Default value</dt>
+<dd><p><code>height</code></p></dd>
+
+
+</dl></dd>
 
 
 <dt id="arg-weight">weight<a class="anchor" aria-label="anchor" href="#arg-weight"></a></dt>
 <dd><p>WEIGHT value</p>
 <p>It is expected that WEIGHT is in kg.</p>
-<p><em>Permitted Values:</em> numeric vector</p></dd>
+<dl><dt>Permitted values</dt>
+<dd><p>numeric vector</p></dd>
+
+<dt>Default value</dt>
+<dd><p><code>weight</code></p></dd>
+
+
+</dl></dd>
 
 
 <dt id="arg-method">method<a class="anchor" aria-label="anchor" href="#arg-method"></a></dt>
@@ -101,7 +115,14 @@
 <p>Boyd: 0.0003207 * (height ^ 0.3) * (1000 * weight) ^ (0.7285 - (0.0188 * log10(1000 * weight)))</p>
 <p>Fujimoto: 0.008883 * height ^ 0.663 * weight ^ 0.444</p>
 <p>Takahira: 0.007241 * height ^ 0.725 * weight ^ 0.425</p>
-<p><em>Permitted Values:</em> character value</p></dd>
+<dl><dt>Permitted values</dt>
+<dd><p>character value</p></dd>
+
+<dt>Default value</dt>
+<dd><p>none</p></dd>
+
+
+</dl></dd>
 
 </dl></div>
     <div class="section level2">

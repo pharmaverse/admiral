@@ -11,7 +11,7 @@ Derive death cause (DTHCAUS) and add traceability variables if required."><meta 
 
     <a class="navbar-brand me-2" href="../index.html">admiral</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.2.0.9016</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.2.0.9017</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -93,22 +93,42 @@ function has been deprecated in favor of <code><a href="derive_vars_extreme_even
 
 <dl><dt id="arg-dataset">dataset<a class="anchor" aria-label="anchor" href="#arg-dataset"></a></dt>
 <dd><p>Input dataset</p>
-<p>The variables specified by the <code>subject_keys</code> argument are expected to be in the dataset.</p></dd>
+<p>The variables specified by the <code>subject_keys</code> argument are expected to be in the dataset.</p>
+<dl><dt>Default value</dt>
+<dd><p>none</p></dd>
+
+
+</dl></dd>
 
 
 <dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
-<dd><p>Objects of class "dthcaus_source" created by <code><a href="dthcaus_source.html">dthcaus_source()</a></code>.</p></dd>
+<dd><p>Objects of class "dthcaus_source" created by <code><a href="dthcaus_source.html">dthcaus_source()</a></code>.</p>
+<dl><dt>Default value</dt>
+<dd><p>none</p></dd>
+
+
+</dl></dd>
 
 
 <dt id="arg-source-datasets">source_datasets<a class="anchor" aria-label="anchor" href="#arg-source-datasets"></a></dt>
 <dd><p>A named <code>list</code> containing datasets in which to search for the
-death cause</p></dd>
+death cause</p>
+<dl><dt>Default value</dt>
+<dd><p>none</p></dd>
+
+
+</dl></dd>
 
 
 <dt id="arg-subject-keys">subject_keys<a class="anchor" aria-label="anchor" href="#arg-subject-keys"></a></dt>
 <dd><p>Variables to uniquely identify a subject</p>
 <p>A list of expressions where the expressions are symbols as returned by
-<code><a href="reexport-exprs.html">exprs()</a></code> is expected.</p></dd>
+<code><a href="reexport-exprs.html">exprs()</a></code> is expected.</p>
+<dl><dt>Default value</dt>
+<dd><p><code>get_admiral_option("subject_keys")</code></p></dd>
+
+
+</dl></dd>
 
 </dl></div>
     <div class="section level2">

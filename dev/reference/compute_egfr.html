@@ -15,7 +15,7 @@ Estimated Glomerular Filtration Rate (eGFR) by CKD-EPI or MDRD equations
 
     <a class="navbar-brand me-2" href="../index.html">admiral</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.2.0.9016</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.2.0.9017</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -91,42 +91,76 @@ Estimated Glomerular Filtration Rate (eGFR) by CKD-EPI or MDRD equations
 
 <dl><dt id="arg-creat">creat<a class="anchor" aria-label="anchor" href="#arg-creat"></a></dt>
 <dd><p>Creatinine</p>
-<p>A numeric vector is expected.</p></dd>
+<p>A numeric vector is expected.</p>
+<dl><dt>Default value</dt>
+<dd><p>none</p></dd>
+
+
+</dl></dd>
 
 
 <dt id="arg-creatu">creatu<a class="anchor" aria-label="anchor" href="#arg-creatu"></a></dt>
 <dd><p>Creatinine Units</p>
 <p>A character vector is expected.</p>
-<p>Default: <code>"SI"</code></p>
-<p>Expected Values: <code>"SI"</code>, <code>"CV"</code>, <code>"umol/L"</code>, <code>"mg/dL"</code></p></dd>
+<p>Expected Values: <code>"SI"</code>, <code>"CV"</code>, <code>"umol/L"</code>, <code>"mg/dL"</code></p>
+<dl><dt>Default value</dt>
+<dd><p><code>"SI"</code></p></dd>
+
+
+</dl></dd>
 
 
 <dt id="arg-age">age<a class="anchor" aria-label="anchor" href="#arg-age"></a></dt>
 <dd><p>Age (years)</p>
-<p>A numeric vector is expected.</p></dd>
+<p>A numeric vector is expected.</p>
+<dl><dt>Default value</dt>
+<dd><p>none</p></dd>
+
+
+</dl></dd>
 
 
 <dt id="arg-weight">weight<a class="anchor" aria-label="anchor" href="#arg-weight"></a></dt>
 <dd><p>Weight (kg)</p>
-<p>A numeric vector is expected if <code>method = "CRCL"</code></p></dd>
+<p>A numeric vector is expected if <code>method = "CRCL"</code></p>
+<dl><dt>Default value</dt>
+<dd><p>none</p></dd>
+
+
+</dl></dd>
 
 
 <dt id="arg-sex">sex<a class="anchor" aria-label="anchor" href="#arg-sex"></a></dt>
 <dd><p>Gender</p>
 <p>A character vector is expected.</p>
-<p>Expected Values: <code>"M"</code>, <code>"F"</code></p></dd>
+<p>Expected Values: <code>"M"</code>, <code>"F"</code></p>
+<dl><dt>Default value</dt>
+<dd><p>none</p></dd>
+
+
+</dl></dd>
 
 
 <dt id="arg-race">race<a class="anchor" aria-label="anchor" href="#arg-race"></a></dt>
 <dd><p>Race</p>
 <p>A character vector is expected if <code>method = "MDRD"</code></p>
-<p>Expected Values: <code>"BLACK OR AFRICAN AMERICAN"</code> and others</p></dd>
+<p>Expected Values: <code>"BLACK OR AFRICAN AMERICAN"</code> and others</p>
+<dl><dt>Default value</dt>
+<dd><p><code>NULL</code></p></dd>
+
+
+</dl></dd>
 
 
 <dt id="arg-method">method<a class="anchor" aria-label="anchor" href="#arg-method"></a></dt>
 <dd><p>Method</p>
 <p>A character vector is expected.</p>
-<p>Expected Values: <code>"CRCL"</code>, <code>"CKD-EPI"</code>, <code>"MDRD"</code></p></dd>
+<p>Expected Values: <code>"CRCL"</code>, <code>"CKD-EPI"</code>, <code>"MDRD"</code></p>
+<dl><dt>Default value</dt>
+<dd><p>none</p></dd>
+
+
+</dl></dd>
 
 </dl></div>
     <div class="section level2">

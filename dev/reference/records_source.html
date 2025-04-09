@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">admiral</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.2.0.9016</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.2.0.9017</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -83,12 +83,22 @@
 <dl><dt id="arg-dataset-name">dataset_name<a class="anchor" aria-label="anchor" href="#arg-dataset-name"></a></dt>
 <dd><p>The name of the source dataset</p>
 <p>The name refers to the dataset provided by the <code>source_datasets</code> argument
-of <code><a href="derive_param_extreme_record.html">derive_param_extreme_record()</a></code>.</p></dd>
+of <code><a href="derive_param_extreme_record.html">derive_param_extreme_record()</a></code>.</p>
+<dl><dt>Default value</dt>
+<dd><p>none</p></dd>
+
+
+</dl></dd>
 
 
 <dt id="arg-filter">filter<a class="anchor" aria-label="anchor" href="#arg-filter"></a></dt>
 <dd><p>An unquoted condition for selecting the observations from
-<code>dataset</code>.</p></dd>
+<code>dataset</code>.</p>
+<dl><dt>Default value</dt>
+<dd><p><code>NULL</code></p></dd>
+
+
+</dl></dd>
 
 
 <dt id="arg-new-vars">new_vars<a class="anchor" aria-label="anchor" href="#arg-new-vars"></a></dt>
@@ -101,8 +111,15 @@ from to the input dataset.</p>
 <code>old_var2</code> from the source dataset and adds them to the input dataset renaming
 <code>old_var2</code> to <code>new_var2</code>. Expressions can be used to create new variables
 (see for example <code>new_vars</code> argument in <code><a href="derive_vars_merged.html">derive_vars_merged()</a></code>).</p>
-<p><em>Permitted Values:</em> list of expressions created by <code><a href="reexport-exprs.html">exprs()</a></code>, e.g.,
+<dl><dt>Permitted values</dt>
+<dd><p>list of expressions created by <code><a href="reexport-exprs.html">exprs()</a></code>, e.g.,
 <code>exprs(ADT, desc(AVAL))</code></p></dd>
+
+<dt>Default value</dt>
+<dd><p>none</p></dd>
+
+
+</dl></dd>
 
 </dl></div>
     <div class="section level2">

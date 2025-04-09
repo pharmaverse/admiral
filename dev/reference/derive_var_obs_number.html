@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">admiral</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.2.0.9016</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.2.0.9017</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -88,27 +88,46 @@
 
 <dl><dt id="arg-dataset">dataset<a class="anchor" aria-label="anchor" href="#arg-dataset"></a></dt>
 <dd><p>Input dataset</p>
-<p>The variables specified by the <code>by_vars</code> and <code>order</code> arguments are expected to be in the dataset.</p></dd>
+<p>The variables specified by the <code>by_vars</code> and <code>order</code> arguments are expected to be in the dataset.</p>
+<dl><dt>Default value</dt>
+<dd><p>none</p></dd>
+
+
+</dl></dd>
 
 
 <dt id="arg-by-vars">by_vars<a class="anchor" aria-label="anchor" href="#arg-by-vars"></a></dt>
 <dd><p>Grouping variables</p>
-<p><em>Permitted Values</em>: list of variables created by <code><a href="reexport-exprs.html">exprs()</a></code>
-e.g. <code>exprs(USUBJID, VISIT)</code></p></dd>
+<dl><dt>Default value</dt>
+<dd><p><code>NULL</code></p></dd>
+
+
+</dl></dd>
 
 
 <dt id="arg-order">order<a class="anchor" aria-label="anchor" href="#arg-order"></a></dt>
 <dd><p>Sort order</p>
 <p>Within each by group the observations are ordered by the specified order.</p>
 <p>For handling of <code>NA</code>s in sorting variables see <a href="../articles/generic.html#sort_order">Sort Order</a>.</p>
-<p>Permitted Values: list of variables or functions of variables</p></dd>
+<dl><dt>Permitted values</dt>
+<dd><p>list of variables or functions of variables</p></dd>
+
+<dt>Default value</dt>
+<dd><p><code>NULL</code></p></dd>
+
+
+</dl></dd>
 
 
 <dt id="arg-new-var">new_var<a class="anchor" aria-label="anchor" href="#arg-new-var"></a></dt>
 <dd><p>Name of variable to create</p>
 <p>The new variable is set to the observation number for each by group. The
 numbering starts with 1.</p>
-<p>Default: <code>ASEQ</code></p></dd>
+<dl><dt>Default value</dt>
+<dd><p><code>ASEQ</code></p></dd>
+
+
+</dl></dd>
 
 
 <dt id="arg-check-type">check_type<a class="anchor" aria-label="anchor" href="#arg-check-type"></a></dt>
@@ -116,8 +135,14 @@ numbering starts with 1.</p>
 <p>If <code>"warning"</code> or <code>"error"</code> is specified, the specified message is issued
 if the observations of the input dataset are not unique with respect to the
 by variables and the order.</p>
-<p>Default: <code>"none"</code></p>
-<p>Permitted Values: <code>"none"</code>, <code>"warning"</code>, <code>"error"</code></p></dd>
+<dl><dt>Permitted values</dt>
+<dd><p><code>"none"</code>, <code>"warning"</code>, <code>"error"</code></p></dd>
+
+<dt>Default value</dt>
+<dd><p><code>"none"</code></p></dd>
+
+
+</dl></dd>
 
 </dl></div>
     <div class="section level2">

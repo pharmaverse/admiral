@@ -9,7 +9,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">admiral</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.2.0.9016</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.2.0.9017</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -104,15 +104,26 @@
 <p>The variable specified by <code>by_vars</code> and <code>PARAMCD</code> must be a unique key of
 the input dataset after restricting it by the filter condition (<code>filter</code>
 parameter) and to the parameters specified by <code>sysbp_code</code>, <code>chol_code</code>
-and <code>hdl_code</code>.</p></dd>
+and <code>hdl_code</code>.</p>
+<dl><dt>Default value</dt>
+<dd><p>none</p></dd>
+
+
+</dl></dd>
 
 
 <dt id="arg-by-vars">by_vars<a class="anchor" aria-label="anchor" href="#arg-by-vars"></a></dt>
 <dd><p>Grouping variables</p>
 <p>Only variables specified in <code>by_vars</code> will be populated
 in the newly created records.</p>
-<p><em>Permitted Values</em>: list of variables created by <code><a href="reexport-exprs.html">exprs()</a></code>
-e.g. <code>exprs(USUBJID, VISIT)</code></p></dd>
+<dl><dt>Permitted values</dt>
+<dd><p>list of variables created by <code><a href="reexport-exprs.html">exprs()</a></code>, e.g., <code>exprs(USUBJID, VISIT)</code></p></dd>
+
+<dt>Default value</dt>
+<dd><p>none</p></dd>
+
+
+</dl></dd>
 
 
 <dt id="arg-set-values-to">set_values_to<a class="anchor" aria-label="anchor" href="#arg-set-values-to"></a></dt>
@@ -120,71 +131,141 @@ e.g. <code>exprs(USUBJID, VISIT)</code></p></dd>
 <p>The specified variables are set to the specified values for the new
 observations. For example <code>exprs(PARAMCD = "MAP")</code> defines the parameter code
 for the new parameter.</p>
-<p><em>Permitted Values</em>: List of variable-value pairs</p></dd>
+<dl><dt>Permitted values</dt>
+<dd><p>List of variable-value pairs</p></dd>
+
+<dt>Default value</dt>
+<dd><p><code>exprs(PARAMCD = "MAP")</code></p></dd>
+
+
+</dl></dd>
 
 
 <dt id="arg-sysbp-code">sysbp_code<a class="anchor" aria-label="anchor" href="#arg-sysbp-code"></a></dt>
 <dd><p>Systolic blood pressure parameter code</p>
 <p>The observations where <code>PARAMCD</code> equals the specified value are considered
 as the systolic blood pressure assessments.</p>
-<p><em>Permitted Values:</em> character value</p></dd>
+<dl><dt>Permitted values</dt>
+<dd><p>a character scalar, i.e., a character vector of length one</p></dd>
+
+<dt>Default value</dt>
+<dd><p><code>"SYSBP"</code></p></dd>
+
+
+</dl></dd>
 
 
 <dt id="arg-chol-code">chol_code<a class="anchor" aria-label="anchor" href="#arg-chol-code"></a></dt>
 <dd><p>Total serum cholesterol code</p>
 <p>The observations where <code>PARAMCD</code> equals the specified value are considered
 as the total cholesterol assessments. This must be measured in mg/dL.</p>
-<p><em>Permitted Values:</em> character value</p></dd>
+<dl><dt>Permitted values</dt>
+<dd><p>a character scalar, i.e., a character vector of length one</p></dd>
+
+<dt>Default value</dt>
+<dd><p><code>"CHOL"</code></p></dd>
+
+
+</dl></dd>
 
 
 <dt id="arg-cholhdl-code">cholhdl_code<a class="anchor" aria-label="anchor" href="#arg-cholhdl-code"></a></dt>
 <dd><p>HDL serum cholesterol code</p>
 <p>The observations where <code>PARAMCD</code> equals the specified value are considered
 as the HDL cholesterol assessments. This must be measured in mg/dL.</p>
-<p><em>Permitted Values:</em> character value</p></dd>
+<dl><dt>Permitted values</dt>
+<dd><p>a character scalar, i.e., a character vector of length one</p></dd>
+
+<dt>Default value</dt>
+<dd><p><code>"CHOLHDL"</code></p></dd>
+
+
+</dl></dd>
 
 
 <dt id="arg-age">age<a class="anchor" aria-label="anchor" href="#arg-age"></a></dt>
 <dd><p>Subject age</p>
 <p>A variable containing the subject's age.</p>
-<p><em>Permitted Values:</em> A numeric variable name that refers to a subject age
+<dl><dt>Permitted values</dt>
+<dd><p>A numeric variable name that refers to a subject age
 column of the input dataset</p></dd>
+
+<dt>Default value</dt>
+<dd><p><code>AGE</code></p></dd>
+
+
+</dl></dd>
 
 
 <dt id="arg-sex">sex<a class="anchor" aria-label="anchor" href="#arg-sex"></a></dt>
 <dd><p>Subject sex</p>
 <p>A variable containing the subject's sex.</p>
-<p><em>Permitted Values:</em> A character variable name that refers to a subject sex
+<dl><dt>Permitted values</dt>
+<dd><p>A character variable name that refers to a subject sex
 column of the input dataset</p></dd>
+
+<dt>Default value</dt>
+<dd><p><code>SEX</code></p></dd>
+
+
+</dl></dd>
 
 
 <dt id="arg-smokefl">smokefl<a class="anchor" aria-label="anchor" href="#arg-smokefl"></a></dt>
 <dd><p>Smoking status flag</p>
 <p>A flag indicating smoking status.</p>
-<p><em>Permitted Values:</em> A character variable name that refers to a smoking status
+<dl><dt>Permitted values</dt>
+<dd><p>A character variable name that refers to a smoking status
 column of the input dataset.</p></dd>
+
+<dt>Default value</dt>
+<dd><p><code>SMOKEFL</code></p></dd>
+
+
+</dl></dd>
 
 
 <dt id="arg-diabetfl">diabetfl<a class="anchor" aria-label="anchor" href="#arg-diabetfl"></a></dt>
 <dd><p>Diabetic flag</p>
 <p>A flag indicating diabetic status.</p>
-<p><em>Permitted Values:</em> A character variable name that refers to a diabetic
+<dl><dt>Permitted values</dt>
+<dd><p>A character variable name that refers to a diabetic
 status column of the input dataset</p></dd>
+
+<dt>Default value</dt>
+<dd><p><code>DIABETFL</code></p></dd>
+
+
+</dl></dd>
 
 
 <dt id="arg-trthypfl">trthypfl<a class="anchor" aria-label="anchor" href="#arg-trthypfl"></a></dt>
 <dd><p>Treated with hypertension medication flag</p>
 <p>A flag indicating if a subject was treated with hypertension medication.</p>
-<p><em>Permitted Values:</em> A character variable name that refers to a column that
+<dl><dt>Permitted values</dt>
+<dd><p>A character variable name that refers to a column that
 indicates whether a subject is treated for high blood
 pressure</p></dd>
+
+<dt>Default value</dt>
+<dd><p><code>TRTHYPFL</code></p></dd>
+
+
+</dl></dd>
 
 
 <dt id="arg-get-unit-expr">get_unit_expr<a class="anchor" aria-label="anchor" href="#arg-get-unit-expr"></a></dt>
 <dd><p>An expression providing the unit of the parameter</p>
 <p>The result is used to check the units of the input parameters.</p>
-<p><em>Permitted Values</em>: An expression which is evaluable in the input dataset
+<dl><dt>Permitted values</dt>
+<dd><p>An expression which is evaluable in the input dataset
 and results in a character value</p></dd>
+
+<dt>Default value</dt>
+<dd><p>none</p></dd>
+
+
+</dl></dd>
 
 
 <dt id="arg-filter">filter<a class="anchor" aria-label="anchor" href="#arg-filter"></a></dt>
@@ -192,7 +273,14 @@ and results in a character value</p></dd>
 <p>The specified condition is applied to the input dataset before deriving the
 new parameter, i.e., only observations fulfilling the condition are taken
 into account.</p>
-<p><em>Permitted Values:</em> a condition</p></dd>
+<dl><dt>Permitted values</dt>
+<dd><p>a condition</p></dd>
+
+<dt>Default value</dt>
+<dd><p><code>NULL</code></p></dd>
+
+
+</dl></dd>
 
 </dl></div>
     <div class="section level2">

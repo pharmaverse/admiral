@@ -15,7 +15,7 @@ Total Dose / Planned Dose * 100"><meta property="og:image" content="https://phar
 
     <a class="navbar-brand me-2" href="../index.html">admiral</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.2.0.9016</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.2.0.9017</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -106,15 +106,23 @@ Total Dose / Planned Dose * 100</p>
 <code>PARAMCD</code>, and <code>AVAL</code> are expected as well.</p>
 <p>The variable specified by <code>by_vars</code> and <code>PARAMCD</code> must be a unique key of
 the input dataset after restricting it by the filter condition (<code>filter</code>
-parameter) and to the parameters specified by <code>tadm_code</code> and <code>padm_code</code>.</p></dd>
+parameter) and to the parameters specified by <code>tadm_code</code> and <code>padm_code</code>.</p>
+<dl><dt>Default value</dt>
+<dd><p>none</p></dd>
+
+
+</dl></dd>
 
 
 <dt id="arg-by-vars">by_vars<a class="anchor" aria-label="anchor" href="#arg-by-vars"></a></dt>
 <dd><p>Grouping variables</p>
 <p>Only variables specified in <code>by_vars</code> will be populated
 in the newly created records.</p>
-<p><em>Permitted Values</em>: list of variables created by <code><a href="reexport-exprs.html">exprs()</a></code>
-e.g. <code>exprs(USUBJID, VISIT)</code></p></dd>
+<dl><dt>Default value</dt>
+<dd><p>none</p></dd>
+
+
+</dl></dd>
 
 
 <dt id="arg-set-values-to">set_values_to<a class="anchor" aria-label="anchor" href="#arg-set-values-to"></a></dt>
@@ -122,7 +130,14 @@ e.g. <code>exprs(USUBJID, VISIT)</code></p></dd>
 <p>The specified variables are set to the specified values for the new
 observations. For example <code>exprs(PARAMCD = "MAP")</code> defines the parameter code
 for the new parameter.</p>
-<p><em>Permitted Values</em>: List of variable-value pairs</p></dd>
+<dl><dt>Permitted values</dt>
+<dd><p>List of variable-value pairs</p></dd>
+
+<dt>Default value</dt>
+<dd><p><code>exprs(PARAMCD = "MAP")</code></p></dd>
+
+
+</dl></dd>
 
 
 <dt id="arg-tadm-code">tadm_code<a class="anchor" aria-label="anchor" href="#arg-tadm-code"></a></dt>
@@ -130,7 +145,14 @@ for the new parameter.</p>
 <p>The observations where <code>PARAMCD</code> equals the specified value are considered
 as the total dose administered.  The <code>AVAL</code> associated with this <code>PARAMCD</code>
 will be the numerator of the dose intensity calculation.</p>
-<p>Permitted Values: character value</p></dd>
+<dl><dt>Permitted values</dt>
+<dd><p>character value</p></dd>
+
+<dt>Default value</dt>
+<dd><p><code>"TNDOSE"</code></p></dd>
+
+
+</dl></dd>
 
 
 <dt id="arg-tpadm-code">tpadm_code<a class="anchor" aria-label="anchor" href="#arg-tpadm-code"></a></dt>
@@ -138,14 +160,21 @@ will be the numerator of the dose intensity calculation.</p>
 <p>The observations where <code>PARAMCD</code> equals the specified value are considered
 as the total planned dose.  The <code>AVAL</code> associated with this <code>PARAMCD</code>
 will be the denominator of the dose intensity calculation.</p>
-<p>Permitted Values: character value</p></dd>
+<dl><dt>Permitted values</dt>
+<dd><p>character value</p></dd>
+
+<dt>Default value</dt>
+<dd><p><code>"TSNDOSE"</code></p></dd>
+
+
+</dl></dd>
 
 
 <dt id="arg-zero-doses">zero_doses<a class="anchor" aria-label="anchor" href="#arg-zero-doses"></a></dt>
 <dd><p>Flag indicating logic for handling 0 planned or
 administered doses for a <code>by_vars</code> group</p>
-<p>Default: <code>Inf</code></p>
-<p>Permitted Values: <code>Inf</code>, <code>100</code></p>
+<dl><dt>Permitted values</dt>
+<dd><p><code>Inf</code>, <code>100</code></p>
 <p>No record is returned if either the planned (<code>tpadm_code</code>) or administered
 (<code>tadm_code</code>) <code>AVAL</code> are <code>NA</code>.  No record is returned is a record does not
 exist for both <code>tadm_code</code> and <code>tpadm_code</code> for the specified <code>by_var</code>.</p>
@@ -159,13 +188,26 @@ exist for both <code>tadm_code</code> and <code>tpadm_code</code> for the specif
 (<code>tadm_code</code>) is &gt; 0, 100 is returned.</p></li>
 </ol></dd>
 
+<dt>Default value</dt>
+<dd><p><code>"Inf"</code></p></dd>
+
+
+</dl></dd>
+
 
 <dt id="arg-filter">filter<a class="anchor" aria-label="anchor" href="#arg-filter"></a></dt>
 <dd><p>Filter condition</p>
 <p>The specified condition is applied to the input dataset before deriving the
 new parameter, i.e., only observations fulfilling the condition are taken
 into account.</p>
-<p><em>Permitted Values:</em> a condition</p></dd>
+<dl><dt>Permitted values</dt>
+<dd><p>a condition</p></dd>
+
+<dt>Default value</dt>
+<dd><p><code>NULL</code></p></dd>
+
+
+</dl></dd>
 
 </dl></div>
     <div class="section level2">

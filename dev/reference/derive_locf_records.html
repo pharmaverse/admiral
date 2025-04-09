@@ -9,7 +9,7 @@ does not contain observations for missed visits/time points."><meta property="og
 
     <a class="navbar-brand me-2" href="../index.html">admiral</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.2.0.9016</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.2.0.9017</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -92,13 +92,23 @@ does not contain observations for missed visits/time points.</p>
 
 <dl><dt id="arg-dataset">dataset<a class="anchor" aria-label="anchor" href="#arg-dataset"></a></dt>
 <dd><p>Input dataset</p>
-<p>The variables specified by the <code>by_vars</code>, <code>analysis_var</code>, <code>order</code>, and <code>keep_vars</code> arguments are expected to be in the dataset.</p></dd>
+<p>The variables specified by the <code>by_vars</code>, <code>analysis_var</code>, <code>order</code>, and <code>keep_vars</code> arguments are expected to be in the dataset.</p>
+<dl><dt>Default value</dt>
+<dd><p>none</p></dd>
+
+
+</dl></dd>
 
 
 <dt id="arg-dataset-ref">dataset_ref<a class="anchor" aria-label="anchor" href="#arg-dataset-ref"></a></dt>
 <dd><p>Expected observations dataset</p>
 <p>Data frame with all the combinations of <code>PARAMCD</code>, <code>PARAM</code>, <code>AVISIT</code>,
-<code>AVISITN</code>, ... which are expected in the dataset is expected.</p></dd>
+<code>AVISITN</code>, ... which are expected in the dataset is expected.</p>
+<dl><dt>Default value</dt>
+<dd><p>none</p></dd>
+
+
+</dl></dd>
 
 
 <dt id="arg-by-vars">by_vars<a class="anchor" aria-label="anchor" href="#arg-by-vars"></a></dt>
@@ -107,28 +117,48 @@ does not contain observations for missed visits/time points.</p>
 are added to the output dataset which do not have a corresponding observation
 in the input dataset or for which <code>analysis_var</code> is <code>NA</code> for the corresponding observation
 in the input dataset.</p>
-<p><em>Permitted Values</em>: list of variables created by <code><a href="reexport-exprs.html">exprs()</a></code>
-e.g. <code>exprs(USUBJID, VISIT)</code></p></dd>
+<dl><dt>Default value</dt>
+<dd><p>none</p></dd>
+
+
+</dl></dd>
 
 
 <dt id="arg-analysis-var">analysis_var<a class="anchor" aria-label="anchor" href="#arg-analysis-var"></a></dt>
 <dd><p>Analysis variable.</p>
 <p><em>Default</em>: <code>AVAL</code></p>
-<p><em>Permitted Values</em>: a variable</p></dd>
+<dl><dt>Permitted values</dt>
+<dd><p>a variable</p></dd>
+
+<dt>Default value</dt>
+<dd><p><code>AVAL</code></p></dd>
+
+
+</dl></dd>
 
 
 <dt id="arg-order">order<a class="anchor" aria-label="anchor" href="#arg-order"></a></dt>
 <dd><p>Sort order</p>
 <p>The dataset is sorted by <code>order</code> before carrying the last observation
 forward (e.g. <code>AVAL</code>) within each <code>by_vars</code>.</p>
-<p>For handling of <code>NA</code>s in sorting variables see <a href="../articles/generic.html#sort_order">Sort Order</a>.</p></dd>
+<p>For handling of <code>NA</code>s in sorting variables see <a href="../articles/generic.html#sort_order">Sort Order</a>.</p>
+<dl><dt>Default value</dt>
+<dd><p>none</p></dd>
+
+
+</dl></dd>
 
 
 <dt id="arg-keep-vars">keep_vars<a class="anchor" aria-label="anchor" href="#arg-keep-vars"></a></dt>
 <dd><p>Variables that need carrying the last observation forward</p>
 <p>Keep variables that need carrying the last observation forward other than <code>analysis_var</code>
 (e.g., <code>PARAMN</code>, <code>VISITNUM</code>). If by default <code>NULL</code>, only variables specified in
-<code>by_vars</code> and <code>analysis_var</code> will be populated in the newly created records.</p></dd>
+<code>by_vars</code> and <code>analysis_var</code> will be populated in the newly created records.</p>
+<dl><dt>Default value</dt>
+<dd><p><code>NULL</code></p></dd>
+
+
+</dl></dd>
 
 </dl></div>
     <div class="section level2">

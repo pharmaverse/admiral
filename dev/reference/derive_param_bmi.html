@@ -11,7 +11,7 @@ Note: This is a wrapper function for the more generic derive_param_computed().">
 
     <a class="navbar-brand me-2" href="../index.html">admiral</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.2.0.9016</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.2.0.9017</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -101,7 +101,12 @@ Note: This is a wrapper function for the more generic derive_param_computed().">
 <code>PARAMCD</code>, and <code>AVAL</code> are expected as well.</p>
 <p>The variable specified by <code>by_vars</code> and <code>PARAMCD</code> must be a unique key of
 the input dataset after restricting it by the filter condition (<code>filter</code>
-parameter) and to the parameters specified by <code>weight_code</code> and <code>height_code</code>.</p></dd>
+parameter) and to the parameters specified by <code>weight_code</code> and <code>height_code</code>.</p>
+<dl><dt>Default value</dt>
+<dd><p>none</p></dd>
+
+
+</dl></dd>
 
 
 <dt id="arg-by-vars">by_vars<a class="anchor" aria-label="anchor" href="#arg-by-vars"></a></dt>
@@ -109,8 +114,11 @@ parameter) and to the parameters specified by <code>weight_code</code> and <code
 <p>For each group defined by <code>by_vars</code> an observation is added to the output
 dataset. Only variables specified in <code>by_vars</code> will be populated
 in the newly created records.</p>
-<p><em>Permitted Values</em>: list of variables created by <code><a href="reexport-exprs.html">exprs()</a></code>
-e.g. <code>exprs(USUBJID, VISIT)</code></p></dd>
+<dl><dt>Default value</dt>
+<dd><p>none</p></dd>
+
+
+</dl></dd>
 
 
 <dt id="arg-set-values-to">set_values_to<a class="anchor" aria-label="anchor" href="#arg-set-values-to"></a></dt>
@@ -118,29 +126,56 @@ e.g. <code>exprs(USUBJID, VISIT)</code></p></dd>
 <p>The specified variables are set to the specified values for the new
 observations. For example <code>exprs(PARAMCD = "MAP")</code> defines the parameter code
 for the new parameter.</p>
-<p><em>Permitted Values</em>: List of variable-value pairs</p></dd>
+<dl><dt>Permitted values</dt>
+<dd><p>List of variable-value pairs</p></dd>
+
+<dt>Default value</dt>
+<dd><p><code>exprs(PARAMCD = "MAP")</code></p></dd>
+
+
+</dl></dd>
 
 
 <dt id="arg-weight-code">weight_code<a class="anchor" aria-label="anchor" href="#arg-weight-code"></a></dt>
 <dd><p>WEIGHT parameter code</p>
 <p>The observations where <code>PARAMCD</code> equals the specified value are considered
 as the WEIGHT. It is expected that WEIGHT is measured in kg</p>
-<p><em>Permitted Values:</em> character value</p></dd>
+<dl><dt>Permitted values</dt>
+<dd><p>character value</p></dd>
+
+<dt>Default value</dt>
+<dd><p><code>"WEIGHT"</code></p></dd>
+
+
+</dl></dd>
 
 
 <dt id="arg-height-code">height_code<a class="anchor" aria-label="anchor" href="#arg-height-code"></a></dt>
 <dd><p>HEIGHT parameter code</p>
 <p>The observations where <code>PARAMCD</code> equals the specified value are considered
 as the HEIGHT. It is expected that HEIGHT is measured in cm</p>
-<p><em>Permitted Values:</em> character value</p>
-<p><em>Permitted Values:</em> logical scalar</p></dd>
+<dl><dt>Permitted values</dt>
+<dd><p>logical scalar</p></dd>
+
+<dt>Default value</dt>
+<dd><p><code>"HEIGHT"</code></p></dd>
+
+
+</dl></dd>
 
 
 <dt id="arg-get-unit-expr">get_unit_expr<a class="anchor" aria-label="anchor" href="#arg-get-unit-expr"></a></dt>
 <dd><p>An expression providing the unit of the parameter</p>
 <p>The result is used to check the units of the input parameters.</p>
-<p><em>Permitted Values</em>: An expression which is evaluable in the input dataset
+<dl><dt>Permitted values</dt>
+<dd><p>An expression which is evaluable in the input dataset
 and results in a character value</p></dd>
+
+<dt>Default value</dt>
+<dd><p>none</p></dd>
+
+
+</dl></dd>
 
 
 <dt id="arg-filter">filter<a class="anchor" aria-label="anchor" href="#arg-filter"></a></dt>
@@ -148,7 +183,14 @@ and results in a character value</p></dd>
 <p>The specified condition is applied to the input dataset before deriving the
 new parameter, i.e., only observations fulfilling the condition are taken
 into account.</p>
-<p><em>Permitted Values:</em> a condition</p></dd>
+<dl><dt>Permitted values</dt>
+<dd><p>a condition</p></dd>
+
+<dt>Default value</dt>
+<dd><p><code>NULL</code></p></dd>
+
+
+</dl></dd>
 
 
 <dt id="arg-constant-by-vars">constant_by_vars<a class="anchor" aria-label="anchor" href="#arg-constant-by-vars"></a></dt>
@@ -159,8 +201,11 @@ to the other parameters using the specified variables.</p>
 use <code>constant_by_vars</code> to select the subject-level variable to merge on (e.g. <code>USUBJID</code>).
 This will produce BMI at all visits where weight is measured.  Otherwise
 it will only be calculated at visits with both height and weight collected.</p>
-<p><em>Permitted Values</em>: list of variables created by <code><a href="reexport-exprs.html">exprs()</a></code>
-e.g. <code>exprs(USUBJID, VISIT)</code></p></dd>
+<dl><dt>Default value</dt>
+<dd><p><code>NULL</code></p></dd>
+
+
+</dl></dd>
 
 </dl></div>
     <div class="section level2">

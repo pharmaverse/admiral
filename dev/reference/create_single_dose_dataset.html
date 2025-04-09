@@ -11,7 +11,7 @@ or deriving a total dose parameter in ADEX when EXDOSFRQ != ONCE."><meta propert
 
     <a class="navbar-brand me-2" href="../index.html">admiral</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.2.0.9016</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.2.0.9017</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -100,20 +100,37 @@ or deriving a total dose parameter in <code>ADEX</code> when <code>EXDOSFRQ != O
 
 <dl><dt id="arg-dataset">dataset<a class="anchor" aria-label="anchor" href="#arg-dataset"></a></dt>
 <dd><p>Input dataset</p>
-<p>The variables specified by the <code>dose_freq</code>, <code>start_date</code>, and <code>end_date</code> arguments are expected to be in the dataset.</p></dd>
+<p>The variables specified by the <code>dose_freq</code>, <code>start_date</code>, and <code>end_date</code> arguments are expected to be in the dataset.</p>
+<dl><dt>Default value</dt>
+<dd><p>none</p></dd>
+
+
+</dl></dd>
 
 
 <dt id="arg-dose-freq">dose_freq<a class="anchor" aria-label="anchor" href="#arg-dose-freq"></a></dt>
 <dd><p>The dose frequency</p>
 <p>The aggregate dosing frequency used for multiple doses in a row.</p>
-<p>Permitted Values: defined by lookup table.</p></dd>
+<dl><dt>Permitted values</dt>
+<dd><p>defined by lookup table.</p></dd>
+
+<dt>Default value</dt>
+<dd><p><code>EXDOSFRQ</code></p></dd>
+
+
+</dl></dd>
 
 
 <dt id="arg-start-date">start_date<a class="anchor" aria-label="anchor" href="#arg-start-date"></a></dt>
 <dd><p>The start date</p>
 <p>A date object is expected. This object cannot contain <code>NA</code> values.</p>
 <p>Refer to <code><a href="derive_vars_dt.html">derive_vars_dt()</a></code> to impute and derive a date from a date
-character vector to a date object.</p></dd>
+character vector to a date object.</p>
+<dl><dt>Default value</dt>
+<dd><p><code>ASTDT</code></p></dd>
+
+
+</dl></dd>
 
 
 <dt id="arg-start-datetime">start_datetime<a class="anchor" aria-label="anchor" href="#arg-start-datetime"></a></dt>
@@ -122,14 +139,24 @@ character vector to a date object.</p></dd>
 <p>Refer to <code><a href="derive_vars_dtm.html">derive_vars_dtm()</a></code> to impute and derive a date-time from a date
 character vector to a date object.</p>
 <p>If the input dataset contains frequencies which refer to <code>DOSE_WINDOW</code>
-equals <code>"HOUR"</code> or <code>"MINUTE"</code>, the parameter must be specified.</p></dd>
+equals <code>"HOUR"</code> or <code>"MINUTE"</code>, the parameter must be specified.</p>
+<dl><dt>Default value</dt>
+<dd><p><code>NULL</code></p></dd>
+
+
+</dl></dd>
 
 
 <dt id="arg-end-date">end_date<a class="anchor" aria-label="anchor" href="#arg-end-date"></a></dt>
 <dd><p>The end date</p>
 <p>A date or date-time object is expected. This object cannot contain <code>NA</code> values.</p>
 <p>Refer to <code><a href="derive_vars_dt.html">derive_vars_dt()</a></code> to impute and derive a date from a date
-character vector to a date object.</p></dd>
+character vector to a date object.</p>
+<dl><dt>Default value</dt>
+<dd><p><code>AENDT</code></p></dd>
+
+
+</dl></dd>
 
 
 <dt id="arg-end-datetime">end_datetime<a class="anchor" aria-label="anchor" href="#arg-end-datetime"></a></dt>
@@ -138,7 +165,12 @@ character vector to a date object.</p></dd>
 <p>Refer to <code><a href="derive_vars_dtm.html">derive_vars_dtm()</a></code> to impute and derive a date-time from a date
 character vector to a date object.</p>
 <p>If the input dataset contains frequencies which refer to <code>DOSE_WINDOW</code>
-equals <code>"HOUR"</code> or <code>"MINUTE"</code>, the parameter must be specified.</p></dd>
+equals <code>"HOUR"</code> or <code>"MINUTE"</code>, the parameter must be specified.</p>
+<dl><dt>Default value</dt>
+<dd><p><code>NULL</code></p></dd>
+
+
+</dl></dd>
 
 
 <dt id="arg-lookup-table">lookup_table<a class="anchor" aria-label="anchor" href="#arg-lookup-table"></a></dt>
@@ -149,12 +181,22 @@ default is used, it must have columns <code>DOSE_WINDOW</code>, <code>DOSE_COUNT
 <code>CONVERSION_FACTOR</code>. The default table <code>dose_freq_lookup</code> is described in
 detail <a href="dose_freq_lookup.html">here</a>.</p>
 <p>Permitted Values for <code>DOSE_WINDOW</code>: <code>"MINUTE"</code>, <code>"HOUR"</code>, <code>"DAY"</code>,
-<code>"WEEK"</code>, <code>"MONTH"</code>, <code>"YEAR"</code></p></dd>
+<code>"WEEK"</code>, <code>"MONTH"</code>, <code>"YEAR"</code></p>
+<dl><dt>Default value</dt>
+<dd><p><code>dose_freq_lookup</code></p></dd>
+
+
+</dl></dd>
 
 
 <dt id="arg-lookup-column">lookup_column<a class="anchor" aria-label="anchor" href="#arg-lookup-column"></a></dt>
 <dd><p>The dose frequency value column in the lookup table</p>
-<p>The column of <code>lookup_table</code>.</p></dd>
+<p>The column of <code>lookup_table</code>.</p>
+<dl><dt>Default value</dt>
+<dd><p><code>CDISC_VALUE</code></p></dd>
+
+
+</dl></dd>
 
 
 <dt id="arg-nominal-time">nominal_time<a class="anchor" aria-label="anchor" href="#arg-nominal-time"></a></dt>
@@ -164,14 +206,25 @@ the first dose.  It can be derived as <code>(VISITDY - 1) * 24</code> for exampl
 This will be expanded as the single dose dataset is created.  For example
 an <code>EXDOFRQ</code> of <code>"QD"</code> will result in the nominal_time being incremented by
 24 hours for each expanded record.</p>
-<p>The value can be NULL if not needed.</p></dd>
+<p>The value can be NULL if not needed.</p>
+<dl><dt>Default value</dt>
+<dd><p><code>NULL</code></p></dd>
+
+
+</dl></dd>
 
 
 <dt id="arg-keep-source-vars">keep_source_vars<a class="anchor" aria-label="anchor" href="#arg-keep-source-vars"></a></dt>
 <dd><p>List of variables to be retained from source dataset</p>
 <p>This parameter can be specified if additional information is required in
 the output dataset. For example <code>EXTRT</code> for studies with more than one
-drug.</p></dd>
+drug.</p>
+<dl><dt>Default value</dt>
+<dd><p><code>expr_c(get_admiral_option("subject_keys"), dose_freq, start_date,
+start_datetime, end_date, end_datetime)</code></p></dd>
+
+
+</dl></dd>
 
 </dl></div>
     <div class="section level2">

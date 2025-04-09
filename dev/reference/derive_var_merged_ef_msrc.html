@@ -15,7 +15,7 @@ in different datasets, e.g., EX, EC, and FA."><meta property="og:image" content=
 
     <a class="navbar-brand me-2" href="../index.html">admiral</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.2.0.9016</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.2.0.9017</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -103,13 +103,21 @@ in different datasets, e.g., <code>EX</code>, <code>EC</code>, and <code>FA</cod
 
 <dl><dt id="arg-dataset">dataset<a class="anchor" aria-label="anchor" href="#arg-dataset"></a></dt>
 <dd><p>Input dataset</p>
-<p>The variables specified by the <code>by_vars</code> argument are expected to be in the dataset.</p></dd>
+<p>The variables specified by the <code>by_vars</code> argument are expected to be in the dataset.</p>
+<dl><dt>Default value</dt>
+<dd><p>none</p></dd>
+
+
+</dl></dd>
 
 
 <dt id="arg-by-vars">by_vars<a class="anchor" aria-label="anchor" href="#arg-by-vars"></a></dt>
 <dd><p>Grouping variables</p>
-<p><em>Permitted Values</em>: list of variables created by <code><a href="reexport-exprs.html">exprs()</a></code>
-e.g. <code>exprs(USUBJID, VISIT)</code></p></dd>
+<dl><dt>Default value</dt>
+<dd><p>none</p></dd>
+
+
+</dl></dd>
 
 
 <dt id="arg-flag-events">flag_events<a class="anchor" aria-label="anchor" href="#arg-flag-events"></a></dt>
@@ -117,18 +125,33 @@ e.g. <code>exprs(USUBJID, VISIT)</code></p></dd>
 <p>A list of <code><a href="flag_event.html">flag_event()</a></code> objects is expected. For each event the condition
 (<code>condition</code> field) is evaluated in the source dataset referenced by the
 <code>dataset_name</code> field. If it evaluates to <code>TRUE</code> at least once, the new
-variable is set to <code>true_value</code>.</p></dd>
+variable is set to <code>true_value</code>.</p>
+<dl><dt>Default value</dt>
+<dd><p>none</p></dd>
+
+
+</dl></dd>
 
 
 <dt id="arg-source-datasets">source_datasets<a class="anchor" aria-label="anchor" href="#arg-source-datasets"></a></dt>
 <dd><p>Source datasets</p>
 <p>A named list of datasets is expected. The <code>dataset_name</code> field of
-<code><a href="flag_event.html">flag_event()</a></code> refers to the dataset provided in the list.</p></dd>
+<code><a href="flag_event.html">flag_event()</a></code> refers to the dataset provided in the list.</p>
+<dl><dt>Default value</dt>
+<dd><p>none</p></dd>
+
+
+</dl></dd>
 
 
 <dt id="arg-new-var">new_var<a class="anchor" aria-label="anchor" href="#arg-new-var"></a></dt>
 <dd><p>New variable</p>
-<p>The specified variable is added to the input dataset.</p></dd>
+<p>The specified variable is added to the input dataset.</p>
+<dl><dt>Default value</dt>
+<dd><p>none</p></dd>
+
+
+</dl></dd>
 
 
 <dt id="arg-true-value">true_value<a class="anchor" aria-label="anchor" href="#arg-true-value"></a></dt>
@@ -137,7 +160,12 @@ variable is set to <code>true_value</code>.</p></dd>
 groups for which at least one of the source object (<code>sources</code>) has the
 condition evaluate to <code>TRUE</code>.</p>
 <p>The values of <code>true_value</code>, <code>false_value</code>, and <code>missing_value</code> must be of
-the same type.</p></dd>
+the same type.</p>
+<dl><dt>Default value</dt>
+<dd><p><code>"Y"</code></p></dd>
+
+
+</dl></dd>
 
 
 <dt id="arg-false-value">false_value<a class="anchor" aria-label="anchor" href="#arg-false-value"></a></dt>
@@ -146,7 +174,12 @@ the same type.</p></dd>
 groups which occur in at least one source (<code>sources</code>) but the condition
 never evaluates to <code>TRUE</code>.</p>
 <p>The values of <code>true_value</code>, <code>false_value</code>, and <code>missing_value</code> must be of
-the same type.</p></dd>
+the same type.</p>
+<dl><dt>Default value</dt>
+<dd><p><code>NA_character_</code></p></dd>
+
+
+</dl></dd>
 
 
 <dt id="arg-missing-value">missing_value<a class="anchor" aria-label="anchor" href="#arg-missing-value"></a></dt>
@@ -154,7 +187,12 @@ the same type.</p></dd>
 <p>The new variable is set to the specified value for all by groups without
 observations in any of the sources (<code>sources</code>).</p>
 <p>The values of <code>true_value</code>, <code>false_value</code>, and <code>missing_value</code> must be of
-the same type.</p></dd>
+the same type.</p>
+<dl><dt>Default value</dt>
+<dd><p><code>NA_character_</code></p></dd>
+
+
+</dl></dd>
 
 </dl></div>
     <div class="section level2">

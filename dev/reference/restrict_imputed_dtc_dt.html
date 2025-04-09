@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">admiral</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.2.0.9016</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.2.0.9017</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -84,11 +84,21 @@
 <dd><p>The <code>'--DTC'</code> date to impute</p>
 <p>A character date is expected in a format like <code>yyyy-mm-dd</code> or
 <code>yyyy-mm-ddThh:mm:ss</code>. Trailing components can be omitted and <code>-</code> is a
-valid "missing" value for any component.</p></dd>
+valid "missing" value for any component.</p>
+<dl><dt>Default value</dt>
+<dd><p>none</p></dd>
+
+
+</dl></dd>
 
 
 <dt id="arg-imputed-dtc">imputed_dtc<a class="anchor" aria-label="anchor" href="#arg-imputed-dtc"></a></dt>
-<dd><p>The imputed DTC date</p></dd>
+<dd><p>The imputed DTC date</p>
+<dl><dt>Default value</dt>
+<dd><p>none</p></dd>
+
+
+</dl></dd>
 
 
 <dt id="arg-min-dates">min_dates<a class="anchor" aria-label="anchor" href="#arg-min-dates"></a></dt>
@@ -112,7 +122,12 @@ For example</p>
 <p>returns <code>"2020-11-11T11:11:11"</code> because the possible dates for <code>"2020-11"</code>
 range from <code>"2020-11-01T00:00:00"</code> to <code>"2020-11-30T23:59:59"</code>. Therefore
 <code>"2020-12-06T12:12:12"</code> is ignored. Returning <code>"2020-12-06T12:12:12"</code> would
-have changed the month although it is not missing (in the <code>dtc</code> date).</p></dd>
+have changed the month although it is not missing (in the <code>dtc</code> date).</p>
+<dl><dt>Default value</dt>
+<dd><p><code>NULL</code></p></dd>
+
+
+</dl></dd>
 
 
 <dt id="arg-max-dates">max_dates<a class="anchor" aria-label="anchor" href="#arg-max-dates"></a></dt>
@@ -120,7 +135,12 @@ have changed the month although it is not missing (in the <code>dtc</code> date)
 <p>A list of dates is expected. It is ensured that the imputed date is not after
 any of the specified dates, e.g., that the imputed date is not after the data
 cut off date. Only dates which are in the range of possible dates are
-considered. A date or date-time object is expected.</p></dd>
+considered. A date or date-time object is expected.</p>
+<dl><dt>Default value</dt>
+<dd><p><code>NULL</code></p></dd>
+
+
+</dl></dd>
 
 </dl></div>
     <div class="section level2">

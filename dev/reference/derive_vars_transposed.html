@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">admiral</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.2.0.9016</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.2.0.9017</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -91,41 +91,74 @@
 
 <dl><dt id="arg-dataset">dataset<a class="anchor" aria-label="anchor" href="#arg-dataset"></a></dt>
 <dd><p>Input dataset</p>
-<p>The variables specified by the <code>by_vars</code> argument are expected to be in the dataset.</p></dd>
+<p>The variables specified by the <code>by_vars</code> argument are expected to be in the dataset.</p>
+<dl><dt>Default value</dt>
+<dd><p>none</p></dd>
+
+
+</dl></dd>
 
 
 <dt id="arg-dataset-merge">dataset_merge<a class="anchor" aria-label="anchor" href="#arg-dataset-merge"></a></dt>
 <dd><p>Dataset to transpose and merge</p>
 <p>The variables specified by the <code>by_vars</code>, <code>id_vars</code>, <code>key_var</code> and
 <code>value_var</code> arguments are expected. The variables <code>by_vars</code>, <code>id_vars</code>,
-<code>key_var</code> have to be a unique key.</p></dd>
+<code>key_var</code> have to be a unique key.</p>
+<dl><dt>Default value</dt>
+<dd><p>none</p></dd>
+
+
+</dl></dd>
 
 
 <dt id="arg-by-vars">by_vars<a class="anchor" aria-label="anchor" href="#arg-by-vars"></a></dt>
 <dd><p>Grouping variables</p>
-<p>Keys used to merge <code>dataset_merge</code> with <code>dataset</code>.</p></dd>
+<p>Keys used to merge <code>dataset_merge</code> with <code>dataset</code>.</p>
+<dl><dt>Default value</dt>
+<dd><p>none</p></dd>
+
+
+</dl></dd>
 
 
 <dt id="arg-id-vars">id_vars<a class="anchor" aria-label="anchor" href="#arg-id-vars"></a></dt>
 <dd><p>ID variables</p>
 <p>Variables (excluding <code>by_vars</code> and <code>key_var</code>) that uniquely identify each
 observation in <code>dataset_merge</code>.</p>
-<p><em>Permitted Values</em>: list of variables created by <code><a href="reexport-exprs.html">exprs()</a></code>
-e.g. <code>exprs(USUBJID, VISIT)</code></p></dd>
+<dl><dt>Default value</dt>
+<dd><p><code>NULL</code></p></dd>
+
+
+</dl></dd>
 
 
 <dt id="arg-key-var">key_var<a class="anchor" aria-label="anchor" href="#arg-key-var"></a></dt>
 <dd><p>The variable of <code>dataset_merge</code> containing the names of the
-transposed variables</p></dd>
+transposed variables</p>
+<dl><dt>Default value</dt>
+<dd><p>none</p></dd>
+
+
+</dl></dd>
 
 
 <dt id="arg-value-var">value_var<a class="anchor" aria-label="anchor" href="#arg-value-var"></a></dt>
 <dd><p>The variable of <code>dataset_merge</code> containing the values of the
-transposed variables</p></dd>
+transposed variables</p>
+<dl><dt>Default value</dt>
+<dd><p>none</p></dd>
+
+
+</dl></dd>
 
 
 <dt id="arg-filter">filter<a class="anchor" aria-label="anchor" href="#arg-filter"></a></dt>
-<dd><p>Expression used to restrict the records of <code>dataset_merge</code> prior to transposing</p></dd>
+<dd><p>Expression used to restrict the records of <code>dataset_merge</code> prior to transposing</p>
+<dl><dt>Default value</dt>
+<dd><p><code>NULL</code></p></dd>
+
+
+</dl></dd>
 
 
 <dt id="arg-relationship">relationship<a class="anchor" aria-label="anchor" href="#arg-relationship"></a></dt>
@@ -134,8 +167,15 @@ variable(s) in <code>dataset</code> and <code>dataset_merge</code> (after transp
 <p>This argument is passed to the <code><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html" class="external-link">dplyr::left_join()</a></code> function. See
 <a href="https://dplyr.tidyverse.org/reference/mutate-joins.html#arguments" class="external-link">https://dplyr.tidyverse.org/reference/mutate-joins.html#arguments</a> for
 more details.</p>
-<p><em>Permitted Values</em>: <code>"one-to-one"</code>, <code>"one-to-many"</code>, <code>"many-to-one"</code>,
+<dl><dt>Permitted values</dt>
+<dd><p><code>"one-to-one"</code>, <code>"one-to-many"</code>, <code>"many-to-one"</code>,
 <code>"many-to-many"</code>, <code>NULL</code></p></dd>
+
+<dt>Default value</dt>
+<dd><p><code>NULL</code></p></dd>
+
+
+</dl></dd>
 
 </dl></div>
     <div class="section level2">

@@ -9,7 +9,7 @@ AENDY."><meta property="og:image" content="https://pharmaverse.github.io/admiral
 
     <a class="navbar-brand me-2" href="../index.html">admiral</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.2.0.9016</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.2.0.9017</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -85,14 +85,24 @@ AENDY."><meta property="og:image" content="https://pharmaverse.github.io/admiral
 
 <dl><dt id="arg-dataset">dataset<a class="anchor" aria-label="anchor" href="#arg-dataset"></a></dt>
 <dd><p>Input dataset</p>
-<p>The variables specified by the <code>reference_date</code> and <code>source_vars</code> arguments are expected to be in the dataset.</p></dd>
+<p>The variables specified by the <code>reference_date</code> and <code>source_vars</code> arguments are expected to be in the dataset.</p>
+<dl><dt>Default value</dt>
+<dd><p>none</p></dd>
+
+
+</dl></dd>
 
 
 <dt id="arg-reference-date">reference_date<a class="anchor" aria-label="anchor" href="#arg-reference-date"></a></dt>
 <dd><p>A date or date-time column, e.g., date of first treatment
 or date-time of last exposure to treatment.</p>
 <p>Refer to <code><a href="derive_vars_dt.html">derive_vars_dt()</a></code> to impute and derive a date from a date
-character vector to a date object.</p></dd>
+character vector to a date object.</p>
+<dl><dt>Default value</dt>
+<dd><p>none</p></dd>
+
+
+</dl></dd>
 
 
 <dt id="arg-source-vars">source_vars<a class="anchor" aria-label="anchor" href="#arg-source-vars"></a></dt>
@@ -100,7 +110,12 @@ character vector to a date object.</p></dd>
 <code><a href="reexport-exprs.html">exprs()</a></code> from which dates are to be extracted. This can either be a list of
 date(time) variables or named <code>--DY</code> variables and corresponding –DT(M)
 variables e.g. <code>exprs(TRTSDTM, ASTDTM, AENDT)</code> or <code>exprs(TRTSDT, ASTDTM, AENDT, DEATHDY = DTHDT)</code>. If the source variable does not end in –DT(M), a
-name for the resulting <code>--DY</code> variable must be provided.</p></dd>
+name for the resulting <code>--DY</code> variable must be provided.</p>
+<dl><dt>Default value</dt>
+<dd><p>none</p></dd>
+
+
+</dl></dd>
 
 </dl></div>
     <div class="section level2">

@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">admiral</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.2.0.9016</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.2.0.9017</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -94,53 +94,94 @@
 <p>The variables specified by the <code>by_vars</code> argument are expected to be in the dataset.
 <code>PARAMCD</code>, and <code>AVAL</code> are expected as well.</p>
 <p>The variable specified by <code>by_vars</code> and <code>PARAMCD</code> must be a unique key of
-the input dataset, and to the parameters specified by <code>wbc_code</code> and <code>diff_code</code>.</p></dd>
+the input dataset, and to the parameters specified by <code>wbc_code</code> and <code>diff_code</code>.</p>
+<dl><dt>Default value</dt>
+<dd><p>none</p></dd>
+
+
+</dl></dd>
 
 
 <dt id="arg-by-vars">by_vars<a class="anchor" aria-label="anchor" href="#arg-by-vars"></a></dt>
 <dd><p>Grouping variables</p>
-<p><em>Permitted Values</em>: list of variables created by <code><a href="reexport-exprs.html">exprs()</a></code>
-e.g. <code>exprs(USUBJID, VISIT)</code></p></dd>
+<dl><dt>Default value</dt>
+<dd><p>none</p></dd>
+
+
+</dl></dd>
 
 
 <dt id="arg-set-values-to">set_values_to<a class="anchor" aria-label="anchor" href="#arg-set-values-to"></a></dt>
 <dd><p>Variables to set</p>
 <p>A named list returned by <code><a href="reexport-exprs.html">exprs()</a></code> defining the variables to be set for the
 new parameter, e.g. <code>exprs(PARAMCD = "LYMPH", PARAM = "Lymphocytes Abs (10^9/L)")</code> is
-expected.</p></dd>
+expected.</p>
+<dl><dt>Default value</dt>
+<dd><p>none</p></dd>
+
+
+</dl></dd>
 
 
 <dt id="arg-get-unit-expr">get_unit_expr<a class="anchor" aria-label="anchor" href="#arg-get-unit-expr"></a></dt>
 <dd><p>An expression providing the unit of the parameter</p>
 <p>The result is used to check the units of the input parameters.</p>
-<p>Permitted Values: a variable containing unit from the input dataset, or a function call,
+<dl><dt>Permitted values</dt>
+<dd><p>a variable containing unit from the input dataset, or a function call,
 for example, <code>get_unit_expr = extract_unit(PARAM)</code>.</p></dd>
+
+<dt>Default value</dt>
+<dd><p>none</p></dd>
+
+
+</dl></dd>
 
 
 <dt id="arg-wbc-unit">wbc_unit<a class="anchor" aria-label="anchor" href="#arg-wbc-unit"></a></dt>
 <dd><p>A string containing the required unit of the WBC parameter</p>
-<p>Default: <code>"10^9/L"</code></p></dd>
+<dl><dt>Default value</dt>
+<dd><p><code>"10^9/L"</code></p></dd>
+
+
+</dl></dd>
 
 
 <dt id="arg-wbc-code">wbc_code<a class="anchor" aria-label="anchor" href="#arg-wbc-code"></a></dt>
 <dd><p>White Blood Cell (WBC) parameter</p>
 <p>The observations where <code>PARAMCD</code> equals the specified value are considered
 as the WBC absolute results to use for converting the differentials.</p>
-<p>Default: <code>"WBC"</code></p>
-<p>Permitted Values: character value</p></dd>
+<dl><dt>Permitted values</dt>
+<dd><p>character value</p></dd>
+
+<dt>Default value</dt>
+<dd><p><code>"WBC"</code></p></dd>
+
+
+</dl></dd>
 
 
 <dt id="arg-diff-code">diff_code<a class="anchor" aria-label="anchor" href="#arg-diff-code"></a></dt>
 <dd><p>white blood differential parameter</p>
 <p>The observations where <code>PARAMCD</code> equals the specified value are considered
 as the white blood differential lab results in fraction or percentage value to be converted
-into absolute value.</p></dd>
+into absolute value.</p>
+<dl><dt>Default value</dt>
+<dd><p>none</p></dd>
+
+
+</dl></dd>
 
 
 <dt id="arg-diff-type">diff_type<a class="anchor" aria-label="anchor" href="#arg-diff-type"></a></dt>
 <dd><p>A string specifying the type of differential</p>
-<p>Permitted Values: <code>"percent"</code>, <code>"fraction"</code>
-Default: <code>fraction</code></p></dd>
+<dl><dt>Permitted values</dt>
+<dd><p><code>"percent"</code>, <code>"fraction"</code></p></dd>
+
+<dt>Default value</dt>
+<dd><p><code>"fraction"</code></p></dd>
+
+
+</dl></dd>
 
 </dl></div>
     <div class="section level2">

@@ -11,7 +11,7 @@ for selecting the extreme observation from a series of user-defined events."><me
 
     <a class="navbar-brand me-2" href="../index.html">admiral</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.2.0.9016</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.2.0.9017</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -98,14 +98,21 @@ for selecting the extreme observation from a series of user-defined events.</p>
 
 <dl><dt id="arg-dataset">dataset<a class="anchor" aria-label="anchor" href="#arg-dataset"></a></dt>
 <dd><p>Input dataset</p>
-<p>The variables specified by the <code>by_vars</code> and <code>order</code> arguments are expected to be in the dataset.</p></dd>
+<p>The variables specified by the <code>by_vars</code> and <code>order</code> arguments are expected to be in the dataset.</p>
+<dl><dt>Default value</dt>
+<dd><p>none</p></dd>
+
+
+</dl></dd>
 
 
 <dt id="arg-by-vars">by_vars<a class="anchor" aria-label="anchor" href="#arg-by-vars"></a></dt>
 <dd><p>Grouping variables</p>
-<p><em>Default</em>: <code>NULL</code></p>
-<p><em>Permitted Values</em>: list of variables created by <code><a href="reexport-exprs.html">exprs()</a></code>
-e.g. <code>exprs(USUBJID, VISIT)</code></p></dd>
+<dl><dt>Default value</dt>
+<dd><p><code>NULL</code></p></dd>
+
+
+</dl></dd>
 
 
 <dt id="arg-events">events<a class="anchor" aria-label="anchor" href="#arg-events"></a></dt>
@@ -116,7 +123,12 @@ event. If multiple records meet the filter <code>condition</code>, take the firs
 record sorted by <code>order</code>. The data is grouped by <code>by_vars</code>, i.e., summary
 functions like <code><a href="https://rdrr.io/r/base/all.html" class="external-link">all()</a></code> or <code><a href="https://rdrr.io/r/base/any.html" class="external-link">any()</a></code> can be used in <code>condition</code>.</p>
 <p>For <code><a href="event_joined.html">event_joined()</a></code> events the observations are selected by calling
-<code><a href="filter_joined.html">filter_joined()</a></code>. The <code>condition</code> field is passed to the <code>filter_join</code> argument.</p></dd>
+<code><a href="filter_joined.html">filter_joined()</a></code>. The <code>condition</code> field is passed to the <code>filter_join</code> argument.</p>
+<dl><dt>Default value</dt>
+<dd><p>none</p></dd>
+
+
+</dl></dd>
 
 
 <dt id="arg-tmp-event-nr-var">tmp_event_nr_var<a class="anchor" aria-label="anchor" href="#arg-tmp-event-nr-var"></a></dt>
@@ -125,7 +137,12 @@ functions like <code><a href="https://rdrr.io/r/base/all.html" class="external-l
 number of the event before selecting the records of the event.</p>
 <p>It can be used in <code>order</code> to determine which record should be used if
 records from more than one event are selected.</p>
-<p>The variable is not included in the output dataset.</p></dd>
+<p>The variable is not included in the output dataset.</p>
+<dl><dt>Default value</dt>
+<dd><p><code>NULL</code></p></dd>
+
+
+</dl></dd>
 
 
 <dt id="arg-order">order<a class="anchor" aria-label="anchor" href="#arg-order"></a></dt>
@@ -133,8 +150,15 @@ records from more than one event are selected.</p>
 <p>If a particular event from <code>events</code> has more than one observation, within
 the event and by group, the records are ordered by the specified order.</p>
 <p>For handling of <code>NA</code>s in sorting variables see <a href="../articles/generic.html#sort_order">Sort Order</a>.</p>
-<p><em>Permitted Values:</em> list of expressions created by <code><a href="reexport-exprs.html">exprs()</a></code>, e.g.,
+<dl><dt>Permitted values</dt>
+<dd><p>list of expressions created by <code><a href="reexport-exprs.html">exprs()</a></code>, e.g.,
 <code>exprs(ADT, desc(AVAL))</code></p></dd>
+
+<dt>Default value</dt>
+<dd><p>none</p></dd>
+
+
+</dl></dd>
 
 
 <dt id="arg-mode">mode<a class="anchor" aria-label="anchor" href="#arg-mode"></a></dt>
@@ -142,13 +166,25 @@ the event and by group, the records are ordered by the specified order.</p>
 <p>If a particular event from <code>events</code> has more than one observation,
 <code>"first"</code>/<code>"last"</code> is used to select the first/last record of this type of
 event sorting by <code>order</code>.</p>
-<p><em>Permitted Values:</em> <code>"first"</code>, <code>"last"</code></p></dd>
+<dl><dt>Permitted values</dt>
+<dd><p><code>"first"</code>, <code>"last"</code></p></dd>
+
+<dt>Default value</dt>
+<dd><p>none</p></dd>
+
+
+</dl></dd>
 
 
 <dt id="arg-source-datasets">source_datasets<a class="anchor" aria-label="anchor" href="#arg-source-datasets"></a></dt>
 <dd><p>Source datasets</p>
 <p>A named list of datasets is expected. The <code>dataset_name</code> field of <code><a href="event.html">event()</a></code>
-and <code><a href="event_joined.html">event_joined()</a></code> refers to the dataset provided in the list.</p></dd>
+and <code><a href="event_joined.html">event_joined()</a></code> refers to the dataset provided in the list.</p>
+<dl><dt>Default value</dt>
+<dd><p><code>NULL</code></p></dd>
+
+
+</dl></dd>
 
 
 <dt id="arg-check-type">check_type<a class="anchor" aria-label="anchor" href="#arg-check-type"></a></dt>
@@ -156,14 +192,25 @@ and <code><a href="event_joined.html">event_joined()</a></code> refers to the da
 <p>If <code>"warning"</code> or <code>"error"</code> is specified, the specified message is issued
 if the observations of the input dataset are not unique with respect to the
 by variables and the order.</p>
-<p><em>Default:</em> <code>"warning"</code></p>
-<p><em>Permitted Values:</em> <code>"none"</code>, <code>"warning"</code>, <code>"error"</code></p></dd>
+<dl><dt>Permitted values</dt>
+<dd><p><code>"none"</code>, <code>"message"</code>, <code>"warning"</code>, <code>"error"</code></p></dd>
+
+<dt>Default value</dt>
+<dd><p><code>"warning"</code></p></dd>
+
+
+</dl></dd>
 
 
 <dt id="arg-new-vars">new_vars<a class="anchor" aria-label="anchor" href="#arg-new-vars"></a></dt>
 <dd><p>Variables to add</p>
 <p>The specified variables from the events are added to the output
-dataset. Variables can be renamed by naming the element, i.e., <code>new_vars = exprs(&lt;new name&gt; = &lt;old name&gt;)</code>.</p></dd>
+dataset. Variables can be renamed by naming the element, i.e., <code>new_vars = exprs(&lt;new name&gt; = &lt;old name&gt;)</code>.</p>
+<dl><dt>Default value</dt>
+<dd><p>none</p></dd>
+
+
+</dl></dd>
 
 </dl></div>
     <div class="section level2">

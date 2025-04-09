@@ -15,7 +15,7 @@ All variables of the selected observation are kept."><meta property="og:image" c
 
     <a class="navbar-brand me-2" href="../index.html">admiral</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.2.0.9016</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.2.0.9017</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -101,27 +101,45 @@ All variables of the selected observation are kept.</p>
 
 
 <dl><dt id="arg-dataset">dataset<a class="anchor" aria-label="anchor" href="#arg-dataset"></a></dt>
-<dd><p>Input dataset</p></dd>
+<dd><p>Input dataset</p>
+<dl><dt>Default value</dt>
+<dd><p><code>NULL</code></p></dd>
+
+
+</dl></dd>
 
 
 <dt id="arg-sources">sources<a class="anchor" aria-label="anchor" href="#arg-sources"></a></dt>
 <dd><p>Sources</p>
-<p>A list of <code><a href="records_source.html">records_source()</a></code> objects is expected.</p></dd>
+<p>A list of <code><a href="records_source.html">records_source()</a></code> objects is expected.</p>
+<dl><dt>Default value</dt>
+<dd><p>none</p></dd>
+
+
+</dl></dd>
 
 
 <dt id="arg-source-datasets">source_datasets<a class="anchor" aria-label="anchor" href="#arg-source-datasets"></a></dt>
 <dd><p>Source datasets</p>
 <p>A named list of datasets is expected. The <code>dataset_name</code> field of
 <code><a href="records_source.html">records_source()</a></code> refers to the dataset provided in the list. The variables
-specified by the <code>order</code> and the <code>by_vars</code> arguments are expected after applying <code>new_vars</code>.</p></dd>
+specified by the <code>order</code> and the <code>by_vars</code> arguments are expected after applying <code>new_vars</code>.</p>
+<dl><dt>Default value</dt>
+<dd><p>none</p></dd>
+
+
+</dl></dd>
 
 
 <dt id="arg-by-vars">by_vars<a class="anchor" aria-label="anchor" href="#arg-by-vars"></a></dt>
 <dd><p>Grouping variables</p>
 <p>If the argument is specified, for each by group the observations are
 selected separately.</p>
-<p><em>Permitted Values</em>: list of variables created by <code><a href="reexport-exprs.html">exprs()</a></code>
-e.g. <code>exprs(USUBJID, VISIT)</code></p></dd>
+<dl><dt>Default value</dt>
+<dd><p><code>NULL</code></p></dd>
+
+
+</dl></dd>
 
 
 <dt id="arg-order">order<a class="anchor" aria-label="anchor" href="#arg-order"></a></dt>
@@ -134,8 +152,15 @@ can be specified as well (see examples below).</p>
 variable is <code>NA</code> and <code>mode = "last"</code>, this observation is chosen while for
 <code>mode = "first"</code> the observation is chosen only if there are no
 observations where the variable is not <code>NA</code>.</p>
-<p><em>Permitted Values:</em> list of expressions created by <code><a href="reexport-exprs.html">exprs()</a></code>, e.g.,
+<dl><dt>Permitted values</dt>
+<dd><p>list of expressions created by <code><a href="reexport-exprs.html">exprs()</a></code>, e.g.,
 <code>exprs(ADT, desc(AVAL))</code></p></dd>
+
+<dt>Default value</dt>
+<dd><p>none</p></dd>
+
+
+</dl></dd>
 
 
 <dt id="arg-mode">mode<a class="anchor" aria-label="anchor" href="#arg-mode"></a></dt>
@@ -143,7 +168,14 @@ observations where the variable is not <code>NA</code>.</p>
 <p>If <code>"first"</code> is specified, for each by group the first observation with
 respect to <code>order</code> is included in the output dataset. If <code>"last"</code> is
 specified, the last observation is included in the output dataset.</p>
-<p>Permitted Values:  <code>"first"</code>, <code>"last"</code></p></dd>
+<dl><dt>Permitted values</dt>
+<dd><p><code>"first"</code>, <code>"last"</code></p></dd>
+
+<dt>Default value</dt>
+<dd><p>none</p></dd>
+
+
+</dl></dd>
 
 
 <dt id="arg-set-values-to">set_values_to<a class="anchor" aria-label="anchor" href="#arg-set-values-to"></a></dt>
@@ -153,7 +185,11 @@ observations.</p>
 <p>A list of variable name-value pairs is expected.</p><ul><li><p>LHS refers to a variable.</p></li>
 <li><p>RHS refers to the values to set to the variable. This can be a string, a
 symbol, a numeric value or <code>NA</code>, e.g., <code>exprs(PARAMCD = "PD", PARAM =   "First Progressive Disease")</code>.</p></li>
-</ul></dd>
+</ul><dl><dt>Default value</dt>
+<dd><p>none</p></dd>
+
+
+</dl></dd>
 
 </dl></div>
     <div class="section level2">

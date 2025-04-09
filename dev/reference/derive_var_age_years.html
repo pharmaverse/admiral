@@ -11,7 +11,7 @@ in a new variable (new_var)."><meta property="og:image" content="https://pharmav
 
     <a class="navbar-brand me-2" href="../index.html">admiral</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.2.0.9016</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.2.0.9017</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -88,12 +88,22 @@ in a new variable (<code>new_var</code>).</p>
 
 <dl><dt id="arg-dataset">dataset<a class="anchor" aria-label="anchor" href="#arg-dataset"></a></dt>
 <dd><p>Input dataset</p>
-<p>The variables specified by the <code>age_var</code> argument are expected to be in the dataset.</p></dd>
+<p>The variables specified by the <code>age_var</code> argument are expected to be in the dataset.</p>
+<dl><dt>Default value</dt>
+<dd><p>none</p></dd>
+
+
+</dl></dd>
 
 
 <dt id="arg-age-var">age_var<a class="anchor" aria-label="anchor" href="#arg-age-var"></a></dt>
 <dd><p>Age variable.</p>
-<p>A numeric object is expected.</p></dd>
+<p>A numeric object is expected.</p>
+<dl><dt>Default value</dt>
+<dd><p>none</p></dd>
+
+
+</dl></dd>
 
 
 <dt id="arg-age-unit">age_unit<a class="anchor" aria-label="anchor" href="#arg-age-unit"></a></dt>
@@ -101,14 +111,25 @@ in a new variable (<code>new_var</code>).</p>
 <p>The <code>age_unit</code> argument is only expected when there is NOT a variable <code>age_var+U</code>
 in <code>dataset</code>. This gives the unit of the <code>age_var</code> variable and is used to convert
 AGE to 'years' so that grouping can occur.</p>
-<p>Default: NULL</p>
-<p>Permitted Values: 'years', 'months', 'weeks', 'days', 'hours', 'minutes', 'seconds'</p></dd>
+<dl><dt>Permitted values</dt>
+<dd><p>'years', 'months', 'weeks', 'days', 'hours', 'minutes', 'seconds'</p></dd>
+
+<dt>Default value</dt>
+<dd><p><code>NULL</code></p></dd>
+
+
+</dl></dd>
 
 
 <dt id="arg-new-var">new_var<a class="anchor" aria-label="anchor" href="#arg-new-var"></a></dt>
 <dd><p>New age variable to be created in years. The returned values are
 doubles and NOT integers.
-'</p></dd>
+'</p>
+<dl><dt>Default value</dt>
+<dd><p>none</p></dd>
+
+
+</dl></dd>
 
 </dl></div>
     <div class="section level2">

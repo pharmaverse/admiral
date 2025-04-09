@@ -13,7 +13,7 @@ memory consumption.'><meta property="og:image" content="https://pharmaverse.gith
 
     <a class="navbar-brand me-2" href="../index.html">admiral</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.2.0.9016</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.2.0.9017</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -101,13 +101,23 @@ memory consumption.</p>
 
 <dl><dt id="arg-dataset">dataset<a class="anchor" aria-label="anchor" href="#arg-dataset"></a></dt>
 <dd><p>Input dataset</p>
-<p>The variables specified by the <code>by_vars</code> argument are expected to be in the dataset.</p></dd>
+<p>The variables specified by the <code>by_vars</code> argument are expected to be in the dataset.</p>
+<dl><dt>Default value</dt>
+<dd><p>none</p></dd>
+
+
+</dl></dd>
 
 
 <dt id="arg-dataset-add">dataset_add<a class="anchor" aria-label="anchor" href="#arg-dataset-add"></a></dt>
 <dd><p>Additional dataset</p>
 <p>The variables specified by the <code>by_vars</code>, the <code>new_vars</code>, the <code>join_vars</code>,
-and the <code>order</code> argument are expected.</p></dd>
+and the <code>order</code> argument are expected.</p>
+<dl><dt>Default value</dt>
+<dd><p>none</p></dd>
+
+
+</dl></dd>
 
 
 <dt id="arg-by-vars">by_vars<a class="anchor" aria-label="anchor" href="#arg-by-vars"></a></dt>
@@ -115,8 +125,11 @@ and the <code>order</code> argument are expected.</p></dd>
 <p>The two datasets are joined by the specified variables.</p>
 <p>Variables can be renamed by naming the element, i.e.
 <code>by_vars = exprs(&lt;name in input dataset&gt; = &lt;name in additional dataset&gt;)</code>, similar to the <code>dplyr</code> joins.</p>
-<p><em>Permitted Values</em>: list of variables created by <code><a href="reexport-exprs.html">exprs()</a></code>
-e.g. <code>exprs(USUBJID, VISIT)</code></p></dd>
+<dl><dt>Default value</dt>
+<dd><p><code>NULL</code></p></dd>
+
+
+</dl></dd>
 
 
 <dt id="arg-tmp-obs-nr-var">tmp_obs_nr_var<a class="anchor" aria-label="anchor" href="#arg-tmp-obs-nr-var"></a></dt>
@@ -126,7 +139,12 @@ additional dataset (<code>dataset_add</code>). It is set to the observation numb
 with respect to <code>order</code>. For each by group (<code>by_vars</code>) the observation
 number starts with <code>1</code>. The variable can be used in the conditions
 (<code>filter_join</code>, <code>first_cond_upper</code>, <code>first_cond_lower</code>). It can also be
-used to select consecutive observations or the last observation.</p></dd>
+used to select consecutive observations or the last observation.</p>
+<dl><dt>Default value</dt>
+<dd><p><code>NULL</code></p></dd>
+
+
+</dl></dd>
 
 
 <dt id="arg-join-type">join_type<a class="anchor" aria-label="anchor" href="#arg-join-type"></a></dt>
@@ -140,7 +158,14 @@ be after the assessment. Thus <code>join_type = "after"</code> could be used.</p
 <p>Whereas, sometimes you might allow for confirmatory observations to occur
 prior to the observation. For example, to identify AEs occurring on or
 after seven days before a COVID AE. Thus <code>join_type = "all"</code> could be used.</p>
-<p><em>Permitted Values:</em> <code>"before"</code>, <code>"after"</code>, <code>"all"</code></p></dd>
+<dl><dt>Permitted values</dt>
+<dd><p><code>"before"</code>, <code>"after"</code>, <code>"all"</code></p></dd>
+
+<dt>Default value</dt>
+<dd><p>none</p></dd>
+
+
+</dl></dd>
 
 
 <dt id="arg-first-cond-upper">first_cond_upper<a class="anchor" aria-label="anchor" href="#arg-first-cond-upper"></a></dt>
@@ -151,7 +176,12 @@ condition is not fulfilled for any of the other observations, no
 observations are considered, i.e., the observation is not flagged.</p>
 <p>This argument should be specified if <code>filter_join</code> contains summary
 functions which should not apply to all observations but only up to the
-confirmation assessment.</p></dd>
+confirmation assessment.</p>
+<dl><dt>Default value</dt>
+<dd><p><code>NULL</code></p></dd>
+
+
+</dl></dd>
 
 
 <dt id="arg-first-cond-lower">first_cond_lower<a class="anchor" aria-label="anchor" href="#arg-first-cond-lower"></a></dt>
@@ -164,7 +194,12 @@ considered, i.e., the observation is not flagged.</p>
 <p>This argument should be specified if <code>filter_join</code> contains summary
 functions which should not apply to all observations but only from a
 certain observation before the current observation up to the current
-observation.</p></dd>
+observation.</p>
+<dl><dt>Default value</dt>
+<dd><p><code>NULL</code></p></dd>
+
+
+</dl></dd>
 
 
 <dt id="arg-filter-join">filter_join<a class="anchor" aria-label="anchor" href="#arg-filter-join"></a></dt>
@@ -175,7 +210,14 @@ variables from both datasets <code>dataset</code> and <code>dataset_add</code> c
 condition.</p>
 <p>The condition can include summary functions like <code><a href="https://rdrr.io/r/base/all.html" class="external-link">all()</a></code> or <code><a href="https://rdrr.io/r/base/any.html" class="external-link">any()</a></code>. The
 joined dataset is grouped by the original observations.</p>
-<p><em>Permitted Values</em>: a condition</p></dd>
+<dl><dt>Permitted values</dt>
+<dd><p>a condition</p></dd>
+
+<dt>Default value</dt>
+<dd><p><code>NULL</code></p></dd>
+
+
+</dl></dd>
 
 </dl></div>
     <div class="section level2">

@@ -15,7 +15,7 @@ inputs this result into derive_vars_merged()."><meta property="og:image" content
 
     <a class="navbar-brand me-2" href="../index.html">admiral</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.2.0.9016</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.2.0.9017</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -93,19 +93,34 @@ inputs this result into <code><a href="derive_vars_merged.html">derive_vars_merg
 
 
 <dl><dt id="arg-dataset">dataset<a class="anchor" aria-label="anchor" href="#arg-dataset"></a></dt>
-<dd><p>Input dataset</p></dd>
+<dd><p>Input dataset</p>
+<dl><dt>Default value</dt>
+<dd><p>none</p></dd>
+
+
+</dl></dd>
 
 
 <dt id="arg-new-var">new_var<a class="anchor" aria-label="anchor" href="#arg-new-var"></a></dt>
 <dd><p>New variable</p>
-<p>The specified variable is added to the input dataset.</p></dd>
+<p>The specified variable is added to the input dataset.</p>
+<dl><dt>Default value</dt>
+<dd><p>none</p></dd>
+
+
+</dl></dd>
 
 
 <dt id="arg-condition">condition<a class="anchor" aria-label="anchor" href="#arg-condition"></a></dt>
 <dd><p>Condition</p>
 <p>The condition is evaluated at the dataset (<code>dataset</code>). For
 all rows where it evaluates as <code>TRUE</code> the new variable
-is set to <code>1</code> in the new column. Otherwise, it is set to <code>0</code>.</p></dd>
+is set to <code>1</code> in the new column. Otherwise, it is set to <code>0</code>.</p>
+<dl><dt>Default value</dt>
+<dd><p>none</p></dd>
+
+
+</dl></dd>
 
 
 <dt id="arg-filter">filter<a class="anchor" aria-label="anchor" href="#arg-filter"></a></dt>
@@ -113,7 +128,14 @@ is set to <code>1</code> in the new column. Otherwise, it is set to <code>0</cod
 <p>Only observations fulfilling the specified condition are taken into account
 for flagging. If the argument is not specified, all observations are
 considered.</p>
-<p><em>Permitted Values</em>: a condition</p></dd>
+<dl><dt>Permitted values</dt>
+<dd><p>a condition</p></dd>
+
+<dt>Default value</dt>
+<dd><p><code>NULL</code></p></dd>
+
+
+</dl></dd>
 
 </dl></div>
     <div class="section level2">

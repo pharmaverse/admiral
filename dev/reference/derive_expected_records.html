@@ -9,7 +9,7 @@ contains missing observations."><meta property="og:image" content="https://pharm
 
     <a class="navbar-brand me-2" href="../index.html">admiral</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.2.0.9016</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.2.0.9017</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -90,13 +90,23 @@ contains missing observations.</p>
 
 <dl><dt id="arg-dataset">dataset<a class="anchor" aria-label="anchor" href="#arg-dataset"></a></dt>
 <dd><p>Input dataset</p>
-<p>The variables specified by the <code>dataset_ref</code> and <code>by_vars</code> arguments are expected to be in the dataset.</p></dd>
+<p>The variables specified by the <code>dataset_ref</code> and <code>by_vars</code> arguments are expected to be in the dataset.</p>
+<dl><dt>Default value</dt>
+<dd><p>none</p></dd>
+
+
+</dl></dd>
 
 
 <dt id="arg-dataset-ref">dataset_ref<a class="anchor" aria-label="anchor" href="#arg-dataset-ref"></a></dt>
 <dd><p>Expected observations dataset</p>
 <p>Data frame with the expected observations, e.g., all the expected
-combinations of <code>PARAMCD</code>, <code>PARAM</code>, <code>AVISIT</code>, <code>AVISITN</code>, ...</p></dd>
+combinations of <code>PARAMCD</code>, <code>PARAM</code>, <code>AVISIT</code>, <code>AVISITN</code>, ...</p>
+<dl><dt>Default value</dt>
+<dd><p>none</p></dd>
+
+
+</dl></dd>
 
 
 <dt id="arg-by-vars">by_vars<a class="anchor" aria-label="anchor" href="#arg-by-vars"></a></dt>
@@ -104,8 +114,11 @@ combinations of <code>PARAMCD</code>, <code>PARAM</code>, <code>AVISIT</code>, <
 <p>For each group defined by <code>by_vars</code> those observations from <code>dataset_ref</code>
 are added to the output dataset which do not have a corresponding observation
 in the input dataset.</p>
-<p><em>Permitted Values</em>: list of variables created by <code><a href="reexport-exprs.html">exprs()</a></code>
-e.g. <code>exprs(USUBJID, VISIT)</code></p></dd>
+<dl><dt>Default value</dt>
+<dd><p><code>NULL</code></p></dd>
+
+
+</dl></dd>
 
 
 <dt id="arg-set-values-to">set_values_to<a class="anchor" aria-label="anchor" href="#arg-set-values-to"></a></dt>
@@ -115,7 +128,11 @@ observations.</p>
 <p>A list of variable name-value pairs is expected.</p><ul><li><p>LHS refers to a variable.</p></li>
 <li><p>RHS refers to the values to set to the variable. This can be a string, a
 symbol, a numeric value, <code>NA</code>, or expressions, e.g., <code>exprs(PARAMCD =   "TDOSE", PARCAT1 = "OVERALL")</code>.</p></li>
-</ul></dd>
+</ul><dl><dt>Default value</dt>
+<dd><p><code>NULL</code></p></dd>
+
+
+</dl></dd>
 
 </dl></div>
     <div class="section level2">

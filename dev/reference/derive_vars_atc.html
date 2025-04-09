@@ -9,7 +9,7 @@ Note: This is a wrapper function for the more generic derive_vars_transposed()."
 
     <a class="navbar-brand me-2" href="../index.html">admiral</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.2.0.9016</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.2.0.9017</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -91,31 +91,54 @@ Note: This is a wrapper function for the more generic derive_vars_transposed()."
 
 <dl><dt id="arg-dataset">dataset<a class="anchor" aria-label="anchor" href="#arg-dataset"></a></dt>
 <dd><p>Input dataset</p>
-<p>The variables specified by the <code>by_vars</code> argument are expected to be in the dataset.</p></dd>
+<p>The variables specified by the <code>by_vars</code> argument are expected to be in the dataset.</p>
+<dl><dt>Default value</dt>
+<dd><p>none</p></dd>
+
+
+</dl></dd>
 
 
 <dt id="arg-dataset-facm">dataset_facm<a class="anchor" aria-label="anchor" href="#arg-dataset-facm"></a></dt>
 <dd><p>FACM dataset</p>
 <p>The variables specified by the <code>by_vars</code>, <code>id_vars</code>, and <code>value_var</code>
 arguments and <code>FATESTCD</code> are required. The variables <code>by_vars</code>, <code>id_vars</code>,
-and <code>FATESTCD</code> must be a unique key.</p></dd>
+and <code>FATESTCD</code> must be a unique key.</p>
+<dl><dt>Default value</dt>
+<dd><p>none</p></dd>
+
+
+</dl></dd>
 
 
 <dt id="arg-by-vars">by_vars<a class="anchor" aria-label="anchor" href="#arg-by-vars"></a></dt>
 <dd><p>Grouping variables</p>
-<p>Keys used to merge <code>dataset_facm</code> with <code>dataset</code>.</p></dd>
+<p>Keys used to merge <code>dataset_facm</code> with <code>dataset</code>.</p>
+<dl><dt>Default value</dt>
+<dd><p><code>exprs(!!!get_admiral_option("subject_keys"), CMREFID = FAREFID)</code></p></dd>
+
+
+</dl></dd>
 
 
 <dt id="arg-id-vars">id_vars<a class="anchor" aria-label="anchor" href="#arg-id-vars"></a></dt>
 <dd><p>ID variables</p>
 <p>Variables (excluding by_vars) that uniquely identify each observation in <code>dataset_merge</code>.</p>
-<p><em>Permitted Values</em>: list of variables created by <code><a href="reexport-exprs.html">exprs()</a></code>
-e.g. <code>exprs(USUBJID, VISIT)</code></p></dd>
+<dl><dt>Default value</dt>
+<dd><p><code>NULL</code></p></dd>
+
+
+</dl></dd>
 
 
 <dt id="arg-value-var">value_var<a class="anchor" aria-label="anchor" href="#arg-value-var"></a></dt>
 <dd><p>The variable of <code>dataset_facm</code> containing the values of the
-transposed variables</p></dd>
+transposed variables</p>
+<dl><dt>Default value</dt>
+<dd><p><code>FASTRESC</code></p></dd>
+
+
+</dl></dd>
 
 </dl></div>
     <div class="section level2">

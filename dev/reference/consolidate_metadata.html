@@ -11,7 +11,7 @@ a single lookup table can be created."><meta property="og:image" content="https:
 
     <a class="navbar-brand me-2" href="../index.html">admiral</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.2.0.9016</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.2.0.9017</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -94,27 +94,55 @@ a single lookup table can be created.</p>
 
 <dl><dt id="arg-datasets">datasets<a class="anchor" aria-label="anchor" href="#arg-datasets"></a></dt>
 <dd><p>List of datasets to consolidate</p>
-<p><em>Permitted Values</em>: A named list of datasets</p></dd>
+<dl><dt>Permitted values</dt>
+<dd><p>A named list of datasets</p></dd>
+
+<dt>Default value</dt>
+<dd><p>none</p></dd>
+
+
+</dl></dd>
 
 
 <dt id="arg-key-vars">key_vars<a class="anchor" aria-label="anchor" href="#arg-key-vars"></a></dt>
 <dd><p>Key variables</p>
 <p>The specified variables must be a unique of all input datasets.</p>
-<p><em>Permitted Values</em>: A list of variables created by <code><a href="reexport-exprs.html">exprs()</a></code></p></dd>
+<dl><dt>Permitted values</dt>
+<dd><p>A list of variables created by <code><a href="reexport-exprs.html">exprs()</a></code></p></dd>
+
+<dt>Default value</dt>
+<dd><p>none</p></dd>
+
+
+</dl></dd>
 
 
 <dt id="arg-source-var">source_var<a class="anchor" aria-label="anchor" href="#arg-source-var"></a></dt>
 <dd><p>Source variable</p>
 <p>The specified variable is added to the output dataset. It is set the name
 of the dataset the observation is originating from.</p>
-<p><em>Permitted Values</em>: A symbol</p></dd>
+<dl><dt>Permitted values</dt>
+<dd><p>A symbol</p></dd>
+
+<dt>Default value</dt>
+<dd><p><code>SOURCE</code></p></dd>
+
+
+</dl></dd>
 
 
 <dt id="arg-check-vars">check_vars<a class="anchor" aria-label="anchor" href="#arg-check-vars"></a></dt>
 <dd><p>Check variables?</p>
 <p>If <code>"message"</code>, <code>"warning"</code>, or <code>"error"</code> is specified, a message is issued
 if the variable names differ across the input datasets (<code>datasets</code>).</p>
-<p><em>Permitted Values</em>: <code>"none"</code>, <code>"message"</code>, <code>"warning"</code>, <code>"error"</code></p></dd>
+<dl><dt>Permitted values</dt>
+<dd><p><code>"none"</code>, <code>"message"</code>, <code>"warning"</code>, <code>"error"</code></p></dd>
+
+<dt>Default value</dt>
+<dd><p><code>"warning"</code></p></dd>
+
+
+</dl></dd>
 
 
 <dt id="arg-check-type">check_type<a class="anchor" aria-label="anchor" href="#arg-check-type"></a></dt>
@@ -122,7 +150,14 @@ if the variable names differ across the input datasets (<code>datasets</code>).<
 <p>If <code>"warning"</code> or <code>"error"</code> is specified, a message is issued if the key
 variables (<code>key_vars</code>) are not a unique key in all of the input datasets
 (<code>datasets</code>).</p>
-<p><em>Permitted Values</em>: <code>"none"</code>, <code>"warning"</code>, <code>"error"</code></p></dd>
+<dl><dt>Permitted values</dt>
+<dd><p><code>"none"</code>, <code>"warning"</code>, <code>"error"</code></p></dd>
+
+<dt>Default value</dt>
+<dd><p><code>"error"</code></p></dd>
+
+
+</dl></dd>
 
 </dl></div>
     <div class="section level2">

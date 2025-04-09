@@ -9,7 +9,7 @@ in the derive_vars_query() function as defined in the Queries Dataset Documentat
 
     <a class="navbar-brand me-2" href="../index.html">admiral</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.2.0.9016</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.2.0.9017</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -85,7 +85,12 @@ in the <code><a href="derive_vars_query.html">derive_vars_query()</a></code> fun
 
 <dl><dt id="arg-queries">queries<a class="anchor" aria-label="anchor" href="#arg-queries"></a></dt>
 <dd><p>List of queries</p>
-<p>A list of <code><a href="query.html">query()</a></code> objects is expected.</p></dd>
+<p>A list of <code><a href="query.html">query()</a></code> objects is expected.</p>
+<dl><dt>Default value</dt>
+<dd><p>none</p></dd>
+
+
+</dl></dd>
 
 
 <dt id="arg-version">version<a class="anchor" aria-label="anchor" href="#arg-version"></a></dt>
@@ -93,8 +98,15 @@ in the <code><a href="derive_vars_query.html">derive_vars_query()</a></code> fun
 <p>The dictionary version used for coding the terms should be specified.
 If any of the queries is a basket (SMQ, SDG, ....) or a customized query
 including a basket, the parameter needs to be specified.</p>
-<p><em>Permitted Values</em>: A character string (the expected format is
+<dl><dt>Permitted values</dt>
+<dd><p>A character string (the expected format is
 company-specific)</p></dd>
+
+<dt>Default value</dt>
+<dd><p><code>NULL</code></p></dd>
+
+
+</dl></dd>
 
 
 <dt id="arg-get-terms-fun">get_terms_fun<a class="anchor" aria-label="anchor" href="#arg-get-terms-fun"></a></dt>
@@ -126,7 +138,11 @@ be used to store data which is used for all baskets in the
 database all SMQs can be read and stored in the environment when the first
 SMQ is handled. For the other SMQs the terms can be retrieved from the
 environment instead of accessing the database again.</p></li>
-</ul></dd>
+</ul><dl><dt>Default value</dt>
+<dd><p><code>NULL</code></p></dd>
+
+
+</dl></dd>
 
 </dl></div>
     <div class="section level2">

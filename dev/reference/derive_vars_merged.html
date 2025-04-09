@@ -13,7 +13,7 @@ each by group (order and mode argument)."><meta property="og:image" content="htt
 
     <a class="navbar-brand me-2" href="../index.html">admiral</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.2.0.9016</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.2.0.9017</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -106,13 +106,23 @@ each by group (<code>order</code> and <code>mode</code> argument).</p>
 
 <dl><dt id="arg-dataset">dataset<a class="anchor" aria-label="anchor" href="#arg-dataset"></a></dt>
 <dd><p>Input dataset</p>
-<p>The variables specified by the <code>by_vars</code> argument are expected to be in the dataset.</p></dd>
+<p>The variables specified by the <code>by_vars</code> argument are expected to be in the dataset.</p>
+<dl><dt>Default value</dt>
+<dd><p>none</p></dd>
+
+
+</dl></dd>
 
 
 <dt id="arg-dataset-add">dataset_add<a class="anchor" aria-label="anchor" href="#arg-dataset-add"></a></dt>
 <dd><p>Additional dataset</p>
 <p>The variables specified by the <code>by_vars</code>, the <code>new_vars</code>, and the <code>order</code>
-argument are expected.</p></dd>
+argument are expected.</p>
+<dl><dt>Default value</dt>
+<dd><p>none</p></dd>
+
+
+</dl></dd>
 
 
 <dt id="arg-by-vars">by_vars<a class="anchor" aria-label="anchor" href="#arg-by-vars"></a></dt>
@@ -121,8 +131,11 @@ argument are expected.</p></dd>
 are merged by the specified variables.</p>
 <p>Variables can be renamed by naming the element, i.e.
 <code>by_vars = exprs(&lt;name in input dataset&gt; = &lt;name in additional dataset&gt;)</code>, similar to the <code>dplyr</code> joins.</p>
-<p><em>Permitted Values</em>: list of variables created by <code><a href="reexport-exprs.html">exprs()</a></code>
-e.g. <code>exprs(USUBJID, VISIT)</code></p></dd>
+<dl><dt>Default value</dt>
+<dd><p>none</p></dd>
+
+
+</dl></dd>
 
 
 <dt id="arg-order">order<a class="anchor" aria-label="anchor" href="#arg-order"></a></dt>
@@ -132,8 +145,15 @@ last observation from the additional dataset is selected with respect to the
 specified order.</p>
 <p>Variables defined by the <code>new_vars</code> argument can be used in the sort order.</p>
 <p>For handling of <code>NA</code>s in sorting variables see <a href="../articles/generic.html#sort_order">Sort Order</a>.</p>
-<p><em>Permitted Values</em>: list of expressions created by <code><a href="reexport-exprs.html">exprs()</a></code>, e.g.,
+<dl><dt>Permitted values</dt>
+<dd><p>list of expressions created by <code><a href="reexport-exprs.html">exprs()</a></code>, e.g.,
 <code>exprs(ADT, desc(AVAL))</code> or <code>NULL</code></p></dd>
+
+<dt>Default value</dt>
+<dd><p><code>NULL</code></p></dd>
+
+
+</dl></dd>
 
 
 <dt id="arg-new-vars">new_vars<a class="anchor" aria-label="anchor" href="#arg-new-vars"></a></dt>
@@ -151,7 +171,14 @@ variable <code>LASTRSP</code> to the dataset and sets it to the upper case value
 <code>AVALC</code>.</p>
 <p>If the argument is not specified or set to <code>NULL</code>, all variables from the
 additional dataset (<code>dataset_add</code>) are added.</p>
-<p><em>Permitted Values</em>: list of variables or named expressions created by <code><a href="reexport-exprs.html">exprs()</a></code></p></dd>
+<dl><dt>Permitted values</dt>
+<dd><p>list of variables or named expressions created by <code><a href="reexport-exprs.html">exprs()</a></code></p></dd>
+
+<dt>Default value</dt>
+<dd><p><code>NULL</code></p></dd>
+
+
+</dl></dd>
 
 
 <dt id="arg-filter-add">filter_add<a class="anchor" aria-label="anchor" href="#arg-filter-add"></a></dt>
@@ -161,7 +188,14 @@ for merging. If the argument is not specified, all observations are
 considered.</p>
 <p>Variables defined by the <code>new_vars</code> argument can be used in the filter
 condition.</p>
-<p><em>Permitted Values</em>: a condition</p></dd>
+<dl><dt>Permitted values</dt>
+<dd><p>a condition</p></dd>
+
+<dt>Default value</dt>
+<dd><p><code>NULL</code></p></dd>
+
+
+</dl></dd>
 
 
 <dt id="arg-mode">mode<a class="anchor" aria-label="anchor" href="#arg-mode"></a></dt>
@@ -169,7 +203,14 @@ condition.</p>
 <p>Determines if the first or last observation is selected. If the <code>order</code>
 argument is specified, <code>mode</code> must be non-null.</p>
 <p>If the <code>order</code> argument is not specified, the <code>mode</code> argument is ignored.</p>
-<p><em>Permitted Values</em>: <code>"first"</code>, <code>"last"</code>, <code>NULL</code></p></dd>
+<dl><dt>Permitted values</dt>
+<dd><p><code>"first"</code>, <code>"last"</code>, <code>NULL</code></p></dd>
+
+<dt>Default value</dt>
+<dd><p><code>NULL</code></p></dd>
+
+
+</dl></dd>
 
 
 <dt id="arg-exist-flag">exist_flag<a class="anchor" aria-label="anchor" href="#arg-exist-flag"></a></dt>
@@ -178,21 +219,42 @@ argument is specified, <code>mode</code> must be non-null.</p>
 variable (e.g., <code>FLAG</code>) is added to the input dataset. This variable will
 be the value provided in <code>true_value</code> for all selected records from <code>dataset_add</code>
 which are merged into the input dataset, and the value provided in <code>false_value</code> otherwise.</p>
-<p><em>Permitted Values</em>: Variable name</p></dd>
+<dl><dt>Permitted values</dt>
+<dd><p>Variable name</p></dd>
+
+<dt>Default value</dt>
+<dd><p><code>NULL</code></p></dd>
+
+
+</dl></dd>
 
 
 <dt id="arg-true-value">true_value<a class="anchor" aria-label="anchor" href="#arg-true-value"></a></dt>
 <dd><p>True value</p>
 <p>The value for the specified variable <code>exist_flag</code>, applicable to
 the first or last observation (depending on the mode) of each by group.</p>
-<p>Permitted Values: An atomic scalar</p></dd>
+<dl><dt>Permitted values</dt>
+<dd><p>An atomic scalar</p></dd>
+
+<dt>Default value</dt>
+<dd><p><code>"Y"</code></p></dd>
+
+
+</dl></dd>
 
 
 <dt id="arg-false-value">false_value<a class="anchor" aria-label="anchor" href="#arg-false-value"></a></dt>
 <dd><p>False value</p>
 <p>The value for the specified variable <code>exist_flag</code>, NOT applicable to
 the first or last observation (depending on the mode) of each by group.</p>
-<p>Permitted Values: An atomic scalar</p></dd>
+<dl><dt>Permitted values</dt>
+<dd><p>An atomic scalar</p></dd>
+
+<dt>Default value</dt>
+<dd><p><code>NA_character_</code></p></dd>
+
+
+</dl></dd>
 
 
 <dt id="arg-missing-values">missing_values<a class="anchor" aria-label="anchor" href="#arg-missing-values"></a></dt>
@@ -201,8 +263,15 @@ the first or last observation (depending on the mode) of each by group.</p>
 matching observation in the additional dataset (<code>dataset_add</code>) the values
 of the specified variables are set to the specified value. Only variables
 specified for <code>new_vars</code> can be specified for <code>missing_values</code>.</p>
-<p><em>Permitted Values</em>: named list of expressions, e.g.,
+<dl><dt>Permitted values</dt>
+<dd><p>named list of expressions, e.g.,
 <code>exprs(BASEC = "MISSING", BASE = -1)</code></p></dd>
+
+<dt>Default value</dt>
+<dd><p><code>NULL</code></p></dd>
+
+
+</dl></dd>
 
 
 <dt id="arg-check-type">check_type<a class="anchor" aria-label="anchor" href="#arg-check-type"></a></dt>
@@ -213,17 +282,27 @@ with respect to the by variables and the order.</p>
 <p>If the <code>order</code> argument is not specified, the <code>check_type</code> argument is ignored:
 if the observations of the (restricted) additional dataset are not unique with respect
 to the by variables, an error is issued.</p>
-<p><em>Permitted Values</em>: <code>"none"</code>, <code>"message"</code>, <code>"warning"</code>, <code>"error"</code></p></dd>
+<dl><dt>Permitted values</dt>
+<dd><p><code>"none"</code>, <code>"message"</code>, <code>"warning"</code>, <code>"error"</code></p></dd>
+
+<dt>Default value</dt>
+<dd><p><code>"warning"</code></p></dd>
+
+
+</dl></dd>
 
 
 <dt id="arg-duplicate-msg">duplicate_msg<a class="anchor" aria-label="anchor" href="#arg-duplicate-msg"></a></dt>
 <dd><p>Message of unique check</p>
 <p>If the uniqueness check fails, the specified message is displayed.</p>
-<p><em>Default</em>:</p>
-<p></p><div class="sourceCode r"><pre><code><span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span></span>
+<dl><dt>Default value</dt>
+<dd><p></p><div class="sourceCode r"><pre><code><span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span></span>
 <span>  <span class="st">"Dataset {.arg dataset_add} contains duplicate records with respect to"</span>,</span>
 <span>  <span class="st">"{.var {vars2chr(by_vars)}}."</span></span>
 <span><span class="op">)</span></span></code></pre><p></p></div></dd>
+
+
+</dl></dd>
 
 
 <dt id="arg-relationship">relationship<a class="anchor" aria-label="anchor" href="#arg-relationship"></a></dt>
@@ -233,7 +312,14 @@ containing the additional <code>new_vars</code>.</p>
 <p>This argument is passed to the <code><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html" class="external-link">dplyr::left_join()</a></code> function. See
 <a href="https://dplyr.tidyverse.org/reference/mutate-joins.html#arguments" class="external-link">https://dplyr.tidyverse.org/reference/mutate-joins.html#arguments</a> for
 more details.</p>
-<p><strong>Permitted Values:</strong> <code>"one-to-one"</code>, <code>"many-to-one"</code>, <code>NULL</code>.</p></dd>
+<dl><dt>Permitted values</dt>
+<dd><p><code>"one-to-one"</code>, <code>"many-to-one"</code>, <code>NULL</code>.</p></dd>
+
+<dt>Default value</dt>
+<dd><p><code>NULL</code></p></dd>
+
+
+</dl></dd>
 
 </dl></div>
     <div class="section level2">

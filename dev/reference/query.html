@@ -11,7 +11,7 @@ as input to create_query_data()."><meta property="og:image" content="https://pha
 
     <a class="navbar-brand me-2" href="../index.html">admiral</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.2.0.9016</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.2.0.9017</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -88,25 +88,44 @@ as input to <code><a href="create_query_data.html">create_query_data()</a></code
 
 <dl><dt id="arg-prefix">prefix<a class="anchor" aria-label="anchor" href="#arg-prefix"></a></dt>
 <dd><p>The value is used to populate <code>PREFIX</code> in the output
-dataset of <code><a href="create_query_data.html">create_query_data()</a></code>, e.g., <code>"SMQ03"</code></p></dd>
+dataset of <code><a href="create_query_data.html">create_query_data()</a></code>, e.g., <code>"SMQ03"</code></p>
+<dl><dt>Default value</dt>
+<dd><p>none</p></dd>
+
+
+</dl></dd>
 
 
 <dt id="arg-name">name<a class="anchor" aria-label="anchor" href="#arg-name"></a></dt>
 <dd><p>The value is used to populate <code>GRPNAME</code> in the output dataset
 of <code><a href="create_query_data.html">create_query_data()</a></code>. If the <code>auto</code> keyword is specified, the variable
 is set to the name of the query in the SMQ/SDG database.</p>
-<p><em>Permitted Values</em>: A character scalar or the <code>auto</code> keyword. The <code>auto</code>
+<dl><dt>Permitted values</dt>
+<dd><p>A character scalar or the <code>auto</code> keyword. The <code>auto</code>
 keyword is permitted only for queries which are defined by an
 <code><a href="basket_select.html">basket_select()</a></code> object.</p></dd>
+
+<dt>Default value</dt>
+<dd><p><code>auto</code></p></dd>
+
+
+</dl></dd>
 
 
 <dt id="arg-id">id<a class="anchor" aria-label="anchor" href="#arg-id"></a></dt>
 <dd><p>The value is used to populate <code>GRPID</code> in the output dataset of
 <code><a href="create_query_data.html">create_query_data()</a></code>. If the <code>auto</code> keyword is specified, the variable is
 set to the id of the query in the SMQ/SDG database.</p>
-<p><em>Permitted Values</em>: A integer scalar or the <code>auto</code> keyword. The <code>auto</code>
+<dl><dt>Permitted values</dt>
+<dd><p>A integer scalar or the <code>auto</code> keyword. The <code>auto</code>
 keyword is permitted only for queries which are defined by an
 <code><a href="basket_select.html">basket_select()</a></code> object.</p></dd>
+
+<dt>Default value</dt>
+<dd><p><code>NULL</code></p></dd>
+
+
+</dl></dd>
 
 
 <dt id="arg-add-scope-num">add_scope_num<a class="anchor" aria-label="anchor" href="#arg-add-scope-num"></a></dt>
@@ -115,7 +134,14 @@ of <code><a href="create_query_data.html">create_query_data()</a></code> is popu
 <p>If the parameter is set to <code>TRUE</code>, the definition must be an <code><a href="basket_select.html">basket_select()</a></code>
 object.</p>
 <p><em>Default</em>: <code>FALSE</code></p>
-<p><em>Permitted Values</em>: <code>TRUE</code>, <code>FALSE</code></p></dd>
+<dl><dt>Permitted values</dt>
+<dd><p><code>TRUE</code>, <code>FALSE</code></p></dd>
+
+<dt>Default value</dt>
+<dd><p><code>FALSE</code></p></dd>
+
+
+</dl></dd>
 
 
 <dt id="arg-definition">definition<a class="anchor" aria-label="anchor" href="#arg-definition"></a></dt>
@@ -136,8 +162,15 @@ can be omitted.</p></li>
 <li><p>A list of data frames and <code><a href="basket_select.html">basket_select()</a></code> objects can be specified to
 define a customized query based on custom terms and SMQs. The data frames
 must have the same structure as described for the previous item.</p></li>
-</ul><p><em>Permitted Values</em>: an <code><a href="basket_select.html">basket_select()</a></code> object, a
+</ul><dl><dt>Permitted values</dt>
+<dd><p>an <code><a href="basket_select.html">basket_select()</a></code> object, a
 data frame, or a list of data frames and <code><a href="basket_select.html">basket_select()</a></code> objects.</p></dd>
+
+<dt>Default value</dt>
+<dd><p><code>NULL</code></p></dd>
+
+
+</dl></dd>
 
 </dl></div>
     <div class="section level2">

@@ -9,7 +9,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">admiral</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.2.0.9016</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.2.0.9017</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -85,13 +85,21 @@
 
 <dl><dt id="arg-dataset">dataset<a class="anchor" aria-label="anchor" href="#arg-dataset"></a></dt>
 <dd><p>Input dataset</p>
-<p>The variables specified by the <code>by_vars</code> argument are expected to be in the dataset.</p></dd>
+<p>The variables specified by the <code>by_vars</code> argument are expected to be in the dataset.</p>
+<dl><dt>Default value</dt>
+<dd><p>none</p></dd>
+
+
+</dl></dd>
 
 
 <dt id="arg-by-vars">by_vars<a class="anchor" aria-label="anchor" href="#arg-by-vars"></a></dt>
 <dd><p>Grouping variables</p>
-<p><em>Permitted Values</em>: list of variables created by <code><a href="reexport-exprs.html">exprs()</a></code>
-e.g. <code>exprs(USUBJID, VISIT)</code></p></dd>
+<dl><dt>Default value</dt>
+<dd><p>none</p></dd>
+
+
+</dl></dd>
 
 
 <dt id="arg-parameters">parameters<a class="anchor" aria-label="anchor" href="#arg-parameters"></a></dt>
@@ -100,7 +108,14 @@ e.g. <code>exprs(USUBJID, VISIT)</code></p></dd>
 expression is specified, a new parameter code is added to the input
 dataset. The name of the element defines the parameter code and the
 expression the observations to select.</p>
-<p><em>Permitted Values:</em> A character vector of <code>PARAMCD</code> values or a list of expressions</p></dd>
+<dl><dt>Permitted values</dt>
+<dd><p>A character vector of <code>PARAMCD</code> values or a list of expressions</p></dd>
+
+<dt>Default value</dt>
+<dd><p>none</p></dd>
+
+
+</dl></dd>
 
 
 <dt id="arg-set-values-to">set_values_to<a class="anchor" aria-label="anchor" href="#arg-set-values-to"></a></dt>
@@ -108,14 +123,28 @@ expression the observations to select.</p>
 added to the input dataset. They are set to the value of the variable for
 the parameter. E.g., <code>AVAL.WEIGHT</code> is set to the value of <code>AVAL</code> where
 <code>PARAMCD == "WEIGHT"</code>.</p>
-<p><em>Permitted Values:</em> A list of expressions</p></dd>
+<dl><dt>Permitted values</dt>
+<dd><p>A list of expressions</p></dd>
+
+<dt>Default value</dt>
+<dd><p>none</p></dd>
+
+
+</dl></dd>
 
 
 <dt id="arg-filter">filter<a class="anchor" aria-label="anchor" href="#arg-filter"></a></dt>
 <dd><p>Filter condition used for restricting the input dataset</p>
 <p>The specified filter condition is used in the warnings only. It is not
 applied to the input dataset.</p>
-<p><em>Permitted Values:</em> An unquoted expression</p></dd>
+<dl><dt>Permitted values</dt>
+<dd><p>An unquoted expression</p></dd>
+
+<dt>Default value</dt>
+<dd><p>none</p></dd>
+
+
+</dl></dd>
 
 </dl></div>
     <div class="section level2">

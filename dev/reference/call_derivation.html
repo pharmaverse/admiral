@@ -9,7 +9,7 @@ iterations and others varying."><meta property="og:image" content="https://pharm
 
     <a class="navbar-brand me-2" href="../index.html">admiral</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.2.0.9016</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.2.0.9017</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -84,7 +84,12 @@ iterations and others varying.</p>
 
 
 <dl><dt id="arg-dataset">dataset<a class="anchor" aria-label="anchor" href="#arg-dataset"></a></dt>
-<dd><p>Input dataset</p></dd>
+<dd><p>Input dataset</p>
+<dl><dt>Default value</dt>
+<dd><p><code>NULL</code></p></dd>
+
+
+</dl></dd>
 
 
 <dt id="arg-derivation">derivation<a class="anchor" aria-label="anchor" href="#arg-derivation"></a></dt>
@@ -93,12 +98,22 @@ iterations and others varying.</p>
 adds variables or observations to a dataset. The first argument of a
 derivation must expect a dataset and the derivation must return a dataset.
 All expected arguments for the derivation function must be provided through
-the <code><a href="params.html">params()</a></code> objects passed to the <code>variable_params</code> and <code>...</code> arguments.</p></dd>
+the <code><a href="params.html">params()</a></code> objects passed to the <code>variable_params</code> and <code>...</code> arguments.</p>
+<dl><dt>Default value</dt>
+<dd><p>none</p></dd>
+
+
+</dl></dd>
 
 
 <dt id="arg-variable-params">variable_params<a class="anchor" aria-label="anchor" href="#arg-variable-params"></a></dt>
 <dd><p>A <code>list</code> of function arguments that are different across iterations.
-Each set of function arguments must be created using <code><a href="params.html">params()</a></code>.</p></dd>
+Each set of function arguments must be created using <code><a href="params.html">params()</a></code>.</p>
+<dl><dt>Default value</dt>
+<dd><p>none</p></dd>
+
+
+</dl></dd>
 
 
 <dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
@@ -109,7 +124,12 @@ the value in <code>variable_params</code> overwrites the one in <code>...</code>
 <p>It is also possible to pass functions from outside the <code>{admiral}</code> package
 to <code>call_derivation()</code>, e.g. an extension package function, or
 <code><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">dplyr::mutate()</a></code>. The only requirement for a function being passed to <code>derivation</code> is that
-it must take a dataset as its first argument and return a dataset.</p></dd>
+it must take a dataset as its first argument and return a dataset.</p>
+<dl><dt>Default value</dt>
+<dd><p>none</p></dd>
+
+
+</dl></dd>
 
 </dl></div>
     <div class="section level2">

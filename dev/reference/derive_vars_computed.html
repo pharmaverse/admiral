@@ -23,7 +23,7 @@ parameters in ADVS."><meta property="og:image" content="https://pharmaverse.gith
 
     <a class="navbar-brand me-2" href="../index.html">admiral</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.2.0.9016</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.2.0.9017</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -114,7 +114,12 @@ parameters in <code>ADVS</code>.</p>
 
 
 <dl><dt id="arg-dataset">dataset<a class="anchor" aria-label="anchor" href="#arg-dataset"></a></dt>
-<dd><p>The variables specified by the <code>by_vars</code> parameter are expected.</p></dd>
+<dd><p>The variables specified by the <code>by_vars</code> parameter are expected.</p>
+<dl><dt>Default value</dt>
+<dd><p>none</p></dd>
+
+
+</dl></dd>
 
 
 <dt id="arg-dataset-add">dataset_add<a class="anchor" aria-label="anchor" href="#arg-dataset-add"></a></dt>
@@ -122,14 +127,26 @@ parameters in <code>ADVS</code>.</p>
 <p>The variables specified by the <code>by_vars</code> parameter are expected.</p>
 <p>The variable specified by <code>by_vars</code> and <code>PARAMCD</code> must be a unique key of
 the additional dataset after restricting it by the filter condition
-(<code>filter_add</code> parameter) and to the parameters specified by <code>parameters</code>.</p></dd>
+(<code>filter_add</code> parameter) and to the parameters specified by <code>parameters</code>.</p>
+<dl><dt>Default value</dt>
+<dd><p>none</p></dd>
+
+
+</dl></dd>
 
 
 <dt id="arg-by-vars">by_vars<a class="anchor" aria-label="anchor" href="#arg-by-vars"></a></dt>
 <dd><p>Grouping variables</p>
 <p>Grouping variables uniquely identifying a set of records for which
 <code>new_vars</code> are to be calculated.</p>
-<p><em>Permitted Values:</em> list of variables created by exprs()</p></dd>
+<dl><dt>Permitted values</dt>
+<dd><p>list of variables created by exprs()</p></dd>
+
+<dt>Default value</dt>
+<dd><p>none</p></dd>
+
+
+</dl></dd>
 
 
 <dt id="arg-parameters">parameters<a class="anchor" aria-label="anchor" href="#arg-parameters"></a></dt>
@@ -149,7 +166,14 @@ them to the observations to consider.</p>
 <p>Unnamed elements in the list of expressions are considered as parameter
 codes. For example, <code>parameters = exprs(WEIGHT, HGHT = VSTESTCD == "HEIGHT")</code> uses the parameter code <code>"WEIGHT"</code> and creates a temporary
 parameter code <code>"HGHT"</code>.</p>
-<p><em>Permitted Values:</em> A character vector of <code>PARAMCD</code> values or a list of expressions</p></dd>
+<dl><dt>Permitted values</dt>
+<dd><p>A character vector of <code>PARAMCD</code> values or a list of expressions</p></dd>
+
+<dt>Default value</dt>
+<dd><p>none</p></dd>
+
+
+</dl></dd>
 
 
 <dt id="arg-new-vars">new_vars<a class="anchor" aria-label="anchor" href="#arg-new-vars"></a></dt>
@@ -162,7 +186,14 @@ variables of the parameters specified by <code>parameters</code> can be accessed
 <span id="cb1-3"><a href="#cb1-3" tabindex="-1"></a>)</span></code></pre><p></p></div>
 <p>defines the value for the new variable.</p>
 <p>Variable names in the expression must not contain more than one dot.</p>
-<p><em>Permitted Values:</em> List of variable-value pairs</p></dd>
+<dl><dt>Permitted values</dt>
+<dd><p>List of variable-value pairs</p></dd>
+
+<dt>Default value</dt>
+<dd><p>none</p></dd>
+
+
+</dl></dd>
 
 
 <dt id="arg-filter-add">filter_add<a class="anchor" aria-label="anchor" href="#arg-filter-add"></a></dt>
@@ -170,7 +201,14 @@ variables of the parameters specified by <code>parameters</code> can be accessed
 <p>The specified condition is applied to the additional dataset before
 deriving the new variable, i.e., only observations fulfilling the
 condition are taken into account.</p>
-<p><em>Permitted Values:</em> a condition</p></dd>
+<dl><dt>Permitted values</dt>
+<dd><p>a condition</p></dd>
+
+<dt>Default value</dt>
+<dd><p><code>NULL</code></p></dd>
+
+
+</dl></dd>
 
 
 <dt id="arg-constant-by-vars">constant_by_vars<a class="anchor" aria-label="anchor" href="#arg-constant-by-vars"></a></dt>
@@ -178,7 +216,14 @@ condition are taken into account.</p>
 <p>The constant parameters (parameters that are measured only once) are merged
 to the other parameters using the specified variables.
 (Refer to the Example)</p>
-<p><em>Permitted Values:</em> list of variables</p></dd>
+<dl><dt>Permitted values</dt>
+<dd><p>list of variables</p></dd>
+
+<dt>Default value</dt>
+<dd><p><code>NULL</code></p></dd>
+
+
+</dl></dd>
 
 
 <dt id="arg-constant-parameters">constant_parameters<a class="anchor" aria-label="anchor" href="#arg-constant-parameters"></a></dt>
@@ -199,7 +244,14 @@ observations to consider.</p>
 <p>Unnamed elements in the list of expressions are considered as parameter
 codes. For example, <code>constant_parameters = exprs(WEIGHT, HGHT = VSTESTCD == "HEIGHT")</code> uses the parameter code <code>"WEIGHT"</code> and creates a temporary
 parameter code <code>"HGHT"</code>.</p>
-<p><em>Permitted Values:</em> A character vector of <code>PARAMCD</code> values or a list of expressions</p></dd>
+<dl><dt>Permitted values</dt>
+<dd><p>A character vector of <code>PARAMCD</code> values or a list of expressions</p></dd>
+
+<dt>Default value</dt>
+<dd><p><code>NULL</code></p></dd>
+
+
+</dl></dd>
 
 </dl></div>
     <div class="section level2">

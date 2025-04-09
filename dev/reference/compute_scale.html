@@ -13,7 +13,7 @@ response to obtain a subscale score."><meta property="og:image" content="https:/
 
     <a class="navbar-brand me-2" href="../index.html">admiral</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.2.0.9016</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.2.0.9017</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -97,7 +97,12 @@ response to obtain a subscale score.</p>
 
 <dl><dt id="arg-source">source<a class="anchor" aria-label="anchor" href="#arg-source"></a></dt>
 <dd><p>A vector of values to be scaled</p>
-<p>A numeric vector is expected.</p></dd>
+<p>A numeric vector is expected.</p>
+<dl><dt>Default value</dt>
+<dd><p>none</p></dd>
+
+
+</dl></dd>
 
 
 <dt id="arg-source-range">source_range<a class="anchor" aria-label="anchor" href="#arg-source-range"></a></dt>
@@ -105,7 +110,12 @@ response to obtain a subscale score.</p>
 <p>A numeric vector containing two elements is expected, representing the
 lower and upper bounds of the permitted source range. Alternatively, if no
 argument is specified for <code>source_range</code> and <code>target_range</code>, no
-transformation will be performed.</p></dd>
+transformation will be performed.</p>
+<dl><dt>Default value</dt>
+<dd><p><code>NULL</code></p></dd>
+
+
+</dl></dd>
 
 
 <dt id="arg-target-range">target_range<a class="anchor" aria-label="anchor" href="#arg-target-range"></a></dt>
@@ -113,7 +123,12 @@ transformation will be performed.</p></dd>
 <p>A numeric vector containing two elements is expected, representing the
 lower and upper bounds of the target range. Alternatively, if no
 argument is specified for <code>source_range</code> and <code>target_range</code>, no
-transformation will be performed.</p></dd>
+transformation will be performed.</p>
+<dl><dt>Default value</dt>
+<dd><p><code>NULL</code></p></dd>
+
+
+</dl></dd>
 
 
 <dt id="arg-flip-direction">flip_direction<a class="anchor" aria-label="anchor" href="#arg-flip-direction"></a></dt>
@@ -122,8 +137,14 @@ transformation will be performed.</p></dd>
 within the range 0 to 100, 25 would be reversed to 75.</p>
 <p>This argument will be ignored if <code>source_range</code> and <code>target_range</code> aren't
 specified.</p>
-<p>Default: <code>FALSE</code></p>
-<p>Permitted Values: <code>TRUE</code>, <code>FALSE</code></p></dd>
+<dl><dt>Permitted values</dt>
+<dd><p><code>TRUE</code>, <code>FALSE</code></p></dd>
+
+<dt>Default value</dt>
+<dd><p><code>FALSE</code></p></dd>
+
+
+</dl></dd>
 
 
 <dt id="arg-min-n">min_n<a class="anchor" aria-label="anchor" href="#arg-min-n"></a></dt>
@@ -132,7 +153,11 @@ specified.</p>
 be carried out. If the number of non-missing values is below <code>min_n</code>,
 the result will be set to missing, i.e. <code>NA</code>.</p>
 <p>A positive integer is expected.</p>
-<p>Default: 1</p></dd>
+<dl><dt>Default value</dt>
+<dd><p><code>1</code></p></dd>
+
+
+</dl></dd>
 
 </dl></div>
     <div class="section level2">

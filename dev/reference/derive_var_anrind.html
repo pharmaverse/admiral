@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">admiral</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.2.0.9016</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.2.0.9017</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -87,18 +87,33 @@
 <dl><dt id="arg-dataset">dataset<a class="anchor" aria-label="anchor" href="#arg-dataset"></a></dt>
 <dd><p>Input dataset
 <code>ANRLO</code>, <code>ANRHI</code>, and <code>AVAL</code> are expected and if <code>use_a1hia1lo</code> is set to <code>TRUE</code>,
-<code>A1LO</code> and <code>A1H1</code> are expected as well.</p></dd>
+<code>A1LO</code> and <code>A1H1</code> are expected as well.</p>
+<dl><dt>Default value</dt>
+<dd><p>none</p></dd>
+
+
+</dl></dd>
 
 
 <dt id="arg-signif-dig">signif_dig<a class="anchor" aria-label="anchor" href="#arg-signif-dig"></a></dt>
 <dd><p>Number of significant digits to use when comparing values.</p>
 <p>Significant digits used to avoid floating point discrepancies when comparing numeric values.
-See blog: <a href="https://pharmaverse.github.io/blog/posts/2023-10-30_floating_point/floating_point.html" class="external-link">How admiral handles floating points</a></p></dd>
+See blog: <a href="https://pharmaverse.github.io/blog/posts/2023-10-30_floating_point/floating_point.html" class="external-link">How admiral handles floating points</a></p>
+<dl><dt>Default value</dt>
+<dd><p><code>get_admiral_option("signif_digits")</code></p></dd>
+
+
+</dl></dd>
 
 
 <dt id="arg-use-a-hia-lo">use_a1hia1lo<a class="anchor" aria-label="anchor" href="#arg-use-a-hia-lo"></a></dt>
 <dd><p>A logical value indicating whether to use <code>A1H1</code> and <code>A1LO</code> in
-the derivation of <code>ANRIND</code>.</p></dd>
+the derivation of <code>ANRIND</code>.</p>
+<dl><dt>Default value</dt>
+<dd><p><code>FALSE</code></p></dd>
+
+
+</dl></dd>
 
 </dl></div>
     <div class="section level2">

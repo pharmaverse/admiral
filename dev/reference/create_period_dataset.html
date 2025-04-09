@@ -15,7 +15,7 @@ in OCCDS and BDS datasets."><meta property="og:image" content="https://pharmaver
 
     <a class="navbar-brand me-2" href="../index.html">admiral</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.2.0.9016</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.2.0.9017</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -100,7 +100,12 @@ in OCCDS and BDS datasets.</p>
 <dd><p>Input dataset</p>
 <p>The variables specified by the <code>new_vars</code> and <code>subject_keys</code> arguments are expected to be in the dataset.
 For each element of <code>new_vars</code> at least one variable of the form of the right
-hand side value must be available in the dataset.</p></dd>
+hand side value must be available in the dataset.</p>
+<dl><dt>Default value</dt>
+<dd><p>none</p></dd>
+
+
+</dl></dd>
 
 
 <dt id="arg-new-vars">new_vars<a class="anchor" aria-label="anchor" href="#arg-new-vars"></a></dt>
@@ -114,13 +119,23 @@ both "xx" and "w" are used it refers to a subperiod variable.</p>
 <p>Only one type must be used, e.g., all right hand side values must refer to
 period variables. It is not allowed to mix for example period and subperiod
 variables. If period <em>and</em> subperiod variables are required, separate
-reference datasets must be created.</p></dd>
+reference datasets must be created.</p>
+<dl><dt>Default value</dt>
+<dd><p>none</p></dd>
+
+
+</dl></dd>
 
 
 <dt id="arg-subject-keys">subject_keys<a class="anchor" aria-label="anchor" href="#arg-subject-keys"></a></dt>
 <dd><p>Variables to uniquely identify a subject</p>
 <p>A list of expressions where the expressions are symbols as returned by
-<code><a href="reexport-exprs.html">exprs()</a></code> is expected.</p></dd>
+<code><a href="reexport-exprs.html">exprs()</a></code> is expected.</p>
+<dl><dt>Default value</dt>
+<dd><p><code>get_admiral_option("subject_keys")</code></p></dd>
+
+
+</dl></dd>
 
 </dl></div>
     <div class="section level2">

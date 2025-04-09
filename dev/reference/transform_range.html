@@ -9,7 +9,7 @@ for transforming source values 1, 2, 3, 4, 5 to 0, 25, 50, 75, 100."><meta prope
 
     <a class="navbar-brand me-2" href="../index.html">admiral</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.2.0.9016</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.2.0.9017</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -91,26 +91,48 @@ for transforming source values 1, 2, 3, 4, 5 to 0, 25, 50, 75, 100.</p>
 
 <dl><dt id="arg-source">source<a class="anchor" aria-label="anchor" href="#arg-source"></a></dt>
 <dd><p>A vector of values to be transformed</p>
-<p>A numeric vector is expected.</p></dd>
+<p>A numeric vector is expected.</p>
+<dl><dt>Default value</dt>
+<dd><p>none</p></dd>
+
+
+</dl></dd>
 
 
 <dt id="arg-source-range">source_range<a class="anchor" aria-label="anchor" href="#arg-source-range"></a></dt>
 <dd><p>The permitted source range</p>
 <p>A numeric vector containing two elements is expected, representing the
-lower and upper bounds of the permitted source range.</p></dd>
+lower and upper bounds of the permitted source range.</p>
+<dl><dt>Default value</dt>
+<dd><p>none</p></dd>
+
+
+</dl></dd>
 
 
 <dt id="arg-target-range">target_range<a class="anchor" aria-label="anchor" href="#arg-target-range"></a></dt>
 <dd><p>The target range</p>
 <p>A numeric vector containing two elements is expected, representing the
-lower and upper bounds of the target range.</p></dd>
+lower and upper bounds of the target range.</p>
+<dl><dt>Default value</dt>
+<dd><p>none</p></dd>
+
+
+</dl></dd>
 
 
 <dt id="arg-flip-direction">flip_direction<a class="anchor" aria-label="anchor" href="#arg-flip-direction"></a></dt>
 <dd><p>Flip direction of the range?</p>
 <p>The transformed values will be reversed within the target range, e.g.
 within the range 0 to 100, 25 would be reversed to 75.</p>
-<p><em>Permitted Values</em>: <code>TRUE</code>, <code>FALSE</code></p></dd>
+<dl><dt>Permitted values</dt>
+<dd><p><code>TRUE</code>, <code>FALSE</code></p></dd>
+
+<dt>Default value</dt>
+<dd><p><code>FALSE</code></p></dd>
+
+
+</dl></dd>
 
 
 <dt id="arg-outside-range">outside_range<a class="anchor" aria-label="anchor" href="#arg-outside-range"></a></dt>
@@ -118,7 +140,14 @@ within the range 0 to 100, 25 would be reversed to 75.</p>
 <p>Values outside the source range (<code>source_range</code>) are transformed to <code>NA</code>.</p>
 <p>If <code>"warning"</code> or <code>"error"</code> is specified, a warning or error is issued if
 <code>source</code> includes any values outside the source range.</p>
-<p><em>Permitted Values</em>: <code>"NA"</code>, <code>"warning"</code>, <code>"error"</code></p></dd>
+<dl><dt>Permitted values</dt>
+<dd><p><code>"NA"</code>, <code>"warning"</code>, <code>"error"</code></p></dd>
+
+<dt>Default value</dt>
+<dd><p><code>"NA"</code></p></dd>
+
+
+</dl></dd>
 
 </dl></div>
     <div class="section level2">

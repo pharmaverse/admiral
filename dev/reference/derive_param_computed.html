@@ -23,7 +23,7 @@ $$MAP = \frac{SYSBP + 2 DIABP}{3}$$"><meta property="og:image" content="https://
 
     <a class="navbar-brand me-2" href="../index.html">admiral</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.2.0.9016</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.2.0.9017</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -120,7 +120,12 @@ $$MAP = \frac{SYSBP + 2 DIABP}{3}$$</p>
 <code>PARAMCD</code> is expected as well.</p>
 <p>The variable specified by <code>by_vars</code> and <code>PARAMCD</code> must be a unique key of
 the input dataset after restricting it by the filter condition (<code>filter</code>
-parameter) and to the parameters specified by <code>parameters</code>.</p></dd>
+parameter) and to the parameters specified by <code>parameters</code>.</p>
+<dl><dt>Default value</dt>
+<dd><p><code>NULL</code></p></dd>
+
+
+</dl></dd>
 
 
 <dt id="arg-dataset-add">dataset_add<a class="anchor" aria-label="anchor" href="#arg-dataset-add"></a></dt>
@@ -131,7 +136,12 @@ the additional dataset after restricting it to the parameters specified by
 <code>parameters</code>.</p>
 <p>If the argument is specified, the observations of the additional dataset
 are considered in addition to the observations from the input dataset
-(<code>dataset</code> restricted by <code>filter</code>).</p></dd>
+(<code>dataset</code> restricted by <code>filter</code>).</p>
+<dl><dt>Default value</dt>
+<dd><p><code>NULL</code></p></dd>
+
+
+</dl></dd>
 
 
 <dt id="arg-by-vars">by_vars<a class="anchor" aria-label="anchor" href="#arg-by-vars"></a></dt>
@@ -139,8 +149,11 @@ are considered in addition to the observations from the input dataset
 <p>For each group defined by <code>by_vars</code> an observation is added to the output
 dataset. Only variables specified in <code>by_vars</code> will be populated
 in the newly created records.</p>
-<p><em>Permitted Values</em>: list of variables created by <code><a href="reexport-exprs.html">exprs()</a></code>
-e.g. <code>exprs(USUBJID, VISIT)</code></p></dd>
+<dl><dt>Default value</dt>
+<dd><p>none</p></dd>
+
+
+</dl></dd>
 
 
 <dt id="arg-parameters">parameters<a class="anchor" aria-label="anchor" href="#arg-parameters"></a></dt>
@@ -159,7 +172,14 @@ observations, and adds them to the observations to consider.</p>
 <p>Unnamed elements in the list of expressions are considered as parameter
 codes. For example, <code>parameters = exprs(WEIGHT, HGHT = VSTESTCD == "HEIGHT")</code> uses the parameter code <code>"WEIGHT"</code> and creates a temporary
 parameter code <code>"HGHT"</code>.</p>
-<p><em>Permitted Values:</em> A character vector of <code>PARAMCD</code> values or a list of expressions</p></dd>
+<dl><dt>Permitted values</dt>
+<dd><p>A character vector of <code>PARAMCD</code> values or a list of expressions</p></dd>
+
+<dt>Default value</dt>
+<dd><p>none</p></dd>
+
+
+</dl></dd>
 
 
 <dt id="arg-set-values-to">set_values_to<a class="anchor" aria-label="anchor" href="#arg-set-values-to"></a></dt>
@@ -174,7 +194,14 @@ example</p>
 <span id="cb1-4"><a href="#cb1-4" tabindex="-1"></a>)</span></code></pre><p></p></div>
 <p>defines the analysis value and parameter code for the new parameter.</p>
 <p>Variable names in the expression must not contain more than one dot.</p>
-<p><em>Permitted Values:</em> List of variable-value pairs</p></dd>
+<dl><dt>Permitted values</dt>
+<dd><p>List of variable-value pairs</p></dd>
+
+<dt>Default value</dt>
+<dd><p>none</p></dd>
+
+
+</dl></dd>
 
 
 <dt id="arg-filter">filter<a class="anchor" aria-label="anchor" href="#arg-filter"></a></dt>
@@ -182,15 +209,25 @@ example</p>
 <p>The specified condition is applied to the input dataset before deriving the
 new parameter, i.e., only observations fulfilling the condition are taken
 into account.</p>
-<p><em>Permitted Values:</em> a condition</p></dd>
+<dl><dt>Permitted values</dt>
+<dd><p>a condition</p></dd>
+
+<dt>Default value</dt>
+<dd><p><code>NULL</code></p></dd>
+
+
+</dl></dd>
 
 
 <dt id="arg-constant-by-vars">constant_by_vars<a class="anchor" aria-label="anchor" href="#arg-constant-by-vars"></a></dt>
 <dd><p>By variables for constant parameters</p>
 <p>The constant parameters (parameters that are measured only once) are merged
 to the other parameters using the specified variables. (Refer to Example 2)</p>
-<p><em>Permitted Values</em>: list of variables created by <code><a href="reexport-exprs.html">exprs()</a></code>
-e.g. <code>exprs(USUBJID, VISIT)</code></p></dd>
+<dl><dt>Default value</dt>
+<dd><p><code>NULL</code></p></dd>
+
+
+</dl></dd>
 
 
 <dt id="arg-constant-parameters">constant_parameters<a class="anchor" aria-label="anchor" href="#arg-constant-parameters"></a></dt>
@@ -210,7 +247,14 @@ observations, and adds them to the observations to consider.</p>
 <p>Unnamed elements in the list of expressions are considered as parameter
 codes. For example, <code>constant_parameters = exprs(WEIGHT, HGHT = VSTESTCD == "HEIGHT")</code> uses the parameter code <code>"WEIGHT"</code> and creates a temporary
 parameter code <code>"HGHT"</code>.</p>
-<p><em>Permitted Values:</em> A character vector of <code>PARAMCD</code> values or a list of expressions</p></dd>
+<dl><dt>Permitted values</dt>
+<dd><p>A character vector of <code>PARAMCD</code> values or a list of expressions</p></dd>
+
+<dt>Default value</dt>
+<dd><p><code>NULL</code></p></dd>
+
+
+</dl></dd>
 
 
 <dt id="arg-keep-nas">keep_nas<a class="anchor" aria-label="anchor" href="#arg-keep-nas"></a></dt>
@@ -219,8 +263,15 @@ parameter code <code>"HGHT"</code>.</p>
 the values contributing to the computed value are <code>NA</code> (see Example 1b).</p>
 <p>If the argument is set to a list of variables, observations are added even
 if some of specified variables are <code>NA</code> (see Example 1c).</p>
-<p><em>Permitted Values:</em> <code>TRUE</code>, <code>FALSE</code>, or a list of variables created by
+<dl><dt>Permitted values</dt>
+<dd><p><code>TRUE</code>, <code>FALSE</code>, or a list of variables created by
 <code><a href="reexport-exprs.html">exprs()</a></code> e.g. <code>exprs(ADTF, ATMF)</code></p></dd>
+
+<dt>Default value</dt>
+<dd><p><code>FALSE</code></p></dd>
+
+
+</dl></dd>
 
 </dl></div>
     <div class="section level2">

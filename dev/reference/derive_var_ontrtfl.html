@@ -11,7 +11,7 @@ ASTDT/AENDT)."><meta property="og:image" content="https://pharmaverse.github.io/
 
     <a class="navbar-brand me-2" href="../index.html">admiral</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.2.0.9016</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.2.0.9017</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -100,19 +100,33 @@ assessment date (e.g <code>ADT</code>) or event start and end dates (e.g.
 <dl><dt id="arg-dataset">dataset<a class="anchor" aria-label="anchor" href="#arg-dataset"></a></dt>
 <dd><p>Input dataset</p>
 <p>Required columns are <code>start_date</code>, <code>end_date</code>, <code>ref_start_date</code> and
-<code>ref_end_date</code>.</p></dd>
+<code>ref_end_date</code>.</p>
+<dl><dt>Default value</dt>
+<dd><p>none</p></dd>
+
+
+</dl></dd>
 
 
 <dt id="arg-new-var">new_var<a class="anchor" aria-label="anchor" href="#arg-new-var"></a></dt>
 <dd><p>On-treatment flag variable name to be created.</p>
-<p>Default is <code>ONTRTFL</code>.</p></dd>
+<dl><dt>Default value</dt>
+<dd><p><code>ONTRTFL</code></p></dd>
+
+
+</dl></dd>
 
 
 <dt id="arg-start-date">start_date<a class="anchor" aria-label="anchor" href="#arg-start-date"></a></dt>
 <dd><p>The start date (e.g. <code>AESDT</code>) or assessment date (e.g.
 <code>ADT</code>) Required; A date or date-time object column is expected.</p>
 <p>Refer to <code><a href="derive_vars_dt.html">derive_vars_dt()</a></code> to impute and derive a date from a date
-character vector to a date object.</p></dd>
+character vector to a date object.</p>
+<dl><dt>Default value</dt>
+<dd><p>none</p></dd>
+
+
+</dl></dd>
 
 
 <dt id="arg-end-date">end_date<a class="anchor" aria-label="anchor" href="#arg-end-date"></a></dt>
@@ -122,14 +136,24 @@ date-time object column is expected.</p>
 character vector to a date object.</p>
 <p>Optional; Default is null. If the used and date value is missing on an
 observation, it is assumed the medication is ongoing and <code>ONTRTFL</code> is set
-to <code>"Y"</code>.</p></dd>
+to <code>"Y"</code>.</p>
+<dl><dt>Default value</dt>
+<dd><p><code>NULL</code></p></dd>
+
+
+</dl></dd>
 
 
 <dt id="arg-ref-start-date">ref_start_date<a class="anchor" aria-label="anchor" href="#arg-ref-start-date"></a></dt>
 <dd><p>The lower bound of the on-treatment period Required; A
 date or date-time object column is expected.</p>
 <p>Refer to <code><a href="derive_vars_dt.html">derive_vars_dt()</a></code> to impute and derive a date from a date
-character vector to a date object.</p></dd>
+character vector to a date object.</p>
+<dl><dt>Default value</dt>
+<dd><p>none</p></dd>
+
+
+</dl></dd>
 
 
 <dt id="arg-ref-end-date">ref_end_date<a class="anchor" aria-label="anchor" href="#arg-ref-end-date"></a></dt>
@@ -137,34 +161,60 @@ character vector to a date object.</p></dd>
 date-time object column is expected.</p>
 <p>Refer to <code><a href="derive_vars_dt.html">derive_vars_dt()</a></code> to impute and derive a date from a date
 character vector to a date object.</p>
-<p>Optional; This can be null and everything after <code>ref_start_date</code> will be
-considered on-treatment. Default is <code>NULL</code>.</p></dd>
+<p>If set to <code>NULL</code>, everything after <code>ref_start_date</code> will be considered
+on-treatment.</p>
+<dl><dt>Default value</dt>
+<dd><p><code>NULL</code></p></dd>
+
+
+</dl></dd>
 
 
 <dt id="arg-ref-end-window">ref_end_window<a class="anchor" aria-label="anchor" href="#arg-ref-end-window"></a></dt>
 <dd><p>A window to add to the upper bound <code>ref_end_date</code>
-measured in days (e.g. 7 if 7 days should be added to the upper bound)
-Optional; default is 0.</p></dd>
+measured in days (e.g. 7 if 7 days should be added to the upper bound)</p>
+<dl><dt>Default value</dt>
+<dd><p><code>0</code></p></dd>
+
+
+</dl></dd>
 
 
 <dt id="arg-ignore-time-for-ref-end-date">ignore_time_for_ref_end_date<a class="anchor" aria-label="anchor" href="#arg-ignore-time-for-ref-end-date"></a></dt>
 <dd><p>If the argument is set to <code>TRUE</code>, the time part is ignored for checking if
 the event occurred more than <code>ref_end_window</code> days after reference end
 date.</p>
-<p><em>Permitted Values:</em> <code>TRUE</code>, <code>FALSE</code></p></dd>
+<dl><dt>Permitted values</dt>
+<dd><p><code>TRUE</code>, <code>FALSE</code></p></dd>
+
+<dt>Default value</dt>
+<dd><p><code>TRUE</code></p></dd>
+
+
+</dl></dd>
 
 
 <dt id="arg-filter-pre-timepoint">filter_pre_timepoint<a class="anchor" aria-label="anchor" href="#arg-filter-pre-timepoint"></a></dt>
 <dd><p>An expression to filter observations as not
 on-treatment when <code>date</code> = <code>ref_start_date</code>. For example, if observations
 where <code>VSTPT = PRE</code> should not be considered on-treatment when <code>date = ref_start_date</code>, <code>filter_pre_timepoint</code> should be used to denote when the
-on-treatment flag should be set to null. Optional; default is <code>NULL</code>.</p></dd>
+on-treatment flag should be set to null. Optional; default is <code>NULL</code>.</p>
+<dl><dt>Default value</dt>
+<dd><p><code>NULL</code></p></dd>
+
+
+</dl></dd>
 
 
 <dt id="arg-span-period">span_period<a class="anchor" aria-label="anchor" href="#arg-span-period"></a></dt>
 <dd><p>A logical scalar. If <code>TRUE</code>, events that started
 prior to the <code>ref_start_date</code>and are ongoing or end after the
-<code>ref_start_date</code> are flagged as <code>"Y"</code>. Optional; default is <code>FALSE</code>.</p></dd>
+<code>ref_start_date</code> are flagged as <code>"Y"</code>. Optional; default is <code>FALSE</code>.</p>
+<dl><dt>Default value</dt>
+<dd><p><code>FALSE</code></p></dd>
+
+
+</dl></dd>
 
 </dl></div>
     <div class="section level2">

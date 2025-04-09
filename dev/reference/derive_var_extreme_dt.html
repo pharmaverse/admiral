@@ -15,7 +15,7 @@ Note: This is a wrapper function for the function derive_var_extreme_dtm()."><me
 
     <a class="navbar-brand me-2" href="../index.html">admiral</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.2.0.9016</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.2.0.9017</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -101,34 +101,66 @@ dataset, e.g., the last known alive date (<code>LSTALVDT</code>).</p>
 
 <dl><dt id="arg-dataset">dataset<a class="anchor" aria-label="anchor" href="#arg-dataset"></a></dt>
 <dd><p>Input dataset</p>
-<p>The variables specified by the <code>subject_keys</code> argument are expected to be in the dataset.</p></dd>
+<p>The variables specified by the <code>subject_keys</code> argument are expected to be in the dataset.</p>
+<dl><dt>Default value</dt>
+<dd><p>none</p></dd>
+
+
+</dl></dd>
 
 
 <dt id="arg-new-var">new_var<a class="anchor" aria-label="anchor" href="#arg-new-var"></a></dt>
-<dd><p>Name of variable to create</p></dd>
+<dd><p>Name of variable to create</p>
+<dl><dt>Default value</dt>
+<dd><p>none</p></dd>
+
+
+</dl></dd>
 
 
 <dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
 <dd><p>Source(s) of dates. One or more <code><a href="date_source.html">date_source()</a></code> objects are
-expected.</p></dd>
+expected.</p>
+<dl><dt>Default value</dt>
+<dd><p>none</p></dd>
+
+
+</dl></dd>
 
 
 <dt id="arg-source-datasets">source_datasets<a class="anchor" aria-label="anchor" href="#arg-source-datasets"></a></dt>
 <dd><p>A named <code>list</code> containing datasets in which to search
-for the first or last date</p></dd>
+for the first or last date</p>
+<dl><dt>Default value</dt>
+<dd><p>none</p></dd>
+
+
+</dl></dd>
 
 
 <dt id="arg-mode">mode<a class="anchor" aria-label="anchor" href="#arg-mode"></a></dt>
 <dd><p>Selection mode (first or last)</p>
 <p>If <code>"first"</code> is specified, the first date for each subject is selected. If
 <code>"last"</code> is specified, the last date for each subject is selected.</p>
-<p>Permitted Values:  <code>"first"</code>, <code>"last"</code></p></dd>
+<dl><dt>Permitted values</dt>
+<dd><p><code>"first"</code>, <code>"last"</code></p></dd>
+
+<dt>Default value</dt>
+<dd><p>none</p></dd>
+
+
+</dl></dd>
 
 
 <dt id="arg-subject-keys">subject_keys<a class="anchor" aria-label="anchor" href="#arg-subject-keys"></a></dt>
 <dd><p>Variables to uniquely identify a subject</p>
 <p>A list of expressions where the expressions are symbols as returned by
-<code><a href="reexport-exprs.html">exprs()</a></code> is expected.</p></dd>
+<code><a href="reexport-exprs.html">exprs()</a></code> is expected.</p>
+<dl><dt>Default value</dt>
+<dd><p><code>get_admiral_option("subject_keys")</code></p></dd>
+
+
+</dl></dd>
 
 </dl></div>
     <div class="section level2">

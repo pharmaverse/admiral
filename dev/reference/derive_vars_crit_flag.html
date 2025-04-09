@@ -37,7 +37,7 @@ NA
 
     <a class="navbar-brand me-2" href="../index.html">admiral</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.2.0.9016</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.2.0.9017</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -129,20 +129,39 @@ fulfilled and to <code>NA</code> otherwise if <code>CRITyFL</code> is populated 
 
 
 <dl><dt id="arg-dataset">dataset<a class="anchor" aria-label="anchor" href="#arg-dataset"></a></dt>
-<dd><p>Input dataset</p></dd>
+<dd><p>Input dataset</p>
+<dl><dt>Default value</dt>
+<dd><p>none</p></dd>
+
+
+</dl></dd>
 
 
 <dt id="arg-crit-nr">crit_nr<a class="anchor" aria-label="anchor" href="#arg-crit-nr"></a></dt>
 <dd><p>The criterion number, i.e., the <code>y</code> in <code>CRITy</code></p>
-<p><em>Permitted Values</em>: a positive integer</p></dd>
+<dl><dt>Permitted values</dt>
+<dd><p>a positive integer</p></dd>
+
+<dt>Default value</dt>
+<dd><p><code>1</code></p></dd>
+
+
+</dl></dd>
 
 
 <dt id="arg-condition">condition<a class="anchor" aria-label="anchor" href="#arg-condition"></a></dt>
 <dd><p>Condition for flagging records</p>
 <p>See description of the <code>values_yn</code> argument for details on how the
 <code>CRITyFL</code> variable is populated.</p>
-<p><em>Permitted Values</em>: an unquoted expression which evaluates to a logical (in
+<dl><dt>Permitted values</dt>
+<dd><p>an unquoted expression which evaluates to a logical (in
 <code>dataset</code>)</p></dd>
+
+<dt>Default value</dt>
+<dd><p>none</p></dd>
+
+
+</dl></dd>
 
 
 <dt id="arg-description">description<a class="anchor" aria-label="anchor" href="#arg-description"></a></dt>
@@ -150,8 +169,15 @@ fulfilled and to <code>NA</code> otherwise if <code>CRITyFL</code> is populated 
 <p>The <code>CRITy</code> variable is set to the specified value.</p>
 <p>An expression can be specified to set the value depending on the parameter.
 Please note that the value must be constant within a parameter.</p>
-<p><em>Permitted Values</em>: an unquoted expression which evaluates to a character
+<dl><dt>Permitted values</dt>
+<dd><p>an unquoted expression which evaluates to a character
 (in <code>dataset</code>)</p></dd>
+
+<dt>Default value</dt>
+<dd><p>none</p></dd>
+
+
+</dl></dd>
 
 
 <dt id="arg-values-yn">values_yn<a class="anchor" aria-label="anchor" href="#arg-values-yn"></a></dt>
@@ -161,14 +187,28 @@ Please note that the value must be constant within a parameter.</p>
 evaluate to <code>FALSE</code>, and to <code>NA</code> if it evaluates to <code>NA</code>.</p>
 <p>Otherwise, the <code>CRITyFL</code> variable is set to <code>"Y"</code> if the condition
 (<code>condition</code>) evaluates to <code>TRUE</code>, and to <code>NA</code> otherwise.</p>
-<p><em>Permitted Values</em>: <code>TRUE</code>, <code>FALSE</code></p></dd>
+<dl><dt>Permitted values</dt>
+<dd><p><code>TRUE</code>, <code>FALSE</code></p></dd>
+
+<dt>Default value</dt>
+<dd><p><code>FALSE</code></p></dd>
+
+
+</dl></dd>
 
 
 <dt id="arg-create-numeric-flag">create_numeric_flag<a class="anchor" aria-label="anchor" href="#arg-create-numeric-flag"></a></dt>
 <dd><p>Create a numeric flag?</p>
 <p>If set to <code>TRUE</code>, the <code>CRITyFN</code> variable is created. It is set to <code>1</code> if
 <code>CRITyFL == "Y"</code>, it set to <code>0</code> if <code>CRITyFL == "N"</code>, and to <code>NA</code> otherwise.</p>
-<p><em>Permitted Values</em>: <code>TRUE</code>, <code>FALSE</code></p></dd>
+<dl><dt>Permitted values</dt>
+<dd><p><code>TRUE</code>, <code>FALSE</code></p></dd>
+
+<dt>Default value</dt>
+<dd><p><code>FALSE</code></p></dd>
+
+
+</dl></dd>
 
 </dl></div>
     <div class="section level2">

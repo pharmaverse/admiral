@@ -11,7 +11,7 @@ Note: This is a wrapper function for the more generic tte_source()."><meta prope
 
     <a class="navbar-brand me-2" href="../index.html">admiral</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.2.0.9016</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.2.0.9017</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -96,12 +96,22 @@ Note: This is a wrapper function for the more generic tte_source()."><meta prope
 <dl><dt id="arg-dataset-name">dataset_name<a class="anchor" aria-label="anchor" href="#arg-dataset-name"></a></dt>
 <dd><p>The name of the source dataset</p>
 <p>The name refers to the dataset provided by the <code>source_datasets</code> parameter
-of <code><a href="derive_param_tte.html">derive_param_tte()</a></code>.</p></dd>
+of <code><a href="derive_param_tte.html">derive_param_tte()</a></code>.</p>
+<dl><dt>Default value</dt>
+<dd><p>none</p></dd>
+
+
+</dl></dd>
 
 
 <dt id="arg-filter">filter<a class="anchor" aria-label="anchor" href="#arg-filter"></a></dt>
 <dd><p>An unquoted condition for selecting the observations from
-<code>dataset</code> which are events or possible censoring time points.</p></dd>
+<code>dataset</code> which are events or possible censoring time points.</p>
+<dl><dt>Default value</dt>
+<dd><p><code>NULL</code></p></dd>
+
+
+</dl></dd>
 
 
 <dt id="arg-date">date<a class="anchor" aria-label="anchor" href="#arg-date"></a></dt>
@@ -109,26 +119,48 @@ of <code><a href="derive_param_tte.html">derive_param_tte()</a></code>.</p></dd>
 censoring. A date, or a datetime can be specified. An unquoted symbol or
 expression is expected.</p>
 <p>Refer to <code><a href="derive_vars_dt.html">derive_vars_dt()</a></code> or <code><a href="convert_dtc_to_dt.html">convert_dtc_to_dt()</a></code> to impute and derive a
-date from a date character vector to a date object.</p></dd>
+date from a date character vector to a date object.</p>
+<dl><dt>Default value</dt>
+<dd><p>none</p></dd>
+
+
+</dl></dd>
 
 
 <dt id="arg-censor">censor<a class="anchor" aria-label="anchor" href="#arg-censor"></a></dt>
 <dd><p>Censoring value</p>
 <p>CDISC strongly recommends using <code>0</code> for events and positive integers for
-censoring.</p></dd>
+censoring.</p>
+<dl><dt>Default value</dt>
+<dd><p><code>0</code></p></dd>
+
+
+</dl></dd>
 
 
 <dt id="arg-set-values-to">set_values_to<a class="anchor" aria-label="anchor" href="#arg-set-values-to"></a></dt>
 <dd><p>A named list returned by <code><a href="reexport-exprs.html">exprs()</a></code> defining the variables
 to be set for the event or censoring, e.g. <code>exprs(EVENTDESC = "DEATH", SRCDOM = "ADSL", SRCVAR = "DTHDT")</code>. The values must be a symbol, a
-character string, a numeric value, an expression, or <code>NA</code>.</p></dd>
+character string, a numeric value, an expression, or <code>NA</code>.</p>
+<dl><dt>Default value</dt>
+<dd><p><code>NULL</code></p></dd>
+
+
+</dl></dd>
 
 
 <dt id="arg-order">order<a class="anchor" aria-label="anchor" href="#arg-order"></a></dt>
 <dd><p>Sort order</p>
 <p>An optional named list returned by <code><a href="reexport-exprs.html">exprs()</a></code> defining additional variables
 that the source dataset is sorted on after <code>date</code>.</p>
-<p><em>Permitted Values:</em> list of variables created by <code><a href="reexport-exprs.html">exprs()</a></code> e.g. <code>exprs(ASEQ)</code>.</p></dd>
+<dl><dt>Permitted values</dt>
+<dd><p>list of variables created by <code><a href="reexport-exprs.html">exprs()</a></code> e.g. <code>exprs(ASEQ)</code>.</p></dd>
+
+<dt>Default value</dt>
+<dd><p><code>order</code></p></dd>
+
+
+</dl></dd>
 
 </dl></div>
     <div class="section level2">

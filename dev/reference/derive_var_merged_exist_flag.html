@@ -13,7 +13,7 @@ Note: This is a wrapper function for the more generic derive_vars_merged()."><me
 
     <a class="navbar-brand me-2" href="../index.html">admiral</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.2.0.9016</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.2.0.9017</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -101,23 +101,41 @@ condition.</p>
 
 <dl><dt id="arg-dataset">dataset<a class="anchor" aria-label="anchor" href="#arg-dataset"></a></dt>
 <dd><p>Input dataset</p>
-<p>The variables specified by the <code>by_vars</code> argument are expected to be in the dataset.</p></dd>
+<p>The variables specified by the <code>by_vars</code> argument are expected to be in the dataset.</p>
+<dl><dt>Default value</dt>
+<dd><p>none</p></dd>
+
+
+</dl></dd>
 
 
 <dt id="arg-dataset-add">dataset_add<a class="anchor" aria-label="anchor" href="#arg-dataset-add"></a></dt>
 <dd><p>Additional dataset</p>
-<p>The variables specified by the <code>by_vars</code> argument are expected.</p></dd>
+<p>The variables specified by the <code>by_vars</code> argument are expected.</p>
+<dl><dt>Default value</dt>
+<dd><p>none</p></dd>
+
+
+</dl></dd>
 
 
 <dt id="arg-by-vars">by_vars<a class="anchor" aria-label="anchor" href="#arg-by-vars"></a></dt>
 <dd><p>Grouping variables</p>
-<p><em>Permitted Values</em>: list of variables created by <code><a href="reexport-exprs.html">exprs()</a></code>
-e.g. <code>exprs(USUBJID, VISIT)</code></p></dd>
+<dl><dt>Default value</dt>
+<dd><p>none</p></dd>
+
+
+</dl></dd>
 
 
 <dt id="arg-new-var">new_var<a class="anchor" aria-label="anchor" href="#arg-new-var"></a></dt>
 <dd><p>New variable</p>
-<p>The specified variable is added to the input dataset.</p></dd>
+<p>The specified variable is added to the input dataset.</p>
+<dl><dt>Default value</dt>
+<dd><p>none</p></dd>
+
+
+</dl></dd>
 
 
 <dt id="arg-condition">condition<a class="anchor" aria-label="anchor" href="#arg-condition"></a></dt>
@@ -128,22 +146,44 @@ is set to the true value (<code>true_value</code>). For all by groups where it
 evaluates as <code>FALSE</code> or <code>NA</code> for all observations the new variable is set
 to the false value (<code>false_value</code>). The new variable is set to the missing
 value (<code>missing_value</code>) for by groups not present in the additional
-dataset.</p></dd>
+dataset.</p>
+<dl><dt>Default value</dt>
+<dd><p>none</p></dd>
+
+
+</dl></dd>
 
 
 <dt id="arg-true-value">true_value<a class="anchor" aria-label="anchor" href="#arg-true-value"></a></dt>
-<dd><p>True value</p></dd>
+<dd><p>True value</p>
+<dl><dt>Default value</dt>
+<dd><p><code>"Y"</code></p></dd>
+
+
+</dl></dd>
 
 
 <dt id="arg-false-value">false_value<a class="anchor" aria-label="anchor" href="#arg-false-value"></a></dt>
-<dd><p>False value</p></dd>
+<dd><p>False value</p>
+<dl><dt>Default value</dt>
+<dd><p><code>NA_character_</code></p></dd>
+
+
+</dl></dd>
 
 
 <dt id="arg-missing-value">missing_value<a class="anchor" aria-label="anchor" href="#arg-missing-value"></a></dt>
 <dd><p>Values used for missing information</p>
 <p>The new variable is set to the specified value for all by groups without
 observations in the additional dataset.</p>
-<p><em>Permitted Value</em>: A character scalar</p></dd>
+<dl><dt>Permitted values</dt>
+<dd><p>A character scalar</p></dd>
+
+<dt>Default value</dt>
+<dd><p><code>NA_character_</code></p></dd>
+
+
+</dl></dd>
 
 
 <dt id="arg-filter-add">filter_add<a class="anchor" aria-label="anchor" href="#arg-filter-add"></a></dt>
@@ -151,7 +191,14 @@ observations in the additional dataset.</p>
 <p>Only observations fulfilling the specified condition are taken into account
 for flagging. If the argument is not specified, all observations are
 considered.</p>
-<p><em>Permitted Values</em>: a condition</p></dd>
+<dl><dt>Permitted values</dt>
+<dd><p>a condition</p></dd>
+
+<dt>Default value</dt>
+<dd><p><code>NULL</code></p></dd>
+
+
+</dl></dd>
 
 </dl></div>
     <div class="section level2">

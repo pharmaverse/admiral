@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">admiral</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.2.0.9016</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.2.0.9017</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -81,7 +81,12 @@
 
 
 <dl><dt id="arg-character-value">character_value<a class="anchor" aria-label="anchor" href="#arg-character-value"></a></dt>
-<dd><p>Character version of value to be imputed</p></dd>
+<dd><p>Character version of value to be imputed</p>
+<dl><dt>Default value</dt>
+<dd><p>none</p></dd>
+
+
+</dl></dd>
 
 
 <dt id="arg-imputation-type">imputation_type<a class="anchor" aria-label="anchor" href="#arg-imputation-type"></a></dt>
@@ -91,12 +96,22 @@ Valid Values:
 2: imputation_type=1 and if the character value contains a &lt; or &gt;, the number of
 of decimals associated with the character value is found and then a factor of
 1/10^(number of decimals + 1) will be added/subtracted from the numeric value.
-If no decimals exists, a factor of 1/10 will be added/subtracted from the value.</p></dd>
+If no decimals exists, a factor of 1/10 will be added/subtracted from the value.</p>
+<dl><dt>Default value</dt>
+<dd><p><code>1</code></p></dd>
+
+
+</dl></dd>
 
 
 <dt id="arg-factor">factor<a class="anchor" aria-label="anchor" href="#arg-factor"></a></dt>
 <dd><p>Numeric value (default=0), when using <code>imputation_type</code> = 1, this
-value can be added or subtracted when the qualifier is removed.</p></dd>
+value can be added or subtracted when the qualifier is removed.</p>
+<dl><dt>Default value</dt>
+<dd><p><code>0</code></p></dd>
+
+
+</dl></dd>
 
 </dl></div>
     <div class="section level2">

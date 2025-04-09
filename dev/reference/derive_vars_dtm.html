@@ -11,7 +11,7 @@ and the date/time imputation flag ('--DTF', '--TMF') can be added."><meta proper
 
     <a class="navbar-brand me-2" href="../index.html">admiral</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.2.0.9016</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.2.0.9017</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -100,7 +100,12 @@ and the date/time imputation flag (<code>'--DTF'</code>, <code>'--TMF'</code>) c
 
 <dl><dt id="arg-dataset">dataset<a class="anchor" aria-label="anchor" href="#arg-dataset"></a></dt>
 <dd><p>Input dataset</p>
-<p>The variables specified by the <code>dtc</code> argument are expected to be in the dataset.</p></dd>
+<p>The variables specified by the <code>dtc</code> argument are expected to be in the dataset.</p>
+<dl><dt>Default value</dt>
+<dd><p>none</p></dd>
+
+
+</dl></dd>
 
 
 <dt id="arg-new-vars-prefix">new_vars_prefix<a class="anchor" aria-label="anchor" href="#arg-new-vars-prefix"></a></dt>
@@ -108,14 +113,24 @@ and the date/time imputation flag (<code>'--DTF'</code>, <code>'--TMF'</code>) c
 <p>A character scalar is expected. For the date variable "DT" is appended to
 the specified prefix, for the date imputation flag "DTF", and for the time
 imputation flag "TMF". I.e., for <code>new_vars_prefix = "AST"</code> the variables
-<code>ASTDT</code>, <code>ASTDTF</code>, and <code>ASTTMF</code> are created.</p></dd>
+<code>ASTDT</code>, <code>ASTDTF</code>, and <code>ASTTMF</code> are created.</p>
+<dl><dt>Default value</dt>
+<dd><p>none</p></dd>
+
+
+</dl></dd>
 
 
 <dt id="arg-dtc">dtc<a class="anchor" aria-label="anchor" href="#arg-dtc"></a></dt>
 <dd><p>The <code>'--DTC'</code> date to impute</p>
 <p>A character date is expected in a format like <code>yyyy-mm-dd</code> or
 <code>yyyy-mm-ddThh:mm:ss</code>. Trailing components can be omitted and <code>-</code> is a
-valid "missing" value for any component.</p></dd>
+valid "missing" value for any component.</p>
+<dl><dt>Default value</dt>
+<dd><p>none</p></dd>
+
+
+</dl></dd>
 
 
 <dt id="arg-highest-imputation">highest_imputation<a class="anchor" aria-label="anchor" href="#arg-highest-imputation"></a></dt>
@@ -130,9 +145,16 @@ missing, <code>NA_character_</code> is returned.</p>
 <p>If <code>"Y"</code> is specified, <code>date_imputation</code> should be <code>"first"</code> or <code>"last"</code>
 and <code>min_dates</code> or <code>max_dates</code> should be specified respectively. Otherwise,
 <code>NA_character_</code> is returned if the year component is missing.</p>
-<p><em>Permitted Values</em>: <code>"Y"</code> (year, highest level), <code>"M"</code> (month), <code>"D"</code>
+<dl><dt>Permitted values</dt>
+<dd><p><code>"Y"</code> (year, highest level), <code>"M"</code> (month), <code>"D"</code>
 (day), <code>"h"</code> (hour), <code>"m"</code> (minute), <code>"s"</code> (second), <code>"n"</code> (none, lowest
 level)</p></dd>
+
+<dt>Default value</dt>
+<dd><p><code>"h"</code></p></dd>
+
+
+</dl></dd>
 
 
 <dt id="arg-date-imputation">date_imputation<a class="anchor" aria-label="anchor" href="#arg-date-imputation"></a></dt>
@@ -148,7 +170,12 @@ middle of the possible range:</p><ul><li><p>If both month and day are missing, t
 (middle of the year).</p></li>
 <li><p>If only day is missing, it is imputed as <code>"15"</code> (middle of the month).</p></li>
 </ul></li>
-</ul><p>The argument is ignored if <code>highest_imputation</code> is less then <code>"D"</code>.</p></dd>
+</ul><p>The argument is ignored if <code>highest_imputation</code> is less then <code>"D"</code>.</p>
+<dl><dt>Default value</dt>
+<dd><p><code>"first"</code></p></dd>
+
+
+</dl></dd>
 
 
 <dt id="arg-time-imputation">time_imputation<a class="anchor" aria-label="anchor" href="#arg-time-imputation"></a></dt>
@@ -157,7 +184,12 @@ missing.</p>
 <p>A character value is expected, either as a</p><ul><li><p>format with hour, min and sec specified as <code>"hh:mm:ss"</code>: e.g. <code>"00:00:00"</code>
 for the start of the day,</p></li>
 <li><p>or as a keyword: <code>"first"</code>,<code>"last"</code> to impute to the start/end of a day.</p></li>
-</ul><p>The argument is ignored if <code>highest_imputation = "n"</code>.</p></dd>
+</ul><p>The argument is ignored if <code>highest_imputation = "n"</code>.</p>
+<dl><dt>Default value</dt>
+<dd><p><code>"first"</code></p></dd>
+
+
+</dl></dd>
 
 
 <dt id="arg-flag-imputation">flag_imputation<a class="anchor" aria-label="anchor" href="#arg-flag-imputation"></a></dt>
@@ -169,7 +201,14 @@ If <code>"auto"</code> is specified and <code>highest_imputation</code> argument
 If <code>"auto"</code> is specified and <code>highest_imputation</code> argument is not <code>"n"</code>,
 then time imputation flag is derived.</p>
 <p>If <code>"none"</code> is specified, then no date or time imputation flag is derived.</p>
-<p><em>Permitted Values</em>: <code>"auto"</code>, <code>"date"</code>, <code>"time"</code>, <code>"both"</code>, or <code>"none"</code></p></dd>
+<dl><dt>Permitted values</dt>
+<dd><p><code>"auto"</code>, <code>"date"</code>, <code>"time"</code>, <code>"both"</code>, or <code>"none"</code></p></dd>
+
+<dt>Default value</dt>
+<dd><p><code>"auto"</code></p></dd>
+
+
+</dl></dd>
 
 
 <dt id="arg-min-dates">min_dates<a class="anchor" aria-label="anchor" href="#arg-min-dates"></a></dt>
@@ -196,7 +235,12 @@ range from <code>"2020-11-01T00:00:00"</code> to <code>"2020-11-30T23:59:59"</co
 have changed the month although it is not missing (in the <code>dtc</code> date).</p>
 <p>For date variables (not datetime) in the list the time is imputed to
 <code>"00:00:00"</code>. Specifying date variables makes sense only if the date is
-imputed. If only time is imputed, date variables do not affect the result.</p></dd>
+imputed. If only time is imputed, date variables do not affect the result.</p>
+<dl><dt>Default value</dt>
+<dd><p><code>NULL</code></p></dd>
+
+
+</dl></dd>
 
 
 <dt id="arg-max-dates">max_dates<a class="anchor" aria-label="anchor" href="#arg-max-dates"></a></dt>
@@ -207,7 +251,12 @@ cut off date. Only dates which are in the range of possible dates are
 considered. A date or date-time object is expected.</p>
 <p>For date variables (not datetime) in the list the time is imputed to
 <code>"23:59:59"</code>. Specifying date variables makes sense only if the date is
-imputed. If only time is imputed, date variables do not affect the result.</p></dd>
+imputed. If only time is imputed, date variables do not affect the result.</p>
+<dl><dt>Default value</dt>
+<dd><p><code>NULL</code></p></dd>
+
+
+</dl></dd>
 
 
 <dt id="arg-preserve">preserve<a class="anchor" aria-label="anchor" href="#arg-preserve"></a></dt>
@@ -216,7 +265,14 @@ is missing, e.g. preserve day if month is missing or
 preserve minute when hour is missing.</p>
 <p>For example <code>"2019---07"</code> would return <code>"2019-06-07</code> if <code>preserve = TRUE</code>
 (and <code>date_imputation = "mid"</code>).</p>
-<p>Permitted Values: <code>TRUE</code>, <code>FALSE</code></p></dd>
+<dl><dt>Permitted values</dt>
+<dd><p><code>TRUE</code>, <code>FALSE</code></p></dd>
+
+<dt>Default value</dt>
+<dd><p><code>FALSE</code></p></dd>
+
+
+</dl></dd>
 
 
 <dt id="arg-ignore-seconds-flag">ignore_seconds_flag<a class="anchor" aria-label="anchor" href="#arg-ignore-seconds-flag"></a></dt>
@@ -224,7 +280,14 @@ preserve minute when hour is missing.</p>
 if only hours and minutes are ever collected, and seconds are imputed in
 (<code>'--DTM'</code>) as 00, then it is not necessary to set (<code>'--TMF'</code>) to <code>'S'</code>. A user can set this
 to <code>TRUE</code> so the <code>'S'</code> Flag is dropped from (<code>'--TMF'</code>).</p>
-<p><em>Permitted Values</em>: A logical value</p></dd>
+<dl><dt>Permitted values</dt>
+<dd><p>A logical value</p></dd>
+
+<dt>Default value</dt>
+<dd><p><code>FALSE</code></p></dd>
+
+
+</dl></dd>
 
 </dl></div>
     <div class="section level2">

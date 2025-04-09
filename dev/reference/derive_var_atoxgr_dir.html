@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">admiral</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.2.0.9016</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.2.0.9017</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -91,22 +91,38 @@
 
 <dl><dt id="arg-dataset">dataset<a class="anchor" aria-label="anchor" href="#arg-dataset"></a></dt>
 <dd><p>Input dataset</p>
-<p>The variables specified by the <code>tox_description_var</code> argument are expected to be in the dataset.</p></dd>
+<p>The variables specified by the <code>tox_description_var</code> argument are expected to be in the dataset.</p>
+<dl><dt>Default value</dt>
+<dd><p>none</p></dd>
+
+
+</dl></dd>
 
 
 <dt id="arg-new-var">new_var<a class="anchor" aria-label="anchor" href="#arg-new-var"></a></dt>
 <dd><p>Name of the character grade variable to create, for example, <code>ATOXGRH</code>
-or <code>ATOXGRL</code>.</p></dd>
+or <code>ATOXGRL</code>.</p>
+<dl><dt>Default value</dt>
+<dd><p>none</p></dd>
+
+
+</dl></dd>
 
 
 <dt id="arg-tox-description-var">tox_description_var<a class="anchor" aria-label="anchor" href="#arg-tox-description-var"></a></dt>
 <dd><p>Variable containing the description of the grading
-criteria. For example: "Anemia" or "INR Increased".</p></dd>
+criteria. For example: "Anemia" or "INR Increased".</p>
+<dl><dt>Default value</dt>
+<dd><p>none</p></dd>
+
+
+</dl></dd>
 
 
 <dt id="arg-meta-criteria">meta_criteria<a class="anchor" aria-label="anchor" href="#arg-meta-criteria"></a></dt>
 <dd><p>Metadata data set holding the criteria (normally a case statement)</p>
-<p>Permitted Values: <code>atoxgr_criteria_ctcv4</code>, <code>atoxgr_criteria_ctcv5</code>, <code>atoxgr_criteria_daids</code></p><ul><li><p><code>atoxgr_criteria_ctcv4</code> implements <a href="https://ctep.cancer.gov/protocoldevelopment/electronic_applications/ctc.htm" class="external-link">Common Terminology Criteria for Adverse Events (CTCAE) v4.0</a></p></li>
+<dl><dt>Permitted values</dt>
+<dd><p><code>atoxgr_criteria_ctcv4</code>, <code>atoxgr_criteria_ctcv5</code>, <code>atoxgr_criteria_daids</code></p><ul><li><p><code>atoxgr_criteria_ctcv4</code> implements <a href="https://ctep.cancer.gov/protocoldevelopment/electronic_applications/ctc.htm" class="external-link">Common Terminology Criteria for Adverse Events (CTCAE) v4.0</a></p></li>
 <li><p><code>atoxgr_criteria_ctcv5</code> implements <a href="https://ctep.cancer.gov/protocoldevelopment/electronic_applications/ctc.htm" class="external-link">Common Terminology Criteria for Adverse Events (CTCAE) v5.0</a></p></li>
 <li><p><code>atoxgr_criteria_daids</code> implements
 <a href="https://rsc.niaid.nih.gov/sites/default/files/daidsgradingcorrectedv21.pdf" class="external-link">Division of AIDS (DAIDS) Table for Grading the Severity of Adult and Pediatric Adverse Events</a></p>
@@ -124,10 +140,23 @@ against input data that variables exist.</p></li>
 based on a subset of subjects (e.g. AGE &gt; 18 YEARS)</p></li>
 </ul></dd>
 
+<dt>Default value</dt>
+<dd><p>none</p></dd>
+
+
+</dl></dd>
+
 
 <dt id="arg-criteria-direction">criteria_direction<a class="anchor" aria-label="anchor" href="#arg-criteria-direction"></a></dt>
 <dd><p>Direction (L= Low, H = High) of toxicity grade.</p>
-<p>Permitted Values: "L", "H"</p></dd>
+<dl><dt>Permitted values</dt>
+<dd><p>"L", "H"</p></dd>
+
+<dt>Default value</dt>
+<dd><p>none</p></dd>
+
+
+</dl></dd>
 
 
 <dt id="arg-abnormal-indicator">abnormal_indicator<a class="anchor" aria-label="anchor" href="#arg-abnormal-indicator"></a></dt>
@@ -136,22 +165,39 @@ Usually "HIGH" for <code>criteria_direction</code> = "H" and "LOW" for <code>cri
 <p>This is only required when <code>meta_criteria = atoxgr_criteria_ctcv5</code> and <code>BNRIND</code> is a required
 variable. Currently for terms <code>"Alanine aminotransferase increased"</code>,
 <code>"Alkaline phosphatase increased"</code>, <code>"Aspartate aminotransferase increased"</code>,
-<code>"Blood bilirubin increased"</code> and <code>"GGT increased"</code></p></dd>
+<code>"Blood bilirubin increased"</code> and <code>"GGT increased"</code></p>
+<dl><dt>Default value</dt>
+<dd><p><code>NULL</code></p></dd>
+
+
+</dl></dd>
 
 
 <dt id="arg-get-unit-expr">get_unit_expr<a class="anchor" aria-label="anchor" href="#arg-get-unit-expr"></a></dt>
 <dd><p>An expression providing the unit of the parameter</p>
 <p>The result is used to check the units of the input parameters. Compared with
 <code>SI_UNIT_CHECK</code> in metadata (see <code>meta_criteria</code> parameter).</p>
-<p>Permitted Values: A variable containing unit from the input dataset, or a function call,
+<dl><dt>Permitted values</dt>
+<dd><p>A variable containing unit from the input dataset, or a function call,
 for example, <code>get_unit_expr = extract_unit(PARAM)</code>.</p></dd>
+
+<dt>Default value</dt>
+<dd><p>none</p></dd>
+
+
+</dl></dd>
 
 
 <dt id="arg-signif-dig">signif_dig<a class="anchor" aria-label="anchor" href="#arg-signif-dig"></a></dt>
 <dd><p>Number of significant digits to use when comparing a lab value against another
 value.</p>
 <p>Significant digits used to avoid floating point discrepancies when comparing numeric values.
-See blog: <a href="https://pharmaverse.github.io/blog/posts/2023-10-30_floating_point/floating_point.html" class="external-link">How admiral handles floating points</a></p></dd>
+See blog: <a href="https://pharmaverse.github.io/blog/posts/2023-10-30_floating_point/floating_point.html" class="external-link">How admiral handles floating points</a></p>
+<dl><dt>Default value</dt>
+<dd><p><code>get_admiral_option("signif_digits")</code></p></dd>
+
+
+</dl></dd>
 
 </dl></div>
     <div class="section level2">

@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">admiral</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.2.0.9016</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.2.0.9017</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -82,30 +82,57 @@
 
 <dl><dt id="arg-name">name<a class="anchor" aria-label="anchor" href="#arg-name"></a></dt>
 <dd><p>Name of the query used to select the definition of the query from
-the company database.</p></dd>
+the company database.</p>
+<dl><dt>Default value</dt>
+<dd><p><code>NULL</code></p></dd>
+
+
+</dl></dd>
 
 
 <dt id="arg-id">id<a class="anchor" aria-label="anchor" href="#arg-id"></a></dt>
 <dd><p>Identifier of the query used to select the definition of the query
-from the company database.</p></dd>
+from the company database.</p>
+<dl><dt>Default value</dt>
+<dd><p><code>NULL</code></p></dd>
+
+
+</dl></dd>
 
 
 <dt id="arg-scope">scope<a class="anchor" aria-label="anchor" href="#arg-scope"></a></dt>
 <dd><p>Scope of the query used to select the definition of the query
 from the company database.</p>
-<p><em>Permitted Values</em>: <code>"BROAD"</code>, <code>"NARROW"</code>, <code>NA_character_</code></p></dd>
+<dl><dt>Permitted values</dt>
+<dd><p><code>"BROAD"</code>, <code>"NARROW"</code>, <code>NA_character_</code></p></dd>
+
+<dt>Default value</dt>
+<dd><p><code>NULL</code></p></dd>
+
+
+</dl></dd>
 
 
 <dt id="arg-type">type<a class="anchor" aria-label="anchor" href="#arg-type"></a></dt>
 <dd><p>The type argument expects a character scalar. It is passed to the
 company specific get_terms() function such that the function can determine
-which sort of basket is requested</p></dd>
+which sort of basket is requested</p>
+<dl><dt>Default value</dt>
+<dd><p>none</p></dd>
+
+
+</dl></dd>
 
 
 <dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
 <dd><p>Any number of <em>named</em> function arguments. Can be used to pass in company
 specific conditions or flags that will then be used in user-defined function that is
-passed into argument <code>get_terms_fun</code> for function <code><a href="create_query_data.html">create_query_data()</a></code>.</p></dd>
+passed into argument <code>get_terms_fun</code> for function <code><a href="create_query_data.html">create_query_data()</a></code>.</p>
+<dl><dt>Default value</dt>
+<dd><p>none</p></dd>
+
+
+</dl></dd>
 
 </dl></div>
     <div class="section level2">

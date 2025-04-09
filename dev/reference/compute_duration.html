@@ -9,7 +9,7 @@ relative day, age, ..."><meta property="og:image" content="https://pharmaverse.g
 
     <a class="navbar-brand me-2" href="../index.html">admiral</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.2.0.9016</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.2.0.9017</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -97,7 +97,12 @@ relative day, age, ...</p>
 <p>A date or date-time object is expected.</p>
 <p>Refer to <code><a href="derive_vars_dt.html">derive_vars_dt()</a></code> to impute and derive a date from a date
 character vector to a date object.</p>
-<p>Refer to <code><a href="convert_dtc_to_dt.html">convert_dtc_to_dt()</a></code> to obtain a vector of imputed dates.</p></dd>
+<p>Refer to <code><a href="convert_dtc_to_dt.html">convert_dtc_to_dt()</a></code> to obtain a vector of imputed dates.</p>
+<dl><dt>Default value</dt>
+<dd><p>none</p></dd>
+
+
+</dl></dd>
 
 
 <dt id="arg-end-date">end_date<a class="anchor" aria-label="anchor" href="#arg-end-date"></a></dt>
@@ -105,7 +110,12 @@ character vector to a date object.</p>
 <p>A date or date-time object is expected.</p>
 <p>Refer to <code><a href="derive_vars_dt.html">derive_vars_dt()</a></code> to impute and derive a date from a date
 character vector to a date object.</p>
-<p>Refer to <code><a href="convert_dtc_to_dt.html">convert_dtc_to_dt()</a></code> to obtain a vector of imputed dates.</p></dd>
+<p>Refer to <code><a href="convert_dtc_to_dt.html">convert_dtc_to_dt()</a></code> to obtain a vector of imputed dates.</p>
+<dl><dt>Default value</dt>
+<dd><p>none</p></dd>
+
+
+</dl></dd>
 
 
 <dt id="arg-in-unit">in_unit<a class="anchor" aria-label="anchor" href="#arg-in-unit"></a></dt>
@@ -117,7 +127,12 @@ character vector to a date object.</p>
 <p>For days: <code>"day"</code>, <code>"days"</code>, <code>"d"</code></p>
 <p>For hours: <code>"hour"</code>, <code>"hours"</code>, <code>"hr"</code>, <code>"hrs"</code>, <code>"h"</code></p>
 <p>For minutes: <code>"minute"</code>, <code>"minutes"</code>, <code>"min"</code>, <code>"mins"</code></p>
-<p>For seconds: <code>"second"</code>, <code>"seconds"</code>, <code>"sec"</code>, <code>"secs"</code>, <code>"s"</code></p></dd>
+<p>For seconds: <code>"second"</code>, <code>"seconds"</code>, <code>"sec"</code>, <code>"secs"</code>, <code>"s"</code></p>
+<dl><dt>Default value</dt>
+<dd><p><code>"days"</code></p></dd>
+
+
+</dl></dd>
 
 
 <dt id="arg-out-unit">out_unit<a class="anchor" aria-label="anchor" href="#arg-out-unit"></a></dt>
@@ -130,38 +145,67 @@ character vector to a date object.</p>
 <p>For days: <code>"day"</code>, <code>"days"</code>, <code>"d"</code></p>
 <p>For hours: <code>"hour"</code>, <code>"hours"</code>, <code>"hr"</code>, <code>"hrs"</code>, <code>"h"</code></p>
 <p>For minutes: <code>"minute"</code>, <code>"minutes"</code>, <code>"min"</code>, <code>"mins"</code></p>
-<p>For seconds: <code>"second"</code>, <code>"seconds"</code>, <code>"sec"</code>, <code>"secs"</code>, <code>"s"</code></p></dd>
+<p>For seconds: <code>"second"</code>, <code>"seconds"</code>, <code>"sec"</code>, <code>"secs"</code>, <code>"s"</code></p>
+<dl><dt>Default value</dt>
+<dd><p><code>"days"</code></p></dd>
+
+
+</dl></dd>
 
 
 <dt id="arg-floor-in">floor_in<a class="anchor" aria-label="anchor" href="#arg-floor-in"></a></dt>
 <dd><p>Round down input dates?</p>
 <p>The input dates are round down with respect to the input unit, e.g., if the
 input unit is 'days', the time of the input dates is ignored.</p>
-<p>Default: <code>TRUE</code></p>
-<p>Permitted Values: <code>TRUE</code>, <code>FALSE</code></p></dd>
+<dl><dt>Permitted values</dt>
+<dd><p><code>TRUE</code>, <code>FALSE</code></p></dd>
+
+<dt>Default value</dt>
+<dd><p><code>TRUE</code></p></dd>
+
+
+</dl></dd>
 
 
 <dt id="arg-add-one">add_one<a class="anchor" aria-label="anchor" href="#arg-add-one"></a></dt>
 <dd><p>Add one input unit?</p>
 <p>If the duration is non-negative, one input unit is added. i.e., the
 duration can not be zero.</p>
-<p>Default: <code>TRUE</code></p>
-<p>Permitted Values: <code>TRUE</code>, <code>FALSE</code></p></dd>
+<dl><dt>Permitted values</dt>
+<dd><p><code>TRUE</code>, <code>FALSE</code></p></dd>
+
+<dt>Default value</dt>
+<dd><p><code>TRUE</code></p></dd>
+
+
+</dl></dd>
 
 
 <dt id="arg-trunc-out">trunc_out<a class="anchor" aria-label="anchor" href="#arg-trunc-out"></a></dt>
 <dd><p>Return integer part</p>
 <p>The fractional part of the duration (in output unit) is removed, i.e., the
 integer part is returned.</p>
-<p>Default: <code>FALSE</code></p>
-<p>Permitted Values: <code>TRUE</code>, <code>FALSE</code></p></dd>
+<dl><dt>Permitted values</dt>
+<dd><p><code>TRUE</code>, <code>FALSE</code></p></dd>
+
+<dt>Default value</dt>
+<dd><p><code>FALSE</code></p></dd>
+
+
+</dl></dd>
 
 
 <dt id="arg-type">type<a class="anchor" aria-label="anchor" href="#arg-type"></a></dt>
 <dd><p>lubridate duration type.</p>
 <p>See below for details.</p>
-<p>Default: <code>"duration"</code></p>
-<p>Permitted Values: <code>"duration"</code>, <code>"interval"</code></p></dd>
+<dl><dt>Permitted values</dt>
+<dd><p><code>"duration"</code>, <code>"interval"</code></p></dd>
+
+<dt>Default value</dt>
+<dd><p><code>"duration"</code></p></dd>
+
+
+</dl></dd>
 
 </dl></div>
     <div class="section level2">

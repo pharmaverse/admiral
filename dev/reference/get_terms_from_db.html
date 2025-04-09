@@ -13,7 +13,7 @@ is in the expected format (see assert_terms())."><meta property="og:image" conte
 
     <a class="navbar-brand me-2" href="../index.html">admiral</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.2.0.9016</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.2.0.9017</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -101,43 +101,83 @@ is in the expected format (see <code>assert_terms()</code>).</p>
 <dl><dt id="arg-version">version<a class="anchor" aria-label="anchor" href="#arg-version"></a></dt>
 <dd><p>Version</p>
 <p>The version must be non null. Otherwise, an error is issued. The value is
-passed to the access function (<code>fun</code>).</p></dd>
+passed to the access function (<code>fun</code>).</p>
+<dl><dt>Default value</dt>
+<dd><p>none</p></dd>
+
+
+</dl></dd>
 
 
 <dt id="arg-fun">fun<a class="anchor" aria-label="anchor" href="#arg-fun"></a></dt>
 <dd><p>Access function</p>
 <p>The access function must be non null. Otherwise, an error is issued. The
-function is called to retrieve the terms.</p></dd>
+function is called to retrieve the terms.</p>
+<dl><dt>Default value</dt>
+<dd><p>none</p></dd>
+
+
+</dl></dd>
 
 
 <dt id="arg-queries">queries<a class="anchor" aria-label="anchor" href="#arg-queries"></a></dt>
 <dd><p>Queries</p>
 <p>List of all queries passed to <code><a href="create_query_data.html">create_query_data()</a></code>. It is used for error
-messages.</p></dd>
+messages.</p>
+<dl><dt>Default value</dt>
+<dd><p>none</p></dd>
+
+
+</dl></dd>
 
 
 <dt id="arg-definition">definition<a class="anchor" aria-label="anchor" href="#arg-definition"></a></dt>
 <dd><p>Definition of the query</p>
 <p>The definition is passed to the access function. It defines which terms are
-returned.</p></dd>
+returned.</p>
+<dl><dt>Default value</dt>
+<dd><p>none</p></dd>
+
+
+</dl></dd>
 
 
 <dt id="arg-expect-grpname">expect_grpname<a class="anchor" aria-label="anchor" href="#arg-expect-grpname"></a></dt>
-<dd><p>Is <code>GRPNAME</code> expected in the output dataset?</p></dd>
+<dd><p>Is <code>GRPNAME</code> expected in the output dataset?</p>
+<dl><dt>Default value</dt>
+<dd><p><code>FALSE</code></p></dd>
+
+
+</dl></dd>
 
 
 <dt id="arg-expect-grpid">expect_grpid<a class="anchor" aria-label="anchor" href="#arg-expect-grpid"></a></dt>
-<dd><p>Is <code>GRPID</code> expected in the output dataset?</p></dd>
+<dd><p>Is <code>GRPID</code> expected in the output dataset?</p>
+<dl><dt>Default value</dt>
+<dd><p><code>FALSE</code></p></dd>
+
+
+</dl></dd>
 
 
 <dt id="arg-i">i<a class="anchor" aria-label="anchor" href="#arg-i"></a></dt>
 <dd><p>Index of <code>definition</code> in <code>queries</code></p>
-<p>The value is used for error messages.</p></dd>
+<p>The value is used for error messages.</p>
+<dl><dt>Default value</dt>
+<dd><p>none</p></dd>
+
+
+</dl></dd>
 
 
 <dt id="arg-temp-env">temp_env<a class="anchor" aria-label="anchor" href="#arg-temp-env"></a></dt>
 <dd><p>Temporary environment</p>
-<p>The value is passed to the access function.</p></dd>
+<p>The value is passed to the access function.</p>
+<dl><dt>Default value</dt>
+<dd><p>none</p></dd>
+
+
+</dl></dd>
 
 </dl></div>
     <div class="section level2">

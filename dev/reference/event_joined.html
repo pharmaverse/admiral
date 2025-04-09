@@ -21,7 +21,7 @@ for more details."><meta property="og:image" content="https://pharmaverse.github
 
     <a class="navbar-brand me-2" href="../index.html">admiral</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.2.0.9016</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.2.0.9017</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -117,7 +117,14 @@ for more details.</p>
 event. The name refers to the dataset specified for <code>source_datasets</code> in
 <code><a href="derive_extreme_event.html">derive_extreme_event()</a></code>. If the argument is not specified, the input
 dataset (<code>dataset</code>) of <code><a href="derive_extreme_event.html">derive_extreme_event()</a></code> is used.</p>
-<p><em>Permitted Values</em>: a character scalar</p></dd>
+<dl><dt>Permitted values</dt>
+<dd><p>a character scalar</p></dd>
+
+<dt>Default value</dt>
+<dd><p><code>NULL</code></p></dd>
+
+
+</dl></dd>
 
 
 <dt id="arg-condition">condition<a class="anchor" aria-label="anchor" href="#arg-condition"></a></dt>
@@ -131,15 +138,29 @@ observation. For example in the oncology setting when using this function
 for confirmed best overall response,  <code>condition = AVALC == "CR" &amp; all(AVALC.join %in% c("CR", "NE")) &amp; count_vals(var = AVALC.join, val = "NE") &lt;= 1</code> selects observations with response "CR" and for all
 observations up to the confirmation observation the response is "CR" or
 "NE" and there is at most one "NE".</p>
-<p><em>Permitted Values</em>: an unquoted condition</p></dd>
+<dl><dt>Permitted values</dt>
+<dd><p>an unquoted condition</p></dd>
+
+<dt>Default value</dt>
+<dd><p>none</p></dd>
+
+
+</dl></dd>
 
 
 <dt id="arg-order">order<a class="anchor" aria-label="anchor" href="#arg-order"></a></dt>
 <dd><p>If specified, the specified variables or expressions are used to
 select the first observation.</p>
 <p>For handling of <code>NA</code>s in sorting variables see <a href="../articles/generic.html#sort_order">Sort Order</a>.</p>
-<p><em>Permitted Values</em>: list of expressions created by <code><a href="reexport-exprs.html">exprs()</a></code>, e.g.,
+<dl><dt>Permitted values</dt>
+<dd><p>list of expressions created by <code><a href="reexport-exprs.html">exprs()</a></code>, e.g.,
 <code>exprs(ADT, desc(AVAL))</code> or <code>NULL</code></p></dd>
+
+<dt>Default value</dt>
+<dd><p><code>NULL</code></p></dd>
+
+
+</dl></dd>
 
 
 <dt id="arg-join-vars">join_vars<a class="anchor" aria-label="anchor" href="#arg-join-vars"></a></dt>
@@ -148,7 +169,14 @@ select the first observation.</p>
 this parameter. The specified variables are added to the joined dataset
 with suffix ".join". For example to select all observations with <code>AVALC == "Y"</code> and <code>AVALC == "Y"</code> for at least one subsequent visit <code>join_vars = exprs(AVALC, AVISITN)</code> and <code>condition = AVALC == "Y" &amp; AVALC.join == "Y" &amp; AVISITN &lt; AVISITN.join</code> could be specified.</p>
 <p>The <code>*.join</code> variables are not included in the output dataset.</p>
-<p><em>Permitted Values</em>: a named list of expressions, e.g., created by <code><a href="reexport-exprs.html">exprs()</a></code></p></dd>
+<dl><dt>Permitted values</dt>
+<dd><p>a named list of expressions, e.g., created by <code><a href="reexport-exprs.html">exprs()</a></code></p></dd>
+
+<dt>Default value</dt>
+<dd><p>none</p></dd>
+
+
+</dl></dd>
 
 
 <dt id="arg-join-type">join_type<a class="anchor" aria-label="anchor" href="#arg-join-type"></a></dt>
@@ -156,7 +184,14 @@ with suffix ".join". For example to select all observations with <code>AVALC == 
 <p>The argument determines which of the joined observations are kept with
 respect to the original observation. For example, if <code>join_type = "after"</code> is specified all observations after the original observations are
 kept.</p>
-<p><em>Permitted Values:</em> <code>"before"</code>, <code>"after"</code>, <code>"all"</code></p></dd>
+<dl><dt>Permitted values</dt>
+<dd><p><code>"before"</code>, <code>"after"</code>, <code>"all"</code></p></dd>
+
+<dt>Default value</dt>
+<dd><p>none</p></dd>
+
+
+</dl></dd>
 
 
 <dt id="arg-first-cond-lower">first_cond_lower<a class="anchor" aria-label="anchor" href="#arg-first-cond-lower"></a></dt>
@@ -170,7 +205,14 @@ considered, i.e., the observation is not flagged.</p>
 functions which should not apply to all observations but only from a
 certain observation before the current observation up to the current
 observation.</p>
-<p><em>Permitted Values</em>: an unquoted condition</p></dd>
+<dl><dt>Permitted values</dt>
+<dd><p>an unquoted condition</p></dd>
+
+<dt>Default value</dt>
+<dd><p><code>NULL</code></p></dd>
+
+
+</dl></dd>
 
 
 <dt id="arg-first-cond-upper">first_cond_upper<a class="anchor" aria-label="anchor" href="#arg-first-cond-upper"></a></dt>
@@ -182,14 +224,28 @@ observations are considered, i.e., the observation is not flagged.</p>
 <p>This parameter should be specified if <code>condition</code> contains summary
 functions which should not apply to all observations but only up to the
 confirmation assessment.</p>
-<p><em>Permitted Values</em>: an unquoted condition</p></dd>
+<dl><dt>Permitted values</dt>
+<dd><p>an unquoted condition</p></dd>
+
+<dt>Default value</dt>
+<dd><p><code>NULL</code></p></dd>
+
+
+</dl></dd>
 
 
 <dt id="arg-set-values-to">set_values_to<a class="anchor" aria-label="anchor" href="#arg-set-values-to"></a></dt>
 <dd><p>A named list returned by <code><a href="reexport-exprs.html">exprs()</a></code> defining the variables
 to be set for the event, e.g. <code>exprs(PARAMCD = "WSP", PARAM  = "Worst Sleeping Problems")</code>. The values can be a symbol, a
 character string, a numeric value, <code>NA</code> or an expression.</p>
-<p><em>Permitted Values</em>: a named list of expressions, e.g., created by <code><a href="reexport-exprs.html">exprs()</a></code></p></dd>
+<dl><dt>Permitted values</dt>
+<dd><p>a named list of expressions, e.g., created by <code><a href="reexport-exprs.html">exprs()</a></code></p></dd>
+
+<dt>Default value</dt>
+<dd><p><code>NULL</code></p></dd>
+
+
+</dl></dd>
 
 
 <dt id="arg-keep-source-vars">keep_source_vars<a class="anchor" aria-label="anchor" href="#arg-keep-source-vars"></a></dt>
@@ -197,15 +253,29 @@ character string, a numeric value, <code>NA</code> or an expression.</p>
 <p>The specified variables are kept for the selected observations. The
 variables specified for <code>by_vars</code> (of <code><a href="derive_extreme_event.html">derive_extreme_event()</a></code>) and created
 by <code>set_values_to</code> are always kept.</p>
-<p><em>Permitted Values</em>: A list of expressions where each element is
+<dl><dt>Permitted values</dt>
+<dd><p>A list of expressions where each element is
 a symbol or a tidyselect expression, e.g., <code>exprs(VISIT, VISITNUM, starts_with("RS"))</code>.</p></dd>
+
+<dt>Default value</dt>
+<dd><p><code>NULL</code></p></dd>
+
+
+</dl></dd>
 
 
 <dt id="arg-description">description<a class="anchor" aria-label="anchor" href="#arg-description"></a></dt>
 <dd><p>Description of the event</p>
 <p>The description does not affect the derivations where the event is used. It
 is intended for documentation only.</p>
-<p><em>Permitted Values</em>: a character scalar</p></dd>
+<dl><dt>Permitted values</dt>
+<dd><p>a character scalar</p></dd>
+
+<dt>Default value</dt>
+<dd><p><code>NULL</code></p></dd>
+
+
+</dl></dd>
 
 </dl></div>
     <div class="section level2">

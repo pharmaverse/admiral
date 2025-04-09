@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">admiral</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.2.0.9016</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.2.0.9017</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -82,7 +82,12 @@
 
 <dl><dt id="arg-dataset">dataset<a class="anchor" aria-label="anchor" href="#arg-dataset"></a></dt>
 <dd><p>Input dataset</p>
-<p>The variables specified by the <code>by_vars</code> and <code>definition</code> arguments are expected to be in the dataset.</p></dd>
+<p>The variables specified by the <code>by_vars</code> and <code>definition</code> arguments are expected to be in the dataset.</p>
+<dl><dt>Default value</dt>
+<dd><p>none</p></dd>
+
+
+</dl></dd>
 
 
 <dt id="arg-definition">definition<a class="anchor" aria-label="anchor" href="#arg-definition"></a></dt>
@@ -102,7 +107,12 @@ the category value(s) used by the logical expression.</p></li>
 <p>e.g. if <code>by_vars</code> is specified as <code>exprs(VSTEST)</code>:</p>
 <p></p><div class="sourceCode r"><pre><code><span><span class="fu"><a href="../reference/reexport-exprs.html">exprs</a></span><span class="op">(</span><span class="op">~</span><span class="va">VSTEST</span>,   <span class="op">~</span><span class="va">condition</span>,  <span class="op">~</span><span class="va">AVALCAT1</span>, <span class="op">~</span><span class="va">AVALCA1N</span>,</span>
 <span>      <span class="st">"Height"</span>, <span class="va">AVAL</span> <span class="op">&gt;=</span> <span class="fl">140</span>, <span class="st">"&gt;=140 cm"</span>,         <span class="fl">1</span>,</span>
-<span>      <span class="st">"Height"</span>,  <span class="va">AVAL</span> <span class="op">&lt;</span> <span class="fl">140</span>,  <span class="st">"&lt;140 cm"</span>,         <span class="fl">2</span><span class="op">)</span></span></code></pre><p></p></div></dd>
+<span>      <span class="st">"Height"</span>,  <span class="va">AVAL</span> <span class="op">&lt;</span> <span class="fl">140</span>,  <span class="st">"&lt;140 cm"</span>,         <span class="fl">2</span><span class="op">)</span></span></code></pre><p></p></div>
+<dl><dt>Default value</dt>
+<dd><p>none</p></dd>
+
+
+</dl></dd>
 
 
 <dt id="arg-by-vars">by_vars<a class="anchor" aria-label="anchor" href="#arg-by-vars"></a></dt>
@@ -111,7 +121,12 @@ Allows for specifying by groups, e.g. <code>exprs(PARAMCD)</code>.
 Variable must be present in both <code>dataset</code> and <code>definition</code>.
 The conditions in <code>definition</code> are applied only to those records that match <code>by_vars</code>.
 The categorization variables are set to <code>NA</code> for records
-not matching any of the by groups in <code>definition</code>.</p></dd>
+not matching any of the by groups in <code>definition</code>.</p>
+<dl><dt>Default value</dt>
+<dd><p><code>NULL</code></p></dd>
+
+
+</dl></dd>
 
 </dl></div>
     <div class="section level2">

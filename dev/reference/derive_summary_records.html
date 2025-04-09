@@ -13,7 +13,7 @@ records has been added to a dataset."><meta property="og:image" content="https:/
 
     <a class="navbar-brand me-2" href="../index.html">admiral</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.2.0.9016</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.2.0.9017</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -99,21 +99,36 @@ records has been added to a dataset.</p>
 
 <dl><dt id="arg-dataset">dataset<a class="anchor" aria-label="anchor" href="#arg-dataset"></a></dt>
 <dd><p>Input dataset</p>
-<p>The variables specified by the <code>by_vars</code> argument are expected to be in the dataset.</p></dd>
+<p>The variables specified by the <code>by_vars</code> argument are expected to be in the dataset.</p>
+<dl><dt>Default value</dt>
+<dd><p><code>NULL</code></p></dd>
+
+
+</dl></dd>
 
 
 <dt id="arg-dataset-add">dataset_add<a class="anchor" aria-label="anchor" href="#arg-dataset-add"></a></dt>
 <dd><p>Additional dataset</p>
 <p>The variables specified for <code>by_vars</code> are expected.
 Observations from the specified dataset are going to be used to calculate and added
-as new records to the input dataset (<code>dataset</code>).</p></dd>
+as new records to the input dataset (<code>dataset</code>).</p>
+<dl><dt>Default value</dt>
+<dd><p>none</p></dd>
+
+
+</dl></dd>
 
 
 <dt id="arg-dataset-ref">dataset_ref<a class="anchor" aria-label="anchor" href="#arg-dataset-ref"></a></dt>
 <dd><p>Reference dataset</p>
 <p>The variables specified for <code>by_vars</code> are expected. For each
 observation of the specified dataset a new observation is added to the
-input dataset.</p></dd>
+input dataset.</p>
+<dl><dt>Default value</dt>
+<dd><p><code>NULL</code></p></dd>
+
+
+</dl></dd>
 
 
 <dt id="arg-by-vars">by_vars<a class="anchor" aria-label="anchor" href="#arg-by-vars"></a></dt>
@@ -121,8 +136,11 @@ input dataset.</p></dd>
 <p>Variables to consider for generation of groupwise summary
 records. Providing the names of variables in <code><a href="reexport-exprs.html">exprs()</a></code> will create a
 groupwise summary and generate summary records for the specified groups.</p>
-<p><em>Permitted Values</em>: list of variables created by <code><a href="reexport-exprs.html">exprs()</a></code>
-e.g. <code>exprs(USUBJID, VISIT)</code></p></dd>
+<dl><dt>Default value</dt>
+<dd><p>none</p></dd>
+
+
+</dl></dd>
 
 
 <dt id="arg-filter-add">filter_add<a class="anchor" aria-label="anchor" href="#arg-filter-add"></a></dt>
@@ -134,7 +152,11 @@ function is involved.</p>
 values greater than mean of <code>AVAL</code> with in <code>by_vars</code>.</p></li>
 <li><p><code>filter_add = (dplyr::n() &gt; 2)</code> will filter n count of <code>by_vars</code> greater
 than 2.</p></li>
-</ul></dd>
+</ul><dl><dt>Default value</dt>
+<dd><p><code>NULL</code></p></dd>
+
+
+</dl></dd>
 
 
 <dt id="arg-set-values-to">set_values_to<a class="anchor" aria-label="anchor" href="#arg-set-values-to"></a></dt>
@@ -149,7 +171,12 @@ used, the values are summarized by the variables specified for <code>by_vars</co
 <p></p><div class="sourceCode"><pre><code><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a>  set_values_to <span class="ot">=</span> <span class="fu">exprs</span>(</span>
 <span id="cb1-2"><a href="#cb1-2" tabindex="-1"></a>    <span class="at">AVAL =</span> <span class="fu">sum</span>(AVAL),</span>
 <span id="cb1-3"><a href="#cb1-3" tabindex="-1"></a>    <span class="at">DTYPE =</span> <span class="st">"AVERAGE"</span>,</span>
-<span id="cb1-4"><a href="#cb1-4" tabindex="-1"></a>  )</span></code></pre><p></p></div></dd>
+<span id="cb1-4"><a href="#cb1-4" tabindex="-1"></a>  )</span></code></pre><p></p></div>
+<dl><dt>Default value</dt>
+<dd><p>none</p></dd>
+
+
+</dl></dd>
 
 
 <dt id="arg-missing-values">missing_values<a class="anchor" aria-label="anchor" href="#arg-missing-values"></a></dt>
@@ -157,8 +184,15 @@ used, the values are summarized by the variables specified for <code>by_vars</co
 <p>For observations of the reference dataset (<code>dataset_ref</code>) which do not have a
 complete mapping defined by the summarization defined in <code>set_values_to</code>.  Only variables
 specified for <code>set_values_to</code> can be specified for <code>missing_values</code>.</p>
-<p><em>Permitted Values</em>: named list of expressions, e.g.,
+<dl><dt>Permitted values</dt>
+<dd><p>named list of expressions, e.g.,
 <code>exprs(AVAL = -9999)</code></p></dd>
+
+<dt>Default value</dt>
+<dd><p><code>NULL</code></p></dd>
+
+
+</dl></dd>
 
 </dl></div>
     <div class="section level2">

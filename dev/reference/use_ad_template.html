@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">admiral</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.2.0.9016</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.2.0.9017</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -90,23 +90,48 @@
 <dd><p>An ADaM dataset name. You can use any of the available
 dataset names
 <code>"ADAE"</code>, <code>"ADCM"</code>, <code>"ADEG"</code>, <code>"ADEX"</code>, <code>"ADLB"</code>, <code>"ADLBHY"</code>, <code>"ADMH"</code>, <code>"ADPC"</code>, <code>"ADPP"</code>, <code>"ADPPK"</code>, <code>"ADSL"</code>, <code>"ADVS"</code>.
-The dataset name is case-insensitive. The default dataset name is <code>"ADSL"</code>.</p></dd>
+The dataset name is case-insensitive. The default dataset name is <code>"ADSL"</code>.</p>
+<dl><dt>Default value</dt>
+<dd><p><code>"adsl"</code></p></dd>
+
+
+</dl></dd>
 
 
 <dt id="arg-save-path">save_path<a class="anchor" aria-label="anchor" href="#arg-save-path"></a></dt>
-<dd><p>Path to save the script.</p></dd>
+<dd><p>Path to save the script.</p>
+<dl><dt>Default value</dt>
+<dd><p><code>paste0("./", adam_name, ".R")</code></p></dd>
+
+
+</dl></dd>
 
 
 <dt id="arg-package">package<a class="anchor" aria-label="anchor" href="#arg-package"></a></dt>
-<dd><p>The R package in which to look for templates. By default <code>"admiral"</code>.</p></dd>
+<dd><p>The R package in which to look for templates. By default <code>"admiral"</code>.</p>
+<dl><dt>Default value</dt>
+<dd><p><code>"admiral"</code></p></dd>
+
+
+</dl></dd>
 
 
 <dt id="arg-overwrite">overwrite<a class="anchor" aria-label="anchor" href="#arg-overwrite"></a></dt>
-<dd><p>Whether to overwrite an existing file named <code>save_path</code>.</p></dd>
+<dd><p>Whether to overwrite an existing file named <code>save_path</code>.</p>
+<dl><dt>Default value</dt>
+<dd><p><code>FALSE</code></p></dd>
+
+
+</dl></dd>
 
 
 <dt id="arg-open">open<a class="anchor" aria-label="anchor" href="#arg-open"></a></dt>
-<dd><p>Whether to open the script right away.</p></dd>
+<dd><p>Whether to open the script right away.</p>
+<dl><dt>Default value</dt>
+<dd><p><code><a href="https://rdrr.io/r/base/interactive.html" class="external-link">interactive()</a></code></p></dd>
+
+
+</dl></dd>
 
 </dl></div>
     <div class="section level2">

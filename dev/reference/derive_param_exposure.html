@@ -9,7 +9,7 @@ start (ASTDT(M))and end date (AENDT(M)) as the minimum and maximum date by by_va
 
     <a class="navbar-brand me-2" href="../index.html">admiral</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.2.0.9016</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.2.0.9017</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -92,7 +92,12 @@ start (<code>ASTDT(M)</code>)and end date (<code>AENDT(M)</code>) as the minimum
 
 <dl><dt id="arg-dataset">dataset<a class="anchor" aria-label="anchor" href="#arg-dataset"></a></dt>
 <dd><p>Input dataset</p>
-<p>The variables specified by the <code>by_vars</code> argument are expected to be in the dataset.</p></dd>
+<p>The variables specified by the <code>by_vars</code> argument are expected to be in the dataset.</p>
+<dl><dt>Default value</dt>
+<dd><p><code>NULL</code></p></dd>
+
+
+</dl></dd>
 
 
 <dt id="arg-dataset-add">dataset_add<a class="anchor" aria-label="anchor" href="#arg-dataset-add"></a></dt>
@@ -100,7 +105,12 @@ start (<code>ASTDT(M)</code>)and end date (<code>AENDT(M)</code>) as the minimum
 <p>The variables specified for <code>by_vars</code>, <code>analysis_var</code>, <code>PARAMCD</code>,
 alongside either <code>ASTDTM</code> and <code>AENDTM</code> or <code>ASTDT</code> and <code>AENDT</code> are also expected.
 Observations from the specified dataset are going to be used to calculate and added
-as new records to the input dataset (<code>dataset</code>).</p></dd>
+as new records to the input dataset (<code>dataset</code>).</p>
+<dl><dt>Default value</dt>
+<dd><p>none</p></dd>
+
+
+</dl></dd>
 
 
 <dt id="arg-by-vars">by_vars<a class="anchor" aria-label="anchor" href="#arg-by-vars"></a></dt>
@@ -108,15 +118,25 @@ as new records to the input dataset (<code>dataset</code>).</p></dd>
 <p>For each group defined by <code>by_vars</code> an observation is added to the output
 dataset. Only variables specified in <code>by_vars</code> will be populated
 in the newly created records.</p>
-<p><em>Permitted Values</em>: list of variables created by <code><a href="reexport-exprs.html">exprs()</a></code>
-e.g. <code>exprs(USUBJID, VISIT)</code></p></dd>
+<dl><dt>Default value</dt>
+<dd><p>none</p></dd>
+
+
+</dl></dd>
 
 
 <dt id="arg-input-code">input_code<a class="anchor" aria-label="anchor" href="#arg-input-code"></a></dt>
 <dd><p>Required parameter code</p>
 <p>The observations where <code>PARAMCD</code> equals the specified value are considered to compute the
 summary record.</p>
-<p><em>Permitted Values:</em> A character of <code>PARAMCD</code> value</p></dd>
+<dl><dt>Permitted values</dt>
+<dd><p>A character of <code>PARAMCD</code> value</p></dd>
+
+<dt>Default value</dt>
+<dd><p>none</p></dd>
+
+
+</dl></dd>
 
 
 <dt id="arg-filter-add">filter_add<a class="anchor" aria-label="anchor" href="#arg-filter-add"></a></dt>
@@ -128,7 +148,11 @@ function is involved.</p>
 values greater than mean of <code>AVAL</code> with in <code>by_vars</code>.</p></li>
 <li><p><code>filter_add = (dplyr::n() &gt; 2)</code> will filter n count of <code>by_vars</code> greater
 than 2.</p></li>
-</ul></dd>
+</ul><dl><dt>Default value</dt>
+<dd><p><code>NULL</code></p></dd>
+
+
+</dl></dd>
 
 
 <dt id="arg-set-values-to">set_values_to<a class="anchor" aria-label="anchor" href="#arg-set-values-to"></a></dt>
@@ -137,7 +161,14 @@ than 2.</p></li>
 <li><p>RHS refers to the values to set to the variable. This can be a string, a symbol, a numeric
 value, <code>NA</code>, or an expression.
 (e.g.  <code>exprs(PARAMCD = "TDOSE",PARCAT1 = "OVERALL")</code>).</p></li>
-</ul><p><em>Permitted Values:</em> List of variable-value pairs</p></dd>
+</ul><dl><dt>Permitted values</dt>
+<dd><p>List of variable-value pairs</p></dd>
+
+<dt>Default value</dt>
+<dd><p><code>NULL</code></p></dd>
+
+
+</dl></dd>
 
 </dl></div>
     <div class="section level2">

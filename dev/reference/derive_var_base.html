@@ -9,7 +9,7 @@ Note: This is a wrapper function for the more generic derive_vars_merged()."><me
 
     <a class="navbar-brand me-2" href="../index.html">admiral</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.2.0.9016</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.2.0.9017</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -91,28 +91,51 @@ Note: This is a wrapper function for the more generic derive_vars_merged()."><me
 
 <dl><dt id="arg-dataset">dataset<a class="anchor" aria-label="anchor" href="#arg-dataset"></a></dt>
 <dd><p>Input dataset</p>
-<p>The variables specified by the <code>by_vars</code> and <code>source_var</code> arguments are expected to be in the dataset.</p></dd>
+<p>The variables specified by the <code>by_vars</code> and <code>source_var</code> arguments are expected to be in the dataset.</p>
+<dl><dt>Default value</dt>
+<dd><p>none</p></dd>
+
+
+</dl></dd>
 
 
 <dt id="arg-by-vars">by_vars<a class="anchor" aria-label="anchor" href="#arg-by-vars"></a></dt>
 <dd><p>Grouping variables</p>
 <p>Grouping variables uniquely identifying a set
 of records for which to calculate <code>new_var</code>.</p>
-<p><em>Permitted Values</em>: list of variables created by <code><a href="reexport-exprs.html">exprs()</a></code>
-e.g. <code>exprs(USUBJID, VISIT)</code></p></dd>
+<dl><dt>Default value</dt>
+<dd><p>none</p></dd>
+
+
+</dl></dd>
 
 
 <dt id="arg-source-var">source_var<a class="anchor" aria-label="anchor" href="#arg-source-var"></a></dt>
-<dd><p>The column from which to extract the baseline value, e.g. <code>AVAL</code></p></dd>
+<dd><p>The column from which to extract the baseline value, e.g. <code>AVAL</code></p>
+<dl><dt>Default value</dt>
+<dd><p><code>AVAL</code></p></dd>
+
+
+</dl></dd>
 
 
 <dt id="arg-new-var">new_var<a class="anchor" aria-label="anchor" href="#arg-new-var"></a></dt>
-<dd><p>The name of the newly created baseline column, e.g. <code>BASE</code></p></dd>
+<dd><p>The name of the newly created baseline column, e.g. <code>BASE</code></p>
+<dl><dt>Default value</dt>
+<dd><p><code>BASE</code></p></dd>
+
+
+</dl></dd>
 
 
 <dt id="arg-filter">filter<a class="anchor" aria-label="anchor" href="#arg-filter"></a></dt>
 <dd><p>The condition used to filter <code>dataset</code> for baseline records.</p>
-<p>By default <code>ABLFL == "Y"</code></p></dd>
+<p>By default <code>ABLFL == "Y"</code></p>
+<dl><dt>Default value</dt>
+<dd><p><code>ABLFL == "Y"</code></p></dd>
+
+
+</dl></dd>
 
 </dl></div>
     <div class="section level2">

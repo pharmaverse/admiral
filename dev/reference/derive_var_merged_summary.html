@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">admiral</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.2.0.9016</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.2.0.9017</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -89,13 +89,23 @@
 
 <dl><dt id="arg-dataset">dataset<a class="anchor" aria-label="anchor" href="#arg-dataset"></a></dt>
 <dd><p>Input dataset</p>
-<p>The variables specified by the <code>by_vars</code> argument are expected to be in the dataset.</p></dd>
+<p>The variables specified by the <code>by_vars</code> argument are expected to be in the dataset.</p>
+<dl><dt>Default value</dt>
+<dd><p>none</p></dd>
+
+
+</dl></dd>
 
 
 <dt id="arg-dataset-add">dataset_add<a class="anchor" aria-label="anchor" href="#arg-dataset-add"></a></dt>
 <dd><p>Additional dataset</p>
 <p>The variables specified by the <code>by_vars</code> and the variables used on the left
-hand sides of the <code>new_vars</code> arguments are expected.</p></dd>
+hand sides of the <code>new_vars</code> arguments are expected.</p>
+<dl><dt>Default value</dt>
+<dd><p>none</p></dd>
+
+
+</dl></dd>
 
 
 <dt id="arg-by-vars">by_vars<a class="anchor" aria-label="anchor" href="#arg-by-vars"></a></dt>
@@ -103,8 +113,11 @@ hand sides of the <code>new_vars</code> arguments are expected.</p></dd>
 <p>The expressions on the left hand sides of <code>new_vars</code> are evaluated by the
 specified <em>variables</em>. Then the resulting values are merged to the input
 dataset (<code>dataset</code>) by the specified <em>variables</em>.</p>
-<p><em>Permitted Values</em>: list of variables created by <code><a href="reexport-exprs.html">exprs()</a></code>
-e.g. <code>exprs(USUBJID, VISIT)</code></p></dd>
+<dl><dt>Default value</dt>
+<dd><p>none</p></dd>
+
+
+</dl></dd>
 
 
 <dt id="arg-new-vars">new_vars<a class="anchor" aria-label="anchor" href="#arg-new-vars"></a></dt>
@@ -118,7 +131,12 @@ used, the values are summarized by the variables specified for <code>by_vars</co
 <p></p><div class="sourceCode"><pre><code><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a>  new_vars <span class="ot">=</span> <span class="fu">exprs</span>(</span>
 <span id="cb1-2"><a href="#cb1-2" tabindex="-1"></a>    <span class="at">DOSESUM =</span> <span class="fu">sum</span>(AVAL),</span>
 <span id="cb1-3"><a href="#cb1-3" tabindex="-1"></a>    <span class="at">DOSEMEAN =</span> <span class="fu">mean</span>(AVAL)</span>
-<span id="cb1-4"><a href="#cb1-4" tabindex="-1"></a>  )</span></code></pre><p></p></div></dd>
+<span id="cb1-4"><a href="#cb1-4" tabindex="-1"></a>  )</span></code></pre><p></p></div>
+<dl><dt>Default value</dt>
+<dd><p><code>NULL</code></p></dd>
+
+
+</dl></dd>
 
 
 <dt id="arg-filter-add">filter_add<a class="anchor" aria-label="anchor" href="#arg-filter-add"></a></dt>
@@ -126,7 +144,14 @@ used, the values are summarized by the variables specified for <code>by_vars</co
 <p>Only observations fulfilling the specified condition are taken into account
 for summarizing. If the argument is not specified, all observations are
 considered.</p>
-<p><em>Permitted Values</em>: a condition</p></dd>
+<dl><dt>Permitted values</dt>
+<dd><p>a condition</p></dd>
+
+<dt>Default value</dt>
+<dd><p><code>NULL</code></p></dd>
+
+
+</dl></dd>
 
 
 <dt id="arg-missing-values">missing_values<a class="anchor" aria-label="anchor" href="#arg-missing-values"></a></dt>
@@ -135,8 +160,15 @@ considered.</p>
 matching observation in the additional dataset (<code>dataset_add</code>) the values
 of the specified variables are set to the specified value. Only variables
 specified for <code>new_vars</code> can be specified for <code>missing_values</code>.</p>
-<p><em>Permitted Values</em>: named list of expressions, e.g.,
+<dl><dt>Permitted values</dt>
+<dd><p>named list of expressions, e.g.,
 <code>exprs(BASEC = "MISSING", BASE = -1)</code></p></dd>
+
+<dt>Default value</dt>
+<dd><p><code>NULL</code></p></dd>
+
+
+</dl></dd>
 
 </dl></div>
     <div class="section level2">

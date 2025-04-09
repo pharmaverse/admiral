@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">admiral</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.2.0.9016</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.2.0.9017</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -92,13 +92,21 @@
 
 <dl><dt id="arg-dataset">dataset<a class="anchor" aria-label="anchor" href="#arg-dataset"></a></dt>
 <dd><p>Input dataset</p>
-<p>The variables specified by the <code>by_vars</code> argument are expected to be in the dataset.</p></dd>
+<p>The variables specified by the <code>by_vars</code> argument are expected to be in the dataset.</p>
+<dl><dt>Default value</dt>
+<dd><p>none</p></dd>
+
+
+</dl></dd>
 
 
 <dt id="arg-by-vars">by_vars<a class="anchor" aria-label="anchor" href="#arg-by-vars"></a></dt>
 <dd><p>Grouping variables</p>
-<p><em>Permitted Values</em>: list of variables created by <code><a href="reexport-exprs.html">exprs()</a></code>
-e.g. <code>exprs(USUBJID, VISIT)</code></p></dd>
+<dl><dt>Default value</dt>
+<dd><p>none</p></dd>
+
+
+</dl></dd>
 
 
 <dt id="arg-order">order<a class="anchor" aria-label="anchor" href="#arg-order"></a></dt>
@@ -106,40 +114,80 @@ e.g. <code>exprs(USUBJID, VISIT)</code></p></dd>
 <p>The first or last observation is determined with respect to the specified
 order.</p>
 <p>For handling of <code>NA</code>s in sorting variables see <a href="../articles/generic.html#sort_order">Sort Order</a>.</p>
-<p>Permitted Values: list of variables or functions of variables</p></dd>
+<dl><dt>Permitted values</dt>
+<dd><p>list of variables or functions of variables</p></dd>
+
+<dt>Default value</dt>
+<dd><p>none</p></dd>
+
+
+</dl></dd>
 
 
 <dt id="arg-new-var">new_var<a class="anchor" aria-label="anchor" href="#arg-new-var"></a></dt>
 <dd><p>Variable to add</p>
 <p>The specified variable is added to the output dataset. It is set to the value
 set in <code>true_value</code> for the first or last observation (depending on the mode) of each by group.</p>
-<p>Permitted Values: list of name-value pairs</p></dd>
+<dl><dt>Permitted values</dt>
+<dd><p>list of name-value pairs</p></dd>
+
+<dt>Default value</dt>
+<dd><p>none</p></dd>
+
+
+</dl></dd>
 
 
 <dt id="arg-mode">mode<a class="anchor" aria-label="anchor" href="#arg-mode"></a></dt>
 <dd><p>Flag mode</p>
 <p>Determines of the first or last observation is flagged.</p>
-<p>Permitted Values: <code>"first"</code>, <code>"last"</code></p></dd>
+<dl><dt>Permitted values</dt>
+<dd><p><code>"first"</code>, <code>"last"</code></p></dd>
+
+<dt>Default value</dt>
+<dd><p>none</p></dd>
+
+
+</dl></dd>
 
 
 <dt id="arg-true-value">true_value<a class="anchor" aria-label="anchor" href="#arg-true-value"></a></dt>
 <dd><p>True value</p>
 <p>The value for the specified variable <code>new_var</code>, applicable to
 the first or last observation (depending on the mode) of each by group.</p>
-<p>Permitted Values: An atomic scalar</p></dd>
+<dl><dt>Permitted values</dt>
+<dd><p>An atomic scalar</p></dd>
+
+<dt>Default value</dt>
+<dd><p><code>"Y"</code></p></dd>
+
+
+</dl></dd>
 
 
 <dt id="arg-false-value">false_value<a class="anchor" aria-label="anchor" href="#arg-false-value"></a></dt>
 <dd><p>False value</p>
 <p>The value for the specified variable <code>new_var</code>, NOT applicable to
 the first or last observation (depending on the mode) of each by group.</p>
-<p>Permitted Values: An atomic scalar</p></dd>
+<dl><dt>Permitted values</dt>
+<dd><p>An atomic scalar</p></dd>
+
+<dt>Default value</dt>
+<dd><p><code>NA_character_</code></p></dd>
+
+
+</dl></dd>
 
 
 <dt id="arg-flag-all">flag_all<a class="anchor" aria-label="anchor" href="#arg-flag-all"></a></dt>
 <dd><p>Flag setting</p>
 <p>A logical value where if set to <code>TRUE</code>, all records are flagged
-and no error or warning is issued if the first or last record is not unique.</p></dd>
+and no error or warning is issued if the first or last record is not unique.</p>
+<dl><dt>Default value</dt>
+<dd><p><code>FALSE</code></p></dd>
+
+
+</dl></dd>
 
 
 <dt id="arg-check-type">check_type<a class="anchor" aria-label="anchor" href="#arg-check-type"></a></dt>
@@ -147,8 +195,14 @@ and no error or warning is issued if the first or last record is not unique.</p>
 <p>If <code>"warning"</code> or <code>"error"</code> is specified, the specified message is issued
 if the observations of the input dataset are not unique with respect to the
 by variables and the order.</p>
-<p>Default: <code>"warning"</code></p>
-<p>Permitted Values: <code>"none"</code>, <code>"warning"</code>, <code>"error"</code></p></dd>
+<dl><dt>Permitted values</dt>
+<dd><p><code>"none"</code>, <code>"warning"</code>, <code>"error"</code></p></dd>
+
+<dt>Default value</dt>
+<dd><p><code>"warning"</code></p></dd>
+
+
+</dl></dd>
 
 </dl></div>
     <div class="section level2">

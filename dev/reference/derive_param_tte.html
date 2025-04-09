@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">admiral</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.2.0.9016</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.2.0.9017</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -94,19 +94,34 @@
 
 <dl><dt id="arg-dataset">dataset<a class="anchor" aria-label="anchor" href="#arg-dataset"></a></dt>
 <dd><p>Input dataset
-<code>PARAMCD</code> is expected.</p></dd>
+<code>PARAMCD</code> is expected.</p>
+<dl><dt>Default value</dt>
+<dd><p><code>NULL</code></p></dd>
+
+
+</dl></dd>
 
 
 <dt id="arg-dataset-adsl">dataset_adsl<a class="anchor" aria-label="anchor" href="#arg-dataset-adsl"></a></dt>
 <dd><p>ADSL input dataset</p>
 <p>The variables specified for <code>start_date</code>, and
-<code>subject_keys</code> are expected.</p></dd>
+<code>subject_keys</code> are expected.</p>
+<dl><dt>Default value</dt>
+<dd><p>none</p></dd>
+
+
+</dl></dd>
 
 
 <dt id="arg-source-datasets">source_datasets<a class="anchor" aria-label="anchor" href="#arg-source-datasets"></a></dt>
 <dd><p>Source datasets</p>
 <p>A named list of datasets is expected. The <code>dataset_name</code> field of
-<code><a href="tte_source.html">tte_source()</a></code> refers to the dataset provided in the list.</p></dd>
+<code><a href="tte_source.html">tte_source()</a></code> refers to the dataset provided in the list.</p>
+<dl><dt>Default value</dt>
+<dd><p>none</p></dd>
+
+
+</dl></dd>
 
 
 <dt id="arg-by-vars">by_vars<a class="anchor" aria-label="anchor" href="#arg-by-vars"></a></dt>
@@ -117,8 +132,11 @@ derived for each by group.</p>
 source dataset must contain either all by variables or none of the by
 variables.</p>
 <p>The by variables are not included in the output dataset.</p>
-<p><em>Permitted Values</em>: list of variables created by <code><a href="reexport-exprs.html">exprs()</a></code>
-e.g. <code>exprs(USUBJID, VISIT)</code></p></dd>
+<dl><dt>Default value</dt>
+<dd><p><code>NULL</code></p></dd>
+
+
+</dl></dd>
 
 
 <dt id="arg-start-date">start_date<a class="anchor" aria-label="anchor" href="#arg-start-date"></a></dt>
@@ -126,23 +144,43 @@ e.g. <code>exprs(USUBJID, VISIT)</code></p></dd>
 <p>The variable <code>STARTDT</code> is set to the specified date. The value is taken
 from the ADSL dataset.</p>
 <p>If the event or censoring date is before the origin date, <code>ADT</code> is set to
-the origin date.</p></dd>
+the origin date.</p>
+<dl><dt>Default value</dt>
+<dd><p><code>TRTSDT</code></p></dd>
+
+
+</dl></dd>
 
 
 <dt id="arg-event-conditions">event_conditions<a class="anchor" aria-label="anchor" href="#arg-event-conditions"></a></dt>
 <dd><p>Sources and conditions defining events</p>
-<p>A list of <code><a href="event_source.html">event_source()</a></code> objects is expected.</p></dd>
+<p>A list of <code><a href="event_source.html">event_source()</a></code> objects is expected.</p>
+<dl><dt>Default value</dt>
+<dd><p>none</p></dd>
+
+
+</dl></dd>
 
 
 <dt id="arg-censor-conditions">censor_conditions<a class="anchor" aria-label="anchor" href="#arg-censor-conditions"></a></dt>
 <dd><p>Sources and conditions defining censorings</p>
-<p>A list of <code><a href="censor_source.html">censor_source()</a></code> objects is expected.</p></dd>
+<p>A list of <code><a href="censor_source.html">censor_source()</a></code> objects is expected.</p>
+<dl><dt>Default value</dt>
+<dd><p>none</p></dd>
+
+
+</dl></dd>
 
 
 <dt id="arg-create-datetime">create_datetime<a class="anchor" aria-label="anchor" href="#arg-create-datetime"></a></dt>
 <dd><p>Create datetime variables?</p>
 <p>If set to <code>TRUE</code>, variables <code>ADTM</code> and <code>STARTDTM</code> are created. Otherwise,
-variables <code>ADT</code> and <code>STARTDT</code> are created.</p></dd>
+variables <code>ADT</code> and <code>STARTDT</code> are created.</p>
+<dl><dt>Default value</dt>
+<dd><p><code>FALSE</code></p></dd>
+
+
+</dl></dd>
 
 
 <dt id="arg-set-values-to">set_values_to<a class="anchor" aria-label="anchor" href="#arg-set-values-to"></a></dt>
@@ -150,12 +188,22 @@ variables <code>ADT</code> and <code>STARTDT</code> are created.</p></dd>
 <p>A named list returned by <code><a href="reexport-exprs.html">exprs()</a></code> defining the variables to be set for the
 new parameter, e.g. <code>exprs(PARAMCD = "OS", PARAM = "Overall Survival")</code> is
 expected. The values must be symbols, character strings, numeric values,
-expressions, or <code>NA</code>.</p></dd>
+expressions, or <code>NA</code>.</p>
+<dl><dt>Default value</dt>
+<dd><p>none</p></dd>
+
+
+</dl></dd>
 
 
 <dt id="arg-subject-keys">subject_keys<a class="anchor" aria-label="anchor" href="#arg-subject-keys"></a></dt>
 <dd><p>Variables to uniquely identify a subject</p>
-<p>A list of symbols created using <code><a href="reexport-exprs.html">exprs()</a></code> is expected.</p></dd>
+<p>A list of symbols created using <code><a href="reexport-exprs.html">exprs()</a></code> is expected.</p>
+<dl><dt>Default value</dt>
+<dd><p><code>get_admiral_option("subject_keys")</code></p></dd>
+
+
+</dl></dd>
 
 
 <dt id="arg-check-type">check_type<a class="anchor" aria-label="anchor" href="#arg-check-type"></a></dt>
@@ -164,7 +212,14 @@ expressions, or <code>NA</code>.</p></dd>
 if the observations of the source datasets are not unique with respect to the
 by variables and the date and order specified in the <code><a href="event_source.html">event_source()</a></code> and
 <code><a href="censor_source.html">censor_source()</a></code> objects.</p>
-<p><em>Permitted Values</em>: <code>"none"</code>, <code>"message"</code>, <code>"warning"</code>, <code>"error"</code></p></dd>
+<dl><dt>Permitted values</dt>
+<dd><p><code>"none"</code>, <code>"message"</code>, <code>"warning"</code>, <code>"error"</code></p></dd>
+
+<dt>Default value</dt>
+<dd><p><code>"warning"</code></p></dd>
+
+
+</dl></dd>
 
 </dl></div>
     <div class="section level2">

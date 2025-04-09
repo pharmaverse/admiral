@@ -11,7 +11,7 @@ may vary depending on the slice."><meta property="og:image" content="https://pha
 
     <a class="navbar-brand me-2" href="../index.html">admiral</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.2.0.9016</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.2.0.9017</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -87,7 +87,12 @@ may vary depending on the slice.</p>
 
 
 <dl><dt id="arg-dataset">dataset<a class="anchor" aria-label="anchor" href="#arg-dataset"></a></dt>
-<dd><p>Input dataset</p></dd>
+<dd><p>Input dataset</p>
+<dl><dt>Default value</dt>
+<dd><p>none</p></dd>
+
+
+</dl></dd>
 
 
 <dt id="arg-derivation">derivation<a class="anchor" aria-label="anchor" href="#arg-derivation"></a></dt>
@@ -97,12 +102,22 @@ adds variables or observations to a dataset. The first argument of a
 derivation must expect a dataset and the derivation must return a dataset.
 All expected arguments for the derivation function must be provided through
 the <code><a href="params.html">params()</a></code> object passed to the <code>args</code> argument or be provided in <em>every</em>
-<code><a href="derivation_slice.html">derivation_slice()</a></code>.</p></dd>
+<code><a href="derivation_slice.html">derivation_slice()</a></code>.</p>
+<dl><dt>Default value</dt>
+<dd><p>none</p></dd>
+
+
+</dl></dd>
 
 
 <dt id="arg-args">args<a class="anchor" aria-label="anchor" href="#arg-args"></a></dt>
 <dd><p>Arguments of the derivation</p>
-<p>A <code><a href="params.html">params()</a></code> object is expected.</p></dd>
+<p>A <code><a href="params.html">params()</a></code> object is expected.</p>
+<dl><dt>Default value</dt>
+<dd><p><code>NULL</code></p></dd>
+
+
+</dl></dd>
 
 
 <dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
@@ -111,7 +126,12 @@ the <code><a href="params.html">params()</a></code> object passed to the <code>a
 for the derivation. The derivation is called on the subset with the
 parameters specified by the <code>args</code> parameter and the <code>args</code> field of the
 <code><a href="derivation_slice.html">derivation_slice()</a></code> object. If a parameter is specified for both, the
-value in <code><a href="derivation_slice.html">derivation_slice()</a></code> overwrites the one in <code>args</code>.</p></dd>
+value in <code><a href="derivation_slice.html">derivation_slice()</a></code> overwrites the one in <code>args</code>.</p>
+<dl><dt>Default value</dt>
+<dd><p>none</p></dd>
+
+
+</dl></dd>
 
 </dl></div>
     <div class="section level2">
