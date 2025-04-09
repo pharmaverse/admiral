@@ -9,8 +9,8 @@
 #'   A function that performs a specific derivation is expected. A derivation
 #'   adds variables or observations to a dataset. The first argument of a
 #'   derivation must expect a dataset and the derivation must return a dataset.
-#'   The function must provide the `dataset` argument and all arguments
-#'   specified in the `params()` objects passed to the `arg` argument.
+#'   All expected arguments for the derivation function must be provided through
+#'   the `params()` objects passed to the `args` argument.
 #'
 #' @param args Arguments of the derivation
 #'
@@ -18,11 +18,18 @@
 #'
 #' @param filter Filter condition
 #'
+#' @details
+#'
+#'   It is also possible to pass functions from outside the `{admiral}` package
+#'   to `restrict_derivation()`, e.g. an extension package function, or
+#'   `dplyr::mutate()`. The only requirement for a function being passed to `derivation` is that
+#'   it must take a dataset as its first argument and return a dataset.
+#'
 #' @family high_order_function
 #' @keywords high_order_function
 #'
 #'
-#' @seealso [params()] [slice_derivation()]
+#' @seealso [params()] [slice_derivation()] [call_derivation()]
 #'
 #' @export
 #'

@@ -37,7 +37,7 @@
 #'
 #'   *Default*: `AVAL`
 #'
-#'   *Permitted Values*: a variable
+#' @permitted a variable
 #'
 #' @param analysis_var_fill Update `analysis_var` when `NA` without adding new observations?
 #'

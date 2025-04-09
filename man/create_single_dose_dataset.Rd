@@ -21,20 +21,31 @@ create_single_dose_dataset(
 \arguments{
 \item{dataset}{Input dataset
 
-The variables specified by the \code{dose_freq}, \code{start_date}, and \code{end_date} arguments are expected to be in the dataset.}
+The variables specified by the \code{dose_freq}, \code{start_date}, and \code{end_date} arguments are expected to be in the dataset.
+
+\describe{
+\item{Default value}{none}
+}}
 
 \item{dose_freq}{The dose frequency
 
 The aggregate dosing frequency used for multiple doses in a row.
 
-Permitted Values: defined by lookup table.}
+\describe{
+\item{Permitted values}{defined by lookup table.}
+\item{Default value}{\code{EXDOSFRQ}}
+}}
 
 \item{start_date}{The start date
 
 A date object is expected. This object cannot contain \code{NA} values.
 
 Refer to \code{derive_vars_dt()} to impute and derive a date from a date
-character vector to a date object.}
+character vector to a date object.
+
+\describe{
+\item{Default value}{\code{ASTDT}}
+}}
 
 \item{start_datetime}{The start date-time
 
@@ -44,14 +55,22 @@ Refer to \code{derive_vars_dtm()} to impute and derive a date-time from a date
 character vector to a date object.
 
 If the input dataset contains frequencies which refer to \code{DOSE_WINDOW}
-equals \code{"HOUR"} or \code{"MINUTE"}, the parameter must be specified.}
+equals \code{"HOUR"} or \code{"MINUTE"}, the parameter must be specified.
+
+\describe{
+\item{Default value}{\code{NULL}}
+}}
 
 \item{end_date}{The end date
 
 A date or date-time object is expected. This object cannot contain \code{NA} values.
 
 Refer to \code{derive_vars_dt()} to impute and derive a date from a date
-character vector to a date object.}
+character vector to a date object.
+
+\describe{
+\item{Default value}{\code{AENDT}}
+}}
 
 \item{end_datetime}{The end date-time
 
@@ -61,7 +80,11 @@ Refer to \code{derive_vars_dtm()} to impute and derive a date-time from a date
 character vector to a date object.
 
 If the input dataset contains frequencies which refer to \code{DOSE_WINDOW}
-equals \code{"HOUR"} or \code{"MINUTE"}, the parameter must be specified.}
+equals \code{"HOUR"} or \code{"MINUTE"}, the parameter must be specified.
+
+\describe{
+\item{Default value}{\code{NULL}}
+}}
 
 \item{lookup_table}{The dose frequency value lookup table
 
@@ -72,11 +95,19 @@ default is used, it must have columns \code{DOSE_WINDOW}, \code{DOSE_COUNT}, and
 detail \link[=dose_freq_lookup]{here}.
 
 Permitted Values for \code{DOSE_WINDOW}: \code{"MINUTE"}, \code{"HOUR"}, \code{"DAY"},
-\code{"WEEK"}, \code{"MONTH"}, \code{"YEAR"}}
+\code{"WEEK"}, \code{"MONTH"}, \code{"YEAR"}
+
+\describe{
+\item{Default value}{\code{dose_freq_lookup}}
+}}
 
 \item{lookup_column}{The dose frequency value column in the lookup table
 
-The column of \code{lookup_table}.}
+The column of \code{lookup_table}.
+
+\describe{
+\item{Default value}{\code{CDISC_VALUE}}
+}}
 
 \item{nominal_time}{The nominal relative time from first dose (\code{NFRLT})
 
@@ -86,13 +117,22 @@ This will be expanded as the single dose dataset is created.  For example
 an \code{EXDOFRQ} of \code{"QD"} will result in the nominal_time being incremented by
 24 hours for each expanded record.
 
-The value can be NULL if not needed.}
+The value can be NULL if not needed.
+
+\describe{
+\item{Default value}{\code{NULL}}
+}}
 
 \item{keep_source_vars}{List of variables to be retained from source dataset
 
 This parameter can be specified if additional information is required in
 the output dataset. For example \code{EXTRT} for studies with more than one
-drug.}
+drug.
+
+\describe{
+\item{Default value}{\code{expr_c(get_admiral_option("subject_keys"), dose_freq, start_date,
+start_datetime, end_date, end_datetime)}}
+}}
 }
 \value{
 The input dataset with a single dose per row.

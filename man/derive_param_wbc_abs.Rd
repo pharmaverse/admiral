@@ -22,49 +22,70 @@ The variables specified by the \code{by_vars} argument are expected to be in the
 \code{PARAMCD}, and \code{AVAL} are expected as well.
 
 The variable specified by \code{by_vars} and \code{PARAMCD} must be a unique key of
-the input dataset, and to the parameters specified by \code{wbc_code} and \code{diff_code}.}
+the input dataset, and to the parameters specified by \code{wbc_code} and \code{diff_code}.
+
+\describe{
+\item{Default value}{none}
+}}
 
 \item{by_vars}{Grouping variables
 
-\emph{Permitted Values}: list of variables created by \code{exprs()}
-e.g. \code{exprs(USUBJID, VISIT)}}
+\describe{
+\item{Default value}{none}
+}}
 
 \item{set_values_to}{Variables to set
 
 A named list returned by \code{exprs()} defining the variables to be set for the
 new parameter, e.g. \code{exprs(PARAMCD = "LYMPH", PARAM = "Lymphocytes Abs (10^9/L)")} is
-expected.}
+expected.
+
+\describe{
+\item{Default value}{none}
+}}
 
 \item{get_unit_expr}{An expression providing the unit of the parameter
 
 The result is used to check the units of the input parameters.
 
-Permitted Values: a variable containing unit from the input dataset, or a function call,
+\describe{
+\item{Permitted values}{a variable containing unit from the input dataset, or a function call,
 for example, \code{get_unit_expr = extract_unit(PARAM)}.}
+\item{Default value}{none}
+}}
 
 \item{wbc_unit}{A string containing the required unit of the WBC parameter
 
-Default: \code{"10^9/L"}}
+\describe{
+\item{Default value}{\code{"10^9/L"}}
+}}
 
 \item{wbc_code}{White Blood Cell (WBC) parameter
 
 The observations where \code{PARAMCD} equals the specified value are considered
 as the WBC absolute results to use for converting the differentials.
 
-Default: \code{"WBC"}
-
-Permitted Values: character value}
+\describe{
+\item{Permitted values}{character value}
+\item{Default value}{\code{"WBC"}}
+}}
 
 \item{diff_code}{white blood differential parameter
 
 The observations where \code{PARAMCD} equals the specified value are considered
 as the white blood differential lab results in fraction or percentage value to be converted
-into absolute value.}
+into absolute value.
+
+\describe{
+\item{Default value}{none}
+}}
 
 \item{diff_type}{A string specifying the type of differential
 
-Permitted Values: \code{"percent"}, \code{"fraction"}
-Default: \code{fraction}}
+\describe{
+\item{Permitted values}{\code{"percent"}, \code{"fraction"}}
+\item{Default value}{\code{"fraction"}}
+}}
 }
 \value{
 The input dataset with the new parameter added
