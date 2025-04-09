@@ -308,7 +308,6 @@ test_that("derive_locf_records Test 6: populate VISITNUM for LOCF records", {
 
 ## Test 7: analysis visits are assigned based on time windows ----
 test_that("derive_locf_records Test 7: analysis visits are assigned based on time windows", {
-
   input <- tibble::tribble(
     ~STUDYID, ~USUBJID, ~PARAMCD, ~PARAM, ~AVAL, ~AVISITN, ~AVISIT, ~ADY,
     "TEST01", "01-701-1015", "DIABP", "Diastolic Blood Pressure (mmHg)", 51, 0, "BASELINE", 0,
@@ -366,7 +365,6 @@ test_that("derive_locf_records Test 7: analysis visits are assigned based on tim
 
 ## Test 8: update records with missing values instead of new records ----
 test_that("derive_locf_records Test 8: update records with missing values instead of new records", {
-
   input <- tibble::tribble(
     ~STUDYID, ~USUBJID, ~PARAMCD, ~PARAM, ~AVAL, ~AVISITN, ~AVISIT, ~ADY,
     "TEST01", "01-701-1015", "DIABP", "Diastolic Blood Pressure (mmHg)", 51, 0, "BASELINE", 0,
