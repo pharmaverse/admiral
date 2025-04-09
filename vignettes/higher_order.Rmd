@@ -34,6 +34,12 @@ arguments being fixed across iterations and others varying
 each slice a single derivation is called separately. Some or all arguments of the
 derivation may vary depending on the slice.
 
+The examples in this vignette all showcase the higher order functions taking other
+`{admiral}` functions as input, but in principle any functions that modify a 
+dataset (e.g. an extension package function, or `dplyr::mutate()`, etc.) can be 
+passed too. The only requirement for a function being passed to `derivation` is that it must take
+a dataset as its first argument and return a dataset.
+
 ## Required Packages
 
 The examples of this vignette require the following packages.
@@ -53,10 +59,16 @@ adsl <- admiral::admiral_adsl
 ae <- convert_blanks_to_na(ae)
 vs <- convert_blanks_to_na(vs)
 ```
+
 ```{r echo=FALSE}
 adsl <- filter(adsl, USUBJID %in% c("01-701-1111", "01-705-1393"))
 ae <- filter(ae, USUBJID %in% c("01-701-1111", "01-705-1393"))
-vs <- filter(vs, USUBJID %in% c("01-701-1015"))
+vs <- vs %>%
+  filter(
+    USUBJID %in% c("01-701-1015"),
+    VISIT %in% c("BASELINE", "WEEK 2", "WEEK 4"),
+    VSTESTCD %in% c("TEMP", "WEIGHT")
+  )
 ```
 
 The following code creates a minimally viable ADAE dataset to be used where
@@ -104,8 +116,7 @@ vs_without <- vs %>%
 vs_without %>%
   arrange(USUBJID, VSTESTCD, VSDY, VSSEQ) %>%
   dataset_vignette(
-    display_vars = exprs(USUBJID, VSTESTCD, VSORRES, ALOFL, AHIFL),
-    filter = VSTESTCD %in% c("TEMP", "WEIGHT")
+    display_vars = exprs(USUBJID, VSTESTCD, VSORRES, ALOFL, AHIFL)
   )
 ```
 
@@ -129,8 +140,7 @@ vs_with <- vs %>%
 vs_with %>%
   arrange(USUBJID, VSTESTCD, VSDY, VSSEQ) %>%
   dataset_vignette(
-    display_vars = exprs(USUBJID, VSTESTCD, VSORRES, ALOFL, AHIFL),
-    filter = VSTESTCD %in% c("TEMP", "WEIGHT")
+    display_vars = exprs(USUBJID, VSTESTCD, VSORRES, ALOFL, AHIFL)
   )
 ```
 
@@ -316,3 +326,41 @@ in the above case the moderate AE slice could have been above the severe AE
 slice, for example, and there would have been no difference to the result.
 However the third slice had to come last to check all remaining (i.e. not severe
 or moderate) records only.
+
+# Combining Higher Order Functions
+
+It is also possible to use two or more of the higher order functions in combination.
+The most likely use case is employing `call_derivation()` to repeat similar 
+derivations multiple times, but within a call to `restrict_derivation()` to execute 
+the derivations on a subset of the input dataset.
+
+For instance, let's pick up VS from the `call_derivation()` example and suppose
+that we wish to derive the highest value and lowest value flags for just the 
+temperature parameter. We can do this by ensuring that the derivation passed to
+`restrict_derivation()` is `call_derivation()`, and that the arguments for the 
+latter are all passed through `args`.
+
+```{r}
+vs_hilotemp <- vs %>%
+  restrict_derivation(
+    derivation = call_derivation,
+    args = params(
+      derivation = derive_var_extreme_flag,
+      variable_params = list(
+        params(new_var = ATMPHIFL, mode = "last"),
+        params(new_var = ATMPLOFL, mode = "first")
+      ),
+      by_vars = exprs(USUBJID, VSTESTCD),
+      order = exprs(VSORRES, VSSEQ)
+    ),
+    filter = VSTESTCD == "TEMP"
+  )
+```
+
+```{r, eval=TRUE, echo=FALSE}
+vs_hilotemp %>%
+  arrange(USUBJID, VSTESTCD, VSDY, VSSEQ) %>%
+  dataset_vignette(
+    display_vars = exprs(USUBJID, VSTESTCD, VSORRES, ATMPLOFL, ATMPHIFL)
+  )
+```
