@@ -1,7 +1,7 @@
 # This script:  data-raw/admiral_verify_templates.R
 
 if (F) {
-# magic number error
+# magic number error, TODO:  REMOVE  , use download.file
 load(url("https://github.com/pharmaverse/pharmaverseadam/raw/refs/heads/main/data/adae.rda"))
 s1=  "https://github.com/pharmaverse/pharmaverseadam/blob/main/data/adae.rda"
 s2 = "https://github.com/pharmaverse/pharmaverseadam/raw/refs/heads/main/data/adae.rda"
@@ -26,6 +26,7 @@ z = download.file(url="https://github.com/pharmaverse/pharmaverseadam/raw/refs/h
 #
 # TODO:
 # - add `attr` to generated ADaM
+# - do NOT use package as source for adams_old;  download and use
 # - where code overlaps, make pharamversadam script and this one the same.
 
 # Assumptions/Questions:
@@ -37,7 +38,7 @@ z = download.file(url="https://github.com/pharmaverse/pharmaverseadam/raw/refs/h
 
 #' (if added to `admiral` package)
 #' @param pkg  package (ex:  "admiral )
-#' @param name ADaM or CDISC name, without prefix or suffix  (ex:  adlb)
+#' @param adams_names ADaM or CDISC name, without prefix or suffix  (ex:  adlb)
 #' @param adams_new  character vector of ADaM after template is run
 #' @param adams_old  character vector of original ADaM done at earlier date, saved in github
 
@@ -92,25 +93,7 @@ run_template <- function(adam) {
 }
 
 get_dataset_old = function(adam) {
- # delete !
-  if (F) {
-  ## ----
-
-  # KEEP only ADaMs with template (now 12)
-  adams_old <- adams_old[adams_old %in% names]
-
-  # finally name (ADaM or CDISC name)  the templates vector
-  names(templates) <- names
-  # SOURCE:  USE github (branch?) as source for ADaM *.rda files
-  # 23 ADaMs found
-  # TODO:  for now, use package
-  library(pharmaverseadam)
-  adams_old <- data(package = "pharmaverseadam")
-  adams_old <- adams_old$results[, "Item"]
-  adams_old
-    }
-
-  # keep !   (need to replace with LATEST from github, not package)
+  # TODO: replace with LATEST files from github, not package.
     adam_old <- do.call(`::`, args = list("pharmaverseadam", adam))
 }
 
@@ -120,12 +103,19 @@ get_dataset_new = function(adam){
 }
 
 verify_templates <- function(pkg = "admiral", ignore_templates_pkg = NULL) {
+
+  #   SETUP ----
+  # TODO: make
   clean_cache()
+
+  #   TODO ----
+  # DISCUSS:  Diffdf creates *.txt files, WHERE to put them?
+  # TODO:   fct to remove remove old diffdf *.txt files
 
   # testing ----
   pkg = "admiral"
 
-  # TODO:  more pkg checking?
+  # DISCUSS:  more pkg checking?
   if (pkg != "admiral") error("Curently, only admiral package is accepted.")
 
   library(pkg, character.only = TRUE)
@@ -146,9 +136,10 @@ verify_templates <- function(pkg = "admiral", ignore_templates_pkg = NULL) {
   adam_names <- vapply(templates, function(x) gsub("ad_|\\.R", "", x), USE.NAMES = FALSE, character(length = 1))
   adam_names
 
-  #
+  # check
   if (length(templates) != length(adam_names))  stop("Number of templates and adam_names differ")
-  # templates is named chr[]
+
+  # templates is a named chr[]
   names(templates) <- adam_names
   templates
 
@@ -157,36 +148,35 @@ verify_templates <- function(pkg = "admiral", ignore_templates_pkg = NULL) {
   adam_names = adam_names[adam_names != "adlbhy"]
   adam_names
 
-  #  gather keys (for diffdf)
-  #  keys_adsl <- teal.data::default_cdisc_join_keys[c("ADSL")]$ADSL
-  #  keys_adsl
-
+  # keys for diffdf
   keys <- teal.data::default_cdisc_join_keys
-  L=sapply(toupper(adam_names), function(e) unname(keys[[e]][[e]]), USE.NAMES=T)
-  names(L) <- tolower(names(L))
 
- # L is named list of keys, each element (for adam_name) is chr[] of keys
-  L
+  # keys is named list of keys, each element (for each adam_name) and is chr[] of keys
+  keys =sapply(toupper(adam_names), function(e) unname(keys[[e]][[e]]), USE.NAMES=T)
+  names(keys) <- tolower(names(keys))
+  keys
 
-  # construct named list, each element is unnamed chr[] of keys
-  K=lapply(adam_names, function(e) list("template" = templates[[e]],
-    "keys" = L[[e]]))
-  names(K) = adam_names
+
+  # finally, construct a named list object, each element (adam_names) holds a template and keys
+  obj=lapply(adam_names, function(e) list("template" = templates[[e]],
+    "keys" = keys[[e]]))
+  names(obj) = adam_names
+
   # done !
-  K
-  names(K)
+  obj
+  names(obj)
 
 
+  # testing check ----
   if (F) {
   # need info for specific adam_name?
-  K[["adae"]]$template
-  K[["adae"]]$keys
+  obj[["adae"]]$template
+  obj[["adae"]]$keys
   }
 
-
-
-  # DISCUSS:  now user must manually provides templates to ignore
+  # DISCUSS:  now user must manually provides templates to ignore ----
   # CHANGE TO:   user must manually provides adam to ignore
+
   if (F) {
   # FOR TESTING, (omit ad_adlb.R)
   # ignore_templates_pkg = templates[!(templates %in% c("ad_adsl.R", "ad_adlb.R"))]
@@ -196,13 +186,15 @@ verify_templates <- function(pkg = "admiral", ignore_templates_pkg = NULL) {
   }
 
   # now, generate ADaM datasets and put in cache dir
-  # "adlb" is lengthy
- adams_names = c("adsl", "adae")
-  compare_list <- purrr::map(adams_names, function(adam){
+  # for TESTING,  # "adlb" is lengthy ----
+  adam_names = c("adsl", "adae")
+
+
+  compare_list <- purrr::map(adam_names, .progress = TRUE, function(adam){
     run_template(adam)
     dataset_new <- get_dataset_new(adam) # this function would retrieve that dataset from cache
     dataset_old <- get_dataset_old(adam)
-    compare(base=dataset_old, compare = dataset_new, keys=NULL, file=paste0("data-raw/", adam,".txt"))
+    compare(base=dataset_old, compare = dataset_new, keys=obj[[adam]]$keys, file=paste0("data-raw/", adam,".txt"))
   })
 
   print("DONE")
