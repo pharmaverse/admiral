@@ -9,13 +9,21 @@ derive_basetype_records(dataset, basetypes)
 \arguments{
 \item{dataset}{Input dataset
 
-The variables specified by the \code{basetypes} argument are expected to be in the dataset.}
+The variables specified by the \code{basetypes} argument are expected to be in the dataset.
+
+\describe{
+\item{Default value}{none}
+}}
 
 \item{basetypes}{A \emph{named} list of expressions created using the
 \code{rlang::exprs()} function
 
 The names corresponds to the values of the newly created \code{BASETYPE} variables
-and the expressions are used to subset the input dataset.}
+and the expressions are used to subset the input dataset.
+
+\describe{
+\item{Default value}{none}
+}}
 }
 \value{
 The input dataset with variable \code{BASETYPE} added

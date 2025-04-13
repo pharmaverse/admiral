@@ -11,9 +11,17 @@ restrict_imputed_dtc_dt(dtc, imputed_dtc, min_dates, max_dates)
 
 A character date is expected in a format like \code{yyyy-mm-dd} or
 \code{yyyy-mm-ddThh:mm:ss}. Trailing components can be omitted and \code{-} is a
-valid "missing" value for any component.}
+valid "missing" value for any component.
 
-\item{imputed_dtc}{The imputed DTC date}
+\describe{
+\item{Default value}{none}
+}}
+
+\item{imputed_dtc}{The imputed DTC date
+
+\describe{
+\item{Default value}{none}
+}}
 
 \item{min_dates}{Minimum dates
 
@@ -39,14 +47,22 @@ For example
 returns \code{"2020-11-11T11:11:11"} because the possible dates for \code{"2020-11"}
 range from \code{"2020-11-01T00:00:00"} to \code{"2020-11-30T23:59:59"}. Therefore
 \code{"2020-12-06T12:12:12"} is ignored. Returning \code{"2020-12-06T12:12:12"} would
-have changed the month although it is not missing (in the \code{dtc} date).}
+have changed the month although it is not missing (in the \code{dtc} date).
+
+\describe{
+\item{Default value}{\code{NULL}}
+}}
 
 \item{max_dates}{Maximum dates
 
 A list of dates is expected. It is ensured that the imputed date is not after
 any of the specified dates, e.g., that the imputed date is not after the data
 cut off date. Only dates which are in the range of possible dates are
-considered. A date or date-time object is expected.}
+considered. A date or date-time object is expected.
+
+\describe{
+\item{Default value}{\code{NULL}}
+}}
 }
 \value{
 \itemize{

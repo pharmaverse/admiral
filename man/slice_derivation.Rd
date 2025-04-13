@@ -7,22 +7,32 @@
 slice_derivation(dataset, derivation, args = NULL, ...)
 }
 \arguments{
-\item{dataset}{Input dataset}
+\item{dataset}{Input dataset
+
+\describe{
+\item{Default value}{none}
+}}
 
 \item{derivation}{Derivation
 
 A function that performs a specific derivation is expected. A derivation
 adds variables or observations to a dataset. The first argument of a
 derivation must expect a dataset and the derivation must return a dataset.
-The function must provide the \code{dataset} argument and all arguments
-specified in the \code{params()} objects passed to the \code{arg} argument.
+All expected arguments for the derivation function must be provided through
+the \code{params()} object passed to the \code{args} argument or be provided in \emph{every}
+\code{derivation_slice()}.
 
-Please note that it is not possible to specify \code{{dplyr}}
-functions like \code{mutate()} or \code{summarize()}.}
+\describe{
+\item{Default value}{none}
+}}
 
 \item{args}{Arguments of the derivation
 
-A \code{params()} object is expected.}
+A \code{params()} object is expected.
+
+\describe{
+\item{Default value}{\code{NULL}}
+}}
 
 \item{...}{A \code{derivation_slice()} object is expected
 
@@ -30,7 +40,11 @@ Each slice defines a subset of the input dataset and some of the parameters
 for the derivation. The derivation is called on the subset with the
 parameters specified by the \code{args} parameter and the \code{args} field of the
 \code{derivation_slice()} object. If a parameter is specified for both, the
-value in \code{derivation_slice()} overwrites the one in \code{args}.}
+value in \code{derivation_slice()} overwrites the one in \code{args}.
+
+\describe{
+\item{Default value}{none}
+}}
 }
 \value{
 The input dataset with the variables derived by the derivation added
@@ -53,6 +67,11 @@ the first matching slice.
 \item Observations with no match to any of the slices are included in the
 output dataset but the derivation is not called for them.
 }
+
+It is also possible to pass functions from outside the \code{{admiral}} package
+to \code{slice_derivation()}, e.g. an extension package function, or
+\code{dplyr::mutate()}. The only requirement for a function being passed to \code{derivation} is that
+it must take a dataset as its first argument and return a dataset.
 }
 \examples{
 library(tibble)
@@ -82,9 +101,10 @@ slice_derivation(
     args = params(time_imputation = "last")
   )
 )
+
 }
 \seealso{
-\code{\link[=params]{params()}} \code{\link[=restrict_derivation]{restrict_derivation()}}
+\code{\link[=params]{params()}} \code{\link[=restrict_derivation]{restrict_derivation()}} \code{\link[=call_derivation]{call_derivation()}}
 
 Higher Order Functions: 
 \code{\link{call_derivation}()},

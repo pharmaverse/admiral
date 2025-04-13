@@ -7,10 +7,18 @@
 assert_parameters_argument(parameters, optional = TRUE)
 }
 \arguments{
-\item{parameters}{The argument to check}
+\item{parameters}{The argument to check
+
+\describe{
+\item{Default value}{none}
+}}
 
 \item{optional}{Is the checked argument optional? If set to \code{FALSE} and
-\code{parameters} is \code{NULL} then an error is thrown.}
+\code{parameters} is \code{NULL} then an error is thrown.
+
+\describe{
+\item{Default value}{\code{TRUE}}
+}}
 }
 \value{
 The \code{parameters} argument (converted to a list of symbol, if it is a

@@ -12,7 +12,6 @@
 #'
 #'   A character vector is expected.
 #'
-#'   Default: `"SI"`
 #'
 #'   Expected Values: `"SI"`, `"CV"`, `"umol/L"`, `"mg/dL"`
 #'

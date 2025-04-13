@@ -8,11 +8,19 @@ derivation_slice(filter, args = NULL)
 }
 \arguments{
 \item{filter}{An unquoted condition for defining the observations of the
-slice}
+slice
+
+\describe{
+\item{Default value}{none}
+}}
 
 \item{args}{Arguments of the derivation to be used for the slice
 
-A \code{params()} object is expected.}
+A \code{params()} object is expected.
+
+\describe{
+\item{Default value}{\code{NULL}}
+}}
 }
 \value{
 An object of class \code{derivation_slice}

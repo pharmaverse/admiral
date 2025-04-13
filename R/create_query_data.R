@@ -14,7 +14,7 @@
 #'   If any of the queries is a basket (SMQ, SDG, ....) or a customized query
 #'   including a basket, the parameter needs to be specified.
 #'
-#'   *Permitted Values*: A character string (the expected format is
+#' @permitted A character string (the expected format is
 #'   company-specific)
 #'
 #' @param get_terms_fun Function which returns the terms
@@ -431,7 +431,7 @@ assert_db_requirements <- function(version, version_arg_name, fun, fun_arg_name,
 #'   of `create_query_data()`. If the `auto` keyword is specified, the variable
 #'   is set to the name of the query in the SMQ/SDG database.
 #'
-#'   *Permitted Values*: A character scalar or the `auto` keyword. The `auto`
+#' @permitted A character scalar or the `auto` keyword. The `auto`
 #'   keyword is permitted only for queries which are defined by an
 #'   `basket_select()` object.
 #'
@@ -439,7 +439,7 @@ assert_db_requirements <- function(version, version_arg_name, fun, fun_arg_name,
 #'   `create_query_data()`. If the `auto` keyword is specified, the variable is
 #'   set to the id of the query in the SMQ/SDG database.
 #'
-#'   *Permitted Values*: A integer scalar or the `auto` keyword. The `auto`
+#' @permitted A integer scalar or the `auto` keyword. The `auto`
 #'   keyword is permitted only for queries which are defined by an
 #'   `basket_select()` object.
 #'
@@ -451,7 +451,7 @@ assert_db_requirements <- function(version, version_arg_name, fun, fun_arg_name,
 #'
 #'   *Default*: `FALSE`
 #'
-#'   *Permitted Values*: `TRUE`, `FALSE`
+#' @permitted `TRUE`, `FALSE`
 #'
 #' @param definition Definition of terms belonging to the query
 #'
@@ -477,7 +477,7 @@ assert_db_requirements <- function(version, version_arg_name, fun, fun_arg_name,
 #'   define a customized query based on custom terms and SMQs. The data frames
 #'   must have the same structure as described for the previous item.
 #'
-#'   *Permitted Values*: an `basket_select()` object, a
+#' @permitted an `basket_select()` object, a
 #'   data frame, or a list of data frames and `basket_select()` objects.
 #'
 #'
@@ -777,7 +777,7 @@ assert_terms <- function(terms,
 #' @param scope Scope of the query used to select the definition of the query
 #'   from the company database.
 #'
-#'   *Permitted Values*: `"BROAD"`, `"NARROW"`, `NA_character_`
+#' @permitted `"BROAD"`, `"NARROW"`, `NA_character_`
 #'
 #' @param type The type argument expects a character scalar. It is passed to the
 #' company specific get_terms() function such that the function can determine

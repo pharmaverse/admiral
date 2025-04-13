@@ -29,7 +29,7 @@
 #'   deriving the new variable, i.e., only observations fulfilling the
 #'   condition are taken into account.
 #'
-#'   *Permitted Values:* a condition
+#' @permitted a condition
 #'
 #' @param parameters Required parameter codes
 #'
@@ -52,7 +52,7 @@
 #'   "HEIGHT")` uses the parameter code `"WEIGHT"` and creates a temporary
 #'   parameter code `"HGHT"`.
 #'
-#'   *Permitted Values:* A character vector of `PARAMCD` values or a list of expressions
+#' @permitted A character vector of `PARAMCD` values or a list of expressions
 #'
 #'
 #' @param by_vars Grouping variables
@@ -60,7 +60,7 @@
 #'   Grouping variables uniquely identifying a set of records for which
 #'   `new_vars` are to be calculated.
 #'
-#'   *Permitted Values:* list of variables created by exprs()
+#' @permitted list of variables created by exprs()
 #'
 #' @param constant_parameters Required constant parameter codes
 #'
@@ -85,7 +85,7 @@
 #'   "HEIGHT")` uses the parameter code `"WEIGHT"` and creates a temporary
 #'   parameter code `"HGHT"`.
 #'
-#'   *Permitted Values:* A character vector of `PARAMCD` values or a list of expressions
+#' @permitted A character vector of `PARAMCD` values or a list of expressions
 #'
 #' @param constant_by_vars By variables for constant parameters
 #'
@@ -93,7 +93,7 @@
 #'   to the other parameters using the specified variables.
 #'   (Refer to the Example)
 #'
-#'   *Permitted Values:* list of variables
+#' @permitted list of variables
 #'
 #'
 #' @param new_vars Name of the newly created variables
@@ -110,7 +110,7 @@
 #'
 #'   Variable names in the expression must not contain more than one dot.
 #'
-#'   *Permitted Values:* List of variable-value pairs
+#' @permitted List of variable-value pairs
 #'
 #'
 #' @details For each group (with respect to the variables specified for the
