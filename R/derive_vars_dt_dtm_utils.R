@@ -15,14 +15,18 @@
 #' @family utils_impute
 #' @keywords internal
 dtm_level <- function(level) {
+  possible_values <- c("n", "s", "m", "h", "D", "M", "Y")
+  assert_character_scalar(level, values = possible_values)
+
   out <-
     factor(
       level,
-      levels = c("n", "s", "m", "h", "D", "M", "Y"),
+      levels = possible_values,
       ordered = TRUE
     )
   class(out) <- c("dtm_level", class(out))
   out
+
 }
 
 #' Create a `dt_level` object
@@ -42,7 +46,6 @@ dtm_level <- function(level) {
 dt_level <- function(level) {
   possible_values <- c("n", "D", "M", "Y")
   assert_character_scalar(level, values = possible_values)
-
 
   out <-
     factor(

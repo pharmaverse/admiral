@@ -1,4 +1,4 @@
-# derive_vars_dt Test 8: min_dates length mismatch provides error
+# impute_dtc_dt Test 8: min_dates length mismatch provides error
 
     Code
       impute_dtc_dt(input, min_dates = list(c(ymd("2019-07-06")), c(ymd("2019-06-06"))),
@@ -7,7 +7,7 @@
       Error in `restrict_imputed_dtc_dt()`:
       ! Length of `min_dates` do not match length of dates to be imputed.
 
-# derive_vars_dt Test 9: max_dates length mismatch provides error
+# impute_dtc_dt Test 9: max_dates length mismatch provides error
 
     Code
       impute_dtc_dt(input, max_dates = list(c(ymd("2019-07-06")), c(ymd("2019-06-06"))),
@@ -16,7 +16,7 @@
       Error in `restrict_imputed_dtc_dt()`:
       ! Length of `max_dates` do not match length of dates to be imputed.
 
-# derive_vars_dt Test 12: wrong input to `date_imputation`
+# impute_dtc_dt Test 12: wrong input to `date_imputation`
 
     Code
       impute_dtc_dt(dtc = input, highest_imputation = "M", date_imputation = "13-01")
