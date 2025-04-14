@@ -1,33 +1,21 @@
 # This script:  data-raw/admiral_verify_templates.R
 
-if (F) {
-# magic number error, TODO:  REMOVE  , use download.file
-load(url("https://github.com/pharmaverse/pharmaverseadam/raw/refs/heads/main/data/adae.rda"))
-s1=  "https://github.com/pharmaverse/pharmaverseadam/blob/main/data/adae.rda"
-s2 = "https://github.com/pharmaverse/pharmaverseadam/raw/refs/heads/main/data/adae.rda"
-load(url(s1))
-load(url(s2))
-# feature is experimental, not available??
-readRDS(url("https://github.com/pharmaverse/pharmaverseadam/raw/refs/heads/main/data/adae.rda"))
-# downloads file
-z = download.file(url="https://github.com/pharmaverse/pharmaverseadam/raw/refs/heads/main/data/adae.rda",
-                  "junk.rda")
-}
-
 #
-# Generates ADaM from templates and compares to previously generated ADaM in github pharmaverseadam.
+# Generates ADaM from templates and compares to previously generated ADaM file (in pharmaverseadam).
 # pharmaverseadam is the SOURCE.
 #
 # Much code taken from pharamavreseadam::create_adams_data.R
 # (https://github.com/pharmaverse/pharmaverseadam/blob/main/data-raw/create_adams_data.R)
 #
-
+#
+#
 # USAGE:   verify_templates()
 #
 # TODO:
 # - add `attr` to generated ADaM
-# - do NOT use package as source for adams_old;  download and use
+# - re-write `load_rda()`:  now serves two purposes and was written in simpler times
 # - where code overlaps, make pharamversadam script and this one the same.
+# - this script uses several directories.  This needs cleaning, better naming...
 
 # Assumptions/Questions:
 # - ignore *.rda files in admiral/data (per Ben)
@@ -36,7 +24,7 @@ z = download.file(url="https://github.com/pharmaverse/pharmaverseadam/raw/refs/h
 # - now using `.rda` datafiles, switch to `.rds`? (easier to program; pilot5 uses)
 # - use cli:: for messages/errors?
 
-#' (if added to `admiral` package)
+#' (if were to add to `admiral` package)
 #' @param pkg  package (ex:  "admiral )
 #' @param adams_names ADaM or CDISC name, without prefix or suffix  (ex:  adlb)
 #' @param adams_new  character vector of ADaM after template is run
@@ -50,6 +38,7 @@ z = download.file(url="https://github.com/pharmaverse/pharmaverseadam/raw/refs/h
 #' - admiral/inst/templates/  templates to create ADaM datasets
 #' - cache_dir  cache, where newly generated ADaM files kept and diffdf reports
 #'      (os dependent)
+#' - adam_old_dir  - dir where prior ADaMs are downloaded and stored
 
 load_rda <- function(fileName) {
   load(fileName)
@@ -88,13 +77,43 @@ clean_cache <- function() {
   }
 }
 
-run_template <- function(adam) {
-  source(paste0(path$template_dir, "/ad_", adam, ".R"))
+clean_adam_old_dir = function(){
+  if (dir.exists(tempdir())) {
+    unlink(adam_old_dir, recursive = TRUE)
+    message(adam_old_dir,  "directory deleted: ", tempdir())
+  } else {
+    message(adam_old_dir, "directory does not exist: ", tempdir())
+  }
 }
+
+download_adam_old = function (adam_names){
+  # tempdir = directory to store
+  # adam_names = chr[] of old adams to download
+  # tempdir() is fixed for session
+  # DO NOT LOAD to memory these files till needed.
+
+  lapply(adam_names, function(adam){
+
+    githubURL = paste0(
+      "https://github.com/pharmaverse/pharmaverseadam/raw/refs/heads/main/data/",
+      adam, ".rda?raw=true")
+
+    cat(adam, "\n")
+    download.file(url = githubURL,
+                  #destfile = paste0(tempdir(), "/", adam, ".rda"),
+                  destfile = paste0(path$adam_old_dir, "/", adam, ".rda"),
+                  mode = "wb")
+  })
+}
+  # does the real work
+  run_template <- function(adam) {
+    source(paste0(path$template_dir, "/ad_", adam, ".R"))
+  }
 
 get_dataset_old = function(adam) {
   # TODO: replace with LATEST files from github, not package.
-    adam_old <- do.call(`::`, args = list("pharmaverseadam", adam))
+  #  adam_old <- do.call(`::`, args = list("pharmaverseadam", adam))
+  adam_old <- load_rda(paste0(path$adam_old_dir, "/", adam, ".rda"))
 }
 
 get_dataset_new = function(adam){
@@ -105,11 +124,11 @@ get_dataset_new = function(adam){
 verify_templates <- function(pkg = "admiral", ignore_templates_pkg = NULL) {
 
   #   SETUP ----
-  # TODO: make
+  # TODO: remove prior ADaM downloads
   clean_cache()
 
   #   TODO ----
-  # DISCUSS:  Diffdf creates *.txt files, WHERE to put them?
+  # DISCUSS:  Diffdf creates *.txt files, DIRECTORY to put them?
   # TODO:   fct to remove remove old diffdf *.txt files
 
   # testing ----
@@ -123,13 +142,16 @@ verify_templates <- function(pkg = "admiral", ignore_templates_pkg = NULL) {
   sprintf("generating ADaMs for  %s package", pkg)
 
   # list of important paths
-  path <- list(
+  path <<- list(
     template_dir = file.path(system.file(package = pkg), "templates"),
-    cache_dir = tools::R_user_dir("admiral_templates_data", which = "cache")
+    cache_dir = tools::R_user_dir("admiral_templates_data", which = "cache"),
+    adam_old_dir = tempdir() #"data-raw"
   )
+
   # gather all templates for this pkg (12 found) ----
   templates <- list.files(path$template_dir, pattern = "ad_")
   templates
+
 
   #adam_names is unnamed chr[]
   ## from templates  generate these ADaMs, 12 ----
@@ -147,6 +169,9 @@ verify_templates <- function(pkg = "admiral", ignore_templates_pkg = NULL) {
   # per Ben, ignore "adlbhy"
   adam_names = adam_names[adam_names != "adlbhy"]
   adam_names
+
+  # download, save prior ADaMs from pharmaverseadam
+  download_adam_old(adam_names)
 
   # keys for diffdf
   keys <- teal.data::default_cdisc_join_keys
@@ -174,7 +199,7 @@ verify_templates <- function(pkg = "admiral", ignore_templates_pkg = NULL) {
   obj[["adae"]]$keys
   }
 
-  # DISCUSS:  now user must manually provides templates to ignore ----
+  # DISCUSS:  now user must manually provide templates to ignore ----
   # CHANGE TO:   user must manually provides adam to ignore
 
   if (F) {
@@ -189,6 +214,9 @@ verify_templates <- function(pkg = "admiral", ignore_templates_pkg = NULL) {
   # for TESTING,  # "adlb" is lengthy ----
   adam_names = c("adsl", "adae")
 
+  run_template <- function(adam) {
+    source(paste0(path$template_dir, "/ad_", adam, ".R"))
+  }
 
   compare_list <- purrr::map(adam_names, .progress = TRUE, function(adam){
     run_template(adam)
@@ -196,6 +224,7 @@ verify_templates <- function(pkg = "admiral", ignore_templates_pkg = NULL) {
     dataset_old <- get_dataset_old(adam)
     compare(base=dataset_old, compare = dataset_new, keys=obj[[adam]]$keys, file=paste0("data-raw/", adam,".txt"))
   })
+
 
   print("DONE")
 }
