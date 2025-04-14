@@ -21,17 +21,15 @@
 #'
 #'   The result is used to check the units of the input parameters.
 #'
-#'   Permitted Values: a variable containing unit from the input dataset, or a function call,
+#' @permitted a variable containing unit from the input dataset, or a function call,
 #'   for example, `get_unit_expr = extract_unit(PARAM)`.
 #'
 #' @param wbc_unit A string containing the required unit of the WBC parameter
 #'
-#'   Default: `"10^9/L"`
 #'
 #' @param diff_type A string specifying the type of differential
 #'
-#'   Permitted Values: `"percent"`, `"fraction"`
-#'   Default: `fraction`
+#' @permitted `"percent"`, `"fraction"`
 #'
 #' @param by_vars Grouping variables
 #'
@@ -42,9 +40,8 @@
 #'   The observations where `PARAMCD` equals the specified value are considered
 #'   as the WBC absolute results to use for converting the differentials.
 #'
-#'   Default: `"WBC"`
 #'
-#'   Permitted Values: character value
+#' @permitted character value
 #'
 #' @param diff_code white blood differential parameter
 #'

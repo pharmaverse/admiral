@@ -14,7 +14,6 @@
 #'   Refer to `derive_vars_dt()` to impute and derive a date from a date
 #'   character vector to a date object.
 #'
-#'   Default: `TRTSDT`
 #'
 #' @param end_date The end date
 #'
@@ -23,7 +22,6 @@
 #'   Refer to `derive_vars_dt()` to impute and derive a date from a date
 #'   character vector to a date object.
 #'
-#'   Default: `TRTEDT`
 #'
 #' @details The total treatment duration is derived as the number of days from
 #'   start to end date plus one.

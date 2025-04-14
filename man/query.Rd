@@ -8,23 +8,33 @@ query(prefix, name = auto, id = NULL, add_scope_num = FALSE, definition = NULL)
 }
 \arguments{
 \item{prefix}{The value is used to populate \code{PREFIX} in the output
-dataset of \code{create_query_data()}, e.g., \code{"SMQ03"}}
+dataset of \code{create_query_data()}, e.g., \code{"SMQ03"}
+
+\describe{
+\item{Default value}{none}
+}}
 
 \item{name}{The value is used to populate \code{GRPNAME} in the output dataset
 of \code{create_query_data()}. If the \code{auto} keyword is specified, the variable
 is set to the name of the query in the SMQ/SDG database.
 
-\emph{Permitted Values}: A character scalar or the \code{auto} keyword. The \code{auto}
+\describe{
+\item{Permitted values}{A character scalar or the \code{auto} keyword. The \code{auto}
 keyword is permitted only for queries which are defined by an
 \code{basket_select()} object.}
+\item{Default value}{\code{auto}}
+}}
 
 \item{id}{The value is used to populate \code{GRPID} in the output dataset of
 \code{create_query_data()}. If the \code{auto} keyword is specified, the variable is
 set to the id of the query in the SMQ/SDG database.
 
-\emph{Permitted Values}: A integer scalar or the \code{auto} keyword. The \code{auto}
+\describe{
+\item{Permitted values}{A integer scalar or the \code{auto} keyword. The \code{auto}
 keyword is permitted only for queries which are defined by an
 \code{basket_select()} object.}
+\item{Default value}{\code{NULL}}
+}}
 
 \item{add_scope_num}{Determines if  \code{SCOPEN} in the output dataset
 of \code{create_query_data()} is populated
@@ -34,7 +44,10 @@ object.
 
 \emph{Default}: \code{FALSE}
 
-\emph{Permitted Values}: \code{TRUE}, \code{FALSE}}
+\describe{
+\item{Permitted values}{\code{TRUE}, \code{FALSE}}
+\item{Default value}{\code{FALSE}}
+}}
 
 \item{definition}{Definition of terms belonging to the query
 
@@ -59,8 +72,11 @@ define a customized query based on custom terms and SMQs. The data frames
 must have the same structure as described for the previous item.
 }
 
-\emph{Permitted Values}: an \code{basket_select()} object, a
+\describe{
+\item{Permitted values}{an \code{basket_select()} object, a
 data frame, or a list of data frames and \code{basket_select()} objects.}
+\item{Default value}{\code{NULL}}
+}}
 }
 \value{
 An object of class \code{query}.

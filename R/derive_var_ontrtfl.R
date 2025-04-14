@@ -11,8 +11,6 @@
 #'
 #' @param new_var On-treatment flag variable name to be created.
 #'
-#'   Default is `ONTRTFL`.
-#'
 #' @param start_date The start date (e.g. `AESDT`) or assessment date (e.g.
 #'   `ADT`) Required; A date or date-time object column is expected.
 #'
@@ -41,12 +39,11 @@
 #'   Refer to `derive_vars_dt()` to impute and derive a date from a date
 #'   character vector to a date object.
 #'
-#'   Optional; This can be null and everything after `ref_start_date` will be
-#'   considered on-treatment. Default is `NULL`.
+#'   If set to `NULL`, everything after `ref_start_date` will be considered
+#'   on-treatment.
 #'
 #' @param ref_end_window A window to add to the upper bound `ref_end_date`
 #'   measured in days (e.g. 7 if 7 days should be added to the upper bound)
-#'   Optional; default is 0.
 #'
 #' @param ignore_time_for_ref_end_date
 #'
@@ -54,7 +51,7 @@
 #'   the event occurred more than `ref_end_window` days after reference end
 #'   date.
 #'
-#'   *Permitted Values:* `TRUE`, `FALSE`
+#' @permitted `TRUE`, `FALSE`
 #'
 #' @param filter_pre_timepoint An expression to filter observations as not
 #'   on-treatment when `date` = `ref_start_date`. For example, if observations

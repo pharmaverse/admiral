@@ -2,10 +2,20 @@
 
 ## New Features
 
+- The documentation was enhanced: (#2585)
+    - The default value of an argument is now displayed in the argument description.
+    - For complex functions each example has now a title, which is also shown in
+    the TOC, and a description. This enabled adding more examples without losing
+    readability. See `derive_extreme_records()` for an example.
+    - The output of the structured examples used for complex functions is
+    displayed in the help pages in RStudio.
+
 ## Updates of Existing Functions
 
 - The function `extract_duplicate_records()` was updated to consider all variables in the input dataset for the by group if the `by_vars` argument is omitted entirely. (#2644)
-- In `slice_derivation`, previously the derivation is not called for empty subsets, however this can lead to issues when the input dataset is empty. Now the derivation is called for all subsets.
+- In `slice_derivation()`, previously the derivation is not called for empty
+subsets, however this can lead to issues when the input dataset is empty. Now
+the derivation is called for all subsets. (#2645)
 - The examples section for the function `derive_var_trtemfl()` was enhanced to include a showcasing of all scenarios discussed in the following [PHUSE White Paper on Treatment-Emergent AEs](https://phuse.s3.eu-central-1.amazonaws.com/Deliverables/Safety+Analytics/WP-087+Recommended+Definition+of++Treatment-Emergent+Adverse+Events+in+Clinical+Trials+.pdf). (#2455)
 
 ## Breaking Changes
@@ -22,9 +32,12 @@
 
 ## Documentation
 
+- The examples section of the following functions was enhanced:
+    - `derive_extreme_records()` (#2585)
+
 - Added an example to the `derive_vars_transposed()` reference page to showcase how duplicates-related errors can arise when records in `dataset_merge` are not uniquely identified. (#2609)
 
-- Default value of `type` in `derive_vars_aage()` is now shown as `interval` to match the function behaviour. (#2685) 
+- Default value of `type` in `derive_vars_aage()` is now shown as `interval` to match the function behavior. (#2685) 
 
 - The "Lab Grading" vignette was updated to correct some typos and make text easier to
 read (#2623).
@@ -32,6 +45,8 @@ read (#2623).
 - The "BDS Time-to-Event" vignette was updated to include `SRCSEQ` consistently (#2658).
 
 - The template for ADPC and vignette were updated to include an example of using `DTYPE` for imputed records (#2657).
+
+- The "Higher Order Functions" vignette was updated to showcase an example of two higher order functions used in combination. The documentation for each of the higher order functions was also corrected by removing the stated requirement that the `derivation` takes a `dataset` argument (#2656).
 
 
 ## Various
