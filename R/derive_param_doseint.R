@@ -29,7 +29,7 @@
 #'   as the total dose administered.  The `AVAL` associated with this `PARAMCD`
 #'   will be the numerator of the dose intensity calculation.
 #'
-#'   Permitted Values: character value
+#' @permitted character value
 #'
 #' @param tpadm_code Total Doses Planned parameter code
 #'
@@ -37,14 +37,13 @@
 #'   as the total planned dose.  The `AVAL` associated with this `PARAMCD`
 #'   will be the denominator of the dose intensity calculation.
 #'
-#'   Permitted Values: character value
+#' @permitted character value
 #'
 #' @param zero_doses Flag indicating logic for handling 0 planned or
 #' administered doses for a `by_vars` group
 #'
-#'   Default: `Inf`
 #'
-#'   Permitted Values: `Inf`, `100`
+#' @permitted `Inf`, `100`
 #'
 #' No record is returned if either the planned (`tpadm_code`) or administered
 #' (`tadm_code`) `AVAL` are `NA`.  No record is returned is a record does not

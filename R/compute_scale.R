@@ -31,9 +31,8 @@
 #'   This argument will be ignored if `source_range` and `target_range` aren't
 #'   specified.
 #'
-#'   Default: `FALSE`
 #'
-#'   Permitted Values: `TRUE`, `FALSE`
+#' @permitted `TRUE`, `FALSE`
 #'
 #' @param min_n Minimum number of values for computation
 #'
@@ -43,7 +42,6 @@
 #'
 #'   A positive integer is expected.
 #'
-#'   Default: 1
 #'
 #' @details Returns a numeric value. If source contains less than `min_n` values,
 #'   the result is set to `NA`. If `source_range` and `target_range` aren't

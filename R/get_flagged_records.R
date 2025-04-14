@@ -25,7 +25,7 @@
 #'   for flagging. If the argument is not specified, all observations are
 #'   considered.
 #'
-#'   *Permitted Values*: a condition
+#' @permitted a condition
 #'
 #' @return The output dataset is the input dataset filtered by the `filter` condition
 #' and with the variable specified for `new_var` representing a flag for the condition.

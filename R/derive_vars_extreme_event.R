@@ -32,7 +32,7 @@
 #'
 #'   `r roxygen_order_na_handling()`
 #'
-#'   *Permitted Values:* list of expressions created by `exprs()`, e.g.,
+#' @permitted list of expressions created by `exprs()`, e.g.,
 #'   `exprs(ADT, desc(AVAL))`
 #'
 #' @param mode Selection mode (first or last)
@@ -41,7 +41,7 @@
 #'   `"first"`/`"last"` is used to select the first/last record of this type of
 #'   event sorting by `order`.
 #'
-#'   *Permitted Values:* `"first"`, `"last"`
+#' @permitted `"first"`, `"last"`
 #'
 #' @param source_datasets Source datasets
 #'

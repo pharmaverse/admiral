@@ -26,7 +26,7 @@
 #'
 #'   If `"none"` is specified, then no date imputation flag is derived.
 #'
-#'   *Permitted Values*: `"auto"`, `"date"` or `"none"`
+#' @permitted `"auto"`, `"date"` or `"none"`
 #'
 #'
 #' @inheritParams impute_dtc_dt
@@ -271,7 +271,7 @@ convert_dtc_to_dt <- function(dtc,
 #'   and `min_dates` or `max_dates` should be specified respectively. Otherwise,
 #'   `NA_character_` is returned if the year component is missing.
 #'
-#'   *Permitted Values*: `"Y"` (year, highest level), `"M"` (month), `"D"`
+#' @permitted `"Y"` (year, highest level), `"M"` (month), `"D"`
 #'   (day), `"n"` (none, lowest level)
 #'
 #' @param date_imputation The value to impute the day/month when a datepart is
@@ -333,7 +333,7 @@ convert_dtc_to_dt <- function(dtc,
 #' For example `"2019---07"` would return `"2019-06-07` if `preserve = TRUE`
 #' (and `date_imputation = "MID"`).
 #'
-#' Permitted Values: `TRUE`, `FALSE`
+#' @permitted `TRUE`, `FALSE`
 #'
 #' @details Usually this computation function can not be used with `%>%`.
 #'
