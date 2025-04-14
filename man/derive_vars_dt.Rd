@@ -19,19 +19,31 @@ derive_vars_dt(
 \arguments{
 \item{dataset}{Input dataset
 
-The variables specified by the \code{dtc} argument are expected to be in the dataset.}
+The variables specified by the \code{dtc} argument are expected to be in the dataset.
+
+\describe{
+\item{Default value}{none}
+}}
 
 \item{new_vars_prefix}{Prefix used for the output variable(s).
 
 A character scalar is expected. For the date variable "DT" is appended to
 the specified prefix and for the date imputation flag "DTF". I.e., for
-\code{new_vars_prefix = "AST"} the variables \code{ASTDT} and \code{ASTDTF} are created.}
+\code{new_vars_prefix = "AST"} the variables \code{ASTDT} and \code{ASTDTF} are created.
+
+\describe{
+\item{Default value}{none}
+}}
 
 \item{dtc}{The \code{'--DTC'} date to impute
 
 A character date is expected in a format like \code{yyyy-mm-dd} or
 \code{yyyy-mm-ddThh:mm:ss}. Trailing components can be omitted and \code{-} is a
-valid "missing" value for any component.}
+valid "missing" value for any component.
+
+\describe{
+\item{Default value}{none}
+}}
 
 \item{highest_imputation}{Highest imputation level
 
@@ -49,8 +61,11 @@ If \code{"Y"} is specified, \code{date_imputation} should be \code{"first"} or \
 and \code{min_dates} or \code{max_dates} should be specified respectively. Otherwise,
 \code{NA_character_} is returned if the year component is missing.
 
-\emph{Permitted Values}: \code{"Y"} (year, highest level), \code{"M"} (month), \code{"D"}
+\describe{
+\item{Permitted values}{\code{"Y"} (year, highest level), \code{"M"} (month), \code{"D"}
 (day), \code{"n"} (none, lowest level)}
+\item{Default value}{\code{"n"}}
+}}
 
 \item{date_imputation}{The value to impute the day/month when a datepart is
 missing.
@@ -74,7 +89,11 @@ The year can not be specified; for imputing the year
 \code{"first"} or \code{"last"} together with \code{min_dates} or \code{max_dates} argument can
 be used (see examples).
 
-The argument is ignored if \code{highest_imputation} is less than \code{"D"}.}
+The argument is ignored if \code{highest_imputation} is less than \code{"D"}.
+
+\describe{
+\item{Default value}{\code{"first"}}
+}}
 
 \item{flag_imputation}{Whether the date imputation flag must also be derived.
 
@@ -85,7 +104,10 @@ If \code{"date"} is specified, then date imputation flag is derived.
 
 If \code{"none"} is specified, then no date imputation flag is derived.
 
-\emph{Permitted Values}: \code{"auto"}, \code{"date"} or \code{"none"}}
+\describe{
+\item{Permitted values}{\code{"auto"}, \code{"date"} or \code{"none"}}
+\item{Default value}{\code{"auto"}}
+}}
 
 \item{min_dates}{Minimum dates
 
@@ -111,21 +133,32 @@ For example
 returns \code{"2020-11-11T11:11:11"} because the possible dates for \code{"2020-11"}
 range from \code{"2020-11-01T00:00:00"} to \code{"2020-11-30T23:59:59"}. Therefore
 \code{"2020-12-06T12:12:12"} is ignored. Returning \code{"2020-12-06T12:12:12"} would
-have changed the month although it is not missing (in the \code{dtc} date).}
+have changed the month although it is not missing (in the \code{dtc} date).
+
+\describe{
+\item{Default value}{\code{NULL}}
+}}
 
 \item{max_dates}{Maximum dates
 
 A list of dates is expected. It is ensured that the imputed date is not after
 any of the specified dates, e.g., that the imputed date is not after the data
 cut off date. Only dates which are in the range of possible dates are
-considered. A date or date-time object is expected.}
+considered. A date or date-time object is expected.
+
+\describe{
+\item{Default value}{\code{NULL}}
+}}
 
 \item{preserve}{Preserve day if month is missing and day is present
 
 For example \code{"2019---07"} would return \verb{"2019-06-07} if \code{preserve = TRUE}
 (and \code{date_imputation = "MID"}).
 
-Permitted Values: \code{TRUE}, \code{FALSE}}
+\describe{
+\item{Permitted values}{\code{TRUE}, \code{FALSE}}
+\item{Default value}{\code{FALSE}}
+}}
 }
 \value{
 The input dataset with the date \code{'--DT'} (and the date imputation flag \code{'--DTF'}

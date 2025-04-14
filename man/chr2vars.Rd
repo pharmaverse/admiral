@@ -7,7 +7,11 @@
 chr2vars(chr)
 }
 \arguments{
-\item{chr}{A character vector}
+\item{chr}{A character vector
+
+\describe{
+\item{Default value}{none}
+}}
 }
 \value{
 A \code{list} of expressions as returned by \code{\link[=exprs]{exprs()}}

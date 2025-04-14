@@ -19,12 +19,17 @@ filter_relative(
 \arguments{
 \item{dataset}{Input dataset
 
-The variables specified by the \code{by_vars} and \code{order} arguments are expected to be in the dataset.}
+The variables specified by the \code{by_vars} and \code{order} arguments are expected to be in the dataset.
+
+\describe{
+\item{Default value}{none}
+}}
 
 \item{by_vars}{Grouping variables
 
-\emph{Permitted Values}: list of variables created by \code{exprs()}
-e.g. \code{exprs(USUBJID, VISIT)}}
+\describe{
+\item{Default value}{none}
+}}
 
 \item{order}{Sort order
 
@@ -32,14 +37,21 @@ Within each by group the observations are ordered by the specified order.
 
 For handling of \code{NA}s in sorting variables see \href{../articles/generic.html#sort_order}{Sort Order}.
 
-\emph{Permitted Values:} list of expressions created by \code{exprs()}, e.g.,
+\describe{
+\item{Permitted values}{list of expressions created by \code{exprs()}, e.g.,
 \code{exprs(ADT, desc(AVAL))}}
+\item{Default value}{none}
+}}
 
 \item{condition}{Condition for Reference Observation
 
 The specified condition determines the reference observation. The output
 dataset contains all observations before or after (\code{selection} parameter)
-the reference observation.}
+the reference observation.
+
+\describe{
+\item{Default value}{none}
+}}
 
 \item{mode}{Selection mode (first or last)
 
@@ -51,19 +63,31 @@ observations before or after (\code{selection} parameter) the observation where
 the condition (\code{condition} parameter) is fulfilled the \emph{last} time is
 included in the output dataset.
 
-\emph{Permitted Values:} \code{"first"}, \code{"last"}}
+\describe{
+\item{Permitted values}{\code{"first"}, \code{"last"}}
+\item{Default value}{none}
+}}
 
 \item{selection}{Select observations before or after the reference observation?
 
-\emph{Permitted Values:} \code{"before"}, \code{"after"}}
+\describe{
+\item{Permitted values}{\code{"before"}, \code{"after"}}
+\item{Default value}{none}
+}}
 
 \item{inclusive}{Include the reference observation?
 
-\emph{Permitted Values:} \code{TRUE}, \code{FALSE}}
+\describe{
+\item{Permitted values}{\code{TRUE}, \code{FALSE}}
+\item{Default value}{none}
+}}
 
 \item{keep_no_ref_groups}{Should by groups without reference observation be kept?
 
-\emph{Permitted Values:} \code{TRUE}, \code{FALSE}}
+\describe{
+\item{Permitted values}{\code{TRUE}, \code{FALSE}}
+\item{Default value}{\code{TRUE}}
+}}
 
 \item{check_type}{Check uniqueness?
 
@@ -71,7 +95,10 @@ If \code{"warning"} or \code{"error"} is specified, the specified message is iss
 if the observations of the input dataset are not unique with respect to the
 by variables and the order.
 
-\emph{Permitted Values:} \code{"none"}, \code{"warning"}, \code{"error"}}
+\describe{
+\item{Permitted values}{\code{"none"}, \code{"warning"}, \code{"error"}}
+\item{Default value}{\code{"warning"}}
+}}
 }
 \value{
 A dataset containing for each by group the observations before or

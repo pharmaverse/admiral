@@ -15,7 +15,11 @@ convert_dtc_to_dtm(
 )
 }
 \arguments{
-\item{dtc}{The \code{'--DTC'} date to convert.}
+\item{dtc}{The \code{'--DTC'} date to convert.
+
+\describe{
+\item{Default value}{none}
+}}
 
 \item{highest_imputation}{Highest imputation level
 
@@ -33,9 +37,12 @@ If \code{"Y"} is specified, \code{date_imputation} should be \code{"first"} or \
 and \code{min_dates} or \code{max_dates} should be specified respectively. Otherwise,
 \code{NA_character_} is returned if the year component is missing.
 
-\emph{Permitted Values}: \code{"Y"} (year, highest level), \code{"M"} (month), \code{"D"}
+\describe{
+\item{Permitted values}{\code{"Y"} (year, highest level), \code{"M"} (month), \code{"D"}
 (day), \code{"h"} (hour), \code{"m"} (minute), \code{"s"} (second), \code{"n"} (none, lowest
 level)}
+\item{Default value}{\code{"h"}}
+}}
 
 \item{date_imputation}{The value to impute the day/month when a datepart is
 missing.
@@ -59,7 +66,11 @@ The year can not be specified; for imputing the year
 \code{"first"} or \code{"last"} together with \code{min_dates} or \code{max_dates} argument can
 be used (see examples).
 
-The argument is ignored if \code{highest_imputation} is less than \code{"D"}.}
+The argument is ignored if \code{highest_imputation} is less than \code{"D"}.
+
+\describe{
+\item{Default value}{\code{"first"}}
+}}
 
 \item{time_imputation}{The value to impute the time when a timepart is
 missing.
@@ -71,7 +82,11 @@ for the start of the day,
 \item or as a keyword: \code{"first"},\code{"last"} to impute to the start/end of a day.
 }
 
-The argument is ignored if \code{highest_imputation = "n"}.}
+The argument is ignored if \code{highest_imputation = "n"}.
+
+\describe{
+\item{Default value}{\code{"first"}}
+}}
 
 \item{min_dates}{Minimum dates
 
@@ -101,7 +116,11 @@ have changed the month although it is not missing (in the \code{dtc} date).
 
 For date variables (not datetime) in the list the time is imputed to
 \code{"00:00:00"}. Specifying date variables makes sense only if the date is
-imputed. If only time is imputed, date variables do not affect the result.}
+imputed. If only time is imputed, date variables do not affect the result.
+
+\describe{
+\item{Default value}{\code{NULL}}
+}}
 
 \item{max_dates}{Maximum dates
 
@@ -112,7 +131,11 @@ considered. A date or date-time object is expected.
 
 For date variables (not datetime) in the list the time is imputed to
 \code{"23:59:59"}. Specifying date variables makes sense only if the date is
-imputed. If only time is imputed, date variables do not affect the result.}
+imputed. If only time is imputed, date variables do not affect the result.
+
+\describe{
+\item{Default value}{\code{NULL}}
+}}
 
 \item{preserve}{Preserve lower level date/time part when higher order part
 is missing, e.g. preserve day if month is missing or
@@ -121,7 +144,10 @@ preserve minute when hour is missing.
 For example \code{"2019---07"} would return \verb{"2019-06-07} if \code{preserve = TRUE}
 (and \code{date_imputation = "mid"}).
 
-Permitted Values: \code{TRUE}, \code{FALSE}}
+\describe{
+\item{Permitted values}{\code{TRUE}, \code{FALSE}}
+\item{Default value}{\code{FALSE}}
+}}
 }
 \value{
 A datetime object
