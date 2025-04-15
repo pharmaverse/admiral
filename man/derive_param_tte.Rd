@@ -222,9 +222,10 @@ For each subject the time to first adverse event should be created as a paramete
 set to adverse event start date.
 \item The censor source object is created using \code{censor_source()} and the date is
 set to end of study date.
-\item Then these are passed to derive the time to event parameter with the provided
-parameter descriptions (\code{PARAMCD} and \code{PARAM}).
-\item Note the values of the censor variable (\code{CNSR}) that were derived here,
+\item The event and censor source objects are then passed to \code{derive_param_tte()}
+to derive the time to event parameter with the provided parameter
+descriptions (\code{PARAMCD} and \code{PARAM}).
+\item Note the values of the censor variable (\code{CNSR}) that are derived below,
 where the first subject has an event and the second does not.
 }
 
@@ -314,9 +315,9 @@ term (\code{AEDECOD}) should be created as parameters.
 The source records are checked regarding duplicates with respect to the
 by variables and the date and order specified in the source objects.
 By default, a warning is issued if any duplicates are found.
-Note here how the \code{source_datasets} argument was updated to read in the
-new adverse event source dataset constructed below containing a duplicate
-date for \code{"Cough"}.
+Note here how after creating a new adverse event dataset containing a
+duplicate date for \code{"Cough"}, it was then passed to the function using the
+\code{source_datasets} argument - where you see below \code{ae = ae_dup}.
 
 \if{html}{\out{<div class="sourceCode r">}}\preformatted{ae_dup <- tribble(
   ~USUBJID, ~AESTDT,           ~AESEQ, ~AEDECOD, ~AESER,
@@ -350,7 +351,7 @@ derive_param_tte(
 #> `AEDECOD`, and `AESTDT`
 #> ℹ Run `admiral::get_duplicates_dataset()` to access the duplicate records}\if{html}{\out{</div>}}
 
-For investigating the issue the dataset of the duplicate source records
+For investigating the issue, the dataset of the duplicate source records
 can be obtained by calling \code{get_duplicates_dataset()}:
 
 \if{html}{\out{<div class="sourceCode r">}}\preformatted{get_duplicates_dataset()
@@ -525,7 +526,8 @@ they are known to be alive.
 \itemize{
 \item The start date is set using \code{start_date} argument, now that we need to use
 different to the default.
-\item In this example, datetime was needed using \code{create_datetime} argument.
+\item In this example, datetime was needed, which can be achieved by setting
+\code{create_datetime} argument to \code{TRUE}.
 }
 
 \if{html}{\out{<div class="sourceCode r">}}\preformatted{data("admiral_adsl")

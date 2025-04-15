@@ -413,7 +413,7 @@ derive_extreme_records(
 #> Warning: Dataset contains duplicate records with respect to `USUBJID` and `AVAL`
 #> ℹ Run `admiral::get_duplicates_dataset()` to access the duplicate records}\if{html}{\out{</div>}}
 
-For investigating the issue the dataset of the duplicate source records
+For investigating the issue, the dataset of the duplicate source records
 can be obtained by calling \code{get_duplicates_dataset()}:
 
 \if{html}{\out{<div class="sourceCode r">}}\preformatted{get_duplicates_dataset()

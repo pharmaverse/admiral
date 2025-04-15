@@ -168,9 +168,10 @@
 #'   set to adverse event start date.
 #' - The censor source object is created using `censor_source()` and the date is
 #'   set to end of study date.
-#' - Then these are passed to derive the time to event parameter with the provided
-#'   parameter descriptions (`PARAMCD` and `PARAM`).
-#' - Note the values of the censor variable (`CNSR`) that were derived here,
+#' - The event and censor source objects are then passed to `derive_param_tte()`
+#'   to derive the time to event parameter with the provided parameter
+#'   descriptions (`PARAMCD` and `PARAM`).
+#' - Note the values of the censor variable (`CNSR`) that are derived below,
 #'   where the first subject has an event and the second does not.
 #' @code
 #' library(tibble)
@@ -247,9 +248,9 @@
 #' @info The source records are checked regarding duplicates with respect to the
 #'   by variables and the date and order specified in the source objects.
 #'   By default, a warning is issued if any duplicates are found.
-#'   Note here how the `source_datasets` argument was updated to read in the
-#'   new adverse event source dataset constructed below containing a duplicate
-#'   date for `"Cough"`.
+#'   Note here how after creating a new adverse event dataset containing a
+#'   duplicate date for `"Cough"`, it was then passed to the function using the
+#'   `source_datasets` argument - where you see below `ae = ae_dup`.
 #' @code [expected_cnds = "duplicate_records"]
 #' ae_dup <- tribble(
 #'   ~USUBJID, ~AESTDT,           ~AESEQ, ~AEDECOD, ~AESER,
@@ -272,7 +273,7 @@
 #'   )
 #' )
 #'
-#' @info For investigating the issue the dataset of the duplicate source records
+#' @info For investigating the issue, the dataset of the duplicate source records
 #'   can be obtained by calling `get_duplicates_dataset()`:
 #' @code
 #' get_duplicates_dataset()
@@ -410,7 +411,8 @@
 #'
 #' - The start date is set using `start_date` argument, now that we need to use
 #'   different to the default.
-#' - In this example, datetime was needed using `create_datetime` argument.
+#' - In this example, datetime was needed, which can be achieved by setting
+#'   `create_datetime` argument to `TRUE`.
 #' @code
 #' data("admiral_adsl")
 #'
