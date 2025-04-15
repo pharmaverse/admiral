@@ -435,6 +435,7 @@ impute_dtc_dt <- function(dtc,
     )
   assert_logical_scalar(preserve)
 
+  # the `assert_date_imputation` function is stored in `derive_vars_dt_dtm_utils.R`
   assert_date_imputation(
     highest_imputation = highest_imputation,
     date_imputation = date_imputation
