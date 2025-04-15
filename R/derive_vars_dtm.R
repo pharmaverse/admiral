@@ -140,6 +140,7 @@ derive_vars_dtm <- function(dataset,
   dtc <- assert_symbol(enexpr(dtc))
   assert_data_frame(dataset, required_vars = exprs(!!dtc))
 
+  # the `assert_dt_dtm_inputs` function is stored in `derive_vars_dt_dtm_utils.R`
   assert_dt_dtm_inputs(
     new_vars_prefix = new_vars_prefix,
     max_dates = max_dates,

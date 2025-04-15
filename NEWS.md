@@ -35,7 +35,7 @@ the derivation is called for all subsets. (#2645)
 ## Documentation
 
 
-- Improved documentation and error messages of `derive_vars_dt`. (#2654)
+- Improved documentation, error messages, and argument assertions of `derive_vars_dt`, `derive_vars_dtm`, `impute_dtc_dt`, `impute_dtc_dtm`. (#2654)
 
 - Added an example to the `derive_vars_transposed()` reference page to showcase how duplicates-related errors can arise when records in `dataset_merge` are not uniquely identified. (#2609)
 

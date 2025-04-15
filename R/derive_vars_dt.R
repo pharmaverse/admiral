@@ -148,6 +148,8 @@ derive_vars_dt <- function(dataset, # nolint: cyclocomp_linter
   # check and quote arguments
   dtc <- assert_symbol(enexpr(dtc))
   assert_data_frame(dataset, required_vars = exprs(!!dtc))
+
+  # the `assert_dt_dtm_inputs` function is stored in `derive_vars_dt_dtm_utils.R`
   assert_dt_dtm_inputs(
     new_vars_prefix = new_vars_prefix,
     max_dates = max_dates,
@@ -291,8 +293,6 @@ convert_dtc_to_dt <- function(dtc,
 #'   The year can not be specified; for imputing the year
 #'   `"first"` or `"last"` together with `min_dates` or `max_dates` argument can
 #'   be used (see examples).
-#'
-#'   The argument is ignored if `highest_imputation` is less than `"D"`.
 #'
 #' @param min_dates Minimum dates
 #'
