@@ -331,3 +331,73 @@ assert_dt_dtm_inputs <- function(new_vars_prefix, max_dates, min_dates, # nolint
 
   return(invisible(NULL))
 }
+
+#' Assert `date_imputation`
+#'
+#' Applies assertions on the `date_imputation` argument to reduce
+#' cyclomatic complexity
+#'
+#' @param highest_imputation Highest imputation level
+#' @param date_imputation The value to impute the day/month when a datepart is
+#'   missing.
+#'
+#' @keywords internal
+#'
+#' @return `invisible(NULL)`
+assert_date_imputation <- function(highest_imputation, date_imputation) {
+  date_imputation <- tolower(date_imputation)
+  if (highest_imputation == "D") {
+    assert_character_scalar(date_imputation, values = c("first", "mid", "last"))
+  }
+
+  if (highest_imputation == "M") {
+    is_mm_dd_format <- grepl("^(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])$", date_imputation)
+    is_one_of_keys <- date_imputation %in% c("first", "mid", "last")
+    if (!{
+      is_mm_dd_format || is_one_of_keys
+    }) {
+      cli_abort(paste(
+        "If {.code highest_imputation = \"M\"} is specified, {.arg date_imputation} must be",
+        "one of `'first'`, `'mid'`, `'last'`",
+        "or a format with month and day specified as `'mm-dd'`: e.g. `'06-15'`"
+      ))
+    }
+  }
+
+  if (highest_imputation == "Y") {
+    assert_character_scalar(date_imputation, values = c("first", "last"))
+  }
+  return(invisible(NULL))
+}
+
+#' Assert `time_imputation`
+#'
+#' Applies assertions on the `time_imputation` argument
+#'
+#' @param highest_imputation Highest imputation level
+#' @param time_imputation The value to impute time when missing
+#'
+#' @keywords internal
+#'
+#' @return `invisible(NULL)`
+assert_time_imputation <- function(highest_imputation, time_imputation) {
+  time_imputation <- tolower(time_imputation)
+
+  is_hh_mm_ss_format <- grepl(
+    "^(0[0-9]|1[0-9]|2[0-3]|24):([0-5][0-9]):([0-5][0-9])$",
+    time_imputation
+  )
+  is_one_of_keys <- time_imputation %in% c("first", "last")
+
+  if (!{
+    is_hh_mm_ss_format || is_one_of_keys
+  } && highest_imputation != "n") {
+    cli_abort(paste(
+      "{.arg time_imputation} must be",
+      'one of `"first"`, `"last`"',
+      'or time specified as `"hh:mm:ss"`: e.g. `"12:00:00"`'
+    ))
+  }
+
+  return(invisible(NULL))
+}

@@ -140,6 +140,7 @@ derive_vars_dtm <- function(dataset,
   dtc <- assert_symbol(enexpr(dtc))
   assert_data_frame(dataset, required_vars = exprs(!!dtc))
 
+
   # the `assert_dt_dtm_inputs` function is stored in `derive_vars_dt_dtm_utils.R`
   assert_dt_dtm_inputs(
     new_vars_prefix = new_vars_prefix,
@@ -475,11 +476,19 @@ impute_dtc_dtm <- function(dtc,
       date_imputation,
       case_sensitive = FALSE
     )
+  assert_date_imputation(
+    highest_imputation = highest_imputation,
+    date_imputation = date_imputation
+  )
   time_imputation <-
     assert_character_scalar(
       time_imputation,
       case_sensitive = FALSE
     )
+  assert_time_imputation(
+    highest_imputation = highest_imputation,
+    time_imputation = time_imputation
+  )
   assert_logical_scalar(preserve)
 
   if (length(dtc) == 0) {
