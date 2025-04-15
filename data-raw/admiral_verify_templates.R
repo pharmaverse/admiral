@@ -1,13 +1,11 @@
 # This script:  data-raw/admiral_verify_templates.R
 
 #
-# Generates ADaM from templates and compares to previously generated ADaM file (in pharmaverseadam).
+# Generates ADaM from templates and compares to previously generated ADaM file (found in pharmaverseadam).
 # pharmaverseadam is the SOURCE.
 #
 # Much code taken from pharamavreseadam::create_adams_data.R
 # (https://github.com/pharmaverse/pharmaverseadam/blob/main/data-raw/create_adams_data.R)
-#
-#
 #
 # USAGE:   verify_templates()
 #
@@ -199,32 +197,37 @@ verify_templates <- function(pkg = "admiral", ignore_templates_pkg = NULL) {
   obj[["adae"]]$keys
   }
 
-  # DISCUSS:  now user must manually provide templates to ignore ----
-  # CHANGE TO:   user must manually provides adam to ignore
+  # DISCUSS:   NOW, user must manually enter templates to ignore ----
+  # CHANGE TO: PROPOSED:   user must manually remove ADaMs to ignore
 
+  # CHANGE:   remove this -----------
   if (F) {
   # FOR TESTING, (omit ad_adlb.R)
   # ignore_templates_pkg = templates[!(templates %in% c("ad_adsl.R", "ad_adlb.R"))]
-
   # For real,
   ignore_templates_pkg <- templates[templates == c("ad_adlbhy.R")]
   }
+  # CHANGE:   remove above -----------
 
-  # now, generate ADaM datasets and put in cache dir
-  # for TESTING,  # "adlb" is lengthy ----
+
+  # CHANGE:  now, manually list ADaMs  to generate new ADaM datasets and put in cache dir
+  # (for TESTING, skip "adlb" is lengthy ----)
+
+  # for TESTING, otherwise will be ALL adam_names
   adam_names = c("adsl", "adae")
 
-  run_template <- function(adam) {
-    source(paste0(path$template_dir, "/ad_", adam, ".R"))
-  }
+  # function that does the work
+ # run_template <- function(adam) {
+ #   source(paste0(path$template_dir, "/ad_", adam, ".R"))
+ # }
 
   compare_list <- purrr::map(adam_names, .progress = TRUE, function(adam){
     run_template(adam)
     dataset_new <- get_dataset_new(adam) # this function would retrieve that dataset from cache
     dataset_old <- get_dataset_old(adam)
     compare(base=dataset_old, compare = dataset_new, keys=obj[[adam]]$keys, file=paste0("data-raw/", adam,".txt"))
+    # TODO: remove old/new ADaMs from environment
   })
-
 
   print("DONE")
 }
