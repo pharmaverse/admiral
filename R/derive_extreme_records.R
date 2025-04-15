@@ -271,7 +271,7 @@
 #'   )
 #' )
 #'
-#' @info For investigating the issue the dataset of the duplicate source records
+#' @info For investigating the issue, the dataset of the duplicate source records
 #'   can be obtained by calling `get_duplicates_dataset()`:
 #' @code
 #' get_duplicates_dataset()
