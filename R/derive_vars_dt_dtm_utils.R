@@ -15,10 +15,13 @@
 #' @family utils_impute
 #' @keywords internal
 dtm_level <- function(level) {
+  possible_values <- c("n", "s", "m", "h", "D", "M", "Y")
+  assert_character_scalar(level, values = possible_values)
+
   out <-
     factor(
       level,
-      levels = c("n", "s", "m", "h", "D", "M", "Y"),
+      levels = possible_values,
       ordered = TRUE
     )
   class(out) <- c("dtm_level", class(out))
@@ -42,7 +45,6 @@ dtm_level <- function(level) {
 dt_level <- function(level) {
   possible_values <- c("n", "D", "M", "Y")
   assert_character_scalar(level, values = possible_values)
-
 
   out <-
     factor(
@@ -259,4 +261,143 @@ get_partialdatetime <- function(dtc) {
     partial[[i]] <- if_else(partial[[i]] %in% c("-", ""), NA_character_, partial[[i]])
   }
   partial
+}
+
+#' Check input assertions for date and imputation parameters
+#' Used in `derive_vars_dt()` and `derive_vars_dtm()`.
+#'
+#' Applies assertions on the `new_vars_prefix`, `max_dates`, `min_dates`,
+#' `flag_imputation`, `highest_imputation`, and `date_imputation` arguments
+#' to reduce cyclomatic complexity.
+#'
+#' @param new_vars_prefix Prefix for new variables.
+#' @param max_dates Maximum dates of events (can be `NULL`).
+#' @param min_dates Minimum dates of events (can be `NULL`).
+#' @param flag_imputation_values Allowed values for the `flag_imputation` argument.
+#' @param flag_imputation The value to impute.
+#' @param highest_imputation Highest imputation level.
+#' @param highest_imputation_values Allowed values for the `highest_imputation` argument.
+#' @param date_imputation The value to impute the day/month
+#' when a date part is missing (can be `NULL`).
+#'
+#' @keywords internal
+#'
+#' @return `invisible(NULL)`
+assert_dt_dtm_inputs <- function(new_vars_prefix, max_dates, min_dates, # nolint: cyclocomp_linter
+                                 flag_imputation, flag_imputation_values,
+                                 highest_imputation, highest_imputation_values,
+                                 date_imputation = NULL) {
+  assert_character_scalar(new_vars_prefix)
+  assert_vars(max_dates, optional = TRUE)
+  assert_vars(min_dates, optional = TRUE)
+
+  assert_character_scalar(
+    highest_imputation,
+    values = highest_imputation_values,
+    case_sensitive = FALSE # not sure
+  )
+
+  assert_character_scalar(
+    flag_imputation,
+    values = flag_imputation_values,
+    case_sensitive = FALSE
+  )
+
+  if ((highest_imputation == "Y" && is.null(min_dates) && is.null(max_dates)) ||
+    (highest_imputation == "Y" && length(min_dates) == 0 && length(max_dates) == 0)) {
+    cli_abort(paste(
+      "If {.code highest_imputation = \"Y\"} is specified, {.arg min_dates} or",
+      "{.arg max_dates} must be specified respectively."
+    ))
+  }
+
+  if (highest_imputation == "Y") {
+    assert_character_scalar(date_imputation, values = c("first", "last"))
+  }
+
+  if (highest_imputation == "Y" && is.null(min_dates) && date_imputation == "first") {
+    cli_warn(paste(
+      "If {.code highest_imputation = \"Y\"} and {.code date_imputation = \"first\"}",
+      "is specified, {.arg min_dates} should be specified."
+    ))
+  }
+
+  if (highest_imputation == "Y" && is.null(max_dates) && date_imputation == "last") {
+    cli_warn(paste(
+      "If {.code highest_imputation = \"Y\"} and {.code date_imputation = \"last\"}",
+      "is specified, {.arg max_dates} should be specified."
+    ))
+  }
+
+  return(invisible(NULL))
+}
+
+#' Assert `date_imputation`
+#'
+#' Applies assertions on the `date_imputation` argument to reduce
+#' cyclomatic complexity
+#'
+#' @param highest_imputation Highest imputation level
+#' @param date_imputation The value to impute the day/month when a datepart is
+#'   missing.
+#'
+#' @keywords internal
+#'
+#' @return `invisible(NULL)`
+assert_date_imputation <- function(highest_imputation, date_imputation) {
+  date_imputation <- tolower(date_imputation)
+  if (highest_imputation == "D") {
+    assert_character_scalar(date_imputation, values = c("first", "mid", "last"))
+  }
+
+  if (highest_imputation == "M") {
+    is_mm_dd_format <- grepl("^(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])$", date_imputation)
+    is_one_of_keys <- date_imputation %in% c("first", "mid", "last")
+    if (!{
+      is_mm_dd_format || is_one_of_keys
+    }) {
+      cli_abort(paste(
+        "If {.code highest_imputation = \"M\"} is specified, {.arg date_imputation} must be",
+        "one of `'first'`, `'mid'`, `'last'`",
+        "or a format with month and day specified as `'mm-dd'`: e.g. `'06-15'`"
+      ))
+    }
+  }
+
+  if (highest_imputation == "Y") {
+    assert_character_scalar(date_imputation, values = c("first", "last"))
+  }
+  return(invisible(NULL))
+}
+
+#' Assert `time_imputation`
+#'
+#' Applies assertions on the `time_imputation` argument
+#'
+#' @param highest_imputation Highest imputation level
+#' @param time_imputation The value to impute time when missing
+#'
+#' @keywords internal
+#'
+#' @return `invisible(NULL)`
+assert_time_imputation <- function(highest_imputation, time_imputation) {
+  time_imputation <- tolower(time_imputation)
+
+  is_hh_mm_ss_format <- grepl(
+    "^(0[0-9]|1[0-9]|2[0-3]|24):([0-5][0-9]):([0-5][0-9])$",
+    time_imputation
+  )
+  is_one_of_keys <- time_imputation %in% c("first", "last")
+
+  if (!{
+    is_hh_mm_ss_format || is_one_of_keys
+  } && highest_imputation != "n") {
+    cli_abort(paste(
+      "{.arg time_imputation} must be",
+      'one of `"first"`, `"last`"',
+      'or time specified as `"hh:mm:ss"`: e.g. `"12:00:00"`'
+    ))
+  }
+
+  return(invisible(NULL))
 }
