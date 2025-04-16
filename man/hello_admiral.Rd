@@ -7,7 +7,7 @@
 hello_admiral(hw = TRUE)
 }
 \arguments{
-\item{hw}{\code{TRUE} to include "hw" in the welcome message, \code{FALSE} otherwise.
+\item{hw}{\code{TRUE} to include \code{hw} in the welcome message, \code{FALSE} otherwise.
 Defaults to \code{TRUE}.
 
 \describe{
@@ -29,5 +29,5 @@ hello_admiral()
 hello_admiral(hw = FALSE)
 
 }
-\concept{der_adxx}
-\keyword{der_adxx}
+\concept{utils_misc}
+\keyword{utils_misc}

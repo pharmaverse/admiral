@@ -5,14 +5,14 @@
 #' It is for dummy testing.
 #'
 #' @param hw
-#'   `TRUE` to include "hw" in the welcome message, `FALSE` otherwise.
+#'   `TRUE` to include `hw` in the welcome message, `FALSE` otherwise.
 #'   Defaults to `TRUE`.
 #'
 #' @return
 #'   Happy message
 #'
-#' @family der_adxx
-#' @keywords der_adxx
+#' @family utils_misc
+#' @keywords utils_misc
 #' @export
 #'
 #' @examples
