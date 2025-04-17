@@ -13,13 +13,11 @@
 # - add `attr` to generated ADaM
 # - re-write `load_rda()`:  now serves two purposes and was written in simpler times
 # - where code overlaps, make pharamversadam script and this one the same.
-# - this script uses several directories.  This needs cleaning, better naming...
 
 # Assumptions/Questions:
 # - ignore *.rda files in admiral/data (per Ben)
 # - written as standalone R script, not as package R function
 # - compares full ADaM - all rows (ie no reduction in number of rows in each dataset)
-# - now using `.rda` datafiles, switch to `.rds`? (easier to program; pilot5 uses)
 # - use cli:: for messages/errors?
 
 #' (if were to add to `admiral` package)
@@ -98,7 +96,7 @@ download_adam_old = function (adam_names){
 
     cat(adam, "\n")
     download.file(url = githubURL,
-                  #destfile = paste0(tempdir(), "/", adam, ".rda"),
+                  quiet = TRUE,
                   destfile = paste0(path$adam_old_dir, "/", adam, ".rda"),
                   mode = "wb")
   })
@@ -137,13 +135,21 @@ verify_templates <- function(pkg = "admiral", ignore_templates_pkg = NULL) {
 
   library(pkg, character.only = TRUE)
   library(teal.data)
-  sprintf("generating ADaMs for  %s package", pkg)
+  sprintf("generating ADaMs for  %s package\n", pkg)
+
+  # temporary directories
+  x = tempdir()
+  dir.create(paste0(x, "/old"))
+  dir.create(paste0(x, "/new"))
+  dir.create(paste0(x, "/diff"))
 
   # list of important paths
   path <<- list(
     template_dir = file.path(system.file(package = pkg), "templates"),
     cache_dir = tools::R_user_dir("admiral_templates_data", which = "cache"),
-    adam_old_dir = tempdir() #"data-raw"
+    adam_old_dir =  paste0(x, "/old"),
+    adam_new_dir =  paste0(x, "/new"),
+    diff = paste0(x, "/diff")
   )
 
   # gather all templates for this pkg (12 found) ----
@@ -210,22 +216,20 @@ verify_templates <- function(pkg = "admiral", ignore_templates_pkg = NULL) {
   # CHANGE:   remove above -----------
 
 
-  # CHANGE:  now, manually list ADaMs  to generate new ADaM datasets and put in cache dir
+  # CHANGE:  now, which templates to run?   ENTER in adam_names
   # (for TESTING, skip "adlb" is lengthy ----)
 
   # for TESTING, otherwise will be ALL adam_names
   adam_names = c("adsl", "adae")
 
-  # function that does the work
- # run_template <- function(adam) {
- #   source(paste0(path$template_dir, "/ad_", adam, ".R"))
- # }
-
+  sprintf("---- Run templates\n")
   compare_list <- purrr::map(adam_names, .progress = TRUE, function(adam){
+    cat("---- Template running for ", adam, "\n")
     run_template(adam)
     dataset_new <- get_dataset_new(adam) # this function would retrieve that dataset from cache
     dataset_old <- get_dataset_old(adam)
-    compare(base=dataset_old, compare = dataset_new, keys=obj[[adam]]$keys, file=paste0("data-raw/", adam,".txt"))
+    compare(base=dataset_old, compare = dataset_new, keys=obj[[adam]]$keys,
+            file=paste0(path$diff,"/", adam,".txt"))
     # TODO: remove old/new ADaMs from environment
   })
 
