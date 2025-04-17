@@ -24,7 +24,7 @@ lb <- pharmaversesdtm::lb
 # When SAS datasets are imported into R using haven::read_sas(), missing
 # character values from SAS appear as "" characters in R, instead of appearing
 # as NA values. Further details can be obtained via the following link:
-# https://pharmaverse.github.io/admiral/articles/admiral.html#handling-of-missing-values # nolint
+# https://pharmaverse.github.io/admiral/cran-release/articles/admiral.html#handling-of-missing-values # nolint
 
 
 dm <- convert_blanks_to_na(dm)
@@ -98,7 +98,7 @@ ex_ext <- ex %>%
 adsl <- dm %>%
   ## derive treatment variables (TRT01P, TRT01A) ----
   # See also the "Visit and Period Variables" vignette
-  # (https://pharmaverse.github.io/admiral/articles/visits_periods.html#treatment_adsl)
+  # (https://pharmaverse.github.io/admiral/cran-release/articles/visits_periods.html#treatment_adsl)
   mutate(TRT01P = ARM, TRT01A = ACTARM) %>%
   ## derive treatment start date (TRTSDTM) ----
   derive_vars_merged(
