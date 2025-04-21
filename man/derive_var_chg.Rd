@@ -7,11 +7,7 @@
 derive_var_chg(dataset)
 }
 \arguments{
-\item{dataset}{Input dataset \code{AVAL} and \code{BASE} are expected.
-
-\describe{
-\item{Default value}{none}
-}}
+\item{dataset}{Input dataset \code{AVAL} and \code{BASE} are expected.}
 }
 \value{
 The input dataset with an additional column named \code{CHG}

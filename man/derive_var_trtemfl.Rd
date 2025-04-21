@@ -23,65 +23,23 @@ derive_var_trtemfl(
 \item{dataset}{Input dataset
 
 The variables specified by \code{start_date}, \code{end_date}, \code{trt_start_date},
-\code{trt_end_date}, \code{initial_intensity}, and \code{intensity} are expected.
+\code{trt_end_date}, \code{initial_intensity}, and \code{intensity} are expected.}
 
-\describe{
-\item{Default value}{none}
-}}
+\item{new_var}{New variable}
 
-\item{new_var}{New variable
+\item{start_date}{Event start date}
 
-\describe{
-\item{Default value}{\code{TRTEMFL}}
-}}
+\item{end_date}{Event end date}
 
-\item{start_date}{Event start date
+\item{trt_start_date}{Treatment start date}
 
-\describe{
-\item{Permitted values}{A symbol referring to a date or datetime variable of
-the input dataset}
-\item{Default value}{\code{ASTDTM}}
-}}
-
-\item{end_date}{Event end date
-
-\describe{
-\item{Permitted values}{A symbol referring to a date or datetime variable of
-the input dataset}
-\item{Default value}{\code{AENDTM}}
-}}
-
-\item{trt_start_date}{Treatment start date
-
-\describe{
-\item{Permitted values}{A symbol referring to a date or datetime variable of
-the input dataset}
-\item{Default value}{\code{TRTSDTM}}
-}}
-
-\item{trt_end_date}{Treatment end date
-
-\describe{
-\item{Permitted values}{A symbol referring to a date or datetime variable of
-the input dataset or \code{NULL}}
-\item{Default value}{\code{NULL}}
-}}
+\item{trt_end_date}{Treatment end date}
 
 \item{end_window}{If the argument is specified (in 'days'), events starting more than the specified
-number of days after end of treatment, are not flagged.
-
-\describe{
-\item{Permitted values}{A non-negative integer or \code{NULL}}
-\item{Default value}{\code{NULL}}
-}}
+number of days after end of treatment, are not flagged.}
 
 \item{ignore_time_for_trt_end}{If the argument is set to \code{TRUE}, the time part is ignored for checking if
-the event occurred more than \code{end_window} days after end of treatment.
-
-\describe{
-\item{Permitted values}{\code{TRUE}, \code{FALSE}}
-\item{Default value}{\code{TRUE}}
-}}
+the event occurred more than \code{end_window} days after end of treatment.}
 
 \item{initial_intensity}{Initial severity/intensity or toxicity
 
@@ -94,13 +52,7 @@ flagged.
 
 The values of the specified variable must be comparable with the usual
 comparison operators. I.e., if the intensity is greater than the initial
-intensity \code{initial_intensity < intensity} must evaluate to \code{TRUE}.
-
-\describe{
-\item{Permitted values}{A symbol referring to a variable of the input dataset
-or \code{NULL}}
-\item{Default value}{\code{NULL}}
-}}
+intensity \code{initial_intensity < intensity} must evaluate to \code{TRUE}.}
 
 \item{intensity}{Severity/intensity or toxicity
 
@@ -110,13 +62,7 @@ intensity is greater than the initial intensity), are flagged.
 
 The values of the specified variable must be comparable with the usual
 comparison operators. I.e., if the intensity is greater than the initial
-intensity \code{initial_intensity < intensity} must evaluate to \code{TRUE}.
-
-\describe{
-\item{Permitted values}{A symbol referring to a variable of the input dataset
-or \code{NULL}}
-\item{Default value}{\code{NULL}}
-}}
+intensity \code{initial_intensity < intensity} must evaluate to \code{TRUE}.}
 
 \item{group_var}{Grouping variable
 
@@ -125,22 +71,12 @@ of AE with multiple lines using a grouping variable.
 
 Events starting during treatment or before treatment and worsening afterward
 are flagged. Once an AE record in a group is flagged, all subsequent records
-in the treatment window are flagged regardless of severity.
-
-\describe{
-\item{Permitted values}{A symbol referring to a variable of the input dataset
-or \code{NULL}}
-\item{Default value}{\code{NULL}}
-}}
+in the treatment window are flagged regardless of severity.}
 
 \item{subject_keys}{Variables to uniquely identify a subject.
 
 A list of symbols created using \code{exprs()} is expected. This argument is only
-used when \code{group_var} is specified.
-
-\describe{
-\item{Default value}{\code{get_admiral_option("subject_keys")}}
-}}
+used when \code{group_var} is specified.}
 }
 \value{
 The input dataset with the variable specified by \code{new_var} added

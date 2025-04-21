@@ -7,20 +7,16 @@
 hello_admiral(exclamation = TRUE)
 }
 \arguments{
-\item{exclamation}{\code{TRUE} or \code{FALSE}
-
-\describe{
-\item{Default value}{\code{TRUE}}
-}}
+\item{exclamation}{\code{TRUE} or \code{FALSE}}
 }
 \value{
 A string that welcomes the user to the admiral family, with or without an exclamation point.
 }
 \description{
-This function displays a welcome message to users of the admiral package and is used for on-boarding purposes.
+This function displays a welcome message to users and is used for on-boarding purposes.
 }
 \details{
-The \code{exclamation} argument refers to the presence or absence of an exclamation point (e.g., "!") in the output.
+\code{exclamation} argument refers to the presence/absence of an exclamation point in the output.
 }
 \examples{
 # Display welcome message without an exclamation point
