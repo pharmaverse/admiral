@@ -1,12 +1,12 @@
 #' Welcome message function
 #'
 #' @description
-#' This function displays a welcome message to users of the admiral package and is used for on-boarding purposes.
+#' This function displays a welcome message to users and is used for on-boarding purposes.
 #'
 #' @param exclamation `TRUE` or `FALSE`
 #'
 #' @details
-#' The `exclamation` argument refers to the presence or absence of an exclamation point (e.g., "!") in the output.
+#' `exclamation` argument refers to the presence/absence of an exclamation point in the output.
 #'
 #' @return
 #'   A string that welcomes the user to the admiral family, with or without an exclamation point.
