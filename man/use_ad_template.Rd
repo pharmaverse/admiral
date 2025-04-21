@@ -63,6 +63,7 @@ if (interactive()) {
 }
 \seealso{
 Utilities used for examples and template scripts: 
+\code{\link{hello_admiral}()},
 \code{\link{list_all_templates}()}
 }
 \concept{utils_examples}

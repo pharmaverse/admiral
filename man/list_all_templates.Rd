@@ -24,6 +24,7 @@ list_all_templates()
 }
 \seealso{
 Utilities used for examples and template scripts: 
+\code{\link{hello_admiral}()},
 \code{\link{use_ad_template}()}
 }
 \concept{utils_examples}
