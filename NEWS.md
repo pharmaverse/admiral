@@ -9,7 +9,7 @@
     readability. See `derive_extreme_records()` for an example.
     - The output of the structured examples used for complex functions is
     displayed in the help pages in RStudio.
-- New function `my_first_fcn()` displays a welcome message to users of the admiral package and is used for onboarding purposes [#1839](https://github.com/pharmaverse/admiral/issues/1839#event-17076591355).
+- New function `hello_admiral()` displays a welcome message to users of the admiral package and is used for onboarding purposes [#1839](https://github.com/pharmaverse/admiral/issues/1839#event-17076591355).
 
 ## Updates of Existing Functions
 
