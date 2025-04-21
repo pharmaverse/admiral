@@ -1,7 +1,7 @@
 #' Welcome message function
 #'
 #' @description
-#' This function displays a welcome message to users of the admiral package and is used for onboarding purposes.
+#' This function displays a welcome message to users of the admiral package and is used for on-boarding purposes.
 #'
 #' @param exclamation `TRUE` or `FALSE`
 #'
