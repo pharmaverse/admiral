@@ -17,7 +17,7 @@ hello_admiral(exclamation = TRUE)
 A string that welcomes the user to the admiral family, with or without an exclamation point.
 }
 \description{
-This function displays a welcome message to users of the admiral package and is used for onboarding purposes.
+This function displays a welcome message to users of the admiral package and is used for on-boarding purposes.
 }
 \details{
 The \code{exclamation} argument refers to the presence or absence of an exclamation point (e.g., "!") in the output.
