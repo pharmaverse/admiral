@@ -177,7 +177,7 @@ derive_summary_records <- function(dataset = NULL,
                                    set_values_to,
                                    missing_values = NULL) {
   assert_vars(by_vars)
-  assert_data_frame(dataset, required_vars = by_vars, optional = TRUE)
+  assert_data_frame(dataset, optional = TRUE)
   assert_data_frame(dataset_add, required_vars = by_vars)
   assert_data_frame(
     dataset_ref,
