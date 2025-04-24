@@ -121,98 +121,10 @@ When all records have same values within \code{by_vars} then this function will
 retain those common values in the newly derived records. Otherwise new value
 will be set to \code{NA}.
 }
-\examples{
-library(tibble)
-library(dplyr)
-
-adeg <- tribble(
-  ~USUBJID,   ~EGSEQ, ~PARAM,             ~AVISIT,    ~EGDTC,             ~AVAL, ~TRTA,
-  "XYZ-1001", 1,      "QTcF Int. (msec)", "Baseline", "2016-02-24T07:50", 385,   NA_character_,
-  "XYZ-1001", 2,      "QTcF Int. (msec)", "Baseline", "2016-02-24T07:52", 399,   NA_character_,
-  "XYZ-1001", 3,      "QTcF Int. (msec)", "Baseline", "2016-02-24T07:56", 396,   NA_character_,
-  "XYZ-1001", 4,      "QTcF Int. (msec)", "Visit 2",  "2016-03-08T09:45", 384,   "Placebo",
-  "XYZ-1001", 5,      "QTcF Int. (msec)", "Visit 2",  "2016-03-08T09:48", 393,   "Placebo",
-  "XYZ-1001", 6,      "QTcF Int. (msec)", "Visit 2",  "2016-03-08T09:51", 388,   "Placebo",
-  "XYZ-1001", 7,      "QTcF Int. (msec)", "Visit 3",  "2016-03-22T10:45", 385,   "Placebo",
-  "XYZ-1001", 8,      "QTcF Int. (msec)", "Visit 3",  "2016-03-22T10:48", 394,   "Placebo",
-  "XYZ-1001", 9,      "QTcF Int. (msec)", "Visit 3",  "2016-03-22T10:51", 402,   "Placebo",
-  "XYZ-1002", 1,      "QTcF Int. (msec)", "Baseline", "2016-02-22T07:58", 399,   NA_character_,
-  "XYZ-1002", 2,      "QTcF Int. (msec)", "Baseline", "2016-02-22T07:58", 410,   NA_character_,
-  "XYZ-1002", 3,      "QTcF Int. (msec)", "Baseline", "2016-02-22T08:01", 392,   NA_character_,
-  "XYZ-1002", 4,      "QTcF Int. (msec)", "Visit 2",  "2016-03-06T09:50", 401,   "Active 20mg",
-  "XYZ-1002", 5,      "QTcF Int. (msec)", "Visit 2",  "2016-03-06T09:53", 407,   "Active 20mg",
-  "XYZ-1002", 6,      "QTcF Int. (msec)", "Visit 2",  "2016-03-06T09:56", 400,   "Active 20mg",
-  "XYZ-1002", 7,      "QTcF Int. (msec)", "Visit 3",  "2016-03-24T10:50", 412,   "Active 20mg",
-  "XYZ-1002", 8,      "QTcF Int. (msec)", "Visit 3",  "2016-03-24T10:53", 414,   "Active 20mg",
-  "XYZ-1002", 9,      "QTcF Int. (msec)", "Visit 3",  "2016-03-24T10:56", 402,   "Active 20mg"
-) \%>\%
-  mutate(
-    ADTM = convert_dtc_to_dtm(EGDTC)
-  )
-
-# Summarize the average of the triplicate ECG interval values (AVAL)
-derive_summary_records(
-  adeg,
-  dataset_add = adeg,
-  by_vars = exprs(USUBJID, PARAM, AVISIT),
-  set_values_to = exprs(
-    AVAL = mean(AVAL, na.rm = TRUE),
-    DTYPE = "AVERAGE"
-  )
-) \%>\%
-  arrange(USUBJID, AVISIT)
-
-# Derive more than one summary variable
-derive_summary_records(
-  adeg,
-  dataset_add = adeg,
-  by_vars = exprs(USUBJID, PARAM, AVISIT),
-  set_values_to = exprs(
-    AVAL = mean(AVAL),
-    ADTM = max(ADTM),
-    DTYPE = "AVERAGE"
-  )
-) \%>\%
-  arrange(USUBJID, AVISIT) \%>\%
-  select(-EGSEQ, -TRTA)
-
-# Sample ADEG dataset with triplicate record for only AVISIT = 'Baseline'
-adeg <- tribble(
-  ~USUBJID,   ~EGSEQ, ~PARAM,             ~AVISIT,    ~EGDTC,             ~AVAL, ~TRTA,
-  "XYZ-1001", 1,      "QTcF Int. (msec)", "Baseline", "2016-02-24T07:50", 385,   NA_character_,
-  "XYZ-1001", 2,      "QTcF Int. (msec)", "Baseline", "2016-02-24T07:52", 399,   NA_character_,
-  "XYZ-1001", 3,      "QTcF Int. (msec)", "Baseline", "2016-02-24T07:56", 396,   NA_character_,
-  "XYZ-1001", 4,      "QTcF Int. (msec)", "Visit 2",  "2016-03-08T09:48", 393,   "Placebo",
-  "XYZ-1001", 5,      "QTcF Int. (msec)", "Visit 2",  "2016-03-08T09:51", 388,   "Placebo",
-  "XYZ-1001", 6,      "QTcF Int. (msec)", "Visit 3",  "2016-03-22T10:48", 394,   "Placebo",
-  "XYZ-1001", 7,      "QTcF Int. (msec)", "Visit 3",  "2016-03-22T10:51", 402,   "Placebo",
-  "XYZ-1002", 1,      "QTcF Int. (msec)", "Baseline", "2016-02-22T07:58", 399,   NA_character_,
-  "XYZ-1002", 2,      "QTcF Int. (msec)", "Baseline", "2016-02-22T07:58", 410,   NA_character_,
-  "XYZ-1002", 3,      "QTcF Int. (msec)", "Baseline", "2016-02-22T08:01", 392,   NA_character_,
-  "XYZ-1002", 4,      "QTcF Int. (msec)", "Visit 2",  "2016-03-06T09:53", 407,   "Active 20mg",
-  "XYZ-1002", 5,      "QTcF Int. (msec)", "Visit 2",  "2016-03-06T09:56", 400,   "Active 20mg",
-  "XYZ-1002", 6,      "QTcF Int. (msec)", "Visit 3",  "2016-03-24T10:53", 414,   "Active 20mg",
-  "XYZ-1002", 7,      "QTcF Int. (msec)", "Visit 3",  "2016-03-24T10:56", 402,   "Active 20mg"
-)
-
-# Compute the average of AVAL only if there are more than 2 records within the
-# by group
-derive_summary_records(
-  adeg,
-  dataset_add = adeg,
-  by_vars = exprs(USUBJID, PARAM, AVISIT),
-  filter_add = n() > 2,
-  set_values_to = exprs(
-    AVAL = mean(AVAL, na.rm = TRUE),
-    DTYPE = "AVERAGE"
-  )
-) \%>\%
-  arrange(USUBJID, AVISIT)
-}
 \seealso{
 \code{\link[=get_summary_records]{get_summary_records()}}, \code{\link[=derive_var_merged_summary]{derive_var_merged_summary()}}
 
-BDS-Findings Functions for adding Parameters/Records: 
+BDS-Findings Functions for adding Parameters/Records:
 \code{\link{default_qtc_paramcd}()},
 \code{\link{derive_expected_records}()},
 \code{\link{derive_extreme_event}()},
@@ -232,3 +144,148 @@ BDS-Findings Functions for adding Parameters/Records:
 }
 \concept{der_prm_bds_findings}
 \keyword{der_prm_bds_findings}
+\section{Examples}{
+\subsection{Data setup}{
+
+The following examples use the ECG dataset below as a basis.
+
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{library(tibble, warn.conflicts = FALSE)
+library(dplyr, warn.conflicts = FALSE)
+
+adeg <- tribble(
+  ~USUBJID,   ~EGSEQ, ~PARAM,             ~AVISIT,    ~EGDTC,             ~AVAL, ~TRTA,
+  "XYZ-1001", 1,      "QTcF Int. (msec)", "Baseline", "2016-02-24T07:50", 385,   NA_character_,
+  "XYZ-1001", 2,      "QTcF Int. (msec)", "Baseline", "2016-02-24T07:52", 399,   NA_character_,
+  "XYZ-1001", 3,      "QTcF Int. (msec)", "Baseline", "2016-02-24T07:56", 396,   NA_character_,
+  "XYZ-1001", 4,      "QTcF Int. (msec)", "Visit 2",  "2016-03-08T09:48", 393,   "Placebo",
+  "XYZ-1001", 5,      "QTcF Int. (msec)", "Visit 2",  "2016-03-08T09:51", 388,   "Placebo",
+  "XYZ-1001", 6,      "QTcF Int. (msec)", "Visit 3",  "2016-03-22T10:48", 394,   "Placebo",
+  "XYZ-1001", 7,      "QTcF Int. (msec)", "Visit 3",  "2016-03-22T10:51", 402,   "Placebo",
+  "XYZ-1002", 1,      "QTcF Int. (msec)", "Baseline", "2016-02-22T07:58", 399,   NA_character_,
+  "XYZ-1002", 2,      "QTcF Int. (msec)", "Baseline", "2016-02-22T07:58", 410,   NA_character_,
+  "XYZ-1002", 3,      "QTcF Int. (msec)", "Baseline", "2016-02-22T08:01", 392,   NA_character_,
+  "XYZ-1002", 4,      "QTcF Int. (msec)", "Visit 2",  "2016-03-06T09:53", 407,   "Active 20mg",
+  "XYZ-1002", 5,      "QTcF Int. (msec)", "Visit 2",  "2016-03-06T09:56", 400,   "Active 20mg",
+  "XYZ-1002", 6,      "QTcF Int. (msec)", "Visit 3",  "2016-03-24T10:53", 414,   "Active 20mg",
+  "XYZ-1002", 7,      "QTcF Int. (msec)", "Visit 3",  "2016-03-24T10:56", 402,   "Active 20mg"
+) %>%
+  mutate(ADTM = convert_dtc_to_dtm(EGDTC))}\if{html}{\out{</div>}}}
+\subsection{Summarize one or more variables using summary functions}{
+
+A derived record is generated for each subject, containing the mean of the triplicate ECG
+interval values (AVAL) and the latest measurement's time (ADTM) by using summary functions
+within \code{set_values_to}.
+
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{
+derive_summary_records(
+  adeg,
+  dataset_add = adeg,
+  by_vars = exprs(USUBJID, PARAM, AVISIT),
+  set_values_to = exprs(
+    AVAL = mean(AVAL, na.rm = TRUE),
+    ADTM = max(ADTM),
+    DTYPE = "AVERAGE"
+  )
+) %>%
+  arrange(USUBJID, AVISIT) %>%
+  select(-EGSEQ, -TRTA)
+#> # A tibble: 20 × 7
+#>    USUBJID  PARAM            AVISIT   EGDTC       AVAL ADTM                DTYPE
+#>    <chr>    <chr>            <chr>    <chr>      <dbl> <dttm>              <chr>
+#>  1 XYZ-1001 QTcF Int. (msec) Baseline 2016-02-2…  385  2016-02-24 07:50:00 <NA>
+#>  2 XYZ-1001 QTcF Int. (msec) Baseline 2016-02-2…  399  2016-02-24 07:52:00 <NA>
+#>  3 XYZ-1001 QTcF Int. (msec) Baseline 2016-02-2…  396  2016-02-24 07:56:00 <NA>
+#>  4 XYZ-1001 QTcF Int. (msec) Baseline <NA>        393. 2016-02-24 07:56:00 AVER…
+#>  5 XYZ-1001 QTcF Int. (msec) Visit 2  2016-03-0…  393  2016-03-08 09:48:00 <NA>
+#>  6 XYZ-1001 QTcF Int. (msec) Visit 2  2016-03-0…  388  2016-03-08 09:51:00 <NA>
+#>  7 XYZ-1001 QTcF Int. (msec) Visit 2  <NA>        390. 2016-03-08 09:51:00 AVER…
+#>  8 XYZ-1001 QTcF Int. (msec) Visit 3  2016-03-2…  394  2016-03-22 10:48:00 <NA>
+#>  9 XYZ-1001 QTcF Int. (msec) Visit 3  2016-03-2…  402  2016-03-22 10:51:00 <NA>
+#> 10 XYZ-1001 QTcF Int. (msec) Visit 3  <NA>        398  2016-03-22 10:51:00 AVER…
+#> 11 XYZ-1002 QTcF Int. (msec) Baseline 2016-02-2…  399  2016-02-22 07:58:00 <NA>
+#> 12 XYZ-1002 QTcF Int. (msec) Baseline 2016-02-2…  410  2016-02-22 07:58:00 <NA>
+#> 13 XYZ-1002 QTcF Int. (msec) Baseline 2016-02-2…  392  2016-02-22 08:01:00 <NA>
+#> 14 XYZ-1002 QTcF Int. (msec) Baseline <NA>        400. 2016-02-22 08:01:00 AVER…
+#> 15 XYZ-1002 QTcF Int. (msec) Visit 2  2016-03-0…  407  2016-03-06 09:53:00 <NA>
+#> 16 XYZ-1002 QTcF Int. (msec) Visit 2  2016-03-0…  400  2016-03-06 09:56:00 <NA>
+#> 17 XYZ-1002 QTcF Int. (msec) Visit 2  <NA>        404. 2016-03-06 09:56:00 AVER…
+#> 18 XYZ-1002 QTcF Int. (msec) Visit 3  2016-03-2…  414  2016-03-24 10:53:00 <NA>
+#> 19 XYZ-1002 QTcF Int. (msec) Visit 3  2016-03-2…  402  2016-03-24 10:56:00 <NA>
+#> 20 XYZ-1002 QTcF Int. (msec) Visit 3  <NA>        408  2016-03-24 10:56:00 AVER…}\if{html}{\out{</div>}}}
+\subsection{Restricting source records (\code{filter_add})}{
+
+The \code{filter_add} argument can be used to restrict the records that are being summarized.
+For instance, the mean of the triplicates above can be computed only for the baseline records
+by passing \verb{filter_add = AVISIT == "Baseline}.
+
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{
+derive_summary_records(
+  adeg,
+  dataset_add = adeg,
+  by_vars = exprs(USUBJID, PARAM, AVISIT),
+  filter_add = AVISIT == "Baseline",
+  set_values_to = exprs(
+    AVAL = mean(AVAL, na.rm = TRUE),
+    DTYPE = "AVERAGE"
+  )
+) %>%
+  arrange(USUBJID, AVISIT) %>%
+  select(-EGSEQ, -TRTA)
+#> # A tibble: 16 × 7
+#>    USUBJID  PARAM            AVISIT   EGDTC       AVAL ADTM                DTYPE
+#>    <chr>    <chr>            <chr>    <chr>      <dbl> <dttm>              <chr>
+#>  1 XYZ-1001 QTcF Int. (msec) Baseline 2016-02-2…  385  2016-02-24 07:50:00 <NA>
+#>  2 XYZ-1001 QTcF Int. (msec) Baseline 2016-02-2…  399  2016-02-24 07:52:00 <NA>
+#>  3 XYZ-1001 QTcF Int. (msec) Baseline 2016-02-2…  396  2016-02-24 07:56:00 <NA>
+#>  4 XYZ-1001 QTcF Int. (msec) Baseline <NA>        393. NA                  AVER…
+#>  5 XYZ-1001 QTcF Int. (msec) Visit 2  2016-03-0…  393  2016-03-08 09:48:00 <NA>
+#>  6 XYZ-1001 QTcF Int. (msec) Visit 2  2016-03-0…  388  2016-03-08 09:51:00 <NA>
+#>  7 XYZ-1001 QTcF Int. (msec) Visit 3  2016-03-2…  394  2016-03-22 10:48:00 <NA>
+#>  8 XYZ-1001 QTcF Int. (msec) Visit 3  2016-03-2…  402  2016-03-22 10:51:00 <NA>
+#>  9 XYZ-1002 QTcF Int. (msec) Baseline 2016-02-2…  399  2016-02-22 07:58:00 <NA>
+#> 10 XYZ-1002 QTcF Int. (msec) Baseline 2016-02-2…  410  2016-02-22 07:58:00 <NA>
+#> 11 XYZ-1002 QTcF Int. (msec) Baseline 2016-02-2…  392  2016-02-22 08:01:00 <NA>
+#> 12 XYZ-1002 QTcF Int. (msec) Baseline <NA>        400. NA                  AVER…
+#> 13 XYZ-1002 QTcF Int. (msec) Visit 2  2016-03-0…  407  2016-03-06 09:53:00 <NA>
+#> 14 XYZ-1002 QTcF Int. (msec) Visit 2  2016-03-0…  400  2016-03-06 09:56:00 <NA>
+#> 15 XYZ-1002 QTcF Int. (msec) Visit 3  2016-03-2…  414  2016-03-24 10:53:00 <NA>
+#> 16 XYZ-1002 QTcF Int. (msec) Visit 3  2016-03-2…  402  2016-03-24 10:56:00 <NA> }\if{html}{\out{</div>}}
+
+Summary functions can also be used within \code{filter_add} to filter based on conditions applied
+to the whole of the by group specified in \code{by_vars}. For instance, the mean of the
+triplicates can be computed only for by groups  which do indeed contain three records by passing
+\code{filter_add = n() > 2}.
+
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{
+derive_summary_records(
+  adeg,
+  dataset_add = adeg,
+  by_vars = exprs(USUBJID, PARAM, AVISIT),
+  filter_add = n() > 2,
+  set_values_to = exprs(
+    AVAL = mean(AVAL, na.rm = TRUE),
+    DTYPE = "AVERAGE"
+  )
+) %>%
+  arrange(USUBJID, AVISIT) %>%
+  select(-EGSEQ, -TRTA)
+#> # A tibble: 16 × 7
+#>    USUBJID  PARAM            AVISIT   EGDTC       AVAL ADTM                DTYPE
+#>    <chr>    <chr>            <chr>    <chr>      <dbl> <dttm>              <chr>
+#>  1 XYZ-1001 QTcF Int. (msec) Baseline 2016-02-2…  385  2016-02-24 07:50:00 <NA>
+#>  2 XYZ-1001 QTcF Int. (msec) Baseline 2016-02-2…  399  2016-02-24 07:52:00 <NA>
+#>  3 XYZ-1001 QTcF Int. (msec) Baseline 2016-02-2…  396  2016-02-24 07:56:00 <NA>
+#>  4 XYZ-1001 QTcF Int. (msec) Baseline <NA>        393. NA                  AVER…
+#>  5 XYZ-1001 QTcF Int. (msec) Visit 2  2016-03-0…  393  2016-03-08 09:48:00 <NA>
+#>  6 XYZ-1001 QTcF Int. (msec) Visit 2  2016-03-0…  388  2016-03-08 09:51:00 <NA>
+#>  7 XYZ-1001 QTcF Int. (msec) Visit 3  2016-03-2…  394  2016-03-22 10:48:00 <NA>
+#>  8 XYZ-1001 QTcF Int. (msec) Visit 3  2016-03-2…  402  2016-03-22 10:51:00 <NA>
+#>  9 XYZ-1002 QTcF Int. (msec) Baseline 2016-02-2…  399  2016-02-22 07:58:00 <NA>
+#> 10 XYZ-1002 QTcF Int. (msec) Baseline 2016-02-2…  410  2016-02-22 07:58:00 <NA>
+#> 11 XYZ-1002 QTcF Int. (msec) Baseline 2016-02-2…  392  2016-02-22 08:01:00 <NA>
+#> 12 XYZ-1002 QTcF Int. (msec) Baseline <NA>        400. NA                  AVER…
+#> 13 XYZ-1002 QTcF Int. (msec) Visit 2  2016-03-0…  407  2016-03-06 09:53:00 <NA>
+#> 14 XYZ-1002 QTcF Int. (msec) Visit 2  2016-03-0…  400  2016-03-06 09:56:00 <NA>
+#> 15 XYZ-1002 QTcF Int. (msec) Visit 3  2016-03-2…  414  2016-03-24 10:53:00 <NA>
+#> 16 XYZ-1002 QTcF Int. (msec) Visit 3  2016-03-2…  402  2016-03-24 10:56:00 <NA> }\if{html}{\out{</div>}}}}
+

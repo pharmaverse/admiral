@@ -15,7 +15,7 @@
 #'
 #' @param dataset_add Additional dataset
 #'
-#'    The variables specified for `by_vars` are expected.
+#'   The variables specified for `by_vars` are expected.
 #'   Observations from the specified dataset are going to be used to calculate and added
 #'   as new records to the input dataset (`dataset`).
 #'
@@ -82,62 +82,16 @@
 #'
 #' @export
 #'
-#' @examples
-#' library(tibble)
-#' library(dplyr)
+#' @examplesx
 #'
-#' adeg <- tribble(
-#'   ~USUBJID,   ~EGSEQ, ~PARAM,             ~AVISIT,    ~EGDTC,             ~AVAL, ~TRTA,
-#'   "XYZ-1001", 1,      "QTcF Int. (msec)", "Baseline", "2016-02-24T07:50", 385,   NA_character_,
-#'   "XYZ-1001", 2,      "QTcF Int. (msec)", "Baseline", "2016-02-24T07:52", 399,   NA_character_,
-#'   "XYZ-1001", 3,      "QTcF Int. (msec)", "Baseline", "2016-02-24T07:56", 396,   NA_character_,
-#'   "XYZ-1001", 4,      "QTcF Int. (msec)", "Visit 2",  "2016-03-08T09:45", 384,   "Placebo",
-#'   "XYZ-1001", 5,      "QTcF Int. (msec)", "Visit 2",  "2016-03-08T09:48", 393,   "Placebo",
-#'   "XYZ-1001", 6,      "QTcF Int. (msec)", "Visit 2",  "2016-03-08T09:51", 388,   "Placebo",
-#'   "XYZ-1001", 7,      "QTcF Int. (msec)", "Visit 3",  "2016-03-22T10:45", 385,   "Placebo",
-#'   "XYZ-1001", 8,      "QTcF Int. (msec)", "Visit 3",  "2016-03-22T10:48", 394,   "Placebo",
-#'   "XYZ-1001", 9,      "QTcF Int. (msec)", "Visit 3",  "2016-03-22T10:51", 402,   "Placebo",
-#'   "XYZ-1002", 1,      "QTcF Int. (msec)", "Baseline", "2016-02-22T07:58", 399,   NA_character_,
-#'   "XYZ-1002", 2,      "QTcF Int. (msec)", "Baseline", "2016-02-22T07:58", 410,   NA_character_,
-#'   "XYZ-1002", 3,      "QTcF Int. (msec)", "Baseline", "2016-02-22T08:01", 392,   NA_character_,
-#'   "XYZ-1002", 4,      "QTcF Int. (msec)", "Visit 2",  "2016-03-06T09:50", 401,   "Active 20mg",
-#'   "XYZ-1002", 5,      "QTcF Int. (msec)", "Visit 2",  "2016-03-06T09:53", 407,   "Active 20mg",
-#'   "XYZ-1002", 6,      "QTcF Int. (msec)", "Visit 2",  "2016-03-06T09:56", 400,   "Active 20mg",
-#'   "XYZ-1002", 7,      "QTcF Int. (msec)", "Visit 3",  "2016-03-24T10:50", 412,   "Active 20mg",
-#'   "XYZ-1002", 8,      "QTcF Int. (msec)", "Visit 3",  "2016-03-24T10:53", 414,   "Active 20mg",
-#'   "XYZ-1002", 9,      "QTcF Int. (msec)", "Visit 3",  "2016-03-24T10:56", 402,   "Active 20mg"
-#' ) %>%
-#'   mutate(
-#'     ADTM = convert_dtc_to_dtm(EGDTC)
-#'   )
+#' @caption Data setup
 #'
-#' # Summarize the average of the triplicate ECG interval values (AVAL)
-#' derive_summary_records(
-#'   adeg,
-#'   dataset_add = adeg,
-#'   by_vars = exprs(USUBJID, PARAM, AVISIT),
-#'   set_values_to = exprs(
-#'     AVAL = mean(AVAL, na.rm = TRUE),
-#'     DTYPE = "AVERAGE"
-#'   )
-#' ) %>%
-#'   arrange(USUBJID, AVISIT)
+#' @info The following examples use the ECG dataset below as a basis.
 #'
-#' # Derive more than one summary variable
-#' derive_summary_records(
-#'   adeg,
-#'   dataset_add = adeg,
-#'   by_vars = exprs(USUBJID, PARAM, AVISIT),
-#'   set_values_to = exprs(
-#'     AVAL = mean(AVAL),
-#'     ADTM = max(ADTM),
-#'     DTYPE = "AVERAGE"
-#'   )
-#' ) %>%
-#'   arrange(USUBJID, AVISIT) %>%
-#'   select(-EGSEQ, -TRTA)
+#' @code
+#' library(tibble, warn.conflicts = FALSE)
+#' library(dplyr, warn.conflicts = FALSE)
 #'
-#' # Sample ADEG dataset with triplicate record for only AVISIT = 'Baseline'
 #' adeg <- tribble(
 #'   ~USUBJID,   ~EGSEQ, ~PARAM,             ~AVISIT,    ~EGDTC,             ~AVAL, ~TRTA,
 #'   "XYZ-1001", 1,      "QTcF Int. (msec)", "Baseline", "2016-02-24T07:50", 385,   NA_character_,
@@ -154,10 +108,58 @@
 #'   "XYZ-1002", 5,      "QTcF Int. (msec)", "Visit 2",  "2016-03-06T09:56", 400,   "Active 20mg",
 #'   "XYZ-1002", 6,      "QTcF Int. (msec)", "Visit 3",  "2016-03-24T10:53", 414,   "Active 20mg",
 #'   "XYZ-1002", 7,      "QTcF Int. (msec)", "Visit 3",  "2016-03-24T10:56", 402,   "Active 20mg"
-#' )
+#' ) %>%
+#'   mutate(ADTM = convert_dtc_to_dtm(EGDTC))
 #'
-#' # Compute the average of AVAL only if there are more than 2 records within the
-#' # by group
+#' @caption Summarize one or more variables using summary functions
+#'
+#' @info A derived record is generated for each subject, containing the mean of the triplicate ECG
+#' interval values (AVAL) and the latest measurement's time (ADTM) by using summary functions
+#' within `set_values_to`.
+#'
+#' @code
+#'
+#' derive_summary_records(
+#'   adeg,
+#'   dataset_add = adeg,
+#'   by_vars = exprs(USUBJID, PARAM, AVISIT),
+#'   set_values_to = exprs(
+#'     AVAL = mean(AVAL, na.rm = TRUE),
+#'     ADTM = max(ADTM),
+#'     DTYPE = "AVERAGE"
+#'   )
+#' ) %>%
+#'   arrange(USUBJID, AVISIT) %>%
+#'   select(-EGSEQ, -TRTA)
+#'
+#' @caption Restricting source records (`filter_add`)
+#'
+#' @info The `filter_add` argument can be used to restrict the records that are being summarized.
+#' For instance, the mean of the triplicates above can be computed only for the baseline records
+#' by passing `filter_add = AVISIT == "Baseline"`.
+#'
+#' @code
+#'
+#' derive_summary_records(
+#'   adeg,
+#'   dataset_add = adeg,
+#'   by_vars = exprs(USUBJID, PARAM, AVISIT),
+#'   filter_add = AVISIT == "Baseline",
+#'   set_values_to = exprs(
+#'     AVAL = mean(AVAL, na.rm = TRUE),
+#'     DTYPE = "AVERAGE"
+#'   )
+#' ) %>%
+#'   arrange(USUBJID, AVISIT) %>%
+#'   select(-EGSEQ, -TRTA)
+#'
+#' @info Summary functions can also be used within `filter_add` to filter based on conditions applied
+#' to the whole of the by group specified in `by_vars`. For instance, the mean of the
+#' triplicates can be computed only for by groups  which do indeed contain three records by passing
+#' `filter_add = n() > 2`.
+#'
+#' @code
+#'
 #' derive_summary_records(
 #'   adeg,
 #'   dataset_add = adeg,
@@ -168,7 +170,9 @@
 #'     DTYPE = "AVERAGE"
 #'   )
 #' ) %>%
-#'   arrange(USUBJID, AVISIT)
+#'   arrange(USUBJID, AVISIT) %>%
+#'   select(-EGSEQ, -TRTA)
+
 derive_summary_records <- function(dataset = NULL,
                                    dataset_add,
                                    dataset_ref = NULL,
