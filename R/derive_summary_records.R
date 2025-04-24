@@ -112,11 +112,10 @@
 #' @caption Summarize one or more variables using summary functions
 #'
 #' @info A derived record is generated for each subject, containing the mean of the triplicate ECG
-#' interval values (AVAL) and the latest measurement's time (ADTM) by using summary functions
-#' within `set_values_to`.
+#' interval values (`AVAL`) and the latest measurement's time (`ADTM`) by using summary functions
+#' within the `set_values_to` argument.
 #'
 #' @code
-#'
 #' derive_summary_records(
 #'   adeg,
 #'   dataset_add = adeg,
@@ -136,7 +135,6 @@
 #' `AVAL` from the summary record rather than the source records.
 #'
 #' @code
-#'
 #' derive_summary_records(
 #'   adeg,
 #'   dataset_add = adeg,
@@ -157,7 +155,6 @@
 #' by passing `filter_add = AVISIT == "Baseline"`.
 #'
 #' @code
-#'
 #' derive_summary_records(
 #'   adeg,
 #'   dataset_add = adeg,
@@ -176,7 +173,6 @@
 #' by passing `filter_add = n() > 2`.
 #'
 #' @code
-#'
 #' derive_summary_records(
 #'   adeg,
 #'   dataset_add = adeg,
@@ -196,10 +192,10 @@
 #' the input dataset `adeg_allparamvis` (containing an extra `"Visit 2"` for patient
 #' `1002`) ensures a summary record is derived for that visit as well. For these records,
 #' the values of the analysis variables to be populated should be specified within the
-#' `missing_values` argument.
+#' `missing_values` argument. Here, `DTYPE = "PHANTOM"` was chosen as `AVAL` is set to
+#' missing.
 #'
 #' @code
-#'
 #' adeg_allparamvis <- tribble(
 #'   ~USUBJID,   ~PARAM,             ~AVISIT,
 #'   "XYZ-1001", "QTcF Int. (msec)", "Baseline",
