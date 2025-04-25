@@ -118,9 +118,8 @@ records has been added to a dataset, if the derivation deviates from the
 standard derivation of the parameter.
 }
 \details{
-When all records have same values within \code{by_vars} then this function will
-retain those common values in the newly derived records. Otherwise new value
-will be set to \code{NA}.
+For the newly derived records, only variables specified within \code{by_vars} or
+\code{set_values_to} will be populated. All other variables will be set to \code{NA}.
 }
 \seealso{
 \code{\link[=derive_var_merged_summary]{derive_var_merged_summary()}}

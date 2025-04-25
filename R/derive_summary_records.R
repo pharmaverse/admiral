@@ -8,9 +8,8 @@
 #' standard derivation of the parameter.
 #'
 #' @details
-#' When all records have same values within `by_vars` then this function will
-#' retain those common values in the newly derived records. Otherwise new value
-#' will be set to `NA`.
+#' For the newly derived records, only variables specified within `by_vars` or
+#' `set_values_to` will be populated. All other variables will be set to `NA`.
 #'
 #' @param dataset  `r roxygen_param_dataset(expected_vars = c("by_vars"))`
 #'
