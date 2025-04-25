@@ -84,7 +84,7 @@ test_that("derive_summary_records Test 3: Errors", {
   # Is by_vars `exprs()` object?
   expect_error(
     derive_summary_records(
-      input,
+      dataset_add = input,
       by_vars = "x",
       set_values_to = exprs(
         z = mean(z)
@@ -95,7 +95,7 @@ test_that("derive_summary_records Test 3: Errors", {
   # Does by_vars exist in input dataset?
   expect_error(
     derive_summary_records(
-      input,
+      dataset_add = input,
       by_vars = exprs(a),
       set_values_to = exprs(
         z = mean(z)
