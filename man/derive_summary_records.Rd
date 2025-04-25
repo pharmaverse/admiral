@@ -114,7 +114,8 @@ A data frame with derived records appended to original dataset.
 It is not uncommon to have an analysis need whereby one needs to derive an
 analysis value (\code{AVAL}) from multiple records. The ADaM basic dataset
 structure variable \code{DTYPE} is available to indicate when a new derived
-records has been added to a dataset.
+records has been added to a dataset, if the derivation deviates from the
+standard derivation of the parameter.
 }
 \details{
 When all records have same values within \code{by_vars} then this function will
@@ -122,7 +123,7 @@ retain those common values in the newly derived records. Otherwise new value
 will be set to \code{NA}.
 }
 \seealso{
-\code{\link[=get_summary_records]{get_summary_records()}}, \code{\link[=derive_var_merged_summary]{derive_var_merged_summary()}}
+\code{\link[=derive_var_merged_summary]{derive_var_merged_summary()}}
 
 BDS-Findings Functions for adding Parameters/Records: 
 \code{\link{default_qtc_paramcd}()},

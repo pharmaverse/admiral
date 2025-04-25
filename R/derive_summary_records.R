@@ -4,7 +4,8 @@
 #' It is not uncommon to have an analysis need whereby one needs to derive an
 #' analysis value (`AVAL`) from multiple records. The ADaM basic dataset
 #' structure variable `DTYPE` is available to indicate when a new derived
-#' records has been added to a dataset.
+#' records has been added to a dataset, if the derivation deviates from the
+#' standard derivation of the parameter.
 #'
 #' @details
 #' When all records have same values within `by_vars` then this function will
@@ -78,7 +79,7 @@
 #' @family der_prm_bds_findings
 #' @keywords der_prm_bds_findings
 #'
-#' @seealso [get_summary_records()], [derive_var_merged_summary()]
+#' @seealso [derive_var_merged_summary()]
 #'
 #' @export
 #'
