@@ -533,17 +533,17 @@ test_that("get_joined_data Test 15: `first_cond_lower` works", {
 test_that("derive_vars_joined Test 15: filter_add is not ignored when join_type != 'all'", {
   adbds <- tibble::tribble(
     ~subj, ~day, ~val,
-    "1",    15,   -1,
-    "1",    17,    0,
-    "1",    20,    1
+    "1", 15, -1,
+    "1", 17, 0,
+    "1", 20, 1
   )
 
   # Test with join_type = "before"
   expected_before <- tibble::tribble(
     ~subj, ~day, ~val, ~lastposval,
-    "1",    15,   -1,         NA,
-    "1",    17,    0,          0,
-    "1",    20,    1,          1
+    "1", 15, -1, NA,
+    "1", 17, 0, 0,
+    "1", 20, 1, 1
   )
 
   expect_dfs_equal(
@@ -564,9 +564,9 @@ test_that("derive_vars_joined Test 15: filter_add is not ignored when join_type 
   # Test with join_type = "after"
   expected_after <- tibble::tribble(
     ~subj, ~day, ~val, ~lastposval,
-    "1",    15,   -1,          1,
-    "1",    17,    0,         NA,
-    "1",    20,    1,         NA
+    "1", 15, -1, 1,
+    "1", 17, 0, NA,
+    "1", 20, 1, NA
   )
 
   expect_dfs_equal(
