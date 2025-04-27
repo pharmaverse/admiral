@@ -10,13 +10,23 @@ create_query_data(queries, version = NULL, get_terms_fun = NULL)
 \arguments{
 \item{queries}{List of queries
 
-A list of \code{query()} objects is expected.}
+A list of \code{query()} objects is expected.
+
+\describe{
+\item{Default value}{none}
+}}
 
 \item{version}{Dictionary version
 
 The dictionary version used for coding the terms should be specified.
 If any of the queries is a basket (SMQ, SDG, ....) or a customized query
-including a basket, the parameter needs to be specified.}
+including a basket, the parameter needs to be specified.
+
+\describe{
+\item{Permitted values}{A character string (the expected format is
+company-specific)}
+\item{Default value}{\code{NULL}}
+}}
 
 \item{get_terms_fun}{Function which returns the terms
 
@@ -54,6 +64,10 @@ be used to store data which is used for all baskets in the
 database all SMQs can be read and stored in the environment when the first
 SMQ is handled. For the other SMQs the terms can be retrieved from the
 environment instead of accessing the database again.
+}
+
+\describe{
+\item{Default value}{\code{NULL}}
 }}
 }
 \value{

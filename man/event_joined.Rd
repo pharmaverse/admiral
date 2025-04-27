@@ -21,7 +21,12 @@ event_joined(
 \item{dataset_name}{Dataset name of the dataset to be used as input for the
 event. The name refers to the dataset specified for \code{source_datasets} in
 \code{derive_extreme_event()}. If the argument is not specified, the input
-dataset (\code{dataset}) of \code{derive_extreme_event()} is used.}
+dataset (\code{dataset}) of \code{derive_extreme_event()} is used.
+
+\describe{
+\item{Permitted values}{a character scalar}
+\item{Default value}{\code{NULL}}
+}}
 
 \item{condition}{An unquoted condition for selecting the observations, which
 will contribute to the extreme event.
@@ -33,12 +38,23 @@ the summary function are applied to all observations up to the confirmation
 observation. For example in the oncology setting when using this function
 for confirmed best overall response,  \code{condition = AVALC == "CR" & all(AVALC.join \%in\% c("CR", "NE")) & count_vals(var = AVALC.join, val = "NE") <= 1} selects observations with response "CR" and for all
 observations up to the confirmation observation the response is "CR" or
-"NE" and there is at most one "NE".}
+"NE" and there is at most one "NE".
+
+\describe{
+\item{Permitted values}{an unquoted condition}
+\item{Default value}{none}
+}}
 
 \item{order}{If specified, the specified variables or expressions are used to
 select the first observation.
 
-For handling of \code{NA}s in sorting variables see \href{../articles/generic.html#sort_order}{Sort Order}.}
+For handling of \code{NA}s in sorting variables see \href{../articles/generic.html#sort_order}{Sort Order}.
+
+\describe{
+\item{Permitted values}{list of expressions created by \code{exprs()}, e.g.,
+\code{exprs(ADT, desc(AVAL))} or \code{NULL}}
+\item{Default value}{\code{NULL}}
+}}
 
 \item{join_vars}{Variables to keep from joined dataset
 
@@ -46,13 +62,23 @@ The variables needed from the other observations should be specified for
 this parameter. The specified variables are added to the joined dataset
 with suffix ".join". For example to select all observations with \code{AVALC == "Y"} and \code{AVALC == "Y"} for at least one subsequent visit \code{join_vars = exprs(AVALC, AVISITN)} and \code{condition = AVALC == "Y" & AVALC.join == "Y" & AVISITN < AVISITN.join} could be specified.
 
-The \verb{*.join} variables are not included in the output dataset.}
+The \verb{*.join} variables are not included in the output dataset.
+
+\describe{
+\item{Permitted values}{a named list of expressions, e.g., created by \code{exprs()}}
+\item{Default value}{none}
+}}
 
 \item{join_type}{Observations to keep after joining
 
 The argument determines which of the joined observations are kept with
 respect to the original observation. For example, if \code{join_type = "after"} is specified all observations after the original observations are
-kept.}
+kept.
+
+\describe{
+\item{Permitted values}{\code{"before"}, \code{"after"}, \code{"all"}}
+\item{Default value}{none}
+}}
 
 \item{first_cond_lower}{Condition for selecting range of data (before)
 
@@ -65,7 +91,12 @@ considered, i.e., the observation is not flagged.
 This parameter should be specified if \code{condition} contains summary
 functions which should not apply to all observations but only from a
 certain observation before the current observation up to the current
-observation.}
+observation.
+
+\describe{
+\item{Permitted values}{an unquoted condition}
+\item{Default value}{\code{NULL}}
+}}
 
 \item{first_cond_upper}{Condition for selecting range of data (after)
 
@@ -76,22 +107,43 @@ observations are considered, i.e., the observation is not flagged.
 
 This parameter should be specified if \code{condition} contains summary
 functions which should not apply to all observations but only up to the
-confirmation assessment.}
+confirmation assessment.
+
+\describe{
+\item{Permitted values}{an unquoted condition}
+\item{Default value}{\code{NULL}}
+}}
 
 \item{set_values_to}{A named list returned by \code{exprs()} defining the variables
 to be set for the event, e.g. \code{exprs(PARAMCD = "WSP", PARAM  = "Worst Sleeping Problems")}. The values can be a symbol, a
-character string, a numeric value, \code{NA} or an expression.}
+character string, a numeric value, \code{NA} or an expression.
+
+\describe{
+\item{Permitted values}{a named list of expressions, e.g., created by \code{exprs()}}
+\item{Default value}{\code{NULL}}
+}}
 
 \item{keep_source_vars}{Variables to keep from the source dataset
 
 The specified variables are kept for the selected observations. The
 variables specified for \code{by_vars} (of \code{derive_extreme_event()}) and created
-by \code{set_values_to} are always kept.}
+by \code{set_values_to} are always kept.
+
+\describe{
+\item{Permitted values}{A list of expressions where each element is
+a symbol or a tidyselect expression, e.g., \code{exprs(VISIT, VISITNUM, starts_with("RS"))}.}
+\item{Default value}{\code{NULL}}
+}}
 
 \item{description}{Description of the event
 
 The description does not affect the derivations where the event is used. It
-is intended for documentation only.}
+is intended for documentation only.
+
+\describe{
+\item{Permitted values}{a character scalar}
+\item{Default value}{\code{NULL}}
+}}
 }
 \value{
 An object of class \code{event_joined}

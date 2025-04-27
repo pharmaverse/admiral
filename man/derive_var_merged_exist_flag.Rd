@@ -19,17 +19,33 @@ derive_var_merged_exist_flag(
 \arguments{
 \item{dataset}{Input dataset
 
-The variables specified by the \code{by_vars} argument are expected to be in the dataset.}
+The variables specified by the \code{by_vars} argument are expected to be in the dataset.
+
+\describe{
+\item{Default value}{none}
+}}
 
 \item{dataset_add}{Additional dataset
 
-The variables specified by the \code{by_vars} argument are expected.}
+The variables specified by the \code{by_vars} argument are expected.
 
-\item{by_vars}{Grouping variables}
+\describe{
+\item{Default value}{none}
+}}
+
+\item{by_vars}{Grouping variables
+
+\describe{
+\item{Default value}{none}
+}}
 
 \item{new_var}{New variable
 
-The specified variable is added to the input dataset.}
+The specified variable is added to the input dataset.
+
+\describe{
+\item{Default value}{none}
+}}
 
 \item{condition}{Condition
 
@@ -39,22 +55,44 @@ is set to the true value (\code{true_value}). For all by groups where it
 evaluates as \code{FALSE} or \code{NA} for all observations the new variable is set
 to the false value (\code{false_value}). The new variable is set to the missing
 value (\code{missing_value}) for by groups not present in the additional
-dataset.}
+dataset.
 
-\item{true_value}{True value}
+\describe{
+\item{Default value}{none}
+}}
 
-\item{false_value}{False value}
+\item{true_value}{True value
+
+\describe{
+\item{Default value}{\code{"Y"}}
+}}
+
+\item{false_value}{False value
+
+\describe{
+\item{Default value}{\code{NA_character_}}
+}}
 
 \item{missing_value}{Values used for missing information
 
 The new variable is set to the specified value for all by groups without
-observations in the additional dataset.}
+observations in the additional dataset.
+
+\describe{
+\item{Permitted values}{A character scalar}
+\item{Default value}{\code{NA_character_}}
+}}
 
 \item{filter_add}{Filter for additional data
 
 Only observations fulfilling the specified condition are taken into account
 for flagging. If the argument is not specified, all observations are
-considered.}
+considered.
+
+\describe{
+\item{Permitted values}{a condition}
+\item{Default value}{\code{NULL}}
+}}
 }
 \value{
 The output dataset contains all observations and variables of the
