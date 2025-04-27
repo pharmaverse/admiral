@@ -29,31 +29,19 @@ derive_vars_joined(
 \arguments{
 \item{dataset}{Input dataset
 
-The variables specified by the \code{by_vars} argument are expected to be in the dataset.
-
-\describe{
-\item{Default value}{none}
-}}
+The variables specified by the \code{by_vars} argument are expected to be in the dataset.}
 
 \item{dataset_add}{Additional dataset
 
 The variables specified by the \code{by_vars}, the \code{new_vars}, the \code{join_vars},
-and the \code{order} argument are expected.
-
-\describe{
-\item{Default value}{none}
-}}
+and the \code{order} argument are expected.}
 
 \item{by_vars}{Grouping variables
 
 The two datasets are joined by the specified variables.
 
 Variables can be renamed by naming the element, i.e.
-\verb{by_vars = exprs(<name in input dataset> = <name in additional dataset>)}, similar to the \code{dplyr} joins.
-
-\describe{
-\item{Default value}{\code{NULL}}
-}}
+\verb{by_vars = exprs(<name in input dataset> = <name in additional dataset>)}, similar to the \code{dplyr} joins.}
 
 \item{order}{Sort order
 
@@ -69,13 +57,7 @@ added to the additional dataset and can be used in the filter conditions
 (\code{filter_add}, \code{filter_join}) and for \code{join_vars} and \code{new_vars}. The
 variable is not included in the output dataset.
 
-For handling of \code{NA}s in sorting variables see \href{../articles/generic.html#sort_order}{Sort Order}.
-
-\describe{
-\item{Permitted values}{list of expressions created by \code{exprs()}, e.g.,
-\code{exprs(ADT, desc(AVAL))} or \code{NULL}}
-\item{Default value}{\code{NULL}}
-}}
+For handling of \code{NA}s in sorting variables see \href{../articles/generic.html#sort_order}{Sort Order}.}
 
 \item{new_vars}{Variables to add
 
@@ -95,12 +77,7 @@ variable \code{LASTRSP} to the dataset and sets it to the upper case value of
 \code{AVALC}.
 
 If the argument is not specified or set to \code{NULL}, all variables from the
-additional dataset (\code{dataset_add}) are added.
-
-\describe{
-\item{Permitted values}{list of variables or named expressions created by \code{exprs()}}
-\item{Default value}{\code{NULL}}
-}}
+additional dataset (\code{dataset_add}) are added.}
 
 \item{tmp_obs_nr_var}{Temporary observation number
 
@@ -112,11 +89,7 @@ number starts with \code{1}. The variable can be used in the conditions
 used to select consecutive observations or the last observation.
 
 The variable is not included in the output dataset. To include it specify
-it for \code{new_vars}.
-
-\describe{
-\item{Default value}{\code{NULL}}
-}}
+it for \code{new_vars}.}
 
 \item{join_vars}{Variables to use from additional dataset
 
@@ -131,12 +104,7 @@ additional dataset and can be used in the filter conditions (\code{filter_add},
 \code{filter_join}) and for \code{new_vars}. The variable is not included in the
 output dataset.
 
-The variables are not included in the output dataset.
-
-\describe{
-\item{Permitted values}{list of variables or named expressions created by \code{exprs()}}
-\item{Default value}{\code{NULL}}
-}}
+The variables are not included in the output dataset.}
 
 \item{join_type}{Observations to keep after joining
 
@@ -150,12 +118,7 @@ be after the assessment. Thus \code{join_type = "after"} could be used.
 
 Whereas, sometimes you might allow for confirmatory observations to occur
 prior to the observation. For example, to identify AEs occurring on or
-after seven days before a COVID AE. Thus \code{join_type = "all"} could be used.
-
-\describe{
-\item{Permitted values}{\code{"before"}, \code{"after"}, \code{"all"}}
-\item{Default value}{none}
-}}
+after seven days before a COVID AE. Thus \code{join_type = "all"} could be used.}
 
 \item{filter_add}{Filter for additional dataset (\code{dataset_add})
 
@@ -167,12 +130,7 @@ Variables created by \code{order} or \code{new_vars} arguments can be used in th
 condition.
 
 The condition can include summary functions like \code{all()} or \code{any()}. The
-additional dataset is grouped by the by variables (\code{by_vars}).
-
-\describe{
-\item{Permitted values}{a condition}
-\item{Default value}{\code{NULL}}
-}}
+additional dataset is grouped by the by variables (\code{by_vars}).}
 
 \item{first_cond_lower}{Condition for selecting range of data (before)
 
@@ -185,11 +143,7 @@ considered.
 This argument should be specified if \code{filter_join} contains summary
 functions which should not apply to all observations but only from a
 certain observation before the current observation up to the current
-observation. For an example see the last example below.
-
-\describe{
-\item{Default value}{\code{NULL}}
-}}
+observation. For an example see the last example below.}
 
 \item{first_cond_upper}{Condition for selecting range of data (after)
 
@@ -200,11 +154,7 @@ observations are considered.
 
 This argument should be specified if \code{filter_join} contains summary
 functions which should not apply to all observations but only up to the
-confirmation assessment. For an example see the last example below.
-
-\describe{
-\item{Default value}{\code{NULL}}
-}}
+confirmation assessment. For an example see the last example below.}
 
 \item{filter_join}{Filter for the joined dataset
 
@@ -215,69 +165,38 @@ Variables created by \code{order} or \code{new_vars} arguments can be used in th
 condition.
 
 The condition can include summary functions like \code{all()} or \code{any()}. The
-joined dataset is grouped by the original observations.
-
-\describe{
-\item{Permitted values}{a condition}
-\item{Default value}{\code{NULL}}
-}}
+joined dataset is grouped by the original observations.}
 
 \item{mode}{Selection mode
 
 Determines if the first or last observation is selected. If the \code{order}
 argument is specified, \code{mode} must be non-null.
 
-If the \code{order} argument is not specified, the \code{mode} argument is ignored.
-
-\describe{
-\item{Permitted values}{\code{"first"}, \code{"last"}, \code{NULL}}
-\item{Default value}{\code{NULL}}
-}}
+If the \code{order} argument is not specified, the \code{mode} argument is ignored.}
 
 \item{exist_flag}{Exist flag
 
 If the argument is specified (e.g., \code{exist_flag = FLAG}), the specified
 variable (e.g., \code{FLAG}) is added to the input dataset. This variable will
 be the value provided in \code{true_value} for all selected records from \code{dataset_add}
-which are merged into the input dataset, and the value provided in \code{false_value} otherwise.
-
-\describe{
-\item{Permitted values}{Variable name}
-\item{Default value}{\code{NULL}}
-}}
+which are merged into the input dataset, and the value provided in \code{false_value} otherwise.}
 
 \item{true_value}{True value
 
 The value for the specified variable \code{exist_flag}, applicable to
-the first or last observation (depending on the mode) of each by group.
-
-\describe{
-\item{Permitted values}{An atomic scalar}
-\item{Default value}{\code{"Y"}}
-}}
+the first or last observation (depending on the mode) of each by group.}
 
 \item{false_value}{False value
 
 The value for the specified variable \code{exist_flag}, NOT applicable to
-the first or last observation (depending on the mode) of each by group.
-
-\describe{
-\item{Permitted values}{An atomic scalar}
-\item{Default value}{\code{NA_character_}}
-}}
+the first or last observation (depending on the mode) of each by group.}
 
 \item{missing_values}{Values for non-matching observations
 
 For observations of the input dataset (\code{dataset}) which do not have a
 matching observation in the additional dataset (\code{dataset_add}) the values
 of the specified variables are set to the specified value. Only variables
-specified for \code{new_vars} can be specified for \code{missing_values}.
-
-\describe{
-\item{Permitted values}{named list of expressions, e.g.,
-\code{exprs(BASEC = "MISSING", BASE = -1)}}
-\item{Default value}{\code{NULL}}
-}}
+specified for \code{new_vars} can be specified for \code{missing_values}.}
 
 \item{check_type}{Check uniqueness?
 
@@ -288,12 +207,7 @@ respect to the by variables and the order.
 This argument is ignored if \code{order} is not specified. In this case an error
 is issued independent of \code{check_type} if the restricted joined dataset
 contains more than one observation for any of the observations of the input
-dataset.
-
-\describe{
-\item{Permitted values}{\code{"none"}, \code{"warning"}, \code{"error"}}
-\item{Default value}{\code{"warning"}}
-}}
+dataset.}
 }
 \value{
 The output dataset contains all observations and variables of the

@@ -18,11 +18,7 @@ impute_dtc_dt(
 
 A character date is expected in a format like \code{yyyy-mm-dd} or
 \code{yyyy-mm-ddThh:mm:ss}. Trailing components can be omitted and \code{-} is a
-valid "missing" value for any component.
-
-\describe{
-\item{Default value}{none}
-}}
+valid "missing" value for any component.}
 
 \item{highest_imputation}{Highest imputation level
 
@@ -38,13 +34,7 @@ missing, \code{NA_character_} is returned.
 
 If \code{"Y"} is specified, \code{date_imputation} should be \code{"first"} or \code{"last"}
 and \code{min_dates} or \code{max_dates} should be specified respectively. Otherwise,
-\code{NA_character_} is returned if the year component is missing.
-
-\describe{
-\item{Permitted values}{\code{"Y"} (year, highest level), \code{"M"} (month), \code{"D"}
-(day), \code{"n"} (none, lowest level)}
-\item{Default value}{\code{"n"}}
-}}
+\code{NA_character_} is returned if the year component is missing.}
 
 \item{date_imputation}{The value to impute the day/month when a datepart is
 missing.
@@ -65,11 +55,7 @@ middle of the possible range:
 }
 }
 
-The argument is ignored if \code{highest_imputation} is less then \code{"D"}.
-
-\describe{
-\item{Default value}{\code{"first"}}
-}}
+The argument is ignored if \code{highest_imputation} is less then \code{"D"}.}
 
 \item{min_dates}{Minimum dates
 
@@ -95,32 +81,19 @@ For example
 returns \code{"2020-11-11T11:11:11"} because the possible dates for \code{"2020-11"}
 range from \code{"2020-11-01T00:00:00"} to \code{"2020-11-30T23:59:59"}. Therefore
 \code{"2020-12-06T12:12:12"} is ignored. Returning \code{"2020-12-06T12:12:12"} would
-have changed the month although it is not missing (in the \code{dtc} date).
-
-\describe{
-\item{Default value}{\code{NULL}}
-}}
+have changed the month although it is not missing (in the \code{dtc} date).}
 
 \item{max_dates}{Maximum dates
 
 A list of dates is expected. It is ensured that the imputed date is not after
 any of the specified dates, e.g., that the imputed date is not after the data
 cut off date. Only dates which are in the range of possible dates are
-considered. A date or date-time object is expected.
-
-\describe{
-\item{Default value}{\code{NULL}}
-}}
+considered. A date or date-time object is expected.}
 
 \item{preserve}{Preserve day if month is missing and day is present
 
 For example \code{"2019---07"} would return \verb{"2019-06-07} if \code{preserve = TRUE}
-(and \code{date_imputation = "MID"}).
-
-\describe{
-\item{Permitted values}{\code{TRUE}, \code{FALSE}}
-\item{Default value}{\code{FALSE}}
-}}
+(and \code{date_imputation = "MID"}).}
 }
 \value{
 A character vector

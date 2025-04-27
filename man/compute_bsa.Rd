@@ -9,21 +9,11 @@ compute_bsa(height = height, weight = weight, method)
 \arguments{
 \item{height}{HEIGHT value
 
-It is expected that HEIGHT is in cm.
-
-\describe{
-\item{Permitted values}{numeric vector}
-\item{Default value}{\code{height}}
-}}
+It is expected that HEIGHT is in cm.}
 
 \item{weight}{WEIGHT value
 
-It is expected that WEIGHT is in kg.
-
-\describe{
-\item{Permitted values}{numeric vector}
-\item{Default value}{\code{weight}}
-}}
+It is expected that WEIGHT is in kg.}
 
 \item{method}{Derivation method to use:
 
@@ -39,12 +29,7 @@ Boyd: 0.0003207 * (height ^ 0.3) * (1000 * weight) ^ (0.7285 - (0.0188 * log10(1
 
 Fujimoto: 0.008883 * height ^ 0.663 * weight ^ 0.444
 
-Takahira: 0.007241 * height ^ 0.725 * weight ^ 0.425
-
-\describe{
-\item{Permitted values}{character value}
-\item{Default value}{none}
-}}
+Takahira: 0.007241 * height ^ 0.725 * weight ^ 0.425}
 }
 \value{
 The BSA (Body Surface Area) in m^2.

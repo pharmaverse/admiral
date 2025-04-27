@@ -7,11 +7,7 @@
 call_derivation(dataset = NULL, derivation, variable_params, ...)
 }
 \arguments{
-\item{dataset}{Input dataset
-
-\describe{
-\item{Default value}{\code{NULL}}
-}}
+\item{dataset}{Input dataset}
 
 \item{derivation}{The derivation function to call
 
@@ -19,18 +15,10 @@ A function that performs a specific derivation is expected. A derivation
 adds variables or observations to a dataset. The first argument of a
 derivation must expect a dataset and the derivation must return a dataset.
 All expected arguments for the derivation function must be provided through
-the \code{params()} objects passed to the \code{variable_params} and \code{...} arguments.
-
-\describe{
-\item{Default value}{none}
-}}
+the \code{params()} objects passed to the \code{variable_params} and \code{...} arguments.}
 
 \item{variable_params}{A \code{list} of function arguments that are different across iterations.
-Each set of function arguments must be created using \code{\link[=params]{params()}}.
-
-\describe{
-\item{Default value}{none}
-}}
+Each set of function arguments must be created using \code{\link[=params]{params()}}.}
 
 \item{...}{Any number of \emph{named} function arguments that stay the same across iterations.
 If a function argument is specified both inside \code{variable_params} and \code{...} then
@@ -41,11 +29,7 @@ the value in \code{variable_params} overwrites the one in \code{...}.
 It is also possible to pass functions from outside the \code{{admiral}} package
 to \code{call_derivation()}, e.g. an extension package function, or
 \code{dplyr::mutate()}. The only requirement for a function being passed to \code{derivation} is that
-it must take a dataset as its first argument and return a dataset.
-
-\describe{
-\item{Default value}{none}
-}}
+it must take a dataset as its first argument and return a dataset.}
 }
 \value{
 The input dataset with additional records/variables added depending on

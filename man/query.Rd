@@ -8,33 +8,15 @@ query(prefix, name = auto, id = NULL, add_scope_num = FALSE, definition = NULL)
 }
 \arguments{
 \item{prefix}{The value is used to populate \code{PREFIX} in the output
-dataset of \code{create_query_data()}, e.g., \code{"SMQ03"}
-
-\describe{
-\item{Default value}{none}
-}}
+dataset of \code{create_query_data()}, e.g., \code{"SMQ03"}}
 
 \item{name}{The value is used to populate \code{GRPNAME} in the output dataset
 of \code{create_query_data()}. If the \code{auto} keyword is specified, the variable
-is set to the name of the query in the SMQ/SDG database.
-
-\describe{
-\item{Permitted values}{A character scalar or the \code{auto} keyword. The \code{auto}
-keyword is permitted only for queries which are defined by an
-\code{basket_select()} object.}
-\item{Default value}{\code{auto}}
-}}
+is set to the name of the query in the SMQ/SDG database.}
 
 \item{id}{The value is used to populate \code{GRPID} in the output dataset of
 \code{create_query_data()}. If the \code{auto} keyword is specified, the variable is
-set to the id of the query in the SMQ/SDG database.
-
-\describe{
-\item{Permitted values}{A integer scalar or the \code{auto} keyword. The \code{auto}
-keyword is permitted only for queries which are defined by an
-\code{basket_select()} object.}
-\item{Default value}{\code{NULL}}
-}}
+set to the id of the query in the SMQ/SDG database.}
 
 \item{add_scope_num}{Determines if  \code{SCOPEN} in the output dataset
 of \code{create_query_data()} is populated
@@ -42,12 +24,7 @@ of \code{create_query_data()} is populated
 If the parameter is set to \code{TRUE}, the definition must be an \code{basket_select()}
 object.
 
-\emph{Default}: \code{FALSE}
-
-\describe{
-\item{Permitted values}{\code{TRUE}, \code{FALSE}}
-\item{Default value}{\code{FALSE}}
-}}
+\emph{Default}: \code{FALSE}}
 
 \item{definition}{Definition of terms belonging to the query
 
@@ -70,12 +47,6 @@ can be omitted.
 \item A list of data frames and \code{basket_select()} objects can be specified to
 define a customized query based on custom terms and SMQs. The data frames
 must have the same structure as described for the previous item.
-}
-
-\describe{
-\item{Permitted values}{an \code{basket_select()} object, a
-data frame, or a list of data frames and \code{basket_select()} objects.}
-\item{Default value}{\code{NULL}}
 }}
 }
 \value{

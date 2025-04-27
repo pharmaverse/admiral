@@ -16,17 +16,9 @@ A character value is expected, either as a
 of June,
 \item or as a keyword: \code{"first"}, \code{"mid"}, \code{"last"} to impute to the first/mid/last
 day/month.
-}
-
-\describe{
-\item{Default value}{none}
 }}
 
-\item{month}{Month component of the partial date
-
-\describe{
-\item{Default value}{none}
-}}
+\item{month}{Month component of the partial date}
 }
 \value{
 A list of character vectors. The elements of the list are named
