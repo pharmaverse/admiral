@@ -84,12 +84,13 @@ test_that("derive_summary_records Test 3: Errors", {
   # Is by_vars `exprs()` object?
   expect_error(
     derive_summary_records(
-      dataset_add = input,
+      input,
       by_vars = "x",
       set_values_to = exprs(
         z = mean(z)
       )
-    )
+    ),
+    class = "assert_vars"
   )
 
   # Does by_vars exist in input dataset?
@@ -101,7 +102,7 @@ test_that("derive_summary_records Test 3: Errors", {
         z = mean(z)
       )
     ),
-    regexp = "Required variable `a` is missing"
+    class = "assert_data_frame"
   )
 })
 
