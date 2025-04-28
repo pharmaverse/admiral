@@ -359,7 +359,7 @@ assert_date_imputation <- function(highest_imputation, date_imputation) {
       cli_abort(paste(
         "If {.code highest_imputation = \"M\"} is specified, {.arg date_imputation} must be",
         "one of {.val first}, {.val mid}, {.val last}",
-        "or a format with month and day specified as `'mm-dd'`: e.g. `'06-15'`"
+        "or a format with month and day specified as {.val mm-dd}: e.g. {.val 06-15}"
       ))
     }
   }
