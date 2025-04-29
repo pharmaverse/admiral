@@ -417,12 +417,14 @@
 #' - In this example, datetime was needed, which can be achieved by setting
 #'   `create_datetime` argument to `TRUE`.
 #' @code
+# nolint start
 #' adsl <- tribble(
 #'   ~USUBJID, ~RANDDTM,                       ~LSALVDTM,                      ~DTHDTM,                        ~DTHFL,
 #'   "01",     ymd_hms("2020-10-03 00:00:00"), ymd_hms("2022-12-15 23:59:59"), NA,                             NA,
 #'   "02",     ymd_hms("2021-01-23 00:00:00"), ymd_hms("2021-02-03 19:45:59"), ymd_hms("2021-02-03 19:45:59"), "Y"
 #' ) %>%
 #'   mutate(STUDYID = "AB42")
+# nolint end
 #'
 #' # derive overall survival parameter
 #' death <- event_source(
