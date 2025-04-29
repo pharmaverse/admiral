@@ -185,8 +185,8 @@
 #' ) %>%
 #'   mutate(STUDYID = "AB42")
 #'
-#' ae <- tribble(
-#'   ~USUBJID, ~AESTDT,           ~AESEQ, ~AEDECOD,
+#' adae <- tribble(
+#'   ~USUBJID, ~ASTDT,            ~AESEQ, ~AEDECOD,
 #'   "01",     ymd("2021-01-03"),      1, "Flu",
 #'   "01",     ymd("2021-03-04"),      2, "Cough",
 #'   "01",     ymd("2021-03-05"),      3, "Cough"
@@ -194,12 +194,12 @@
 #'   mutate(STUDYID = "AB42")
 #'
 #' ttae <- event_source(
-#'   dataset_name = "ae",
-#'   date = AESTDT,
+#'   dataset_name = "adae",
+#'   date = ASTDT,
 #'   set_values_to = exprs(
 #'     EVNTDESC = "AE",
-#'     SRCDOM = "AE",
-#'     SRCVAR = "AESTDTC",
+#'     SRCDOM = "ADAE",
+#'     SRCVAR = "ASTDT",
 #'     SRCSEQ = AESEQ
 #'   )
 #' )
@@ -218,7 +218,7 @@
 #'   dataset_adsl = adsl,
 #'   event_conditions = list(ttae),
 #'   censor_conditions = list(eos),
-#'   source_datasets = list(adsl = adsl, ae = ae),
+#'   source_datasets = list(adsl = adsl, adae = adae),
 #'   set_values_to = exprs(
 #'     PARAMCD = "TTAE",
 #'     PARAM = "Time to First Adverse Event"
@@ -236,7 +236,7 @@
 #'   by_vars = exprs(AEDECOD),
 #'   event_conditions = list(ttae),
 #'   censor_conditions = list(eos),
-#'   source_datasets = list(adsl = adsl, ae = ae),
+#'   source_datasets = list(adsl = adsl, adae = adae),
 #'   set_values_to = exprs(
 #'     PARAMCD = paste0("TTAE", as.numeric(as.factor(AEDECOD))),
 #'     PARAM = paste("Time to First", AEDECOD, "Adverse Event")
@@ -250,10 +250,10 @@
 #'   By default, a warning is issued if any duplicates are found.
 #'   Note here how after creating a new adverse event dataset containing a
 #'   duplicate date for `"Cough"`, it was then passed to the function using the
-#'   `source_datasets` argument - where you see below `ae = ae_dup`.
+#'   `source_datasets` argument - where you see below `adae = adae_dup`.
 #' @code [expected_cnds = "duplicate_records"]
-#' ae_dup <- tribble(
-#'   ~USUBJID, ~AESTDT,           ~AESEQ, ~AEDECOD, ~AESER,
+#' adae_dup <- tribble(
+#'   ~USUBJID, ~ASTDT,            ~AESEQ, ~AEDECOD, ~AESER,
 #'   "01",     ymd("2021-01-03"),      1, "Flu",    "Y",
 #'   "01",     ymd("2021-03-04"),      2, "Cough",  "N",
 #'   "01",     ymd("2021-03-04"),      3, "Cough",  "Y"
@@ -264,7 +264,7 @@
 #'   dataset_adsl = adsl,
 #'   by_vars = exprs(AEDECOD),
 #'   start_date = TRTSDT,
-#'   source_datasets = list(adsl = adsl, ae = ae_dup),
+#'   source_datasets = list(adsl = adsl, adae = adae_dup),
 #'   event_conditions = list(ttae),
 #'   censor_conditions = list(eos),
 #'   set_values_to = exprs(
@@ -278,11 +278,13 @@
 #' @code
 #' get_duplicates_dataset()
 #'
-#' @info Common options to solve the issue in the `event_source()`/`censor_source()`
-#'   calls are:
-#' - Restricting the source records by specifying/updating the `filter` argument.
-#' - Specifying additional variables for `order`.
-#' - Setting `check_type = "none"` to ignore any duplicates.
+#' @info Common options to solve the issue:
+#' - Restricting the source records by specifying/updating the `filter` argument
+#' in the `event_source()`/`censor_source()` calls.
+#' - Specifying additional variables for `order` in the
+#' `event_source()`/`censor_source()` calls.
+#' - Setting `check_type = "none"` in the `derive_param_tte()` call to ignore any
+#' duplicates.
 #'
 #' In this example it does not have significant impact which record is chosen as
 #' the dates are the same so the time to event derivation will be the same, but
@@ -295,14 +297,14 @@
 #'   dataset_adsl = adsl,
 #'   by_vars = exprs(AEDECOD),
 #'   start_date = TRTSDT,
-#'   source_datasets = list(adsl = adsl, ae = ae_dup),
+#'   source_datasets = list(adsl = adsl, adae = adae_dup),
 #'   event_conditions = list(event_source(
-#'     dataset_name = "ae",
-#'     date = AESTDT,
+#'     dataset_name = "adae",
+#'     date = ASTDT,
 #'     set_values_to = exprs(
 #'       EVNTDESC = "AE",
-#'       SRCDOM = "AE",
-#'       SRCVAR = "AESTDTC",
+#'       SRCDOM = "ADAE",
+#'       SRCVAR = "ASTDT",
 #'       SRCSEQ = AESEQ
 #'     ),
 #'     order = exprs(AESEQ)
@@ -323,15 +325,15 @@
 #'   dataset_adsl = adsl,
 #'   by_vars = exprs(AEDECOD),
 #'   start_date = TRTSDT,
-#'   source_datasets = list(adsl = adsl, ae = ae_dup),
+#'   source_datasets = list(adsl = adsl, adae = adae_dup),
 #'   event_conditions = list(event_source(
-#'     dataset_name = "ae",
+#'     dataset_name = "adae",
 #'     filter = AESER == "Y",
-#'     date = AESTDT,
+#'     date = ASTDT,
 #'     set_values_to = exprs(
 #'       EVNTDESC = "Serious AE",
-#'       SRCDOM = "AE",
-#'       SRCVAR = "AESTDTC",
+#'       SRCDOM = "ADAE",
+#'       SRCVAR = "ASTDT",
 #'       SRCSEQ = AESEQ
 #'     )
 #'   )),
@@ -343,9 +345,10 @@
 #' ) %>%
 #'   select(USUBJID, STARTDT, PARAMCD, PARAM, ADT, CNSR, SRCSEQ)
 #'
-#' @caption Using different censor values (`censor`)
-#' @info Within `event_source()`/`censor_source()` the values used to denote
-#'   an event/censor can be changed from the default of `0`/`1`.
+#' @caption Using different censor values (`censor`) and censoring at earliest
+#' occurring censor condition
+#' @info Within `censor_source()` the value used to denote a censor can be
+#' changed from the default of `1`.
 #'
 #' In this example an extra censor is used for new drug date with the value of `2`.
 #' @code
@@ -365,7 +368,7 @@
 #'   by_vars = exprs(AEDECOD),
 #'   event_conditions = list(ttae),
 #'   censor_conditions = list(eos, newdrug),
-#'   source_datasets = list(adsl = adsl, ae = ae),
+#'   source_datasets = list(adsl = adsl, adae = adae),
 #'   set_values_to = exprs(
 #'     PARAMCD = paste0("TTAE", as.numeric(as.factor(AEDECOD))),
 #'     PARAM = paste("Time to First", AEDECOD, "Adverse Event")
@@ -396,7 +399,7 @@
 #'   by_vars = exprs(AEDECOD),
 #'   event_conditions = list(ttae),
 #'   censor_conditions = list(eos_nonewdrug, newdrug),
-#'   source_datasets = list(adsl = adsl, ae = ae),
+#'   source_datasets = list(adsl = adsl, adae = adae),
 #'   set_values_to = exprs(
 #'     PARAMCD = paste0("TTAE", as.numeric(as.factor(AEDECOD))),
 #'     PARAM = paste("Time to First", AEDECOD, "Adverse Event")
@@ -414,37 +417,40 @@
 #' - In this example, datetime was needed, which can be achieved by setting
 #'   `create_datetime` argument to `TRUE`.
 #' @code
-#' data("admiral_adsl")
-#'
-#' adsl <- admiral_adsl
+#' adsl <- tribble(
+#'   ~USUBJID, ~RANDDTM,                       ~LSALVDTM,                      ~DTHDTM,                        ~DTHFL,
+#'   "01",     ymd_hms("2020-10-03 00:00:00"), ymd_hms("2022-12-15 23:59:59"), NA,                             NA,
+#'   "02",     ymd_hms("2021-01-23 00:00:00"), ymd_hms("2021-02-03 19:45:59"), ymd_hms("2021-02-03 19:45:59"), "Y"
+#' ) %>%
+#'   mutate(STUDYID = "AB42")
 #'
 #' # derive overall survival parameter
 #' death <- event_source(
 #'   dataset_name = "adsl",
 #'   filter = DTHFL == "Y",
-#'   date = DTHDT,
+#'   date = DTHDTM,
 #'   set_values_to = exprs(
 #'     EVNTDESC = "DEATH",
 #'     SRCDOM = "ADSL",
-#'     SRCVAR = "DTHDT"
+#'     SRCVAR = "DTHDTM"
 #'   )
 #' )
 #'
-#' last_alive_dt <- censor_source(
+#' last_alive <- censor_source(
 #'   dataset_name = "adsl",
-#'   date = LSTALVDT,
+#'   date = LSALVDTM,
 #'   set_values_to = exprs(
 #'     EVNTDESC = "LAST DATE KNOWN ALIVE",
 #'     SRCDOM = "ADSL",
-#'     SRCVAR = "LSTALVDT"
+#'     SRCVAR = "LSALVDTM"
 #'   )
 #' )
 #'
 #' derive_param_tte(
 #'   dataset_adsl = adsl,
-#'   start_date = RANDDT,
+#'   start_date = RANDDTM,
 #'   event_conditions = list(death),
-#'   censor_conditions = list(last_alive_dt),
+#'   censor_conditions = list(last_alive),
 #'   create_datetime = TRUE,
 #'   source_datasets = list(adsl = adsl),
 #'   set_values_to = exprs(
@@ -452,8 +458,7 @@
 #'     PARAM = "Overall Survival"
 #'   )
 #' ) %>%
-#'   select(-STUDYID) %>%
-#'   filter(row_number() %in% 20:30)
+#'   select(USUBJID, STARTDTM, PARAMCD, PARAM, ADTM, CNSR)
 #'
 #' @caption Duration of response time to event parameter
 #' @info In oncology trials, this is commonly derived as time from response until

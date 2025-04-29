@@ -237,24 +237,24 @@ adsl <- tribble(
   ~USUBJID, ~TRTSDT,           ~EOSDT,            ~NEWDRGDT,
   "01",     ymd("2020-12-06"), ymd("2021-03-06"), NA,
   "02",     ymd("2021-01-16"), ymd("2021-02-03"), ymd("2021-01-03")
-) %>%
+) \%>\%
   mutate(STUDYID = "AB42")
 
-ae <- tribble(
-  ~USUBJID, ~AESTDT,           ~AESEQ, ~AEDECOD,
+adae <- tribble(
+  ~USUBJID, ~ASTDT,            ~AESEQ, ~AEDECOD,
   "01",     ymd("2021-01-03"),      1, "Flu",
   "01",     ymd("2021-03-04"),      2, "Cough",
   "01",     ymd("2021-03-05"),      3, "Cough"
-) %>%
+) \%>\%
   mutate(STUDYID = "AB42")
 
 ttae <- event_source(
-  dataset_name = "ae",
-  date = AESTDT,
+  dataset_name = "adae",
+  date = ASTDT,
   set_values_to = exprs(
     EVNTDESC = "AE",
-    SRCDOM = "AE",
-    SRCVAR = "AESTDTC",
+    SRCDOM = "ADAE",
+    SRCVAR = "ASTDT",
     SRCSEQ = AESEQ
   )
 )
@@ -273,12 +273,12 @@ derive_param_tte(
   dataset_adsl = adsl,
   event_conditions = list(ttae),
   censor_conditions = list(eos),
-  source_datasets = list(adsl = adsl, ae = ae),
+  source_datasets = list(adsl = adsl, adae = adae),
   set_values_to = exprs(
     PARAMCD = "TTAE",
     PARAM = "Time to First Adverse Event"
   )
-) %>%
+) \%>\%
   select(USUBJID, STARTDT, PARAMCD, PARAM, ADT, CNSR, SRCSEQ)
 #> # A tibble: 2 × 7
 #>   USUBJID STARTDT    PARAMCD PARAM                       ADT         CNSR SRCSEQ
@@ -296,12 +296,12 @@ term (\code{AEDECOD}) should be created as parameters.
   by_vars = exprs(AEDECOD),
   event_conditions = list(ttae),
   censor_conditions = list(eos),
-  source_datasets = list(adsl = adsl, ae = ae),
+  source_datasets = list(adsl = adsl, adae = adae),
   set_values_to = exprs(
     PARAMCD = paste0("TTAE", as.numeric(as.factor(AEDECOD))),
     PARAM = paste("Time to First", AEDECOD, "Adverse Event")
   )
-) %>%
+) \%>\%
   select(USUBJID, STARTDT, PARAMCD, PARAM, ADT, CNSR, SRCSEQ)
 #> # A tibble: 4 × 7
 #>   USUBJID STARTDT    PARAMCD PARAM                       ADT         CNSR SRCSEQ
@@ -317,21 +317,21 @@ by variables and the date and order specified in the source objects.
 By default, a warning is issued if any duplicates are found.
 Note here how after creating a new adverse event dataset containing a
 duplicate date for \code{"Cough"}, it was then passed to the function using the
-\code{source_datasets} argument - where you see below \code{ae = ae_dup}.
+\code{source_datasets} argument - where you see below \code{adae = adae_dup}.
 
-\if{html}{\out{<div class="sourceCode r">}}\preformatted{ae_dup <- tribble(
-  ~USUBJID, ~AESTDT,           ~AESEQ, ~AEDECOD, ~AESER,
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{adae_dup <- tribble(
+  ~USUBJID, ~ASTDT,            ~AESEQ, ~AEDECOD, ~AESER,
   "01",     ymd("2021-01-03"),      1, "Flu",    "Y",
   "01",     ymd("2021-03-04"),      2, "Cough",  "N",
   "01",     ymd("2021-03-04"),      3, "Cough",  "Y"
-) %>%
+) \%>\%
   mutate(STUDYID = "AB42")
 
 derive_param_tte(
   dataset_adsl = adsl,
   by_vars = exprs(AEDECOD),
   start_date = TRTSDT,
-  source_datasets = list(adsl = adsl, ae = ae_dup),
+  source_datasets = list(adsl = adsl, adae = adae_dup),
   event_conditions = list(ttae),
   censor_conditions = list(eos),
   set_values_to = exprs(
@@ -340,35 +340,36 @@ derive_param_tte(
   )
 )
 #> # A tibble: 4 × 11
-#>   USUBJID STUDYID EVNTDESC     SRCDOM SRCVAR  SRCSEQ  CNSR ADT        STARTDT   
-#>   <chr>   <chr>   <chr>        <chr>  <chr>    <dbl> <int> <date>     <date>    
-#> 1 01      AB42    AE           AE     AESTDTC      2     0 2021-03-04 2020-12-06
-#> 2 01      AB42    AE           AE     AESTDTC      1     0 2021-01-03 2020-12-06
-#> 3 02      AB42    END OF STUDY ADSL   EOSDT       NA     1 2021-02-03 2021-01-16
-#> 4 02      AB42    END OF STUDY ADSL   EOSDT       NA     1 2021-02-03 2021-01-16
+#>   USUBJID STUDYID EVNTDESC     SRCDOM SRCVAR SRCSEQ  CNSR ADT        STARTDT   
+#>   <chr>   <chr>   <chr>        <chr>  <chr>   <dbl> <int> <date>     <date>    
+#> 1 01      AB42    AE           ADAE   ASTDT       2     0 2021-03-04 2020-12-06
+#> 2 01      AB42    AE           ADAE   ASTDT       1     0 2021-01-03 2020-12-06
+#> 3 02      AB42    END OF STUDY ADSL   EOSDT      NA     1 2021-02-03 2021-01-16
+#> 4 02      AB42    END OF STUDY ADSL   EOSDT      NA     1 2021-02-03 2021-01-16
 #> # ℹ 2 more variables: PARAMCD <chr>, PARAM <chr>
-#> Warning: Dataset "ae" contains duplicate records with respect to `STUDYID`, `USUBJID`,
-#> `AEDECOD`, and `AESTDT`
+#> Warning: Dataset "adae" contains duplicate records with respect to `STUDYID`, `USUBJID`,
+#> `AEDECOD`, and `ASTDT`
 #> ℹ Run `admiral::get_duplicates_dataset()` to access the duplicate records}\if{html}{\out{</div>}}
 
 For investigating the issue, the dataset of the duplicate source records
 can be obtained by calling \code{get_duplicates_dataset()}:
 
 \if{html}{\out{<div class="sourceCode r">}}\preformatted{get_duplicates_dataset()
-#> Duplicate records with respect to `STUDYID`, `USUBJID`, `AEDECOD`, and
-#> `AESTDT`.
+#> Duplicate records with respect to `STUDYID`, `USUBJID`, `AEDECOD`, and `ASTDT`.
 #> # A tibble: 2 × 6
-#>   STUDYID USUBJID AEDECOD AESTDT     AESEQ AESER
+#>   STUDYID USUBJID AEDECOD ASTDT      AESEQ AESER
 #> * <chr>   <chr>   <chr>   <date>     <dbl> <chr>
 #> 1 AB42    01      Cough   2021-03-04     2 N    
 #> 2 AB42    01      Cough   2021-03-04     3 Y    }\if{html}{\out{</div>}}
 
-Common options to solve the issue in the \code{event_source()}/\code{censor_source()}
-calls are:
+Common options to solve the issue:
 \itemize{
-\item Restricting the source records by specifying/updating the \code{filter} argument.
-\item Specifying additional variables for \code{order}.
-\item Setting \code{check_type = "none"} to ignore any duplicates.
+\item Restricting the source records by specifying/updating the \code{filter} argument
+in the \code{event_source()}/\code{censor_source()} calls.
+\item Specifying additional variables for \code{order} in the
+\code{event_source()}/\code{censor_source()} calls.
+\item Setting \code{check_type = "none"} in the \code{derive_param_tte()} call to ignore any
+duplicates.
 }
 
 In this example it does not have significant impact which record is chosen as
@@ -382,14 +383,14 @@ function call itself.
   dataset_adsl = adsl,
   by_vars = exprs(AEDECOD),
   start_date = TRTSDT,
-  source_datasets = list(adsl = adsl, ae = ae_dup),
+  source_datasets = list(adsl = adsl, adae = adae_dup),
   event_conditions = list(event_source(
-    dataset_name = "ae",
-    date = AESTDT,
+    dataset_name = "adae",
+    date = ASTDT,
     set_values_to = exprs(
       EVNTDESC = "AE",
-      SRCDOM = "AE",
-      SRCVAR = "AESTDTC",
+      SRCDOM = "ADAE",
+      SRCVAR = "ASTDT",
       SRCSEQ = AESEQ
     ),
     order = exprs(AESEQ)
@@ -399,7 +400,7 @@ function call itself.
     PARAMCD = paste0("TTAE", as.numeric(as.factor(AEDECOD))),
     PARAM = paste("Time to First", AEDECOD, "Adverse Event")
   )
-) %>%
+) \%>\%
   select(USUBJID, STARTDT, PARAMCD, PARAM, ADT, CNSR, SRCSEQ)
 #> # A tibble: 4 × 7
 #>   USUBJID STARTDT    PARAMCD PARAM                       ADT         CNSR SRCSEQ
@@ -417,15 +418,15 @@ here only using serious adverse events.
   dataset_adsl = adsl,
   by_vars = exprs(AEDECOD),
   start_date = TRTSDT,
-  source_datasets = list(adsl = adsl, ae = ae_dup),
+  source_datasets = list(adsl = adsl, adae = adae_dup),
   event_conditions = list(event_source(
-    dataset_name = "ae",
+    dataset_name = "adae",
     filter = AESER == "Y",
-    date = AESTDT,
+    date = ASTDT,
     set_values_to = exprs(
       EVNTDESC = "Serious AE",
-      SRCDOM = "AE",
-      SRCVAR = "AESTDTC",
+      SRCDOM = "ADAE",
+      SRCVAR = "ASTDT",
       SRCSEQ = AESEQ
     )
   )),
@@ -434,7 +435,7 @@ here only using serious adverse events.
     PARAMCD = paste0("TTSAE", as.numeric(as.factor(AEDECOD))),
     PARAM = paste("Time to First Serious", AEDECOD, "Adverse Event")
   )
-) %>%
+) \%>\%
   select(USUBJID, STARTDT, PARAMCD, PARAM, ADT, CNSR, SRCSEQ)
 #> # A tibble: 4 × 7
 #>   USUBJID STARTDT    PARAMCD PARAM                       ADT         CNSR SRCSEQ
@@ -443,10 +444,11 @@ here only using serious adverse events.
 #> 2 01      2020-12-06 TTSAE2  Time to First Serious Flu … 2021-01-03     0      1
 #> 3 02      2021-01-16 TTSAE1  Time to First Serious Coug… 2021-02-03     1     NA
 #> 4 02      2021-01-16 TTSAE2  Time to First Serious Flu … 2021-02-03     1     NA}\if{html}{\out{</div>}}}
-\subsection{Using different censor values (\code{censor})}{
+\subsection{Using different censor values (\code{censor}) and censoring at earliest
+occurring censor condition}{
 
-Within \code{event_source()}/\code{censor_source()} the values used to denote
-an event/censor can be changed from the default of \code{0}/\code{1}.
+Within \code{censor_source()} the value used to denote a censor can be
+changed from the default of \code{1}.
 
 In this example an extra censor is used for new drug date with the value of \code{2}.
 
@@ -466,12 +468,12 @@ derive_param_tte(
   by_vars = exprs(AEDECOD),
   event_conditions = list(ttae),
   censor_conditions = list(eos, newdrug),
-  source_datasets = list(adsl = adsl, ae = ae),
+  source_datasets = list(adsl = adsl, adae = adae),
   set_values_to = exprs(
     PARAMCD = paste0("TTAE", as.numeric(as.factor(AEDECOD))),
     PARAM = paste("Time to First", AEDECOD, "Adverse Event")
   )
-) %>%
+) \%>\%
   select(USUBJID, STARTDT, PARAMCD, PARAM, ADT, CNSR, SRCSEQ)
 #> # A tibble: 4 × 7
 #>   USUBJID STARTDT    PARAMCD PARAM                       ADT         CNSR SRCSEQ
@@ -504,12 +506,12 @@ derive_param_tte(
   by_vars = exprs(AEDECOD),
   event_conditions = list(ttae),
   censor_conditions = list(eos_nonewdrug, newdrug),
-  source_datasets = list(adsl = adsl, ae = ae),
+  source_datasets = list(adsl = adsl, adae = adae),
   set_values_to = exprs(
     PARAMCD = paste0("TTAE", as.numeric(as.factor(AEDECOD))),
     PARAM = paste("Time to First", AEDECOD, "Adverse Event")
   )
-) %>%
+) \%>\%
   select(USUBJID, STARTDT, PARAMCD, PARAM, ADT, CNSR, SRCSEQ)
 #> # A tibble: 4 × 7
 #>   USUBJID STARTDT    PARAMCD PARAM                       ADT         CNSR SRCSEQ
@@ -530,61 +532,53 @@ different to the default.
 \code{create_datetime} argument to \code{TRUE}.
 }
 
-\if{html}{\out{<div class="sourceCode r">}}\preformatted{data("admiral_adsl")
-
-adsl <- admiral_adsl
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{adsl <- tribble(
+  ~USUBJID, ~RANDDTM,                       ~LSALVDTM,                      ~DTHDTM,                        ~DTHFL,
+  "01",     ymd_hms("2020-10-03 00:00:00"), ymd_hms("2022-12-15 23:59:59"), NA,                             NA,
+  "02",     ymd_hms("2021-01-23 00:00:00"), ymd_hms("2021-02-03 19:45:59"), ymd_hms("2021-02-03 19:45:59"), "Y"
+) \%>\%
+  mutate(STUDYID = "AB42")
 
 # derive overall survival parameter
 death <- event_source(
   dataset_name = "adsl",
   filter = DTHFL == "Y",
-  date = DTHDT,
+  date = DTHDTM,
   set_values_to = exprs(
     EVNTDESC = "DEATH",
     SRCDOM = "ADSL",
-    SRCVAR = "DTHDT"
+    SRCVAR = "DTHDTM"
   )
 )
 
-last_alive_dt <- censor_source(
+last_alive <- censor_source(
   dataset_name = "adsl",
-  date = LSTALVDT,
+  date = LSALVDTM,
   set_values_to = exprs(
     EVNTDESC = "LAST DATE KNOWN ALIVE",
     SRCDOM = "ADSL",
-    SRCVAR = "LSTALVDT"
+    SRCVAR = "LSALVDTM"
   )
 )
 
 derive_param_tte(
   dataset_adsl = adsl,
-  start_date = RANDDT,
+  start_date = RANDDTM,
   event_conditions = list(death),
-  censor_conditions = list(last_alive_dt),
+  censor_conditions = list(last_alive),
   create_datetime = TRUE,
   source_datasets = list(adsl = adsl),
   set_values_to = exprs(
     PARAMCD = "OS",
     PARAM = "Overall Survival"
   )
-) %>%
-  select(-STUDYID) %>%
-  filter(row_number() %in% 20:30)
-#> # A tibble: 11 × 9
-#>    USUBJID   EVNTDESC SRCDOM SRCVAR  CNSR ADTM                STARTDTM   PARAMCD
-#>    <chr>     <chr>    <chr>  <chr>  <int> <dttm>              <date>     <chr>  
-#>  1 01-701-1… LAST DA… ADSL   LSTAL…     1 2013-08-03 00:00:00 2013-02-02 OS     
-#>  2 01-701-1… DEATH    ADSL   DTHDT      0 2013-01-14 00:00:00 2012-11-15 OS     
-#>  3 01-701-1… LAST DA… ADSL   LSTAL…     1 2013-09-22 00:00:00 2013-03-30 OS     
-#>  4 01-701-1… LAST DA… ADSL   LSTAL…     1 2014-07-11 00:00:00 2014-01-11 OS     
-#>  5 01-701-1… LAST DA… ADSL   LSTAL…     1 2014-06-14 00:00:00 2014-02-07 OS     
-#>  6 01-701-1… LAST DA… ADSL   LSTAL…     1 2014-07-26 00:00:00 2014-01-25 OS     
-#>  7 01-701-1… LAST DA… ADSL   LSTAL…     1 2013-06-14 00:00:00 2013-03-24 OS     
-#>  8 01-701-1… LAST DA… ADSL   LSTAL…     1 2013-11-05 00:00:00 2013-08-29 OS     
-#>  9 01-701-1… LAST DA… ADSL   LSTAL…     1 2014-11-20 00:00:00 2014-05-22 OS     
-#> 10 01-701-1… LAST DA… ADSL   LSTAL…     1 2013-04-02 00:00:00 2012-10-02 OS     
-#> 11 01-701-1… LAST DA… ADSL   LSTAL…     1 2013-02-07 00:00:00 2013-01-05 OS     
-#> # ℹ 1 more variable: PARAM <chr>}\if{html}{\out{</div>}}}
+) \%>\%
+  select(USUBJID, STARTDTM, PARAMCD, PARAM, ADTM, CNSR)
+#> # A tibble: 2 × 6
+#>   USUBJID STARTDTM            PARAMCD PARAM            ADTM                 CNSR
+#>   <chr>   <dttm>              <chr>   <chr>            <dttm>              <int>
+#> 1 01      2020-10-03 00:00:00 OS      Overall Survival 2022-12-15 23:59:59     1
+#> 2 02      2021-01-23 00:00:00 OS      Overall Survival 2021-02-03 19:45:59     0}\if{html}{\out{</div>}}}
 \subsection{Duration of response time to event parameter}{
 
 In oncology trials, this is commonly derived as time from response until
@@ -599,7 +593,7 @@ parameter created, so see below how this is filtered only on responders.
   "02",     "N",    NA,                NA,
   "03",     "Y",    ymd("2021-08-21"), NA,
   "04",     "N",    NA,                ymd("2021-04-14")
-) %>%
+) \%>\%
   mutate(STUDYID = "AB42")
 
 adrs <- tribble(
@@ -611,7 +605,7 @@ adrs <- tribble(
   "04",     "SD",   ymd("2021-02-13"), 1,
   "04",     "PR",   ymd("2021-04-14"), 2,
   "04",     "CR",   ymd("2021-05-15"), 3
-) %>%
+) \%>\%
   mutate(STUDYID = "AB42", PARAMCD = "OVR")
 
 pd <- event_source(
@@ -658,7 +652,7 @@ derive_param_tte(
     PARAMCD = "DURRSP",
     PARAM = "Duration of Response"
   )
-) %>%
+) \%>\%
   select(USUBJID, STARTDT, PARAMCD, PARAM, ADT, CNSR, SRCSEQ)
 #> # A tibble: 2 × 7
 #>   USUBJID STARTDT    PARAMCD PARAM                ADT         CNSR SRCSEQ
