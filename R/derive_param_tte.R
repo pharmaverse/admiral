@@ -318,8 +318,8 @@
 #'   select(USUBJID, STARTDT, PARAMCD, PARAM, ADT, CNSR, SRCSEQ)
 #'
 #' @caption Filtering source records (`filter`)
-#' @info The first option could have been achieved using `filter`, for example
-#'   here only using serious adverse events.
+#' @info The first option from above could have been achieved using `filter`, for
+#'   example here only using serious adverse events.
 #' @code
 #' derive_param_tte(
 #'   dataset_adsl = adsl,
@@ -345,10 +345,61 @@
 #' ) %>%
 #'   select(USUBJID, STARTDT, PARAMCD, PARAM, ADT, CNSR, SRCSEQ)
 #'
+#' @caption Using multiple event/censor conditions
+#' @info In the above examples, we only have a single event and single censor
+#'   condition. Here, we now consider multiple conditions for each passed using
+#'   `event_conditions` and `censor_conditions`.
+#'
+#' For the event we are going to use first AE and additionally check a lab condition,
+#' and for the censor we'll add in treatment start date in case end of study date
+#' was ever missing.
+#' @code
+#' adlb <- tribble(
+#'   ~USUBJID, ~ADT,              ~PARAMCD, ~ANRIND,
+#'   "01",     ymd("2020-12-22"), "HGB",    "LOW"
+#' ) %>%
+#'   mutate(STUDYID = "AB42")
+#'
+#' low_hgb <- event_source(
+#'   dataset_name = "adlb",
+#'   filter = PARAMCD == "HGB" & ANRIND == "LOW",
+#'   date = ADT,
+#'   set_values_to = exprs(
+#'     EVNTDESC = "POSSIBLE ANEMIA",
+#'     SRCDOM = "ADLB",
+#'     SRCVAR = "ADT"
+#'   )
+#' )
+#'
+#' trt_start <- censor_source(
+#'   dataset_name = "adsl",
+#'   date = TRTSDT,
+#'   set_values_to = exprs(
+#'     EVNTDESC = "TREATMENT START",
+#'     SRCDOM = "ADSL",
+#'     SRCVAR = "TRTSDT"
+#'   )
+#' )
+#'
+#' derive_param_tte(
+#'   dataset_adsl = adsl,
+#'   event_conditions = list(ttae, low_hgb),
+#'   censor_conditions = list(eos, trt_start),
+#'   source_datasets = list(adsl = adsl, adae = adae, adlb = adlb),
+#'   set_values_to = exprs(
+#'     PARAMCD = "TTAELB",
+#'     PARAM = "Time to First Adverse Event or Possible Anemia (Labs)"
+#'   )
+#' ) %>%
+#'   select(USUBJID, STARTDT, PARAMCD, PARAM, ADT, CNSR, SRCSEQ)
+#'
+#' @info Note above how the earliest event date is always taken and the latest
+#'   censor date.
+#'
 #' @caption Using different censor values (`censor`) and censoring at earliest
-#' occurring censor condition
+#'   occurring censor condition
 #' @info Within `censor_source()` the value used to denote a censor can be
-#' changed from the default of `1`.
+#'   changed from the default of `1`.
 #'
 #' In this example an extra censor is used for new drug date with the value of `2`.
 #' @code
@@ -376,12 +427,14 @@
 #' ) %>%
 #'   select(USUBJID, STARTDT, PARAMCD, PARAM, ADT, CNSR, SRCSEQ)
 #'
-#' @info In this case the results are still the same as the latest censor
-#'   condition is always taken for those without an event, and for the second
-#'   subject this is still the end of study date.
-#'   So, if we wanted to instead censor here at the new drug date if subject
-#'   has one, then we would need to again use the `filter` argument, but this
-#'   time for a new end of study censor source object.
+#' @info In this case the results are still the same, because as explained in
+#'   the above example the latest censor condition is always taken for those
+#'   without an event. For the second subject this is still the end of study
+#'   date.
+#'
+#' So, if we wanted to instead censor here at the new drug date if subject
+#' has one, then we would need to again use the `filter` argument, but this
+#' time for a new end of study censor source object.
 #' @code
 #' eos_nonewdrug <- censor_source(
 #'   dataset_name = "adsl",
