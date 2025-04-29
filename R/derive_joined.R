@@ -856,7 +856,7 @@ get_joined_data <- function(dataset,
   } else {
     joined_data <- get_joined_sub_data(
       data,
-      dataset_add = data_add,
+      dataset_add = data_add_to_join,
       by_vars = by_vars_left,
       tmp_obs_nr_var = tmp_obs_nr_var,
       tmp_obs_nr_left = tmp_obs_nr_left,

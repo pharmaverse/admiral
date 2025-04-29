@@ -937,16 +937,37 @@ derive_var_merged_summary <- function(dataset,
   )
 
   # Summarise the analysis value and merge to the original dataset
-  derive_vars_merged(
-    dataset,
-    dataset_add = derive_summary_records(
-      dataset_add = dataset_add,
-      by_vars = by_vars_right,
-      filter_add = !!filter_add,
-      set_values_to = new_vars,
-    ) %>%
-      select(!!!by_vars_right, names(new_vars)),
-    by_vars = by_vars,
-    missing_values = missing_values
+  rlang::try_fetch(
+    derive_vars_merged(
+      dataset,
+      dataset_add = derive_summary_records(
+        dataset_add = dataset_add,
+        by_vars = by_vars_right,
+        filter_add = !!filter_add,
+        set_values_to = new_vars,
+      ) %>%
+        select(!!!by_vars_right, names(new_vars)),
+      by_vars = by_vars,
+      missing_values = missing_values
+    ),
+    duplicate_records = function(cnd) {
+      cli_abort(
+        c(
+          "After summarising, the dataset contains duplicate records with respect to {.var {cnd$by_vars}}.",
+          "Please check {.arg new_vars} if summary functions like {.fun mean}, {.fun sum}, ... are used on the right hand side.",
+          i = "Run {.run admiral::get_duplicates_dataset()} to access the duplicate records"
+        ),
+        class = cnd$class,
+        by_vars = cnd$by_vars
+      )
+    },
+    warning = function(cnd) {
+      if (!any(str_detect(
+        cnd$message,
+        stringr::fixed("Returning more (or less) than 1 row per `summarise()` group was deprecated"))
+      )) {
+        zap()
+      }
+    }
   )
 }

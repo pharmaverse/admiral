@@ -5,6 +5,7 @@ list(
     dataset = "a dataset, i.e., a `data.frame` or tibble",
     mode = "`\"first\"`, `\"last\"`",
     msg_type = "`\"none\"`, `\"message\"`, `\"warning\"`, `\"error\"`",
+    order_optional = "list of expressions created by `exprs()`, e.g., `exprs(ADT, desc(AVAL))` or `NULL`",
     var_list = "list of variables created by `exprs()`, e.g., `exprs(USUBJID, VISIT)`"
   )
 )

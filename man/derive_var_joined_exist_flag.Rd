@@ -574,6 +574,7 @@ General Derivation Functions for all ADaMs that returns variable appended to dat
 \code{\link{derive_vars_cat}()},
 \code{\link{derive_vars_computed}()},
 \code{\link{derive_vars_joined}()},
+\code{\link{derive_vars_joined_summary}()},
 \code{\link{derive_vars_merged}()},
 \code{\link{derive_vars_merged_lookup}()},
 \code{\link{derive_vars_transposed}()}
