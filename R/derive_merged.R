@@ -937,7 +937,8 @@ derive_var_merged_summary <- function(dataset,
   )
 
   # Summarise the analysis value and merge to the original dataset
-  rlang::try_fetch(
+  tryCatch(
+    withCallingHandlers(
     derive_vars_merged(
       dataset,
       dataset_add = derive_summary_records(
@@ -950,6 +951,14 @@ derive_var_merged_summary <- function(dataset,
       by_vars = by_vars,
       missing_values = missing_values
     ),
+    warning = function(cnd) {
+      if (any(str_detect(
+        cnd$message,
+        stringr::fixed("Returning more (or less) than 1 row per `summarise()` group was deprecated"))
+      )) {
+        rlang::cnd_muffle(cnd)
+      }
+    }),
     duplicate_records = function(cnd) {
       cli_abort(
         c(
@@ -958,16 +967,9 @@ derive_var_merged_summary <- function(dataset,
           i = "Run {.run admiral::get_duplicates_dataset()} to access the duplicate records"
         ),
         class = cnd$class,
+        call = NULL,
         by_vars = cnd$by_vars
       )
-    },
-    warning = function(cnd) {
-      if (!any(str_detect(
-        cnd$message,
-        stringr::fixed("Returning more (or less) than 1 row per `summarise()` group was deprecated"))
-      )) {
-        zap()
-      }
     }
   )
 }
