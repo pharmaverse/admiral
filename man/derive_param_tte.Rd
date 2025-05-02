@@ -444,7 +444,8 @@ example here only using serious adverse events.
 #> 2 01      2020-12-06 TTSAE2  Time to First Serious Flu … 2021-01-03     0      1
 #> 3 02      2021-01-16 TTSAE1  Time to First Serious Coug… 2021-02-03     1     NA
 #> 4 02      2021-01-16 TTSAE2  Time to First Serious Flu … 2021-02-03     1     NA}\if{html}{\out{</div>}}}
-\subsection{Using multiple event/censor conditions}{
+\subsection{Using multiple event/censor conditions (\code{event_conditions}
+/\code{censor_conditions})}{
 
 In the above examples, we only have a single event and single censor
 condition. Here, we now consider multiple conditions for each passed using
@@ -716,5 +717,9 @@ derive_param_tte(
 #>   USUBJID STARTDT    PARAMCD PARAM                ADT         CNSR SRCSEQ
 #>   <chr>   <date>     <chr>   <chr>                <date>     <int>  <dbl>
 #> 1 01      2021-03-04 DURRSP  Duration of Response 2021-05-05     0      3
-#> 2 04      2021-04-14 DURRSP  Duration of Response 2021-05-15     1      3}\if{html}{\out{</div>}}}}
+#> 2 04      2021-04-14 DURRSP  Duration of Response 2021-05-15     1      3}\if{html}{\out{</div>}}}
+\subsection{Further examples}{
+
+Further example usages of this function can be found in the
+\href{../articles/bds_tte.html}{Time-to-Event vignette}.}}
 

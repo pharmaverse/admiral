@@ -345,7 +345,8 @@
 #' ) %>%
 #'   select(USUBJID, STARTDT, PARAMCD, PARAM, ADT, CNSR, SRCSEQ)
 #'
-#' @caption Using multiple event/censor conditions
+#' @caption Using multiple event/censor conditions (`event_conditions`
+#'   /`censor_conditions`)
 #' @info In the above examples, we only have a single event and single censor
 #'   condition. Here, we now consider multiple conditions for each passed using
 #'   `event_conditions` and `censor_conditions`.
@@ -589,6 +590,10 @@
 #'   )
 #' ) %>%
 #'   select(USUBJID, STARTDT, PARAMCD, PARAM, ADT, CNSR, SRCSEQ)
+#'
+#' @caption Further examples
+#' @info Further example usages of this function can be found in the
+#'   [Time-to-Event vignette](../articles/bds_tte.html).
 derive_param_tte <- function(dataset = NULL,
                              dataset_adsl,
                              source_datasets,
