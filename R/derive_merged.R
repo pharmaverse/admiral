@@ -937,6 +937,10 @@ derive_var_merged_summary <- function(dataset,
   )
 
   # Summarise the analysis value and merge to the original dataset
+  # If for one of the new variables no summary function is used, i.e., more than
+  # one record is created per by group, the error from signal_duplicates_records()
+  # need to be updated and the warning from dplyr needs to be suppressed as it
+  # is misleading.
   tryCatch(
     withCallingHandlers(
     derive_vars_merged(

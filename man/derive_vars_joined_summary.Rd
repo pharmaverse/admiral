@@ -185,6 +185,7 @@ certain observation before the current observation up to the current
 observation. For an example see the last example below.
 
 \describe{
+\item{Permitted values}{an unquoted condition, e.g., \code{AVISIT == "BASELINE"}}
 \item{Default value}{\code{NULL}}
 }}
 
@@ -200,6 +201,7 @@ functions which should not apply to all observations but only up to the
 confirmation assessment. For an example see the last example below.
 
 \describe{
+\item{Permitted values}{an unquoted condition, e.g., \code{AVISIT == "BASELINE"}}
 \item{Default value}{\code{NULL}}
 }}
 
@@ -215,7 +217,7 @@ The condition can include summary functions like \code{all()} or \code{any()}. T
 joined dataset is grouped by the original observations.
 
 \describe{
-\item{Permitted values}{a condition}
+\item{Permitted values}{an unquoted condition, e.g., \code{AVISIT == "BASELINE"}}
 \item{Default value}{\code{NULL}}
 }}
 
@@ -302,214 +304,8 @@ than the input datasets. If this causes memory issues, please try setting
 the admiral option \code{save_memory} to \code{TRUE} (see \code{set_admiral_options()}).
 This reduces the memory consumption but increases the run-time.
 }
-\examples{
-library(tibble)
-library(lubridate)
-library(dplyr, warn.conflicts = FALSE)
-library(tidyr)
-
-# Add AVISIT (based on time windows), AWLO, and AWHI
-adbds <- tribble(
-  ~USUBJID, ~ADY,
-  "1",       -33,
-  "1",        -2,
-  "1",         3,
-  "1",        24,
-  "2",        NA,
-)
-
-windows <- tribble(
-  ~AVISIT,    ~AWLO, ~AWHI,
-  "BASELINE",   -30,     1,
-  "WEEK 1",       2,     7,
-  "WEEK 2",       8,    15,
-  "WEEK 3",      16,    22,
-  "WEEK 4",      23,    30
-)
-
-derive_vars_joined(
-  adbds,
-  dataset_add = windows,
-  join_type = "all",
-  filter_join = AWLO <= ADY & ADY <= AWHI
-)
-
-# derive the nadir after baseline and before the current observation
-adbds <- tribble(
-  ~USUBJID, ~ADY, ~AVAL,
-  "1",        -7,    10,
-  "1",         1,    12,
-  "1",         8,    11,
-  "1",        15,     9,
-  "1",        20,    14,
-  "1",        24,    12,
-  "2",        13,     8
-)
-
-derive_vars_joined(
-  adbds,
-  dataset_add = adbds,
-  by_vars = exprs(USUBJID),
-  order = exprs(AVAL),
-  new_vars = exprs(NADIR = AVAL),
-  join_vars = exprs(ADY),
-  join_type = "all",
-  filter_add = ADY > 0,
-  filter_join = ADY.join < ADY,
-  mode = "first",
-  check_type = "none"
-)
-
-# add highest hemoglobin value within two weeks before AE,
-# take earliest if more than one
-adae <- tribble(
-  ~USUBJID, ~ASTDY,
-  "1",           3,
-  "1",          22,
-  "2",           2
-)
-
-adlb <- tribble(
-  ~USUBJID, ~PARAMCD, ~ADY, ~AVAL,
-  "1",      "HGB",       1,   8.5,
-  "1",      "HGB",       3,   7.9,
-  "1",      "HGB",       5,   8.9,
-  "1",      "HGB",       8,   8.0,
-  "1",      "HGB",       9,   8.0,
-  "1",      "HGB",      16,   7.4,
-  "1",      "HGB",      24,   8.1,
-  "1",      "ALB",       1,    42,
-)
-
-derive_vars_joined(
-  adae,
-  dataset_add = adlb,
-  by_vars = exprs(USUBJID),
-  order = exprs(AVAL, desc(ADY)),
-  new_vars = exprs(HGB_MAX = AVAL, HGB_DY = ADY),
-  join_type = "all",
-  filter_add = PARAMCD == "HGB",
-  filter_join = ASTDY - 14 <= ADY & ADY <= ASTDY,
-  mode = "last"
-)
-
-# Add APERIOD, APERIODC based on ADSL
-adsl <- tribble(
-  ~USUBJID, ~AP01SDT,     ~AP01EDT,     ~AP02SDT,     ~AP02EDT,
-  "1",      "2021-01-04", "2021-02-06", "2021-02-07", "2021-03-07",
-  "2",      "2021-02-02", "2021-03-02", "2021-03-03", "2021-04-01"
-) \%>\%
-  mutate(across(ends_with("DT"), ymd)) \%>\%
-  mutate(STUDYID = "xyz")
-
-period_ref <- create_period_dataset(
-  adsl,
-  new_vars = exprs(APERSDT = APxxSDT, APEREDT = APxxEDT)
-)
-
-period_ref
-
-adae <- tribble(
-  ~USUBJID, ~ASTDT,
-  "1",      "2021-01-01",
-  "1",      "2021-01-05",
-  "1",      "2021-02-05",
-  "1",      "2021-03-05",
-  "1",      "2021-04-05",
-  "2",      "2021-02-15",
-) \%>\%
-  mutate(
-    ASTDT = ymd(ASTDT),
-    STUDYID = "xyz"
-  )
-
-derive_vars_joined(
-  adae,
-  dataset_add = period_ref,
-  by_vars = exprs(STUDYID, USUBJID),
-  join_vars = exprs(APERSDT, APEREDT),
-  join_type = "all",
-  filter_join = APERSDT <= ASTDT & ASTDT <= APEREDT
-)
-
-# Add day since last dose (LDRELD)
-adae <- tribble(
-  ~USUBJID, ~ASTDT,       ~AESEQ,
-  "1",      "2020-02-02",      1,
-  "1",      "2020-02-04",      2
-) \%>\%
-  mutate(ASTDT = ymd(ASTDT))
-
-ex <- tribble(
-  ~USUBJID, ~EXSDTC,
-  "1",      "2020-01-10",
-  "1",      "2020-01",
-  "1",      "2020-01-20",
-  "1",      "2020-02-03"
-)
-
-## Please note that EXSDT is created via the order argument and then used
-## for new_vars, filter_add, and filter_join
-derive_vars_joined(
-  adae,
-  dataset_add = ex,
-  by_vars = exprs(USUBJID),
-  order = exprs(EXSDT = convert_dtc_to_dt(EXSDTC)),
-  join_type = "all",
-  new_vars = exprs(LDRELD = compute_duration(
-    start_date = EXSDT, end_date = ASTDT
-  )),
-  filter_add = !is.na(EXSDT),
-  filter_join = EXSDT <= ASTDT,
-  mode = "last"
-)
-
-# first_cond_lower and first_cond_upper argument
-myd <- tribble(
-  ~subj, ~day, ~val,
-  "1",      1, "++",
-  "1",      2, "-",
-  "1",      3, "0",
-  "1",      4, "+",
-  "1",      5, "++",
-  "1",      6, "-",
-  "2",      1, "-",
-  "2",      2, "++",
-  "2",      3, "+",
-  "2",      4, "0",
-  "2",      5, "-",
-  "2",      6, "++"
-)
-
-# derive last "++" day before "0" where all results in between are "+" or "++"
-derive_vars_joined(
-  myd,
-  dataset_add = myd,
-  by_vars = exprs(subj),
-  order = exprs(day),
-  mode = "first",
-  new_vars = exprs(prev_plus_day = day),
-  join_vars = exprs(val),
-  join_type = "before",
-  first_cond_lower = val.join == "++",
-  filter_join = val == "0" & all(val.join \%in\% c("+", "++"))
-)
-
-# derive first "++" day after "0" where all results in between are "+" or "++"
-derive_vars_joined(
-  myd,
-  dataset_add = myd,
-  by_vars = exprs(subj),
-  order = exprs(day),
-  mode = "last",
-  new_vars = exprs(next_plus_day = day),
-  join_vars = exprs(val),
-  join_type = "after",
-  first_cond_upper = val.join == "++",
-  filter_join = val == "0" & all(val.join \%in\% c("+", "++"))
-)
-}
 \seealso{
+\code{\link[=derive_vars_joined]{derive_vars_joined()}}, \code{\link[=derive_vars_merged_summary]{derive_vars_merged_summary()}},
 \code{\link[=derive_var_joined_exist_flag]{derive_var_joined_exist_flag()}}, \code{\link[=filter_joined]{filter_joined()}}
 
 General Derivation Functions for all ADaMs that returns variable appended to dataset:
@@ -529,3 +325,84 @@ General Derivation Functions for all ADaMs that returns variable appended to dat
 }
 \concept{der_gen}
 \keyword{der_gen}
+\section{Examples}{
+\subsection{Derive cumulative dose before event (\code{CUMDOSA})}{
+
+To the \code{ADAE} dataset the cumulative actual dose up to the day of the
+adverse event should be added.
+\itemize{
+\item \code{USUBJID} is specified for \code{by_vars} to join the \code{ADAE} and the \code{ADEX}
+dataset by subject.
+\item \code{filter_join} is specified to restrict the \code{ADEX} dataset to the days up
+to the adverse event. \code{ADY.join} refers to the study day in \code{ADEX}.
+\item The new variable \code{CUMDOSE} is defined by the \code{new_vars} argument. It is
+set to the sum of \code{AVAL}.
+\item As \code{ADY} from \code{ADEX} is used in \code{filter_join} (but not in \code{new_vars}), it
+needs to be specified for \code{join_vars}.
+}
+
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{library(tibble)
+library(dplyr, warn.conflicts = FALSE)
+
+adex <- tribble(
+  ~USUBJID, ~ADY, ~AVAL,
+  "1",         1,    10,
+  "1",         8,    20,
+  "1",        15,    10,
+  "2",         8,     5
+)
+
+adae <- tribble(
+  ~USUBJID, ~ADY, ~AEDECOD,
+  "1",         2, "Fatigue",
+  "1",         9, "Influenza",
+  "1",        15, "Theft",
+  "1",        15, "Fatigue",
+  "2",         4, "Parasomnia",
+  "3",         2, "Truancy"
+)
+
+derive_vars_joined_summary(
+  dataset = adae,
+  dataset_add = adex,
+  by_vars = exprs(USUBJID),
+  filter_join = ADY.join <= ADY,
+  join_type = "all",
+  join_vars = exprs(ADY),
+  new_vars = exprs(CUMDOSE = sum(AVAL, na.rm = TRUE))
+)
+#> # A tibble: 6 × 4
+#>   USUBJID   ADY AEDECOD    CUMDOSE
+#>   <chr>   <dbl> <chr>        <dbl>
+#> 1 1           2 Fatigue         10
+#> 2 1           9 Influenza       30
+#> 3 1          15 Theft           40
+#> 4 1          15 Fatigue         40
+#> 5 2           4 Parasomnia      NA
+#> 6 3           2 Truancy         NA}\if{html}{\out{</div>}}}
+\subsection{Define values for records without records in the additional dataset (\code{missing_values})}{
+
+By default, the new variables are set to \code{NA} for records without
+matching records in the restricted additional dataset. This can be changed
+by specifying the \code{missing_values} argument.
+
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{derive_vars_joined_summary(
+  dataset = adae,
+  dataset_add = adex,
+  by_vars = exprs(USUBJID),
+  filter_join = ADY.join <= ADY,
+  join_type = "all",
+  join_vars = exprs(ADY),
+  new_vars = exprs(CUMDOSE = sum(AVAL, na.rm = TRUE)),
+  missing_values = exprs(CUMDOSE = 0)
+)
+#> # A tibble: 6 × 4
+#>   USUBJID   ADY AEDECOD    CUMDOSE
+#>   <chr>   <dbl> <chr>        <dbl>
+#> 1 1           2 Fatigue         10
+#> 2 1           9 Influenza       30
+#> 3 1          15 Theft           40
+#> 4 1          15 Fatigue         40
+#> 5 2           4 Parasomnia       0
+#> 6 3           2 Truancy          0}\if{html}{\out{</div>}}}}
+
