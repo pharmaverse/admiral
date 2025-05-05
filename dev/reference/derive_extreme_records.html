@@ -17,7 +17,7 @@ where only the by variables are populated for the new records."><meta property="
 
     <a class="navbar-brand me-2" href="../index.html">admiral</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.2.0.9018</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.2.0.9019</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -531,7 +531,7 @@ are found.</p>
 <span><span class="co">#&gt; 2 2       MINIMUM    93</span></span>
 <span><span class="co">#&gt; Warning: Dataset contains duplicate records with respect to `USUBJID` and `AVAL`</span></span>
 <span><span class="co">#&gt; ℹ Run `admiral::get_duplicates_dataset()` to access the duplicate records</span></span></code></pre><p></p></div>
-<p>For investigating the issue the dataset of the duplicate source records
+<p>For investigating the issue, the dataset of the duplicate source records
 can be obtained by calling <code><a href="get_duplicates_dataset.html">get_duplicates_dataset()</a></code>:</p>
 <p></p><div class="sourceCode r"><pre><code><span><span class="fu"><a href="../reference/get_duplicates_dataset.html">get_duplicates_dataset</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Duplicate records with respect to `USUBJID` and `AVAL`.</span></span>
@@ -622,7 +622,7 @@ the input dataset. For the new records set <code>AVISIT = "PBL LAST"</code>, <co
 <span>  <span class="st">"2"</span>,      <span class="st">"BASELINE"</span>,        <span class="fl">1</span>, <span class="st">"DEF"</span>,        <span class="fl">9</span>,      <span class="fl">1</span>,</span>
 <span>  <span class="st">"2"</span>,      <span class="st">"WEEK 1"</span>,          <span class="fl">2</span>, <span class="st">"DEF"</span>,       <span class="fl">10</span>,      <span class="fl">2</span>,</span>
 <span>  <span class="st">"2"</span>,      <span class="st">"WEEK 2"</span>,          <span class="fl">3</span>, <span class="st">"DEF"</span>,       <span class="fl">12</span>,      <span class="fl">3</span></span>
-<span><span class="op">)</span> </span>
+<span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
 <span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>STUDYID <span class="op">=</span> <span class="st">"XYZ"</span>, .before <span class="op">=</span> <span class="va">USUBJID</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="../reference/derive_extreme_records.html">derive_extreme_records</a></span><span class="op">(</span></span>
@@ -802,7 +802,7 @@ occurred (set <code>AVALC = "Y"</code>, <code>AVAL = 1</code>) or not (set <code
 <span>  <span class="st">"1"</span>,      <span class="fu"><a href="https://lubridate.tidyverse.org/reference/ymd.html" class="external-link">ymd</a></span><span class="op">(</span><span class="st">"2022-05-13"</span><span class="op">)</span>,</span>
 <span>  <span class="st">"2"</span>,      <span class="fu"><a href="https://lubridate.tidyverse.org/reference/ymd.html" class="external-link">ymd</a></span><span class="op">(</span><span class="st">""</span><span class="op">)</span>,</span>
 <span>  <span class="st">"3"</span>,      <span class="fu"><a href="https://lubridate.tidyverse.org/reference/ymd.html" class="external-link">ymd</a></span><span class="op">(</span><span class="st">""</span><span class="op">)</span></span>
-<span><span class="op">)</span> </span>
+<span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>STUDYID <span class="op">=</span> <span class="st">"XX1234"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">adrs</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://tibble.tidyverse.org/reference/tribble.html" class="external-link">tribble</a></span><span class="op">(</span></span>
@@ -813,10 +813,10 @@ occurred (set <code>AVALC = "Y"</code>, <code>AVAL = 1</code>) or not (set <code
 <span>  <span class="st">"2"</span>,      <span class="st">"2021-06-15"</span>, <span class="st">"SD"</span>,       <span class="fl">3</span>,</span>
 <span>  <span class="st">"2"</span>,      <span class="st">"2021-07-16"</span>, <span class="st">"PD"</span>,       <span class="fl">4</span>,</span>
 <span>  <span class="st">"2"</span>,      <span class="st">"2021-09-14"</span>, <span class="st">"PD"</span>,       <span class="fl">4</span></span>
-<span><span class="op">)</span> </span>
+<span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span></span>
 <span>    STUDYID <span class="op">=</span> <span class="st">"XX1234"</span>, .before <span class="op">=</span> <span class="va">USUBJID</span></span>
-<span>  <span class="op">)</span> </span>
+<span>  <span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span></span>
 <span>    ADT <span class="op">=</span> <span class="fu"><a href="https://lubridate.tidyverse.org/reference/ymd.html" class="external-link">ymd</a></span><span class="op">(</span><span class="va">RSDTC</span><span class="op">)</span>,</span>
 <span>    PARAMCD <span class="op">=</span> <span class="st">"OVR"</span>,</span>

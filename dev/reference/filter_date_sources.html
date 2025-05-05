@@ -9,7 +9,7 @@ from a list of sources."><meta property="og:image" content="https://pharmaverse.
 
     <a class="navbar-brand me-2" href="../index.html">admiral</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.2.0.9018</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.2.0.9019</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -183,7 +183,7 @@ by variables and the date and order specified in the <code><a href="tte_source.h
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
     <p>The following steps are performed to create the output dataset:</p>
 <ol><li><p>For each source dataset the observations as specified by
-the <code>filter</code> element are selected. Then for each patient the first or last
+the <code>filter</code> element are selected. Then for each subject the first or last
 observation (with respect to <code>date</code>) is selected.</p></li>
 <li><p>The <code>ADT</code> variable is set to the variable specified by the
 <code>date</code> element. If the date variable is a datetime variable, only
@@ -194,7 +194,7 @@ the first possible date.</p></li>
 element.</p></li>
 <li><p>The selected observations of all source datasets are combined into a
 single dataset.</p></li>
-<li><p>For each patient the first or last observation (with respect to the
+<li><p>For each subject the first or last observation (with respect to the
 <code>ADT</code> variable) from the single dataset is selected.</p></li>
 </ol></div>
 
