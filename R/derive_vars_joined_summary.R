@@ -17,20 +17,21 @@
 #'   The variables specified by the `by_vars`, the `new_vars`, the `join_vars`,
 #'   and the `order` argument are expected.
 #'
+#' @permitted [dataset]
+#'
 #' @param by_vars Grouping variables
 #'
 #'   The two datasets are joined by the specified variables.
 #'
 #'   `r roxygen_param_by_vars(rename = TRUE)`
 #'
+#' @permitted [var_list_rename]
+#'
 #' @param order Sort order
 #'
-#'   If the argument is set to a non-null value, for each observation of the
-#'   input dataset the first or last observation from the joined dataset is
-#'   selected with respect to the specified order. The specified variables are
-#'   expected in the additional dataset (`dataset_add`). If a variable is
-#'   available in both `dataset` and `dataset_add`, the one from `dataset_add`
-#'   is used for the sorting.
+#'   The specified variables are used to determine the order of the records if
+#'   `first_cond_lower` or `first_cond_upper` is specified or if `join_type`
+#'   equals `"before"` or `"after"`.
 #'
 #'   If an expression is named, e.g., `exprs(EXSTDT =
 #'   convert_dtc_to_dt(EXSTDTC), EXSEQ)`, a corresponding variable (`EXSTDT`) is
@@ -40,43 +41,31 @@
 #'
 #'   `r roxygen_order_na_handling()`
 #'
-#' @permitted list of expressions created by `exprs()`, e.g.,
-#'    `exprs(ADT, desc(AVAL))` or `NULL`
+#' @permitted [order_optional]
 #'
 #' @param new_vars Variables to add
 #'
-#'   The specified variables from the additional dataset are added to the output
-#'   dataset. Variables can be renamed by naming the element, i.e., `new_vars =
-#'   exprs(<new name> = <old name>)`.
+#'   The new variables can be defined by named expressions, i.e., `new_vars =
+#'   exprs(<new variable> = <value>)`. The value must be defined such that it
+#'   results in a single record per by group, e.g., by using a summary function
+#'   like `mean()`, `sum()`, ...
 #'
-#'   For example `new_vars = exprs(var1, var2)` adds variables `var1` and `var2`
-#'   from `dataset_add` to the input dataset.
-#'
-#'   And `new_vars = exprs(var1, new_var2 = old_var2)` takes `var1` and
-#'   `old_var2` from `dataset_add` and adds them to the input dataset renaming
-#'   `old_var2` to `new_var2`.
-#'
-#'   Values of the added variables can be modified by specifying an expression.
-#'   For example, `new_vars = LASTRSP = exprs(str_to_upper(AVALC))` adds the
-#'   variable `LASTRSP` to the dataset and sets it to the upper case value of
-#'   `AVALC`.
-#'
-#'   If the argument is not specified or set to `NULL`, all variables from the
-#'   additional dataset (`dataset_add`) are added.
-#'
-#' @permitted list of variables or named expressions created by `exprs()`
+#' @permitted [expr_list_summary]
 #'
 #' @param tmp_obs_nr_var Temporary observation number
 #'
 #'   The specified variable is added to the input dataset (`dataset`) and the
-#'   additional dataset (`dataset_add`). It is set to the observation number
-#'   with respect to `order`. For each by group (`by_vars`) the observation
-#'   number starts with `1`. The variable can be used in the conditions
-#'   (`filter_join`, `first_cond_upper`, `first_cond_lower`). It can also be
-#'   used to select consecutive observations or the last observation.
+#'   restricted additional dataset (`dataset_add` after applying `filter_add`).
+#'   It is set to the observation number with respect to `order`. For each by
+#'   group (`by_vars`) the observation number starts with `1`. The variable can
+#'   be used in the conditions (`filter_join`, `first_cond_upper`,
+#'   `first_cond_lower`). It can also be used to select consecutive observations
+#'   or the last observation.
 #'
 #'   The variable is not included in the output dataset. To include it specify
 #'   it for `new_vars`.
+#'
+#' @permitted [symbol]
 #'
 #' @param join_vars Variables to use from additional dataset
 #'
@@ -86,15 +75,22 @@
 #'   in both the input dataset and the additional dataset, the suffix ".join" is
 #'   added to the variable from the additional dataset.
 #'
-#'   If an expression is named, e.g., `exprs(EXTDT =
+#'   If an expression is named, e.g., `exprs(EXSTDT =
 #'   convert_dtc_to_dt(EXSTDTC))`, a corresponding variable is added to the
 #'   additional dataset and can be used in the filter conditions (`filter_add`,
-#'   `filter_join`) and for `new_vars`. The variable is not included in the
-#'   output dataset.
+#'   `filter_join`) and for `new_vars`.
 #'
 #'   The variables are not included in the output dataset.
 #'
-#' @permitted list of variables or named expressions created by `exprs()`
+#' @permitted [var_expr_list]
+#'
+#' @param join_type Observations to keep after joining
+#'
+#'   The argument determines which of the joined observations are kept with
+#'   respect to the original observation. For example, if `join_type = "after"`
+#'   is specified all observations after the original observations are kept.
+#'
+#' @permitted `"before"`, `"after"`, `"all"`
 #'
 #' @param first_cond_lower Condition for selecting range of data (before)
 #'
@@ -137,6 +133,20 @@
 #'
 #' @permitted [condition]
 #'
+#' @param check_type Check uniqueness?
+#'
+#'   If `"message"`, `"warning"` or `"error"` is specified, the specified
+#'   message is issued if the observations of the input dataset (`dataset`) or
+#'   the restricted additional dataset (`dataset_add` after applying
+#'   `filter_add`) are not unique with respect to the by variables and the
+#'   order.
+#'
+#'   The uniqueness is checked only if `tmp_obs_nr_var`, `first_cond_lower`,
+#'   or `first_cond_upper` is specified or `join_type` equals `"before"` or
+#'   `"after"`.
+#'
+#' @permitted [msg_type]
+#'
 #' @inheritParams get_joined_data
 #' @inheritParams derive_vars_merged
 #'
@@ -172,22 +182,18 @@
 #'
 #' 1. The joined dataset is restricted by the `filter_join` condition.
 #'
-#' 1. If `order` is specified, for each observation of the input dataset the
-#' first or last observation (depending on `mode`) is selected.
-#'
-#' 1. The variables specified for `new_vars` are created (if requested) and
-#' merged to the input dataset. I.e., the output dataset contains all
-#' observations from the input dataset. For observations without a matching
-#' observation in the joined dataset the new variables are set as specified by
-#' `missing_values` (or to `NA` for variables not in `missing_values`).
-#' Observations in the additional dataset which have no matching observation in
-#' the input dataset are ignored.
+#' 1. The variables specified for `new_vars` are created and merged to the input
+#' dataset. I.e., the output dataset contains all observations from the input
+#' dataset. For observations without a matching observation in the joined
+#' dataset the new variables are set as specified by `missing_values` (or to
+#' `NA` for variables not in `missing_values`). Observations in the additional
+#' dataset which have no matching observation in the input dataset are ignored.
 #'
 #' `r roxygen_save_memory()`
 #'
 #' @return The output dataset contains all observations and variables of the
-#'   input dataset and additionally the variables specified for `new_vars` from
-#'   the additional dataset (`dataset_add`).
+#'   input dataset and additionally the variables specified for `new_vars`
+#'   derived from the additional dataset (`dataset_add`).
 #'
 #' @seealso [derive_vars_joined()], [derive_vars_merged_summary()],
 #' [derive_var_joined_exist_flag()], [filter_joined()]
@@ -208,7 +214,7 @@
 #'    dataset by subject.
 #'   - `filter_join` is specified to restrict the `ADEX` dataset to the days up
 #'    to the adverse event. `ADY.join` refers to the study day in `ADEX`.
-#'   - The new variable `CUMDOSE` is defined by the `new_vars` argument. It is
+#'   - The new variable `CUMDOSA` is defined by the `new_vars` argument. It is
 #'   set to the sum of `AVAL`.
 #'   - As `ADY` from `ADEX` is used in `filter_join` (but not in `new_vars`), it
 #'    needs to be specified for `join_vars`.
@@ -242,7 +248,7 @@
 #'   filter_join = ADY.join <= ADY,
 #'   join_type = "all",
 #'   join_vars = exprs(ADY),
-#'   new_vars = exprs(CUMDOSE = sum(AVAL, na.rm = TRUE))
+#'   new_vars = exprs(CUMDOSA = sum(AVAL, na.rm = TRUE))
 #' )
 #'
 #' @caption Define values for records without records in the additional dataset (`missing_values`)
@@ -262,6 +268,45 @@
 #'   missing_values = exprs(CUMDOSE = 0)
 #' )
 #'
+#' @caption Derive weekly score
+#'
+#' @info For each planned visit the average score within the week before the
+#'   visit should be derived if at least three assessments are available.
+#'
+#' @code
+#' planned_visits <- tribble(
+#'   ~AVISIT,  ~ADY,
+#'   "WEEK 1",    8,
+#'   "WEEK 4",   29,
+#'   "WEEK 8",   57
+#'   ) %>%
+#'   mutate(USUBJID = "1")
+#'
+#' adqs <- tribble(
+#'   ~ADY, ~AVAL,
+#'      1,    10,
+#'      2,    12,
+#'      4,     9,
+#'      5,     9,
+#'      7,    10,
+#'     25,    11,
+#'     27,    10,
+#'     29,    10,
+#'     41,     8,
+#'     42,     9,
+#'     44,     5
+#' ) %>%
+#' mutate(USUBJID = "1")
+#'
+#' derive_vars_joined_summary(
+#'   planned_visits,
+#'   dataset_add = adqs,
+#'   by_vars = exprs(USUBJID),
+#'   filter_join = ADY - 7 <= ADY.join & ADY.join < ADY,
+#'   join_type = "all",
+#'   join_vars = exprs(ADY),
+#'   new_vars = exprs(AVAL = if_else(n() >= 3, mean(AVAL, na.rm = TRUE), NA))
+#' )
 derive_vars_joined_summary <- function(dataset,
                                dataset_add,
                                by_vars = NULL,
@@ -297,17 +342,16 @@ derive_vars_joined_summary <- function(dataset,
   first_cond_upper <- assert_filter_cond(enexpr(first_cond_upper), optional = TRUE)
   filter_join <- assert_filter_cond(enexpr(filter_join), optional = TRUE)
 
-  preexisting_vars <- chr2vars(colnames(dataset))
-  preexisting_vars_no_by_vars <- preexisting_vars[which(!(preexisting_vars %in% by_vars))]
-  duplicates <- intersect(replace_values_by_names(new_vars), preexisting_vars_no_by_vars)
+  preexisting_vars <- setdiff(chr2vars(colnames(dataset)), by_vars_left)
+  duplicates <- intersect(replace_values_by_names(new_vars), preexisting_vars)
   if (length(duplicates) > 0) {
-    cli_abort(
+    cli_abort(c(
       paste(
-        "The variable{?s} {.var {duplicates}} in {.arg dataset_add} ha{?s/ve} naming",
-        "conflicts with {.arg dataset}, please make the appropriate modifications",
-        "to {.arg new_vars}."
-      )
-    )
+        "The variable{?s} {.var {duplicates}} in {.arg new_vars} {?is/are} already",
+        "in {.arg dataset}"
+      ),
+      "Please make appropriate modifications to {.arg dataset} or {.arg new_vars}."
+    ))
   }
 
   # number observations of the input dataset to get a unique key

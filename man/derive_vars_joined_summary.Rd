@@ -38,6 +38,7 @@ The variables specified by the \code{by_vars}, the \code{new_vars}, the \code{jo
 and the \code{order} argument are expected.
 
 \describe{
+\item{Permitted values}{a dataset, i.e., a \code{data.frame} or tibble}
 \item{Default value}{none}
 }}
 
@@ -49,17 +50,15 @@ Variables can be renamed by naming the element, i.e.
 \verb{by_vars = exprs(<name in input dataset> = <name in additional dataset>)}, similar to the \code{dplyr} joins.
 
 \describe{
+\item{Permitted values}{list of (optionally named) variables created by \code{exprs()}, e.g., \code{exprs(USUBJID, ADY = ASTDY)}}
 \item{Default value}{\code{NULL}}
 }}
 
 \item{order}{Sort order
 
-If the argument is set to a non-null value, for each observation of the
-input dataset the first or last observation from the joined dataset is
-selected with respect to the specified order. The specified variables are
-expected in the additional dataset (\code{dataset_add}). If a variable is
-available in both \code{dataset} and \code{dataset_add}, the one from \code{dataset_add}
-is used for the sorting.
+The specified variables are used to determine the order of the records if
+\code{first_cond_lower} or \code{first_cond_upper} is specified or if \code{join_type}
+equals \code{"before"} or \code{"after"}.
 
 If an expression is named, e.g., \code{exprs(EXSTDT = convert_dtc_to_dt(EXSTDTC), EXSEQ)}, a corresponding variable (\code{EXSTDT}) is
 added to the additional dataset and can be used in the filter conditions
@@ -69,49 +68,36 @@ variable is not included in the output dataset.
 For handling of \code{NA}s in sorting variables see \href{../articles/generic.html#sort_order}{Sort Order}.
 
 \describe{
-\item{Permitted values}{list of expressions created by \code{exprs()}, e.g.,
-\code{exprs(ADT, desc(AVAL))} or \code{NULL}}
+\item{Permitted values}{list of expressions created by \code{exprs()}, e.g., \code{exprs(ADT, desc(AVAL))} or \code{NULL}}
 \item{Default value}{\code{NULL}}
 }}
 
 \item{new_vars}{Variables to add
 
-The specified variables from the additional dataset are added to the output
-dataset. Variables can be renamed by naming the element, i.e., \verb{new_vars = exprs(<new name> = <old name>)}.
-
-For example \code{new_vars = exprs(var1, var2)} adds variables \code{var1} and \code{var2}
-from \code{dataset_add} to the input dataset.
-
-And \code{new_vars = exprs(var1, new_var2 = old_var2)} takes \code{var1} and
-\code{old_var2} from \code{dataset_add} and adds them to the input dataset renaming
-\code{old_var2} to \code{new_var2}.
-
-Values of the added variables can be modified by specifying an expression.
-For example, \code{new_vars = LASTRSP = exprs(str_to_upper(AVALC))} adds the
-variable \code{LASTRSP} to the dataset and sets it to the upper case value of
-\code{AVALC}.
-
-If the argument is not specified or set to \code{NULL}, all variables from the
-additional dataset (\code{dataset_add}) are added.
+The new variables can be defined by named expressions, i.e., \verb{new_vars = exprs(<new variable> = <value>)}. The value must be defined such that it
+results in a single record per by group, e.g., by using a summary function
+like \code{mean()}, \code{sum()}, ...
 
 \describe{
-\item{Permitted values}{list of variables or named expressions created by \code{exprs()}}
+\item{Permitted values}{list of named expressions created by \code{exprs()}, e.g., \code{exprs(CUMDOSA = sum(AVAL, na.rm = TRUE), AVALU = "ml")}}
 \item{Default value}{none}
 }}
 
 \item{tmp_obs_nr_var}{Temporary observation number
 
 The specified variable is added to the input dataset (\code{dataset}) and the
-additional dataset (\code{dataset_add}). It is set to the observation number
-with respect to \code{order}. For each by group (\code{by_vars}) the observation
-number starts with \code{1}. The variable can be used in the conditions
-(\code{filter_join}, \code{first_cond_upper}, \code{first_cond_lower}). It can also be
-used to select consecutive observations or the last observation.
+restricted additional dataset (\code{dataset_add} after applying \code{filter_add}).
+It is set to the observation number with respect to \code{order}. For each by
+group (\code{by_vars}) the observation number starts with \code{1}. The variable can
+be used in the conditions (\code{filter_join}, \code{first_cond_upper},
+\code{first_cond_lower}). It can also be used to select consecutive observations
+or the last observation.
 
 The variable is not included in the output dataset. To include it specify
 it for \code{new_vars}.
 
 \describe{
+\item{Permitted values}{an unquoted symbol, e.g., \code{AVAL}}
 \item{Default value}{\code{NULL}}
 }}
 
@@ -123,15 +109,14 @@ do not need to be repeated for \code{join_vars}. If a specified variable exists
 in both the input dataset and the additional dataset, the suffix ".join" is
 added to the variable from the additional dataset.
 
-If an expression is named, e.g., \code{exprs(EXTDT = convert_dtc_to_dt(EXSTDTC))}, a corresponding variable is added to the
+If an expression is named, e.g., \code{exprs(EXSTDT = convert_dtc_to_dt(EXSTDTC))}, a corresponding variable is added to the
 additional dataset and can be used in the filter conditions (\code{filter_add},
-\code{filter_join}) and for \code{new_vars}. The variable is not included in the
-output dataset.
+\code{filter_join}) and for \code{new_vars}.
 
 The variables are not included in the output dataset.
 
 \describe{
-\item{Permitted values}{list of variables or named expressions created by \code{exprs()}}
+\item{Permitted values}{list of variables or named expressions created by \code{exprs()}, e.g., \code{exprs(EXSTDY, EXSTDTM = convert_dtc_to_dtm(EXSTDTC))}}
 \item{Default value}{\code{NULL}}
 }}
 
@@ -140,14 +125,6 @@ The variables are not included in the output dataset.
 The argument determines which of the joined observations are kept with
 respect to the original observation. For example, if \code{join_type = "after"}
 is specified all observations after the original observations are kept.
-
-For example for confirmed response or BOR in the oncology setting or
-confirmed deterioration in questionnaires the confirmatory assessment must
-be after the assessment. Thus \code{join_type = "after"} could be used.
-
-Whereas, sometimes you might allow for confirmatory observations to occur
-prior to the observation. For example, to identify AEs occurring on or
-after seven days before a COVID AE. Thus \code{join_type = "all"} could be used.
 
 \describe{
 \item{Permitted values}{\code{"before"}, \code{"after"}, \code{"all"}}
@@ -167,7 +144,7 @@ The condition can include summary functions like \code{all()} or \code{any()}. T
 additional dataset is grouped by the by variables (\code{by_vars}).
 
 \describe{
-\item{Permitted values}{a condition}
+\item{Permitted values}{an unquoted condition, e.g., \code{AVISIT == "BASELINE"}}
 \item{Default value}{\code{NULL}}
 }}
 
@@ -236,24 +213,25 @@ specified for \code{new_vars} can be specified for \code{missing_values}.
 
 \item{check_type}{Check uniqueness?
 
-If \code{"warning"} or \code{"error"} is specified, the specified message is issued
-if the observations of the (restricted) joined dataset are not unique with
-respect to the by variables and the order.
+If \code{"message"}, \code{"warning"} or \code{"error"} is specified, the specified
+message is issued if the observations of the input dataset (\code{dataset}) or
+the restricted additional dataset (\code{dataset_add} after applying
+\code{filter_add}) are not unique with respect to the by variables and the
+order.
 
-This argument is ignored if \code{order} is not specified. In this case an error
-is issued independent of \code{check_type} if the restricted joined dataset
-contains more than one observation for any of the observations of the input
-dataset.
+The uniqueness is checked only if \code{tmp_obs_nr_var}, \code{first_cond_lower},
+or \code{first_cond_upper} is specified or \code{join_type} equals \code{"before"} or
+\code{"after"}.
 
 \describe{
-\item{Permitted values}{\code{"none"}, \code{"warning"}, \code{"error"}}
+\item{Permitted values}{\code{"none"}, \code{"message"}, \code{"warning"}, \code{"error"}}
 \item{Default value}{\code{"warning"}}
 }}
 }
 \value{
 The output dataset contains all observations and variables of the
-input dataset and additionally the variables specified for \code{new_vars} from
-the additional dataset (\code{dataset_add}).
+input dataset and additionally the variables specified for \code{new_vars}
+derived from the additional dataset (\code{dataset_add}).
 }
 \description{
 The function summarises variables from an additional dataset and adds the
@@ -288,15 +266,12 @@ dataset the condition is not fulfilled, the observation is removed.
 
 For an example see the last example in the "Examples" section.
 \item The joined dataset is restricted by the \code{filter_join} condition.
-\item If \code{order} is specified, for each observation of the input dataset the
-first or last observation (depending on \code{mode}) is selected.
-\item The variables specified for \code{new_vars} are created (if requested) and
-merged to the input dataset. I.e., the output dataset contains all
-observations from the input dataset. For observations without a matching
-observation in the joined dataset the new variables are set as specified by
-\code{missing_values} (or to \code{NA} for variables not in \code{missing_values}).
-Observations in the additional dataset which have no matching observation in
-the input dataset are ignored.
+\item The variables specified for \code{new_vars} are created and merged to the input
+dataset. I.e., the output dataset contains all observations from the input
+dataset. For observations without a matching observation in the joined
+dataset the new variables are set as specified by \code{missing_values} (or to
+\code{NA} for variables not in \code{missing_values}). Observations in the additional
+dataset which have no matching observation in the input dataset are ignored.
 }
 
 \strong{Note:} This function creates temporary datasets which may be much bigger
@@ -335,7 +310,7 @@ adverse event should be added.
 dataset by subject.
 \item \code{filter_join} is specified to restrict the \code{ADEX} dataset to the days up
 to the adverse event. \code{ADY.join} refers to the study day in \code{ADEX}.
-\item The new variable \code{CUMDOSE} is defined by the \code{new_vars} argument. It is
+\item The new variable \code{CUMDOSA} is defined by the \code{new_vars} argument. It is
 set to the sum of \code{AVAL}.
 \item As \code{ADY} from \code{ADEX} is used in \code{filter_join} (but not in \code{new_vars}), it
 needs to be specified for \code{join_vars}.
@@ -369,10 +344,10 @@ derive_vars_joined_summary(
   filter_join = ADY.join <= ADY,
   join_type = "all",
   join_vars = exprs(ADY),
-  new_vars = exprs(CUMDOSE = sum(AVAL, na.rm = TRUE))
+  new_vars = exprs(CUMDOSA = sum(AVAL, na.rm = TRUE))
 )
 #> # A tibble: 6 × 4
-#>   USUBJID   ADY AEDECOD    CUMDOSE
+#>   USUBJID   ADY AEDECOD    CUMDOSA
 #>   <chr>   <dbl> <chr>        <dbl>
 #> 1 1           2 Fatigue         10
 #> 2 1           9 Influenza       30

@@ -141,16 +141,16 @@
 #'
 #' @param check_type Check uniqueness?
 #'
-#'   If `"warning"` or `"error"` is specified, the specified message is issued
-#'   if the observations of the (restricted) joined dataset are not unique with
-#'   respect to the by variables and the order.
+#'   If `"message"`, `"warning"` or `"error"` is specified, the specified
+#'   message is issued if the observations of the (restricted) joined dataset
+#'   are not unique with respect to the by variables and the order.
 #'
 #'   This argument is ignored if `order` is not specified. In this case an error
 #'   is issued independent of `check_type` if the restricted joined dataset
 #'   contains more than one observation for any of the observations of the input
 #'   dataset.
 #'
-#' @permitted `"none"`, `"warning"`, `"error"`
+#' @permitted [msg_type]
 #'
 #' @inheritParams get_joined_data
 #' @inheritParams derive_vars_merged
@@ -637,7 +637,7 @@ derive_vars_joined <- function(dataset,
 #'   The condition can include summary functions like `all()` or `any()`. The
 #'   additional dataset is grouped by the by variables (`by_vars`).
 #'
-#' @permitted a condition
+#' @permitted [condition]
 #'
 #' @param first_cond_lower Condition for selecting range of data (before)
 #'
@@ -678,16 +678,16 @@ derive_vars_joined <- function(dataset,
 #'
 #' @param check_type Check uniqueness?
 #'
-#'   If `"warning"` or `"error"` is specified, the specified message is issued
-#'   if the observations of the (restricted) joined dataset are not unique with
-#'   respect to the by variables and the order.
+#'   If `"message"`, `"warning"` or `"error"` is specified, the specified
+#'   message is issued if the observations of the (restricted) joined dataset
+#'   are not unique with respect to the by variables and the order.
 #'
 #'   This argument is ignored if `order` is not specified. In this case an error
 #'   is issued independent of `check_type` if the restricted joined dataset
 #'   contains more than one observation for any of the observations of the input
 #'   dataset.
 #'
-#' @permitted `"none"`, `"warning"`, `"error"`
+#' @permitted [msg_type]
 #'
 #'
 #' @details

@@ -170,7 +170,7 @@ The condition can include summary functions like \code{all()} or \code{any()}. T
 additional dataset is grouped by the by variables (\code{by_vars}).
 
 \describe{
-\item{Permitted values}{a condition}
+\item{Permitted values}{an unquoted condition, e.g., \code{AVISIT == "BASELINE"}}
 \item{Default value}{\code{NULL}}
 }}
 
@@ -281,9 +281,9 @@ specified for \code{new_vars} can be specified for \code{missing_values}.
 
 \item{check_type}{Check uniqueness?
 
-If \code{"warning"} or \code{"error"} is specified, the specified message is issued
-if the observations of the (restricted) joined dataset are not unique with
-respect to the by variables and the order.
+If \code{"message"}, \code{"warning"} or \code{"error"} is specified, the specified
+message is issued if the observations of the (restricted) joined dataset
+are not unique with respect to the by variables and the order.
 
 This argument is ignored if \code{order} is not specified. In this case an error
 is issued independent of \code{check_type} if the restricted joined dataset
@@ -291,7 +291,7 @@ contains more than one observation for any of the observations of the input
 dataset.
 
 \describe{
-\item{Permitted values}{\code{"none"}, \code{"warning"}, \code{"error"}}
+\item{Permitted values}{\code{"none"}, \code{"message"}, \code{"warning"}, \code{"error"}}
 \item{Default value}{\code{"warning"}}
 }}
 }

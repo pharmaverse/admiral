@@ -9,6 +9,12 @@
     readability. See `derive_extreme_records()` for an example.
     - The output of the structured examples used for complex functions is
     displayed in the help pages in RStudio.
+    
+- New function `derive_vars_joined_summary()` to derive summary variables from
+  selected records of an additional dataset where the selection depends on
+  variables from both the input dataset and the additional dataset. For example,
+  the cumulative dose up to each adverse event in `ADAE` can be derived with the
+  new function. (#2652)
 
 ## Updates of Existing Functions
 
