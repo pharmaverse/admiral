@@ -195,7 +195,7 @@
 #'   input dataset and additionally the variables specified for `new_vars`
 #'   derived from the additional dataset (`dataset_add`).
 #'
-#' @seealso [derive_vars_joined()], [derive_vars_merged_summary()],
+#' @seealso [derive_vars_joined()], [derive_var_merged_summary()],
 #' [derive_var_joined_exist_flag()], [filter_joined()]
 #'
 #' @keywords der_gen

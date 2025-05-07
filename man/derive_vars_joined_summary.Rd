@@ -280,7 +280,7 @@ the admiral option \code{save_memory} to \code{TRUE} (see \code{set_admiral_opti
 This reduces the memory consumption but increases the run-time.
 }
 \seealso{
-\code{\link[=derive_vars_joined]{derive_vars_joined()}}, \code{\link[=derive_vars_merged_summary]{derive_vars_merged_summary()}},
+\code{\link[=derive_vars_joined]{derive_vars_joined()}}, \code{\link[=derive_var_merged_summary]{derive_var_merged_summary()}},
 \code{\link[=derive_var_joined_exist_flag]{derive_var_joined_exist_flag()}}, \code{\link[=filter_joined]{filter_joined()}}
 
 General Derivation Functions for all ADaMs that returns variable appended to dataset:
@@ -379,5 +379,49 @@ by specifying the \code{missing_values} argument.
 #> 3 1          15 Theft           40
 #> 4 1          15 Fatigue         40
 #> 5 2           4 Parasomnia       0
-#> 6 3           2 Truancy          0}\if{html}{\out{</div>}}}}
+#> 6 3           2 Truancy          0}\if{html}{\out{</div>}}}
+\subsection{Derive weekly score}{
+
+For each planned visit the average score within the week before the
+visit should be derived if at least three assessments are available.
+
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{planned_visits <- tribble(
+  ~AVISIT,  ~ADY,
+  "WEEK 1",    8,
+  "WEEK 4",   29,
+  "WEEK 8",   57
+  ) \%>\%
+  mutate(USUBJID = "1")
+
+adqs <- tribble(
+  ~ADY, ~AVAL,
+     1,    10,
+     2,    12,
+     4,     9,
+     5,     9,
+     7,    10,
+    25,    11,
+    27,    10,
+    29,    10,
+    41,     8,
+    42,     9,
+    44,     5
+) \%>\%
+mutate(USUBJID = "1")
+
+derive_vars_joined_summary(
+  planned_visits,
+  dataset_add = adqs,
+  by_vars = exprs(USUBJID),
+  filter_join = ADY - 7 <= ADY.join & ADY.join < ADY,
+  join_type = "all",
+  join_vars = exprs(ADY),
+  new_vars = exprs(AVAL = if_else(n() >= 3, mean(AVAL, na.rm = TRUE), NA))
+)
+#> # A tibble: 3 × 4
+#>   AVISIT   ADY USUBJID  AVAL
+#>   <chr>  <dbl> <chr>   <dbl>
+#> 1 WEEK 1     8 1          10
+#> 2 WEEK 4    29 1          NA
+#> 3 WEEK 8    57 1          NA}\if{html}{\out{</div>}}}}
 
