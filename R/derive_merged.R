@@ -958,17 +958,23 @@ derive_var_merged_summary <- function(dataset,
       warning = function(cnd) {
         if (any(str_detect(
           cnd$message,
-          stringr::fixed("Returning more (or less) than 1 row per `summarise()` group was deprecated")
+          fixed("Returning more (or less) than 1 row per `summarise()` group was deprecated")
         ))) {
-          rlang::cnd_muffle(cnd)
+          cnd_muffle(cnd)
         }
       }
     ),
     duplicate_records = function(cnd) {
       cli_abort(
         c(
-          "After summarising, the dataset contains duplicate records with respect to {.var {cnd$by_vars}}.",
-          "Please check {.arg new_vars} if summary functions like {.fun mean}, {.fun sum}, ... are used on the right hand side.",
+          paste(
+            "After summarising, the dataset contains duplicate records with",
+            "respect to {.var {cnd$by_vars}}."
+          ),
+          paste(
+            "Please check {.arg new_vars} if summary functions like {.fun mean},",
+            "{.fun sum}, ... are used on the right hand side."
+          ),
           i = "Run {.run admiral::get_duplicates_dataset()} to access the duplicate records"
         ),
         class = cnd$class,
