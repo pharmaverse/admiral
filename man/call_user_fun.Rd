@@ -17,6 +17,7 @@ call_user_fun(call)
 The return value of the function call
 }
 \description{
+r lifecycle::badge("deprecated")
 Calls a function provided by the user and adds the function call to the error
 message if the call fails.
 }
@@ -31,12 +32,6 @@ try(call_user_fun(compute_bmi(
   weight = "hallo"
 )))
 }
-\seealso{
-Utilities used within Derivation functions: 
-\code{\link{extract_unit}()},
-\code{\link{get_flagged_records}()},
-\code{\link{get_not_mapped}()},
-\code{\link{get_vars_query}()}
-}
-\concept{utils_help}
-\keyword{utils_help}
+\concept{utils_help, deprecated}
+\keyword{deprecated}
+\keyword{utils_help,}

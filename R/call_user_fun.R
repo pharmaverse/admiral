@@ -1,15 +1,17 @@
 #' Calls a Function Provided by the User
 #'
+#' @description
+#' r lifecycle::badge("deprecated")
 #' Calls a function provided by the user and adds the function call to the error
 #' message if the call fails.
-#'
+
 #' @param call Call to be executed
 #'
 #'
 #' @return The return value of the function call
 #'
-#' @family utils_help
-#' @keywords utils_help
+#' @family utils_help, deprecated
+#' @keywords utils_help, deprecated
 #'
 #' @export
 #'
@@ -24,6 +26,11 @@
 #'   weight = "hallo"
 #' )))
 call_user_fun <- function(call) {
+  deprecate_inform(
+    when = "1.3.0",
+    what = "call_user_fun()",
+    details = ""
+  )
   tryCatch(
     eval_tidy(call),
     error = function(cnd) {
