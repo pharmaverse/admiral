@@ -1,8 +1,8 @@
 # This script:  data-raw/admiral_verify_templates.R
 
+# FIX
+# Generates ADaM from templates and compares to previously generated ADaM file (found in https:://github.com main branch pharmaverseadam).
 #
-# Generates ADaM from templates and compares to previously generated ADaM file (found in pharmaverseadam).
-# pharmaverseadam is the SOURCE.
 #
 # Much code taken from pharamavreseadam::create_adams_data.R
 # (https://github.com/pharmaverse/pharmaverseadam/blob/main/data-raw/create_adams_data.R)
@@ -18,7 +18,7 @@
 # - ignore *.rda files in admiral/data (per Ben)
 # - written as standalone R script, not as package R function
 # - compares full ADaM - all rows (ie no reduction in number of rows in each dataset)
-# - use cli:: for messages/errors?
+# - use cli:: for messages/errors - YES
 
 #' (if were to add to `admiral` package)
 #' @param pkg  package (ex:  "admiral )
