@@ -17,9 +17,11 @@ derive_summary_records(
 \arguments{
 \item{dataset}{Input dataset
 
-The variables specified by the \code{by_vars} argument are expected to be in the dataset.
+If the argument is not specified (or set to \code{NULL}), a new dataset is
+created. Otherwise, the new records are appended to the specified dataset.
 
 \describe{
+\item{Permitted values}{a dataset, i.e., a \code{data.frame} or tibble}
 \item{Default value}{\code{NULL}}
 }}
 

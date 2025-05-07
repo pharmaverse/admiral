@@ -11,11 +11,16 @@
 #' retain those common values in the newly derived records. Otherwise new value
 #' will be set to `NA`.
 #'
-#' @param dataset  `r roxygen_param_dataset(expected_vars = c("by_vars"))`
+#' @param dataset `r roxygen_param_dataset()`
+#'
+#'   If the argument is not specified (or set to `NULL`), a new dataset is
+#'   created. Otherwise, the new records are appended to the specified dataset.
+#'
+#' @permitted [dataset]
 #'
 #' @param dataset_add Additional dataset
 #'
-#'    The variables specified for `by_vars` are expected.
+#'   The variables specified for `by_vars` are expected.
 #'   Observations from the specified dataset are going to be used to calculate and added
 #'   as new records to the input dataset (`dataset`).
 #'
@@ -177,7 +182,7 @@ derive_summary_records <- function(dataset = NULL,
                                    set_values_to,
                                    missing_values = NULL) {
   assert_vars(by_vars)
-  assert_data_frame(dataset, required_vars = by_vars, optional = TRUE)
+  assert_data_frame(dataset, optional = TRUE)
   assert_data_frame(dataset_add, required_vars = by_vars)
   assert_data_frame(
     dataset_ref,
