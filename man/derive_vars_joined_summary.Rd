@@ -234,7 +234,7 @@ input dataset and additionally the variables specified for \code{new_vars}
 derived from the additional dataset (\code{dataset_add}).
 }
 \description{
-The function summarises variables from an additional dataset and adds the
+The function summarizes variables from an additional dataset and adds the
 summarized values as new variables to the input dataset. The selection of the
 observations from the additional dataset can depend on variables from both
 datasets. For example, all doses before the current observation can be

@@ -1,7 +1,7 @@
 #' Summarize Variables from an Additional Dataset Based on Conditions from Both
 #' Datasets
 #'
-#' The function summarises variables from an additional dataset and adds the
+#' The function summarizes variables from an additional dataset and adds the
 #' summarized values as new variables to the input dataset. The selection of the
 #' observations from the additional dataset can depend on variables from both
 #' datasets. For example, all doses before the current observation can be
