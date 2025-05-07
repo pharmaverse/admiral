@@ -308,19 +308,19 @@
 #'   new_vars = exprs(AVAL = if_else(n() >= 3, mean(AVAL, na.rm = TRUE), NA))
 #' )
 derive_vars_joined_summary <- function(dataset,
-                               dataset_add,
-                               by_vars = NULL,
-                               order = NULL,
-                               new_vars,
-                               tmp_obs_nr_var = NULL,
-                               join_vars = NULL,
-                               join_type,
-                               filter_add = NULL,
-                               first_cond_lower = NULL,
-                               first_cond_upper = NULL,
-                               filter_join = NULL,
-                               missing_values = NULL,
-                               check_type = "warning") {
+                                       dataset_add,
+                                       by_vars = NULL,
+                                       order = NULL,
+                                       new_vars,
+                                       tmp_obs_nr_var = NULL,
+                                       join_vars = NULL,
+                                       join_type,
+                                       filter_add = NULL,
+                                       first_cond_lower = NULL,
+                                       first_cond_upper = NULL,
+                                       filter_join = NULL,
+                                       missing_values = NULL,
+                                       check_type = "warning") {
   assert_vars(by_vars, optional = TRUE)
   by_vars_left <- replace_values_by_names(by_vars)
   assert_expr_list(order, optional = TRUE)
