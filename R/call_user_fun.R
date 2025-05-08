@@ -11,7 +11,7 @@
 #' @return The return value of the function call
 #'
 #' @family  deprecated
-#' @keywords utils_help, deprecated
+#' @keywords deprecated
 #'
 #' @export
 #'
