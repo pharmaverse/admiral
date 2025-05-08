@@ -10,7 +10,7 @@
 #'
 #' @return The return value of the function call
 #'
-#' @family utils_help, deprecated
+#' @family  deprecated
 #' @keywords utils_help, deprecated
 #'
 #' @export
