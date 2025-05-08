@@ -229,6 +229,14 @@ convert_dtc_to_dt <- function(dtc,
                               preserve = FALSE) {
   assert_character_vector(dtc)
   warn_if_invalid_dtc(dtc, is_valid_dtc(dtc))
+  assert_highest_imputation(
+    highest_imputation = highest_imputation,
+    highest_imputation_values = c("Y", "M", "D", "n"),
+    date_imputation = date_imputation,
+    min_dates = min_dates,
+    max_dates = max_dates
+  )
+
 
   imputed_dtc <- impute_dtc_dt(
     dtc = dtc,

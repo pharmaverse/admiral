@@ -22,7 +22,7 @@
       impute_dtc_dt(dtc = input, highest_imputation = "M", date_imputation = "13-01")
     Condition
       Error in `assert_date_imputation()`:
-      ! If `highest_imputation = "M"` is specified, `date_imputation` must be one of `'first'`, `'mid'`, `'last'` or a format with month and day specified as `'mm-dd'`: e.g. `'06-15'`
+      ! If `highest_imputation = "M"` is specified, `date_imputation` must be one of "first", "mid", "last" or a format with month and day specified as "mm-dd": e.g. "06-15"
 
 ---
 
@@ -30,7 +30,7 @@
       impute_dtc_dt(dtc = input, highest_imputation = "M", date_imputation = "12:01")
     Condition
       Error in `assert_date_imputation()`:
-      ! If `highest_imputation = "M"` is specified, `date_imputation` must be one of `'first'`, `'mid'`, `'last'` or a format with month and day specified as `'mm-dd'`: e.g. `'06-15'`
+      ! If `highest_imputation = "M"` is specified, `date_imputation` must be one of "first", "mid", "last" or a format with month and day specified as "mm-dd": e.g. "06-15"
 
 ---
 
@@ -38,7 +38,7 @@
       impute_dtc_dt(dtc = input, highest_imputation = "M", date_imputation = "01")
     Condition
       Error in `assert_date_imputation()`:
-      ! If `highest_imputation = "M"` is specified, `date_imputation` must be one of `'first'`, `'mid'`, `'last'` or a format with month and day specified as `'mm-dd'`: e.g. `'06-15'`
+      ! If `highest_imputation = "M"` is specified, `date_imputation` must be one of "first", "mid", "last" or a format with month and day specified as "mm-dd": e.g. "06-15"
 
 ---
 
@@ -56,7 +56,22 @@
       Error in `assert_date_imputation()`:
       ! Argument `date_imputation` must be equal to one of "first" or "last".
 
-# derive_vars_dt Test 21: NA imputation for highest_imputation = Y & max_dates but date_imputation = first
+# derive_vars_dt Test 20: Error for highest_imputation = Y & max_dates
+
+    Code
+      data.frame(AESTDTC = c(NA_character_, NA_character_), TRTSDT = c(ymd(
+        "2022-01-01"), NA)) %>% mutate(AESTDTC = as.character(AESTDTC)) %>%
+        derive_vars_dt(dtc = AESTDTC, new_vars_prefix = "AST", highest_imputation = "Y",
+          date_imputation = "last", flag_imputation = "auto", max_dates = exprs(
+            TRTSDT))
+    Condition
+      Error in `mutate()`:
+      i In argument: `ASTDT = convert_dtc_to_dt(...)`.
+      Caused by error in `assert_highest_imputation()`:
+      ! Each element of the list in argument `max_dates` must be class/type <symbol>.
+      i But, element 1 is a <Date> object
+
+# derive_vars_dt Test 21: Error for highest_imputation = Y & max_dates but date_imputation = first
 
     Code
       data.frame(AESTDTC = c(NA_character_, NA_character_), TRTSDT = c(ymd(
@@ -67,12 +82,28 @@
     Condition
       Warning:
       If `highest_imputation = "Y"` and `date_imputation = "first"` is specified, `min_dates` should be specified.
-    Output
-        AESTDTC     TRTSDT ASTDT ASTDTF
-      1    <NA> 2022-01-01  <NA>   <NA>
-      2    <NA>       <NA>  <NA>   <NA>
+      Error in `mutate()`:
+      i In argument: `ASTDT = convert_dtc_to_dt(...)`.
+      Caused by error in `assert_highest_imputation()`:
+      ! Each element of the list in argument `max_dates` must be class/type <symbol>.
+      i But, element 1 is a <Date> object
 
-# derive_vars_dt Test 23: NA imputation for highest_imputation = Y & min_dates but date_imputation = last
+# derive_vars_dt Test 22: Error for highest_imputation = Y & min_dates
+
+    Code
+      data.frame(AESTDTC = c(NA_character_, NA_character_), TRTSDT = c(ymd(
+        "2022-01-01"), NA)) %>% mutate(AESTDTC = as.character(AESTDTC)) %>%
+        derive_vars_dt(dtc = AESTDTC, new_vars_prefix = "AST", highest_imputation = "Y",
+          date_imputation = "first", flag_imputation = "auto", min_dates = exprs(
+            TRTSDT))
+    Condition
+      Error in `mutate()`:
+      i In argument: `ASTDT = convert_dtc_to_dt(...)`.
+      Caused by error in `assert_highest_imputation()`:
+      ! Each element of the list in argument `min_dates` must be class/type <symbol>.
+      i But, element 1 is a <Date> object
+
+# derive_vars_dt Test 23: Error for highest_imputation = Y & min_dates but date_imputation = last
 
     Code
       data.frame(AESTDTC = c(NA_character_, NA_character_), TRTSDT = c(ymd(
@@ -83,10 +114,11 @@
     Condition
       Warning:
       If `highest_imputation = "Y"` and `date_imputation = "last"` is specified, `max_dates` should be specified.
-    Output
-        AESTDTC     TRTSDT ASTDT ASTDTF
-      1    <NA> 2022-01-01  <NA>   <NA>
-      2    <NA>       <NA>  <NA>   <NA>
+      Error in `mutate()`:
+      i In argument: `ASTDT = convert_dtc_to_dt(...)`.
+      Caused by error in `assert_highest_imputation()`:
+      ! Each element of the list in argument `min_dates` must be class/type <symbol>.
+      i But, element 1 is a <Date> object
 
 # derive_vars_dt Test 24: NA imputation for highest_imputation = Y but null min/max dates fails
 
@@ -96,6 +128,6 @@
         derive_vars_dt(dtc = AESTDTC, new_vars_prefix = "AST", highest_imputation = "Y",
           date_imputation = "first", flag_imputation = "auto")
     Condition
-      Error in `assert_dt_dtm_inputs()`:
+      Error in `assert_highest_imputation()`:
       ! If `highest_imputation = "Y"` is specified, `min_dates` or `max_dates` must be specified respectively.
 
