@@ -1,7 +1,8 @@
 # This script:  data-raw/admiral_verify_templates.R
 
 # FIX
-# Generates ADaM from templates and compares to previously generated ADaM file (found in https:://github.com main branch pharmaverseadam).
+# Generates ADaM from templates and compares to previously generated ADaM file
+# (These are found in https:://github.com main branch pharmaverseadam).
 #
 #
 # Much code taken from pharamavreseadam::create_adams_data.R
@@ -41,8 +42,8 @@ verify_templates <- function(pkg = "admiral", ignore_templates_pkg = NULL) {
   clean_cache()  # clear all..
 
   # TODO:   fct to remove remove old diffdf *.txt files
-  
-  pkg = "admiral"
+
+  pkg <- "admiral"
   if (pkg != "admiral") error("Curently, only admiral package is accepted.")
 
   library(pkg, character.only = TRUE)
@@ -51,7 +52,7 @@ verify_templates <- function(pkg = "admiral", ignore_templates_pkg = NULL) {
   sprintf("generating ADaMs for  %s package\n", pkg)
 
   # temporary directories
-  x = tempdir()
+  x <- tempdir()
   dir.create(paste0(x, "/old"))
   dir.create(paste0(x, "/diff"))
 
@@ -72,7 +73,7 @@ verify_templates <- function(pkg = "admiral", ignore_templates_pkg = NULL) {
   # gather all templates for this pkg (12 found) ----
   templates <- list.files(path$template_dir, pattern = "ad_")
 
-  # from templates  generate vector of adam_names 
+  # from templates  generate vector of adam_names
   adam_names <- vapply(templates, function(x) gsub("ad_|\\.R", "", x),
                        USE.NAMES = FALSE, character(length = 1))
 
@@ -83,7 +84,7 @@ verify_templates <- function(pkg = "admiral", ignore_templates_pkg = NULL) {
   names(templates) <- adam_names
 
   # per Ben, ignore "adlbhy"
-  adam_names = adam_names[adam_names != "adlbhy"]
+  adam_names  <-  adam_names[adam_names != "adlbhy"]
 
   # download, save prior ADaMs from pharmaverseadam
 
@@ -93,33 +94,34 @@ verify_templates <- function(pkg = "admiral", ignore_templates_pkg = NULL) {
   keys <- teal.data::default_cdisc_join_keys
 
   # keys is named list of keys, each element (for each adam_name) and is chr[] of keys
-  keys =sapply(toupper(adam_names), function(e) unname(keys[[e]][[e]]), USE.NAMES=T)
+  keys   <- sapply(toupper(adam_names), function(e) unname(keys[[e]][[e]]), USE.NAMES = TRUE)
   names(keys) <- tolower(names(keys))
   keys
 
 
   # finally, construct a named list object: each element (adam_names) holds a template and keys
-  obj=lapply(adam_names, function(e) list("template" = templates[[e]],
-    "keys" = keys[[e]]))
-  names(obj) = adam_names
+  obj  <- lapply(adam_names, function(e) {list("template" = templates[[e]],
+                                               "keys" = keys[[e]])
+        })
+  names(obj) <- adam_names
 
   # done !
   obj
   names(obj)
 
-  
   # for TESTING, otherwise will be ALL adam_names
-  adam_names = c("adsl", "adae")
+  adam_names  <-  c("adsl", "adae")
 
   sprintf("---- Run templates\n")
-  compare_list <- purrr::map(adam_names, .progress = TRUE, function(adam){
+  compare_list <- purrr::map(adam_names, .progress = TRUE, function(adam) {
     cat("---- Template running for ", adam, "\n")
     run_template(adam, dir = path$template_dir)
-   # dataset_new <- get_dataset_new(adam, path$adam_new_dir) 
-    dataset_new <- get_dataset_new(adam, path$cache_dir) 
+    dataset_new <- get_dataset_new(adam, path$cache_dir)
     dataset_old <- get_dataset_old(adam, path$adam_old_dir)
-    compare(base=dataset_old, compare = dataset_new, keys=obj[[adam]]$keys,
-            file=paste0(path$diff,"/", adam,".txt"))
+    compare(base = dataset_old,
+            compare = dataset_new,
+            keys = obj[[adam]]$keys,
+            file = paste0(path$diff, "/", adam,  ".txt"))
   })
 
   # TODO:  cleanup?
@@ -132,11 +134,11 @@ verify_templates <- function(pkg = "admiral", ignore_templates_pkg = NULL) {
 
 #------------------------  helper functions
 
-display_diff  <- function(dir = NULL, path = NULL){
- map(list.files(dir, full.names = TRUE), readLines) 
- }
+display_diff  <- function(dir = NULL, path = NULL) {
+  map(list.files(dir, full.names = TRUE), readLines)
+}
 
-load_rda <- function(fileName) {
+load_rda <- function(filename) {
   load(fileName)
   get(ls()[ls() != "fileName"]) # returns dataset
 }
@@ -146,7 +148,7 @@ save_rda <- function(data, file_path, new_name) {
     save(data, file = file_path, compress = "bzip2")
   }
 }
-compare <- function(base, compare, keys, file=NULL) {
+compare <- function(base, compare, keys, file = NULL) {
   tryCatch(
     {
       diffdf::diffdf(
@@ -173,7 +175,7 @@ clean_cache <- function() {
   }
 }
 
-clean_adam_old_dir = function(dir = NULL){
+clean_adam_old_dir  <-  function(dir = NULL) {
   if (dir.exists(tempdir())) {
     unlink(adam_old_dir, recursive = TRUE)
     message(adam_old_dir,  "directory deleted: ", tempdir())
@@ -182,13 +184,8 @@ clean_adam_old_dir = function(dir = NULL){
   }
 }
 
-download_adam_old = function (adam_names, path=NULL){
-  # tempdir = directory to store
-  # adam_names = chr[] of old adams to download
-  # tempdir() is fixed for session
-  # DO NOT LOAD to memory these files till needed.
-
-  lapply(adam_names, function(adam){
+download_adam_old <- function(adam_names, path = NULL) {
+  lapply(adam_names, function(adam) {
     githubURL = paste0(
       "https://github.com/pharmaverse/pharmaverseadam/raw/refs/heads/main/data/",
       adam, ".rda?raw=true")
@@ -200,20 +197,16 @@ download_adam_old = function (adam_names, path=NULL){
   })
 }
 
-get_dataset_old = function(adam, path = NULL) {
-  # TODO: replace with LATEST files from github, not package.
-  #  adam_old <- do.call(`::`, args = list("pharmaverseadam", adam))
+get_dataset_old <- function(adam, path = NULL) {
   adam_old <- load_rda(paste0(path, "/", adam, ".rda"))
 }
 
-get_dataset_new = function(adam, path = NULL){
+get_dataset_new <- function(adam, path = NULL) {
     load_rda(paste0(path, "/", adam, ".rda"))
     adam_new <- get(adam)
 }
 
   # does the real work
-run_template <- function(adam, dir = NULL ) {
-  #source(paste0(path$template_dir, "/ad_", adam, ".R"))
+run_template <- function(adam, dir = NULL) {
   source(paste0(dir,  "/ad_", adam, ".R"))
 }
-
