@@ -11,12 +11,10 @@
 #
 # TODO:
 # - add `attr` to generated ADaM
-# - re-write `load_rda()`:  now serves two purposes and was written in simpler times
 # - where code overlaps, make pharamversadam script and this one the same.
 
 # Assumptions/Questions:
 # - ignore *.rda files in admiral/data (per Ben)
-# - written as standalone R script, not as package R function
 # - compares full ADaM - all rows (ie no reduction in number of rows in each dataset)
 # - use cli:: for messages/errors - YES
 
@@ -30,11 +28,114 @@
 #' @param cache_dir (cache)     ~/.config/R/admiral_templates_data   (varies by OS/configuration)
 
 #' Directories
-#' - admiral/data     not used
+#' - admiral/data     do not use
 #' - admiral/inst/templates/  templates to create ADaM datasets
 #' - cache_dir  cache, where newly generated ADaM files kept and diffdf reports
 #'      (os dependent)
 #' - adam_old_dir  - dir where prior ADaMs are downloaded and stored
+#' - adam_new_dir  - dir where new ADaMs are downloaded and stored
+
+verify_templates <- function(pkg = "admiral", ignore_templates_pkg = NULL) {
+
+  # SETUP ----
+  # TODO: remove prior ADaM downloads
+  clean_cache()
+
+  # TODO:   fct to remove remove old diffdf *.txt files
+  
+  pkg = "admiral"
+  if (pkg != "admiral") error("Curently, only admiral package is accepted.")
+
+  library(pkg, character.only = TRUE)
+  library(teal.data)
+  sprintf("generating ADaMs for  %s package\n", pkg)
+
+  # temporary directories
+  x = tempdir()
+  dir.create(paste0(x, "/old"))
+  dir.create(paste0(x, "/new"))
+  dir.create(paste0(x, "/diff"))
+
+  # list of important paths
+  path <<- list(
+    template_dir = file.path(system.file(package = pkg), "templates"),
+    cache_dir = tools::R_user_dir("admiral_templates_data", which = "cache"),
+    adam_old_dir =  paste0(x, "/old"),
+    adam_new_dir =  paste0(x, "/new"),
+    diff = paste0(x, "/diff")
+  )
+
+  # gather all templates for this pkg (12 found) ----
+  templates <- list.files(path$template_dir, pattern = "ad_")
+
+  # from templates  generate vector of adam_names 
+  adam_names <- vapply(templates, function(x) gsub("ad_|\\.R", "", x), USE.NAMES = FALSE, character(length = 1))
+
+  # check
+  if (length(templates) != length(adam_names))  stop("Number of templates and adam_names differ")
+
+  # templates is a named chr[]
+  names(templates) <- adam_names
+
+  # per Ben, ignore "adlbhy"
+  adam_names = adam_names[adam_names != "adlbhy"]
+
+  # download, save prior ADaMs from pharmaverseadam
+
+  download_adam_old(adam_names)
+
+  # keys for diffdf
+  keys <- teal.data::default_cdisc_join_keys
+
+  # keys is named list of keys, each element (for each adam_name) and is chr[] of keys
+  keys =sapply(toupper(adam_names), function(e) unname(keys[[e]][[e]]), USE.NAMES=T)
+  names(keys) <- tolower(names(keys))
+  keys
+
+
+  # finally, construct a named list object: each element (adam_names) holds a template and keys
+  obj=lapply(adam_names, function(e) list("template" = templates[[e]],
+    "keys" = keys[[e]]))
+  names(obj) = adam_names
+
+  # done !
+  obj
+  names(obj)
+
+
+  # testing check ----
+  if (F) {
+  # need info for specific adam_name?
+  obj[["adae"]]$template
+  obj[["adae"]]$keys
+  }
+
+  
+  # for TESTING, otherwise will be ALL adam_names
+  adam_names = c("adsl", "adae")
+
+  sprintf("---- Run templates\n")
+  compare_list <- purrr::map(adam_names, .progress = TRUE, function(adam){
+    cat("---- Template running for ", adam, "\n")
+    run_template(adam)
+    dataset_new <- get_dataset_new(adam) # this function would retrieve that dataset from cache
+    dataset_old <- get_dataset_old(adam)
+    compare(base=dataset_old, compare = dataset_new, keys=obj[[adam]]$keys,
+            file=paste0(path$diff,"/", adam,".txt"))
+  })
+
+  # TODO:  cleanup?
+
+  display_diff(dir = path$diff)
+
+  print("DONE")
+}
+
+#------------------------  helper functions
+
+display_diff  <- function(dir = NULL){
+ map(list.files(dir, full.names = TRUE), readLines) 
+ }
 
 load_rda <- function(fileName) {
   load(fileName)
@@ -89,22 +190,16 @@ download_adam_old = function (adam_names){
   # DO NOT LOAD to memory these files till needed.
 
   lapply(adam_names, function(adam){
-
     githubURL = paste0(
       "https://github.com/pharmaverse/pharmaverseadam/raw/refs/heads/main/data/",
       adam, ".rda?raw=true")
-
-    cat(adam, "\n")
+    cat("Downloading adam from github pharamaversedam", adam, "\n")
     download.file(url = githubURL,
                   quiet = TRUE,
                   destfile = paste0(path$adam_old_dir, "/", adam, ".rda"),
                   mode = "wb")
   })
 }
-  # does the real work
-  run_template <- function(adam) {
-    source(paste0(path$template_dir, "/ad_", adam, ".R"))
-  }
 
 get_dataset_old = function(adam) {
   # TODO: replace with LATEST files from github, not package.
@@ -117,122 +212,8 @@ get_dataset_new = function(adam){
     adam_new <- get(adam)
 }
 
-verify_templates <- function(pkg = "admiral", ignore_templates_pkg = NULL) {
-
-  #   SETUP ----
-  # TODO: remove prior ADaM downloads
-  clean_cache()
-
-  #   TODO ----
-  # DISCUSS:  Diffdf creates *.txt files, DIRECTORY to put them?
-  # TODO:   fct to remove remove old diffdf *.txt files
-
-  # testing ----
-  pkg = "admiral"
-
-  # DISCUSS:  more pkg checking?
-  if (pkg != "admiral") error("Curently, only admiral package is accepted.")
-
-  library(pkg, character.only = TRUE)
-  library(teal.data)
-  sprintf("generating ADaMs for  %s package\n", pkg)
-
-  # temporary directories
-  x = tempdir()
-  dir.create(paste0(x, "/old"))
-  dir.create(paste0(x, "/new"))
-  dir.create(paste0(x, "/diff"))
-
-  # list of important paths
-  path <<- list(
-    template_dir = file.path(system.file(package = pkg), "templates"),
-    cache_dir = tools::R_user_dir("admiral_templates_data", which = "cache"),
-    adam_old_dir =  paste0(x, "/old"),
-    adam_new_dir =  paste0(x, "/new"),
-    diff = paste0(x, "/diff")
-  )
-
-  # gather all templates for this pkg (12 found) ----
-  templates <- list.files(path$template_dir, pattern = "ad_")
-  templates
-
-
-  #adam_names is unnamed chr[]
-  ## from templates  generate these ADaMs, 12 ----
-  adam_names <- vapply(templates, function(x) gsub("ad_|\\.R", "", x), USE.NAMES = FALSE, character(length = 1))
-  adam_names
-
-  # check
-  if (length(templates) != length(adam_names))  stop("Number of templates and adam_names differ")
-
-  # templates is a named chr[]
-  names(templates) <- adam_names
-  templates
-
-
-  # per Ben, ignore "adlbhy"
-  adam_names = adam_names[adam_names != "adlbhy"]
-  adam_names
-
-  # download, save prior ADaMs from pharmaverseadam
-  download_adam_old(adam_names)
-
-  # keys for diffdf
-  keys <- teal.data::default_cdisc_join_keys
-
-  # keys is named list of keys, each element (for each adam_name) and is chr[] of keys
-  keys =sapply(toupper(adam_names), function(e) unname(keys[[e]][[e]]), USE.NAMES=T)
-  names(keys) <- tolower(names(keys))
-  keys
-
-
-  # finally, construct a named list object, each element (adam_names) holds a template and keys
-  obj=lapply(adam_names, function(e) list("template" = templates[[e]],
-    "keys" = keys[[e]]))
-  names(obj) = adam_names
-
-  # done !
-  obj
-  names(obj)
-
-
-  # testing check ----
-  if (F) {
-  # need info for specific adam_name?
-  obj[["adae"]]$template
-  obj[["adae"]]$keys
-  }
-
-  # DISCUSS:   NOW, user must manually enter templates to ignore ----
-  # CHANGE TO: PROPOSED:   user must manually remove ADaMs to ignore
-
-  # CHANGE:   remove this -----------
-  if (F) {
-  # FOR TESTING, (omit ad_adlb.R)
-  # ignore_templates_pkg = templates[!(templates %in% c("ad_adsl.R", "ad_adlb.R"))]
-  # For real,
-  ignore_templates_pkg <- templates[templates == c("ad_adlbhy.R")]
-  }
-  # CHANGE:   remove above -----------
-
-
-  # CHANGE:  now, which templates to run?   ENTER in adam_names
-  # (for TESTING, skip "adlb" is lengthy ----)
-
-  # for TESTING, otherwise will be ALL adam_names
-  adam_names = c("adsl", "adae")
-
-  sprintf("---- Run templates\n")
-  compare_list <- purrr::map(adam_names, .progress = TRUE, function(adam){
-    cat("---- Template running for ", adam, "\n")
-    run_template(adam)
-    dataset_new <- get_dataset_new(adam) # this function would retrieve that dataset from cache
-    dataset_old <- get_dataset_old(adam)
-    compare(base=dataset_old, compare = dataset_new, keys=obj[[adam]]$keys,
-            file=paste0(path$diff,"/", adam,".txt"))
-    # TODO: remove old/new ADaMs from environment
-  })
-
-  print("DONE")
+  # does the real work
+run_template <- function(adam) {
+  source(paste0(path$template_dir, "/ad_", adam, ".R"))
 }
 
