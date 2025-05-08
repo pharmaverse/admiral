@@ -14,7 +14,6 @@ Get list of records not mapped from the lookup table.
 }
 \seealso{
 Utilities used within Derivation functions: 
-\code{\link{call_user_fun}()},
 \code{\link{extract_unit}()},
 \code{\link{get_flagged_records}()},
 \code{\link{get_vars_query}()}
