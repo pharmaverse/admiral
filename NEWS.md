@@ -35,6 +35,7 @@ the derivation is called for all subsets. (#2645)
 - The examples sections of the following functions were enhanced:
     - `derive_extreme_records()` (#2585)
     - `derive_param_tte()` (#2704)
+    - `derive_param_computed` (#2701)
 
 - Added an example to the `derive_vars_transposed()` reference page to showcase how duplicates-related errors can arise when records in `dataset_merge` are not uniquely identified. (#2609)
 

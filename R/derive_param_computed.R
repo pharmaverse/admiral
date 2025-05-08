@@ -149,12 +149,24 @@
 #'
 #' @export
 #'
-#' @examples
+#' @examplesx
+#'
+#' @caption Add a parameter computed from the analysis value of other parameters
+#'
+#' @info Example 1a: Derive mean arterial pressure (MAP) from systolic (SYSBP)
+#'     and diastolic blood pressure (DIABP)
+#'
+#' - Here, for each `USUBJID` and `VISIT` group, an observation is added to the output dataset when the filtered input
+#'   dataset (`dataset`) contains exactly one observation for each parameter code specified for `parameters` and all
+#'   contributing values (e.g., `AVAL.SYSBP` and `AVAL.DIABP`) are not `NA`.
+#' - This results in three additional rows: `USUBJID` `01-701-1015` at `VISIT` `BASELINE` and `WEEK 2`, and
+#'   `USUBJID` `01-701-1028` at `VISIT` `BASELINE` only.
+#'
+#' @code
 #' library(tibble)
 #' library(dplyr)
 #' library(lubridate)
 #'
-#' # Example 1a: Derive MAP
 #' advs <- tribble(
 #'   ~USUBJID,      ~PARAMCD, ~PARAM,                            ~AVAL, ~VISIT,
 #'   "01-701-1015", "DIABP",  "Diastolic Blood Pressure (mmHg)",    51, "BASELINE",
@@ -188,8 +200,20 @@
 #'   )
 #' )
 #'
-#' # Example 1b: Using option `keep_nas = TRUE` to derive MAP in the case where some/all
-#' # values of a variable used in the computation are missing
+#' @info Example 1b: Using option `keep_nas = TRUE` to derive MAP in the case
+#'     where some/all values of a variable used in the computation are missing
+#'
+#' - Note that observations will be added here even if some of the values contributing
+#'   to the computed values are `NA`.
+#' - This therefore results in four additional rows: `USUBJID` `01-701-1015` at `VISIT` `BASELINE` and `WEEK 2`
+#'   and `USUBJID` `01-701-1028` at `VISIT` `BASELINE` and `WEEK 2`, with the value of `AVAL` for
+#'   `USUBJID` `01-701-1028` at `VISIT` `WEEK 2` being `NA`.
+#'
+#' @code
+#' library(tibble)
+#' library(dplyr)
+#' library(lubridate)
+#'
 #'
 #' derive_param_computed(
 #'   advs,
@@ -206,8 +230,16 @@
 #'   keep_nas = TRUE
 #' )
 #'
-#' # Example 1c: Using option `keep_nas = exprs(ADTF)` to derive MAP in the case where
-#' # some/all values of a variable used in the computation are missing but ignoring ADTF
+#' @info Example 1c: Using option `keep_nas = exprs(ADTF)` to derive MAP in the case where
+#'     some/all values of a variable used in the computation are missing but ignoring `ADTF`
+#'
+#' - Note that observations will be added here even if some of the values contributing
+#'   to the computed values are `NA`.
+#'
+#' @code
+#' library(tibble)
+#' library(dplyr)
+#' library(lubridate)
 #'
 #' derive_param_computed(
 #'   advs,
@@ -224,7 +256,18 @@
 #'   keep_nas = exprs(ADTF)
 #' )
 #'
-#' # Example 2: Derive BMI where height is measured only once
+#' @info Example 2: Derive BMI where height is measured only once
+#'
+#' - Here, the parameters that are measured only once (i.e., the constant parameters)
+#'   are merged to the other parameters using the specified variables.
+#' - In this example, `height` is the specified in `constant_parameters` as it is
+#'   only mesaured once.
+#'
+#' @code
+#' library(tibble)
+#' library(dplyr)
+#' library(lubridate)
+#'
 #' advs <- tribble(
 #'   ~USUBJID,      ~PARAMCD, ~PARAM,        ~AVAL, ~AVALU, ~VISIT,
 #'   "01-701-1015", "HEIGHT", "Height (cm)", 147.0, "cm",   "SCREENING",
@@ -251,7 +294,13 @@
 #'   constant_by_vars = exprs(USUBJID)
 #' )
 #'
-#' # Example 3: Using data from an additional dataset and other variables than AVAL
+#' @info Example 3: Using data from an additional dataset and other variables than `AVAL`
+#'
+#' @code
+#' library(tibble)
+#' library(dplyr)
+#' library(lubridate)
+#'
 #' qs <- tribble(
 #'   ~USUBJID, ~AVISIT,   ~QSTESTCD, ~QSORRES, ~QSSTRESN,
 #'   "1",      "WEEK 2",  "CHSF112", NA,               1,
@@ -290,7 +339,14 @@
 #'   )
 #' )
 #'
-#' # Example 4: Computing more than one variable
+#'
+#' @info Example 4: Computing more than one variable
+#'
+#' @code
+#' library(tibble)
+#' library(dplyr)
+#' library(lubridate)
+#'
 #' adlb_tbilialk <- tribble(
 #'   ~USUBJID, ~PARAMCD, ~AVALC, ~ADTM,        ~ADTF,
 #'   "1",      "ALK2",   "Y",    "2021-05-13", NA_character_,

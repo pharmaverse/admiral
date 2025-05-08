@@ -189,12 +189,44 @@ For the new observations the variables specified for \code{set_values_to} are
 set to the provided values. The values of the other variables of the input
 dataset are set to \code{NA}.
 }
-\examples{
-library(tibble)
+\seealso{
+BDS-Findings Functions for adding Parameters/Records: 
+\code{\link{default_qtc_paramcd}()},
+\code{\link{derive_expected_records}()},
+\code{\link{derive_extreme_event}()},
+\code{\link{derive_extreme_records}()},
+\code{\link{derive_locf_records}()},
+\code{\link{derive_param_bmi}()},
+\code{\link{derive_param_bsa}()},
+\code{\link{derive_param_doseint}()},
+\code{\link{derive_param_exist_flag}()},
+\code{\link{derive_param_exposure}()},
+\code{\link{derive_param_framingham}()},
+\code{\link{derive_param_map}()},
+\code{\link{derive_param_qtc}()},
+\code{\link{derive_param_rr}()},
+\code{\link{derive_param_wbc_abs}()},
+\code{\link{derive_summary_records}()}
+}
+\concept{der_prm_bds_findings}
+\keyword{der_prm_bds_findings}
+\section{Examples}{
+\subsection{Add a parameter computed from the analysis value of other parameters}{
+
+Example 1a: Derive mean arterial pressure (MAP) from systolic (SYSBP)
+and diastolic blood pressure (DIABP)
+\itemize{
+\item Here, for each \code{USUBJID} and \code{VISIT} group, an observation is added to the output dataset when the filtered input
+dataset (\code{dataset}) contains exactly one observation for each parameter code specified for \code{parameters} and all
+contributing values (e.g., \code{AVAL.SYSBP} and \code{AVAL.DIABP}) are not \code{NA}.
+\item This results in three additional rows: \code{USUBJID} \code{01-701-1015} at \code{VISIT} \code{BASELINE} and \verb{WEEK 2}, and
+\code{USUBJID} \code{01-701-1028} at \code{VISIT} \code{BASELINE} only.
+}
+
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{library(tibble)
 library(dplyr)
 library(lubridate)
 
-# Example 1a: Derive MAP
 advs <- tribble(
   ~USUBJID,      ~PARAMCD, ~PARAM,                            ~AVAL, ~VISIT,
   "01-701-1015", "DIABP",  "Diastolic Blood Pressure (mmHg)",    51, "BASELINE",
@@ -227,9 +259,35 @@ derive_param_computed(
     ADT = ADT.SYSBP
   )
 )
+#> # A tibble: 11 × 8
+#>    USUBJID     PARAMCD PARAM                   AVAL VISIT AVALU ADT        ADTF 
+#>    <chr>       <chr>   <chr>                  <dbl> <chr> <chr> <date>     <chr>
+#>  1 01-701-1015 DIABP   Diastolic Blood Press…  51   BASE… mmHg  2024-01-10 <NA> 
+#>  2 01-701-1015 DIABP   Diastolic Blood Press…  50   WEEK… mmHg  2024-01-24 <NA> 
+#>  3 01-701-1015 SYSBP   Systolic Blood Pressu… 121   BASE… mmHg  2024-01-10 <NA> 
+#>  4 01-701-1015 SYSBP   Systolic Blood Pressu… 121   WEEK… mmHg  2024-01-24 <NA> 
+#>  5 01-701-1028 DIABP   Diastolic Blood Press…  79   BASE… mmHg  2024-01-10 <NA> 
+#>  6 01-701-1028 DIABP   Diastolic Blood Press…  80   WEEK… mmHg  2024-01-24 <NA> 
+#>  7 01-701-1028 SYSBP   Systolic Blood Pressu… 130   BASE… mmHg  2024-01-10 <NA> 
+#>  8 01-701-1028 SYSBP   Systolic Blood Pressu…  NA   WEEK… mmHg  2024-01-24 <NA> 
+#>  9 01-701-1015 MAP     Mean Arterial Pressur…  74.3 BASE… mmHg  2024-01-10 <NA> 
+#> 10 01-701-1015 MAP     Mean Arterial Pressur…  73.7 WEEK… mmHg  2024-01-24 <NA> 
+#> 11 01-701-1028 MAP     Mean Arterial Pressur…  96   BASE… mmHg  2024-01-10 <NA> }\if{html}{\out{</div>}}
 
-# Example 1b: Using option `keep_nas = TRUE` to derive MAP in the case where some/all
-# values of a variable used in the computation are missing
+Example 1b: Using option \code{keep_nas = TRUE} to derive MAP in the case
+where some/all values of a variable used in the computation are missing
+\itemize{
+\item Note that observations will be added here even if some of the values contributing
+to the computed values are \code{NA}.
+\item This therefore results in four additional rows: \code{USUBJID} \code{01-701-1015} at \code{VISIT} \code{BASELINE} and \verb{WEEK 2}
+and \code{USUBJID} \code{01-701-1028} at \code{VISIT} \code{BASELINE} and \verb{WEEK 2}, with the value of \code{AVAL} for
+\code{USUBJID} \code{01-701-1028} at \code{VISIT} \verb{WEEK 2} being \code{NA}.
+}
+
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{library(tibble)
+library(dplyr)
+library(lubridate)
+
 
 derive_param_computed(
   advs,
@@ -245,9 +303,32 @@ derive_param_computed(
   ),
   keep_nas = TRUE
 )
+#> # A tibble: 12 × 8
+#>    USUBJID     PARAMCD PARAM                   AVAL VISIT AVALU ADT        ADTF 
+#>    <chr>       <chr>   <chr>                  <dbl> <chr> <chr> <date>     <chr>
+#>  1 01-701-1015 DIABP   Diastolic Blood Press…  51   BASE… mmHg  2024-01-10 <NA> 
+#>  2 01-701-1015 DIABP   Diastolic Blood Press…  50   WEEK… mmHg  2024-01-24 <NA> 
+#>  3 01-701-1015 SYSBP   Systolic Blood Pressu… 121   BASE… mmHg  2024-01-10 <NA> 
+#>  4 01-701-1015 SYSBP   Systolic Blood Pressu… 121   WEEK… mmHg  2024-01-24 <NA> 
+#>  5 01-701-1028 DIABP   Diastolic Blood Press…  79   BASE… mmHg  2024-01-10 <NA> 
+#>  6 01-701-1028 DIABP   Diastolic Blood Press…  80   WEEK… mmHg  2024-01-24 <NA> 
+#>  7 01-701-1028 SYSBP   Systolic Blood Pressu… 130   BASE… mmHg  2024-01-10 <NA> 
+#>  8 01-701-1028 SYSBP   Systolic Blood Pressu…  NA   WEEK… mmHg  2024-01-24 <NA> 
+#>  9 01-701-1015 MAP     Mean Arterial Pressur…  74.3 BASE… mmHg  2024-01-10 <NA> 
+#> 10 01-701-1015 MAP     Mean Arterial Pressur…  73.7 WEEK… mmHg  2024-01-24 <NA> 
+#> 11 01-701-1028 MAP     Mean Arterial Pressur…  96   BASE… mmHg  2024-01-10 <NA> 
+#> 12 01-701-1028 MAP     Mean Arterial Pressur…  NA   WEEK… mmHg  2024-01-24 <NA> }\if{html}{\out{</div>}}
 
-# Example 1c: Using option `keep_nas = exprs(ADTF)` to derive MAP in the case where
-# some/all values of a variable used in the computation are missing but ignoring ADTF
+Example 1c: Using option \code{keep_nas = exprs(ADTF)} to derive MAP in the case where
+some/all values of a variable used in the computation are missing but ignoring \code{ADTF}
+\itemize{
+\item Note that observations will be added here even if some of the values contributing
+to the computed values are \code{NA}.
+}
+
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{library(tibble)
+library(dplyr)
+library(lubridate)
 
 derive_param_computed(
   advs,
@@ -263,8 +344,33 @@ derive_param_computed(
   ),
   keep_nas = exprs(ADTF)
 )
+#> # A tibble: 11 × 8
+#>    USUBJID     PARAMCD PARAM                   AVAL VISIT AVALU ADT        ADTF 
+#>    <chr>       <chr>   <chr>                  <dbl> <chr> <chr> <date>     <chr>
+#>  1 01-701-1015 DIABP   Diastolic Blood Press…  51   BASE… mmHg  2024-01-10 <NA> 
+#>  2 01-701-1015 DIABP   Diastolic Blood Press…  50   WEEK… mmHg  2024-01-24 <NA> 
+#>  3 01-701-1015 SYSBP   Systolic Blood Pressu… 121   BASE… mmHg  2024-01-10 <NA> 
+#>  4 01-701-1015 SYSBP   Systolic Blood Pressu… 121   WEEK… mmHg  2024-01-24 <NA> 
+#>  5 01-701-1028 DIABP   Diastolic Blood Press…  79   BASE… mmHg  2024-01-10 <NA> 
+#>  6 01-701-1028 DIABP   Diastolic Blood Press…  80   WEEK… mmHg  2024-01-24 <NA> 
+#>  7 01-701-1028 SYSBP   Systolic Blood Pressu… 130   BASE… mmHg  2024-01-10 <NA> 
+#>  8 01-701-1028 SYSBP   Systolic Blood Pressu…  NA   WEEK… mmHg  2024-01-24 <NA> 
+#>  9 01-701-1015 MAP     Mean Arterial Pressur…  74.3 BASE… mmHg  2024-01-10 <NA> 
+#> 10 01-701-1015 MAP     Mean Arterial Pressur…  73.7 WEEK… mmHg  2024-01-24 <NA> 
+#> 11 01-701-1028 MAP     Mean Arterial Pressur…  96   BASE… mmHg  2024-01-10 <NA> }\if{html}{\out{</div>}}
 
-# Example 2: Derive BMI where height is measured only once
+Example 2: Derive BMI where height is measured only once
+\itemize{
+\item Here, the parameters that are measured only once (i.e., the constant parameters)
+are merged to the other parameters using the specified variables.
+\item In this example, \code{height} is the specified in \code{constant_parameters} as it is
+only mesaured once.
+}
+
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{library(tibble)
+library(dplyr)
+library(lubridate)
+
 advs <- tribble(
   ~USUBJID,      ~PARAMCD, ~PARAM,        ~AVAL, ~AVALU, ~VISIT,
   "01-701-1015", "HEIGHT", "Height (cm)", 147.0, "cm",   "SCREENING",
@@ -290,8 +396,30 @@ derive_param_computed(
   constant_parameters = c("HEIGHT"),
   constant_by_vars = exprs(USUBJID)
 )
+#> # A tibble: 14 × 6
+#>    USUBJID     PARAMCD PARAM                     AVAL AVALU  VISIT    
+#>    <chr>       <chr>   <chr>                    <dbl> <chr>  <chr>    
+#>  1 01-701-1015 HEIGHT  Height (cm)              147   cm     SCREENING
+#>  2 01-701-1015 WEIGHT  Weight (kg)               54   kg     SCREENING
+#>  3 01-701-1015 WEIGHT  Weight (kg)               54.4 kg     BASELINE 
+#>  4 01-701-1015 WEIGHT  Weight (kg)               53.1 kg     WEEK 2   
+#>  5 01-701-1028 HEIGHT  Height (cm)              163   cm     SCREENING
+#>  6 01-701-1028 WEIGHT  Weight (kg)               78.5 kg     SCREENING
+#>  7 01-701-1028 WEIGHT  Weight (kg)               80.3 kg     BASELINE 
+#>  8 01-701-1028 WEIGHT  Weight (kg)               80.7 kg     WEEK 2   
+#>  9 01-701-1015 BMI     Body Mass Index (kg/m^2)  25.0 kg/m^2 SCREENING
+#> 10 01-701-1015 BMI     Body Mass Index (kg/m^2)  25.2 kg/m^2 BASELINE 
+#> 11 01-701-1015 BMI     Body Mass Index (kg/m^2)  24.6 kg/m^2 WEEK 2   
+#> 12 01-701-1028 BMI     Body Mass Index (kg/m^2)  29.5 kg/m^2 SCREENING
+#> 13 01-701-1028 BMI     Body Mass Index (kg/m^2)  30.2 kg/m^2 BASELINE 
+#> 14 01-701-1028 BMI     Body Mass Index (kg/m^2)  30.4 kg/m^2 WEEK 2   }\if{html}{\out{</div>}}
 
-# Example 3: Using data from an additional dataset and other variables than AVAL
+Example 3: Using data from an additional dataset and other variables than \code{AVAL}
+
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{library(tibble)
+library(dplyr)
+library(lubridate)
+
 qs <- tribble(
   ~USUBJID, ~AVISIT,   ~QSTESTCD, ~QSORRES, ~QSSTRESN,
   "1",      "WEEK 2",  "CHSF112", NA,               1,
@@ -329,8 +457,22 @@ derive_param_computed(
     PARAMCD = "CHSF13"
   )
 )
+#> # A tibble: 6 × 6
+#>   USUBJID AVISIT PARAMCD QSSTRESN  AVAL QSORRES
+#>   <chr>   <chr>  <chr>      <dbl> <dbl> <chr>  
+#> 1 1       WEEK 2 CHSF12         1     6 <NA>   
+#> 2 1       WEEK 2 CHSF14         1     6 <NA>   
+#> 3 1       WEEK 4 CHSF12         2    12 <NA>   
+#> 4 1       WEEK 4 CHSF14         1     6 <NA>   
+#> 5 1       WEEK 2 CHSF13        NA    38 <NA>   
+#> 6 1       WEEK 4 CHSF13        NA    25 <NA>   }\if{html}{\out{</div>}}
 
-# Example 4: Computing more than one variable
+Example 4: Computing more than one variable
+
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{library(tibble)
+library(dplyr)
+library(lubridate)
+
 adlb_tbilialk <- tribble(
   ~USUBJID, ~PARAMCD, ~AVALC, ~ADTM,        ~ADTF,
   "1",      "ALK2",   "Y",    "2021-05-13", NA_character_,
@@ -355,25 +497,10 @@ derive_param_computed(
   ),
   keep_nas = TRUE
 )
-}
-\seealso{
-BDS-Findings Functions for adding Parameters/Records: 
-\code{\link{default_qtc_paramcd}()},
-\code{\link{derive_expected_records}()},
-\code{\link{derive_extreme_event}()},
-\code{\link{derive_extreme_records}()},
-\code{\link{derive_locf_records}()},
-\code{\link{derive_param_bmi}()},
-\code{\link{derive_param_bsa}()},
-\code{\link{derive_param_doseint}()},
-\code{\link{derive_param_exist_flag}()},
-\code{\link{derive_param_exposure}()},
-\code{\link{derive_param_framingham}()},
-\code{\link{derive_param_map}()},
-\code{\link{derive_param_qtc}()},
-\code{\link{derive_param_rr}()},
-\code{\link{derive_param_wbc_abs}()},
-\code{\link{derive_summary_records}()}
-}
-\concept{der_prm_bds_findings}
-\keyword{der_prm_bds_findings}
+#> # A tibble: 3 × 6
+#>   USUBJID AVALC ADTM       ADTF  PARAMCD PARAM                                  
+#>   <chr>   <chr> <date>     <chr> <chr>   <chr>                                  
+#> 1 1       Y     2021-06-30 D     TB2AK2  TBILI > 2 times ULN and ALKPH <= 2 tim…
+#> 2 2       N     2021-12-31 M     TB2AK2  TBILI > 2 times ULN and ALKPH <= 2 tim…
+#> 3 3       N     2021-04-04 <NA>  TB2AK2  TBILI > 2 times ULN and ALKPH <= 2 tim…}\if{html}{\out{</div>}}}}
+
