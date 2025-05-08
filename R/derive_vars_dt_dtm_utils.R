@@ -394,7 +394,7 @@ assert_time_imputation <- function(highest_imputation, time_imputation) {
   } && highest_imputation != "n") {
     cli_abort(paste(
       "{.arg time_imputation} must be",
-      'one of `"first"`, `"last`"',
+      'one of {.val first}, {.val last}',
       'or time specified as {.val hh:mm:ss}: e.g. {.val 12:00:00}'
     ))
   }
