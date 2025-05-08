@@ -126,6 +126,7 @@ verify_templates <- function(pkg = "admiral", ignore_templates_pkg = NULL) {
 
   # TODO:  cleanup?
 
+  # run AFTER verify_templates() completes, otherwise will not print
   display_diff(dir = path$diff)
 
   print("DONE")
