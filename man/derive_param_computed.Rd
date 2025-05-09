@@ -211,9 +211,9 @@ BDS-Findings Functions for adding Parameters/Records:
 \concept{der_prm_bds_findings}
 \keyword{der_prm_bds_findings}
 \section{Examples}{
-\subsection{Add a parameter computed from the analysis value of other parameters}{
+\subsection{Example 1a - Adding a parameter computed from a formula}{
 
-Example 1a: Derive mean arterial pressure (MAP) from systolic (SYSBP)
+Derive mean arterial pressure (MAP) from systolic (SYSBP)
 and diastolic blood pressure (DIABP)
 \itemize{
 \item Here, for each \code{USUBJID} and \code{VISIT} group, an observation is added to the output dataset when the filtered input
@@ -272,9 +272,10 @@ derive_param_computed(
 #>  8 01-701-1028 SYSBP   Systolic Blood Pressu…  NA   WEEK… mmHg  2024-01-24 <NA> 
 #>  9 01-701-1015 MAP     Mean Arterial Pressur…  74.3 BASE… mmHg  2024-01-10 <NA> 
 #> 10 01-701-1015 MAP     Mean Arterial Pressur…  73.7 WEEK… mmHg  2024-01-24 <NA> 
-#> 11 01-701-1028 MAP     Mean Arterial Pressur…  96   BASE… mmHg  2024-01-10 <NA> }\if{html}{\out{</div>}}
+#> 11 01-701-1028 MAP     Mean Arterial Pressur…  96   BASE… mmHg  2024-01-10 <NA> }\if{html}{\out{</div>}}}
+\subsection{Example 1b - Adding a parameter computed from a formula with \code{keep_nas = TRUE}}{
 
-Example 1b: Using option \code{keep_nas = TRUE} to derive MAP in the case
+Using option \code{keep_nas = TRUE} to derive MAP in the case
 where some/all values of a variable used in the computation are missing
 \itemize{
 \item Note that observations will be added here even if some of the values contributing
@@ -317,9 +318,10 @@ derive_param_computed(
 #>  9 01-701-1015 MAP     Mean Arterial Pressur…  74.3 BASE… mmHg  2024-01-10 <NA> 
 #> 10 01-701-1015 MAP     Mean Arterial Pressur…  73.7 WEEK… mmHg  2024-01-24 <NA> 
 #> 11 01-701-1028 MAP     Mean Arterial Pressur…  96   BASE… mmHg  2024-01-10 <NA> 
-#> 12 01-701-1028 MAP     Mean Arterial Pressur…  NA   WEEK… mmHg  2024-01-24 <NA> }\if{html}{\out{</div>}}
+#> 12 01-701-1028 MAP     Mean Arterial Pressur…  NA   WEEK… mmHg  2024-01-24 <NA> }\if{html}{\out{</div>}}}
+\subsection{Example 1c - Adding a parameter computed from a formula with \code{keep_nas = exprs()}}{
 
-Example 1c: Using option \code{keep_nas = exprs(ADTF)} to derive MAP in the case where
+Using option \code{keep_nas = exprs(ADTF)} to derive MAP in the case where
 some/all values of a variable used in the computation are missing but ignoring \code{ADTF}
 \itemize{
 \item Note that observations will be added here even if some of the values contributing
@@ -357,14 +359,15 @@ derive_param_computed(
 #>  8 01-701-1028 SYSBP   Systolic Blood Pressu…  NA   WEEK… mmHg  2024-01-24 <NA> 
 #>  9 01-701-1015 MAP     Mean Arterial Pressur…  74.3 BASE… mmHg  2024-01-10 <NA> 
 #> 10 01-701-1015 MAP     Mean Arterial Pressur…  73.7 WEEK… mmHg  2024-01-24 <NA> 
-#> 11 01-701-1028 MAP     Mean Arterial Pressur…  96   BASE… mmHg  2024-01-10 <NA> }\if{html}{\out{</div>}}
+#> 11 01-701-1028 MAP     Mean Arterial Pressur…  96   BASE… mmHg  2024-01-10 <NA> }\if{html}{\out{</div>}}}
+\subsection{Example 2 - Using the \code{constant_parameters} argument}{
 
-Example 2: Derive BMI where height is measured only once
+Derive BMI where height is measured only once
 \itemize{
 \item Here, the parameters that are measured only once (i.e., the constant parameters)
 are merged to the other parameters using the specified variables.
 \item In this example, \code{height} is the specified in \code{constant_parameters} as it is
-only mesaured once.
+only measured once.
 }
 
 \if{html}{\out{<div class="sourceCode r">}}\preformatted{library(tibble)
@@ -412,9 +415,10 @@ derive_param_computed(
 #> 11 01-701-1015 BMI     Body Mass Index (kg/m^2)  24.6 kg/m^2 WEEK 2   
 #> 12 01-701-1028 BMI     Body Mass Index (kg/m^2)  29.5 kg/m^2 SCREENING
 #> 13 01-701-1028 BMI     Body Mass Index (kg/m^2)  30.2 kg/m^2 BASELINE 
-#> 14 01-701-1028 BMI     Body Mass Index (kg/m^2)  30.4 kg/m^2 WEEK 2   }\if{html}{\out{</div>}}
+#> 14 01-701-1028 BMI     Body Mass Index (kg/m^2)  30.4 kg/m^2 WEEK 2   }\if{html}{\out{</div>}}}
+\subsection{Example 3 - Using \code{dataset_add} argument and non-\code{AVAL} variables}{
 
-Example 3: Using data from an additional dataset and other variables than \code{AVAL}
+Using data from an additional dataset and other variables than \code{AVAL}
 
 \if{html}{\out{<div class="sourceCode r">}}\preformatted{library(tibble)
 library(dplyr)
@@ -465,9 +469,10 @@ derive_param_computed(
 #> 3 1       WEEK 4 CHSF12         2    12 <NA>   
 #> 4 1       WEEK 4 CHSF14         1     6 <NA>   
 #> 5 1       WEEK 2 CHSF13        NA    38 <NA>   
-#> 6 1       WEEK 4 CHSF13        NA    25 <NA>   }\if{html}{\out{</div>}}
+#> 6 1       WEEK 4 CHSF13        NA    25 <NA>   }\if{html}{\out{</div>}}}
+\subsection{Example 4 - Adding a parameter computed from more than one variable}{
 
-Example 4: Computing more than one variable
+Specifying more than one variable-value pair via \code{set_values_to}
 
 \if{html}{\out{<div class="sourceCode r">}}\preformatted{library(tibble)
 library(dplyr)

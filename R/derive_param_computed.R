@@ -151,9 +151,9 @@
 #'
 #' @examplesx
 #'
-#' @caption Add a parameter computed from the analysis value of other parameters
+#' @caption Example 1a - Adding a parameter computed from a formula
 #'
-#' @info Example 1a: Derive mean arterial pressure (MAP) from systolic (SYSBP)
+#' @info Derive mean arterial pressure (MAP) from systolic (SYSBP)
 #'     and diastolic blood pressure (DIABP)
 #'
 #' - Here, for each `USUBJID` and `VISIT` group, an observation is added to the output dataset when the filtered input
@@ -200,7 +200,9 @@
 #'   )
 #' )
 #'
-#' @info Example 1b: Using option `keep_nas = TRUE` to derive MAP in the case
+#' @caption Example 1b - Adding a parameter computed from a formula with `keep_nas = TRUE`
+#'
+#' @info Using option `keep_nas = TRUE` to derive MAP in the case
 #'     where some/all values of a variable used in the computation are missing
 #'
 #' - Note that observations will be added here even if some of the values contributing
@@ -230,7 +232,9 @@
 #'   keep_nas = TRUE
 #' )
 #'
-#' @info Example 1c: Using option `keep_nas = exprs(ADTF)` to derive MAP in the case where
+#' @caption Example 1c - Adding a parameter computed from a formula with `keep_nas = exprs()`
+#'
+#' @info Using option `keep_nas = exprs(ADTF)` to derive MAP in the case where
 #'     some/all values of a variable used in the computation are missing but ignoring `ADTF`
 #'
 #' - Note that observations will be added here even if some of the values contributing
@@ -256,12 +260,14 @@
 #'   keep_nas = exprs(ADTF)
 #' )
 #'
-#' @info Example 2: Derive BMI where height is measured only once
+#' @caption Example 2 - Using the `constant_parameters` argument
+#'
+#' @info Derive BMI where height is measured only once
 #'
 #' - Here, the parameters that are measured only once (i.e., the constant parameters)
 #'   are merged to the other parameters using the specified variables.
 #' - In this example, `height` is the specified in `constant_parameters` as it is
-#'   only mesaured once.
+#'   only measured once.
 #'
 #' @code
 #' library(tibble)
@@ -294,7 +300,9 @@
 #'   constant_by_vars = exprs(USUBJID)
 #' )
 #'
-#' @info Example 3: Using data from an additional dataset and other variables than `AVAL`
+#' @caption Example 3 - Using `dataset_add` argument and non-`AVAL` variables
+#'
+#' @info Using data from an additional dataset and other variables than `AVAL`
 #'
 #' @code
 #' library(tibble)
@@ -340,7 +348,9 @@
 #' )
 #'
 #'
-#' @info Example 4: Computing more than one variable
+#' @caption Example 4 - Adding a parameter computed from more than one variable
+#'
+#' @info Specifying more than one variable-value pair via `set_values_to`
 #'
 #' @code
 #' library(tibble)
