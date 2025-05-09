@@ -32,6 +32,7 @@
 #' @param adam_old_dir  temporary directory where old ADaMs (downloaded from github.com) are stored
 #' @param adam_new_dir  temporary directory where new ADaMs are stored.
 
+
 verify_templates <- function(pkg = "admiral", ignore_templates_pkg = NULL) {
   # SETUP ----
   # TODO: remove prior ADaM downloads
@@ -181,7 +182,8 @@ compare <- function(base, compare, keys, file = NULL) {
         base = base,
         compare = compare,
         keys = keys,
-        file = file
+        file = file,
+        suppress_warnings = TRUE    # for now
       )
     },
     error = function(e) {
