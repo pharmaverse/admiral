@@ -1,7 +1,8 @@
 # WORKS
 name:  verify_templates_experimental
 
-run-name: 
+run-name: EXPERIMENTAL
+
 
 on:
   workflow_dispatch:

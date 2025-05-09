@@ -63,7 +63,9 @@ verify_templates <- function(pkg = "admiral", ignore_templates_pkg = NULL, ds = 
   # list of important paths
   ## path <<- list(
   path <- list(
-    template_dir = file.path(system.file(package = pkg), "templates"),
+    #template_dir = file.path(system.file(package = pkg), "templates"),
+    # use active package
+    template_dir = "inst/templates",
     cache_dir = tools::R_user_dir("admiral_templates_data", which = "cache"),
     adam_new_dir = tools::R_user_dir("admiral_templates_data", which = "cache"),
     adam_old_dir = paste0(x, "/old"),
@@ -109,8 +111,6 @@ verify_templates <- function(pkg = "admiral", ignore_templates_pkg = NULL, ds = 
   keys <- sapply(toupper(adam_names), function(e) unname(keys[[e]][[e]]),
                  USE.NAMES = TRUE, simplify = FALSE)
   names(keys) <- tolower(names(keys))
-
-browser(expr=is.null(.ESSBP.[["@3@"]]));##:ess-bp-end:##
 ##:ess-bp-start::browser@nil:##
   keys
   
