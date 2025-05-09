@@ -522,10 +522,6 @@ impute_dtc_dt <- function(dtc,
     max_dates = max_dates
   )
 
-  if (highest_imputation == "Y" && is.null(min_dates) && is.null(max_dates)) {
-    cli_warn("If `highest_imputation` = \"Y\" is specified, `min_dates` or `max_dates` should be specified respectively.") # nolint
-  }
-
   return(restricted)
 }
 
@@ -555,23 +551,18 @@ restrict_imputed_dtc_dt <- function(dtc,
                                     max_dates) {
   if (!(is.null(min_dates) || length(min_dates) == 0) ||
     !(is.null(max_dates) || length(max_dates) == 0)) {
-    suppress_warning(
-      { # nolint
-        # determine range of possible dates
-        min_dtc <-
-          get_date_range(
-            dtc,
-            date_imputation = "first"
-          )
-        max_dtc <-
-          get_date_range(
-            dtc,
-            date_imputation = "last"
-          )
-      },
-      # Suppress warning because we need to run without min/max dates but users should not
-      regexpr = "If `highest_imputation` = \"Y\" is specified, `min_dates` or `max_dates` should be specified respectively." # nolint
-    )
+    # determine range of possible dates
+    min_dtc <-
+      get_date_range(
+        dtc,
+        date_imputation = "first"
+      )
+    max_dtc <-
+      get_date_range(
+        dtc,
+        date_imputation = "last"
+      )
+
   }
   if (!(is.null(min_dates) || length(min_dates) == 0)) {
     if (length(unique(c(length(imputed_dtc), unlist(lapply(min_dates, length))))) != 1) {
