@@ -216,11 +216,14 @@ BDS-Findings Functions for adding Parameters/Records:
 Derive mean arterial pressure (MAP) from systolic (SYSBP)
 and diastolic blood pressure (DIABP)
 \itemize{
-\item Here, for each \code{USUBJID} and \code{VISIT} group, an observation is added to the output dataset when the filtered input
-dataset (\code{dataset}) contains exactly one observation for each parameter code specified for \code{parameters} and all
-contributing values (e.g., \code{AVAL.SYSBP} and \code{AVAL.DIABP}) are not \code{NA}.
-\item This results in three additional rows: \code{USUBJID} \code{01-701-1015} at \code{VISIT} \code{BASELINE} and \verb{WEEK 2}, and
-\code{USUBJID} \code{01-701-1028} at \code{VISIT} \code{BASELINE} only.
+\item Here, for each \code{USUBJID} and \code{VISIT} group, an observation is added
+to the output dataset when the filtered input dataset (\code{dataset})
+contains exactly one observation for each parameter code specified
+for \code{parameters} and all contributing values (e.g., \code{AVAL.SYSBP}
+and \code{AVAL.DIABP}) are not \code{NA}.
+\item This results in three additional rows: \code{USUBJID} \code{01-701-1015} at
+\code{VISIT} \code{BASELINE} and \verb{WEEK 2}, and \code{USUBJID} \code{01-701-1028} at
+\code{VISIT} \code{BASELINE} only.
 }
 
 \if{html}{\out{<div class="sourceCode r">}}\preformatted{library(tibble)

@@ -156,11 +156,14 @@
 #' @info Derive mean arterial pressure (MAP) from systolic (SYSBP)
 #'     and diastolic blood pressure (DIABP)
 #'
-#' - Here, for each `USUBJID` and `VISIT` group, an observation is added to the output dataset when the filtered input
-#'   dataset (`dataset`) contains exactly one observation for each parameter code specified for `parameters` and all
-#'   contributing values (e.g., `AVAL.SYSBP` and `AVAL.DIABP`) are not `NA`.
-#' - This results in three additional rows: `USUBJID` `01-701-1015` at `VISIT` `BASELINE` and `WEEK 2`, and
-#'   `USUBJID` `01-701-1028` at `VISIT` `BASELINE` only.
+#' - Here, for each `USUBJID` and `VISIT` group, an observation is added
+#'   to the output dataset when the filtered input dataset (`dataset`)
+#'   contains exactly one observation for each parameter code specified
+#'   for `parameters` and all contributing values (e.g., `AVAL.SYSBP`
+#'   and `AVAL.DIABP`) are not `NA`.
+#' - This results in three additional rows: `USUBJID` `01-701-1015` at
+#'   `VISIT` `BASELINE` and `WEEK 2`, and `USUBJID` `01-701-1028` at
+#'   `VISIT` `BASELINE` only.
 #'
 #' @code
 #' library(tibble)
