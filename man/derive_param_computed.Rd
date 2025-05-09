@@ -283,8 +283,9 @@ where some/all values of a variable used in the computation are missing
 \itemize{
 \item Note that observations will be added here even if some of the values contributing
 to the computed values are \code{NA}.
-\item This therefore results in four additional rows: \code{USUBJID} \code{01-701-1015} at \code{VISIT} \code{BASELINE} and \verb{WEEK 2}
-and \code{USUBJID} \code{01-701-1028} at \code{VISIT} \code{BASELINE} and \verb{WEEK 2}, with the value of \code{AVAL} for
+\item This therefore results in four additional rows: \code{USUBJID} \code{01-701-1015}
+at \code{VISIT} \code{BASELINE} and \verb{WEEK 2} and \code{USUBJID} \code{01-701-1028}
+at \code{VISIT} \code{BASELINE} and \verb{WEEK 2}, with the value of \code{AVAL} for
 \code{USUBJID} \code{01-701-1028} at \code{VISIT} \verb{WEEK 2} being \code{NA}.
 }
 

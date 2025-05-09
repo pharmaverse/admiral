@@ -210,8 +210,9 @@
 #'
 #' - Note that observations will be added here even if some of the values contributing
 #'   to the computed values are `NA`.
-#' - This therefore results in four additional rows: `USUBJID` `01-701-1015` at `VISIT` `BASELINE` and `WEEK 2`
-#'   and `USUBJID` `01-701-1028` at `VISIT` `BASELINE` and `WEEK 2`, with the value of `AVAL` for
+#' - This therefore results in four additional rows: `USUBJID` `01-701-1015`
+#'   at `VISIT` `BASELINE` and `WEEK 2` and `USUBJID` `01-701-1028`
+#'   at `VISIT` `BASELINE` and `WEEK 2`, with the value of `AVAL` for
 #'   `USUBJID` `01-701-1028` at `VISIT` `WEEK 2` being `NA`.
 #'
 #' @code
