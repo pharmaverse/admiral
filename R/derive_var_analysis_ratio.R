@@ -22,10 +22,11 @@
 #' Ratio to Analysis Range Lower Limit `AVAL / ANRLO` will return a new variable
 #' `R2ANRLO`, and Ratio to Analysis Range  Upper Limit `AVAL / ANRHI` will return
 #' a new variable `R2ANRLO`. Please note how the denominator variable has the prefix
-#' `R2----`. Note that `R2AyHI` and `R2AyLO` can also be derived using this function.
-#' A user can override the default returned variables by using the
+#' `R2----`. A user can override the default returned variables by using the
 #' `new_var` argument. Also, values of 0 in the denominator will return `NA` in
 #' the derivation.
+#'
+#' Note that `R2AyHI` and `R2AyLO` can also be derived using this function.
 #'
 #' Reference CDISC ADaM Implementation Guide
 #' Version 1.1 Section 3.3.4 Analysis Parameter Variables for BDS Datasets

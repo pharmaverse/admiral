@@ -51,10 +51,11 @@ have returned a new variable \code{R2BASE} that will be appended to the input da
 Ratio to Analysis Range Lower Limit \code{AVAL / ANRLO} will return a new variable
 \code{R2ANRLO}, and Ratio to Analysis Range  Upper Limit \code{AVAL / ANRHI} will return
 a new variable \code{R2ANRLO}. Please note how the denominator variable has the prefix
-\verb{R2----}. Note that \code{R2AyHI} and \code{R2AyLO} can also be derived using this function.
-A user can override the default returned variables by using the
+\verb{R2----}. A user can override the default returned variables by using the
 \code{new_var} argument. Also, values of 0 in the denominator will return \code{NA} in
 the derivation.
+
+Note that \code{R2AyHI} and \code{R2AyLO} can also be derived using this function.
 
 Reference CDISC ADaM Implementation Guide
 Version 1.1 Section 3.3.4 Analysis Parameter Variables for BDS Datasets
