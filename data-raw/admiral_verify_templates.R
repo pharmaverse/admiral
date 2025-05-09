@@ -1,15 +1,5 @@
 # This script:  data-raw/admiral_verify_templates.R
 
-# FIX
-# Generates ADaM from templates and compares to previously generated ADaM file
-# (These are found in https:://github.com main branch pharmaverseadam).
-#
-#
-# Much code taken from pharamavreseadam::create_adams_data.R
-# (https://github.com/pharmaverse/pharmaverseadam/blob/main/data-raw/create_adams_data.R)
-#
-# USAGE:   verify_templates()
-#
 # TODO:
 # - add `attr` to generated ADaM
 # - where code overlaps, make pharamversadam script and this one the same.
@@ -33,7 +23,20 @@
 #' @param adam_new_dir  temporary directory where new ADaMs are stored.
 
 
-verify_templates <- function(pkg = "admiral", ignore_templates_pkg = NULL, ds = c("adae")) {
+#' @title verify_templats
+#' @param pkg package (currently only admiral)
+#' @description:
+#' Generates ADaM from templates and compares to previously generated ADaM file
+#' (These are found in https:://github.com main branch pharmaverseadam).
+#'
+#' Much code taken from pharamavreseadam::create_adams_data.R
+#'  (https://github.com/pharmaverse/pharmaverseadam/blob/main/data-raw/create_adams_data.R)
+#
+#'rUSAGE:   verify_templates()
+#
+#' @export
+
+verify_templates <- function(pkg = "admiral", ds = c("adae")) {
   # SETUP ----
   # TODO: remove prior ADaM downloads
   # ASSUME:  (1) user is running script for 1st time and no temporary directories exist yet, OR
@@ -103,7 +106,7 @@ verify_templates <- function(pkg = "admiral", ignore_templates_pkg = NULL, ds = 
   #library(teal.slice)
   #get_keys(adam_names)
   ## ------------------------  FUTURE
-  
+
   # keys for diffdf
   keys <- teal.data::default_cdisc_join_keys
 
@@ -113,7 +116,7 @@ verify_templates <- function(pkg = "admiral", ignore_templates_pkg = NULL, ds = 
   names(keys) <- tolower(names(keys))
 ##:ess-bp-start::browser@nil:##
   keys
-  
+
 
   # finally, construct a named list object: each element (adam_names) holds a template and keys
   obj <- lapply(adam_names, function(e) {
@@ -169,7 +172,6 @@ verify_templates <- function(pkg = "admiral", ignore_templates_pkg = NULL, ds = 
 #' print(file_contents[[1]]) # Shows contents of the first file
 #' }
 #'
-#' @export
 display_diff <- function(dir = NULL) {
   files <- list.files(dir, full.names = TRUE)
   contents <- lapply(files, readLines)
@@ -184,16 +186,21 @@ display_diff <- function(dir = NULL) {
   invisible(NULL)
 }
 
+#' @description: loads saved file `filename` and returns the dataset
 load_rda <- function(filename) {
   load(filename)
   get(ls()[ls() != "filename"]) # returns dataset
 }
+
+#' @description saves the dataset to a specified file path
 save_rda <- function(data, file_path, new_name) {
   # new_name must include  .rda
   if (missing(new_name)) {
     save(data, file = file_path, compress = "bzip2")
   }
 }
+
+#' @desciption Uses `diffdf` to compare two datasets
 compare <- function(base, compare, keys, file = NULL) {
   tryCatch(
     {
@@ -211,7 +218,7 @@ compare <- function(base, compare, keys, file = NULL) {
   ) ## end tryCatch
 } ## end compare
 
-# start fresh
+#' @description:  removes the cache directory
 clean_cache <- function() {
   cache_dir <- tools::R_user_dir("admiral_templates_data", which = "cache")
   if (dir.exists(cache_dir)) {
@@ -222,6 +229,7 @@ clean_cache <- function() {
   }
 }
 
+#' @description:  removes the old adam directory
 clean_adam_old_dir <- function(dir = NULL) {
   if (dir.exists(tempdir())) {
     unlink(adam_old_dir, recursive = TRUE)
@@ -231,6 +239,7 @@ clean_adam_old_dir <- function(dir = NULL) {
   }
 }
 
+#' @description:  downloads the old ADaM datasets from github
 download_adam_old <- function(adam_names, path = NULL) {
   lapply(adam_names, function(adam) {
     githubURL <- paste0(
@@ -247,16 +256,18 @@ download_adam_old <- function(adam_names, path = NULL) {
   })
 }
 
+#' @description loads the save filed for old dataset
 get_dataset_old <- function(adam, path = NULL) {
   adam_old <- load_rda(paste0(path, "/", adam, ".rda"))
 }
 
+#' @description loads the save filed for new dataset
 get_dataset_new <- function(adam, path = NULL) {
   load_rda(paste0(path, "/", adam, ".rda"))
   adam_new <- get(adam)
 }
 
-# does the real work
+#' @description:  runs the template for the specified ADaM
 run_template <- function(adam, dir = NULL) {
   source(paste0(dir, "/ad_", adam, ".R"))
 }
