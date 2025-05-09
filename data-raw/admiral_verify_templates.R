@@ -134,13 +134,36 @@ verify_templates <- function(pkg = "admiral", ignore_templates_pkg = NULL) {
 
 #------------------------  helper functions
 
-display_diff  <- function(dir = NULL, path = NULL) {
-  map(list.files(dir, full.names = TRUE), readLines)
+#' Display Results of running diffdf  
+#'
+#' Reads all text files in a specified directory and returns their contents in a named list.
+#' Each entry in the list contains the lines of one file as a character vector, and the 
+#' entry is named after the file.
+#'
+#' @param dir A character string specifying the path to the directory containing the text files.
+#'
+#' @return A named list. Each element is a character vector giving the lines of a file;
+#'   the names of the list correspond to the individual filenames.
+#'
+#' @examples
+#' \dontrun{
+#' # Read contents of all files in "logs" directory
+#' file_contents <- display_diff("logs")
+#' print(names(file_contents))   # Shows the filenames
+#' print(file_contents[[1]])     # Shows contents of the first file
+#' }
+#'
+#' @export
+display_diff <- function(dir = NULL) {
+  files <- list.files(dir, full.names = TRUE)
+  contents <- lapply(files, readLines)
+  names(contents) <- basename(files)
+  contents
 }
 
 load_rda <- function(filename) {
-  load(fileName)
-  get(ls()[ls() != "fileName"]) # returns dataset
+  load(filename)
+  get(ls()[ls() != "filename"]) # returns dataset
 }
 save_rda <- function(data, file_path, new_name) {
   # new_name must include  .rda
