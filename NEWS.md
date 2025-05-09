@@ -13,9 +13,11 @@
 ## Updates of Existing Functions
 
 - The function `extract_duplicate_records()` was updated to consider all variables in the input dataset for the by group if the `by_vars` argument is omitted entirely. (#2644)
+
 - In `slice_derivation()`, previously the derivation is not called for empty
 subsets, however this can lead to issues when the input dataset is empty. Now
 the derivation is called for all subsets. (#2645)
+
 - The examples section for the function `derive_var_trtemfl()` was enhanced to include a showcasing of all scenarios discussed in the following [PHUSE White Paper on Treatment-Emergent AEs](https://phuse.s3.eu-central-1.amazonaws.com/Deliverables/Safety+Analytics/WP-087+Recommended+Definition+of++Treatment-Emergent+Adverse+Events+in+Clinical+Trials+.pdf). (#2455)
 
 ## Breaking Changes
@@ -32,7 +34,11 @@ the derivation is called for all subsets. (#2645)
 
 ## Documentation
 
-- The examples sections of the following functions were enhanced:
+- Improved documentation, error messages, and argument assertions of `derive_vars_dt()`, `derive_vars_dtm()`, `impute_dtc_dt()`, `impute_dtc_dtm()`. (#2654)
+
+- Added an example to the `derive_vars_transposed()` reference page to showcase how duplicates-related errors can arise when records in `dataset_merge` are not uniquely identified. (#2609)
+
+- The examples section of the following functions was enhanced:
     - `derive_extreme_records()` (#2585)
     - `derive_param_tte()` (#2704)
 
@@ -41,9 +47,9 @@ the derivation is called for all subsets. (#2645)
 - Default value of `type` in `derive_vars_aage()` is now shown as `interval` to match the function behavior. (#2685) 
 
 - The "Lab Grading" vignette was updated to correct some typos and make text easier to
-read (#2623).
+read. (#2623)
 
-- The "BDS Time-to-Event" vignette was updated to include `SRCSEQ` consistently (#2658).
+- The "BDS Time-to-Event" vignette was updated to include `SRCSEQ` consistently. (#2658)
 
 - The template for ADPC and vignette were updated to include an example of using `DTYPE` for imputed records (#2657).
 

@@ -67,7 +67,7 @@
 #'   7, "Alveolar proteinosis", NA_character_, NA_integer_
 #' )
 #' get_vars_query(adae, queries)
-get_vars_query <- function(dataset, dataset_queries) { # nolint: cyclocomp_linter
+get_vars_query <- function(dataset, dataset_queries) {
   source_vars <- unique(dataset_queries$SRCVAR)
   assert_data_frame(dataset,
     required_vars = chr2vars(source_vars),
@@ -272,7 +272,7 @@ get_vars_query <- function(dataset, dataset_queries) { # nolint: cyclocomp_linte
 #'   7, "Alveolar proteinosis", NA_character_, NA_integer_
 #' )
 #' derive_vars_query(adae, queries)
-derive_vars_query <- function(dataset, dataset_queries) { # nolint: cyclocomp_linter
+derive_vars_query <- function(dataset, dataset_queries) {
   # join restructured queries to input dataset
   assert_valid_queries(dataset_queries, queries_name = deparse(substitute(dataset_queries)))
   dataset_queries <- convert_blanks_to_na(dataset_queries)
