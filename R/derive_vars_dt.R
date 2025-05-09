@@ -229,13 +229,6 @@ convert_dtc_to_dt <- function(dtc,
                               preserve = FALSE) {
   assert_character_vector(dtc)
   warn_if_invalid_dtc(dtc, is_valid_dtc(dtc))
-  assert_highest_imputation(
-    highest_imputation = highest_imputation,
-    highest_imputation_values = c("Y", "M", "D", "n"),
-    date_imputation = date_imputation,
-    min_dates = min_dates,
-    max_dates = max_dates
-  )
 
 
   imputed_dtc <- impute_dtc_dt(
@@ -277,9 +270,9 @@ convert_dtc_to_dt <- function(dtc,
 #'   If `"n"` is specified no imputation is performed, i.e., if any component is
 #'   missing, `NA_character_` is returned.
 #'
-#'   If `"Y"` is specified, `date_imputation` should be `"first"` or `"last"`
-#'   and `min_dates` or `max_dates` should be specified respectively. Otherwise,
-#'   `NA_character_` is returned if the year component is missing.
+#'   If `"Y"` is specified, `date_imputation` must be `"first"` or `"last"`
+#'   and `min_dates` or `max_dates` must be specified respectively. Otherwise,
+#'   an error is thrown.
 #'
 #' @permitted `"Y"` (year, highest level), `"M"` (month), `"D"`
 #'   (day), `"n"` (none, lowest level)
@@ -435,6 +428,15 @@ impute_dtc_dt <- function(dtc,
     year = "Y"
   )
   assert_character_scalar(highest_imputation, values = imputation_levels)
+
+  assert_highest_imputation(
+    highest_imputation = highest_imputation,
+    highest_imputation_values = imputation_levels,
+    date_imputation = date_imputation,
+    min_dates = min_dates,
+    max_dates = max_dates
+  )
+
   highest_imputation <- dt_level(highest_imputation)
   date_imputation <-
     assert_character_scalar(
@@ -557,15 +559,13 @@ restrict_imputed_dtc_dt <- function(dtc,
       { # nolint
         # determine range of possible dates
         min_dtc <-
-          impute_dtc_dt(
+          get_date_range(
             dtc,
-            highest_imputation = "Y",
             date_imputation = "first"
           )
         max_dtc <-
-          impute_dtc_dt(
+          get_date_range(
             dtc,
-            highest_imputation = "Y",
             date_imputation = "last"
           )
       },
