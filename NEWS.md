@@ -49,7 +49,7 @@ read (#2623).
 
 - The "Higher Order Functions" vignette was updated to showcase an example of two higher order functions used in combination. The documentation for each of the higher order functions was also corrected by removing the stated requirement that the `derivation` takes a `dataset` argument (#2656).
 
-- The 'Details' section of the `derive_var_analysis_ratio` function and the 'Derive Analysis Ratio' section of the "Creating a BDS Finding ADaM" vignette were updated to include references to `R2AyHI` and `R2AyLO` (#2548).
+- The 'Details' section of the `derive_var_analysis_ratio()` function and the 'Derive Analysis Ratio' section of the "Creating a BDS Finding ADaM" vignette were updated to include references to `R2AyHI` and `R2AyLO`. (#2548)
 
 ## Various
 
