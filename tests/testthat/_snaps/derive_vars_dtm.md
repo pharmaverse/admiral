@@ -27,7 +27,7 @@
       time_imputation = "last")
     Condition
       Error in `assert_date_imputation()`:
-      ! If `highest_imputation = "M"` is specified, `date_imputation` must be one of `'first'`, `'mid'`, `'last'` or a format with month and day specified as `'mm-dd'`: e.g. `'06-15'`
+      ! If `highest_imputation = "M"` is specified, `date_imputation` must be one of "first", "mid", "last" or a format with month and day specified as "mm-dd": e.g. "06-15"
 
 ---
 
@@ -36,7 +36,7 @@
         "2020"), highest_imputation = "M", date_imputation = "10", time_imputation = "last")
     Condition
       Error in `assert_date_imputation()`:
-      ! If `highest_imputation = "M"` is specified, `date_imputation` must be one of `'first'`, `'mid'`, `'last'` or a format with month and day specified as `'mm-dd'`: e.g. `'06-15'`
+      ! If `highest_imputation = "M"` is specified, `date_imputation` must be one of "first", "mid", "last" or a format with month and day specified as "mm-dd": e.g. "06-15"
 
 ---
 
@@ -65,7 +65,7 @@
       time_imputation = "WRONG")
     Condition
       Error in `assert_time_imputation()`:
-      ! `time_imputation` must be one of `"first"`, `"last`" or time specified as `"hh:mm:ss"`: e.g. `"12:00:00"`
+      ! `time_imputation` must be one of "first", "last" or time specified as "hh:mm:ss": e.g. "12:00:00"
 
 ---
 
@@ -75,7 +75,7 @@
       time_imputation = "12:12:61")
     Condition
       Error in `assert_time_imputation()`:
-      ! `time_imputation` must be one of `"first"`, `"last`" or time specified as `"hh:mm:ss"`: e.g. `"12:00:00"`
+      ! `time_imputation` must be one of "first", "last" or time specified as "hh:mm:ss": e.g. "12:00:00"
 
 # compute_tmf Test 16: throws ERROR when ignore_seconds_flag  = T and seconds are present
 
@@ -135,14 +135,14 @@
         derive_vars_dtm(dtc = AESTDTC, new_vars_prefix = "AST", highest_imputation = "Y",
           date_imputation = "first", time_imputation = "first", flag_imputation = "both")
     Condition
-      Error in `assert_dt_dtm_inputs()`:
+      Error in `assert_highest_imputation()`:
       ! If `highest_imputation = "Y"` is specified, `min_dates` or `max_dates` must be specified respectively.
 
 # derive_vars_dtm Test 32: catch ignore_seconds_flag error
 
     Code
       derive_vars_dtm(input, new_vars_prefix = "AST", dtc = XXSTDTC,
-        ignore_seconds_flag = TRUE)
+        highest_imputation = "M", ignore_seconds_flag = TRUE)
     Condition
       Error in `derive_vars_dtm()`:
       ! Seconds detected in data while `ignore_seconds_flag` is invoked

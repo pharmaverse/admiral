@@ -871,6 +871,7 @@ test_that("derive_vars_dtm Test 32: catch ignore_seconds_flag error", {
       input,
       new_vars_prefix = "AST",
       dtc = XXSTDTC,
+      highest_imputation = "M",
       ignore_seconds_flag = TRUE
     ),
     error = TRUE
