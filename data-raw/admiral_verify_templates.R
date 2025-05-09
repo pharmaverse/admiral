@@ -33,7 +33,7 @@
 #' @param adam_new_dir  temporary directory where new ADaMs are stored.
 
 
-verify_templates <- function(pkg = "admiral", ignore_templates_pkg = NULL) {
+verify_templates <- function(pkg = "admiral", ignore_templates_pkg = NULL, ds = c("adae")) {
   # SETUP ----
   # TODO: remove prior ADaM downloads
   # ASSUME:  (1) user is running script for 1st time and no temporary directories exist yet, OR
@@ -84,21 +84,36 @@ verify_templates <- function(pkg = "admiral", ignore_templates_pkg = NULL) {
   # templates is a named chr[]
   names(templates) <- adam_names
 
+  # limit to ds user submitted
+  adam_names <- adam_names[adam_names %in% ds]
+
   # per Ben, ignore "adlbhy"
   adam_names <- adam_names[adam_names != "adlbhy"]
 
+
   # download, save prior ADaMs from pharmaverseadam
 
+  cat("Downloading from github pharmaverseadam \n")
   download_adam_old(adam_names, path = path$adam_old_dir)
 
+  ## ------------------------  FUTURE
+  # new code for keys
+  #library(teal.slice)
+  #get_keys(adam_names)
+  ## ------------------------  FUTURE
+  
   # keys for diffdf
   keys <- teal.data::default_cdisc_join_keys
 
   # keys is named list of keys, each element (for each adam_name) and is chr[] of keys
-  keys <- sapply(toupper(adam_names), function(e) unname(keys[[e]][[e]]), USE.NAMES = TRUE)
+  keys <- sapply(toupper(adam_names), function(e) unname(keys[[e]][[e]]),
+                 USE.NAMES = TRUE, simplify = FALSE)
   names(keys) <- tolower(names(keys))
-  keys
 
+browser(expr=is.null(.ESSBP.[["@3@"]]));##:ess-bp-end:##
+##:ess-bp-start::browser@nil:##
+  keys
+  
 
   # finally, construct a named list object: each element (adam_names) holds a template and keys
   obj <- lapply(adam_names, function(e) {
@@ -112,9 +127,6 @@ verify_templates <- function(pkg = "admiral", ignore_templates_pkg = NULL) {
   # done !
   obj
   names(obj)
-
-  # for TESTING, otherwise will be ALL adam_names
-  adam_names <- c("adsl", "adae")
 
   sprintf("---- Run templates\n")
   compare_list <- purrr::map(adam_names, .progress = TRUE, function(adam) {
@@ -165,7 +177,7 @@ display_diff <- function(dir = NULL) {
   map2(
     names(contents), contents,
     function(name, content) {
-      cli::cli_h1(paste("Differences found for", str_replace_all(name, ".txt", ""), "\n"))
+      cli::cli_h1(paste("Differences found for", str_replace_all(name, ".txt", ""), " ",  today(),  "\n"))
       cat(paste(content, collapse = "\n"))
     }
   )
