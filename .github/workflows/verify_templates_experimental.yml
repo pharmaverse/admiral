@@ -31,6 +31,9 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@v4
 
+      - name: load_all
+      	run: Rscript -e 'devtools::load_all()'
+
       - name: source 
         run:  Rscript -e 'source("data-raw/admiral_verify_templates.R")'
        
