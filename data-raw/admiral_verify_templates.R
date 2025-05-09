@@ -162,7 +162,14 @@ display_diff <- function(dir = NULL) {
   files <- list.files(dir, full.names = TRUE)
   contents <- lapply(files, readLines)
   names(contents) <- basename(files)
-  contents
+  map2(
+    names(contents), contents,
+    function(name, content) {
+      cli::cli_h1(paste("Differences found for", str_replace_all(name, ".txt", ""), "\n"))
+      cat(paste(content, collapse = "\n"))
+    }
+  )
+  invisible(NULL)
 }
 
 load_rda <- function(filename) {
