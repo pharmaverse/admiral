@@ -30,7 +30,7 @@
 #'   eg. "Anemia" or "INR Increased". Note: the variable is case insensitive.
 #' - `DIRECTION`: variable to hold the direction of the abnormality of a particular lab test
 #'   value. "L" is for LOW values, "H" is for HIGH values. Note: the variable is case insensitive.
-#' - `SI_UNIT_CHECK`: variable to hold unit of particular lab test. Used to check against input data
+#' - `UNIT_CHECK`: variable to hold unit of particular lab test. Used to check against input data
 #'   if criteria is based on absolute values.
 #' - `VAR_CHECK`: variable to hold comma separated list of variables used in criteria. Used to check
 #'   against input data that variables exist.
@@ -53,7 +53,7 @@
 #' @param get_unit_expr An expression providing the unit of the parameter
 #'
 #'   The result is used to check the units of the input parameters. Compared with
-#'   `SI_UNIT_CHECK` in metadata (see `meta_criteria` parameter).
+#'   `UNIT_CHECK` in metadata (see `meta_criteria` parameter).
 #'
 #' @permitted A variable containing unit from the input dataset, or a function call,
 #'   for example, `get_unit_expr = extract_unit(PARAM)`.
@@ -151,7 +151,7 @@ derive_var_atoxgr_dir <- function(dataset,
   # Check metadata data set has required variables
   assert_data_frame(
     meta_criteria,
-    required_vars = exprs(TERM, GRADE_CRITERIA_CODE, FILTER, DIRECTION, SI_UNIT_CHECK, VAR_CHECK)
+    required_vars = exprs(TERM, GRADE_CRITERIA_CODE, FILTER, DIRECTION, UNIT_CHECK, VAR_CHECK)
   )
   # check DIRECTION has expected values L or H
   assert_character_vector(meta_criteria$DIRECTION, values = c("L", "H"))
@@ -161,11 +161,12 @@ derive_var_atoxgr_dir <- function(dataset,
   # L = low (Hypo) H = high (Hyper)
   atoxgr_dir <- meta_criteria %>%
     filter(!is.na(GRADE_CRITERIA_CODE) & toupper(DIRECTION) == toupper(criteria_direction)) %>%
-    select(TERM, DIRECTION, SI_UNIT_CHECK, FILTER, GRADE_CRITERIA_CODE, VAR_CHECK) %>%
+    select(TERM, DIRECTION, UNIT_CHECK, FILTER, GRADE_CRITERIA_CODE, VAR_CHECK) %>%
     mutate(
       TERM_UPPER = toupper(TERM),
-      SI_UNIT_UPPER = toupper(SI_UNIT_CHECK)
-    )
+      UNIT_UPPER = toupper(UNIT_CHECK)
+    ) %>%
+    distinct()
 
   # from ADLB VAD get distinct list of terms to be graded
   terms_in_vad <- dataset %>%
@@ -200,56 +201,86 @@ derive_var_atoxgr_dir <- function(dataset,
     grade_this_term <- to_be_graded %>%
       filter(!!tox_description_var == list_of_terms$TERM[i])
 
+    # get unique list of FILTERS (possibly more than one unit)
+    meta_this_filter_uniq <- meta_this_term %>%
+      select(FILTER) %>%
+      distinct()
 
     # Within each TERM check if there are FILTERs to be applied
     # if FILTER not missing then loop through each FILTER for the TERM already specified
-    for (j in seq_along(meta_this_term$FILTER)) {
+    for (j in seq_along(meta_this_filter_uniq$FILTER)) {
       # subset using FILTER if its not empty
-      if (!is.na(meta_this_term$FILTER[j])) {
+      if (!is.na(meta_this_filter_uniq$FILTER[j])) {
         meta_this_filter <- meta_this_term %>%
           filter(FILTER == meta_this_term$FILTER[j])
-      } else {
-        meta_this_filter <- meta_this_term
-      }
 
-      # Put list of variables required for criteria in a vector
-      list_of_vars <- gsub("\\s+", "", unlist(strsplit(meta_this_filter$VAR_CHECK, ",")))
-
-      if (!is.na(meta_this_filter$FILTER)) {
         # filter lab data using FILTER from metadata
         grade_this_filter <- grade_this_term %>%
-          filter(eval(parse(text = meta_this_filter$FILTER)))
+          filter(eval(parse(text = meta_this_filter_uniq$FILTER[j])))
+
       } else {
+        meta_this_filter <- meta_this_term
+
         grade_this_filter <- grade_this_term
       }
 
-      # check variables required in criteria exist on data
-      assert_data_frame(grade_this_filter, required_vars = exprs(!!!syms(list_of_vars)))
+      # Within each TERM and FILTER check if there are UNITs to be applied
+      # if UNIT not missing then loop through each UNIT for the TERM and FILTER already specified
+      for (x in seq_along(meta_this_filter$UNIT_CHECK)) {
 
-      if ("BNRIND" %in% list_of_vars) {
-        # check input parameter is character value
-        assert_character_vector(abnormal_indicator, optional = FALSE)
+        if (!is.na(meta_this_filter$UNIT_CHECK[x])) {
+
+          meta_this_filter_unit <- meta_this_filter %>%
+            filter(UNIT_CHECK == meta_this_filter$UNIT_CHECK[x])
+
+          grade_this_filter_unit <- grade_this_filter %>%
+            filter(meta_this_filter_unit$UNIT_UPPER == toupper(!!get_unit_expr) |
+                     is.na(toupper(!!get_unit_expr)))
+        } else {
+          meta_this_filter_unit <- meta_this_filter
+
+          grade_this_filter_unit <- grade_this_filter
+        }
+
+        # Put list of variables required for criteria in a vector
+        list_of_vars <- gsub("\\s+", "", unlist(strsplit(meta_this_filter_unit$VAR_CHECK, ",")))
+
+        # check variables required in criteria exist on data
+        assert_data_frame(grade_this_filter_unit, required_vars = exprs(!!!syms(list_of_vars)))
+
+        if ("BNRIND" %in% list_of_vars) {
+          # check input parameter is character value
+          assert_character_vector(abnormal_indicator, optional = FALSE)
+        }
+
+        # apply criteria when SI or CV unit matches
+        grade_this_filter_unit <- grade_this_filter_unit %>%
+          mutate(
+            temp_flag = meta_this_filter_unit$UNIT_UPPER == toupper(!!get_unit_expr) |
+              is.na(meta_this_filter_unit$UNIT_UPPER),
+            !!new_var := if_else(
+              temp_flag, eval(parse(text = meta_this_filter_unit$GRADE_CRITERIA_CODE)), NA_character_
+              )
+          ) %>%
+          select(-temp_flag)
+
+        # add data just graded to data already processed
+        out_data <- bind_rows(out_data, grade_this_filter_unit)
+
+        if (!is.na(meta_this_filter$UNIT_CHECK[x])) {
+          grade_this_filter <- grade_this_filter %>%
+            filter(meta_this_filter_unit$UNIT_UPPER != toupper(!!get_unit_expr) &
+                     !is.na(meta_this_filter_unit$UNIT_UPPER))
+
+          if (x == length(meta_this_filter$UNIT_CHECK)) {
+            out_data <- bind_rows(out_data, grade_this_filter)
+          }
+        }
       }
+      # remove lab data just graded from data still to be graded for the specified TERM
+      grade_this_term <- grade_this_term %>%
+        filter(!(eval(parse(text = meta_this_filter_unit$FILTER))))
 
-      # apply criteria when SI unit matches
-      grade_this_filter <- grade_this_filter %>%
-        mutate(
-          temp_flag = meta_this_filter$SI_UNIT_UPPER == toupper(!!get_unit_expr) |
-            is.na(meta_this_filter$SI_UNIT_UPPER),
-          !!new_var := if_else(
-            temp_flag, eval(parse(text = meta_this_filter$GRADE_CRITERIA_CODE)), NA_character_
-          )
-        ) %>%
-        select(-temp_flag)
-
-      # add data just graded to data already processed
-      out_data <- bind_rows(out_data, grade_this_filter)
-
-      if (!is.na(meta_this_filter$FILTER)) {
-        # remove lab data just graded from data still to be graded for the specified TERM
-        grade_this_term <- grade_this_term %>%
-          filter(!(eval(parse(text = meta_this_filter$FILTER))))
-      }
     }
 
     # remove lab data with TERM just graded from data still to be graded
