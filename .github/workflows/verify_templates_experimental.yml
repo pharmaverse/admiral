@@ -31,12 +31,24 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@v4
 
-      - name: load_all
-      	run: Rscript -e 'devtools::load_all()'
+      - uses: r-lib/actions/setup-r-dependencies@v2
+        with:
+          extra-packages: any::rcmdcheck
+          needs: check
 
-      - name: source 
-        run:  Rscript -e 'source("data-raw/admiral_verify_templates.R")'
+      #- name: load_all
+      	#run:  Rscript -e 'devtools::load_all()'
+
+     # - name: source 
+#  run:  Rscript -e 'source("data-raw/admiral_verify_templates.R")'
        
-      - name: run the code
-	run:  Rscript -e 'verify_templates()'
+      #- name: run the code
+# run:  Rscript -e 'verify_templates()'
+ 
+      - name: Session info
+        run: |
+          options(width = 100)
+          pkgs <- installed.packages()[, "Package"]
+          sessioninfo::session_info(pkgs, include_base = TRUE)
+        shell: Rscript {0}
 
