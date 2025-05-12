@@ -27,7 +27,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">admiral</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.2.0.9020</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.2.0.9021</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -736,7 +736,9 @@ used.</p>
 <code><a href="../reference/derive_var_analysis_ratio.html">derive_var_analysis_ratio()</a></code>. This function derives a ratio
 variable based on user-specified pair. For example, Ratio to Baseline is
 calculated by <code>AVAL / BASE</code> and the function appends a new
-variable <code>R2BASE</code> to the dataset. Examples calls are:</p>
+variable <code>R2BASE</code> to the dataset. This function can also
+derive <code>R2AyHI</code> and <code>R2AyLO</code> values. Examples
+calls are:</p>
 <div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">advs</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/derive_var_analysis_ratio.html">derive_var_analysis_ratio</a></span><span class="op">(</span><span class="va">advs</span>,</span>
 <span>  numer_var <span class="op">=</span> <span class="va">AVAL</span>,</span>
