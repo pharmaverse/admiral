@@ -63,7 +63,7 @@ Variable | Scope |  Type | Example Value
 ------- | -------- | ------ | -------- 
 **TERM** | Term describing the criteria applied to a particular lab test.|  Character |  "Anemia" 
 **DIRECTION** | The direction of the abnormality of a particular lab test value|   Character | "L" or "H".
-**SI_UNIT_CHECK** | Unit of lab test, to check against input data if criteria is based on absolute values. |  Character | "mmol/L"
+**UNIT_CHECK** | Unit of lab test, to check against input data if criteria is based on absolute values. |  Character | "mmol/L"
 **VAR_CHECK** | Comma separated list of variables used in criteria, to check input data that variables exist. |  Character | "AVAL, ANRLO"
 **FILTER** | Only required for DAIDS grading. Variable to hold code that filters the lab data based on contents of column SUBGROUP. |  Character |R code that is valid within a `filter` function call.
 **GRADE_CRITERIA_CODE** | Variable to hold code that creates grade based on defined criteria. |  Character |R code that is a valid case statement within a `mutate` function call.
@@ -301,16 +301,16 @@ adlb <- adlb %>%
 
 Note: `{admiral}` does not grade 'Anemia' or 'Hemoglobin Increased' because the metadata is 
 based on the SI unit of 'g/L', however the CDISC data has SI unit of 'mmol/L'.
-Please see `SI_UNIT_CHECK` variable in `{admiral}` metadata `atoxgr_criteria_ctcv4()` or 
+Please see `UNIT_CHECK` variable in `{admiral}` metadata `atoxgr_criteria_ctcv4()` or 
 `atoxgr_criteria_ctcv5()` or `atoxgr_criteria_daids()`, the metadata is in the data folder
 of `{admiral}`.
 <br>
 
 ```{r, eval=TRUE, echo=FALSE}
 atoxgr_criteria_ctcv4 %>%
-  filter(!is.na(SI_UNIT_CHECK)) %>%
+  filter(!is.na(UNIT_CHECK)) %>%
   dataset_vignette(
-    display_vars = exprs(TERM, SI_UNIT_CHECK),
+  display_vars = exprs(TERM, SUNIT_CHECK),
   )
 ```
 <br>
