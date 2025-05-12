@@ -31,7 +31,7 @@ Print Named List
 print_named_list(death_event)
 }
 \seealso{
-Utilities for printing: 
+Utilities for printing:
 \code{\link{print.adam_templates}()},
 \code{\link{print.duplicates}()},
 \code{\link{print.source}()}

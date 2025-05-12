@@ -210,7 +210,7 @@ create_query_data(
 \seealso{
 \code{\link[=derive_vars_query]{derive_vars_query()}}, \code{\link[=query]{query()}}, \code{\link[=basket_select]{basket_select()}}, \href{../articles/queries_dataset.html}{Queries Dataset Documentation}
 
-Creating auxiliary datasets: 
+Creating auxiliary datasets:
 \code{\link{consolidate_metadata}()},
 \code{\link{create_period_dataset}()},
 \code{\link{create_single_dose_dataset}()}

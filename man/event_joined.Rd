@@ -297,7 +297,7 @@ derive_extreme_event(
 \seealso{
 \code{\link[=derive_extreme_event]{derive_extreme_event()}}, \code{\link[=derive_vars_extreme_event]{derive_vars_extreme_event()}}, \code{\link[=event]{event()}}
 
-Source Objects: 
+Source Objects:
 \code{\link{basket_select}()},
 \code{\link{censor_source}()},
 \code{\link{death_event}},

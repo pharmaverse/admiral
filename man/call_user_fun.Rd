@@ -32,6 +32,15 @@ try(call_user_fun(compute_bmi(
   weight = "hallo"
 )))
 }
-\concept{utils_help, deprecated}
+\seealso{
+Other deprecated: 
+\code{\link{date_source}()},
+\code{\link{derive_param_extreme_record}()},
+\code{\link{derive_var_dthcaus}()},
+\code{\link{derive_var_extreme_dt}()},
+\code{\link{derive_var_extreme_dtm}()},
+\code{\link{dthcaus_source}()},
+\code{\link{get_summary_records}()}
+}
+\concept{deprecated}
 \keyword{deprecated}
-\keyword{utils_help,}
