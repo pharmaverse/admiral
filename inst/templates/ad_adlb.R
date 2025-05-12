@@ -93,35 +93,35 @@ adlb <- lb %>%
     by_vars = exprs(STUDYID, USUBJID)
   ) %>%
   ## Calculate ADT, ADY ----
-  derive_vars_dt(
-    new_vars_prefix = "A",
-    dtc = LBDTC
-  ) %>%
+derive_vars_dt(
+  new_vars_prefix = "A",
+  dtc = LBDTC
+) %>%
   derive_vars_dy(reference_date = TRTSDT, source_vars = exprs(ADT))
 
 adlb <- adlb %>%
   ## Add PARAMCD PARAM and PARAMN - from LOOK-UP table ----
-  # Replace with PARAMCD lookup function
-  derive_vars_merged_lookup(
-    dataset_add = param_lookup,
-    new_vars = exprs(PARAMCD, PARAM, PARAMN),
-    by_vars = exprs(LBTESTCD),
-    check_type = "none",
-    print_not_mapped = FALSE
-  ) %>%
+# Replace with PARAMCD lookup function
+derive_vars_merged_lookup(
+  dataset_add = param_lookup,
+  new_vars = exprs(PARAMCD, PARAM, PARAMN),
+  by_vars = exprs(LBTESTCD),
+  check_type = "none",
+  print_not_mapped = FALSE
+) %>%
   ## Calculate PARCAT1 AVAL AVALC ANRLO ANRHI ----
-  mutate(
-    PARCAT1 = LBCAT,
-    AVAL = LBSTRESN,
-    # Only populate AVALC if character value is non-redundant with AVAL
-    AVALC = ifelse(
-      is.na(LBSTRESN) | as.character(LBSTRESN) != LBSTRESC,
-      LBSTRESC,
-      NA
-    ),
-    ANRLO = LBSTNRLO,
-    ANRHI = LBSTNRHI
-  )
+mutate(
+  PARCAT1 = LBCAT,
+  AVAL = LBSTRESN,
+  # Only populate AVALC if character value is non-redundant with AVAL
+  AVALC = ifelse(
+    is.na(LBSTRESN) | as.character(LBSTRESN) != LBSTRESC,
+    LBSTRESC,
+    NA
+  ),
+  ANRLO = LBSTNRLO,
+  ANRHI = LBSTNRHI
+)
 
 # Derive Absolute values from fractional Differentials using WBC
 # Only derive where absolute values do not already exist
@@ -173,12 +173,12 @@ adlb <- adlb %>%
 
 adlb <- adlb %>%
   ## Calculate ONTRTFL ----
-  derive_var_ontrtfl(
-    start_date = ADT,
-    ref_start_date = TRTSDT,
-    ref_end_date = TRTEDT,
-    filter_pre_timepoint = AVISIT == "Baseline"
-  )
+derive_var_ontrtfl(
+  start_date = ADT,
+  ref_start_date = TRTSDT,
+  ref_end_date = TRTEDT,
+  filter_pre_timepoint = AVISIT == "Baseline"
+)
 
 ## Calculate ANRIND : requires the reference ranges ANRLO, ANRHI ----
 adlb <- adlb %>%
@@ -262,212 +262,17 @@ grade_lookup <- tibble::tribble(
   "WBC",  "White blood cell decreased",                         "Leukocytosis",
 )
 
-adlb_test <- adlb %>%
-  filter(PARAMCD == "ALB") %>%
-  mutate(PARAM = "Albumin (g/dL)",
-         AVAL = AVAL/10,
-         ANRLO = ANRLO/10
-         )
-
-adlb_all <- adlb %>%
-  bind_rows(adlb_test)
-
 # Assign grade criteria
 # metadata atoxgr_criteria_ctcv4 used to implement NCI-CTCAEv4
 # user could change to atoxgr_criteria_ctcv5 to implement NCI-CTCAEv5
 # Note: Hyperglycemia and Hypophosphatemia not defined in NCI-CTCAEv5 so
 # user would need to amend look-up table grade_lookup
 # See (https://pharmaverse.github.io/admiral/articles/lab_grading.html#implement_ctcv5)
-grade_crit <- atoxgr_criteria_ctcv5
+grade_crit <- atoxgr_criteria_ctcv4
 
-case_when(  is.na(AVAL) ~ NA_character_,  signif(AVAL, signif_dig) < 2 ~ "3",  signif(AVAL, signif_dig) < 3 ~ "2",  is.na(ANRLO) ~ NA_character_,  signif(AVAL, signif_dig) < signif(ANRLO, signif_dig) ~ "1",  signif(AVAL, signif_dig) >= signif(ANRLO, signif_dig) ~ "0"  )
-
-
-grade_crit_alb <- grade_crit %>%
-  filter(TERM == "Hypoalbuminemia") %>%
-  mutate(SI_UNIT_CHECK = "g/dL",
-         GRADE_CRITERIA_CODE = 'case_when(  is.na(AVAL) ~ NA_character_,  signif(AVAL, signif_dig) < 2 ~ "3",  signif(AVAL, signif_dig) < 3 ~ "2",  is.na(ANRLO) ~ NA_character_,  signif(AVAL, signif_dig) < signif(ANRLO, signif_dig) ~ "1",  signif(AVAL, signif_dig) >= signif(ANRLO, signif_dig) ~ "0"  )',
-  )
-
-grade_crit_all <- grade_crit %>%
-  bind_rows(grade_crit_alb)
-
-
-adlb_alb <- adlb_chk2 %>%
-  filter(PARAMCD == "ALB" & ATOXGRL > 1)
-
-terms_in_vad <- input1_dbili_daids %>%
-  filter(!is.na(ATOXDSCH)) %>%
-  distinct(ATOXDSCH) %>%
-  mutate(
-    TERM = ATOXDSCH,
-    TERM_UPPER = toupper(TERM)
-  )
-atoxgr_dir <- meta %>%
-  filter(!is.na(GRADE_CRITERIA_CODE) & toupper(DIRECTION) == toupper("H")) %>%
-  select(TERM, DIRECTION, SI_UNIT_CHECK, FILTER, GRADE_CRITERIA_CODE, VAR_CHECK) %>%
-  mutate(
-    TERM_UPPER = toupper(TERM),
-    SI_UNIT_UPPER = toupper(SI_UNIT_CHECK)
-  )
-
-
-# only keep terms that exist in both ADLB data and criteria metadata
-list_of_terms <- terms_in_vad %>%
-  semi_join(atoxgr_dir, by = "TERM_UPPER") %>%
-  arrange(TERM)
-
-out_data <- input_dbili_daids %>%
-  filter(ATOXDSCH %notin% (list_of_terms$TERM) | is.na(ATOXDSCH)) %>%
-  mutate(ATOXGRH := NA_character_)
-to_be_graded <- input_dbili_daids %>%
-  filter(ATOXDSCH %in% (list_of_terms$TERM))
-
-
-for (i in seq_along(list_of_terms$TERM)) {
-  # filter metadata on a term
-  meta_this_term <- atoxgr_dir %>%
-    filter(TERM_UPPER == list_of_terms$TERM_UPPER[i])
-
-  grade_this_term <- to_be_graded %>%
-    filter(ATOXDSCH == list_of_terms$TERM[i])
-
-  # get unique list of FILTERS (possibly more than one unit)
-  meta_this_filter_uniq <- meta_this_term %>%
-    select(FILTER) %>%
-    distinct()
-  signif_dig <- get_admiral_option("signif_digits")
-  # Within each TERM check if there are FILTERs to be applied
-  # if FILTER not missing then loop through each FILTER for the TERM already specified
-  for (j in seq_along(meta_this_filter_uniq$FILTER)) {
-    # subset using FILTER if its not empty
-    if (!is.na(meta_this_filter_uniq$FILTER[j])) {
-      meta_this_filter <- meta_this_term %>%
-        filter(FILTER == meta_this_term$FILTER[j])
-
-      # filter lab data using FILTER from metadata
-      grade_this_filter <- grade_this_term %>%
-        filter(eval(parse(text = meta_this_filter_uniq$FILTER[j])))
-
-    } else {
-      meta_this_filter <- meta_this_term
-
-      grade_this_filter <- grade_this_term
-    }
-
-
-    for (x in seq_along(meta_this_filter$SI_UNIT_CHECK)) {
-
-      if (!is.na(meta_this_filter$SI_UNIT_CHECK[x])) {
-
-        meta_this_filter_unit <- meta_this_filter %>%
-          filter(SI_UNIT_CHECK == meta_this_filter$SI_UNIT_CHECK[x])
-
-        grade_this_filter_unit <- grade_this_filter %>%
-          filter(meta_this_filter_unit$SI_UNIT_UPPER == toupper(AVALU) |
-                   is.na(toupper(AVALU)))
-      } else {
-        meta_this_filter_unit <- meta_this_filter
-
-        grade_this_filter_unit <- grade_this_filter
-      }
-
-
-      # Put list of variables required for criteria in a vector
-      list_of_vars <- gsub("\\s+", "", unlist(strsplit(meta_this_filter_unit$VAR_CHECK, ",")))
-
-      # check variables required in criteria exist on data
-      assert_data_frame(grade_this_filter_unit, required_vars = exprs(!!!syms(list_of_vars)))
-
-      if ("BNRIND" %in% list_of_vars) {
-        # check input parameter is character value
-        assert_character_vector(abnormal_indicator, optional = FALSE)
-      }
-
-      # apply criteria when SI unit matches
-      grade_this_filter_unit <- grade_this_filter_unit %>%
-        mutate(
-          temp_flag = meta_this_filter_unit$SI_UNIT_UPPER == toupper(AVALU) |
-            is.na(meta_this_filter_unit$SI_UNIT_UPPER),
-          ATOXGRH = if_else(
-            temp_flag, eval(parse(text = meta_this_filter_unit$GRADE_CRITERIA_CODE)), NA_character_
-          )
-        ) %>%
-        select(-temp_flag)
-
-      # add data just graded to data already processed
-      out_data <- bind_rows(out_data, grade_this_filter_unit)
-
-      if (!is.na(meta_this_filter$SI_UNIT_CHECK[x])) {
-        grade_this_filter <- grade_this_filter %>%
-          filter(meta_this_filter_unit$SI_UNIT_UPPER != toupper(AVALU) &
-          !is.na(meta_this_filter_unit$SI_UNIT_UPPER))
-
-        if (x == length(meta_this_filter$SI_UNIT_CHECK)) {
-          out_data <- bind_rows(out_data, grade_this_filter)
-        }
-      }
-
-      if (j == 2 & x == 1L){
-        filter_start21 <- grade_this_filter_unit
-        filter_rem12 <- grade_this_filter
-        filter_meta2 <- meta_this_filter
-        out_data2 <-  out_data
-      }
-
-    }
-    # remove lab data just graded from data still to be graded for the specified TERM
-    grade_this_term <- grade_this_term %>%
-      filter(!(eval(parse(text = meta_this_filter_unit$FILTER))))
-
-  }
-
-
-  # remove lab data with TERM just graded from data still to be graded
-  to_be_graded <- to_be_graded %>%
-    filter(ATOXDSCH != list_of_terms$TERM[i])
-}
-
-
-NCICTC5 <- grade_crit %>%
-  filter(!is.na(SI_UNIT_CHECK))
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-for (i in seq_along(list_of_terms$TERM)) {
- if (i == length(list_of_terms$TERM)) {
-   x <- "Y"
- }
-}
-
-test <- length(list_of_terms$TERM)
 
 # Add ATOXDSCL and ATOXDSCH
-adlb_chk3 <- adlb_all %>%
+adlb <- adlb %>%
   derive_vars_merged(
     dataset_add = grade_lookup,
     by_vars = exprs(PARAMCD)
@@ -475,7 +280,7 @@ adlb_chk3 <- adlb_all %>%
   # Derive toxicity grade for low values ATOXGRL
 
   derive_var_atoxgr_dir(
-    meta_criteria = grade_crit_all,
+    meta_criteria = grade_crit,
     new_var = ATOXGRL,
     tox_description_var = ATOXDSCL,
     criteria_direction = "L",
@@ -488,7 +293,6 @@ adlb_chk3 <- adlb_all %>%
     new_var = ATOXGRH,
     tox_description_var = ATOXDSCH,
     criteria_direction = "H",
-    abnormal_indicator = "HIGH",
     get_unit_expr = extract_unit(PARAM)
   ) %>%
   # (Optional) derive overall grade ATOXGR (combining ATOXGRL and ATOXGRH)
@@ -653,4 +457,4 @@ if (!file.exists(dir)) {
   # Create the folder
   dir.create(dir, recursive = TRUE, showWarnings = FALSE)
 }
-save(adlb, file = file.path(dir, "adlb.rda"), compress = "bzip2")
+save(adlb, file = file

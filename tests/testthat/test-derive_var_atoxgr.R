@@ -152,9 +152,9 @@ test_that("derive_var_atoxgr Test 5a: CTCAEv4 Anemia (SI unit)", {
 # CV_UNIT is g/dL so divide numeric values by 10
 expected_anemia_cv <- expected_anemia_si %>%
   mutate(
-    AVAL = if_else(is.na(AVAL), NA_real_, AVAL/10),
-    ANRLO = if_else(is.na(ANRLO), NA_real_, ANRLO/10),
-    ANRHI = if_else(is.na(ANRHI), NA_real_, ANRHI/10),
+    AVAL = if_else(is.na(AVAL), NA_real_, AVAL / 10),
+    ANRLO = if_else(is.na(ANRLO), NA_real_, ANRLO / 10),
+    ANRHI = if_else(is.na(ANRHI), NA_real_, ANRHI / 10),
     AVALU = if_else(toupper(AVALU) == "G/L", "g/dL", AVALU)
   )
 
@@ -181,7 +181,6 @@ test_that("derive_var_atoxgr Test 5b: CTCAEv4 Anemia (CV unit)", {
 
 ## Test 5c: CTCAEv4 Anemia (SI + CV unit) ----
 test_that("derive_var_atoxgr Test 5c: CTCAEv4 Anemia (SI + CV unit)", {
-
   expected_anemia_sicv <- expected_anemia_cv %>%
     mutate(TESTNUM = TESTNUM + 16) %>%
     bind_rows(expected_anemia_si)
@@ -299,7 +298,6 @@ input_leukocytosis_cv <- expected_leukocytosis_cv %>%
 
 ## Test 7b: CTCAEv4 Leukocytosis (USCV unit) ----
 test_that("derive_var_atoxgr Test 7b: CTCAEv4 Leukocytosis (USCV unit)", {
-
   actual_leukocytosis_cv <- derive_var_atoxgr_dir(
     input_leukocytosis_cv,
     new_var = ATOXGRH,
@@ -327,7 +325,6 @@ input_leukocytosis_cv2 <- expected_leukocytosis_cv2 %>%
 
 ## Test 7c: CTCAEv4 Leukocytosis (legacy USCV unit) ----
 test_that("derive_var_atoxgr Test 7c: CTCAEv4 Leukocytosis (legacy USCV unit)", {
-
   actual_leukocytosis_cv2 <- derive_var_atoxgr_dir(
     input_leukocytosis_cv2,
     new_var = ATOXGRH,
@@ -1092,33 +1089,33 @@ expected_choles_si <- tibble::tribble(
 )
 
 expected_choles_cv <- tibble::tribble(
-  ~ATOXDSCH,          ~AVAL,  ~ANRLO, ~ANRHI, ~AVALU,    ~ATOXGRH,
-  "Not a term",       8,      0,      200,   "mg/dL",  NA,
-  NA_character_,      10,     0,      200,   "mg/dL",  NA,
-  "Cholesterol high", 501,    0,      200,   "mg/dL",  "4",
-  "Cholesterol High", 500,    0,      200,   "mg/dL",  "3",
-  "Cholesterol high", 401,    0,      200,   "Mg/dL",  "3",
+  ~ATOXDSCH,           ~AVAL,  ~ANRLO,  ~ANRHI,   ~AVALU,  ~ATOXGRH,
+  "Not a term",        8,      0,       200,     "mg/dL",        NA,
+  NA_character_,       10,     0,       200,     "mg/dL",        NA,
+  "Cholesterol high",  501,    0,       200,     "mg/dL",       "4",
+  "Cholesterol High",  500,    0,       200,     "mg/dL",       "3",
+  "Cholesterol high",  401,    0,       200,     "Mg/dL",       "3",
   # wrong unit - grade missing
-  "Cholesterol high", 400,    0,      200,   "ug/dL",  NA,
-  "Cholesterol high", 400,    0,      200,   "mg/dL",  "2",
-  "Cholesterol high", 301,    0,      200,   "mg/dL",  "2",
-  "Cholesterol high", 300,    0,      200,   "mg/dL",  "1",
-  "Cholesterol high", 201,    0,      200,   "mg/dL",  "1",
-  "Cholesterol high", 200,    0,      200,   "mg/dL",  "0",
+  "Cholesterol high",  400,    0,       200,     "ug/dL",        NA,
+  "Cholesterol high",  400,    0,       200,     "mg/dL",       "2",
+  "Cholesterol high",  301,    0,       200,     "mg/dL",       "2",
+  "Cholesterol high",  300,    0,       200,     "mg/dL",       "1",
+  "Cholesterol high",  201,    0,       200,     "mg/dL",       "1",
+  "Cholesterol high",  200,    0,       200,     "mg/dL",       "0",
   # ANRHI missing - AVAL satisfies grade 2 - 4
-  "Cholesterol high", 501,    0,      NA,     "mg/dL",  "4",
-  "Cholesterol High", 500,    0,      NA,     "mg/dL",  "3",
-  "Cholesterol high", 401,    0,      NA,     "MG/dL",  "3",
-  "Cholesterol high", 400,    0,      NA,     "mg/dL",  "2",
-  "Cholesterol high", 301 ,   0,      NA,     "mg/dL",  "2",
+  "Cholesterol high",  501,    0,       NA,      "mg/dL",       "4",
+  "Cholesterol High",  500,    0,       NA,      "mg/dL",       "3",
+  "Cholesterol high",  401,    0,       NA,      "MG/dL",       "3",
+  "Cholesterol high",  400,    0,       NA,      "mg/dL",       "2",
+  "Cholesterol high",  301,    0,       NA,      "mg/dL",       "2",
   # ANRHI missing - AVAL does NOT satisfies grade 2 - 4
-  "Cholesterol high", 300,    0,      NA,     "mg/dL",  NA,
-  "Cholesterol high", 201,    0,      NA,     "mg/dL",  NA,
-  "Cholesterol high", 200,    0,      NA,     "mg/dL",  NA,
+  "Cholesterol high",  300,    0,       NA,      "mg/dL",        NA,
+  "Cholesterol high",  201,    0,       NA,      "mg/dL",        NA,
+  "Cholesterol high",  200,    0,       NA,      "mg/dL",        NA,
   # Unit missing - cannot grade
-  "Cholesterol high", 200,    0,     200,      NA,        NA,
+  "Cholesterol high",  200,    0,       200,          NA,        NA,
   # AVAL missing cannot grade
-  "Cholesterol high", NA,     0,     200,      "mmol/L",  NA,
+  "Cholesterol high",  NA,     0,       200,    "mmol/L",        NA,
 )
 
 
@@ -1441,57 +1438,57 @@ test_that("derive_var_atoxgr Test 27: CTCAEv4 Fibrinogen decreased", {
 ## Test 28: CTCAEv5 Fibrinogen decreased ----
 test_that("derive_var_atoxgr Test 28: CTCAEv5 Fibrinogen decreased", {
   expected_fib <- tibble::tribble(
-    ~ATOXDSCL, ~AVAL, ~ANRLO, ~PCHG, ~AVALU, ~ATOXGRL,
-    "Not a term", 9, 10, 40, "g/L", NA,
-    NA_character_, 10, 10, 40, "g/L", NA,
+    ~ATOXDSCL,               ~AVAL,  ~ANRLO,  ~PCHG,  ~AVALU,  ~ATOXGRL,
+    "Not a term",            9,      10,      40,      "g/L",        NA,
+    NA_character_,           10,     10,      40,      "g/L",        NA,
     # Satisfies < 0.5 for grade 4 - other criteria missing
-    "Fibrinogen decreased", 0.49, NA, NA, "g/L", "4",
+    "Fibrinogen decreased",  0.49,   NA,      NA,      "g/L",       "4",
     # Satisfies < 0.5 for grade 4 - satisfies grade 3 for other criteria
-    "Fibrinogen decreased", 0.49, 1, -51, "g/L", "4",
+    "Fibrinogen decreased",  0.49,   1,       -51,     "g/L",       "4",
     # Satisfies < 0.25*LLN for grade 4 - PCHG missing
-    "Fibrinogen decreased", 0.5, 2.1, NA, "g/L", "4",
+    "Fibrinogen decreased",  0.5,    2.1,     NA,      "g/L",       "4",
     # Satisfies < 0.25*LLN for grade 4 - PCHG satisfies grade 3
-    "Fibrinogen decreased", 0.5, 2.1, -51, "g/L", "4",
+    "Fibrinogen decreased",  0.5,    2.1,     -51,     "g/L",       "4",
     # Satisfies <=75% decrease for grade 4 - LLN  satisfies grade 3
-    "Fibrinogen decreased", 0.5, 1.1, -75, "g/L", "4",
+    "Fibrinogen decreased",  0.5,    1.1,     -75,     "g/L",       "4",
     # Satisfies < 0.5*LLN for grade 3 - PCHG missing
-    "Fibrinogen decreased", 1, 2.1, NA, "g/L", "3",
+    "Fibrinogen decreased",  1,      2.1,     NA,      "g/L",       "3",
     # Satisfies < 0.5*LLN for grade 3 - PCHG satisfies grade 2
-    "Fibrinogen decreased", 1, 2.1, -49, "g/L", "3",
+    "Fibrinogen decreased",  1,      2.1,     -49,     "g/L",       "3",
     # Satisfies <=50% decrease for grade 3 - LLN  satisfies grade 2
-    "Fibrinogen decreased", 1, 2, -50, "g/L", "3",
+    "Fibrinogen decreased",  1,      2,       -50,     "g/L",       "3",
     # Satisfies < 0.75*LLN for grade 2 - PCHG missing
-    "Fibrinogen decreased", 1.5, 2.1, NA, "g/L", "2",
+    "Fibrinogen decreased",  1.5,    2.1,     NA,      "g/L",       "2",
     # Satisfies < 0.75*LLN for grade 2 - PCHG satisfies grade 1
-    "Fibrinogen decreased", 1.5, 2.1, -10, "g/L", "2",
+    "Fibrinogen decreased",  1.5,    2.1,     -10,     "g/L",       "2",
     # Satisfies <=25% for grade 2 - LLN satisfies grade 1
-    "Fibrinogen decreased", 1.5, 1.6, -25, "g/L", "2",
+    "Fibrinogen decreased",  1.5,    1.6,     -25,     "g/L",       "2",
     # Satisfies < LLN for grade 1 - PCHG missing
-    "Fibrinogen decreased", 2, 2.1, NA, "g/L", "1",
+    "Fibrinogen decreased",  2,      2.1,     NA,      "g/L",       "1",
     # Satisfies < LLN for grade 1 - PCHG satisfies grade 0
-    "Fibrinogen decreased", 2, 2.1, 10, "g/L", "1",
+    "Fibrinogen decreased",  2,      2.1,     10,      "g/L",       "1",
     # Satisfies grade 0 - AVAL >= LLN AND no % descrease
-    "Fibrinogen decreased", 1.5, 1.5, 0, "g/L", "0",
+    "Fibrinogen decreased",  1.5,    1.5,     0,       "g/L",       "0",
     # Satisfies % decrease for grade 1 - AVAL = LLN so not abnormal
-    "Fibrinogen decreased", 1.5, 1.5, -1, "g/L", "0",
+    "Fibrinogen decreased",  1.5,    1.5,     -1,      "g/L",       "0",
     # AVAL >= LLN - PCT missing but its normal so ignore PCT
-    "Fibrinogen decreased", 1.5, 1.5, NA, "g/L", "0",
+    "Fibrinogen decreased",  1.5,    1.5,     NA,      "g/L",       "0",
     # Satisfies <=75% decrease for grade 4 - LLN missing do not know its abnormal
-    "Fibrinogen decreased", 1, NA, -75, "g/L", NA,
+    "Fibrinogen decreased",  1,      NA,      -75,     "g/L",        NA,
     # Satisfies <=50% decrease for grade 3 - LLN missing do not know its abnormal
-    "Fibrinogen decreased", 1, NA, -50, "g/L", NA,
+    "Fibrinogen decreased",  1,      NA,      -50,     "g/L",        NA,
     # Satisfies <=25% decrease for grade 2 - LLN missing do not know its abnormal
-    "Fibrinogen decreased", 1.5, NA, -25, "g/L", NA,
+    "Fibrinogen decreased",  1.5,    NA,      -25,     "g/L",        NA,
     # Satisfies % decrease for grade 1 - LLN missing do not know its abnormal
-    "Fibrinogen decreased", 1.5, NA, -1, "g/L", NA,
+    "Fibrinogen decreased",  1.5,    NA,      -1,      "g/L",        NA,
     # PCT >= 0 BUT LLN missing cannot grade as NORMAL
-    "Fibrinogen decreased", 1.5, NA, 10, "g/L", NA,
+    "Fibrinogen decreased",  1.5,    NA,      10,      "g/L",        NA,
     # AVAL missing cannot grade
-    "Fibrinogen decreased", NA, 1.5, 10, "g/L", NA,
+    "Fibrinogen decreased",  NA,     1.5,     10,      "g/L",        NA,
     # wrong unit cannot grade as it may satisfy grade 4
-    "Fibrinogen decreased", 1.5, 1.5, 0, "g/dL", NA,
+    "Fibrinogen decreased",  1.5,    1.5,     0,      "g/dL",        NA,
     # missing unit cannot grade as it may satisfy grade 4
-    "Fibrinogen decreased", 1.5, 1.5, 0, NA, NA,
+    "Fibrinogen decreased",  1.5,    1.5,     0,          NA,        NA,
   )
   input_fib <- expected_fib %>%
     select(-ATOXGRL)
@@ -2056,7 +2053,6 @@ input_lymd_cv <- expected_lymd_cv %>%
 
 ## Test 39b: CTCAEv4 Lymphocyte count decreased (USCV unit) ----
 test_that("derive_var_atoxgr Test 39a: CTCAEv4 Lymphocyte count decreased (USCV unit)", {
-
   actual_lymd_cv <- derive_var_atoxgr_dir(
     input_lymd_cv,
     new_var = ATOXGRL,
@@ -2085,7 +2081,6 @@ input_lymd_cv2 <- expected_lymd_cv2 %>%
 
 ## Test 39c: CTCAEv4 Lymphocyte count decreased (legacy USCV unit) ----
 test_that("derive_var_atoxgr Test 39c: CTCAEv4 Lymphocyte count decreased (legacy USCV unit)", {
-
   actual_lymd_cv2 <- derive_var_atoxgr_dir(
     input_lymd_cv2,
     new_var = ATOXGRL,
@@ -2122,7 +2117,6 @@ test_that("derive_var_atoxgr Test 40a: CTCAEv5 Lymphocyte count decreased (SI un
 
 ## Test 40b: CTCAEv5 Lymphocyte count decreased (USCV unit) ----
 test_that("derive_var_atoxgr Test 40b: CTCAEv5 Lymphocyte count decreased (USCV unit)", {
-
   actual_lymd_cv <- derive_var_atoxgr_dir(
     input_lymd_cv,
     new_var = ATOXGRL,
@@ -2151,7 +2145,6 @@ input_lymd_cv2 <- expected_lymd_cv2 %>%
 
 ## Test 40c: CTCAEv5 Lymphocyte count decreased (legacy USCV unit) ----
 test_that("derive_var_atoxgr Test 40c: CTCAEv5 Lymphocyte count decreased (legacy USCV unit)", {
-
   actual_lymd_cv2 <- derive_var_atoxgr_dir(
     input_lymd_cv2,
     new_var = ATOXGRL,
@@ -2984,32 +2977,32 @@ input_calioni_si <- expected_calioni_si %>%
   select(-ATOXGRH)
 
 expected_calioni_cv <- tibble::tribble(
-  ~ATOXDSCH,                 ~AVAL,  ~ANRLO, ~ANRHI,   ~AVALU,   ~ATOXGRH, ~TESTNUM,
-  "Not a term",              7.3,    0,      5,       "mg/dL",         NA,        1,
-  NA_character_,             7.3,    0,      5,       "mg/dL",         NA,        2,
+  ~ATOXDSCH,                  ~AVAL,  ~ANRLO,  ~ANRHI,   ~AVALU,  ~ATOXGRH,  ~TESTNUM,
+  "Not a term",               7.3,    0,       5,       "mg/dL",        NA,  1,
+  NA_character_,              7.3,    0,       5,       "mg/dL",        NA,  2,
   # ANRHI not missing
-  "Hypercalcemia (Ionized)", 7.3, 0,      5,       "mg/dL",        "4",        3,
-  "Hypercalcemia (Ionized)", 7.2,    0,      5,       "mg/dL",        "3",        4,
-  "Hypercalcemia (Ionized)", 6.5,    0,      5,       "mg/dL",        "3",        5,
-  "Hypercalcemia (Ionized)", 6.4,    0,      5,       "mg/dL",        "2",        6,
-  "Hypercalcemia (Ionized)", 6.1,    0,      5,       "mg/dL",        "2",        7,
-  "Hypercalcemia (Ionized)", 6.0,    0,      5,       "mg/dL",        "1",        8,
-  "Hypercalcemia (Ionized)", 5.1,    0,      5,       "mg/dL",        "1",        9,
-  "Hypercalcemia (Ionized)", 5,      0,      5,       "mg/dL",        "0",       10,
+  "Hypercalcemia (Ionized)",  7.3,    0,       5,       "mg/dL",       "4",  3,
+  "Hypercalcemia (Ionized)",  7.2,    0,       5,       "mg/dL",       "3",  4,
+  "Hypercalcemia (Ionized)",  6.5,    0,       5,       "mg/dL",       "3",  5,
+  "Hypercalcemia (Ionized)",  6.4,    0,       5,       "mg/dL",       "2",  6,
+  "Hypercalcemia (Ionized)",  6.1,    0,       5,       "mg/dL",       "2",  7,
+  "Hypercalcemia (Ionized)",  6.0,    0,       5,       "mg/dL",       "1",  8,
+  "Hypercalcemia (Ionized)",  5.1,    0,       5,       "mg/dL",       "1",  9,
+  "Hypercalcemia (Ionized)",  5,      0,       5,       "mg/dL",       "0",  10,
   # ANRHI missing - can grade 2-4
-  "Hypercalcemia (Ionized)", 7.3,    0,      NA,      "mg/dL",        "4",       11,
-  "Hypercalcemia (Ionized)", 7.2,    0,      NA,      "mg/dL",        "3",       12,
-  "Hypercalcemia (Ionized)", 6.5,    0,      NA,      "mg/dL",        "3",       13,
-  "Hypercalcemia (Ionized)", 6.4,    0,      NA,      "mg/dL",        "2",       14,
-  "Hypercalcemia (Ionized)", 6.1,    0,      NA,      "mg/dL",        "2",       15,
+  "Hypercalcemia (Ionized)",  7.3,    0,       NA,      "mg/dL",       "4",  11,
+  "Hypercalcemia (Ionized)",  7.2,    0,       NA,      "mg/dL",       "3",  12,
+  "Hypercalcemia (Ionized)",  6.5,    0,       NA,      "mg/dL",       "3",  13,
+  "Hypercalcemia (Ionized)",  6.4,    0,       NA,      "mg/dL",       "2",  14,
+  "Hypercalcemia (Ionized)",  6.1,    0,       NA,      "mg/dL",       "2",  15,
   # ANRHI missing - can NOT grade 0 or 1mg/d
-  "Hypercalcemia (Ionized)", 6.0,    0,      NA,      "mg/dL",         NA,       16,
-  "Hypercalcemia (Ionized)", 5.1,    0,      NA,      "mg/dL",         NA,       17,
-  "Hypercalcemia (Ionized)", 5,      0,      NA,      "mg/dL",         NA,       18,
+  "Hypercalcemia (Ionized)",  6.0,    0,       NA,      "mg/dL",        NA,  16,
+  "Hypercalcemia (Ionized)",  5.1,    0,       NA,      "mg/dL",        NA,  17,
+  "Hypercalcemia (Ionized)",  5,      0,       NA,      "mg/dL",        NA,  18,
   # Unit missing cannot grade
-  "Hypercalcemia (Ionized)", 5,      0,      5,            NA,         NA,       19,
+  "Hypercalcemia (Ionized)",  5,      0,       5,            NA,        NA,  19,
   # AVAL missing cannot grade
-  "Hypercalcemia (Ionized)", NA,     0,      5,       "mg/dL",         NA,       20,
+  "Hypercalcemia (Ionized)",  NA,     0,       5,       "mg/dL",        NA,  20,
 )
 input_calioni_cv <- expected_calioni_cv %>%
   select(-ATOXGRH)
@@ -3152,32 +3145,32 @@ test_that("derive_var_atoxgr Test 55a: CTCAEv4 Hyperglycemia (Fasting) (SI unit)
 ## Test 55b: CTCAEv4 Hyperglycemia (Fasting) (USCV unit) ----
 test_that("derive_var_atoxgr Test 55b: CTCAEv4 Hyperglycemia (Fasting) (USCV unit)", {
   expected_glycfi <- tibble::tribble(
-    ~ATOXDSCH,                 ~AVAL,  ~ANRLO, ~ANRHI,  ~AVALU,  ~ATOXGRH, ~TESTNUM,
-    "Not a term",              501,    0,      100,    "mg/dL",  NA,       1,
-    NA_character_,             501,    0,      100,    "mg/dL",  NA,       2,
+    ~ATOXDSCH,                  ~AVAL,  ~ANRLO,  ~ANRHI,   ~AVALU, ~ATOXGRH,  ~TESTNUM,
+    "Not a term",               501,    0,       100,     "mg/dL",       NA,  1,
+    NA_character_,              501,    0,       100,     "mg/dL",       NA,  2,
     # ANRHI not missing
-    "Hyperglycemia (Fasting)", 501,    0,      100,    "mg/dL",  "4",      3,
-    "Hyperglycemia (Fasting)", 500,    0,      100,    "mg/dL",  "3",      4,
-    "Hyperglycemia (Fasting)", 251,    0,      100,    "mg/dL",  "3",      5,
-    "Hyperglycemia (Fasting)", 250,    0,      100,    "mg/dL",  "2",      6,
-    "Hyperglycemia (Fasting)", 161,    0,      100,    "mg/dL",  "2",      7,
-    "Hyperglycemia (Fasting)", 160,    0,      100,    "mg/dL",  "1",      8,
-    "Hyperglycemia (Fasting)", 101,    0,      100,    "mg/dL",  "1",      9,
-    "Hyperglycemia (Fasting)", 100,    0,      100,    "mg/dL",  "0",      10,
+    "Hyperglycemia (Fasting)",  501,    0,       100,     "mg/dL",      "4",  3,
+    "Hyperglycemia (Fasting)",  500,    0,       100,     "mg/dL",      "3",  4,
+    "Hyperglycemia (Fasting)",  251,    0,       100,     "mg/dL",      "3",  5,
+    "Hyperglycemia (Fasting)",  250,    0,       100,     "mg/dL",      "2",  6,
+    "Hyperglycemia (Fasting)",  161,    0,       100,     "mg/dL",      "2",  7,
+    "Hyperglycemia (Fasting)",  160,    0,       100,     "mg/dL",      "1",  8,
+    "Hyperglycemia (Fasting)",  101,    0,       100,     "mg/dL",      "1",  9,
+    "Hyperglycemia (Fasting)",  100,    0,       100,     "mg/dL",      "0",  10,
     # ANRHI missing - can grade 2-4
-    "Hyperglycemia (Fasting)", 501,    0,      NA,     "mg/dL",  "4",      11,
-    "Hyperglycemia (Fasting)", 500,    0,      NA,     "mg/dL",  "3",      12,
-    "Hyperglycemia (Fasting)", 251,    0,      NA,     "mg/dL",  "3",      13,
-    "Hyperglycemia (Fasting)", 250,    0,      NA,     "mg/dL",  "2",      14,
-    "Hyperglycemia (Fasting)", 161,    0,      NA,     "mg/dL",  "2",      15,
+    "Hyperglycemia (Fasting)",  501,    0,       NA,      "mg/dL",      "4",  11,
+    "Hyperglycemia (Fasting)",  500,    0,       NA,      "mg/dL",      "3",  12,
+    "Hyperglycemia (Fasting)",  251,    0,       NA,      "mg/dL",      "3",  13,
+    "Hyperglycemia (Fasting)",  250,    0,       NA,      "mg/dL",      "2",  14,
+    "Hyperglycemia (Fasting)",  161,    0,       NA,      "mg/dL",      "2",  15,
     # ANRHI missing - can NOT grade 0 or 1
-    "Hyperglycemia (Fasting)", 160,    0,      NA,     "mg/dL",  NA,       16,
-    "Hyperglycemia (Fasting)", 101,    0,      NA,     "mg/dL",  NA,       17,
-    "Hyperglycemia (Fasting)", 100,    0,      NA,     "mg/dL",  NA,       18,
+    "Hyperglycemia (Fasting)",  160,    0,       NA,      "mg/dL",       NA,  16,
+    "Hyperglycemia (Fasting)",  101,    0,       NA,      "mg/dL",       NA,  17,
+    "Hyperglycemia (Fasting)",  100,    0,       NA,      "mg/dL",       NA,  18,
     # Unit missing cannot grade
-    "Hyperglycemia (Fasting)", 100,    0,      5.3,    NA,       NA,       19,
+    "Hyperglycemia (Fasting)",  100,    0,       5.3,          NA,       NA,  19,
     # AVAL missing cannot grade
-    "Hyperglycemia (Fasting)", NA,     0,      5.3,    "mg/dL",  NA,       20,
+    "Hyperglycemia (Fasting)",  NA,     0,       5.3,     "mg/dL",       NA,  20,
   )
   input_glycfi <- expected_glycfi %>%
     select(-ATOXGRH)
@@ -3246,18 +3239,18 @@ test_that("derive_var_atoxgr Test 56a: CTCAEv4 Hyperglycemia (SI unit)", {
 ## Test 56b: CTCAEv4 Hyperglycemia (USCV unit) ----
 test_that("derive_var_atoxgr Test 56b: CTCAEv4 Hyperglycemia (USCV unit)", {
   expected_glyci <- tibble::tribble(
-    ~ATOXDSCH,       ~AVAL,  ~ANRLO, ~ANRHI,  ~AVALU,    ~ATOXGRH, ~TESTNUM,
-    "Not a term",    501,    0,      5.3,    "mg/dL",    NA,       1,
-    NA_character_,   501,    0,      5.3,    "mg/dL",    NA,       2,
-    "Hyperglycemia", 501,    0,      5.3,    "mg/dL",    "4",      3,
-    "Hyperglycemia", 500,    0,      5.3,    "mg/dL",    "3",      4,
-    "Hyperglycemia", 251,    0,      5.3,    "mg/dL",    "3",      5,
-    "Hyperglycemia", 250,    0,      5.3,    "mg/dL",    "0",      6,
-    "Hyperglycemia", 250,    0,      NA,     "mg/dL",    "0",      7,
+    ~ATOXDSCH,        ~AVAL,  ~ANRLO,  ~ANRHI,   ~AVALU,  ~ATOXGRH,  ~TESTNUM,
+    "Not a term",     501,    0,       5.3,     "mg/dL",        NA,  1,
+    NA_character_,    501,    0,       5.3,     "mg/dL",        NA,  2,
+    "Hyperglycemia",  501,    0,       5.3,     "mg/dL",       "4",  3,
+    "Hyperglycemia",  500,    0,       5.3,     "mg/dL",       "3",  4,
+    "Hyperglycemia",  251,    0,       5.3,     "mg/dL",       "3",  5,
+    "Hyperglycemia",  250,    0,       5.3,     "mg/dL",       "0",  6,
+    "Hyperglycemia",  250,    0,       NA,      "mg/dL",       "0",  7,
     # Unit missing cannot grade
-    "Hyperglycemia", 250,    0,      5.3,    NA,         NA,       8,
+    "Hyperglycemia",  250,    0,       5.3,          NA,        NA,  8,
     # AVAL missing cannot grade
-    "Hyperglycemia", NA,     0,      5.3,    "mg/dL",    NA,       9,
+    "Hyperglycemia",  NA,     0,       5.3,     "mg/dL",        NA,  9,
   )
   input_glyci <- expected_glyci %>%
     select(-ATOXGRH)
@@ -3431,28 +3424,28 @@ input_magni_si <- expected_magni_si %>%
   select(-ATOXGRH)
 
 expected_magni_cv <- tibble::tribble(
-  ~ATOXDSCH,         ~AVAL, ~ANRLO, ~ANRHI,  ~AVALU, ~ATOXGRH, ~TESTNUM,
-  "Not a term",      8.1,   0,      1.2,    "mg/dL", NA,       1,
-  NA_character_,     8.1,   0,      1.2,    "mg/dL", NA,       2,
+  ~ATOXDSCH,          ~AVAL,  ~ANRLO,  ~ANRHI,   ~AVALU, ~ATOXGRH,  ~TESTNUM,
+  "Not a term",       8.1,    0,       1.2,     "mg/dL",       NA,  1,
+  NA_character_,      8.1,    0,       1.2,     "mg/dL",       NA,  2,
   # ANRHI not missing
-  "Hypermagnesemia", 8.1,   0,      1.2,    "mg/dL", "4",      3,
-  "Hypermagnesemia", 8,     0,      1.2,    "mg/dL", "3",      4,
-  "Hypermagnesemia", 3.1,   0,      1.2,    "mg/dL", "3",      5,
-  "Hypermagnesemia", 3,     0,      1.2,    "mg/dL", "1",      6,
-  "Hypermagnesemia", 1.21,  0,      1.2,    "mg/dL", "1",      7,
-  "Hypermagnesemia", 1.2,   0,      1.2,    "mg/dL", "0",      8,
+  "Hypermagnesemia",  8.1,    0,       1.2,     "mg/dL",      "4",  3,
+  "Hypermagnesemia",  8,      0,       1.2,     "mg/dL",      "3",  4,
+  "Hypermagnesemia",  3.1,    0,       1.2,     "mg/dL",      "3",  5,
+  "Hypermagnesemia",  3,      0,       1.2,     "mg/dL",      "1",  6,
+  "Hypermagnesemia",  1.21,   0,       1.2,     "mg/dL",      "1",  7,
+  "Hypermagnesemia",  1.2,    0,       1.2,     "mg/dL",      "0",  8,
   # ANRHI missing - can grade 3-4
-  "Hypermagnesemia", 8.1,   0,      NA,     "mg/dL", "4",      9,
-  "Hypermagnesemia", 8,     0,      NA,     "mg/dL", "3",      10,
-  "Hypermagnesemia", 3.1,   0,      NA,     "mg/dL", "3",      11,
+  "Hypermagnesemia",  8.1,    0,       NA,      "mg/dL",      "4",  9,
+  "Hypermagnesemia",  8,      0,       NA,      "mg/dL",      "3",  10,
+  "Hypermagnesemia",  3.1,    0,       NA,      "mg/dL",      "3",  11,
   # ANRHI missing - can NOT grade 0 or 1
-  "Hypermagnesemia", 3,     0,      NA,     "mg/dL", NA,       12,
-  "Hypermagnesemia", 1.21,  0,      NA,     "mg/dL", NA,       13,
-  "Hypermagnesemia", 1.2,   0,      NA,     "mg/dL", NA,       14,
+  "Hypermagnesemia",  3,      0,       NA,      "mg/dL",       NA,  12,
+  "Hypermagnesemia",  1.21,   0,       NA,      "mg/dL",       NA,  13,
+  "Hypermagnesemia",  1.2,    0,       NA,      "mg/dL",       NA,  14,
   # Unit missing cannot grade
-  "Hypermagnesemia", 1.2,   0,      1.2,    NA,      NA,       15,
+  "Hypermagnesemia",  1.2,    0,       1.2,          NA,       NA,  15,
   # AVAL missing cannot grade
-  "Hypermagnesemia", NA,    0,      1.2,    "mg/dL", NA,       16,
+  "Hypermagnesemia",  NA,     0,       1.2,     "mg/dL",       NA,  16,
 )
 input_magni_cv <- expected_magni_cv %>%
   select(-ATOXGRH)
@@ -3781,24 +3774,24 @@ test_that("derive_var_atoxgr Test 64b: CTCAEv5 Hypertriglyceridemia (USCV unit)"
 
 
 expected_urici_si <- tibble::tribble(
-  ~ATOXDSCH,        ~AVAL, ~ANRLO, ~ANRHI,   ~AVALU,  ~ATOXGRH,
-  "Not a term",     591,   0,      200,    "umol/L",  NA,
-  NA_character_,    591,   0,      200,    "umol/L",  NA,
+  ~ATOXDSCH,        ~AVAL,  ~ANRLO,  ~ANRHI,    ~AVALU, ~ATOXGRH,
+  "Not a term",     591,    0,       200,     "umol/L",       NA,
+  NA_character_,    591,    0,       200,     "umol/L",       NA,
   # ANRHI not missing
-  "Hyperuricemia",  591,   0,      200,    "umol/L",  "4",
-  "Hyperuricemia",  590,   0,      200,    "umol/L",  "3",
-  "Hyperuricemia",  201,   0,      200,    "umol/L",  "3",
-  "Hyperuricemia",  200,   0,      200,    "umol/L",  "0",
+  "Hyperuricemia",  591,    0,       200,     "umol/L",      "4",
+  "Hyperuricemia",  590,    0,       200,     "umol/L",      "3",
+  "Hyperuricemia",  201,    0,       200,     "umol/L",      "3",
+  "Hyperuricemia",  200,    0,       200,     "umol/L",      "0",
   # ANRHI missing - can grade 4
-  "Hyperuricemia",  591,   0,      NA,     "umol/L",  "4",
+  "Hyperuricemia",  591,    0,       NA,      "umol/L",      "4",
   # ANRHI missing - can NOT grade 0 or 3
-  "Hyperuricemia",  590,   0,      NA,     "umol/L",  NA,
-  "Hyperuricemia",  201,   0,      NA,     "umol/L",  NA,
-  "Hyperuricemia",  200,   0,      NA,     "umol/L",  NA,
+  "Hyperuricemia",  590,    0,       NA,      "umol/L",       NA,
+  "Hyperuricemia",  201,    0,       NA,      "umol/L",       NA,
+  "Hyperuricemia",  200,    0,       NA,      "umol/L",       NA,
   # Unit missing cannot grade
-  "Hyperuricemia",  200,   0,      200,    NA,       "0",
+  "Hyperuricemia",  200,    0,       200,           NA,      "0",
   # AVAL missing cannot grade
-  "Hyperuricemia",  NA,    0,      200,    "umol/L",  NA,
+  "Hyperuricemia",  NA,     0,       200,     "umol/L",       NA,
 )
 input_urici_si <- expected_urici_si %>%
   select(-ATOXGRH)
@@ -4092,32 +4085,32 @@ input_calcd_si <- expected_calcd_si %>%
   select(-ATOXGRL)
 
 expected_calcd_cv <- tibble::tribble(
-  ~ATOXDSCL,       ~AVAL,  ~ANRLO, ~ANRHI, ~AVALU,    ~ATOXGRL,
-  "Not a term",    5.9,    9,      100,    "mg/dL",   NA,
-  NA_character_,   5.9,    9,      100,    "mg/dL",  NA,
+  ~ATOXDSCL,       ~AVAL,  ~ANRLO,  ~ANRHI,   ~AVALU,  ~ATOXGRL,
+  "Not a term",    5.9,    9,       100,     "mg/dL",        NA,
+  NA_character_,   5.9,    9,       100,     "mg/dL",        NA,
   # ANRLO not missing
-  "Hypocalcemia",  5.9,    9,      100,    "mg/dL",  "4",
-  "Hypocalcemia",  6,      9,      100,    "mg/dL",  "3",
-  "Hypocalcemia",  6.9,    9,      100,    "mg/dL",  "3",
-  "Hypocalcemia",  7,      9,      100,    "mg/dL",  "2",
-  "Hypocalcemia",  7.9,    9,      100,    "mg/dL",  "2",
-  "Hypocalcemia",  8,      9,      100,    "mg/dL",  "1",
-  "Hypocalcemia",  8.9,    9,      100,    "mg/dL",  "1",
-  "Hypocalcemia",  9,      9,      100,    "mg/dL",  "0",
+  "Hypocalcemia",  5.9,    9,       100,     "mg/dL",       "4",
+  "Hypocalcemia",  6,      9,       100,     "mg/dL",       "3",
+  "Hypocalcemia",  6.9,    9,       100,     "mg/dL",       "3",
+  "Hypocalcemia",  7,      9,       100,     "mg/dL",       "2",
+  "Hypocalcemia",  7.9,    9,       100,     "mg/dL",       "2",
+  "Hypocalcemia",  8,      9,       100,     "mg/dL",       "1",
+  "Hypocalcemia",  8.9,    9,       100,     "mg/dL",       "1",
+  "Hypocalcemia",  9,      9,       100,     "mg/dL",       "0",
   # ANRLO missing - can grade 2-4
-  "Hypocalcemia",  5.9,    9,      NA,     "mg/dL",  "4",
-  "Hypocalcemia",  6,      9,      NA,     "mg/dL",  "3",
-  "Hypocalcemia",  6.9,    9,      NA,     "mg/dL",  "3",
-  "Hypocalcemia",  7,      9,      NA,     "mg/dL",  "2",
-  "Hypocalcemia",  7.9,    9,      NA,     "mg/dL",  "2",
+  "Hypocalcemia",  5.9,    9,       NA,      "mg/dL",       "4",
+  "Hypocalcemia",  6,      9,       NA,      "mg/dL",       "3",
+  "Hypocalcemia",  6.9,    9,       NA,      "mg/dL",       "3",
+  "Hypocalcemia",  7,      9,       NA,      "mg/dL",       "2",
+  "Hypocalcemia",  7.9,    9,       NA,      "mg/dL",       "2",
   # ANRLO missing - can NOT grade 0 or 1
-  "Hypocalcemia",  8,      9,      NA,     "mg/dL",  "1",
-  "Hypocalcemia",  8.9,    9,      NA,     "mg/dL",  "1",
-  "Hypocalcemia",  9,      9,      NA,     "mg/dL",  "0",
+  "Hypocalcemia",  8,      9,       NA,      "mg/dL",       "1",
+  "Hypocalcemia",  8.9,    9,       NA,      "mg/dL",       "1",
+  "Hypocalcemia",  9,      9,       NA,      "mg/dL",       "0",
   # Unit missing cannot grade
-  "Hypocalcemia",  9,      9,      100,    NA,        NA,
+  "Hypocalcemia",  9,      9,       100,          NA,        NA,
   # AVAL missing cannot grade
-  "Hypocalcemia",  NA,     9,      100,    "mg/dL",  NA,
+  "Hypocalcemia",  NA,     9,       100,     "mg/dL",        NA,
 )
 input_calcd_cv <- expected_calcd_cv %>%
   select(-ATOXGRL)
@@ -4335,63 +4328,63 @@ test_that("derive_var_atoxgr Test 72b: CTCAEv5 Hypocalcemia (Ionized) (USCV unit
 ### Grade 1: <LLN - 55 mg/dL
 
 expected_glycd_si <- tibble::tribble(
-  ~ATOXDSCL,       ~AVAL,  ~ANRLO, ~ANRHI, ~AVALU,   ~ATOXGRL,
-  "Not a term",    1.69,   4,      100,    "mmol/L",  NA,
-  NA_character_,   1.69,   4,      100,    "mmol/L",  NA,
+  ~ATOXDSCL,       ~AVAL,  ~ANRLO,  ~ANRHI,    ~AVALU,  ~ATOXGRL,
+  "Not a term",    1.69,   4,       100,     "mmol/L",        NA,
+  NA_character_,   1.69,   4,       100,     "mmol/L",        NA,
   # ANRLO not missing
-  "Hypoglycemia",  1.69,   4,      100,    "mmol/L",  "4",
-  "Hypoglycemia",  1.7,    4,      100,    "mmol/L",  "3",
-  "Hypoglycemia",  2.19,   4,      100,    "mmol/L",  "3",
-  "Hypoglycemia",  2.2,    4,      100,    "mmol/L",  "2",
-  "Hypoglycemia",  2.9,    4,      100,    "mmol/L",  "2",
-  "Hypoglycemia",  3,      4,      100,    "mmol/L",  "1",
-  "Hypoglycemia",  3.9,    4,      100,    "mmol/L",  "1",
-  "Hypoglycemia",  4,      4,      100,    "mmol/L",  "0",
+  "Hypoglycemia",  1.69,   4,       100,     "mmol/L",       "4",
+  "Hypoglycemia",  1.7,    4,       100,     "mmol/L",       "3",
+  "Hypoglycemia",  2.19,   4,       100,     "mmol/L",       "3",
+  "Hypoglycemia",  2.2,    4,       100,     "mmol/L",       "2",
+  "Hypoglycemia",  2.9,    4,       100,     "mmol/L",       "2",
+  "Hypoglycemia",  3,      4,       100,     "mmol/L",       "1",
+  "Hypoglycemia",  3.9,    4,       100,     "mmol/L",       "1",
+  "Hypoglycemia",  4,      4,       100,     "mmol/L",       "0",
   # ANRLO missing - can grade 2-4
-  "Hypoglycemia",  1.69,   NA,     100,    "mmol/L",  "4",
-  "Hypoglycemia",  1.7,    NA,     100,    "mmol/L",  "3",
-  "Hypoglycemia",  2.19,   NA,     100,    "mmol/L",  "3",
-  "Hypoglycemia",  2.2,    NA,     100,    "mmol/L",  "2",
-  "Hypoglycemia",  2.9,    NA,     100,    "mmol/L",  "2",
+  "Hypoglycemia",  1.69,   NA,      100,     "mmol/L",       "4",
+  "Hypoglycemia",  1.7,    NA,      100,     "mmol/L",       "3",
+  "Hypoglycemia",  2.19,   NA,      100,     "mmol/L",       "3",
+  "Hypoglycemia",  2.2,    NA,      100,     "mmol/L",       "2",
+  "Hypoglycemia",  2.9,    NA,      100,     "mmol/L",       "2",
   # ANRLO missing - can NOT grade 0 or 1mg/dL
-  "Hypoglycemia",  3,      NA,     100,    "mmol/L",  NA,
-  "Hypoglycemia",  3.9,    NA,     100,    "mmol/L",  NA,
-  "Hypoglycemia",  4,      NA,     100,    "mmol/L",  NA,
+  "Hypoglycemia",  3,      NA,      100,     "mmol/L",        NA,
+  "Hypoglycemia",  3.9,    NA,      100,     "mmol/L",        NA,
+  "Hypoglycemia",  4,      NA,      100,     "mmol/L",        NA,
   # Unit missing cannot grade
-  "Hypoglycemia",  4,      4,      100,    NA,        NA,
+  "Hypoglycemia",  4,      4,       100,           NA,        NA,
   # AVAL missing cannot grade
-  "Hypoglycemia",  NA,     4,      100,    "mmol/L",  NA,
+  "Hypoglycemia",  NA,     4,       100,     "mmol/L",        NA,
 )
 input_glycd_si <- expected_glycd_si %>%
   select(-ATOXGRL)
 
 expected_glycd_cv <- tibble::tribble(
-  ~ATOXDSCL,       ~AVAL,  ~ANRLO,  ~ANRHI, ~AVALU,   ~ATOXGRL,
-  "Not a term",    29,     70,      100,    "mg/dL",  NA,
-  NA_character_,   29,     70,      100,    "g/dL",   NA,
+  ~ATOXDSCL,       ~AVAL,  ~ANRLO, ~ANRHI,   ~AVALU,  ~ATOXGRL,
+  "Not a term",    29,     70,     100,     "mg/dL",        NA,
+  NA_character_,   29,     70,     100,      "g/dL",        NA,
   # ANRLO not missing
-  "Hypoglycemia",  29,     70,      100,    "mg/dL",  "4",
-  "Hypoglycemia",  30,     70,      100,    "mg/dL",  "3",
-  "Hypoglycemia",  39,     70,      100,    "mg/dL",  "3",
-  "Hypoglycemia",  40,     70,      100,    "mg/dL",  "2",
-  "Hypoglycemia",  54,     70,      100,    "mg/dL",  "2",
-  "Hypoglycemia",  55,     70,      100,    "mg/dL",  "1",
-  "Hypoglycemia",  69,     70,      100,    "mg/dL",  "1",
-  "Hypoglycemia",  70,     70,      100,    "mg/dL",  "0",
+  "Hypoglycemia",  29,     70,     100,     "mg/dL",       "4",
+  "Hypoglycemia",  30,     70,     100,     "mg/dL",       "3",
+  "Hypoglycemia",  39,     70,     100,     "mg/dL",       "3",
+  "Hypoglycemia",  40,     70,     100,     "mg/dL",       "2",
+  "Hypoglycemia",  54,     70,     100,     "mg/dL",       "2",
+  "Hypoglycemia",  55,     70,     100,     "mg/dL",       "1",
+  "Hypoglycemia",  69,     70,     100,     "mg/dL",       "1",
+  "Hypoglycemia",  70,     70,     100,     "mg/dL",       "0",
   # ANRLO missing - can grade 2-4
-  "Hypoglycemia",  29,     NA,      100,    "mg/dL",  "4",
-  "Hypoglycemia",  30,     NA,      100,    "mg/dL",  "3",
-  "Hypoglycemia",  39,     NA,      100,    "mg/dL",  "3",
-  "Hypoglycemia",  40,     NA,      100,    "mg/dL",  "2",
-  "Hypoglycemia",  54,     NA,      100,    "mg/dL",  "2",
+  "Hypoglycemia",  29,     NA,     100,     "mg/dL",       "4",
+  "Hypoglycemia",  30,     NA,     100,     "mg/dL",       "3",
+  "Hypoglycemia",  39,     NA,     100,     "mg/dL",       "3",
+  "Hypoglycemia",  40,     NA,     100,     "mg/dL",       "2",
+  "Hypoglycemia",  54,     NA,     100,     "mg/dL",       "2",
   # ANRLO missing - can NOT grade 0 or 1
-  "Hypoglycemia",  55,     NA,      100,    "mg/dL",  NA,
-  "Hypoglycemia",  69,     NA,      100,    "mg/dL",  NA,
-  "Hypoglycemia",  70,     NA,      100,    "mg/dL",  NA,
-  # Unit missing cannot grade
-  "Hypoglycemia",  70,     70,      100,    NA,        NA,
+  "Hypoglycemia",  55,     NA,     100,     "mg/dL",        NA,
+  "Hypoglycemia",  69,     NA,     100,     "mg/dL",        NA,
+  "Hypoglycemia",  70,     NA,     100,     "mg/dL",        NA,
+  # Unit missing cannot     grade
+  "Hypoglycemia",  70,     70,     100,          NA,        NA,
   # AVAL missing cannot grade
-  "Hypoglycemia",  NA,     70,      100,    "mg/dL",  NA,
+  "Hypoglycemia",  NA,     70,     100,     "mg/dL",        NA,
 )
 input_glycd_cv <- expected_glycd_cv %>%
   select(-ATOXGRL)
@@ -4622,32 +4615,32 @@ input_magnd_si <- expected_magnd_si %>%
   select(-ATOXGRL)
 
 expected_magnd_cv <- tibble::tribble(
-  ~ATOXDSCL,         ~AVAL,  ~ANRLO, ~ANRHI, ~AVALU,  ~ATOXGRL,
-  "Not a term",      0.69,   1.5,    10,     "mg/dL",  NA,
-  NA_character_,     0.69,   1.5,    10,     "mg/dL",  NA,
+  ~ATOXDSCL,         ~AVAL,  ~ANRLO,  ~ANRHI,   ~AVALU,  ~ATOXGRL,
+  "Not a term",      0.69,   1.5,     10,      "mg/dL",        NA,
+  NA_character_,     0.69,   1.5,     10,      "mg/dL",        NA,
   # ANRLO not missing
-  "Hypomagnesemia",  0.69,   1.5,    10,     "mg/dL",  "4",
-  "Hypomagnesemia",  0.7,    1.5,    10,     "mg/dL",  "3",
-  "Hypomagnesemia",  0.89,   1.5,    10,     "mg/dL",  "3",
-  "Hypomagnesemia",  0.9,    1.5,    10,     "mg/dL",  "2",
-  "Hypomagnesemia",  1.19,   1.5,    10,     "mg/dL",  "2",
-  "Hypomagnesemia",  1.2,    1.5,    10,     "mg/dL",  "1",
-  "Hypomagnesemia",  1.49,   1.5,    10,     "mg/dL",  "1",
-  "Hypomagnesemia",  1.5,    1.5,    10,     "mg/dL",  "0",
+  "Hypomagnesemia",  0.69,   1.5,     10,      "mg/dL",       "4",
+  "Hypomagnesemia",  0.7,    1.5,     10,      "mg/dL",       "3",
+  "Hypomagnesemia",  0.89,   1.5,     10,      "mg/dL",       "3",
+  "Hypomagnesemia",  0.9,    1.5,     10,      "mg/dL",       "2",
+  "Hypomagnesemia",  1.19,   1.5,     10,      "mg/dL",       "2",
+  "Hypomagnesemia",  1.2,    1.5,     10,      "mg/dL",       "1",
+  "Hypomagnesemia",  1.49,   1.5,     10,      "mg/dL",       "1",
+  "Hypomagnesemia",  1.5,    1.5,     10,      "mg/dL",       "0",
   # ANRLO missing - can grade 2-4
-  "Hypomagnesemia",  0.69,   NA,     10,     "mg/dL",  "4",
-  "Hypomagnesemia",  0.7,    NA,     10,     "mg/dL",  "3",
-  "Hypomagnesemia",  0.89,   NA,     10,     "mg/dL",  "3",
-  "Hypomagnesemia",  0.9,    NA,     10,     "mg/dL",  "2",
-  "Hypomagnesemia",  1.19,   NA,     10,     "mg/dL",  "2",
+  "Hypomagnesemia",  0.69,   NA,      10,      "mg/dL",       "4",
+  "Hypomagnesemia",  0.7,    NA,      10,      "mg/dL",       "3",
+  "Hypomagnesemia",  0.89,   NA,      10,      "mg/dL",       "3",
+  "Hypomagnesemia",  0.9,    NA,      10,      "mg/dL",       "2",
+  "Hypomagnesemia",  1.19,   NA,      10,      "mg/dL",       "2",
   # ANRLO missing - can NOT grade 0 or 1
-  "Hypomagnesemia",  1.2,    NA,     10,     "mg/dL",  NA,
-  "Hypomagnesemia",  1.49,   NA,     10,     "mg/dL",  NA,
-  "Hypomagnesemia",  1.5,    NA,     10,     "mg/dL",  NA,
+  "Hypomagnesemia",  1.2,    NA,      10,      "mg/dL",        NA,
+  "Hypomagnesemia",  1.49,   NA,      10,      "mg/dL",        NA,
+  "Hypomagnesemia",  1.5,    NA,      10,      "mg/dL",        NA,
   # Unit missing cannot grade
-  "Hypomagnesemia",  1.5,    1.5,    10,     NA,       NA,
+  "Hypomagnesemia",  1.5,    1.5,     10,           NA,        NA,
   # AVAL missing cannot grade
-  "Hypomagnesemia",  NA,     1.5,    10,     "mg/dL",  NA,
+  "Hypomagnesemia",  NA,     1.5,     10,      "mg/dL",        NA,
 )
 input_magnd_cv <- expected_magnd_cv %>%
   select(-ATOXGRL)
@@ -4897,32 +4890,32 @@ test_that("derive_var_atoxgr Test 81: CTCAEv4 Hypophosphatemia (SI unit)", {
 ## Test 81b: CTCAEv4 Hypophosphatemia (USCV unit) ----
 test_that("derive_var_atoxgr Test 81: CTCAEv4 Hypophosphatemia (USCV unit)", {
   expected_phosd <- tibble::tribble(
-    ~ATOXDSCL,           ~AVAL,  ~ANRLO, ~ANRHI,  ~AVALU,  ~ATOXGRL,
-    "Not a term",        0.99,   3,      100,    "mg/dL",  NA,
-    NA_character_,       0.99,   3,      100,    "mg/dL",  NA,
+    ~ATOXDSCL,           ~AVAL,  ~ANRLO,  ~ANRHI,   ~AVALU,  ~ATOXGRL,
+    "Not a term",        0.99,   3,       100,     "mg/dL",        NA,
+    NA_character_,       0.99,   3,       100,     "mg/dL",        NA,
     # ANRLO not missing
-    "Hypophosphatemia",  0.99,   3,      100,    "mg/dL",  "4",
-    "Hypophosphatemia",  1,      3,      100,    "mg/dL",  "3",
-    "Hypophosphatemia",  1.9,    3,      100,    "mg/dL",  "3",
-    "Hypophosphatemia",  2,      3,      100,    "mg/dL",  "2",
-    "Hypophosphatemia",  2.49,   3,      100,    "mg/dL",  "2",
-    "Hypophosphatemia",  2.5,    3,      100,    "mg/dL",  "1",
-    "Hypophosphatemia",  2.9,    3,      100,    "mg/dL",  "1",
-    "Hypophosphatemia",  3,      3,      100,    "mg/dL",  "0",
+    "Hypophosphatemia",  0.99,   3,       100,     "mg/dL",       "4",
+    "Hypophosphatemia",  1,      3,       100,     "mg/dL",       "3",
+    "Hypophosphatemia",  1.9,    3,       100,     "mg/dL",       "3",
+    "Hypophosphatemia",  2,      3,       100,     "mg/dL",       "2",
+    "Hypophosphatemia",  2.49,   3,       100,     "mg/dL",       "2",
+    "Hypophosphatemia",  2.5,    3,       100,     "mg/dL",       "1",
+    "Hypophosphatemia",  2.9,    3,       100,     "mg/dL",       "1",
+    "Hypophosphatemia",  3,      3,       100,     "mg/dL",       "0",
     # ANRLO missing - can grade 3-4
-    "Hypophosphatemia",  0.99,   NA,     100,    "mg/dL",  "4",
-    "Hypophosphatemia",  1,      NA,     100,    "mg/dL",  "3",
-    "Hypophosphatemia",  1.9,    NA,     100,    "mg/dL",  "3",
-    "Hypophosphatemia",  2,      NA,     100,    "mg/dL",  "2",
-    "Hypophosphatemia",  2.49,   NA,     100,    "mg/dL",  "2",
+    "Hypophosphatemia",  0.99,   NA,      100,     "mg/dL",       "4",
+    "Hypophosphatemia",  1,      NA,      100,     "mg/dL",       "3",
+    "Hypophosphatemia",  1.9,    NA,      100,     "mg/dL",       "3",
+    "Hypophosphatemia",  2,      NA,      100,     "mg/dL",       "2",
+    "Hypophosphatemia",  2.49,   NA,      100,     "mg/dL",       "2",
     # ANRLO missing - can NOT grade 0 or 1
-    "Hypophosphatemia",  2.5,    NA,     100,    "mg/dL",  NA,
-    "Hypophosphatemia",  2.9,    NA,     100,    "mg/dL",  NA,
-    "Hypophosphatemia",  3,      NA,     100,    "mg/dL",  NA,
+    "Hypophosphatemia",  2.5,    NA,      100,     "mg/dL",        NA,
+    "Hypophosphatemia",  2.9,    NA,      100,     "mg/dL",        NA,
+    "Hypophosphatemia",  3,      NA,      100,     "mg/dL",        NA,
     # Unit missing cannot grade
-    "Hypophosphatemia",  3,      1,      100,    NA,       NA,
+    "Hypophosphatemia",  3,      1,       100,          NA,        NA,
     # AVAL missing cannot grade
-    "Hypophosphatemia",  NA,     1,      100,    "mg/dL",  NA,
+    "Hypophosphatemia",  NA,     1,       100,     "mg/dL",        NA,
   )
   input_phosd <- expected_phosd %>%
     select(-ATOXGRL)
@@ -5039,7 +5032,6 @@ input_albl_daids_cv <- expected_albl_daids_cv %>%
 
 ## Test 83a: DAIDS Albumin, Low (SI unit) ----
 test_that("derive_var_atoxgr Test 83a: DAIDS Albumin, Low (SI unit)", {
-
   actual_albl_daids_si <- derive_var_atoxgr_dir(
     input_albl_daids_si,
     new_var = ATOXGRL,
@@ -5058,7 +5050,6 @@ test_that("derive_var_atoxgr Test 83a: DAIDS Albumin, Low (SI unit)", {
 
 ## Test 83b: DAIDS Albumin, Low (USCV unit) ----
 test_that("derive_var_atoxgr Test 83b: DAIDS Albumin, Low (USCV unit)", {
-
   actual_albl_daids_cv <- derive_var_atoxgr_dir(
     input_albl_daids_cv,
     new_var = ATOXGRL,
@@ -5430,8 +5421,10 @@ expected_dbiligt28d_daids_si <- tibble::tribble(
 
 ## CV unit
 expected_dbiligt28d_daids_cv <- expected_dbiligt28d_daids_si %>%
-  mutate(AVALU = "mg/dL",
-         TESTNUM = TESTNUM + 30)
+  mutate(
+    AVALU = "mg/dL",
+    TESTNUM = TESTNUM + 30
+  )
 
 ### <= 28 days of age
 
@@ -5704,22 +5697,22 @@ expected_calcige7d_daids_si <- tibble::tribble(
   )
 
 expected_calcige7d_daids_cv <- tibble::tribble(
-  ~ATOXDSCH,       ~AVAL,  ~AVALU,    ~ATOXGRH, ~TESTNUM,
-  "Not a term",    13.5,    "mg/dL",  NA,       1,
-  NA_character_,   13.5,    "mg/dL",  NA,       2,
+  ~ATOXDSCH,        ~AVAL,   ~AVALU,  ~ATOXGRH,  ~TESTNUM,
+  "Not a term",     13.5,   "mg/dL",        NA,  1,
+  NA_character_,    13.5,   "mg/dL",        NA,  2,
   # ANRHI not missing
-  "Calcium, High", 13.5,    "mg/dL",  "4",      3,
-  "Calcium, High", 13.49,   "mg/dL",  "3",      4,
-  "Calcium, High", 12.5,    "mg/dL",  "3",      5,
-  "Calcium, High", 12.49,   "mg/dL",  "2",      6,
-  "Calcium, High", 11.5,    "mg/dL",  "2",      7,
-  "Calcium, High", 11.49,   "mg/dL",  "1",      8,
-  "Calcium, High", 10.6,    "mg/dL",  "1",      9,
-  "Calcium, High", 10.59,   "mg/dL",  "0",      10,
+  "Calcium, High",  13.5,   "mg/dL",       "4",  3,
+  "Calcium, High",  13.49,  "mg/dL",       "3",  4,
+  "Calcium, High",  12.5,   "mg/dL",       "3",  5,
+  "Calcium, High",  12.49,  "mg/dL",       "2",  6,
+  "Calcium, High",  11.5,   "mg/dL",       "2",  7,
+  "Calcium, High",  11.49,  "mg/dL",       "1",  8,
+  "Calcium, High",  10.6,   "mg/dL",       "1",  9,
+  "Calcium, High",  10.59,  "mg/dL",       "0",  10,
   # Unit missing cannot grade
-  "Calcium, High", 10.5,    NA,        NA,      11,
+  "Calcium, High",  10.5,        NA,        NA,  11,
   # AVAL missing cannot grade
-  "Calcium, High", NA,     "mg/dL",  NA,        12,
+  "Calcium, High",  NA,     "mg/dL",        NA,  12,
 ) %>%
   mutate(
     BRTHDT = lubridate::ymd("2023-01-01"),
@@ -5918,7 +5911,6 @@ input_calioni_daids_cv <- expected_calioni_daids_cv %>%
 
 ## Test 93a: DAIDS Calcium (Ionized), High (SI unit) ----
 test_that("derive_var_atoxgr Test 93a: DAIDS Calcium (Ionized), High (SI unit)", {
-
   actual_calioni_daids_si <- derive_var_atoxgr_dir(
     input_calioni_daids_si,
     new_var = ATOXGRH,
@@ -5937,7 +5929,6 @@ test_that("derive_var_atoxgr Test 93a: DAIDS Calcium (Ionized), High (SI unit)",
 
 ## Test 93b: DAIDS Calcium (Ionized), High (USCV unit) ----
 test_that("derive_var_atoxgr Test 93b: DAIDS Calcium (Ionized), High (USCV unit)", {
-
   actual_calioni_daids_cv <- derive_var_atoxgr_dir(
     input_calioni_daids_cv,
     new_var = ATOXGRH,
@@ -5995,22 +5986,22 @@ expected_calcdge7d_daids_si <- tibble::tribble(
   )
 
 expected_calcdge7d_daids_cv <- tibble::tribble(
-  ~ATOXDSCL,       ~AVAL,  ~AVALU,   ~ATOXGRL, ~TESTNUM,
-  "Not a term",    6.09,   "mg/dL",  NA,       1,
-  NA_character_,   6.09,   "mg/dL",  NA,       2,
+  ~ATOXDSCL,       ~AVAL,   ~AVALU,  ~ATOXGRL,  ~TESTNUM,
+  "Not a term",    6.09,   "mg/dL",        NA,  1,
+  NA_character_,   6.09,   "mg/dL",        NA,  2,
   # ANRLO not missing
-  "Calcium, Low",  6.09,   "mg/dL",  "4",      3,
-  "Calcium, Low",  6.1,    "mg/dL",  "3",      4,
-  "Calcium, Low",  6.9,    "mg/dL",  "3",      5,
-  "Calcium, Low",  7,      "mg/dL",  "2",      6,
-  "Calcium, Low",  7.7,    "mg/dL",  "2",      7,
-  "Calcium, Low",  7.8,    "mg/dL",  "1",      8,
-  "Calcium, Low",  8.3,    "mg/dL",  "1",      9,
-  "Calcium, Low",  8.4,    "mg/dL",  "0",      10,
+  "Calcium, Low",  6.09,   "mg/dL",       "4",  3,
+  "Calcium, Low",  6.1,    "mg/dL",       "3",  4,
+  "Calcium, Low",  6.9,    "mg/dL",       "3",  5,
+  "Calcium, Low",  7,      "mg/dL",       "2",  6,
+  "Calcium, Low",  7.7,    "mg/dL",       "2",  7,
+  "Calcium, Low",  7.8,    "mg/dL",       "1",  8,
+  "Calcium, Low",  8.3,    "mg/dL",       "1",  9,
+  "Calcium, Low",  8.4,    "mg/dL",       "0",  10,
   # Unit missing cannot grade
-  "Calcium, Low",  8.4,    NA,        NA,       11,
+  "Calcium, Low",  8.4,         NA,        NA,  11,
   # AVAL missing cannot grade
-  "Calcium, Low",  NA,     "mg/dL",  NA,       12,
+  "Calcium, Low",  NA,     "mg/dL",        NA,  12,
 ) %>%
   mutate(
     BRTHDT = lubridate::ymd("2023-01-01"),
@@ -6055,22 +6046,22 @@ expected_calcdlt7d_daids_si <- tibble::tribble(
   )
 ### CV unit
 expected_calcdlt7d_daids_cv <- tibble::tribble(
-  ~ATOXDSCL,      ~AVAL, ~AVALU,  ~ATOXGRL, ~TESTNUM,
-  "Not a term",   5.49,  "mg/dL", NA,       13,
-  NA_character_,  5.49,  "mg/dL", NA,       14,
+  ~ATOXDSCL,       ~AVAL,   ~AVALU,  ~ATOXGRL,  ~TESTNUM,
+  "Not a term",    5.49,   "mg/dL",        NA,  13,
+  NA_character_,   5.49,   "mg/dL",        NA,  14,
   # ANRLO not missing
-  "Calcium, Low", 5.49,  "mg/dL", "4",      15,
-  "Calcium, Low", 5.5,   "mg/dL", "3",      16,
-  "Calcium, Low", 5.99,  "mg/dL", "3",      17,
-  "Calcium, Low", 6,     "mg/dL", "2",      18,
-  "Calcium, Low", 6.49,  "mg/dL", "2",      19,
-  "Calcium, Low", 6.5,   "mg/dL", "1",      20,
-  "Calcium, Low", 7.49,  "mg/dL", "1",      21,
-  "Calcium, Low", 7.5,   "mg/dL", "0",      22,
+  "Calcium, Low",  5.49,   "mg/dL",       "4",  15,
+  "Calcium, Low",  5.5,    "mg/dL",       "3",  16,
+  "Calcium, Low",  5.99,   "mg/dL",       "3",  17,
+  "Calcium, Low",  6,      "mg/dL",       "2",  18,
+  "Calcium, Low",  6.49,   "mg/dL",       "2",  19,
+  "Calcium, Low",  6.5,    "mg/dL",       "1",  20,
+  "Calcium, Low",  7.49,   "mg/dL",       "1",  21,
+  "Calcium, Low",  7.5,    "mg/dL",       "0",  22,
   # Unit missing cannot grade
-  "Calcium, Low", 7.5,   NA,       NA,      23,
+  "Calcium, Low",  7.5,         NA,        NA,  23,
   # AVAL missing cannot grade
-  "Calcium, Low", NA,    "mg/dL", NA,       24,
+  "Calcium, Low",  NA,     "mg/dL",        NA,  24,
 ) %>%
   mutate(
     BRTHDT = lubridate::ymd("2023-01-01"),
@@ -6492,21 +6483,21 @@ test_that("derive_var_atoxgr Test 99a:  DAIDS Glucose Nonfasting, High (SI unit)
 ## Test 99b:  DAIDS Glucose Nonfasting, High (USCV unit) ----
 test_that("derive_var_atoxgr Test 99b:  DAIDS Glucose Nonfasting, High (USCV unit)", {
   expected_glucnfi_daids_cv <- tibble::tribble(
-    ~ATOXDSCH,                  ~AVAL,  ~AVALU,   ~ATOXGRH, ~TESTNUM,
-    "Not a term",               500,    "mg/L",   NA,       1,
-    NA_character_,              500,    "mg/dL", NA,       2,
-    "Glucose Nonfasting, High", 500,    "mg/dL", "4",      3,
-    "Glucose Nonfasting, High", 499,    "mg/dL", "3",      4,
-    "Glucose Nonfasting, High", 251,    "mg/dL", "3",      5,
-    "Glucose Nonfasting, High", 250,    "mg/dL", "2",      6,
-    "Glucose Nonfasting, High", 161,    "mg/dL", "2",      7,
-    "Glucose Nonfasting, High", 160,    "mg/dL", "1",      8,
-    "Glucose Nonfasting, High", 116,    "mg/dL", "1",      9,
-    "Glucose Nonfasting, High", 115,    "mg/dL", "0",      10,
+    ~ATOXDSCH,                   ~AVAL,  ~AVALU,  ~ATOXGRH,  ~TESTNUM,
+    "Not a term",                500,    "mg/L",        NA,  1,
+    NA_character_,               500,   "mg/dL",        NA,  2,
+    "Glucose Nonfasting, High",  500,   "mg/dL",       "4",  3,
+    "Glucose Nonfasting, High",  499,   "mg/dL",       "3",  4,
+    "Glucose Nonfasting, High",  251,   "mg/dL",       "3",  5,
+    "Glucose Nonfasting, High",  250,   "mg/dL",       "2",  6,
+    "Glucose Nonfasting, High",  161,   "mg/dL",       "2",  7,
+    "Glucose Nonfasting, High",  160,   "mg/dL",       "1",  8,
+    "Glucose Nonfasting, High",  116,   "mg/dL",       "1",  9,
+    "Glucose Nonfasting, High",  115,   "mg/dL",       "0",  10,
     # AVALU missing cannot grade
-    "Glucose Nonfasting, High", 115,      NA,       NA,       11,
+    "Glucose Nonfasting, High",  115,        NA,        NA,  11,
     # AVAL missing cannot grade
-    "Glucose Nonfasting, High", NA,     "mg/dL", NA,       12,
+    "Glucose Nonfasting, High",  NA,    "mg/dL",        NA,  12,
   )
 
   input_glucnfi_daids_cv <- expected_glucnfi_daids_cv %>%
@@ -6569,21 +6560,21 @@ expected_glucdge1m_daids_si <- tibble::tribble(
 
 ### CV unit
 expected_glucdge1m_daids_cv <- tibble::tribble(
-  ~ATOXDSCL,      ~AVAL,  ~AVALU,   ~ATOXGRL, ~TESTNUM,
-  "Not a term",   29,     "mg/L",   NA,       1,
-  NA_character_,  29,     "mg/dL",  NA,       2,
-  "Glucose, Low", 29,     "mg/dL",  "4",      3,
-  "Glucose, Low", 30,     "mg/dL",  "3",      4,
-  "Glucose, Low", 39,     "mg/dL",  "3",      5,
-  "Glucose, Low", 40,     "mg/dL",  "2",      6,
-  "Glucose, Low", 54,     "mg/dL",  "2",      7,
-  "Glucose, Low", 55,     "mg/dL",  "1",      8,
-  "Glucose, Low", 64,     "mg/dL",  "1",      9,
-  "Glucose, Low", 65,     "mg/dL",  "0",      10,
+  ~ATOXDSCL, ~AVAL, ~AVALU, ~ATOXGRL, ~TESTNUM,
+  "Not a term", 29, "mg/L", NA, 1,
+  NA_character_, 29, "mg/dL", NA, 2,
+  "Glucose, Low", 29, "mg/dL", "4", 3,
+  "Glucose, Low", 30, "mg/dL", "3", 4,
+  "Glucose, Low", 39, "mg/dL", "3", 5,
+  "Glucose, Low", 40, "mg/dL", "2", 6,
+  "Glucose, Low", 54, "mg/dL", "2", 7,
+  "Glucose, Low", 55, "mg/dL", "1", 8,
+  "Glucose, Low", 64, "mg/dL", "1", 9,
+  "Glucose, Low", 65, "mg/dL", "0", 10,
   # AVALU missing cannot grade
-  "Glucose, Low", 65,      NA,       NA,      11,
+  "Glucose, Low", 65, NA, NA, 11,
   # AVAL missing cannot grade
-  "Glucose, Low", NA,     "mg/dL",  NA,       12,
+  "Glucose, Low", NA, "mg/dL", NA, 12,
 ) %>%
   mutate(
     BRTHDT = lubridate::ymd("2022-11-30"),
@@ -7032,19 +7023,19 @@ expected_ldlfige18y_daids_si <- tibble::tribble(
   )
 
 expected_ldlfige18y_daids_cv <- tibble::tribble(
-  ~ATOXDSCH,            ~AVAL,  ~AVALU,    ~ATOXGRH, ~TESTNUM,
-  "Not a term",         190,    "mg/dL",  NA,       1,
-  NA_character_,        190,    "mg/dL",  NA,       2,
-  "LDL, Fasting, High", 190,    "mg/dL",  "3",      3,
-  "LDL, Fasting, High", 189,    "mg/dL",  "2",      4,
-  "LDL, Fasting, High", 160,    "mg/dL",  "2",      5,
-  "LDL, Fasting, High", 159,    "mg/dL",  "1",      6,
-  "LDL, Fasting, High", 130,    "mg/dL",  "1",      7,
-  "LDL, Fasting, High", 129,    "mg/dL",  "0",      8,
+  ~ATOXDSCH,             ~AVAL,   ~AVALU,  ~ATOXGRH,  ~TESTNUM,
+  "Not a term",          190,    "mg/dL",        NA,  1,
+  NA_character_,         190,    "mg/dL",        NA,  2,
+  "LDL, Fasting, High",  190,    "mg/dL",       "3",  3,
+  "LDL, Fasting, High",  189,    "mg/dL",       "2",  4,
+  "LDL, Fasting, High",  160,    "mg/dL",       "2",  5,
+  "LDL, Fasting, High",  159,    "mg/dL",       "1",  6,
+  "LDL, Fasting, High",  130,    "mg/dL",       "1",  7,
+  "LDL, Fasting, High",  129,    "mg/dL",       "0",  8,
   # Unit missing cannot grade
-  "LDL, Fasting, High", 129,    NA,       NA,       9,
+  "LDL, Fasting, High",  129,         NA,        NA,  9,
   # AVAL missing cannot grade
-  "LDL, Fasting, High", NA,     "mg/dL",  NA,       10,
+  "LDL, Fasting, High",  NA,     "mg/dL",        NA,  10,
 ) %>%
   mutate(
     BRTHDT = lubridate::ymd("2005-01-08"),
@@ -7330,7 +7321,6 @@ expected_magd_daids_cv <- expected_magd_daids_si %>%
 
 ## Test 106a: DAIDS Magnesium, Low (SI unit) ----
 test_that("derive_var_atoxgr Test 106a: DAIDS Magnesium, Low (SI unit)", {
-
   input_magd_daids_si <- expected_magd_daids_si %>%
     select(-ATOXGRL)
 
@@ -7352,7 +7342,6 @@ test_that("derive_var_atoxgr Test 106a: DAIDS Magnesium, Low (SI unit)", {
 
 ## Test 106b: DAIDS Magnesium, Low (USCV unit) ----
 test_that("derive_var_atoxgr Test 106b: DAIDS Magnesium, Low (USCV unit)", {
-
   input_magd_daids_cv <- expected_magd_daids_cv %>%
     select(-ATOXGRL)
 
@@ -7421,30 +7410,30 @@ expected_phosd_daids_gt14y_si <- tibble::tribble(
   )
 
 expected_phosd_daids_gt14y_cv <- tibble::tribble(
-  ~AVAL, ~ANRLO, ~AVALU,   ~ATOXGRL, ~TESTNUM,
-  0.9,   2.5,    "MM3",    NA,       1,
-  0.9,   2.5,    "mg/dL", "4",      2,
-  1,     2.5,    "mg/dL", "3",      3,
-  1.3,   2.5,    "mg/dL", "3",      4,
-  1.4,   2.5,    "mg/dL", "2",      5,
-  1.9,   2.5,    "mg/dL", "2",      6,
-  2,     2.5,    "mg/dL", "1",      7,
-  2.49,  2.5,    "mg/dL", "1",      8,
-  2.5,   2.5,    "mg/dL", "0",      9,
+  ~AVAL,  ~ANRLO,   ~AVALU,  ~ATOXGRL,  ~TESTNUM,
+  0.9,    2.5,       "MM3",        NA,  1,
+  0.9,    2.5,     "mg/dL",       "4",  2,
+  1,      2.5,     "mg/dL",       "3",  3,
+  1.3,    2.5,     "mg/dL",       "3",  4,
+  1.4,    2.5,     "mg/dL",       "2",  5,
+  1.9,    2.5,     "mg/dL",       "2",  6,
+  2,      2.5,     "mg/dL",       "1",  7,
+  2.49,   2.5,     "mg/dL",       "1",  8,
+  2.5,    2.5,     "mg/dL",       "0",  9,
   # missing ANRLO - can grade 2 - 4
-  0.9,   2.5,    "mg/dL", "4",      10,
-  1,     2.5,    "mg/dL", "3",      11,
-  1.3,   2.5,    "mg/dL", "3",      12,
-  1.4,   2.5,    "mg/dL", "2",      13,
-  1.9,   2.5,    "mg/dL", "2",      14,
+  0.9,    2.5,     "mg/dL",       "4",  10,
+  1,      2.5,     "mg/dL",       "3",  11,
+  1.3,    2.5,     "mg/dL",       "3",  12,
+  1.4,    2.5,     "mg/dL",       "2",  13,
+  1.9,    2.5,     "mg/dL",       "2",  14,
   # missing ANRLO - can grade 0 - 1
-  2,     2.5,    "mg/dL", "1",      15,
-  2.49,  2.5,    "mg/dL", "1",      16,
-  2.5,   2.5,    "mg/dL", "0",      17,
+  2,      2.5,     "mg/dL",       "1",  15,
+  2.49,   2.5,     "mg/dL",       "1",  16,
+  2.5,    2.5,     "mg/dL",       "0",  17,
   # missing AVAL
-  NA,    2.5,    "mg/dL", NA,       18,
+  NA,     2.5,     "mg/dL",        NA,  18,
   # missing UNIT
-  1,     2.5,    NA,       NA,       19,
+  1,      2.5,          NA,        NA,  19,
 ) %>%
   mutate(
     ATOXDSCL = "Phosphate, Low",
@@ -7669,7 +7658,6 @@ input_poti_daids <- expected_poti_daids %>%
 
 ## Test 108a: DAIDS Potassium, High (SI unit) ----
 test_that("derive_var_atoxgr Test 108a: DAIDS Potassium, High (SI unit)", {
-
   actual_poti_daids <- derive_var_atoxgr_dir(
     input_poti_daids,
     new_var = ATOXGRH,
@@ -7688,7 +7676,6 @@ test_that("derive_var_atoxgr Test 108a: DAIDS Potassium, High (SI unit)", {
 
 ## Test 108b: DAIDS Potassium, High (USCV unit) ----
 test_that("derive_var_atoxgr Test 108b: DAIDS Potassium, High (USCV unit)", {
-
   actual_poti_daids <- derive_var_atoxgr_dir(
     input_poti_daids,
     new_var = ATOXGRH,
@@ -7736,7 +7723,6 @@ input_potd_daids <- expected_potd_daids %>%
 
 ## Test 109a: DAIDS Potassium, Low (SI unit) ----
 test_that("derive_var_atoxgr Test 109a: DAIDS Potassium, Low (SI unit)", {
-
   actual_potd_daids <- derive_var_atoxgr_dir(
     input_potd_daids,
     new_var = ATOXGRL,
@@ -7755,7 +7741,6 @@ test_that("derive_var_atoxgr Test 109a: DAIDS Potassium, Low (SI unit)", {
 
 ## Test 109b: DAIDS Potassium, Low (USCV unit) ----
 test_that("derive_var_atoxgr Test 109b: DAIDS Potassium, Low (USCV unit)", {
-
   actual_potd_daids <- derive_var_atoxgr_dir(
     input_potd_daids,
     new_var = ATOXGRL,
@@ -7803,7 +7788,6 @@ input_sodi_daids <- expected_sodi_daids %>%
 
 ## Test 110a: DAIDS Sodium, High (SI unit) ----
 test_that("derive_var_atoxgr Test 110a: DAIDS Sodium, High (SI unit)", {
-
   actual_sodi_daids <- derive_var_atoxgr_dir(
     input_sodi_daids,
     new_var = ATOXGRH,
@@ -7822,7 +7806,6 @@ test_that("derive_var_atoxgr Test 110a: DAIDS Sodium, High (SI unit)", {
 
 ## Test 110b: DAIDS Sodium, High (USCV unit) ----
 test_that("derive_var_atoxgr Test 110b: DAIDS Sodium, High (USCV unit)", {
-
   actual_sodi_daids <- derive_var_atoxgr_dir(
     input_sodi_daids,
     new_var = ATOXGRH,
@@ -7959,21 +7942,21 @@ test_that("derive_var_atoxgr Test 112a: DAIDS Uric Acid, High (SI unit)", {
 ## Test 112b: DAIDS Uric Acid, High (USCV unit) ----
 test_that("derive_var_atoxgr Test 112b: DAIDS Uric Acid, High (USCV unit)", {
   expected_urici_daids <- tibble::tribble(
-    ~ATOXDSCH,          ~AVAL, ~AVALU,   ~ATOXGRH, ~TESTNUM,
-    "Not a term",       15,    "mg/dL",  NA,       1,
-    NA_character_,      15,    "mg/dL",  NA,       2,
-    "Uric Acid, High",  15,    "mg/dL",  "4",      3,
-    "Uric Acid, High",  14.9,  "mg/dL",  "3",      4,
-    "Uric Acid, High",  12,    "mg/dL",  "3",      5,
-    "Uric Acid, High",  11.9,  "mg/dL",  "2",      6,
-    "Uric Acid, High",  10,    "mg/dL",  "2",      7,
-    "Uric Acid, High",  9.9,   "mg/dL",  "1",      8,
-    "Uric Acid, High",  7.5,   "mg/dL",  "1",      9,
-    "Uric Acid, High",  7.4,   "mg/dL",  "0",      10,
+    ~ATOXDSCH,         ~AVAL,  ~AVALU,  ~ATOXGRH, ~TESTNUM,
+    "Not a term",      15,    "mg/dL",        NA, 1,
+    NA_character_,     15,    "mg/dL",        NA, 2,
+    "Uric Acid, High", 15,    "mg/dL",       "4", 3,
+    "Uric Acid, High", 14.9,  "mg/dL",       "3", 4,
+    "Uric Acid, High", 12,    "mg/dL",       "3", 5,
+    "Uric Acid, High", 11.9,  "mg/dL",       "2", 6,
+    "Uric Acid, High", 10,    "mg/dL",       "2", 7,
+    "Uric Acid, High", 9.9,   "mg/dL",       "1", 8,
+    "Uric Acid, High", 7.5,   "mg/dL",       "1", 9,
+    "Uric Acid, High", 7.4,   "mg/dL",       "0", 10,
     # Unit missing cannot grade
-    "Uric Acid, High",  200,   NA,        NA,       11,
+    "Uric Acid, High", 200,        NA,        NA, 11,
     # AVAL missing cannot grade
-    "Uric Acid, High",  NA,    "mg/dL",  NA,       12,
+    "Uric Acid, High", NA,    "mg/dL",        NA, 12,
   )
 
   input_urici_daids <- expected_urici_daids %>%
@@ -8056,7 +8039,6 @@ input_cd4d_daids_si <- expected_cd4d_daids_si %>%
 
 ## Test 113a: DAIDS Absolute CD4 Count, Low (SI unit) ----
 test_that("derive_var_atoxgr Test 113a: DAIDS Absolute CD4 Count, Low (SI unit)", {
-
   actual_cd4d_daids_si <- derive_var_atoxgr_dir(
     input_cd4d_daids_si,
     new_var = ATOXGRL,
@@ -8085,7 +8067,6 @@ input_cd4d_daids_cv <- expected_cd4d_daids_cv %>%
 
 ## Test 113b: DAIDS Absolute CD4 Count, Low (USCV unit) ----
 test_that("derive_var_atoxgr Test 113b: DAIDS Absolute CD4 Count, Low (USCV unit)", {
-
   actual_cd4d_daids_cv <- derive_var_atoxgr_dir(
     input_cd4d_daids_cv,
     new_var = ATOXGRL,
@@ -8165,7 +8146,6 @@ input_lymphd_daids_si <- expected_lymphd_daids_si %>%
 
 ## Test 114a: DAIDS Absolute Lymphocyte Count, Low (SI unit) ----
 test_that("derive_var_atoxgr Test 114a: DAIDS Absolute Lymphocyte Count, Low (SI unit)", {
-
   actual_lymphd_daids_si <- derive_var_atoxgr_dir(
     input_lymphd_daids_si,
     new_var = ATOXGRL,
@@ -8192,7 +8172,6 @@ input_lymphd_daids_cv <- expected_lymphd_daids_cv %>%
 
 ## Test 114b: DAIDS Absolute Lymphocyte Count, Low (USCV unit) ----
 test_that("derive_var_atoxgr Test 114b: DAIDS Absolute Lymphocyte Count, Low (USCV unit)", {
-
   actual_lymphd_daids_cv <- derive_var_atoxgr_dir(
     input_lymphd_daids_cv,
     new_var = ATOXGRL,
@@ -8220,7 +8199,6 @@ input_lymphd_daids_cv2 <- expected_lymphd_daids_cv2 %>%
 
 ## Test 114c: DAIDS Absolute Lymphocyte Count, Low (legacy USCV unit) ----
 test_that("derive_var_atoxgr Test 114c: DAIDS Absolute Lymphocyte Count, Low (legacy USCV unit)", {
-
   actual_lymphd_daids_cv2 <- derive_var_atoxgr_dir(
     input_lymphd_daids_cv2,
     new_var = ATOXGRL,
@@ -8470,7 +8448,6 @@ input_fibd_daids_si <- expected_fibd_daids_si %>%
 
 ## Test 116a: DAIDS Fibrinogen Decreased (SI unit) ----
 test_that("derive_var_atoxgr Test 116a: DAIDS Fibrinogen Decreased (SI unit)", {
-
   actual_fibd_daids_si <- derive_var_atoxgr_dir(
     input_fibd_daids_si,
     new_var = ATOXGRL,
@@ -8500,7 +8477,6 @@ input_fibd_daids_cv <- expected_fibd_daids_cv %>%
 
 ## Test 116b: DAIDS Fibrinogen Decreased (USCV unit) ----
 test_that("derive_var_atoxgr Test 116b: DAIDS Fibrinogen Decreased (USCV unit)", {
-
   actual_fibd_daids_cv <- derive_var_atoxgr_dir(
     input_fibd_daids_cv,
     new_var = ATOXGRL,
@@ -8758,7 +8734,6 @@ test_that("derive_var_atoxgr Test 117: DAIDS HGB Low (SI unit)", {
 
 ## Test 117b: DAIDS HGB Low (CV unit) ----
 test_that("derive_var_atoxgr Test 117b: DAIDS HGB Low (CV unit)", {
-
   expected_hgbd_daids_cv <- expected_hgbd_daids %>%
     mutate(
       AVAL = AVAL / 10,
@@ -8864,7 +8839,6 @@ input_methi_daids <- expected_methi_daids %>%
 
 ## Test 119a: DAIDS Methemoglobin (SI unit) ----
 test_that("derive_var_atoxgr Test 119a: DAIDS Methemoglobin (SI unit)", {
-
   actual_methi_daids <- derive_var_atoxgr_dir(
     input_methi_daids,
     new_var = ATOXGRH,
@@ -8883,7 +8857,6 @@ test_that("derive_var_atoxgr Test 119a: DAIDS Methemoglobin (SI unit)", {
 
 ## Test 119b: DAIDS Methemoglobin (USCV unit) ----
 test_that("derive_var_atoxgr Test 119b: DAIDS Methemoglobin (USCV unit)", {
-
   actual_methi_daids <- derive_var_atoxgr_dir(
     input_methi_daids,
     new_var = ATOXGRH,
@@ -8976,7 +8949,6 @@ input_plated_daids_si <- expected_plated_daids_si %>%
 
 ## Test 121a: DAIDS Platelets decreased (SI unit) ----
 test_that("derive_var_atoxgr Test 121a: DAIDS Platelets decreased (SI unit)", {
-
   actual_plated_daids_si <- derive_var_atoxgr_dir(
     input_plated_daids_si,
     new_var = ATOXGRL,
@@ -9003,7 +8975,6 @@ input_plated_daids_cv <- expected_plated_daids_cv %>%
 
 ## Test 121b: DAIDS Platelets decreased (USCV unit) ----
 test_that("derive_var_atoxgr Test 121b: DAIDS Platelets decreased (USCV unit)", {
-
   actual_plated_daids_cv <- derive_var_atoxgr_dir(
     input_plated_daids_cv,
     new_var = ATOXGRL,
@@ -9031,7 +9002,6 @@ input_plated_daids_cv2 <- expected_plated_daids_cv2 %>%
 
 ## Test 121c: DAIDS Platelets decreased (legacy USCV unit) ----
 test_that("derive_var_atoxgr Test 121c: DAIDS Platelets decreased (legacy USCV unit)", {
-
   actual_plated_daids_cv2 <- derive_var_atoxgr_dir(
     input_plated_daids_cv2,
     new_var = ATOXGRL,

@@ -217,7 +217,6 @@ derive_var_atoxgr_dir <- function(dataset,
         # filter lab data using FILTER from metadata
         grade_this_filter <- grade_this_term %>%
           filter(eval(parse(text = meta_this_filter_uniq$FILTER[j])))
-
       } else {
         meta_this_filter <- meta_this_term
 
@@ -227,15 +226,13 @@ derive_var_atoxgr_dir <- function(dataset,
       # Within each TERM and FILTER check if there are UNITs to be applied
       # if UNIT not missing then loop through each UNIT for the TERM and FILTER already specified
       for (x in seq_along(meta_this_filter$UNIT_CHECK)) {
-
         if (!is.na(meta_this_filter$UNIT_CHECK[x])) {
-
           meta_this_filter_unit <- meta_this_filter %>%
             filter(UNIT_CHECK == meta_this_filter$UNIT_CHECK[x])
 
           grade_this_filter_unit <- grade_this_filter %>%
             filter(meta_this_filter_unit$UNIT_UPPER == toupper(!!get_unit_expr) |
-                     is.na(toupper(!!get_unit_expr)))
+              is.na(toupper(!!get_unit_expr)))
         } else {
           meta_this_filter_unit <- meta_this_filter
 
@@ -260,7 +257,7 @@ derive_var_atoxgr_dir <- function(dataset,
               is.na(meta_this_filter_unit$UNIT_UPPER),
             !!new_var := if_else(
               temp_flag, eval(parse(text = meta_this_filter_unit$GRADE_CRITERIA_CODE)), NA_character_
-              )
+            )
           ) %>%
           select(-temp_flag)
 
@@ -270,7 +267,7 @@ derive_var_atoxgr_dir <- function(dataset,
         if (!is.na(meta_this_filter$UNIT_CHECK[x])) {
           grade_this_filter <- grade_this_filter %>%
             filter(meta_this_filter_unit$UNIT_UPPER != toupper(!!get_unit_expr) &
-                     !is.na(meta_this_filter_unit$UNIT_UPPER))
+              !is.na(meta_this_filter_unit$UNIT_UPPER))
 
           if (x == length(meta_this_filter$UNIT_CHECK)) {
             out_data <- bind_rows(out_data, grade_this_filter)
@@ -280,7 +277,6 @@ derive_var_atoxgr_dir <- function(dataset,
       # remove lab data just graded from data still to be graded for the specified TERM
       grade_this_term <- grade_this_term %>%
         filter(!(eval(parse(text = meta_this_filter_unit$FILTER))))
-
     }
 
     # remove lab data with TERM just graded from data still to be graded
