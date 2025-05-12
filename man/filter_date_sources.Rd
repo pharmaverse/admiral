@@ -92,7 +92,7 @@ from a list of sources.
 The following steps are performed to create the output dataset:
 
 \enumerate{ \item For each source dataset the observations as specified by
-the \code{filter} element are selected. Then for each patient the first or last
+the \code{filter} element are selected. Then for each subject the first or last
 observation (with respect to \code{date}) is selected.
 
 \item The \code{ADT} variable is set to the variable specified by the
@@ -107,7 +107,7 @@ element.
 \item The selected observations of all source datasets are combined into a
 single dataset.
 
-\item For each patient the first or last observation (with respect to the
+\item For each subject the first or last observation (with respect to the
 \code{ADT} variable) from the single dataset is selected. }
 }
 \examples{
