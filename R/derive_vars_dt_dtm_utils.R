@@ -287,7 +287,6 @@ assert_dt_dtm_inputs <- function(new_vars_prefix, max_dates, min_dates, # nolint
                                  flag_imputation, flag_imputation_values,
                                  highest_imputation, highest_imputation_values,
                                  date_imputation = NULL) {
-
   assert_character_scalar(new_vars_prefix)
 
   assert_character_scalar(
@@ -369,8 +368,8 @@ assert_time_imputation <- function(highest_imputation, time_imputation) {
   } && highest_imputation != "n") {
     cli_abort(paste(
       "{.arg time_imputation} must be",
-      'one of {.val first}, {.val last}',
-      'or time specified as {.val hh:mm:ss}: e.g. {.val 12:00:00}'
+      "one of {.val first}, {.val last}",
+      "or time specified as {.val hh:mm:ss}: e.g. {.val 12:00:00}"
     ))
   }
 
@@ -381,8 +380,7 @@ assert_time_imputation <- function(highest_imputation, time_imputation) {
 assert_highest_imputation <- function(highest_imputation, highest_imputation_values,
                                       date_imputation = NULL,
                                       max_dates, min_dates # nolint: cyclocomp_linter
-                                      ) {
-
+) {
   # assert_vars(max_dates, optional = TRUE)
   # assert_vars(min_dates, optional = TRUE)
 
@@ -393,7 +391,7 @@ assert_highest_imputation <- function(highest_imputation, highest_imputation_val
   )
 
   if ((highest_imputation == "Y" && is.null(min_dates) && is.null(max_dates)) ||
-      (highest_imputation == "Y" && length(min_dates) == 0 && length(max_dates) == 0)) {
+    (highest_imputation == "Y" && length(min_dates) == 0 && length(max_dates) == 0)) {
     cli_abort(paste(
       "If {.code highest_imputation = \"Y\"} is specified, {.arg min_dates} or",
       "{.arg max_dates} must be specified respectively."
@@ -427,11 +425,14 @@ assert_highest_imputation <- function(highest_imputation, highest_imputation_val
 #' Internal helper function to convert a character vector of (possibly partial) dates (`dtc`)
 #' into complete dates based on a specified imputation rule (`date_imputation`).
 #'
-#' @param dtc A character vector of dates in ISO 8601 format (e.g., `"2022-12-15"`, `"2022-12"`, `"2022"`).
+#' @param dtc A character vector of dates in ISO 8601 format
+#' (e.g., `"2022-12-15"`, `"2022-12"`, `"2022"`).
 #' Partial dates are allowed.
 #'
-#' @param date_imputation A string specifying the imputation strategy to apply to incomplete dates.
-#' Accepts `"first"` (default) or `"last"` to impute to the first or last possible date, respectively.
+#' @param date_imputation A string specifying the imputation strategy to apply to
+#' incomplete dates.
+#' Accepts `"first"` (default) or `"last"` to impute to the first or last possible date,
+#' respectively.
 #'
 #' @return A character vector of fully imputed dates in `"YYYY-MM-DD"` format.
 #'
@@ -442,118 +443,75 @@ assert_highest_imputation <- function(highest_imputation, highest_imputation_val
 #' The function performs the following steps:
 #' - Validates and parses the input date strings.
 #' - Determines which components (year, month, day) are missing.
-#' - Applies the selected imputation rule (`"first"` or `"last"`) to fill in missing components.
+#' - Applies the selected imputation rule (`"first"` or `"last"`) to fill in
+#'  missing components.
 #' - Returns a fully qualified date or `NA` if imputation cannot be performed.
 #'
 #' @keywords internal
 #' @noRd
 get_dt_dtm_range <- function(dtc,
-                          date_imputation = "first",
-                          time_imputation = NULL) {
+                             date_imputation = "first",
+                             time_imputation = NULL) {
   assert_character_vector(dtc)
   valid_dtc <- is_valid_dtc(dtc)
   warn_if_invalid_dtc(dtc, valid_dtc)
 
-  imputation_levels <- c(
-    none = "n",
-    second = "s",
-    minute = "m",
-    hour = "h",
-    day = "D",
-    month = "M",
-    year = "Y"
-  )
-
   is_datetime <- !is.null(time_imputation)
 
-  highest_imputation <- imputation_levels[["year"]]
-  highest_imputation_level <- if (is_datetime) dtm_level(highest_imputation) else dt_level(highest_imputation)
+  highest_imputation_level <- get_highest_imputation_level(is_datetime, "Y")
 
   date_imputation <- assert_character_scalar(date_imputation, case_sensitive = FALSE)
   if (is_datetime) {
     time_imputation <- assert_character_scalar(time_imputation, case_sensitive = FALSE)
-    assert_time_imputation(highest_imputation = highest_imputation_level, time_imputation = time_imputation)
+    assert_time_imputation(highest_imputation = highest_imputation_level,
+                           time_imputation = time_imputation)
   }
 
-  if (length(dtc) == 0) return(character(0))
+  if (length(dtc) == 0) {
+    return(character(0))
+  }
 
   # Parse partials
-  partial <- if (is_datetime) {
-    get_partialdatetime(dtc)
-  } else {
-    extract_partial_date(dtc)
-  }
-
-
-
+  partial <- parse_partial_date_time(dtc, is_datetime)
   components <- names(partial)
 
   if (is_datetime) {
-    for (i in 2:6) {
-      partial[[i]] <- if_else(is.na(partial[[i - 1]]), NA_character_, partial[[i]])
-    }
+    partial <- propagate_na_values(partial)
   }
 
   target <- get_imputation_targets(partial, date_imputation, time_imputation, is_datetime)
+  target <- get_imputation_targets(partial, date_imputation, time_imputation, is_datetime)
 
-
-  for (component in components) {
-    # Determine the imputation level for this component
-    component_level <- if (is_datetime) {
-      dtm_level(imputation_levels[[component]])
-    } else {
-      dt_level(imputation_levels[[component]])
-    }
-
-    # Mask the target value if it's more detailed than allowed
-    if (highest_imputation_level < component_level) {
-      target[[component]] <- "xx"
-    }
-  }
-
-  imputed <- vector("list", length(components))
-  names(imputed) <- components
-  for (c in components) {
-    imputed[[c]] <- if_else(is.na(partial[[c]]), target[[c]], partial[[c]])
-  }
-
-  imputed_dtc <- if (is_datetime) {
-    paste0(
-      paste(imputed[["year"]], imputed[["month"]], imputed[["day"]], sep = "-"),
-      "T",
-      paste(imputed[["hour"]], imputed[["minute"]], imputed[["second"]], sep = ":")
-    )
-  } else {
-    paste(imputed[["year"]], imputed[["month"]], imputed[["day"]], sep = "-")
-  }
-
-  imputed_dtc <- if_else(str_detect(imputed_dtc, "x"), NA_character_, imputed_dtc)
+  imputed <- impute_values(partial, target, components)
+  imputed_dtc <- format_imputed_dtc(imputed, is_datetime)
 
   if (date_imputation == "last") {
-    imputed_dtc <- if_else(
-      is.na(partial[["day"]]),
-      if (is_datetime) {
-        strftime(
-          rollback(ymd_hms(imputed_dtc) + months(1)),
-          format = "%Y-%m-%dT%H:%M:%S",
-          tz = "UTC"
-        )
-      } else {
-        strftime(
-          rollback(ymd(imputed_dtc) + months(1)),
-          format = "%Y-%m-%d"
-        )
-      },
-      imputed_dtc
-    )
+    imputed_dtc <- adjust_last_day_imputation(imputed_dtc, partial, is_datetime)
   }
 
 
   return(imputed_dtc)
 }
 
-# Helper for extracting partial date (year, month, day)
-extract_partial_date <- function(dtc) {
+#' Extract Partial Date Components
+#'
+#' @description
+#' `r lifecycle::badge("stable")`
+#'
+#' This function extracts year, month, and day components from a vector of
+#' date strings.
+#'
+#' @param dtc A character vector of date strings to be parsed.
+#'
+#' @return A list with three elements: "year", "month", and "day", each containing
+#'   a character vector of the respective date components.
+#'
+#' @details
+#' The function uses regular expressions to extract date components. It handles
+#' partial dates and propagates NA values for missing higher-order components.
+#'
+#' @keywords internal
+get_partialdate <- function(dtc) {
   two <- "(\\d{2}|-?)"
   partialdate <- str_match(dtc, paste0("(\\d{4}|-?)-?", two, "-?", two))
   components <- c("year", "month", "day")
@@ -572,10 +530,41 @@ extract_partial_date <- function(dtc) {
   return(names_list)
 }
 
+#' Get Highest Imputation Level
+#'
+#' @description
+#' `r lifecycle::badge("stable")`
+#'
+#' Determines the highest imputation level based on whether it's a date or datetime.
+#'
+#' @param is_datetime A logical indicating whether the imputation is for a datetime.
+#' @param highest_imputation A character indicating the highest imputation level.
+#'
+#' @return An integer representing the highest imputation level.
+#'
+#' @keywords internal
+get_highest_imputation_level <- function(is_datetime, highest_imputation) {
+  if (is_datetime) dtm_level(highest_imputation) else dt_level(highest_imputation)
+}
 
-# Helper for getting imputation targets
+#' Get Imputation Targets
+#'
+#' @description
+#' `r lifecycle::badge("stable")`
+#'
+#' Determines the imputation targets for date and time components.
+#'
+#' @param partial A list of partial date/time components.
+#' @param date_imputation A character specifying the date imputation method.
+#' @param time_imputation A character specifying the time imputation method.
+#' @param is_datetime A logical indicating whether it's a datetime imputation.
+#'
+#' @return A list of imputation targets for date and (if applicable) time components.
+#'
+#' @keywords internal
 get_imputation_targets <- function(partial, date_imputation, time_imputation, is_datetime) {
-  target_date <- get_imputation_target_date(date_imputation = date_imputation, month = partial[["month"]])
+  target_date <- get_imputation_target_date(date_imputation = date_imputation,
+                                            month = partial[["month"]])
 
   if (is_datetime) {
     target_time <- get_imputation_target_time(time_imputation = time_imputation)
@@ -583,4 +572,172 @@ get_imputation_targets <- function(partial, date_imputation, time_imputation, is
   }
 
   return(target_date)
+}
+
+#' Adjust Last Day Imputation
+#'
+#' @description
+#' `r lifecycle::badge("stable")`
+#'
+#' Adjusts the imputed date/datetime to the last day of the month when necessary.
+#'
+#' @param imputed_dtc A character vector of imputed date/datetime strings.
+#' @param partial A list of partial date/time components.
+#' @param is_datetime A logical indicating whether it's a datetime adjustment.
+#'
+#' @return A character vector of adjusted date/datetime strings.
+#'
+#' @details
+#' This function is used when the date imputation method is set to "last" and
+#' the day component is missing. It adjusts the date to the last day of the month.
+#'
+#' @keywords internal
+#'
+#' @importFrom lubridate ymd_hms ymd rollback
+adjust_last_day_imputation <- function(imputed_dtc, partial, is_datetime) {
+  if_else(
+    is.na(partial[["day"]]),
+    if (is_datetime) {
+      strftime(
+        rollback(ymd_hms(imputed_dtc) + months(1)),
+        format = "%Y-%m-%dT%H:%M:%S",
+        tz = "UTC"
+      )
+    } else {
+      strftime(
+        rollback(ymd(imputed_dtc) + months(1)),
+        format = "%Y-%m-%d"
+      )
+    },
+    imputed_dtc
+  )
+}
+
+
+#' Impute Missing Values
+#'
+#' @description
+#' `r lifecycle::badge("stable")`
+#'
+#' Imputes missing values in partial date/time components using target values.
+#'
+#' @param partial A list of partial date/time components.
+#' @param target A list of target values for imputation.
+#' @param components A character vector of component names.
+#'
+#' @return A list of imputed date/time components.
+#'
+#' @keywords internal
+impute_values <- function(partial, target, components) {
+  imputed <- vector("list", length(components))
+  names(imputed) <- components
+  for (c in components) {
+    imputed[[c]] <- if_else(is.na(partial[[c]]), target[[c]], partial[[c]])
+  }
+  imputed
+}
+#' Mask Target Values
+#'
+#' @description
+#' `r lifecycle::badge("stable")`
+#'
+#' Masks target values based on the highest allowed imputation level.
+#'
+#' @param target A list of target values for imputation.
+#' @param components A character vector of component names.
+#' @param highest_imputation_level The highest allowed imputation level.
+#' @param is_datetime A logical indicating whether it's a datetime imputation.
+#'
+#' @return A list of masked target values.
+#'
+#' @keywords internal
+mask_target_values <- function(target, components, highest_imputation_level, is_datetime) {
+  imputation_levels <- c(
+    none = "n", second = "s", minute = "m", hour = "h",
+    day = "D", month = "M", year = "Y"
+  )
+
+  for (component in components) {
+    component_level <- if (is_datetime) {
+      dtm_level(imputation_levels[[component]])
+    } else {
+      dt_level(imputation_levels[[component]])
+    }
+
+    if (highest_imputation_level < component_level) {
+      target[[component]] <- "xx"
+    }
+  }
+  target
+}
+
+#' Format Imputed Date/DateTime
+#'
+#' @description
+#' `r lifecycle::badge("stable")`
+#'
+#' Formats imputed date/datetime components into a string representation.
+#'
+#' @param imputed A list of imputed date/time components.
+#' @param is_datetime A logical indicating whether it's a datetime format.
+#'
+#' @return A character vector of formatted date/datetime strings.
+#'
+#' @details
+#' The function formats the imputed components into "YYYY-MM-DD" for dates
+#' and "YYYY-MM-DDTHH:MM:SS" for datetimes. It replaces any string containing
+#' 'x' with NA.
+#'
+#' @keywords internal
+format_imputed_dtc <- function(imputed, is_datetime) {
+  if (is_datetime) {
+    dtc <- paste0(
+      paste(imputed[["year"]], imputed[["month"]], imputed[["day"]], sep = "-"),
+      "T",
+      paste(imputed[["hour"]], imputed[["minute"]], imputed[["second"]], sep = ":")
+    )
+  } else {
+    dtc <- paste(imputed[["year"]], imputed[["month"]], imputed[["day"]], sep = "-")
+  }
+  if_else(str_detect(dtc, "x"), NA_character_, dtc)
+}
+
+propagate_na_values <- function(partial) {
+  for (i in 2:6) {
+    partial[[i]] <- if_else(is.na(partial[[i - 1]]), NA_character_, partial[[i]])
+  }
+  partial
+}
+
+#' Parse Partial Date or DateTime
+#'
+#' @description
+#' `r lifecycle::badge("stable")`
+#'
+#' This function parses a vector of date or datetime strings into their component
+#' parts.
+#'
+#' @param dtc A character vector of date or datetime strings to be parsed.
+#' @param is_datetime A logical value indicating whether the input strings include
+#' time information.
+#'
+#' @return A list of character vectors, each representing a component of the date
+#' or datetime.
+#'   For dates, the components are "year", "month", and "day".
+#'   For datetimes, the components also include "hour", "minute", and "second".
+#'
+#' @details
+#' The function uses different parsing methods depending on whether the input is
+#'  a date or a datetime:
+#' - For dates, it calls `extract_partialdate()`.
+#' - For datetimes, it calls `get_partialdatetime()`.
+#'
+#' @keywords internal
+#'
+parse_partial_date_time <- function(dtc, is_datetime) {
+  if (is_datetime) {
+    get_partialdatetime(dtc)
+  } else {
+    get_partialdate(dtc)
+  }
 }
