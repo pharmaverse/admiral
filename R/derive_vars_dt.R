@@ -427,7 +427,6 @@ impute_dtc_dt <- function(dtc,
     month = "M",
     year = "Y"
   )
-  assert_character_scalar(highest_imputation, values = imputation_levels)
 
   assert_highest_imputation(
     highest_imputation = highest_imputation,

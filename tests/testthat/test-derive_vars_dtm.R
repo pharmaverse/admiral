@@ -262,34 +262,28 @@ test_that("impute_dtc_dtm Test 11: max_dates length mismatch provides error", {
         c(ymd_hms("2020-12-06T12:12:12")),
         c(ymd_hms("2020-11-11T11:11:11"))
       ),
-      highest_imputation = "Y"
+      highest_imputation = "Y",
+      date_imputation = "last"
     ),
     "Length of `max_dates` do not match length of dates to be imputed."
   )
 })
 
-## Test 12: Warning if null min/max_dates when highest_imputation = Y ----
-test_that("impute_dtc_dtm Test 12: Warning if null min/max_dates when highest_imputation = Y", {
-  expect_warning(
+## Test 12: Error if null min/max_dates when highest_imputation = Y ----
+test_that("impute_dtc_dtm Test 12: Error if null min/max_dates when highest_imputation = Y", {
+  expect_error(
     impute_dtc_dtm(
       c("2020-12", NA_character_),
       highest_imputation = "Y"
     ),
-    "If `highest_imputation` = \"Y\" is specified, `min_dates` or `max_dates` should be specified respectively." # nolint
+    'If `highest_imputation = "Y"` is specified, `min_dates` or `max_dates` must be specified respectively.' # nolint
   )
 })
 
 ## Test 13: wrong input to `date_imputation` ----
 test_that("impute_dtc_dtm Test 13: wrong input to `date_imputation`", {
-  # impossible month 13
-  expect_snapshot(
-    impute_dtc_dtm(
-      dtc = c("2020-12", "2020-11", NA_character_, "2020-02-02"),
-      highest_imputation = "Y",
-      date_imputation = "last",
-      time_imputation = "last"
-    )
-  )
+
+  # date imputation is not a key when highest_imputation is "D"
   expect_snapshot(
     impute_dtc_dtm(
       dtc = c("2020-12", "2020-11", NA_character_, "2020-02-02"),
@@ -490,6 +484,7 @@ test_that("derive_vars_dtm Test 18: default behavior", {
   )
 
   actual_output <- derive_vars_dtm(
+    highest_imputation = "h",
     input,
     new_vars_prefix = "AST",
     dtc = XXSTDTC

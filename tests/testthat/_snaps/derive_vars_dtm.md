@@ -2,18 +2,6 @@
 
     Code
       impute_dtc_dtm(dtc = c("2020-12", "2020-11", NA_character_, "2020-02-02"),
-      highest_imputation = "Y", date_imputation = "last", time_imputation = "last")
-    Condition
-      Warning:
-      If `highest_imputation` = "Y" is specified, `min_dates` or `max_dates` should be specified respectively.
-    Output
-      [1] "2020-12-31T23:59:59" "2020-11-30T23:59:59" "9999-12-31T23:59:59"
-      [4] "2020-02-02T23:59:59"
-
----
-
-    Code
-      impute_dtc_dtm(dtc = c("2020-12", "2020-11", NA_character_, "2020-02-02"),
       highest_imputation = "D", date_imputation = "15", time_imputation = "last")
     Condition
       Error in `assert_date_imputation()`:
@@ -54,8 +42,8 @@
         "2020"), highest_imputation = "Y", date_imputation = "2020-02-02",
       time_imputation = "last")
     Condition
-      Error in `assert_date_imputation()`:
-      ! Argument `date_imputation` must be equal to one of "first" or "last".
+      Error in `assert_highest_imputation()`:
+      ! If `highest_imputation = "Y"` is specified, `min_dates` or `max_dates` must be specified respectively.
 
 ---
 

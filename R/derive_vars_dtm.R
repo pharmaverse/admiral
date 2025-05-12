@@ -469,7 +469,16 @@ impute_dtc_dtm <- function(dtc,
     month = "M",
     year = "Y"
   )
-  assert_character_scalar(highest_imputation, values = imputation_levels)
+
+  assert_highest_imputation(
+    highest_imputation = highest_imputation,
+    highest_imputation_values = imputation_levels,
+    date_imputation = date_imputation,
+    min_dates = min_dates,
+    max_dates = max_dates
+  )
+
+
   highest_imputation <- dtm_level(highest_imputation)
   date_imputation <-
     assert_character_scalar(
@@ -597,28 +606,19 @@ restrict_imputed_dtc_dtm <- function(dtc,
                                      min_dates,
                                      max_dates) {
   if (!(is.null(min_dates) || length(min_dates) == 0) ||
-    !(is.null(max_dates) || length(max_dates) == 0)) {
-    suppress_warning(
-      { # nolint
-        # determine range of possible dates
-        min_dtc <-
-          impute_dtc_dtm(
-            dtc,
-            highest_imputation = "Y",
-            date_imputation = "first",
-            time_imputation = "first"
-          )
-        max_dtc <-
-          impute_dtc_dtm(
-            dtc,
-            highest_imputation = "Y",
-            date_imputation = "last",
-            time_imputation = "last"
-          )
-      },
-      # Suppress warning because we need to run without min/max dates but users should not
-      regexpr = "If `highest_imputation` = \"Y\" is specified, `min_dates` or `max_dates` should be specified respectively." # nolint
-    )
+      !(is.null(max_dates) || length(max_dates) == 0)) {
+    min_dtc <-
+      get_dtm_range(
+        dtc,
+        date_imputation = "first",
+        time_imputation = "first"
+      )
+    max_dtc <-
+      get_dtm_range(
+        dtc,
+        date_imputation = "last",
+        time_imputation = "last"
+      )
   }
   if (!(is.null(min_dates) || length(min_dates) == 0)) {
     if (length(unique(c(length(imputed_dtc), unlist(lapply(min_dates, length))))) != 1) {

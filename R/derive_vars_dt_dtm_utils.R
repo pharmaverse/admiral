@@ -298,7 +298,7 @@ assert_dt_dtm_inputs <- function(new_vars_prefix, max_dates, min_dates, # nolint
 
   assert_highest_imputation(
     highest_imputation = highest_imputation,
-    highest_imputation_values = c("Y", "M", "D", "n"),
+    highest_imputation_values = highest_imputation_values,
     date_imputation = date_imputation,
     min_dates = min_dates,
     max_dates = max_dates
@@ -389,7 +389,7 @@ assert_highest_imputation <- function(highest_imputation, highest_imputation_val
   assert_character_scalar(
     highest_imputation,
     values = highest_imputation_values,
-    case_sensitive = FALSE # not sure
+    case_sensitive = TRUE # not sure
   )
 
   if ((highest_imputation == "Y" && is.null(min_dates) && is.null(max_dates)) ||
@@ -526,6 +526,118 @@ get_date_range <- function(dtc,
         strftime(
           rollback(ymd(imputed_dtc) + months(1)),
           format = "%Y-%m-%d"
+        ),
+        imputed_dtc
+      )
+  }
+
+  return(imputed_dtc)
+}
+
+
+get_dtm_range <- function(dtc,
+                           date_imputation = "first",
+                           time_imputation = NULL
+                          ) {
+
+  highest_imputation <- "Y"
+
+  # Check arguments ----
+  assert_character_vector(dtc)
+  valid_dtc <- is_valid_dtc(dtc)
+  warn_if_invalid_dtc(dtc, valid_dtc)
+
+  imputation_levels <- c(
+    none = "n",
+    second = "s",
+    minute = "m",
+    hour = "h",
+    day = "D",
+    month = "M",
+    year = "Y"
+  )
+  highest_imputation <- dtm_level(highest_imputation)
+  date_imputation <-
+    assert_character_scalar(
+      date_imputation,
+      case_sensitive = FALSE
+    )
+  # the `assert_date_imputation` function is stored in `derive_vars_dt_dtm_utils.R`
+  assert_date_imputation(
+    highest_imputation = highest_imputation,
+    date_imputation = date_imputation
+  )
+  time_imputation <-
+    assert_character_scalar(
+      time_imputation,
+      case_sensitive = FALSE
+    )
+  # the `assert_time_imputation` function is stored in `derive_vars_dt_dtm_utils.R`
+  assert_time_imputation(
+    highest_imputation = highest_imputation,
+    time_imputation = time_imputation
+  )
+
+
+  if (length(dtc) == 0) {
+    return(vector("character"))
+  }
+
+  # Parse character date ----
+  partial <- get_partialdatetime(dtc)
+  components <- names(partial)
+
+  # Handle preserve argument ----
+
+  for (i in 2:6) {
+    partial[[i]] <- if_else(is.na(partial[[i - 1]]), NA_character_, partial[[i]])
+  }
+
+  # Determine target components ----
+  target_date <- get_imputation_target_date(
+    date_imputation = date_imputation,
+    month = partial[["month"]]
+  )
+  target_time <- get_imputation_target_time(
+    time_imputation = time_imputation
+  )
+  target <- c(target_date, target_time)
+
+  for (c in components) {
+    if (highest_imputation < dtm_level(imputation_levels[[c]])) {
+      target[[c]] <- "xx"
+    }
+  }
+
+  # Impute ----
+  imputed <- vector("list", 6)
+  names(imputed) <- components
+  for (c in components) {
+    imputed[[c]] <- if_else(is.na(partial[[c]]), target[[c]], partial[[c]])
+  }
+
+  imputed_dtc <-
+    paste0(
+      paste(imputed[["year"]], imputed[["month"]], imputed[["day"]], sep = "-"),
+      "T",
+      paste(imputed[["hour"]], imputed[["minute"]], imputed[["second"]], sep = ":")
+    )
+
+  imputed_dtc <-
+    if_else(
+      str_detect(imputed_dtc, "x"),
+      NA_character_,
+      imputed_dtc
+    )
+
+  if (date_imputation == "last") {
+    imputed_dtc <-
+      if_else(
+        is.na(partial[["day"]]),
+        strftime(
+          rollback(ymd_hms(imputed_dtc) + months(1)),
+          format = "%Y-%m-%dT%H:%M:%S",
+          tz = "UTC"
         ),
         imputed_dtc
       )
