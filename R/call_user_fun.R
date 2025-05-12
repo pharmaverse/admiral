@@ -29,7 +29,7 @@ call_user_fun <- function(call) {
   deprecate_inform(
     when = "1.3.0",
     what = "call_user_fun()",
-    details = ""
+    details = "`call_user_fun()` is no longer in use;  The original code for this function is here: https://github.com/pharmaverse/admiral/blob/a49e84143379f921ef4e10ab546a09648d76f4ec/R/call_user_fun.R#L26-L39"
   )
   tryCatch(
     eval_tidy(call),
