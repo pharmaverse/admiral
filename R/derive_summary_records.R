@@ -4,12 +4,12 @@
 #' It is not uncommon to have an analysis need whereby one needs to derive an
 #' analysis value (`AVAL`) from multiple records. The ADaM basic dataset
 #' structure variable `DTYPE` is available to indicate when a new derived
-#' records has been added to a dataset.
+#' records has been added to a dataset, if the derivation deviates from the
+#' standard derivation of the parameter.
 #'
 #' @details
-#' When all records have same values within `by_vars` then this function will
-#' retain those common values in the newly derived records. Otherwise new value
-#' will be set to `NA`.
+#' For the newly derived records, only variables specified within `by_vars` or
+#' `set_values_to` will be populated. All other variables will be set to `NA`.
 #'
 #' @param dataset `r roxygen_param_dataset()`
 #'
@@ -83,44 +83,88 @@
 #' @family der_prm_bds_findings
 #' @keywords der_prm_bds_findings
 #'
-#' @seealso [get_summary_records()], [derive_var_merged_summary()]
+#' @seealso [derive_var_merged_summary()]
 #'
 #' @export
 #'
-#' @examples
-#' library(tibble)
-#' library(dplyr)
+#' @examplesx
+#'
+#' @caption Data setup
+#'
+#' @info The following examples use the ECG dataset below as a basis.
+#'
+#' @code
+#' library(tibble, warn.conflicts = FALSE)
+#' library(dplyr, warn.conflicts = FALSE)
 #'
 #' adeg <- tribble(
-#'   ~USUBJID,   ~EGSEQ, ~PARAM,             ~AVISIT,    ~EGDTC,             ~AVAL, ~TRTA,
-#'   "XYZ-1001", 1,      "QTcF Int. (msec)", "Baseline", "2016-02-24T07:50", 385,   NA_character_,
-#'   "XYZ-1001", 2,      "QTcF Int. (msec)", "Baseline", "2016-02-24T07:52", 399,   NA_character_,
-#'   "XYZ-1001", 3,      "QTcF Int. (msec)", "Baseline", "2016-02-24T07:56", 396,   NA_character_,
-#'   "XYZ-1001", 4,      "QTcF Int. (msec)", "Visit 2",  "2016-03-08T09:45", 384,   "Placebo",
-#'   "XYZ-1001", 5,      "QTcF Int. (msec)", "Visit 2",  "2016-03-08T09:48", 393,   "Placebo",
-#'   "XYZ-1001", 6,      "QTcF Int. (msec)", "Visit 2",  "2016-03-08T09:51", 388,   "Placebo",
-#'   "XYZ-1001", 7,      "QTcF Int. (msec)", "Visit 3",  "2016-03-22T10:45", 385,   "Placebo",
-#'   "XYZ-1001", 8,      "QTcF Int. (msec)", "Visit 3",  "2016-03-22T10:48", 394,   "Placebo",
-#'   "XYZ-1001", 9,      "QTcF Int. (msec)", "Visit 3",  "2016-03-22T10:51", 402,   "Placebo",
-#'   "XYZ-1002", 1,      "QTcF Int. (msec)", "Baseline", "2016-02-22T07:58", 399,   NA_character_,
-#'   "XYZ-1002", 2,      "QTcF Int. (msec)", "Baseline", "2016-02-22T07:58", 410,   NA_character_,
-#'   "XYZ-1002", 3,      "QTcF Int. (msec)", "Baseline", "2016-02-22T08:01", 392,   NA_character_,
-#'   "XYZ-1002", 4,      "QTcF Int. (msec)", "Visit 2",  "2016-03-06T09:50", 401,   "Active 20mg",
-#'   "XYZ-1002", 5,      "QTcF Int. (msec)", "Visit 2",  "2016-03-06T09:53", 407,   "Active 20mg",
-#'   "XYZ-1002", 6,      "QTcF Int. (msec)", "Visit 2",  "2016-03-06T09:56", 400,   "Active 20mg",
-#'   "XYZ-1002", 7,      "QTcF Int. (msec)", "Visit 3",  "2016-03-24T10:50", 412,   "Active 20mg",
-#'   "XYZ-1002", 8,      "QTcF Int. (msec)", "Visit 3",  "2016-03-24T10:53", 414,   "Active 20mg",
-#'   "XYZ-1002", 9,      "QTcF Int. (msec)", "Visit 3",  "2016-03-24T10:56", 402,   "Active 20mg"
+#'   ~USUBJID,   ~PARAM,             ~AVISIT,    ~EGDTC,             ~AVAL,
+#'   "XYZ-1001", "QTcF Int. (msec)", "Baseline", "2016-02-24T07:50", 385,
+#'   "XYZ-1001", "QTcF Int. (msec)", "Baseline", "2016-02-24T07:52", 399,
+#'   "XYZ-1001", "QTcF Int. (msec)", "Baseline", "2016-02-24T07:56", 396,
+#'   "XYZ-1001", "QTcF Int. (msec)", "Visit 2",  "2016-03-08T09:48", 393,
+#'   "XYZ-1001", "QTcF Int. (msec)", "Visit 2",  "2016-03-08T09:51", 388,
+#'   "XYZ-1001", "QTcF Int. (msec)", "Visit 3",  "2016-03-22T10:48", 394,
+#'   "XYZ-1001", "QTcF Int. (msec)", "Visit 3",  "2016-03-22T10:51", 402,
+#'   "XYZ-1002", "QTcF Int. (msec)", "Baseline", "2016-02-22T07:58", 399,
+#'   "XYZ-1002", "QTcF Int. (msec)", "Baseline", "2016-02-22T07:58", 200,
+#'   "XYZ-1002", "QTcF Int. (msec)", "Baseline", "2016-02-22T08:01", 392,
+#'   "XYZ-1002", "QTcF Int. (msec)", "Visit 3",  "2016-03-24T10:53", 414,
+#'   "XYZ-1002", "QTcF Int. (msec)", "Visit 3",  "2016-03-24T10:56", 402
 #' ) %>%
-#'   mutate(
-#'     ADTM = convert_dtc_to_dtm(EGDTC)
-#'   )
+#'   mutate(ADTM = convert_dtc_to_dtm(EGDTC))
 #'
-#' # Summarize the average of the triplicate ECG interval values (AVAL)
+#' @caption Summarize one or more variables using summary functions
+#'
+#' @info A derived record is generated for each subject, containing the mean of the triplicate ECG
+#' interval values (`AVAL`) and the latest measurement's time (`ADTM`) by using summary functions
+#' within the `set_values_to` argument.
+#'
+#' @code
 #' derive_summary_records(
 #'   adeg,
 #'   dataset_add = adeg,
 #'   by_vars = exprs(USUBJID, PARAM, AVISIT),
+#'   set_values_to = exprs(
+#'     AVAL = mean(AVAL, na.rm = TRUE),
+#'     ADTM = max(ADTM),
+#'     DTYPE = "AVERAGE"
+#'   )
+#' ) %>%
+#'   arrange(USUBJID, AVISIT)
+#'
+#' @info Functions such as `all()` and `any()` are also often useful when creating
+#' summary records. For instance, the above example can be extended to flag which derived
+#' records were affected by outliers. Note that the outlier flag is created before `AVAL`
+#' is set for the summary record. Otherwise, referencing `AVAL` later on would pick up the
+#' `AVAL` from the summary record rather than the source records.
+#'
+#' @code
+#' derive_summary_records(
+#'   adeg,
+#'   dataset_add = adeg,
+#'   by_vars = exprs(USUBJID, PARAM, AVISIT),
+#'   set_values_to = exprs(
+#'     OUTLIEFL = if_else(any(AVAL >= 500 | AVAL <= 300), "Y", "N"),
+#'     AVAL = mean(AVAL, na.rm = TRUE),
+#'     ADTM = max(ADTM),
+#'     DTYPE = "AVERAGE"
+#'   )
+#' ) %>%
+#'   arrange(USUBJID, AVISIT)
+#'
+#' @caption Restricting source records (`filter_add`)
+#'
+#' @info The `filter_add` argument can be used to restrict the records that are being summarized.
+#' For instance, the mean of the triplicates above can be computed only for the baseline records
+#' by passing `filter_add = AVISIT == "Baseline"`.
+#'
+#' @code
+#' derive_summary_records(
+#'   adeg,
+#'   dataset_add = adeg,
+#'   by_vars = exprs(USUBJID, PARAM, AVISIT),
+#'   filter_add = AVISIT == "Baseline",
 #'   set_values_to = exprs(
 #'     AVAL = mean(AVAL, na.rm = TRUE),
 #'     DTYPE = "AVERAGE"
@@ -128,41 +172,12 @@
 #' ) %>%
 #'   arrange(USUBJID, AVISIT)
 #'
-#' # Derive more than one summary variable
-#' derive_summary_records(
-#'   adeg,
-#'   dataset_add = adeg,
-#'   by_vars = exprs(USUBJID, PARAM, AVISIT),
-#'   set_values_to = exprs(
-#'     AVAL = mean(AVAL),
-#'     ADTM = max(ADTM),
-#'     DTYPE = "AVERAGE"
-#'   )
-#' ) %>%
-#'   arrange(USUBJID, AVISIT) %>%
-#'   select(-EGSEQ, -TRTA)
+#' @info Summary functions can also be used within `filter_add` to filter based on conditions
+#' applied to the whole of the by group specified in `by_vars`. For instance, the mean of
+#' the triplicates can be computed only for by groups  which do indeed contain three records
+#' by passing `filter_add = n() > 2`.
 #'
-#' # Sample ADEG dataset with triplicate record for only AVISIT = 'Baseline'
-#' adeg <- tribble(
-#'   ~USUBJID,   ~EGSEQ, ~PARAM,             ~AVISIT,    ~EGDTC,             ~AVAL, ~TRTA,
-#'   "XYZ-1001", 1,      "QTcF Int. (msec)", "Baseline", "2016-02-24T07:50", 385,   NA_character_,
-#'   "XYZ-1001", 2,      "QTcF Int. (msec)", "Baseline", "2016-02-24T07:52", 399,   NA_character_,
-#'   "XYZ-1001", 3,      "QTcF Int. (msec)", "Baseline", "2016-02-24T07:56", 396,   NA_character_,
-#'   "XYZ-1001", 4,      "QTcF Int. (msec)", "Visit 2",  "2016-03-08T09:48", 393,   "Placebo",
-#'   "XYZ-1001", 5,      "QTcF Int. (msec)", "Visit 2",  "2016-03-08T09:51", 388,   "Placebo",
-#'   "XYZ-1001", 6,      "QTcF Int. (msec)", "Visit 3",  "2016-03-22T10:48", 394,   "Placebo",
-#'   "XYZ-1001", 7,      "QTcF Int. (msec)", "Visit 3",  "2016-03-22T10:51", 402,   "Placebo",
-#'   "XYZ-1002", 1,      "QTcF Int. (msec)", "Baseline", "2016-02-22T07:58", 399,   NA_character_,
-#'   "XYZ-1002", 2,      "QTcF Int. (msec)", "Baseline", "2016-02-22T07:58", 410,   NA_character_,
-#'   "XYZ-1002", 3,      "QTcF Int. (msec)", "Baseline", "2016-02-22T08:01", 392,   NA_character_,
-#'   "XYZ-1002", 4,      "QTcF Int. (msec)", "Visit 2",  "2016-03-06T09:53", 407,   "Active 20mg",
-#'   "XYZ-1002", 5,      "QTcF Int. (msec)", "Visit 2",  "2016-03-06T09:56", 400,   "Active 20mg",
-#'   "XYZ-1002", 6,      "QTcF Int. (msec)", "Visit 3",  "2016-03-24T10:53", 414,   "Active 20mg",
-#'   "XYZ-1002", 7,      "QTcF Int. (msec)", "Visit 3",  "2016-03-24T10:56", 402,   "Active 20mg"
-#' )
-#'
-#' # Compute the average of AVAL only if there are more than 2 records within the
-#' # by group
+#' @code
 #' derive_summary_records(
 #'   adeg,
 #'   dataset_add = adeg,
@@ -174,6 +189,46 @@
 #'   )
 #' ) %>%
 #'   arrange(USUBJID, AVISIT)
+#'
+#' @caption Adding records for groups not in source (`dataset_ref` and `missing_values`)
+#'
+#' @info Adding records for groups which are not in the source data can be achieved by
+#' specifying a reference dataset in the `dataset_ref` argument. For example, specifying
+#' the input dataset `adeg_allparamvis` (containing an extra `"Visit 2"` for patient
+#' `1002`) ensures a summary record is derived for that visit as well. For these records,
+#' the values of the analysis variables to be populated should be specified within the
+#' `missing_values` argument. Here, `DTYPE = "PHANTOM"` was chosen as `AVAL` is set to
+#' missing.
+#'
+#' @code
+#' adeg_allparamvis <- tribble(
+#'   ~USUBJID,   ~PARAM,             ~AVISIT,
+#'   "XYZ-1001", "QTcF Int. (msec)", "Baseline",
+#'   "XYZ-1001", "QTcF Int. (msec)", "Visit 2",
+#'   "XYZ-1001", "QTcF Int. (msec)", "Visit 3",
+#'   "XYZ-1002", "QTcF Int. (msec)", "Baseline",
+#'   "XYZ-1002", "QTcF Int. (msec)", "Visit 2",
+#'   "XYZ-1002", "QTcF Int. (msec)", "Visit 3"
+#' )
+#'
+#' derive_summary_records(
+#'   adeg,
+#'   dataset_add = adeg,
+#'   dataset_ref = adeg_allparamvis,
+#'   by_vars = exprs(USUBJID, PARAM, AVISIT),
+#'   set_values_to = exprs(
+#'     AVAL = mean(AVAL, na.rm = TRUE),
+#'     ADTM = max(ADTM),
+#'     DTYPE = "AVERAGE"
+#'   ),
+#'   missing_values = exprs(
+#'     AVAL = NA,
+#'     ADTM = NA,
+#'     DTYPE = "PHANTOM"
+#'   )
+#' ) %>%
+#'   arrange(USUBJID, AVISIT)
+
 derive_summary_records <- function(dataset = NULL,
                                    dataset_add,
                                    dataset_ref = NULL,
