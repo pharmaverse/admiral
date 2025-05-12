@@ -26,7 +26,7 @@ A \code{dt_level} object is an ordered factor, i.e., two objects can be
 compared.
 }
 \seealso{
-Utilities used for date imputation:
+Utilities used for date imputation: 
 \code{\link{dtm_level}()},
 \code{\link{get_imputation_target_date}()},
 \code{\link{get_imputation_target_time}()},

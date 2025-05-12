@@ -483,7 +483,7 @@ filter_joined(
 \seealso{
 \code{\link[=count_vals]{count_vals()}}, \code{\link[=min_cond]{min_cond()}}, \code{\link[=max_cond]{max_cond()}}
 
-Utilities for Filtering Observations:
+Utilities for Filtering Observations: 
 \code{\link{count_vals}()},
 \code{\link{filter_exist}()},
 \code{\link{filter_extreme}()},

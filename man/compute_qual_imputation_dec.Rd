@@ -31,7 +31,7 @@ Derive an imputed value
 compute_qual_imputation_dec("<40.1")
 }
 \seealso{
-BDS-Findings Functions that returns a vector:
+BDS-Findings Functions that returns a vector: 
 \code{\link{compute_bmi}()},
 \code{\link{compute_bsa}()},
 \code{\link{compute_egfr}()},

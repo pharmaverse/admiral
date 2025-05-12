@@ -62,7 +62,7 @@ if (interactive()) {
 }
 }
 \seealso{
-Utilities used for examples and template scripts:
+Utilities used for examples and template scripts: 
 \code{\link{list_all_templates}()}
 }
 \concept{utils_examples}

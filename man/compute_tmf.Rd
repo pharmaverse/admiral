@@ -55,7 +55,7 @@ compute_tmf(dtc = "2022-05--T23:59:00", dtm = ymd_hms("2022-05-15T23:59:59"))
 
 }
 \seealso{
-Date/Time Computation Functions that returns a vector:
+Date/Time Computation Functions that returns a vector: 
 \code{\link{compute_age_years}()},
 \code{\link{compute_dtf}()},
 \code{\link{compute_duration}()},

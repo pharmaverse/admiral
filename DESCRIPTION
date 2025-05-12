@@ -1,7 +1,7 @@
 Type: Package
 Package: admiral
 Title: ADaM in R Asset Library
-Version: 1.2.0.9022
+Version: 1.2.0.9020
 Authors@R: c(
     person("Ben", "Straub", , "ben.x.straub@gsk.com", role = c("aut", "cre")),
     person("Stefan", "Bundfuss", role = "aut",
@@ -78,4 +78,4 @@ Language: en-US
 LazyData: true
 Roxygen: list(markdown = TRUE, roclets = c("collate", "namespace",
     "admiraldev::rdx_roclet"))
-RoxygenNote: 7.3.2.9000
+RoxygenNote: 7.3.2

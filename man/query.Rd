@@ -150,7 +150,7 @@ query(
 \seealso{
 \code{\link[=create_query_data]{create_query_data()}}, \code{\link[=basket_select]{basket_select()}}, \href{../articles/queries_dataset.html}{Queries Dataset Documentation}
 
-Source Objects:
+Source Objects: 
 \code{\link{basket_select}()},
 \code{\link{censor_source}()},
 \code{\link{death_event}},
