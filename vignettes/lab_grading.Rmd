@@ -310,7 +310,7 @@ of `{admiral}`.
 atoxgr_criteria_ctcv4 %>%
   filter(!is.na(UNIT_CHECK)) %>%
   dataset_vignette(
-    display_vars = exprs(TERM, SUNIT_CHECK),
+    display_vars = exprs(TERM, UNIT_CHECK),
   )
 ```
 <br>
