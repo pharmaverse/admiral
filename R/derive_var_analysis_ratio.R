@@ -26,6 +26,8 @@
 #' `new_var` argument. Also, values of 0 in the denominator will return `NA` in
 #' the derivation.
 #'
+#' Note that `R2AyHI` and `R2AyLO` can also be derived using this function.
+#'
 #' Reference CDISC ADaM Implementation Guide
 #' Version 1.1 Section 3.3.4 Analysis Parameter Variables for BDS Datasets
 #'
