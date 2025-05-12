@@ -4199,7 +4199,7 @@ test_that("derive_var_atoxgr Test 70b: CTCAEv5 Hypocalcemia (USCV unit)", {
 ### Grade 1: <LLN - 1.0 mmol/L
 
 ### CV unit is mg/dL
-### mg/dL = 4 * mmol/L
+### mg/dL is 4 x mmol/L
 
 
 expected_caliond_si <- tibble::tribble(
