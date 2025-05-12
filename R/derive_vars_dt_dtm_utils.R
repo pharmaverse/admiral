@@ -481,20 +481,10 @@ get_dt_dtm_range <- function(dtc,
   partial <- if (is_datetime) {
     get_partialdatetime(dtc)
   } else {
-    two <- "(\\d{2}|-?)"
-    partialdate <- str_match(dtc, paste0("(\\d{4}|-?)-?", two, "-?", two))
-    components <- c("year", "month", "day")
-    names_list <- vector("list", 3)
-    names(names_list) <- components
-    for (i in seq_along(components)) {
-      names_list[[i]] <- partialdate[, i + 1]
-      names_list[[i]] <- if_else(names_list[[i]] %in% c("-", ""), NA_character_, names_list[[i]])
-    }
-    for (i in 2:3) {
-      names_list[[i]] <- if_else(is.na(names_list[[i - 1]]), NA_character_, names_list[[i]])
-    }
-    names_list
+    extract_partial_date(dtc)
   }
+
+
 
   components <- names(partial)
 
@@ -504,22 +494,20 @@ get_dt_dtm_range <- function(dtc,
     }
   }
 
-  # Imputation targets
-  target_date <- get_imputation_target_date(
-    date_imputation = date_imputation,
-    month = partial[["month"]]
-  )
+  target <- get_imputation_targets(partial, date_imputation, time_imputation, is_datetime)
 
-  if (is_datetime) {
-    target_time <- get_imputation_target_time(time_imputation = time_imputation)
-    target <- c(target_date, target_time)
-  } else {
-    target <- target_date
-  }
 
-  for (c in components) {
-    if (highest_imputation_level < (if (is_datetime) dtm_level(imputation_levels[[c]]) else dt_level(imputation_levels[[c]]))) {
-      target[[c]] <- "xx"
+  for (component in components) {
+    # Determine the imputation level for this component
+    component_level <- if (is_datetime) {
+      dtm_level(imputation_levels[[component]])
+    } else {
+      dt_level(imputation_levels[[component]])
+    }
+
+    # Mask the target value if it's more detailed than allowed
+    if (highest_imputation_level < component_level) {
+      target[[component]] <- "xx"
     }
   }
 
@@ -560,5 +548,39 @@ get_dt_dtm_range <- function(dtc,
     )
   }
 
+
   return(imputed_dtc)
+}
+
+# Helper for extracting partial date (year, month, day)
+extract_partial_date <- function(dtc) {
+  two <- "(\\d{2}|-?)"
+  partialdate <- str_match(dtc, paste0("(\\d{4}|-?)-?", two, "-?", two))
+  components <- c("year", "month", "day")
+  names_list <- setNames(vector("list", length(components)), components)
+
+  for (i in seq_along(components)) {
+    x <- partialdate[, i + 1]
+    x[x %in% c("-", "")] <- NA_character_
+    names_list[[i]] <- x
+  }
+
+  for (i in 2:3) {
+    names_list[[i]] <- if_else(is.na(names_list[[i - 1]]), NA_character_, names_list[[i]])
+  }
+
+  return(names_list)
+}
+
+
+# Helper for getting imputation targets
+get_imputation_targets <- function(partial, date_imputation, time_imputation, is_datetime) {
+  target_date <- get_imputation_target_date(date_imputation = date_imputation, month = partial[["month"]])
+
+  if (is_datetime) {
+    target_time <- get_imputation_target_time(time_imputation = time_imputation)
+    return(c(target_date, target_time))
+  }
+
+  return(target_date)
 }
