@@ -5,7 +5,7 @@
 \alias{atoxgr_criteria_daids_uscv}
 \title{Metadata Holding Grading Criteria for DAIDs using USCV unit where applicable}
 \format{
-An object of class \code{tbl_df} (inherits from \code{tbl}, \code{data.frame}) with 63 rows and 15 columns.
+An object of class \code{tbl_df} (inherits from \code{tbl}, \code{data.frame}) with 71 rows and 15 columns.
 }
 \usage{
 atoxgr_criteria_daids_uscv
