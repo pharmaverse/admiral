@@ -282,7 +282,6 @@ test_that("impute_dtc_dtm Test 12: Error if null min/max_dates when highest_impu
 
 ## Test 13: wrong input to `date_imputation` ----
 test_that("impute_dtc_dtm Test 13: wrong input to `date_imputation`", {
-
   # date imputation is not a key when highest_imputation is "D"
   expect_snapshot(
     impute_dtc_dtm(

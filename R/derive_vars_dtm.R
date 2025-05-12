@@ -606,15 +606,15 @@ restrict_imputed_dtc_dtm <- function(dtc,
                                      min_dates,
                                      max_dates) {
   if (!(is.null(min_dates) || length(min_dates) == 0) ||
-      !(is.null(max_dates) || length(max_dates) == 0)) {
+    !(is.null(max_dates) || length(max_dates) == 0)) {
     min_dtc <-
-      get_dtm_range(
+      get_dt_dtm_range(
         dtc,
         date_imputation = "first",
         time_imputation = "first"
       )
     max_dtc <-
-      get_dtm_range(
+      get_dt_dtm_range(
         dtc,
         date_imputation = "last",
         time_imputation = "last"

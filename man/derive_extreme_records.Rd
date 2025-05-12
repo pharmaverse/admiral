@@ -508,7 +508,7 @@ the input dataset. For the new records set \code{AVISIT = "PBL LAST"}, \code{AVI
   "2",      "BASELINE",        1, "DEF",        9,      1,
   "2",      "WEEK 1",          2, "DEF",       10,      2,
   "2",      "WEEK 2",          3, "DEF",       12,      3
-) \%>\%
+) %>%
 mutate(STUDYID = "XYZ", .before = USUBJID)
 
 derive_extreme_records(
@@ -681,7 +681,7 @@ occurred (set \code{AVALC = "Y"}, \code{AVAL = 1}) or not (set \code{AVALC = "N"
   "1",      ymd("2022-05-13"),
   "2",      ymd(""),
   "3",      ymd("")
-) \%>\%
+) %>%
   mutate(STUDYID = "XX1234")
 
 adrs <- tribble(
@@ -692,10 +692,10 @@ adrs <- tribble(
   "2",      "2021-06-15", "SD",       3,
   "2",      "2021-07-16", "PD",       4,
   "2",      "2021-09-14", "PD",       4
-) \%>\%
+) %>%
   mutate(
     STUDYID = "XX1234", .before = USUBJID
-  ) \%>\%
+  ) %>%
   mutate(
     ADT = ymd(RSDTC),
     PARAMCD = "OVR",

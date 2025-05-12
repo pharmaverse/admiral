@@ -32,9 +32,9 @@ missing, \code{NA_character_} is returned. For example, for \code{highest_imputa
 If \code{"n"} is specified no imputation is performed, i.e., if any component is
 missing, \code{NA_character_} is returned.
 
-If \code{"Y"} is specified, \code{date_imputation} should be \code{"first"} or \code{"last"}
-and \code{min_dates} or \code{max_dates} should be specified respectively. Otherwise,
-\code{NA_character_} is returned if the year component is missing.
+If \code{"Y"} is specified, \code{date_imputation} must be \code{"first"} or \code{"last"}
+and \code{min_dates} or \code{max_dates} must be specified respectively. Otherwise,
+an error is thrown.
 
 \describe{
 \item{Permitted values}{\code{"Y"} (year, highest level), \code{"M"} (month), \code{"D"}
