@@ -36,7 +36,7 @@ parts.
 The function uses different parsing methods depending on whether the input is
 a date or a datetime:
 \itemize{
-\item For dates, it calls \code{extract_partialdate()}.
+\item For dates, it calls \code{get_partialdate()}.
 \item For datetimes, it calls \code{get_partialdatetime()}.
 }
 }

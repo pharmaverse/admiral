@@ -729,7 +729,7 @@ propagate_na_values <- function(partial) {
 #' @details
 #' The function uses different parsing methods depending on whether the input is
 #'  a date or a datetime:
-#' - For dates, it calls `extract_partialdate()`.
+#' - For dates, it calls `get_partialdate()`.
 #' - For datetimes, it calls `get_partialdatetime()`.
 #'
 #' @keywords internal
