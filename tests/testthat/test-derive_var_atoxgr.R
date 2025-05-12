@@ -440,7 +440,10 @@ test_that("derive_var_atoxgr Test 9: CTCAEv4 Activated partial thromboplastin ti
 })
 
 ## Test 9b: CTCAEv4 Activated partial thromboplastin time prolonged (SI + CV METDATA) ----
-test_that("derive_var_atoxgr Test 9b: CTCAEv4 Activated partial thromboplastin time prolonged (SI + CV METDATA)", {
+test_that(paste(
+  "derive_var_atoxgr Test 9b: CTCAEv4 Activated partial thromboplastin time prolonged",
+  "(SI + CV METDATA)"
+), {
   atoxgr_criteria_ctcv4_sicv <- atoxgr_criteria_ctcv4 %>%
     bind_rows(atoxgr_criteria_ctcv4_uscv)
 
@@ -4189,13 +4192,13 @@ test_that("derive_var_atoxgr Test 70b: CTCAEv5 Hypocalcemia (USCV unit)", {
 
 ### Hypocalcemia (Ionized)
 ### NCICTCAEv4 and NCICTCAEv5 criteria is the same
-### ### SI unit is mmol/L
+### SI unit is mmol/L
 ### Grade 4: <0.8 mmol/L
 ### Grade 3: <0.9 - 0.8 mmol/L
 ### Grade 2: <1.0 - 0.9 mmol/L
 ### Grade 1: <LLN - 1.0 mmol/L
 
-### ### CV unit is mg/dL
+### CV unit is mg/dL
 ### mg/dL = 4 * mmol/L
 
 
@@ -4314,14 +4317,14 @@ test_that("derive_var_atoxgr Test 72b: CTCAEv5 Hypocalcemia (Ionized) (USCV unit
 
 ### Hypoglycemia
 ### NCICTCAEv4 and NCICTCAEv5 criteria is the same
-### ### SI unit is mmol/L
+### SI unit is mmol/L
 ### Grade 4: <1.7 mmol/L
 ### Grade 3: <2.2 - 1.7 mmol/L
 ### Grade 2: <3.0 - 2.2 mmol/L
 ### Grade 1: <LLN - 3.0 mmol/L
 
 
-### ### CV unit is mg/dL
+### CV unit is mg/dL
 ### Grade 4: <30 mg/dL
 ### Grade 3: <40 - 30 mg/dL
 ### Grade 2: <55 - 40 mg/dL

@@ -256,7 +256,9 @@ derive_var_atoxgr_dir <- function(dataset,
             temp_flag = meta_this_filter_unit$UNIT_UPPER == toupper(!!get_unit_expr) |
               is.na(meta_this_filter_unit$UNIT_UPPER),
             !!new_var := if_else(
-              temp_flag, eval(parse(text = meta_this_filter_unit$GRADE_CRITERIA_CODE)), NA_character_
+              temp_flag,
+              eval(parse(text = meta_this_filter_unit$GRADE_CRITERIA_CODE)),
+              NA_character_
             )
           ) %>%
           select(-temp_flag)

@@ -93,35 +93,35 @@ adlb <- lb %>%
     by_vars = exprs(STUDYID, USUBJID)
   ) %>%
   ## Calculate ADT, ADY ----
-derive_vars_dt(
-  new_vars_prefix = "A",
-  dtc = LBDTC
-) %>%
+  derive_vars_dt(
+    new_vars_prefix = "A",
+    dtc = LBDTC
+  ) %>%
   derive_vars_dy(reference_date = TRTSDT, source_vars = exprs(ADT))
 
 adlb <- adlb %>%
   ## Add PARAMCD PARAM and PARAMN - from LOOK-UP table ----
-# Replace with PARAMCD lookup function
-derive_vars_merged_lookup(
-  dataset_add = param_lookup,
-  new_vars = exprs(PARAMCD, PARAM, PARAMN),
-  by_vars = exprs(LBTESTCD),
-  check_type = "none",
-  print_not_mapped = FALSE
-) %>%
+  # Replace with PARAMCD lookup function
+  derive_vars_merged_lookup(
+    dataset_add = param_lookup,
+    new_vars = exprs(PARAMCD, PARAM, PARAMN),
+    by_vars = exprs(LBTESTCD),
+    check_type = "none",
+    print_not_mapped = FALSE
+  ) %>%
   ## Calculate PARCAT1 AVAL AVALC ANRLO ANRHI ----
-mutate(
-  PARCAT1 = LBCAT,
-  AVAL = LBSTRESN,
-  # Only populate AVALC if character value is non-redundant with AVAL
-  AVALC = ifelse(
-    is.na(LBSTRESN) | as.character(LBSTRESN) != LBSTRESC,
-    LBSTRESC,
-    NA
-  ),
-  ANRLO = LBSTNRLO,
-  ANRHI = LBSTNRHI
-)
+  mutate(
+    PARCAT1 = LBCAT,
+    AVAL = LBSTRESN,
+    # Only populate AVALC if character value is non-redundant with AVAL
+    AVALC = ifelse(
+      is.na(LBSTRESN) | as.character(LBSTRESN) != LBSTRESC,
+      LBSTRESC,
+      NA
+    ),
+    ANRLO = LBSTNRLO,
+    ANRHI = LBSTNRHI
+  )
 
 # Derive Absolute values from fractional Differentials using WBC
 # Only derive where absolute values do not already exist
@@ -173,12 +173,12 @@ adlb <- adlb %>%
 
 adlb <- adlb %>%
   ## Calculate ONTRTFL ----
-derive_var_ontrtfl(
-  start_date = ADT,
-  ref_start_date = TRTSDT,
-  ref_end_date = TRTEDT,
-  filter_pre_timepoint = AVISIT == "Baseline"
-)
+  derive_var_ontrtfl(
+    start_date = ADT,
+    ref_start_date = TRTSDT,
+    ref_end_date = TRTEDT,
+    filter_pre_timepoint = AVISIT == "Baseline"
+  )
 
 ## Calculate ANRIND : requires the reference ranges ANRLO, ANRHI ----
 adlb <- adlb %>%
@@ -457,4 +457,4 @@ if (!file.exists(dir)) {
   # Create the folder
   dir.create(dir, recursive = TRUE, showWarnings = FALSE)
 }
-save(adlb, file = file
+save(adlb, file = file.path(dir, "adlb.rda"), compress = "bzip2")
