@@ -56,9 +56,9 @@ It ensures that necessary conditions are met when \code{highest_imputation} is s
 \itemize{
 \item If \code{highest_imputation} is "Y", either \code{min_dates} or \code{max_dates} must be specified.
 \item If \code{highest_imputation} is "Y" and \code{date_imputation} is "first",
-\code{min_dates} should be specified.
+\code{min_dates} must be specified.
 \item If \code{highest_imputation} is "Y" and \code{date_imputation} is "last",
-\code{max_dates} should be specified.
+\code{max_dates} must be specified.
 }
 }
 \keyword{internal}
