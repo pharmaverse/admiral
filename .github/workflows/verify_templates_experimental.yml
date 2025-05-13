@@ -16,7 +16,7 @@ jobs:
       - name: echo
         run:  echo "This is workflow_dispatch"
 
-       
+
   print_results:
     runs-on: ubuntu-latest
 
@@ -35,12 +35,12 @@ jobs:
 
       - uses: r-lib/actions/setup-r-dependencies@v2
 
-      - name: source 
+      - name: source
         run:  Rscript -e 'source("data-raw/admiral_verify_templates.R")'
-       
-      #- name: run the code
-# run:  Rscript -e 'verify_templates()'
- 
+
+      - name: run the code
+        run:  Rscript -e 'verify_templates()'
+
       - name: Session info
         run: |
           options(width = 100)
