@@ -377,16 +377,18 @@ assert_time_imputation <- function(highest_imputation, time_imputation) {
 }
 
 
-assert_highest_imputation <- function(highest_imputation, highest_imputation_values,
+assert_highest_imputation <- function(highest_imputation, highest_imputation_values, # nolint: cyclocomp_linter
                                       date_imputation = NULL,
-                                      max_dates, min_dates # nolint: cyclocomp_linter
-) {
-
+                                      max_dates, min_dates) {
   assert_character_scalar(
     highest_imputation,
     values = highest_imputation_values,
     case_sensitive = TRUE # not sure
   )
+
+  if (highest_imputation != "Y") {
+    return(invisible(NULL))
+  }
 
   if ((highest_imputation == "Y" && is.null(min_dates) && is.null(max_dates)) ||
     (highest_imputation == "Y" && length(min_dates) == 0 && length(max_dates) == 0)) {
@@ -461,8 +463,10 @@ get_dt_dtm_range <- function(dtc,
   date_imputation <- assert_character_scalar(date_imputation, case_sensitive = FALSE)
   if (is_datetime) {
     time_imputation <- assert_character_scalar(time_imputation, case_sensitive = FALSE)
-    assert_time_imputation(highest_imputation = highest_imputation_level,
-                           time_imputation = time_imputation)
+    assert_time_imputation(
+      highest_imputation = highest_imputation_level,
+      time_imputation = time_imputation
+    )
   }
 
   if (length(dtc) == 0) {
@@ -477,7 +481,6 @@ get_dt_dtm_range <- function(dtc,
     partial <- propagate_na_values(partial)
   }
 
-  target <- get_imputation_targets(partial, date_imputation, time_imputation, is_datetime)
   target <- get_imputation_targets(partial, date_imputation, time_imputation, is_datetime)
 
   imputed <- impute_values(partial, target, components)
@@ -565,8 +568,10 @@ get_highest_imputation_level <- function(is_datetime, highest_imputation) {
 #'
 #' @keywords internal
 get_imputation_targets <- function(partial, date_imputation, time_imputation, is_datetime) {
-  target_date <- get_imputation_target_date(date_imputation = date_imputation,
-                                            month = partial[["month"]])
+  target_date <- get_imputation_target_date(
+    date_imputation = date_imputation,
+    month = partial[["month"]]
+  )
 
   if (is_datetime) {
     target_time <- get_imputation_target_time(time_imputation = time_imputation)
@@ -639,41 +644,6 @@ impute_values <- function(partial, target, components) {
     imputed[[c]] <- if_else(is.na(partial[[c]]), target[[c]], partial[[c]])
   }
   imputed
-}
-#' Mask Target Values
-#'
-#' @description
-#' `r lifecycle::badge("stable")`
-#'
-#' This is a helping function for `get_dt_dtm_range()`
-#' Masks target values based on the highest allowed imputation level.
-#'
-#' @param target A list of target values for imputation.
-#' @param components A character vector of component names.
-#' @param highest_imputation_level The highest allowed imputation level.
-#' @param is_datetime A logical indicating whether it's a datetime imputation.
-#'
-#' @return A list of masked target values.
-#'
-#' @keywords internal
-mask_target_values <- function(target, components, highest_imputation_level, is_datetime) {
-  imputation_levels <- c(
-    none = "n", second = "s", minute = "m", hour = "h",
-    day = "D", month = "M", year = "Y"
-  )
-
-  for (component in components) {
-    component_level <- if (is_datetime) {
-      dtm_level(imputation_levels[[component]])
-    } else {
-      dt_level(imputation_levels[[component]])
-    }
-
-    if (highest_imputation_level < component_level) {
-      target[[component]] <- "xx"
-    }
-  }
-  target
 }
 
 #' Format Imputed Date/Datetime
