@@ -522,8 +522,8 @@ test_that("derive_vars_dt Test 19: date imputed to last, no DTF", {
   )
 })
 
-## Test 20: Error for highest_imputation = Y & max_dates ----
-test_that("derive_vars_dt Test 20: Error for highest_imputation = Y & max_dates", {
+## Test 20: highest_imputation = Y & max_dates ----
+test_that("derive_vars_dt Test 20: highest_imputation = Y & max_dates", {
   actual <- data.frame(
     AESTDTC = c(NA_character_, NA_character_),
     TRTSDT = c(ymd("2022-01-01"), NA)
@@ -548,7 +548,7 @@ test_that("derive_vars_dt Test 20: Error for highest_imputation = Y & max_dates"
   expect_dfs_equal(actual, expected, keys = c("ASTDT", "ASTDTF"))
 })
 
-## Test 21: NA imputation for highest_imputation = Y & max_dates but date_imputation = first ----
+## Test 21: Error for highest_imputation = Y & max_dates but date_imputation = first ----
 test_that("derive_vars_dt Test 21: NA imputation for highest_imputation = Y & max_dates but date_imputation = first", { # nolint
   expect_snapshot(
     data.frame(
@@ -563,7 +563,8 @@ test_that("derive_vars_dt Test 21: NA imputation for highest_imputation = Y & ma
         date_imputation = "first",
         flag_imputation = "auto",
         max_dates = exprs(TRTSDT)
-      )
+      ),
+    error = TRUE
   )
 })
 ## Test 22: NA imputation for highest_imputation = Y & min_dates ----
@@ -592,8 +593,8 @@ test_that("derive_vars_dt Test 22: NA imputation for highest_imputation = Y & mi
   expect_dfs_equal(actual, expected, keys = c("ASTDT", "ASTDTF"))
 })
 
-## Test 23: NA imputation for highest_imputation = Y & min_dates but date_imputation = last ----
-test_that("derive_vars_dt Test 23: NA imputation for highest_imputation = Y & min_dates but date_imputation = last", { # nolint
+## Test 23: Error for highest_imputation = Y & min_dates but date_imputation = last ----
+test_that("derive_vars_dt Test 23: Error for highest_imputation = Y & min_dates but date_imputation = last", { # nolint
   expect_snapshot(
     data.frame(
       AESTDTC = c(NA_character_, NA_character_),
@@ -607,12 +608,13 @@ test_that("derive_vars_dt Test 23: NA imputation for highest_imputation = Y & mi
         date_imputation = "last",
         flag_imputation = "auto",
         min_dates = exprs(TRTSDT)
-      )
+      ),
+    error = TRUE
   )
 })
 
-## Test 24: NA imputation for highest_imputation = Y but null min/max dates fails ----
-test_that("derive_vars_dt Test 24: NA imputation for highest_imputation = Y but null min/max dates fails", { # nolint
+## Test 24: Error for highest_imputation = Y but null min/max dates fails ----
+test_that("derive_vars_dt Test 24: Error for highest_imputation = Y but null min/max dates fails", { # nolint
   expect_snapshot(
     data.frame(
       AESTDTC = c(NA_character_, NA_character_),

@@ -544,8 +544,9 @@ restrict_imputed_dtc_dt <- function(dtc,
                                     imputed_dtc,
                                     min_dates,
                                     max_dates) {
-  if (!(is.null(min_dates) || length(min_dates) == 0) ||
-    !(is.null(max_dates) || length(max_dates) == 0)) {
+  any_mindate <- !(is.null(min_dates) || length(min_dates) == 0)
+  any_maxdate <- !(is.null(max_dates) || length(max_dates) == 0)
+  if (any_mindate || any_maxdate) {
     # determine range of possible dates
     min_dtc <-
       get_dt_dtm_range(
@@ -558,7 +559,7 @@ restrict_imputed_dtc_dt <- function(dtc,
         date_imputation = "last"
       )
   }
-  if (!(is.null(min_dates) || length(min_dates) == 0)) {
+  if (any_mindate) {
     if (length(unique(c(length(imputed_dtc), unlist(lapply(min_dates, length))))) != 1) {
       cli_abort("Length of {.arg min_dates} do not match length of dates to be imputed.")
     }
@@ -575,7 +576,7 @@ restrict_imputed_dtc_dt <- function(dtc,
       )
     }
   }
-  if (!(is.null(max_dates) || length(max_dates) == 0)) {
+  if (any_maxdate) {
     if (length(unique(c(length(imputed_dtc), unlist(lapply(max_dates, length))))) != 1) {
       cli_abort("Length of {.arg max_dates} do not match length of dates to be imputed.")
     }

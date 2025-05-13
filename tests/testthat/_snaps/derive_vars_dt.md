@@ -54,7 +54,7 @@
       impute_dtc_dt(dtc = input, highest_imputation = "Y", date_imputation = "2006-01-01")
     Condition
       Error in `assert_highest_imputation()`:
-      ! If `highest_imputation = "Y"` is specified, `min_dates` or `max_dates` must be specified respectively.
+      ! Argument `date_imputation` must be equal to one of "first" or "last".
 
 # derive_vars_dt Test 21: NA imputation for highest_imputation = Y & max_dates but date_imputation = first
 
@@ -65,14 +65,10 @@
           date_imputation = "first", flag_imputation = "auto", max_dates = exprs(
             TRTSDT))
     Condition
-      Warning:
-      If `highest_imputation = "Y"` and `date_imputation = "first"` is specified, `min_dates` should be specified.
-    Output
-        AESTDTC     TRTSDT ASTDT ASTDTF
-      1    <NA> 2022-01-01  <NA>   <NA>
-      2    <NA>       <NA>  <NA>   <NA>
+      Error in `assert_highest_imputation()`:
+      ! If `highest_imputation = "Y"` and `date_imputation = "first"` is specified, `min_dates` must be specified.
 
-# derive_vars_dt Test 23: NA imputation for highest_imputation = Y & min_dates but date_imputation = last
+# derive_vars_dt Test 23: Error for highest_imputation = Y & min_dates but date_imputation = last
 
     Code
       data.frame(AESTDTC = c(NA_character_, NA_character_), TRTSDT = c(ymd(
@@ -81,14 +77,10 @@
           date_imputation = "last", flag_imputation = "auto", min_dates = exprs(
             TRTSDT))
     Condition
-      Warning:
-      If `highest_imputation = "Y"` and `date_imputation = "last"` is specified, `max_dates` should be specified.
-    Output
-        AESTDTC     TRTSDT ASTDT ASTDTF
-      1    <NA> 2022-01-01  <NA>   <NA>
-      2    <NA>       <NA>  <NA>   <NA>
+      Error in `assert_highest_imputation()`:
+      ! If `highest_imputation = "Y"` and `date_imputation = "last"` is specified, `max_dates` must be specified.
 
-# derive_vars_dt Test 24: NA imputation for highest_imputation = Y but null min/max dates fails
+# derive_vars_dt Test 24: Error for highest_imputation = Y but null min/max dates fails
 
     Code
       data.frame(AESTDTC = c(NA_character_, NA_character_), TRTSDT = c(ymd(

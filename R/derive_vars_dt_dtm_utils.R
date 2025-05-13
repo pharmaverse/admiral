@@ -283,7 +283,7 @@ get_partialdatetime <- function(dtc) {
 #' @keywords internal
 #'
 #' @returns `invisible(NULL)`
-assert_dt_dtm_inputs <- function(new_vars_prefix, max_dates, min_dates, # nolint: cyclocomp_linter
+assert_dt_dtm_inputs <- function(new_vars_prefix, max_dates, min_dates,
                                  flag_imputation, flag_imputation_values,
                                  highest_imputation, highest_imputation_values,
                                  date_imputation = NULL) {
@@ -409,14 +409,14 @@ assert_time_imputation <- function(highest_imputation, time_imputation) {
 #' @details
 #' - If `highest_imputation` is "Y", either `min_dates` or `max_dates` must be specified.
 #' - If `highest_imputation` is "Y" and `date_imputation` is "first",
-#' `min_dates` should be specified.
+#' `min_dates` must be specified.
 #' - If `highest_imputation` is "Y" and `date_imputation` is "last",
-#' `max_dates` should be specified.
+#' `max_dates` must be specified.
 #'
 #' @returns Returns `NULL` invisibly if assertions pass.
 #'
 #' @keywords internal
-assert_highest_imputation <- function(highest_imputation, highest_imputation_values, # nolint: cyclocomp_linter
+assert_highest_imputation <- function(highest_imputation, highest_imputation_values,
                                       date_imputation = NULL,
                                       max_dates, min_dates) {
   assert_character_scalar(
@@ -429,31 +429,32 @@ assert_highest_imputation <- function(highest_imputation, highest_imputation_val
     return(invisible(NULL))
   }
 
-  if ((highest_imputation == "Y" && is.null(min_dates) && is.null(max_dates)) ||
-    (highest_imputation == "Y" && length(min_dates) == 0 && length(max_dates) == 0)) {
+  assert_character_scalar(date_imputation, values = c("first", "last"))
+  no_mindates <- is.null(min_dates) || length(min_dates) == 0
+  no_maxdates <- is.null(max_dates) || length(max_dates) == 0
+
+  if (no_maxdates && no_mindates) {
     cli_abort(paste(
       "If {.code highest_imputation = \"Y\"} is specified, {.arg min_dates} or",
       "{.arg max_dates} must be specified respectively."
     ))
   }
 
-  if (highest_imputation == "Y") {
-    assert_character_scalar(date_imputation, values = c("first", "last"))
-  }
 
-  if (highest_imputation == "Y" && is.null(min_dates) && date_imputation == "first") {
-    cli_warn(paste(
+  if (no_mindates && date_imputation == "first") {
+    cli_abort(paste(
       "If {.code highest_imputation = \"Y\"} and {.code date_imputation = \"first\"}",
-      "is specified, {.arg min_dates} should be specified."
+      "is specified, {.arg min_dates} must be specified."
     ))
   }
 
-  if (highest_imputation == "Y" && is.null(max_dates) && date_imputation == "last") {
-    cli_warn(paste(
+  if (no_maxdates && date_imputation == "last") {
+    cli_abort(paste(
       "If {.code highest_imputation = \"Y\"} and {.code date_imputation = \"last\"}",
-      "is specified, {.arg max_dates} should be specified."
+      "is specified, {.arg max_dates} must be specified."
     ))
   }
+
 
   return(invisible(NULL))
 }

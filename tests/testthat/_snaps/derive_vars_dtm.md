@@ -43,7 +43,7 @@
       time_imputation = "last")
     Condition
       Error in `assert_highest_imputation()`:
-      ! If `highest_imputation = "Y"` is specified, `min_dates` or `max_dates` must be specified respectively.
+      ! Argument `date_imputation` must be equal to one of "first" or "last".
 
 ---
 
@@ -83,7 +83,7 @@
     Message
       The `ASTDTF` variable is already present in the input dataset and will not be re-derived.
 
-# derive_vars_dtm Test 26: NA imputation for highest_imputation = Y & max_dates but date_imputation = first
+# derive_vars_dtm Test 26: Error for highest_imputation = Y & max_dates but date_imputation = first
 
     Code
       (data.frame(AESTDTC = c(NA_character_, NA_character_), TRTSDTM = c(ymd_hms(
@@ -92,14 +92,10 @@
           date_imputation = "first", time_imputation = "first", flag_imputation = "both",
           max_dates = exprs(TRTSDTM)))
     Condition
-      Warning:
-      If `highest_imputation = "Y"` and `date_imputation = "first"` is specified, `min_dates` should be specified.
-    Output
-        AESTDTC             TRTSDTM ASTDTM ASTDTF ASTTMF
-      1    <NA> 2022-01-01 23:59:59   <NA>   <NA>   <NA>
-      2    <NA>                <NA>   <NA>   <NA>   <NA>
+      Error in `assert_highest_imputation()`:
+      ! If `highest_imputation = "Y"` and `date_imputation = "first"` is specified, `min_dates` must be specified.
 
-# derive_vars_dtm Test 28: NA imputation for highest_imputation = Y & min_dates but date_imputation = last
+# derive_vars_dtm Test 28: Error for highest_imputation = Y & min_dates but date_imputation = last
 
     Code
       data.frame(AESTDTC = c(NA_character_, NA_character_), TRTSDTM = c(ymd_hms(
@@ -108,12 +104,8 @@
           date_imputation = "last", time_imputation = "last", flag_imputation = "both",
           min_dates = exprs(TRTSDTM))
     Condition
-      Warning:
-      If `highest_imputation = "Y"` and `date_imputation = "last"` is specified, `max_dates` should be specified.
-    Output
-        AESTDTC             TRTSDTM ASTDTM ASTDTF ASTTMF
-      1    <NA> 2022-01-01 23:59:59   <NA>   <NA>   <NA>
-      2    <NA>                <NA>   <NA>   <NA>   <NA>
+      Error in `assert_highest_imputation()`:
+      ! If `highest_imputation = "Y"` and `date_imputation = "last"` is specified, `max_dates` must be specified.
 
 # derive_vars_dtm Test 29: NA imputation for highest_imputation = Y but null min/max dates fails
 
