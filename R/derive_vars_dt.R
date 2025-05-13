@@ -136,7 +136,7 @@
 #'   date_imputation = "mid",
 #'   preserve = TRUE
 #' )
-derive_vars_dt <- function(dataset, # nolint: cyclocomp_linter
+derive_vars_dt <- function(dataset,
                            new_vars_prefix,
                            dtc,
                            highest_imputation = "n",

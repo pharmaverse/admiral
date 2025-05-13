@@ -566,10 +566,6 @@ impute_dtc_dtm <- function(dtc,
     max_dates = max_dates
   )
 
-  if (highest_imputation == "Y" && is.null(min_dates) && is.null(max_dates)) {
-    cli_warn("If `highest_imputation` = \"Y\" is specified, `min_dates` or `max_dates` should be specified respectively.") # nolint
-  }
-
   return(restricted)
 }
 
