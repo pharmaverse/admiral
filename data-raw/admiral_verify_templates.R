@@ -32,7 +32,7 @@
 #' Much code taken from pharamavreseadam::create_adams_data.R
 #'  (https://github.com/pharmaverse/pharmaverseadam/blob/main/data-raw/create_adams_data.R)
 #
-#'rUSAGE:   verify_templates()
+#' rUSAGE:   verify_templates()
 #
 #' @export
 
@@ -66,7 +66,7 @@ verify_templates <- function(pkg = "admiral", ds = c("adae")) {
   # list of important paths
   ## path <<- list(
   path <- list(
-    #template_dir = file.path(system.file(package = pkg), "templates"),
+    # template_dir = file.path(system.file(package = pkg), "templates"),
     # use active package
     template_dir = "inst/templates",
     cache_dir = tools::R_user_dir("admiral_templates_data", which = "cache"),
@@ -103,8 +103,8 @@ verify_templates <- function(pkg = "admiral", ds = c("adae")) {
 
   ## ------------------------  FUTURE
   # new code for keys
-  #library(teal.slice)
-  #get_keys(adam_names)
+  # library(teal.slice)
+  # get_keys(adam_names)
   ## ------------------------  FUTURE
 
   # keys for diffdf
@@ -112,9 +112,10 @@ verify_templates <- function(pkg = "admiral", ds = c("adae")) {
 
   # keys is named list of keys, each element (for each adam_name) and is chr[] of keys
   keys <- sapply(toupper(adam_names), function(e) unname(keys[[e]][[e]]),
-                 USE.NAMES = TRUE, simplify = FALSE)
+    USE.NAMES = TRUE, simplify = FALSE
+  )
   names(keys) <- tolower(names(keys))
-##:ess-bp-start::browser@nil:##
+  ## :ess-bp-start::browser@nil:##
   keys
 
 
@@ -179,7 +180,7 @@ display_diff <- function(dir = NULL) {
   map2(
     names(contents), contents,
     function(name, content) {
-      cli::cli_h1(paste("Differences found for", str_replace_all(name, ".txt", ""), " ",  today(),  "\n"))
+      cli::cli_h1(paste("Differences found for", str_replace_all(name, ".txt", ""), " ", today(), "\n"))
       cat(paste(content, collapse = "\n"))
     }
   )
@@ -209,7 +210,7 @@ compare <- function(base, compare, keys, file = NULL) {
         compare = compare,
         keys = keys,
         file = file,
-        suppress_warnings = TRUE    # for now
+        suppress_warnings = TRUE # for now
       )
     },
     error = function(e) {
