@@ -6,7 +6,7 @@
 #'   (day), `"h"` (hour), `"m"` (minute), `"s"` (second, lowest level), `"n"`
 #'   (none)
 #'
-#' @returns A `dtm_level` object
+#' @return A `dtm_level` object
 #'
 #' @details A `dtm_level` object is an ordered factor, i.e., two objects can be
 #'   compared.
@@ -35,7 +35,7 @@ dtm_level <- function(level) {
 #' @permitted `"Y"` (year, highest level), `"M"` (month), `"D"`
 #'   (day), `"n"` (none, lowest level)
 #'
-#' @returns A `dt_level` object
+#' @return A `dt_level` object
 #'
 #' @details A `dt_level` object is an ordered factor, i.e., two objects can be
 #'   compared.
@@ -69,7 +69,7 @@ dt_level <- function(level) {
 
 #' @param month Month component of the partial date
 #'
-#' @returns A list of character vectors. The elements of the list are named
+#' @return A list of character vectors. The elements of the list are named
 #'   "year", "month", "day".
 #'
 #' @details
@@ -130,7 +130,7 @@ get_imputation_target_date <- function(date_imputation,
 #'   for the start of the day,
 #'   - or as a keyword: `"first"`,`"last"` to impute to the start/end of a day.
 #'
-#' @returns A list of character vectors. The elements of the list are named
+#' @return A list of character vectors. The elements of the list are named
 #'   "hour", "minute", "second".
 #'
 #' @details
@@ -226,7 +226,7 @@ convert_date_to_dtm <- function(dt,
 #'   `yyyy-mm-ddThh:mm:ss`. Trailing components can be omitted and `-` is a
 #'   valid value for any component.
 #'
-#' @returns A list of character vectors. The elements of the list are named
+#' @return A list of character vectors. The elements of the list are named
 #'   "year", "month", "day", "hour", "minute", and "second". Missing components
 #'   are set to `NA_character_`.
 #'
@@ -315,7 +315,7 @@ assert_dt_dtm_inputs <- function(new_vars_prefix, max_dates, min_dates, # nolint
 #' @param date_imputation The value to impute the day/month when a datepart is
 #'   missing.
 #'
-#' @returns asserted `date_imputation`
+#' @return asserted `date_imputation`
 #'
 #' @keywords internal
 #'
@@ -359,7 +359,7 @@ assert_date_imputation <- function(highest_imputation, date_imputation) {
 #' @param highest_imputation Highest imputation level
 #' @param time_imputation The value to impute time when missing
 #'
-#' @returns asserted `time_imputation`
+#' @return asserted `time_imputation`
 #'
 #' @keywords internal
 #'
