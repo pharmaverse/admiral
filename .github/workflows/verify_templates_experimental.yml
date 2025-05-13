@@ -3,9 +3,16 @@ name:  verify_templates_experimental
 run-name: EXPERIMENTAL
 
 
+# this yaml workflow runs when a push occurs on this branch
 on:
   push:
     branches:  [2642_verify_templates_results]
+
+# manually
+on:
+  workflow_dispatch:
+    - '2642_verify_templates_results'
+
 
 jobs:
   task1:
