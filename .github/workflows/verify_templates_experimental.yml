@@ -4,7 +4,7 @@ run-name: EXPERIMENTAL
 
 
 on:
-  workflow_dispatch:
+  push:
     branches:  2642_verify_templates_results
 
 jobs:
