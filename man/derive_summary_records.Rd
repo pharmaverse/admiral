@@ -168,7 +168,7 @@ adeg <- tribble(
   "XYZ-1002", "QTcF Int. (msec)", "Baseline", "2016-02-22T08:01", 392,
   "XYZ-1002", "QTcF Int. (msec)", "Visit 3",  "2016-03-24T10:53", 414,
   "XYZ-1002", "QTcF Int. (msec)", "Visit 3",  "2016-03-24T10:56", 402
-) %>%
+) \%>\%
   mutate(ADTM = convert_dtc_to_dtm(EGDTC))}\if{html}{\out{</div>}}}
 \subsection{Summarize one or more variables using summary functions}{
 
@@ -185,7 +185,7 @@ within the \code{set_values_to} argument.
     ADTM = max(ADTM),
     DTYPE = "AVERAGE"
   )
-) %>%
+) \%>\%
   arrange(USUBJID, AVISIT)
 #> # A tibble: 17 × 7
 #>    USUBJID  PARAM            AVISIT   EGDTC       AVAL ADTM                DTYPE
@@ -224,7 +224,7 @@ is set for the summary record. Otherwise, referencing \code{AVAL} later on would
     ADTM = max(ADTM),
     DTYPE = "AVERAGE"
   )
-) %>%
+) \%>\%
   arrange(USUBJID, AVISIT)
 #> # A tibble: 17 × 8
 #>    USUBJID  PARAM          AVISIT EGDTC  AVAL ADTM                OUTLIEFL DTYPE
@@ -261,7 +261,7 @@ by passing \code{filter_add = AVISIT == "Baseline"}.
     AVAL = mean(AVAL, na.rm = TRUE),
     DTYPE = "AVERAGE"
   )
-) %>%
+) \%>\%
   arrange(USUBJID, AVISIT)
 #> # A tibble: 14 × 7
 #>    USUBJID  PARAM            AVISIT   EGDTC       AVAL ADTM                DTYPE
@@ -295,7 +295,7 @@ by passing \code{filter_add = n() > 2}.
     AVAL = mean(AVAL, na.rm = TRUE),
     DTYPE = "AVERAGE"
   )
-) %>%
+) \%>\%
   arrange(USUBJID, AVISIT)
 #> # A tibble: 14 × 7
 #>    USUBJID  PARAM            AVISIT   EGDTC       AVAL ADTM                DTYPE
@@ -349,7 +349,7 @@ derive_summary_records(
     ADTM = NA,
     DTYPE = "PHANTOM"
   )
-) %>%
+) \%>\%
   arrange(USUBJID, AVISIT)
 #> # A tibble: 18 × 7
 #>    USUBJID  PARAM            AVISIT   EGDTC       AVAL ADTM                DTYPE

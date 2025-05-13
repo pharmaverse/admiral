@@ -237,7 +237,7 @@ adsl <- tribble(
   ~USUBJID, ~TRTSDT,           ~EOSDT,            ~NEWDRGDT,
   "01",     ymd("2020-12-06"), ymd("2021-03-06"), NA,
   "02",     ymd("2021-01-16"), ymd("2021-02-03"), ymd("2021-01-03")
-) %>%
+) \%>\%
   mutate(STUDYID = "AB42")
 
 adae <- tribble(
@@ -245,7 +245,7 @@ adae <- tribble(
   "01",     ymd("2021-01-03"),      1, "Flu",
   "01",     ymd("2021-03-04"),      2, "Cough",
   "01",     ymd("2021-03-05"),      3, "Cough"
-) %>%
+) \%>\%
   mutate(STUDYID = "AB42")
 
 ttae <- event_source(
@@ -278,7 +278,7 @@ derive_param_tte(
     PARAMCD = "TTAE",
     PARAM = "Time to First Adverse Event"
   )
-) %>%
+) \%>\%
   select(USUBJID, STARTDT, PARAMCD, PARAM, ADT, CNSR, SRCSEQ)
 #> # A tibble: 2 × 7
 #>   USUBJID STARTDT    PARAMCD PARAM                       ADT         CNSR SRCSEQ
@@ -301,7 +301,7 @@ term (\code{AEDECOD}) should be created as parameters.
     PARAMCD = paste0("TTAE", as.numeric(as.factor(AEDECOD))),
     PARAM = paste("Time to First", AEDECOD, "Adverse Event")
   )
-) %>%
+) \%>\%
   select(USUBJID, STARTDT, PARAMCD, PARAM, ADT, CNSR, SRCSEQ)
 #> # A tibble: 4 × 7
 #>   USUBJID STARTDT    PARAMCD PARAM                       ADT         CNSR SRCSEQ
@@ -324,7 +324,7 @@ duplicate date for \code{"Cough"}, it was then passed to the function using the
   "01",     ymd("2021-01-03"),      1, "Flu",    "Y",
   "01",     ymd("2021-03-04"),      2, "Cough",  "N",
   "01",     ymd("2021-03-04"),      3, "Cough",  "Y"
-) %>%
+) \%>\%
   mutate(STUDYID = "AB42")
 
 derive_param_tte(
@@ -400,7 +400,7 @@ function call itself.
     PARAMCD = paste0("TTAE", as.numeric(as.factor(AEDECOD))),
     PARAM = paste("Time to First", AEDECOD, "Adverse Event")
   )
-) %>%
+) \%>\%
   select(USUBJID, STARTDT, PARAMCD, PARAM, ADT, CNSR, SRCSEQ)
 #> # A tibble: 4 × 7
 #>   USUBJID STARTDT    PARAMCD PARAM                       ADT         CNSR SRCSEQ
@@ -435,7 +435,7 @@ example here only using serious adverse events.
     PARAMCD = paste0("TTSAE", as.numeric(as.factor(AEDECOD))),
     PARAM = paste("Time to First Serious", AEDECOD, "Adverse Event")
   )
-) %>%
+) \%>\%
   select(USUBJID, STARTDT, PARAMCD, PARAM, ADT, CNSR, SRCSEQ)
 #> # A tibble: 4 × 7
 #>   USUBJID STARTDT    PARAMCD PARAM                       ADT         CNSR SRCSEQ
@@ -458,7 +458,7 @@ was ever missing.
 \if{html}{\out{<div class="sourceCode r">}}\preformatted{adlb <- tribble(
   ~USUBJID, ~ADT,              ~PARAMCD, ~ANRIND,
   "01",     ymd("2020-12-22"), "HGB",    "LOW"
-) %>%
+) \%>\%
   mutate(STUDYID = "AB42")
 
 low_hgb <- event_source(
@@ -491,7 +491,7 @@ derive_param_tte(
     PARAMCD = "TTAELB",
     PARAM = "Time to First Adverse Event or Possible Anemia (Labs)"
   )
-) %>%
+) \%>\%
   select(USUBJID, STARTDT, PARAMCD, PARAM, ADT, CNSR, SRCSEQ)
 #> # A tibble: 2 × 7
 #>   USUBJID STARTDT    PARAMCD PARAM                       ADT         CNSR SRCSEQ
@@ -530,7 +530,7 @@ derive_param_tte(
     PARAMCD = paste0("TTAE", as.numeric(as.factor(AEDECOD))),
     PARAM = paste("Time to First", AEDECOD, "Adverse Event")
   )
-) %>%
+) \%>\%
   select(USUBJID, STARTDT, PARAMCD, PARAM, ADT, CNSR, SRCSEQ)
 #> # A tibble: 4 × 7
 #>   USUBJID STARTDT    PARAMCD PARAM                       ADT         CNSR SRCSEQ
@@ -570,7 +570,7 @@ derive_param_tte(
     PARAMCD = paste0("TTAE", as.numeric(as.factor(AEDECOD))),
     PARAM = paste("Time to First", AEDECOD, "Adverse Event")
   )
-) %>%
+) \%>\%
   select(USUBJID, STARTDT, PARAMCD, PARAM, ADT, CNSR, SRCSEQ)
 #> # A tibble: 4 × 7
 #>   USUBJID STARTDT    PARAMCD PARAM                       ADT         CNSR SRCSEQ
@@ -595,7 +595,7 @@ different to the default.
   ~USUBJID, ~RANDDTM,                       ~LSALVDTM,                      ~DTHDTM,                        ~DTHFL,
   "01",     ymd_hms("2020-10-03 00:00:00"), ymd_hms("2022-12-15 23:59:59"), NA,                             NA,
   "02",     ymd_hms("2021-01-23 00:00:00"), ymd_hms("2021-02-03 19:45:59"), ymd_hms("2021-02-03 19:45:59"), "Y"
-) %>%
+) \%>\%
   mutate(STUDYID = "AB42")
 
 # derive overall survival parameter
@@ -631,7 +631,7 @@ derive_param_tte(
     PARAMCD = "OS",
     PARAM = "Overall Survival"
   )
-) %>%
+) \%>\%
   select(USUBJID, STARTDTM, PARAMCD, PARAM, ADTM, CNSR)
 #> # A tibble: 2 × 6
 #>   USUBJID STARTDTM            PARAMCD PARAM            ADTM                 CNSR
@@ -652,7 +652,7 @@ parameter created, so see below how this is filtered only on responders.
   "02",     "N",    NA,                NA,
   "03",     "Y",    ymd("2021-08-21"), NA,
   "04",     "N",    NA,                ymd("2021-04-14")
-) %>%
+) \%>\%
   mutate(STUDYID = "AB42")
 
 adrs <- tribble(
@@ -664,7 +664,7 @@ adrs <- tribble(
   "04",     "SD",   ymd("2021-02-13"), 1,
   "04",     "PR",   ymd("2021-04-14"), 2,
   "04",     "CR",   ymd("2021-05-15"), 3
-) %>%
+) \%>\%
   mutate(STUDYID = "AB42", PARAMCD = "OVR")
 
 pd <- event_source(
@@ -711,7 +711,7 @@ derive_param_tte(
     PARAMCD = "DURRSP",
     PARAM = "Duration of Response"
   )
-) %>%
+) \%>\%
   select(USUBJID, STARTDT, PARAMCD, PARAM, ADT, CNSR, SRCSEQ)
 #> # A tibble: 2 × 7
 #>   USUBJID STARTDT    PARAMCD PARAM                ADT         CNSR SRCSEQ
