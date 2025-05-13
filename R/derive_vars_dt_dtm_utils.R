@@ -315,10 +315,18 @@ assert_dt_dtm_inputs <- function(new_vars_prefix, max_dates, min_dates, # nolint
 #' @param date_imputation The value to impute the day/month when a datepart is
 #'   missing.
 #'
+#' @returns asserted `date_imputation`
+#'
 #' @keywords internal
 #'
 #' @return `invisible(NULL)`
 assert_date_imputation <- function(highest_imputation, date_imputation) {
+  date_imputation <-
+    assert_character_scalar(
+      date_imputation,
+      case_sensitive = FALSE
+    )
+
   date_imputation <- tolower(date_imputation)
   if (highest_imputation == "D") {
     assert_character_scalar(date_imputation, values = c("first", "mid", "last"))
@@ -341,7 +349,7 @@ assert_date_imputation <- function(highest_imputation, date_imputation) {
   if (highest_imputation == "Y") {
     assert_character_scalar(date_imputation, values = c("first", "last"))
   }
-  return(invisible(NULL))
+  return(date_imputation)
 }
 
 #' Assert `time_imputation`
@@ -351,10 +359,18 @@ assert_date_imputation <- function(highest_imputation, date_imputation) {
 #' @param highest_imputation Highest imputation level
 #' @param time_imputation The value to impute time when missing
 #'
+#' @returns asserted `time_imputation`
+#'
 #' @keywords internal
 #'
 #' @return `invisible(NULL)`
 assert_time_imputation <- function(highest_imputation, time_imputation) {
+  time_imputation <-
+    assert_character_scalar(
+      time_imputation,
+      case_sensitive = FALSE
+    )
+
   time_imputation <- tolower(time_imputation)
 
   is_hh_mm_ss_format <- grepl(
@@ -373,7 +389,7 @@ assert_time_imputation <- function(highest_imputation, time_imputation) {
     ))
   }
 
-  return(invisible(NULL))
+  return(time_imputation)
 }
 
 #' Assert Highest Imputation Validity

@@ -21,6 +21,8 @@ missing.
 }}
 }
 \value{
+asserted \code{date_imputation}
+
 \code{invisible(NULL)}
 }
 \description{

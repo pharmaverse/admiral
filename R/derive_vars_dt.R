@@ -437,15 +437,11 @@ impute_dtc_dt <- function(dtc,
   )
 
   highest_imputation <- dt_level(highest_imputation)
-  date_imputation <-
-    assert_character_scalar(
-      date_imputation,
-      case_sensitive = FALSE
-    )
+
   assert_logical_scalar(preserve)
 
   # the `assert_date_imputation` function is stored in `derive_vars_dt_dtm_utils.R`
-  assert_date_imputation(
+  date_imputation <- assert_date_imputation(
     highest_imputation = highest_imputation,
     date_imputation = date_imputation
   )

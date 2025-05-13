@@ -480,23 +480,15 @@ impute_dtc_dtm <- function(dtc,
 
 
   highest_imputation <- dtm_level(highest_imputation)
-  date_imputation <-
-    assert_character_scalar(
-      date_imputation,
-      case_sensitive = FALSE
-    )
+
   # the `assert_date_imputation` function is stored in `derive_vars_dt_dtm_utils.R`
-  assert_date_imputation(
+  date_imputation <- assert_date_imputation(
     highest_imputation = highest_imputation,
     date_imputation = date_imputation
   )
-  time_imputation <-
-    assert_character_scalar(
-      time_imputation,
-      case_sensitive = FALSE
-    )
+
   # the `assert_time_imputation` function is stored in `derive_vars_dt_dtm_utils.R`
-  assert_time_imputation(
+  time_imputation <- assert_time_imputation(
     highest_imputation = highest_imputation,
     time_imputation = time_imputation
   )

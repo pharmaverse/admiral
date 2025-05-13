@@ -20,6 +20,8 @@ assert_time_imputation(highest_imputation, time_imputation)
 }}
 }
 \value{
+asserted \code{time_imputation}
+
 \code{invisible(NULL)}
 }
 \description{
