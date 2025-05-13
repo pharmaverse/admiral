@@ -8,10 +8,9 @@ on:
   push:
     branches:  [2642_verify_templates_results]
 
-# manually
+# manually, so can not a dependency on another branch or event
 on:
   workflow_dispatch:
-    - '2642_verify_templates_results'
 
 
 jobs:
