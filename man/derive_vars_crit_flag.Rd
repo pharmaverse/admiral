@@ -14,21 +14,42 @@ derive_vars_crit_flag(
 )
 }
 \arguments{
-\item{dataset}{Input dataset}
+\item{dataset}{Input dataset
 
-\item{crit_nr}{The criterion number, i.e., the \code{y} in \code{CRITy}}
+\describe{
+\item{Default value}{none}
+}}
+
+\item{crit_nr}{The criterion number, i.e., the \code{y} in \code{CRITy}
+
+\describe{
+\item{Permitted values}{a positive integer}
+\item{Default value}{\code{1}}
+}}
 
 \item{condition}{Condition for flagging records
 
 See description of the \code{values_yn} argument for details on how the
-\code{CRITyFL} variable is populated.}
+\code{CRITyFL} variable is populated.
+
+\describe{
+\item{Permitted values}{an unquoted expression which evaluates to a logical (in
+\code{dataset})}
+\item{Default value}{none}
+}}
 
 \item{description}{The description of the criterion
 
 The \code{CRITy} variable is set to the specified value.
 
 An expression can be specified to set the value depending on the parameter.
-Please note that the value must be constant within a parameter.}
+Please note that the value must be constant within a parameter.
+
+\describe{
+\item{Permitted values}{an unquoted expression which evaluates to a character
+(in \code{dataset})}
+\item{Default value}{none}
+}}
 
 \item{values_yn}{Should \code{"Y"} and \code{"N"} be used for \code{CRITyFL}?
 
@@ -37,12 +58,22 @@ If set to \code{TRUE}, the \code{CRITyFL} variable is set to \code{"Y"} if the c
 evaluate to \code{FALSE}, and to \code{NA} if it evaluates to \code{NA}.
 
 Otherwise, the \code{CRITyFL} variable is set to \code{"Y"} if the condition
-(\code{condition}) evaluates to \code{TRUE}, and to \code{NA} otherwise.}
+(\code{condition}) evaluates to \code{TRUE}, and to \code{NA} otherwise.
+
+\describe{
+\item{Permitted values}{\code{TRUE}, \code{FALSE}}
+\item{Default value}{\code{FALSE}}
+}}
 
 \item{create_numeric_flag}{Create a numeric flag?
 
 If set to \code{TRUE}, the \code{CRITyFN} variable is created. It is set to \code{1} if
-\code{CRITyFL == "Y"}, it set to \code{0} if \code{CRITyFL == "N"}, and to \code{NA} otherwise.}
+\code{CRITyFL == "Y"}, it set to \code{0} if \code{CRITyFL == "N"}, and to \code{NA} otherwise.
+
+\describe{
+\item{Permitted values}{\code{TRUE}, \code{FALSE}}
+\item{Default value}{\code{FALSE}}
+}}
 }
 \value{
 The input dataset with the variables \code{CRITy}, \code{CRITyFL}, and

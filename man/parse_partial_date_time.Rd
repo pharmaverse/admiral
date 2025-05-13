@@ -7,10 +7,18 @@
 parse_partial_date_time(dtc, is_datetime)
 }
 \arguments{
-\item{dtc}{A character vector of date or datetime strings to be parsed.}
+\item{dtc}{A character vector of date or datetime strings to be parsed.
+
+\describe{
+\item{Default value}{none}
+}}
 
 \item{is_datetime}{A logical value indicating whether the input strings include
-time information.}
+time information.
+
+\describe{
+\item{Default value}{none}
+}}
 }
 \value{
 A list of character vectors, each representing a component of the date

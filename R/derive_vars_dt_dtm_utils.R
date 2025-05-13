@@ -6,7 +6,7 @@
 #'   (day), `"h"` (hour), `"m"` (minute), `"s"` (second, lowest level), `"n"`
 #'   (none)
 #'
-#' @return A `dtm_level` object
+#' @returns A `dtm_level` object
 #'
 #' @details A `dtm_level` object is an ordered factor, i.e., two objects can be
 #'   compared.
@@ -35,7 +35,7 @@ dtm_level <- function(level) {
 #' @permitted `"Y"` (year, highest level), `"M"` (month), `"D"`
 #'   (day), `"n"` (none, lowest level)
 #'
-#' @return A `dt_level` object
+#' @returns A `dt_level` object
 #'
 #' @details A `dt_level` object is an ordered factor, i.e., two objects can be
 #'   compared.
@@ -69,7 +69,7 @@ dt_level <- function(level) {
 
 #' @param month Month component of the partial date
 #'
-#' @return A list of character vectors. The elements of the list are named
+#' @returns A list of character vectors. The elements of the list are named
 #'   "year", "month", "day".
 #'
 #' @details
@@ -130,7 +130,7 @@ get_imputation_target_date <- function(date_imputation,
 #'   for the start of the day,
 #'   - or as a keyword: `"first"`,`"last"` to impute to the start/end of a day.
 #'
-#' @return A list of character vectors. The elements of the list are named
+#' @returns A list of character vectors. The elements of the list are named
 #'   "hour", "minute", "second".
 #'
 #' @details
@@ -176,7 +176,7 @@ get_imputation_target_time <- function(time_imputation) {
 #'
 #' @details Usually this computation function can not be used with `%>%`.
 #'
-#' @return A datetime object
+#' @returns A datetime object
 #'
 #'
 #' @family com_date_time
@@ -226,7 +226,7 @@ convert_date_to_dtm <- function(dt,
 #'   `yyyy-mm-ddThh:mm:ss`. Trailing components can be omitted and `-` is a
 #'   valid value for any component.
 #'
-#' @return A list of character vectors. The elements of the list are named
+#' @returns A list of character vectors. The elements of the list are named
 #'   "year", "month", "day", "hour", "minute", and "second". Missing components
 #'   are set to `NA_character_`.
 #'
@@ -282,7 +282,7 @@ get_partialdatetime <- function(dtc) {
 #'
 #' @keywords internal
 #'
-#' @return `invisible(NULL)`
+#' @returns `invisible(NULL)`
 assert_dt_dtm_inputs <- function(new_vars_prefix, max_dates, min_dates, # nolint: cyclocomp_linter
                                  flag_imputation, flag_imputation_values,
                                  highest_imputation, highest_imputation_values,
@@ -315,11 +315,11 @@ assert_dt_dtm_inputs <- function(new_vars_prefix, max_dates, min_dates, # nolint
 #' @param date_imputation The value to impute the day/month when a datepart is
 #'   missing.
 #'
-#' @return asserted `date_imputation`
+#' @returns asserted `date_imputation`
 #'
 #' @keywords internal
 #'
-#' @return `invisible(NULL)`
+#' @returns `invisible(NULL)`
 assert_date_imputation <- function(highest_imputation, date_imputation) {
   date_imputation <-
     assert_character_scalar(
@@ -359,11 +359,11 @@ assert_date_imputation <- function(highest_imputation, date_imputation) {
 #' @param highest_imputation Highest imputation level
 #' @param time_imputation The value to impute time when missing
 #'
-#' @return asserted `time_imputation`
+#' @returns asserted `time_imputation`
 #'
 #' @keywords internal
 #'
-#' @return `invisible(NULL)`
+#' @returns `invisible(NULL)`
 assert_time_imputation <- function(highest_imputation, time_imputation) {
   time_imputation <-
     assert_character_scalar(
@@ -413,7 +413,7 @@ assert_time_imputation <- function(highest_imputation, time_imputation) {
 #' - If `highest_imputation` is "Y" and `date_imputation` is "last",
 #' `max_dates` should be specified.
 #'
-#' @return Returns `NULL` invisibly if assertions pass.
+#' @returns Returns `NULL` invisibly if assertions pass.
 #'
 #' @keywords internal
 assert_highest_imputation <- function(highest_imputation, highest_imputation_values, # nolint: cyclocomp_linter
@@ -473,7 +473,7 @@ assert_highest_imputation <- function(highest_imputation, highest_imputation_val
 #' Accepts `"first"` (default) or `"last"` to impute to the first or last possible date,
 #' respectively.
 #'
-#' @return A character vector of fully imputed dates in `"YYYY-MM-DD"` format.
+#' @returns A character vector of fully imputed dates in `"YYYY-MM-DD"` format.
 #'
 #' @details
 #' This function is a simplified version of the `impute_dtc_dt()` function that
@@ -545,7 +545,7 @@ get_dt_dtm_range <- function(dtc,
 #'
 #' @param dtc A character vector of date strings to be parsed.
 #'
-#' @return A list with three elements: "year", "month", and "day", each containing
+#' @returns A list with three elements: "year", "month", and "day", each containing
 #'   a character vector of the respective date components.
 #'
 #' @details
@@ -583,7 +583,7 @@ get_partialdate <- function(dtc) {
 #' @param is_datetime A logical indicating whether the imputation is for a datetime.
 #' @param highest_imputation A character indicating the highest imputation level.
 #'
-#' @return An integer representing the highest imputation level.
+#' @returns An integer representing the highest imputation level.
 #'
 #' @keywords internal
 get_highest_imputation_level <- function(is_datetime, highest_imputation) {
@@ -603,7 +603,7 @@ get_highest_imputation_level <- function(is_datetime, highest_imputation) {
 #' @param time_imputation A character specifying the time imputation method.
 #' @param is_datetime A logical indicating whether it's a datetime imputation.
 #'
-#' @return A list of imputation targets for date and (if applicable) time components.
+#' @returns A list of imputation targets for date and (if applicable) time components.
 #'
 #' @keywords internal
 get_imputation_targets <- function(partial, date_imputation, time_imputation, is_datetime) {
@@ -632,7 +632,7 @@ get_imputation_targets <- function(partial, date_imputation, time_imputation, is
 #' @param partial A list of partial date/time components.
 #' @param is_datetime A logical indicating whether it's a datetime adjustment.
 #'
-#' @return A character vector of adjusted date/datetime strings.
+#' @returns A character vector of adjusted date/datetime strings.
 #'
 #' @details
 #' This function is used when the date imputation method is set to "last" and
@@ -673,7 +673,7 @@ adjust_last_day_imputation <- function(imputed_dtc, partial, is_datetime) {
 #' @param target A list of target values for imputation.
 #' @param components A character vector of component names.
 #'
-#' @return A list of imputed date/time components.
+#' @returns A list of imputed date/time components.
 #'
 #' @keywords internal
 impute_values <- function(partial, target, components) {
@@ -696,7 +696,7 @@ impute_values <- function(partial, target, components) {
 #' @param imputed A list of imputed date/time components.
 #' @param is_datetime A logical indicating whether it's a datetime format.
 #'
-#' @return A character vector of formatted date/datetime strings.
+#' @returns A character vector of formatted date/datetime strings.
 #'
 #' @details
 #' The function formats the imputed components into "YYYY-MM-DD" for dates
@@ -726,7 +726,7 @@ format_imputed_dtc <- function(imputed, is_datetime) {
 #'
 #' @param partial A list of partial date/time components.
 #'
-#' @return A list of date/time components with propagated NA values.
+#' @returns A list of date/time components with propagated NA values.
 #'
 #' @details
 #' This function ensures that if a higher-order component (e.g., month) is NA,
@@ -753,7 +753,7 @@ propagate_na_values <- function(partial) {
 #' @param is_datetime A logical value indicating whether the input strings include
 #' time information.
 #'
-#' @return A list of character vectors, each representing a component of the date
+#' @returns A list of character vectors, each representing a component of the date
 #' or datetime.
 #'   For dates, the components are "year", "month", and "day".
 #'   For datetimes, the components also include "hour", "minute", and "second".

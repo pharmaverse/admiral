@@ -7,7 +7,11 @@
 get_partialdate(dtc)
 }
 \arguments{
-\item{dtc}{A character vector of date strings to be parsed.}
+\item{dtc}{A character vector of date strings to be parsed.
+
+\describe{
+\item{Default value}{none}
+}}
 }
 \value{
 A list with three elements: "year", "month", and "day", each containing
