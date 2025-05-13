@@ -376,7 +376,30 @@ assert_time_imputation <- function(highest_imputation, time_imputation) {
   return(invisible(NULL))
 }
 
-
+#' Assert Highest Imputation Validity
+#'
+#' @description
+#' `r lifecycle::badge("stable")`
+#'
+#' This function checks the validity and requirements for the `highest_imputation` parameter.
+#' It ensures that necessary conditions are met when `highest_imputation` is set to "Y".
+#'
+#' @param highest_imputation A character scalar indicating the highest level of imputation.
+#' @param highest_imputation_values A character vector of valid values for `highest_imputation`.
+#' @param date_imputation Optional character scalar specifying the imputation method for dates.
+#' @param max_dates Optional vector specifying maximum dates for imputation.
+#' @param min_dates Optional vector specifying minimum dates for imputation.
+#'
+#' @details
+#' - If `highest_imputation` is "Y", either `min_dates` or `max_dates` must be specified.
+#' - If `highest_imputation` is "Y" and `date_imputation` is "first",
+#' `min_dates` should be specified.
+#' - If `highest_imputation` is "Y" and `date_imputation` is "last",
+#' `max_dates` should be specified.
+#'
+#' @return Returns `NULL` invisibly if assertions pass.
+#'
+#' @keywords internal
 assert_highest_imputation <- function(highest_imputation, highest_imputation_values, # nolint: cyclocomp_linter
                                       date_imputation = NULL,
                                       max_dates, min_dates) {

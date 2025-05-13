@@ -20,6 +20,7 @@ a character vector of the respective date components.
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#stable}{\figure{lifecycle-stable.svg}{options: alt='[Stable]'}}}{\strong{[Stable]}}
 
+This is a helping function for \code{get_dt_dtm_range()}
 This function extracts year, month, and day components from a vector of
 date strings.
 }

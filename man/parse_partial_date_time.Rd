@@ -2,7 +2,7 @@
 % Please edit documentation in R/derive_vars_dt_dtm_utils.R
 \name{parse_partial_date_time}
 \alias{parse_partial_date_time}
-\title{Parse Partial Date or DateTime}
+\title{Parse Partial Date or Datetime}
 \usage{
 parse_partial_date_time(dtc, is_datetime)
 }
@@ -29,6 +29,7 @@ For datetimes, the components also include "hour", "minute", and "second".
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#stable}{\figure{lifecycle-stable.svg}{options: alt='[Stable]'}}}{\strong{[Stable]}}
 
+This is a helping function for \code{get_dt_dtm_range()}
 This function parses a vector of date or datetime strings into their component
 parts.
 }

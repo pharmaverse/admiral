@@ -2,7 +2,7 @@
 % Please edit documentation in R/derive_vars_dt_dtm_utils.R
 \name{format_imputed_dtc}
 \alias{format_imputed_dtc}
-\title{Format Imputed Date/DateTime}
+\title{Format Imputed Date/Datetime}
 \usage{
 format_imputed_dtc(imputed, is_datetime)
 }
@@ -25,6 +25,7 @@ A character vector of formatted date/datetime strings.
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#stable}{\figure{lifecycle-stable.svg}{options: alt='[Stable]'}}}{\strong{[Stable]}}
 
+This is a helping function for \code{get_dt_dtm_range()}
 Formats imputed date/datetime components into a string representation.
 }
 \details{

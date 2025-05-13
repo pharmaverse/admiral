@@ -31,6 +31,7 @@ A character vector of adjusted date/datetime strings.
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#stable}{\figure{lifecycle-stable.svg}{options: alt='[Stable]'}}}{\strong{[Stable]}}
 
+This is a helping function for \code{get_dt_dtm_range()}
 Adjusts the imputed date/datetime to the last day of the month when necessary.
 }
 \details{

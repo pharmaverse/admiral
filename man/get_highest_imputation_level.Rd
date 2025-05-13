@@ -25,6 +25,7 @@ An integer representing the highest imputation level.
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#stable}{\figure{lifecycle-stable.svg}{options: alt='[Stable]'}}}{\strong{[Stable]}}
 
+This is a helping function for \code{get_dt_dtm_range()}
 Determines the highest imputation level based on whether it's a date or datetime.
 }
 \keyword{internal}
