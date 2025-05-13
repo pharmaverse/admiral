@@ -7,12 +7,17 @@
 #' each by group (`order` and `mode` argument).
 #'
 #' @param dataset
+#'
 #' `r roxygen_param_dataset(expected_vars = c("by_vars"))`
+#'
+#' @permitted [dataset]
 #'
 #' @param dataset_add Additional dataset
 #'
 #'   The variables specified by the `by_vars`, the `new_vars`, and the `order`
 #'   argument are expected.
+#'
+#' @permitted [dataset]
 #'
 #' @param by_vars Grouping variables
 #'
@@ -20,6 +25,8 @@
 #'   are merged by the specified variables.
 #'
 #'   `r roxygen_param_by_vars(rename = TRUE)`
+#'
+#' @permitted [var_list]
 #'
 #' @param order Sort order
 #'
@@ -31,8 +38,7 @@
 #'
 #'   `r roxygen_order_na_handling()`
 #'
-#' @permitted list of expressions created by `exprs()`, e.g.,
-#'   `exprs(ADT, desc(AVAL))` or `NULL`
+#' @permitted [var_list]
 #'
 #' @param new_vars Variables to add
 #'
@@ -55,7 +61,7 @@
 #'   If the argument is not specified or set to `NULL`, all variables from the
 #'   additional dataset (`dataset_add`) are added.
 #'
-#' @permitted list of variables or named expressions created by `exprs()`
+#' @permitted [var_list]
 #'
 #' @param filter_add Filter for additional dataset (`dataset_add`)
 #'
@@ -66,7 +72,7 @@
 #'   Variables defined by the `new_vars` argument can be used in the filter
 #'   condition.
 #'
-#' @permitted a condition
+#' @permitted [condition]
 #'
 #' @param mode Selection mode
 #'
@@ -75,7 +81,7 @@
 #'
 #'   If the `order` argument is not specified, the `mode` argument is ignored.
 #'
-#' @permitted `"first"`, `"last"`, `NULL`
+#' @permitted [mode]
 #'
 #' @param exist_flag Exist flag
 #'
@@ -84,21 +90,21 @@
 #'   be the value provided in `true_value` for all selected records from `dataset_add`
 #'   which are merged into the input dataset, and the value provided in `false_value` otherwise.
 #'
-#' @permitted Variable name
+#' @permitted [var]
 #'
 #' @param true_value True value
 #'
 #'   The value for the specified variable `exist_flag`, applicable to
 #'   the first or last observation (depending on the mode) of each by group.
 #'
-#' @permitted An atomic scalar
+#' @permitted [char_scalar]
 #'
 #' @param false_value False value
 #'
 #'   The value for the specified variable `exist_flag`, NOT applicable to
 #'   the first or last observation (depending on the mode) of each by group.
 #'
-#' @permitted An atomic scalar
+#' @permitted [char_scalar]
 #'
 #' @param missing_values Values for non-matching observations
 #'
@@ -107,8 +113,7 @@
 #'   of the specified variables are set to the specified value. Only variables
 #'   specified for `new_vars` can be specified for `missing_values`.
 #'
-#' @permitted named list of expressions, e.g.,
-#'   `exprs(BASEC = "MISSING", BASE = -1)`
+#' @permitted [expr_list]
 #'
 #' @param check_type Check uniqueness?
 #'
@@ -120,7 +125,7 @@
 #'   if the observations of the (restricted) additional dataset are not unique with respect
 #'   to the by variables, an error is issued.
 #'
-#' @permitted `"none"`, `"message"`, `"warning"`, `"error"`
+#' @permitted [msg_type]
 #'
 #' @param duplicate_msg Message of unique check
 #'
@@ -135,6 +140,8 @@
 #'   )
 #'   ```
 #'
+#' @permitted [msg]
+#'
 #' @param relationship Expected merge-relationship between the `by_vars`
 #'   variable(s) in `dataset` (input dataset) and the `dataset_add` (additional dataset)
 #'    containing the additional `new_vars`.
@@ -143,7 +150,7 @@
 #'   <https://dplyr.tidyverse.org/reference/mutate-joins.html#arguments> for
 #'   more details.
 #'
-#' @permitted `"one-to-one"`, `"many-to-one"`, `NULL`.
+#' @permitted [merge_rel]
 #'
 #' @return The output dataset contains all observations and variables of the
 #'   input dataset and additionally the variables specified for `new_vars` from
@@ -488,13 +495,19 @@ derive_vars_merged <- function(dataset,
 #'
 #'   The variables specified by the `by_vars` argument are expected.
 #'
+#' @permitted [dataset]
+#'
 #' @param by_vars Grouping variables
 #'
 #' `r roxygen_param_by_vars()`
 #'
+#' @permitted [var_list]
+#'
 #' @param new_var New variable
 #'
 #'   The specified variable is added to the input dataset.
+#'
+#' @permitted [var]
 #'
 #' @param condition Condition
 #'
@@ -506,16 +519,22 @@ derive_vars_merged <- function(dataset,
 #'   value (`missing_value`) for by groups not present in the additional
 #'   dataset.
 #'
+#' @permitted [condition]
+#'
 #' @param true_value True value
+#'
+#' @permitted [char_scalar]
 #'
 #' @param false_value False value
 #'
-#' @param missing_value Values used for missing information
+#' @permitted [char_scalar]
+#'
+#' @param missing_value Value used for missing information
 #'
 #'   The new variable is set to the specified value for all by groups without
 #'   observations in the additional dataset.
 #'
-#' @permitted A character scalar
+#' @permitted [char_scalar]
 #'
 #' @param filter_add Filter for additional data
 #'
@@ -523,7 +542,7 @@ derive_vars_merged <- function(dataset,
 #'   for flagging. If the argument is not specified, all observations are
 #'   considered.
 #'
-#' @permitted a condition
+#' @permitted [condition]
 #'
 #' @inheritParams derive_vars_merged
 #'
@@ -543,7 +562,6 @@ derive_vars_merged <- function(dataset,
 #'   observation exists and for all observations the condition evaluates to
 #'   `FALSE` or `NA`. Otherwise, it is set to the missing value
 #'   (`missing_value`).
-#'
 #'
 #' @family der_gen
 #' @keywords der_gen
@@ -643,24 +661,22 @@ derive_var_merged_exist_flag <- function(dataset,
 #'
 #' @param dataset_add Lookup table
 #'
-#' The variables specified by the `by_vars` argument are expected.
+#'   The variables specified by the `by_vars` argument are expected.
+#'
+#' @permitted [dataset]
 #'
 #' @param print_not_mapped Print a list of unique `by_vars` values that do not
 #' have corresponding records from the lookup table?
 #'
-#' *Default*: `TRUE`
-#'
-#' @permitted `TRUE`, `FALSE`
+#' @permitted [boolean]
 #'
 #' @inheritParams derive_vars_merged
-#'
 #'
 #' @return The output dataset contains all observations and variables of the
 #' input dataset, and add the variables specified in `new_vars` from the lookup
 #' table specified in `dataset_add`. Optionally prints a list of unique
 #' `by_vars` values that do not have corresponding records
 #' from the lookup table (by specifying `print_not_mapped = TRUE`).
-#'
 #'
 #' @keywords der_gen
 #' @family der_gen
@@ -795,6 +811,8 @@ get_not_mapped <- function() {
 #'   The variables specified by the `by_vars` and the variables used on the left
 #'   hand sides of the `new_vars` arguments are expected.
 #'
+#' @permitted [dataset]
+#'
 #' @param by_vars Grouping variables
 #'
 #'   The expressions on the left hand sides of `new_vars` are evaluated by the
@@ -802,6 +820,8 @@ get_not_mapped <- function() {
 #'   dataset (`dataset`) by the specified *variables*.
 #'
 #'   `r roxygen_param_by_vars()`
+#'
+#' @permitted [var_list]
 #'
 #' @param new_vars New variables to add
 #'
@@ -821,13 +841,15 @@ get_not_mapped <- function() {
 #'     )
 #'   ```
 #'
+#' @permitted [var_list]
+#'
 #' @param filter_add Filter for additional dataset (`dataset_add`)
 #'
 #'   Only observations fulfilling the specified condition are taken into account
 #'   for summarizing. If the argument is not specified, all observations are
 #'   considered.
 #'
-#' @permitted a condition
+#' @permitted [condition]
 #'
 #' @inheritParams derive_vars_merged
 #'

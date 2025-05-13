@@ -7,18 +7,25 @@
 #' before the current observation.
 #'
 #' @param dataset
+#'
 #' `r roxygen_param_dataset(expected_vars = c("by_vars"))`
+#'
+#' @permitted [dataset]
 #'
 #' @param dataset_add Additional dataset
 #'
 #'   The variables specified by the `by_vars`, the `new_vars`, the `join_vars`,
 #'   and the `order` argument are expected.
 #'
+#' @permitted [dataset]
+#'
 #' @param by_vars Grouping variables
 #'
 #'   The two datasets are joined by the specified variables.
 #'
 #'   `r roxygen_param_by_vars(rename = TRUE)`
+#'
+#' @permitted [var_list]
 #'
 #' @param order Sort order
 #'
@@ -37,8 +44,7 @@
 #'
 #'   `r roxygen_order_na_handling()`
 #'
-#' @permitted list of expressions created by `exprs()`, e.g.,
-#'    `exprs(ADT, desc(AVAL))` or `NULL`
+#' @permitted [var_list]
 #'
 #' @param new_vars Variables to add
 #'
@@ -61,7 +67,7 @@
 #'   If the argument is not specified or set to `NULL`, all variables from the
 #'   additional dataset (`dataset_add`) are added.
 #'
-#' @permitted list of variables or named expressions created by `exprs()`
+#' @permitted [var_list]
 #'
 #' @param tmp_obs_nr_var Temporary observation number
 #'
@@ -74,6 +80,8 @@
 #'
 #'   The variable is not included in the output dataset. To include it specify
 #'   it for `new_vars`.
+#'
+#' @permitted [var]
 #'
 #' @param join_vars Variables to use from additional dataset
 #'
@@ -91,7 +99,7 @@
 #'
 #'   The variables are not included in the output dataset.
 #'
-#' @permitted list of variables or named expressions created by `exprs()`
+#' @permitted [var_list]
 #'
 #' @param first_cond_lower Condition for selecting range of data (before)
 #'
@@ -106,6 +114,8 @@
 #'   certain observation before the current observation up to the current
 #'   observation. For an example see the last example below.
 #'
+#' @permitted [condition]
+#'
 #' @param first_cond_upper Condition for selecting range of data (after)
 #'
 #'   If this argument is specified, the other observations are restricted up to
@@ -116,6 +126,8 @@
 #'   This argument should be specified if `filter_join` contains summary
 #'   functions which should not apply to all observations but only up to the
 #'   confirmation assessment. For an example see the last example below.
+#'
+#' @permitted [condition]
 #'
 #' @param filter_join Filter for the joined dataset
 #'
@@ -128,7 +140,7 @@
 #'   The condition can include summary functions like `all()` or `any()`. The
 #'   joined dataset is grouped by the original observations.
 #'
-#' @permitted a condition
+#' @permitted [condition]
 #'
 #' @param mode Selection mode
 #'
@@ -137,7 +149,7 @@
 #'
 #'   If the `order` argument is not specified, the `mode` argument is ignored.
 #'
-#' @permitted `"first"`, `"last"`, `NULL`
+#' @permitted [mode]
 #'
 #' @param check_type Check uniqueness?
 #'
@@ -150,7 +162,7 @@
 #'   contains more than one observation for any of the observations of the input
 #'   dataset.
 #'
-#' @permitted `"none"`, `"warning"`, `"error"`
+#' @permitted [msg_type]
 #'
 #' @inheritParams get_joined_data
 #' @inheritParams derive_vars_merged
@@ -549,18 +561,25 @@ derive_vars_joined <- function(dataset,
 #' variables are included in the output dataset.
 #'
 #' @param dataset
+#'
 #' `r roxygen_param_dataset(expected_vars = c("by_vars"))`
+#'
+#' @permitted [dataset]
 #'
 #' @param dataset_add Additional dataset
 #'
 #'   The variables specified by the `by_vars`, the `new_vars`, the `join_vars`,
 #'   and the `order` argument are expected.
 #'
+#' @permitted [dataset]
+#'
 #' @param by_vars Grouping variables
 #'
 #'   The two datasets are joined by the specified variables.
 #'
 #'   `r roxygen_param_by_vars(rename = TRUE)`
+#'
+#' @permitted [var_list]
 #'
 #' @param order Sort order
 #'
@@ -579,8 +598,7 @@ derive_vars_joined <- function(dataset,
 #'
 #'   `r roxygen_order_na_handling()`
 #'
-#' @permitted list of expressions created by `exprs()`, e.g.,
-#'    `exprs(ADT, desc(AVAL))` or `NULL`
+#' @permitted [var_list]
 #'
 #' @param join_vars Variables to use from additional dataset
 #'
@@ -598,7 +616,7 @@ derive_vars_joined <- function(dataset,
 #'
 #'   The variables are not included in the output dataset.
 #'
-#' @permitted list of variables or named expressions created by `exprs()`
+#' @permitted [var_list]
 #'
 #' @param join_type Observations to keep after joining
 #'
@@ -614,7 +632,7 @@ derive_vars_joined <- function(dataset,
 #'   prior to the observation. For example, to identify AEs occurring on or
 #'   after seven days before a COVID AE. Thus `join_type = "all"` could be used.
 #'
-#' @permitted `"before"`, `"after"`, `"all"`
+#' @permitted [join]
 #'
 #' @param tmp_obs_nr_var Temporary observation number
 #'
@@ -624,6 +642,8 @@ derive_vars_joined <- function(dataset,
 #'   number starts with `1`. The variable can be used in the conditions
 #'   (`filter_join`, `first_cond_upper`, `first_cond_lower`). It can also be
 #'   used to select consecutive observations or the last observation.
+#'
+#' @permitted [var]
 #'
 #' @param filter_add Filter for additional dataset (`dataset_add`)
 #'
@@ -637,7 +657,7 @@ derive_vars_joined <- function(dataset,
 #'   The condition can include summary functions like `all()` or `any()`. The
 #'   additional dataset is grouped by the by variables (`by_vars`).
 #'
-#' @permitted a condition
+#' @permitted [condition]
 #'
 #' @param first_cond_lower Condition for selecting range of data (before)
 #'
@@ -652,6 +672,8 @@ derive_vars_joined <- function(dataset,
 #'   certain observation before the current observation up to the current
 #'   observation.
 #'
+#' @permitted [condition]
+#'
 #' @param first_cond_upper Condition for selecting range of data (after)
 #'
 #'   If this argument is specified, the other observations are restricted up to
@@ -662,6 +684,8 @@ derive_vars_joined <- function(dataset,
 #'   This argument should be specified if `filter_join` contains summary
 #'   functions which should not apply to all observations but only up to the
 #'   confirmation assessment.
+#'
+#' @permitted [condition]
 #'
 #' @param filter_join Filter for the joined dataset
 #'
@@ -674,7 +698,7 @@ derive_vars_joined <- function(dataset,
 #'   The condition can include summary functions like `all()` or `any()`. The
 #'   joined dataset is grouped by the original observations.
 #'
-#' @permitted a condition
+#' @permitted [condition]
 #'
 #' @param check_type Check uniqueness?
 #'
@@ -687,8 +711,7 @@ derive_vars_joined <- function(dataset,
 #'   contains more than one observation for any of the observations of the input
 #'   dataset.
 #'
-#' @permitted `"none"`, `"warning"`, `"error"`
-#'
+#' @permitted [msg_type]
 #'
 #' @details
 #'

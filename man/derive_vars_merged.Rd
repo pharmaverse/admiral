@@ -28,6 +28,7 @@ derive_vars_merged(
 The variables specified by the \code{by_vars} argument are expected to be in the dataset.
 
 \describe{
+\item{Permitted values}{a dataset, i.e., a \code{data.frame} or tibble}
 \item{Default value}{none}
 }}
 
@@ -37,6 +38,7 @@ The variables specified by the \code{by_vars}, the \code{new_vars}, and the \cod
 argument are expected.
 
 \describe{
+\item{Permitted values}{a dataset, i.e., a \code{data.frame} or tibble}
 \item{Default value}{none}
 }}
 
@@ -49,6 +51,7 @@ Variables can be renamed by naming the element, i.e.
 \verb{by_vars = exprs(<name in input dataset> = <name in additional dataset>)}, similar to the \code{dplyr} joins.
 
 \describe{
+\item{Permitted values}{list of variables created by \code{exprs()}, e.g., \code{exprs(USUBJID, VISIT)}}
 \item{Default value}{none}
 }}
 
@@ -63,8 +66,7 @@ Variables defined by the \code{new_vars} argument can be used in the sort order.
 For handling of \code{NA}s in sorting variables see \href{../articles/generic.html#sort_order}{Sort Order}.
 
 \describe{
-\item{Permitted values}{list of expressions created by \code{exprs()}, e.g.,
-\code{exprs(ADT, desc(AVAL))} or \code{NULL}}
+\item{Permitted values}{list of variables created by \code{exprs()}, e.g., \code{exprs(USUBJID, VISIT)}}
 \item{Default value}{\code{NULL}}
 }}
 
@@ -89,7 +91,7 @@ If the argument is not specified or set to \code{NULL}, all variables from the
 additional dataset (\code{dataset_add}) are added.
 
 \describe{
-\item{Permitted values}{list of variables or named expressions created by \code{exprs()}}
+\item{Permitted values}{list of variables created by \code{exprs()}, e.g., \code{exprs(USUBJID, VISIT)}}
 \item{Default value}{\code{NULL}}
 }}
 
@@ -103,7 +105,7 @@ Variables defined by the \code{new_vars} argument can be used in the filter
 condition.
 
 \describe{
-\item{Permitted values}{a condition}
+\item{Permitted values}{an unquoted condition, e.g., \code{AVISIT == "BASELINE"}}
 \item{Default value}{\code{NULL}}
 }}
 
@@ -115,7 +117,7 @@ argument is specified, \code{mode} must be non-null.
 If the \code{order} argument is not specified, the \code{mode} argument is ignored.
 
 \describe{
-\item{Permitted values}{\code{"first"}, \code{"last"}, \code{NULL}}
+\item{Permitted values}{\code{"first"}, \code{"last"}}
 \item{Default value}{\code{NULL}}
 }}
 
@@ -127,7 +129,7 @@ be the value provided in \code{true_value} for all selected records from \code{d
 which are merged into the input dataset, and the value provided in \code{false_value} otherwise.
 
 \describe{
-\item{Permitted values}{Variable name}
+\item{Permitted values}{a variable}
 \item{Default value}{\code{NULL}}
 }}
 
@@ -137,7 +139,7 @@ The value for the specified variable \code{exist_flag}, applicable to
 the first or last observation (depending on the mode) of each by group.
 
 \describe{
-\item{Permitted values}{An atomic scalar}
+\item{Permitted values}{a character scalar, i.e., a character vector of length one}
 \item{Default value}{\code{"Y"}}
 }}
 
@@ -147,7 +149,7 @@ The value for the specified variable \code{exist_flag}, NOT applicable to
 the first or last observation (depending on the mode) of each by group.
 
 \describe{
-\item{Permitted values}{An atomic scalar}
+\item{Permitted values}{a character scalar, i.e., a character vector of length one}
 \item{Default value}{\code{NA_character_}}
 }}
 
@@ -159,8 +161,7 @@ of the specified variables are set to the specified value. Only variables
 specified for \code{new_vars} can be specified for \code{missing_values}.
 
 \describe{
-\item{Permitted values}{named list of expressions, e.g.,
-\code{exprs(BASEC = "MISSING", BASE = -1)}}
+\item{Permitted values}{list of expressions created by \code{exprs()}, e.g., \code{exprs(BASEC = "MISSING", BASE = -1)}}
 \item{Default value}{\code{NULL}}
 }}
 
@@ -184,6 +185,7 @@ to the by variables, an error is issued.
 If the uniqueness check fails, the specified message is displayed.
 
 \describe{
+\item{Permitted values}{a console message to be printed, e.g. \code{"Attention"} or for longer messages use \code{paste("Line 1", "Line 2")}}
 \item{Default value}{\if{html}{\out{<div class="sourceCode r">}}\preformatted{paste(
   "Dataset \{.arg dataset_add\} contains duplicate records with respect to",
   "\{.var \{vars2chr(by_vars)\}\}."
@@ -200,7 +202,7 @@ This argument is passed to the \code{dplyr::left_join()} function. See
 more details.
 
 \describe{
-\item{Permitted values}{\code{"one-to-one"}, \code{"many-to-one"}, \code{NULL}.}
+\item{Permitted values}{\code{"one-to-one"}, \code{"many-to-one"}}
 \item{Default value}{\code{NULL}}
 }}
 }

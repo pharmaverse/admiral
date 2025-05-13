@@ -32,6 +32,7 @@ derive_vars_joined(
 The variables specified by the \code{by_vars} argument are expected to be in the dataset.
 
 \describe{
+\item{Permitted values}{a dataset, i.e., a \code{data.frame} or tibble}
 \item{Default value}{none}
 }}
 
@@ -41,6 +42,7 @@ The variables specified by the \code{by_vars}, the \code{new_vars}, the \code{jo
 and the \code{order} argument are expected.
 
 \describe{
+\item{Permitted values}{a dataset, i.e., a \code{data.frame} or tibble}
 \item{Default value}{none}
 }}
 
@@ -52,6 +54,7 @@ Variables can be renamed by naming the element, i.e.
 \verb{by_vars = exprs(<name in input dataset> = <name in additional dataset>)}, similar to the \code{dplyr} joins.
 
 \describe{
+\item{Permitted values}{list of variables created by \code{exprs()}, e.g., \code{exprs(USUBJID, VISIT)}}
 \item{Default value}{\code{NULL}}
 }}
 
@@ -72,8 +75,7 @@ variable is not included in the output dataset.
 For handling of \code{NA}s in sorting variables see \href{../articles/generic.html#sort_order}{Sort Order}.
 
 \describe{
-\item{Permitted values}{list of expressions created by \code{exprs()}, e.g.,
-\code{exprs(ADT, desc(AVAL))} or \code{NULL}}
+\item{Permitted values}{list of variables created by \code{exprs()}, e.g., \code{exprs(USUBJID, VISIT)}}
 \item{Default value}{\code{NULL}}
 }}
 
@@ -98,7 +100,7 @@ If the argument is not specified or set to \code{NULL}, all variables from the
 additional dataset (\code{dataset_add}) are added.
 
 \describe{
-\item{Permitted values}{list of variables or named expressions created by \code{exprs()}}
+\item{Permitted values}{list of variables created by \code{exprs()}, e.g., \code{exprs(USUBJID, VISIT)}}
 \item{Default value}{\code{NULL}}
 }}
 
@@ -115,6 +117,7 @@ The variable is not included in the output dataset. To include it specify
 it for \code{new_vars}.
 
 \describe{
+\item{Permitted values}{a variable}
 \item{Default value}{\code{NULL}}
 }}
 
@@ -134,7 +137,7 @@ output dataset.
 The variables are not included in the output dataset.
 
 \describe{
-\item{Permitted values}{list of variables or named expressions created by \code{exprs()}}
+\item{Permitted values}{list of variables created by \code{exprs()}, e.g., \code{exprs(USUBJID, VISIT)}}
 \item{Default value}{\code{NULL}}
 }}
 
@@ -170,7 +173,7 @@ The condition can include summary functions like \code{all()} or \code{any()}. T
 additional dataset is grouped by the by variables (\code{by_vars}).
 
 \describe{
-\item{Permitted values}{a condition}
+\item{Permitted values}{an unquoted condition, e.g., \code{AVISIT == "BASELINE"}}
 \item{Default value}{\code{NULL}}
 }}
 
@@ -188,6 +191,7 @@ certain observation before the current observation up to the current
 observation. For an example see the last example below.
 
 \describe{
+\item{Permitted values}{an unquoted condition, e.g., \code{AVISIT == "BASELINE"}}
 \item{Default value}{\code{NULL}}
 }}
 
@@ -203,6 +207,7 @@ functions which should not apply to all observations but only up to the
 confirmation assessment. For an example see the last example below.
 
 \describe{
+\item{Permitted values}{an unquoted condition, e.g., \code{AVISIT == "BASELINE"}}
 \item{Default value}{\code{NULL}}
 }}
 
@@ -218,7 +223,7 @@ The condition can include summary functions like \code{all()} or \code{any()}. T
 joined dataset is grouped by the original observations.
 
 \describe{
-\item{Permitted values}{a condition}
+\item{Permitted values}{an unquoted condition, e.g., \code{AVISIT == "BASELINE"}}
 \item{Default value}{\code{NULL}}
 }}
 
@@ -230,7 +235,7 @@ argument is specified, \code{mode} must be non-null.
 If the \code{order} argument is not specified, the \code{mode} argument is ignored.
 
 \describe{
-\item{Permitted values}{\code{"first"}, \code{"last"}, \code{NULL}}
+\item{Permitted values}{\code{"first"}, \code{"last"}}
 \item{Default value}{\code{NULL}}
 }}
 
@@ -242,7 +247,7 @@ be the value provided in \code{true_value} for all selected records from \code{d
 which are merged into the input dataset, and the value provided in \code{false_value} otherwise.
 
 \describe{
-\item{Permitted values}{Variable name}
+\item{Permitted values}{a variable}
 \item{Default value}{\code{NULL}}
 }}
 
@@ -252,7 +257,7 @@ The value for the specified variable \code{exist_flag}, applicable to
 the first or last observation (depending on the mode) of each by group.
 
 \describe{
-\item{Permitted values}{An atomic scalar}
+\item{Permitted values}{a character scalar, i.e., a character vector of length one}
 \item{Default value}{\code{"Y"}}
 }}
 
@@ -262,7 +267,7 @@ The value for the specified variable \code{exist_flag}, NOT applicable to
 the first or last observation (depending on the mode) of each by group.
 
 \describe{
-\item{Permitted values}{An atomic scalar}
+\item{Permitted values}{a character scalar, i.e., a character vector of length one}
 \item{Default value}{\code{NA_character_}}
 }}
 
@@ -274,8 +279,7 @@ of the specified variables are set to the specified value. Only variables
 specified for \code{new_vars} can be specified for \code{missing_values}.
 
 \describe{
-\item{Permitted values}{named list of expressions, e.g.,
-\code{exprs(BASEC = "MISSING", BASE = -1)}}
+\item{Permitted values}{list of expressions created by \code{exprs()}, e.g., \code{exprs(BASEC = "MISSING", BASE = -1)}}
 \item{Default value}{\code{NULL}}
 }}
 
@@ -291,7 +295,7 @@ contains more than one observation for any of the observations of the input
 dataset.
 
 \describe{
-\item{Permitted values}{\code{"none"}, \code{"warning"}, \code{"error"}}
+\item{Permitted values}{\code{"none"}, \code{"message"}, \code{"warning"}, \code{"error"}}
 \item{Default value}{\code{"warning"}}
 }}
 }
