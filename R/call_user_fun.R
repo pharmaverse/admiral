@@ -32,8 +32,7 @@ call_user_fun <- function(call) {
     details = c(
       "`call_user_fun()` is no longer in use; ",
       "The original code for this function is here: ",
-      "https://github.com/pharmaverse/admiral/",
-      "blob/a49e84143379f921ef4e10ab546a09648d76f4ec/R/call_user_fun.R#L26-L39"
+      "https://github.com/pharmaverse/admiral/blob/v1.2.0/R/call_user_fun.R#L26-L39"
     )
   )
   tryCatch(
