@@ -53,7 +53,7 @@ The metadata should have the following variables:
 eg. "Anemia" or "INR Increased". Note: the variable is case insensitive.
 \item \code{DIRECTION}: variable to hold the direction of the abnormality of a particular lab test
 value. "L" is for LOW values, "H" is for HIGH values. Note: the variable is case insensitive.
-\item \code{SI_UNIT_CHECK}: variable to hold unit of particular lab test. Used to check against input data
+\item \code{UNIT_CHECK}: variable to hold unit of particular lab test. Used to check against input data
 if criteria is based on absolute values.
 \item \code{VAR_CHECK}: variable to hold comma separated list of variables used in criteria. Used to check
 against input data that variables exist.
@@ -86,7 +86,7 @@ variable. Currently for terms \code{"Alanine aminotransferase increased"},
 \item{get_unit_expr}{An expression providing the unit of the parameter
 
 The result is used to check the units of the input parameters. Compared with
-\code{SI_UNIT_CHECK} in metadata (see \code{meta_criteria} parameter).
+\code{UNIT_CHECK} in metadata (see \code{meta_criteria} parameter).
 
 \describe{
 \item{Permitted values}{A variable containing unit from the input dataset, or a function call,

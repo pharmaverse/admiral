@@ -53,8 +53,11 @@ adsl \%>\%
 
 Other metadata: 
 \code{\link{atoxgr_criteria_ctcv4}},
+\code{\link{atoxgr_criteria_ctcv4_uscv}},
 \code{\link{atoxgr_criteria_ctcv5}},
+\code{\link{atoxgr_criteria_ctcv5_uscv}},
 \code{\link{atoxgr_criteria_daids}},
+\code{\link{atoxgr_criteria_daids_uscv}},
 \code{\link{dose_freq_lookup}}
 }
 \concept{metadata}

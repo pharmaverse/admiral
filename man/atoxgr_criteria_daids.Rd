@@ -3,7 +3,7 @@
 \docType{data}
 \name{atoxgr_criteria_daids}
 \alias{atoxgr_criteria_daids}
-\title{Metadata Holding Grading Criteria for DAIDs}
+\title{Metadata Holding Grading Criteria for DAIDs using SI unit where applicable}
 \format{
 An object of class \code{tbl_df} (inherits from \code{tbl}, \code{data.frame}) with 63 rows and 15 columns.
 }
@@ -11,7 +11,7 @@ An object of class \code{tbl_df} (inherits from \code{tbl}, \code{data.frame}) w
 atoxgr_criteria_daids
 }
 \description{
-Metadata Holding Grading Criteria for DAIDs
+Metadata Holding Grading Criteria for DAIDs using SI unit where applicable
 }
 \details{
 This metadata has its origin in the ADLB Grading Spec Excel file which ships with \code{{admiral}}
@@ -31,7 +31,7 @@ eg. 'Anemia' or 'INR Increased'. Note: the variable is case insensitive.
 \item \code{Definition}: Holds the definition of the lab test abnormality.
 \item \code{FILTER} : \code{admiral} code to apply the filter based on SUBGROUP column.
 \item \code{GRADE_CRITERIA_CODE}: variable to hold code that creates grade based on defined criteria.
-\item \code{SI_UNIT_CHECK}: variable to hold unit of particular lab test. Used to check against input data
+\item \code{UNIT_CHECK}: variable to hold SI unit of particular lab test. Used to check against input data
 if criteria is based on absolute values.
 \item \code{VAR_CHECK}: List of variables required to implement lab grade criteria. Use to check against
 input data.
@@ -49,7 +49,10 @@ traceability only.
 \seealso{
 Other metadata: 
 \code{\link{atoxgr_criteria_ctcv4}},
+\code{\link{atoxgr_criteria_ctcv4_uscv}},
 \code{\link{atoxgr_criteria_ctcv5}},
+\code{\link{atoxgr_criteria_ctcv5_uscv}},
+\code{\link{atoxgr_criteria_daids_uscv}},
 \code{\link{country_code_lookup}},
 \code{\link{dose_freq_lookup}}
 }
