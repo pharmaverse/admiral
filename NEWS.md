@@ -19,6 +19,7 @@ subsets, however this can lead to issues when the input dataset is empty. Now
 the derivation is called for all subsets. (#2645)
 
 - The examples section for the function `derive_var_trtemfl()` was enhanced to include a showcasing of all scenarios discussed in the following [PHUSE White Paper on Treatment-Emergent AEs](https://phuse.s3.eu-central-1.amazonaws.com/Deliverables/Safety+Analytics/WP-087+Recommended+Definition+of++Treatment-Emergent+Adverse+Events+in+Clinical+Trials+.pdf). (#2455)
+- The background checks in `derive_summary_records()` were too restrictive: `by_vars` were expected in `dataset` although the code did not require it. This requirement has therefore been dropped (#2686).
 
 - `derive_vars_dt()`, `derive_vars_dtm()`, `impute_dtc_dt()`, `impute_dtc_dtm()`, `convert_dtc_to_dt()`, & `convert_dtc_to_dtm()` and related functions will now throw an error instead of a warning when `highest_imputation = "Y"` but neither `min_date` (when `date_imputation = "first"`) nor `max_dates` (when `date_imputation = "last"`) are specified. (#2654)
 
@@ -44,6 +45,7 @@ the derivation is called for all subsets. (#2645)
 - The examples section of the following functions was enhanced:
     - `derive_extreme_records()` (#2585)
     - `derive_param_tte()` (#2704)
+    - `derive_summary_records()` (#2707)
 
 - Added an example to the `derive_vars_transposed()` reference page to showcase how duplicates-related errors can arise when records in `dataset_merge` are not uniquely identified. (#2609)
 
@@ -58,6 +60,7 @@ read. (#2623)
 
 - The "Higher Order Functions" vignette was updated to showcase an example of two higher order functions used in combination. The documentation for each of the higher order functions was also corrected by removing the stated requirement that the `derivation` takes a `dataset` argument (#2656).
 
+- The 'Details' section of the `derive_var_analysis_ratio()` function and the 'Derive Analysis Ratio' section of the "Creating a BDS Finding ADaM" vignette were updated to include references to `R2AyHI` and `R2AyLO`. (#2548)
 
 ## Various
 
