@@ -7,29 +7,13 @@
 get_imputation_targets(partial, date_imputation, time_imputation, is_datetime)
 }
 \arguments{
-\item{partial}{A list of partial date/time components.
+\item{partial}{A list of partial date/time components.}
 
-\describe{
-\item{Default value}{none}
-}}
+\item{date_imputation}{A character specifying the date imputation method.}
 
-\item{date_imputation}{A character specifying the date imputation method.
+\item{time_imputation}{A character specifying the time imputation method.}
 
-\describe{
-\item{Default value}{none}
-}}
-
-\item{time_imputation}{A character specifying the time imputation method.
-
-\describe{
-\item{Default value}{none}
-}}
-
-\item{is_datetime}{A logical indicating whether it's a datetime imputation.
-
-\describe{
-\item{Default value}{none}
-}}
+\item{is_datetime}{A logical indicating whether it's a datetime imputation.}
 }
 \value{
 A list of imputation targets for date and (if applicable) time components.

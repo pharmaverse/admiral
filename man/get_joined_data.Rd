@@ -22,31 +22,19 @@ get_joined_data(
 \arguments{
 \item{dataset}{Input dataset
 
-The variables specified by the \code{by_vars} argument are expected to be in the dataset.
-
-\describe{
-\item{Default value}{none}
-}}
+The variables specified by the \code{by_vars} argument are expected to be in the dataset.}
 
 \item{dataset_add}{Additional dataset
 
 The variables specified by the \code{by_vars}, the \code{new_vars}, the \code{join_vars},
-and the \code{order} argument are expected.
-
-\describe{
-\item{Default value}{none}
-}}
+and the \code{order} argument are expected.}
 
 \item{by_vars}{Grouping variables
 
 The two datasets are joined by the specified variables.
 
 Variables can be renamed by naming the element, i.e.
-\verb{by_vars = exprs(<name in input dataset> = <name in additional dataset>)}, similar to the \code{dplyr} joins.
-
-\describe{
-\item{Default value}{\code{NULL}}
-}}
+\verb{by_vars = exprs(<name in input dataset> = <name in additional dataset>)}, similar to the \code{dplyr} joins.}
 
 \item{join_vars}{Variables to use from additional dataset
 
@@ -61,12 +49,7 @@ additional dataset and can be used in the filter conditions (\code{filter_add},
 \code{filter_join}) and for \code{new_vars}. The variable is not included in the
 output dataset.
 
-The variables are not included in the output dataset.
-
-\describe{
-\item{Permitted values}{list of variables or named expressions created by \code{exprs()}}
-\item{Default value}{\code{NULL}}
-}}
+The variables are not included in the output dataset.}
 
 \item{join_type}{Observations to keep after joining
 
@@ -80,12 +63,7 @@ be after the assessment. Thus \code{join_type = "after"} could be used.
 
 Whereas, sometimes you might allow for confirmatory observations to occur
 prior to the observation. For example, to identify AEs occurring on or
-after seven days before a COVID AE. Thus \code{join_type = "all"} could be used.
-
-\describe{
-\item{Permitted values}{\code{"before"}, \code{"after"}, \code{"all"}}
-\item{Default value}{none}
-}}
+after seven days before a COVID AE. Thus \code{join_type = "all"} could be used.}
 
 \item{first_cond_lower}{Condition for selecting range of data (before)
 
@@ -98,11 +76,7 @@ considered, i.e., the observation is not flagged.
 This argument should be specified if \code{filter_join} contains summary
 functions which should not apply to all observations but only from a
 certain observation before the current observation up to the current
-observation.
-
-\describe{
-\item{Default value}{\code{NULL}}
-}}
+observation.}
 
 \item{first_cond_upper}{Condition for selecting range of data (after)
 
@@ -113,11 +87,7 @@ observations are considered, i.e., the observation is not flagged.
 
 This argument should be specified if \code{filter_join} contains summary
 functions which should not apply to all observations but only up to the
-confirmation assessment.
-
-\describe{
-\item{Default value}{\code{NULL}}
-}}
+confirmation assessment.}
 
 \item{order}{Sort order
 
@@ -133,13 +103,7 @@ added to the additional dataset and can be used in the filter conditions
 (\code{filter_add}, \code{filter_join}) and for \code{join_vars} and \code{new_vars}. The
 variable is not included in the output dataset.
 
-For handling of \code{NA}s in sorting variables see \href{../articles/generic.html#sort_order}{Sort Order}.
-
-\describe{
-\item{Permitted values}{list of expressions created by \code{exprs()}, e.g.,
-\code{exprs(ADT, desc(AVAL))} or \code{NULL}}
-\item{Default value}{\code{NULL}}
-}}
+For handling of \code{NA}s in sorting variables see \href{../articles/generic.html#sort_order}{Sort Order}.}
 
 \item{tmp_obs_nr_var}{Temporary observation number
 
@@ -148,11 +112,7 @@ additional dataset (\code{dataset_add}). It is set to the observation number
 with respect to \code{order}. For each by group (\code{by_vars}) the observation
 number starts with \code{1}. The variable can be used in the conditions
 (\code{filter_join}, \code{first_cond_upper}, \code{first_cond_lower}). It can also be
-used to select consecutive observations or the last observation.
-
-\describe{
-\item{Default value}{\code{NULL}}
-}}
+used to select consecutive observations or the last observation.}
 
 \item{filter_add}{Filter for additional dataset (\code{dataset_add})
 
@@ -164,12 +124,7 @@ Variables created by \code{order} or \code{new_vars} arguments can be used in th
 condition.
 
 The condition can include summary functions like \code{all()} or \code{any()}. The
-additional dataset is grouped by the by variables (\code{by_vars}).
-
-\describe{
-\item{Permitted values}{a condition}
-\item{Default value}{\code{NULL}}
-}}
+additional dataset is grouped by the by variables (\code{by_vars}).}
 
 \item{filter_join}{Filter for the joined dataset
 
@@ -180,12 +135,7 @@ Variables created by \code{order} or \code{new_vars} arguments can be used in th
 condition.
 
 The condition can include summary functions like \code{all()} or \code{any()}. The
-joined dataset is grouped by the original observations.
-
-\describe{
-\item{Permitted values}{a condition}
-\item{Default value}{\code{NULL}}
-}}
+joined dataset is grouped by the original observations.}
 
 \item{check_type}{Check uniqueness?
 
@@ -196,12 +146,7 @@ respect to the by variables and the order.
 This argument is ignored if \code{order} is not specified. In this case an error
 is issued independent of \code{check_type} if the restricted joined dataset
 contains more than one observation for any of the observations of the input
-dataset.
-
-\describe{
-\item{Permitted values}{\code{"none"}, \code{"warning"}, \code{"error"}}
-\item{Default value}{\code{"warning"}}
-}}
+dataset.}
 }
 \description{
 The helper function joins the data for the "joined" functions. All \code{.join}

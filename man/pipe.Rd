@@ -7,17 +7,9 @@
 lhs \%>\% rhs
 }
 \arguments{
-\item{lhs}{A value or the magrittr placeholder.
+\item{lhs}{A value or the magrittr placeholder.}
 
-\describe{
-\item{Default value}{\code{NULL}}
-}}
-
-\item{rhs}{A function call using the magrittr semantics.
-
-\describe{
-\item{Default value}{\code{NULL}}
-}}
+\item{rhs}{A function call using the magrittr semantics.}
 }
 \description{
 See \code{magrittr::\link[magrittr:\%>\%]{\%>\%}} for more details.

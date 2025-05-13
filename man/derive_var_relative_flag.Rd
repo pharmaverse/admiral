@@ -20,49 +20,27 @@ derive_var_relative_flag(
 \arguments{
 \item{dataset}{Input dataset
 
-The variables specified by the \code{by_vars} and \code{order} arguments are expected to be in the dataset.
+The variables specified by the \code{by_vars} and \code{order} arguments are expected to be in the dataset.}
 
-\describe{
-\item{Default value}{none}
-}}
-
-\item{by_vars}{Grouping variables
-
-\describe{
-\item{Default value}{none}
-}}
+\item{by_vars}{Grouping variables}
 
 \item{order}{Sort order
 
 Within each by group the observations are ordered by the specified order.
 
-For handling of \code{NA}s in sorting variables see \href{../articles/generic.html#sort_order}{Sort Order}.
-
-\describe{
-\item{Permitted values}{list of expressions created by \code{exprs()}, e.g.,
-\code{exprs(ADT, desc(AVAL))}}
-\item{Default value}{none}
-}}
+For handling of \code{NA}s in sorting variables see \href{../articles/generic.html#sort_order}{Sort Order}.}
 
 \item{new_var}{New variable
 
 The variable is added to the input dataset and set to \code{"Y"} for all
 observations before or after the condition is fulfilled. For all other
-observations it is set to \code{NA}.
-
-\describe{
-\item{Default value}{none}
-}}
+observations it is set to \code{NA}.}
 
 \item{condition}{Condition for Reference Observation
 
 The specified condition determines the reference observation. In the output
 dataset all observations before or after (\code{selection} argument)
-the reference observation are flagged.
-
-\describe{
-\item{Default value}{none}
-}}
+the reference observation are flagged.}
 
 \item{mode}{Selection mode (first or last)
 
@@ -72,44 +50,19 @@ after (\code{selection} argument) the observation where the condition
 output dataset. If \code{"last"} is specified, for each by group the
 observations before or after (\code{selection} argument) the observation where
 the condition (\code{condition} argument) is fulfilled the \emph{last} time is
-flagged in the output dataset.
+flagged in the output dataset.}
 
-\describe{
-\item{Permitted values}{\code{"first"}, \code{"last"}}
-\item{Default value}{none}
-}}
+\item{selection}{Flag observations before or after the reference observation?}
 
-\item{selection}{Flag observations before or after the reference observation?
+\item{inclusive}{Flag the reference observation?}
 
-\describe{
-\item{Permitted values}{\code{"before"}, \code{"after"}}
-\item{Default value}{none}
-}}
-
-\item{inclusive}{Flag the reference observation?
-
-\describe{
-\item{Permitted values}{\code{TRUE}, \code{FALSE}}
-\item{Default value}{none}
-}}
-
-\item{flag_no_ref_groups}{Should by groups without reference observation be flagged?
-
-\describe{
-\item{Permitted values}{\code{TRUE}, \code{FALSE}}
-\item{Default value}{\code{TRUE}}
-}}
+\item{flag_no_ref_groups}{Should by groups without reference observation be flagged?}
 
 \item{check_type}{Check uniqueness?
 
 If \code{"warning"} or \code{"error"} is specified, the specified message is issued
 if the observations of the input dataset are not unique with respect to the
-by variables and the order.
-
-\describe{
-\item{Permitted values}{\code{"none"}, \code{"warning"}, \code{"error"}}
-\item{Default value}{\code{"warning"}}
-}}
+by variables and the order.}
 }
 \value{
 The input dataset with the new variable (\code{new_var}) added

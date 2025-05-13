@@ -17,41 +17,25 @@ derive_summary_records(
 \arguments{
 \item{dataset}{Input dataset
 
-The variables specified by the \code{by_vars} argument are expected to be in the dataset.
-
-\describe{
-\item{Default value}{\code{NULL}}
-}}
+The variables specified by the \code{by_vars} argument are expected to be in the dataset.}
 
 \item{dataset_add}{Additional dataset
 
 The variables specified for \code{by_vars} are expected.
 Observations from the specified dataset are going to be used to calculate and added
-as new records to the input dataset (\code{dataset}).
-
-\describe{
-\item{Default value}{none}
-}}
+as new records to the input dataset (\code{dataset}).}
 
 \item{dataset_ref}{Reference dataset
 
 The variables specified for \code{by_vars} are expected. For each
 observation of the specified dataset a new observation is added to the
-input dataset.
-
-\describe{
-\item{Default value}{\code{NULL}}
-}}
+input dataset.}
 
 \item{by_vars}{Grouping variables
 
 Variables to consider for generation of groupwise summary
 records. Providing the names of variables in \code{\link[=exprs]{exprs()}} will create a
-groupwise summary and generate summary records for the specified groups.
-
-\describe{
-\item{Default value}{none}
-}}
+groupwise summary and generate summary records for the specified groups.}
 
 \item{filter_add}{Filter condition as logical expression to apply during
 summary calculation. By default, filtering expressions are computed within
@@ -64,10 +48,6 @@ For example,
 values greater than mean of \code{AVAL} with in \code{by_vars}.
 \item \code{filter_add = (dplyr::n() > 2)} will filter n count of \code{by_vars} greater
 than 2.
-}
-
-\describe{
-\item{Default value}{\code{NULL}}
 }}
 
 \item{set_values_to}{Variables to be set
@@ -89,23 +69,13 @@ For example:
     AVAL = sum(AVAL),
     DTYPE = "AVERAGE",
   )
-}\if{html}{\out{</div>}}
-
-\describe{
-\item{Default value}{none}
-}}
+}\if{html}{\out{</div>}}}
 
 \item{missing_values}{Values for missing summary values
 
 For observations of the reference dataset (\code{dataset_ref}) which do not have a
 complete mapping defined by the summarization defined in \code{set_values_to}.  Only variables
-specified for \code{set_values_to} can be specified for \code{missing_values}.
-
-\describe{
-\item{Permitted values}{named list of expressions, e.g.,
-\code{exprs(AVAL = -9999)}}
-\item{Default value}{\code{NULL}}
-}}
+specified for \code{set_values_to} can be specified for \code{missing_values}.}
 }
 \value{
 A data frame with derived records appended to original dataset.

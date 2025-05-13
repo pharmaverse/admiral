@@ -15,40 +15,20 @@ derive_var_base(
 \arguments{
 \item{dataset}{Input dataset
 
-The variables specified by the \code{by_vars} and \code{source_var} arguments are expected to be in the dataset.
-
-\describe{
-\item{Default value}{none}
-}}
+The variables specified by the \code{by_vars} and \code{source_var} arguments are expected to be in the dataset.}
 
 \item{by_vars}{Grouping variables
 
 Grouping variables uniquely identifying a set
-of records for which to calculate \code{new_var}.
+of records for which to calculate \code{new_var}.}
 
-\describe{
-\item{Default value}{none}
-}}
+\item{source_var}{The column from which to extract the baseline value, e.g. \code{AVAL}}
 
-\item{source_var}{The column from which to extract the baseline value, e.g. \code{AVAL}
-
-\describe{
-\item{Default value}{\code{AVAL}}
-}}
-
-\item{new_var}{The name of the newly created baseline column, e.g. \code{BASE}
-
-\describe{
-\item{Default value}{\code{BASE}}
-}}
+\item{new_var}{The name of the newly created baseline column, e.g. \code{BASE}}
 
 \item{filter}{The condition used to filter \code{dataset} for baseline records.
 
-By default \code{ABLFL == "Y"}
-
-\describe{
-\item{Default value}{\code{ABLFL == "Y"}}
-}}
+By default \code{ABLFL == "Y"}}
 }
 \value{
 A new \code{data.frame} containing all records and variables of the input

@@ -7,17 +7,9 @@
 get_highest_imputation_level(is_datetime, highest_imputation)
 }
 \arguments{
-\item{is_datetime}{A logical indicating whether the imputation is for a datetime.
+\item{is_datetime}{A logical indicating whether the imputation is for a datetime.}
 
-\describe{
-\item{Default value}{none}
-}}
-
-\item{highest_imputation}{A character indicating the highest imputation level.
-
-\describe{
-\item{Default value}{none}
-}}
+\item{highest_imputation}{A character indicating the highest imputation level.}
 }
 \value{
 An integer representing the highest imputation level.

@@ -7,17 +7,9 @@
 assert_time_imputation(highest_imputation, time_imputation)
 }
 \arguments{
-\item{highest_imputation}{Highest imputation level
+\item{highest_imputation}{Highest imputation level}
 
-\describe{
-\item{Default value}{none}
-}}
-
-\item{time_imputation}{The value to impute time when missing
-
-\describe{
-\item{Default value}{none}
-}}
+\item{time_imputation}{The value to impute time when missing}
 }
 \value{
 asserted \code{time_imputation}

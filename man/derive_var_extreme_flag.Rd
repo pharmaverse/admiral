@@ -19,88 +19,46 @@ derive_var_extreme_flag(
 \arguments{
 \item{dataset}{Input dataset
 
-The variables specified by the \code{by_vars} argument are expected to be in the dataset.
+The variables specified by the \code{by_vars} argument are expected to be in the dataset.}
 
-\describe{
-\item{Default value}{none}
-}}
-
-\item{by_vars}{Grouping variables
-
-\describe{
-\item{Default value}{none}
-}}
+\item{by_vars}{Grouping variables}
 
 \item{order}{Sort order
 
 The first or last observation is determined with respect to the specified
 order.
 
-For handling of \code{NA}s in sorting variables see \href{../articles/generic.html#sort_order}{Sort Order}.
-
-\describe{
-\item{Permitted values}{list of variables or functions of variables}
-\item{Default value}{none}
-}}
+For handling of \code{NA}s in sorting variables see \href{../articles/generic.html#sort_order}{Sort Order}.}
 
 \item{new_var}{Variable to add
 
 The specified variable is added to the output dataset. It is set to the value
-set in \code{true_value} for the first or last observation (depending on the mode) of each by group.
-
-\describe{
-\item{Permitted values}{list of name-value pairs}
-\item{Default value}{none}
-}}
+set in \code{true_value} for the first or last observation (depending on the mode) of each by group.}
 
 \item{mode}{Flag mode
 
-Determines of the first or last observation is flagged.
-
-\describe{
-\item{Permitted values}{\code{"first"}, \code{"last"}}
-\item{Default value}{none}
-}}
+Determines of the first or last observation is flagged.}
 
 \item{true_value}{True value
 
 The value for the specified variable \code{new_var}, applicable to
-the first or last observation (depending on the mode) of each by group.
-
-\describe{
-\item{Permitted values}{An atomic scalar}
-\item{Default value}{\code{"Y"}}
-}}
+the first or last observation (depending on the mode) of each by group.}
 
 \item{false_value}{False value
 
 The value for the specified variable \code{new_var}, NOT applicable to
-the first or last observation (depending on the mode) of each by group.
-
-\describe{
-\item{Permitted values}{An atomic scalar}
-\item{Default value}{\code{NA_character_}}
-}}
+the first or last observation (depending on the mode) of each by group.}
 
 \item{flag_all}{Flag setting
 
 A logical value where if set to \code{TRUE}, all records are flagged
-and no error or warning is issued if the first or last record is not unique.
-
-\describe{
-\item{Default value}{\code{FALSE}}
-}}
+and no error or warning is issued if the first or last record is not unique.}
 
 \item{check_type}{Check uniqueness?
 
 If \code{"warning"} or \code{"error"} is specified, the specified message is issued
 if the observations of the input dataset are not unique with respect to the
-by variables and the order.
-
-\describe{
-\item{Permitted values}{\code{"none"}, \code{"warning"}, \code{"error"}}
-\item{Default value}{\code{"warning"}}
-}}
+by variables and the order.}
 }
 \value{
 The input dataset with the new flag variable added

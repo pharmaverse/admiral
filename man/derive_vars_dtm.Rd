@@ -21,32 +21,20 @@ derive_vars_dtm(
 \arguments{
 \item{dataset}{Input dataset
 
-The variables specified by the \code{dtc} argument are expected to be in the dataset.
-
-\describe{
-\item{Default value}{none}
-}}
+The variables specified by the \code{dtc} argument are expected to be in the dataset.}
 
 \item{new_vars_prefix}{Prefix used for the output variable(s).
 
 A character scalar is expected. For the date variable "DT" is appended to
 the specified prefix, for the date imputation flag "DTF", and for the time
 imputation flag "TMF". I.e., for \code{new_vars_prefix = "AST"} the variables
-\code{ASTDT}, \code{ASTDTF}, and \code{ASTTMF} are created.
-
-\describe{
-\item{Default value}{none}
-}}
+\code{ASTDT}, \code{ASTDTF}, and \code{ASTTMF} are created.}
 
 \item{dtc}{The \code{'--DTC'} date to impute
 
 A character date is expected in a format like \code{yyyy-mm-dd} or
 \code{yyyy-mm-ddThh:mm:ss}. Trailing components can be omitted and \code{-} is a
-valid "missing" value for any component.
-
-\describe{
-\item{Default value}{none}
-}}
+valid "missing" value for any component.}
 
 \item{highest_imputation}{Highest imputation level
 
@@ -62,14 +50,7 @@ missing, \code{NA_character_} is returned.
 
 If \code{"Y"} is specified, \code{date_imputation} should be \code{"first"} or \code{"last"}
 and \code{min_dates} or \code{max_dates} should be specified respectively. Otherwise,
-\code{NA_character_} is returned if the year component is missing.
-
-\describe{
-\item{Permitted values}{\code{"Y"} (year, highest level), \code{"M"} (month), \code{"D"}
-(day), \code{"h"} (hour), \code{"m"} (minute), \code{"s"} (second), \code{"n"} (none, lowest
-level)}
-\item{Default value}{\code{"h"}}
-}}
+\code{NA_character_} is returned if the year component is missing.}
 
 \item{date_imputation}{The value to impute the day/month when a datepart is
 missing.
@@ -91,11 +72,7 @@ middle of the possible range:
 
 The year can not be specified; for imputing the year
 \code{"first"} or \code{"last"} together with \code{min_dates} or \code{max_dates} argument can
-be used (see examples).
-
-\describe{
-\item{Default value}{\code{"first"}}
-}}
+be used (see examples).}
 
 \item{time_imputation}{The value to impute the time when a timepart is
 missing.
@@ -107,11 +84,7 @@ for the start of the day,
 \item or as a keyword: \code{"first"},\code{"last"} to impute to the start/end of a day.
 }
 
-The argument is ignored if \code{highest_imputation = "n"}.
-
-\describe{
-\item{Default value}{\code{"first"}}
-}}
+The argument is ignored if \code{highest_imputation = "n"}.}
 
 \item{flag_imputation}{Whether the date/time imputation flag(s) must also be derived.
 
@@ -123,12 +96,7 @@ If \code{"both"} or \code{"time"} is specified, then time imputation flag is der
 If \code{"auto"} is specified and \code{highest_imputation} argument is not \code{"n"},
 then time imputation flag is derived.
 
-If \code{"none"} is specified, then no date or time imputation flag is derived.
-
-\describe{
-\item{Permitted values}{\code{"auto"}, \code{"date"}, \code{"time"}, \code{"both"}, or \code{"none"}}
-\item{Default value}{\code{"auto"}}
-}}
+If \code{"none"} is specified, then no date or time imputation flag is derived.}
 
 \item{min_dates}{Minimum dates
 
@@ -158,11 +126,7 @@ have changed the month although it is not missing (in the \code{dtc} date).
 
 For date variables (not datetime) in the list the time is imputed to
 \code{"00:00:00"}. Specifying date variables makes sense only if the date is
-imputed. If only time is imputed, date variables do not affect the result.
-
-\describe{
-\item{Default value}{\code{NULL}}
-}}
+imputed. If only time is imputed, date variables do not affect the result.}
 
 \item{max_dates}{Maximum dates
 
@@ -173,33 +137,19 @@ considered. A date or date-time object is expected.
 
 For date variables (not datetime) in the list the time is imputed to
 \code{"23:59:59"}. Specifying date variables makes sense only if the date is
-imputed. If only time is imputed, date variables do not affect the result.
-
-\describe{
-\item{Default value}{\code{NULL}}
-}}
+imputed. If only time is imputed, date variables do not affect the result.}
 
 \item{preserve}{Preserve lower level date/time part when higher order part
 is missing, e.g. preserve day if month is missing or
 preserve minute when hour is missing.
 
 For example \code{"2019---07"} would return \verb{"2019-06-07} if \code{preserve = TRUE}
-(and \code{date_imputation = "mid"}).
-
-\describe{
-\item{Permitted values}{\code{TRUE}, \code{FALSE}}
-\item{Default value}{\code{FALSE}}
-}}
+(and \code{date_imputation = "mid"}).}
 
 \item{ignore_seconds_flag}{ADaM IG states that given SDTM (\code{'--DTC'}) variable,
 if only hours and minutes are ever collected, and seconds are imputed in
 (\code{'--DTM'}) as 00, then it is not necessary to set (\code{'--TMF'}) to \code{'S'}. A user can set this
-to \code{TRUE} so the \code{'S'} Flag is dropped from (\code{'--TMF'}).
-
-\describe{
-\item{Permitted values}{A logical value}
-\item{Default value}{\code{FALSE}}
-}}
+to \code{TRUE} so the \code{'S'} Flag is dropped from (\code{'--TMF'}).}
 }
 \value{
 The input dataset with the datetime \code{'--DTM'} (and the date/time imputation

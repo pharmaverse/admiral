@@ -17,54 +17,22 @@ assert_dt_dtm_inputs(
 )
 }
 \arguments{
-\item{new_vars_prefix}{Prefix for new variables.
+\item{new_vars_prefix}{Prefix for new variables.}
 
-\describe{
-\item{Default value}{none}
-}}
+\item{max_dates}{Maximum dates of events (can be \code{NULL}).}
 
-\item{max_dates}{Maximum dates of events (can be \code{NULL}).
+\item{min_dates}{Minimum dates of events (can be \code{NULL}).}
 
-\describe{
-\item{Default value}{none}
-}}
+\item{flag_imputation}{The value to impute.}
 
-\item{min_dates}{Minimum dates of events (can be \code{NULL}).
+\item{flag_imputation_values}{Allowed values for the \code{flag_imputation} argument.}
 
-\describe{
-\item{Default value}{none}
-}}
+\item{highest_imputation}{Highest imputation level.}
 
-\item{flag_imputation}{The value to impute.
-
-\describe{
-\item{Default value}{none}
-}}
-
-\item{flag_imputation_values}{Allowed values for the \code{flag_imputation} argument.
-
-\describe{
-\item{Default value}{none}
-}}
-
-\item{highest_imputation}{Highest imputation level.
-
-\describe{
-\item{Default value}{none}
-}}
-
-\item{highest_imputation_values}{Allowed values for the \code{highest_imputation} argument.
-
-\describe{
-\item{Default value}{none}
-}}
+\item{highest_imputation_values}{Allowed values for the \code{highest_imputation} argument.}
 
 \item{date_imputation}{The value to impute the day/month
-when a date part is missing (can be \code{NULL}).
-
-\describe{
-\item{Default value}{\code{NULL}}
-}}
+when a date part is missing (can be \code{NULL}).}
 }
 \value{
 \code{invisible(NULL)}

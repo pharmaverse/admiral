@@ -16,61 +16,36 @@ derive_locf_records(
 \arguments{
 \item{dataset}{Input dataset
 
-The variables specified by the \code{by_vars}, \code{analysis_var}, \code{order}, and \code{keep_vars} arguments are expected to be in the dataset.
-
-\describe{
-\item{Default value}{none}
-}}
+The variables specified by the \code{by_vars}, \code{analysis_var}, \code{order}, and \code{keep_vars} arguments are expected to be in the dataset.}
 
 \item{dataset_ref}{Expected observations dataset
 
 Data frame with all the combinations of \code{PARAMCD}, \code{PARAM}, \code{AVISIT},
-\code{AVISITN}, ... which are expected in the dataset is expected.
-
-\describe{
-\item{Default value}{none}
-}}
+\code{AVISITN}, ... which are expected in the dataset is expected.}
 
 \item{by_vars}{Grouping variables
 
 For each group defined by \code{by_vars} those observations from \code{dataset_ref}
 are added to the output dataset which do not have a corresponding observation
 in the input dataset or for which \code{analysis_var} is \code{NA} for the corresponding observation
-in the input dataset.
-
-\describe{
-\item{Default value}{none}
-}}
+in the input dataset.}
 
 \item{analysis_var}{Analysis variable.
 
-\emph{Default}: \code{AVAL}
-
-\describe{
-\item{Permitted values}{a variable}
-\item{Default value}{\code{AVAL}}
-}}
+\emph{Default}: \code{AVAL}}
 
 \item{order}{Sort order
 
 The dataset is sorted by \code{order} before carrying the last observation
 forward (e.g. \code{AVAL}) within each \code{by_vars}.
 
-For handling of \code{NA}s in sorting variables see \href{../articles/generic.html#sort_order}{Sort Order}.
-
-\describe{
-\item{Default value}{none}
-}}
+For handling of \code{NA}s in sorting variables see \href{../articles/generic.html#sort_order}{Sort Order}.}
 
 \item{keep_vars}{Variables that need carrying the last observation forward
 
 Keep variables that need carrying the last observation forward other than \code{analysis_var}
 (e.g., \code{PARAMN}, \code{VISITNUM}). If by default \code{NULL}, only variables specified in
-\code{by_vars} and \code{analysis_var} will be populated in the newly created records.
-
-\describe{
-\item{Default value}{\code{NULL}}
-}}
+\code{by_vars} and \code{analysis_var} will be populated in the newly created records.}
 }
 \value{
 The input dataset with the new "LOCF" observations added for each

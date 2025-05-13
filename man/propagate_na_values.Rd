@@ -7,11 +7,7 @@
 propagate_na_values(partial)
 }
 \arguments{
-\item{partial}{A list of partial date/time components.
-
-\describe{
-\item{Default value}{none}
-}}
+\item{partial}{A list of partial date/time components.}
 }
 \value{
 A list of date/time components with propagated NA values.

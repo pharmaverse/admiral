@@ -7,18 +7,10 @@
 assert_date_imputation(highest_imputation, date_imputation)
 }
 \arguments{
-\item{highest_imputation}{Highest imputation level
-
-\describe{
-\item{Default value}{none}
-}}
+\item{highest_imputation}{Highest imputation level}
 
 \item{date_imputation}{The value to impute the day/month when a datepart is
-missing.
-
-\describe{
-\item{Default value}{none}
-}}
+missing.}
 }
 \value{
 asserted \code{date_imputation}

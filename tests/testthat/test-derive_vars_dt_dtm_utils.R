@@ -122,7 +122,7 @@ test_that("get_highest_imputation_level correctly determines highest level", {
 
 # Test for get_imputation_targets
 test_that("get_imputation_targets correctly generates imputation targets", {
-  # Case: date_imputation = "first"
+  # When date_imputation = "first"
   partial <- list(year = "2020", month = "03", day = NA_character_)
   expect_equal(
     get_imputation_targets(partial,
@@ -144,7 +144,7 @@ test_that("get_imputation_targets correctly generates imputation targets", {
     )
   )
 
-  # Case: date_imputation = "mid"
+  # When date_imputation = "mid"
   expect_equal(
     get_imputation_targets(partial,
       date_imputation = "mid",
@@ -163,7 +163,7 @@ test_that("get_imputation_targets correctly generates imputation targets", {
     list(year = "xxxx", month = "06", day = "30")
   )
 
-  # Case: date_imputation = "last"
+  # When date_imputation = "last"
   expect_equal(
     get_imputation_targets(partial,
       date_imputation = "last",
@@ -173,7 +173,7 @@ test_that("get_imputation_targets correctly generates imputation targets", {
     list(year = "9999", month = "12", day = "28")
   )
 
-  # Case: date_imputation = "mm-dd"
+  # When date_imputation = "mm-dd"
   expect_equal(
     get_imputation_targets(partial,
       date_imputation = "06-15",

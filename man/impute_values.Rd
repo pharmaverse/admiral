@@ -7,23 +7,11 @@
 impute_values(partial, target, components)
 }
 \arguments{
-\item{partial}{A list of partial date/time components.
+\item{partial}{A list of partial date/time components.}
 
-\describe{
-\item{Default value}{none}
-}}
+\item{target}{A list of target values for imputation.}
 
-\item{target}{A list of target values for imputation.
-
-\describe{
-\item{Default value}{none}
-}}
-
-\item{components}{A character vector of component names.
-
-\describe{
-\item{Default value}{none}
-}}
+\item{components}{A character vector of component names.}
 }
 \value{
 A list of imputed date/time components.

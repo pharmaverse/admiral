@@ -7,11 +7,7 @@
 restrict_derivation(dataset, derivation, args = NULL, filter)
 }
 \arguments{
-\item{dataset}{Input dataset
-
-\describe{
-\item{Default value}{none}
-}}
+\item{dataset}{Input dataset}
 
 \item{derivation}{Derivation
 
@@ -19,25 +15,13 @@ A function that performs a specific derivation is expected. A derivation
 adds variables or observations to a dataset. The first argument of a
 derivation must expect a dataset and the derivation must return a dataset.
 All expected arguments for the derivation function must be provided through
-the \code{params()} objects passed to the \code{args} argument.
-
-\describe{
-\item{Default value}{none}
-}}
+the \code{params()} objects passed to the \code{args} argument.}
 
 \item{args}{Arguments of the derivation
 
-A \code{params()} object is expected.
+A \code{params()} object is expected.}
 
-\describe{
-\item{Default value}{\code{NULL}}
-}}
-
-\item{filter}{Filter condition
-
-\describe{
-\item{Default value}{none}
-}}
+\item{filter}{Filter condition}
 }
 \description{
 Execute a derivation on a subset of the input dataset.
