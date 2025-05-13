@@ -381,8 +381,6 @@ assert_highest_imputation <- function(highest_imputation, highest_imputation_val
                                       date_imputation = NULL,
                                       max_dates, min_dates # nolint: cyclocomp_linter
 ) {
-  # assert_vars(max_dates, optional = TRUE)
-  # assert_vars(min_dates, optional = TRUE)
 
   assert_character_scalar(
     highest_imputation,
@@ -419,7 +417,7 @@ assert_highest_imputation <- function(highest_imputation, highest_imputation_val
   return(invisible(NULL))
 }
 
-#' Impute Partial Dates to Full Dates Based on Specified Imputation Strategy
+#' Get range of possible date / datetime
 #'
 #' @description
 #' Internal helper function to convert a character vector of (possibly partial) dates (`dtc`)
@@ -498,8 +496,10 @@ get_dt_dtm_range <- function(dtc,
 #' @description
 #' `r lifecycle::badge("stable")`
 #'
+#' This is a helping function for `get_dt_dtm_range()`
 #' This function extracts year, month, and day components from a vector of
 #' date strings.
+#'
 #'
 #' @param dtc A character vector of date strings to be parsed.
 #'
@@ -535,6 +535,7 @@ get_partialdate <- function(dtc) {
 #' @description
 #' `r lifecycle::badge("stable")`
 #'
+#' This is a helping function for `get_dt_dtm_range()`
 #' Determines the highest imputation level based on whether it's a date or datetime.
 #'
 #' @param is_datetime A logical indicating whether the imputation is for a datetime.
@@ -552,6 +553,7 @@ get_highest_imputation_level <- function(is_datetime, highest_imputation) {
 #' @description
 #' `r lifecycle::badge("stable")`
 #'
+#' This is a helping function for `get_dt_dtm_range()`
 #' Determines the imputation targets for date and time components.
 #'
 #' @param partial A list of partial date/time components.
@@ -579,6 +581,7 @@ get_imputation_targets <- function(partial, date_imputation, time_imputation, is
 #' @description
 #' `r lifecycle::badge("stable")`
 #'
+#' This is a helping function for `get_dt_dtm_range()`
 #' Adjusts the imputed date/datetime to the last day of the month when necessary.
 #'
 #' @param imputed_dtc A character vector of imputed date/datetime strings.
@@ -619,6 +622,7 @@ adjust_last_day_imputation <- function(imputed_dtc, partial, is_datetime) {
 #' @description
 #' `r lifecycle::badge("stable")`
 #'
+#' This is a helping function for `get_dt_dtm_range()`
 #' Imputes missing values in partial date/time components using target values.
 #'
 #' @param partial A list of partial date/time components.
@@ -641,6 +645,7 @@ impute_values <- function(partial, target, components) {
 #' @description
 #' `r lifecycle::badge("stable")`
 #'
+#' This is a helping function for `get_dt_dtm_range()`
 #' Masks target values based on the highest allowed imputation level.
 #'
 #' @param target A list of target values for imputation.
@@ -671,11 +676,12 @@ mask_target_values <- function(target, components, highest_imputation_level, is_
   target
 }
 
-#' Format Imputed Date/DateTime
+#' Format Imputed Date/Datetime
 #'
 #' @description
 #' `r lifecycle::badge("stable")`
 #'
+#' This is a helping function for `get_dt_dtm_range()`
 #' Formats imputed date/datetime components into a string representation.
 #'
 #' @param imputed A list of imputed date/time components.
@@ -701,7 +707,23 @@ format_imputed_dtc <- function(imputed, is_datetime) {
   }
   if_else(str_detect(dtc, "x"), NA_character_, dtc)
 }
-
+#' Propagate NA Values
+#'
+#' @description
+#' `r lifecycle::badge("stable")`
+#'
+#' This is a helping function for `get_dt_dtm_range()`.
+#' Propagates NA values through date/time components.
+#'
+#' @param partial A list of partial date/time components.
+#'
+#' @return A list of date/time components with propagated NA values.
+#'
+#' @details
+#' This function ensures that if a higher-order component (e.g., month) is NA,
+#' all lower-order components (e.g., day, hour, etc.) are also set to NA.
+#'
+#' @keywords internal
 propagate_na_values <- function(partial) {
   for (i in 2:6) {
     partial[[i]] <- if_else(is.na(partial[[i - 1]]), NA_character_, partial[[i]])
@@ -709,11 +731,12 @@ propagate_na_values <- function(partial) {
   partial
 }
 
-#' Parse Partial Date or DateTime
+#' Parse Partial Date or Datetime
 #'
 #' @description
 #' `r lifecycle::badge("stable")`
 #'
+#' This is a helping function for `get_dt_dtm_range()`
 #' This function parses a vector of date or datetime strings into their component
 #' parts.
 #'
