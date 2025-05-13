@@ -5,7 +5,7 @@ run-name: EXPERIMENTAL
 
 on:
   push:
-    branches:  2642_verify_templates_results
+    branches:  [2642_verify_templates_results]
 
 jobs:
   task1:
