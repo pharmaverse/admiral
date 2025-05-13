@@ -48,16 +48,28 @@ The DAIDS criteria can be found under the heading
 
 # Grading metadata
 
-`{admiral}` will store a metadata data set for each set of grading criteria in the data folder of 
-`{admiral}`. Currently, we have `atoxgr_criteria_ctcv4()` for NCI-CTCAEv4, `atoxgr_criteria_ctcv5()`
-for NCI-CTCAEv5 and `atoxgr_criteria_daids()` for DAIDS. Each metadata data set has required 
-variables and optional variables, the optional variables are purely for transparency, and will
-contain detailed information about the grading criteria. The required variables are those used by
-`{admiral}` to create the grade.
+`{admiral}` will store two sets of metadata data set for each set of grading criteria in the data folder of 
+`{admiral}`, one for SI units, and one for US (conventional) units. These are as follows:
+
+NCI-CTCAEv4
+  + `atoxgr_criteria_ctcv4()` for SI units.
+  + `atoxgr_criteria_ctcv4()_uscv` for US (conventional) units.
+
+NCI-CTCAEv5
+  + `atoxgr_criteria_ctcv5()` for SI units.
+  + `atoxgr_criteria_ctcv5()_uscv` for US (conventional) units.
+
+DAIDS
+  + `atoxgr_criteria_daids()` for SI units.
+  + `atoxgr_criteria_daids()_uscv` for US (conventional) units.
+
+Each metadata data set has required variables and optional variables, the optional variables are purely for transparency,
+and will contain detailed information about the grading criteria. The required variables are those used by`{admiral}` to
+create the grade.
 
 ## Structure of metadata set
 
-The metadata data set has the following structure for the required variables:
+Each metadata data set has the following structure for the required variables:
 
 Variable | Scope |  Type | Example Value
 ------- | -------- | ------ | -------- 
@@ -865,6 +877,19 @@ atoxgr_criteria_daids %>%
 ```
 <br>
 
+# US (Conventional) unit implementation
+
+The metadata for the US (Conventional) units is the same as the metadata for SI units
+except when checking for units, when the criteria is based on numeric values. The `UNIT_CHECK`
+variable will then contain the US (Conventional) unit, and if the unit is not a synonym for the
+SI unit then the grading criteria is updated accordingly.
+There were some lab tests where it made sense to have 2 sets of US (Conventional) units, these
+were lab tests related to `"WBC"`, `"Lymphocytes"`, `"Neutrophils"` and `"Platelets"`. We have the US unit
+`"10^3/uL"` which is a synonym of the SI unit `"10^9/L"`, and also the US unit `"10^3/ml"` which is a synonym
+for `"/mm3"` which is included in the grading criteria documentation.
+If companies have lab tests that have units that don't exactly match what is in the `UNIT_CHECK` variable, but
+the unit is a one-to-one mapping, then the `UNIT_CHECK` variable can be updated with company-specific code to
+reflect this.
 
 
 # Conclusion
