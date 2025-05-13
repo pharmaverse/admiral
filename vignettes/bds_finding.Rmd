@@ -717,7 +717,7 @@ records only, `restrict_derivation()` can be used.
 Analysis ratio variables can be derived using the `{admiral}` function 
 `derive_var_analysis_ratio()`. This function derives a ratio variable based on user-specified pair. 
 For example, Ratio to Baseline is calculated by `AVAL / BASE` and the function appends a new 
-variable `R2BASE` to the dataset. Examples calls are:
+variable `R2BASE` to the dataset. This function can also derive `R2AyHI` and `R2AyLO` values. Examples calls are:
 
 ```{r eval=TRUE}
 advs <- derive_var_analysis_ratio(advs,
