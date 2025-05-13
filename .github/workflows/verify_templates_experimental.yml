@@ -1,4 +1,3 @@
-# WORKS
 [![.github/workflows/verify_templates_experimental.yml](https://github.com/pharmaverse/admiral/actions/workflows/verify_templates_experimental.yml/badge.svg?branch=2642_verify_template_results&event=workflow_dispatch)](https://github.com/pharmaverse/admiral/actions/workflows/verify_templates_experimental.yml)
 name:  verify_templates_experimental
 
