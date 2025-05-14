@@ -301,10 +301,16 @@ General Derivation Functions for all ADaMs that returns variable appended to dat
 \concept{der_gen}
 \keyword{der_gen}
 \section{Examples}{
+
+
+The examples focus on the functionality specific to this function. For
+examples of functionality common to all "joined" functions like
+\code{filter_join}, \code{join_type}, \code{first_cond_lower}, ... please see the examples
+of \code{\link[=derive_vars_joined]{derive_vars_joined()}}.
 \subsection{Derive cumulative dose before event (\code{CUMDOSA})}{
 
-To the \code{ADAE} dataset the cumulative actual dose up to the day of the
-adverse event should be added.
+Deriving the cumulative actual dose up to the day of the adverse event
+in the \code{ADAE} dataset.
 \itemize{
 \item \code{USUBJID} is specified for \code{by_vars} to join the \code{ADAE} and the \code{ADEX}
 dataset by subject.
@@ -314,6 +320,9 @@ to the adverse event. \code{ADY.join} refers to the study day in \code{ADEX}.
 set to the sum of \code{AVAL}.
 \item As \code{ADY} from \code{ADEX} is used in \code{filter_join} (but not in \code{new_vars}), it
 needs to be specified for \code{join_vars}.
+\item The \code{join_type} is set to \code{"all"} to consider all records in the joined
+dataset. \code{join_type = "before"} can't by used here because then doses at
+the same day as the adverse event would be excluded.
 }
 
 \if{html}{\out{<div class="sourceCode r">}}\preformatted{library(tibble)
@@ -380,10 +389,15 @@ by specifying the \code{missing_values} argument.
 #> 4 1          15 Fatigue         40
 #> 5 2           4 Parasomnia       0
 #> 6 3           2 Truancy          0}\if{html}{\out{</div>}}}
-\subsection{Derive weekly score}{
+\subsection{Derive weekly score if enough assessments are available}{
 
 For each planned visit the average score within the week before the
 visit should be derived if at least three assessments are available.
+
+Please note that the condition for the number of assessments is specified
+in \code{new_vars} and not in \code{filter_join}. This is because the number of
+assessments within the week before the visit should be counted but not the
+number of assessment available for the subject.
 
 \if{html}{\out{<div class="sourceCode r">}}\preformatted{planned_visits <- tribble(
   ~AVISIT,  ~ADY,

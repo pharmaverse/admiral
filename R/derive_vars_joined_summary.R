@@ -205,10 +205,15 @@
 #'
 #' @examplesx
 #'
+#' @info The examples focus on the functionality specific to this function. For
+#'   examples of functionality common to all "joined" functions like
+#'   `filter_join`, `join_type`, `first_cond_lower`, ... please see the examples
+#'   of [derive_vars_joined()].
+#'
 #' @caption Derive cumulative dose before event (`CUMDOSA`)
 #'
-#' @info To the `ADAE` dataset the cumulative actual dose up to the day of the
-#'   adverse event should be added.
+#' @info Deriving the cumulative actual dose up to the day of the adverse event
+#'   in the `ADAE` dataset.
 #'
 #'   - `USUBJID` is specified for `by_vars` to join the `ADAE` and the `ADEX`
 #'    dataset by subject.
@@ -218,6 +223,9 @@
 #'   set to the sum of `AVAL`.
 #'   - As `ADY` from `ADEX` is used in `filter_join` (but not in `new_vars`), it
 #'    needs to be specified for `join_vars`.
+#'    - The `join_type` is set to `"all"` to consider all records in the joined
+#'    dataset. `join_type = "before"` can't by used here because then doses at
+#'    the same day as the adverse event would be excluded.
 #'
 #' @code
 #' library(tibble)
@@ -268,10 +276,15 @@
 #'   missing_values = exprs(CUMDOSE = 0)
 #' )
 #'
-#' @caption Derive weekly score
+#' @caption Derive weekly score if enough assessments are available
 #'
 #' @info For each planned visit the average score within the week before the
 #'   visit should be derived if at least three assessments are available.
+#'
+#'   Please note that the condition for the number of assessments is specified
+#'   in `new_vars` and not in `filter_join`. This is because the number of
+#'   assessments within the week before the visit should be counted but not the
+#'   number of assessment available for the subject.
 #'
 #' @code
 #' planned_visits <- tribble(
