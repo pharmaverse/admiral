@@ -203,6 +203,18 @@ save_rda <- function(data, file_path, new_name) {
 
 #' @desciption Uses `diffdf` to compare two datasets
 compare <- function(base, compare, keys, file = NULL) {
+  #------------------------ to be removed 
+  attr(base, "label") <- NULL
+  attr(base, "_xportr.df_arg_")  <- NULL
+  e = globalenv()
+  e$old = base
+  e$new = compare
+  e$file = file
+ # ------------------------  to be removed
+
+  # DISCUSS:  base and compare have attributes!   But differ ! => Remove both
+  for (name in names(base)) {attr(base[[name]], "label") = NULL}
+  for (name in names(compare)) {attr(compare[[name]], "label") = NULL}
   tryCatch(
     {
       diffdf::diffdf(
