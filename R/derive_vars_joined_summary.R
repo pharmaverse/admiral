@@ -284,7 +284,7 @@
 #'   Please note that the condition for the number of assessments is specified
 #'   in `new_vars` and not in `filter_join`. This is because the number of
 #'   assessments within the week before the visit should be counted but not the
-#'   number of assessment available for the subject.
+#'   number of assessments available for the subject.
 #'
 #' @code
 #' planned_visits <- tribble(

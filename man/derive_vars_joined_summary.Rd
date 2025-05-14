@@ -397,7 +397,7 @@ visit should be derived if at least three assessments are available.
 Please note that the condition for the number of assessments is specified
 in \code{new_vars} and not in \code{filter_join}. This is because the number of
 assessments within the week before the visit should be counted but not the
-number of assessment available for the subject.
+number of assessments available for the subject.
 
 \if{html}{\out{<div class="sourceCode r">}}\preformatted{planned_visits <- tribble(
   ~AVISIT,  ~ADY,
