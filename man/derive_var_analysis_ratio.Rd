@@ -55,6 +55,8 @@ a new variable \code{R2ANRLO}. Please note how the denominator variable has the 
 \code{new_var} argument. Also, values of 0 in the denominator will return \code{NA} in
 the derivation.
 
+Note that \code{R2AyHI} and \code{R2AyLO} can also be derived using this function.
+
 Reference CDISC ADaM Implementation Guide
 Version 1.1 Section 3.3.4 Analysis Parameter Variables for BDS Datasets
 }
