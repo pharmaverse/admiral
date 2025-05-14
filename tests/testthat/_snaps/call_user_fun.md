@@ -6,8 +6,7 @@
       `call_user_fun()` was deprecated in admiral 1.3.0.
       i `call_user_fun()` is no longer in use;
       i The original code for this function is here:
-      i https://github.com/pharmaverse/admiral/
-      i blob/a49e84143379f921ef4e10ab546a09648d76f4ec/R/call_user_fun.R#L26-L39
+      i https://github.com/pharmaverse/admiral/blob/v1.2.0/R/call_user_fun.R#L26-L39
     Condition
       Error in `call_user_fun()`:
       ! Calling `compute_bmi(height = 172, weight = "hallo")` caused the following error:
