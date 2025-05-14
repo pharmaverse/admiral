@@ -856,7 +856,10 @@ get_not_mapped <- function() {
 #' @description Merge a summary variable from a dataset to the input dataset.
 #'
 #' @param dataset
+#'
 #' `r roxygen_param_dataset(expected_vars = c("by_vars"))`
+#'
+#' @permitted [dataset]
 #'
 #' @param dataset_add Additional dataset
 #'

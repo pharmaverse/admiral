@@ -19,6 +19,7 @@ derive_var_merged_summary(
 The variables specified by the \code{by_vars} argument are expected to be in the dataset.
 
 \describe{
+\item{Permitted values}{a dataset, i.e., a \code{data.frame} or tibble}
 \item{Default value}{none}
 }}
 

@@ -12,7 +12,7 @@ event. The name refers to the dataset specified for \code{source_datasets} in
 \code{derive_var_merged_ef_msrc()}.
 
 \describe{
-\item{Permitted values}{a character scalar, i.e., a character vector of length one}
+\item{Permitted values}{a dataset, i.e., a \code{data.frame} or tibble}
 \item{Default value}{none}
 }}
 
