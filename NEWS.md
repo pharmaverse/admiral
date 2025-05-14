@@ -26,7 +26,7 @@ the derivation is called for all subsets. (#2645)
 
     **Phase 1 (message)**
 	
-	- `call_user_fun()` has been deprecated and will have no replacement.  (For original code, please see: "https://github.com/pharmaverse/admiral/blob/v1.2.0/R/call_user_fun.R#L26-L39") 
+	- `call_user_fun()` has been deprecated and will have no replacement.  (For original code, please see: "https://github.com/pharmaverse/admiral/blob/v1.2.0/R/call_user_fun.R#L26-L39") (#2678)
   
     **Phase 2 (warning)**
     
