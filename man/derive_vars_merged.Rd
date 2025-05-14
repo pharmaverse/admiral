@@ -234,137 +234,6 @@ Observations in the additional dataset which have no matching observation
 in the input dataset are ignored.
 }
 }
-\examples{
-library(dplyr, warn.conflicts = FALSE)
-vs <- tribble(
-  ~STUDYID,  ~DOMAIN,  ~USUBJID, ~VSTESTCD,      ~VISIT, ~VSSTRESN, ~VSSTRESU,       ~VSDTC,
-  "PILOT01",    "VS", "01-1302",  "HEIGHT", "SCREENING",     177.8,      "cm", "2013-08-20",
-  "PILOT01",    "VS", "01-1302",  "WEIGHT", "SCREENING",     81.19,      "kg", "2013-08-20",
-  "PILOT01",    "VS", "01-1302",  "WEIGHT",  "BASELINE",      82.1,      "kg", "2013-08-29",
-  "PILOT01",    "VS", "01-1302",  "WEIGHT",    "WEEK 2",     81.19,      "kg", "2013-09-15",
-  "PILOT01",    "VS", "01-1302",  "WEIGHT",    "WEEK 4",     82.56,      "kg", "2013-09-24",
-  "PILOT01",    "VS", "01-1302",  "WEIGHT",    "WEEK 6",     80.74,      "kg", "2013-10-08",
-  "PILOT01",    "VS", "01-1302",  "WEIGHT",    "WEEK 8",      82.1,      "kg", "2013-10-22",
-  "PILOT01",    "VS", "01-1302",  "WEIGHT",   "WEEK 12",      82.1,      "kg", "2013-11-05",
-  "PILOT01",    "VS", "17-1344",  "HEIGHT", "SCREENING",     163.5,      "cm", "2014-01-01",
-  "PILOT01",    "VS", "17-1344",  "WEIGHT", "SCREENING",     58.06,      "kg", "2014-01-01",
-  "PILOT01",    "VS", "17-1344",  "WEIGHT",  "BASELINE",     58.06,      "kg", "2014-01-11",
-  "PILOT01",    "VS", "17-1344",  "WEIGHT",    "WEEK 2",     58.97,      "kg", "2014-01-24",
-  "PILOT01",    "VS", "17-1344",  "WEIGHT",    "WEEK 4",     57.97,      "kg", "2014-02-07",
-  "PILOT01",    "VS", "17-1344",  "WEIGHT",    "WEEK 6",     58.97,      "kg", "2014-02-19",
-  "PILOT01",    "VS", "17-1344",  "WEIGHT",    "WEEK 8",     57.79,      "kg", "2014-03-14"
-)
-
-dm <- tribble(
-  ~STUDYID,  ~DOMAIN,  ~USUBJID, ~AGE,   ~AGEU,
-  "PILOT01",    "DM", "01-1302",   61, "YEARS",
-  "PILOT01",    "DM", "17-1344",   64, "YEARS"
-)
-
-
-# Merging all dm variables to vs
-derive_vars_merged(
-  vs,
-  dataset_add = select(dm, -DOMAIN),
-  by_vars = exprs(STUDYID, USUBJID)
-) \%>\%
-  select(STUDYID, USUBJID, VSTESTCD, VISIT, VSSTRESN, AGE, AGEU)
-
-
-# Merge last weight to adsl
-adsl <- tribble(
-  ~STUDYID,   ~USUBJID, ~AGE,   ~AGEU,
-  "PILOT01", "01-1302",   61, "YEARS",
-  "PILOT01", "17-1344",   64, "YEARS"
-)
-
-
-derive_vars_merged(
-  adsl,
-  dataset_add = vs,
-  by_vars = exprs(STUDYID, USUBJID),
-  order = exprs(convert_dtc_to_dtm(VSDTC)),
-  mode = "last",
-  new_vars = exprs(LASTWGT = VSSTRESN, LASTWGTU = VSSTRESU),
-  filter_add = VSTESTCD == "WEIGHT",
-  exist_flag = vsdatafl
-) \%>\%
-  select(STUDYID, USUBJID, AGE, AGEU, LASTWGT, LASTWGTU, vsdatafl)
-
-
-# Derive treatment start datetime (TRTSDTM)
-ex <- tribble(
-  ~STUDYID,  ~DOMAIN,  ~USUBJID, ~EXSTDY, ~EXENDY,     ~EXSTDTC,     ~EXENDTC,
-  "PILOT01",    "EX", "01-1302",       1,      18, "2013-08-29", "2013-09-15",
-  "PILOT01",    "EX", "01-1302",      19,      69, "2013-09-16", "2013-11-05",
-  "PILOT01",    "EX", "17-1344",       1,      14, "2014-01-11", "2014-01-24",
-  "PILOT01",    "EX", "17-1344",      15,      63, "2014-01-25", "2014-03-14"
-)
-## Impute exposure start date to first date/time
-ex_ext <- derive_vars_dtm(
-  ex,
-  dtc = EXSTDTC,
-  new_vars_prefix = "EXST",
-  highest_imputation = "M",
-)
-## Add first exposure datetime and imputation flags to adsl
-derive_vars_merged(
-  select(dm, STUDYID, USUBJID),
-  dataset_add = ex_ext,
-  by_vars = exprs(STUDYID, USUBJID),
-  new_vars = exprs(TRTSDTM = EXSTDTM, TRTSDTF = EXSTDTF, TRTSTMF = EXSTTMF),
-  order = exprs(EXSTDTM),
-  mode = "first"
-)
-
-# Derive treatment end datetime (TRTEDTM)
-## Impute exposure end datetime to last time, no date imputation
-ex_ext <- derive_vars_dtm(
-  ex,
-  dtc = EXENDTC,
-  new_vars_prefix = "EXEN",
-  time_imputation = "last",
-)
-## Add last exposure datetime and imputation flag to adsl
-derive_vars_merged(
-  select(adsl, STUDYID, USUBJID),
-  dataset_add = ex_ext,
-  filter_add = !is.na(EXENDTM),
-  by_vars = exprs(STUDYID, USUBJID),
-  new_vars = exprs(TRTEDTM = EXENDTM, TRTETMF = EXENTMF),
-  order = exprs(EXENDTM),
-  mode = "last"
-)
-# Modify merged values and set value for non matching observations
-adsl <- tribble(
-  ~USUBJID, ~SEX, ~COUNTRY,
-  "ST42-1", "F",  "AUT",
-  "ST42-2", "M",  "MWI",
-  "ST42-3", "M",  "NOR",
-  "ST42-4", "F",  "UGA"
-)
-
-advs <- tribble(
-  ~USUBJID, ~PARAMCD, ~AVISIT,    ~AVISITN, ~AVAL,
-  "ST42-1", "WEIGHT", "BASELINE",        0,    66,
-  "ST42-1", "WEIGHT", "WEEK 2",          1,    68,
-  "ST42-2", "WEIGHT", "BASELINE",        0,    88,
-  "ST42-3", "WEIGHT", "WEEK 2",          1,    55,
-  "ST42-3", "WEIGHT", "WEEK 4",          2,    50
-)
-
-derive_vars_merged(
-  adsl,
-  dataset_add = advs,
-  by_vars = exprs(USUBJID),
-  new_vars = exprs(
-    LSTVSCAT = if_else(AVISIT == "BASELINE", "BASELINE", "POST-BASELINE")
-  ),
-  order = exprs(AVISITN),
-  mode = "last",
-  missing_values = exprs(LSTVSCAT = "MISSING")
-)
-}
 \seealso{
 General Derivation Functions for all ADaMs that returns variable appended to dataset:
 \code{\link{derive_var_extreme_flag}()},
@@ -382,3 +251,244 @@ General Derivation Functions for all ADaMs that returns variable appended to dat
 }
 \concept{der_gen}
 \keyword{der_gen}
+\section{Examples}{
+\subsection{Basic merge of a full dataset}{
+
+Merge all demographic variables onto a vital signs dataset.
+\itemize{
+\item The variable \code{DOMAIN} exists in both datasets so note the use of
+\code{select(dm, -DOMAIN)} in the \code{dataset_add} argument.
+}
+
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{library(tibble)
+library(dplyr, warn.conflicts = FALSE)
+vs <- tribble(
+  ~DOMAIN,  ~USUBJID, ~VSTESTCD, ~VISIT,      ~VSSTRESN, ~VSDTC,
+  "VS",     "01",     "HEIGHT",  "SCREENING",     178.0, "2013-08-20",
+  "VS",     "01",     "WEIGHT",  "SCREENING",      81.9, "2013-08-20",
+  "VS",     "01",     "WEIGHT",  "BASELINE",       82.1, "2013-08-29",
+  "VS",     "01",     "WEIGHT",  "WEEK 2",         81.9, "2013-09-15",
+  "VS",     "01",     "WEIGHT",  "WEEK 4",         82.6, "2013-09-24",
+  "VS",     "02",     "WEIGHT",  "BASELINE",       58.6, "2014-01-11"
+) \%>\%
+  mutate(STUDYID = "AB42")
+
+dm <- tribble(
+  ~DOMAIN, ~USUBJID, ~AGE, ~AGEU,
+  "DM",    "01",       61, "YEARS",
+  "DM",    "02",       64, "YEARS",
+  "DM",    "03",       85, "YEARS"
+) \%>\%
+  mutate(STUDYID = "AB42")
+
+derive_vars_merged(
+  vs,
+  dataset_add = select(dm, -DOMAIN),
+  by_vars = exprs(STUDYID, USUBJID)
+) \%>\%
+  select(USUBJID, VSTESTCD, VISIT, VSSTRESN, AGE, AGEU)
+#> # A tibble: 6 × 6
+#>   USUBJID VSTESTCD VISIT     VSSTRESN   AGE AGEU 
+#>   <chr>   <chr>    <chr>        <dbl> <dbl> <chr>
+#> 1 01      HEIGHT   SCREENING    178      61 YEARS
+#> 2 01      WEIGHT   SCREENING     81.9    61 YEARS
+#> 3 01      WEIGHT   BASELINE      82.1    61 YEARS
+#> 4 01      WEIGHT   WEEK 2        81.9    61 YEARS
+#> 5 01      WEIGHT   WEEK 4        82.6    61 YEARS
+#> 6 02      WEIGHT   BASELINE      58.6    64 YEARS}\if{html}{\out{</div>}}}
+\subsection{Merge only the first/last value (\code{order} and \code{mode})}{
+
+Merge the last occurring weight for each subject to the demographics dataset.
+\itemize{
+\item To enable sorting by visit date \code{convert_dtc_to_dtm()} is used to convert
+to a datetime, within the \code{order} argument.
+\item Then the \code{mode} argument is set to \code{"last"} to ensure the last sorted value
+is taken. Be cautious if \code{NA} values are possible in the \code{order} variables -
+see \href{https://pharmaverse.github.io/admiral/articles/generic.html#sort_order}{Sort Order}.
+\item The \code{filter_add} argument is used to restrict the vital signs records only
+to weight assessments.
+}
+
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{derive_vars_merged(
+  dm,
+  dataset_add = vs,
+  by_vars = exprs(STUDYID, USUBJID),
+  order = exprs(convert_dtc_to_dtm(VSDTC)),
+  mode = "last",
+  new_vars = exprs(LSTWT = VSSTRESN),
+  filter_add = VSTESTCD == "WEIGHT"
+) \%>\%
+  select(USUBJID, AGE, AGEU, LSTWT)
+#> # A tibble: 3 × 4
+#>   USUBJID   AGE AGEU  LSTWT
+#>   <chr>   <dbl> <chr> <dbl>
+#> 1 01         61 YEARS  82.6
+#> 2 02         64 YEARS  58.6
+#> 3 03         85 YEARS  NA  }\if{html}{\out{</div>}}}
+\subsection{Handling duplicates (\code{check_type})}{
+
+The source records are checked regarding duplicates with respect to the
+by variables and the order specified.
+By default, a warning is issued if any duplicates are found.
+Note the results here with a new vital signs dataset containing a
+duplicate last weight assessment date.
+
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{vs_dup <- tribble(
+  ~DOMAIN,  ~USUBJID, ~VSTESTCD, ~VISIT,      ~VSSTRESN, ~VSDTC,
+  "VS",     "01",     "WEIGHT",  "WEEK 2",        81.1, "2013-09-24",
+  "VS",     "01",     "WEIGHT",  "WEEK 4",        82.6, "2013-09-24"
+) \%>\%
+  mutate(STUDYID = "AB42")
+
+derive_vars_merged(
+  dm,
+  dataset_add = vs_dup,
+  by_vars = exprs(STUDYID, USUBJID),
+  order = exprs(convert_dtc_to_dtm(VSDTC)),
+  mode = "last",
+  new_vars = exprs(LSTWT = VSSTRESN),
+  filter_add = VSTESTCD == "WEIGHT"
+) \%>\%
+  select(USUBJID, AGE, AGEU, LSTWT)
+#> # A tibble: 3 × 4
+#>   USUBJID   AGE AGEU  LSTWT
+#>   <chr>   <dbl> <chr> <dbl>
+#> 1 01         61 YEARS  82.6
+#> 2 02         64 YEARS  NA  
+#> 3 03         85 YEARS  NA  
+#> Warning: Dataset contains duplicate records with respect to `STUDYID`, `USUBJID`, and
+#> `convert_dtc_to_dtm(VSDTC)`
+#> ℹ Run `admiral::get_duplicates_dataset()` to access the duplicate records}\if{html}{\out{</div>}}
+
+For investigating the issue, the dataset of the duplicate source records
+can be obtained by calling \code{get_duplicates_dataset()}:
+
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{get_duplicates_dataset()
+#> Duplicate records with respect to `STUDYID`, `USUBJID`, and
+#> `convert_dtc_to_dtm(VSDTC)`.
+#> # A tibble: 2 × 9
+#>   STUDYID USUBJID convert_dtc_to_dtm(VSDT…¹ DOMAIN VSTESTCD VISIT VSSTRESN VSDTC
+#> * <chr>   <chr>   <dttm>                    <chr>  <chr>    <chr>    <dbl> <chr>
+#> 1 AB42    01      2013-09-24 00:00:00       VS     WEIGHT   WEEK…     81.1 2013…
+#> 2 AB42    01      2013-09-24 00:00:00       VS     WEIGHT   WEEK…     82.6 2013…
+#> # ℹ abbreviated name: ¹​`convert_dtc_to_dtm(VSDTC)`
+#> # ℹ 1 more variable: LSTWT <dbl>}\if{html}{\out{</div>}}
+
+Common options to solve the issue:
+\itemize{
+\item Restricting the source records by specifying/updating the \code{filter_add} argument.
+\item Specifying additional variables for \code{order} - this is the most common approach
+adding something like a sequence variable.
+\item Setting \code{check_type = "none"} to ignore any duplicates, but then in this case
+the last occurring record would be chosen according to the sort order of the
+input \code{dataset_add}.
+}}
+\subsection{Modify values dependent on the merge (\code{new_vars} and \code{missing_values})}{
+
+For the last occurring weight for each subject, add a categorisation of
+which visit it occurred at to the demographics dataset.
+\itemize{
+\item In the \code{new_vars} argument other functions can be utilised to modify the
+merged values. For example, in the below case we want to categorise the
+visit as \code{"BASELINE"} or \code{"POST-BASELINE"} using \code{if_else()}.
+\item The \code{missing_values} argument assigns a specific value for subjects with
+no matching observations - see subject \code{"03"} in the below example.
+}
+
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{derive_vars_merged(
+  dm,
+  dataset_add = vs,
+  by_vars = exprs(STUDYID, USUBJID),
+  order = exprs(convert_dtc_to_dtm(VSDTC)),
+  mode = "last",
+  new_vars = exprs(
+    LSTWTCAT = if_else(VISIT == "BASELINE", "BASELINE", "POST-BASELINE")
+  ),
+  filter_add = VSTESTCD == "WEIGHT",
+  missing_values = exprs(LSTWTCAT = "MISSING")
+) \%>\%
+  select(USUBJID, AGE, AGEU, LSTWTCAT)
+#> # A tibble: 3 × 4
+#>   USUBJID   AGE AGEU  LSTWTCAT     
+#>   <chr>   <dbl> <chr> <chr>        
+#> 1 01         61 YEARS POST-BASELINE
+#> 2 02         64 YEARS BASELINE     
+#> 3 03         85 YEARS MISSING      }\if{html}{\out{</div>}}}
+\subsection{Check existence of records to merge (\code{exist_flag}, \code{true_value} and \code{false_value})}{
+
+Similar to the above example, now we prefer to have a separate flag
+variable to show whether a selected record was merged.
+\itemize{
+\item The name of the new variable is set with the \code{exist_flag} argument.
+\item The values of this new variable are assigned via the \code{true_value} and
+\code{false_value} arguments.
+}
+
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{derive_vars_merged(
+  dm,
+  dataset_add = vs,
+  by_vars = exprs(STUDYID, USUBJID),
+  order = exprs(convert_dtc_to_dtm(VSDTC)),
+  mode = "last",
+  new_vars = exprs(
+    LSTWTCAT = if_else(VISIT == "BASELINE", "BASELINE", "POST-BASELINE")
+  ),
+  filter_add = VSTESTCD == "WEIGHT",
+  exist_flag = WTCHECK,
+  true_value = "Y",
+  false_value = "MISSING"
+) \%>\%
+  select(USUBJID, AGE, AGEU, LSTWTCAT, WTCHECK)
+#> # A tibble: 3 × 5
+#>   USUBJID   AGE AGEU  LSTWTCAT      WTCHECK
+#>   <chr>   <dbl> <chr> <chr>         <chr>  
+#> 1 01         61 YEARS POST-BASELINE Y      
+#> 2 02         64 YEARS BASELINE      Y      
+#> 3 03         85 YEARS <NA>          MISSING}\if{html}{\out{</div>}}}
+\subsection{Creating more than one variable from the merge (\code{new_vars})}{
+
+Derive treatment start datetime and associated imputation flags.
+\itemize{
+\item In this example we first impute exposure datetime and associated flag
+variables as a separate first step to be used in the \code{order} argument.
+\item In the \code{new_vars} arguments, you can see how both datetime and the date and
+time imputation flags are all merged in one call.
+}
+
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{ex <- tribble(
+  ~DOMAIN, ~USUBJID, ~EXSTDTC,
+  "EX",    "01",     "2013-08-29",
+  "EX",    "01",     "2013-09-16",
+  "EX",    "02",     "2014-01-11",
+  "EX",    "02",     "2014-01-25"
+) \%>\%
+  mutate(STUDYID = "AB42")
+
+ex_ext <- derive_vars_dtm(
+  ex,
+  dtc = EXSTDTC,
+  new_vars_prefix = "EXST",
+  highest_imputation = "M"
+)
+
+derive_vars_merged(
+  dm,
+  dataset_add = ex_ext,
+  by_vars = exprs(STUDYID, USUBJID),
+  new_vars = exprs(TRTSDTM = EXSTDTM, TRTSDTF = EXSTDTF, TRTSTMF = EXSTTMF),
+  order = exprs(EXSTDTM),
+  mode = "first"
+) \%>\%
+  select(USUBJID, TRTSDTM, TRTSDTF, TRTSTMF)
+#> # A tibble: 3 × 4
+#>   USUBJID TRTSDTM             TRTSDTF TRTSTMF
+#>   <chr>   <dttm>              <chr>   <chr>  
+#> 1 01      2013-08-29 00:00:00 <NA>    H      
+#> 2 02      2014-01-11 00:00:00 <NA>    H      
+#> 3 03      NA                  <NA>    <NA>   }\if{html}{\out{</div>}}}
+\subsection{Further examples}{
+
+Further example usages of this function, including guidance on when to
+use this function versus \code{derive_vars_joined()}, can be found in the
+\href{../articles/generic.html}{Generic Derivations vignette}.}}
+
