@@ -346,14 +346,25 @@ get_terms_from_db <- function(version,
     queries = queries,
     i = i
   )
-  terms <- call_user_fun(
+  terms <-
+   tryCatch({
+    call_user_fun(
     fun(
       basket_select = definition,
       version = version,
       keep_id = expect_grpid,
       temp_env = temp_env
     )
-  )
+    )
+  }, error = function(e) {
+    cli_abort(
+      c(
+        "The function {.fun {fun}} failed to retrieve the terms.",
+        "Error message: {.val {e$message}}"
+      )
+    )}
+   )
+
   assert_terms(
     terms,
     expect_grpname = expect_grpname,
