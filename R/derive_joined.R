@@ -104,7 +104,7 @@
 #' @param first_cond_lower Condition for selecting range of data (before)
 #'
 #'   If this argument is specified, the other observations are restricted from
-#'   the first observation before the current observation where the specified
+#'   the last observation before the current observation where the specified
 #'   condition is fulfilled up to the current observation. If the condition is
 #'   not fulfilled for any of the other observations, no observations are
 #'   considered.
@@ -112,7 +112,7 @@
 #'   This argument should be specified if `filter_join` contains summary
 #'   functions which should not apply to all observations but only from a
 #'   certain observation before the current observation up to the current
-#'   observation. For an example see the last example below.
+#'   observation. For an example, see the "Examples" section below.
 #'
 #' @permitted [condition]
 #'
@@ -125,7 +125,7 @@
 #'
 #'   This argument should be specified if `filter_join` contains summary
 #'   functions which should not apply to all observations but only up to the
-#'   confirmation assessment. For an example see the last example below.
+#'   confirmation assessment. For an example, see the "Examples" section below.
 #'
 #' @permitted [condition]
 #'
@@ -195,7 +195,7 @@
 #'     fulfilling the condition is included). If for an observation of the input
 #'     dataset the condition is not fulfilled, the observation is removed.
 #'
-#'     For an example see the last example in the "Examples" section.
+#'     For an example, see the "Examples" section below.
 #'
 #' 1. The joined dataset is restricted by the `filter_join` condition.
 #'
@@ -223,21 +223,36 @@
 #'
 #' @export
 #'
-#' @examples
+#' @examplesx
+#'
+#' @caption Basic join based on a generic time window (`filter_join`)
+#' @info Derive a visit based on where the study day falls according to a
+#'   scheduled set of time windows.
+#'
+#' - The `filter_join` argument here can check conditions using variables from
+#'   both the `dataset` and `dataset_add`, so the study day is compared to the
+#'   start and end of the time window.
+#' - As no grouping variables are assigned using the `by_vars` argument, a full
+#'   join is performed keeping all variables from `dataset_add`.
+#' @code
 #' library(tibble)
 #' library(lubridate)
 #' library(dplyr, warn.conflicts = FALSE)
 #' library(tidyr)
 #'
-#' # Add AVISIT (based on time windows), AWLO, and AWHI
 #' adbds <- tribble(
-#'   ~USUBJID, ~ADY,
-#'   "1",       -33,
-#'   "1",        -2,
-#'   "1",         3,
-#'   "1",        24,
-#'   "2",        NA,
-#' )
+#'   ~USUBJID, ~ADY, ~AVAL,
+#'   "1",       -33,    11,
+#'   "1",        -7,    10,
+#'   "1",         1,    12,
+#'   "1",         8,    12,
+#'   "1",        15,     9,
+#'   "1",        20,    14,
+#'   "1",        24,    12,
+#'   "2",        -1,    13,
+#'   "2",        13,     8
+#' ) %>%
+#'   mutate(STUDYID = "AB42")
 #'
 #' windows <- tribble(
 #'   ~AVISIT,    ~AWLO, ~AWHI,
@@ -253,24 +268,53 @@
 #'   dataset_add = windows,
 #'   join_type = "all",
 #'   filter_join = AWLO <= ADY & ADY <= AWHI
-#' )
+#' ) %>%
+#'   select(USUBJID, ADY, AVISIT)
 #'
-#' # derive the nadir after baseline and before the current observation
-#' adbds <- tribble(
-#'   ~USUBJID, ~ADY, ~AVAL,
-#'   "1",        -7,    10,
-#'   "1",         1,    12,
-#'   "1",         8,    11,
-#'   "1",        15,     9,
-#'   "1",        20,    14,
-#'   "1",        24,    12,
-#'   "2",        13,     8
-#' )
+#' @caption Join only the lowest/highest value occurring within a condition (`filter_join`,
+#'   `order` and `mode`)
+#' @info Derive the nadir value for each observation (i.e. the lowest value
+#'   occurring before) by subject.
 #'
+#' - Note how `dataset` and `dataset_add` are the same here, so we are joining
+#'   a dataset with itself.
+#' - Now we use `by_vars` as we only want to perform the join by subject.
+#' - To find the lowest value we use the `order` and `mode` arguments.
+#' - We subsequently need to check `ADY` to only check assessments occurring
+#'   before. As this is not included in `by_vars` or `order`, we have to ensure
+#'   it also gets joined by adding to `join_vars`. Then in `filter_join` note
+#'   how `ADY.join < ADY` is used as the same variable exists in both datasets,
+#'   so the version from `dataset_add` has `.join` added.
+#' - Finally, we use `check_type = "none"` because this is a case where there
+#'   could be duplicates according to the sort order used (e.g. see subject `"1"`
+#'   records at day 1 and 8). Given the values are the same it doesn't matter
+#'   to us which exact one is taken, so we silence the default warning here.
+#' @code
 #' derive_vars_joined(
 #'   adbds,
 #'   dataset_add = adbds,
-#'   by_vars = exprs(USUBJID),
+#'   by_vars = exprs(STUDYID, USUBJID),
+#'   order = exprs(AVAL),
+#'   new_vars = exprs(NADIR = AVAL),
+#'   join_vars = exprs(ADY),
+#'   join_type = "all",
+#'   filter_join = ADY.join < ADY,
+#'   mode = "first",
+#'   check_type = "none"
+#' ) %>%
+#'   select(USUBJID, ADY, AVAL, NADIR)
+#'
+#' @caption Filtering which records are joined from the additional dataset (`filter_add`)
+#' @info Imagine we wanted to achieve the same as above, but we now want to derive
+#'   this allowing only post-baseline values to be possible for the nadir.
+#'
+#' - The `filter_add` argument can be used here as we only need to restrict the
+#'   source data from `dataset_add`.
+#' @code
+#' derive_vars_joined(
+#'   adbds,
+#'   dataset_add = adbds,
+#'   by_vars = exprs(STUDYID, USUBJID),
 #'   order = exprs(AVAL),
 #'   new_vars = exprs(NADIR = AVAL),
 #'   join_vars = exprs(ADY),
@@ -279,16 +323,26 @@
 #'   filter_join = ADY.join < ADY,
 #'   mode = "first",
 #'   check_type = "none"
-#' )
+#' ) %>%
+#'   select(USUBJID, ADY, AVAL, NADIR)
 #'
-#' # add highest hemoglobin value within two weeks before AE,
-#' # take earliest if more than one
+#' @caption Combining all of the above examples
+#' @info Using all of the arguments demonstrated above, here is a more complex
+#'   example to add to AE the highest hemoglobin value occurring within two weeks
+#'   before each AE. Also join the day it occurred, taking the earliest occurrence
+#'   if more than one assessment with the same value.
+#'
+#' - Note how we used `mode = "last"` to get the highest lab value, but then as we
+#'   wanted the earliest occurrence if more than one it means we need to add
+#'   `desc(ADY)` to `order`. i.e. the last day when in descending order is the first.
+#' @code
 #' adae <- tribble(
 #'   ~USUBJID, ~ASTDY,
 #'   "1",           3,
 #'   "1",          22,
 #'   "2",           2
-#' )
+#' ) %>%
+#'   mutate(STUDYID = "AB42")
 #'
 #' adlb <- tribble(
 #'   ~USUBJID, ~PARAMCD, ~ADY, ~AVAL,
@@ -298,30 +352,34 @@
 #'   "1",      "HGB",       8,   8.0,
 #'   "1",      "HGB",       9,   8.0,
 #'   "1",      "HGB",      16,   7.4,
-#'   "1",      "HGB",      24,   8.1,
 #'   "1",      "ALB",       1,    42,
-#' )
+#' ) %>%
+#'   mutate(STUDYID = "AB42")
 #'
 #' derive_vars_joined(
 #'   adae,
 #'   dataset_add = adlb,
-#'   by_vars = exprs(USUBJID),
+#'   by_vars = exprs(STUDYID, USUBJID),
 #'   order = exprs(AVAL, desc(ADY)),
 #'   new_vars = exprs(HGB_MAX = AVAL, HGB_DY = ADY),
 #'   join_type = "all",
 #'   filter_add = PARAMCD == "HGB",
 #'   filter_join = ASTDY - 14 <= ADY & ADY <= ASTDY,
 #'   mode = "last"
-#' )
+#' ) %>%
+#'   select(USUBJID, ASTDY, HGB_MAX, HGB_DY)
 #'
-#' # Add APERIOD, APERIODC based on ADSL
+#' @caption Join based on subject-specific periods (`join_vars` and `filter_join`)
+#' @info Create a period reference dataset from `ADSL` and join this with `ADAE`
+#'   to assign each AE to which period they occurred within.
+#' @code
 #' adsl <- tribble(
 #'   ~USUBJID, ~AP01SDT,     ~AP01EDT,     ~AP02SDT,     ~AP02EDT,
 #'   "1",      "2021-01-04", "2021-02-06", "2021-02-07", "2021-03-07",
 #'   "2",      "2021-02-02", "2021-03-02", "2021-03-03", "2021-04-01"
 #' ) %>%
 #'   mutate(across(ends_with("DT"), ymd)) %>%
-#'   mutate(STUDYID = "xyz")
+#'   mutate(STUDYID = "AB42")
 #'
 #' period_ref <- create_period_dataset(
 #'   adsl,
@@ -341,7 +399,7 @@
 #' ) %>%
 #'   mutate(
 #'     ASTDT = ymd(ASTDT),
-#'     STUDYID = "xyz"
+#'     STUDYID = "AB42"
 #'   )
 #'
 #' derive_vars_joined(
@@ -351,15 +409,30 @@
 #'   join_vars = exprs(APERSDT, APEREDT),
 #'   join_type = "all",
 #'   filter_join = APERSDT <= ASTDT & ASTDT <= APEREDT
-#' )
+#' ) %>%
+#'   select(USUBJID, ASTDT, APERSDT, APEREDT, APERIOD)
 #'
+#' @caption Modify values dependent on the join (`new_vars`)
+#' @info Add to `ADAE` the number of days since the last dose of treatment, plus
+#'   1 day.
+#'
+#' - In the `new_vars` argument, other functions can be utilised to modify the
+#'   joined values. For example, in the below case we want to calculate the
+#'   number of days between the AE and the last dose using `compute_duration()`.
+#'   This function includes the plus 1 day as default.
+#' - Also note how in this example `EXSDT` is created via the `order` argument
+#'   and then used for `new_vars`, `filter_add` and `filter_join`.
+#' @code
 #' # Add day since last dose (LDRELD)
 #' adae <- tribble(
-#'   ~USUBJID, ~ASTDT,       ~AESEQ,
-#'   "1",      "2020-02-02",      1,
-#'   "1",      "2020-02-04",      2
+#'   ~USUBJID, ~ASTDT,
+#'   "1",      "2020-02-02",
+#'   "1",      "2020-02-04"
 #' ) %>%
-#'   mutate(ASTDT = ymd(ASTDT))
+#'   mutate(
+#'     ASTDT = ymd(ASTDT),
+#'     STUDYID = "AB42"
+#'   )
 #'
 #' ex <- tribble(
 #'   ~USUBJID, ~EXSDTC,
@@ -367,14 +440,13 @@
 #'   "1",      "2020-01",
 #'   "1",      "2020-01-20",
 #'   "1",      "2020-02-03"
-#' )
+#' ) %>%
+#'   mutate(STUDYID = "AB42")
 #'
-#' ## Please note that EXSDT is created via the order argument and then used
-#' ## for new_vars, filter_add, and filter_join
 #' derive_vars_joined(
 #'   adae,
 #'   dataset_add = ex,
-#'   by_vars = exprs(USUBJID),
+#'   by_vars = exprs(STUDYID, USUBJID),
 #'   order = exprs(EXSDT = convert_dtc_to_dt(EXSDTC)),
 #'   join_type = "all",
 #'   new_vars = exprs(LDRELD = compute_duration(
@@ -383,52 +455,131 @@
 #'   filter_add = !is.na(EXSDT),
 #'   filter_join = EXSDT <= ASTDT,
 #'   mode = "last"
-#' )
+#' ) %>%
+#'   select(USUBJID, ASTDT, LDRELD)
 #'
-#' # first_cond_lower and first_cond_upper argument
+#' @caption Join records occurring before a condition (`first_cond_lower`,
+#'   `join_type` and `filter_join`)
+#' @info In an arbitrary dataset where subjects have values of `"0"`, `"-"`, `"+"`
+#'   or `"++"`, for any value of `"0"` derive the last occurring `"++"` day that
+#'   occurs before the `"0"`.
+#'
+#' - Firstly, `first_cond_lower = AVAL.join == "++"` is used so that for each
+#'   observation of `dataset` the joined records from `dataset_add` are restricted
+#'   to only include from the last occurring `"++"` before.
+#' - Then `join_type = "before"` is now used instead of `join_type = "all"`.
+#'   This is because we only want to join the records occurring before the
+#'   `filter_join` condition. Using `AVAL == "0"` ensures here that we only join
+#'   the records occurring before any `"0"` in our `dataset`.
+#' @code
 #' myd <- tribble(
-#'   ~subj, ~day, ~val,
-#'   "1",      1, "++",
-#'   "1",      2, "-",
-#'   "1",      3, "0",
-#'   "1",      4, "+",
-#'   "1",      5, "++",
-#'   "1",      6, "-",
-#'   "2",      1, "-",
-#'   "2",      2, "++",
-#'   "2",      3, "+",
-#'   "2",      4, "0",
-#'   "2",      5, "-",
-#'   "2",      6, "++"
-#' )
+#'   ~USUBJID, ~ADY, ~AVAL,
+#'   "1",         1, "++",
+#'   "1",         2, "-",
+#'   "1",         3, "0",
+#'   "1",         4, "+",
+#'   "1",         5, "++",
+#'   "1",         6, "-",
+#'   "2",         1, "-",
+#'   "2",         2, "++",
+#'   "2",         3, "+",
+#'   "2",         4, "0",
+#'   "2",         5, "-",
+#'   "2",         6, "++",
+#'   "2",         7, "0"
+#' ) %>%
+#'   mutate(STUDYID = "AB42")
 #'
-#' # derive last "++" day before "0" where all results in between are "+" or "++"
 #' derive_vars_joined(
 #'   myd,
 #'   dataset_add = myd,
-#'   by_vars = exprs(subj),
-#'   order = exprs(day),
+#'   by_vars = exprs(STUDYID, USUBJID),
+#'   order = exprs(ADY),
 #'   mode = "first",
-#'   new_vars = exprs(prev_plus_day = day),
-#'   join_vars = exprs(val),
+#'   new_vars = exprs(PREVPLDY = ADY),
+#'   join_vars = exprs(AVAL),
 #'   join_type = "before",
-#'   first_cond_lower = val.join == "++",
-#'   filter_join = val == "0" & all(val.join %in% c("+", "++"))
-#' )
+#'   first_cond_lower = AVAL.join == "++",
+#'   filter_join = AVAL == "0"
+#' ) %>%
+#'   select(USUBJID, ADY, AVAL, PREVPLDY)
 #'
-#' # derive first "++" day after "0" where all results in between are "+" or "++"
+#' @caption Join records occurring before a condition checking all values in between
+#'   (`first_cond_lower`, `join_type` and `filter_join`)
+#' @info In the same example as above, now additionally check that in between the
+#'   `"++"` and the `"0"` all results must be either `"+"` or `"++"`.
+#'
+#' - The `filter_join` condition used here now includes `all(AVAL.join %in% c("+", "++"))`
+#'   to further restrict the joined records from `dataset_add` to only where all
+#'   the values are either `"+"` or `"++"`.
+#' - The `order` and `mode` arguments ensure only the day of the `"++"` value
+#'   is joined. For example, for subject `"2"` it selects the day 2 record
+#'   instead of day 3, by using `"first"`.
+#' @code
 #' derive_vars_joined(
 #'   myd,
 #'   dataset_add = myd,
-#'   by_vars = exprs(subj),
-#'   order = exprs(day),
+#'   by_vars = exprs(STUDYID, USUBJID),
+#'   order = exprs(ADY),
+#'   mode = "first",
+#'   new_vars = exprs(PREVPLDY = ADY),
+#'   join_vars = exprs(AVAL),
+#'   join_type = "before",
+#'   first_cond_lower = AVAL.join == "++",
+#'   filter_join = AVAL == "0" & all(AVAL.join %in% c("+", "++"))
+#' ) %>%
+#'   select(USUBJID, ADY, AVAL, PREVPLDY)
+#'
+#' @caption Join records occurring after a condition checking all values in between
+#'   (`first_cond_upper`, `join_type` and `filter_join`)
+#' @info Similar to the above, now derive the first `"++"` day after any `"0"`
+#'   where all results in between are either `"+"` or `"++"`.
+#'
+#' - Note how the main difference here is the use of `join_type = "after"` and
+#'   the `first_cond_upper` argument, instead of `first_cond_lower`.
+#' @code
+#' derive_vars_joined(
+#'   myd,
+#'   dataset_add = myd,
+#'   by_vars = exprs(STUDYID, USUBJID),
+#'   order = exprs(ADY),
 #'   mode = "last",
-#'   new_vars = exprs(next_plus_day = day),
-#'   join_vars = exprs(val),
+#'   new_vars = exprs(NEXTPLDY = ADY),
+#'   join_vars = exprs(AVAL),
 #'   join_type = "after",
-#'   first_cond_upper = val.join == "++",
-#'   filter_join = val == "0" & all(val.join %in% c("+", "++"))
-#' )
+#'   first_cond_upper = AVAL.join == "++",
+#'   filter_join = AVAL == "0" & all(AVAL.join %in% c("+", "++"))
+#' ) %>%
+#'   select(USUBJID, ADY, AVAL, NEXTPLDY)
+#'
+#' @caption Join records after a condition occurring in consecutive visits
+#'   (`tmp_obs_nr_var`, `join_type` and `filter_join`)
+#' @info Find the first value on the next occurring unique visit day after any `"0"`.
+#'
+#' - The `tmp_obs_nr_var` argument can be useful as shown here to help pick out
+#'   consecutive next or last occurring records with respect to `order`.
+#' @code
+#' derive_vars_joined(
+#'   myd,
+#'   dataset_add = myd,
+#'   by_vars = exprs(STUDYID, USUBJID),
+#'   order = exprs(ADY),
+#'   mode = "first",
+#'   new_vars = exprs(NEXTVAL = AVAL),
+#'   tmp_obs_nr_var = tmp_obs_nr,
+#'   join_vars = exprs(AVAL),
+#'   join_type = "after",
+#'   filter_join = AVAL == "0" & ADY < ADY.join & tmp_obs_nr + 1 == tmp_obs_nr.join
+#' ) %>%
+#'   select(USUBJID, ADY, AVAL, NEXTVAL)
+#'
+#' @caption Further examples
+#' @info Further example usages of this function, including guidance on when to
+#'   use this function versus `derive_vars_merged()`, can be found in the
+#'   [Generic Derivations vignette](../articles/generic.html).
+#'
+#'   Equivalent examples for using the `exist_flag`, `true_value`, `false_value`,
+#'   `missing_values` and `check_type` arguments can be found in `derive_vars_merged()`.
 derive_vars_joined <- function(dataset,
                                dataset_add,
                                by_vars = NULL,

@@ -280,7 +280,7 @@
 #' @info For the last occurring weight for each subject, add a categorisation of
 #'   which visit it occurred at to the demographics dataset.
 #'
-#' - In the `new_vars` argument other functions can be utilised to modify the
+#' - In the `new_vars` argument, other functions can be utilised to modify the
 #'   merged values. For example, in the below case we want to categorise the
 #'   visit as `"BASELINE"` or `"POST-BASELINE"` using `if_else()`.
 #' - The `missing_values` argument assigns a specific value for subjects with

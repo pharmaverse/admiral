@@ -388,7 +388,7 @@ input \code{dataset_add}.
 For the last occurring weight for each subject, add a categorisation of
 which visit it occurred at to the demographics dataset.
 \itemize{
-\item In the \code{new_vars} argument other functions can be utilised to modify the
+\item In the \code{new_vars} argument, other functions can be utilised to modify the
 merged values. For example, in the below case we want to categorise the
 visit as \code{"BASELINE"} or \code{"POST-BASELINE"} using \code{if_else()}.
 \item The \code{missing_values} argument assigns a specific value for subjects with
