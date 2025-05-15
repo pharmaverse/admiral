@@ -31,9 +31,9 @@
 #'
 #' Much code taken from pharamavreseadam::create_adams_data.R
 #'  (https://github.com/pharmaverse/pharmaverseadam/blob/main/data-raw/create_adams_data.R)
-#
-#' rUSAGE:   verify_templates()
-#
+#'
+#' USAGE:   verify_templates()
+#'
 #' @export
 
 verify_templates <- function(pkg = "admiral", ds = c("adae")) {
@@ -115,7 +115,6 @@ verify_templates <- function(pkg = "admiral", ds = c("adae")) {
     USE.NAMES = TRUE, simplify = FALSE
   )
   names(keys) <- tolower(names(keys))
-  ## :ess-bp-start::browser@nil:##
   keys
 
 
@@ -145,11 +144,10 @@ verify_templates <- function(pkg = "admiral", ds = c("adae")) {
       file = paste0(path$diff, "/", adam, ".txt")
     )
   })
-
   # TODO:  cleanup?
-
   # run AFTER verify_templates() completes, otherwise will not print
   display_diff(dir = path$diff)
+  print(compare_list, row_limit = nrow(compare_list))
 }
 
 #------------------------  helper functions
@@ -213,11 +211,11 @@ compare <- function(base, compare, keys, file = NULL) {
  # ------------------------  to be removed
 
   # DISCUSS:  base and compare have attributes!   But differ ! => Remove both
-  for (name in names(base)) {attr(base[[name]], "label") = NULL}
-  for (name in names(compare)) {attr(compare[[name]], "label") = NULL}
+  #for (name in names(base)) {attr(base[[name]], "label") = NULL}
+  #for (name in names(compare)) {attr(compare[[name]], "label") = NULL}
   tryCatch(
     {
-      diffdf::diffdf(
+      e$res <- diffdf::diffdf(
         base = base,
         compare = compare,
         keys = keys,
