@@ -366,6 +366,7 @@ get_terms_from_db <- function(version,
       )
     }
   )
+
   assert_terms(
     terms,
     expect_grpname = expect_grpname,
