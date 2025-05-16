@@ -619,16 +619,20 @@ test_that("format.basket_select Test 25:  error handling works correctly", {
       error = function(e) {
         # Assertions in case of error handling
         expect_match(conditionMessage(e), "An error occurred when calling the function:")
-        expect_match(conditionMessage(e),
-                     "Calling {.code fun(basket_select = {definition},
+        expect_match(
+          conditionMessage(e),
+          "Calling {.code fun(basket_select = {definition},
                      version = {version}, keep_id = {expect_grpid},
-                     temp_env = {temp_env})} caused the following error:")
-        expect_equal(conditionMessage(e),
-                     "An error occurred when calling the function:
+                     temp_env = {temp_env})} caused the following error:"
+        )
+        expect_equal(
+          conditionMessage(e),
+          "An error occurred when calling the function:
                      Calling .code fun(basket_select = {definition},
                      version = {version}, keep_id = {expect_grpid},
                      temp_env = {temp_env}) caused the following error:
-                     This is a simulated error.")
+                     This is a simulated error."
+        )
       }
     )
   })
