@@ -12,7 +12,7 @@
 
 ## Updates of Existing Functions
 
-- In derive_vars_joined(), the filter_add argument is now correctly applied for all join types, fixing an issue where it was ignored when join_type != "all".(#2682)
+- In `derive_vars_joined()`, the `filter_add` argument is now correctly applied for all join types, fixing an issue where it was ignored when `join_type != "all"`. (#2682)
 - The function `extract_duplicate_records()` was updated to consider all variables in the input dataset for the by group if the `by_vars` argument is omitted entirely. (#2644)
 - In `slice_derivation()`, previously the derivation is not called for empty
 subsets, however this can lead to issues when the input dataset is empty. Now
