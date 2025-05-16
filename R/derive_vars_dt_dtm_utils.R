@@ -488,7 +488,6 @@ assert_highest_imputation <- function(highest_imputation, highest_imputation_val
 #' - Returns a fully qualified date or `NA` if imputation cannot be performed.
 #'
 #' @keywords internal
-#' @noRd
 get_dt_dtm_range <- function(dtc,
                              date_imputation = "first",
                              time_imputation = NULL) {
