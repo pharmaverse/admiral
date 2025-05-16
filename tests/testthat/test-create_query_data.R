@@ -596,3 +596,40 @@ test_that("format.basket_select Test 24: formatting is correct (name specified)"
     "basket_select(name = \"My SDG\", id = NULL, scope = \"NA\", type = \"sdg\")"
   )
 })
+
+# Define a mock function that throws an error
+error_fun <- function(...) {
+  stop("This is a simulated error.")
+}
+
+## Test 25: get_terms_from_db error handling with cli_abort works correctly ----
+test_that("format.basket_select Test 25:  error handling works correctly", {
+  expect_error({
+    tryCatch(
+      get_terms_from_db(
+        version = "test_version",
+        fun = error_fun,
+        queries = NULL,
+        definition = basket_select(name = NULL, scope = "BROAD", type = "smq"),
+        expect_grpname = FALSE,
+        expect_grpid = FALSE,
+        i = 1,
+        temp_env = NULL
+      ),
+      error = function(e) {
+        # Assertions in case of error handling
+        expect_match(conditionMessage(e), "An error occurred when calling the function:")
+        expect_match(conditionMessage(e),
+                     "Calling {.code fun(basket_select = {definition},
+                     version = {version}, keep_id = {expect_grpid},
+                     temp_env = {temp_env})} caused the following error:")
+        expect_equal(conditionMessage(e),
+                     "An error occurred when calling the function:
+                     Calling .code fun(basket_select = {definition},
+                     version = {version}, keep_id = {expect_grpid},
+                     temp_env = {temp_env}) caused the following error:
+                     This is a simulated error.")
+      }
+    )
+  })
+})

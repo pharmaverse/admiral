@@ -346,13 +346,25 @@ get_terms_from_db <- function(version,
     queries = queries,
     i = i
   )
-  terms <- call_user_fun(
+
+  terms <- tryCatch(
     fun(
       basket_select = definition,
       version = version,
       keep_id = expect_grpid,
       temp_env = temp_env
-    )
+    ),
+    error = function(err) {
+      cli_abort(
+        c(
+          "An error occurred when calling the internal function:",
+          "Calling {.code fun(basket_select = {definition},
+          version = {version}, keep_id = {expect_grpid},
+          temp_env = {temp_env})} caused the following error:",
+          conditionMessage(err)
+        )
+      )
+    }
   )
   assert_terms(
     terms,
