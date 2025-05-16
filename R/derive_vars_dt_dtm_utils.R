@@ -755,8 +755,8 @@ propagate_na_values <- function(partial) {
 #'
 #' @returns A list of character vectors, each representing a component of the date
 #' or datetime.
-#'   For dates, the components are "year", "month", and "day".
-#'   For datetimes, the components also include "hour", "minute", and "second".
+#' - For dates, the components are "year", "month", and "day".
+#' - For datetimes, the components also include "hour", "minute", and "second".
 #'
 #' @details
 #' The function uses different parsing methods depending on whether the input is
