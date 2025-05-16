@@ -349,7 +349,7 @@ assert_date_imputation <- function(highest_imputation, date_imputation) {
   if (highest_imputation == "Y") {
     assert_character_scalar(date_imputation, values = c("first", "last"))
   }
-  return(date_imputation)
+  date_imputation
 }
 
 #' Assert `time_imputation`
