@@ -1,0 +1,54 @@
+name:  verify_templates_experimental
+
+run-name: EXPERIMENTAL
+
+
+# this yaml workflow runs when a push occurs on this branch
+# OR, manually,
+on:
+  push:
+    branches:  [2642_verify_templates_results]
+  workflow_dispatch:
+
+
+
+jobs:
+  task1:
+    runs-on: ubuntu-latest
+    if: ${{ github.event_name == 'workflow_dispatch' }}
+    steps:
+      - name: echo
+        run:  echo "This is workflow_dispatch"
+
+
+  print_results:
+    runs-on: ubuntu-latest
+
+    env:
+        GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
+        R_KEEP_PKG_SOURCE: yes
+
+    steps:
+      - name: Set up R
+        uses: r-lib/actions/setup-r@v2
+        with:
+          use-public-rspm: true
+
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - uses: r-lib/actions/setup-r-dependencies@v2
+
+      - name: source
+        run:  Rscript -e 'source("data-raw/admiral_verify_templates.R")'
+
+      - name: run the code
+        run:  Rscript -e 'verify_templates()'
+
+      - name: Session info
+        run: |
+          options(width = 100)
+          pkgs <- installed.packages()[, "Package"]
+          sessioninfo::session_info(pkgs, include_base = TRUE)
+        shell: Rscript {0}
+
