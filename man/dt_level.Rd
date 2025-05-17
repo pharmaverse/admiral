@@ -25,6 +25,19 @@ Create a \code{dt_level} object
 A \code{dt_level} object is an ordered factor, i.e., two objects can be
 compared.
 }
+\examples{
+# Create a dt_level object with level "D" (day)
+level_day <- dt_level("D")
+print(level_day)
+
+# Create a dt_level object with level "Y" (year)
+level_year <- dt_level("Y")
+print(level_year)
+
+# Compare two dt_level objects
+level_day > level_year  # TRUE, because "Y" is higher than "D".
+
+}
 \seealso{
 Utilities used for date imputation: 
 \code{\link{dtm_level}()},

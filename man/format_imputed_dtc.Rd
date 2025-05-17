@@ -33,4 +33,34 @@ The function formats the imputed components into "YYYY-MM-DD" for dates
 and "YYYY-MM-DDTHH:MM:SS" for datetimes. It replaces any string containing
 'x' with NA.
 }
+\examples{
+# Format imputed datetime components
+imputed_datetime <- list(
+  year = "2020", month = "01", day = "01",
+  hour = "12", minute = "00", second = "00"
+)
+formatted_datetime <- format_imputed_dtc(imputed_datetime, is_datetime = TRUE)
+print(formatted_datetime)
+
+# Format imputed date components
+imputed_date <- list(year = "2020", month = "01", day = "01")
+formatted_date <- format_imputed_dtc(imputed_date, is_datetime = FALSE)
+print(formatted_date)
+
+# Handle imputed datetime with missing parts (contains 'x')
+# Expected: NA because 'x' is an undefined component
+imputed_partial_datetime <- list(
+  year = "2020", month = "xx", day = "01",
+  hour = "12", minute = "00", second = "00"
+)
+formatted_partial_datetime <- format_imputed_dtc(imputed_partial_datetime, is_datetime = TRUE)
+print(formatted_partial_datetime)
+
+# Handle imputed date with missing parts (contains 'x')
+# Expected: NA because 'x' is an undefined component
+imputed_partial_date <- list(year = "2020", month = "xx", day = "01")
+formatted_partial_date <- format_imputed_dtc(imputed_partial_date, is_datetime = FALSE)
+print(formatted_partial_date)
+
+}
 \keyword{internal}

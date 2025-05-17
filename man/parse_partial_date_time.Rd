@@ -23,8 +23,10 @@ time information.
 \value{
 A list of character vectors, each representing a component of the date
 or datetime.
-For dates, the components are "year", "month", and "day".
-For datetimes, the components also include "hour", "minute", and "second".
+\itemize{
+\item For dates, the components are "year", "month", and "day".
+\item For datetimes, the components also include "hour", "minute", and "second".
+}
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#stable}{\figure{lifecycle-stable.svg}{options: alt='[Stable]'}}}{\strong{[Stable]}}
@@ -40,5 +42,27 @@ a date or a datetime:
 \item For dates, it calls \code{get_partialdate()}.
 \item For datetimes, it calls \code{get_partialdatetime()}.
 }
+}
+\examples{
+# Parse partial datetime components
+dtc_datetime <- "2020-03-15T12:34"
+parsed_datetime <- parse_partial_date_time(dtc_datetime, is_datetime = TRUE)
+print(parsed_datetime)
+
+# Parse partial date components
+dtc_date <- "2020-03"
+parsed_date <- parse_partial_date_time(dtc_date, is_datetime = FALSE)
+print(parsed_date)
+
+# Parse partial datetime with missing components
+dtc_partial_datetime <- "2020-03T12"
+parsed_partial_datetime <- parse_partial_date_time(dtc_partial_datetime, is_datetime = TRUE)
+print(parsed_partial_datetime)
+
+# Parse partial date with incomplete year
+dtc_year <- "2020"
+parsed_year <- parse_partial_date_time(dtc_year, is_datetime = FALSE)
+print(parsed_year)
+
 }
 \keyword{internal}

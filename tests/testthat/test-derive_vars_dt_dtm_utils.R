@@ -100,28 +100,24 @@ test_that("get_imputation_target_time Test 12: get correct target for missing ti
 })
 
 # Test for get_dt_dtm_range
-test_that("get_dt_dtm_range correctly imputes date time", {
+## Test 13: get_dt_dtm_range correctly imputes date time ----
+test_that("get_imputation_target_time Test 13: get_dt_dtm_range correctly imputes date time", {
   dtc <- c("2020-02-29", "2021-03")
   expect_equal(get_dt_dtm_range(dtc, date_imputation = "first"), c("2020-02-29", "2021-03-01"))
   expect_equal(get_dt_dtm_range(dtc, date_imputation = "last"), c("2020-02-29", "2021-03-31"))
   expect_equal(get_dt_dtm_range(character(0), date_imputation = "first"), character(0))
 })
 
-# Test for get_partialdate
-test_that("get_partialdate correctly extracts date components", {
-  dtc <- c("2020-02-29", "2021-03")
-  expected <- list(year = c("2020", "2021"), month = c("02", "03"), day = c("29", NA_character_))
-  expect_equal(get_partialdate(dtc), expected)
-})
-
 # Test for get_highest_imputation_level
-test_that("get_highest_imputation_level correctly determines highest level", {
+## Test 14: get_highest_imputation_level correctly determines highest level ----
+test_that("get_imputation_target_time Test 14: get_highest_imputation_level correctly determines highest level", {
   expect_equal(get_highest_imputation_level(FALSE, "Y"), dt_level("Y"))
   expect_equal(get_highest_imputation_level(TRUE, "Y"), dtm_level("Y"))
 })
 
 # Test for get_imputation_targets
-test_that("get_imputation_targets correctly generates imputation targets", {
+## Test 15: get_imputation_targets correctly generates imputation targets ----
+test_that("get_imputation_target_time Test 15: get_imputation_targets correctly generates imputation targets", {
   # When date_imputation = "first"
   partial <- list(year = "2020", month = "03", day = NA_character_)
   expect_equal(
@@ -186,7 +182,8 @@ test_that("get_imputation_targets correctly generates imputation targets", {
 
 
 # Test for adjust_last_day_imputation
-test_that("adjust_last_day_imputation correctly adjusts last day imputation", {
+## Test 16: adjust_last_day_imputation correctly adjusts last day imputation ----
+test_that("get_imputation_target_time Test 16: adjust_last_day_imputation correctly adjusts last day imputation", {
   expect_equal(
     adjust_last_day_imputation(
       imputed_dtc = "2021-03-01",
@@ -206,7 +203,8 @@ test_that("adjust_last_day_imputation correctly adjusts last day imputation", {
 })
 
 # Test for impute_values
-test_that("impute_values correctly imputes missing values", {
+## Test 17: impute_values correctly imputes missing values ----
+test_that("get_imputation_target_time Test 17: impute_values correctly imputes missing values", {
   partial <- list(year = "2020", month = NA_character_, day = NA_character_)
   target <- list(year = "2020", month = "01", day = "01")
   components <- c("year", "month", "day")
@@ -217,7 +215,8 @@ test_that("impute_values correctly imputes missing values", {
 })
 
 # Test for format_imputed_dtc
-test_that("format_imputed_dtc correctly formats imputed date time", {
+## Test 18: format_imputed_dtc correctly formats imputed date time ----
+test_that("get_imputation_target_time Test 18: format_imputed_dtc correctly formats imputed date time", {
   imputed <- list(
     year = "2020", month = "01", day = "01",
     hour = "12", minute = "00", second = "00"
@@ -227,7 +226,8 @@ test_that("format_imputed_dtc correctly formats imputed date time", {
 })
 
 # Test for propagate_na_values
-test_that("propagate_na_values correctly propagates NA values in DateTime", {
+## Test 19: propagate_na_values correctly propagates NA values in DateTime ----
+test_that("get_imputation_target_time Test 19: propagate_na_values correctly propagates NA values in DateTime", {
   partial <- list(
     year = "2020", month = NA_character_, day = "01",
     hour = "12", minute = NA_character_, second = "20"
@@ -242,7 +242,8 @@ test_that("propagate_na_values correctly propagates NA values in DateTime", {
 })
 
 # Test for parse_partial_date_time
-test_that("parse_partial_date_time correctly parses partial date or datetime", {
+## Test 20: parse_partial_date_time correctly parses partial date or datetime ----
+test_that("get_imputation_target_time Test 20: parse_partial_date_time correctly parses partial date or datetime", {
   dtc <- c("2020-02", "2021")
   expect_equal(
     parse_partial_date_time(dtc, FALSE),

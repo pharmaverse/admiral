@@ -29,6 +29,24 @@ Parse DTC variable and Determine Components
 The function can be replaced by the parttime parser once it is
 available.
 }
+\examples{
+# Get partial datetime components for a complete datetime string
+dtc_complete <- get_partialdatetime("2020-03-15T12:34:56")
+print(dtc_complete)
+
+# Get partial datetime components for a partial datetime string
+dtc_partial <- get_partialdatetime("2020-03-15T12:34")
+print(dtc_partial)
+
+# Get partial datetime components for a date-only string
+dtc_date_only <- get_partialdatetime("2020-03-15")
+print(dtc_date_only)
+
+# Get partial datetime components for an incomplete year string
+dtc_year_partial <- get_partialdatetime("2020")
+print(dtc_year_partial)
+
+}
 \seealso{
 \code{\link[=impute_dtc_dtm]{impute_dtc_dtm()}}, \code{\link[=impute_dtc_dt]{impute_dtc_dt()}}
 

@@ -2,7 +2,7 @@
 % Please edit documentation in R/derive_vars_dt_dtm_utils.R
 \name{propagate_na_values}
 \alias{propagate_na_values}
-\title{Propagate NA Values}
+\title{Propagate NA Values for datetime values}
 \usage{
 propagate_na_values(partial)
 }
@@ -25,5 +25,23 @@ Propagates NA values through date/time components.
 \details{
 This function ensures that if a higher-order component (e.g., month) is NA,
 all lower-order components (e.g., day, hour, etc.) are also set to NA.
+}
+\examples{
+# Propagate NA values through datetime components
+partial_datetime <- list(
+  year = "2020", month = NA_character_, day = "01",
+  hour = "12", minute = NA_character_, second = "34"
+)
+propagated_datetime <- propagate_na_values(partial_datetime)
+print(propagated_datetime)
+
+# Propagate NA values for datetime with missing higher order components
+partial_missing <- list(
+  year = NA_character_, month = "01", day = "01",
+  hour = "12", minute = "00", second = "00"
+)
+propagated_missing <- propagate_na_values(partial_missing)
+print(propagated_missing)
+
 }
 \keyword{internal}
