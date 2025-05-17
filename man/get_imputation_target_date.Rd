@@ -48,6 +48,28 @@ and \code{"15"} otherwise are returned.
 component occurs in the imputed DTC value, the imputed DTC value is set to
 \code{NA_character_} in the imputation functions.
 }
+\examples{
+# Get imputation target for "first"
+target_first <- get_imputation_target_date("first", month = NA)
+print(target_first)
+
+# Get imputation target for "mid" with specified month
+target_mid <- get_imputation_target_date("mid", month = "03")
+print(target_mid)
+
+# Get imputation target for "mid" with NA month
+target_mid_na <- get_imputation_target_date("mid", month = NA)
+print(target_mid_na)
+
+# Get imputation target for "last"
+target_last <- get_imputation_target_date("last", month = NA)
+print(target_last)
+
+# Get imputation target for custom date imputation "06-15"
+target_custom <- get_imputation_target_date("06-15", month = NA)
+print(target_custom)
+
+}
 \seealso{
 \code{\link[=impute_dtc_dtm]{impute_dtc_dtm()}}, \code{\link[=impute_dtc_dt]{impute_dtc_dt()}}
 

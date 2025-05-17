@@ -742,7 +742,8 @@ get_joined_data <- function(dataset,
       values = c("none", "warning", "error"),
       case_sensitive = FALSE
     )
-  if (join_type != "all" || !is.null(first_cond_lower) || !is.null(first_cond_upper)) {
+  any_first_cond <- !is.null(first_cond_lower) || !is.null(first_cond_upper)
+  if (join_type != "all" || any_first_cond) {
     dataset_order_vars <- extract_vars(order)
   } else {
     dataset_order_vars <- NULL
@@ -782,8 +783,7 @@ get_joined_data <- function(dataset,
   # relation of records, e.g., join_type = before|after, first_cond_lower,
   # first_cond_upper
   tmp_obs_nr_var_join <- NULL
-  if (join_type != "all" || !is.null(first_cond_lower) || !is.null(first_cond_upper) ||
-    !is.null(tmp_obs_nr_var)) {
+  if (join_type != "all" || any_first_cond || !is.null(tmp_obs_nr_var)) {
     if (is.null(tmp_obs_nr_var)) {
       tmp_obs_nr_var <- get_new_tmp_var(dataset, prefix = "tmp_obs_nr")
       tmp_obs_nr_var_join <- paste0(as_name(tmp_obs_nr_var), ".join")
