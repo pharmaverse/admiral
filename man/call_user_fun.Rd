@@ -17,6 +17,7 @@ call_user_fun(call)
 The return value of the function call
 }
 \description{
+r lifecycle::badge("deprecated")
 Calls a function provided by the user and adds the function call to the error
 message if the call fails.
 }
@@ -32,11 +33,14 @@ try(call_user_fun(compute_bmi(
 )))
 }
 \seealso{
-Utilities used within Derivation functions: 
-\code{\link{extract_unit}()},
-\code{\link{get_flagged_records}()},
-\code{\link{get_not_mapped}()},
-\code{\link{get_vars_query}()}
+Other deprecated: 
+\code{\link{date_source}()},
+\code{\link{derive_param_extreme_record}()},
+\code{\link{derive_var_dthcaus}()},
+\code{\link{derive_var_extreme_dt}()},
+\code{\link{derive_var_extreme_dtm}()},
+\code{\link{dthcaus_source}()},
+\code{\link{get_summary_records}()}
 }
-\concept{utils_help}
-\keyword{utils_help}
+\concept{deprecated}
+\keyword{deprecated}
