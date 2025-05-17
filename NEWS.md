@@ -60,6 +60,8 @@ read. (#2623)
 
 - The 'Details' section of the `derive_var_analysis_ratio()` function and the 'Derive Analysis Ratio' section of the "Creating a BDS Finding ADaM" vignette were updated to include references to `R2AyHI` and `R2AyLO`. (#2548)
 
+- The `derive_basetype_records()` documentation was updated to clarify `BASETYPE` derivations. (#2545)
+
 ## Various
 
 <details>
