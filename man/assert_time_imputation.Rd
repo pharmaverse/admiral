@@ -29,15 +29,15 @@ Applies assertions on the \code{time_imputation} argument
 }
 \examples{
 # Assert valid 'first' time imputation
-time_imp_first <- assert_time_imputation("Y", "first")
+time_imp_first <- admiral:::assert_time_imputation("Y", "first")
 print(time_imp_first)
 
 # Assert valid 'last' time imputation
-time_imp_last <- assert_time_imputation("Y", "last")
+time_imp_last <- admiral:::assert_time_imputation("Y", "last")
 print(time_imp_last)
 
 # Assert valid custom time imputation "12:34:56"
-time_imp_custom <- assert_time_imputation("Y", "12:34:56")
+time_imp_custom <- admiral:::assert_time_imputation("Y", "12:34:56")
 print(time_imp_custom)
 
 }

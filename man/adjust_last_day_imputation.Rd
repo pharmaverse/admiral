@@ -42,7 +42,7 @@ the day component is missing. It adjusts the date to the last day of the month.
 # Adjust last day imputation for a date with an incomplete day
 imputed_date <- "2021-03-01"
 partial_date <- list(year = "2021", month = "03", day = NA_character_)
-adjusted_date <- adjust_last_day_imputation(imputed_date,
+adjusted_date <- admiral:::adjust_last_day_imputation(imputed_date,
                                             partial_date,
                                             is_datetime = FALSE)
 print(adjusted_date)
@@ -51,14 +51,14 @@ print(adjusted_date)
 imputed_datetime <- "2021-03-01T00:00:00"
 partial_datetime <- list(year = "2021",  month = "03", day = NA_character_,
                          hour = "00", minute = "00", second = "00")
-adjusted_datetime <- adjust_last_day_imputation(imputed_datetime,
+adjusted_datetime <- admiral:::adjust_last_day_imputation(imputed_datetime,
                                                 partial_datetime,
                                                 is_datetime = TRUE)
 print(adjusted_datetime)
 
 # Adjust last day imputation for a date with known day
 partial_date_known_day <- list(year = "2021", month = "03", day = "15")
-adjusted_date_known_day <- adjust_last_day_imputation(imputed_date,
+adjusted_date_known_day <- admiral:::adjust_last_day_imputation(imputed_date,
                                                       partial_date_known_day,
                                                       is_datetime = FALSE)
 print(adjusted_date_known_day)
@@ -66,7 +66,7 @@ print(adjusted_date_known_day)
 # Adjust last day imputation for a datetime with known day
 partial_datetime_known_day <- list(year = "2021", month = "03", day = "15",
                                    hour = "00", minute = "00", second = "00")
-adjusted_datetime_known_day <- adjust_last_day_imputation(imputed_datetime,
+adjusted_datetime_known_day <- admiral:::adjust_last_day_imputation(imputed_datetime,
                                                           partial_datetime_known_day,
                                                           is_datetime = TRUE)
 print(adjusted_datetime_known_day)
