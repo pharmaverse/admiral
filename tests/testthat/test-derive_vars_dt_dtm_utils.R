@@ -103,36 +103,58 @@ test_that("get_imputation_target_time Test 12: get correct target for missing ti
 ## Test 13: get_dt_dtm_range correctly imputes date ranges ----
 test_that("get_dt_dtm_range correctly imputes date ranges", {
   dtc <- c("2020-02-29", "2021-03", "--08-15", "2022", "2022--", "---29")
-  dtc_datetimes <- c("2020-02-29T12:00", "2021-03T14:30", "2021-03--T14",
-                     "--03-15T14:00", "2022--T12:34")
+  dtc_datetimes <- c(
+    "2020-02-29T12:00", "2021-03T14:30", "2021-03--T14",
+    "--03-15T14:00", "2022--T12:34"
+  )
 
   # Validate 'first' date imputation for complete dates and partial dates
-  expect_equal(get_dt_dtm_range(dtc, date_imputation = "first"),
-               c("2020-02-29", "2021-03-01", "0000-08-15", "2022-01-01",
-                 "2022-01-01", "0000-01-29"))
+  expect_equal(
+    get_dt_dtm_range(dtc, date_imputation = "first"),
+    c(
+      "2020-02-29", "2021-03-01", "0000-08-15", "2022-01-01",
+      "2022-01-01", "0000-01-29"
+    )
+  )
 
   # Validate 'last' date imputation for complete dates and partial dates
-  expect_equal(get_dt_dtm_range(dtc, date_imputation = "last"),
-               c("2020-02-29", "2021-03-31", "9999-08-15", "2022-12-31",
-                 "2022-12-31", "9999-12-29"))
+  expect_equal(
+    get_dt_dtm_range(dtc, date_imputation = "last"),
+    c(
+      "2020-02-29", "2021-03-31", "9999-08-15", "2022-12-31",
+      "2022-12-31", "9999-12-29"
+    )
+  )
 
   # Check leap year February
-  expect_equal(get_dt_dtm_range(c("2020-02", "2021-02"), date_imputation = "last"),
-               c("2020-02-29", "2021-02-28"))
+  expect_equal(
+    get_dt_dtm_range(c("2020-02", "2021-02"), date_imputation = "last"),
+    c("2020-02-29", "2021-02-28")
+  )
 
   # Validate 'first' datetime imputation
-  expect_equal(get_dt_dtm_range(dtc_datetimes,
-                                date_imputation = "first",
-                                time_imputation = "first"),
-               c("2020-02-29T12:00:00", "2021-03-01T00:00:00", "2021-03-01T00:00:00",
-                 "0000-01-01T00:00:00", "2022-01-01T00:00:00"))
+  expect_equal(
+    get_dt_dtm_range(dtc_datetimes,
+      date_imputation = "first",
+      time_imputation = "first"
+    ),
+    c(
+      "2020-02-29T12:00:00", "2021-03-01T00:00:00", "2021-03-01T00:00:00",
+      "0000-01-01T00:00:00", "2022-01-01T00:00:00"
+    )
+  )
 
   # Validate 'last' datetime imputation for partial datetime
-  expect_equal(get_dt_dtm_range(dtc_datetimes,
-                                date_imputation = "first",
-                                time_imputation = "last"),
-               c("2020-02-29T12:00:59", "2021-03-01T23:59:59", "2021-03-01T23:59:59",
-                 "0000-01-01T23:59:59", "2022-01-01T23:59:59"))
+  expect_equal(
+    get_dt_dtm_range(dtc_datetimes,
+      date_imputation = "first",
+      time_imputation = "last"
+    ),
+    c(
+      "2020-02-29T12:00:59", "2021-03-01T23:59:59", "2021-03-01T23:59:59",
+      "0000-01-01T23:59:59", "2022-01-01T23:59:59"
+    )
+  )
 
   # Edge case: empty input
   expect_equal(get_dt_dtm_range(character(0), date_imputation = "first"), character(0))
@@ -144,37 +166,56 @@ test_that("get_dt_dtm_range correctly imputes date ranges", {
 
   # Validate correct imputation with single year
   year_only <- c("2020", "2021")
-  expect_equal(get_dt_dtm_range(year_only, date_imputation = "first"),
-               c("2020-01-01", "2021-01-01"))
-  expect_equal(get_dt_dtm_range(year_only, date_imputation = "last"),
-               c("2020-12-31", "2021-12-31"))
+  expect_equal(
+    get_dt_dtm_range(year_only, date_imputation = "first"),
+    c("2020-01-01", "2021-01-01")
+  )
+  expect_equal(
+    get_dt_dtm_range(year_only, date_imputation = "last"),
+    c("2020-12-31", "2021-12-31")
+  )
 
   # Validate correct imputation with year-month only
   year_month <- c("2020-02", "2021-05")
-  expect_equal(get_dt_dtm_range(year_month, date_imputation = "first"),
-               c("2020-02-01", "2021-05-01"))
-  expect_equal(get_dt_dtm_range(year_month, date_imputation = "last"),
-               c("2020-02-29", "2021-05-31"))
+  expect_equal(
+    get_dt_dtm_range(year_month, date_imputation = "first"),
+    c("2020-02-01", "2021-05-01")
+  )
+  expect_equal(
+    get_dt_dtm_range(year_month, date_imputation = "last"),
+    c("2020-02-29", "2021-05-31")
+  )
 
   # Validate input with 'first' date and custom time imputation ('12:34:56')
-  expect_equal(get_dt_dtm_range(dtc_datetimes,
-                                date_imputation = "first",
-                                time_imputation = "12:34:56"),
-               c("2020-02-29T12:00:56", "2021-03-01T12:34:56", "2021-03-01T12:34:56",
-                 "0000-01-01T12:34:56", "2022-01-01T12:34:56"))
+  expect_equal(
+    get_dt_dtm_range(dtc_datetimes,
+      date_imputation = "first",
+      time_imputation = "12:34:56"
+    ),
+    c(
+      "2020-02-29T12:00:56", "2021-03-01T12:34:56", "2021-03-01T12:34:56",
+      "0000-01-01T12:34:56", "2022-01-01T12:34:56"
+    )
+  )
 
   # Validate correct handling of date imputation 'first' with missing day
   dtc_partial <- c("2020-02", "2021-03T12")
-  expect_equal(get_dt_dtm_range(dtc_partial,
-                                date_imputation = "first",
-                                time_imputation = "first"),
-               c("2020-02-01T00:00:00", "2021-03-01T00:00:00"))
+  expect_equal(
+    get_dt_dtm_range(dtc_partial,
+      date_imputation = "first",
+      time_imputation = "first"
+    ),
+    c("2020-02-01T00:00:00", "2021-03-01T00:00:00")
+  )
 
   # Validate correct handling of date imputation 'last' with missing day
-  expect_equal(get_dt_dtm_range(dtc_partial,
-                                date_imputation = "last",
-                                time_imputation = "last"),
-               c("2020-02-29T23:59:59", "2021-03-31T23:59:59"))
+  expect_equal(
+    get_dt_dtm_range(dtc_partial,
+      date_imputation = "last",
+      time_imputation = "last"
+    ),
+    c("2020-02-29T23:59:59", "2021-03-31T23:59:59")
+  )
 })
 
 # Test for get_highest_imputation_level

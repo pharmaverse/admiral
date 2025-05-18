@@ -210,12 +210,12 @@ test_that("derive_vars_dt Test 9: max_dates length mismatch provides error", {
 
 ## Test 10: Warning if null min/max_dates when highest_imputation = Y ----
 test_that("derive_vars_dt Test 10: Warning if null min/max_dates when highest_imputation = Y", {
-  expect_error(
+  expect_snapshot(
     impute_dtc_dt(
       input,
       highest_imputation = "Y"
     ),
-    'If `highest_imputation = "Y"` is specified, `min_dates` or `max_dates` must be specified respectively.' # nolint
+    error = TRUE
   )
 })
 
