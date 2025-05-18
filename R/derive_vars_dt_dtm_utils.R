@@ -939,6 +939,7 @@ format_imputed_dtc <- function(imputed, is_datetime) {
   }
   if_else(str_detect(dtc, "x"), NA_character_, dtc)
 }
+
 #' Propagate NA Values for datetime values
 #'
 #' @description

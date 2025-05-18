@@ -240,7 +240,7 @@ test_that("impute_dtc_dtm Test 9: max_dates parameter works", {
 
 ## Test 10: min_dates length mismatch provides error ----
 test_that("impute_dtc_dtm Test 10: min_dates length mismatch provides error", {
-  expect_error(
+  expect_snapshot(
     impute_dtc_dtm(
       c("2020-12", NA_character_),
       min_dates = list(
@@ -249,13 +249,13 @@ test_that("impute_dtc_dtm Test 10: min_dates length mismatch provides error", {
       ),
       highest_imputation = "Y"
     ),
-    "Length of `min_dates` do not match length of dates to be imputed."
+    error = TRUE
   )
 })
 
 ## Test 11: max_dates length mismatch provides error ----
 test_that("impute_dtc_dtm Test 11: max_dates length mismatch provides error", {
-  expect_error(
+  expect_snapshot(
     impute_dtc_dtm(
       c("2020-12", NA_character_),
       max_dates = list(
@@ -265,18 +265,18 @@ test_that("impute_dtc_dtm Test 11: max_dates length mismatch provides error", {
       highest_imputation = "Y",
       date_imputation = "last"
     ),
-    "Length of `max_dates` do not match length of dates to be imputed."
+    error = TRUE
   )
 })
 
 ## Test 12: Error if null min/max_dates when highest_imputation = Y ----
 test_that("impute_dtc_dtm Test 12: Error if null min/max_dates when highest_imputation = Y", {
-  expect_error(
+  expect_snapshot(
     impute_dtc_dtm(
       c("2020-12", NA_character_),
       highest_imputation = "Y"
     ),
-    'If `highest_imputation = "Y"` is specified, `min_dates` or `max_dates` must be specified respectively.' # nolint
+    error = TRUE
   )
 })
 

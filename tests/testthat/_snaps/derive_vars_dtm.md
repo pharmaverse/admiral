@@ -1,3 +1,31 @@
+# impute_dtc_dtm Test 10: min_dates length mismatch provides error
+
+    Code
+      impute_dtc_dtm(c("2020-12", NA_character_), min_dates = list(c(ymd_hms(
+        "2020-12-06T12:12:12")), c(ymd_hms("2020-11-11T11:11:11"))),
+      highest_imputation = "Y")
+    Condition
+      Error in `restrict_imputed_dtc_dtm()`:
+      ! Length of `min_dates` do not match length of dates to be imputed.
+
+# impute_dtc_dtm Test 11: max_dates length mismatch provides error
+
+    Code
+      impute_dtc_dtm(c("2020-12", NA_character_), max_dates = list(c(ymd_hms(
+        "2020-12-06T12:12:12")), c(ymd_hms("2020-11-11T11:11:11"))),
+      highest_imputation = "Y", date_imputation = "last")
+    Condition
+      Error in `restrict_imputed_dtc_dtm()`:
+      ! Length of `max_dates` do not match length of dates to be imputed.
+
+# impute_dtc_dtm Test 12: Error if null min/max_dates when highest_imputation = Y
+
+    Code
+      impute_dtc_dtm(c("2020-12", NA_character_), highest_imputation = "Y")
+    Condition
+      Error in `assert_highest_imputation()`:
+      ! If `highest_imputation = "Y"` is specified, `min_dates` or `max_dates` must be specified respectively.
+
 # impute_dtc_dtm Test 13: wrong input to `date_imputation`
 
     Code
