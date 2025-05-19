@@ -882,8 +882,10 @@ adjust_last_day_imputation <- function(imputed_dtc, partial, is_datetime) {
 #'   hour = "12", minute = "00", second = "00"
 #' )
 #' components_datetime <- c("year", "month", "day", "hour", "minute", "second")
-#' imputed_datetime <- admiral:::impute_values(partial_datetime, target_datetime,
-#'                                            components_datetime)
+#' imputed_datetime <- admiral:::impute_values(
+#'   partial_datetime, target_datetime,
+#'   components_datetime
+#' )
 #' print(imputed_datetime)
 #'
 #' # Impute missing values when some components are already present
@@ -937,14 +939,16 @@ impute_values <- function(partial, target, components) {
 #'   hour = "12", minute = "00", second = "00"
 #' )
 #' formatted_partial_datetime <- admiral:::format_imputed_dtc(imputed_partial_datetime,
-#'                                                           is_datetime = TRUE)
+#'   is_datetime = TRUE
+#' )
 #' print(formatted_partial_datetime)
 #'
 #' # Handle imputed date with missing parts (contains 'x')
 #' # Expected: NA because 'x' is an undefined component
 #' imputed_partial_date <- list(year = "2020", month = "xx", day = "01")
 #' formatted_partial_date <- admiral:::format_imputed_dtc(imputed_partial_date,
-#'                                                        is_datetime = FALSE)
+#'   is_datetime = FALSE
+#' )
 #' print(formatted_partial_date)
 #'
 #' @details
@@ -988,7 +992,8 @@ format_imputed_dtc <- function(imputed, is_datetime) {
 #'   hour = "12", minute = NA_character_, second = "34"
 #' )
 #' propagated_datetime <- admiral:::propagate_na_values(partial_datetime,
-#'                                                      is_datetime = TRUE)
+#'   is_datetime = TRUE
+#' )
 #' print(propagated_datetime)
 #'
 #' # Propagate NA values for datetime with missing higher order components
@@ -997,14 +1002,16 @@ format_imputed_dtc <- function(imputed, is_datetime) {
 #'   hour = "12", minute = "00", second = "00"
 #' )
 #' propagated_missing <- admiral:::propagate_na_values(partial_missing,
-#'                                                     is_datetime = TRUE)
+#'   is_datetime = TRUE
+#' )
 #' print(propagated_missing)
 #'
 #' partial_missing_date <- list(
 #'   year = "2023", month = NA_character_, day = "01"
 #' )
 #' propagated_missing_date <- admiral:::propagate_na_values(partial_missing_date,
-#'                                                          is_datetime = FALSE)
+#'   is_datetime = FALSE
+#' )
 #' print(propagated_missing_date)
 #'
 #' @details
@@ -1052,7 +1059,8 @@ propagate_na_values <- function(partial, is_datetime) {
 #' # Parse partial datetime with missing components
 #' dtc_partial_datetime <- "2020-03T12"
 #' parsed_partial_datetime <- admiral:::parse_partial_date_time(dtc_partial_datetime,
-#'                                                              is_datetime = TRUE)
+#'   is_datetime = TRUE
+#' )
 #' print(parsed_partial_datetime)
 #'
 #' # Parse partial date with incomplete year
