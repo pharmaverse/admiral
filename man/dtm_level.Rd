@@ -36,7 +36,7 @@ level_hour <- dtm_level("h")
 print(level_hour)
 
 # Compare two dtm_level objects
-level_day > level_hour  # TRUE, because "D" is larger than "h".
+level_day > level_hour # TRUE, because "D" is larger than "h".
 }
 \seealso{
 Utilities used for date imputation: 

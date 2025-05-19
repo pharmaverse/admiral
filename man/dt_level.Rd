@@ -35,7 +35,7 @@ level_year <- dt_level("Y")
 print(level_year)
 
 # Compare two dt_level objects
-level_day > level_year  # TRUE, because "Y" is higher than "D".
+level_day > level_year # TRUE, because "Y" is larger than "D".
 
 }
 \seealso{

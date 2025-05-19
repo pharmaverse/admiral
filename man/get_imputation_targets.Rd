@@ -44,43 +44,50 @@ Determines the imputation targets for date and time components.
 # Get imputation targets for a date with 'first' date imputation
 partial_date <- list(year = "2020", month = "03", day = NA_character_)
 target_first_date <- get_imputation_targets(partial_date,
-                                            date_imputation = "first",
-                                            time_imputation = NULL,
-                                            is_datetime = FALSE)
+  date_imputation = "first",
+  time_imputation = NULL,
+  is_datetime = FALSE
+)
 print(target_first_date)
 
 # Get imputation targets for a datetime with 'first' date and time imputation
-partial_datetime <- list(year = "2020",
-                         month = "03",
-                         day = NA_character_,
-                         hour = "12",
-                         minute = NA_character_,
-                         second = NA_character_)
+partial_datetime <- list(
+  year = "2020",
+  month = "03",
+  day = NA_character_,
+  hour = "12",
+  minute = NA_character_,
+  second = NA_character_
+)
 target_first_datetime <- get_imputation_targets(partial_datetime,
-                                                date_imputation = "first",
-                                                time_imputation = "first",
-                                                is_datetime = TRUE)
+  date_imputation = "first",
+  time_imputation = "first",
+  is_datetime = TRUE
+)
 print(target_first_datetime)
 
 # Get imputation targets for a datetime with 'last' date and time imputation
 target_last_datetime <- get_imputation_targets(partial_datetime,
-                                               date_imputation = "last",
-                                               time_imputation = "last",
-                                               is_datetime = TRUE)
+  date_imputation = "last",
+  time_imputation = "last",
+  is_datetime = TRUE
+)
 print(target_last_datetime)
 
 # Get imputation targets for a date with custom date imputation '06-15'
 target_custom_date <- get_imputation_targets(partial_date,
-                                             date_imputation = "06-15",
-                                             time_imputation = NULL,
-                                             is_datetime = FALSE)
+  date_imputation = "06-15",
+  time_imputation = NULL,
+  is_datetime = FALSE
+)
 print(target_custom_date)
 
 # Get imputation targets for a datetime with custom time imputation '12:34:56'
 target_custom_time <- get_imputation_targets(partial_datetime,
-                                             date_imputation = "first",
-                                             time_imputation = "12:34:56",
-                                             is_datetime = TRUE)
+  date_imputation = "first",
+  time_imputation = "12:34:56",
+  is_datetime = TRUE
+)
 print(target_custom_time)
 
 }

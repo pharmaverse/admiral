@@ -57,14 +57,16 @@ print(imputed_dates_last)
 # Impute datetime range with 'first' time imputation
 dtc_datetimes <- c("2020-02-29T12:00", "2021-03T14:30")
 imputed_datetimes_first <- get_dt_dtm_range(dtc_datetimes,
-                                            date_imputation = "first",
-                                            time_imputation = "first")
+  date_imputation = "first",
+  time_imputation = "first"
+)
 print(imputed_datetimes_first)
 
 # Impute datetime range with 'last' time imputation
 imputed_datetimes_last <- get_dt_dtm_range(dtc_datetimes,
-                                           date_imputation = "first",
-                                           time_imputation = "last")
+  date_imputation = "first",
+  time_imputation = "last"
+)
 print(imputed_datetimes_last)
 
 # Edge case: Return empty character vector for empty input

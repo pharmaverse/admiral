@@ -21,7 +21,7 @@
 #' print(level_hour)
 #'
 #' # Compare two dtm_level objects
-#' level_day > level_hour  # TRUE, because "D" is larger than "h".
+#' level_day > level_hour # TRUE, because "D" is larger than "h".
 #' @family utils_impute
 #' @keywords internal
 dtm_level <- function(level) {
@@ -60,7 +60,7 @@ dtm_level <- function(level) {
 #' print(level_year)
 #'
 #' # Compare two dt_level objects
-#' level_day > level_year  # TRUE, because "Y" is higher than "D".
+#' level_day > level_year # TRUE, because "Y" is larger than "D".
 #'
 #' @family utils_impute
 #' @keywords internal
@@ -572,14 +572,16 @@ assert_highest_imputation <- function(highest_imputation, highest_imputation_val
 #' # Impute datetime range with 'first' time imputation
 #' dtc_datetimes <- c("2020-02-29T12:00", "2021-03T14:30")
 #' imputed_datetimes_first <- get_dt_dtm_range(dtc_datetimes,
-#'                                             date_imputation = "first",
-#'                                             time_imputation = "first")
+#'   date_imputation = "first",
+#'   time_imputation = "first"
+#' )
 #' print(imputed_datetimes_first)
 #'
 #' # Impute datetime range with 'last' time imputation
 #' imputed_datetimes_last <- get_dt_dtm_range(dtc_datetimes,
-#'                                            date_imputation = "first",
-#'                                            time_imputation = "last")
+#'   date_imputation = "first",
+#'   time_imputation = "last"
+#' )
 #' print(imputed_datetimes_last)
 #'
 #' # Edge case: Return empty character vector for empty input
@@ -657,23 +659,31 @@ get_dt_dtm_range <- function(dtc,
 #'
 #' @examples
 #' # Get highest imputation level for date
-#' highest_level_date <- get_highest_imputation_level(is_datetime = FALSE,
-#'                                                    highest_imputation = "Y")
+#' highest_level_date <- get_highest_imputation_level(
+#'   is_datetime = FALSE,
+#'   highest_imputation = "Y"
+#' )
 #' print(highest_level_date)
 #'
 #' # Get highest imputation level for datetime
-#' highest_level_datetime <- get_highest_imputation_level(is_datetime = TRUE,
-#'                                                        highest_imputation = "Y")
+#' highest_level_datetime <- get_highest_imputation_level(
+#'   is_datetime = TRUE,
+#'   highest_imputation = "Y"
+#' )
 #' print(highest_level_datetime)
 #'
 #' # Get highest imputation level for date with month level
-#' highest_level_month_date <- get_highest_imputation_level(is_datetime = FALSE,
-#'                                                          highest_imputation = "M")
+#' highest_level_month_date <- get_highest_imputation_level(
+#'   is_datetime = FALSE,
+#'   highest_imputation = "M"
+#' )
 #' print(highest_level_month_date)
 #'
 #' # Get highest imputation level for datetime with hour level
-#' highest_level_hour_datetime <- get_highest_imputation_level(is_datetime = TRUE,
-#                                                             highest_imputation = "h")
+#' highest_level_hour_datetime <- get_highest_imputation_level(
+#'   is_datetime = TRUE,
+#'   highest_imputation = "h"
+#' )
 #' print(highest_level_hour_datetime)
 #'
 #' @keywords internal
@@ -700,43 +710,50 @@ get_highest_imputation_level <- function(is_datetime, highest_imputation) {
 #' # Get imputation targets for a date with 'first' date imputation
 #' partial_date <- list(year = "2020", month = "03", day = NA_character_)
 #' target_first_date <- get_imputation_targets(partial_date,
-#'                                             date_imputation = "first",
-#'                                             time_imputation = NULL,
-#'                                             is_datetime = FALSE)
+#'   date_imputation = "first",
+#'   time_imputation = NULL,
+#'   is_datetime = FALSE
+#' )
 #' print(target_first_date)
 #'
 #' # Get imputation targets for a datetime with 'first' date and time imputation
-#' partial_datetime <- list(year = "2020",
-#'                          month = "03",
-#'                          day = NA_character_,
-#'                          hour = "12",
-#'                          minute = NA_character_,
-#'                          second = NA_character_)
+#' partial_datetime <- list(
+#'   year = "2020",
+#'   month = "03",
+#'   day = NA_character_,
+#'   hour = "12",
+#'   minute = NA_character_,
+#'   second = NA_character_
+#' )
 #' target_first_datetime <- get_imputation_targets(partial_datetime,
-#'                                                 date_imputation = "first",
-#'                                                 time_imputation = "first",
-#'                                                 is_datetime = TRUE)
+#'   date_imputation = "first",
+#'   time_imputation = "first",
+#'   is_datetime = TRUE
+#' )
 #' print(target_first_datetime)
 #'
 #' # Get imputation targets for a datetime with 'last' date and time imputation
 #' target_last_datetime <- get_imputation_targets(partial_datetime,
-#'                                                date_imputation = "last",
-#'                                                time_imputation = "last",
-#'                                                is_datetime = TRUE)
+#'   date_imputation = "last",
+#'   time_imputation = "last",
+#'   is_datetime = TRUE
+#' )
 #' print(target_last_datetime)
 #'
 #' # Get imputation targets for a date with custom date imputation '06-15'
 #' target_custom_date <- get_imputation_targets(partial_date,
-#'                                              date_imputation = "06-15",
-#'                                              time_imputation = NULL,
-#'                                              is_datetime = FALSE)
+#'   date_imputation = "06-15",
+#'   time_imputation = NULL,
+#'   is_datetime = FALSE
+#' )
 #' print(target_custom_date)
 #'
 #' # Get imputation targets for a datetime with custom time imputation '12:34:56'
 #' target_custom_time <- get_imputation_targets(partial_datetime,
-#'                                              date_imputation = "first",
-#'                                              time_imputation = "12:34:56",
-#'                                              is_datetime = TRUE)
+#'   date_imputation = "first",
+#'   time_imputation = "12:34:56",
+#'   is_datetime = TRUE
+#' )
 #' print(target_custom_time)
 #'
 #' @keywords internal
@@ -773,32 +790,40 @@ get_imputation_targets <- function(partial, date_imputation, time_imputation, is
 #' imputed_date <- "2021-03-01"
 #' partial_date <- list(year = "2021", month = "03", day = NA_character_)
 #' adjusted_date <- admiral:::adjust_last_day_imputation(imputed_date,
-#'                                             partial_date,
-#'                                             is_datetime = FALSE)
+#'   partial_date,
+#'   is_datetime = FALSE
+#' )
 #' print(adjusted_date)
 #'
 #' # Adjust last day imputation for a datetime with missing day
 #' imputed_datetime <- "2021-03-01T00:00:00"
-#' partial_datetime <- list(year = "2021",  month = "03", day = NA_character_,
-#'                          hour = "00", minute = "00", second = "00")
+#' partial_datetime <- list(
+#'   year = "2021", month = "03", day = NA_character_,
+#'   hour = "00", minute = "00", second = "00"
+#' )
 #' adjusted_datetime <- admiral:::adjust_last_day_imputation(imputed_datetime,
-#'                                                 partial_datetime,
-#'                                                 is_datetime = TRUE)
+#'   partial_datetime,
+#'   is_datetime = TRUE
+#' )
 #' print(adjusted_datetime)
 #'
 #' # Adjust last day imputation for a date with known day
 #' partial_date_known_day <- list(year = "2021", month = "03", day = "15")
 #' adjusted_date_known_day <- admiral:::adjust_last_day_imputation(imputed_date,
-#'                                                       partial_date_known_day,
-#'                                                       is_datetime = FALSE)
+#'   partial_date_known_day,
+#'   is_datetime = FALSE
+#' )
 #' print(adjusted_date_known_day)
 #'
 #' # Adjust last day imputation for a datetime with known day
-#' partial_datetime_known_day <- list(year = "2021", month = "03", day = "15",
-#'                                    hour = "00", minute = "00", second = "00")
+#' partial_datetime_known_day <- list(
+#'   year = "2021", month = "03", day = "15",
+#'   hour = "00", minute = "00", second = "00"
+#' )
 #' adjusted_datetime_known_day <- admiral:::adjust_last_day_imputation(imputed_datetime,
-#'                                                           partial_datetime_known_day,
-#'                                                           is_datetime = TRUE)
+#'   partial_datetime_known_day,
+#'   is_datetime = TRUE
+#' )
 #' print(adjusted_datetime_known_day)
 #'
 #' @details
