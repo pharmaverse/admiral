@@ -440,7 +440,8 @@ Derive the nadir value for each observation (i.e. the lowest value
 occurring before) by subject.
 \itemize{
 \item Note how \code{dataset} and \code{dataset_add} are the same here, so we are joining
-a dataset with itself.
+a dataset with itself. This enables us to compare records within the dataset
+to each other.
 \item Now we use \code{by_vars} as we only want to perform the join by subject.
 \item To find the lowest value we use the \code{order} and \code{mode} arguments.
 \item We subsequently need to check \code{ADY} to only check assessments occurring
@@ -567,21 +568,28 @@ derive_vars_joined(
 \subsection{Compute values in \code{new_vars} and \code{order}}{
 
 Add to \code{ADAE} the number of days since the last dose of treatment, plus
-1 day.
+1 day. If the dose occurs on the same day as the AE then include it as the
+last dose.
 \itemize{
-\item In the \code{new_vars} argument, other functions can be utilised to modify the
+\item In the \code{new_vars} argument, other functions can be utilized to modify the
 joined values using variables from both \code{dataset} and \code{dataset_add}.
 For example, in the below case we want to calculate the number of days
 between the AE and the last dose using \code{compute_duration()}. This function
 includes the plus 1 day as default.
 \item Also note how in this example \code{EXSDT} is created via the \code{order} argument
 and then used for \code{new_vars}, \code{filter_add} and \code{filter_join}.
+\item The reason to use \code{join_type = "all"} here instead of \code{"before"} is that we
+want to include any dose occurring on the same day as the AE, hence the
+\code{filter_join = EXSDT <= ASTDT}. Whereas using \code{join_type = "before"}
+would have resulted in the condition \code{EXSDT < ASTDT}. See the next example
+instead for \code{join_type = "before"}.
 }
 
 \if{html}{\out{<div class="sourceCode r">}}\preformatted{adae <- tribble(
   ~USUBJID, ~ASTDT,
   "1",      "2020-02-02",
-  "1",      "2020-02-04"
+  "1",      "2020-02-04",
+  "2",      "2021-01-08"
 ) \%>\%
   mutate(
     ASTDT = ymd(ASTDT),
@@ -593,7 +601,8 @@ ex <- tribble(
   "1",      "2020-01-10",
   "1",      "2020-01",
   "1",      "2020-01-20",
-  "1",      "2020-02-03"
+  "1",      "2020-02-03",
+  "2",      "2021-01-05"
 ) \%>\%
   mutate(STUDYID = "AB42")
 
@@ -611,11 +620,12 @@ derive_vars_joined(
   mode = "last"
 ) \%>\%
   select(USUBJID, ASTDT, LDRELD)
-#> # A tibble: 2 × 3
+#> # A tibble: 3 × 3
 #>   USUBJID ASTDT      LDRELD
 #>   <chr>   <date>      <dbl>
 #> 1 1       2020-02-02     14
-#> 2 1       2020-02-04      2}\if{html}{\out{</div>}}}
+#> 2 1       2020-02-04      2
+#> 3 2       2021-01-08      4}\if{html}{\out{</div>}}}
 \subsection{Join records occurring before a condition (\code{join_type = "before"})}{
 
 In an arbitrary dataset where subjects have values of \code{"0"}, \code{"-"}, \code{"+"}
@@ -678,8 +688,8 @@ derive_vars_joined(
 #> 11 2           5 -           NA
 #> 12 2           6 ++          NA
 #> 13 2           7 0            6}\if{html}{\out{</div>}}}
-\subsection{Join records occurring before a condition checking all values in between
-(\code{first_cond_lower}, \code{join_type} and \code{filter_join})}{
+\subsection{Join records occurring before a condition and checking all values in
+between (\code{first_cond_lower}, \code{join_type} and \code{filter_join})}{
 
 In the same example as above, now additionally check that in between the
 \code{"++"} and the \code{"0"} all results must be either \code{"+"} or \code{"++"}.
@@ -766,13 +776,12 @@ where all results in between are either \code{"+"} or \code{"++"}.
 #> 11 2           5 -           NA
 #> 12 2           6 ++          NA
 #> 13 2           7 0           NA}\if{html}{\out{</div>}}}
-\subsection{Join records after a condition occurring in consecutive visits
-(\code{tmp_obs_nr_var}, \code{join_type} and \code{filter_join})}{
+\subsection{Join a value from the next occurring record (\code{join_type = "after"})}{
 
-Find the first value on the next occurring unique visit day after any \code{"0"}.
+Add the value from the next occurring record as a new variable.
 \itemize{
-\item The \code{tmp_obs_nr_var} argument can be useful as shown here to help pick out
-consecutive next or last occurring records with respect to \code{order}.
+\item The \code{join_type = "after"} here essentially acts as a lag to join variables from
+the next occurring record, and \code{mode = "first"} selects the first of these.
 }
 
 \if{html}{\out{<div class="sourceCode r">}}\preformatted{derive_vars_joined(
@@ -782,32 +791,69 @@ consecutive next or last occurring records with respect to \code{order}.
   order = exprs(ADY),
   mode = "first",
   new_vars = exprs(NEXTVAL = AVAL),
-  tmp_obs_nr_var = tmp_obs_nr,
   join_vars = exprs(AVAL),
-  join_type = "after",
-  filter_join = AVAL == "0" & ADY < ADY.join & tmp_obs_nr + 1 == tmp_obs_nr.join
+  join_type = "after"
 ) \%>\%
   select(USUBJID, ADY, AVAL, NEXTVAL)
 #> # A tibble: 13 × 4
 #>    USUBJID   ADY AVAL  NEXTVAL
 #>    <chr>   <dbl> <chr> <chr>  
-#>  1 1           1 ++    <NA>   
-#>  2 1           2 -     <NA>   
+#>  1 1           1 ++    -      
+#>  2 1           2 -     0      
 #>  3 1           3 0     +      
-#>  4 1           4 +     <NA>   
-#>  5 1           5 ++    <NA>   
+#>  4 1           4 +     ++     
+#>  5 1           5 ++    -      
 #>  6 1           6 -     <NA>   
-#>  7 2           1 -     <NA>   
-#>  8 2           2 ++    <NA>   
-#>  9 2           3 +     <NA>   
+#>  7 2           1 -     ++     
+#>  8 2           2 ++    +      
+#>  9 2           3 +     0      
 #> 10 2           4 0     -      
-#> 11 2           5 -     <NA>   
-#> 12 2           6 ++    <NA>   
+#> 11 2           5 -     ++     
+#> 12 2           6 ++    0      
+#> 13 2           7 0     <NA>   }\if{html}{\out{</div>}}}
+\subsection{Join records after a condition occurring in consecutive visits
+(\code{tmp_obs_nr_var}, \code{join_type} and \code{filter_join})}{
+
+Find the last occurring value on any of the next 3 unique visit days.
+\itemize{
+\item The \code{tmp_obs_nr_var} argument can be useful as shown here to help pick out
+records happening before or after with respect to \code{order}, as you can see
+in the \code{filter_join}.
+}
+
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{derive_vars_joined(
+  myd,
+  dataset_add = myd,
+  by_vars = exprs(STUDYID, USUBJID),
+  order = exprs(ADY),
+  mode = "last",
+  new_vars = exprs(NEXTVAL = AVAL),
+  tmp_obs_nr_var = tmp_obs_nr,
+  join_vars = exprs(AVAL),
+  join_type = "after",
+  filter_join = tmp_obs_nr + 3 >= tmp_obs_nr.join
+) \%>\%
+  select(USUBJID, ADY, AVAL, NEXTVAL)
+#> # A tibble: 13 × 4
+#>    USUBJID   ADY AVAL  NEXTVAL
+#>    <chr>   <dbl> <chr> <chr>  
+#>  1 1           1 ++    +      
+#>  2 1           2 -     ++     
+#>  3 1           3 0     -      
+#>  4 1           4 +     -      
+#>  5 1           5 ++    -      
+#>  6 1           6 -     <NA>   
+#>  7 2           1 -     0      
+#>  8 2           2 ++    -      
+#>  9 2           3 +     ++     
+#> 10 2           4 0     0      
+#> 11 2           5 -     0      
+#> 12 2           6 ++    0      
 #> 13 2           7 0     <NA>   }\if{html}{\out{</div>}}}
 \subsection{Derive period variables (\code{APERIOD}, \code{APERSDT}, \code{APEREDT})}{
 
 Create a period reference dataset from \code{ADSL} and join this with \code{ADAE}
-to assign each AE to which period they occurred within.
+to identify within which period each AE occurred.
 
 \if{html}{\out{<div class="sourceCode r">}}\preformatted{adsl <- tribble(
   ~USUBJID, ~AP01SDT,     ~AP01EDT,     ~AP02SDT,     ~AP02EDT,

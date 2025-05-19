@@ -279,7 +279,8 @@
 #'   occurring before) by subject.
 #'
 #' - Note how `dataset` and `dataset_add` are the same here, so we are joining
-#'   a dataset with itself.
+#'   a dataset with itself. This enables us to compare records within the dataset
+#'   to each other.
 #' - Now we use `by_vars` as we only want to perform the join by subject.
 #' - To find the lowest value we use the `order` and `mode` arguments.
 #' - We subsequently need to check `ADY` to only check assessments occurring
@@ -373,20 +374,27 @@
 #'
 #' @caption Compute values in `new_vars` and `order`
 #' @info Add to `ADAE` the number of days since the last dose of treatment, plus
-#'   1 day.
+#'   1 day. If the dose occurs on the same day as the AE then include it as the
+#'   last dose.
 #'
-#' - In the `new_vars` argument, other functions can be utilised to modify the
+#' - In the `new_vars` argument, other functions can be utilized to modify the
 #'   joined values using variables from both `dataset` and `dataset_add`.
 #'   For example, in the below case we want to calculate the number of days
 #'   between the AE and the last dose using `compute_duration()`. This function
 #'   includes the plus 1 day as default.
 #' - Also note how in this example `EXSDT` is created via the `order` argument
 #'   and then used for `new_vars`, `filter_add` and `filter_join`.
+#' - The reason to use `join_type = "all"` here instead of `"before"` is that we
+#'   want to include any dose occurring on the same day as the AE, hence the
+#'   `filter_join = EXSDT <= ASTDT`. Whereas using `join_type = "before"`
+#'   would have resulted in the condition `EXSDT < ASTDT`. See the next example
+#'   instead for `join_type = "before"`.
 #' @code
 #' adae <- tribble(
 #'   ~USUBJID, ~ASTDT,
 #'   "1",      "2020-02-02",
-#'   "1",      "2020-02-04"
+#'   "1",      "2020-02-04",
+#'   "2",      "2021-01-08"
 #' ) %>%
 #'   mutate(
 #'     ASTDT = ymd(ASTDT),
@@ -398,7 +406,8 @@
 #'   "1",      "2020-01-10",
 #'   "1",      "2020-01",
 #'   "1",      "2020-01-20",
-#'   "1",      "2020-02-03"
+#'   "1",      "2020-02-03",
+#'   "2",      "2021-01-05"
 #' ) %>%
 #'   mutate(STUDYID = "AB42")
 #'
@@ -462,8 +471,8 @@
 #' ) %>%
 #'   select(USUBJID, ADY, AVAL, PREVPLDY)
 #'
-#' @caption Join records occurring before a condition checking all values in between
-#'   (`first_cond_lower`, `join_type` and `filter_join`)
+#' @caption Join records occurring before a condition and checking all values in
+#'   between (`first_cond_lower`, `join_type` and `filter_join`)
 #' @info In the same example as above, now additionally check that in between the
 #'   `"++"` and the `"0"` all results must be either `"+"` or `"++"`.
 #'
@@ -516,12 +525,11 @@
 #' ) %>%
 #'   select(USUBJID, ADY, AVAL, NEXTPLDY)
 #'
-#' @caption Join records after a condition occurring in consecutive visits
-#'   (`tmp_obs_nr_var`, `join_type` and `filter_join`)
-#' @info Find the first value on the next occurring unique visit day after any `"0"`.
+#' @caption Join a value from the next occurring record (`join_type = "after"`)
+#' @info Add the value from the next occurring record as a new variable.
 #'
-#' - The `tmp_obs_nr_var` argument can be useful as shown here to help pick out
-#'   consecutive next or last occurring records with respect to `order`.
+#' - The `join_type = "after"` here essentially acts as a lag to join variables from
+#'   the next occurring record, and `mode = "first"` selects the first of these.
 #' @code
 #' derive_vars_joined(
 #'   myd,
@@ -530,16 +538,36 @@
 #'   order = exprs(ADY),
 #'   mode = "first",
 #'   new_vars = exprs(NEXTVAL = AVAL),
+#'   join_vars = exprs(AVAL),
+#'   join_type = "after"
+#' ) %>%
+#'   select(USUBJID, ADY, AVAL, NEXTVAL)
+#'
+#' @caption Join records after a condition occurring in consecutive visits
+#'   (`tmp_obs_nr_var`, `join_type` and `filter_join`)
+#' @info Find the last occurring value on any of the next 3 unique visit days.
+#'
+#' - The `tmp_obs_nr_var` argument can be useful as shown here to help pick out
+#'   records happening before or after with respect to `order`, as you can see
+#'   in the `filter_join`.
+#' @code
+#' derive_vars_joined(
+#'   myd,
+#'   dataset_add = myd,
+#'   by_vars = exprs(STUDYID, USUBJID),
+#'   order = exprs(ADY),
+#'   mode = "last",
+#'   new_vars = exprs(NEXTVAL = AVAL),
 #'   tmp_obs_nr_var = tmp_obs_nr,
 #'   join_vars = exprs(AVAL),
 #'   join_type = "after",
-#'   filter_join = AVAL == "0" & ADY < ADY.join & tmp_obs_nr + 1 == tmp_obs_nr.join
+#'   filter_join = tmp_obs_nr + 3 >= tmp_obs_nr.join
 #' ) %>%
 #'   select(USUBJID, ADY, AVAL, NEXTVAL)
 #'
 #' @caption Derive period variables (`APERIOD`, `APERSDT`, `APEREDT`)
 #' @info Create a period reference dataset from `ADSL` and join this with `ADAE`
-#'   to assign each AE to which period they occurred within.
+#'   to identify within which period each AE occurred.
 #' @code
 #' adsl <- tribble(
 #'   ~USUBJID, ~AP01SDT,     ~AP01EDT,     ~AP02SDT,     ~AP02EDT,
