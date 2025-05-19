@@ -110,8 +110,8 @@
 #'
 #' @caption Add a new record for the worst observation using `event()` objects
 #' @info For each subject the observation containing the worst sleeping problem
-#'   (if any exist) out of a possible should be identified and added as a new
-#'   record, retaining all variables from the original observation.
+#'   (if any exist)  should be identified and added as a new record, retaining
+#'   all variables from the original observation.
 #'
 #' - The groups for which new records are added are specified by the `by_vars`
 #'   argument. Here for each *subject* a record should be added. Thus
@@ -319,11 +319,17 @@
 #'   )
 #' )
 #'
-#' @caption More complex example: confirmed best overall response
-#' @info Explanation TBC
+#' @caption A more complex example: Confirmed Best Overall Response
+#' @info The final example showcases a use of `derive_extreme_event()`
+#'   to calculate the Confirmed Best Overall Response (CBOR) in an
+#'   ADRS dataset. This example builds on all the previous ones and
+#'   thus assumes a baseline level of confidence with
+#'   `derive_extreme_event()`.
+#'
+#'   The following ADSL and ADRS datasets will be used
+#'   throughout:
 #'
 #' @code
-#'
 #' adsl <- tribble(
 #'   ~USUBJID, ~TRTSDTC,
 #'   "1",      "2020-01-01",
@@ -374,6 +380,37 @@
 #'     new_vars = exprs(TRTSDT)
 #'   )
 #'
+#' @info Since the CBOR derivation contains multiple complex parts, it's
+#'   convenient to make use of the `description` argument within each event object
+#'   to describe what condition is being checked.
+#'
+#'   - For the Confirmed Response (CR), for each `"CR"` record in the original ADRS
+#'     dataset that will be identified by the first part of the `condition` argument
+#'     (`AVALC == "CR"`) we need to use the `first_cond_upper` argument to limit the
+#'     group of observations to consider alongside it. Namely, we need to look up to
+#'     and including the second CR (`AVALC.join == "CR"`) over 28 days from the first
+#'     one (`ADT.join >= ADT + 28`). The observations satisfying `first_cond_upper`
+#'     then form part of our "join group", meaning that the remaining portions of
+#'     `condition` which reference joined variables are limited to this group.
+#'     In particular, within `condition` we use `all()` to check that all observations
+#'     are either `"CR"` or `"NE"`, and `count_vals()` to ensure at most one is
+#'     `"NE"`. Note that here we have selected `join_type = "after"` because
+#'     <insert explanation here, explaining why join_type = "all" changes patient 1 to a "PR">.
+#'
+#'  - The Partial Response (PR), is very similar; with the difference being that the
+#'    first portion of `condition` now references `"PR"` and `first_cond_upper`
+#'    accepts a confirmatory PR or CR 28 days later. Note that now we must add
+#'    `"PR"` as an option within the `all()` condition to account for confirmatory
+#'    PRs.
+#'
+#'  - The Stable Disease (SD), Progressive Disease (PD) and Not Evaluable (NE)
+#'    events are simpler and just require `event()` calls.
+#'
+#'  - Finally, we use a catch-all `event()` with `condition = TRUE` and
+#'    `dataset_name = adsl` to identify those subjects who do not appear in ADRS
+#'    and list their CBOR as `"MISSING"`.
+#'
+#'@code
 #' derive_extreme_event(
 #'   adrs,
 #'   by_vars = exprs(USUBJID),
@@ -389,14 +426,11 @@
 #'       ),
 #'       join_vars = exprs(AVALC, ADT),
 #'       join_type = "after",
-#'       first_cond_upper = AVALC.join == "CR" &
-#'         ADT.join >= ADT + 28,
+#'       first_cond_upper = AVALC.join == "CR" & ADT.join >= ADT + 28,
 #'       condition = AVALC == "CR" &
 #'         all(AVALC.join %in% c("CR", "NE")) &
 #'         count_vals(var = AVALC.join, val = "NE") <= 1,
-#'       set_values_to = exprs(
-#'         AVALC = "CR"
-#'       )
+#'       set_values_to = exprs(AVALC = "CR")
 #'     ),
 #'     event_joined(
 #'       description = paste(
@@ -405,14 +439,11 @@
 #'       ),
 #'       join_vars = exprs(AVALC, ADT),
 #'       join_type = "after",
-#'       first_cond_upper = AVALC.join %in% c("CR", "PR") &
-#'         ADT.join >= ADT + 28,
+#'       first_cond_upper = AVALC.join %in% c("CR", "PR") & ADT.join >= ADT + 28,
 #'       condition = AVALC == "PR" &
 #'         all(AVALC.join %in% c("CR", "PR", "NE")) &
 #'         count_vals(var = AVALC.join, val = "NE") <= 1,
-#'       set_values_to = exprs(
-#'         AVALC = "PR"
-#'       )
+#'       set_values_to = exprs(AVALC = "PR")
 #'     ),
 #'     event(
 #'       description = paste(
@@ -420,29 +451,21 @@
 #'         "after treatment start"
 #'       ),
 #'       condition = AVALC %in% c("CR", "PR", "SD") & ADT >= TRTSDT + 28,
-#'       set_values_to = exprs(
-#'         AVALC = "SD"
-#'       )
+#'       set_values_to = exprs(AVALC = "SD")
 #'     ),
 #'     event(
 #'       condition = AVALC == "PD",
-#'       set_values_to = exprs(
-#'         AVALC = "PD"
-#'       )
+#'       set_values_to = exprs(AVALC = "PD")
 #'     ),
 #'     event(
 #'       condition = AVALC %in% c("CR", "PR", "SD", "NE"),
-#'       set_values_to = exprs(
-#'         AVALC = "NE"
-#'       )
+#'       set_values_to = exprs(AVALC = "NE")
 #'     ),
 #'     event(
-#'       description = "set response to MISSING for patients without records in ADRS",
+#'       description = "Set response to MISSING for patients without records in ADRS",
 #'       dataset_name = "adsl",
 #'       condition = TRUE,
-#'       set_values_to = exprs(
-#'         AVALC = "MISSING"
-#'       ),
+#'       set_values_to = exprs(AVALC = "MISSING"),
 #'       keep_source_vars = exprs(TRTSDT)
 #'     )
 #'   ),
