@@ -162,7 +162,10 @@ test_that("get_dt_dtm_range correctly imputes date ranges", {
   # Validate imputation with invalid date formats (warnings)
   invalid_dtc <- c("invalid-date", "2021-13-40")
   expect_warning(get_dt_dtm_range(invalid_dtc, date_imputation = "first"))
-  expect_warning(get_dt_dtm_range(invalid_dtc, date_imputation = "last"))
+  warnings <- capture_warnings(get_dt_dtm_range(invalid_dtc, date_imputation = "last"))
+  expect_length(warnings, 2)
+  expect_match(warnings[1], "Dataset contains incorrect datetime format:")
+  expect_match(warnings[2], "failed to parse")
 
   # Validate correct imputation with single year
   year_only <- c("2020", "2021")
