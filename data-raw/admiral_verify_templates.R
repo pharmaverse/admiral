@@ -36,7 +36,6 @@
 #' USAGE:   verify_templates()
 #'
 #' @export
-
 verify_templates <- function(pkg = "admiral", ds = c("adae")) {
   # SETUP ----
   # TODO: remove prior ADaM downloads
@@ -225,6 +224,8 @@ compare <- function(base, compare, keys, file = NULL) {
   e$old = base
   e$new = compare
   e$file = file
+  #saveRDS(e$old,file= paste0("old", ".RDS"))    # temporary
+  #saveRDS(e$new,file= paste0("new", ".RDS")) 
  # ------------------------  to be removed ?
 
   # remove column attributes
@@ -241,7 +242,6 @@ compare <- function(base, compare, keys, file = NULL) {
       )
     },
     error = function(e) message("Error in diffdf: ", e$message)
-  )
   ) ## end tryCatch
 } ## end compare
 
@@ -266,7 +266,9 @@ clean_adam_old_dir <- function(dir = NULL) {
   }
 }
 
-#' @description:  downloads the old ADaM datasets from github
+#' Downloads ADaM datasets from pharmaverseadam
+#' @param adam_names character vector  Set of  ADaMs to download.
+#' @param path Character string. Directory to save downloaded ADaMs  downloads the old ADaM datasets from github
 download_adam_old <- function(adam_names, path = NULL) {
   lapply(adam_names, function(adam) {
     githubURL <- paste0(
@@ -283,18 +285,37 @@ download_adam_old <- function(adam_names, path = NULL) {
   })
 }
 
-#' @description loads the save filed for old dataset
-get_dataset_old <- function(adam, path = NULL) {
-  adam_old <- load_rda(paste0(path, "/", adam, ".rda"))
+#' Loads an ADaM dataset from a saved RDA file on disk.
+#'
+#' @param adam Character string. Name of the ADaM dataset to retrieve from disk (without file extension).
+#' @param path Character string. Path to the directory containing the stored ADaM file.
+#' @return The loaded dataset (as an R object).
+#'
+#' @examples
+#' \dontrun{
+#' adsl <- get_dataset_old("adsl", path = "data/adam")
+#' }
+get_dataset_old <- function(adam, path) {
+  adam_old <- load_rda(file.path(path, paste0(adam, ".rda")))
 }
 
-#' @description loads the save filed for new dataset
+#' Load a Saved ADaM Dataset
+
+#' Loads an ADaM dataset from in  saved RDA file on disk.
+#' @param adam Character string. Name of the ADaM dataset to retrieve from disk (without file extension).
+#' @param path Character string. Path to the directory containing the stored ADaM file.
+#'
+#' @return The loaded dataset (as an R object).
 get_dataset_new <- function(adam, path = NULL) {
   load_rda(paste0(path, "/", adam, ".rda"))
   adam_new <- get(adam)
 }
-
-#' @description:  runs the template for the specified ADaM
+#' Uses source() to run a template
+#' 
+#' @param adam Character string.  Run the template assicated with this ADaM name.
+#' @param dir Character string.  Directory where templates are stored.
+#' @return 
+#' @description  runs the template for the specified ADaM
 run_template <- function(adam, dir = NULL) {
   source(paste0(dir, "/ad_", adam, ".R"))
 }

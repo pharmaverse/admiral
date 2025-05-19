@@ -3,11 +3,12 @@ name:  verify_templates_experimental
 run-name: EXPERIMENTAL
 
 
+# To establish `workflow_dispatch` must use `default` branch.
 # this yaml workflow runs when a push occurs on this branch
 # OR, manually,
 on:
-  push:
-    branches:  [2642_verify_templates_results]
+#  push:
+#    branches:  [2642_verify_templates_results]
   workflow_dispatch:
 
 

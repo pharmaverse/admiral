@@ -1,0 +1,27 @@
+# WORKS !
+name:  210 Rsimple R script
+
+run-name: runs simple R script
+
+on:
+  workflow_dispatch
+
+jobs:
+  task1:
+    runs-on: ubuntu-latest
+    container:
+      image:  rocker/r-ver:latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Run script
+        run: Rscript -e 'source("R/01_first.R")'
+
+      - name: Install Dependencies
+        run:  |
+          Rscript -e 'install.packages(c("diffdf"))'
+
+      - name: R file
+        run:  Rscript -e 'source("load_run.R" )'
+
