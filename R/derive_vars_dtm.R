@@ -498,25 +498,19 @@ impute_dtc_dtm <- function(dtc,
     return(vector("character"))
   }
 
+  is_datetime <- TRUE
+
   # Parse character date ----
-  partial <- get_partialdatetime(dtc)
+  partial <- parse_partial_date_time(dtc, is_datetime)
   components <- names(partial)
 
   # Handle preserve argument ----
   if (!preserve) {
-    for (i in 2:6) {
-      partial[[i]] <- if_else(is.na(partial[[i - 1]]), NA_character_, partial[[i]])
-    }
+    partial <- propagate_na_values(partial, is_datetime)
   }
+
   # Determine target components ----
-  target_date <- get_imputation_target_date(
-    date_imputation = date_imputation,
-    month = partial[["month"]]
-  )
-  target_time <- get_imputation_target_time(
-    time_imputation = time_imputation
-  )
-  target <- c(target_date, target_time)
+  target <- get_imputation_targets(partial, date_imputation, time_imputation, is_datetime)
 
   for (c in components) {
     if (highest_imputation < dtm_level(imputation_levels[[c]])) {
@@ -531,31 +525,11 @@ impute_dtc_dtm <- function(dtc,
     imputed[[c]] <- if_else(is.na(partial[[c]]), target[[c]], partial[[c]])
   }
 
-  imputed_dtc <-
-    paste0(
-      paste(imputed[["year"]], imputed[["month"]], imputed[["day"]], sep = "-"),
-      "T",
-      paste(imputed[["hour"]], imputed[["minute"]], imputed[["second"]], sep = ":")
-    )
-
-  imputed_dtc <-
-    if_else(
-      str_detect(imputed_dtc, "x"),
-      NA_character_,
-      imputed_dtc
-    )
+  imputed <- impute_values(partial, target, components)
+  imputed_dtc <- format_imputed_dtc(imputed, is_datetime)
 
   if (date_imputation == "last") {
-    imputed_dtc <-
-      if_else(
-        is.na(partial[["day"]]),
-        strftime(
-          rollback(ymd_hms(imputed_dtc) + months(1)),
-          format = "%Y-%m-%dT%H:%M:%S",
-          tz = "UTC"
-        ),
-        imputed_dtc
-      )
+    imputed_dtc <- adjust_last_day_imputation(imputed_dtc, partial, is_datetime)
   }
 
   # Handle min_dates and max_dates argument ----
