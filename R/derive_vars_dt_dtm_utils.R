@@ -973,6 +973,9 @@ format_imputed_dtc <- function(imputed, is_datetime) {
 #'
 #' @param partial A list of partial date/time components.
 #'
+#' @param is_datetime A logical value indicating whether the input strings include
+#' time information.
+#'
 #' @returns A list of date/time components with propagated NA values.
 #'
 #' @examples
@@ -981,7 +984,7 @@ format_imputed_dtc <- function(imputed, is_datetime) {
 #'   year = "2020", month = NA_character_, day = "01",
 #'   hour = "12", minute = NA_character_, second = "34"
 #' )
-#' propagated_datetime <- propagate_na_values(partial_datetime)
+#' propagated_datetime <- propagate_na_values(partial_datetime, is_datetime = TRUE)
 #' print(propagated_datetime)
 #'
 #' # Propagate NA values for datetime with missing higher order components
@@ -989,15 +992,21 @@ format_imputed_dtc <- function(imputed, is_datetime) {
 #'   year = NA_character_, month = "01", day = "01",
 #'   hour = "12", minute = "00", second = "00"
 #' )
-#' propagated_missing <- propagate_na_values(partial_missing)
+#' propagated_missing <- propagate_na_values(partial_missing, is_datetime = TRUE)
 #' print(propagated_missing)
+#'
+#' partial_missing_date <- list(
+#'   year = "2023", month = NA_character_, day = "01"
+#' )
+#' propagated_missing_date <- propagate_na_values(partial_missing_date, is_datetime = FALSE)
+#' print(propagated_missing_date)
 #'
 #' @details
 #' This function ensures that if a higher-order component (e.g., month) is NA,
 #' all lower-order components (e.g., day, hour, etc.) are also set to NA.
 #'
 #' @keywords internal
-propagate_na_values <- function(partial, is_datetime = TRUE) {
+propagate_na_values <- function(partial, is_datetime) {
   comp_length <- ifelse(is_datetime, 6, 3)
   for (i in 2:comp_length) {
     partial[[i]] <- if_else(is.na(partial[[i - 1]]), NA_character_, partial[[i]])

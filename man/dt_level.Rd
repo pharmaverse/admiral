@@ -27,11 +27,11 @@ compared.
 }
 \examples{
 # Create a dt_level object with level "D" (day)
-level_day <- dt_level("D")
+level_day <- admiral:::dt_level("D")
 print(level_day)
 
 # Create a dt_level object with level "Y" (year)
-level_year <- dt_level("Y")
+level_year <- admiral:::dt_level("Y")
 print(level_year)
 
 # Compare two dt_level objects

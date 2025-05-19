@@ -346,7 +346,7 @@ test_that("get_imputation_target_time Test 19: correctly propagate NA values in 
     hour = "12", minute = NA_character_, second = "20"
   )
   expect_equal(
-    propagate_na_values(partial),
+    propagate_na_values(partial, is_datetime = TRUE),
     list(
       year = "2020", month = NA_character_, day = NA_character_,
       hour = NA_character_, minute = NA_character_, second = NA_character_
