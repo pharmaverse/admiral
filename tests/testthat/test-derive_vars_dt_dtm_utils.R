@@ -112,8 +112,8 @@ test_that("get_dt_dtm_range correctly imputes date ranges", {
   expect_equal(
     get_dt_dtm_range(dtc, date_imputation = "first"),
     c(
-      "2020-02-29", "2021-03-01", "0000-08-15", "2022-01-01",
-      "2022-01-01", "0000-01-29"
+      "2020-02-29", "2021-03-01", "0000-01-01", "2022-01-01",
+      "2022-01-01", "0000-01-01"
     )
   )
 
@@ -121,8 +121,8 @@ test_that("get_dt_dtm_range correctly imputes date ranges", {
   expect_equal(
     get_dt_dtm_range(dtc, date_imputation = "last"),
     c(
-      "2020-02-29", "2021-03-31", "9999-08-15", "2022-12-31",
-      "2022-12-31", "9999-12-29"
+      "2020-02-29", "2021-03-31", "9999-12-31", "2022-12-31",
+      "2022-12-31", "9999-12-31"
     )
   )
 

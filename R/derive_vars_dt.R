@@ -417,6 +417,7 @@ impute_dtc_dt <- function(dtc,
                           min_dates = NULL,
                           max_dates = NULL,
                           preserve = FALSE) {
+  is_datetime <- FALSE
   # Check arguments ----
   assert_character_vector(dtc)
   valid_dtc <- is_valid_dtc(dtc)
@@ -446,33 +447,21 @@ impute_dtc_dt <- function(dtc,
     date_imputation = date_imputation
   )
 
-  # Parse character date ----
-  two <- "(\\d{2}|-?)"
-  partialdate <- str_match(dtc, paste0(
-    "(\\d{4}|-?)-?",
-    two,
-    "-?",
-    two
-  ))
-  partial <- vector("list", 3)
-  components <- c("year", "month", "day")
-  names(partial) <- components
-  for (i in seq_along(components)) {
-    partial[[i]] <- partialdate[, i + 1]
-    partial[[i]] <- if_else(partial[[i]] %in% c("-", ""), NA_character_, partial[[i]])
+  if (length(dtc) == 0) {
+    return(character(0))
   }
+
+  # Parse partials
+  partial <- parse_partial_date_time(dtc, is_datetime)
+  components <- names(partial)
 
   # Handle preserve argument ----
   if (!preserve) {
-    for (i in 2:3) {
-      partial[[i]] <- if_else(is.na(partial[[i - 1]]), NA_character_, partial[[i]])
-    }
+    partial <- propagate_na_values(partial, is_datetime)
   }
+
   # Determine target components ----
-  target <- get_imputation_target_date(
-    date_imputation = date_imputation,
-    month = partial[["month"]]
-  )
+  target <- get_imputation_targets(partial, date_imputation, is_datetime = is_datetime)
 
   for (c in components) {
     if (highest_imputation < dt_level(imputation_levels[[c]])) {
@@ -481,32 +470,12 @@ impute_dtc_dt <- function(dtc,
   }
 
   # Impute ----
-  imputed <- vector("list", 3)
-  names(imputed) <- components
-  for (c in components) {
-    imputed[[c]] <- if_else(is.na(partial[[c]]), target[[c]], partial[[c]])
-  }
+  imputed <- impute_values(partial, target, components)
+  imputed_dtc <- format_imputed_dtc(imputed, is_datetime)
 
-  imputed_dtc <-
-    paste(imputed[["year"]], imputed[["month"]], imputed[["day"]], sep = "-")
-
-  imputed_dtc <-
-    if_else(
-      str_detect(imputed_dtc, "x"),
-      NA_character_,
-      imputed_dtc
-    )
 
   if (date_imputation == "last") {
-    imputed_dtc <-
-      if_else(
-        is.na(partial[["day"]]),
-        strftime(
-          rollback(ymd(imputed_dtc) + months(1)),
-          format = "%Y-%m-%d"
-        ),
-        imputed_dtc
-      )
+    imputed_dtc <- adjust_last_day_imputation(imputed_dtc, partial, is_datetime)
   }
 
   # Handle min_dates and max_dates argument ----

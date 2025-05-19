@@ -628,9 +628,7 @@ get_dt_dtm_range <- function(dtc,
   partial <- parse_partial_date_time(dtc, is_datetime)
   components <- names(partial)
 
-  if (is_datetime) {
-    partial <- propagate_na_values(partial)
-  }
+  partial <- propagate_na_values(partial, is_datetime)
 
   target <- get_imputation_targets(partial, date_imputation, time_imputation, is_datetime)
 
@@ -999,8 +997,9 @@ format_imputed_dtc <- function(imputed, is_datetime) {
 #' all lower-order components (e.g., day, hour, etc.) are also set to NA.
 #'
 #' @keywords internal
-propagate_na_values <- function(partial) {
-  for (i in 2:6) {
+propagate_na_values <- function(partial, is_datetime = TRUE) {
+  comp_length <- ifelse(is_datetime, 6, 3)
+  for (i in 2:comp_length) {
     partial[[i]] <- if_else(is.na(partial[[i - 1]]), NA_character_, partial[[i]])
   }
   partial
