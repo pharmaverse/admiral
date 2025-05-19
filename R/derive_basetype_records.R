@@ -4,10 +4,11 @@
 #' baseline for a given Analysis Parameter `PARAM` in the same dataset.  For a
 #' given parameter, if Baseline Value `BASE` or `BASEC` are derived and there
 #' is more than one definition of baseline, then `BASETYPE` must be non-null on
-#' all records of any type for that parameter. Each value of `BASETYPE` refers
-#' to a definition of baseline that characterizes the value of `BASE` on that
-#' row.  Please see section 4.2.1.6 of the ADaM Implementation Guide, version
-#' 1.3 for further background.
+#' all records of any type for that parameter where either `BASE` or `BASEC`
+#' are also non-null. Each value of `BASETYPE` refers to a definition of
+#' baseline that characterizes the value of `BASE` on that row.  Please see
+#' section 4.2.1.6 of the ADaM Implementation Guide, version 1.3 for further
+#' background.
 #'
 #' Adds the `BASETYPE` variable to a dataset and duplicates records based upon
 #' the provided conditions.
