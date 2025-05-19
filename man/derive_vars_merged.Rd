@@ -88,7 +88,9 @@ variable \code{LASTRSP} to the dataset and sets it to the upper case value of
 \code{AVALC}.
 
 If the argument is not specified or set to \code{NULL}, all variables from the
-additional dataset (\code{dataset_add}) are added.
+additional dataset (\code{dataset_add}) are added. In the case when a variable
+exists in both datasets, an error is issued to ensure the user either adds
+to \code{by_vars}, removes or renames.
 
 \describe{
 \item{Permitted values}{list of variables created by \code{exprs()}, e.g., \code{exprs(USUBJID, VISIT)}}
@@ -257,7 +259,8 @@ General Derivation Functions for all ADaMs that returns variable appended to dat
 Merge all demographic variables onto a vital signs dataset.
 \itemize{
 \item The variable \code{DOMAIN} exists in both datasets so note the use of
-\code{select(dm, -DOMAIN)} in the \code{dataset_add} argument.
+\code{select(dm, -DOMAIN)} in the \code{dataset_add} argument. Without this an error
+would be issued to notify the user.
 }
 
 \if{html}{\out{<div class="sourceCode r">}}\preformatted{library(tibble)
@@ -376,20 +379,22 @@ can be obtained by calling \code{get_duplicates_dataset()}:
 
 Common options to solve the issue:
 \itemize{
-\item Restricting the source records by specifying/updating the \code{filter_add} argument.
-\item Specifying additional variables for \code{order} - this is the most common approach
+\item Specifying additional variables for \code{order} - this is the most common approach,
 adding something like a sequence variable.
+\item Restricting the source records by specifying/updating the \code{filter_add} argument.
 \item Setting \code{check_type = "none"} to ignore any duplicates, but then in this case
 the last occurring record would be chosen according to the sort order of the
-input \code{dataset_add}.
+input \code{dataset_add}. This is not often advisable, unless the order has no impact
+on the result, as the temporary sort order can be prone to variation across
+an \code{{admiral}} script.
 }}
 \subsection{Modify values dependent on the merge (\code{new_vars} and \code{missing_values})}{
 
-For the last occurring weight for each subject, add a categorisation of
+For the last occurring weight for each subject, add a categorization of
 which visit it occurred at to the demographics dataset.
 \itemize{
-\item In the \code{new_vars} argument, other functions can be utilised to modify the
-merged values. For example, in the below case we want to categorise the
+\item In the \code{new_vars} argument, other functions can be utilized to modify the
+merged values. For example, in the below case we want to categorize the
 visit as \code{"BASELINE"} or \code{"POST-BASELINE"} using \code{if_else()}.
 \item The \code{missing_values} argument assigns a specific value for subjects with
 no matching observations - see subject \code{"03"} in the below example.

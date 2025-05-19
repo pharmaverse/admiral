@@ -59,7 +59,9 @@
 #'   `AVALC`.
 #'
 #'   If the argument is not specified or set to `NULL`, all variables from the
-#'   additional dataset (`dataset_add`) are added.
+#'   additional dataset (`dataset_add`) are added. In the case when a variable
+#'   exists in both datasets, an error is issued to ensure the user either adds
+#'   to `by_vars`, removes or renames.
 #'
 #' @permitted [var_list]
 #'
@@ -186,7 +188,8 @@
 #' @info Merge all demographic variables onto a vital signs dataset.
 #'
 #' - The variable `DOMAIN` exists in both datasets so note the use of
-#'   `select(dm, -DOMAIN)` in the `dataset_add` argument.
+#'   `select(dm, -DOMAIN)` in the `dataset_add` argument. Without this an error
+#'   would be issued to notify the user.
 #' @code
 #' library(tibble)
 #' library(dplyr, warn.conflicts = FALSE)
@@ -269,19 +272,21 @@
 #' get_duplicates_dataset()
 #'
 #' @info Common options to solve the issue:
-#' - Restricting the source records by specifying/updating the `filter_add` argument.
-#' - Specifying additional variables for `order` - this is the most common approach
+#' - Specifying additional variables for `order` - this is the most common approach,
 #'   adding something like a sequence variable.
+#' - Restricting the source records by specifying/updating the `filter_add` argument.
 #' - Setting `check_type = "none"` to ignore any duplicates, but then in this case
 #'   the last occurring record would be chosen according to the sort order of the
-#'   input `dataset_add`.
+#'   input `dataset_add`. This is not often advisable, unless the order has no impact
+#'   on the result, as the temporary sort order can be prone to variation across
+#'   an `{admiral}` script.
 #'
 #' @caption Modify values dependent on the merge (`new_vars` and `missing_values`)
-#' @info For the last occurring weight for each subject, add a categorisation of
+#' @info For the last occurring weight for each subject, add a categorization of
 #'   which visit it occurred at to the demographics dataset.
 #'
-#' - In the `new_vars` argument, other functions can be utilised to modify the
-#'   merged values. For example, in the below case we want to categorise the
+#' - In the `new_vars` argument, other functions can be utilized to modify the
+#'   merged values. For example, in the below case we want to categorize the
 #'   visit as `"BASELINE"` or `"POST-BASELINE"` using `if_else()`.
 #' - The `missing_values` argument assigns a specific value for subjects with
 #'   no matching observations - see subject `"03"` in the below example.

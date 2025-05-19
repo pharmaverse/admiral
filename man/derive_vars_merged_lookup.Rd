@@ -82,7 +82,9 @@ variable \code{LASTRSP} to the dataset and sets it to the upper case value of
 \code{AVALC}.
 
 If the argument is not specified or set to \code{NULL}, all variables from the
-additional dataset (\code{dataset_add}) are added.
+additional dataset (\code{dataset_add}) are added. In the case when a variable
+exists in both datasets, an error is issued to ensure the user either adds
+to \code{by_vars}, removes or renames.
 
 \describe{
 \item{Permitted values}{list of variables created by \code{exprs()}, e.g., \code{exprs(USUBJID, VISIT)}}
