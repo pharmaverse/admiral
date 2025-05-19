@@ -13,11 +13,11 @@
 #'
 #' @examples
 #' # Create a dtm_level object with level "D" (day)
-#' level_day <- dtm_level("D")
+#' level_day <- admiral:::dtm_level("D")
 #' print(level_day)
 #'
 #' # Create a dtm_level object with level "h" (hour)
-#' level_hour <- dtm_level("h")
+#' level_hour <- admiral:::dtm_level("h")
 #' print(level_hour)
 #'
 #' # Compare two dtm_level objects
@@ -108,23 +108,23 @@ dt_level <- function(level) {
 #'
 #' @examples
 #' # Get imputation target for "first"
-#' target_first <- get_imputation_target_date("first", month = NA)
+#' target_first <- admiral:::get_imputation_target_date("first", month = NA)
 #' print(target_first)
 #'
 #' # Get imputation target for "mid" with specified month
-#' target_mid <- get_imputation_target_date("mid", month = "03")
+#' target_mid <- admiral:::get_imputation_target_date("mid", month = "03")
 #' print(target_mid)
 #'
 #' # Get imputation target for "mid" with NA month
-#' target_mid_na <- get_imputation_target_date("mid", month = NA)
+#' target_mid_na <- admiral:::get_imputation_target_date("mid", month = NA)
 #' print(target_mid_na)
 #'
 #' # Get imputation target for "last"
-#' target_last <- get_imputation_target_date("last", month = NA)
+#' target_last <- admiral:::get_imputation_target_date("last", month = NA)
 #' print(target_last)
 #'
 #' # Get imputation target for custom date imputation "06-15"
-#' target_custom <- get_imputation_target_date("06-15", month = NA)
+#' target_custom <- admiral:::get_imputation_target_date("06-15", month = NA)
 #' print(target_custom)
 #'
 #' @family utils_impute
@@ -183,15 +183,15 @@ get_imputation_target_date <- function(date_imputation,
 #'
 #' @examples
 #' # Get imputation target for "first" time
-#' target_first_time <- get_imputation_target_time("first")
+#' target_first_time <- admiral:::get_imputation_target_time("first")
 #' print(target_first_time)
 #'
 #' # Get imputation target for "last" time
-#' target_last_time <- get_imputation_target_time("last")
+#' target_last_time <- admiral:::get_imputation_target_time("last")
 #' print(target_last_time)
 #'
 #' # Get imputation target for custom time imputation "12-34-56"
-#' target_custom_time <- get_imputation_target_time("12-34-56")
+#' target_custom_time <- admiral:::get_imputation_target_time("12-34-56")
 #' print(target_custom_time)
 #'
 #' @family utils_impute
@@ -289,19 +289,19 @@ convert_date_to_dtm <- function(dt,
 #'
 #' @examples
 #' # Get partial datetime components for a complete datetime string
-#' dtc_complete <- get_partialdatetime("2020-03-15T12:34:56")
+#' dtc_complete <- admiral:::get_partialdatetime("2020-03-15T12:34:56")
 #' print(dtc_complete)
 #'
 #' # Get partial datetime components for a partial datetime string
-#' dtc_partial <- get_partialdatetime("2020-03-15T12:34")
+#' dtc_partial <- admiral:::get_partialdatetime("2020-03-15T12:34")
 #' print(dtc_partial)
 #'
 #' # Get partial datetime components for a date-only string
-#' dtc_date_only <- get_partialdatetime("2020-03-15")
+#' dtc_date_only <- admiral:::get_partialdatetime("2020-03-15")
 #' print(dtc_date_only)
 #'
 #' # Get partial datetime components for an incomplete year string
-#' dtc_year_partial <- get_partialdatetime("2020")
+#' dtc_year_partial <- admiral:::get_partialdatetime("2020")
 #' print(dtc_year_partial)
 #'
 #' @family utils_impute
@@ -562,30 +562,30 @@ assert_highest_imputation <- function(highest_imputation, highest_imputation_val
 #' @examples
 #' # Impute date range for dates with 'first' date imputation
 #' dtc_dates <- c("2020-02-29", "2021-03")
-#' imputed_dates_first <- get_dt_dtm_range(dtc_dates, date_imputation = "first")
+#' imputed_dates_first <- admiral:::get_dt_dtm_range(dtc_dates, date_imputation = "first")
 #' print(imputed_dates_first)
 #'
 #' # Impute date range for dates with 'last' date imputation
-#' imputed_dates_last <- get_dt_dtm_range(dtc_dates, date_imputation = "last")
+#' imputed_dates_last <- admiral:::get_dt_dtm_range(dtc_dates, date_imputation = "last")
 #' print(imputed_dates_last)
 #'
 #' # Impute datetime range with 'first' time imputation
 #' dtc_datetimes <- c("2020-02-29T12:00", "2021-03T14:30")
-#' imputed_datetimes_first <- get_dt_dtm_range(dtc_datetimes,
+#' imputed_datetimes_first <- admiral:::get_dt_dtm_range(dtc_datetimes,
 #'   date_imputation = "first",
 #'   time_imputation = "first"
 #' )
 #' print(imputed_datetimes_first)
 #'
 #' # Impute datetime range with 'last' time imputation
-#' imputed_datetimes_last <- get_dt_dtm_range(dtc_datetimes,
+#' imputed_datetimes_last <- admiral:::get_dt_dtm_range(dtc_datetimes,
 #'   date_imputation = "first",
 #'   time_imputation = "last"
 #' )
 #' print(imputed_datetimes_last)
 #'
 #' # Edge case: Return empty character vector for empty input
-#' imputed_empty <- get_dt_dtm_range(character(0), date_imputation = "first")
+#' imputed_empty <- admiral:::get_dt_dtm_range(character(0), date_imputation = "first")
 #' print(imputed_empty)
 #'
 #' @details
@@ -657,28 +657,28 @@ get_dt_dtm_range <- function(dtc,
 #'
 #' @examples
 #' # Get highest imputation level for date
-#' highest_level_date <- get_highest_imputation_level(
+#' highest_level_date <- admiral:::get_highest_imputation_level(
 #'   is_datetime = FALSE,
 #'   highest_imputation = "Y"
 #' )
 #' print(highest_level_date)
 #'
 #' # Get highest imputation level for datetime
-#' highest_level_datetime <- get_highest_imputation_level(
+#' highest_level_datetime <- admiral:::get_highest_imputation_level(
 #'   is_datetime = TRUE,
 #'   highest_imputation = "Y"
 #' )
 #' print(highest_level_datetime)
 #'
 #' # Get highest imputation level for date with month level
-#' highest_level_month_date <- get_highest_imputation_level(
+#' highest_level_month_date <- admiral:::get_highest_imputation_level(
 #'   is_datetime = FALSE,
 #'   highest_imputation = "M"
 #' )
 #' print(highest_level_month_date)
 #'
 #' # Get highest imputation level for datetime with hour level
-#' highest_level_hour_datetime <- get_highest_imputation_level(
+#' highest_level_hour_datetime <- admiral:::get_highest_imputation_level(
 #'   is_datetime = TRUE,
 #'   highest_imputation = "h"
 #' )
@@ -707,7 +707,7 @@ get_highest_imputation_level <- function(is_datetime, highest_imputation) {
 #' @examples
 #' # Get imputation targets for a date with 'first' date imputation
 #' partial_date <- list(year = "2020", month = "03", day = NA_character_)
-#' target_first_date <- get_imputation_targets(partial_date,
+#' target_first_date <- admiral:::get_imputation_targets(partial_date,
 #'   date_imputation = "first",
 #'   time_imputation = NULL,
 #'   is_datetime = FALSE
@@ -723,7 +723,7 @@ get_highest_imputation_level <- function(is_datetime, highest_imputation) {
 #'   minute = NA_character_,
 #'   second = NA_character_
 #' )
-#' target_first_datetime <- get_imputation_targets(partial_datetime,
+#' target_first_datetime <- admiral:::get_imputation_targets(partial_datetime,
 #'   date_imputation = "first",
 #'   time_imputation = "first",
 #'   is_datetime = TRUE
@@ -731,7 +731,7 @@ get_highest_imputation_level <- function(is_datetime, highest_imputation) {
 #' print(target_first_datetime)
 #'
 #' # Get imputation targets for a datetime with 'last' date and time imputation
-#' target_last_datetime <- get_imputation_targets(partial_datetime,
+#' target_last_datetime <- admiral:::get_imputation_targets(partial_datetime,
 #'   date_imputation = "last",
 #'   time_imputation = "last",
 #'   is_datetime = TRUE
@@ -739,7 +739,7 @@ get_highest_imputation_level <- function(is_datetime, highest_imputation) {
 #' print(target_last_datetime)
 #'
 #' # Get imputation targets for a date with custom date imputation '06-15'
-#' target_custom_date <- get_imputation_targets(partial_date,
+#' target_custom_date <- admiral:::get_imputation_targets(partial_date,
 #'   date_imputation = "06-15",
 #'   time_imputation = NULL,
 #'   is_datetime = FALSE
@@ -747,7 +747,7 @@ get_highest_imputation_level <- function(is_datetime, highest_imputation) {
 #' print(target_custom_date)
 #'
 #' # Get imputation targets for a datetime with custom time imputation '12:34:56'
-#' target_custom_time <- get_imputation_targets(partial_datetime,
+#' target_custom_time <- admiral:::get_imputation_targets(partial_datetime,
 #'   date_imputation = "first",
 #'   time_imputation = "12:34:56",
 #'   is_datetime = TRUE
@@ -869,7 +869,7 @@ adjust_last_day_imputation <- function(imputed_dtc, partial, is_datetime) {
 #' partial_date <- list(year = "2020", month = NA_character_, day = NA_character_)
 #' target_date <- list(year = "2020", month = "01", day = "01")
 #' components_date <- c("year", "month", "day")
-#' imputed_date <- impute_values(partial_date, target_date, components_date)
+#' imputed_date <- admiral:::impute_values(partial_date, target_date, components_date)
 #' print(imputed_date)
 #'
 #' # Impute missing values for datetime components
@@ -882,14 +882,15 @@ adjust_last_day_imputation <- function(imputed_dtc, partial, is_datetime) {
 #'   hour = "12", minute = "00", second = "00"
 #' )
 #' components_datetime <- c("year", "month", "day", "hour", "minute", "second")
-#' imputed_datetime <- impute_values(partial_datetime, target_datetime, components_datetime)
+#' imputed_datetime <- admiral:::impute_values(partial_datetime, target_datetime,
+#'                                            components_datetime)
 #' print(imputed_datetime)
 #'
 #' # Impute missing values when some components are already present
 #' partial_mixed <- list(year = "2020", month = "06", day = NA_character_)
 #' target_mixed <- list(year = "2020", month = "01", day = "01")
 #' components_mixed <- c("year", "month", "day")
-#' imputed_mixed <- impute_values(partial_mixed, target_mixed, components_mixed)
+#' imputed_mixed <- admiral:::impute_values(partial_mixed, target_mixed, components_mixed)
 #' print(imputed_mixed)
 #'
 #' @keywords internal
@@ -921,12 +922,12 @@ impute_values <- function(partial, target, components) {
 #'   year = "2020", month = "01", day = "01",
 #'   hour = "12", minute = "00", second = "00"
 #' )
-#' formatted_datetime <- format_imputed_dtc(imputed_datetime, is_datetime = TRUE)
+#' formatted_datetime <- admiral:::format_imputed_dtc(imputed_datetime, is_datetime = TRUE)
 #' print(formatted_datetime)
 #'
 #' # Format imputed date components
 #' imputed_date <- list(year = "2020", month = "01", day = "01")
-#' formatted_date <- format_imputed_dtc(imputed_date, is_datetime = FALSE)
+#' formatted_date <- admiral:::format_imputed_dtc(imputed_date, is_datetime = FALSE)
 #' print(formatted_date)
 #'
 #' # Handle imputed datetime with missing parts (contains 'x')
@@ -935,13 +936,15 @@ impute_values <- function(partial, target, components) {
 #'   year = "2020", month = "xx", day = "01",
 #'   hour = "12", minute = "00", second = "00"
 #' )
-#' formatted_partial_datetime <- format_imputed_dtc(imputed_partial_datetime, is_datetime = TRUE)
+#' formatted_partial_datetime <- admiral:::format_imputed_dtc(imputed_partial_datetime,
+#'                                                           is_datetime = TRUE)
 #' print(formatted_partial_datetime)
 #'
 #' # Handle imputed date with missing parts (contains 'x')
 #' # Expected: NA because 'x' is an undefined component
 #' imputed_partial_date <- list(year = "2020", month = "xx", day = "01")
-#' formatted_partial_date <- format_imputed_dtc(imputed_partial_date, is_datetime = FALSE)
+#' formatted_partial_date <- admiral:::format_imputed_dtc(imputed_partial_date,
+#'                                                        is_datetime = FALSE)
 #' print(formatted_partial_date)
 #'
 #' @details
@@ -984,7 +987,8 @@ format_imputed_dtc <- function(imputed, is_datetime) {
 #'   year = "2020", month = NA_character_, day = "01",
 #'   hour = "12", minute = NA_character_, second = "34"
 #' )
-#' propagated_datetime <- propagate_na_values(partial_datetime, is_datetime = TRUE)
+#' propagated_datetime <- admiral:::propagate_na_values(partial_datetime,
+#'                                                      is_datetime = TRUE)
 #' print(propagated_datetime)
 #'
 #' # Propagate NA values for datetime with missing higher order components
@@ -992,13 +996,15 @@ format_imputed_dtc <- function(imputed, is_datetime) {
 #'   year = NA_character_, month = "01", day = "01",
 #'   hour = "12", minute = "00", second = "00"
 #' )
-#' propagated_missing <- propagate_na_values(partial_missing, is_datetime = TRUE)
+#' propagated_missing <- admiral:::propagate_na_values(partial_missing,
+#'                                                     is_datetime = TRUE)
 #' print(propagated_missing)
 #'
 #' partial_missing_date <- list(
 #'   year = "2023", month = NA_character_, day = "01"
 #' )
-#' propagated_missing_date <- propagate_na_values(partial_missing_date, is_datetime = FALSE)
+#' propagated_missing_date <- admiral:::propagate_na_values(partial_missing_date,
+#'                                                          is_datetime = FALSE)
 #' print(propagated_missing_date)
 #'
 #' @details
@@ -1035,22 +1041,23 @@ propagate_na_values <- function(partial, is_datetime) {
 #' @examples
 #' # Parse partial datetime components
 #' dtc_datetime <- "2020-03-15T12:34"
-#' parsed_datetime <- parse_partial_date_time(dtc_datetime, is_datetime = TRUE)
+#' parsed_datetime <- admiral:::parse_partial_date_time(dtc_datetime, is_datetime = TRUE)
 #' print(parsed_datetime)
 #'
 #' # Parse partial date components
 #' dtc_date <- "2020-03"
-#' parsed_date <- parse_partial_date_time(dtc_date, is_datetime = FALSE)
+#' parsed_date <- admiral:::parse_partial_date_time(dtc_date, is_datetime = FALSE)
 #' print(parsed_date)
 #'
 #' # Parse partial datetime with missing components
 #' dtc_partial_datetime <- "2020-03T12"
-#' parsed_partial_datetime <- parse_partial_date_time(dtc_partial_datetime, is_datetime = TRUE)
+#' parsed_partial_datetime <- admiral:::parse_partial_date_time(dtc_partial_datetime,
+#'                                                              is_datetime = TRUE)
 #' print(parsed_partial_datetime)
 #'
 #' # Parse partial date with incomplete year
 #' dtc_year <- "2020"
-#' parsed_year <- parse_partial_date_time(dtc_year, is_datetime = FALSE)
+#' parsed_year <- admiral:::parse_partial_date_time(dtc_year, is_datetime = FALSE)
 #' print(parsed_year)
 #'
 #' @details

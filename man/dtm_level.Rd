@@ -28,11 +28,11 @@ compared.
 }
 \examples{
 # Create a dtm_level object with level "D" (day)
-level_day <- dtm_level("D")
+level_day <- admiral:::dtm_level("D")
 print(level_day)
 
 # Create a dtm_level object with level "h" (hour)
-level_hour <- dtm_level("h")
+level_hour <- admiral:::dtm_level("h")
 print(level_hour)
 
 # Compare two dtm_level objects

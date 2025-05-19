@@ -37,15 +37,15 @@ Get Time Imputation Targets
 }
 \examples{
 # Get imputation target for "first" time
-target_first_time <- get_imputation_target_time("first")
+target_first_time <- admiral:::get_imputation_target_time("first")
 print(target_first_time)
 
 # Get imputation target for "last" time
-target_last_time <- get_imputation_target_time("last")
+target_last_time <- admiral:::get_imputation_target_time("last")
 print(target_last_time)
 
 # Get imputation target for custom time imputation "12-34-56"
-target_custom_time <- get_imputation_target_time("12-34-56")
+target_custom_time <- admiral:::get_imputation_target_time("12-34-56")
 print(target_custom_time)
 
 }

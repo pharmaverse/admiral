@@ -39,7 +39,7 @@ Imputes missing values in partial date/time components using target values.
 partial_date <- list(year = "2020", month = NA_character_, day = NA_character_)
 target_date <- list(year = "2020", month = "01", day = "01")
 components_date <- c("year", "month", "day")
-imputed_date <- impute_values(partial_date, target_date, components_date)
+imputed_date <- admiral:::impute_values(partial_date, target_date, components_date)
 print(imputed_date)
 
 # Impute missing values for datetime components
@@ -52,14 +52,15 @@ target_datetime <- list(
   hour = "12", minute = "00", second = "00"
 )
 components_datetime <- c("year", "month", "day", "hour", "minute", "second")
-imputed_datetime <- impute_values(partial_datetime, target_datetime, components_datetime)
+imputed_datetime <- admiral:::impute_values(partial_datetime, target_datetime,
+                                           components_datetime)
 print(imputed_datetime)
 
 # Impute missing values when some components are already present
 partial_mixed <- list(year = "2020", month = "06", day = NA_character_)
 target_mixed <- list(year = "2020", month = "01", day = "01")
 components_mixed <- c("year", "month", "day")
-imputed_mixed <- impute_values(partial_mixed, target_mixed, components_mixed)
+imputed_mixed <- admiral:::impute_values(partial_mixed, target_mixed, components_mixed)
 print(imputed_mixed)
 
 }

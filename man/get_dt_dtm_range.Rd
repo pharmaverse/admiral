@@ -47,30 +47,30 @@ missing components.
 \examples{
 # Impute date range for dates with 'first' date imputation
 dtc_dates <- c("2020-02-29", "2021-03")
-imputed_dates_first <- get_dt_dtm_range(dtc_dates, date_imputation = "first")
+imputed_dates_first <- admiral:::get_dt_dtm_range(dtc_dates, date_imputation = "first")
 print(imputed_dates_first)
 
 # Impute date range for dates with 'last' date imputation
-imputed_dates_last <- get_dt_dtm_range(dtc_dates, date_imputation = "last")
+imputed_dates_last <- admiral:::get_dt_dtm_range(dtc_dates, date_imputation = "last")
 print(imputed_dates_last)
 
 # Impute datetime range with 'first' time imputation
 dtc_datetimes <- c("2020-02-29T12:00", "2021-03T14:30")
-imputed_datetimes_first <- get_dt_dtm_range(dtc_datetimes,
+imputed_datetimes_first <- admiral:::get_dt_dtm_range(dtc_datetimes,
   date_imputation = "first",
   time_imputation = "first"
 )
 print(imputed_datetimes_first)
 
 # Impute datetime range with 'last' time imputation
-imputed_datetimes_last <- get_dt_dtm_range(dtc_datetimes,
+imputed_datetimes_last <- admiral:::get_dt_dtm_range(dtc_datetimes,
   date_imputation = "first",
   time_imputation = "last"
 )
 print(imputed_datetimes_last)
 
 # Edge case: Return empty character vector for empty input
-imputed_empty <- get_dt_dtm_range(character(0), date_imputation = "first")
+imputed_empty <- admiral:::get_dt_dtm_range(character(0), date_imputation = "first")
 print(imputed_empty)
 
 }

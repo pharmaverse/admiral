@@ -39,7 +39,8 @@ partial_datetime <- list(
   year = "2020", month = NA_character_, day = "01",
   hour = "12", minute = NA_character_, second = "34"
 )
-propagated_datetime <- propagate_na_values(partial_datetime, is_datetime = TRUE)
+propagated_datetime <- admiral:::propagate_na_values(partial_datetime,
+                                                     is_datetime = TRUE)
 print(propagated_datetime)
 
 # Propagate NA values for datetime with missing higher order components
@@ -47,13 +48,15 @@ partial_missing <- list(
   year = NA_character_, month = "01", day = "01",
   hour = "12", minute = "00", second = "00"
 )
-propagated_missing <- propagate_na_values(partial_missing, is_datetime = TRUE)
+propagated_missing <- admiral:::propagate_na_values(partial_missing,
+                                                    is_datetime = TRUE)
 print(propagated_missing)
 
 partial_missing_date <- list(
   year = "2023", month = NA_character_, day = "01"
 )
-propagated_missing_date <- propagate_na_values(partial_missing_date, is_datetime = FALSE)
+propagated_missing_date <- admiral:::propagate_na_values(partial_missing_date,
+                                                         is_datetime = FALSE)
 print(propagated_missing_date)
 
 }

@@ -31,19 +31,19 @@ available.
 }
 \examples{
 # Get partial datetime components for a complete datetime string
-dtc_complete <- get_partialdatetime("2020-03-15T12:34:56")
+dtc_complete <- admiral:::get_partialdatetime("2020-03-15T12:34:56")
 print(dtc_complete)
 
 # Get partial datetime components for a partial datetime string
-dtc_partial <- get_partialdatetime("2020-03-15T12:34")
+dtc_partial <- admiral:::get_partialdatetime("2020-03-15T12:34")
 print(dtc_partial)
 
 # Get partial datetime components for a date-only string
-dtc_date_only <- get_partialdatetime("2020-03-15")
+dtc_date_only <- admiral:::get_partialdatetime("2020-03-15")
 print(dtc_date_only)
 
 # Get partial datetime components for an incomplete year string
-dtc_year_partial <- get_partialdatetime("2020")
+dtc_year_partial <- admiral:::get_partialdatetime("2020")
 print(dtc_year_partial)
 
 }

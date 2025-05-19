@@ -46,22 +46,23 @@ a date or a datetime:
 \examples{
 # Parse partial datetime components
 dtc_datetime <- "2020-03-15T12:34"
-parsed_datetime <- parse_partial_date_time(dtc_datetime, is_datetime = TRUE)
+parsed_datetime <- admiral:::parse_partial_date_time(dtc_datetime, is_datetime = TRUE)
 print(parsed_datetime)
 
 # Parse partial date components
 dtc_date <- "2020-03"
-parsed_date <- parse_partial_date_time(dtc_date, is_datetime = FALSE)
+parsed_date <- admiral:::parse_partial_date_time(dtc_date, is_datetime = FALSE)
 print(parsed_date)
 
 # Parse partial datetime with missing components
 dtc_partial_datetime <- "2020-03T12"
-parsed_partial_datetime <- parse_partial_date_time(dtc_partial_datetime, is_datetime = TRUE)
+parsed_partial_datetime <- admiral:::parse_partial_date_time(dtc_partial_datetime,
+                                                             is_datetime = TRUE)
 print(parsed_partial_datetime)
 
 # Parse partial date with incomplete year
 dtc_year <- "2020"
-parsed_year <- parse_partial_date_time(dtc_year, is_datetime = FALSE)
+parsed_year <- admiral:::parse_partial_date_time(dtc_year, is_datetime = FALSE)
 print(parsed_year)
 
 }

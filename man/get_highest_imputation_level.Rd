@@ -30,28 +30,28 @@ Determines the highest imputation level based on whether it's a date or datetime
 }
 \examples{
 # Get highest imputation level for date
-highest_level_date <- get_highest_imputation_level(
+highest_level_date <- admiral:::get_highest_imputation_level(
   is_datetime = FALSE,
   highest_imputation = "Y"
 )
 print(highest_level_date)
 
 # Get highest imputation level for datetime
-highest_level_datetime <- get_highest_imputation_level(
+highest_level_datetime <- admiral:::get_highest_imputation_level(
   is_datetime = TRUE,
   highest_imputation = "Y"
 )
 print(highest_level_datetime)
 
 # Get highest imputation level for date with month level
-highest_level_month_date <- get_highest_imputation_level(
+highest_level_month_date <- admiral:::get_highest_imputation_level(
   is_datetime = FALSE,
   highest_imputation = "M"
 )
 print(highest_level_month_date)
 
 # Get highest imputation level for datetime with hour level
-highest_level_hour_datetime <- get_highest_imputation_level(
+highest_level_hour_datetime <- admiral:::get_highest_imputation_level(
   is_datetime = TRUE,
   highest_imputation = "h"
 )
