@@ -52,8 +52,10 @@ target_datetime <- list(
   hour = "12", minute = "00", second = "00"
 )
 components_datetime <- c("year", "month", "day", "hour", "minute", "second")
-imputed_datetime <- admiral:::impute_values(partial_datetime, target_datetime,
-                                           components_datetime)
+imputed_datetime <- admiral:::impute_values(
+  partial_datetime, target_datetime,
+  components_datetime
+)
 print(imputed_datetime)
 
 # Impute missing values when some components are already present

@@ -57,7 +57,8 @@ print(parsed_date)
 # Parse partial datetime with missing components
 dtc_partial_datetime <- "2020-03T12"
 parsed_partial_datetime <- admiral:::parse_partial_date_time(dtc_partial_datetime,
-                                                             is_datetime = TRUE)
+  is_datetime = TRUE
+)
 print(parsed_partial_datetime)
 
 # Parse partial date with incomplete year

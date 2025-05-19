@@ -54,14 +54,16 @@ imputed_partial_datetime <- list(
   hour = "12", minute = "00", second = "00"
 )
 formatted_partial_datetime <- admiral:::format_imputed_dtc(imputed_partial_datetime,
-                                                          is_datetime = TRUE)
+  is_datetime = TRUE
+)
 print(formatted_partial_datetime)
 
 # Handle imputed date with missing parts (contains 'x')
 # Expected: NA because 'x' is an undefined component
 imputed_partial_date <- list(year = "2020", month = "xx", day = "01")
 formatted_partial_date <- admiral:::format_imputed_dtc(imputed_partial_date,
-                                                       is_datetime = FALSE)
+  is_datetime = FALSE
+)
 print(formatted_partial_date)
 
 }
