@@ -191,26 +191,84 @@ than the input datasets. If this causes memory issues, please try setting
 the admiral option \code{save_memory} to \code{TRUE} (see \code{set_admiral_options()}).
 This reduces the memory consumption but increases the run-time.
 }
-\examples{
-library(tibble)
+\seealso{
+\code{\link[=event]{event()}}, \code{\link[=event_joined]{event_joined()}}, \code{\link[=derive_vars_extreme_event]{derive_vars_extreme_event()}}
+
+BDS-Findings Functions for adding Parameters/Records: 
+\code{\link{default_qtc_paramcd}()},
+\code{\link{derive_expected_records}()},
+\code{\link{derive_extreme_records}()},
+\code{\link{derive_locf_records}()},
+\code{\link{derive_param_bmi}()},
+\code{\link{derive_param_bsa}()},
+\code{\link{derive_param_computed}()},
+\code{\link{derive_param_doseint}()},
+\code{\link{derive_param_exist_flag}()},
+\code{\link{derive_param_exposure}()},
+\code{\link{derive_param_framingham}()},
+\code{\link{derive_param_map}()},
+\code{\link{derive_param_qtc}()},
+\code{\link{derive_param_rr}()},
+\code{\link{derive_param_wbc_abs}()},
+\code{\link{derive_summary_records}()}
+}
+\concept{der_prm_bds_findings}
+\keyword{der_prm_bds_findings}
+\section{Examples}{
+\subsection{Add a new record for the worst observation using \code{event()} objects}{
+
+For each subject the observation containing the worst sleeping problem
+(if any exist) out of a possible should be identified and added as a new
+record, retaining all variables from the original observation.
+\itemize{
+\item The groups for which new records are added are specified by the \code{by_vars}
+argument. Here for each \emph{subject} a record should be added. Thus
+\code{by_vars = exprs(USUBJID)} is specified.
+\item The sets of possible sleeping problems are passed through the \code{events}
+argument as \code{event()} objects. Each event contains a \code{condition} which
+may or may not be satisfied by each record (or possibly a group of
+records) within the input dataset \code{dataset}. Summary functions such as
+\code{any()} and \code{all()} are often handy to use within conditions, as is done
+here for the third event, which checks that the subject had no sleeping
+issues. The final event uses a catch-all \code{condition = TRUE} to ensure all
+subjects have a new record derived. Note that in this example, as no
+condition involves analysis of \strong{cross-comparison values of within  records},
+it is sufficient to use \code{event()} objects rather than \code{event_joined()} -
+see the next example for a more complex condition.
+\item If any subject has one or more records satisfying the conditions from
+events, we can select just one record using the \code{order} argument. In this
+example, the first argument passed to \code{order} is \code{event_nr}, which is a
+temporary variable created through the \code{tmp_event_nr_var} argument, which
+numbers the events consecutively. Since \code{mode = first}, we only consider
+the first event for which a condition is satisfied. Within that event, we
+consider only the observation with the latest day, because the second
+argument for the order is \code{desc(ADY)}.
+\item Once a record is identified as satisfying an event's condition, a new
+observation is created, where each variable is populated with values
+sought according to the following order of precedence: (a): values
+specified in the event's \code{set_values_to} (here, \code{AVAL} and \code{AVALC}), (b)
+values specified in the global \code{set_values_to} (here, \code{PARAM} and
+\code{PARAMCD}), (c) values from the selected observation as
+long as that variable appears in \code{keep_source_vars} (here, \code{ADY} does
+as due to the use of the tidyselect expression \code{everything()}).
+}
+
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{library(tibble)
 library(dplyr)
 library(lubridate)
 
-adqs <- tribble(
-  ~USUBJID, ~PARAMCD,       ~AVALC,        ~ADY,
-  "1",      "NO SLEEP",     "N",              1,
-  "1",      "WAKE UP",      "N",              2,
-  "1",      "FALL ASLEEP",  "N",              3,
-  "2",      "NO SLEEP",     "N",              1,
-  "2",      "WAKE UP",      "Y",              2,
-  "2",      "WAKE UP",      "Y",              3,
-  "2",      "FALL ASLEEP",  "N",              4,
-  "3",      "NO SLEEP",     NA_character_,    1
+adqs1 <- tribble(
+  ~USUBJID, ~PARAMCD,         ~AVALC,        ~ADY,
+  "1",      "NO SLEEP",       "N",              1,
+  "1",      "WAKE UP 3X",     "N",              2,
+  "2",      "NO SLEEP",       "N",              1,
+  "2",      "WAKE UP 3X",     "Y",              2,
+  "2",      "WAKE UP 3X",     "Y",              3,
+  "3",      "NO SLEEP",       NA_character_,    1
 )
 
-# Add a new record for each USUBJID storing the the worst sleeping problem.
 derive_extreme_event(
-  adqs,
+  adqs1,
   by_vars = exprs(USUBJID),
   events = list(
     event(
@@ -218,17 +276,13 @@ derive_extreme_event(
       set_values_to = exprs(AVALC = "No sleep", AVAL = 1)
     ),
     event(
-      condition = PARAMCD == "WAKE UP" & AVALC == "Y",
-      set_values_to = exprs(AVALC = "Waking up more than three times", AVAL = 2)
-    ),
-    event(
-      condition = PARAMCD == "FALL ASLEEP" & AVALC == "Y",
-      set_values_to = exprs(AVALC = "More than 30 mins to fall asleep", AVAL = 3)
+      condition = PARAMCD == "WAKE UP 3X" & AVALC == "Y",
+      set_values_to = exprs(AVALC = "Waking up three times", AVAL = 2)
     ),
     event(
       condition = all(AVALC == "N"),
       set_values_to = exprs(
-        AVALC = "No sleeping problems", AVAL = 4
+        AVALC = "No sleeping problems", AVAL = 3
       )
     ),
     event(
@@ -241,12 +295,125 @@ derive_extreme_event(
   mode = "first",
   set_values_to = exprs(
     PARAMCD = "WSP",
-    PARAM = "Worst Sleeping Problems"
-  )
+    PARAM = "Worst Sleeping Problem"
+  ),
+  keep_source_vars = exprs(everything())
+)
+#> # A tibble: 9 × 6
+#>   USUBJID PARAMCD    AVALC                   ADY  AVAL PARAM                 
+#>   <chr>   <chr>      <chr>                 <dbl> <dbl> <chr>                 
+#> 1 1       NO SLEEP   N                         1    NA <NA>                  
+#> 2 1       WAKE UP 3X N                         2    NA <NA>                  
+#> 3 2       NO SLEEP   N                         1    NA <NA>                  
+#> 4 2       WAKE UP 3X Y                         2    NA <NA>                  
+#> 5 2       WAKE UP 3X Y                         3    NA <NA>                  
+#> 6 3       NO SLEEP   <NA>                      1    NA <NA>                  
+#> 7 1       WSP        No sleeping problems      2     3 Worst Sleeping Problem
+#> 8 2       WSP        Waking up three times     3     2 Worst Sleeping Problem
+#> 9 3       WSP        Missing                   1    99 Worst Sleeping Problem}\if{html}{\out{</div>}}}
+\subsection{Add a new record for the worst observation using \code{event()} and
+\code{event_joined()} objects}{
+
+We'll now extend the above example. Specifically, we consider a new
+possible worst sleeping problem, namely if a subject experiences no
+sleep on consecutive days.
+\itemize{
+\item The "consecutive days" portion of the condition requires records to be
+compared with each other. This is done by using an \code{event_joined()} object,
+specifically by passing \code{dataset_name = adqs2} to it so that the \code{adqs2}
+dataset is joined onto itself. The \code{condition} now checks for two
+no sleep records, and crucially compares the \code{ADY} values to see if
+they differ by one day. The \code{.join} syntax distinguishes between the
+\code{ADY} value of the parent and joined datasets. As the condition involves
+\code{AVALC}, \code{PARAMCD} and \code{ADY}, we specify these variables with \code{join_vars},
+and finally, because we wish to compare all records with each other, we
+select \code{join_type = "all"}.
+\item Since we are now passing an \code{event_joined} object to
+\code{derive_extreme_event()}, we also need to specify the \code{source_datasets}
+object so as to indicate which dataset we wish to use for the join.
+}
+
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{adqs2 <- tribble(
+   ~USUBJID, ~PARAMCD,     ~AVALC, ~ADY,
+   "4",      "WAKE UP",    "N",    1,
+   "4",      "NO SLEEP",   "Y",    2,
+   "4",      "NO SLEEP",   "Y",    3,
+   "5",      "NO SLEEP",   "N",    1,
+   "5",      "NO SLEEP",   "Y",    2,
+   "5",      "WAKE UP 3X", "Y",    3,
+   "5",      "NO SLEEP",   "N",    4
 )
 
-# Use different mode by event
-adhy <- tribble(
+derive_extreme_event(
+  adqs2,
+  by_vars = exprs(USUBJID),
+  events = list(
+    event_joined(
+      dataset_name = "adqs2",
+      join_vars = exprs(AVALC, PARAMCD, ADY),
+      join_type = "all",
+      condition = PARAMCD == "NO SLEEP" & AVALC == "Y" &
+        PARAMCD.join == "NO SLEEP" & AVALC.join == "Y" &
+        ADY == ADY.join + 1,
+      set_values_to = exprs(AVALC = "No sleep two nights in a row", AVAL = 0)
+    ),
+    event(
+      condition = PARAMCD == "NO SLEEP" & AVALC == "Y",
+      set_values_to = exprs(AVALC = "No sleep", AVAL = 1)
+    ),
+    event(
+      condition = PARAMCD == "WAKE UP 3X" & AVALC == "Y",
+      set_values_to = exprs(AVALC = "Waking up three times", AVAL = 2)
+    ),
+    event(
+      condition = all(AVALC == "N"),
+      set_values_to = exprs(
+        AVALC = "No sleeping problems", AVAL = 3
+      )
+    ),
+    event(
+      condition = TRUE,
+      set_values_to = exprs(AVALC = "Missing", AVAL = 99)
+    )
+  ),
+  source_datasets = list(adqs2 = adqs2),
+  tmp_event_nr_var = event_nr,
+  order = exprs(event_nr, desc(ADY)),
+  mode = "first",
+  set_values_to = exprs(
+    PARAMCD = "WSP",
+    PARAM = "Worst Sleeping Problem"
+  ),
+  keep_source_vars = exprs(everything())
+)
+#> # A tibble: 9 × 6
+#>   USUBJID PARAMCD    AVALC                          ADY  AVAL PARAM             
+#>   <chr>   <chr>      <chr>                        <dbl> <dbl> <chr>             
+#> 1 4       WAKE UP    N                                1    NA <NA>              
+#> 2 4       NO SLEEP   Y                                2    NA <NA>              
+#> 3 4       NO SLEEP   Y                                3    NA <NA>              
+#> 4 5       NO SLEEP   N                                1    NA <NA>              
+#> 5 5       NO SLEEP   Y                                2    NA <NA>              
+#> 6 5       WAKE UP 3X Y                                3    NA <NA>              
+#> 7 5       NO SLEEP   N                                4    NA <NA>              
+#> 8 4       WSP        No sleep two nights in a row     3     0 Worst Sleeping Pr…
+#> 9 5       WSP        No sleep                         2     1 Worst Sleeping Pr…}\if{html}{\out{</div>}}}
+\subsection{Specifying different arguments across \code{event()} object}{
+
+Here we consider a Hy's law use case. We are interested in
+knowing whether a subject's Alkaline Phosphatase has ever not
+been below twice the upper limit of normal range. If so, i.e. if
+\code{CRIT1FL} is \code{NA}, we are interested in the record for the first
+time this occurs, and if not, we wish to retain the last record.
+\itemize{
+\item In first \code{event()}, since we simply seek the first time that
+\code{CRIT1FL} is \code{NA}, it's enough to specify the \code{condition}.
+\item In the second \code{event()}, we select the last record among the
+full set of records where \code{CRIT1FL = "Y"} by additionally
+specifying\code{mode = "last"} within the \code{event()}.
+}
+
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{adhy <- tribble(
   ~USUBJID, ~AVISITN, ~CRIT1FL,
   "1",             1, "Y",
   "1",             2, "Y",
@@ -283,10 +450,22 @@ derive_extreme_event(
     PARAM = "ALKPH <= 2 times ULN"
   )
 )
+#> # A tibble: 8 × 6
+#>   USUBJID AVISITN CRIT1FL PARAMCD PARAM                      AVALC
+#>   <chr>     <dbl> <chr>   <chr>   <chr>                      <chr>
+#> 1 1             1 Y       ALKPH   Alkaline Phosphatase (U/L) <NA> 
+#> 2 1             2 Y       ALKPH   Alkaline Phosphatase (U/L) <NA> 
+#> 3 2             1 Y       ALKPH   Alkaline Phosphatase (U/L) <NA> 
+#> 4 2             2 <NA>    ALKPH   Alkaline Phosphatase (U/L) <NA> 
+#> 5 2             3 Y       ALKPH   Alkaline Phosphatase (U/L) <NA> 
+#> 6 2             4 <NA>    ALKPH   Alkaline Phosphatase (U/L) <NA> 
+#> 7 1             2 <NA>    ALK2    ALKPH <= 2 times ULN       Y    
+#> 8 2             2 <NA>    ALK2    ALKPH <= 2 times ULN       N    }\if{html}{\out{</div>}}}
+\subsection{More complex example: confirmed best overall response}{
 
-# Derive confirmed best overall response (using event_joined())
-# CR - complete response, PR - partial response, SD - stable disease
-# NE - not evaluable, PD - progressive disease
+Explanation TBC
+
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{
 adsl <- tribble(
   ~USUBJID, ~TRTSDTC,
   "1",      "2020-01-01",
@@ -415,28 +594,15 @@ derive_extreme_event(
   )
 ) \%>\%
   filter(PARAMCD == "CBOR")
+#> # A tibble: 8 × 7
+#>   USUBJID ADTC       AVALC   ADT        PARAMCD PARAM                 TRTSDT    
+#>   <chr>   <chr>      <chr>   <date>     <chr>   <chr>                 <date>    
+#> 1 1       2020-02-01 CR      2020-02-01 CBOR    Best Confirmed Overa… 2020-01-01
+#> 2 2       2020-02-01 SD      2020-02-01 CBOR    Best Confirmed Overa… 2019-12-12
+#> 3 3       <NA>       MISSING NA         CBOR    Best Confirmed Overa… 2019-11-11
+#> 4 4       2020-05-01 SD      2020-05-01 CBOR    Best Confirmed Overa… 2019-12-30
+#> 5 5       2020-01-01 NE      2020-01-01 CBOR    Best Confirmed Overa… 2020-01-01
+#> 6 6       2020-02-06 PR      2020-02-06 CBOR    Best Confirmed Overa… 2020-02-02
+#> 7 7       2020-02-06 NE      2020-02-06 CBOR    Best Confirmed Overa… 2020-02-02
+#> 8 8       2020-02-16 PD      2020-02-16 CBOR    Best Confirmed Overa… 2020-02-01}\if{html}{\out{</div>}}}}
 
-}
-\seealso{
-\code{\link[=event]{event()}}, \code{\link[=event_joined]{event_joined()}}, \code{\link[=derive_vars_extreme_event]{derive_vars_extreme_event()}}
-
-BDS-Findings Functions for adding Parameters/Records: 
-\code{\link{default_qtc_paramcd}()},
-\code{\link{derive_expected_records}()},
-\code{\link{derive_extreme_records}()},
-\code{\link{derive_locf_records}()},
-\code{\link{derive_param_bmi}()},
-\code{\link{derive_param_bsa}()},
-\code{\link{derive_param_computed}()},
-\code{\link{derive_param_doseint}()},
-\code{\link{derive_param_exist_flag}()},
-\code{\link{derive_param_exposure}()},
-\code{\link{derive_param_framingham}()},
-\code{\link{derive_param_map}()},
-\code{\link{derive_param_qtc}()},
-\code{\link{derive_param_rr}()},
-\code{\link{derive_param_wbc_abs}()},
-\code{\link{derive_summary_records}()}
-}
-\concept{der_prm_bds_findings}
-\keyword{der_prm_bds_findings}

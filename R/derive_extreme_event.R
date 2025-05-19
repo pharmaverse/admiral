@@ -106,26 +106,61 @@
 #'
 #' @export
 #'
-#' @examples
+#' @examplesx
+#'
+#' @caption Add a new record for the worst observation using `event()` objects
+#' @info For each subject the observation containing the worst sleeping problem
+#'   (if any exist) out of a possible should be identified and added as a new
+#'   record, retaining all variables from the original observation.
+#'
+#' - The groups for which new records are added are specified by the `by_vars`
+#'   argument. Here for each *subject* a record should be added. Thus
+#'   `by_vars = exprs(USUBJID)` is specified.
+#' - The sets of possible sleeping problems are passed through the `events`
+#'   argument as `event()` objects. Each event contains a `condition` which
+#'   may or may not be satisfied by each record (or possibly a group of
+#'   records) within the input dataset `dataset`. Summary functions such as
+#'   `any()` and `all()` are often handy to use within conditions, as is done
+#'   here for the third event, which checks that the subject had no sleeping
+#'   issues. The final event uses a catch-all `condition = TRUE` to ensure all
+#'   subjects have a new record derived. Note that in this example, as no
+#'   condition involves analysis of __cross-comparison values of within  records__,
+#'   it is sufficient to use `event()` objects rather than `event_joined()` -
+#'   see the next example for a more complex condition.
+#' - If any subject has one or more records satisfying the conditions from
+#'   events, we can select just one record using the `order` argument. In this
+#'   example, the first argument passed to `order` is `event_nr`, which is a
+#'   temporary variable created through the `tmp_event_nr_var` argument, which
+#'   numbers the events consecutively. Since `mode = first`, we only consider
+#'   the first event for which a condition is satisfied. Within that event, we
+#'   consider only the observation with the latest day, because the second
+#'   argument for the order is `desc(ADY)`.
+#' - Once a record is identified as satisfying an event's condition, a new
+#'   observation is created, where each variable is populated with values
+#'   sought according to the following order of precedence: (a): values
+#'   specified in the event's `set_values_to` (here, `AVAL` and `AVALC`), (b)
+#'   values specified in the global `set_values_to` (here, `PARAM` and
+#'   `PARAMCD`), (c) values from the selected observation as
+#'   long as that variable appears in `keep_source_vars` (here, `ADY` does
+#'   as due to the use of the tidyselect expression `everything()`).
+#'
+#' @code
 #' library(tibble)
 #' library(dplyr)
 #' library(lubridate)
 #'
-#' adqs <- tribble(
-#'   ~USUBJID, ~PARAMCD,       ~AVALC,        ~ADY,
-#'   "1",      "NO SLEEP",     "N",              1,
-#'   "1",      "WAKE UP",      "N",              2,
-#'   "1",      "FALL ASLEEP",  "N",              3,
-#'   "2",      "NO SLEEP",     "N",              1,
-#'   "2",      "WAKE UP",      "Y",              2,
-#'   "2",      "WAKE UP",      "Y",              3,
-#'   "2",      "FALL ASLEEP",  "N",              4,
-#'   "3",      "NO SLEEP",     NA_character_,    1
+#' adqs1 <- tribble(
+#'   ~USUBJID, ~PARAMCD,         ~AVALC,        ~ADY,
+#'   "1",      "NO SLEEP",       "N",              1,
+#'   "1",      "WAKE UP 3X",     "N",              2,
+#'   "2",      "NO SLEEP",       "N",              1,
+#'   "2",      "WAKE UP 3X",     "Y",              2,
+#'   "2",      "WAKE UP 3X",     "Y",              3,
+#'   "3",      "NO SLEEP",       NA_character_,    1
 #' )
 #'
-#' # Add a new record for each USUBJID storing the the worst sleeping problem.
 #' derive_extreme_event(
-#'   adqs,
+#'   adqs1,
 #'   by_vars = exprs(USUBJID),
 #'   events = list(
 #'     event(
@@ -133,17 +168,13 @@
 #'       set_values_to = exprs(AVALC = "No sleep", AVAL = 1)
 #'     ),
 #'     event(
-#'       condition = PARAMCD == "WAKE UP" & AVALC == "Y",
-#'       set_values_to = exprs(AVALC = "Waking up more than three times", AVAL = 2)
-#'     ),
-#'     event(
-#'       condition = PARAMCD == "FALL ASLEEP" & AVALC == "Y",
-#'       set_values_to = exprs(AVALC = "More than 30 mins to fall asleep", AVAL = 3)
+#'       condition = PARAMCD == "WAKE UP 3X" & AVALC == "Y",
+#'       set_values_to = exprs(AVALC = "Waking up three times", AVAL = 2)
 #'     ),
 #'     event(
 #'       condition = all(AVALC == "N"),
 #'       set_values_to = exprs(
-#'         AVALC = "No sleeping problems", AVAL = 4
+#'         AVALC = "No sleeping problems", AVAL = 3
 #'       )
 #'     ),
 #'     event(
@@ -156,11 +187,100 @@
 #'   mode = "first",
 #'   set_values_to = exprs(
 #'     PARAMCD = "WSP",
-#'     PARAM = "Worst Sleeping Problems"
-#'   )
+#'     PARAM = "Worst Sleeping Problem"
+#'   ),
+#'   keep_source_vars = exprs(everything())
 #' )
 #'
-#' # Use different mode by event
+#' @caption Add a new record for the worst observation using `event()` and
+#'    `event_joined()` objects
+#' @info We'll now extend the above example. Specifically, we consider a new
+#'    possible worst sleeping problem, namely if a subject experiences no
+#'    sleep on consecutive days.
+#'
+#'  - The "consecutive days" portion of the condition requires records to be
+#'    compared with each other. This is done by using an `event_joined()` object,
+#'    specifically by passing `dataset_name = adqs2` to it so that the `adqs2`
+#'    dataset is joined onto itself. The `condition` now checks for two
+#'    no sleep records, and crucially compares the `ADY` values to see if
+#'    they differ by one day. The `.join` syntax distinguishes between the
+#'    `ADY` value of the parent and joined datasets. As the condition involves
+#'    `AVALC`, `PARAMCD` and `ADY`, we specify these variables with `join_vars`,
+#'    and finally, because we wish to compare all records with each other, we
+#'    select `join_type = "all"`.
+#'  - Since we are now passing an `event_joined` object to
+#'    `derive_extreme_event()`, we also need to specify the `source_datasets`
+#'    object so as to indicate which dataset we wish to use for the join.
+#'
+#' @code
+#' adqs2 <- tribble(
+#'    ~USUBJID, ~PARAMCD,     ~AVALC, ~ADY,
+#'    "4",      "WAKE UP",    "N",    1,
+#'    "4",      "NO SLEEP",   "Y",    2,
+#'    "4",      "NO SLEEP",   "Y",    3,
+#'    "5",      "NO SLEEP",   "N",    1,
+#'    "5",      "NO SLEEP",   "Y",    2,
+#'    "5",      "WAKE UP 3X", "Y",    3,
+#'    "5",      "NO SLEEP",   "N",    4
+#' )
+#'
+#' derive_extreme_event(
+#'   adqs2,
+#'   by_vars = exprs(USUBJID),
+#'   events = list(
+#'     event_joined(
+#'       dataset_name = "adqs2",
+#'       join_vars = exprs(AVALC, PARAMCD, ADY),
+#'       join_type = "all",
+#'       condition = PARAMCD == "NO SLEEP" & AVALC == "Y" &
+#'         PARAMCD.join == "NO SLEEP" & AVALC.join == "Y" &
+#'         ADY == ADY.join + 1,
+#'       set_values_to = exprs(AVALC = "No sleep two nights in a row", AVAL = 0)
+#'     ),
+#'     event(
+#'       condition = PARAMCD == "NO SLEEP" & AVALC == "Y",
+#'       set_values_to = exprs(AVALC = "No sleep", AVAL = 1)
+#'     ),
+#'     event(
+#'       condition = PARAMCD == "WAKE UP 3X" & AVALC == "Y",
+#'       set_values_to = exprs(AVALC = "Waking up three times", AVAL = 2)
+#'     ),
+#'     event(
+#'       condition = all(AVALC == "N"),
+#'       set_values_to = exprs(
+#'         AVALC = "No sleeping problems", AVAL = 3
+#'       )
+#'     ),
+#'     event(
+#'       condition = TRUE,
+#'       set_values_to = exprs(AVALC = "Missing", AVAL = 99)
+#'     )
+#'   ),
+#'   source_datasets = list(adqs2 = adqs2),
+#'   tmp_event_nr_var = event_nr,
+#'   order = exprs(event_nr, desc(ADY)),
+#'   mode = "first",
+#'   set_values_to = exprs(
+#'     PARAMCD = "WSP",
+#'     PARAM = "Worst Sleeping Problem"
+#'   ),
+#'   keep_source_vars = exprs(everything())
+#' )
+#'
+#' @caption Specifying different arguments across `event()` object
+#' @info Here we consider a Hy's law use case. We are interested in
+#'   knowing whether a subject's Alkaline Phosphatase has ever not
+#'   been below twice the upper limit of normal range. If so, i.e. if
+#'   `CRIT1FL` is `NA`, we are interested in the record for the first
+#'    time this occurs, and if not, we wish to retain the last record.
+#'
+#'  - In first `event()`, since we simply seek the first time that
+#'    `CRIT1FL` is `NA`, it's enough to specify the `condition`.
+#'  - In the second `event()`, we select the last record among the
+#'    full set of records where `CRIT1FL = "Y"` by additionally
+#'     specifying`mode = "last"` within the `event()`.
+#'
+#' @code
 #' adhy <- tribble(
 #'   ~USUBJID, ~AVISITN, ~CRIT1FL,
 #'   "1",             1, "Y",
@@ -199,9 +319,11 @@
 #'   )
 #' )
 #'
-#' # Derive confirmed best overall response (using event_joined())
-#' # CR - complete response, PR - partial response, SD - stable disease
-#' # NE - not evaluable, PD - progressive disease
+#' @caption More complex example: confirmed best overall response
+#' @info Explanation TBC
+#'
+#' @code
+#'
 #' adsl <- tribble(
 #'   ~USUBJID, ~TRTSDTC,
 #'   "1",      "2020-01-01",
@@ -331,6 +453,7 @@
 #' ) %>%
 #'   filter(PARAMCD == "CBOR")
 #'
+
 derive_extreme_event <- function(dataset = NULL,
                                  by_vars,
                                  events,
