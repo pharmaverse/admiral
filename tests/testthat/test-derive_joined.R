@@ -483,31 +483,53 @@ test_that("derive_vars_joined Test 14: save_memory with by_vars", {
   set_admiral_options(save_memory = save_memory)
 })
 
-## Test 15: join_type = before works with filter_add ----
-test_that("derive_vars_joined Test 15: join_type = before works with filter_add",{
-  expected <- tibble::tribble(
-    ~subj, ~day, ~val, ~lastposval,
+## Test 15: filter_add is not ignored when join_type != 'all' ----
+test_that("derive_vars_joined Test 15: filter_add is not ignored when join_type != 'all'", {
+  # Test with join_type = "before"
+  expected_before <- tibble::tribble(
+    ~subj, ~day, ~val, ~prevposval,
     "1",     15,   -1,          NA,
     "1",     17,    0,          NA,
     "1",     20,    1,           0
   )
 
-  adbds <- select(expected, -lastposval)
+  adbds <- select(expected_before, -prevposval)
 
-  actual <- derive_vars_joined(
-    adbds,
-    dataset_add = adbds,
-    filter_add = val >= 0,
-    by_vars = exprs(subj),
-    order = exprs(day),
-    new_vars = exprs(lastposval = val),
-    join_type = "before",
-    mode = "last"
+  expect_dfs_equal(
+    base = expected_before,
+    comp = derive_vars_joined(
+      adbds,
+      dataset_add = adbds,
+      by_vars = exprs(subj),
+      order = exprs(day),
+      new_vars = exprs(prevposval = val),
+      join_type = "before",
+      mode = "last",
+      filter_add = val >= 0
+    ),
+    keys = c("subj", "day")
+  )
+
+  # Test with join_type = "after"
+  expected_after <- tibble::tribble(
+    ~subj, ~day, ~val, ~nextposval,
+    "1",     15,   -1,           0,
+    "1",     17,    0,           1,
+    "1",     20,    1,          NA
   )
 
   expect_dfs_equal(
-    base = expected,
-    compare = actual,
+    base = expected_after,
+    comp = derive_vars_joined(
+      adbds,
+      dataset_add = adbds,
+      by_vars = exprs(subj),
+      order = exprs(day),
+      new_vars = exprs(nextposval = val),
+      join_type = "after",
+      mode = "first",
+      filter_add = val >= 0
+    ),
     keys = c("subj", "day")
   )
 })
@@ -555,61 +577,5 @@ test_that("get_joined_data Test 16: `first_cond_lower` works", {
       filter_join = val == "0" & all(val.join %in% c("+", "++"))
     ),
     keys = c("subj", "day.join")
-  )
-})
-
-## Test 15: filter_add is not ignored when join_type != "all" ----
-test_that("derive_vars_joined Test 15: filter_add is not ignored when join_type != 'all'", {
-  adbds <- tibble::tribble(
-    ~subj, ~day, ~val,
-    "1", 15, -1,
-    "1", 17, 0,
-    "1", 20, 1
-  )
-
-  # Test with join_type = "before"
-  expected_before <- tibble::tribble(
-    ~subj, ~day, ~val, ~lastposval,
-    "1", 15, -1, NA,
-    "1", 17, 0, 0,
-    "1", 20, 1, 1
-  )
-
-  expect_dfs_equal(
-    base = expected_before,
-    comp = derive_vars_joined(
-      adbds,
-      dataset_add = adbds,
-      by_vars = exprs(subj),
-      order = exprs(day),
-      new_vars = exprs(lastposval = val),
-      join_type = "before",
-      mode = "last",
-      filter_add = val >= 0
-    ),
-    keys = c("subj", "day")
-  )
-
-  # Test with join_type = "after"
-  expected_after <- tibble::tribble(
-    ~subj, ~day, ~val, ~lastposval,
-    "1", 15, -1, 1,
-    "1", 17, 0, NA,
-    "1", 20, 1, NA
-  )
-
-  expect_dfs_equal(
-    base = expected_after,
-    comp = derive_vars_joined(
-      adbds,
-      dataset_add = adbds,
-      by_vars = exprs(subj),
-      order = exprs(day),
-      new_vars = exprs(lastposval = val),
-      join_type = "after",
-      mode = "last",
-      filter_add = val >= 0
-    ),
-    keys = c("subj", "day")
   )
 })
