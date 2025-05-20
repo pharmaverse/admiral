@@ -170,7 +170,7 @@ The condition can include summary functions like \code{all()} or \code{any()}. T
 additional dataset is grouped by the by variables (\code{by_vars}).
 
 \describe{
-\item{Permitted values}{a condition}
+\item{Permitted values}{an unquoted condition, e.g., \code{AVISIT == "BASELINE"}}
 \item{Default value}{\code{NULL}}
 }}
 

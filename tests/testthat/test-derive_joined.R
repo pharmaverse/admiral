@@ -483,9 +483,38 @@ test_that("derive_vars_joined Test 14: save_memory with by_vars", {
   set_admiral_options(save_memory = save_memory)
 })
 
+## Test 15: join_type = before works with filter_add ----
+test_that("derive_vars_joined Test 15: join_type = before works with filter_add",{
+  expected <- tibble::tribble(
+    ~subj, ~day, ~val, ~lastposval,
+    "1",     15,   -1,          NA,
+    "1",     17,    0,          NA,
+    "1",     20,    1,           0
+  )
+
+  adbds <- select(expected, -lastposval)
+
+  actual <- derive_vars_joined(
+    adbds,
+    dataset_add = adbds,
+    filter_add = val >= 0,
+    by_vars = exprs(subj),
+    order = exprs(day),
+    new_vars = exprs(lastposval = val),
+    join_type = "before",
+    mode = "last"
+  )
+
+  expect_dfs_equal(
+    base = expected,
+    compare = actual,
+    keys = c("subj", "day")
+  )
+})
+
 # get_joined_data ----
-## Test 15: `first_cond_lower` works ----
-test_that("get_joined_data Test 15: `first_cond_lower` works", {
+## Test 16: `first_cond_lower` works ----
+test_that("get_joined_data Test 16: `first_cond_lower` works", {
   data <- tribble(
     ~subj, ~day, ~val,
     "1",      1, "++",

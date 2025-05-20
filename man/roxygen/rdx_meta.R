@@ -8,6 +8,7 @@ list(
     mode = "`\"first\"`, `\"last\"`",
     msg_type = "`\"none\"`, `\"message\"`, `\"warning\"`, `\"error\"`",
     source_list = "a list of source objects, e.g., `list(pd, death)`",
+    symbol = "an unquoted symbol, e.g., `AVAL`",
     var_list = "list of variables created by `exprs()`, e.g., `exprs(USUBJID, VISIT)`"
   )
 )
