@@ -3,7 +3,7 @@
 <!-- start badges -->
 [![pharmaverse admiral Badge](http://pharmaverse.org/shields/admiral.svg)](https://pharmaverse.org)
 [![CRAN status](https://www.r-pkg.org/badges/version/admiral)](https://CRAN.R-project.org/package=admiral)
-[![Test Coverage](https://raw.githubusercontent.com/pharmaverse/admiral/badges/main/test-coverage.svg)](https://github.com/pharmaverse/admiral/actions/workflows/code-coverage.yml)
+![Test Coverage](https://raw.githubusercontent.com/pharmaverse/admiral/badges/main/test-coverage.svg)
 [![Total Downloads](http://cranlogs.r-pkg.org/badges/grand-total/admiral?color=green)](https://cran.r-project.org/package=admiral)
 [![R-CMD-check](https://github.com/pharmaverse/admiral/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/pharmaverse/admiral/actions/workflows/R-CMD-check.yaml)
 
