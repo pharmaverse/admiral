@@ -806,7 +806,7 @@ get_joined_data <- function(dataset,
         cnd_type = check_type
       )
       signal_duplicate_records(
-        dataset = dataset_add,
+        dataset = data_add,
         by_vars = c(by_vars, order),
         msg = paste(
           "Dataset {.arg dataset_add} contains duplicate records with respect to",
@@ -821,7 +821,7 @@ get_joined_data <- function(dataset,
 
     groups <- bind_rows(
       select(data, !!!by_vars, !!!replace_values_by_names(order)),
-      select(dataset_add, !!!by_vars, !!!replace_values_by_names(order))
+      select(data_add, !!!by_vars, !!!replace_values_by_names(order))
     ) %>%
       distinct() %>%
       derive_var_obs_number(
@@ -838,7 +838,7 @@ get_joined_data <- function(dataset,
         check_type = "none"
       )
 
-    data_add <- dataset_add %>%
+    data_add <- data_add %>%
       derive_vars_merged(
         dataset_add = groups,
         by_vars = exprs(!!!by_vars, !!!replace_values_by_names(order)),
