@@ -217,7 +217,9 @@ BDS-Findings Functions for adding Parameters/Records:
 
 For each subject, the observation containing the worst sleeping problem
 (if any exist) should be identified and added as a new record, retaining
-all variables from the original observation.
+all variables from the original observation. If multiple occurrences of the
+worst sleeping problem occur, or no sleeping problems, then take the
+observation occurring at the latest day.
 \itemize{
 \item The groups for which new records are added are specified by the \code{by_vars}
 argument. Here for each \emph{subject} a record should be added. Thus
@@ -253,29 +255,7 @@ due to the use of the tidyselect expression \code{everything()}).
 
 \if{html}{\out{<div class="sourceCode r">}}\preformatted{library(tibble)
 library(dplyr)
-#> 
-#> Attaching package: ‘dplyr’
-#> 
-#> The following objects are masked from ‘package:admiral’:
-#> 
-#>     anti_join, filter_if, inner_join, left_join
-#> 
-#> The following objects are masked from ‘package:stats’:
-#> 
-#>     filter, lag
-#> 
-#> The following objects are masked from ‘package:base’:
-#> 
-#>     intersect, setdiff, setequal, union
-#> 
 library(lubridate)
-#> 
-#> Attaching package: ‘lubridate’
-#> 
-#> The following objects are masked from ‘package:base’:
-#> 
-#>     date, intersect, setdiff, union
-#> 
 
 adqs1 <- tribble(
   ~USUBJID, ~PARAMCD,         ~AVALC,        ~ADY,
@@ -351,8 +331,12 @@ they differ by one day. The \code{.join} syntax distinguishes between the
 and finally, because we wish to compare all records with each other, we
 select \code{join_type = "all"}.
 \item Since we are now passing an \code{event_joined} object to
-\code{derive_extreme_event()}, we also need to specify the \code{source_datasets}
-object so as to indicate which dataset we wish to use for the join.
+\code{derive_extreme_event()}, it is good practice to explicitly specify the
+\code{source_datasets} argument so as to indicate which dataset we wish to
+use for the join. Note that in this case, it is not strictly needed
+as even in the \code{event_joined()} object we are using the same source
+dataset as for the general call to \code{derive_extreme_event()}, i.e.
+\code{adqs2}, but this is not always the case (see the final CBOR example).
 }
 
 \if{html}{\out{<div class="sourceCode r">}}\preformatted{adqs2 <- tribble(
@@ -425,16 +409,25 @@ select(-STUDYID)
 \subsection{Specifying different arguments across \code{event()} objects}{
 
 Here we consider a Hy's Law use case. We are interested in
-knowing whether a subject's Alkaline Phosphatase has ever not
-been below twice the upper limit of normal range. If so, i.e. if
+knowing whether a subject's Alkaline Phosphatase has ever been
+above twice the upper limit of normal range. If so, i.e. if
 \code{CRIT1FL} is \code{NA}, we are interested in the record for the first
 time this occurs, and if not, we wish to retain the last record.
+As such, for this case now we need to vary our usage of the
+\code{mode} argument dependent on the \code{event()}.
 \itemize{
 \item In first \code{event()}, since we simply seek the first time that
-\code{CRIT1FL} is \code{NA}, it's enough to specify the \code{condition}.
+\code{CRIT1FL} is \code{NA}, it's enough to specify the \code{condition},
+because we inherit to \code{order} and \code{mode} from the main
+\code{derive_extreme_event()} call here which will automatically
+select the first occurrence by \code{AVISITN}.
 \item In the second \code{event()}, we select the last record among the
 full set of records where \code{CRIT1FL = "Y"} by additionally
 specifying \code{mode = "last"} within the \code{event()}.
+\item Note now the usage of \code{keep_source_vars = exprs(AVISITN)}
+rather than \code{everything()} as in the previous example. This
+is done to ensure \code{CRIT1FL} is not populated for the new
+records.
 }
 
 \if{html}{\out{<div class="sourceCode r">}}\preformatted{adhy <- tribble(
@@ -491,9 +484,9 @@ select(-STUDYID)
 
 The final example showcases a use of \code{derive_extreme_event()}
 to calculate the Confirmed Best Overall Response (CBOR) in an
-\code{ADRS} dataset. This example builds on all the previous ones and
-thus assumes a baseline level of confidence with
-\code{derive_extreme_event()}.
+\code{ADRS} dataset, as is common in many oncology trials. This example
+builds on all the previous ones and thus assumes a baseline level
+of confidence with \code{derive_extreme_event()}.
 
 The following \code{ADSL} and \code{ADRS} datasets will be used
 throughout:
@@ -577,7 +570,10 @@ accepts a confirmatory \code{"PR"} or \code{"CR"} 28 days later. Note that now w
 events are simpler and just require \code{event()} calls.
 \item Finally, we use a catch-all \code{event()} with \code{condition = TRUE} and
 \code{dataset_name = adsl} to identify those subjects who do not appear in ADRS
-and list their CBOR as \code{"MISSING"}.
+and list their CBOR as \code{"MISSING"}. Note here the fact that \code{dataset_name} is
+set to \code{adsl}, which is a new source dataset. As such it's important in the
+main \code{derive_extreme_event()} call to list \code{adsl} as another source dataset
+with \code{source_datasets = list(adsl = adsl)}.
 }
 
 \if{html}{\out{<div class="sourceCode r">}}\preformatted{derive_extreme_event(
@@ -654,5 +650,9 @@ and list their CBOR as \code{"MISSING"}.
 #> 5 5       2020-01-01 NE      2020-01-01 AB42    CBOR    Best Confirm… 2020-01-01
 #> 6 6       2020-02-06 PR      2020-02-06 AB42    CBOR    Best Confirm… 2020-02-02
 #> 7 7       2020-02-06 NE      2020-02-06 AB42    CBOR    Best Confirm… 2020-02-02
-#> 8 8       2020-02-16 PD      2020-02-16 AB42    CBOR    Best Confirm… 2020-02-01}\if{html}{\out{</div>}}}}
+#> 8 8       2020-02-16 PD      2020-02-16 AB42    CBOR    Best Confirm… 2020-02-01}\if{html}{\out{</div>}}}
+\subsection{Further examples}{
+
+Equivalent examples for using the\code{check_type} argument can be found in
+\code{derive_extreme_records()}.}}
 

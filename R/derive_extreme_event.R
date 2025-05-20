@@ -210,8 +210,12 @@
 #'    and finally, because we wish to compare all records with each other, we
 #'    select `join_type = "all"`.
 #'  - Since we are now passing an `event_joined` object to
-#'    `derive_extreme_event()`, we also need to specify the `source_datasets`
-#'    object so as to indicate which dataset we wish to use for the join.
+#'    `derive_extreme_event()`, it is good practice to explicitly specify the
+#'    `source_datasets` argument so as to indicate which dataset we wish to
+#'    use for the join. Note that in this case, it is not strictly needed
+#'    as even in the `event_joined()` object we are using the same source
+#'    dataset as for the general call to `derive_extreme_event()`, i.e.
+#'    `adqs2`, but this is not always the case (see the final CBOR example).
 #'
 #' @code
 #' adqs2 <- tribble(
@@ -272,16 +276,25 @@
 #'
 #' @caption Specifying different arguments across `event()` objects
 #' @info Here we consider a Hy's Law use case. We are interested in
-#'   knowing whether a subject's Alkaline Phosphatase has ever not
-#'   been below twice the upper limit of normal range. If so, i.e. if
+#'   knowing whether a subject's Alkaline Phosphatase has ever been
+#'   above twice the upper limit of normal range. If so, i.e. if
 #'   `CRIT1FL` is `NA`, we are interested in the record for the first
-#'    time this occurs, and if not, we wish to retain the last record.
+#'   time this occurs, and if not, we wish to retain the last record.
+#'   As such, for this case now we need to vary our usage of the
+#'   `mode` argument dependent on the `event()`.
 #'
 #'  - In first `event()`, since we simply seek the first time that
-#'    `CRIT1FL` is `NA`, it's enough to specify the `condition`.
+#'    `CRIT1FL` is `NA`, it's enough to specify the `condition`,
+#'    because we inherit to `order` and `mode` from the main
+#'    `derive_extreme_event()` call here which will automatically
+#'    select the first occurrence by `AVISITN`.
 #'  - In the second `event()`, we select the last record among the
 #'    full set of records where `CRIT1FL = "Y"` by additionally
 #'    specifying `mode = "last"` within the `event()`.
+#'  - Note now the usage of `keep_source_vars = exprs(AVISITN)`
+#'    rather than `everything()` as in the previous example. This
+#'    is done to ensure `CRIT1FL` is not populated for the new
+#'    records.
 #'
 #' @code
 #' adhy <- tribble(
@@ -327,9 +340,9 @@
 #' @caption A more complex example: Confirmed Best Overall Response
 #' @info The final example showcases a use of `derive_extreme_event()`
 #'   to calculate the Confirmed Best Overall Response (CBOR) in an
-#'   `ADRS` dataset. This example builds on all the previous ones and
-#'   thus assumes a baseline level of confidence with
-#'   `derive_extreme_event()`.
+#'   `ADRS` dataset, as is common in many oncology trials. This example
+#'   builds on all the previous ones and thus assumes a baseline level
+#'   of confidence with `derive_extreme_event()`.
 #'
 #'   The following `ADSL` and `ADRS` datasets will be used
 #'   throughout:
@@ -417,7 +430,10 @@
 #'
 #'  - Finally, we use a catch-all `event()` with `condition = TRUE` and
 #'    `dataset_name = adsl` to identify those subjects who do not appear in ADRS
-#'    and list their CBOR as `"MISSING"`.
+#'    and list their CBOR as `"MISSING"`. Note here the fact that `dataset_name` is
+#'    set to `adsl`, which is a new source dataset. As such it's important in the
+#'    main `derive_extreme_event()` call to list `adsl` as another source dataset
+#'    with `source_datasets = list(adsl = adsl)`.
 #'
 #' @code
 #' derive_extreme_event(
@@ -485,7 +501,9 @@
 #' ) %>%
 #'   filter(PARAMCD == "CBOR")
 #'
-
+#' @caption Further examples
+#' @info Equivalent examples for using the`check_type` argument can be found in
+#'   `derive_extreme_records()`.
 derive_extreme_event <- function(dataset = NULL,
                                  by_vars,
                                  events,
