@@ -389,6 +389,128 @@ by specifying the \code{missing_values} argument.
 #> 4 1          15 Fatigue         40
 #> 5 2           4 Parasomnia       0
 #> 6 3           2 Truancy          0}\if{html}{\out{</div>}}}
+\subsection{Selecting records (\code{join_type = "before"}, \code{join_type = "after"})}{
+
+The \code{join_type} argument can be used to select records from the
+additional dataset. For example, if \code{join_type = "before"} is specified,
+only records before the current observation are selected. If \code{join_type = "after"} is specified, only records after the current observation are
+selected.
+
+To illustrate this, a variable (\code{SELECTED_DAYS}) is derived which contains
+the selected days.
+
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{mydata <- tribble(
+  ~DAY,
+  1,
+  2,
+  3,
+  4,
+  5
+)
+
+derive_vars_joined_summary(
+  mydata,
+  dataset_add = mydata,
+  order = exprs(DAY),
+  join_type = "before",
+  new_vars = exprs(SELECTED_DAYS = paste(DAY, collapse = ", "))
+)
+#> # A tibble: 5 × 2
+#>     DAY SELECTED_DAYS
+#>   <dbl> <chr>        
+#> 1     1 <NA>         
+#> 2     2 1            
+#> 3     3 1, 2         
+#> 4     4 1, 2, 3      
+#> 5     5 1, 2, 3, 4   
+
+derive_vars_joined_summary(
+  mydata,
+  dataset_add = mydata,
+  order = exprs(DAY),
+  join_type = "after",
+  new_vars = exprs(SELECTED_DAYS = paste(DAY, collapse = ", "))
+)
+#> # A tibble: 5 × 2
+#>     DAY SELECTED_DAYS
+#>   <dbl> <chr>        
+#> 1     1 2, 3, 4, 5   
+#> 2     2 3, 4, 5      
+#> 3     3 4, 5         
+#> 4     4 5            
+#> 5     5 <NA>         }\if{html}{\out{</div>}}}
+\subsection{Selecting records (\code{first_cond_lower}, \code{first_cond_upper})}{
+
+The \code{first_cond_lower} and \code{first_cond_upper} arguments can be used to
+restrict the joined dataset to a certain range of records. For example, if
+\code{first_cond_lower} is specified, the joined dataset is restricted to the
+last observation before the current record where the condition is
+fulfilled.
+
+Please note:
+\itemize{
+\item If the condition is not fulfilled for any of the records, no records are
+selected.
+\item The restriction implied by \code{join_type} is applied first.
+\item If a variable is contained in both \code{dataset} and \code{dataset_add} like \code{DAY}
+in the example below, \code{DAY} refers to the value from \code{dataset} and
+\code{DAY.join} to the value from \code{dataset_add}.
+}
+
+To illustrate this, a variable (\code{SELECTED_DAYS}) is derived which contains
+the selected days.
+
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{derive_vars_joined_summary(
+  mydata,
+  dataset_add = mydata,
+  order = exprs(DAY),
+  join_type = "before",
+  first_cond_lower = DAY.join == 2,
+  new_vars = exprs(SELECTED_DAYS = paste(sort(DAY), collapse = ", "))
+)
+#> # A tibble: 5 × 2
+#>     DAY SELECTED_DAYS
+#>   <dbl> <chr>        
+#> 1     1 <NA>         
+#> 2     2 <NA>         
+#> 3     3 2            
+#> 4     4 2, 3         
+#> 5     5 2, 3, 4      
+
+derive_vars_joined_summary(
+  mydata,
+  dataset_add = mydata,
+  order = exprs(DAY),
+  join_type = "after",
+  first_cond_upper = DAY.join == 4,
+  new_vars = exprs(SELECTED_DAYS = paste(DAY, collapse = ", "))
+)
+#> # A tibble: 5 × 2
+#>     DAY SELECTED_DAYS
+#>   <dbl> <chr>        
+#> 1     1 2, 3, 4      
+#> 2     2 3, 4         
+#> 3     3 4            
+#> 4     4 <NA>         
+#> 5     5 <NA>         
+
+derive_vars_joined_summary(
+  mydata,
+  dataset_add = mydata,
+  order = exprs(DAY),
+  join_type = "all",
+  first_cond_lower = DAY.join == 2,
+  first_cond_upper = DAY.join == 4,
+  new_vars = exprs(SELECTED_DAYS = paste(sort(DAY), collapse = ", "))
+)
+#> # A tibble: 5 × 2
+#>     DAY SELECTED_DAYS
+#>   <dbl> <chr>        
+#> 1     1 2, 3, 4      
+#> 2     2 2, 3, 4      
+#> 3     3 2, 3, 4      
+#> 4     4 2, 3, 4      
+#> 5     5 2, 3, 4      }\if{html}{\out{</div>}}}
 \subsection{Derive weekly score if enough assessments are available}{
 
 For each planned visit the average score within the week before the

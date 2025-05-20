@@ -276,6 +276,91 @@
 #'   missing_values = exprs(CUMDOSE = 0)
 #' )
 #'
+#' @caption Selecting records (`join_type = "before"`, `join_type = "after"`)
+#'
+#' @info The `join_type` argument can be used to select records from the
+#'   additional dataset. For example, if `join_type = "before"` is specified,
+#'   only records before the current observation are selected. If `join_type =
+#'   "after"` is specified, only records after the current observation are
+#'   selected.
+#'
+#'   To illustrate this, a variable (`SELECTED_DAYS`) is derived which contains
+#'   the selected days.
+#'
+#' @code
+#' mydata <- tribble(
+#'   ~DAY,
+#'   1,
+#'   2,
+#'   3,
+#'   4,
+#'   5
+#' )
+#'
+#' derive_vars_joined_summary(
+#'   mydata,
+#'   dataset_add = mydata,
+#'   order = exprs(DAY),
+#'   join_type = "before",
+#'   new_vars = exprs(SELECTED_DAYS = paste(DAY, collapse = ", "))
+#' )
+#'
+#' derive_vars_joined_summary(
+#'   mydata,
+#'   dataset_add = mydata,
+#'   order = exprs(DAY),
+#'   join_type = "after",
+#'   new_vars = exprs(SELECTED_DAYS = paste(DAY, collapse = ", "))
+#' )
+#'
+#' @caption Selecting records (`first_cond_lower`, `first_cond_upper`)
+#'
+#' @info The `first_cond_lower` and `first_cond_upper` arguments can be used to
+#'  restrict the joined dataset to a certain range of records. For example, if
+#'  `first_cond_lower` is specified, the joined dataset is restricted to the
+#'  last observation before the current record where the condition is
+#'  fulfilled.
+#'
+#'  Please note:
+#'  - If the condition is not fulfilled for any of the records, no records are
+#'  selected.
+#'  - The restriction implied by `join_type` is applied first.
+#'  -  If a variable is contained in both `dataset` and `dataset_add` like `DAY`
+#'  in the example below, `DAY` refers to the value from `dataset` and
+#'  `DAY.join` to the value from `dataset_add`.
+#'
+#'  To illustrate this, a variable (`SELECTED_DAYS`) is derived which contains
+#'  the selected days.
+#'
+#' @code
+#' derive_vars_joined_summary(
+#'   mydata,
+#'   dataset_add = mydata,
+#'   order = exprs(DAY),
+#'   join_type = "before",
+#'   first_cond_lower = DAY.join == 2,
+#'   new_vars = exprs(SELECTED_DAYS = paste(sort(DAY), collapse = ", "))
+#' )
+#'
+#' derive_vars_joined_summary(
+#'   mydata,
+#'   dataset_add = mydata,
+#'   order = exprs(DAY),
+#'   join_type = "after",
+#'   first_cond_upper = DAY.join == 4,
+#'   new_vars = exprs(SELECTED_DAYS = paste(DAY, collapse = ", "))
+#' )
+#'
+#' derive_vars_joined_summary(
+#'   mydata,
+#'   dataset_add = mydata,
+#'   order = exprs(DAY),
+#'   join_type = "all",
+#'   first_cond_lower = DAY.join == 2,
+#'   first_cond_upper = DAY.join == 4,
+#'   new_vars = exprs(SELECTED_DAYS = paste(sort(DAY), collapse = ", "))
+#' )
+#'
 #' @caption Derive weekly score if enough assessments are available
 #'
 #' @info For each planned visit the average score within the week before the
