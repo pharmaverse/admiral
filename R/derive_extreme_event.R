@@ -109,8 +109,8 @@
 #' @examplesx
 #'
 #' @caption Add a new record for the worst observation using `event()` objects
-#' @info For each subject the observation containing the worst sleeping problem
-#'   (if any exist)  should be identified and added as a new record, retaining
+#' @info For each subject, the observation containing the worst sleeping problem
+#'   (if any exist) should be identified and added as a new record, retaining
 #'   all variables from the original observation.
 #'
 #' - The groups for which new records are added are specified by the `by_vars`
@@ -131,7 +131,7 @@
 #'   events, we can select just one record using the `order` argument. In this
 #'   example, the first argument passed to `order` is `event_nr`, which is a
 #'   temporary variable created through the `tmp_event_nr_var` argument, which
-#'   numbers the events consecutively. Since `mode = first`, we only consider
+#'   numbers the events consecutively. Since `mode = "first"`, we only consider
 #'   the first event for which a condition is satisfied. Within that event, we
 #'   consider only the observation with the latest day, because the second
 #'   argument for the order is `desc(ADY)`.
@@ -142,7 +142,7 @@
 #'   values specified in the global `set_values_to` (here, `PARAM` and
 #'   `PARAMCD`), (c) values from the selected observation as
 #'   long as that variable appears in `keep_source_vars` (here, `ADY` does
-#'   as due to the use of the tidyselect expression `everything()`).
+#'   due to the use of the tidyselect expression `everything()`).
 #'
 #' @code
 #' library(tibble)
@@ -221,7 +221,7 @@
 #'    "5",      "NO SLEEP",   "N",    1,
 #'    "5",      "NO SLEEP",   "Y",    2,
 #'    "5",      "WAKE UP 3X", "Y",    3,
-#'    "5",      "NO SLEEP",   "N",    4
+#'    "5",      "NO SLEEP",   "Y",    4
 #' )
 #'
 #' derive_extreme_event(
@@ -267,8 +267,8 @@
 #'   keep_source_vars = exprs(everything())
 #' )
 #'
-#' @caption Specifying different arguments across `event()` object
-#' @info Here we consider a Hy's law use case. We are interested in
+#' @caption Specifying different arguments across `event()` objects
+#' @info Here we consider a Hy's Law use case. We are interested in
 #'   knowing whether a subject's Alkaline Phosphatase has ever not
 #'   been below twice the upper limit of normal range. If so, i.e. if
 #'   `CRIT1FL` is `NA`, we are interested in the record for the first
@@ -278,7 +278,7 @@
 #'    `CRIT1FL` is `NA`, it's enough to specify the `condition`.
 #'  - In the second `event()`, we select the last record among the
 #'    full set of records where `CRIT1FL = "Y"` by additionally
-#'     specifying`mode = "last"` within the `event()`.
+#'    specifying `mode = "last"` within the `event()`.
 #'
 #' @code
 #' adhy <- tribble(
@@ -322,11 +322,11 @@
 #' @caption A more complex example: Confirmed Best Overall Response
 #' @info The final example showcases a use of `derive_extreme_event()`
 #'   to calculate the Confirmed Best Overall Response (CBOR) in an
-#'   ADRS dataset. This example builds on all the previous ones and
+#'   `ADRS` dataset. This example builds on all the previous ones and
 #'   thus assumes a baseline level of confidence with
 #'   `derive_extreme_event()`.
 #'
-#'   The following ADSL and ADRS datasets will be used
+#'   The following `ADSL` and `ADRS` datasets will be used
 #'   throughout:
 #'
 #' @code
@@ -386,7 +386,7 @@
 #'
 #'   - For the Confirmed Response (CR), for each `"CR"` record in the original ADRS
 #'     dataset that will be identified by the first part of the `condition` argument
-#'     (`AVALC == "CR"`) we need to use the `first_cond_upper` argument to limit the
+#'     (`AVALC == "CR"`), we need to use the `first_cond_upper` argument to limit the
 #'     group of observations to consider alongside it. Namely, we need to look up to
 #'     and including the second CR (`AVALC.join == "CR"`) over 28 days from the first
 #'     one (`ADT.join >= ADT + 28`). The observations satisfying `first_cond_upper`
@@ -399,9 +399,9 @@
 #'
 #'  - The Partial Response (PR), is very similar; with the difference being that the
 #'    first portion of `condition` now references `"PR"` and `first_cond_upper`
-#'    accepts a confirmatory PR or CR 28 days later. Note that now we must add
+#'    accepts a confirmatory `"PR"` or `"CR"` 28 days later. Note that now we must add
 #'    `"PR"` as an option within the `all()` condition to account for confirmatory
-#'    PRs.
+#'    "`PR`"s.
 #'
 #'  - The Stable Disease (SD), Progressive Disease (PD) and Not Evaluable (NE)
 #'    events are simpler and just require `event()` calls.
