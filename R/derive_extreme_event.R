@@ -35,8 +35,7 @@
 #'
 #'   `r roxygen_order_na_handling()`
 #'
-#' @permitted list of expressions created by `exprs()`, e.g.,
-#'   `exprs(ADT, desc(AVAL))`
+#' @permitted [var_list]
 #'
 #' @param mode Selection mode (first or last)
 #'
@@ -44,7 +43,7 @@
 #'   `"first"`/`"last"` is used to select the first/last record of this type of
 #'   event sorting by `order`.
 #'
-#' @permitted `"first"`, `"last"`
+#' @permitted [mode]
 #'
 #' @param source_datasets Source datasets
 #'
@@ -59,9 +58,7 @@
 #'  the event will take precedence over the value of the `keep_source_vars`
 #'  argument.
 #'
-#' @permitted A list of expressions where each element is
-#'   a symbol or a tidyselect expression, e.g., `exprs(VISIT, VISITNUM,
-#'   starts_with("RS"))`.
+#' @permitted [var_list]
 #'
 #' @inheritParams filter_extreme
 #' @inheritParams derive_summary_records
@@ -157,11 +154,12 @@
 #'   "2",      "WAKE UP 3X",     "Y",              2,
 #'   "2",      "WAKE UP 3X",     "Y",              3,
 #'   "3",      "NO SLEEP",       NA_character_,    1
-#' )
+#' ) %>%
+#' mutate(STUDYID = "AB42")
 #'
 #' derive_extreme_event(
 #'   adqs1,
-#'   by_vars = exprs(USUBJID),
+#'   by_vars = exprs(STUDYID, USUBJID),
 #'   events = list(
 #'     event(
 #'       condition = PARAMCD == "NO SLEEP" & AVALC == "Y",
@@ -190,7 +188,8 @@
 #'     PARAM = "Worst Sleeping Problem"
 #'   ),
 #'   keep_source_vars = exprs(everything())
-#' )
+#' ) %>%
+#' select(-STUDYID)
 #'
 #' @caption Add a new record for the worst observation using `event()` and
 #'    `event_joined()` objects
@@ -222,11 +221,12 @@
 #'    "5",      "NO SLEEP",   "Y",    2,
 #'    "5",      "WAKE UP 3X", "Y",    3,
 #'    "5",      "NO SLEEP",   "Y",    4
-#' )
+#' ) %>%
+#' mutate(STUDYID = "AB42")
 #'
 #' derive_extreme_event(
 #'   adqs2,
-#'   by_vars = exprs(USUBJID),
+#'   by_vars = exprs(STUDYID, USUBJID),
 #'   events = list(
 #'     event_joined(
 #'       dataset_name = "adqs2",
@@ -265,7 +265,8 @@
 #'     PARAM = "Worst Sleeping Problem"
 #'   ),
 #'   keep_source_vars = exprs(everything())
-#' )
+#' ) %>%
+#' select(-STUDYID)
 #'
 #' @caption Specifying different arguments across `event()` objects
 #' @info Here we consider a Hy's Law use case. We are interested in
@@ -292,12 +293,13 @@
 #' ) %>%
 #'   mutate(
 #'     PARAMCD = "ALKPH",
-#'     PARAM = "Alkaline Phosphatase (U/L)"
+#'     PARAM = "Alkaline Phosphatase (U/L)",
+#'     STUDYID = "AB42"
 #'   )
 #'
 #' derive_extreme_event(
 #'   adhy,
-#'   by_vars = exprs(USUBJID),
+#'   by_vars = exprs(STUDYID, USUBJID),
 #'   events = list(
 #'     event(
 #'       condition = is.na(CRIT1FL),
@@ -317,7 +319,8 @@
 #'     PARAMCD = "ALK2",
 #'     PARAM = "ALKPH <= 2 times ULN"
 #'   )
-#' )
+#' ) %>%
+#' select(-STUDYID)
 #'
 #' @caption A more complex example: Confirmed Best Overall Response
 #' @info The final example showcases a use of `derive_extreme_event()`
@@ -341,7 +344,10 @@
 #'   "7",      "2020-02-02",
 #'   "8",      "2020-02-01"
 #' ) %>%
-#'   mutate(TRTSDT = ymd(TRTSDTC))
+#' mutate(
+#'   TRTSDT = ymd(TRTSDTC),
+#'   STUDYID = "AB42"
+#' )
 #'
 #' adrs <- tribble(
 #'   ~USUBJID, ~ADTC,        ~AVALC,
@@ -371,12 +377,13 @@
 #' ) %>%
 #'   mutate(
 #'     ADT = ymd(ADTC),
+#'     STUDYID = "AB42",
 #'     PARAMCD = "OVR",
 #'     PARAM = "Overall Response by Investigator"
 #'   ) %>%
 #'   derive_vars_merged(
 #'     dataset_add = adsl,
-#'     by_vars = exprs(USUBJID),
+#'     by_vars = exprs(STUDYID, USUBJID),
 #'     new_vars = exprs(TRTSDT)
 #'   )
 #'
@@ -410,10 +417,10 @@
 #'    `dataset_name = adsl` to identify those subjects who do not appear in ADRS
 #'    and list their CBOR as `"MISSING"`.
 #'
-#'@code
+#' @code
 #' derive_extreme_event(
 #'   adrs,
-#'   by_vars = exprs(USUBJID),
+#'   by_vars = exprs(STUDYID, USUBJID),
 #'   tmp_event_nr_var = event_nr,
 #'   order = exprs(event_nr, ADT),
 #'   mode = "first",

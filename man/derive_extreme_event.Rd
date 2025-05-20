@@ -69,8 +69,7 @@ the event and by group, the records are ordered by the specified order.
 For handling of \code{NA}s in sorting variables see \href{../articles/generic.html#sort_order}{Sort Order}.
 
 \describe{
-\item{Permitted values}{list of expressions created by \code{exprs()}, e.g.,
-\code{exprs(ADT, desc(AVAL))}}
+\item{Permitted values}{list of variables created by \code{exprs()}, e.g., \code{exprs(USUBJID, VISIT)}}
 \item{Default value}{none}
 }}
 
@@ -139,8 +138,7 @@ the event will take precedence over the value of the \code{keep_source_vars}
 argument.
 
 \describe{
-\item{Permitted values}{A list of expressions where each element is
-a symbol or a tidyselect expression, e.g., \code{exprs(VISIT, VISITNUM, starts_with("RS"))}.}
+\item{Permitted values}{list of variables created by \code{exprs()}, e.g., \code{exprs(USUBJID, VISIT)}}
 \item{Default value}{\code{exprs(everything())}}
 }}
 }
@@ -217,8 +215,8 @@ BDS-Findings Functions for adding Parameters/Records:
 \section{Examples}{
 \subsection{Add a new record for the worst observation using \code{event()} objects}{
 
-For each subject the observation containing the worst sleeping problem
-(if any exist)  should be identified and added as a new record, retaining
+For each subject, the observation containing the worst sleeping problem
+(if any exist) should be identified and added as a new record, retaining
 all variables from the original observation.
 \itemize{
 \item The groups for which new records are added are specified by the \code{by_vars}
@@ -239,7 +237,7 @@ see the next example for a more complex condition.
 events, we can select just one record using the \code{order} argument. In this
 example, the first argument passed to \code{order} is \code{event_nr}, which is a
 temporary variable created through the \code{tmp_event_nr_var} argument, which
-numbers the events consecutively. Since \code{mode = first}, we only consider
+numbers the events consecutively. Since \code{mode = "first"}, we only consider
 the first event for which a condition is satisfied. Within that event, we
 consider only the observation with the latest day, because the second
 argument for the order is \code{desc(ADY)}.
@@ -250,12 +248,34 @@ specified in the event's \code{set_values_to} (here, \code{AVAL} and \code{AVALC
 values specified in the global \code{set_values_to} (here, \code{PARAM} and
 \code{PARAMCD}), (c) values from the selected observation as
 long as that variable appears in \code{keep_source_vars} (here, \code{ADY} does
-as due to the use of the tidyselect expression \code{everything()}).
+due to the use of the tidyselect expression \code{everything()}).
 }
 
 \if{html}{\out{<div class="sourceCode r">}}\preformatted{library(tibble)
 library(dplyr)
+#> 
+#> Attaching package: ‘dplyr’
+#> 
+#> The following objects are masked from ‘package:admiral’:
+#> 
+#>     anti_join, filter_if, inner_join, left_join
+#> 
+#> The following objects are masked from ‘package:stats’:
+#> 
+#>     filter, lag
+#> 
+#> The following objects are masked from ‘package:base’:
+#> 
+#>     intersect, setdiff, setequal, union
+#> 
 library(lubridate)
+#> 
+#> Attaching package: ‘lubridate’
+#> 
+#> The following objects are masked from ‘package:base’:
+#> 
+#>     date, intersect, setdiff, union
+#> 
 
 adqs1 <- tribble(
   ~USUBJID, ~PARAMCD,         ~AVALC,        ~ADY,
@@ -265,11 +285,12 @@ adqs1 <- tribble(
   "2",      "WAKE UP 3X",     "Y",              2,
   "2",      "WAKE UP 3X",     "Y",              3,
   "3",      "NO SLEEP",       NA_character_,    1
-)
+) \%>\%
+mutate(STUDYID = "AB42")
 
 derive_extreme_event(
   adqs1,
-  by_vars = exprs(USUBJID),
+  by_vars = exprs(STUDYID, USUBJID),
   events = list(
     event(
       condition = PARAMCD == "NO SLEEP" & AVALC == "Y",
@@ -298,7 +319,8 @@ derive_extreme_event(
     PARAM = "Worst Sleeping Problem"
   ),
   keep_source_vars = exprs(everything())
-)
+) \%>\%
+select(-STUDYID)
 #> # A tibble: 9 × 6
 #>   USUBJID PARAMCD    AVALC                   ADY  AVAL PARAM                 
 #>   <chr>   <chr>      <chr>                 <dbl> <dbl> <chr>                 
@@ -341,12 +363,13 @@ object so as to indicate which dataset we wish to use for the join.
    "5",      "NO SLEEP",   "N",    1,
    "5",      "NO SLEEP",   "Y",    2,
    "5",      "WAKE UP 3X", "Y",    3,
-   "5",      "NO SLEEP",   "N",    4
-)
+   "5",      "NO SLEEP",   "Y",    4
+) \%>\%
+mutate(STUDYID = "AB42")
 
 derive_extreme_event(
   adqs2,
-  by_vars = exprs(USUBJID),
+  by_vars = exprs(STUDYID, USUBJID),
   events = list(
     event_joined(
       dataset_name = "adqs2",
@@ -385,7 +408,8 @@ derive_extreme_event(
     PARAM = "Worst Sleeping Problem"
   ),
   keep_source_vars = exprs(everything())
-)
+) \%>\%
+select(-STUDYID)
 #> # A tibble: 9 × 6
 #>   USUBJID PARAMCD    AVALC                          ADY  AVAL PARAM             
 #>   <chr>   <chr>      <chr>                        <dbl> <dbl> <chr>             
@@ -395,12 +419,12 @@ derive_extreme_event(
 #> 4 5       NO SLEEP   N                                1    NA <NA>              
 #> 5 5       NO SLEEP   Y                                2    NA <NA>              
 #> 6 5       WAKE UP 3X Y                                3    NA <NA>              
-#> 7 5       NO SLEEP   N                                4    NA <NA>              
+#> 7 5       NO SLEEP   Y                                4    NA <NA>              
 #> 8 4       WSP        No sleep two nights in a row     3     0 Worst Sleeping Pr…
-#> 9 5       WSP        No sleep                         2     1 Worst Sleeping Pr…}\if{html}{\out{</div>}}}
-\subsection{Specifying different arguments across \code{event()} object}{
+#> 9 5       WSP        No sleep                         4     1 Worst Sleeping Pr…}\if{html}{\out{</div>}}}
+\subsection{Specifying different arguments across \code{event()} objects}{
 
-Here we consider a Hy's law use case. We are interested in
+Here we consider a Hy's Law use case. We are interested in
 knowing whether a subject's Alkaline Phosphatase has ever not
 been below twice the upper limit of normal range. If so, i.e. if
 \code{CRIT1FL} is \code{NA}, we are interested in the record for the first
@@ -410,7 +434,7 @@ time this occurs, and if not, we wish to retain the last record.
 \code{CRIT1FL} is \code{NA}, it's enough to specify the \code{condition}.
 \item In the second \code{event()}, we select the last record among the
 full set of records where \code{CRIT1FL = "Y"} by additionally
-specifying\code{mode = "last"} within the \code{event()}.
+specifying \code{mode = "last"} within the \code{event()}.
 }
 
 \if{html}{\out{<div class="sourceCode r">}}\preformatted{adhy <- tribble(
@@ -424,12 +448,13 @@ specifying\code{mode = "last"} within the \code{event()}.
 ) \%>\%
   mutate(
     PARAMCD = "ALKPH",
-    PARAM = "Alkaline Phosphatase (U/L)"
+    PARAM = "Alkaline Phosphatase (U/L)",
+    STUDYID = "AB42"
   )
 
 derive_extreme_event(
   adhy,
-  by_vars = exprs(USUBJID),
+  by_vars = exprs(STUDYID, USUBJID),
   events = list(
     event(
       condition = is.na(CRIT1FL),
@@ -449,7 +474,8 @@ derive_extreme_event(
     PARAMCD = "ALK2",
     PARAM = "ALKPH <= 2 times ULN"
   )
-)
+) \%>\%
+select(-STUDYID)
 #> # A tibble: 8 × 6
 #>   USUBJID AVISITN CRIT1FL PARAMCD PARAM                      AVALC
 #>   <chr>     <dbl> <chr>   <chr>   <chr>                      <chr>
@@ -465,11 +491,11 @@ derive_extreme_event(
 
 The final example showcases a use of \code{derive_extreme_event()}
 to calculate the Confirmed Best Overall Response (CBOR) in an
-ADRS dataset. This example builds on all the previous ones and
+\code{ADRS} dataset. This example builds on all the previous ones and
 thus assumes a baseline level of confidence with
 \code{derive_extreme_event()}.
 
-The following ADSL and ADRS datasets will be used
+The following \code{ADSL} and \code{ADRS} datasets will be used
 throughout:
 
 \if{html}{\out{<div class="sourceCode r">}}\preformatted{adsl <- tribble(
@@ -483,7 +509,10 @@ throughout:
   "7",      "2020-02-02",
   "8",      "2020-02-01"
 ) \%>\%
-  mutate(TRTSDT = ymd(TRTSDTC))
+mutate(
+  TRTSDT = ymd(TRTSDTC),
+  STUDYID = "AB42"
+)
 
 adrs <- tribble(
   ~USUBJID, ~ADTC,        ~AVALC,
@@ -513,12 +542,13 @@ adrs <- tribble(
 ) \%>\%
   mutate(
     ADT = ymd(ADTC),
+    STUDYID = "AB42",
     PARAMCD = "OVR",
     PARAM = "Overall Response by Investigator"
   ) \%>\%
   derive_vars_merged(
     dataset_add = adsl,
-    by_vars = exprs(USUBJID),
+    by_vars = exprs(STUDYID, USUBJID),
     new_vars = exprs(TRTSDT)
   )}\if{html}{\out{</div>}}
 
@@ -528,7 +558,7 @@ to describe what condition is being checked.
 \itemize{
 \item For the Confirmed Response (CR), for each \code{"CR"} record in the original ADRS
 dataset that will be identified by the first part of the \code{condition} argument
-(\code{AVALC == "CR"}) we need to use the \code{first_cond_upper} argument to limit the
+(\code{AVALC == "CR"}), we need to use the \code{first_cond_upper} argument to limit the
 group of observations to consider alongside it. Namely, we need to look up to
 and including the second CR (\code{AVALC.join == "CR"}) over 28 days from the first
 one (\code{ADT.join >= ADT + 28}). The observations satisfying \code{first_cond_upper}
@@ -540,9 +570,9 @@ are either \code{"CR"} or \code{"NE"}, and \code{count_vals()} to ensure at most
 <insert explanation here, explaining why join_type = "all" changes patient 1 to a "PR">.
 \item The Partial Response (PR), is very similar; with the difference being that the
 first portion of \code{condition} now references \code{"PR"} and \code{first_cond_upper}
-accepts a confirmatory PR or CR 28 days later. Note that now we must add
+accepts a confirmatory \code{"PR"} or \code{"CR"} 28 days later. Note that now we must add
 \code{"PR"} as an option within the \code{all()} condition to account for confirmatory
-PRs.
+"\code{PR}"s.
 \item The Stable Disease (SD), Progressive Disease (PD) and Not Evaluable (NE)
 events are simpler and just require \code{event()} calls.
 \item Finally, we use a catch-all \code{event()} with \code{condition = TRUE} and
@@ -552,7 +582,7 @@ and list their CBOR as \code{"MISSING"}.
 
 \if{html}{\out{<div class="sourceCode r">}}\preformatted{derive_extreme_event(
   adrs,
-  by_vars = exprs(USUBJID),
+  by_vars = exprs(STUDYID, USUBJID),
   tmp_event_nr_var = event_nr,
   order = exprs(event_nr, ADT),
   mode = "first",
@@ -614,15 +644,15 @@ and list their CBOR as \code{"MISSING"}.
   )
 ) \%>\%
   filter(PARAMCD == "CBOR")
-#> # A tibble: 8 × 7
-#>   USUBJID ADTC       AVALC   ADT        PARAMCD PARAM                 TRTSDT    
-#>   <chr>   <chr>      <chr>   <date>     <chr>   <chr>                 <date>    
-#> 1 1       2020-02-01 CR      2020-02-01 CBOR    Best Confirmed Overa… 2020-01-01
-#> 2 2       2020-02-01 SD      2020-02-01 CBOR    Best Confirmed Overa… 2019-12-12
-#> 3 3       <NA>       MISSING NA         CBOR    Best Confirmed Overa… 2019-11-11
-#> 4 4       2020-05-01 SD      2020-05-01 CBOR    Best Confirmed Overa… 2019-12-30
-#> 5 5       2020-01-01 NE      2020-01-01 CBOR    Best Confirmed Overa… 2020-01-01
-#> 6 6       2020-02-06 PR      2020-02-06 CBOR    Best Confirmed Overa… 2020-02-02
-#> 7 7       2020-02-06 NE      2020-02-06 CBOR    Best Confirmed Overa… 2020-02-02
-#> 8 8       2020-02-16 PD      2020-02-16 CBOR    Best Confirmed Overa… 2020-02-01}\if{html}{\out{</div>}}}}
+#> # A tibble: 8 × 8
+#>   USUBJID ADTC       AVALC   ADT        STUDYID PARAMCD PARAM         TRTSDT    
+#>   <chr>   <chr>      <chr>   <date>     <chr>   <chr>   <chr>         <date>    
+#> 1 1       2020-02-01 CR      2020-02-01 AB42    CBOR    Best Confirm… 2020-01-01
+#> 2 2       2020-02-01 SD      2020-02-01 AB42    CBOR    Best Confirm… 2019-12-12
+#> 3 3       <NA>       MISSING NA         AB42    CBOR    Best Confirm… 2019-11-11
+#> 4 4       2020-05-01 SD      2020-05-01 AB42    CBOR    Best Confirm… 2019-12-30
+#> 5 5       2020-01-01 NE      2020-01-01 AB42    CBOR    Best Confirm… 2020-01-01
+#> 6 6       2020-02-06 PR      2020-02-06 AB42    CBOR    Best Confirm… 2020-02-02
+#> 7 7       2020-02-06 NE      2020-02-06 AB42    CBOR    Best Confirm… 2020-02-02
+#> 8 8       2020-02-16 PD      2020-02-16 AB42    CBOR    Best Confirm… 2020-02-01}\if{html}{\out{</div>}}}}
 
