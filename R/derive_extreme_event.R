@@ -108,7 +108,9 @@
 #' @caption Add a new record for the worst observation using `event()` objects
 #' @info For each subject, the observation containing the worst sleeping problem
 #'   (if any exist) should be identified and added as a new record, retaining
-#'   all variables from the original observation.
+#'   all variables from the original observation. If multiple occurrences of the
+#'   worst sleeping problem occur, or no sleeping problems, then take the
+#'   observation occurring at the latest day.
 #'
 #' - The groups for which new records are added are specified by the `by_vars`
 #'   argument. Here for each *subject* a record should be added. Thus
