@@ -22,6 +22,7 @@ derive_var_merged_exist_flag(
 The variables specified by the \code{by_vars} argument are expected to be in the dataset.
 
 \describe{
+\item{Permitted values}{a dataset, i.e., a \code{data.frame} or tibble}
 \item{Default value}{none}
 }}
 
@@ -30,12 +31,14 @@ The variables specified by the \code{by_vars} argument are expected to be in the
 The variables specified by the \code{by_vars} argument are expected.
 
 \describe{
+\item{Permitted values}{a dataset, i.e., a \code{data.frame} or tibble}
 \item{Default value}{none}
 }}
 
 \item{by_vars}{Grouping variables
 
 \describe{
+\item{Permitted values}{list of variables created by \code{exprs()}, e.g., \code{exprs(USUBJID, VISIT)}}
 \item{Default value}{none}
 }}
 
@@ -44,6 +47,7 @@ The variables specified by the \code{by_vars} argument are expected.
 The specified variable is added to the input dataset.
 
 \describe{
+\item{Permitted values}{a variable}
 \item{Default value}{none}
 }}
 
@@ -58,28 +62,31 @@ value (\code{missing_value}) for by groups not present in the additional
 dataset.
 
 \describe{
+\item{Permitted values}{an unquoted condition, e.g., \code{AVISIT == "BASELINE"}}
 \item{Default value}{none}
 }}
 
 \item{true_value}{True value
 
 \describe{
+\item{Permitted values}{a character scalar, i.e., a character vector of length one}
 \item{Default value}{\code{"Y"}}
 }}
 
 \item{false_value}{False value
 
 \describe{
+\item{Permitted values}{a character scalar, i.e., a character vector of length one}
 \item{Default value}{\code{NA_character_}}
 }}
 
-\item{missing_value}{Values used for missing information
+\item{missing_value}{Value used for missing information
 
 The new variable is set to the specified value for all by groups without
 observations in the additional dataset.
 
 \describe{
-\item{Permitted values}{A character scalar}
+\item{Permitted values}{a character scalar, i.e., a character vector of length one}
 \item{Default value}{\code{NA_character_}}
 }}
 
@@ -90,7 +97,7 @@ for flagging. If the argument is not specified, all observations are
 considered.
 
 \describe{
-\item{Permitted values}{a condition}
+\item{Permitted values}{an unquoted condition, e.g., \code{AVISIT == "BASELINE"}}
 \item{Default value}{\code{NULL}}
 }}
 }

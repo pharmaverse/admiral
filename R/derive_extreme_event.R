@@ -18,6 +18,8 @@
 #'   For `event_joined()` events the observations are selected by calling
 #'   `filter_joined()`. The `condition` field is passed to the `filter_join` argument.
 #'
+#' @permitted [event]
+#'
 #' @param tmp_event_nr_var Temporary event number variable
 #'
 #'   The specified variable is added to all source datasets and is set to the
@@ -27,6 +29,8 @@
 #'   records from more than one event are selected.
 #'
 #'   The variable is not included in the output dataset.
+#'
+#' @permitted [var]
 #'
 #' @param order Sort order
 #'
@@ -49,6 +53,8 @@
 #'
 #'   A named list of datasets is expected. The `dataset_name` field of `event()`
 #'   and `event_joined()` refers to the dataset provided in the list.
+#'
+#' @permitted [dataset_list]
 #'
 #' @param set_values_to Variables to be set
 #'

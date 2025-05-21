@@ -46,6 +46,7 @@ For \code{event_joined()} events the observations are selected by calling
 \code{filter_joined()}. The \code{condition} field is passed to the \code{filter_join} argument.
 
 \describe{
+\item{Permitted values}{an \code{event()} or \code{event_joined()} object}
 \item{Default value}{none}
 }}
 
@@ -60,6 +61,7 @@ records from more than one event are selected.
 The variable is not included in the output dataset.
 
 \describe{
+\item{Permitted values}{a variable}
 \item{Default value}{\code{NULL}}
 }}
 
@@ -92,6 +94,7 @@ A named list of datasets is expected. The \code{dataset_name} field of \code{eve
 and \code{event_joined()} refers to the dataset provided in the list.
 
 \describe{
+\item{Permitted values}{named list of datasets, e.g., \code{list(adsl = adsl, ae = ae)}}
 \item{Default value}{\code{NULL}}
 }}
 
