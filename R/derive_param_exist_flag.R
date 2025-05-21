@@ -190,7 +190,7 @@ derive_param_exist_flag <- function(dataset = NULL,
 
   # Create new observations
   new_obs <- derive_var_merged_exist_flag(
-    dataset_ref,
+    select(dataset_ref, !!!by_vars),
     dataset_add = dataset_add,
     filter_add = !!filter_add,
     condition = !!condition,

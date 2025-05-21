@@ -74,7 +74,7 @@ test_that("derive_extreme_records Test 2: derive first PD date", {
     adrs,
     dataset_ref = adsl,
     dataset_add = adrs,
-    by_vars = exprs(USUBJID),
+    by_vars = exprs(STUDYID, USUBJID),
     filter_add = PARAMCD == "OVR" & AVALC == "PD",
     exist_flag = AVALC,
     order = exprs(ADT),
