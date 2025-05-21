@@ -34,7 +34,7 @@ jobs:
 
 
       - name: run the code
-        run:  Rscript -e 'verify_templates()'
+        run:  Rscript -e 'load_all(); verify_templates()'
 
       - name: Session info
         run: |
