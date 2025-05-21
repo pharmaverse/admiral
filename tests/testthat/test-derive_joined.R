@@ -534,9 +534,42 @@ test_that("derive_vars_joined Test 15: filter_add is not ignored when join_type 
   )
 })
 
+## Test 16: warning if `order` is not unique ----
+test_that("derive_vars_joined Test 16: warning if `order` is not unique", {
+  expected <- tibble::tribble(
+    ~subj, ~day, ~seq, ~val, ~prevposval,
+    "1",     15,    1,   -1,          NA,
+    "1",     17,    2,    0,          NA,
+    "1",     17,    3,    0,          NA,
+    "1",     20,    4,    1,           0
+  )
+
+  adbds <- select(expected, -prevposval)
+
+  expect_snapshot(
+    actual <- derive_vars_joined(
+      adbds,
+      dataset_add = adbds,
+      by_vars = exprs(subj),
+      order = exprs(day),
+      new_vars = exprs(prevposval = val),
+      join_type = "before",
+      mode = "last",
+      filter_add = val >= 0
+    )
+  )
+
+  expect_dfs_equal(
+    base = expected,
+    comp = actual,
+    keys = c("subj", "day", "seq")
+  )
+
+})
+
 # get_joined_data ----
-## Test 16: `first_cond_lower` works ----
-test_that("get_joined_data Test 16: `first_cond_lower` works", {
+## Test 17: `first_cond_lower` works ----
+test_that("get_joined_data Test 17: `first_cond_lower` works", {
   data <- tribble(
     ~subj, ~day, ~val,
     "1",      1, "++",
