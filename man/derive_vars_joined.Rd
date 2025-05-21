@@ -537,9 +537,9 @@ source data from \code{dataset_add}.
 \subsection{Combining all of the above examples}{
 
 Using all of the arguments demonstrated above, here is a more complex
-example to add to \code{AE} the highest hemoglobin value occurring within two weeks
-before each \code{AE}. Also join the day it occurred, taking the earliest occurrence
-if more than one assessment with the same value.
+example to add to \code{ADAE} the highest hemoglobin value occurring within two weeks
+before each adverse event. Also join the day it occurred, taking the earliest
+occurrence if more than one assessment with the same value.
 \itemize{
 \item Note how we used \code{mode = "last"} to get the highest lab value, but then as we
 wanted the earliest occurrence if more than one it means we need to add
