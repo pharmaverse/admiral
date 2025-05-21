@@ -339,7 +339,7 @@ test_that("derive_locf_records Test 7: analysis visits are assigned based on tim
     tibble::tribble(
       ~STUDYID, ~USUBJID, ~PARAMCD, ~PARAM, ~AVAL, ~AVISITN, ~AVISIT, ~ADY,
       "TEST01", "01-701-1028", "DIABP", "Diastolic Blood Pressure (mmHg)", 80, 4, "WEEK 4", 28,
-      "TEST01", "01-701-1028", "DIABP", "Diastolic Blood Pressure (mmHg)", 80, 6, "WEEK 6", 42,
+      "TEST01", "01-701-1028", "DIABP", "Diastolic Blood Pressure (mmHg)", 80, 6, "WEEK 6", 44,
       "TEST01", "01-701-1028", "SYSBP", "Systolic Blood Pressure (mmHg)", 130, 2, "WEEK 2", 14
     ) %>%
       mutate(DTYPE = "LOCF")
@@ -349,6 +349,7 @@ test_that("derive_locf_records Test 7: analysis visits are assigned based on tim
   actual_output <- derive_locf_records(
     input,
     dataset_ref = advs_expected_obsv,
+    analysis_var = AVAL,
     by_vars = exprs(STUDYID, USUBJID, PARAM, PARAMCD),
     id_vars_ref = exprs(STUDYID, USUBJID, PARAM, PARAMCD, AVISITN, AVISIT),
     order = exprs(AVISITN, AVISIT, ADY)
@@ -363,8 +364,9 @@ test_that("derive_locf_records Test 7: analysis visits are assigned based on tim
 })
 
 
-## Test 8: update records with missing values instead of new records ----
-test_that("derive_locf_records Test 8: update records with missing values instead of new records", {
+## Test 8: update records with missing values instead of adding new records ----
+test_that("derive_locf_records Test 8: update records with missing values instead of adding new
+          records", {
   input <- tibble::tribble(
     ~STUDYID, ~USUBJID, ~PARAMCD, ~PARAM, ~AVAL, ~AVISITN, ~AVISIT, ~ADY,
     "TEST01", "01-701-1015", "DIABP", "Diastolic Blood Pressure (mmHg)", 51, 0, "BASELINE", 0,
@@ -396,7 +398,7 @@ test_that("derive_locf_records Test 8: update records with missing values instea
     tibble::tribble(
       ~STUDYID, ~USUBJID, ~PARAMCD, ~PARAM, ~AVAL, ~AVISITN, ~AVISIT, ~ADY,
       "TEST01", "01-701-1028", "DIABP", "Diastolic Blood Pressure (mmHg)", 80, 4, "WEEK 4", 28,
-      "TEST01", "01-701-1028", "DIABP", "Diastolic Blood Pressure (mmHg)", 80, 6, "WEEK 6", 42,
+      "TEST01", "01-701-1028", "DIABP", "Diastolic Blood Pressure (mmHg)", 80, 6, "WEEK 6", 44,
       "TEST01", "01-701-1028", "SYSBP", "Systolic Blood Pressure (mmHg)", 130, 2, "WEEK 2", 14
     ) %>%
       mutate(DTYPE = "LOCF")
@@ -407,9 +409,10 @@ test_that("derive_locf_records Test 8: update records with missing values instea
   actual_output <- derive_locf_records(
     input,
     dataset_ref = advs_expected_obsv,
+    analysis_var = AVAL,
     by_vars = exprs(STUDYID, USUBJID, PARAM, PARAMCD),
     id_vars_ref = exprs(STUDYID, USUBJID, PARAM, PARAMCD, AVISITN, AVISIT),
-    analysis_var_fill = TRUE,
+    imputation = "update",
     order = exprs(AVISITN, AVISIT, ADY)
   )
 
@@ -418,5 +421,185 @@ test_that("derive_locf_records Test 8: update records with missing values instea
     base = expected_output,
     compare = actual_output,
     keys = c("STUDYID", "USUBJID", "PARAMCD", "PARAM", "AVISITN", "AVISIT", "DTYPE")
+  )
+})
+
+
+
+
+
+## Test 9: add new imputed records when values are missing  ----
+test_that("derive_locf_records Test 9: add new imputed records when values are missing", {
+  input <- tibble::tribble(
+    ~STUDYID, ~USUBJID, ~PARAMN, ~PARAMCD, ~PARAM, ~AVAL, ~AVISITN, ~AVISIT, ~ADY,
+    "TEST01", "01-701-1015", 1, "DIABP", "Diastolic Blood Pressure (mmHg)", 51, 0, "BASELINE", 0,
+    "TEST01", "01-701-1015", 1, "DIABP", "Diastolic Blood Pressure (mmHg)", 50, 2, "WEEK 2", 14,
+    "TEST01", "01-701-1015", 1, "DIABP", "Diastolic Blood Pressure (mmHg)", 52, 4, "WEEK 4", 28,
+    "TEST01", "01-701-1015", 1, "DIABP", "Diastolic Blood Pressure (mmHg)", 54, 6, "WEEK 6", 42,
+    "TEST01", "01-701-1015", 2, "SYSBP", "Systolic Blood Pressure (mmHg)", 121, 0, "BASELINE", 0,
+    "TEST01", "01-701-1015", 2, "SYSBP", "Systolic Blood Pressure (mmHg)", 121, 2, "WEEK 2", 14,
+    "TEST01", "01-701-1028", 1, "DIABP", "Diastolic Blood Pressure (mmHg)", 79, 0, "BASELINE", 0,
+    "TEST01", "01-701-1028", 1, "DIABP", "Diastolic Blood Pressure (mmHg)", 80, 2, "WEEK 2", 12,
+    "TEST01", "01-701-1028", 1, "DIABP", "Diastolic Blood Pressure (mmHg)", NA, 4, "WEEK 4", 28,
+    "TEST01", "01-701-1028", 1, "DIABP", "Diastolic Blood Pressure (mmHg)", NA, 6, "WEEK 6", 44,
+    "TEST01", "01-701-1028", 2, "SYSBP", "Systolic Blood Pressure (mmHg)", 130, 0, "BASELINE", 0
+  )
+
+  advs_expected_obsv <- tibble::tribble(
+    ~PARAMCD, ~PARAM, ~AVISITN, ~AVISIT, ~ADY,
+    "DIABP", "Diastolic Blood Pressure (mmHg)", 0, "BASELINE", 0,
+    "DIABP", "Diastolic Blood Pressure (mmHg)", 2, "WEEK 2", 14,
+    "DIABP", "Diastolic Blood Pressure (mmHg)", 4, "WEEK 4", 28,
+    "DIABP", "Diastolic Blood Pressure (mmHg)", 6, "WEEK 6", 42,
+    "SYSBP", "Systolic Blood Pressure (mmHg)", 0, "BASELINE", 0,
+    "SYSBP", "Systolic Blood Pressure (mmHg)", 2, "WEEK 2", 14
+  )
+
+
+  expected_output <- bind_rows(
+    input,
+    tibble::tribble(
+      ~STUDYID, ~USUBJID, ~PARAMN, ~PARAMCD, ~PARAM, ~AVAL, ~AVISITN, ~AVISIT, ~ADY,
+      "TEST01", "01-701-1028", NA, "DIABP", "Diastolic Blood Pressure (mmHg)", 80, 4, "WEEK 4", 28,
+      "TEST01", "01-701-1028", NA, "DIABP", "Diastolic Blood Pressure (mmHg)", 80, 6, "WEEK 6", 44,
+      "TEST01", "01-701-1028", NA, "SYSBP", "Systolic Blood Pressure (mmHg)", 130, 2, "WEEK 2", 14
+    ) %>%
+      mutate(DTYPE = "LOCF")
+  )
+
+
+  actual_output <- derive_locf_records(
+    input,
+    dataset_ref = advs_expected_obsv,
+    analysis_var = AVAL,
+    by_vars = exprs(STUDYID, USUBJID, PARAM, PARAMCD),
+    id_vars_ref = exprs(STUDYID, USUBJID, PARAM, PARAMCD, AVISITN, AVISIT),
+    imputation = "add",
+    order = exprs(AVISITN, AVISIT, ADY)
+  )
+
+
+  expect_dfs_equal(
+    base = expected_output,
+    compare = actual_output,
+    keys = c("STUDYID", "USUBJID", "PARAMCD", "PARAM", "AVISITN", "AVISIT", "DTYPE")
+  )
+})
+
+## Test 10: add new imputed records when values are missing and populate all other variables in the
+##          new records ----
+test_that("derive_locf_records Test 10: add new imputed records when values are missing and populate
+          all other variables in the new records", {
+  input <- tibble::tribble(
+    ~STUDYID, ~USUBJID, ~PARAMN, ~PARAMCD, ~PARAM, ~AVAL, ~AVISITN, ~AVISIT, ~ADY,
+    "TEST01", "01-701-1015", 1, "DIABP", "Diastolic Blood Pressure (mmHg)", 51, 0, "BASELINE", 0,
+    "TEST01", "01-701-1015", 1, "DIABP", "Diastolic Blood Pressure (mmHg)", 50, 2, "WEEK 2", 14,
+    "TEST01", "01-701-1015", 1, "DIABP", "Diastolic Blood Pressure (mmHg)", 52, 4, "WEEK 4", 28,
+    "TEST01", "01-701-1015", 1, "DIABP", "Diastolic Blood Pressure (mmHg)", 54, 6, "WEEK 6", 42,
+    "TEST01", "01-701-1015", 2, "SYSBP", "Systolic Blood Pressure (mmHg)", 121, 0, "BASELINE", 0,
+    "TEST01", "01-701-1015", 2, "SYSBP", "Systolic Blood Pressure (mmHg)", 121, 2, "WEEK 2", 14,
+    "TEST01", "01-701-1028", 1, "DIABP", "Diastolic Blood Pressure (mmHg)", 79, 0, "BASELINE", 0,
+    "TEST01", "01-701-1028", 1, "DIABP", "Diastolic Blood Pressure (mmHg)", 80, 2, "WEEK 2", 12,
+    "TEST01", "01-701-1028", 1, "DIABP", "Diastolic Blood Pressure (mmHg)", NA, 4, "WEEK 4", 28,
+    "TEST01", "01-701-1028", 1, "DIABP", "Diastolic Blood Pressure (mmHg)", NA, 6, "WEEK 6", 44,
+    "TEST01", "01-701-1028", 2, "SYSBP", "Systolic Blood Pressure (mmHg)", 130, 0, "BASELINE", 0
+  )
+
+  advs_expected_obsv <- tibble::tribble(
+    ~PARAMCD, ~PARAM, ~AVISITN, ~AVISIT, ~ADY,
+    "DIABP", "Diastolic Blood Pressure (mmHg)", 0, "BASELINE", 0,
+    "DIABP", "Diastolic Blood Pressure (mmHg)", 2, "WEEK 2", 14,
+    "DIABP", "Diastolic Blood Pressure (mmHg)", 4, "WEEK 4", 28,
+    "DIABP", "Diastolic Blood Pressure (mmHg)", 6, "WEEK 6", 42,
+    "SYSBP", "Systolic Blood Pressure (mmHg)", 0, "BASELINE", 0,
+    "SYSBP", "Systolic Blood Pressure (mmHg)", 2, "WEEK 2", 14
+  )
+
+
+  expected_output <- bind_rows(
+    input,
+    tibble::tribble(
+      ~STUDYID, ~USUBJID, ~PARAMN, ~PARAMCD, ~PARAM, ~AVAL, ~AVISITN, ~AVISIT, ~ADY,
+      "TEST01", "01-701-1028", 1, "DIABP", "Diastolic Blood Pressure (mmHg)", 80, 4, "WEEK 4", 28,
+      "TEST01", "01-701-1028", 1, "DIABP", "Diastolic Blood Pressure (mmHg)", 80, 6, "WEEK 6", 44,
+      "TEST01", "01-701-1028", 2, "SYSBP", "Systolic Blood Pressure (mmHg)", 130, 2, "WEEK 2", 14
+    ) %>%
+      mutate(DTYPE = "LOCF")
+  )
+
+
+  actual_output <- derive_locf_records(
+    input,
+    dataset_ref = advs_expected_obsv,
+    analysis_var = AVAL,
+    by_vars = exprs(STUDYID, USUBJID, PARAM, PARAMCD),
+    id_vars_ref = exprs(STUDYID, USUBJID, PARAM, PARAMCD, AVISITN, AVISIT),
+    imputation = "update_add",
+    order = exprs(AVISITN, AVISIT, ADY),
+    keep_vars = exprs(PARAMN)
+  )
+
+
+  expect_dfs_equal(
+    base = expected_output,
+    compare = actual_output,
+    keys = c("STUDYID", "USUBJID", "PARAMCD", "PARAM", "AVISITN", "AVISIT", "DTYPE")
+  )
+})
+
+
+
+## Test 11: fill variables other than analysis_var for imputed records ----
+test_that("derive_locf_records Test 11: fill variables other than analysis_var for imputed
+          records", {
+  input <- tibble::tribble(
+    ~STUDYID, ~USUBJID, ~PARAMCD, ~PARAMN, ~AVAL, ~AVISITN, ~AVISIT, ~DATEC, ~DAY,
+    "CDISC01", "01-701-1015", "DIABP", 2, 85, 0, "BASELINE", "February", "day a",
+    "CDISC01", "01-701-1015", "DIABP", 2, 80, 2, "VISIT 2", "March", "day b",
+    "CDISC01", "01-701-1015", "DIABP", 2, 50, 4, "VISIT 4", "April", "day c",
+    "CDISC01", "01-701-1015", "DIABP", 2, 20, 6, "VISIT 6", "May", "day d",
+    "CDISC01", "01-701-1015", "DIABP", 2, 35, 8, "VISIT 8", "June", "day e",
+    "CDISC01", "01-701-1015", "DIABP", 2, NA, 10, "VISIT 10", "July", "day f",
+    "CDISC01", "01-701-1015", "DIABP", 2, 20, 12, "VISIT 12", "August", "day g",
+    "CDISC01", "01-701-1015", "DIABP", 2, NA, 14, "VISIT 14", "September", "day h"
+  )
+
+  advs_expected_obsv <- tibble::tribble(
+    ~PARAMCD, ~AVISITN, ~AVISIT,
+    "DIABP", 0, "BASELINE",
+    "DIABP", 2, "VISIT 2",
+    "DIABP", 4, "VISIT 4",
+    "DIABP", 6, "VISIT 6",
+    "DIABP", 8, "VISIT 8",
+    "DIABP", 10, "VISIT 10",
+    "DIABP", 12, "VISIT 12",
+    "DIABP", 14, "VISIT 14"
+  )
+
+  expected_output <- bind_rows(
+    input,
+    tibble::tribble(
+      ~STUDYID, ~USUBJID, ~PARAMCD, ~PARAMN, ~AVAL, ~AVISITN, ~AVISIT, ~DATEC, ~DAY,
+      "CDISC01", "01-701-1015", "DIABP", 2, 35, 10, "VISIT 10", "July", "day f",
+      "CDISC01", "01-701-1015", "DIABP", 2, 20, 14, "VISIT 14", "September", "day h"
+    ) %>%
+      mutate(DTYPE = "LOCF")
+  )
+
+  actual_output <- derive_locf_records(
+    dataset = input,
+    dataset_ref = advs_expected_obsv,
+    by_vars = exprs(STUDYID, USUBJID, PARAMCD),
+    imputation = "add",
+    order = exprs(AVISITN, AVISIT),
+    keep_vars = exprs(PARAMN, DATEC, DAY),
+  ) |>
+    arrange(USUBJID, PARAMCD, AVISITN, desc(is.na(DTYPE)), DTYPE)
+
+
+  expect_dfs_equal(
+    base = expected_output,
+    compare = actual_output,
+    keys = c("STUDYID", "USUBJID", "PARAMCD", "PARAMN", "AVISITN", "AVISIT", "DTYPE")
   )
 })
