@@ -9,6 +9,7 @@
 install.packages("pak")
 pak::pak("devtools")
 pak::pak("diffdf")
+pak::pak("teal.data")
 
 
 devtools::load_all()

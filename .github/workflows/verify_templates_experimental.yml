@@ -29,6 +29,11 @@ jobs:
 
 # missing devtools::
       - uses: r-lib/actions/setup-r-dependencies@v2
+#        with:
+#	  cache: true
+#	  dependencies: 'hard'o
+#	  install-pandoc: false
+#	  install-quarto
 
 # copy from 
 #      - Install Dependencies from DESCRIPTION 
