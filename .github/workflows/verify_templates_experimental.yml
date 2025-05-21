@@ -39,12 +39,13 @@ jobs:
 # env:
 # R_REMOTES_STANDALONE: "true"
 
+# WHY do next 2 lines = SYNTAX error?
 #......- name: needed packages
 #        run:  Rscript -e 'install.packages(c("devtools", "diffdf"))'
 
 
       - name: source
-        run:  Rscript -e 'source("data-raw/admiral_verify_templates.R")'
+        run:  Rscript -e 'install.packages(c("devtools")); source("data-raw/admiral_verify_templates.R")'
 
 
       - name: run the code
