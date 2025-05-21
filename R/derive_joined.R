@@ -76,9 +76,12 @@
 #'   The specified variable is added to the input dataset (`dataset`) and the
 #'   additional dataset (`dataset_add`). It is set to the observation number
 #'   with respect to `order`. For each by group (`by_vars`) the observation
-#'   number starts with `1`. The variable can be used in the conditions
-#'   (`filter_join`, `first_cond_upper`, `first_cond_lower`). It can also be
-#'   used to select consecutive observations or the last observation.
+#'   number starts with `1`. If there is more than one record for specific
+#'   values for `by_vars` and `order`, all records get the same observation
+#'   number. By default, a warning (see `check_type`) is issued in this case.
+#'   The variable can be used in the conditions (`filter_join`,
+#'   `first_cond_upper`, `first_cond_lower`). It can also be used to select
+#'   consecutive observations or the last observation.
 #'
 #'   The variable is not included in the output dataset. To include it specify
 #'   it for `new_vars`.
@@ -904,9 +907,9 @@ derive_vars_joined <- function(dataset,
 #'
 #' @param check_type Check uniqueness?
 #'
-#'   If `"warning"` or `"error"` is specified, the specified message is issued
-#'   if the observations of the (restricted) joined dataset are not unique with
-#'   respect to the by variables and the order.
+#'   If `"message"`, `"warning"` or `"error"` is specified, the specified
+#'   message is issued if the observations of the (restricted) joined dataset
+#'   are not unique with respect to the by variables and the order.
 #'
 #'   This argument is ignored if `order` is not specified. In this case an error
 #'   is issued independent of `check_type` if the restricted joined dataset
@@ -1003,9 +1006,9 @@ get_joined_data <- function(dataset,
     filter_if(filter_add) %>%
     ungroup()
 
-  # number observations of the input dataset and the additional dataset for
-  # relation of records, e.g., join_type = before|after, first_cond_lower,
-  # first_cond_upper
+  # number groups with respect to by_vars and order in the input dataset and the
+  # additional dataset for relation of records, e.g., join_type = before|after,
+  # first_cond_lower, first_cond_upper
   tmp_obs_nr_var_join <- NULL
   if (join_type != "all" || !is.null(first_cond_lower) || !is.null(first_cond_upper) ||
     !is.null(tmp_obs_nr_var)) {
@@ -1013,21 +1016,56 @@ get_joined_data <- function(dataset,
       tmp_obs_nr_var <- get_new_tmp_var(dataset, prefix = "tmp_obs_nr")
       tmp_obs_nr_var_join <- paste0(as_name(tmp_obs_nr_var), ".join")
     }
-    data_add <- derive_var_obs_number(
-      data_add,
-      new_var = !!tmp_obs_nr_var,
-      by_vars = by_vars,
-      order = order,
-      check_type = check_type
-    )
+
+    if (check_type != "none") {
+      # check if order results in unique values in dataset and dataset_add
+      signal_duplicate_records(
+        dataset = data,
+        by_vars = c(by_vars, order),
+        msg = paste(
+          "Dataset {.arg dataset} contains duplicate records with respect to",
+          "{.var {replace_values_by_names(by_vars)}}"
+        ),
+        cnd_type = check_type
+      )
+      signal_duplicate_records(
+        dataset = data_add,
+        by_vars = c(by_vars, order),
+        msg = paste(
+          "Dataset {.arg dataset_add} contains duplicate records with respect to",
+          "{.var {replace_values_by_names(by_vars)}}"
+        ),
+        cnd_type = check_type
+      )
+    }
 
     data <- data %>%
-      mutate(!!!order) %>%
+      mutate(!!!order)
+
+    groups <- bind_rows(
+      select(data, !!!by_vars, !!!replace_values_by_names(order)),
+      select(data_add, !!!by_vars, !!!replace_values_by_names(order))
+    ) %>%
+      distinct() %>%
       derive_var_obs_number(
         new_var = !!tmp_obs_nr_var,
         by_vars = by_vars,
         order = order,
-        check_type = check_type
+        check_type = "none"
+      )
+
+    data <- data %>%
+      derive_vars_merged(
+        dataset_add = groups,
+        by_vars = exprs(!!!by_vars, !!!replace_values_by_names(order)),
+        check_type = "none"
+      )
+
+    data_add <- data_add %>%
+      derive_vars_merged(
+        dataset_add = groups,
+        by_vars = exprs(!!!by_vars, !!!replace_values_by_names(order)),
+        check_type = "none"
       )
   }
 
@@ -1104,6 +1142,11 @@ get_joined_data <- function(dataset,
 #' `get_joined_data()` to process each by group separately. This reduces the
 #' memory consumption.
 #'
+#' @param tmp_obs_nr_left Temporary observation number for `dataset`
+#'
+#' The specified variable has to be in the input dataset (`dataset`) and has to
+#' be a unique key.
+#'
 #' @inheritParams get_joined_data
 #'
 #' @details
@@ -1154,7 +1197,7 @@ get_joined_sub_data <- function(dataset,
     # select all observations up to the first confirmation observation
     data_joined <- filter_relative(
       data_joined,
-      by_vars = expr_c(by_vars, tmp_obs_nr_var),
+      by_vars = expr_c(by_vars, tmp_obs_nr_left),
       condition = !!first_cond_upper,
       order = exprs(!!parse_expr(paste0(as_name(tmp_obs_nr_var), ".join"))),
       mode = "first",
@@ -1168,7 +1211,7 @@ get_joined_sub_data <- function(dataset,
     # select all observations up to the first confirmation observation
     data_joined <- filter_relative(
       data_joined,
-      by_vars = expr_c(by_vars, tmp_obs_nr_var),
+      by_vars = expr_c(by_vars, tmp_obs_nr_left),
       condition = !!first_cond_lower,
       order = exprs(!!parse_expr(paste0("desc(", as_name(tmp_obs_nr_var), ".join)"))),
       mode = "first",

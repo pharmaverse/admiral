@@ -14,7 +14,7 @@ list(
     msg = "a console message to be printed, e.g. `\"Attention\"` or for longer messages use `paste(\"Line 1\", \"Line 2\")`",
     msg_type = "`\"none\"`, `\"message\"`, `\"warning\"`, `\"error\"`",
     source_list = "a list of source objects, e.g., `list(pd, death)`",
-    var = "a variable",
+    var = "an unquoted symbol, e.g., `AVAL`",
     var_list = "list of variables created by `exprs()`, e.g., `exprs(USUBJID, VISIT)`"
   )
 )
