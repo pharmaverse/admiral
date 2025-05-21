@@ -4,7 +4,7 @@ name:  210 Rsimple R script
 run-name: runs simple R script
 
 on:
-  [workflow_dispatch, push]
+  [workflow_dispatch]
 
 jobs:
   task1:
