@@ -575,7 +575,7 @@ derive_extreme_records <- function(dataset = NULL,
       intersect(by_vars_chr)
 
     new_ref_obs <- anti_join(
-      select(dataset_ref, common_vars),
+      select(dataset_ref, all_of(common_vars)),
       select(new_add_obs, !!!by_vars),
       by = by_vars_chr
     )
