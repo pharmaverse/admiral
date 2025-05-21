@@ -19,6 +19,10 @@ subsets, however this can lead to issues when the input dataset is empty. Now
 the derivation is called for all subsets. (#2645)
 - The examples section for the function `derive_var_trtemfl()` was enhanced to include a showcasing of all scenarios discussed in the following [PHUSE White Paper on Treatment-Emergent AEs](https://phuse.s3.eu-central-1.amazonaws.com/Deliverables/Safety+Analytics/WP-087+Recommended+Definition+of++Treatment-Emergent+Adverse+Events+in+Clinical+Trials+.pdf). (#2455)
 - The background checks in `derive_summary_records()` were too restrictive: `by_vars` were expected in `dataset` although the code did not require it. This requirement has therefore been dropped (#2686).
+- The functions `derive_vars_joined()`, `derive_var_joined_exist_flag()`, and
+`filter_joined()` produce correct results now when they are used with `join_type
+= "before"` or `join_type = "after"` and `dataset` and `dataset_add` differ or
+the `filter_add` argument is used. (#2863)
 
 ## Breaking Changes
 
@@ -31,6 +35,14 @@ the derivation is called for all subsets. (#2645)
     **Phase 3 (error)**
     
     **Phase 4 (removed)**
+
+- The values of the variable specified for `tmp_obs_nr_var` in
+`derive_vars_joined()`, `derive_var_joined_exist_flag()`, `filter_joined()` are
+now populated differently if there are multiple records in `dataset` or
+`dataset_add` for the same values of `by_vars` and `order`. Before each of these
+records was assigned a different value, i.e., the variable (together with
+`by_vars`) was a unique identifier. Now the value is the same for all these
+records. (#2683)
 
 ## Documentation
 
