@@ -67,7 +67,7 @@ generic_derivations <- tibble::tribble(
   "derive_var_joined_exist_flag()", "selection",   "variables", "single",
   "derive_var_merged_ef_msrc()",    "selection",   "variables", "multiple",
   "derive_var_merged_exist_flag()", "selection",   "variables", "single",
-  "derive_vars_merged_summary()",   "summary",     "variables", "single",
+  "derive_var_merged_summary()",    "summary",     "variables", "single",
   "derive_vars_joined()",           "selection",   "variables", "single",
   "derive_vars_merged()",           "selection",   "variables", "single",
   "derive_vars_extreme_event()",    "selection",   "variables", "multiple",

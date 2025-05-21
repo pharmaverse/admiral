@@ -6,7 +6,7 @@ on:
   pull_request:
     branches: [main, master]
 
-name: R-CMD-check for Snapshot Testing
+name: R-CMD-check # keep as ensures snapshots are running
 
 permissions: read-all
 
