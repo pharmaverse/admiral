@@ -12,6 +12,7 @@
 
 ## Updates of Existing Functions
 
+- In `derive_vars_joined()`, the `filter_add` argument is now correctly applied for all join types, fixing an issue where it was ignored when `join_type != "all"`. (#2682)
 - The function `extract_duplicate_records()` was updated to consider all variables in the input dataset for the by group if the `by_vars` argument is omitted entirely. (#2644)
 
 - In `slice_derivation()`, previously the derivation is not called for empty
@@ -44,6 +45,8 @@ the derivation is called for all subsets. (#2645)
     - `derive_extreme_records()` (#2585)
     - `derive_param_tte()` (#2704)
     - `derive_summary_records()` (#2707)
+    - `derive_vars_joined()` (#2727)
+    - `derive_vars_merged()` (#2727)
 
 - Added an example to the `derive_vars_transposed()` reference page to showcase how duplicates-related errors can arise when records in `dataset_merge` are not uniquely identified. (#2609)
 
