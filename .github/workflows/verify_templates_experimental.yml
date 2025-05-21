@@ -44,12 +44,16 @@ jobs:
 #        run:  Rscript -e 'install.packages(c("devtools", "diffdf"))'
 
 
-      - name: source
-        run:  Rscript -e 'install.packages(c("devtools")); source("data-raw/admiral_verify_templates.R")'
+#      - name: source
+#        run:  Rscript -e 'install.packages(c("devtools")); source("data-raw/admiral_verify_templates.R")'
+#
 
+#      - name: run the code
+#        run:  Rscript -e 'devtools::load_all(); verify_templates()'
 
-      - name: run the code
-        run:  Rscript -e 'devtools::load_all(); verify_templates()'
+      - name: source, run the code
+        run:  Rscript -e 'source("data-raw/load_run.R")'
+
 
       - name: Session info
         run: |
