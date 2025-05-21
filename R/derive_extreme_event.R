@@ -50,6 +50,27 @@
 #'   A named list of datasets is expected. The `dataset_name` field of `event()`
 #'   and `event_joined()` refers to the dataset provided in the list.
 #'
+#' @param set_values_to Variables to be set
+#'
+#'   The specified variables are set to the specified values for the new
+#'   observations.
+#'
+#'   Set a list of variables to some specified value for the new records
+#'   + LHS refer to a variable.
+#'   + RHS refers to the values to set to the variable. This can be a string, a
+#'   symbol, a numeric value, an expression or NA. If summary functions are
+#'   used, the values are summarized by the variables specified for `by_vars`.
+#'
+#'   For example:
+#'   ```
+#'     set_values_to = exprs(
+#'       PARAMCD = "WOBS",
+#'       PARAM = "Worst Observations"
+#'     )
+#'   ```
+#'
+#' @permitted [expr_list_formula]
+#'
 #' @param keep_source_vars Variables to keep from the source dataset
 #'
 #'  For each event the specified variables are kept from the selected

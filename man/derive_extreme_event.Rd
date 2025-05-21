@@ -122,14 +122,14 @@ used, the values are summarized by the variables specified for \code{by_vars}.
 For example:
 
 \if{html}{\out{<div class="sourceCode">}}\preformatted{  set_values_to = exprs(
-    AVAL = sum(AVAL),
-    DTYPE = "AVERAGE",
+    PARAMCD = "WOBS",
+    PARAM = "Worst Observations"
   )
 }\if{html}{\out{</div>}}
 
 \describe{
-\item{Permitted values}{list of variables created by \code{exprs()}, e.g., \code{exprs(USUBJID, VISIT)}}
-\item{Default value}{none}
+\item{Permitted values}{list of named expressions created by a formula using \code{exprs()}, e.g., \code{exprs(AVALC = VSSTRESC, AVAL = yn_to_numeric(AVALC))}}
+\item{Default value}{\code{NULL}}
 }}
 
 \item{keep_source_vars}{Variables to keep from the source dataset

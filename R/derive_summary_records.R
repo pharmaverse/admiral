@@ -77,7 +77,7 @@
 #'     )
 #'   ```
 #'
-#' @permitted [var_list]
+#' @permitted [expr_list_summary]
 #'
 #' @param missing_values Values for missing summary values
 #'
@@ -85,7 +85,7 @@
 #'   complete mapping defined by the summarization defined in `set_values_to`.  Only variables
 #'   specified for `set_values_to` can be specified for `missing_values`.
 #'
-#' @permitted [var_list]
+#' @permitted [expr_list_summary]
 #'
 #' @return A data frame with derived records appended to original dataset.
 #'

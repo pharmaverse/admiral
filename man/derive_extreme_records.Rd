@@ -176,7 +176,7 @@ For example:
 }\if{html}{\out{</div>}}
 
 \describe{
-\item{Permitted values}{list of variables created by \code{exprs()}, e.g., \code{exprs(USUBJID, VISIT)}}
+\item{Permitted values}{list of named expressions created by \code{exprs()}, e.g., \code{exprs(CUMDOSA = sum(AVAL, na.rm = TRUE), AVALU = "ml")}}
 \item{Default value}{none}
 }}
 }
