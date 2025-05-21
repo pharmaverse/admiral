@@ -443,8 +443,18 @@
 #'     `condition` which reference joined variables are limited to this group.
 #'     In particular, within `condition` we use `all()` to check that all observations
 #'     are either `"CR"` or `"NE"`, and `count_vals()` to ensure at most one is
-#'     `"NE"`. Note that here we have selected `join_type = "after"` because
-#'     <insert explanation here, explaining why join_type = "all" changes patient 1 to a "PR">.
+#'     `"NE"`.
+#'
+#'     Note that the selection of `join_type = "after"` is critical here, due to the
+#'     fact that the restriction implied by `join_type` is applied before the one
+#'     implied by `first_cond_upper`. Picking the first subject (who was correctly
+#'     identified as a confirmed responder) as an example, selecting
+#'     `join_type = "all"` instead of `"after"` would mean the first `"PR"` record
+#'     from `"2020-01-01"` would also be considered when evaluating the
+#'     `all(AVALC.join %in% c("CR", "NE"))` portion of `condition`. In turn, the
+#'     condition would not be satisfied anymore, and in this case, following the
+#'     later event logic shows the subject would be considered a partial responder
+#'     instead.
 #'
 #'  - The Partial Response (PR), is very similar; with the difference being that the
 #'    first portion of `condition` now references `"PR"` and `first_cond_upper`

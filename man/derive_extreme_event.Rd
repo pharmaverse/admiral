@@ -565,8 +565,18 @@ then form part of our "join group", meaning that the remaining portions of
 \code{condition} which reference joined variables are limited to this group.
 In particular, within \code{condition} we use \code{all()} to check that all observations
 are either \code{"CR"} or \code{"NE"}, and \code{count_vals()} to ensure at most one is
-\code{"NE"}. Note that here we have selected \code{join_type = "after"} because
-<insert explanation here, explaining why join_type = "all" changes patient 1 to a "PR">.
+\code{"NE"}.
+
+Note that the selection of \code{join_type = "after"} rather than \code{"all"} is
+critical here, due to the fact that the restriction implied by \code{join_type} is
+applied before the one implied by \code{first_cond_upper}. Picking the first
+subject (who was correctly identified as a confirmed responder) as an example,
+selecting \code{join_type = "all"} instead would mean the first \code{"PR"} record from
+\code{"2020-01-01"} would also be considered when evaluating the
+\code{all(AVALC.join \%in\% c("CR", "NE"))} portion of \code{condition}. In turn, the
+condition would not be satisfied anymore, and in this case, following the
+later event logic shows the subject would be considered a partial responder
+instead.
 \item The Partial Response (PR), is very similar; with the difference being that the
 first portion of \code{condition} now references \code{"PR"} and \code{first_cond_upper}
 accepts a confirmatory \code{"PR"} or \code{"CR"} 28 days later. Note that now we must add
