@@ -41,8 +41,8 @@ jobs:
 
 ......- name: needed packages
         run: |
-          install.packages(c("devtools", "diffdf"))
-        shell:  Rscript {0}
+          Rscript -e 'install.packages(c("devtools", "diffdf"))'
+        shell: Rscript {0}
 
 
       - name: source
