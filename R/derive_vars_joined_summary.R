@@ -207,7 +207,7 @@
 #'
 #' @info The examples focus on the functionality specific to this function. For
 #'   examples of functionality common to all "joined" functions like
-#'   `filter_join`, `join_type`, `first_cond_lower`, ... please see the examples
+#'   `filter_join`, `filter_add`, `join_vars`, ... please see the examples
 #'   of [derive_vars_joined()].
 #'
 #' @caption Derive cumulative dose before event (`CUMDOSA`)

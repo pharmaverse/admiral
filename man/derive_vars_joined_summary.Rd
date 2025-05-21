@@ -305,7 +305,7 @@ General Derivation Functions for all ADaMs that returns variable appended to dat
 
 The examples focus on the functionality specific to this function. For
 examples of functionality common to all "joined" functions like
-\code{filter_join}, \code{join_type}, \code{first_cond_lower}, ... please see the examples
+\code{filter_join}, \code{filter_add}, \code{join_vars}, ... please see the examples
 of \code{\link[=derive_vars_joined]{derive_vars_joined()}}.
 \subsection{Derive cumulative dose before event (\code{CUMDOSA})}{
 
