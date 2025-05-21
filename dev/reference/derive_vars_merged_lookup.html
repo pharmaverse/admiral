@@ -11,7 +11,7 @@ mapping from the lookup table."><meta property="og:image" content="https://pharm
 
     <a class="navbar-brand me-2" href="../index.html">admiral</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.2.0.9024</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.2.0.9025</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -100,7 +100,10 @@ mapping from the lookup table.</p>
 <dl><dt id="arg-dataset">dataset<a class="anchor" aria-label="anchor" href="#arg-dataset"></a></dt>
 <dd><p>Input dataset</p>
 <p>The variables specified by the <code>by_vars</code> argument are expected to be in the dataset.</p>
-<dl><dt>Default value</dt>
+<dl><dt>Permitted values</dt>
+<dd><p>a dataset, i.e., a <code>data.frame</code> or tibble</p></dd>
+
+<dt>Default value</dt>
 <dd><p>none</p></dd>
 
 
@@ -110,7 +113,10 @@ mapping from the lookup table.</p>
 <dt id="arg-dataset-add">dataset_add<a class="anchor" aria-label="anchor" href="#arg-dataset-add"></a></dt>
 <dd><p>Lookup table</p>
 <p>The variables specified by the <code>by_vars</code> argument are expected.</p>
-<dl><dt>Default value</dt>
+<dl><dt>Permitted values</dt>
+<dd><p>a dataset, i.e., a <code>data.frame</code> or tibble</p></dd>
+
+<dt>Default value</dt>
 <dd><p>none</p></dd>
 
 
@@ -123,7 +129,10 @@ mapping from the lookup table.</p>
 are merged by the specified variables.</p>
 <p>Variables can be renamed by naming the element, i.e.
 <code>by_vars = exprs(&lt;name in input dataset&gt; = &lt;name in additional dataset&gt;)</code>, similar to the <code>dplyr</code> joins.</p>
-<dl><dt>Default value</dt>
+<dl><dt>Permitted values</dt>
+<dd><p>list of variables created by <code><a href="reexport-exprs.html">exprs()</a></code>, e.g., <code>exprs(USUBJID, VISIT)</code></p></dd>
+
+<dt>Default value</dt>
 <dd><p>none</p></dd>
 
 
@@ -138,8 +147,7 @@ specified order.</p>
 <p>Variables defined by the <code>new_vars</code> argument can be used in the sort order.</p>
 <p>For handling of <code>NA</code>s in sorting variables see <a href="../articles/generic.html#sort_order">Sort Order</a>.</p>
 <dl><dt>Permitted values</dt>
-<dd><p>list of expressions created by <code><a href="reexport-exprs.html">exprs()</a></code>, e.g.,
-<code>exprs(ADT, desc(AVAL))</code> or <code>NULL</code></p></dd>
+<dd><p>list of variables created by <code><a href="reexport-exprs.html">exprs()</a></code>, e.g., <code>exprs(USUBJID, VISIT)</code></p></dd>
 
 <dt>Default value</dt>
 <dd><p><code>NULL</code></p></dd>
@@ -162,9 +170,11 @@ For example, <code>new_vars = LASTRSP = exprs(str_to_upper(AVALC))</code> adds t
 variable <code>LASTRSP</code> to the dataset and sets it to the upper case value of
 <code>AVALC</code>.</p>
 <p>If the argument is not specified or set to <code>NULL</code>, all variables from the
-additional dataset (<code>dataset_add</code>) are added.</p>
+additional dataset (<code>dataset_add</code>) are added. In the case when a variable
+exists in both datasets, an error is issued to ensure the user either adds
+to <code>by_vars</code>, removes or renames.</p>
 <dl><dt>Permitted values</dt>
-<dd><p>list of variables or named expressions created by <code><a href="reexport-exprs.html">exprs()</a></code></p></dd>
+<dd><p>list of variables created by <code><a href="reexport-exprs.html">exprs()</a></code>, e.g., <code>exprs(USUBJID, VISIT)</code></p></dd>
 
 <dt>Default value</dt>
 <dd><p><code>NULL</code></p></dd>
@@ -179,7 +189,7 @@ additional dataset (<code>dataset_add</code>) are added.</p>
 argument is specified, <code>mode</code> must be non-null.</p>
 <p>If the <code>order</code> argument is not specified, the <code>mode</code> argument is ignored.</p>
 <dl><dt>Permitted values</dt>
-<dd><p><code>"first"</code>, <code>"last"</code>, <code>NULL</code></p></dd>
+<dd><p><code>"first"</code>, <code>"last"</code></p></dd>
 
 <dt>Default value</dt>
 <dd><p><code>NULL</code></p></dd>
@@ -196,7 +206,7 @@ considered.</p>
 <p>Variables defined by the <code>new_vars</code> argument can be used in the filter
 condition.</p>
 <dl><dt>Permitted values</dt>
-<dd><p>a condition</p></dd>
+<dd><p>an unquoted condition, e.g., <code>AVISIT == "BASELINE"</code></p></dd>
 
 <dt>Default value</dt>
 <dd><p><code>NULL</code></p></dd>
@@ -226,7 +236,10 @@ to the by variables, an error is issued.</p>
 <dt id="arg-duplicate-msg">duplicate_msg<a class="anchor" aria-label="anchor" href="#arg-duplicate-msg"></a></dt>
 <dd><p>Message of unique check</p>
 <p>If the uniqueness check fails, the specified message is displayed.</p>
-<dl><dt>Default value</dt>
+<dl><dt>Permitted values</dt>
+<dd><p>a console message to be printed, e.g. <code>"Attention"</code> or for longer messages use <code>paste("Line 1", "Line 2")</code></p></dd>
+
+<dt>Default value</dt>
 <dd><p></p><div class="sourceCode r"><pre><code><span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span></span>
 <span>  <span class="st">"Dataset {.arg dataset_add} contains duplicate records with respect to"</span>,</span>
 <span>  <span class="st">"{.var {vars2chr(by_vars)}}."</span></span>
@@ -239,9 +252,8 @@ to the by variables, an error is issued.</p>
 <dt id="arg-print-not-mapped">print_not_mapped<a class="anchor" aria-label="anchor" href="#arg-print-not-mapped"></a></dt>
 <dd><p>Print a list of unique <code>by_vars</code> values that do not
 have corresponding records from the lookup table?</p>
-<p><em>Default</em>: <code>TRUE</code></p>
 <dl><dt>Permitted values</dt>
-<dd><p><code>TRUE</code>, <code>FALSE</code></p></dd>
+<dd><p><code>"TRUE"</code>, <code>"FALSE"</code></p></dd>
 
 <dt>Default value</dt>
 <dd><p><code>TRUE</code></p></dd>

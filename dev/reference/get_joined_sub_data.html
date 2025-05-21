@@ -13,7 +13,7 @@ memory consumption.'><meta property="og:image" content="https://pharmaverse.gith
 
     <a class="navbar-brand me-2" href="../index.html">admiral</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.2.0.9024</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.2.0.9025</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -102,7 +102,10 @@ memory consumption.</p>
 <dl><dt id="arg-dataset">dataset<a class="anchor" aria-label="anchor" href="#arg-dataset"></a></dt>
 <dd><p>Input dataset</p>
 <p>The variables specified by the <code>by_vars</code> argument are expected to be in the dataset.</p>
-<dl><dt>Default value</dt>
+<dl><dt>Permitted values</dt>
+<dd><p>a dataset, i.e., a <code>data.frame</code> or tibble</p></dd>
+
+<dt>Default value</dt>
 <dd><p>none</p></dd>
 
 
@@ -113,7 +116,10 @@ memory consumption.</p>
 <dd><p>Additional dataset</p>
 <p>The variables specified by the <code>by_vars</code>, the <code>new_vars</code>, the <code>join_vars</code>,
 and the <code>order</code> argument are expected.</p>
-<dl><dt>Default value</dt>
+<dl><dt>Permitted values</dt>
+<dd><p>a dataset, i.e., a <code>data.frame</code> or tibble</p></dd>
+
+<dt>Default value</dt>
 <dd><p>none</p></dd>
 
 
@@ -125,7 +131,10 @@ and the <code>order</code> argument are expected.</p>
 <p>The two datasets are joined by the specified variables.</p>
 <p>Variables can be renamed by naming the element, i.e.
 <code>by_vars = exprs(&lt;name in input dataset&gt; = &lt;name in additional dataset&gt;)</code>, similar to the <code>dplyr</code> joins.</p>
-<dl><dt>Default value</dt>
+<dl><dt>Permitted values</dt>
+<dd><p>list of variables created by <code><a href="reexport-exprs.html">exprs()</a></code>, e.g., <code>exprs(USUBJID, VISIT)</code></p></dd>
+
+<dt>Default value</dt>
 <dd><p><code>NULL</code></p></dd>
 
 
@@ -140,7 +149,10 @@ with respect to <code>order</code>. For each by group (<code>by_vars</code>) the
 number starts with <code>1</code>. The variable can be used in the conditions
 (<code>filter_join</code>, <code>first_cond_upper</code>, <code>first_cond_lower</code>). It can also be
 used to select consecutive observations or the last observation.</p>
-<dl><dt>Default value</dt>
+<dl><dt>Permitted values</dt>
+<dd><p>a variable</p></dd>
+
+<dt>Default value</dt>
 <dd><p><code>NULL</code></p></dd>
 
 
@@ -177,7 +189,10 @@ observations are considered, i.e., the observation is not flagged.</p>
 <p>This argument should be specified if <code>filter_join</code> contains summary
 functions which should not apply to all observations but only up to the
 confirmation assessment.</p>
-<dl><dt>Default value</dt>
+<dl><dt>Permitted values</dt>
+<dd><p>an unquoted condition, e.g., <code>AVISIT == "BASELINE"</code></p></dd>
+
+<dt>Default value</dt>
 <dd><p><code>NULL</code></p></dd>
 
 
@@ -195,7 +210,10 @@ considered, i.e., the observation is not flagged.</p>
 functions which should not apply to all observations but only from a
 certain observation before the current observation up to the current
 observation.</p>
-<dl><dt>Default value</dt>
+<dl><dt>Permitted values</dt>
+<dd><p>an unquoted condition, e.g., <code>AVISIT == "BASELINE"</code></p></dd>
+
+<dt>Default value</dt>
 <dd><p><code>NULL</code></p></dd>
 
 
@@ -211,7 +229,7 @@ condition.</p>
 <p>The condition can include summary functions like <code><a href="https://rdrr.io/r/base/all.html" class="external-link">all()</a></code> or <code><a href="https://rdrr.io/r/base/any.html" class="external-link">any()</a></code>. The
 joined dataset is grouped by the original observations.</p>
 <dl><dt>Permitted values</dt>
-<dd><p>a condition</p></dd>
+<dd><p>an unquoted condition, e.g., <code>AVISIT == "BASELINE"</code></p></dd>
 
 <dt>Default value</dt>
 <dd><p><code>NULL</code></p></dd>

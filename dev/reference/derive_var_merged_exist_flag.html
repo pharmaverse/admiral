@@ -13,7 +13,7 @@ Note: This is a wrapper function for the more generic derive_vars_merged()."><me
 
     <a class="navbar-brand me-2" href="../index.html">admiral</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.2.0.9024</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.2.0.9025</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -102,7 +102,10 @@ condition.</p>
 <dl><dt id="arg-dataset">dataset<a class="anchor" aria-label="anchor" href="#arg-dataset"></a></dt>
 <dd><p>Input dataset</p>
 <p>The variables specified by the <code>by_vars</code> argument are expected to be in the dataset.</p>
-<dl><dt>Default value</dt>
+<dl><dt>Permitted values</dt>
+<dd><p>a dataset, i.e., a <code>data.frame</code> or tibble</p></dd>
+
+<dt>Default value</dt>
 <dd><p>none</p></dd>
 
 
@@ -112,7 +115,10 @@ condition.</p>
 <dt id="arg-dataset-add">dataset_add<a class="anchor" aria-label="anchor" href="#arg-dataset-add"></a></dt>
 <dd><p>Additional dataset</p>
 <p>The variables specified by the <code>by_vars</code> argument are expected.</p>
-<dl><dt>Default value</dt>
+<dl><dt>Permitted values</dt>
+<dd><p>a dataset, i.e., a <code>data.frame</code> or tibble</p></dd>
+
+<dt>Default value</dt>
 <dd><p>none</p></dd>
 
 
@@ -121,7 +127,10 @@ condition.</p>
 
 <dt id="arg-by-vars">by_vars<a class="anchor" aria-label="anchor" href="#arg-by-vars"></a></dt>
 <dd><p>Grouping variables</p>
-<dl><dt>Default value</dt>
+<dl><dt>Permitted values</dt>
+<dd><p>list of variables created by <code><a href="reexport-exprs.html">exprs()</a></code>, e.g., <code>exprs(USUBJID, VISIT)</code></p></dd>
+
+<dt>Default value</dt>
 <dd><p>none</p></dd>
 
 
@@ -131,7 +140,10 @@ condition.</p>
 <dt id="arg-new-var">new_var<a class="anchor" aria-label="anchor" href="#arg-new-var"></a></dt>
 <dd><p>New variable</p>
 <p>The specified variable is added to the input dataset.</p>
-<dl><dt>Default value</dt>
+<dl><dt>Permitted values</dt>
+<dd><p>a variable</p></dd>
+
+<dt>Default value</dt>
 <dd><p>none</p></dd>
 
 
@@ -147,7 +159,10 @@ evaluates as <code>FALSE</code> or <code>NA</code> for all observations the new 
 to the false value (<code>false_value</code>). The new variable is set to the missing
 value (<code>missing_value</code>) for by groups not present in the additional
 dataset.</p>
-<dl><dt>Default value</dt>
+<dl><dt>Permitted values</dt>
+<dd><p>an unquoted condition, e.g., <code>AVISIT == "BASELINE"</code></p></dd>
+
+<dt>Default value</dt>
 <dd><p>none</p></dd>
 
 
@@ -156,7 +171,10 @@ dataset.</p>
 
 <dt id="arg-true-value">true_value<a class="anchor" aria-label="anchor" href="#arg-true-value"></a></dt>
 <dd><p>True value</p>
-<dl><dt>Default value</dt>
+<dl><dt>Permitted values</dt>
+<dd><p>a character scalar, i.e., a character vector of length one</p></dd>
+
+<dt>Default value</dt>
 <dd><p><code>"Y"</code></p></dd>
 
 
@@ -165,7 +183,10 @@ dataset.</p>
 
 <dt id="arg-false-value">false_value<a class="anchor" aria-label="anchor" href="#arg-false-value"></a></dt>
 <dd><p>False value</p>
-<dl><dt>Default value</dt>
+<dl><dt>Permitted values</dt>
+<dd><p>a character scalar, i.e., a character vector of length one</p></dd>
+
+<dt>Default value</dt>
 <dd><p><code>NA_character_</code></p></dd>
 
 
@@ -173,11 +194,11 @@ dataset.</p>
 
 
 <dt id="arg-missing-value">missing_value<a class="anchor" aria-label="anchor" href="#arg-missing-value"></a></dt>
-<dd><p>Values used for missing information</p>
+<dd><p>Value used for missing information</p>
 <p>The new variable is set to the specified value for all by groups without
 observations in the additional dataset.</p>
 <dl><dt>Permitted values</dt>
-<dd><p>A character scalar</p></dd>
+<dd><p>a character scalar, i.e., a character vector of length one</p></dd>
 
 <dt>Default value</dt>
 <dd><p><code>NA_character_</code></p></dd>
@@ -192,7 +213,7 @@ observations in the additional dataset.</p>
 for flagging. If the argument is not specified, all observations are
 considered.</p>
 <dl><dt>Permitted values</dt>
-<dd><p>a condition</p></dd>
+<dd><p>an unquoted condition, e.g., <code>AVISIT == "BASELINE"</code></p></dd>
 
 <dt>Default value</dt>
 <dd><p><code>NULL</code></p></dd>

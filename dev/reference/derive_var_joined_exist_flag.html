@@ -9,7 +9,7 @@ example, flagging events which need to be confirmed by a second event."><meta pr
 
     <a class="navbar-brand me-2" href="../index.html">admiral</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.2.0.9024</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.2.0.9025</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -102,7 +102,10 @@ example, flagging events which need to be confirmed by a second event.</p>
 <dl><dt id="arg-dataset">dataset<a class="anchor" aria-label="anchor" href="#arg-dataset"></a></dt>
 <dd><p>Input dataset</p>
 <p>The variables specified by the <code>by_vars</code> and <code>join_vars</code> arguments are expected to be in the dataset.</p>
-<dl><dt>Default value</dt>
+<dl><dt>Permitted values</dt>
+<dd><p>a dataset, i.e., a <code>data.frame</code> or tibble</p></dd>
+
+<dt>Default value</dt>
 <dd><p>none</p></dd>
 
 
@@ -113,7 +116,10 @@ example, flagging events which need to be confirmed by a second event.</p>
 <dd><p>Additional dataset</p>
 <p>The variables specified for <code>by_vars</code>, <code>join_vars</code>, and <code>order</code> are
 expected.</p>
-<dl><dt>Default value</dt>
+<dl><dt>Permitted values</dt>
+<dd><p>a dataset, i.e., a <code>data.frame</code> or tibble</p></dd>
+
+<dt>Default value</dt>
 <dd><p>none</p></dd>
 
 
@@ -124,7 +130,10 @@ expected.</p>
 <dd><p>Grouping variables</p>
 <p>The specified variables are used for joining the input
 dataset (<code>dataset</code>) with the additional dataset (<code>dataset_add</code>).</p>
-<dl><dt>Default value</dt>
+<dl><dt>Permitted values</dt>
+<dd><p>list of variables created by <code><a href="reexport-exprs.html">exprs()</a></code>, e.g., <code>exprs(USUBJID, VISIT)</code></p></dd>
+
+<dt>Default value</dt>
 <dd><p>none</p></dd>
 
 
@@ -135,7 +144,10 @@ dataset (<code>dataset</code>) with the additional dataset (<code>dataset_add</c
 <dd><p>Order</p>
 <p>The observations are ordered by the specified order.</p>
 <p>For handling of <code>NA</code>s in sorting variables see <a href="../articles/generic.html#sort_order">Sort Order</a>.</p>
-<dl><dt>Default value</dt>
+<dl><dt>Permitted values</dt>
+<dd><p>list of variables created by <code><a href="reexport-exprs.html">exprs()</a></code>, e.g., <code>exprs(USUBJID, VISIT)</code></p></dd>
+
+<dt>Default value</dt>
 <dd><p>none</p></dd>
 
 
@@ -145,7 +157,10 @@ dataset (<code>dataset</code>) with the additional dataset (<code>dataset_add</c
 <dt id="arg-new-var">new_var<a class="anchor" aria-label="anchor" href="#arg-new-var"></a></dt>
 <dd><p>New variable</p>
 <p>The specified variable is added to the input dataset.</p>
-<dl><dt>Default value</dt>
+<dl><dt>Permitted values</dt>
+<dd><p>a variable</p></dd>
+
+<dt>Default value</dt>
 <dd><p>none</p></dd>
 
 
@@ -161,7 +176,10 @@ number starts with <code>1</code>. The variable can be used in the conditions
 (<code>filter_join</code>, <code>first_cond_upper</code>, <code>first_cond_lower</code>). It is not included
 in the output dataset. It can also be used to flag consecutive observations
 or the last observation (see last example below).</p>
-<dl><dt>Default value</dt>
+<dl><dt>Permitted values</dt>
+<dd><p>a variable</p></dd>
+
+<dt>Default value</dt>
 <dd><p><code>NULL</code></p></dd>
 
 
@@ -174,7 +192,10 @@ or the last observation (see last example below).</p>
 for this parameter. The specified variables are added to the joined dataset
 with suffix ".join". For example to flag all observations with <code>AVALC == "Y"</code> and <code>AVALC == "Y"</code> for at least one subsequent visit <code>join_vars = exprs(AVALC, AVISITN)</code> and <code>filter_join = AVALC == "Y" &amp; AVALC.join == "Y" &amp; AVISITN &lt; AVISITN.join</code> could be specified.</p>
 <p>The <code>*.join</code> variables are not included in the output dataset.</p>
-<dl><dt>Default value</dt>
+<dl><dt>Permitted values</dt>
+<dd><p>list of variables created by <code><a href="reexport-exprs.html">exprs()</a></code>, e.g., <code>exprs(USUBJID, VISIT)</code></p></dd>
+
+<dt>Default value</dt>
 <dd><p>none</p></dd>
 
 
@@ -213,7 +234,10 @@ considered, i.e., the observation is not flagged.</p>
 functions which should not apply to all observations but only from a
 certain observation before the current observation up to the current
 observation. For an example see the last example below.</p>
-<dl><dt>Default value</dt>
+<dl><dt>Permitted values</dt>
+<dd><p>an unquoted condition, e.g., <code>AVISIT == "BASELINE"</code></p></dd>
+
+<dt>Default value</dt>
 <dd><p><code>NULL</code></p></dd>
 
 
@@ -229,7 +253,10 @@ observations are considered, i.e., the observation is not flagged.</p>
 <p>This parameter should be specified if <code>filter_join</code> contains summary
 functions which should not apply to all observations but only up to the
 confirmation assessment. For an example see the third example below.</p>
-<dl><dt>Default value</dt>
+<dl><dt>Permitted values</dt>
+<dd><p>an unquoted condition, e.g., <code>AVISIT == "BASELINE"</code></p></dd>
+
+<dt>Default value</dt>
 <dd><p><code>NULL</code></p></dd>
 
 
@@ -246,7 +273,7 @@ condition.</p>
 <p>The condition can include summary functions like <code><a href="https://rdrr.io/r/base/all.html" class="external-link">all()</a></code> or <code><a href="https://rdrr.io/r/base/any.html" class="external-link">any()</a></code>. The
 additional dataset is grouped by the by variables (<code>by_vars</code>).</p>
 <dl><dt>Permitted values</dt>
-<dd><p>a condition</p></dd>
+<dd><p>an unquoted condition, e.g., <code>AVISIT == "BASELINE"</code></p></dd>
 
 <dt>Default value</dt>
 <dd><p><code>NULL</code></p></dd>
@@ -265,7 +292,10 @@ observation. For example, <code>filter_join = AVALC == "CR" &amp; all(AVALC.join
 selects observations with response "CR" and for all observations up to the
 confirmation observation the response is "CR" or "NE" and there is at most
 one "NE".</p>
-<dl><dt>Default value</dt>
+<dl><dt>Permitted values</dt>
+<dd><p>an unquoted condition, e.g., <code>AVISIT == "BASELINE"</code></p></dd>
+
+<dt>Default value</dt>
 <dd><p>none</p></dd>
 
 
@@ -274,7 +304,10 @@ one "NE".</p>
 
 <dt id="arg-true-value">true_value<a class="anchor" aria-label="anchor" href="#arg-true-value"></a></dt>
 <dd><p>Value of <code>new_var</code> for flagged observations</p>
-<dl><dt>Default value</dt>
+<dl><dt>Permitted values</dt>
+<dd><p>a character scalar, i.e., a character vector of length one</p></dd>
+
+<dt>Default value</dt>
 <dd><p><code>"Y"</code></p></dd>
 
 
@@ -283,7 +316,10 @@ one "NE".</p>
 
 <dt id="arg-false-value">false_value<a class="anchor" aria-label="anchor" href="#arg-false-value"></a></dt>
 <dd><p>Value of <code>new_var</code> for observations not flagged</p>
-<dl><dt>Default value</dt>
+<dl><dt>Permitted values</dt>
+<dd><p>a character scalar, i.e., a character vector of length one</p></dd>
+
+<dt>Default value</dt>
 <dd><p><code>NA_character_</code></p></dd>
 
 
@@ -296,7 +332,7 @@ one "NE".</p>
 if the observations of the input dataset are not unique with respect to the
 by variables and the order.</p>
 <dl><dt>Permitted values</dt>
-<dd><p><code>"none"</code>, <code>"warning"</code>, <code>"error"</code></p></dd>
+<dd><p><code>"none"</code>, <code>"message"</code>, <code>"warning"</code>, <code>"error"</code></p></dd>
 
 <dt>Default value</dt>
 <dd><p><code>"warning"</code></p></dd>

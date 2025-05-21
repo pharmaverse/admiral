@@ -15,7 +15,7 @@ in different datasets, e.g., EX, EC, and FA."><meta property="og:image" content=
 
     <a class="navbar-brand me-2" href="../index.html">admiral</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.2.0.9024</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.2.0.9025</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -104,7 +104,10 @@ in different datasets, e.g., <code>EX</code>, <code>EC</code>, and <code>FA</cod
 <dl><dt id="arg-dataset">dataset<a class="anchor" aria-label="anchor" href="#arg-dataset"></a></dt>
 <dd><p>Input dataset</p>
 <p>The variables specified by the <code>by_vars</code> argument are expected to be in the dataset.</p>
-<dl><dt>Default value</dt>
+<dl><dt>Permitted values</dt>
+<dd><p>a dataset, i.e., a <code>data.frame</code> or tibble</p></dd>
+
+<dt>Default value</dt>
 <dd><p>none</p></dd>
 
 
@@ -113,7 +116,10 @@ in different datasets, e.g., <code>EX</code>, <code>EC</code>, and <code>FA</cod
 
 <dt id="arg-by-vars">by_vars<a class="anchor" aria-label="anchor" href="#arg-by-vars"></a></dt>
 <dd><p>Grouping variables</p>
-<dl><dt>Default value</dt>
+<dl><dt>Permitted values</dt>
+<dd><p>list of variables created by <code><a href="reexport-exprs.html">exprs()</a></code>, e.g., <code>exprs(USUBJID, VISIT)</code></p></dd>
+
+<dt>Default value</dt>
 <dd><p>none</p></dd>
 
 
@@ -126,7 +132,10 @@ in different datasets, e.g., <code>EX</code>, <code>EC</code>, and <code>FA</cod
 (<code>condition</code> field) is evaluated in the source dataset referenced by the
 <code>dataset_name</code> field. If it evaluates to <code>TRUE</code> at least once, the new
 variable is set to <code>true_value</code>.</p>
-<dl><dt>Default value</dt>
+<dl><dt>Permitted values</dt>
+<dd><p>a list of <code><a href="flag_event.html">flag_event()</a></code> objects</p></dd>
+
+<dt>Default value</dt>
 <dd><p>none</p></dd>
 
 
@@ -137,7 +146,10 @@ variable is set to <code>true_value</code>.</p>
 <dd><p>Source datasets</p>
 <p>A named list of datasets is expected. The <code>dataset_name</code> field of
 <code><a href="flag_event.html">flag_event()</a></code> refers to the dataset provided in the list.</p>
-<dl><dt>Default value</dt>
+<dl><dt>Permitted values</dt>
+<dd><p>named list of datasets, e.g., <code>list(adsl = adsl, ae = ae)</code></p></dd>
+
+<dt>Default value</dt>
 <dd><p>none</p></dd>
 
 
@@ -147,7 +159,10 @@ variable is set to <code>true_value</code>.</p>
 <dt id="arg-new-var">new_var<a class="anchor" aria-label="anchor" href="#arg-new-var"></a></dt>
 <dd><p>New variable</p>
 <p>The specified variable is added to the input dataset.</p>
-<dl><dt>Default value</dt>
+<dl><dt>Permitted values</dt>
+<dd><p>a variable</p></dd>
+
+<dt>Default value</dt>
 <dd><p>none</p></dd>
 
 
@@ -161,7 +176,10 @@ groups for which at least one of the source object (<code>sources</code>) has th
 condition evaluate to <code>TRUE</code>.</p>
 <p>The values of <code>true_value</code>, <code>false_value</code>, and <code>missing_value</code> must be of
 the same type.</p>
-<dl><dt>Default value</dt>
+<dl><dt>Permitted values</dt>
+<dd><p>a character scalar, i.e., a character vector of length one</p></dd>
+
+<dt>Default value</dt>
 <dd><p><code>"Y"</code></p></dd>
 
 
@@ -175,7 +193,10 @@ groups which occur in at least one source (<code>sources</code>) but the conditi
 never evaluates to <code>TRUE</code>.</p>
 <p>The values of <code>true_value</code>, <code>false_value</code>, and <code>missing_value</code> must be of
 the same type.</p>
-<dl><dt>Default value</dt>
+<dl><dt>Permitted values</dt>
+<dd><p>a character scalar, i.e., a character vector of length one</p></dd>
+
+<dt>Default value</dt>
 <dd><p><code>NA_character_</code></p></dd>
 
 
@@ -188,7 +209,10 @@ the same type.</p>
 observations in any of the sources (<code>sources</code>).</p>
 <p>The values of <code>true_value</code>, <code>false_value</code>, and <code>missing_value</code> must be of
 the same type.</p>
-<dl><dt>Default value</dt>
+<dl><dt>Permitted values</dt>
+<dd><p>a character scalar, i.e., a character vector of length one</p></dd>
+
+<dt>Default value</dt>
 <dd><p><code>NA_character_</code></p></dd>
 
 

@@ -9,7 +9,7 @@ derive_var_merged_ef_msrc() function."><meta property="og:image" content="https:
 
     <a class="navbar-brand me-2" href="../index.html">admiral</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.2.0.9024</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.2.0.9025</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -88,7 +88,7 @@ derive_var_merged_ef_msrc() function."><meta property="og:image" content="https:
 event. The name refers to the dataset specified for <code>source_datasets</code> in
 <code><a href="derive_var_merged_ef_msrc.html">derive_var_merged_ef_msrc()</a></code>.</p>
 <dl><dt>Permitted values</dt>
-<dd><p>a character scalar</p></dd>
+<dd><p>a dataset, i.e., a <code>data.frame</code> or tibble</p></dd>
 
 <dt>Default value</dt>
 <dd><p>none</p></dd>
@@ -102,7 +102,10 @@ event. The name refers to the dataset specified for <code>source_datasets</code>
 <p>The condition is evaluated at the dataset referenced by <code>dataset_name</code>. For
 all by groups where it evaluates as <code>TRUE</code> at least once the new variable
 is set to the true value (<code>true_value</code>).</p>
-<dl><dt>Default value</dt>
+<dl><dt>Permitted values</dt>
+<dd><p>an unquoted condition, e.g., <code>AVISIT == "BASELINE"</code></p></dd>
+
+<dt>Default value</dt>
 <dd><p><code>NULL</code></p></dd>
 
 
@@ -117,7 +120,10 @@ condition is evaluated. If named elements are used in <code>by_vars</code> like
 after the evaluation. If the <code>by_vars</code> element is not specified, the
 observations are grouped by the variables specified for the <code>by_vars</code>
 argument of <code><a href="derive_var_merged_ef_msrc.html">derive_var_merged_ef_msrc()</a></code>.</p>
-<dl><dt>Default value</dt>
+<dl><dt>Permitted values</dt>
+<dd><p>list of variables created by <code><a href="reexport-exprs.html">exprs()</a></code>, e.g., <code>exprs(USUBJID, VISIT)</code></p></dd>
+
+<dt>Default value</dt>
 <dd><p><code>NULL</code></p></dd>
 
 
