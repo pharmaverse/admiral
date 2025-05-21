@@ -23,12 +23,14 @@ derive_extreme_event(
 The variables specified by the \code{by_vars} and \code{order} arguments are expected to be in the dataset.
 
 \describe{
+\item{Permitted values}{a dataset, i.e., a \code{data.frame} or tibble}
 \item{Default value}{none}
 }}
 
 \item{by_vars}{Grouping variables
 
 \describe{
+\item{Permitted values}{list of variables created by \code{exprs()}, e.g., \code{exprs(USUBJID, VISIT)}}
 \item{Default value}{\code{NULL}}
 }}
 
@@ -126,6 +128,7 @@ For example:
 }\if{html}{\out{</div>}}
 
 \describe{
+\item{Permitted values}{list of variables created by \code{exprs()}, e.g., \code{exprs(USUBJID, VISIT)}}
 \item{Default value}{none}
 }}
 
@@ -253,9 +256,9 @@ long as that variable appears in \code{keep_source_vars} (here, \code{ADY} does
 due to the use of the tidyselect expression \code{everything()}).
 }
 
-\if{html}{\out{<div class="sourceCode r">}}\preformatted{library(tibble)
-library(dplyr)
-library(lubridate)
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{library(tibble, warn.conflicts = FALSE)
+library(dplyr, warn.conflicts = FALSE)
+library(lubridate, warn.conflicts = FALSE)
 
 adqs1 <- tribble(
   ~USUBJID, ~PARAMCD,         ~AVALC,        ~ADY,
@@ -549,7 +552,7 @@ Since the CBOR derivation contains multiple complex parts, it's
 convenient to make use of the \code{description} argument within each event object
 to describe what condition is being checked.
 \itemize{
-\item For the Confirmed Response (CR), for each \code{"CR"} record in the original ADRS
+\item For the Confirmed Response (CR), for each \code{"CR"} record in the original \code{ADRS}
 dataset that will be identified by the first part of the \code{condition} argument
 (\code{AVALC == "CR"}), we need to use the \code{first_cond_upper} argument to limit the
 group of observations to consider alongside it. Namely, we need to look up to
@@ -569,7 +572,7 @@ accepts a confirmatory \code{"PR"} or \code{"CR"} 28 days later. Note that now w
 \item The Stable Disease (SD), Progressive Disease (PD) and Not Evaluable (NE)
 events are simpler and just require \code{event()} calls.
 \item Finally, we use a catch-all \code{event()} with \code{condition = TRUE} and
-\code{dataset_name = adsl} to identify those subjects who do not appear in ADRS
+\code{dataset_name = adsl} to identify those subjects who do not appear in \code{ADRS}
 and list their CBOR as \code{"MISSING"}. Note here the fact that \code{dataset_name} is
 set to \code{adsl}, which is a new source dataset. As such it's important in the
 main \code{derive_extreme_event()} call to list \code{adsl} as another source dataset
@@ -639,18 +642,19 @@ with \code{source_datasets = list(adsl = adsl)}.
     PARAM = "Best Confirmed Overall Response by Investigator"
   )
 ) \%>\%
-  filter(PARAMCD == "CBOR")
-#> # A tibble: 8 × 8
-#>   USUBJID ADTC       AVALC   ADT        STUDYID PARAMCD PARAM         TRTSDT    
-#>   <chr>   <chr>      <chr>   <date>     <chr>   <chr>   <chr>         <date>    
-#> 1 1       2020-02-01 CR      2020-02-01 AB42    CBOR    Best Confirm… 2020-01-01
-#> 2 2       2020-02-01 SD      2020-02-01 AB42    CBOR    Best Confirm… 2019-12-12
-#> 3 3       <NA>       MISSING NA         AB42    CBOR    Best Confirm… 2019-11-11
-#> 4 4       2020-05-01 SD      2020-05-01 AB42    CBOR    Best Confirm… 2019-12-30
-#> 5 5       2020-01-01 NE      2020-01-01 AB42    CBOR    Best Confirm… 2020-01-01
-#> 6 6       2020-02-06 PR      2020-02-06 AB42    CBOR    Best Confirm… 2020-02-02
-#> 7 7       2020-02-06 NE      2020-02-06 AB42    CBOR    Best Confirm… 2020-02-02
-#> 8 8       2020-02-16 PD      2020-02-16 AB42    CBOR    Best Confirm… 2020-02-01}\if{html}{\out{</div>}}}
+  filter(PARAMCD == "CBOR") \%>\%
+  select(-STUDYID, -ADTC)
+#> # A tibble: 8 × 6
+#>   USUBJID AVALC   ADT        PARAMCD PARAM                            TRTSDT    
+#>   <chr>   <chr>   <date>     <chr>   <chr>                            <date>    
+#> 1 1       CR      2020-02-01 CBOR    Best Confirmed Overall Response… 2020-01-01
+#> 2 2       SD      2020-02-01 CBOR    Best Confirmed Overall Response… 2019-12-12
+#> 3 3       MISSING NA         CBOR    Best Confirmed Overall Response… 2019-11-11
+#> 4 4       SD      2020-05-01 CBOR    Best Confirmed Overall Response… 2019-12-30
+#> 5 5       NE      2020-01-01 CBOR    Best Confirmed Overall Response… 2020-01-01
+#> 6 6       PR      2020-02-06 CBOR    Best Confirmed Overall Response… 2020-02-02
+#> 7 7       NE      2020-02-06 CBOR    Best Confirmed Overall Response… 2020-02-02
+#> 8 8       PD      2020-02-16 CBOR    Best Confirmed Overall Response… 2020-02-01}\if{html}{\out{</div>}}}
 \subsection{Further examples}{
 
 Equivalent examples for using the\code{check_type} argument can be found in

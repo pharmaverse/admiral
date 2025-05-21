@@ -144,9 +144,9 @@
 #'   due to the use of the tidyselect expression `everything()`).
 #'
 #' @code
-#' library(tibble)
-#' library(dplyr)
-#' library(lubridate)
+#' library(tibble, warn.conflicts = FALSE)
+#' library(dplyr, warn.conflicts = FALSE)
+#' library(lubridate, warn.conflicts = FALSE)
 #'
 #' adqs1 <- tribble(
 #'   ~USUBJID, ~PARAMCD,         ~AVALC,        ~ADY,
@@ -406,7 +406,7 @@
 #'   convenient to make use of the `description` argument within each event object
 #'   to describe what condition is being checked.
 #'
-#'   - For the Confirmed Response (CR), for each `"CR"` record in the original ADRS
+#'   - For the Confirmed Response (CR), for each `"CR"` record in the original `ADRS`
 #'     dataset that will be identified by the first part of the `condition` argument
 #'     (`AVALC == "CR"`), we need to use the `first_cond_upper` argument to limit the
 #'     group of observations to consider alongside it. Namely, we need to look up to
@@ -429,7 +429,7 @@
 #'    events are simpler and just require `event()` calls.
 #'
 #'  - Finally, we use a catch-all `event()` with `condition = TRUE` and
-#'    `dataset_name = adsl` to identify those subjects who do not appear in ADRS
+#'    `dataset_name = adsl` to identify those subjects who do not appear in `ADRS`
 #'    and list their CBOR as `"MISSING"`. Note here the fact that `dataset_name` is
 #'    set to `adsl`, which is a new source dataset. As such it's important in the
 #'    main `derive_extreme_event()` call to list `adsl` as another source dataset
@@ -499,7 +499,8 @@
 #'     PARAM = "Best Confirmed Overall Response by Investigator"
 #'   )
 #' ) %>%
-#'   filter(PARAMCD == "CBOR")
+#'   filter(PARAMCD == "CBOR") %>%
+#'   select(-STUDYID, -ADTC)
 #'
 #' @caption Further examples
 #' @info Equivalent examples for using the`check_type` argument can be found in

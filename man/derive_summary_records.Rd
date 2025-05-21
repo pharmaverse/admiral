@@ -32,6 +32,7 @@ Observations from the specified dataset are going to be used to calculate and ad
 as new records to the input dataset (\code{dataset}).
 
 \describe{
+\item{Permitted values}{a dataset, i.e., a \code{data.frame} or tibble}
 \item{Default value}{none}
 }}
 
@@ -42,6 +43,7 @@ observation of the specified dataset a new observation is added to the
 input dataset.
 
 \describe{
+\item{Permitted values}{a dataset, i.e., a \code{data.frame} or tibble}
 \item{Default value}{\code{NULL}}
 }}
 
@@ -52,6 +54,7 @@ records. Providing the names of variables in \code{\link[=exprs]{exprs()}} will 
 groupwise summary and generate summary records for the specified groups.
 
 \describe{
+\item{Permitted values}{list of variables created by \code{exprs()}, e.g., \code{exprs(USUBJID, VISIT)}}
 \item{Default value}{none}
 }}
 
@@ -69,6 +72,7 @@ than 2.
 }
 
 \describe{
+\item{Permitted values}{an unquoted condition, e.g., \code{AVISIT == "BASELINE"}}
 \item{Default value}{\code{NULL}}
 }}
 
@@ -94,6 +98,7 @@ For example:
 }\if{html}{\out{</div>}}
 
 \describe{
+\item{Permitted values}{list of variables created by \code{exprs()}, e.g., \code{exprs(USUBJID, VISIT)}}
 \item{Default value}{none}
 }}
 
@@ -104,8 +109,7 @@ complete mapping defined by the summarization defined in \code{set_values_to}.  
 specified for \code{set_values_to} can be specified for \code{missing_values}.
 
 \describe{
-\item{Permitted values}{named list of expressions, e.g.,
-\code{exprs(AVAL = -9999)}}
+\item{Permitted values}{list of variables created by \code{exprs()}, e.g., \code{exprs(USUBJID, VISIT)}}
 \item{Default value}{\code{NULL}}
 }}
 }

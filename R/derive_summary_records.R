@@ -24,11 +24,15 @@
 #'   Observations from the specified dataset are going to be used to calculate and added
 #'   as new records to the input dataset (`dataset`).
 #'
+#' @permitted [dataset]
+#'
 #' @param dataset_ref Reference dataset
 #'
 #'   The variables specified for `by_vars` are expected. For each
 #'   observation of the specified dataset a new observation is added to the
 #'   input dataset.
+#'
+#' @permitted [dataset]
 #'
 #' @param by_vars Grouping variables
 #'
@@ -37,6 +41,8 @@
 #'   groupwise summary and generate summary records for the specified groups.
 #'
 #'   `r roxygen_param_by_vars()`
+#'
+#' @permitted [var_list]
 #'
 #' @param filter_add Filter condition as logical expression to apply during
 #'   summary calculation. By default, filtering expressions are computed within
@@ -49,6 +55,8 @@
 #'   values greater than mean of `AVAL` with in `by_vars`.
 #'   + `filter_add = (dplyr::n() > 2)` will filter n count of `by_vars` greater
 #'   than 2.
+#'
+#' @permitted [condition]
 #'
 #' @param set_values_to Variables to be set
 #'
@@ -69,14 +77,15 @@
 #'     )
 #'   ```
 #'
+#' @permitted [var_list]
+#'
 #' @param missing_values Values for missing summary values
 #'
 #'   For observations of the reference dataset (`dataset_ref`) which do not have a
 #'   complete mapping defined by the summarization defined in `set_values_to`.  Only variables
 #'   specified for `set_values_to` can be specified for `missing_values`.
 #'
-#' @permitted named list of expressions, e.g.,
-#'   `exprs(AVAL = -9999)`
+#' @permitted [var_list]
 #'
 #' @return A data frame with derived records appended to original dataset.
 #'
