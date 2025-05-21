@@ -31,13 +31,19 @@ jobs:
       - uses: r-lib/actions/setup-r-dependencies@v2
 
 # copy from 
-      - Install Dependencies from DESCRIPTION 
-        run |
-          install.packages(c("remotes", "devtools"))
-          remotes::install_local(force = TRUE, dependencies = TRUE)
-        shell: Rscript {0}
+#      - Install Dependencies from DESCRIPTION 
+#        run |
+#          install.packages(c("remotes", "devtools"))
+#          remotes::install_local(force = TRUE, dependencies = TRUE)
+#        shell: Rscript {0}
 # env:
 # R_REMOTES_STANDALONE: "true"
+
+......- name: needed packages
+        run: |
+        install.packages(c("devtools", "diffdf"))
+        shell:  Rscript {0}
+
 
       - name: source
         run:  Rscript -e 'source("data-raw/admiral_verify_templates.R")'
