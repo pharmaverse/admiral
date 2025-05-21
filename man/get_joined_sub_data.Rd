@@ -22,6 +22,7 @@ get_joined_sub_data(
 The variables specified by the \code{by_vars} argument are expected to be in the dataset.
 
 \describe{
+\item{Permitted values}{a dataset, i.e., a \code{data.frame} or tibble}
 \item{Default value}{none}
 }}
 
@@ -31,6 +32,7 @@ The variables specified by the \code{by_vars}, the \code{new_vars}, the \code{jo
 and the \code{order} argument are expected.
 
 \describe{
+\item{Permitted values}{a dataset, i.e., a \code{data.frame} or tibble}
 \item{Default value}{none}
 }}
 
@@ -42,6 +44,7 @@ Variables can be renamed by naming the element, i.e.
 \verb{by_vars = exprs(<name in input dataset> = <name in additional dataset>)}, similar to the \code{dplyr} joins.
 
 \describe{
+\item{Permitted values}{list of variables created by \code{exprs()}, e.g., \code{exprs(USUBJID, VISIT)}}
 \item{Default value}{\code{NULL}}
 }}
 
