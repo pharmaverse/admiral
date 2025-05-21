@@ -184,6 +184,22 @@
 #'
 #' @examplesx
 #'
+#' @caption Note on usage versus `derive_vars_joined()`
+#' @info The question between using `derive_vars_merged()` or the more powerful
+#'   `derive_vars_joined()` comes down to how you need to select the observations
+#'   to be merged.
+#'
+#' - If the observations from `dataset_add` to merge can be selected
+#'   by a condition (`filter_add`) using *only* variables from `dataset_add`, then
+#'   always use `derive_vars_merged()` as it requires less resources (time and
+#'   memory). A common example of this would be a randomization date in `ADSL`,
+#'   where you are simply merging on a date from `DS` according to a certain
+#'   `DSDECOD` condition such as `DSDECOD == "RANDOMIZATION"`.
+#' - However, if the selection of the observations from `dataset_add` can depend
+#'   on variables from *both* datasets, then use `derive_vars_joined()`. An
+#'   example of this would be assigning period variables from `ADSL` to an `ADAE`,
+#'   where you now need to check each adverse event start date against the period
+#'   start and end dates to decide which period value to join.
 #' @caption Basic merge of a full dataset
 #' @info Merge all demographic variables onto a vital signs dataset.
 #'
@@ -279,7 +295,7 @@
 #'   the last occurring record would be chosen according to the sort order of the
 #'   input `dataset_add`. This is not often advisable, unless the order has no impact
 #'   on the result, as the temporary sort order can be prone to variation across
-#'   an `{admiral}` script.
+#'   an ADaM script.
 #'
 #' @caption Modify values dependent on the merge (`new_vars` and `missing_values`)
 #' @info For the last occurring weight for each subject, add a categorization of
@@ -364,8 +380,7 @@
 #'   select(USUBJID, TRTSDTM, TRTSDTF, TRTSTMF)
 #'
 #' @caption Further examples
-#' @info Further example usages of this function, including guidance on when to
-#'   use this function versus `derive_vars_joined()`, can be found in the
+#' @info Further example usages of this function can be found in the
 #'   [Generic Derivations vignette](../articles/generic.html).
 derive_vars_merged <- function(dataset,
                                dataset_add,

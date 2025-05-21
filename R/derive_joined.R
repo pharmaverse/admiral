@@ -227,6 +227,22 @@
 #'
 #' @examplesx
 #'
+#' @caption Note on usage versus `derive_vars_merged()`
+#' @info The question between using `derive_vars_merged()` or the more powerful
+#'   `derive_vars_joined()` comes down to how you need to select the observations
+#'   to be merged.
+#'
+#' - If the observations from `dataset_add` to merge can be selected
+#'   by a condition (`filter_add`) using *only* variables from `dataset_add`, then
+#'   always use `derive_vars_merged()` as it requires less resources (time and
+#'   memory). A common example of this would be a randomization date in `ADSL`,
+#'   where you are simply merging on a date from `DS` according to a certain
+#'   `DSDECOD` condition such as `DSDECOD == "RANDOMIZATION"`.
+#' - However, if the selection of the observations from `dataset_add` can depend
+#'   on variables from *both* datasets, then use `derive_vars_joined()`. An
+#'   example of this would be assigning period variables from `ADSL` to an `ADAE`,
+#'   where you now need to check each adverse event start date against the period
+#'   start and end dates to decide which period value to join.
 #' @caption Basic join based on a generic time window (`filter_join`)
 #' @info Derive a visit based on where the study day falls according to a
 #'   scheduled set of time windows.
@@ -288,10 +304,11 @@
 #'   it also gets joined by adding to `join_vars`. Then in `filter_join` note
 #'   how `ADY.join < ADY` is used as the same variable exists in both datasets,
 #'   so the version from `dataset_add` has `.join` added.
-#' - Finally, we use `check_type = "none"` because this is a case where there
-#'   could be duplicates according to the sort order used (e.g. see subject `"1"`
-#'   records at day 1 and 8). Given the values are the same it doesn't matter
-#'   to us which exact one is taken, so we silence the default warning here.
+#' - According to the `AVAL` sort order used there could be duplicates (e.g. see
+#'   subject `"1"` records at day 1 and 8), but given we only need to join `AVAL`
+#'   itself here it doesn't actually matter to us which exact record is taken.
+#'   So, in this example, we silence the uniqueness check by using
+#'   `check_type = "none"`.
 #' @code
 #' derive_vars_joined(
 #'   adbds,
@@ -331,8 +348,8 @@
 #'
 #' @caption Combining all of the above examples
 #' @info Using all of the arguments demonstrated above, here is a more complex
-#'   example to add to AE the highest hemoglobin value occurring within two weeks
-#'   before each AE. Also join the day it occurred, taking the earliest occurrence
+#'   example to add to `AE` the highest hemoglobin value occurring within two weeks
+#'   before each `AE`. Also join the day it occurred, taking the earliest occurrence
 #'   if more than one assessment with the same value.
 #'
 #' - Note how we used `mode = "last"` to get the highest lab value, but then as we
@@ -609,8 +626,7 @@
 #'   select(USUBJID, ASTDT, APERSDT, APEREDT, APERIOD)
 #'
 #' @caption Further examples
-#' @info Further example usages of this function, including guidance on when to
-#'   use this function versus `derive_vars_merged()`, can be found in the
+#' @info Further example usages of this function can be found in the
 #'   [Generic Derivations vignette](../articles/generic.html).
 #'
 #'   Equivalent examples for using the `exist_flag`, `true_value`, `false_value`,

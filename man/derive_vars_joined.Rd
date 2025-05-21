@@ -374,6 +374,24 @@ General Derivation Functions for all ADaMs that returns variable appended to dat
 \concept{der_gen}
 \keyword{der_gen}
 \section{Examples}{
+\subsection{Note on usage versus \code{derive_vars_merged()}}{
+
+The question between using \code{derive_vars_merged()} or the more powerful
+\code{derive_vars_joined()} comes down to how you need to select the observations
+to be merged.
+\itemize{
+\item If the observations from \code{dataset_add} to merge can be selected
+by a condition (\code{filter_add}) using \emph{only} variables from \code{dataset_add}, then
+always use \code{derive_vars_merged()} as it requires less resources (time and
+memory). A common example of this would be a randomization date in \code{ADSL},
+where you are simply merging on a date from \code{DS} according to a certain
+\code{DSDECOD} condition such as \code{DSDECOD == "RANDOMIZATION"}.
+\item However, if the selection of the observations from \code{dataset_add} can depend
+on variables from \emph{both} datasets, then use \code{derive_vars_joined()}. An
+example of this would be assigning period variables from \code{ADSL} to an \code{ADAE},
+where you now need to check each adverse event start date against the period
+start and end dates to decide which period value to join.
+}}
 \subsection{Basic join based on a generic time window (\code{filter_join})}{
 
 Derive a visit based on where the study day falls according to a
@@ -449,10 +467,11 @@ before. As this is not included in \code{by_vars} or \code{order}, we have to en
 it also gets joined by adding to \code{join_vars}. Then in \code{filter_join} note
 how \code{ADY.join < ADY} is used as the same variable exists in both datasets,
 so the version from \code{dataset_add} has \code{.join} added.
-\item Finally, we use \code{check_type = "none"} because this is a case where there
-could be duplicates according to the sort order used (e.g. see subject \code{"1"}
-records at day 1 and 8). Given the values are the same it doesn't matter
-to us which exact one is taken, so we silence the default warning here.
+\item According to the \code{AVAL} sort order used there could be duplicates (e.g. see
+subject \code{"1"} records at day 1 and 8), but given we only need to join \code{AVAL}
+itself here it doesn't actually matter to us which exact record is taken.
+So, in this example, we silence the uniqueness check by using
+\code{check_type = "none"}.
 }
 
 \if{html}{\out{<div class="sourceCode r">}}\preformatted{derive_vars_joined(
@@ -518,8 +537,8 @@ source data from \code{dataset_add}.
 \subsection{Combining all of the above examples}{
 
 Using all of the arguments demonstrated above, here is a more complex
-example to add to AE the highest hemoglobin value occurring within two weeks
-before each AE. Also join the day it occurred, taking the earliest occurrence
+example to add to \code{AE} the highest hemoglobin value occurring within two weeks
+before each \code{AE}. Also join the day it occurred, taking the earliest occurrence
 if more than one assessment with the same value.
 \itemize{
 \item Note how we used \code{mode = "last"} to get the highest lab value, but then as we
@@ -911,8 +930,7 @@ derive_vars_joined(
 #> 6 2       2021-02-15 2021-02-02 2021-03-02       1}\if{html}{\out{</div>}}}
 \subsection{Further examples}{
 
-Further example usages of this function, including guidance on when to
-use this function versus \code{derive_vars_merged()}, can be found in the
+Further example usages of this function can be found in the
 \href{../articles/generic.html}{Generic Derivations vignette}.
 
 Equivalent examples for using the \code{exist_flag}, \code{true_value}, \code{false_value},

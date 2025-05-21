@@ -254,6 +254,24 @@ General Derivation Functions for all ADaMs that returns variable appended to dat
 \concept{der_gen}
 \keyword{der_gen}
 \section{Examples}{
+\subsection{Note on usage versus \code{derive_vars_joined()}}{
+
+The question between using \code{derive_vars_merged()} or the more powerful
+\code{derive_vars_joined()} comes down to how you need to select the observations
+to be merged.
+\itemize{
+\item If the observations from \code{dataset_add} to merge can be selected
+by a condition (\code{filter_add}) using \emph{only} variables from \code{dataset_add}, then
+always use \code{derive_vars_merged()} as it requires less resources (time and
+memory). A common example of this would be a randomization date in \code{ADSL},
+where you are simply merging on a date from \code{DS} according to a certain
+\code{DSDECOD} condition such as \code{DSDECOD == "RANDOMIZATION"}.
+\item However, if the selection of the observations from \code{dataset_add} can depend
+on variables from \emph{both} datasets, then use \code{derive_vars_joined()}. An
+example of this would be assigning period variables from \code{ADSL} to an \code{ADAE},
+where you now need to check each adverse event start date against the period
+start and end dates to decide which period value to join.
+}}
 \subsection{Basic merge of a full dataset}{
 
 Merge all demographic variables onto a vital signs dataset.
@@ -386,7 +404,7 @@ adding something like a sequence variable.
 the last occurring record would be chosen according to the sort order of the
 input \code{dataset_add}. This is not often advisable, unless the order has no impact
 on the result, as the temporary sort order can be prone to variation across
-an \code{{admiral}} script.
+an ADaM script.
 }}
 \subsection{Modify values dependent on the merge (\code{new_vars} and \code{missing_values})}{
 
@@ -493,7 +511,6 @@ derive_vars_merged(
 #> 3 03      NA                  <NA>    <NA>   }\if{html}{\out{</div>}}}
 \subsection{Further examples}{
 
-Further example usages of this function, including guidance on when to
-use this function versus \code{derive_vars_joined()}, can be found in the
+Further example usages of this function can be found in the
 \href{../articles/generic.html}{Generic Derivations vignette}.}}
 
