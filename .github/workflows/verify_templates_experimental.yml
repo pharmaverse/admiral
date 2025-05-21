@@ -27,7 +27,16 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@v4
 
+# missing devtools::
       - uses: r-lib/actions/setup-r-dependencies@v2
+
+# copy from 
+      - Install Dependencies from DESCRIPTION 
+        run |
+          remotes::install_local(force = TRUE, dependencies = TRUE)
+        shell: Rscript {0}
+        env:
+          R_REMOTES_STANDALONE: "true"
 
       - name: source
         run:  Rscript -e 'source("data-raw/admiral_verify_templates.R")'
