@@ -9,7 +9,7 @@ example, flagging events which need to be confirmed by a second event."><meta pr
 
     <a class="navbar-brand me-2" href="../index.html">admiral</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.2.0.9025</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.2.0.9026</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -158,7 +158,7 @@ dataset (<code>dataset</code>) with the additional dataset (<code>dataset_add</c
 <dd><p>New variable</p>
 <p>The specified variable is added to the input dataset.</p>
 <dl><dt>Permitted values</dt>
-<dd><p>a variable</p></dd>
+<dd><p>an unquoted symbol, e.g., <code>AVAL</code></p></dd>
 
 <dt>Default value</dt>
 <dd><p>none</p></dd>
@@ -172,12 +172,15 @@ dataset (<code>dataset</code>) with the additional dataset (<code>dataset_add</c
 <p>The specified variable is added to the input dataset (<code>dataset</code>) and the
 additional dataset (<code>dataset_add</code>). It is set to the observation number
 with respect to <code>order</code>. For each by group (<code>by_vars</code>) the observation
-number starts with <code>1</code>. The variable can be used in the conditions
-(<code>filter_join</code>, <code>first_cond_upper</code>, <code>first_cond_lower</code>). It is not included
-in the output dataset. It can also be used to flag consecutive observations
-or the last observation (see last example below).</p>
+number starts with <code>1</code>. If there is more than one record for specific
+values for <code>by_vars</code> and <code>order</code>, all records get the same observation
+number. By default, a warning (see <code>check_type</code>) is issued in this case.
+The variable can be used in the conditions (<code>filter_join</code>,
+<code>first_cond_upper</code>, <code>first_cond_lower</code>). It is not included in the output
+dataset. It can also be used to flag consecutive observations or the last
+observation (see last example below).</p>
 <dl><dt>Permitted values</dt>
-<dd><p>a variable</p></dd>
+<dd><p>an unquoted symbol, e.g., <code>AVAL</code></p></dd>
 
 <dt>Default value</dt>
 <dd><p><code>NULL</code></p></dd>

@@ -13,7 +13,7 @@ memory consumption.'><meta property="og:image" content="https://pharmaverse.gith
 
     <a class="navbar-brand me-2" href="../index.html">admiral</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.2.0.9025</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.2.0.9026</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -150,10 +150,21 @@ number starts with <code>1</code>. The variable can be used in the conditions
 (<code>filter_join</code>, <code>first_cond_upper</code>, <code>first_cond_lower</code>). It can also be
 used to select consecutive observations or the last observation.</p>
 <dl><dt>Permitted values</dt>
-<dd><p>a variable</p></dd>
+<dd><p>an unquoted symbol, e.g., <code>AVAL</code></p></dd>
 
 <dt>Default value</dt>
 <dd><p><code>NULL</code></p></dd>
+
+
+</dl></dd>
+
+
+<dt id="arg-tmp-obs-nr-left">tmp_obs_nr_left<a class="anchor" aria-label="anchor" href="#arg-tmp-obs-nr-left"></a></dt>
+<dd><p>Temporary observation number for <code>dataset</code></p>
+<p>The specified variable has to be in the input dataset (<code>dataset</code>) and has to
+be a unique key.</p>
+<dl><dt>Default value</dt>
+<dd><p>none</p></dd>
 
 
 </dl></dd>

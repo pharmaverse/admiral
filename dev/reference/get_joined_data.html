@@ -9,7 +9,7 @@ variables are included in the output dataset.'><meta property="og:image" content
 
     <a class="navbar-brand me-2" href="../index.html">admiral</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.2.0.9025</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.2.0.9026</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -253,7 +253,7 @@ number starts with <code>1</code>. The variable can be used in the conditions
 (<code>filter_join</code>, <code>first_cond_upper</code>, <code>first_cond_lower</code>). It can also be
 used to select consecutive observations or the last observation.</p>
 <dl><dt>Permitted values</dt>
-<dd><p>a variable</p></dd>
+<dd><p>an unquoted symbol, e.g., <code>AVAL</code></p></dd>
 
 <dt>Default value</dt>
 <dd><p><code>NULL</code></p></dd>
@@ -301,9 +301,9 @@ joined dataset is grouped by the original observations.</p>
 
 <dt id="arg-check-type">check_type<a class="anchor" aria-label="anchor" href="#arg-check-type"></a></dt>
 <dd><p>Check uniqueness?</p>
-<p>If <code>"warning"</code> or <code>"error"</code> is specified, the specified message is issued
-if the observations of the (restricted) joined dataset are not unique with
-respect to the by variables and the order.</p>
+<p>If <code>"message"</code>, <code>"warning"</code> or <code>"error"</code> is specified, the specified
+message is issued if the observations of the (restricted) joined dataset
+are not unique with respect to the by variables and the order.</p>
 <p>This argument is ignored if <code>order</code> is not specified. In this case an error
 is issued independent of <code>check_type</code> if the restricted joined dataset
 contains more than one observation for any of the observations of the input
