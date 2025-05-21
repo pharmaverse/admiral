@@ -564,7 +564,6 @@ test_that("derive_vars_joined Test 16: warning if `order` is not unique", {
     comp = actual,
     keys = c("subj", "day", "seq")
   )
-
 })
 
 # get_joined_data ----
