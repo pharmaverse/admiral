@@ -49,7 +49,7 @@ jobs:
 
 
       - name: run the code
-        run:  Rscript -e 'load_all(); verify_templates()'
+        run:  Rscript -e 'devtools::load_all(); verify_templates()'
 
       - name: Session info
         run: |
