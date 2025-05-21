@@ -26,6 +26,14 @@ the `filter_add` argument is used. (#2863)
 
 ## Breaking Changes
 
+- The values of the variable specified for `tmp_obs_nr_var` in
+`derive_vars_joined()`, `derive_var_joined_exist_flag()`, `filter_joined()` are
+now populated differently if there are multiple records in `dataset` or
+`dataset_add` for the same values of `by_vars` and `order`. Before each of these
+records was assigned a different value, i.e., the variable (together with
+`by_vars`) was a unique identifier. Now the value is the same for all these
+records. (#2683)
+
 - The following function arguments are entering the next phase of the [deprecation process](https://pharmaverse.github.io/admiraldev/articles/programming_strategy.html#deprecation): (#2487) (#2595)
 
     **Phase 1 (message)**
@@ -35,14 +43,6 @@ the `filter_add` argument is used. (#2863)
     **Phase 3 (error)**
     
     **Phase 4 (removed)**
-
-- The values of the variable specified for `tmp_obs_nr_var` in
-`derive_vars_joined()`, `derive_var_joined_exist_flag()`, `filter_joined()` are
-now populated differently if there are multiple records in `dataset` or
-`dataset_add` for the same values of `by_vars` and `order`. Before each of these
-records was assigned a different value, i.e., the variable (together with
-`by_vars`) was a unique identifier. Now the value is the same for all these
-records. (#2683)
 
 ## Documentation
 
