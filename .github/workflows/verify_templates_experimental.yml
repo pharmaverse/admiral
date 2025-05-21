@@ -40,9 +40,7 @@ jobs:
 # R_REMOTES_STANDALONE: "true"
 
 ......- name: needed packages
-        run: |
-          Rscript -e 'install.packages(c("devtools", "diffdf"))'
-        shell: Rscript {0}
+        run:  Rscript -e 'install.packages(c("devtools", "diffdf"))'
 
 
       - name: source
