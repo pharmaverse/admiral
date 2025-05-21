@@ -6,7 +6,7 @@
 # source("admiral_verify_templates.R")
 # run the function:  verify_templates():w
 
-install.package("pak")
+install.packages("pak")
 pak::pak("devtools")
 pak::pak("diffdf")
 
