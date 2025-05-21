@@ -1014,7 +1014,7 @@ get_joined_data <- function(dataset,
       tmp_obs_nr_var_join <- paste0(as_name(tmp_obs_nr_var), ".join")
     }
     data_add <- derive_var_obs_number(
-      dataset_add,
+      data_add,
       new_var = !!tmp_obs_nr_var,
       by_vars = by_vars,
       order = order,
