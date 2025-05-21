@@ -12,7 +12,7 @@ event. The name refers to the dataset specified for \code{source_datasets} in
 \code{derive_var_merged_ef_msrc()}.
 
 \describe{
-\item{Permitted values}{a character scalar}
+\item{Permitted values}{a dataset, i.e., a \code{data.frame} or tibble}
 \item{Default value}{none}
 }}
 
@@ -23,6 +23,7 @@ all by groups where it evaluates as \code{TRUE} at least once the new variable
 is set to the true value (\code{true_value}).
 
 \describe{
+\item{Permitted values}{an unquoted condition, e.g., \code{AVISIT == "BASELINE"}}
 \item{Default value}{\code{NULL}}
 }}
 
@@ -36,6 +37,7 @@ observations are grouped by the variables specified for the \code{by_vars}
 argument of \code{derive_var_merged_ef_msrc()}.
 
 \describe{
+\item{Permitted values}{list of variables created by \code{exprs()}, e.g., \code{exprs(USUBJID, VISIT)}}
 \item{Default value}{\code{NULL}}
 }}
 }

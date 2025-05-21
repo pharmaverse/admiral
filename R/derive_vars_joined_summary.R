@@ -65,7 +65,7 @@
 #'   The variable is not included in the output dataset. To include it specify
 #'   it for `new_vars`.
 #'
-#' @permitted [symbol]
+#' @permitted [var]
 #'
 #' @param join_vars Variables to use from additional dataset
 #'
@@ -90,7 +90,7 @@
 #'   respect to the original observation. For example, if `join_type = "after"`
 #'   is specified all observations after the original observations are kept.
 #'
-#' @permitted `"before"`, `"after"`, `"all"`
+#' @permitted [join_type]
 #'
 #' @param first_cond_lower Condition for selecting range of data (before)
 #'

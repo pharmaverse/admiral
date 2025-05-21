@@ -23,7 +23,7 @@
 #'   The new variable is set to the observation number for each by group. The
 #'   numbering starts with 1.
 #'
-#' @permitted [symbol]
+#' @permitted [var]
 #'
 #' @param check_type Check uniqueness?
 #'

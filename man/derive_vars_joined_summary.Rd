@@ -206,8 +206,7 @@ of the specified variables are set to the specified value. Only variables
 specified for \code{new_vars} can be specified for \code{missing_values}.
 
 \describe{
-\item{Permitted values}{named list of expressions, e.g.,
-\code{exprs(BASEC = "MISSING", BASE = -1)}}
+\item{Permitted values}{list of named expressions created by \code{exprs()}, e.g., \code{exprs(BASEC = "MISSING", BASE = -1)}}
 \item{Default value}{\code{NULL}}
 }}
 
