@@ -567,12 +567,12 @@ In particular, within \code{condition} we use \code{all()} to check that all obs
 are either \code{"CR"} or \code{"NE"}, and \code{count_vals()} to ensure at most one is
 \code{"NE"}.
 
-Note that the selection of \code{join_type = "after"} rather than \code{"all"} is
-critical here, due to the fact that the restriction implied by \code{join_type} is
-applied before the one implied by \code{first_cond_upper}. Picking the first
-subject (who was correctly identified as a confirmed responder) as an example,
-selecting \code{join_type = "all"} instead would mean the first \code{"PR"} record from
-\code{"2020-01-01"} would also be considered when evaluating the
+Note that the selection of \code{join_type = "after"} is critical here, due to the
+fact that the restriction implied by \code{join_type} is applied before the one
+implied by \code{first_cond_upper}. Picking the first subject (who was correctly
+identified as a confirmed responder) as an example, selecting
+\code{join_type = "all"} instead of \code{"after"} would mean the first \code{"PR"} record
+from \code{"2020-01-01"} would also be considered when evaluating the
 \code{all(AVALC.join \%in\% c("CR", "NE"))} portion of \code{condition}. In turn, the
 condition would not be satisfied anymore, and in this case, following the
 later event logic shows the subject would be considered a partial responder
