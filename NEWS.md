@@ -70,6 +70,8 @@ read (#2623). Also, updated to include new metadata for grading using US (Conven
 
 - The "BDS Time-to-Event" vignette was updated to include `SRCSEQ` consistently (#2658).
 
+- The template for ADAE and the OCCDS vignette were updated to include an example of the `DOSEON` and `DOSEU` variables (#2737).
+
 - The template for ADPC and vignette were updated to include an example of using `DTYPE` for imputed records (#2657).
 
 - The "Higher Order Functions" vignette was updated to showcase an example of two higher order functions used in combination. The documentation for each of the higher order functions was also corrected by removing the stated requirement that the `derivation` takes a `dataset` argument (#2656).
