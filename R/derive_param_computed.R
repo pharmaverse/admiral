@@ -151,18 +151,11 @@
 #'
 #' @examplesx
 #'
-#' @caption Example 1a - Adding a parameter computed from a formula
+#' @caption Example 1 - Data setup
 #'
-#' @info Derive mean arterial pressure (MAP) from systolic (SYSBP).
-#'
-#' - Here, for each `USUBJID` and `VISIT` group, an observation is added
-#'   to the output dataset when the filtered input dataset (`dataset`)
-#'   contains exactly one observation for each parameter code specified
-#'   for `parameters` and all contributing values (e.g., `AVAL.SYSBP`
-#'   and `AVAL.DIABP`) are not `NA`.
+#' @info Examples 1a-c use the following `advs` data.
 #'
 #' @code
-#'
 #' advs <- tribble(
 #'   ~USUBJID,      ~PARAMCD, ~PARAM,                            ~AVAL, ~VISIT,
 #'   "01-701-1015", "DIABP",  "Diastolic Blood Pressure (mmHg)",    51, "BASELINE",
@@ -183,6 +176,18 @@
 #'     ADTF = NA_character_
 #'   )
 #'
+#' @caption Example 1a - Adding a parameter computed from a formula
+#'
+#' @info Derive mean arterial pressure (MAP) from systolic (SYSBP).
+#'
+#' - Here, for each `USUBJID` and `VISIT` group, an observation is added
+#'   to the output dataset when the filtered input dataset (`dataset`)
+#'   contains exactly one observation for each parameter code specified
+#'   for `parameters` and all contributing values (e.g., `AVAL.SYSBP`
+#'   and `AVAL.DIABP`) are not `NA`.
+#'
+#' @code
+#'
 #' derive_param_computed(
 #'   advs,
 #'   by_vars = exprs(USUBJID, VISIT),
@@ -196,7 +201,8 @@
 #'   )
 #' )
 #'
-#' @caption Example 1b - Adding a parameter computed from a formula with `keep_nas = TRUE`
+#' @caption Example 1b - Not ignoring missing values for source
+#'     parameters (`keep_nas = TRUE`)
 #'
 #' @info Using option `keep_nas = TRUE` to derive MAP in the case
 #'     where some/all values of a variable used in the computation are missing
@@ -205,7 +211,6 @@
 #'   to the computed values are `NA`.
 #'
 #' @code
-#'
 #'
 #' derive_param_computed(
 #'   advs,
@@ -229,6 +234,7 @@
 #'
 #' - Note that observations will be added here even if some of the values contributing
 #'   to the computed values are `NA`.
+#' - Thus, there is one more row for the patient who has an `NA` value for `SYSBP` here.
 #'
 #' @code
 #'
@@ -247,6 +253,24 @@
 #'   keep_nas = exprs(ADTF)
 #' )
 #'
+#' @caption Example 2 - Data setup
+#'
+#' @info Example 2  uses the following `advs` data.
+#'
+#' @code
+#'
+#' advs <- tribble(
+#'   ~USUBJID,      ~PARAMCD, ~PARAM,        ~AVAL, ~AVALU, ~VISIT,
+#'   "01-701-1015", "HEIGHT", "Height (cm)", 147.0, "cm",   "SCREENING",
+#'   "01-701-1015", "WEIGHT", "Weight (kg)",  54.0, "kg",   "SCREENING",
+#'   "01-701-1015", "WEIGHT", "Weight (kg)",  54.4, "kg",   "BASELINE",
+#'   "01-701-1015", "WEIGHT", "Weight (kg)",  53.1, "kg",   "WEEK 2",
+#'   "01-701-1028", "HEIGHT", "Height (cm)", 163.0, "cm",   "SCREENING",
+#'   "01-701-1028", "WEIGHT", "Weight (kg)",  78.5, "kg",   "SCREENING",
+#'   "01-701-1028", "WEIGHT", "Weight (kg)",  80.3, "kg",   "BASELINE",
+#'   "01-701-1028", "WEIGHT", "Weight (kg)",  80.7, "kg",   "WEEK 2"
+#' )
+#'
 #' @caption Example 2 - Derivations using parameters measured only once
 #' (`constant_parameters` and `constant_by_vars`)
 #'
@@ -263,20 +287,6 @@
 #'   is measured for each patient only at the first visit
 #'   (`constant_parameters = "HEIGHT"`, `constant_by_vars = exprs(USUBJID`)).
 #'
-#' @code
-#'
-#' advs <- tribble(
-#'   ~USUBJID,      ~PARAMCD, ~PARAM,        ~AVAL, ~AVALU, ~VISIT,
-#'   "01-701-1015", "HEIGHT", "Height (cm)", 147.0, "cm",   "SCREENING",
-#'   "01-701-1015", "WEIGHT", "Weight (kg)",  54.0, "kg",   "SCREENING",
-#'   "01-701-1015", "WEIGHT", "Weight (kg)",  54.4, "kg",   "BASELINE",
-#'   "01-701-1015", "WEIGHT", "Weight (kg)",  53.1, "kg",   "WEEK 2",
-#'   "01-701-1028", "HEIGHT", "Height (cm)", 163.0, "cm",   "SCREENING",
-#'   "01-701-1028", "WEIGHT", "Weight (kg)",  78.5, "kg",   "SCREENING",
-#'   "01-701-1028", "WEIGHT", "Weight (kg)",  80.3, "kg",   "BASELINE",
-#'   "01-701-1028", "WEIGHT", "Weight (kg)",  80.7, "kg",   "WEEK 2"
-#' )
-#'
 #' derive_param_computed(
 #'   advs,
 #'   by_vars = exprs(USUBJID, VISIT),
@@ -291,10 +301,9 @@
 #'   constant_by_vars = exprs(USUBJID)
 #' )
 #'
-#' @caption Example 3 - Derivations including data from an additional
-#' dataset (`dataset_add`) and non-`AVAL` variables
+#' @caption Example 3 - Data setup
 #'
-#' @info Using data from an additional dataset and other variables than `AVAL`
+#' @info Example 3  uses the following `qs` and `adchsf` data.
 #'
 #' @code
 #'
@@ -317,6 +326,13 @@
 #' ) %>%
 #'   mutate(QSORRES = NA_character_)
 #'
+#' @caption Example 3 - Derivations including data from an additional
+#' dataset (`dataset_add`) and non-`AVAL` variables
+#'
+#' @info Using data from an additional dataset and other variables than `AVAL`
+#'
+#' @code
+#'
 #' derive_param_computed(
 #'   adchsf,
 #'   dataset_add = qs,
@@ -336,10 +352,9 @@
 #'   )
 #' )
 #'
+#' @caption Example 4 - Data setup
 #'
-#' @caption Example 4 - Adding a parameter computed from more than one variable
-#'
-#' @info Specifying more than one variable-value pair via `set_values_to`
+#' @info Example 4  uses the following `adlb_tbilialk` data.
 #'
 #' @code
 #'
@@ -353,6 +368,13 @@
 #'   "3",      "TBILI2", "N",    "2021-04-04", NA_character_
 #' ) %>%
 #'   mutate(ADTM = ymd(ADTM))
+#'
+#'
+#' @caption Example 4 - Adding a parameter computed from more than one variable
+#'
+#' @info Specifying more than one variable-value pair via `set_values_to`
+#'
+#' @code
 #'
 #' derive_param_computed(
 #'   dataset_add = adlb_tbilialk,

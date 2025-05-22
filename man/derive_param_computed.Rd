@@ -211,26 +211,11 @@ BDS-Findings Functions for adding Parameters/Records:
 \concept{der_prm_bds_findings}
 \keyword{der_prm_bds_findings}
 \section{Examples}{
-\subsection{Example 1a - Adding a parameter computed from a formula}{
+\subsection{Example 1 - Data setup}{
 
-Derive mean arterial pressure (MAP) from systolic (SYSBP)
-and diastolic blood pressure (DIABP)
-\itemize{
-\item Here, for each \code{USUBJID} and \code{VISIT} group, an observation is added
-to the output dataset when the filtered input dataset (\code{dataset})
-contains exactly one observation for each parameter code specified
-for \code{parameters} and all contributing values (e.g., \code{AVAL.SYSBP}
-and \code{AVAL.DIABP}) are not \code{NA}.
-\item This results in three additional rows: \code{USUBJID} \code{01-701-1015} at
-\code{VISIT} \code{BASELINE} and \verb{WEEK 2}, and \code{USUBJID} \code{01-701-1028} at
-\code{VISIT} \code{BASELINE} only.
-}
+Examples 1a-c use the following \code{advs} data.
 
-\if{html}{\out{<div class="sourceCode r">}}\preformatted{library(tibble)
-library(dplyr)
-library(lubridate)
-
-advs <- tribble(
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{advs <- tribble(
   ~USUBJID,      ~PARAMCD, ~PARAM,                            ~AVAL, ~VISIT,
   "01-701-1015", "DIABP",  "Diastolic Blood Pressure (mmHg)",    51, "BASELINE",
   "01-701-1015", "DIABP",  "Diastolic Blood Pressure (mmHg)",    50, "WEEK 2",
@@ -248,8 +233,19 @@ advs <- tribble(
       VISIT == "WEEK 2" ~ as.Date("2024-01-24")
     ),
     ADTF = NA_character_
-  )
+  )}\if{html}{\out{</div>}}}
+\subsection{Example 1a - Adding a parameter computed from a formula}{
 
+Derive mean arterial pressure (MAP) from systolic (SYSBP).
+\itemize{
+\item Here, for each \code{USUBJID} and \code{VISIT} group, an observation is added
+to the output dataset when the filtered input dataset (\code{dataset})
+contains exactly one observation for each parameter code specified
+for \code{parameters} and all contributing values (e.g., \code{AVAL.SYSBP}
+and \code{AVAL.DIABP}) are not \code{NA}.
+}
+
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{
 derive_param_computed(
   advs,
   by_vars = exprs(USUBJID, VISIT),
@@ -276,24 +272,17 @@ derive_param_computed(
 #>  9 01-701-1015 MAP     Mean Arterial Pressur…  74.3 BASE… mmHg  2024-01-10 <NA> 
 #> 10 01-701-1015 MAP     Mean Arterial Pressur…  73.7 WEEK… mmHg  2024-01-24 <NA> 
 #> 11 01-701-1028 MAP     Mean Arterial Pressur…  96   BASE… mmHg  2024-01-10 <NA> }\if{html}{\out{</div>}}}
-\subsection{Example 1b - Adding a parameter computed from a formula with \code{keep_nas = TRUE}}{
+\subsection{Example 1b - Not ignoring missing values for source
+parameters (\code{keep_nas = TRUE})}{
 
 Using option \code{keep_nas = TRUE} to derive MAP in the case
 where some/all values of a variable used in the computation are missing
 \itemize{
 \item Note that observations will be added here even if some of the values contributing
 to the computed values are \code{NA}.
-\item This therefore results in four additional rows: \code{USUBJID} \code{01-701-1015}
-at \code{VISIT} \code{BASELINE} and \verb{WEEK 2} and \code{USUBJID} \code{01-701-1028}
-at \code{VISIT} \code{BASELINE} and \verb{WEEK 2}, with the value of \code{AVAL} for
-\code{USUBJID} \code{01-701-1028} at \code{VISIT} \verb{WEEK 2} being \code{NA}.
 }
 
-\if{html}{\out{<div class="sourceCode r">}}\preformatted{library(tibble)
-library(dplyr)
-library(lubridate)
-
-
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{
 derive_param_computed(
   advs,
   by_vars = exprs(USUBJID, VISIT),
@@ -330,12 +319,10 @@ some/all values of a variable used in the computation are missing but ignoring \
 \itemize{
 \item Note that observations will be added here even if some of the values contributing
 to the computed values are \code{NA}.
+\item Thus, there is one more row for the patient who has an \code{NA} value for \code{SYSBP} here.
 }
 
-\if{html}{\out{<div class="sourceCode r">}}\preformatted{library(tibble)
-library(dplyr)
-library(lubridate)
-
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{
 derive_param_computed(
   advs,
   by_vars = exprs(USUBJID, VISIT),
@@ -364,20 +351,11 @@ derive_param_computed(
 #>  9 01-701-1015 MAP     Mean Arterial Pressur…  74.3 BASE… mmHg  2024-01-10 <NA> 
 #> 10 01-701-1015 MAP     Mean Arterial Pressur…  73.7 WEEK… mmHg  2024-01-24 <NA> 
 #> 11 01-701-1028 MAP     Mean Arterial Pressur…  96   BASE… mmHg  2024-01-10 <NA> }\if{html}{\out{</div>}}}
-\subsection{Example 2 - Using the \code{constant_parameters} argument}{
+\subsection{Example 2 - Data setup}{
 
-Derive BMI where height is measured only once
-\itemize{
-\item Here, the parameters that are measured only once (i.e., the constant parameters)
-are merged to the other parameters using the specified variables.
-\item In this example, \code{height} is the specified in \code{constant_parameters} as it is
-only measured once.
-}
+Example 2  uses the following \code{advs} data.
 
-\if{html}{\out{<div class="sourceCode r">}}\preformatted{library(tibble)
-library(dplyr)
-library(lubridate)
-
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{
 advs <- tribble(
   ~USUBJID,      ~PARAMCD, ~PARAM,        ~AVAL, ~AVALU, ~VISIT,
   "01-701-1015", "HEIGHT", "Height (cm)", 147.0, "cm",   "SCREENING",
@@ -388,46 +366,42 @@ advs <- tribble(
   "01-701-1028", "WEIGHT", "Weight (kg)",  78.5, "kg",   "SCREENING",
   "01-701-1028", "WEIGHT", "Weight (kg)",  80.3, "kg",   "BASELINE",
   "01-701-1028", "WEIGHT", "Weight (kg)",  80.7, "kg",   "WEEK 2"
-)
+)}\if{html}{\out{</div>}}}
+\subsection{Example 2 - Derivations using parameters measured only once
+(\code{constant_parameters} and \code{constant_by_vars})}{
+
+Derive BMI where height is measured only once
+\itemize{
+\item In the above examples, for each parameter specified in the
+\code{parameters} argument, we expect one record per by group, where the by
+group is specified in \code{by_vars}. However, if a parameter is only
+measured once, it can be specified in \code{constant_parameters} instead.
+\item A modified by group still needs to be provided for the constant
+parameters. This can be done via \code{constant_by_vars}.
+\item See the example below, where weight is measured for each patient
+at each visit (\code{by_vars = exprs(USUBJID, VISIT)}), while height
+is measured for each patient only at the first visit
+(\code{constant_parameters = "HEIGHT"}, \verb{constant_by_vars = exprs(USUBJID})).
+}
 
 derive_param_computed(
-  advs,
-  by_vars = exprs(USUBJID, VISIT),
-  parameters = "WEIGHT",
-  set_values_to = exprs(
-    AVAL = AVAL.WEIGHT / (AVAL.HEIGHT / 100)^2,
-    PARAMCD = "BMI",
-    PARAM = "Body Mass Index (kg/m^2)",
-    AVALU = "kg/m^2"
-  ),
-  constant_parameters = c("HEIGHT"),
-  constant_by_vars = exprs(USUBJID)
-)
-#> # A tibble: 14 × 6
-#>    USUBJID     PARAMCD PARAM                     AVAL AVALU  VISIT    
-#>    <chr>       <chr>   <chr>                    <dbl> <chr>  <chr>    
-#>  1 01-701-1015 HEIGHT  Height (cm)              147   cm     SCREENING
-#>  2 01-701-1015 WEIGHT  Weight (kg)               54   kg     SCREENING
-#>  3 01-701-1015 WEIGHT  Weight (kg)               54.4 kg     BASELINE 
-#>  4 01-701-1015 WEIGHT  Weight (kg)               53.1 kg     WEEK 2   
-#>  5 01-701-1028 HEIGHT  Height (cm)              163   cm     SCREENING
-#>  6 01-701-1028 WEIGHT  Weight (kg)               78.5 kg     SCREENING
-#>  7 01-701-1028 WEIGHT  Weight (kg)               80.3 kg     BASELINE 
-#>  8 01-701-1028 WEIGHT  Weight (kg)               80.7 kg     WEEK 2   
-#>  9 01-701-1015 BMI     Body Mass Index (kg/m^2)  25.0 kg/m^2 SCREENING
-#> 10 01-701-1015 BMI     Body Mass Index (kg/m^2)  25.2 kg/m^2 BASELINE 
-#> 11 01-701-1015 BMI     Body Mass Index (kg/m^2)  24.6 kg/m^2 WEEK 2   
-#> 12 01-701-1028 BMI     Body Mass Index (kg/m^2)  29.5 kg/m^2 SCREENING
-#> 13 01-701-1028 BMI     Body Mass Index (kg/m^2)  30.2 kg/m^2 BASELINE 
-#> 14 01-701-1028 BMI     Body Mass Index (kg/m^2)  30.4 kg/m^2 WEEK 2   }\if{html}{\out{</div>}}}
-\subsection{Example 3 - Using \code{dataset_add} argument and non-\code{AVAL} variables}{
+advs,
+by_vars = exprs(USUBJID, VISIT),
+parameters = "WEIGHT",
+set_values_to = exprs(
+AVAL = AVAL.WEIGHT / (AVAL.HEIGHT / 100)^2,
+PARAMCD = "BMI",
+PARAM = "Body Mass Index (kg/m^2)",
+AVALU = "kg/m^2"
+),
+constant_parameters = c("HEIGHT"),
+constant_by_vars = exprs(USUBJID)
+)}
+\subsection{Example 3 - Data setup}{
 
-Using data from an additional dataset and other variables than \code{AVAL}
+Example 3  uses the following \code{qs} and \code{adchsf} data.
 
-\if{html}{\out{<div class="sourceCode r">}}\preformatted{library(tibble)
-library(dplyr)
-library(lubridate)
-
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{
 qs <- tribble(
   ~USUBJID, ~AVISIT,   ~QSTESTCD, ~QSORRES, ~QSSTRESN,
   "1",      "WEEK 2",  "CHSF112", NA,               1,
@@ -445,8 +419,13 @@ adchsf <- tribble(
   "1",      "WEEK 4", "CHSF12", 2,            12,
   "1",      "WEEK 4", "CHSF14", 1,             6
 ) \%>\%
-  mutate(QSORRES = NA_character_)
+  mutate(QSORRES = NA_character_)}\if{html}{\out{</div>}}}
+\subsection{Example 3 - Derivations including data from an additional
+dataset (\code{dataset_add}) and non-\code{AVAL} variables}{
 
+Using data from an additional dataset and other variables than \code{AVAL}
+
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{
 derive_param_computed(
   adchsf,
   dataset_add = qs,
@@ -474,14 +453,11 @@ derive_param_computed(
 #> 4 1       WEEK 4 CHSF14         1     6 <NA>   
 #> 5 1       WEEK 2 CHSF13        NA    38 <NA>   
 #> 6 1       WEEK 4 CHSF13        NA    25 <NA>   }\if{html}{\out{</div>}}}
-\subsection{Example 4 - Adding a parameter computed from more than one variable}{
+\subsection{Example 4 - Data setup}{
 
-Specifying more than one variable-value pair via \code{set_values_to}
+Example 4  uses the following \code{adlb_tbilialk} data.
 
-\if{html}{\out{<div class="sourceCode r">}}\preformatted{library(tibble)
-library(dplyr)
-library(lubridate)
-
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{
 adlb_tbilialk <- tribble(
   ~USUBJID, ~PARAMCD, ~AVALC, ~ADTM,        ~ADTF,
   "1",      "ALK2",   "Y",    "2021-05-13", NA_character_,
@@ -491,8 +467,12 @@ adlb_tbilialk <- tribble(
   "3",      "ALK2",   "N",    "2021-04-03", NA_character_,
   "3",      "TBILI2", "N",    "2021-04-04", NA_character_
 ) \%>\%
-  mutate(ADTM = ymd(ADTM))
+  mutate(ADTM = ymd(ADTM))}\if{html}{\out{</div>}}}
+\subsection{Example 4 - Adding a parameter computed from more than one variable}{
 
+Specifying more than one variable-value pair via \code{set_values_to}
+
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{
 derive_param_computed(
   dataset_add = adlb_tbilialk,
   by_vars = exprs(USUBJID),
