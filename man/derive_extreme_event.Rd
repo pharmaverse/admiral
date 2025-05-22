@@ -336,13 +336,6 @@ they differ by one day. The \code{.join} syntax distinguishes between the
 \code{AVALC}, \code{PARAMCD} and \code{ADY}, we specify these variables with \code{join_vars},
 and finally, because we wish to compare all records with each other, we
 select \code{join_type = "all"}.
-\item Since we are now passing an \code{event_joined} object to
-\code{derive_extreme_event()}, it is good practice to explicitly specify the
-\code{source_datasets} argument so as to indicate which dataset we wish to
-use for the join. Note that in this case, it is not strictly needed
-as even in the \code{event_joined()} object we are using the same source
-dataset as for the general call to \code{derive_extreme_event()}, i.e.
-\code{adqs2}, but this is not always the case (see the final CBOR example).
 }
 
 \if{html}{\out{<div class="sourceCode r">}}\preformatted{adqs2 <- tribble(
@@ -362,7 +355,6 @@ derive_extreme_event(
   by_vars = exprs(STUDYID, USUBJID),
   events = list(
     event_joined(
-      dataset_name = "adqs2",
       join_vars = exprs(AVALC, PARAMCD, ADY),
       join_type = "all",
       condition = PARAMCD == "NO SLEEP" & AVALC == "Y" &
@@ -389,7 +381,6 @@ derive_extreme_event(
       set_values_to = exprs(AVALC = "Missing", AVAL = 99)
     )
   ),
-  source_datasets = list(adqs2 = adqs2),
   tmp_event_nr_var = event_nr,
   order = exprs(event_nr, desc(ADY)),
   mode = "first",
@@ -417,33 +408,33 @@ select(-STUDYID)
 Here we consider a Hy's Law use case. We are interested in
 knowing whether a subject's Alkaline Phosphatase has ever been
 above twice the upper limit of normal range. If so, i.e. if
-\code{CRIT1FL} is \code{NA}, we are interested in the record for the first
+\code{CRIT1FL} is \code{Y}, we are interested in the record for the first
 time this occurs, and if not, we wish to retain the last record.
 As such, for this case now we need to vary our usage of the
 \code{mode} argument dependent on the \code{event()}.
 \itemize{
 \item In first \code{event()}, since we simply seek the first time that
-\code{CRIT1FL} is \code{NA}, it's enough to specify the \code{condition},
+\code{CRIT1FL} is not \code{NA}, it's enough to specify the \code{condition},
 because we inherit to \code{order} and \code{mode} from the main
 \code{derive_extreme_event()} call here which will automatically
 select the first occurrence by \code{AVISITN}.
 \item In the second \code{event()}, we select the last record among the
-full set of records where \code{CRIT1FL = "Y"} by additionally
+full set of records where \code{CRIT1FL} is not \code{NA} by additionally
 specifying \code{mode = "last"} within the \code{event()}.
 \item Note now the usage of \code{keep_source_vars = exprs(AVISITN)}
 rather than \code{everything()} as in the previous example. This
-is done to ensure \code{CRIT1FL} is not populated for the new
-records.
+is done to ensure \code{CRIT1} and \code{CRIT1FL} are not populated for
+the new records.
 }
 
 \if{html}{\out{<div class="sourceCode r">}}\preformatted{adhy <- tribble(
-  ~USUBJID, ~AVISITN, ~CRIT1FL,
-  "1",             1, "Y",
-  "1",             2, "Y",
-  "2",             1, "Y",
-  "2",             2, NA_character_,
-  "2",             3, "Y",
-  "2",             4, NA_character_
+  ~USUBJID, ~AVISITN,              ~CRIT1,      ~CRIT1FL,
+  "1",             1, "ALT > 2 times ULN", NA_character_,
+  "1",             2, "ALT > 2 times ULN", NA_character_,
+  "2",             1, "ALT > 2 times ULN", NA_character_,
+  "2",             2, "ALT > 2 times ULN", "Y",
+  "2",             3, "ALT > 2 times ULN", NA_character_,
+  "2",             4, "ALT > 2 times ULN", "Y"
 ) \%>\%
   mutate(
     PARAMCD = "ALKPH",
@@ -456,13 +447,13 @@ derive_extreme_event(
   by_vars = exprs(STUDYID, USUBJID),
   events = list(
     event(
-      condition = is.na(CRIT1FL),
-      set_values_to = exprs(AVALC = "N")
+      condition = !is.na(CRIT1FL),
+      set_values_to = exprs(AVALC = "Y")
     ),
     event(
-      condition = CRIT1FL == "Y",
+      condition = is.na(CRIT1FL),
       mode = "last",
-      set_values_to = exprs(AVALC = "Y")
+      set_values_to = exprs(AVALC = "N")
     )
   ),
   tmp_event_nr_var = event_nr,
@@ -475,18 +466,19 @@ derive_extreme_event(
   )
 ) \%>\%
 select(-STUDYID)
-#> # A tibble: 8 × 6
-#>   USUBJID AVISITN CRIT1FL PARAMCD PARAM                      AVALC
-#>   <chr>     <dbl> <chr>   <chr>   <chr>                      <chr>
-#> 1 1             1 Y       ALKPH   Alkaline Phosphatase (U/L) <NA> 
-#> 2 1             2 Y       ALKPH   Alkaline Phosphatase (U/L) <NA> 
-#> 3 2             1 Y       ALKPH   Alkaline Phosphatase (U/L) <NA> 
-#> 4 2             2 <NA>    ALKPH   Alkaline Phosphatase (U/L) <NA> 
-#> 5 2             3 Y       ALKPH   Alkaline Phosphatase (U/L) <NA> 
-#> 6 2             4 <NA>    ALKPH   Alkaline Phosphatase (U/L) <NA> 
-#> 7 1             2 <NA>    ALK2    ALKPH <= 2 times ULN       Y    
-#> 8 2             2 <NA>    ALK2    ALKPH <= 2 times ULN       N    }\if{html}{\out{</div>}}}
-\subsection{A more complex example: Confirmed Best Overall Response}{
+#> # A tibble: 8 × 7
+#>   USUBJID AVISITN CRIT1             CRIT1FL PARAMCD PARAM                  AVALC
+#>   <chr>     <dbl> <chr>             <chr>   <chr>   <chr>                  <chr>
+#> 1 1             1 ALT > 2 times ULN <NA>    ALKPH   Alkaline Phosphatase … <NA> 
+#> 2 1             2 ALT > 2 times ULN <NA>    ALKPH   Alkaline Phosphatase … <NA> 
+#> 3 2             1 ALT > 2 times ULN <NA>    ALKPH   Alkaline Phosphatase … <NA> 
+#> 4 2             2 ALT > 2 times ULN Y       ALKPH   Alkaline Phosphatase … <NA> 
+#> 5 2             3 ALT > 2 times ULN <NA>    ALKPH   Alkaline Phosphatase … <NA> 
+#> 6 2             4 ALT > 2 times ULN Y       ALKPH   Alkaline Phosphatase … <NA> 
+#> 7 1             2 <NA>              <NA>    ALK2    ALKPH <= 2 times ULN   N    
+#> 8 2             2 <NA>              <NA>    ALK2    ALKPH <= 2 times ULN   Y    }\if{html}{\out{</div>}}}
+\subsection{A more complex example: Confirmed Best Overall Response
+(\code{first/last_cond_upper}, \code{join_type}, \code{source_datasets})}{
 
 The final example showcases a use of \code{derive_extreme_event()}
 to calculate the Confirmed Best Overall Response (CBOR) in an

@@ -58,7 +58,7 @@ number starts with \code{1}. The variable can be used in the conditions
 used to select consecutive observations or the last observation.
 
 \describe{
-\item{Permitted values}{an unquoted symbol, e.g., \code{AVAL}}
+\item{Permitted values}{a variable}
 \item{Default value}{\code{NULL}}
 }}
 

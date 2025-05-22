@@ -236,13 +236,6 @@
 #'    `AVALC`, `PARAMCD` and `ADY`, we specify these variables with `join_vars`,
 #'    and finally, because we wish to compare all records with each other, we
 #'    select `join_type = "all"`.
-#'  - Since we are now passing an `event_joined` object to
-#'    `derive_extreme_event()`, it is good practice to explicitly specify the
-#'    `source_datasets` argument so as to indicate which dataset we wish to
-#'    use for the join. Note that in this case, it is not strictly needed
-#'    as even in the `event_joined()` object we are using the same source
-#'    dataset as for the general call to `derive_extreme_event()`, i.e.
-#'    `adqs2`, but this is not always the case (see the final CBOR example).
 #'
 #' @code
 #' adqs2 <- tribble(
@@ -262,7 +255,6 @@
 #'   by_vars = exprs(STUDYID, USUBJID),
 #'   events = list(
 #'     event_joined(
-#'       dataset_name = "adqs2",
 #'       join_vars = exprs(AVALC, PARAMCD, ADY),
 #'       join_type = "all",
 #'       condition = PARAMCD == "NO SLEEP" & AVALC == "Y" &
@@ -289,7 +281,6 @@
 #'       set_values_to = exprs(AVALC = "Missing", AVAL = 99)
 #'     )
 #'   ),
-#'   source_datasets = list(adqs2 = adqs2),
 #'   tmp_event_nr_var = event_nr,
 #'   order = exprs(event_nr, desc(ADY)),
 #'   mode = "first",
@@ -305,33 +296,33 @@
 #' @info Here we consider a Hy's Law use case. We are interested in
 #'   knowing whether a subject's Alkaline Phosphatase has ever been
 #'   above twice the upper limit of normal range. If so, i.e. if
-#'   `CRIT1FL` is `NA`, we are interested in the record for the first
+#'   `CRIT1FL` is `Y`, we are interested in the record for the first
 #'   time this occurs, and if not, we wish to retain the last record.
 #'   As such, for this case now we need to vary our usage of the
 #'   `mode` argument dependent on the `event()`.
 #'
 #'  - In first `event()`, since we simply seek the first time that
-#'    `CRIT1FL` is `NA`, it's enough to specify the `condition`,
+#'    `CRIT1FL` is not `NA`, it's enough to specify the `condition`,
 #'    because we inherit to `order` and `mode` from the main
 #'    `derive_extreme_event()` call here which will automatically
 #'    select the first occurrence by `AVISITN`.
 #'  - In the second `event()`, we select the last record among the
-#'    full set of records where `CRIT1FL = "Y"` by additionally
+#'    full set of records where `CRIT1FL` is not `NA` by additionally
 #'    specifying `mode = "last"` within the `event()`.
 #'  - Note now the usage of `keep_source_vars = exprs(AVISITN)`
 #'    rather than `everything()` as in the previous example. This
-#'    is done to ensure `CRIT1FL` is not populated for the new
-#'    records.
+#'    is done to ensure `CRIT1` and `CRIT1FL` are not populated for
+#'    the new records.
 #'
 #' @code
 #' adhy <- tribble(
-#'   ~USUBJID, ~AVISITN, ~CRIT1FL,
-#'   "1",             1, "Y",
-#'   "1",             2, "Y",
-#'   "2",             1, "Y",
-#'   "2",             2, NA_character_,
-#'   "2",             3, "Y",
-#'   "2",             4, NA_character_
+#'   ~USUBJID, ~AVISITN,              ~CRIT1,      ~CRIT1FL,
+#'   "1",             1, "ALT > 2 times ULN", NA_character_,
+#'   "1",             2, "ALT > 2 times ULN", NA_character_,
+#'   "2",             1, "ALT > 2 times ULN", NA_character_,
+#'   "2",             2, "ALT > 2 times ULN", "Y",
+#'   "2",             3, "ALT > 2 times ULN", NA_character_,
+#'   "2",             4, "ALT > 2 times ULN", "Y"
 #' ) %>%
 #'   mutate(
 #'     PARAMCD = "ALKPH",
@@ -344,13 +335,13 @@
 #'   by_vars = exprs(STUDYID, USUBJID),
 #'   events = list(
 #'     event(
-#'       condition = is.na(CRIT1FL),
-#'       set_values_to = exprs(AVALC = "N")
+#'       condition = !is.na(CRIT1FL),
+#'       set_values_to = exprs(AVALC = "Y")
 #'     ),
 #'     event(
-#'       condition = CRIT1FL == "Y",
+#'       condition = is.na(CRIT1FL),
 #'       mode = "last",
-#'       set_values_to = exprs(AVALC = "Y")
+#'       set_values_to = exprs(AVALC = "N")
 #'     )
 #'   ),
 #'   tmp_event_nr_var = event_nr,
@@ -365,6 +356,7 @@
 #' select(-STUDYID)
 #'
 #' @caption A more complex example: Confirmed Best Overall Response
+#' (`first/last_cond_upper`, `join_type`, `source_datasets`)
 #' @info The final example showcases a use of `derive_extreme_event()`
 #'   to calculate the Confirmed Best Overall Response (CBOR) in an
 #'   `ADRS` dataset, as is common in many oncology trials. This example
