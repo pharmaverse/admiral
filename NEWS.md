@@ -12,9 +12,9 @@
     
 - New lab grading metadata for US (Conventional) units for the three grading criteria
 `admiral` already produces for SI units (#2557).
-    - `atoxgr_criteria_ctcv4_uscv()` (NCI-CTCAEv4 criteria)
-    - `atoxgr_criteria_ctcv5_uscv()` (NCI-CTCAEv5 criteria)
-    - `atoxgr_criteria_daids_uscv()` (DAIDs criteria)
+    - `atoxgr_criteria_ctcv4_uscv` (NCI-CTCAEv4 criteria)
+    - `atoxgr_criteria_ctcv5_uscv` (NCI-CTCAEv5 criteria)
+    - `atoxgr_criteria_daids_uscv` (DAIDs criteria)
 
 ## Updates of Existing Functions
 
@@ -24,10 +24,11 @@ subsets, however this can lead to issues when the input dataset is empty. Now
 the derivation is called for all subsets. (#2645)
 - The examples section for the function `derive_var_trtemfl()` was enhanced to include a showcasing of all scenarios discussed in the following [PHUSE White Paper on Treatment-Emergent AEs](https://phuse.s3.eu-central-1.amazonaws.com/Deliverables/Safety+Analytics/WP-087+Recommended+Definition+of++Treatment-Emergent+Adverse+Events+in+Clinical+Trials+.pdf). (#2455)
 - `derive_var_atoxgr_dir()` updated to handle more than one unit in grading metadata. Related to providing US (Conventional) units for grading (#2557).
-- Lab grading metadata `atoxgr_criteria_ctcv4()`, `atoxgr_criteria_ctcv5()` and `atoxgr_criteria_daids()` variable `SI_UNIT_CHECK` renamed to `UNIT_CHECK` (#2557).
 - The background checks in `derive_summary_records()` were too restrictive: `by_vars` were expected in `dataset` although the code did not require it. This requirement has therefore been dropped (#2686).
 
 ## Breaking Changes
+
+- Lab grading metadata `atoxgr_criteria_ctcv4()`, `atoxgr_criteria_ctcv5()` and `atoxgr_criteria_daids()` variable `SI_UNIT_CHECK` renamed to `UNIT_CHECK` (#2557).
 
 - The following function arguments are entering the next phase of the [deprecation process](https://pharmaverse.github.io/admiraldev/articles/programming_strategy.html#deprecation): (#2487) (#2595)
 

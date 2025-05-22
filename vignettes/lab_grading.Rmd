@@ -52,16 +52,16 @@ The DAIDS criteria can be found under the heading
 `{admiral}`, one for SI units, and one for US (conventional) units. These are as follows:
 
 NCI-CTCAEv4
-  + `atoxgr_criteria_ctcv4()` for SI units.
-  + `atoxgr_criteria_ctcv4()_uscv` for US (conventional) units.
+  + `atoxgr_criteria_ctcv4` for SI units.
+  + `atoxgr_criteria_ctcv4_uscv` for US (conventional) units.
 
 NCI-CTCAEv5
-  + `atoxgr_criteria_ctcv5()` for SI units.
-  + `atoxgr_criteria_ctcv5()_uscv` for US (conventional) units.
+  + `atoxgr_criteria_ctcv5` for SI units.
+  + `atoxgr_criteria_ctcv5_uscv` for US (conventional) units.
 
 DAIDS
-  + `atoxgr_criteria_daids()` for SI units.
-  + `atoxgr_criteria_daids()_uscv` for US (conventional) units.
+  + `atoxgr_criteria_daids` for SI units.
+  + `atoxgr_criteria_daids_uscv` for US (conventional) units.
 
 Each metadata data set has required variables and optional variables, the optional variables are purely for transparency,
 and will contain detailed information about the grading criteria. The required variables are those used by`{admiral}` to
