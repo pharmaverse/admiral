@@ -37,7 +37,8 @@ for the date imputation as \code{get_imputation_target_date()} imputes the last 
 as \code{"28"}.
 }
 \details{
-If the day component in \code{partial} is missing, the day (in \code{imputed_dtc}) is adjusted to the last day of the month.
+If the day component in \code{partial} is missing,
+the day (in \code{imputed_dtc}) is adjusted to the last day of the month.
 }
 \examples{
 # Adjust last day imputation for a date with an incomplete day

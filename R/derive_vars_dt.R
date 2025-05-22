@@ -149,16 +149,21 @@ derive_vars_dt <- function(dataset,
   dtc <- assert_symbol(enexpr(dtc))
   assert_data_frame(dataset, required_vars = exprs(!!dtc))
 
-  # the `assert_dt_dtm_inputs` function is stored in `derive_vars_dt_dtm_utils.R`
-  assert_dt_dtm_inputs(
-    new_vars_prefix = new_vars_prefix,
-    max_dates = max_dates,
-    min_dates = min_dates,
-    flag_imputation = flag_imputation,
-    flag_imputation_values = c("auto", "date", "none"),
+  assert_character_scalar(new_vars_prefix)
+
+  flag_imputation <- assert_character_scalar(
+    flag_imputation,
+    values = c("auto", "date", "none"),
+    case_sensitive = TRUE
+  )
+
+  # the `assert_highest_imputation` function is stored in `derive_vars_dt_dtm_utils.R`
+  assert_highest_imputation(
     highest_imputation = highest_imputation,
     highest_imputation_values = c("Y", "M", "D", "n"),
-    date_imputation = date_imputation
+    date_imputation = date_imputation,
+    min_dates = min_dates,
+    max_dates = max_dates
   )
 
   # output varname
@@ -517,16 +522,13 @@ restrict_imputed_dtc_dt <- function(dtc,
   any_maxdate <- !(is.null(max_dates) || length(max_dates) == 0)
   if (any_mindate || any_maxdate) {
     # determine range of possible dates
-    min_dtc <-
+    dtc_range <-
       get_dt_dtm_range(
         dtc,
-        date_imputation = "first"
+        create_datetime = FALSE
       )
-    max_dtc <-
-      get_dt_dtm_range(
-        dtc,
-        date_imputation = "last"
-      )
+    min_dtc <- dtc_range[["lower"]]
+    max_dtc <- dtc_range[["upper"]]
   }
   if (any_mindate) {
     if (length(unique(c(length(imputed_dtc), unlist(lapply(min_dates, length))))) != 1) {

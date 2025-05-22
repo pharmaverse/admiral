@@ -16,7 +16,7 @@
       Error in `restrict_imputed_dtc_dt()`:
       ! Length of `max_dates` do not match length of dates to be imputed.
 
-# derive_vars_dt Test 10: Warning if null min/max_dates when highest_imputation = Y
+# derive_vars_dt Test 10: Error if null min/max_dates when highest_imputation = Y
 
     Code
       impute_dtc_dt(input, highest_imputation = "Y")

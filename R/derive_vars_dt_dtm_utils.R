@@ -353,56 +353,11 @@ get_partialdatetime <- function(dtc, create_datetime) {
     partial[[i]] <- if_else(partial[[i]] %in% c("-", ""), NA_character_, partial[[i]])
   }
 
-  if(!create_datetime){
+  if (!create_datetime) {
     partial <- partial[c("year", "month", "day")]
   }
 
   partial
-}
-
-#' Check Date and Imputation arguments
-#'
-#' @description
-#' Used in `derive_vars_dt()` and `derive_vars_dtm()`.
-#'
-#' Applies assertions on the `new_vars_prefix`, `max_dates`, `min_dates`,
-#' `flag_imputation`, `highest_imputation`, and `date_imputation` arguments
-#' to reduce cyclomatic complexity.
-#'
-#' @param new_vars_prefix Prefix for new variables.
-#' @param max_dates Maximum dates of events (can be `NULL`).
-#' @param min_dates Minimum dates of events (can be `NULL`).
-#' @param flag_imputation_values Allowed values for the `flag_imputation` argument.
-#' @param flag_imputation The value to impute.
-#' @param highest_imputation Highest imputation level.
-#' @param highest_imputation_values Allowed values for the `highest_imputation` argument.
-#' @param date_imputation The value to impute the day/month
-#' when a date part is missing (can be `NULL`).
-#'
-#' @keywords internal
-#'
-#' @returns `invisible(NULL)`
-assert_dt_dtm_inputs <- function(new_vars_prefix, max_dates, min_dates,
-                                 flag_imputation, flag_imputation_values,
-                                 highest_imputation, highest_imputation_values,
-                                 date_imputation = NULL) {
-  assert_character_scalar(new_vars_prefix)
-
-  assert_character_scalar(
-    flag_imputation,
-    values = flag_imputation_values,
-    case_sensitive = FALSE
-  )
-
-  assert_highest_imputation(
-    highest_imputation = highest_imputation,
-    highest_imputation_values = highest_imputation_values,
-    date_imputation = date_imputation,
-    min_dates = min_dates,
-    max_dates = max_dates
-  )
-
-  return(invisible(NULL))
 }
 
 #' Assert `date_imputation`
@@ -509,7 +464,8 @@ assert_time_imputation <- function(highest_imputation, time_imputation) {
 #' `r lifecycle::badge("stable")`
 #'
 #' This function checks the validity and requirements for the `highest_imputation` argument.
-#' It ensures that necessary conditions for `date_imputation`, `min_dates`, and `max_dates` are met when `highest_imputation` is set to `"Y"`.
+#' It ensures that necessary conditions for `date_imputation`, `min_dates`,
+#' and `max_dates` are met when `highest_imputation` is set to `"Y"`.
 #'
 #' @param highest_imputation A character scalar indicating the highest level of imputation.
 #' @param highest_imputation_values A character vector of valid values for `highest_imputation`.
@@ -578,40 +534,25 @@ assert_highest_imputation <- function(highest_imputation, highest_imputation_val
 #' (e.g., `"2022-12-15"`, `"2022-12"`, `"2022"`).
 #' Partial dates are allowed.
 #'
-#' @param date_imputation A string specifying the imputation strategy to apply to
-#' incomplete dates.
-#' Accepts `"first"` (default) or `"last"` to impute to the first or last possible date,
-#' respectively.
+#' @param create_datetime return the range in datetime format.
 #'
-#' @returns A character vector of fully imputed dates in `"YYYY-MM-DD"` or `"YYYY-MM-DDThh:mm:ss"` format.
+#' @returns A list containing two vectors of fully imputed dates
+#' in `"YYYY-MM-DD"` or `"YYYY-MM-DDThh:mm:ss"` format - the lower and upper limit of the range.
 #'
 #' @examples
-#' # Impute date range for dates with 'first' date imputation
+#' # Get Range from Partial Dates
 #' dtc_dates <- c("2020-02-29", "2021-03")
-#' imputed_dates_first <- admiral:::get_dt_dtm_range(dtc_dates, date_imputation = "first")
+#' imputed_dates_first <- admiral:::get_dt_dtm_range(dtc_dates, create_datetime = FALSE)
 #' print(imputed_dates_first)
 #'
-#' # Impute date range for dates with 'last' date imputation
-#' imputed_dates_last <- admiral:::get_dt_dtm_range(dtc_dates, date_imputation = "last")
-#' print(imputed_dates_last)
 #'
-#' # Impute datetime range with 'first' time imputation
+#' # Get Range from Partial Datetime
 #' dtc_datetimes <- c("2020-02-29T12:00", "2021-03T14:30")
-#' imputed_datetimes_first <- admiral:::get_dt_dtm_range(dtc_datetimes,
-#'   date_imputation = "first",
-#'   time_imputation = "first"
-#' )
+#' imputed_datetimes_first <- admiral:::get_dt_dtm_range(dtc_datetimes, create_datetime = TRUE)
 #' print(imputed_datetimes_first)
 #'
-#' # Impute datetime range with 'last' time imputation
-#' imputed_datetimes_last <- admiral:::get_dt_dtm_range(dtc_datetimes,
-#'   date_imputation = "first",
-#'   time_imputation = "last"
-#' )
-#' print(imputed_datetimes_last)
-#'
 #' # Edge case: Return empty character vector for empty input
-#' imputed_empty <- admiral:::get_dt_dtm_range(character(0), date_imputation = "first")
+#' imputed_empty <- admiral:::get_dt_dtm_range(character(0), create_datetime = TRUE)
 #' print(imputed_empty)
 #'
 #' @details
@@ -627,45 +568,57 @@ assert_highest_imputation <- function(highest_imputation, highest_imputation_val
 #'
 #' @keywords internal
 get_dt_dtm_range <- function(dtc,
-                             date_imputation = "first",
-                             time_imputation = NULL) {
+                             create_datetime) {
   assert_character_vector(dtc)
   valid_dtc <- is_valid_dtc(dtc)
   warn_if_invalid_dtc(dtc, valid_dtc)
 
-  is_datetime <- !is.null(time_imputation)
-
-  highest_imputation_level <- get_highest_imputation_level(is_datetime, "Y")
-
-  date_imputation <- assert_character_scalar(date_imputation, case_sensitive = FALSE)
-  if (is_datetime) {
-    time_imputation <- assert_character_scalar(time_imputation, case_sensitive = FALSE)
-    assert_time_imputation(
-      highest_imputation = highest_imputation_level,
-      time_imputation = time_imputation
-    )
-  }
+  highest_imputation_level <- get_highest_imputation_level(
+    highest_imputation = "Y",
+    is_datetime = create_datetime
+  )
 
   if (length(dtc) == 0) {
     return(character(0))
   }
 
   # Parse partials
-  partial <- get_partialdatetime(dtc, create_datetime = is_datetime)
+  partial <- get_partialdatetime(dtc, create_datetime = create_datetime)
+  partial <- propagate_na_values(partial, is_datetime = create_datetime)
   components <- names(partial)
 
-  partial <- propagate_na_values(partial, is_datetime)
+  if (create_datetime) {
+    target_upper <- get_imputation_targets(partial,
+      date_imputation = "last",
+      time_imputation = "last",
+      is_datetime = create_datetime
+    )
 
-  target <- get_imputation_targets(partial, date_imputation, time_imputation, is_datetime)
+    target_lower <- get_imputation_targets(partial,
+      date_imputation = "first",
+      time_imputation = "first",
+      is_datetime = create_datetime
+    )
+  } else {
+    target_upper <- get_imputation_targets(partial,
+      date_imputation = "last",
+      is_datetime = create_datetime
+    )
 
-  imputed <- impute_values(partial, target, components)
-  imputed_dtc <- format_imputed_dtc(imputed, is_datetime)
-
-  if (date_imputation == "last") {
-    imputed_dtc <- adjust_last_day_imputation(imputed_dtc, partial, is_datetime)
+    target_lower <- get_imputation_targets(partial,
+      date_imputation = "first",
+      is_datetime = create_datetime
+    )
   }
 
-  return(imputed_dtc)
+  imputed_lower <- impute_values(partial, target_lower, components)
+  imputed_dtc_lower <- format_imputed_dtc(imputed_lower, create_datetime)
+
+  imputed_upper <- impute_values(partial, target_upper, components)
+  imputed_dtc_upper <- format_imputed_dtc(imputed_upper, create_datetime)
+  imputed_dtc_upper <- adjust_last_day_imputation(imputed_dtc_upper, partial, create_datetime)
+
+  return(list("lower" = imputed_dtc_lower, "upper" = imputed_dtc_upper))
 }
 
 #' Get Highest Imputation Level
@@ -853,7 +806,8 @@ get_imputation_targets <- function(partial, date_imputation, time_imputation, is
 #' print(adjusted_datetime_known_day)
 #'
 #' @details
-#' If the day component in `partial` is missing, the day (in `imputed_dtc`) is adjusted to the last day of the month.
+#' If the day component in `partial` is missing,
+#' the day (in `imputed_dtc`) is adjusted to the last day of the month.
 #'
 #' @keywords internal
 #'

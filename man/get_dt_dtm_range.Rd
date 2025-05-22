@@ -4,7 +4,7 @@
 \alias{get_dt_dtm_range}
 \title{Get Range of Partial Date / Datetime}
 \usage{
-get_dt_dtm_range(dtc, date_imputation = "first", time_imputation = NULL)
+get_dt_dtm_range(dtc, create_datetime)
 }
 \arguments{
 \item{dtc}{A character vector of dates in ISO 8601 format
@@ -15,17 +15,15 @@ Partial dates are allowed.
 \item{Default value}{none}
 }}
 
-\item{date_imputation}{A string specifying the imputation strategy to apply to
-incomplete dates.
-Accepts \code{"first"} (default) or \code{"last"} to impute to the first or last possible date,
-respectively.
+\item{create_datetime}{return the range in datetime format.
 
 \describe{
-\item{Default value}{\code{"first"}}
+\item{Default value}{none}
 }}
 }
 \value{
-A character vector of fully imputed dates in \code{"YYYY-MM-DD"} or \code{"YYYY-MM-DDThh:mm:ss"} format.
+A list containing two vectors of fully imputed dates
+in \code{"YYYY-MM-DD"} or \code{"YYYY-MM-DDThh:mm:ss"} format - the lower and upper limit of the range.
 }
 \description{
 Internal helper function to convert a character vector of (possibly partial) dates (\code{dtc})
@@ -45,32 +43,20 @@ missing components.
 }
 }
 \examples{
-# Impute date range for dates with 'first' date imputation
+# Get Range from Partial Dates
 dtc_dates <- c("2020-02-29", "2021-03")
-imputed_dates_first <- admiral:::get_dt_dtm_range(dtc_dates, date_imputation = "first")
+imputed_dates_first <- admiral:::get_dt_dtm_range(dtc_dates, create_datetime = FALSE)
 print(imputed_dates_first)
 
-# Impute date range for dates with 'last' date imputation
-imputed_dates_last <- admiral:::get_dt_dtm_range(dtc_dates, date_imputation = "last")
-print(imputed_dates_last)
 
-# Impute datetime range with 'first' time imputation
+# Get Range from Partial Datetime
 dtc_datetimes <- c("2020-02-29T12:00", "2021-03T14:30")
-imputed_datetimes_first <- admiral:::get_dt_dtm_range(dtc_datetimes,
-  date_imputation = "first",
-  time_imputation = "first"
+imputed_datetimes_first <- admiral:::get_dt_dtm_range(dtc_datetimes, create_datetime = TRUE
 )
 print(imputed_datetimes_first)
 
-# Impute datetime range with 'last' time imputation
-imputed_datetimes_last <- admiral:::get_dt_dtm_range(dtc_datetimes,
-  date_imputation = "first",
-  time_imputation = "last"
-)
-print(imputed_datetimes_last)
-
 # Edge case: Return empty character vector for empty input
-imputed_empty <- admiral:::get_dt_dtm_range(character(0), date_imputation = "first")
+imputed_empty <- admiral:::get_dt_dtm_range(character(0), create_datetime = TRUE)
 print(imputed_empty)
 
 }
