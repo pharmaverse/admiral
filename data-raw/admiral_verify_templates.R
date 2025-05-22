@@ -17,10 +17,12 @@
 #' @param adams_old  character vector of original ADaM done at earlier date, saved in github
 
 ## DISCUSS
-#' @param template_dir_path  installed directory (admiral/inst/templates/)
-#' @param cache_dir (cache)     ~/.config/R/admiral_templates_data   (varies by OS/configuration)
-#' @param adam_old_dir  temporary directory where old ADaMs (downloaded from github.com) are stored
-#' @param adam_new_dir  temporary directory where new ADaMs are stored.
+#' @param template_dir  Path to templates in the active package (load_all())
+#'   ("inst/directory)
+#' @param cache_dir (cache)  Path to cache.       (varies by OS/configuration)
+#'   ~/.config/R/admiral_templates_data
+#' @param adam_old_dir  temporary directory where old ADaMs
+#'   (downloaded from github.com) are stored
 
 
 #' @title verify_templates
@@ -66,7 +68,6 @@ verify_templates <- function(pkg = "admiral", ds = c("adae")) {
   # list of important paths
   ## path <<- list(
   path <- list(
-    # template_dir = file.path(system.file(package = pkg), "templates"),
     # use active package
     template_dir = "inst/templates",
     cache_dir = tools::R_user_dir("admiral_templates_data", which = "cache"),
@@ -99,12 +100,6 @@ verify_templates <- function(pkg = "admiral", ds = c("adae")) {
 
   cat("Downloading from github pharmaverseadam \n")
   download_adam_old(adam_names, path = path$adam_old_dir)
-
-  ## ------------------------  FUTURE
-  # new code for keys
-  # library(teal.slice)
-  # get_keys(adam_names)
-  ## ------------------------  FUTURE
 
   # keys for diffdf
   keys <- teal.data::default_cdisc_join_keys
@@ -147,7 +142,7 @@ verify_templates <- function(pkg = "admiral", ds = c("adae")) {
   # run AFTER verify_templates() completes, otherwise will not print
   display_diff(dir = path$diff)
   # This prints entire set of differences.
-  #print(compare_list, row_limit = nrow(compare_list))
+  # print(compare_list, row_limit = nrow(compare_list))
 }
 
 #------------------------  helper functions
@@ -219,18 +214,22 @@ save_rda <- function(data, file_path, new_name) {
 compare <- function(base, compare, keys, file = NULL) {
   #------------------------ to be removed ?
   attr(base, "label") <- NULL
-  attr(base, "_xportr.df_arg_")  <- NULL
-  e = globalenv()
-  e$old = base
-  e$new = compare
-  e$file = file
-  #saveRDS(e$old,file= paste0("old", ".RDS"))    # temporary
-  #saveRDS(e$new,file= paste0("new", ".RDS")) 
- # ------------------------  to be removed ?
+  attr(base, "_xportr.df_arg_") <- NULL
+  e <- globalenv()
+  e$old <- base
+  e$new <- compare
+  e$file <- file
+  # saveRDS(e$old,file= paste0("old", ".RDS"))    # temporary
+  # saveRDS(e$new,file= paste0("new", ".RDS"))
+  # ------------------------  to be removed ?
 
   # remove column attributes
-  for (name in names(base)) {attr(base[[name]], "label") = NULL}
-  for (name in names(compare)) {attr(compare[[name]], "label") = NULL}
+  for (name in names(base)) {
+    attr(base[[name]], "label") <- NULL
+  }
+  for (name in names(compare)) {
+    attr(compare[[name]], "label") <- NULL
+  }
   tryCatch(
     {
       e$res <- diffdf::diffdf(
@@ -268,7 +267,7 @@ clean_adam_old_dir <- function(dir = NULL) {
 
 #' Downloads ADaM datasets from pharmaverseadam
 #' @param adam_names character vector  Set of  ADaMs to download.
-#' @param path Character string. Directory to save downloaded ADaMs  downloads the old ADaM datasets from github
+#' @param path Character string. Directory to save downloaded ADaMs.
 download_adam_old <- function(adam_names, path = NULL) {
   lapply(adam_names, function(adam) {
     githubURL <- paste0(
@@ -287,8 +286,10 @@ download_adam_old <- function(adam_names, path = NULL) {
 
 #' Loads an ADaM dataset from a saved RDA file on disk.
 #'
-#' @param adam Character string. Name of the ADaM dataset to retrieve from disk (without file extension).
-#' @param path Character string. Path to the directory containing the stored ADaM file.
+#' @param adam Character string. Name of the ADaM dataset to retrieve from
+#'   disk (without file extension).
+#' @param path Character string. Path to the directory containing the
+#'   stored ADaM file.
 #' @return The loaded dataset (as an R object).
 #'
 #' @examples
@@ -302,8 +303,10 @@ get_dataset_old <- function(adam, path) {
 #' Load a Saved ADaM Dataset
 
 #' Loads an ADaM dataset from in  saved RDA file on disk.
-#' @param adam Character string. Name of the ADaM dataset to retrieve from disk (without file extension).
-#' @param path Character string. Path to the directory containing the stored ADaM file.
+#' @param adam Character string. Name of the ADaM dataset to retrieve
+#'   from disk (without file extension).
+#' @param path Character string. Path to the directory containing
+#'   the stored ADaM file.
 #'
 #' @return The loaded dataset (as an R object).
 get_dataset_new <- function(adam, path = NULL) {
@@ -311,10 +314,10 @@ get_dataset_new <- function(adam, path = NULL) {
   adam_new <- get(adam)
 }
 #' Uses source() to run a template
-#' 
+#'
 #' @param adam Character string.  Run the template assicated with this ADaM name.
 #' @param dir Character string.  Directory where templates are stored.
-#' @return 
+#' @return
 #' @description  runs the template for the specified ADaM
 run_template <- function(adam, dir = NULL) {
   source(paste0(dir, "/ad_", adam, ".R"))

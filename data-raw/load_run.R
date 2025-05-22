@@ -17,13 +17,3 @@ devtools::load_all()
 source("data-raw/admiral_verify_templates.R")
 
 verify_templates()
-
-
-
-
-
-
-
-
-
-
