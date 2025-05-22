@@ -526,7 +526,7 @@ number of assessments available for the subject.
   "WEEK 4",   29,
   "WEEK 8",   57
   ) \%>\%
-  mutate(USUBJID = "1")
+  mutate(USUBJID = "1", .before = AVISIT)
 
 adqs <- tribble(
   ~ADY, ~AVAL,
@@ -554,9 +554,9 @@ derive_vars_joined_summary(
   new_vars = exprs(AVAL = if_else(n() >= 3, mean(AVAL, na.rm = TRUE), NA))
 )
 #> # A tibble: 3 × 4
-#>   AVISIT   ADY USUBJID  AVAL
-#>   <chr>  <dbl> <chr>   <dbl>
-#> 1 WEEK 1     8 1          10
-#> 2 WEEK 4    29 1          NA
-#> 3 WEEK 8    57 1          NA}\if{html}{\out{</div>}}}}
+#>   USUBJID AVISIT   ADY  AVAL
+#>   <chr>   <chr>  <dbl> <dbl>
+#> 1 1       WEEK 1     8    10
+#> 2 1       WEEK 4    29    NA
+#> 3 1       WEEK 8    57    NA}\if{html}{\out{</div>}}}}
 

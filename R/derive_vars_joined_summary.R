@@ -378,7 +378,7 @@
 #'   "WEEK 4",   29,
 #'   "WEEK 8",   57
 #'   ) %>%
-#'   mutate(USUBJID = "1")
+#'   mutate(USUBJID = "1", .before = AVISIT)
 #'
 #' adqs <- tribble(
 #'   ~ADY, ~AVAL,
