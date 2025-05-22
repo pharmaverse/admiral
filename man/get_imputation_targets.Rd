@@ -13,13 +13,30 @@ get_imputation_targets(partial, date_imputation, time_imputation, is_datetime)
 \item{Default value}{none}
 }}
 
-\item{date_imputation}{A character specifying the date imputation method.
+\item{date_imputation}{The value to impute the day/month when a datepart is
+missing.
+
+A character value is expected, either as a
+\itemize{
+\item format with month and day specified as \code{"mm-dd"}: e.g. \code{"06-15"} for the 15th
+of June,
+\item or as a keyword: \code{"first"}, \code{"mid"}, \code{"last"} to impute to the first/mid/last
+day/month.
+}
 
 \describe{
 \item{Default value}{none}
 }}
 
-\item{time_imputation}{A character specifying the time imputation method.
+\item{time_imputation}{The value to impute the time when a timepart is
+missing.
+
+A character value is expected, either as a
+\itemize{
+\item format with hour, min and sec specified as \code{"hh:mm:ss"}: e.g. \code{"00:00:00"}
+for the start of the day,
+\item or as a keyword: \code{"first"},\code{"last"} to impute to the start/end of a day.
+}
 
 \describe{
 \item{Default value}{none}

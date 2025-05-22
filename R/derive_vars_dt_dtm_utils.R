@@ -677,8 +677,8 @@ get_highest_imputation_level <- function(highest_imputation, is_datetime) {
 #' (see `get_imputation_target_time()`) components.
 #'
 #' @param partial A list of partial date/time components.
-#' @param date_imputation A character specifying the date imputation method.
-#' @param time_imputation A character specifying the time imputation method.
+#' @inheritParams get_imputation_target_date
+#' @inheritParams get_imputation_target_time
 #' @param is_datetime A logical indicating whether it's a datetime imputation.
 #'
 #' @returns A list of imputation targets for date and (if applicable) time components.
