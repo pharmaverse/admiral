@@ -1000,6 +1000,8 @@ get_joined_data <- function(dataset,
       check_type = "none"
     )
 
+  # derive variables defined by order and join_vars and restrict the additional
+  # dataset
   data_add <- dataset_add %>%
     group_by(!!!by_vars) %>%
     mutate(!!!order, !!!join_vars) %>%
@@ -1039,6 +1041,8 @@ get_joined_data <- function(dataset,
       )
     }
 
+    # derive variables defined by order, then these can be used later, e.g., in
+    # filter_join
     data <- data %>%
       mutate(!!!order)
 
