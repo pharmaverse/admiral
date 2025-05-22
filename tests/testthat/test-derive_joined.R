@@ -566,9 +566,37 @@ test_that("derive_vars_joined Test 16: warning if `order` is not unique", {
   )
 })
 
+## Test 17: order with unnamed expression ----
+test_that("derive_vars_joined Test 17: order with unnamed expression", {
+  expected <- tribble(
+    ~USUBJID, ~ADTM,                          ~AVAL, ~LASTAVAL,
+    "1",      ymd_hms("2020-02-01T08:00:00"),    15,        NA,
+    "1",      ymd_hms("2020-02-01T12:00:00"),    10,        NA,
+    "1",      ymd_hms("2020-02-07T12:00:00"),     9,        15,
+    "1",      ymd_hms("2020-02-09T12:00:00"),     8,         9
+  )
+
+  adbds <- select(expected, -LASTAVAL)
+
+  expect_dfs_equal(
+    base = expected,
+    comp = derive_vars_joined(
+      dataset = adbds,
+      dataset_add = adbds,
+      by_vars = exprs(USUBJID),
+      order = exprs(date(ADTM), AVAL),
+      new_vars = exprs(LASTAVAL = AVAL),
+      join_type = "before",
+      filter_join = date(ADTM.join) < date(ADTM),
+      mode = "last"
+    ),
+    keys = c("USUBJID", "ADTM")
+  )
+})
+
 # get_joined_data ----
-## Test 17: `first_cond_lower` works ----
-test_that("get_joined_data Test 17: `first_cond_lower` works", {
+## Test 18: `first_cond_lower` works ----
+test_that("get_joined_data Test 18: `first_cond_lower` works", {
   data <- tribble(
     ~subj, ~day, ~val,
     "1",      1, "++",

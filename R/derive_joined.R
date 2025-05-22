@@ -1042,29 +1042,37 @@ get_joined_data <- function(dataset,
     data <- data %>%
       mutate(!!!order)
 
+    # if order contains unnamed expressions like floor(event_nr), the previous
+    # mutate() creates a variable named `floor(event_nr)`. We need to use this
+    # variable name instead of the expression in the following calls.
+    order_vars <- map(
+      replace_values_by_names(order),
+      function(x) sym(as_label(x))
+    )
+
     groups <- bind_rows(
-      select(data, !!!by_vars, !!!replace_values_by_names(order)),
-      select(data_add, !!!by_vars, !!!replace_values_by_names(order))
+      select(data, !!!by_vars, !!!order_vars),
+      select(data_add, !!!by_vars, !!!order_vars)
     ) %>%
       distinct() %>%
       derive_var_obs_number(
         new_var = !!tmp_obs_nr_var,
         by_vars = by_vars,
-        order = order,
+        order = order_vars,
         check_type = "none"
       )
 
     data <- data %>%
       derive_vars_merged(
         dataset_add = groups,
-        by_vars = exprs(!!!by_vars, !!!replace_values_by_names(order)),
+        by_vars = exprs(!!!by_vars, !!!order_vars),
         check_type = "none"
       )
 
     data_add <- data_add %>%
       derive_vars_merged(
         dataset_add = groups,
-        by_vars = exprs(!!!by_vars, !!!replace_values_by_names(order)),
+        by_vars = exprs(!!!by_vars, !!!order_vars),
         check_type = "none"
       )
   }
