@@ -2,13 +2,37 @@
 
 ## New Features
 
+- The documentation was enhanced: (#2585)
+    - The default value of an argument is now displayed in the argument description.
+    - For complex functions each example has now a title, which is also shown in
+    the TOC, and a description. This enabled adding more examples without losing
+    readability. See `derive_extreme_records()` for an example.
+    - The output of the structured examples used for complex functions is
+    displayed in the help pages in RStudio.
+
 ## Updates of Existing Functions
 
+- In `derive_vars_joined()`, the `filter_add` argument is now correctly applied for all join types, fixing an issue where it was ignored when `join_type != "all"`. (#2682)
 - The function `extract_duplicate_records()` was updated to consider all variables in the input dataset for the by group if the `by_vars` argument is omitted entirely. (#2644)
-- In `slice_derivation`, previously the derivation is not called for empty subsets, however this can lead to issues when the input dataset is empty. Now the derivation is called for all subsets.
+- In `slice_derivation()`, previously the derivation is not called for empty
+subsets, however this can lead to issues when the input dataset is empty. Now
+the derivation is called for all subsets. (#2645)
 - The examples section for the function `derive_var_trtemfl()` was enhanced to include a showcasing of all scenarios discussed in the following [PHUSE White Paper on Treatment-Emergent AEs](https://phuse.s3.eu-central-1.amazonaws.com/Deliverables/Safety+Analytics/WP-087+Recommended+Definition+of++Treatment-Emergent+Adverse+Events+in+Clinical+Trials+.pdf). (#2455)
+- The background checks in `derive_summary_records()` were too restrictive: `by_vars` were expected in `dataset` although the code did not require it. This requirement has therefore been dropped (#2686).
+- The functions `derive_vars_joined()`, `derive_var_joined_exist_flag()`, and
+`filter_joined()` produce correct results now when they are used with `join_type
+= "before"` or `join_type = "after"` and `dataset` and `dataset_add` differ or
+the `filter_add` argument is used. (#2863)
 
 ## Breaking Changes
+
+- The values of the variable specified for `tmp_obs_nr_var` in
+`derive_vars_joined()`, `derive_var_joined_exist_flag()`, `filter_joined()` are
+now populated differently if there are multiple records in `dataset` or
+`dataset_add` for the same values of `by_vars` and `order`. Before each of these
+records was assigned a different value, i.e., the variable (together with
+`by_vars`) was a unique identifier. Now the value is the same for all these
+records. (#2683)
 
 - The following function arguments are entering the next phase of the [deprecation process](https://pharmaverse.github.io/admiraldev/articles/programming_strategy.html#deprecation): (#2487) (#2595)
 
@@ -22,14 +46,29 @@
 
 ## Documentation
 
+- The examples sections of the following functions were enhanced:
+    - `derive_extreme_records()` (#2585)
+    - `derive_param_tte()` (#2704)
+    - `derive_summary_records()` (#2707)
+    - `derive_vars_joined()` (#2727)
+    - `derive_vars_merged()` (#2727)
+
 - Added an example to the `derive_vars_transposed()` reference page to showcase how duplicates-related errors can arise when records in `dataset_merge` are not uniquely identified. (#2609)
 
-- Default value of `type` in `derive_vars_aage()` is now shown as `interval` to match the function behaviour. (#2685) 
+- Default value of `type` in `derive_vars_aage()` is now shown as `interval` to match the function behavior. (#2685) 
 
 - The "Lab Grading" vignette was updated to correct some typos and make text easier to
 read (#2623).
 
 - The "BDS Time-to-Event" vignette was updated to include `SRCSEQ` consistently (#2658).
+
+- The template for ADPC and vignette were updated to include an example of using `DTYPE` for imputed records (#2657).
+
+- The "Higher Order Functions" vignette was updated to showcase an example of two higher order functions used in combination. The documentation for each of the higher order functions was also corrected by removing the stated requirement that the `derivation` takes a `dataset` argument (#2656).
+
+- The 'Details' section of the `derive_var_analysis_ratio()` function and the 'Derive Analysis Ratio' section of the "Creating a BDS Finding ADaM" vignette were updated to include references to `R2AyHI` and `R2AyLO`. (#2548)
+
+- The `derive_basetype_records()` documentation was updated to clarify `BASETYPE` derivations. (#2545)
 
 ## Various
 

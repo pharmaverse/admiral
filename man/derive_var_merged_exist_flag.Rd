@@ -19,20 +19,37 @@ derive_var_merged_exist_flag(
 \arguments{
 \item{dataset}{Input dataset
 
-The variables specified by the \code{by_vars} argument are expected to be in the dataset.}
+The variables specified by the \code{by_vars} argument are expected to be in the dataset.
+
+\describe{
+\item{Permitted values}{a dataset, i.e., a \code{data.frame} or tibble}
+\item{Default value}{none}
+}}
 
 \item{dataset_add}{Additional dataset
 
-The variables specified by the \code{by_vars} argument are expected.}
+The variables specified by the \code{by_vars} argument are expected.
+
+\describe{
+\item{Permitted values}{a dataset, i.e., a \code{data.frame} or tibble}
+\item{Default value}{none}
+}}
 
 \item{by_vars}{Grouping variables
 
-\emph{Permitted Values}: list of variables created by \code{exprs()}
-e.g. \code{exprs(USUBJID, VISIT)}}
+\describe{
+\item{Permitted values}{list of variables created by \code{exprs()}, e.g., \code{exprs(USUBJID, VISIT)}}
+\item{Default value}{none}
+}}
 
 \item{new_var}{New variable
 
-The specified variable is added to the input dataset.}
+The specified variable is added to the input dataset.
+
+\describe{
+\item{Permitted values}{an unquoted symbol, e.g., \code{AVAL}}
+\item{Default value}{none}
+}}
 
 \item{condition}{Condition
 
@@ -42,18 +59,36 @@ is set to the true value (\code{true_value}). For all by groups where it
 evaluates as \code{FALSE} or \code{NA} for all observations the new variable is set
 to the false value (\code{false_value}). The new variable is set to the missing
 value (\code{missing_value}) for by groups not present in the additional
-dataset.}
+dataset.
 
-\item{true_value}{True value}
+\describe{
+\item{Permitted values}{an unquoted condition, e.g., \code{AVISIT == "BASELINE"}}
+\item{Default value}{none}
+}}
 
-\item{false_value}{False value}
+\item{true_value}{True value
 
-\item{missing_value}{Values used for missing information
+\describe{
+\item{Permitted values}{a character scalar, i.e., a character vector of length one}
+\item{Default value}{\code{"Y"}}
+}}
+
+\item{false_value}{False value
+
+\describe{
+\item{Permitted values}{a character scalar, i.e., a character vector of length one}
+\item{Default value}{\code{NA_character_}}
+}}
+
+\item{missing_value}{Value used for missing information
 
 The new variable is set to the specified value for all by groups without
 observations in the additional dataset.
 
-\emph{Permitted Value}: A character scalar}
+\describe{
+\item{Permitted values}{a character scalar, i.e., a character vector of length one}
+\item{Default value}{\code{NA_character_}}
+}}
 
 \item{filter_add}{Filter for additional data
 
@@ -61,7 +96,10 @@ Only observations fulfilling the specified condition are taken into account
 for flagging. If the argument is not specified, all observations are
 considered.
 
-\emph{Permitted Values}: a condition}
+\describe{
+\item{Permitted values}{an unquoted condition, e.g., \code{AVISIT == "BASELINE"}}
+\item{Default value}{\code{NULL}}
+}}
 }
 \value{
 The output dataset contains all observations and variables of the

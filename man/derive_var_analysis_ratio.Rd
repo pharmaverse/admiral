@@ -9,19 +9,35 @@ derive_var_analysis_ratio(dataset, numer_var, denom_var, new_var = NULL)
 \arguments{
 \item{dataset}{Input dataset
 
-The variables specified by the \code{numer_var} and \code{denom_var} arguments are expected to be in the dataset.}
+The variables specified by the \code{numer_var} and \code{denom_var} arguments are expected to be in the dataset.
+
+\describe{
+\item{Default value}{none}
+}}
 
 \item{numer_var}{Variable containing numeric values to be used in the numerator of
-the ratio calculation.}
+the ratio calculation.
+
+\describe{
+\item{Default value}{none}
+}}
 
 \item{denom_var}{Variable containing numeric values to be used in the denominator of
-the ratio calculation.}
+the ratio calculation.
+
+\describe{
+\item{Default value}{none}
+}}
 
 \item{new_var}{A user-defined variable that will be appended to the dataset.
 The default behavior will take the denominator variable and prefix it with \code{R2}
 and append to the dataset. Using this argument will override this default behavior.
 
-Default is \code{NULL}.}
+Default is \code{NULL}.
+
+\describe{
+\item{Default value}{\code{NULL}}
+}}
 }
 \value{
 The input dataset with a ratio variable appended
@@ -38,6 +54,8 @@ a new variable \code{R2ANRLO}. Please note how the denominator variable has the 
 \verb{R2----}. A user can override the default returned variables by using the
 \code{new_var} argument. Also, values of 0 in the denominator will return \code{NA} in
 the derivation.
+
+Note that \code{R2AyHI} and \code{R2AyLO} can also be derived using this function.
 
 Reference CDISC ADaM Implementation Guide
 Version 1.1 Section 3.3.4 Analysis Parameter Variables for BDS Datasets

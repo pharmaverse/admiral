@@ -30,7 +30,7 @@
 #' The observations where `PARAMCD` equals the specified value are considered to compute the
 #' summary record.
 #'
-#'   *Permitted Values:* A character of `PARAMCD` value
+#' @permitted A character of `PARAMCD` value
 #'
 #' @param by_vars Grouping variables
 #'
@@ -48,7 +48,7 @@
 #'   value, `NA`, or an expression.
 #'   (e.g.  `exprs(PARAMCD = "TDOSE",PARCAT1 = "OVERALL")`).
 #'
-#'   *Permitted Values:* List of variable-value pairs
+#' @permitted List of variable-value pairs
 #'
 #' @details For each group (with respect to the variables specified for the `by_vars` parameter),
 #' an observation is added to the output dataset and the defined values are set to the defined

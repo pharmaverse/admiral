@@ -16,21 +16,41 @@ derive_var_shift(
 \arguments{
 \item{dataset}{Input dataset
 
-The variables specified by the \code{from_var} and \code{to_var} arguments are expected to be in the dataset.}
+The variables specified by the \code{from_var} and \code{to_var} arguments are expected to be in the dataset.
 
-\item{new_var}{Name of the character shift variable to create.}
+\describe{
+\item{Default value}{none}
+}}
 
-\item{from_var}{Variable containing value to shift from.}
+\item{new_var}{Name of the character shift variable to create.
 
-\item{to_var}{Variable containing value to shift to.}
+\describe{
+\item{Default value}{none}
+}}
+
+\item{from_var}{Variable containing value to shift from.
+
+\describe{
+\item{Default value}{none}
+}}
+
+\item{to_var}{Variable containing value to shift to.
+
+\describe{
+\item{Default value}{none}
+}}
 
 \item{missing_value}{Character string to replace missing values in \code{from_var} or \code{to_var}.
 
-Default: "NULL"}
+\describe{
+\item{Default value}{\code{"NULL"}}
+}}
 
 \item{sep_val}{Character string to concatenate values of \code{from_var} and \code{to_var}.
 
-Default: " to "}
+\describe{
+\item{Default value}{\code{" to "}}
+}}
 }
 \value{
 The input dataset with the character shift variable added

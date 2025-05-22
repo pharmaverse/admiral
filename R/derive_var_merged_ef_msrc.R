@@ -13,14 +13,20 @@
 #'   `dataset_name` field. If it evaluates to `TRUE` at least once, the new
 #'   variable is set to `true_value`.
 #'
+#' @permitted [flag_event]
+#'
 #' @param source_datasets Source datasets
 #'
 #'   A named list of datasets is expected. The `dataset_name` field of
 #'   `flag_event()` refers to the dataset provided in the list.
 #'
+#' @permitted [dataset_list]
+#'
 #' @param new_var New variable
 #'
 #'   The specified variable is added to the input dataset.
+#'
+#' @permitted [var]
 #'
 #' @param true_value True value
 #'
@@ -31,6 +37,8 @@
 #'   The values of `true_value`, `false_value`, and `missing_value` must be of
 #'   the same type.
 #'
+#' @permitted [char_scalar]
+#'
 #' @param false_value False value
 #'
 #'   The new variable (`new_var`) is set to the specified value for all by
@@ -40,6 +48,8 @@
 #'   The values of `true_value`, `false_value`, and `missing_value` must be of
 #'   the same type.
 #'
+#' @permitted [char_scalar]
+#'
 #' @param missing_value Values used for missing information
 #'
 #'   The new variable is set to the specified value for all by groups without
@@ -47,6 +57,8 @@
 #'
 #'   The values of `true_value`, `false_value`, and `missing_value` must be of
 #'   the same type.
+#'
+#' @permitted [char_scalar]
 #'
 #' @inheritParams derive_var_merged_exist_flag
 #'
@@ -240,13 +252,15 @@ derive_var_merged_ef_msrc <- function(dataset,
 #'   event. The name refers to the dataset specified for `source_datasets` in
 #'   `derive_var_merged_ef_msrc()`.
 #'
-#'   *Permitted Values*: a character scalar
+#' @permitted [dataset]
 #'
 #' @param condition Condition
 #'
 #'   The condition is evaluated at the dataset referenced by `dataset_name`. For
 #'   all by groups where it evaluates as `TRUE` at least once the new variable
 #'   is set to the true value (`true_value`).
+#'
+#' @permitted [condition]
 #'
 #' @param by_vars Grouping variables
 #'
@@ -256,6 +270,8 @@ derive_var_merged_ef_msrc <- function(dataset,
 #'   after the evaluation. If the `by_vars` element is not specified, the
 #'   observations are grouped by the variables specified for the `by_vars`
 #'   argument of `derive_var_merged_ef_msrc()`.
+#'
+#' @permitted [var_list]
 #'
 #' @seealso [derive_var_merged_ef_msrc()]
 #'

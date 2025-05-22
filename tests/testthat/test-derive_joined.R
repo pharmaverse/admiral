@@ -483,9 +483,120 @@ test_that("derive_vars_joined Test 14: save_memory with by_vars", {
   set_admiral_options(save_memory = save_memory)
 })
 
+## Test 15: filter_add is not ignored when join_type != 'all' ----
+test_that("derive_vars_joined Test 15: filter_add is not ignored when join_type != 'all'", {
+  # Test with join_type = "before"
+  expected_before <- tibble::tribble(
+    ~subj, ~day, ~val, ~prevposval,
+    "1",     15,   -1,          NA,
+    "1",     17,    0,          NA,
+    "1",     20,    1,           0
+  )
+
+  adbds <- select(expected_before, -prevposval)
+
+  expect_dfs_equal(
+    base = expected_before,
+    comp = derive_vars_joined(
+      adbds,
+      dataset_add = adbds,
+      by_vars = exprs(subj),
+      order = exprs(day),
+      new_vars = exprs(prevposval = val),
+      join_type = "before",
+      mode = "last",
+      filter_add = val >= 0
+    ),
+    keys = c("subj", "day")
+  )
+
+  # Test with join_type = "after"
+  expected_after <- tibble::tribble(
+    ~subj, ~day, ~val, ~nextposval,
+    "1",     15,   -1,           0,
+    "1",     17,    0,           1,
+    "1",     20,    1,          NA
+  )
+
+  expect_dfs_equal(
+    base = expected_after,
+    comp = derive_vars_joined(
+      adbds,
+      dataset_add = adbds,
+      by_vars = exprs(subj),
+      order = exprs(day),
+      new_vars = exprs(nextposval = val),
+      join_type = "after",
+      mode = "first",
+      filter_add = val >= 0
+    ),
+    keys = c("subj", "day")
+  )
+})
+
+## Test 16: warning if `order` is not unique ----
+test_that("derive_vars_joined Test 16: warning if `order` is not unique", {
+  expected <- tibble::tribble(
+    ~subj, ~day, ~seq, ~val, ~prevposval,
+    "1",     15,    1,   -1,          NA,
+    "1",     17,    2,    0,          NA,
+    "1",     17,    3,    0,          NA,
+    "1",     20,    4,    1,           0
+  )
+
+  adbds <- select(expected, -prevposval)
+
+  expect_snapshot(
+    actual <- derive_vars_joined(
+      adbds,
+      dataset_add = adbds,
+      by_vars = exprs(subj),
+      order = exprs(day),
+      new_vars = exprs(prevposval = val),
+      join_type = "before",
+      mode = "last",
+      filter_add = val >= 0
+    )
+  )
+
+  expect_dfs_equal(
+    base = expected,
+    comp = actual,
+    keys = c("subj", "day", "seq")
+  )
+})
+
+## Test 17: order with unnamed expression ----
+test_that("derive_vars_joined Test 17: order with unnamed expression", {
+  expected <- tribble(
+    ~USUBJID, ~ADTM,                          ~AVAL, ~LASTAVAL,
+    "1",      ymd_hms("2020-02-01T08:00:00"),    15,        NA,
+    "1",      ymd_hms("2020-02-01T12:00:00"),    10,        NA,
+    "1",      ymd_hms("2020-02-07T12:00:00"),     9,        15,
+    "1",      ymd_hms("2020-02-09T12:00:00"),     8,         9
+  )
+
+  adbds <- select(expected, -LASTAVAL)
+
+  expect_dfs_equal(
+    base = expected,
+    comp = derive_vars_joined(
+      dataset = adbds,
+      dataset_add = adbds,
+      by_vars = exprs(USUBJID),
+      order = exprs(date(ADTM), AVAL),
+      new_vars = exprs(LASTAVAL = AVAL),
+      join_type = "before",
+      filter_join = date(ADTM.join) < date(ADTM),
+      mode = "last"
+    ),
+    keys = c("USUBJID", "ADTM")
+  )
+})
+
 # get_joined_data ----
-## Test 15: `first_cond_lower` works ----
-test_that("get_joined_data Test 15: `first_cond_lower` works", {
+## Test 18: `first_cond_lower` works ----
+test_that("get_joined_data Test 18: `first_cond_lower` works", {
   data <- tribble(
     ~subj, ~day, ~val,
     "1",      1, "++",

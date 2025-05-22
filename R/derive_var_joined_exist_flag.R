@@ -11,12 +11,17 @@
 #' used in endpoints such as best overall response.
 #'
 #' @param dataset
+#'
 #'   `r roxygen_param_dataset(expected_vars = c("by_vars", "join_vars"))`
+#'
+#' @permitted [dataset]
 #'
 #' @param dataset_add Additional dataset
 #'
 #'   The variables specified for `by_vars`, `join_vars`, and `order` are
 #'   expected.
+#'
+#' @permitted [dataset]
 #'
 #' @param by_vars Grouping variables
 #'
@@ -25,25 +30,36 @@
 #'
 #'   `r roxygen_param_by_vars()`
 #'
+#' @permitted [var_list]
+#'
 #' @param order Order
 #'
 #'   The observations are ordered by the specified order.
 #'
 #'   `r roxygen_order_na_handling()`
 #'
+#' @permitted [var_list]
+#'
 #' @param new_var New variable
 #'
 #'   The specified variable is added to the input dataset.
+#'
+#' @permitted [var]
 #'
 #' @param tmp_obs_nr_var Temporary observation number
 #'
 #'   The specified variable is added to the input dataset (`dataset`) and the
 #'   additional dataset (`dataset_add`). It is set to the observation number
 #'   with respect to `order`. For each by group (`by_vars`) the observation
-#'   number starts with `1`. The variable can be used in the conditions
-#'   (`filter_join`, `first_cond_upper`, `first_cond_lower`). It is not included
-#'   in the output dataset. It can also be used to flag consecutive observations
-#'   or the last observation (see last example below).
+#'   number starts with `1`. If there is more than one record for specific
+#'   values for `by_vars` and `order`, all records get the same observation
+#'   number. By default, a warning (see `check_type`) is issued in this case.
+#'   The variable can be used in the conditions (`filter_join`,
+#'   `first_cond_upper`, `first_cond_lower`). It is not included in the output
+#'   dataset. It can also be used to flag consecutive observations or the last
+#'   observation (see last example below).
+#'
+#' @permitted [var]
 #'
 #' @param join_vars Variables to keep from joined dataset
 #'
@@ -55,6 +71,8 @@
 #'   AVISITN < AVISITN.join` could be specified.
 #'
 #'   The `*.join` variables are not included in the output dataset.
+#'
+#' @permitted [var_list]
 #'
 #' @param first_cond_lower Condition for selecting range of data (before)
 #'
@@ -69,6 +87,8 @@
 #'   certain observation before the current observation up to the current
 #'   observation. For an example see the last example below.
 #'
+#' @permitted [condition]
+#'
 #' @param first_cond_upper Condition for selecting range of data (after)
 #'
 #'   If this argument is specified, the other observations are restricted up to
@@ -79,6 +99,8 @@
 #'   This parameter should be specified if `filter_join` contains summary
 #'   functions which should not apply to all observations but only up to the
 #'   confirmation assessment. For an example see the third example below.
+#'
+#' @permitted [condition]
 #'
 #' @param filter_join Condition for selecting observations
 #'
@@ -92,17 +114,23 @@
 #'   confirmation observation the response is "CR" or "NE" and there is at most
 #'   one "NE".
 #'
+#' @permitted [condition]
+#'
 #' @param check_type Check uniqueness?
 #'
 #'   If `"warning"` or `"error"` is specified, the specified message is issued
 #'   if the observations of the input dataset are not unique with respect to the
 #'   by variables and the order.
 #'
-#'   *Permitted Values:* `"none"`, `"warning"`, `"error"`
+#' @permitted [msg_type]
 #'
 #' @param true_value Value of `new_var` for flagged observations
 #'
+#' @permitted [char_scalar]
+#'
 #' @param false_value Value of `new_var` for observations not flagged
+#'
+#' @permitted [char_scalar]
 #'
 #' @inheritParams get_joined_data
 #'

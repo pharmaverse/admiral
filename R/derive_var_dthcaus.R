@@ -276,7 +276,7 @@ derive_var_dthcaus <- function(dataset,
 #'   dataset is ordered by `date` and `order`. Can be used to avoid duplicate
 #'   record warning.
 #'
-#'   *Permitted Values*: list of expressions created by `exprs()`, e.g.,
+#' @permitted list of expressions created by `exprs()`, e.g.,
 #'   `exprs(ADT, desc(AVAL))` or `NULL`
 #'
 #' @param mode One of `"first"` or `"last"`.

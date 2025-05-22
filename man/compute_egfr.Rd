@@ -9,41 +9,67 @@ compute_egfr(creat, creatu = "SI", age, weight, sex, race = NULL, method)
 \arguments{
 \item{creat}{Creatinine
 
-A numeric vector is expected.}
+A numeric vector is expected.
+
+\describe{
+\item{Default value}{none}
+}}
 
 \item{creatu}{Creatinine Units
 
 A character vector is expected.
 
-Default: \code{"SI"}
+Expected Values: \code{"SI"}, \code{"CV"}, \code{"umol/L"}, \code{"mg/dL"}
 
-Expected Values: \code{"SI"}, \code{"CV"}, \code{"umol/L"}, \code{"mg/dL"}}
+\describe{
+\item{Default value}{\code{"SI"}}
+}}
 
 \item{age}{Age (years)
 
-A numeric vector is expected.}
+A numeric vector is expected.
+
+\describe{
+\item{Default value}{none}
+}}
 
 \item{weight}{Weight (kg)
 
-A numeric vector is expected if \code{method = "CRCL"}}
+A numeric vector is expected if \code{method = "CRCL"}
+
+\describe{
+\item{Default value}{none}
+}}
 
 \item{sex}{Gender
 
 A character vector is expected.
 
-Expected Values: \code{"M"}, \code{"F"}}
+Expected Values: \code{"M"}, \code{"F"}
+
+\describe{
+\item{Default value}{none}
+}}
 
 \item{race}{Race
 
 A character vector is expected if \code{method = "MDRD"}
 
-Expected Values: \code{"BLACK OR AFRICAN AMERICAN"} and others}
+Expected Values: \code{"BLACK OR AFRICAN AMERICAN"} and others
+
+\describe{
+\item{Default value}{\code{NULL}}
+}}
 
 \item{method}{Method
 
 A character vector is expected.
 
-Expected Values: \code{"CRCL"}, \code{"CKD-EPI"}, \code{"MDRD"}}
+Expected Values: \code{"CRCL"}, \code{"CKD-EPI"}, \code{"MDRD"}
+
+\describe{
+\item{Default value}{none}
+}}
 }
 \value{
 A numeric vector of egfr values

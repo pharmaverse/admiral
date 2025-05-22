@@ -11,13 +11,21 @@ flag_event(dataset_name, condition = NULL, by_vars = NULL)
 event. The name refers to the dataset specified for \code{source_datasets} in
 \code{derive_var_merged_ef_msrc()}.
 
-\emph{Permitted Values}: a character scalar}
+\describe{
+\item{Permitted values}{a dataset, i.e., a \code{data.frame} or tibble}
+\item{Default value}{none}
+}}
 
 \item{condition}{Condition
 
 The condition is evaluated at the dataset referenced by \code{dataset_name}. For
 all by groups where it evaluates as \code{TRUE} at least once the new variable
-is set to the true value (\code{true_value}).}
+is set to the true value (\code{true_value}).
+
+\describe{
+\item{Permitted values}{an unquoted condition, e.g., \code{AVISIT == "BASELINE"}}
+\item{Default value}{\code{NULL}}
+}}
 
 \item{by_vars}{Grouping variables
 
@@ -26,7 +34,12 @@ condition is evaluated. If named elements are used in \code{by_vars} like
 \code{by_vars = exprs(USUBJID, EXLNKID = ECLNKID)}, the variables are renamed
 after the evaluation. If the \code{by_vars} element is not specified, the
 observations are grouped by the variables specified for the \code{by_vars}
-argument of \code{derive_var_merged_ef_msrc()}.}
+argument of \code{derive_var_merged_ef_msrc()}.
+
+\describe{
+\item{Permitted values}{list of variables created by \code{exprs()}, e.g., \code{exprs(USUBJID, VISIT)}}
+\item{Default value}{\code{NULL}}
+}}
 }
 \description{
 The \code{flag_event} object is used to define events as input for the

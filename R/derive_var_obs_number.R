@@ -16,14 +16,13 @@
 #'
 #'   `r roxygen_order_na_handling()`
 #'
-#'   Permitted Values: list of variables or functions of variables
+#' @permitted list of variables or functions of variables
 #'
 #' @param new_var Name of variable to create
 #'
 #'   The new variable is set to the observation number for each by group. The
 #'   numbering starts with 1.
 #'
-#'   Default: `ASEQ`
 #'
 #' @param check_type Check uniqueness?
 #'
@@ -31,9 +30,8 @@
 #'   if the observations of the input dataset are not unique with respect to the
 #'   by variables and the order.
 #'
-#'   Default: `"none"`
 #'
-#'   Permitted Values: `"none"`, `"warning"`, `"error"`
+#' @permitted `"none"`, `"warning"`, `"error"`
 #'
 #' @details For each group (with respect to the variables specified for the
 #'   `by_vars` parameter) the first or last observation (with respect to the

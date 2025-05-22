@@ -31,7 +31,7 @@
 #'
 #'   If `"none"` is specified, then no date or time imputation flag is derived.
 #'
-#'   *Permitted Values*: `"auto"`, `"date"`, `"time"`, `"both"`, or `"none"`
+#' @permitted `"auto"`, `"date"`, `"time"`, `"both"`, or `"none"`
 #'
 #'
 #' @inheritParams impute_dtc_dtm
@@ -307,7 +307,7 @@ convert_dtc_to_dtm <- function(dtc,
 #'   and `min_dates` or `max_dates` should be specified respectively. Otherwise,
 #'   `NA_character_` is returned if the year component is missing.
 #'
-#'   *Permitted Values*: `"Y"` (year, highest level), `"M"` (month), `"D"`
+#' @permitted `"Y"` (year, highest level), `"M"` (month), `"D"`
 #'   (day), `"h"` (hour), `"m"` (minute), `"s"` (second), `"n"` (none, lowest
 #'   level)
 #'
@@ -370,7 +370,7 @@ convert_dtc_to_dtm <- function(dtc,
 #' For example `"2019---07"` would return `"2019-06-07` if `preserve = TRUE`
 #' (and `date_imputation = "mid"`).
 #'
-#' Permitted Values: `TRUE`, `FALSE`
+#' @permitted `TRUE`, `FALSE`
 #'
 #' @inheritParams impute_dtc_dt
 #'
@@ -686,7 +686,7 @@ restrict_imputed_dtc_dtm <- function(dtc,
 #' (`'--DTM'`) as 00, then it is not necessary to set (`'--TMF'`) to `'S'`. A user can set this
 #' to `TRUE` so the `'S'` Flag is dropped from (`'--TMF'`).
 #'
-#' *Permitted Values*: A logical value
+#' @permitted A logical value
 #'
 #' @details Usually this computation function can not be used with `%>%`.
 #'

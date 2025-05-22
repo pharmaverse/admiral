@@ -17,29 +17,46 @@ filter_date_sources(
 \arguments{
 \item{sources}{Sources
 
-A list of \code{tte_source()} objects is expected.}
+A list of \code{tte_source()} objects is expected.
+
+\describe{
+\item{Default value}{none}
+}}
 
 \item{source_datasets}{Source datasets
 
 A named list of datasets is expected. The \code{dataset_name} field of
-\code{tte_source()} refers to the dataset provided in the list.}
+\code{tte_source()} refers to the dataset provided in the list.
+
+\describe{
+\item{Default value}{none}
+}}
 
 \item{by_vars}{By variables
 
 If the parameter is specified, for each by group the observations are
 selected separately.
 
-\emph{Permitted Values}: list of variables created by \code{exprs()}
-e.g. \code{exprs(USUBJID, VISIT)}}
+\describe{
+\item{Default value}{none}
+}}
 
 \item{create_datetime}{Create datetime variable?
 
 If set to \code{TRUE}, variables \code{ADTM} is created. Otherwise, variables \code{ADT}
-is created.}
+is created.
+
+\describe{
+\item{Default value}{\code{FALSE}}
+}}
 
 \item{subject_keys}{Variables to uniquely identify a subject
 
-A list of symbols created using \code{exprs()} is expected.}
+A list of symbols created using \code{exprs()} is expected.
+
+\describe{
+\item{Default value}{none}
+}}
 
 \item{mode}{Selection mode (first or last)
 
@@ -47,7 +64,10 @@ If \code{"first"} is specified, for each subject the first observation with
 respect to the date is included in the output dataset. If \code{"last"} is
 specified, the last observation is included in the output dataset.
 
-\emph{Permitted Values}:  \code{"first"}, \code{"last"}}
+\describe{
+\item{Permitted values}{\code{"first"}, \code{"last"}}
+\item{Default value}{none}
+}}
 
 \item{check_type}{Check uniqueness
 
@@ -55,7 +75,10 @@ If \code{"warning"}, \code{"message"}, or \code{"error"} is specified, the speci
 if the observations of the source datasets are not unique with respect to the
 by variables and the date and order specified in the \code{tte_source()} objects.
 
-\emph{Permitted Values}: \code{"none"}, \code{"warning"}, \code{"error"}, \code{"message"}}
+\describe{
+\item{Permitted values}{\code{"none"}, \code{"warning"}, \code{"error"}, \code{"message"}}
+\item{Default value}{\code{"none"}}
+}}
 }
 \value{
 A dataset with one observation per subject as described in the
@@ -69,7 +92,7 @@ from a list of sources.
 The following steps are performed to create the output dataset:
 
 \enumerate{ \item For each source dataset the observations as specified by
-the \code{filter} element are selected. Then for each patient the first or last
+the \code{filter} element are selected. Then for each subject the first or last
 observation (with respect to \code{date}) is selected.
 
 \item The \code{ADT} variable is set to the variable specified by the
@@ -84,7 +107,7 @@ element.
 \item The selected observations of all source datasets are combined into a
 single dataset.
 
-\item For each patient the first or last observation (with respect to the
+\item For each subject the first or last observation (with respect to the
 \code{ADT} variable) from the single dataset is selected. }
 }
 \examples{

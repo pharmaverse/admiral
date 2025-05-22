@@ -22,15 +22,20 @@ The variables specified by the \code{by_vars} argument are expected to be in the
 
 The variable specified by \code{by_vars} and \code{PARAMCD} must be a unique key of
 the input dataset after restricting it by the filter condition (\code{filter}
-parameter) and to the parameters specified by \code{tadm_code} and \code{padm_code}.}
+parameter) and to the parameters specified by \code{tadm_code} and \code{padm_code}.
+
+\describe{
+\item{Default value}{none}
+}}
 
 \item{by_vars}{Grouping variables
 
 Only variables specified in \code{by_vars} will be populated
 in the newly created records.
 
-\emph{Permitted Values}: list of variables created by \code{exprs()}
-e.g. \code{exprs(USUBJID, VISIT)}}
+\describe{
+\item{Default value}{none}
+}}
 
 \item{set_values_to}{Variables to be set
 
@@ -38,7 +43,10 @@ The specified variables are set to the specified values for the new
 observations. For example \code{exprs(PARAMCD = "MAP")} defines the parameter code
 for the new parameter.
 
-\emph{Permitted Values}: List of variable-value pairs}
+\describe{
+\item{Permitted values}{List of variable-value pairs}
+\item{Default value}{\code{exprs(PARAMCD = "MAP")}}
+}}
 
 \item{tadm_code}{Total Doses Administered parameter code
 
@@ -46,7 +54,10 @@ The observations where \code{PARAMCD} equals the specified value are considered
 as the total dose administered.  The \code{AVAL} associated with this \code{PARAMCD}
 will be the numerator of the dose intensity calculation.
 
-Permitted Values: character value}
+\describe{
+\item{Permitted values}{character value}
+\item{Default value}{\code{"TNDOSE"}}
+}}
 
 \item{tpadm_code}{Total Doses Planned parameter code
 
@@ -54,14 +65,16 @@ The observations where \code{PARAMCD} equals the specified value are considered
 as the total planned dose.  The \code{AVAL} associated with this \code{PARAMCD}
 will be the denominator of the dose intensity calculation.
 
-Permitted Values: character value}
+\describe{
+\item{Permitted values}{character value}
+\item{Default value}{\code{"TSNDOSE"}}
+}}
 
 \item{zero_doses}{Flag indicating logic for handling 0 planned or
 administered doses for a \code{by_vars} group
 
-Default: \code{Inf}
-
-Permitted Values: \code{Inf}, \code{100}
+\describe{
+\item{Permitted values}{\code{Inf}, \code{100}
 
 No record is returned if either the planned (\code{tpadm_code}) or administered
 (\code{tadm_code}) \code{AVAL} are \code{NA}.  No record is returned is a record does not
@@ -82,6 +95,8 @@ If \code{zero_doses} = \code{100} :
 \item If the planned dose (\code{tpadm_code}) is 0 and the administered dose
 (\code{tadm_code}) is > 0, 100 is returned.
 }}
+\item{Default value}{\code{"Inf"}}
+}}
 
 \item{filter}{Filter condition
 
@@ -89,7 +104,10 @@ The specified condition is applied to the input dataset before deriving the
 new parameter, i.e., only observations fulfilling the condition are taken
 into account.
 
-\emph{Permitted Values:} a condition}
+\describe{
+\item{Permitted values}{a condition}
+\item{Default value}{\code{NULL}}
+}}
 }
 \value{
 The input dataset with the new parameter rows added. Note, a variable will only
