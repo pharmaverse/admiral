@@ -510,7 +510,7 @@ impute_dtc_dtm <- function(dtc,
 
   # Handle preserve argument ----
   if (!preserve) {
-    partial <- propagate_na_values(partial, is_datetime)
+    partial <- propagate_na_values(partial)
   }
 
   # Determine target components ----

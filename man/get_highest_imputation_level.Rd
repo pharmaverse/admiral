@@ -4,16 +4,16 @@
 \alias{get_highest_imputation_level}
 \title{Get Highest Imputation Level}
 \usage{
-get_highest_imputation_level(is_datetime, highest_imputation)
+get_highest_imputation_level(highest_imputation, is_datetime)
 }
 \arguments{
-\item{is_datetime}{A logical indicating whether the imputation is for a datetime.
+\item{highest_imputation}{A character indicating the highest imputation level.
 
 \describe{
 \item{Default value}{none}
 }}
 
-\item{highest_imputation}{A character indicating the highest imputation level.
+\item{is_datetime}{A logical indicating whether the imputation is for a datetime.
 
 \describe{
 \item{Default value}{none}

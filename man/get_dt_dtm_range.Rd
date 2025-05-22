@@ -51,8 +51,7 @@ print(imputed_dates_first)
 
 # Get Range from Partial Datetime
 dtc_datetimes <- c("2020-02-29T12:00", "2021-03T14:30")
-imputed_datetimes_first <- admiral:::get_dt_dtm_range(dtc_datetimes, create_datetime = TRUE
-)
+imputed_datetimes_first <- admiral:::get_dt_dtm_range(dtc_datetimes, create_datetime = TRUE)
 print(imputed_datetimes_first)
 
 # Edge case: Return empty character vector for empty input

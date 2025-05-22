@@ -410,8 +410,8 @@ assert_date_imputation <- function(highest_imputation, date_imputation) {
 #'
 #' Applies assertions on the `time_imputation` argument
 #'
-#' @param highest_imputation Highest imputation level
 #' @param time_imputation The value to impute time when missing
+#' @param highest_imputation Highest imputation level
 #'
 #' @returns asserted `time_imputation`
 #'
@@ -430,7 +430,7 @@ assert_date_imputation <- function(highest_imputation, date_imputation) {
 #'
 #' @keywords internal
 #'
-assert_time_imputation <- function(highest_imputation, time_imputation) {
+assert_time_imputation <- function(time_imputation, highest_imputation) {
   time_imputation <-
     assert_character_scalar(
       time_imputation,
@@ -584,7 +584,7 @@ get_dt_dtm_range <- function(dtc,
 
   # Parse partials
   partial <- get_partialdatetime(dtc, create_datetime = create_datetime)
-  partial <- propagate_na_values(partial, is_datetime = create_datetime)
+  partial <- propagate_na_values(partial)
   components <- names(partial)
 
   if (create_datetime) {
@@ -629,8 +629,8 @@ get_dt_dtm_range <- function(dtc,
 #' Returns the `dt_level()` or `dtm_level()` representation of the `highest_imputation`
 #' character value. The level object allows comparisons of levels.
 #'
-#' @param is_datetime A logical indicating whether the imputation is for a datetime.
 #' @param highest_imputation A character indicating the highest imputation level.
+#' @param is_datetime A logical indicating whether the imputation is for a datetime.
 #'
 #' @returns A `dt_level()` or `dtm_level()` object representing the highest imputation level.
 #'
@@ -664,7 +664,7 @@ get_dt_dtm_range <- function(dtc,
 #' print(highest_level_hour_datetime)
 #'
 #' @keywords internal
-get_highest_imputation_level <- function(is_datetime, highest_imputation) {
+get_highest_imputation_level <- function(highest_imputation, is_datetime) {
   if (is_datetime) dtm_level(highest_imputation) else dt_level(highest_imputation)
 }
 
@@ -959,9 +959,6 @@ format_imputed_dtc <- function(imputed, is_datetime) {
 #'
 #' @param partial A list of partial date/time components.
 #'
-#' @param is_datetime A logical value indicating whether the input strings include
-#' time information.
-#'
 #' @returns A list of date/time components with propagated `NA` values.
 #'
 #' @examples
@@ -970,9 +967,7 @@ format_imputed_dtc <- function(imputed, is_datetime) {
 #'   year = "2020", month = NA_character_, day = "01",
 #'   hour = "12", minute = NA_character_, second = "34"
 #' )
-#' propagated_datetime <- admiral:::propagate_na_values(partial_datetime,
-#'   is_datetime = TRUE
-#' )
+#' propagated_datetime <- admiral:::propagate_na_values(partial_datetime)
 #' print(propagated_datetime)
 #'
 #' # Propagate NA values for datetime with missing higher order components
@@ -980,17 +975,13 @@ format_imputed_dtc <- function(imputed, is_datetime) {
 #'   year = NA_character_, month = "01", day = "01",
 #'   hour = "12", minute = "00", second = "00"
 #' )
-#' propagated_missing <- admiral:::propagate_na_values(partial_missing,
-#'   is_datetime = TRUE
-#' )
+#' propagated_missing <- admiral:::propagate_na_values(partial_missing)
 #' print(propagated_missing)
 #'
 #' partial_missing_date <- list(
 #'   year = "2023", month = NA_character_, day = "01"
 #' )
-#' propagated_missing_date <- admiral:::propagate_na_values(partial_missing_date,
-#'   is_datetime = FALSE
-#' )
+#' propagated_missing_date <- admiral:::propagate_na_values(partial_missing_date)
 #' print(propagated_missing_date)
 #'
 #' @details
@@ -998,9 +989,8 @@ format_imputed_dtc <- function(imputed, is_datetime) {
 #' all lower-order components (e.g., day, hour, etc.) are also set to `NA`.
 #'
 #' @keywords internal
-propagate_na_values <- function(partial, is_datetime) {
-  comp_length <- ifelse(is_datetime, 6, 3)
-  for (i in 2:comp_length) {
+propagate_na_values <- function(partial) {
+  for (i in 2:length(partial)) {
     partial[[i]] <- if_else(is.na(partial[[i - 1]]), NA_character_, partial[[i]])
   }
   partial

@@ -180,8 +180,8 @@ test_that("get_imputation_target_time Test 13: get_dt_dtm_range correctly impute
 # Test for get_highest_imputation_level
 ## Test 14: correctly determine highest level ----
 test_that("get_imputation_target_time Test 14: correctly determine highest level", {
-  expect_equal(get_highest_imputation_level(FALSE, "Y"), dt_level("Y"))
-  expect_equal(get_highest_imputation_level(TRUE, "Y"), dtm_level("Y"))
+  expect_equal(get_highest_imputation_level("Y", FALSE), dt_level("Y"))
+  expect_equal(get_highest_imputation_level("Y", TRUE), dtm_level("Y"))
 })
 
 # Test for get_imputation_targets
@@ -302,7 +302,7 @@ test_that("get_imputation_target_time Test 19: correctly propagate NA values in 
     hour = "12", minute = NA_character_, second = "20"
   )
   expect_equal(
-    propagate_na_values(partial, is_datetime = TRUE),
+    propagate_na_values(partial),
     list(
       year = "2020", month = NA_character_, day = NA_character_,
       hour = NA_character_, minute = NA_character_, second = NA_character_
