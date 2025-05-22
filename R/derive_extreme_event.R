@@ -64,8 +64,7 @@
 #'   Set a list of variables to some specified value for the new records
 #'   + LHS refer to a variable.
 #'   + RHS refers to the values to set to the variable. This can be a string, a
-#'   symbol, a numeric value, an expression or NA. If summary functions are
-#'   used, the values are summarized by the variables specified for `by_vars`.
+#'   symbol, a numeric value, an expression or NA.
 #'
 #'   For example:
 #'   ```
@@ -162,13 +161,17 @@
 #'   consider only the observation with the latest day, because the second
 #'   argument for the order is `desc(ADY)`.
 #' - Once a record is identified as satisfying an event's condition, a new
-#'   observation is created, where each variable is populated with values
-#'   sought according to the following order of precedence: (a): values
-#'   specified in the event's `set_values_to` (here, `AVAL` and `AVALC`), (b)
-#'   values specified in the global `set_values_to` (here, `PARAM` and
-#'   `PARAMCD`), (c) values from the selected observation as
-#'   long as that variable appears in `keep_source_vars` (here, `ADY` does
-#'   due to the use of the tidyselect expression `everything()`).
+#'   observation is created by the following process:
+#'   \enumerate{
+#'     \item the selected record is copied,
+#'     \item the variables specified in the event's `set_values_to` (here,
+#'     `AVAL` and `AVALC`) are created/updated,
+#'     \item the variables specified in `keep_source_vars` (here, `ADY` does due
+#'     to the use of the tidyselect expression `everything()`) (plus `by_vars`
+#'     and the variables from `set_values_to`) are kept,
+#'     \item the variabales specified in the global `set_values_to` (here,
+#'     `PARAM` and `PARAMCD`) are created/updated.
+#'   }
 #'
 #' @code
 #' library(tibble, warn.conflicts = FALSE)
@@ -200,9 +203,7 @@
 #'     ),
 #'     event(
 #'       condition = all(AVALC == "N"),
-#'       set_values_to = exprs(
-#'         AVALC = "No sleeping problems", AVAL = 3
-#'       )
+#'       set_values_to = exprs(AVALC = "No sleeping problems", AVAL = 3)
 #'     ),
 #'     event(
 #'       condition = TRUE,
@@ -220,8 +221,7 @@
 #' ) %>%
 #' select(-STUDYID)
 #'
-#' @caption Add a new record for the worst observation using `event()` and
-#'    `event_joined()` objects
+#' @caption Events based on comparison across records (`event_joined()`)
 #' @info We'll now extend the above example. Specifically, we consider a new
 #'    possible worst sleeping problem, namely if a subject experiences no
 #'    sleep on consecutive days.
@@ -236,7 +236,7 @@
 #'    `AVALC`, `PARAMCD` and `ADY`, we specify these variables with `join_vars`,
 #'    and finally, because we wish to compare all records with each other, we
 #'    select `join_type = "all"`.
-#'  - Since we are now passing an `event_joined` object to
+#'  - Since we are now passing an `event_joined()` object to
 #'    `derive_extreme_event()`, it is good practice to explicitly specify the
 #'    `source_datasets` argument so as to indicate which dataset we wish to
 #'    use for the join. Note that in this case, it is not strictly needed
@@ -312,7 +312,7 @@
 #'
 #'  - In first `event()`, since we simply seek the first time that
 #'    `CRIT1FL` is `NA`, it's enough to specify the `condition`,
-#'    because we inherit to `order` and `mode` from the main
+#'    because we inherit `order` and `mode` from the main
 #'    `derive_extreme_event()` call here which will automatically
 #'    select the first occurrence by `AVISITN`.
 #'  - In the second `event()`, we select the last record among the
@@ -460,15 +460,15 @@
 #'    first portion of `condition` now references `"PR"` and `first_cond_upper`
 #'    accepts a confirmatory `"PR"` or `"CR"` 28 days later. Note that now we must add
 #'    `"PR"` as an option within the `all()` condition to account for confirmatory
-#'    "`PR`"s.
+#'    `"PR"`s.
 #'
 #'  - The Stable Disease (SD), Progressive Disease (PD) and Not Evaluable (NE)
 #'    events are simpler and just require `event()` calls.
 #'
 #'  - Finally, we use a catch-all `event()` with `condition = TRUE` and
-#'    `dataset_name = adsl` to identify those subjects who do not appear in `ADRS`
+#'    `dataset_name = "adsl"` to identify those subjects who do not appear in `ADRS`
 #'    and list their CBOR as `"MISSING"`. Note here the fact that `dataset_name` is
-#'    set to `adsl`, which is a new source dataset. As such it's important in the
+#'    set to `"adsl"`, which is a new source dataset. As such it's important in the
 #'    main `derive_extreme_event()` call to list `adsl` as another source dataset
 #'    with `source_datasets = list(adsl = adsl)`.
 #'
