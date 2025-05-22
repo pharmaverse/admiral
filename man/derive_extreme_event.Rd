@@ -118,8 +118,7 @@ Set a list of variables to some specified value for the new records
 \itemize{
 \item LHS refer to a variable.
 \item RHS refers to the values to set to the variable. This can be a string, a
-symbol, a numeric value, an expression or NA. If summary functions are
-used, the values are summarized by the variables specified for \code{by_vars}.
+symbol, a numeric value, an expression or NA.
 }
 
 For example:
@@ -250,13 +249,17 @@ the first event for which a condition is satisfied. Within that event, we
 consider only the observation with the latest day, because the second
 argument for the order is \code{desc(ADY)}.
 \item Once a record is identified as satisfying an event's condition, a new
-observation is created, where each variable is populated with values
-sought according to the following order of precedence: (a): values
-specified in the event's \code{set_values_to} (here, \code{AVAL} and \code{AVALC}), (b)
-values specified in the global \code{set_values_to} (here, \code{PARAM} and
-\code{PARAMCD}), (c) values from the selected observation as
-long as that variable appears in \code{keep_source_vars} (here, \code{ADY} does
-due to the use of the tidyselect expression \code{everything()}).
+observation is created by the following process:
+\enumerate{
+\item the selected record is copied,
+\item the variables specified in the event's \code{set_values_to} (here,
+\code{AVAL} and \code{AVALC}) are created/updated,
+\item the variables specified in \code{keep_source_vars} (here, \code{ADY} does due
+to the use of the tidyselect expression \code{everything()}) (plus \code{by_vars}
+and the variables from \code{set_values_to}) are kept,
+\item the variabales specified in the global \code{set_values_to} (here,
+\code{PARAM} and \code{PARAMCD}) are created/updated.
+}
 }
 
 \if{html}{\out{<div class="sourceCode r">}}\preformatted{library(tibble, warn.conflicts = FALSE)
@@ -288,9 +291,7 @@ derive_extreme_event(
     ),
     event(
       condition = all(AVALC == "N"),
-      set_values_to = exprs(
-        AVALC = "No sleeping problems", AVAL = 3
-      )
+      set_values_to = exprs(AVALC = "No sleeping problems", AVAL = 3)
     ),
     event(
       condition = TRUE,
@@ -319,8 +320,7 @@ select(-STUDYID)
 #> 7 1       WSP        No sleeping problems      2     3 Worst Sleeping Problem
 #> 8 2       WSP        Waking up three times     3     2 Worst Sleeping Problem
 #> 9 3       WSP        Missing                   1    99 Worst Sleeping Problem}\if{html}{\out{</div>}}}
-\subsection{Add a new record for the worst observation using \code{event()} and
-\code{event_joined()} objects}{
+\subsection{Events based on comparison across records (\code{event_joined()})}{
 
 We'll now extend the above example. Specifically, we consider a new
 possible worst sleeping problem, namely if a subject experiences no
@@ -415,11 +415,11 @@ As such, for this case now we need to vary our usage of the
 \itemize{
 \item In first \code{event()}, since we simply seek the first time that
 \code{CRIT1FL} is not \code{NA}, it's enough to specify the \code{condition},
-because we inherit to \code{order} and \code{mode} from the main
+because we inherit \code{order} and \code{mode} from the main
 \code{derive_extreme_event()} call here which will automatically
 select the first occurrence by \code{AVISITN}.
 \item In the second \code{event()}, we select the last record among the
-full set of records where \code{CRIT1FL} is not \code{NA} by additionally
+full set of records where \code{CRIT1FL} are all \code{NA} by additionally
 specifying \code{mode = "last"} within the \code{event()}.
 \item Note now the usage of \code{keep_source_vars = exprs(AVISITN)}
 rather than \code{everything()} as in the previous example. This
@@ -462,7 +462,7 @@ derive_extreme_event(
   keep_source_vars = exprs(AVISITN),
   set_values_to = exprs(
     PARAMCD = "ALK2",
-    PARAM = "ALKPH <= 2 times ULN"
+    PARAM = "ALT > 2 times ULN"
   )
 ) \%>\%
 select(-STUDYID)
@@ -475,8 +475,8 @@ select(-STUDYID)
 #> 4 2             2 ALT > 2 times ULN Y       ALKPH   Alkaline Phosphatase … <NA> 
 #> 5 2             3 ALT > 2 times ULN <NA>    ALKPH   Alkaline Phosphatase … <NA> 
 #> 6 2             4 ALT > 2 times ULN Y       ALKPH   Alkaline Phosphatase … <NA> 
-#> 7 1             2 <NA>              <NA>    ALK2    ALKPH <= 2 times ULN   N    
-#> 8 2             2 <NA>              <NA>    ALK2    ALKPH <= 2 times ULN   Y    }\if{html}{\out{</div>}}}
+#> 7 1             2 <NA>              <NA>    ALK2    ALT > 2 times ULN      N    
+#> 8 2             2 <NA>              <NA>    ALK2    ALT > 2 times ULN      Y    }\if{html}{\out{</div>}}}
 \subsection{A more complex example: Confirmed Best Overall Response
 (\code{first/last_cond_upper}, \code{join_type}, \code{source_datasets})}{
 
@@ -573,13 +573,13 @@ instead.
 first portion of \code{condition} now references \code{"PR"} and \code{first_cond_upper}
 accepts a confirmatory \code{"PR"} or \code{"CR"} 28 days later. Note that now we must add
 \code{"PR"} as an option within the \code{all()} condition to account for confirmatory
-"\code{PR}"s.
+\code{"PR"}s.
 \item The Stable Disease (SD), Progressive Disease (PD) and Not Evaluable (NE)
 events are simpler and just require \code{event()} calls.
 \item Finally, we use a catch-all \code{event()} with \code{condition = TRUE} and
-\code{dataset_name = adsl} to identify those subjects who do not appear in \code{ADRS}
+\code{dataset_name = "adsl"} to identify those subjects who do not appear in \code{ADRS}
 and list their CBOR as \code{"MISSING"}. Note here the fact that \code{dataset_name} is
-set to \code{adsl}, which is a new source dataset. As such it's important in the
+set to \code{"adsl"}, which is a new source dataset. As such it's important in the
 main \code{derive_extreme_event()} call to list \code{adsl} as another source dataset
 with \code{source_datasets = list(adsl = adsl)}.
 }
