@@ -51,9 +51,11 @@ verify_templates <- function(pkg = "admiral", ds = c("adae")) {
   pkg <- "admiral"
   if (pkg != "admiral") error("Curently, only admiral package is accepted.")
 
+  #nolint start
   library(pkg, character.only = TRUE)
   library(teal.data)
   library(purrr)
+  # nolint stop
   sprintf("generating ADaMs for  %s package\n", pkg)
 
   # temporary directories
@@ -320,5 +322,5 @@ get_dataset_new <- function(adam, path = NULL) {
 #' @return
 #' @description  runs the template for the specified ADaM
 run_template <- function(adam, dir = NULL) {
-  source(paste0(dir, "/ad_", adam, ".R"))
+  source(paste0(dir, "/ad_", adam, ".R")) # nolint
 }
