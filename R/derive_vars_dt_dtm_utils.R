@@ -333,7 +333,9 @@ get_partialdatetime <- function(dtc) {
   partial
 }
 
-#' Check input assertions for date and imputation parameters
+#' Check Date and Imputation arguments
+#'
+#' @description
 #' Used in `derive_vars_dt()` and `derive_vars_dtm()`.
 #'
 #' Applies assertions on the `new_vars_prefix`, `max_dates`, `min_dates`,
