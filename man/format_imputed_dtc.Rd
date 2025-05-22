@@ -29,9 +29,9 @@ This is a helping function for \code{get_dt_dtm_range()}
 Formats imputed date/datetime components into a string representation.
 }
 \details{
-The function formats the imputed components into "YYYY-MM-DD" for dates
-and "YYYY-MM-DDTHH:MM:SS" for datetimes. It replaces any string containing
-'x' with NA.
+The function formats the imputed components into \code{"YYYY-MM-DD"} for dates
+and \code{"YYYY-MM-DDThh:mm:ss"} for datetimes. It replaces any string containing
+\code{"x"} with \code{NA}.
 }
 \examples{
 # Format imputed datetime components

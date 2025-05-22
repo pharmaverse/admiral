@@ -2,7 +2,7 @@
 % Please edit documentation in R/derive_vars_dt_dtm_utils.R
 \name{get_dt_dtm_range}
 \alias{get_dt_dtm_range}
-\title{Get range of possible date / datetime}
+\title{Get Range of Partial Date / Datetime}
 \usage{
 get_dt_dtm_range(dtc, date_imputation = "first", time_imputation = NULL)
 }
@@ -25,7 +25,7 @@ respectively.
 }}
 }
 \value{
-A character vector of fully imputed dates in \code{"YYYY-MM-DD"} format.
+A character vector of fully imputed dates in \code{"YYYY-MM-DD"} or \code{"YYYY-MM-DDThh:mm:ss"} format.
 }
 \description{
 Internal helper function to convert a character vector of (possibly partial) dates (\code{dtc})

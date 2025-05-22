@@ -280,6 +280,10 @@ convert_date_to_dtm <- function(dt,
 #'   `yyyy-mm-ddThh:mm:ss`. Trailing components can be omitted and `-` is a
 #'   valid value for any component.
 #'
+#' @param create_datetime logical scalar. If `TRUE` returns Datetime components.
+#'   If `FALSE` returns Date components.
+#'
+#'
 #' @returns A list of character vectors. The elements of the list are named
 #'   "year", "month", "day", "hour", "minute", and "second". Missing components
 #'   are set to `NA_character_`.
@@ -288,20 +292,38 @@ convert_date_to_dtm <- function(dt,
 #'   available.
 #'
 #' @examples
+#' # Datetime
 #' # Get partial datetime components for a complete datetime string
-#' dtc_complete <- admiral:::get_partialdatetime("2020-03-15T12:34:56")
+#' dtc_complete <- admiral:::get_partialdatetime("2020-03-15T12:34:56", TRUE)
 #' print(dtc_complete)
 #'
 #' # Get partial datetime components for a partial datetime string
-#' dtc_partial <- admiral:::get_partialdatetime("2020-03-15T12:34")
+#' dtc_partial <- admiral:::get_partialdatetime("2020-03-15T12:34", TRUE)
 #' print(dtc_partial)
 #'
 #' # Get partial datetime components for a date-only string
-#' dtc_date_only <- admiral:::get_partialdatetime("2020-03-15")
+#' dtc_date_only <- admiral:::get_partialdatetime("2020-03-15", TRUE)
 #' print(dtc_date_only)
 #'
 #' # Get partial datetime components for an incomplete year string
-#' dtc_year_partial <- admiral:::get_partialdatetime("2020")
+#' dtc_year_partial <- admiral:::get_partialdatetime("2020", TRUE)
+#' print(dtc_year_partial)
+#'
+#' # Date
+#' # Get partial date components for a complete datetime string
+#' dtc_complete <- admiral:::get_partialdatetime("2020-03-15T12:34:56", FALSE)
+#' print(dtc_complete)
+#'
+#' # Get partial date components for a partial datetime string
+#' dtc_partial <- admiral:::get_partialdatetime("2020-03-15T12:34", FALSE)
+#' print(dtc_partial)
+#'
+#' # Get partial date components for a year and month only string
+#' dtc_month_only <- admiral:::get_partialdatetime("2020-03", FALSE)
+#' print(dtc_month_only)
+#'
+#' # Get partial date components for an incomplete year string
+#' dtc_year_partial <- admiral:::get_partialdatetime("2020", FALSE)
 #' print(dtc_year_partial)
 #'
 #' @family utils_impute
@@ -309,7 +331,7 @@ convert_date_to_dtm <- function(dt,
 #' @keywords internal
 #'
 #' @seealso [impute_dtc_dtm()], [impute_dtc_dt()]
-get_partialdatetime <- function(dtc) {
+get_partialdatetime <- function(dtc, create_datetime) {
   two <- "(\\d{2}|-?)"
   partialdate <- str_match(dtc, paste0(
     "(\\d{4}|-?)-?",
@@ -330,6 +352,11 @@ get_partialdatetime <- function(dtc) {
     partial[[i]] <- partialdate[, i + 1]
     partial[[i]] <- if_else(partial[[i]] %in% c("-", ""), NA_character_, partial[[i]])
   }
+
+  if(!create_datetime){
+    partial <- partial[c("year", "month", "day")]
+  }
+
   partial
 }
 
@@ -624,7 +651,7 @@ get_dt_dtm_range <- function(dtc,
   }
 
   # Parse partials
-  partial <- parse_partial_date_time(dtc, is_datetime)
+  partial <- get_partialdatetime(dtc, create_datetime = is_datetime)
   components <- names(partial)
 
   partial <- propagate_na_values(partial, is_datetime)
@@ -646,7 +673,7 @@ get_dt_dtm_range <- function(dtc,
 #' @description
 #' `r lifecycle::badge("stable")`
 #'
-#' Returns the `dt_level()` or `dtm_level()` representation of the `highest_imputation` 
+#' Returns the `dt_level()` or `dtm_level()` representation of the `highest_imputation`
 #' character value. The level object allows comparisons of levels.
 #'
 #' @param is_datetime A logical indicating whether the imputation is for a datetime.
@@ -776,7 +803,7 @@ get_imputation_targets <- function(partial, date_imputation, time_imputation, is
 #' This functions adjusts the day of the imputed date to the last day the month
 #' if the day was imputed. It should be called if `date_imputation = "last"` was used
 #' for the date imputation as `get_imputation_target_date()` imputes the last day
-#' as `"28"`. 
+#' as `"28"`.
 #'
 #' @param imputed_dtc A character vector of imputed date/datetime strings.
 #' @param partial A list of partial date/time components.
@@ -1023,61 +1050,4 @@ propagate_na_values <- function(partial, is_datetime) {
     partial[[i]] <- if_else(is.na(partial[[i - 1]]), NA_character_, partial[[i]])
   }
   partial
-}
-
-#' Parse Partial Date or Datetime
-#'
-#' @description
-#' `r lifecycle::badge("stable")`
-#'
-#' This is a helping function for `get_dt_dtm_range()`
-#' This function parses a vector of date or datetime strings into their component
-#' parts.
-#'
-#' @param dtc A character vector of date or datetime strings to be parsed.
-#' @param is_datetime A logical value indicating whether the input strings include
-#' time information.
-#'
-#' @returns A list of character vectors, each representing a component of the date
-#' or datetime.
-#' - For dates, the components are "year", "month", and "day".
-#' - For datetimes, the components also include "hour", "minute", and "second".
-#'
-#' @examples
-#' # Parse partial datetime components
-#' dtc_datetime <- "2020-03-15T12:34"
-#' parsed_datetime <- admiral:::parse_partial_date_time(dtc_datetime, is_datetime = TRUE)
-#' print(parsed_datetime)
-#'
-#' # Parse partial date components
-#' dtc_date <- "2020-03"
-#' parsed_date <- admiral:::parse_partial_date_time(dtc_date, is_datetime = FALSE)
-#' print(parsed_date)
-#'
-#' # Parse partial datetime with missing components
-#' dtc_partial_datetime <- "2020-03T12"
-#' parsed_partial_datetime <- admiral:::parse_partial_date_time(dtc_partial_datetime,
-#'   is_datetime = TRUE
-#' )
-#' print(parsed_partial_datetime)
-#'
-#' # Parse partial date with incomplete year
-#' dtc_year <- "2020"
-#' parsed_year <- admiral:::parse_partial_date_time(dtc_year, is_datetime = FALSE)
-#' print(parsed_year)
-#'
-#' @details
-#' The function uses different parsing methods depending on whether the input is
-#'  a date or a datetime:
-#' - For dates, it calls `get_partialdate()`.
-#' - For datetimes, it calls `get_partialdatetime()`.
-#'
-#' @keywords internal
-#'
-parse_partial_date_time <- function(dtc, is_datetime) {
-  if (is_datetime) {
-    get_partialdatetime(dtc)
-  } else {
-    get_partialdatetime(dtc)[c("year", "month", "day")]
-  }
 }

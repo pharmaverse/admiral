@@ -501,7 +501,7 @@ impute_dtc_dtm <- function(dtc,
   is_datetime <- TRUE
 
   # Parse character date ----
-  partial <- parse_partial_date_time(dtc, is_datetime)
+  partial <- get_partialdatetime(dtc, create_datetime = is_datetime)
   components <- names(partial)
 
   # Handle preserve argument ----
@@ -675,7 +675,7 @@ compute_tmf <- function(dtc,
   valid_dtc <- is_valid_dtc(dtc)
   warn_if_invalid_dtc(dtc, valid_dtc)
 
-  partial <- get_partialdatetime(dtc)
+  partial <- get_partialdatetime(dtc, create_datetime = TRUE)
   highest_miss <- convert_blanks_to_na(vector("character", length(dtc)))
 
   # concatenate lubridate functions: `hour()`, `minute()`, `second()` to map over dtm input

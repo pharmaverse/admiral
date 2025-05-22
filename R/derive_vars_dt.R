@@ -452,7 +452,7 @@ impute_dtc_dt <- function(dtc,
   }
 
   # Parse partials
-  partial <- parse_partial_date_time(dtc, is_datetime)
+  partial <- get_partialdatetime(dtc, create_datetime = is_datetime)
   components <- names(partial)
 
   # Handle preserve argument ----

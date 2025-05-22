@@ -4,7 +4,7 @@
 \alias{get_partialdatetime}
 \title{Parse DTC variable and Determine Components}
 \usage{
-get_partialdatetime(dtc)
+get_partialdatetime(dtc, create_datetime)
 }
 \arguments{
 \item{dtc}{The \code{'--DTC'} date to parse
@@ -12,6 +12,13 @@ get_partialdatetime(dtc)
 A character date is expected in a format like \code{yyyy-mm-dd} or
 \code{yyyy-mm-ddThh:mm:ss}. Trailing components can be omitted and \code{-} is a
 valid value for any component.
+
+\describe{
+\item{Default value}{none}
+}}
+
+\item{create_datetime}{logical scalar. If \code{TRUE} returns Datetime components.
+If \code{FALSE} returns Date components.
 
 \describe{
 \item{Default value}{none}
@@ -30,20 +37,38 @@ The function can be replaced by the parttime parser once it is
 available.
 }
 \examples{
+# Datetime
 # Get partial datetime components for a complete datetime string
-dtc_complete <- admiral:::get_partialdatetime("2020-03-15T12:34:56")
+dtc_complete <- admiral:::get_partialdatetime("2020-03-15T12:34:56", TRUE)
 print(dtc_complete)
 
 # Get partial datetime components for a partial datetime string
-dtc_partial <- admiral:::get_partialdatetime("2020-03-15T12:34")
+dtc_partial <- admiral:::get_partialdatetime("2020-03-15T12:34", TRUE)
 print(dtc_partial)
 
 # Get partial datetime components for a date-only string
-dtc_date_only <- admiral:::get_partialdatetime("2020-03-15")
+dtc_date_only <- admiral:::get_partialdatetime("2020-03-15", TRUE)
 print(dtc_date_only)
 
 # Get partial datetime components for an incomplete year string
-dtc_year_partial <- admiral:::get_partialdatetime("2020")
+dtc_year_partial <- admiral:::get_partialdatetime("2020", TRUE)
+print(dtc_year_partial)
+
+# Date
+# Get partial date components for a complete datetime string
+dtc_complete <- admiral:::get_partialdatetime("2020-03-15T12:34:56", FALSE)
+print(dtc_complete)
+
+# Get partial date components for a partial datetime string
+dtc_partial <- admiral:::get_partialdatetime("2020-03-15T12:34", FALSE)
+print(dtc_partial)
+
+# Get partial date components for a year and month only string
+dtc_month_only <- admiral:::get_partialdatetime("2020-03", FALSE)
+print(dtc_month_only)
+
+# Get partial date components for an incomplete year string
+dtc_year_partial <- admiral:::get_partialdatetime("2020", FALSE)
 print(dtc_year_partial)
 
 }

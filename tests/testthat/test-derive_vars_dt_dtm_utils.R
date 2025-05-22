@@ -99,7 +99,7 @@ test_that("get_imputation_target_time Test 12: get correct target for missing ti
 
 # Test for get_dt_dtm_range
 ## Test 13: get_dt_dtm_range correctly imputes date ranges ----
-test_that("get_dt_dtm_range correctly imputes date ranges", {
+test_that("get_imputation_target_time Test 13: get_dt_dtm_range correctly imputes date ranges", {
   dtc <- c("2020-02-29", "2021-03", "--08-15", "2022", "2022--", "---29")
   dtc_datetimes <- c(
     "2020-02-29T12:00", "2021-03T14:30", "2021-03--T14",
@@ -352,27 +352,150 @@ test_that("get_imputation_target_time Test 19: correctly propagate NA values in 
   )
 })
 
-# Test for parse_partial_date_time
-## Test 20: correctly parse partial date or datetime ----
-test_that("get_imputation_target_time Test 20: correctly parse partial date or datetime", {
-  dtc <- c("2020-02", "2021", "2020---10", "")
-  expect_equal(
-    parse_partial_date_time(dtc, FALSE),
-    list(
-      year = c("2020", "2021", "2020", NA_character_),
-      month = c("02", NA_character_, NA_character_, NA_character_),
-      day = c(NA_character_, NA_character_, "10", NA_character_)
-    )
+# Test for get_partialdatetime
+## Test 20: get_partialdatetime parses complete datetime ----
+test_that("get_imputation_target_time Test 20: get_partialdatetime parses complete datetime", {
+  dtc <- "2020-12-31T23:59:59"
+  expected <- list(
+    year = "2020",
+    month = "12",
+    day = "31",
+    hour = "23",
+    minute = "59",
+    second = "59"
   )
-  expect_equal(
-    parse_partial_date_time(c(dtc, "2020-02-03T12"), TRUE),
-    list(
-      year = c("2020", "2021", "2020", NA_character_, "2020"),
-      month = c("02", NA_character_, NA_character_, NA_character_, "02"),
-      day = c(NA_character_, NA_character_, "10", NA_character_, "03"),
-      hour = c(NA_character_, NA_character_, NA_character_, NA_character_, "12"),
-      minute = c(NA_character_, NA_character_, NA_character_, NA_character_, NA_character_),
-      second = c(NA_character_, NA_character_, NA_character_, NA_character_, NA_character_)
-    )
+  result <- admiral:::get_partialdatetime(dtc, TRUE)
+  expect_identical(result, expected)
+})
+
+## Test 21: get_partialdatetime parses partial datetime ----
+test_that("get_imputation_target_time Test 21: get_partialdatetime parses partial datetime", {
+  dtc <- "2020-12-31T23:59"
+  expected <- list(
+    year = "2020",
+    month = "12",
+    day = "31",
+    hour = "23",
+    minute = "59",
+    second = NA_character_
   )
+  result <- admiral:::get_partialdatetime(dtc, TRUE)
+  expect_identical(result, expected)
+})
+
+## Test 22: get_partialdatetime parses date-only input ----
+test_that("get_imputation_target_time Test 22: get_partialdatetime parses date-only input", {
+  dtc <- "2020-12-31"
+  expected <- list(
+    year = "2020",
+    month = "12",
+    day = "31",
+    hour = NA_character_,
+    minute = NA_character_,
+    second = NA_character_
+  )
+  result <- admiral:::get_partialdatetime(dtc, TRUE)
+  expect_identical(result, expected)
+})
+
+## Test 23: get_partialdatetime parses year-only input ----
+test_that("get_imputation_target_time Test 23: get_partialdatetime parses year-only input", {
+  dtc <- "2020"
+  expected <- list(
+    year = "2020",
+    month = NA_character_,
+    day = NA_character_,
+    hour = NA_character_,
+    minute = NA_character_,
+    second = NA_character_
+  )
+  result <- admiral:::get_partialdatetime(dtc, TRUE)
+  expect_identical(result, expected)
+})
+
+## Test 24: get_partialdatetime with create_datetime = FALSE only returns date parts ----
+test_that("get_imputation_target_time Test 24: get_partialdatetime with create_datetime = FALSE only returns date parts", {
+  dtc <- "2020-03-15T12:34:56"
+  expected <- list(
+    year = "2020",
+    month = "03",
+    day = "15"
+  )
+  result <- admiral:::get_partialdatetime(dtc, FALSE)
+  expect_identical(result, expected)
+})
+
+## Test 25: get_partialdatetime handles partial date with missing components ----
+test_that("get_imputation_target_time Test 25: get_partialdatetime handles partial date with missing components", {
+  dtc <- "2020--"
+  expected <- list(
+    year = "2020",
+    month = NA_character_,
+    day = NA_character_,
+    hour = NA_character_,
+    minute = NA_character_,
+    second = NA_character_
+  )
+  result <- admiral:::get_partialdatetime(dtc, TRUE)
+  expect_identical(result, expected)
+})
+
+## Test 26: get_partialdatetime handles partial datetime with some missing time components ----
+test_that("get_imputation_target_time Test 26: get_partialdatetime handles partial datetime with some missing time components", {
+  dtc <- "2020-03-15T12"
+  expected <- list(
+    year = "2020",
+    month = "03",
+    day = "15",
+    hour = "12",
+    minute = NA_character_,
+    second = NA_character_
+  )
+  result <- admiral:::get_partialdatetime(dtc, TRUE)
+  expect_identical(result, expected)
+})
+
+## Test 27: get_partialdatetime handles completely missing components ----
+test_that("get_imputation_target_time Test 27: get_partialdatetime handles completely missing components", {
+  dtc <- "---T::"
+  expected <- list(
+    year = NA_character_,
+    month = NA_character_,
+    day = NA_character_,
+    hour = NA_character_,
+    minute = NA_character_,
+    second = NA_character_
+  )
+  result <- admiral:::get_partialdatetime(dtc, TRUE)
+  expect_identical(result, expected)
+})
+
+## Test 28: get_partialdatetime handles empty string input ----
+test_that("get_imputation_target_time Test 28: get_partialdatetime handles empty string input", {
+  dtc <- ""
+  expected <- list(
+    year = NA_character_,
+    month = NA_character_,
+    day = NA_character_,
+    hour = NA_character_,
+    minute = NA_character_,
+    second = NA_character_
+  )
+  result <- admiral:::get_partialdatetime(dtc, TRUE)
+  expect_identical(result, expected)
+})
+
+## Test 29: get_partialdatetime handles NA input ----
+test_that("get_imputation_target_time Test 29: get_partialdatetime handles NA input", {
+  dtc <- NA_character_
+  expected <- list(
+    year = NA_character_,
+    month = NA_character_,
+    day = NA_character_,
+    hour = NA_character_,
+    minute = NA_character_,
+    second = NA_character_
+  )
+  result <- admiral:::get_partialdatetime(dtc, TRUE)
+  expect_identical(result, expected)
 })

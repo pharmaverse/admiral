@@ -21,17 +21,16 @@ time information.
 }}
 }
 \value{
-A list of date/time components with propagated NA values.
+A list of date/time components with propagated \code{NA} values.
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#stable}{\figure{lifecycle-stable.svg}{options: alt='[Stable]'}}}{\strong{[Stable]}}
 
-This is a helping function for \code{get_dt_dtm_range()}.
-Propagates NA values through date/time components.
+Propagates \code{NA} values through date/time components.
 }
 \details{
-This function ensures that if a higher-order component (e.g., month) is NA,
-all lower-order components (e.g., day, hour, etc.) are also set to NA.
+This function ensures that if a higher-order component (e.g., month) is \code{NA},
+all lower-order components (e.g., day, hour, etc.) are also set to \code{NA}.
 }
 \examples{
 # Propagate NA values through datetime components

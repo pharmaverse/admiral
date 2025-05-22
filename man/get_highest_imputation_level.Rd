@@ -20,13 +20,13 @@ get_highest_imputation_level(is_datetime, highest_imputation)
 }}
 }
 \value{
-An integer representing the highest imputation level.
+A \code{dt_level()} or \code{dtm_level()} object representing the highest imputation level.
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#stable}{\figure{lifecycle-stable.svg}{options: alt='[Stable]'}}}{\strong{[Stable]}}
 
-This is a helping function for \code{get_dt_dtm_range()}
-Determines the highest imputation level based on whether it's a date or datetime.
+Returns the \code{dt_level()} or \code{dtm_level()} representation of the \code{highest_imputation}
+character value. The level object allows comparisons of levels.
 }
 \examples{
 # Get highest imputation level for date

@@ -31,12 +31,13 @@ A character vector of adjusted date/datetime strings.
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#stable}{\figure{lifecycle-stable.svg}{options: alt='[Stable]'}}}{\strong{[Stable]}}
 
-This is a helping function for \code{get_dt_dtm_range()}
-Adjusts the imputed date/datetime to the last day of the month when necessary.
+This functions adjusts the day of the imputed date to the last day the month
+if the day was imputed. It should be called if \code{date_imputation = "last"} was used
+for the date imputation as \code{get_imputation_target_date()} imputes the last day
+as \code{"28"}.
 }
 \details{
-This function is used when the date imputation method is set to "last" and
-the day component is missing. It adjusts the date to the last day of the month.
+If the day component in \code{partial} is missing, the day (in \code{imputed_dtc}) is adjusted to the last day of the month.
 }
 \examples{
 # Adjust last day imputation for a date with an incomplete day

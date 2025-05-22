@@ -21,8 +21,6 @@ assert_time_imputation(highest_imputation, time_imputation)
 }
 \value{
 asserted \code{time_imputation}
-
-\code{invisible(NULL)}
 }
 \description{
 Applies assertions on the \code{time_imputation} argument

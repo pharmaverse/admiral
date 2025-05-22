@@ -37,8 +37,8 @@ A list of imputation targets for date and (if applicable) time components.
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#stable}{\figure{lifecycle-stable.svg}{options: alt='[Stable]'}}}{\strong{[Stable]}}
 
-This is a helping function for \code{get_dt_dtm_range()}
-Determines the imputation targets for date and time components.
+Determines the imputation targets for date (see \code{get_imputation_target_date()} and time
+(see \code{get_imputation_target_time()}) components.
 }
 \examples{
 # Get imputation targets for a date with 'first' date imputation
