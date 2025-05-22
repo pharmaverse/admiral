@@ -59,7 +59,7 @@ A named list of datasets is expected. The \code{dataset_name} field of
 The specified variable is added to the input dataset.
 
 \describe{
-\item{Permitted values}{a variable}
+\item{Permitted values}{an unquoted symbol, e.g., \code{AVAL}}
 \item{Default value}{none}
 }}
 

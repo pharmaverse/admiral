@@ -51,10 +51,13 @@
 #'   The specified variable is added to the input dataset (`dataset`) and the
 #'   additional dataset (`dataset_add`). It is set to the observation number
 #'   with respect to `order`. For each by group (`by_vars`) the observation
-#'   number starts with `1`. The variable can be used in the conditions
-#'   (`filter_join`, `first_cond_upper`, `first_cond_lower`). It is not included
-#'   in the output dataset. It can also be used to flag consecutive observations
-#'   or the last observation (see last example below).
+#'   number starts with `1`. If there is more than one record for specific
+#'   values for `by_vars` and `order`, all records get the same observation
+#'   number. By default, a warning (see `check_type`) is issued in this case.
+#'   The variable can be used in the conditions (`filter_join`,
+#'   `first_cond_upper`, `first_cond_lower`). It is not included in the output
+#'   dataset. It can also be used to flag consecutive observations or the last
+#'   observation (see last example below).
 #'
 #' @permitted [var]
 #'
