@@ -51,11 +51,11 @@ verify_templates <- function(pkg = "admiral", ds = c("adae")) {
   pkg <- "admiral"
   if (pkg != "admiral") error("Curently, only admiral package is accepted.")
 
-  #nolint start
+  # nolint start
   library(pkg, character.only = TRUE)
   library(teal.data)
   library(purrr)
-  # nolint stop
+  # nolint end
   sprintf("generating ADaMs for  %s package\n", pkg)
 
   # temporary directories
