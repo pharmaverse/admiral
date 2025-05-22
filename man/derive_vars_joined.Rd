@@ -111,9 +111,12 @@ to \code{by_vars}, removes or renames.
 The specified variable is added to the input dataset (\code{dataset}) and the
 additional dataset (\code{dataset_add}). It is set to the observation number
 with respect to \code{order}. For each by group (\code{by_vars}) the observation
-number starts with \code{1}. The variable can be used in the conditions
-(\code{filter_join}, \code{first_cond_upper}, \code{first_cond_lower}). It can also be
-used to select consecutive observations or the last observation.
+number starts with \code{1}. If there is more than one record for specific
+values for \code{by_vars} and \code{order}, all records get the same observation
+number. By default, a warning (see \code{check_type}) is issued in this case.
+The variable can be used in the conditions (\code{filter_join},
+\code{first_cond_upper}, \code{first_cond_lower}). It can also be used to select
+consecutive observations or the last observation.
 
 The variable is not included in the output dataset. To include it specify
 it for \code{new_vars}.

@@ -62,6 +62,15 @@ used to select consecutive observations or the last observation.
 \item{Default value}{\code{NULL}}
 }}
 
+\item{tmp_obs_nr_left}{Temporary observation number for \code{dataset}
+
+The specified variable has to be in the input dataset (\code{dataset}) and has to
+be a unique key.
+
+\describe{
+\item{Default value}{none}
+}}
+
 \item{join_type}{Observations to keep after joining
 
 The argument determines which of the joined observations are kept with
