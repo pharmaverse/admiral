@@ -153,22 +153,15 @@
 #'
 #' @caption Example 1a - Adding a parameter computed from a formula
 #'
-#' @info Derive mean arterial pressure (MAP) from systolic (SYSBP)
-#'     and diastolic blood pressure (DIABP)
+#' @info Derive mean arterial pressure (MAP) from systolic (SYSBP).
 #'
 #' - Here, for each `USUBJID` and `VISIT` group, an observation is added
 #'   to the output dataset when the filtered input dataset (`dataset`)
 #'   contains exactly one observation for each parameter code specified
 #'   for `parameters` and all contributing values (e.g., `AVAL.SYSBP`
 #'   and `AVAL.DIABP`) are not `NA`.
-#' - This results in three additional rows: `USUBJID` `01-701-1015` at
-#'   `VISIT` `BASELINE` and `WEEK 2`, and `USUBJID` `01-701-1028` at
-#'   `VISIT` `BASELINE` only.
 #'
 #' @code
-#' library(tibble)
-#' library(dplyr)
-#' library(lubridate)
 #'
 #' advs <- tribble(
 #'   ~USUBJID,      ~PARAMCD, ~PARAM,                            ~AVAL, ~VISIT,
@@ -210,15 +203,8 @@
 #'
 #' - Note that observations will be added here even if some of the values contributing
 #'   to the computed values are `NA`.
-#' - This therefore results in four additional rows: `USUBJID` `01-701-1015`
-#'   at `VISIT` `BASELINE` and `WEEK 2` and `USUBJID` `01-701-1028`
-#'   at `VISIT` `BASELINE` and `WEEK 2`, with the value of `AVAL` for
-#'   `USUBJID` `01-701-1028` at `VISIT` `WEEK 2` being `NA`.
 #'
 #' @code
-#' library(tibble)
-#' library(dplyr)
-#' library(lubridate)
 #'
 #'
 #' derive_param_computed(
@@ -245,9 +231,6 @@
 #'   to the computed values are `NA`.
 #'
 #' @code
-#' library(tibble)
-#' library(dplyr)
-#' library(lubridate)
 #'
 #' derive_param_computed(
 #'   advs,
@@ -264,19 +247,23 @@
 #'   keep_nas = exprs(ADTF)
 #' )
 #'
-#' @caption Example 2 - Using the `constant_parameters` argument
+#' @caption Example 2 - Derivations using parameters measured only once
+#' (`constant_parameters` and `constant_by_vars`)
 #'
 #' @info Derive BMI where height is measured only once
 #'
-#' - Here, the parameters that are measured only once (i.e., the constant parameters)
-#'   are merged to the other parameters using the specified variables.
-#' - In this example, `height` is the specified in `constant_parameters` as it is
-#'   only measured once.
+#' - In the above examples, for each parameter specified in the
+#'   `parameters` argument, we expect one record per by group, where the by
+#'   group is specified in `by_vars`. However, if a parameter is only
+#'   measured once, it can be specified in `constant_parameters` instead.
+#' - A modified by group still needs to be provided for the constant
+#'   parameters. This can be done via `constant_by_vars`.
+#' - See the example below, where weight is measured for each patient
+#'   at each visit (`by_vars = exprs(USUBJID, VISIT)`), while height
+#'   is measured for each patient only at the first visit
+#'   (`constant_parameters = "HEIGHT"`, `constant_by_vars = exprs(USUBJID`)).
 #'
 #' @code
-#' library(tibble)
-#' library(dplyr)
-#' library(lubridate)
 #'
 #' advs <- tribble(
 #'   ~USUBJID,      ~PARAMCD, ~PARAM,        ~AVAL, ~AVALU, ~VISIT,
@@ -304,14 +291,12 @@
 #'   constant_by_vars = exprs(USUBJID)
 #' )
 #'
-#' @caption Example 3 - Using `dataset_add` argument and non-`AVAL` variables
+#' @caption Example 3 - Derivations including data from an additional
+#' dataset (`dataset_add`) and non-`AVAL` variables
 #'
 #' @info Using data from an additional dataset and other variables than `AVAL`
 #'
 #' @code
-#' library(tibble)
-#' library(dplyr)
-#' library(lubridate)
 #'
 #' qs <- tribble(
 #'   ~USUBJID, ~AVISIT,   ~QSTESTCD, ~QSORRES, ~QSSTRESN,
@@ -357,9 +342,6 @@
 #' @info Specifying more than one variable-value pair via `set_values_to`
 #'
 #' @code
-#' library(tibble)
-#' library(dplyr)
-#' library(lubridate)
 #'
 #' adlb_tbilialk <- tribble(
 #'   ~USUBJID, ~PARAMCD, ~AVALC, ~ADTM,        ~ADTF,
