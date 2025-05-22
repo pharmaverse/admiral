@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">admiral</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.2.0.9027</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.2.0.9028</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -131,7 +131,7 @@ criteria. For example: "Anemia" or "INR Increased".</p>
 eg. "Anemia" or "INR Increased". Note: the variable is case insensitive.</p></li>
 <li><p><code>DIRECTION</code>: variable to hold the direction of the abnormality of a particular lab test
 value. "L" is for LOW values, "H" is for HIGH values. Note: the variable is case insensitive.</p></li>
-<li><p><code>SI_UNIT_CHECK</code>: variable to hold unit of particular lab test. Used to check against input data
+<li><p><code>UNIT_CHECK</code>: variable to hold unit of particular lab test. Used to check against input data
 if criteria is based on absolute values.</p></li>
 <li><p><code>VAR_CHECK</code>: variable to hold comma separated list of variables used in criteria. Used to check
 against input data that variables exist.</p></li>
@@ -176,7 +176,7 @@ variable. Currently for terms <code>"Alanine aminotransferase increased"</code>,
 <dt id="arg-get-unit-expr">get_unit_expr<a class="anchor" aria-label="anchor" href="#arg-get-unit-expr"></a></dt>
 <dd><p>An expression providing the unit of the parameter</p>
 <p>The result is used to check the units of the input parameters. Compared with
-<code>SI_UNIT_CHECK</code> in metadata (see <code>meta_criteria</code> parameter).</p>
+<code>UNIT_CHECK</code> in metadata (see <code>meta_criteria</code> parameter).</p>
 <dl><dt>Permitted values</dt>
 <dd><p>A variable containing unit from the input dataset, or a function call,
 for example, <code>get_unit_expr = extract_unit(PARAM)</code>.</p></dd>

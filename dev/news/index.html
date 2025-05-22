@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">admiral</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.2.0.9027</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.2.0.9028</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -75,6 +75,14 @@
 <li>For complex functions each example has now a title, which is also shown in the TOC, and a description. This enabled adding more examples without losing readability. See <code><a href="../reference/derive_extreme_records.html">derive_extreme_records()</a></code> for an example.</li>
 <li>The output of the structured examples used for complex functions is displayed in the help pages in RStudio.</li>
 </ul></li>
+<li>New lab grading metadata for US (Conventional) units for the three grading criteria <code>admiral</code> already produces for SI units (<a href="https://github.com/pharmaverse/admiral/issues/2557" class="external-link">#2557</a>).
+<ul><li>
+<code>atoxgr_criteria_ctcv4_uscv</code> (NCI-CTCAEv4 criteria)</li>
+<li>
+<code>atoxgr_criteria_ctcv5_uscv</code> (NCI-CTCAEv5 criteria)</li>
+<li>
+<code>atoxgr_criteria_daids_uscv</code> (DAIDs criteria)</li>
+</ul></li>
 </ul></div>
 <div class="section level3">
 <h3 id="updates-of-existing-functions-development-version">Updates of Existing Functions<a class="anchor" aria-label="anchor" href="#updates-of-existing-functions-development-version"></a></h3>
@@ -82,12 +90,15 @@
 <li>The function <code><a href="../reference/extract_duplicate_records.html">extract_duplicate_records()</a></code> was updated to consider all variables in the input dataset for the by group if the <code>by_vars</code> argument is omitted entirely. (<a href="https://github.com/pharmaverse/admiral/issues/2644" class="external-link">#2644</a>)</li>
 <li>In <code><a href="../reference/slice_derivation.html">slice_derivation()</a></code>, previously the derivation is not called for empty subsets, however this can lead to issues when the input dataset is empty. Now the derivation is called for all subsets. (<a href="https://github.com/pharmaverse/admiral/issues/2645" class="external-link">#2645</a>)</li>
 <li>The examples section for the function <code><a href="../reference/derive_var_trtemfl.html">derive_var_trtemfl()</a></code> was enhanced to include a showcasing of all scenarios discussed in the following <a href="https://phuse.s3.eu-central-1.amazonaws.com/Deliverables/Safety+Analytics/WP-087+Recommended+Definition+of++Treatment-Emergent+Adverse+Events+in+Clinical+Trials+.pdf" class="external-link">PHUSE White Paper on Treatment-Emergent AEs</a>. (<a href="https://github.com/pharmaverse/admiral/issues/2455" class="external-link">#2455</a>)</li>
+<li>
+<code><a href="../reference/derive_var_atoxgr_dir.html">derive_var_atoxgr_dir()</a></code> updated to handle more than one unit in grading metadata. Related to providing US (Conventional) units for grading (<a href="https://github.com/pharmaverse/admiral/issues/2557" class="external-link">#2557</a>).</li>
 <li>The background checks in <code><a href="../reference/derive_summary_records.html">derive_summary_records()</a></code> were too restrictive: <code>by_vars</code> were expected in <code>dataset</code> although the code did not require it. This requirement has therefore been dropped (<a href="https://github.com/pharmaverse/admiral/issues/2686" class="external-link">#2686</a>).</li>
 <li>The functions <code><a href="../reference/derive_vars_joined.html">derive_vars_joined()</a></code>, <code><a href="../reference/derive_var_joined_exist_flag.html">derive_var_joined_exist_flag()</a></code>, and <code><a href="../reference/filter_joined.html">filter_joined()</a></code> produce correct results now when they are used with <code>join_type = "before"</code> or <code>join_type = "after"</code> and <code>dataset</code> and <code>dataset_add</code> differ or the <code>filter_add</code> argument is used. (<a href="https://github.com/pharmaverse/admiral/issues/2863" class="external-link">#2863</a>)</li>
 </ul></div>
 <div class="section level3">
 <h3 id="breaking-changes-development-version">Breaking Changes<a class="anchor" aria-label="anchor" href="#breaking-changes-development-version"></a></h3>
-<ul><li><p>The values of the variable specified for <code>tmp_obs_nr_var</code> in <code><a href="../reference/derive_vars_joined.html">derive_vars_joined()</a></code>, <code><a href="../reference/derive_var_joined_exist_flag.html">derive_var_joined_exist_flag()</a></code>, <code><a href="../reference/filter_joined.html">filter_joined()</a></code> are now populated differently if there are multiple records in <code>dataset</code> or <code>dataset_add</code> for the same values of <code>by_vars</code> and <code>order</code>. Before each of these records was assigned a different value, i.e., the variable (together with <code>by_vars</code>) was a unique identifier. Now the value is the same for all these records. (<a href="https://github.com/pharmaverse/admiral/issues/2683" class="external-link">#2683</a>)</p></li>
+<ul><li><p>Lab grading metadata <code><a href="../reference/atoxgr_criteria_ctcv4.html">atoxgr_criteria_ctcv4()</a></code>, <code><a href="../reference/atoxgr_criteria_ctcv5.html">atoxgr_criteria_ctcv5()</a></code> and <code><a href="../reference/atoxgr_criteria_daids.html">atoxgr_criteria_daids()</a></code> variable <code>SI_UNIT_CHECK</code> renamed to <code>UNIT_CHECK</code> (<a href="https://github.com/pharmaverse/admiral/issues/2557" class="external-link">#2557</a>).</p></li>
+<li><p>The values of the variable specified for <code>tmp_obs_nr_var</code> in <code><a href="../reference/derive_vars_joined.html">derive_vars_joined()</a></code>, <code><a href="../reference/derive_var_joined_exist_flag.html">derive_var_joined_exist_flag()</a></code>, <code><a href="../reference/filter_joined.html">filter_joined()</a></code> are now populated differently if there are multiple records in <code>dataset</code> or <code>dataset_add</code> for the same values of <code>by_vars</code> and <code>order</code>. Before each of these records was assigned a different value, i.e., the variable (together with <code>by_vars</code>) was a unique identifier. Now the value is the same for all these records. (<a href="https://github.com/pharmaverse/admiral/issues/2683" class="external-link">#2683</a>)</p></li>
 <li>
 <p>The following function arguments are entering the next phase of the <a href="https://pharmaverse.github.io/admiraldev/articles/programming_strategy.html#deprecation">deprecation process</a>: (<a href="https://github.com/pharmaverse/admiral/issues/2487" class="external-link">#2487</a>) (<a href="https://github.com/pharmaverse/admiral/issues/2595" class="external-link">#2595</a>)</p>
 <p><strong>Phase 1 (message)</strong></p>
@@ -113,7 +124,7 @@
 </ul></li>
 <li><p>Added an example to the <code><a href="../reference/derive_vars_transposed.html">derive_vars_transposed()</a></code> reference page to showcase how duplicates-related errors can arise when records in <code>dataset_merge</code> are not uniquely identified. (<a href="https://github.com/pharmaverse/admiral/issues/2609" class="external-link">#2609</a>)</p></li>
 <li><p>Default value of <code>type</code> in <code><a href="../reference/derive_vars_aage.html">derive_vars_aage()</a></code> is now shown as <code>interval</code> to match the function behavior. (<a href="https://github.com/pharmaverse/admiral/issues/2685" class="external-link">#2685</a>)</p></li>
-<li><p>The “Lab Grading” vignette was updated to correct some typos and make text easier to read (<a href="https://github.com/pharmaverse/admiral/issues/2623" class="external-link">#2623</a>).</p></li>
+<li><p>The “Lab Grading” vignette was updated to correct some typos and make text easier to read (<a href="https://github.com/pharmaverse/admiral/issues/2623" class="external-link">#2623</a>). Also, updated to include new metadata for grading using US (Conventional) units (<a href="https://github.com/pharmaverse/admiral/issues/2557" class="external-link">#2557</a>).</p></li>
 <li><p>The “BDS Time-to-Event” vignette was updated to include <code>SRCSEQ</code> consistently (<a href="https://github.com/pharmaverse/admiral/issues/2658" class="external-link">#2658</a>).</p></li>
 <li><p>The template for ADPC and vignette were updated to include an example of using <code>DTYPE</code> for imputed records (<a href="https://github.com/pharmaverse/admiral/issues/2657" class="external-link">#2657</a>).</p></li>
 <li><p>The “Higher Order Functions” vignette was updated to showcase an example of two higher order functions used in combination. The documentation for each of the higher order functions was also corrected by removing the stated requirement that the <code>derivation</code> takes a <code>dataset</code> argument (<a href="https://github.com/pharmaverse/admiral/issues/2656" class="external-link">#2656</a>).</p></li>
