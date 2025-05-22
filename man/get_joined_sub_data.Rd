@@ -58,8 +58,17 @@ number starts with \code{1}. The variable can be used in the conditions
 used to select consecutive observations or the last observation.
 
 \describe{
-\item{Permitted values}{a variable}
+\item{Permitted values}{an unquoted symbol, e.g., \code{AVAL}}
 \item{Default value}{\code{NULL}}
+}}
+
+\item{tmp_obs_nr_left}{Temporary observation number for \code{dataset}
+
+The specified variable has to be in the input dataset (\code{dataset}) and has to
+be a unique key.
+
+\describe{
+\item{Default value}{none}
 }}
 
 \item{join_type}{Observations to keep after joining

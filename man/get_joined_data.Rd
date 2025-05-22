@@ -155,7 +155,7 @@ number starts with \code{1}. The variable can be used in the conditions
 used to select consecutive observations or the last observation.
 
 \describe{
-\item{Permitted values}{a variable}
+\item{Permitted values}{an unquoted symbol, e.g., \code{AVAL}}
 \item{Default value}{\code{NULL}}
 }}
 
@@ -194,9 +194,9 @@ joined dataset is grouped by the original observations.
 
 \item{check_type}{Check uniqueness?
 
-If \code{"warning"} or \code{"error"} is specified, the specified message is issued
-if the observations of the (restricted) joined dataset are not unique with
-respect to the by variables and the order.
+If \code{"message"}, \code{"warning"} or \code{"error"} is specified, the specified
+message is issued if the observations of the (restricted) joined dataset
+are not unique with respect to the by variables and the order.
 
 This argument is ignored if \code{order} is not specified. In this case an error
 is issued independent of \code{check_type} if the restricted joined dataset
