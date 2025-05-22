@@ -107,7 +107,7 @@ verify_templates <- function(pkg = "admiral", ds = c("adae")) {
   keys <- teal.data::default_cdisc_join_keys
 
   # keys is named list of keys, each element (for each adam_name) and is chr[] of keys
-  keys <- sapply(toupper(adam_names), function(e) unname(keys[[e]][[e]]),    # nolint
+  keys <- sapply(toupper(adam_names), function(e) unname(keys[[e]][[e]]), # nolint
     USE.NAMES = TRUE, simplify = FALSE
   )
   names(keys) <- tolower(names(keys))
@@ -173,8 +173,10 @@ display_diff <- function(dir = NULL) {
   map2(
     names(contents), contents,
     function(name, content) {
-      cli::cli_h1(paste("Differences found for", str_replace_all(name, ".txt", ""),
-                        " ", today(), "\n"))
+      cli::cli_h1(paste(
+        "Differences found for", str_replace_all(name, ".txt", ""),
+        " ", today(), "\n"
+      ))
       cat(paste(content, collapse = "\n"))
     }
   )
@@ -275,7 +277,7 @@ clean_adam_old_dir <- function(dir = NULL) {
 #' @param path Character string. Directory to save downloaded ADaMs.
 download_adam_old <- function(adam_names, path = NULL) {
   lapply(adam_names, function(adam) {
-    githubURL <- paste0(   # nolint
+    githubURL <- paste0( # nolint
       "https://github.com/pharmaverse/pharmaverseadam/raw/refs/heads/main/data/",
       adam, ".rda?raw=true"
     )
