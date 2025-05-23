@@ -156,7 +156,6 @@ derive_vars_dt <- function(dataset,
     values = c("auto", "date", "none"),
     case_sensitive = FALSE
   )
-  flag_imputation <- tolower(flag_imputation)
 
   # the `assert_highest_imputation` function is stored in `derive_vars_dt_dtm_utils.R`
   assert_highest_imputation(
