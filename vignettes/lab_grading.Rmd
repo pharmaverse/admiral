@@ -48,22 +48,34 @@ The DAIDS criteria can be found under the heading
 
 # Grading metadata
 
-`{admiral}` will store a metadata data set for each set of grading criteria in the data folder of 
-`{admiral}`. Currently, we have `atoxgr_criteria_ctcv4()` for NCI-CTCAEv4, `atoxgr_criteria_ctcv5()`
-for NCI-CTCAEv5 and `atoxgr_criteria_daids()` for DAIDS. Each metadata data set has required 
-variables and optional variables, the optional variables are purely for transparency, and will
-contain detailed information about the grading criteria. The required variables are those used by
-`{admiral}` to create the grade.
+`{admiral}` will store two sets of metadata data set for each set of grading criteria in the data folder of 
+`{admiral}`, one for SI units, and one for US (conventional) units. These are as follows:
+
+NCI-CTCAEv4
+  + `atoxgr_criteria_ctcv4` for SI units.
+  + `atoxgr_criteria_ctcv4_uscv` for US (conventional) units.
+
+NCI-CTCAEv5
+  + `atoxgr_criteria_ctcv5` for SI units.
+  + `atoxgr_criteria_ctcv5_uscv` for US (conventional) units.
+
+DAIDS
+  + `atoxgr_criteria_daids` for SI units.
+  + `atoxgr_criteria_daids_uscv` for US (conventional) units.
+
+Each metadata data set has required variables and optional variables, the optional variables are purely for transparency,
+and will contain detailed information about the grading criteria. The required variables are those used by`{admiral}` to
+create the grade.
 
 ## Structure of metadata set
 
-The metadata data set has the following structure for the required variables:
+Each metadata data set has the following structure for the required variables:
 
 Variable | Scope |  Type | Example Value
 ------- | -------- | ------ | -------- 
 **TERM** | Term describing the criteria applied to a particular lab test.|  Character |  "Anemia" 
 **DIRECTION** | The direction of the abnormality of a particular lab test value|   Character | "L" or "H".
-**SI_UNIT_CHECK** | Unit of lab test, to check against input data if criteria is based on absolute values. |  Character | "mmol/L"
+**UNIT_CHECK** | Unit of lab test, to check against input data if criteria is based on absolute values. |  Character | "mmol/L"
 **VAR_CHECK** | Comma separated list of variables used in criteria, to check input data that variables exist. |  Character | "AVAL, ANRLO"
 **FILTER** | Only required for DAIDS grading. Variable to hold code that filters the lab data based on contents of column SUBGROUP. |  Character |R code that is valid within a `filter` function call.
 **GRADE_CRITERIA_CODE** | Variable to hold code that creates grade based on defined criteria. |  Character |R code that is a valid case statement within a `mutate` function call.
@@ -301,16 +313,16 @@ adlb <- adlb %>%
 
 Note: `{admiral}` does not grade 'Anemia' or 'Hemoglobin Increased' because the metadata is 
 based on the SI unit of 'g/L', however the CDISC data has SI unit of 'mmol/L'.
-Please see `SI_UNIT_CHECK` variable in `{admiral}` metadata `atoxgr_criteria_ctcv4()` or 
+Please see `UNIT_CHECK` variable in `{admiral}` metadata `atoxgr_criteria_ctcv4()` or 
 `atoxgr_criteria_ctcv5()` or `atoxgr_criteria_daids()`, the metadata is in the data folder
 of `{admiral}`.
 <br>
 
 ```{r, eval=TRUE, echo=FALSE}
 atoxgr_criteria_ctcv4 %>%
-  filter(!is.na(SI_UNIT_CHECK)) %>%
+  filter(!is.na(UNIT_CHECK)) %>%
   dataset_vignette(
-    display_vars = exprs(TERM, SI_UNIT_CHECK),
+    display_vars = exprs(TERM, UNIT_CHECK),
   )
 ```
 <br>
@@ -865,6 +877,19 @@ atoxgr_criteria_daids %>%
 ```
 <br>
 
+# US (Conventional) unit implementation
+
+The metadata for the US (Conventional) units is the same as the metadata for SI units
+except when checking for units, when the criteria is based on numeric values. The `UNIT_CHECK`
+variable will then contain the US (Conventional) unit, and if the unit is not a synonym for the
+SI unit then the grading criteria is updated accordingly.
+There were some lab tests where it made sense to have 2 sets of US (Conventional) units, these
+were lab tests related to `"WBC"`, `"Lymphocytes"`, `"Neutrophils"` and `"Platelets"`. We have the US unit
+`"10^3/uL"` which is a synonym of the SI unit `"10^9/L"`, and also the US unit `"10^3/ml"` which is a synonym
+for `"/mm3"` which is included in the grading criteria documentation.
+If companies have lab tests that have units that don't exactly match what is in the `UNIT_CHECK` variable, but
+the unit is a one-to-one mapping, then the `UNIT_CHECK` variable can be updated with company-specific code to
+reflect this.
 
 
 # Conclusion
