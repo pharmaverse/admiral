@@ -174,8 +174,24 @@ choose to say impute months, but not days.
 The presence of a \code{'--DTF'} variable is checked and if it already exists in the input dataset,
 a warning is issued and \code{'--DTF'} will be overwritten.
 }
-\examples{
-library(tibble)
+\seealso{
+Date/Time Derivation Functions that returns variable appended to dataset: 
+\code{\link{derive_var_trtdurd}()},
+\code{\link{derive_vars_dtm}()},
+\code{\link{derive_vars_dtm_to_dt}()},
+\code{\link{derive_vars_dtm_to_tm}()},
+\code{\link{derive_vars_duration}()},
+\code{\link{derive_vars_dy}()}
+}
+\concept{der_date_time}
+\keyword{der_date_time}
+\keyword{der_gen}
+\section{Examples}{
+\subsection{Example 1}{
+
+thing
+
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{library(tibble)
 library(lubridate)
 
 mhdt <- tribble(
@@ -187,17 +203,33 @@ mhdt <- tribble(
   "2019",
   "2019---07",
   ""
-)
+)}\if{html}{\out{</div>}}}
+\subsection{Example 2}{
 
-# Create ASTDT and ASTDTF
+thing
+
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{# Create ASTDT and ASTDTF
 # No imputation for partial date
 derive_vars_dt(
   mhdt,
   new_vars_prefix = "AST",
   dtc = MHSTDTC
 )
+#> # A tibble: 7 × 2
+#>   MHSTDTC               ASTDT     
+#>   <chr>                 <date>    
+#> 1 "2019-07-18T15:25:40" 2019-07-18
+#> 2 "2019-07-18T15:25"    2019-07-18
+#> 3 "2019-07-18"          2019-07-18
+#> 4 "2019-02"             NA        
+#> 5 "2019"                NA        
+#> 6 "2019---07"           NA        
+#> 7 ""                    NA        }\if{html}{\out{</div>}}}
+\subsection{Example 3}{
 
-# Create ASTDT and ASTDTF
+thing
+
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{# Create ASTDT and ASTDTF
 # Impute partial dates to first day/month
 derive_vars_dt(
   mhdt,
@@ -205,8 +237,21 @@ derive_vars_dt(
   dtc = MHSTDTC,
   highest_imputation = "M"
 )
+#> # A tibble: 7 × 3
+#>   MHSTDTC               ASTDT      ASTDTF
+#>   <chr>                 <date>     <chr> 
+#> 1 "2019-07-18T15:25:40" 2019-07-18 <NA>  
+#> 2 "2019-07-18T15:25"    2019-07-18 <NA>  
+#> 3 "2019-07-18"          2019-07-18 <NA>  
+#> 4 "2019-02"             2019-02-01 D     
+#> 5 "2019"                2019-01-01 M     
+#> 6 "2019---07"           2019-01-01 M     
+#> 7 ""                    NA         <NA>  }\if{html}{\out{</div>}}}
+\subsection{Example 3}{
 
-# Impute partial dates to 6th of April
+thing
+
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{# Impute partial dates to 6th of April
 derive_vars_dt(
   mhdt,
   new_vars_prefix = "AST",
@@ -214,8 +259,21 @@ derive_vars_dt(
   highest_imputation = "M",
   date_imputation = "04-06"
 )
+#> # A tibble: 7 × 3
+#>   MHSTDTC               ASTDT      ASTDTF
+#>   <chr>                 <date>     <chr> 
+#> 1 "2019-07-18T15:25:40" 2019-07-18 <NA>  
+#> 2 "2019-07-18T15:25"    2019-07-18 <NA>  
+#> 3 "2019-07-18"          2019-07-18 <NA>  
+#> 4 "2019-02"             2019-02-06 D     
+#> 5 "2019"                2019-04-06 M     
+#> 6 "2019---07"           2019-04-06 M     
+#> 7 ""                    NA         <NA>  }\if{html}{\out{</div>}}}
+\subsection{Example 4}{
 
-# Create AENDT and AENDTF
+thing
+
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{# Create AENDT and AENDTF
 # Impute partial dates to last day/month
 derive_vars_dt(
   mhdt,
@@ -224,8 +282,21 @@ derive_vars_dt(
   highest_imputation = "M",
   date_imputation = "last"
 )
+#> # A tibble: 7 × 3
+#>   MHSTDTC               AENDT      AENDTF
+#>   <chr>                 <date>     <chr> 
+#> 1 "2019-07-18T15:25:40" 2019-07-18 <NA>  
+#> 2 "2019-07-18T15:25"    2019-07-18 <NA>  
+#> 3 "2019-07-18"          2019-07-18 <NA>  
+#> 4 "2019-02"             2019-02-28 D     
+#> 5 "2019"                2019-12-31 M     
+#> 6 "2019---07"           2019-12-31 M     
+#> 7 ""                    NA         <NA>  }\if{html}{\out{</div>}}}
+\subsection{Example 5}{
 
-# Create BIRTHDT
+thing
+
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{# Create BIRTHDT
 # Impute partial dates to 15th of June. No Date Imputation Flag
 derive_vars_dt(
   mhdt,
@@ -235,8 +306,21 @@ derive_vars_dt(
   date_imputation = "mid",
   flag_imputation = "none"
 )
+#> # A tibble: 7 × 2
+#>   MHSTDTC               BIRTHDT   
+#>   <chr>                 <date>    
+#> 1 "2019-07-18T15:25:40" 2019-07-18
+#> 2 "2019-07-18T15:25"    2019-07-18
+#> 3 "2019-07-18"          2019-07-18
+#> 4 "2019-02"             2019-02-15
+#> 5 "2019"                2019-06-30
+#> 6 "2019---07"           2019-06-30
+#> 7 ""                    NA        }\if{html}{\out{</div>}}}
+\subsection{Example 6}{
 
-# Impute AE start date to the first date and ensure that the imputed date
+thing
+
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{# Impute AE start date to the first date and ensure that the imputed date
 # is not before the treatment start date
 adae <- tribble(
   ~AESTDTC, ~TRTSDTM,
@@ -251,8 +335,16 @@ derive_vars_dt(
   highest_imputation = "M",
   min_dates = exprs(TRTSDTM)
 )
+#> # A tibble: 2 × 4
+#>   AESTDTC TRTSDTM             ASTDT      ASTDTF
+#>   <chr>   <dttm>              <date>     <chr> 
+#> 1 2020-12 2020-12-06 12:12:12 2020-12-06 D     
+#> 2 2020-11 2020-12-06 12:12:12 2020-11-01 D     }\if{html}{\out{</div>}}}
+\subsection{Example 7}{
 
-# A user imputing dates as middle month/day, i.e. date_imputation = "mid" can
+thing
+
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{# A user imputing dates as middle month/day, i.e. date_imputation = "mid" can
 # use preserve argument to "preserve" partial dates.  For example, "2019---07",
 # will be displayed as "2019-06-07" rather than 2019-06-15 with preserve = TRUE
 
@@ -264,16 +356,14 @@ derive_vars_dt(
   date_imputation = "mid",
   preserve = TRUE
 )
-}
-\seealso{
-Date/Time Derivation Functions that returns variable appended to dataset: 
-\code{\link{derive_var_trtdurd}()},
-\code{\link{derive_vars_dtm}()},
-\code{\link{derive_vars_dtm_to_dt}()},
-\code{\link{derive_vars_dtm_to_tm}()},
-\code{\link{derive_vars_duration}()},
-\code{\link{derive_vars_dy}()}
-}
-\concept{der_date_time}
-\keyword{der_date_time}
-\keyword{der_gen}
+#> # A tibble: 7 × 3
+#>   MHSTDTC               ASTDT      ASTDTF
+#>   <chr>                 <date>     <chr> 
+#> 1 "2019-07-18T15:25:40" 2019-07-18 <NA>  
+#> 2 "2019-07-18T15:25"    2019-07-18 <NA>  
+#> 3 "2019-07-18"          2019-07-18 <NA>  
+#> 4 "2019-02"             2019-02-15 D     
+#> 5 "2019"                2019-06-30 M     
+#> 6 "2019---07"           2019-06-07 M     
+#> 7 ""                    NA         <NA>  }\if{html}{\out{</div>}}}}
+
