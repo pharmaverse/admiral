@@ -115,7 +115,7 @@
 #'   of the specified variables are set to the specified value. Only variables
 #'   specified for `new_vars` can be specified for `missing_values`.
 #'
-#' @permitted [expr_list]
+#' @permitted [expr_list_formula]
 #'
 #' @param check_type Check uniqueness?
 #'

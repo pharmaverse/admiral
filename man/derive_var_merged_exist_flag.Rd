@@ -47,7 +47,7 @@ The variables specified by the \code{by_vars} argument are expected.
 The specified variable is added to the input dataset.
 
 \describe{
-\item{Permitted values}{a variable}
+\item{Permitted values}{an unquoted symbol, e.g., \code{AVAL}}
 \item{Default value}{none}
 }}
 

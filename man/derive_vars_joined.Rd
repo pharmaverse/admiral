@@ -122,7 +122,7 @@ The variable is not included in the output dataset. To include it specify
 it for \code{new_vars}.
 
 \describe{
-\item{Permitted values}{a variable}
+\item{Permitted values}{an unquoted symbol, e.g., \code{AVAL}}
 \item{Default value}{\code{NULL}}
 }}
 
@@ -252,7 +252,7 @@ be the value provided in \code{true_value} for all selected records from \code{d
 which are merged into the input dataset, and the value provided in \code{false_value} otherwise.
 
 \describe{
-\item{Permitted values}{a variable}
+\item{Permitted values}{an unquoted symbol, e.g., \code{AVAL}}
 \item{Default value}{\code{NULL}}
 }}
 
@@ -284,7 +284,7 @@ of the specified variables are set to the specified value. Only variables
 specified for \code{new_vars} can be specified for \code{missing_values}.
 
 \describe{
-\item{Permitted values}{list of named expressions created by \code{exprs()}, e.g., \code{exprs(BASEC = "MISSING", BASE = -1)}}
+\item{Permitted values}{list of named expressions created by a formula using \code{exprs()}, e.g., \code{exprs(AVALC = VSSTRESC, AVAL = yn_to_numeric(AVALC))}}
 \item{Default value}{\code{NULL}}
 }}
 

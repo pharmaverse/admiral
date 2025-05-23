@@ -68,7 +68,7 @@ For handling of \code{NA}s in sorting variables see \href{../articles/generic.ht
 The specified variable is added to the input dataset.
 
 \describe{
-\item{Permitted values}{a variable}
+\item{Permitted values}{an unquoted symbol, e.g., \code{AVAL}}
 \item{Default value}{none}
 }}
 
@@ -86,7 +86,7 @@ dataset. It can also be used to flag consecutive observations or the last
 observation (see last example below).
 
 \describe{
-\item{Permitted values}{a variable}
+\item{Permitted values}{an unquoted symbol, e.g., \code{AVAL}}
 \item{Default value}{\code{NULL}}
 }}
 
