@@ -158,9 +158,9 @@
 #'
 #' @param check_type Check uniqueness?
 #'
-#'   If `"warning"` or `"error"` is specified, the specified message is issued
-#'   if the observations of the (restricted) joined dataset are not unique with
-#'   respect to the by variables and the order.
+#'   If `"message"`, `"warning"` or `"error"` is specified, the specified
+#'   message is issued if the observations of the (restricted) joined dataset
+#'   are not unique with respect to the by variables and the order.
 #'
 #'   This argument is ignored if `order` is not specified. In this case an error
 #'   is issued independent of `check_type` if the restricted joined dataset
@@ -837,7 +837,7 @@ derive_vars_joined <- function(dataset,
 #'   prior to the observation. For example, to identify AEs occurring on or
 #'   after seven days before a COVID AE. Thus `join_type = "all"` could be used.
 #'
-#' @permitted [join]
+#' @permitted [join_type]
 #'
 #' @param tmp_obs_nr_var Temporary observation number
 #'
@@ -1131,7 +1131,7 @@ get_joined_data <- function(dataset,
   } else {
     joined_data <- get_joined_sub_data(
       data,
-      dataset_add = data_add,
+      dataset_add = data_add_to_join,
       by_vars = by_vars_left,
       tmp_obs_nr_var = tmp_obs_nr_var,
       tmp_obs_nr_left = tmp_obs_nr_left,

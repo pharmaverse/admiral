@@ -106,12 +106,10 @@ adae <- adae %>%
     dataset_add = ex_ext,
     by_vars = exprs(STUDYID, USUBJID),
     new_vars = exprs(DOSEON = EXDOSE, DOSEU = EXDOSU),
-    join_vars = exprs(EXSTDTM),
+    join_vars = exprs(EXSTDTM, EXENDTM),
     join_type = "all",
-    order = exprs(EXSTDTM),
     filter_add = (EXDOSE > 0 | (EXDOSE == 0 & grepl("PLACEBO", EXTRT))) & !is.na(EXSTDTM),
-    filter_join = EXSTDTM <= ASTDTM & (ASTDTM <= EXENDTM | is.na(EXENDTM)),
-    mode = "first"
+    filter_join = EXSTDTM <= ASTDTM & (ASTDTM <= EXENDTM | is.na(EXENDTM))
   ) %>%
   ## Derive severity / causality / ... ----
   mutate(
