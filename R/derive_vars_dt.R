@@ -46,7 +46,12 @@
 #'
 #' @export
 #'
-#' @examples
+#' @examplesx
+#'
+#' @caption Example 1
+#' @info thing
+#'
+#' @code
 #' library(tibble)
 #' library(lubridate)
 #'
@@ -61,6 +66,10 @@
 #'   ""
 #' )
 #'
+#' @caption Example 2
+#' @info thing
+#'
+#' @code
 #' # Create ASTDT and ASTDTF
 #' # No imputation for partial date
 #' derive_vars_dt(
@@ -69,6 +78,10 @@
 #'   dtc = MHSTDTC
 #' )
 #'
+#' @caption Example 3
+#' @info thing
+#'
+#' @code
 #' # Create ASTDT and ASTDTF
 #' # Impute partial dates to first day/month
 #' derive_vars_dt(
@@ -78,6 +91,10 @@
 #'   highest_imputation = "M"
 #' )
 #'
+#' @caption Example 3
+#' @info thing
+#'
+#' @code
 #' # Impute partial dates to 6th of April
 #' derive_vars_dt(
 #'   mhdt,
@@ -87,6 +104,10 @@
 #'   date_imputation = "04-06"
 #' )
 #'
+#' @caption Example 4
+#' @info thing
+#'
+#' @code
 #' # Create AENDT and AENDTF
 #' # Impute partial dates to last day/month
 #' derive_vars_dt(
@@ -97,6 +118,10 @@
 #'   date_imputation = "last"
 #' )
 #'
+#' @caption Example 5
+#' @info thing
+#'
+#' @code
 #' # Create BIRTHDT
 #' # Impute partial dates to 15th of June. No Date Imputation Flag
 #' derive_vars_dt(
@@ -108,6 +133,10 @@
 #'   flag_imputation = "none"
 #' )
 #'
+#' @caption Example 6
+#' @info thing
+#'
+#' @code
 #' # Impute AE start date to the first date and ensure that the imputed date
 #' # is not before the treatment start date
 #' adae <- tribble(
@@ -124,6 +153,10 @@
 #'   min_dates = exprs(TRTSDTM)
 #' )
 #'
+#' @caption Example 7
+#' @info thing
+#'
+#' @code
 #' # A user imputing dates as middle month/day, i.e. date_imputation = "mid" can
 #' # use preserve argument to "preserve" partial dates.  For example, "2019---07",
 #' # will be displayed as "2019-06-07" rather than 2019-06-15 with preserve = TRUE
