@@ -851,7 +851,9 @@ adjust_last_day_imputation <- function(imputed_dtc, partial) {
 #' @keywords internal
 impute_date_time <- function(partial, target) {
   # assert partial and target are consistent
-  expect_equal(names(partial), names(target))
+  if(!all.equal(names(partial), names(target))){
+    cli_abort("Names of {.arg partial} and {.arg target} do not match.")
+  }
   components <- names(partial)
   imputed <- vector("list", length(components))
   names(imputed) <- components
