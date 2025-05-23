@@ -97,9 +97,9 @@ dt_level <- function(level) {
 #' @details
 #'
 #'  - For `date_imputation = "first"` `"0000"`, `"01"`, `"01"` are returned.
-#'  - For `date_imputation = "mid"` `"xxxx"`, `"06"`, `"30"` if `month` is `NA`
-#'  and `"15"` otherwise are returned.
-#'  - For `date_imputation = "last"` `"9999"`, `"12"`, `"31"` are returned.
+#'  - For `date_imputation = "mid"` `"xxxx"`, `"06"`, `"30"` if `month` is `NA`.
+#'   otherwise `"15"` returned.
+#'  - For `date_imputation = "last"` `"9999"`, `"12"`, `"28"` are returned.
 #'  - For `date_imputation = "<mm>-<dd>"` `"xxxx"`, `"<mm>"`, `"<dd>"` are returned.
 #'
 #'  `"xxxx"` indicates that the component is undefined. If an undefined
