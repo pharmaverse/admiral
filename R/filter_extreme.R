@@ -4,16 +4,19 @@
 #'
 #' @param dataset `r roxygen_param_dataset(expected_vars = c("by_vars", "order"))`
 #'
+#' @permitted [dataset]
+#'
 #' @param by_vars Grouping variables
 #'
 #'   `r roxygen_param_by_vars()`
+#'
+#' @permitted [var_list]
 #'
 #' @param order Sort order
 #'
 #'   Within each by group the observations are ordered by the specified order.
 #'
-#' @permitted list of expressions created by `exprs()`, e.g.,
-#'   `exprs(ADT, desc(AVAL))`
+#' @permitted [var_list]
 #'
 #' @param mode Selection mode (first or last)
 #'
