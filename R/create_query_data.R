@@ -349,8 +349,8 @@ get_terms_from_db <- function(version,
 
   terms <- tryCatch(
     fun(
-      basket_select = definition,
       version = version,
+      basket_select = definition,
       keep_id = expect_grpid,
       temp_env = temp_env
     ),
