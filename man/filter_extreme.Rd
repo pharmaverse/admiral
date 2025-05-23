@@ -12,12 +12,14 @@ filter_extreme(dataset, by_vars = NULL, order, mode, check_type = "warning")
 The variables specified by the \code{by_vars} and \code{order} arguments are expected to be in the dataset.
 
 \describe{
+\item{Permitted values}{a dataset, i.e., a \code{data.frame} or tibble}
 \item{Default value}{none}
 }}
 
 \item{by_vars}{Grouping variables
 
 \describe{
+\item{Permitted values}{list of variables created by \code{exprs()}, e.g., \code{exprs(USUBJID, VISIT)}}
 \item{Default value}{\code{NULL}}
 }}
 
@@ -26,8 +28,7 @@ The variables specified by the \code{by_vars} and \code{order} arguments are exp
 Within each by group the observations are ordered by the specified order.
 
 \describe{
-\item{Permitted values}{list of expressions created by \code{exprs()}, e.g.,
-\code{exprs(ADT, desc(AVAL))}}
+\item{Permitted values}{list of variables created by \code{exprs()}, e.g., \code{exprs(USUBJID, VISIT)}}
 \item{Default value}{none}
 }}
 

@@ -73,8 +73,7 @@ If \code{dataset_ref} is specified, this argument must be specified.
 Within each by group the observations are ordered by the specified order.
 
 \describe{
-\item{Permitted values}{list of expressions created by \code{exprs()}, e.g.,
-\code{exprs(ADT, desc(AVAL))}}
+\item{Permitted values}{list of variables created by \code{exprs()}, e.g., \code{exprs(USUBJID, VISIT)}}
 \item{Default value}{none}
 }}
 
@@ -177,6 +176,7 @@ For example:
 }\if{html}{\out{</div>}}
 
 \describe{
+\item{Permitted values}{list of named expressions created by \code{exprs()}, e.g., \code{exprs(CUMDOSA = sum(AVAL, na.rm = TRUE), AVALU = "ml")}}
 \item{Default value}{none}
 }}
 }
