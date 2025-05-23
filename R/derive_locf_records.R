@@ -120,21 +120,77 @@
 #'   "SYSBP",         6, "WEEK 6"
 #' )
 #'
+#' # Example 1: Add imputed records for missing timepoints (from `dataset_ref`)
+#' #            and for missing `analysis_var` values
 #' derive_locf_records(
 #'   dataset = advs,
 #'   dataset_ref = advs_expected_obsv,
 #'   by_vars = exprs(STUDYID, USUBJID, PARAMCD),
-#'   analysis_var = AVAL,
-#'   imputation = "update_add",
+#'   imputation = "add",
 #'   order = exprs(AVISITN, AVISIT),
 #'   keep_vars = exprs(PARAMN)
 #' ) |>
 #'   arrange(USUBJID, PARAMCD, AVISIT)
 #'
+#'
+#' # Example 2: Add imputed records for missing timepoints (from `dataset_ref`)
+#' #            and update missing `analysis_var` values
+#' derive_locf_records(
+#'   dataset = advs,
+#'   dataset_ref = advs_expected_obsv,
+#'   by_vars = exprs(STUDYID, USUBJID, PARAMCD),
+#'   imputation = "update",
+#'   order = exprs(AVISITN, AVISIT),
+#'   keep_vars = exprs(PARAMN)
+#' ) |>
+#'   arrange(USUBJID, PARAMCD, AVISIT)
+#'
+#'
+#' # Example 3: Add imputed records for missing timepoints (from `dataset_ref`) and for missing
+#' #            `analysis_var` value, populating all other variables in the new records.
+#' derive_locf_records(
+#'   dataset = advs,
+#'   dataset_ref = advs_expected_obsv,
+#'   by_vars = exprs(STUDYID, USUBJID, PARAMCD),
+#'   imputation = "update_add",
+#'   order = exprs(AVISITN, AVISIT),
+#' ) |>
+#'   arrange(USUBJID, PARAMCD, AVISIT)
+#'
+#'
+#'
+#' adqs <- tribble(
+#'   ~PARAMCD, ~USUBJID, ~VISITNUM, ~VISIT, ~AVISITN, ~AVISIT, ~AVALC, ~QSSEQ,
+#'   "Q01", "1099", 1, "BASELINE", 1, "BASELINE", "Severe Pain", 111,
+#'   "Q01", "1099", 2, "VISIT 2", 2, "VISIT 2", "Moderate Pain", 112,
+#'   "Q01", "1099", 6, "VISIT 6", 6, "VISIT 6", NA, 113,
+#'   "Q01", "1099", 7, "VISIT 7", 7, "VISIT 7", "Mild Pain", 114
+#' )
+#'
+#'
+#' adqs_ref <- tribble(
+#'   ~PARAMCD, ~AVISITN, ~AVISIT,
+#'   "Q01", 1, "BASELINE",
+#'   "Q01", 2, "VISIT 2",
+#'   "Q01", 3, "VISIT 3",
+#'   "Q01", 5, "VISIT 5",
+#'   "Q01", 7, "VISIT 7"
+#' )
+#'
+#' # Example 4: Add imputed records for missing `analysis_var` (AVALC) values
+#' derive_locf_records(
+#'   dataset = adqs,
+#'   dataset_ref = adqs_ref,
+#'   by_vars = exprs(USUBJID, PARAMCD),
+#'   analysis_var = AVALC,
+#'   imputation = "add",
+#'   order = exprs(AVISITN, AVISIT),
+#' ) |>
+#'   arrange(USUBJID, PARAMCD, AVISIT)
 derive_locf_records <- function(dataset,
                                 dataset_ref,
                                 by_vars,
-                                id_vars_ref = lapply(names(dataset_ref), sym),
+                                id_vars_ref = NULL,
                                 analysis_var = AVAL,
                                 imputation = "add",
                                 order,
@@ -164,6 +220,12 @@ derive_locf_records <- function(dataset,
       chr2vars(colnames(dataset_ref))
     )
   )
+
+
+  # Setting id_vars_ref to all the variables of dataset_ref when not specified by user #
+  if (is.null(id_vars_ref)) {
+    id_vars_ref <- lapply(names(dataset_ref), sym)
+  }
 
 
   #### Prepping 'dataset_ref' ####
