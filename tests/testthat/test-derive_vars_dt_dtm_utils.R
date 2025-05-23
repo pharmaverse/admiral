@@ -247,8 +247,9 @@ test_that("get_imputation_target_time Test 15: correctly generate imputation tar
   # When date_imputation = "06-15" and time_imputation = "12:34:56"
   expect_equal(
     get_imputation_targets(partial_datetime,
-                           date_imputation = "06-15",
-                           time_imputation = "12:34:56"),
+      date_imputation = "06-15",
+      time_imputation = "12:34:56"
+    ),
     list(year = "xxxx", month = "06", day = "15", hour = "12", minute = "34", second = "56")
   )
 

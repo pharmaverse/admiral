@@ -423,7 +423,6 @@ impute_dtc_dt <- function(dtc,
                           min_dates = NULL,
                           max_dates = NULL,
                           preserve = FALSE) {
-
   # Check arguments ----
   assert_character_vector(dtc)
   valid_dtc <- is_valid_dtc(dtc)

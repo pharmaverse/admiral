@@ -421,15 +421,15 @@ assert_date_imputation <- function(date_imputation, highest_imputation) {
 #'
 #' @examples
 #' # Assert valid 'first' time imputation
-#' time_imp_first <- admiral:::assert_time_imputation("Y", "first")
+#' time_imp_first <- admiral:::assert_time_imputation("first", "Y")
 #' print(time_imp_first)
 #'
 #' # Assert valid 'last' time imputation
-#' time_imp_last <- admiral:::assert_time_imputation("Y", "last")
+#' time_imp_last <- admiral:::assert_time_imputation("last", "Y")
 #' print(time_imp_last)
 #'
 #' # Assert valid custom time imputation "12:34:56"
-#' time_imp_custom <- admiral:::assert_time_imputation("Y", "12:34:56")
+#' time_imp_custom <- admiral:::assert_time_imputation("12:34:56", "Y")
 #' print(time_imp_custom)
 #'
 #' @keywords internal
@@ -851,7 +851,7 @@ adjust_last_day_imputation <- function(imputed_dtc, partial) {
 #' @keywords internal
 impute_date_time <- function(partial, target) {
   # assert partial and target are consistent
-  if(!all.equal(names(partial), names(target))){
+  if (!all.equal(names(partial), names(target))) {
     cli_abort("Names of {.arg partial} and {.arg target} do not match.")
   }
   components <- names(partial)
