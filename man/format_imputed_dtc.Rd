@@ -17,7 +17,6 @@ format_imputed_dtc(imputed)
 A character vector of formatted date/datetime strings.
 }
 \description{
-This is a helping function for \code{get_dt_dtm_range()}
 Formats imputed date/datetime components into a string representation.
 }
 \details{

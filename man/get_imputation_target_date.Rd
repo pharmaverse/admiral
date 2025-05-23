@@ -38,9 +38,9 @@ Get Date Imputation Targets
 \details{
 \itemize{
 \item For \code{date_imputation = "first"} \code{"0000"}, \code{"01"}, \code{"01"} are returned.
-\item For \code{date_imputation = "mid"} \code{"xxxx"}, \code{"06"}, \code{"30"} if \code{month} is \code{NA}
-and \code{"15"} otherwise are returned.
-\item For \code{date_imputation = "last"} \code{"9999"}, \code{"12"}, \code{"31"} are returned.
+\item For \code{date_imputation = "mid"} \code{"xxxx"}, \code{"06"}, \code{"30"} if \code{month} is \code{NA}.
+otherwise \code{"15"} returned.
+\item For \code{date_imputation = "last"} \code{"9999"}, \code{"12"}, \code{"28"} are returned.
 \item For \code{date_imputation = "<mm>-<dd>"} \code{"xxxx"}, \code{"<mm>"}, \code{"<dd>"} are returned.
 }
 

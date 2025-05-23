@@ -23,7 +23,6 @@ impute_date_time(partial, target)
 A list of imputed date/time components.
 }
 \description{
-This is a helping function for \code{get_dt_dtm_range()}
 Imputes missing values in partial date/time components using target values.
 }
 \examples{

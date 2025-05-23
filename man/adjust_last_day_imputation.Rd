@@ -34,25 +34,17 @@ the day (in \code{imputed_dtc}) is adjusted to the last day of the month.
 }
 \examples{
 # Adjust last day imputation for a date with an incomplete day
-imputed_date <- "2021-03-01"
+imputed_date <- "2021-03-28"
 partial_date <- list(year = "2021", month = "03", day = NA_character_)
-adjusted_date <- admiral:::adjust_last_day_imputation(
-  imputed_date,
-  partial_date
-)
-print(adjusted_date)
+admiral:::adjust_last_day_imputation(imputed_date, partial_date)
 
 # Adjust last day imputation for a datetime with missing day
-imputed_datetime <- "2021-03-01T00:00:00"
+imputed_datetime <- "2021-03-28T00:00:00"
 partial_datetime <- list(
   year = "2021", month = "03", day = NA_character_,
   hour = "00", minute = "00", second = "00"
 )
-adjusted_datetime <- admiral:::adjust_last_day_imputation(
-  imputed_datetime,
-  partial_datetime
-)
-print(adjusted_datetime)
+admiral:::adjust_last_day_imputation(imputed_datetime, partial_datetime)
 
 # Adjust last day imputation for a date with known day
 partial_date_known_day <- list(year = "2021", month = "03", day = "15")
