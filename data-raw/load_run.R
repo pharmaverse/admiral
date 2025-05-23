@@ -15,6 +15,6 @@ pak::pak("teal.data")
 
 devtools::load_all()
 
-source("data-raw/admiral_verify_templates.R")  # nolint
+source("data-raw/admiral_verify_templates.R") # nolint
 
 verify_templates()
