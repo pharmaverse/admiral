@@ -600,7 +600,6 @@ test_that("format.basket_select Test 24: formatting is correct (name specified)"
 
 ## Test 25: formatting is correct (name specified) ----
 test_that("get_terms_from_db Test 25: error message matches snapshot", {
-
   faulty_fun <- function(version, basket_select, keep_id, temp_env) {
     stop("Intentional error for testing")
   }

@@ -411,13 +411,6 @@ join is performed keeping all variables from \code{dataset_add}.
 library(lubridate)
 library(dplyr, warn.conflicts = FALSE)
 library(tidyr)
-#> 
-#> Attaching package: ‘tidyr’
-#> 
-#> The following object is masked from ‘package:testthat’:
-#> 
-#>     matches
-#> 
 
 adbds <- tribble(
   ~USUBJID, ~ADY, ~AVAL,
