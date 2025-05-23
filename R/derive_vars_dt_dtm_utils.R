@@ -723,7 +723,7 @@ get_imputation_targets <- function(partial, date_imputation = NULL, time_imputat
 
   # is_datetime <- all(c("year", "second") %in% names(partial))
   if(is.null(time_imputation) && is_partial_datetime(partial)){
-    cli_abort("As `partial` is datetime, `time_imputation` is expected.")
+    cli_abort("As {.arg partial} is datetime, {.arg time_imputation} is expected.")
   }
   if (is_partial_datetime(partial)) {
     target_time <- get_imputation_target_time(time_imputation = time_imputation)
@@ -1020,7 +1020,7 @@ is_partial_datetime <- function(partial){
   } else if(all(date_components %in% names(partial))){
     return(FALSE)
   } else {
-    cli_abort(paste0("`partial` must be a named list containing either all date components",
+    cli_abort(paste0("{.arg partial}` must be a named list containing either all date components",
                      " or all datetime components"))
   }
 }
