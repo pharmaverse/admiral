@@ -257,7 +257,7 @@ observation is created by the following process:
 \item the variables specified in \code{keep_source_vars} (here, \code{ADY} does due
 to the use of the tidyselect expression \code{everything()}) (plus \code{by_vars}
 and the variables from \code{set_values_to}) are kept,
-\item the variabales specified in the global \code{set_values_to} (here,
+\item the variables specified in the global \code{set_values_to} (here,
 \code{PARAM} and \code{PARAMCD}) are created/updated.
 }
 }

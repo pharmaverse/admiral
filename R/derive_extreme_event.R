@@ -169,7 +169,7 @@
 #'     \item the variables specified in `keep_source_vars` (here, `ADY` does due
 #'     to the use of the tidyselect expression `everything()`) (plus `by_vars`
 #'     and the variables from `set_values_to`) are kept,
-#'     \item the variabales specified in the global `set_values_to` (here,
+#'     \item the variables specified in the global `set_values_to` (here,
 #'     `PARAM` and `PARAMCD`) are created/updated.
 #'   }
 #'
