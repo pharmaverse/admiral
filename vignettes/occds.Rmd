@@ -261,7 +261,10 @@ dataset_vignette(
 
 ## Derive Treatment Dose and Unit {#dose_unit}
 
-In a similar manner, you could derive the treatment dose and unit at the time of the event. 
+In a similar manner, you could derive the treatment dose and unit at the time of
+the event. Please note that it is assumed that the dosing intervals do not
+overlap. If this case occurs, the `derive_vars_joined()` call below will throw
+an error as handling this case is study-specific.
 
 ```{r eval=TRUE}
 ex_single <- derive_vars_dtm(
