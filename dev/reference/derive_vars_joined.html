@@ -13,7 +13,7 @@ before the current observation."><meta property="og:image" content="https://phar
 
     <a class="navbar-brand me-2" href="../index.html">admiral</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.2.0.9030</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.2.0.9031</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -214,7 +214,7 @@ consecutive observations or the last observation.</p>
 <p>The variable is not included in the output dataset. To include it specify
 it for <code>new_vars</code>.</p>
 <dl><dt>Permitted values</dt>
-<dd><p>a variable</p></dd>
+<dd><p>an unquoted symbol, e.g., <code>AVAL</code></p></dd>
 
 <dt>Default value</dt>
 <dd><p><code>NULL</code></p></dd>
@@ -365,7 +365,7 @@ variable (e.g., <code>FLAG</code>) is added to the input dataset. This variable 
 be the value provided in <code>true_value</code> for all selected records from <code>dataset_add</code>
 which are merged into the input dataset, and the value provided in <code>false_value</code> otherwise.</p>
 <dl><dt>Permitted values</dt>
-<dd><p>a variable</p></dd>
+<dd><p>an unquoted symbol, e.g., <code>AVAL</code></p></dd>
 
 <dt>Default value</dt>
 <dd><p><code>NULL</code></p></dd>
@@ -409,7 +409,7 @@ matching observation in the additional dataset (<code>dataset_add</code>) the va
 of the specified variables are set to the specified value. Only variables
 specified for <code>new_vars</code> can be specified for <code>missing_values</code>.</p>
 <dl><dt>Permitted values</dt>
-<dd><p>list of expressions created by <code><a href="reexport-exprs.html">exprs()</a></code>, e.g., <code>exprs(BASEC = "MISSING", BASE = -1)</code></p></dd>
+<dd><p>list of named expressions created by a formula using <code><a href="reexport-exprs.html">exprs()</a></code>, e.g., <code>exprs(AVALC = VSSTRESC, AVAL = yn_to_numeric(AVALC))</code></p></dd>
 
 <dt>Default value</dt>
 <dd><p><code>NULL</code></p></dd>
@@ -420,9 +420,9 @@ specified for <code>new_vars</code> can be specified for <code>missing_values</c
 
 <dt id="arg-check-type">check_type<a class="anchor" aria-label="anchor" href="#arg-check-type"></a></dt>
 <dd><p>Check uniqueness?</p>
-<p>If <code>"warning"</code> or <code>"error"</code> is specified, the specified message is issued
-if the observations of the (restricted) joined dataset are not unique with
-respect to the by variables and the order.</p>
+<p>If <code>"message"</code>, <code>"warning"</code> or <code>"error"</code> is specified, the specified
+message is issued if the observations of the (restricted) joined dataset
+are not unique with respect to the by variables and the order.</p>
 <p>This argument is ignored if <code>order</code> is not specified. In this case an error
 is issued independent of <code>check_type</code> if the restricted joined dataset
 contains more than one observation for any of the observations of the input
@@ -495,6 +495,7 @@ This reduces the memory consumption but increases the run-time.</p>
 <code><a href="derive_var_relative_flag.html">derive_var_relative_flag</a>()</code>,
 <code><a href="derive_vars_cat.html">derive_vars_cat</a>()</code>,
 <code><a href="derive_vars_computed.html">derive_vars_computed</a>()</code>,
+<code><a href="derive_vars_joined_summary.html">derive_vars_joined_summary</a>()</code>,
 <code><a href="derive_vars_merged.html">derive_vars_merged</a>()</code>,
 <code><a href="derive_vars_merged_lookup.html">derive_vars_merged_lookup</a>()</code>,
 <code><a href="derive_vars_transposed.html">derive_vars_transposed</a>()</code></p></div>

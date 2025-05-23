@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">admiral</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.2.0.9030</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.2.0.9031</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -70,12 +70,15 @@
 <h2 class="pkg-version" data-toc-text="development version" id="admiral-development-version">admiral (development version)<a class="anchor" aria-label="anchor" href="#admiral-development-version"></a></h2>
 <div class="section level3">
 <h3 id="new-features-development-version">New Features<a class="anchor" aria-label="anchor" href="#new-features-development-version"></a></h3>
-<ul><li>The documentation was enhanced: (<a href="https://github.com/pharmaverse/admiral/issues/2585" class="external-link">#2585</a>)
+<ul><li>
+<p>The documentation was enhanced: (<a href="https://github.com/pharmaverse/admiral/issues/2585" class="external-link">#2585</a>)</p>
 <ul><li>The default value of an argument is now displayed in the argument description.</li>
 <li>For complex functions each example has now a title, which is also shown in the TOC, and a description. This enabled adding more examples without losing readability. See <code><a href="../reference/derive_extreme_records.html">derive_extreme_records()</a></code> for an example.</li>
 <li>The output of the structured examples used for complex functions is displayed in the help pages in RStudio.</li>
 </ul></li>
-<li>New lab grading metadata for US (Conventional) units for the three grading criteria <code>admiral</code> already produces for SI units (<a href="https://github.com/pharmaverse/admiral/issues/2557" class="external-link">#2557</a>).
+<li><p>New function <code><a href="../reference/derive_vars_joined_summary.html">derive_vars_joined_summary()</a></code> to derive summary variables from selected records of an additional dataset where the selection depends on variables from both the input dataset and the additional dataset. For example, the cumulative dose up to each adverse event in <code>ADAE</code> can be derived with the new function. (<a href="https://github.com/pharmaverse/admiral/issues/2652" class="external-link">#2652</a>)</p></li>
+<li>
+<p>New lab grading metadata for US (Conventional) units for the three grading criteria <code>admiral</code> already produces for SI units (<a href="https://github.com/pharmaverse/admiral/issues/2557" class="external-link">#2557</a>).</p>
 <ul><li>
 <code>atoxgr_criteria_ctcv4_uscv</code> (NCI-CTCAEv4 criteria)</li>
 <li>

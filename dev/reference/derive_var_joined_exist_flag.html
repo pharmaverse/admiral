@@ -9,7 +9,7 @@ example, flagging events which need to be confirmed by a second event."><meta pr
 
     <a class="navbar-brand me-2" href="../index.html">admiral</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.2.0.9030</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.2.0.9031</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -158,7 +158,7 @@ dataset (<code>dataset</code>) with the additional dataset (<code>dataset_add</c
 <dd><p>New variable</p>
 <p>The specified variable is added to the input dataset.</p>
 <dl><dt>Permitted values</dt>
-<dd><p>a variable</p></dd>
+<dd><p>an unquoted symbol, e.g., <code>AVAL</code></p></dd>
 
 <dt>Default value</dt>
 <dd><p>none</p></dd>
@@ -180,7 +180,7 @@ The variable can be used in the conditions (<code>filter_join</code>,
 dataset. It can also be used to flag consecutive observations or the last
 observation (see last example below).</p>
 <dl><dt>Permitted values</dt>
-<dd><p>a variable</p></dd>
+<dd><p>an unquoted symbol, e.g., <code>AVAL</code></p></dd>
 
 <dt>Default value</dt>
 <dd><p><code>NULL</code></p></dd>
@@ -462,6 +462,7 @@ This reduces the memory consumption but increases the run-time.</p>
 <code><a href="derive_vars_cat.html">derive_vars_cat</a>()</code>,
 <code><a href="derive_vars_computed.html">derive_vars_computed</a>()</code>,
 <code><a href="derive_vars_joined.html">derive_vars_joined</a>()</code>,
+<code><a href="derive_vars_joined_summary.html">derive_vars_joined_summary</a>()</code>,
 <code><a href="derive_vars_merged.html">derive_vars_merged</a>()</code>,
 <code><a href="derive_vars_merged_lookup.html">derive_vars_merged_lookup</a>()</code>,
 <code><a href="derive_vars_transposed.html">derive_vars_transposed</a>()</code></p></div>

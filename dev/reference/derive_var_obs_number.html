@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">admiral</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.2.0.9030</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.2.0.9031</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -123,7 +123,10 @@
 <dd><p>Name of variable to create</p>
 <p>The new variable is set to the observation number for each by group. The
 numbering starts with 1.</p>
-<dl><dt>Default value</dt>
+<dl><dt>Permitted values</dt>
+<dd><p>an unquoted symbol, e.g., <code>AVAL</code></p></dd>
+
+<dt>Default value</dt>
 <dd><p><code>ASEQ</code></p></dd>
 
 
@@ -132,11 +135,11 @@ numbering starts with 1.</p>
 
 <dt id="arg-check-type">check_type<a class="anchor" aria-label="anchor" href="#arg-check-type"></a></dt>
 <dd><p>Check uniqueness?</p>
-<p>If <code>"warning"</code> or <code>"error"</code> is specified, the specified message is issued
-if the observations of the input dataset are not unique with respect to the
-by variables and the order.</p>
+<p>If <code>"message"</code>, <code>"warning"</code> or <code>"error"</code> is specified, the specified
+message is issued if the observations of the input dataset are not unique
+with respect to the by variables and the order.</p>
 <dl><dt>Permitted values</dt>
-<dd><p><code>"none"</code>, <code>"warning"</code>, <code>"error"</code></p></dd>
+<dd><p><code>"none"</code>, <code>"message"</code>, <code>"warning"</code>, <code>"error"</code></p></dd>
 
 <dt>Default value</dt>
 <dd><p><code>"none"</code></p></dd>
@@ -169,6 +172,7 @@ order specified for the <code>order</code> parameter and the mode specified for 
 <code><a href="derive_vars_cat.html">derive_vars_cat</a>()</code>,
 <code><a href="derive_vars_computed.html">derive_vars_computed</a>()</code>,
 <code><a href="derive_vars_joined.html">derive_vars_joined</a>()</code>,
+<code><a href="derive_vars_joined_summary.html">derive_vars_joined_summary</a>()</code>,
 <code><a href="derive_vars_merged.html">derive_vars_merged</a>()</code>,
 <code><a href="derive_vars_merged_lookup.html">derive_vars_merged_lookup</a>()</code>,
 <code><a href="derive_vars_transposed.html">derive_vars_transposed</a>()</code></p></div>
