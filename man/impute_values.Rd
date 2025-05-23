@@ -29,8 +29,6 @@ impute_values(partial, target, components)
 A list of imputed date/time components.
 }
 \description{
-\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#stable}{\figure{lifecycle-stable.svg}{options: alt='[Stable]'}}}{\strong{[Stable]}}
-
 This is a helping function for \code{get_dt_dtm_range()}
 Imputes missing values in partial date/time components using target values.
 }

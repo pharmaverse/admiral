@@ -461,7 +461,6 @@ assert_time_imputation <- function(time_imputation, highest_imputation) {
 #' Assert Highest Imputation Validity
 #'
 #' @description
-#' `r lifecycle::badge("stable")`
 #'
 #' This function checks the validity and requirements for the `highest_imputation` argument.
 #' It ensures that necessary conditions for `date_imputation`, `min_dates`,
@@ -575,7 +574,7 @@ get_dt_dtm_range <- function(dtc,
 
   highest_imputation_level <- get_highest_imputation_level(
     highest_imputation = "Y",
-    is_datetime = create_datetime
+    create_datetime = create_datetime
   )
 
   if (length(dtc) == 0) {
@@ -589,18 +588,19 @@ get_dt_dtm_range <- function(dtc,
 
   lo_up <- c("first", "last")
 
-  targets <- lapply(lo_up, function(x){
+  targets <- lapply(lo_up, function(x) {
     get_imputation_targets(partial,
-                           date_imputation = x,
-                           time_imputation = x)
+      date_imputation = x,
+      time_imputation = x
+    )
   })
 
-  imputeds <- lapply(targets, function(target){
+  imputeds <- lapply(targets, function(target) {
     impute_values(partial, target, components)
   })
 
-  imputeds_dtc <- lapply(imputeds, function(imputed){
-    format_imputed_dtc(imputed, create_datetime)
+  imputeds_dtc <- lapply(imputeds, function(imputed) {
+    format_imputed_dtc(imputed)
   })
 
   imputeds_dtc[[2]] <- adjust_last_day_imputation(imputeds_dtc[[2]], partial)
@@ -611,54 +611,52 @@ get_dt_dtm_range <- function(dtc,
 #' Get Highest Imputation Level
 #'
 #' @description
-#' `r lifecycle::badge("stable")`
 #'
 #' Returns the `dt_level()` or `dtm_level()` representation of the `highest_imputation`
 #' character value. The level object allows comparisons of levels.
 #'
 #' @param highest_imputation A character indicating the highest imputation level.
-#' @param is_datetime A logical indicating whether the imputation is for a datetime.
+#' @param create_datetime A logical indicating whether datetime factors levels are required.
 #'
 #' @returns A `dt_level()` or `dtm_level()` object representing the highest imputation level.
 #'
 #' @examples
 #' # Get highest imputation level for date
 #' highest_level_date <- admiral:::get_highest_imputation_level(
-#'   is_datetime = FALSE,
-#'   highest_imputation = "Y"
+#'   highest_imputation = "Y",
+#'   create_datetime = FALSE
 #' )
 #' print(highest_level_date)
 #'
 #' # Get highest imputation level for datetime
 #' highest_level_datetime <- admiral:::get_highest_imputation_level(
-#'   is_datetime = TRUE,
-#'   highest_imputation = "Y"
+#'   highest_imputation = "Y",
+#'   create_datetime = TRUE
 #' )
 #' print(highest_level_datetime)
 #'
 #' # Get highest imputation level for date with month level
 #' highest_level_month_date <- admiral:::get_highest_imputation_level(
-#'   is_datetime = FALSE,
-#'   highest_imputation = "M"
+#'   highest_imputation = "M",
+#'   create_datetime = FALSE
 #' )
 #' print(highest_level_month_date)
 #'
 #' # Get highest imputation level for datetime with hour level
 #' highest_level_hour_datetime <- admiral:::get_highest_imputation_level(
-#'   is_datetime = TRUE,
-#'   highest_imputation = "h"
+#'   highest_imputation = "h",
+#'   create_datetime = TRUE
 #' )
 #' print(highest_level_hour_datetime)
 #'
 #' @keywords internal
-get_highest_imputation_level <- function(highest_imputation, is_datetime) {
-  if (is_datetime) dtm_level(highest_imputation) else dt_level(highest_imputation)
+get_highest_imputation_level <- function(highest_imputation, create_datetime) {
+  if (create_datetime) dtm_level(highest_imputation) else dt_level(highest_imputation)
 }
 
 #' Get Imputation Targets
 #'
 #' @description
-#' `r lifecycle::badge("stable")`
 #'
 #' Determines the imputation targets for date (see `get_imputation_target_date()` and time
 #' (see `get_imputation_target_time()`) components.
@@ -721,8 +719,7 @@ get_imputation_targets <- function(partial, date_imputation = NULL, time_imputat
     month = partial[["month"]]
   )
 
-  # is_datetime <- all(c("year", "second") %in% names(partial))
-  if(is.null(time_imputation) && is_partial_datetime(partial)){
+  if (is.null(time_imputation) && is_partial_datetime(partial)) {
     cli_abort("As {.arg partial} is datetime, {.arg time_imputation} is expected.")
   }
   if (is_partial_datetime(partial)) {
@@ -736,7 +733,6 @@ get_imputation_targets <- function(partial, date_imputation = NULL, time_imputat
 #' Adjust Last Day Imputation
 #'
 #' @description
-#' `r lifecycle::badge("stable")`
 #'
 #' This functions adjusts the day of the imputed date to the last day the month
 #' if the day was imputed. It should be called if `date_imputation = "last"` was used
@@ -752,7 +748,8 @@ get_imputation_targets <- function(partial, date_imputation = NULL, time_imputat
 #' # Adjust last day imputation for a date with an incomplete day
 #' imputed_date <- "2021-03-01"
 #' partial_date <- list(year = "2021", month = "03", day = NA_character_)
-#' adjusted_date <- admiral:::adjust_last_day_imputation(imputed_date,
+#' adjusted_date <- admiral:::adjust_last_day_imputation(
+#'   imputed_date,
 #'   partial_date
 #' )
 #' print(adjusted_date)
@@ -763,14 +760,16 @@ get_imputation_targets <- function(partial, date_imputation = NULL, time_imputat
 #'   year = "2021", month = "03", day = NA_character_,
 #'   hour = "00", minute = "00", second = "00"
 #' )
-#' adjusted_datetime <- admiral:::adjust_last_day_imputation(imputed_datetime,
+#' adjusted_datetime <- admiral:::adjust_last_day_imputation(
+#'   imputed_datetime,
 #'   partial_datetime
 #' )
 #' print(adjusted_datetime)
 #'
 #' # Adjust last day imputation for a date with known day
 #' partial_date_known_day <- list(year = "2021", month = "03", day = "15")
-#' adjusted_date_known_day <- admiral:::adjust_last_day_imputation(imputed_date,
+#' adjusted_date_known_day <- admiral:::adjust_last_day_imputation(
+#'   imputed_date,
 #'   partial_date_known_day
 #' )
 #' print(adjusted_date_known_day)
@@ -780,7 +779,8 @@ get_imputation_targets <- function(partial, date_imputation = NULL, time_imputat
 #'   year = "2021", month = "03", day = "15",
 #'   hour = "00", minute = "00", second = "00"
 #' )
-#' adjusted_datetime_known_day <- admiral:::adjust_last_day_imputation(imputed_datetime,
+#' adjusted_datetime_known_day <- admiral:::adjust_last_day_imputation(
+#'   imputed_datetime,
 #'   partial_datetime_known_day
 #' )
 #' print(adjusted_datetime_known_day)
@@ -813,7 +813,6 @@ adjust_last_day_imputation <- function(imputed_dtc, partial) {
 #' Impute Missing Values
 #'
 #' @description
-#' `r lifecycle::badge("stable")`
 #'
 #' This is a helping function for `get_dt_dtm_range()`
 #' Imputes missing values in partial date/time components using target values.
@@ -868,13 +867,11 @@ impute_values <- function(partial, target, components) {
 #' Format Imputed Date/Datetime
 #'
 #' @description
-#' `r lifecycle::badge("stable")`
 #'
 #' This is a helping function for `get_dt_dtm_range()`
 #' Formats imputed date/datetime components into a string representation.
 #'
 #' @param imputed A list of imputed date/time components.
-#' @param is_datetime A logical indicating whether it's a datetime format.
 #'
 #' @returns A character vector of formatted date/datetime strings.
 #'
@@ -884,12 +881,12 @@ impute_values <- function(partial, target, components) {
 #'   year = "2020", month = "01", day = "01",
 #'   hour = "12", minute = "00", second = "00"
 #' )
-#' formatted_datetime <- admiral:::format_imputed_dtc(imputed_datetime, is_datetime = TRUE)
+#' formatted_datetime <- admiral:::format_imputed_dtc(imputed_datetime)
 #' print(formatted_datetime)
 #'
 #' # Format imputed date components
 #' imputed_date <- list(year = "2020", month = "01", day = "01")
-#' formatted_date <- admiral:::format_imputed_dtc(imputed_date, is_datetime = FALSE)
+#' formatted_date <- admiral:::format_imputed_dtc(imputed_date)
 #' print(formatted_date)
 #'
 #' # Handle imputed datetime with missing parts (contains 'x')
@@ -898,17 +895,13 @@ impute_values <- function(partial, target, components) {
 #'   year = "2020", month = "xx", day = "01",
 #'   hour = "12", minute = "00", second = "00"
 #' )
-#' formatted_partial_datetime <- admiral:::format_imputed_dtc(imputed_partial_datetime,
-#'   is_datetime = TRUE
-#' )
+#' formatted_partial_datetime <- admiral:::format_imputed_dtc(imputed_partial_datetime)
 #' print(formatted_partial_datetime)
 #'
 #' # Handle imputed date with missing parts (contains 'x')
 #' # Expected: NA because 'x' is an undefined component
 #' imputed_partial_date <- list(year = "2020", month = "xx", day = "01")
-#' formatted_partial_date <- admiral:::format_imputed_dtc(imputed_partial_date,
-#'   is_datetime = FALSE
-#' )
+#' formatted_partial_date <- admiral:::format_imputed_dtc(imputed_partial_date)
 #' print(formatted_partial_date)
 #'
 #' @details
@@ -917,8 +910,8 @@ impute_values <- function(partial, target, components) {
 #' `"x"` with `NA`.
 #'
 #' @keywords internal
-format_imputed_dtc <- function(imputed, is_datetime) {
-  if (is_datetime) {
+format_imputed_dtc <- function(imputed) {
+  if (is_partial_datetime(imputed)) {
     dtc <- paste0(
       paste(imputed[["year"]], imputed[["month"]], imputed[["day"]], sep = "-"),
       "T",
@@ -933,7 +926,6 @@ format_imputed_dtc <- function(imputed, is_datetime) {
 #' Propagate NA Values for datetime values
 #'
 #' @description
-#' `r lifecycle::badge("stable")`
 #'
 #' Propagates `NA` values through date/time components.
 #'
@@ -996,31 +988,35 @@ propagate_na_values <- function(partial) {
 #'
 #' @examples
 #' # Datetime example
-#' partial_datetime <- list(year = "2023", month = "05", day = "15",
-#'                          hour = "14", minute = "30", second = "00")
-#' admiral:::is_partial_datetime(partial_datetime)  # Returns TRUE
+#' partial_datetime <- list(
+#'   year = "2023", month = "05", day = "15",
+#'   hour = "14", minute = "30", second = "00"
+#' )
+#' admiral:::is_partial_datetime(partial_datetime) # Returns TRUE
 #'
 #' # Date example
 #' partial_date <- list(year = "2023", month = "05", day = "15")
-#' admiral:::is_partial_datetime(partial_date)  # Returns FALSE
+#' admiral:::is_partial_datetime(partial_date) # Returns FALSE
 #'
 #' # Invalid example
 #' \dontrun{
 #' partial_invalid <- list(year = "2023", month = "05", hour = "14")
-#' admiral:::is_partial_datetime(partial_invalid)  # Throws an error
+#' admiral:::is_partial_datetime(partial_invalid) # Throws an error
 #' }
 #'
 #' @keywords internal
-is_partial_datetime <- function(partial){
+is_partial_datetime <- function(partial) {
   date_components <- c("year", "month", "day")
   time_components <- c("hour", "minute", "second")
 
-  if(all(c(date_components, time_components) %in% names(partial))){
+  if (all(c(date_components, time_components) %in% names(partial))) {
     return(TRUE)
-  } else if(all(date_components %in% names(partial))){
+  } else if (all(date_components %in% names(partial))) {
     return(FALSE)
   } else {
-    cli_abort(paste0("{.arg partial}` must be a named list containing either all date components",
-                     " or all datetime components"))
+    cli_abort(paste0(
+      "{.arg partial} must be a named list containing either all date components",
+      " or all datetime components"
+    ))
   }
 }

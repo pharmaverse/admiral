@@ -47,8 +47,6 @@ assert_highest_imputation(
 Returns \code{NULL} invisibly if assertions pass.
 }
 \description{
-\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#stable}{\figure{lifecycle-stable.svg}{options: alt='[Stable]'}}}{\strong{[Stable]}}
-
 This function checks the validity and requirements for the \code{highest_imputation} argument.
 It ensures that necessary conditions for \code{date_imputation}, \code{min_dates},
 and \code{max_dates} are met when \code{highest_imputation} is set to \code{"Y"}.

@@ -4,16 +4,10 @@
 \alias{format_imputed_dtc}
 \title{Format Imputed Date/Datetime}
 \usage{
-format_imputed_dtc(imputed, is_datetime)
+format_imputed_dtc(imputed)
 }
 \arguments{
 \item{imputed}{A list of imputed date/time components.
-
-\describe{
-\item{Default value}{none}
-}}
-
-\item{is_datetime}{A logical indicating whether it's a datetime format.
 
 \describe{
 \item{Default value}{none}
@@ -23,8 +17,6 @@ format_imputed_dtc(imputed, is_datetime)
 A character vector of formatted date/datetime strings.
 }
 \description{
-\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#stable}{\figure{lifecycle-stable.svg}{options: alt='[Stable]'}}}{\strong{[Stable]}}
-
 This is a helping function for \code{get_dt_dtm_range()}
 Formats imputed date/datetime components into a string representation.
 }
@@ -39,12 +31,12 @@ imputed_datetime <- list(
   year = "2020", month = "01", day = "01",
   hour = "12", minute = "00", second = "00"
 )
-formatted_datetime <- admiral:::format_imputed_dtc(imputed_datetime, is_datetime = TRUE)
+formatted_datetime <- admiral:::format_imputed_dtc(imputed_datetime)
 print(formatted_datetime)
 
 # Format imputed date components
 imputed_date <- list(year = "2020", month = "01", day = "01")
-formatted_date <- admiral:::format_imputed_dtc(imputed_date, is_datetime = FALSE)
+formatted_date <- admiral:::format_imputed_dtc(imputed_date)
 print(formatted_date)
 
 # Handle imputed datetime with missing parts (contains 'x')
@@ -53,17 +45,13 @@ imputed_partial_datetime <- list(
   year = "2020", month = "xx", day = "01",
   hour = "12", minute = "00", second = "00"
 )
-formatted_partial_datetime <- admiral:::format_imputed_dtc(imputed_partial_datetime,
-  is_datetime = TRUE
-)
+formatted_partial_datetime <- admiral:::format_imputed_dtc(imputed_partial_datetime)
 print(formatted_partial_datetime)
 
 # Handle imputed date with missing parts (contains 'x')
 # Expected: NA because 'x' is an undefined component
 imputed_partial_date <- list(year = "2020", month = "xx", day = "01")
-formatted_partial_date <- admiral:::format_imputed_dtc(imputed_partial_date,
-  is_datetime = FALSE
-)
+formatted_partial_date <- admiral:::format_imputed_dtc(imputed_partial_date)
 print(formatted_partial_date)
 
 }

@@ -17,8 +17,6 @@ propagate_na_values(partial)
 A list of date/time components with propagated \code{NA} values.
 }
 \description{
-\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#stable}{\figure{lifecycle-stable.svg}{options: alt='[Stable]'}}}{\strong{[Stable]}}
-
 Propagates \code{NA} values through date/time components.
 }
 \details{

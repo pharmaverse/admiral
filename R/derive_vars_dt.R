@@ -422,7 +422,7 @@ impute_dtc_dt <- function(dtc,
                           min_dates = NULL,
                           max_dates = NULL,
                           preserve = FALSE) {
-  is_datetime <- FALSE
+
   # Check arguments ----
   assert_character_vector(dtc)
   valid_dtc <- is_valid_dtc(dtc)
@@ -457,7 +457,7 @@ impute_dtc_dt <- function(dtc,
   }
 
   # Parse partials
-  partial <- get_partialdatetime(dtc, create_datetime = is_datetime)
+  partial <- get_partialdatetime(dtc, create_datetime = FALSE)
   components <- names(partial)
 
   # Handle preserve argument ----
@@ -476,7 +476,7 @@ impute_dtc_dt <- function(dtc,
 
   # Impute ----
   imputed <- impute_values(partial, target, components)
-  imputed_dtc <- format_imputed_dtc(imputed, is_datetime)
+  imputed_dtc <- format_imputed_dtc(imputed)
 
 
   if (date_imputation == "last") {

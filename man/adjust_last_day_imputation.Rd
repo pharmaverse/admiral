@@ -23,8 +23,6 @@ adjust_last_day_imputation(imputed_dtc, partial)
 A character vector of adjusted date/datetime strings.
 }
 \description{
-\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#stable}{\figure{lifecycle-stable.svg}{options: alt='[Stable]'}}}{\strong{[Stable]}}
-
 This functions adjusts the day of the imputed date to the last day the month
 if the day was imputed. It should be called if \code{date_imputation = "last"} was used
 for the date imputation as \code{get_imputation_target_date()} imputes the last day
@@ -38,7 +36,8 @@ the day (in \code{imputed_dtc}) is adjusted to the last day of the month.
 # Adjust last day imputation for a date with an incomplete day
 imputed_date <- "2021-03-01"
 partial_date <- list(year = "2021", month = "03", day = NA_character_)
-adjusted_date <- admiral:::adjust_last_day_imputation(imputed_date,
+adjusted_date <- admiral:::adjust_last_day_imputation(
+  imputed_date,
   partial_date
 )
 print(adjusted_date)
@@ -49,14 +48,16 @@ partial_datetime <- list(
   year = "2021", month = "03", day = NA_character_,
   hour = "00", minute = "00", second = "00"
 )
-adjusted_datetime <- admiral:::adjust_last_day_imputation(imputed_datetime,
+adjusted_datetime <- admiral:::adjust_last_day_imputation(
+  imputed_datetime,
   partial_datetime
 )
 print(adjusted_datetime)
 
 # Adjust last day imputation for a date with known day
 partial_date_known_day <- list(year = "2021", month = "03", day = "15")
-adjusted_date_known_day <- admiral:::adjust_last_day_imputation(imputed_date,
+adjusted_date_known_day <- admiral:::adjust_last_day_imputation(
+  imputed_date,
   partial_date_known_day
 )
 print(adjusted_date_known_day)
@@ -66,7 +67,8 @@ partial_datetime_known_day <- list(
   year = "2021", month = "03", day = "15",
   hour = "00", minute = "00", second = "00"
 )
-adjusted_datetime_known_day <- admiral:::adjust_last_day_imputation(imputed_datetime,
+adjusted_datetime_known_day <- admiral:::adjust_last_day_imputation(
+  imputed_datetime,
   partial_datetime_known_day
 )
 print(adjusted_datetime_known_day)

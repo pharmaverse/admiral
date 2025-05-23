@@ -30,18 +30,20 @@ Any other combination will result in an error.
 }
 \examples{
 # Datetime example
-partial_datetime <- list(year = "2023", month = "05", day = "15",
-                         hour = "14", minute = "30", second = "00")
-admiral:::is_partial_datetime(partial_datetime)  # Returns TRUE
+partial_datetime <- list(
+  year = "2023", month = "05", day = "15",
+  hour = "14", minute = "30", second = "00"
+)
+admiral:::is_partial_datetime(partial_datetime) # Returns TRUE
 
 # Date example
 partial_date <- list(year = "2023", month = "05", day = "15")
-admiral:::is_partial_datetime(partial_date)  # Returns FALSE
+admiral:::is_partial_datetime(partial_date) # Returns FALSE
 
 # Invalid example
 \dontrun{
 partial_invalid <- list(year = "2023", month = "05", hour = "14")
-admiral:::is_partial_datetime(partial_invalid)  # Throws an error
+admiral:::is_partial_datetime(partial_invalid) # Throws an error
 }
 
 }

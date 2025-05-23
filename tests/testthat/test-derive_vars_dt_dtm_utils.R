@@ -246,7 +246,9 @@ test_that("get_imputation_target_time Test 15: correctly generate imputation tar
 
   # When date_imputation = "06-15" and time_imputation = "12:34:56"
   expect_equal(
-    get_imputation_targets(partial_datetime, date_imputation = "06-15", time_imputation = "12:34:56"),
+    get_imputation_targets(partial_datetime,
+                           date_imputation = "06-15",
+                           time_imputation = "12:34:56"),
     list(year = "xxxx", month = "06", day = "15", hour = "12", minute = "34", second = "56")
   )
 
@@ -272,8 +274,10 @@ test_that("get_imputation_target_time Test 16: correctly adjust last day imputat
   expect_equal(
     adjust_last_day_imputation(
       imputed_dtc = "2021-03-01T00:00:00",
-      partial = list(year = "2021", month = "03", day = NA_character_,
-                     hour = NA_character_, minute = NA_character_, second = NA_character_)
+      partial = list(
+        year = "2021", month = "03", day = NA_character_,
+        hour = NA_character_, minute = NA_character_, second = NA_character_
+      )
     ),
     "2021-03-31T00:00:00"
   )
@@ -298,8 +302,8 @@ test_that("get_imputation_target_time Test 18: correctly format imputed date tim
     year = "2020", month = "01", day = "01",
     hour = "12", minute = "00", second = "00"
   )
-  expect_equal(format_imputed_dtc(imputed, TRUE), "2020-01-01T12:00:00")
-  expect_equal(format_imputed_dtc(imputed[1:3], FALSE), "2020-01-01")
+  expect_equal(format_imputed_dtc(imputed), "2020-01-01T12:00:00")
+  expect_equal(format_imputed_dtc(imputed[1:3]), "2020-01-01")
 })
 
 # Test for propagate_na_values
@@ -469,8 +473,10 @@ test_that("get_partialdatetime Test 29: handle NA input", {
 
 test_that("is_partial_datetime correctly identifies datetime and date partials", {
   # Test with a full datetime
-  partial_datetime <- list(year = "2023", month = "05", day = "15",
-                           hour = "14", minute = "30", second = "00")
+  partial_datetime <- list(
+    year = "2023", month = "05", day = "15",
+    hour = "14", minute = "30", second = "00"
+  )
   expect_true(is_partial_datetime(partial_datetime))
 
   # Test with a date only, partially NA
@@ -480,20 +486,25 @@ test_that("is_partial_datetime correctly identifies datetime and date partials",
   # Test with an invalid partial (missing components)
   partial_invalid <- list(year = "2023", month = "05", hour = "14")
   expect_snapshot(is_partial_datetime(partial_invalid),
-               error = TRUE)
+    error = TRUE
+  )
 
   # Test with an empty list
   expect_snapshot(is_partial_datetime(list()),
-                  error = TRUE)
+    error = TRUE
+  )
 
   # Test with extra components
-  partial_extra <- list(year = "2023", month = "05", day = "15",
-                        hour = "14", minute = "30", second = "00",
-                        millisecond = "500")
+  partial_extra <- list(
+    year = "2023", month = "05", day = "15",
+    hour = "14", minute = "30", second = "00",
+    millisecond = "500"
+  )
   expect_true(is_partial_datetime(partial_extra))
 
   # Test with only time components
   partial_time_only <- list(hour = "14", minute = "30", second = "00")
   expect_snapshot(is_partial_datetime(partial_time_only),
-                  error = TRUE)
+    error = TRUE
+  )
 })

@@ -46,8 +46,6 @@ for the start of the day,
 A list of imputation targets for date and (if applicable) time components.
 }
 \description{
-\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#stable}{\figure{lifecycle-stable.svg}{options: alt='[Stable]'}}}{\strong{[Stable]}}
-
 Determines the imputation targets for date (see \code{get_imputation_target_date()} and time
 (see \code{get_imputation_target_time()}) components.
 }
