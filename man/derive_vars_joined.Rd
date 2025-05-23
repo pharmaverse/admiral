@@ -122,7 +122,7 @@ The variable is not included in the output dataset. To include it specify
 it for \code{new_vars}.
 
 \describe{
-\item{Permitted values}{an unquoted symbol, e.g., \code{AVAL}}
+\item{Permitted values}{a variable}
 \item{Default value}{\code{NULL}}
 }}
 
@@ -252,7 +252,7 @@ be the value provided in \code{true_value} for all selected records from \code{d
 which are merged into the input dataset, and the value provided in \code{false_value} otherwise.
 
 \describe{
-\item{Permitted values}{an unquoted symbol, e.g., \code{AVAL}}
+\item{Permitted values}{a variable}
 \item{Default value}{\code{NULL}}
 }}
 
