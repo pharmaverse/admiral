@@ -26,6 +26,7 @@ the derivation is called for all subsets. (#2645)
 - The examples section for the function `derive_var_trtemfl()` was enhanced to include a showcasing of all scenarios discussed in the following [PHUSE White Paper on Treatment-Emergent AEs](https://phuse.s3.eu-central-1.amazonaws.com/Deliverables/Safety+Analytics/WP-087+Recommended+Definition+of++Treatment-Emergent+Adverse+Events+in+Clinical+Trials+.pdf). (#2455)
 - `derive_var_atoxgr_dir()` updated to handle more than one unit in grading metadata. Related to providing US (Conventional) units for grading (#2557).
 - The background checks in `derive_summary_records()` were too restrictive: `by_vars` were expected in `dataset` although the code did not require it. This requirement has therefore been dropped (#2686).
+- The function `call_user_fun()` has been deprecated, Phase 1 (message). There will be no replacement;  for original code, please see::  "https://github.com/pharmaverse/admiral/blob/v1.2.0/R/call_user_fun.R#L26-L39"
 - The functions `derive_vars_joined()`, `derive_var_joined_exist_flag()`, and
 `filter_joined()` produce correct results now when they are used with `join_type
 = "before"` or `join_type = "after"` and `dataset` and `dataset_add` differ or
@@ -45,6 +46,8 @@ records. (#2683)
 - The following function arguments are entering the next phase of the [deprecation process](https://pharmaverse.github.io/admiraldev/articles/programming_strategy.html#deprecation): (#2487) (#2595)
 
     **Phase 1 (message)**
+	
+	- `call_user_fun()` has been deprecated and will have no replacement.  (For original code, please see: "https://github.com/pharmaverse/admiral/blob/v1.2.0/R/call_user_fun.R#L26-L39") (#2678)
   
     **Phase 2 (warning)**
     

@@ -262,6 +262,7 @@ dm \%>\%
 \code{\link[=derive_vars_merged]{derive_vars_merged()}}
 
 Other deprecated: 
+\code{\link{call_user_fun}()},
 \code{\link{date_source}()},
 \code{\link{derive_param_extreme_record}()},
 \code{\link{derive_var_dthcaus}()},

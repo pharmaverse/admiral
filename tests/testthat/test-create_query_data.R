@@ -596,3 +596,31 @@ test_that("format.basket_select Test 24: formatting is correct (name specified)"
     "basket_select(name = \"My SDG\", id = NULL, scope = \"NA\", type = \"sdg\")"
   )
 })
+
+
+## Test 25: formatting is correct (name specified) ----
+test_that("get_terms_from_db Test 25: error message matches snapshot", {
+  faulty_fun <- function(version, basket_select, keep_id, temp_env) {
+    stop("Intentional error for testing")
+  }
+
+  # Expect the function to throw an error and capture it using tryCatch
+  error_message <- tryCatch(
+    get_terms_from_db(
+      version = "1.0",
+      fun = faulty_fun, # Passing faulty function to trigger error
+      queries = NULL,
+      definition = "dummy_definition",
+      expect_grpname = FALSE,
+      expect_grpid = FALSE,
+      i = NULL,
+      temp_env = list()
+    ),
+    error = function(err) {
+      conditionMessage(err)
+    }
+  )
+
+  # Use expect_snapshot to check the error message
+  expect_snapshot(error_message)
+})
