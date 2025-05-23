@@ -466,7 +466,7 @@ impute_dtc_dt <- function(dtc,
   }
 
   # Determine target components ----
-  target <- get_imputation_targets(partial, date_imputation, is_datetime = is_datetime)
+  target <- get_imputation_targets(partial, date_imputation)
 
   for (c in components) {
     if (highest_imputation < dt_level(imputation_levels[[c]])) {
@@ -480,7 +480,7 @@ impute_dtc_dt <- function(dtc,
 
 
   if (date_imputation == "last") {
-    imputed_dtc <- adjust_last_day_imputation(imputed_dtc, partial, is_datetime)
+    imputed_dtc <- adjust_last_day_imputation(imputed_dtc, partial)
   }
 
   # Handle min_dates and max_dates argument ----

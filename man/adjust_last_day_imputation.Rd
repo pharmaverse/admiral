@@ -4,7 +4,7 @@
 \alias{adjust_last_day_imputation}
 \title{Adjust Last Day Imputation}
 \usage{
-adjust_last_day_imputation(imputed_dtc, partial, is_datetime)
+adjust_last_day_imputation(imputed_dtc, partial)
 }
 \arguments{
 \item{imputed_dtc}{A character vector of imputed date/datetime strings.
@@ -14,12 +14,6 @@ adjust_last_day_imputation(imputed_dtc, partial, is_datetime)
 }}
 
 \item{partial}{A list of partial date/time components.
-
-\describe{
-\item{Default value}{none}
-}}
-
-\item{is_datetime}{A logical indicating whether it's a datetime adjustment.
 
 \describe{
 \item{Default value}{none}
@@ -45,8 +39,7 @@ the day (in \code{imputed_dtc}) is adjusted to the last day of the month.
 imputed_date <- "2021-03-01"
 partial_date <- list(year = "2021", month = "03", day = NA_character_)
 adjusted_date <- admiral:::adjust_last_day_imputation(imputed_date,
-  partial_date,
-  is_datetime = FALSE
+  partial_date
 )
 print(adjusted_date)
 
@@ -57,16 +50,14 @@ partial_datetime <- list(
   hour = "00", minute = "00", second = "00"
 )
 adjusted_datetime <- admiral:::adjust_last_day_imputation(imputed_datetime,
-  partial_datetime,
-  is_datetime = TRUE
+  partial_datetime
 )
 print(adjusted_datetime)
 
 # Adjust last day imputation for a date with known day
 partial_date_known_day <- list(year = "2021", month = "03", day = "15")
 adjusted_date_known_day <- admiral:::adjust_last_day_imputation(imputed_date,
-  partial_date_known_day,
-  is_datetime = FALSE
+  partial_date_known_day
 )
 print(adjusted_date_known_day)
 
@@ -76,8 +67,7 @@ partial_datetime_known_day <- list(
   hour = "00", minute = "00", second = "00"
 )
 adjusted_datetime_known_day <- admiral:::adjust_last_day_imputation(imputed_datetime,
-  partial_datetime_known_day,
-  is_datetime = TRUE
+  partial_datetime_known_day
 )
 print(adjusted_datetime_known_day)
 

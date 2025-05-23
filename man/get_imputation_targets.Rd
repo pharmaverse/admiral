@@ -4,7 +4,7 @@
 \alias{get_imputation_targets}
 \title{Get Imputation Targets}
 \usage{
-get_imputation_targets(partial, date_imputation, time_imputation, is_datetime)
+get_imputation_targets(partial, date_imputation = NULL, time_imputation = NULL)
 }
 \arguments{
 \item{partial}{A list of partial date/time components.
@@ -41,12 +41,6 @@ for the start of the day,
 \describe{
 \item{Default value}{none}
 }}
-
-\item{is_datetime}{A logical indicating whether it's a datetime imputation.
-
-\describe{
-\item{Default value}{none}
-}}
 }
 \value{
 A list of imputation targets for date and (if applicable) time components.
@@ -62,8 +56,7 @@ Determines the imputation targets for date (see \code{get_imputation_target_date
 partial_date <- list(year = "2020", month = "03", day = NA_character_)
 target_first_date <- admiral:::get_imputation_targets(partial_date,
   date_imputation = "first",
-  time_imputation = NULL,
-  is_datetime = FALSE
+  time_imputation = NULL
 )
 print(target_first_date)
 
@@ -78,32 +71,28 @@ partial_datetime <- list(
 )
 target_first_datetime <- admiral:::get_imputation_targets(partial_datetime,
   date_imputation = "first",
-  time_imputation = "first",
-  is_datetime = TRUE
+  time_imputation = "first"
 )
 print(target_first_datetime)
 
 # Get imputation targets for a datetime with 'last' date and time imputation
 target_last_datetime <- admiral:::get_imputation_targets(partial_datetime,
   date_imputation = "last",
-  time_imputation = "last",
-  is_datetime = TRUE
+  time_imputation = "last"
 )
 print(target_last_datetime)
 
 # Get imputation targets for a date with custom date imputation '06-15'
 target_custom_date <- admiral:::get_imputation_targets(partial_date,
   date_imputation = "06-15",
-  time_imputation = NULL,
-  is_datetime = FALSE
+  time_imputation = NULL
 )
 print(target_custom_date)
 
 # Get imputation targets for a datetime with custom time imputation '12:34:56'
 target_custom_time <- admiral:::get_imputation_targets(partial_datetime,
   date_imputation = "first",
-  time_imputation = "12:34:56",
-  is_datetime = TRUE
+  time_imputation = "12:34:56"
 )
 print(target_custom_time)
 
