@@ -145,8 +145,9 @@ derive_vars_dtm <- function(dataset,
   assert_character_scalar(
     flag_imputation,
     values = c("auto", "both", "date", "time", "none"),
-    case_sensitive = TRUE
+    case_sensitive = FALSE
   )
+  flag_imputation <- tolower(flag_imputation)
 
   # the `assert_dt_dtm_inputs` function is stored in `derive_vars_dt_dtm_utils.R`
   assert_highest_imputation(
