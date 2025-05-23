@@ -598,43 +598,30 @@ test_that("format.basket_select Test 24: formatting is correct (name specified)"
 })
 
 
-## Test 25: get_terms_from_db error handling with cli_abort works correctly ----
-test_that("format.basket_select Test 25:  error handling works correctly", {
+## Test 25: formatting is correct (name specified) ----
+test_that("get_terms_from_db Test 25: error message matches snapshot", {
 
-  error_fun <- function(...) {
-    stop("This is a simulated error.")
+  faulty_fun <- function(version, basket_select, keep_id, temp_env) {
+    stop("Intentional error for testing")
   }
 
-    expect_error({
-    tryCatch(
-      get_terms_from_db(
-        version = "test_version",
-        fun = error_fun,
-        queries = NULL,
-        definition = basket_select(name = NULL, scope = "BROAD", type = "smq"),
-        expect_grpname = FALSE,
-        expect_grpid = FALSE,
-        i = 1,
-        temp_env = NULL
-      ),
-      error = function(e) {
-        # Assertions in case of error handling
-        expect_match(conditionMessage(e), "An error occurred when calling the function:")
-        expect_match(
-          conditionMessage(e),
-          "Calling {.code fun(basket_select = {definition},
-                     version = {version}, keep_id = {expect_grpid},
-                     temp_env = {temp_env})} caused the following error:"
-        )
-        expect_equal(
-          conditionMessage(e),
-          "An error occurred when calling the function:
-                     Calling .code fun(basket_select = {definition},
-                     version = {version}, keep_id = {expect_grpid},
-                     temp_env = {temp_env}) caused the following error:
-                     This is a simulated error."
-        )
-      }
-    )
-  })
+  # Expect the function to throw an error and capture it using tryCatch
+  error_message <- tryCatch(
+    get_terms_from_db(
+      version = "1.0",
+      fun = faulty_fun, # Passing faulty function to trigger error
+      queries = NULL,
+      definition = "dummy_definition",
+      expect_grpname = FALSE,
+      expect_grpid = FALSE,
+      i = NULL,
+      temp_env = list()
+    ),
+    error = function(err) {
+      conditionMessage(err)
+    }
+  )
+
+  # Use expect_snapshot to check the error message
+  expect_snapshot(error_message)
 })

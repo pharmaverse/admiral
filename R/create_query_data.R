@@ -357,11 +357,17 @@ get_terms_from_db <- function(version,
     error = function(err) {
       cli_abort(
         c(
-          "An error occurred when calling {get_terms_from_db()}",
-          "Check values for {.code basket_select = {definition},
-          version = {version}, keep_id = {expect_grpid},
-          temp_env = {temp_env}} which caused the following error:",
-          conditionMessage(err)
+          "An error occurred while calling the provided `fun` argument.",
+          "Potential issues could include:",
+          "- Mismatch in expected function arguments.",
+          "- Incorrect handling of input parameters inside `fun`.",
+          "- Not returning expected output.",
+          "Current arguments passed to `fun()`:",
+          " - version: {version}",
+          " - basket_select: {definition}",
+          " - keep_id: {expect_grpid}",
+          " - temp_env: {temp_env}",
+          "Error message: {conditionMessage(err)}"
         )
       )
     }
