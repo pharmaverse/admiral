@@ -15,7 +15,7 @@ standard derivation of the parameter."><meta property="og:image" content="https:
 
     <a class="navbar-brand me-2" href="../index.html">admiral</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.2.0.9029</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.2.0.9030</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -119,7 +119,10 @@ created. Otherwise, the new records are appended to the specified dataset.</p>
 <p>The variables specified for <code>by_vars</code> are expected.
 Observations from the specified dataset are going to be used to calculate and added
 as new records to the input dataset (<code>dataset</code>).</p>
-<dl><dt>Default value</dt>
+<dl><dt>Permitted values</dt>
+<dd><p>a dataset, i.e., a <code>data.frame</code> or tibble</p></dd>
+
+<dt>Default value</dt>
 <dd><p>none</p></dd>
 
 
@@ -131,7 +134,10 @@ as new records to the input dataset (<code>dataset</code>).</p>
 <p>The variables specified for <code>by_vars</code> are expected. For each
 observation of the specified dataset a new observation is added to the
 input dataset.</p>
-<dl><dt>Default value</dt>
+<dl><dt>Permitted values</dt>
+<dd><p>a dataset, i.e., a <code>data.frame</code> or tibble</p></dd>
+
+<dt>Default value</dt>
 <dd><p><code>NULL</code></p></dd>
 
 
@@ -143,7 +149,10 @@ input dataset.</p>
 <p>Variables to consider for generation of groupwise summary
 records. Providing the names of variables in <code><a href="reexport-exprs.html">exprs()</a></code> will create a
 groupwise summary and generate summary records for the specified groups.</p>
-<dl><dt>Default value</dt>
+<dl><dt>Permitted values</dt>
+<dd><p>list of variables created by <code><a href="reexport-exprs.html">exprs()</a></code>, e.g., <code>exprs(USUBJID, VISIT)</code></p></dd>
+
+<dt>Default value</dt>
 <dd><p>none</p></dd>
 
 
@@ -159,7 +168,10 @@ function is involved.</p>
 values greater than mean of <code>AVAL</code> with in <code>by_vars</code>.</p></li>
 <li><p><code>filter_add = (dplyr::n() &gt; 2)</code> will filter n count of <code>by_vars</code> greater
 than 2.</p></li>
-</ul><dl><dt>Default value</dt>
+</ul><dl><dt>Permitted values</dt>
+<dd><p>an unquoted condition, e.g., <code>AVISIT == "BASELINE"</code></p></dd>
+
+<dt>Default value</dt>
 <dd><p><code>NULL</code></p></dd>
 
 
@@ -179,7 +191,10 @@ used, the values are summarized by the variables specified for <code>by_vars</co
 <span id="cb1-2"><a href="#cb1-2" tabindex="-1"></a>    <span class="at">AVAL =</span> <span class="fu">sum</span>(AVAL),</span>
 <span id="cb1-3"><a href="#cb1-3" tabindex="-1"></a>    <span class="at">DTYPE =</span> <span class="st">"AVERAGE"</span>,</span>
 <span id="cb1-4"><a href="#cb1-4" tabindex="-1"></a>  )</span></code></pre><p></p></div>
-<dl><dt>Default value</dt>
+<dl><dt>Permitted values</dt>
+<dd><p>list of named expressions created by <code><a href="reexport-exprs.html">exprs()</a></code>, e.g., <code>exprs(CUMDOSA = sum(AVAL, na.rm = TRUE), AVALU = "ml")</code></p></dd>
+
+<dt>Default value</dt>
 <dd><p>none</p></dd>
 
 
@@ -192,8 +207,7 @@ used, the values are summarized by the variables specified for <code>by_vars</co
 complete mapping defined by the summarization defined in <code>set_values_to</code>.  Only variables
 specified for <code>set_values_to</code> can be specified for <code>missing_values</code>.</p>
 <dl><dt>Permitted values</dt>
-<dd><p>named list of expressions, e.g.,
-<code>exprs(AVAL = -9999)</code></p></dd>
+<dd><p>list of named expressions created by <code><a href="reexport-exprs.html">exprs()</a></code>, e.g., <code>exprs(CUMDOSA = sum(AVAL, na.rm = TRUE), AVALU = "ml")</code></p></dd>
 
 <dt>Default value</dt>
 <dd><p><code>NULL</code></p></dd>

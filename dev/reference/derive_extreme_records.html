@@ -17,7 +17,7 @@ where only the by variables are populated for the new records."><meta property="
 
     <a class="navbar-brand me-2" href="../index.html">admiral</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.2.0.9029</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.2.0.9030</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -174,8 +174,7 @@ also in <code>dataset_add</code> (and are included in <code>keep_source_vars</co
 <dd><p>Sort order</p>
 <p>Within each by group the observations are ordered by the specified order.</p>
 <dl><dt>Permitted values</dt>
-<dd><p>list of expressions created by <code><a href="reexport-exprs.html">exprs()</a></code>, e.g.,
-<code>exprs(ADT, desc(AVAL))</code></p></dd>
+<dd><p>list of variables created by <code><a href="reexport-exprs.html">exprs()</a></code>, e.g., <code>exprs(USUBJID, VISIT)</code></p></dd>
 
 <dt>Default value</dt>
 <dd><p>none</p></dd>
@@ -294,7 +293,10 @@ used, the values are summarized by the variables specified for <code>by_vars</co
 <span id="cb1-2"><a href="#cb1-2" tabindex="-1"></a>    <span class="at">AVAL =</span> <span class="fu">sum</span>(AVAL),</span>
 <span id="cb1-3"><a href="#cb1-3" tabindex="-1"></a>    <span class="at">DTYPE =</span> <span class="st">"AVERAGE"</span>,</span>
 <span id="cb1-4"><a href="#cb1-4" tabindex="-1"></a>  )</span></code></pre><p></p></div>
-<dl><dt>Default value</dt>
+<dl><dt>Permitted values</dt>
+<dd><p>list of named expressions created by <code><a href="reexport-exprs.html">exprs()</a></code>, e.g., <code>exprs(CUMDOSA = sum(AVAL, na.rm = TRUE), AVALU = "ml")</code></p></dd>
+
+<dt>Default value</dt>
 <dd><p>none</p></dd>
 
 

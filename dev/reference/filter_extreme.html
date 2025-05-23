@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">admiral</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.2.0.9029</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.2.0.9030</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -83,7 +83,10 @@
 <dl><dt id="arg-dataset">dataset<a class="anchor" aria-label="anchor" href="#arg-dataset"></a></dt>
 <dd><p>Input dataset</p>
 <p>The variables specified by the <code>by_vars</code> and <code>order</code> arguments are expected to be in the dataset.</p>
-<dl><dt>Default value</dt>
+<dl><dt>Permitted values</dt>
+<dd><p>a dataset, i.e., a <code>data.frame</code> or tibble</p></dd>
+
+<dt>Default value</dt>
 <dd><p>none</p></dd>
 
 
@@ -92,7 +95,10 @@
 
 <dt id="arg-by-vars">by_vars<a class="anchor" aria-label="anchor" href="#arg-by-vars"></a></dt>
 <dd><p>Grouping variables</p>
-<dl><dt>Default value</dt>
+<dl><dt>Permitted values</dt>
+<dd><p>list of variables created by <code><a href="reexport-exprs.html">exprs()</a></code>, e.g., <code>exprs(USUBJID, VISIT)</code></p></dd>
+
+<dt>Default value</dt>
 <dd><p><code>NULL</code></p></dd>
 
 
@@ -103,8 +109,7 @@
 <dd><p>Sort order</p>
 <p>Within each by group the observations are ordered by the specified order.</p>
 <dl><dt>Permitted values</dt>
-<dd><p>list of expressions created by <code><a href="reexport-exprs.html">exprs()</a></code>, e.g.,
-<code>exprs(ADT, desc(AVAL))</code></p></dd>
+<dd><p>list of variables created by <code><a href="reexport-exprs.html">exprs()</a></code>, e.g., <code>exprs(USUBJID, VISIT)</code></p></dd>
 
 <dt>Default value</dt>
 <dd><p>none</p></dd>
