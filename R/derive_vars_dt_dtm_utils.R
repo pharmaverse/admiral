@@ -745,25 +745,17 @@ get_imputation_targets <- function(partial, date_imputation = NULL, time_imputat
 #'
 #' @examples
 #' # Adjust last day imputation for a date with an incomplete day
-#' imputed_date <- "2021-03-01"
+#' imputed_date <- "2021-03-28"
 #' partial_date <- list(year = "2021", month = "03", day = NA_character_)
-#' adjusted_date <- admiral:::adjust_last_day_imputation(
-#'   imputed_date,
-#'   partial_date
-#' )
-#' print(adjusted_date)
+#' admiral:::adjust_last_day_imputation(imputed_date, partial_date)
 #'
 #' # Adjust last day imputation for a datetime with missing day
-#' imputed_datetime <- "2021-03-01T00:00:00"
+#' imputed_datetime <- "2021-03-28T00:00:00"
 #' partial_datetime <- list(
 #'   year = "2021", month = "03", day = NA_character_,
 #'   hour = "00", minute = "00", second = "00"
 #' )
-#' adjusted_datetime <- admiral:::adjust_last_day_imputation(
-#'   imputed_datetime,
-#'   partial_datetime
-#' )
-#' print(adjusted_datetime)
+#' admiral:::adjust_last_day_imputation(imputed_datetime, partial_datetime)
 #'
 #' # Adjust last day imputation for a date with known day
 #' partial_date_known_day <- list(year = "2021", month = "03", day = "15")
@@ -813,7 +805,6 @@ adjust_last_day_imputation <- function(imputed_dtc, partial) {
 #'
 #' @description
 #'
-#' This is a helping function for `get_dt_dtm_range()`
 #' Imputes missing values in partial date/time components using target values.
 #'
 #' @param partial A list of partial date/time components.
@@ -867,7 +858,6 @@ impute_date_time <- function(partial, target) {
 #'
 #' @description
 #'
-#' This is a helping function for `get_dt_dtm_range()`
 #' Formats imputed date/datetime components into a string representation.
 #'
 #' @param imputed A list of imputed date/time components.
