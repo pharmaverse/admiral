@@ -527,7 +527,7 @@ impute_dtc_dtm <- function(dtc,
     imputed[[c]] <- if_else(is.na(partial[[c]]), target[[c]], partial[[c]])
   }
 
-  imputed <- impute_values(partial, target, components)
+  imputed <- impute_date_time(partial, target)
   imputed_dtc <- format_imputed_dtc(imputed)
 
   if (date_imputation == "last") {

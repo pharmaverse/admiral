@@ -475,7 +475,7 @@ impute_dtc_dt <- function(dtc,
   }
 
   # Impute ----
-  imputed <- impute_values(partial, target, components)
+  imputed <- impute_date_time(partial, target)
   imputed_dtc <- format_imputed_dtc(imputed)
 
 

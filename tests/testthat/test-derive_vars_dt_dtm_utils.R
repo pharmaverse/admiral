@@ -288,9 +288,8 @@ test_that("get_imputation_target_time Test 16: correctly adjust last day imputat
 test_that("get_imputation_target_time Test 17: impute_values correctly imputes missing values", {
   partial <- list(year = "2020", month = NA_character_, day = NA_character_)
   target <- list(year = "2020", month = "01", day = "01")
-  components <- c("year", "month", "day")
   expect_equal(
-    impute_values(partial, target, components),
+    impute_date_time(partial, target),
     list(year = "2020", month = "01", day = "01")
   )
 })

@@ -362,19 +362,23 @@ get_partialdatetime <- function(dtc, create_datetime) {
 
 #' Assert `date_imputation`
 #'
+#' @description
 #' Applies assertions on the `date_imputation` argument to reduce
 #' cyclomatic complexity
 #'
-#' @param highest_imputation Highest imputation level
+#' @details
+#' Asserts that date_imputation is a scalar.
+#' Asserts that the values in `date_imputation` are permitted.
+#' The permitted values in `date_imputation` vary by `highest_imputation`
+#'
 #' @param date_imputation The value to impute the day/month when a datepart is
 #'   missing.
+#' @param highest_imputation Highest imputation level
 #'
 #' @returns asserted `date_imputation`
 #'
 #' @keywords internal
-#'
-#' @returns `invisible(NULL)`
-assert_date_imputation <- function(highest_imputation, date_imputation) {
+assert_date_imputation <- function(date_imputation, highest_imputation) {
   date_imputation <-
     assert_character_scalar(
       date_imputation,
@@ -555,15 +559,9 @@ assert_highest_imputation <- function(highest_imputation, highest_imputation_val
 #' print(imputed_empty)
 #'
 #' @details
-#' This function is a simplified version of the `impute_dtc_dt()` function that
-#' does not throw an error when having no min_dates nor max_dates specified when
-#' `date_imputation = "Y"`.
-#' The function performs the following steps:
-#' - Validates and parses the input date strings.
-#' - Determines which components (year, month, day) are missing.
-#' - Applies the selected imputation rule (`"first"` or `"last"`) to fill in
-#'  missing components.
-#' - Returns a fully qualified date or `NA` if imputation cannot be performed.
+#' The functions replaces missing components in `dtc` with the earliest (lower bound)
+#' and latest (upper bound) possible value. Missing year is replaced with `"0000"` for the
+#' lower bound and `"9999"` for the upper bound.
 #'
 #' @keywords internal
 get_dt_dtm_range <- function(dtc,
@@ -584,7 +582,6 @@ get_dt_dtm_range <- function(dtc,
   # Parse partials
   partial <- get_partialdatetime(dtc, create_datetime = create_datetime)
   partial <- propagate_na_values(partial)
-  components <- names(partial)
 
   lo_up <- c("first", "last")
 
@@ -595,17 +592,19 @@ get_dt_dtm_range <- function(dtc,
     )
   })
 
-  imputeds <- lapply(targets, function(target) {
-    impute_values(partial, target, components)
+  imputed_targets <- lapply(targets, function(target) {
+    impute_date_time(partial, target)
   })
 
-  imputeds_dtc <- lapply(imputeds, function(imputed) {
+  imputed_dtcs <- lapply(imputed_targets, function(imputed) {
     format_imputed_dtc(imputed)
   })
 
-  imputeds_dtc[[2]] <- adjust_last_day_imputation(imputeds_dtc[[2]], partial)
+  imputed_dtcs[[2]] <- adjust_last_day_imputation(imputed_dtcs[[2]], partial)
 
-  return(list("lower" = imputeds_dtc[[1]], "upper" = imputeds_dtc[[2]]))
+  names(imputed_dtcs) <- c("lower", "upper")
+
+  imputed_dtcs
 }
 
 #' Get Highest Imputation Level
@@ -819,7 +818,6 @@ adjust_last_day_imputation <- function(imputed_dtc, partial) {
 #'
 #' @param partial A list of partial date/time components.
 #' @param target A list of target values for imputation.
-#' @param components A character vector of component names.
 #'
 #' @returns A list of imputed date/time components.
 #'
@@ -827,8 +825,7 @@ adjust_last_day_imputation <- function(imputed_dtc, partial) {
 #' # Impute missing values for date components
 #' partial_date <- list(year = "2020", month = NA_character_, day = NA_character_)
 #' target_date <- list(year = "2020", month = "01", day = "01")
-#' components_date <- c("year", "month", "day")
-#' imputed_date <- admiral:::impute_values(partial_date, target_date, components_date)
+#' imputed_date <- admiral:::impute_date_time(partial_date, target_date)
 #' print(imputed_date)
 #'
 #' # Impute missing values for datetime components
@@ -840,22 +837,22 @@ adjust_last_day_imputation <- function(imputed_dtc, partial) {
 #'   year = "2020", month = "01", day = "01",
 #'   hour = "12", minute = "00", second = "00"
 #' )
-#' components_datetime <- c("year", "month", "day", "hour", "minute", "second")
-#' imputed_datetime <- admiral:::impute_values(
-#'   partial_datetime, target_datetime,
-#'   components_datetime
+#' imputed_datetime <- admiral:::impute_date_time(
+#'   partial_datetime, target_datetime
 #' )
 #' print(imputed_datetime)
 #'
 #' # Impute missing values when some components are already present
 #' partial_mixed <- list(year = "2020", month = "06", day = NA_character_)
 #' target_mixed <- list(year = "2020", month = "01", day = "01")
-#' components_mixed <- c("year", "month", "day")
-#' imputed_mixed <- admiral:::impute_values(partial_mixed, target_mixed, components_mixed)
+#' imputed_mixed <- admiral:::impute_date_time(partial_mixed, target_mixed)
 #' print(imputed_mixed)
 #'
 #' @keywords internal
-impute_values <- function(partial, target, components) {
+impute_date_time <- function(partial, target) {
+  # assert partial and target are consistent
+  expect_equal(names(partial), names(target))
+  components <- names(partial)
   imputed <- vector("list", length(components))
   names(imputed) <- components
   for (c in components) {

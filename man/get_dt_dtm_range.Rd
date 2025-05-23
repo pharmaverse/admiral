@@ -30,17 +30,9 @@ Internal helper function to convert a character vector of (possibly partial) dat
 into complete dates based on a specified imputation rule (\code{date_imputation}).
 }
 \details{
-This function is a simplified version of the \code{impute_dtc_dt()} function that
-does not throw an error when having no min_dates nor max_dates specified when
-\code{date_imputation = "Y"}.
-The function performs the following steps:
-\itemize{
-\item Validates and parses the input date strings.
-\item Determines which components (year, month, day) are missing.
-\item Applies the selected imputation rule (\code{"first"} or \code{"last"}) to fill in
-missing components.
-\item Returns a fully qualified date or \code{NA} if imputation cannot be performed.
-}
+The functions replaces missing components in \code{dtc} with the earliest (lower bound)
+and latest (upper bound) possible value. Missing year is replaced with \code{"0000"} for the
+lower bound and \code{"9999"} for the upper bound.
 }
 \examples{
 # Get Range from Partial Dates
