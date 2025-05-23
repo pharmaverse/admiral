@@ -125,7 +125,7 @@
 #'   date_imputation = "mid",
 #'   preserve = TRUE
 #' )
-derive_vars_dtm <- function(dataset, # nolint: cyclocomp_linter
+derive_vars_dtm <- function(dataset,
                             new_vars_prefix,
                             dtc,
                             highest_imputation = "h",
@@ -137,38 +137,25 @@ derive_vars_dtm <- function(dataset, # nolint: cyclocomp_linter
                             preserve = FALSE,
                             ignore_seconds_flag = FALSE) {
   # check and quote arguments
-  assert_character_scalar(new_vars_prefix)
-  assert_vars(max_dates, optional = TRUE)
-  assert_vars(min_dates, optional = TRUE)
   dtc <- assert_symbol(enexpr(dtc))
   assert_data_frame(dataset, required_vars = exprs(!!dtc))
-  assert_character_scalar(
+
+  assert_character_scalar(new_vars_prefix)
+
+  flag_imputation <- assert_character_scalar(
     flag_imputation,
     values = c("auto", "both", "date", "time", "none"),
     case_sensitive = FALSE
   )
-  if ((highest_imputation == "Y" && is.null(min_dates) && is.null(max_dates)) ||
-    (highest_imputation == "Y" && length(min_dates) == 0 && length(max_dates) == 0)) {
-    cli_abort(paste(
-      "If {.code highest_impuation = \"Y\"} is specified, {.arg min_dates} or",
-      "{.arg max_dates} must be specified respectively."
-    ))
-  }
-  if (highest_imputation == "Y") {
-    assert_character_scalar(date_imputation, values = c("first", "last"))
-  }
-  if (highest_imputation == "Y" && is.null(min_dates) && date_imputation == "first") {
-    cli_warn(paste(
-      "If {.code highest_impuation = \"Y\"} and {.code date_imputation = \"first\"}",
-      "is specified, {.arg min_dates} should be specified."
-    ))
-  }
-  if (highest_imputation == "Y" && is.null(max_dates) && date_imputation == "last") {
-    cli_warn(paste(
-      "If {.code highest_impuation = \"Y\"} and {.code date_imputation = \"last\"}",
-      "is specified, {.arg max_dates} should be specified."
-    ))
-  }
+
+  # the `assert_dt_dtm_inputs` function is stored in `derive_vars_dt_dtm_utils.R`
+  assert_highest_imputation(
+    highest_imputation = highest_imputation,
+    highest_imputation_values = c("Y", "M", "D", "h", "m", "s", "n"),
+    date_imputation = date_imputation,
+    min_dates = min_dates,
+    max_dates = max_dates
+  )
 
   dtm <- paste0(new_vars_prefix, "DTM")
 
@@ -486,18 +473,29 @@ impute_dtc_dtm <- function(dtc,
     month = "M",
     year = "Y"
   )
-  assert_character_scalar(highest_imputation, values = imputation_levels)
+
+  assert_highest_imputation(
+    highest_imputation = highest_imputation,
+    highest_imputation_values = imputation_levels,
+    date_imputation = date_imputation,
+    min_dates = min_dates,
+    max_dates = max_dates
+  )
+
+
   highest_imputation <- dtm_level(highest_imputation)
-  date_imputation <-
-    assert_character_scalar(
-      date_imputation,
-      case_sensitive = FALSE
-    )
-  time_imputation <-
-    assert_character_scalar(
-      time_imputation,
-      case_sensitive = FALSE
-    )
+
+  # the `assert_date_imputation` function is stored in `derive_vars_dt_dtm_utils.R`
+  date_imputation <- assert_date_imputation(
+    highest_imputation = highest_imputation,
+    date_imputation = date_imputation
+  )
+
+  # the `assert_time_imputation` function is stored in `derive_vars_dt_dtm_utils.R`
+  time_imputation <- assert_time_imputation(
+    highest_imputation = highest_imputation,
+    time_imputation = time_imputation
+  )
   assert_logical_scalar(preserve)
 
   if (length(dtc) == 0) {
@@ -505,24 +503,16 @@ impute_dtc_dtm <- function(dtc,
   }
 
   # Parse character date ----
-  partial <- get_partialdatetime(dtc)
+  partial <- get_partialdatetime(dtc, create_datetime = TRUE)
   components <- names(partial)
 
   # Handle preserve argument ----
   if (!preserve) {
-    for (i in 2:6) {
-      partial[[i]] <- if_else(is.na(partial[[i - 1]]), NA_character_, partial[[i]])
-    }
+    partial <- propagate_na_values(partial)
   }
+
   # Determine target components ----
-  target_date <- get_imputation_target_date(
-    date_imputation = date_imputation,
-    month = partial[["month"]]
-  )
-  target_time <- get_imputation_target_time(
-    time_imputation = time_imputation
-  )
-  target <- c(target_date, target_time)
+  target <- get_imputation_targets(partial, date_imputation, time_imputation)
 
   for (c in components) {
     if (highest_imputation < dtm_level(imputation_levels[[c]])) {
@@ -537,31 +527,11 @@ impute_dtc_dtm <- function(dtc,
     imputed[[c]] <- if_else(is.na(partial[[c]]), target[[c]], partial[[c]])
   }
 
-  imputed_dtc <-
-    paste0(
-      paste(imputed[["year"]], imputed[["month"]], imputed[["day"]], sep = "-"),
-      "T",
-      paste(imputed[["hour"]], imputed[["minute"]], imputed[["second"]], sep = ":")
-    )
-
-  imputed_dtc <-
-    if_else(
-      str_detect(imputed_dtc, "x"),
-      NA_character_,
-      imputed_dtc
-    )
+  imputed <- impute_date_time(partial, target)
+  imputed_dtc <- format_imputed_dtc(imputed)
 
   if (date_imputation == "last") {
-    imputed_dtc <-
-      if_else(
-        is.na(partial[["day"]]),
-        strftime(
-          rollback(ymd_hms(imputed_dtc) + months(1)),
-          format = "%Y-%m-%dT%H:%M:%S",
-          tz = "UTC"
-        ),
-        imputed_dtc
-      )
+    imputed_dtc <- adjust_last_day_imputation(imputed_dtc, partial)
   }
 
   # Handle min_dates and max_dates argument ----
@@ -571,10 +541,6 @@ impute_dtc_dtm <- function(dtc,
     min_dates = min_dates,
     max_dates = max_dates
   )
-
-  if (highest_imputation == "Y" && is.null(min_dates) && is.null(max_dates)) {
-    warning("If `highest_impuation` = \"Y\" is specified, `min_dates` or `max_dates` should be specified respectively.") # nolint
-  }
 
   return(restricted)
 }
@@ -603,31 +569,18 @@ restrict_imputed_dtc_dtm <- function(dtc,
                                      imputed_dtc,
                                      min_dates,
                                      max_dates) {
-  if (!(is.null(min_dates) || length(min_dates) == 0) ||
-    !(is.null(max_dates) || length(max_dates) == 0)) {
-    suppress_warning(
-      { # nolint
-        # determine range of possible dates
-        min_dtc <-
-          impute_dtc_dtm(
-            dtc,
-            highest_imputation = "Y",
-            date_imputation = "first",
-            time_imputation = "first"
-          )
-        max_dtc <-
-          impute_dtc_dtm(
-            dtc,
-            highest_imputation = "Y",
-            date_imputation = "last",
-            time_imputation = "last"
-          )
-      },
-      # Suppress warning because we need to run without min/max dates but users should not
-      regexpr = "If `highest_impuation` = \"Y\" is specified, `min_dates` or `max_dates` should be specified respectively." # nolint
-    )
+  any_mindate <- !(is.null(min_dates) || length(min_dates) == 0)
+  any_maxdate <- !(is.null(max_dates) || length(max_dates) == 0)
+  if (any_mindate || any_maxdate) {
+    dtc_range <-
+      get_dt_dtm_range(
+        dtc,
+        create_datetime = TRUE
+      )
+    min_dtc <- dtc_range[["lower"]]
+    max_dtc <- dtc_range[["upper"]]
   }
-  if (!(is.null(min_dates) || length(min_dates) == 0)) {
+  if (any_mindate) {
     if (length(unique(c(length(imputed_dtc), unlist(lapply(min_dates, length))))) != 1) {
       cli_abort("Length of {.arg min_dates} do not match length of dates to be imputed.")
     }
@@ -644,7 +597,7 @@ restrict_imputed_dtc_dtm <- function(dtc,
       )
     }
   }
-  if (!(is.null(max_dates) || length(max_dates) == 0)) {
+  if (any_maxdate) {
     if (length(unique(c(length(imputed_dtc), unlist(lapply(max_dates, length))))) != 1) {
       cli_abort("Length of {.arg max_dates} do not match length of dates to be imputed.")
     }
@@ -719,7 +672,7 @@ compute_tmf <- function(dtc,
   valid_dtc <- is_valid_dtc(dtc)
   warn_if_invalid_dtc(dtc, valid_dtc)
 
-  partial <- get_partialdatetime(dtc)
+  partial <- get_partialdatetime(dtc, create_datetime = TRUE)
   highest_miss <- convert_blanks_to_na(vector("character", length(dtc)))
 
   # concatenate lubridate functions: `hour()`, `minute()`, `second()` to map over dtm input
