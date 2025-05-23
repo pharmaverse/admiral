@@ -1,16 +1,23 @@
 # This script:  data-raw/admiral_verify_templates.R
 
 # TODO:
-# - add `attr` to generated ADaM
 # - where code overlaps, make pharamversadam script and this one the same.
 
 # Assumptions/Questions:
 # - ignore *.rda files in admiral/data (per Ben)
 # - compares full ADaM - all rows (ie no reduction in number of rows in each dataset)
 # - use cli:: for messages/errors - YES
-# - use has loaded/attached `admiral` (library(admiral)). The script is NOT being run independently.
 
-#' (if were to add to `admiral` package)
+
+#' Directories used to find files:
+
+#' template_dir  location of template R files (inst/templates)
+#' 
+
+#'  tempdir() or cache_dir:  after running, templates place new ADaMs here
+#'  adam_old_dir : ADaMs downloaded from pharamverseadam 
+#'  adam_new_dir
+#' (IF we were to add to `admiral` package)
 #' @param pkg  package (ex:  "admiral )
 #' @param adams_names ADaM or CDISC name, without prefix or suffix  (ex:  adlb)
 #' @param adams_new  character vector of ADaM after template is run
@@ -27,9 +34,9 @@
 
 #' @title verify_templates
 #' @param pkg package (currently only admiral)
-#' @param ds  character vector of ADaM names.  Corresponding templates will be run.
+#' @param ds  character vector of ADaM names.  Corresponding to templates to run.
 #' @description:
-#' Generates ADaM from templates and compares to previously generated ADaM file
+#' Generates ADaM from templates and compares to previously generated ADaM file.
 #' (These are found in https:://github.com main branch pharmaverseadam).
 #'
 #' Much code taken from pharamavreseadam::create_adams_data.R
@@ -46,8 +53,6 @@ verify_templates <- function(pkg = "admiral", ds = c("adae")) {
 
   clean_cache() # clear all..
 
-  # TODO:   fct to remove remove old diffdf *.txt files
-
   pkg <- "admiral"
   if (pkg != "admiral") error("Curently, only admiral package is accepted.")
 
@@ -63,12 +68,13 @@ verify_templates <- function(pkg = "admiral", ds = c("adae")) {
   dir.create(paste0(x, "/old"))
   dir.create(paste0(x, "/diff"))
 
+  ?dir.create
+  
   # TODO: choose 1:
   # cache_dir and adam_new_dir are the SAME
   # cache_dir is where templates deposit new ADaM
   # adam_new_dir is used when reading from disk
   # list of important paths
-  ## path <<- list(
   path <- list(
     # use active package
     template_dir = "inst/templates",
