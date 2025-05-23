@@ -140,7 +140,7 @@
 #'
 #' - The groups for which new records are added are specified by the `by_vars`
 #'   argument. Here for each *subject* a record should be added. Thus
-#'   `by_vars = exprs(USUBJID)` is specified.
+#'   `by_vars = exprs(STUDYID, USUBJID)` is specified.
 #' - The sets of possible sleeping problems are passed through the `events`
 #'   argument as `event()` objects. Each event contains a `condition` which
 #'   may or may not be satisfied by each record (or possibly a group of
@@ -302,12 +302,12 @@
 #'   `mode` argument dependent on the `event()`.
 #'
 #'  - In first `event()`, since we simply seek the first time that
-#'    `CRIT1FL` is not `NA`, it's enough to specify the `condition`,
+#'    `CRIT1FL` is `"Y"`, it's enough to specify the `condition`,
 #'    because we inherit `order` and `mode` from the main
 #'    `derive_extreme_event()` call here which will automatically
 #'    select the first occurrence by `AVISITN`.
 #'  - In the second `event()`, we select the last record among the
-#'    full set of records where `CRIT1FL` are all `NA` by additionally
+#'    full set of records where `CRIT1FL` are all `"N"` by additionally
 #'    specifying `mode = "last"` within the `event()`.
 #'  - Note now the usage of `keep_source_vars = exprs(AVISITN)`
 #'    rather than `everything()` as in the previous example. This
@@ -316,17 +316,17 @@
 #'
 #' @code
 #' adhy <- tribble(
-#'   ~USUBJID, ~AVISITN,              ~CRIT1,      ~CRIT1FL,
-#'   "1",             1, "ALT > 2 times ULN", NA_character_,
-#'   "1",             2, "ALT > 2 times ULN", NA_character_,
-#'   "2",             1, "ALT > 2 times ULN", NA_character_,
+#'   ~USUBJID, ~AVISITN,              ~CRIT1, ~CRIT1FL,
+#'   "1",             1, "ALT > 2 times ULN", "N",
+#'   "1",             2, "ALT > 2 times ULN", "N",
+#'   "2",             1, "ALT > 2 times ULN", "N",
 #'   "2",             2, "ALT > 2 times ULN", "Y",
-#'   "2",             3, "ALT > 2 times ULN", NA_character_,
+#'   "2",             3, "ALT > 2 times ULN", "N",
 #'   "2",             4, "ALT > 2 times ULN", "Y"
 #' ) %>%
 #'   mutate(
-#'     PARAMCD = "ALKPH",
-#'     PARAM = "Alkaline Phosphatase (U/L)",
+#'     PARAMCD = "ALT",
+#'     PARAM = "ALT (U/L)",
 #'     STUDYID = "AB42"
 #'   )
 #'
@@ -335,11 +335,11 @@
 #'   by_vars = exprs(STUDYID, USUBJID),
 #'   events = list(
 #'     event(
-#'       condition = !is.na(CRIT1FL),
+#'       condition = CRIT1FL == "Y",
 #'       set_values_to = exprs(AVALC = "Y")
 #'     ),
 #'     event(
-#'       condition = is.na(CRIT1FL),
+#'       condition = CRIT1FL == "N",
 #'       mode = "last",
 #'       set_values_to = exprs(AVALC = "N")
 #'     )
@@ -349,11 +349,11 @@
 #'   mode = "first",
 #'   keep_source_vars = exprs(AVISITN),
 #'   set_values_to = exprs(
-#'     PARAMCD = "ALK2",
+#'     PARAMCD = "ALT2",
 #'     PARAM = "ALT > 2 times ULN"
 #'   )
 #' ) %>%
-#' select(-STUDYID)
+#'   select(-STUDYID)
 #'
 #' @caption A more complex example: Confirmed Best Overall Response
 #' (`first/last_cond_upper`, `join_type`, `source_datasets`)

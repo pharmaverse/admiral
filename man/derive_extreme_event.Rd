@@ -228,7 +228,7 @@ observation occurring at the latest day.
 \itemize{
 \item The groups for which new records are added are specified by the \code{by_vars}
 argument. Here for each \emph{subject} a record should be added. Thus
-\code{by_vars = exprs(USUBJID)} is specified.
+\code{by_vars = exprs(STUDYID, USUBJID)} is specified.
 \item The sets of possible sleeping problems are passed through the \code{events}
 argument as \code{event()} objects. Each event contains a \code{condition} which
 may or may not be satisfied by each record (or possibly a group of
@@ -414,12 +414,12 @@ As such, for this case now we need to vary our usage of the
 \code{mode} argument dependent on the \code{event()}.
 \itemize{
 \item In first \code{event()}, since we simply seek the first time that
-\code{CRIT1FL} is not \code{NA}, it's enough to specify the \code{condition},
+\code{CRIT1FL} is \code{"Y"}, it's enough to specify the \code{condition},
 because we inherit \code{order} and \code{mode} from the main
 \code{derive_extreme_event()} call here which will automatically
 select the first occurrence by \code{AVISITN}.
 \item In the second \code{event()}, we select the last record among the
-full set of records where \code{CRIT1FL} are all \code{NA} by additionally
+full set of records where \code{CRIT1FL} are all \code{"N"} by additionally
 specifying \code{mode = "last"} within the \code{event()}.
 \item Note now the usage of \code{keep_source_vars = exprs(AVISITN)}
 rather than \code{everything()} as in the previous example. This
@@ -428,17 +428,17 @@ the new records.
 }
 
 \if{html}{\out{<div class="sourceCode r">}}\preformatted{adhy <- tribble(
-  ~USUBJID, ~AVISITN,              ~CRIT1,      ~CRIT1FL,
-  "1",             1, "ALT > 2 times ULN", NA_character_,
-  "1",             2, "ALT > 2 times ULN", NA_character_,
-  "2",             1, "ALT > 2 times ULN", NA_character_,
+  ~USUBJID, ~AVISITN,              ~CRIT1, ~CRIT1FL,
+  "1",             1, "ALT > 2 times ULN", "N",
+  "1",             2, "ALT > 2 times ULN", "N",
+  "2",             1, "ALT > 2 times ULN", "N",
   "2",             2, "ALT > 2 times ULN", "Y",
-  "2",             3, "ALT > 2 times ULN", NA_character_,
+  "2",             3, "ALT > 2 times ULN", "N",
   "2",             4, "ALT > 2 times ULN", "Y"
 ) \%>\%
   mutate(
-    PARAMCD = "ALKPH",
-    PARAM = "Alkaline Phosphatase (U/L)",
+    PARAMCD = "ALT",
+    PARAM = "ALT (U/L)",
     STUDYID = "AB42"
   )
 
@@ -447,11 +447,11 @@ derive_extreme_event(
   by_vars = exprs(STUDYID, USUBJID),
   events = list(
     event(
-      condition = !is.na(CRIT1FL),
+      condition = CRIT1FL == "Y",
       set_values_to = exprs(AVALC = "Y")
     ),
     event(
-      condition = is.na(CRIT1FL),
+      condition = CRIT1FL == "N",
       mode = "last",
       set_values_to = exprs(AVALC = "N")
     )
@@ -461,22 +461,22 @@ derive_extreme_event(
   mode = "first",
   keep_source_vars = exprs(AVISITN),
   set_values_to = exprs(
-    PARAMCD = "ALK2",
+    PARAMCD = "ALT2",
     PARAM = "ALT > 2 times ULN"
   )
 ) \%>\%
-select(-STUDYID)
+  select(-STUDYID)
 #> # A tibble: 8 × 7
-#>   USUBJID AVISITN CRIT1             CRIT1FL PARAMCD PARAM                  AVALC
-#>   <chr>     <dbl> <chr>             <chr>   <chr>   <chr>                  <chr>
-#> 1 1             1 ALT > 2 times ULN <NA>    ALKPH   Alkaline Phosphatase … <NA> 
-#> 2 1             2 ALT > 2 times ULN <NA>    ALKPH   Alkaline Phosphatase … <NA> 
-#> 3 2             1 ALT > 2 times ULN <NA>    ALKPH   Alkaline Phosphatase … <NA> 
-#> 4 2             2 ALT > 2 times ULN Y       ALKPH   Alkaline Phosphatase … <NA> 
-#> 5 2             3 ALT > 2 times ULN <NA>    ALKPH   Alkaline Phosphatase … <NA> 
-#> 6 2             4 ALT > 2 times ULN Y       ALKPH   Alkaline Phosphatase … <NA> 
-#> 7 1             2 <NA>              <NA>    ALK2    ALT > 2 times ULN      N    
-#> 8 2             2 <NA>              <NA>    ALK2    ALT > 2 times ULN      Y    }\if{html}{\out{</div>}}}
+#>   USUBJID AVISITN CRIT1             CRIT1FL PARAMCD PARAM             AVALC
+#>   <chr>     <dbl> <chr>             <chr>   <chr>   <chr>             <chr>
+#> 1 1             1 ALT > 2 times ULN N       ALT     ALT (U/L)         <NA> 
+#> 2 1             2 ALT > 2 times ULN N       ALT     ALT (U/L)         <NA> 
+#> 3 2             1 ALT > 2 times ULN N       ALT     ALT (U/L)         <NA> 
+#> 4 2             2 ALT > 2 times ULN Y       ALT     ALT (U/L)         <NA> 
+#> 5 2             3 ALT > 2 times ULN N       ALT     ALT (U/L)         <NA> 
+#> 6 2             4 ALT > 2 times ULN Y       ALT     ALT (U/L)         <NA> 
+#> 7 1             2 <NA>              <NA>    ALT2    ALT > 2 times ULN N    
+#> 8 2             2 <NA>              <NA>    ALT2    ALT > 2 times ULN Y    }\if{html}{\out{</div>}}}
 \subsection{A more complex example: Confirmed Best Overall Response
 (\code{first/last_cond_upper}, \code{join_type}, \code{source_datasets})}{
 
