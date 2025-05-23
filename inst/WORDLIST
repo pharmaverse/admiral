@@ -9,6 +9,7 @@ ADNCA
 ADPC
 ADPP
 ADPPK
+ADRS
 ADSL
 ADVS
 ADaM
@@ -47,6 +48,7 @@ Basetype
 Bazett
 Bazett's
 Biologics
+CBOR
 CDISC
 CKD
 CMD
@@ -332,6 +334,7 @@ recoded
 renv
 repo
 reproducibility
+responder
 responders
 rlang
 roche
