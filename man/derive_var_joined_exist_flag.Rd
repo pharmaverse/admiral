@@ -28,6 +28,7 @@ derive_var_joined_exist_flag(
 The variables specified by the \code{by_vars} and \code{join_vars} arguments are expected to be in the dataset.
 
 \describe{
+\item{Permitted values}{a dataset, i.e., a \code{data.frame} or tibble}
 \item{Default value}{none}
 }}
 
@@ -37,6 +38,7 @@ The variables specified for \code{by_vars}, \code{join_vars}, and \code{order} a
 expected.
 
 \describe{
+\item{Permitted values}{a dataset, i.e., a \code{data.frame} or tibble}
 \item{Default value}{none}
 }}
 
@@ -46,6 +48,7 @@ The specified variables are used for joining the input
 dataset (\code{dataset}) with the additional dataset (\code{dataset_add}).
 
 \describe{
+\item{Permitted values}{list of variables created by \code{exprs()}, e.g., \code{exprs(USUBJID, VISIT)}}
 \item{Default value}{none}
 }}
 
@@ -56,6 +59,7 @@ The observations are ordered by the specified order.
 For handling of \code{NA}s in sorting variables see \href{../articles/generic.html#sort_order}{Sort Order}.
 
 \describe{
+\item{Permitted values}{list of variables created by \code{exprs()}, e.g., \code{exprs(USUBJID, VISIT)}}
 \item{Default value}{none}
 }}
 
@@ -64,6 +68,7 @@ For handling of \code{NA}s in sorting variables see \href{../articles/generic.ht
 The specified variable is added to the input dataset.
 
 \describe{
+\item{Permitted values}{an unquoted symbol, e.g., \code{AVAL}}
 \item{Default value}{none}
 }}
 
@@ -72,12 +77,16 @@ The specified variable is added to the input dataset.
 The specified variable is added to the input dataset (\code{dataset}) and the
 additional dataset (\code{dataset_add}). It is set to the observation number
 with respect to \code{order}. For each by group (\code{by_vars}) the observation
-number starts with \code{1}. The variable can be used in the conditions
-(\code{filter_join}, \code{first_cond_upper}, \code{first_cond_lower}). It is not included
-in the output dataset. It can also be used to flag consecutive observations
-or the last observation (see last example below).
+number starts with \code{1}. If there is more than one record for specific
+values for \code{by_vars} and \code{order}, all records get the same observation
+number. By default, a warning (see \code{check_type}) is issued in this case.
+The variable can be used in the conditions (\code{filter_join},
+\code{first_cond_upper}, \code{first_cond_lower}). It is not included in the output
+dataset. It can also be used to flag consecutive observations or the last
+observation (see last example below).
 
 \describe{
+\item{Permitted values}{an unquoted symbol, e.g., \code{AVAL}}
 \item{Default value}{\code{NULL}}
 }}
 
@@ -90,6 +99,7 @@ with suffix ".join". For example to flag all observations with \code{AVALC == "Y
 The \verb{*.join} variables are not included in the output dataset.
 
 \describe{
+\item{Permitted values}{list of variables created by \code{exprs()}, e.g., \code{exprs(USUBJID, VISIT)}}
 \item{Default value}{none}
 }}
 
@@ -126,6 +136,7 @@ certain observation before the current observation up to the current
 observation. For an example see the last example below.
 
 \describe{
+\item{Permitted values}{an unquoted condition, e.g., \code{AVISIT == "BASELINE"}}
 \item{Default value}{\code{NULL}}
 }}
 
@@ -141,6 +152,7 @@ functions which should not apply to all observations but only up to the
 confirmation assessment. For an example see the third example below.
 
 \describe{
+\item{Permitted values}{an unquoted condition, e.g., \code{AVISIT == "BASELINE"}}
 \item{Default value}{\code{NULL}}
 }}
 
@@ -157,7 +169,7 @@ The condition can include summary functions like \code{all()} or \code{any()}. T
 additional dataset is grouped by the by variables (\code{by_vars}).
 
 \describe{
-\item{Permitted values}{a condition}
+\item{Permitted values}{an unquoted condition, e.g., \code{AVISIT == "BASELINE"}}
 \item{Default value}{\code{NULL}}
 }}
 
@@ -173,18 +185,21 @@ confirmation observation the response is "CR" or "NE" and there is at most
 one "NE".
 
 \describe{
+\item{Permitted values}{an unquoted condition, e.g., \code{AVISIT == "BASELINE"}}
 \item{Default value}{none}
 }}
 
 \item{true_value}{Value of \code{new_var} for flagged observations
 
 \describe{
+\item{Permitted values}{a character scalar, i.e., a character vector of length one}
 \item{Default value}{\code{"Y"}}
 }}
 
 \item{false_value}{Value of \code{new_var} for observations not flagged
 
 \describe{
+\item{Permitted values}{a character scalar, i.e., a character vector of length one}
 \item{Default value}{\code{NA_character_}}
 }}
 
@@ -195,7 +210,7 @@ if the observations of the input dataset are not unique with respect to the
 by variables and the order.
 
 \describe{
-\item{Permitted values}{\code{"none"}, \code{"warning"}, \code{"error"}}
+\item{Permitted values}{\code{"none"}, \code{"message"}, \code{"warning"}, \code{"error"}}
 \item{Default value}{\code{"warning"}}
 }}
 }
