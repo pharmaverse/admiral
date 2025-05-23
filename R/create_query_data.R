@@ -357,10 +357,10 @@ get_terms_from_db <- function(version,
     error = function(err) {
       cli_abort(
         c(
-          "An error occurred when calling the internal function:",
-          "Calling {.code fun(basket_select = {definition},
+          "An error occurred when calling {get_terms_from_db()}",
+          "Check values for {.code basket_select = {definition},
           version = {version}, keep_id = {expect_grpid},
-          temp_env = {temp_env})} caused the following error:",
+          temp_env = {temp_env}} which caused the following error:",
           conditionMessage(err)
         )
       )

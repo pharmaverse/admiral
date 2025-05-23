@@ -597,14 +597,15 @@ test_that("format.basket_select Test 24: formatting is correct (name specified)"
   )
 })
 
-# Define a mock function that throws an error
-error_fun <- function(...) {
-  stop("This is a simulated error.")
-}
 
 ## Test 25: get_terms_from_db error handling with cli_abort works correctly ----
 test_that("format.basket_select Test 25:  error handling works correctly", {
-  expect_error({
+
+  error_fun <- function(...) {
+    stop("This is a simulated error.")
+  }
+
+    expect_error({
     tryCatch(
       get_terms_from_db(
         version = "test_version",
