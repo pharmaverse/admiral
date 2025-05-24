@@ -214,3 +214,38 @@ test_that("call_derivation Test 8: Error is thrown if duplicate parameters", {
     params(dtc = VSDTC, dtc = VSDTC, new_vars_prefix = "A")
   )
 })
+
+## Test 9: Test new environment when variable_env != fixed_env  ----
+# ---- call_derivation Test 9: Test new environment when variable_env != fixed_env  ----
+test_that("call_derivation Test 9: Test new environment when variable_env != fixed_env", {
+  input <- pharmaversesdtm::ae[sample(seq_len(nrow(pharmaversesdtm::ae)), 1000), ] %>%
+    left_join(admiral_adsl, by = "USUBJID")
+
+  # Create a variable in a call_derivation environment
+  my_env <- new.env()
+  my_env$date_imp <- "first"
+  params_in_env <- with(my_env, params(
+    dtc = AESTDTC,
+    date_imputation = date_imp,
+    new_vars_prefix = "AST"
+  ))
+
+  expected_output <- input %>%
+    derive_vars_dt(
+      new_vars_prefix = "AST",
+      dtc = AESTDTC,
+      date_imputation = "first",
+      min_dates = exprs(TRTSDT),
+      max_dates = exprs(TRTEDT)
+    )
+
+  actual_output <- call_derivation(
+    dataset = input,
+    derivation = derive_vars_dt,
+    variable_params = list(params_in_env),
+    min_dates = exprs(TRTSDT),
+    max_dates = exprs(TRTEDT)
+  )
+
+  expect_dfs_equal(expected_output, actual_output, keys = c("USUBJID", "AESEQ"))
+})
