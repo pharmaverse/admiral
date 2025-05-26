@@ -37,6 +37,11 @@ the derivation is called for all subsets. (#2645)
 = "before"` or `join_type = "after"` and `dataset` and `dataset_add` differ or
 the `filter_add` argument is used. (#2863)
 
+- The function `derive_locf_records()` was updated to include two new arguments: `id_vars_ref` and `imputation`.
+  The `id_vars_ref` argument allows users to select the variables to group by in the reference dataset (`dataset_ref`) 
+  when determining which observations to add to the input dataset. The `imputation` argument lets users decide whether 
+  to update `analysis_var` when its value is `NA` ("update"), or to add a new observation instead ("add" and "update_add"). (#2694) (#2680) (#2717)
+
 ## Breaking Changes
 
 - Lab grading metadata `atoxgr_criteria_ctcv4()`, `atoxgr_criteria_ctcv5()` and `atoxgr_criteria_daids()` variable `SI_UNIT_CHECK` renamed to `UNIT_CHECK` (#2557).
