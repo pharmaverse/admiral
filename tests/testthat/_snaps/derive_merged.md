@@ -125,3 +125,14 @@
       3 ST42-3  M     NOR     ST42          NA
       4 ST42-4  F     UGA     ST42          NA
 
+# derive_var_merged_summary Test 28: error if no summary function
+
+    Code
+      derive_var_merged_summary(adbds, dataset_add = adbds, by_vars = exprs(AVISIT),
+      new_vars = exprs(MEANVIS = AVAL / 2))
+    Condition
+      Error:
+      ! After summarising, the dataset contains duplicate records with respect to `AVISIT`.
+      Please check `new_vars` if summary functions like `mean()`, `sum()`, ... are used on the right hand side.
+      i Run `admiral::get_duplicates_dataset()` to access the duplicate records
+

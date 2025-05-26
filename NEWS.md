@@ -10,6 +10,12 @@
     - The output of the structured examples used for complex functions is
     displayed in the help pages in RStudio.
     
+- New function `derive_vars_joined_summary()` to derive summary variables from
+  selected records of an additional dataset where the selection depends on
+  variables from both the input dataset and the additional dataset. For example,
+  the cumulative dose up to each adverse event in `ADAE` can be derived with the
+  new function. (#2652)
+
 - New lab grading metadata for US (Conventional) units for the three grading criteria
 `admiral` already produces for SI units (#2557).
     - `atoxgr_criteria_ctcv4_uscv` (NCI-CTCAEv4 criteria)
@@ -39,6 +45,7 @@ the `filter_add` argument is used. (#2863)
 ## Breaking Changes
 
 - Lab grading metadata `atoxgr_criteria_ctcv4()`, `atoxgr_criteria_ctcv5()` and `atoxgr_criteria_daids()` variable `SI_UNIT_CHECK` renamed to `UNIT_CHECK`. (#2557)
+
 - The values of the variable specified for `tmp_obs_nr_var` in
 `derive_vars_joined()`, `derive_var_joined_exist_flag()`, `filter_joined()` are
 now populated differently if there are multiple records in `dataset` or
