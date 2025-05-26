@@ -12,7 +12,6 @@ Authors@R: c(
     person("Dinakar", "Kulkarni", role = "aut"),
     person("Edoardo", "Mancini", role = "aut",
            comment = c(ORCID = "0009-0006-4899-8641")),
-    person("Sadchla", "Mascary", role = "aut"),
     person("Gordon", "Miller", role = "aut"),
     person("Jim", "Rothstein", role = "aut",
            comment = c(ORCID = "0009-0009-8659-6071")),
@@ -76,6 +75,6 @@ Config/testthat/edition: 3
 Encoding: UTF-8
 Language: en-US
 LazyData: true
-Roxygen: list(markdown = TRUE, roclets = c("collate", "namespace",
+Roxygen: list(markdown = TRUE, roclets = c("rd", "collate", "namespace",
     "admiraldev::rdx_roclet"))
 RoxygenNote: 7.3.2

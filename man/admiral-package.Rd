@@ -35,7 +35,6 @@ Authors:
   \item Fanny Gautier
   \item Dinakar Kulkarni
   \item Edoardo Mancini (\href{https://orcid.org/0009-0006-4899-8641}{ORCID})
-  \item Sadchla Mascary
   \item Gordon Miller
   \item Jim Rothstein (\href{https://orcid.org/0009-0009-8659-6071}{ORCID})
   \item Sophie Shapcott
