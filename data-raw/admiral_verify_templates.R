@@ -5,18 +5,17 @@
 
 # Assumptions/Questions:
 # - ignore *.rda files in admiral/data (per Ben)
-# - compares full ADaM - all rows (ie no reduction in number of rows in each dataset)
+# - compares full ADaM - ie all rows 
+# - for developer use and developer has run load_all()
 # - use cli:: for messages/errors - YES
 
 
 #' Directories used to find files:
 
-#' template_dir  location of template R files (inst/templates)
-#'
-
-#'  tempdir() or cache_dir:  after running, templates place new ADaMs here
+#'  template_dir  location of template R files (inst/templates)
+#'  adam_new_dir (aka tempdir() or cache_dir ):  after running, templates place new ADaMs here
 #'  adam_old_dir : ADaMs downloaded from pharamverseadam
-#'  adam_new_dir
+
 #' (IF we were to add to `admiral` package)
 #' @param pkg  package (ex:  "admiral )
 #' @param adams_names ADaM or CDISC name, without prefix or suffix  (ex:  adlb)
@@ -30,6 +29,8 @@
 #'   ~/.config/R/admiral_templates_data
 #' @param adam_old_dir  temporary directory where old ADaMs
 #'   (downloaded from github.com) are stored
+#' @param adam_new_dir  temporary directory where new ADaMs
+#'   (created by templates) are stored
 
 
 #' @title verify_templates
@@ -46,8 +47,7 @@
 #'
 #' @export
 verify_templates <- function(pkg = "admiral", ds = c("adae")) {
-  # SETUP ----
-  # TODO: remove prior ADaM downloads
+  # TODO: delete all remove prior ADaM downloads
   # ASSUME:  (1) user is running script for 1st time and no temporary directories exist yet, OR
   #          (2) user is running script a 2nd time and must clear old
 
@@ -65,10 +65,8 @@ verify_templates <- function(pkg = "admiral", ds = c("adae")) {
 
   # temporary directories
   x <- tempdir()
-  dir.create(paste0(x, "/old"))
-  dir.create(paste0(x, "/diff"))
-
-  ?dir.create
+  dir.create(file.path(x, "old"))
+  dir.create(file.path(x, "diff"))
 
   # TODO: choose 1:
   # cache_dir and adam_new_dir are the SAME
@@ -76,13 +74,15 @@ verify_templates <- function(pkg = "admiral", ds = c("adae")) {
   # adam_new_dir is used when reading from disk
   # list of important paths
   path <- list(
-    # use active package
     template_dir = "inst/templates",
     cache_dir = tools::R_user_dir("admiral_templates_data", which = "cache"),
     adam_new_dir = tools::R_user_dir("admiral_templates_data", which = "cache"),
-    adam_old_dir = paste0(x, "/old"),
-    diff = paste0(x, "/diff")
+    adam_old_dir = file.path(x, "old"),
+    diff = file.path(x, "diff")
   )
+
+  # TODO: if dir exists then empty it ; if not exist create it. 
+  #lapply(path, function(x)  if( x %in% c("template_dir", "cache_dir")!exists(x)) dir.create(x))
 
   # gather all templates for this pkg (12 found) ----
   templates <- list.files(path$template_dir, pattern = "ad_")
@@ -128,10 +128,6 @@ verify_templates <- function(pkg = "admiral", ds = c("adae")) {
     )
   })
   names(obj) <- adam_names
-
-  # done !
-  obj
-  names(obj)
 
   sprintf("---- Run templates\n")
   compare_list <- purrr::map(adam_names, .progress = TRUE, function(adam) {
@@ -223,9 +219,8 @@ save_rda <- function(data, file_path, new_name) {
 #'     # A file containing label information to remove from attributes of the datasets
 #'     compare_file=get_R_data_path("_label_files/")
 compare <- function(base, compare, keys, file = NULL) {
-  #------------------------ to be removed ?
-  attr(base, "label") <- NULL
-  attr(base, "_xportr.df_arg_") <- NULL
+
+  #--------debugging--------- to be removed ?
   e <- globalenv()
   e$old <- base
   e$new <- compare
