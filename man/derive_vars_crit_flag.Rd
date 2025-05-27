@@ -17,13 +17,14 @@ derive_vars_crit_flag(
 \item{dataset}{Input dataset
 
 \describe{
+\item{Permitted values}{a dataset, i.e., a \code{data.frame} or tibble}
 \item{Default value}{none}
 }}
 
 \item{crit_nr}{The criterion number, i.e., the \code{y} in \code{CRITy}
 
 \describe{
-\item{Permitted values}{a positive integer}
+\item{Permitted values}{a positive integer, e.g. \code{2} or \code{5}}
 \item{Default value}{\code{1}}
 }}
 
@@ -33,8 +34,7 @@ See description of the \code{values_yn} argument for details on how the
 \code{CRITyFL} variable is populated.
 
 \describe{
-\item{Permitted values}{an unquoted expression which evaluates to a logical (in
-\code{dataset})}
+\item{Permitted values}{an unquoted condition, e.g., \code{AVISIT == "BASELINE"}}
 \item{Default value}{none}
 }}
 
@@ -61,7 +61,7 @@ Otherwise, the \code{CRITyFL} variable is set to \code{"Y"} if the condition
 (\code{condition}) evaluates to \code{TRUE}, and to \code{NA} otherwise.
 
 \describe{
-\item{Permitted values}{\code{TRUE}, \code{FALSE}}
+\item{Permitted values}{\code{"TRUE"}, \code{"FALSE"}}
 \item{Default value}{\code{FALSE}}
 }}
 
@@ -71,7 +71,7 @@ If set to \code{TRUE}, the \code{CRITyFN} variable is created. It is set to \cod
 \code{CRITyFL == "Y"}, it set to \code{0} if \code{CRITyFL == "N"}, and to \code{NA} otherwise.
 
 \describe{
-\item{Permitted values}{\code{TRUE}, \code{FALSE}}
+\item{Permitted values}{\code{"TRUE"}, \code{"FALSE"}}
 \item{Default value}{\code{FALSE}}
 }}
 }
@@ -84,7 +84,7 @@ The function derives ADaM compliant criterion flags, e.g., to facilitate
 subgroup analyses.
 
 If a criterion flag can't be derived with this function, the derivation is
-not ADaM compliant. It helps to ensure that
+not ADaM compliant. It helps to ensure that:
 \itemize{
 \item the condition of the criterion depends only on variables of the same row,
 \item the \code{CRITyFL} is populated with valid values, i.e, either \code{"Y"} and \code{NA} or
@@ -98,35 +98,6 @@ fulfilled and to \code{NA} otherwise if \code{CRITyFL} is populated with \code{"
 \code{NA}
 }
 }
-}
-\examples{
-library(tibble)
-adbds <- tribble(
-  ~PARAMCD, ~AVAL,
-  "AST",    42,
-  "AST",    52,
-  "AST",    NA_real_,
-  "ALT",    33,
-  "ALT",    51
-)
-
-# Create a criterion flag with values "Y" and NA
-derive_vars_crit_flag(
-  adbds,
-  condition = AVAL > 50,
-  description = "Absolute value > 50"
-)
-
-# Create criterion flag with values "Y", "N", and NA and parameter dependent
-# criterion description
-derive_vars_crit_flag(
-  adbds,
-  crit_nr = 2,
-  condition = AVAL > 50,
-  description = paste(PARAMCD, "> 50"),
-  values_yn = TRUE,
-  create_numeric_flag = TRUE
-)
 }
 \seealso{
 BDS-Findings Functions that returns variable appended to dataset: 
@@ -143,3 +114,148 @@ BDS-Findings Functions that returns variable appended to dataset:
 }
 \concept{der_bds_findings}
 \keyword{der_bds_findings}
+\section{Examples}{
+\subsection{Data setup}{
+
+The following examples use the BDS dataset below as a basis.
+
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{library(tibble, warn.conflicts = FALSE)
+
+adbds <- tribble(
+  ~PARAMCD, ~AVAL,
+  "AST",    42,
+  "AST",    52,
+  "AST",    NA_real_,
+  "ALT",    33,
+  "ALT",    51
+)}\if{html}{\out{</div>}}}
+\subsection{Creating a simple criterion flag with values \code{"Y"} and \code{NA}
+(\code{condition}, \code{description})}{
+
+The following call is a simple application of \code{derive_vars_crit_flag()}
+to derive a criterion flag/variable pair in a BDS dataset.
+\itemize{
+\item The new variables are named \code{CRIT1}/\code{CRITFL} because the argument
+\code{crit_nr} has not been passed.
+\item Since the argument \code{values_yn} has also not been passed and thus is
+set to its default of \code{FALSE}, \code{CRITFL} is set to \code{Y} only if the
+condition \code{condition} evaluates to \code{TRUE}. For example, in both the
+first and third records, where \code{condition} is respectively \code{FALSE}
+and \code{NA}, we set \code{CRITFL = NA_character_}. The fourth record also
+exhibits this behavior. Also, as per CDISC standards, in this case
+\code{CRIT1} is populated only for records where \code{condition} evaluates
+to \code{TRUE}.
+}
+
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{derive_vars_crit_flag(
+  adbds,
+  condition = AVAL > 50,
+  description = "Absolute value > 50"
+)
+#> # A tibble: 5 × 4
+#>   PARAMCD  AVAL CRIT1FL CRIT1              
+#>   <chr>   <dbl> <chr>   <chr>              
+#> 1 AST        42 <NA>    <NA>               
+#> 2 AST        52 Y       Absolute value > 50
+#> 3 AST        NA <NA>    <NA>               
+#> 4 ALT        33 <NA>    <NA>               
+#> 5 ALT        51 Y       Absolute value > 50}\if{html}{\out{</div>}}
+
+The \code{description} argument also accepts expressions which depend
+on other variables in the input dataset. This can be useful to
+dynamically populate \code{CRITx}, for instance in the case below where
+we improve the \code{CRIT1} text because the same flag/variable pair is
+actually being used for multiple parameters.
+
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{derive_vars_crit_flag(
+  adbds,
+  condition = AVAL > 50,
+  description = paste(PARAMCD, "> 50"),
+)
+#> # A tibble: 5 × 4
+#>   PARAMCD  AVAL CRIT1FL CRIT1   
+#>   <chr>   <dbl> <chr>   <chr>   
+#> 1 AST        42 <NA>    <NA>    
+#> 2 AST        52 Y       AST > 50
+#> 3 AST        NA <NA>    <NA>    
+#> 4 ALT        33 <NA>    <NA>    
+#> 5 ALT        51 Y       ALT > 50}\if{html}{\out{</div>}}}
+\subsection{Creating a criterion flag with values \code{"Y"}, \code{N} and \code{NA}
+(\code{values_yn})}{
+
+The next call builds on the previous example by using
+\code{value_yn = TRUE} to additionally distinguish between the cases
+where the condition \code{condition} is \code{FALSE} and those where it is
+not evaluable at all.
+\itemize{
+\item As compared to the previous example, for the first record \code{condition}
+evaluates to \code{FALSE} and so we set \code{CRIT1FL = "N"}, whereas for the
+third record, \code{condition} evaluates to \code{NA} because \code{AVAL} is
+missing and so we set \code{CRIT1FL = NA_character_}.
+\item Note also that because we are using the values \code{"Y"}, \code{"N"} and \code{NA}
+for the flag, as per CDISC standards \code{CRIT1} is now
+populated for all records rather than just for the \code{"Y"} records.
+}
+
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{derive_vars_crit_flag(
+  adbds,
+  condition = AVAL > 50,
+  description = paste(PARAMCD, "> 50"),
+  values_yn = TRUE
+)
+#> # A tibble: 5 × 4
+#>   PARAMCD  AVAL CRIT1FL CRIT1   
+#>   <chr>   <dbl> <chr>   <chr>   
+#> 1 AST        42 N       AST > 50
+#> 2 AST        52 Y       AST > 50
+#> 3 AST        NA <NA>    AST > 50
+#> 4 ALT        33 N       ALT > 50
+#> 5 ALT        51 Y       ALT > 50}\if{html}{\out{</div>}}
+
+If the user wishes to set the criterion flag to \code{"N"} whenever
+the condition is not fulfilled, \code{condition} can be updated using
+an \code{if_else} call, where the third argument determines the behavior
+when the condition \code{condition} is not evaluable.
+
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{derive_vars_crit_flag(
+  adbds,
+  condition = if_else(AVAL > 50, TRUE, FALSE, FALSE),
+  description = paste(PARAMCD, "> 50"),
+  values_yn = TRUE
+)
+#> # A tibble: 5 × 4
+#>   PARAMCD  AVAL CRIT1FL CRIT1   
+#>   <chr>   <dbl> <chr>   <chr>   
+#> 1 AST        42 N       AST > 50
+#> 2 AST        52 Y       AST > 50
+#> 3 AST        NA N       AST > 50
+#> 4 ALT        33 N       ALT > 50
+#> 5 ALT        51 Y       ALT > 50}\if{html}{\out{</div>}}}
+\subsection{Specifying the criterion variable/flag number and creating
+a numeric flag (\code{crit_nr}, \code{create_numeric_flag}).}{
+
+The user can manually specify the criterion variable/flag number
+to use to name \code{CRITx}/\code{CRITxFL} by passing the \code{crit_nr} argument. This
+may be necessary if, for instance, other criterion flags already exist
+in the input dataset.
+
+The user can also choose to create an additional, equivalent numeric
+flag \code{CRITxFN} by setting \code{create_numeric_flag} to \code{TRUE}.
+
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{derive_vars_crit_flag(
+  adbds,
+  condition = AVAL > 50,
+  description = paste(PARAMCD, "> 50"),
+  values_yn = TRUE,
+  crit_nr = 2,
+  create_numeric_flag = TRUE
+)
+#> # A tibble: 5 × 5
+#>   PARAMCD  AVAL CRIT2FL CRIT2    CRIT2FN
+#>   <chr>   <dbl> <chr>   <chr>      <int>
+#> 1 AST        42 N       AST > 50       0
+#> 2 AST        52 Y       AST > 50       1
+#> 3 AST        NA <NA>    AST > 50      NA
+#> 4 ALT        33 N       ALT > 50       0
+#> 5 ALT        51 Y       ALT > 50       1}\if{html}{\out{</div>}}}}
+

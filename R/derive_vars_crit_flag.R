@@ -6,7 +6,7 @@
 #' subgroup analyses.
 #'
 #' If a criterion flag can't be derived with this function, the derivation is
-#' not ADaM compliant. It helps to ensure that
+#' not ADaM compliant. It helps to ensure that:
 #' - the condition of the criterion depends only on variables of the same row,
 #' - the `CRITyFL` is populated with valid values, i.e, either `"Y"` and `NA` or
 #'  `"Y"`, `"N"`, and `NA`,
@@ -18,16 +18,20 @@
 #'   `NA`
 #'
 #' @param dataset Input dataset
+#'
+#' @permitted [dataset]
+#'
 #' @param crit_nr The criterion number, i.e., the `y` in `CRITy`
 #'
-#' @permitted a positive integer
+#' @permitted [pos_int]
+#'
 #' @param condition Condition for flagging records
 #'
 #'   See description of the `values_yn` argument for details on how the
 #'   `CRITyFL` variable is populated.
 #'
-#' @permitted an unquoted expression which evaluates to a logical (in
-#'    `dataset`)
+#' @permitted [condition]
+#'
 #' @param description The description of the criterion
 #'
 #'   The `CRITy` variable is set to the specified value.
@@ -35,8 +39,11 @@
 #'   An expression can be specified to set the value depending on the parameter.
 #'   Please note that the value must be constant within a parameter.
 #'
+#' @permitted [char_scalar]
+#'
 #' @permitted an unquoted expression which evaluates to a character
 #'    (in `dataset`)
+#'
 #' @param values_yn Should `"Y"` and `"N"` be used for `CRITyFL`?
 #'
 #'   If set to `TRUE`, the `CRITyFL` variable is set to `"Y"` if the condition
@@ -46,13 +53,15 @@
 #'   Otherwise, the `CRITyFL` variable is set to `"Y"` if the condition
 #'   (`condition`) evaluates to `TRUE`, and to `NA` otherwise.
 #'
-#' @permitted `TRUE`, `FALSE`
+#' @permitted [boolean]
+#'
 #' @param create_numeric_flag Create a numeric flag?
 #'
 #'   If set to `TRUE`, the `CRITyFN` variable is created. It is set to `1` if
 #'   `CRITyFL == "Y"`, it set to `0` if `CRITyFL == "N"`, and to `NA` otherwise.
 #'
-#' @permitted `TRUE`, `FALSE`
+#' @permitted [boolean]
+#'
 #' @return The input dataset with the variables `CRITy`, `CRITyFL`, and
 #'   optionally `CRITyFN` added.
 #'
@@ -61,8 +70,15 @@
 #'
 #' @export
 #'
-#' @examples
-#' library(tibble)
+#' @examplesx
+#'
+#' @caption Data setup
+#'
+#' @info The following examples use the BDS dataset below as a basis.
+#'
+#' @code
+#' library(tibble, warn.conflicts = FALSE)
+#'
 #' adbds <- tribble(
 #'   ~PARAMCD, ~AVAL,
 #'   "AST",    42,
@@ -72,21 +88,98 @@
 #'   "ALT",    51
 #' )
 #'
-#' # Create a criterion flag with values "Y" and NA
+#' @caption Creating a simple criterion flag with values `"Y"` and `NA`
+#'   (`condition`, `description`)
+#'
+#' @info The following call is a simple application of `derive_vars_crit_flag()`
+#'   to derive a criterion flag/variable pair in a BDS dataset.
+#'
+#'   - The new variables are named `CRIT1`/`CRITFL` because the argument
+#'     `crit_nr` has not been passed.
+#'   - Since the argument `values_yn` has also not been passed and thus is
+#'     set to its default of `FALSE`, `CRITFL` is set to `Y` only if the
+#'     condition `condition` evaluates to `TRUE`. For example, in both the
+#'     first and third records, where `condition` is respectively `FALSE`
+#'     and `NA`, we set `CRITFL = NA_character_`. The fourth record also
+#'     exhibits this behavior. Also, as per CDISC standards, in this case
+#'     `CRIT1` is populated only for records where `condition` evaluates
+#'     to `TRUE`.
+#'
+#' @code
 #' derive_vars_crit_flag(
 #'   adbds,
 #'   condition = AVAL > 50,
 #'   description = "Absolute value > 50"
 #' )
 #'
-#' # Create criterion flag with values "Y", "N", and NA and parameter dependent
-#' # criterion description
+#' @info The `description` argument also accepts expressions which depend
+#'   on other variables in the input dataset. This can be useful to
+#'   dynamically populate `CRITx`, for instance in the case below where
+#'   we improve the `CRIT1` text because the same flag/variable pair is
+#'   actually being used for multiple parameters.
+#'
+#' @code
 #' derive_vars_crit_flag(
 #'   adbds,
-#'   crit_nr = 2,
+#'   condition = AVAL > 50,
+#'   description = paste(PARAMCD, "> 50"),
+#' )
+#'
+#' @caption Creating a criterion flag with values `"Y"`, `N` and `NA`
+#'   (`values_yn`)
+#'
+#' @info The next call builds on the previous example by using
+#'  `value_yn = TRUE` to additionally distinguish between the cases
+#'   where the condition `condition` is `FALSE` and those where it is
+#'   not evaluable at all.
+#'
+#'   - As compared to the previous example, for the first record `condition`
+#'     evaluates to `FALSE` and so we set `CRIT1FL = "N"`, whereas for the
+#'     third record, `condition` evaluates to `NA` because `AVAL` is
+#'     missing and so we set `CRIT1FL = NA_character_`.
+#'   - Note also that because we are using the values `"Y"`, `"N"` and `NA`
+#'     for the flag, as per CDISC standards `CRIT1` is now
+#'     populated for all records rather than just for the `"Y"` records.
+#'
+#' @code
+#' derive_vars_crit_flag(
+#'   adbds,
+#'   condition = AVAL > 50,
+#'   description = paste(PARAMCD, "> 50"),
+#'   values_yn = TRUE
+#' )
+#'
+#' @info If the user wishes to set the criterion flag to `"N"` whenever
+#'   the condition is not fulfilled, `condition` can be updated using
+#'   an `if_else` call, where the third argument determines the behavior
+#'   when the condition `condition` is not evaluable.
+#'
+#' @code
+#' derive_vars_crit_flag(
+#'   adbds,
+#'   condition = if_else(AVAL > 50, TRUE, FALSE, FALSE),
+#'   description = paste(PARAMCD, "> 50"),
+#'   values_yn = TRUE
+#' )
+#'
+#' @caption Specifying the criterion variable/flag number and creating
+#'   a numeric flag (`crit_nr`, `create_numeric_flag`).
+#'
+#' @info The user can manually specify the criterion variable/flag number
+#'   to use to name `CRITx`/`CRITxFL` by passing the `crit_nr` argument. This
+#'   may be necessary if, for instance, other criterion flags already exist
+#'   in the input dataset.
+#'
+#'   The user can also choose to create an additional, equivalent numeric
+#'   flag `CRITxFN` by setting `create_numeric_flag` to `TRUE`.
+#'
+#' @code
+#' derive_vars_crit_flag(
+#'   adbds,
 #'   condition = AVAL > 50,
 #'   description = paste(PARAMCD, "> 50"),
 #'   values_yn = TRUE,
+#'   crit_nr = 2,
 #'   create_numeric_flag = TRUE
 #' )
 derive_vars_crit_flag <- function(dataset,
