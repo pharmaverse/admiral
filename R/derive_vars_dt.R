@@ -48,8 +48,8 @@
 #'
 #' @examplesx
 #'
-#' @caption Example 1
-#' @info thing
+#' @caption Create ASTDT and ASTDTF
+#' @info No imputation for partial date
 #'
 #' @code
 #' library(tibble)
@@ -66,12 +66,6 @@
 #'   ""
 #' )
 #'
-#' @caption Example 2
-#' @info thing
-#'
-#' @code
-#' # Create ASTDT and ASTDTF
-#' # No imputation for partial date
 #' derive_vars_dt(
 #'   mhdt,
 #'   new_vars_prefix = "AST",

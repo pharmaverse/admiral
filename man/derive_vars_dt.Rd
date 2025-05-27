@@ -187,9 +187,9 @@ Date/Time Derivation Functions that returns variable appended to dataset:
 \keyword{der_date_time}
 \keyword{der_gen}
 \section{Examples}{
-\subsection{Example 1}{
+\subsection{Create ASTDT and ASTDTF}{
 
-thing
+No imputation for partial date
 
 \if{html}{\out{<div class="sourceCode r">}}\preformatted{library(tibble)
 library(lubridate)
@@ -203,13 +203,8 @@ mhdt <- tribble(
   "2019",
   "2019---07",
   ""
-)}\if{html}{\out{</div>}}}
-\subsection{Example 2}{
+)
 
-thing
-
-\if{html}{\out{<div class="sourceCode r">}}\preformatted{# Create ASTDT and ASTDTF
-# No imputation for partial date
 derive_vars_dt(
   mhdt,
   new_vars_prefix = "AST",
