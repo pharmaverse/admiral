@@ -82,7 +82,7 @@ verify_templates <- function(pkg = "admiral", ds = c("adae")) {
   )
 
   # TODO: if dir exists then empty it ; if not exist create it.
-  #lapply(path, function(x)  if( x %in% c("template_dir", "cache_dir")!exists(x)) dir.create(x))
+  # lapply(path, function(x)  if( x %in% c("template_dir", "cache_dir")!exists(x)) dir.create(x))
 
   # gather all templates for this pkg (12 found) ----
   templates <- list.files(path$template_dir, pattern = "ad_")
@@ -219,7 +219,6 @@ save_rda <- function(data, file_path, new_name) {
 #'     # A file containing label information to remove from attributes of the datasets
 #'     compare_file=get_R_data_path("_label_files/")
 compare <- function(base, compare, keys, file = NULL) {
-
   # DISCUSS
   #--------debugging--------- remove OR save as new save_debug( , debug=FALSE) function
   e <- globalenv()
