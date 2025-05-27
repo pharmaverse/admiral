@@ -21,12 +21,14 @@ derive_var_merged_ef_msrc(
 The variables specified by the \code{by_vars} argument are expected to be in the dataset.
 
 \describe{
+\item{Permitted values}{a dataset, i.e., a \code{data.frame} or tibble}
 \item{Default value}{none}
 }}
 
 \item{by_vars}{Grouping variables
 
 \describe{
+\item{Permitted values}{list of variables created by \code{exprs()}, e.g., \code{exprs(USUBJID, VISIT)}}
 \item{Default value}{none}
 }}
 
@@ -38,6 +40,7 @@ A list of \code{flag_event()} objects is expected. For each event the condition
 variable is set to \code{true_value}.
 
 \describe{
+\item{Permitted values}{a list of \code{flag_event()} objects}
 \item{Default value}{none}
 }}
 
@@ -47,6 +50,7 @@ A named list of datasets is expected. The \code{dataset_name} field of
 \code{flag_event()} refers to the dataset provided in the list.
 
 \describe{
+\item{Permitted values}{named list of datasets, e.g., \code{list(adsl = adsl, ae = ae)}}
 \item{Default value}{none}
 }}
 
@@ -55,6 +59,7 @@ A named list of datasets is expected. The \code{dataset_name} field of
 The specified variable is added to the input dataset.
 
 \describe{
+\item{Permitted values}{an unquoted symbol, e.g., \code{AVAL}}
 \item{Default value}{none}
 }}
 
@@ -68,6 +73,7 @@ The values of \code{true_value}, \code{false_value}, and \code{missing_value} mu
 the same type.
 
 \describe{
+\item{Permitted values}{a character scalar, i.e., a character vector of length one}
 \item{Default value}{\code{"Y"}}
 }}
 
@@ -81,6 +87,7 @@ The values of \code{true_value}, \code{false_value}, and \code{missing_value} mu
 the same type.
 
 \describe{
+\item{Permitted values}{a character scalar, i.e., a character vector of length one}
 \item{Default value}{\code{NA_character_}}
 }}
 
@@ -93,6 +100,7 @@ The values of \code{true_value}, \code{false_value}, and \code{missing_value} mu
 the same type.
 
 \describe{
+\item{Permitted values}{a character scalar, i.e., a character vector of length one}
 \item{Default value}{\code{NA_character_}}
 }}
 }
@@ -226,6 +234,7 @@ General Derivation Functions for all ADaMs that returns variable appended to dat
 \code{\link{derive_vars_cat}()},
 \code{\link{derive_vars_computed}()},
 \code{\link{derive_vars_joined}()},
+\code{\link{derive_vars_joined_summary}()},
 \code{\link{derive_vars_merged}()},
 \code{\link{derive_vars_merged_lookup}()},
 \code{\link{derive_vars_transposed}()}

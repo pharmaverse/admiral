@@ -19,6 +19,7 @@ derive_var_merged_summary(
 The variables specified by the \code{by_vars} argument are expected to be in the dataset.
 
 \describe{
+\item{Permitted values}{a dataset, i.e., a \code{data.frame} or tibble}
 \item{Default value}{none}
 }}
 
@@ -28,6 +29,7 @@ The variables specified by the \code{by_vars} and the variables used on the left
 hand sides of the \code{new_vars} arguments are expected.
 
 \describe{
+\item{Permitted values}{a dataset, i.e., a \code{data.frame} or tibble}
 \item{Default value}{none}
 }}
 
@@ -38,6 +40,7 @@ specified \emph{variables}. Then the resulting values are merged to the input
 dataset (\code{dataset}) by the specified \emph{variables}.
 
 \describe{
+\item{Permitted values}{list of variables created by \code{exprs()}, e.g., \code{exprs(USUBJID, VISIT)}}
 \item{Default value}{none}
 }}
 
@@ -62,6 +65,7 @@ For example:
 }\if{html}{\out{</div>}}
 
 \describe{
+\item{Permitted values}{list of variables created by \code{exprs()}, e.g., \code{exprs(USUBJID, VISIT)}}
 \item{Default value}{\code{NULL}}
 }}
 
@@ -72,7 +76,7 @@ for summarizing. If the argument is not specified, all observations are
 considered.
 
 \describe{
-\item{Permitted values}{a condition}
+\item{Permitted values}{an unquoted condition, e.g., \code{AVISIT == "BASELINE"}}
 \item{Default value}{\code{NULL}}
 }}
 
@@ -84,8 +88,7 @@ of the specified variables are set to the specified value. Only variables
 specified for \code{new_vars} can be specified for \code{missing_values}.
 
 \describe{
-\item{Permitted values}{named list of expressions, e.g.,
-\code{exprs(BASEC = "MISSING", BASE = -1)}}
+\item{Permitted values}{list of named expressions created by a formula using \code{exprs()}, e.g., \code{exprs(AVALC = VSSTRESC, AVAL = yn_to_numeric(AVALC))}}
 \item{Default value}{\code{NULL}}
 }}
 }
@@ -182,6 +185,7 @@ General Derivation Functions for all ADaMs that returns variable appended to dat
 \code{\link{derive_vars_cat}()},
 \code{\link{derive_vars_computed}()},
 \code{\link{derive_vars_joined}()},
+\code{\link{derive_vars_joined_summary}()},
 \code{\link{derive_vars_merged}()},
 \code{\link{derive_vars_merged_lookup}()},
 \code{\link{derive_vars_transposed}()}

@@ -44,17 +44,18 @@ The new variable is set to the observation number for each by group. The
 numbering starts with 1.
 
 \describe{
+\item{Permitted values}{an unquoted symbol, e.g., \code{AVAL}}
 \item{Default value}{\code{ASEQ}}
 }}
 
 \item{check_type}{Check uniqueness?
 
-If \code{"warning"} or \code{"error"} is specified, the specified message is issued
-if the observations of the input dataset are not unique with respect to the
-by variables and the order.
+If \code{"message"}, \code{"warning"} or \code{"error"} is specified, the specified
+message is issued if the observations of the input dataset are not unique
+with respect to the by variables and the order.
 
 \describe{
-\item{Permitted values}{\code{"none"}, \code{"warning"}, \code{"error"}}
+\item{Permitted values}{\code{"none"}, \code{"message"}, \code{"warning"}, \code{"error"}}
 \item{Default value}{\code{"none"}}
 }}
 }
@@ -117,6 +118,7 @@ General Derivation Functions for all ADaMs that returns variable appended to dat
 \code{\link{derive_vars_cat}()},
 \code{\link{derive_vars_computed}()},
 \code{\link{derive_vars_joined}()},
+\code{\link{derive_vars_joined_summary}()},
 \code{\link{derive_vars_merged}()},
 \code{\link{derive_vars_merged_lookup}()},
 \code{\link{derive_vars_transposed}()}

@@ -667,8 +667,32 @@ test_that("derive_var_merged_summary Test 27: merge sel vars 'one-to-one'", {
   )
 })
 
-## Test 28: test get_not_mapped with unmapped records ----
-test_that("derive_vars_merged_lookup Test 28: test get_not_mapped with unmapped records", {
+## Test 28: error if no summary function ----
+test_that("derive_var_merged_summary Test 28: error if no summary function", {
+  adbds <- tibble::tribble(
+    ~AVISIT,  ~ASEQ, ~AVAL,
+    "WEEK 1",     1,    10,
+    "WEEK 1",     2,    NA,
+    "WEEK 2",     3,    NA,
+    "WEEK 3",     4,    42,
+    "WEEK 4",     5,    12,
+    "WEEK 4",     6,    12,
+    "WEEK 4",     7,    15
+  )
+
+  expect_snapshot(
+    derive_var_merged_summary(
+      adbds,
+      dataset_add = adbds,
+      by_vars = exprs(AVISIT),
+      new_vars = exprs(MEANVIS = AVAL / 2)
+    ),
+    error = TRUE
+  )
+})
+
+## Test 29: test get_not_mapped with unmapped records ----
+test_that("derive_vars_merged_lookup Test 29: test get_not_mapped with unmapped records", {
 
   # Create a lookup table that doesn't include BMI
   param_lookup <- tibble::tribble(
@@ -702,8 +726,8 @@ test_that("derive_vars_merged_lookup Test 28: test get_not_mapped with unmapped 
   )
 })
 
-## Test 29: error handling for many-to-one relationship ----
-test_that("derive_vars_merged Test 29: error handling for many-to-one relationship", {
+## Test 30: error handling for many-to-one relationship ----
+test_that("derive_vars_merged Test 30: error handling for many-to-one relationship", {
 
   dataset <- tibble::tribble(
     ~USUBJID, ~SEX,

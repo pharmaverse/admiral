@@ -7,12 +7,17 @@
 #' each by group (`order` and `mode` argument).
 #'
 #' @param dataset
+#'
 #' `r roxygen_param_dataset(expected_vars = c("by_vars"))`
+#'
+#' @permitted [dataset]
 #'
 #' @param dataset_add Additional dataset
 #'
 #'   The variables specified by the `by_vars`, the `new_vars`, and the `order`
 #'   argument are expected.
+#'
+#' @permitted [dataset]
 #'
 #' @param by_vars Grouping variables
 #'
@@ -20,6 +25,8 @@
 #'   are merged by the specified variables.
 #'
 #'   `r roxygen_param_by_vars(rename = TRUE)`
+#'
+#' @permitted [var_list]
 #'
 #' @param order Sort order
 #'
@@ -31,8 +38,7 @@
 #'
 #'   `r roxygen_order_na_handling()`
 #'
-#' @permitted list of expressions created by `exprs()`, e.g.,
-#'   `exprs(ADT, desc(AVAL))` or `NULL`
+#' @permitted [var_list]
 #'
 #' @param new_vars Variables to add
 #'
@@ -53,9 +59,11 @@
 #'   `AVALC`.
 #'
 #'   If the argument is not specified or set to `NULL`, all variables from the
-#'   additional dataset (`dataset_add`) are added.
+#'   additional dataset (`dataset_add`) are added. In the case when a variable
+#'   exists in both datasets, an error is issued to ensure the user either adds
+#'   to `by_vars`, removes or renames.
 #'
-#' @permitted list of variables or named expressions created by `exprs()`
+#' @permitted [var_list]
 #'
 #' @param filter_add Filter for additional dataset (`dataset_add`)
 #'
@@ -66,7 +74,7 @@
 #'   Variables defined by the `new_vars` argument can be used in the filter
 #'   condition.
 #'
-#' @permitted a condition
+#' @permitted [condition]
 #'
 #' @param mode Selection mode
 #'
@@ -75,7 +83,7 @@
 #'
 #'   If the `order` argument is not specified, the `mode` argument is ignored.
 #'
-#' @permitted `"first"`, `"last"`, `NULL`
+#' @permitted [mode]
 #'
 #' @param exist_flag Exist flag
 #'
@@ -84,21 +92,21 @@
 #'   be the value provided in `true_value` for all selected records from `dataset_add`
 #'   which are merged into the input dataset, and the value provided in `false_value` otherwise.
 #'
-#' @permitted Variable name
+#' @permitted [var]
 #'
 #' @param true_value True value
 #'
 #'   The value for the specified variable `exist_flag`, applicable to
 #'   the first or last observation (depending on the mode) of each by group.
 #'
-#' @permitted An atomic scalar
+#' @permitted [char_scalar]
 #'
 #' @param false_value False value
 #'
 #'   The value for the specified variable `exist_flag`, NOT applicable to
 #'   the first or last observation (depending on the mode) of each by group.
 #'
-#' @permitted An atomic scalar
+#' @permitted [char_scalar]
 #'
 #' @param missing_values Values for non-matching observations
 #'
@@ -107,8 +115,7 @@
 #'   of the specified variables are set to the specified value. Only variables
 #'   specified for `new_vars` can be specified for `missing_values`.
 #'
-#' @permitted named list of expressions, e.g.,
-#'   `exprs(BASEC = "MISSING", BASE = -1)`
+#' @permitted [expr_list_formula]
 #'
 #' @param check_type Check uniqueness?
 #'
@@ -120,7 +127,7 @@
 #'   if the observations of the (restricted) additional dataset are not unique with respect
 #'   to the by variables, an error is issued.
 #'
-#' @permitted `"none"`, `"message"`, `"warning"`, `"error"`
+#' @permitted [msg_type]
 #'
 #' @param duplicate_msg Message of unique check
 #'
@@ -135,6 +142,8 @@
 #'   )
 #'   ```
 #'
+#' @permitted [msg]
+#'
 #' @param relationship Expected merge-relationship between the `by_vars`
 #'   variable(s) in `dataset` (input dataset) and the `dataset_add` (additional dataset)
 #'    containing the additional `new_vars`.
@@ -143,7 +152,7 @@
 #'   <https://dplyr.tidyverse.org/reference/mutate-joins.html#arguments> for
 #'   more details.
 #'
-#' @permitted `"one-to-one"`, `"many-to-one"`, `NULL`.
+#' @permitted [merge_rel]
 #'
 #' @return The output dataset contains all observations and variables of the
 #'   input dataset and additionally the variables specified for `new_vars` from
@@ -173,136 +182,206 @@
 #'
 #' @export
 #'
-#' @examples
+#' @examplesx
+#'
+#' @caption Note on usage versus `derive_vars_joined()`
+#' @info The question between using `derive_vars_merged()` or the more powerful
+#'   `derive_vars_joined()` comes down to how you need to select the observations
+#'   to be merged.
+#'
+#' - If the observations from `dataset_add` to merge can be selected
+#'   by a condition (`filter_add`) using *only* variables from `dataset_add`, then
+#'   always use `derive_vars_merged()` as it requires less resources (time and
+#'   memory). A common example of this would be a randomization date in `ADSL`,
+#'   where you are simply merging on a date from `DS` according to a certain
+#'   `DSDECOD` condition such as `DSDECOD == "RANDOMIZATION"`.
+#' - However, if the selection of the observations from `dataset_add` can depend
+#'   on variables from *both* datasets, then use `derive_vars_joined()`. An
+#'   example of this would be assigning period variables from `ADSL` to an `ADAE`,
+#'   where you now need to check each adverse event start date against the period
+#'   start and end dates to decide which period value to join.
+#' @caption Basic merge of a full dataset
+#' @info Merge all demographic variables onto a vital signs dataset.
+#'
+#' - The variable `DOMAIN` exists in both datasets so note the use of
+#'   `select(dm, -DOMAIN)` in the `dataset_add` argument. Without this an error
+#'   would be issued to notify the user.
+#' @code
+#' library(tibble)
 #' library(dplyr, warn.conflicts = FALSE)
 #' vs <- tribble(
-#'   ~STUDYID,  ~DOMAIN,  ~USUBJID, ~VSTESTCD,      ~VISIT, ~VSSTRESN, ~VSSTRESU,       ~VSDTC,
-#'   "PILOT01",    "VS", "01-1302",  "HEIGHT", "SCREENING",     177.8,      "cm", "2013-08-20",
-#'   "PILOT01",    "VS", "01-1302",  "WEIGHT", "SCREENING",     81.19,      "kg", "2013-08-20",
-#'   "PILOT01",    "VS", "01-1302",  "WEIGHT",  "BASELINE",      82.1,      "kg", "2013-08-29",
-#'   "PILOT01",    "VS", "01-1302",  "WEIGHT",    "WEEK 2",     81.19,      "kg", "2013-09-15",
-#'   "PILOT01",    "VS", "01-1302",  "WEIGHT",    "WEEK 4",     82.56,      "kg", "2013-09-24",
-#'   "PILOT01",    "VS", "01-1302",  "WEIGHT",    "WEEK 6",     80.74,      "kg", "2013-10-08",
-#'   "PILOT01",    "VS", "01-1302",  "WEIGHT",    "WEEK 8",      82.1,      "kg", "2013-10-22",
-#'   "PILOT01",    "VS", "01-1302",  "WEIGHT",   "WEEK 12",      82.1,      "kg", "2013-11-05",
-#'   "PILOT01",    "VS", "17-1344",  "HEIGHT", "SCREENING",     163.5,      "cm", "2014-01-01",
-#'   "PILOT01",    "VS", "17-1344",  "WEIGHT", "SCREENING",     58.06,      "kg", "2014-01-01",
-#'   "PILOT01",    "VS", "17-1344",  "WEIGHT",  "BASELINE",     58.06,      "kg", "2014-01-11",
-#'   "PILOT01",    "VS", "17-1344",  "WEIGHT",    "WEEK 2",     58.97,      "kg", "2014-01-24",
-#'   "PILOT01",    "VS", "17-1344",  "WEIGHT",    "WEEK 4",     57.97,      "kg", "2014-02-07",
-#'   "PILOT01",    "VS", "17-1344",  "WEIGHT",    "WEEK 6",     58.97,      "kg", "2014-02-19",
-#'   "PILOT01",    "VS", "17-1344",  "WEIGHT",    "WEEK 8",     57.79,      "kg", "2014-03-14"
-#' )
+#'   ~DOMAIN,  ~USUBJID, ~VSTESTCD, ~VISIT,      ~VSSTRESN, ~VSDTC,
+#'   "VS",     "01",     "HEIGHT",  "SCREENING",     178.0, "2013-08-20",
+#'   "VS",     "01",     "WEIGHT",  "SCREENING",      81.9, "2013-08-20",
+#'   "VS",     "01",     "WEIGHT",  "BASELINE",       82.1, "2013-08-29",
+#'   "VS",     "01",     "WEIGHT",  "WEEK 2",         81.9, "2013-09-15",
+#'   "VS",     "01",     "WEIGHT",  "WEEK 4",         82.6, "2013-09-24",
+#'   "VS",     "02",     "WEIGHT",  "BASELINE",       58.6, "2014-01-11"
+#' ) %>%
+#'   mutate(STUDYID = "AB42")
 #'
 #' dm <- tribble(
-#'   ~STUDYID,  ~DOMAIN,  ~USUBJID, ~AGE,   ~AGEU,
-#'   "PILOT01",    "DM", "01-1302",   61, "YEARS",
-#'   "PILOT01",    "DM", "17-1344",   64, "YEARS"
-#' )
+#'   ~DOMAIN, ~USUBJID, ~AGE, ~AGEU,
+#'   "DM",    "01",       61, "YEARS",
+#'   "DM",    "02",       64, "YEARS",
+#'   "DM",    "03",       85, "YEARS"
+#' ) %>%
+#'   mutate(STUDYID = "AB42")
 #'
-#'
-#' # Merging all dm variables to vs
 #' derive_vars_merged(
 #'   vs,
 #'   dataset_add = select(dm, -DOMAIN),
 #'   by_vars = exprs(STUDYID, USUBJID)
 #' ) %>%
-#'   select(STUDYID, USUBJID, VSTESTCD, VISIT, VSSTRESN, AGE, AGEU)
+#'   select(USUBJID, VSTESTCD, VISIT, VSSTRESN, AGE, AGEU)
 #'
+#' @caption Merge only the first/last value (`order` and `mode`)
+#' @info Merge the last occurring weight for each subject to the demographics dataset.
 #'
-#' # Merge last weight to adsl
-#' adsl <- tribble(
-#'   ~STUDYID,   ~USUBJID, ~AGE,   ~AGEU,
-#'   "PILOT01", "01-1302",   61, "YEARS",
-#'   "PILOT01", "17-1344",   64, "YEARS"
-#' )
-#'
-#'
+#' - To enable sorting by visit date `convert_dtc_to_dtm()` is used to convert
+#'   to a datetime, within the `order` argument.
+#' - Then the `mode` argument is set to `"last"` to ensure the last sorted value
+#'   is taken. Be cautious if `NA` values are possible in the `order` variables -
+#'   see [Sort Order](https://pharmaverse.github.io/admiral/articles/generic.html#sort_order).
+#' - The `filter_add` argument is used to restrict the vital signs records only
+#'   to weight assessments.
+#' @code
 #' derive_vars_merged(
-#'   adsl,
+#'   dm,
 #'   dataset_add = vs,
 #'   by_vars = exprs(STUDYID, USUBJID),
 #'   order = exprs(convert_dtc_to_dtm(VSDTC)),
 #'   mode = "last",
-#'   new_vars = exprs(LASTWGT = VSSTRESN, LASTWGTU = VSSTRESU),
-#'   filter_add = VSTESTCD == "WEIGHT",
-#'   exist_flag = vsdatafl
+#'   new_vars = exprs(LSTWT = VSSTRESN),
+#'   filter_add = VSTESTCD == "WEIGHT"
 #' ) %>%
-#'   select(STUDYID, USUBJID, AGE, AGEU, LASTWGT, LASTWGTU, vsdatafl)
+#'   select(USUBJID, AGE, AGEU, LSTWT)
 #'
+#' @caption Handling duplicates (`check_type`)
+#' @info The source records are checked regarding duplicates with respect to the
+#'   by variables and the order specified.
+#'   By default, a warning is issued if any duplicates are found.
+#'   Note the results here with a new vital signs dataset containing a
+#'   duplicate last weight assessment date.
+#' @code [expected_cnds = "duplicate_records"]
+#' vs_dup <- tribble(
+#'   ~DOMAIN,  ~USUBJID, ~VSTESTCD, ~VISIT,      ~VSSTRESN, ~VSDTC,
+#'   "VS",     "01",     "WEIGHT",  "WEEK 2",        81.1, "2013-09-24",
+#'   "VS",     "01",     "WEIGHT",  "WEEK 4",        82.6, "2013-09-24"
+#' ) %>%
+#'   mutate(STUDYID = "AB42")
 #'
-#' # Derive treatment start datetime (TRTSDTM)
+#' derive_vars_merged(
+#'   dm,
+#'   dataset_add = vs_dup,
+#'   by_vars = exprs(STUDYID, USUBJID),
+#'   order = exprs(convert_dtc_to_dtm(VSDTC)),
+#'   mode = "last",
+#'   new_vars = exprs(LSTWT = VSSTRESN),
+#'   filter_add = VSTESTCD == "WEIGHT"
+#' ) %>%
+#'   select(USUBJID, AGE, AGEU, LSTWT)
+#'
+#' @info For investigating the issue, the dataset of the duplicate source records
+#'   can be obtained by calling `get_duplicates_dataset()`:
+#' @code
+#' get_duplicates_dataset()
+#'
+#' @info Common options to solve the issue:
+#' - Specifying additional variables for `order` - this is the most common approach,
+#'   adding something like a sequence variable.
+#' - Restricting the source records by specifying/updating the `filter_add` argument.
+#' - Setting `check_type = "none"` to ignore any duplicates, but then in this case
+#'   the last occurring record would be chosen according to the sort order of the
+#'   input `dataset_add`. This is not often advisable, unless the order has no impact
+#'   on the result, as the temporary sort order can be prone to variation across
+#'   an ADaM script.
+#'
+#' @caption Modify values dependent on the merge (`new_vars` and `missing_values`)
+#' @info For the last occurring weight for each subject, add a categorization of
+#'   which visit it occurred at to the demographics dataset.
+#'
+#' - In the `new_vars` argument, other functions can be utilized to modify the
+#'   merged values. For example, in the below case we want to categorize the
+#'   visit as `"BASELINE"` or `"POST-BASELINE"` using `if_else()`.
+#' - The `missing_values` argument assigns a specific value for subjects with
+#'   no matching observations - see subject `"03"` in the below example.
+#' @code
+#' derive_vars_merged(
+#'   dm,
+#'   dataset_add = vs,
+#'   by_vars = exprs(STUDYID, USUBJID),
+#'   order = exprs(convert_dtc_to_dtm(VSDTC)),
+#'   mode = "last",
+#'   new_vars = exprs(
+#'     LSTWTCAT = if_else(VISIT == "BASELINE", "BASELINE", "POST-BASELINE")
+#'   ),
+#'   filter_add = VSTESTCD == "WEIGHT",
+#'   missing_values = exprs(LSTWTCAT = "MISSING")
+#' ) %>%
+#'   select(USUBJID, AGE, AGEU, LSTWTCAT)
+#'
+#' @caption Check existence of records to merge (`exist_flag`, `true_value` and `false_value`)
+#' @info Similar to the above example, now we prefer to have a separate flag
+#'    variable to show whether a selected record was merged.
+#'
+#' - The name of the new variable is set with the `exist_flag` argument.
+#' - The values of this new variable are assigned via the `true_value` and
+#'   `false_value` arguments.
+#' @code
+#' derive_vars_merged(
+#'   dm,
+#'   dataset_add = vs,
+#'   by_vars = exprs(STUDYID, USUBJID),
+#'   order = exprs(convert_dtc_to_dtm(VSDTC)),
+#'   mode = "last",
+#'   new_vars = exprs(
+#'     LSTWTCAT = if_else(VISIT == "BASELINE", "BASELINE", "POST-BASELINE")
+#'   ),
+#'   filter_add = VSTESTCD == "WEIGHT",
+#'   exist_flag = WTCHECK,
+#'   true_value = "Y",
+#'   false_value = "MISSING"
+#' ) %>%
+#'   select(USUBJID, AGE, AGEU, LSTWTCAT, WTCHECK)
+#'
+#' @caption Creating more than one variable from the merge (`new_vars`)
+#' @info Derive treatment start datetime and associated imputation flags.
+#'
+#' - In this example we first impute exposure datetime and associated flag
+#'   variables as a separate first step to be used in the `order` argument.
+#' - In the `new_vars` arguments, you can see how both datetime and the date and
+#'   time imputation flags are all merged in one call.
+#' @code
 #' ex <- tribble(
-#'   ~STUDYID,  ~DOMAIN,  ~USUBJID, ~EXSTDY, ~EXENDY,     ~EXSTDTC,     ~EXENDTC,
-#'   "PILOT01",    "EX", "01-1302",       1,      18, "2013-08-29", "2013-09-15",
-#'   "PILOT01",    "EX", "01-1302",      19,      69, "2013-09-16", "2013-11-05",
-#'   "PILOT01",    "EX", "17-1344",       1,      14, "2014-01-11", "2014-01-24",
-#'   "PILOT01",    "EX", "17-1344",      15,      63, "2014-01-25", "2014-03-14"
-#' )
-#' ## Impute exposure start date to first date/time
+#'   ~DOMAIN, ~USUBJID, ~EXSTDTC,
+#'   "EX",    "01",     "2013-08-29",
+#'   "EX",    "01",     "2013-09-16",
+#'   "EX",    "02",     "2014-01-11",
+#'   "EX",    "02",     "2014-01-25"
+#' ) %>%
+#'   mutate(STUDYID = "AB42")
+#'
 #' ex_ext <- derive_vars_dtm(
 #'   ex,
 #'   dtc = EXSTDTC,
 #'   new_vars_prefix = "EXST",
-#'   highest_imputation = "M",
+#'   highest_imputation = "M"
 #' )
-#' ## Add first exposure datetime and imputation flags to adsl
+#'
 #' derive_vars_merged(
-#'   select(dm, STUDYID, USUBJID),
+#'   dm,
 #'   dataset_add = ex_ext,
 #'   by_vars = exprs(STUDYID, USUBJID),
 #'   new_vars = exprs(TRTSDTM = EXSTDTM, TRTSDTF = EXSTDTF, TRTSTMF = EXSTTMF),
 #'   order = exprs(EXSTDTM),
 #'   mode = "first"
-#' )
+#' ) %>%
+#'   select(USUBJID, TRTSDTM, TRTSDTF, TRTSTMF)
 #'
-#' # Derive treatment end datetime (TRTEDTM)
-#' ## Impute exposure end datetime to last time, no date imputation
-#' ex_ext <- derive_vars_dtm(
-#'   ex,
-#'   dtc = EXENDTC,
-#'   new_vars_prefix = "EXEN",
-#'   time_imputation = "last",
-#' )
-#' ## Add last exposure datetime and imputation flag to adsl
-#' derive_vars_merged(
-#'   select(adsl, STUDYID, USUBJID),
-#'   dataset_add = ex_ext,
-#'   filter_add = !is.na(EXENDTM),
-#'   by_vars = exprs(STUDYID, USUBJID),
-#'   new_vars = exprs(TRTEDTM = EXENDTM, TRTETMF = EXENTMF),
-#'   order = exprs(EXENDTM),
-#'   mode = "last"
-#' )
-#' # Modify merged values and set value for non matching observations
-#' adsl <- tribble(
-#'   ~USUBJID, ~SEX, ~COUNTRY,
-#'   "ST42-1", "F",  "AUT",
-#'   "ST42-2", "M",  "MWI",
-#'   "ST42-3", "M",  "NOR",
-#'   "ST42-4", "F",  "UGA"
-#' )
-#'
-#' advs <- tribble(
-#'   ~USUBJID, ~PARAMCD, ~AVISIT,    ~AVISITN, ~AVAL,
-#'   "ST42-1", "WEIGHT", "BASELINE",        0,    66,
-#'   "ST42-1", "WEIGHT", "WEEK 2",          1,    68,
-#'   "ST42-2", "WEIGHT", "BASELINE",        0,    88,
-#'   "ST42-3", "WEIGHT", "WEEK 2",          1,    55,
-#'   "ST42-3", "WEIGHT", "WEEK 4",          2,    50
-#' )
-#'
-#' derive_vars_merged(
-#'   adsl,
-#'   dataset_add = advs,
-#'   by_vars = exprs(USUBJID),
-#'   new_vars = exprs(
-#'     LSTVSCAT = if_else(AVISIT == "BASELINE", "BASELINE", "POST-BASELINE")
-#'   ),
-#'   order = exprs(AVISITN),
-#'   mode = "last",
-#'   missing_values = exprs(LSTVSCAT = "MISSING")
-#' )
+#' @caption Further examples
+#' @info Further example usages of this function can be found in the
+#'   [Generic Derivations vignette](../articles/generic.html).
 derive_vars_merged <- function(dataset,
                                dataset_add,
                                by_vars,
@@ -488,13 +567,19 @@ derive_vars_merged <- function(dataset,
 #'
 #'   The variables specified by the `by_vars` argument are expected.
 #'
+#' @permitted [dataset]
+#'
 #' @param by_vars Grouping variables
 #'
 #' `r roxygen_param_by_vars()`
 #'
+#' @permitted [var_list]
+#'
 #' @param new_var New variable
 #'
 #'   The specified variable is added to the input dataset.
+#'
+#' @permitted [var]
 #'
 #' @param condition Condition
 #'
@@ -506,16 +591,22 @@ derive_vars_merged <- function(dataset,
 #'   value (`missing_value`) for by groups not present in the additional
 #'   dataset.
 #'
+#' @permitted [condition]
+#'
 #' @param true_value True value
+#'
+#' @permitted [char_scalar]
 #'
 #' @param false_value False value
 #'
-#' @param missing_value Values used for missing information
+#' @permitted [char_scalar]
+#'
+#' @param missing_value Value used for missing information
 #'
 #'   The new variable is set to the specified value for all by groups without
 #'   observations in the additional dataset.
 #'
-#' @permitted A character scalar
+#' @permitted [char_scalar]
 #'
 #' @param filter_add Filter for additional data
 #'
@@ -523,7 +614,7 @@ derive_vars_merged <- function(dataset,
 #'   for flagging. If the argument is not specified, all observations are
 #'   considered.
 #'
-#' @permitted a condition
+#' @permitted [condition]
 #'
 #' @inheritParams derive_vars_merged
 #'
@@ -543,7 +634,6 @@ derive_vars_merged <- function(dataset,
 #'   observation exists and for all observations the condition evaluates to
 #'   `FALSE` or `NA`. Otherwise, it is set to the missing value
 #'   (`missing_value`).
-#'
 #'
 #' @family der_gen
 #' @keywords der_gen
@@ -643,24 +733,22 @@ derive_var_merged_exist_flag <- function(dataset,
 #'
 #' @param dataset_add Lookup table
 #'
-#' The variables specified by the `by_vars` argument are expected.
+#'   The variables specified by the `by_vars` argument are expected.
+#'
+#' @permitted [dataset]
 #'
 #' @param print_not_mapped Print a list of unique `by_vars` values that do not
 #' have corresponding records from the lookup table?
 #'
-#' *Default*: `TRUE`
-#'
-#' @permitted `TRUE`, `FALSE`
+#' @permitted [boolean]
 #'
 #' @inheritParams derive_vars_merged
-#'
 #'
 #' @return The output dataset contains all observations and variables of the
 #' input dataset, and add the variables specified in `new_vars` from the lookup
 #' table specified in `dataset_add`. Optionally prints a list of unique
 #' `by_vars` values that do not have corresponding records
 #' from the lookup table (by specifying `print_not_mapped = TRUE`).
-#'
 #'
 #' @keywords der_gen
 #' @family der_gen
@@ -788,12 +876,17 @@ get_not_mapped <- function() {
 #' @description Merge a summary variable from a dataset to the input dataset.
 #'
 #' @param dataset
+#'
 #' `r roxygen_param_dataset(expected_vars = c("by_vars"))`
+#'
+#' @permitted [dataset]
 #'
 #' @param dataset_add Additional dataset
 #'
 #'   The variables specified by the `by_vars` and the variables used on the left
 #'   hand sides of the `new_vars` arguments are expected.
+#'
+#' @permitted [dataset]
 #'
 #' @param by_vars Grouping variables
 #'
@@ -802,6 +895,8 @@ get_not_mapped <- function() {
 #'   dataset (`dataset`) by the specified *variables*.
 #'
 #'   `r roxygen_param_by_vars()`
+#'
+#' @permitted [var_list]
 #'
 #' @param new_vars New variables to add
 #'
@@ -821,13 +916,15 @@ get_not_mapped <- function() {
 #'     )
 #'   ```
 #'
+#' @permitted [var_list]
+#'
 #' @param filter_add Filter for additional dataset (`dataset_add`)
 #'
 #'   Only observations fulfilling the specified condition are taken into account
 #'   for summarizing. If the argument is not specified, all observations are
 #'   considered.
 #'
-#' @permitted a condition
+#' @permitted [condition]
 #'
 #' @inheritParams derive_vars_merged
 #'
@@ -937,16 +1034,50 @@ derive_var_merged_summary <- function(dataset,
   )
 
   # Summarise the analysis value and merge to the original dataset
-  derive_vars_merged(
-    dataset,
-    dataset_add = derive_summary_records(
-      dataset_add = dataset_add,
-      by_vars = by_vars_right,
-      filter_add = !!filter_add,
-      set_values_to = new_vars,
-    ) %>%
-      select(!!!by_vars_right, names(new_vars)),
-    by_vars = by_vars,
-    missing_values = missing_values
+  # If for one of the new variables no summary function is used, i.e., more than
+  # one record is created per by group, the error from signal_duplicates_records()
+  # need to be updated and the warning from dplyr needs to be suppressed as it
+  # is misleading.
+  tryCatch(
+    withCallingHandlers(
+      derive_vars_merged(
+        dataset,
+        dataset_add = derive_summary_records(
+          dataset_add = dataset_add,
+          by_vars = by_vars_right,
+          filter_add = !!filter_add,
+          set_values_to = new_vars,
+        ) %>%
+          select(!!!by_vars_right, names(new_vars)),
+        by_vars = by_vars,
+        missing_values = missing_values
+      ),
+      warning = function(cnd) {
+        if (any(str_detect(
+          cnd$message,
+          fixed("Returning more (or less) than 1 row per `summarise()` group was deprecated")
+        ))) {
+          cnd_muffle(cnd)
+        }
+      }
+    ),
+    duplicate_records = function(cnd) {
+      cli_abort(
+        c(
+          paste(
+            "After summarising, the dataset contains duplicate records with",
+            "respect to {.var {cnd$by_vars}}."
+          ),
+          paste(
+            "Please check {.arg new_vars} if summary functions like {.fun mean},",
+            "{.fun sum}, ... are used on the right hand side."
+          ),
+          i = "Run {.run admiral::get_duplicates_dataset()} to access the duplicate records"
+        ),
+        class = cnd$class,
+        call = NULL,
+        by_vars = cnd$by_vars
+      )
+    }
   )
 }

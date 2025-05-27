@@ -9,6 +9,18 @@
     readability. See `derive_extreme_records()` for an example.
     - The output of the structured examples used for complex functions is
     displayed in the help pages in RStudio.
+    
+- New function `derive_vars_joined_summary()` to derive summary variables from
+  selected records of an additional dataset where the selection depends on
+  variables from both the input dataset and the additional dataset. For example,
+  the cumulative dose up to each adverse event in `ADAE` can be derived with the
+  new function. (#2652)
+
+- New lab grading metadata for US (Conventional) units for the three grading criteria
+`admiral` already produces for SI units (#2557).
+    - `atoxgr_criteria_ctcv4_uscv` (NCI-CTCAEv4 criteria)
+    - `atoxgr_criteria_ctcv5_uscv` (NCI-CTCAEv5 criteria)
+    - `atoxgr_criteria_daids_uscv` (DAIDs criteria)
 
 ## Updates of Existing Functions
 
@@ -18,9 +30,24 @@
 subsets, however this can lead to issues when the input dataset is empty. Now
 the derivation is called for all subsets. (#2645)
 - The examples section for the function `derive_var_trtemfl()` was enhanced to include a showcasing of all scenarios discussed in the following [PHUSE White Paper on Treatment-Emergent AEs](https://phuse.s3.eu-central-1.amazonaws.com/Deliverables/Safety+Analytics/WP-087+Recommended+Definition+of++Treatment-Emergent+Adverse+Events+in+Clinical+Trials+.pdf). (#2455)
+- `derive_var_atoxgr_dir()` updated to handle more than one unit in grading metadata. Related to providing US (Conventional) units for grading (#2557).
 - The background checks in `derive_summary_records()` were too restrictive: `by_vars` were expected in `dataset` although the code did not require it. This requirement has therefore been dropped (#2686).
+- The functions `derive_vars_joined()`, `derive_var_joined_exist_flag()`, and
+`filter_joined()` produce correct results now when they are used with `join_type
+= "before"` or `join_type = "after"` and `dataset` and `dataset_add` differ or
+the `filter_add` argument is used. (#2863)
 
 ## Breaking Changes
+
+- Lab grading metadata `atoxgr_criteria_ctcv4()`, `atoxgr_criteria_ctcv5()` and `atoxgr_criteria_daids()` variable `SI_UNIT_CHECK` renamed to `UNIT_CHECK` (#2557).
+
+- The values of the variable specified for `tmp_obs_nr_var` in
+`derive_vars_joined()`, `derive_var_joined_exist_flag()`, `filter_joined()` are
+now populated differently if there are multiple records in `dataset` or
+`dataset_add` for the same values of `by_vars` and `order`. Before each of these
+records was assigned a different value, i.e., the variable (together with
+`by_vars`) was a unique identifier. Now the value is the same for all these
+records. (#2683)
 
 - The following function arguments are entering the next phase of the [deprecation process](https://pharmaverse.github.io/admiraldev/articles/programming_strategy.html#deprecation): (#2487) (#2595)
 
@@ -38,15 +65,20 @@ the derivation is called for all subsets. (#2645)
     - `derive_extreme_records()` (#2585)
     - `derive_param_tte()` (#2704)
     - `derive_summary_records()` (#2707)
+    - `derive_extreme_event()` (#2735)
+    - `derive_vars_joined()` (#2727)
+    - `derive_vars_merged()` (#2727)
 
 - Added an example to the `derive_vars_transposed()` reference page to showcase how duplicates-related errors can arise when records in `dataset_merge` are not uniquely identified. (#2609)
 
 - Default value of `type` in `derive_vars_aage()` is now shown as `interval` to match the function behavior. (#2685) 
 
 - The "Lab Grading" vignette was updated to correct some typos and make text easier to
-read (#2623).
+read (#2623). Also, updated to include new metadata for grading using US (Conventional) units (#2557).
 
 - The "BDS Time-to-Event" vignette was updated to include `SRCSEQ` consistently (#2658).
+
+- The template for ADAE and the OCCDS vignette were updated to include an example of the `DOSEON` and `DOSEU` variables (#2737).
 
 - The template for ADPC and vignette were updated to include an example of using `DTYPE` for imputed records (#2657).
 
