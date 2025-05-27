@@ -41,9 +41,6 @@
 #'
 #' @permitted [char_scalar]
 #'
-#' @permitted an unquoted expression which evaluates to a character
-#'    (in `dataset`)
-#'
 #' @param values_yn Should `"Y"` and `"N"` be used for `CRITyFL`?
 #'
 #'   If set to `TRUE`, the `CRITyFL` variable is set to `"Y"` if the condition
