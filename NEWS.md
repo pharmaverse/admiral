@@ -25,21 +25,27 @@
 ## Updates of Existing Functions
 
 - In `derive_vars_joined()`, the `filter_add` argument is now correctly applied for all join types, fixing an issue where it was ignored when `join_type != "all"`. (#2682)
+
 - The function `extract_duplicate_records()` was updated to consider all variables in the input dataset for the by group if the `by_vars` argument is omitted entirely. (#2644)
+
 - In `slice_derivation()`, previously the derivation is not called for empty
 subsets, however this can lead to issues when the input dataset is empty. Now
 the derivation is called for all subsets. (#2645)
+
 - The examples section for the function `derive_var_trtemfl()` was enhanced to include a showcasing of all scenarios discussed in the following [PHUSE White Paper on Treatment-Emergent AEs](https://phuse.s3.eu-central-1.amazonaws.com/Deliverables/Safety+Analytics/WP-087+Recommended+Definition+of++Treatment-Emergent+Adverse+Events+in+Clinical+Trials+.pdf). (#2455)
+
 - `derive_var_atoxgr_dir()` updated to handle more than one unit in grading metadata. Related to providing US (Conventional) units for grading (#2557).
+
 - The background checks in `derive_summary_records()` were too restrictive: `by_vars` were expected in `dataset` although the code did not require it. This requirement has therefore been dropped (#2686).
-<<<<<<< HEAD
-- The functions `derive_summary_records()`, `derive_extreme_records()` and `derive_param_exist_flag()` were updated to fix an issue where if a variable was in both `dataset_add` and `dataset_ref`, it was added to the new records even if was is not in `by_vars`. (#2664)
-=======
+
+- The functions `derive_summary_records()` and `derive_param_exist_flag()` 
+were updated to fix an issue where if a variable was in both `dataset_add` and `dataset_ref`, it was 
+added to the new records even if was is not in `by_vars`. (#2664)
+
 - The functions `derive_vars_joined()`, `derive_var_joined_exist_flag()`, and
 `filter_joined()` produce correct results now when they are used with `join_type
 = "before"` or `join_type = "after"` and `dataset` and `dataset_add` differ or
 the `filter_add` argument is used. (#2863)
->>>>>>> main
 
 ## Breaking Changes
 
