@@ -5,7 +5,7 @@
 
 # Assumptions/Questions:
 # - ignore *.rda files in admiral/data (per Ben)
-# - compares full ADaM - ie all rows 
+# - compares full ADaM - ie all rows
 # - for developer use and developer has run load_all()
 # - use cli:: for messages/errors - YES
 
@@ -65,8 +65,8 @@ verify_templates <- function(pkg = "admiral", ds = c("adae")) {
 
   # temporary directories
   x <- tempdir()
-  dir.create(file.path(x, "old"))
-  dir.create(file.path(x, "diff"))
+  dir.create(file.path(x, "old"), showWarnings = TRUE)
+  dir.create(file.path(x, "diff"), showWarnings = TRUE)
 
   # TODO: choose 1:
   # cache_dir and adam_new_dir are the SAME
@@ -81,7 +81,7 @@ verify_templates <- function(pkg = "admiral", ds = c("adae")) {
     diff = file.path(x, "diff")
   )
 
-  # TODO: if dir exists then empty it ; if not exist create it. 
+  # TODO: if dir exists then empty it ; if not exist create it.
   #lapply(path, function(x)  if( x %in% c("template_dir", "cache_dir")!exists(x)) dir.create(x))
 
   # gather all templates for this pkg (12 found) ----
@@ -220,7 +220,8 @@ save_rda <- function(data, file_path, new_name) {
 #'     compare_file=get_R_data_path("_label_files/")
 compare <- function(base, compare, keys, file = NULL) {
 
-  #--------debugging--------- to be removed ?
+  # DISCUSS
+  #--------debugging--------- remove OR save as new save_debug( , debug=FALSE) function
   e <- globalenv()
   e$old <- base
   e$new <- compare
