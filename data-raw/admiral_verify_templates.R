@@ -12,10 +12,10 @@
 #' Directories used to find files:
 
 #' template_dir  location of template R files (inst/templates)
-#' 
+#'
 
 #'  tempdir() or cache_dir:  after running, templates place new ADaMs here
-#'  adam_old_dir : ADaMs downloaded from pharamverseadam 
+#'  adam_old_dir : ADaMs downloaded from pharamverseadam
 #'  adam_new_dir
 #' (IF we were to add to `admiral` package)
 #' @param pkg  package (ex:  "admiral )
@@ -69,7 +69,7 @@ verify_templates <- function(pkg = "admiral", ds = c("adae")) {
   dir.create(paste0(x, "/diff"))
 
   ?dir.create
-  
+
   # TODO: choose 1:
   # cache_dir and adam_new_dir are the SAME
   # cache_dir is where templates deposit new ADaM
