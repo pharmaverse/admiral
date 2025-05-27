@@ -98,6 +98,9 @@ read (#2623). Also, updated to include new metadata for grading using US (Conven
 
 - The `derive_basetype_records()` documentation was updated to clarify `BASETYPE` derivations. (#2545)
 
+- The `derive_extreme_records()` documentation was updated to clarify which variables are populated
+from `dataset_ref` for the new observations. (#2664)
+
 ## Various
 
 <details>
