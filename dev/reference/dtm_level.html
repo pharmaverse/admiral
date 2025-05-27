@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">admiral</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.2.0.9031</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.2.0.9032</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -114,6 +114,25 @@ compared.</p>
 <code><a href="restrict_imputed_dtc_dtm.html">restrict_imputed_dtc_dtm</a>()</code></p></div>
     </div>
 
+    <div class="section level2">
+    <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># Create a dtm_level object with level "D" (day)</span></span></span>
+<span class="r-in"><span><span class="va">level_day</span> <span class="op">&lt;-</span> <span class="fu">admiral</span><span class="fu">:::</span><span class="fu">dtm_level</span><span class="op">(</span><span class="st">"D"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">level_day</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] D</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Levels: n &lt; s &lt; m &lt; h &lt; D &lt; M &lt; Y</span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Create a dtm_level object with level "h" (hour)</span></span></span>
+<span class="r-in"><span><span class="va">level_hour</span> <span class="op">&lt;-</span> <span class="fu">admiral</span><span class="fu">:::</span><span class="fu">dtm_level</span><span class="op">(</span><span class="st">"h"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">level_hour</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] h</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Levels: n &lt; s &lt; m &lt; h &lt; D &lt; M &lt; Y</span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Compare two dtm_level objects</span></span></span>
+<span class="r-in"><span><span class="va">level_day</span> <span class="op">&gt;</span> <span class="va">level_hour</span> <span class="co"># TRUE, because "D" is larger than "h".</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] TRUE</span>
+</code></pre></div>
+    </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside></div>
 

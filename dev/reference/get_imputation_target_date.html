@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">admiral</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.2.0.9031</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.2.0.9032</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -112,9 +112,9 @@ day/month.</p></li>
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
 
 <ul><li><p>For <code>date_imputation = "first"</code> <code>"0000"</code>, <code>"01"</code>, <code>"01"</code> are returned.</p></li>
-<li><p>For <code>date_imputation = "mid"</code> <code>"xxxx"</code>, <code>"06"</code>, <code>"30"</code> if <code>month</code> is <code>NA</code>
-and <code>"15"</code> otherwise are returned.</p></li>
-<li><p>For <code>date_imputation = "last"</code> <code>"9999"</code>, <code>"12"</code>, <code>"31"</code> are returned.</p></li>
+<li><p>For <code>date_imputation = "mid"</code> <code>"xxxx"</code>, <code>"06"</code>, <code>"30"</code> if <code>month</code> is <code>NA</code>.
+otherwise <code>"15"</code> returned.</p></li>
+<li><p>For <code>date_imputation = "last"</code> <code>"9999"</code>, <code>"12"</code>, <code>"28"</code> are returned.</p></li>
 <li><p>For <code>date_imputation = "&lt;mm&gt;-&lt;dd&gt;"</code> <code>"xxxx"</code>, <code>"&lt;mm&gt;"</code>, <code>"&lt;dd&gt;"</code> are returned.</p></li>
 </ul><p><code>"xxxx"</code> indicates that the component is undefined. If an undefined
 component occurs in the imputed DTC value, the imputed DTC value is set to
@@ -132,6 +132,75 @@ component occurs in the imputed DTC value, the imputed DTC value is set to
 <code><a href="restrict_imputed_dtc_dtm.html">restrict_imputed_dtc_dtm</a>()</code></p></div>
     </div>
 
+    <div class="section level2">
+    <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># Get imputation target for "first"</span></span></span>
+<span class="r-in"><span><span class="va">target_first</span> <span class="op">&lt;-</span> <span class="fu">admiral</span><span class="fu">:::</span><span class="fu">get_imputation_target_date</span><span class="op">(</span><span class="st">"first"</span>, month <span class="op">=</span> <span class="cn">NA</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">target_first</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $year</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "0000"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $month</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "01"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $day</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "01"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Get imputation target for "mid" with specified month</span></span></span>
+<span class="r-in"><span><span class="va">target_mid</span> <span class="op">&lt;-</span> <span class="fu">admiral</span><span class="fu">:::</span><span class="fu">get_imputation_target_date</span><span class="op">(</span><span class="st">"mid"</span>, month <span class="op">=</span> <span class="st">"03"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">target_mid</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $year</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "xxxx"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $month</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "06"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $day</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "15"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Get imputation target for "mid" with NA month</span></span></span>
+<span class="r-in"><span><span class="va">target_mid_na</span> <span class="op">&lt;-</span> <span class="fu">admiral</span><span class="fu">:::</span><span class="fu">get_imputation_target_date</span><span class="op">(</span><span class="st">"mid"</span>, month <span class="op">=</span> <span class="cn">NA</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">target_mid_na</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $year</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "xxxx"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $month</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "06"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $day</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "30"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Get imputation target for "last"</span></span></span>
+<span class="r-in"><span><span class="va">target_last</span> <span class="op">&lt;-</span> <span class="fu">admiral</span><span class="fu">:::</span><span class="fu">get_imputation_target_date</span><span class="op">(</span><span class="st">"last"</span>, month <span class="op">=</span> <span class="cn">NA</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">target_last</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $year</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "9999"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $month</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "12"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $day</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "28"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Get imputation target for custom date imputation "06-15"</span></span></span>
+<span class="r-in"><span><span class="va">target_custom</span> <span class="op">&lt;-</span> <span class="fu">admiral</span><span class="fu">:::</span><span class="fu">get_imputation_target_date</span><span class="op">(</span><span class="st">"06-15"</span>, month <span class="op">=</span> <span class="cn">NA</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">target_custom</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $year</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "xxxx"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $month</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "06"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $day</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "15"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-in"><span></span></span>
+</code></pre></div>
+    </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside></div>
 

@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">admiral</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.2.0.9031</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.2.0.9032</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -73,7 +73,7 @@
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">get_partialdatetime</span><span class="op">(</span><span class="va">dtc</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">get_partialdatetime</span><span class="op">(</span><span class="va">dtc</span>, <span class="va">create_datetime</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -85,6 +85,16 @@
 <p>A character date is expected in a format like <code>yyyy-mm-dd</code> or
 <code>yyyy-mm-ddThh:mm:ss</code>. Trailing components can be omitted and <code>-</code> is a
 valid value for any component.</p>
+<dl><dt>Default value</dt>
+<dd><p>none</p></dd>
+
+
+</dl></dd>
+
+
+<dt id="arg-create-datetime">create_datetime<a class="anchor" aria-label="anchor" href="#arg-create-datetime"></a></dt>
+<dd><p>logical scalar. If <code>TRUE</code> returns Datetime components.
+If <code>FALSE</code> returns Date components.</p>
 <dl><dt>Default value</dt>
 <dd><p>none</p></dd>
 
@@ -115,6 +125,152 @@ available.</p>
 <code><a href="restrict_imputed_dtc_dtm.html">restrict_imputed_dtc_dtm</a>()</code></p></div>
     </div>
 
+    <div class="section level2">
+    <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># Datetime</span></span></span>
+<span class="r-in"><span><span class="co"># Get partial datetime components for a complete datetime string</span></span></span>
+<span class="r-in"><span><span class="va">dtc_complete</span> <span class="op">&lt;-</span> <span class="fu">admiral</span><span class="fu">:::</span><span class="fu">get_partialdatetime</span><span class="op">(</span><span class="st">"2020-03-15T12:34:56"</span>, <span class="cn">TRUE</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">dtc_complete</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $year</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "2020"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $month</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "03"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $day</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "15"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $hour</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "12"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $minute</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "34"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $second</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "56"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Get partial datetime components for a partial datetime string</span></span></span>
+<span class="r-in"><span><span class="va">dtc_partial</span> <span class="op">&lt;-</span> <span class="fu">admiral</span><span class="fu">:::</span><span class="fu">get_partialdatetime</span><span class="op">(</span><span class="st">"2020-03-15T12:34"</span>, <span class="cn">TRUE</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">dtc_partial</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $year</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "2020"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $month</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "03"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $day</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "15"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $hour</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "12"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $minute</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "34"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $second</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Get partial datetime components for a date-only string</span></span></span>
+<span class="r-in"><span><span class="va">dtc_date_only</span> <span class="op">&lt;-</span> <span class="fu">admiral</span><span class="fu">:::</span><span class="fu">get_partialdatetime</span><span class="op">(</span><span class="st">"2020-03-15"</span>, <span class="cn">TRUE</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">dtc_date_only</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $year</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "2020"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $month</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "03"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $day</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "15"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $hour</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $minute</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $second</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Get partial datetime components for an incomplete year string</span></span></span>
+<span class="r-in"><span><span class="va">dtc_year_partial</span> <span class="op">&lt;-</span> <span class="fu">admiral</span><span class="fu">:::</span><span class="fu">get_partialdatetime</span><span class="op">(</span><span class="st">"2020"</span>, <span class="cn">TRUE</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">dtc_year_partial</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $year</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "2020"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $month</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $day</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $hour</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $minute</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $second</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Date</span></span></span>
+<span class="r-in"><span><span class="co"># Get partial date components for a complete datetime string</span></span></span>
+<span class="r-in"><span><span class="va">dtc_complete</span> <span class="op">&lt;-</span> <span class="fu">admiral</span><span class="fu">:::</span><span class="fu">get_partialdatetime</span><span class="op">(</span><span class="st">"2020-03-15T12:34:56"</span>, <span class="cn">FALSE</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">dtc_complete</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $year</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "2020"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $month</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "03"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $day</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "15"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Get partial date components for a partial datetime string</span></span></span>
+<span class="r-in"><span><span class="va">dtc_partial</span> <span class="op">&lt;-</span> <span class="fu">admiral</span><span class="fu">:::</span><span class="fu">get_partialdatetime</span><span class="op">(</span><span class="st">"2020-03-15T12:34"</span>, <span class="cn">FALSE</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">dtc_partial</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $year</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "2020"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $month</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "03"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $day</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "15"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Get partial date components for a year and month only string</span></span></span>
+<span class="r-in"><span><span class="va">dtc_month_only</span> <span class="op">&lt;-</span> <span class="fu">admiral</span><span class="fu">:::</span><span class="fu">get_partialdatetime</span><span class="op">(</span><span class="st">"2020-03"</span>, <span class="cn">FALSE</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">dtc_month_only</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $year</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "2020"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $month</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "03"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $day</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Get partial date components for an incomplete year string</span></span></span>
+<span class="r-in"><span><span class="va">dtc_year_partial</span> <span class="op">&lt;-</span> <span class="fu">admiral</span><span class="fu">:::</span><span class="fu">get_partialdatetime</span><span class="op">(</span><span class="st">"2020"</span>, <span class="cn">FALSE</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">dtc_year_partial</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $year</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "2020"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $month</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $day</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-in"><span></span></span>
+</code></pre></div>
+    </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside></div>
 

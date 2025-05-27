@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">admiral</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.2.0.9031</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.2.0.9032</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -108,9 +108,9 @@ level are imputed.</p>
 missing, <code>NA_character_</code> is returned. For example, for <code>highest_imputation = "D"</code> <code>"2020"</code> results in <code>NA_character_</code> because the month is missing.</p>
 <p>If <code>"n"</code> is specified no imputation is performed, i.e., if any component is
 missing, <code>NA_character_</code> is returned.</p>
-<p>If <code>"Y"</code> is specified, <code>date_imputation</code> should be <code>"first"</code> or <code>"last"</code>
-and <code>min_dates</code> or <code>max_dates</code> should be specified respectively. Otherwise,
-<code>NA_character_</code> is returned if the year component is missing.</p>
+<p>If <code>"Y"</code> is specified, <code>date_imputation</code> must be <code>"first"</code> or <code>"last"</code>
+and <code>min_dates</code> or <code>max_dates</code> must be specified respectively. Otherwise,
+an error is thrown.</p>
 <dl><dt>Permitted values</dt>
 <dd><p><code>"Y"</code> (year, highest level), <code>"M"</code> (month), <code>"D"</code>
 (day), <code>"n"</code> (none, lowest level)</p></dd>
@@ -125,17 +125,18 @@ and <code>min_dates</code> or <code>max_dates</code> should be specified respect
 <dt id="arg-date-imputation">date_imputation<a class="anchor" aria-label="anchor" href="#arg-date-imputation"></a></dt>
 <dd><p>The value to impute the day/month when a datepart is
 missing.</p>
-<p>A character value is expected, either as a</p><ul><li><p>format with month and day specified as <code>"mm-dd"</code>: e.g. <code>"06-15"</code> for the
-15th of June (The year can not be specified; for imputing the year
-<code>"first"</code> or <code>"last"</code> together with <code>min_dates</code> or <code>max_dates</code> argument can
-be used (see examples).),</p></li>
-<li><p>or as a keyword: <code>"first"</code>, <code>"mid"</code>, <code>"last"</code> to impute to the first/mid/last
+<p>A character value is expected.</p><ul><li><p>If  <code>highest_imputation</code> is <code>"M"</code>, month and day can be
+specified as <code>"mm-dd"</code>: e.g. <code>"06-15"</code> for the 15th of June</p></li>
+<li><p>When  <code>highest_imputation</code> is <code>"M"</code> or  <code>"D"</code>, the following keywords are available:
+<code>"first"</code>, <code>"mid"</code>, <code>"last"</code> to impute to the first/mid/last
 day/month. If <code>"mid"</code> is specified, missing components are imputed as the
 middle of the possible range:</p><ul><li><p>If both month and day are missing, they are imputed as <code>"06-30"</code>
 (middle of the year).</p></li>
 <li><p>If only day is missing, it is imputed as <code>"15"</code> (middle of the month).</p></li>
 </ul></li>
-</ul><p>The argument is ignored if <code>highest_imputation</code> is less then <code>"D"</code>.</p>
+</ul><p>The year can not be specified; for imputing the year
+<code>"first"</code> or <code>"last"</code> together with <code>min_dates</code> or <code>max_dates</code> argument can
+be used (see examples).</p>
 <dl><dt>Default value</dt>
 <dd><p><code>"first"</code></p></dd>
 
