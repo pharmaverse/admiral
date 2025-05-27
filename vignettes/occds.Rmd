@@ -35,6 +35,7 @@ otherwise specified.*
 * [Derive ATC variables](#atc)
 * [Derive Planned and Actual Treatment](#trtpa)
 * [Derive Date/Date-time of Last Dose](#last_dose)
+* [Derive Treatment Dose and Unit](#dose_unit)
 * [Derive Severity, Causality, and Toxicity Grade](#severity)
 * [Derive Treatment Emergent Flag](#trtflag)
 * [Derive Occurrence Flags](#occflag)
@@ -224,7 +225,6 @@ vignette](visits_periods.html#treatment_bds).
 
 ## Derive Date/Date-time of Last Dose {#last_dose}
 
-
 The function `derive_vars_joined()` can be used to derive the last dose date before the start of the event. 
 
 ```{r eval=TRUE}
@@ -255,6 +255,44 @@ dataset_vignette(
   display_vars = exprs(
     USUBJID, AEDECOD, AESEQ, AESTDTC, AEENDTC,
     ASTDT, AENDT, LDOSEDTM
+  )
+)
+```
+
+## Derive Treatment Dose and Unit {#dose_unit}
+
+In a similar manner, you could derive the treatment dose and unit at the time of
+the event. Please note that it is assumed that the dosing intervals do not
+overlap. If this case occurs, the `derive_vars_joined()` call below will throw
+an error as handling this case is study-specific.
+
+```{r eval=TRUE}
+ex_single <- derive_vars_dtm(
+  ex_single,
+  dtc = EXENDTC,
+  new_vars_prefix = "EXEN",
+  time_imputation = "last",
+  flag_imputation = "none"
+)
+
+adae <- derive_vars_joined(
+  adae,
+  ex_single,
+  by_vars = exprs(STUDYID, USUBJID),
+  new_vars = exprs(DOSEON = EXDOSE, DOSEU = EXDOSU),
+  join_vars = exprs(EXSTDTM, EXENDTM),
+  join_type = "all",
+  filter_add = (EXDOSE > 0 | (EXDOSE == 0 & grepl("PLACEBO", EXTRT))) & !is.na(EXSTDTM),
+  filter_join = EXSTDTM <= ASTDTM & (ASTDTM <= EXENDTM | is.na(EXENDTM))
+)
+```
+
+```{r, eval=TRUE, echo=FALSE}
+dataset_vignette(
+  adae,
+  display_vars = exprs(
+    USUBJID, AEDECOD, AESEQ, AESTDTC, AEENDTC,
+    ASTDT, AENDT, DOSEON, DOSEU
   )
 )
 ```

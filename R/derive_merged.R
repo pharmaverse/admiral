@@ -115,7 +115,7 @@
 #'   of the specified variables are set to the specified value. Only variables
 #'   specified for `new_vars` can be specified for `missing_values`.
 #'
-#' @permitted [expr_list]
+#' @permitted [expr_list_formula]
 #'
 #' @param check_type Check uniqueness?
 #'
@@ -1034,16 +1034,50 @@ derive_var_merged_summary <- function(dataset,
   )
 
   # Summarise the analysis value and merge to the original dataset
-  derive_vars_merged(
-    dataset,
-    dataset_add = derive_summary_records(
-      dataset_add = dataset_add,
-      by_vars = by_vars_right,
-      filter_add = !!filter_add,
-      set_values_to = new_vars,
-    ) %>%
-      select(!!!by_vars_right, names(new_vars)),
-    by_vars = by_vars,
-    missing_values = missing_values
+  # If for one of the new variables no summary function is used, i.e., more than
+  # one record is created per by group, the error from signal_duplicates_records()
+  # need to be updated and the warning from dplyr needs to be suppressed as it
+  # is misleading.
+  tryCatch(
+    withCallingHandlers(
+      derive_vars_merged(
+        dataset,
+        dataset_add = derive_summary_records(
+          dataset_add = dataset_add,
+          by_vars = by_vars_right,
+          filter_add = !!filter_add,
+          set_values_to = new_vars,
+        ) %>%
+          select(!!!by_vars_right, names(new_vars)),
+        by_vars = by_vars,
+        missing_values = missing_values
+      ),
+      warning = function(cnd) {
+        if (any(str_detect(
+          cnd$message,
+          fixed("Returning more (or less) than 1 row per `summarise()` group was deprecated")
+        ))) {
+          cnd_muffle(cnd)
+        }
+      }
+    ),
+    duplicate_records = function(cnd) {
+      cli_abort(
+        c(
+          paste(
+            "After summarising, the dataset contains duplicate records with",
+            "respect to {.var {cnd$by_vars}}."
+          ),
+          paste(
+            "Please check {.arg new_vars} if summary functions like {.fun mean},",
+            "{.fun sum}, ... are used on the right hand side."
+          ),
+          i = "Run {.run admiral::get_duplicates_dataset()} to access the duplicate records"
+        ),
+        class = cnd$class,
+        call = NULL,
+        by_vars = cnd$by_vars
+      )
+    }
   )
 }

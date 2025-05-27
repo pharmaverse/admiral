@@ -111,15 +111,18 @@ to \code{by_vars}, removes or renames.
 The specified variable is added to the input dataset (\code{dataset}) and the
 additional dataset (\code{dataset_add}). It is set to the observation number
 with respect to \code{order}. For each by group (\code{by_vars}) the observation
-number starts with \code{1}. The variable can be used in the conditions
-(\code{filter_join}, \code{first_cond_upper}, \code{first_cond_lower}). It can also be
-used to select consecutive observations or the last observation.
+number starts with \code{1}. If there is more than one record for specific
+values for \code{by_vars} and \code{order}, all records get the same observation
+number. By default, a warning (see \code{check_type}) is issued in this case.
+The variable can be used in the conditions (\code{filter_join},
+\code{first_cond_upper}, \code{first_cond_lower}). It can also be used to select
+consecutive observations or the last observation.
 
 The variable is not included in the output dataset. To include it specify
 it for \code{new_vars}.
 
 \describe{
-\item{Permitted values}{a variable}
+\item{Permitted values}{an unquoted symbol, e.g., \code{AVAL}}
 \item{Default value}{\code{NULL}}
 }}
 
@@ -249,7 +252,7 @@ be the value provided in \code{true_value} for all selected records from \code{d
 which are merged into the input dataset, and the value provided in \code{false_value} otherwise.
 
 \describe{
-\item{Permitted values}{a variable}
+\item{Permitted values}{an unquoted symbol, e.g., \code{AVAL}}
 \item{Default value}{\code{NULL}}
 }}
 
@@ -281,15 +284,15 @@ of the specified variables are set to the specified value. Only variables
 specified for \code{new_vars} can be specified for \code{missing_values}.
 
 \describe{
-\item{Permitted values}{list of expressions created by \code{exprs()}, e.g., \code{exprs(BASEC = "MISSING", BASE = -1)}}
+\item{Permitted values}{list of named expressions created by a formula using \code{exprs()}, e.g., \code{exprs(AVALC = VSSTRESC, AVAL = yn_to_numeric(AVALC))}}
 \item{Default value}{\code{NULL}}
 }}
 
 \item{check_type}{Check uniqueness?
 
-If \code{"warning"} or \code{"error"} is specified, the specified message is issued
-if the observations of the (restricted) joined dataset are not unique with
-respect to the by variables and the order.
+If \code{"message"}, \code{"warning"} or \code{"error"} is specified, the specified
+message is issued if the observations of the (restricted) joined dataset
+are not unique with respect to the by variables and the order.
 
 This argument is ignored if \code{order} is not specified. In this case an error
 is issued independent of \code{check_type} if the restricted joined dataset
@@ -367,6 +370,7 @@ General Derivation Functions for all ADaMs that returns variable appended to dat
 \code{\link{derive_var_relative_flag}()},
 \code{\link{derive_vars_cat}()},
 \code{\link{derive_vars_computed}()},
+\code{\link{derive_vars_joined_summary}()},
 \code{\link{derive_vars_merged}()},
 \code{\link{derive_vars_merged_lookup}()},
 \code{\link{derive_vars_transposed}()}

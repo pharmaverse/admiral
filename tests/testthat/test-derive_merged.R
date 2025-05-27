@@ -666,3 +666,27 @@ test_that("derive_var_merged_summary Test 27: merge sel vars 'one-to-one'", {
     )
   )
 })
+
+## Test 28: error if no summary function ----
+test_that("derive_var_merged_summary Test 28: error if no summary function", {
+  adbds <- tibble::tribble(
+    ~AVISIT,  ~ASEQ, ~AVAL,
+    "WEEK 1",     1,    10,
+    "WEEK 1",     2,    NA,
+    "WEEK 2",     3,    NA,
+    "WEEK 3",     4,    42,
+    "WEEK 4",     5,    12,
+    "WEEK 4",     6,    12,
+    "WEEK 4",     7,    15
+  )
+
+  expect_snapshot(
+    derive_var_merged_summary(
+      adbds,
+      dataset_add = adbds,
+      by_vars = exprs(AVISIT),
+      new_vars = exprs(MEANVIS = AVAL / 2)
+    ),
+    error = TRUE
+  )
+})

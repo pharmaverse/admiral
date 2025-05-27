@@ -102,39 +102,39 @@ test_that("derive_var_atoxgr Test 4: ATOXGR < 0 (HYPO)", {
 ### Grade 1: <LLN - 100 g/L
 
 
-expected_anemia <- tibble::tribble(
-  ~ATOXDSCL,      ~AVAL,  ~ANRLO, ~ANRHI, ~AVALU, ~ATOXGRL,
-  "Not a term",   80,     120,    200,    "G/L",  NA,
-  NA_character_,  60,     50,     100,    "G/L",  NA,
-  "ANEMIA",       79,     140,    NA,     "G/L",  "3",
-  "ANEMIA",       80,     140,    NA,     "G/L",  "2",
-  "Anemia",       99,     140,    NA,     "G/L",  "2",
-  "Anemia",       100,    140,    NA,     "G/L",  "1",
+expected_anemia_si <- tibble::tribble(
+  ~ATOXDSCL,      ~AVAL,  ~ANRLO, ~ANRHI, ~AVALU, ~ATOXGRL, ~TESTNUM,
+  "Not a term",   80,     120,    200,    "G/L",  NA,       1,
+  NA_character_,  60,     50,     100,    "G/L",  NA,       2,
+  "ANEMIA",       79,     140,    NA,     "G/L",  "3",      3,
+  "ANEMIA",       80,     140,    NA,     "G/L",  "2",      4,
+  "Anemia",       99,     140,    NA,     "G/L",  "2",      5,
+  "Anemia",       100,    140,    NA,     "G/L",  "1",      6,
   # wrong UNIT - GRADE should be missing
-  "anemia",       100,    140,    NA,     "G/dL", NA,
-  "Anemia",       139,    140,    NA,     "G/L",  "1",
-  "ANEMIA",       140,    140,    NA,     "g/L",  "0",
+  "anemia",       100,    140,    NA,     "G/cL", NA,       7,
+  "Anemia",       139,    140,    NA,     "G/L",  "1",      8,
+  "ANEMIA",       140,    140,    NA,     "g/L",  "0",      9,
   # ANRLO missing AVAL not grade 2 or 3 - cannot grade
-  "Anemia",       140,    NA,     NA,     "G/L",  NA,
-  "Anemia",       139,    NA,     NA,     "G/L",  NA,
-  "Anemia",       100,    NA,     NA,     "G/L",  NA,
+  "Anemia",       140,    NA,     NA,     "G/L",  NA,       10,
+  "Anemia",       139,    NA,     NA,     "G/L",  NA,       11,
+  "Anemia",       100,    NA,     NA,     "G/L",  NA,       12,
   # ANRLO missing but AVAL satisfies grade 2
-  "Anemia",       99,     NA,     NA,     "G/L",  "2",
+  "Anemia",       99,     NA,     NA,     "G/L",  "2",      13,
   # ANRLO missing but AVAL satisfies grade 3
-  "Anemia",       79,     NA,     NA,     "G/L",  "3",
+  "Anemia",       79,     NA,     NA,     "G/L",  "3",      14,
   # Unit missing cannot grade
-  "Anemia",       140,    140,    NA,     NA,     NA,
+  "Anemia",       140,    140,    NA,     NA,     NA,       15,
   # AVAL missing cannot grade
-  "Anemia",       NA,     140,    NA,     "G/L",  NA,
+  "Anemia",       NA,     140,    NA,     "G/L",  NA,       16,
 )
 
-input_anemia <- expected_anemia %>%
+input_anemia_si <- expected_anemia_si %>%
   select(-ATOXGRL)
 
-## Test 5: CTCAEv4 Anemia ----
-test_that("derive_var_atoxgr Test 5: CTCAEv4 Anemia", {
-  actual_anemia_ctcv4 <- derive_var_atoxgr_dir(
-    input_anemia,
+## Test 5a: CTCAEv4 Anemia ----
+test_that("derive_var_atoxgr Test 5a: CTCAEv4 Anemia (SI unit)", {
+  actual_anemia_ctcv4_si <- derive_var_atoxgr_dir(
+    input_anemia_si,
     new_var = ATOXGRL,
     meta_criteria = atoxgr_criteria_ctcv4,
     tox_description_var = ATOXDSCL,
@@ -143,16 +143,74 @@ test_that("derive_var_atoxgr Test 5: CTCAEv4 Anemia", {
   )
 
   expect_dfs_equal(
-    base = expected_anemia,
-    compare = actual_anemia_ctcv4,
-    keys = c("ATOXDSCL", "AVAL", "ANRLO", "ANRHI", "AVALU")
+    base = expected_anemia_si,
+    compare = actual_anemia_ctcv4_si,
+    keys = c("TESTNUM")
   )
 })
 
-## Test 6: CTCAEv5 Anemia ----
-test_that("derive_var_atoxgr Test 6: CTCAEv5 Anemia", {
-  actual_anemia_ctcv5 <- derive_var_atoxgr_dir(
-    input_anemia,
+# CV_UNIT is g/dL so divide numeric values by 10
+expected_anemia_cv <- expected_anemia_si %>%
+  mutate(
+    AVAL = if_else(is.na(AVAL), NA_real_, AVAL / 10),
+    ANRLO = if_else(is.na(ANRLO), NA_real_, ANRLO / 10),
+    ANRHI = if_else(is.na(ANRHI), NA_real_, ANRHI / 10),
+    AVALU = if_else(toupper(AVALU) == "G/L", "g/dL", AVALU)
+  )
+
+input_anemia_cv <- expected_anemia_cv %>%
+  select(-ATOXGRL)
+
+## Test 5b: CTCAEv4 Anemia (CV unit) ----
+test_that("derive_var_atoxgr Test 5b: CTCAEv4 Anemia (CV unit)", {
+  actual_anemia_ctcv4 <- derive_var_atoxgr_dir(
+    input_anemia_cv,
+    new_var = ATOXGRL,
+    meta_criteria = atoxgr_criteria_ctcv4_uscv,
+    tox_description_var = ATOXDSCL,
+    criteria_direction = "L",
+    get_unit_expr = AVALU
+  )
+
+  expect_dfs_equal(
+    base = expected_anemia_cv,
+    compare = actual_anemia_ctcv4,
+    keys = c("TESTNUM")
+  )
+})
+
+## Test 5c: CTCAEv4 Anemia (SI + CV unit) ----
+test_that("derive_var_atoxgr Test 5c: CTCAEv4 Anemia (SI + CV unit)", {
+  expected_anemia_sicv <- expected_anemia_cv %>%
+    mutate(TESTNUM = TESTNUM + 16) %>%
+    bind_rows(expected_anemia_si)
+
+  input_anemia_sicv <- expected_anemia_sicv %>%
+    select(-ATOXGRL)
+
+  atoxgr_criteria_ctcv4_siuscv <- atoxgr_criteria_ctcv4_uscv %>%
+    bind_rows(atoxgr_criteria_ctcv4)
+
+  actual_anemia_ctcv4 <- derive_var_atoxgr_dir(
+    input_anemia_sicv,
+    new_var = ATOXGRL,
+    meta_criteria = atoxgr_criteria_ctcv4_siuscv,
+    tox_description_var = ATOXDSCL,
+    criteria_direction = "L",
+    get_unit_expr = AVALU
+  )
+
+  expect_dfs_equal(
+    base = expected_anemia_sicv,
+    compare = actual_anemia_ctcv4,
+    keys = c("TESTNUM")
+  )
+})
+
+## Test 6a: CTCAEv5 Anemia (SI unit) ----
+test_that("derive_var_atoxgr Test 6: CTCAEv5 Anemia (SI unit)", {
+  actual_anemia_ctcv5_si <- derive_var_atoxgr_dir(
+    input_anemia_si,
     new_var = ATOXGRL,
     meta_criteria = atoxgr_criteria_ctcv5,
     tox_description_var = ATOXDSCL,
@@ -161,18 +219,40 @@ test_that("derive_var_atoxgr Test 6: CTCAEv5 Anemia", {
   )
 
   expect_dfs_equal(
-    base = expected_anemia,
-    compare = actual_anemia_ctcv5,
-    keys = c("ATOXDSCL", "AVAL", "ANRLO", "ANRHI", "AVALU")
+    base = expected_anemia_si,
+    compare = actual_anemia_ctcv5_si,
+    keys = c("TESTNUM")
+  )
+})
+
+## Test 6b: CTCAEv5 Anemia (CV unit) ----
+test_that("derive_var_atoxgr Test 6: CTCAEv5 Anemia (CV unit)", {
+  actual_anemia_ctcv5_cv <- derive_var_atoxgr_dir(
+    input_anemia_cv,
+    new_var = ATOXGRL,
+    meta_criteria = atoxgr_criteria_ctcv5_uscv,
+    tox_description_var = ATOXDSCL,
+    criteria_direction = "L",
+    get_unit_expr = AVALU
+  )
+
+  expect_dfs_equal(
+    base = expected_anemia_cv,
+    compare = actual_anemia_ctcv5_cv,
+    keys = c("TESTNUM")
   )
 })
 
 
 ### Leukocytosis
 ### NCICTCAEv4 and NCICTCAEv5 criteria is the same
+### Si unit is 10^9/L
+### CV unit is 10^3/uL ( = 10^9/L)
+### Legacy CV unit is 10^3/mL (1000 * 10^9/L)
+
 ### Grade 3: >100,000/mm3
 
-expected_leukocytosis <- tibble::tribble(
+expected_leukocytosis_si <- tibble::tribble(
   ~ATOXDSCH,      ~AVAL,  ~ANRLO, ~ANRHI, ~AVALU,    ~ATOXGRH,
   "Not a term",   99,     0,      NA,     "10^9/L",  NA,
   NA,             99,     0,      NA,     "10^9/L",  NA,
@@ -186,14 +266,14 @@ expected_leukocytosis <- tibble::tribble(
   # AVAL missing cannot grade
   "Leukocytosis", NA,     0,      40,     "10^9/L",  NA,
 )
-input_leukocytosis <- expected_leukocytosis %>%
+input_leukocytosis_si <- expected_leukocytosis_si %>%
   select(-ATOXGRH)
 
 
-## Test 7: CTCAEv4 Leukocytosis ----
-test_that("derive_var_atoxgr Test 7: CTCAEv4 Leukocytosis", {
-  actual_leukocytosis <- derive_var_atoxgr_dir(
-    input_leukocytosis,
+## Test 7a: CTCAEv4 Leukocytosis (SI unit) ----
+test_that("derive_var_atoxgr Test 7a: CTCAEv4 Leukocytosis (SI unit)", {
+  actual_leukocytosis_si <- derive_var_atoxgr_dir(
+    input_leukocytosis_si,
     new_var = ATOXGRH,
     meta_criteria = atoxgr_criteria_ctcv4,
     tox_description_var = ATOXDSCH,
@@ -202,16 +282,69 @@ test_that("derive_var_atoxgr Test 7: CTCAEv4 Leukocytosis", {
   )
 
   expect_dfs_equal(
-    base = expected_leukocytosis,
-    compare = actual_leukocytosis,
+    base = expected_leukocytosis_si,
+    compare = actual_leukocytosis_si,
     keys = c("ATOXDSCH", "AVAL", "ANRLO", "ANRHI", "AVALU")
   )
 })
 
-## Test 8: CTCAEv5 Leukocytosis ----
-test_that("derive_var_atoxgr Test 8: CTCAEv5 Leukocytosis", {
-  actual_leukocytosis <- derive_var_atoxgr_dir(
-    input_leukocytosis,
+expected_leukocytosis_cv <- expected_leukocytosis_si %>%
+  mutate(
+    AVALU = if_else(str_to_upper(AVALU) == "10^9/L", "10^3/uL", AVALU)
+  )
+
+input_leukocytosis_cv <- expected_leukocytosis_cv %>%
+  select(-ATOXGRH)
+
+## Test 7b: CTCAEv4 Leukocytosis (USCV unit) ----
+test_that("derive_var_atoxgr Test 7b: CTCAEv4 Leukocytosis (USCV unit)", {
+  actual_leukocytosis_cv <- derive_var_atoxgr_dir(
+    input_leukocytosis_cv,
+    new_var = ATOXGRH,
+    meta_criteria = atoxgr_criteria_ctcv4_uscv,
+    tox_description_var = ATOXDSCH,
+    criteria_direction = "H",
+    get_unit_expr = AVALU
+  )
+
+  expect_dfs_equal(
+    base = expected_leukocytosis_cv,
+    compare = actual_leukocytosis_cv,
+    keys = c("ATOXDSCH", "AVAL", "ANRLO", "ANRHI", "AVALU")
+  )
+})
+
+expected_leukocytosis_cv2 <- expected_leukocytosis_si %>%
+  mutate(
+    AVAL = 1000 * AVAL,
+    ANRHI = 1000 * ANRHI,
+    AVALU = if_else(str_to_upper(AVALU) == "10^9/L", "10^3/mL", AVALU)
+  )
+input_leukocytosis_cv2 <- expected_leukocytosis_cv2 %>%
+  select(-ATOXGRH)
+
+## Test 7c: CTCAEv4 Leukocytosis (legacy USCV unit) ----
+test_that("derive_var_atoxgr Test 7c: CTCAEv4 Leukocytosis (legacy USCV unit)", {
+  actual_leukocytosis_cv2 <- derive_var_atoxgr_dir(
+    input_leukocytosis_cv2,
+    new_var = ATOXGRH,
+    meta_criteria = atoxgr_criteria_ctcv4_uscv,
+    tox_description_var = ATOXDSCH,
+    criteria_direction = "H",
+    get_unit_expr = AVALU
+  )
+
+  expect_dfs_equal(
+    base = expected_leukocytosis_cv2,
+    compare = actual_leukocytosis_cv2,
+    keys = c("ATOXDSCH", "AVAL", "ANRLO", "ANRHI", "AVALU")
+  )
+})
+
+## Test 8a: CTCAEv5 Leukocytosis (SI unit) ----
+test_that("derive_var_atoxgr Test 8a: CTCAEv5 Leukocytosis (SI unit)", {
+  actual_leukocytosis_si <- derive_var_atoxgr_dir(
+    input_leukocytosis_si,
     new_var = ATOXGRH,
     meta_criteria = atoxgr_criteria_ctcv5,
     tox_description_var = ATOXDSCH,
@@ -220,8 +353,44 @@ test_that("derive_var_atoxgr Test 8: CTCAEv5 Leukocytosis", {
   )
 
   expect_dfs_equal(
-    base = expected_leukocytosis,
-    compare = actual_leukocytosis,
+    base = expected_leukocytosis_si,
+    compare = actual_leukocytosis_si,
+    keys = c("ATOXDSCH", "AVAL", "ANRLO", "ANRHI", "AVALU")
+  )
+})
+
+## Test 8b: CTCAEv5 Leukocytosis (USCV unit) ----
+test_that("derive_var_atoxgr Test 8b: CTCAEv5 Leukocytosis (USCV unit)", {
+  actual_leukocytosis_cv <- derive_var_atoxgr_dir(
+    input_leukocytosis_cv,
+    new_var = ATOXGRH,
+    meta_criteria = atoxgr_criteria_ctcv5_uscv,
+    tox_description_var = ATOXDSCH,
+    criteria_direction = "H",
+    get_unit_expr = AVALU
+  )
+
+  expect_dfs_equal(
+    base = expected_leukocytosis_cv,
+    compare = actual_leukocytosis_cv,
+    keys = c("ATOXDSCH", "AVAL", "ANRLO", "ANRHI", "AVALU")
+  )
+})
+
+## Test 8c: CTCAEv5 Leukocytosis (legacy USCV unit) ----
+test_that("derive_var_atoxgr Test 8c: CTCAEv5 Leukocytosis (legacy USCV unit)", {
+  actual_leukocytosis_cv2 <- derive_var_atoxgr_dir(
+    input_leukocytosis_cv2,
+    new_var = ATOXGRH,
+    meta_criteria = atoxgr_criteria_ctcv5_uscv,
+    tox_description_var = ATOXDSCH,
+    criteria_direction = "H",
+    get_unit_expr = AVALU
+  )
+
+  expect_dfs_equal(
+    base = expected_leukocytosis_cv2,
+    compare = actual_leukocytosis_cv2,
     keys = c("ATOXDSCH", "AVAL", "ANRLO", "ANRHI", "AVALU")
   )
 })
@@ -252,12 +421,36 @@ expected_aptt <- tibble::tribble(
 input_aptt <- expected_aptt %>%
   select(-ATOXGRH)
 
-## Test 9: CTCAEv4 Activated partial thromboplastin time prolonged ----
+## Test 9a: CTCAEv4 Activated partial thromboplastin time prolonged ----
 test_that("derive_var_atoxgr Test 9: CTCAEv4 Activated partial thromboplastin time prolonged", {
   actual_aptt <- derive_var_atoxgr_dir(
     input_aptt,
     new_var = ATOXGRH,
     meta_criteria = atoxgr_criteria_ctcv4,
+    tox_description_var = ATOXDSCH,
+    criteria_direction = "H",
+    get_unit_expr = AVALU
+  )
+
+  expect_dfs_equal(
+    base = expected_aptt,
+    compare = actual_aptt,
+    keys = c("ATOXDSCH", "AVAL", "ANRHI", "AVALU")
+  )
+})
+
+## Test 9b: CTCAEv4 Activated partial thromboplastin time prolonged (SI + CV METDATA) ----
+test_that(paste(
+  "derive_var_atoxgr Test 9b: CTCAEv4 Activated partial thromboplastin time prolonged",
+  "(SI + CV METDATA)"
+), {
+  atoxgr_criteria_ctcv4_sicv <- atoxgr_criteria_ctcv4 %>%
+    bind_rows(atoxgr_criteria_ctcv4_uscv)
+
+  actual_aptt <- derive_var_atoxgr_dir(
+    input_aptt,
+    new_var = ATOXGRH,
+    meta_criteria = atoxgr_criteria_ctcv4_sicv,
     tox_description_var = ATOXDSCH,
     criteria_direction = "H",
     get_unit_expr = AVALU
@@ -727,12 +920,18 @@ test_that("derive_var_atoxgr Test 18: CTCAEv5  Blood bilirubin increased", {
 
 ### CD4 Lymphocytes decreased
 ### NCICTCAEv5 same criteria as NCICTCAEv4
+### SI unit (10^9/L)
 ### Grade 4: <0.05 x 10e9 /L
-### Grade 3: <0.2 x 0.05 - 10e9 /L
+### Grade 3: <0.2 - 0.05 x 10e9 /L
 ### Grade 2: <0.5 - 0.2 x 10e9 /L
 ### Grade 1: <LLN - 0.5 x 10e9 /L
+### USCV unit (1/uL = /mm3)
+### Grade 4: <50/mm3
+### Grade 3: <200 x 50/mm3
+### Grade 2: <500 - 200/mm3
+### Grade 1: <LLN - 500/mm3
 
-expected_cd4 <- tibble::tribble(
+expected_cd4_si <- tibble::tribble(
   ~ATOXDSCL,                    ~AVAL,  ~ANRLO, ~AVALU,    ~ATOXGRL,
   "Not a term",                 80,     120,    "10^9/L",  NA,
   NA_character_,                60,     50,     "10^9/L",  NA,
@@ -762,13 +961,23 @@ expected_cd4 <- tibble::tribble(
   "CD4 lymphocytes decreased",  NA,     0.8,    "10^9/L",  NA,
 )
 
-input_cd4 <- expected_cd4 %>%
+input_cd4_si <- expected_cd4_si %>%
   select(-ATOXGRL)
 
-## Test 19: CTCAEv4 CD4 Lymphocytes decreased ----
-test_that("derive_var_atoxgr Test 19: CTCAEv4 CD4 Lymphocytes decreased", {
-  actual_cd4 <- derive_var_atoxgr_dir(
-    input_cd4,
+expected_cd4_cv <- expected_cd4_si %>%
+  mutate(
+    AVAL = AVAL * 1000,
+    ANRLO = ANRLO * 1000,
+    AVALU = if_else(str_to_upper(AVALU) == "10^9/L", "1/uL", NA_character_)
+  )
+
+input_cd4_cv <- expected_cd4_cv %>%
+  select(-ATOXGRL)
+
+## Test 19a: CTCAEv4 CD4 Lymphocytes decreased (SI unit) ----
+test_that("derive_var_atoxgr Test 19a: CTCAEv4 CD4 Lymphocytes decreased (SI unit)", {
+  actual_cd4_si <- derive_var_atoxgr_dir(
+    input_cd4_si,
     new_var = ATOXGRL,
     meta_criteria = atoxgr_criteria_ctcv4,
     tox_description_var = ATOXDSCL,
@@ -777,16 +986,34 @@ test_that("derive_var_atoxgr Test 19: CTCAEv4 CD4 Lymphocytes decreased", {
   )
 
   expect_dfs_equal(
-    base = expected_cd4,
-    compare = actual_cd4,
+    base = expected_cd4_si,
+    compare = actual_cd4_si,
     keys = c("ATOXDSCL", "AVAL", "ANRLO", "AVALU")
   )
 })
 
-## Test 20: CTCAEv5 CD4 Lymphocytes decreased ----
-test_that("derive_var_atoxgr Test 20: CTCAEv5 CD4 Lymphocytes decreased", {
-  actual_cd4 <- derive_var_atoxgr_dir(
-    input_cd4,
+## Test 19b: CTCAEv4 CD4 Lymphocytes decreased (USCV unit) ----
+test_that("derive_var_atoxgr Test 19b: CTCAEv4 CD4 Lymphocytes decreased (USCV unit)", {
+  actual_cd4_cv <- derive_var_atoxgr_dir(
+    input_cd4_cv,
+    new_var = ATOXGRL,
+    meta_criteria = atoxgr_criteria_ctcv4_uscv,
+    tox_description_var = ATOXDSCL,
+    criteria_direction = "L",
+    get_unit_expr = AVALU
+  )
+
+  expect_dfs_equal(
+    base = expected_cd4_cv,
+    compare = actual_cd4_cv,
+    keys = c("ATOXDSCL", "AVAL", "ANRLO", "AVALU")
+  )
+})
+
+## Test 20a: CTCAEv5 CD4 Lymphocytes decreased (SI unit) ----
+test_that("derive_var_atoxgr Test 20: CTCAEv5 CD4 Lymphocytes decreased (SI unit)", {
+  actual_cd4_si <- derive_var_atoxgr_dir(
+    input_cd4_si,
     new_var = ATOXGRL,
     meta_criteria = atoxgr_criteria_ctcv5,
     tox_description_var = ATOXDSCL,
@@ -795,20 +1022,46 @@ test_that("derive_var_atoxgr Test 20: CTCAEv5 CD4 Lymphocytes decreased", {
   )
 
   expect_dfs_equal(
-    base = expected_cd4,
-    compare = actual_cd4,
+    base = expected_cd4_si,
+    compare = actual_cd4_si,
+    keys = c("ATOXDSCL", "AVAL", "ANRLO", "AVALU")
+  )
+})
+
+## Test 20b: CTCAEv5 CD4 Lymphocytes decreased (USCV unit) ----
+test_that("derive_var_atoxgr Test 20b: CTCAEv5 CD4 Lymphocytes decreased (USCV unit)", {
+  actual_cd4_cv <- derive_var_atoxgr_dir(
+    input_cd4_cv,
+    new_var = ATOXGRL,
+    meta_criteria = atoxgr_criteria_ctcv5_uscv,
+    tox_description_var = ATOXDSCL,
+    criteria_direction = "L",
+    get_unit_expr = AVALU
+  )
+
+  expect_dfs_equal(
+    base = expected_cd4_cv,
+    compare = actual_cd4_cv,
     keys = c("ATOXDSCL", "AVAL", "ANRLO", "AVALU")
   )
 })
 
 ### Cholesterol high
 ### NCICTCAEv5 same criteria as NCICTCAEv4
+### SI unit (mmol/L)
 ### Grade 4: >12.92 mmol/L
 ### Grade 3: >10.34 - 12.92 mmol/L
 ### Grade 2: >7.75 - 10.34 mmol/L
 ### Grade 1: >ULN - 7.75 mmol/L
 
-expected_choles <- tibble::tribble(
+
+### SI unit (mg/dL)
+### Grade 4: >500 mg/dL
+### Grade 3: >400 - 500 mg/dL
+### Grade 2: >300 - 400 mg/dL
+### Grade 1: >ULN - 300 mg/dL
+
+expected_choles_si <- tibble::tribble(
   ~ATOXDSCH,          ~AVAL,  ~ANRLO, ~ANRHI, ~AVALU,    ~ATOXGRH,
   "Not a term",       8,      0,      5,      "mmol/L",  NA,
   NA_character_,      10,     0,      5,      "mmol/L",  NA,
@@ -837,13 +1090,48 @@ expected_choles <- tibble::tribble(
   # AVAL missing cannot grade
   "Cholesterol high", NA,     0,      5,      "mmol/L",  NA,
 )
-input_choles <- expected_choles %>%
+
+expected_choles_cv <- tibble::tribble(
+  ~ATOXDSCH,           ~AVAL,  ~ANRLO,  ~ANRHI,   ~AVALU,  ~ATOXGRH,
+  "Not a term",        8,      0,       200,     "mg/dL",        NA,
+  NA_character_,       10,     0,       200,     "mg/dL",        NA,
+  "Cholesterol high",  501,    0,       200,     "mg/dL",       "4",
+  "Cholesterol High",  500,    0,       200,     "mg/dL",       "3",
+  "Cholesterol high",  401,    0,       200,     "Mg/dL",       "3",
+  # wrong unit - grade missing
+  "Cholesterol high",  400,    0,       200,     "ug/dL",        NA,
+  "Cholesterol high",  400,    0,       200,     "mg/dL",       "2",
+  "Cholesterol high",  301,    0,       200,     "mg/dL",       "2",
+  "Cholesterol high",  300,    0,       200,     "mg/dL",       "1",
+  "Cholesterol high",  201,    0,       200,     "mg/dL",       "1",
+  "Cholesterol high",  200,    0,       200,     "mg/dL",       "0",
+  # ANRHI missing - AVAL satisfies grade 2 - 4
+  "Cholesterol high",  501,    0,       NA,      "mg/dL",       "4",
+  "Cholesterol High",  500,    0,       NA,      "mg/dL",       "3",
+  "Cholesterol high",  401,    0,       NA,      "MG/dL",       "3",
+  "Cholesterol high",  400,    0,       NA,      "mg/dL",       "2",
+  "Cholesterol high",  301,    0,       NA,      "mg/dL",       "2",
+  # ANRHI missing - AVAL does NOT satisfies grade 2 - 4
+  "Cholesterol high",  300,    0,       NA,      "mg/dL",        NA,
+  "Cholesterol high",  201,    0,       NA,      "mg/dL",        NA,
+  "Cholesterol high",  200,    0,       NA,      "mg/dL",        NA,
+  # Unit missing - cannot grade
+  "Cholesterol high",  200,    0,       200,          NA,        NA,
+  # AVAL missing cannot grade
+  "Cholesterol high",  NA,     0,       200,    "mmol/L",        NA,
+)
+
+
+input_choles_si <- expected_choles_si %>%
   select(-ATOXGRH)
 
-## Test 21: CTCAEv4 Cholesterol high ----
-test_that("derive_var_atoxgr Test 21: CTCAEv4 Cholesterol high", {
-  actual_choles <- derive_var_atoxgr_dir(
-    input_choles,
+input_choles_cv <- expected_choles_cv %>%
+  select(-ATOXGRH)
+
+## Test 21a: CTCAEv4 Cholesterol high (SI unit) ----
+test_that("derive_var_atoxgr Test 21a: CTCAEv4 Cholesterol high (SI unit)", {
+  actual_choles_si <- derive_var_atoxgr_dir(
+    input_choles_si,
     new_var = ATOXGRH,
     meta_criteria = atoxgr_criteria_ctcv4,
     tox_description_var = ATOXDSCH,
@@ -852,16 +1140,34 @@ test_that("derive_var_atoxgr Test 21: CTCAEv4 Cholesterol high", {
   )
 
   expect_dfs_equal(
-    base = expected_choles,
-    compare = actual_choles,
+    base = expected_choles_si,
+    compare = actual_choles_si,
     keys = c("ATOXDSCH", "AVAL", "ANRLO", "ANRHI", "AVALU")
   )
 })
 
-## Test 22: CTCAEv5 Cholesterol high ----
-test_that("derive_var_atoxgr Test 22: CTCAEv5 Cholesterol high", {
-  actual_choles <- derive_var_atoxgr_dir(
-    input_choles,
+## Test 21b: CTCAEv4 Cholesterol high (USCV unit) ----
+test_that("derive_var_atoxgr Test 21b: CTCAEv4 Cholesterol high (USCV unit)", {
+  actual_choles_cv <- derive_var_atoxgr_dir(
+    input_choles_cv,
+    new_var = ATOXGRH,
+    meta_criteria = atoxgr_criteria_ctcv4_uscv,
+    tox_description_var = ATOXDSCH,
+    criteria_direction = "H",
+    get_unit_expr = AVALU
+  )
+
+  expect_dfs_equal(
+    base = expected_choles_cv,
+    compare = actual_choles_cv,
+    keys = c("ATOXDSCH", "AVAL", "ANRLO", "ANRHI", "AVALU")
+  )
+})
+
+## Test 22a: CTCAEv5 Cholesterol high (SI unit) ----
+test_that("derive_var_atoxgr Test 22a: CTCAEv5 Cholesterol high (SI unit)", {
+  actual_choles_si <- derive_var_atoxgr_dir(
+    input_choles_si,
     new_var = ATOXGRH,
     meta_criteria = atoxgr_criteria_ctcv5,
     tox_description_var = ATOXDSCH,
@@ -870,8 +1176,26 @@ test_that("derive_var_atoxgr Test 22: CTCAEv5 Cholesterol high", {
   )
 
   expect_dfs_equal(
-    base = expected_choles,
-    compare = actual_choles,
+    base = expected_choles_si,
+    compare = actual_choles_si,
+    keys = c("ATOXDSCH", "AVAL", "ANRLO", "ANRHI", "AVALU")
+  )
+})
+
+## Test 22b: CTCAEv5 Cholesterol high (USCV unit) ----
+test_that("derive_var_atoxgr Test 22b: CTCAEv5 Cholesterol high (USCV unit)", {
+  actual_choles_cv <- derive_var_atoxgr_dir(
+    input_choles_cv,
+    new_var = ATOXGRH,
+    meta_criteria = atoxgr_criteria_ctcv5_uscv,
+    tox_description_var = ATOXDSCH,
+    criteria_direction = "H",
+    get_unit_expr = AVALU
+  )
+
+  expect_dfs_equal(
+    base = expected_choles_cv,
+    compare = actual_choles_cv,
     keys = c("ATOXDSCH", "AVAL", "ANRLO", "ANRHI", "AVALU")
   )
 })
@@ -1117,57 +1441,57 @@ test_that("derive_var_atoxgr Test 27: CTCAEv4 Fibrinogen decreased", {
 ## Test 28: CTCAEv5 Fibrinogen decreased ----
 test_that("derive_var_atoxgr Test 28: CTCAEv5 Fibrinogen decreased", {
   expected_fib <- tibble::tribble(
-    ~ATOXDSCL, ~AVAL, ~ANRLO, ~PCHG, ~AVALU, ~ATOXGRL,
-    "Not a term", 9, 10, 40, "g/L", NA,
-    NA_character_, 10, 10, 40, "g/L", NA,
+    ~ATOXDSCL,               ~AVAL,  ~ANRLO,  ~PCHG,  ~AVALU,  ~ATOXGRL,
+    "Not a term",            9,      10,      40,      "g/L",        NA,
+    NA_character_,           10,     10,      40,      "g/L",        NA,
     # Satisfies < 0.5 for grade 4 - other criteria missing
-    "Fibrinogen decreased", 0.49, NA, NA, "g/L", "4",
+    "Fibrinogen decreased",  0.49,   NA,      NA,      "g/L",       "4",
     # Satisfies < 0.5 for grade 4 - satisfies grade 3 for other criteria
-    "Fibrinogen decreased", 0.49, 1, -51, "g/L", "4",
+    "Fibrinogen decreased",  0.49,   1,       -51,     "g/L",       "4",
     # Satisfies < 0.25*LLN for grade 4 - PCHG missing
-    "Fibrinogen decreased", 0.5, 2.1, NA, "g/L", "4",
+    "Fibrinogen decreased",  0.5,    2.1,     NA,      "g/L",       "4",
     # Satisfies < 0.25*LLN for grade 4 - PCHG satisfies grade 3
-    "Fibrinogen decreased", 0.5, 2.1, -51, "g/L", "4",
+    "Fibrinogen decreased",  0.5,    2.1,     -51,     "g/L",       "4",
     # Satisfies <=75% decrease for grade 4 - LLN  satisfies grade 3
-    "Fibrinogen decreased", 0.5, 1.1, -75, "g/L", "4",
+    "Fibrinogen decreased",  0.5,    1.1,     -75,     "g/L",       "4",
     # Satisfies < 0.5*LLN for grade 3 - PCHG missing
-    "Fibrinogen decreased", 1, 2.1, NA, "g/L", "3",
+    "Fibrinogen decreased",  1,      2.1,     NA,      "g/L",       "3",
     # Satisfies < 0.5*LLN for grade 3 - PCHG satisfies grade 2
-    "Fibrinogen decreased", 1, 2.1, -49, "g/L", "3",
+    "Fibrinogen decreased",  1,      2.1,     -49,     "g/L",       "3",
     # Satisfies <=50% decrease for grade 3 - LLN  satisfies grade 2
-    "Fibrinogen decreased", 1, 2, -50, "g/L", "3",
+    "Fibrinogen decreased",  1,      2,       -50,     "g/L",       "3",
     # Satisfies < 0.75*LLN for grade 2 - PCHG missing
-    "Fibrinogen decreased", 1.5, 2.1, NA, "g/L", "2",
+    "Fibrinogen decreased",  1.5,    2.1,     NA,      "g/L",       "2",
     # Satisfies < 0.75*LLN for grade 2 - PCHG satisfies grade 1
-    "Fibrinogen decreased", 1.5, 2.1, -10, "g/L", "2",
+    "Fibrinogen decreased",  1.5,    2.1,     -10,     "g/L",       "2",
     # Satisfies <=25% for grade 2 - LLN satisfies grade 1
-    "Fibrinogen decreased", 1.5, 1.6, -25, "g/L", "2",
+    "Fibrinogen decreased",  1.5,    1.6,     -25,     "g/L",       "2",
     # Satisfies < LLN for grade 1 - PCHG missing
-    "Fibrinogen decreased", 2, 2.1, NA, "g/L", "1",
+    "Fibrinogen decreased",  2,      2.1,     NA,      "g/L",       "1",
     # Satisfies < LLN for grade 1 - PCHG satisfies grade 0
-    "Fibrinogen decreased", 2, 2.1, 10, "g/L", "1",
+    "Fibrinogen decreased",  2,      2.1,     10,      "g/L",       "1",
     # Satisfies grade 0 - AVAL >= LLN AND no % descrease
-    "Fibrinogen decreased", 1.5, 1.5, 0, "g/L", "0",
+    "Fibrinogen decreased",  1.5,    1.5,     0,       "g/L",       "0",
     # Satisfies % decrease for grade 1 - AVAL = LLN so not abnormal
-    "Fibrinogen decreased", 1.5, 1.5, -1, "g/L", "0",
+    "Fibrinogen decreased",  1.5,    1.5,     -1,      "g/L",       "0",
     # AVAL >= LLN - PCT missing but its normal so ignore PCT
-    "Fibrinogen decreased", 1.5, 1.5, NA, "g/L", "0",
+    "Fibrinogen decreased",  1.5,    1.5,     NA,      "g/L",       "0",
     # Satisfies <=75% decrease for grade 4 - LLN missing do not know its abnormal
-    "Fibrinogen decreased", 1, NA, -75, "g/L", NA,
+    "Fibrinogen decreased",  1,      NA,      -75,     "g/L",        NA,
     # Satisfies <=50% decrease for grade 3 - LLN missing do not know its abnormal
-    "Fibrinogen decreased", 1, NA, -50, "g/L", NA,
+    "Fibrinogen decreased",  1,      NA,      -50,     "g/L",        NA,
     # Satisfies <=25% decrease for grade 2 - LLN missing do not know its abnormal
-    "Fibrinogen decreased", 1.5, NA, -25, "g/L", NA,
+    "Fibrinogen decreased",  1.5,    NA,      -25,     "g/L",        NA,
     # Satisfies % decrease for grade 1 - LLN missing do not know its abnormal
-    "Fibrinogen decreased", 1.5, NA, -1, "g/L", NA,
+    "Fibrinogen decreased",  1.5,    NA,      -1,      "g/L",        NA,
     # PCT >= 0 BUT LLN missing cannot grade as NORMAL
-    "Fibrinogen decreased", 1.5, NA, 10, "g/L", NA,
+    "Fibrinogen decreased",  1.5,    NA,      10,      "g/L",        NA,
     # AVAL missing cannot grade
-    "Fibrinogen decreased", NA, 1.5, 10, "g/L", NA,
+    "Fibrinogen decreased",  NA,     1.5,     10,      "g/L",        NA,
     # wrong unit cannot grade as it may satisfy grade 4
-    "Fibrinogen decreased", 1.5, 1.5, 0, "g/dL", NA,
+    "Fibrinogen decreased",  1.5,    1.5,     0,      "g/dL",        NA,
     # missing unit cannot grade as it may satisfy grade 4
-    "Fibrinogen decreased", 1.5, 1.5, 0, NA, NA,
+    "Fibrinogen decreased",  1.5,    1.5,     0,          NA,        NA,
   )
   input_fib <- expected_fib %>%
     select(-ATOXGRL)
@@ -1359,53 +1683,62 @@ test_that("derive_var_atoxgr Test 32: CTCAEv5 Haptoglobin decreased", {
 
 ### Hemoglobin increased
 # NCICTCAEv5 same as NCICTCAEv4 when BASE is normal
+# SI unit is "g/L" USCV unit is "g/dL"
 ### Grade 3: Increase in >4 gm/dL above ULN or above baseline if baseline is above ULN
 ### Grade 2: Increase in >2 - 4 gm/dL above ULN or above baseline if baseline is above ULN
 ### Grade 1: Increase in >0 - 2 gm/dL above ULN or above baseline if baseline is above ULN
 
-expected_hgbi <- tibble::tribble(
-  ~ATOXDSCH, ~AVAL, ~BASE, ~ANRHI, ~AVALU, ~ATOXGRH, ~TESTNUM, ~V5,
-  "Not a term", 80, 120, 200, "g/L", NA, 1, "Y",
-  NA_character_, 60, 50, 100, "g/L", NA, 2, "Y",
+expected_hgbi_si <- tibble::tribble(
+  ~ATOXDSCH,              ~AVAL, ~BASE, ~ANRHI, ~AVALU, ~ATOXGRH, ~TESTNUM, ~V5,
+  "Not a term",           80,    120,   200,     "g/L",       NA,        1, "Y",
+  NA_character_,          60,    50,    100,     "g/L",       NA,        2, "Y",
   # BASE greater than ANRHI
-  "Hemoglobin increased", 106, 65, 60, "g/L", "3", 3, "N",
-  "Hemoglobin increased", 105, 65, 60, "g/L", "2", 4, "N",
-  "Hemoglobin increased", 86, 65, 60, "g/L", "2", 5, "N",
-  "Hemoglobin increased", 85, 65, 60, "g/L", "1", 6, "N",
-  "Hemoglobin increased", 66, 65, 60, "g/L", "1", 7, "N",
-  "Hemoglobin increased", 65, 65, 60, "g/L", "0", 8, "N",
-  "Hemoglobin increased", NA, 65, 60, "g/L", NA, 9, "N",
+  "Hemoglobin increased", 106,   65,    60,      "g/L",      "3",        3, "N",
+  "Hemoglobin increased", 105,   65,    60,      "g/L",      "2",        4, "N",
+  "Hemoglobin increased", 86,    65,    60,      "g/L",      "2",        5, "N",
+  "Hemoglobin increased", 85,    65,    60,      "g/L",      "1",        6, "N",
+  "Hemoglobin increased", 66,    65,    60,      "g/L",      "1",        7, "N",
+  "Hemoglobin increased", 65,    65,    60,      "g/L",      "0",        8, "N",
+  "Hemoglobin increased", NA,    65,    60,      "g/L",       NA,        9, "N",
   # BASE less than or equal to ANRHI
-  "Hemoglobin increased", 106, 60, 65, "g/L", "3", 10, "Y",
-  "Hemoglobin increased", 105, 60, 65, "g/L", "2", 11, "Y",
-  "Hemoglobin increased", 86, 60, 65, "g/L", "2", 12, "Y",
-  "Hemoglobin increased", 85, 60, 65, "g/L", "1", 13, "Y",
-  "Hemoglobin increased", 66, 60, 65, "g/L", "1", 14, "Y",
-  "Hemoglobin increased", 65, 60, 65, "g/L", "0", 15, "Y",
-  "Hemoglobin increased", NA, 60, 65, "g/L", NA, 16, "Y",
+  "Hemoglobin increased", 106,   60,    65,      "g/L",      "3",       10, "Y",
+  "Hemoglobin increased", 105,   60,    65,      "g/L",      "2",       11, "Y",
+  "Hemoglobin increased", 86,    60,    65,      "g/L",      "2",       12, "Y",
+  "Hemoglobin increased", 85,    60,    65,      "g/L",      "1",       13, "Y",
+  "Hemoglobin increased", 66,    60,    65,      "g/L",      "1",       14, "Y",
+  "Hemoglobin increased", 65,    60,    65,      "g/L",      "0",       15, "Y",
+  "Hemoglobin increased", NA,    60,    65,      "g/L",       NA,       16, "Y",
   # BASE missing
-  "Hemoglobin increased", 106, NA, 65, "g/L", "3", 17, "N",
-  "Hemoglobin increased", 105, NA, 65, "g/L", "2", 18, "N",
-  "Hemoglobin increased", 86, NA, 65, "g/L", "2", 19, "N",
-  "Hemoglobin increased", 85, NA, 65, "g/L", "1", 20, "N",
-  "Hemoglobin increased", 66, NA, 65, "g/L", "1", 21, "N",
-  "Hemoglobin increased", 65, NA, 65, "g/L", "0", 22, "N",
-  "Hemoglobin increased", NA, NA, 65, "g/L", NA, 23, "N",
+  "Hemoglobin increased", 106,   NA,    65,      "g/L",      "3",       17, "N",
+  "Hemoglobin increased", 105,   NA,    65,      "g/L",      "2",       18, "N",
+  "Hemoglobin increased", 86,    NA,    65,      "g/L",      "2",       19, "N",
+  "Hemoglobin increased", 85,    NA,    65,      "g/L",      "1",       20, "N",
+  "Hemoglobin increased", 66,    NA,    65,      "g/L",      "1",       21, "N",
+  "Hemoglobin increased", 65,    NA,    65,      "g/L",      "0",       22, "N",
+  "Hemoglobin increased", NA,    NA,    65,      "g/L",       NA,       23, "N",
   # Unit missing cannot grade
-  "Hemoglobin increased", 200, 61, 65, NA, NA, 24, "Y",
+  "Hemoglobin increased", 200,   61,    65,         NA,       NA,       24, "Y",
   # ANRHI missing - cannot grade
-  "Hemoglobin increased", 200, 60, NA, "g/L", NA, 25, "Y",
+  "Hemoglobin increased", 200,   60,    NA,      "g/L",       NA,       25, "Y",
   # AVAL missing cannot grade
-  "Hemoglobin increased", NA, 60, 65, "g/L", NA, 26, "Y",
+  "Hemoglobin increased", NA,    60,    65,      "g/L",       NA,       26, "Y",
 )
 
-## Test 33: CTCAEv4 Hemoglobin increased ----
-test_that("derive_var_atoxgr Test 33: CTCAEv4 Hemoglobin increased", {
-  input_hgbi <- expected_hgbi %>%
+expected_hgbi_cv <- expected_hgbi_si %>%
+  mutate(
+    AVAL = AVAL / 10,
+    BASE = BASE / 10,
+    ANRHI = ANRHI / 10,
+    AVALU = if_else(str_to_upper(AVALU) == "G/L", "g/dL", NA_character_)
+  )
+
+## Test 33a: CTCAEv4 Hemoglobin increased (SI unit) ----
+test_that("derive_var_atoxgr Test 33a: CTCAEv4 Hemoglobin increased (SI unit)", {
+  input_hgbi_si <- expected_hgbi_si %>%
     select(-ATOXGRH)
 
-  actual_hgbi <- derive_var_atoxgr_dir(
-    input_hgbi,
+  actual_hgbi_si <- derive_var_atoxgr_dir(
+    input_hgbi_si,
     new_var = ATOXGRH,
     meta_criteria = atoxgr_criteria_ctcv4,
     tox_description_var = ATOXDSCH,
@@ -1414,22 +1747,43 @@ test_that("derive_var_atoxgr Test 33: CTCAEv4 Hemoglobin increased", {
   )
 
   expect_dfs_equal(
-    base = expected_hgbi,
-    compare = actual_hgbi,
+    base = expected_hgbi_si,
+    compare = actual_hgbi_si,
     keys = c("TESTNUM")
   )
 })
 
-## Test 34: CTCAEv5 Hemoglobin increased ----
-test_that("derive_var_atoxgr Test 34: CTCAEv5 Hemoglobin increased", {
-  expected_hgbi <- expected_hgbi %>%
-    filter(V5 == "Y")
-
-  input_hgbi <- expected_hgbi %>%
+## Test 33b: CTCAEv4 Hemoglobin increased (USCV unit) ----
+test_that("derive_var_atoxgr Test 33b: CTCAEv4 Hemoglobin increased (USCV unit)", {
+  input_hgbi_cv <- expected_hgbi_cv %>%
     select(-ATOXGRH)
 
-  actual_hgbi <- derive_var_atoxgr_dir(
-    input_hgbi,
+  actual_hgbi_cv <- derive_var_atoxgr_dir(
+    input_hgbi_cv,
+    new_var = ATOXGRH,
+    meta_criteria = atoxgr_criteria_ctcv4_uscv,
+    tox_description_var = ATOXDSCH,
+    criteria_direction = "H",
+    get_unit_expr = AVALU
+  )
+
+  expect_dfs_equal(
+    base = expected_hgbi_cv,
+    compare = actual_hgbi_cv,
+    keys = c("TESTNUM")
+  )
+})
+
+## Test 34a: CTCAEv5 Hemoglobin increased (SI unit) ----
+test_that("derive_var_atoxgr Test 34a: CTCAEv5 Hemoglobin increased (SI unit)", {
+  expected_hgbi_si <- expected_hgbi_si %>%
+    filter(V5 == "Y")
+
+  input_hgbi_si <- expected_hgbi_si %>%
+    select(-ATOXGRH)
+
+  actual_hgbi_si <- derive_var_atoxgr_dir(
+    input_hgbi_si,
     new_var = ATOXGRH,
     meta_criteria = atoxgr_criteria_ctcv5,
     tox_description_var = ATOXDSCH,
@@ -1438,8 +1792,32 @@ test_that("derive_var_atoxgr Test 34: CTCAEv5 Hemoglobin increased", {
   )
 
   expect_dfs_equal(
-    base = expected_hgbi,
-    compare = actual_hgbi,
+    base = expected_hgbi_si,
+    compare = actual_hgbi_si,
+    keys = c("TESTNUM")
+  )
+})
+
+## Test 34b: CTCAEv5 Hemoglobin increased (USCV unit) ----
+test_that("derive_var_atoxgr Test 34a: CTCAEv5 Hemoglobin increased (USCV unit)", {
+  expected_hgbi_cv <- expected_hgbi_cv %>%
+    filter(V5 == "Y")
+
+  input_hgbi_cv <- expected_hgbi_cv %>%
+    select(-ATOXGRH)
+
+  actual_hgbi_cv <- derive_var_atoxgr_dir(
+    input_hgbi_cv,
+    new_var = ATOXGRH,
+    meta_criteria = atoxgr_criteria_ctcv5_uscv,
+    tox_description_var = ATOXDSCH,
+    criteria_direction = "H",
+    get_unit_expr = AVALU
+  )
+
+  expect_dfs_equal(
+    base = expected_hgbi_cv,
+    compare = actual_hgbi_cv,
     keys = c("TESTNUM")
   )
 })
@@ -1612,12 +1990,15 @@ test_that("derive_var_atoxgr Test 38: CTCAEv5 Lipase increased", {
 
 ### Lymphocyte count decreased
 ### NCICTCAEv4 and NCICTCAEv5 criteria is the same
+### SI unit is 10^9/L
+### CV unit is 10^3/uL (= SI unit)
+### Legacy CV unit is 10^3/mL (= 1000 * SI unit)
 ### Grade 4: <0.2 x 10e9 /L
 ### Grade 3: <0.5 - 0.2 x 10e9 /L
 ### Grade 2: <0.8 - 0.5 x 10e9 /L
 ### Grade 1: <LLN - 0.8 x 10e9/L
 
-expected_lymd <- tibble::tribble(
+expected_lymd_si <- tibble::tribble(
   ~ATOXDSCL,                    ~AVAL,  ~ANRLO, ~ANRHI, ~AVALU,    ~ATOXGRL, ~TESTNUM,
   "Not a term",                 80,     120,    200,    "10^9/L",  NA,       1,
   NA_character_,                60,     50,     100,    "10^9/L",  NA,       2,
@@ -1645,13 +2026,13 @@ expected_lymd <- tibble::tribble(
   # AVAL missing cannot grade
   "Lymphocyte count decreased", 1.1,    1.1,    NA,     "10^9/L",  "0",      20,
 )
-input_lymd <- expected_lymd %>%
+input_lymd_si <- expected_lymd_si %>%
   select(-ATOXGRL)
 
-## Test 39: CTCAEv4 Lymphocyte count decreased ----
-test_that("derive_var_atoxgr Test 39: CTCAEv4 Lymphocyte count decreased", {
-  actual_lymd <- derive_var_atoxgr_dir(
-    input_lymd,
+## Test 39a: CTCAEv4 Lymphocyte count decreased (SI unit) ----
+test_that("derive_var_atoxgr Test 39a: CTCAEv4 Lymphocyte count decreased (SI unit)", {
+  actual_lymd_si <- derive_var_atoxgr_dir(
+    input_lymd_si,
     new_var = ATOXGRL,
     meta_criteria = atoxgr_criteria_ctcv4,
     tox_description_var = ATOXDSCL,
@@ -1660,16 +2041,69 @@ test_that("derive_var_atoxgr Test 39: CTCAEv4 Lymphocyte count decreased", {
   )
 
   expect_dfs_equal(
-    base = expected_lymd,
-    compare = actual_lymd,
+    base = expected_lymd_si,
+    compare = actual_lymd_si,
     keys = c("TESTNUM")
   )
 })
 
-## Test 40: CTCAEv5 Lymphocyte count decreased ----
-test_that("derive_var_atoxgr Test 40: CTCAEv5 Lymphocyte count decreased", {
-  actual_lymd <- derive_var_atoxgr_dir(
-    input_lymd,
+expected_lymd_cv <- expected_lymd_si %>%
+  mutate(
+    AVALU = if_else(str_to_upper(AVALU) == "10^9/L", "10^3/uL", AVALU)
+  )
+input_lymd_cv <- expected_lymd_cv %>%
+  select(-ATOXGRL)
+
+## Test 39b: CTCAEv4 Lymphocyte count decreased (USCV unit) ----
+test_that("derive_var_atoxgr Test 39a: CTCAEv4 Lymphocyte count decreased (USCV unit)", {
+  actual_lymd_cv <- derive_var_atoxgr_dir(
+    input_lymd_cv,
+    new_var = ATOXGRL,
+    meta_criteria = atoxgr_criteria_ctcv4_uscv,
+    tox_description_var = ATOXDSCL,
+    criteria_direction = "L",
+    get_unit_expr = AVALU
+  )
+
+  expect_dfs_equal(
+    base = expected_lymd_cv,
+    compare = actual_lymd_cv,
+    keys = c("TESTNUM")
+  )
+})
+
+expected_lymd_cv2 <- expected_lymd_si %>%
+  mutate(
+    AVAL = AVAL * 1000,
+    ANRLO = ANRLO * 1000,
+    ANRHI = ANRHI * 1000,
+    AVALU = if_else(str_to_upper(AVALU) == "10^9/L", "10^3/mL", AVALU)
+  )
+input_lymd_cv2 <- expected_lymd_cv2 %>%
+  select(-ATOXGRL)
+
+## Test 39c: CTCAEv4 Lymphocyte count decreased (legacy USCV unit) ----
+test_that("derive_var_atoxgr Test 39c: CTCAEv4 Lymphocyte count decreased (legacy USCV unit)", {
+  actual_lymd_cv2 <- derive_var_atoxgr_dir(
+    input_lymd_cv2,
+    new_var = ATOXGRL,
+    meta_criteria = atoxgr_criteria_ctcv4_uscv,
+    tox_description_var = ATOXDSCL,
+    criteria_direction = "L",
+    get_unit_expr = AVALU
+  )
+
+  expect_dfs_equal(
+    base = expected_lymd_cv2,
+    compare = actual_lymd_cv2,
+    keys = c("TESTNUM")
+  )
+})
+
+## Test 40a: CTCAEv5 Lymphocyte count decreased (SI unit) ----
+test_that("derive_var_atoxgr Test 40a: CTCAEv5 Lymphocyte count decreased (SI unit)", {
+  actual_lymd_si <- derive_var_atoxgr_dir(
+    input_lymd_si,
     new_var = ATOXGRL,
     meta_criteria = atoxgr_criteria_ctcv5,
     tox_description_var = ATOXDSCL,
@@ -1678,18 +2112,67 @@ test_that("derive_var_atoxgr Test 40: CTCAEv5 Lymphocyte count decreased", {
   )
 
   expect_dfs_equal(
-    base = expected_lymd,
-    compare = actual_lymd,
+    base = expected_lymd_si,
+    compare = actual_lymd_si,
+    keys = c("TESTNUM")
+  )
+})
+
+## Test 40b: CTCAEv5 Lymphocyte count decreased (USCV unit) ----
+test_that("derive_var_atoxgr Test 40b: CTCAEv5 Lymphocyte count decreased (USCV unit)", {
+  actual_lymd_cv <- derive_var_atoxgr_dir(
+    input_lymd_cv,
+    new_var = ATOXGRL,
+    meta_criteria = atoxgr_criteria_ctcv5_uscv,
+    tox_description_var = ATOXDSCL,
+    criteria_direction = "L",
+    get_unit_expr = AVALU
+  )
+
+  expect_dfs_equal(
+    base = expected_lymd_cv,
+    compare = actual_lymd_cv,
+    keys = c("TESTNUM")
+  )
+})
+
+expected_lymd_cv2 <- expected_lymd_si %>%
+  mutate(
+    AVAL = AVAL * 1000,
+    ANRLO = ANRLO * 1000,
+    ANRHI = ANRHI * 1000,
+    AVALU = if_else(str_to_upper(AVALU) == "10^9/L", "10^3/mL", AVALU)
+  )
+input_lymd_cv2 <- expected_lymd_cv2 %>%
+  select(-ATOXGRL)
+
+## Test 40c: CTCAEv5 Lymphocyte count decreased (legacy USCV unit) ----
+test_that("derive_var_atoxgr Test 40c: CTCAEv5 Lymphocyte count decreased (legacy USCV unit)", {
+  actual_lymd_cv2 <- derive_var_atoxgr_dir(
+    input_lymd_cv2,
+    new_var = ATOXGRL,
+    meta_criteria = atoxgr_criteria_ctcv5_uscv,
+    tox_description_var = ATOXDSCL,
+    criteria_direction = "L",
+    get_unit_expr = AVALU
+  )
+
+  expect_dfs_equal(
+    base = expected_lymd_cv2,
+    compare = actual_lymd_cv2,
     keys = c("TESTNUM")
   )
 })
 
 ### Lymphocyte count increased
 ### NCICTCAEv4 and NCICTCAEv5 criteria is the same
+### SI unit is 10^9/L
+### CV unit is 10^3/uL (= SI unit)
+### Legacy CV unit is 10^3/mL (= 1000 * SI unit)
 ### Grade 3: >20,000/mm3
 ### Grade 2: >4000/mm3 - 20,000/mm3
 
-expected_lymi <- tibble::tribble(
+expected_lymi_si <- tibble::tribble(
   ~ATOXDSCH,                    ~AVAL,  ~ANRLO, ~ANRHI, ~AVALU,    ~ATOXGRH,
   "Not a term",                 80,     120,    200,    "10^9/L",  NA,
   NA_character_,                60,     50,     100,    "10^9/L",  NA,
@@ -1702,13 +2185,13 @@ expected_lymi <- tibble::tribble(
   # AVAL missing cannot grade
   "Lymphocyte count increased", NA,     NA,     NA,     "10^9/L",  NA,
 )
-input_lymi <- expected_lymi %>%
+input_lymi_si <- expected_lymi_si %>%
   select(-ATOXGRH)
 
-## Test 41: CTCAEv4 Lymphocyte count increased ----
-test_that("derive_var_atoxgr Test 41: CTCAEv4 Lymphocyte count increased", {
-  actual_lymi <- derive_var_atoxgr_dir(
-    input_lymi,
+## Test 41a: CTCAEv4 Lymphocyte count increased (SI unit) ----
+test_that("derive_var_atoxgr Test 41a: CTCAEv4 Lymphocyte count increased (SI unit)", {
+  actual_lymi_si <- derive_var_atoxgr_dir(
+    input_lymi_si,
     new_var = ATOXGRH,
     meta_criteria = atoxgr_criteria_ctcv4,
     tox_description_var = ATOXDSCH,
@@ -1717,16 +2200,69 @@ test_that("derive_var_atoxgr Test 41: CTCAEv4 Lymphocyte count increased", {
   )
 
   expect_dfs_equal(
-    base = expected_lymi,
-    compare = actual_lymi,
+    base = expected_lymi_si,
+    compare = actual_lymi_si,
     keys = c("AVAL", "ANRLO", "ANRHI", "AVALU")
   )
 })
 
-## Test 42: CTCAEv5 Lymphocyte count increased ----
-test_that("derive_var_atoxgr Test 42: CTCAEv5 Lymphocyte count increased", {
-  actual_lymi <- derive_var_atoxgr_dir(
-    input_lymi,
+expected_lymi_cv <- expected_lymi_si %>%
+  mutate(
+    AVALU = if_else(str_to_upper(AVALU) == "10^9/L", "10^3/uL", AVALU)
+  )
+input_lymi_cv <- expected_lymi_cv %>%
+  select(-ATOXGRH)
+
+## Test 41b: CTCAEv4 Lymphocyte count increased  (USCV unit) ----
+test_that("derive_var_atoxgr Test 41b: CTCAEv4 Lymphocyte count increased  (USCV unit)", {
+  actual_lymi_cv <- derive_var_atoxgr_dir(
+    input_lymi_cv,
+    new_var = ATOXGRH,
+    meta_criteria = atoxgr_criteria_ctcv4_uscv,
+    tox_description_var = ATOXDSCH,
+    criteria_direction = "H",
+    get_unit_expr = AVALU
+  )
+
+  expect_dfs_equal(
+    base = expected_lymi_cv,
+    compare = actual_lymi_cv,
+    keys = c("AVAL", "ANRLO", "ANRHI", "AVALU")
+  )
+})
+
+expected_lymi_cv2 <- expected_lymi_si %>%
+  mutate(
+    AVAL = AVAL * 1000,
+    ANRLO = ANRLO * 1000,
+    ANRHI = ANRHI * 1000,
+    AVALU = if_else(str_to_upper(AVALU) == "10^9/L", "10^3/mL", AVALU)
+  )
+input_lymi_cv2 <- expected_lymi_cv2 %>%
+  select(-ATOXGRH)
+
+## Test 41c: CTCAEv4 Lymphocyte count increased (legacy USCV unit) ----
+test_that("derive_var_atoxgr Test 41c: CTCAEv4 Lymphocyte count increased (legacy USCV unit)", {
+  actual_lymi_cv2 <- derive_var_atoxgr_dir(
+    input_lymi_cv2,
+    new_var = ATOXGRH,
+    meta_criteria = atoxgr_criteria_ctcv4_uscv,
+    tox_description_var = ATOXDSCH,
+    criteria_direction = "H",
+    get_unit_expr = AVALU
+  )
+
+  expect_dfs_equal(
+    base = expected_lymi_cv2,
+    compare = actual_lymi_cv2,
+    keys = c("AVAL", "ANRLO", "ANRHI", "AVALU")
+  )
+})
+
+## Test 42a: CTCAEv5 Lymphocyte count increased (SI unit) ----
+test_that("derive_var_atoxgr Test 42a: CTCAEv5 Lymphocyte count increased (SI unit)", {
+  actual_lymi_si <- derive_var_atoxgr_dir(
+    input_lymi_si,
     new_var = ATOXGRH,
     meta_criteria = atoxgr_criteria_ctcv5,
     tox_description_var = ATOXDSCH,
@@ -1735,20 +2271,59 @@ test_that("derive_var_atoxgr Test 42: CTCAEv5 Lymphocyte count increased", {
   )
 
   expect_dfs_equal(
-    base = expected_lymi,
-    compare = actual_lymi,
+    base = expected_lymi_si,
+    compare = actual_lymi_si,
+    keys = c("AVAL", "ANRLO", "ANRHI", "AVALU")
+  )
+})
+
+## Test 42b: CTCAEv5 Lymphocyte count increased (USCV unit) ----
+test_that("derive_var_atoxgr Test 42b: CTCAEv5 Lymphocyte count increased (USCV unit)", {
+  actual_lymi_cv <- derive_var_atoxgr_dir(
+    input_lymi_cv,
+    new_var = ATOXGRH,
+    meta_criteria = atoxgr_criteria_ctcv5_uscv,
+    tox_description_var = ATOXDSCH,
+    criteria_direction = "H",
+    get_unit_expr = AVALU
+  )
+
+  expect_dfs_equal(
+    base = expected_lymi_cv,
+    compare = actual_lymi_cv,
+    keys = c("AVAL", "ANRLO", "ANRHI", "AVALU")
+  )
+})
+
+## Test 42c: CTCAEv5 Lymphocyte count increased (legacy USCV unit) ----
+test_that("derive_var_atoxgr Test 42c: CTCAEv5 Lymphocyte count increased (legacy USCV unit)", {
+  actual_lymi_cv2 <- derive_var_atoxgr_dir(
+    input_lymi_cv2,
+    new_var = ATOXGRH,
+    meta_criteria = atoxgr_criteria_ctcv5_uscv,
+    tox_description_var = ATOXDSCH,
+    criteria_direction = "H",
+    get_unit_expr = AVALU
+  )
+
+  expect_dfs_equal(
+    base = expected_lymi_cv2,
+    compare = actual_lymi_cv2,
     keys = c("AVAL", "ANRLO", "ANRHI", "AVALU")
   )
 })
 
 ### Neutrophil count decreased
 ### NCICTCAEv4 and NCICTCAEv5 criteria is the same
+### SI unit is 10^9/L
+### CV unit is 10^3/uL (= SI unit)
+### Legacy CV unit is 10^3/mL (= 1000 * SI unit)
 ### Grade 4: <25.0 x 10e9 /L
 ### Grade 3: <1.0 - 0.5 x 10e9 /L
 ### Grade 2: <1.5 - 1.0 x 10e9 /L
 ### Grade 1: <LLN - 1.5 x 10e9 /L
 
-expected_neut <- tibble::tribble(
+expected_neut_si <- tibble::tribble(
   ~ATOXDSCL,                    ~AVAL,  ~ANRLO, ~ANRHI, ~AVALU,    ~ATOXGRL,
   "Not a term",                 80,     120,    200,    "10^9/L",  NA,
   NA_character_,                60,     50,     100,    "10^9/L",  NA,
@@ -1776,14 +2351,14 @@ expected_neut <- tibble::tribble(
   # AVAL missing cannot grade
   "Neutrophil count decreased", NA,     2,      NA,     "10^9/L",  NA,
 )
-input_neut <- expected_neut %>%
+input_neut_si <- expected_neut_si %>%
   select(-ATOXGRL)
 
 
-## Test 43: CTCAEv4 Neutrophil count decreased ----
-test_that("derive_var_atoxgr Test 43: CTCAEv4 Neutrophil count decreased", {
-  actual_neut <- derive_var_atoxgr_dir(
-    input_neut,
+## Test 43a: CTCAEv4 Neutrophil count decreased (SI unit) ----
+test_that("derive_var_atoxgr Test 43a: CTCAEv4 Neutrophil count decreased (SI unit)", {
+  actual_neut_si <- derive_var_atoxgr_dir(
+    input_neut_si,
     new_var = ATOXGRL,
     meta_criteria = atoxgr_criteria_ctcv4,
     tox_description_var = ATOXDSCL,
@@ -1792,16 +2367,69 @@ test_that("derive_var_atoxgr Test 43: CTCAEv4 Neutrophil count decreased", {
   )
 
   expect_dfs_equal(
-    base = expected_neut,
-    compare = actual_neut,
+    base = expected_neut_si,
+    compare = actual_neut_si,
     keys = c("AVAL", "ANRLO", "ANRHI", "AVALU")
   )
 })
 
-## Test 44: CTCAEv5 Neutrophil count decreased ----
-test_that("derive_var_atoxgr Test 44: CTCAEv5 Neutrophil count decreased", {
-  actual_neut <- derive_var_atoxgr_dir(
-    input_neut,
+expected_neut_cv <- expected_neut_si %>%
+  mutate(
+    AVALU = if_else(str_to_upper(AVALU) == "10^9/L", "10^3/uL", AVALU)
+  )
+input_neut_cv <- expected_neut_cv %>%
+  select(-ATOXGRL)
+
+## Test 43b: CTCAEv4 Neutrophil count decreased (USCV unit) ----
+test_that("derive_var_atoxgr Test 43b: CTCAEv4 Neutrophil count decreased (USCV unit)", {
+  actual_neut_cv <- derive_var_atoxgr_dir(
+    input_neut_cv,
+    new_var = ATOXGRL,
+    meta_criteria = atoxgr_criteria_ctcv4_uscv,
+    tox_description_var = ATOXDSCL,
+    criteria_direction = "L",
+    get_unit_expr = AVALU
+  )
+
+  expect_dfs_equal(
+    base = expected_neut_cv,
+    compare = actual_neut_cv,
+    keys = c("AVAL", "ANRLO", "ANRHI", "AVALU")
+  )
+})
+
+expected_neut_cv2 <- expected_neut_si %>%
+  mutate(
+    AVAL = AVAL * 1000,
+    ANRLO = ANRLO * 1000,
+    ANRHI = ANRHI * 1000,
+    AVALU = if_else(str_to_upper(AVALU) == "10^9/L", "10^3/mL", AVALU)
+  )
+input_neut_cv2 <- expected_neut_cv2 %>%
+  select(-ATOXGRL)
+
+## Test 43c: CTCAEv4 Neutrophil count decreased (legacy USCV unit) ----
+test_that("derive_var_atoxgr Test 43c: CTCAEv4 Neutrophil count decreased (legacy USCV unit)", {
+  actual_neut_cv2 <- derive_var_atoxgr_dir(
+    input_neut_cv2,
+    new_var = ATOXGRL,
+    meta_criteria = atoxgr_criteria_ctcv4_uscv,
+    tox_description_var = ATOXDSCL,
+    criteria_direction = "L",
+    get_unit_expr = AVALU
+  )
+
+  expect_dfs_equal(
+    base = expected_neut_cv2,
+    compare = actual_neut_cv2,
+    keys = c("AVAL", "ANRLO", "ANRHI", "AVALU")
+  )
+})
+
+## Test 44a: CTCAEv5 Neutrophil count decreased (SI unit) ----
+test_that("derive_var_atoxgr Test 44a: CTCAEv5 Neutrophil count decreased (SI unit)", {
+  actual_neut_si <- derive_var_atoxgr_dir(
+    input_neut_si,
     new_var = ATOXGRL,
     meta_criteria = atoxgr_criteria_ctcv5,
     tox_description_var = ATOXDSCL,
@@ -1810,20 +2438,59 @@ test_that("derive_var_atoxgr Test 44: CTCAEv5 Neutrophil count decreased", {
   )
 
   expect_dfs_equal(
-    base = expected_neut,
-    compare = actual_neut,
+    base = expected_neut_si,
+    compare = actual_neut_si,
+    keys = c("AVAL", "ANRLO", "ANRHI", "AVALU")
+  )
+})
+
+## Test 44b: CTCAEv5 Neutrophil count decreased (USCV unit) ----
+test_that("derive_var_atoxgr Test 44b: CTCAEv5 Neutrophil count decreased (USCV unit)", {
+  actual_neut_cv <- derive_var_atoxgr_dir(
+    input_neut_cv,
+    new_var = ATOXGRL,
+    meta_criteria = atoxgr_criteria_ctcv5_uscv,
+    tox_description_var = ATOXDSCL,
+    criteria_direction = "L",
+    get_unit_expr = AVALU
+  )
+
+  expect_dfs_equal(
+    base = expected_neut_cv,
+    compare = actual_neut_cv,
+    keys = c("AVAL", "ANRLO", "ANRHI", "AVALU")
+  )
+})
+
+## Test 44c: CTCAEv5 Neutrophil count decreased (legacy USCV unit) ----
+test_that("derive_var_atoxgr Test 44c: CTCAEv5 Neutrophil count decreased (legacy USCV unit)", {
+  actual_neut_cv2 <- derive_var_atoxgr_dir(
+    input_neut_cv2,
+    new_var = ATOXGRL,
+    meta_criteria = atoxgr_criteria_ctcv5_uscv,
+    tox_description_var = ATOXDSCL,
+    criteria_direction = "L",
+    get_unit_expr = AVALU
+  )
+
+  expect_dfs_equal(
+    base = expected_neut_cv2,
+    compare = actual_neut_cv2,
     keys = c("AVAL", "ANRLO", "ANRHI", "AVALU")
   )
 })
 
 ### Platelet count decreased
 ### NCICTCAEv4 and NCICTCAEv5 criteria is the same
+### SI unit is 10^9/L
+### CV unit is 10^3/uL (= SI unit)
+### Legacy CV unit is 10^3/mL (= 1000 * SI unit)
 ### Grade 4: <25.0 x 10e9 /L
 ### Grade 3: <50.0 - 25.0 x 10e9 /L
 ### Grade 2: <75.0 - 50.0 x 10e9 /L
 ### Grade 1: <LLN - 75.0 x 10e9 /L
 
-expected_plate <- tibble::tribble(
+expected_plate_si <- tibble::tribble(
   ~ATOXDSCL,                  ~AVAL, ~ANRLO, ~ANRHI, ~AVALU,   ~ATOXGRL, ~TESTNUM,
   "Not a term",               80,    120,    200,    "10^9/L", NA,       1,
   NA_character_,              60,    50,     100,    "10^9/L", NA,       2,
@@ -1851,13 +2518,13 @@ expected_plate <- tibble::tribble(
   # AVAL missing cannot grade
   "Platelet count decreased", NA,    100,    NA,     "10^9/L", NA,       20,
 )
-input_plate <- expected_plate %>%
+input_plate_si <- expected_plate_si %>%
   select(-ATOXGRL)
 
-## Test 45: CTCAEv4 Platelet count decreased ----
-test_that("derive_var_atoxgr Test 45: CTCAEv4 Platelet count decreased", {
-  actual_plate <- derive_var_atoxgr_dir(
-    input_plate,
+## Test 45a: CTCAEv4 Platelet count decreased (SI unit) ----
+test_that("derive_var_atoxgr Test 45a: CTCAEv4 Platelet count decreased (SI unit)", {
+  actual_plate_si <- derive_var_atoxgr_dir(
+    input_plate_si,
     new_var = ATOXGRL,
     meta_criteria = atoxgr_criteria_ctcv4,
     tox_description_var = ATOXDSCL,
@@ -1866,16 +2533,69 @@ test_that("derive_var_atoxgr Test 45: CTCAEv4 Platelet count decreased", {
   )
 
   expect_dfs_equal(
-    base = expected_plate,
-    compare = actual_plate,
+    base = expected_plate_si,
+    compare = actual_plate_si,
     keys = c("TESTNUM")
   )
 })
 
-## Test 46: CTCAEv5 Platelet count decreased ----
-test_that("derive_var_atoxgr Test 46: CTCAEv5 Platelet count decreased", {
-  actual_plate <- derive_var_atoxgr_dir(
-    input_plate,
+expected_plate_cv <- expected_plate_si %>%
+  mutate(
+    AVALU = if_else(str_to_upper(AVALU) == "10^9/L", "10^3/uL", AVALU)
+  )
+input_plate_cv <- expected_plate_cv %>%
+  select(-ATOXGRL)
+
+## Test 45b: CTCAEv4 Platelet count decreased (USCV unit) ----
+test_that("derive_var_atoxgr Test 45b: CTCAEv4 Platelet count decreased (USCV unit)", {
+  actual_plate_cv <- derive_var_atoxgr_dir(
+    input_plate_cv,
+    new_var = ATOXGRL,
+    meta_criteria = atoxgr_criteria_ctcv4_uscv,
+    tox_description_var = ATOXDSCL,
+    criteria_direction = "L",
+    get_unit_expr = AVALU
+  )
+
+  expect_dfs_equal(
+    base = expected_plate_cv,
+    compare = actual_plate_cv,
+    keys = c("TESTNUM")
+  )
+})
+
+expected_plate_cv2 <- expected_plate_si %>%
+  mutate(
+    AVAL = AVAL * 1000,
+    ANRLO = ANRLO * 1000,
+    ANRHI = ANRHI * 1000,
+    AVALU = if_else(str_to_upper(AVALU) == "10^9/L", "10^3/mL", AVALU)
+  )
+input_plate_cv2 <- expected_plate_cv2 %>%
+  select(-ATOXGRL)
+
+## Test 45c: CTCAEv4 Platelet count decreased (legacy USCV unit) ----
+test_that("derive_var_atoxgr Test 45c: CTCAEv4 Platelet count decreased (legacy USCV unit)", {
+  actual_plate_cv2 <- derive_var_atoxgr_dir(
+    input_plate_cv2,
+    new_var = ATOXGRL,
+    meta_criteria = atoxgr_criteria_ctcv4_uscv,
+    tox_description_var = ATOXDSCL,
+    criteria_direction = "L",
+    get_unit_expr = AVALU
+  )
+
+  expect_dfs_equal(
+    base = expected_plate_cv2,
+    compare = actual_plate_cv2,
+    keys = c("TESTNUM")
+  )
+})
+
+## Test 46a: CTCAEv5 Platelet count decreased (SI unit) ----
+test_that("derive_var_atoxgr Test 46a: CTCAEv5 Platelet count decreased (SI unit)", {
+  actual_plate_si <- derive_var_atoxgr_dir(
+    input_plate_si,
     new_var = ATOXGRL,
     meta_criteria = atoxgr_criteria_ctcv5,
     tox_description_var = ATOXDSCL,
@@ -1884,8 +2604,44 @@ test_that("derive_var_atoxgr Test 46: CTCAEv5 Platelet count decreased", {
   )
 
   expect_dfs_equal(
-    base = expected_plate,
-    compare = actual_plate,
+    base = expected_plate_si,
+    compare = actual_plate_si,
+    keys = c("TESTNUM")
+  )
+})
+
+## Test 46b: CTCAEv5 Platelet count decreased (USCV unit) ----
+test_that("derive_var_atoxgr Test 46b: CTCAEv5 Platelet count decreased (USCV unit)", {
+  actual_plate_cv <- derive_var_atoxgr_dir(
+    input_plate_cv,
+    new_var = ATOXGRL,
+    meta_criteria = atoxgr_criteria_ctcv5_uscv,
+    tox_description_var = ATOXDSCL,
+    criteria_direction = "L",
+    get_unit_expr = AVALU
+  )
+
+  expect_dfs_equal(
+    base = expected_plate_cv,
+    compare = actual_plate_cv,
+    keys = c("TESTNUM")
+  )
+})
+
+## Test 46c: CTCAEv5 Platelet count decreased (legacy USCV unit) ----
+test_that("derive_var_atoxgr Test 46c: CTCAEv5 Platelet count decreased (legacy USCV unit)", {
+  actual_plate_cv2 <- derive_var_atoxgr_dir(
+    input_plate_cv2,
+    new_var = ATOXGRL,
+    meta_criteria = atoxgr_criteria_ctcv5_uscv,
+    tox_description_var = ATOXDSCL,
+    criteria_direction = "L",
+    get_unit_expr = AVALU
+  )
+
+  expect_dfs_equal(
+    base = expected_plate_cv2,
+    compare = actual_plate_cv2,
     keys = c("TESTNUM")
   )
 })
@@ -2032,12 +2788,19 @@ test_that("derive_var_atoxgr Test 50: CTCAEv5 White blood cell decreased", {
 
 ### Hypercalcemia
 ### NCICTCAEv4 and NCICTCAEv5 criteria is the same
+### SI unit
 ### Grade 4: >3.4 mmol/L
 ### Grade 3: >3.1 - 3.4 mmol/L
 ### Grade 2: >2.9 - 3.1 mmol/L
 ### Grade 1: >ULN - 2.9 mmol/L
 
-expected_calci <- tibble::tribble(
+### CV unit
+### Grade 4: >13.5 mg/dL
+### Grade 3: >12.5 - 13.5 mg/dL
+### Grade 2: >11.5 - 12.5 mg/dL
+### Grade 1: >ULN - 11.5 mg/dL
+
+expected_calci_si <- tibble::tribble(
   ~ATOXDSCH,       ~AVAL,  ~ANRLO, ~ANRHI, ~AVALU,    ~ATOXGRH, ~TESTNUM,
   "Not a term",    3.5,    0,      2.5,    "mmol/L",  NA,       1,
   NA_character_,   3.5,    0,      2.5,    "mmol/L",  NA,       2,
@@ -2065,13 +2828,44 @@ expected_calci <- tibble::tribble(
   # AVAL missing cannot grade
   "Hypercalcemia", NA,     0,      2.5,    "mmol/L",  NA,       20,
 )
-input_calci <- expected_calci %>%
+input_calci_si <- expected_calci_si %>%
   select(-ATOXGRH)
 
-## Test 51: CTCAEv4 Hypercalcemia ----
-test_that("derive_var_atoxgr Test 51: CTCAEv4 Hypercalcemia", {
-  actual_calci <- derive_var_atoxgr_dir(
-    input_calci,
+expected_calci_cv <- tibble::tribble(
+  ~ATOXDSCH,       ~AVAL,  ~ANRLO, ~ANRHI,   ~AVALU,   ~ATOXGRH, ~TESTNUM,
+  "Not a term",    13.6,   0,      10.5,    "mg/dL",         NA,        1,
+  NA_character_,   13.6,   0,      10.5,    "mg/dL",         NA,        2,
+  # ANRHI not missing
+  "Hypercalcemia", 13.6,   0,      10.5,    "mg/dL",        "4",        3,
+  "Hypercalcemia", 13.5,   0,      10.5,    "mg/dL",        "3",        4,
+  "Hypercalcemia", 12.6,   0,      10.5,    "mg/dL",        "3",        5,
+  "Hypercalcemia", 12.5,   0,      10.5,    "mg/dL",        "2",        6,
+  "Hypercalcemia", 11.6,   0,      10.5,    "mg/dL",        "2",        7,
+  "Hypercalcemia", 11.5,   0,      10.5,    "mg/dL",        "1",        8,
+  "Hypercalcemia", 10.6,   0,      10.5,    "mg/dL",        "1",        9,
+  "Hypercalcemia", 10.5,   0,      10.5,    "mg/dL",        "0",       10,
+  # ANRHI missing - can grade 2-4
+  "Hypercalcemia", 13.6,   0,      NA,      "mg/dL",        "4",       11,
+  "Hypercalcemia", 13.5,   0,      NA,      "mg/dL",        "3",       12,
+  "Hypercalcemia", 12.6,   0,      NA,      "mg/dL",        "3",       13,
+  "Hypercalcemia", 12.5,   0,      NA,      "mg/dL",        "2",       14,
+  "Hypercalcemia", 11.6,   0,      NA,      "mg/dL",        "2",       15,
+  # ANRHI missing - can NOT grade 0 or 1mg/d
+  "Hypercalcemia", 11.5,   0,      NA,      "mg/dL",         NA,       16,
+  "Hypercalcemia", 10.6,   0,      NA,      "mg/dL",         NA,       17,
+  "Hypercalcemia", 10.5,   0,      NA,      "mg/dL",         NA,       18,
+  # Unit missing cannot grade
+  "Hypercalcemia", 10.5,   0,      10.5,         NA,         NA,       19,
+  # AVAL missing cannot grade
+  "Hypercalcemia", NA,     0,      10.5,    "mg/dL",         NA,       20,
+)
+input_calci_cv <- expected_calci_cv %>%
+  select(-ATOXGRH)
+
+## Test 51a: CTCAEv4 Hypercalcemia (SI unit) ----
+test_that("derive_var_atoxgr Test 51a: CTCAEv4 Hypercalcemia (SI unit)", {
+  actual_calci_si <- derive_var_atoxgr_dir(
+    input_calci_si,
     new_var = ATOXGRH,
     meta_criteria = atoxgr_criteria_ctcv4,
     tox_description_var = ATOXDSCH,
@@ -2080,16 +2874,34 @@ test_that("derive_var_atoxgr Test 51: CTCAEv4 Hypercalcemia", {
   )
 
   expect_dfs_equal(
-    base = expected_calci,
-    compare = actual_calci,
+    base = expected_calci_si,
+    compare = actual_calci_si,
     keys = c("TESTNUM")
   )
 })
 
-## Test 52: CTCAEv5 Hypercalcemia ----
-test_that("derive_var_atoxgr Test 52: CTCAEv5 Hypercalcemia", {
-  actual_calci <- derive_var_atoxgr_dir(
-    input_calci,
+## Test 51b: CTCAEv4 Hypercalcemia (USCV unit) ----
+test_that("derive_var_atoxgr Test 51b: CTCAEv4 Hypercalcemia (USCV unit)", {
+  actual_calci_cv <- derive_var_atoxgr_dir(
+    input_calci_cv,
+    new_var = ATOXGRH,
+    meta_criteria = atoxgr_criteria_ctcv4_uscv,
+    tox_description_var = ATOXDSCH,
+    criteria_direction = "H",
+    get_unit_expr = AVALU
+  )
+
+  expect_dfs_equal(
+    base = expected_calci_cv,
+    compare = actual_calci_cv,
+    keys = c("TESTNUM")
+  )
+})
+
+## Test 52a: CTCAEv5 Hypercalcemia (SI unit) ----
+test_that("derive_var_atoxgr Test 52a: CTCAEv5 Hypercalcemia (SI unit)", {
+  actual_calci_si <- derive_var_atoxgr_dir(
+    input_calci_si,
     new_var = ATOXGRH,
     meta_criteria = atoxgr_criteria_ctcv5,
     tox_description_var = ATOXDSCH,
@@ -2098,20 +2910,45 @@ test_that("derive_var_atoxgr Test 52: CTCAEv5 Hypercalcemia", {
   )
 
   expect_dfs_equal(
-    base = expected_calci,
-    compare = actual_calci,
+    base = expected_calci_si,
+    compare = actual_calci_si,
+    keys = c("TESTNUM")
+  )
+})
+
+## Test 52b: CTCAEv5 Hypercalcemia (USCV unit) ----
+test_that("derive_var_atoxgr Test 52b: CTCAEv5 Hypercalcemia (USCV unit)", {
+  actual_calci_cv <- derive_var_atoxgr_dir(
+    input_calci_cv,
+    new_var = ATOXGRH,
+    meta_criteria = atoxgr_criteria_ctcv5_uscv,
+    tox_description_var = ATOXDSCH,
+    criteria_direction = "H",
+    get_unit_expr = AVALU
+  )
+
+  expect_dfs_equal(
+    base = expected_calci_cv,
+    compare = actual_calci_cv,
     keys = c("TESTNUM")
   )
 })
 
 ### Hypercalcemia (Ionized)
 ### NCICTCAEv4 and NCICTCAEv5 criteria is the same
+### SI unit
 ### Grade 4: >1.8 mmol/L
 ### Grade 3: >1.6 - 1.8 mmol/L
 ### Grade 2: >1.5 - 1.6 mmol/L
 ### Grade 1: >ULN - 1.5 mmol/L
 
-expected_calioni <- tibble::tribble(
+### CV unit
+### Grade 4: >7.2 mg/dL
+### Grade 3: >6.4 - 7.2 mg/dL
+### Grade 2: >6 - 6.4 mg/dL
+### Grade 1: >ULN - 11.5 mg/dL
+
+expected_calioni_si <- tibble::tribble(
   ~ATOXDSCH,                 ~AVAL,  ~ANRLO, ~ANRHI, ~AVALU,    ~ATOXGRH, ~TESTNUM,
   "Not a term",              1.9,    0,      1.3,    "mmol/L",  NA,       1,
   NA_character_,             1.9,    0,      1.3,    "mmol/L",  NA,       2,
@@ -2139,14 +2976,44 @@ expected_calioni <- tibble::tribble(
   # AVAL missing cannot grade
   "Hypercalcemia (Ionized)", NA,     0,      1.3,    "mmol/L",  NA,       20,
 )
-input_calioni <- expected_calioni %>%
+input_calioni_si <- expected_calioni_si %>%
   select(-ATOXGRH)
 
+expected_calioni_cv <- tibble::tribble(
+  ~ATOXDSCH,                  ~AVAL,  ~ANRLO,  ~ANRHI,   ~AVALU,  ~ATOXGRH,  ~TESTNUM,
+  "Not a term",               7.3,    0,       5,       "mg/dL",        NA,  1,
+  NA_character_,              7.3,    0,       5,       "mg/dL",        NA,  2,
+  # ANRHI not missing
+  "Hypercalcemia (Ionized)",  7.3,    0,       5,       "mg/dL",       "4",  3,
+  "Hypercalcemia (Ionized)",  7.2,    0,       5,       "mg/dL",       "3",  4,
+  "Hypercalcemia (Ionized)",  6.5,    0,       5,       "mg/dL",       "3",  5,
+  "Hypercalcemia (Ionized)",  6.4,    0,       5,       "mg/dL",       "2",  6,
+  "Hypercalcemia (Ionized)",  6.1,    0,       5,       "mg/dL",       "2",  7,
+  "Hypercalcemia (Ionized)",  6.0,    0,       5,       "mg/dL",       "1",  8,
+  "Hypercalcemia (Ionized)",  5.1,    0,       5,       "mg/dL",       "1",  9,
+  "Hypercalcemia (Ionized)",  5,      0,       5,       "mg/dL",       "0",  10,
+  # ANRHI missing - can grade 2-4
+  "Hypercalcemia (Ionized)",  7.3,    0,       NA,      "mg/dL",       "4",  11,
+  "Hypercalcemia (Ionized)",  7.2,    0,       NA,      "mg/dL",       "3",  12,
+  "Hypercalcemia (Ionized)",  6.5,    0,       NA,      "mg/dL",       "3",  13,
+  "Hypercalcemia (Ionized)",  6.4,    0,       NA,      "mg/dL",       "2",  14,
+  "Hypercalcemia (Ionized)",  6.1,    0,       NA,      "mg/dL",       "2",  15,
+  # ANRHI missing - can NOT grade 0 or 1mg/d
+  "Hypercalcemia (Ionized)",  6.0,    0,       NA,      "mg/dL",        NA,  16,
+  "Hypercalcemia (Ionized)",  5.1,    0,       NA,      "mg/dL",        NA,  17,
+  "Hypercalcemia (Ionized)",  5,      0,       NA,      "mg/dL",        NA,  18,
+  # Unit missing cannot grade
+  "Hypercalcemia (Ionized)",  5,      0,       5,            NA,        NA,  19,
+  # AVAL missing cannot grade
+  "Hypercalcemia (Ionized)",  NA,     0,       5,       "mg/dL",        NA,  20,
+)
+input_calioni_cv <- expected_calioni_cv %>%
+  select(-ATOXGRH)
 
-## Test 53: CTCAEv4 Hypercalcemia (Ionized) ----
-test_that("derive_var_atoxgr Test 53: CTCAEv4 Hypercalcemia (Ionized)", {
-  actual_calioni <- derive_var_atoxgr_dir(
-    input_calioni,
+## Test 53a: CTCAEv4 Hypercalcemia (Ionized) (SI unit) ----
+test_that("derive_var_atoxgr Test 53a: CTCAEv4 Hypercalcemia (Ionized) (SI unit)", {
+  actual_calioni_si <- derive_var_atoxgr_dir(
+    input_calioni_si,
     new_var = ATOXGRH,
     meta_criteria = atoxgr_criteria_ctcv4,
     tox_description_var = ATOXDSCH,
@@ -2155,16 +3022,34 @@ test_that("derive_var_atoxgr Test 53: CTCAEv4 Hypercalcemia (Ionized)", {
   )
 
   expect_dfs_equal(
-    base = expected_calioni,
-    compare = actual_calioni,
+    base = expected_calioni_si,
+    compare = actual_calioni_si,
     keys = c("TESTNUM")
   )
 })
 
-## Test 54: CTCAEv5 Hypercalcemia (Ionized) ----
-test_that("derive_var_atoxgr Test 54: CTCAEv5 Hypercalcemia (Ionized)", {
-  actual_calioni <- derive_var_atoxgr_dir(
-    input_calioni,
+## Test 53b: CTCAEv4 Hypercalcemia (Ionized) (USCV unit) ----
+test_that("derive_var_atoxgr Test 53b: CTCAEv4 Hypercalcemia (Ionized) (USCV unit)", {
+  actual_calioni_cv <- derive_var_atoxgr_dir(
+    input_calioni_cv,
+    new_var = ATOXGRH,
+    meta_criteria = atoxgr_criteria_ctcv4_uscv,
+    tox_description_var = ATOXDSCH,
+    criteria_direction = "H",
+    get_unit_expr = AVALU
+  )
+
+  expect_dfs_equal(
+    base = expected_calioni_cv,
+    compare = actual_calioni_cv,
+    keys = c("TESTNUM")
+  )
+})
+
+## Test 54a: CTCAEv5 Hypercalcemia (Ionized) (SI unit) ----
+test_that("derive_var_atoxgr Test 54a: CTCAEv5 Hypercalcemia (Ionized) (SI unit)", {
+  actual_calioni_si <- derive_var_atoxgr_dir(
+    input_calioni_si,
     new_var = ATOXGRH,
     meta_criteria = atoxgr_criteria_ctcv5,
     tox_description_var = ATOXDSCH,
@@ -2173,21 +3058,46 @@ test_that("derive_var_atoxgr Test 54: CTCAEv5 Hypercalcemia (Ionized)", {
   )
 
   expect_dfs_equal(
-    base = expected_calioni,
-    compare = actual_calioni,
+    base = expected_calioni_si,
+    compare = actual_calioni_si,
+    keys = c("TESTNUM")
+  )
+})
+
+## Test 54b: CTCAEv5 Hypercalcemia (Ionized) (USCV unit) ----
+test_that("derive_var_atoxgr Test 54b: CTCAEv5 Hypercalcemia (Ionized) (USCV unit)", {
+  actual_calioni_cv <- derive_var_atoxgr_dir(
+    input_calioni_cv,
+    new_var = ATOXGRH,
+    meta_criteria = atoxgr_criteria_ctcv5_uscv,
+    tox_description_var = ATOXDSCH,
+    criteria_direction = "H",
+    get_unit_expr = AVALU
+  )
+
+  expect_dfs_equal(
+    base = expected_calioni_cv,
+    compare = actual_calioni_cv,
     keys = c("TESTNUM")
   )
 })
 
 ### Hyperglycemia (Fasting) (NCICTCAEv4)
 ### not included in NCICTCAEv5
+### SI unit
 ### Grade 4: >27.8 mmol/L
 ### Grade 3: >13.9 - 27.8 mmol/L
 ### Grade 2: >8.9 - 13.9 mmol/L
 ### Grade 1: >ULN - 8.9 mmol/L
 
-## Test 55: CTCAEv4 Hyperglycemia (Fasting) ----
-test_that("derive_var_atoxgr Test 55: CTCAEv4 Hyperglycemia (Fasting)", {
+### CV unit
+### Grade 4: >500 mg/dL
+### Grade 3: >250 - 500 mg/dL
+### Grade 2: >160 - 250 mg/dL
+### Grade 1: >ULN - 160 mg/dL
+
+## Test 55a: CTCAEv4 Hyperglycemia (Fasting) (SI unit) ----
+test_that("derive_var_atoxgr Test 55a: CTCAEv4 Hyperglycemia (Fasting) (SI unit)", {
   expected_glycfi <- tibble::tribble(
     ~ATOXDSCH,                 ~AVAL,  ~ANRLO, ~ANRHI, ~AVALU,    ~ATOXGRH, ~TESTNUM,
     "Not a term",              27.9,   0,      5.3,    "mmol/L",  NA,       1,
@@ -2235,13 +3145,67 @@ test_that("derive_var_atoxgr Test 55: CTCAEv4 Hyperglycemia (Fasting)", {
   )
 })
 
+## Test 55b: CTCAEv4 Hyperglycemia (Fasting) (USCV unit) ----
+test_that("derive_var_atoxgr Test 55b: CTCAEv4 Hyperglycemia (Fasting) (USCV unit)", {
+  expected_glycfi <- tibble::tribble(
+    ~ATOXDSCH,                  ~AVAL,  ~ANRLO,  ~ANRHI,   ~AVALU, ~ATOXGRH,  ~TESTNUM,
+    "Not a term",               501,    0,       100,     "mg/dL",       NA,  1,
+    NA_character_,              501,    0,       100,     "mg/dL",       NA,  2,
+    # ANRHI not missing
+    "Hyperglycemia (Fasting)",  501,    0,       100,     "mg/dL",      "4",  3,
+    "Hyperglycemia (Fasting)",  500,    0,       100,     "mg/dL",      "3",  4,
+    "Hyperglycemia (Fasting)",  251,    0,       100,     "mg/dL",      "3",  5,
+    "Hyperglycemia (Fasting)",  250,    0,       100,     "mg/dL",      "2",  6,
+    "Hyperglycemia (Fasting)",  161,    0,       100,     "mg/dL",      "2",  7,
+    "Hyperglycemia (Fasting)",  160,    0,       100,     "mg/dL",      "1",  8,
+    "Hyperglycemia (Fasting)",  101,    0,       100,     "mg/dL",      "1",  9,
+    "Hyperglycemia (Fasting)",  100,    0,       100,     "mg/dL",      "0",  10,
+    # ANRHI missing - can grade 2-4
+    "Hyperglycemia (Fasting)",  501,    0,       NA,      "mg/dL",      "4",  11,
+    "Hyperglycemia (Fasting)",  500,    0,       NA,      "mg/dL",      "3",  12,
+    "Hyperglycemia (Fasting)",  251,    0,       NA,      "mg/dL",      "3",  13,
+    "Hyperglycemia (Fasting)",  250,    0,       NA,      "mg/dL",      "2",  14,
+    "Hyperglycemia (Fasting)",  161,    0,       NA,      "mg/dL",      "2",  15,
+    # ANRHI missing - can NOT grade 0 or 1
+    "Hyperglycemia (Fasting)",  160,    0,       NA,      "mg/dL",       NA,  16,
+    "Hyperglycemia (Fasting)",  101,    0,       NA,      "mg/dL",       NA,  17,
+    "Hyperglycemia (Fasting)",  100,    0,       NA,      "mg/dL",       NA,  18,
+    # Unit missing cannot grade
+    "Hyperglycemia (Fasting)",  100,    0,       5.3,          NA,       NA,  19,
+    # AVAL missing cannot grade
+    "Hyperglycemia (Fasting)",  NA,     0,       5.3,     "mg/dL",       NA,  20,
+  )
+  input_glycfi <- expected_glycfi %>%
+    select(-ATOXGRH)
+
+  actual_glycfi <- derive_var_atoxgr_dir(
+    input_glycfi,
+    new_var = ATOXGRH,
+    meta_criteria = atoxgr_criteria_ctcv4_uscv,
+    tox_description_var = ATOXDSCH,
+    criteria_direction = "H",
+    get_unit_expr = AVALU
+  )
+
+  expect_dfs_equal(
+    base = expected_glycfi,
+    compare = actual_glycfi,
+    keys = c("TESTNUM")
+  )
+})
+
 ### Hyperglycemia (NCICTCAEv4)
 ### not included in NCICTCAEv5
+### SI unit
 ### Grade 4: >27.8 mmol/L
 ### Grade 3: >13.9 - 27.8 mmol/L
 
-## Test 56: CTCAEv4 Hyperglycemia ----
-test_that("derive_var_atoxgr Test 56: CTCAEv4 Hyperglycemia", {
+### CV unit
+### Grade 4: >500 mg/dL
+### Grade 3: >250 - 500 mg/dL
+
+## Test 56a: CTCAEv4 Hyperglycemia (SI unit) ----
+test_that("derive_var_atoxgr Test 56a: CTCAEv4 Hyperglycemia (SI unit)", {
   expected_glyci <- tibble::tribble(
     ~ATOXDSCH,       ~AVAL,  ~ANRLO, ~ANRHI, ~AVALU,    ~ATOXGRH, ~TESTNUM,
     "Not a term",    27.9,   0,      5.3,    "mmol/L",  NA,       1,
@@ -2275,8 +3239,45 @@ test_that("derive_var_atoxgr Test 56: CTCAEv4 Hyperglycemia", {
   )
 })
 
+## Test 56b: CTCAEv4 Hyperglycemia (USCV unit) ----
+test_that("derive_var_atoxgr Test 56b: CTCAEv4 Hyperglycemia (USCV unit)", {
+  expected_glyci <- tibble::tribble(
+    ~ATOXDSCH,        ~AVAL,  ~ANRLO,  ~ANRHI,   ~AVALU,  ~ATOXGRH,  ~TESTNUM,
+    "Not a term",     501,    0,       5.3,     "mg/dL",        NA,  1,
+    NA_character_,    501,    0,       5.3,     "mg/dL",        NA,  2,
+    "Hyperglycemia",  501,    0,       5.3,     "mg/dL",       "4",  3,
+    "Hyperglycemia",  500,    0,       5.3,     "mg/dL",       "3",  4,
+    "Hyperglycemia",  251,    0,       5.3,     "mg/dL",       "3",  5,
+    "Hyperglycemia",  250,    0,       5.3,     "mg/dL",       "0",  6,
+    "Hyperglycemia",  250,    0,       NA,      "mg/dL",       "0",  7,
+    # Unit missing cannot grade
+    "Hyperglycemia",  250,    0,       5.3,          NA,        NA,  8,
+    # AVAL missing cannot grade
+    "Hyperglycemia",  NA,     0,       5.3,     "mg/dL",        NA,  9,
+  )
+  input_glyci <- expected_glyci %>%
+    select(-ATOXGRH)
+
+  actual_glyci <- derive_var_atoxgr_dir(
+    input_glyci,
+    new_var = ATOXGRH,
+    meta_criteria = atoxgr_criteria_ctcv4_uscv,
+    tox_description_var = ATOXDSCH,
+    criteria_direction = "H",
+    get_unit_expr = AVALU
+  )
+
+  expect_dfs_equal(
+    base = expected_glyci,
+    compare = actual_glyci,
+    keys = c("TESTNUM")
+  )
+})
+
+
 ### Hyperkalemia
 ### NCICTCAEv4 and NCICTCAEv5 criteria is the same
+### SI + CV unit
 ### Grade 4: >7.0 mmol/L
 ### Grade 3: >6.0 - 7.0 mmol/L
 ### Grade 2: >5.5 - 6.0 mmol/L
@@ -2313,8 +3314,8 @@ expected_kalei <- tibble::tribble(
 input_kalei <- expected_kalei %>%
   select(-ATOXGRH)
 
-## Test 57: CTCAEv4 Hyperkalemia ----
-test_that("derive_var_atoxgr Test 57: CTCAEv4 Hyperkalemia", {
+## Test 57a: CTCAEv4 Hyperkalemia (SI unit) ----
+test_that("derive_var_atoxgr Test 57a: CTCAEv4 Hyperkalemia (SI unit)", {
   actual_kalei <- derive_var_atoxgr_dir(
     input_kalei,
     new_var = ATOXGRH,
@@ -2331,8 +3332,26 @@ test_that("derive_var_atoxgr Test 57: CTCAEv4 Hyperkalemia", {
   )
 })
 
-## Test 58: CTCAEv5 Hyperkalemia ----
-test_that("derive_var_atoxgr Test 58: CTCAEv5 Hyperkalemia", {
+## Test 57b: CTCAEv4 Hyperkalemia (USCV unit) ----
+test_that("derive_var_atoxgr Test 57b: CTCAEv4 Hyperkalemia (USCV unit)", {
+  actual_kalei <- derive_var_atoxgr_dir(
+    input_kalei,
+    new_var = ATOXGRH,
+    meta_criteria = atoxgr_criteria_ctcv4_uscv,
+    tox_description_var = ATOXDSCH,
+    criteria_direction = "H",
+    get_unit_expr = AVALU
+  )
+
+  expect_dfs_equal(
+    base = expected_kalei,
+    compare = actual_kalei,
+    keys = c("TESTNUM")
+  )
+})
+
+## Test 58a: CTCAEv5 Hyperkalemia (SI unit) ----
+test_that("derive_var_atoxgr Test 58a: CTCAEv5 Hyperkalemia (SI unit)", {
   actual_kalei <- derive_var_atoxgr_dir(
     input_kalei,
     new_var = ATOXGRH,
@@ -2349,13 +3368,38 @@ test_that("derive_var_atoxgr Test 58: CTCAEv5 Hyperkalemia", {
   )
 })
 
+## Test 58b: CTCAEv5 Hyperkalemia (USCV unit) ----
+test_that("derive_var_atoxgr Test 58b: CTCAEv5 Hyperkalemia (USCV unit)", {
+  actual_kalei <- derive_var_atoxgr_dir(
+    input_kalei,
+    new_var = ATOXGRH,
+    meta_criteria = atoxgr_criteria_ctcv5_uscv,
+    tox_description_var = ATOXDSCH,
+    criteria_direction = "H",
+    get_unit_expr = AVALU
+  )
+
+  expect_dfs_equal(
+    base = expected_kalei,
+    compare = actual_kalei,
+    keys = c("TESTNUM")
+  )
+})
+
 ### Hypermagnesemia
 ### NCICTCAEv4 and NCICTCAEv5 criteria is the same
+### SI unit
 ### Grade 4: >3.30 mmol/L
 ### Grade 3: >1.23 - 3.30 mmol/L
 ### Grade 1: >ULN - 1.23 mmol/L
 
-expected_magni <- tibble::tribble(
+
+### CV unit
+### Grade 4: >8 mg/dL
+### Grade 3: >3 - 8 mg/dL
+### Grade 1: >ULN - 3 mg/dL
+
+expected_magni_si <- tibble::tribble(
   ~ATOXDSCH,         ~AVAL, ~ANRLO, ~ANRHI, ~AVALU,   ~ATOXGRH, ~TESTNUM,
   "Not a term",      3.4,   0,      0.8,    "mmol/L", NA,       1,
   NA_character_,     3.4,   0,      0.8,    "mmol/L", NA,       2,
@@ -2379,14 +3423,41 @@ expected_magni <- tibble::tribble(
   # AVAL missing cannot grade
   "Hypermagnesemia", NA,    0,      0.8,    "mmol/L", NA,       16,
 )
-input_magni <- expected_magni %>%
+input_magni_si <- expected_magni_si %>%
+  select(-ATOXGRH)
+
+expected_magni_cv <- tibble::tribble(
+  ~ATOXDSCH,          ~AVAL,  ~ANRLO,  ~ANRHI,   ~AVALU, ~ATOXGRH,  ~TESTNUM,
+  "Not a term",       8.1,    0,       1.2,     "mg/dL",       NA,  1,
+  NA_character_,      8.1,    0,       1.2,     "mg/dL",       NA,  2,
+  # ANRHI not missing
+  "Hypermagnesemia",  8.1,    0,       1.2,     "mg/dL",      "4",  3,
+  "Hypermagnesemia",  8,      0,       1.2,     "mg/dL",      "3",  4,
+  "Hypermagnesemia",  3.1,    0,       1.2,     "mg/dL",      "3",  5,
+  "Hypermagnesemia",  3,      0,       1.2,     "mg/dL",      "1",  6,
+  "Hypermagnesemia",  1.21,   0,       1.2,     "mg/dL",      "1",  7,
+  "Hypermagnesemia",  1.2,    0,       1.2,     "mg/dL",      "0",  8,
+  # ANRHI missing - can grade 3-4
+  "Hypermagnesemia",  8.1,    0,       NA,      "mg/dL",      "4",  9,
+  "Hypermagnesemia",  8,      0,       NA,      "mg/dL",      "3",  10,
+  "Hypermagnesemia",  3.1,    0,       NA,      "mg/dL",      "3",  11,
+  # ANRHI missing - can NOT grade 0 or 1
+  "Hypermagnesemia",  3,      0,       NA,      "mg/dL",       NA,  12,
+  "Hypermagnesemia",  1.21,   0,       NA,      "mg/dL",       NA,  13,
+  "Hypermagnesemia",  1.2,    0,       NA,      "mg/dL",       NA,  14,
+  # Unit missing cannot grade
+  "Hypermagnesemia",  1.2,    0,       1.2,          NA,       NA,  15,
+  # AVAL missing cannot grade
+  "Hypermagnesemia",  NA,     0,       1.2,     "mg/dL",       NA,  16,
+)
+input_magni_cv <- expected_magni_cv %>%
   select(-ATOXGRH)
 
 
-## Test 59: CTCAEv4 Hypermagnesemia ----
-test_that("derive_var_atoxgr Test 59: CTCAEv4 Hypermagnesemia", {
-  actual_magni <- derive_var_atoxgr_dir(
-    input_magni,
+## Test 59a: CTCAEv4 Hypermagnesemia (SI unit) ----
+test_that("derive_var_atoxgr Test 59a: CTCAEv4 Hypermagnesemia (SI unit)", {
+  actual_magni_si <- derive_var_atoxgr_dir(
+    input_magni_si,
     new_var = ATOXGRH,
     meta_criteria = atoxgr_criteria_ctcv4,
     tox_description_var = ATOXDSCH,
@@ -2395,16 +3466,34 @@ test_that("derive_var_atoxgr Test 59: CTCAEv4 Hypermagnesemia", {
   )
 
   expect_dfs_equal(
-    base = expected_magni,
-    compare = actual_magni,
+    base = expected_magni_si,
+    compare = actual_magni_si,
     keys = c("TESTNUM")
   )
 })
 
-## Test 60: CTCAEv5 Hypermagnesemia ----
-test_that("derive_var_atoxgr Test 60: CTCAEv5 Hypermagnesemia", {
-  actual_magni <- derive_var_atoxgr_dir(
-    input_magni,
+## Test 59b: CTCAEv4 Hypermagnesemia (USCV unit) ----
+test_that("derive_var_atoxgr Test 59b: CTCAEv4 Hypermagnesemia (USCV unit)", {
+  actual_magni_cv <- derive_var_atoxgr_dir(
+    input_magni_cv,
+    new_var = ATOXGRH,
+    meta_criteria = atoxgr_criteria_ctcv4_uscv,
+    tox_description_var = ATOXDSCH,
+    criteria_direction = "H",
+    get_unit_expr = AVALU
+  )
+
+  expect_dfs_equal(
+    base = expected_magni_cv,
+    compare = actual_magni_cv,
+    keys = c("TESTNUM")
+  )
+})
+
+## Test 60a: CTCAEv5 Hypermagnesemia (SI unit) ----
+test_that("derive_var_atoxgr Test 60a: CTCAEv5 Hypermagnesemia (SI unit)", {
+  actual_magni_si <- derive_var_atoxgr_dir(
+    input_magni_si,
     new_var = ATOXGRH,
     meta_criteria = atoxgr_criteria_ctcv5,
     tox_description_var = ATOXDSCH,
@@ -2413,14 +3502,33 @@ test_that("derive_var_atoxgr Test 60: CTCAEv5 Hypermagnesemia", {
   )
 
   expect_dfs_equal(
-    base = expected_magni,
-    compare = actual_magni,
+    base = expected_magni_si,
+    compare = actual_magni_si,
+    keys = c("TESTNUM")
+  )
+})
+
+## Test 60b: CTCAEv5 Hypermagnesemia (USCV unit) ----
+test_that("derive_var_atoxgr Test 60b: CTCAEv5 Hypermagnesemia (USCV unit)", {
+  actual_magni_cv <- derive_var_atoxgr_dir(
+    input_magni_cv,
+    new_var = ATOXGRH,
+    meta_criteria = atoxgr_criteria_ctcv5_uscv,
+    tox_description_var = ATOXDSCH,
+    criteria_direction = "H",
+    get_unit_expr = AVALU
+  )
+
+  expect_dfs_equal(
+    base = expected_magni_cv,
+    compare = actual_magni_cv,
     keys = c("TESTNUM")
   )
 })
 
 ### Hypernatremia
 ### NCICTCAEv4 and NCICTCAEv5 criteria is the same
+### SI + CV unit
 ### Grade 4: >160 mmol/L
 ### Grade 3: >155 - 160 mmol/L
 ### Grade 2: >150 - 155 mmol/L
@@ -2457,8 +3565,8 @@ expected_natri <- tibble::tribble(
 input_natri <- expected_natri %>%
   select(-ATOXGRH)
 
-## Test 61: CTCAEv4 Hypernatremia ----
-test_that("derive_var_atoxgr Test 61: CTCAEv4 Hypernatremia", {
+## Test 61a: CTCAEv4 Hypernatremia (SI unit) ----
+test_that("derive_var_atoxgr Test 61a: CTCAEv4 Hypernatremia (SI unit)", {
   actual_natri <- derive_var_atoxgr_dir(
     input_natri,
     new_var = ATOXGRH,
@@ -2475,8 +3583,26 @@ test_that("derive_var_atoxgr Test 61: CTCAEv4 Hypernatremia", {
   )
 })
 
-## Test 62: CTCAEv5 Hypernatremia ----
-test_that("derive_var_atoxgr Test 62: CTCAEv5 Hypernatremia", {
+## Test 61b: CTCAEv4 Hypernatremia (USCV unit) ----
+test_that("derive_var_atoxgr Test 61b: CTCAEv4 Hypernatremia (USCV unit)", {
+  actual_natri <- derive_var_atoxgr_dir(
+    input_natri,
+    new_var = ATOXGRH,
+    meta_criteria = atoxgr_criteria_ctcv4_uscv,
+    tox_description_var = ATOXDSCH,
+    criteria_direction = "H",
+    get_unit_expr = AVALU
+  )
+
+  expect_dfs_equal(
+    base = expected_natri,
+    compare = actual_natri,
+    keys = c("TESTNUM")
+  )
+})
+
+## Test 62a: CTCAEv5 Hypernatremia (SI unit) ----
+test_that("derive_var_atoxgr Test 62a: CTCAEv5 Hypernatremia (SI unit)", {
   actual_natri <- derive_var_atoxgr_dir(
     input_natri,
     new_var = ATOXGRH,
@@ -2493,14 +3619,40 @@ test_that("derive_var_atoxgr Test 62: CTCAEv5 Hypernatremia", {
   )
 })
 
+## Test 62b: CTCAEv5 Hypernatremia (USCV unit) ----
+test_that("derive_var_atoxgr Test 62b: CTCAEv5 Hypernatremia (USCV unit)", {
+  actual_natri <- derive_var_atoxgr_dir(
+    input_natri,
+    new_var = ATOXGRH,
+    meta_criteria = atoxgr_criteria_ctcv5_uscv,
+    tox_description_var = ATOXDSCH,
+    criteria_direction = "H",
+    get_unit_expr = AVALU
+  )
+
+  expect_dfs_equal(
+    base = expected_natri,
+    compare = actual_natri,
+    keys = c("TESTNUM")
+  )
+})
+
 ### Hypertriglyceridemia
 ### NCICTCAEv4 and NCICTCAEv5 criteria is the same
+### SI unit
 ### Grade 4: >11.4 mmol/L
 ### Grade 3: >5.7 mmol/L - 11.4 mmol/L
 ### Grade 2: >3.42 mmol/L - 5.7 mmol/L
 ### Grade 1: 1.71 mmol/L - 3.42 mmol/L
 
-expected_trigi <- tibble::tribble(
+
+### CV unit
+### Grade 4: >1000 mg/dL
+### Grade 3: >500 - 1000 mg/dL
+### Grade 2: >300 - 500 mg/dL
+### Grade 1: 150 - 300 mg/dL
+
+expected_trigi_si <- tibble::tribble(
   ~ATOXDSCH,               ~AVAL,  ~ANRLO, ~ANRHI, ~AVALU,    ~ATOXGRH,
   "Not a term",            11.5,   0,      2.1,    "mmol/L",  NA,
   NA_character_,           11.5,   0,      2.1,    "mmol/L",  NA,
@@ -2517,13 +3669,34 @@ expected_trigi <- tibble::tribble(
   # AVAL missing cannot grade
   "Hypertriglyceridemia",  NA,     0,      2.1,    "mmol/L",  NA,
 )
-input_trigi <- expected_trigi %>%
+input_trigi_si <- expected_trigi_si %>%
   select(-ATOXGRH)
 
-## Test 63: CTCAEv4 Hypertriglyceridemia ----
-test_that("derive_var_atoxgr Test 63: CTCAEv4 Hypertriglyceridemia", {
-  actual_trigi <- derive_var_atoxgr_dir(
-    input_trigi,
+expected_trigi_cv <- tibble::tribble(
+  ~ATOXDSCH,               ~AVAL,  ~ANRLO, ~ANRHI,  ~AVALU,   ~ATOXGRH,
+  "Not a term",            1001,   0,      50,      "mg/dL",  NA,
+  NA_character_,           1001,   0,      50,      "mg/dL",  NA,
+  "Hypertriglyceridemia",  1001,   0,      50,      "mg/dL",  "4",
+  "Hypertriglyceridemia",  1000,   0,      50,      "mg/dL",  "3",
+  "Hypertriglyceridemia",  501,    0,      50,      "mg/dL",  "3",
+  "Hypertriglyceridemia",  500,    0,      50,      "mg/dL",  "2",
+  "Hypertriglyceridemia",  301,    0,      50,      "mg/dL",  "2",
+  "Hypertriglyceridemia",  300,    0,      50,      "mg/dL",  "1",
+  "Hypertriglyceridemia",  151,    0,      50,      "mg/dL",  "1",
+  "Hypertriglyceridemia",  150,    0,      50,      "mg/dL",  "0",
+  # Unit missing cannot grade
+  "Hypertriglyceridemia",  150,    0,      50,      NA,       NA,
+  # AVAL missing cannot grade
+  "Hypertriglyceridemia",  NA,     0,      50,      "mg/dL",  NA,
+)
+input_trigi_cv <- expected_trigi_cv %>%
+  select(-ATOXGRH)
+
+
+## Test 63a: CTCAEv4 Hypertriglyceridemia (SI unit) ----
+test_that("derive_var_atoxgr Test 63a: CTCAEv4 Hypertriglyceridemia (SI unit)", {
+  actual_trigi_si <- derive_var_atoxgr_dir(
+    input_trigi_si,
     new_var = ATOXGRH,
     meta_criteria = atoxgr_criteria_ctcv4,
     tox_description_var = ATOXDSCH,
@@ -2532,16 +3705,34 @@ test_that("derive_var_atoxgr Test 63: CTCAEv4 Hypertriglyceridemia", {
   )
 
   expect_dfs_equal(
-    base = expected_trigi,
-    compare = actual_trigi,
+    base = expected_trigi_si,
+    compare = actual_trigi_si,
     keys = c("ATOXDSCH", "AVAL", "AVALU")
   )
 })
 
-## Test 64: CTCAEv5 Hypertriglyceridemia ----
-test_that("derive_var_atoxgr Test 64: CTCAEv5 Hypertriglyceridemia", {
-  actual_trigi <- derive_var_atoxgr_dir(
-    input_trigi,
+## Test 63b: CTCAEv4 Hypertriglyceridemia (USCV unit) ----
+test_that("derive_var_atoxgr Test 63b: CTCAEv4 Hypertriglyceridemia (USCV unit)", {
+  actual_trigi_cv <- derive_var_atoxgr_dir(
+    input_trigi_cv,
+    new_var = ATOXGRH,
+    meta_criteria = atoxgr_criteria_ctcv4_uscv,
+    tox_description_var = ATOXDSCH,
+    criteria_direction = "H",
+    get_unit_expr = AVALU
+  )
+
+  expect_dfs_equal(
+    base = expected_trigi_cv,
+    compare = actual_trigi_cv,
+    keys = c("ATOXDSCH", "AVAL", "AVALU")
+  )
+})
+
+## Test 64a: CTCAEv5 Hypertriglyceridemia (SI unit) ----
+test_that("derive_var_atoxgr Test 64a: CTCAEv5 Hypertriglyceridemia (SI unit)", {
+  actual_trigi_si <- derive_var_atoxgr_dir(
+    input_trigi_si,
     new_var = ATOXGRH,
     meta_criteria = atoxgr_criteria_ctcv5,
     tox_description_var = ATOXDSCH,
@@ -2550,53 +3741,101 @@ test_that("derive_var_atoxgr Test 64: CTCAEv5 Hypertriglyceridemia", {
   )
 
   expect_dfs_equal(
-    base = expected_trigi,
-    compare = actual_trigi,
+    base = expected_trigi_si,
+    compare = actual_trigi_si,
+    keys = c("ATOXDSCH", "AVAL", "AVALU")
+  )
+})
+
+## Test 64b: CTCAEv5 Hypertriglyceridemia (USCV unit) ----
+test_that("derive_var_atoxgr Test 64b: CTCAEv5 Hypertriglyceridemia (USCV unit)", {
+  actual_trigi_cv <- derive_var_atoxgr_dir(
+    input_trigi_cv,
+    new_var = ATOXGRH,
+    meta_criteria = atoxgr_criteria_ctcv5_uscv,
+    tox_description_var = ATOXDSCH,
+    criteria_direction = "H",
+    get_unit_expr = AVALU
+  )
+
+  expect_dfs_equal(
+    base = expected_trigi_cv,
+    compare = actual_trigi_cv,
     keys = c("ATOXDSCH", "AVAL", "AVALU")
   )
 })
 
 ### Hyperuricemia (NCICTCAEv4)
 ### NCICTCAEv5 only has grade 3
+### SI unit is umol/L = 1000 * mmol/L
 ### Grade 4: >0.59 mmol/L;
-### Grade 3: >ULN - 10 mg/dL (0.59 mmol/L)
+### Grade 3: >ULN - 0.59 mmol/L
 
-expected_urici <- tibble::tribble(
-  ~ATOXDSCH,        ~AVAL, ~ANRLO, ~ANRHI, ~AVALU,    ~ATOXGRH,
-  "Not a term",     591,   0,      200,    "umol/L",  NA,
-  NA_character_,    591,   0,      200,    "umol/L",  NA,
+### CV unit is mg/dL
+### Grade 4: >10 mg/dL
+### Grade 3: >ULN - 10 mg/dL
+
+
+expected_urici_si <- tibble::tribble(
+  ~ATOXDSCH,        ~AVAL,  ~ANRLO,  ~ANRHI,    ~AVALU, ~ATOXGRH,
+  "Not a term",     591,    0,       200,     "umol/L",       NA,
+  NA_character_,    591,    0,       200,     "umol/L",       NA,
   # ANRHI not missing
-  "Hyperuricemia",  591,   0,      200,    "umol/L",  "4",
-  "Hyperuricemia",  590,   0,      200,    "umol/L",  "3",
-  "Hyperuricemia",  201,   0,      200,    "umol/L",  "3",
-  "Hyperuricemia",  200,   0,      200,    "umol/L",  "0",
+  "Hyperuricemia",  591,    0,       200,     "umol/L",      "4",
+  "Hyperuricemia",  590,    0,       200,     "umol/L",      "3",
+  "Hyperuricemia",  201,    0,       200,     "umol/L",      "3",
+  "Hyperuricemia",  200,    0,       200,     "umol/L",      "0",
   # ANRHI missing - can grade 4
-  "Hyperuricemia",  591,   0,      NA,     "umol/L",  "4",
+  "Hyperuricemia",  591,    0,       NA,      "umol/L",      "4",
   # ANRHI missing - can NOT grade 0 or 3
-  "Hyperuricemia",  590,   0,      NA,     "umol/L",  NA,
-  "Hyperuricemia",  201,   0,      NA,     "umol/L",  NA,
-  "Hyperuricemia",  200,   0,      NA,     "umol/L",  NA,
+  "Hyperuricemia",  590,    0,       NA,      "umol/L",       NA,
+  "Hyperuricemia",  201,    0,       NA,      "umol/L",       NA,
+  "Hyperuricemia",  200,    0,       NA,      "umol/L",       NA,
   # Unit missing cannot grade
-  "Hyperuricemia",  200,   0,      200,    NA,        "0",
+  "Hyperuricemia",  200,    0,       200,           NA,      "0",
   # AVAL missing cannot grade
-  "Hyperuricemia",  NA,    0,      200,    "umol/L",  NA,
+  "Hyperuricemia",  NA,     0,       200,     "umol/L",       NA,
 )
-input_urici <- expected_urici %>%
+input_urici_si <- expected_urici_si %>%
+  select(-ATOXGRH)
+
+expected_urici_cv <- tibble::tribble(
+  ~ATOXDSCH,        ~AVAL, ~ANRLO, ~ANRHI,  ~AVALU,  ~ATOXGRH,
+  "Not a term",     11,    0,      5,      "mg/dL",  NA,
+  NA_character_,    11,    0,      5,      "mg/dL",  NA,
+  # ANRHI not missing
+  "Hyperuricemia",  11,    0,      5,      "mg/dL",  "4",
+  "Hyperuricemia",  10,    0,      5,      "mg/dL",  "3",
+  "Hyperuricemia",  6,     0,      5,      "mg/dL",  "3",
+  "Hyperuricemia",  5,     0,      5,      "mg/dL",  "0",
+  # ANRHI missing - can grade 4
+  "Hyperuricemia",  11,    0,      NA,     "mg/dL",  "4",
+  # ANRHI missing - can NOT grade 0 or 3
+  "Hyperuricemia",  10,    0,      NA,     "mg/dL",  NA,
+  "Hyperuricemia",  6,     0,      NA,     "mg/dL",  NA,
+  "Hyperuricemia",  5,     0,      NA,     "mg/dL",  NA,
+  # Unit missing cannot grade
+  "Hyperuricemia",  5,     0,      5,           NA,  "0",
+  # AVAL missing cannot grade
+  "Hyperuricemia",  NA,    0,      5,      "mg/dL",  NA,
+)
+
+input_urici_cv <- expected_urici_cv %>%
   select(-ATOXGRH)
 
 ### Hyperuricemia (NCICTCAEv5)
 ### NCICTCAEv5 only has grade 3
 ### Grade 3: >ULN
 
-## Test 65: CTCAEv5 Hyperuricemia ----
-test_that("derive_var_atoxgr Test 65: CTCAEv5 Hyperuricemia", {
-  expected_urici <- expected_urici %>%
+## Test 65a: CTCAEv5 Hyperuricemia (SI unit) ----
+test_that("derive_var_atoxgr Test 65a: CTCAEv5 Hyperuricemia (SI unit)", {
+  expected_urici_si <- expected_urici_si %>%
     filter(is.na(ATOXGRH) | ATOXGRH != "4")
-  input_urici <- expected_urici %>%
+  input_urici_si <- expected_urici_si %>%
     select(-ATOXGRH)
 
-  actual_urici <- derive_var_atoxgr_dir(
-    input_urici,
+  actual_urici_si <- derive_var_atoxgr_dir(
+    input_urici_si,
     new_var = ATOXGRH,
     meta_criteria = atoxgr_criteria_ctcv5,
     tox_description_var = ATOXDSCH,
@@ -2605,23 +3844,47 @@ test_that("derive_var_atoxgr Test 65: CTCAEv5 Hyperuricemia", {
   )
 
   expect_dfs_equal(
-    base = expected_urici,
-    compare = actual_urici,
+    base = expected_urici_si,
+    compare = actual_urici_si,
     keys = c("ATOXDSCH", "AVAL", "ANRHI", "AVALU")
   )
 })
 
-# If unit missing then grade CANNOT be calculated as needed for grade 4
-## Test 66: CTCAEv4 Hyperuricemia ----
-test_that("derive_var_atoxgr Test 66: CTCAEv4 Hyperuricemia", {
-  expected_urici <- expected_urici %>%
-    mutate(ATOXGRH = if_else(is.na(AVALU), NA_character_, ATOXGRH))
-
-  input_urici <- expected_urici %>%
+## Test 65b: CTCAEv5 Hyperuricemia (USCV unit) ----
+test_that("derive_var_atoxgr Test 65b: CTCAEv5 Hyperuricemia (USCV unit)", {
+  expected_urici_cv <- expected_urici_cv %>%
+    filter(is.na(ATOXGRH) | ATOXGRH != "4")
+  input_urici_cv <- expected_urici_cv %>%
     select(-ATOXGRH)
 
-  actual_urici <- derive_var_atoxgr_dir(
-    input_urici,
+  actual_urici_cv <- derive_var_atoxgr_dir(
+    input_urici_cv,
+    new_var = ATOXGRH,
+    meta_criteria = atoxgr_criteria_ctcv5_uscv,
+    tox_description_var = ATOXDSCH,
+    criteria_direction = "H",
+    get_unit_expr = AVALU
+  )
+
+  expect_dfs_equal(
+    base = expected_urici_cv,
+    compare = actual_urici_cv,
+    keys = c("ATOXDSCH", "AVAL", "ANRHI", "AVALU")
+  )
+})
+
+
+# If unit missing then grade CANNOT be calculated as needed for grade 4
+## Test 66a: CTCAEv4 Hyperuricemia (SI unit) ----
+test_that("derive_var_atoxgr Test 66a: CTCAEv4 Hyperuricemia (SI unit)", {
+  expected_urici_si <- expected_urici_si %>%
+    mutate(ATOXGRH = if_else(is.na(AVALU), NA_character_, ATOXGRH))
+
+  input_urici_si <- expected_urici_si %>%
+    select(-ATOXGRH)
+
+  actual_urici_si <- derive_var_atoxgr_dir(
+    input_urici_si,
     new_var = ATOXGRH,
     meta_criteria = atoxgr_criteria_ctcv4,
     tox_description_var = ATOXDSCH,
@@ -2630,19 +3893,44 @@ test_that("derive_var_atoxgr Test 66: CTCAEv4 Hyperuricemia", {
   )
 
   expect_dfs_equal(
-    base = expected_urici,
-    compare = actual_urici,
+    base = expected_urici_si,
+    compare = actual_urici_si,
+    keys = c("ATOXDSCH", "AVAL", "ANRHI", "AVALU")
+  )
+})
+
+## Test 66b: CTCAEv4 Hyperuricemia (USCV unit) ----
+test_that("derive_var_atoxgr Test 66b: CTCAEv4 Hyperuricemia (USCV unit)", {
+  expected_urici_cv <- expected_urici_cv %>%
+    mutate(ATOXGRH = if_else(is.na(AVALU), NA_character_, ATOXGRH))
+
+  input_urici_cv <- expected_urici_cv %>%
+    select(-ATOXGRH)
+
+  actual_urici_cv <- derive_var_atoxgr_dir(
+    input_urici_cv,
+    new_var = ATOXGRH,
+    meta_criteria = atoxgr_criteria_ctcv4_uscv,
+    tox_description_var = ATOXDSCH,
+    criteria_direction = "H",
+    get_unit_expr = AVALU
+  )
+
+  expect_dfs_equal(
+    base = expected_urici_cv,
+    compare = actual_urici_cv,
     keys = c("ATOXDSCH", "AVAL", "ANRHI", "AVALU")
   )
 })
 
 ### Hypoalbuminemia
 ### NCICTCAEv4 and NCICTCAEv5 criteria is the same
+### SI init is g/L - CV unit is g/dL
 ### Grade 3: <20 g/L
 ### Grade 2: <30 - 20 g/L
 ### Grade 1: <LLN - 30 g/L
 
-expected_albd <- tibble::tribble(
+expected_albd_si <- tibble::tribble(
   ~ATOXDSCL,          ~AVAL,  ~ANRLO, ~ANRHI, ~AVALU, ~ATOXGRL,
   "Not a term",       19,     40,     100,    "G/L",  NA,
   NA_character_,      19,     40,     100,    "G/L",  NA,
@@ -2667,13 +3955,25 @@ expected_albd <- tibble::tribble(
   # AVAL missing cannot grade
   "Hypoalbuminemia",  NA,     40,     100,    "G/L",  NA,
 )
-input_albd <- expected_albd %>%
+input_albd_si <- expected_albd_si %>%
   select(-ATOXGRL)
 
-## Test 67: CTCAEv4 Hypoalbuminemia ----
-test_that("derive_var_atoxgr Test 67: CTCAEv4 Hypoalbuminemia", {
-  actual_albd <- derive_var_atoxgr_dir(
-    input_albd,
+expected_albd_cv <- expected_albd_si %>%
+  mutate(
+    AVAL = AVAL / 10,
+    ANRLO = ANRLO / 10,
+    ANRHI = ANRHI / 10,
+    AVALU = if_else(is.na(AVALU), NA_character_, "g/dL")
+  )
+
+input_albd_cv <- expected_albd_cv %>%
+  select(-ATOXGRL)
+
+
+## Test 67a: CTCAEv4 Hypoalbuminemia (SI unit) ----
+test_that("derive_var_atoxgr Test 67a: CTCAEv4 Hypoalbuminemia (SI unit)", {
+  actual_albd_si <- derive_var_atoxgr_dir(
+    input_albd_si,
     new_var = ATOXGRL,
     meta_criteria = atoxgr_criteria_ctcv4,
     tox_description_var = ATOXDSCL,
@@ -2682,16 +3982,34 @@ test_that("derive_var_atoxgr Test 67: CTCAEv4 Hypoalbuminemia", {
   )
 
   expect_dfs_equal(
-    base = expected_albd,
-    compare = actual_albd,
+    base = expected_albd_si,
+    compare = actual_albd_si,
     keys = c("ATOXDSCL", "AVAL", "ANRLO", "ANRHI", "AVALU")
   )
 })
 
-## Test 68: CTCAEv5 Hypoalbuminemia ----
-test_that("derive_var_atoxgr Test 68: CTCAEv5 Hypoalbuminemia", {
-  actual_albd <- derive_var_atoxgr_dir(
-    input_albd,
+## Test 67b: CTCAEv4 Hypoalbuminemia (USCV unit) ----
+test_that("derive_var_atoxgr Test 67b: CTCAEv4 Hypoalbuminemia (USCV unit)", {
+  actual_albd_cv <- derive_var_atoxgr_dir(
+    input_albd_cv,
+    new_var = ATOXGRL,
+    meta_criteria = atoxgr_criteria_ctcv4_uscv,
+    tox_description_var = ATOXDSCL,
+    criteria_direction = "L",
+    get_unit_expr = AVALU
+  )
+
+  expect_dfs_equal(
+    base = expected_albd_cv,
+    compare = actual_albd_cv,
+    keys = c("ATOXDSCL", "AVAL", "ANRLO", "ANRHI", "AVALU")
+  )
+})
+
+## Test 68a: CTCAEv5 Hypoalbuminemia (SI unit) ----
+test_that("derive_var_atoxgr Test 68a: CTCAEv5 Hypoalbuminemia (SI unit)", {
+  actual_albd_si <- derive_var_atoxgr_dir(
+    input_albd_si,
     new_var = ATOXGRL,
     meta_criteria = atoxgr_criteria_ctcv5,
     tox_description_var = ATOXDSCL,
@@ -2700,20 +4018,45 @@ test_that("derive_var_atoxgr Test 68: CTCAEv5 Hypoalbuminemia", {
   )
 
   expect_dfs_equal(
-    base = expected_albd,
-    compare = actual_albd,
+    base = expected_albd_si,
+    compare = actual_albd_si,
+    keys = c("ATOXDSCL", "AVAL", "ANRLO", "ANRHI", "AVALU")
+  )
+})
+
+## Test 68b: CTCAEv5 Hypoalbuminemia (USCV unit) ----
+test_that("derive_var_atoxgr Test 68b: CTCAEv5 Hypoalbuminemia (USCV unit)", {
+  actual_albd_cv <- derive_var_atoxgr_dir(
+    input_albd_cv,
+    new_var = ATOXGRL,
+    meta_criteria = atoxgr_criteria_ctcv5_uscv,
+    tox_description_var = ATOXDSCL,
+    criteria_direction = "L",
+    get_unit_expr = AVALU
+  )
+
+  expect_dfs_equal(
+    base = expected_albd_cv,
+    compare = actual_albd_cv,
     keys = c("ATOXDSCL", "AVAL", "ANRLO", "ANRHI", "AVALU")
   )
 })
 
 ### Hypocalcemia
 ### NCICTCAEv4 and NCICTCAEv5 criteria is the same
+### SI unit is mmol/L
 ### Grade 4: <1.5 mmol/L
 ### Grade 3: <1.75 - 1.5 mmol/L
 ### Grade 2: <2.0 - 1.75 mmol/L
 ### Grade 1: <LLN - 2.0 mmol/L
 
-expected_calcd <- tibble::tribble(
+### CV unit is mg/dL
+### Grade 4: <6 mg/dL
+### Grade 3: <7 - 6 mg/dL
+### Grade 2: <8 - 7 mg/dL
+### Grade 1: <LLN - 8 mg/dL
+
+expected_calcd_si <- tibble::tribble(
   ~ATOXDSCL,       ~AVAL,  ~ANRLO, ~ANRHI, ~AVALU,    ~ATOXGRL,
   "Not a term",    1.4,    4,      100,    "mmol/L",  NA,
   NA_character_,   1.4,    4,      100,    "mmol/L",  NA,
@@ -2741,13 +4084,44 @@ expected_calcd <- tibble::tribble(
   # AVAL missing cannot grade
   "Hypocalcemia",  NA,     4,      100,    "mmol/L",  NA,
 )
-input_calcd <- expected_calcd %>%
+input_calcd_si <- expected_calcd_si %>%
   select(-ATOXGRL)
 
-## Test 69: CTCAEv4 Hypocalcemia ----
-test_that("derive_var_atoxgr Test 69: CTCAEv4 Hypocalcemia", {
-  actual_calcd <- derive_var_atoxgr_dir(
-    input_calcd,
+expected_calcd_cv <- tibble::tribble(
+  ~ATOXDSCL,       ~AVAL,  ~ANRLO,  ~ANRHI,   ~AVALU,  ~ATOXGRL,
+  "Not a term",    5.9,    9,       100,     "mg/dL",        NA,
+  NA_character_,   5.9,    9,       100,     "mg/dL",        NA,
+  # ANRLO not missing
+  "Hypocalcemia",  5.9,    9,       100,     "mg/dL",       "4",
+  "Hypocalcemia",  6,      9,       100,     "mg/dL",       "3",
+  "Hypocalcemia",  6.9,    9,       100,     "mg/dL",       "3",
+  "Hypocalcemia",  7,      9,       100,     "mg/dL",       "2",
+  "Hypocalcemia",  7.9,    9,       100,     "mg/dL",       "2",
+  "Hypocalcemia",  8,      9,       100,     "mg/dL",       "1",
+  "Hypocalcemia",  8.9,    9,       100,     "mg/dL",       "1",
+  "Hypocalcemia",  9,      9,       100,     "mg/dL",       "0",
+  # ANRLO missing - can grade 2-4
+  "Hypocalcemia",  5.9,    9,       NA,      "mg/dL",       "4",
+  "Hypocalcemia",  6,      9,       NA,      "mg/dL",       "3",
+  "Hypocalcemia",  6.9,    9,       NA,      "mg/dL",       "3",
+  "Hypocalcemia",  7,      9,       NA,      "mg/dL",       "2",
+  "Hypocalcemia",  7.9,    9,       NA,      "mg/dL",       "2",
+  # ANRLO missing - can NOT grade 0 or 1
+  "Hypocalcemia",  8,      9,       NA,      "mg/dL",       "1",
+  "Hypocalcemia",  8.9,    9,       NA,      "mg/dL",       "1",
+  "Hypocalcemia",  9,      9,       NA,      "mg/dL",       "0",
+  # Unit missing cannot grade
+  "Hypocalcemia",  9,      9,       100,          NA,        NA,
+  # AVAL missing cannot grade
+  "Hypocalcemia",  NA,     9,       100,     "mg/dL",        NA,
+)
+input_calcd_cv <- expected_calcd_cv %>%
+  select(-ATOXGRL)
+
+## Test 69a: CTCAEv4 Hypocalcemia (SI unit) ----
+test_that("derive_var_atoxgr Test 69a: CTCAEv4 Hypocalcemia (SI unit)", {
+  actual_calcd_si <- derive_var_atoxgr_dir(
+    input_calcd_si,
     new_var = ATOXGRL,
     meta_criteria = atoxgr_criteria_ctcv4,
     tox_description_var = ATOXDSCL,
@@ -2756,16 +4130,34 @@ test_that("derive_var_atoxgr Test 69: CTCAEv4 Hypocalcemia", {
   )
 
   expect_dfs_equal(
-    base = expected_calcd,
-    compare = actual_calcd,
+    base = expected_calcd_si,
+    compare = actual_calcd_si,
     keys = c("ATOXDSCL", "AVAL", "ANRLO", "ANRHI", "AVALU")
   )
 })
 
-## Test 70: CTCAEv5 Hypocalcemia ----
-test_that("derive_var_atoxgr Test 70: CTCAEv5 Hypocalcemia", {
-  actual_calcd <- derive_var_atoxgr_dir(
-    input_calcd,
+## Test 69b: CTCAEv4 Hypocalcemia (USCV unit) ----
+test_that("derive_var_atoxgr Test 69b: CTCAEv4 Hypocalcemia (USCV unit)", {
+  actual_calcd_cv <- derive_var_atoxgr_dir(
+    input_calcd_cv,
+    new_var = ATOXGRL,
+    meta_criteria = atoxgr_criteria_ctcv4_uscv,
+    tox_description_var = ATOXDSCL,
+    criteria_direction = "L",
+    get_unit_expr = AVALU
+  )
+
+  expect_dfs_equal(
+    base = expected_calcd_cv,
+    compare = actual_calcd_cv,
+    keys = c("ATOXDSCL", "AVAL", "ANRLO", "ANRHI", "AVALU")
+  )
+})
+
+## Test 70a: CTCAEv5 Hypocalcemia (SI unit) ----
+test_that("derive_var_atoxgr Test 70a: CTCAEv5 Hypocalcemia (SI unit)", {
+  actual_calcd_si <- derive_var_atoxgr_dir(
+    input_calcd_si,
     new_var = ATOXGRL,
     meta_criteria = atoxgr_criteria_ctcv5,
     tox_description_var = ATOXDSCL,
@@ -2774,20 +4166,43 @@ test_that("derive_var_atoxgr Test 70: CTCAEv5 Hypocalcemia", {
   )
 
   expect_dfs_equal(
-    base = expected_calcd,
-    compare = actual_calcd,
+    base = expected_calcd_si,
+    compare = actual_calcd_si,
+    keys = c("ATOXDSCL", "AVAL", "ANRLO", "ANRHI", "AVALU")
+  )
+})
+
+## Test 70b: CTCAEv5 Hypocalcemia (USCV unit) ----
+test_that("derive_var_atoxgr Test 70b: CTCAEv5 Hypocalcemia (USCV unit)", {
+  actual_calcd_cv <- derive_var_atoxgr_dir(
+    input_calcd_cv,
+    new_var = ATOXGRL,
+    meta_criteria = atoxgr_criteria_ctcv5_uscv,
+    tox_description_var = ATOXDSCL,
+    criteria_direction = "L",
+    get_unit_expr = AVALU
+  )
+
+  expect_dfs_equal(
+    base = expected_calcd_cv,
+    compare = actual_calcd_cv,
     keys = c("ATOXDSCL", "AVAL", "ANRLO", "ANRHI", "AVALU")
   )
 })
 
 ### Hypocalcemia (Ionized)
 ### NCICTCAEv4 and NCICTCAEv5 criteria is the same
+### SI unit is mmol/L
 ### Grade 4: <0.8 mmol/L
 ### Grade 3: <0.9 - 0.8 mmol/L
 ### Grade 2: <1.0 - 0.9 mmol/L
 ### Grade 1: <LLN - 1.0 mmol/L
 
-expected_caliond <- tibble::tribble(
+### CV unit is mg/dL
+### mg/dL is 4 x mmol/L
+
+
+expected_caliond_si <- tibble::tribble(
   ~ATOXDSCL,                 ~AVAL,  ~ANRLO, ~ANRHI, ~AVALU,    ~ATOXGRL,
   "Not a term",              0.79,   1.3,    100,    "mmol/L",  NA,
   NA_character_,             0.79,   1.3,    100,    "mmol/L",  NA,
@@ -2815,13 +4230,23 @@ expected_caliond <- tibble::tribble(
   # AVAL missing cannot grade
   "Hypocalcemia (Ionized)",  NA,     1.3,    100,    "mmol/L",  NA,
 )
-input_caliond <- expected_caliond %>%
+input_caliond_si <- expected_caliond_si %>%
   select(-ATOXGRL)
 
-## Test 71: CTCAEv4 Hypocalcemia (Ionized) ----
-test_that("derive_var_atoxgr Test 71: CTCAEv4 Hypocalcemia (Ionized)", {
-  actual_caliond <- derive_var_atoxgr_dir(
-    input_caliond,
+expected_caliond_cv <- expected_caliond_si %>%
+  mutate(
+    AVAL = AVAL * 4,
+    ANRHI = ANRHI * 4,
+    ANRLO = ANRLO * 4,
+    AVALU = if_else(is.na(AVALU), NA_character_, "mg/dL")
+  )
+input_caliond_cv <- expected_caliond_cv %>%
+  select(-ATOXGRL)
+
+## Test 71a: CTCAEv4 Hypocalcemia (Ionized) (SI unit) ----
+test_that("derive_var_atoxgr Test 71a: CTCAEv4 Hypocalcemia (Ionized) (SI unit)", {
+  actual_caliond_si <- derive_var_atoxgr_dir(
+    input_caliond_si,
     new_var = ATOXGRL,
     meta_criteria = atoxgr_criteria_ctcv4,
     tox_description_var = ATOXDSCL,
@@ -2830,16 +4255,34 @@ test_that("derive_var_atoxgr Test 71: CTCAEv4 Hypocalcemia (Ionized)", {
   )
 
   expect_dfs_equal(
-    base = expected_caliond,
-    compare = actual_caliond,
+    base = expected_caliond_si,
+    compare = actual_caliond_si,
     keys = c("ATOXDSCL", "AVAL", "ANRLO", "ANRHI", "AVALU")
   )
 })
 
-## Test 72: CTCAEv5 Hypocalcemia (Ionized) ----
-test_that("derive_var_atoxgr Test 72: CTCAEv5 Hypocalcemia (Ionized)", {
-  actual_caliond <- derive_var_atoxgr_dir(
-    input_caliond,
+## Test 71b: CTCAEv4 Hypocalcemia (Ionized) (USCV unit) ----
+test_that("derive_var_atoxgr Test 71b: CTCAEv4 Hypocalcemia (Ionized) (USCV unit)", {
+  actual_caliond_cv <- derive_var_atoxgr_dir(
+    input_caliond_cv,
+    new_var = ATOXGRL,
+    meta_criteria = atoxgr_criteria_ctcv4_uscv,
+    tox_description_var = ATOXDSCL,
+    criteria_direction = "L",
+    get_unit_expr = AVALU
+  )
+
+  expect_dfs_equal(
+    base = expected_caliond_cv,
+    compare = actual_caliond_cv,
+    keys = c("ATOXDSCL", "AVAL", "ANRLO", "ANRHI", "AVALU")
+  )
+})
+
+## Test 72a: CTCAEv5 Hypocalcemia (Ionized) (SI unit) ----
+test_that("derive_var_atoxgr Test 72a: CTCAEv5 Hypocalcemia (Ionized) (SI unit)", {
+  actual_caliond_si <- derive_var_atoxgr_dir(
+    input_caliond_si,
     new_var = ATOXGRL,
     meta_criteria = atoxgr_criteria_ctcv5,
     tox_description_var = ATOXDSCL,
@@ -2848,54 +4291,111 @@ test_that("derive_var_atoxgr Test 72: CTCAEv5 Hypocalcemia (Ionized)", {
   )
 
   expect_dfs_equal(
-    base = expected_caliond,
-    compare = actual_caliond,
+    base = expected_caliond_si,
+    compare = actual_caliond_si,
+    keys = c("ATOXDSCL", "AVAL", "ANRLO", "ANRHI", "AVALU")
+  )
+})
+
+## Test 72b: CTCAEv5 Hypocalcemia (Ionized) (SI unit) ----
+test_that("derive_var_atoxgr Test 72b: CTCAEv5 Hypocalcemia (Ionized) (USCV unit)", {
+  actual_caliond_cv <- derive_var_atoxgr_dir(
+    input_caliond_cv,
+    new_var = ATOXGRL,
+    meta_criteria = atoxgr_criteria_ctcv5_uscv,
+    tox_description_var = ATOXDSCL,
+    criteria_direction = "L",
+    get_unit_expr = AVALU
+  )
+
+  expect_dfs_equal(
+    base = expected_caliond_cv,
+    compare = actual_caliond_cv,
     keys = c("ATOXDSCL", "AVAL", "ANRLO", "ANRHI", "AVALU")
   )
 })
 
 ### Hypoglycemia
 ### NCICTCAEv4 and NCICTCAEv5 criteria is the same
+### SI unit is mmol/L
 ### Grade 4: <1.7 mmol/L
 ### Grade 3: <2.2 - 1.7 mmol/L
 ### Grade 2: <3.0 - 2.2 mmol/L
 ### Grade 1: <LLN - 3.0 mmol/L
 
-expected_glycd <- tibble::tribble(
-  ~ATOXDSCL,       ~AVAL,  ~ANRLO, ~ANRHI, ~AVALU,    ~ATOXGRL,
-  "Not a term",    1.69,   4,      100,    "mmol/L",  NA,
-  NA_character_,   1.69,   4,      100,    "mmol/L",  NA,
+
+### CV unit is mg/dL
+### Grade 4: <30 mg/dL
+### Grade 3: <40 - 30 mg/dL
+### Grade 2: <55 - 40 mg/dL
+### Grade 1: <LLN - 55 mg/dL
+
+expected_glycd_si <- tibble::tribble(
+  ~ATOXDSCL,       ~AVAL,  ~ANRLO,  ~ANRHI,    ~AVALU,  ~ATOXGRL,
+  "Not a term",    1.69,   4,       100,     "mmol/L",        NA,
+  NA_character_,   1.69,   4,       100,     "mmol/L",        NA,
   # ANRLO not missing
-  "Hypoglycemia",  1.69,   4,      100,    "mmol/L",  "4",
-  "Hypoglycemia",  1.7,    4,      100,    "mmol/L",  "3",
-  "Hypoglycemia",  2.19,   4,      100,    "mmol/L",  "3",
-  "Hypoglycemia",  2.2,    4,      100,    "mmol/L",  "2",
-  "Hypoglycemia",  2.9,    4,      100,    "mmol/L",  "2",
-  "Hypoglycemia",  3,      4,      100,    "mmol/L",  "1",
-  "Hypoglycemia",  3.9,    4,      100,    "mmol/L",  "1",
-  "Hypoglycemia",  4,      4,      100,    "mmol/L",  "0",
+  "Hypoglycemia",  1.69,   4,       100,     "mmol/L",       "4",
+  "Hypoglycemia",  1.7,    4,       100,     "mmol/L",       "3",
+  "Hypoglycemia",  2.19,   4,       100,     "mmol/L",       "3",
+  "Hypoglycemia",  2.2,    4,       100,     "mmol/L",       "2",
+  "Hypoglycemia",  2.9,    4,       100,     "mmol/L",       "2",
+  "Hypoglycemia",  3,      4,       100,     "mmol/L",       "1",
+  "Hypoglycemia",  3.9,    4,       100,     "mmol/L",       "1",
+  "Hypoglycemia",  4,      4,       100,     "mmol/L",       "0",
   # ANRLO missing - can grade 2-4
-  "Hypoglycemia",  1.69,   NA,     100,    "mmol/L",  "4",
-  "Hypoglycemia",  1.7,    NA,     100,    "mmol/L",  "3",
-  "Hypoglycemia",  2.19,   NA,     100,    "mmol/L",  "3",
-  "Hypoglycemia",  2.2,    NA,     100,    "mmol/L",  "2",
-  "Hypoglycemia",  2.9,    NA,     100,    "mmol/L",  "2",
-  # ANRLO missing - can NOT grade 0 or 1
-  "Hypoglycemia",  3,      NA,     100,    "mmol/L",  NA,
-  "Hypoglycemia",  3.9,    NA,     100,    "mmol/L",  NA,
-  "Hypoglycemia",  4,      NA,     100,    "mmol/L",  NA,
+  "Hypoglycemia",  1.69,   NA,      100,     "mmol/L",       "4",
+  "Hypoglycemia",  1.7,    NA,      100,     "mmol/L",       "3",
+  "Hypoglycemia",  2.19,   NA,      100,     "mmol/L",       "3",
+  "Hypoglycemia",  2.2,    NA,      100,     "mmol/L",       "2",
+  "Hypoglycemia",  2.9,    NA,      100,     "mmol/L",       "2",
+  # ANRLO missing - can NOT grade 0 or 1mg/dL
+  "Hypoglycemia",  3,      NA,      100,     "mmol/L",        NA,
+  "Hypoglycemia",  3.9,    NA,      100,     "mmol/L",        NA,
+  "Hypoglycemia",  4,      NA,      100,     "mmol/L",        NA,
   # Unit missing cannot grade
-  "Hypoglycemia",  4,      4,      100,    NA,        NA,
+  "Hypoglycemia",  4,      4,       100,           NA,        NA,
   # AVAL missing cannot grade
-  "Hypoglycemia",  NA,     4,      100,    "mmol/L",  NA,
+  "Hypoglycemia",  NA,     4,       100,     "mmol/L",        NA,
 )
-input_glycd <- expected_glycd %>%
+input_glycd_si <- expected_glycd_si %>%
   select(-ATOXGRL)
 
-## Test 73: CTCAEv4 Hypoglycemia ----
-test_that("derive_var_atoxgr Test 73: CTCAEv4 Hypoglycemia", {
-  actual_glycd <- derive_var_atoxgr_dir(
-    input_glycd,
+expected_glycd_cv <- tibble::tribble(
+  ~ATOXDSCL,       ~AVAL,  ~ANRLO, ~ANRHI,   ~AVALU,  ~ATOXGRL,
+  "Not a term",    29,     70,     100,     "mg/dL",        NA,
+  NA_character_,   29,     70,     100,      "g/dL",        NA,
+  # ANRLO not missing
+  "Hypoglycemia",  29,     70,     100,     "mg/dL",       "4",
+  "Hypoglycemia",  30,     70,     100,     "mg/dL",       "3",
+  "Hypoglycemia",  39,     70,     100,     "mg/dL",       "3",
+  "Hypoglycemia",  40,     70,     100,     "mg/dL",       "2",
+  "Hypoglycemia",  54,     70,     100,     "mg/dL",       "2",
+  "Hypoglycemia",  55,     70,     100,     "mg/dL",       "1",
+  "Hypoglycemia",  69,     70,     100,     "mg/dL",       "1",
+  "Hypoglycemia",  70,     70,     100,     "mg/dL",       "0",
+  # ANRLO missing - can grade 2-4
+  "Hypoglycemia",  29,     NA,     100,     "mg/dL",       "4",
+  "Hypoglycemia",  30,     NA,     100,     "mg/dL",       "3",
+  "Hypoglycemia",  39,     NA,     100,     "mg/dL",       "3",
+  "Hypoglycemia",  40,     NA,     100,     "mg/dL",       "2",
+  "Hypoglycemia",  54,     NA,     100,     "mg/dL",       "2",
+  # ANRLO missing - can NOT grade 0 or 1
+  "Hypoglycemia",  55,     NA,     100,     "mg/dL",        NA,
+  "Hypoglycemia",  69,     NA,     100,     "mg/dL",        NA,
+  "Hypoglycemia",  70,     NA,     100,     "mg/dL",        NA,
+  # Unit missing cannot     grade
+  "Hypoglycemia",  70,     70,     100,          NA,        NA,
+  # AVAL missing cannot grade
+  "Hypoglycemia",  NA,     70,     100,     "mg/dL",        NA,
+)
+input_glycd_cv <- expected_glycd_cv %>%
+  select(-ATOXGRL)
+
+## Test 73a: CTCAEv4 Hypoglycemia (SI unit) ----
+test_that("derive_var_atoxgr Test 73a: CTCAEv4 Hypoglycemia (SI unit)", {
+  actual_glycd_si <- derive_var_atoxgr_dir(
+    input_glycd_si,
     new_var = ATOXGRL,
     meta_criteria = atoxgr_criteria_ctcv4,
     tox_description_var = ATOXDSCL,
@@ -2904,16 +4404,35 @@ test_that("derive_var_atoxgr Test 73: CTCAEv4 Hypoglycemia", {
   )
 
   expect_dfs_equal(
-    base = expected_glycd,
-    compare = actual_glycd,
+    base = expected_glycd_si,
+    compare = actual_glycd_si,
     keys = c("ATOXDSCL", "AVAL", "ANRLO", "ANRHI", "AVALU")
   )
 })
 
-## Test 74: CTCAEv5 Hypoglycemia ----
-test_that("derive_var_atoxgr Test 74: CTCAEv5 Hypoglycemia", {
-  actual_glycd <- derive_var_atoxgr_dir(
-    input_glycd,
+## Test 73b: CTCAEv4 Hypoglycemia (USCV unit) ----
+test_that("derive_var_atoxgr Test 73b: CTCAEv4 Hypoglycemia (USCV unit)", {
+  actual_glycd_cv <- derive_var_atoxgr_dir(
+    input_glycd_cv,
+    new_var = ATOXGRL,
+    meta_criteria = atoxgr_criteria_ctcv4_uscv,
+    tox_description_var = ATOXDSCL,
+    criteria_direction = "L",
+    get_unit_expr = AVALU
+  )
+
+  expect_dfs_equal(
+    base = expected_glycd_cv,
+    compare = actual_glycd_cv,
+    keys = c("ATOXDSCL", "AVAL", "ANRLO", "ANRHI", "AVALU")
+  )
+})
+
+
+## Test 74a: CTCAEv5 Hypoglycemia (SI unit) ----
+test_that("derive_var_atoxgr Test 74a: CTCAEv5 Hypoglycemia (SI unit)", {
+  actual_glycd_si <- derive_var_atoxgr_dir(
+    input_glycd_si,
     new_var = ATOXGRL,
     meta_criteria = atoxgr_criteria_ctcv5,
     tox_description_var = ATOXDSCL,
@@ -2922,14 +4441,33 @@ test_that("derive_var_atoxgr Test 74: CTCAEv5 Hypoglycemia", {
   )
 
   expect_dfs_equal(
-    base = expected_glycd,
-    compare = actual_glycd,
+    base = expected_glycd_si,
+    compare = actual_glycd_si,
+    keys = c("ATOXDSCL", "AVAL", "ANRLO", "ANRHI", "AVALU")
+  )
+})
+
+## Test 74b: CTCAEv5 Hypoglycemia (USCV unit) ----
+test_that("derive_var_atoxgr Test 74b: CTCAEv5 Hypoglycemia (USCV unit)", {
+  actual_glycd_cv <- derive_var_atoxgr_dir(
+    input_glycd_cv,
+    new_var = ATOXGRL,
+    meta_criteria = atoxgr_criteria_ctcv5_uscv,
+    tox_description_var = ATOXDSCL,
+    criteria_direction = "L",
+    get_unit_expr = AVALU
+  )
+
+  expect_dfs_equal(
+    base = expected_glycd_cv,
+    compare = actual_glycd_cv,
     keys = c("ATOXDSCL", "AVAL", "ANRLO", "ANRHI", "AVALU")
   )
 })
 
 ### Hypokalemia
 ### NCICTCAEv4 and NCICTCAEv5 criteria is the same
+### SI unit and CV unit is mmol/L
 ### Grade 4: <2.5 mmol/L
 ### Grade 3: <3.0 - 2.5 mmol/L
 ### Grade 2: <LLN - 3.0 mmol/L
@@ -2961,8 +4499,8 @@ expected_kaled <- tibble::tribble(
 input_kaled <- expected_kaled %>%
   select(-ATOXGRL)
 
-## Test 75: CTCAEv4 Hypokalemia ----
-test_that("derive_var_atoxgr Test 75: CTCAEv4 Hypokalemia", {
+## Test 75a: CTCAEv4 Hypokalemia (SI unit) ----
+test_that("derive_var_atoxgr Test 75a: CTCAEv4 Hypokalemia (SI unit)", {
   actual_kaled <- derive_var_atoxgr_dir(
     input_kaled,
     new_var = ATOXGRL,
@@ -2979,8 +4517,26 @@ test_that("derive_var_atoxgr Test 75: CTCAEv4 Hypokalemia", {
   )
 })
 
-## Test 76: CTCAEv5 Hypokalemia ----
-test_that("derive_var_atoxgr Test 76: CTCAEv5 Hypokalemia", {
+## Test 75b: CTCAEv4 Hypokalemia (USCV unit) ----
+test_that("derive_var_atoxgr Test 75b: CTCAEv4 Hypokalemia (USCV unit)", {
+  actual_kaled <- derive_var_atoxgr_dir(
+    input_kaled,
+    new_var = ATOXGRL,
+    meta_criteria = atoxgr_criteria_ctcv4_uscv,
+    tox_description_var = ATOXDSCL,
+    criteria_direction = "L",
+    get_unit_expr = AVALU
+  )
+
+  expect_dfs_equal(
+    base = expected_kaled,
+    compare = actual_kaled,
+    keys = c("ATOXDSCL", "AVAL", "ANRLO", "ANRHI", "AVALU")
+  )
+})
+
+## Test 76a: CTCAEv5 Hypokalemia (SI unit) ----
+test_that("derive_var_atoxgr Test 76a: CTCAEv5 Hypokalemia (SI unit)", {
   actual_kaled <- derive_var_atoxgr_dir(
     input_kaled,
     new_var = ATOXGRL,
@@ -2997,14 +4553,40 @@ test_that("derive_var_atoxgr Test 76: CTCAEv5 Hypokalemia", {
   )
 })
 
+## Test 76b: CTCAEv5 Hypokalemia (USCV unit) ----
+test_that("derive_var_atoxgr Test 76b: CTCAEv5 Hypokalemia (USCV unit)", {
+  actual_kaled <- derive_var_atoxgr_dir(
+    input_kaled,
+    new_var = ATOXGRL,
+    meta_criteria = atoxgr_criteria_ctcv5_uscv,
+    tox_description_var = ATOXDSCL,
+    criteria_direction = "L",
+    get_unit_expr = AVALU
+  )
+
+  expect_dfs_equal(
+    base = expected_kaled,
+    compare = actual_kaled,
+    keys = c("ATOXDSCL", "AVAL", "ANRLO", "ANRHI", "AVALU")
+  )
+})
+
 ### Hypomagnesemia
 ### NCICTCAEv4 and NCICTCAEv5 criteria is the same
+### SI unit is mmol/L
 ### Grade 4: <0.3 mmol/L
 ### Grade 3: <0.4 - 0.3 mmol/L
 ### Grade 2: <0.5 - 0.4 mmol/L
 ### Grade 1: <LLN - 0.5 mmol/L
 
-expected_magnd <- tibble::tribble(
+
+### CV unit is mg/dL
+### Grade 4: <0.7 mg/dL
+### Grade 3: <0.9 - 0.7 mg/dL
+### Grade 2: <1.2 - 0.9 mg/dL
+### Grade 1: <LLN - 1.2 mg/dL
+
+expected_magnd_si <- tibble::tribble(
   ~ATOXDSCL,         ~AVAL,  ~ANRLO, ~ANRHI, ~AVALU,    ~ATOXGRL,
   "Not a term",      0.29,   1,      100,    "mmol/L",  NA,
   NA_character_,     0.29,   1,      100,    "mmol/L",  NA,
@@ -3032,13 +4614,44 @@ expected_magnd <- tibble::tribble(
   # AVAL missing cannot grade
   "Hypomagnesemia",  NA,     1,      100,    "mmol/L",  NA,
 )
-input_magnd <- expected_magnd %>%
+input_magnd_si <- expected_magnd_si %>%
   select(-ATOXGRL)
 
-## Test 77: CTCAEv4 Hypomagnesemia ----
-test_that("derive_var_atoxgr Test 77: CTCAEv4 Hypomagnesemia", {
-  actual_magnd <- derive_var_atoxgr_dir(
-    input_magnd,
+expected_magnd_cv <- tibble::tribble(
+  ~ATOXDSCL,         ~AVAL,  ~ANRLO,  ~ANRHI,   ~AVALU,  ~ATOXGRL,
+  "Not a term",      0.69,   1.5,     10,      "mg/dL",        NA,
+  NA_character_,     0.69,   1.5,     10,      "mg/dL",        NA,
+  # ANRLO not missing
+  "Hypomagnesemia",  0.69,   1.5,     10,      "mg/dL",       "4",
+  "Hypomagnesemia",  0.7,    1.5,     10,      "mg/dL",       "3",
+  "Hypomagnesemia",  0.89,   1.5,     10,      "mg/dL",       "3",
+  "Hypomagnesemia",  0.9,    1.5,     10,      "mg/dL",       "2",
+  "Hypomagnesemia",  1.19,   1.5,     10,      "mg/dL",       "2",
+  "Hypomagnesemia",  1.2,    1.5,     10,      "mg/dL",       "1",
+  "Hypomagnesemia",  1.49,   1.5,     10,      "mg/dL",       "1",
+  "Hypomagnesemia",  1.5,    1.5,     10,      "mg/dL",       "0",
+  # ANRLO missing - can grade 2-4
+  "Hypomagnesemia",  0.69,   NA,      10,      "mg/dL",       "4",
+  "Hypomagnesemia",  0.7,    NA,      10,      "mg/dL",       "3",
+  "Hypomagnesemia",  0.89,   NA,      10,      "mg/dL",       "3",
+  "Hypomagnesemia",  0.9,    NA,      10,      "mg/dL",       "2",
+  "Hypomagnesemia",  1.19,   NA,      10,      "mg/dL",       "2",
+  # ANRLO missing - can NOT grade 0 or 1
+  "Hypomagnesemia",  1.2,    NA,      10,      "mg/dL",        NA,
+  "Hypomagnesemia",  1.49,   NA,      10,      "mg/dL",        NA,
+  "Hypomagnesemia",  1.5,    NA,      10,      "mg/dL",        NA,
+  # Unit missing cannot grade
+  "Hypomagnesemia",  1.5,    1.5,     10,           NA,        NA,
+  # AVAL missing cannot grade
+  "Hypomagnesemia",  NA,     1.5,     10,      "mg/dL",        NA,
+)
+input_magnd_cv <- expected_magnd_cv %>%
+  select(-ATOXGRL)
+
+## Test 77a: CTCAEv4 Hypomagnesemia (SI unit) ----
+test_that("derive_var_atoxgr Test 77a: CTCAEv4 Hypomagnesemia (SI unit)", {
+  actual_magnd_si <- derive_var_atoxgr_dir(
+    input_magnd_si,
     new_var = ATOXGRL,
     meta_criteria = atoxgr_criteria_ctcv4,
     tox_description_var = ATOXDSCL,
@@ -3047,16 +4660,34 @@ test_that("derive_var_atoxgr Test 77: CTCAEv4 Hypomagnesemia", {
   )
 
   expect_dfs_equal(
-    base = expected_magnd,
-    compare = actual_magnd,
+    base = expected_magnd_si,
+    compare = actual_magnd_si,
     keys = c("ATOXDSCL", "AVAL", "ANRLO", "ANRHI", "AVALU")
   )
 })
 
-## Test 78: CTCAEv5 Hypomagnesemia ----
-test_that("derive_var_atoxgr Test 78: CTCAEv5 Hypomagnesemia", {
-  actual_magnd <- derive_var_atoxgr_dir(
-    input_magnd,
+## Test 77b: CTCAEv4 Hypomagnesemia (USCV unit) ----
+test_that("derive_var_atoxgr Test 77b: CTCAEv4 Hypomagnesemia (USCV unit)", {
+  actual_magnd_cv <- derive_var_atoxgr_dir(
+    input_magnd_cv,
+    new_var = ATOXGRL,
+    meta_criteria = atoxgr_criteria_ctcv4_uscv,
+    tox_description_var = ATOXDSCL,
+    criteria_direction = "L",
+    get_unit_expr = AVALU
+  )
+
+  expect_dfs_equal(
+    base = expected_magnd_cv,
+    compare = actual_magnd_cv,
+    keys = c("ATOXDSCL", "AVAL", "ANRLO", "ANRHI", "AVALU")
+  )
+})
+
+## Test 78a: CTCAEv5 Hypomagnesemia (SI unit) ----
+test_that("derive_var_atoxgr Test 78a: CTCAEv5 Hypomagnesemia (SI unit)", {
+  actual_magnd_si <- derive_var_atoxgr_dir(
+    input_magnd_si,
     new_var = ATOXGRL,
     meta_criteria = atoxgr_criteria_ctcv5,
     tox_description_var = ATOXDSCL,
@@ -3065,14 +4696,33 @@ test_that("derive_var_atoxgr Test 78: CTCAEv5 Hypomagnesemia", {
   )
 
   expect_dfs_equal(
-    base = expected_magnd,
-    compare = actual_magnd,
+    base = expected_magnd_si,
+    compare = actual_magnd_si,
+    keys = c("ATOXDSCL", "AVAL", "ANRLO", "ANRHI", "AVALU")
+  )
+})
+
+## Test 78b: CTCAEv5 Hypomagnesemia (USCV unit) ----
+test_that("derive_var_atoxgr Test 78b: CTCAEv5 Hypomagnesemia (USCV unit)", {
+  actual_magnd_cv <- derive_var_atoxgr_dir(
+    input_magnd_cv,
+    new_var = ATOXGRL,
+    meta_criteria = atoxgr_criteria_ctcv5_uscv,
+    tox_description_var = ATOXDSCL,
+    criteria_direction = "L",
+    get_unit_expr = AVALU
+  )
+
+  expect_dfs_equal(
+    base = expected_magnd_cv,
+    compare = actual_magnd_cv,
     keys = c("ATOXDSCL", "AVAL", "ANRLO", "ANRHI", "AVALU")
   )
 })
 
 ### Hyponatremia (NCICTCAEv4)
 ### NCICTCAEv4 and NCICTCAEv5 essentially the same (slightly different text)
+### SI unit and CV unit is mmol/L
 ### Grade 4: <120 mmol/L
 ### Grade 3: <130 - 120 mmol/L
 ### Grade 1: <LLN - 130 mmol/L
@@ -3104,8 +4754,8 @@ expected_natrd <- tibble::tribble(
 input_natrd <- expected_natrd %>%
   select(-ATOXGRL)
 
-## Test 79: CTCAEv4 Hyponatremia ----
-test_that("derive_var_atoxgr Test 79: CTCAEv4 Hyponatremia", {
+## Test 79a: CTCAEv4 Hyponatremia (SI unit) ----
+test_that("derive_var_atoxgr Test 79a: CTCAEv4 Hyponatremia (SI unit)", {
   actual_natrd <- derive_var_atoxgr_dir(
     input_natrd,
     new_var = ATOXGRL,
@@ -3122,8 +4772,26 @@ test_that("derive_var_atoxgr Test 79: CTCAEv4 Hyponatremia", {
   )
 })
 
-## Test 80: CTCAEv5 Hyponatremia ----
-test_that("derive_var_atoxgr Test 80: CTCAEv5 Hyponatremia", {
+## Test 79b: CTCAEv4 Hyponatremia (USCV unit) ----
+test_that("derive_var_atoxgr Test 79b: CTCAEv4 Hyponatremia (USCV unit)", {
+  actual_natrd <- derive_var_atoxgr_dir(
+    input_natrd,
+    new_var = ATOXGRL,
+    meta_criteria = atoxgr_criteria_ctcv4_uscv,
+    tox_description_var = ATOXDSCL,
+    criteria_direction = "L",
+    get_unit_expr = AVALU
+  )
+
+  expect_dfs_equal(
+    base = expected_natrd,
+    compare = actual_natrd,
+    keys = c("ATOXDSCL", "AVAL", "ANRLO", "ANRHI", "AVALU")
+  )
+})
+
+## Test 80a: CTCAEv5 Hyponatremia (SI unit) ----
+test_that("derive_var_atoxgr Test 80a: CTCAEv5 Hyponatremia (SI unit)", {
   actual_natrd <- derive_var_atoxgr_dir(
     input_natrd,
     new_var = ATOXGRL,
@@ -3140,15 +4808,41 @@ test_that("derive_var_atoxgr Test 80: CTCAEv5 Hyponatremia", {
   )
 })
 
+## Test 80b: CTCAEv5 Hyponatremia (USCV unit) ----
+test_that("derive_var_atoxgr Test 80b: CTCAEv5 Hyponatremia (USCV unit)", {
+  actual_natrd <- derive_var_atoxgr_dir(
+    input_natrd,
+    new_var = ATOXGRL,
+    meta_criteria = atoxgr_criteria_ctcv5_uscv,
+    tox_description_var = ATOXDSCL,
+    criteria_direction = "L",
+    get_unit_expr = AVALU
+  )
+
+  expect_dfs_equal(
+    base = expected_natrd,
+    compare = actual_natrd,
+    keys = c("ATOXDSCL", "AVAL", "ANRLO", "ANRHI", "AVALU")
+  )
+})
+
 ### Hypophosphatemia
 ### Only in NCICTCAEv4 (not NCICTCAEv5)
+### SI unit is mmol/L
 ### Grade 4: <0.3 mmol/L
 ### Grade 3: <0.6 - 0.3 mmol/L
 ### Grade 2: <0.8 - 0.6 mmol/L
 ### Grade 1: <LLN - 0.8 mmol/L
 
-## Test 81: CTCAEv4 Hypophosphatemia ----
-test_that("derive_var_atoxgr Test 81: CTCAEv4 Hypophosphatemia", {
+
+### SI unit is mg/dL
+### Grade 4: <1 mg/dL
+### Grade 3: <2 - 1 mg/dL
+### Grade 2: <2.5 - 2 mg/dL
+### Grade 1: <LLN - 2.5 mg/dL
+
+## Test 81a: CTCAEv4 Hypophosphatemia (SI unit) ----
+test_that("derive_var_atoxgr Test 81: CTCAEv4 Hypophosphatemia (SI unit)", {
   expected_phosd <- tibble::tribble(
     ~ATOXDSCL,           ~AVAL,  ~ANRLO, ~ANRHI, ~AVALU,    ~ATOXGRL,
     "Not a term",        0.29,   1,      100,    "mmol/L",  NA,
@@ -3196,7 +4890,54 @@ test_that("derive_var_atoxgr Test 81: CTCAEv4 Hypophosphatemia", {
   )
 })
 
+## Test 81b: CTCAEv4 Hypophosphatemia (USCV unit) ----
+test_that("derive_var_atoxgr Test 81: CTCAEv4 Hypophosphatemia (USCV unit)", {
+  expected_phosd <- tibble::tribble(
+    ~ATOXDSCL,           ~AVAL,  ~ANRLO,  ~ANRHI,   ~AVALU,  ~ATOXGRL,
+    "Not a term",        0.99,   3,       100,     "mg/dL",        NA,
+    NA_character_,       0.99,   3,       100,     "mg/dL",        NA,
+    # ANRLO not missing
+    "Hypophosphatemia",  0.99,   3,       100,     "mg/dL",       "4",
+    "Hypophosphatemia",  1,      3,       100,     "mg/dL",       "3",
+    "Hypophosphatemia",  1.9,    3,       100,     "mg/dL",       "3",
+    "Hypophosphatemia",  2,      3,       100,     "mg/dL",       "2",
+    "Hypophosphatemia",  2.49,   3,       100,     "mg/dL",       "2",
+    "Hypophosphatemia",  2.5,    3,       100,     "mg/dL",       "1",
+    "Hypophosphatemia",  2.9,    3,       100,     "mg/dL",       "1",
+    "Hypophosphatemia",  3,      3,       100,     "mg/dL",       "0",
+    # ANRLO missing - can grade 3-4
+    "Hypophosphatemia",  0.99,   NA,      100,     "mg/dL",       "4",
+    "Hypophosphatemia",  1,      NA,      100,     "mg/dL",       "3",
+    "Hypophosphatemia",  1.9,    NA,      100,     "mg/dL",       "3",
+    "Hypophosphatemia",  2,      NA,      100,     "mg/dL",       "2",
+    "Hypophosphatemia",  2.49,   NA,      100,     "mg/dL",       "2",
+    # ANRLO missing - can NOT grade 0 or 1
+    "Hypophosphatemia",  2.5,    NA,      100,     "mg/dL",        NA,
+    "Hypophosphatemia",  2.9,    NA,      100,     "mg/dL",        NA,
+    "Hypophosphatemia",  3,      NA,      100,     "mg/dL",        NA,
+    # Unit missing cannot grade
+    "Hypophosphatemia",  3,      1,       100,          NA,        NA,
+    # AVAL missing cannot grade
+    "Hypophosphatemia",  NA,     1,       100,     "mg/dL",        NA,
+  )
+  input_phosd <- expected_phosd %>%
+    select(-ATOXGRL)
 
+  actual_phosd <- derive_var_atoxgr_dir(
+    input_phosd,
+    new_var = ATOXGRL,
+    meta_criteria = atoxgr_criteria_ctcv4_uscv,
+    tox_description_var = ATOXDSCL,
+    criteria_direction = "L",
+    get_unit_expr = AVALU
+  )
+
+  expect_dfs_equal(
+    base = expected_phosd,
+    compare = actual_phosd,
+    keys = c("ATOXDSCL", "AVAL", "ANRLO", "ANRHI", "AVALU")
+  )
+})
 
 # DAIDS grading----
 
@@ -3249,42 +4990,53 @@ test_that("derive_var_atoxgr Test 82: DAIDS Acidosis", {
 })
 
 ### Albumin, Low
+### SI unit is g/L CV unit is g/dL
 ### Grade 3: < 20
 ### Grade 2: >= 20 to < 30
 ### Grade 1: 30 to < LLN
 
-## Test 83: DAIDS Albumin, Low ----
-test_that("derive_var_atoxgr Test 83: DAIDS Albumin, Low", {
-  expected_albl_daids <- tibble::tribble(
-    ~ATOXDSCL,      ~AVAL,  ~ANRLO, ~AVALU, ~ATOXGRL, ~TESTNUM,
-    "Not a term",   35,     40,     "g/L",  NA,       1,
-    NA_character_,  35,     40,     "g/L",  NA,       2,
-    # ANRLO not missing
-    "Albumin, Low", 19,     40,     "g/L",  "3",      3,
-    "Albumin, Low", 20,     40,     "g/L",  "2",      4,
-    "Albumin, Low", 29,     40,     "g/L",  "2",      5,
-    "Albumin, Low", 30,     40,     "g/L",  "1",      6,
-    "Albumin, Low", 39,     40,     "g/L",  "1",      7,
-    "Albumin, Low", 40,     40,     "g/L",  "0",      8,
-    # ANRLO missing - can grade 2 and 3
-    "Albumin, Low", 19,     NA,     "g/L",  "3",      9,
-    "Albumin, Low", 20,     NA,     "g/L",  "2",      10,
-    "Albumin, Low", 29,     NA,     "g/L",  "2",      11,
-    # ANRLO missing - can NOT grade 0 or 1
-    "Albumin, Low", 30,     NA,     "g/L",  NA,       12,
-    "Albumin, Low", 39,     NA,     "g/L",  NA,       13,
-    "Albumin, Low", 40,     NA,     "g/L",  NA,       14,
-    # AVALU missing cannot grade
-    "Albumin, Low", 40,     40,     NA,     NA,       15,
-    # AVAL missing cannot grade
-    "Albumin, Low", NA,     40,     "g/L",  NA,       16,
+expected_albl_daids_si <- tibble::tribble(
+  ~ATOXDSCL,      ~AVAL,  ~ANRLO, ~AVALU, ~ATOXGRL, ~TESTNUM,
+  "Not a term",   35,     40,     "g/L",  NA,       1,
+  NA_character_,  35,     40,     "g/L",  NA,       2,
+  # ANRLO not missing
+  "Albumin, Low", 19,     40,     "g/L",  "3",      3,
+  "Albumin, Low", 20,     40,     "g/L",  "2",      4,
+  "Albumin, Low", 29,     40,     "g/L",  "2",      5,
+  "Albumin, Low", 30,     40,     "g/L",  "1",      6,
+  "Albumin, Low", 39,     40,     "g/L",  "1",      7,
+  "Albumin, Low", 40,     40,     "g/L",  "0",      8,
+  # ANRLO missing - can grade 2 and 3
+  "Albumin, Low", 19,     NA,     "g/L",  "3",      9,
+  "Albumin, Low", 20,     NA,     "g/L",  "2",      10,
+  "Albumin, Low", 29,     NA,     "g/L",  "2",      11,
+  # ANRLO missing - can NOT grade 0 or 1
+  "Albumin, Low", 30,     NA,     "g/L",  NA,       12,
+  "Albumin, Low", 39,     NA,     "g/L",  NA,       13,
+  "Albumin, Low", 40,     NA,     "g/L",  NA,       14,
+  # AVALU missing cannot grade
+  "Albumin, Low", 40,     40,     NA,     NA,       15,
+  # AVAL missing cannot grade
+  "Albumin, Low", NA,     40,     "g/L",  NA,       16,
+)
+
+input_albl_daids_si <- expected_albl_daids_si %>%
+  select(-ATOXGRL)
+
+expected_albl_daids_cv <- expected_albl_daids_si %>%
+  mutate(
+    AVAL = AVAL / 10,
+    ANRLO = ANRLO / 10,
+    AVALU = if_else(is.na(AVALU), NA_character_, "g/dL")
   )
 
-  input_albl_daids <- expected_albl_daids %>%
-    select(-ATOXGRL)
+input_albl_daids_cv <- expected_albl_daids_cv %>%
+  select(-ATOXGRL)
 
-  actual_albl_daids <- derive_var_atoxgr_dir(
-    input_albl_daids,
+## Test 83a: DAIDS Albumin, Low (SI unit) ----
+test_that("derive_var_atoxgr Test 83a: DAIDS Albumin, Low (SI unit)", {
+  actual_albl_daids_si <- derive_var_atoxgr_dir(
+    input_albl_daids_si,
     new_var = ATOXGRL,
     meta_criteria = atoxgr_criteria_daids,
     tox_description_var = ATOXDSCL,
@@ -3293,8 +5045,26 @@ test_that("derive_var_atoxgr Test 83: DAIDS Albumin, Low", {
   )
 
   expect_dfs_equal(
-    base = expected_albl_daids,
-    compare = actual_albl_daids,
+    base = expected_albl_daids_si,
+    compare = actual_albl_daids_si,
+    keys = c("ATOXDSCL", "TESTNUM")
+  )
+})
+
+## Test 83b: DAIDS Albumin, Low (USCV unit) ----
+test_that("derive_var_atoxgr Test 83b: DAIDS Albumin, Low (USCV unit)", {
+  actual_albl_daids_cv <- derive_var_atoxgr_dir(
+    input_albl_daids_cv,
+    new_var = ATOXGRL,
+    meta_criteria = atoxgr_criteria_daids_uscv,
+    tox_description_var = ATOXDSCL,
+    criteria_direction = "L",
+    get_unit_expr = AVALU
+  )
+
+  expect_dfs_equal(
+    base = expected_albl_daids_cv,
+    compare = actual_albl_daids_cv,
     keys = c("ATOXDSCL", "TESTNUM")
   )
 })
@@ -3496,8 +5266,6 @@ test_that("derive_var_atoxgr Test 87: DAIDS Amylase, High", {
   )
 })
 
-
-
 ### AST, High
 ### Grade 4: >= 10.0 x ULN
 ### Grade 3: 5.0 to < 10.0 x ULN
@@ -3549,44 +5317,45 @@ test_that("derive_var_atoxgr Test 88: DAIDS AST, High", {
 
 
 ### Bicarbonate, Low
+### SI + cv unit is mmol/L
 ### Grade 4: < 8.0 mmol/L
 ### Grade 3: 8.0 -< 11.0 mmol/L
 ### Grade 2: 11.0 -< 16.0 mmol/L
 ### Grade 1: 16.0 mmol/L -< LLN
 
-## Test 89: DAIDS Bicarbonate, Low ----
-test_that("derive_var_atoxgr Test 89: DAIDS Bicarbonate, Low", {
-  expected_bicarbd_daids <- tibble::tribble(
-    ~ATOXDSCL,           ~AVAL,  ~ANRLO, ~AVALU,    ~ATOXGRL, ~TESTNUM,
-    "Not a term",        22,     20,     "mmol/L",  NA,       1,
-    NA_character_,       22,     20,     "mmol/L",  NA,       2,
-    # ANRLO not missing
-    "Bicarbonate, Low",  7.9,    20,     "mmol/L",  "4",      3,
-    "Bicarbonate, Low",  8,      20,     "mmol/L",  "3",      4,
-    "Bicarbonate, Low",  10.9,   20,     "mmol/L",  "3",      5,
-    "Bicarbonate, Low",  11,     20,     "mmol/L",  "2",      6,
-    "Bicarbonate, Low",  15.9,   20,     "mmol/L",  "2",      7,
-    "Bicarbonate, Low",  16,     20,     "mmol/L",  "1",      8,
-    "Bicarbonate, Low",  19,     20,     "mmol/L",  "1",      9,
-    "Bicarbonate, Low",  20,     20,     "mmol/L",  "0",      10,
-    # ANRLO missing - can grade 2-4
-    "Bicarbonate, Low",  7.9,    NA,     "mmol/L",  "4",      11,
-    "Bicarbonate, Low",  8,      NA,     "mmol/L",  "3",      12,
-    "Bicarbonate, Low",  10.9,   NA,     "mmol/L",  "3",      13,
-    "Bicarbonate, Low",  11,     NA,     "mmol/L",  "2",      14,
-    "Bicarbonate, Low",  15.9,   NA,     "mmol/L",  "2",      15,
-    # ANRLO missing - can NOT grade 0 or 1
-    "Bicarbonate, Low",  16,     NA,     "mmol/L",  NA,       16,
-    "Bicarbonate, Low",  19,     NA,     "mmol/L",  NA,       17,
-    "Bicarbonate, Low",  20,     NA,     "mmol/L",  NA,       18,
-    # Unit missing cannot grade
-    "Bicarbonate, Low",  20,     20,     NA,        NA,       19,
-    # AVAL missing cannot grade
-    "Bicarbonate, Low",  NA,     20,     "mmol/L",  NA,       20,
-  )
-  input_bicarbd_daids <- expected_bicarbd_daids %>%
-    select(-ATOXGRL)
+expected_bicarbd_daids <- tibble::tribble(
+  ~ATOXDSCL,           ~AVAL,  ~ANRLO, ~AVALU,    ~ATOXGRL, ~TESTNUM,
+  "Not a term",        22,     20,     "mmol/L",  NA,       1,
+  NA_character_,       22,     20,     "mmol/L",  NA,       2,
+  # ANRLO not missing
+  "Bicarbonate, Low",  7.9,    20,     "mmol/L",  "4",      3,
+  "Bicarbonate, Low",  8,      20,     "mmol/L",  "3",      4,
+  "Bicarbonate, Low",  10.9,   20,     "mmol/L",  "3",      5,
+  "Bicarbonate, Low",  11,     20,     "mmol/L",  "2",      6,
+  "Bicarbonate, Low",  15.9,   20,     "mmol/L",  "2",      7,
+  "Bicarbonate, Low",  16,     20,     "mmol/L",  "1",      8,
+  "Bicarbonate, Low",  19,     20,     "mmol/L",  "1",      9,
+  "Bicarbonate, Low",  20,     20,     "mmol/L",  "0",      10,
+  # ANRLO missing - can grade 2-4
+  "Bicarbonate, Low",  7.9,    NA,     "mmol/L",  "4",      11,
+  "Bicarbonate, Low",  8,      NA,     "mmol/L",  "3",      12,
+  "Bicarbonate, Low",  10.9,   NA,     "mmol/L",  "3",      13,
+  "Bicarbonate, Low",  11,     NA,     "mmol/L",  "2",      14,
+  "Bicarbonate, Low",  15.9,   NA,     "mmol/L",  "2",      15,
+  # ANRLO missing - can NOT grade 0 or 1
+  "Bicarbonate, Low",  16,     NA,     "mmol/L",  NA,       16,
+  "Bicarbonate, Low",  19,     NA,     "mmol/L",  NA,       17,
+  "Bicarbonate, Low",  20,     NA,     "mmol/L",  NA,       18,
+  # Unit missing cannot grade
+  "Bicarbonate, Low",  20,     20,     NA,        NA,       19,
+  # AVAL missing cannot grade
+  "Bicarbonate, Low",  NA,     20,     "mmol/L",  NA,       20,
+)
+input_bicarbd_daids <- expected_bicarbd_daids %>%
+  select(-ATOXGRL)
 
+## Test 89a: DAIDS Bicarbonate, Low (SI unit) ----
+test_that("derive_var_atoxgr Test 89a: DAIDS Bicarbonate, Low (SI unit)", {
   actual_bicarbd_daids <- derive_var_atoxgr_dir(
     input_bicarbd_daids,
     new_var = ATOXGRL,
@@ -3603,16 +5372,37 @@ test_that("derive_var_atoxgr Test 89: DAIDS Bicarbonate, Low", {
   )
 })
 
+## Test 89b: DAIDS Bicarbonate, Low (USCV unit) ----
+test_that("derive_var_atoxgr Test 89b: DAIDS Bicarbonate, Low (USCV unit)", {
+  actual_bicarbd_daids <- derive_var_atoxgr_dir(
+    input_bicarbd_daids,
+    new_var = ATOXGRL,
+    meta_criteria = atoxgr_criteria_daids_uscv,
+    tox_description_var = ATOXDSCL,
+    criteria_direction = "L",
+    get_unit_expr = AVALU
+  )
+
+  expect_dfs_equal(
+    base = expected_bicarbd_daids,
+    compare = actual_bicarbd_daids,
+    keys = c("ATOXDSCL", "TESTNUM")
+  )
+})
+
 
 ### Direct Bilirubin, High
 
+### SI unit is umol/L
+### CV unit is mg/dL
 ### 17.1 used as conversion from "mg/dL" to "umol/L"
 
 ### > 28 days of age
 
 ### Grade 4: > ULN
 
-expected_dbiligt28d_daids <- tibble::tribble(
+## SI unit
+expected_dbiligt28d_daids_si <- tibble::tribble(
   ~ATOXDSCH,                  ~AVAL,  ~ANRHI, ~AVALU,   ~ATOXGRH, ~TESTNUM,
   "Not a term",               7,      8,      "umol/L", NA,       1,
   NA_character_,              7,      8,      "umol/L", NA,       2,
@@ -3632,6 +5422,13 @@ expected_dbiligt28d_daids <- tibble::tribble(
     LBDT = lubridate::ymd("2023-01-30")
   )
 
+## CV unit
+expected_dbiligt28d_daids_cv <- expected_dbiligt28d_daids_si %>%
+  mutate(
+    AVALU = "mg/dL",
+    TESTNUM = TESTNUM + 30
+  )
+
 ### <= 28 days of age
 
 ### Grade 4: > 2 mg/dL (> 34.2 umol/L)
@@ -3639,8 +5436,8 @@ expected_dbiligt28d_daids <- tibble::tribble(
 ### Grade 2: > 1 to <= 1.5 mg/dL (> 17.1 to <= 25.65 umol/L)
 ### Grade 1: ULN to <= 1 mg/dL (ULN to <= 17.1 umol/L)
 
-
-expected_dbilile28d_daids <- tibble::tribble(
+## SI unit
+expected_dbilile28d_daids_si <- tibble::tribble(
   ~ATOXDSCH,                  ~AVAL,  ~ANRHI, ~AVALU,   ~ATOXGRH, ~TESTNUM,
   "Not a term",               7,      8,      "umol/L", NA,       10,
   NA_character_,              7,      8,      "umol/L", NA,       11,
@@ -3671,9 +5468,43 @@ expected_dbilile28d_daids <- tibble::tribble(
     LBDT = lubridate::ymd("2023-01-29")
   )
 
+## CV unit
+expected_dbilile28d_daids_cv <- tibble::tribble(
+  ~ATOXDSCH,                  ~AVAL,  ~ANRHI, ~AVALU,  ~ATOXGRH, ~TESTNUM,
+  "Not a term",               2.1,    0.5,    "mg/dL", NA,       10,
+  NA_character_,              2.1,    0.5,    "mg/dL", NA,       11,
+  # ANRHI not missing
+  "Direct Bilirubin, High",   2.1,    0.5,    "mg/dL", "4",      12,
+  "Direct Bilirubin, High",   2,      0.5,    "mg/dL", "3",      13,
+  "Direct Bilirubin, High",   1.51,   0.5,    "mg/dL", "3",      14,
+  "Direct Bilirubin, High",   1.5,    0.5,    "mg/dL", "2",      15,
+  "Direct Bilirubin, High",   1.1,    0.5,    "mg/dL", "2",      16,
+  "Direct Bilirubin, High",   1,      0.5,    "mg/dL", "1",      17,
+  "Direct Bilirubin, High",   0.5,    0.5,    "mg/dL", "1",      18,
+  "Direct Bilirubin, High",   0.49,   0.5,    "mg/dL", "0",      19,
+  # ANRHI missing can still grade 2 - 4
+  "Direct Bilirubin, High",   2.1,    NA,     "mg/dL", "4",      20,
+  "Direct Bilirubin, High",   2,      NA,     "mg/dL", "3",      21,
+  "Direct Bilirubin, High",   1.51,   NA,     "mg/dL", "3",      22,
+  "Direct Bilirubin, High",   1.5,    NA,     "mg/dL", "2",      23,
+  "Direct Bilirubin, High",   1.1,    NA,     "mg/dL", "2",      24,
+  # ANRHI missing cannot still grade 0 - 1
+  "Direct Bilirubin, High",   1,      NA,     "mg/dL", NA,       25,
+  "Direct Bilirubin, High",   0.5,    NA,     "mg/dL", NA,       26,
+  "Direct Bilirubin, High",   0.49,   NA,     "mg/dL", NA,       27,
+  # AVAL missing cannot grademg/dL
+  "Direct Bilirubin, High",   NA,     0.5,    "mg/dL", NA,       28,
+) %>%
+  mutate(
+    BRTHDT = lubridate::ymd("2023-01-01"),
+    LBDT = lubridate::ymd("2023-01-29")
+  )
+
+
 ### add subjects with missing LBDT or BRTHDT
 
-expected_dbilinoage_daids <- expected_dbilile28d_daids %>%
+## SI unit
+expected_dbilinoage_daids_si <- expected_dbilile28d_daids_si %>%
   filter(TESTNUM %in% c(18, 19)) %>%
   mutate(
     LBDT = if_else(TESTNUM == 18, NA, LBDT),
@@ -3682,21 +5513,37 @@ expected_dbilinoage_daids <- expected_dbilile28d_daids %>%
     TESTNUM = if_else(TESTNUM == 18, 29, 30)
   )
 
-### put all data together
-expected_dbili_daids <- expected_dbilinoage_daids %>%
-  bind_rows(
-    expected_dbilile28d_daids,
-    expected_dbiligt28d_daids
+## CV unit
+expected_dbilinoage_daids_cv <- expected_dbilile28d_daids_cv %>%
+  filter(TESTNUM %in% c(48, 49)) %>%
+  mutate(
+    LBDT = if_else(TESTNUM == 48, NA, LBDT),
+    BRTHDT = if_else(TESTNUM == 49, NA, BRTHDT),
+    ATOXGRH = NA_character_,
+    TESTNUM = if_else(TESTNUM == 48, 59, 60)
   )
 
+### put all SI data together
+expected_dbili_daids_si <- expected_dbilinoage_daids_si %>%
+  bind_rows(
+    expected_dbilile28d_daids_si,
+    expected_dbiligt28d_daids_si
+  )
 
-## Test 90: DAIDS Direct Bilirubin, High ----
-test_that("derive_var_atoxgr Test 90: DAIDS Direct Bilirubin, High", {
-  input_dbili_daids <- expected_dbili_daids %>%
+### put all CV data together
+expected_dbili_daids_cv <- expected_dbilinoage_daids_cv %>%
+  bind_rows(
+    expected_dbilile28d_daids_cv,
+    expected_dbiligt28d_daids_cv
+  )
+
+## Test 90a: DAIDS Direct Bilirubin, High (SI unit) ----
+test_that("derive_var_atoxgr Test 90: DAIDS Direct Bilirubin, High (SI unit)", {
+  input_dbili_daids_si <- expected_dbili_daids_si %>%
     select(-ATOXGRH)
 
-  actual_dbili_daids <- derive_var_atoxgr_dir(
-    input_dbili_daids,
+  actual_dbili_daids_si <- derive_var_atoxgr_dir(
+    input_dbili_daids_si,
     new_var = ATOXGRH,
     meta_criteria = atoxgr_criteria_daids,
     tox_description_var = ATOXDSCH,
@@ -3705,8 +5552,29 @@ test_that("derive_var_atoxgr Test 90: DAIDS Direct Bilirubin, High", {
   )
 
   expect_dfs_equal(
-    base = expected_dbili_daids,
-    compare = actual_dbili_daids,
+    base = expected_dbili_daids_si,
+    compare = actual_dbili_daids_si,
+    keys = c("ATOXDSCH", "TESTNUM")
+  )
+})
+
+## Test 90b: DAIDS Direct Bilirubin, High (USCV unit) ----
+test_that("derive_var_atoxgr Test 90b: DAIDS Direct Bilirubin, High (USCV unit)", {
+  input_dbili_daids_cv <- expected_dbili_daids_cv %>%
+    select(-ATOXGRH)
+
+  actual_dbili_daids_cv <- derive_var_atoxgr_dir(
+    input_dbili_daids_cv,
+    new_var = ATOXGRH,
+    meta_criteria = atoxgr_criteria_daids_uscv,
+    tox_description_var = ATOXDSCH,
+    criteria_direction = "H",
+    get_unit_expr = AVALU
+  )
+
+  expect_dfs_equal(
+    base = expected_dbili_daids_cv,
+    compare = actual_dbili_daids_cv,
     keys = c("ATOXDSCH", "TESTNUM")
   )
 })
@@ -3794,13 +5662,21 @@ test_that("derive_var_atoxgr Test 91: DAIDS Total Bilirubin, High", {
 
 ### Calcium, High
 
+## SI unit is mmol/L
 ### >= 7 days of age
 ### Grade 4: >= 3.38 mmol/L
 ### Grade 3: 3.13 -< 3.38 mmol/L
 ### Grade 2: 2.88 -< 3.13 mmol/L
 ### Grade 1: 2.65 -< 2.88 mmol/L
 
-expected_calcige7d_daids <- tibble::tribble(
+## CV unit is mg/dL
+### >= 7 days of age
+### Grade 4: >= 13.5 mg/dL
+### Grade 3: 12.5 -< 13.5 mg/dL
+### Grade 2: 11.5 -< 12.5 mg/dL
+### Grade 1: 10.6 -< 11.5 mg/dL
+
+expected_calcige7d_daids_si <- tibble::tribble(
   ~ATOXDSCH,       ~AVAL,  ~AVALU,    ~ATOXGRH, ~TESTNUM,
   "Not a term",    3.5,    "mmol/L",  NA,       1,
   NA_character_,   3.5,    "mmol/L",  NA,       2,
@@ -3823,13 +5699,43 @@ expected_calcige7d_daids <- tibble::tribble(
     LBDT = lubridate::ymd("2023-01-08")
   )
 
+expected_calcige7d_daids_cv <- tibble::tribble(
+  ~ATOXDSCH,        ~AVAL,   ~AVALU,  ~ATOXGRH,  ~TESTNUM,
+  "Not a term",     13.5,   "mg/dL",        NA,  1,
+  NA_character_,    13.5,   "mg/dL",        NA,  2,
+  # ANRHI not missing
+  "Calcium, High",  13.5,   "mg/dL",       "4",  3,
+  "Calcium, High",  13.49,  "mg/dL",       "3",  4,
+  "Calcium, High",  12.5,   "mg/dL",       "3",  5,
+  "Calcium, High",  12.49,  "mg/dL",       "2",  6,
+  "Calcium, High",  11.5,   "mg/dL",       "2",  7,
+  "Calcium, High",  11.49,  "mg/dL",       "1",  8,
+  "Calcium, High",  10.6,   "mg/dL",       "1",  9,
+  "Calcium, High",  10.59,  "mg/dL",       "0",  10,
+  # Unit missing cannot grade
+  "Calcium, High",  10.5,        NA,        NA,  11,
+  # AVAL missing cannot grade
+  "Calcium, High",  NA,     "mg/dL",        NA,  12,
+) %>%
+  mutate(
+    BRTHDT = lubridate::ymd("2023-01-01"),
+    LBDT = lubridate::ymd("2023-01-08")
+  )
+
 ### < 7 days of age
+### SI unit is mmol/L
 ### Grade 4: >= 3.38 mmol/L
 ### Grade 3: 3.23 -< 3.38 mmol/L
 ### Grade 2: 3.1 -< 3.23 mmol/L
 ### Grade 1: 2.88 -< 3.1 mmol/L
 
-expected_calcilt7d_daids <- tibble::tribble(
+## CV unit is mg/dL
+### Grade 4: >= 13.5 mg/dL
+### Grade 3: 12.9 -< 13.5 mg/dL
+### Grade 2: 12.4 -< 12.9 mg/dL
+### Grade 1: 11.5 -< 12.4 mg/dL
+
+expected_calcilt7d_daids_si <- tibble::tribble(
   ~ATOXDSCH,       ~AVAL,  ~AVALU,    ~ATOXGRH, ~TESTNUM,
   "Not a term",    3.5,    "mmol/L",  NA,       13,
   NA_character_,   3.5,    "mmol/L",  NA,       14,
@@ -3852,7 +5758,31 @@ expected_calcilt7d_daids <- tibble::tribble(
     LBDT = lubridate::ymd("2023-01-07")
   )
 
-expected_calcinoage_daids <- expected_calcige7d_daids %>%
+expected_calcilt7d_daids_cv <- tibble::tribble(
+  ~ATOXDSCH,       ~AVAL,  ~AVALU,   ~ATOXGRH, ~TESTNUM,
+  "Not a term",    13.5,   "mg/dL",  NA,       13,
+  NA_character_,   13.5,   "mg/dL",  NA,       14,
+  # ANRHI not missing
+  "Calcium, High", 13.5,   "mg/dL",  "4",      15,
+  "Calcium, High", 13.49,  "mg/dL",  "3",      16,
+  "Calcium, High", 12.9,   "mg/dL",  "3",      17,
+  "Calcium, High", 12.89,  "mg/dL",  "2",      18,
+  "Calcium, High", 12.4,   "mg/dL",  "2",      19,
+  "Calcium, High", 12.39,  "mg/dL",  "1",      20,
+  "Calcium, High", 11.5,   "mg/dL",  "1",      21,
+  "Calcium, High", 11.49,  "mg/dL",  "0",      22,
+  # Unit missing cannot grade
+  "Calcium, High", 11.49,  NA,       NA,       23,
+  # AVAL missing cannot grade
+  "Calcium, High", NA,     "mg/dL",  NA,       24,
+) %>%
+  mutate(
+    BRTHDT = lubridate::ymd("2023-01-01"),
+    LBDT = lubridate::ymd("2023-01-07")
+  )
+
+## create data with age missing for SI unit
+expected_calcinoage_daids_si <- expected_calcige7d_daids_si %>%
   filter(TESTNUM %in% c(9, 10)) %>%
   mutate(
     LBDT = if_else(TESTNUM == 9, NA, LBDT),
@@ -3861,20 +5791,36 @@ expected_calcinoage_daids <- expected_calcige7d_daids %>%
     TESTNUM = if_else(TESTNUM == 9, 25, 26)
   )
 
-expected_calci_daids <- expected_calcinoage_daids %>%
-  bind_rows(
-    expected_calcige7d_daids,
-    expected_calcilt7d_daids
+## create data with age missing for CV unit
+expected_calcinoage_daids_cv <- expected_calcige7d_daids_cv %>%
+  filter(TESTNUM %in% c(9, 10)) %>%
+  mutate(
+    LBDT = if_else(TESTNUM == 9, NA, LBDT),
+    BRTHDT = if_else(TESTNUM == 10, NA, BRTHDT),
+    ATOXGRH = NA_character_,
+    TESTNUM = if_else(TESTNUM == 9, 25, 26)
   )
 
+# put all SI data together
+expected_calci_daids_si <- expected_calcinoage_daids_si %>%
+  bind_rows(
+    expected_calcige7d_daids_si,
+    expected_calcilt7d_daids_si
+  )
 
-## Test 92: DAIDS Calcium, High ----
-test_that("derive_var_atoxgr Test 92: DAIDS Calcium, High", {
-  input_calci_daids <- expected_calci_daids %>%
+# put all CV data together
+expected_calci_daids_cv <- expected_calcinoage_daids_cv %>%
+  bind_rows(
+    expected_calcige7d_daids_cv,
+    expected_calcilt7d_daids_cv
+  )
+## Test 92a: DAIDS Calcium, High (SI unit) ----
+test_that("derive_var_atoxgr Test 92a: DAIDS Calcium, High (SI unit)", {
+  input_calci_daids_si <- expected_calci_daids_si %>%
     select(-ATOXGRH)
 
-  actual_calci_daids <- derive_var_atoxgr_dir(
-    input_calci_daids,
+  actual_calci_daids_si <- derive_var_atoxgr_dir(
+    input_calci_daids_si,
     new_var = ATOXGRH,
     meta_criteria = atoxgr_criteria_daids,
     tox_description_var = ATOXDSCH,
@@ -3883,54 +5829,93 @@ test_that("derive_var_atoxgr Test 92: DAIDS Calcium, High", {
   )
 
   expect_dfs_equal(
-    base = expected_calci_daids,
-    compare = actual_calci_daids,
+    base = expected_calci_daids_si,
+    compare = actual_calci_daids_si,
+    keys = c("TESTNUM")
+  )
+})
+
+## Test 92b: DAIDS Calcium, High (USCV unit) ----
+test_that("derive_var_atoxgr Test 92b: DAIDS Calcium, High (USCV unit)", {
+  input_calci_daids_cv <- expected_calci_daids_cv %>%
+    select(-ATOXGRH)
+
+  actual_calci_daids_cv <- derive_var_atoxgr_dir(
+    input_calci_daids_cv,
+    new_var = ATOXGRH,
+    meta_criteria = atoxgr_criteria_daids_uscv,
+    tox_description_var = ATOXDSCH,
+    criteria_direction = "H",
+    get_unit_expr = AVALU
+  )
+
+  expect_dfs_equal(
+    base = expected_calci_daids_cv,
+    compare = actual_calci_daids_cv,
     keys = c("TESTNUM")
   )
 })
 
 
 ### Calcium (Ionized), High
+### SI unit is mmol/L
 ### Grade 4: >= 1.8 mmol/L
 ### Grade 3: 1.6 -< 1.8 mmol/L
 ### Grade 2: 1.5 -< 1.6 mmol/L
 ### Grade 1: >ULN -< 1.5 mmol/L
 
-## Test 93: DAIDS Calcium (Ionized), High ----
-test_that("derive_var_atoxgr Test 93: DAIDS Calcium (Ionized), High", {
-  expected_calioni_daids <- tibble::tribble(
-    ~ATOXDSCH,                 ~AVAL, ~ANRLO, ~ANRHI, ~AVALU,   ~ATOXGRH, ~TESTNUM,
-    "Not a term",              1.8,   1.1,    1.4,    "mmol/L", NA,       1,
-    NA_character_,             1.79,  1.1,    1.4,    "mmol/L", NA,       2,
-    # ANRHI not missing
-    "Calcium (Ionized), High", 1.8,   1.1,    1.4,    "mmol/L", "4",      3,
-    "Calcium (Ionized), High", 1.79,  1.1,    1.4,    "mmol/L", "3",      4,
-    "Calcium (Ionized), High", 1.6,   1.1,    1.4,    "mmol/L", "3",      5,
-    "Calcium (Ionized), High", 1.59,  1.1,    1.4,    "mmol/L", "2",      6,
-    "Calcium (Ionized), High", 1.5,   1.1,    1.4,    "mmol/L", "2",      7,
-    "Calcium (Ionized), High", 1.49,  1.1,    1.4,    "mmol/L", "1",      8,
-    "Calcium (Ionized), High", 1.41,  1.1,    1.4,    "mmol/L", "1",      9,
-    "Calcium (Ionized), High", 1.4,   1.1,    1.4,    "mmol/L", "0",      10,
-    # ANRHI missing - can grade 2-4
-    "Calcium (Ionized), High", 1.8,   1.1,    NA,     "mmol/L", "4",      11,
-    "Calcium (Ionized), High", 1.79,  1.1,    NA,     "mmol/L", "3",      12,
-    "Calcium (Ionized), High", 1.6,   1.1,    NA,     "mmol/L", "3",      13,
-    "Calcium (Ionized), High", 1.59,  1.1,    NA,     "mmol/L", "2",      14,
-    "Calcium (Ionized), High", 1.5,   1.1,    NA,     "mmol/L", "2",      15,
-    # ANRHI missing - can NOT grade 0 or 1
-    "Calcium (Ionized), High", 1.49,  1.1,    NA,     "mmol/L", NA,       16,
-    "Calcium (Ionized), High", 1.41,  1.1,    NA,     "mmol/L", NA,       17,
-    "Calcium (Ionized), High", 1.4,   1.1,    NA,     "mmol/L", NA,       18,
-    # Unit missing cannot grade
-    "Calcium (Ionized), High", 1.3,   1.1,    1.4,    NA,       NA,       19,
-    # AVAL missing cannot grade
-    "Calcium (Ionized), High", NA,    1.1,    1.4,    "mmol/L", NA,       20,
-  )
-  input_calioni_daids <- expected_calioni_daids %>%
-    select(-ATOXGRH)
 
-  actual_calioni_daids <- derive_var_atoxgr_dir(
-    input_calioni_daids,
+### CV unit is mg/dL (4 * mmol/L)
+### Grade 4: >= 7.2 mg/dL
+### Grade 3: 6.4 -< 7.2 mg/dL
+### Grade 2: 6.0 -< 6.4 mg/dL
+### Grade 1: >ULN -< 6.0 mg/dL
+
+expected_calioni_daids_si <- tibble::tribble(
+  ~ATOXDSCH,                 ~AVAL, ~ANRLO, ~ANRHI, ~AVALU,   ~ATOXGRH, ~TESTNUM,
+  "Not a term",              1.8,   1.1,    1.4,    "mmol/L", NA,       1,
+  NA_character_,             1.79,  1.1,    1.4,    "mmol/L", NA,       2,
+  # ANRHI not missing
+  "Calcium (Ionized), High", 1.8,   1.1,    1.4,    "mmol/L", "4",      3,
+  "Calcium (Ionized), High", 1.79,  1.1,    1.4,    "mmol/L", "3",      4,
+  "Calcium (Ionized), High", 1.6,   1.1,    1.4,    "mmol/L", "3",      5,
+  "Calcium (Ionized), High", 1.59,  1.1,    1.4,    "mmol/L", "2",      6,
+  "Calcium (Ionized), High", 1.5,   1.1,    1.4,    "mmol/L", "2",      7,
+  "Calcium (Ionized), High", 1.49,  1.1,    1.4,    "mmol/L", "1",      8,
+  "Calcium (Ionized), High", 1.41,  1.1,    1.4,    "mmol/L", "1",      9,
+  "Calcium (Ionized), High", 1.4,   1.1,    1.4,    "mmol/L", "0",      10,
+  # ANRHI missing - can grade 2-4
+  "Calcium (Ionized), High", 1.8,   1.1,    NA,     "mmol/L", "4",      11,
+  "Calcium (Ionized), High", 1.79,  1.1,    NA,     "mmol/L", "3",      12,
+  "Calcium (Ionized), High", 1.6,   1.1,    NA,     "mmol/L", "3",      13,
+  "Calcium (Ionized), High", 1.59,  1.1,    NA,     "mmol/L", "2",      14,
+  "Calcium (Ionized), High", 1.5,   1.1,    NA,     "mmol/L", "2",      15,
+  # ANRHI missing - can NOT grade 0 or 1
+  "Calcium (Ionized), High", 1.49,  1.1,    NA,     "mmol/L", NA,       16,
+  "Calcium (Ionized), High", 1.41,  1.1,    NA,     "mmol/L", NA,       17,
+  "Calcium (Ionized), High", 1.4,   1.1,    NA,     "mmol/L", NA,       18,
+  # Unit missing cannot grade
+  "Calcium (Ionized), High", 1.3,   1.1,    1.4,    NA,       NA,       19,
+  # AVAL missing cannot grade
+  "Calcium (Ionized), High", NA,    1.1,    1.4,    "mmol/L", NA,       20,
+)
+input_calioni_daids_si <- expected_calioni_daids_si %>%
+  select(-ATOXGRH)
+
+expected_calioni_daids_cv <- expected_calioni_daids_si %>%
+  mutate(
+    AVAL = 4 * AVAL,
+    ANRLO = 4 * ANRLO,
+    ANRHI = 4 * ANRHI,
+    AVALU = if_else(is.na(AVALU), NA_character_, "mg/dL")
+  )
+input_calioni_daids_cv <- expected_calioni_daids_cv %>%
+  select(-ATOXGRH)
+
+## Test 93a: DAIDS Calcium (Ionized), High (SI unit) ----
+test_that("derive_var_atoxgr Test 93a: DAIDS Calcium (Ionized), High (SI unit)", {
+  actual_calioni_daids_si <- derive_var_atoxgr_dir(
+    input_calioni_daids_si,
     new_var = ATOXGRH,
     meta_criteria = atoxgr_criteria_daids,
     tox_description_var = ATOXDSCH,
@@ -3939,8 +5924,26 @@ test_that("derive_var_atoxgr Test 93: DAIDS Calcium (Ionized), High", {
   )
 
   expect_dfs_equal(
-    base = expected_calioni_daids,
-    compare = actual_calioni_daids,
+    base = expected_calioni_daids_si,
+    compare = actual_calioni_daids_si,
+    keys = c("ATOXDSCH", "TESTNUM")
+  )
+})
+
+## Test 93b: DAIDS Calcium (Ionized), High (USCV unit) ----
+test_that("derive_var_atoxgr Test 93b: DAIDS Calcium (Ionized), High (USCV unit)", {
+  actual_calioni_daids_cv <- derive_var_atoxgr_dir(
+    input_calioni_daids_cv,
+    new_var = ATOXGRH,
+    meta_criteria = atoxgr_criteria_daids_uscv,
+    tox_description_var = ATOXDSCH,
+    criteria_direction = "H",
+    get_unit_expr = AVALU
+  )
+
+  expect_dfs_equal(
+    base = expected_calioni_daids_cv,
+    compare = actual_calioni_daids_cv,
     keys = c("ATOXDSCH", "TESTNUM")
   )
 })
@@ -3949,12 +5952,20 @@ test_that("derive_var_atoxgr Test 93: DAIDS Calcium (Ionized), High", {
 ### Calcium, Low
 
 ### >= 7 days of age
+
+### SI unit is mmol/L
 ### Grade 4: < 1.53 mmol/L
 ### Grade 3: 1.53 -< 1.75 mmol/L
 ### Grade 2: 1.75 -< 1.95 mmol/L
 ### Grade 1: 1.95 -< 2.10 mmol/L
 
-expected_calcdge7d_daids <- tibble::tribble(
+### CV unit is mg/dL
+### Grade 4: < 6.1 mg/dL
+### Grade 3: 6.1 -< 7.0 mg/dL
+### Grade 2: 7.0 -< 7.8 mg/dL
+### Grade 1: 7.8 -< 8.4 mg/dL
+
+expected_calcdge7d_daids_si <- tibble::tribble(
   ~ATOXDSCL,       ~AVAL,  ~AVALU,    ~ATOXGRL, ~TESTNUM,
   "Not a term",    2.2,    "mmol/L",  NA,       1,
   NA_character_,   2.2,    "mmol/L",  NA,       2,
@@ -3977,13 +5988,44 @@ expected_calcdge7d_daids <- tibble::tribble(
     LBDT = lubridate::ymd("2023-01-08")
   )
 
+expected_calcdge7d_daids_cv <- tibble::tribble(
+  ~ATOXDSCL,       ~AVAL,   ~AVALU,  ~ATOXGRL,  ~TESTNUM,
+  "Not a term",    6.09,   "mg/dL",        NA,  1,
+  NA_character_,   6.09,   "mg/dL",        NA,  2,
+  # ANRLO not missing
+  "Calcium, Low",  6.09,   "mg/dL",       "4",  3,
+  "Calcium, Low",  6.1,    "mg/dL",       "3",  4,
+  "Calcium, Low",  6.9,    "mg/dL",       "3",  5,
+  "Calcium, Low",  7,      "mg/dL",       "2",  6,
+  "Calcium, Low",  7.7,    "mg/dL",       "2",  7,
+  "Calcium, Low",  7.8,    "mg/dL",       "1",  8,
+  "Calcium, Low",  8.3,    "mg/dL",       "1",  9,
+  "Calcium, Low",  8.4,    "mg/dL",       "0",  10,
+  # Unit missing cannot grade
+  "Calcium, Low",  8.4,         NA,        NA,  11,
+  # AVAL missing cannot grade
+  "Calcium, Low",  NA,     "mg/dL",        NA,  12,
+) %>%
+  mutate(
+    BRTHDT = lubridate::ymd("2023-01-01"),
+    LBDT = lubridate::ymd("2023-01-08")
+  )
+
 ### < 7 days of age
+### SI unit is mmol/L
 ### Grade 4: < 1.38 mmol/L
 ### Grade 3: 1.38 -< 1.5 mmol/L
 ### Grade 2: 1.5 -< 1.63 mmol/L
 ### Grade 1: 1.63 -< 1.88 mmol/L
 
-expected_calcdlt7d_daids <- tibble::tribble(
+### CV unit is mg/dL
+### Grade 4: < 5.5 mg/dL
+### Grade 3: 5.5 -< 6.0 mg/dL
+### Grade 2: 6.0 -< 6.5 mg/dL
+### Grade 1: 6.5 -< 7.5 mg/dL
+
+### SI unit
+expected_calcdlt7d_daids_si <- tibble::tribble(
   ~ATOXDSCL,      ~AVAL, ~AVALU,   ~ATOXGRL, ~TESTNUM,
   "Not a term",   2.2,   "mmol/L", NA,       13,
   NA_character_,  2.2,   "mmol/L", NA,       14,
@@ -4005,8 +6047,32 @@ expected_calcdlt7d_daids <- tibble::tribble(
     BRTHDT = lubridate::ymd("2023-01-01"),
     LBDT = lubridate::ymd("2023-01-07")
   )
+### CV unit
+expected_calcdlt7d_daids_cv <- tibble::tribble(
+  ~ATOXDSCL,       ~AVAL,   ~AVALU,  ~ATOXGRL,  ~TESTNUM,
+  "Not a term",    5.49,   "mg/dL",        NA,  13,
+  NA_character_,   5.49,   "mg/dL",        NA,  14,
+  # ANRLO not missing
+  "Calcium, Low",  5.49,   "mg/dL",       "4",  15,
+  "Calcium, Low",  5.5,    "mg/dL",       "3",  16,
+  "Calcium, Low",  5.99,   "mg/dL",       "3",  17,
+  "Calcium, Low",  6,      "mg/dL",       "2",  18,
+  "Calcium, Low",  6.49,   "mg/dL",       "2",  19,
+  "Calcium, Low",  6.5,    "mg/dL",       "1",  20,
+  "Calcium, Low",  7.49,   "mg/dL",       "1",  21,
+  "Calcium, Low",  7.5,    "mg/dL",       "0",  22,
+  # Unit missing cannot grade
+  "Calcium, Low",  7.5,         NA,        NA,  23,
+  # AVAL missing cannot grade
+  "Calcium, Low",  NA,     "mg/dL",        NA,  24,
+) %>%
+  mutate(
+    BRTHDT = lubridate::ymd("2023-01-01"),
+    LBDT = lubridate::ymd("2023-01-07")
+  )
 
-expected_calcdnoage_daids <- expected_calcdge7d_daids %>%
+## create SI records with age missing
+expected_calcdnoage_daids_si <- expected_calcdge7d_daids_si %>%
   filter(TESTNUM %in% c(9, 10)) %>%
   mutate(
     LBDT = if_else(TESTNUM == 9, NA, LBDT),
@@ -4015,20 +6081,38 @@ expected_calcdnoage_daids <- expected_calcdge7d_daids %>%
     TESTNUM = if_else(TESTNUM == 9, 25, 26)
   )
 
-expected_calcd_daids <- expected_calcdnoage_daids %>%
+## create CV records with age missing
+expected_calcdnoage_daids_cv <- expected_calcdge7d_daids_cv %>%
+  filter(TESTNUM %in% c(9, 10)) %>%
+  mutate(
+    LBDT = if_else(TESTNUM == 9, NA, LBDT),
+    BRTHDT = if_else(TESTNUM == 10, NA, BRTHDT),
+    ATOXGRL = NA_character_,
+    TESTNUM = if_else(TESTNUM == 9, 25, 26)
+  )
+
+## put all SI records together
+expected_calcd_daids_si <- expected_calcdnoage_daids_si %>%
   bind_rows(
-    expected_calcdge7d_daids,
-    expected_calcdlt7d_daids
+    expected_calcdge7d_daids_si,
+    expected_calcdlt7d_daids_si
+  )
+
+## put all CV records together
+expected_calcd_daids_cv <- expected_calcdnoage_daids_cv %>%
+  bind_rows(
+    expected_calcdge7d_daids_cv,
+    expected_calcdlt7d_daids_cv
   )
 
 
-## Test 94: DAIDS Calcium, Low ----
-test_that("derive_var_atoxgr Test 94: DAIDS Calcium, Low", {
-  input_calcd_daids <- expected_calcd_daids %>%
+## Test 94a: DAIDS Calcium, Low (SI unit) ----
+test_that("derive_var_atoxgr Test 94a: DAIDS Calcium, Low (SI unit)", {
+  input_calcd_daids_si <- expected_calcd_daids_si %>%
     select(-ATOXGRL)
 
-  actual_calcd_daids <- derive_var_atoxgr_dir(
-    input_calcd_daids,
+  actual_calcd_daids_si <- derive_var_atoxgr_dir(
+    input_calcd_daids_si,
     new_var = ATOXGRL,
     meta_criteria = atoxgr_criteria_daids,
     tox_description_var = ATOXDSCL,
@@ -4037,54 +6121,92 @@ test_that("derive_var_atoxgr Test 94: DAIDS Calcium, Low", {
   )
 
   expect_dfs_equal(
-    base = expected_calcd_daids,
-    compare = actual_calcd_daids,
+    base = expected_calcd_daids_si,
+    compare = actual_calcd_daids_si,
+    keys = c("TESTNUM")
+  )
+})
+
+## Test 94b: DAIDS Calcium, Low (USCV unit) ----
+test_that("derive_var_atoxgr Test 94b: DAIDS Calcium, Low (USCV unit)", {
+  input_calcd_daids_cv <- expected_calcd_daids_cv %>%
+    select(-ATOXGRL)
+
+  actual_calcd_daids_cv <- derive_var_atoxgr_dir(
+    input_calcd_daids_cv,
+    new_var = ATOXGRL,
+    meta_criteria = atoxgr_criteria_daids_uscv,
+    tox_description_var = ATOXDSCL,
+    criteria_direction = "L",
+    get_unit_expr = AVALU
+  )
+
+  expect_dfs_equal(
+    base = expected_calcd_daids_cv,
+    compare = actual_calcd_daids_cv,
     keys = c("TESTNUM")
   )
 })
 
 
 ### Calcium (Ionized), Low
+### SI unit is mmol/L
 ### Grade 4: <0.8 mmol/L
 ### Grade 3: 0.8 -< 0.9 mmol/L
 ### Grade 2: 0.9 -< 1.0 mmol/L
 ### Grade 1: 1.0 mmol/L -< LLN
 
-## Test 95: DAIDS Calcium (Ionized), Low ----
-test_that("derive_var_atoxgr Test 95: DAIDS Calcium (Ionized), Low", {
-  expected_caliond_daids <- tibble::tribble(
-    ~ATOXDSCL,                ~AVAL, ~ANRLO, ~ANRHI, ~AVALU,   ~ATOXGRL, ~TESTNUM,
-    "Not a term",             0.79,  1.1,    100,    "mmol/L", NA,       1,
-    NA_character_,            0.79,  1.1,    100,    "mmol/L", NA,       2,
-    # ANRLO not missing
-    "Calcium (Ionized), Low", 0.79,  1.1,    100,    "mmol/L", "4",      3,
-    "Calcium (Ionized), Low", 0.8,   1.1,    100,    "mmol/L", "3",      4,
-    "Calcium (Ionized), Low", 0.89,  1.1,    100,    "mmol/L", "3",      5,
-    "Calcium (Ionized), Low", 0.9,   1.1,    100,    "mmol/L", "2",      6,
-    "Calcium (Ionized), Low", 0.99,  1.1,    100,    "mmol/L", "2",      7,
-    "Calcium (Ionized), Low", 1,     1.1,    100,    "mmol/L", "1",      8,
-    "Calcium (Ionized), Low", 1.09,  1.1,    100,    "mmol/L", "1",      9,
-    "Calcium (Ionized), Low", 1.1,   1.1,    100,    "mmol/L", "0",      10,
-    # ANRLO missing - can grade 2-4
-    "Calcium (Ionized), Low", 0.79,  NA,     100,    "mmol/L", "4",      11,
-    "Calcium (Ionized), Low", 0.8,   NA,     100,    "mmol/L", "3",      12,
-    "Calcium (Ionized), Low", 0.89,  NA,     100,    "mmol/L", "3",      13,
-    "Calcium (Ionized), Low", 0.9,   NA,     100,    "mmol/L", "2",      14,
-    "Calcium (Ionized), Low", 0.99,  NA,     100,    "mmol/L", "2",      15,
-    # ANRLO missing - can NOT grade 0 or 1
-    "Calcium (Ionized), Low", 1,     NA,     100,    "mmol/L", NA,       16,
-    "Calcium (Ionized), Low", 1.09,  NA,     100,    "mmol/L", NA,       17,
-    "Calcium (Ionized), Low", 1.1,   NA,     100,    "mmol/L", NA,       18,
-    # Unit missing cannot grade
-    "Calcium (Ionized), Low", 1.1,   1.1,    100,    NA,       NA,       19,
-    # AVAL missing cannot grade
-    "Calcium (Ionized), Low", NA,    1.1,    100,    "mmol/L", NA,       20,
-  )
-  input_caliond_daids <- expected_caliond_daids %>%
-    select(-ATOXGRL)
 
-  actual_caliond_daids <- derive_var_atoxgr_dir(
-    input_caliond_daids,
+### SI unit is mg/dL ( 4 * mmol/L)
+### Grade 4: <3.2 mg/dL
+### Grade 3: 3.2 -< 3.6 mg/dL
+### Grade 2: 3.6 -< 4.0 mg/dL
+### Grade 1: 4.0 mg/dL -< LLN
+
+expected_caliond_daids_si <- tibble::tribble(
+  ~ATOXDSCL,                ~AVAL, ~ANRLO, ~ANRHI, ~AVALU,   ~ATOXGRL, ~TESTNUM,
+  "Not a term",             0.79,  1.1,    100,    "mmol/L", NA,       1,
+  NA_character_,            0.79,  1.1,    100,    "mmol/L", NA,       2,
+  # ANRLO not missing
+  "Calcium (Ionized), Low", 0.79,  1.1,    100,    "mmol/L", "4",      3,
+  "Calcium (Ionized), Low", 0.8,   1.1,    100,    "mmol/L", "3",      4,
+  "Calcium (Ionized), Low", 0.89,  1.1,    100,    "mmol/L", "3",      5,
+  "Calcium (Ionized), Low", 0.9,   1.1,    100,    "mmol/L", "2",      6,
+  "Calcium (Ionized), Low", 0.99,  1.1,    100,    "mmol/L", "2",      7,
+  "Calcium (Ionized), Low", 1,     1.1,    100,    "mmol/L", "1",      8,
+  "Calcium (Ionized), Low", 1.09,  1.1,    100,    "mmol/L", "1",      9,
+  "Calcium (Ionized), Low", 1.1,   1.1,    100,    "mmol/L", "0",      10,
+  # ANRLO missing - can grade 2-4
+  "Calcium (Ionized), Low", 0.79,  NA,     100,    "mmol/L", "4",      11,
+  "Calcium (Ionized), Low", 0.8,   NA,     100,    "mmol/L", "3",      12,
+  "Calcium (Ionized), Low", 0.89,  NA,     100,    "mmol/L", "3",      13,
+  "Calcium (Ionized), Low", 0.9,   NA,     100,    "mmol/L", "2",      14,
+  "Calcium (Ionized), Low", 0.99,  NA,     100,    "mmol/L", "2",      15,
+  # ANRLO missing - can NOT grade 0 or 1
+  "Calcium (Ionized), Low", 1,     NA,     100,    "mmol/L", NA,       16,
+  "Calcium (Ionized), Low", 1.09,  NA,     100,    "mmol/L", NA,       17,
+  "Calcium (Ionized), Low", 1.1,   NA,     100,    "mmol/L", NA,       18,
+  # Unit missing cannot grade
+  "Calcium (Ionized), Low", 1.1,   1.1,    100,    NA,       NA,       19,
+  # AVAL missing cannot grade
+  "Calcium (Ionized), Low", NA,    1.1,    100,    "mmol/L", NA,       20,
+)
+input_caliond_daids_si <- expected_caliond_daids_si %>%
+  select(-ATOXGRL)
+
+expected_caliond_daids_cv <- expected_caliond_daids_si %>%
+  mutate(
+    AVAL = AVAL * 4,
+    ANRLO = ANRLO * 4,
+    AVALU = if_else(is.na(AVALU), NA_character_, "mg/dL")
+  )
+input_caliond_daids_cv <- expected_caliond_daids_cv %>%
+  select(-ATOXGRL)
+
+## Test 95a: DAIDS Calcium (Ionized), Low (SI unit) ----
+test_that("derive_var_atoxgr Test 95a: DAIDS Calcium (Ionized), Low (SI unit)", {
+  actual_caliond_daids_si <- derive_var_atoxgr_dir(
+    input_caliond_daids_si,
     new_var = ATOXGRL,
     meta_criteria = atoxgr_criteria_daids,
     tox_description_var = ATOXDSCL,
@@ -4093,8 +6215,26 @@ test_that("derive_var_atoxgr Test 95: DAIDS Calcium (Ionized), Low", {
   )
 
   expect_dfs_equal(
-    base = expected_caliond_daids,
-    compare = actual_caliond_daids,
+    base = expected_caliond_daids_si,
+    compare = actual_caliond_daids_si,
+    keys = c("ATOXDSCL", "TESTNUM")
+  )
+})
+
+## Test 95b: DAIDS Calcium (Ionized), Low (USCV unit) ----
+test_that("derive_var_atoxgr Test 95b: DAIDS Calcium (Ionized), Low (USCV unit)", {
+  actual_caliond_daids_cv <- derive_var_atoxgr_dir(
+    input_caliond_daids_cv,
+    new_var = ATOXGRL,
+    meta_criteria = atoxgr_criteria_daids_uscv,
+    tox_description_var = ATOXDSCL,
+    criteria_direction = "L",
+    get_unit_expr = AVALU
+  )
+
+  expect_dfs_equal(
+    base = expected_caliond_daids_cv,
+    compare = actual_caliond_daids_cv,
     keys = c("ATOXDSCL", "TESTNUM")
   )
 })
@@ -4200,14 +6340,21 @@ test_that("derive_var_atoxgr Test 97: DAIDS Creatinine, High", {
 
 ### Glucose Fasting, High
 
+### SI unit is mmol/L
 ### Grade 4: >= 27.75 mmol/L
 ### Grade 3: 13.89 -< 27.75 mmol/L
 ### Grade 2: 6.95 -< 13.89 mmol/L
 ### Grade 1: 6.11 -< 6.95 mmol/L
 
-## Test 98:  DAIDS Glucose Fasting, High ----
-test_that("derive_var_atoxgr Test 98:  DAIDS Glucose Fasting, High", {
-  expected_glucfi_daids <- tibble::tribble(
+### CV unit is mg/dL
+### Grade 4: >= 500 mg/dL
+### Grade 3: >250 -< 500 mg/dL
+### Grade 2: >125 - 250 mg/dL
+### Grade 1: 110 - 125 mg/dL
+
+## Test 98a:  DAIDS Glucose Fasting, High (SI unit)----
+test_that("derive_var_atoxgr Test 98a:  DAIDS Glucose Fasting, High (SI unit)", {
+  expected_glucfi_daids_si <- tibble::tribble(
     ~ATOXDSCH,               ~AVAL,  ~AVALU,   ~ATOXGRH, ~TESTNUM,
     "Not a term",            9.5,    "mg/L",   NA,       1,
     NA_character_,           9.5,    "mmol/L", NA,       2,
@@ -4225,11 +6372,11 @@ test_that("derive_var_atoxgr Test 98:  DAIDS Glucose Fasting, High", {
     "Glucose Fasting, High", NA,     "mmol/L", NA,       12,
   )
 
-  input_glucfi_daids <- expected_glucfi_daids %>%
+  input_glucfi_daids_si <- expected_glucfi_daids_si %>%
     select(-ATOXGRH)
 
-  actual_glucfi_daids <- derive_var_atoxgr_dir(
-    input_glucfi_daids,
+  actual_glucfi_daids_si <- derive_var_atoxgr_dir(
+    input_glucfi_daids_si,
     new_var = ATOXGRH,
     meta_criteria = atoxgr_criteria_daids,
     tox_description_var = ATOXDSCH,
@@ -4238,22 +6385,68 @@ test_that("derive_var_atoxgr Test 98:  DAIDS Glucose Fasting, High", {
   )
 
   expect_dfs_equal(
-    base = expected_glucfi_daids,
-    compare = actual_glucfi_daids,
+    base = expected_glucfi_daids_si,
+    compare = actual_glucfi_daids_si,
+    keys = c("ATOXDSCH", "TESTNUM")
+  )
+})
+
+## Test 98b:  DAIDS Glucose Fasting, High (USCV unit)----
+test_that("derive_var_atoxgr Test 98b:  DAIDS Glucose Fasting, High (USCV unit)", {
+  expected_glucfi_daids_cv <- tibble::tribble(
+    ~ATOXDSCH,               ~AVAL,  ~AVALU,   ~ATOXGRH, ~TESTNUM,
+    "Not a term",            500,    "mg/L",   NA,       1,
+    NA_character_,           500,    "mg/dL",  NA,       2,
+    "Glucose Fasting, High", 500,    "mg/dL",  "4",      3,
+    "Glucose Fasting, High", 499,    "mg/dL",  "3",      4,
+    "Glucose Fasting, High", 251,    "mg/dL",  "3",      5,
+    "Glucose Fasting, High", 250,    "mg/dL",  "2",      6,
+    "Glucose Fasting, High", 126,    "mg/dL",  "2",      7,
+    "Glucose Fasting, High", 125,    "mg/dL",  "1",      8,
+    "Glucose Fasting, High", 110,    "mg/dL",  "1",      9,
+    "Glucose Fasting, High", 109,    "mg/dL",  "0",      10,
+    # AVALU missing cannot grade
+    "Glucose Fasting, High", 7,      NA,       NA,       11,
+    # AVAL missing cannot grade
+    "Glucose Fasting, High", NA,     "mg/dL",  NA,       12,
+  )
+
+  input_glucfi_daids_cv <- expected_glucfi_daids_cv %>%
+    select(-ATOXGRH)
+
+  actual_glucfi_daids_cv <- derive_var_atoxgr_dir(
+    input_glucfi_daids_cv,
+    new_var = ATOXGRH,
+    meta_criteria = atoxgr_criteria_daids_uscv,
+    tox_description_var = ATOXDSCH,
+    criteria_direction = "H",
+    get_unit_expr = AVALU
+  )
+
+  expect_dfs_equal(
+    base = expected_glucfi_daids_cv,
+    compare = actual_glucfi_daids_cv,
     keys = c("ATOXDSCH", "TESTNUM")
   )
 })
 
 ### Glucose Nonfasting, High
 
+### SI unit is mmol/L
 ### Grade 4: >= 27.75 mmol/L
 ### Grade 3: 13.89 -< 27.75 mmol/L
 ### Grade 2: 8.89 -< 13.89 mmol/L
 ### Grade 1: 6.44 -< 8.89 mmol/L
 
-## Test 99:  DAIDS Glucose Nonfasting, High ----
-test_that("derive_var_atoxgr Test 99:  DAIDS Glucose Nonfasting, High", {
-  expected_glucnfi_daids <- tibble::tribble(
+### CV unit is mg/dL
+### Grade 4: >= 500 mg/dL
+### Grade 3: >250 -< 500 mg/dL
+### Grade 2: >160 - 250 mg/dL
+### Grade 1: 116 - 160 mg/dL
+
+## Test 99a:  DAIDS Glucose Nonfasting, High (SI unit) ----
+test_that("derive_var_atoxgr Test 99a:  DAIDS Glucose Nonfasting, High (SI unit)", {
+  expected_glucnfi_daids_si <- tibble::tribble(
     ~ATOXDSCH,                  ~AVAL,  ~AVALU,   ~ATOXGRH, ~TESTNUM,
     "Not a term",               9.5,    "mg/L",   NA,       1,
     NA_character_,              9.5,    "mmol/L", NA,       2,
@@ -4271,11 +6464,11 @@ test_that("derive_var_atoxgr Test 99:  DAIDS Glucose Nonfasting, High", {
     "Glucose Nonfasting, High", NA,     "mmol/L", NA,       12,
   )
 
-  input_glucnfi_daids <- expected_glucnfi_daids %>%
+  input_glucnfi_daids_si <- expected_glucnfi_daids_si %>%
     select(-ATOXGRH)
 
-  actual_glucnfi_daids <- derive_var_atoxgr_dir(
-    input_glucnfi_daids,
+  actual_glucnfi_daids_si <- derive_var_atoxgr_dir(
+    input_glucnfi_daids_si,
     new_var = ATOXGRH,
     meta_criteria = atoxgr_criteria_daids,
     tox_description_var = ATOXDSCH,
@@ -4284,8 +6477,47 @@ test_that("derive_var_atoxgr Test 99:  DAIDS Glucose Nonfasting, High", {
   )
 
   expect_dfs_equal(
-    base = expected_glucnfi_daids,
-    compare = actual_glucnfi_daids,
+    base = expected_glucnfi_daids_si,
+    compare = actual_glucnfi_daids_si,
+    keys = c("ATOXDSCH", "TESTNUM")
+  )
+})
+
+## Test 99b:  DAIDS Glucose Nonfasting, High (USCV unit) ----
+test_that("derive_var_atoxgr Test 99b:  DAIDS Glucose Nonfasting, High (USCV unit)", {
+  expected_glucnfi_daids_cv <- tibble::tribble(
+    ~ATOXDSCH,                   ~AVAL,  ~AVALU,  ~ATOXGRH,  ~TESTNUM,
+    "Not a term",                500,    "mg/L",        NA,  1,
+    NA_character_,               500,   "mg/dL",        NA,  2,
+    "Glucose Nonfasting, High",  500,   "mg/dL",       "4",  3,
+    "Glucose Nonfasting, High",  499,   "mg/dL",       "3",  4,
+    "Glucose Nonfasting, High",  251,   "mg/dL",       "3",  5,
+    "Glucose Nonfasting, High",  250,   "mg/dL",       "2",  6,
+    "Glucose Nonfasting, High",  161,   "mg/dL",       "2",  7,
+    "Glucose Nonfasting, High",  160,   "mg/dL",       "1",  8,
+    "Glucose Nonfasting, High",  116,   "mg/dL",       "1",  9,
+    "Glucose Nonfasting, High",  115,   "mg/dL",       "0",  10,
+    # AVALU missing cannot grade
+    "Glucose Nonfasting, High",  115,        NA,        NA,  11,
+    # AVAL missing cannot grade
+    "Glucose Nonfasting, High",  NA,    "mg/dL",        NA,  12,
+  )
+
+  input_glucnfi_daids_cv <- expected_glucnfi_daids_cv %>%
+    select(-ATOXGRH)
+
+  actual_glucnfi_daids_cv <- derive_var_atoxgr_dir(
+    input_glucnfi_daids_cv,
+    new_var = ATOXGRH,
+    meta_criteria = atoxgr_criteria_daids_uscv,
+    tox_description_var = ATOXDSCH,
+    criteria_direction = "H",
+    get_unit_expr = AVALU
+  )
+
+  expect_dfs_equal(
+    base = expected_glucnfi_daids_cv,
+    compare = actual_glucnfi_daids_cv,
     keys = c("ATOXDSCH", "TESTNUM")
   )
 })
@@ -4294,12 +6526,20 @@ test_that("derive_var_atoxgr Test 99:  DAIDS Glucose Nonfasting, High", {
 
 ### >= 1 month of age
 
+### SI unit is mmol/L
 ### Grade 4: < 1.67 mmol/L
 ### Grade 3: 1.67 -< 2.22 mmol/L
 ### Grade 2: 2.22 -< 3.05 mmol/L
 ### Grade 1: 3.05 -< 3.55 mmol/L
 
-expected_glucdge1m_daids <- tibble::tribble(
+### CV unit is mg/dL
+### Grade 4: < 30 mg/dL
+### Grade 3: 30 -< 40 mg/dL
+### Grade 2: 40 -< 55 mg/dL
+### Grade 1: 55 - 64 mg/dL
+
+### SI unit
+expected_glucdge1m_daids_si <- tibble::tribble(
   ~ATOXDSCL,      ~AVAL,  ~AVALU,   ~ATOXGRL, ~TESTNUM,
   "Not a term",   9.5,    "mg/L",   NA,       1,
   NA_character_,  4.1,    "mmol/L", NA,       2,
@@ -4321,14 +6561,44 @@ expected_glucdge1m_daids <- tibble::tribble(
     LBDT = lubridate::ymd("2022-12-30"),
   )
 
+### CV unit
+expected_glucdge1m_daids_cv <- tibble::tribble(
+  ~ATOXDSCL, ~AVAL, ~AVALU, ~ATOXGRL, ~TESTNUM,
+  "Not a term", 29, "mg/L", NA, 1,
+  NA_character_, 29, "mg/dL", NA, 2,
+  "Glucose, Low", 29, "mg/dL", "4", 3,
+  "Glucose, Low", 30, "mg/dL", "3", 4,
+  "Glucose, Low", 39, "mg/dL", "3", 5,
+  "Glucose, Low", 40, "mg/dL", "2", 6,
+  "Glucose, Low", 54, "mg/dL", "2", 7,
+  "Glucose, Low", 55, "mg/dL", "1", 8,
+  "Glucose, Low", 64, "mg/dL", "1", 9,
+  "Glucose, Low", 65, "mg/dL", "0", 10,
+  # AVALU missing cannot grade
+  "Glucose, Low", 65, NA, NA, 11,
+  # AVAL missing cannot grade
+  "Glucose, Low", NA, "mg/dL", NA, 12,
+) %>%
+  mutate(
+    BRTHDT = lubridate::ymd("2022-11-30"),
+    LBDT = lubridate::ymd("2022-12-30"),
+  )
+
 ### < 1 month of age
 
+### SI unit is mmol/L
 ### Grade 4: < 1.67 mmol/L
 ### Grade 3: 1.67 -< 2.22 mmol/L
 ### Grade 2: 2.22 -< 2.78 mmol/L
 ### Grade 1: 2.78 -< 3.00 mmol/L
 
-expected_glucdlt1m_daids <- tibble::tribble(
+### CV unit is mg/dL
+### Grade 4: < 30 mg/dL
+### Grade 3: 30 -< 40 mg/dL
+### Grade 2: 40 -< 50 mg/dL
+### Grade 1: 50 - 54 mg/dL
+
+expected_glucdlt1m_daids_si <- tibble::tribble(
   ~ATOXDSCL,      ~AVAL,  ~AVALU,   ~ATOXGRL, ~TESTNUM,
   "Not a term",   9.5,    "mg/L",   NA,       13,
   NA_character_,  4.1,    "mmol/L", NA,       14,
@@ -4350,7 +6620,39 @@ expected_glucdlt1m_daids <- tibble::tribble(
     LBDT = lubridate::ymd("2022-12-29"),
   )
 
-expected_glucdnoage_daids <- expected_glucdge1m_daids %>%
+expected_glucdlt1m_daids_cv <- tibble::tribble(
+  ~ATOXDSCL,      ~AVAL,  ~AVALU,   ~ATOXGRL, ~TESTNUM,
+  "Not a term",   29,     "mg/L",   NA,       13,
+  NA_character_,  29,     "mg/dL",  NA,       14,
+  "Glucose, Low", 29,     "mg/dL",  "4",      15,
+  "Glucose, Low", 30,     "mg/dL",  "3",      16,
+  "Glucose, Low", 39,     "mg/dL",  "3",      17,
+  "Glucose, Low", 40,     "mg/dL",  "2",      18,
+  "Glucose, Low", 49,     "mg/dL",  "2",      19,
+  "Glucose, Low", 50,     "mg/dL",  "1",      20,
+  "Glucose, Low", 54,     "mg/dL",  "1",      21,
+  "Glucose, Low", 55,     "mg/dL",  "0",      22,
+  # AVALU missing cannot grade
+  "Glucose, Low", 55,     NA,       NA,       23,
+  # AVAL missing cannot grade
+  "Glucose, Low", NA,     "mg/dL",  NA,       24,
+) %>%
+  mutate(
+    BRTHDT = lubridate::ymd("2022-11-30"),
+    LBDT = lubridate::ymd("2022-12-29"),
+  )
+
+## create SI records with age missing
+expected_glucdnoage_daids_si <- expected_glucdge1m_daids_si %>%
+  filter(TESTNUM %in% c(9, 10)) %>%
+  mutate(
+    ATOXGRL = NA_character_,
+    LBDT = if_else(TESTNUM == 9, NA, LBDT),
+    BRTHDT = if_else(TESTNUM == 10, NA, BRTHDT),
+    TESTNUM = if_else(TESTNUM == 9, 25, 26)
+  )
+## create CV records with age missing
+expected_glucdnoage_daids_cv <- expected_glucdge1m_daids_cv %>%
   filter(TESTNUM %in% c(9, 10)) %>%
   mutate(
     ATOXGRL = NA_character_,
@@ -4359,20 +6661,28 @@ expected_glucdnoage_daids <- expected_glucdge1m_daids %>%
     TESTNUM = if_else(TESTNUM == 9, 25, 26)
   )
 
-expected_glucd_daids <- expected_glucdnoage_daids %>%
+## put all SI records together
+expected_glucd_daids_si <- expected_glucdnoage_daids_si %>%
   bind_rows(
-    expected_glucdge1m_daids,
-    expected_glucdlt1m_daids
+    expected_glucdge1m_daids_si,
+    expected_glucdlt1m_daids_si
+  )
+
+## put all CV records together
+expected_glucd_daids_cv <- expected_glucdnoage_daids_cv %>%
+  bind_rows(
+    expected_glucdge1m_daids_cv,
+    expected_glucdlt1m_daids_cv
   )
 
 
-## Test 100:  DAIDS Glucose, Low ----
-test_that("derive_var_atoxgr Test 100:  DAIDS Glucose, Low", {
-  input_glucd_daids <- expected_glucd_daids %>%
+## Test 100a:  DAIDS Glucose, Low (SI unit) ----
+test_that("derive_var_atoxgr Test 100a:  DAIDS Glucose, Low (SI unit)", {
+  input_glucd_daids_si <- expected_glucd_daids_si %>%
     select(-ATOXGRL)
 
-  actual_glucd_daids <- derive_var_atoxgr_dir(
-    input_glucd_daids,
+  actual_glucd_daids_si <- derive_var_atoxgr_dir(
+    input_glucd_daids_si,
     new_var = ATOXGRL,
     meta_criteria = atoxgr_criteria_daids,
     tox_description_var = ATOXDSCL,
@@ -4381,8 +6691,29 @@ test_that("derive_var_atoxgr Test 100:  DAIDS Glucose, Low", {
   )
 
   expect_dfs_equal(
-    base = expected_glucd_daids,
-    compare = actual_glucd_daids,
+    base = expected_glucd_daids_si,
+    compare = actual_glucd_daids_si,
+    keys = c("ATOXDSCL", "TESTNUM")
+  )
+})
+
+## Test 100b:  DAIDS Glucose, Low (USCV unit) ----
+test_that("derive_var_atoxgr Test 100b:  DAIDS Glucose, Low (USCV unit)", {
+  input_glucd_daids_cv <- expected_glucd_daids_cv %>%
+    select(-ATOXGRL)
+
+  actual_glucd_daids_cv <- derive_var_atoxgr_dir(
+    input_glucd_daids_cv,
+    new_var = ATOXGRL,
+    meta_criteria = atoxgr_criteria_daids_uscv,
+    tox_description_var = ATOXDSCL,
+    criteria_direction = "L",
+    get_unit_expr = AVALU
+  )
+
+  expect_dfs_equal(
+    base = expected_glucd_daids_cv,
+    compare = actual_glucd_daids_cv,
     keys = c("ATOXDSCL", "TESTNUM")
   )
 })
@@ -4481,11 +6812,18 @@ test_that("derive_var_atoxgr Test 102:  DAIDS Lipase, High", {
 ### Cholesterol, Fasting, High
 
 ### >= 18 years of age
+### SI unit is mmol/L
 ### Grade 3: >= 7.77 mmol/L
 ### Grade 2: 6.19 -< 7.77 mmol/L
 ### Grade 1: 5.18 -< 6.19 mmol/L
 
-expected_cholfige18y_daids <- tibble::tribble(
+### CV unit is mg/dL
+### Grade 3: >= 300 mg/dL
+### Grade 2: 240 -< 300 mg/dL
+### Grade 1: 200 -< 240 mg/dL
+
+### SI data
+expected_cholfige18y_daids_si <- tibble::tribble(
   ~ATOXDSCH,                    ~AVAL,  ~AVALU,    ~ATOXGRH, ~TESTNUM,
   "Not a term",                 3.5,    "mmol/L",  NA,       1,
   NA_character_,                3.5,    "mmol/L",  NA,       2,
@@ -4505,12 +6843,39 @@ expected_cholfige18y_daids <- tibble::tribble(
     LBDT = lubridate::ymd("2023-01-08")
   )
 
+### CV data
+expected_cholfige18y_daids_cv <- tibble::tribble(
+  ~ATOXDSCH,                    ~AVAL,  ~AVALU,    ~ATOXGRH, ~TESTNUM,
+  "Not a term",                 300,    "mg/dL",   NA,       1,
+  NA_character_,                300,    "mg/dL",   NA,       2,
+  "Cholesterol, Fasting, High", 300,    "mg/dL",   "3",      3,
+  "Cholesterol, Fasting, High", 299,    "mg/dL",   "2",      4,
+  "Cholesterol, Fasting, High", 240,    "mg/dL",   "2",      5,
+  "Cholesterol, Fasting, High", 239,    "mg/dL",   "1",      6,
+  "Cholesterol, Fasting, High", 200,    "mg/dL",   "1",      7,
+  "Cholesterol, Fasting, High", 199,    "mg/dL",   "0",      8,
+  # Unit missing cannot grade
+  "Cholesterol, Fasting, High", 200,    NA,        NA,       9,
+  # AVAL missing cannot grade
+  "Cholesterol, Fasting, High", NA,     "mg/dL",   NA,       10,
+) %>%
+  mutate(
+    BRTHDT = lubridate::ymd("2005-01-08"),
+    LBDT = lubridate::ymd("2023-01-08")
+  )
+
 ### < 18 years of age
+### SI unit is mmol/L
 ### Grade 3: >= 7.77 mmol/L
 ### Grade 2: 5.15 -< 7.77 mmol/L
 ### Grade 1: 4.4 -< 5.15 mmol/L
 
-expected_cholfilt18y_daids <- tibble::tribble(
+### CV unit is mg/dL
+### Grade 3: >= 300 mg/dL
+### Grade 2: 200 -< 300 mg/dL
+### Grade 1: 170 -< 200 mg/dL
+
+expected_cholfilt18y_daids_si <- tibble::tribble(
   ~ATOXDSCH,                    ~AVAL,  ~AVALU,    ~ATOXGRH, ~TESTNUM,
   "Not a term",                 3.5,    "mmol/L",  NA,       13,
   NA_character_,                3.5,    "mmol/L",  NA,       14,
@@ -4530,7 +6895,28 @@ expected_cholfilt18y_daids <- tibble::tribble(
     LBDT = lubridate::ymd("2023-01-07")
   )
 
-expected_cholfinoage_daids <- expected_cholfige18y_daids %>%
+expected_cholfilt18y_daids_cv <- tibble::tribble(
+  ~ATOXDSCH,                    ~AVAL,  ~AVALU,   ~ATOXGRH, ~TESTNUM,
+  "Not a term",                 300,    "mg/dL",  NA,       13,
+  NA_character_,                300,    "mg/dL",  NA,       14,
+  "Cholesterol, Fasting, High", 300,    "mg/dL",  "3",      15,
+  "Cholesterol, Fasting, High", 299,    "mg/dL",  "2",      16,
+  "Cholesterol, Fasting, High", 200,    "mg/dL",  "2",      17,
+  "Cholesterol, Fasting, High", 199,    "mg/dL",  "1",      18,
+  "Cholesterol, Fasting, High", 170,    "mg/dL",  "1",      19,
+  "Cholesterol, Fasting, High", 169,    "mg/dL",  "0",      20,
+  # Unit missing cannot grade
+  "Cholesterol, Fasting, High", 169,    NA,       NA,       21,
+  # AVAL missing cannot grade
+  "Cholesterol, Fasting, High", NA,     "mg/dL",  NA,       22,
+) %>%
+  mutate(
+    BRTHDT = lubridate::ymd("2005-01-08"),
+    LBDT = lubridate::ymd("2023-01-07")
+  )
+
+## create SI records with age missing
+expected_cholfinoage_daids_si <- expected_cholfige18y_daids_si %>%
   filter(TESTNUM %in% c(9, 10)) %>%
   mutate(
     LBDT = if_else(TESTNUM == 9, NA, LBDT),
@@ -4539,20 +6925,37 @@ expected_cholfinoage_daids <- expected_cholfige18y_daids %>%
     TESTNUM = if_else(TESTNUM == 9, 25, 26)
   )
 
-expected_cholfi_daids <- expected_cholfinoage_daids %>%
-  bind_rows(
-    expected_cholfige18y_daids,
-    expected_cholfilt18y_daids
+## create CV records with age missing
+expected_cholfinoage_daids_cv <- expected_cholfige18y_daids_cv %>%
+  filter(TESTNUM %in% c(9, 10)) %>%
+  mutate(
+    LBDT = if_else(TESTNUM == 9, NA, LBDT),
+    BRTHDT = if_else(TESTNUM == 10, NA, BRTHDT),
+    ATOXGRH = NA_character_,
+    TESTNUM = if_else(TESTNUM == 9, 25, 26)
   )
 
+## put all SI data together
+expected_cholfi_daids_si <- expected_cholfinoage_daids_si %>%
+  bind_rows(
+    expected_cholfige18y_daids_si,
+    expected_cholfilt18y_daids_si
+  )
 
-## Test 103: DAIDS Cholesterol, Fasting, High ----
-test_that("derive_var_atoxgr Test 103: DAIDS Cholesterol, Fasting, High", {
-  input_cholfi_daids <- expected_cholfi_daids %>%
+## put all CV data together
+expected_cholfi_daids_cv <- expected_cholfinoage_daids_cv %>%
+  bind_rows(
+    expected_cholfige18y_daids_cv,
+    expected_cholfilt18y_daids_cv
+  )
+
+## Test 103a: DAIDS Cholesterol, Fasting, High (SI unit) ----
+test_that("derive_var_atoxgr Test 103a: DAIDS Cholesterol, Fasting, High (SI unit)", {
+  input_cholfi_daids_si <- expected_cholfi_daids_si %>%
     select(-ATOXGRH)
 
-  actual_cholfi_daids <- derive_var_atoxgr_dir(
-    input_cholfi_daids,
+  actual_cholfi_daids_si <- derive_var_atoxgr_dir(
+    input_cholfi_daids_si,
     new_var = ATOXGRH,
     meta_criteria = atoxgr_criteria_daids,
     tox_description_var = ATOXDSCH,
@@ -4561,22 +6964,48 @@ test_that("derive_var_atoxgr Test 103: DAIDS Cholesterol, Fasting, High", {
   )
 
   expect_dfs_equal(
-    base = expected_cholfi_daids,
-    compare = actual_cholfi_daids,
+    base = expected_cholfi_daids_si,
+    compare = actual_cholfi_daids_si,
     keys = c("TESTNUM")
   )
 })
 
+## Test 103b: DAIDS Cholesterol, Fasting, High (USCV unit) ----
+test_that("derive_var_atoxgr Test 103b: DAIDS Cholesterol, Fasting, High (USCV unit)", {
+  input_cholfi_daids_cv <- expected_cholfi_daids_cv %>%
+    select(-ATOXGRH)
 
+  actual_cholfi_daids_cv <- derive_var_atoxgr_dir(
+    input_cholfi_daids_cv,
+    new_var = ATOXGRH,
+    meta_criteria = atoxgr_criteria_daids_uscv,
+    tox_description_var = ATOXDSCH,
+    criteria_direction = "H",
+    get_unit_expr = AVALU
+  )
+
+  expect_dfs_equal(
+    base = expected_cholfi_daids_cv,
+    compare = actual_cholfi_daids_cv,
+    keys = c("TESTNUM")
+  )
+})
 
 ### LDL, Fasting, High
 
 ### >= 18 years of age
+
+## SI unit is mmol/L
 ### Grade 3: >= 4.90 mmol/L
 ### Grade 2: 4.12 -< 4.90 mmol/L
 ### Grade 1: 3.17 -< 4.12 mmol/L
 
-expected_ldlfige18y_daids <- tibble::tribble(
+## CV unit is mg/dL
+### Grade 3: >= 190 mg/dL
+### Grade 2: 160 -< 190 mg/dL
+### Grade 1: 130 -< 160 mg/dL
+
+expected_ldlfige18y_daids_si <- tibble::tribble(
   ~ATOXDSCH,            ~AVAL,  ~AVALU,    ~ATOXGRH, ~TESTNUM,
   "Not a term",         3.1,    "mmol/L",  NA,       1,
   NA_character_,        3.1,    "mmol/L",  NA,       2,
@@ -4596,12 +7025,39 @@ expected_ldlfige18y_daids <- tibble::tribble(
     LBDT = lubridate::ymd("2023-01-08")
   )
 
+expected_ldlfige18y_daids_cv <- tibble::tribble(
+  ~ATOXDSCH,             ~AVAL,   ~AVALU,  ~ATOXGRH,  ~TESTNUM,
+  "Not a term",          190,    "mg/dL",        NA,  1,
+  NA_character_,         190,    "mg/dL",        NA,  2,
+  "LDL, Fasting, High",  190,    "mg/dL",       "3",  3,
+  "LDL, Fasting, High",  189,    "mg/dL",       "2",  4,
+  "LDL, Fasting, High",  160,    "mg/dL",       "2",  5,
+  "LDL, Fasting, High",  159,    "mg/dL",       "1",  6,
+  "LDL, Fasting, High",  130,    "mg/dL",       "1",  7,
+  "LDL, Fasting, High",  129,    "mg/dL",       "0",  8,
+  # Unit missing cannot grade
+  "LDL, Fasting, High",  129,         NA,        NA,  9,
+  # AVAL missing cannot grade
+  "LDL, Fasting, High",  NA,     "mg/dL",        NA,  10,
+) %>%
+  mutate(
+    BRTHDT = lubridate::ymd("2005-01-08"),
+    LBDT = lubridate::ymd("2023-01-08")
+  )
+
+## SI unit is mmol/L
 ### > 2 to < 18 years of age
 ### Grade 3: >= 4.90 mmol/L
 ### Grade 2: 3.34 -< 4.90 mmol/L
 ### Grade 1: 2.85 -< 3.34 mmol/L
 
-expected_ldlfilt18y_daids <- tibble::tribble(
+## CV unit is mg/dL
+### Grade 3: >= 190 mg/dL
+### Grade 2: 130 -< 190 mg/dL
+### Grade 1: 110 -< 130 mg/dL
+
+## SI data
+expected_ldlfilt18y_daids_si <- tibble::tribble(
   ~ATOXDSCH,            ~AVAL,  ~AVALU,    ~ATOXGRH, ~TESTNUM,
   "Not a term",         2.8,    "mmol/L",  NA,       11,
   NA_character_,        2.8,    "mmol/L",  NA,       12,
@@ -4620,8 +7076,29 @@ expected_ldlfilt18y_daids <- tibble::tribble(
     BRTHDT = lubridate::ymd("2020-01-07"),
     LBDT = lubridate::ymd("2023-01-07")
   )
+## CV data
+expected_ldlfilt18y_daids_cv <- tibble::tribble(
+  ~ATOXDSCH,            ~AVAL,  ~AVALU,   ~ATOXGRH, ~TESTNUM,
+  "Not a term",         190,    "mg/dL",  NA,       11,
+  NA_character_,        190,    "mg/dL",  NA,       12,
+  "LDL, Fasting, High", 190,    "mg/dL",  "3",      13,
+  "LDL, Fasting, High", 189,    "mg/dL",  "2",      14,
+  "LDL, Fasting, High", 130,    "mg/dL",  "2",      15,
+  "LDL, Fasting, High", 129,    "mg/dL",  "1",      16,
+  "LDL, Fasting, High", 110,    "mg/dL",  "1",      17,
+  "LDL, Fasting, High", 109,    "mg/dL",  "0",      18,
+  # Unit missing cannot grade
+  "LDL, Fasting, High", 110,    NA,       NA,       19,
+  # AVAL missing cannot grade
+  "LDL, Fasting, High", NA,     "mg/dL",  NA,       20,
+) %>%
+  mutate(
+    BRTHDT = lubridate::ymd("2020-01-07"),
+    LBDT = lubridate::ymd("2023-01-07")
+  )
 
-expected_ldlfinoage_daids <- expected_ldlfige18y_daids %>%
+## create SI records with age mssing
+expected_ldlfinoage_daids_si <- expected_ldlfige18y_daids_si %>%
   filter(TESTNUM %in% c(7, 8)) %>%
   mutate(
     LBDT = if_else(TESTNUM == 7, NA, LBDT),
@@ -4630,7 +7107,18 @@ expected_ldlfinoage_daids <- expected_ldlfige18y_daids %>%
     TESTNUM = if_else(TESTNUM == 7, 25, 26)
   )
 
-expected_ldlfile2y_daids <- expected_ldlfige18y_daids %>%
+## create CV records with age mssing
+expected_ldlfinoage_daids_cv <- expected_ldlfige18y_daids_cv %>%
+  filter(TESTNUM %in% c(7, 8)) %>%
+  mutate(
+    LBDT = if_else(TESTNUM == 7, NA, LBDT),
+    BRTHDT = if_else(TESTNUM == 8, NA, BRTHDT),
+    ATOXGRH = NA_character_,
+    TESTNUM = if_else(TESTNUM == 7, 25, 26)
+  )
+
+## create SI records with age <= 2 years
+expected_ldlfile2y_daids_si <- expected_ldlfige18y_daids_si %>%
   filter(TESTNUM %in% c(7, 8)) %>%
   mutate(
     BRTHDT = if_else(TESTNUM == 7, lubridate::ymd("2021-01-07"), lubridate::ymd("2022-01-07")),
@@ -4638,21 +7126,38 @@ expected_ldlfile2y_daids <- expected_ldlfige18y_daids %>%
     TESTNUM = if_else(TESTNUM == 7, 27, 28)
   )
 
-expected_ldlfi_daids <- expected_ldlfile2y_daids %>%
-  bind_rows(
-    expected_ldlfinoage_daids,
-    expected_ldlfige18y_daids,
-    expected_ldlfilt18y_daids
+## create CV records with age <= 2 years
+expected_ldlfile2y_daids_cv <- expected_ldlfige18y_daids_cv %>%
+  filter(TESTNUM %in% c(7, 8)) %>%
+  mutate(
+    BRTHDT = if_else(TESTNUM == 7, lubridate::ymd("2021-01-07"), lubridate::ymd("2022-01-07")),
+    ATOXGRH = NA_character_,
+    TESTNUM = if_else(TESTNUM == 7, 27, 28)
   )
 
+## put all SI records together
+expected_ldlfi_daids_si <- expected_ldlfile2y_daids_si %>%
+  bind_rows(
+    expected_ldlfinoage_daids_si,
+    expected_ldlfige18y_daids_si,
+    expected_ldlfilt18y_daids_si
+  )
 
-## Test 104: DAIDS LDL, Fasting, High ----
-test_that("derive_var_atoxgr Test 104: DAIDS LDL, Fasting, High", {
-  input_ldlfi_daids <- expected_ldlfi_daids %>%
+## put all CV records together
+expected_ldlfi_daids_cv <- expected_ldlfile2y_daids_cv %>%
+  bind_rows(
+    expected_ldlfinoage_daids_cv,
+    expected_ldlfige18y_daids_cv,
+    expected_ldlfilt18y_daids_cv
+  )
+
+## Test 104a: DAIDS LDL, Fasting, High (SI unit) ----
+test_that("derive_var_atoxgr Test 104a: DAIDS LDL, Fasting, High (SI unit)", {
+  input_ldlfi_daids_si <- expected_ldlfi_daids_si %>%
     select(-ATOXGRH)
 
-  actual_ldlfi_daids <- derive_var_atoxgr_dir(
-    input_ldlfi_daids,
+  actual_ldlfi_daids_si <- derive_var_atoxgr_dir(
+    input_ldlfi_daids_si,
     new_var = ATOXGRH,
     meta_criteria = atoxgr_criteria_daids,
     tox_description_var = ATOXDSCH,
@@ -4661,23 +7166,50 @@ test_that("derive_var_atoxgr Test 104: DAIDS LDL, Fasting, High", {
   )
 
   expect_dfs_equal(
-    base = expected_ldlfi_daids,
-    compare = actual_ldlfi_daids,
+    base = expected_ldlfi_daids_si,
+    compare = actual_ldlfi_daids_si,
     keys = c("TESTNUM")
   )
 })
 
+## Test 104b: DAIDS LDL, Fasting, High (USCV unit) ----
+test_that("derive_var_atoxgr Test 104b: DAIDS LDL, Fasting, High (USCV unit)", {
+  input_ldlfi_daids_cv <- expected_ldlfi_daids_cv %>%
+    select(-ATOXGRH)
+
+  actual_ldlfi_daids_cv <- derive_var_atoxgr_dir(
+    input_ldlfi_daids_cv,
+    new_var = ATOXGRH,
+    meta_criteria = atoxgr_criteria_daids_uscv,
+    tox_description_var = ATOXDSCH,
+    criteria_direction = "H",
+    get_unit_expr = AVALU
+  )
+
+  expect_dfs_equal(
+    base = expected_ldlfi_daids_cv,
+    compare = actual_ldlfi_daids_cv,
+    keys = c("TESTNUM")
+  )
+})
 
 ### Triglycerides, Fasting, High
 
+### SI unit is mmol/L
 ### Grade 4: > 11.4 mmol/L
 ### Grade 3: >5.7 - 11.4 mmol/L
 ### Grade 2: >3.42 - 5.7 mmol/L
 ### Grade 1: 1.71 - 3.42 mmol/L
 
-## Test 105: DAIDS Triglycerides, Fasting, High ----
-test_that("derive_var_atoxgr Test 105: DAIDS Triglycerides, Fasting, High", {
-  expected_trigfi_daids <- tibble::tribble(
+### CV unit is mg/dL
+### Grade 4: > 1000 mg/dL
+### Grade 3: >500 - 1000 mg/dL
+### Grade 2: >300 - 500 mg/dL
+### Grade 1: 150 - 300 mg/dL
+
+## Test 105a: DAIDS Triglycerides, Fasting, High (SI unit) ----
+test_that("derive_var_atoxgr Test 105a: DAIDS Triglycerides, Fasting, High (SI unit)", {
+  expected_trigfi_daids_si <- tibble::tribble(
     ~ATOXDSCH,                       ~AVAL,  ~AVALU,    ~ATOXGRH, ~TESTNUM,
     "Not a term",                    1.5,    "mmol/L",  NA,       1,
     NA_character_,                   1.5,    "mmol/L",  NA,       2,
@@ -4695,12 +7227,12 @@ test_that("derive_var_atoxgr Test 105: DAIDS Triglycerides, Fasting, High", {
     "Triglycerides, Fasting, High",  NA,     "mmol/L",  NA,       12,
   )
 
-  input_trigfi_daids <- expected_trigfi_daids %>%
+  input_trigfi_daids_si <- expected_trigfi_daids_si %>%
     select(-ATOXGRH)
 
 
-  actual_trigfi_daids <- derive_var_atoxgr_dir(
-    input_trigfi_daids,
+  actual_trigfi_daids_si <- derive_var_atoxgr_dir(
+    input_trigfi_daids_si,
     new_var = ATOXGRH,
     meta_criteria = atoxgr_criteria_daids,
     tox_description_var = ATOXDSCH,
@@ -4709,46 +7241,94 @@ test_that("derive_var_atoxgr Test 105: DAIDS Triglycerides, Fasting, High", {
   )
 
   expect_dfs_equal(
-    base = expected_trigfi_daids,
-    compare = actual_trigfi_daids,
+    base = expected_trigfi_daids_si,
+    compare = actual_trigfi_daids_si,
     keys = c("ATOXDSCH", "TESTNUM")
   )
 })
 
+## Test 105b: DAIDS Triglycerides, Fasting, High (USCV unit) ----
+test_that("derive_var_atoxgr Test 105b: DAIDS Triglycerides, Fasting, High (USCV unit)", {
+  expected_trigfi_daids_cv <- tibble::tribble(
+    ~ATOXDSCH,                       ~AVAL,   ~AVALU,    ~ATOXGRH, ~TESTNUM,
+    "Not a term",                    1001,    "mg/dL",   NA,       1,
+    NA_character_,                   1001,    "mg/dL",   NA,       2,
+    "Triglycerides, Fasting, High",  1001,    "mg/dL",   "4",      3,
+    "Triglycerides, Fasting, High",  1000,    "mg/dL",   "3",      4,
+    "Triglycerides, Fasting, High",  501,     "mg/dL",   "3",      5,
+    "Triglycerides, Fasting, High",  500,     "mg/dL",   "2",      6,
+    "Triglycerides, Fasting, High",  301,     "mg/dL",   "2",      7,
+    "Triglycerides, Fasting, High",  300,     "mg/dL",   "1",      8,
+    "Triglycerides, Fasting, High",  150,     "mg/dL",   "1",      9,
+    "Triglycerides, Fasting, High",  149,     "mg/dL",   "0",      10,
+    # Unit missing cannot grade
+    "Triglycerides, Fasting, High",  149,     NA,        NA,       11,
+    # AVAL missing cannot grade
+    "Triglycerides, Fasting, High",  NA,      "mg/dL",   NA,       12,
+  )
 
+  input_trigfi_daids_cv <- expected_trigfi_daids_cv %>%
+    select(-ATOXGRH)
+
+  actual_trigfi_daids_cv <- derive_var_atoxgr_dir(
+    input_trigfi_daids_cv,
+    new_var = ATOXGRH,
+    meta_criteria = atoxgr_criteria_daids_uscv,
+    tox_description_var = ATOXDSCH,
+    criteria_direction = "H",
+    get_unit_expr = AVALU
+  )
+
+  expect_dfs_equal(
+    base = expected_trigfi_daids_cv,
+    compare = actual_trigfi_daids_cv,
+    keys = c("ATOXDSCH", "TESTNUM")
+  )
+})
 
 ### Magnesium, Low
 
+### SI unit is mmol/L
 ### Grade 4: <0.3 mmol/L
 ### Grade 3: 0.3 -< 0.45 mmol/L
 ### Grade 2: 0.45 -< 0.6 mmol/L
 ### Grade 1: 0.6 -< 0.7 mmol/L
 
-## Test 106: DAIDS Magnesium, Low ----
-test_that("derive_var_atoxgr Test 106: DAIDS Magnesium, Low", {
-  expected_magd_daids <- tibble::tribble(
-    ~ATOXDSCL,         ~AVAL,  ~AVALU,    ~ATOXGRL, ~TESTNUM,
-    "Not a term",      0.5,    "mmol/L",  NA,       1,
-    NA_character_,     0.5,    "mmol/L",  NA,       2,
-    "Magnesium, Low",  0.29,   "mmol/L",  "4",      3,
-    "Magnesium, Low",  0.3,    "mmol/L",  "3",      4,
-    "Magnesium, Low",  0.44,   "mmol/L",  "3",      5,
-    "Magnesium, Low",  0.45,   "mmol/L",  "2",      6,
-    "Magnesium, Low",  0.59,   "mmol/L",  "2",      7,
-    "Magnesium, Low",  0.6,    "mmol/L",  "1",      8,
-    "Magnesium, Low",  0.69,   "mmol/L",  "1",      9,
-    "Magnesium, Low",  0.7,    "mmol/L",  "0",      10,
-    # Unit missing cannot grade
-    "Magnesium, Low",  0.5,    NA,        NA,       11,
-    # AVAL missing cannot grade
-    "Magnesium, Low",  NA,     "mmol/L",  NA,       12,
+### CV unit is mg/dL
+### Conversion factor 2.431 used to convert mmol/L to mg/dL
+
+expected_magd_daids_si <- tibble::tribble(
+  ~ATOXDSCL,         ~AVAL,  ~AVALU,    ~ATOXGRL, ~TESTNUM,
+  "Not a term",      0.5,    "mmol/L",  NA,       1,
+  NA_character_,     0.5,    "mmol/L",  NA,       2,
+  "Magnesium, Low",  0.29,   "mmol/L",  "4",      3,
+  "Magnesium, Low",  0.3,    "mmol/L",  "3",      4,
+  "Magnesium, Low",  0.44,   "mmol/L",  "3",      5,
+  "Magnesium, Low",  0.45,   "mmol/L",  "2",      6,
+  "Magnesium, Low",  0.59,   "mmol/L",  "2",      7,
+  "Magnesium, Low",  0.6,    "mmol/L",  "1",      8,
+  "Magnesium, Low",  0.69,   "mmol/L",  "1",      9,
+  "Magnesium, Low",  0.7,    "mmol/L",  "0",      10,
+  # Unit missing cannot grade
+  "Magnesium, Low",  0.5,    NA,        NA,       11,
+  # AVAL missing cannot grade
+  "Magnesium, Low",  NA,     "mmol/L",  NA,       12,
+)
+
+## CV unit using conversions factor 2.431
+expected_magd_daids_cv <- expected_magd_daids_si %>%
+  mutate(
+    AVAL = AVAL * 2.431,
+    AVALU = if_else(is.na(AVALU), NA_character_, "mg/dL")
   )
 
-  input_magd_daids <- expected_magd_daids %>%
+## Test 106a: DAIDS Magnesium, Low (SI unit) ----
+test_that("derive_var_atoxgr Test 106a: DAIDS Magnesium, Low (SI unit)", {
+  input_magd_daids_si <- expected_magd_daids_si %>%
     select(-ATOXGRL)
 
-  actual_magd_daids <- derive_var_atoxgr_dir(
-    input_magd_daids,
+  actual_magd_daids_si <- derive_var_atoxgr_dir(
+    input_magd_daids_si,
     new_var = ATOXGRL,
     meta_criteria = atoxgr_criteria_daids,
     tox_description_var = ATOXDSCL,
@@ -4757,23 +7337,50 @@ test_that("derive_var_atoxgr Test 106: DAIDS Magnesium, Low", {
   )
 
   expect_dfs_equal(
-    base = expected_magd_daids,
-    compare = actual_magd_daids,
+    base = expected_magd_daids_si,
+    compare = actual_magd_daids_si,
     keys = c("ATOXDSCL", "TESTNUM")
   )
 })
 
+## Test 106b: DAIDS Magnesium, Low (USCV unit) ----
+test_that("derive_var_atoxgr Test 106b: DAIDS Magnesium, Low (USCV unit)", {
+  input_magd_daids_cv <- expected_magd_daids_cv %>%
+    select(-ATOXGRL)
+
+  actual_magd_daids_cv <- derive_var_atoxgr_dir(
+    input_magd_daids_cv,
+    new_var = ATOXGRL,
+    meta_criteria = atoxgr_criteria_daids_uscv,
+    tox_description_var = ATOXDSCL,
+    criteria_direction = "L",
+    get_unit_expr = AVALU
+  )
+
+  expect_dfs_equal(
+    base = expected_magd_daids_cv,
+    compare = actual_magd_daids_cv,
+    keys = c("ATOXDSCL", "TESTNUM")
+  )
+})
 
 ### Phosphate, Low
 
 ### > 14 years of age
 
+### SI unit is mmol/L
 ### Grade 4: < 0.32 mmol/L
 ### Grade 3: 0.32 to < 0.45 mmol/L
 ### Grade 2: 0.45 to < 0.65 mmol/L
 ### Grade 1: 0.65 mmol/L to < LLN mmol/L
 
-expected_phosd_daids_gt14y <- tibble::tribble(
+### CV unit is mg/dL
+### Grade 4: < 1 mg/dL
+### Grade 3: 1 to < 1.4 mg/dL
+### Grade 2: 1.4 to < 2 mg/dL
+### Grade 1: 2 to < LLN mg/dL
+
+expected_phosd_daids_gt14y_si <- tibble::tribble(
   ~AVAL, ~ANRLO, ~AVALU,   ~ATOXGRL, ~TESTNUM,
   0.9,   0.8,    "MM3",    NA,       1,
   0.31,  0.8,    "mmol/L", "4",      2,
@@ -4805,14 +7412,53 @@ expected_phosd_daids_gt14y <- tibble::tribble(
     LBDT = lubridate::ymd("2023-07-01")
   )
 
+expected_phosd_daids_gt14y_cv <- tibble::tribble(
+  ~AVAL,  ~ANRLO,   ~AVALU,  ~ATOXGRL,  ~TESTNUM,
+  0.9,    2.5,       "MM3",        NA,  1,
+  0.9,    2.5,     "mg/dL",       "4",  2,
+  1,      2.5,     "mg/dL",       "3",  3,
+  1.3,    2.5,     "mg/dL",       "3",  4,
+  1.4,    2.5,     "mg/dL",       "2",  5,
+  1.9,    2.5,     "mg/dL",       "2",  6,
+  2,      2.5,     "mg/dL",       "1",  7,
+  2.49,   2.5,     "mg/dL",       "1",  8,
+  2.5,    2.5,     "mg/dL",       "0",  9,
+  # missing ANRLO - can grade 2 - 4
+  0.9,    2.5,     "mg/dL",       "4",  10,
+  1,      2.5,     "mg/dL",       "3",  11,
+  1.3,    2.5,     "mg/dL",       "3",  12,
+  1.4,    2.5,     "mg/dL",       "2",  13,
+  1.9,    2.5,     "mg/dL",       "2",  14,
+  # missing ANRLO - can grade 0 - 1
+  2,      2.5,     "mg/dL",       "1",  15,
+  2.49,   2.5,     "mg/dL",       "1",  16,
+  2.5,    2.5,     "mg/dL",       "0",  17,
+  # missing AVAL
+  NA,     2.5,     "mg/dL",        NA,  18,
+  # missing UNIT
+  1,      2.5,          NA,        NA,  19,
+) %>%
+  mutate(
+    ATOXDSCL = "Phosphate, Low",
+    BRTHDT = lubridate::ymd("2008-07-01"),
+    LBDT = lubridate::ymd("2023-07-01")
+  )
+
 ### 1 to 14 years of age
 
+### SI unit is mmol/L
 ### Grade 4: < 0.48 mmol/L
 ### Grade 3: 0.48 to < 0.81 mmol/L
 ### Grade 2: 0.81 to < 0.97 mmol/L
 ### Grade 1: 0.97 to <1.13 mmol/L
 
-expected_phosd_daids_le14y <- tibble::tribble(
+### CV unit is mg/dL
+### Grade 4: < 1.5 mg/dL
+### Grade 3: 1.5 to < 2.5 mg/dL
+### Grade 2: 2.5 to < 3 mg/dL
+### Grade 1: 3 to < 3.5 mg/dL
+
+expected_phosd_daids_le14y_si <- tibble::tribble(
   ~AVAL,  ~AVALU,    ~ATOXGRL, ~TESTNUM,
   1.2,    "MM3",     NA,       20,
   0.47,   "mmol/L",  "4",      21,
@@ -4832,14 +7478,41 @@ expected_phosd_daids_le14y <- tibble::tribble(
     LBDT = lubridate::ymd("2023-07-01")
   )
 
+expected_phosd_daids_le14y_cv <- tibble::tribble(
+  ~AVAL,  ~AVALU,    ~ATOXGRL, ~TESTNUM,
+  1.49,   "MM3",     NA,       20,
+  1.49,   "mg/dL",   "4",      21,
+  1.5,    "mg/dL",   "3",      22,
+  2.4,    "mg/dL",   "3",      23,
+  2.5,    "mg/dL",   "2",      24,
+  2.9,    "mg/dL",   "2",      25,
+  3,      "mg/dL",   "1",      26,
+  3.49,   "mg/dL",   "1",      27,
+  3.5,    "mg/dL",   "0",      28,
+  NA,     "mg/dL",   NA,       29,
+  3.5,    NA,        NA,       30,
+) %>%
+  mutate(
+    ATOXDSCL = "Phosphate, Low",
+    BRTHDT = lubridate::ymd("2022-07-01"),
+    LBDT = lubridate::ymd("2023-07-01")
+  )
+
 ### < 1 year of age
 
+### SI unit is mmol/L
 ### Grade 4: < 0.48 mmol/L
 ### Grade 3: 0.48 to < 0.81 mmol/L
 ### Grade 2: 0.81 to < 1.13 mmol/L
 ### Grade 1: 1.13 to < 1.45 mmol/L
 
-expected_phosd_daids_lt1y <- tibble::tribble(
+### CV unit is mg/dL
+### Grade 4: < 1.5 mg/dL
+### Grade 3: 1.5 to < 2.5 mg/dL
+### Grade 2: 2.5 to < 3.5 mg/dL
+### Grade 1: 3.5 to < 4.5 mg/dL
+
+expected_phosd_daids_lt1y_si <- tibble::tribble(
   ~AVAL,  ~AVALU,    ~ATOXGRL, ~TESTNUM,
   1.5,    "MM3",     NA,       31,
   0.47,   "mmol/L",  "4",      32,
@@ -4859,9 +7532,38 @@ expected_phosd_daids_lt1y <- tibble::tribble(
     LBDT = lubridate::ymd("2023-07-02")
   )
 
+expected_phosd_daids_lt1y_cv <- tibble::tribble(
+  ~AVAL,  ~AVALU,    ~ATOXGRL, ~TESTNUM,
+  1.49,   "MM3",     NA,       31,
+  1.49,   "mg/dL",   "4",      32,
+  1.5,    "mg/dL",   "3",      33,
+  2.4,    "mg/dL",   "3",      34,
+  2.5,    "mg/dL",   "2",      35,
+  3.4,    "mg/dL",   "2",      36,
+  3.5,    "mg/dL",   "1",      37,
+  4.49,   "mg/dL",   "1",      38,
+  4.5,    "mg/dL",   "0",      39,
+  NA,     "mg/dL",   NA,       40,
+  4.5,    NA,        NA,       41,
+) %>%
+  mutate(
+    ATOXDSCL = "Phosphate, Low",
+    BRTHDT = lubridate::ymd("2023-07-01"),
+    LBDT = lubridate::ymd("2023-07-02")
+  )
 
-# Set lab date or birth date to missing
-expected_phosd_daids_noage <- expected_phosd_daids_gt14y %>%
+
+# Set lab date or birth date to missing for SI records
+expected_phosd_daids_noage_si <- expected_phosd_daids_gt14y_si %>%
+  filter(TESTNUM %in% c(8, 9)) %>%
+  mutate(
+    LBDT = if_else(TESTNUM == 8, NA, LBDT),
+    BRTHDT = if_else(TESTNUM == 9, NA, BRTHDT),
+    ATOXGRL = NA,
+    TESTNUM = if_else(TESTNUM == 8, 42, 43)
+  )
+# Set lab date or birth date to missing for CV records
+expected_phosd_daids_noage_cv <- expected_phosd_daids_gt14y_cv %>%
   filter(TESTNUM %in% c(8, 9)) %>%
   mutate(
     LBDT = if_else(TESTNUM == 8, NA, LBDT),
@@ -4870,21 +7572,29 @@ expected_phosd_daids_noage <- expected_phosd_daids_gt14y %>%
     TESTNUM = if_else(TESTNUM == 8, 42, 43)
   )
 
-expected_phosd_daids <- expected_phosd_daids_gt14y %>%
+## put all SI records together
+expected_phosd_daids_si <- expected_phosd_daids_gt14y_si %>%
   bind_rows(
-    expected_phosd_daids_le14y,
-    expected_phosd_daids_lt1y,
-    expected_phosd_daids_noage
+    expected_phosd_daids_le14y_si,
+    expected_phosd_daids_lt1y_si,
+    expected_phosd_daids_noage_si
   )
 
+## put all CV records together
+expected_phosd_daids_cv <- expected_phosd_daids_gt14y_cv %>%
+  bind_rows(
+    expected_phosd_daids_le14y_cv,
+    expected_phosd_daids_lt1y_cv,
+    expected_phosd_daids_noage_cv
+  )
 
-## Test 107: DAIDS Phosphate, Low ----
-test_that("derive_var_atoxgr Test 107: DAIDS Phosphate, Low", {
-  input_phosd_daids <- expected_phosd_daids %>%
+## Test 107a: DAIDS Phosphate, Low (SI unit) ----
+test_that("derive_var_atoxgr Test 107a: DAIDS Phosphate, Low (SI unit)", {
+  input_phosd_daids_si <- expected_phosd_daids_si %>%
     select(-ATOXGRL)
 
-  actual_phosd_daids <- derive_var_atoxgr_dir(
-    input_phosd_daids,
+  actual_phosd_daids_si <- derive_var_atoxgr_dir(
+    input_phosd_daids_si,
     new_var = ATOXGRL,
     meta_criteria = atoxgr_criteria_daids,
     tox_description_var = ATOXDSCL,
@@ -4893,45 +7603,64 @@ test_that("derive_var_atoxgr Test 107: DAIDS Phosphate, Low", {
   )
 
   expect_dfs_equal(
-    base = expected_phosd_daids,
-    compare = actual_phosd_daids,
+    base = expected_phosd_daids_si,
+    compare = actual_phosd_daids_si,
     keys = c("TESTNUM")
   )
 })
 
+## Test 107b: DAIDS Phosphate, Low (USCV unit) ----
+test_that("derive_var_atoxgr Test 107b: DAIDS Phosphate, Low (USCV unit)", {
+  input_phosd_daids_cv <- expected_phosd_daids_cv %>%
+    select(-ATOXGRL)
 
+  actual_phosd_daids_cv <- derive_var_atoxgr_dir(
+    input_phosd_daids_cv,
+    new_var = ATOXGRL,
+    meta_criteria = atoxgr_criteria_daids_uscv,
+    tox_description_var = ATOXDSCL,
+    criteria_direction = "L",
+    get_unit_expr = AVALU
+  )
+
+  expect_dfs_equal(
+    base = expected_phosd_daids_cv,
+    compare = actual_phosd_daids_cv,
+    keys = c("TESTNUM")
+  )
+})
 
 ### Potassium, High
 
+### SI unit + CV is mmol/L
 ### Grade 4: >= 7 mmol/L
 ### Grade 3: 6.5 -< 7 mmol/L
 ### Grade 2: 6 -< 6.5 mmol/L
 ### Grade 1: 5.6 -< 6 mmol/L
 
-## Test 108: DAIDS Potassium, High ----
-test_that("derive_var_atoxgr Test 108: DAIDS Potassium, High", {
-  expected_poti_daids <- tibble::tribble(
-    ~ATOXDSCH,          ~AVAL,  ~AVALU,    ~ATOXGRH, ~TESTNUM,
-    "Not a term",       5,      "mmol/L",  NA,       1,
-    NA_character_,      5,      "mmol/L",  NA,       2,
-    "Potassium, High",  7,      "mmol/L",  "4",      3,
-    "Potassium, High",  6.9,    "mmol/L",  "3",      4,
-    "Potassium, High",  6.5,    "mmol/L",  "3",      5,
-    "Potassium, High",  6.4,    "mmol/L",  "2",      6,
-    "Potassium, High",  6,      "mmol/L",  "2",      7,
-    "Potassium, High",  5.9,    "mmol/L",  "1",      8,
-    "Potassium, High",  5.6,    "mmol/L",  "1",      9,
-    "Potassium, High",  5.5,    "mmol/L",  "0",      10,
-    # Unit missing cannot grade
-    "Potassium, High",  5,      NA,        NA,       11,
-    # AVAL missing cannot grade
-    "Potassium, High",  NA,     "mmol/L",  NA,       12,
-  )
+expected_poti_daids <- tibble::tribble(
+  ~ATOXDSCH,          ~AVAL,  ~AVALU,    ~ATOXGRH, ~TESTNUM,
+  "Not a term",       5,      "mmol/L",  NA,       1,
+  NA_character_,      5,      "mmol/L",  NA,       2,
+  "Potassium, High",  7,      "mmol/L",  "4",      3,
+  "Potassium, High",  6.9,    "mmol/L",  "3",      4,
+  "Potassium, High",  6.5,    "mmol/L",  "3",      5,
+  "Potassium, High",  6.4,    "mmol/L",  "2",      6,
+  "Potassium, High",  6,      "mmol/L",  "2",      7,
+  "Potassium, High",  5.9,    "mmol/L",  "1",      8,
+  "Potassium, High",  5.6,    "mmol/L",  "1",      9,
+  "Potassium, High",  5.5,    "mmol/L",  "0",      10,
+  # Unit missing cannot grade
+  "Potassium, High",  5,      NA,        NA,       11,
+  # AVAL missing cannot grade
+  "Potassium, High",  NA,     "mmol/L",  NA,       12,
+)
 
-  input_poti_daids <- expected_poti_daids %>%
-    select(-ATOXGRH)
+input_poti_daids <- expected_poti_daids %>%
+  select(-ATOXGRH)
 
-
+## Test 108a: DAIDS Potassium, High (SI unit) ----
+test_that("derive_var_atoxgr Test 108a: DAIDS Potassium, High (SI unit)", {
   actual_poti_daids <- derive_var_atoxgr_dir(
     input_poti_daids,
     new_var = ATOXGRH,
@@ -4948,38 +7677,55 @@ test_that("derive_var_atoxgr Test 108: DAIDS Potassium, High", {
   )
 })
 
+## Test 108b: DAIDS Potassium, High (USCV unit) ----
+test_that("derive_var_atoxgr Test 108b: DAIDS Potassium, High (USCV unit)", {
+  actual_poti_daids <- derive_var_atoxgr_dir(
+    input_poti_daids,
+    new_var = ATOXGRH,
+    meta_criteria = atoxgr_criteria_daids_uscv,
+    tox_description_var = ATOXDSCH,
+    criteria_direction = "H",
+    get_unit_expr = AVALU
+  )
+
+  expect_dfs_equal(
+    base = expected_poti_daids,
+    compare = actual_poti_daids,
+    keys = c("ATOXDSCH", "TESTNUM")
+  )
+})
 
 ### Potassium, Low
 
+### SI unit + CV is mmol/L
 ### Grade 4: <2 mmol/L
 ### Grade 3: 2 -< 2.5 mmol/L
 ### Grade 2: 2.5 -< 3 mmol/L
 ### Grade 1: 3 -< 3.4 mmol/L
 
-## Test 109: DAIDS Potassium, Low ----
-test_that("derive_var_atoxgr Test 109: DAIDS Potassium, Low", {
-  expected_potd_daids <- tibble::tribble(
-    ~ATOXDSCL,         ~AVAL,  ~AVALU,    ~ATOXGRL, ~TESTNUM,
-    "Not a term",      3,      "mmol/L",  NA,       1,
-    NA_character_,     3,      "mmol/L",  NA,       2,
-    "Potassium, Low",  1.9,    "mmol/L",  "4",      3,
-    "Potassium, Low",  2,      "mmol/L",  "3",      4,
-    "Potassium, Low",  2.4,    "mmol/L",  "3",      5,
-    "Potassium, Low",  2.5,    "mmol/L",  "2",      6,
-    "Potassium, Low",  2.9,    "mmol/L",  "2",      7,
-    "Potassium, Low",  3,      "mmol/L",  "1",      8,
-    "Potassium, Low",  3.3,    "mmol/L",  "1",      9,
-    "Potassium, Low",  3.4,    "mmol/L",  "0",      10,
-    # Unit missing cannot grade
-    "Potassium, Low",  3,      NA,        NA,       11,
-    # AVAL missing cannot grade
-    "Potassium, Low",  NA,     "mmol/L",  NA,       12,
-  )
+expected_potd_daids <- tibble::tribble(
+  ~ATOXDSCL,         ~AVAL,  ~AVALU,    ~ATOXGRL, ~TESTNUM,
+  "Not a term",      3,      "mmol/L",  NA,       1,
+  NA_character_,     3,      "mmol/L",  NA,       2,
+  "Potassium, Low",  1.9,    "mmol/L",  "4",      3,
+  "Potassium, Low",  2,      "mmol/L",  "3",      4,
+  "Potassium, Low",  2.4,    "mmol/L",  "3",      5,
+  "Potassium, Low",  2.5,    "mmol/L",  "2",      6,
+  "Potassium, Low",  2.9,    "mmol/L",  "2",      7,
+  "Potassium, Low",  3,      "mmol/L",  "1",      8,
+  "Potassium, Low",  3.3,    "mmol/L",  "1",      9,
+  "Potassium, Low",  3.4,    "mmol/L",  "0",      10,
+  # Unit missing cannot grade
+  "Potassium, Low",  3,      NA,        NA,       11,
+  # AVAL missing cannot grade
+  "Potassium, Low",  NA,     "mmol/L",  NA,       12,
+)
 
-  input_potd_daids <- expected_potd_daids %>%
-    select(-ATOXGRL)
+input_potd_daids <- expected_potd_daids %>%
+  select(-ATOXGRL)
 
-
+## Test 109a: DAIDS Potassium, Low (SI unit) ----
+test_that("derive_var_atoxgr Test 109a: DAIDS Potassium, Low (SI unit)", {
   actual_potd_daids <- derive_var_atoxgr_dir(
     input_potd_daids,
     new_var = ATOXGRL,
@@ -4996,39 +7742,55 @@ test_that("derive_var_atoxgr Test 109: DAIDS Potassium, Low", {
   )
 })
 
+## Test 109b: DAIDS Potassium, Low (USCV unit) ----
+test_that("derive_var_atoxgr Test 109b: DAIDS Potassium, Low (USCV unit)", {
+  actual_potd_daids <- derive_var_atoxgr_dir(
+    input_potd_daids,
+    new_var = ATOXGRL,
+    meta_criteria = atoxgr_criteria_daids_uscv,
+    tox_description_var = ATOXDSCL,
+    criteria_direction = "L",
+    get_unit_expr = AVALU
+  )
 
+  expect_dfs_equal(
+    base = expected_potd_daids,
+    compare = actual_potd_daids,
+    keys = c("ATOXDSCL", "TESTNUM")
+  )
+})
 
 ### Sodium, High
 
+### SI unit + CV is mmol/L
 ### Grade 4: >= 160 mmol/L
 ### Grade 3: 154 -< 160 mmol/L
 ### Grade 2: 150 -< 154 mmol/L
 ### Grade 1: 146 -< 150 mmol/L
 
-## Test 110: DAIDS Sodium, High ----
-test_that("derive_var_atoxgr Test 110: DAIDS Sodium, High", {
-  expected_sodi_daids <- tibble::tribble(
-    ~ATOXDSCH,       ~AVAL,  ~AVALU,    ~ATOXGRH, ~TESTNUM,
-    "Not a term",    146,    "mmol/L",  NA,       1,
-    NA_character_,   146,    "mmol/L",  NA,       2,
-    "Sodium, High",  160,    "mmol/L",  "4",      3,
-    "Sodium, High",  159,    "mmol/L",  "3",      4,
-    "Sodium, High",  154,    "mmol/L",  "3",      5,
-    "Sodium, High",  153,    "mmol/L",  "2",      6,
-    "Sodium, High",  150,    "mmol/L",  "2",      7,
-    "Sodium, High",  149,    "mmol/L",  "1",      8,
-    "Sodium, High",  146,    "mmol/L",  "1",      9,
-    "Sodium, High",  145,    "mmol/L",  "0",      10,
-    # Unit missing cannot grade
-    "Sodium, High",  140,    NA,        NA,       11,
-    # AVAL missing cannot grade
-    "Sodium, High",  NA,     "mmol/L",  NA,       12,
-  )
+expected_sodi_daids <- tibble::tribble(
+  ~ATOXDSCH,       ~AVAL,  ~AVALU,    ~ATOXGRH, ~TESTNUM,
+  "Not a term",    146,    "mmol/L",  NA,       1,
+  NA_character_,   146,    "mmol/L",  NA,       2,
+  "Sodium, High",  160,    "mmol/L",  "4",      3,
+  "Sodium, High",  159,    "mmol/L",  "3",      4,
+  "Sodium, High",  154,    "mmol/L",  "3",      5,
+  "Sodium, High",  153,    "mmol/L",  "2",      6,
+  "Sodium, High",  150,    "mmol/L",  "2",      7,
+  "Sodium, High",  149,    "mmol/L",  "1",      8,
+  "Sodium, High",  146,    "mmol/L",  "1",      9,
+  "Sodium, High",  145,    "mmol/L",  "0",      10,
+  # Unit missing cannot grade
+  "Sodium, High",  140,    NA,        NA,       11,
+  # AVAL missing cannot grade
+  "Sodium, High",  NA,     "mmol/L",  NA,       12,
+)
 
-  input_sodi_daids <- expected_sodi_daids %>%
-    select(-ATOXGRH)
+input_sodi_daids <- expected_sodi_daids %>%
+  select(-ATOXGRH)
 
-
+## Test 110a: DAIDS Sodium, High (SI unit) ----
+test_that("derive_var_atoxgr Test 110a: DAIDS Sodium, High (SI unit)", {
   actual_sodi_daids <- derive_var_atoxgr_dir(
     input_sodi_daids,
     new_var = ATOXGRH,
@@ -5045,38 +7807,55 @@ test_that("derive_var_atoxgr Test 110: DAIDS Sodium, High", {
   )
 })
 
+## Test 110b: DAIDS Sodium, High (USCV unit) ----
+test_that("derive_var_atoxgr Test 110b: DAIDS Sodium, High (USCV unit)", {
+  actual_sodi_daids <- derive_var_atoxgr_dir(
+    input_sodi_daids,
+    new_var = ATOXGRH,
+    meta_criteria = atoxgr_criteria_daids_uscv,
+    tox_description_var = ATOXDSCH,
+    criteria_direction = "H",
+    get_unit_expr = AVALU
+  )
+
+  expect_dfs_equal(
+    base = expected_sodi_daids,
+    compare = actual_sodi_daids,
+    keys = c("ATOXDSCH", "TESTNUM")
+  )
+})
 
 ### Sodium, Low
 
+### SI unit + CV is mmol/L
 ### Grade 4: <= 120 mmol/L
 ### Grade 3: >120 -< 125 mmol/L
 ### Grade 2: 125 -< 130 mmol/L
 ### Grade 1: 130 -< 135 mmol/L
 
-## Test 111: DAIDS Sodium, Low ----
-test_that("derive_var_atoxgr Test 111: DAIDS Sodium, Low", {
-  expected_sodd_daids <- tibble::tribble(
-    ~ATOXDSCL,      ~AVAL,  ~AVALU,    ~ATOXGRL, ~TESTNUM,
-    "Not a term",   119,    "mmol/L",  NA,       1,
-    NA_character_,  119,    "mmol/L",  NA,       2,
-    "Sodium, Low",  120,    "mmol/L",  "4",      3,
-    "Sodium, Low",  121,    "mmol/L",  "3",      4,
-    "Sodium, Low",  124,    "mmol/L",  "3",      5,
-    "Sodium, Low",  125,    "mmol/L",  "2",      6,
-    "Sodium, Low",  129,    "mmol/L",  "2",      7,
-    "Sodium, Low",  130,    "mmol/L",  "1",      8,
-    "Sodium, Low",  134,    "mmol/L",  "1",      9,
-    "Sodium, Low",  135,    "mmol/L",  "0",      10,
-    # Unit missing cannot grade
-    "Sodium, Low",  140,    NA,        NA,       11,
-    # AVAL missing cannot grade
-    "Sodium, Low",  NA,     "mmol/L",  NA,       12,
-  )
+expected_sodd_daids <- tibble::tribble(
+  ~ATOXDSCL,      ~AVAL,  ~AVALU,    ~ATOXGRL, ~TESTNUM,
+  "Not a term",   119,    "mmol/L",  NA,       1,
+  NA_character_,  119,    "mmol/L",  NA,       2,
+  "Sodium, Low",  120,    "mmol/L",  "4",      3,
+  "Sodium, Low",  121,    "mmol/L",  "3",      4,
+  "Sodium, Low",  124,    "mmol/L",  "3",      5,
+  "Sodium, Low",  125,    "mmol/L",  "2",      6,
+  "Sodium, Low",  129,    "mmol/L",  "2",      7,
+  "Sodium, Low",  130,    "mmol/L",  "1",      8,
+  "Sodium, Low",  134,    "mmol/L",  "1",      9,
+  "Sodium, Low",  135,    "mmol/L",  "0",      10,
+  # Unit missing cannot grade
+  "Sodium, Low",  140,    NA,        NA,       11,
+  # AVAL missing cannot grade
+  "Sodium, Low",  NA,     "mmol/L",  NA,       12,
+)
 
-  input_sodd_daids <- expected_sodd_daids %>%
-    select(-ATOXGRL)
+input_sodd_daids <- expected_sodd_daids %>%
+  select(-ATOXGRL)
 
-
+## Test 111a: DAIDS Sodium, Low (SI unit) ----
+test_that("derive_var_atoxgr Test 111a: DAIDS Sodium, Low (SI unit)", {
   actual_sodd_daids <- derive_var_atoxgr_dir(
     input_sodd_daids,
     new_var = ATOXGRL,
@@ -5093,16 +7872,39 @@ test_that("derive_var_atoxgr Test 111: DAIDS Sodium, Low", {
   )
 })
 
+## Test 111b: DAIDS Sodium, Low (USCV unit) ----
+test_that("derive_var_atoxgr Test 111b: DAIDS Sodium, Low (USCV unit)", {
+  actual_sodd_daids <- derive_var_atoxgr_dir(
+    input_sodd_daids,
+    new_var = ATOXGRL,
+    meta_criteria = atoxgr_criteria_daids_uscv,
+    tox_description_var = ATOXDSCL,
+    criteria_direction = "L",
+    get_unit_expr = AVALU
+  )
 
+  expect_dfs_equal(
+    base = expected_sodd_daids,
+    compare = actual_sodd_daids,
+    keys = c("ATOXDSCL", "TESTNUM")
+  )
+})
 ### Uric Acid, High
 
+### SI unit is umol/L
 ### Grade 4: >= 890 umol/L (0.89 mmol/L)
 ### Grade 3: 710 -< 890 umol/L (0.71 - <0.89 mmol/L)
 ### Grade 2: 590 -< 710 umol/L (0.59 - <0.71 mmol/L)
 ### Grade 1: 450 -< 590 umol/L (0.45 - <0.59 mmol/L)
 
-## Test 112: DAIDS Uric Acid, High ----
-test_that("derive_var_atoxgr Test 112: DAIDS Uric Acid, High", {
+### CV unit is mg/dL
+### Grade 4: >= 15 mg/dL
+### Grade 3: 12 -< 15 mg/dL
+### Grade 2: 10 -< 12 mg/dL
+### Grade 1: 7.5 -< 10 mg/dL
+
+## Test 112a: DAIDS Uric Acid, High (SI unit) ----
+test_that("derive_var_atoxgr Test 112a: DAIDS Uric Acid, High (SI unit)", {
   expected_urici_daids <- tibble::tribble(
     ~ATOXDSCH,          ~AVAL, ~AVALU,    ~ATOXGRH, ~TESTNUM,
     "Not a term",       591,   "umol/L",  NA,       1,
@@ -5140,67 +7942,108 @@ test_that("derive_var_atoxgr Test 112: DAIDS Uric Acid, High", {
   )
 })
 
+## Test 112b: DAIDS Uric Acid, High (USCV unit) ----
+test_that("derive_var_atoxgr Test 112b: DAIDS Uric Acid, High (USCV unit)", {
+  expected_urici_daids <- tibble::tribble(
+    ~ATOXDSCH,         ~AVAL,  ~AVALU,  ~ATOXGRH, ~TESTNUM,
+    "Not a term",      15,    "mg/dL",        NA, 1,
+    NA_character_,     15,    "mg/dL",        NA, 2,
+    "Uric Acid, High", 15,    "mg/dL",       "4", 3,
+    "Uric Acid, High", 14.9,  "mg/dL",       "3", 4,
+    "Uric Acid, High", 12,    "mg/dL",       "3", 5,
+    "Uric Acid, High", 11.9,  "mg/dL",       "2", 6,
+    "Uric Acid, High", 10,    "mg/dL",       "2", 7,
+    "Uric Acid, High", 9.9,   "mg/dL",       "1", 8,
+    "Uric Acid, High", 7.5,   "mg/dL",       "1", 9,
+    "Uric Acid, High", 7.4,   "mg/dL",       "0", 10,
+    # Unit missing cannot grade
+    "Uric Acid, High", 200,        NA,        NA, 11,
+    # AVAL missing cannot grade
+    "Uric Acid, High", NA,    "mg/dL",        NA, 12,
+  )
+
+  input_urici_daids <- expected_urici_daids %>%
+    select(-ATOXGRH)
+
+  actual_urici_daids <- derive_var_atoxgr_dir(
+    input_urici_daids,
+    new_var = ATOXGRH,
+    meta_criteria = atoxgr_criteria_daids_uscv,
+    tox_description_var = ATOXDSCH,
+    criteria_direction = "H",
+    get_unit_expr = AVALU
+  )
+
+  expect_dfs_equal(
+    base = expected_urici_daids,
+    compare = actual_urici_daids,
+    keys = c("ATOXDSCH", "TESTNUM")
+  )
+})
 
 ### Absolute CD4+ Count, Low
 
 ### > 5 years of age
 
+### Si unit is 10^9/L
+### CV unit is 10^3/uL ( = 10^9/L)
+### Legacy CV unit is 10^3/mL (1000 * 10^9/L)
 ### Grade 4: < 0.1 10^9/L
 ### Grade 3: 0.1 to < 0.2 10^9/L
 ### Grade 2: 0.2 to < 0.3 10^9/L
 ### Grade 1: 0.3 to < 0.4 10^9/L
 
-## Test 113: DAIDS Absolute Lymphocyte Count, Low ----
-test_that("derive_var_atoxgr Test 113: DAIDS Absolute Lymphocyte Count, Low", {
-  expected_cd4d_daids_gt5y <- tibble::tribble(
-    ~AVAL,  ~AVALU,    ~ATOXGRL, ~TESTNUM,
-    0.1,    "MM3",     NA,       1,
-    0.09,   "10^9/L",  "4",      2,
-    0.1,    "10^9/L",  "3",      3,
-    0.19,   "10^9/L",  "3",      4,
-    0.2,    "10^9/L",  "2",      5,
-    0.29,   "10^9/L",  "2",      6,
-    0.3,    "10^9/L",  "1",      7,
-    0.39,   "10^9/L",  "1",      8,
-    0.4,    "10^9/L",  "0",      9,
-    NA,     "10^9/L",  NA,       10,
-    1,      NA,        NA,       11,
-  ) %>%
-    mutate(
-      ATOXDSCL = "Absolute CD4+ Count, Low",
-      BRTHDT = lubridate::ymd("2023-07-01"),
-      LBDT = lubridate::ymd("2029-07-01")
-    )
+expected_cd4d_daids_gt5y <- tibble::tribble(
+  ~AVAL,  ~AVALU,    ~ATOXGRL, ~TESTNUM,
+  0.1,    "MM3",     NA,       1,
+  0.09,   "10^9/L",  "4",      2,
+  0.1,    "10^9/L",  "3",      3,
+  0.19,   "10^9/L",  "3",      4,
+  0.2,    "10^9/L",  "2",      5,
+  0.29,   "10^9/L",  "2",      6,
+  0.3,    "10^9/L",  "1",      7,
+  0.39,   "10^9/L",  "1",      8,
+  0.4,    "10^9/L",  "0",      9,
+  NA,     "10^9/L",  NA,       10,
+  1,      NA,        NA,       11,
+) %>%
+  mutate(
+    ATOXDSCL = "Absolute CD4+ Count, Low",
+    BRTHDT = lubridate::ymd("2023-07-01"),
+    LBDT = lubridate::ymd("2029-07-01")
+  )
 
-  # no criteria for age <= 5 years set grade to missing
-  expected_cd4d_daids_le5y <- expected_cd4d_daids_gt5y %>%
-    mutate(
-      LBDT = lubridate::ymd("2028-07-01"),
-      ATOXGRL = NA_character_,
-      TESTNUM = TESTNUM + 11
-    )
+# no criteria for age <= 5 years set grade to missing
+expected_cd4d_daids_le5y <- expected_cd4d_daids_gt5y %>%
+  mutate(
+    LBDT = lubridate::ymd("2028-07-01"),
+    ATOXGRL = NA_character_,
+    TESTNUM = TESTNUM + 11
+  )
 
-  # add missing LBDT and BRTHDT
-  expected_cd4d_daids_noage <- expected_cd4d_daids_gt5y %>%
-    filter(TESTNUM %in% c(5, 6)) %>%
-    mutate(
-      LBDT = if_else(TESTNUM == 5, NA, LBDT),
-      BRTHDT = if_else(TESTNUM == 6, NA, BRTHDT),
-      ATOXGRL = NA_character_,
-      TESTNUM = if_else(TESTNUM == 5, 23, 24)
-    )
+# add missing LBDT and BRTHDT
+expected_cd4d_daids_noage <- expected_cd4d_daids_gt5y %>%
+  filter(TESTNUM %in% c(5, 6)) %>%
+  mutate(
+    LBDT = if_else(TESTNUM == 5, NA, LBDT),
+    BRTHDT = if_else(TESTNUM == 6, NA, BRTHDT),
+    ATOXGRL = NA_character_,
+    TESTNUM = if_else(TESTNUM == 5, 23, 24)
+  )
 
-  expected_cd4d_daids <- expected_cd4d_daids_gt5y %>%
-    bind_rows(
-      expected_cd4d_daids_le5y,
-      expected_cd4d_daids_noage
-    )
+expected_cd4d_daids_si <- expected_cd4d_daids_gt5y %>%
+  bind_rows(
+    expected_cd4d_daids_le5y,
+    expected_cd4d_daids_noage
+  )
 
-  input_cd4d_daids <- expected_cd4d_daids %>%
-    select(-ATOXGRL)
+input_cd4d_daids_si <- expected_cd4d_daids_si %>%
+  select(-ATOXGRL)
 
-  actual_cd4d_daids <- derive_var_atoxgr_dir(
-    input_cd4d_daids,
+## Test 113a: DAIDS Absolute CD4 Count, Low (SI unit) ----
+test_that("derive_var_atoxgr Test 113a: DAIDS Absolute CD4 Count, Low (SI unit)", {
+  actual_cd4d_daids_si <- derive_var_atoxgr_dir(
+    input_cd4d_daids_si,
     new_var = ATOXGRL,
     meta_criteria = atoxgr_criteria_daids,
     tox_description_var = ATOXDSCL,
@@ -5209,74 +8052,105 @@ test_that("derive_var_atoxgr Test 113: DAIDS Absolute Lymphocyte Count, Low", {
   )
 
   expect_dfs_equal(
-    base = expected_cd4d_daids,
-    compare = actual_cd4d_daids,
+    base = expected_cd4d_daids_si,
+    compare = actual_cd4d_daids_si,
     keys = c("TESTNUM")
   )
 })
 
+
+expected_cd4d_daids_cv <- expected_cd4d_daids_si %>%
+  mutate(
+    AVAL = AVAL * 1000,
+    AVALU = if_else(str_to_upper(AVALU) == "10^9/L", "1/uL", AVALU)
+  )
+
+input_cd4d_daids_cv <- expected_cd4d_daids_cv %>%
+  select(-ATOXGRL)
+
+## Test 113b: DAIDS Absolute CD4 Count, Low (USCV unit) ----
+test_that("derive_var_atoxgr Test 113b: DAIDS Absolute CD4 Count, Low (USCV unit)", {
+  actual_cd4d_daids_cv <- derive_var_atoxgr_dir(
+    input_cd4d_daids_cv,
+    new_var = ATOXGRL,
+    meta_criteria = atoxgr_criteria_daids_uscv,
+    tox_description_var = ATOXDSCL,
+    criteria_direction = "L",
+    get_unit_expr = AVALU
+  )
+
+  expect_dfs_equal(
+    base = expected_cd4d_daids_cv,
+    compare = actual_cd4d_daids_cv,
+    keys = c("TESTNUM")
+  )
+})
 
 ### Absolute Lymphocyte Count, Low
 
 ### > 5 years of age
 
+### Si unit is 10^9/L
+### CV unit is 10^3/uL ( = 10^9/L)
+### Legacy CV unit is 10^3/mL (1000 * 10^9/L)
 ### Grade 4: < 0.35 10^9/L
 ### Grade 3: 0.35 to < 0.5 10^9/L
 ### Grade 2: 0.5 to < 0.6 10^9/L
 ### Grade 1: 0.6 to < 0.65 10^9/L
 
-## Test 114: DAIDS Absolute Lymphocyte Count, Low ----
-test_that("derive_var_atoxgr Test 114: DAIDS Absolute Lymphocyte Count, Low", {
-  expected_lymphd_daids_gt5y <- tibble::tribble(
-    ~AVAL,  ~AVALU,    ~ATOXGRL, ~TESTNUM,
-    0.35,   "MM3",     NA,       1,
-    0.34,   "10^9/L",  "4",      2,
-    0.35,   "10^9/L",  "3",      3,
-    0.49,   "10^9/L",  "3",      4,
-    0.5,    "10^9/L",  "2",      5,
-    0.59,   "10^9/L",  "2",      6,
-    0.6,    "10^9/L",  "1",      7,
-    0.64,   "10^9/L",  "1",      8,
-    0.65,   "10^9/L",  "0",      9,
-    0.66,   "10^9/L",  "0",      10,
-    NA,     "10^9/L",  NA,       11,
-    1,      NA,        NA,       12,
-  ) %>%
-    mutate(
-      ATOXDSCL = "Absolute Lymphocyte Count, Low",
-      BRTHDT = lubridate::ymd("2023-07-01"),
-      LBDT = lubridate::ymd("2029-07-01")
-    )
+expected_lymphd_daids_gt5y <- tibble::tribble(
+  ~AVAL,  ~AVALU,    ~ATOXGRL, ~TESTNUM,
+  0.35,   "MM3",     NA,       1,
+  0.34,   "10^9/L",  "4",      2,
+  0.35,   "10^9/L",  "3",      3,
+  0.49,   "10^9/L",  "3",      4,
+  0.5,    "10^9/L",  "2",      5,
+  0.59,   "10^9/L",  "2",      6,
+  0.6,    "10^9/L",  "1",      7,
+  0.64,   "10^9/L",  "1",      8,
+  0.65,   "10^9/L",  "0",      9,
+  0.66,   "10^9/L",  "0",      10,
+  NA,     "10^9/L",  NA,       11,
+  1,      NA,        NA,       12,
+) %>%
+  mutate(
+    ATOXDSCL = "Absolute Lymphocyte Count, Low",
+    BRTHDT = lubridate::ymd("2023-07-01"),
+    LBDT = lubridate::ymd("2029-07-01")
+  )
 
-  # no criteria for age <= 5 years set grade to missing
-  expected_lymphd_daids_le5y <- expected_lymphd_daids_gt5y %>%
-    mutate(
-      LBDT = lubridate::ymd("2028-07-01"),
-      ATOXGRL = NA_character_,
-      TESTNUM = TESTNUM + 12
-    )
+# no criteria for age <= 5 years set grade to missing
+expected_lymphd_daids_le5y <- expected_lymphd_daids_gt5y %>%
+  mutate(
+    LBDT = lubridate::ymd("2028-07-01"),
+    ATOXGRL = NA_character_,
+    TESTNUM = TESTNUM + 12
+  )
 
-  # add missing LBDT and BRTHDT
-  expected_lymphd_daids_noage <- expected_lymphd_daids_gt5y %>%
-    filter(TESTNUM %in% c(5, 6)) %>%
-    mutate(
-      LBDT = if_else(TESTNUM == 5, NA, LBDT),
-      BRTHDT = if_else(TESTNUM == 6, NA, BRTHDT),
-      ATOXGRL = NA_character_,
-      TESTNUM = if_else(TESTNUM == 5, 25, 26)
-    )
+# add missing LBDT and BRTHDT
+expected_lymphd_daids_noage <- expected_lymphd_daids_gt5y %>%
+  filter(TESTNUM %in% c(5, 6)) %>%
+  mutate(
+    LBDT = if_else(TESTNUM == 5, NA, LBDT),
+    BRTHDT = if_else(TESTNUM == 6, NA, BRTHDT),
+    ATOXGRL = NA_character_,
+    TESTNUM = if_else(TESTNUM == 5, 25, 26)
+  )
 
-  expected_lymphd_daids <- expected_lymphd_daids_gt5y %>%
-    bind_rows(
-      expected_lymphd_daids_le5y,
-      expected_lymphd_daids_noage
-    )
+expected_lymphd_daids_si <- expected_lymphd_daids_gt5y %>%
+  bind_rows(
+    expected_lymphd_daids_le5y,
+    expected_lymphd_daids_noage
+  )
 
-  input_lymphd_daids <- expected_lymphd_daids %>%
-    select(-ATOXGRL)
+input_lymphd_daids_si <- expected_lymphd_daids_si %>%
+  select(-ATOXGRL)
 
-  actual_lymphd_daids <- derive_var_atoxgr_dir(
-    input_lymphd_daids,
+
+## Test 114a: DAIDS Absolute Lymphocyte Count, Low (SI unit) ----
+test_that("derive_var_atoxgr Test 114a: DAIDS Absolute Lymphocyte Count, Low (SI unit)", {
+  actual_lymphd_daids_si <- derive_var_atoxgr_dir(
+    input_lymphd_daids_si,
     new_var = ATOXGRL,
     meta_criteria = atoxgr_criteria_daids,
     tox_description_var = ATOXDSCL,
@@ -5285,17 +8159,72 @@ test_that("derive_var_atoxgr Test 114: DAIDS Absolute Lymphocyte Count, Low", {
   )
 
   expect_dfs_equal(
-    base = expected_lymphd_daids,
-    compare = actual_lymphd_daids,
+    base = expected_lymphd_daids_si,
+    compare = actual_lymphd_daids_si,
     keys = c("TESTNUM")
   )
 })
 
+expected_lymphd_daids_cv <- expected_lymphd_daids_si %>%
+  mutate(
+    AVALU = if_else(str_to_upper(AVALU) == "10^9/L", "10^3/uL", AVALU)
+  )
+
+input_lymphd_daids_cv <- expected_lymphd_daids_cv %>%
+  select(-ATOXGRL)
+
+## Test 114b: DAIDS Absolute Lymphocyte Count, Low (USCV unit) ----
+test_that("derive_var_atoxgr Test 114b: DAIDS Absolute Lymphocyte Count, Low (USCV unit)", {
+  actual_lymphd_daids_cv <- derive_var_atoxgr_dir(
+    input_lymphd_daids_cv,
+    new_var = ATOXGRL,
+    meta_criteria = atoxgr_criteria_daids_uscv,
+    tox_description_var = ATOXDSCL,
+    criteria_direction = "L",
+    get_unit_expr = AVALU
+  )
+
+  expect_dfs_equal(
+    base = expected_lymphd_daids_cv,
+    compare = actual_lymphd_daids_cv,
+    keys = c("TESTNUM")
+  )
+})
+
+expected_lymphd_daids_cv2 <- expected_lymphd_daids_si %>%
+  mutate(
+    AVAL = AVAL * 1000,
+    AVALU = if_else(str_to_upper(AVALU) == "10^9/L", "10^3/mL", AVALU)
+  )
+
+input_lymphd_daids_cv2 <- expected_lymphd_daids_cv2 %>%
+  select(-ATOXGRL)
+
+## Test 114c: DAIDS Absolute Lymphocyte Count, Low (legacy USCV unit) ----
+test_that("derive_var_atoxgr Test 114c: DAIDS Absolute Lymphocyte Count, Low (legacy USCV unit)", {
+  actual_lymphd_daids_cv2 <- derive_var_atoxgr_dir(
+    input_lymphd_daids_cv2,
+    new_var = ATOXGRL,
+    meta_criteria = atoxgr_criteria_daids_uscv,
+    tox_description_var = ATOXDSCL,
+    criteria_direction = "L",
+    get_unit_expr = AVALU
+  )
+
+  expect_dfs_equal(
+    base = expected_lymphd_daids_cv2,
+    compare = actual_lymphd_daids_cv2,
+    keys = c("TESTNUM")
+  )
+})
 
 ### Absolute Neutrophil Count (ANC), Low
 
 ### > 7 days of age
 
+### Si unit is 10^9/L
+### CV unit is 10^3/uL ( = 10^9/L)
+### Legacy CV unit is 10^3/mL (1000 * 10^9/L)
 ### Grade 4: < 0.4 10^9/L
 ### Grade 3: 0.4 to < 0.6 10^9/L
 ### Grade 2: 0.6 to < 0.8 10^9/L
@@ -5323,6 +8252,9 @@ expected_ancd_daids_gt7d <- tibble::tribble(
 
 ### 2 to 7 days of age
 
+### Si unit is 10^9/L
+### CV unit is 10^3/uL ( = 10^9/L)
+### Legacy CV unit is 10^3/mL (1000 * 10^9/L)
 ### Grade 4: < 0.75 10^9/L
 ### Grade 3: 0.75 to < 1.0 10^9/L
 ### Grade 2: 1.0 to < 1.25 10^9/L
@@ -5350,6 +8282,9 @@ expected_ancd_daids_ge2d <- tibble::tribble(
 
 ### <= 1 day of age
 
+### Si unit is 10^9/L
+### CV unit is 10^3/uL ( = 10^9/L)
+### Legacy CV unit is 10^3/mL (1000 * 10^9/L)
 ### Grade 4: < 1.50 10^9/L
 ### Grade 3: 1.50 to < 3.0 10^9/L
 ### Grade 2: 3.0 to < 4.0 10^9/L
@@ -5394,18 +8329,18 @@ expected_ancd_daids_noage <- expected_ancd_daids %>%
     )
   )
 
-expected_ancd_daids <- expected_ancd_daids %>%
+expected_ancd_daids_si <- expected_ancd_daids %>%
   bind_rows(expected_ancd_daids_noage)
 
 
-input_ancd_daids <- expected_ancd_daids %>%
+input_ancd_daids_si <- expected_ancd_daids_si %>%
   select(-ATOXGRL)
 
 
-## Test 115: DAIDS ANC Low ----
-test_that("derive_var_atoxgr Test 115: DAIDS ANC Low", {
-  actual_ancd_daids <- derive_var_atoxgr_dir(
-    input_ancd_daids,
+## Test 115a: DAIDS ANC Low (SI unit) ----
+test_that("derive_var_atoxgr Test 115a: DAIDS ANC Low (SI unit)", {
+  actual_ancd_daids_si <- derive_var_atoxgr_dir(
+    input_ancd_daids_si,
     new_var = ATOXGRL,
     meta_criteria = atoxgr_criteria_daids,
     tox_description_var = ATOXDSCL,
@@ -5414,56 +8349,110 @@ test_that("derive_var_atoxgr Test 115: DAIDS ANC Low", {
   )
 
   expect_dfs_equal(
-    base = expected_ancd_daids,
-    compare = actual_ancd_daids,
+    base = expected_ancd_daids_si,
+    compare = actual_ancd_daids_si,
+    keys = c("TESTNUM")
+  )
+})
+
+expected_ancd_daids_cv <- expected_ancd_daids_si %>%
+  mutate(
+    AVALU = if_else(str_to_upper(AVALU) == "10^9/L", "10^3/uL", AVALU)
+  )
+input_ancd_daids_cv <- expected_ancd_daids_cv %>%
+  select(-ATOXGRL)
+
+## Test 115b: DAIDS ANC Low (USCV unit) ----
+test_that("derive_var_atoxgr Test 115b: DAIDS ANC Low (USCV unit)", {
+  actual_ancd_daids_cv <- derive_var_atoxgr_dir(
+    input_ancd_daids_cv,
+    new_var = ATOXGRL,
+    meta_criteria = atoxgr_criteria_daids_uscv,
+    tox_description_var = ATOXDSCL,
+    criteria_direction = "L",
+    get_unit_expr = AVALU
+  )
+
+  expect_dfs_equal(
+    base = expected_ancd_daids_cv,
+    compare = actual_ancd_daids_cv,
+    keys = c("TESTNUM")
+  )
+})
+
+expected_ancd_daids_cv2 <- expected_ancd_daids_si %>%
+  mutate(
+    AVAL = AVAL * 1000,
+    AVALU = if_else(str_to_upper(AVALU) == "10^9/L", "10^3/mL", AVALU)
+  )
+input_ancd_daids_cv2 <- expected_ancd_daids_cv2 %>%
+  select(-ATOXGRL)
+
+## Test 115c: DAIDS ANC Low (legacy USCV unit) ----
+test_that("derive_var_atoxgr Test 115c: DAIDS ANC Low (legacy USCV unit)", {
+  actual_ancd_daids_cv2 <- derive_var_atoxgr_dir(
+    input_ancd_daids_cv2,
+    new_var = ATOXGRL,
+    meta_criteria = atoxgr_criteria_daids_uscv,
+    tox_description_var = ATOXDSCL,
+    criteria_direction = "L",
+    get_unit_expr = AVALU
+  )
+
+  expect_dfs_equal(
+    base = expected_ancd_daids_cv2,
+    compare = actual_ancd_daids_cv2,
     keys = c("TESTNUM")
   )
 })
 
 
 ### Fibrinogen Decreased
+### SI unit is g/L
 ### Grade 4: <0.5 g/L OR < 0.25 x LLN
 ### Grade 3: 0.5 to <0.75 g/L OR 0.25 to < 0.50 x LLN
 ### Grade 2: 0.75 to <1 g/L OR >= 0.50 to < 0.75 x LLN
 ### Grade 1: 1 to < 2 g/L OR 0.75 to < 1.00 x LLN
 
-## Test 116: DAIDS Fibrinogen Decreased ----
-test_that("derive_var_atoxgr Test 116: DAIDS Fibrinogen Decreased", {
-  expected_fibd_daids <- tibble::tribble(
-    ~ATOXDSCL,              ~AVAL, ~ANRLO, ~AVALU, ~ATOXGRL, ~TESTNUM,
-    "Not a term",           2,     1,      "g/L",  NA,       1,
-    NA_character_,          2,     1,      "g/L",  NA,       2,
-    "Fibrinogen Decreased", 2,     1,      "g/dL", NA,       3,
-    # test first half of criteria
-    "Fibrinogen Decreased", 0.49,  1,      "g/L",  "4",      4,
-    "Fibrinogen Decreased", 0.5,   1,      "g/L",  "3",      5,
-    "Fibrinogen Decreased", 0.74,  1,      "g/L",  "3",      6,
-    "Fibrinogen Decreased", 0.75,  1,      "g/L",  "2",      7,
-    "Fibrinogen Decreased", 0.99,  1,      "g/L",  "2",      8,
-    "Fibrinogen Decreased", 1,     1,      "g/L",  "1",      9,
-    "Fibrinogen Decreased", 1.99,  1,      "g/L",  "1",      10,
-    "Fibrinogen Decreased", 2,     1,      "g/L",  "0",      11,
-    # test second half of criteria
-    "Fibrinogen Decreased", 0.74,  3,      "g/L",  "4",      12,
-    "Fibrinogen Decreased", 0.75,  3,      "g/L",  "3",      13,
-    "Fibrinogen Decreased", 1.49,  3,      "g/L",  "3",      14,
-    "Fibrinogen Decreased", 1.5,   3,      "g/L",  "2",      15,
-    "Fibrinogen Decreased", 2.24,  3,      "g/L",  "2",      16,
-    "Fibrinogen Decreased", 2.25,  3,      "g/L",  "1",      17,
-    "Fibrinogen Decreased", 2.99,  3,      "g/L",  "1",      18,
-    "Fibrinogen Decreased", 3,     3,      "g/L",  "0",      19,
-    # TEST for missing values
-    "Fibrinogen Decreased", 0.49,  NA,     "g/L",  "4",      20,
-    "Fibrinogen Decreased", 0.5,   NA,     "g/L",  NA,       21,
-    "Fibrinogen Decreased", 2,     1,      NA,     NA,       22,
-    "Fibrinogen Decreased", NA,    1,      "g/L",  NA,       23,
-  )
+### CV unit is mg/dL (= 100 * g/L)
 
-  input_fibd_daids <- expected_fibd_daids %>%
-    select(-ATOXGRL)
+expected_fibd_daids_si <- tibble::tribble(
+  ~ATOXDSCL,              ~AVAL, ~ANRLO, ~AVALU, ~ATOXGRL, ~TESTNUM,
+  "Not a term",           2,     1,      "g/L",  NA,       1,
+  NA_character_,          2,     1,      "g/L",  NA,       2,
+  "Fibrinogen Decreased", 2,     1,      "g/dL", NA,       3,
+  # test first half of criteria
+  "Fibrinogen Decreased", 0.49,  1,      "g/L",  "4",      4,
+  "Fibrinogen Decreased", 0.5,   1,      "g/L",  "3",      5,
+  "Fibrinogen Decreased", 0.74,  1,      "g/L",  "3",      6,
+  "Fibrinogen Decreased", 0.75,  1,      "g/L",  "2",      7,
+  "Fibrinogen Decreased", 0.99,  1,      "g/L",  "2",      8,
+  "Fibrinogen Decreased", 1,     1,      "g/L",  "1",      9,
+  "Fibrinogen Decreased", 1.99,  1,      "g/L",  "1",      10,
+  "Fibrinogen Decreased", 2,     1,      "g/L",  "0",      11,
+  # test second half of criteria
+  "Fibrinogen Decreased", 0.74,  3,      "g/L",  "4",      12,
+  "Fibrinogen Decreased", 0.75,  3,      "g/L",  "3",      13,
+  "Fibrinogen Decreased", 1.49,  3,      "g/L",  "3",      14,
+  "Fibrinogen Decreased", 1.5,   3,      "g/L",  "2",      15,
+  "Fibrinogen Decreased", 2.24,  3,      "g/L",  "2",      16,
+  "Fibrinogen Decreased", 2.25,  3,      "g/L",  "1",      17,
+  "Fibrinogen Decreased", 2.99,  3,      "g/L",  "1",      18,
+  "Fibrinogen Decreased", 3,     3,      "g/L",  "0",      19,
+  # TEST for missing values
+  "Fibrinogen Decreased", 0.49,  NA,     "g/L",  "4",      20,
+  "Fibrinogen Decreased", 0.5,   NA,     "g/L",  NA,       21,
+  "Fibrinogen Decreased", 2,     1,      NA,     NA,       22,
+  "Fibrinogen Decreased", NA,    1,      "g/L",  NA,       23,
+)
 
-  actual_fibd_daids <- derive_var_atoxgr_dir(
-    input_fibd_daids,
+input_fibd_daids_si <- expected_fibd_daids_si %>%
+  select(-ATOXGRL)
+
+## Test 116a: DAIDS Fibrinogen Decreased (SI unit) ----
+test_that("derive_var_atoxgr Test 116a: DAIDS Fibrinogen Decreased (SI unit)", {
+  actual_fibd_daids_si <- derive_var_atoxgr_dir(
+    input_fibd_daids_si,
     new_var = ATOXGRL,
     meta_criteria = atoxgr_criteria_daids,
     tox_description_var = ATOXDSCL,
@@ -5472,15 +8461,44 @@ test_that("derive_var_atoxgr Test 116: DAIDS Fibrinogen Decreased", {
   )
 
   expect_dfs_equal(
-    base = expected_fibd_daids,
-    compare = actual_fibd_daids,
+    base = expected_fibd_daids_si,
+    compare = actual_fibd_daids_si,
     keys = c("TESTNUM")
   )
 })
 
+## CV unit is mg/dL which is 100 * SI unit of g/L
+expected_fibd_daids_cv <- expected_fibd_daids_si %>%
+  mutate(
+    AVAL = 100 * AVAL,
+    ANRLO = 100 * ANRLO,
+    AVALU = if_else(str_to_upper(AVALU) == "G/L", "mg/dL", NA_character_)
+  )
 
+input_fibd_daids_cv <- expected_fibd_daids_cv %>%
+  select(-ATOXGRL)
+
+## Test 116b: DAIDS Fibrinogen Decreased (USCV unit) ----
+test_that("derive_var_atoxgr Test 116b: DAIDS Fibrinogen Decreased (USCV unit)", {
+  actual_fibd_daids_cv <- derive_var_atoxgr_dir(
+    input_fibd_daids_cv,
+    new_var = ATOXGRL,
+    meta_criteria = atoxgr_criteria_daids_uscv,
+    tox_description_var = ATOXDSCL,
+    criteria_direction = "L",
+    get_unit_expr = AVALU
+  )
+
+  expect_dfs_equal(
+    base = expected_fibd_daids_cv,
+    compare = actual_fibd_daids_cv,
+    keys = c("TESTNUM")
+  )
+})
 
 ### Hemoglobin, Low
+### SI unit is g/L
+### CV unit g/dL ( = g/L / 10)
 
 ### >= 13 years of age (male only)
 
@@ -5699,8 +8717,8 @@ expected_hgbd_daids <- expected_hgbd_daids %>%
 input_hgbd_daids <- expected_hgbd_daids %>%
   select(-ATOXGRL)
 
-## Test 117: DAIDS HGB Low ----
-test_that("derive_var_atoxgr Test 117: DAIDS HGB Low", {
+## Test 117a: DAIDS HGB Low (SI unit) ----
+test_that("derive_var_atoxgr Test 117: DAIDS HGB Low (SI unit)", {
   actual_hgbd_daids <- derive_var_atoxgr_dir(
     input_hgbd_daids,
     new_var = ATOXGRL,
@@ -5713,6 +8731,34 @@ test_that("derive_var_atoxgr Test 117: DAIDS HGB Low", {
   expect_dfs_equal(
     base = expected_hgbd_daids,
     compare = actual_hgbd_daids,
+    keys = c("ATOXDSCL", "TESTNUM")
+  )
+})
+
+## Test 117b: DAIDS HGB Low (CV unit) ----
+test_that("derive_var_atoxgr Test 117b: DAIDS HGB Low (CV unit)", {
+  expected_hgbd_daids_cv <- expected_hgbd_daids %>%
+    mutate(
+      AVAL = AVAL / 10,
+      AVALU = if_else(!is.na(AVALU) & str_to_upper(AVALU) == "G/L", "g/dL", NA_character_)
+    )
+
+  input_hgbd_daids_cv <- expected_hgbd_daids_cv %>%
+    select(-ATOXGRL)
+
+
+  actual_hgbd_daids_cv <- derive_var_atoxgr_dir(
+    input_hgbd_daids_cv,
+    new_var = ATOXGRL,
+    meta_criteria = atoxgr_criteria_daids_uscv,
+    tox_description_var = ATOXDSCL,
+    criteria_direction = "L",
+    get_unit_expr = AVALU
+  )
+
+  expect_dfs_equal(
+    base = expected_hgbd_daids_cv,
+    compare = actual_hgbd_daids_cv,
     keys = c("ATOXDSCL", "TESTNUM")
   )
 })
@@ -5766,39 +8812,58 @@ test_that("derive_var_atoxgr Test 118: DAIDS INR High", {
 
 
 ### Methemoglobin
+### SI + CV unit is %
 
 ### Grade 4: >=20.0%
 ### Grade 3: 15 to < 20%
 ### Grade 2: 10 to < 15%
 ### Grade 1: 5 to <10%
 
-## Test 119: DAIDS Methemoglobin ----
-test_that("derive_var_atoxgr Test 119: DAIDS Methemoglobin", {
-  expected_methi_daids <- tibble::tribble(
-    ~ATOXDSCH,         ~AVAL, ~AVALU,  ~ATOXGRH,
-    "Not a term",      20,    "%",     NA,
-    NA_character_,     20,    "%",     NA,
-    "Methemoglobin",   20,    "%",     "4",
-    "Methemoglobin",   19,    "%",     "3",
-    "Methemoglobin",   15,    "%",     "3",
-    "Methemoglobin",   14,    "%",     "2",
-    "Methemoglobin",   10,    "%",     "2",
-    "Methemoglobin",   9,     "%",     "1",
-    "Methemoglobin",   5,     "%",     "1",
-    "Methemoglobin",   4,     "%",     "0",
-    # Unit wrong - cannot grade
-    "Methemoglobin",   100,   NA,      NA,
-    # AVAL missing cannot grade
-    "Methemoglobin",   NA,    "%",     NA,
-  )
+expected_methi_daids <- tibble::tribble(
+  ~ATOXDSCH,         ~AVAL, ~AVALU,  ~ATOXGRH,
+  "Not a term",      20,    "%",     NA,
+  NA_character_,     20,    "%",     NA,
+  "Methemoglobin",   20,    "%",     "4",
+  "Methemoglobin",   19,    "%",     "3",
+  "Methemoglobin",   15,    "%",     "3",
+  "Methemoglobin",   14,    "%",     "2",
+  "Methemoglobin",   10,    "%",     "2",
+  "Methemoglobin",   9,     "%",     "1",
+  "Methemoglobin",   5,     "%",     "1",
+  "Methemoglobin",   4,     "%",     "0",
+  # Unit wrong - cannot grade
+  "Methemoglobin",   100,   NA,      NA,
+  # AVAL missing cannot grade
+  "Methemoglobin",   NA,    "%",     NA,
+)
 
-  input_methi_daids <- expected_methi_daids %>%
-    select(-ATOXGRH)
+input_methi_daids <- expected_methi_daids %>%
+  select(-ATOXGRH)
 
+## Test 119a: DAIDS Methemoglobin (SI unit) ----
+test_that("derive_var_atoxgr Test 119a: DAIDS Methemoglobin (SI unit)", {
   actual_methi_daids <- derive_var_atoxgr_dir(
     input_methi_daids,
     new_var = ATOXGRH,
     meta_criteria = atoxgr_criteria_daids,
+    tox_description_var = ATOXDSCH,
+    criteria_direction = "H",
+    get_unit_expr = AVALU
+  )
+
+  expect_dfs_equal(
+    base = expected_methi_daids,
+    compare = actual_methi_daids,
+    keys = c("ATOXDSCH", "AVAL", "AVALU")
+  )
+})
+
+## Test 119b: DAIDS Methemoglobin (USCV unit) ----
+test_that("derive_var_atoxgr Test 119b: DAIDS Methemoglobin (USCV unit)", {
+  actual_methi_daids <- derive_var_atoxgr_dir(
+    input_methi_daids,
+    new_var = ATOXGRH,
+    meta_criteria = atoxgr_criteria_daids_uscv,
     tox_description_var = ATOXDSCH,
     criteria_direction = "H",
     get_unit_expr = AVALU
@@ -5859,33 +8924,36 @@ test_that("derive_var_atoxgr Test 120: DAIDS PTT High", {
 
 
 ### Platelets, Decreased
+### Si unit is 10^9/L
+### CV unit is 10^3/uL ( = 10^9/L)
+### Legacy CV unit is 10^3/mL (1000 * 10^9/L)
 ### Grade 4: <25 x 10e9 /L
 ### Grade 3: 25 to <50  x 10e9 /L
 ### Grade 2: 50 to <100 - x 10e9
 ### Grade 1: 100 - 125 x 10e9 /L
 
-## Test 121: DAIDS Platelets decreased ----
-test_that("derive_var_atoxgr Test 121: DAIDS Platelets decreased", {
-  expected_plated_daids <- tibble::tribble(
-    ~ATOXDSCL,              ~AVAL, ~AVALU,    ~ATOXGRL, ~TESTNUM,
-    "Not a term",           126,   "10^9/L",  NA,       1,
-    NA_character_,          120,   "10^9/L",  NA,       2,
-    "Platelets, Decreased", 115,   "MM3",     NA,       3,
-    "Platelets, Decreased", 24.9,  "10^9/L",  "4",      4,
-    "Platelets, Decreased", 25,    "10^9/L",  "3",      5,
-    "Platelets, Decreased", 49.9,  "10^9/L",  "3",      6,
-    "Platelets, Decreased", 50,    "10^9/L",  "2",      7,
-    "Platelets, Decreased", 99.9,  "10^9/L",  "2",      8,
-    "Platelets, Decreased", 100,   "10^9/L",  "1",      9,
-    "Platelets, Decreased", 124.9, "10^9/L",  "1",      10,
-    "Platelets, Decreased", 125,   "10^9/L",  "0",      11,
-  )
+expected_plated_daids_si <- tibble::tribble(
+  ~ATOXDSCL,              ~AVAL, ~AVALU,    ~ATOXGRL, ~TESTNUM,
+  "Not a term",           126,   "10^9/L",  NA,       1,
+  NA_character_,          120,   "10^9/L",  NA,       2,
+  "Platelets, Decreased", 115,   "MM3",     NA,       3,
+  "Platelets, Decreased", 24.9,  "10^9/L",  "4",      4,
+  "Platelets, Decreased", 25,    "10^9/L",  "3",      5,
+  "Platelets, Decreased", 49.9,  "10^9/L",  "3",      6,
+  "Platelets, Decreased", 50,    "10^9/L",  "2",      7,
+  "Platelets, Decreased", 99.9,  "10^9/L",  "2",      8,
+  "Platelets, Decreased", 100,   "10^9/L",  "1",      9,
+  "Platelets, Decreased", 124.9, "10^9/L",  "1",      10,
+  "Platelets, Decreased", 125,   "10^9/L",  "0",      11,
+)
 
-  input_plated_daids <- expected_plated_daids %>%
-    select(-ATOXGRL)
+input_plated_daids_si <- expected_plated_daids_si %>%
+  select(-ATOXGRL)
 
-  actual_plated_daids <- derive_var_atoxgr_dir(
-    input_plated_daids,
+## Test 121a: DAIDS Platelets decreased (SI unit) ----
+test_that("derive_var_atoxgr Test 121a: DAIDS Platelets decreased (SI unit)", {
+  actual_plated_daids_si <- derive_var_atoxgr_dir(
+    input_plated_daids_si,
     new_var = ATOXGRL,
     meta_criteria = atoxgr_criteria_daids,
     tox_description_var = ATOXDSCL,
@@ -5894,8 +8962,61 @@ test_that("derive_var_atoxgr Test 121: DAIDS Platelets decreased", {
   )
 
   expect_dfs_equal(
-    base = expected_plated_daids,
-    compare = actual_plated_daids,
+    base = expected_plated_daids_si,
+    compare = actual_plated_daids_si,
+    keys = c("TESTNUM")
+  )
+})
+
+expected_plated_daids_cv <- expected_plated_daids_si %>%
+  mutate(
+    AVALU = if_else(str_to_upper(AVALU) == "10^9/L", "10^3/uL", AVALU)
+  )
+
+input_plated_daids_cv <- expected_plated_daids_cv %>%
+  select(-ATOXGRL)
+
+## Test 121b: DAIDS Platelets decreased (USCV unit) ----
+test_that("derive_var_atoxgr Test 121b: DAIDS Platelets decreased (USCV unit)", {
+  actual_plated_daids_cv <- derive_var_atoxgr_dir(
+    input_plated_daids_cv,
+    new_var = ATOXGRL,
+    meta_criteria = atoxgr_criteria_daids_uscv,
+    tox_description_var = ATOXDSCL,
+    criteria_direction = "L",
+    get_unit_expr = AVALU
+  )
+
+  expect_dfs_equal(
+    base = expected_plated_daids_cv,
+    compare = actual_plated_daids_cv,
+    keys = c("TESTNUM")
+  )
+})
+
+expected_plated_daids_cv2 <- expected_plated_daids_si %>%
+  mutate(
+    AVAL = AVAL * 1000,
+    AVALU = if_else(str_to_upper(AVALU) == "10^9/L", "10^3/mL", AVALU)
+  )
+
+input_plated_daids_cv2 <- expected_plated_daids_cv2 %>%
+  select(-ATOXGRL)
+
+## Test 121c: DAIDS Platelets decreased (legacy USCV unit) ----
+test_that("derive_var_atoxgr Test 121c: DAIDS Platelets decreased (legacy USCV unit)", {
+  actual_plated_daids_cv2 <- derive_var_atoxgr_dir(
+    input_plated_daids_cv2,
+    new_var = ATOXGRL,
+    meta_criteria = atoxgr_criteria_daids_uscv,
+    tox_description_var = ATOXDSCL,
+    criteria_direction = "L",
+    get_unit_expr = AVALU
+  )
+
+  expect_dfs_equal(
+    base = expected_plated_daids_cv2,
+    compare = actual_plated_daids_cv2,
     keys = c("TESTNUM")
   )
 })
@@ -5947,6 +9068,10 @@ test_that("derive_var_atoxgr Test 122: DAIDS PT High", {
 })
 
 ### White blood cell decreased (> 7 days of age)
+
+### Si unit is 10^9/L
+### CV unit is 10^3/uL ( = 10^9/L)
+### Legacy CV unit is 10^3/mL (1000 * 10^9/L)
 ### Grade 4: <1 x 10e9/L
 ### Grade 3: 1 to 1.499 x 10e9/L
 ### Grade 2: 1.5 to 1.999 x 10e9/L
@@ -5972,6 +9097,10 @@ expected_wbcd_daids_gt7d <- tibble::tribble(
   )
 
 ### White blood cell decreased (<= 7 days of age)
+
+### Si unit is 10^9/L
+### CV unit is 10^3/uL ( = 10^9/L)
+### Legacy CV unit is 10^3/mL (1000 * 10^9/L)
 ### Grade 4: <2.500 x 10e9/L
 ### Grade 3: 2.5 to 3.999 x 10e9/L
 ### Grade 2:   4 to 5.499 x 10e9/L
@@ -6003,19 +9132,19 @@ expected_wbcd_daids_noage <- expected_wbcd_daids_gt7d %>%
     TESTNUM = TESTNUM + 11
   )
 
-expected_wbcd_daids <- expected_wbcd_daids_gt7d %>%
+expected_wbcd_daids_si <- expected_wbcd_daids_gt7d %>%
   bind_rows(
     expected_wbcd_daids_le7d,
     expected_wbcd_daids_noage
   )
 
-input_wbcd_daids <- expected_wbcd_daids %>%
+input_wbcd_daids_si <- expected_wbcd_daids_si %>%
   select(-ATOXGRL)
 
-## Test 123: DAIDS White blood cell decreased ----
-test_that("derive_var_atoxgr Test 123: DAIDS White blood cell decreased", {
-  actual_wbcd_daids <- derive_var_atoxgr_dir(
-    input_wbcd_daids,
+## Test 123a: DAIDS White blood cell decreased (SI unit) ----
+test_that("derive_var_atoxgr Test 123a: DAIDS White blood cell decreased (SI unit)", {
+  actual_wbcd_daids_si <- derive_var_atoxgr_dir(
+    input_wbcd_daids_si,
     new_var = ATOXGRL,
     meta_criteria = atoxgr_criteria_daids,
     tox_description_var = ATOXDSCL,
@@ -6024,8 +9153,61 @@ test_that("derive_var_atoxgr Test 123: DAIDS White blood cell decreased", {
   )
 
   expect_dfs_equal(
-    base = expected_wbcd_daids,
-    compare = actual_wbcd_daids,
+    base = expected_wbcd_daids_si,
+    compare = actual_wbcd_daids_si,
+    keys = c("TESTNUM")
+  )
+})
+
+expected_wbcd_daids_cv <- expected_wbcd_daids_si %>%
+  mutate(
+    AVALU = if_else(str_to_upper(AVALU) == "10^9/L", "10^3/uL", AVALU)
+  )
+
+input_wbcd_daids_cv <- expected_wbcd_daids_cv %>%
+  select(-ATOXGRL)
+
+## Test 123b: DAIDS White blood cell decreased (USCV unit) ----
+test_that("derive_var_atoxgr Test 123b: DAIDS White blood cell decreased (USCV unit)", {
+  actual_wbcd_daids_cv <- derive_var_atoxgr_dir(
+    input_wbcd_daids_cv,
+    new_var = ATOXGRL,
+    meta_criteria = atoxgr_criteria_daids_uscv,
+    tox_description_var = ATOXDSCL,
+    criteria_direction = "L",
+    get_unit_expr = AVALU
+  )
+
+  expect_dfs_equal(
+    base = expected_wbcd_daids_cv,
+    compare = actual_wbcd_daids_cv,
+    keys = c("TESTNUM")
+  )
+})
+
+expected_wbcd_daids_cv2 <- expected_wbcd_daids_si %>%
+  mutate(
+    AVAL = AVAL * 1000,
+    AVALU = if_else(str_to_upper(AVALU) == "10^9/L", "10^3/mL", AVALU)
+  )
+
+input_wbcd_daids_cv2 <- expected_wbcd_daids_cv2 %>%
+  select(-ATOXGRL)
+
+## Test 123c: DAIDS White blood cell decreased (USCV unit) ----
+test_that("derive_var_atoxgr Test 123c: DAIDS White blood cell decreased (USCV unit)", {
+  actual_wbcd_daids_cv2 <- derive_var_atoxgr_dir(
+    input_wbcd_daids_cv2,
+    new_var = ATOXGRL,
+    meta_criteria = atoxgr_criteria_daids_uscv,
+    tox_description_var = ATOXDSCL,
+    criteria_direction = "L",
+    get_unit_expr = AVALU
+  )
+
+  expect_dfs_equal(
+    base = expected_wbcd_daids_cv2,
+    compare = actual_wbcd_daids_cv2,
     keys = c("TESTNUM")
   )
 })
