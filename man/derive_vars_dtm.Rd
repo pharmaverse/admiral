@@ -74,13 +74,12 @@ level)}
 \item{date_imputation}{The value to impute the day/month when a datepart is
 missing.
 
-A character value is expected, either as a
+A character value is expected.
 \itemize{
-\item format with month and day specified as \code{"mm-dd"}: e.g. \code{"06-15"} for the
-15th of June (The year can not be specified; for imputing the year
-\code{"first"} or \code{"last"} together with \code{min_dates} or \code{max_dates} argument can
-be used (see examples).),
-\item or as a keyword: \code{"first"}, \code{"mid"}, \code{"last"} to impute to the first/mid/last
+\item If  \code{highest_imputation} is \code{"M"}, month and day can be
+specified as \code{"mm-dd"}: e.g. \code{"06-15"} for the 15th of June
+\item When  \code{highest_imputation} is \code{"M"} or  \code{"D"}, the following keywords are available:
+\code{"first"}, \code{"mid"}, \code{"last"} to impute to the first/mid/last
 day/month. If \code{"mid"} is specified, missing components are imputed as the
 middle of the possible range:
 \itemize{
@@ -90,7 +89,9 @@ middle of the possible range:
 }
 }
 
-The argument is ignored if \code{highest_imputation} is less then \code{"D"}.
+The year can not be specified; for imputing the year
+\code{"first"} or \code{"last"} together with \code{min_dates} or \code{max_dates} argument can
+be used (see examples).
 
 \describe{
 \item{Default value}{\code{"first"}}
