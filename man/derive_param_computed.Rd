@@ -213,7 +213,7 @@ BDS-Findings Functions for adding Parameters/Records:
 \section{Examples}{
 \subsection{Example 1 - Data setup}{
 
-Examples 1a-c use the following \code{advs} data.
+Examples 1a, 1b, and 1c use the following \code{advs} data.
 
 \if{html}{\out{<div class="sourceCode r">}}\preformatted{advs <- tribble(
   ~USUBJID,      ~PARAMCD, ~PARAM,                            ~AVAL, ~VISIT,
@@ -236,7 +236,8 @@ Examples 1a-c use the following \code{advs} data.
   )}\if{html}{\out{</div>}}}
 \subsection{Example 1a - Adding a parameter computed from a formula}{
 
-Derive mean arterial pressure (MAP) from systolic (SYSBP).
+Derive mean arterial pressure (MAP) from systolic (SYSBP)
+and diastolic blood pressure (DIABP).
 \itemize{
 \item Here, for each \code{USUBJID} and \code{VISIT} group, an observation is added
 to the output dataset when the filtered input dataset (\code{dataset})
@@ -272,11 +273,11 @@ derive_param_computed(
 #>  9 01-701-1015 MAP     Mean Arterial Pressur…  74.3 BASE… mmHg  2024-01-10 <NA> 
 #> 10 01-701-1015 MAP     Mean Arterial Pressur…  73.7 WEEK… mmHg  2024-01-24 <NA> 
 #> 11 01-701-1028 MAP     Mean Arterial Pressur…  96   BASE… mmHg  2024-01-10 <NA> }\if{html}{\out{</div>}}}
-\subsection{Example 1b - Not ignoring missing values for source
+\subsection{Example 1b - Keeping missing values for source
 parameters (\code{keep_nas = TRUE})}{
 
-Using option \code{keep_nas = TRUE} to derive MAP in the case
-where some/all values of a variable used in the computation are missing
+Use option \code{keep_nas = TRUE} to derive MAP in the case where
+some/all values of a variable used in the computation are missing.
 \itemize{
 \item Note that observations will be added here even if some of the values contributing
 to the computed values are \code{NA}.
@@ -312,14 +313,18 @@ derive_param_computed(
 #> 10 01-701-1015 MAP     Mean Arterial Pressur…  73.7 WEEK… mmHg  2024-01-24 <NA> 
 #> 11 01-701-1028 MAP     Mean Arterial Pressur…  96   BASE… mmHg  2024-01-10 <NA> 
 #> 12 01-701-1028 MAP     Mean Arterial Pressur…  NA   WEEK… mmHg  2024-01-24 <NA> }\if{html}{\out{</div>}}}
-\subsection{Example 1c - Adding a parameter computed from a formula with \code{keep_nas = exprs()}}{
+\subsection{Example 1c - Deriving records when some values
+are \code{NA} (\code{keep_nas = exprs()})}{
 
-Using option \code{keep_nas = exprs(ADTF)} to derive MAP in the case where
-some/all values of a variable used in the computation are missing but ignoring \code{ADTF}
+Use option \code{keep_nas = exprs(ADTF)} to derive MAP in the case where
+some/all values of a variable used in the computation are
+missing but keeping \code{NA} values of \code{ADTF}.
 \itemize{
-\item Note that observations will be added here even if some of the values contributing
-to the computed values are \code{NA}.
-\item Thus, there is one more row for the patient who has an \code{NA} value for \code{SYSBP} here.
+\item This is distinct from Example 1b because \code{ADTF} is not in the formula
+used to derive the parameter. Thus, keeping the \code{ADTF} values that are
+\code{NA} via \code{keep_nas = exprs(ADTF)} will not result in the \code{NA}
+record for \code{USUBJID} \code{01-701-1028} at \verb{WEEK 2} that is
+included in Example 1b's output.
 }
 
 \if{html}{\out{<div class="sourceCode r">}}\preformatted{
@@ -370,7 +375,7 @@ advs <- tribble(
 \subsection{Example 2 - Derivations using parameters measured only once
 (\code{constant_parameters} and \code{constant_by_vars})}{
 
-Derive BMI where height is measured only once
+Derive BMI where \code{HEIGHT} is measured only once.
 \itemize{
 \item In the above examples, for each parameter specified in the
 \code{parameters} argument, we expect one record per by group, where the by
@@ -384,19 +389,37 @@ is measured for each patient only at the first visit
 (\code{constant_parameters = "HEIGHT"}, \verb{constant_by_vars = exprs(USUBJID})).
 }
 
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{
 derive_param_computed(
-advs,
-by_vars = exprs(USUBJID, VISIT),
-parameters = "WEIGHT",
-set_values_to = exprs(
-AVAL = AVAL.WEIGHT / (AVAL.HEIGHT / 100)^2,
-PARAMCD = "BMI",
-PARAM = "Body Mass Index (kg/m^2)",
-AVALU = "kg/m^2"
-),
-constant_parameters = c("HEIGHT"),
-constant_by_vars = exprs(USUBJID)
-)}
+  advs,
+  by_vars = exprs(USUBJID, VISIT),
+  parameters = "WEIGHT",
+  set_values_to = exprs(
+    AVAL = AVAL.WEIGHT / (AVAL.HEIGHT / 100)^2,
+    PARAMCD = "BMI",
+    PARAM = "Body Mass Index (kg/m^2)",
+    AVALU = "kg/m^2"
+  ),
+  constant_parameters = c("HEIGHT"),
+  constant_by_vars = exprs(USUBJID)
+)
+#> # A tibble: 14 × 6
+#>    USUBJID     PARAMCD PARAM                     AVAL AVALU  VISIT    
+#>    <chr>       <chr>   <chr>                    <dbl> <chr>  <chr>    
+#>  1 01-701-1015 HEIGHT  Height (cm)              147   cm     SCREENING
+#>  2 01-701-1015 WEIGHT  Weight (kg)               54   kg     SCREENING
+#>  3 01-701-1015 WEIGHT  Weight (kg)               54.4 kg     BASELINE 
+#>  4 01-701-1015 WEIGHT  Weight (kg)               53.1 kg     WEEK 2   
+#>  5 01-701-1028 HEIGHT  Height (cm)              163   cm     SCREENING
+#>  6 01-701-1028 WEIGHT  Weight (kg)               78.5 kg     SCREENING
+#>  7 01-701-1028 WEIGHT  Weight (kg)               80.3 kg     BASELINE 
+#>  8 01-701-1028 WEIGHT  Weight (kg)               80.7 kg     WEEK 2   
+#>  9 01-701-1015 BMI     Body Mass Index (kg/m^2)  25.0 kg/m^2 SCREENING
+#> 10 01-701-1015 BMI     Body Mass Index (kg/m^2)  25.2 kg/m^2 BASELINE 
+#> 11 01-701-1015 BMI     Body Mass Index (kg/m^2)  24.6 kg/m^2 WEEK 2   
+#> 12 01-701-1028 BMI     Body Mass Index (kg/m^2)  29.5 kg/m^2 SCREENING
+#> 13 01-701-1028 BMI     Body Mass Index (kg/m^2)  30.2 kg/m^2 BASELINE 
+#> 14 01-701-1028 BMI     Body Mass Index (kg/m^2)  30.4 kg/m^2 WEEK 2   }\if{html}{\out{</div>}}}
 \subsection{Example 3 - Data setup}{
 
 Example 3  uses the following \code{qs} and \code{adchsf} data.
@@ -423,14 +446,23 @@ adchsf <- tribble(
 \subsection{Example 3 - Derivations including data from an additional
 dataset (\code{dataset_add}) and non-\code{AVAL} variables}{
 
-Using data from an additional dataset and other variables than \code{AVAL}
+Use data from an additional dataset and other variables than \code{AVAL}.
+\itemize{
+\item In this example, the dataset specified via \code{dataset_add} (e.g., \code{qs})
+is an SDTM dataset. There is no parameter code in the dataset.
+\item The \code{parameters} argument is therefore used to specify a list of
+expressions to derive temporary parameter codes.
+\item Then, \code{set_values_to} is used to specify the values for the new
+observations of each variable, and variable-value pairs from both
+datasets are referenced via \code{exprs()}.
+}
 
 \if{html}{\out{<div class="sourceCode r">}}\preformatted{
 derive_param_computed(
   adchsf,
   dataset_add = qs,
   by_vars = exprs(USUBJID, AVISIT),
-  parameters = exprs(CHSF12, CHSF13 = QSTESTCD \%in\% c("CHSF113", "CHSF213"), CHSF14),
+  parameters = exprs(CHSF12, CHSF13 = QSTESTCD \%in\% c("CHSF113"), CHSF14),
   set_values_to = exprs(
     AVAL = case_when(
       QSORRES.CHSF13 == "Not applicable" ~ 0,
@@ -468,9 +500,16 @@ adlb_tbilialk <- tribble(
   "3",      "TBILI2", "N",    "2021-04-04", NA_character_
 ) \%>\%
   mutate(ADTM = ymd(ADTM))}\if{html}{\out{</div>}}}
-\subsection{Example 4 - Adding a parameter computed from more than one variable}{
+\subsection{Example 4 - Computing more than one variable}{
 
-Specifying more than one variable-value pair via \code{set_values_to}
+Specify more than one variable-value pair via \code{set_values_to}.
+\itemize{
+\item In this example, the values of \code{AVALC}, \code{ADTM}, \code{ADTF}, \code{PARAMCD},
+and \code{PARAM} are determined via distinctly defined analysis values
+and parameter codes.
+\item This is different from Example 3 as more than one variable is
+derived.
+}
 
 \if{html}{\out{<div class="sourceCode r">}}\preformatted{
 derive_param_computed(

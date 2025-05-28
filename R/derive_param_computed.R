@@ -153,7 +153,7 @@
 #'
 #' @caption Example 1 - Data setup
 #'
-#' @info Examples 1a-c use the following `advs` data.
+#' @info Examples 1a, 1b, and 1c use the following `advs` data.
 #'
 #' @code
 #' advs <- tribble(
@@ -178,7 +178,8 @@
 #'
 #' @caption Example 1a - Adding a parameter computed from a formula
 #'
-#' @info Derive mean arterial pressure (MAP) from systolic (SYSBP).
+#' @info Derive mean arterial pressure (MAP) from systolic (SYSBP)
+#'   and diastolic blood pressure (DIABP).
 #'
 #' - Here, for each `USUBJID` and `VISIT` group, an observation is added
 #'   to the output dataset when the filtered input dataset (`dataset`)
@@ -201,11 +202,11 @@
 #'   )
 #' )
 #'
-#' @caption Example 1b - Not ignoring missing values for source
+#' @caption Example 1b - Keeping missing values for source
 #'     parameters (`keep_nas = TRUE`)
 #'
-#' @info Using option `keep_nas = TRUE` to derive MAP in the case
-#'     where some/all values of a variable used in the computation are missing
+#' @info Use option `keep_nas = TRUE` to derive MAP in the case where
+#'     some/all values of a variable used in the computation are missing.
 #'
 #' - Note that observations will be added here even if some of the values contributing
 #'   to the computed values are `NA`.
@@ -227,14 +228,18 @@
 #'   keep_nas = TRUE
 #' )
 #'
-#' @caption Example 1c - Adding a parameter computed from a formula with `keep_nas = exprs()`
+#' @caption Example 1c - Deriving records when some values
+#'     are `NA` (`keep_nas = exprs()`)
 #'
-#' @info Using option `keep_nas = exprs(ADTF)` to derive MAP in the case where
-#'     some/all values of a variable used in the computation are missing but ignoring `ADTF`
+#' @info Use option `keep_nas = exprs(ADTF)` to derive MAP in the case where
+#'     some/all values of a variable used in the computation are
+#'     missing but keeping `NA` values of `ADTF`.
 #'
-#' - Note that observations will be added here even if some of the values contributing
-#'   to the computed values are `NA`.
-#' - Thus, there is one more row for the patient who has an `NA` value for `SYSBP` here.
+#' - This is distinct from Example 1b because `ADTF` is not in the formula
+#'   used to derive the parameter. Thus, keeping the `ADTF` values that are
+#'   `NA` via `keep_nas = exprs(ADTF)` will not result in the `NA`
+#'   record for `USUBJID` `01-701-1028` at `WEEK 2` that is
+#'   included in Example 1b's output.
 #'
 #' @code
 #'
@@ -274,7 +279,7 @@
 #' @caption Example 2 - Derivations using parameters measured only once
 #' (`constant_parameters` and `constant_by_vars`)
 #'
-#' @info Derive BMI where height is measured only once
+#' @info Derive BMI where `HEIGHT` is measured only once.
 #'
 #' - In the above examples, for each parameter specified in the
 #'   `parameters` argument, we expect one record per by group, where the by
@@ -286,6 +291,8 @@
 #'   at each visit (`by_vars = exprs(USUBJID, VISIT)`), while height
 #'   is measured for each patient only at the first visit
 #'   (`constant_parameters = "HEIGHT"`, `constant_by_vars = exprs(USUBJID`)).
+#'
+#' @code
 #'
 #' derive_param_computed(
 #'   advs,
@@ -329,7 +336,15 @@
 #' @caption Example 3 - Derivations including data from an additional
 #' dataset (`dataset_add`) and non-`AVAL` variables
 #'
-#' @info Using data from an additional dataset and other variables than `AVAL`
+#' @info Use data from an additional dataset and other variables than `AVAL`.
+#'
+#' - In this example, the dataset specified via `dataset_add` (e.g., `qs`)
+#'   is an SDTM dataset. There is no parameter code in the dataset.
+#' - The `parameters` argument is therefore used to specify a list of
+#'   expressions to derive temporary parameter codes.
+#' - Then, `set_values_to` is used to specify the values for the new
+#'   observations of each variable, and variable-value pairs from both
+#'   datasets are referenced via `exprs()`.
 #'
 #' @code
 #'
@@ -337,7 +352,7 @@
 #'   adchsf,
 #'   dataset_add = qs,
 #'   by_vars = exprs(USUBJID, AVISIT),
-#'   parameters = exprs(CHSF12, CHSF13 = QSTESTCD %in% c("CHSF113", "CHSF213"), CHSF14),
+#'   parameters = exprs(CHSF12, CHSF13 = QSTESTCD %in% c("CHSF113"), CHSF14),
 #'   set_values_to = exprs(
 #'     AVAL = case_when(
 #'       QSORRES.CHSF13 == "Not applicable" ~ 0,
@@ -370,9 +385,15 @@
 #'   mutate(ADTM = ymd(ADTM))
 #'
 #'
-#' @caption Example 4 - Adding a parameter computed from more than one variable
+#' @caption Example 4 - Computing more than one variable
 #'
-#' @info Specifying more than one variable-value pair via `set_values_to`
+#' @info Specify more than one variable-value pair via `set_values_to`.
+#'
+#' - In this example, the values of `AVALC`, `ADTM`, `ADTF`, `PARAMCD`,
+#'   and `PARAM` are determined via distinctly defined analysis values
+#'   and parameter codes.
+#' - This is different from Example 3 as more than one variable is
+#'   derived.
 #'
 #' @code
 #'
