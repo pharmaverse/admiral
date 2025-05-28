@@ -8,6 +8,7 @@
 # - compares full ADaM - ie all rows
 # - for developer use and developer has run load_all()
 # - use cli:: for messages/errors - YES
+# - most datasets are  stored as.rda files
 
 
 #' Directories used to find files:
@@ -19,11 +20,18 @@
 #'  adam_new_dir (aka tempdir() or cache_dir ):  after running, templates place new ADaMs here
 #'  adam_old_dir : ADaMs downloaded from pharamverseadam
 
+#' Named vectors/lists
+#'
+#'  adam_names (named character vector)
+#'  path  (named list)
+#'  keys  (named list)
+#'  obj   (named list)
+#'  templates (named list)
+
+
 #' (IF we were to add to `admiral` package)
 #' @param pkg  package (ex:  "admiral )
 #' @param adams_names ADaM or CDISC name, without prefix or suffix  (ex:  adlb)
-#' @param adams_new  character vector of ADaM after template is run
-#' @param adams_old  character vector of original ADaM done at earlier date, saved in github
 
 ## DISCUSS
 #' @param template_dir  Path to templates in the active package (load_all())
@@ -38,10 +46,11 @@
 
 #' @title verify_templates
 #' @param pkg package (currently only admiral)
-#' @param ds  character vector of ADaM names.  Corresponding to templates to run.
+#' @param ds  character vector of ADaM names.  Corresponding to templates to run.  \
+#'   A subset of adam_names.
 #' @description:
 #' Generates ADaM from templates and compares to previously generated ADaM file.
-#' (These are found in https:://github.com main branch pharmaverseadam).
+#' (The latter are found in https:://github.com main branch pharmaverseadam).
 #'
 #' Much code taken from pharamavreseadam::create_adams_data.R
 #'  (https://github.com/pharmaverse/pharmaverseadam/blob/main/data-raw/create_adams_data.R)
@@ -51,13 +60,13 @@
 #' @export
 verify_templates <- function(pkg = "admiral", ds = c("adae")) {
   # TODO: delete all remove prior ADaM downloads
-  # ASSUME:  (1) user is running script for 1st time and no temporary directories exist yet, OR
-  #          (2) user is running script a 2nd time and must clear old
+  # ASSUME:  (1) user is running script for 1st time and no temporary directories exist, OR
+  #          (2) user is running script a 2nd time, in same session, and must remove directories 
 
   clean_cache() # clear all..
 
   pkg <- "admiral"
-  if (pkg != "admiral") error("Curently, only admiral package is accepted.")
+  if (pkg != "admiral") cli_abort("Currently only `admiral` package is supported")
 
   # nolint start
   library(pkg, character.only = TRUE)
@@ -65,9 +74,11 @@ verify_templates <- function(pkg = "admiral", ds = c("adae")) {
   library(purrr)
   library(cli)
   # nolint end
-  sprintf("generating ADaMs for  %s package\n", pkg)
+  cli_alert("Generating ADaMs for { pkg} package.")
 
+  # TODO:  do not show Warnings
   # temporary directories
+  cli_inform("Creating temporary directories")
   x <- tempdir()
   dir.create(file.path(x, "old"), showWarnings = TRUE)
   dir.create(file.path(x, "new"), showWarnings = TRUE)
@@ -86,7 +97,7 @@ verify_templates <- function(pkg = "admiral", ds = c("adae")) {
     diff = file.path(x, "diff")
   )
 
-  # TODO: if dir exists then empty it ; if not exist create it.
+  # TODO: if dir exists then empty it ; if not exist then create it.
   # lapply(path, function(x)  if( x %in% c("template_dir", "cache_dir")!exists(x)) dir.create(x))
 
   # gather all templates for this pkg (12 found) ----
@@ -103,7 +114,8 @@ verify_templates <- function(pkg = "admiral", ds = c("adae")) {
   # templates is a named chr[]
   names(templates) <- adam_names
 
-  # limit to ds user submitted
+  # User specified templates in `ds`.   Only run these.
+
   adam_names <- adam_names[adam_names %in% ds]
 
   # per Ben, ignore "adlbhy"
@@ -111,7 +123,7 @@ verify_templates <- function(pkg = "admiral", ds = c("adae")) {
 
   # download, save prior ADaMs from pharmaverseadam
 
-  cat("Downloading from github pharmaverseadam \n")
+  cli_inform("Downloading from github pharmaverseadam")
   download_adam_old(adam_names, path = path$adam_old_dir)
 
   # keys for diffdf
@@ -122,8 +134,6 @@ verify_templates <- function(pkg = "admiral", ds = c("adae")) {
     USE.NAMES = TRUE, simplify = FALSE
   )
   names(keys) <- tolower(names(keys))
-  keys
-
 
   # finally, construct a named list object: each element (adam_names) holds a template and keys
   obj <- lapply(adam_names, function(e) {
@@ -140,7 +150,8 @@ verify_templates <- function(pkg = "admiral", ds = c("adae")) {
     run_template(adam, dir = path$template_dir)
     # file in cache directory with suffix ".rda"
     dataset_new = load_rda(paste0(path$cache_dir, "/", adam, ".rda"))
-    file.copy(file.path(path$cache_dir, adam, ".rda"), file.path(path$adam_new_dir, adam, ".rda"))
+    file.copy(file.path(path$cache_dir, adam, ".rda"),
+              file.path(path$adam_new_dir, adam, ".rda"))
     dataset_old <- get_dataset_old(adam, path$adam_old_dir)
     compare(
       base = dataset_old,
@@ -149,7 +160,6 @@ verify_templates <- function(pkg = "admiral", ds = c("adae")) {
       file = paste0(path$diff, "/", adam, ".txt")
     )
   })
-  # TODO:  cleanup?
   # run AFTER verify_templates() completes, otherwise will not print
   display_diff(dir = path$diff)
 }
@@ -228,6 +238,7 @@ save_rda <- function(data, file_path, new_name) {
 compare <- function(base, compare, keys, file = NULL) {
   # DISCUSS
   #--------debugging--------- remove OR save as new save_debug( , debug=FALSE) function
+  # useful to have easy access to these in global env
   e <- globalenv()
   e$old <- base
   e$new <- compare
@@ -337,3 +348,5 @@ get_dataset_new <- function(adam, path = NULL) {
 run_template <- function(adam, dir = NULL) {
   source(paste0(dir, "/ad_", adam, ".R")) # nolint
 }
+
+verify_templates()
