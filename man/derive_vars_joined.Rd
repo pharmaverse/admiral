@@ -411,14 +411,7 @@ join is performed keeping all variables from \code{dataset_add}.
 \if{html}{\out{<div class="sourceCode r">}}\preformatted{library(tibble)
 library(lubridate)
 library(dplyr, warn.conflicts = FALSE)
-library(tidyr)
-#> 
-#> Attaching package: ‘tidyr’
-#> 
-#> The following object is masked from ‘package:testthat’:
-#> 
-#>     matches
-#> 
+library(tidyr, warn.conflicts = FALSE)
 
 adbds <- tribble(
   ~USUBJID, ~ADY, ~AVAL,
