@@ -117,7 +117,9 @@
 #'   order specified for the `order` argument and the mode specified for the
 #'   `mode` argument) is selected.
 #'   1. If `dataset_ref` is specified, observations which are in `dataset_ref`
-#'   but not in the selected records are added.
+#'   but not in the selected records are added. Variables that are common
+#'   across `dataset_ref`, `dataset_add` and `keep_source_vars()` are also
+#'   populated for the new observations.
 #'   1. The variables specified by the `set_values_to` argument are added to
 #'   the selected observations.
 #'   1. The variables specified by the `keep_source_vars` argument are selected

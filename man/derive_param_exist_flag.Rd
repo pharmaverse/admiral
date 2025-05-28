@@ -73,8 +73,6 @@ For all groups with at least one observations in the additional dataset
 (\code{dataset_add}) fulfilling the event condition (\code{condition}), \code{AVALC} is
 set to the specified value (\code{true_value}).
 
-\emph{Default}: \code{"Y"}
-
 \describe{
 \item{Permitted values}{A character scalar}
 \item{Default value}{\code{"Y"}}
@@ -86,8 +84,6 @@ For all groups with at least one observations in the additional dataset
 (\code{dataset_add}) but none of them is fulfilling the event condition
 (\code{condition}), \code{AVALC} is set to the specified value (\code{false_value}).
 
-\emph{Default}: \code{NA_character_}
-
 \describe{
 \item{Permitted values}{A character scalar}
 \item{Default value}{\code{NA_character_}}
@@ -97,8 +93,6 @@ For all groups with at least one observations in the additional dataset
 
 For all groups without an observation in the additional dataset
 (\code{dataset_add}), \code{AVALC} is set to the specified value (\code{missing_value}).
-
-\emph{Default}: \code{NA_character_}
 
 \describe{
 \item{Permitted values}{A character scalar}

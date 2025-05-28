@@ -259,7 +259,7 @@
 #' library(tibble)
 #' library(lubridate)
 #' library(dplyr, warn.conflicts = FALSE)
-#' library(tidyr)
+#' library(tidyr, warn.conflicts = FALSE)
 #'
 #' adbds <- tribble(
 #'   ~USUBJID, ~ADY, ~AVAL,
