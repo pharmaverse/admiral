@@ -274,10 +274,6 @@ derive_summary_records <- function(dataset = NULL,
     add_vars <- colnames(dataset_add)
     ref_vars <- colnames(dataset_ref)
 
-    common_vars <- add_vars %>%
-      intersect(ref_vars) %>%
-      intersect(by_vars_chr)
-
     new_ref_obs <- anti_join(
       select(dataset_ref, !!!by_vars),
       select(summary_records, !!!by_vars),
