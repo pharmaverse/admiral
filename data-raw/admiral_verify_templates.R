@@ -12,6 +12,9 @@
 
 #' Directories used to find files:
 
+#'  cache_dir
+#'  diff_dir
+#'  tempdir()
 #'  template_dir  location of template R files (inst/templates)
 #'  adam_new_dir (aka tempdir() or cache_dir ):  after running, templates place new ADaMs here
 #'  adam_old_dir : ADaMs downloaded from pharamverseadam
@@ -60,12 +63,14 @@ verify_templates <- function(pkg = "admiral", ds = c("adae")) {
   library(pkg, character.only = TRUE)
   library(teal.data)
   library(purrr)
+  library(cli)
   # nolint end
   sprintf("generating ADaMs for  %s package\n", pkg)
 
   # temporary directories
   x <- tempdir()
   dir.create(file.path(x, "old"), showWarnings = TRUE)
+  dir.create(file.path(x, "new"), showWarnings = TRUE)
   dir.create(file.path(x, "diff"), showWarnings = TRUE)
 
   # TODO: choose 1:
@@ -76,7 +81,7 @@ verify_templates <- function(pkg = "admiral", ds = c("adae")) {
   path <- list(
     template_dir = "inst/templates",
     cache_dir = tools::R_user_dir("admiral_templates_data", which = "cache"),
-    adam_new_dir = tools::R_user_dir("admiral_templates_data", which = "cache"),
+    adam_new_dir = file.path(x, "new"),
     adam_old_dir = file.path(x, "old"),
     diff = file.path(x, "diff")
   )
@@ -131,9 +136,11 @@ verify_templates <- function(pkg = "admiral", ds = c("adae")) {
 
   sprintf("---- Run templates\n")
   compare_list <- purrr::map(adam_names, .progress = TRUE, function(adam) {
-    cat("---- Template running for ", adam, "\n")
+    cli_inform("Template running for adam")
     run_template(adam, dir = path$template_dir)
-    dataset_new <- get_dataset_new(adam, path$cache_dir)
+    # file in cache directory with suffix ".rda"
+    dataset_new = load_rda(paste0(path$cache_dir, "/", adam, ".rda"))
+    file.copy(file.path(path$cache_dir, adam, ".rda"), file.path(path$adam_new_dir, adam, ".rda"))
     dataset_old <- get_dataset_old(adam, path$adam_old_dir)
     compare(
       base = dataset_old,
