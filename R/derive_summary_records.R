@@ -273,16 +273,15 @@ derive_summary_records <- function(dataset = NULL,
   if (!is.null(dataset_ref)) {
     add_vars <- colnames(dataset_add)
     ref_vars <- colnames(dataset_ref)
-    by_vars_chr <- map_chr(by_vars, as_name)
 
     common_vars <- add_vars %>%
       intersect(ref_vars) %>%
       intersect(by_vars_chr)
 
     new_ref_obs <- anti_join(
-      select(dataset_ref, all_of(common_vars)),
+      select(dataset_ref, !!!by_vars),
       select(summary_records, !!!by_vars),
-      by = by_vars_chr
+      by = map_chr(by_vars, as_name)
     )
 
     if (!is.null(missing_values)) {

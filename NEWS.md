@@ -40,16 +40,21 @@ the derivation is called for all subsets. (#2645)
 
 - The functions `derive_summary_records()` and `derive_param_exist_flag()` 
 were updated to fix an issue where if a variable was in both `dataset_add` and `dataset_ref`, it was 
-added to the new records even if was is not in `by_vars`. (#2664)
+added to the new records even if it was not in `by_vars`. (#2664)
+
+- `derive_var_atoxgr_dir()` updated to handle more than one unit in grading metadata. Related to providing US (Conventional) units for grading. (#2557)
+- The background checks in `derive_summary_records()` were too restrictive: `by_vars` were expected in `dataset` although the code did not require it. This requirement has therefore been dropped. (#2686)
 
 - The functions `derive_vars_joined()`, `derive_var_joined_exist_flag()`, and
 `filter_joined()` produce correct results now when they are used with `join_type
 = "before"` or `join_type = "after"` and `dataset` and `dataset_add` differ or
 the `filter_add` argument is used. (#2863)
 
+- `derive_vars_dt()`, `derive_vars_dtm()`, `impute_dtc_dt()`, `impute_dtc_dtm()`, `convert_dtc_to_dt()`, & `convert_dtc_to_dtm()` and related functions will now throw an error instead of a warning when `highest_imputation = "Y"` but neither `min_date` (when `date_imputation = "first"`) nor `max_dates` (when `date_imputation = "last"`) are specified. (#2654)
+
 ## Breaking Changes
 
-- Lab grading metadata `atoxgr_criteria_ctcv4()`, `atoxgr_criteria_ctcv5()` and `atoxgr_criteria_daids()` variable `SI_UNIT_CHECK` renamed to `UNIT_CHECK` (#2557).
+- Lab grading metadata `atoxgr_criteria_ctcv4()`, `atoxgr_criteria_ctcv5()` and `atoxgr_criteria_daids()` variable `SI_UNIT_CHECK` renamed to `UNIT_CHECK`. (#2557)
 
 - The values of the variable specified for `tmp_obs_nr_var` in
 `derive_vars_joined()`, `derive_var_joined_exist_flag()`, `filter_joined()` are
@@ -71,7 +76,9 @@ records. (#2683)
 
 ## Documentation
 
-- The examples sections of the following functions were enhanced:
+- Improved documentation, error messages, and argument assertions of `derive_vars_dt()`, `derive_vars_dtm()`, `impute_dtc_dt()`, `impute_dtc_dtm()`, `convert_dtc_to_dt()`, & `convert_dtc_to_dtm()`. (#2654)
+
+- The examples section of the following functions was enhanced:
     - `derive_extreme_records()` (#2585)
     - `derive_param_tte()` (#2704)
     - `derive_summary_records()` (#2707)
@@ -84,9 +91,9 @@ records. (#2683)
 - Default value of `type` in `derive_vars_aage()` is now shown as `interval` to match the function behavior. (#2685) 
 
 - The "Lab Grading" vignette was updated to correct some typos and make text easier to
-read (#2623). Also, updated to include new metadata for grading using US (Conventional) units (#2557).
+read (#2623) and updated to include new metadata for grading using US (Conventional) units. (#2557)
 
-- The "BDS Time-to-Event" vignette was updated to include `SRCSEQ` consistently (#2658).
+- The "BDS Time-to-Event" vignette was updated to include `SRCSEQ` consistently. (#2658)
 
 - The template for ADAE and the OCCDS vignette were updated to include an example of the `DOSEON` and `DOSEU` variables (#2737).
 
