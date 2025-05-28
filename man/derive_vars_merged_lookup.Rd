@@ -23,6 +23,7 @@ derive_vars_merged_lookup(
 The variables specified by the \code{by_vars} argument are expected to be in the dataset.
 
 \describe{
+\item{Permitted values}{a dataset, i.e., a \code{data.frame} or tibble}
 \item{Default value}{none}
 }}
 
@@ -31,6 +32,7 @@ The variables specified by the \code{by_vars} argument are expected to be in the
 The variables specified by the \code{by_vars} argument are expected.
 
 \describe{
+\item{Permitted values}{a dataset, i.e., a \code{data.frame} or tibble}
 \item{Default value}{none}
 }}
 
@@ -43,6 +45,7 @@ Variables can be renamed by naming the element, i.e.
 \verb{by_vars = exprs(<name in input dataset> = <name in additional dataset>)}, similar to the \code{dplyr} joins.
 
 \describe{
+\item{Permitted values}{list of variables created by \code{exprs()}, e.g., \code{exprs(USUBJID, VISIT)}}
 \item{Default value}{none}
 }}
 
@@ -57,8 +60,7 @@ Variables defined by the \code{new_vars} argument can be used in the sort order.
 For handling of \code{NA}s in sorting variables see \href{../articles/generic.html#sort_order}{Sort Order}.
 
 \describe{
-\item{Permitted values}{list of expressions created by \code{exprs()}, e.g.,
-\code{exprs(ADT, desc(AVAL))} or \code{NULL}}
+\item{Permitted values}{list of variables created by \code{exprs()}, e.g., \code{exprs(USUBJID, VISIT)}}
 \item{Default value}{\code{NULL}}
 }}
 
@@ -80,10 +82,12 @@ variable \code{LASTRSP} to the dataset and sets it to the upper case value of
 \code{AVALC}.
 
 If the argument is not specified or set to \code{NULL}, all variables from the
-additional dataset (\code{dataset_add}) are added.
+additional dataset (\code{dataset_add}) are added. In the case when a variable
+exists in both datasets, an error is issued to ensure the user either adds
+to \code{by_vars}, removes or renames.
 
 \describe{
-\item{Permitted values}{list of variables or named expressions created by \code{exprs()}}
+\item{Permitted values}{list of variables created by \code{exprs()}, e.g., \code{exprs(USUBJID, VISIT)}}
 \item{Default value}{\code{NULL}}
 }}
 
@@ -95,7 +99,7 @@ argument is specified, \code{mode} must be non-null.
 If the \code{order} argument is not specified, the \code{mode} argument is ignored.
 
 \describe{
-\item{Permitted values}{\code{"first"}, \code{"last"}, \code{NULL}}
+\item{Permitted values}{\code{"first"}, \code{"last"}}
 \item{Default value}{\code{NULL}}
 }}
 
@@ -109,7 +113,7 @@ Variables defined by the \code{new_vars} argument can be used in the filter
 condition.
 
 \describe{
-\item{Permitted values}{a condition}
+\item{Permitted values}{an unquoted condition, e.g., \code{AVISIT == "BASELINE"}}
 \item{Default value}{\code{NULL}}
 }}
 
@@ -133,6 +137,7 @@ to the by variables, an error is issued.
 If the uniqueness check fails, the specified message is displayed.
 
 \describe{
+\item{Permitted values}{a console message to be printed, e.g. \code{"Attention"} or for longer messages use \code{paste("Line 1", "Line 2")}}
 \item{Default value}{\if{html}{\out{<div class="sourceCode r">}}\preformatted{paste(
   "Dataset \{.arg dataset_add\} contains duplicate records with respect to",
   "\{.var \{vars2chr(by_vars)\}\}."
@@ -143,10 +148,8 @@ If the uniqueness check fails, the specified message is displayed.
 \item{print_not_mapped}{Print a list of unique \code{by_vars} values that do not
 have corresponding records from the lookup table?
 
-\emph{Default}: \code{TRUE}
-
 \describe{
-\item{Permitted values}{\code{TRUE}, \code{FALSE}}
+\item{Permitted values}{\code{"TRUE"}, \code{"FALSE"}}
 \item{Default value}{\code{TRUE}}
 }}
 }
@@ -220,6 +223,7 @@ General Derivation Functions for all ADaMs that returns variable appended to dat
 \code{\link{derive_vars_cat}()},
 \code{\link{derive_vars_computed}()},
 \code{\link{derive_vars_joined}()},
+\code{\link{derive_vars_joined_summary}()},
 \code{\link{derive_vars_merged}()},
 \code{\link{derive_vars_transposed}()}
 }
