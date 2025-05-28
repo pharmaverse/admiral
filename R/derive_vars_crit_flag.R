@@ -95,8 +95,8 @@
 #'   - The new variables are named `CRIT1`/`CRIT1FL` because the argument
 #'     `crit_nr` has not been passed.
 #'   - Since the argument `values_yn` has also not been passed and thus is
-#'     set to its default of `FALSE`, `CRIT1FL` is set to `Y` only if the
-#'     condition `condition` evaluates to `TRUE`. For example, in both the
+#'     set to its default of `FALSE`, `CRIT1FL` is set to `Y` only if
+#'     `condition` evaluates to `TRUE`. For example, in both the
 #'     first and third records, where `condition` is respectively `FALSE`
 #'     and `NA`, we set `CRIT1FL = NA_character_`. The fourth record also
 #'     exhibits this behavior. Also, as per CDISC standards, in this case

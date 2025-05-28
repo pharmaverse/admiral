@@ -135,13 +135,13 @@ adbds <- tribble(
 The following call is a simple application of \code{derive_vars_crit_flag()}
 to derive a criterion flag/variable pair in a BDS dataset.
 \itemize{
-\item The new variables are named \code{CRIT1}/\code{CRITFL} because the argument
+\item The new variables are named \code{CRIT1}/\code{CRIT1FL} because the argument
 \code{crit_nr} has not been passed.
 \item Since the argument \code{values_yn} has also not been passed and thus is
-set to its default of \code{FALSE}, \code{CRITFL} is set to \code{Y} only if the
-condition \code{condition} evaluates to \code{TRUE}. For example, in both the
+set to its default of \code{FALSE}, \code{CRIT1FL} is set to \code{Y} only if
+\code{condition} evaluates to \code{TRUE}. For example, in both the
 first and third records, where \code{condition} is respectively \code{FALSE}
-and \code{NA}, we set \code{CRITFL = NA_character_}. The fourth record also
+and \code{NA}, we set \code{CRIT1FL = NA_character_}. The fourth record also
 exhibits this behavior. Also, as per CDISC standards, in this case
 \code{CRIT1} is populated only for records where \code{condition} evaluates
 to \code{TRUE}.
@@ -180,18 +180,18 @@ actually being used for multiple parameters.
 #> 3 AST        NA <NA>    <NA>    
 #> 4 ALT        33 <NA>    <NA>    
 #> 5 ALT        51 Y       ALT > 50}\if{html}{\out{</div>}}}
-\subsection{Creating a criterion flag with values \code{"Y"}, \code{N} and \code{NA}
+\subsection{Creating a criterion flag with values \code{"Y"}, \code{"N"} and \code{NA}
 (\code{values_yn})}{
 
 The next call builds on the previous example by using
-\code{value_yn = TRUE} to additionally distinguish between the cases
-where the condition \code{condition} is \code{FALSE} and those where it is
+\code{value_yn = TRUE} to distinguish between the cases
+where \code{condition} is \code{FALSE} and those where it is
 not evaluable at all.
 \itemize{
 \item As compared to the previous example, for the first record \code{condition}
 evaluates to \code{FALSE} and so we set \code{CRIT1FL = "N"}, whereas for the
 third record, \code{condition} evaluates to \code{NA} because \code{AVAL} is
-missing and so we set \code{CRIT1FL = NA_character_}.
+missing and so we set \code{CRIT1FL} to \code{NA}.
 \item Note also that because we are using the values \code{"Y"}, \code{"N"} and \code{NA}
 for the flag, as per CDISC standards \code{CRIT1} is now
 populated for all records rather than just for the \code{"Y"} records.
@@ -215,7 +215,7 @@ populated for all records rather than just for the \code{"Y"} records.
 If the user wishes to set the criterion flag to \code{"N"} whenever
 the condition is not fulfilled, \code{condition} can be updated using
 an \code{if_else} call, where the third argument determines the behavior
-when the condition \code{condition} is not evaluable.
+when the condition is not evaluable.
 
 \if{html}{\out{<div class="sourceCode r">}}\preformatted{derive_vars_crit_flag(
   adbds,
@@ -235,12 +235,12 @@ when the condition \code{condition} is not evaluable.
 a numeric flag (\code{crit_nr}, \code{create_numeric_flag}).}{
 
 The user can manually specify the criterion variable/flag number
-to use to name \code{CRITx}/\code{CRITxFL} by passing the \code{crit_nr} argument. This
+to use to name \code{CRITy}/\code{CRITyFL} by passing the \code{crit_nr} argument. This
 may be necessary if, for instance, other criterion flags already exist
 in the input dataset.
 
 The user can also choose to create an additional, equivalent numeric
-flag \code{CRITxFN} by setting \code{create_numeric_flag} to \code{TRUE}.
+flag \code{CRITyFN} by setting \code{create_numeric_flag} to \code{TRUE}.
 
 \if{html}{\out{<div class="sourceCode r">}}\preformatted{derive_vars_crit_flag(
   adbds,
