@@ -150,7 +150,7 @@
 #' @info If the user wishes to set the criterion flag to `"N"` whenever
 #'   the condition is not fulfilled, `condition` can be updated using
 #'   an `if_else` call, where the third argument determines the behavior
-#'   when the condition `condition` is not evaluable.
+#'   when the condition is not evaluable.
 #'
 #' @code
 #' derive_vars_crit_flag(
