@@ -46,7 +46,8 @@ An expression can be specified to set the value depending on the parameter.
 Please note that the value must be constant within a parameter.
 
 \describe{
-\item{Permitted values}{a character scalar, i.e., a character vector of length one}
+\item{Permitted values}{an unquoted expression which evaluates to a character
+(in \code{dataset})}
 \item{Default value}{none}
 }}
 

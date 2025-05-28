@@ -39,7 +39,8 @@
 #'   An expression can be specified to set the value depending on the parameter.
 #'   Please note that the value must be constant within a parameter.
 #'
-#' @permitted [char_scalar]
+#' @permitted an unquoted expression which evaluates to a character
+#'    (in `dataset`)
 #'
 #' @param values_yn Should `"Y"` and `"N"` be used for `CRITyFL`?
 #'
