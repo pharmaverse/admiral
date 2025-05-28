@@ -92,13 +92,13 @@
 #' @info The following call is a simple application of `derive_vars_crit_flag()`
 #'   to derive a criterion flag/variable pair in a BDS dataset.
 #'
-#'   - The new variables are named `CRIT1`/`CRITFL` because the argument
+#'   - The new variables are named `CRIT1`/`CRIT1FL` because the argument
 #'     `crit_nr` has not been passed.
 #'   - Since the argument `values_yn` has also not been passed and thus is
-#'     set to its default of `FALSE`, `CRITFL` is set to `Y` only if the
+#'     set to its default of `FALSE`, `CRIT1FL` is set to `Y` only if the
 #'     condition `condition` evaluates to `TRUE`. For example, in both the
 #'     first and third records, where `condition` is respectively `FALSE`
-#'     and `NA`, we set `CRITFL = NA_character_`. The fourth record also
+#'     and `NA`, we set `CRIT1FL = NA_character_`. The fourth record also
 #'     exhibits this behavior. Also, as per CDISC standards, in this case
 #'     `CRIT1` is populated only for records where `condition` evaluates
 #'     to `TRUE`.
@@ -123,18 +123,18 @@
 #'   description = paste(PARAMCD, "> 50"),
 #' )
 #'
-#' @caption Creating a criterion flag with values `"Y"`, `N` and `NA`
+#' @caption Creating a criterion flag with values `"Y"`, `"N"` and `NA`
 #'   (`values_yn`)
 #'
 #' @info The next call builds on the previous example by using
-#'  `value_yn = TRUE` to additionally distinguish between the cases
-#'   where the condition `condition` is `FALSE` and those where it is
+#'  `value_yn = TRUE` to distinguish between the cases
+#'   where `condition` is `FALSE` and those where it is
 #'   not evaluable at all.
 #'
 #'   - As compared to the previous example, for the first record `condition`
 #'     evaluates to `FALSE` and so we set `CRIT1FL = "N"`, whereas for the
 #'     third record, `condition` evaluates to `NA` because `AVAL` is
-#'     missing and so we set `CRIT1FL = NA_character_`.
+#'     missing and so we set `CRIT1FL` to `NA`.
 #'   - Note also that because we are using the values `"Y"`, `"N"` and `NA`
 #'     for the flag, as per CDISC standards `CRIT1` is now
 #'     populated for all records rather than just for the `"Y"` records.
@@ -164,12 +164,12 @@
 #'   a numeric flag (`crit_nr`, `create_numeric_flag`).
 #'
 #' @info The user can manually specify the criterion variable/flag number
-#'   to use to name `CRITx`/`CRITxFL` by passing the `crit_nr` argument. This
+#'   to use to name `CRITy`/`CRITyFL` by passing the `crit_nr` argument. This
 #'   may be necessary if, for instance, other criterion flags already exist
 #'   in the input dataset.
 #'
 #'   The user can also choose to create an additional, equivalent numeric
-#'   flag `CRITxFN` by setting `create_numeric_flag` to `TRUE`.
+#'   flag `CRITyFN` by setting `create_numeric_flag` to `TRUE`.
 #'
 #' @code
 #' derive_vars_crit_flag(
