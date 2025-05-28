@@ -42,7 +42,7 @@ Please note that the value must be constant within a parameter.
 
 If set to \code{TRUE}, the \code{CRITyFL} variable is set to \code{"Y"} if the condition
 (\code{condition}) evaluates to \code{TRUE}, it is set to \code{"N"} if the condition
-evaluate to \code{FALSE}, and to \code{NA} if it evaluates to \code{NA}.
+evaluates to \code{FALSE}, and to \code{NA} if it evaluates to \code{NA}.
 
 Otherwise, the \code{CRITyFL} variable is set to \code{"Y"} if the condition
 (\code{condition}) evaluates to \code{TRUE}, and to \code{NA} otherwise.

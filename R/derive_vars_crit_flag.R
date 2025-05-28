@@ -41,7 +41,7 @@
 #'
 #'   If set to `TRUE`, the `CRITyFL` variable is set to `"Y"` if the condition
 #'   (`condition`) evaluates to `TRUE`, it is set to `"N"` if the condition
-#'   evaluate to `FALSE`, and to `NA` if it evaluates to `NA`.
+#'   evaluates to `FALSE`, and to `NA` if it evaluates to `NA`.
 #'
 #'   Otherwise, the `CRITyFL` variable is set to `"Y"` if the condition
 #'   (`condition`) evaluates to `TRUE`, and to `NA` otherwise.
