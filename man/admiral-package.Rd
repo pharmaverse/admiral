@@ -34,6 +34,7 @@ Authors:
   \item Jeffrey Dickinson
   \item Ross Farrugia
   \item Fanny Gautier
+  \item G Gayatri
   \item Dinakar Kulkarni
   \item Edoardo Mancini (\href{https://orcid.org/0009-0006-4899-8641}{ORCID})
   \item Gordon Miller
