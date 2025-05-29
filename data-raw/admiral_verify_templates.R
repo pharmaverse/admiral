@@ -2,6 +2,8 @@
 
 # TODO:
 # - where code overlaps, make pharamversadam script and this one the same.
+# - TODO: replace messages with cli::cli_*
+# - TODO: lots of directories and named lists.  Best way to keep neat and organized?
 
 # Assumptions/Questions:
 # - ignore *.rda files in admiral/data (per Ben)
@@ -20,7 +22,7 @@
 #'  adam_new_dir (aka tempdir() or cache_dir ):  after running, templates place new ADaMs here
 #'  adam_old_dir : ADaMs downloaded from pharamverseadam
 
-#' Named vectors/lists
+#' Named vectors/lists, use adam_name to name
 #'
 #'  adam_names (named character vector)
 #'  path  (named list)
@@ -29,11 +31,9 @@
 #'  templates (named list)
 
 
-#' (IF we were to add to `admiral` package)
-#' @param pkg  package (ex:  "admiral )
-#' @param adams_names ADaM or CDISC name, without prefix or suffix  (ex:  adlb)
+#' @param adams_names character vector. ADaM or CDISC name, without prefix or suffix  (ex:  adlb)
 
-## DISCUSS
+## DISCUSS, several named vectors, try tibble?
 #' @param template_dir  Path to templates in the active package (load_all())
 #'   ("inst/directory)
 #' @param cache_dir (cache)  Path to cache.       (varies by OS/configuration)
@@ -61,7 +61,7 @@
 verify_templates <- function(pkg = "admiral", ds = c("adae")) {
   # TODO: delete all remove prior ADaM downloads
   # ASSUME:  (1) user is running script for 1st time and no temporary directories exist, OR
-  #          (2) user is running script a 2nd time, in same session, and must remove directories 
+  #          (2) user is running script a 2nd time, in same session, and must remove directories
 
   clean_cache() # clear all..
 
@@ -77,18 +77,14 @@ verify_templates <- function(pkg = "admiral", ds = c("adae")) {
   cli_alert("Generating ADaMs for { pkg} package.")
 
   # TODO:  do not show Warnings
-  # temporary directories
+  # creae temporary directories
   cli_inform("Creating temporary directories")
   x <- tempdir()
   dir.create(file.path(x, "old"), showWarnings = TRUE)
   dir.create(file.path(x, "new"), showWarnings = TRUE)
   dir.create(file.path(x, "diff"), showWarnings = TRUE)
 
-  # TODO: choose 1:
-  # cache_dir and adam_new_dir are the SAME
-  # cache_dir is where templates deposit new ADaM
-  # adam_new_dir is used when reading from disk
-  # list of important paths
+  # TODO:
   path <- list(
     template_dir = "inst/templates",
     cache_dir = tools::R_user_dir("admiral_templates_data", which = "cache"),
@@ -97,7 +93,8 @@ verify_templates <- function(pkg = "admiral", ds = c("adae")) {
     diff = file.path(x, "diff")
   )
 
-  # TODO: if dir exists then empty it ; if not exist then create it.
+  # TODO:
+  # if dir exists then empty it ; if not exist then create it.
   # lapply(path, function(x)  if( x %in% c("template_dir", "cache_dir")!exists(x)) dir.create(x))
 
   # gather all templates for this pkg (12 found) ----
@@ -114,15 +111,14 @@ verify_templates <- function(pkg = "admiral", ds = c("adae")) {
   # templates is a named chr[]
   names(templates) <- adam_names
 
-  # User specified templates in `ds`.   Only run these.
+  # User specified templates in `ds`. Limit to only these templates.
 
   adam_names <- adam_names[adam_names %in% ds]
 
   # per Ben, ignore "adlbhy"
   adam_names <- adam_names[adam_names != "adlbhy"]
 
-  # download, save prior ADaMs from pharmaverseadam
-
+  # download, save prior ADaMs from pharmaverseadam as .rda files
   cli_inform("Downloading from github pharmaverseadam")
   download_adam_old(adam_names, path = path$adam_old_dir)
 
@@ -148,7 +144,7 @@ verify_templates <- function(pkg = "admiral", ds = c("adae")) {
   compare_list <- purrr::map(adam_names, .progress = TRUE, function(adam) {
     cli_inform("Template running for adam")
     run_template(adam, dir = path$template_dir)
-    # file in cache directory with suffix ".rda"
+    # retrieve *.rda file in cache; copy to correct directory
     dataset_new = load_rda(paste0(path$cache_dir, "/", adam, ".rda"))
     file.copy(file.path(path$cache_dir, adam, ".rda"),
               file.path(path$adam_new_dir, adam, ".rda"))
@@ -310,6 +306,10 @@ download_adam_old <- function(adam_names, path = NULL) {
   })
 }
 
+## DISCUSS:
+#  Combine next 2 functions into one.   get_dataset(adam, path)
+#  The path tells us if old or new.
+
 #' Loads an ADaM dataset from a saved RDA file on disk.
 #'
 #' @param adam Character string. Name of the ADaM dataset to retrieve from
@@ -349,4 +349,6 @@ run_template <- function(adam, dir = NULL) {
   source(paste0(dir, "/ad_", adam, ".R")) # nolint
 }
 
-verify_templates()
+# Since this is script, and not package R function it must be loaded/sourced separately.
+# The next line runs the entire process after this file is sourced.
+#verify_templates()   # nolint
