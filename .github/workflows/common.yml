@@ -15,13 +15,11 @@ on:
       - "v*"
     branches:
       - main
-      - patch
   # 'pull_request' events are triggered when PRs are
   # created against one of these target branches.
   pull_request:
     branches:
       - main
-      - patch
   # 'release' events are triggered when...
   # you guessed it - when releases are made.
   release:
@@ -81,7 +79,14 @@ jobs:
     needs: get_r_version
     with:
       r-version: "release"
-      skip-multiversion-docs: true
+      # Whether to skip multiversion docs
+      # Note that if you have multiple versions of docs,
+      # your URL links are likely to break due to path changes
+      skip-multiversion-docs: false
+      latest-tag-alt-name: cran-release
+      multiversion-docs-landing-page: cran-release
+      branches-or-tags-to-list: >-
+        ^main$|^cran-release$|^v([0-9]+\\.)?([0-9]+\\.)?([0-9]+)|^v([0-9]+\\.)?([0-9]+\\.)?([0-9]+)(-rc[0-9]+)$
     secrets:
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
   linter:

@@ -21,7 +21,7 @@ adsl <- admiral::admiral_adsl
 # When SAS datasets are imported into R using haven::read_sas(), missing
 # character values from SAS appear as "" characters in R, instead of appearing
 # as NA values. Further details can be obtained via the following link:
-# https://pharmaverse.github.io/admiral/articles/admiral.html#handling-of-missing-values # nolint
+# https://pharmaverse.github.io/admiral/cran-release/articles/admiral.html#handling-of-missing-values # nolint
 
 lb <- convert_blanks_to_na(lb)
 
@@ -156,7 +156,7 @@ adlb <- adlb %>%
 
 ## Get Visit Info ----
 # See also the "Visit and Period Variables" vignette
-# (https://pharmaverse.github.io/admiral/articles/visits_periods.html#visits)
+# (https://pharmaverse.github.io/admiral/cran-release/articles/visits_periods.html#visits)
 adlb <- adlb %>%
   # Derive Timing
   mutate(
@@ -239,7 +239,7 @@ adlb <- adlb %>%
 
 # Assign ATOXDSCL and ATOXDSCH to hold lab grading terms
 # ATOXDSCL and ATOXDSCH hold terms defined by NCI-CTCAEv4.
-# See (https://pharmaverse.github.io/admiral/articles/lab_grading.html#implement_ctcv4)
+# See (https://pharmaverse.github.io/admiral/cran-release/articles/lab_grading.html#implement_ctcv4)
 grade_lookup <- tibble::tribble(
   ~PARAMCD,                  ~ATOXDSCL,                              ~ATOXDSCH,
   "ALB",             "Hypoalbuminemia",                          NA_character_,
@@ -267,7 +267,7 @@ grade_lookup <- tibble::tribble(
 # user could change to atoxgr_criteria_ctcv5 to implement NCI-CTCAEv5
 # Note: Hyperglycemia and Hypophosphatemia not defined in NCI-CTCAEv5 so
 # user would need to amend look-up table grade_lookup
-# See (https://pharmaverse.github.io/admiral/articles/lab_grading.html#implement_ctcv5)
+# See (https://pharmaverse.github.io/admiral/cran-release/articles/lab_grading.html#implement_ctcv5)
 grade_crit <- atoxgr_criteria_ctcv4
 
 
@@ -378,7 +378,7 @@ adlb <- adlb %>%
 
 ## Get treatment information ----
 # See also the "Visit and Period Variables" vignette
-# (https://pharmaverse.github.io/admiral/articles/visits_periods.html#treatment_bds)
+# (https://pharmaverse.github.io/admiral/cran-release/articles/visits_periods.html#treatment_bds)
 adlb <- adlb %>%
   # Assign TRTA, TRTP
   mutate(
