@@ -138,13 +138,12 @@
 #'   min_dates = exprs(TRTSDTM)
 #' )
 #'
-#' @caption Example 7
-#' @info thing
+#' @caption Preserve information from Partial Dates when deriving ASTDT
+#' @info A user imputing dates as middle month/day, i.e. date_imputation = "mid" can
+#' use preserve argument to "preserve" partial dates.  For example, "2019---07",
+#' will be displayed as "2019-06-07" rather than 2019-06-15 with preserve = TRUE
 #'
 #' @code
-#' # A user imputing dates as middle month/day, i.e. date_imputation = "mid" can
-#' # use preserve argument to "preserve" partial dates.  For example, "2019---07",
-#' # will be displayed as "2019-06-07" rather than 2019-06-15 with preserve = TRUE
 #'
 #' derive_vars_dt(
 #'   mhdt,

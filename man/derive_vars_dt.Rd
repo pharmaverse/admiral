@@ -324,14 +324,13 @@ derive_vars_dt(
 #>   <chr>   <dttm>              <date>     <chr> 
 #> 1 2020-12 2020-12-06 12:12:12 2020-12-06 D     
 #> 2 2020-11 2020-12-06 12:12:12 2020-11-01 D     }\if{html}{\out{</div>}}}
-\subsection{Example 7}{
+\subsection{Preserve information from Partial Dates when deriving ASTDT}{
 
-thing
+A user imputing dates as middle month/day, i.e. date_imputation = "mid" can
+use preserve argument to "preserve" partial dates.  For example, "2019---07",
+will be displayed as "2019-06-07" rather than 2019-06-15 with preserve = TRUE
 
-\if{html}{\out{<div class="sourceCode r">}}\preformatted{# A user imputing dates as middle month/day, i.e. date_imputation = "mid" can
-# use preserve argument to "preserve" partial dates.  For example, "2019---07",
-# will be displayed as "2019-06-07" rather than 2019-06-15 with preserve = TRUE
-
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{
 derive_vars_dt(
   mhdt,
   new_vars_prefix = "AST",
