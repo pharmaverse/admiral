@@ -136,6 +136,20 @@ derive_vars_dtm <- function(dataset,
                             max_dates = NULL,
                             preserve = FALSE,
                             ignore_seconds_flag = FALSE) {
+  deprecate_inform(
+    when = "1.4.0",
+    what = "derive_vars_dtm(ignore_seconds_flag = 'will be changed to TRUE')",
+    details = c(
+      x = "The default behavior of ignore_seconds_flag will change to TRUE in
+      the next release of admiral. This message will turn into a warning at the
+      beginning of 2026.",
+      i = "See admiral's deprecation guidance:
+      https://pharmaverse.github.io/admiraldev/dev/articles/programming_strategy.html#deprecation"
+    )
+  )
+
+
+
   # check and quote arguments
   dtc <- assert_symbol(enexpr(dtc))
   assert_data_frame(dataset, required_vars = exprs(!!dtc))
