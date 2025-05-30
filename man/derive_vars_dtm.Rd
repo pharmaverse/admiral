@@ -383,5 +383,9 @@ derive_vars_dtm(
 #> 4 "2019-02"          2019-02-15 00:00:00 D      H     
 #> 5 "2019"             2019-06-30 00:00:00 M      H     
 #> 6 "2019---07"        2019-06-07 00:00:00 M      H     
-#> 7 ""                 NA                  <NA>   <NA>  }\if{html}{\out{</div>}}}}
+#> 7 ""                 NA                  <NA>   <NA>  }\if{html}{\out{</div>}}}
+\subsection{Further examples}{
+
+Further example usages of this function can be found in the
+\href{../articles/imputation.html}{Dates and Imputation vignette}.}}
 

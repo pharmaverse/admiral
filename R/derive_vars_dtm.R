@@ -162,6 +162,9 @@
 #'   date_imputation = "mid",
 #'   preserve = TRUE
 #' )
+#' @caption Further examples
+#' @info Further example usages of this function can be found in the
+#'   [Dates and Imputation vignette](../articles/imputation.html).
 derive_vars_dtm <- function(dataset, # nolint: cyclocomp_linter
                             new_vars_prefix,
                             dtc,
