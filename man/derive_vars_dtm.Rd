@@ -218,8 +218,58 @@ The presence of a \code{'--DTF'} variable is checked and the variable is not der
 if it already exists in the input dataset. However, if \code{'--TMF'} already exists
 in the input dataset, a warning is issued and \code{'--TMF'} will be overwritten.
 }
-\examples{
-library(tibble)
+\seealso{
+Date/Time Derivation Functions that returns variable appended to dataset: 
+\code{\link{derive_var_trtdurd}()},
+\code{\link{derive_vars_dt}()},
+\code{\link{derive_vars_dtm_to_dt}()},
+\code{\link{derive_vars_dtm_to_tm}()},
+\code{\link{derive_vars_duration}()},
+\code{\link{derive_vars_dy}()}
+}
+\concept{der_date_time}
+\keyword{der_date_time}
+\keyword{der_gen}
+\section{Examples}{
+\subsection{Derive \code{ASTDTM}}{
+
+Note that function produces variable \code{ASTTMF} and appends
+missing \code{"hh:mm:ss"} to \code{ASTDTM}
+
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{library(tibble)
+library(lubridate)
+
+mhdt <- tribble(
+  ~MHSTDTC,
+  "2019-07-18T15:25:40",
+  "2019-07-18T15:25",
+  "2019-07-18",
+  "2019-02",
+  "2019",
+  "2019---07",
+  ""
+)
+
+derive_vars_dtm(
+  mhdt,
+  new_vars_prefix = "AST",
+  dtc = MHSTDTC
+)
+#> # A tibble: 7 × 3
+#>   MHSTDTC               ASTDTM              ASTTMF
+#>   <chr>                 <dttm>              <chr> 
+#> 1 "2019-07-18T15:25:40" 2019-07-18 15:25:40 <NA>  
+#> 2 "2019-07-18T15:25"    2019-07-18 15:25:00 S     
+#> 3 "2019-07-18"          2019-07-18 00:00:00 H     
+#> 4 "2019-02"             NA                  <NA>  
+#> 5 "2019"                NA                  <NA>  
+#> 6 "2019---07"           NA                  <NA>  
+#> 7 ""                    NA                  <NA>  }\if{html}{\out{</div>}}}
+\subsection{Derive \code{ASTDTM} and suppress \code{ASTTMF}}{
+
+Note that function appends missing \code{"hh:mm:ss"} to \code{ASTDTM}
+
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{library(tibble)
 library(lubridate)
 
 mhdt <- tribble(
@@ -237,11 +287,24 @@ derive_vars_dtm(
   mhdt,
   new_vars_prefix = "AST",
   dtc = MHSTDTC,
-  highest_imputation = "M"
+  flag_imputation = "none"
 )
+#> # A tibble: 7 × 2
+#>   MHSTDTC               ASTDTM             
+#>   <chr>                 <dttm>             
+#> 1 "2019-07-18T15:25:40" 2019-07-18 15:25:40
+#> 2 "2019-07-18T15:25"    2019-07-18 15:25:00
+#> 3 "2019-07-18"          2019-07-18 00:00:00
+#> 4 "2019-02"             NA                 
+#> 5 "2019"                NA                 
+#> 6 "2019---07"           NA                 
+#> 7 ""                    NA                 }\if{html}{\out{</div>}}}
+\subsection{Derive AENDTM where AE end date is imputed to the last date and
+ensure that the imputed date is not after the death or data cut off date}{
 
-# Impute AE end date to the last date and ensure that the imputed date is not
-# after the death or data cut off date
+Note two flag variables: \code{ASTDTF} and \code{ASTTMF}
+
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{#
 adae <- tribble(
   ~AEENDTC, ~DTHDT, ~DCUTDT,
   "2020-12", ymd("2020-12-06"), ymd("2020-12-24"),
@@ -257,8 +320,17 @@ derive_vars_dtm(
   time_imputation = "last",
   max_dates = exprs(DTHDT, DCUTDT)
 )
+#> # A tibble: 2 × 6
+#>   AEENDTC DTHDT      DCUTDT     AENDTM              AENDTF AENTMF
+#>   <chr>   <date>     <date>     <dttm>              <chr>  <chr> 
+#> 1 2020-12 2020-12-06 2020-12-24 2020-12-06 23:59:59 D      H     
+#> 2 2020-11 2020-12-06 2020-12-24 2020-11-30 23:59:59 D      H     }\if{html}{\out{</div>}}}
+\subsection{Derive ASTDTM while using \code{ignore_seconds_flag} to suppress \code{S}
+from the \code{--TMF} variable.}{
 
-# Seconds has been removed from the input dataset.  Function now uses
+Seconds has been removed from the input dataset.
+
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{#   Function now uses
 # ignore_seconds_flag to remove the 'S' from the --TMF variable.
 mhdt <- tribble(
   ~MHSTDTC,
@@ -278,11 +350,22 @@ derive_vars_dtm(
   highest_imputation = "M",
   ignore_seconds_flag = TRUE
 )
+#> # A tibble: 7 × 4
+#>   MHSTDTC            ASTDTM              ASTDTF ASTTMF
+#>   <chr>              <dttm>              <chr>  <chr> 
+#> 1 "2019-07-18T15:25" 2019-07-18 15:25:00 <NA>   <NA>  
+#> 2 "2019-07-18T15:25" 2019-07-18 15:25:00 <NA>   <NA>  
+#> 3 "2019-07-18"       2019-07-18 00:00:00 <NA>   H     
+#> 4 "2019-02"          2019-02-01 00:00:00 D      H     
+#> 5 "2019"             2019-01-01 00:00:00 M      H     
+#> 6 "2019---07"        2019-01-01 00:00:00 M      H     
+#> 7 ""                 NA                  <NA>   <NA>  }\if{html}{\out{</div>}}}
+\subsection{Derive ASTDTM while preserving partial dates}{
 
-# A user imputing dates as middle month/day, i.e. date_imputation = "MID" can
-# use preserve argument to "preserve" partial dates.  For example, "2019---07",
-# will be displayed as "2019-06-07" rather than 2019-06-15 with preserve = TRUE
+A user imputing dates as middle month/day, i.e. \code{date_imputation = "MID"} can
+use \code{preserve} argument to "preserve" partial dates.  For example, \code{"2019---07"},\verb{will be displayed as}"2019-06-07"\verb{rather than}"2019-06-15"\code{with}preserve = TRUE`
 
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{
 derive_vars_dtm(
   mhdt,
   new_vars_prefix = "AST",
@@ -291,16 +374,14 @@ derive_vars_dtm(
   date_imputation = "mid",
   preserve = TRUE
 )
-}
-\seealso{
-Date/Time Derivation Functions that returns variable appended to dataset: 
-\code{\link{derive_var_trtdurd}()},
-\code{\link{derive_vars_dt}()},
-\code{\link{derive_vars_dtm_to_dt}()},
-\code{\link{derive_vars_dtm_to_tm}()},
-\code{\link{derive_vars_duration}()},
-\code{\link{derive_vars_dy}()}
-}
-\concept{der_date_time}
-\keyword{der_date_time}
-\keyword{der_gen}
+#> # A tibble: 7 × 4
+#>   MHSTDTC            ASTDTM              ASTDTF ASTTMF
+#>   <chr>              <dttm>              <chr>  <chr> 
+#> 1 "2019-07-18T15:25" 2019-07-18 15:25:00 <NA>   S     
+#> 2 "2019-07-18T15:25" 2019-07-18 15:25:00 <NA>   S     
+#> 3 "2019-07-18"       2019-07-18 00:00:00 <NA>   H     
+#> 4 "2019-02"          2019-02-15 00:00:00 D      H     
+#> 5 "2019"             2019-06-30 00:00:00 M      H     
+#> 6 "2019---07"        2019-06-07 00:00:00 M      H     
+#> 7 ""                 NA                  <NA>   <NA>  }\if{html}{\out{</div>}}}}
+

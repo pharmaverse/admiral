@@ -95,7 +95,7 @@
 #'   date_imputation = "04-06"
 #' )
 #'
-#' @caption Derive AENDT and AENDTF and impute partial dates to last day/month
+#' @caption Derive `AENDT` and `AENDTF` and impute partial dates to last day/month
 #'
 #' @code
 #' derive_vars_dt(
@@ -119,7 +119,7 @@
 #'   flag_imputation = "none"
 #' )
 #'
-#' @caption Derive `ASTDT` where the AE start date is imputed to the first date.
+#' @caption Derive `ASTDT` where the `AE` start date is imputed to the first date.
 #' @info Ensure that the imputed date is not before the treatment start date
 #' via `min_dates` argument.
 #'
@@ -138,10 +138,10 @@
 #'   min_dates = exprs(TRTSDTM)
 #' )
 #'
-#' @caption Preserve information from Partial Dates when deriving ASTDT
-#' @info A user imputing dates as middle month/day, i.e. date_imputation = "mid" can
-#' use preserve argument to "preserve" partial dates.  For example, "2019---07",
-#' will be displayed as "2019-06-07" rather than 2019-06-15 with preserve = TRUE
+#' @caption Preserve information from Partial Dates when deriving `ASTDT`
+#' @info A user imputing dates as middle month/day, i.e. `date_imputation = "mid"` can
+#' use preserve argument to "preserve" partial dates.  For example, `"2019---07"`,
+#' will be displayed as `"2019-06-07"` rather than `"2019-06-15"` with `preserve = TRUE`
 #'
 #' @code
 #'

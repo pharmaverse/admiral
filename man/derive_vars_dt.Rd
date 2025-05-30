@@ -260,7 +260,7 @@ Note that \code{"-06"} is used in the imputation of \code{"2019-02"}
 #> 5 "2019"                2019-04-06 M     
 #> 6 "2019---07"           2019-04-06 M     
 #> 7 ""                    NA         <NA>  }\if{html}{\out{</div>}}}
-\subsection{Derive AENDT and AENDTF and impute partial dates to last day/month}{
+\subsection{Derive \code{AENDT} and \code{AENDTF} and impute partial dates to last day/month}{
 
 \if{html}{\out{<div class="sourceCode r">}}\preformatted{derive_vars_dt(
   mhdt,
@@ -301,7 +301,7 @@ Date Imputation Flag is suppressed.
 #> 5 "2019"                2019-06-30
 #> 6 "2019---07"           2019-06-30
 #> 7 ""                    NA        }\if{html}{\out{</div>}}}
-\subsection{Derive \code{ASTDT} where the AE start date is imputed to the first date.}{
+\subsection{Derive \code{ASTDT} where the \code{AE} start date is imputed to the first date.}{
 
 Ensure that the imputed date is not before the treatment start date
 via \code{min_dates} argument.
@@ -324,11 +324,11 @@ derive_vars_dt(
 #>   <chr>   <dttm>              <date>     <chr> 
 #> 1 2020-12 2020-12-06 12:12:12 2020-12-06 D     
 #> 2 2020-11 2020-12-06 12:12:12 2020-11-01 D     }\if{html}{\out{</div>}}}
-\subsection{Preserve information from Partial Dates when deriving ASTDT}{
+\subsection{Preserve information from Partial Dates when deriving \code{ASTDT}}{
 
-A user imputing dates as middle month/day, i.e. date_imputation = "mid" can
-use preserve argument to "preserve" partial dates.  For example, "2019---07",
-will be displayed as "2019-06-07" rather than 2019-06-15 with preserve = TRUE
+A user imputing dates as middle month/day, i.e. \code{date_imputation = "mid"} can
+use preserve argument to "preserve" partial dates.  For example, \code{"2019---07"},
+will be displayed as \code{"2019-06-07"} rather than \code{"2019-06-15"} with \code{preserve = TRUE}
 
 \if{html}{\out{<div class="sourceCode r">}}\preformatted{
 derive_vars_dt(

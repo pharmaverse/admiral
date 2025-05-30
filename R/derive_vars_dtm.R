@@ -52,7 +52,35 @@
 #'
 #' @export
 #'
-#' @examples
+#' @examplesx
+#'
+#' @caption Derive `ASTDTM`
+#' @info Note that function produces variable `ASTTMF` and appends
+#' missing `"hh:mm:ss"` to `ASTDTM`
+#' @code
+#' library(tibble)
+#' library(lubridate)
+#'
+#' mhdt <- tribble(
+#'   ~MHSTDTC,
+#'   "2019-07-18T15:25:40",
+#'   "2019-07-18T15:25",
+#'   "2019-07-18",
+#'   "2019-02",
+#'   "2019",
+#'   "2019---07",
+#'   ""
+#' )
+#'
+#' derive_vars_dtm(
+#'   mhdt,
+#'   new_vars_prefix = "AST",
+#'   dtc = MHSTDTC
+#' )
+#'
+#' @caption Derive `ASTDTM` and suppress `ASTTMF`
+#' @info Note that function appends missing `"hh:mm:ss"` to `ASTDTM`
+#' @code
 #' library(tibble)
 #' library(lubridate)
 #'
@@ -71,11 +99,14 @@
 #'   mhdt,
 #'   new_vars_prefix = "AST",
 #'   dtc = MHSTDTC,
-#'   highest_imputation = "M"
+#'   flag_imputation = "none"
 #' )
 #'
-#' # Impute AE end date to the last date and ensure that the imputed date is not
-#' # after the death or data cut off date
+#' @caption Derive AENDTM where AE end date is imputed to the last date and
+#' ensure that the imputed date is not after the death or data cut off date
+#' @info Note two flag variables: `ASTDTF` and `ASTTMF`
+#' @code
+#' #
 #' adae <- tribble(
 #'   ~AEENDTC, ~DTHDT, ~DCUTDT,
 #'   "2020-12", ymd("2020-12-06"), ymd("2020-12-24"),
@@ -92,7 +123,11 @@
 #'   max_dates = exprs(DTHDT, DCUTDT)
 #' )
 #'
-#' # Seconds has been removed from the input dataset.  Function now uses
+#' @caption Derive ASTDTM while using `ignore_seconds_flag` to suppress `S`
+#' from the `--TMF` variable.
+#' @info Seconds has been removed from the input dataset.
+#' @code
+#' #   Function now uses
 #' # ignore_seconds_flag to remove the 'S' from the --TMF variable.
 #' mhdt <- tribble(
 #'   ~MHSTDTC,
@@ -113,9 +148,11 @@
 #'   ignore_seconds_flag = TRUE
 #' )
 #'
-#' # A user imputing dates as middle month/day, i.e. date_imputation = "MID" can
-#' # use preserve argument to "preserve" partial dates.  For example, "2019---07",
-#' # will be displayed as "2019-06-07" rather than 2019-06-15 with preserve = TRUE
+#' @caption Derive ASTDTM while preserving partial dates
+#' @info A user imputing dates as middle month/day, i.e. `date_imputation = "MID"` can
+#' use `preserve` argument to "preserve" partial dates.  For example, `"2019---07"`,`
+#' will be displayed as `"2019-06-07"` rather than `"2019-06-15"` with `preserve = TRUE`
+#' @code
 #'
 #' derive_vars_dtm(
 #'   mhdt,
