@@ -187,9 +187,7 @@ Date/Time Derivation Functions that returns variable appended to dataset:
 \keyword{der_date_time}
 \keyword{der_gen}
 \section{Examples}{
-\subsection{Create ASTDT and ASTDTF}{
-
-No imputation for partial date
+\subsection{Derive \code{ASTDT} with no imputation for partial dates}{
 
 \if{html}{\out{<div class="sourceCode r">}}\preformatted{library(tibble)
 library(lubridate)
@@ -220,13 +218,12 @@ derive_vars_dt(
 #> 5 "2019"                NA        
 #> 6 "2019---07"           NA        
 #> 7 ""                    NA        }\if{html}{\out{</div>}}}
-\subsection{Example 3}{
+\subsection{Derive \code{ASTDT} with imputation for partial dates}{
 
-thing
+\code{ASTDTF} is automatically created. Please note the use of \code{D} for day
+imputation and \code{M} for month imputation.
 
-\if{html}{\out{<div class="sourceCode r">}}\preformatted{# Create ASTDT and ASTDTF
-# Impute partial dates to first day/month
-derive_vars_dt(
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{derive_vars_dt(
   mhdt,
   new_vars_prefix = "AST",
   dtc = MHSTDTC,
@@ -242,12 +239,11 @@ derive_vars_dt(
 #> 5 "2019"                2019-01-01 M     
 #> 6 "2019---07"           2019-01-01 M     
 #> 7 ""                    NA         <NA>  }\if{html}{\out{</div>}}}
-\subsection{Example 3}{
+\subsection{Derive \code{ASTDT} with date imputation to a specific date, i.e. April 6th.}{
 
-thing
+Note that \code{"-06"} is used in the imputation of \code{"2019-02"}
 
-\if{html}{\out{<div class="sourceCode r">}}\preformatted{# Impute partial dates to 6th of April
-derive_vars_dt(
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{derive_vars_dt(
   mhdt,
   new_vars_prefix = "AST",
   dtc = MHSTDTC,
@@ -264,13 +260,9 @@ derive_vars_dt(
 #> 5 "2019"                2019-04-06 M     
 #> 6 "2019---07"           2019-04-06 M     
 #> 7 ""                    NA         <NA>  }\if{html}{\out{</div>}}}
-\subsection{Example 4}{
+\subsection{Derive AENDT and AENDTF and impute partial dates to last day/month}{
 
-thing
-
-\if{html}{\out{<div class="sourceCode r">}}\preformatted{# Create AENDT and AENDTF
-# Impute partial dates to last day/month
-derive_vars_dt(
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{derive_vars_dt(
   mhdt,
   new_vars_prefix = "AEN",
   dtc = MHSTDTC,
@@ -287,13 +279,11 @@ derive_vars_dt(
 #> 5 "2019"                2019-12-31 M     
 #> 6 "2019---07"           2019-12-31 M     
 #> 7 ""                    NA         <NA>  }\if{html}{\out{</div>}}}
-\subsection{Example 5}{
+\subsection{Derive \code{BIRTHDT} with partial date imputation to June 15th.}{
 
-thing
+Date Imputation Flag is suppressed.
 
-\if{html}{\out{<div class="sourceCode r">}}\preformatted{# Create BIRTHDT
-# Impute partial dates to 15th of June. No Date Imputation Flag
-derive_vars_dt(
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{derive_vars_dt(
   mhdt,
   new_vars_prefix = "BIRTH",
   dtc = MHSTDTC,
@@ -311,13 +301,12 @@ derive_vars_dt(
 #> 5 "2019"                2019-06-30
 #> 6 "2019---07"           2019-06-30
 #> 7 ""                    NA        }\if{html}{\out{</div>}}}
-\subsection{Example 6}{
+\subsection{Derive \code{ASTDT} where the AE start date is imputed to the first date.}{
 
-thing
+Ensure that the imputed date is not before the treatment start date
+via \code{min_dates} argument.
 
-\if{html}{\out{<div class="sourceCode r">}}\preformatted{# Impute AE start date to the first date and ensure that the imputed date
-# is not before the treatment start date
-adae <- tribble(
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{adae <- tribble(
   ~AESTDTC, ~TRTSDTM,
   "2020-12", ymd_hms("2020-12-06T12:12:12"),
   "2020-11", ymd_hms("2020-12-06T12:12:12")

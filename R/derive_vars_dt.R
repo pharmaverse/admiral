@@ -48,8 +48,7 @@
 #'
 #' @examplesx
 #'
-#' @caption Create ASTDT and ASTDTF
-#' @info No imputation for partial date
+#' @caption Derive `ASTDT` with no imputation for partial dates
 #'
 #' @code
 #' library(tibble)
@@ -72,12 +71,11 @@
 #'   dtc = MHSTDTC
 #' )
 #'
-#' @caption Example 3
-#' @info thing
+#' @caption Derive `ASTDT` with imputation for partial dates
+#' @info `ASTDTF` is automatically created. Please note the use of `D` for day
+#' imputation and `M` for month imputation.
 #'
 #' @code
-#' # Create ASTDT and ASTDTF
-#' # Impute partial dates to first day/month
 #' derive_vars_dt(
 #'   mhdt,
 #'   new_vars_prefix = "AST",
@@ -85,11 +83,10 @@
 #'   highest_imputation = "M"
 #' )
 #'
-#' @caption Example 3
-#' @info thing
+#' @caption Derive `ASTDT` with date imputation to a specific date, i.e. April 6th.
+#' @info Note that `"-06"` is used in the imputation of `"2019-02"`
 #'
 #' @code
-#' # Impute partial dates to 6th of April
 #' derive_vars_dt(
 #'   mhdt,
 #'   new_vars_prefix = "AST",
@@ -98,12 +95,9 @@
 #'   date_imputation = "04-06"
 #' )
 #'
-#' @caption Example 4
-#' @info thing
+#' @caption Derive AENDT and AENDTF and impute partial dates to last day/month
 #'
 #' @code
-#' # Create AENDT and AENDTF
-#' # Impute partial dates to last day/month
 #' derive_vars_dt(
 #'   mhdt,
 #'   new_vars_prefix = "AEN",
@@ -112,12 +106,10 @@
 #'   date_imputation = "last"
 #' )
 #'
-#' @caption Example 5
-#' @info thing
+#' @caption Derive `BIRTHDT` with partial date imputation to June 15th.
+#' @info Date Imputation Flag is suppressed.
 #'
 #' @code
-#' # Create BIRTHDT
-#' # Impute partial dates to 15th of June. No Date Imputation Flag
 #' derive_vars_dt(
 #'   mhdt,
 #'   new_vars_prefix = "BIRTH",
@@ -127,12 +119,11 @@
 #'   flag_imputation = "none"
 #' )
 #'
-#' @caption Example 6
-#' @info thing
+#' @caption Derive `ASTDT` where the AE start date is imputed to the first date.
+#' @info Ensure that the imputed date is not before the treatment start date
+#' via `min_dates` argument.
 #'
 #' @code
-#' # Impute AE start date to the first date and ensure that the imputed date
-#' # is not before the treatment start date
 #' adae <- tribble(
 #'   ~AESTDTC, ~TRTSDTM,
 #'   "2020-12", ymd_hms("2020-12-06T12:12:12"),
