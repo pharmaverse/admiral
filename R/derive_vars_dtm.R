@@ -142,7 +142,7 @@ derive_vars_dtm <- function(dataset,
     details = c(
       x = "The default behavior of ignore_seconds_flag will change to TRUE in
       the next release of admiral. This message will turn into a warning at the
-      beginning of 2026.",
+      beginning of 2026. Please update your code to avoid this future warning message.",
       i = "See admiral's deprecation guidance:
       https://pharmaverse.github.io/admiraldev/dev/articles/programming_strategy.html#deprecation"
     )
