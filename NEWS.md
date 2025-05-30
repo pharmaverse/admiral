@@ -76,6 +76,7 @@ records. (#2683)
     - `derive_vars_joined()` (#2727)
     - `derive_vars_merged()` (#2727)
     - `derive_vars_crit_flag()` (#2744)
+    - `derive_var_trtemfl()` (#2746)
 
 - Added an example to the `derive_vars_transposed()` reference page to showcase how duplicates-related errors can arise when records in `dataset_merge` are not uniquely identified. (#2609)
 
