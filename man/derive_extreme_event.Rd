@@ -61,7 +61,7 @@ records from more than one event are selected.
 The variable is not included in the output dataset.
 
 \describe{
-\item{Permitted values}{a variable}
+\item{Permitted values}{an unquoted symbol, e.g., \code{AVAL}}
 \item{Default value}{\code{NULL}}
 }}
 
