@@ -158,9 +158,9 @@
 #'
 #' @param check_type Check uniqueness?
 #'
-#'   If `"warning"` or `"error"` is specified, the specified message is issued
-#'   if the observations of the (restricted) joined dataset are not unique with
-#'   respect to the by variables and the order.
+#'   If `"message"`, `"warning"` or `"error"` is specified, the specified
+#'   message is issued if the observations of the (restricted) joined dataset
+#'   are not unique with respect to the by variables and the order.
 #'
 #'   This argument is ignored if `order` is not specified. In this case an error
 #'   is issued independent of `check_type` if the restricted joined dataset
@@ -837,7 +837,7 @@ derive_vars_joined <- function(dataset,
 #'   prior to the observation. For example, to identify AEs occurring on or
 #'   after seven days before a COVID AE. Thus `join_type = "all"` could be used.
 #'
-#' @permitted [join]
+#' @permitted [join_type]
 #'
 #' @param tmp_obs_nr_var Temporary observation number
 #'
@@ -970,7 +970,8 @@ get_joined_data <- function(dataset,
       values = c("none", "warning", "error"),
       case_sensitive = FALSE
     )
-  if (join_type != "all" || !is.null(first_cond_lower) || !is.null(first_cond_upper)) {
+  any_first_cond <- !is.null(first_cond_lower) || !is.null(first_cond_upper)
+  if (join_type != "all" || any_first_cond) {
     dataset_order_vars <- extract_vars(order)
   } else {
     dataset_order_vars <- NULL
@@ -1012,8 +1013,7 @@ get_joined_data <- function(dataset,
   # additional dataset for relation of records, e.g., join_type = before|after,
   # first_cond_lower, first_cond_upper
   tmp_obs_nr_var_join <- NULL
-  if (join_type != "all" || !is.null(first_cond_lower) || !is.null(first_cond_upper) ||
-    !is.null(tmp_obs_nr_var)) {
+  if (join_type != "all" || any_first_cond || !is.null(tmp_obs_nr_var)) {
     if (is.null(tmp_obs_nr_var)) {
       tmp_obs_nr_var <- get_new_tmp_var(dataset, prefix = "tmp_obs_nr")
       tmp_obs_nr_var_join <- paste0(as_name(tmp_obs_nr_var), ".join")
@@ -1131,7 +1131,7 @@ get_joined_data <- function(dataset,
   } else {
     joined_data <- get_joined_sub_data(
       data,
-      dataset_add = data_add,
+      dataset_add = data_add_to_join,
       by_vars = by_vars_left,
       tmp_obs_nr_var = tmp_obs_nr_var,
       tmp_obs_nr_left = tmp_obs_nr_left,

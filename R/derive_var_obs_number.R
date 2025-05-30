@@ -23,15 +23,15 @@
 #'   The new variable is set to the observation number for each by group. The
 #'   numbering starts with 1.
 #'
+#' @permitted [var]
 #'
 #' @param check_type Check uniqueness?
 #'
-#'   If `"warning"` or `"error"` is specified, the specified message is issued
-#'   if the observations of the input dataset are not unique with respect to the
-#'   by variables and the order.
+#'   If `"message"`, `"warning"` or `"error"` is specified, the specified
+#'   message is issued if the observations of the input dataset are not unique
+#'   with respect to the by variables and the order.
 #'
-#'
-#' @permitted `"none"`, `"warning"`, `"error"`
+#' @permitted [msg_type]
 #'
 #' @details For each group (with respect to the variables specified for the
 #'   `by_vars` parameter) the first or last observation (with respect to the

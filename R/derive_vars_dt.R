@@ -156,7 +156,7 @@
 #' @caption Further examples
 #' @info Further example usages of this function can be found in the
 #'   [Dates and Imputation vignette](../articles/imputation.html).
-derive_vars_dt <- function(dataset, # nolint: cyclocomp_linter
+derive_vars_dt <- function(dataset,
                            new_vars_prefix,
                            dtc,
                            highest_imputation = "n",
@@ -166,38 +166,25 @@ derive_vars_dt <- function(dataset, # nolint: cyclocomp_linter
                            max_dates = NULL,
                            preserve = FALSE) {
   # check and quote arguments
-  assert_character_scalar(new_vars_prefix)
-  assert_vars(max_dates, optional = TRUE)
-  assert_vars(min_dates, optional = TRUE)
   dtc <- assert_symbol(enexpr(dtc))
   assert_data_frame(dataset, required_vars = exprs(!!dtc))
-  assert_character_scalar(
+
+  assert_character_scalar(new_vars_prefix)
+
+  flag_imputation <- assert_character_scalar(
     flag_imputation,
     values = c("auto", "date", "none"),
     case_sensitive = FALSE
   )
-  if ((highest_imputation == "Y" && is.null(min_dates) && is.null(max_dates)) ||
-    (highest_imputation == "Y" && length(min_dates) == 0 && length(max_dates) == 0)) {
-    cli_abort(paste(
-      "If {.code highest_impuation = \"Y\"} is specified, {.arg min_dates} or",
-      "{.arg max_dates} must be specified respectively."
-    ))
-  }
-  if (highest_imputation == "Y") {
-    assert_character_scalar(date_imputation, values = c("first", "last"))
-  }
-  if (highest_imputation == "Y" && is.null(min_dates) && date_imputation == "first") {
-    cli_warn(paste(
-      "If {.code highest_impuation = \"Y\"} and {.code date_imputation = \"first\"}",
-      "is specified, {.arg min_dates} should be specified."
-    ))
-  }
-  if (highest_imputation == "Y" && is.null(max_dates) && date_imputation == "last") {
-    cli_warn(paste(
-      "If {.code highest_impuation = \"Y\"} and {.code date_imputation = \"last\"}",
-      "is specified, {.arg max_dates} should be specified."
-    ))
-  }
+
+  # the `assert_highest_imputation` function is stored in `derive_vars_dt_dtm_utils.R`
+  assert_highest_imputation(
+    highest_imputation = highest_imputation,
+    highest_imputation_values = c("Y", "M", "D", "n"),
+    date_imputation = date_imputation,
+    min_dates = min_dates,
+    max_dates = max_dates
+  )
 
   # output varname
   dt <- paste0(new_vars_prefix, "DT")
@@ -268,6 +255,7 @@ convert_dtc_to_dt <- function(dtc,
   assert_character_vector(dtc)
   warn_if_invalid_dtc(dtc, is_valid_dtc(dtc))
 
+
   imputed_dtc <- impute_dtc_dt(
     dtc = dtc,
     highest_imputation = highest_imputation,
@@ -307,9 +295,9 @@ convert_dtc_to_dt <- function(dtc,
 #'   If `"n"` is specified no imputation is performed, i.e., if any component is
 #'   missing, `NA_character_` is returned.
 #'
-#'   If `"Y"` is specified, `date_imputation` should be `"first"` or `"last"`
-#'   and `min_dates` or `max_dates` should be specified respectively. Otherwise,
-#'   `NA_character_` is returned if the year component is missing.
+#'   If `"Y"` is specified, `date_imputation` must be `"first"` or `"last"`
+#'   and `min_dates` or `max_dates` must be specified respectively. Otherwise,
+#'   an error is thrown.
 #'
 #' @permitted `"Y"` (year, highest level), `"M"` (month), `"D"`
 #'   (day), `"n"` (none, lowest level)
@@ -317,19 +305,20 @@ convert_dtc_to_dt <- function(dtc,
 #' @param date_imputation The value to impute the day/month when a datepart is
 #'   missing.
 #'
-#'   A character value is expected, either as a
-#'   - format with month and day specified as `"mm-dd"`: e.g. `"06-15"` for the
-#'   15th of June (The year can not be specified; for imputing the year
-#'   `"first"` or `"last"` together with `min_dates` or `max_dates` argument can
-#'   be used (see examples).),
-#'   - or as a keyword: `"first"`, `"mid"`, `"last"` to impute to the first/mid/last
-#'   day/month. If `"mid"` is specified, missing components are imputed as the
-#'   middle of the possible range:
+#'   A character value is expected.
+#'    - If  `highest_imputation` is `"M"`, month and day can be
+#'      specified as `"mm-dd"`: e.g. `"06-15"` for the 15th of June
+#'    - When  `highest_imputation` is `"M"` or  `"D"`, the following keywords are available:
+#'      `"first"`, `"mid"`, `"last"` to impute to the first/mid/last
+#'      day/month. If `"mid"` is specified, missing components are imputed as the
+#'      middle of the possible range:
 #'       - If both month and day are missing, they are imputed as `"06-30"`
 #'        (middle of the year).
 #'       - If only day is missing, it is imputed as `"15"` (middle of the month).
 #'
-#'   The argument is ignored if `highest_imputation` is less then `"D"`.
+#'   The year can not be specified; for imputing the year
+#'   `"first"` or `"last"` together with `min_dates` or `max_dates` argument can
+#'   be used (see examples).
 #'
 #' @param min_dates Minimum dates
 #'
@@ -463,42 +452,40 @@ impute_dtc_dt <- function(dtc,
     month = "M",
     year = "Y"
   )
-  assert_character_scalar(highest_imputation, values = imputation_levels)
+
+  assert_highest_imputation(
+    highest_imputation = highest_imputation,
+    highest_imputation_values = imputation_levels,
+    date_imputation = date_imputation,
+    min_dates = min_dates,
+    max_dates = max_dates
+  )
+
   highest_imputation <- dt_level(highest_imputation)
-  date_imputation <-
-    assert_character_scalar(
-      date_imputation,
-      case_sensitive = FALSE
-    )
+
   assert_logical_scalar(preserve)
 
-  # Parse character date ----
-  two <- "(\\d{2}|-?)"
-  partialdate <- str_match(dtc, paste0(
-    "(\\d{4}|-?)-?",
-    two,
-    "-?",
-    two
-  ))
-  partial <- vector("list", 3)
-  components <- c("year", "month", "day")
-  names(partial) <- components
-  for (i in seq_along(components)) {
-    partial[[i]] <- partialdate[, i + 1]
-    partial[[i]] <- if_else(partial[[i]] %in% c("-", ""), NA_character_, partial[[i]])
+  # the `assert_date_imputation` function is stored in `derive_vars_dt_dtm_utils.R`
+  date_imputation <- assert_date_imputation(
+    highest_imputation = highest_imputation,
+    date_imputation = date_imputation
+  )
+
+  if (length(dtc) == 0) {
+    return(character(0))
   }
+
+  # Parse partials
+  partial <- get_partialdatetime(dtc, create_datetime = FALSE)
+  components <- names(partial)
 
   # Handle preserve argument ----
   if (!preserve) {
-    for (i in 2:3) {
-      partial[[i]] <- if_else(is.na(partial[[i - 1]]), NA_character_, partial[[i]])
-    }
+    partial <- propagate_na_values(partial)
   }
+
   # Determine target components ----
-  target <- get_imputation_target_date(
-    date_imputation = date_imputation,
-    month = partial[["month"]]
-  )
+  target <- get_imputation_targets(partial, date_imputation)
 
   for (c in components) {
     if (highest_imputation < dt_level(imputation_levels[[c]])) {
@@ -507,32 +494,12 @@ impute_dtc_dt <- function(dtc,
   }
 
   # Impute ----
-  imputed <- vector("list", 3)
-  names(imputed) <- components
-  for (c in components) {
-    imputed[[c]] <- if_else(is.na(partial[[c]]), target[[c]], partial[[c]])
-  }
+  imputed <- impute_date_time(partial, target)
+  imputed_dtc <- format_imputed_dtc(imputed)
 
-  imputed_dtc <-
-    paste(imputed[["year"]], imputed[["month"]], imputed[["day"]], sep = "-")
-
-  imputed_dtc <-
-    if_else(
-      str_detect(imputed_dtc, "x"),
-      NA_character_,
-      imputed_dtc
-    )
 
   if (date_imputation == "last") {
-    imputed_dtc <-
-      if_else(
-        is.na(partial[["day"]]),
-        strftime(
-          rollback(ymd(imputed_dtc) + months(1)),
-          format = "%Y-%m-%d"
-        ),
-        imputed_dtc
-      )
+    imputed_dtc <- adjust_last_day_imputation(imputed_dtc, partial)
   }
 
   # Handle min_dates and max_dates argument ----
@@ -542,10 +509,6 @@ impute_dtc_dt <- function(dtc,
     min_dates = min_dates,
     max_dates = max_dates
   )
-
-  if (highest_imputation == "Y" && is.null(min_dates) && is.null(max_dates)) {
-    warning("If `highest_impuation` = \"Y\" is specified, `min_dates` or `max_dates` should be specified respectively.") # nolint
-  }
 
   return(restricted)
 }
@@ -574,29 +537,19 @@ restrict_imputed_dtc_dt <- function(dtc,
                                     imputed_dtc,
                                     min_dates,
                                     max_dates) {
-  if (!(is.null(min_dates) || length(min_dates) == 0) ||
-    !(is.null(max_dates) || length(max_dates) == 0)) {
-    suppress_warning(
-      { # nolint
-        # determine range of possible dates
-        min_dtc <-
-          impute_dtc_dt(
-            dtc,
-            highest_imputation = "Y",
-            date_imputation = "first"
-          )
-        max_dtc <-
-          impute_dtc_dt(
-            dtc,
-            highest_imputation = "Y",
-            date_imputation = "last"
-          )
-      },
-      # Suppress warning because we need to run without min/max dates but users should not
-      regexpr = "If `highest_impuation` = \"Y\" is specified, `min_dates` or `max_dates` should be specified respectively." # nolint
-    )
+  any_mindate <- !(is.null(min_dates) || length(min_dates) == 0)
+  any_maxdate <- !(is.null(max_dates) || length(max_dates) == 0)
+  if (any_mindate || any_maxdate) {
+    # determine range of possible dates
+    dtc_range <-
+      get_dt_dtm_range(
+        dtc,
+        create_datetime = FALSE
+      )
+    min_dtc <- dtc_range[["lower"]]
+    max_dtc <- dtc_range[["upper"]]
   }
-  if (!(is.null(min_dates) || length(min_dates) == 0)) {
+  if (any_mindate) {
     if (length(unique(c(length(imputed_dtc), unlist(lapply(min_dates, length))))) != 1) {
       cli_abort("Length of {.arg min_dates} do not match length of dates to be imputed.")
     }
@@ -613,7 +566,7 @@ restrict_imputed_dtc_dt <- function(dtc,
       )
     }
   }
-  if (!(is.null(max_dates) || length(max_dates) == 0)) {
+  if (any_maxdate) {
     if (length(unique(c(length(imputed_dtc), unlist(lapply(max_dates, length))))) != 1) {
       cli_abort("Length of {.arg max_dates} do not match length of dates to be imputed.")
     }
