@@ -38,15 +38,37 @@ Get Date Imputation Targets
 \details{
 \itemize{
 \item For \code{date_imputation = "first"} \code{"0000"}, \code{"01"}, \code{"01"} are returned.
-\item For \code{date_imputation = "mid"} \code{"xxxx"}, \code{"06"}, \code{"30"} if \code{month} is \code{NA}
-and \code{"15"} otherwise are returned.
-\item For \code{date_imputation = "last"} \code{"9999"}, \code{"12"}, \code{"31"} are returned.
+\item For \code{date_imputation = "mid"} \code{"xxxx"}, \code{"06"}, \code{"30"} if \code{month} is \code{NA}.
+otherwise \code{"15"} returned.
+\item For \code{date_imputation = "last"} \code{"9999"}, \code{"12"}, \code{"28"} are returned.
 \item For \code{date_imputation = "<mm>-<dd>"} \code{"xxxx"}, \code{"<mm>"}, \code{"<dd>"} are returned.
 }
 
 \code{"xxxx"} indicates that the component is undefined. If an undefined
 component occurs in the imputed DTC value, the imputed DTC value is set to
 \code{NA_character_} in the imputation functions.
+}
+\examples{
+# Get imputation target for "first"
+target_first <- admiral:::get_imputation_target_date("first", month = NA)
+print(target_first)
+
+# Get imputation target for "mid" with specified month
+target_mid <- admiral:::get_imputation_target_date("mid", month = "03")
+print(target_mid)
+
+# Get imputation target for "mid" with NA month
+target_mid_na <- admiral:::get_imputation_target_date("mid", month = NA)
+print(target_mid_na)
+
+# Get imputation target for "last"
+target_last <- admiral:::get_imputation_target_date("last", month = NA)
+print(target_last)
+
+# Get imputation target for custom date imputation "06-15"
+target_custom <- admiral:::get_imputation_target_date("06-15", month = NA)
+print(target_custom)
+
 }
 \seealso{
 \code{\link[=impute_dtc_dtm]{impute_dtc_dtm()}}, \code{\link[=impute_dtc_dt]{impute_dtc_dt()}}
