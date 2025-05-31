@@ -514,23 +514,6 @@ derive_vars_merged <- function(dataset,
         ),
         call = parent.frame(n = 4)
       )
-    },
-    "dplyr_error_join_relationship_many_to_one" = function(cnd) {
-      cli_abort(
-        message = c(
-          str_replace(
-            str_replace(
-              cnd$message, "`x`", "`dataset`"
-            ), "`y`", "`dataset_add`"
-          ),
-          i = str_replace(
-            str_replace(
-              cnd$body, "`x`", "`dataset`"
-            ), "`y`", "`dataset_add`"
-          )
-        ),
-        call = parent.frame(n = 4)
-      )
     }
   )
 
