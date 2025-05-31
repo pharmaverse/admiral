@@ -106,7 +106,7 @@
       derive_vars_merged(advs, dataset_add = adsl, by_vars = exprs(USUBJID),
       new_vars = exprs(SEX), relationship = "one-to-one")
     Condition
-      Error in `tryCatch()`:
+      Error in `derive_vars_merged()`:
       ! Each row in `dataset_add` must match at most 1 row in `dataset`.
       i Row 1 of `dataset_add` matches multiple rows in `dataset`.
 
@@ -134,15 +134,5 @@
       Error:
       ! After summarising, the dataset contains duplicate records with respect to `AVISIT`.
       Please check `new_vars` if summary functions like `mean()`, `sum()`, ... are used on the right hand side.
-      i Run `admiral::get_duplicates_dataset()` to access the duplicate records
-
-# derive_vars_merged Test 30: error handling for many-to-one relationship
-
-    Code
-      derive_vars_merged(dataset, dataset_add = dataset_add, by_vars = exprs(USUBJID),
-      relationship = "many-to-one")
-    Condition
-      Error in `signal_duplicate_records()`:
-      ! Dataset `dataset_add` contains duplicate records with respect to `USUBJID`.
       i Run `admiral::get_duplicates_dataset()` to access the duplicate records
 

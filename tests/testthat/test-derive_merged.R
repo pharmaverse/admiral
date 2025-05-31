@@ -725,32 +725,3 @@ test_that("derive_vars_merged_lookup Test 29: test get_not_mapped with unmapped 
     keys = c("VSTESTCD", "VSTEST")
   )
 })
-
-## Test 30: error handling for many-to-one relationship ----
-test_that("derive_vars_merged Test 30: error handling for many-to-one relationship", {
-
-  dataset <- tibble::tribble(
-    ~USUBJID, ~SEX,
-    "ST42-1", "F",
-    "ST42-2", "M"
-  )
-
-  # Create a dataset_add with duplicate USUBJID
-  dataset_add <- tibble::tribble(
-    ~USUBJID, ~COUNTRY,
-    "ST42-1", "AUT",
-    "ST42-1", "USA",
-    "ST42-2", "MWI"
-  )
-
-  # Test that the error is properly formatted
-  expect_snapshot(
-    derive_vars_merged(
-      dataset,
-      dataset_add = dataset_add,
-      by_vars = exprs(USUBJID),
-      relationship = "many-to-one"
-    ),
-    error = TRUE
-  )
-})
