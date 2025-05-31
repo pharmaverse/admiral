@@ -693,10 +693,9 @@ test_that("derive_var_merged_summary Test 28: error if no summary function", {
 
 ## Test 29: test get_not_mapped with unmapped records ----
 test_that("derive_vars_merged_lookup Test 29: test get_not_mapped with unmapped records", {
-
   # Create a lookup table that doesn't include BMI
   param_lookup <- tibble::tribble(
-    ~VSTESTCD, ~VSTEST, ~PARAMCD, ~DESCRIPTION,
+    ~VSTESTCD, ~VSTEST, ~PARAMCD,  ~DESCRIPTION,
     "HEIGHT", "Height", "HEIGHT", "Height (cm)",
     "WEIGHT", "Weight", "WEIGHT", "Weight (kg)",
   )
@@ -715,8 +714,8 @@ test_that("derive_vars_merged_lookup Test 29: test get_not_mapped with unmapped 
 
   # Verify the not mapped records
   expected_not_mapped <- tibble::tribble(
-    ~VSTESTCD, ~VSTEST,
-    "DIABP", "Diastolic Blood Pressure"
+    ~VSTESTCD,                    ~VSTEST,
+    "DIABP",   "Diastolic Blood Pressure"
   )
 
   expect_dfs_equal(
