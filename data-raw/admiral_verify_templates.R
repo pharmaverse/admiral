@@ -140,7 +140,7 @@ verify_templates <- function(pkg = "admiral", ds = c("adae")) {
   })
   names(obj) <- adam_names
 
-  sprintf("---- Run templates\n")
+cli_inform("---- Run templates\n")
   compare_list <- purrr::map(adam_names, .progress = TRUE, function(adam) {
     cli_inform("Template running for adam")
     run_template(adam, dir = path$template_dir)
