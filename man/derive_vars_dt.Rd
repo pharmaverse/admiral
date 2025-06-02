@@ -188,7 +188,10 @@ Date/Time Derivation Functions that returns variable appended to dataset:
 \keyword{der_date_time}
 \keyword{der_gen}
 \section{Examples}{
-\subsection{Derive \code{ASTDT} with no imputation for partial dates}{
+\subsection{Derive a date variable (\code{ASTDT}) from a date character variable
+(\code{MHSTDTC})}{
+
+No imputation is done for partial dates.
 
 \if{html}{\out{<div class="sourceCode r">}}\preformatted{library(tibble)
 library(lubridate)
@@ -219,10 +222,13 @@ derive_vars_dt(
 #> 5 "2019"                NA        
 #> 6 "2019---07"           NA        
 #> 7 ""                    NA        }\if{html}{\out{</div>}}}
-\subsection{Derive \code{ASTDT} with imputation for partial dates}{
+\subsection{Derive \code{ASTDT} with imputation for partial dates to first day/month
+(\code{highest_imputation = "M"}).}{
 
-\code{ASTDTF} is automatically created. Please note the use of \code{D} for day
-imputation and \code{M} for month imputation.
+A flag variable (\code{ASTDTF}) is automatically created. The flag variable indicates
+if imputation was done on the date. Please note the use of \code{highest_imputation = "M"}
+for month imputation, i.e. the highest imputation done on a partial date is
+up to the month.
 
 \if{html}{\out{<div class="sourceCode r">}}\preformatted{derive_vars_dt(
   mhdt,
@@ -240,9 +246,10 @@ imputation and \code{M} for month imputation.
 #> 5 "2019"                2019-01-01 M     
 #> 6 "2019---07"           2019-01-01 M     
 #> 7 ""                    NA         <NA>  }\if{html}{\out{</div>}}}
-\subsection{Derive \code{ASTDT} with date imputation to a specific date, i.e. April 6th.}{
+\subsection{Derive \code{ASTDT} with date imputation to a specific date (\code{date_imputation})}{
 
-Note that \code{"-06"} is used in the imputation of \code{"2019-02"}
+The example has \code{date_imputation = 04-06} set for April 6th. Note that day
+portion, i.e. \code{"-06"}, is used in the imputation of \code{"2019-02"}.
 
 \if{html}{\out{<div class="sourceCode r">}}\preformatted{derive_vars_dt(
   mhdt,
@@ -280,9 +287,10 @@ Note that \code{"-06"} is used in the imputation of \code{"2019-02"}
 #> 5 "2019"                2019-12-31 M     
 #> 6 "2019---07"           2019-12-31 M     
 #> 7 ""                    NA         <NA>  }\if{html}{\out{</div>}}}
-\subsection{Derive \code{BIRTHDT} with partial date imputation to June 15th.}{
+\subsection{Derive \code{BIRTHDT} with date imputation flag (\code{--DTF}) suppressed.}{
 
-Date Imputation Flag is suppressed.
+Note that \code{date_imputation = "mid"} and so partial date imputation will be
+set to June 15th.
 
 \if{html}{\out{<div class="sourceCode r">}}\preformatted{derive_vars_dt(
   mhdt,

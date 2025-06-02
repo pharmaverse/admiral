@@ -364,7 +364,8 @@ derive_vars_dtm(
 \subsection{Derive ASTDTM while preserving partial dates}{
 
 A user imputing dates as middle month/day, i.e. \code{date_imputation = "MID"} can
-use \code{preserve} argument to "preserve" partial dates.  For example, \code{"2019---07"},\verb{will be displayed as}"2019-06-07"\verb{rather than}"2019-06-15"\code{with}preserve = TRUE`
+use \code{preserve} argument to "preserve" partial dates.  For example, \code{"2019---07"},
+will be displayed as \code{"2019-06-07"} rather than \code{"2019-06-15"} with \code{preserve = TRUE}
 
 \if{html}{\out{<div class="sourceCode r">}}\preformatted{
 derive_vars_dtm(

@@ -48,8 +48,9 @@
 #'
 #' @examplesx
 #'
-#' @caption Derive `ASTDT` with no imputation for partial dates
-#'
+#' @caption Derive a date variable (`ASTDT`) from a date character variable
+#' (`MHSTDTC`)
+#' @info No imputation is done for partial dates.
 #' @code
 #' library(tibble)
 #' library(lubridate)
@@ -71,9 +72,12 @@
 #'   dtc = MHSTDTC
 #' )
 #'
-#' @caption Derive `ASTDT` with imputation for partial dates to first day/month (`highest_imputation`)
-#' @info `ASTDTF` is automatically created. Please note the use of `D` for day
-#' imputation and `M` for month imputation.
+#' @caption Derive `ASTDT` with imputation for partial dates to first day/month
+#' (`highest_imputation = "M"`).
+#' @info A flag variable (`ASTDTF`) is automatically created. The flag variable indicates
+#' if imputation was done on the date. Please note the use of `highest_imputation = "M"`
+#'  for month imputation, i.e. the highest imputation done on a partial date is
+#'  up to the month.
 #'
 #' @code
 #' derive_vars_dt(
@@ -84,7 +88,8 @@
 #' )
 #'
 #' @caption Derive `ASTDT` with date imputation to a specific date (`date_imputation`)
-#' @info Note that `"-06"` is used in the imputation of `"2019-02"`
+#' @info The example has `date_imputation = 04-06` set for April 6th. Note that day
+#' portion, i.e. `"-06"`, is used in the imputation of `"2019-02"`.
 #'
 #' @code
 #' derive_vars_dt(
@@ -106,8 +111,9 @@
 #'   date_imputation = "last"
 #' )
 #'
-#' @caption Derive `BIRTHDT` with partial date imputation to June 15th.
-#' @info Date Imputation Flag is suppressed.
+#' @caption Derive `BIRTHDT` with date imputation flag (`--DTF`) suppressed.
+#' @info Note that `date_imputation = "mid"` and so partial date imputation will be
+#' set to June 15th.
 #'
 #' @code
 #' derive_vars_dt(
