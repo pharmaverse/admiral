@@ -79,7 +79,6 @@ records. (#2683)
     - `derive_vars_dtm()` (#2715)
     - `derive_vars_crit_flag()` (#2744)
 
-
 - Added an example to the `derive_vars_transposed()` reference page to showcase how duplicates-related errors can arise when records in `dataset_merge` are not uniquely identified. (#2609)
 
 - Default value of `type` in `derive_vars_aage()` is now shown as `interval` to match the function behavior. (#2685) 
