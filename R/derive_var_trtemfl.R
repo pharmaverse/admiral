@@ -109,9 +109,9 @@
 #'      and `end_date` is on or after `trt_start_date` or `end_date` is `NA`, it
 #'      is set to `"Y"`;
 #'    - if `group_var` is specified:
-#'      if previous `intensity` < `intensity` and `start_date` is after `trt_start_date`
-#'      and `end_date` is on or after `trt_start_date` or `end_date` is `NA`, it
-#'      is set to `"Y"`;
+#'      if `intensity` at treatment start < `intensity` and `start_date` is after
+#'      `trt_start_date` and `end_date` is on or after `trt_start_date` or
+#'      `end_date` is `NA`, it is set to `"Y"`;
 #'
 #'  - Otherwise it is set to `NA_character_`.
 #'
@@ -136,10 +136,11 @@
 #'
 #' - For this basic example, all we are using are AE start/end dates and
 #'   comparing those against treatment start date.
-#' - If the AE started on or after treatment then we flag as treatment-emergent.
-#' - If missing AE start date then we flag as treatment-emergent as worst case,
-#'   unless we know that the AE end date was before treatment so we can rule out
-#'   this being treatment-emergent.
+#' - If the AE started on or after treatment then we flag as treatment-emergent
+#'   (e.g. records 5-7).
+#' - If missing AE start date then we flag as treatment-emergent as worst case
+#'   (e.g. records 8, 11 and 13), unless we know that the AE end date was before
+#'   treatment so we can rule out this being treatment-emergent (e.g. record 12).
 #' @code
 #' library(tibble)
 #' library(dplyr, warn.conflicts = FALSE)
@@ -181,22 +182,38 @@
 #'   start_date = ASTDT,
 #'   end_date = AENDT,
 #'   trt_start_date = TRTSDT
-#' ) %>% select(TRTSDT, ASTDT, AENDT, TRTEMFL)
+#' ) %>% select(USUBJID, TRTSDT, ASTDT, AENDT, TRTEMFL)
 #'
-#' @caption Considering treatment end date and worsening (`trt_end_date`, `end_window`,
-#'   `initial_intensity` and `intensity`)
-#' @info Derive a new variable named `TRTEM2FL` taking treatment end and worsening
-#'   after treatment into account
+#' @caption Considering treatment end date (`trt_end_date` and `end_window`)
+#' @info Derive `TRTEMFL` taking a treatment end window into account
 #'
 #' - In addition to the treatment-emergent checks explained in the above
-#'   example, we now have treatment end date and `end_window = 10`. This enforces
-#'   the additional condition to check that any AE started on or before treatment
-#'   end date + 10 days, to be considered as treatment-emergent.
-#' - For worsening after treatment, this only impacts AEs starting before treatment,
-#'   and ending on or after treatment (or with missing AE end date). Here we can
-#'   additionally consider treatment-emergence for an AE that was ongoing at the
-#'   start of treatment which may have worsened as a result of treatment,
-#'   i.e. the most extreme intensity is greater than the initial intensity.
+#'   example, we now supply a treatment end date, `trt_end_date = TRTEDT` and
+#'   an end window, `end_window = 10`. With these, any AE which started on or
+#'   before treatment end date + 10 days is considered as treatment-emergent.
+#'   Otherwise, those starting after the treatment end window are no longer
+#'   flagged as treatment-emergent (e.g. record 7)
+#' @code
+#' derive_var_trtemfl(
+#'   adae,
+#'   start_date = ASTDT,
+#'   end_date = AENDT,
+#'   trt_start_date = TRTSDT,
+#'   trt_end_date = TRTEDT,
+#'   end_window = 10
+#' ) %>% select(USUBJID, TRTSDT, TRTEDT, ASTDT, AENDT, TRTEMFL)
+#'
+#' @caption Considering treatment worsening (`initial_intensity` and `intensity`)
+#' @info Derive a new variable named `TRTEM2FL` taking worsening after treatment
+#'   start into account
+#'
+#' - We also now start look at changes in intensity following treatment start using
+#'   the `initial_intensity` and `intensity` arguments. This only impacts AEs
+#'   starting before treatment, and ending on or after treatment (or with missing
+#'   AE end date). We can additionally consider treatment-emergence for an
+#'   AE that was ongoing at the start of treatment which may have worsened
+#'   as a result of treatment,  i.e. the most extreme intensity is greater than
+#'   the initial intensity (e.g. records 3 and 9).
 #' @code
 #' derive_var_trtemfl(
 #'   adae,
@@ -208,45 +225,33 @@
 #'   end_window = 10,
 #'   initial_intensity = AEITOXGR,
 #'   intensity = AETOXGR
-#' ) %>% select(TRTSDT, TRTEDT, ASTDT, AENDT, AEITOXGR, AETOXGR, TRTEM2FL)
+#' ) %>% select(USUBJID, TRTSDT, ASTDT, AENDT, AEITOXGR, AETOXGR, TRTEM2FL)
 #'
 #' @caption Worsening when the same AE is collected over multiple records
 #'   (`intensity` and `group_var`)
-#' @info Derive `TRTEMFL` taking treatment end and worsening after treatment into
-#'   account within a grouping variable
+#' @info Derive `TRTEMFL` taking worsening after treatment into account within a
+#'   grouping variable
 #'
-#' - This examples works in a similar way to the above, but now instead of comparing
-#'   intensity to initial intensity, we compare intensity for any AE ongoing at the
-#'   start of treatment against the intensity of the previous record within the
-#'   grouping variable (`group_var`).
+#' - Firstly, to understand which records correspond to the same AE, we need
+#'   to supply a grouping variable (`group_var`). Then this example works in a
+#'   similar way to the above one, but here we don't have an initial intensity
+#'   so we have to use the intensity of the AE at the time of treatment start.
+#'   If an ongoing AE increases intensity after treatment start (i.e. worsens),
+#'   then from that point on the records are considered treatment-emergent,
+#'   unless after the treatment end window (e.g. records 4, 6 and 7).
 #' @code
 #' adae2 <- tribble(
-#'   ~USUBJID, ~ASTDT,            ~AENDT,            ~AEITOXGR, ~AETOXGR, ~AEGRPID,
-#'   # before treatment
-#'   "1",      ymd("2021-12-13"), ymd("2021-12-15"), "1",       "1",      "1",
-#'   "1",      ymd("2021-12-14"), ymd("2021-12-14"), "1",       "3",      "1",
-#'   # starting before treatment and ending during treatment
-#'   "1",      ymd("2021-12-30"), ymd("2022-01-14"), "3",       "3",      "2",
-#'   "1",      ymd("2022-01-05"), ymd("2022-06-01"), "3",       "1",      "2",
-#'   "1",      ymd("2022-01-10"), ymd("2022-01-11"), "3",       "2",      "2",
-#'   "1",      ymd("2022-01-13"), ymd("2022-03-01"), "3",       "1",      "2",
-#'   # starting during treatment
-#'   "1",      ymd("2022-01-01"), ymd("2022-01-02"), "4",       "4",      "3",
-#'   # after treatment
-#'   "1",      ymd("2022-05-10"), ymd("2022-05-10"), "2",       "2",      "4",
-#'   "1",      ymd("2022-05-10"), ymd("2022-05-10"), "2",       "2",      "4",
-#'   "1",      ymd("2022-05-11"), ymd("2022-05-11"), "2",       "2",      "4",
-#'   # missing dates
-#'   "1",      NA,                NA,                "3",       "4",      "5",
-#'   "1",      ymd("2021-12-30"), NA,                "3",       "4",      "5",
-#'   "1",      ymd("2021-12-31"), NA,                "3",       "3",      "5",
-#'   "1",      NA,                ymd("2022-01-04"), "3",       "4",      "5",
-#'   "1",      NA,                ymd("2021-12-24"), "3",       "4",      "5",
-#'   "1",      NA,                ymd("2022-06-04"), "3",       "4",      "5",
-#'   # without treatment
-#'   "2",      NA,                ymd("2021-12-03"), "1",       "2",      "1",
-#'   "2",      ymd("2021-12-01"), ymd("2021-12-03"), "1",       "2",      "2",
-#'   "2",      ymd("2021-12-06"), NA,                "1",       "2",      "3"
+#'   ~USUBJID, ~ASTDT,            ~AENDT,            ~AETOXGR, ~AEGRPID,
+#'   # ongoing AE where intensity drops after treatment start
+#'   "1",      ymd("2021-12-31"), ymd("2022-01-01"), "3",      "1",
+#'   "1",      ymd("2022-01-02"), ymd("2022-01-11"), "2",      "1",
+#'   # ongoing AE where intensity increases after treatment start
+#'   "1",      ymd("2021-12-31"), ymd("2022-01-01"), "1",      "2",
+#'   "1",      ymd("2022-01-02"), ymd("2022-01-11"), "2",      "2",
+#'   # ongoing AE where intensity increases after treatment start and then drops
+#'   "1",      ymd("2021-12-31"), ymd("2022-01-01"), "1",      "3",
+#'   "1",      ymd("2022-01-02"), ymd("2022-01-11"), "2",      "3",
+#'   "1",      ymd("2022-01-12"), ymd("2022-01-15"), "1",      "3"
 #' ) %>%
 #'   mutate(
 #'     STUDYID = "AB42",
@@ -263,12 +268,14 @@
 #'   end_window = 10,
 #'   intensity = AETOXGR,
 #'   group_var = AEGRPID
-#' ) %>% select(TRTSDT, TRTEDT, ASTDT, AENDT, AEITOXGR, AETOXGR, AEGRPID, TRTEMFL)
+#' ) %>% select(USUBJID, TRTSDT, ASTDT, AENDT, AETOXGR, AEGRPID, TRTEMFL)
 #'
 #' @caption Further Examples from PHUSE White Paper
 #' @info Here we present more cases (some new, some similar to the examples above)
-#'   which are aligned one-to-one with the scenarios in the PHUSE White Paper on
-#'   Treatment-Emergent AEs linked above
+#'   which are aligned one-to-one with the scenarios in the
+# nolint start
+#'   [PHUSE White Paper](https://phuse.s3.eu-central-1.amazonaws.com/Deliverables/Safety+Analytics/WP-087+Recommended+Definition+of++Treatment-Emergent+Adverse+Events+in+Clinical+Trials+.pdf)
+# nolint end
 #' @code
 #' adae3 <- tribble(
 #'   ~USUBJID, ~TRTSDTM, ~TRTEDTM, ~ASTDTM, ~AENDTM, ~AEITOXGR, ~AETOXGR,

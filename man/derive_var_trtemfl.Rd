@@ -169,9 +169,9 @@ if \code{initial_intensity < intensity} and \code{start_date} is before \code{tr
 and \code{end_date} is on or after \code{trt_start_date} or \code{end_date} is \code{NA}, it
 is set to \code{"Y"};
 \item if \code{group_var} is specified:
-if previous \code{intensity} < \code{intensity} and \code{start_date} is after \code{trt_start_date}
-and \code{end_date} is on or after \code{trt_start_date} or \code{end_date} is \code{NA}, it
-is set to \code{"Y"};
+if \code{intensity} at treatment start < \code{intensity} and \code{start_date} is after
+\code{trt_start_date} and \code{end_date} is on or after \code{trt_start_date} or
+\code{end_date} is \code{NA}, it is set to \code{"Y"};
 }
 \item Otherwise it is set to \code{NA_character_}.
 }
@@ -196,10 +196,11 @@ Derive \code{TRTEMFL} without considering treatment end and worsening
 \itemize{
 \item For this basic example, all we are using are AE start/end dates and
 comparing those against treatment start date.
-\item If the AE started on or after treatment then we flag as treatment-emergent.
-\item If missing AE start date then we flag as treatment-emergent as worst case,
-unless we know that the AE end date was before treatment so we can rule out
-this being treatment-emergent.
+\item If the AE started on or after treatment then we flag as treatment-emergent
+(e.g. records 5-7).
+\item If missing AE start date then we flag as treatment-emergent as worst case
+(e.g. records 8, 11 and 13), unless we know that the AE end date was before
+treatment so we can rule out this being treatment-emergent (e.g. record 12).
 }
 
 \if{html}{\out{<div class="sourceCode r">}}\preformatted{library(tibble)
@@ -242,41 +243,77 @@ derive_var_trtemfl(
   start_date = ASTDT,
   end_date = AENDT,
   trt_start_date = TRTSDT
-) \%>\% select(TRTSDT, ASTDT, AENDT, TRTEMFL)
-#> # A tibble: 16 × 4
-#>    TRTSDT     ASTDT      AENDT      TRTEMFL
-#>    <date>     <date>     <date>     <chr>  
-#>  1 2022-01-01 2021-12-13 2021-12-15 <NA>   
-#>  2 2022-01-01 2021-12-14 2021-12-14 <NA>   
-#>  3 2022-01-01 2021-12-30 2022-01-14 <NA>   
-#>  4 2022-01-01 2021-12-31 2022-01-01 <NA>   
-#>  5 2022-01-01 2022-01-01 2022-01-02 Y      
-#>  6 2022-01-01 2022-05-10 2022-05-10 Y      
-#>  7 2022-01-01 2022-05-11 2022-05-11 Y      
-#>  8 2022-01-01 NA         NA         Y      
-#>  9 2022-01-01 2021-12-30 NA         <NA>   
-#> 10 2022-01-01 2021-12-31 NA         <NA>   
-#> 11 2022-01-01 NA         2022-01-04 Y      
-#> 12 2022-01-01 NA         2021-12-24 <NA>   
-#> 13 2022-01-01 NA         2022-06-04 Y      
-#> 14 NA         NA         2021-12-03 <NA>   
-#> 15 NA         2021-12-01 2021-12-03 <NA>   
-#> 16 NA         2021-12-06 NA         <NA>   }\if{html}{\out{</div>}}}
-\subsection{Considering treatment end date and worsening (\code{trt_end_date}, \code{end_window},
-\code{initial_intensity} and \code{intensity})}{
+) \%>\% select(USUBJID, TRTSDT, ASTDT, AENDT, TRTEMFL)
+#> # A tibble: 16 × 5
+#>    USUBJID TRTSDT     ASTDT      AENDT      TRTEMFL
+#>    <chr>   <date>     <date>     <date>     <chr>  
+#>  1 1       2022-01-01 2021-12-13 2021-12-15 <NA>   
+#>  2 1       2022-01-01 2021-12-14 2021-12-14 <NA>   
+#>  3 1       2022-01-01 2021-12-30 2022-01-14 <NA>   
+#>  4 1       2022-01-01 2021-12-31 2022-01-01 <NA>   
+#>  5 1       2022-01-01 2022-01-01 2022-01-02 Y      
+#>  6 1       2022-01-01 2022-05-10 2022-05-10 Y      
+#>  7 1       2022-01-01 2022-05-11 2022-05-11 Y      
+#>  8 1       2022-01-01 NA         NA         Y      
+#>  9 1       2022-01-01 2021-12-30 NA         <NA>   
+#> 10 1       2022-01-01 2021-12-31 NA         <NA>   
+#> 11 1       2022-01-01 NA         2022-01-04 Y      
+#> 12 1       2022-01-01 NA         2021-12-24 <NA>   
+#> 13 1       2022-01-01 NA         2022-06-04 Y      
+#> 14 2       NA         NA         2021-12-03 <NA>   
+#> 15 2       NA         2021-12-01 2021-12-03 <NA>   
+#> 16 2       NA         2021-12-06 NA         <NA>   }\if{html}{\out{</div>}}}
+\subsection{Considering treatment end date (\code{trt_end_date} and \code{end_window})}{
 
-Derive a new variable named \code{TRTEM2FL} taking treatment end and worsening
-after treatment into account
+Derive \code{TRTEMFL} taking a treatment end window into account
 \itemize{
 \item In addition to the treatment-emergent checks explained in the above
-example, we now have treatment end date and \code{end_window = 10}. This enforces
-the additional condition to check that any AE started on or before treatment
-end date + 10 days, to be considered as treatment-emergent.
-\item For worsening after treatment, this only impacts AEs starting before treatment,
-and ending on or after treatment (or with missing AE end date). Here we can
-additionally consider treatment-emergence for an AE that was ongoing at the
-start of treatment which may have worsened as a result of treatment,
-i.e. the most extreme intensity is greater than the initial intensity.
+example, we now supply a treatment end date, \code{trt_end_date = TRTEDT} and
+an end window, \code{end_window = 10}. With these, any AE which started on or
+before treatment end date + 10 days is considered as treatment-emergent.
+Otherwise, those starting after the treatment end window are no longer
+flagged as treatment-emergent (e.g. record 7)
+}
+
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{derive_var_trtemfl(
+  adae,
+  start_date = ASTDT,
+  end_date = AENDT,
+  trt_start_date = TRTSDT,
+  trt_end_date = TRTEDT,
+  end_window = 10
+) \%>\% select(USUBJID, TRTSDT, TRTEDT, ASTDT, AENDT, TRTEMFL)
+#> # A tibble: 16 × 6
+#>    USUBJID TRTSDT     TRTEDT     ASTDT      AENDT      TRTEMFL
+#>    <chr>   <date>     <date>     <date>     <date>     <chr>  
+#>  1 1       2022-01-01 2022-04-30 2021-12-13 2021-12-15 <NA>   
+#>  2 1       2022-01-01 2022-04-30 2021-12-14 2021-12-14 <NA>   
+#>  3 1       2022-01-01 2022-04-30 2021-12-30 2022-01-14 <NA>   
+#>  4 1       2022-01-01 2022-04-30 2021-12-31 2022-01-01 <NA>   
+#>  5 1       2022-01-01 2022-04-30 2022-01-01 2022-01-02 Y      
+#>  6 1       2022-01-01 2022-04-30 2022-05-10 2022-05-10 Y      
+#>  7 1       2022-01-01 2022-04-30 2022-05-11 2022-05-11 <NA>   
+#>  8 1       2022-01-01 2022-04-30 NA         NA         Y      
+#>  9 1       2022-01-01 2022-04-30 2021-12-30 NA         <NA>   
+#> 10 1       2022-01-01 2022-04-30 2021-12-31 NA         <NA>   
+#> 11 1       2022-01-01 2022-04-30 NA         2022-01-04 Y      
+#> 12 1       2022-01-01 2022-04-30 NA         2021-12-24 <NA>   
+#> 13 1       2022-01-01 2022-04-30 NA         2022-06-04 Y      
+#> 14 2       NA         NA         NA         2021-12-03 <NA>   
+#> 15 2       NA         NA         2021-12-01 2021-12-03 <NA>   
+#> 16 2       NA         NA         2021-12-06 NA         <NA>   }\if{html}{\out{</div>}}}
+\subsection{Considering treatment worsening (\code{initial_intensity} and \code{intensity})}{
+
+Derive a new variable named \code{TRTEM2FL} taking worsening after treatment
+start into account
+\itemize{
+\item We also now start look at changes in intensity following treatment start using
+the \code{initial_intensity} and \code{intensity} arguments. This only impacts AEs
+starting before treatment, and ending on or after treatment (or with missing
+AE end date). We can additionally consider treatment-emergence for an
+AE that was ongoing at the start of treatment which may have worsened
+as a result of treatment,  i.e. the most extreme intensity is greater than
+the initial intensity (e.g. records 3 and 9).
 }
 
 \if{html}{\out{<div class="sourceCode r">}}\preformatted{derive_var_trtemfl(
@@ -289,65 +326,53 @@ i.e. the most extreme intensity is greater than the initial intensity.
   end_window = 10,
   initial_intensity = AEITOXGR,
   intensity = AETOXGR
-) \%>\% select(TRTSDT, TRTEDT, ASTDT, AENDT, AEITOXGR, AETOXGR, TRTEM2FL)
+) \%>\% select(USUBJID, TRTSDT, ASTDT, AENDT, AEITOXGR, AETOXGR, TRTEM2FL)
 #> # A tibble: 16 × 7
-#>    TRTSDT     TRTEDT     ASTDT      AENDT      AEITOXGR AETOXGR TRTEM2FL
-#>    <date>     <date>     <date>     <date>     <chr>    <chr>   <chr>   
-#>  1 2022-01-01 2022-04-30 2021-12-13 2021-12-15 1        1       <NA>    
-#>  2 2022-01-01 2022-04-30 2021-12-14 2021-12-14 1        3       <NA>    
-#>  3 2022-01-01 2022-04-30 2021-12-30 2022-01-14 1        3       Y       
-#>  4 2022-01-01 2022-04-30 2021-12-31 2022-01-01 1        1       <NA>    
-#>  5 2022-01-01 2022-04-30 2022-01-01 2022-01-02 3        4       Y       
-#>  6 2022-01-01 2022-04-30 2022-05-10 2022-05-10 2        2       Y       
-#>  7 2022-01-01 2022-04-30 2022-05-11 2022-05-11 2        2       <NA>    
-#>  8 2022-01-01 2022-04-30 NA         NA         3        4       Y       
-#>  9 2022-01-01 2022-04-30 2021-12-30 NA         3        4       Y       
-#> 10 2022-01-01 2022-04-30 2021-12-31 NA         3        3       <NA>    
-#> 11 2022-01-01 2022-04-30 NA         2022-01-04 3        4       Y       
-#> 12 2022-01-01 2022-04-30 NA         2021-12-24 3        4       <NA>    
-#> 13 2022-01-01 2022-04-30 NA         2022-06-04 3        4       Y       
-#> 14 NA         NA         NA         2021-12-03 1        2       <NA>    
-#> 15 NA         NA         2021-12-01 2021-12-03 1        2       <NA>    
-#> 16 NA         NA         2021-12-06 NA         1        2       <NA>    }\if{html}{\out{</div>}}}
+#>    USUBJID TRTSDT     ASTDT      AENDT      AEITOXGR AETOXGR TRTEM2FL
+#>    <chr>   <date>     <date>     <date>     <chr>    <chr>   <chr>   
+#>  1 1       2022-01-01 2021-12-13 2021-12-15 1        1       <NA>    
+#>  2 1       2022-01-01 2021-12-14 2021-12-14 1        3       <NA>    
+#>  3 1       2022-01-01 2021-12-30 2022-01-14 1        3       Y       
+#>  4 1       2022-01-01 2021-12-31 2022-01-01 1        1       <NA>    
+#>  5 1       2022-01-01 2022-01-01 2022-01-02 3        4       Y       
+#>  6 1       2022-01-01 2022-05-10 2022-05-10 2        2       Y       
+#>  7 1       2022-01-01 2022-05-11 2022-05-11 2        2       <NA>    
+#>  8 1       2022-01-01 NA         NA         3        4       Y       
+#>  9 1       2022-01-01 2021-12-30 NA         3        4       Y       
+#> 10 1       2022-01-01 2021-12-31 NA         3        3       <NA>    
+#> 11 1       2022-01-01 NA         2022-01-04 3        4       Y       
+#> 12 1       2022-01-01 NA         2021-12-24 3        4       <NA>    
+#> 13 1       2022-01-01 NA         2022-06-04 3        4       Y       
+#> 14 2       NA         NA         2021-12-03 1        2       <NA>    
+#> 15 2       NA         2021-12-01 2021-12-03 1        2       <NA>    
+#> 16 2       NA         2021-12-06 NA         1        2       <NA>    }\if{html}{\out{</div>}}}
 \subsection{Worsening when the same AE is collected over multiple records
 (\code{intensity} and \code{group_var})}{
 
-Derive \code{TRTEMFL} taking treatment end and worsening after treatment into
-account within a grouping variable
+Derive \code{TRTEMFL} taking worsening after treatment into account within a
+grouping variable
 \itemize{
-\item This examples works in a similar way to the above, but now instead of comparing
-intensity to initial intensity, we compare intensity for any AE ongoing at the
-start of treatment against the intensity of the previous record within the
-grouping variable (\code{group_var}).
+\item Firstly, to understand which records correspond to the same AE, we need
+to supply a grouping variable (\code{group_var}). Then this example works in a
+similar way to the above one, but here we don't have an initial intensity
+so we have to use the intensity of the AE at the time of treatment start.
+If an ongoing AE increases intensity after treatment start (i.e. worsens),
+then from that point on the records are considered treatment-emergent,
+unless after the treatment end window (e.g. records 4, 6 and 7).
 }
 
 \if{html}{\out{<div class="sourceCode r">}}\preformatted{adae2 <- tribble(
-  ~USUBJID, ~ASTDT,            ~AENDT,            ~AEITOXGR, ~AETOXGR, ~AEGRPID,
-  # before treatment
-  "1",      ymd("2021-12-13"), ymd("2021-12-15"), "1",       "1",      "1",
-  "1",      ymd("2021-12-14"), ymd("2021-12-14"), "1",       "3",      "1",
-  # starting before treatment and ending during treatment
-  "1",      ymd("2021-12-30"), ymd("2022-01-14"), "3",       "3",      "2",
-  "1",      ymd("2022-01-05"), ymd("2022-06-01"), "3",       "1",      "2",
-  "1",      ymd("2022-01-10"), ymd("2022-01-11"), "3",       "2",      "2",
-  "1",      ymd("2022-01-13"), ymd("2022-03-01"), "3",       "1",      "2",
-  # starting during treatment
-  "1",      ymd("2022-01-01"), ymd("2022-01-02"), "4",       "4",      "3",
-  # after treatment
-  "1",      ymd("2022-05-10"), ymd("2022-05-10"), "2",       "2",      "4",
-  "1",      ymd("2022-05-10"), ymd("2022-05-10"), "2",       "2",      "4",
-  "1",      ymd("2022-05-11"), ymd("2022-05-11"), "2",       "2",      "4",
-  # missing dates
-  "1",      NA,                NA,                "3",       "4",      "5",
-  "1",      ymd("2021-12-30"), NA,                "3",       "4",      "5",
-  "1",      ymd("2021-12-31"), NA,                "3",       "3",      "5",
-  "1",      NA,                ymd("2022-01-04"), "3",       "4",      "5",
-  "1",      NA,                ymd("2021-12-24"), "3",       "4",      "5",
-  "1",      NA,                ymd("2022-06-04"), "3",       "4",      "5",
-  # without treatment
-  "2",      NA,                ymd("2021-12-03"), "1",       "2",      "1",
-  "2",      ymd("2021-12-01"), ymd("2021-12-03"), "1",       "2",      "2",
-  "2",      ymd("2021-12-06"), NA,                "1",       "2",      "3"
+  ~USUBJID, ~ASTDT,            ~AENDT,            ~AETOXGR, ~AEGRPID,
+  # ongoing AE where intensity drops after treatment start
+  "1",      ymd("2021-12-31"), ymd("2022-01-01"), "3",      "1",
+  "1",      ymd("2022-01-02"), ymd("2022-01-11"), "2",      "1",
+  # ongoing AE where intensity increases after treatment start
+  "1",      ymd("2021-12-31"), ymd("2022-01-01"), "1",      "2",
+  "1",      ymd("2022-01-02"), ymd("2022-01-11"), "2",      "2",
+  # ongoing AE where intensity increases after treatment start and then drops
+  "1",      ymd("2021-12-31"), ymd("2022-01-01"), "1",      "3",
+  "1",      ymd("2022-01-02"), ymd("2022-01-11"), "2",      "3",
+  "1",      ymd("2022-01-12"), ymd("2022-01-15"), "1",      "3"
 ) \%>\%
   mutate(
     STUDYID = "AB42",
@@ -364,34 +389,22 @@ derive_var_trtemfl(
   end_window = 10,
   intensity = AETOXGR,
   group_var = AEGRPID
-) \%>\% select(TRTSDT, TRTEDT, ASTDT, AENDT, AEITOXGR, AETOXGR, AEGRPID, TRTEMFL)
-#> # A tibble: 19 × 8
-#>    TRTSDT     TRTEDT     ASTDT      AENDT      AEITOXGR AETOXGR AEGRPID TRTEMFL
-#>    <date>     <date>     <date>     <date>     <chr>    <chr>   <chr>   <chr>  
-#>  1 2022-01-01 2022-04-30 2021-12-13 2021-12-15 1        1       1       <NA>   
-#>  2 2022-01-01 2022-04-30 2021-12-14 2021-12-14 1        3       1       <NA>   
-#>  3 2022-01-01 2022-04-30 2021-12-30 2022-01-14 3        3       2       <NA>   
-#>  4 2022-01-01 2022-04-30 2022-01-05 2022-06-01 3        1       2       <NA>   
-#>  5 2022-01-01 2022-04-30 2022-01-10 2022-01-11 3        2       2       Y      
-#>  6 2022-01-01 2022-04-30 2022-01-13 2022-03-01 3        1       2       Y      
-#>  7 2022-01-01 2022-04-30 2022-01-01 2022-01-02 4        4       3       Y      
-#>  8 2022-01-01 2022-04-30 2022-05-10 2022-05-10 2        2       4       Y      
-#>  9 2022-01-01 2022-04-30 2022-05-10 2022-05-10 2        2       4       Y      
-#> 10 2022-01-01 2022-04-30 2022-05-11 2022-05-11 2        2       4       <NA>   
-#> 11 2022-01-01 2022-04-30 2021-12-30 NA         3        4       5       <NA>   
-#> 12 2022-01-01 2022-04-30 2021-12-31 NA         3        3       5       <NA>   
-#> 13 2022-01-01 2022-04-30 NA         NA         3        4       5       Y      
-#> 14 2022-01-01 2022-04-30 NA         2022-01-04 3        4       5       Y      
-#> 15 2022-01-01 2022-04-30 NA         2021-12-24 3        4       5       <NA>   
-#> 16 2022-01-01 2022-04-30 NA         2022-06-04 3        4       5       Y      
-#> 17 NA         NA         NA         2021-12-03 1        2       1       <NA>   
-#> 18 NA         NA         2021-12-01 2021-12-03 1        2       2       <NA>   
-#> 19 NA         NA         2021-12-06 NA         1        2       3       <NA>   }\if{html}{\out{</div>}}}
+) \%>\% select(USUBJID, TRTSDT, ASTDT, AENDT, AETOXGR, AEGRPID, TRTEMFL)
+#> # A tibble: 7 × 7
+#>   USUBJID TRTSDT     ASTDT      AENDT      AETOXGR AEGRPID TRTEMFL
+#>   <chr>   <date>     <date>     <date>     <chr>   <chr>   <chr>  
+#> 1 1       2022-01-01 2021-12-31 2022-01-01 3       1       <NA>   
+#> 2 1       2022-01-01 2022-01-02 2022-01-11 2       1       <NA>   
+#> 3 1       2022-01-01 2021-12-31 2022-01-01 1       2       <NA>   
+#> 4 1       2022-01-01 2022-01-02 2022-01-11 2       2       Y      
+#> 5 1       2022-01-01 2021-12-31 2022-01-01 1       3       <NA>   
+#> 6 1       2022-01-01 2022-01-02 2022-01-11 2       3       Y      
+#> 7 1       2022-01-01 2022-01-12 2022-01-15 1       3       Y      }\if{html}{\out{</div>}}}
 \subsection{Further Examples from PHUSE White Paper}{
 
 Here we present more cases (some new, some similar to the examples above)
-which are aligned one-to-one with the scenarios in the PHUSE White Paper on
-Treatment-Emergent AEs linked above
+which are aligned one-to-one with the scenarios in the
+\href{https://phuse.s3.eu-central-1.amazonaws.com/Deliverables/Safety+Analytics/WP-087+Recommended+Definition+of++Treatment-Emergent+Adverse+Events+in+Clinical+Trials+.pdf}{PHUSE White Paper}
 
 \if{html}{\out{<div class="sourceCode r">}}\preformatted{adae3 <- tribble(
   ~USUBJID, ~TRTSDTM, ~TRTEDTM, ~ASTDTM, ~AENDTM, ~AEITOXGR, ~AETOXGR,
