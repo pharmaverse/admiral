@@ -75,7 +75,8 @@ records. (#2683)
     - `derive_extreme_event()` (#2735)
     - `derive_vars_joined()` (#2727)
     - `derive_vars_merged()` (#2727)
-    - `derive_vars_merged()` (#2715)
+    - `derive_vars_dt()` (#2715)
+    - `derive_vars_dtm()` (#2715)
     - `derive_vars_crit_flag()` (#2744)
 
 
