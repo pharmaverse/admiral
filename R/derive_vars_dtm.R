@@ -150,7 +150,7 @@
 #'
 #' @caption Derive ASTDTM while preserving partial dates
 #' @info A user imputing dates as middle month/day, i.e. `date_imputation = "MID"` can
-#' use `preserve` argument to "preserve" partial dates.  For example, `"2019---07"`,`
+#' use `preserve` argument to "preserve" partial dates.  For example, `"2019---07"`,
 #' will be displayed as `"2019-06-07"` rather than `"2019-06-15"` with `preserve = TRUE`
 #' @code
 #'
