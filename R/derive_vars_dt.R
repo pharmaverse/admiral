@@ -83,7 +83,7 @@
 #'   highest_imputation = "M"
 #' )
 #'
-#' @caption Derive `ASTDT` with date imputation to a specific date, i.e. April 6th.
+#' @caption Derive `ASTDT` with date imputation to a specific date (`date_imputation`)
 #' @info Note that `"-06"` is used in the imputation of `"2019-02"`
 #'
 #' @code
