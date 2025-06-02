@@ -1,6 +1,6 @@
 # Contribution to {admiral} 
 
-This outlines how to propose a change to the admiral package. For more detailed info about contributing to {admiral}, and other [pharmaverse packages](https://pharmaverse.org/), please see the [Contribution Guide](https://pharmaverse.github.io/admiral/CONTRIBUTING.html) as well as other Developer Guides in the Articles section of the [{admiraldev} website](https://pharmaverse.github.io/admiraldev/).
+This outlines how to propose a change to the admiral package. For more detailed info about contributing to {admiral}, and other [pharmaverse packages](https://pharmaverse.org/), please see the [Contribution Guide](https://pharmaverse.github.io/admiral/cran-release/CONTRIBUTING.html) as well as other Developer Guides in the Articles section of the [{admiraldev} website](https://pharmaverse.github.io/admiraldev/).
 
 Please note that we try to align to best practices used in other R packages' development processes - so veteran developers should be familiar with our processes. However, we do deviate slightly from some best practices and we advise all new contributors to review our package documentation accordingly.
 
@@ -59,7 +59,7 @@ If you decide to contribute with code and you're ready to make your first code c
         If so, remember to run `devtools::document()` and include the
         updated `NAMESPACE` and `.Rd` files in `man/`.
     e.  Does your code update have any impact on the [ADaM
-        template](https://pharmaverse.github.io/admiral/articles/admiral.html#starting-a-script)
+        template](https://pharmaverse.github.io/admiral/cran-release/articles/admiral.html#starting-a-script)
         R scripts stored in `inst/templates`?
     f.  Does your code update have any impact on the vignettes stored in
         vignettes?
@@ -67,7 +67,7 @@ If you decide to contribute with code and you're ready to make your first code c
     h.  Did you build `{admiral}` site `pkgdown::build_site()` and check
         that all affected examples are displayed correctly and that all
         new functions occur on the
-        "[Reference](https://pharmaverse.github.io/admiral/reference/)" page?
+        "[Reference](https://pharmaverse.github.io/admiral/cran-release/reference/)" page?
 4.  Once happy with all the updates, make a [pull
     request](https://pharmaverse.github.io/admiraldev/articles/git_usage.html#pull-request) to merge to the `main` branch
     and link the issue so that it closes after successful merging.
