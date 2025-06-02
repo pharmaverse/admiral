@@ -271,7 +271,6 @@ derive_summary_records <- function(dataset = NULL,
   )
 
   if (!is.null(dataset_ref)) {
-
     new_ref_obs <- anti_join(
       select(dataset_ref, !!!by_vars),
       select(summary_records, !!!by_vars),
