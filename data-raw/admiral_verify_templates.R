@@ -152,7 +152,7 @@ cli_inform("---- Run templates\n")
     compare(
       base = dataset_old,
       compare = dataset_new,
-      keys = obj[[adam]]$keys,
+      keys = teal.data::default_cdisc_join_keys[[adam]],
       file = paste0(path$diff, "/", adam, ".txt")
     )
   })
