@@ -71,7 +71,7 @@
 #'   dtc = MHSTDTC
 #' )
 #'
-#' @caption Derive `ASTDT` with imputation for partial dates
+#' @caption Derive `ASTDT` with imputation for partial dates to first day/month (`highest_imputation`)
 #' @info `ASTDTF` is automatically created. Please note the use of `D` for day
 #' imputation and `M` for month imputation.
 #'
