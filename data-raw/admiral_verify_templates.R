@@ -77,9 +77,10 @@ verify_templates <- function(pkg = "admiral", ds = c("adae")) {
   cli_alert("Generating ADaMs for { pkg} package.")
 
   # TODO:  do not show Warnings
-  # creae temporary directories
+  # (DISCUSS) CHOOSE one:  create temporary or permanent directories
   cli_inform("Creating temporary directories")
   x <- tempdir()
+  #x  <- "~/data"
   dir.create(file.path(x, "old"), showWarnings = TRUE)
   dir.create(file.path(x, "new"), showWarnings = TRUE)
   dir.create(file.path(x, "diff"), showWarnings = TRUE)
@@ -112,43 +113,29 @@ verify_templates <- function(pkg = "admiral", ds = c("adae")) {
   names(templates) <- adam_names
 
   # User specified templates in `ds`. Limit to only these templates.
-
   adam_names <- adam_names[adam_names %in% ds]
 
   # per Ben, ignore "adlbhy"
   adam_names <- adam_names[adam_names != "adlbhy"]
 
   # download, save prior ADaMs from pharmaverseadam as .rda files
-  cli_inform("Downloading from github pharmaverseadam")
+  cli_inform("---- Begin downloading from github pharmaverseadam")
   download_adam_old(adam_names, path = path$adam_old_dir)
 
-  # keys for diffdf
-  keys <- teal.data::default_cdisc_join_keys
-
-  # keys is named list of keys, each element (for each adam_name) and is chr[] of keys
-  keys <- sapply(toupper(adam_names), function(e) unname(keys[[e]][[e]]), # nolint
-    USE.NAMES = TRUE, simplify = FALSE
-  )
-  names(keys) <- tolower(names(keys))
-
-  # finally, construct a named list object: each element (adam_names) holds a template and keys
-  obj <- lapply(adam_names, function(e) {
-    list(
-      "template" = templates[[e]],
-      "keys" = keys[[e]]
-    )
-  })
-  names(obj) <- adam_names
-
-cli_inform("---- Run templates\n")
+  cli_inform("---- Run templates\n")
   compare_list <- purrr::map(adam_names, .progress = TRUE, function(adam) {
-    cli_inform("Template running for adam")
+    cli_inform("Template running for {adam}")
     run_template(adam, dir = path$template_dir)
     # retrieve *.rda file in cache; copy to correct directory
     dataset_new = load_rda(paste0(path$cache_dir, "/", adam, ".rda"))
-    file.copy(file.path(path$cache_dir, adam, ".rda"),
-              file.path(path$adam_new_dir, adam, ".rda"))
+    file.copy(file.path(path$cache_dir, paste0(adam, ".rda")),
+              file.path(path$adam_new_dir, paste0(adam, ".rda")))
     dataset_old <- get_dataset_old(adam, path$adam_old_dir)
+
+    # ------------------------  DISCUSS
+    # CHOOSE ONE:   continue to compare,  
+    # OR,  insert Eli's quarto code to compare AND display nicely
+    # ------------------------  
     compare(
       base = dataset_old,
       compare = dataset_new,
@@ -296,7 +283,7 @@ download_adam_old <- function(adam_names, path = NULL) {
       "https://github.com/pharmaverse/pharmaverseadam/raw/refs/heads/main/data/",
       adam, ".rda?raw=true"
     )
-    cat("Downloading adam from github pharamaversedam", adam, "\n")
+    cat("Downloading: ", adam, "\n")
     download.file(
       url = githubURL,
       quiet = TRUE,

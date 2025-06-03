@@ -27,6 +27,14 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@v4
 
+## ------------------------  DISCUSS
+##
+## R script data-raw/load_run.R (approx line 68)  can replace
+## .. all these commented lines
+## .. please advise
+##
+## ------------------------  
+
 # missing devtools::
       - uses: r-lib/actions/setup-r-dependencies@v2
 #        with:

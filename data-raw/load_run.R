@@ -1,10 +1,11 @@
 # This script:  data-raw/load_all.R
+# PURPOSE:  gh actions uses this R code.
 
 # nolint start
 # install all needed  packages
 # load_all()
 # source("admiral_verify_templates.R")
-# run the function:  verify_templates():w
+# run the function:  verify_templates()
 # nolint end
 
 install.packages("pak")
