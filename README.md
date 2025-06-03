@@ -38,7 +38,7 @@ pak::pkg_install("pharmaverse/admiral", dependencies = TRUE)
 
 The `{admiral}` family has several downstream and upstream dependencies and so releases are done in two Phases:
 
-* Phase 1 release is for [{admiraldev}](https://pharmaverse.github.io/admiraldev/), [{pharmaversesdtm}](https://pharmaverse.github.io/pharmaversesdtm/), and [{admiral}](https://pharmaverse.github.io/admiral/) core
+* Phase 1 release is for [{admiraldev}](https://pharmaverse.github.io/admiraldev/), [{pharmaversesdtm}](https://pharmaverse.github.io/pharmaversesdtm/), and [{admiral}](https://pharmaverse.github.io/admiral/cran-release/) core
 * Phase 2 release is extension packages, e.g. [{admiralonco}](https://pharmaverse.github.io/admiralonco/), [{admiralophtha}](https://pharmaverse.github.io/admiralophtha/), [{admiralvaccine}](https://pharmaverse.github.io/admiralvaccine/) and [{pharmaverseadam}](https://pharmaverse.github.io/pharmaverseadam/).
 
 __NB:__ We strive for a regular 6 month release schedule for [{admiraldev}](https://pharmaverse.github.io/admiraldev/), [{pharmaversesdtm}](https://pharmaverse.github.io/pharmaversesdtm/), and [{admiral}](https://pharmaverse.github.io/admiral/). Extension packages releases are on a content-basis and as such may be more infrequent than the below schedule shows.
@@ -61,6 +61,8 @@ __NB:__ We strive for a regular 6 month release schedule for [{admiraldev}](http
 |                  |                                                                          | [{admiralpeds}](https://pharmaverse.github.io/admiralpeds/)            |
 |                  |                                                                          | [{admiralmetabolic}](https://pharmaverse.github.io/admiralmetabolic/)  |
 |                  |                                                                          | [{pharmaverseadam}](https://pharmaverse.github.io/pharmaverseadam/)    |                                                                       
+
+__NB:__ We strive for a regular 6 month release schedule.
 
 ## Main Goal
 
@@ -87,7 +89,7 @@ We will provide:
 * Pharmaceutical communities and companies are encouraged to contribute to `{admiral}` following
   the provided programming strategy and modular approach
 * Functions that are comprehensively documented and tested, including example calls---these are
-  all listed in the [Reference section](https://pharmaverse.github.io/admiral/reference/index.html).
+  all listed in the [Reference section](https://pharmaverse.github.io/admiral/cran-release/reference/index.html).
 * Vignettes on how to create ADSL, BDS and OCCDS datasets, including example scripts.
 * Vignettes for ADaM dataset specific functionality (i.e. dictionary coding, date imputation, SMQs ...).
 
@@ -169,12 +171,12 @@ that all our developers and contributors must follow, so that all our code has a
 
 ## References and Documentation
 
-* Please go to [Get Started](https://pharmaverse.github.io/admiral/articles/admiral.html) section to start using `{admiral}`.
+* Please go to [Get Started](https://pharmaverse.github.io/admiral/cran-release/articles/admiral.html) section to start using `{admiral}`.
 * Please see the [pharmaverse YouTube channel](https://www.youtube.com/channel/UCxQFEv8HNqM01DXzdQLCy6Q) for videos related to `{admiral}`.
 * Please see the [Programming Strategy](https://pharmaverse.github.io/admiraldev/articles/programming_strategy.html) to understand how functions are created.
-* Please see the [FAQ](https://pharmaverse.github.io/admiral/articles/faq.html) for the most frequent questions.
-* Please see the [Contribution Model](https://pharmaverse.github.io/admiral/CONTRIBUTING.html) for how to get involved with making contributions.
-* Please see [FAQ: R and Package Versions](https://pharmaverse.github.io/admiral/articles/faq.html#why-do-we-use-a-certain-r-version-and-package-versions-for-development) for why we develop with certain R and package versions.
+* Please see the [FAQ](https://pharmaverse.github.io/admiral/cran-release/articles/faq.html) for the most frequent questions.
+* Please see the [Contribution Model](https://pharmaverse.github.io/admiral/cran-release/CONTRIBUTING.html) for how to get involved with making contributions.
+* Please see [FAQ: R and Package Versions](https://pharmaverse.github.io/admiral/cran-release/articles/faq.html#why-do-we-use-a-certain-r-version-and-package-versions-for-development) for why we develop with certain R and package versions.
 
 ## Pharmaverse Blog
 
