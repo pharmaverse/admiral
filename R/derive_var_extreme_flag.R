@@ -14,9 +14,7 @@
 #'
 #'   `r roxygen_order_na_handling()`
 #'
-#'  @permitted [var_list]
-#'
-#' @permitted list of variables or functions of variables
+#' @permitted [var_list]
 #'
 #' @param new_var Variable to add
 #'
@@ -213,7 +211,7 @@
 #'   arrange(STUDYID, USUBJID, AESTDY, AESEQ) %>%
 #'   select(STUDYID, USUBJID, AEDECOD, AESEV, AESTDY, AESEQ, AOCCIFL)
 #'
-#' @caption Flagging all records if multiple are identified (flag_all`)
+#' @caption Flagging all records if multiple are identified (`flag_all`)
 #'
 #' @info Revisiting the above example, if we instead wish to flag *all*
 #'   occurrences of the most severe AE, then we can use `flag_all = TRUE`.

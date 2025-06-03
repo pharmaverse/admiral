@@ -40,10 +40,8 @@ order.
 
 For handling of \code{NA}s in sorting variables see \href{../articles/generic.html#sort_order}{Sort Order}.
 
-@permitted \link{var_list}
-
 \describe{
-\item{Permitted values}{list of variables or functions of variables}
+\item{Permitted values}{list of variables created by \code{exprs()}, e.g., \code{exprs(USUBJID, VISIT)}}
 \item{Default value}{none}
 }}
 
@@ -337,7 +335,7 @@ to ensure we only flag the \emph{first} occurrence, we specify \code{AESDTY} and
 #> 5 AB123   1023    ERYTHEMA  SEVERE      5     2 Y      
 #> 6 AB123   1023    ERYTHEMA  MILD        8     3 <NA>   
 #> 7 AB123   1023    AV BLOCK  MILD       22     4 <NA>   }\if{html}{\out{</div>}}}
-\subsection{Flagging all records if multiple are identified (flag_all`)}{
+\subsection{Flagging all records if multiple are identified (\code{flag_all})}{
 
 Revisiting the above example, if we instead wish to flag \emph{all}
 occurrences of the most severe AE, then we can use \code{flag_all = TRUE}.
