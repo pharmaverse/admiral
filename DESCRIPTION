@@ -1,7 +1,7 @@
 Type: Package
 Package: admiral
 Title: ADaM in R Asset Library
-Version: 1.2.0.9035
+Version: 1.2.0.9036
 Authors@R: c(
     person("Ben", "Straub", , "ben.x.straub@gsk.com", role = c("aut", "cre")),
     person("Stefan", "Bundfuss", role = "aut",
@@ -35,7 +35,7 @@ Description: A toolbox for programming Clinical Data Interchange Standards
     Analysis Data Model Team, 2021,
     <https://www.cdisc.org/standards/foundational/adam>).
 License: Apache License (>= 2)
-URL: https://pharmaverse.github.io/admiral/,
+URL: https://pharmaverse.github.io/admiral/cran-release/,
     https://github.com/pharmaverse/admiral
 BugReports: https://github.com/pharmaverse/admiral/issues
 Depends: 
