@@ -5,12 +5,16 @@
 #' @param dataset
 #'   `r roxygen_param_dataset(expected_vars = c("by_vars"))`
 #'
+#' @permitted [dataset]
+#'
 #' @param order Sort order
 #'
 #'   The first or last observation is determined with respect to the specified
 #'   order.
 #'
 #'   `r roxygen_order_na_handling()`
+#'
+#'  @permitted [var_list]
 #'
 #' @permitted list of variables or functions of variables
 #'
@@ -19,37 +23,40 @@
 #'   The specified variable is added to the output dataset. It is set to the value
 #'   set in `true_value` for the first or last observation (depending on the mode) of each by group.
 #'
-#' @permitted list of name-value pairs
+#' @permitted [var]
 #'
 #' @param mode Flag mode
 #'
 #'   Determines of the first or last observation is flagged.
 #'
-#' @permitted `"first"`, `"last"`
+#' @permitted [mode]
 #'
 #' @param true_value True value
 #'
 #'   The value for the specified variable `new_var`, applicable to
 #'   the first or last observation (depending on the mode) of each by group.
 #'
-#' @permitted An atomic scalar
+#' @permitted [char_scalar]
 #'
 #' @param false_value False value
 #'
 #'   The value for the specified variable `new_var`, NOT applicable to
 #'   the first or last observation (depending on the mode) of each by group.
 #'
-#' @permitted An atomic scalar
+#' @permitted [char_scalar]
 #'
 #' @param flag_all Flag setting
 #'
 #'   A logical value where if set to `TRUE`, all records are flagged
 #'   and no error or warning is issued if the first or last record is not unique.
 #'
+#' @permitted [boolean]
+#'
 #' @param by_vars Grouping variables
 #'
 #'   `r roxygen_param_by_vars()`
 #'
+#' @permitted [var_list]
 #'
 #' @param check_type Check uniqueness?
 #'
@@ -57,8 +64,7 @@
 #'   if the observations of the input dataset are not unique with respect to the
 #'   by variables and the order.
 #'
-#'
-#' @permitted `"none"`, `"warning"`, `"error"`
+#' @permitted [msg_type]
 #'
 #' @details For each group (with respect to the variables specified for the
 #'   `by_vars` parameter), `new_var` is set to `"Y"` for the first or last observation
@@ -78,116 +84,45 @@
 #'
 #' @export
 #'
-#' @examples
-#' library(tibble)
+#' @examplesx
+#'
+#' @caption Data setup
+#'
+#' @info The following examples use the `ADVS` and `ADAE` datasets below as a basis.
+#'
+#' @code
+#' library(tibble, warn.conflicts = FALSE)
+#' library(lubridate, warn.conflicts = FALSE)
 #' library(dplyr, warn.conflicts = FALSE)
-#' example_vs <- tribble(
-#'   ~USUBJID, ~VSTESTCD,      ~VISIT, ~VISITNUM, ~VSTPTNUM, ~VSSTRESN,
-#'   "1001",     "DIABP", "SCREENING",         1,        10,        64,
-#'   "1001",     "DIABP", "SCREENING",         1,        11,        66,
-#'   "1001",     "DIABP",  "BASELINE",         2,       100,        68,
-#'   "1001",     "DIABP",  "BASELINE",         2,       101,        68,
-#'   "1001",     "DIABP",    "WEEK 2",         3,       200,        72,
-#'   "1001",     "DIABP",    "WEEK 2",         3,       201,        71,
-#'   "1001",     "DIABP",    "WEEK 4",         4,       300,        70,
-#'   "1001",     "DIABP",    "WEEK 4",         4,       301,        70
+#'
+#' advs <- tribble(
+#'   ~USUBJID, ~PARAMCD,    ~AVISIT,          ~ADT, ~AVAL,
+#'   "1015",   "TEMP",   "BASELINE",  "2021-04-27",  38.0,
+#'   "1015",   "TEMP",   "BASELINE",  "2021-04-25",  39.0,
+#'   "1015",   "TEMP",   "BASELINE",  "2021-04-23",  37.0,
+#'   "1015",   "TEMP",   "WEEK 1",    "2021-05-02",  37.5,
+#'   "1015",   "TEMP",   "WEEK 2",    "2021-05-07",  37.0,
+#'   "1015",   "WEIGHT", "SCREENING", "2021-04-19",  81.2,
+#'   "1015",   "WEIGHT", "SCREENING", "2021-04-20",  83.1,
+#'   "1015",   "WEIGHT", "BASELINE",  "2021-04-25",  82.7,
+#'   "1015",   "WEIGHT", "BASELINE",  "2021-04-27",  84.0,
+#'   "1015",   "WEIGHT", "WEEK 2",    "2021-05-09",  82.5,
+#'   "1023",   "TEMP",   "SCREENING", "2021-04-27",  38.0,
+#'   "1023",   "TEMP",   "BASELINE",  "2021-04-28",  37.5,
+#'   "1023",   "TEMP",   "BASELINE",  "2021-04-29",  36.5,
+#'   "1023",   "TEMP",   "WEEK 1",    "2021-05-03",  37.0,
+#'   "1023",   "TEMP",   "WEEK 2",    "2021-05-09",  37.0,
+#'   "1023",   "WEIGHT", "SCREENING", "2021-04-27",  69.6,
+#'   "1023",   "WEIGHT", "BASELINE",  "2021-04-29",  67.2,
+#'   "1023",   "WEIGHT", "WEEK 1",    "2021-05-01",  68.3,
+#'   "1023",   "WEIGHT", "WEEK 1",    "2021-05-02",  65.9
+#' ) %>%
+#' mutate(
+#'   STUDYID = "AB123",
+#'   ADT = ymd(ADT)
 #' )
 #'
-#' # Flag last value for each patient, test, and visit, baseline observations are ignored
-#' example_vs %>%
-#'   restrict_derivation(
-#'     derivation = derive_var_extreme_flag,
-#'     args = params(
-#'       by_vars = exprs(USUBJID, VSTESTCD, VISIT),
-#'       order = exprs(VSTPTNUM),
-#'       new_var = LASTFL,
-#'       mode = "last"
-#'     ),
-#'     filter = VISIT != "BASELINE"
-#'   ) %>%
-#'   arrange(USUBJID, VSTESTCD, VISITNUM, VSTPTNUM) %>%
-#'   select(USUBJID, VSTESTCD, VISIT, VSTPTNUM, VSSTRESN, LASTFL)
-#'
-#' # Baseline (ABLFL) examples:
-#'
-#' input <- tribble(
-#'   ~STUDYID, ~USUBJID,  ~PARAMCD,     ~AVISIT,                  ~ADT, ~AVAL,    ~DTYPE,
-#'   "TEST01",  "PAT01", "PARAM01",  "BASELINE", as.Date("2021-04-27"),  15.0,        NA,
-#'   "TEST01",  "PAT01", "PARAM01",  "BASELINE", as.Date("2021-04-25"),  14.0,        NA,
-#'   "TEST01",  "PAT01", "PARAM01",  "BASELINE", as.Date("2021-04-23"),  15.0, "AVERAGE",
-#'   "TEST01",  "PAT01", "PARAM01",    "WEEK 1", as.Date("2021-04-27"),  10.0, "AVERAGE",
-#'   "TEST01",  "PAT01", "PARAM01",    "WEEK 2", as.Date("2021-04-30"),  12.0,        NA,
-#'   "TEST01",  "PAT02", "PARAM01", "SCREENING", as.Date("2021-04-27"),  15.0, "AVERAGE",
-#'   "TEST01",  "PAT02", "PARAM01",  "BASELINE", as.Date("2021-04-25"),  14.0, "AVERAGE",
-#'   "TEST01",  "PAT02", "PARAM01",  "BASELINE", as.Date("2021-04-23"),  15.0, "AVERAGE",
-#'   "TEST01",  "PAT02", "PARAM01",    "WEEK 1", as.Date("2021-04-27"),  10.0, "AVERAGE",
-#'   "TEST01",  "PAT02", "PARAM01",    "WEEK 2", as.Date("2021-04-30"),  12.0, "AVERAGE",
-#'   "TEST01",  "PAT01", "PARAM02", "SCREENING", as.Date("2021-04-27"),  15.0, "AVERAGE",
-#'   "TEST01",  "PAT01", "PARAM02", "SCREENING", as.Date("2021-04-25"),  14.0, "AVERAGE",
-#'   "TEST01",  "PAT01", "PARAM02", "SCREENING", as.Date("2021-04-23"),  15.0,        NA,
-#'   "TEST01",  "PAT01", "PARAM02",  "BASELINE", as.Date("2021-04-27"),  10.0, "AVERAGE",
-#'   "TEST01",  "PAT01", "PARAM02",    "WEEK 2", as.Date("2021-04-30"),  12.0,        NA,
-#'   "TEST01",  "PAT02", "PARAM02", "SCREENING", as.Date("2021-04-27"),  15.0,        NA,
-#'   "TEST01",  "PAT02", "PARAM02",  "BASELINE", as.Date("2021-04-25"),  14.0,        NA,
-#'   "TEST01",  "PAT02", "PARAM02",    "WEEK 1", as.Date("2021-04-23"),  15.0,        NA,
-#'   "TEST01",  "PAT02", "PARAM02",    "WEEK 1", as.Date("2021-04-27"),  10.0,        NA,
-#'   "TEST01",  "PAT02", "PARAM02",  "BASELINE", as.Date("2021-04-30"),  12.0,        NA
-#' )
-#'
-#' # Last observation
-#' restrict_derivation(
-#'   input,
-#'   derivation = derive_var_extreme_flag,
-#'   args = params(
-#'     by_vars = exprs(USUBJID, PARAMCD),
-#'     order = exprs(ADT),
-#'     new_var = ABLFL,
-#'     mode = "last"
-#'   ),
-#'   filter = AVISIT == "BASELINE"
-#' )
-#'
-#' # Worst observation - Direction = High
-#' restrict_derivation(
-#'   input,
-#'   derivation = derive_var_extreme_flag,
-#'   args = params(
-#'     by_vars = exprs(USUBJID, PARAMCD),
-#'     order = exprs(AVAL, ADT),
-#'     new_var = ABLFL,
-#'     mode = "last"
-#'   ),
-#'   filter = AVISIT == "BASELINE"
-#' )
-#'
-#' # Worst observation - Direction = Lo
-#' restrict_derivation(
-#'   input,
-#'   derivation = derive_var_extreme_flag,
-#'   args = params(
-#'     by_vars = exprs(USUBJID, PARAMCD),
-#'     order = exprs(desc(AVAL), ADT),
-#'     new_var = ABLFL,
-#'     mode = "last"
-#'   ),
-#'   filter = AVISIT == "BASELINE"
-#' )
-#'
-#' # Average observation
-#' restrict_derivation(
-#'   input,
-#'   derivation = derive_var_extreme_flag,
-#'   args = params(
-#'     by_vars = exprs(USUBJID, PARAMCD),
-#'     order = exprs(ADT, desc(AVAL)),
-#'     new_var = ABLFL,
-#'     mode = "last"
-#'   ),
-#'   filter = AVISIT == "BASELINE" & DTYPE == "AVERAGE"
-#' )
-#'
-#' # OCCURDS Examples
-#' example_ae <- tribble(
+#' adae <- tribble(
 #'   ~USUBJID,         ~AEBODSYS,    ~AEDECOD,   ~AESEV, ~AESTDY, ~AESEQ,
 #'   "1015", "GENERAL DISORDERS",  "ERYTHEMA",   "MILD",       2,      1,
 #'   "1015", "GENERAL DISORDERS",  "PRURITUS",   "MILD",       2,      2,
@@ -196,53 +131,190 @@
 #'   "1023",    "SKIN DISORDERS",  "ERYTHEMA",   "MILD",       3,      1,
 #'   "1023",    "SKIN DISORDERS",  "ERYTHEMA", "SEVERE",       5,      2,
 #'   "1023",    "SKIN DISORDERS",  "ERYTHEMA",   "MILD",       8,      3
-#' )
+#' ) %>%
+#' mutate(STUDYID = "AB123")
 #'
-#' # Most severe AE first occurrence per patient
-#' example_ae %>%
+#' @caption Flagging the first/last observation within a by group
+#'
+#' @info A new variable is added for each subject to flag the last observation
+#'   within a by_group. Within each by group (specified by `by_vars`) the
+#'   `order = ADT` argument specifies we wish to sort the records by analysis
+#'   date and then select the last one (`mode = "last"`). The name of the new
+#'   variable is passed through the `new_var = LASTFL` call.
+#'
+#' @code
+#' advs %>%
+#'   derive_var_extreme_flag(
+#'     by_vars = exprs(STUDYID, USUBJID, PARAMCD),
+#'     order = exprs(ADT),
+#'     new_var = LASTFL,
+#'     mode = "last",
+#'   ) %>%
+#'   arrange(STUDYID, USUBJID, PARAMCD, ADT) %>%
+#'   select(STUDYID, everything())
+#'
+#' @info Note here that a similar `FIRSTFL` variable could instead be derived
+#'    simply by switching to `mode = "first"`. Alternatively, we could make use
+#'    of `desc()` within the sorting specified by `order`:
+#'
+#' @code
+#' advs %>%
+#'   derive_var_extreme_flag(
+#'     by_vars = exprs(STUDYID, USUBJID, PARAMCD),
+#'     order = exprs(desc(ADT)),
+#'     new_var = FIRSTFL,
+#'     mode = "last",
+#'   ) %>%
+#'   arrange(STUDYID, USUBJID, PARAMCD, ADT) %>%
+#'   select(STUDYID, everything())
+#'
+#' @caption Modifying the flag values (`true_value`, `false_value`)
+#'
+#' @info The previous example is now enhanced with custom values for the flag
+#'   entries. Records which are flagged are filled with the contents of
+#'   `true_value` and those which are not are filled with the contents of
+#'   `false_value`. Note that these are normally preset to `"Y"` and `NA`,
+#'   which is why they were not specified in the example above.
+#'
+#' @code
+#' advs %>%
+#'   derive_var_extreme_flag(
+#'     by_vars = exprs(STUDYID, USUBJID, PARAMCD),
+#'     order = exprs(ADT),
+#'     new_var = LASTFL,
+#'     mode = "last",
+#'     true_value = "Yes",
+#'     false_value = "No",
+#'   ) %>%
+#'   arrange(STUDYID, USUBJID, PARAMCD, ADT) %>%
+#'   select(STUDYID, everything())
+#'
+#' @caption Creating temporary variables for sorting
+#'
+#' @info In this example we wish to flag the first occurrence of the most
+#'   severe AE within each subject. To ensure correct sorting of the
+#'   severity values, `AESEV` must be pre-processed into a numeric variable
+#'   `TEMP_AESEVN` which can then be passed inside `order`. Once again,
+#'   to ensure we only flag the *first* occurrence, we specify `AESDTY` and
+#'   `AESEQ` inside `order` as well.
+#'
+#' @code
+#' adae %>%
 #'   mutate(
 #'     TEMP_AESEVN =
 #'       as.integer(factor(AESEV, levels = c("SEVERE", "MODERATE", "MILD")))
 #'   ) %>%
 #'   derive_var_extreme_flag(
 #'     new_var = AOCCIFL,
-#'     by_vars = exprs(USUBJID),
+#'     by_vars = exprs(STUDYID, USUBJID),
 #'     order = exprs(TEMP_AESEVN, AESTDY, AESEQ),
 #'     mode = "first"
 #'   ) %>%
-#'   arrange(USUBJID, AESTDY, AESEQ) %>%
-#'   select(USUBJID, AEDECOD, AESEV, AESTDY, AESEQ, AOCCIFL)
+#'   arrange(STUDYID, USUBJID, AESTDY, AESEQ) %>%
+#'   select(STUDYID, USUBJID, AEDECOD, AESEV, AESTDY, AESEQ, AOCCIFL)
 #'
-#' # Most severe AE first occurrence per patient (flag all cases)
-#' example_ae %>%
+#' @caption Flagging all records if multiple are identified (flag_all`)
+#'
+#' @info Revisiting the above example, if we instead wish to flag *all*
+#'   occurrences of the most severe AE, then we can use `flag_all = TRUE`.
+#'   Note that we now also omit `AESEQ` from the `order` argument
+#'   because we do not need to differentiate between two AEs occurring on
+#'   the same day (e.g. for subject `"1015"`) as they are both flagged.
+#'
+#' @code
+#' adae %>%
 #'   mutate(
 #'     TEMP_AESEVN =
 #'       as.integer(factor(AESEV, levels = c("SEVERE", "MODERATE", "MILD")))
 #'   ) %>%
 #'   derive_var_extreme_flag(
 #'     new_var = AOCCIFL,
-#'     by_vars = exprs(USUBJID),
+#'     by_vars = exprs(STUDYID, USUBJID),
 #'     order = exprs(TEMP_AESEVN, AESTDY),
 #'     mode = "first",
 #'     flag_all = TRUE
 #'   ) %>%
-#'   arrange(USUBJID, AESTDY) %>%
-#'   select(USUBJID, AEDECOD, AESEV, AESTDY, AOCCIFL)
+#'   arrange(STUDYID, USUBJID, AESTDY, AESEQ) %>%
+#'   select(STUDYID, USUBJID, AEDECOD, AESEV, AESTDY, AESEQ, AOCCIFL)
 #'
-#' # Most severe AE first occurrence per patient per body system
-#' example_ae %>%
-#'   mutate(
-#'     TEMP_AESEVN =
-#'       as.integer(factor(AESEV, levels = c("SEVERE", "MODERATE", "MILD")))
-#'   ) %>%
-#'   derive_var_extreme_flag(
-#'     new_var = AOCCSIFL,
-#'     by_vars = exprs(USUBJID, AEBODSYS),
-#'     order = exprs(TEMP_AESEVN, AESTDY, AESEQ),
-#'     mode = "first"
-#'   ) %>%
-#'   arrange(USUBJID, AESTDY, AESEQ) %>%
-#'   select(USUBJID, AEBODSYS, AESEV, AESTDY, AOCCSIFL)
+#' @caption Deriving baseline flag `ABLFL`
+#'
+#' @info `derive_var_extreme_flag()` is very often used to derive the baseline
+#'   flag `ABLFL`, so the following section contains various examples of this
+#'   in action for the `ADVS` dataset. Note that for these derivations it is
+#'   often convenient to leverage higher order functions such as
+#'   `restrict_derivation()` and `slice_derivation()`. Please read the
+#'   [Higher Order Functions](https://pharmaverse.github.io/admiral/articles/higher_order.html)
+#'   vignette, as well as their specific reference pages, to learn more.
+#'
+#'   To set the baseline flag for the last observation among those where
+#'   `AVISIT = "BASELINE"`, we can use a similar call to the examples above but
+#'   wrapping inside of `restrict_derivation()` and making use of the `filter`
+#'   argument.
+#'
+#' @code
+#' restrict_derivation(
+#'   advs,
+#'   derivation = derive_var_extreme_flag,
+#'   args = params(
+#'     by_vars = exprs(USUBJID, PARAMCD),
+#'     order = exprs(ADT),
+#'     new_var = ABLFL,
+#'     mode = "last"
+#'   ),
+#'   filter = AVISIT == "BASELINE"
+#' ) %>%
+#'   arrange(STUDYID, USUBJID, PARAMCD, ADT) %>%
+#'   select(STUDYID, everything())
+#'
+#' @info Instead, to set baseline as the lowest observation among
+#'   those where `AVISIT = "BASELINE"`, we can modify the `order` argument,
+#'   ensuring to sort by `AVAL` before `ADT`. Note if instead the highest
+#'   was to be required, we would need to again make use of `desc()`.
+#'
+#' @code
+#' restrict_derivation(
+#'   advs,
+#'   derivation = derive_var_extreme_flag,
+#'   args = params(
+#'     by_vars = exprs(USUBJID, PARAMCD),
+#'     order = exprs(AVAL, ADT),
+#'     new_var = ABLFL,
+#'     mode = "last"
+#'   ),
+#'   filter = AVISIT == "BASELINE"
+#' ) %>%
+#'   arrange(STUDYID, USUBJID, PARAMCD, ADT) %>%
+#'   select(STUDYID, everything())
+#'
+#' @info In practice, baseline-setting may vary on a parameter by
+#'   parameter basis, in which case `slice_derivation()` could be
+#'   used in place of `restrict_derivation()`. In the example below, we
+#'   set the baseline flag as follows: for temperature records, as the
+#'   lowest value recorded at a baseline visit; for weight records,
+#'   as the highest value recorded at a baseline visit.
+#'
+#' @code
+#' slice_derivation(
+#'   advs,
+#'   derivation = derive_var_extreme_flag,
+#'   args = params(
+#'     by_vars = exprs(USUBJID, PARAMCD),
+#'     order = exprs(AVAL, ADT),
+#'     new_var = ABLFL,
+#'   ),
+#'   derivation_slice(
+#'     filter = AVISIT == "BASELINE" & PARAMCD == "TEMP",
+#'     args = params(mode = "first")
+#'   ),
+#'   derivation_slice(
+#'     filter = AVISIT == "BASELINE" & PARAMCD == "WEIGHT",
+#'     args = params(mode = "last")
+#'   )
+#' ) %>%
+#'   arrange(STUDYID, USUBJID, PARAMCD, ADT) %>%
+#'   select(STUDYID, everything())
+
 derive_var_extreme_flag <- function(dataset,
                                     by_vars,
                                     order,

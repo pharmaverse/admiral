@@ -22,12 +22,14 @@ derive_var_extreme_flag(
 The variables specified by the \code{by_vars} argument are expected to be in the dataset.
 
 \describe{
+\item{Permitted values}{a dataset, i.e., a \code{data.frame} or tibble}
 \item{Default value}{none}
 }}
 
 \item{by_vars}{Grouping variables
 
 \describe{
+\item{Permitted values}{list of variables created by \code{exprs()}, e.g., \code{exprs(USUBJID, VISIT)}}
 \item{Default value}{none}
 }}
 
@@ -37,6 +39,8 @@ The first or last observation is determined with respect to the specified
 order.
 
 For handling of \code{NA}s in sorting variables see \href{../articles/generic.html#sort_order}{Sort Order}.
+
+@permitted \link{var_list}
 
 \describe{
 \item{Permitted values}{list of variables or functions of variables}
@@ -49,7 +53,7 @@ The specified variable is added to the output dataset. It is set to the value
 set in \code{true_value} for the first or last observation (depending on the mode) of each by group.
 
 \describe{
-\item{Permitted values}{list of name-value pairs}
+\item{Permitted values}{an unquoted symbol, e.g., \code{AVAL}}
 \item{Default value}{none}
 }}
 
@@ -68,7 +72,7 @@ The value for the specified variable \code{new_var}, applicable to
 the first or last observation (depending on the mode) of each by group.
 
 \describe{
-\item{Permitted values}{An atomic scalar}
+\item{Permitted values}{a character scalar, i.e., a character vector of length one}
 \item{Default value}{\code{"Y"}}
 }}
 
@@ -78,7 +82,7 @@ The value for the specified variable \code{new_var}, NOT applicable to
 the first or last observation (depending on the mode) of each by group.
 
 \describe{
-\item{Permitted values}{An atomic scalar}
+\item{Permitted values}{a character scalar, i.e., a character vector of length one}
 \item{Default value}{\code{NA_character_}}
 }}
 
@@ -88,6 +92,7 @@ A logical value where if set to \code{TRUE}, all records are flagged
 and no error or warning is issued if the first or last record is not unique.
 
 \describe{
+\item{Permitted values}{\code{"TRUE"}, \code{"FALSE"}}
 \item{Default value}{\code{FALSE}}
 }}
 
@@ -98,7 +103,7 @@ if the observations of the input dataset are not unique with respect to the
 by variables and the order.
 
 \describe{
-\item{Permitted values}{\code{"none"}, \code{"warning"}, \code{"error"}}
+\item{Permitted values}{\code{"none"}, \code{"message"}, \code{"warning"}, \code{"error"}}
 \item{Default value}{\code{"warning"}}
 }}
 }
@@ -119,172 +124,6 @@ Otherwise, \code{new_var} is set to \code{NA}. Thus, the direction of "worst" is
 all parameters in the dataset depending on the \code{order} and the \code{mode}, i.e. for every
 parameter the first or last record will be flagged across the whole dataset.
 }
-\examples{
-library(tibble)
-library(dplyr, warn.conflicts = FALSE)
-example_vs <- tribble(
-  ~USUBJID, ~VSTESTCD,      ~VISIT, ~VISITNUM, ~VSTPTNUM, ~VSSTRESN,
-  "1001",     "DIABP", "SCREENING",         1,        10,        64,
-  "1001",     "DIABP", "SCREENING",         1,        11,        66,
-  "1001",     "DIABP",  "BASELINE",         2,       100,        68,
-  "1001",     "DIABP",  "BASELINE",         2,       101,        68,
-  "1001",     "DIABP",    "WEEK 2",         3,       200,        72,
-  "1001",     "DIABP",    "WEEK 2",         3,       201,        71,
-  "1001",     "DIABP",    "WEEK 4",         4,       300,        70,
-  "1001",     "DIABP",    "WEEK 4",         4,       301,        70
-)
-
-# Flag last value for each patient, test, and visit, baseline observations are ignored
-example_vs \%>\%
-  restrict_derivation(
-    derivation = derive_var_extreme_flag,
-    args = params(
-      by_vars = exprs(USUBJID, VSTESTCD, VISIT),
-      order = exprs(VSTPTNUM),
-      new_var = LASTFL,
-      mode = "last"
-    ),
-    filter = VISIT != "BASELINE"
-  ) \%>\%
-  arrange(USUBJID, VSTESTCD, VISITNUM, VSTPTNUM) \%>\%
-  select(USUBJID, VSTESTCD, VISIT, VSTPTNUM, VSSTRESN, LASTFL)
-
-# Baseline (ABLFL) examples:
-
-input <- tribble(
-  ~STUDYID, ~USUBJID,  ~PARAMCD,     ~AVISIT,                  ~ADT, ~AVAL,    ~DTYPE,
-  "TEST01",  "PAT01", "PARAM01",  "BASELINE", as.Date("2021-04-27"),  15.0,        NA,
-  "TEST01",  "PAT01", "PARAM01",  "BASELINE", as.Date("2021-04-25"),  14.0,        NA,
-  "TEST01",  "PAT01", "PARAM01",  "BASELINE", as.Date("2021-04-23"),  15.0, "AVERAGE",
-  "TEST01",  "PAT01", "PARAM01",    "WEEK 1", as.Date("2021-04-27"),  10.0, "AVERAGE",
-  "TEST01",  "PAT01", "PARAM01",    "WEEK 2", as.Date("2021-04-30"),  12.0,        NA,
-  "TEST01",  "PAT02", "PARAM01", "SCREENING", as.Date("2021-04-27"),  15.0, "AVERAGE",
-  "TEST01",  "PAT02", "PARAM01",  "BASELINE", as.Date("2021-04-25"),  14.0, "AVERAGE",
-  "TEST01",  "PAT02", "PARAM01",  "BASELINE", as.Date("2021-04-23"),  15.0, "AVERAGE",
-  "TEST01",  "PAT02", "PARAM01",    "WEEK 1", as.Date("2021-04-27"),  10.0, "AVERAGE",
-  "TEST01",  "PAT02", "PARAM01",    "WEEK 2", as.Date("2021-04-30"),  12.0, "AVERAGE",
-  "TEST01",  "PAT01", "PARAM02", "SCREENING", as.Date("2021-04-27"),  15.0, "AVERAGE",
-  "TEST01",  "PAT01", "PARAM02", "SCREENING", as.Date("2021-04-25"),  14.0, "AVERAGE",
-  "TEST01",  "PAT01", "PARAM02", "SCREENING", as.Date("2021-04-23"),  15.0,        NA,
-  "TEST01",  "PAT01", "PARAM02",  "BASELINE", as.Date("2021-04-27"),  10.0, "AVERAGE",
-  "TEST01",  "PAT01", "PARAM02",    "WEEK 2", as.Date("2021-04-30"),  12.0,        NA,
-  "TEST01",  "PAT02", "PARAM02", "SCREENING", as.Date("2021-04-27"),  15.0,        NA,
-  "TEST01",  "PAT02", "PARAM02",  "BASELINE", as.Date("2021-04-25"),  14.0,        NA,
-  "TEST01",  "PAT02", "PARAM02",    "WEEK 1", as.Date("2021-04-23"),  15.0,        NA,
-  "TEST01",  "PAT02", "PARAM02",    "WEEK 1", as.Date("2021-04-27"),  10.0,        NA,
-  "TEST01",  "PAT02", "PARAM02",  "BASELINE", as.Date("2021-04-30"),  12.0,        NA
-)
-
-# Last observation
-restrict_derivation(
-  input,
-  derivation = derive_var_extreme_flag,
-  args = params(
-    by_vars = exprs(USUBJID, PARAMCD),
-    order = exprs(ADT),
-    new_var = ABLFL,
-    mode = "last"
-  ),
-  filter = AVISIT == "BASELINE"
-)
-
-# Worst observation - Direction = High
-restrict_derivation(
-  input,
-  derivation = derive_var_extreme_flag,
-  args = params(
-    by_vars = exprs(USUBJID, PARAMCD),
-    order = exprs(AVAL, ADT),
-    new_var = ABLFL,
-    mode = "last"
-  ),
-  filter = AVISIT == "BASELINE"
-)
-
-# Worst observation - Direction = Lo
-restrict_derivation(
-  input,
-  derivation = derive_var_extreme_flag,
-  args = params(
-    by_vars = exprs(USUBJID, PARAMCD),
-    order = exprs(desc(AVAL), ADT),
-    new_var = ABLFL,
-    mode = "last"
-  ),
-  filter = AVISIT == "BASELINE"
-)
-
-# Average observation
-restrict_derivation(
-  input,
-  derivation = derive_var_extreme_flag,
-  args = params(
-    by_vars = exprs(USUBJID, PARAMCD),
-    order = exprs(ADT, desc(AVAL)),
-    new_var = ABLFL,
-    mode = "last"
-  ),
-  filter = AVISIT == "BASELINE" & DTYPE == "AVERAGE"
-)
-
-# OCCURDS Examples
-example_ae <- tribble(
-  ~USUBJID,         ~AEBODSYS,    ~AEDECOD,   ~AESEV, ~AESTDY, ~AESEQ,
-  "1015", "GENERAL DISORDERS",  "ERYTHEMA",   "MILD",       2,      1,
-  "1015", "GENERAL DISORDERS",  "PRURITUS",   "MILD",       2,      2,
-  "1015",      "GI DISORDERS", "DIARRHOEA",   "MILD",       8,      3,
-  "1023", "CARDIAC DISORDERS",  "AV BLOCK",   "MILD",      22,      4,
-  "1023",    "SKIN DISORDERS",  "ERYTHEMA",   "MILD",       3,      1,
-  "1023",    "SKIN DISORDERS",  "ERYTHEMA", "SEVERE",       5,      2,
-  "1023",    "SKIN DISORDERS",  "ERYTHEMA",   "MILD",       8,      3
-)
-
-# Most severe AE first occurrence per patient
-example_ae \%>\%
-  mutate(
-    TEMP_AESEVN =
-      as.integer(factor(AESEV, levels = c("SEVERE", "MODERATE", "MILD")))
-  ) \%>\%
-  derive_var_extreme_flag(
-    new_var = AOCCIFL,
-    by_vars = exprs(USUBJID),
-    order = exprs(TEMP_AESEVN, AESTDY, AESEQ),
-    mode = "first"
-  ) \%>\%
-  arrange(USUBJID, AESTDY, AESEQ) \%>\%
-  select(USUBJID, AEDECOD, AESEV, AESTDY, AESEQ, AOCCIFL)
-
-# Most severe AE first occurrence per patient (flag all cases)
-example_ae \%>\%
-  mutate(
-    TEMP_AESEVN =
-      as.integer(factor(AESEV, levels = c("SEVERE", "MODERATE", "MILD")))
-  ) \%>\%
-  derive_var_extreme_flag(
-    new_var = AOCCIFL,
-    by_vars = exprs(USUBJID),
-    order = exprs(TEMP_AESEVN, AESTDY),
-    mode = "first",
-    flag_all = TRUE
-  ) \%>\%
-  arrange(USUBJID, AESTDY) \%>\%
-  select(USUBJID, AEDECOD, AESEV, AESTDY, AOCCIFL)
-
-# Most severe AE first occurrence per patient per body system
-example_ae \%>\%
-  mutate(
-    TEMP_AESEVN =
-      as.integer(factor(AESEV, levels = c("SEVERE", "MODERATE", "MILD")))
-  ) \%>\%
-  derive_var_extreme_flag(
-    new_var = AOCCSIFL,
-    by_vars = exprs(USUBJID, AEBODSYS),
-    order = exprs(TEMP_AESEVN, AESTDY, AESEQ),
-    mode = "first"
-  ) \%>\%
-  arrange(USUBJID, AESTDY, AESEQ) \%>\%
-  select(USUBJID, AEBODSYS, AESEV, AESTDY, AOCCSIFL)
-}
 \seealso{
 General Derivation Functions for all ADaMs that returns variable appended to dataset:
 \code{\link{derive_var_joined_exist_flag}()},
@@ -303,3 +142,371 @@ General Derivation Functions for all ADaMs that returns variable appended to dat
 }
 \concept{der_gen}
 \keyword{der_gen}
+\section{Examples}{
+\subsection{Data setup}{
+
+The following examples use the \code{ADVS} and \code{ADAE} datasets below as a basis.
+
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{library(tibble, warn.conflicts = FALSE)
+library(lubridate, warn.conflicts = FALSE)
+library(dplyr, warn.conflicts = FALSE)
+
+advs <- tribble(
+  ~USUBJID, ~PARAMCD,    ~AVISIT,          ~ADT, ~AVAL,
+  "1015",   "TEMP",   "BASELINE",  "2021-04-27",  38.0,
+  "1015",   "TEMP",   "BASELINE",  "2021-04-25",  39.0,
+  "1015",   "TEMP",   "BASELINE",  "2021-04-23",  37.0,
+  "1015",   "TEMP",   "WEEK 1",    "2021-05-02",  37.5,
+  "1015",   "TEMP",   "WEEK 2",    "2021-05-07",  37.0,
+  "1015",   "WEIGHT", "SCREENING", "2021-04-19",  81.2,
+  "1015",   "WEIGHT", "SCREENING", "2021-04-20",  83.1,
+  "1015",   "WEIGHT", "BASELINE",  "2021-04-25",  82.7,
+  "1015",   "WEIGHT", "BASELINE",  "2021-04-27",  84.0,
+  "1015",   "WEIGHT", "WEEK 2",    "2021-05-09",  82.5,
+  "1023",   "TEMP",   "SCREENING", "2021-04-27",  38.0,
+  "1023",   "TEMP",   "BASELINE",  "2021-04-28",  37.5,
+  "1023",   "TEMP",   "BASELINE",  "2021-04-29",  36.5,
+  "1023",   "TEMP",   "WEEK 1",    "2021-05-03",  37.0,
+  "1023",   "TEMP",   "WEEK 2",    "2021-05-09",  37.0,
+  "1023",   "WEIGHT", "SCREENING", "2021-04-27",  69.6,
+  "1023",   "WEIGHT", "BASELINE",  "2021-04-29",  67.2,
+  "1023",   "WEIGHT", "WEEK 1",    "2021-05-01",  68.3,
+  "1023",   "WEIGHT", "WEEK 1",    "2021-05-02",  65.9
+) \%>\%
+mutate(
+  STUDYID = "AB123",
+  ADT = ymd(ADT)
+)
+
+adae <- tribble(
+  ~USUBJID,         ~AEBODSYS,    ~AEDECOD,   ~AESEV, ~AESTDY, ~AESEQ,
+  "1015", "GENERAL DISORDERS",  "ERYTHEMA",   "MILD",       2,      1,
+  "1015", "GENERAL DISORDERS",  "PRURITUS",   "MILD",       2,      2,
+  "1015",      "GI DISORDERS", "DIARRHOEA",   "MILD",       8,      3,
+  "1023", "CARDIAC DISORDERS",  "AV BLOCK",   "MILD",      22,      4,
+  "1023",    "SKIN DISORDERS",  "ERYTHEMA",   "MILD",       3,      1,
+  "1023",    "SKIN DISORDERS",  "ERYTHEMA", "SEVERE",       5,      2,
+  "1023",    "SKIN DISORDERS",  "ERYTHEMA",   "MILD",       8,      3
+) \%>\%
+mutate(STUDYID = "AB123")}\if{html}{\out{</div>}}}
+\subsection{Flagging the first/last observation within a by group}{
+
+A new variable is added for each subject to flag the last observation
+within a by_group. Within each by group (specified by \code{by_vars}) the
+\code{order = ADT} argument specifies we wish to sort the records by analysis
+date and then select the last one (\code{mode = "last"}). The name of the new
+variable is passed through the \code{new_var = LASTFL} call.
+
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{advs \%>\%
+  derive_var_extreme_flag(
+    by_vars = exprs(STUDYID, USUBJID, PARAMCD),
+    order = exprs(ADT),
+    new_var = LASTFL,
+    mode = "last",
+  ) \%>\%
+  arrange(STUDYID, USUBJID, PARAMCD, ADT) \%>\%
+  select(STUDYID, everything())
+#> # A tibble: 19 × 7
+#>    STUDYID USUBJID PARAMCD AVISIT    ADT         AVAL LASTFL
+#>    <chr>   <chr>   <chr>   <chr>     <date>     <dbl> <chr> 
+#>  1 AB123   1015    TEMP    BASELINE  2021-04-23  37   <NA>  
+#>  2 AB123   1015    TEMP    BASELINE  2021-04-25  39   <NA>  
+#>  3 AB123   1015    TEMP    BASELINE  2021-04-27  38   <NA>  
+#>  4 AB123   1015    TEMP    WEEK 1    2021-05-02  37.5 <NA>  
+#>  5 AB123   1015    TEMP    WEEK 2    2021-05-07  37   Y     
+#>  6 AB123   1015    WEIGHT  SCREENING 2021-04-19  81.2 <NA>  
+#>  7 AB123   1015    WEIGHT  SCREENING 2021-04-20  83.1 <NA>  
+#>  8 AB123   1015    WEIGHT  BASELINE  2021-04-25  82.7 <NA>  
+#>  9 AB123   1015    WEIGHT  BASELINE  2021-04-27  84   <NA>  
+#> 10 AB123   1015    WEIGHT  WEEK 2    2021-05-09  82.5 Y     
+#> 11 AB123   1023    TEMP    SCREENING 2021-04-27  38   <NA>  
+#> 12 AB123   1023    TEMP    BASELINE  2021-04-28  37.5 <NA>  
+#> 13 AB123   1023    TEMP    BASELINE  2021-04-29  36.5 <NA>  
+#> 14 AB123   1023    TEMP    WEEK 1    2021-05-03  37   <NA>  
+#> 15 AB123   1023    TEMP    WEEK 2    2021-05-09  37   Y     
+#> 16 AB123   1023    WEIGHT  SCREENING 2021-04-27  69.6 <NA>  
+#> 17 AB123   1023    WEIGHT  BASELINE  2021-04-29  67.2 <NA>  
+#> 18 AB123   1023    WEIGHT  WEEK 1    2021-05-01  68.3 <NA>  
+#> 19 AB123   1023    WEIGHT  WEEK 1    2021-05-02  65.9 Y     }\if{html}{\out{</div>}}
+
+Note here that a similar \code{FIRSTFL} variable could instead be derived
+simply by switching to \code{mode = "first"}. Alternatively, we could make use
+of \code{desc()} within the sorting specified by \code{order}:
+
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{advs \%>\%
+  derive_var_extreme_flag(
+    by_vars = exprs(STUDYID, USUBJID, PARAMCD),
+    order = exprs(desc(ADT)),
+    new_var = FIRSTFL,
+    mode = "last",
+  ) \%>\%
+  arrange(STUDYID, USUBJID, PARAMCD, ADT) \%>\%
+  select(STUDYID, everything())
+#> # A tibble: 19 × 7
+#>    STUDYID USUBJID PARAMCD AVISIT    ADT         AVAL FIRSTFL
+#>    <chr>   <chr>   <chr>   <chr>     <date>     <dbl> <chr>  
+#>  1 AB123   1015    TEMP    BASELINE  2021-04-23  37   Y      
+#>  2 AB123   1015    TEMP    BASELINE  2021-04-25  39   <NA>   
+#>  3 AB123   1015    TEMP    BASELINE  2021-04-27  38   <NA>   
+#>  4 AB123   1015    TEMP    WEEK 1    2021-05-02  37.5 <NA>   
+#>  5 AB123   1015    TEMP    WEEK 2    2021-05-07  37   <NA>   
+#>  6 AB123   1015    WEIGHT  SCREENING 2021-04-19  81.2 Y      
+#>  7 AB123   1015    WEIGHT  SCREENING 2021-04-20  83.1 <NA>   
+#>  8 AB123   1015    WEIGHT  BASELINE  2021-04-25  82.7 <NA>   
+#>  9 AB123   1015    WEIGHT  BASELINE  2021-04-27  84   <NA>   
+#> 10 AB123   1015    WEIGHT  WEEK 2    2021-05-09  82.5 <NA>   
+#> 11 AB123   1023    TEMP    SCREENING 2021-04-27  38   Y      
+#> 12 AB123   1023    TEMP    BASELINE  2021-04-28  37.5 <NA>   
+#> 13 AB123   1023    TEMP    BASELINE  2021-04-29  36.5 <NA>   
+#> 14 AB123   1023    TEMP    WEEK 1    2021-05-03  37   <NA>   
+#> 15 AB123   1023    TEMP    WEEK 2    2021-05-09  37   <NA>   
+#> 16 AB123   1023    WEIGHT  SCREENING 2021-04-27  69.6 Y      
+#> 17 AB123   1023    WEIGHT  BASELINE  2021-04-29  67.2 <NA>   
+#> 18 AB123   1023    WEIGHT  WEEK 1    2021-05-01  68.3 <NA>   
+#> 19 AB123   1023    WEIGHT  WEEK 1    2021-05-02  65.9 <NA>   }\if{html}{\out{</div>}}}
+\subsection{Modifying the flag values (\code{true_value}, \code{false_value})}{
+
+The previous example is now enhanced with custom values for the flag
+entries. Records which are flagged are filled with the contents of
+\code{true_value} and those which are not are filled with the contents of
+\code{false_value}. Note that these are normally preset to \code{"Y"} and \code{NA},
+which is why they were not specified in the example above.
+
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{advs \%>\%
+  derive_var_extreme_flag(
+    by_vars = exprs(STUDYID, USUBJID, PARAMCD),
+    order = exprs(ADT),
+    new_var = LASTFL,
+    mode = "last",
+    true_value = "Yes",
+    false_value = "No",
+  ) \%>\%
+  arrange(STUDYID, USUBJID, PARAMCD, ADT) \%>\%
+  select(STUDYID, everything())
+#> # A tibble: 19 × 7
+#>    STUDYID USUBJID PARAMCD AVISIT    ADT         AVAL LASTFL
+#>    <chr>   <chr>   <chr>   <chr>     <date>     <dbl> <chr> 
+#>  1 AB123   1015    TEMP    BASELINE  2021-04-23  37   No    
+#>  2 AB123   1015    TEMP    BASELINE  2021-04-25  39   No    
+#>  3 AB123   1015    TEMP    BASELINE  2021-04-27  38   No    
+#>  4 AB123   1015    TEMP    WEEK 1    2021-05-02  37.5 No    
+#>  5 AB123   1015    TEMP    WEEK 2    2021-05-07  37   Yes   
+#>  6 AB123   1015    WEIGHT  SCREENING 2021-04-19  81.2 No    
+#>  7 AB123   1015    WEIGHT  SCREENING 2021-04-20  83.1 No    
+#>  8 AB123   1015    WEIGHT  BASELINE  2021-04-25  82.7 No    
+#>  9 AB123   1015    WEIGHT  BASELINE  2021-04-27  84   No    
+#> 10 AB123   1015    WEIGHT  WEEK 2    2021-05-09  82.5 Yes   
+#> 11 AB123   1023    TEMP    SCREENING 2021-04-27  38   No    
+#> 12 AB123   1023    TEMP    BASELINE  2021-04-28  37.5 No    
+#> 13 AB123   1023    TEMP    BASELINE  2021-04-29  36.5 No    
+#> 14 AB123   1023    TEMP    WEEK 1    2021-05-03  37   No    
+#> 15 AB123   1023    TEMP    WEEK 2    2021-05-09  37   Yes   
+#> 16 AB123   1023    WEIGHT  SCREENING 2021-04-27  69.6 No    
+#> 17 AB123   1023    WEIGHT  BASELINE  2021-04-29  67.2 No    
+#> 18 AB123   1023    WEIGHT  WEEK 1    2021-05-01  68.3 No    
+#> 19 AB123   1023    WEIGHT  WEEK 1    2021-05-02  65.9 Yes   }\if{html}{\out{</div>}}}
+\subsection{Creating temporary variables for sorting}{
+
+In this example we wish to flag the first occurrence of the most
+severe AE within each subject. To ensure correct sorting of the
+severity values, \code{AESEV} must be pre-processed into a numeric variable
+\code{TEMP_AESEVN} which can then be passed inside \code{order}. Once again,
+to ensure we only flag the \emph{first} occurrence, we specify \code{AESDTY} and
+\code{AESEQ} inside \code{order} as well.
+
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{adae \%>\%
+  mutate(
+    TEMP_AESEVN =
+      as.integer(factor(AESEV, levels = c("SEVERE", "MODERATE", "MILD")))
+  ) \%>\%
+  derive_var_extreme_flag(
+    new_var = AOCCIFL,
+    by_vars = exprs(STUDYID, USUBJID),
+    order = exprs(TEMP_AESEVN, AESTDY, AESEQ),
+    mode = "first"
+  ) \%>\%
+  arrange(STUDYID, USUBJID, AESTDY, AESEQ) \%>\%
+  select(STUDYID, USUBJID, AEDECOD, AESEV, AESTDY, AESEQ, AOCCIFL)
+#> # A tibble: 7 × 7
+#>   STUDYID USUBJID AEDECOD   AESEV  AESTDY AESEQ AOCCIFL
+#>   <chr>   <chr>   <chr>     <chr>   <dbl> <dbl> <chr>  
+#> 1 AB123   1015    ERYTHEMA  MILD        2     1 Y      
+#> 2 AB123   1015    PRURITUS  MILD        2     2 <NA>   
+#> 3 AB123   1015    DIARRHOEA MILD        8     3 <NA>   
+#> 4 AB123   1023    ERYTHEMA  MILD        3     1 <NA>   
+#> 5 AB123   1023    ERYTHEMA  SEVERE      5     2 Y      
+#> 6 AB123   1023    ERYTHEMA  MILD        8     3 <NA>   
+#> 7 AB123   1023    AV BLOCK  MILD       22     4 <NA>   }\if{html}{\out{</div>}}}
+\subsection{Flagging all records if multiple are identified (flag_all`)}{
+
+Revisiting the above example, if we instead wish to flag \emph{all}
+occurrences of the most severe AE, then we can use \code{flag_all = TRUE}.
+Note that we now also omit \code{AESEQ} from the \code{order} argument
+because we do not need to differentiate between two AEs occurring on
+the same day (e.g. for subject \code{"1015"}) as they are both flagged.
+
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{adae \%>\%
+  mutate(
+    TEMP_AESEVN =
+      as.integer(factor(AESEV, levels = c("SEVERE", "MODERATE", "MILD")))
+  ) \%>\%
+  derive_var_extreme_flag(
+    new_var = AOCCIFL,
+    by_vars = exprs(STUDYID, USUBJID),
+    order = exprs(TEMP_AESEVN, AESTDY),
+    mode = "first",
+    flag_all = TRUE
+  ) \%>\%
+  arrange(STUDYID, USUBJID, AESTDY, AESEQ) \%>\%
+  select(STUDYID, USUBJID, AEDECOD, AESEV, AESTDY, AESEQ, AOCCIFL)
+#> # A tibble: 7 × 7
+#>   STUDYID USUBJID AEDECOD   AESEV  AESTDY AESEQ AOCCIFL
+#>   <chr>   <chr>   <chr>     <chr>   <dbl> <dbl> <chr>  
+#> 1 AB123   1015    ERYTHEMA  MILD        2     1 Y      
+#> 2 AB123   1015    PRURITUS  MILD        2     2 Y      
+#> 3 AB123   1015    DIARRHOEA MILD        8     3 <NA>   
+#> 4 AB123   1023    ERYTHEMA  MILD        3     1 <NA>   
+#> 5 AB123   1023    ERYTHEMA  SEVERE      5     2 Y      
+#> 6 AB123   1023    ERYTHEMA  MILD        8     3 <NA>   
+#> 7 AB123   1023    AV BLOCK  MILD       22     4 <NA>   }\if{html}{\out{</div>}}}
+\subsection{Deriving baseline flag \code{ABLFL}}{
+
+\code{derive_var_extreme_flag()} is very often used to derive the baseline
+flag \code{ABLFL}, so the following section contains various examples of this
+in action for the \code{ADVS} dataset. Note that for these derivations it is
+often convenient to leverage higher order functions such as
+\code{restrict_derivation()} and \code{slice_derivation()}. Please read the
+\href{https://pharmaverse.github.io/admiral/articles/higher_order.html}{Higher Order Functions}
+vignette, as well as their specific reference pages, to learn more.
+
+To set the baseline flag for the last observation among those where
+\code{AVISIT = "BASELINE"}, we can use a similar call to the examples above but
+wrapping inside of \code{restrict_derivation()} and making use of the \code{filter}
+argument.
+
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{restrict_derivation(
+  advs,
+  derivation = derive_var_extreme_flag,
+  args = params(
+    by_vars = exprs(USUBJID, PARAMCD),
+    order = exprs(ADT),
+    new_var = ABLFL,
+    mode = "last"
+  ),
+  filter = AVISIT == "BASELINE"
+) \%>\%
+  arrange(STUDYID, USUBJID, PARAMCD, ADT) \%>\%
+  select(STUDYID, everything())
+#> # A tibble: 19 × 7
+#>    STUDYID USUBJID PARAMCD AVISIT    ADT         AVAL ABLFL
+#>    <chr>   <chr>   <chr>   <chr>     <date>     <dbl> <chr>
+#>  1 AB123   1015    TEMP    BASELINE  2021-04-23  37   <NA> 
+#>  2 AB123   1015    TEMP    BASELINE  2021-04-25  39   <NA> 
+#>  3 AB123   1015    TEMP    BASELINE  2021-04-27  38   Y    
+#>  4 AB123   1015    TEMP    WEEK 1    2021-05-02  37.5 <NA> 
+#>  5 AB123   1015    TEMP    WEEK 2    2021-05-07  37   <NA> 
+#>  6 AB123   1015    WEIGHT  SCREENING 2021-04-19  81.2 <NA> 
+#>  7 AB123   1015    WEIGHT  SCREENING 2021-04-20  83.1 <NA> 
+#>  8 AB123   1015    WEIGHT  BASELINE  2021-04-25  82.7 <NA> 
+#>  9 AB123   1015    WEIGHT  BASELINE  2021-04-27  84   Y    
+#> 10 AB123   1015    WEIGHT  WEEK 2    2021-05-09  82.5 <NA> 
+#> 11 AB123   1023    TEMP    SCREENING 2021-04-27  38   <NA> 
+#> 12 AB123   1023    TEMP    BASELINE  2021-04-28  37.5 <NA> 
+#> 13 AB123   1023    TEMP    BASELINE  2021-04-29  36.5 Y    
+#> 14 AB123   1023    TEMP    WEEK 1    2021-05-03  37   <NA> 
+#> 15 AB123   1023    TEMP    WEEK 2    2021-05-09  37   <NA> 
+#> 16 AB123   1023    WEIGHT  SCREENING 2021-04-27  69.6 <NA> 
+#> 17 AB123   1023    WEIGHT  BASELINE  2021-04-29  67.2 Y    
+#> 18 AB123   1023    WEIGHT  WEEK 1    2021-05-01  68.3 <NA> 
+#> 19 AB123   1023    WEIGHT  WEEK 1    2021-05-02  65.9 <NA> }\if{html}{\out{</div>}}
+
+Instead, to set baseline as the lowest observation among
+those where \code{AVISIT = "BASELINE"}, we can modify the \code{order} argument,
+ensuring to sort by \code{AVAL} before \code{ADT}. Note if instead the highest
+was to be required, we would need to again make use of \code{desc()}.
+
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{restrict_derivation(
+  advs,
+  derivation = derive_var_extreme_flag,
+  args = params(
+    by_vars = exprs(USUBJID, PARAMCD),
+    order = exprs(AVAL, ADT),
+    new_var = ABLFL,
+    mode = "last"
+  ),
+  filter = AVISIT == "BASELINE"
+) \%>\%
+  arrange(STUDYID, USUBJID, PARAMCD, ADT) \%>\%
+  select(STUDYID, everything())
+#> # A tibble: 19 × 7
+#>    STUDYID USUBJID PARAMCD AVISIT    ADT         AVAL ABLFL
+#>    <chr>   <chr>   <chr>   <chr>     <date>     <dbl> <chr>
+#>  1 AB123   1015    TEMP    BASELINE  2021-04-23  37   <NA> 
+#>  2 AB123   1015    TEMP    BASELINE  2021-04-25  39   Y    
+#>  3 AB123   1015    TEMP    BASELINE  2021-04-27  38   <NA> 
+#>  4 AB123   1015    TEMP    WEEK 1    2021-05-02  37.5 <NA> 
+#>  5 AB123   1015    TEMP    WEEK 2    2021-05-07  37   <NA> 
+#>  6 AB123   1015    WEIGHT  SCREENING 2021-04-19  81.2 <NA> 
+#>  7 AB123   1015    WEIGHT  SCREENING 2021-04-20  83.1 <NA> 
+#>  8 AB123   1015    WEIGHT  BASELINE  2021-04-25  82.7 <NA> 
+#>  9 AB123   1015    WEIGHT  BASELINE  2021-04-27  84   Y    
+#> 10 AB123   1015    WEIGHT  WEEK 2    2021-05-09  82.5 <NA> 
+#> 11 AB123   1023    TEMP    SCREENING 2021-04-27  38   <NA> 
+#> 12 AB123   1023    TEMP    BASELINE  2021-04-28  37.5 Y    
+#> 13 AB123   1023    TEMP    BASELINE  2021-04-29  36.5 <NA> 
+#> 14 AB123   1023    TEMP    WEEK 1    2021-05-03  37   <NA> 
+#> 15 AB123   1023    TEMP    WEEK 2    2021-05-09  37   <NA> 
+#> 16 AB123   1023    WEIGHT  SCREENING 2021-04-27  69.6 <NA> 
+#> 17 AB123   1023    WEIGHT  BASELINE  2021-04-29  67.2 Y    
+#> 18 AB123   1023    WEIGHT  WEEK 1    2021-05-01  68.3 <NA> 
+#> 19 AB123   1023    WEIGHT  WEEK 1    2021-05-02  65.9 <NA> }\if{html}{\out{</div>}}
+
+In practice, baseline-setting may vary on a parameter by
+parameter basis, in which case \code{slice_derivation()} could be
+used in place of \code{restrict_derivation()}. In the example below, we
+set the baseline flag as follows: for temperature records, as the
+lowest value recorded at a baseline visit; for weight records,
+as the highest value recorded at a baseline visit.
+
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{slice_derivation(
+  advs,
+  derivation = derive_var_extreme_flag,
+  args = params(
+    by_vars = exprs(USUBJID, PARAMCD),
+    order = exprs(AVAL, ADT),
+    new_var = ABLFL,
+  ),
+  derivation_slice(
+    filter = AVISIT == "BASELINE" & PARAMCD == "TEMP",
+    args = params(mode = "first")
+  ),
+  derivation_slice(
+    filter = AVISIT == "BASELINE" & PARAMCD == "WEIGHT",
+    args = params(mode = "last")
+  )
+) \%>\%
+  arrange(STUDYID, USUBJID, PARAMCD, ADT) \%>\%
+  select(STUDYID, everything())
+#> # A tibble: 19 × 7
+#>    STUDYID USUBJID PARAMCD AVISIT    ADT         AVAL ABLFL
+#>    <chr>   <chr>   <chr>   <chr>     <date>     <dbl> <chr>
+#>  1 AB123   1015    TEMP    BASELINE  2021-04-23  37   Y    
+#>  2 AB123   1015    TEMP    BASELINE  2021-04-25  39   <NA> 
+#>  3 AB123   1015    TEMP    BASELINE  2021-04-27  38   <NA> 
+#>  4 AB123   1015    TEMP    WEEK 1    2021-05-02  37.5 <NA> 
+#>  5 AB123   1015    TEMP    WEEK 2    2021-05-07  37   <NA> 
+#>  6 AB123   1015    WEIGHT  SCREENING 2021-04-19  81.2 <NA> 
+#>  7 AB123   1015    WEIGHT  SCREENING 2021-04-20  83.1 <NA> 
+#>  8 AB123   1015    WEIGHT  BASELINE  2021-04-25  82.7 <NA> 
+#>  9 AB123   1015    WEIGHT  BASELINE  2021-04-27  84   Y    
+#> 10 AB123   1015    WEIGHT  WEEK 2    2021-05-09  82.5 <NA> 
+#> 11 AB123   1023    TEMP    SCREENING 2021-04-27  38   <NA> 
+#> 12 AB123   1023    TEMP    BASELINE  2021-04-28  37.5 <NA> 
+#> 13 AB123   1023    TEMP    BASELINE  2021-04-29  36.5 Y    
+#> 14 AB123   1023    TEMP    WEEK 1    2021-05-03  37   <NA> 
+#> 15 AB123   1023    TEMP    WEEK 2    2021-05-09  37   <NA> 
+#> 16 AB123   1023    WEIGHT  SCREENING 2021-04-27  69.6 <NA> 
+#> 17 AB123   1023    WEIGHT  BASELINE  2021-04-29  67.2 Y    
+#> 18 AB123   1023    WEIGHT  WEEK 1    2021-05-01  68.3 <NA> 
+#> 19 AB123   1023    WEIGHT  WEEK 1    2021-05-02  65.9 <NA> }\if{html}{\out{</div>}}}}
+
