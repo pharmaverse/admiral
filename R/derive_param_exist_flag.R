@@ -42,9 +42,7 @@
 #'   For all groups with at least one observations in the additional dataset
 #'   (`dataset_add`) fulfilling the event condition (`condition`), `AVALC` is
 #'   set to the specified value (`true_value`).
-#'
-#'   *Default*: `"Y"`
-#'
+
 #' @permitted A character scalar
 #'
 #' @param false_value False value
@@ -53,17 +51,13 @@
 #'   (`dataset_add`) but none of them is fulfilling the event condition
 #'   (`condition`), `AVALC` is set to the specified value (`false_value`).
 #'
-#'   *Default*: `NA_character_`
-#'
 #' @permitted A character scalar
 #'
 #' @param missing_value Values used for missing information
 #'
 #'   For all groups without an observation in the additional dataset
 #'   (`dataset_add`), `AVALC` is set to the specified value (`missing_value`).
-#'
-#'   *Default*: `NA_character_`
-#'
+
 #' @permitted A character scalar
 #'
 #' @param filter_add Filter for additional data
@@ -190,7 +184,7 @@ derive_param_exist_flag <- function(dataset = NULL,
 
   # Create new observations
   new_obs <- derive_var_merged_exist_flag(
-    dataset_ref,
+    select(dataset_ref, !!!by_vars),
     dataset_add = dataset_add,
     filter_add = !!filter_add,
     condition = !!condition,

@@ -25,6 +25,7 @@
 ## Updates of Existing Functions
 
 - In `derive_vars_joined()`, the `filter_add` argument is now correctly applied for all join types, fixing an issue where it was ignored when `join_type != "all"`. (#2682)
+
 - The function `extract_duplicate_records()` was updated to consider all variables in the input dataset for the by group if the `by_vars` argument is omitted entirely. (#2644)
 
 - In `slice_derivation()`, previously the derivation is not called for empty
@@ -32,15 +33,24 @@ subsets, however this can lead to issues when the input dataset is empty. Now
 the derivation is called for all subsets. (#2645)
 
 - The examples section for the function `derive_var_trtemfl()` was enhanced to include a showcasing of all scenarios discussed in the following [PHUSE White Paper on Treatment-Emergent AEs](https://phuse.s3.eu-central-1.amazonaws.com/Deliverables/Safety+Analytics/WP-087+Recommended+Definition+of++Treatment-Emergent+Adverse+Events+in+Clinical+Trials+.pdf). (#2455)
+
+- `derive_var_atoxgr_dir()` updated to handle more than one unit in grading metadata. Related to providing US (Conventional) units for grading (#2557).
+
+- The background checks in `derive_summary_records()` were too restrictive: `by_vars` were expected in `dataset` although the code did not require it. This requirement has therefore been dropped (#2686).
+
+- The functions `derive_summary_records()` and `derive_param_exist_flag()` 
+were updated to fix an issue where if a variable was in both `dataset_add` and `dataset_ref`, it was 
+added to the new records even if it was not in `by_vars`. (#2664)
+
 - `derive_var_atoxgr_dir()` updated to handle more than one unit in grading metadata. Related to providing US (Conventional) units for grading. (#2557)
 - The background checks in `derive_summary_records()` were too restrictive: `by_vars` were expected in `dataset` although the code did not require it. This requirement has therefore been dropped. (#2686)
+
 - The functions `derive_vars_joined()`, `derive_var_joined_exist_flag()`, and
 `filter_joined()` produce correct results now when they are used with `join_type
 = "before"` or `join_type = "after"` and `dataset` and `dataset_add` differ or
 the `filter_add` argument is used. (#2863)
 
 - `derive_vars_dt()`, `derive_vars_dtm()`, `impute_dtc_dt()`, `impute_dtc_dtm()`, `convert_dtc_to_dt()`, & `convert_dtc_to_dtm()` and related functions will now throw an error instead of a warning when `highest_imputation = "Y"` but neither `min_date` (when `date_imputation = "first"`) nor `max_dates` (when `date_imputation = "last"`) are specified. (#2654)
-
 
 ## Breaking Changes
 
@@ -96,6 +106,9 @@ read (#2623) and updated to include new metadata for grading using US (Conventio
 - The 'Details' section of the `derive_var_analysis_ratio()` function and the 'Derive Analysis Ratio' section of the "Creating a BDS Finding ADaM" vignette were updated to include references to `R2AyHI` and `R2AyLO`. (#2548)
 
 - The `derive_basetype_records()` documentation was updated to clarify `BASETYPE` derivations. (#2545)
+
+- The `derive_extreme_records()` documentation was updated to clarify which variables are populated
+from `dataset_ref` for the new observations. (#2664)
 
 ## Various
 
