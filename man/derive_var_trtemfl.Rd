@@ -201,6 +201,8 @@ comparing those against treatment start date.
 \item If missing AE start date then we flag as treatment-emergent as worst case
 (e.g. records 8, 11 and 13), unless we know that the AE end date was before
 treatment so we can rule out this being treatment-emergent (e.g. record 12).
+\item Any not treated subject would not get their AEs flagged as treatment-emergent
+(e.g. records 14-16).
 }
 
 \if{html}{\out{<div class="sourceCode r">}}\preformatted{library(tibble)
@@ -272,7 +274,7 @@ example, we now supply a treatment end date, \code{trt_end_date = TRTEDT} and
 an end window, \code{end_window = 10}. With these, any AE which started on or
 before treatment end date + 10 days is considered as treatment-emergent.
 Otherwise, those starting after the treatment end window are no longer
-flagged as treatment-emergent (e.g. record 7)
+flagged as treatment-emergent (e.g. record 7).
 }
 
 \if{html}{\out{<div class="sourceCode r">}}\preformatted{derive_var_trtemfl(
