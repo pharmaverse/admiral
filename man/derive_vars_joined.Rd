@@ -411,7 +411,7 @@ join is performed keeping all variables from \code{dataset_add}.
 \if{html}{\out{<div class="sourceCode r">}}\preformatted{library(tibble)
 library(lubridate)
 library(dplyr, warn.conflicts = FALSE)
-library(tidyr)
+library(tidyr, warn.conflicts = FALSE)
 
 adbds <- tribble(
   ~USUBJID, ~ADY, ~AVAL,
