@@ -39,7 +39,7 @@ the parameter. E.g., \code{AVAL.WEIGHT} is set to the value of \code{AVAL} where
 \code{PARAMCD == "WEIGHT"}.
 
 \describe{
-\item{Permitted values}{A list of expressions}
+\item{Permitted values}{}
 \item{Default value}{none}
 }}
 
