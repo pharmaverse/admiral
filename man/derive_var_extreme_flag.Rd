@@ -153,22 +153,17 @@ advs <- tribble(
   ~USUBJID, ~PARAMCD,    ~AVISIT,          ~ADT, ~AVAL,
   "1015",   "TEMP",   "BASELINE",  "2021-04-27",  38.0,
   "1015",   "TEMP",   "BASELINE",  "2021-04-25",  39.0,
-  "1015",   "TEMP",   "BASELINE",  "2021-04-23",  37.0,
-  "1015",   "TEMP",   "WEEK 1",    "2021-05-02",  37.5,
-  "1015",   "TEMP",   "WEEK 2",    "2021-05-07",  37.0,
+  "1015",   "TEMP",   "WEEK 2",    "2021-05-10",  37.5,
   "1015",   "WEIGHT", "SCREENING", "2021-04-19",  81.2,
-  "1015",   "WEIGHT", "SCREENING", "2021-04-20",  83.1,
   "1015",   "WEIGHT", "BASELINE",  "2021-04-25",  82.7,
   "1015",   "WEIGHT", "BASELINE",  "2021-04-27",  84.0,
   "1015",   "WEIGHT", "WEEK 2",    "2021-05-09",  82.5,
   "1023",   "TEMP",   "SCREENING", "2021-04-27",  38.0,
   "1023",   "TEMP",   "BASELINE",  "2021-04-28",  37.5,
-  "1023",   "TEMP",   "BASELINE",  "2021-04-29",  36.5,
+  "1023",   "TEMP",   "BASELINE",  "2021-04-29",  37.5,
   "1023",   "TEMP",   "WEEK 1",    "2021-05-03",  37.0,
-  "1023",   "TEMP",   "WEEK 2",    "2021-05-09",  37.0,
   "1023",   "WEIGHT", "SCREENING", "2021-04-27",  69.6,
   "1023",   "WEIGHT", "BASELINE",  "2021-04-29",  67.2,
-  "1023",   "WEIGHT", "WEEK 1",    "2021-05-01",  68.3,
   "1023",   "WEIGHT", "WEEK 1",    "2021-05-02",  65.9
 ) \%>\%
 mutate(
@@ -187,11 +182,11 @@ adae <- tribble(
   "1023",    "SKIN DISORDERS",  "ERYTHEMA",   "MILD",       8,      3
 ) \%>\%
 mutate(STUDYID = "AB123")}\if{html}{\out{</div>}}}
-\subsection{Flagging the first/last observation within a by group}{
+\subsection{Flagging the first/last observation within a by group (\code{order}, \code{mode})}{
 
 A new variable is added for each subject to flag the last observation
-within a by_group. Within each by group (specified by \code{by_vars}) the
-\code{order = ADT} argument specifies we wish to sort the records by analysis
+within a by group. Within each by group (specified by \code{by_vars}), the
+\code{order = exprs(ADT)} argument specifies we wish to sort the records by analysis
 date and then select the last one (\code{mode = "last"}). The name of the new
 variable is passed through the \code{new_var = LASTFL} call.
 
@@ -204,28 +199,23 @@ variable is passed through the \code{new_var = LASTFL} call.
   ) \%>\%
   arrange(STUDYID, USUBJID, PARAMCD, ADT) \%>\%
   select(STUDYID, everything())
-#> # A tibble: 19 × 7
+#> # A tibble: 14 × 7
 #>    STUDYID USUBJID PARAMCD AVISIT    ADT         AVAL LASTFL
 #>    <chr>   <chr>   <chr>   <chr>     <date>     <dbl> <chr> 
-#>  1 AB123   1015    TEMP    BASELINE  2021-04-23  37   <NA>  
-#>  2 AB123   1015    TEMP    BASELINE  2021-04-25  39   <NA>  
-#>  3 AB123   1015    TEMP    BASELINE  2021-04-27  38   <NA>  
-#>  4 AB123   1015    TEMP    WEEK 1    2021-05-02  37.5 <NA>  
-#>  5 AB123   1015    TEMP    WEEK 2    2021-05-07  37   Y     
-#>  6 AB123   1015    WEIGHT  SCREENING 2021-04-19  81.2 <NA>  
-#>  7 AB123   1015    WEIGHT  SCREENING 2021-04-20  83.1 <NA>  
-#>  8 AB123   1015    WEIGHT  BASELINE  2021-04-25  82.7 <NA>  
-#>  9 AB123   1015    WEIGHT  BASELINE  2021-04-27  84   <NA>  
-#> 10 AB123   1015    WEIGHT  WEEK 2    2021-05-09  82.5 Y     
-#> 11 AB123   1023    TEMP    SCREENING 2021-04-27  38   <NA>  
-#> 12 AB123   1023    TEMP    BASELINE  2021-04-28  37.5 <NA>  
-#> 13 AB123   1023    TEMP    BASELINE  2021-04-29  36.5 <NA>  
-#> 14 AB123   1023    TEMP    WEEK 1    2021-05-03  37   <NA>  
-#> 15 AB123   1023    TEMP    WEEK 2    2021-05-09  37   Y     
-#> 16 AB123   1023    WEIGHT  SCREENING 2021-04-27  69.6 <NA>  
-#> 17 AB123   1023    WEIGHT  BASELINE  2021-04-29  67.2 <NA>  
-#> 18 AB123   1023    WEIGHT  WEEK 1    2021-05-01  68.3 <NA>  
-#> 19 AB123   1023    WEIGHT  WEEK 1    2021-05-02  65.9 Y     }\if{html}{\out{</div>}}
+#>  1 AB123   1015    TEMP    BASELINE  2021-04-25  39   <NA>  
+#>  2 AB123   1015    TEMP    BASELINE  2021-04-27  38   <NA>  
+#>  3 AB123   1015    TEMP    WEEK 2    2021-05-10  37.5 Y     
+#>  4 AB123   1015    WEIGHT  SCREENING 2021-04-19  81.2 <NA>  
+#>  5 AB123   1015    WEIGHT  BASELINE  2021-04-25  82.7 <NA>  
+#>  6 AB123   1015    WEIGHT  BASELINE  2021-04-27  84   <NA>  
+#>  7 AB123   1015    WEIGHT  WEEK 2    2021-05-09  82.5 Y     
+#>  8 AB123   1023    TEMP    SCREENING 2021-04-27  38   <NA>  
+#>  9 AB123   1023    TEMP    BASELINE  2021-04-28  37.5 <NA>  
+#> 10 AB123   1023    TEMP    BASELINE  2021-04-29  37.5 <NA>  
+#> 11 AB123   1023    TEMP    WEEK 1    2021-05-03  37   Y     
+#> 12 AB123   1023    WEIGHT  SCREENING 2021-04-27  69.6 <NA>  
+#> 13 AB123   1023    WEIGHT  BASELINE  2021-04-29  67.2 <NA>  
+#> 14 AB123   1023    WEIGHT  WEEK 1    2021-05-02  65.9 Y     }\if{html}{\out{</div>}}
 
 Note here that a similar \code{FIRSTFL} variable could instead be derived
 simply by switching to \code{mode = "first"}. Alternatively, we could make use
@@ -240,28 +230,23 @@ of \code{desc()} within the sorting specified by \code{order}:
   ) \%>\%
   arrange(STUDYID, USUBJID, PARAMCD, ADT) \%>\%
   select(STUDYID, everything())
-#> # A tibble: 19 × 7
+#> # A tibble: 14 × 7
 #>    STUDYID USUBJID PARAMCD AVISIT    ADT         AVAL FIRSTFL
 #>    <chr>   <chr>   <chr>   <chr>     <date>     <dbl> <chr>  
-#>  1 AB123   1015    TEMP    BASELINE  2021-04-23  37   Y      
-#>  2 AB123   1015    TEMP    BASELINE  2021-04-25  39   <NA>   
-#>  3 AB123   1015    TEMP    BASELINE  2021-04-27  38   <NA>   
-#>  4 AB123   1015    TEMP    WEEK 1    2021-05-02  37.5 <NA>   
-#>  5 AB123   1015    TEMP    WEEK 2    2021-05-07  37   <NA>   
-#>  6 AB123   1015    WEIGHT  SCREENING 2021-04-19  81.2 Y      
-#>  7 AB123   1015    WEIGHT  SCREENING 2021-04-20  83.1 <NA>   
-#>  8 AB123   1015    WEIGHT  BASELINE  2021-04-25  82.7 <NA>   
-#>  9 AB123   1015    WEIGHT  BASELINE  2021-04-27  84   <NA>   
-#> 10 AB123   1015    WEIGHT  WEEK 2    2021-05-09  82.5 <NA>   
-#> 11 AB123   1023    TEMP    SCREENING 2021-04-27  38   Y      
-#> 12 AB123   1023    TEMP    BASELINE  2021-04-28  37.5 <NA>   
-#> 13 AB123   1023    TEMP    BASELINE  2021-04-29  36.5 <NA>   
-#> 14 AB123   1023    TEMP    WEEK 1    2021-05-03  37   <NA>   
-#> 15 AB123   1023    TEMP    WEEK 2    2021-05-09  37   <NA>   
-#> 16 AB123   1023    WEIGHT  SCREENING 2021-04-27  69.6 Y      
-#> 17 AB123   1023    WEIGHT  BASELINE  2021-04-29  67.2 <NA>   
-#> 18 AB123   1023    WEIGHT  WEEK 1    2021-05-01  68.3 <NA>   
-#> 19 AB123   1023    WEIGHT  WEEK 1    2021-05-02  65.9 <NA>   }\if{html}{\out{</div>}}}
+#>  1 AB123   1015    TEMP    BASELINE  2021-04-25  39   Y      
+#>  2 AB123   1015    TEMP    BASELINE  2021-04-27  38   <NA>   
+#>  3 AB123   1015    TEMP    WEEK 2    2021-05-10  37.5 <NA>   
+#>  4 AB123   1015    WEIGHT  SCREENING 2021-04-19  81.2 Y      
+#>  5 AB123   1015    WEIGHT  BASELINE  2021-04-25  82.7 <NA>   
+#>  6 AB123   1015    WEIGHT  BASELINE  2021-04-27  84   <NA>   
+#>  7 AB123   1015    WEIGHT  WEEK 2    2021-05-09  82.5 <NA>   
+#>  8 AB123   1023    TEMP    SCREENING 2021-04-27  38   Y      
+#>  9 AB123   1023    TEMP    BASELINE  2021-04-28  37.5 <NA>   
+#> 10 AB123   1023    TEMP    BASELINE  2021-04-29  37.5 <NA>   
+#> 11 AB123   1023    TEMP    WEEK 1    2021-05-03  37   <NA>   
+#> 12 AB123   1023    WEIGHT  SCREENING 2021-04-27  69.6 Y      
+#> 13 AB123   1023    WEIGHT  BASELINE  2021-04-29  67.2 <NA>   
+#> 14 AB123   1023    WEIGHT  WEEK 1    2021-05-02  65.9 <NA>   }\if{html}{\out{</div>}}}
 \subsection{Modifying the flag values (\code{true_value}, \code{false_value})}{
 
 The previous example is now enhanced with custom values for the flag
@@ -281,35 +266,30 @@ which is why they were not specified in the example above.
   ) \%>\%
   arrange(STUDYID, USUBJID, PARAMCD, ADT) \%>\%
   select(STUDYID, everything())
-#> # A tibble: 19 × 7
+#> # A tibble: 14 × 7
 #>    STUDYID USUBJID PARAMCD AVISIT    ADT         AVAL LASTFL
 #>    <chr>   <chr>   <chr>   <chr>     <date>     <dbl> <chr> 
-#>  1 AB123   1015    TEMP    BASELINE  2021-04-23  37   No    
-#>  2 AB123   1015    TEMP    BASELINE  2021-04-25  39   No    
-#>  3 AB123   1015    TEMP    BASELINE  2021-04-27  38   No    
-#>  4 AB123   1015    TEMP    WEEK 1    2021-05-02  37.5 No    
-#>  5 AB123   1015    TEMP    WEEK 2    2021-05-07  37   Yes   
-#>  6 AB123   1015    WEIGHT  SCREENING 2021-04-19  81.2 No    
-#>  7 AB123   1015    WEIGHT  SCREENING 2021-04-20  83.1 No    
-#>  8 AB123   1015    WEIGHT  BASELINE  2021-04-25  82.7 No    
-#>  9 AB123   1015    WEIGHT  BASELINE  2021-04-27  84   No    
-#> 10 AB123   1015    WEIGHT  WEEK 2    2021-05-09  82.5 Yes   
-#> 11 AB123   1023    TEMP    SCREENING 2021-04-27  38   No    
-#> 12 AB123   1023    TEMP    BASELINE  2021-04-28  37.5 No    
-#> 13 AB123   1023    TEMP    BASELINE  2021-04-29  36.5 No    
-#> 14 AB123   1023    TEMP    WEEK 1    2021-05-03  37   No    
-#> 15 AB123   1023    TEMP    WEEK 2    2021-05-09  37   Yes   
-#> 16 AB123   1023    WEIGHT  SCREENING 2021-04-27  69.6 No    
-#> 17 AB123   1023    WEIGHT  BASELINE  2021-04-29  67.2 No    
-#> 18 AB123   1023    WEIGHT  WEEK 1    2021-05-01  68.3 No    
-#> 19 AB123   1023    WEIGHT  WEEK 1    2021-05-02  65.9 Yes   }\if{html}{\out{</div>}}}
-\subsection{Creating temporary variables for sorting}{
+#>  1 AB123   1015    TEMP    BASELINE  2021-04-25  39   No    
+#>  2 AB123   1015    TEMP    BASELINE  2021-04-27  38   No    
+#>  3 AB123   1015    TEMP    WEEK 2    2021-05-10  37.5 Yes   
+#>  4 AB123   1015    WEIGHT  SCREENING 2021-04-19  81.2 No    
+#>  5 AB123   1015    WEIGHT  BASELINE  2021-04-25  82.7 No    
+#>  6 AB123   1015    WEIGHT  BASELINE  2021-04-27  84   No    
+#>  7 AB123   1015    WEIGHT  WEEK 2    2021-05-09  82.5 Yes   
+#>  8 AB123   1023    TEMP    SCREENING 2021-04-27  38   No    
+#>  9 AB123   1023    TEMP    BASELINE  2021-04-28  37.5 No    
+#> 10 AB123   1023    TEMP    BASELINE  2021-04-29  37.5 No    
+#> 11 AB123   1023    TEMP    WEEK 1    2021-05-03  37   Yes   
+#> 12 AB123   1023    WEIGHT  SCREENING 2021-04-27  69.6 No    
+#> 13 AB123   1023    WEIGHT  BASELINE  2021-04-29  67.2 No    
+#> 14 AB123   1023    WEIGHT  WEEK 1    2021-05-02  65.9 Yes   }\if{html}{\out{</div>}}}
+\subsection{Creating temporary variables for sorting (\code{check_type})}{
 
 In this example we wish to flag the first occurrence of the most
 severe AE within each subject. To ensure correct sorting of the
 severity values, \code{AESEV} must be pre-processed into a numeric variable
 \code{TEMP_AESEVN} which can then be passed inside \code{order}. Once again,
-to ensure we only flag the \emph{first} occurrence, we specify \code{AESDTY} and
+to ensure we only flag the \emph{first} occurrence, we specify \code{AESTDY} and
 \code{AESEQ} inside \code{order} as well.
 
 \if{html}{\out{<div class="sourceCode r">}}\preformatted{adae \%>\%
@@ -321,7 +301,8 @@ to ensure we only flag the \emph{first} occurrence, we specify \code{AESDTY} and
     new_var = AOCCIFL,
     by_vars = exprs(STUDYID, USUBJID),
     order = exprs(TEMP_AESEVN, AESTDY, AESEQ),
-    mode = "first"
+    mode = "first",
+    check_type = "warning"
   ) \%>\%
   arrange(STUDYID, USUBJID, AESTDY, AESEQ) \%>\%
   select(STUDYID, USUBJID, AEDECOD, AESEV, AESTDY, AESEQ, AOCCIFL)
@@ -334,14 +315,24 @@ to ensure we only flag the \emph{first} occurrence, we specify \code{AESDTY} and
 #> 4 AB123   1023    ERYTHEMA  MILD        3     1 <NA>   
 #> 5 AB123   1023    ERYTHEMA  SEVERE      5     2 Y      
 #> 6 AB123   1023    ERYTHEMA  MILD        8     3 <NA>   
-#> 7 AB123   1023    AV BLOCK  MILD       22     4 <NA>   }\if{html}{\out{</div>}}}
+#> 7 AB123   1023    AV BLOCK  MILD       22     4 <NA>   }\if{html}{\out{</div>}}
+
+Note here that the presence of \code{AESEQ} as a sorting variable inside
+the \code{order} argument ensures that the combination of \code{by_vars} and
+\code{order} indexes unique records in the dataset. If this had been omitted,
+the choice of \code{check_type = "warning"} would have ensured that
+\code{derive_var_extreme_event()} would throw a warning due to perceived
+duplicate records (in this case, the first two AEs for subject \code{"1015"}).
+If no sorting variables exist, or if these duplicates are known, then
+the user can silence the warning with \code{check_type = "none"}. Alternatively,
+the warning can be upgraded to an error with \code{check_type = "error"}.}
 \subsection{Flagging all records if multiple are identified (\code{flag_all})}{
 
-Revisiting the above example, if we instead wish to flag \emph{all}
-occurrences of the most severe AE, then we can use \code{flag_all = TRUE}.
-Note that we now also omit \code{AESEQ} from the \code{order} argument
-because we do not need to differentiate between two AEs occurring on
-the same day (e.g. for subject \code{"1015"}) as they are both flagged.
+Revisiting the above example, if we instead wish to flag \emph{all} AEs
+of the highest severity occurring on the earliest date, then we can use
+\code{flag_all = TRUE}. Note that we now also omit \code{AESEQ} from the \code{order}
+argument because we do not need to differentiate between two AEs occurring
+on the same day (e.g. for subject \code{"1015"}) as they are both flagged.
 
 \if{html}{\out{<div class="sourceCode r">}}\preformatted{adae \%>\%
   mutate(
@@ -367,7 +358,7 @@ the same day (e.g. for subject \code{"1015"}) as they are both flagged.
 #> 5 AB123   1023    ERYTHEMA  SEVERE      5     2 Y      
 #> 6 AB123   1023    ERYTHEMA  MILD        8     3 <NA>   
 #> 7 AB123   1023    AV BLOCK  MILD       22     4 <NA>   }\if{html}{\out{</div>}}}
-\subsection{Deriving baseline flag \code{ABLFL}}{
+\subsection{Deriving a baseline flag}{
 
 \code{derive_var_extreme_flag()} is very often used to derive the baseline
 flag \code{ABLFL}, so the following section contains various examples of this
@@ -395,40 +386,40 @@ argument.
 ) \%>\%
   arrange(STUDYID, USUBJID, PARAMCD, ADT) \%>\%
   select(STUDYID, everything())
-#> # A tibble: 19 × 7
+#> # A tibble: 14 × 7
 #>    STUDYID USUBJID PARAMCD AVISIT    ADT         AVAL ABLFL
 #>    <chr>   <chr>   <chr>   <chr>     <date>     <dbl> <chr>
-#>  1 AB123   1015    TEMP    BASELINE  2021-04-23  37   <NA> 
-#>  2 AB123   1015    TEMP    BASELINE  2021-04-25  39   <NA> 
-#>  3 AB123   1015    TEMP    BASELINE  2021-04-27  38   Y    
-#>  4 AB123   1015    TEMP    WEEK 1    2021-05-02  37.5 <NA> 
-#>  5 AB123   1015    TEMP    WEEK 2    2021-05-07  37   <NA> 
-#>  6 AB123   1015    WEIGHT  SCREENING 2021-04-19  81.2 <NA> 
-#>  7 AB123   1015    WEIGHT  SCREENING 2021-04-20  83.1 <NA> 
-#>  8 AB123   1015    WEIGHT  BASELINE  2021-04-25  82.7 <NA> 
-#>  9 AB123   1015    WEIGHT  BASELINE  2021-04-27  84   Y    
-#> 10 AB123   1015    WEIGHT  WEEK 2    2021-05-09  82.5 <NA> 
-#> 11 AB123   1023    TEMP    SCREENING 2021-04-27  38   <NA> 
-#> 12 AB123   1023    TEMP    BASELINE  2021-04-28  37.5 <NA> 
-#> 13 AB123   1023    TEMP    BASELINE  2021-04-29  36.5 Y    
-#> 14 AB123   1023    TEMP    WEEK 1    2021-05-03  37   <NA> 
-#> 15 AB123   1023    TEMP    WEEK 2    2021-05-09  37   <NA> 
-#> 16 AB123   1023    WEIGHT  SCREENING 2021-04-27  69.6 <NA> 
-#> 17 AB123   1023    WEIGHT  BASELINE  2021-04-29  67.2 Y    
-#> 18 AB123   1023    WEIGHT  WEEK 1    2021-05-01  68.3 <NA> 
-#> 19 AB123   1023    WEIGHT  WEEK 1    2021-05-02  65.9 <NA> }\if{html}{\out{</div>}}
+#>  1 AB123   1015    TEMP    BASELINE  2021-04-25  39   <NA> 
+#>  2 AB123   1015    TEMP    BASELINE  2021-04-27  38   Y    
+#>  3 AB123   1015    TEMP    WEEK 2    2021-05-10  37.5 <NA> 
+#>  4 AB123   1015    WEIGHT  SCREENING 2021-04-19  81.2 <NA> 
+#>  5 AB123   1015    WEIGHT  BASELINE  2021-04-25  82.7 <NA> 
+#>  6 AB123   1015    WEIGHT  BASELINE  2021-04-27  84   Y    
+#>  7 AB123   1015    WEIGHT  WEEK 2    2021-05-09  82.5 <NA> 
+#>  8 AB123   1023    TEMP    SCREENING 2021-04-27  38   <NA> 
+#>  9 AB123   1023    TEMP    BASELINE  2021-04-28  37.5 <NA> 
+#> 10 AB123   1023    TEMP    BASELINE  2021-04-29  37.5 Y    
+#> 11 AB123   1023    TEMP    WEEK 1    2021-05-03  37   <NA> 
+#> 12 AB123   1023    WEIGHT  SCREENING 2021-04-27  69.6 <NA> 
+#> 13 AB123   1023    WEIGHT  BASELINE  2021-04-29  67.2 Y    
+#> 14 AB123   1023    WEIGHT  WEEK 1    2021-05-02  65.9 <NA> }\if{html}{\out{</div>}}
 
-Instead, to set baseline as the lowest observation among
-those where \code{AVISIT = "BASELINE"}, we can modify the \code{order} argument,
-ensuring to sort by \code{AVAL} before \code{ADT}. Note if instead the highest
-was to be required, we would need to again make use of \code{desc()}.
+Alternatively, to set baseline as the lowest observation among
+those where \code{AVISIT = "BASELINE"} (selecting the latest if there are
+multiple) we can modify the \code{order} argument, ensuring to sort by
+descending \code{AVAL}  before \code{ADT}. Note here the synergy between \code{desc()}
+and \code{mode}, because \code{mode = "last"} applies to both the ordering
+variables \code{AVAL} and \code{ADT} and so we need to reverse only the ordering
+of the former to ensure that the lowest value is selected but also that
+the latest one among multiple is preferred. This is relevant for
+subject \code{"1023"}'s temperature records.
 
 \if{html}{\out{<div class="sourceCode r">}}\preformatted{restrict_derivation(
   advs,
   derivation = derive_var_extreme_flag,
   args = params(
     by_vars = exprs(USUBJID, PARAMCD),
-    order = exprs(AVAL, ADT),
+    order = exprs(desc(AVAL), ADT),
     new_var = ABLFL,
     mode = "last"
   ),
@@ -436,75 +427,66 @@ was to be required, we would need to again make use of \code{desc()}.
 ) \%>\%
   arrange(STUDYID, USUBJID, PARAMCD, ADT) \%>\%
   select(STUDYID, everything())
-#> # A tibble: 19 × 7
+#> # A tibble: 14 × 7
 #>    STUDYID USUBJID PARAMCD AVISIT    ADT         AVAL ABLFL
 #>    <chr>   <chr>   <chr>   <chr>     <date>     <dbl> <chr>
-#>  1 AB123   1015    TEMP    BASELINE  2021-04-23  37   <NA> 
-#>  2 AB123   1015    TEMP    BASELINE  2021-04-25  39   Y    
-#>  3 AB123   1015    TEMP    BASELINE  2021-04-27  38   <NA> 
-#>  4 AB123   1015    TEMP    WEEK 1    2021-05-02  37.5 <NA> 
-#>  5 AB123   1015    TEMP    WEEK 2    2021-05-07  37   <NA> 
-#>  6 AB123   1015    WEIGHT  SCREENING 2021-04-19  81.2 <NA> 
-#>  7 AB123   1015    WEIGHT  SCREENING 2021-04-20  83.1 <NA> 
-#>  8 AB123   1015    WEIGHT  BASELINE  2021-04-25  82.7 <NA> 
-#>  9 AB123   1015    WEIGHT  BASELINE  2021-04-27  84   Y    
-#> 10 AB123   1015    WEIGHT  WEEK 2    2021-05-09  82.5 <NA> 
-#> 11 AB123   1023    TEMP    SCREENING 2021-04-27  38   <NA> 
-#> 12 AB123   1023    TEMP    BASELINE  2021-04-28  37.5 Y    
-#> 13 AB123   1023    TEMP    BASELINE  2021-04-29  36.5 <NA> 
-#> 14 AB123   1023    TEMP    WEEK 1    2021-05-03  37   <NA> 
-#> 15 AB123   1023    TEMP    WEEK 2    2021-05-09  37   <NA> 
-#> 16 AB123   1023    WEIGHT  SCREENING 2021-04-27  69.6 <NA> 
-#> 17 AB123   1023    WEIGHT  BASELINE  2021-04-29  67.2 Y    
-#> 18 AB123   1023    WEIGHT  WEEK 1    2021-05-01  68.3 <NA> 
-#> 19 AB123   1023    WEIGHT  WEEK 1    2021-05-02  65.9 <NA> }\if{html}{\out{</div>}}
+#>  1 AB123   1015    TEMP    BASELINE  2021-04-25  39   <NA> 
+#>  2 AB123   1015    TEMP    BASELINE  2021-04-27  38   Y    
+#>  3 AB123   1015    TEMP    WEEK 2    2021-05-10  37.5 <NA> 
+#>  4 AB123   1015    WEIGHT  SCREENING 2021-04-19  81.2 <NA> 
+#>  5 AB123   1015    WEIGHT  BASELINE  2021-04-25  82.7 Y    
+#>  6 AB123   1015    WEIGHT  BASELINE  2021-04-27  84   <NA> 
+#>  7 AB123   1015    WEIGHT  WEEK 2    2021-05-09  82.5 <NA> 
+#>  8 AB123   1023    TEMP    SCREENING 2021-04-27  38   <NA> 
+#>  9 AB123   1023    TEMP    BASELINE  2021-04-28  37.5 <NA> 
+#> 10 AB123   1023    TEMP    BASELINE  2021-04-29  37.5 Y    
+#> 11 AB123   1023    TEMP    WEEK 1    2021-05-03  37   <NA> 
+#> 12 AB123   1023    WEIGHT  SCREENING 2021-04-27  69.6 <NA> 
+#> 13 AB123   1023    WEIGHT  BASELINE  2021-04-29  67.2 Y    
+#> 14 AB123   1023    WEIGHT  WEEK 1    2021-05-02  65.9 <NA> }\if{html}{\out{</div>}}
 
 In practice, baseline-setting may vary on a parameter by
 parameter basis, in which case \code{slice_derivation()} could be
 used in place of \code{restrict_derivation()}. In the example below, we
 set the baseline flag as follows: for temperature records, as the
 lowest value recorded at a baseline visit; for weight records,
-as the highest value recorded at a baseline visit.
+as the highest value recorded at a baseline visit. In both cases,
+we again select the latest observation if there are multiple.
 
 \if{html}{\out{<div class="sourceCode r">}}\preformatted{slice_derivation(
   advs,
   derivation = derive_var_extreme_flag,
   args = params(
     by_vars = exprs(USUBJID, PARAMCD),
-    order = exprs(AVAL, ADT),
+    mode = "last",
     new_var = ABLFL,
   ),
   derivation_slice(
     filter = AVISIT == "BASELINE" & PARAMCD == "TEMP",
-    args = params(mode = "first")
+    args = params(order = exprs(desc(AVAL), ADT))
   ),
   derivation_slice(
     filter = AVISIT == "BASELINE" & PARAMCD == "WEIGHT",
-    args = params(mode = "last")
+    args = params(order = exprs(AVAL, ADT))
   )
 ) \%>\%
   arrange(STUDYID, USUBJID, PARAMCD, ADT) \%>\%
   select(STUDYID, everything())
-#> # A tibble: 19 × 7
+#> # A tibble: 14 × 7
 #>    STUDYID USUBJID PARAMCD AVISIT    ADT         AVAL ABLFL
 #>    <chr>   <chr>   <chr>   <chr>     <date>     <dbl> <chr>
-#>  1 AB123   1015    TEMP    BASELINE  2021-04-23  37   Y    
-#>  2 AB123   1015    TEMP    BASELINE  2021-04-25  39   <NA> 
-#>  3 AB123   1015    TEMP    BASELINE  2021-04-27  38   <NA> 
-#>  4 AB123   1015    TEMP    WEEK 1    2021-05-02  37.5 <NA> 
-#>  5 AB123   1015    TEMP    WEEK 2    2021-05-07  37   <NA> 
-#>  6 AB123   1015    WEIGHT  SCREENING 2021-04-19  81.2 <NA> 
-#>  7 AB123   1015    WEIGHT  SCREENING 2021-04-20  83.1 <NA> 
-#>  8 AB123   1015    WEIGHT  BASELINE  2021-04-25  82.7 <NA> 
-#>  9 AB123   1015    WEIGHT  BASELINE  2021-04-27  84   Y    
-#> 10 AB123   1015    WEIGHT  WEEK 2    2021-05-09  82.5 <NA> 
-#> 11 AB123   1023    TEMP    SCREENING 2021-04-27  38   <NA> 
-#> 12 AB123   1023    TEMP    BASELINE  2021-04-28  37.5 <NA> 
-#> 13 AB123   1023    TEMP    BASELINE  2021-04-29  36.5 Y    
-#> 14 AB123   1023    TEMP    WEEK 1    2021-05-03  37   <NA> 
-#> 15 AB123   1023    TEMP    WEEK 2    2021-05-09  37   <NA> 
-#> 16 AB123   1023    WEIGHT  SCREENING 2021-04-27  69.6 <NA> 
-#> 17 AB123   1023    WEIGHT  BASELINE  2021-04-29  67.2 Y    
-#> 18 AB123   1023    WEIGHT  WEEK 1    2021-05-01  68.3 <NA> 
-#> 19 AB123   1023    WEIGHT  WEEK 1    2021-05-02  65.9 <NA> }\if{html}{\out{</div>}}}}
+#>  1 AB123   1015    TEMP    BASELINE  2021-04-25  39   <NA> 
+#>  2 AB123   1015    TEMP    BASELINE  2021-04-27  38   Y    
+#>  3 AB123   1015    TEMP    WEEK 2    2021-05-10  37.5 <NA> 
+#>  4 AB123   1015    WEIGHT  SCREENING 2021-04-19  81.2 <NA> 
+#>  5 AB123   1015    WEIGHT  BASELINE  2021-04-25  82.7 <NA> 
+#>  6 AB123   1015    WEIGHT  BASELINE  2021-04-27  84   Y    
+#>  7 AB123   1015    WEIGHT  WEEK 2    2021-05-09  82.5 <NA> 
+#>  8 AB123   1023    TEMP    SCREENING 2021-04-27  38   <NA> 
+#>  9 AB123   1023    TEMP    BASELINE  2021-04-28  37.5 <NA> 
+#> 10 AB123   1023    TEMP    BASELINE  2021-04-29  37.5 Y    
+#> 11 AB123   1023    TEMP    WEEK 1    2021-05-03  37   <NA> 
+#> 12 AB123   1023    WEIGHT  SCREENING 2021-04-27  69.6 <NA> 
+#> 13 AB123   1023    WEIGHT  BASELINE  2021-04-29  67.2 Y    
+#> 14 AB123   1023    WEIGHT  WEEK 1    2021-05-02  65.9 <NA> }\if{html}{\out{</div>}}}}
 
