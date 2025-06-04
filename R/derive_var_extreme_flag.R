@@ -135,8 +135,8 @@
 #' @caption Flagging the first/last observation within a by group
 #'
 #' @info A new variable is added for each subject to flag the last observation
-#'   within a by_group. Within each by group (specified by `by_vars`) the
-#'   `order = ADT` argument specifies we wish to sort the records by analysis
+#'   within a by group. Within each by group (specified by `by_vars`), the
+#'   `order = exprs(ADT)` argument specifies we wish to sort the records by analysis
 #'   date and then select the last one (`mode = "last"`). The name of the new
 #'   variable is passed through the `new_var = LASTFL` call.
 #'
@@ -193,7 +193,7 @@
 #'   severe AE within each subject. To ensure correct sorting of the
 #'   severity values, `AESEV` must be pre-processed into a numeric variable
 #'   `TEMP_AESEVN` which can then be passed inside `order`. Once again,
-#'   to ensure we only flag the *first* occurrence, we specify `AESDTY` and
+#'   to ensure we only flag the *first* occurrence, we specify `AESTDY` and
 #'   `AESEQ` inside `order` as well.
 #'
 #' @code
@@ -235,7 +235,7 @@
 #'   arrange(STUDYID, USUBJID, AESTDY, AESEQ) %>%
 #'   select(STUDYID, USUBJID, AEDECOD, AESEV, AESTDY, AESEQ, AOCCIFL)
 #'
-#' @caption Deriving baseline flag `ABLFL`
+#' @caption Deriving a baseline flag
 #'
 #' @info `derive_var_extreme_flag()` is very often used to derive the baseline
 #'   flag `ABLFL`, so the following section contains various examples of this
@@ -265,7 +265,7 @@
 #'   arrange(STUDYID, USUBJID, PARAMCD, ADT) %>%
 #'   select(STUDYID, everything())
 #'
-#' @info Instead, to set baseline as the lowest observation among
+#' @info Alternatively, to set baseline as the lowest observation among
 #'   those where `AVISIT = "BASELINE"`, we can modify the `order` argument,
 #'   ensuring to sort by `AVAL` before `ADT`. Note if instead the highest
 #'   was to be required, we would need to again make use of `desc()`.
