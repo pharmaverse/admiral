@@ -115,6 +115,10 @@
 #'
 #'   Variable names in the expression must not contain more than one dot.
 #'
+#'   Note that `dplyr` helper functions such as `dplyr::starts_with()` should
+#'   be avoided unless the list of variable-value pairs is clearly
+#'   specified in a statement via the `set_values_to` argument.
+#'
 #' @permitted List of variable-value pairs
 #'
 #' @param keep_nas Keep observations with `NA`s

@@ -97,6 +97,10 @@ defines the analysis value and parameter code for the new parameter.
 
 Variable names in the expression must not contain more than one dot.
 
+Note that \code{dplyr} helper functions such as \code{dplyr::starts_with()} should
+be avoided unless the list of variable-value pairs is clearly
+specified in a statement via the \code{set_values_to} argument.
+
 \describe{
 \item{Permitted values}{List of variable-value pairs}
 \item{Default value}{none}
