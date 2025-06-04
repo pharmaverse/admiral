@@ -113,7 +113,7 @@ new parameter, i.e., only observations fulfilling the condition are taken
 into account.
 
 \describe{
-\item{Permitted values}{a condition}
+\item{Permitted values}{an unquoted condition, e.g., \code{AVISIT == "BASELINE"}}
 \item{Default value}{\code{NULL}}
 }}
 
@@ -250,7 +250,7 @@ input dataset (\code{dataset}) contains exactly one observation for
 each parameter code specified for \code{parameters} and all contributing
 values (e.g., \code{AVAL.SYSBP} and \code{AVAL.DIABP}) are not \code{NA}.
 Indeed, patient \code{01-701-1028} does not get a \code{"WEEK 2"}-derived record
-as \code{AVAL} is \code{NA} for their \verb{"WEEK 2} systolic blood pressure.
+as \code{AVAL} is \code{NA} for their \code{"WEEK 2"} systolic blood pressure.
 }
 
 \if{html}{\out{<div class="sourceCode r">}}\preformatted{derive_param_computed(
@@ -288,7 +288,7 @@ some/all values of a variable used in the computation are missing.
 \itemize{
 \item Note that observations will be added here even if some of the values contributing
 to the computed values are \code{NA}. In particular, patient \code{01-701-1028}
-does not get a \code{"WEEK 2"}-derived record as compared to Example 1a, but
+does get a \code{"WEEK 2"}-derived record as compared to Example 1a, but
 with \code{AVAL = NA}.
 }
 
@@ -305,22 +305,23 @@ with \code{AVAL = NA}.
     ADTF = ADTF.SYSBP
   ),
   keep_nas = TRUE
-)
-#> # A tibble: 12 × 8
-#>    USUBJID     PARAMCD PARAM                   AVAL VISIT AVALU ADT        ADTF 
-#>    <chr>       <chr>   <chr>                  <dbl> <chr> <chr> <date>     <chr>
-#>  1 01-701-1015 DIABP   Diastolic Blood Press…  51   BASE… mmHg  2024-01-10 <NA> 
-#>  2 01-701-1015 DIABP   Diastolic Blood Press…  50   WEEK… mmHg  2024-01-24 <NA> 
-#>  3 01-701-1015 SYSBP   Systolic Blood Pressu… 121   BASE… mmHg  2024-01-10 <NA> 
-#>  4 01-701-1015 SYSBP   Systolic Blood Pressu… 121   WEEK… mmHg  2024-01-24 <NA> 
-#>  5 01-701-1028 DIABP   Diastolic Blood Press…  79   BASE… mmHg  2024-01-10 <NA> 
-#>  6 01-701-1028 DIABP   Diastolic Blood Press…  80   WEEK… mmHg  2024-01-24 <NA> 
-#>  7 01-701-1028 SYSBP   Systolic Blood Pressu… 130   BASE… mmHg  2024-01-10 <NA> 
-#>  8 01-701-1028 SYSBP   Systolic Blood Pressu…  NA   WEEK… mmHg  2024-01-24 <NA> 
-#>  9 01-701-1015 MAP     Mean Arterial Pressur…  74.3 BASE… mmHg  2024-01-10 <NA> 
-#> 10 01-701-1015 MAP     Mean Arterial Pressur…  73.7 WEEK… mmHg  2024-01-24 <NA> 
-#> 11 01-701-1028 MAP     Mean Arterial Pressur…  96   BASE… mmHg  2024-01-10 <NA> 
-#> 12 01-701-1028 MAP     Mean Arterial Pressur…  NA   WEEK… mmHg  2024-01-24 <NA> }\if{html}{\out{</div>}}}
+)\%>\%
+select(-PARAM)
+#> # A tibble: 12 × 7
+#>    USUBJID     PARAMCD  AVAL VISIT    AVALU ADT        ADTF 
+#>    <chr>       <chr>   <dbl> <chr>    <chr> <date>     <chr>
+#>  1 01-701-1015 DIABP    51   BASELINE mmHg  2024-01-10 <NA> 
+#>  2 01-701-1015 DIABP    50   WEEK 2   mmHg  2024-01-24 <NA> 
+#>  3 01-701-1015 SYSBP   121   BASELINE mmHg  2024-01-10 <NA> 
+#>  4 01-701-1015 SYSBP   121   WEEK 2   mmHg  2024-01-24 <NA> 
+#>  5 01-701-1028 DIABP    79   BASELINE mmHg  2024-01-10 <NA> 
+#>  6 01-701-1028 DIABP    80   WEEK 2   mmHg  2024-01-24 <NA> 
+#>  7 01-701-1028 SYSBP   130   BASELINE mmHg  2024-01-10 <NA> 
+#>  8 01-701-1028 SYSBP    NA   WEEK 2   mmHg  2024-01-24 <NA> 
+#>  9 01-701-1015 MAP      74.3 BASELINE mmHg  2024-01-10 <NA> 
+#> 10 01-701-1015 MAP      73.7 WEEK 2   mmHg  2024-01-24 <NA> 
+#> 11 01-701-1028 MAP      96   BASELINE mmHg  2024-01-10 <NA> 
+#> 12 01-701-1028 MAP      NA   WEEK 2   mmHg  2024-01-24 <NA> }\if{html}{\out{</div>}}}
 \subsection{Example 1c - Keeping missing values for some source
 variables (\code{keep_nas = exprs()})}{
 
@@ -335,7 +336,7 @@ In 1b, we do the opposite and allow the creation of new records
 regardless of how many \code{NA}s we encounter in the source variables.
 \item Here, we want to disregard \code{NA} values but only from the variables
 that are specified via \code{keep_na_values}.
-\item This is important because we have added \code{ADTF} in \code{set_values_to}
+\item This is important because we have added \code{ADTF} in \code{set_values_to},
 but all values of this variable are \code{NA}. As such, in order to
 get any derived records at all, but continue not getting one
 when \code{AVAL} is \code{NA} in any of the source records,

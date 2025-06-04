@@ -36,7 +36,7 @@
 #'   new parameter, i.e., only observations fulfilling the condition are taken
 #'   into account.
 #'
-#' @permitted a condition
+#' @permitted [condition]
 #'
 #' @param parameters Required parameter codes
 #'
@@ -192,7 +192,7 @@
 #'   each parameter code specified for `parameters` and all contributing
 #'   values (e.g., `AVAL.SYSBP` and `AVAL.DIABP`) are not `NA`.
 #'   Indeed, patient `01-701-1028` does not get a `"WEEK 2"`-derived record
-#'   as `AVAL` is `NA` for their `"WEEK 2` systolic blood pressure.
+#'   as `AVAL` is `NA` for their `"WEEK 2"` systolic blood pressure.
 #'
 #' @code
 #' derive_param_computed(
@@ -217,7 +217,7 @@
 #'
 #' - Note that observations will be added here even if some of the values contributing
 #'   to the computed values are `NA`. In particular, patient `01-701-1028`
-#'   does not get a `"WEEK 2"`-derived record as compared to Example 1a, but
+#'   does get a `"WEEK 2"`-derived record as compared to Example 1a, but
 #'   with `AVAL = NA`.
 #'
 #' @code
@@ -234,7 +234,8 @@
 #'     ADTF = ADTF.SYSBP
 #'   ),
 #'   keep_nas = TRUE
-#' )
+#' )%>%
+#' select(-PARAM)
 #'
 #' @caption Example 1c - Keeping missing values for some source
 #'     variables (`keep_nas = exprs()`)
@@ -250,7 +251,7 @@
 #'   regardless of how many `NA`s we encounter in the source variables.
 #' - Here, we want to disregard `NA` values but only from the variables
 #'   that are specified via `keep_na_values`.
-#' - This is important because we have added `ADTF` in `set_values_to`
+#' - This is important because we have added `ADTF` in `set_values_to`,
 #'   but all values of this variable are `NA`. As such, in order to
 #'   get any derived records at all, but continue not getting one
 #'   when `AVAL` is `NA` in any of the source records,
@@ -589,7 +590,7 @@ assert_parameters_argument <- function(parameters, optional = TRUE) {
 #'   the parameter. E.g., `AVAL.WEIGHT` is set to the value of `AVAL` where
 #'   `PARAMCD == "WEIGHT"`.
 #'
-#' @permitted A list of expressions
+#' @permitted
 #'
 #' @param filter Filter condition used for restricting the input dataset
 #'
