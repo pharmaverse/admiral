@@ -107,7 +107,7 @@
 #'   date_imputation = "04-06"
 #' )
 #'
-#' @caption Date imputation set to the last day and month (`date_imputation = "last"`)
+#' @caption Impute to the last day/month (`date_imputation = "last"`)
 #' @info In this example, we derive `AENDT` impute partial dates to last day/month, i.e.
 #' `date_imputation = "last"`.
 #'
