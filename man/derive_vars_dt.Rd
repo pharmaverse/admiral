@@ -277,7 +277,7 @@ imputation of the record with \code{"2019-02"}.
 #> 7 ""                    NA         <NA>  }\if{html}{\out{</div>}}}
 \subsection{Impute to the last day/month (\code{date_imputation = "last"})}{
 
-In this example, we derive \code{AENDT} impute partial dates to last day/month, i.e.
+In this example, we derive \code{ADT} impute partial dates to last day/month, i.e.
 \code{date_imputation = "last"}.
 
 \if{html}{\out{<div class="sourceCode r">}}\preformatted{qsdt <- tribble(
@@ -308,8 +308,8 @@ derive_vars_dt(
 #> 5 "2019"                2019-12-31 M    
 #> 6 "2019---07"           2019-12-31 M    
 #> 7 ""                    NA         <NA> }\if{html}{\out{</div>}}}
-\subsection{Date imputation flag variable suppressed (\code{flag_imputation = none})
-flag variable suppressed}{
+\subsection{Impute to the middle (\code{date_imputaton = "mid"}) and suppress
+imputation flag (\code{flag_imputation = "none"})}{
 
 In this example, we will derive \code{BIRTHDT} with date imputation flag
 (\code{--DTF}) suppressed. Also, note that \code{date_imputation = "mid"} and so partial
