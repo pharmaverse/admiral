@@ -5,7 +5,7 @@ list(
     condition = "an unquoted condition, e.g., `AVISIT == \"BASELINE\"`",
     dataset = "a dataset, i.e., a `data.frame` or tibble",
     dataset_list = "named list of datasets, e.g., `list(adsl = adsl, ae = ae)`",
-    date = "a date variable",
+    date = "a date or datetime variable",
     date_chr = "a date character variable",
     date_chr_vector = "a date character vector",
     date_imp = "`\"first\"`, `\"mid\"`, `\"last\"`, or user-defined",
