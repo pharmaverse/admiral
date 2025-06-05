@@ -73,7 +73,7 @@
 #'   dtc = MHSTDTC
 #' )
 #'
-#' @caption Derive a date variable with date imputation set to the first day and month
+#' @caption Date imputation set to the first day and month (`highest_imputation`)
 #' @info In this example, we derive `ASTDT` with imputation for partial dates to set
 #' to first day/month, i.e. `date_imputation = "first"`. A flag variable, `ASTDTF`,
 #' is automatically created. The flag variable indicates if imputation was done
@@ -89,7 +89,7 @@
 #'   date_imputation = "first"
 #' )
 #'
-#' @caption Derive a date variable with date imputation set to a specific date
+#' @caption Date imputation set to a specific date (`date_imputation`)
 #' @info In this example, we derive `ASTDT` with specific date imputation, i.e.
 #' `date_imputation = "04-06"`. Note that day portion, `"-06"`, is used in the
 #' imputation of the record with `"2019-02"`.
@@ -103,7 +103,7 @@
 #'   date_imputation = "04-06"
 #' )
 #'
-#' @caption Derive a date variable with date imputation set to the last day and month
+#' @caption Date imputation set to the last day and month (`date_imputation = "last"`)
 #' @info In this example, we derive `AENDT` impute partial dates to last day/month, i.e.
 #' `date_imputation = "last"`.
 #'
@@ -116,11 +116,11 @@
 #'   date_imputation = "last"
 #' )
 #'
-#' @caption Derive a date variable with date imputation and with the date imputation
+#' @caption Date imputation flag variable suppressed (`flag_imputation`)
 #' flag variable suppressed
 #' @info In this example, we will derive `BIRTHDT` with date imputation flag
 #' (`--DTF`) suppressed. Also, note that `date_imputation = "mid"` and so partial
-#' date imputation will be set to June 15th.
+#' date imputation will be set to June 30th for missing month and 15th for missing day only.
 #'
 #' @code
 #' derive_vars_dt(
@@ -132,11 +132,11 @@
 #'   flag_imputation = "none"
 #' )
 #'
-#' @caption Derive a date variable where the imputed date is not allowed to be set before
+#' @caption Imputed date is not allowed to be set before a user-defined date (`min_dates`)
 #' a user-defined date
 #' @info In this example, we derive `ASTDT` where `AESTDTC` is all partial dates in
 #' need of imputation. Using `min_dates = exprs(TRTSDTM)`, we are telling the function
-#' to not allow imputation dates to be before the treatment start date.
+#' to not allow imputation dates to be before the treatment start date
 #' via `min_dates` argument.
 #'
 #' @code
@@ -154,10 +154,10 @@
 #'   min_dates = exprs(TRTSDTM)
 #' )
 #'
-#' @caption Derive a date variable using imputation but preserve certain information
+#' @caption Preserve certain information from the partial dates during imputation (`preserve`)
 #' from the partial dates
 #' @info A user imputing dates as middle month/day, i.e. `date_imputation = "mid"` can
-#' use the `preserve` argument to "preserve" partial dates.  For example, `"2019---07"`,
+#' use the `preserve` argument to "preserve" information from the partial dates.  For example, `"2019---07"`,
 #' will be displayed as `"2019-06-07"` rather than `"2019-06-15"` with `preserve = TRUE`
 #'
 #' @code
@@ -172,7 +172,7 @@
 #' )
 #' @caption Further examples
 #' @info Further example usages of this function can be found in the
-#'   [Dates and Imputation vignette](../articles/imputation.html).
+#'   [Date and Time Imputation vignette](../articles/imputation.html).
 derive_vars_dt <- function(dataset,
                            new_vars_prefix,
                            dtc,
