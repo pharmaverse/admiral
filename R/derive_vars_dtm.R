@@ -56,7 +56,8 @@
 #'
 #' @caption Derive a date/time variable from a date character variable
 #' @info In this example, we derive `ASTDTM` from `MHSTDTC`. Note that the function
-#' produces the variable `ASTTMF` and appends missing `"hh:mm:ss"` to `ASTDTM`.
+#' automatically produces the variable `ASTTMF` and appends missing `"hh:mm:ss"`
+#' to `ASTDTM`.
 #' @code
 #' library(tibble)
 #' library(lubridate)
@@ -86,20 +87,6 @@
 #' two flag variables are created.
 #'
 #' @code
-#' library(tibble)
-#' library(lubridate)
-#'
-#' mhdt <- tribble(
-#'   ~MHSTDTC,
-#'   "2019-07-18T15:25:40",
-#'   "2019-07-18T15:25",
-#'   "2019-07-18",
-#'   "2019-02",
-#'   "2019",
-#'   "2019---07",
-#'   ""
-#' )
-#'
 #' derive_vars_dtm(
 #'  mhdt,
 #'  new_vars_prefix = "AST",
@@ -114,20 +101,6 @@
 #' @info In this example, we derive `ASTDTM` but suppress the `ASTTMF`. Note that
 #' function appends missing `"hh:mm:ss"` to `ASTDTM`.
 #' @code
-#' library(tibble)
-#' library(lubridate)
-#'
-#' mhdt <- tribble(
-#'   ~MHSTDTC,
-#'   "2019-07-18T15:25:40",
-#'   "2019-07-18T15:25",
-#'   "2019-07-18",
-#'   "2019-02",
-#'   "2019",
-#'   "2019---07",
-#'   ""
-#' )
-#'
 #' derive_vars_dtm(
 #'   mhdt,
 #'   new_vars_prefix = "AST",
@@ -163,15 +136,16 @@
 #' variable, if only hours and minutes are ever collected, and seconds are imputed
 #' in ('--DTM') as `00`, then it is not necessary to set ('--TMF') to 'S'.
 #' @code
+#'
 #' mhdt <- tribble(
-#'   ~MHSTDTC,
-#'   "2019-07-18T15:25",
-#'   "2019-07-18T15:25",
-#'   "2019-07-18",
-#'   "2019-02",
-#'   "2019",
-#'   "2019---07",
-#'   ""
+#' ~MHSTDTC,
+#' "2019-07-18T15:25",
+#' "2019-07-18T15:25",
+#' "2019-07-18",
+#' "2019-02",
+#' "2019",
+#' "2019---07",
+#' ""
 #' )
 #'
 #' derive_vars_dtm(

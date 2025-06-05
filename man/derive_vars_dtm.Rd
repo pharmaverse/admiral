@@ -235,7 +235,8 @@ Date/Time Derivation Functions that returns variable appended to dataset:
 \subsection{Derive a date/time variable from a date character variable}{
 
 In this example, we derive \code{ASTDTM} from \code{MHSTDTC}. Note that the function
-produces the variable \code{ASTTMF} and appends missing \code{"hh:mm:ss"} to \code{ASTDTM}.
+automatically produces the variable \code{ASTTMF} and appends missing \code{"hh:mm:ss"}
+to \code{ASTDTM}.
 
 \if{html}{\out{<div class="sourceCode r">}}\preformatted{library(tibble)
 library(lubridate)
@@ -274,21 +275,7 @@ all or part of \code{23:59:59} for time imputation. Note that \code{highest_impu
 must be used in conjunction with the two imputation arguments. Also note that
 two flag variables are created.
 
-\if{html}{\out{<div class="sourceCode r">}}\preformatted{library(tibble)
-library(lubridate)
-
-mhdt <- tribble(
-  ~MHSTDTC,
-  "2019-07-18T15:25:40",
-  "2019-07-18T15:25",
-  "2019-07-18",
-  "2019-02",
-  "2019",
-  "2019---07",
-  ""
-)
-
-derive_vars_dtm(
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{derive_vars_dtm(
  mhdt,
  new_vars_prefix = "AST",
  dtc = MHSTDTC,
@@ -311,21 +298,7 @@ derive_vars_dtm(
 In this example, we derive \code{ASTDTM} but suppress the \code{ASTTMF}. Note that
 function appends missing \code{"hh:mm:ss"} to \code{ASTDTM}.
 
-\if{html}{\out{<div class="sourceCode r">}}\preformatted{library(tibble)
-library(lubridate)
-
-mhdt <- tribble(
-  ~MHSTDTC,
-  "2019-07-18T15:25:40",
-  "2019-07-18T15:25",
-  "2019-07-18",
-  "2019-02",
-  "2019",
-  "2019---07",
-  ""
-)
-
-derive_vars_dtm(
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{derive_vars_dtm(
   mhdt,
   new_vars_prefix = "AST",
   dtc = MHSTDTC,
@@ -375,15 +348,16 @@ seconds in the \code{ASTTMF} variable. The ADaM IG states that given SDTM ('--DT
 variable, if only hours and minutes are ever collected, and seconds are imputed
 in ('--DTM') as \code{00}, then it is not necessary to set ('--TMF') to 'S'.
 
-\if{html}{\out{<div class="sourceCode r">}}\preformatted{mhdt <- tribble(
-  ~MHSTDTC,
-  "2019-07-18T15:25",
-  "2019-07-18T15:25",
-  "2019-07-18",
-  "2019-02",
-  "2019",
-  "2019---07",
-  ""
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{
+mhdt <- tribble(
+~MHSTDTC,
+"2019-07-18T15:25",
+"2019-07-18T15:25",
+"2019-07-18",
+"2019-02",
+"2019",
+"2019---07",
+""
 )
 
 derive_vars_dtm(

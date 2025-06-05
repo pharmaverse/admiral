@@ -342,12 +342,13 @@ derive_vars_dt(
 #>   <chr>   <dttm>              <date>     <chr> 
 #> 1 2020-12 2020-12-06 12:12:12 2020-12-06 D     
 #> 2 2020-11 2020-12-06 12:12:12 2020-11-01 D     }\if{html}{\out{</div>}}}
-\subsection{Preserve certain information from the partial dates during imputation (\code{preserve})
-from the partial dates}{
+\subsection{Preserve certain information from the partial dates during imputation
+(\code{preserve}) from the partial dates}{
 
 A user imputing dates as middle month/day, i.e. \code{date_imputation = "mid"} can
-use the \code{preserve} argument to "preserve" information from the partial dates.  For example, \code{"2019---07"},
-will be displayed as \code{"2019-06-07"} rather than \code{"2019-06-15"} with \code{preserve = TRUE}
+use the \code{preserve} argument to "preserve" information from the partial dates.
+For example, \code{"2019---07"}, will be displayed as \code{"2019-06-07"} rather than
+\code{"2019-06-15"} with \code{preserve = TRUE}
 
 \if{html}{\out{<div class="sourceCode r">}}\preformatted{derive_vars_dt(
   mhdt,

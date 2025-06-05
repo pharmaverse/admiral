@@ -153,11 +153,12 @@
 #'   min_dates = exprs(TRTSDTM)
 #' )
 #'
-#' @caption Preserve certain information from the partial dates during imputation (`preserve`)
-#' from the partial dates
+#' @caption Preserve certain information from the partial dates during imputation
+#' (`preserve`) from the partial dates
 #' @info A user imputing dates as middle month/day, i.e. `date_imputation = "mid"` can
-#' use the `preserve` argument to "preserve" information from the partial dates.  For example, `"2019---07"`,
-#' will be displayed as `"2019-06-07"` rather than `"2019-06-15"` with `preserve = TRUE`
+#' use the `preserve` argument to "preserve" information from the partial dates.
+#' For example, `"2019---07"`, will be displayed as `"2019-06-07"` rather than
+#' `"2019-06-15"` with `preserve = TRUE`
 #'
 #' @code
 #' derive_vars_dt(
