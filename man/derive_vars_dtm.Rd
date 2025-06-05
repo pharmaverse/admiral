@@ -346,7 +346,7 @@ derive_vars_dtm(
 #>   <chr>   <date>     <date>     <dttm>              <chr>  <chr> 
 #> 1 2020-12 2020-12-06 2020-12-24 2020-12-06 23:59:59 D      H     
 #> 2 2020-11 2020-12-06 2020-12-24 2020-11-30 23:59:59 D      H     }\if{html}{\out{</div>}}}
-\subsection{Imputation flag variable suppresses the use of \code{S} (\code{ignore_seconds_flag})}{
+\subsection{Suppress \code{"S"} for imputation flag (\code{ignore_seconds_flag})}{
 
 In this example, we set \code{ignore_seconds_flag = TRUE} to suppress \code{S} for
 seconds in the \code{ASTTMF} variable. The ADaM IG states that given SDTM ('--DTC')
@@ -356,7 +356,6 @@ in ('--DTM') as \code{00}, then it is not necessary to set ('--TMF') to 'S'.
 \if{html}{\out{<div class="sourceCode r">}}\preformatted{
 mhdt <- tribble(
 ~MHSTDTC,
-"2019-07-18T15:25",
 "2019-07-18T15:25",
 "2019-07-18",
 "2019-02",
@@ -372,17 +371,16 @@ derive_vars_dtm(
   highest_imputation = "M",
   ignore_seconds_flag = TRUE
 )
-#> # A tibble: 7 × 4
+#> # A tibble: 6 × 4
 #>   MHSTDTC            ASTDTM              ASTDTF ASTTMF
 #>   <chr>              <dttm>              <chr>  <chr> 
 #> 1 "2019-07-18T15:25" 2019-07-18 15:25:00 <NA>   <NA>  
-#> 2 "2019-07-18T15:25" 2019-07-18 15:25:00 <NA>   <NA>  
-#> 3 "2019-07-18"       2019-07-18 00:00:00 <NA>   H     
-#> 4 "2019-02"          2019-02-01 00:00:00 D      H     
-#> 5 "2019"             2019-01-01 00:00:00 M      H     
-#> 6 "2019---07"        2019-01-01 00:00:00 M      H     
-#> 7 ""                 NA                  <NA>   <NA>  }\if{html}{\out{</div>}}}
-\subsection{Preserve certain information from the partial date/times during imputation (\code{preserve})}{
+#> 2 "2019-07-18"       2019-07-18 00:00:00 <NA>   H     
+#> 3 "2019-02"          2019-02-01 00:00:00 D      H     
+#> 4 "2019"             2019-01-01 00:00:00 M      H     
+#> 5 "2019---07"        2019-01-01 00:00:00 M      H     
+#> 6 ""                 NA                  <NA>   <NA>  }\if{html}{\out{</div>}}}
+\subsection{Preserve lower components if higher ones were imputed (\code{preserve})}{
 
 In this example, we impute dates as the middle month/day with \code{date_imputation = "mid"}
 and impute time as last (\code{23:59:59}) with \code{time_imputation = "last"}.

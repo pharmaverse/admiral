@@ -192,7 +192,7 @@ Date/Time Derivation Functions that returns variable appended to dataset:
 \keyword{der_date_time}
 \keyword{der_gen}
 \section{Examples}{
-\subsection{Derive a date variable from a date character variable}{
+\subsection{Derive a date variable without imputation}{
 
 In this example, we derive \code{ASTDT} from \code{MHSTDTC} with no imputation
 done for partial dates.
@@ -228,11 +228,12 @@ derive_vars_dt(
 #> 7 ""                    NA        }\if{html}{\out{</div>}}}
 \subsection{Date imputation set to the first day and month (\code{date_imputation = first})}{
 
-In this example, we derive \code{ASTDT} with imputation for partial dates to set
-to first day/month, i.e. \code{date_imputation = "first"}. A flag variable, \code{ASTDTF},
+Imputation is requested by the \code{highest_imputation} argument. Here
+\code{highest_imputation = "M"} for month imputation is used, i.e. the highest
+imputation done on a partial date is up to the month. By default, missing date
+components are imputed to the first day/month/year. A date imputation flag variable, \code{ASTDTF},
 is automatically created. The flag variable indicates if imputation was done
-on the date. Please note the use of \code{highest_imputation = "M"} for month
-imputation, i.e. the highest imputation done on a partial date is up to the month.
+on the date.
 
 \if{html}{\out{<div class="sourceCode r">}}\preformatted{derive_vars_dt(
   mhdt,
@@ -274,7 +275,7 @@ imputation of the record with \code{"2019-02"}.
 #> 5 "2019"                2019-04-06 M     
 #> 6 "2019---07"           2019-04-06 M     
 #> 7 ""                    NA         <NA>  }\if{html}{\out{</div>}}}
-\subsection{Date imputation set to the last day and month (\code{date_imputation = "last"})}{
+\subsection{Impute to the last day/month (\code{date_imputation = "last"})}{
 
 In this example, we derive \code{AENDT} impute partial dates to last day/month, i.e.
 \code{date_imputation = "last"}.
@@ -303,16 +304,27 @@ In this example, we will derive \code{BIRTHDT} with date imputation flag
 (\code{--DTF}) suppressed. Also, note that \code{date_imputation = "mid"} and so partial
 date imputation will be set to June 30th for missing month and 15th for missing day only.
 
-\if{html}{\out{<div class="sourceCode r">}}\preformatted{derive_vars_dt(
-  mhdt,
-  new_vars_prefix = "BIRTH",
-  dtc = MHSTDTC,
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{
+exdt <- tribble(
+  ~EXSTDTC,
+  "2019-07-18T15:25:40",
+  "2019-07-18T15:25",
+  "2019-07-18",
+  "2019-02",
+  "2019",
+  "2019---07",
+  ""
+)
+derive_vars_dt(
+  exdt,
+  new_vars_prefix = "TRTS",
+  dtc = EXSTDTC,
   highest_imputation = "M",
   date_imputation = "mid",
   flag_imputation = "none"
 )
 #> # A tibble: 7 × 2
-#>   MHSTDTC               BIRTHDT   
+#>   EXSTDTC               TRTSDT    
 #>   <chr>                 <date>    
 #> 1 "2019-07-18T15:25:40" 2019-07-18
 #> 2 "2019-07-18T15:25"    2019-07-18
@@ -321,7 +333,7 @@ date imputation will be set to June 30th for missing month and 15th for missing 
 #> 5 "2019"                2019-06-30
 #> 6 "2019---07"           2019-06-30
 #> 7 ""                    NA        }\if{html}{\out{</div>}}}
-\subsection{Imputed date is not allowed to be set before a user-defined date (\code{min_dates})}{
+\subsection{Avoid imputation before a user-defined date (\code{min_dates})}{
 
 In this example, we derive \code{ASTDT} where \code{AESTDTC} is all partial dates in
 need of imputation. Using \code{min_dates = exprs(TRTSDTM)}, we are telling the function

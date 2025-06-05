@@ -79,7 +79,7 @@
 #' @caption Date imputation set to the first day and month (`date_imputation = first`)
 #' @info Imputation is requested by the `highest_imputation` argument. Here
 #' `highest_imputation = "M"` for month imputation is used, i.e. the highest
-#' imputation done on a partial date is up to the month. By default, missing date 
+#' imputation done on a partial date is up to the month. By default, missing date
 #' components are imputed to the first day/month/year. A date imputation flag variable, `ASTDTF`,
 #' is automatically created. The flag variable indicates if imputation was done
 #' on the date.
@@ -127,10 +127,21 @@
 #' date imputation will be set to June 30th for missing month and 15th for missing day only.
 #'
 #' @code
+#'
+#' exdt <- tribble(
+#'   ~EXSTDTC,
+#'   "2019-07-18T15:25:40",
+#'   "2019-07-18T15:25",
+#'   "2019-07-18",
+#'   "2019-02",
+#'   "2019",
+#'   "2019---07",
+#'   ""
+#' )
 #' derive_vars_dt(
-#'   mhdt,
-#'   new_vars_prefix = "BIRTH",
-#'   dtc = MHSTDTC,
+#'   exdt,
+#'   new_vars_prefix = "TRTS",
+#'   dtc = EXSTDTC,
 #'   highest_imputation = "M",
 #'   date_imputation = "mid",
 #'   flag_imputation = "none"
