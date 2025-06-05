@@ -131,8 +131,8 @@
 #'   date_imputation = "last"
 #' )
 #'
-#' @caption Date imputation flag variable suppressed (`flag_imputation = none`)
-#' flag variable suppressed
+#' @caption Impute to the middle (`date_imputaton = "mid"`) and suppress
+#' imputation flag (`flag_imputation = "none"`)
 #' @info In this example, we will derive `BIRTHDT` with date imputation flag
 #' (`--DTF`) suppressed. Also, note that `date_imputation = "mid"` and so partial
 #' date imputation will be set to June 30th for missing month and 15th for missing day only.
