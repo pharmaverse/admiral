@@ -73,7 +73,7 @@
 #'   dtc = MHSTDTC
 #' )
 #'
-#' @caption Date imputation set to the first day and month (`highest_imputation`)
+#' @caption Date imputation set to the first day and month (`date_imputation = first`)
 #' @info In this example, we derive `ASTDT` with imputation for partial dates to set
 #' to first day/month, i.e. `date_imputation = "first"`. A flag variable, `ASTDTF`,
 #' is automatically created. The flag variable indicates if imputation was done
@@ -89,7 +89,7 @@
 #'   date_imputation = "first"
 #' )
 #'
-#' @caption Date imputation set to a specific date (`date_imputation`)
+#' @caption Date imputation set to a specific date (`date_imputation = "04-06"`)
 #' @info In this example, we derive `ASTDT` with specific date imputation, i.e.
 #' `date_imputation = "04-06"`. Note that day portion, `"-06"`, is used in the
 #' imputation of the record with `"2019-02"`.
@@ -116,7 +116,7 @@
 #'   date_imputation = "last"
 #' )
 #'
-#' @caption Date imputation flag variable suppressed (`flag_imputation`)
+#' @caption Date imputation flag variable suppressed (`flag_imputation = none`)
 #' flag variable suppressed
 #' @info In this example, we will derive `BIRTHDT` with date imputation flag
 #' (`--DTF`) suppressed. Also, note that `date_imputation = "mid"` and so partial
@@ -133,7 +133,6 @@
 #' )
 #'
 #' @caption Imputed date is not allowed to be set before a user-defined date (`min_dates`)
-#' a user-defined date
 #' @info In this example, we derive `ASTDT` where `AESTDTC` is all partial dates in
 #' need of imputation. Using `min_dates = exprs(TRTSDTM)`, we are telling the function
 #' to not allow imputation dates to be before the treatment start date
@@ -161,7 +160,6 @@
 #' will be displayed as `"2019-06-07"` rather than `"2019-06-15"` with `preserve = TRUE`
 #'
 #' @code
-#'
 #' derive_vars_dt(
 #'   mhdt,
 #'   new_vars_prefix = "AST",

@@ -232,7 +232,7 @@ Date/Time Derivation Functions that returns variable appended to dataset:
 \keyword{der_date_time}
 \keyword{der_gen}
 \section{Examples}{
-\subsection{Derive a date/time variable from a date character variable.}{
+\subsection{Derive a date/time variable from a date character variable}{
 
 In this example, we derive \code{ASTDTM} from \code{MHSTDTC}. Note that the function
 produces the variable \code{ASTTMF} and appends missing \code{"hh:mm:ss"} to \code{ASTDTM}.
@@ -266,11 +266,11 @@ derive_vars_dtm(
 #> 5 "2019"                NA                  <NA>  
 #> 6 "2019---07"           NA                  <NA>  
 #> 7 ""                    NA                  <NA>  }\if{html}{\out{</div>}}}
-\subsection{Derive a date/time variable with date/time imputation set to "last".}{
+\subsection{Date/time imputation set to the latest (\code{date_imputation = "last"})}{
 
 In this example, we set \code{date_imputation = "last"} to get the last month/day
 for partial dates. We also set \code{time_imputation = "last"}. The function will use
-all or part of \code{23:59:00} for time imputation. Note that \code{highest_imputation = "M"}
+all or part of \code{23:59:59} for time imputation. Note that \code{highest_imputation = "M"}
 must be used in conjunction with the two imputation arguments. Also note that
 two flag variables are created.
 
@@ -306,8 +306,7 @@ derive_vars_dtm(
 #> 5 "2019"                2019-12-31 23:59:59 M      H     
 #> 6 "2019---07"           2019-12-31 23:59:59 M      H     
 #> 7 ""                    NA                  <NA>   <NA>  }\if{html}{\out{</div>}}}
-\subsection{Derive a date/time variable with the date/time imputation flag variables
-suppressed}{
+\subsection{Date/time imputation flag variables suppressed (\code{flag_imputation = none})}{
 
 In this example, we derive \code{ASTDTM} but suppress the \code{ASTTMF}. Note that
 function appends missing \code{"hh:mm:ss"} to \code{ASTDTM}.
@@ -342,16 +341,14 @@ derive_vars_dtm(
 #> 5 "2019"                NA                 
 #> 6 "2019---07"           NA                 
 #> 7 ""                    NA                 }\if{html}{\out{</div>}}}
-\subsection{Derive a date/time variable where imputed dates are not allowed after
-specified dates.}{
+\subsection{Imputed date/times are not allowed after specified date/times (\code{max_dates})}{
 
-In this example, we derive AENDTM where AE end date is imputed to the last date.
+In this example, we derive \code{AENDTM} where AE end date is imputed to the last date.
 To ensure that the imputed date is not after the death or data cut off date we can
 set \code{max_dates = exprs(DTHDT, DCUTDT)}. Note two flag variables: \code{ASTDTF} and \code{ASTTMF}
 are created.
 
-\if{html}{\out{<div class="sourceCode r">}}\preformatted{#
-adae <- tribble(
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{adae <- tribble(
   ~AEENDTC, ~DTHDT, ~DCUTDT,
   "2020-12", ymd("2020-12-06"), ymd("2020-12-24"),
   "2020-11", ymd("2020-12-06"), ymd("2020-12-24")
@@ -371,17 +368,14 @@ derive_vars_dtm(
 #>   <chr>   <date>     <date>     <dttm>              <chr>  <chr> 
 #> 1 2020-12 2020-12-06 2020-12-24 2020-12-06 23:59:59 D      H     
 #> 2 2020-11 2020-12-06 2020-12-24 2020-11-30 23:59:59 D      H     }\if{html}{\out{</div>}}}
-\subsection{Derive a date/time variable where the the imputation flag variable
-suppresses the use of \code{S}.}{
+\subsection{Imputation flag variable suppresses the use of \code{S} (\code{ignore_seconds_flag})}{
 
 In this example, we set \code{ignore_seconds_flag = TRUE} to suppress \code{S} for
 seconds in the \code{ASTTMF} variable. The ADaM IG states that given SDTM ('--DTC')
 variable, if only hours and minutes are ever collected, and seconds are imputed
 in ('--DTM') as \code{00}, then it is not necessary to set ('--TMF') to 'S'.
 
-\if{html}{\out{<div class="sourceCode r">}}\preformatted{#   Function now uses
-# ignore_seconds_flag to remove the 'S' from the --TMF variable.
-mhdt <- tribble(
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{mhdt <- tribble(
   ~MHSTDTC,
   "2019-07-18T15:25",
   "2019-07-18T15:25",
@@ -409,16 +403,14 @@ derive_vars_dtm(
 #> 5 "2019"             2019-01-01 00:00:00 M      H     
 #> 6 "2019---07"        2019-01-01 00:00:00 M      H     
 #> 7 ""                 NA                  <NA>   <NA>  }\if{html}{\out{</div>}}}
-\subsection{Derive a date/time  variable using imputation but preserve certain
-information from the partial dates.}{
+\subsection{Preserve certain information from the partial date/times during imputation (\code{preserve})}{
 
 In this example, we impute dates as the middle month/day, i.e. \code{date_imputation = "mid"}.
 We can use the \code{preserve} argument to "preserve" partial dates.  For example,
 \code{"2019---07"}, will be displayed as \code{"2019-06-07"} rather than \code{"2019-06-15"}
 by setting \code{preserve = TRUE}.
 
-\if{html}{\out{<div class="sourceCode r">}}\preformatted{
-derive_vars_dtm(
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{derive_vars_dtm(
   mhdt,
   new_vars_prefix = "AST",
   dtc = MHSTDTC,
@@ -439,5 +431,5 @@ derive_vars_dtm(
 \subsection{Further examples}{
 
 Further example usages of this function can be found in the
-\href{../articles/imputation.html}{Dates and Imputation vignette}.}}
+\href{../articles/imputation.html}{Date and Time Imputation vignette}.}}
 

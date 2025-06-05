@@ -110,8 +110,7 @@
 #' )
 #'
 #'
-#' @caption Date/time imputation flag variables suppressed (`flag_imputation`)
-#' suppressed
+#' @caption Date/time imputation flag variables suppressed (`flag_imputation = none`)
 #' @info In this example, we derive `ASTDTM` but suppress the `ASTTMF`. Note that
 #' function appends missing `"hh:mm:ss"` to `ASTDTM`.
 #' @code
@@ -137,13 +136,11 @@
 #' )
 #'
 #' @caption Imputed date/times are not allowed after specified date/times (`max_dates`)
-#' specified dates.
 #' @info In this example, we derive `AENDTM` where AE end date is imputed to the last date.
 #' To ensure that the imputed date is not after the death or data cut off date we can
 #' set `max_dates = exprs(DTHDT, DCUTDT)`. Note two flag variables: `ASTDTF` and `ASTTMF`
 #' are created.
 #' @code
-#' #
 #' adae <- tribble(
 #'   ~AEENDTC, ~DTHDT, ~DCUTDT,
 #'   "2020-12", ymd("2020-12-06"), ymd("2020-12-24"),
@@ -161,14 +158,11 @@
 #' )
 #'
 #' @caption Imputation flag variable suppresses the use of `S` (`ignore_seconds_flag`)
-#' suppresses the use of `S`.
 #' @info In this example, we set `ignore_seconds_flag = TRUE` to suppress `S` for
 #' seconds in the `ASTTMF` variable. The ADaM IG states that given SDTM ('--DTC')
 #' variable, if only hours and minutes are ever collected, and seconds are imputed
 #' in ('--DTM') as `00`, then it is not necessary to set ('--TMF') to 'S'.
 #' @code
-#' #   Function now uses
-#' # ignore_seconds_flag to remove the 'S' from the --TMF variable.
 #' mhdt <- tribble(
 #'   ~MHSTDTC,
 #'   "2019-07-18T15:25",
@@ -189,13 +183,11 @@
 #' )
 #'
 #' @caption Preserve certain information from the partial date/times during imputation (`preserve`)
-#' information from the partial dates.
 #' @info In this example, we impute dates as the middle month/day, i.e. `date_imputation = "mid"`.
 #' We can use the `preserve` argument to "preserve" partial dates.  For example,
 #' `"2019---07"`, will be displayed as `"2019-06-07"` rather than `"2019-06-15"`
 #' by setting `preserve = TRUE`.
 #' @code
-#'
 #' derive_vars_dtm(
 #'   mhdt,
 #'   new_vars_prefix = "AST",
