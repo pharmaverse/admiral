@@ -17,6 +17,7 @@ convert_dtc_to_dt(
 \item{dtc}{The --DTC date to convert.
 
 \describe{
+\item{Permitted values}{a date character vector}
 \item{Default value}{none}
 }}
 
@@ -65,6 +66,7 @@ The year can not be specified; for imputing the year
 be used (see examples).
 
 \describe{
+\item{Permitted values}{\code{"first"}, \code{"mid"}, \code{"last"}, or user-defined}
 \item{Default value}{\code{"first"}}
 }}
 

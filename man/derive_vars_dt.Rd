@@ -22,6 +22,7 @@ derive_vars_dt(
 The variables specified by the \code{dtc} argument are expected to be in the dataset.
 
 \describe{
+\item{Permitted values}{a dataset, i.e., a \code{data.frame} or tibble}
 \item{Default value}{none}
 }}
 
@@ -32,6 +33,7 @@ the specified prefix and for the date imputation flag "DTF". I.e., for
 \code{new_vars_prefix = "AST"} the variables \code{ASTDT} and \code{ASTDTF} are created.
 
 \describe{
+\item{Permitted values}{a character scalar, i.e., a character vector of length one}
 \item{Default value}{none}
 }}
 
@@ -42,6 +44,7 @@ A character date is expected in a format like \code{yyyy-mm-dd} or
 valid "missing" value for any component.
 
 \describe{
+\item{Permitted values}{a date character variable}
 \item{Default value}{none}
 }}
 
@@ -90,6 +93,7 @@ The year can not be specified; for imputing the year
 be used (see examples).
 
 \describe{
+\item{Permitted values}{\code{"first"}, \code{"mid"}, \code{"last"}, or user-defined}
 \item{Default value}{\code{"first"}}
 }}
 

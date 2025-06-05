@@ -11,6 +11,8 @@
 #' @param dataset
 #' `r roxygen_param_dataset(expected_vars = c("dtc"))`
 #'
+#' @permitted [dataset]
+#'
 #' @param new_vars_prefix Prefix used for the output variable(s).
 #'
 #'   A character scalar is expected. For the date variable "DT" is appended to
@@ -18,6 +20,7 @@
 #'   imputation flag "TMF". I.e., for `new_vars_prefix = "AST"` the variables
 #'   `ASTDT`, `ASTDTF`, and `ASTTMF` are created.
 #'
+#' @permitted [char_scalar]
 #'
 #' @param flag_imputation Whether the date/time imputation flag(s) must also be derived.
 #'
@@ -31,8 +34,7 @@
 #'
 #'   If `"none"` is specified, then no date or time imputation flag is derived.
 #'
-#' @permitted `"auto"`, `"date"`, `"time"`, `"both"`, or `"none"`
-#'
+#' @permitted [date_time_flag_imp]
 #'
 #' @inheritParams impute_dtc_dtm
 #' @inheritParams compute_tmf
@@ -157,17 +159,30 @@
 #' )
 #'
 #' @caption Preserve certain information from the partial date/times during imputation (`preserve`)
-#' @info In this example, we impute dates as the middle month/day, i.e. `date_imputation = "mid"`.
-#' We can use the `preserve` argument to "preserve" partial dates.  For example,
-#' `"2019---07"`, will be displayed as `"2019-06-07"` rather than `"2019-06-15"`
-#' by setting `preserve = TRUE`.
+#' @info In this example, we impute dates as the middle month/day with `date_imputation = "mid"`
+#' and impute time as last (`23:59:59`) with `time_imputation = "last"`.
+#' We use the `preserve` argument to "preserve" partial dates.  For example,
+#' `"2019---18T15:-:05"`, will be displayed as `"2019-06-18 15:59:05"` by setting
+#' `preserve = TRUE`.
 #' @code
+#' mhdt <- tribble(
+#' ~MHSTDTC,
+#' "2019-07-18T15:25",
+#' "2019---18T15:-:05",
+#' "2019-07-18",
+#' "2019-02",
+#' "2019",
+#' "2019---07",
+#' ""
+#' )
+#'
 #' derive_vars_dtm(
 #'   mhdt,
 #'   new_vars_prefix = "AST",
 #'   dtc = MHSTDTC,
 #'   highest_imputation = "M",
 #'   date_imputation = "mid",
+#'   time_imputation = "last",
 #'   preserve = TRUE
 #' )
 #' @caption Further examples
@@ -268,6 +283,8 @@ derive_vars_dtm <- function(dataset,
 #'
 #' @param dtc The `'--DTC'` date to convert.
 #'
+#' @permitted [date_chr_vector]
+#'
 #' @inheritParams impute_dtc_dtm
 #'
 #' @details Usually this computation function can not be used with `%>%`.
@@ -325,6 +342,8 @@ convert_dtc_to_dtm <- function(dtc,
 #'   `yyyy-mm-ddThh:mm:ss`. Trailing components can be omitted and `-` is a
 #'   valid "missing" value for any component.
 #'
+#' @permitted [date_chr]
+#'
 #' @param highest_imputation Highest imputation level
 #'
 #'   The `highest_imputation` argument controls which components of the DTC
@@ -342,9 +361,7 @@ convert_dtc_to_dtm <- function(dtc,
 #'   and `min_dates` or `max_dates` should be specified respectively. Otherwise,
 #'   `NA_character_` is returned if the year component is missing.
 #'
-#' @permitted `"Y"` (year, highest level), `"M"` (month), `"D"`
-#'   (day), `"h"` (hour), `"m"` (minute), `"s"` (second), `"n"` (none, lowest
-#'   level)
+#' @permitted [date_time_high_imp]
 #'
 #' @param time_imputation The value to impute the time when a timepart is
 #'   missing.
@@ -355,6 +372,8 @@ convert_dtc_to_dtm <- function(dtc,
 #'   - or as a keyword: `"first"`,`"last"` to impute to the start/end of a day.
 #'
 #'   The argument is ignored if `highest_imputation = "n"`.
+#'
+#' @permitted [time_imp]
 #'
 #' @param min_dates Minimum dates
 #'
@@ -405,7 +424,7 @@ convert_dtc_to_dtm <- function(dtc,
 #' For example `"2019---07"` would return `"2019-06-07` if `preserve = TRUE`
 #' (and `date_imputation = "mid"`).
 #'
-#' @permitted `TRUE`, `FALSE`
+#' @permitted [boolean]
 #'
 #' @inheritParams impute_dtc_dt
 #'

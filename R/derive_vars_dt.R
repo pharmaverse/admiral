@@ -11,11 +11,15 @@
 #' @param dataset
 #' `r roxygen_param_dataset(expected_vars = c("dtc"))`
 #'
+#' @permitted [dataset]
+#'
 #' @param new_vars_prefix Prefix used for the output variable(s).
 #'
 #'   A character scalar is expected. For the date variable "DT" is appended to
 #'   the specified prefix and for the date imputation flag "DTF". I.e., for
 #'   `new_vars_prefix = "AST"` the variables `ASTDT` and `ASTDTF` are created.
+#'
+#' @permitted [char_scalar]
 #'
 #' @param flag_imputation Whether the date imputation flag must also be derived.
 #'
@@ -26,8 +30,7 @@
 #'
 #'   If `"none"` is specified, then no date imputation flag is derived.
 #'
-#' @permitted `"auto"`, `"date"` or `"none"`
-#'
+#' @permitted [date_flag_imp]
 #'
 #' @inheritParams impute_dtc_dt
 #'
@@ -246,8 +249,9 @@ derive_vars_dt <- function(dataset,
 #'
 #' @param dtc The --DTC date to convert.
 #'
-#' @inheritParams impute_dtc_dt
+#' @permitted [date_chr_vector]
 #'
+#' @inheritParams impute_dtc_dt
 #'
 #' @details Usually this computation function can not be used with `%>%`.
 #'
@@ -298,6 +302,8 @@ convert_dtc_to_dt <- function(dtc,
 #'   `yyyy-mm-ddThh:mm:ss`. Trailing components can be omitted and `-` is a
 #'   valid "missing" value for any component.
 #'
+#' @permitted [date_chr]
+#'
 #' @param highest_imputation Highest imputation level
 #'
 #'   The `highest_imputation` argument controls which components of the DTC
@@ -315,8 +321,7 @@ convert_dtc_to_dt <- function(dtc,
 #'   and `min_dates` or `max_dates` must be specified respectively. Otherwise,
 #'   an error is thrown.
 #'
-#' @permitted `"Y"` (year, highest level), `"M"` (month), `"D"`
-#'   (day), `"n"` (none, lowest level)
+#' @permitted [date_high_imp]
 #'
 #' @param date_imputation The value to impute the day/month when a datepart is
 #'   missing.
@@ -335,6 +340,8 @@ convert_dtc_to_dt <- function(dtc,
 #'   The year can not be specified; for imputing the year
 #'   `"first"` or `"last"` together with `min_dates` or `max_dates` argument can
 #'   be used (see examples).
+#'
+#' @permitted [date_imp]
 #'
 #' @param min_dates Minimum dates
 #'

@@ -24,6 +24,7 @@ derive_vars_dtm(
 The variables specified by the \code{dtc} argument are expected to be in the dataset.
 
 \describe{
+\item{Permitted values}{a dataset, i.e., a \code{data.frame} or tibble}
 \item{Default value}{none}
 }}
 
@@ -35,6 +36,7 @@ imputation flag "TMF". I.e., for \code{new_vars_prefix = "AST"} the variables
 \code{ASTDT}, \code{ASTDTF}, and \code{ASTTMF} are created.
 
 \describe{
+\item{Permitted values}{a character scalar, i.e., a character vector of length one}
 \item{Default value}{none}
 }}
 
@@ -45,6 +47,7 @@ A character date is expected in a format like \code{yyyy-mm-dd} or
 valid "missing" value for any component.
 
 \describe{
+\item{Permitted values}{a date character variable}
 \item{Default value}{none}
 }}
 
@@ -94,6 +97,7 @@ The year can not be specified; for imputing the year
 be used (see examples).
 
 \describe{
+\item{Permitted values}{\code{"first"}, \code{"mid"}, \code{"last"}, or user-defined}
 \item{Default value}{\code{"first"}}
 }}
 
@@ -110,6 +114,7 @@ for the start of the day,
 The argument is ignored if \code{highest_imputation = "n"}.
 
 \describe{
+\item{Permitted values}{\code{"first"}, \code{"last"}, or user-defined}
 \item{Default value}{\code{"first"}}
 }}
 
@@ -126,7 +131,7 @@ then time imputation flag is derived.
 If \code{"none"} is specified, then no date or time imputation flag is derived.
 
 \describe{
-\item{Permitted values}{\code{"auto"}, \code{"date"}, \code{"time"}, \code{"both"}, or \code{"none"}}
+\item{Permitted values}{\code{"auto"}, \code{"date"},\code{"time"}, \code{"both"} or \code{"none"}}
 \item{Default value}{\code{"auto"}}
 }}
 
@@ -187,7 +192,7 @@ For example \code{"2019---07"} would return \verb{"2019-06-07} if \code{preserve
 (and \code{date_imputation = "mid"}).
 
 \describe{
-\item{Permitted values}{\code{TRUE}, \code{FALSE}}
+\item{Permitted values}{\code{"TRUE"}, \code{"FALSE"}}
 \item{Default value}{\code{FALSE}}
 }}
 
@@ -379,29 +384,42 @@ derive_vars_dtm(
 #> 7 ""                 NA                  <NA>   <NA>  }\if{html}{\out{</div>}}}
 \subsection{Preserve certain information from the partial date/times during imputation (\code{preserve})}{
 
-In this example, we impute dates as the middle month/day, i.e. \code{date_imputation = "mid"}.
-We can use the \code{preserve} argument to "preserve" partial dates.  For example,
-\code{"2019---07"}, will be displayed as \code{"2019-06-07"} rather than \code{"2019-06-15"}
-by setting \code{preserve = TRUE}.
+In this example, we impute dates as the middle month/day with \code{date_imputation = "mid"}
+and impute time as last (\code{23:59:59}) with \code{time_imputation = "last"}.
+We use the \code{preserve} argument to "preserve" partial dates.  For example,
+\code{"2019---18T15:-:05"}, will be displayed as \code{"2019-06-18 15:59:05"} by setting
+\code{preserve = TRUE}.
 
-\if{html}{\out{<div class="sourceCode r">}}\preformatted{derive_vars_dtm(
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{mhdt <- tribble(
+~MHSTDTC,
+"2019-07-18T15:25",
+"2019---18T15:-:05",
+"2019-07-18",
+"2019-02",
+"2019",
+"2019---07",
+""
+)
+
+derive_vars_dtm(
   mhdt,
   new_vars_prefix = "AST",
   dtc = MHSTDTC,
   highest_imputation = "M",
   date_imputation = "mid",
+  time_imputation = "last",
   preserve = TRUE
 )
 #> # A tibble: 7 × 4
-#>   MHSTDTC            ASTDTM              ASTDTF ASTTMF
-#>   <chr>              <dttm>              <chr>  <chr> 
-#> 1 "2019-07-18T15:25" 2019-07-18 15:25:00 <NA>   S     
-#> 2 "2019-07-18T15:25" 2019-07-18 15:25:00 <NA>   S     
-#> 3 "2019-07-18"       2019-07-18 00:00:00 <NA>   H     
-#> 4 "2019-02"          2019-02-15 00:00:00 D      H     
-#> 5 "2019"             2019-06-30 00:00:00 M      H     
-#> 6 "2019---07"        2019-06-07 00:00:00 M      H     
-#> 7 ""                 NA                  <NA>   <NA>  }\if{html}{\out{</div>}}}
+#>   MHSTDTC             ASTDTM              ASTDTF ASTTMF
+#>   <chr>               <dttm>              <chr>  <chr> 
+#> 1 "2019-07-18T15:25"  2019-07-18 15:25:59 <NA>   S     
+#> 2 "2019---18T15:-:05" 2019-06-18 15:59:05 M      M     
+#> 3 "2019-07-18"        2019-07-18 23:59:59 <NA>   H     
+#> 4 "2019-02"           2019-02-15 23:59:59 D      H     
+#> 5 "2019"              2019-06-30 23:59:59 M      H     
+#> 6 "2019---07"         2019-06-07 23:59:59 M      H     
+#> 7 ""                  NA                  <NA>   <NA>  }\if{html}{\out{</div>}}}
 \subsection{Further examples}{
 
 Further example usages of this function can be found in the
