@@ -85,6 +85,7 @@ records. (#2683)
 - The examples section of the following functions was enhanced:
     - `derive_extreme_records()` (#2585)
     - `derive_param_tte()` (#2704)
+    - `derive_param_computed()` (#2701)
     - `derive_summary_records()` (#2707)
     - `derive_extreme_event()` (#2735)
     - `derive_vars_joined()` (#2727)

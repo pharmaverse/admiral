@@ -34,6 +34,7 @@ dataset. Only variables specified in \code{by_vars} will be populated
 in the newly created records.
 
 \describe{
+\item{Permitted values}{list of variables created by \code{exprs()}, e.g., \code{exprs(USUBJID, VISIT)}}
 \item{Default value}{none}
 }}
 
@@ -75,7 +76,7 @@ new parameter, i.e., only observations fulfilling the condition are taken
 into account.
 
 \describe{
-\item{Permitted values}{a condition}
+\item{Permitted values}{an unquoted condition, e.g., \code{AVISIT == "BASELINE"}}
 \item{Default value}{\code{NULL}}
 }}
 }
