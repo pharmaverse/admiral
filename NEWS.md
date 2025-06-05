@@ -43,6 +43,7 @@ were updated to fix an issue where if a variable was in both `dataset_add` and `
 added to the new records even if it was not in `by_vars`. (#2664)
 
 - `derive_var_atoxgr_dir()` updated to handle more than one unit in grading metadata. Related to providing US (Conventional) units for grading. (#2557)
+
 - The background checks in `derive_summary_records()` were too restrictive: `by_vars` were expected in `dataset` although the code did not require it. This requirement has therefore been dropped. (#2686)
 
 - The functions `derive_vars_joined()`, `derive_var_joined_exist_flag()`, and
@@ -51,6 +52,9 @@ added to the new records even if it was not in `by_vars`. (#2664)
 the `filter_add` argument is used. (#2863)
 
 - `derive_vars_dt()`, `derive_vars_dtm()`, `impute_dtc_dt()`, `impute_dtc_dtm()`, `convert_dtc_to_dt()`, & `convert_dtc_to_dtm()` and related functions will now throw an error instead of a warning when `highest_imputation = "Y"` but neither `min_date` (when `date_imputation = "first"`) nor `max_dates` (when `date_imputation = "last"`) are specified. (#2654)
+
+- `create_query_data()` no longer issues warnings when `basket_select()` objects
+with custom arguments of length greater than one are used. (#2751)
 
 ## Breaking Changes
 
