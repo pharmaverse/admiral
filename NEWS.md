@@ -10,6 +10,12 @@
     - The output of the structured examples used for complex functions is
     displayed in the help pages in RStudio.
     
+- New function `derive_vars_joined_summary()` to derive summary variables from
+  selected records of an additional dataset where the selection depends on
+  variables from both the input dataset and the additional dataset. For example,
+  the cumulative dose up to each adverse event in `ADAE` can be derived with the
+  new function. (#2652)
+
 - New lab grading metadata for US (Conventional) units for the three grading criteria
 `admiral` already produces for SI units (#2557).
     - `atoxgr_criteria_ctcv4_uscv` (NCI-CTCAEv4 criteria)
@@ -19,22 +25,39 @@
 ## Updates of Existing Functions
 
 - In `derive_vars_joined()`, the `filter_add` argument is now correctly applied for all join types, fixing an issue where it was ignored when `join_type != "all"`. (#2682)
+
 - The function `extract_duplicate_records()` was updated to consider all variables in the input dataset for the by group if the `by_vars` argument is omitted entirely. (#2644)
+
 - In `slice_derivation()`, previously the derivation is not called for empty
 subsets, however this can lead to issues when the input dataset is empty. Now
 the derivation is called for all subsets. (#2645)
+
 - The examples section for the function `derive_var_trtemfl()` was enhanced to include a showcasing of all scenarios discussed in the following [PHUSE White Paper on Treatment-Emergent AEs](https://phuse.s3.eu-central-1.amazonaws.com/Deliverables/Safety+Analytics/WP-087+Recommended+Definition+of++Treatment-Emergent+Adverse+Events+in+Clinical+Trials+.pdf). (#2455)
+
 - `derive_var_atoxgr_dir()` updated to handle more than one unit in grading metadata. Related to providing US (Conventional) units for grading (#2557).
+
 - The background checks in `derive_summary_records()` were too restrictive: `by_vars` were expected in `dataset` although the code did not require it. This requirement has therefore been dropped (#2686).
+
 - The function `call_user_fun()` has been deprecated, Phase 1 (message). There will be no replacement;  for original code, please see::  "https://github.com/pharmaverse/admiral/blob/v1.2.0/R/call_user_fun.R#L26-L39"
+
+- The functions `derive_summary_records()` and `derive_param_exist_flag()` 
+were updated to fix an issue where if a variable was in both `dataset_add` and `dataset_ref`, it was 
+added to the new records even if it was not in `by_vars`. (#2664)
+
+- `derive_var_atoxgr_dir()` updated to handle more than one unit in grading metadata. Related to providing US (Conventional) units for grading. (#2557)
+- The background checks in `derive_summary_records()` were too restrictive: `by_vars` were expected in `dataset` although the code did not require it. This requirement has therefore been dropped. (#2686)
+
 - The functions `derive_vars_joined()`, `derive_var_joined_exist_flag()`, and
 `filter_joined()` produce correct results now when they are used with `join_type
 = "before"` or `join_type = "after"` and `dataset` and `dataset_add` differ or
 the `filter_add` argument is used. (#2863)
 
+- `derive_vars_dt()`, `derive_vars_dtm()`, `impute_dtc_dt()`, `impute_dtc_dtm()`, `convert_dtc_to_dt()`, & `convert_dtc_to_dtm()` and related functions will now throw an error instead of a warning when `highest_imputation = "Y"` but neither `min_date` (when `date_imputation = "first"`) nor `max_dates` (when `date_imputation = "last"`) are specified. (#2654)
+
 ## Breaking Changes
 
-- Lab grading metadata `atoxgr_criteria_ctcv4()`, `atoxgr_criteria_ctcv5()` and `atoxgr_criteria_daids()` variable `SI_UNIT_CHECK` renamed to `UNIT_CHECK` (#2557).
+- Lab grading metadata `atoxgr_criteria_ctcv4()`, `atoxgr_criteria_ctcv5()` and `atoxgr_criteria_daids()` variable `SI_UNIT_CHECK` renamed to `UNIT_CHECK`. (#2557)
+
 - The values of the variable specified for `tmp_obs_nr_var` in
 `derive_vars_joined()`, `derive_var_joined_exist_flag()`, `filter_joined()` are
 now populated differently if there are multiple records in `dataset` or
@@ -57,22 +80,26 @@ records. (#2683)
 
 ## Documentation
 
-- The examples sections of the following functions were enhanced:
+- Improved documentation, error messages, and argument assertions of `derive_vars_dt()`, `derive_vars_dtm()`, `impute_dtc_dt()`, `impute_dtc_dtm()`, `convert_dtc_to_dt()`, & `convert_dtc_to_dtm()`. (#2654)
+
+- The examples section of the following functions was enhanced:
     - `derive_extreme_records()` (#2585)
     - `derive_param_tte()` (#2704)
     - `derive_summary_records()` (#2707)
     - `derive_extreme_event()` (#2735)
     - `derive_vars_joined()` (#2727)
     - `derive_vars_merged()` (#2727)
+    - `derive_vars_crit_flag()` (#2744)
+    - `derive_var_trtemfl()` (#2746)
 
 - Added an example to the `derive_vars_transposed()` reference page to showcase how duplicates-related errors can arise when records in `dataset_merge` are not uniquely identified. (#2609)
 
 - Default value of `type` in `derive_vars_aage()` is now shown as `interval` to match the function behavior. (#2685) 
 
 - The "Lab Grading" vignette was updated to correct some typos and make text easier to
-read (#2623). Also, updated to include new metadata for grading using US (Conventional) units (#2557).
+read (#2623) and updated to include new metadata for grading using US (Conventional) units. (#2557)
 
-- The "BDS Time-to-Event" vignette was updated to include `SRCSEQ` consistently (#2658).
+- The "BDS Time-to-Event" vignette was updated to include `SRCSEQ` consistently. (#2658)
 
 - The template for ADAE and the OCCDS vignette were updated to include an example of the `DOSEON` and `DOSEU` variables (#2737).
 
@@ -83,6 +110,9 @@ read (#2623). Also, updated to include new metadata for grading using US (Conven
 - The 'Details' section of the `derive_var_analysis_ratio()` function and the 'Derive Analysis Ratio' section of the "Creating a BDS Finding ADaM" vignette were updated to include references to `R2AyHI` and `R2AyLO`. (#2548)
 
 - The `derive_basetype_records()` documentation was updated to clarify `BASETYPE` derivations. (#2545)
+
+- The `derive_extreme_records()` documentation was updated to clarify which variables are populated
+from `dataset_ref` for the new observations. (#2664)
 
 ## Various
 
@@ -1222,7 +1252,7 @@ updated to process additional parameter (#1125).
 imputation functions themselves (#1299). I.e., if a derivation like last known alive
 date is based on dates, DTC variables have to be converted to numeric date or
 datetime variables in a preprocessing step. For examples see the [ADSL
-vignette](https://pharmaverse.github.io/admiral/articles/adsl.html).
+vignette](https://pharmaverse.github.io/admiral/cran-release/articles/adsl.html).
   The following arguments were deprecated:
 
   - `date_imputation`, `time_imputation`, and `preserve` in `date_source()`
@@ -1321,7 +1351,7 @@ empty (#1309)
   
 
 - `create_query_data()` is provided to create the [queries
-dataset](https://pharmaverse.github.io/admiral/articles/queries_dataset.html) required as input for `derive_vars_query()` (#606)
+dataset](https://pharmaverse.github.io/admiral/cran-release/articles/queries_dataset.html) required as input for `derive_vars_query()` (#606)
 
 - `create_single_dose_dataset()` - Derives dataset of single dose from aggregate dose information (#660)
 
@@ -1354,7 +1384,7 @@ first disease progression. (#1023)
 ### ADLB
 
   - New ADLB template script available `ad_adlb.R`, specific ADLB functions developed and
-  [BDS Finding vignette](https://pharmaverse.github.io/admiral/articles/bds_finding.html) has examples enhanced with ADLB functions. (#1122)
+  [BDS Finding vignette](https://pharmaverse.github.io/admiral/cran-release/articles/bds_finding.html) has examples enhanced with ADLB functions. (#1122)
 
   - `derive_var_shift()` - Derives a character shift variable containing concatenated shift in values based on user-defined pairing (#944)
   - `derive_var_analysis_ratio()` - Derives a ratio variable based on user-supplied variables from a BDS dataset, e.g. ADLB. (#943)
@@ -1436,7 +1466,7 @@ specific for admiral. Derivations like this can be implemented calling
 - Updated `derive_var_worst_flag()` and `derive_var_extreme_flag()` vignettes to clarify their purpose (#691)
 
 - Added example of ASEQ derivation in ADCM to 
-[OCCDS vignette](https://pharmaverse.github.io/admiral/articles/occds.html#aseq)
+[OCCDS vignette](https://pharmaverse.github.io/admiral/cran-release/articles/occds.html#aseq)
 (#720)
 
 - Examples have been added for `format_reason_default()`, `format_eoxxstt_default()`, `extend_source_datasets()` and `filter_date_sources()` (#745)
@@ -1522,7 +1552,7 @@ this case the day is imputed as `15` (#592)
 
 - README and site homepage has been updated with important new section around expectations of {admiral}, as well as other useful references such as links to conference talks (#868 & #802)
 
-- New vignette [Development Process](https://pharmaverse.github.io/admiral/CONTRIBUTING.html) and improvements made to contribution vignettes (#765 & #758)
+- New vignette [Development Process](https://pharmaverse.github.io/admiral/cran-release/CONTRIBUTING.html) and improvements made to contribution vignettes (#765 & #758)
 
 - Updated [Pull Request Review Guidance](https://pharmaverse.github.io/admiraldev/articles/pr_review_guidance.html) on using `task-list-completed` workflow (#817)
 
@@ -1536,7 +1566,7 @@ this case the day is imputed as `15` (#592)
 
 - The first truly open source release licensed under Apache 2.0 (#680)
 
-- New vignette [Contributing to admiral](https://pharmaverse.github.io/admiral/CONTRIBUTING.html) (#679)
+- New vignette [Contributing to admiral](https://pharmaverse.github.io/admiral/cran-release/CONTRIBUTING.html) (#679)
 
 - New vignette [Unit Test Guidance](https://pharmaverse.github.io/admiraldev/articles/unit_test_guidance.html) (#679)
 
@@ -1558,7 +1588,7 @@ age in different units (#569)
 - `derive_param_tte()` derives time-to-event-parameters (#546)
 
 - For common time-to-event endpoints [event and censoring source
-objects](https://pharmaverse.github.io/admiral/reference/index.html#section-pre-defined-time-to-event-sources) are
+objects](https://pharmaverse.github.io/admiral/cran-release/reference/index.html#section-pre-defined-time-to-event-sources) are
 provided (#612)
 
 ### Developer
@@ -1593,9 +1623,9 @@ to specify the unit of the input age (#569)
 
 ## Documentation
 
-- New vignette [Creating a BDS Time-to-Event ADaM](https://pharmaverse.github.io/admiral/articles/bds_tte.html) (#549)
+- New vignette [Creating a BDS Time-to-Event ADaM](https://pharmaverse.github.io/admiral/cran-release/articles/bds_tte.html) (#549)
 
-- New vignette [Queries Dataset Documentation](https://pharmaverse.github.io/admiral/articles/queries_dataset.html) (#561)
+- New vignette [Queries Dataset Documentation](https://pharmaverse.github.io/admiral/cran-release/articles/queries_dataset.html) (#561)
 
 - New vignette [Writing Vignettes](https://pharmaverse.github.io/admiraldev/articles/writing_vignettes.html) (#334)
 
@@ -1790,10 +1820,10 @@ to specify the unit of the input age (#569)
 
 ## Documentation
 
-- [Frequently Asked Questions](https://pharmaverse.github.io/admiral/articles/faq.html)
+- [Frequently Asked Questions](https://pharmaverse.github.io/admiral/cran-release/articles/faq.html)
 
-- [Creating ADSL](https://pharmaverse.github.io/admiral/articles/adsl.html)
+- [Creating ADSL](https://pharmaverse.github.io/admiral/cran-release/articles/adsl.html)
 
-- [Creating a BDS Finding ADaM](https://pharmaverse.github.io/admiral/articles/bds_finding.html)
+- [Creating a BDS Finding ADaM](https://pharmaverse.github.io/admiral/cran-release/articles/bds_finding.html)
 
-- [Creating an OCCDS ADaM](https://pharmaverse.github.io/admiral/articles/occds.html)
+- [Creating an OCCDS ADaM](https://pharmaverse.github.io/admiral/cran-release/articles/occds.html)
