@@ -211,7 +211,7 @@
 #'   the `order` argument ensures that the combination of `by_vars` and
 #'   `order` indexes unique records in the dataset. If this had been omitted,
 #'   the choice of `check_type = "warning"` would have ensured that
-#'   `derive_var_extreme_event()` would throw a warning due to perceived
+#'   `derive_var_extreme_flag()` would throw a warning due to perceived
 #'   duplicate records (in this case, the first two AEs for subject `"1015"`).
 #'   If no sorting variables exist, or if these duplicates are acceptable, then
 #'   the user can silence the warning with `check_type = "none"`. Alternatively,
