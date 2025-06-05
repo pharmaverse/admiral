@@ -157,7 +157,7 @@
 #'   ignore_seconds_flag = TRUE
 #' )
 #'
-#' @caption Preserve certain information from the partial date/times during imputation (`preserve`)
+#' @caption Preserve lower components if higher ones were imputed (`preserve`)
 #' @info In this example, we impute dates as the middle month/day with `date_imputation = "mid"`
 #' and impute time as last (`23:59:59`) with `time_imputation = "last"`.
 #' We use the `preserve` argument to "preserve" partial dates.  For example,
