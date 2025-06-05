@@ -77,11 +77,12 @@
 #' )
 #'
 #' @caption Date imputation set to the first day and month (`date_imputation = first`)
-#' @info In this example, we derive `ASTDT` with imputation for partial dates to set
-#' to first day/month, i.e. `date_imputation = "first"`. A flag variable, `ASTDTF`,
+#' @info Imputation is requested by the `highest_imputation` argument. Here
+#' `highest_imputation = "M"` for month imputation is used, i.e. the highest
+#' imputation done on a partial date is up to the month. By default, missing date 
+#' components are imputed to the first day/month/year. A date imputation flag variable, `ASTDTF`,
 #' is automatically created. The flag variable indicates if imputation was done
-#' on the date. Please note the use of `highest_imputation = "M"` for month
-#' imputation, i.e. the highest imputation done on a partial date is up to the month.
+#' on the date.
 #'
 #' @code
 #' derive_vars_dt(
