@@ -51,7 +51,7 @@
 #'
 #' @examplesx
 #'
-#' @caption Derive a date variable from a date character variable
+#' @caption Derive a date variable without imputation
 #'
 #' @info In this example, we derive `ASTDT` from `MHSTDTC` with no imputation
 #' done for partial dates.
