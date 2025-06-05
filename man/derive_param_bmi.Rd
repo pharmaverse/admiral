@@ -36,6 +36,7 @@ dataset. Only variables specified in \code{by_vars} will be populated
 in the newly created records.
 
 \describe{
+\item{Permitted values}{list of variables created by \code{exprs()}, e.g., \code{exprs(USUBJID, VISIT)}}
 \item{Default value}{none}
 }}
 

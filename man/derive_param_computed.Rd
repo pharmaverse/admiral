@@ -27,6 +27,7 @@ the input dataset after restricting it by the filter condition (\code{filter}
 parameter) and to the parameters specified by \code{parameters}.
 
 \describe{
+\item{Permitted values}{a dataset, i.e., a \code{data.frame} or tibble}
 \item{Default value}{\code{NULL}}
 }}
 
@@ -43,6 +44,7 @@ are considered in addition to the observations from the input dataset
 (\code{dataset} restricted by \code{filter}).
 
 \describe{
+\item{Permitted values}{a dataset, i.e., a \code{data.frame} or tibble}
 \item{Default value}{\code{NULL}}
 }}
 
@@ -53,6 +55,7 @@ dataset. Only variables specified in \code{by_vars} will be populated
 in the newly created records.
 
 \describe{
+\item{Permitted values}{list of variables created by \code{exprs()}, e.g., \code{exprs(USUBJID, VISIT)}}
 \item{Default value}{none}
 }}
 
@@ -102,7 +105,7 @@ be avoided unless the list of variable-value pairs is clearly
 specified in a statement via the \code{set_values_to} argument.
 
 \describe{
-\item{Permitted values}{List of variable-value pairs}
+\item{Permitted values}{list of named expressions created by a formula using \code{exprs()}, e.g., \code{exprs(AVALC = VSSTRESC, AVAL = yn_to_numeric(AVALC))}}
 \item{Default value}{none}
 }}
 
@@ -123,6 +126,7 @@ The constant parameters (parameters that are measured only once) are merged
 to the other parameters using the specified variables. (Refer to Example 2)
 
 \describe{
+\item{Permitted values}{list of variables created by \code{exprs()}, e.g., \code{exprs(USUBJID, VISIT)}}
 \item{Default value}{\code{NULL}}
 }}
 
@@ -217,9 +221,9 @@ BDS-Findings Functions for adding Parameters/Records:
 \section{Examples}{
 \subsection{Example 1 - Data setup}{
 
-Examples 1a, 1b, and 1c use the following \code{advs} data.
+Examples 1a, 1b, and 1c use the following \code{ADVS} data.
 
-\if{html}{\out{<div class="sourceCode r">}}\preformatted{advs <- tribble(
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{ADVS <- tribble(
   ~USUBJID,      ~PARAMCD, ~PARAM,                            ~AVAL, ~VISIT,
   "01-701-1015", "DIABP",  "Diastolic Blood Pressure (mmHg)",    51, "BASELINE",
   "01-701-1015", "DIABP",  "Diastolic Blood Pressure (mmHg)",    50, "WEEK 2",
@@ -254,7 +258,7 @@ as \code{AVAL} is \code{NA} for their \code{"WEEK 2"} systolic blood pressure.
 }
 
 \if{html}{\out{<div class="sourceCode r">}}\preformatted{derive_param_computed(
-  advs,
+  ADVS,
   by_vars = exprs(USUBJID, VISIT),
   parameters = c("SYSBP", "DIABP"),
   set_values_to = exprs(
@@ -293,7 +297,7 @@ with \code{AVAL = NA}.
 }
 
 \if{html}{\out{<div class="sourceCode r">}}\preformatted{derive_param_computed(
-  advs,
+  ADVS,
   by_vars = exprs(USUBJID, VISIT),
   parameters = c("SYSBP", "DIABP"),
   set_values_to = exprs(
@@ -344,7 +348,7 @@ when \code{AVAL} is \code{NA} in any of the source records,
 }
 
 \if{html}{\out{<div class="sourceCode r">}}\preformatted{derive_param_computed(
-  advs,
+  ADVS,
   by_vars = exprs(USUBJID, VISIT),
   parameters = c("SYSBP", "DIABP"),
   set_values_to = exprs(
@@ -388,9 +392,7 @@ is measured for each patient only at the first visit
 (\code{constant_parameters = "HEIGHT"}, \verb{constant_by_vars = exprs(USUBJID})).
 }
 
-\if{html}{\out{<div class="sourceCode r">}}\preformatted{# Example 2  uses the following `advs` data.
-
-advs <- tribble(
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{ADVS <- tribble(
   ~USUBJID,      ~PARAMCD, ~PARAM,        ~AVAL, ~AVALU, ~VISIT,
   "01-701-1015", "HEIGHT", "Height (cm)", 147.0, "cm",   "SCREENING",
   "01-701-1015", "WEIGHT", "Weight (kg)",  54.0, "kg",   "SCREENING",
@@ -403,7 +405,7 @@ advs <- tribble(
 )
 
 derive_param_computed(
-  advs,
+  ADVS,
   by_vars = exprs(USUBJID, VISIT),
   parameters = "WEIGHT",
   set_values_to = exprs(
@@ -437,7 +439,7 @@ dataset (\code{dataset_add}) and non-\code{AVAL} variables}{
 
 Use data from an additional dataset and other variables than \code{AVAL}.
 \itemize{
-\item In this example, the dataset specified via \code{dataset_add} (e.g., \code{qs})
+\item In this example, the dataset specified via \code{dataset_add} (e.g., \code{QS})
 is an SDTM dataset. There is no parameter code in the dataset.
 \item The \code{parameters} argument is therefore used to specify a list of
 expressions to derive temporary parameter codes.
@@ -446,9 +448,7 @@ observations of each variable, and variable-value pairs from both
 datasets are referenced via \code{exprs()}.
 }
 
-\if{html}{\out{<div class="sourceCode r">}}\preformatted{# Example 3  uses the following `qs` and `adchsf` data.
-
-qs <- tribble(
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{QS <- tribble(
   ~USUBJID, ~AVISIT,   ~QSTESTCD, ~QSORRES, ~QSSTRESN,
   "1",      "WEEK 2",  "CHSF112", NA,               1,
   "1",      "WEEK 2",  "CHSF113", "Yes",           NA,
@@ -458,7 +458,7 @@ qs <- tribble(
   "1",      "WEEK 4",  "CHSF114", NA,               1
 )
 
-adchsf <- tribble(
+ADCHSF <- tribble(
   ~USUBJID, ~AVISIT,  ~PARAMCD, ~QSSTRESN, ~AVAL,
   "1",      "WEEK 2", "CHSF12", 1,             6,
   "1",      "WEEK 2", "CHSF14", 1,             6,
@@ -468,8 +468,8 @@ adchsf <- tribble(
   mutate(QSORRES = NA_character_)
 
 derive_param_computed(
-  adchsf,
-  dataset_add = qs,
+  ADCHSF,
+  dataset_add = QS,
   by_vars = exprs(USUBJID, AVISIT),
   parameters = exprs(CHSF12, CHSF13 = QSTESTCD \%in\% c("CHSF113"), CHSF14),
   set_values_to = exprs(
@@ -505,9 +505,7 @@ and parameter codes.
 derived.
 }
 
-\if{html}{\out{<div class="sourceCode r">}}\preformatted{# Example 4  uses the following `adlb_tbilialk` data.
-
-adlb_tbilialk <- tribble(
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{ADLB_TBILIALK <- tribble(
   ~USUBJID, ~PARAMCD, ~AVALC, ~ADTM,        ~ADTF,
   "1",      "ALK2",   "Y",    "2021-05-13", NA_character_,
   "1",      "TBILI2", "Y",    "2021-06-30", "D",
@@ -519,7 +517,7 @@ adlb_tbilialk <- tribble(
   mutate(ADTM = ymd(ADTM))
 
 derive_param_computed(
-  dataset_add = adlb_tbilialk,
+  dataset_add = ADLB_TBILIALK,
   by_vars = exprs(USUBJID),
   parameters = c("ALK2", "TBILI2"),
   set_values_to = exprs(

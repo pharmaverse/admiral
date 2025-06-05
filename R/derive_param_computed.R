@@ -18,6 +18,8 @@
 #'   the input dataset after restricting it by the filter condition (`filter`
 #'   parameter) and to the parameters specified by `parameters`.
 #'
+#' @permitted [dataset]
+#'
 #' @param dataset_add Additional dataset
 #'
 #'   The variables specified by the `by_vars` parameter are expected.
@@ -29,6 +31,8 @@
 #'   If the argument is specified, the observations of the additional dataset
 #'   are considered in addition to the observations from the input dataset
 #'   (`dataset` restricted by `filter`).
+#'
+#' @permitted [dataset]
 #'
 #' @param filter Filter condition
 #'
@@ -68,6 +72,8 @@
 #'
 #'   `r roxygen_param_by_vars()`
 #'
+#' @permitted [var_list]
+#'
 #' @param constant_parameters Required constant parameter codes
 #'
 #'   It is expected that all the parameter codes (`PARAMCD`) which are required
@@ -99,6 +105,8 @@
 #'
 #'   `r roxygen_param_by_vars()`
 #'
+#' @permitted [var_list]
+#'
 #' @param set_values_to Variables to be set
 #'
 #'   The specified variables are set to the specified values for the new
@@ -119,7 +127,7 @@
 #'   be avoided unless the list of variable-value pairs is clearly
 #'   specified in a statement via the `set_values_to` argument.
 #'
-#' @permitted List of variable-value pairs
+#' @permitted [expr_list_formula]
 #'
 #' @param keep_nas Keep observations with `NA`s
 #'
@@ -157,10 +165,10 @@
 #'
 #' @caption Example 1 - Data setup
 #'
-#' @info Examples 1a, 1b, and 1c use the following `advs` data.
+#' @info Examples 1a, 1b, and 1c use the following `ADVS` data.
 #'
 #' @code
-#' advs <- tribble(
+#' ADVS <- tribble(
 #'   ~USUBJID,      ~PARAMCD, ~PARAM,                            ~AVAL, ~VISIT,
 #'   "01-701-1015", "DIABP",  "Diastolic Blood Pressure (mmHg)",    51, "BASELINE",
 #'   "01-701-1015", "DIABP",  "Diastolic Blood Pressure (mmHg)",    50, "WEEK 2",
@@ -196,7 +204,7 @@
 #'
 #' @code
 #' derive_param_computed(
-#'   advs,
+#'   ADVS,
 #'   by_vars = exprs(USUBJID, VISIT),
 #'   parameters = c("SYSBP", "DIABP"),
 #'   set_values_to = exprs(
@@ -222,7 +230,7 @@
 #'
 #' @code
 #' derive_param_computed(
-#'   advs,
+#'   ADVS,
 #'   by_vars = exprs(USUBJID, VISIT),
 #'   parameters = c("SYSBP", "DIABP"),
 #'   set_values_to = exprs(
@@ -259,7 +267,7 @@
 #'
 #' @code
 #' derive_param_computed(
-#'   advs,
+#'   ADVS,
 #'   by_vars = exprs(USUBJID, VISIT),
 #'   parameters = c("SYSBP", "DIABP"),
 #'   set_values_to = exprs(
@@ -290,9 +298,7 @@
 #'   (`constant_parameters = "HEIGHT"`, `constant_by_vars = exprs(USUBJID`)).
 #'
 #' @code
-#' # Example 2  uses the following `advs` data.
-#'
-#' advs <- tribble(
+#' ADVS <- tribble(
 #'   ~USUBJID,      ~PARAMCD, ~PARAM,        ~AVAL, ~AVALU, ~VISIT,
 #'   "01-701-1015", "HEIGHT", "Height (cm)", 147.0, "cm",   "SCREENING",
 #'   "01-701-1015", "WEIGHT", "Weight (kg)",  54.0, "kg",   "SCREENING",
@@ -305,7 +311,7 @@
 #' )
 #'
 #' derive_param_computed(
-#'   advs,
+#'   ADVS,
 #'   by_vars = exprs(USUBJID, VISIT),
 #'   parameters = "WEIGHT",
 #'   set_values_to = exprs(
@@ -323,7 +329,7 @@
 #'
 #' @info Use data from an additional dataset and other variables than `AVAL`.
 #'
-#' - In this example, the dataset specified via `dataset_add` (e.g., `qs`)
+#' - In this example, the dataset specified via `dataset_add` (e.g., `QS`)
 #'   is an SDTM dataset. There is no parameter code in the dataset.
 #' - The `parameters` argument is therefore used to specify a list of
 #'   expressions to derive temporary parameter codes.
@@ -332,9 +338,7 @@
 #'   datasets are referenced via `exprs()`.
 #'
 #' @code
-#' # Example 3  uses the following `qs` and `adchsf` data.
-#'
-#' qs <- tribble(
+#' QS <- tribble(
 #'   ~USUBJID, ~AVISIT,   ~QSTESTCD, ~QSORRES, ~QSSTRESN,
 #'   "1",      "WEEK 2",  "CHSF112", NA,               1,
 #'   "1",      "WEEK 2",  "CHSF113", "Yes",           NA,
@@ -344,7 +348,7 @@
 #'   "1",      "WEEK 4",  "CHSF114", NA,               1
 #' )
 #'
-#' adchsf <- tribble(
+#' ADCHSF <- tribble(
 #'   ~USUBJID, ~AVISIT,  ~PARAMCD, ~QSSTRESN, ~AVAL,
 #'   "1",      "WEEK 2", "CHSF12", 1,             6,
 #'   "1",      "WEEK 2", "CHSF14", 1,             6,
@@ -354,8 +358,8 @@
 #'   mutate(QSORRES = NA_character_)
 #'
 #' derive_param_computed(
-#'   adchsf,
-#'   dataset_add = qs,
+#'   ADCHSF,
+#'   dataset_add = QS,
 #'   by_vars = exprs(USUBJID, AVISIT),
 #'   parameters = exprs(CHSF12, CHSF13 = QSTESTCD %in% c("CHSF113"), CHSF14),
 #'   set_values_to = exprs(
@@ -383,9 +387,7 @@
 #'   derived.
 #'
 #' @code
-#' # Example 4  uses the following `adlb_tbilialk` data.
-#'
-#' adlb_tbilialk <- tribble(
+#' ADLB_TBILIALK <- tribble(
 #'   ~USUBJID, ~PARAMCD, ~AVALC, ~ADTM,        ~ADTF,
 #'   "1",      "ALK2",   "Y",    "2021-05-13", NA_character_,
 #'   "1",      "TBILI2", "Y",    "2021-06-30", "D",
@@ -397,7 +399,7 @@
 #'   mutate(ADTM = ymd(ADTM))
 #'
 #' derive_param_computed(
-#'   dataset_add = adlb_tbilialk,
+#'   dataset_add = ADLB_TBILIALK,
 #'   by_vars = exprs(USUBJID),
 #'   parameters = c("ALK2", "TBILI2"),
 #'   set_values_to = exprs(
