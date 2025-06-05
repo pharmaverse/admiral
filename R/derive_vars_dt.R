@@ -112,10 +112,21 @@
 #' `date_imputation = "last"`.
 #'
 #' @code
+#' qsdt <- tribble(
+#'   ~QSDTC,
+#'   "2019-07-18T15:25:40",
+#'   "2019-07-18T15:25",
+#'   "2019-07-18",
+#'   "2019-02",
+#'   "2019",
+#'   "2019---07",
+#'   ""
+#' )
+#'
 #' derive_vars_dt(
-#'   mhdt,
-#'   new_vars_prefix = "AEN",
-#'   dtc = MHSTDTC,
+#'   qsdt,
+#'   new_vars_prefix = "A",
+#'   dtc = QSDTC,
 #'   highest_imputation = "M",
 #'   date_imputation = "last"
 #' )

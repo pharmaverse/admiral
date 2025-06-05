@@ -280,23 +280,34 @@ imputation of the record with \code{"2019-02"}.
 In this example, we derive \code{AENDT} impute partial dates to last day/month, i.e.
 \code{date_imputation = "last"}.
 
-\if{html}{\out{<div class="sourceCode r">}}\preformatted{derive_vars_dt(
-  mhdt,
-  new_vars_prefix = "AEN",
-  dtc = MHSTDTC,
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{qsdt <- tribble(
+  ~QSDTC,
+  "2019-07-18T15:25:40",
+  "2019-07-18T15:25",
+  "2019-07-18",
+  "2019-02",
+  "2019",
+  "2019---07",
+  ""
+)
+
+derive_vars_dt(
+  qsdt,
+  new_vars_prefix = "A",
+  dtc = QSDTC,
   highest_imputation = "M",
   date_imputation = "last"
 )
 #> # A tibble: 7 × 3
-#>   MHSTDTC               AENDT      AENDTF
-#>   <chr>                 <date>     <chr> 
-#> 1 "2019-07-18T15:25:40" 2019-07-18 <NA>  
-#> 2 "2019-07-18T15:25"    2019-07-18 <NA>  
-#> 3 "2019-07-18"          2019-07-18 <NA>  
-#> 4 "2019-02"             2019-02-28 D     
-#> 5 "2019"                2019-12-31 M     
-#> 6 "2019---07"           2019-12-31 M     
-#> 7 ""                    NA         <NA>  }\if{html}{\out{</div>}}}
+#>   QSDTC                 ADT        ADTF 
+#>   <chr>                 <date>     <chr>
+#> 1 "2019-07-18T15:25:40" 2019-07-18 <NA> 
+#> 2 "2019-07-18T15:25"    2019-07-18 <NA> 
+#> 3 "2019-07-18"          2019-07-18 <NA> 
+#> 4 "2019-02"             2019-02-28 D    
+#> 5 "2019"                2019-12-31 M    
+#> 6 "2019---07"           2019-12-31 M    
+#> 7 ""                    NA         <NA> }\if{html}{\out{</div>}}}
 \subsection{Date imputation flag variable suppressed (\code{flag_imputation = none})
 flag variable suppressed}{
 
