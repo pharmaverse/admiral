@@ -213,7 +213,7 @@
 #'   the choice of `check_type = "warning"` would have ensured that
 #'   `derive_var_extreme_event()` would throw a warning due to perceived
 #'   duplicate records (in this case, the first two AEs for subject `"1015"`).
-#'   If no sorting variables exist, or if these duplicates are known, then
+#'   If no sorting variables exist, or if these duplicates are acceptable, then
 #'   the user can silence the warning with `check_type = "none"`. Alternatively,
 #'   the warning can be upgraded to an error with `check_type = "error"`.
 #'
