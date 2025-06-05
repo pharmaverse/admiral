@@ -132,7 +132,7 @@
 #'   max_dates = exprs(DTHDT, DCUTDT)
 #' )
 #'
-#' @caption Imputation flag variable suppresses the use of `S` (`ignore_seconds_flag`)
+#' @caption Suppress `"S"` for imputation flag (`ignore_seconds_flag`)
 #' @info In this example, we set `ignore_seconds_flag = TRUE` to suppress `S` for
 #' seconds in the `ASTTMF` variable. The ADaM IG states that given SDTM ('--DTC')
 #' variable, if only hours and minutes are ever collected, and seconds are imputed
