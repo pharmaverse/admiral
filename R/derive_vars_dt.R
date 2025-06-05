@@ -136,7 +136,7 @@
 #'   flag_imputation = "none"
 #' )
 #'
-#' @caption Imputed date is not allowed to be set before a user-defined date (`min_dates`)
+#' @caption Avoid imputation before a user-defined date (`min_dates`)
 #' @info In this example, we derive `ASTDT` where `AESTDTC` is all partial dates in
 #' need of imputation. Using `min_dates = exprs(TRTSDTM)`, we are telling the function
 #' to not allow imputation dates to be before the treatment start date
