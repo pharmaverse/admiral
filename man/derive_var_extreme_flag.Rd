@@ -321,9 +321,9 @@ Note here that the presence of \code{AESEQ} as a sorting variable inside
 the \code{order} argument ensures that the combination of \code{by_vars} and
 \code{order} indexes unique records in the dataset. If this had been omitted,
 the choice of \code{check_type = "warning"} would have ensured that
-\code{derive_var_extreme_event()} would throw a warning due to perceived
+\code{derive_var_extreme_flag()} would throw a warning due to perceived
 duplicate records (in this case, the first two AEs for subject \code{"1015"}).
-If no sorting variables exist, or if these duplicates are known, then
+If no sorting variables exist, or if these duplicates are acceptable, then
 the user can silence the warning with \code{check_type = "none"}. Alternatively,
 the warning can be upgraded to an error with \code{check_type = "error"}.}
 \subsection{Flagging all records if multiple are identified (\code{flag_all})}{
