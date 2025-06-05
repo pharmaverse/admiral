@@ -132,7 +132,7 @@
 #'   flag_imputation = "none"
 #' )
 #'
-#' @caption Derive a date variable where the imputated date is not allowed to be set before
+#' @caption Derive a date variable where the imputed date is not allowed to be set before
 #' a user-defined date
 #' @info In this example, we derive `ASTDT` where `AESTDTC` is all partial dates in
 #' need of imputation. Using `min_dates = exprs(TRTSDTM)`, we are telling the function

@@ -342,7 +342,7 @@ derive_vars_dtm(
 #> 5 "2019"                NA                 
 #> 6 "2019---07"           NA                 
 #> 7 ""                    NA                 }\if{html}{\out{</div>}}}
-\subsection{Derive a date/time variable where imputated dates are not allowed after
+\subsection{Derive a date/time variable where imputed dates are not allowed after
 specified dates.}{
 
 In this example, we derive AENDTM where AE end date is imputed to the last date.
@@ -409,11 +409,13 @@ derive_vars_dtm(
 #> 5 "2019"             2019-01-01 00:00:00 M      H     
 #> 6 "2019---07"        2019-01-01 00:00:00 M      H     
 #> 7 ""                 NA                  <NA>   <NA>  }\if{html}{\out{</div>}}}
-\subsection{Derive ASTDTM while preserving partial dates}{
+\subsection{Derive a date/time  variable using imputation but preserve certain
+information from the partial dates.}{
 
-A user imputing dates as middle month/day, i.e. \code{date_imputation = "MID"} can
-use \code{preserve} argument to "preserve" partial dates.  For example, \code{"2019---07"},
-will be displayed as \code{"2019-06-07"} rather than \code{"2019-06-15"} with \code{preserve = TRUE}
+In this example, we impute dates as the middle month/day, i.e. \code{date_imputation = "mid"}.
+We can use the \code{preserve} argument to "preserve" partial dates.  For example,
+\code{"2019---07"}, will be displayed as \code{"2019-06-07"} rather than \code{"2019-06-15"}
+by setting \code{preserve = TRUE}.
 
 \if{html}{\out{<div class="sourceCode r">}}\preformatted{
 derive_vars_dtm(

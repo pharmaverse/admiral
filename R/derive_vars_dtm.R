@@ -107,7 +107,7 @@
 #'  date_imputation = "last",
 #'  time_imputation = "last",
 #'  highest_imputation = "M"
-#')
+#' )
 #'
 #'
 #' @caption Derive a date/time variable with the date/time imputation flag variables
@@ -136,7 +136,7 @@
 #'   flag_imputation = "none"
 #' )
 #'
-#' @caption Derive a date/time variable where imputated dates are not allowed after
+#' @caption Derive a date/time variable where imputed dates are not allowed after
 #' specified dates.
 #' @info In this example, we derive AENDTM where AE end date is imputed to the last date.
 #' To ensure that the imputed date is not after the death or data cut off date we can

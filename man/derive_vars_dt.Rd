@@ -317,7 +317,7 @@ date imputation will be set to June 15th.
 #> 5 "2019"                2019-06-30
 #> 6 "2019---07"           2019-06-30
 #> 7 ""                    NA        }\if{html}{\out{</div>}}}
-\subsection{Derive a date variable where the imputated date is not allowed to be set before
+\subsection{Derive a date variable where the imputed date is not allowed to be set before
 a user-defined date}{
 
 In this example, we derive \code{ASTDT} where \code{AESTDTC} is all partial dates in
