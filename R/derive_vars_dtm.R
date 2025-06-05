@@ -54,9 +54,9 @@
 #'
 #' @examplesx
 #'
-#' @caption Derive `ASTDTM`
-#' @info Note that function produces variable `ASTTMF` and appends
-#' missing `"hh:mm:ss"` to `ASTDTM`
+#' @caption Derive a date/time variable from a date character variable.
+#' @info In this example, we derive `ASTDTM` from `MHSTDTC`. Note that the function
+#' produces the variable `ASTTMF` and appends missing `"hh:mm:ss"` to `ASTDTM`.
 #' @code
 #' library(tibble)
 #' library(lubridate)
@@ -78,8 +78,42 @@
 #'   dtc = MHSTDTC
 #' )
 #'
-#' @caption Derive `ASTDTM` and suppress `ASTTMF`
-#' @info Note that function appends missing `"hh:mm:ss"` to `ASTDTM`
+#' @caption Derive a date/time variable with date/time imputation set to "last".
+#' @info In this example, we set `date_imputation = "last"` to get the last month/day
+#' for partial dates. We also set `time_imputation = "last"`. The function will use
+#' all or part of `23:59:00` for time imputation. Note that `highest_imputation = "M"`
+#' must be used in conjunction with the two imputation arguments. Also note that
+#' two flag variables are created.
+#'
+#' @code
+#' library(tibble)
+#' library(lubridate)
+#'
+#' mhdt <- tribble(
+#'   ~MHSTDTC,
+#'   "2019-07-18T15:25:40",
+#'   "2019-07-18T15:25",
+#'   "2019-07-18",
+#'   "2019-02",
+#'   "2019",
+#'   "2019---07",
+#'   ""
+#' )
+#'
+#' derive_vars_dtm(
+#'  mhdt,
+#'  new_vars_prefix = "AST",
+#'  dtc = MHSTDTC,
+#'  date_imputation = "last",
+#'  time_imputation = "last",
+#'  highest_imputation = "M"
+#')
+#'
+#'
+#' @caption Derive a date/time variable with the date/time imputation flag variables
+#' suppressed
+#' @info In this example, we derive `ASTDTM` but suppress the `ASTTMF`. Note that
+#' function appends missing `"hh:mm:ss"` to `ASTDTM`.
 #' @code
 #' library(tibble)
 #' library(lubridate)
@@ -102,9 +136,12 @@
 #'   flag_imputation = "none"
 #' )
 #'
-#' @caption Derive AENDTM where AE end date is imputed to the last date and
-#' ensure that the imputed date is not after the death or data cut off date
-#' @info Note two flag variables: `ASTDTF` and `ASTTMF`
+#' @caption Derive a date/time variable where imputated dates are not allowed after
+#' specified dates.
+#' @info In this example, we derive AENDTM where AE end date is imputed to the last date.
+#' To ensure that the imputed date is not after the death or data cut off date we can
+#' set `max_dates = exprs(DTHDT, DCUTDT)`. Note two flag variables: `ASTDTF` and `ASTTMF`
+#' are created.
 #' @code
 #' #
 #' adae <- tribble(
@@ -123,9 +160,12 @@
 #'   max_dates = exprs(DTHDT, DCUTDT)
 #' )
 #'
-#' @caption Derive ASTDTM while using `ignore_seconds_flag` to suppress `S`
-#' from the `--TMF` variable.
-#' @info Seconds has been removed from the input dataset.
+#' @caption Derive a date/time variable where the the imputation flag variable
+#' suppresses the use of `S`.
+#' @info In this example, we set `ignore_seconds_flag = TRUE` to suppress `S` for
+#' seconds in the `ASTTMF` variable. The ADaM IG states that given SDTM ('--DTC')
+#' variable, if only hours and minutes are ever collected, and seconds are imputed
+#' in ('--DTM') as `00`, then it is not necessary to set ('--TMF') to 'S'.
 #' @code
 #' #   Function now uses
 #' # ignore_seconds_flag to remove the 'S' from the --TMF variable.
@@ -148,10 +188,12 @@
 #'   ignore_seconds_flag = TRUE
 #' )
 #'
-#' @caption Derive ASTDTM while preserving partial dates
-#' @info A user imputing dates as middle month/day, i.e. `date_imputation = "MID"` can
-#' use `preserve` argument to "preserve" partial dates.  For example, `"2019---07"`,
-#' will be displayed as `"2019-06-07"` rather than `"2019-06-15"` with `preserve = TRUE`
+#' @caption Derive a date/time  variable using imputation but preserve certain
+#' information from the partial dates.
+#' @info In this example, we impute dates as the middle month/day, i.e. `date_imputation = "mid"`.
+#' We can use the `preserve` argument to "preserve" partial dates.  For example,
+#' `"2019---07"`, will be displayed as `"2019-06-07"` rather than `"2019-06-15"`
+#' by setting `preserve = TRUE`.
 #' @code
 #'
 #' derive_vars_dtm(

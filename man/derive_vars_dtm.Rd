@@ -232,10 +232,10 @@ Date/Time Derivation Functions that returns variable appended to dataset:
 \keyword{der_date_time}
 \keyword{der_gen}
 \section{Examples}{
-\subsection{Derive \code{ASTDTM}}{
+\subsection{Derive a date/time variable from a date character variable.}{
 
-Note that function produces variable \code{ASTTMF} and appends
-missing \code{"hh:mm:ss"} to \code{ASTDTM}
+In this example, we derive \code{ASTDTM} from \code{MHSTDTC}. Note that the function
+produces the variable \code{ASTTMF} and appends missing \code{"hh:mm:ss"} to \code{ASTDTM}.
 
 \if{html}{\out{<div class="sourceCode r">}}\preformatted{library(tibble)
 library(lubridate)
@@ -266,9 +266,51 @@ derive_vars_dtm(
 #> 5 "2019"                NA                  <NA>  
 #> 6 "2019---07"           NA                  <NA>  
 #> 7 ""                    NA                  <NA>  }\if{html}{\out{</div>}}}
-\subsection{Derive \code{ASTDTM} and suppress \code{ASTTMF}}{
+\subsection{Derive a date/time variable with date/time imputation set to "last".}{
 
-Note that function appends missing \code{"hh:mm:ss"} to \code{ASTDTM}
+In this example, we set \code{date_imputation = "last"} to get the last month/day
+for partial dates. We also set \code{time_imputation = "last"}. The function will use
+all or part of \code{23:59:00} for time imputation. Note that \code{highest_imputation = "M"}
+must be used in conjunction with the two imputation arguments. Also note that
+two flag variables are created.
+
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{library(tibble)
+library(lubridate)
+
+mhdt <- tribble(
+  ~MHSTDTC,
+  "2019-07-18T15:25:40",
+  "2019-07-18T15:25",
+  "2019-07-18",
+  "2019-02",
+  "2019",
+  "2019---07",
+  ""
+)
+
+derive_vars_dtm(
+ mhdt,
+ new_vars_prefix = "AST",
+ dtc = MHSTDTC,
+ date_imputation = "last",
+ time_imputation = "last",
+ highest_imputation = "M"
+)
+#> # A tibble: 7 × 4
+#>   MHSTDTC               ASTDTM              ASTDTF ASTTMF
+#>   <chr>                 <dttm>              <chr>  <chr> 
+#> 1 "2019-07-18T15:25:40" 2019-07-18 15:25:40 <NA>   <NA>  
+#> 2 "2019-07-18T15:25"    2019-07-18 15:25:59 <NA>   S     
+#> 3 "2019-07-18"          2019-07-18 23:59:59 <NA>   H     
+#> 4 "2019-02"             2019-02-28 23:59:59 D      H     
+#> 5 "2019"                2019-12-31 23:59:59 M      H     
+#> 6 "2019---07"           2019-12-31 23:59:59 M      H     
+#> 7 ""                    NA                  <NA>   <NA>  }\if{html}{\out{</div>}}}
+\subsection{Derive a date/time variable with the date/time imputation flag variables
+suppressed}{
+
+In this example, we derive \code{ASTDTM} but suppress the \code{ASTTMF}. Note that
+function appends missing \code{"hh:mm:ss"} to \code{ASTDTM}.
 
 \if{html}{\out{<div class="sourceCode r">}}\preformatted{library(tibble)
 library(lubridate)
@@ -300,10 +342,13 @@ derive_vars_dtm(
 #> 5 "2019"                NA                 
 #> 6 "2019---07"           NA                 
 #> 7 ""                    NA                 }\if{html}{\out{</div>}}}
-\subsection{Derive AENDTM where AE end date is imputed to the last date and
-ensure that the imputed date is not after the death or data cut off date}{
+\subsection{Derive a date/time variable where imputated dates are not allowed after
+specified dates.}{
 
-Note two flag variables: \code{ASTDTF} and \code{ASTTMF}
+In this example, we derive AENDTM where AE end date is imputed to the last date.
+To ensure that the imputed date is not after the death or data cut off date we can
+set \code{max_dates = exprs(DTHDT, DCUTDT)}. Note two flag variables: \code{ASTDTF} and \code{ASTTMF}
+are created.
 
 \if{html}{\out{<div class="sourceCode r">}}\preformatted{#
 adae <- tribble(
@@ -326,10 +371,13 @@ derive_vars_dtm(
 #>   <chr>   <date>     <date>     <dttm>              <chr>  <chr> 
 #> 1 2020-12 2020-12-06 2020-12-24 2020-12-06 23:59:59 D      H     
 #> 2 2020-11 2020-12-06 2020-12-24 2020-11-30 23:59:59 D      H     }\if{html}{\out{</div>}}}
-\subsection{Derive ASTDTM while using \code{ignore_seconds_flag} to suppress \code{S}
-from the \code{--TMF} variable.}{
+\subsection{Derive a date/time variable where the the imputation flag variable
+suppresses the use of \code{S}.}{
 
-Seconds has been removed from the input dataset.
+In this example, we set \code{ignore_seconds_flag = TRUE} to suppress \code{S} for
+seconds in the \code{ASTTMF} variable. The ADaM IG states that given SDTM ('--DTC')
+variable, if only hours and minutes are ever collected, and seconds are imputed
+in ('--DTM') as \code{00}, then it is not necessary to set ('--TMF') to 'S'.
 
 \if{html}{\out{<div class="sourceCode r">}}\preformatted{#   Function now uses
 # ignore_seconds_flag to remove the 'S' from the --TMF variable.

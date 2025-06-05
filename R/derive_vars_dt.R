@@ -48,9 +48,10 @@
 #'
 #' @examplesx
 #'
-#' @caption Derive a date variable (`ASTDT`) from a date character variable
-#' (`MHSTDTC`)
-#' @info No imputation is done for partial dates.
+#' @caption Derive a date variable from a date character variable
+#'
+#' @info In this example, we derive `ASTDT` from `MHSTDTC` with no imputation
+#' done for partial dates.
 #' @code
 #' library(tibble)
 #' library(lubridate)
@@ -72,24 +73,26 @@
 #'   dtc = MHSTDTC
 #' )
 #'
-#' @caption Derive `ASTDT` with imputation for partial dates to first day/month
-#' (`highest_imputation = "M"`).
-#' @info A flag variable (`ASTDTF`) is automatically created. The flag variable indicates
-#' if imputation was done on the date. Please note the use of `highest_imputation = "M"`
-#'  for month imputation, i.e. the highest imputation done on a partial date is
-#'  up to the month.
+#' @caption Derive a date variable with date imputation set to the first day and month
+#' @info In this example, we derive `ASTDT` with imputation for partial dates to set
+#' to first day/month, i.e. `date_imputation = "first"`. A flag variable, `ASTDTF`,
+#' is automatically created. The flag variable indicates if imputation was done
+#' on the date. Please note the use of `highest_imputation = "M"` for month
+#' imputation, i.e. the highest imputation done on a partial date is up to the month.
 #'
 #' @code
 #' derive_vars_dt(
 #'   mhdt,
 #'   new_vars_prefix = "AST",
 #'   dtc = MHSTDTC,
-#'   highest_imputation = "M"
+#'   highest_imputation = "M",
+#'   date_imputation = "first"
 #' )
 #'
-#' @caption Derive `ASTDT` with date imputation to a specific date (`date_imputation`)
-#' @info The example has `date_imputation = 04-06` set for April 6th. Note that day
-#' portion, i.e. `"-06"`, is used in the imputation of `"2019-02"`.
+#' @caption Derive a date variable with date imputation set to a specific date
+#' @info In this example, we derive `ASTDT` with specific date imputation, i.e.
+#' `date_imputation = "04-06"`. Note that day portion, `"-06"`, is used in the
+#' imputation of the record with `"2019-02"`.
 #'
 #' @code
 #' derive_vars_dt(
@@ -100,7 +103,9 @@
 #'   date_imputation = "04-06"
 #' )
 #'
-#' @caption Derive `AENDT` and `AENDTF` and impute partial dates to last day/month
+#' @caption Derive a date variable with date imputation set to the last day and month
+#' @info In this example, we derive `AENDT` impute partial dates to last day/month, i.e.
+#' `date_imputation = "last"`.
 #'
 #' @code
 #' derive_vars_dt(
@@ -111,9 +116,11 @@
 #'   date_imputation = "last"
 #' )
 #'
-#' @caption Derive `BIRTHDT` with date imputation flag (`--DTF`) suppressed.
-#' @info Note that `date_imputation = "mid"` and so partial date imputation will be
-#' set to June 15th.
+#' @caption Derive a date variable with date imputation and with the date imputation
+#' flag variable suppressed
+#' @info In this example, we will derive `BIRTHDT` with date imputation flag
+#' (`--DTF`) suppressed. Also, note that `date_imputation = "mid"` and so partial
+#' date imputation will be set to June 15th.
 #'
 #' @code
 #' derive_vars_dt(
@@ -125,8 +132,11 @@
 #'   flag_imputation = "none"
 #' )
 #'
-#' @caption Derive `ASTDT` where the `AE` start date is imputed to the first date.
-#' @info Ensure that the imputed date is not before the treatment start date
+#' @caption Derive a date variable where the imputated date is not allowed to be set before
+#' a user-defined date
+#' @info In this example, we derive `ASTDT` where `AESTDTC` is all partial dates in
+#' need of imputation. Using `min_dates = exprs(TRTSDTM)`, we are telling the function
+#' to not allow imputation dates to be before the treatment start date.
 #' via `min_dates` argument.
 #'
 #' @code
@@ -144,9 +154,10 @@
 #'   min_dates = exprs(TRTSDTM)
 #' )
 #'
-#' @caption Preserve information from Partial Dates when deriving `ASTDT`
+#' @caption Derive a date variable using imputation but preserve certain information
+#' from the partial dates
 #' @info A user imputing dates as middle month/day, i.e. `date_imputation = "mid"` can
-#' use preserve argument to "preserve" partial dates.  For example, `"2019---07"`,
+#' use the `preserve` argument to "preserve" partial dates.  For example, `"2019---07"`,
 #' will be displayed as `"2019-06-07"` rather than `"2019-06-15"` with `preserve = TRUE`
 #'
 #' @code
