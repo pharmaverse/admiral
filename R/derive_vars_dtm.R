@@ -136,19 +136,19 @@ derive_vars_dtm <- function(dataset,
                             max_dates = NULL,
                             preserve = FALSE,
                             ignore_seconds_flag = FALSE) {
-  deprecate_inform(
-    when = "1.4.0",
-    what = "derive_vars_dtm(ignore_seconds_flag = 'will be changed to TRUE')",
-    details = c(
-      x = "The default behavior of ignore_seconds_flag will change to TRUE in
-      the next release of admiral. This message will turn into a warning at the
-      beginning of 2026. Please update your code to avoid this future warning message.",
-      i = "See admiral's deprecation guidance:
-      https://pharmaverse.github.io/admiraldev/dev/articles/programming_strategy.html#deprecation"
-    )
-  )
 
+  # Function to display the message once during the session
+  show_message_once <- function() {
+    # Check if the message has already been displayed
+    if (!admiral_environment$message_displayed) {
+      cli_inform("The default value of {.arg ignore_seconds_flag}
+              will change to {.val TRUE} in admiral 1.4.0.")
+      admiral_environment$message_displayed <- TRUE
+    }
+  }
 
+  # Display the message if it hasn't been displayed yet
+  show_message_once()
 
   # check and quote arguments
   dtc <- assert_symbol(enexpr(dtc))
