@@ -100,7 +100,7 @@
 #' )
 #'
 #'
-#' @caption Suppress imputation flags (`flag_imputation = none`)
+#' @caption Suppress imputation flags (`flag_imputation = "none"`)
 #' @info In this example, we derive `ASTDTM` but suppress the `ASTTMF`. Note that
 #' function appends missing `"hh:mm:ss"` to `ASTDTM`.
 #' @code
