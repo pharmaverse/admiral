@@ -76,7 +76,7 @@
 #'   dtc = MHSTDTC
 #' )
 #'
-#' @caption Date imputation set to the first day and month (`date_imputation = first`)
+#' @caption Impute partial dates (`date_imputation = first`)
 #' @info Imputation is requested by the `highest_imputation` argument. Here
 #' `highest_imputation = "M"` for month imputation is used, i.e. the highest
 #' imputation done on a partial date is up to the month. By default, missing date
@@ -119,9 +119,10 @@
 #'
 #' @caption Impute to the middle (`date_imputaton = "mid"`) and suppress
 #' imputation flag (`flag_imputation = "none"`)
-#' @info In this example, we will derive `BIRTHDT` with date imputation flag
+#' @info In this example, we will derive `TRTSDT` with date imputation flag
 #' (`--DTF`) suppressed. Also, note that `date_imputation = "mid"` and so partial
-#' date imputation will be set to June 30th for missing month and 15th for missing day only.
+#' date imputation will be set to June 30th for missing month and 15th for missing
+#' day only.
 #'
 #' @code
 #'

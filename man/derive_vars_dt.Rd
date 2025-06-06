@@ -226,7 +226,7 @@ derive_vars_dt(
 #> 5 "2019"                NA        
 #> 6 "2019---07"           NA        
 #> 7 ""                    NA        }\if{html}{\out{</div>}}}
-\subsection{Date imputation set to the first day and month (\code{date_imputation = first})}{
+\subsection{Impute partial dates (\code{date_imputation = first})}{
 
 Imputation is requested by the \code{highest_imputation} argument. Here
 \code{highest_imputation = "M"} for month imputation is used, i.e. the highest
@@ -288,9 +288,10 @@ derive_vars_dt(
 \subsection{Impute to the middle (\code{date_imputaton = "mid"}) and suppress
 imputation flag (\code{flag_imputation = "none"})}{
 
-In this example, we will derive \code{BIRTHDT} with date imputation flag
+In this example, we will derive \code{TRTSDT} with date imputation flag
 (\code{--DTF}) suppressed. Also, note that \code{date_imputation = "mid"} and so partial
-date imputation will be set to June 30th for missing month and 15th for missing day only.
+date imputation will be set to June 30th for missing month and 15th for missing
+day only.
 
 \if{html}{\out{<div class="sourceCode r">}}\preformatted{
 exdt <- tribble(

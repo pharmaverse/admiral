@@ -299,7 +299,7 @@ two flag variables are created.
 #> 5 "2019"                2019-12-31 23:59:59 M      H     
 #> 6 "2019---07"           2019-12-31 23:59:59 M      H     
 #> 7 ""                    NA                  <NA>   <NA>  }\if{html}{\out{</div>}}}
-\subsection{Suppress imputation flags (\code{flag_imputation = none})}{
+\subsection{Suppress imputation flags (\code{flag_imputation = "none"})}{
 
 In this example, we derive \code{ASTDTM} but suppress the \code{ASTTMF}. Note that
 function appends missing \code{"hh:mm:ss"} to \code{ASTDTM}.
