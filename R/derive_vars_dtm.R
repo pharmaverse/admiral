@@ -56,10 +56,10 @@
 #'
 #' @examplesx
 #'
-#' @caption Derive a date/time variable from a date character variable
-#' @info In this example, we derive `ASTDTM` from `MHSTDTC`. Note that the function
-#' automatically produces the variable `ASTTMF` and appends missing `"hh:mm:ss"`
-#' to `ASTDTM`.
+#' @caption Derive a datetime variable imputing time
+#' @info In this example, we derive `ASTDTM` from `MHSTDTC`. Note that by default the function
+#' imputes missing time components to `00` but doesn't impute missing date components
+#' and automatically produces the time imputation flag (`ASTTMF`).
 #' @code
 #' library(tibble)
 #' library(lubridate)
@@ -81,11 +81,12 @@
 #'   dtc = MHSTDTC
 #' )
 #'
-#' @caption Date/time imputation set to the latest (`date_imputation = "last"`)
+#' @caption Impute to the latest (`date_imputation = "last"`)
 #' @info In this example, we set `date_imputation = "last"` to get the last month/day
 #' for partial dates. We also set `time_imputation = "last"`. The function will use
-#' all or part of `23:59:59` for time imputation. Note that `highest_imputation = "M"`
-#' must be used in conjunction with the two imputation arguments. Also note that
+#' all or part of `23:59:59` for time imputation. Note that `highest_imputation` must
+#' be at least `"D"` to perform date imputation. Here we use `highest_imputation = "M"`
+#' to request imputation of month and day (and time). Also note that
 #' two flag variables are created.
 #'
 #' @code
@@ -99,7 +100,7 @@
 #' )
 #'
 #'
-#' @caption Date/time imputation flag variables suppressed (`flag_imputation = none`)
+#' @caption Suppress imputation flags (`flag_imputation = none`)
 #' @info In this example, we derive `ASTDTM` but suppress the `ASTTMF`. Note that
 #' function appends missing `"hh:mm:ss"` to `ASTDTM`.
 #' @code
@@ -110,7 +111,7 @@
 #'   flag_imputation = "none"
 #' )
 #'
-#' @caption Imputed date/times are not allowed after specified date/times (`max_dates`)
+#' @caption Avoid imputation after specified datetimes (`max_dates`)
 #' @info In this example, we derive `AENDTM` where AE end date is imputed to the last date.
 #' To ensure that the imputed date is not after the death or data cut off date we can
 #' set `max_dates = exprs(DTHDT, DCUTDT)`. Note two flag variables: `ASTDTF` and `ASTTMF`
