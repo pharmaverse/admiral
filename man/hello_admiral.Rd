@@ -15,8 +15,6 @@ hello_admiral(hw = TRUE)
 }
 \value{
 Happy Message
-
-family der_adxx
 }
 \description{
 My first function, happy greeting
@@ -24,10 +22,11 @@ My first function, happy greeting
 \details{
 In the roxygen documentation you will find tags for family and keywords.
 This is to create organized sections for the Reference tab on the pkgdown website.
-You can modify the \verb{_pkgdoqn.yml} as necessary to create appropriate sections as necessary.
+You can modify the \verb{_pkgdown.yml} as necessary to create appropriate sections as necessary.
 Under \code{./man/roxygen/meta.R}, you will find where to store these family/keywords.
 }
 \examples{
 hello_admiral(hw = FALSE)
 }
-\keyword{der_adxx}
+\concept{example}
+\keyword{example}
