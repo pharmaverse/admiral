@@ -136,6 +136,19 @@ derive_vars_dtm <- function(dataset,
                             max_dates = NULL,
                             preserve = FALSE,
                             ignore_seconds_flag = FALSE) {
+  # Function to display the message once during the session
+  show_message_once <- function() {
+    # Check if the message has already been displayed
+    if (!admiral_environment$message_displayed) {
+      cli_inform("The default value of {.arg ignore_seconds_flag}
+              will change to {.val TRUE} in admiral 1.4.0.")
+      admiral_environment$message_displayed <- TRUE
+    }
+  }
+
+  # Display the message if it hasn't been displayed yet
+  show_message_once()
+
   # check and quote arguments
   dtc <- assert_symbol(enexpr(dtc))
   assert_data_frame(dataset, required_vars = exprs(!!dtc))
