@@ -84,8 +84,9 @@
 #' @caption Impute to the latest (`date_imputation = "last"`)
 #' @info In this example, we set `date_imputation = "last"` to get the last month/day
 #' for partial dates. We also set `time_imputation = "last"`. The function will use
-#' all or part of `23:59:59` for time imputation. Note that `highest_imputation = "M"`
-#' must be used in conjunction with the two imputation arguments. Also note that
+#' all or part of `23:59:59` for time imputation. Note that `highest_imputation` must
+#' be at least `"D"` to perform date imputation. Here we use `highest_imputation = "M"`
+#' to request imputation of month and day (and time). Also note that
 #' two flag variables are created.
 #'
 #' @code
