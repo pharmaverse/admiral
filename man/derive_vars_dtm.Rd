@@ -324,28 +324,31 @@ function appends missing \code{"hh:mm:ss"} to \code{ASTDTM}.
 In this example, we derive \code{AENDTM} where AE end date is imputed to the last date.
 To ensure that the imputed date is not after the death or data cut off date we can
 set \code{max_dates = exprs(DTHDT, DCUTDT)}. Note two flag variables: \code{ASTDTF} and \code{ASTTMF}
-are created.
+are created. Setting \code{highest_imputation = "Y"} will allow for the missing \code{AEENDTC}
+record to be imputed from \code{max_dates = exprs(DTHDT, DCUTDT)}.
 
 \if{html}{\out{<div class="sourceCode r">}}\preformatted{adae <- tribble(
   ~AEENDTC, ~DTHDT, ~DCUTDT,
   "2020-12", ymd("2020-12-06"), ymd("2020-12-24"),
-  "2020-11", ymd("2020-12-06"), ymd("2020-12-24")
+  "2020-11", ymd("2020-12-06"), ymd("2020-12-24"),
+         "", ymd("2020-12-06"), ymd("2020-12-24")
 )
 
 derive_vars_dtm(
   adae,
   dtc = AEENDTC,
   new_vars_prefix = "AEN",
-  highest_imputation = "M",
+  highest_imputation = "Y",
   date_imputation = "last",
   time_imputation = "last",
   max_dates = exprs(DTHDT, DCUTDT)
 )
-#> # A tibble: 2 × 6
-#>   AEENDTC DTHDT      DCUTDT     AENDTM              AENDTF AENTMF
-#>   <chr>   <date>     <date>     <dttm>              <chr>  <chr> 
-#> 1 2020-12 2020-12-06 2020-12-24 2020-12-06 23:59:59 D      H     
-#> 2 2020-11 2020-12-06 2020-12-24 2020-11-30 23:59:59 D      H     }\if{html}{\out{</div>}}}
+#> # A tibble: 3 × 6
+#>   AEENDTC   DTHDT      DCUTDT     AENDTM              AENDTF AENTMF
+#>   <chr>     <date>     <date>     <dttm>              <chr>  <chr> 
+#> 1 "2020-12" 2020-12-06 2020-12-24 2020-12-06 23:59:59 D      H     
+#> 2 "2020-11" 2020-12-06 2020-12-24 2020-11-30 23:59:59 D      H     
+#> 3 ""        2020-12-06 2020-12-24 2020-12-06 23:59:59 Y      H     }\if{html}{\out{</div>}}}
 \subsection{Suppress \code{"S"} for imputation flag (\code{ignore_seconds_flag})}{
 
 In this example, we set \code{ignore_seconds_flag = TRUE} to suppress \code{S} for

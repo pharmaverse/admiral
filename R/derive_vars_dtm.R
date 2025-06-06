@@ -114,19 +114,21 @@
 #' @info In this example, we derive `AENDTM` where AE end date is imputed to the last date.
 #' To ensure that the imputed date is not after the death or data cut off date we can
 #' set `max_dates = exprs(DTHDT, DCUTDT)`. Note two flag variables: `ASTDTF` and `ASTTMF`
-#' are created.
+#' are created. Setting `highest_imputation = "Y"` will allow for the missing `AEENDTC`
+#' record to be imputed from `max_dates = exprs(DTHDT, DCUTDT)`.
 #' @code
 #' adae <- tribble(
 #'   ~AEENDTC, ~DTHDT, ~DCUTDT,
 #'   "2020-12", ymd("2020-12-06"), ymd("2020-12-24"),
-#'   "2020-11", ymd("2020-12-06"), ymd("2020-12-24")
+#'   "2020-11", ymd("2020-12-06"), ymd("2020-12-24"),
+#'          "", ymd("2020-12-06"), ymd("2020-12-24")
 #' )
 #'
 #' derive_vars_dtm(
 #'   adae,
 #'   dtc = AEENDTC,
 #'   new_vars_prefix = "AEN",
-#'   highest_imputation = "M",
+#'   highest_imputation = "Y",
 #'   date_imputation = "last",
 #'   time_imputation = "last",
 #'   max_dates = exprs(DTHDT, DCUTDT)

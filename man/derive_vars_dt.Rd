@@ -252,29 +252,6 @@ on the date.
 #> 5 "2019"                2019-01-01 M     
 #> 6 "2019---07"           2019-01-01 M     
 #> 7 ""                    NA         <NA>  }\if{html}{\out{</div>}}}
-\subsection{Date imputation set to a specific date (\code{date_imputation = "04-06"})}{
-
-In this example, we derive \code{ASTDT} with specific date imputation, i.e.
-\code{date_imputation = "04-06"}. Note that day portion, \code{"-06"}, is used in the
-imputation of the record with \code{"2019-02"}.
-
-\if{html}{\out{<div class="sourceCode r">}}\preformatted{derive_vars_dt(
-  mhdt,
-  new_vars_prefix = "AST",
-  dtc = MHSTDTC,
-  highest_imputation = "M",
-  date_imputation = "04-06"
-)
-#> # A tibble: 7 × 3
-#>   MHSTDTC               ASTDT      ASTDTF
-#>   <chr>                 <date>     <chr> 
-#> 1 "2019-07-18T15:25:40" 2019-07-18 <NA>  
-#> 2 "2019-07-18T15:25"    2019-07-18 <NA>  
-#> 3 "2019-07-18"          2019-07-18 <NA>  
-#> 4 "2019-02"             2019-02-06 D     
-#> 5 "2019"                2019-04-06 M     
-#> 6 "2019---07"           2019-04-06 M     
-#> 7 ""                    NA         <NA>  }\if{html}{\out{</div>}}}
 \subsection{Impute to the last day/month (\code{date_imputation = "last"})}{
 
 In this example, we derive \code{ADT} impute partial dates to last day/month, i.e.
@@ -344,6 +321,29 @@ derive_vars_dt(
 #> 5 "2019"                2019-06-30
 #> 6 "2019---07"           2019-06-30
 #> 7 ""                    NA        }\if{html}{\out{</div>}}}
+\subsection{Date imputation set to a specific date (\code{date_imputation = "04-06"})}{
+
+In this example, we derive \code{ASTDT} with specific date imputation, i.e.
+\code{date_imputation = "04-06"}. Note that day portion, \code{"-06"}, is used in the
+imputation of the record with \code{"2019-02"}.
+
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{derive_vars_dt(
+  mhdt,
+  new_vars_prefix = "AST",
+  dtc = MHSTDTC,
+  highest_imputation = "M",
+  date_imputation = "04-06"
+)
+#> # A tibble: 7 × 3
+#>   MHSTDTC               ASTDT      ASTDTF
+#>   <chr>                 <date>     <chr> 
+#> 1 "2019-07-18T15:25:40" 2019-07-18 <NA>  
+#> 2 "2019-07-18T15:25"    2019-07-18 <NA>  
+#> 3 "2019-07-18"          2019-07-18 <NA>  
+#> 4 "2019-02"             2019-02-06 D     
+#> 5 "2019"                2019-04-06 M     
+#> 6 "2019---07"           2019-04-06 M     
+#> 7 ""                    NA         <NA>  }\if{html}{\out{</div>}}}
 \subsection{Avoid imputation before a user-defined date (\code{min_dates})}{
 
 In this example, we derive \code{ASTDT} where \code{AESTDTC} is all partial dates in
@@ -369,13 +369,11 @@ derive_vars_dt(
 #>   <chr>   <dttm>              <date>     <chr> 
 #> 1 2020-12 2020-12-06 12:12:12 2020-12-06 D     
 #> 2 2020-11 2020-12-06 12:12:12 2020-11-01 D     }\if{html}{\out{</div>}}}
-\subsection{Preserve certain information from the partial dates during imputation
-(\code{preserve}) from the partial dates}{
+\subsection{Preserve lower components if higher ones were imputed (\code{preserve})}{
 
-A user imputing dates as middle month/day, i.e. \code{date_imputation = "mid"} can
-use the \code{preserve} argument to "preserve" information from the partial dates.
+The \code{preserve} argument can be used to "preserve" information from the partial dates.
 For example, \code{"2019---07"}, will be displayed as \code{"2019-06-07"} rather than
-\code{"2019-06-15"} with \code{preserve = TRUE}
+\code{"2019-06-30"} with \code{preserve = TRUE} and \code{date_imputation = "mid"} .
 
 \if{html}{\out{<div class="sourceCode r">}}\preformatted{derive_vars_dt(
   mhdt,
