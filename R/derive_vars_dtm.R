@@ -136,7 +136,6 @@ derive_vars_dtm <- function(dataset,
                             max_dates = NULL,
                             preserve = FALSE,
                             ignore_seconds_flag = FALSE) {
-
   # Function to display the message once during the session
   show_message_once <- function() {
     # Check if the message has already been displayed
