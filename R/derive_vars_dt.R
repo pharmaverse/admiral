@@ -145,7 +145,7 @@
 #'   flag_imputation = "none"
 #' )
 #'
-#' @caption Date imputation set to a specific date (`date_imputation = "04-06"`)
+#' @caption Impute to a specific date (`date_imputation = "04-06"`)
 #' @info In this example, we derive `ASTDT` with specific date imputation, i.e.
 #' `date_imputation = "04-06"`. Note that day portion, `"-06"`, is used in the
 #' imputation of the record with `"2019-02"`.

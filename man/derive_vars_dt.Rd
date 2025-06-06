@@ -322,7 +322,7 @@ derive_vars_dt(
 #> 5 "2019"                2019-06-30
 #> 6 "2019---07"           2019-06-30
 #> 7 ""                    NA        }\if{html}{\out{</div>}}}
-\subsection{Date imputation set to a specific date (\code{date_imputation = "04-06"})}{
+\subsection{Impute to a specific date (\code{date_imputation = "04-06"})}{
 
 In this example, we derive \code{ASTDT} with specific date imputation, i.e.
 \code{date_imputation = "04-06"}. Note that day portion, \code{"-06"}, is used in the
