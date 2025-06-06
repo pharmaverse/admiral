@@ -423,7 +423,7 @@ filter_joined <- function(dataset,
                           join_type,
                           first_cond_lower = NULL,
                           first_cond_upper = NULL,
-                          order,
+                          order = NULL,
                           tmp_obs_nr_var = NULL,
                           filter_add = NULL,
                           filter_join,
@@ -439,8 +439,12 @@ filter_joined <- function(dataset,
     )
   first_cond_lower <- assert_filter_cond(enexpr(first_cond_lower), optional = TRUE)
   first_cond_upper <- assert_filter_cond(enexpr(first_cond_upper), optional = TRUE)
-  assert_expr_list(order)
   tmp_obs_nr_var <- assert_symbol(enexpr(tmp_obs_nr_var), optional = TRUE)
+  assert_expr_list(
+    order,
+    optional = join_type == "all" && is.null(first_cond_lower) &&
+      is.null(first_cond_upper) && is.null(tmp_obs_nr_var)
+  )
   filter_add <- assert_filter_cond(enexpr(filter_add), optional = TRUE)
   filter_join <- assert_filter_cond(enexpr(filter_join))
   check_type <-
@@ -459,9 +463,13 @@ filter_joined <- function(dataset,
     required_vars = expr_c(by_vars, join_vars, extract_vars(order))
   )
 
-  if (is.null(tmp_obs_nr_var)) {
-    tmp_obs_nr_var <- get_new_tmp_var(dataset, prefix = "tmp_obs_nr_")
-  }
+  tmp_obs_nr_unique <- get_new_tmp_var(dataset, prefix = "tmp_obs_nr_unique")
+  dataset <- derive_var_obs_number(
+    dataset,
+    by_vars = by_vars,
+    new_var = !!tmp_obs_nr_unique
+  )
+
   get_joined_data(
     dataset,
     dataset_add = dataset_add,
@@ -476,12 +484,14 @@ filter_joined <- function(dataset,
     filter_join = !!filter_join,
     check_type = check_type
   ) %>%
-    # select one observation of each group, as the joined variables are removed
-    # it doesn't matter which one, so we take just the first one
-    group_by(!!!by_vars, !!tmp_obs_nr_var) %>%
+    # select one observation of each records of the input dataset, as the joined
+    # variables are removed it doesn't matter which one, so we take just the
+    # first one
+    group_by(!!!by_vars, !!tmp_obs_nr_unique) %>%
     slice(1L) %>%
     ungroup() %>%
-    select(colnames(dataset))
+    select(colnames(dataset)) %>%
+    remove_tmp_vars()
 }
 
 #' Count Number of Observations Where a Variable Equals a Value

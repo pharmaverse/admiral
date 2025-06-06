@@ -490,7 +490,7 @@
 derive_var_joined_exist_flag <- function(dataset,
                                          dataset_add,
                                          by_vars,
-                                         order,
+                                         order = NULL,
                                          new_var,
                                          tmp_obs_nr_var = NULL,
                                          join_vars,
