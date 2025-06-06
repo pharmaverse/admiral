@@ -180,10 +180,9 @@
 #' )
 #'
 #' @caption Preserve lower components if higher ones were imputed (`preserve`)
-#' @info A user imputing dates as middle month/day, i.e. `date_imputation = "mid"` can
-#' use the `preserve` argument to "preserve" information from the partial dates.
+#' @info The `preserve` argument can be used to "preserve" information from the partial dates.
 #' For example, `"2019---07"`, will be displayed as `"2019-06-07"` rather than
-#' `"2019-06-15"` with `preserve = TRUE`
+#' `"2019-06-30"` with `preserve = TRUE` and `date_imputation = "mid"` .
 #'
 #' @code
 #' derive_vars_dt(
