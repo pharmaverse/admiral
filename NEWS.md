@@ -58,6 +58,10 @@ with custom arguments of length greater than one are used. (#2751)
 
 ## Breaking Changes
 
+- `derive_vars_dtm()` issues a message alerting users to a coming change in 
+`admiral 1.4.0` where the default behavior of `ignore_seconds_flag` will be changed from 
+`FALSE` to `TRUE`. (#2661)
+
 - Lab grading metadata `atoxgr_criteria_ctcv4()`, `atoxgr_criteria_ctcv5()` and `atoxgr_criteria_daids()` variable `SI_UNIT_CHECK` renamed to `UNIT_CHECK`. (#2557)
 
 - The values of the variable specified for `tmp_obs_nr_var` in
