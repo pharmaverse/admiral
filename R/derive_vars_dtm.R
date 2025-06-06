@@ -110,7 +110,7 @@
 #'   flag_imputation = "none"
 #' )
 #'
-#' @caption Imputed date/times are not allowed after specified date/times (`max_dates`)
+#' @caption Avoid imputation after specified datetimes (`max_dates`)
 #' @info In this example, we derive `AENDTM` where AE end date is imputed to the last date.
 #' To ensure that the imputed date is not after the death or data cut off date we can
 #' set `max_dates = exprs(DTHDT, DCUTDT)`. Note two flag variables: `ASTDTF` and `ASTTMF`
