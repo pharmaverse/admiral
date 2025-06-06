@@ -350,7 +350,7 @@ imputation of the record with \code{"2019-02"}.
 In this example, we derive \code{ASTDT} where \code{AESTDTC} is all partial dates in
 need of imputation. Using \code{min_dates = exprs(TRTSDTM)}, we are telling the function
 to not allow imputation dates to be before the treatment start date
-via \code{min_dates} argument. Note that the second record does not get imputated
+via \code{min_dates} argument. Note that the second record does not get imputed
 as it is before \code{TRTSDTM}.
 
 \if{html}{\out{<div class="sourceCode r">}}\preformatted{adae <- tribble(

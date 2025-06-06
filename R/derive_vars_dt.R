@@ -162,7 +162,7 @@
 #' @info In this example, we derive `ASTDT` where `AESTDTC` is all partial dates in
 #' need of imputation. Using `min_dates = exprs(TRTSDTM)`, we are telling the function
 #' to not allow imputation dates to be before the treatment start date
-#' via `min_dates` argument. Note that the second record does not get imputated
+#' via `min_dates` argument. Note that the second record does not get imputed
 #' as it is before `TRTSDTM`.
 #'
 #' @code
