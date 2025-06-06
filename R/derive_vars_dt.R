@@ -93,20 +93,6 @@
 #'   date_imputation = "first"
 #' )
 #'
-#' @caption Date imputation set to a specific date (`date_imputation = "04-06"`)
-#' @info In this example, we derive `ASTDT` with specific date imputation, i.e.
-#' `date_imputation = "04-06"`. Note that day portion, `"-06"`, is used in the
-#' imputation of the record with `"2019-02"`.
-#'
-#' @code
-#' derive_vars_dt(
-#'   mhdt,
-#'   new_vars_prefix = "AST",
-#'   dtc = MHSTDTC,
-#'   highest_imputation = "M",
-#'   date_imputation = "04-06"
-#' )
-#'
 #' @caption Impute to the last day/month (`date_imputation = "last"`)
 #' @info In this example, we derive `ADT` impute partial dates to last day/month, i.e.
 #' `date_imputation = "last"`.
@@ -158,6 +144,19 @@
 #'   flag_imputation = "none"
 #' )
 #'
+#' @caption Date imputation set to a specific date (`date_imputation = "04-06"`)
+#' @info In this example, we derive `ASTDT` with specific date imputation, i.e.
+#' `date_imputation = "04-06"`. Note that day portion, `"-06"`, is used in the
+#' imputation of the record with `"2019-02"`.
+#'
+#' @code
+#' derive_vars_dt(
+#'   mhdt,
+#'   new_vars_prefix = "AST",
+#'   dtc = MHSTDTC,
+#'   highest_imputation = "M",
+#'   date_imputation = "04-06"
+#' )
 #' @caption Avoid imputation before a user-defined date (`min_dates`)
 #' @info In this example, we derive `ASTDT` where `AESTDTC` is all partial dates in
 #' need of imputation. Using `min_dates = exprs(TRTSDTM)`, we are telling the function
