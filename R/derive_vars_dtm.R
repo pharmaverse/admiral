@@ -56,7 +56,7 @@
 #'
 #' @examplesx
 #'
-#' @caption Derive a date/time variable from a date character variable
+#' @caption Derive a datetime variable imputing time
 #' @info In this example, we derive `ASTDTM` from `MHSTDTC`. Note that the function
 #' automatically produces the variable `ASTTMF` and appends missing `"hh:mm:ss"`
 #' to `ASTDTM`.
