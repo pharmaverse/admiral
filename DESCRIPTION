@@ -12,6 +12,7 @@ Authors@R: c(
     person("Ross", "Farrugia", role = "aut"),
     person("Fanny", "Gautier", role = "aut"),
     person("G", "Gayatri", role = "aut"),
+    person("Solveig", "Holmgaard", role = "aut"),
     person("Dinakar", "Kulkarni", role = "aut"),
     person("Edoardo", "Mancini", role = "aut",
            comment = c(ORCID = "0009-0006-4899-8641")),
