@@ -73,7 +73,7 @@ If the event or censoring date is before the origin date, \code{ADT} is set to
 the origin date.
 
 \describe{
-\item{Permitted values}{a date variable}
+\item{Permitted values}{a date or datetime variable}
 \item{Default value}{\code{TRTSDT}}
 }}
 
