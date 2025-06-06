@@ -57,9 +57,9 @@
 #' @examplesx
 #'
 #' @caption Derive a datetime variable imputing time
-#' @info In this example, we derive `ASTDTM` from `MHSTDTC`. Note that the function
-#' automatically produces the variable `ASTTMF` and appends missing `"hh:mm:ss"`
-#' to `ASTDTM`.
+#' @info In this example, we derive `ASTDTM` from `MHSTDTC`. Note that by default the function
+#' imputes missing time components to `00` but doesn't impute missing date components
+#' and automatically produces the time imputation flag (`ASTTMF`).
 #' @code
 #' library(tibble)
 #' library(lubridate)
