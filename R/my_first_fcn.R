@@ -16,8 +16,7 @@
 #' @export
 #'
 #' @examples
-#' hello_admiral(hw=FALSE)
-
+#' hello_admiral(hw = FALSE)
 hello_admiral <- function(hw = TRUE) {
   if (hw) {
     message("Welcome to the admiral family!")
