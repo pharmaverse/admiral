@@ -237,11 +237,11 @@ Date/Time Derivation Functions that returns variable appended to dataset:
 \keyword{der_date_time}
 \keyword{der_gen}
 \section{Examples}{
-\subsection{Derive a date/time variable from a date character variable}{
+\subsection{Derive a datetime variable imputing time}{
 
-In this example, we derive \code{ASTDTM} from \code{MHSTDTC}. Note that the function
-automatically produces the variable \code{ASTTMF} and appends missing \code{"hh:mm:ss"}
-to \code{ASTDTM}.
+In this example, we derive \code{ASTDTM} from \code{MHSTDTC}. Note that by default the function
+imputes missing time components to \code{00} but doesn't impute missing date components
+and automatically produces the time imputation flag (\code{ASTTMF}).
 
 \if{html}{\out{<div class="sourceCode r">}}\preformatted{library(tibble)
 library(lubridate)
@@ -272,12 +272,13 @@ derive_vars_dtm(
 #> 5 "2019"                NA                  <NA>  
 #> 6 "2019---07"           NA                  <NA>  
 #> 7 ""                    NA                  <NA>  }\if{html}{\out{</div>}}}
-\subsection{Date/time imputation set to the latest (\code{date_imputation = "last"})}{
+\subsection{Impute to the latest (\code{date_imputation = "last"})}{
 
 In this example, we set \code{date_imputation = "last"} to get the last month/day
 for partial dates. We also set \code{time_imputation = "last"}. The function will use
-all or part of \code{23:59:59} for time imputation. Note that \code{highest_imputation = "M"}
-must be used in conjunction with the two imputation arguments. Also note that
+all or part of \code{23:59:59} for time imputation. Note that \code{highest_imputation} must
+be at least \code{"D"} to perform date imputation. Here we use \code{highest_imputation = "M"}
+to request imputation of month and day (and time). Also note that
 two flag variables are created.
 
 \if{html}{\out{<div class="sourceCode r">}}\preformatted{derive_vars_dtm(
@@ -298,7 +299,7 @@ two flag variables are created.
 #> 5 "2019"                2019-12-31 23:59:59 M      H     
 #> 6 "2019---07"           2019-12-31 23:59:59 M      H     
 #> 7 ""                    NA                  <NA>   <NA>  }\if{html}{\out{</div>}}}
-\subsection{Date/time imputation flag variables suppressed (\code{flag_imputation = none})}{
+\subsection{Suppress imputation flags (\code{flag_imputation = none})}{
 
 In this example, we derive \code{ASTDTM} but suppress the \code{ASTTMF}. Note that
 function appends missing \code{"hh:mm:ss"} to \code{ASTDTM}.
@@ -319,7 +320,7 @@ function appends missing \code{"hh:mm:ss"} to \code{ASTDTM}.
 #> 5 "2019"                NA                 
 #> 6 "2019---07"           NA                 
 #> 7 ""                    NA                 }\if{html}{\out{</div>}}}
-\subsection{Imputed date/times are not allowed after specified date/times (\code{max_dates})}{
+\subsection{Avoid imputation after specified datetimes (\code{max_dates})}{
 
 In this example, we derive \code{AENDTM} where AE end date is imputed to the last date.
 To ensure that the imputed date is not after the death or data cut off date we can
