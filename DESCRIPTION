@@ -1,7 +1,7 @@
 Type: Package
 Package: admiral
 Title: ADaM in R Asset Library
-Version: 1.2.0.9040
+Version: 1.2.0.9041
 Authors@R: c(
     person("Ben", "Straub", , "ben.x.straub@gsk.com", role = c("aut", "cre")),
     person("Stefan", "Bundfuss", role = "aut",
@@ -12,6 +12,7 @@ Authors@R: c(
     person("Ross", "Farrugia", role = "aut"),
     person("Fanny", "Gautier", role = "aut"),
     person("G", "Gayatri", role = "aut"),
+    person("Solveig", "Holmgaard", role = "aut"),
     person("Dinakar", "Kulkarni", role = "aut"),
     person("Edoardo", "Mancini", role = "aut",
            comment = c(ORCID = "0009-0006-4899-8641")),
