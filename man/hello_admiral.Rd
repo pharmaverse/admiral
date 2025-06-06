@@ -28,6 +28,6 @@ You can modify the \verb{_pkgdoqn.yml} as necessary to create appropriate sectio
 Under \code{./man/roxygen/meta.R}, you will find where to store these family/keywords.
 }
 \examples{
-hello_admiral(hw=FALSE)
+hello_admiral(hw = FALSE)
 }
 \keyword{der_adxx}
