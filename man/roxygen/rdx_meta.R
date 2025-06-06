@@ -6,8 +6,8 @@ list(
     dataset = "a dataset, i.e., a `data.frame` or tibble",
     dataset_list = "named list of datasets, e.g., `list(adsl = adsl, ae = ae)`",
     date = "a date or datetime variable",
-    date_chr = "a date character variable",
-    date_chr_vector = "a date character vector",
+    date_chr = "a character date variable",
+    date_chr_vector = "a character date vector",
     date_imp = "`\"first\"`, `\"mid\"`, `\"last\"`, or user-defined",
     date_high_imp = "`\"Y\"` (year, highest level), `\"M\"` (month), `\"D\"`
     (day), `\"n\"` (none, lowest level)",

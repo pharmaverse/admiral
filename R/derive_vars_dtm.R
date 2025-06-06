@@ -1,8 +1,8 @@
-#' Derive/Impute a Datetime from a Date Character Vector
+#' Derive/Impute a Datetime from a Character Date
 #'
-#' Derive a datetime object (`'--DTM'`) from a date character vector (`'--DTC'`).
+#' Derive a datetime object (`'*DTM'`) from a character date (`'--DTC'`).
 #' The date and time can be imputed (see `date_imputation`/`time_imputation` arguments)
-#' and the date/time imputation flag (`'--DTF'`, `'--TMF'`) can be added.
+#' and the date/time imputation flag (`'*DTF'`, `'*TMF'`) can be added.
 #'
 #' In `{admiral}` we don't allow users to pick any single part of the date/time to
 #' impute, we only enable to impute up to a highest level, i.e. you couldn't
@@ -15,9 +15,9 @@
 #'
 #' @param new_vars_prefix Prefix used for the output variable(s).
 #'
-#'   A character scalar is expected. For the date variable "DT" is appended to
-#'   the specified prefix, for the date imputation flag "DTF", and for the time
-#'   imputation flag "TMF". I.e., for `new_vars_prefix = "AST"` the variables
+#'   A character scalar is expected. For the date variable (`'*DT'`) is appended to
+#'   the specified prefix, for the date imputation flag (`'*DTF'`), and for the time
+#'   imputation flag (`'*TMF'`), i.e., for `new_vars_prefix = "AST"` the variables
 #'   `ASTDT`, `ASTDTF`, and `ASTTMF` are created.
 #'
 #' @permitted [char_scalar]
@@ -40,12 +40,12 @@
 #' @inheritParams compute_tmf
 #'
 #' @details
-#' The presence of a `'--DTF'` variable is checked and the variable is not derived
-#' if it already exists in the input dataset. However, if `'--TMF'` already exists
-#' in the input dataset, a warning is issued and `'--TMF'` will be overwritten.
+#' The presence of a `'*DTF'` variable is checked and the variable is not derived
+#' if it already exists in the input dataset. However, if `'*TMF'` already exists
+#' in the input dataset, a warning is issued and `'*TMF'` will be overwritten.
 #'
-#' @return  The input dataset with the datetime `'--DTM'` (and the date/time imputation
-#' flag `'--DTF'`, `'--TMF'`) added.
+#' @return  The input dataset with the datetime `'*DTM'` (and the date/time imputation
+#' flag `'*DTF'`, `'*TMF'`) added.
 #'
 #'
 #' @family der_date_time
@@ -119,10 +119,11 @@
 #' record to be imputed from `max_dates = exprs(DTHDT, DCUTDT)`.
 #' @code
 #' adae <- tribble(
-#'   ~AEENDTC, ~DTHDT, ~DCUTDT,
-#'   "2020-12", ymd("2020-12-06"), ymd("2020-12-24"),
-#'   "2020-11", ymd("2020-12-06"), ymd("2020-12-24"),
-#'          "", ymd("2020-12-06"), ymd("2020-12-24")
+#'    ~AEENDTC,             ~DTHDT,           ~DCUTDT,
+#'    "2020-12", ymd("2020-12-26"), ymd("2020-12-24"),
+#'    "2020-11", ymd("2020-12-06"), ymd("2020-12-24"),
+#'           "", ymd("2020-12-06"), ymd("2020-12-24"),
+#' "2020-12-20", ymd("2020-12-06"), ymd("2020-12-24")
 #' )
 #'
 #' derive_vars_dtm(
@@ -139,7 +140,7 @@
 #' @info In this example, we set `ignore_seconds_flag = TRUE` to suppress `S` for
 #' seconds in the `ASTTMF` variable. The ADaM IG states that given SDTM ('--DTC')
 #' variable, if only hours and minutes are ever collected, and seconds are imputed
-#' in ('--DTM') as `00`, then it is not necessary to set ('--TMF') to 'S'.
+#' in ('*DTM') as `00`, then it is not necessary to set ('*TMF') to 'S'.
 #' @code
 #'
 #' mhdt <- tribble(
@@ -281,7 +282,7 @@ derive_vars_dtm <- function(dataset,
 
 #' Convert a Date Character Vector into a Datetime Object
 #'
-#' Convert a date character vector (usually `'--DTC'`) into a Date vector (usually `'--DTM'`).
+#' Convert a date character vector (usually `'--DTC'`) into a Date vector (usually `'*DTM'`).
 #'
 #' @param dtc The `'--DTC'` date to convert.
 #'
@@ -692,27 +693,27 @@ restrict_imputed_dtc_dtm <- function(dtc,
 
 #' Derive the Time Imputation Flag
 #'
-#' Derive the time imputation flag (`'--TMF'`) comparing a date character vector
-#' (`'--DTC'`) with a Datetime vector (`'--DTM'`).
+#' Derive the time imputation flag (`'*TMF'`) comparing a date character vector
+#' (`'--DTC'`) with a Datetime vector (`'*DTM'`).
 #'
 #' @param dtc The date character vector (`'--DTC'`).
 #'
 #'   A character date is expected in a format like `yyyy-mm-ddThh:mm:ss` (partial or complete).
 #'
-#' @param dtm The Date vector to compare (`'--DTM'`).
+#' @param dtm The Date vector to compare (`'*DTM'`).
 #'
 #'   A datetime object is expected.
 #'
 #' @param ignore_seconds_flag  ADaM IG states that given SDTM (`'--DTC'`) variable,
 #' if only hours and minutes are ever collected, and seconds are imputed in
-#' (`'--DTM'`) as 00, then it is not necessary to set (`'--TMF'`) to `'S'`. A user can set this
-#' to `TRUE` so the `'S'` Flag is dropped from (`'--TMF'`).
+#' (`'*DTM'`) as 00, then it is not necessary to set (`'*TMF'`) to `'S'`. A user can set this
+#' to `TRUE` so the `'S'` Flag is dropped from (`'*TMF'`).
 #'
 #' @permitted A logical value
 #'
 #' @details Usually this computation function can not be used with `%>%`.
 #'
-#' @return The time imputation flag (`'--TMF'`) (character value of `'H'`, `'M'` , `'S'` or `NA`)
+#' @return The time imputation flag (`'*TMF'`) (character value of `'H'`, `'M'` , `'S'` or `NA`)
 #'
 #'
 #' @family com_date_time

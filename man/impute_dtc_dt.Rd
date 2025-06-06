@@ -21,13 +21,13 @@ A character date is expected in a format like \code{yyyy-mm-dd} or
 valid "missing" value for any component.
 
 \describe{
-\item{Permitted values}{a date character variable}
+\item{Permitted values}{a character date variable}
 \item{Default value}{none}
 }}
 
 \item{highest_imputation}{Highest imputation level
 
-The \code{highest_imputation} argument controls which components of the DTC
+The \code{highest_imputation} argument controls which components of the \code{'--DTC'}
 value are imputed if they are missing. All components up to the specified
 level are imputed.
 

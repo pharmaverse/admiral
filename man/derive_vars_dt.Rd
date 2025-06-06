@@ -2,7 +2,7 @@
 % Please edit documentation in R/derive_vars_dt.R
 \name{derive_vars_dt}
 \alias{derive_vars_dt}
-\title{Derive/Impute a Date from a Date Character Vector}
+\title{Derive/Impute a Date from a Character Date}
 \usage{
 derive_vars_dt(
   dataset,
@@ -28,8 +28,8 @@ The variables specified by the \code{dtc} argument are expected to be in the dat
 
 \item{new_vars_prefix}{Prefix used for the output variable(s).
 
-A character scalar is expected. For the date variable "DT" is appended to
-the specified prefix and for the date imputation flag "DTF". I.e., for
+A character scalar is expected. For the date variable (\code{'*DT'}) is appended to
+the specified prefix and for the date imputation flag (\code{'*DTF'}), i.e., for
 \code{new_vars_prefix = "AST"} the variables \code{ASTDT} and \code{ASTDTF} are created.
 
 \describe{
@@ -44,13 +44,13 @@ A character date is expected in a format like \code{yyyy-mm-dd} or
 valid "missing" value for any component.
 
 \describe{
-\item{Permitted values}{a date character variable}
+\item{Permitted values}{a character date variable}
 \item{Default value}{none}
 }}
 
 \item{highest_imputation}{Highest imputation level
 
-The \code{highest_imputation} argument controls which components of the DTC
+The \code{highest_imputation} argument controls which components of the \code{'--DTC'}
 value are imputed if they are missing. All components up to the specified
 level are imputed.
 
@@ -163,21 +163,21 @@ For example \code{"2019---07"} would return \verb{"2019-06-07} if \code{preserve
 }}
 }
 \value{
-The input dataset with the date \code{'--DT'} (and the date imputation flag \code{'--DTF'}
+The input dataset with the date \code{'*DT'} (and the date imputation flag \code{'*DTF'}
 if requested) added.
 }
 \description{
-Derive a date (\code{'--DT'}) from a date character vector (\verb{'--DTC}').
+Derive a date (\code{'*DT'}) from a character date (\verb{'--DTC}').
 The date can be imputed (see \code{date_imputation} argument)
-and the date imputation flag ('\verb{--DTF'}) can be added.
+and the date imputation flag ('\verb{*DTF'}) can be added.
 }
 \details{
 In \code{{admiral}} we don't allow users to pick any single part of the date/time to
 impute, we only enable to impute up to a highest level, i.e. you couldn't
 choose to say impute months, but not days.
 
-The presence of a \code{'--DTF'} variable is checked and if it already exists in the input dataset,
-a warning is issued and \code{'--DTF'} will be overwritten.
+The presence of a \code{'*DTF'} variable is checked and if it already exists in the input dataset,
+a warning is issued and \code{'*DTF'} will be overwritten.
 }
 \seealso{
 Date/Time Derivation Functions that returns variable appended to dataset: 
@@ -289,7 +289,7 @@ derive_vars_dt(
 imputation flag (\code{flag_imputation = "none"})}{
 
 In this example, we will derive \code{TRTSDT} with date imputation flag
-(\code{--DTF}) suppressed. Also, note that \code{date_imputation = "mid"} and so partial
+(\verb{*DTF}) suppressed. Also, note that \code{date_imputation = "mid"} and so partial
 date imputation will be set to June 30th for missing month and 15th for missing
 day only.
 

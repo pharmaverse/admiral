@@ -1,8 +1,8 @@
-#' Derive/Impute a Date from a Date Character Vector
+#' Derive/Impute a Date from a Character Date
 #'
-#' Derive a date (`'--DT'`) from a date character vector (`'--DTC`').
+#' Derive a date (`'*DT'`) from a character date (`'--DTC`').
 #' The date can be imputed (see `date_imputation` argument)
-#' and the date imputation flag ('`--DTF'`) can be added.
+#' and the date imputation flag ('`*DTF'`) can be added.
 #'
 #' In `{admiral}` we don't allow users to pick any single part of the date/time to
 #' impute, we only enable to impute up to a highest level, i.e. you couldn't
@@ -15,8 +15,8 @@
 #'
 #' @param new_vars_prefix Prefix used for the output variable(s).
 #'
-#'   A character scalar is expected. For the date variable "DT" is appended to
-#'   the specified prefix and for the date imputation flag "DTF". I.e., for
+#'   A character scalar is expected. For the date variable (`'*DT'`) is appended to
+#'   the specified prefix and for the date imputation flag (`'*DTF'`), i.e., for
 #'   `new_vars_prefix = "AST"` the variables `ASTDT` and `ASTDTF` are created.
 #'
 #' @permitted [char_scalar]
@@ -35,12 +35,12 @@
 #' @inheritParams impute_dtc_dt
 #'
 #' @return
-#' The input dataset with the date `'--DT'` (and the date imputation flag `'--DTF'`
+#' The input dataset with the date `'*DT'` (and the date imputation flag `'*DTF'`
 #' if requested) added.
 #'
 #' @details
-#' The presence of a `'--DTF'` variable is checked and if it already exists in the input dataset,
-#' a warning is issued and `'--DTF'` will be overwritten.
+#' The presence of a `'*DTF'` variable is checked and if it already exists in the input dataset,
+#' a warning is issued and `'*DTF'` will be overwritten.
 #'
 #'
 #' @family der_date_time
@@ -120,7 +120,7 @@
 #' @caption Impute to the middle (`date_imputaton = "mid"`) and suppress
 #' imputation flag (`flag_imputation = "none"`)
 #' @info In this example, we will derive `TRTSDT` with date imputation flag
-#' (`--DTF`) suppressed. Also, note that `date_imputation = "mid"` and so partial
+#' (`*DTF`) suppressed. Also, note that `date_imputation = "mid"` and so partial
 #' date imputation will be set to June 30th for missing month and 15th for missing
 #' day only.
 #'
@@ -230,7 +230,7 @@ derive_vars_dt <- function(dataset,
   dt <- paste0(new_vars_prefix, "DT")
   warn_if_vars_exist(dataset, dt)
 
-  # derive --DT var
+  # derive *DT var
   dataset <- dataset %>%
     mutate(
       !!sym(dt) := convert_dtc_to_dt(
@@ -246,7 +246,7 @@ derive_vars_dt <- function(dataset,
   # derive DTF
   if (flag_imputation == "date" ||
     flag_imputation == "auto" && highest_imputation != "n") {
-    # add --DTF if not there already
+    # add *DTF if not there already
     dtf <- paste0(new_vars_prefix, "DTF")
     dtf_exist <- dtf %in% colnames(dataset)
     if (!dtf_exist) {
@@ -266,7 +266,7 @@ derive_vars_dt <- function(dataset,
 
 #' Convert a Date Character Vector into a Date Object
 #'
-#' Convert a date character vector (usually '--DTC') into a Date vector (usually '--DT').
+#' Convert a date character vector (usually '--DTC') into a Date vector (usually '*DT').
 #'
 #' @param dtc The --DTC date to convert.
 #'
@@ -327,7 +327,7 @@ convert_dtc_to_dt <- function(dtc,
 #'
 #' @param highest_imputation Highest imputation level
 #'
-#'   The `highest_imputation` argument controls which components of the DTC
+#'   The `highest_imputation` argument controls which components of the `'--DTC'`
 #'   value are imputed if they are missing. All components up to the specified
 #'   level are imputed.
 #'
@@ -632,8 +632,8 @@ restrict_imputed_dtc_dt <- function(dtc,
 
 #' Derive the Date Imputation Flag
 #'
-#' Derive the date imputation flag (`'--DTF'`) comparing a date character vector
-#' (`'--DTC'`) with a Date vector (`'--DT'`).
+#' Derive the date imputation flag (`'*DTF'`) comparing a date character vector
+#' (`'--DTC'`) with a Date vector (`'*DT'`).
 #'
 #' @param dtc The date character vector (`'--DTC'`).
 #'
@@ -645,7 +645,7 @@ restrict_imputed_dtc_dt <- function(dtc,
 #'
 #' @details Usually this computation function can not be used with `%>%`.
 #'
-#' @return The date imputation flag (`'--DTF'`) (character value of `'D'`, `'M'` , `'Y'` or `NA`)
+#' @return The date imputation flag (`'*DTF'`) (character value of `'D'`, `'M'` , `'Y'` or `NA`)
 #'
 #'
 #' @family com_date_time

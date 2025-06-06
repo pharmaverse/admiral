@@ -2,7 +2,7 @@
 % Please edit documentation in R/derive_vars_dtm.R
 \name{derive_vars_dtm}
 \alias{derive_vars_dtm}
-\title{Derive/Impute a Datetime from a Date Character Vector}
+\title{Derive/Impute a Datetime from a Character Date}
 \usage{
 derive_vars_dtm(
   dataset,
@@ -30,9 +30,9 @@ The variables specified by the \code{dtc} argument are expected to be in the dat
 
 \item{new_vars_prefix}{Prefix used for the output variable(s).
 
-A character scalar is expected. For the date variable "DT" is appended to
-the specified prefix, for the date imputation flag "DTF", and for the time
-imputation flag "TMF". I.e., for \code{new_vars_prefix = "AST"} the variables
+A character scalar is expected. For the date variable (\code{'*DT'}) is appended to
+the specified prefix, for the date imputation flag (\code{'*DTF'}), and for the time
+imputation flag (\code{'*TMF'}), i.e., for \code{new_vars_prefix = "AST"} the variables
 \code{ASTDT}, \code{ASTDTF}, and \code{ASTTMF} are created.
 
 \describe{
@@ -47,7 +47,7 @@ A character date is expected in a format like \code{yyyy-mm-dd} or
 valid "missing" value for any component.
 
 \describe{
-\item{Permitted values}{a date character variable}
+\item{Permitted values}{a character date variable}
 \item{Default value}{none}
 }}
 
@@ -198,8 +198,8 @@ For example \code{"2019---07"} would return \verb{"2019-06-07} if \code{preserve
 
 \item{ignore_seconds_flag}{ADaM IG states that given SDTM (\code{'--DTC'}) variable,
 if only hours and minutes are ever collected, and seconds are imputed in
-(\code{'--DTM'}) as 00, then it is not necessary to set (\code{'--TMF'}) to \code{'S'}. A user can set this
-to \code{TRUE} so the \code{'S'} Flag is dropped from (\code{'--TMF'}).
+(\code{'*DTM'}) as 00, then it is not necessary to set (\code{'*TMF'}) to \code{'S'}. A user can set this
+to \code{TRUE} so the \code{'S'} Flag is dropped from (\code{'*TMF'}).
 
 \describe{
 \item{Permitted values}{A logical value}
@@ -207,22 +207,22 @@ to \code{TRUE} so the \code{'S'} Flag is dropped from (\code{'--TMF'}).
 }}
 }
 \value{
-The input dataset with the datetime \code{'--DTM'} (and the date/time imputation
-flag \code{'--DTF'}, \code{'--TMF'}) added.
+The input dataset with the datetime \code{'*DTM'} (and the date/time imputation
+flag \code{'*DTF'}, \code{'*TMF'}) added.
 }
 \description{
-Derive a datetime object (\code{'--DTM'}) from a date character vector (\code{'--DTC'}).
+Derive a datetime object (\code{'*DTM'}) from a character date (\code{'--DTC'}).
 The date and time can be imputed (see \code{date_imputation}/\code{time_imputation} arguments)
-and the date/time imputation flag (\code{'--DTF'}, \code{'--TMF'}) can be added.
+and the date/time imputation flag (\code{'*DTF'}, \code{'*TMF'}) can be added.
 }
 \details{
 In \code{{admiral}} we don't allow users to pick any single part of the date/time to
 impute, we only enable to impute up to a highest level, i.e. you couldn't
 choose to say impute months, but not days.
 
-The presence of a \code{'--DTF'} variable is checked and the variable is not derived
-if it already exists in the input dataset. However, if \code{'--TMF'} already exists
-in the input dataset, a warning is issued and \code{'--TMF'} will be overwritten.
+The presence of a \code{'*DTF'} variable is checked and the variable is not derived
+if it already exists in the input dataset. However, if \code{'*TMF'} already exists
+in the input dataset, a warning is issued and \code{'*TMF'} will be overwritten.
 }
 \seealso{
 Date/Time Derivation Functions that returns variable appended to dataset: 
@@ -329,10 +329,11 @@ are created. Setting \code{highest_imputation = "Y"} will allow for the missing 
 record to be imputed from \code{max_dates = exprs(DTHDT, DCUTDT)}.
 
 \if{html}{\out{<div class="sourceCode r">}}\preformatted{adae <- tribble(
-  ~AEENDTC, ~DTHDT, ~DCUTDT,
-  "2020-12", ymd("2020-12-06"), ymd("2020-12-24"),
-  "2020-11", ymd("2020-12-06"), ymd("2020-12-24"),
-         "", ymd("2020-12-06"), ymd("2020-12-24")
+   ~AEENDTC,             ~DTHDT,           ~DCUTDT,
+   "2020-12", ymd("2020-12-26"), ymd("2020-12-24"),
+   "2020-11", ymd("2020-12-06"), ymd("2020-12-24"),
+          "", ymd("2020-12-06"), ymd("2020-12-24"),
+"2020-12-20", ymd("2020-12-06"), ymd("2020-12-24")
 )
 
 derive_vars_dtm(
@@ -344,18 +345,19 @@ derive_vars_dtm(
   time_imputation = "last",
   max_dates = exprs(DTHDT, DCUTDT)
 )
-#> # A tibble: 3 × 6
-#>   AEENDTC   DTHDT      DCUTDT     AENDTM              AENDTF AENTMF
-#>   <chr>     <date>     <date>     <dttm>              <chr>  <chr> 
-#> 1 "2020-12" 2020-12-06 2020-12-24 2020-12-06 23:59:59 D      H     
-#> 2 "2020-11" 2020-12-06 2020-12-24 2020-11-30 23:59:59 D      H     
-#> 3 ""        2020-12-06 2020-12-24 2020-12-06 23:59:59 Y      H     }\if{html}{\out{</div>}}}
+#> # A tibble: 4 × 6
+#>   AEENDTC      DTHDT      DCUTDT     AENDTM              AENDTF AENTMF
+#>   <chr>        <date>     <date>     <dttm>              <chr>  <chr> 
+#> 1 "2020-12"    2020-12-26 2020-12-24 2020-12-24 23:59:59 D      H     
+#> 2 "2020-11"    2020-12-06 2020-12-24 2020-11-30 23:59:59 D      H     
+#> 3 ""           2020-12-06 2020-12-24 2020-12-06 23:59:59 Y      H     
+#> 4 "2020-12-20" 2020-12-06 2020-12-24 2020-12-20 23:59:59 <NA>   H     }\if{html}{\out{</div>}}}
 \subsection{Suppress \code{"S"} for imputation flag (\code{ignore_seconds_flag})}{
 
 In this example, we set \code{ignore_seconds_flag = TRUE} to suppress \code{S} for
 seconds in the \code{ASTTMF} variable. The ADaM IG states that given SDTM ('--DTC')
 variable, if only hours and minutes are ever collected, and seconds are imputed
-in ('--DTM') as \code{00}, then it is not necessary to set ('--TMF') to 'S'.
+in ('*DTM') as \code{00}, then it is not necessary to set ('*TMF') to 'S'.
 
 \if{html}{\out{<div class="sourceCode r">}}\preformatted{
 mhdt <- tribble(

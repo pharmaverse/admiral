@@ -17,13 +17,13 @@ convert_dtc_to_dt(
 \item{dtc}{The --DTC date to convert.
 
 \describe{
-\item{Permitted values}{a date character vector}
+\item{Permitted values}{a character date vector}
 \item{Default value}{none}
 }}
 
 \item{highest_imputation}{Highest imputation level
 
-The \code{highest_imputation} argument controls which components of the DTC
+The \code{highest_imputation} argument controls which components of the \code{'--DTC'}
 value are imputed if they are missing. All components up to the specified
 level are imputed.
 
@@ -125,7 +125,7 @@ For example \code{"2019---07"} would return \verb{"2019-06-07} if \code{preserve
 a date object
 }
 \description{
-Convert a date character vector (usually '--DTC') into a Date vector (usually '--DT').
+Convert a date character vector (usually '--DTC') into a Date vector (usually '*DT').
 }
 \details{
 Usually this computation function can not be used with \verb{\%>\%}.

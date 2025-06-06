@@ -18,7 +18,7 @@ convert_dtc_to_dtm(
 \item{dtc}{The \code{'--DTC'} date to convert.
 
 \describe{
-\item{Permitted values}{a date character vector}
+\item{Permitted values}{a character date vector}
 \item{Default value}{none}
 }}
 
@@ -154,7 +154,7 @@ For example \code{"2019---07"} would return \verb{"2019-06-07} if \code{preserve
 A datetime object
 }
 \description{
-Convert a date character vector (usually \code{'--DTC'}) into a Date vector (usually \code{'--DTM'}).
+Convert a date character vector (usually \code{'--DTC'}) into a Date vector (usually \code{'*DTM'}).
 }
 \details{
 Usually this computation function can not be used with \verb{\%>\%}.

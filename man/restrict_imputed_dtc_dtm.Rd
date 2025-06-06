@@ -14,7 +14,7 @@ A character date is expected in a format like \code{yyyy-mm-dd} or
 valid "missing" value for any component.
 
 \describe{
-\item{Permitted values}{a date character variable}
+\item{Permitted values}{a character date variable}
 \item{Default value}{none}
 }}
 
