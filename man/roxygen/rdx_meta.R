@@ -5,7 +5,7 @@ list(
     condition = "an unquoted condition, e.g., `AVISIT == \"BASELINE\"`",
     dataset = "a dataset, i.e., a `data.frame` or tibble",
     dataset_list = "named list of datasets, e.g., `list(adsl = adsl, ae = ae)`",
-    date = "a date variable",
+    date = "a date or datetime variable",
     event = "an `event()` or `event_joined()` object",
     expr_list_formula = "list of named expressions created by a formula using `exprs()`, e.g., `exprs(AVALC = VSSTRESC, AVAL = yn_to_numeric(AVALC))`",
     expr_list_summary = "list of named expressions created by `exprs()`, e.g., `exprs(CUMDOSA = sum(AVAL, na.rm = TRUE), AVALU = \"ml\")`",

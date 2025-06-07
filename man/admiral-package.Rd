@@ -13,7 +13,7 @@ A toolbox for programming Clinical Data Interchange Standards Consortium (CDISC)
 \seealso{
 Useful links:
 \itemize{
-  \item \url{https://pharmaverse.github.io/admiral/}
+  \item \url{https://pharmaverse.github.io/admiral/cran-release/}
   \item \url{https://github.com/pharmaverse/admiral}
   \item Report bugs at \url{https://github.com/pharmaverse/admiral/issues}
 }
@@ -35,6 +35,7 @@ Authors:
   \item Ross Farrugia
   \item Fanny Gautier
   \item G Gayatri
+  \item Solveig Holmgaard
   \item Dinakar Kulkarni
   \item Edoardo Mancini (\href{https://orcid.org/0009-0006-4899-8641}{ORCID})
   \item Gordon Miller

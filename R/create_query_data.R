@@ -892,10 +892,17 @@ format.basket_select <- function(x, ...) {
   for (i in seq_len(length(all_arg_names))) {
     is_numeric_class <- map_lgl(x[i], inherits, "numeric") | map_chr(x[i], typeof) == "numeric"
 
-    if (is_numeric_class) {
+    if (is.character(x[[i]]) && length(x[[i]]) <= 1 && !is.na(x[[i]])) {
+      formvar[i] <- paste(all_arg_names[i], "=", dquote(x[[i]]))
+    } else if (length(x[[i]]) <= 1 || typeof(x[[i]]) == "language") {
       formvar[i] <- paste(all_arg_names[i], "=", format(x[[i]]))
     } else {
-      formvar[i] <- paste(all_arg_names[i], "=", dquote(x[[i]]))
+      if (typeof(x[[i]]) == "list") {
+        obj_name <- "list"
+      } else {
+        obj_name <- "c"
+      }
+      formvar[i] <- paste0(all_arg_names[i], " = ", obj_name, "(...)")
     }
   }
 
