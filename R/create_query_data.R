@@ -346,14 +346,33 @@ get_terms_from_db <- function(version,
     queries = queries,
     i = i
   )
-  terms <- call_user_fun(
+
+  terms <- tryCatch(
     fun(
-      basket_select = definition,
       version = version,
+      basket_select = definition,
       keep_id = expect_grpid,
       temp_env = temp_env
-    )
+    ),
+    error = function(err) {
+      cli_abort(
+        c(
+          "An error occurred while calling the provided `fun` argument.",
+          "Potential issues could include:",
+          "- Mismatch in expected function arguments.",
+          "- Incorrect handling of input parameters inside `fun`.",
+          "- Not returning expected output.",
+          "Current arguments passed to `fun()`:",
+          " - version: {version}",
+          " - basket_select: {definition}",
+          " - keep_id: {expect_grpid}",
+          " - temp_env: {temp_env}",
+          "Error message: {conditionMessage(err)}"
+        )
+      )
+    }
   )
+
   assert_terms(
     terms,
     expect_grpname = expect_grpname,

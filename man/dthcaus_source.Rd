@@ -103,6 +103,7 @@ src_ds <- dthcaus_source(
 \code{\link[=derive_var_dthcaus]{derive_var_dthcaus()}}
 
 Other deprecated: 
+\code{\link{call_user_fun}()},
 \code{\link{date_source}()},
 \code{\link{derive_param_extreme_record}()},
 \code{\link{derive_var_dthcaus}()},

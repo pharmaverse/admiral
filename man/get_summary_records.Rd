@@ -166,6 +166,7 @@ get_summary_records(
 \code{\link[=derive_summary_records]{derive_summary_records()}}, \code{\link[=derive_var_merged_summary]{derive_var_merged_summary()}}
 
 Other deprecated: 
+\code{\link{call_user_fun}()},
 \code{\link{date_source}()},
 \code{\link{derive_param_extreme_record}()},
 \code{\link{derive_var_dthcaus}()},

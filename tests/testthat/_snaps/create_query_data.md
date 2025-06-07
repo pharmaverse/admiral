@@ -167,3 +167,10 @@
       Error in `basket_select()`:
       ! argument "type" is missing, with no default
 
+# get_terms_from_db Test 25: error message matches snapshot
+
+    Code
+      error_message
+    Output
+      [1] "An error occurred while calling the provided `fun` argument.\nPotential issues could include:\n- Mismatch in expected function arguments.\n- Incorrect handling of input parameters inside `fun`.\n- Not returning expected output.\nCurrent arguments passed to `fun()`:\n- version: 1.0\n- basket_select: dummy_definition\n- keep_id: FALSE\n- temp_env:\nError message: Intentional error for testing"
+
