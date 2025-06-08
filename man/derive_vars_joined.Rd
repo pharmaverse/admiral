@@ -284,15 +284,15 @@ of the specified variables are set to the specified value. Only variables
 specified for \code{new_vars} can be specified for \code{missing_values}.
 
 \describe{
-\item{Permitted values}{list of expressions created by \code{exprs()}, e.g., \code{exprs(BASEC = "MISSING", BASE = -1)}}
+\item{Permitted values}{list of named expressions created by a formula using \code{exprs()}, e.g., \code{exprs(AVALC = VSSTRESC, AVAL = yn_to_numeric(AVALC))}}
 \item{Default value}{\code{NULL}}
 }}
 
 \item{check_type}{Check uniqueness?
 
-If \code{"warning"} or \code{"error"} is specified, the specified message is issued
-if the observations of the (restricted) joined dataset are not unique with
-respect to the by variables and the order.
+If \code{"message"}, \code{"warning"} or \code{"error"} is specified, the specified
+message is issued if the observations of the (restricted) joined dataset
+are not unique with respect to the by variables and the order.
 
 This argument is ignored if \code{order} is not specified. In this case an error
 is issued independent of \code{check_type} if the restricted joined dataset
@@ -370,6 +370,7 @@ General Derivation Functions for all ADaMs that returns variable appended to dat
 \code{\link{derive_var_relative_flag}()},
 \code{\link{derive_vars_cat}()},
 \code{\link{derive_vars_computed}()},
+\code{\link{derive_vars_joined_summary}()},
 \code{\link{derive_vars_merged}()},
 \code{\link{derive_vars_merged_lookup}()},
 \code{\link{derive_vars_transposed}()}
@@ -410,7 +411,7 @@ join is performed keeping all variables from \code{dataset_add}.
 \if{html}{\out{<div class="sourceCode r">}}\preformatted{library(tibble)
 library(lubridate)
 library(dplyr, warn.conflicts = FALSE)
-library(tidyr)
+library(tidyr, warn.conflicts = FALSE)
 
 adbds <- tribble(
   ~USUBJID, ~ADY, ~AVAL,

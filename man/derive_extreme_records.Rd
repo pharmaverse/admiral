@@ -73,8 +73,7 @@ If \code{dataset_ref} is specified, this argument must be specified.
 Within each by group the observations are ordered by the specified order.
 
 \describe{
-\item{Permitted values}{list of expressions created by \code{exprs()}, e.g.,
-\code{exprs(ADT, desc(AVAL))}}
+\item{Permitted values}{list of variables created by \code{exprs()}, e.g., \code{exprs(USUBJID, VISIT)}}
 \item{Default value}{none}
 }}
 
@@ -177,6 +176,7 @@ For example:
 }\if{html}{\out{</div>}}
 
 \describe{
+\item{Permitted values}{list of named expressions created by \code{exprs()}, e.g., \code{exprs(CUMDOSA = sum(AVAL, na.rm = TRUE), AVALU = "ml")}}
 \item{Default value}{none}
 }}
 }
@@ -201,7 +201,9 @@ where only the by variables are populated for the new records.
 order specified for the \code{order} argument and the mode specified for the
 \code{mode} argument) is selected.
 \item If \code{dataset_ref} is specified, observations which are in \code{dataset_ref}
-but not in the selected records are added.
+but not in the selected records are added. Variables that are common
+across \code{dataset_ref}, \code{dataset_add} and \code{keep_source_vars()} are also
+populated for the new observations.
 \item The variables specified by the \code{set_values_to} argument are added to
 the selected observations.
 \item The variables specified by the \code{keep_source_vars} argument are selected

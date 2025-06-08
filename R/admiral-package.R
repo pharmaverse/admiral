@@ -22,7 +22,7 @@
 #'   inform is_call is_expression is_missing is_named list2 new_environment
 #'   parse_expr parse_exprs set_names sym syms type_of zap
 #' @importFrom stats setNames
-#' @importFrom stringr str_c str_count str_detect str_extract str_glue
+#' @importFrom stringr fixed str_c str_count str_detect str_extract str_glue
 #'             str_length str_locate str_locate_all str_match str_remove
 #'             str_remove_all str_replace str_replace_all str_split str_starts
 #'             str_sub str_subset str_to_lower str_to_title str_to_upper

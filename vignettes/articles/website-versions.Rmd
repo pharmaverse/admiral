@@ -15,7 +15,7 @@ knitr::opts_chunk$set(
 
 ```{r setup, include=FALSE}
 base_url <-
-  "https://pharmaverse.github.io/admiral/" # include the trailing backslash!
+  "https://pharmaverse.github.io/admiral/cran-release/" # include the trailing backslash!
 
 # get list of all files in the `gh-pages` branch
 df_all_files <- tryCatch(gert::git_ls(ref = "gh-pages"), error = function(x) FALSE)
