@@ -192,7 +192,6 @@ derive_locf_records(
   arrange(USUBJID, PARAMCD, AVISIT)
 
 
-
 adqs <- tribble(
   ~PARAMCD, ~USUBJID, ~VISITNUM, ~VISIT, ~AVISITN, ~AVISIT, ~AVALC, ~QSSEQ,
   "Q01", "1099", 1, "BASELINE", 1, "BASELINE", "Severe Pain", 111,
@@ -200,7 +199,6 @@ adqs <- tribble(
   "Q01", "1099", 6, "VISIT 6", 6, "VISIT 6", NA, 113,
   "Q01", "1099", 7, "VISIT 7", 7, "VISIT 7", "Mild Pain", 114
 )
-
 
 adqs_ref <- tribble(
   ~PARAMCD, ~AVISITN, ~AVISIT,

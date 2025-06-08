@@ -158,7 +158,6 @@
 #'   arrange(USUBJID, PARAMCD, AVISIT)
 #'
 #'
-#'
 #' adqs <- tribble(
 #'   ~PARAMCD, ~USUBJID, ~VISITNUM, ~VISIT, ~AVISITN, ~AVISIT, ~AVALC, ~QSSEQ,
 #'   "Q01", "1099", 1, "BASELINE", 1, "BASELINE", "Severe Pain", 111,
@@ -166,7 +165,6 @@
 #'   "Q01", "1099", 6, "VISIT 6", 6, "VISIT 6", NA, 113,
 #'   "Q01", "1099", 7, "VISIT 7", 7, "VISIT 7", "Mild Pain", 114
 #' )
-#'
 #'
 #' adqs_ref <- tribble(
 #'   ~PARAMCD, ~AVISITN, ~AVISIT,
@@ -251,9 +249,15 @@ derive_locf_records <- function(dataset,
   exp_obs_by_vars <- as.character(union(by_vars, id_vars_ref))
 
 
+  # Flag the original missing analysis_var records
+  dataset <- dataset %>%
+    mutate(missing_avar = if_else(is.na(!!analysis_var), "missing", NA_character_))
+
+
   # Get unique combination of visits/timepoints per parameter per subject
   # from the input dataset
   advs_unique_original <- dataset %>%
+    filter(!(is.na(!!analysis_var))) %>%
     select(all_of(exp_obs_by_vars)) %>%
     distinct()
 
@@ -262,7 +266,8 @@ derive_locf_records <- function(dataset,
 
   # Get all the expected observations that are to be added to the input dataset
   advs_exp_obsv <- exp_obsv %>%
-    anti_join(advs_unique_original, by = c(exp_obs_by_vars))
+    anti_join(advs_unique_original, by = c(exp_obs_by_vars)) %>%
+    mutate(new_records = "new")
 
 
   # Add the expected observations to the input dataset
@@ -286,7 +291,9 @@ derive_locf_records <- function(dataset,
     arrange(!!!by_vars, !!!order) %>%
     group_by(!!!by_vars) %>%
     fill(!!analysis_var, !!!keep_vars) %>%
-    ungroup()
+    ungroup() %>%
+    filter(!(!is.na(missing_avar) & is.na(new_records))) %>%
+    select(-missing_avar, -new_records)
 
 
   # When imputation = 'add',  keep all variables other than analysis_var, by_vars,
@@ -320,7 +327,8 @@ derive_locf_records <- function(dataset,
 
   # Get the missing analysis_var (e.g., AVAL) records
   aval_missing <- dataset %>%
-    filter(is.na(!!analysis_var))
+    filter(is.na(!!analysis_var)) %>%
+    select(-missing_avar)
 
   if (imputation %in% c("add", "update_add")) {
     bind_rows(aval_locf, aval_missing)
