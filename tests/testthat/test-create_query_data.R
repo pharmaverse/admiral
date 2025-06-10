@@ -622,8 +622,8 @@ test_that("format.basket_select Test 26: long expressions", {
       name = "My SDG",
       type = "sdg",
       scope = NA_character_,
-      filter = expr((PT_NAME == "Dysaesthesia" | LLT_NAME == "Paraesthesia skin")
-        & PRIMARY_PATH == "Y")
+      filter = expr((PT_NAME == "Dysaesthesia" | LLT_NAME == "Paraesthesia skin") &
+        PRIMARY_PATH == "Y")
     )),
     paste(
       "basket_select(name = \"My SDG\", id = NULL, scope = NA, type = \"sdg\",",
