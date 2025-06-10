@@ -2,6 +2,7 @@
 
 ## New Features
 
+- New function `my_first_fcn()` as dummy practice (#1839)
 - The documentation was enhanced: (#2585)
     - The default value of an argument is now displayed in the argument description.
     - For complex functions each example has now a title, which is also shown in
