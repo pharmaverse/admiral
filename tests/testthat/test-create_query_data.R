@@ -627,7 +627,8 @@ test_that("format.basket_select Test 26: long expressions", {
     )),
     paste(
       "basket_select(name = \"My SDG\", id = NULL, scope = NA, type = \"sdg\",",
-      "filter = (PT_NAME == \"Dysaesthesia\" | LLT_NAME == \"Paraesthesia skin\") & PRIMARY_PATH == \"Y\")"
+      "filter = (PT_NAME == \"Dysaesthesia\" | LLT_NAME == \"Paraesthesia skin\")",
+      "& PRIMARY_PATH == \"Y\")"
     )
   )
 })
