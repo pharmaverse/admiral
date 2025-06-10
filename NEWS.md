@@ -85,12 +85,14 @@ records. (#2683)
 - The examples section of the following functions was enhanced:
     - `derive_extreme_records()` (#2585)
     - `derive_param_tte()` (#2704)
+    - `derive_param_computed()` (#2701)
     - `derive_summary_records()` (#2707)
     - `derive_extreme_event()` (#2735)
     - `derive_vars_joined()` (#2727)
     - `derive_vars_merged()` (#2727)
     - `derive_vars_crit_flag()` (#2744)
     - `derive_var_trtemfl()` (#2746)
+    - `derive_var_extreme_flag()` (#2752)
 
 - Added an example to the `derive_vars_transposed()` reference page to showcase how duplicates-related errors can arise when records in `dataset_merge` are not uniquely identified. (#2609)
 
@@ -113,6 +115,8 @@ read (#2623) and updated to include new metadata for grading using US (Conventio
 
 - The `derive_extreme_records()` documentation was updated to clarify which variables are populated
 from `dataset_ref` for the new observations. (#2664)
+
+- The 'Assign `PARAMCD`, `PARAM`, `PARAMN`, `PARCAT1`' section of the "Creating a BDS Finding ADaM" vignette was updated to clarify `PARAM` to `PARCAT1` mapping. (#2547)
 
 ## Various
 
