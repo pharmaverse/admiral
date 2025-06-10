@@ -105,7 +105,7 @@ new parameter, i.e., only observations fulfilling the condition are taken
 into account.
 
 \describe{
-\item{Permitted values}{a condition}
+\item{Permitted values}{an unquoted condition, e.g., \code{AVISIT == "BASELINE"}}
 \item{Default value}{\code{NULL}}
 }}
 }

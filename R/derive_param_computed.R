@@ -18,6 +18,8 @@
 #'   the input dataset after restricting it by the filter condition (`filter`
 #'   parameter) and to the parameters specified by `parameters`.
 #'
+#' @permitted [dataset]
+#'
 #' @param dataset_add Additional dataset
 #'
 #'   The variables specified by the `by_vars` parameter are expected.
@@ -30,13 +32,15 @@
 #'   are considered in addition to the observations from the input dataset
 #'   (`dataset` restricted by `filter`).
 #'
+#' @permitted [dataset]
+#'
 #' @param filter Filter condition
 #'
 #'   The specified condition is applied to the input dataset before deriving the
 #'   new parameter, i.e., only observations fulfilling the condition are taken
 #'   into account.
 #'
-#' @permitted a condition
+#' @permitted [condition]
 #'
 #' @param parameters Required parameter codes
 #'
@@ -67,6 +71,8 @@
 #'   in the newly created records.
 #'
 #'   `r roxygen_param_by_vars()`
+#'
+#' @permitted [var_list]
 #'
 #' @param constant_parameters Required constant parameter codes
 #'
@@ -99,6 +105,8 @@
 #'
 #'   `r roxygen_param_by_vars()`
 #'
+#' @permitted [var_list]
+#'
 #' @param set_values_to Variables to be set
 #'
 #'   The specified variables are set to the specified values for the new
@@ -115,7 +123,11 @@
 #'
 #'   Variable names in the expression must not contain more than one dot.
 #'
-#' @permitted List of variable-value pairs
+#'   Note that `dplyr` helper functions such as `dplyr::starts_with()` should
+#'   be avoided unless the list of variable-value pairs is clearly
+#'   specified in a statement via the `set_values_to` argument.
+#'
+#' @permitted [expr_list_formula]
 #'
 #' @param keep_nas Keep observations with `NA`s
 #'
@@ -149,13 +161,14 @@
 #'
 #' @export
 #'
-#' @examples
-#' library(tibble)
-#' library(dplyr)
-#' library(lubridate)
+#' @examplesx
 #'
-#' # Example 1a: Derive MAP
-#' advs <- tribble(
+#' @caption Example 1 - Data setup
+#'
+#' @info Examples 1a, 1b, and 1c use the following `ADVS` data.
+#'
+#' @code
+#' ADVS <- tribble(
 #'   ~USUBJID,      ~PARAMCD, ~PARAM,                            ~AVAL, ~VISIT,
 #'   "01-701-1015", "DIABP",  "Diastolic Blood Pressure (mmHg)",    51, "BASELINE",
 #'   "01-701-1015", "DIABP",  "Diastolic Blood Pressure (mmHg)",    50, "WEEK 2",
@@ -175,8 +188,23 @@
 #'     ADTF = NA_character_
 #'   )
 #'
+#' @caption Example 1a - Adding a parameter computed from a formula
+#'   (`parameters`, `set_values_to`)
+#'
+#' @info Derive mean arterial pressure (MAP) from systolic (SYSBP)
+#'   and diastolic blood pressure (DIABP).
+#'
+#' - Here, for each `USUBJID` and `VISIT` group (specified in `by_vars`),
+#'   an observation is added to the output dataset when the filtered
+#'   input dataset (`dataset`) contains exactly one observation for
+#'   each parameter code specified for `parameters` and all contributing
+#'   values (e.g., `AVAL.SYSBP` and `AVAL.DIABP`) are not `NA`.
+#'   Indeed, patient `01-701-1028` does not get a `"WEEK 2"`-derived record
+#'   as `AVAL` is `NA` for their `"WEEK 2"` systolic blood pressure.
+#'
+#' @code
 #' derive_param_computed(
-#'   advs,
+#'   ADVS,
 #'   by_vars = exprs(USUBJID, VISIT),
 #'   parameters = c("SYSBP", "DIABP"),
 #'   set_values_to = exprs(
@@ -186,13 +214,23 @@
 #'     AVALU = "mmHg",
 #'     ADT = ADT.SYSBP
 #'   )
-#' )
+#' ) %>%
+#' select(-PARAM)
 #'
-#' # Example 1b: Using option `keep_nas = TRUE` to derive MAP in the case where some/all
-#' # values of a variable used in the computation are missing
+#' @caption Example 1b - Keeping missing values for any source
+#'     variables (`keep_nas = TRUE`)
 #'
+#' @info Use option `keep_nas = TRUE` to derive MAP in the case where
+#'     some/all values of a variable used in the computation are missing.
+#'
+#' - Note that observations will be added here even if some of the values contributing
+#'   to the computed values are `NA`. In particular, patient `01-701-1028`
+#'   does get a `"WEEK 2"`-derived record as compared to Example 1a, but
+#'   with `AVAL = NA`.
+#'
+#' @code
 #' derive_param_computed(
-#'   advs,
+#'   ADVS,
 #'   by_vars = exprs(USUBJID, VISIT),
 #'   parameters = c("SYSBP", "DIABP"),
 #'   set_values_to = exprs(
@@ -204,13 +242,32 @@
 #'     ADTF = ADTF.SYSBP
 #'   ),
 #'   keep_nas = TRUE
-#' )
+#' )%>%
+#' select(-PARAM)
 #'
-#' # Example 1c: Using option `keep_nas = exprs(ADTF)` to derive MAP in the case where
-#' # some/all values of a variable used in the computation are missing but ignoring ADTF
+#' @caption Example 1c - Keeping missing values for some source
+#'     variables (`keep_nas = exprs()`)
 #'
+#' @info Use option `keep_nas = exprs(ADTF)` to derive MAP in the case where
+#'     some/all values of a variable used in the computation are
+#'     missing but keeping `NA` values of `ADTF`.
+#'
+#' - This is subtly distinct from Examples 1a and 1b. In 1a, we do not
+#'   get new derived records if any of the source records have a value
+#'   of `NA` for a variable that is included in `set_values_to`.
+#'   In 1b, we do the opposite and allow the creation of new records
+#'   regardless of how many `NA`s we encounter in the source variables.
+#' - Here, we want to disregard `NA` values but only from the variables
+#'   that are specified via `keep_na_values`.
+#' - This is important because we have added `ADTF` in `set_values_to`,
+#'   but all values of this variable are `NA`. As such, in order to
+#'   get any derived records at all, but continue not getting one
+#'   when `AVAL` is `NA` in any of the source records,
+#'   (see patient `"01-701-1028"` again), we specify `keep_nas = exprs(ADTF)`.
+#'
+#' @code
 #' derive_param_computed(
-#'   advs,
+#'   ADVS,
 #'   by_vars = exprs(USUBJID, VISIT),
 #'   parameters = c("SYSBP", "DIABP"),
 #'   set_values_to = exprs(
@@ -224,8 +281,24 @@
 #'   keep_nas = exprs(ADTF)
 #' )
 #'
-#' # Example 2: Derive BMI where height is measured only once
-#' advs <- tribble(
+#' @caption Example 2 - Derivations using parameters measured only once
+#' (`constant_parameters` and `constant_by_vars`)
+#'
+#' @info Derive BMI where `HEIGHT` is measured only once.
+#'
+#' - In the above examples, for each parameter specified in the
+#'   `parameters` argument, we expect one record per by group, where the by
+#'   group is specified in `by_vars`. However, if a parameter is only
+#'   measured once, it can be specified in `constant_parameters` instead.
+#' - A modified by group still needs to be provided for the constant
+#'   parameters. This can be done via `constant_by_vars`.
+#' - See the example below, where weight is measured for each patient
+#'   at each visit (`by_vars = exprs(USUBJID, VISIT)`), while height
+#'   is measured for each patient only at the first visit
+#'   (`constant_parameters = "HEIGHT"`, `constant_by_vars = exprs(USUBJID`)).
+#'
+#' @code
+#' ADVS <- tribble(
 #'   ~USUBJID,      ~PARAMCD, ~PARAM,        ~AVAL, ~AVALU, ~VISIT,
 #'   "01-701-1015", "HEIGHT", "Height (cm)", 147.0, "cm",   "SCREENING",
 #'   "01-701-1015", "WEIGHT", "Weight (kg)",  54.0, "kg",   "SCREENING",
@@ -238,7 +311,7 @@
 #' )
 #'
 #' derive_param_computed(
-#'   advs,
+#'   ADVS,
 #'   by_vars = exprs(USUBJID, VISIT),
 #'   parameters = "WEIGHT",
 #'   set_values_to = exprs(
@@ -251,8 +324,21 @@
 #'   constant_by_vars = exprs(USUBJID)
 #' )
 #'
-#' # Example 3: Using data from an additional dataset and other variables than AVAL
-#' qs <- tribble(
+#' @caption Example 3 - Derivations including data from an additional
+#' dataset (`dataset_add`) and non-`AVAL` variables
+#'
+#' @info Use data from an additional dataset and other variables than `AVAL`.
+#'
+#' - In this example, the dataset specified via `dataset_add` (e.g., `QS`)
+#'   is an SDTM dataset. There is no parameter code in the dataset.
+#' - The `parameters` argument is therefore used to specify a list of
+#'   expressions to derive temporary parameter codes.
+#' - Then, `set_values_to` is used to specify the values for the new
+#'   observations of each variable, and variable-value pairs from both
+#'   datasets are referenced via `exprs()`.
+#'
+#' @code
+#' QS <- tribble(
 #'   ~USUBJID, ~AVISIT,   ~QSTESTCD, ~QSORRES, ~QSSTRESN,
 #'   "1",      "WEEK 2",  "CHSF112", NA,               1,
 #'   "1",      "WEEK 2",  "CHSF113", "Yes",           NA,
@@ -262,7 +348,7 @@
 #'   "1",      "WEEK 4",  "CHSF114", NA,               1
 #' )
 #'
-#' adchsf <- tribble(
+#' ADCHSF <- tribble(
 #'   ~USUBJID, ~AVISIT,  ~PARAMCD, ~QSSTRESN, ~AVAL,
 #'   "1",      "WEEK 2", "CHSF12", 1,             6,
 #'   "1",      "WEEK 2", "CHSF14", 1,             6,
@@ -272,10 +358,10 @@
 #'   mutate(QSORRES = NA_character_)
 #'
 #' derive_param_computed(
-#'   adchsf,
-#'   dataset_add = qs,
+#'   ADCHSF,
+#'   dataset_add = QS,
 #'   by_vars = exprs(USUBJID, AVISIT),
-#'   parameters = exprs(CHSF12, CHSF13 = QSTESTCD %in% c("CHSF113", "CHSF213"), CHSF14),
+#'   parameters = exprs(CHSF12, CHSF13 = QSTESTCD %in% c("CHSF113"), CHSF14),
 #'   set_values_to = exprs(
 #'     AVAL = case_when(
 #'       QSORRES.CHSF13 == "Not applicable" ~ 0,
@@ -290,8 +376,18 @@
 #'   )
 #' )
 #'
-#' # Example 4: Computing more than one variable
-#' adlb_tbilialk <- tribble(
+#' @caption Example 4 - Computing more than one variable
+#'
+#' @info Specify more than one variable-value pair via `set_values_to`.
+#'
+#' - In this example, the values of `AVALC`, `ADTM`, `ADTF`, `PARAMCD`,
+#'   and `PARAM` are determined via distinctly defined analysis values
+#'   and parameter codes.
+#' - This is different from Example 3 as more than one variable is
+#'   derived.
+#'
+#' @code
+#' ADLB_TBILIALK <- tribble(
 #'   ~USUBJID, ~PARAMCD, ~AVALC, ~ADTM,        ~ADTF,
 #'   "1",      "ALK2",   "Y",    "2021-05-13", NA_character_,
 #'   "1",      "TBILI2", "Y",    "2021-06-30", "D",
@@ -303,7 +399,7 @@
 #'   mutate(ADTM = ymd(ADTM))
 #'
 #' derive_param_computed(
-#'   dataset_add = adlb_tbilialk,
+#'   dataset_add = ADLB_TBILIALK,
 #'   by_vars = exprs(USUBJID),
 #'   parameters = c("ALK2", "TBILI2"),
 #'   set_values_to = exprs(
@@ -496,7 +592,7 @@ assert_parameters_argument <- function(parameters, optional = TRUE) {
 #'   the parameter. E.g., `AVAL.WEIGHT` is set to the value of `AVAL` where
 #'   `PARAMCD == "WEIGHT"`.
 #'
-#' @permitted A list of expressions
+#' @permitted
 #'
 #' @param filter Filter condition used for restricting the input dataset
 #'
