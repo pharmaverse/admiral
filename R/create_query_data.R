@@ -895,7 +895,11 @@ format.basket_select <- function(x, ...) {
     if (is.character(x[[i]]) && length(x[[i]]) <= 1 && !is.na(x[[i]])) {
       formvar[i] <- paste(all_arg_names[i], "=", dquote(x[[i]]))
     } else if (length(x[[i]]) <= 1 || typeof(x[[i]]) == "language") {
-      formvar[i] <- paste(all_arg_names[i], "=", format(x[[i]]))
+      formvar[i] <- paste(
+        all_arg_names[i],
+        "=",
+        format(x[[i]]) %>% trimws() %>% paste(collapse = " ")
+      )
     } else {
       if (typeof(x[[i]]) == "list") {
         obj_name <- "list"
