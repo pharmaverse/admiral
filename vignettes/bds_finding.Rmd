@@ -256,6 +256,11 @@ If more than one lookup table, e.g., company parameter mappings and project
 parameter mappings, are available, `consolidate_metadata()` can be used to
 consolidate these into a single lookup table.
 
+Additionally note that each parameter is mapped to only one `PARCAT1` variable. 
+This is described in section 3.3.4.1 of the ADaM Implementation Guide, 
+version 1.3: "Any given `PARAM` may be associated with at-most one level 
+of `PARCATy` (e.g., one level of `PARCAT1` and one level of `PARCAT2`)". 
+
 ## Derive Results (`AVAL`, `AVALC`) {#aval}
 
 The mapping of `AVAL` and `AVALC` is left to the ADaM programmer. An 
