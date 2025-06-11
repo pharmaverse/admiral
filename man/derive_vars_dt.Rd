@@ -28,8 +28,8 @@ The variables specified by the \code{dtc} argument are expected to be in the dat
 
 \item{new_vars_prefix}{Prefix used for the output variable(s).
 
-A character scalar is expected. For the date variable (\code{'*DT'}) is appended to
-the specified prefix and for the date imputation flag (\code{'*DTF'}), i.e., for
+A character scalar is expected. For the date variable (\verb{*DT}) is appended to
+the specified prefix and for the date imputation flag (\verb{*DTF}), i.e., for
 \code{new_vars_prefix = "AST"} the variables \code{ASTDT} and \code{ASTDTF} are created.
 
 \describe{
@@ -106,6 +106,10 @@ If \code{"date"} is specified, then date imputation flag is derived.
 
 If \code{"none"} is specified, then no date imputation flag is derived.
 
+Please note that CDISC requirements dictate the need for a date imputation
+flag if any imputation is performed, so \code{flag_imputation = "none"} should
+only be used if the imputed variable is not part of the final ADaM dataset.
+
 \describe{
 \item{Permitted values}{\code{"auto"}, \code{"date"} or \code{"none"}}
 \item{Default value}{\code{"auto"}}
@@ -163,11 +167,11 @@ For example \code{"2019---07"} would return \verb{"2019-06-07} if \code{preserve
 }}
 }
 \value{
-The input dataset with the date \code{'*DT'} (and the date imputation flag \code{'*DTF'}
+The input dataset with the date \verb{*DT} (and the date imputation flag \verb{*DTF}
 if requested) added.
 }
 \description{
-Derive a date (\code{'*DT'}) from a character date (\verb{'--DTC}').
+Derive a date (\verb{*DT}) from a character date (\verb{'--DTC}').
 The date can be imputed (see \code{date_imputation} argument)
 and the date imputation flag ('\verb{*DTF'}) can be added.
 }
@@ -176,8 +180,8 @@ In \code{{admiral}} we don't allow users to pick any single part of the date/tim
 impute, we only enable to impute up to a highest level, i.e. you couldn't
 choose to say impute months, but not days.
 
-The presence of a \code{'*DTF'} variable is checked and if it already exists in the input dataset,
-a warning is issued and \code{'*DTF'} will be overwritten.
+The presence of a \verb{*DTF} variable is checked and if it already exists in the input dataset,
+a warning is issued and \verb{*DTF} will be overwritten.
 }
 \seealso{
 Date/Time Derivation Functions that returns variable appended to dataset: 
@@ -289,9 +293,11 @@ derive_vars_dt(
 imputation flag (\code{flag_imputation = "none"})}{
 
 In this example, we will derive \code{TRTSDT} with date imputation flag
-(\verb{*DTF}) suppressed. Also, note that \code{date_imputation = "mid"} and so partial
-date imputation will be set to June 30th for missing month and 15th for missing
-day only.
+(\verb{*DTF}) suppressed. Since \code{date_imputation = "mid"}, partial date imputation
+will be set to June 30th for missing month and 15th for missing day only.
+The \code{flag_imputation = "none"} call ensures no date imputation flag is
+created. In practice, as per CDISC requirements this option can only be
+selected if the imputed variable is not part of the final ADaM dataset.
 
 \if{html}{\out{<div class="sourceCode r">}}\preformatted{
 exdt <- tribble(

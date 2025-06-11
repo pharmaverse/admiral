@@ -24,11 +24,11 @@ A date object is expected.
 }}
 }
 \value{
-The date imputation flag (\code{'*DTF'}) (character value of \code{'D'}, \code{'M'} , \code{'Y'} or \code{NA})
+The date imputation flag (\verb{*DTF}) (character value of \code{'D'}, \code{'M'} , \code{'Y'} or \code{NA})
 }
 \description{
-Derive the date imputation flag (\code{'*DTF'}) comparing a date character vector
-(\code{'--DTC'}) with a Date vector (\code{'*DT'}).
+Derive the date imputation flag (\verb{*DTF}) comparing a date character vector
+(\code{'--DTC'}) with a Date vector (\verb{*DT}).
 }
 \details{
 Usually this computation function can not be used with \verb{\%>\%}.

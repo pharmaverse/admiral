@@ -30,8 +30,8 @@ The variables specified by the \code{dtc} argument are expected to be in the dat
 
 \item{new_vars_prefix}{Prefix used for the output variable(s).
 
-A character scalar is expected. For the date variable (\code{'*DT'}) is appended to
-the specified prefix, for the date imputation flag (\code{'*DTF'}), and for the time
+A character scalar is expected. For the date variable (\verb{*DT}) is appended to
+the specified prefix, for the date imputation flag (\verb{*DTF}), and for the time
 imputation flag (\code{'*TMF'}), i.e., for \code{new_vars_prefix = "AST"} the variables
 \code{ASTDT}, \code{ASTDTF}, and \code{ASTTMF} are created.
 
@@ -130,6 +130,10 @@ then time imputation flag is derived.
 
 If \code{"none"} is specified, then no date or time imputation flag is derived.
 
+Please note that CDISC requirements dictate the need for a date/time imputation
+flag if any imputation is performed, so \code{flag_imputation = "none"} should
+only be used if the imputed variable is not part of the final ADaM dataset.
+
 \describe{
 \item{Permitted values}{\code{"auto"}, \code{"date"},\code{"time"}, \code{"both"} or \code{"none"}}
 \item{Default value}{\code{"auto"}}
@@ -208,19 +212,19 @@ to \code{TRUE} so the \code{'S'} Flag is dropped from (\code{'*TMF'}).
 }
 \value{
 The input dataset with the datetime \code{'*DTM'} (and the date/time imputation
-flag \code{'*DTF'}, \code{'*TMF'}) added.
+flag \verb{*DTF}, \code{'*TMF'}) added.
 }
 \description{
 Derive a datetime object (\code{'*DTM'}) from a character date (\code{'--DTC'}).
 The date and time can be imputed (see \code{date_imputation}/\code{time_imputation} arguments)
-and the date/time imputation flag (\code{'*DTF'}, \code{'*TMF'}) can be added.
+and the date/time imputation flag (\verb{*DTF}, \code{'*TMF'}) can be added.
 }
 \details{
 In \code{{admiral}} we don't allow users to pick any single part of the date/time to
 impute, we only enable to impute up to a highest level, i.e. you couldn't
 choose to say impute months, but not days.
 
-The presence of a \code{'*DTF'} variable is checked and the variable is not derived
+The presence of a \verb{*DTF} variable is checked and the variable is not derived
 if it already exists in the input dataset. However, if \code{'*TMF'} already exists
 in the input dataset, a warning is issued and \code{'*TMF'} will be overwritten.
 }
@@ -302,7 +306,10 @@ two flag variables are created.
 \subsection{Suppress imputation flags (\code{flag_imputation = "none"})}{
 
 In this example, we derive \code{ASTDTM} but suppress the \code{ASTTMF}. Note that
-function appends missing \code{"hh:mm:ss"} to \code{ASTDTM}.
+function appends missing \code{"hh:mm:ss"} to \code{ASTDTM}. The \code{flag_imputation = "none"}
+call ensures no date/time imputation flag is created. In practice, as per CDISC
+requirements this option can only beselected if the imputed variable is not part
+of the final ADaM dataset.
 
 \if{html}{\out{<div class="sourceCode r">}}\preformatted{derive_vars_dtm(
   mhdt,

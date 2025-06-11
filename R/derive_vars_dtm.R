@@ -2,7 +2,7 @@
 #'
 #' Derive a datetime object (`'*DTM'`) from a character date (`'--DTC'`).
 #' The date and time can be imputed (see `date_imputation`/`time_imputation` arguments)
-#' and the date/time imputation flag (`'*DTF'`, `'*TMF'`) can be added.
+#' and the date/time imputation flag (`*DTF`, `'*TMF'`) can be added.
 #'
 #' In `{admiral}` we don't allow users to pick any single part of the date/time to
 #' impute, we only enable to impute up to a highest level, i.e. you couldn't
@@ -15,8 +15,8 @@
 #'
 #' @param new_vars_prefix Prefix used for the output variable(s).
 #'
-#'   A character scalar is expected. For the date variable (`'*DT'`) is appended to
-#'   the specified prefix, for the date imputation flag (`'*DTF'`), and for the time
+#'   A character scalar is expected. For the date variable (`*DT`) is appended to
+#'   the specified prefix, for the date imputation flag (`*DTF`), and for the time
 #'   imputation flag (`'*TMF'`), i.e., for `new_vars_prefix = "AST"` the variables
 #'   `ASTDT`, `ASTDTF`, and `ASTTMF` are created.
 #'
@@ -34,18 +34,22 @@
 #'
 #'   If `"none"` is specified, then no date or time imputation flag is derived.
 #'
+#'  Please note that CDISC requirements dictate the need for a date/time imputation
+#'  flag if any imputation is performed, so `flag_imputation = "none"` should
+#'  only be used if the imputed variable is not part of the final ADaM dataset.
+#'
 #' @permitted [date_time_flag_imp]
 #'
 #' @inheritParams impute_dtc_dtm
 #' @inheritParams compute_tmf
 #'
 #' @details
-#' The presence of a `'*DTF'` variable is checked and the variable is not derived
+#' The presence of a `*DTF` variable is checked and the variable is not derived
 #' if it already exists in the input dataset. However, if `'*TMF'` already exists
 #' in the input dataset, a warning is issued and `'*TMF'` will be overwritten.
 #'
 #' @return  The input dataset with the datetime `'*DTM'` (and the date/time imputation
-#' flag `'*DTF'`, `'*TMF'`) added.
+#' flag `*DTF`, `'*TMF'`) added.
 #'
 #'
 #' @family der_date_time
@@ -102,7 +106,10 @@
 #'
 #' @caption Suppress imputation flags (`flag_imputation = "none"`)
 #' @info In this example, we derive `ASTDTM` but suppress the `ASTTMF`. Note that
-#' function appends missing `"hh:mm:ss"` to `ASTDTM`.
+#' function appends missing `"hh:mm:ss"` to `ASTDTM`. The `flag_imputation = "none"`
+#' call ensures no date/time imputation flag is created. In practice, as per CDISC
+#' requirements this option can only beselected if the imputed variable is not part
+#' of the final ADaM dataset.
 #' @code
 #' derive_vars_dtm(
 #'   mhdt,

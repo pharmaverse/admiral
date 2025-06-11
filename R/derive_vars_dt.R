@@ -1,6 +1,6 @@
 #' Derive/Impute a Date from a Character Date
 #'
-#' Derive a date (`'*DT'`) from a character date (`'--DTC`').
+#' Derive a date (`*DT`) from a character date (`'--DTC`').
 #' The date can be imputed (see `date_imputation` argument)
 #' and the date imputation flag ('`*DTF'`) can be added.
 #'
@@ -15,8 +15,8 @@
 #'
 #' @param new_vars_prefix Prefix used for the output variable(s).
 #'
-#'   A character scalar is expected. For the date variable (`'*DT'`) is appended to
-#'   the specified prefix and for the date imputation flag (`'*DTF'`), i.e., for
+#'   A character scalar is expected. For the date variable (`*DT`) is appended to
+#'   the specified prefix and for the date imputation flag (`*DTF`), i.e., for
 #'   `new_vars_prefix = "AST"` the variables `ASTDT` and `ASTDTF` are created.
 #'
 #' @permitted [char_scalar]
@@ -30,17 +30,21 @@
 #'
 #'   If `"none"` is specified, then no date imputation flag is derived.
 #'
+#'  Please note that CDISC requirements dictate the need for a date imputation
+#'  flag if any imputation is performed, so `flag_imputation = "none"` should
+#'  only be used if the imputed variable is not part of the final ADaM dataset.
+#'
 #' @permitted [date_flag_imp]
 #'
 #' @inheritParams impute_dtc_dt
 #'
 #' @return
-#' The input dataset with the date `'*DT'` (and the date imputation flag `'*DTF'`
+#' The input dataset with the date `*DT` (and the date imputation flag `*DTF`
 #' if requested) added.
 #'
 #' @details
-#' The presence of a `'*DTF'` variable is checked and if it already exists in the input dataset,
-#' a warning is issued and `'*DTF'` will be overwritten.
+#' The presence of a `*DTF` variable is checked and if it already exists in the input dataset,
+#' a warning is issued and `*DTF` will be overwritten.
 #'
 #'
 #' @family der_date_time
@@ -120,9 +124,11 @@
 #' @caption Impute to the middle (`date_imputaton = "mid"`) and suppress
 #' imputation flag (`flag_imputation = "none"`)
 #' @info In this example, we will derive `TRTSDT` with date imputation flag
-#' (`*DTF`) suppressed. Also, note that `date_imputation = "mid"` and so partial
-#' date imputation will be set to June 30th for missing month and 15th for missing
-#' day only.
+#' (`*DTF`) suppressed. Since `date_imputation = "mid"`, partial date imputation
+#'  will be set to June 30th for missing month and 15th for missing day only.
+#'  The `flag_imputation = "none"` call ensures no date imputation flag is
+#'  created. In practice, as per CDISC requirements this option can only be
+#'  selected if the imputed variable is not part of the final ADaM dataset.
 #'
 #' @code
 #'
@@ -246,7 +252,7 @@ derive_vars_dt <- function(dataset,
 
   # derive DTF
   if (flag_imputation == "date" ||
-    flag_imputation == "auto" && highest_imputation != "n") {
+      flag_imputation == "auto" && highest_imputation != "n") {
     # add *DTF if not there already
     dtf <- paste0(new_vars_prefix, "DTF")
     dtf_exist <- dtf %in% colnames(dataset)
@@ -633,8 +639,8 @@ restrict_imputed_dtc_dt <- function(dtc,
 
 #' Derive the Date Imputation Flag
 #'
-#' Derive the date imputation flag (`'*DTF'`) comparing a date character vector
-#' (`'--DTC'`) with a Date vector (`'*DT'`).
+#' Derive the date imputation flag (`*DTF`) comparing a date character vector
+#' (`'--DTC'`) with a Date vector (`*DT`).
 #'
 #' @param dtc The date character vector (`'--DTC'`).
 #'
@@ -646,7 +652,7 @@ restrict_imputed_dtc_dt <- function(dtc,
 #'
 #' @details Usually this computation function can not be used with `%>%`.
 #'
-#' @return The date imputation flag (`'*DTF'`) (character value of `'D'`, `'M'` , `'Y'` or `NA`)
+#' @return The date imputation flag (`*DTF`) (character value of `'D'`, `'M'` , `'Y'` or `NA`)
 #'
 #'
 #' @family com_date_time
@@ -673,8 +679,8 @@ compute_dtf <- function(dtc, dt) {
 
   # Find date portion
   date_portion <- ifelse(grepl("T", dtc),
-    gsub("T", "", substr(dtc, 1, str_locate(dtc, "T")[, 1])),
-    substr(dtc, 1, 10)
+                         gsub("T", "", substr(dtc, 1, str_locate(dtc, "T")[, 1])),
+                         substr(dtc, 1, 10)
   )
   n_chr_date_portion <- nchar(date_portion)
 
