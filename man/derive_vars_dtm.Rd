@@ -308,7 +308,7 @@ two flag variables are created.
 In this example, we derive \code{ASTDTM} but suppress the \code{ASTTMF}. Note that
 function appends missing \code{"hh:mm:ss"} to \code{ASTDTM}. The \code{flag_imputation = "none"}
 call ensures no date/time imputation flag is created. In practice, as per CDISC
-requirements this option can only beselected if the imputed variable is not part
+requirements this option can only be selected if the imputed variable is not part
 of the final ADaM dataset.
 
 \if{html}{\out{<div class="sourceCode r">}}\preformatted{derive_vars_dtm(

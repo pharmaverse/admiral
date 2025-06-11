@@ -108,7 +108,7 @@
 #' @info In this example, we derive `ASTDTM` but suppress the `ASTTMF`. Note that
 #' function appends missing `"hh:mm:ss"` to `ASTDTM`. The `flag_imputation = "none"`
 #' call ensures no date/time imputation flag is created. In practice, as per CDISC
-#' requirements this option can only beselected if the imputed variable is not part
+#' requirements this option can only be selected if the imputed variable is not part
 #' of the final ADaM dataset.
 #' @code
 #' derive_vars_dtm(
