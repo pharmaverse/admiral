@@ -46,8 +46,8 @@ in the input dataset.
 
 \item{id_vars_ref}{Grouping variables in expected observations dataset
 
-The variables to group by in \code{dataset_ref} when determining which observations should be added
-to the input dataset.
+The variables to group by in \code{dataset_ref} when determining which observations should be
+added to the input dataset.
 
 \describe{
 \item{Default value}{All the variables in \code{dataset_ref}}
@@ -63,15 +63,13 @@ to the input dataset.
 \item{imputation}{Select the mode of imputation:
 
 \code{add}: Keep all original records and add imputed records for missing
-timepoints (from \code{dataset_ref}) and missing \code{analysis_var} values, populating
-only \code{by_vars}, \code{order}, and \code{id_vars_ref} in the new records.
+timepoints and missing \code{analysis_var} values from \code{dataset_ref}.
 
-\code{update}: Update records with missing \code{analysis_var}, and add imputed records
-for missing timepoints (from \code{dataset_ref}).
+\code{update}: Update records with missing \code{analysis_var} and add imputed records
+for missing timepoints from \code{dataset_ref}.
 
-\code{update_add}: Keep all original records and add imputed records for missing
-timepoints (from \code{dataset_ref}) and missing \code{analysis_var}, populating all
-other variables in the new records.
+\code{update_add}: Keep all original records, update records with missing \code{analysis_var}
+and add imputed records for missing timepoints from \code{dataset_ref}.
 
 \describe{
 \item{Permitted values}{One of these 3 values: \code{"add"}, \code{"update"}, \code{"update_add"}}
@@ -154,8 +152,8 @@ advs_expected_obsv <- tribble(
   "SYSBP",         6, "WEEK 6"
 )
 
-# Example 1: Add imputed records for missing timepoints (from `dataset_ref`)
-#            and for missing `analysis_var` values
+# Example 1: Add imputed records for missing timepoints and for missing
+#            `analysis_var` values (from `dataset_ref`), keeping all the original records.
 derive_locf_records(
   dataset = advs,
   dataset_ref = advs_expected_obsv,
@@ -168,7 +166,7 @@ derive_locf_records(
 
 
 # Example 2: Add imputed records for missing timepoints (from `dataset_ref`)
-#            and update missing `analysis_var` values
+#            and update missing `analysis_var` values.
 derive_locf_records(
   dataset = advs,
   dataset_ref = advs_expected_obsv,
@@ -180,42 +178,13 @@ derive_locf_records(
   arrange(USUBJID, PARAMCD, AVISIT)
 
 
-# Example 3: Add imputed records for missing timepoints (from `dataset_ref`) and for missing
-#            `analysis_var` value, populating all other variables in the new records.
+# Example 3: Add imputed records for missing timepoints (from `dataset_ref`) and
+#            update missing `analysis_var` values, keeping all the original records.
 derive_locf_records(
   dataset = advs,
   dataset_ref = advs_expected_obsv,
   by_vars = exprs(STUDYID, USUBJID, PARAMCD),
   imputation = "update_add",
-  order = exprs(AVISITN, AVISIT),
-) |>
-  arrange(USUBJID, PARAMCD, AVISIT)
-
-
-adqs <- tribble(
-  ~PARAMCD, ~USUBJID, ~VISITNUM, ~VISIT, ~AVISITN, ~AVISIT, ~AVALC, ~QSSEQ,
-  "Q01", "1099", 1, "BASELINE", 1, "BASELINE", "Severe Pain", 111,
-  "Q01", "1099", 2, "VISIT 2", 2, "VISIT 2", "Moderate Pain", 112,
-  "Q01", "1099", 6, "VISIT 6", 6, "VISIT 6", NA, 113,
-  "Q01", "1099", 7, "VISIT 7", 7, "VISIT 7", "Mild Pain", 114
-)
-
-adqs_ref <- tribble(
-  ~PARAMCD, ~AVISITN, ~AVISIT,
-  "Q01", 1, "BASELINE",
-  "Q01", 2, "VISIT 2",
-  "Q01", 3, "VISIT 3",
-  "Q01", 5, "VISIT 5",
-  "Q01", 7, "VISIT 7"
-)
-
-# Example 4: Add imputed records for missing `analysis_var` (AVALC) values
-derive_locf_records(
-  dataset = adqs,
-  dataset_ref = adqs_ref,
-  by_vars = exprs(USUBJID, PARAMCD),
-  analysis_var = AVALC,
-  imputation = "add",
   order = exprs(AVISITN, AVISIT),
 ) |>
   arrange(USUBJID, PARAMCD, AVISIT)

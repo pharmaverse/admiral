@@ -249,37 +249,37 @@ test_that("derive_locf_records Test 5: visit variables are parameter dependent",
 ## Test 6: analysis visits are assigned based on time windows ----
 test_that("derive_locf_records Test 6: analysis visits are assigned based on time windows", {
   input <- tibble::tribble(
-    ~USUBJID, ~PARAMCD, ~AVAL, ~AVISITN, ~AVISIT,   ~ADY,
-    "1",      "DIABP",   51,   0,        "BASELINE", 0,
-    "1",      "DIABP",   50,   2,        "WEEK 2",  14,
-    "1",      "DIABP",   52,   4,        "WEEK 4",  28,
-    "1",      "DIABP",   54,   6,        "WEEK 6",  42,
-    "1",      "SYSBP",   21,   0,        "BASELINE", 0,
-    "1",      "SYSBP",  121,   2,        "WEEK 2",  14,
-    "2",      "DIABP",   79,   0,        "BASELINE", 0,
-    "2",      "DIABP",   80,   2,        "WEEK 2",  12,
-    "2",      "DIABP",   NA,   4,        "WEEK 4",  26,
-    "2",      "DIABP",   NA,   6,        "WEEK 6",  44,
-    "2",      "SYSBP",  130,   0,        "BASELINE", 0
+    ~USUBJID, ~PARAMCD, ~AVAL, ~AVISITN, ~AVISIT, ~ADY,
+    "1", "DIABP", 51, 0, "BASELINE", 0,
+    "1", "DIABP", 50, 2, "WEEK 2", 14,
+    "1", "DIABP", 52, 4, "WEEK 4", 28,
+    "1", "DIABP", 54, 6, "WEEK 6", 42,
+    "1", "SYSBP", 21, 0, "BASELINE", 0,
+    "1", "SYSBP", 121, 2, "WEEK 2", 14,
+    "2", "DIABP", 79, 0, "BASELINE", 0,
+    "2", "DIABP", 80, 2, "WEEK 2", 12,
+    "2", "DIABP", NA, 4, "WEEK 4", 26,
+    "2", "DIABP", NA, 6, "WEEK 6", 44,
+    "2", "SYSBP", 130, 0, "BASELINE", 0
   )
 
   advs_expected_obsv <- tibble::tribble(
-    ~PARAMCD, ~AVISITN, ~AVISIT,   ~ADY,
-    "DIABP",  0,        "BASELINE", 0,
-    "DIABP",  2,        "WEEK 2",  14,
-    "DIABP",  4,        "WEEK 4",  28,
-    "DIABP",  6,        "WEEK 6",  42,
-    "SYSBP",  0,        "BASELINE", 0,
-    "SYSBP",  2,        "WEEK 2",  14
+    ~PARAMCD, ~AVISITN, ~AVISIT, ~ADY,
+    "DIABP", 0, "BASELINE", 0,
+    "DIABP", 2, "WEEK 2", 14,
+    "DIABP", 4, "WEEK 4", 28,
+    "DIABP", 6, "WEEK 6", 42,
+    "SYSBP", 0, "BASELINE", 0,
+    "SYSBP", 2, "WEEK 2", 14
   )
 
   expected_output <- bind_rows(
     input,
     tibble::tribble(
-      ~USUBJID, ~PARAMCD, ~AVAL, ~AVISITN, ~AVISIT,  ~ADY,
-      "2",      "DIABP",   80,   4,        "WEEK 4", 28,
-      "2",      "DIABP",   80,   6,        "WEEK 6", 42,
-      "2",      "SYSBP",  130,   2,        "WEEK 2", 14
+      ~USUBJID, ~PARAMCD, ~AVAL, ~AVISITN, ~AVISIT, ~ADY,
+      "2", "DIABP", 80, 4, "WEEK 4", 28,
+      "2", "DIABP", 80, 6, "WEEK 6", 42,
+      "2", "SYSBP", 130, 2, "WEEK 2", 14
     ) %>%
       mutate(DTYPE = "LOCF")
   )
@@ -304,37 +304,37 @@ test_that("derive_locf_records Test 6: analysis visits are assigned based on tim
 ## Test 7: imputation = update ----
 test_that("derive_locf_records Test 7: imputation = update", {
   input <- tibble::tribble(
-    ~USUBJID, ~PARAMCD, ~AVAL, ~AVISITN, ~AVISIT,    ~ADY,
-    "1",      "DIABP",   51,   0,        "BASELINE",  0,
-    "1",      "DIABP",   50,   2,        "WEEK 2",   14,
-    "1",      "DIABP",   52,   4,        "WEEK 4",   28,
-    "1",      "DIABP",   54,   6,        "WEEK 6",   42,
-    "1",      "SYSBP",  121,   0,        "BASELINE",  0,
-    "1",      "SYSBP",  121,   2,        "WEEK 2",   14,
-    "2",      "DIABP",   79,   0,        "BASELINE",  0,
-    "2",      "DIABP",   80,   2,        "WEEK 2",   12,
-    "2",      "DIABP",   NA,   4,        "WEEK 4",   28,
-    "2",      "DIABP",   NA,   6,        "WEEK 6",   44,
-    "2",      "SYSBP",  130,   0,        "BASELINE",  0
+    ~USUBJID, ~PARAMCD, ~AVAL, ~AVISITN, ~AVISIT, ~ADY,
+    "1", "DIABP", 51, 0, "BASELINE", 0,
+    "1", "DIABP", 50, 2, "WEEK 2", 14,
+    "1", "DIABP", 52, 4, "WEEK 4", 28,
+    "1", "DIABP", 54, 6, "WEEK 6", 42,
+    "1", "SYSBP", 121, 0, "BASELINE", 0,
+    "1", "SYSBP", 121, 2, "WEEK 2", 14,
+    "2", "DIABP", 79, 0, "BASELINE", 0,
+    "2", "DIABP", 80, 2, "WEEK 2", 12,
+    "2", "DIABP", NA, 4, "WEEK 4", 28,
+    "2", "DIABP", NA, 6, "WEEK 6", 44,
+    "2", "SYSBP", 130, 0, "BASELINE", 0
   )
 
   advs_expected_obsv <- tibble::tribble(
-    ~PARAMCD, ~AVISITN, ~AVISIT,    ~ADY,
-    "DIABP",  0,        "BASELINE",  0,
-    "DIABP",  2,        "WEEK 2",   14,
-    "DIABP",  4,        "WEEK 4",   28,
-    "DIABP",  6,        "WEEK 6",   42,
-    "SYSBP",  0,        "BASELINE",  0,
-    "SYSBP",  2,        "WEEK 2",   14
+    ~PARAMCD, ~AVISITN, ~AVISIT, ~ADY,
+    "DIABP", 0, "BASELINE", 0,
+    "DIABP", 2, "WEEK 2", 14,
+    "DIABP", 4, "WEEK 4", 28,
+    "DIABP", 6, "WEEK 6", 42,
+    "SYSBP", 0, "BASELINE", 0,
+    "SYSBP", 2, "WEEK 2", 14
   )
 
   expected_output <- bind_rows(
     input,
     tibble::tribble(
-      ~USUBJID, ~PARAMCD, ~AVAL, ~AVISITN, ~AVISIT,  ~ADY,
-      "2",      "DIABP",   80,   4,        "WEEK 4", 28,
-      "2",      "DIABP",   80,   6,        "WEEK 6", 42,
-      "2",      "SYSBP",  130,   2,        "WEEK 2", 14
+      ~USUBJID, ~PARAMCD, ~AVAL, ~AVISITN, ~AVISIT, ~ADY,
+      "2", "DIABP", 80, 4, "WEEK 4", 28,
+      "2", "DIABP", 80, 6, "WEEK 6", 44,
+      "2", "SYSBP", 130, 2, "WEEK 2", 14
     ) %>%
       mutate(DTYPE = "LOCF")
   ) %>%
@@ -390,7 +390,7 @@ test_that("derive_locf_records Test 8: imputation = update_add", {
     tibble::tribble(
       ~USUBJID, ~PARAMN, ~PARAMCD, ~AVAL, ~AVISITN, ~AVISIT,  ~ADY,
       "2",      1,       "DIABP",  80,    4,        "WEEK 4", 28,
-      "2",      1,       "DIABP",  80,    6,        "WEEK 6", 42,
+      "2",      1,       "DIABP",  80,    6,        "WEEK 6", 44,
       "2",      2,       "SYSBP",  130,   2,        "WEEK 2", 14
     ) %>%
       mutate(DTYPE = "LOCF")
@@ -444,10 +444,10 @@ test_that("derive_locf_records Test 9: fill variables other than analysis_var fo
   expected_output <- bind_rows(
     input,
     tibble::tribble(
-      ~USUBJID, ~PARAMCD, ~PARAMN, ~AVAL, ~AVISITN, ~AVISIT,    ~DATEC,      ~DAY,
-      "1",      "DIABP",  2,       85,     2,       "VISIT 2",  "February",  "day a",
-      "1",      "DIABP",  2,       35,    10,       "VISIT 10", "July",      "day f",
-      "1",      "DIABP",  2,       20,    14,       "VISIT 14", "September", "day h"
+      ~USUBJID, ~PARAMCD, ~PARAMN, ~AVAL, ~AVISITN, ~AVISIT, ~DATEC, ~DAY,
+      "1", "DIABP", 2, 85, 2, "VISIT 2", "February", "day a",
+      "1", "DIABP", 2, 35, 10, "VISIT 10", "July", "day f",
+      "1", "DIABP", 2, 20, 14, "VISIT 14", "September", "day h"
     ) %>%
       mutate(DTYPE = "LOCF")
   )
@@ -456,7 +456,7 @@ test_that("derive_locf_records Test 9: fill variables other than analysis_var fo
     dataset = input,
     dataset_ref = advs_expected_obsv,
     by_vars = exprs(USUBJID, PARAMCD),
-    imputation = "add",
+    imputation = "update_add",
     order = exprs(AVISITN, AVISIT),
     keep_vars = exprs(PARAMN, DATEC, DAY),
   ) |>
