@@ -138,9 +138,9 @@
 #'
 #' @caption Suppress `"S"` for imputation flag (`ignore_seconds_flag`)
 #' @info In this example, we set `ignore_seconds_flag = TRUE` to suppress `S` for
-#' seconds in the `ASTTMF` variable. The ADaM IG states that given SDTM ('--DTC')
+#' seconds in the `ASTTMF` variable. The ADaM IG states that given SDTM (`--DTC`)
 #' variable, if only hours and minutes are ever collected, and seconds are imputed
-#' in ('*DTM') as `00`, then it is not necessary to set ('*TMF') to 'S'.
+#' in (`*DTM`) as `00`, then it is not necessary to set (`*TMF`) to `"S"`.
 #' @code
 #'
 #' mhdt <- tribble(
