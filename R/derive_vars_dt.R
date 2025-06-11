@@ -76,7 +76,7 @@
 #'   dtc = MHSTDTC
 #' )
 #'
-#' @caption Impute partial dates (`date_imputation = first`)
+#' @caption Impute partial dates (`highest_imputation`)
 #' @info Imputation is requested by the `highest_imputation` argument. Here
 #' `highest_imputation = "M"` for month imputation is used, i.e. the highest
 #' imputation done on a partial date is up to the month. By default, missing date
