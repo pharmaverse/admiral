@@ -226,7 +226,7 @@ derive_vars_dt(
 #> 5 "2019"                NA        
 #> 6 "2019---07"           NA        
 #> 7 ""                    NA        }\if{html}{\out{</div>}}}
-\subsection{Impute partial dates (\code{date_imputation = first})}{
+\subsection{Impute partial dates (\code{highest_imputation})}{
 
 Imputation is requested by the \code{highest_imputation} argument. Here
 \code{highest_imputation = "M"} for month imputation is used, i.e. the highest

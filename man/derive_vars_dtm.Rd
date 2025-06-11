@@ -355,9 +355,9 @@ derive_vars_dtm(
 \subsection{Suppress \code{"S"} for imputation flag (\code{ignore_seconds_flag})}{
 
 In this example, we set \code{ignore_seconds_flag = TRUE} to suppress \code{S} for
-seconds in the \code{ASTTMF} variable. The ADaM IG states that given SDTM ('--DTC')
+seconds in the \code{ASTTMF} variable. The ADaM IG states that given SDTM (\code{--DTC})
 variable, if only hours and minutes are ever collected, and seconds are imputed
-in ('*DTM') as \code{00}, then it is not necessary to set ('*TMF') to 'S'.
+in (\verb{*DTM}) as \code{00}, then it is not necessary to set (\verb{*TMF}) to \code{"S"}.
 
 \if{html}{\out{<div class="sourceCode r">}}\preformatted{
 mhdt <- tribble(
