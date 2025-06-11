@@ -206,9 +206,9 @@ one "NE".
 
 \item{check_type}{Check uniqueness?
 
-If \code{"warning"} or \code{"error"} is specified, the specified message is issued
-if the observations of the input dataset are not unique with respect to the
-by variables and the order.
+If \code{"message"}, \code{"warning"}, or \code{"error"} is specified, the specified
+message is issued if the observations of the input dataset are not unique
+with respect to the by variables and the order.
 
 \describe{
 \item{Permitted values}{\code{"none"}, \code{"message"}, \code{"warning"}, \code{"error"}}
@@ -297,7 +297,7 @@ observation where \code{first_cond_upper} is fulfilled (the observation
 fulfilling the condition is included). If for an observation of the input
 dataset the condition is not fulfilled, the observation is removed.
 
-For an example see the last example in the "Examples" section.
+For examples the "Examples" section.
 }
 
 \subsection{Step 4}{
