@@ -106,7 +106,7 @@
       derive_vars_merged(advs, dataset_add = adsl, by_vars = exprs(USUBJID),
       new_vars = exprs(SEX), relationship = "one-to-one")
     Condition
-      Error in `tryCatch()`:
+      Error in `derive_vars_merged()`:
       ! Each row in `dataset_add` must match at most 1 row in `dataset`.
       i Row 1 of `dataset_add` matches multiple rows in `dataset`.
 
