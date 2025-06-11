@@ -120,6 +120,8 @@ read (#2623) and updated to include new metadata for grading using US (Conventio
 - The `derive_extreme_records()` documentation was updated to clarify which variables are populated
 from `dataset_ref` for the new observations. (#2664)
 
+- The 'Assign `PARAMCD`, `PARAM`, `PARAMN`, `PARCAT1`' section of the "Creating a BDS Finding ADaM" vignette was updated to clarify `PARAM` to `PARCAT1` mapping. (#2547)
+
 ## Various
 
 <details>
