@@ -56,6 +56,11 @@ the `filter_add` argument is used. (#2863)
 - `create_query_data()` no longer issues warnings when `basket_select()` objects
 with custom arguments of length greater than one are used. (#2751)
 
+- The `order` argument in `derive_var_joined_exist_flag()` and `filter_joined()`
+is now optional unless `join_type = "after"`, `join_type = "before"`,
+`first_cond_lower`, `first_cond_upper`, or `tmp_obs_nr_var` are specified.
+(#2729)
+
 ## Breaking Changes
 
 - Lab grading metadata `atoxgr_criteria_ctcv4()`, `atoxgr_criteria_ctcv5()` and `atoxgr_criteria_daids()` variable `SI_UNIT_CHECK` renamed to `UNIT_CHECK`. (#2557)
@@ -83,16 +88,18 @@ records. (#2683)
 - Improved documentation, error messages, and argument assertions of `derive_vars_dt()`, `derive_vars_dtm()`, `impute_dtc_dt()`, `impute_dtc_dtm()`, `convert_dtc_to_dt()`, & `convert_dtc_to_dtm()`. (#2654)
 
 - The examples section of the following functions was enhanced:
-    - `derive_extreme_records()` (#2585)
-    - `derive_param_tte()` (#2704)
-    - `derive_param_computed()` (#2701)
-    - `derive_summary_records()` (#2707)
     - `derive_extreme_event()` (#2735)
+    - `derive_extreme_records()` (#2585)
+    - `derive_param_computed()` (#2701)
+    - `derive_param_tte()` (#2704)
+    - `derive_summary_records()` (#2707)
+    - `derive_var_extreme_flag()` (#2752)
+    - `derive_var_joined_exist_flag()` (#2729)
+    - `derive_var_trtemfl()` (#2746)
+    - `derive_vars_crit_flag()` (#2744)
     - `derive_vars_joined()` (#2727)
     - `derive_vars_merged()` (#2727)
-    - `derive_vars_crit_flag()` (#2744)
-    - `derive_var_trtemfl()` (#2746)
-    - `derive_var_extreme_flag()` (#2752)
+    - `filter_joined()` (#2729)
 
 - Added an example to the `derive_vars_transposed()` reference page to showcase how duplicates-related errors can arise when records in `dataset_merge` are not uniquely identified. (#2609)
 
