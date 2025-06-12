@@ -120,7 +120,6 @@ test_that("filter_joined Test 4: join_type = 'all'", {
     by_vars = exprs(USUBJID),
     join_vars = exprs(ACOVFL, ADY),
     join_type = "all",
-    order = exprs(ADY),
     filter_join = ADURN > 30 & ACOVFL.join == "Y" & ADY >= ADY.join - 7
   )
 
