@@ -37,3 +37,7 @@ admiral_environment$nmap <- NULL
 # duplicates.R ----
 ## signal_duplicate_records
 admiral_environment$duplicates <- NULL
+
+# derive_vars_dtm.R ----
+## ignore_seconds_flag
+admiral_environment$message_displayed <- FALSE
