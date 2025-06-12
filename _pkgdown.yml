@@ -217,10 +217,6 @@ navbar:
     admiraldiscovery:
       text: "🔎 Find my function"
       href: https://pharmaverse.github.io/admiraldiscovery/articles/reactable.html
-    history:
-      icon: fa-history
-      href: articles/website-versions.html
-      aria-label: Previous Release Websites
     slack:
       icon: fa-slack
       href: https://pharmaverse.slack.com/

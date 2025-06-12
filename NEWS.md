@@ -120,6 +120,8 @@ from `dataset_ref` for the new observations. (#2664)
 
 - The 'Assign `PARAMCD`, `PARAM`, `PARAMN`, `PARCAT1`' section of the "Creating a BDS Finding ADaM" vignette was updated to clarify `PARAM` to `PARCAT1` mapping. (#2547)
 
+- The package documentation for (1) all CRAN-released versions starting from `{admiral}` 1.0.0 up until the current version and (2) the latest development version (listed under "main") are all now accessible using the "Versions" selector in the toolbar. (#2766)
+
 ## Various
 
 <details>
