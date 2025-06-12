@@ -1,8 +1,8 @@
 #' Derive/Impute a Date from a Character Date
 #'
-#' Derive a date (`*DT`) from a character date (`'--DTC`').
+#' Derive a date (`*DT`) from a character date (`--DTC`).
 #' The date can be imputed (see `date_imputation` argument)
-#' and the date imputation flag ('`*DTF'`) can be added.
+#' and the date imputation flag (`*DTF`) can be added.
 #'
 #' In `{admiral}` we don't allow users to pick any single part of the date/time to
 #' impute, we only enable to impute up to a highest level, i.e. you couldn't
@@ -273,7 +273,7 @@ derive_vars_dt <- function(dataset,
 
 #' Convert a Date Character Vector into a Date Object
 #'
-#' Convert a date character vector (usually '--DTC') into a Date vector (usually '*DT').
+#' Convert a date character vector (usually `--DTC`) into a Date vector (usually `*DT`).
 #'
 #' @param dtc The --DTC date to convert.
 #'
@@ -334,7 +334,7 @@ convert_dtc_to_dt <- function(dtc,
 #'
 #' @param highest_imputation Highest imputation level
 #'
-#'   The `highest_imputation` argument controls which components of the `'--DTC'`
+#'   The `highest_imputation` argument controls which components of the `--DTC`
 #'   value are imputed if they are missing. All components up to the specified
 #'   level are imputed.
 #'
@@ -640,7 +640,7 @@ restrict_imputed_dtc_dt <- function(dtc,
 #' Derive the Date Imputation Flag
 #'
 #' Derive the date imputation flag (`*DTF`) comparing a date character vector
-#' (`'--DTC'`) with a Date vector (`*DT`).
+#' (`--DTC`) with a Date vector (`*DT`).
 #'
 #' @param dtc The date character vector (`'--DTC'`).
 #'
