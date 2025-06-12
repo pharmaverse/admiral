@@ -60,7 +60,7 @@
 #'   This parameter should be specified if `filter_join` contains summary
 #'   functions which should not apply to all observations but only from a
 #'   certain observation before the current observation up to the current
-#'   observation. For an example see the last example below.
+#'   observation. For examples see the "Examples" section below.
 #'
 #' @permitted [condition]
 #'
@@ -73,7 +73,7 @@
 #'
 #'   This parameter should be specified if `filter_join` contains summary
 #'   functions which should not apply to all observations but only up to the
-#'   confirmation assessment. For an example see the last example below.
+#'   confirmation assessment. For examples see the "Examples" section below.
 #'
 #' @permitted [condition]
 #'
@@ -244,11 +244,13 @@
 #' @examplesx
 #' @caption Filter records considering other records (`filter_join`, `join_vars`)
 #' @info In this example, the input dataset should be restricted to records with
-#'   a duration longer than 30 and on or after 7 days before a COVID AE (`ACOVFL
-#'   == "Y"`). The condition for restricting the records is specified by the
-#'   `filter_join` argument. Variables from the other records are referenced by
-#'   variable names with the suffix `.join`. These variables have to be
-#'   specified for the `join_vars` argument.
+#'   a duration longer than 30 and after a COVID AE (`ACOVFL == "Y"`) or within
+#'   7 days before a COVID AE. The condition for restricting the records is
+#'   specified by the `filter_join` argument. Variables from the other records
+#'   are referenced by variable names with the suffix `.join`. These variables
+#'   have to be specified for the `join_vars` argument. As records before _and_
+#'   after the current record should be considered, `join_type = "all"` is
+#'   specified.
 #' @code
 #' library(tibble)
 #'
@@ -275,10 +277,12 @@
 #'   filter_join = ADURN > 30 & ACOVFL.join == "Y" & ADY >= ADY.join - 7
 #' )
 #'
-#' @caption Considering only records after the current on (`join_type = "after"`)
+#' @caption Considering only records after the current one (`join_type = "after"`)
 #' @info In this example, the input dataset is restricted to records with `AVALC
 #'   == "Y"` and `AVALC == "Y"` at a subsequent visit. `join_type = "after"` is
-#'   specified to consider only records after the current one.
+#'   specified to consider only records after the current one. Please note that
+#'   the `order` argument must be specified, as otherwise it is not possible to
+#'   determine which records are after the current record.
 #' @code
 #' data <- tribble(
 #'   ~USUBJID, ~AVISITN, ~AVALC,
@@ -301,130 +305,6 @@
 #'   join_type = "after",
 #'   order = exprs(AVISITN),
 #'   filter_join = AVALC == "Y" & AVALC.join == "Y"
-#' )
-#'
-#' @caption Considering only records up to a condition (`first_cond_upper`)
-#' @info In this example, the records with
-#' - `AVALC == "CR"`,
-#' - `AVALC == "CR"` at a subsequent visit,
-#' - only `"CR"` or `"NE"` in between, and
-#' - at most one `"NE"` in between
-#'
-#' should be selected. The other records to be considered are restricted to
-#' those up to the first occurrence of `"CR"` by specifying the
-#' `first_cond_upper` argument. The `count_vals()` function is used to count the
-#' `"NE"`s for the last condition.
-#' @code
-#' data <- tribble(
-#'   ~USUBJID, ~AVISITN, ~AVALC,
-#'   "1",      1,        "PR",
-#'   "1",      2,        "CR",
-#'   "1",      3,        "NE",
-#'   "1",      4,        "CR",
-#'   "1",      5,        "NE",
-#'   "2",      1,        "CR",
-#'   "2",      2,        "PR",
-#'   "2",      3,        "CR",
-#'   "3",      1,        "CR",
-#'   "4",      1,        "CR",
-#'   "4",      2,        "NE",
-#'   "4",      3,        "NE",
-#'   "4",      4,        "CR",
-#'   "4",      5,        "PR"
-#' )
-#'
-#' filter_joined(
-#'   data,
-#'   dataset_add = data,
-#'   by_vars = exprs(USUBJID),
-#'   join_vars = exprs(AVALC),
-#'   join_type = "after",
-#'   order = exprs(AVISITN),
-#'   first_cond_upper = AVALC.join == "CR",
-#'   filter_join = AVALC == "CR" & all(AVALC.join %in% c("CR", "NE")) &
-#'     count_vals(var = AVALC.join, val = "NE") <= 1
-#' )
-#'
-#' @caption Considering order of values (`min_cond()`, `max_cond()`)
-#' @info In this example, records with
-#' - `AVALC == "PR"`,
-#' - `AVALC == "CR"` or `AVALC == "PR"` at a subsequent visit at least 20 days later,
-#' - only `"CR"`, `"PR"`, or `"NE"` in between,
-#' - at most one `"NE"` in between, and
-#' - `"CR"` is
-#'   not followed by `"PR"`
-#'
-#' should be selected. The last condition is realized by using `min_cond()` and
-#' `max_cond()`, ensuring that the first occurrence of `"CR"` is after the last
-#' occurrence of `"PR"`.
-#' @code
-#' data <- tribble(
-#'   ~USUBJID, ~ADY, ~AVALC,
-#'   "1",         6, "PR",
-#'   "1",        12, "CR",
-#'   "1",        24, "NE",
-#'   "1",        32, "CR",
-#'   "1",        48, "PR",
-#'   "2",         3, "PR",
-#'   "2",        21, "CR",
-#'   "2",        33, "PR",
-#'   "3",        11, "PR",
-#'   "4",         7, "PR",
-#'   "4",        12, "NE",
-#'   "4",        24, "NE",
-#'   "4",        32, "PR",
-#'   "4",        55, "PR"
-#' )
-#'
-#' filter_joined(
-#'   data,
-#'   dataset_add = data,
-#'   by_vars = exprs(USUBJID),
-#'   join_vars = exprs(AVALC, ADY),
-#'   join_type = "after",
-#'   order = exprs(ADY),
-#'   first_cond_upper = AVALC.join %in% c("CR", "PR") & ADY.join - ADY >= 20,
-#'   filter_join = AVALC == "PR" &
-#'     all(AVALC.join %in% c("CR", "PR", "NE")) &
-#'     count_vals(var = AVALC.join, val = "NE") <= 1 &
-#'     (
-#'       min_cond(var = ADY.join, cond = AVALC.join == "CR") >
-#'         max_cond(var = ADY.join, cond = AVALC.join == "PR") |
-#'         count_vals(var = AVALC.join, val = "CR") == 0
-#'     )
-#' )
-#'
-#' @caption Considering the order of records (`tmp_obs_nr_var`)
-#' @info In this example, the records with `CRIT1FL == "Y"` at two consecutive
-#'   visits or at the last visit should be selected. A temporary order variable
-#'   is created by specifying the `tmp_obs_nr_var` argument. It is used in
-#'   `filter_join` then. The temporary variable doesn't need to be specified for
-#'   `join_vars`.
-#' @code
-#' data <- tribble(
-#'   ~USUBJID, ~AVISITN, ~CRIT1FL,
-#'   "1",      1,        "Y",
-#'   "1",      2,        "N",
-#'   "1",      3,        "Y",
-#'   "1",      5,        "N",
-#'   "2",      1,        "Y",
-#'   "2",      3,        "Y",
-#'   "2",      5,        "N",
-#'   "3",      1,        "Y",
-#'   "4",      1,        "Y",
-#'   "4",      2,        "N",
-#' )
-#'
-#' filter_joined(
-#'   data,
-#'   dataset_add = data,
-#'   by_vars = exprs(USUBJID),
-#'   tmp_obs_nr_var = tmp_obs_nr,
-#'   join_vars = exprs(CRIT1FL),
-#'   join_type = "all",
-#'   order = exprs(AVISITN),
-#'   filter_join = CRIT1FL == "Y" & CRIT1FL.join == "Y" &
-#'     (tmp_obs_nr + 1 == tmp_obs_nr.join | tmp_obs_nr == max(tmp_obs_nr.join))
 #' )
 #'
 #' @caption Considering a range of records only (`first_cond_lower`, `first_cond_upper`)
@@ -474,6 +354,134 @@
 #'   join_type = "after",
 #'   first_cond_upper = val.join == "++",
 #'   filter_join = val == "0" & all(val.join %in% c("+", "++"))
+#' )
+#'
+#' @caption Considering only records up to a condition (`first_cond_upper`)
+#' @info In this example from deriving confirmed response in oncology, the
+#'   records with
+#' - `AVALC == "CR"`,
+#' - `AVALC == "CR"` at a subsequent visit,
+#' - only `"CR"` or `"NE"` in between, and
+#' - at most one `"NE"` in between
+#'
+#' should be selected. The other records to be considered are restricted to
+#' those up to the first occurrence of `"CR"` by specifying the
+#' `first_cond_upper` argument. The `count_vals()` function is used to count the
+#' `"NE"`s for the last condition.
+#' @code
+#' data <- tribble(
+#'   ~USUBJID, ~AVISITN, ~AVALC,
+#'   "1",      1,        "PR",
+#'   "1",      2,        "CR",
+#'   "1",      3,        "NE",
+#'   "1",      4,        "CR",
+#'   "1",      5,        "NE",
+#'   "2",      1,        "CR",
+#'   "2",      2,        "PR",
+#'   "2",      3,        "CR",
+#'   "3",      1,        "CR",
+#'   "4",      1,        "CR",
+#'   "4",      2,        "NE",
+#'   "4",      3,        "NE",
+#'   "4",      4,        "CR",
+#'   "4",      5,        "PR"
+#' )
+#'
+#' filter_joined(
+#'   data,
+#'   dataset_add = data,
+#'   by_vars = exprs(USUBJID),
+#'   join_vars = exprs(AVALC),
+#'   join_type = "after",
+#'   order = exprs(AVISITN),
+#'   first_cond_upper = AVALC.join == "CR",
+#'   filter_join = AVALC == "CR" & all(AVALC.join %in% c("CR", "NE")) &
+#'     count_vals(var = AVALC.join, val = "NE") <= 1
+#' )
+#'
+#' @caption Considering order of values (`min_cond()`, `max_cond()`)
+#' @info In this example from deriving confirmed response in oncology, records
+#'   with
+#' - `AVALC == "PR"`,
+#' - `AVALC == "CR"` or `AVALC == "PR"` at a subsequent visit at least 20 days later,
+#' - only `"CR"`, `"PR"`, or `"NE"` in between,
+#' - at most one `"NE"` in between, and
+#' - `"CR"` is
+#'   not followed by `"PR"`
+#'
+#' should be selected. The last condition is realized by using `min_cond()` and
+#' `max_cond()`, ensuring that the first occurrence of `"CR"` is after the last
+#' occurrence of `"PR"`. The second call to `count_vals()` in the condition is
+#' required to cover the case of no `"CR"`s (the `min_cond()` call returns `NA`
+#' then).
+#' @code
+#' data <- tribble(
+#'   ~USUBJID, ~ADY, ~AVALC,
+#'   "1",         6, "PR",
+#'   "1",        12, "CR",
+#'   "1",        24, "NE",
+#'   "1",        32, "CR",
+#'   "1",        48, "PR",
+#'   "2",         3, "PR",
+#'   "2",        21, "CR",
+#'   "2",        33, "PR",
+#'   "3",        11, "PR",
+#'   "4",         7, "PR",
+#'   "4",        12, "NE",
+#'   "4",        24, "NE",
+#'   "4",        32, "PR",
+#'   "4",        55, "PR"
+#' )
+#'
+#' filter_joined(
+#'   data,
+#'   dataset_add = data,
+#'   by_vars = exprs(USUBJID),
+#'   join_vars = exprs(AVALC, ADY),
+#'   join_type = "after",
+#'   order = exprs(ADY),
+#'   first_cond_upper = AVALC.join %in% c("CR", "PR") & ADY.join - ADY >= 20,
+#'   filter_join = AVALC == "PR" &
+#'     all(AVALC.join %in% c("CR", "PR", "NE")) &
+#'     count_vals(var = AVALC.join, val = "NE") <= 1 &
+#'     (
+#'       min_cond(var = ADY.join, cond = AVALC.join == "CR") >
+#'         max_cond(var = ADY.join, cond = AVALC.join == "PR") |
+#'         count_vals(var = AVALC.join, val = "CR") == 0
+#'     )
+#' )
+#'
+#' @caption Considering the order of records (`tmp_obs_nr_var`)
+#' @info In this example, the records with `CRIT1FL == "Y"` at two consecutive
+#'   visits or at the last visit should be selected. A temporary order variable
+#'   is created by specifying the `tmp_obs_nr_var` argument. Then it is used in
+#'   `filter_join`. The temporary variable doesn't need to be specified for
+#'   `join_vars`.
+#' @code
+#' data <- tribble(
+#'   ~USUBJID, ~AVISITN, ~CRIT1FL,
+#'   "1",      1,        "Y",
+#'   "1",      2,        "N",
+#'   "1",      3,        "Y",
+#'   "1",      5,        "N",
+#'   "2",      1,        "Y",
+#'   "2",      3,        "Y",
+#'   "2",      5,        "N",
+#'   "3",      1,        "Y",
+#'   "4",      1,        "Y",
+#'   "4",      2,        "N",
+#' )
+#'
+#' filter_joined(
+#'   data,
+#'   dataset_add = data,
+#'   by_vars = exprs(USUBJID),
+#'   tmp_obs_nr_var = tmp_obs_nr,
+#'   join_vars = exprs(CRIT1FL),
+#'   join_type = "all",
+#'   order = exprs(AVISITN),
+#'   filter_join = CRIT1FL == "Y" & CRIT1FL.join == "Y" &
+#'     (tmp_obs_nr + 1 == tmp_obs_nr.join | tmp_obs_nr == max(tmp_obs_nr.join))
 #' )
 filter_joined <- function(dataset,
                           dataset_add,
