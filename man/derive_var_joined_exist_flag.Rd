@@ -348,7 +348,7 @@ General Derivation Functions for all ADaMs that returns variable appended to dat
 \subsection{Flag records considering other records (\code{filter_join}, \code{join_vars})}{
 
 In this example, records with a duration longer than 30 and after a
-COVID AE (\code{ACOVFL == "Y"}) or within 7 days before a COVID AE should be
+COVID AE (\code{ACOVFL == "Y"}) or up to seven days before a COVID AE should be
 flagged. The condition for flagging the records is specified by the
 \code{filter_join} argument. Variables from the other records are referenced by
 variable names with the suffix \code{.join}. These variables have to be

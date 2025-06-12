@@ -240,7 +240,7 @@
 #' @examplesx
 #' @caption Flag records considering other records (`filter_join`, `join_vars`)
 #' @info In this example, records with a duration longer than 30 and after a
-#'   COVID AE (`ACOVFL == "Y"`) or within 7 days before a COVID AE should be
+#'   COVID AE (`ACOVFL == "Y"`) or up to seven days before a COVID AE should be
 #'   flagged. The condition for flagging the records is specified by the
 #'   `filter_join` argument. Variables from the other records are referenced by
 #'   variable names with the suffix `.join`. These variables have to be

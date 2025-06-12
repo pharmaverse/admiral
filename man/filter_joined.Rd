@@ -313,8 +313,8 @@ Utilities for Filtering Observations:
 \subsection{Filter records considering other records (\code{filter_join}, \code{join_vars})}{
 
 In this example, the input dataset should be restricted to records with
-a duration longer than 30 and after a COVID AE (\code{ACOVFL == "Y"}) or within
-7 days before a COVID AE. The condition for restricting the records is
+a duration longer than 30 and after a COVID AE (\code{ACOVFL == "Y"}) or up to
+seven days before a COVID AE. The condition for restricting the records is
 specified by the \code{filter_join} argument. Variables from the other records
 are referenced by variable names with the suffix \code{.join}. These variables
 have to be specified for the \code{join_vars} argument. As records before \emph{and}
