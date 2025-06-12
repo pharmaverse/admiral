@@ -32,7 +32,7 @@ The variables specified by the \code{dtc} argument are expected to be in the dat
 
 A character scalar is expected. For the date variable (\verb{*DT}) is appended to
 the specified prefix, for the date imputation flag (\verb{*DTF}), and for the time
-imputation flag (\code{'*TMF'}), i.e., for \code{new_vars_prefix = "AST"} the variables
+imputation flag (\verb{*TMF}), i.e., for \code{new_vars_prefix = "AST"} the variables
 \code{ASTDT}, \code{ASTDTF}, and \code{ASTTMF} are created.
 
 \describe{
@@ -202,8 +202,8 @@ For example \code{"2019---07"} would return \verb{"2019-06-07} if \code{preserve
 
 \item{ignore_seconds_flag}{ADaM IG states that given SDTM (\code{'--DTC'}) variable,
 if only hours and minutes are ever collected, and seconds are imputed in
-(\code{'*DTM'}) as 00, then it is not necessary to set (\code{'*TMF'}) to \code{'S'}. A user can set this
-to \code{TRUE} so the \code{'S'} Flag is dropped from (\code{'*TMF'}).
+(\verb{*DTM}) as 00, then it is not necessary to set (\verb{*TMF}) to \code{"S"}. A user can set this
+to \code{TRUE} so the \code{"S"} Flag is dropped from (\verb{*TMF}).
 
 \describe{
 \item{Permitted values}{A logical value}
@@ -211,13 +211,13 @@ to \code{TRUE} so the \code{'S'} Flag is dropped from (\code{'*TMF'}).
 }}
 }
 \value{
-The input dataset with the datetime \code{'*DTM'} (and the date/time imputation
-flag \verb{*DTF}, \code{'*TMF'}) added.
+The input dataset with the datetime \verb{*DTM} (and the date/time imputation
+flag \verb{*DTF}, \verb{*TMF}) added.
 }
 \description{
-Derive a datetime object (\code{'*DTM'}) from a character date (\code{'--DTC'}).
+Derive a datetime object (\verb{*DTM}) from a character date (\code{--DTC}).
 The date and time can be imputed (see \code{date_imputation}/\code{time_imputation} arguments)
-and the date/time imputation flag (\verb{*DTF}, \code{'*TMF'}) can be added.
+and the date/time imputation flag (\verb{*DTF}, \verb{*TMF}) can be added.
 }
 \details{
 In \code{{admiral}} we don't allow users to pick any single part of the date/time to
@@ -225,8 +225,8 @@ impute, we only enable to impute up to a highest level, i.e. you couldn't
 choose to say impute months, but not days.
 
 The presence of a \verb{*DTF} variable is checked and the variable is not derived
-if it already exists in the input dataset. However, if \code{'*TMF'} already exists
-in the input dataset, a warning is issued and \code{'*TMF'} will be overwritten.
+if it already exists in the input dataset. However, if \verb{*TMF} already exists
+in the input dataset, a warning is issued and \verb{*TMF} will be overwritten.
 }
 \seealso{
 Date/Time Derivation Functions that returns variable appended to dataset: 

@@ -15,7 +15,7 @@ A character date is expected in a format like \code{yyyy-mm-ddThh:mm:ss} (partia
 \item{Default value}{none}
 }}
 
-\item{dtm}{The Date vector to compare (\code{'*DTM'}).
+\item{dtm}{The Date vector to compare (\verb{*DTM}).
 
 A datetime object is expected.
 
@@ -25,8 +25,8 @@ A datetime object is expected.
 
 \item{ignore_seconds_flag}{ADaM IG states that given SDTM (\code{'--DTC'}) variable,
 if only hours and minutes are ever collected, and seconds are imputed in
-(\code{'*DTM'}) as 00, then it is not necessary to set (\code{'*TMF'}) to \code{'S'}. A user can set this
-to \code{TRUE} so the \code{'S'} Flag is dropped from (\code{'*TMF'}).
+(\verb{*DTM}) as 00, then it is not necessary to set (\verb{*TMF}) to \code{"S"}. A user can set this
+to \code{TRUE} so the \code{"S"} Flag is dropped from (\verb{*TMF}).
 
 \describe{
 \item{Permitted values}{A logical value}
@@ -34,11 +34,11 @@ to \code{TRUE} so the \code{'S'} Flag is dropped from (\code{'*TMF'}).
 }}
 }
 \value{
-The time imputation flag (\code{'*TMF'}) (character value of \code{'H'}, \code{'M'} , \code{'S'} or \code{NA})
+The time imputation flag (\verb{*TMF}) (character value of \code{"H"}, \code{"M"} , \code{"S"} or \code{NA})
 }
 \description{
-Derive the time imputation flag (\code{'*TMF'}) comparing a date character vector
-(\code{'--DTC'}) with a Datetime vector (\code{'*DTM'}).
+Derive the time imputation flag (\verb{*TMF}) comparing a date character vector
+(\code{--DTC}) with a Datetime vector (\verb{*DTM}).
 }
 \details{
 Usually this computation function can not be used with \verb{\%>\%}.

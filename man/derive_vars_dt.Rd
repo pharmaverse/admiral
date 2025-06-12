@@ -50,7 +50,7 @@ valid "missing" value for any component.
 
 \item{highest_imputation}{Highest imputation level
 
-The \code{highest_imputation} argument controls which components of the \code{'--DTC'}
+The \code{highest_imputation} argument controls which components of the \code{--DTC}
 value are imputed if they are missing. All components up to the specified
 level are imputed.
 
@@ -171,9 +171,9 @@ The input dataset with the date \verb{*DT} (and the date imputation flag \verb{*
 if requested) added.
 }
 \description{
-Derive a date (\verb{*DT}) from a character date (\verb{'--DTC}').
+Derive a date (\verb{*DT}) from a character date (\code{--DTC}).
 The date can be imputed (see \code{date_imputation} argument)
-and the date imputation flag ('\verb{*DTF'}) can be added.
+and the date imputation flag (\verb{*DTF}) can be added.
 }
 \details{
 In \code{{admiral}} we don't allow users to pick any single part of the date/time to
