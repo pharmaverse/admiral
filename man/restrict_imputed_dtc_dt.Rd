@@ -7,7 +7,7 @@
 restrict_imputed_dtc_dt(dtc, imputed_dtc, min_dates, max_dates)
 }
 \arguments{
-\item{dtc}{The \code{'--DTC'} date to impute
+\item{dtc}{The \code{--DTC} date to impute
 
 A character date is expected in a format like \code{yyyy-mm-dd} or
 \code{yyyy-mm-ddThh:mm:ss}. Trailing components can be omitted and \code{-} is a

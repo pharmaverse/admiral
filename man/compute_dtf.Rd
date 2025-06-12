@@ -7,7 +7,7 @@
 compute_dtf(dtc, dt)
 }
 \arguments{
-\item{dtc}{The date character vector (\code{'--DTC'}).
+\item{dtc}{The date character vector (\code{--DTC}).
 
 A character date is expected in a format like \code{yyyy-mm-ddThh:mm:ss} (partial or complete).
 
@@ -24,7 +24,7 @@ A date object is expected.
 }}
 }
 \value{
-The date imputation flag (\verb{*DTF}) (character value of \code{'D'}, \code{'M'} , \code{'Y'} or \code{NA})
+The date imputation flag (\verb{*DTF}) (character value of \code{"D"}, \code{"M"} , \code{"Y"} or \code{NA})
 }
 \description{
 Derive the date imputation flag (\verb{*DTF}) comparing a date character vector

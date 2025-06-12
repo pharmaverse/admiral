@@ -15,7 +15,7 @@ convert_dtc_to_dtm(
 )
 }
 \arguments{
-\item{dtc}{The \code{'--DTC'} date to convert.
+\item{dtc}{The \code{--DTC} date to convert.
 
 \describe{
 \item{Permitted values}{a character date vector}

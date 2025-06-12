@@ -7,7 +7,7 @@
 compute_tmf(dtc, dtm, ignore_seconds_flag = FALSE)
 }
 \arguments{
-\item{dtc}{The date character vector (\code{'--DTC'}).
+\item{dtc}{The date character vector (\code{--DTC}).
 
 A character date is expected in a format like \code{yyyy-mm-ddThh:mm:ss} (partial or complete).
 
@@ -23,7 +23,7 @@ A datetime object is expected.
 \item{Default value}{none}
 }}
 
-\item{ignore_seconds_flag}{ADaM IG states that given SDTM (\code{'--DTC'}) variable,
+\item{ignore_seconds_flag}{ADaM IG states that given SDTM (\code{--DTC}) variable,
 if only hours and minutes are ever collected, and seconds are imputed in
 (\verb{*DTM}) as 00, then it is not necessary to set (\verb{*TMF}) to \code{"S"}. A user can set this
 to \code{TRUE} so the \code{"S"} Flag is dropped from (\verb{*TMF}).

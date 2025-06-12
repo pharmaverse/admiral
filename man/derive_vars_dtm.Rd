@@ -40,7 +40,7 @@ imputation flag (\verb{*TMF}), i.e., for \code{new_vars_prefix = "AST"} the vari
 \item{Default value}{none}
 }}
 
-\item{dtc}{The \code{'--DTC'} date to impute
+\item{dtc}{The \code{--DTC} date to impute
 
 A character date is expected in a format like \code{yyyy-mm-dd} or
 \code{yyyy-mm-ddThh:mm:ss}. Trailing components can be omitted and \code{-} is a
@@ -200,7 +200,7 @@ For example \code{"2019---07"} would return \verb{"2019-06-07} if \code{preserve
 \item{Default value}{\code{FALSE}}
 }}
 
-\item{ignore_seconds_flag}{ADaM IG states that given SDTM (\code{'--DTC'}) variable,
+\item{ignore_seconds_flag}{ADaM IG states that given SDTM (\code{--DTC}) variable,
 if only hours and minutes are ever collected, and seconds are imputed in
 (\verb{*DTM}) as 00, then it is not necessary to set (\verb{*TMF}) to \code{"S"}. A user can set this
 to \code{TRUE} so the \code{"S"} Flag is dropped from (\verb{*TMF}).

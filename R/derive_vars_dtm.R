@@ -291,7 +291,7 @@ derive_vars_dtm <- function(dataset,
 #'
 #' Convert a date character vector (usually `--DTC`) into a Date vector (usually `*DTM`).
 #'
-#' @param dtc The `'--DTC'` date to convert.
+#' @param dtc The `--DTC` date to convert.
 #'
 #' @permitted [date_chr_vector]
 #'
@@ -341,12 +341,12 @@ convert_dtc_to_dtm <- function(dtc,
   ymd_hms(imputed_dtc)
 }
 
-#' Impute Partial Date(-time) Portion of a `'--DTC'` Variable
+#' Impute Partial Date(-time) Portion of a `--DTC` Variable
 #'
-#' Imputation partial date/time portion of a `'--DTC'` variable. based on user
+#' Imputation partial date/time portion of a `--DTC` variable. based on user
 #' input.
 #'
-#' @param dtc The `'--DTC'` date to impute
+#' @param dtc The `--DTC` date to impute
 #'
 #'   A character date is expected in a format like `yyyy-mm-dd` or
 #'   `yyyy-mm-ddThh:mm:ss`. Trailing components can be omitted and `-` is a
@@ -703,7 +703,7 @@ restrict_imputed_dtc_dtm <- function(dtc,
 #' Derive the time imputation flag (`*TMF`) comparing a date character vector
 #' (`--DTC`) with a Datetime vector (`*DTM`).
 #'
-#' @param dtc The date character vector (`'--DTC'`).
+#' @param dtc The date character vector (`--DTC`).
 #'
 #'   A character date is expected in a format like `yyyy-mm-ddThh:mm:ss` (partial or complete).
 #'
@@ -711,7 +711,7 @@ restrict_imputed_dtc_dtm <- function(dtc,
 #'
 #'   A datetime object is expected.
 #'
-#' @param ignore_seconds_flag  ADaM IG states that given SDTM (`'--DTC'`) variable,
+#' @param ignore_seconds_flag  ADaM IG states that given SDTM (`--DTC`) variable,
 #' if only hours and minutes are ever collected, and seconds are imputed in
 #' (`*DTM`) as 00, then it is not necessary to set (`*TMF`) to `"S"`. A user can set this
 #' to `TRUE` so the `"S"` Flag is dropped from (`*TMF`).

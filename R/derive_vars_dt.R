@@ -320,11 +320,11 @@ convert_dtc_to_dt <- function(dtc,
   ymd(imputed_dtc)
 }
 
-#' Impute Partial Date Portion of a `'--DTC'` Variable
+#' Impute Partial Date Portion of a `--DTC` Variable
 #'
-#' Imputation partial date portion of a `'--DTC'` variable based on user input.
+#' Imputation partial date portion of a `--DTC` variable based on user input.
 #'
-#' @param dtc The `'--DTC'` date to impute
+#' @param dtc The `--DTC` date to impute
 #'
 #'   A character date is expected in a format like `yyyy-mm-dd` or
 #'   `yyyy-mm-ddThh:mm:ss`. Trailing components can be omitted and `-` is a
@@ -642,7 +642,7 @@ restrict_imputed_dtc_dt <- function(dtc,
 #' Derive the date imputation flag (`*DTF`) comparing a date character vector
 #' (`--DTC`) with a Date vector (`*DT`).
 #'
-#' @param dtc The date character vector (`'--DTC'`).
+#' @param dtc The date character vector (`--DTC`).
 #'
 #'   A character date is expected in a format like `yyyy-mm-ddThh:mm:ss` (partial or complete).
 #'
@@ -652,7 +652,7 @@ restrict_imputed_dtc_dt <- function(dtc,
 #'
 #' @details Usually this computation function can not be used with `%>%`.
 #'
-#' @return The date imputation flag (`*DTF`) (character value of `'D'`, `'M'` , `'Y'` or `NA`)
+#' @return The date imputation flag (`*DTF`) (character value of `"D"`, `"M"` , `"Y"` or `NA`)
 #'
 #'
 #' @family com_date_time

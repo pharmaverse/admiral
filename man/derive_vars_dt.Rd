@@ -37,7 +37,7 @@ the specified prefix and for the date imputation flag (\verb{*DTF}), i.e., for
 \item{Default value}{none}
 }}
 
-\item{dtc}{The \code{'--DTC'} date to impute
+\item{dtc}{The \code{--DTC} date to impute
 
 A character date is expected in a format like \code{yyyy-mm-dd} or
 \code{yyyy-mm-ddThh:mm:ss}. Trailing components can be omitted and \code{-} is a

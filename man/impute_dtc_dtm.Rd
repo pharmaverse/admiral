@@ -2,7 +2,7 @@
 % Please edit documentation in R/derive_vars_dtm.R
 \name{impute_dtc_dtm}
 \alias{impute_dtc_dtm}
-\title{Impute Partial Date(-time) Portion of a \code{'--DTC'} Variable}
+\title{Impute Partial Date(-time) Portion of a \code{--DTC} Variable}
 \usage{
 impute_dtc_dtm(
   dtc,
@@ -15,7 +15,7 @@ impute_dtc_dtm(
 )
 }
 \arguments{
-\item{dtc}{The \code{'--DTC'} date to impute
+\item{dtc}{The \code{--DTC} date to impute
 
 A character date is expected in a format like \code{yyyy-mm-dd} or
 \code{yyyy-mm-ddThh:mm:ss}. Trailing components can be omitted and \code{-} is a
@@ -158,7 +158,7 @@ For example \code{"2019---07"} would return \verb{"2019-06-07} if \code{preserve
 A character vector
 }
 \description{
-Imputation partial date/time portion of a \code{'--DTC'} variable. based on user
+Imputation partial date/time portion of a \code{--DTC} variable. based on user
 input.
 }
 \details{
