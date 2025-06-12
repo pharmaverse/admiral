@@ -646,6 +646,9 @@ restrict_imputed_dtc_dtm <- function(dtc,
 #' (`'--DTM'`) as 00, then it is not necessary to set (`'--TMF'`) to `'S'`. A user can set this
 #' to `TRUE` so the `'S'` Flag is dropped from (`'--TMF'`).
 #'
+#' Please note that the default value of `ignore_seconds_flag` will change to `TRUE` in
+#' admiral 1.4.0.
+#'
 #' @permitted A logical value
 #'
 #' @details Usually this computation function can not be used with `%>%`.
