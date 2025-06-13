@@ -539,7 +539,7 @@ From SOC = "Investigations" there are 21 CTCAE v5.0 Terms:
   
 Note: These are the same terms identified for NCI-CTCAEv4.
 
-From the SOC =  "Metabolism and nutrition disorders" there are 12 CTCAE v5.0 Terms:
+From the SOC =  "Metabolism and nutrition disorders" there are 14 CTCAE v5.0 Terms:
 
   + Acidosis
   + Alkalosis
