@@ -381,7 +381,7 @@ From SOC = "Investigations" there are 21 CTCAE v4.0 Terms:
   + Serum amylase increased
   + White blood cell decreased
 
-From the SOC =  "Metabolism and nutrition disorders" there are 14 CTCAE v4.0 Terms:
+From the SOC =  "Metabolism and nutrition disorders" there are 16 CTCAE v4.0 Terms:
 
   + Acidosis
   + Alkalosis
