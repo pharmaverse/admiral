@@ -18,7 +18,7 @@
 #'
 #'   For each group defined by `by_vars` those observations from `dataset_ref`
 #'   are added to the output dataset which do not have a corresponding observation
-#'   in the input dataset or for which `analysis_var` is NA for the corresponding observation
+#'   in the input dataset or for which `analysis_var` is `NA` for the corresponding observation
 #'   in the input dataset.
 #'
 #'   `r roxygen_param_by_vars()`
@@ -77,6 +77,10 @@
 #'   previous observation in the input dataset (when sorted by `order`) and
 #'   `DTYPE` is set to "LOCF".
 #'
+#'   The `imputation` argument decides whether to update the existing observation when
+#'   `analysis_var` is `NA` ("update" and "update_add"), or to add a new observation from
+#'   `dataset_ref` instead ("add").
+#'
 #' @return The input dataset with the new "LOCF" observations added for each
 #' `by_vars`. Note, a variable will only be populated in the new parameter rows
 #' if it is specified in `by_vars`.
@@ -92,14 +96,14 @@
 #' library(tibble)
 #'
 #' advs <- tribble(
-#'   ~STUDYID,  ~USUBJID,      ~PARAMCD, ~PARAMN, ~AVAL, ~AVISITN, ~AVISIT,
-#'   "CDISC01", "01-701-1015", "PULSE",        1,    65,        0, "BASELINE",
-#'   "CDISC01", "01-701-1015", "DIABP",        2,    79,        0, "BASELINE",
-#'   "CDISC01", "01-701-1015", "DIABP",        2,    80,        2, "WEEK 2",
-#'   "CDISC01", "01-701-1015", "DIABP",        2,    NA,        4, "WEEK 4",
-#'   "CDISC01", "01-701-1015", "DIABP",        2,    NA,        6, "WEEK 6",
-#'   "CDISC01", "01-701-1015", "SYSBP",        3,   130,        0, "BASELINE",
-#'   "CDISC01", "01-701-1015", "SYSBP",        3,   132,        2, "WEEK 2"
+#'   ~STUDYID,  ~USUBJID,      ~VSSEQ, ~PARAMCD, ~PARAMN, ~AVAL, ~AVISITN, ~AVISIT,
+#'   "CDISC01", "01-701-1015",      1, "PULSE",        1,    65,        0, "BASELINE",
+#'   "CDISC01", "01-701-1015",      2, "DIABP",        2,    79,        0, "BASELINE",
+#'   "CDISC01", "01-701-1015",      3, "DIABP",        2,    80,        2, "WEEK 2",
+#'   "CDISC01", "01-701-1015",      4, "DIABP",        2,    NA,        4, "WEEK 4",
+#'   "CDISC01", "01-701-1015",      5, "DIABP",        2,    NA,        6, "WEEK 6",
+#'   "CDISC01", "01-701-1015",      6, "SYSBP",        3,   130,        0, "BASELINE",
+#'   "CDISC01", "01-701-1015",      7, "SYSBP",        3,   132,        2, "WEEK 2"
 #' )
 #'
 #' # A dataset with all the combinations of PARAMCD, PARAM, AVISIT, AVISITN, ...
@@ -139,7 +143,6 @@
 #'   by_vars = exprs(STUDYID, USUBJID, PARAMCD),
 #'   imputation = "update",
 #'   order = exprs(AVISITN, AVISIT),
-#'   keep_vars = exprs(PARAMN)
 #' ) |>
 #'   arrange(USUBJID, PARAMCD, AVISIT)
 #'
@@ -162,7 +165,7 @@ derive_locf_records <- function(dataset,
                                 imputation = "add",
                                 order,
                                 keep_vars = NULL) {
-  #### Input Checking ####
+  # Input Checking #
   analysis_var <- assert_symbol(enexpr(analysis_var))
 
   # Check if input parameters is a valid list of variables
@@ -195,8 +198,7 @@ derive_locf_records <- function(dataset,
   }
 
 
-  #### Prepping 'dataset_ref' ####
-
+  # Prepping 'dataset_ref' #
   # Get the IDs from input dataset for which the expected observations are to be added
   ids <- dataset %>%
     select(!!!setdiff(by_vars, chr2vars(colnames(dataset_ref)))) %>%
@@ -207,20 +209,15 @@ derive_locf_records <- function(dataset,
 
 
 
-  ##### Add LOCF records ####
-
-
-  # Get the variable names from the expected observation dataset
-  exp_obs_vars <- exp_obsv %>%
-    colnames()
-
+  # Add LOCF records #
   # Get the variable names to join by
   exp_obs_by_vars <- as.character(union(by_vars, id_vars_ref))
 
+  tmp_missing_avar <- get_new_tmp_var(exp_obsv, prefix = "tmp_missing_avar")
 
   # Flag the original missing analysis_var records
   dataset <- dataset %>%
-    mutate(missing_avar = if_else(is.na(!!analysis_var), "missing", NA_character_))
+    mutate(!!tmp_missing_avar := if_else(is.na(!!analysis_var), "missing", NA_character_))
 
 
   # Get unique combination of visits/timepoints per parameter per subject
@@ -230,15 +227,14 @@ derive_locf_records <- function(dataset,
     select(all_of(exp_obs_by_vars)) %>%
     distinct()
 
-
   tmp_dtype <- get_new_tmp_var(exp_obsv, prefix = "tmp_dtype")
-
+  tmp_new_records <- get_new_tmp_var(exp_obsv, prefix = "tmp_new_records")
 
   # Get the missing analysis_var (e.g., AVAL) records
   if (imputation %in% c("add", "update_add")) {
     aval_missing <- dataset %>%
       filter(is.na(!!analysis_var)) %>%
-      select(-missing_avar)
+      remove_tmp_vars()
   } else {
     aval_missing <- NULL
   }
@@ -247,18 +243,18 @@ derive_locf_records <- function(dataset,
     data_fill <- dataset
 
     # Get all the expected observations that are to be added to the input dataset
-    advs_exp_obsv <- exp_obsv %>%
-      anti_join(dataset, by = c(exp_obs_by_vars)) %>%
-      mutate(new_records = "new")
+    exp_obsv_to_add <- exp_obsv %>%
+      anti_join(dataset, by = exp_obs_by_vars) %>%
+      mutate(!!tmp_new_records := "new")
   } else {
     # Get the records with missing analysis_var (e.g., AVAL) to impute
     data_fill <- dataset %>%
       filter(!is.na(!!analysis_var))
 
     # Get all the expected observations that are to be added to the input dataset
-    advs_exp_obsv <- exp_obsv %>%
-      anti_join(advs_unique_original, by = c(exp_obs_by_vars)) %>%
-      mutate(new_records = "new")
+    exp_obsv_to_add <- exp_obsv %>%
+      anti_join(advs_unique_original, by = exp_obs_by_vars) %>%
+      mutate(!!tmp_new_records := "new")
   }
 
   # Add the expected observations to the input dataset
@@ -266,8 +262,7 @@ derive_locf_records <- function(dataset,
   # Use fill() to fill the 'analysis_var' from the previous observation for the newly
   # added records
 
-  aval_locf <- data_fill %>%
-    full_join(advs_exp_obsv, by = c(exp_obs_vars)) %>%
+  aval_locf <- bind_rows(data_fill, exp_obsv_to_add) %>%
     mutate(!!tmp_dtype := if_else(is.na(!!analysis_var), "LOCF", NA_character_))
 
   if ("DTYPE" %in% colnames(aval_locf)) {
@@ -283,8 +278,8 @@ derive_locf_records <- function(dataset,
     group_by(!!!by_vars) %>%
     fill(!!analysis_var, !!!keep_vars) %>%
     ungroup() %>%
-    filter(!(!is.na(missing_avar) & is.na(new_records) & is.na(DTYPE))) %>%
-    select(-missing_avar, -new_records)
+    filter(!(!is.na(!!tmp_missing_avar) & is.na(!!tmp_new_records) & is.na(DTYPE))) %>%
+    remove_tmp_vars()
 
 
   # When imputation = 'add',  keep all variables other than analysis_var, by_vars,
@@ -301,12 +296,10 @@ derive_locf_records <- function(dataset,
 
     aval_locf <- locf %>%
       mutate(across(
-        .cols = -as.character(c(c(analysis_var, by_vars, order, id_vars_ref, keep_vars), "DTYPE")),
+        .cols = -as.character(c(analysis_var, by_vars, order, id_vars_ref, keep_vars, "DTYPE")),
         .fns = ~ vector(typeof(.), 1)[NA]
       )) %>%
       bind_rows(non_locf)
-  } else if (imputation %in% c("update", "update_add")) {
-    aval_locf <- aval_locf
   }
 
   # Output dataset:

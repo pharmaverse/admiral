@@ -37,7 +37,7 @@ Data frame with all the combinations of \code{PARAMCD}, \code{PARAM}, \code{AVIS
 
 For each group defined by \code{by_vars} those observations from \code{dataset_ref}
 are added to the output dataset which do not have a corresponding observation
-in the input dataset or for which \code{analysis_var} is NA for the corresponding observation
+in the input dataset or for which \code{analysis_var} is \code{NA} for the corresponding observation
 in the input dataset.
 
 \describe{
@@ -118,6 +118,10 @@ the output dataset
 For the new observations, \code{analysis_var} is set to the non-missing \code{analysis_var} of the
 previous observation in the input dataset (when sorted by \code{order}) and
 \code{DTYPE} is set to "LOCF".
+
+The \code{imputation} argument decides whether to update the existing observation when
+\code{analysis_var} is \code{NA} ("update" and "update_add"), or to add a new observation from
+\code{dataset_ref} instead ("add").
 }
 }
 \examples{
@@ -126,14 +130,14 @@ library(dplyr)
 library(tibble)
 
 advs <- tribble(
-  ~STUDYID,  ~USUBJID,      ~PARAMCD, ~PARAMN, ~AVAL, ~AVISITN, ~AVISIT,
-  "CDISC01", "01-701-1015", "PULSE",        1,    65,        0, "BASELINE",
-  "CDISC01", "01-701-1015", "DIABP",        2,    79,        0, "BASELINE",
-  "CDISC01", "01-701-1015", "DIABP",        2,    80,        2, "WEEK 2",
-  "CDISC01", "01-701-1015", "DIABP",        2,    NA,        4, "WEEK 4",
-  "CDISC01", "01-701-1015", "DIABP",        2,    NA,        6, "WEEK 6",
-  "CDISC01", "01-701-1015", "SYSBP",        3,   130,        0, "BASELINE",
-  "CDISC01", "01-701-1015", "SYSBP",        3,   132,        2, "WEEK 2"
+  ~STUDYID,  ~USUBJID,      ~VSSEQ, ~PARAMCD, ~PARAMN, ~AVAL, ~AVISITN, ~AVISIT,
+  "CDISC01", "01-701-1015",      1, "PULSE",        1,    65,        0, "BASELINE",
+  "CDISC01", "01-701-1015",      2, "DIABP",        2,    79,        0, "BASELINE",
+  "CDISC01", "01-701-1015",      3, "DIABP",        2,    80,        2, "WEEK 2",
+  "CDISC01", "01-701-1015",      4, "DIABP",        2,    NA,        4, "WEEK 4",
+  "CDISC01", "01-701-1015",      5, "DIABP",        2,    NA,        6, "WEEK 6",
+  "CDISC01", "01-701-1015",      6, "SYSBP",        3,   130,        0, "BASELINE",
+  "CDISC01", "01-701-1015",      7, "SYSBP",        3,   132,        2, "WEEK 2"
 )
 
 # A dataset with all the combinations of PARAMCD, PARAM, AVISIT, AVISITN, ...
@@ -173,7 +177,6 @@ derive_locf_records(
   by_vars = exprs(STUDYID, USUBJID, PARAMCD),
   imputation = "update",
   order = exprs(AVISITN, AVISIT),
-  keep_vars = exprs(PARAMN)
 ) |>
   arrange(USUBJID, PARAMCD, AVISIT)
 
