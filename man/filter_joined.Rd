@@ -313,13 +313,13 @@ Utilities for Filtering Observations:
 \subsection{Filter records considering other records (\code{filter_join}, \code{join_vars})}{
 
 In this example, the input dataset should be restricted to records with
-a duration longer than 30 and after a COVID AE (\code{ACOVFL == "Y"}) or up to
-seven days before a COVID AE. The condition for restricting the records is
-specified by the \code{filter_join} argument. Variables from the other records
-are referenced by variable names with the suffix \code{.join}. These variables
-have to be specified for the \code{join_vars} argument. As records before \emph{and}
-after the current record should be considered, \code{join_type = "all"} is
-specified.
+a duration longer than 30 and where a COVID AE (\code{ACOVFL == "Y"}) occurred
+before or up to seven days after the record. The condition for restricting
+the records is specified by the \code{filter_join} argument. Variables from the
+other records are referenced by variable names with the suffix \code{.join}.
+These variables have to be specified for the \code{join_vars} argument. As
+records before \emph{and} after the current record should be considered,
+\code{join_type = "all"} is specified.
 
 \if{html}{\out{<div class="sourceCode r">}}\preformatted{library(tibble)
 
@@ -343,7 +343,7 @@ filter_joined(
   by_vars = exprs(USUBJID),
   join_vars = exprs(ACOVFL, ADY),
   join_type = "all",
-  filter_join = ADURN > 30 & ACOVFL.join == "Y" & ADY >= ADY.join - 7
+  filter_join = ADURN > 30 & ACOVFL.join == "Y" & ADY.join <= ADY + 7
 )
 #> # A tibble: 2 × 4
 #>   USUBJID   ADY ACOVFL ADURN

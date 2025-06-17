@@ -347,13 +347,14 @@ General Derivation Functions for all ADaMs that returns variable appended to dat
 \section{Examples}{
 \subsection{Flag records considering other records (\code{filter_join}, \code{join_vars})}{
 
-In this example, records with a duration longer than 30 and after a
-COVID AE (\code{ACOVFL == "Y"}) or up to seven days before a COVID AE should be
-flagged. The condition for flagging the records is specified by the
-\code{filter_join} argument. Variables from the other records are referenced by
-variable names with the suffix \code{.join}. These variables have to be
-specified for the \code{join_vars} argument. As records before \emph{and} after the
-current record should be considered, \code{join_type = "all"} is specified.
+In this example, records with a duration longer than 30 and where a
+COVID AE (\code{ACOVFL == "Y"}) occurred before or up to seven days after the
+record should be flagged. The condition for flagging the records is
+specified by the \code{filter_join} argument. Variables from the other records
+are referenced by variable names with the suffix \code{.join}. These variables
+have to be specified for the \code{join_vars} argument. As records before \emph{and}
+after the current record should be considered, \code{join_type = "all"} is
+specified.
 
 \if{html}{\out{<div class="sourceCode r">}}\preformatted{library(tibble)
 
@@ -378,7 +379,7 @@ derive_var_joined_exist_flag(
   by_vars = exprs(USUBJID),
   join_vars = exprs(ACOVFL, ADY),
   join_type = "all",
-  filter_join = ADURN > 30 & ACOVFL.join == "Y" & ADY >= ADY.join - 7
+  filter_join = ADURN > 30 & ACOVFL.join == "Y" & ADY.join <= ADY + 7
 )
 #> # A tibble: 10 × 5
 #>    USUBJID   ADY ACOVFL ADURN ALCOVFL

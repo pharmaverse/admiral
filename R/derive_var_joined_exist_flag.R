@@ -239,13 +239,14 @@
 #'
 #' @examplesx
 #' @caption Flag records considering other records (`filter_join`, `join_vars`)
-#' @info In this example, records with a duration longer than 30 and after a
-#'   COVID AE (`ACOVFL == "Y"`) or up to seven days before a COVID AE should be
-#'   flagged. The condition for flagging the records is specified by the
-#'   `filter_join` argument. Variables from the other records are referenced by
-#'   variable names with the suffix `.join`. These variables have to be
-#'   specified for the `join_vars` argument. As records before _and_ after the
-#'   current record should be considered, `join_type = "all"` is specified.
+#' @info In this example, records with a duration longer than 30 and where a
+#'   COVID AE (`ACOVFL == "Y"`) occurred before or up to seven days after the
+#'   record should be flagged. The condition for flagging the records is
+#'   specified by the `filter_join` argument. Variables from the other records
+#'   are referenced by variable names with the suffix `.join`. These variables
+#'   have to be specified for the `join_vars` argument. As records before _and_
+#'   after the current record should be considered, `join_type = "all"` is
+#'   specified.
 #' @code
 #' library(tibble)
 #'
@@ -270,7 +271,7 @@
 #'   by_vars = exprs(USUBJID),
 #'   join_vars = exprs(ACOVFL, ADY),
 #'   join_type = "all",
-#'   filter_join = ADURN > 30 & ACOVFL.join == "Y" & ADY >= ADY.join - 7
+#'   filter_join = ADURN > 30 & ACOVFL.join == "Y" & ADY.join <= ADY + 7
 #' )
 #'
 #' @caption Considering only records after the current one (`join_type =
