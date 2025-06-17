@@ -209,6 +209,13 @@ derive_vars_dtm <- function(dataset,
                             max_dates = NULL,
                             preserve = FALSE,
                             ignore_seconds_flag = FALSE) {
+  # Display the argument change message only once during the session
+  if (!admiral_environment$message_displayed) {
+    cli_inform("The default value of {.arg ignore_seconds_flag}
+              will change to {.val TRUE} in admiral 1.4.0.")
+    admiral_environment$message_displayed <- TRUE
+  }
+
   # check and quote arguments
   dtc <- assert_symbol(enexpr(dtc))
   assert_data_frame(dataset, required_vars = exprs(!!dtc))
@@ -715,6 +722,9 @@ restrict_imputed_dtc_dtm <- function(dtc,
 #' if only hours and minutes are ever collected, and seconds are imputed in
 #' (`*DTM`) as 00, then it is not necessary to set (`*TMF`) to `"S"`. A user can set this
 #' to `TRUE` so the `"S"` Flag is dropped from (`*TMF`).
+#'
+#' Please note that the default value of `ignore_seconds_flag` will change to `TRUE` in
+#' admiral 1.4.0.
 #'
 #' @permitted A logical value
 #'
