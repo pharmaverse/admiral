@@ -71,7 +71,7 @@
 #' by_vars parameter) those observations from `dataset_ref` are added to
 #' the output dataset
 #' - which do not have a corresponding observation in the input dataset or
-#' - for which `analysis_var` is NA for the corresponding observation in the input dataset.
+#' - for which `analysis_var` is `NA` for the corresponding observation in the input dataset.
 #'
 #'   For the new observations, `analysis_var` is set to the non-missing `analysis_var` of the
 #'   previous observation in the input dataset (when sorted by `order`) and
@@ -82,8 +82,7 @@
 #'   `dataset_ref` instead ("add").
 #'
 #' @return The input dataset with the new "LOCF" observations added for each
-#' `by_vars`. Note, a variable will only be populated in the new parameter rows
-#' if it is specified in `by_vars`.
+#' `by_vars`, based on the value passed to the `imputation` argument.
 #'
 #' @keywords der_prm_bds_findings
 #' @family der_prm_bds_findings

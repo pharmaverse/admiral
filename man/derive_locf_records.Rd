@@ -99,8 +99,7 @@ Keep variables that need carrying the last observation forward other than \code{
 }
 \value{
 The input dataset with the new "LOCF" observations added for each
-\code{by_vars}. Note, a variable will only be populated in the new parameter rows
-if it is specified in \code{by_vars}.
+\code{by_vars}, based on the value passed to the \code{imputation} argument.
 }
 \description{
 Adds LOCF records as new observations for each 'by group' when the dataset
@@ -113,7 +112,7 @@ by_vars parameter) those observations from \code{dataset_ref} are added to
 the output dataset
 \itemize{
 \item which do not have a corresponding observation in the input dataset or
-\item for which \code{analysis_var} is NA for the corresponding observation in the input dataset.
+\item for which \code{analysis_var} is \code{NA} for the corresponding observation in the input dataset.
 
 For the new observations, \code{analysis_var} is set to the non-missing \code{analysis_var} of the
 previous observation in the input dataset (when sorted by \code{order}) and
