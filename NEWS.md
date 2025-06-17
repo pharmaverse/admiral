@@ -36,6 +36,9 @@ the derivation is called for all subsets. (#2645)
 
 - `derive_var_atoxgr_dir()` updated to handle more than one unit in grading metadata. Related to providing US (Conventional) units for grading (#2557).
 
+- NCICTCAEv4 and NCICTCAEv5 grading criteria (`atoxgr_criteria_ctcv4`, `atoxgr_criteria_ctcv4_uscv`, `atoxgr_criteria_ctcv5`, `atoxgr_criteria_ctcv5_uscv`), 
+updated to add terms `"Acidosis"` and `"Alkalosis"` (#2768).
+
 - The background checks in `derive_summary_records()` were too restrictive: `by_vars` were expected in `dataset` although the code did not require it. This requirement has therefore been dropped (#2686).
 
 - The functions `derive_summary_records()` and `derive_param_exist_flag()` 
@@ -62,6 +65,10 @@ is now optional unless `join_type = "after"`, `join_type = "before"`,
 (#2729)
 
 ## Breaking Changes
+
+- `derive_vars_dtm()` issues a message alerting users to a coming change in 
+`admiral 1.4.0` where the default behavior of `ignore_seconds_flag` will be changed from 
+`FALSE` to `TRUE`. (#2661)
 
 - Lab grading metadata `atoxgr_criteria_ctcv4()`, `atoxgr_criteria_ctcv5()` and `atoxgr_criteria_daids()` variable `SI_UNIT_CHECK` renamed to `UNIT_CHECK`. (#2557)
 
@@ -126,6 +133,8 @@ read (#2623) and updated to include new metadata for grading using US (Conventio
 from `dataset_ref` for the new observations. (#2664)
 
 - The 'Assign `PARAMCD`, `PARAM`, `PARAMN`, `PARCAT1`' section of the "Creating a BDS Finding ADaM" vignette was updated to clarify `PARAM` to `PARCAT1` mapping. (#2547)
+
+- The package documentation for (1) all CRAN-released versions starting from `{admiral}` 1.0.0 up until the current version and (2) the latest development version (listed under "main") are all now accessible using the "Versions" selector in the toolbar. (#2766)
 
 ## Various
 
