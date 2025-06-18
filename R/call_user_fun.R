@@ -30,7 +30,7 @@ call_user_fun <- function(call) {
     when = "1.3.0",
     what = "call_user_fun()",
     details = c(
-      "`call_user_fun()` is no longer supported and no replacement provided; ",
+      "`call_user_fun()` is no longer supported and no replacement is provided; ",
       "The original code for this function is here: ",
       "https://github.com/pharmaverse/admiral/blob/v1.2.0/R/call_user_fun.R#L26-L39"
     )

@@ -41,8 +41,6 @@ updated to add terms `"Acidosis"` and `"Alkalosis"` (#2768).
 
 - The background checks in `derive_summary_records()` were too restrictive: `by_vars` were expected in `dataset` although the code did not require it. This requirement has therefore been dropped (#2686).
 
-- The function `call_user_fun()` has been deprecated, Phase 1 (message). There will be no replacement;  for original code, please see::  "https://github.com/pharmaverse/admiral/blob/v1.2.0/R/call_user_fun.R#L26-L39"
-
 - The functions `derive_summary_records()` and `derive_param_exist_flag()` 
 were updated to fix an issue where if a variable was in both `dataset_add` and `dataset_ref`, it was 
 added to the new records even if it was not in `by_vars`. (#2664)
@@ -86,7 +84,7 @@ records. (#2683)
 
     **Phase 1 (message)**
 	
-	- `call_user_fun()` has been deprecated and will have no replacement.  (For original code, please see: "https://github.com/pharmaverse/admiral/blob/v1.2.0/R/call_user_fun.R#L26-L39") (#2678)
+	- `call_user_fun()` is deprecated and will have no replacement. (#2678)
   
     **Phase 2 (warning)**
     
