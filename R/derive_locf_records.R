@@ -78,8 +78,8 @@
 #'   `DTYPE` is set to "LOCF".
 #'
 #'   The `imputation` argument decides whether to update the existing observation when
-#'   `analysis_var` is `NA` ("update" and "update_add"), or to add a new observation from
-#'   `dataset_ref` instead ("add").
+#'   `analysis_var` is `NA` (`"update"` and `"update_add"`), or to add a new observation from
+#'   `dataset_ref` instead (`"add"`).
 #'
 #' @return The input dataset with the new "LOCF" observations added for each
 #' `by_vars`, based on the value passed to the `imputation` argument.
