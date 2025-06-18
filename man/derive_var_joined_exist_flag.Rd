@@ -8,7 +8,7 @@ derive_var_joined_exist_flag(
   dataset,
   dataset_add,
   by_vars,
-  order,
+  order = NULL,
   new_var,
   tmp_obs_nr_var = NULL,
   join_vars,
@@ -54,13 +54,14 @@ dataset (\code{dataset}) with the additional dataset (\code{dataset_add}).
 
 \item{order}{Order
 
-The observations are ordered by the specified order.
+The observations are ordered by the specified order if \code{join_type = "after"}, \code{join_type = "before"}, \code{first_cond_lower}, \code{first_cond_upper},
+or \code{tmp_obs_nr_var} are specified.
 
 For handling of \code{NA}s in sorting variables see \href{../articles/generic.html#sort_order}{Sort Order}.
 
 \describe{
 \item{Permitted values}{list of variables created by \code{exprs()}, e.g., \code{exprs(USUBJID, VISIT)}}
-\item{Default value}{none}
+\item{Default value}{\code{NULL}}
 }}
 
 \item{new_var}{New variable
@@ -205,9 +206,9 @@ one "NE".
 
 \item{check_type}{Check uniqueness?
 
-If \code{"warning"} or \code{"error"} is specified, the specified message is issued
-if the observations of the input dataset are not unique with respect to the
-by variables and the order.
+If \code{"message"}, \code{"warning"}, or \code{"error"} is specified, the specified
+message is issued if the observations of the input dataset are not unique
+with respect to the by variables and the order.
 
 \describe{
 \item{Permitted values}{\code{"none"}, \code{"message"}, \code{"warning"}, \code{"error"}}
@@ -296,7 +297,7 @@ observation where \code{first_cond_upper} is fulfilled (the observation
 fulfilling the condition is included). If for an observation of the input
 dataset the condition is not fulfilled, the observation is removed.
 
-For an example see the last example in the "Examples" section.
+For examples see the "Examples" section.
 }
 
 \subsection{Step 4}{
@@ -308,7 +309,7 @@ and restricted to the observations fulfilling the condition specified by
 
 \subsection{Step 5}{
 
-The first observation of each group is selected
+The first observation of each group is selected.
 }
 
 \subsection{Step 6}{
@@ -323,11 +324,40 @@ the admiral option \code{save_memory} to \code{TRUE} (see \code{set_admiral_opti
 This reduces the memory consumption but increases the run-time.
 }
 }
-\examples{
-library(tibble)
+\seealso{
+\code{\link[=filter_joined]{filter_joined()}}, \code{\link[=derive_vars_joined]{derive_vars_joined()}}
 
-# flag observations with a duration longer than 30 and
-# at, after, or up to 7 days before a COVID AE (ACOVFL == "Y")
+General Derivation Functions for all ADaMs that returns variable appended to dataset:
+\code{\link{derive_var_extreme_flag}()},
+\code{\link{derive_var_merged_ef_msrc}()},
+\code{\link{derive_var_merged_exist_flag}()},
+\code{\link{derive_var_merged_summary}()},
+\code{\link{derive_var_obs_number}()},
+\code{\link{derive_var_relative_flag}()},
+\code{\link{derive_vars_cat}()},
+\code{\link{derive_vars_computed}()},
+\code{\link{derive_vars_joined}()},
+\code{\link{derive_vars_joined_summary}()},
+\code{\link{derive_vars_merged}()},
+\code{\link{derive_vars_merged_lookup}()},
+\code{\link{derive_vars_transposed}()}
+}
+\concept{der_gen}
+\keyword{der_gen}
+\section{Examples}{
+\subsection{Flag records considering other records (\code{filter_join}, \code{join_vars})}{
+
+In this example, records with a duration longer than 30 and where a
+COVID AE (\code{ACOVFL == "Y"}) occurred before or up to seven days after the
+record should be flagged. The condition for flagging the records is
+specified by the \code{filter_join} argument. Variables from the other records
+are referenced by variable names with the suffix \code{.join}. These variables
+have to be specified for the \code{join_vars} argument. As records before \emph{and}
+after the current record should be considered, \code{join_type = "all"} is
+specified.
+
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{library(tibble)
+
 adae <- tribble(
   ~USUBJID, ~ADY, ~ACOVFL, ~ADURN,
   "1",        10, "N",          1,
@@ -349,12 +379,33 @@ derive_var_joined_exist_flag(
   by_vars = exprs(USUBJID),
   join_vars = exprs(ACOVFL, ADY),
   join_type = "all",
-  order = exprs(ADY),
-  filter_join = ADURN > 30 & ACOVFL.join == "Y" & ADY >= ADY.join - 7
+  filter_join = ADURN > 30 & ACOVFL.join == "Y" & ADY.join <= ADY + 7
 )
+#> # A tibble: 10 × 5
+#>    USUBJID   ADY ACOVFL ADURN ALCOVFL
+#>    <chr>   <dbl> <chr>  <dbl> <chr>  
+#>  1 1          10 N          1 <NA>   
+#>  2 1          21 N         50 Y      
+#>  3 1          23 Y         14 <NA>   
+#>  4 1          32 N         31 Y      
+#>  5 1          42 N         20 <NA>   
+#>  6 2          11 Y         13 <NA>   
+#>  7 2          23 N          2 <NA>   
+#>  8 3          13 Y         12 <NA>   
+#>  9 4          14 N         32 <NA>   
+#> 10 4          21 N         41 <NA>   }\if{html}{\out{</div>}}}
+\subsection{Considering only records after the current one (\code{join_type = "after"}, \code{true_value}, \code{false_value})}{
 
-# flag observations with AVALC == "Y" and AVALC == "Y" at one subsequent visit
-data <- tribble(
+In this example, records with \code{AVALC == "Y"} and \code{AVALC == "Y"} at a
+subsequent visit should be flagged. \code{join_type = "after"} is specified to
+consider only records after the current one. Please note that the \code{order}
+argument must be specified, as otherwise it is not possible to determine
+which records are after the current record.
+
+Please note that a numeric flag is created here by specifying the
+\code{true_value} and the \code{false_value} argument.
+
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{data <- tribble(
   ~USUBJID, ~AVISITN, ~AVALC,
   "1",      1,        "Y",
   "1",      2,        "N",
@@ -371,16 +422,124 @@ derive_var_joined_exist_flag(
   data,
   dataset_add = data,
   by_vars = exprs(USUBJID),
-  new_var = CONFFL,
+  new_var = CONFFLN,
   join_vars = exprs(AVALC, AVISITN),
   join_type = "after",
   order = exprs(AVISITN),
-  filter_join = AVALC == "Y" & AVALC.join == "Y" & AVISITN < AVISITN.join
+  filter_join = AVALC == "Y" & AVALC.join == "Y",
+  true_value = 1,
+  false_value = 0
 )
+#> # A tibble: 9 × 4
+#>   USUBJID AVISITN AVALC CONFFLN
+#>   <chr>     <dbl> <chr>   <dbl>
+#> 1 1             1 Y           1
+#> 2 1             2 N           0
+#> 3 1             3 Y           0
+#> 4 1             4 N           0
+#> 5 2             1 Y           0
+#> 6 2             2 N           0
+#> 7 3             1 Y           0
+#> 8 4             1 N           0
+#> 9 4             2 N           0}\if{html}{\out{</div>}}}
+\subsection{Considering a range of records only (\code{first_cond_lower}, \code{first_cond_upper})}{
 
-# select observations with AVALC == "CR", AVALC == "CR" at a subsequent visit,
-# only "CR" or "NE" in between, and at most one "NE" in between
-data <- tribble(
+Consider the following data.
+
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{myd <- tribble(
+  ~subj, ~day, ~val,
+  "1",      1, "++",
+  "1",      2, "-",
+  "1",      3, "0",
+  "1",      4, "+",
+  "1",      5, "++",
+  "1",      6, "-",
+  "2",      1, "-",
+  "2",      2, "++",
+  "2",      3, "+",
+  "2",      4, "0",
+  "2",      5, "-",
+  "2",      6, "++"
+)}\if{html}{\out{</div>}}
+
+To flag \code{"0"} where all results from the first \code{"++"} before the \code{"0"}
+up to the \code{"0"} (excluding the \code{"0"}) are \code{"+"} or \code{"++"} the
+\code{first_cond_lower} argument and \code{join_type = "before"} are specified.
+
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{derive_var_joined_exist_flag(
+  myd,
+  dataset_add = myd,
+  by_vars = exprs(subj),
+  order = exprs(day),
+  new_var = flag,
+  join_vars = exprs(val),
+  join_type = "before",
+  first_cond_lower = val.join == "++",
+  filter_join = val == "0" & all(val.join \%in\% c("+", "++"))
+)
+#> # A tibble: 12 × 4
+#>    subj    day val   flag 
+#>    <chr> <dbl> <chr> <chr>
+#>  1 1         1 ++    <NA> 
+#>  2 1         2 -     <NA> 
+#>  3 1         3 0     <NA> 
+#>  4 1         4 +     <NA> 
+#>  5 1         5 ++    <NA> 
+#>  6 1         6 -     <NA> 
+#>  7 2         1 -     <NA> 
+#>  8 2         2 ++    <NA> 
+#>  9 2         3 +     <NA> 
+#> 10 2         4 0     Y    
+#> 11 2         5 -     <NA> 
+#> 12 2         6 ++    <NA> }\if{html}{\out{</div>}}
+
+To flag \code{"0"} where all results from the \code{"0"} (excluding the \code{"0"}) up
+to the first \code{"++"} after the \code{"0"} are \code{"+"} or \code{"++"} the
+\code{first_cond_upper} argument and \code{join_type = "after"} are specified.
+
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{derive_var_joined_exist_flag(
+  myd,
+  dataset_add = myd,
+  by_vars = exprs(subj),
+  order = exprs(day),
+  new_var = flag,
+  join_vars = exprs(val),
+  join_type = "after",
+  first_cond_upper = val.join == "++",
+  filter_join = val == "0" & all(val.join \%in\% c("+", "++"))
+)
+#> # A tibble: 12 × 4
+#>    subj    day val   flag 
+#>    <chr> <dbl> <chr> <chr>
+#>  1 1         1 ++    <NA> 
+#>  2 1         2 -     <NA> 
+#>  3 1         3 0     Y    
+#>  4 1         4 +     <NA> 
+#>  5 1         5 ++    <NA> 
+#>  6 1         6 -     <NA> 
+#>  7 2         1 -     <NA> 
+#>  8 2         2 ++    <NA> 
+#>  9 2         3 +     <NA> 
+#> 10 2         4 0     <NA> 
+#> 11 2         5 -     <NA> 
+#> 12 2         6 ++    <NA> }\if{html}{\out{</div>}}}
+\subsection{Considering only records up to a condition (\code{first_cond_upper})}{
+
+In this example from deriving confirmed response in oncology, the
+records with
+\itemize{
+\item \code{AVALC == "CR"},
+\item \code{AVALC == "CR"} at a subsequent visit,
+\item only \code{"CR"} or \code{"NE"} in between, and
+\item at most one \code{"NE"} in between
+}
+
+should be flagged. The other records to be considered are restricted to those
+up to the first occurrence of \code{"CR"} by specifying the \code{first_cond_upper}
+argument. The \code{count_vals()} function is used to count the \code{"NE"}s for the
+last condition.
+
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{data <- tribble(
   ~USUBJID, ~AVISITN, ~AVALC,
   "1",      1,        "PR",
   "1",      2,        "CR",
@@ -410,11 +569,43 @@ derive_var_joined_exist_flag(
   filter_join = AVALC == "CR" & all(AVALC.join \%in\% c("CR", "NE")) &
     count_vals(var = AVALC.join, val = "NE") <= 1
 )
+#> # A tibble: 14 × 4
+#>    USUBJID AVISITN AVALC CONFFL
+#>    <chr>     <dbl> <chr> <chr> 
+#>  1 1             1 PR    <NA>  
+#>  2 1             2 CR    Y     
+#>  3 1             3 NE    <NA>  
+#>  4 1             4 CR    <NA>  
+#>  5 1             5 NE    <NA>  
+#>  6 2             1 CR    <NA>  
+#>  7 2             2 PR    <NA>  
+#>  8 2             3 CR    <NA>  
+#>  9 3             1 CR    <NA>  
+#> 10 4             1 CR    <NA>  
+#> 11 4             2 NE    <NA>  
+#> 12 4             3 NE    <NA>  
+#> 13 4             4 CR    <NA>  
+#> 14 4             5 PR    <NA>  }\if{html}{\out{</div>}}}
+\subsection{Considering order of values (\code{min_cond()}, \code{max_cond()})}{
 
-# flag observations with AVALC == "PR", AVALC == "CR" or AVALC == "PR"
-# at a subsequent visit at least 20 days later, only "CR", "PR", or "NE"
-# in between, at most one "NE" in between, and "CR" is not followed by "PR"
-data <- tribble(
+In this example from deriving confirmed response in oncology, records
+with
+\itemize{
+\item \code{AVALC == "PR"},
+\item \code{AVALC == "CR"} or \code{AVALC == "PR"} at a subsequent visit at least 20 days later,
+\item only \code{"CR"}, \code{"PR"}, or \code{"NE"} in between,
+\item at most one \code{"NE"} in between, and
+\item \code{"CR"} is
+not followed by \code{"PR"}
+}
+
+should be flagged. The last condition is realized by using \code{min_cond()} and
+\code{max_cond()}, ensuring that the first occurrence of \code{"CR"} is after the last
+occurrence of \code{"PR"}. The second call to \code{count_vals()} in the condition is
+required to cover the case of no \code{"CR"}s (the \code{min_cond()} call returns \code{NA}
+then).
+
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{data <- tribble(
   ~USUBJID, ~ADY, ~AVALC,
   "1",         6, "PR",
   "1",        12, "CR",
@@ -450,9 +641,32 @@ derive_var_joined_exist_flag(
         count_vals(var = AVALC.join, val = "CR") == 0
     )
 )
+#> # A tibble: 14 × 4
+#>    USUBJID   ADY AVALC CONFFL
+#>    <chr>   <dbl> <chr> <chr> 
+#>  1 1           6 PR    <NA>  
+#>  2 1          12 CR    <NA>  
+#>  3 1          24 NE    <NA>  
+#>  4 1          32 CR    <NA>  
+#>  5 1          48 PR    <NA>  
+#>  6 2           3 PR    <NA>  
+#>  7 2          21 CR    <NA>  
+#>  8 2          33 PR    <NA>  
+#>  9 3          11 PR    <NA>  
+#> 10 4           7 PR    <NA>  
+#> 11 4          12 NE    <NA>  
+#> 12 4          24 NE    <NA>  
+#> 13 4          32 PR    Y     
+#> 14 4          55 PR    <NA>  }\if{html}{\out{</div>}}}
+\subsection{Considering the order of records (\code{tmp_obs_nr_var})}{
 
-# flag observations with CRIT1FL == "Y" at two consecutive visits or at the last visit
-data <- tribble(
+In this example, the records with \code{CRIT1FL == "Y"} at two consecutive
+visits or at the last visit should be flagged. A temporary order variable
+is created by specifying the \code{tmp_obs_nr_var} argument. Then it is used in
+\code{filter_join}. The temporary variable doesn't need to be specified for
+\code{join_vars}.
+
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{data <- tribble(
   ~USUBJID, ~AVISITN, ~CRIT1FL,
   "1",      1,        "Y",
   "1",      2,        "N",
@@ -478,62 +692,31 @@ derive_var_joined_exist_flag(
   filter_join = CRIT1FL == "Y" & CRIT1FL.join == "Y" &
     (tmp_obs_nr + 1 == tmp_obs_nr.join | tmp_obs_nr == max(tmp_obs_nr.join))
 )
+#> # A tibble: 10 × 4
+#>    USUBJID AVISITN CRIT1FL CONFFL
+#>    <chr>     <dbl> <chr>   <chr> 
+#>  1 1             1 Y       <NA>  
+#>  2 1             2 N       <NA>  
+#>  3 1             3 Y       <NA>  
+#>  4 1             5 N       <NA>  
+#>  5 2             1 Y       Y     
+#>  6 2             3 Y       <NA>  
+#>  7 2             5 N       <NA>  
+#>  8 3             1 Y       Y     
+#>  9 4             1 Y       <NA>  
+#> 10 4             2 N       <NA>  }\if{html}{\out{</div>}}}
+\subsection{Flag each dose which is lower than the previous dose
+(\code{tmp_obs_nr_var})}{
 
-# first_cond_lower and first_cond_upper argument
-myd <- tribble(
-  ~subj, ~day, ~val,
-  "1",      1, "++",
-  "1",      2, "-",
-  "1",      3, "0",
-  "1",      4, "+",
-  "1",      5, "++",
-  "1",      6, "-",
-  "2",      1, "-",
-  "2",      2, "++",
-  "2",      3, "+",
-  "2",      4, "0",
-  "2",      5, "-",
-  "2",      6, "++"
-)
-
-# flag "0" where all results from the first "++" before the "0" up to the "0"
-# (excluding the "0") are "+" or "++"
-derive_var_joined_exist_flag(
-  myd,
-  dataset_add = myd,
-  by_vars = exprs(subj),
-  order = exprs(day),
-  new_var = flag,
-  join_vars = exprs(val),
-  join_type = "before",
-  first_cond_lower = val.join == "++",
-  filter_join = val == "0" & all(val.join \%in\% c("+", "++"))
-)
-
-# flag "0" where all results from the "0" (excluding the "0") up to the first
-# "++" after the "0" are "+" or "++"
-derive_var_joined_exist_flag(
-  myd,
-  dataset_add = myd,
-  by_vars = exprs(subj),
-  order = exprs(day),
-  new_var = flag,
-  join_vars = exprs(val),
-  join_type = "after",
-  first_cond_upper = val.join == "++",
-  filter_join = val == "0" & all(val.join \%in\% c("+", "++"))
-)
-
-# flag each dose which is lower than the previous dose per subject
-ex <- tribble(
-  ~USUBJID, ~EXSTDTM,          ~EXDOSE,
-  "1",      "2024-01-01T08:00",      2,
-  "1",      "2024-01-02T08:00",      4,
-  "2",      "2024-01-01T08:30",      1,
-  "2",      "2024-01-02T08:30",      4,
-  "2",      "2024-01-03T08:30",      3,
-  "2",      "2024-01-04T08:30",      2,
-  "2",      "2024-01-05T08:30",      2
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{ex <- tribble(
+  ~USUBJID, ~EXSTDTM,           ~EXDOSE,
+  "1",      "2024-01-01T08:00",       2,
+  "1",      "2024-01-02T08:00",       4,
+  "2",      "2024-01-01T08:30",       1,
+  "2",      "2024-01-02T08:30",       4,
+  "2",      "2024-01-03T08:30",       3,
+  "2",      "2024-01-04T08:30",       2,
+  "2",      "2024-01-05T08:30",       2
 )
 
 derive_var_joined_exist_flag(
@@ -551,10 +734,24 @@ derive_var_joined_exist_flag(
     & EXDOSE < EXDOSE.join # Dose is lower than previous
   )
 )
+#> # A tibble: 7 × 4
+#>   USUBJID EXSTDTM          EXDOSE DOSREDFL
+#>   <chr>   <chr>             <dbl> <chr>   
+#> 1 1       2024-01-01T08:00      2 <NA>    
+#> 2 1       2024-01-02T08:00      4 <NA>    
+#> 3 2       2024-01-01T08:30      1 <NA>    
+#> 4 2       2024-01-02T08:30      4 <NA>    
+#> 5 2       2024-01-03T08:30      3 Y       
+#> 6 2       2024-01-04T08:30      2 Y       
+#> 7 2       2024-01-05T08:30      2 <NA>    }\if{html}{\out{</div>}}}
+\subsection{Derive definitive deterioration flag}{
 
-# derive definitive deterioration flag as any deterioration (CHGCAT1 = "Worsened")
-# by parameter that is not followed by a non-deterioration
-adqs <- tribble(
+In this example a definitive deterioration flag should be derived as
+any deterioration (\code{CHGCAT1 = "Worsened"}) by parameter that is not
+followed by a non-deterioration. Please note that \code{join_type = "after"}
+can't by used here, as otherwise the last record wouldn't be flagged.
+
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{adqs <- tribble(
   ~USUBJID, ~PARAMCD, ~ADY, ~CHGCAT1,
   "1",      "QS1",      10, "Improved",
   "1",      "QS1",      21, "Improved",
@@ -570,29 +767,100 @@ derive_var_joined_exist_flag(
   dataset_add = adqs,
   new_var = DDETERFL,
   by_vars = exprs(USUBJID, PARAMCD),
-  join_vars = exprs(CHGCAT1),
+  join_vars = exprs(CHGCAT1, ADY),
   join_type = "all",
-  order = exprs(ADY),
   filter_join = all(CHGCAT1.join == "Worsened" | ADY > ADY.join)
 )
-}
-\seealso{
-\code{\link[=filter_joined]{filter_joined()}}, \code{\link[=derive_vars_joined]{derive_vars_joined()}}
+#> # A tibble: 7 × 5
+#>   USUBJID PARAMCD   ADY CHGCAT1  DDETERFL
+#>   <chr>   <chr>   <dbl> <chr>    <chr>   
+#> 1 1       QS1        10 Improved <NA>    
+#> 2 1       QS1        21 Improved <NA>    
+#> 3 1       QS1        23 Improved <NA>    
+#> 4 1       QS2        32 Worsened <NA>    
+#> 5 1       QS2        42 Improved <NA>    
+#> 6 2       QS1        11 Worsened Y       
+#> 7 2       QS1        24 Worsened Y       }\if{html}{\out{</div>}}}
+\subsection{Handling duplicates (\code{check_type})}{
 
-General Derivation Functions for all ADaMs that returns variable appended to dataset:
-\code{\link{derive_var_extreme_flag}()},
-\code{\link{derive_var_merged_ef_msrc}()},
-\code{\link{derive_var_merged_exist_flag}()},
-\code{\link{derive_var_merged_summary}()},
-\code{\link{derive_var_obs_number}()},
-\code{\link{derive_var_relative_flag}()},
-\code{\link{derive_vars_cat}()},
-\code{\link{derive_vars_computed}()},
-\code{\link{derive_vars_joined}()},
-\code{\link{derive_vars_joined_summary}()},
-\code{\link{derive_vars_merged}()},
-\code{\link{derive_vars_merged_lookup}()},
-\code{\link{derive_vars_transposed}()}
-}
-\concept{der_gen}
-\keyword{der_gen}
+If the \code{order} argument is used, it is checked if the records are
+unique with respect to \code{by_vars} and \code{order}. Consider for example the
+derivation of \code{CONFFL} which flags records with \code{AVALC == "Y"} which are
+confirmed at a subsequent visit.
+
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{data <- tribble(
+  ~USUBJID, ~AVISITN, ~ADY, ~AVALC,
+  "1",      1,           1, "Y",
+  "1",      2,           8, "N",
+  "1",      3,          15, "Y",
+  "1",      4,          22, "N",
+  "2",      1,           1, "Y",
+  "2",      2,           8, "Y",
+  "2",      2,          10, "Y"
+)
+
+derive_var_joined_exist_flag(
+  data,
+  dataset_add = data,
+  by_vars = exprs(USUBJID),
+  new_var = CONFFL,
+  join_vars = exprs(AVALC, AVISITN),
+  join_type = "after",
+  order = exprs(AVISITN),
+  filter_join = AVALC == "Y" & AVALC.join == "Y"
+)
+#> # A tibble: 7 × 5
+#>   USUBJID AVISITN   ADY AVALC CONFFL
+#>   <chr>     <dbl> <dbl> <chr> <chr> 
+#> 1 1             1     1 Y     Y     
+#> 2 1             2     8 N     <NA>  
+#> 3 1             3    15 Y     <NA>  
+#> 4 1             4    22 N     <NA>  
+#> 5 2             1     1 Y     Y     
+#> 6 2             2     8 Y     <NA>  
+#> 7 2             2    10 Y     <NA>  
+#> Warning: Dataset `dataset` contains duplicate records with respect to `USUBJID` and
+#> `AVISITN`
+#> ℹ Run `admiral::get_duplicates_dataset()` to access the duplicate records
+#> Warning: Dataset `dataset_add` contains duplicate records with respect to `USUBJID` and
+#> `AVISITN`
+#> ℹ Run `admiral::get_duplicates_dataset()` to access the duplicate records}\if{html}{\out{</div>}}
+
+The records for \code{USUBJID == "2"} are not unique with respect to
+\code{USUBJID} and \code{AVISITN}. Thus a warning is issued. The duplicates can be
+accessed by calling \code{get_duplicates_dataset()}:
+
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{get_duplicates_dataset()
+#> Duplicate records with respect to `USUBJID` and `AVISITN`.
+#> # A tibble: 2 × 4
+#>   USUBJID AVISITN   ADY AVALC
+#> * <chr>     <dbl> <dbl> <chr>
+#> 1 2             2     8 Y    
+#> 2 2             2    10 Y    }\if{html}{\out{</div>}}
+
+In this example, confirmation is required at a subsequent \emph{visit}.
+Please note that the first record for subject \code{"2"} at visit \code{2} is not
+flagged. Thus the warning can be suppressed by specifying \code{check_type = "none"}.
+
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{derive_var_joined_exist_flag(
+  data,
+  dataset_add = data,
+  by_vars = exprs(USUBJID),
+  new_var = CONFFL,
+  join_vars = exprs(AVALC, AVISITN),
+  join_type = "after",
+  order = exprs(AVISITN),
+  filter_join = AVALC == "Y" & AVALC.join == "Y",
+  check_type = "none"
+)
+#> # A tibble: 7 × 5
+#>   USUBJID AVISITN   ADY AVALC CONFFL
+#>   <chr>     <dbl> <dbl> <chr> <chr> 
+#> 1 1             1     1 Y     Y     
+#> 2 1             2     8 N     <NA>  
+#> 3 1             3    15 Y     <NA>  
+#> 4 1             4    22 N     <NA>  
+#> 5 2             1     1 Y     Y     
+#> 6 2             2     8 Y     <NA>  
+#> 7 2             2    10 Y     <NA>  }\if{html}{\out{</div>}}}}
+
