@@ -185,7 +185,6 @@ test_that("derive_var_joined_exist_flag Test 4: join_type = 'all'", {
     new_var = ALCOVFL,
     join_vars = exprs(ACOVFL, ADY),
     join_type = "all",
-    order = exprs(ADY),
     filter_join = ADURN > 30 & ACOVFL.join == "Y" & ADY >= ADY.join - 7
   )
 
@@ -285,5 +284,43 @@ test_that("derive_var_joined_exist_flag Test 6: tmp_obs_nr_var argument works", 
       false_value = "N"
     ),
     keys = c("USUBJID", "AVISITN")
+  )
+})
+
+## Test 7: no warning if multiple records match ----
+test_that("derive_var_joined_exist_flag Test 7: no warning if multiple records match", {
+  expected <- tibble::tribble(
+    ~USUBJID, ~AEGRPID, ~AEDECOD,         ~AEIOIFL,
+    "1",      "001",    "IRITIS",         "Y",
+    "2",      "003",    "FATIGUE",        NA_character_,
+    "2",      "007",    "INFLAMMATION",   "Y",
+    "3",      "002",    "HEADACHE",       NA_character_,
+    "4",      "001",    "CARDIAC ARREST", NA_character_
+  )
+
+  ae <- select(expected, -AEIOIFL)
+
+  oe <- tibble::tribble(
+    ~USUBJID, ~OEGRPID, ~OECAT,
+    "1",      "001",    "ADVERSE EVENTS-INTRAOCULAR INFLAMMATION",
+    "2",      "003",    "OPHTHALMIC IMAGING",
+    "2",      "007",    "ADVERSE EVENTS-INTRAOCULAR INFLAMMATION",
+    "3",      "009",    "OPHTHALMIC IMAGING",
+    "3",      "001",    "OPHTHALMIC IMAGING"
+  )
+
+  expect_dfs_equal(
+    expected,
+    derive_var_joined_exist_flag(
+      dataset = ae,
+      dataset_add = oe,
+      by_vars = exprs(USUBJID),
+      new_var = AEIOIFL,
+      join_type = "all",
+      join_vars = exprs(OECAT, OEGRPID),
+      order = exprs(),
+      filter_join = OECAT == "ADVERSE EVENTS-INTRAOCULAR INFLAMMATION" & OEGRPID == AEGRPID
+    ),
+    keys = c("USUBJID", "AEGRPID")
   )
 })

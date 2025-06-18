@@ -593,7 +593,43 @@ test_that("format.basket_select Test 23: formatting is correct (id specified)", 
 test_that("format.basket_select Test 24: formatting is correct (name specified)", {
   expect_equal(
     format(basket_select(name = "My SDG", type = "sdg", scope = NA_character_)),
-    "basket_select(name = \"My SDG\", id = NULL, scope = \"NA\", type = \"sdg\")"
+    "basket_select(name = \"My SDG\", id = NULL, scope = NA, type = \"sdg\")"
+  )
+})
+
+## Test 25: custom fields ----
+test_that("format.basket_select Test 25: custom fields", {
+  expect_equal(
+    format(basket_select(
+      name = "My SDG",
+      type = "sdg",
+      scope = NA_character_,
+      filter = expr(STATUS == "approved"),
+      list = list(a = 1, b = 2),
+      vector = c("a", "b", "c")
+    )),
+    paste(
+      "basket_select(name = \"My SDG\", id = NULL, scope = NA, type = \"sdg\",",
+      "filter = STATUS == \"approved\", list = list(...), vector = c(...))"
+    )
+  )
+})
+
+## Test 26: long expressions ----
+test_that("format.basket_select Test 26: long expressions", {
+  expect_equal(
+    format(basket_select(
+      name = "My SDG",
+      type = "sdg",
+      scope = NA_character_,
+      filter = expr((PT_NAME == "Dysaesthesia" | LLT_NAME == "Paraesthesia skin") &
+        PRIMARY_PATH == "Y")
+    )),
+    paste(
+      "basket_select(name = \"My SDG\", id = NULL, scope = NA, type = \"sdg\",",
+      "filter = (PT_NAME == \"Dysaesthesia\" | LLT_NAME == \"Paraesthesia skin\")",
+      "& PRIMARY_PATH == \"Y\")"
+    )
   )
 })
 
