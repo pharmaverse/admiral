@@ -170,7 +170,14 @@
 # get_terms_from_db Test 25: error message matches snapshot
 
     Code
-      error_message
-    Output
-      [1] "An error occurred while calling the function `faulty_fun()` provided to the `get_terms_fun` argument.\nPotential issues could include:\n- Mismatch in expected function arguments.\n- Incorrect handling of input parameters inside `faulty_fun()`.\n- Not returning expected output.\nCurrent arguments passed to `faulty_fun()`:\n- version: 1.0\n- basket_select: dummy_definition\n- keep_id: FALSE\nError message: Intentional error for testing"
+      create_query_data(queries = list(pregsmq), version = "20.0", get_terms_fun = faulty_fun)
+    Condition
+      Error in `value[[3L]]()`:
+      ! An error occurred while calling the function `faulty_fun()` provided to the `get_terms_fun` argument.
+      This could be due to incorrect handling of input parameters inside `faulty_fun()`.
+      Current arguments passed to `faulty_fun()`:
+      - version: 20.0
+      - basket_select: Pregnancy and neonatal topics (SMQ), NULL, NARROW, and smq
+      - keep_id: TRUE
+      Error message: Intentional error for testing
 
