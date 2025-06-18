@@ -308,7 +308,7 @@ create_query_data <- function(queries,
 #' @param fun_name Name of access function
 #'
 #'   The character name of the access function, usually created with
-#'   `deparse(subsitute(fun)`. This must be non null. Otherwise, an error is issued.
+#'   `deparse(subsitute(fun))`. This must be non null. Otherwise, an error is issued.
 #'
 #' @param queries Queries
 #'
@@ -346,15 +346,16 @@ get_terms_from_db <- function(version,
                               expect_grpid = FALSE,
                               i,
                               temp_env) {
+  assert_character_scalar(fun_name)
+
   assert_db_requirements(
     version = version,
     version_arg_name = deparse(substitute(version)),
     fun = fun,
-    fun_arg_name = deparse(substitute(fun)),
+    fun_arg_name = fun_name,
     queries = queries,
     i = i
   )
-  assert_character_scalar(fun_name)
 
   terms <- tryCatch(
     fun(
