@@ -197,7 +197,7 @@ derive_locf_records <- function(dataset,
   }
 
 
-  # Prepping 'dataset_ref' #
+  # Prepping 'dataset_ref'
   # Get the IDs from input dataset for which the expected observations are to be added
   ids <- dataset %>%
     select(!!!setdiff(by_vars, chr2vars(colnames(dataset_ref)))) %>%
