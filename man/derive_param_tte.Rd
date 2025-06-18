@@ -440,12 +440,12 @@ example here only using serious adverse events.
 ) \%>\%
   select(USUBJID, STARTDT, PARAMCD, PARAM, ADT, CNSR, SRCSEQ)
 #> # A tibble: 4 × 7
-#>   USUBJID STARTDT    PARAMCD PARAM                                     ADT         CNSR SRCSEQ
-#>   <chr>   <date>     <chr>   <chr>                                     <date>     <int>  <dbl>
-#> 1 01      2020-12-06 TTSAE1  Time to First Serious Cough Adverse Event 2021-03-04     0      3
-#> 2 01      2020-12-06 TTSAE2  Time to First Serious Flu Adverse Event   2021-01-03     0      1
-#> 3 02      2021-01-16 TTSAE1  Time to First Serious Cough Adverse Event 2021-02-03     1     NA
-#> 4 02      2021-01-16 TTSAE2  Time to First Serious Flu Adverse Event   2021-02-03     1     NA}\if{html}{\out{</div>}}}
+#>   USUBJID STARTDT    PARAMCD PARAM                       ADT         CNSR SRCSEQ
+#>   <chr>   <date>     <chr>   <chr>                       <date>     <int>  <dbl>
+#> 1 01      2020-12-06 TTSAE1  Time to First Serious Coug… 2021-03-04     0      3
+#> 2 01      2020-12-06 TTSAE2  Time to First Serious Flu … 2021-01-03     0      1
+#> 3 02      2021-01-16 TTSAE1  Time to First Serious Coug… 2021-02-03     1     NA
+#> 4 02      2021-01-16 TTSAE2  Time to First Serious Flu … 2021-02-03     1     NA}\if{html}{\out{</div>}}}
 \subsection{Using multiple event/censor conditions (\code{event_conditions}
 /\code{censor_conditions})}{
 
@@ -496,10 +496,10 @@ derive_param_tte(
 ) \%>\%
   select(USUBJID, STARTDT, PARAMCD, PARAM, ADT, CNSR, SRCSEQ)
 #> # A tibble: 2 × 7
-#>   USUBJID STARTDT    PARAMCD PARAM                    ADT         CNSR SRCSEQ
-#>   <chr>   <date>     <chr>   <chr>                    <date>     <int>  <dbl>
-#> 1 01      2020-12-06 TTAELB  Time to First Adverse E… 2020-12-22     0     NA
-#> 2 02      2021-01-16 TTAELB  Time to First Adverse E… 2021-02-03     1     NA}\if{html}{\out{</div>}}
+#>   USUBJID STARTDT    PARAMCD PARAM                       ADT         CNSR SRCSEQ
+#>   <chr>   <date>     <chr>   <chr>                       <date>     <int>  <dbl>
+#> 1 01      2020-12-06 TTAELB  Time to First Adverse Even… 2020-12-22     0     NA
+#> 2 02      2021-01-16 TTAELB  Time to First Adverse Even… 2021-02-03     1     NA}\if{html}{\out{</div>}}
 
 Note above how the earliest event date is always taken and the latest
 censor date.}
