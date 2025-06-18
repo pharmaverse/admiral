@@ -359,7 +359,7 @@ get_terms_from_db <- function(version,
     error = function(err) {
       cli_abort(
         c(
-          "An error occurred while calling the function {.fn {fun_name}} provided to the `fun` argument.",
+          "An error occurred while calling the function {.fn {fun_name}} provided to the `get_terms_fun` argument.",
           "Potential issues could include:",
           "- Mismatch in expected function arguments.",
           "- Incorrect handling of input parameters inside `fun`.",
