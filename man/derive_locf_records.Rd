@@ -119,8 +119,8 @@ previous observation in the input dataset (when sorted by \code{order}) and
 \code{DTYPE} is set to "LOCF".
 
 The \code{imputation} argument decides whether to update the existing observation when
-\code{analysis_var} is \code{NA} ("update" and "update_add"), or to add a new observation from
-\code{dataset_ref} instead ("add").
+\code{analysis_var} is \code{NA} (\code{"update"} and \code{"update_add"}), or to add a new observation from
+\code{dataset_ref} instead (\code{"add"}).
 }
 }
 \examples{
