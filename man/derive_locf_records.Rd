@@ -8,7 +8,9 @@ derive_locf_records(
   dataset,
   dataset_ref,
   by_vars,
+  id_vars_ref = NULL,
   analysis_var = AVAL,
+  imputation = "add",
   order,
   keep_vars = NULL
 )
@@ -42,13 +44,36 @@ in the input dataset.
 \item{Default value}{none}
 }}
 
-\item{analysis_var}{Analysis variable.
+\item{id_vars_ref}{Grouping variables in expected observations dataset
 
-\emph{Default}: \code{AVAL}
+The variables to group by in \code{dataset_ref} when determining which observations should be
+added to the input dataset.
+
+\describe{
+\item{Default value}{All the variables in \code{dataset_ref}}
+}}
+
+\item{analysis_var}{Analysis variable.
 
 \describe{
 \item{Permitted values}{a variable}
 \item{Default value}{\code{AVAL}}
+}}
+
+\item{imputation}{Select the mode of imputation:
+
+\code{add}: Keep all original records and add imputed records for missing
+timepoints and missing \code{analysis_var} values from \code{dataset_ref}.
+
+\code{update}: Update records with missing \code{analysis_var} and add imputed records
+for missing timepoints from \code{dataset_ref}.
+
+\code{update_add}: Keep all original records, update records with missing \code{analysis_var}
+and add imputed records for missing timepoints from \code{dataset_ref}.
+
+\describe{
+\item{Permitted values}{One of these 3 values: \code{"add"}, \code{"update"}, \code{"update_add"}}
+\item{Default value}{\code{"add"}}
 }}
 
 \item{order}{Sort order
@@ -74,12 +99,12 @@ Keep variables that need carrying the last observation forward other than \code{
 }
 \value{
 The input dataset with the new "LOCF" observations added for each
-\code{by_vars}. Note, a variable will only be populated in the new parameter rows
-if it is specified in \code{by_vars}.
+\code{by_vars}, based on the value passed to the \code{imputation} argument.
 }
 \description{
 Adds LOCF records as new observations for each 'by group' when the dataset
-does not contain observations for missed visits/time points.
+does not contain observations for missed visits/time points and when analysis
+value is missing.
 }
 \details{
 For each group (with respect to the variables specified for the
@@ -87,11 +112,15 @@ by_vars parameter) those observations from \code{dataset_ref} are added to
 the output dataset
 \itemize{
 \item which do not have a corresponding observation in the input dataset or
-\item for which \code{analysis_var} is NA for the corresponding observation in the input dataset.
+\item for which \code{analysis_var} is \code{NA} for the corresponding observation in the input dataset.
 
 For the new observations, \code{analysis_var} is set to the non-missing \code{analysis_var} of the
 previous observation in the input dataset (when sorted by \code{order}) and
 \code{DTYPE} is set to "LOCF".
+
+The \code{imputation} argument decides whether to update the existing observation when
+\code{analysis_var} is \code{NA} (\code{"update"} and \code{"update_add"}), or to add a new observation from
+\code{dataset_ref} instead (\code{"add"}).
 }
 }
 \examples{
@@ -100,27 +129,18 @@ library(dplyr)
 library(tibble)
 
 advs <- tribble(
-  ~STUDYID,  ~USUBJID,      ~PARAMCD, ~PARAMN, ~AVAL, ~AVISITN, ~AVISIT,
-  "CDISC01", "01-701-1015", "PULSE",        1,    65,        0, "BASELINE",
-  "CDISC01", "01-701-1015", "DIABP",        2,    79,        0, "BASELINE",
-  "CDISC01", "01-701-1015", "DIABP",        2,    80,        2, "WEEK 2",
-  "CDISC01", "01-701-1015", "DIABP",        2,    NA,        4, "WEEK 4",
-  "CDISC01", "01-701-1015", "DIABP",        2,    NA,        6, "WEEK 6",
-  "CDISC01", "01-701-1015", "SYSBP",        3,   130,        0, "BASELINE",
-  "CDISC01", "01-701-1015", "SYSBP",        3,   132,        2, "WEEK 2",
-  "CDISC01", "01-701-1028", "PULSE",        1,    61,        0, "BASELINE",
-  "CDISC01", "01-701-1028", "PULSE",        1,    60,        6, "WEEK 6",
-  "CDISC01", "01-701-1028", "DIABP",        2,    51,        0, "BASELINE",
-  "CDISC01", "01-701-1028", "DIABP",        2,    50,        2, "WEEK 2",
-  "CDISC01", "01-701-1028", "DIABP",        2,    51,        4, "WEEK 4",
-  "CDISC01", "01-701-1028", "DIABP",        2,    50,        6, "WEEK 6",
-  "CDISC01", "01-701-1028", "SYSBP",        3,   121,        0, "BASELINE",
-  "CDISC01", "01-701-1028", "SYSBP",        3,   121,        2, "WEEK 2",
-  "CDISC01", "01-701-1028", "SYSBP",        3,   121,        4, "WEEK 4",
-  "CDISC01", "01-701-1028", "SYSBP",        3,   121,        6, "WEEK 6"
+  ~STUDYID,  ~USUBJID,      ~VSSEQ, ~PARAMCD, ~PARAMN, ~AVAL, ~AVISITN, ~AVISIT,
+  "CDISC01", "01-701-1015",      1, "PULSE",        1,    65,        0, "BASELINE",
+  "CDISC01", "01-701-1015",      2, "DIABP",        2,    79,        0, "BASELINE",
+  "CDISC01", "01-701-1015",      3, "DIABP",        2,    80,        2, "WEEK 2",
+  "CDISC01", "01-701-1015",      4, "DIABP",        2,    NA,        4, "WEEK 4",
+  "CDISC01", "01-701-1015",      5, "DIABP",        2,    NA,        6, "WEEK 6",
+  "CDISC01", "01-701-1015",      6, "SYSBP",        3,   130,        0, "BASELINE",
+  "CDISC01", "01-701-1015",      7, "SYSBP",        3,   132,        2, "WEEK 2"
 )
 
-# A dataset with all the combinations of PARAMCD, PARAM, AVISIT, AVISITN, ... which are expected.
+# A dataset with all the combinations of PARAMCD, PARAM, AVISIT, AVISITN, ...
+# which are expected.
 advs_expected_obsv <- tribble(
   ~PARAMCD, ~AVISITN, ~AVISIT,
   "PULSE",         0, "BASELINE",
@@ -135,15 +155,41 @@ advs_expected_obsv <- tribble(
   "SYSBP",         6, "WEEK 6"
 )
 
+# Example 1: Add imputed records for missing timepoints and for missing
+#            `analysis_var` values (from `dataset_ref`), keeping all the original records.
 derive_locf_records(
   dataset = advs,
   dataset_ref = advs_expected_obsv,
   by_vars = exprs(STUDYID, USUBJID, PARAMCD),
+  imputation = "add",
   order = exprs(AVISITN, AVISIT),
   keep_vars = exprs(PARAMN)
 ) |>
   arrange(USUBJID, PARAMCD, AVISIT)
 
+
+# Example 2: Add imputed records for missing timepoints (from `dataset_ref`)
+#            and update missing `analysis_var` values.
+derive_locf_records(
+  dataset = advs,
+  dataset_ref = advs_expected_obsv,
+  by_vars = exprs(STUDYID, USUBJID, PARAMCD),
+  imputation = "update",
+  order = exprs(AVISITN, AVISIT),
+) |>
+  arrange(USUBJID, PARAMCD, AVISIT)
+
+
+# Example 3: Add imputed records for missing timepoints (from `dataset_ref`) and
+#            update missing `analysis_var` values, keeping all the original records.
+derive_locf_records(
+  dataset = advs,
+  dataset_ref = advs_expected_obsv,
+  by_vars = exprs(STUDYID, USUBJID, PARAMCD),
+  imputation = "update_add",
+  order = exprs(AVISITN, AVISIT),
+) |>
+  arrange(USUBJID, PARAMCD, AVISIT)
 }
 \seealso{
 BDS-Findings Functions for adding Parameters/Records: 
