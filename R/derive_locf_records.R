@@ -164,7 +164,7 @@ derive_locf_records <- function(dataset,
                                 imputation = "add",
                                 order,
                                 keep_vars = NULL) {
-  # Input Checking #
+  # Input Checking
   analysis_var <- assert_symbol(enexpr(analysis_var))
 
   # Check if input parameters is a valid list of variables
