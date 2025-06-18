@@ -640,23 +640,22 @@ test_that("get_terms_from_db Test 25: error message matches snapshot", {
     stop("Intentional error for testing")
   }
 
-  # Expect the function to throw an error and capture it using tryCatch
-  error_message <- tryCatch(
-    get_terms_from_db(
-      version = "1.0",
-      fun = faulty_fun, # Passing faulty function to trigger error
-      queries = NULL,
-      definition = "dummy_definition",
-      expect_grpname = FALSE,
-      expect_grpid = FALSE,
-      i = NULL,
-      temp_env = list()
-    ),
-    error = function(err) {
-      conditionMessage(err)
-    }
+  pregsmq <- query(
+    prefix = "SMQ02",
+    id = auto,
+    definition = basket_select(
+      name = "Pregnancy and neonatal topics (SMQ)",
+      scope = "NARROW",
+      type = "smq"
+    )
   )
-
-  # Use expect_snapshot to check the error message
-  expect_snapshot(error_message)
+  
+  expect_snapshot(
+    create_query_data(
+      queries = list(pregsmq),
+      version = "20.0",
+      get_terms_fun = faulty_fun
+    ),
+    error = TRUE
+  )
 })
