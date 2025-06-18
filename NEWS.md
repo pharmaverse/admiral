@@ -4,12 +4,26 @@
 
 - The documentation was enhanced: (#2585)
     - The default value of an argument is now displayed in the argument description.
-    - For complex functions each example has now a title, which is also shown in
+    - For some complex functions each example has now a title, which is also shown in
     the TOC, and a description. This enabled adding more examples without losing
-    readability. See `derive_extreme_records()` for an example.
-    - The output of the structured examples used for complex functions is
-    displayed in the help pages in RStudio.
-    
+    readability. The output of the structured examples used for complex functions is
+    displayed in the help pages in RStudio. The following existing functions 
+    (as well as any new functions added in this release) received this enhancement:
+      - `derive_extreme_event()` (#2735)
+      - `derive_extreme_records()` (#2585)
+      - `derive_param_computed()` (#2701)
+      - `derive_param_tte()` (#2704)
+      - `derive_summary_records()` (#2707)
+      - `derive_var_extreme_flag()` (#2752)
+      - `derive_var_joined_exist_flag()` (#2729)
+      - `derive_var_trtemfl()` (#2746)
+      - `derive_vars_crit_flag()` (#2744)
+      - `derive_vars_dt()` (#2715)
+      - `derive_vars_dtm()` (#2715)
+      - `derive_vars_joined()` (#2727)
+      - `derive_vars_merged()` (#2727)
+      - `filter_joined()` (#2729)
+  <p>
 - New function `derive_vars_joined_summary()` to derive summary variables from
   selected records of an additional dataset where the selection depends on
   variables from both the input dataset and the additional dataset. For example,
@@ -99,22 +113,6 @@ records. (#2683)
 ## Documentation
 
 - Improved documentation, error messages, and argument assertions of `derive_vars_dt()`, `derive_vars_dtm()`, `impute_dtc_dt()`, `impute_dtc_dtm()`, `convert_dtc_to_dt()`, & `convert_dtc_to_dtm()`. (#2654)
-
-- The examples section of the following functions was enhanced:
-    - `derive_extreme_event()` (#2735)
-    - `derive_extreme_records()` (#2585)
-    - `derive_param_computed()` (#2701)
-    - `derive_param_tte()` (#2704)
-    - `derive_summary_records()` (#2707)
-    - `derive_var_extreme_flag()` (#2752)
-    - `derive_var_joined_exist_flag()` (#2729)
-    - `derive_var_trtemfl()` (#2746)
-    - `derive_vars_crit_flag()` (#2744)
-    - `derive_vars_dt()` (#2715)
-    - `derive_vars_dtm()` (#2715)
-    - `derive_vars_joined()` (#2727)
-    - `derive_vars_merged()` (#2727)
-    - `filter_joined()` (#2729)
 
 - Added an example to the `derive_vars_transposed()` reference page to showcase how duplicates-related errors can arise when records in `dataset_merge` are not uniquely identified. (#2609)
 

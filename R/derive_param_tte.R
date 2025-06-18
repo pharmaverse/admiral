@@ -64,12 +64,16 @@
 #'   If set to `TRUE`, variables `ADTM` and `STARTDTM` are created. Otherwise,
 #'   variables `ADT` and `STARTDT` are created.
 #'
+#' @permitted [boolean]
+#'
 #' @param set_values_to Variables to set
 #'
 #'   A named list returned by `exprs()` defining the variables to be set for the
 #'   new parameter, e.g. `exprs(PARAMCD = "OS", PARAM = "Overall Survival")` is
 #'   expected. The values must be symbols, character strings, numeric values,
 #'   expressions, or `NA`.
+#'
+#' @permitted [expr_list_formula]
 #'
 #' @param subject_keys Variables to uniquely identify a subject
 #'
