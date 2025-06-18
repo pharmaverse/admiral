@@ -726,7 +726,7 @@ restrict_imputed_dtc_dtm <- function(dtc,
 #' Please note that the default value of `ignore_seconds_flag` will change to `TRUE` in
 #' admiral 1.4.0.
 #'
-#' @permitted A logical value
+#' @permitted [boolean]
 #'
 #' @details Usually this computation function can not be used with `%>%`.
 #'

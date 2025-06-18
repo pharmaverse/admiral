@@ -11,6 +11,7 @@ list(
     date_imp = "`\"first\"`, `\"mid\"`, `\"last\"`, or user-defined",
     date_high_imp = "`\"Y\"` (year, highest level), `\"M\"` (month), `\"D\"`
     (day), `\"n\"` (none, lowest level)",
+    date_list = "a list of dates, e.g. `list(ymd_hms(\"2021-07-01T04:03:01\"), ymd_hms(\"2022-05-12T13:57:23\"))`",
     date_flag_imp = "`\"auto\"`, `\"date\"` or `\"none\"`",
     date_time_flag_imp = "`\"auto\"`, `\"date\"`,`\"time\"`, `\"both\"` or `\"none\"`",
     date_time_high_imp = "`\"Y\"` (year, highest level), `\"M\"` (month), `\"D\"`
@@ -32,6 +33,7 @@ list(
     var = "an unquoted symbol, e.g., `AVAL`",
     var_list = "list of variables created by `exprs()`, e.g., `exprs(USUBJID, VISIT)`",
     var_list_rename = "list of (optionally named) variables created by `exprs()`, e.g., `exprs(USUBJID, ADY = ASTDY)`",
+    var_list_tidyselect = "list of variables or tidyselect expressions created by `exprs()`, e.g., `exprs(DTHDT, starts_with(\"AST\"))` or `exprs(everything)`",
     var_expr_list = "list of variables or named expressions created by `exprs()`, e.g., `exprs(EXSTDY, EXSTDTM = convert_dtc_to_dtm(EXSTDTC))`"
   )
 )
