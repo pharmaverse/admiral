@@ -352,7 +352,7 @@ get_terms_from_db <- function(version,
     version = version,
     version_arg_name = deparse(substitute(version)),
     fun = fun,
-    fun_arg_name = fun_name,
+    fun_arg_name = deparse(substitute(fun)),
     queries = queries,
     i = i
   )
@@ -367,7 +367,10 @@ get_terms_from_db <- function(version,
     error = function(err) {
       cli_abort(
         c(
-          "An error occurred while calling the function {.fn {fun_name}} provided to the `get_terms_fun` argument.", #nolint
+          paste(
+            "An error occurred while calling the function {.fn {fun_name}} provided",
+            "to the `get_terms_fun` argument."
+          ),
           "This could be due to incorrect handling of input parameters inside {.fn {fun_name}}.",
           "Current arguments passed to {.fn {fun_name}}:",
           " - version: {version}",
