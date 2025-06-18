@@ -208,7 +208,7 @@ derive_locf_records <- function(dataset,
 
 
 
-  # Add LOCF records #
+  # Add LOCF records
   # Get the variable names to join by
   exp_obs_by_vars <- as.character(union(by_vars, id_vars_ref))
 
