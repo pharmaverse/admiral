@@ -338,16 +338,15 @@ get_terms_from_db <- function(version,
                               expect_grpid = FALSE,
                               i,
                               temp_env) {
+  fun_arg_name <- deparse(substitute(fun))
   assert_db_requirements(
     version = version,
     version_arg_name = deparse(substitute(version)),
     fun = fun,
-    fun_arg_name = deparse(substitute(fun)),
+    fun_arg_name = fun_arg_name,
     queries = queries,
     i = i
   )
-
-  fun_name <- deparse(substitute(fun))
 
   terms <- tryCatch(
     fun(
@@ -359,16 +358,15 @@ get_terms_from_db <- function(version,
     error = function(err) {
       cli_abort(
         c(
-          "An error occurred while calling the function {.fn {fun_name}} provided to the `get_terms_fun` argument.",
+          "An error occurred while calling the function {.fn {fun_arg_name}} provided to the `get_terms_fun` argument.",
           "Potential issues could include:",
           "- Mismatch in expected function arguments.",
-          "- Incorrect handling of input parameters inside `fun`.",
+          "- Incorrect handling of input parameters inside {.fn {fun_arg_name}}.",
           "- Not returning expected output.",
-          "Current arguments passed to `fun()`:",
+          "Current arguments passed to {.fn {fun_arg_name}}:",
           " - version: {version}",
           " - basket_select: {definition}",
           " - keep_id: {expect_grpid}",
-          " - temp_env: {temp_env}",
           "Error message: {conditionMessage(err)}"
         )
       )

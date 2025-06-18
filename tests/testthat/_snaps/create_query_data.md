@@ -172,5 +172,5 @@
     Code
       error_message
     Output
-      [1] "An error occurred while calling the function `faulty_fun()` provided to the `fun` argument.\nPotential issues could include:\n- Mismatch in expected function arguments.\n- Incorrect handling of input parameters inside `fun`.\n- Not returning expected output.\nCurrent arguments passed to `fun()`:\n- version: 1.0\n- basket_select: dummy_definition\n- keep_id: FALSE\n- temp_env:\nError message: Intentional error for testing"
+      [1] "An error occurred while calling the function `faulty_fun()` provided to the `get_terms_fun` argument.\nPotential issues could include:\n- Mismatch in expected function arguments.\n- Incorrect handling of input parameters inside `faulty_fun()`.\n- Not returning expected output.\nCurrent arguments passed to `faulty_fun()`:\n- version: 1.0\n- basket_select: dummy_definition\n- keep_id: FALSE\nError message: Intentional error for testing"
 
