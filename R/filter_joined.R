@@ -18,10 +18,14 @@
 #'
 #' @param dataset `r roxygen_param_dataset(expected_vars = c("by_vars", "order"))`
 #'
+#' @permitted [dataset]
+#'
 #' @param dataset_add Additional dataset
 #'
 #'   The variables specified for `by_vars`, `join_vars`, and `order` are
 #'   expected.
+#'
+#' @permitted [dataset]
 #'
 #' @param by_vars By variables
 #'
@@ -29,6 +33,8 @@
 #'   dataset with itself.
 #'
 #'  `r roxygen_param_by_vars()`
+#'
+#' @permitted [var_list]
 #'
 #' @param join_vars Variables to keep from joined dataset
 #'
@@ -41,6 +47,8 @@
 #'
 #'   The `*.join` variables are not included in the output dataset.
 #'
+#' @permitted [var_list]
+#'
 #' @param first_cond_lower Condition for selecting range of data (before)
 #'
 #'   If this argument is specified, the other observations are restricted from
@@ -52,7 +60,9 @@
 #'   This parameter should be specified if `filter_join` contains summary
 #'   functions which should not apply to all observations but only from a
 #'   certain observation before the current observation up to the current
-#'   observation. For an example see the last example below.
+#'   observation. For examples see the "Examples" section below.
+#'
+#' @permitted [condition]
 #'
 #' @param first_cond_upper Condition for selecting range of data (after)
 #'
@@ -63,7 +73,9 @@
 #'
 #'   This parameter should be specified if `filter_join` contains summary
 #'   functions which should not apply to all observations but only up to the
-#'   confirmation assessment. For an example see the last example below.
+#'   confirmation assessment. For examples see the "Examples" section below.
+#'
+#' @permitted [condition]
 #'
 #' @param order Order
 #'
@@ -73,6 +85,8 @@
 #'
 #' @permitted list of expressions created by `exprs()`, e.g.,
 #'   `exprs(ADT, desc(AVAL))`
+#'
+#' @permitted [order_optional]
 #'
 #' @param tmp_obs_nr_var Temporary observation number
 #'
@@ -87,6 +101,8 @@
 #'   dataset. It can also be used to select consecutive observations or the last
 #'   observation (see example below).
 #'
+#' @permitted [var]
+#'
 #' @param filter_add Filter for additional dataset (`dataset_add`)
 #'
 #'   Only observations from `dataset_add` fulfilling the specified condition are
@@ -97,6 +113,8 @@
 #'
 #'   The condition can include summary functions. The additional dataset is
 #'   grouped by the by variables (`by_vars`).
+#'
+#' @permitted [condition]
 #'
 #' @param filter_join Condition for selecting observations
 #'
@@ -111,13 +129,15 @@
 #'   observations up to the confirmation observation the response is "CR" or
 #'   "NE" and there is at most one "NE".
 #'
+#' @permitted [condition]
+#'
 #' @param check_type Check uniqueness?
 #'
-#'   If `"warning"` or `"error"` is specified, the specified message is issued
-#'   if the observations of the input dataset are not unique with respect to the
-#'   by variables and the order.
+#'   If `"message"`, `"warning"`, or `"error"` is specified, the specified
+#'   message is issued if the observations of the input dataset are not unique
+#'   with respect to the by variables and the order.
 #'
-#' @permitted `"none"`, `"warning"`, `"error"`
+#' @permitted [msg_type]
 #'
 #' @inheritParams get_joined_data
 #'
@@ -221,13 +241,19 @@
 #'
 #' @export
 #'
-#' @examples
-#'
+#' @examplesx
+#' @caption Filter records considering other records (`filter_join`, `join_vars`)
+#' @info In this example, the input dataset should be restricted to records with
+#'   a duration longer than 30 and where a COVID AE (`ACOVFL == "Y"`) occurred
+#'   before or up to seven days after the record. The condition for restricting
+#'   the records is specified by the `filter_join` argument. Variables from the
+#'   other records are referenced by variable names with the suffix `.join`.
+#'   These variables have to be specified for the `join_vars` argument. As
+#'   records before _and_ after the current record should be considered,
+#'   `join_type = "all"` is specified.
+#' @code
 #' library(tibble)
-#' library(admiral)
 #'
-#' # filter observations with a duration longer than 30 and
-#' # on or after 7 days before a COVID AE (ACOVFL == "Y")
 #' adae <- tribble(
 #'   ~USUBJID, ~ADY, ~ACOVFL, ~ADURN,
 #'   "1",        10, "N",          1,
@@ -248,11 +274,16 @@
 #'   by_vars = exprs(USUBJID),
 #'   join_vars = exprs(ACOVFL, ADY),
 #'   join_type = "all",
-#'   order = exprs(ADY),
-#'   filter_join = ADURN > 30 & ACOVFL.join == "Y" & ADY >= ADY.join - 7
+#'   filter_join = ADURN > 30 & ACOVFL.join == "Y" & ADY.join <= ADY + 7
 #' )
 #'
-#' # filter observations with AVALC == "Y" and AVALC == "Y" at a subsequent visit
+#' @caption Considering only records after the current one (`join_type = "after"`)
+#' @info In this example, the input dataset is restricted to records with `AVALC
+#'   == "Y"` and `AVALC == "Y"` at a subsequent visit. `join_type = "after"` is
+#'   specified to consider only records after the current one. Please note that
+#'   the `order` argument must be specified, as otherwise it is not possible to
+#'   determine which records are after the current record.
+#' @code
 #' data <- tribble(
 #'   ~USUBJID, ~AVISITN, ~AVALC,
 #'   "1",      1,        "Y",
@@ -273,11 +304,71 @@
 #'   join_vars = exprs(AVALC, AVISITN),
 #'   join_type = "after",
 #'   order = exprs(AVISITN),
-#'   filter_join = AVALC == "Y" & AVALC.join == "Y" & AVISITN < AVISITN.join
+#'   filter_join = AVALC == "Y" & AVALC.join == "Y"
 #' )
 #'
-#' # select observations with AVALC == "CR", AVALC == "CR" at a subsequent visit,
-#' # only "CR" or "NE" in between, and at most one "NE" in between
+#' @caption Considering a range of records only (`first_cond_lower`, `first_cond_upper`)
+#' @info Consider the following data.
+#' @code
+#' myd <- tribble(
+#'   ~subj, ~day, ~val,
+#'   "1",      1, "++",
+#'   "1",      2, "-",
+#'   "1",      3, "0",
+#'   "1",      4, "+",
+#'   "1",      5, "++",
+#'   "1",      6, "-",
+#'   "2",      1, "-",
+#'   "2",      2, "++",
+#'   "2",      3, "+",
+#'   "2",      4, "0",
+#'   "2",      5, "-",
+#'   "2",      6, "++"
+#' )
+#'
+#' @info To select `"0"` where all results from the first `"++"` before the
+#' `"0"` up to the `"0"` (excluding the `"0"`) are `"+"` or `"++"` the
+#' `first_cond_lower` argument and `join_type = "before"` are specified.
+#' @code
+#' filter_joined(
+#'   myd,
+#'   dataset_add = myd,
+#'   by_vars = exprs(subj),
+#'   order = exprs(day),
+#'   join_vars = exprs(val),
+#'   join_type = "before",
+#'   first_cond_lower = val.join == "++",
+#'   filter_join = val == "0" & all(val.join %in% c("+", "++"))
+#' )
+#'
+#' @info To select `"0"` where all results from the `"0"` (excluding the `"0"`)
+#'   up to the first `"++"` after the `"0"` are `"+"` or `"++"` the
+#'   `first_cond_upper` argument and `join_type = "after"` are specified.
+#' @code
+#' filter_joined(
+#'   myd,
+#'   dataset_add = myd,
+#'   by_vars = exprs(subj),
+#'   order = exprs(day),
+#'   join_vars = exprs(val),
+#'   join_type = "after",
+#'   first_cond_upper = val.join == "++",
+#'   filter_join = val == "0" & all(val.join %in% c("+", "++"))
+#' )
+#'
+#' @caption Considering only records up to a condition (`first_cond_upper`)
+#' @info In this example from deriving confirmed response in oncology, the
+#'   records with
+#' - `AVALC == "CR"`,
+#' - `AVALC == "CR"` at a subsequent visit,
+#' - only `"CR"` or `"NE"` in between, and
+#' - at most one `"NE"` in between
+#'
+#' should be selected. The other records to be considered are restricted to
+#' those up to the first occurrence of `"CR"` by specifying the
+#' `first_cond_upper` argument. The `count_vals()` function is used to count the
+#' `"NE"`s for the last condition.
+#' @code
 #' data <- tribble(
 #'   ~USUBJID, ~AVISITN, ~AVALC,
 #'   "1",      1,        "PR",
@@ -308,9 +399,22 @@
 #'     count_vals(var = AVALC.join, val = "NE") <= 1
 #' )
 #'
-#' # select observations with AVALC == "PR", AVALC == "CR" or AVALC == "PR"
-#' # at a subsequent visit at least 20 days later, only "CR", "PR", or "NE"
-#' # in between, at most one "NE" in between, and "CR" is not followed by "PR"
+#' @caption Considering order of values (`min_cond()`, `max_cond()`)
+#' @info In this example from deriving confirmed response in oncology, records
+#'   with
+#' - `AVALC == "PR"`,
+#' - `AVALC == "CR"` or `AVALC == "PR"` at a subsequent visit at least 20 days later,
+#' - only `"CR"`, `"PR"`, or `"NE"` in between,
+#' - at most one `"NE"` in between, and
+#' - `"CR"` is
+#'   not followed by `"PR"`
+#'
+#' should be selected. The last condition is realized by using `min_cond()` and
+#' `max_cond()`, ensuring that the first occurrence of `"CR"` is after the last
+#' occurrence of `"PR"`. The second call to `count_vals()` in the condition is
+#' required to cover the case of no `"CR"`s (the `min_cond()` call returns `NA`
+#' then).
+#' @code
 #' data <- tribble(
 #'   ~USUBJID, ~ADY, ~AVALC,
 #'   "1",         6, "PR",
@@ -347,7 +451,13 @@
 #'     )
 #' )
 #'
-#' # select observations with CRIT1FL == "Y" at two consecutive visits or at the last visit
+#' @caption Considering the order of records (`tmp_obs_nr_var`)
+#' @info In this example, the records with `CRIT1FL == "Y"` at two consecutive
+#'   visits or at the last visit should be selected. A temporary order variable
+#'   is created by specifying the `tmp_obs_nr_var` argument. Then it is used in
+#'   `filter_join`. The temporary variable doesn't need to be specified for
+#'   `join_vars`.
+#' @code
 #' data <- tribble(
 #'   ~USUBJID, ~AVISITN, ~CRIT1FL,
 #'   "1",      1,        "Y",
@@ -373,49 +483,6 @@
 #'   filter_join = CRIT1FL == "Y" & CRIT1FL.join == "Y" &
 #'     (tmp_obs_nr + 1 == tmp_obs_nr.join | tmp_obs_nr == max(tmp_obs_nr.join))
 #' )
-#'
-#' # first_cond_lower and first_cond_upper argument
-#' myd <- tribble(
-#'   ~subj, ~day, ~val,
-#'   "1",      1, "++",
-#'   "1",      2, "-",
-#'   "1",      3, "0",
-#'   "1",      4, "+",
-#'   "1",      5, "++",
-#'   "1",      6, "-",
-#'   "2",      1, "-",
-#'   "2",      2, "++",
-#'   "2",      3, "+",
-#'   "2",      4, "0",
-#'   "2",      5, "-",
-#'   "2",      6, "++"
-#' )
-#'
-#' # select "0" where all results from the first "++" before the "0" up to the "0"
-#' # (excluding the "0") are "+" or "++"
-#' filter_joined(
-#'   myd,
-#'   dataset_add = myd,
-#'   by_vars = exprs(subj),
-#'   order = exprs(day),
-#'   join_vars = exprs(val),
-#'   join_type = "before",
-#'   first_cond_lower = val.join == "++",
-#'   filter_join = val == "0" & all(val.join %in% c("+", "++"))
-#' )
-#'
-#' # select "0" where all results from the "0" (excluding the "0") up to the first
-#' # "++" after the "0" are "+" or "++"
-#' filter_joined(
-#'   myd,
-#'   dataset_add = myd,
-#'   by_vars = exprs(subj),
-#'   order = exprs(day),
-#'   join_vars = exprs(val),
-#'   join_type = "after",
-#'   first_cond_upper = val.join == "++",
-#'   filter_join = val == "0" & all(val.join %in% c("+", "++"))
-#' )
 filter_joined <- function(dataset,
                           dataset_add,
                           by_vars,
@@ -423,7 +490,7 @@ filter_joined <- function(dataset,
                           join_type,
                           first_cond_lower = NULL,
                           first_cond_upper = NULL,
-                          order,
+                          order = NULL,
                           tmp_obs_nr_var = NULL,
                           filter_add = NULL,
                           filter_join,
@@ -439,8 +506,12 @@ filter_joined <- function(dataset,
     )
   first_cond_lower <- assert_filter_cond(enexpr(first_cond_lower), optional = TRUE)
   first_cond_upper <- assert_filter_cond(enexpr(first_cond_upper), optional = TRUE)
-  assert_expr_list(order)
   tmp_obs_nr_var <- assert_symbol(enexpr(tmp_obs_nr_var), optional = TRUE)
+  assert_expr_list(
+    order,
+    optional = join_type == "all" && is.null(first_cond_lower) &&
+      is.null(first_cond_upper) && is.null(tmp_obs_nr_var)
+  )
   filter_add <- assert_filter_cond(enexpr(filter_add), optional = TRUE)
   filter_join <- assert_filter_cond(enexpr(filter_join))
   check_type <-
@@ -459,9 +530,13 @@ filter_joined <- function(dataset,
     required_vars = expr_c(by_vars, join_vars, extract_vars(order))
   )
 
-  if (is.null(tmp_obs_nr_var)) {
-    tmp_obs_nr_var <- get_new_tmp_var(dataset, prefix = "tmp_obs_nr_")
-  }
+  tmp_obs_nr_unique <- get_new_tmp_var(dataset, prefix = "tmp_obs_nr_unique")
+  dataset <- derive_var_obs_number(
+    dataset,
+    by_vars = by_vars,
+    new_var = !!tmp_obs_nr_unique
+  )
+
   get_joined_data(
     dataset,
     dataset_add = dataset_add,
@@ -476,12 +551,14 @@ filter_joined <- function(dataset,
     filter_join = !!filter_join,
     check_type = check_type
   ) %>%
-    # select one observation of each group, as the joined variables are removed
-    # it doesn't matter which one, so we take just the first one
-    group_by(!!!by_vars, !!tmp_obs_nr_var) %>%
+    # select one observation of each records of the input dataset, as the joined
+    # variables are removed it doesn't matter which one, so we take just the
+    # first one
+    group_by(!!!by_vars, !!tmp_obs_nr_unique) %>%
     slice(1L) %>%
     ungroup() %>%
-    select(colnames(dataset))
+    select(colnames(dataset)) %>%
+    remove_tmp_vars()
 }
 
 #' Count Number of Observations Where a Variable Equals a Value
