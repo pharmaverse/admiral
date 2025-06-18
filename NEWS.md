@@ -68,6 +68,11 @@ added to the new records even if it was not in `by_vars`. (#2664)
 = "before"` or `join_type = "after"` and `dataset` and `dataset_add` differ or
 the `filter_add` argument is used. (#2863)
 
+- The function `derive_locf_records()` was updated to include two new arguments: `id_vars_ref` and `imputation`.
+  The `id_vars_ref` argument allows users to select the variables to group by in the reference dataset (`dataset_ref`) 
+  when determining which observations to add to the input dataset. The `imputation` argument lets users decide whether 
+  to update `analysis_var` when its value is `NA` ("update" and "update_add"), or to add a new observation instead ("add"). (#2694) (#2680) (#2717)
+
 - `derive_vars_dt()`, `derive_vars_dtm()`, `impute_dtc_dt()`, `impute_dtc_dtm()`, `convert_dtc_to_dt()`, & `convert_dtc_to_dtm()` and related functions will now throw an error instead of a warning when `highest_imputation = "Y"` but neither `min_date` (when `date_imputation = "first"`) nor `max_dates` (when `date_imputation = "last"`) are specified. (#2654)
 
 - `create_query_data()` no longer issues warnings when `basket_select()` objects
@@ -77,6 +82,7 @@ with custom arguments of length greater than one are used. (#2751)
 is now optional unless `join_type = "after"`, `join_type = "before"`,
 `first_cond_lower`, `first_cond_upper`, or `tmp_obs_nr_var` are specified.
 (#2729)
+
 
 ## Breaking Changes
 
