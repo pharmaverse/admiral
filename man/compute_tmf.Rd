@@ -32,7 +32,7 @@ Please note that the default value of \code{ignore_seconds_flag} will change to 
 admiral 1.4.0.
 
 \describe{
-\item{Permitted values}{A logical value}
+\item{Permitted values}{\code{"TRUE"}, \code{"FALSE"}}
 \item{Default value}{\code{FALSE}}
 }}
 }

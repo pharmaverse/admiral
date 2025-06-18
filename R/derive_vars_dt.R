@@ -398,6 +398,8 @@ convert_dtc_to_dt <- function(dtc,
 #' `"2020-12-06T12:12:12"` is ignored. Returning `"2020-12-06T12:12:12"` would
 #' have changed the month although it is not missing (in the `dtc` date).
 #'
+#' @permitted [date_list]
+#'
 #' @param max_dates Maximum dates
 #'
 #' A list of dates is expected. It is ensured that the imputed date is not after
@@ -405,12 +407,14 @@ convert_dtc_to_dt <- function(dtc,
 #' cut off date. Only dates which are in the range of possible dates are
 #' considered. A date or date-time object is expected.
 #'
+#' @permitted [date_list]
+#'
 #' @param preserve Preserve day if month is missing and day is present
 #'
 #' For example `"2019---07"` would return `"2019-06-07` if `preserve = TRUE`
 #' (and `date_imputation = "MID"`).
 #'
-#' @permitted `TRUE`, `FALSE`
+#' @permitted [boolean]
 #'
 #' @details Usually this computation function can not be used with `%>%`.
 #'

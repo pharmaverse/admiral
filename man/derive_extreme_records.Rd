@@ -131,6 +131,7 @@ For new observations selected from the additional dataset (\code{dataset_add}),
 \code{exist_flag} is set to the specified value.
 
 \describe{
+\item{Permitted values}{a character scalar, i.e., a character vector of length one}
 \item{Default value}{\code{"Y"}}
 }}
 
@@ -140,6 +141,7 @@ For new observations not selected from the additional dataset
 (\code{dataset_add}), \code{exist_flag} is set to the specified value.
 
 \describe{
+\item{Permitted values}{a character scalar, i.e., a character vector of length one}
 \item{Default value}{\code{NA_character_}}
 }}
 
@@ -151,6 +153,7 @@ variables to be kept for the new records. The variables specified for
 automatically.
 
 \describe{
+\item{Permitted values}{list of variables or tidyselect expressions created by \code{exprs()}, e.g., \code{exprs(DTHDT, starts_with("AST"))} or \code{exprs(everything)}}
 \item{Default value}{\code{exprs(everything())}}
 }}
 
@@ -764,6 +767,6 @@ created which indicates whether the subject died (set \code{AVALC = "Y"}, \code{
 #> 2 XX1234  2       DEATH   Death NA         N    
 #> 3 XX1234  3       DEATH   Death NA         N    }\if{html}{\out{</div>}}
 
-The \code{keep_source_vars} argument is specified to avoid that all \code{ADLS}
+The \code{keep_source_vars} argument is specified to avoid that all \code{ADSL}
 variables (like \code{DTHDT}) are copied to the parameter.}}
 

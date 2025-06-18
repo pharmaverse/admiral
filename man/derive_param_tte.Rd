@@ -101,6 +101,7 @@ If set to \code{TRUE}, variables \code{ADTM} and \code{STARTDTM} are created. Ot
 variables \code{ADT} and \code{STARTDT} are created.
 
 \describe{
+\item{Permitted values}{\code{"TRUE"}, \code{"FALSE"}}
 \item{Default value}{\code{FALSE}}
 }}
 
@@ -112,6 +113,7 @@ expected. The values must be symbols, character strings, numeric values,
 expressions, or \code{NA}.
 
 \describe{
+\item{Permitted values}{list of named expressions created by a formula using \code{exprs()}, e.g., \code{exprs(AVALC = VSSTRESC, AVAL = yn_to_numeric(AVALC))}}
 \item{Default value}{none}
 }}
 
