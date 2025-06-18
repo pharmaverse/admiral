@@ -423,6 +423,8 @@ convert_dtc_to_dtm <- function(dtc,
 #' `"00:00:00"`. Specifying date variables makes sense only if the date is
 #' imputed. If only time is imputed, date variables do not affect the result.
 #'
+#' @permitted [date_list]
+#'
 #' @param max_dates Maximum dates
 #'
 #' A list of dates is expected. It is ensured that the imputed date is not after
@@ -433,7 +435,9 @@ convert_dtc_to_dtm <- function(dtc,
 #' For date variables (not datetime) in the list the time is imputed to
 #' `"23:59:59"`. Specifying date variables makes sense only if the date is
 #' imputed. If only time is imputed, date variables do not affect the result.
-
+#'
+#' @permitted [date_list]
+#'
 #' @param preserve Preserve lower level date/time part when higher order part
 #' is missing, e.g. preserve day if month is missing or
 #' preserve minute when hour is missing.
