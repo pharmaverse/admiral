@@ -38,7 +38,7 @@ function is called to retrieve the terms.
 \item{fun_name}{Name of access function
 
 The character name of the access function, usually created with
-\code{deparse(subsitute(fun))}. This must be non null. Otherwise, an error is issued.
+\code{deparse(substitute(fun))}. This must be non null. Otherwise, an error is issued.
 
 \describe{
 \item{Default value}{none}

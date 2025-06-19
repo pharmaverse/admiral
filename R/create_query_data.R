@@ -308,7 +308,7 @@ create_query_data <- function(queries,
 #' @param fun_name Name of access function
 #'
 #'   The character name of the access function, usually created with
-#'   `deparse(subsitute(fun))`. This must be non null. Otherwise, an error is issued.
+#'   `deparse(substitute(fun))`. This must be non null. Otherwise, an error is issued.
 #'
 #' @param queries Queries
 #'
