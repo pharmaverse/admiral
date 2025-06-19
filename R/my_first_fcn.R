@@ -13,7 +13,7 @@
 #' @export
 #'
 #' @examples
-#' hello_admiral(hw = FALSE)
+#' hello_admiral(smile = FALSE)
 hello_admiral <- function(smile = TRUE) {
   if (smile) {
     message("Welcome to the admiral family :)")

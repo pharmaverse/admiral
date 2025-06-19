@@ -23,7 +23,7 @@ My first function, happy greeting
 This is a message of happiness.
 }
 \examples{
-hello_admiral(hw = FALSE)
+hello_admiral(smile = FALSE)
 }
 \concept{example}
 \keyword{example}
