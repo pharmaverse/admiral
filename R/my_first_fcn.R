@@ -2,10 +2,7 @@
 #'
 #' @param hw TRUE or FALSE
 #'
-#' @details In the roxygen documentation you will find tags for family and keywords.
-#' This is to create organized sections for the Reference tab on the pkgdown website.
-#' You can modify the `_pkgdown.yml` as necessary to create appropriate sections as necessary.
-#' Under `./man/roxygen/meta.R`, you will find where to store these family/keywords.
+#' @details This is a message of happiness.
 #'
 #' @return Happy Message
 #'
@@ -17,9 +14,9 @@
 #'
 #' @examples
 #' hello_admiral(hw = FALSE)
-hello_admiral <- function(hw = TRUE) {
-  if (hw) {
-    message("Welcome to the admiral family!")
+hello_admiral <- function(smile = TRUE) {
+  if (smile) {
+    message("Welcome to the admiral family :)")
   } else {
     message("Welcome to the admiral family!")
   }
