@@ -103,6 +103,8 @@ records. (#2683)
 - The following function arguments are entering the next phase of the [deprecation process](https://pharmaverse.github.io/admiraldev/articles/programming_strategy.html#deprecation): (#2487) (#2595)
 
     **Phase 1 (message)**
+	
+	- `call_user_fun()` is deprecated and will have no replacement. (#2678)
   
     **Phase 2 (warning)**
     

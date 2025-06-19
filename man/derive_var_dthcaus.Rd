@@ -164,6 +164,7 @@ derive_var_dthcaus(
 \code{\link[=dthcaus_source]{dthcaus_source()}}
 
 Other deprecated: 
+\code{\link{call_user_fun}()},
 \code{\link{date_source}()},
 \code{\link{derive_param_extreme_record}()},
 \code{\link{derive_var_extreme_dt}()},

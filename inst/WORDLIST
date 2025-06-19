@@ -1,3 +1,11 @@
+Datetime
+Durations
+datetime
+datetimes
+recoded
+repo
+reproducibility
+timepoint
 ADAE
 ADCM
 ADEG
@@ -92,7 +100,6 @@ Declan
 Denney
 DuBois
 Duniec
-Durations
 EMA
 EOSSTT
 EPI
@@ -306,8 +313,6 @@ creatinine
 cyclomatic
 dL
 datepart
-datetime
-datetimes
 deps
 der
 desc
@@ -327,6 +332,7 @@ framingham
 funder
 glomerular
 groupwise
+lifecycle
 lubridate
 mL
 magrittr
@@ -347,7 +353,6 @@ pre
 prev
 prm
 quosures
-recoded
 renv
 repo
 reproducibility
@@ -370,7 +375,6 @@ tidyselect
 tidyverse
 timeframe
 timepart
-timepoint
 tte
 umol
 ungrouped
