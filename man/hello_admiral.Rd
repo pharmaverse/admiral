@@ -7,10 +7,10 @@
 hello_admiral(smile = TRUE)
 }
 \arguments{
-\item{hw}{TRUE or FALSE
+\item{smile}{TRUE or FALSE
 
 \describe{
-\item{Default value}{\code{NULL}}
+\item{Default value}{\code{TRUE}}
 }}
 }
 \value{

@@ -1,6 +1,6 @@
 #' My first function, happy greeting
 #'
-#' @param hw TRUE or FALSE
+#' @param smile TRUE or FALSE
 #'
 #' @details This is a message of happiness.
 #'
