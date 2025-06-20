@@ -126,15 +126,17 @@ verify_templates <- function(pkg = "admiral", ds = c("adae")) {
     cli_inform("Template running for {adam}")
     run_template(adam, dir = path$template_dir)
     # retrieve *.rda file in cache; copy to correct directory
-    dataset_new = load_rda(paste0(path$cache_dir, "/", adam, ".rda"))
-    file.copy(file.path(path$cache_dir, paste0(adam, ".rda")),
-              file.path(path$adam_new_dir, paste0(adam, ".rda")))
+    dataset_new <- load_rda(paste0(path$cache_dir, "/", adam, ".rda"))
+    file.copy(
+      file.path(path$cache_dir, paste0(adam, ".rda")),
+      file.path(path$adam_new_dir, paste0(adam, ".rda"))
+    )
     dataset_old <- get_dataset_old(adam, path$adam_old_dir)
 
     # ------------------------  DISCUSS
-    # CHOOSE ONE:   `continue` as below, OR 
+    # CHOOSE ONE:   `continue` as below, OR
     #                insert Eli's quarto code to compare AND display nicely
-    # ------------------------  
+    # ------------------------
     compare(
       base = dataset_old,
       compare = dataset_new,
@@ -223,7 +225,7 @@ save_rda <- function(data, file_path, new_name) {
 #' @param file name of file to hold result of `diffdf`
 
 compare <- function(base, compare, keys, file = NULL) {
-  # DISCUSS ------------------------  
+  # DISCUSS ------------------------
   # Default: datasets are in tmp directories and not saved
   # To debug:  useful to have easy access to datasets in (1) global env
   e <- globalenv()
@@ -235,7 +237,7 @@ compare <- function(base, compare, keys, file = NULL) {
   # saveRDS(e$old,file= paste0("old", ".RDS"))    # temporary
   # saveRDS(e$new,file= paste0("new", ".RDS"))
   # nolint end
-  # ------------------------  
+  # ------------------------
 
   # remove column attributes
   for (name in names(base)) {
@@ -343,4 +345,4 @@ run_template <- function(adam, dir = NULL) {
 
 # Since this is script, and not package R function it must be loaded/sourced separately.
 # The next line runs the entire process after this file is sourced.
-#verify_templates()   # nolint
+# verify_templates()   # nolint
