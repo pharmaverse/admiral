@@ -100,7 +100,7 @@ verify_templates <- function(pkg = "admiral", ds = c("adae")) {
   # gather templates for this pkg (12 found) ----
   templates <- list.files(path$template_dir, pattern = "ad_")
 
-  # from templates  generate vector of adam_names
+  # from templates generate vector of adam_names
   adam_names <- vapply(templates, function(x) gsub("ad_|\\.R", "", x),
     USE.NAMES = FALSE, character(length = 1)
   )
