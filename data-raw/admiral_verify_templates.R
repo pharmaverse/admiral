@@ -106,7 +106,7 @@ verify_templates <- function(pkg = "admiral", ds = c("adae")) {
   )
 
   # check
-  if (length(templates) != length(adam_names)) stop("Number of templates and adam_names differ")
+  if (length(templates) != length(adam_names)) cli_abort("Number of templates and adam_names differ")
 
   # templates is a named chr[]
   names(templates) <- adam_names
