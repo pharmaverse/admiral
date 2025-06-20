@@ -7,6 +7,7 @@
 get_terms_from_db(
   version,
   fun,
+  fun_name,
   queries,
   definition,
   expect_grpname = FALSE,
@@ -29,6 +30,15 @@ passed to the access function (\code{fun}).
 
 The access function must be non null. Otherwise, an error is issued. The
 function is called to retrieve the terms.
+
+\describe{
+\item{Default value}{none}
+}}
+
+\item{fun_name}{Name of access function
+
+The character name of the access function, usually created with
+\code{deparse(substitute(fun))}. This must be non null. Otherwise, an error is issued.
 
 \describe{
 \item{Default value}{none}

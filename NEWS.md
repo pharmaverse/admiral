@@ -4,12 +4,26 @@
 
 - The documentation was enhanced: (#2585)
     - The default value of an argument is now displayed in the argument description.
-    - For complex functions each example has now a title, which is also shown in
+    - For some complex functions each example has now a title, which is also shown in
     the TOC, and a description. This enabled adding more examples without losing
-    readability. See `derive_extreme_records()` for an example.
-    - The output of the structured examples used for complex functions is
-    displayed in the help pages in RStudio.
-    
+    readability. The output of the structured examples used for complex functions is
+    displayed in the help pages in RStudio. The following existing functions 
+    (as well as any new functions added in this release) received this enhancement:
+      - `derive_extreme_event()` (#2735)
+      - `derive_extreme_records()` (#2585)
+      - `derive_param_computed()` (#2701)
+      - `derive_param_tte()` (#2704)
+      - `derive_summary_records()` (#2707)
+      - `derive_var_extreme_flag()` (#2752)
+      - `derive_var_joined_exist_flag()` (#2729)
+      - `derive_var_trtemfl()` (#2746)
+      - `derive_vars_crit_flag()` (#2744)
+      - `derive_vars_dt()` (#2715)
+      - `derive_vars_dtm()` (#2715)
+      - `derive_vars_joined()` (#2727)
+      - `derive_vars_merged()` (#2727)
+      - `filter_joined()` (#2729)
+  <p>
 - New function `derive_vars_joined_summary()` to derive summary variables from
   selected records of an additional dataset where the selection depends on
   variables from both the input dataset and the additional dataset. For example,
@@ -25,6 +39,7 @@
 ## Updates of Existing Functions
 
 - In `derive_vars_joined()`, the `filter_add` argument is now correctly applied for all join types, fixing an issue where it was ignored when `join_type != "all"`. (#2682)
+
 - The function `extract_duplicate_records()` was updated to consider all variables in the input dataset for the by group if the `by_vars` argument is omitted entirely. (#2644)
 
 - In `slice_derivation()`, previously the derivation is not called for empty
@@ -32,17 +47,48 @@ subsets, however this can lead to issues when the input dataset is empty. Now
 the derivation is called for all subsets. (#2645)
 
 - The examples section for the function `derive_var_trtemfl()` was enhanced to include a showcasing of all scenarios discussed in the following [PHUSE White Paper on Treatment-Emergent AEs](https://phuse.s3.eu-central-1.amazonaws.com/Deliverables/Safety+Analytics/WP-087+Recommended+Definition+of++Treatment-Emergent+Adverse+Events+in+Clinical+Trials+.pdf). (#2455)
+
+- `derive_var_atoxgr_dir()` updated to handle more than one unit in grading metadata. Related to providing US (Conventional) units for grading (#2557).
+
+- NCICTCAEv4 and NCICTCAEv5 grading criteria (`atoxgr_criteria_ctcv4`, `atoxgr_criteria_ctcv4_uscv`, `atoxgr_criteria_ctcv5`, `atoxgr_criteria_ctcv5_uscv`), 
+updated to add terms `"Acidosis"` and `"Alkalosis"` (#2768).
+
+- The background checks in `derive_summary_records()` were too restrictive: `by_vars` were expected in `dataset` although the code did not require it. This requirement has therefore been dropped (#2686).
+
+- The functions `derive_summary_records()` and `derive_param_exist_flag()` 
+were updated to fix an issue where if a variable was in both `dataset_add` and `dataset_ref`, it was 
+added to the new records even if it was not in `by_vars`. (#2664)
+
 - `derive_var_atoxgr_dir()` updated to handle more than one unit in grading metadata. Related to providing US (Conventional) units for grading. (#2557)
+
 - The background checks in `derive_summary_records()` were too restrictive: `by_vars` were expected in `dataset` although the code did not require it. This requirement has therefore been dropped. (#2686)
+
 - The functions `derive_vars_joined()`, `derive_var_joined_exist_flag()`, and
 `filter_joined()` produce correct results now when they are used with `join_type
 = "before"` or `join_type = "after"` and `dataset` and `dataset_add` differ or
 the `filter_add` argument is used. (#2863)
 
+- The function `derive_locf_records()` was updated to include two new arguments: `id_vars_ref` and `imputation`.
+  The `id_vars_ref` argument allows users to select the variables to group by in the reference dataset (`dataset_ref`) 
+  when determining which observations to add to the input dataset. The `imputation` argument lets users decide whether 
+  to update `analysis_var` when its value is `NA` ("update" and "update_add"), or to add a new observation instead ("add"). (#2694) (#2680) (#2717)
+
 - `derive_vars_dt()`, `derive_vars_dtm()`, `impute_dtc_dt()`, `impute_dtc_dtm()`, `convert_dtc_to_dt()`, & `convert_dtc_to_dtm()` and related functions will now throw an error instead of a warning when `highest_imputation = "Y"` but neither `min_date` (when `date_imputation = "first"`) nor `max_dates` (when `date_imputation = "last"`) are specified. (#2654)
+
+- `create_query_data()` no longer issues warnings when `basket_select()` objects
+with custom arguments of length greater than one are used. (#2751)
+
+- The `order` argument in `derive_var_joined_exist_flag()` and `filter_joined()`
+is now optional unless `join_type = "after"`, `join_type = "before"`,
+`first_cond_lower`, `first_cond_upper`, or `tmp_obs_nr_var` are specified.
+(#2729)
 
 
 ## Breaking Changes
+
+- `derive_vars_dtm()` issues a message alerting users to a coming change in 
+`admiral 1.4.0` where the default behavior of `ignore_seconds_flag` will be changed from 
+`FALSE` to `TRUE`. (#2661)
 
 - Lab grading metadata `atoxgr_criteria_ctcv4()`, `atoxgr_criteria_ctcv5()` and `atoxgr_criteria_daids()` variable `SI_UNIT_CHECK` renamed to `UNIT_CHECK`. (#2557)
 
@@ -57,6 +103,8 @@ records. (#2683)
 - The following function arguments are entering the next phase of the [deprecation process](https://pharmaverse.github.io/admiraldev/articles/programming_strategy.html#deprecation): (#2487) (#2595)
 
     **Phase 1 (message)**
+	
+	- `call_user_fun()` is deprecated and will have no replacement. (#2678)
   
     **Phase 2 (warning)**
     
@@ -67,15 +115,6 @@ records. (#2683)
 ## Documentation
 
 - Improved documentation, error messages, and argument assertions of `derive_vars_dt()`, `derive_vars_dtm()`, `impute_dtc_dt()`, `impute_dtc_dtm()`, `convert_dtc_to_dt()`, & `convert_dtc_to_dtm()`. (#2654)
-
-- The examples section of the following functions was enhanced:
-    - `derive_extreme_records()` (#2585)
-    - `derive_param_tte()` (#2704)
-    - `derive_summary_records()` (#2707)
-    - `derive_extreme_event()` (#2735)
-    - `derive_vars_joined()` (#2727)
-    - `derive_vars_merged()` (#2727)
-    - `derive_vars_crit_flag()` (#2744)
 
 - Added an example to the `derive_vars_transposed()` reference page to showcase how duplicates-related errors can arise when records in `dataset_merge` are not uniquely identified. (#2609)
 
@@ -95,6 +134,13 @@ read (#2623) and updated to include new metadata for grading using US (Conventio
 - The 'Details' section of the `derive_var_analysis_ratio()` function and the 'Derive Analysis Ratio' section of the "Creating a BDS Finding ADaM" vignette were updated to include references to `R2AyHI` and `R2AyLO`. (#2548)
 
 - The `derive_basetype_records()` documentation was updated to clarify `BASETYPE` derivations. (#2545)
+
+- The `derive_extreme_records()` documentation was updated to clarify which variables are populated
+from `dataset_ref` for the new observations. (#2664)
+
+- The 'Assign `PARAMCD`, `PARAM`, `PARAMN`, `PARCAT1`' section of the "Creating a BDS Finding ADaM" vignette was updated to clarify `PARAM` to `PARCAT1` mapping. (#2547)
+
+- The package documentation for (1) all CRAN-released versions starting from `{admiral}` 1.0.0 up until the current version and (2) the latest development version (listed under "main") are all now accessible using the "Versions" selector in the toolbar. (#2766)
 
 ## Various
 

@@ -215,6 +215,7 @@ create_query_data <- function(queries,
       query_data[[i]] <- get_terms_from_db(
         version = version,
         fun = get_terms_fun,
+        fun_name = deparse(substitute(get_terms_fun)),
         queries = queries,
         definition = queries[[i]]$definition,
         expect_grpname = TRUE,
@@ -245,6 +246,7 @@ create_query_data <- function(queries,
           terms[[j]] <- get_terms_from_db(
             version = version,
             fun = get_terms_fun,
+            fun_name = deparse(substitute(get_terms_fun)),
             queries = queries,
             definition = definition[[j]],
             i = i,
@@ -303,6 +305,11 @@ create_query_data <- function(queries,
 #'   The access function must be non null. Otherwise, an error is issued. The
 #'   function is called to retrieve the terms.
 #'
+#' @param fun_name Name of access function
+#'
+#'   The character name of the access function, usually created with
+#'   `deparse(substitute(fun))`. This must be non null. Otherwise, an error is issued.
+#'
 #' @param queries Queries
 #'
 #'   List of all queries passed to `create_query_data()`. It is used for error
@@ -332,12 +339,15 @@ create_query_data <- function(queries,
 #'
 get_terms_from_db <- function(version,
                               fun,
+                              fun_name,
                               queries,
                               definition,
                               expect_grpname = FALSE,
                               expect_grpid = FALSE,
                               i,
                               temp_env) {
+  assert_character_scalar(fun_name)
+
   assert_db_requirements(
     version = version,
     version_arg_name = deparse(substitute(version)),
@@ -346,14 +356,32 @@ get_terms_from_db <- function(version,
     queries = queries,
     i = i
   )
-  terms <- call_user_fun(
+
+  terms <- tryCatch(
     fun(
-      basket_select = definition,
       version = version,
+      basket_select = definition,
       keep_id = expect_grpid,
       temp_env = temp_env
-    )
+    ),
+    error = function(err) {
+      cli_abort(
+        c(
+          paste(
+            "An error occurred while calling the function {.fn {fun_name}} provided",
+            "to the `get_terms_fun` argument."
+          ),
+          "This could be due to incorrect handling of input parameters inside {.fn {fun_name}}.",
+          "Current arguments passed to {.fn {fun_name}}:",
+          " - version: {version}",
+          " - basket_select: {definition}",
+          " - keep_id: {expect_grpid}",
+          "Error message: {conditionMessage(err)}"
+        )
+      )
+    }
   )
+
   assert_terms(
     terms,
     expect_grpname = expect_grpname,
@@ -892,10 +920,21 @@ format.basket_select <- function(x, ...) {
   for (i in seq_len(length(all_arg_names))) {
     is_numeric_class <- map_lgl(x[i], inherits, "numeric") | map_chr(x[i], typeof) == "numeric"
 
-    if (is_numeric_class) {
-      formvar[i] <- paste(all_arg_names[i], "=", format(x[[i]]))
-    } else {
+    if (is.character(x[[i]]) && length(x[[i]]) <= 1 && !is.na(x[[i]])) {
       formvar[i] <- paste(all_arg_names[i], "=", dquote(x[[i]]))
+    } else if (length(x[[i]]) <= 1 || typeof(x[[i]]) == "language") {
+      formvar[i] <- paste(
+        all_arg_names[i],
+        "=",
+        format(x[[i]]) %>% trimws() %>% paste(collapse = " ")
+      )
+    } else {
+      if (typeof(x[[i]]) == "list") {
+        obj_name <- "list"
+      } else {
+        obj_name <- "c"
+      }
+      formvar[i] <- paste0(all_arg_names[i], " = ", obj_name, "(...)")
     }
   }
 
