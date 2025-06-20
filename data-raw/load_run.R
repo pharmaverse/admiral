@@ -18,4 +18,7 @@ devtools::load_all()
 
 source("data-raw/admiral_verify_templates.R") # nolint
 
-verify_templates()
+templates <- list_all_templates() |> paste()
+templates <- templates[templates!="ADLBHY"]
+
+verify_templates(ds = templates |> tolower() |> head(2))

@@ -1,16 +1,11 @@
 # This script:  data-raw/admiral_verify_templates.R
 
-# TODO:
-# - where code overlaps, make pharamversadam script and this one the same.
-# - TODO: replace messages with cli::cli_*
-# - TODO: lots of directories and named lists.  Best way to keep neat and organized?
-
 # Assumptions/Questions:
 # - ignore *.rda files in admiral/data (per Ben)
 # - compares full ADaM - ie all rows
 # - for developer use and developer has run load_all()
 # - use cli:: for messages/errors - YES
-# - most datasets are  stored as.rda files
+# - most datasets are  stored as .rda files
 
 
 #' Directories used to find files:
@@ -76,28 +71,9 @@ verify_templates <- function(pkg = "admiral", ds = c("adae")) {
   # nolint end
   cli_alert("Generating ADaMs for { pkg} package.")
 
-  # TODO:  remove any warnings
-  # (DISCUSS) CHOOSE one for directories: : temporary or permanent? (here: temporary)
-  cli_inform("Creating temporary directories")
-  x <- tempdir()
-  dir.create(file.path(x, "old"), showWarnings = TRUE)
-  dir.create(file.path(x, "new"), showWarnings = TRUE)
-  dir.create(file.path(x, "diff"), showWarnings = TRUE)
+  path <- create_directories()
 
-  # TODO:
-  path <- list(
-    template_dir = "inst/templates",
-    cache_dir = tools::R_user_dir("admiral_templates_data", which = "cache"),
-    adam_new_dir = file.path(x, "new"),
-    adam_old_dir = file.path(x, "old"),
-    diff = file.path(x, "diff")
-  )
-
-  # TODO:
-  # if dir exists then empty it ; if not exist then create it.
-  # lapply(path, function(x)  if( x %in% c("template_dir", "cache_dir")!exists(x)) dir.create(x))
-
-  # gather templates for this pkg (12 found) ----
+  # gather templates ----
   templates <- list.files(path$template_dir, pattern = "ad_")
 
   # from templates generate vector of adam_names
@@ -133,10 +109,7 @@ verify_templates <- function(pkg = "admiral", ds = c("adae")) {
     )
     dataset_old <- get_dataset_old(adam, path$adam_old_dir)
 
-    # ------------------------  DISCUSS
-    # CHOOSE ONE:   `continue` as below, OR
-    #                insert Eli's quarto code to compare AND display nicely
-    # ------------------------
+    # compare the generated dataset to the reference dataset from github
     compare(
       base = dataset_old,
       compare = dataset_new,
@@ -144,8 +117,12 @@ verify_templates <- function(pkg = "admiral", ds = c("adae")) {
       file = paste0(path$diff, "/", adam, ".txt")
     )
   })
-  # finally, disply differences
+
+  issues <- map(compare_list, function(x) diffdf::diffdf_has_issues(x)) |> unlist()
+
+  # finally, display differences
   display_diff(dir = path$diff)
+  cli_abort(paste("Issues found in",  paste0(adam_names[issues], collapse = ", ")))
 }
 
 #------------------------  helper functions
@@ -171,19 +148,32 @@ verify_templates <- function(pkg = "admiral", ds = c("adae")) {
 #'
 #' @param dir Directory with `diff` files, one for each ADaM
 display_diff <- function(dir = NULL) {
+  # Open connection to log file
+  log_file <- file("verify_template_comparisons.txt", "a")
+
   files <- list.files(dir, full.names = TRUE)
   contents <- lapply(files, readLines)
   names(contents) <- basename(files)
+
   map2(
     names(contents), contents,
     function(name, content) {
-      cli::cli_h1(paste(
-        "Differences found for", str_replace_all(name, ".txt", ""),
-        " ", today(), "\n"
-      ))
+      header <- paste("Differences found for", str_replace_all(name, ".txt", ""),
+                      " ", today(), "\n")
+
+      # Display to console
+      cli::cli_h1(header)
       cat(paste(content, collapse = "\n"))
+
+      # Write to log file
+      writeLines(header, log_file)
+      writeLines(paste(content, collapse = "\n"), log_file)
+      writeLines("\n", log_file) # Add separator between entries
     }
   )
+
+  # Close the file connection
+  close(log_file)
   invisible(NULL)
 }
 #' @description: loads saved rda file `filename` and returns the dataset
@@ -246,9 +236,9 @@ compare <- function(base, compare, keys, file = NULL) {
   for (name in names(compare)) {
     attr(compare[[name]], "label") <- NULL
   }
-  tryCatch(
+  comparison <- tryCatch(
     {
-      e$res <- diffdf::diffdf(
+      diffdf::diffdf(
         base = base,
         compare = compare,
         keys = keys,
@@ -258,6 +248,7 @@ compare <- function(base, compare, keys, file = NULL) {
     },
     error = function(e) message("Error in diffdf: ", e$message)
   ) ## end tryCatch
+  comparison
 } ## end compare
 
 #' @description:  removes the cache directory
@@ -268,16 +259,6 @@ clean_cache <- function() {
     message("Cache directory deleted: ", cache_dir)
   } else {
     message("Cache directory does not exist: ", cache_dir)
-  }
-}
-
-#' @description:  removes the old adam directory
-clean_adam_old_dir <- function(dir = NULL) {
-  if (dir.exists(tempdir())) {
-    unlink(adam_old_dir, recursive = TRUE)
-    message(adam_old_dir, "directory deleted: ", tempdir())
-  } else {
-    message(adam_old_dir, "directory does not exist: ", tempdir())
   }
 }
 
@@ -299,10 +280,6 @@ download_adam_old <- function(adam_names, path = NULL) {
     )
   })
 }
-
-## DISCUSS:
-#  Combine next 2 functions into one.   get_dataset(adam, path)
-#  The path tells us if old or new.
 
 #' Loads an ADaM dataset from a saved RDA file on disk.
 #'
@@ -346,3 +323,23 @@ run_template <- function(adam, dir = NULL) {
 # Since this is script, and not package R function it must be loaded/sourced separately.
 # The next line runs the entire process after this file is sourced.
 # verify_templates()   # nolint
+
+
+#' create_directories
+#'
+#' @return list of paths to directories
+create_directories <- function() {
+  cli_inform("Creating temporary directories")
+  x <- tempdir()
+  dir.create(file.path(x, "old"), showWarnings = FALSE)
+  dir.create(file.path(x, "new"), showWarnings = FALSE)
+  dir.create(file.path(x, "diff"), showWarnings = FALSE)
+
+  list(
+    template_dir = "inst/templates",
+    cache_dir = tools::R_user_dir("admiral_templates_data", which = "cache"),
+    adam_new_dir = file.path(x, "new"),
+    adam_old_dir = file.path(x, "old"),
+    diff = file.path(x, "diff")
+  )
+}
