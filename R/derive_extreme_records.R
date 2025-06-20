@@ -85,18 +85,14 @@
 #'   For new observations selected from the additional dataset (`dataset_add`),
 #'   `exist_flag` is set to the specified value.
 #'
+#' @permitted [char_scalar]
+#'
 #' @param false_value False value
 #'
 #'   For new observations not selected from the additional dataset
 #'   (`dataset_add`), `exist_flag` is set to the specified value.
 #'
-#' @param keep_source_vars Variables to be kept in the new records
-#'
-#'   A named list or tidyselect expressions created by `exprs()` defining the
-#'   variables to be kept for the new records. The variables specified for
-#'   `by_vars` and `set_values_to` need not be specified here as they are kept
-#'   automatically.
-#'
+#' @permitted [char_scalar]
 #'
 #' @param keep_source_vars Variables to be kept in the new records
 #'
@@ -105,6 +101,7 @@
 #'   `by_vars` and `set_values_to` need not be specified here as they are kept
 #'   automatically.
 #'
+#' @permitted [var_list_tidyselect]
 #'
 #' @inheritParams filter_extreme
 #' @inheritParams derive_summary_records
@@ -117,7 +114,9 @@
 #'   order specified for the `order` argument and the mode specified for the
 #'   `mode` argument) is selected.
 #'   1. If `dataset_ref` is specified, observations which are in `dataset_ref`
-#'   but not in the selected records are added.
+#'   but not in the selected records are added. Variables that are common
+#'   across `dataset_ref`, `dataset_add` and `keep_source_vars()` are also
+#'   populated for the new observations.
 #'   1. The variables specified by the `set_values_to` argument are added to
 #'   the selected observations.
 #'   1. The variables specified by the `keep_source_vars` argument are selected
@@ -509,7 +508,7 @@
 #'     ADT = DTHDT
 #'   )
 #' )
-#' @info The `keep_source_vars` argument is specified to avoid that all `ADLS`
+#' @info The `keep_source_vars` argument is specified to avoid that all `ADSL`
 #'   variables (like `DTHDT`) are copied to the parameter.
 derive_extreme_records <- function(dataset = NULL,
                                    dataset_add,

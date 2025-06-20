@@ -34,7 +34,9 @@
 #'
 #' @param order Order
 #'
-#'   The observations are ordered by the specified order.
+#'   The observations are ordered by the specified order if `join_type =
+#'   "after"`, `join_type = "before"`, `first_cond_lower`, `first_cond_upper`,
+#'   or `tmp_obs_nr_var` are specified.
 #'
 #'   `r roxygen_order_na_handling()`
 #'
@@ -118,9 +120,9 @@
 #'
 #' @param check_type Check uniqueness?
 #'
-#'   If `"warning"` or `"error"` is specified, the specified message is issued
-#'   if the observations of the input dataset are not unique with respect to the
-#'   by variables and the order.
+#'   If `"message"`, `"warning"`, or `"error"` is specified, the specified
+#'   message is issued if the observations of the input dataset are not unique
+#'   with respect to the by variables and the order.
 #'
 #' @permitted [msg_type]
 #'
@@ -206,7 +208,7 @@
 #'   fulfilling the condition is included). If for an observation of the input
 #'   dataset the condition is not fulfilled, the observation is removed.
 #'
-#'   For an example see the last example in the "Examples" section.
+#'   For examples see the "Examples" section.
 #'
 #'   ## Step 4
 #'
@@ -216,7 +218,7 @@
 #'
 #'   ## Step 5
 #'
-#'   The first observation of each group is selected
+#'   The first observation of each group is selected.
 #'
 #'   ## Step 6
 #'
@@ -235,11 +237,19 @@
 #'
 #' @export
 #'
-#' @examples
+#' @examplesx
+#' @caption Flag records considering other records (`filter_join`, `join_vars`)
+#' @info In this example, records with a duration longer than 30 and where a
+#'   COVID AE (`ACOVFL == "Y"`) occurred before or up to seven days after the
+#'   record should be flagged. The condition for flagging the records is
+#'   specified by the `filter_join` argument. Variables from the other records
+#'   are referenced by variable names with the suffix `.join`. These variables
+#'   have to be specified for the `join_vars` argument. As records before _and_
+#'   after the current record should be considered, `join_type = "all"` is
+#'   specified.
+#' @code
 #' library(tibble)
 #'
-#' # flag observations with a duration longer than 30 and
-#' # at, after, or up to 7 days before a COVID AE (ACOVFL == "Y")
 #' adae <- tribble(
 #'   ~USUBJID, ~ADY, ~ACOVFL, ~ADURN,
 #'   "1",        10, "N",          1,
@@ -261,11 +271,20 @@
 #'   by_vars = exprs(USUBJID),
 #'   join_vars = exprs(ACOVFL, ADY),
 #'   join_type = "all",
-#'   order = exprs(ADY),
-#'   filter_join = ADURN > 30 & ACOVFL.join == "Y" & ADY >= ADY.join - 7
+#'   filter_join = ADURN > 30 & ACOVFL.join == "Y" & ADY.join <= ADY + 7
 #' )
 #'
-#' # flag observations with AVALC == "Y" and AVALC == "Y" at one subsequent visit
+#' @caption Considering only records after the current one (`join_type =
+#'   "after"`, `true_value`, `false_value`)
+#' @info In this example, records with `AVALC == "Y"` and `AVALC == "Y"` at a
+#'   subsequent visit should be flagged. `join_type = "after"` is specified to
+#'   consider only records after the current one. Please note that the `order`
+#'   argument must be specified, as otherwise it is not possible to determine
+#'   which records are after the current record.
+#'
+#'   Please note that a numeric flag is created here by specifying the
+#'   `true_value` and the `false_value` argument.
+#' @code
 #' data <- tribble(
 #'   ~USUBJID, ~AVISITN, ~AVALC,
 #'   "1",      1,        "Y",
@@ -283,15 +302,79 @@
 #'   data,
 #'   dataset_add = data,
 #'   by_vars = exprs(USUBJID),
-#'   new_var = CONFFL,
+#'   new_var = CONFFLN,
 #'   join_vars = exprs(AVALC, AVISITN),
 #'   join_type = "after",
 #'   order = exprs(AVISITN),
-#'   filter_join = AVALC == "Y" & AVALC.join == "Y" & AVISITN < AVISITN.join
+#'   filter_join = AVALC == "Y" & AVALC.join == "Y",
+#'   true_value = 1,
+#'   false_value = 0
 #' )
 #'
-#' # select observations with AVALC == "CR", AVALC == "CR" at a subsequent visit,
-#' # only "CR" or "NE" in between, and at most one "NE" in between
+#' @caption Considering a range of records only (`first_cond_lower`, `first_cond_upper`)
+#' @info Consider the following data.
+#' @code
+#' myd <- tribble(
+#'   ~subj, ~day, ~val,
+#'   "1",      1, "++",
+#'   "1",      2, "-",
+#'   "1",      3, "0",
+#'   "1",      4, "+",
+#'   "1",      5, "++",
+#'   "1",      6, "-",
+#'   "2",      1, "-",
+#'   "2",      2, "++",
+#'   "2",      3, "+",
+#'   "2",      4, "0",
+#'   "2",      5, "-",
+#'   "2",      6, "++"
+#' )
+#'
+#' @info To flag `"0"` where all results from the first `"++"` before the `"0"`
+#' up to the `"0"` (excluding the `"0"`) are `"+"` or `"++"` the
+#' `first_cond_lower` argument and `join_type = "before"` are specified.
+#' @code
+#' derive_var_joined_exist_flag(
+#'   myd,
+#'   dataset_add = myd,
+#'   by_vars = exprs(subj),
+#'   order = exprs(day),
+#'   new_var = flag,
+#'   join_vars = exprs(val),
+#'   join_type = "before",
+#'   first_cond_lower = val.join == "++",
+#'   filter_join = val == "0" & all(val.join %in% c("+", "++"))
+#' )
+#'
+#' @info To flag `"0"` where all results from the `"0"` (excluding the `"0"`) up
+#' to the first `"++"` after the `"0"` are `"+"` or `"++"` the
+#' `first_cond_upper` argument and `join_type = "after"` are specified.
+#' @code
+#' derive_var_joined_exist_flag(
+#'   myd,
+#'   dataset_add = myd,
+#'   by_vars = exprs(subj),
+#'   order = exprs(day),
+#'   new_var = flag,
+#'   join_vars = exprs(val),
+#'   join_type = "after",
+#'   first_cond_upper = val.join == "++",
+#'   filter_join = val == "0" & all(val.join %in% c("+", "++"))
+#' )
+#'
+#' @caption Considering only records up to a condition (`first_cond_upper`)
+#' @info In this example from deriving confirmed response in oncology, the
+#'   records with
+#' - `AVALC == "CR"`,
+#' - `AVALC == "CR"` at a subsequent visit,
+#' - only `"CR"` or `"NE"` in between, and
+#' - at most one `"NE"` in between
+#'
+#' should be flagged. The other records to be considered are restricted to those
+#' up to the first occurrence of `"CR"` by specifying the `first_cond_upper`
+#' argument. The `count_vals()` function is used to count the `"NE"`s for the
+#' last condition.
+#' @code
 #' data <- tribble(
 #'   ~USUBJID, ~AVISITN, ~AVALC,
 #'   "1",      1,        "PR",
@@ -323,9 +406,22 @@
 #'     count_vals(var = AVALC.join, val = "NE") <= 1
 #' )
 #'
-#' # flag observations with AVALC == "PR", AVALC == "CR" or AVALC == "PR"
-#' # at a subsequent visit at least 20 days later, only "CR", "PR", or "NE"
-#' # in between, at most one "NE" in between, and "CR" is not followed by "PR"
+#' @caption Considering order of values (`min_cond()`, `max_cond()`)
+#' @info In this example from deriving confirmed response in oncology, records
+#'   with
+#' - `AVALC == "PR"`,
+#' - `AVALC == "CR"` or `AVALC == "PR"` at a subsequent visit at least 20 days later,
+#' - only `"CR"`, `"PR"`, or `"NE"` in between,
+#' - at most one `"NE"` in between, and
+#' - `"CR"` is
+#'   not followed by `"PR"`
+#'
+#' should be flagged. The last condition is realized by using `min_cond()` and
+#' `max_cond()`, ensuring that the first occurrence of `"CR"` is after the last
+#' occurrence of `"PR"`. The second call to `count_vals()` in the condition is
+#' required to cover the case of no `"CR"`s (the `min_cond()` call returns `NA`
+#' then).
+#' @code
 #' data <- tribble(
 #'   ~USUBJID, ~ADY, ~AVALC,
 #'   "1",         6, "PR",
@@ -363,7 +459,13 @@
 #'     )
 #' )
 #'
-#' # flag observations with CRIT1FL == "Y" at two consecutive visits or at the last visit
+#' @caption Considering the order of records (`tmp_obs_nr_var`)
+#' @info In this example, the records with `CRIT1FL == "Y"` at two consecutive
+#'   visits or at the last visit should be flagged. A temporary order variable
+#'   is created by specifying the `tmp_obs_nr_var` argument. Then it is used in
+#'   `filter_join`. The temporary variable doesn't need to be specified for
+#'   `join_vars`.
+#' @code
 #' data <- tribble(
 #'   ~USUBJID, ~AVISITN, ~CRIT1FL,
 #'   "1",      1,        "Y",
@@ -391,61 +493,18 @@
 #'     (tmp_obs_nr + 1 == tmp_obs_nr.join | tmp_obs_nr == max(tmp_obs_nr.join))
 #' )
 #'
-#' # first_cond_lower and first_cond_upper argument
-#' myd <- tribble(
-#'   ~subj, ~day, ~val,
-#'   "1",      1, "++",
-#'   "1",      2, "-",
-#'   "1",      3, "0",
-#'   "1",      4, "+",
-#'   "1",      5, "++",
-#'   "1",      6, "-",
-#'   "2",      1, "-",
-#'   "2",      2, "++",
-#'   "2",      3, "+",
-#'   "2",      4, "0",
-#'   "2",      5, "-",
-#'   "2",      6, "++"
-#' )
-#'
-#' # flag "0" where all results from the first "++" before the "0" up to the "0"
-#' # (excluding the "0") are "+" or "++"
-#' derive_var_joined_exist_flag(
-#'   myd,
-#'   dataset_add = myd,
-#'   by_vars = exprs(subj),
-#'   order = exprs(day),
-#'   new_var = flag,
-#'   join_vars = exprs(val),
-#'   join_type = "before",
-#'   first_cond_lower = val.join == "++",
-#'   filter_join = val == "0" & all(val.join %in% c("+", "++"))
-#' )
-#'
-#' # flag "0" where all results from the "0" (excluding the "0") up to the first
-#' # "++" after the "0" are "+" or "++"
-#' derive_var_joined_exist_flag(
-#'   myd,
-#'   dataset_add = myd,
-#'   by_vars = exprs(subj),
-#'   order = exprs(day),
-#'   new_var = flag,
-#'   join_vars = exprs(val),
-#'   join_type = "after",
-#'   first_cond_upper = val.join == "++",
-#'   filter_join = val == "0" & all(val.join %in% c("+", "++"))
-#' )
-#'
-#' # flag each dose which is lower than the previous dose per subject
+#' @caption Flag each dose which is lower than the previous dose
+#'   (`tmp_obs_nr_var`)
+#' @code
 #' ex <- tribble(
-#'   ~USUBJID, ~EXSTDTM,          ~EXDOSE,
-#'   "1",      "2024-01-01T08:00",      2,
-#'   "1",      "2024-01-02T08:00",      4,
-#'   "2",      "2024-01-01T08:30",      1,
-#'   "2",      "2024-01-02T08:30",      4,
-#'   "2",      "2024-01-03T08:30",      3,
-#'   "2",      "2024-01-04T08:30",      2,
-#'   "2",      "2024-01-05T08:30",      2
+#'   ~USUBJID, ~EXSTDTM,           ~EXDOSE,
+#'   "1",      "2024-01-01T08:00",       2,
+#'   "1",      "2024-01-02T08:00",       4,
+#'   "2",      "2024-01-01T08:30",       1,
+#'   "2",      "2024-01-02T08:30",       4,
+#'   "2",      "2024-01-03T08:30",       3,
+#'   "2",      "2024-01-04T08:30",       2,
+#'   "2",      "2024-01-05T08:30",       2
 #' )
 #'
 #' derive_var_joined_exist_flag(
@@ -464,8 +523,12 @@
 #'   )
 #' )
 #'
-#' # derive definitive deterioration flag as any deterioration (CHGCAT1 = "Worsened")
-#' # by parameter that is not followed by a non-deterioration
+#' @caption Derive definitive deterioration flag
+#' @info In this example a definitive deterioration flag should be derived as
+#'   any deterioration (`CHGCAT1 = "Worsened"`) by parameter that is not
+#'   followed by a non-deterioration. Please note that `join_type = "after"`
+#'   can't by used here, as otherwise the last record wouldn't be flagged.
+#' @code
 #' adqs <- tribble(
 #'   ~USUBJID, ~PARAMCD, ~ADY, ~CHGCAT1,
 #'   "1",      "QS1",      10, "Improved",
@@ -482,15 +545,63 @@
 #'   dataset_add = adqs,
 #'   new_var = DDETERFL,
 #'   by_vars = exprs(USUBJID, PARAMCD),
-#'   join_vars = exprs(CHGCAT1),
+#'   join_vars = exprs(CHGCAT1, ADY),
 #'   join_type = "all",
-#'   order = exprs(ADY),
 #'   filter_join = all(CHGCAT1.join == "Worsened" | ADY > ADY.join)
+#' )
+#'
+#' @caption Handling duplicates (`check_type`)
+#' @info If the `order` argument is used, it is checked if the records are
+#'   unique with respect to `by_vars` and `order`. Consider for example the
+#'   derivation of `CONFFL` which flags records with `AVALC == "Y"` which are
+#'   confirmed at a subsequent visit.
+#' @code [expected_cnds = "duplicate_records"]
+#' data <- tribble(
+#'   ~USUBJID, ~AVISITN, ~ADY, ~AVALC,
+#'   "1",      1,           1, "Y",
+#'   "1",      2,           8, "N",
+#'   "1",      3,          15, "Y",
+#'   "1",      4,          22, "N",
+#'   "2",      1,           1, "Y",
+#'   "2",      2,           8, "Y",
+#'   "2",      2,          10, "Y"
+#' )
+#'
+#' derive_var_joined_exist_flag(
+#'   data,
+#'   dataset_add = data,
+#'   by_vars = exprs(USUBJID),
+#'   new_var = CONFFL,
+#'   join_vars = exprs(AVALC, AVISITN),
+#'   join_type = "after",
+#'   order = exprs(AVISITN),
+#'   filter_join = AVALC == "Y" & AVALC.join == "Y"
+#' )
+#' @info The records for `USUBJID == "2"` are not unique with respect to
+#'   `USUBJID` and `AVISITN`. Thus a warning is issued. The duplicates can be
+#'   accessed by calling `get_duplicates_dataset()`:
+#' @code
+#' get_duplicates_dataset()
+#' @info In this example, confirmation is required at a subsequent _visit_.
+#'   Please note that the first record for subject `"2"` at visit `2` is not
+#'   flagged. Thus the warning can be suppressed by specifying `check_type =
+#'   "none"`.
+#' @code
+#' derive_var_joined_exist_flag(
+#'   data,
+#'   dataset_add = data,
+#'   by_vars = exprs(USUBJID),
+#'   new_var = CONFFL,
+#'   join_vars = exprs(AVALC, AVISITN),
+#'   join_type = "after",
+#'   order = exprs(AVISITN),
+#'   filter_join = AVALC == "Y" & AVALC.join == "Y",
+#'   check_type = "none"
 #' )
 derive_var_joined_exist_flag <- function(dataset,
                                          dataset_add,
                                          by_vars,
-                                         order,
+                                         order = NULL,
                                          new_var,
                                          tmp_obs_nr_var = NULL,
                                          join_vars,

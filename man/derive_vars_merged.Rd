@@ -494,6 +494,8 @@ ex_ext <- derive_vars_dtm(
   new_vars_prefix = "EXST",
   highest_imputation = "M"
 )
+#> The default value of `ignore_seconds_flag` will change to "TRUE" in admiral
+#> 1.4.0.
 
 derive_vars_merged(
   dm,

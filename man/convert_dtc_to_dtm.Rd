@@ -15,9 +15,10 @@ convert_dtc_to_dtm(
 )
 }
 \arguments{
-\item{dtc}{The \code{'--DTC'} date to convert.
+\item{dtc}{The \code{--DTC} date to convert.
 
 \describe{
+\item{Permitted values}{a character date vector}
 \item{Default value}{none}
 }}
 
@@ -67,6 +68,7 @@ The year can not be specified; for imputing the year
 be used (see examples).
 
 \describe{
+\item{Permitted values}{\code{"first"}, \code{"mid"}, \code{"last"}, or user-defined}
 \item{Default value}{\code{"first"}}
 }}
 
@@ -83,6 +85,7 @@ for the start of the day,
 The argument is ignored if \code{highest_imputation = "n"}.
 
 \describe{
+\item{Permitted values}{\code{"first"}, \code{"last"}, or user-defined}
 \item{Default value}{\code{"first"}}
 }}
 
@@ -117,6 +120,7 @@ For date variables (not datetime) in the list the time is imputed to
 imputed. If only time is imputed, date variables do not affect the result.
 
 \describe{
+\item{Permitted values}{a list of dates, e.g. \code{list(ymd_hms("2021-07-01T04:03:01"), ymd_hms("2022-05-12T13:57:23"))}}
 \item{Default value}{\code{NULL}}
 }}
 
@@ -132,6 +136,7 @@ For date variables (not datetime) in the list the time is imputed to
 imputed. If only time is imputed, date variables do not affect the result.
 
 \describe{
+\item{Permitted values}{a list of dates, e.g. \code{list(ymd_hms("2021-07-01T04:03:01"), ymd_hms("2022-05-12T13:57:23"))}}
 \item{Default value}{\code{NULL}}
 }}
 
@@ -143,7 +148,7 @@ For example \code{"2019---07"} would return \verb{"2019-06-07} if \code{preserve
 (and \code{date_imputation = "mid"}).
 
 \describe{
-\item{Permitted values}{\code{TRUE}, \code{FALSE}}
+\item{Permitted values}{\code{"TRUE"}, \code{"FALSE"}}
 \item{Default value}{\code{FALSE}}
 }}
 }
@@ -151,7 +156,7 @@ For example \code{"2019---07"} would return \verb{"2019-06-07} if \code{preserve
 A datetime object
 }
 \description{
-Convert a date character vector (usually \code{'--DTC'}) into a Date vector (usually \code{'--DTM'}).
+Convert a date character vector (usually \code{--DTC}) into a Date vector (usually \verb{*DTM}).
 }
 \details{
 Usually this computation function can not be used with \verb{\%>\%}.

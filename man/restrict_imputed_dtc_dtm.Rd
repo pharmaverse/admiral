@@ -7,13 +7,14 @@
 restrict_imputed_dtc_dtm(dtc, imputed_dtc, min_dates, max_dates)
 }
 \arguments{
-\item{dtc}{The \code{'--DTC'} date to impute
+\item{dtc}{The \code{--DTC} date to impute
 
 A character date is expected in a format like \code{yyyy-mm-dd} or
 \code{yyyy-mm-ddThh:mm:ss}. Trailing components can be omitted and \code{-} is a
 valid "missing" value for any component.
 
 \describe{
+\item{Permitted values}{a character date variable}
 \item{Default value}{none}
 }}
 
@@ -54,6 +55,7 @@ For date variables (not datetime) in the list the time is imputed to
 imputed. If only time is imputed, date variables do not affect the result.
 
 \describe{
+\item{Permitted values}{a list of dates, e.g. \code{list(ymd_hms("2021-07-01T04:03:01"), ymd_hms("2022-05-12T13:57:23"))}}
 \item{Default value}{\code{NULL}}
 }}
 
@@ -69,6 +71,7 @@ For date variables (not datetime) in the list the time is imputed to
 imputed. If only time is imputed, date variables do not affect the result.
 
 \describe{
+\item{Permitted values}{a list of dates, e.g. \code{list(ymd_hms("2021-07-01T04:03:01"), ymd_hms("2022-05-12T13:57:23"))}}
 \item{Default value}{\code{NULL}}
 }}
 }

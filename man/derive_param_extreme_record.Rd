@@ -169,6 +169,7 @@ derive_param_extreme_record(
 }
 \seealso{
 Other deprecated: 
+\code{\link{call_user_fun}()},
 \code{\link{date_source}()},
 \code{\link{derive_var_dthcaus}()},
 \code{\link{derive_var_extreme_dt}()},

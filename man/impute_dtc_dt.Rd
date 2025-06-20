@@ -2,7 +2,7 @@
 % Please edit documentation in R/derive_vars_dt.R
 \name{impute_dtc_dt}
 \alias{impute_dtc_dt}
-\title{Impute Partial Date Portion of a \code{'--DTC'} Variable}
+\title{Impute Partial Date Portion of a \code{--DTC} Variable}
 \usage{
 impute_dtc_dt(
   dtc,
@@ -14,19 +14,20 @@ impute_dtc_dt(
 )
 }
 \arguments{
-\item{dtc}{The \code{'--DTC'} date to impute
+\item{dtc}{The \code{--DTC} date to impute
 
 A character date is expected in a format like \code{yyyy-mm-dd} or
 \code{yyyy-mm-ddThh:mm:ss}. Trailing components can be omitted and \code{-} is a
 valid "missing" value for any component.
 
 \describe{
+\item{Permitted values}{a character date variable}
 \item{Default value}{none}
 }}
 
 \item{highest_imputation}{Highest imputation level
 
-The \code{highest_imputation} argument controls which components of the DTC
+The \code{highest_imputation} argument controls which components of the \code{--DTC}
 value are imputed if they are missing. All components up to the specified
 level are imputed.
 
@@ -69,6 +70,7 @@ The year can not be specified; for imputing the year
 be used (see examples).
 
 \describe{
+\item{Permitted values}{\code{"first"}, \code{"mid"}, \code{"last"}, or user-defined}
 \item{Default value}{\code{"first"}}
 }}
 
@@ -99,6 +101,7 @@ range from \code{"2020-11-01T00:00:00"} to \code{"2020-11-30T23:59:59"}. Therefo
 have changed the month although it is not missing (in the \code{dtc} date).
 
 \describe{
+\item{Permitted values}{a list of dates, e.g. \code{list(ymd_hms("2021-07-01T04:03:01"), ymd_hms("2022-05-12T13:57:23"))}}
 \item{Default value}{\code{NULL}}
 }}
 
@@ -110,6 +113,7 @@ cut off date. Only dates which are in the range of possible dates are
 considered. A date or date-time object is expected.
 
 \describe{
+\item{Permitted values}{a list of dates, e.g. \code{list(ymd_hms("2021-07-01T04:03:01"), ymd_hms("2022-05-12T13:57:23"))}}
 \item{Default value}{\code{NULL}}
 }}
 
@@ -119,7 +123,7 @@ For example \code{"2019---07"} would return \verb{"2019-06-07} if \code{preserve
 (and \code{date_imputation = "MID"}).
 
 \describe{
-\item{Permitted values}{\code{TRUE}, \code{FALSE}}
+\item{Permitted values}{\code{"TRUE"}, \code{"FALSE"}}
 \item{Default value}{\code{FALSE}}
 }}
 }
@@ -127,7 +131,7 @@ For example \code{"2019---07"} would return \verb{"2019-06-07} if \code{preserve
 A character vector
 }
 \description{
-Imputation partial date portion of a \code{'--DTC'} variable based on user input.
+Imputation partial date portion of a \code{--DTC} variable based on user input.
 }
 \details{
 Usually this computation function can not be used with \verb{\%>\%}.
