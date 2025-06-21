@@ -260,8 +260,8 @@ compare <- function(base, compare, keys, file = NULL) {
 #' @description:  removes the cache directory
 clean_cache <- function() {
   cache_dir <- tools::R_user_dir("admiral_templates_data", which = "cache")
-  adam_new_dir <- fs::path(tempdir(), "adam_new_dir")
-  adam_old_dir <- fs::path(tempdir(), "adam_old_dir")
+  adam_new_dir <- fs::path(tempdir(), "new")
+  adam_old_dir <- fs::path(tempdir(), "old")
   diff <- fs::path(tempdir(), "diff")
 
   path = c(cache_dir, adam_new_dir, adam_old_dir, diff)   
