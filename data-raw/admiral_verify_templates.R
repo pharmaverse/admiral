@@ -98,9 +98,7 @@ verify_templates <- function(pkg = "admiral", ds = c("adae")) {
   download_adam_old(adam_names, path = path$adam_old_dir)
 
   cli_inform("---- Run templates\n")
-  ##:ess-bp-start::browser@nil:##
-browser(expr=is.null(.ESSBP.[["@3@"]]));##:ess-bp-end:##
-  
+
   # one adam at a time
   compare_list <- purrr::map(adam_names, .progress = TRUE, function(adam) {
     cli_inform("Template running for {adam}")
