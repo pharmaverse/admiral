@@ -98,6 +98,10 @@ verify_templates <- function(pkg = "admiral", ds = c("adae")) {
   download_adam_old(adam_names, path = path$adam_old_dir)
 
   cli_inform("---- Run templates\n")
+  ##:ess-bp-start::browser@nil:##
+browser(expr=is.null(.ESSBP.[["@3@"]]));##:ess-bp-end:##
+  
+  # one adam at a time
   compare_list <- purrr::map(adam_names, .progress = TRUE, function(adam) {
     cli_inform("Template running for {adam}")
     run_template(adam, dir = path$template_dir)
@@ -110,19 +114,22 @@ verify_templates <- function(pkg = "admiral", ds = c("adae")) {
     dataset_old <- get_dataset_old(adam, path$adam_old_dir)
 
     # compare the generated dataset to the reference dataset from github
-    compare(
+    res = compare(
       base = dataset_old,
       compare = dataset_new,
       keys = teal.data::default_cdisc_join_keys[[adam]],
       file = paste0(path$diff, "/", adam, ".txt")
     )
-  })
+  
+  # logical vector
+    # DISCUSS:   why abort??
+    issues  <- diffdf::diffdf_has_issues(res) |> unlist() 
+  #  if (issues) cli_abort(c("Issues found in  {adam}   "))
+  })  # all ADaMs are compard 
 
-  issues <- map(compare_list, function(x) diffdf::diffdf_has_issues(x)) |> unlist()
-
-  # finally, display differences
-  display_diff(dir = path$diff)
-  cli_abort(paste("Issues found in",  paste0(adam_names[issues], collapse = ", ")))
+  # finally, display differences and log
+    display_diff(dir = path$diff)
+    print(path$diff)
 }
 
 #------------------------  helper functions
@@ -159,7 +166,7 @@ display_diff <- function(dir = NULL) {
     names(contents), contents,
     function(name, content) {
       header <- paste("Differences found for", str_replace_all(name, ".txt", ""),
-                      " ", today(), "\n")
+                      " ", date(), "\n")
 
       # Display to console
       cli::cli_h1(header)
@@ -173,6 +180,7 @@ display_diff <- function(dir = NULL) {
   )
 
   # Close the file connection
+  writeLines("\n END of RUN -------", log_file)
   close(log_file)
   invisible(NULL)
 }
@@ -254,14 +262,20 @@ compare <- function(base, compare, keys, file = NULL) {
 #' @description:  removes the cache directory
 clean_cache <- function() {
   cache_dir <- tools::R_user_dir("admiral_templates_data", which = "cache")
-  if (dir.exists(cache_dir)) {
-    unlink(cache_dir, recursive = TRUE)
-    message("Cache directory deleted: ", cache_dir)
-  } else {
-    message("Cache directory does not exist: ", cache_dir)
-  }
-}
+  adam_new_dir <- fs::path(tempdir(), "adam_new_dir")
+  adam_old_dir <- fs::path(tempdir(), "adam_old_dir")
+  diff <- fs::path(tempdir(), "diff")
 
+  path = c(cache_dir, adam_new_dir, adam_old_dir, diff)   
+
+  lapply(path, function(e) {
+  if (dir.exists(e)) {
+    unlink(e, recursive = TRUE)
+    message("Directory deleted: ", e)
+   }
+  })
+
+  }
 #' Downloads ADaM datasets from pharmaverseadam
 #' @param adam_names character vector  Set of  ADaMs to download.
 #' @param path Character string. Directory to save downloaded ADaMs.
