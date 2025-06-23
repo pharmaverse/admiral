@@ -105,12 +105,26 @@ records. (#2683)
     **Phase 1 (message)**
 	
 	- `call_user_fun()` is deprecated and will have no replacement. (#2678)
+	- `derive_param_extreme_record()` is deprecated and replaced by `derive_extreme_event()`
+  - `derive_var_dthcaus()` is deprecated and replaced by `derive_vars_extreme_event()`
+  - `date_source()` is deprecated and replaced by `event()`
+  - `dthcaus_source()` is deprecated and replaced by `event()`
+  - `derive_var_extreme_dt()` and `derive_var_extreme_dtm()` are deprecated and replaced by     
+  `derive_vars_extreme_event()`
+  - `get_summary_records()` is deprecated. Please use `derive_summary_records()` with the `dataset_add` 
+  argument and without the `dataset` argument.
   
     **Phase 2 (warning)**
     
+    No functions or arguments in this Phase
+
     **Phase 3 (error)**
     
+    No functions or arguments in this Phase
+
     **Phase 4 (removed)**
+    
+    No functions or arguments in this Phase
 
 ## Documentation
 
