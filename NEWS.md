@@ -1,4 +1,4 @@
-# admiral (development version)
+# admiral 1.3.0
 
 ## New Features
 
