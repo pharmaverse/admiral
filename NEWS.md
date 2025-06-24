@@ -53,8 +53,6 @@ the derivation is called for all subsets. (#2645)
 - NCICTCAEv4 and NCICTCAEv5 grading criteria (`atoxgr_criteria_ctcv4`, `atoxgr_criteria_ctcv4_uscv`, `atoxgr_criteria_ctcv5`, `atoxgr_criteria_ctcv5_uscv`), 
 updated to add terms `"Acidosis"` and `"Alkalosis"` (#2768).
 
-- The background checks in `derive_summary_records()` were too restrictive: `by_vars` were expected in `dataset` although the code did not require it. This requirement has therefore been dropped (#2686).
-
 - The functions `derive_summary_records()` and `derive_param_exist_flag()` 
 were updated to fix an issue where if a variable was in both `dataset_add` and `dataset_ref`, it was 
 added to the new records even if it was not in `by_vars`. (#2664)
