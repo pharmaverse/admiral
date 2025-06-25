@@ -65,7 +65,6 @@ verify_templates <- function(pkg = "admiral", ds = c("adae")) {
 
   # nolint start
   library(pkg, character.only = TRUE)
-  library(teal.data)
   library(purrr)
   library(cli)
   # nolint end
@@ -115,7 +114,6 @@ verify_templates <- function(pkg = "admiral", ds = c("adae")) {
     res = compare(
       base = dataset_old,
       compare = dataset_new,
-      keys = teal.data::default_cdisc_join_keys[[adam]],
       file = paste0(path$diff, "/", adam, ".txt")
     )
   
