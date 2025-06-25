@@ -380,7 +380,7 @@ derive_vars_merged(
 #> 3 03         85 YEARS  NA  
 #> Warning: Dataset contains duplicate records with respect to `STUDYID`, `USUBJID`, and
 #> `convert_dtc_to_dtm(VSDTC)`
-#> ℹ Run `admiral::get_duplicates_dataset()` to access the duplicate records}\if{html}{\out{</div>}}
+#> i Run `admiral::get_duplicates_dataset()` to access the duplicate records}\if{html}{\out{</div>}}
 
 For investigating the issue, the dataset of the duplicate source records
 can be obtained by calling \code{get_duplicates_dataset()}:
@@ -393,8 +393,8 @@ can be obtained by calling \code{get_duplicates_dataset()}:
 #> * <chr>   <chr>   <dttm>                    <chr>  <chr>    <chr>    <dbl> <chr>
 #> 1 AB42    01      2013-09-24 00:00:00       VS     WEIGHT   WEEK…     81.1 2013…
 #> 2 AB42    01      2013-09-24 00:00:00       VS     WEIGHT   WEEK…     82.6 2013…
-#> # ℹ abbreviated name: ¹​`convert_dtc_to_dtm(VSDTC)`
-#> # ℹ 1 more variable: LSTWT <dbl>}\if{html}{\out{</div>}}
+#> # i abbreviated name: ¹`convert_dtc_to_dtm(VSDTC)`
+#> # i 1 more variable: LSTWT <dbl>}\if{html}{\out{</div>}}
 
 Common options to solve the issue:
 \itemize{
