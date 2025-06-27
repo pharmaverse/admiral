@@ -5,8 +5,6 @@
 ## Updates of Existing Functions
 
 ## Breaking Changes
-
-    **Phase 1 (message)**
  
     
 ## Documentation
