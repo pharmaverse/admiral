@@ -7,9 +7,6 @@
 ## Breaking Changes
 
     **Phase 1 (message)**
-  
-    **Phase 2 (warning)**
-  
  
     
 ## Documentation
