@@ -9,9 +9,7 @@
     **Phase 1 (message)**
   
     **Phase 2 (warning)**
-
-    **Phase 3 (error)**
-
+  
  
     
 ## Documentation
