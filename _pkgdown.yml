@@ -16,16 +16,6 @@ repo:
 news:
   cran_dates: true
 
-development:
-  mode: auto
-  # Set version_label to "danger" (= red color) for development/auto mode
-  # Else ensure to switch version_label to "default" (= light gray color) before to proceed with an official release
-  # version_label: danger
-  version_label: default
-  # The 'destination' setting allows you to override the default
-  # subdirectory used for the development site
-  destination: ""
-
 authors:
   before: "We define *authors* as those who are actively maintaining the code base, and *contributors* as those who made a significant contribution in the past. For all acknowledgements, see the eponymous section in the [Home Page](https://pharmaverse.github.io/admiral/cran-release/)."
   footer:
