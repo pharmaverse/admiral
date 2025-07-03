@@ -126,6 +126,12 @@ reference:
   contents:
   - has_keyword('reexport')
 
+- title: Function for dummy issue
+  desc: |
+    Function to write a message to the console, created as part of the {admiral} onboarding process.
+  contents:
+  - has_keyword('admiral_onboarding')
+
 - title: Deprecated
   desc: |
     Functions and arguments may need to be removed or replaced over time.
