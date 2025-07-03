@@ -130,7 +130,7 @@ reference:
   desc: |
     Function to write a message to the console, created as part of the {admiral} onboarding process.
   contents:
-  - has_keyword('admiral_onboarding')
+  - has_keyword('admiral_dummy_task')
 
 - title: Deprecated
   desc: |

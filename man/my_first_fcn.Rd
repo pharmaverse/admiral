@@ -12,5 +12,5 @@ Prints a welcome message.
 \details{
 Prints "Welcome to the admiral family!" to the console.
 }
-\concept{admiral_onboarding}
-\keyword{admiral_onboarding}
+\concept{admiral_dummy_task}
+\keyword{admiral_dummy_task}

@@ -2,8 +2,8 @@
 #'
 #' Prints a welcome message.
 #'
-#' @keywords admiral_on boarding
-#' @family admiral_on boarding
+#' @keywords admiral_dummy_task
+#' @family admiral_dummy_task
 #'
 #' @details Prints "Welcome to the admiral family!" to the console.
 
