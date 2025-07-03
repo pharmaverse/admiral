@@ -136,6 +136,10 @@ reference:
   contents:
   - has_keyword('reexport')
 
+- title: Function for dummy issue
+  contents:
+  - has_keyword('admiral_onboarding')
+
 - title: Deprecated
   desc: |
     Functions and arguments may need to be removed or replaced over time.
