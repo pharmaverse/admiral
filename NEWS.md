@@ -59,7 +59,7 @@
     - `atoxgr_criteria_ctcv4_uscv` (NCI-CTCAEv4 criteria)
     - `atoxgr_criteria_ctcv5_uscv` (NCI-CTCAEv5 criteria)
     - `atoxgr_criteria_daids_uscv` (DAIDs criteria)
-- New function `my_first_fcn` to print a welcome message to the console
+- New function `my_first_fcn` to print a welcome message to the console (#1839)
 
 ## Updates of Existing Functions
 
