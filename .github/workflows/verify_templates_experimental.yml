@@ -2,10 +2,11 @@ name:  verify_templates_experimental
 
 run-name: EXPERIMENTAL
 
-# To establish `workflow_dispatch` must use `default` branch.
-# this yaml workflow runs when a push occurs on this branch
-# OR, manually,
+# For GITHUB to recognize `workflow_dispatch`, the yml file  must be `default` branch, OR
+# run on pull_request or push.  
 
+
+# Run when ?	      
 on:
   push:
     branches:  [2642_verify_templates_results]
