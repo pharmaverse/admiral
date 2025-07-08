@@ -54,9 +54,11 @@
 #'
 #' @export
 verify_templates <- function(pkg = "admiral", ds = c("adae")) {
-  # TODO: delete all prior ADaM downloads
-  # ASSUME:  (1) user is running script for 1st time and no temporary directories exist, OR
-  #          (2) user is running script a 2nd time, in same session, and now must remove directories
+    # ASSUME:  not for interactive use, GHA workflow only
+
+  # temporary:  will become value for `ds` in function
+  ds = c("adae", "adcm", "adeg", "adex", "adlb", "adlbhy", "admh", "adpc", 
+           "adpp", "adppk", "adsl", "advs")
 
   clean_cache() # clear all..
 
@@ -67,6 +69,7 @@ verify_templates <- function(pkg = "admiral", ds = c("adae")) {
   library(pkg, character.only = TRUE)
   library(purrr)
   library(cli)
+  library(stringr)
   # nolint end
   cli_alert("Generating ADaMs for { pkg} package.")
 
@@ -109,7 +112,6 @@ verify_templates <- function(pkg = "admiral", ds = c("adae")) {
       file.path(path$adam_new_dir, paste0(adam, ".rda"))
     )
     dataset_old <- get_dataset_old(adam, path$adam_old_dir)
-
     # compare the generated dataset to the reference dataset from github
     res = compare(
       base = dataset_old,
@@ -245,7 +247,7 @@ compare <- function(base, compare, keys, file = NULL) {
       diffdf::diffdf(
         base = base,
         compare = compare,
-        keys = keys,
+        keys = NULL,   # not using
         file = file,
         suppress_warnings = TRUE # for now
       )
