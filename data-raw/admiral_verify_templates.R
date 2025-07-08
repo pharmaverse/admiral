@@ -1,5 +1,30 @@
 # This script:  data-raw/admiral_verify_templates.R
 
+# ------------------------ dev_tibble 
+# branch: dev_tibble
+# PURPOSE:  construct tibble of paths, directories ...
+# FIRST:  run entire script, then try out tibble
+# SEE function: create_directories 
+
+path = create_directories()
+path$diff
+
+z=expr(paste0(path$diff, adam))
+adam = "/adae.rda"
+eval(z)
+
+if (FALSE) {
+# once you have adam_names, templates, path$diff
+    t <- tibble("adam" = adam_names,
+                "template" = templates,
+                "diff" = (paste0(path$diff, "/", adam, ".rda"))
+                )
+
+    }
+t
+# ------------------------  
+
+
 # Assumptions/Questions:
 # - ignore *.rda files in admiral/data (per Ben)
 # - compares full ADaM - ie all rows
@@ -67,6 +92,7 @@ verify_templates <- function(pkg = "admiral", ds = c("adae")) {
   library(pkg, character.only = TRUE)
   library(purrr)
   library(cli)
+  library(pharmaverseadam)
   # nolint end
   cli_alert("Generating ADaMs for { pkg} package.")
 
@@ -74,6 +100,7 @@ verify_templates <- function(pkg = "admiral", ds = c("adae")) {
 
   # gather templates ----
   templates <- list.files(path$template_dir, pattern = "ad_")
+    
 
   # from templates generate vector of adam_names
   adam_names <- vapply(templates, function(x) gsub("ad_|\\.R", "", x),
@@ -119,8 +146,9 @@ verify_templates <- function(pkg = "admiral", ds = c("adae")) {
   
   # logical vector
     # DISCUSS:   why abort??
+    browser()
     issues  <- diffdf::diffdf_has_issues(res) |> unlist() 
-  #  if (issues) cli_abort(c("Issues found in  {adam}   "))
+    if (issues) cli_abort(c("Issues found in  {adam}   "))
   })  # all ADaMs are compard 
 
   # finally, display differences and log
@@ -276,6 +304,15 @@ clean_cache <- function() {
 #' @param adam_names character vector  Set of  ADaMs to download.
 #' @param path Character string. Directory to save downloaded ADaMs.
 download_adam_old <- function(adam_names, path = NULL) {
+   #  structure a call; evaluate it; save to temporary location
+    lapply(adam_names, function(adam) {
+        z = call("::", "pharmaverseadam", adam)
+        z = eval(z)
+        save(z,  file = paste0(path, "/", adam, ".rda"))
+        })
+    # ------------------------ REMOVE
+   # legacy 
+    if (FALSE) {
   lapply(adam_names, function(adam) {
     githubURL <- paste0( # nolint
       "https://github.com/pharmaverse/pharmaverseadam/raw/refs/heads/main/data/",
@@ -289,7 +326,11 @@ download_adam_old <- function(adam_names, path = NULL) {
       mode = "wb"
     )
   })
-}
+  }  # end if 
+    # ------------------------  
+
+
+}  # end function
 
 #' Loads an ADaM dataset from a saved RDA file on disk.
 #'
