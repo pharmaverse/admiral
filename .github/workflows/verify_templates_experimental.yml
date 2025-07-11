@@ -53,5 +53,5 @@ jobs:
 
       - name: PR comment with file
         uses: thollander/actions-comment-pull-request@v3
-          with:
+        with:
           file-path: .github/actions/verify_templates_experimental.yml 
