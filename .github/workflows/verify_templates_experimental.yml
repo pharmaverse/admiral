@@ -6,10 +6,11 @@ run-name: EXPERIMENTAL
 # run on pull_request or push.  
 
 
-# Run when ?	      
+# Run when: if branch changes, does all templates
 on:
   push:
-    branches:  [2642_verify_templates_results]
+     branches:  [feedback_template_verification]
+#    branches:  [2642_verify_templates_results]
   workflow_dispatch:
   pull_request:
 
@@ -27,43 +28,6 @@ jobs:
 
       - name: Checkout repo
         uses: actions/checkout@v4
-
-## ------------------------  DISCUSS
-##
-## R script data-raw/load_run.R (approx line 68)  can replace
-## .. all these commented lines
-## .. please advise
-##
-## ------------------------  
-
-# missing devtools::
-      - uses: r-lib/actions/setup-r-dependencies@v2
-#        with:
-#	  cache: true
-#	  dependencies: 'hard'o
-#	  install-pandoc: false
-#	  install-quarto
-
-# copy from 
-#      - Install Dependencies from DESCRIPTION 
-#        run |
-#          install.packages(c("remotes", "devtools"))
-#          remotes::install_local(force = TRUE, dependencies = TRUE)
-#        shell: Rscript {0}
-# env:
-# R_REMOTES_STANDALONE: "true"
-
-# WHY do next 2 lines = SYNTAX error?
-#......- name: needed packages
-#        run:  Rscript -e 'install.packages(c("devtools", "diffdf"))'
-
-
-#      - name: source
-#        run:  Rscript -e 'install.packages(c("devtools")); source("data-raw/admiral_verify_templates.R")'
-#
-
-#      - name: run the code
-#        run:  Rscript -e 'devtools::load_all(); verify_templates()'
 
       - name: source, run the code
         run:  Rscript -e 'source("data-raw/load_run.R")'
