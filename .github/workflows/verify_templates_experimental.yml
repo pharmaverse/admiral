@@ -26,6 +26,16 @@ jobs:
         with:
           use-public-rspm: true
 
+      - name: Install R dependencies
+        run: |
+          Rscript -e 'install.packages(c("admiraldev",
+          "dplyr",
+          "hms",
+          "lubridate",
+          "tidyr",
+          "tidyselct"),
+            repos = "https://packagemanager.posit.co/cran/__linux__/noble/latest")'
+
       - name: Checkout repo
         uses: actions/checkout@v4
 
