@@ -33,7 +33,8 @@ jobs:
           "hms",
           "lubridate",
           "tidyr",
-          "tidyselct"),
+          "tidyselct",
+          "pharmaversesdtm"),
             repos = "https://packagemanager.posit.co/cran/__linux__/noble/latest")'
 
       - name: Checkout repo
@@ -49,3 +50,8 @@ jobs:
           pkgs <- installed.packages()[, "Package"]
           sessioninfo::session_info(pkgs, include_base = TRUE)
         shell: Rscript {0}
+
+      - name: PR comment with file
+        uses: thollander/actions-comment-pull-request@v3
+          with:
+          file-path: .github/actions/verify_templates_experimental.yml 
