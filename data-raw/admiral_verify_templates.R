@@ -104,7 +104,6 @@ verify_templates <- function(pkg = "admiral", ds = NULL) {
   cli_inform("---- Run templates\n")
 
   # one adam at a time
-    browser()
   compare_list <- purrr::map(adam_names, .progress = TRUE, function(adam) {
     cli_inform("Template running for {adam}")
     run_template(adam, dir = path$template_dir)
