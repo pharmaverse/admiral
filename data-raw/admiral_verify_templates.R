@@ -53,12 +53,14 @@
 #' USAGE:   verify_templates()
 #'
 #' @export
-verify_templates <- function(pkg = "admiral", ds = c("adae")) {
+verify_templates <- function(pkg = "admiral", ds = NULL) {
     # ASSUME:  not for interactive use, GHA workflow only
 
-  # temporary:  will become value for `ds` in function
+  # no value for ds?  then run all templates
+  if (is.null(ds)) {
   ds = c("adae", "adcm", "adeg", "adex", "adlb", "adlbhy", "admh", "adpc", 
            "adpp", "adppk", "adsl", "advs")
+  }
 
   clean_cache() # clear all..
 
@@ -102,6 +104,7 @@ verify_templates <- function(pkg = "admiral", ds = c("adae")) {
   cli_inform("---- Run templates\n")
 
   # one adam at a time
+    browser()
   compare_list <- purrr::map(adam_names, .progress = TRUE, function(adam) {
     cli_inform("Template running for {adam}")
     run_template(adam, dir = path$template_dir)
