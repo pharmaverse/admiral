@@ -230,11 +230,6 @@ compare <- function(base, compare, keys, file = NULL) {
   e$old <- base
   e$new <- compare
   e$file <- file
-  # OR (2) saved a directory?
-  # nolint start
-  # saveRDS(e$old,file= paste0("old", ".RDS"))    # temporary
-  # saveRDS(e$new,file= paste0("new", ".RDS"))
-  # nolint end
   # ------------------------
 
   # remove column attributes
@@ -276,7 +271,7 @@ clean_cache <- function() {
   })
 
   }
-#' Downloads ADaM datasets from pharmaverseadam
+#' Copies ADaM datasets from pharmaverseadam
 #' @param adam_names character vector  Set of  ADaMs to download.
 #' @param path Character string. Directory to save downloaded ADaMs.
 download_adam_old <- function(adam_names, path = NULL) {
@@ -293,6 +288,7 @@ download_adam_old <- function(adam_names, path = NULL) {
       mode = "wb"
     )
   })
+
 }
 
 #' Loads an ADaM dataset from a saved RDA file on disk.

@@ -3,17 +3,17 @@ name:  verify_templates_experimental
 run-name: EXPERIMENTAL
 
 # For GITHUB to recognize `workflow_dispatch`, the yml file  must be `default` branch, OR
-# run on pull_request or push.  
+# run on pull_request or manual.
 
 
 # Run when: if branch changes, does all templates
 on:
   push:
-     branches:  [feedback_template_verification]
+#    branches:  [feedback_template_verification]
 #    branches:  [2642_verify_templates_results]
   workflow_dispatch:
   pull_request:
-
+    branches:  [feedback_template_verification]
 jobs:
   verify_templates:
     runs-on: ubuntu-latest
