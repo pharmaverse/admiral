@@ -98,7 +98,7 @@ verify_templates <- function(pkg = "admiral", ds = NULL) {
   adam_names <- adam_names[adam_names != "adlbhy"]
 
   # download, saved prior ADaMs from pharmaverseadam as .rda files
-  cli_inform("---- Begin downloading from github pharmaverseadam")
+  cli_inform("---- Begin copying from github pharmaverseadam")
   download_adam_old(adam_names, path = path$adam_old_dir)
 
   cli_inform("---- Run templates\n")
@@ -129,7 +129,7 @@ verify_templates <- function(pkg = "admiral", ds = NULL) {
 
   # finally, display differences and log
     display_diff(dir = path$diff)
-    print(path$diff)
+    #print(path$diff)
 }
 
 #------------------------  helper functions
@@ -165,7 +165,7 @@ display_diff <- function(dir = NULL) {
   map2(
     names(contents), contents,
     function(name, content) {
-      header <- paste("Differences found for", str_replace_all(name, ".txt", ""),
+      header <- paste("Differences found for ", str_replace_all(name, ".txt", ""),
                       " ", date(), "\n")
 
       # Display to console

@@ -21,7 +21,7 @@ source("data-raw/admiral_verify_templates.R") # nolint
 templates <- list_all_templates() |> paste()
 templates <- templates[templates!="ADLBHY"]
 
-# run only 2 templates
+# To run only 2 templates
 # verify_templates(ds = templates |> tolower() |> head(2))
 
 # run all templates, default is all
