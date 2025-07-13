@@ -275,19 +275,35 @@ clean_cache <- function() {
 #' @param adam_names character vector  Set of  ADaMs to download.
 #' @param path Character string. Directory to save downloaded ADaMs.
 download_adam_old <- function(adam_names, path = NULL) {
-  lapply(adam_names, function(adam) {
-    githubURL <- paste0( # nolint
-      "https://github.com/pharmaverse/pharmaverseadam/raw/refs/heads/main/data/",
-      adam, ".rda?raw=true"
-    )
-    cat("Downloading: ", adam, "\n")
-    download.file(
-      url = githubURL,
-      quiet = TRUE,
-      destfile = paste0(path, "/", adam, ".rda"),
-      mode = "wb"
-    )
-  })
+
+  # NEW:
+  # ds here is singlular
+  #path = "." 
+  #  ds = c("adae", "adsl")
+
+  f = function(ds) {
+      q = call("::", "pharmaverseadam", sym(ds))
+      save(q,
+          file = file.path(path, paste0(ds, ".rda"))) }
+
+  walk(.x = adam_names, .f = f)
+
+#  LEGACY
+#  lapply(adam_names, function(adam) {
+#    githubURL <- paste0( # nolint
+#      "https://github.com/pharmaverse/pharmaverseadam/raw/refs/heads/main/data/",
+#      adam, ".rda?raw=true"
+#    )
+#    cat("Downloading: ", adam, "\n")
+#    download.file(
+#      url = githubURL,
+#      quiet = TRUE,
+#      destfile = paste0(path, "/", adam, ".rda"),
+#      mode = "wb"
+#    )
+#  })
+
+
 
 }
 
@@ -304,7 +320,7 @@ download_adam_old <- function(adam_names, path = NULL) {
 #' adsl <- get_dataset_old("adsl", path = "data/adam")
 #' }
 get_dataset_old <- function(adam, path) {
-  adam_old <- load_rda(file.path(path, paste0(adam, ".rda")))
+  adam_old <- eval(load_rda(file.path(path, paste0(adam, ".rda"))))
 }
 
 #' Load a Saved ADaM Dataset
