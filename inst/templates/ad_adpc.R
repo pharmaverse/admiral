@@ -163,7 +163,7 @@ adpc_first_dose <- pc_dates %>%
     mode = "first",
     by_vars = exprs(STUDYID, USUBJID, DRUG)
   ) %>%
-  filter(!is.na(FANLDTM)) %>%
+  dplyr::filter(!is.na(FANLDTM)) %>%
   # Derive AVISIT based on nominal relative time
   # Derive AVISITN to nominal time in whole days using integer division
   # Define AVISIT based on nominal day
