@@ -62,6 +62,7 @@ verify_templates <- function(pkg = "admiral", ds = NULL) {
            "adpp", "adppk", "adsl", "advs")
   }
 
+  ds = c("adpp", "adppk", "adsl", "advs")
   clean_cache() # clear all..
 
   pkg <- "admiral"
@@ -123,9 +124,12 @@ verify_templates <- function(pkg = "admiral", ds = NULL) {
   
   # logical vector
     # DISCUSS:   why abort??
-    issues  <- diffdf::diffdf_has_issues(res) |> unlist() 
-  #  if (issues) cli_abort(c("Issues found in  {adam}   "))
-  })  # all ADaMs are compard 
+
+    #issues  <- diffdf::diffdf_has_issues(res) |> unlist() 
+    issues  <- diffdf::diffdf_has_issues(res) 
+    if (issues) cli_abort(c("Issues found in  {adam}   "))
+
+  })  # all ADaMs are compared 
 
   # finally, display differences and log
     display_diff(dir = path$diff)
@@ -278,8 +282,6 @@ download_adam_old <- function(adam_names, path = NULL) {
 
   # NEW:
   # ds here is singlular
-  #path = "." 
-  #  ds = c("adae", "adsl")
 
   f = function(ds) {
       q = call("::", "pharmaverseadam", sym(ds))
