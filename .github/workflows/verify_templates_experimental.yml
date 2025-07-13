@@ -34,7 +34,7 @@ jobs:
           "lubridate",
           "tidyr",
           "tidyselct",
-	  "pharmaverseadam",
+          "pharmaverseadam",
           "pharmaversesdtm"),
             repos = "https://packagemanager.posit.co/cran/__linux__/noble/latest")'
 
