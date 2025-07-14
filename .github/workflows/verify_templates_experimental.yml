@@ -8,10 +8,10 @@ run-name: EXPERIMENTAL
 
 # Run when: if branch changes, does all templates
 on:
-  push:
+#  push:
 #    branches:  [feedback_template_verification]
 #    branches:  [2642_verify_templates_results]
-  workflow_dispatch:
+#  workflow_dispatch:
   pull_request:
     branches:  [feedback_template_verification]
 jobs:
