@@ -62,7 +62,7 @@ verify_templates <- function(pkg = "admiral", ds = NULL) {
            "adpp", "adppk", "adsl", "advs")
   }
 
-  ds = c("adpp", "adppk", "adsl", "advs")
+  #ds = c("adpp", "adppk", "adsl", "advs")
   clean_cache() # clear all..
 
   pkg <- "admiral"
