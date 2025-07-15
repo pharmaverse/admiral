@@ -255,7 +255,7 @@ adpc_arrlt <- bind_rows(adpc_nom_next, ex_exp) %>%
   ) %>%
   arrange(USUBJID, ADTM) %>%
   ungroup() %>%
-  filter(ADT <= maxdate) %>%
+  dplyr::filter(ADT <= maxdate) %>%
   # Derive Actual Relative Time from First Dose (AFRLT)
   derive_vars_duration(
     new_var = AFRLT,

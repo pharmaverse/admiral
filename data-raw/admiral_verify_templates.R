@@ -63,7 +63,7 @@ verify_templates <- function(pkg = "admiral", ds = NULL) {
   }
 
   #ds = c("adpp", "adppk", "adsl", "advs")
-  clean_cache() # clear all..
+#  clean_cache() # clear all..
 
   pkg <- "admiral"
   if (pkg != "admiral") cli_abort("Currently only `admiral` package is supported")
@@ -104,38 +104,28 @@ verify_templates <- function(pkg = "admiral", ds = NULL) {
 
   cli_inform("---- Run templates\n")
 
-  # one adam at a time
-  compare_list <- purrr::map(adam_names, .progress = TRUE, function(adam) {
-    cli_inform("Template running for {adam}")
-    run_template(adam, dir = path$template_dir)
-    # retrieve *.rda file in cache; copy to correct directory
-    dataset_new <- load_rda(paste0(path$cache_dir, "/", adam, ".rda"))
-    file.copy(
-      file.path(path$cache_dir, paste0(adam, ".rda")),
-      file.path(path$adam_new_dir, paste0(adam, ".rda"))
-    )
-    dataset_old <- get_dataset_old(adam, path$adam_old_dir)
-    # compare the generated dataset to the reference dataset from github
-    res = compare(
-      base = dataset_old,
-      compare = dataset_new,
-      file = paste0(path$diff, "/", adam, ".txt")
-    )
-  
-  # logical vector
-    # DISCUSS:   why abort??
+#  if (exists(file.path("inst/verify/old") unlink(
 
-    #issues  <- diffdf::diffdf_has_issues(res) |> unlist() 
-    issues  <- diffdf::diffdf_has_issues(res) 
-    if (issues) cli_abort(c("Issues found in  {adam}   "))
+  old_dir = file.path("inst/verify/old")
+  if(!exists(old_dir)) dir.create(old_dir, recursive = TRUE)
 
-  })  # all ADaMs are compared 
+  new_dir = file.path("inst/verify/new")
+  if(!exists(new_dir)) dir.create(new_dir, recursive = TRUE)
+    
+    purrr::map(adam_names, .progress = TRUE, function(adam){
+        cli_inform("------Template running for {adam}")
+        run_template(adam, dir = path$template_dir)
+        # retrieve *.rda file in cache; copy to correct directory
+        dataset_new <- load_rda(paste0(path$cache_dir, "/", adam, ".rda"))
+        saveRDS(dataset_new, file = file.path(new_dir, paste0(adam, ".rds")))
+        dataset_old <- get_dataset_old(adam, path$adam_old_dir)
+        saveRDS(dataset_old, file = file.path(old_dir, paste0(adam, ".rds")))
+        })
 
-  # finally, display differences and log
-    display_diff(dir = path$diff)
-    #print(path$diff)
+    cli_inform("---- Done with templates\n")
+
+
 }
-
 #------------------------  helper functions
 
 #' Display Results of running diffdf
@@ -338,3 +328,4 @@ create_directories <- function() {
     diff = file.path(x, "diff")
   )
 }
+    
