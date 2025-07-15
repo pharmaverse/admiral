@@ -1,16 +1,11 @@
 # This script:  data-raw/admiral_verify_templates.R
 
-# TODO:
-# - where code overlaps, make pharamversadam script and this one the same.
-# - TODO: replace messages with cli::cli_*
-# - TODO: lots of directories and named lists.  Best way to keep neat and organized?
-
 # Assumptions/Questions:
 # - ignore *.rda files in admiral/data (per Ben)
 # - compares full ADaM - ie all rows
 # - for developer use and developer has run load_all()
 # - use cli:: for messages/errors - YES
-# - most datasets are  stored as.rda files
+# - most datasets are  stored as .rda files
 
 
 #' Directories used to find files:
@@ -58,11 +53,16 @@
 #' USAGE:   verify_templates()
 #'
 #' @export
-verify_templates <- function(pkg = "admiral", ds = c("adae")) {
-  # TODO: delete all prior ADaM downloads
-  # ASSUME:  (1) user is running script for 1st time and no temporary directories exist, OR
-  #          (2) user is running script a 2nd time, in same session, and now must remove directories
+verify_templates <- function(pkg = "admiral", ds = NULL) {
+    # ASSUME:  not for interactive use, GHA workflow only
 
+  # no value for ds?  then run all templates
+  if (is.null(ds)) {
+  ds = c("adae", "adcm", "adeg", "adex", "adlb", "adlbhy", "admh", "adpc", 
+           "adpp", "adppk", "adsl", "advs")
+  }
+
+  #ds = c("adpp", "adppk", "adsl", "advs")
   clean_cache() # clear all..
 
   pkg <- "admiral"
@@ -70,34 +70,15 @@ verify_templates <- function(pkg = "admiral", ds = c("adae")) {
 
   # nolint start
   library(pkg, character.only = TRUE)
-  library(teal.data)
   library(purrr)
   library(cli)
+  library(stringr)
   # nolint end
   cli_alert("Generating ADaMs for { pkg} package.")
 
-  # TODO:  remove any warnings
-  # (DISCUSS) CHOOSE one for directories: : temporary or permanent? (here: temporary)
-  cli_inform("Creating temporary directories")
-  x <- tempdir()
-  dir.create(file.path(x, "old"), showWarnings = TRUE)
-  dir.create(file.path(x, "new"), showWarnings = TRUE)
-  dir.create(file.path(x, "diff"), showWarnings = TRUE)
+  path <- create_directories()
 
-  # TODO:
-  path <- list(
-    template_dir = "inst/templates",
-    cache_dir = tools::R_user_dir("admiral_templates_data", which = "cache"),
-    adam_new_dir = file.path(x, "new"),
-    adam_old_dir = file.path(x, "old"),
-    diff = file.path(x, "diff")
-  )
-
-  # TODO:
-  # if dir exists then empty it ; if not exist then create it.
-  # lapply(path, function(x)  if( x %in% c("template_dir", "cache_dir")!exists(x)) dir.create(x))
-
-  # gather templates for this pkg (12 found) ----
+  # gather templates ----
   templates <- list.files(path$template_dir, pattern = "ad_")
 
   # from templates generate vector of adam_names
@@ -118,10 +99,12 @@ verify_templates <- function(pkg = "admiral", ds = c("adae")) {
   adam_names <- adam_names[adam_names != "adlbhy"]
 
   # download, saved prior ADaMs from pharmaverseadam as .rda files
-  cli_inform("---- Begin downloading from github pharmaverseadam")
+  cli_inform("---- Begin copying from github pharmaverseadam")
   download_adam_old(adam_names, path = path$adam_old_dir)
 
   cli_inform("---- Run templates\n")
+
+  # one adam at a time
   compare_list <- purrr::map(adam_names, .progress = TRUE, function(adam) {
     cli_inform("Template running for {adam}")
     run_template(adam, dir = path$template_dir)
@@ -132,20 +115,25 @@ verify_templates <- function(pkg = "admiral", ds = c("adae")) {
       file.path(path$adam_new_dir, paste0(adam, ".rda"))
     )
     dataset_old <- get_dataset_old(adam, path$adam_old_dir)
-
-    # ------------------------  DISCUSS
-    # CHOOSE ONE:   `continue` as below, OR
-    #                insert Eli's quarto code to compare AND display nicely
-    # ------------------------
-    compare(
+    # compare the generated dataset to the reference dataset from github
+    res = compare(
       base = dataset_old,
       compare = dataset_new,
-      keys = teal.data::default_cdisc_join_keys[[adam]],
       file = paste0(path$diff, "/", adam, ".txt")
     )
-  })
-  # finally, disply differences
-  display_diff(dir = path$diff)
+  
+  # logical vector
+    # DISCUSS:   why abort??
+
+    #issues  <- diffdf::diffdf_has_issues(res) |> unlist() 
+    issues  <- diffdf::diffdf_has_issues(res) 
+    if (issues) cli_abort(c("Issues found in  {adam}   "))
+
+  })  # all ADaMs are compared 
+
+  # finally, display differences and log
+    display_diff(dir = path$diff)
+    #print(path$diff)
 }
 
 #------------------------  helper functions
@@ -171,19 +159,33 @@ verify_templates <- function(pkg = "admiral", ds = c("adae")) {
 #'
 #' @param dir Directory with `diff` files, one for each ADaM
 display_diff <- function(dir = NULL) {
+  # Open connection to log file
+  log_file <- file("verify_template_comparisons.txt", "a")
+
   files <- list.files(dir, full.names = TRUE)
   contents <- lapply(files, readLines)
   names(contents) <- basename(files)
+
   map2(
     names(contents), contents,
     function(name, content) {
-      cli::cli_h1(paste(
-        "Differences found for", str_replace_all(name, ".txt", ""),
-        " ", today(), "\n"
-      ))
+      header <- paste("Differences found for ", str_replace_all(name, ".txt", ""),
+                      " ", date(), "\n")
+
+      # Display to console
+      cli::cli_h1(header)
       cat(paste(content, collapse = "\n"))
+
+      # Write to log file
+      writeLines(header, log_file)
+      writeLines(paste(content, collapse = "\n"), log_file)
+      writeLines("\n", log_file) # Add separator between entries
     }
   )
+
+  # Close the file connection
+  writeLines("\n END of RUN -------", log_file)
+  close(log_file)
   invisible(NULL)
 }
 #' @description: loads saved rda file `filename` and returns the dataset
@@ -232,77 +234,47 @@ compare <- function(base, compare, keys, file = NULL) {
   e$old <- base
   e$new <- compare
   e$file <- file
-  # OR (2) saved a directory?
-  # nolint start
-  # saveRDS(e$old,file= paste0("old", ".RDS"))    # temporary
-  # saveRDS(e$new,file= paste0("new", ".RDS"))
-  # nolint end
   # ------------------------
 
   # remove column attributes
   for (name in names(base)) {
     attr(base[[name]], "label") <- NULL
   }
-  for (name in names(compare)) {
-    attr(compare[[name]], "label") <- NULL
-  }
-  tryCatch(
-    {
-      e$res <- diffdf::diffdf(
-        base = base,
-        compare = compare,
-        keys = keys,
-        file = file,
-        suppress_warnings = TRUE # for now
-      )
-    },
-    error = function(e) message("Error in diffdf: ", e$message)
-  ) ## end tryCatch
-} ## end compare
 
-#' @description:  removes the cache directory
-clean_cache <- function() {
-  cache_dir <- tools::R_user_dir("admiral_templates_data", which = "cache")
-  if (dir.exists(cache_dir)) {
-    unlink(cache_dir, recursive = TRUE)
-    message("Cache directory deleted: ", cache_dir)
-  } else {
-    message("Cache directory does not exist: ", cache_dir)
   }
-}
-
-#' @description:  removes the old adam directory
-clean_adam_old_dir <- function(dir = NULL) {
-  if (dir.exists(tempdir())) {
-    unlink(adam_old_dir, recursive = TRUE)
-    message(adam_old_dir, "directory deleted: ", tempdir())
-  } else {
-    message(adam_old_dir, "directory does not exist: ", tempdir())
-  }
-}
-
-#' Downloads ADaM datasets from pharmaverseadam
+#' Copies ADaM datasets from pharmaverseadam
 #' @param adam_names character vector  Set of  ADaMs to download.
 #' @param path Character string. Directory to save downloaded ADaMs.
 download_adam_old <- function(adam_names, path = NULL) {
-  lapply(adam_names, function(adam) {
-    githubURL <- paste0( # nolint
-      "https://github.com/pharmaverse/pharmaverseadam/raw/refs/heads/main/data/",
-      adam, ".rda?raw=true"
-    )
-    cat("Downloading: ", adam, "\n")
-    download.file(
-      url = githubURL,
-      quiet = TRUE,
-      destfile = paste0(path, "/", adam, ".rda"),
-      mode = "wb"
-    )
-  })
-}
 
-## DISCUSS:
-#  Combine next 2 functions into one.   get_dataset(adam, path)
-#  The path tells us if old or new.
+  # NEW:
+  # ds here is singlular
+
+  f = function(ds) {
+      q = call("::", "pharmaverseadam", sym(ds))
+      save(q,
+          file = file.path(path, paste0(ds, ".rda"))) }
+
+  walk(.x = adam_names, .f = f)
+
+#  LEGACY
+#  lapply(adam_names, function(adam) {
+#    githubURL <- paste0( # nolint
+#      "https://github.com/pharmaverse/pharmaverseadam/raw/refs/heads/main/data/",
+#      adam, ".rda?raw=true"
+#    )
+#    cat("Downloading: ", adam, "\n")
+#    download.file(
+#      url = githubURL,
+#      quiet = TRUE,
+#      destfile = paste0(path, "/", adam, ".rda"),
+#      mode = "wb"
+#    )
+#  })
+
+
+
+}
 
 #' Loads an ADaM dataset from a saved RDA file on disk.
 #'
@@ -317,7 +289,7 @@ download_adam_old <- function(adam_names, path = NULL) {
 #' adsl <- get_dataset_old("adsl", path = "data/adam")
 #' }
 get_dataset_old <- function(adam, path) {
-  adam_old <- load_rda(file.path(path, paste0(adam, ".rda")))
+  adam_old <- eval(load_rda(file.path(path, paste0(adam, ".rda"))))
 }
 
 #' Load a Saved ADaM Dataset
@@ -346,3 +318,23 @@ run_template <- function(adam, dir = NULL) {
 # Since this is script, and not package R function it must be loaded/sourced separately.
 # The next line runs the entire process after this file is sourced.
 # verify_templates()   # nolint
+
+
+#' create_directories
+#'
+#' @return list of paths to directories
+create_directories <- function() {
+  cli_inform("Creating temporary directories")
+  x <- tempdir()
+  dir.create(file.path(x, "old"), showWarnings = FALSE)
+  dir.create(file.path(x, "new"), showWarnings = FALSE)
+  dir.create(file.path(x, "diff"), showWarnings = FALSE)
+
+  list(
+    template_dir = "inst/templates",
+    cache_dir = tools::R_user_dir("admiral_templates_data", which = "cache"),
+    adam_new_dir = file.path(x, "new"),
+    adam_old_dir = file.path(x, "old"),
+    diff = file.path(x, "diff")
+  )
+}
