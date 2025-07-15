@@ -240,39 +240,6 @@ compare <- function(base, compare, keys, file = NULL) {
   for (name in names(base)) {
     attr(base[[name]], "label") <- NULL
   }
-  for (name in names(compare)) {
-    attr(compare[[name]], "label") <- NULL
-  }
-  comparison <- tryCatch(
-    {
-      diffdf::diffdf(
-        base = base,
-        compare = compare,
-        keys = NULL,   # not using
-        file = file,
-        suppress_warnings = TRUE # for now
-      )
-    },
-    error = function(e) message("Error in diffdf: ", e$message)
-  ) ## end tryCatch
-  comparison
-} ## end compare
-
-#' @description:  removes the cache directory
-clean_cache <- function() {
-  cache_dir <- tools::R_user_dir("admiral_templates_data", which = "cache")
-  adam_new_dir <- file.path(tempdir(), "new")
-  adam_old_dir <- file.path(tempdir(), "old")
-  diff <- file.path(tempdir(), "diff")
-
-  path = c(cache_dir, adam_new_dir, adam_old_dir, diff)   
-
-  lapply(path, function(e) {
-  if (dir.exists(e)) {
-    unlink(e, recursive = TRUE)
-    message("Directory deleted: ", e)
-   }
-  })
 
   }
 #' Copies ADaM datasets from pharmaverseadam
