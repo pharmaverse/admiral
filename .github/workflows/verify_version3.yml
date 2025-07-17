@@ -6,14 +6,14 @@ name: QC Dataset Check ✅
 on:
   pull_request:
     branches:
-      - verify_version3 
+      - verify_version3
 
 jobs:
-  act:
-    runs-on: ubuntu-latest
-    container: # <--- This is why act used node:16-buster-slim (has no git)
-      image: node:16-buster-slim
-
+#  act:
+#    runs-on: ubuntu-latest
+#    container: # <--- This is why act used node:16-buster-slim (has no git)
+#      image: node:16-buster-slim
+#
 #	    container:
 #      image: "ghcr.io/pharmaverse/admiralci-release:latest"
 ##      image: rocker/r-ver:latest
