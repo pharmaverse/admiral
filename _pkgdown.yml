@@ -22,7 +22,13 @@ authors:
     roles: [aut, ctb, cre, fnd]
     text: "Developed by"
   sidebar:
-    roles: [aut]
+    roles: [aut, fnd]
+  F. Hoffmann-La Roche AG:
+    html: "<a href='https://www.roche.com/'><img src='man/figures/roche_logo.svg' height='34' alt='Roche logo' /></a>"
+    href: https://posit.co
+  GlaxoSmithKline LLC:
+    html: "<a href='https://www.gsk.com/'><img src='man/figures/gsk_logo.svg' height='20' alt='GSK logo' /></a>"
+    href: https://posit.co
 
 reference:
 - title: Derivations for Adding Variables
