@@ -7,6 +7,9 @@ on:
   pull_request:
     branches:
       - verify_version3
+  push:
+    branches:
+      - verify_version3
 
 jobs:
   verify:
