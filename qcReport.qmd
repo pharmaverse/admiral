@@ -30,6 +30,7 @@ sessionInfo()
 
 ```{r data_load}
 #| echo: false
+
 input_dataset_paths <- list.files(input_path)
 input_dataset_paths <- input_dataset_paths[endsWith(input_dataset_paths, ".rds") ]
 input_dataset_names <- tools::file_path_sans_ext(input_dataset_paths)
@@ -72,7 +73,7 @@ cat("COMPARE: ", "Pilot 3 Datasets", "\n")
 for (y in input_dataset_names) {
   new_dataset <- paste0("new_", y)
   comp_dataset <- paste0("comp_", y)
-  diffs <- diffdf(get(new_dataset), get(comp_dataset))
+  diffs <- diffdf(base = get(new_dataset), compare =  get(comp_dataset))
     
   if (length(diffs) != 0) file.create("qc.fail")
     

@@ -131,8 +131,10 @@ verify_templates <- function(pkg = "admiral", ds = NULL) {
 
     cli_inform("---- Done with templates\n")
 
-
 }
+
+
+
 #------------------------  helper functions
 
 #' Display Results of running diffdf
