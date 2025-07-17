@@ -10,7 +10,7 @@ on:
   push:
     branches:
       - verify_version3
-  dispatch_workflow:
+  workflow_dispatch:
 
 jobs:
   verify:
