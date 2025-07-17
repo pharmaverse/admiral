@@ -1,6 +1,6 @@
 ## Dataset QC Check Complete! 
 
-Date:  2025-07-15 
+Date:  2025-07-17 
 Run by:   
 Git Ref:   
 BASE:  Pilot 5 Datasets 
@@ -25,21 +25,21 @@ Summary of BASE and COMPARE
 
 
 There are columns in BASE and COMPARE with differing attributes !!
-First 10 of 79 rows are shown in table below
-  =======================================================================
-   VARIABLE  ATTR_NAME  VALUES.BASE              VALUES.COMP             
-  -----------------------------------------------------------------------
-    ADURN      label       NULL            "Analysis Duration (N)"       
-    ADURU      label       NULL           "Analysis Duration Units"      
-    AEACN      label       NULL      "Action Taken with Study Treatm..." 
-   AEBDSYCD    label       NULL      "Body System or Organ Class Cod..." 
-   AEBODSYS    label       NULL         "Body System or Organ Class"     
-   AEDECOD     label       NULL           "Dictionary-Derived Term"      
-    AEDTC      label       NULL           "Date/Time of Collection"      
-   AEENDTC     label       NULL       "End Date/Time of Adverse Event"   
-    AEENDY     label       NULL      "Study Day of End of Adverse Ev..." 
-    AEHLGT     label       NULL            "High Level Group Term"       
-  -----------------------------------------------------------------------
+First 10 of 24 rows are shown in table below
+  ================================================================
+   VARIABLE  ATTR_NAME          VALUES.BASE           VALUES.COMP 
+  ----------------------------------------------------------------
+    ACTARM     label    "Description of Actual Arm"      NULL     
+   ACTARMCD    label         "Actual Arm Code"           NULL     
+     AGE       label                Age                  NULL     
+     AGEU      label            "Age Units"              NULL     
+     ARM       label    "Description of Planned Arm"     NULL     
+    ARMCD      label         "Planned Arm Code"          NULL     
+   COUNTRY     label              Country                NULL     
+    DMDTC      label     "Date/Time of Collection"       NULL     
+     DMDY      label     "Study Day of Collection"       NULL     
+    DTHDTC     label        "Date/Time of Death"         NULL     
+  ----------------------------------------------------------------
 
 
 There are columns in BASE that are not in COMPARE !!
@@ -75,21 +75,21 @@ Summary of BASE and COMPARE
 
 
 There are columns in BASE and COMPARE with differing attributes !!
-First 10 of 68 rows are shown in table below
-  =======================================================================
-   VARIABLE  ATTR_NAME  VALUES.BASE              VALUES.COMP             
-  -----------------------------------------------------------------------
-    ADURN      label       NULL            "Analysis Duration (N)"       
-    ADURU      label       NULL           "Analysis Duration Units"      
-    AENDT      label       NULL              "Analysis End Date"         
-    AENDTF     label       NULL      "Analysis End Date Imputation F..." 
-    AENDTM     label       NULL           "Analysis End Date/Time"       
-    AENDY      label       NULL          "Analysis End Relative Day"     
-    AENTMF     label       NULL      "Analysis End Time Imputation F..." 
-    AGEGR1     label       NULL             "Pooled Age Group 1"         
-   ANL01FL     label       NULL              "Analysis Flag 01"          
-   AOCCPFL     label       NULL      "1st Occurrence of Preferred Te..." 
-  -----------------------------------------------------------------------
+First 10 of 22 rows are shown in table below
+  ================================================================
+   VARIABLE  ATTR_NAME          VALUES.BASE           VALUES.COMP 
+  ----------------------------------------------------------------
+    ACTARM     label    "Description of Actual Arm"      NULL     
+   ACTARMCD    label         "Actual Arm Code"           NULL     
+     AGE       label                Age                  NULL     
+     AGEU      label            "Age Units"              NULL     
+     ARM       label    "Description of Planned Arm"     NULL     
+    ARMCD      label         "Planned Arm Code"          NULL     
+   COUNTRY     label              Country                NULL     
+    DMDTC      label     "Date/Time of Collection"       NULL     
+     DMDY      label     "Study Day of Collection"       NULL     
+    DTHDTC     label        "Date/Time of Death"         NULL     
+  ----------------------------------------------------------------
 
 
 ```
@@ -116,21 +116,21 @@ Summary of BASE and COMPARE
 
 
 There are columns in BASE and COMPARE with differing attributes !!
-First 10 of 82 rows are shown in table below
-  =======================================================================
-   VARIABLE  ATTR_NAME  VALUES.BASE              VALUES.COMP             
-  -----------------------------------------------------------------------
-    ABLFL      label       NULL            "Baseline Record Flag"        
-     ADT       label       NULL                "Analysis Date"           
-     ADTM      label       NULL              "Analysis Datetime"         
-     ADY       label       NULL            "Analysis Relative Day"       
-    AGEGR1     label       NULL             "Pooled Age Group 1"         
-   ANL01FL     label       NULL              "Analysis Flag 01"          
-    ANRHI      label       NULL      "Analysis Normal Range Upper Li..." 
-    ANRIND     label       NULL      "Analysis Reference Range Indic..." 
-    ANRLO      label       NULL      "Analysis Normal Range Lower Li..." 
-     ASEQ      label       NULL          "Analysis Sequence Number"      
-  -----------------------------------------------------------------------
+First 10 of 22 rows are shown in table below
+  ================================================================
+   VARIABLE  ATTR_NAME          VALUES.BASE           VALUES.COMP 
+  ----------------------------------------------------------------
+    ACTARM     label    "Description of Actual Arm"      NULL     
+   ACTARMCD    label         "Actual Arm Code"           NULL     
+     AGE       label                Age                  NULL     
+     AGEU      label            "Age Units"              NULL     
+     ARM       label    "Description of Planned Arm"     NULL     
+    ARMCD      label         "Planned Arm Code"          NULL     
+   COUNTRY     label              Country                NULL     
+    DMDTC      label     "Date/Time of Collection"       NULL     
+     DMDY      label     "Study Day of Collection"       NULL     
+    DTHDTC     label        "Date/Time of Death"         NULL     
+  ----------------------------------------------------------------
 
 
 Not all Values Compared Equal
@@ -379,21 +379,21 @@ Summary of BASE and COMPARE
 
 
 There are columns in BASE and COMPARE with differing attributes !!
-First 10 of 66 rows are shown in table below
-  =======================================================================
-   VARIABLE  ATTR_NAME  VALUES.BASE              VALUES.COMP             
-  -----------------------------------------------------------------------
-    AENDT      label       NULL              "Analysis End Date"         
-    AENDTF     label       NULL      "Analysis End Date Imputation F..." 
-    AENDTM     label       NULL            "Analysis End Datetime"       
-    AENDY      label       NULL          "Analysis End Relative Day"     
-    AENTMF     label       NULL      "Analysis End Time Imputation F..." 
-    AGEGR1     label       NULL             "Pooled Age Group 1"         
-     ASEQ      label       NULL          "Analysis Sequence Number"      
-    ASTDT      label       NULL             "Analysis Start Date"        
-    ASTDTF     label       NULL      "Analysis Start Date Imputation..." 
-    ASTDTM     label       NULL           "Analysis Start Datetime"      
-  -----------------------------------------------------------------------
+First 10 of 24 rows are shown in table below
+  ================================================================
+   VARIABLE  ATTR_NAME          VALUES.BASE           VALUES.COMP 
+  ----------------------------------------------------------------
+    ACTARM     label    "Description of Actual Arm"      NULL     
+   ACTARMCD    label         "Actual Arm Code"           NULL     
+     AGE       label                Age                  NULL     
+     AGEU      label            "Age Units"              NULL     
+     ARM       label    "Description of Planned Arm"     NULL     
+    ARMCD      label         "Planned Arm Code"          NULL     
+   COUNTRY     label              Country                NULL     
+    DMDTC      label     "Date/Time of Collection"       NULL     
+     DMDY      label     "Study Day of Collection"       NULL     
+    DTHDTC     label        "Date/Time of Death"         NULL     
+  ----------------------------------------------------------------
 
 
 ```
@@ -420,21 +420,21 @@ Summary of BASE and COMPARE
 
 
 There are columns in BASE and COMPARE with differing attributes !!
-First 10 of 89 rows are shown in table below
-  =======================================================================
-   VARIABLE  ATTR_NAME  VALUES.BASE              VALUES.COMP             
-  -----------------------------------------------------------------------
-    ABLFL      label       NULL            "Baseline Record Flag"        
-     ADT       label       NULL                "Analysis Date"           
-     ADY       label       NULL            "Analysis Relative Day"       
-    AGEGR1     label       NULL             "Pooled Age Group 1"         
-   ANL01FL     label       NULL              "Analysis Flag 01"          
-    ANRHI      label       NULL      "Analysis Normal Range Upper Li..." 
-    ANRIND     label       NULL      "Analysis Reference Range Indic..." 
-    ANRLO      label       NULL      "Analysis Normal Range Lower Li..." 
-     ASEQ      label       NULL          "Analysis Sequence Number"      
-   ATOXDSCH    label       NULL      "Analysis Toxicity Description ..." 
-  -----------------------------------------------------------------------
+First 10 of 22 rows are shown in table below
+  ================================================================
+   VARIABLE  ATTR_NAME          VALUES.BASE           VALUES.COMP 
+  ----------------------------------------------------------------
+    ACTARM     label    "Description of Actual Arm"      NULL     
+   ACTARMCD    label         "Actual Arm Code"           NULL     
+     AGE       label                Age                  NULL     
+     AGEU      label            "Age Units"              NULL     
+     ARM       label    "Description of Planned Arm"     NULL     
+    ARMCD      label         "Planned Arm Code"          NULL     
+   COUNTRY     label              Country                NULL     
+    DMDTC      label     "Date/Time of Collection"       NULL     
+     DMDY      label     "Study Day of Collection"       NULL     
+    DTHDTC     label        "Date/Time of Death"         NULL     
+  ----------------------------------------------------------------
 
 
 ```
@@ -461,21 +461,21 @@ Summary of BASE and COMPARE
 
 
 There are columns in BASE and COMPARE with differing attributes !!
-First 10 of 88 rows are shown in table below
-  =======================================================================
-   VARIABLE  ATTR_NAME  VALUES.BASE              VALUES.COMP             
-  -----------------------------------------------------------------------
-     ADT       label       NULL                "Analysis Date"           
-     ADY       label       NULL            "Analysis Relative Day"       
-    AENDT      label       NULL              "Analysis End Date"         
-    AENDY      label       NULL          "Analysis End Relative Day"     
-    AGEGR1     label       NULL             "Pooled Age Group 1"         
-    AHIST      label       NULL      "Response of Med Hx (past or cu..." 
-   ANL01FL     label       NULL              "Analysis Flag 01"          
-    AOCCFL     label       NULL      "1st Occurrence within Subject ..." 
-   AOCCPFL     label       NULL      "1st Occurrence of Preferred Te..." 
-   AOCCSFL     label       NULL         "1st Occurrence of SOC Flag"     
-  -----------------------------------------------------------------------
+First 10 of 22 rows are shown in table below
+  ================================================================
+   VARIABLE  ATTR_NAME          VALUES.BASE           VALUES.COMP 
+  ----------------------------------------------------------------
+    ACTARM     label    "Description of Actual Arm"      NULL     
+   ACTARMCD    label         "Actual Arm Code"           NULL     
+     AGE       label                Age                  NULL     
+     AGEU      label            "Age Units"              NULL     
+     ARM       label    "Description of Planned Arm"     NULL     
+    ARMCD      label         "Planned Arm Code"          NULL     
+   COUNTRY     label              Country                NULL     
+    DMDTC      label     "Date/Time of Collection"       NULL     
+     DMDY      label     "Study Day of Collection"       NULL     
+    DTHDTC     label        "Date/Time of Death"         NULL     
+  ----------------------------------------------------------------
 
 
 ```
@@ -483,166 +483,8 @@ First 10 of 88 rows are shown in table below
 </details>
 
 <details>
-<summary>❌ Dataset: adpp</summary>
+<summary>❌ Dataset: adpc</summary>
 
 
 ```
-
-Differences found between the objects!
-
-Summary of BASE and COMPARE
-  =================================================
-    PROPERTY         BASE              COMP        
-  -------------------------------------------------
-      Name     get(new_dataset)  get(comp_dataset) 
-     Class        data.frame        data.frame     
-    Rows(#)          2688              2688        
-   Columns(#)         79                79         
-  -------------------------------------------------
-
-
-There are columns in BASE and COMPARE with differing attributes !!
-First 10 of 38 rows are shown in table below
-  =======================================================================
-   VARIABLE  ATTR_NAME  VALUES.BASE              VALUES.COMP             
-  -----------------------------------------------------------------------
-     ADT       label       NULL                "Analysis Date"           
-     ADY       label       NULL            "Analysis Relative Day"       
-    AGEGR1     label       NULL             "Pooled Age Group 1"         
-   AVALCA1N    label       NULL        "Analysis Value Category 1 (N)"   
-   AVALCAT1    label       NULL          "Analysis Value Category 1"     
-    AVISIT     label       NULL               "Analysis Visit"           
-   AVISITN     label       NULL             "Analysis Visit (N)"         
-   DTH30FL     label       NULL      "Death Within 30 Days of Last T..." 
-   DTHA30FL    label       NULL      "Death After 30 Days from Last ..." 
-    DTHADY     label       NULL            "Relative Day of Death"       
-  -----------------------------------------------------------------------
-
-
-```
-
-</details>
-
-<details>
-<summary>❌ Dataset: adppk</summary>
-
-
-```
-
-Differences found between the objects!
-
-Summary of BASE and COMPARE
-  ==================================================================
-    PROPERTY             BASE                       COMP            
-  ------------------------------------------------------------------
-      Name         get(new_dataset)           get(comp_dataset)     
-     Class     "tbl_df, tbl, data.frame"  "tbl_df, tbl, data.frame" 
-    Rows(#)              3522                       3522            
-   Columns(#)             61                         61             
-  ------------------------------------------------------------------
-
-
-There are columns in BASE and COMPARE with differing attributes !!
-First 10 of 45 rows are shown in table below
-  =======================================================================
-   VARIABLE  ATTR_NAME  VALUES.BASE              VALUES.COMP             
-  -----------------------------------------------------------------------
-    AFRLT      label       NULL      "Act. Rel. Time from Analyte Fi..." 
-    ALLOQ      label       NULL      "Analysis Lower Limit of Quanti..." 
-     AMT       label       NULL      "Actual Amount of Dose Received..." 
-    APRLT      label       NULL      "Actual Rel Time from Previous ..." 
-     ASEQ      label       NULL          "Analysis Sequence Number"      
-     AVAL      label       NULL               "Analysis Value"           
-    AVALU      label       NULL             "Analysis Value Unit"        
-    BLQFL      label       NULL      "Below Lower Limit of Quant Fla..." 
-    BLQFN      label       NULL      "Below Lower Limit of Quant Fla..." 
-    BMIBL      label       NULL      "Baseline Body Mass Index (kg/m..." 
-  -----------------------------------------------------------------------
-
-
-```
-
-</details>
-
-<details>
-<summary>❌ Dataset: adsl</summary>
-
-
-```
-
-Differences found between the objects!
-
-Summary of BASE and COMPARE
-  ==================================================================
-    PROPERTY             BASE                       COMP            
-  ------------------------------------------------------------------
-      Name         get(new_dataset)           get(comp_dataset)     
-     Class     "tbl_df, tbl, data.frame"  "tbl_df, tbl, data.frame" 
-    Rows(#)               306                        306            
-   Columns(#)             54                         54             
-  ------------------------------------------------------------------
-
-
-There are columns in BASE and COMPARE with differing attributes !!
-First 10 of 27 rows are shown in table below
-  =======================================================================
-   VARIABLE  ATTR_NAME  VALUES.BASE              VALUES.COMP             
-  -----------------------------------------------------------------------
-    AGEGR1     label       NULL             "Pooled Age Group 1"         
-   DTH30FL     label       NULL      "Death Within 30 Days of Last T..." 
-   DTHA30FL    label       NULL      "Death After 30 Days from Last ..." 
-    DTHADY     label       NULL            "Relative Day of Death"       
-   DTHB30FL    label       NULL      "Death Within 30 Days of First ..." 
-    DTHDT      label       NULL                "Date of Death"           
-    DTHDTF     label       NULL        "Date of Death Imputation Flag"   
-    EOSDT      label       NULL              "End of Study Date"         
-    EOSSTT     label       NULL             "End of Study Status"        
-    FRVDT      label       NULL         "Final Retrievel Visit Date"     
-  -----------------------------------------------------------------------
-
-
-```
-
-</details>
-
-<details>
-<summary>❌ Dataset: advs</summary>
-
-
-```
-
-Differences found between the objects!
-
-Summary of BASE and COMPARE
-  ==================================================================
-    PROPERTY             BASE                       COMP            
-  ------------------------------------------------------------------
-      Name         get(new_dataset)           get(comp_dataset)     
-     Class     "tbl_df, tbl, data.frame"  "tbl_df, tbl, data.frame" 
-    Rows(#)              65032                      65032           
-   Columns(#)             105                        105            
-  ------------------------------------------------------------------
-
-
-There are columns in BASE and COMPARE with differing attributes !!
-First 10 of 79 rows are shown in table below
-  =======================================================================
-   VARIABLE  ATTR_NAME  VALUES.BASE              VALUES.COMP             
-  -----------------------------------------------------------------------
-     A1HI      label       NULL        "Analysis Range 1 Upper Limit"    
-     A1LO      label       NULL        "Analysis Range 1 Lower Limit"    
-    ABLFL      label       NULL            "Baseline Record Flag"        
-     ADT       label       NULL                "Analysis Date"           
-     ADY       label       NULL            "Analysis Relative Day"       
-    AGEGR1     label       NULL             "Pooled Age Group 1"         
-   ANL01FL     label       NULL              "Analysis Flag 01"          
-    ANRHI      label       NULL      "Analysis Normal Range Upper Li..." 
-    ANRIND     label       NULL      "Analysis Reference Range Indic..." 
-    ANRLO      label       NULL      "Analysis Normal Range Lower Li..." 
-  -----------------------------------------------------------------------
-
-
-```
-
-</details>
 

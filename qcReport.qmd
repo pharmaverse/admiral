@@ -5,6 +5,8 @@ date: "`r Sys.Date()`"
 editor: visual
 execute:
   keep-md: true
+editor_options: 
+  chunk_output_type: console
 ---
 
 ```{r, echo = FALSE}
@@ -55,7 +57,7 @@ for (i in seq_along(comp_dataset_names)) {
 
 ```
 
-`r length(input_dataset_names)` datasets were found in the `pilot5-submission/pilot5-input/adamdata` directory. The datasets are `r input_dataset_names`
+`` `r length(input_dataset_names)` `` datasets were found in the `pilot5-submission/pilot5-input/adamdata` directory. The datasets are \``` r input_dataset_names` ``
 
 ```{r data_html}
 #| echo: false
