@@ -9,17 +9,7 @@ on:
       - verify_version3
 
 jobs:
-#  act:
-#    runs-on: ubuntu-latest
-#    container: # <--- This is why act used node:16-buster-slim (has no git)
-#      image: node:16-buster-slim
-#
-#	    container:
-#      image: "ghcr.io/pharmaverse/admiralci-release:latest"
-##      image: rocker/r-ver:latest
-# SEE; https://pharmaverse.github.io/admiralci/articles/common_structure.html
-
-  GHA:
+  verify:
     runs-on: ubuntu-latest
     if: ${{ !env.ACT }}
 
@@ -27,32 +17,20 @@ jobs:
 
       - name: Set US Eastern timezone
         run: sudo timedatectl set-timezone America/New_York
-    
+
       - name: Check out repository
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
       - name: Set up R
-        if: ${{ !env.ACT }}
         uses: r-lib/actions/setup-r@v2
-
-      - name: Set up R (act only)
-        if: ${{ env.ACT }}
-        uses:
-
-        if: ${{env.ACT}}
-      - name: Install Git (REQUIRED FOR THIS SPECIFIC DOCKER IMAGE)
-        run: |
-          apt-get update # Update package lists
-          apt-get install -y git # Install git
 
       - uses: quarto-dev/quarto-actions/setup@v2
 
       - name: Install R dependencies
         run: |
           Rscript -e 'install.packages(c("dplyr", "jsonlite", "quarto", "diffdf", "rmarkdown", "safetyData", "tibble", "stringr", "haven"), repos = "https://packagemanager.posit.co/cran/__linux__/noble/latest")'
-          
 
       - name: Run QC script
         run: R -e 'quarto::quarto_render("qcReport.qmd")'
