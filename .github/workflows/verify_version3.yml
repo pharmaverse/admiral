@@ -1,7 +1,7 @@
 
 # Source:  pilot5, Eli Miller, @ July 15, 2025
 
-name: QC Dataset Check ✅
+name: Verify Templates ✅
 
 on:
   pull_request:
