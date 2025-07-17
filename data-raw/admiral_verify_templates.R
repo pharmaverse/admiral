@@ -118,8 +118,15 @@ verify_templates <- function(pkg = "admiral", ds = NULL) {
         # retrieve *.rda file in cache; copy to correct directory
         dataset_new <- load_rda(paste0(path$cache_dir, "/", adam, ".rda"))
         saveRDS(dataset_new, file = file.path(new_dir, paste0(adam, ".rds")))
+
+        
         dataset_old <- get_dataset_old(adam, path$adam_old_dir)
+        # remove column attributes from old
+        for (name in names(dataset_old)) {
+            attr(dataset_old[[name]], "label") <- NULL
+        }
         saveRDS(dataset_old, file = file.path(old_dir, paste0(adam, ".rds")))
+
         })
 
     cli_inform("---- Done with templates\n")
