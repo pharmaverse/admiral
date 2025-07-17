@@ -32,7 +32,7 @@ jobs:
 
       - name: Install R dependencies
         run: |
-          Rscript -e 'install.packages(c("dplyr", "jsonlite", "quarto", "diffdf", "rmarkdown", "safetyData", "tibble", "stringr", "haven"), repos = "https://packagemanager.posit.co/cran/__linux__/noble/latest")'
+          Rscript -e 'install.packages(c("dplyr", "jsonlite", "quarto", "diffdf", "rmarkdown", "safetyData", "tibble", "stringr"), repos = "https://packagemanager.posit.co/cran/__linux__/noble/latest")'
 
       - name: Run QC script
         run: R -e 'quarto::quarto_render("qcReport.qmd")'
