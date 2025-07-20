@@ -53,9 +53,9 @@ jobs:
           comment-tag: qc-dataset
           pr-number:  2784  # wants this??
 
-#      - name: Fail Step if no differences found
-#        if: hashFiles('qc.fail') != ''
-#        uses: actions/github-script@v3
-#        with:
-#          script: |
-#            core.setFailed('QC Check failed!')
+      - name: Fail Step if no differences found
+        if: hashFiles('qc.fail') != ''
+        uses: actions/github-script@v3
+        with:
+          script: |
+            core.setFailed('QC Check failed!')
