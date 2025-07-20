@@ -78,7 +78,7 @@ for (y in input_dataset_names) {
   new_dataset <- paste0("new_", y)
   comp_dataset <- paste0("comp_", y)
   diffs <- diffdf(base = get(comp_dataset), compare =  get(new_dataset))
-  diffdf::diffdf_has_issues(diffs)
+  if  (diffdf::diffdf_has_issues(diffs)) print(diffs)
     
   if (length(diffs) != 0) file.create("qc.fail")
     

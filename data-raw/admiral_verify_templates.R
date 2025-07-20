@@ -58,12 +58,11 @@ verify_templates <- function(pkg = "admiral", ds = NULL) {
 
   # no value for ds?  then run all templates
   if (is.null(ds)) {
-  ds = c("adae", "adcm", "adeg", "adex", "adlb", "adlbhy", "admh", "adpc", 
+  ds = c("adae", "adcm", "adeg", "adex", "adlb", "adlbhy", "admh", "adpc",  
            "adpp", "adppk", "adsl", "advs")
   }
 
   #ds = c("adpp", "adppk", "adsl", "advs")
-#  clean_cache() # clear all..
 
   pkg <- "admiral"
   if (pkg != "admiral") cli_abort("Currently only `admiral` package is supported")
@@ -74,12 +73,33 @@ verify_templates <- function(pkg = "admiral", ds = NULL) {
   library(cli)
   library(stringr)
   # nolint end
+
+  cli_inform("Clean directories")
+
+
+  # always remove, then re-create permanent directories (for .rds)
+    if (dir.exists("inst/verify")) {
+        res = unlink("inst/verify", recursive=TRUE)}
+  dir.create("inst/verify/old", recursive = TRUE)
+  dir.create("inst/verify/new", recursive = TRUE)
+
+  # temporary directories:   two cases
+  # clean
+  if (dir.exists(file.path(tempdir(), "old"))) {
+        unlink("*.rda", recursive = TRUE)
+        }
+
+  # create fresh (skips if dir  exists)
+  path <- create_directories()
+            
+
   cli_alert("Generating ADaMs for { pkg} package.")
 
-  path <- create_directories()
-
   # gather templates ----
-  templates <- list.files(path$template_dir, pattern = "ad_")
+  template_dir = file.path("inst/templates")
+  templates <- list.files(template_dir, pattern = "ad_")
+
+  cache_dir = tools::R_user_dir("admiral_templates_data", which = "cache")
 
   # from templates generate vector of adam_names
   adam_names <- vapply(templates, function(x) gsub("ad_|\\.R", "", x),
@@ -104,40 +124,39 @@ verify_templates <- function(pkg = "admiral", ds = NULL) {
 
   cli_inform("---- Run templates\n")
 
-#  if (exists(file.path("inst/verify/old") unlink(
-
-  old_dir = file.path("inst/verify/old")
-  if(!exists(old_dir)) dir.create(old_dir, recursive = TRUE)
-
-  new_dir = file.path("inst/verify/new")
-  if(!exists(new_dir)) dir.create(new_dir, recursive = TRUE)
     
     purrr::map(adam_names, .progress = TRUE, function(adam){
         cli_inform("------Template running for {adam}")
+        tryCatch(
+        {
         run_template(adam, dir = path$template_dir)
+
         # retrieve *.rda file in cache; copy to correct directory
         dataset_new <- load_rda(paste0(path$cache_dir, "/", adam, ".rda"))
         for (name in names(dataset_new)) {
             attr(dataset_new[[name]], "label") <- NULL
         }
-        saveRDS(dataset_new, file = file.path(new_dir, paste0(adam, ".rds")))
+        saveRDS(dataset_new, file = file.path("inst/verify/new", paste0(adam, ".rds")))
 
         
         dataset_old <- get_dataset_old(adam, path$adam_old_dir)
-        # simpler way:
-        #attr(dataset_old, "_xportr.df_arg_") = NULL
-        #attr(dataset_old, "label") = NULL
         # remove column attributes from old
         for (name in names(dataset_old)) {
             attr(dataset_old[[name]], "label") <- NULL
         }
-        saveRDS(dataset_old, file = file.path(old_dir, paste0(adam, ".rds")))
+        saveRDS(dataset_old, file = file.path("inst/verify/old", paste0(adam, ".rds")))
 
-        res = diffdf::diffdf(compare = dataset_new, base=dataset_old)
-        sink(file.path("inst/verify", paste0(adam, ".diff")))
-       print(res) 
-        sink()
+        # temporary, for testing
+        res = diffdf::diffdf(dataset_new, dataset_old, suppress_warnings = TRUE)
+        if (diffdf::diffdf_has_issues(res)) {
+           print(res)
+           saveRDS(res, file=file.path("inst/verify", paste0(adam, ".diff")))
+        }
 
+       },
+       error = function(e) message(paste0(adam , " problem: ", e$message))
+        
+       )   # end tryCatch 
         })
 
     cli_inform("---- Done with templates\n")
@@ -336,9 +355,9 @@ run_template <- function(adam, dir = NULL) {
 create_directories <- function() {
   cli_inform("Creating temporary directories")
   x <- tempdir()
-  dir.create(file.path(x, "old"), showWarnings = FALSE)
-  dir.create(file.path(x, "new"), showWarnings = FALSE)
-  dir.create(file.path(x, "diff"), showWarnings = FALSE)
+  if (!dir.exists(file.path(x, "old") )) dir.create(file.path(x, "old"), showWarnings = TRUE)
+  if (!dir.exists(file.path(x, "new"))) dir.create(file.path(x, "new"), showWarnings = TRUE)
+  if (!dir.exists(file.path(x, "diff"))) dir.create(file.path(x, "diff"), showWarnings = TRUE)
 
   list(
     template_dir = "inst/templates",

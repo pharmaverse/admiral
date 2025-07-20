@@ -327,165 +327,45 @@ No issues were found!
 </details>
 
 <details>
-<summary>❌ Dataset: adpp</summary>
+<summary>✅ Dataset: adpp</summary>
 
 
 ```
 
-Differences found between the objects!
-
-Summary of BASE and COMPARE
-  =================================================
-    PROPERTY         BASE               COMP       
-  -------------------------------------------------
-      Name     get(comp_dataset)  get(new_dataset) 
-     Class        data.frame         data.frame    
-    Rows(#)          2688               2688       
-   Columns(#)         79                 79        
-  -------------------------------------------------
-
-
-There are columns in BASE and COMPARE with differing attributes !!
-First 10 of 38 rows are shown in table below
-  =======================================================================
-   VARIABLE  ATTR_NAME  VALUES.BASE              VALUES.COMP             
-  -----------------------------------------------------------------------
-     ADT       label       NULL                "Analysis Date"           
-     ADY       label       NULL            "Analysis Relative Day"       
-    AGEGR1     label       NULL             "Pooled Age Group 1"         
-   AVALCA1N    label       NULL        "Analysis Value Category 1 (N)"   
-   AVALCAT1    label       NULL          "Analysis Value Category 1"     
-    AVISIT     label       NULL               "Analysis Visit"           
-   AVISITN     label       NULL             "Analysis Visit (N)"         
-   DTH30FL     label       NULL      "Death Within 30 Days of Last T..." 
-   DTHA30FL    label       NULL      "Death After 30 Days from Last ..." 
-    DTHADY     label       NULL            "Relative Day of Death"       
-  -----------------------------------------------------------------------
-
-
+No issues were found!
 ```
 
 </details>
 
 <details>
-<summary>❌ Dataset: adppk</summary>
+<summary>✅ Dataset: adppk</summary>
 
 
 ```
 
-Differences found between the objects!
-
-Summary of BASE and COMPARE
-  ==================================================================
-    PROPERTY             BASE                       COMP            
-  ------------------------------------------------------------------
-      Name         get(comp_dataset)          get(new_dataset)      
-     Class     "tbl_df, tbl, data.frame"  "tbl_df, tbl, data.frame" 
-    Rows(#)              3522                       3522            
-   Columns(#)             61                         61             
-  ------------------------------------------------------------------
-
-
-There are columns in BASE and COMPARE with differing attributes !!
-First 10 of 45 rows are shown in table below
-  =======================================================================
-   VARIABLE  ATTR_NAME  VALUES.BASE              VALUES.COMP             
-  -----------------------------------------------------------------------
-    AFRLT      label       NULL      "Act. Rel. Time from Analyte Fi..." 
-    ALLOQ      label       NULL      "Analysis Lower Limit of Quanti..." 
-     AMT       label       NULL      "Actual Amount of Dose Received..." 
-    APRLT      label       NULL      "Actual Rel Time from Previous ..." 
-     ASEQ      label       NULL          "Analysis Sequence Number"      
-     AVAL      label       NULL               "Analysis Value"           
-    AVALU      label       NULL             "Analysis Value Unit"        
-    BLQFL      label       NULL      "Below Lower Limit of Quant Fla..." 
-    BLQFN      label       NULL      "Below Lower Limit of Quant Fla..." 
-    BMIBL      label       NULL      "Baseline Body Mass Index (kg/m..." 
-  -----------------------------------------------------------------------
-
-
+No issues were found!
 ```
 
 </details>
 
 <details>
-<summary>❌ Dataset: adsl</summary>
+<summary>✅ Dataset: adsl</summary>
 
 
 ```
 
-Differences found between the objects!
-
-Summary of BASE and COMPARE
-  ==================================================================
-    PROPERTY             BASE                       COMP            
-  ------------------------------------------------------------------
-      Name         get(comp_dataset)          get(new_dataset)      
-     Class     "tbl_df, tbl, data.frame"  "tbl_df, tbl, data.frame" 
-    Rows(#)               306                        306            
-   Columns(#)             54                         54             
-  ------------------------------------------------------------------
-
-
-There are columns in BASE and COMPARE with differing attributes !!
-First 10 of 27 rows are shown in table below
-  =======================================================================
-   VARIABLE  ATTR_NAME  VALUES.BASE              VALUES.COMP             
-  -----------------------------------------------------------------------
-    AGEGR1     label       NULL             "Pooled Age Group 1"         
-   DTH30FL     label       NULL      "Death Within 30 Days of Last T..." 
-   DTHA30FL    label       NULL      "Death After 30 Days from Last ..." 
-    DTHADY     label       NULL            "Relative Day of Death"       
-   DTHB30FL    label       NULL      "Death Within 30 Days of First ..." 
-    DTHDT      label       NULL                "Date of Death"           
-    DTHDTF     label       NULL        "Date of Death Imputation Flag"   
-    EOSDT      label       NULL              "End of Study Date"         
-    EOSSTT     label       NULL             "End of Study Status"        
-    FRVDT      label       NULL         "Final Retrievel Visit Date"     
-  -----------------------------------------------------------------------
-
-
+No issues were found!
 ```
 
 </details>
 
 <details>
-<summary>❌ Dataset: advs</summary>
+<summary>✅ Dataset: advs</summary>
 
 
 ```
 
-Differences found between the objects!
-
-Summary of BASE and COMPARE
-  ==================================================================
-    PROPERTY             BASE                       COMP            
-  ------------------------------------------------------------------
-      Name         get(comp_dataset)          get(new_dataset)      
-     Class     "tbl_df, tbl, data.frame"  "tbl_df, tbl, data.frame" 
-    Rows(#)              65032                      65032           
-   Columns(#)             105                        105            
-  ------------------------------------------------------------------
-
-
-There are columns in BASE and COMPARE with differing attributes !!
-First 10 of 79 rows are shown in table below
-  =======================================================================
-   VARIABLE  ATTR_NAME  VALUES.BASE              VALUES.COMP             
-  -----------------------------------------------------------------------
-     A1HI      label       NULL        "Analysis Range 1 Upper Limit"    
-     A1LO      label       NULL        "Analysis Range 1 Lower Limit"    
-    ABLFL      label       NULL            "Baseline Record Flag"        
-     ADT       label       NULL                "Analysis Date"           
-     ADY       label       NULL            "Analysis Relative Day"       
-    AGEGR1     label       NULL             "Pooled Age Group 1"         
-   ANL01FL     label       NULL              "Analysis Flag 01"          
-    ANRHI      label       NULL      "Analysis Normal Range Upper Li..." 
-    ANRIND     label       NULL      "Analysis Reference Range Indic..." 
-    ANRLO      label       NULL      "Analysis Normal Range Lower Li..." 
-  -----------------------------------------------------------------------
-
-
+No issues were found!
 ```
 
 </details>
