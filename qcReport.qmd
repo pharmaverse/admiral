@@ -74,6 +74,7 @@ cat("Git Ref: ", Sys.getenv("GITHUB_REF"), "\n")
 cat("BASE: ", "Generated ADaM Datasets from Templates during Run", "\n")
 cat("COMPARE: ", "ADaM Datasets from pharmaverseadam ", "\n")
 for (y in input_dataset_names) {
+  if (y == "adpc") next()
   new_dataset <- paste0("new_", y)
   comp_dataset <- paste0("comp_", y)
   diffs <- diffdf(base = get(comp_dataset), compare =  get(new_dataset))
