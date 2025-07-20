@@ -398,7 +398,7 @@ adpc_lloq <- adpc_aval %>%
 # ---- Create DTYPE copy records ----
 
 dtype <- adpc_lloq %>%
-  filter(NFRLT > 0 & NXRLT == 0 & EVID == 0 & !is.na(AVISIT_next)) %>%
+  dplyr::filter(NFRLT > 0 & NXRLT == 0 & EVID == 0 & !is.na(AVISIT_next)) %>%
   select(-PCRFTDT, -PCRFTTM) %>%
   # Re-derive variables in for DTYPE copy records
   mutate(
