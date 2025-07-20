@@ -1,0 +1,235 @@
+Differences found between the objects!
+
+Summary of BASE and COMPARE
+  ==================================================================
+    PROPERTY             BASE                       COMP            
+  ------------------------------------------------------------------
+      Name            dataset_old                dataset_new        
+     Class     "tbl_df, tbl, data.frame"  "tbl_df, tbl, data.frame" 
+    Rows(#)              78756                      78756           
+   Columns(#)             108                        108            
+  ------------------------------------------------------------------
+
+
+Not all Values Compared Equal
+First 10 of 12 rows are shown in table below
+  =============================
+   Variable  No of Differences 
+  -----------------------------
+     ADY           19159       
+   BASETYPE        78756       
+    ABLFL           7112       
+     BASE          76493       
+    BNRIND         25393       
+     CHG           43252       
+     PCHG          43252       
+   ANL01FL         35526       
+   AVALCAT1        43828       
+   CHGCAT1         24784       
+  -----------------------------
+
+
+First 10 of 19159 rows are shown in table below
+  ========================================
+   VARIABLE  ..ROWNUMBER..  BASE  COMPARE 
+  ----------------------------------------
+     ADY          15         NA     -7    
+     ADY          19         NA     -2    
+     ADY          23         NA      1    
+     ADY          27         NA     13    
+     ADY          31         NA     15    
+     ADY          35         NA     29    
+     ADY          39         NA     31    
+     ADY          43         NA     42    
+     ADY          47         NA     63    
+     ADY          51         NA     84    
+  ----------------------------------------
+
+
+First 10 of 78756 rows are shown in table below
+  =================================================
+   VARIABLE  ..ROWNUMBER..  BASE      COMPARE      
+  -------------------------------------------------
+   BASETYPE        1        LAST  "BASELINE DAY 1" 
+   BASETYPE        2        LAST  "BASELINE DAY 1" 
+   BASETYPE        3        LAST  "BASELINE DAY 1" 
+   BASETYPE        4        LAST  "BASELINE DAY 1" 
+   BASETYPE        5        LAST  "BASELINE DAY 1" 
+   BASETYPE        6        LAST  "BASELINE DAY 1" 
+   BASETYPE        7        LAST  "BASELINE DAY 1" 
+   BASETYPE        8        LAST  "BASELINE DAY 1" 
+   BASETYPE        9        LAST  "BASELINE DAY 1" 
+   BASETYPE       10        LAST  "BASELINE DAY 1" 
+  -------------------------------------------------
+
+
+First 10 of 7112 rows are shown in table below
+  ========================================
+   VARIABLE  ..ROWNUMBER..  BASE  COMPARE 
+  ----------------------------------------
+    ABLFL          20        Y     <NA>   
+    ABLFL          21        Y     <NA>   
+    ABLFL          22        Y     <NA>   
+    ABLFL          23       <NA>     Y    
+    ABLFL          76        Y     <NA>   
+    ABLFL          77        Y     <NA>   
+    ABLFL          78        Y     <NA>   
+    ABLFL          79       <NA>     Y    
+    ABLFL         132        Y     <NA>   
+    ABLFL         133        Y     <NA>   
+  ----------------------------------------
+
+
+First 10 of 76493 rows are shown in table below
+  =========================================
+   VARIABLE  ..ROWNUMBER..  BASE  COMPARE  
+  -----------------------------------------
+     BASE         12         73   73.66667 
+     BASE         13         83   73.66667 
+     BASE         14         65   73.66667 
+     BASE         15         NA   73.66667 
+     BASE         16         73   73.66667 
+     BASE         17         83   73.66667 
+     BASE         18         65   73.66667 
+     BASE         19         NA   73.66667 
+     BASE         20         73   73.66667 
+     BASE         21         83   73.66667 
+  -----------------------------------------
+
+
+First 10 of 25393 rows are shown in table below
+  ========================================
+   VARIABLE  ..ROWNUMBER..  BASE  COMPARE 
+  ----------------------------------------
+    BNRIND        15        <NA>  NORMAL  
+    BNRIND        19        <NA>  NORMAL  
+    BNRIND        23        <NA>  NORMAL  
+    BNRIND        27        <NA>  NORMAL  
+    BNRIND        31        <NA>  NORMAL  
+    BNRIND        35        <NA>  NORMAL  
+    BNRIND        39        <NA>  NORMAL  
+    BNRIND        43        <NA>  NORMAL  
+    BNRIND        47        <NA>  NORMAL  
+    BNRIND        51        <NA>  NORMAL  
+  ----------------------------------------
+
+
+First 10 of 43252 rows are shown in table below
+  ============================================
+   VARIABLE  ..ROWNUMBER..  BASE    COMPARE   
+  --------------------------------------------
+     CHG          28        -10   -10.6666667 
+     CHG          29          0     9.3333333 
+     CHG          30          1    -7.6666667 
+     CHG          31         NA    -3.0000000 
+     CHG          32        -12   -12.6666667 
+     CHG          33        -18    -8.6666667 
+     CHG          34          9     0.3333333 
+     CHG          35         NA    -7.0000000 
+     CHG          40         -9    -9.6666667 
+     CHG          41        -19    -9.6666667 
+  --------------------------------------------
+
+
+First 10 of 43252 rows are shown in table below
+  ==================================================
+   VARIABLE  ..ROWNUMBER..     BASE       COMPARE   
+  --------------------------------------------------
+     PCHG         28        -13.698630  -14.4796380 
+     PCHG         29          0.000000   12.6696833 
+     PCHG         30          1.538462  -10.4072398 
+     PCHG         31                NA   -4.0723982 
+     PCHG         32        -16.438356  -17.1945701 
+     PCHG         33        -21.686747  -11.7647059 
+     PCHG         34         13.846154    0.4524887 
+     PCHG         35                NA   -9.5022624 
+     PCHG         40        -12.328767  -13.1221719 
+     PCHG         41        -22.891566  -13.1221719 
+  --------------------------------------------------
+
+
+First 10 of 35526 rows are shown in table below
+  ========================================
+   VARIABLE  ..ROWNUMBER..  BASE  COMPARE 
+  ----------------------------------------
+   ANL01FL         3         Y     <NA>   
+   ANL01FL         4         Y     <NA>   
+   ANL01FL         5         Y     <NA>   
+   ANL01FL         6         Y     <NA>   
+   ANL01FL         7         Y     <NA>   
+   ANL01FL         8         Y     <NA>   
+   ANL01FL         9         Y     <NA>   
+   ANL01FL        10         Y     <NA>   
+   ANL01FL        11         Y     <NA>   
+   ANL01FL        23        <NA>     Y    
+  ----------------------------------------
+
+
+First 10 of 43828 rows are shown in table below
+  ===========================================================
+   VARIABLE  ..ROWNUMBER..        BASE           COMPARE     
+  -----------------------------------------------------------
+   AVALCAT1       68         "<= 450 msec"     "<= 450 ms"   
+   AVALCAT1       69        ">450<=480 msec"  ">450<=480 ms" 
+   AVALCAT1       70         "<= 450 msec"     "<= 450 ms"   
+   AVALCAT1       71         "<= 450 msec"     "<= 450 ms"   
+   AVALCAT1       72        ">450<=480 msec"  ">450<=480 ms" 
+   AVALCAT1       73          ">500 msec"       ">500 ms"    
+   AVALCAT1       74         "<= 450 msec"     "<= 450 ms"   
+   AVALCAT1       75         "<= 450 msec"     "<= 450 ms"   
+   AVALCAT1       76        ">450<=480 msec"  ">450<=480 ms" 
+   AVALCAT1       77        ">450<=480 msec"  ">450<=480 ms" 
+  -----------------------------------------------------------
+
+
+First 10 of 24784 rows are shown in table below
+  =======================================================
+   VARIABLE  ..ROWNUMBER..       BASE         COMPARE    
+  -------------------------------------------------------
+   CHGCAT1        84         "<= 30 msec"    "<= 30 ms"  
+   CHGCAT1        85        ">30<=60 msec"  ">30<=60 ms" 
+   CHGCAT1        86          ">60 msec"      ">60 ms"   
+   CHGCAT1        87             <NA>       ">30<=60 ms" 
+   CHGCAT1        88         "<= 30 msec"    "<= 30 ms"  
+   CHGCAT1        89         "<= 30 msec"   ">30<=60 ms" 
+   CHGCAT1        90          ">60 msec"      ">60 ms"   
+   CHGCAT1        91             <NA>        "<= 30 ms"  
+   CHGCAT1        96         "<= 30 msec"    "<= 30 ms"  
+   CHGCAT1        97         "<= 30 msec"    "<= 30 ms"  
+  -------------------------------------------------------
+
+
+First 10 of 10955 rows are shown in table below
+  ========================================
+   VARIABLE  ..ROWNUMBER..  BASE  COMPARE 
+  ----------------------------------------
+   CHGCAT1N        87        NA      2    
+   CHGCAT1N        89         1      2    
+   CHGCAT1N        91        NA      1    
+   CHGCAT1N        99        NA      2    
+   CHGCAT1N       100         2      3    
+   CHGCAT1N       101         1      2    
+   CHGCAT1N       103        NA      2    
+   CHGCAT1N       107        NA      1    
+   CHGCAT1N       110         3      2    
+   CHGCAT1N       111        NA      1    
+  ----------------------------------------
+
+
+First 10 of 65742 rows are shown in table below
+  ===================================================================
+   VARIABLE  ..ROWNUMBER..          BASE               COMPARE       
+  -------------------------------------------------------------------
+    PARAM         68        "QT Duration (msec)"  "QT Duration (ms)" 
+    PARAM         69        "QT Duration (msec)"  "QT Duration (ms)" 
+    PARAM         70        "QT Duration (msec)"  "QT Duration (ms)" 
+    PARAM         71        "QT Duration (msec)"  "QT Duration (ms)" 
+    PARAM         72        "QT Duration (msec)"  "QT Duration (ms)" 
+    PARAM         73        "QT Duration (msec)"  "QT Duration (ms)" 
+    PARAM         74        "QT Duration (msec)"  "QT Duration (ms)" 
+    PARAM         75        "QT Duration (msec)"  "QT Duration (ms)" 
+    PARAM         76        "QT Duration (msec)"  "QT Duration (ms)" 
+    PARAM         77        "QT Duration (msec)"  "QT Duration (ms)" 
+  -------------------------------------------------------------------
+
+

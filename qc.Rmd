@@ -1,10 +1,10 @@
-## Dataset QC Check Complete! 
+## Verify Templates Check Complete! 
 
-Date:  2025-07-17 
+Date:  2025-07-20 
 Run by:   
 Git Ref:   
-BASE:  Pilot 5 Datasets 
-COMPARE:  Pilot 3 Datasets 
+BASE:  Generated ADaM Datasets from Templates during Run 
+COMPARE:  ADaM Datasets from pharmaverseadam  
 <details>
 <summary>❌ Dataset: adae</summary>
 
@@ -17,29 +17,11 @@ Summary of BASE and COMPARE
   ==================================================================
     PROPERTY             BASE                       COMP            
   ------------------------------------------------------------------
-      Name         get(new_dataset)           get(comp_dataset)     
+      Name         get(comp_dataset)          get(new_dataset)      
      Class     "tbl_df, tbl, data.frame"  "tbl_df, tbl, data.frame" 
     Rows(#)              1191                       1191            
    Columns(#)             107                        105            
   ------------------------------------------------------------------
-
-
-There are columns in BASE and COMPARE with differing attributes !!
-First 10 of 24 rows are shown in table below
-  ================================================================
-   VARIABLE  ATTR_NAME          VALUES.BASE           VALUES.COMP 
-  ----------------------------------------------------------------
-    ACTARM     label    "Description of Actual Arm"      NULL     
-   ACTARMCD    label         "Actual Arm Code"           NULL     
-     AGE       label                Age                  NULL     
-     AGEU      label            "Age Units"              NULL     
-     ARM       label    "Description of Planned Arm"     NULL     
-    ARMCD      label         "Planned Arm Code"          NULL     
-   COUNTRY     label              Country                NULL     
-    DMDTC      label     "Date/Time of Collection"       NULL     
-     DMDY      label     "Study Day of Collection"       NULL     
-    DTHDTC     label        "Date/Time of Death"         NULL     
-  ----------------------------------------------------------------
 
 
 There are columns in BASE that are not in COMPARE !!
@@ -56,42 +38,12 @@ There are columns in BASE that are not in COMPARE !!
 </details>
 
 <details>
-<summary>❌ Dataset: adcm</summary>
+<summary>✅ Dataset: adcm</summary>
 
 
 ```
 
-Differences found between the objects!
-
-Summary of BASE and COMPARE
-  ==================================================================
-    PROPERTY             BASE                       COMP            
-  ------------------------------------------------------------------
-      Name         get(new_dataset)           get(comp_dataset)     
-     Class     "tbl_df, tbl, data.frame"  "tbl_df, tbl, data.frame" 
-    Rows(#)              7510                       7510            
-   Columns(#)             95                         95             
-  ------------------------------------------------------------------
-
-
-There are columns in BASE and COMPARE with differing attributes !!
-First 10 of 22 rows are shown in table below
-  ================================================================
-   VARIABLE  ATTR_NAME          VALUES.BASE           VALUES.COMP 
-  ----------------------------------------------------------------
-    ACTARM     label    "Description of Actual Arm"      NULL     
-   ACTARMCD    label         "Actual Arm Code"           NULL     
-     AGE       label                Age                  NULL     
-     AGEU      label            "Age Units"              NULL     
-     ARM       label    "Description of Planned Arm"     NULL     
-    ARMCD      label         "Planned Arm Code"          NULL     
-   COUNTRY     label              Country                NULL     
-    DMDTC      label     "Date/Time of Collection"       NULL     
-     DMDY      label     "Study Day of Collection"       NULL     
-    DTHDTC     label        "Date/Time of Death"         NULL     
-  ----------------------------------------------------------------
-
-
+No issues were found!
 ```
 
 </details>
@@ -108,29 +60,11 @@ Summary of BASE and COMPARE
   ==================================================================
     PROPERTY             BASE                       COMP            
   ------------------------------------------------------------------
-      Name         get(new_dataset)           get(comp_dataset)     
+      Name         get(comp_dataset)          get(new_dataset)      
      Class     "tbl_df, tbl, data.frame"  "tbl_df, tbl, data.frame" 
     Rows(#)              78756                      78756           
    Columns(#)             108                        108            
   ------------------------------------------------------------------
-
-
-There are columns in BASE and COMPARE with differing attributes !!
-First 10 of 22 rows are shown in table below
-  ================================================================
-   VARIABLE  ATTR_NAME          VALUES.BASE           VALUES.COMP 
-  ----------------------------------------------------------------
-    ACTARM     label    "Description of Actual Arm"      NULL     
-   ACTARMCD    label         "Actual Arm Code"           NULL     
-     AGE       label                Age                  NULL     
-     AGEU      label            "Age Units"              NULL     
-     ARM       label    "Description of Planned Arm"     NULL     
-    ARMCD      label         "Planned Arm Code"          NULL     
-   COUNTRY     label              Country                NULL     
-    DMDTC      label     "Date/Time of Collection"       NULL     
-     DMDY      label     "Study Day of Collection"       NULL     
-    DTHDTC     label        "Date/Time of Death"         NULL     
-  ----------------------------------------------------------------
 
 
 Not all Values Compared Equal
@@ -360,124 +294,34 @@ First 10 of 65742 rows are shown in table below
 </details>
 
 <details>
-<summary>❌ Dataset: adex</summary>
+<summary>✅ Dataset: adex</summary>
 
 
 ```
 
-Differences found between the objects!
-
-Summary of BASE and COMPARE
-  ==================================================================
-    PROPERTY             BASE                       COMP            
-  ------------------------------------------------------------------
-      Name         get(new_dataset)           get(comp_dataset)     
-     Class     "tbl_df, tbl, data.frame"  "tbl_df, tbl, data.frame" 
-    Rows(#)              6315                       6315            
-   Columns(#)             92                         92             
-  ------------------------------------------------------------------
-
-
-There are columns in BASE and COMPARE with differing attributes !!
-First 10 of 24 rows are shown in table below
-  ================================================================
-   VARIABLE  ATTR_NAME          VALUES.BASE           VALUES.COMP 
-  ----------------------------------------------------------------
-    ACTARM     label    "Description of Actual Arm"      NULL     
-   ACTARMCD    label         "Actual Arm Code"           NULL     
-     AGE       label                Age                  NULL     
-     AGEU      label            "Age Units"              NULL     
-     ARM       label    "Description of Planned Arm"     NULL     
-    ARMCD      label         "Planned Arm Code"          NULL     
-   COUNTRY     label              Country                NULL     
-    DMDTC      label     "Date/Time of Collection"       NULL     
-     DMDY      label     "Study Day of Collection"       NULL     
-    DTHDTC     label        "Date/Time of Death"         NULL     
-  ----------------------------------------------------------------
-
-
+No issues were found!
 ```
 
 </details>
 
 <details>
-<summary>❌ Dataset: adlb</summary>
+<summary>✅ Dataset: adlb</summary>
 
 
 ```
 
-Differences found between the objects!
-
-Summary of BASE and COMPARE
-  ==================================================================
-    PROPERTY             BASE                       COMP            
-  ------------------------------------------------------------------
-      Name         get(new_dataset)           get(comp_dataset)     
-     Class     "tbl_df, tbl, data.frame"  "tbl_df, tbl, data.frame" 
-    Rows(#)              83652                      83652           
-   Columns(#)             115                        115            
-  ------------------------------------------------------------------
-
-
-There are columns in BASE and COMPARE with differing attributes !!
-First 10 of 22 rows are shown in table below
-  ================================================================
-   VARIABLE  ATTR_NAME          VALUES.BASE           VALUES.COMP 
-  ----------------------------------------------------------------
-    ACTARM     label    "Description of Actual Arm"      NULL     
-   ACTARMCD    label         "Actual Arm Code"           NULL     
-     AGE       label                Age                  NULL     
-     AGEU      label            "Age Units"              NULL     
-     ARM       label    "Description of Planned Arm"     NULL     
-    ARMCD      label         "Planned Arm Code"          NULL     
-   COUNTRY     label              Country                NULL     
-    DMDTC      label     "Date/Time of Collection"       NULL     
-     DMDY      label     "Study Day of Collection"       NULL     
-    DTHDTC     label        "Date/Time of Death"         NULL     
-  ----------------------------------------------------------------
-
-
+No issues were found!
 ```
 
 </details>
 
 <details>
-<summary>❌ Dataset: admh</summary>
+<summary>✅ Dataset: admh</summary>
 
 
 ```
 
-Differences found between the objects!
-
-Summary of BASE and COMPARE
-  ==================================================================
-    PROPERTY             BASE                       COMP            
-  ------------------------------------------------------------------
-      Name         get(new_dataset)           get(comp_dataset)     
-     Class     "tbl_df, tbl, data.frame"  "tbl_df, tbl, data.frame" 
-    Rows(#)              1818                       1818            
-   Columns(#)             114                        114            
-  ------------------------------------------------------------------
-
-
-There are columns in BASE and COMPARE with differing attributes !!
-First 10 of 22 rows are shown in table below
-  ================================================================
-   VARIABLE  ATTR_NAME          VALUES.BASE           VALUES.COMP 
-  ----------------------------------------------------------------
-    ACTARM     label    "Description of Actual Arm"      NULL     
-   ACTARMCD    label         "Actual Arm Code"           NULL     
-     AGE       label                Age                  NULL     
-     AGEU      label            "Age Units"              NULL     
-     ARM       label    "Description of Planned Arm"     NULL     
-    ARMCD      label         "Planned Arm Code"          NULL     
-   COUNTRY     label              Country                NULL     
-    DMDTC      label     "Date/Time of Collection"       NULL     
-     DMDY      label     "Study Day of Collection"       NULL     
-    DTHDTC     label        "Date/Time of Death"         NULL     
-  ----------------------------------------------------------------
-
-
+No issues were found!
 ```
 
 </details>
@@ -487,5 +331,4 @@ First 10 of 22 rows are shown in table below
 
 
 ```
-
 

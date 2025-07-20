@@ -1,0 +1,22 @@
+Differences found between the objects!
+
+Summary of BASE and COMPARE
+  ==================================================================
+    PROPERTY             BASE                       COMP            
+  ------------------------------------------------------------------
+      Name            dataset_old                dataset_new        
+     Class     "tbl_df, tbl, data.frame"  "tbl_df, tbl, data.frame" 
+    Rows(#)              1191                       1191            
+   Columns(#)             105                        107            
+  ------------------------------------------------------------------
+
+
+There are columns in COMPARE that are not in BASE !!
+  =========
+   COLUMNS 
+  ---------
+   DOSEON  
+    DOSEU  
+  ---------
+
+

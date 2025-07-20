@@ -117,15 +117,26 @@ verify_templates <- function(pkg = "admiral", ds = NULL) {
         run_template(adam, dir = path$template_dir)
         # retrieve *.rda file in cache; copy to correct directory
         dataset_new <- load_rda(paste0(path$cache_dir, "/", adam, ".rda"))
+        for (name in names(dataset_new)) {
+            attr(dataset_new[[name]], "label") <- NULL
+        }
         saveRDS(dataset_new, file = file.path(new_dir, paste0(adam, ".rds")))
 
         
         dataset_old <- get_dataset_old(adam, path$adam_old_dir)
+        # simpler way:
+        #attr(dataset_old, "_xportr.df_arg_") = NULL
+        #attr(dataset_old, "label") = NULL
         # remove column attributes from old
         for (name in names(dataset_old)) {
             attr(dataset_old[[name]], "label") <- NULL
         }
         saveRDS(dataset_old, file = file.path(old_dir, paste0(adam, ".rds")))
+
+        res = diffdf::diffdf(compare = dataset_new, base=dataset_old)
+        sink(file.path("inst/verify", paste0(adam, ".diff")))
+       print(res) 
+        sink()
 
         })
 

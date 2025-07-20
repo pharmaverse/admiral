@@ -15,11 +15,14 @@ library(diffdf)
 library(tibble)
 library(stringr)
 #library(haven)
-input_path <- "inst/verify/new"
-comp_path <- "inst/verify/old"
+# base is older ds; 
+input_path <- "inst/verify/old"
+comp_path <- "inst/verify/new"
 ```
 
-This is the QC report dated `r Sys.Date()`. The report compares the datasets in the `pilot5-submission/pilot5-input/adamdata` directory with the datasets in the `~/GitHub/submissions-pilot3-adam/submission/adam` directory. The datasets are compared using the `diffdf` package.
+This is the QC report dated `r Sys.Date()`. 
+
+The report compares the ADaM datasets in the `pharmaverseadam` package with the ADaM `datasets generated from templates during this run`.  The datasets are compared using the `diffdf` package.
 
 This run was initiated by `r Sys.getenv("GITHUB_ACTOR")` on the `r Sys.getenv("GITHUB_REF")` Git ref.
 
@@ -73,7 +76,8 @@ cat("COMPARE: ", "ADaM Datasets from pharmaverseadam ", "\n")
 for (y in input_dataset_names) {
   new_dataset <- paste0("new_", y)
   comp_dataset <- paste0("comp_", y)
-  diffs <- diffdf(base = get(new_dataset), compare =  get(comp_dataset))
+  diffs <- diffdf(base = get(comp_dataset), compare =  get(new_dataset))
+  diffdf::diffdf_has_issues(diffs)
     
   if (length(diffs) != 0) file.create("qc.fail")
     
