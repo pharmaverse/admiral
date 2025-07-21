@@ -1,65 +1,6 @@
 
 # Source:  pilot5, Eli Miller, @ July 15, 2025
 
-name: Verify Templates ✅
-
-on:
-  pull_request:
-    branches:
-      - verify_version3
-  push:
-    branches:
-      - verify_version3
-  workflow_dispatch:
-
-jobs:
-  verify:
-    runs-on: ubuntu-latest
-    env:
-        GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
-
-    steps:
-
-      - name: Set US Eastern timezone
-        run: sudo timedatectl set-timezone America/New_York
-
-      - name: Check out repository
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-
-      - name: Set up R
-        uses: r-lib/actions/setup-r@v2
-
-      - uses: quarto-dev/quarto-actions/setup@v2
-
-      - name: Install R dependencies
-        run: |
-          Rscript -e 'install.packages(c("dplyr", "jsonlite", "quarto", "diffdf", "rmarkdown", "safetyData", "tibble", "stringr"), repos = "https://packagemanager.posit.co/cran/__linux__/noble/latest")'
-
-      - name: Run QC script
-        run: R -e 'quarto::quarto_render("qcReport.qmd")'
-
-      - name: Upload report artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: qcReport.html
-          path: qcReport.html
-
-      - name: PR comment with file
-        uses: thollander/actions-comment-pull-request@v3
-        with:
-          file-path: qc.Rmd
-          comment-tag: qc-dataset
-          pr-number:  2784  # wants this??
-
-#      - name: Fail Step if no differences found
-#        if: hashFiles('qc.fail') != ''
-#        uses: actions/github-script@v3
-#        with:
-#          script: |
-#            core.setFailed('QC Check failed!')
-
 # Source:  pilot5, Eli Miller, @ July 15, 2025
 
 name: Verify Templates ✅
