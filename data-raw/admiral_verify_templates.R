@@ -127,8 +127,7 @@ verify_templates <- function(pkg = "admiral", ds = NULL) {
     
     purrr::map(adam_names, .progress = TRUE, function(adam){
         cli_inform("------Template running for {adam}")
-        tryCatch(
-        {
+        tryCatch({
         run_template(adam, dir = path$template_dir)
 
         # retrieve *.rda file in cache; copy to correct directory
@@ -153,15 +152,17 @@ verify_templates <- function(pkg = "admiral", ds = NULL) {
            saveRDS(res, file=file.path("inst/verify", paste0(adam, ".diff")))
         }
 
-       },
-       error = function(e) message(paste0(adam , " problem: ", e$message))
-        
+       }, # end expr 
+      error = function(e) {
+           e
+           message(paste0(adam , " problem: ", e$message))
+          }
        )   # end tryCatch 
-        })
+
+})  # end  purrr::map
 
     cli_inform("---- Done with templates\n")
-
-}
+} # end verify
 
 
 
