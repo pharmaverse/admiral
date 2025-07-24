@@ -16,6 +16,8 @@
     
 ## Documentation
 
+- The ADSL template and vignette were updated to make example derivation of `SAFFL` CDISC-compliant.
+
 ## Various
 
 <details>
