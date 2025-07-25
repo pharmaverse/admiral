@@ -127,7 +127,7 @@ verify_templates <- function(pkg = "admiral", ds = NULL) {
     
     purrr::map(adam_names, .progress = TRUE, function(adam){
         cli_inform("------Template running for {adam}")
-        tryCatch({
+        ##tryCatch({
         run_template(adam, dir = path$template_dir)
 
         # retrieve *.rda file in cache; copy to correct directory
@@ -145,19 +145,19 @@ verify_templates <- function(pkg = "admiral", ds = NULL) {
         }
         saveRDS(dataset_old, file = file.path("inst/verify/old", paste0(adam, ".rds")))
 
-        # temporary, for testing
-        res = diffdf::diffdf(dataset_new, dataset_old, suppress_warnings = TRUE)
-        if (diffdf::diffdf_has_issues(res)) {
-           print(res)
-           saveRDS(res, file=file.path("inst/verify", paste0(adam, ".diff")))
-        }
-
-       }, # end expr 
-      error = function(e) {
-           e
-           message(paste0(adam , " problem: ", e$message))
-          }
-       )   # end tryCatch 
+#        # temporary, for testing
+         res = diffdf::diffdf(dataset_new, dataset_old, suppress_warnings = TRUE)
+         if (diffdf::diffdf_has_issues(res)) {
+            print(res)
+            saveRDS(res, file=file.path("inst/verify", paste0(adam, ".diff")))
+         }
+ 
+   #     }, # end expr 
+    #  error = function(e) {
+    #       e
+    #       message(paste0(adam , " problem: ", e$message))
+    #      }
+    #   )   # end tryCatch 
 
 })  # end  purrr::map
 
@@ -277,32 +277,30 @@ compare <- function(base, compare, keys, file = NULL) {
 #' @param path Character string. Directory to save downloaded ADaMs.
 download_adam_old <- function(adam_names, path = NULL) {
 
-  # NEW:
-  # ds here is singlular
+#  # NEW:
+#  # ds here is singlular
+#
+#  f = function(ds) {
+#      q = call("::", "pharmaverseadam", sym(ds))
+#      save(q,
+#          file = file.path(path, paste0(ds, ".rda"))) }
+#
+#  walk(.x = adam_names, .f = f)
 
-  f = function(ds) {
-      q = call("::", "pharmaverseadam", sym(ds))
-      save(q,
-          file = file.path(path, paste0(ds, ".rda"))) }
-
-  walk(.x = adam_names, .f = f)
-
-#  LEGACY
-#  lapply(adam_names, function(adam) {
-#    githubURL <- paste0( # nolint
-#      "https://github.com/pharmaverse/pharmaverseadam/raw/refs/heads/main/data/",
-#      adam, ".rda?raw=true"
-#    )
-#    cat("Downloading: ", adam, "\n")
-#    download.file(
-#      url = githubURL,
-#      quiet = TRUE,
-#      destfile = paste0(path, "/", adam, ".rda"),
-#      mode = "wb"
-#    )
-#  })
-
-
+#   LEGACY
+   lapply(adam_names, function(adam) {
+     githubURL <- paste0( # nolint
+       "https://github.com/pharmaverse/pharmaverseadam/raw/refs/heads/main/data/",
+       adam, ".rda?raw=true"
+     )
+     cat("Downloading: ", adam, "\n")
+     download.file(
+       url = githubURL,
+       quiet = TRUE,
+       destfile = paste0(path, "/", adam, ".rda"),
+       mode = "wb"
+     )
+   })
 
 }
 
