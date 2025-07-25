@@ -7,7 +7,7 @@ name: Verify Templates ✅
 on:
   pull_request:
     branches:
-      - verify_version3
+      -  main 
   push:
     branches:
       - verify_version3
@@ -49,7 +49,7 @@ jobs:
 
       - name: Comment PR with qc.Rmd (if Pull Request)
         # This step will only run if the event is a pull_request
-#        if: github.event_name == 'pull_request'
+        if: github.event_name == 'pull_request'
         uses: thollander/actions-comment-pull-request@v3
         with:
           file-path: qc.Rmd
