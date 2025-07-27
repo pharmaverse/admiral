@@ -65,6 +65,7 @@ verify_templates <- function(pkg = "admiral", ds = NULL) {
   #ds = c("adpp", "adppk", "adsl", "advs")
 
   pkg <- "admiral"
+
   if (pkg != "admiral") cli_abort("Currently only `admiral` package is supported")
 
   # nolint start
