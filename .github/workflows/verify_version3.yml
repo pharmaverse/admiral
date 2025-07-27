@@ -8,9 +8,6 @@ on:
   pull_request:
     branches:
       -  main 
-  push:
-    branches:
-      - verify_version3
   workflow_dispatch:
 
 jobs:
