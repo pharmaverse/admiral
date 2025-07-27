@@ -1,4 +1,3 @@
-
 # Source:  pilot5, Eli Miller, @ July 15, 2025, modified
 
 
@@ -7,8 +6,11 @@ name: Verify Templates ✅
 on:
   pull_request:
     branches:
-      -  main 
-  workflow_dispatch:
+      -  main
+    paths:
+      -  '**.yml'
+
+run-name: PR Build for ${{ github.event.pull_request.number }} by @${{ github.actor }}
 
 jobs:
   verify:
@@ -24,7 +26,16 @@ jobs:
       - name: Check out repository
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0
+         ref: ${{ github.event.pull_request.head.ref }} # Checkout the branch of the PR
+         fetch-depth: 0
+
+      - name: Print PR details
+        run: |
+          echo "This workflow is running for PR # ${{ github.event.pull_request.number }}"
+          echo "PR Title: ${{ github.event.pull_request.title }}"
+          echo "Source Branch: ${{ github.event.pull_request.head.ref }}"
+          echo "Target Branch: ${{ github.event.pull_request.base.ref }}"
+          echo "Last commit SHA: ${{ github.sha }}"
 
       - name: Set up R
         uses: r-lib/actions/setup-r@v2
