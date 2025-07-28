@@ -58,7 +58,7 @@ verify_templates <- function(pkg = "admiral", ds = NULL) {
 
   # no value for ds?  then run all templates
   if (is.null(ds)) {
-  ds = c("adae", "adcm", "adeg", "adex", "adlb", "adlbhy", "admh", "adpc",  
+  ds = c("adae", "adcm", "adeg", "adex", "adlb", "adlbhy", "admh", "adpc",
            "adpp", "adppk", "adsl", "advs")
   }
 
@@ -80,7 +80,8 @@ verify_templates <- function(pkg = "admiral", ds = NULL) {
 
   # always remove, then re-create permanent directories (for .rds)
     if (dir.exists("inst/verify")) {
-        res = unlink("inst/verify", recursive=TRUE)}
+        res = unlink("inst/verify", recursive = TRUE)
+        }
   dir.create("inst/verify/old", recursive = TRUE)
   dir.create("inst/verify/new", recursive = TRUE)
 
@@ -92,15 +93,15 @@ verify_templates <- function(pkg = "admiral", ds = NULL) {
 
   # create fresh (skips if dir  exists)
   path <- create_directories()
-            
+
 
   cli_alert("Generating ADaMs for { pkg} package.")
 
   # gather templates ----
-  template_dir = file.path("inst/templates")
+  template_dir <- file.path("inst/templates")
   templates <- list.files(template_dir, pattern = "ad_")
 
-  cache_dir = tools::R_user_dir("admiral_templates_data", which = "cache")
+  cache_dir <- tools::R_user_dir("admiral_templates_data", which = "cache")
 
   # from templates generate vector of adam_names
   adam_names <- vapply(templates, function(x) gsub("ad_|\\.R", "", x),
@@ -108,7 +109,8 @@ verify_templates <- function(pkg = "admiral", ds = NULL) {
   )
 
   # check
-  if (length(templates) != length(adam_names)) cli_abort("Number of templates and adam_names differ")
+  if (length(templates) != length(adam_names))
+    cli_abort("Number of templates and adam_names differ")
 
   # templates is a named chr[]
   names(templates) <- adam_names
@@ -125,8 +127,8 @@ verify_templates <- function(pkg = "admiral", ds = NULL) {
 
   cli_inform("---- Run templates\n")
 
-    
-    purrr::map(adam_names, .progress = TRUE, function(adam){
+
+    purrr::map(adam_names, .progress = TRUE, function(adam) {
         cli_inform("------Template running for {adam}")
         ##tryCatch({
         run_template(adam, dir = path$template_dir)
@@ -138,7 +140,7 @@ verify_templates <- function(pkg = "admiral", ds = NULL) {
         }
         saveRDS(dataset_new, file = file.path("inst/verify/new", paste0(adam, ".rds")))
 
-        
+
         dataset_old <- get_dataset_old(adam, path$adam_old_dir)
         # remove column attributes from old
         for (name in names(dataset_old)) {
@@ -150,15 +152,15 @@ verify_templates <- function(pkg = "admiral", ds = NULL) {
          res = diffdf::diffdf(dataset_new, dataset_old, suppress_warnings = TRUE)
          if (diffdf::diffdf_has_issues(res)) {
             print(res)
-            saveRDS(res, file=file.path("inst/verify", paste0(adam, ".diff")))
+            saveRDS(res, file = file.path("inst/verify", paste0(adam, ".diff")))
          }
- 
-   #     }, # end expr 
+
+   #     }, # end expr
     #  error = function(e) {
     #       e
     #       message(paste0(adam , " problem: ", e$message))
     #      }
-    #   )   # end tryCatch 
+    #   )   # end tryCatch
 
 })  # end  purrr::map
 
@@ -355,7 +357,7 @@ run_template <- function(adam, dir = NULL) {
 create_directories <- function() {
   cli_inform("Creating temporary directories")
   x <- tempdir()
-  if (!dir.exists(file.path(x, "old") )) dir.create(file.path(x, "old"), showWarnings = TRUE)
+  if (!dir.exists(file.path(x, "old"))) dir.create(file.path(x, "old"), showWarnings = TRUE)
   if (!dir.exists(file.path(x, "new"))) dir.create(file.path(x, "new"), showWarnings = TRUE)
   if (!dir.exists(file.path(x, "diff"))) dir.create(file.path(x, "diff"), showWarnings = TRUE)
 
@@ -367,4 +369,3 @@ create_directories <- function() {
     diff = file.path(x, "diff")
   )
 }
-    
