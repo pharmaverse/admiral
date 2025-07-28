@@ -54,15 +54,17 @@
 #'
 #' @export
 verify_templates <- function(pkg = "admiral", ds = NULL) {
-    # ASSUME:  not for interactive use, GHA workflow only
+  # ASSUME:  not for interactive use, GHA workflow only
 
   # no value for ds?  then run all templates
   if (is.null(ds)) {
-  ds = c("adae", "adcm", "adeg", "adex", "adlb", "adlbhy", "admh", "adpc",
-           "adpp", "adppk", "adsl", "advs")
+    ds <- c(
+      "adae", "adcm", "adeg", "adex", "adlb", "adlbhy", "admh", "adpc",
+      "adpp", "adppk", "adsl", "advs"
+    )
   }
 
-  #ds = c("adpp", "adppk", "adsl", "advs")
+  # ds = c("adpp", "adppk", "adsl", "advs")
 
   pkg <- "admiral"
 
@@ -79,17 +81,17 @@ verify_templates <- function(pkg = "admiral", ds = NULL) {
 
 
   # always remove, then re-create permanent directories (for .rds)
-    if (dir.exists("inst/verify")) {
-        res = unlink("inst/verify", recursive = TRUE)
-        }
+  if (dir.exists("inst/verify")) {
+    res <- unlink("inst/verify", recursive = TRUE)
+  }
   dir.create("inst/verify/old", recursive = TRUE)
   dir.create("inst/verify/new", recursive = TRUE)
 
   # temporary directories:   two cases
   # clean
   if (dir.exists(file.path(tempdir(), "old"))) {
-        unlink("*.rda", recursive = TRUE)
-        }
+    unlink("*.rda", recursive = TRUE)
+  }
 
   # create fresh (skips if dir  exists)
   path <- create_directories()
@@ -109,8 +111,9 @@ verify_templates <- function(pkg = "admiral", ds = NULL) {
   )
 
   # check
-  if (length(templates) != length(adam_names))
+  if (length(templates) != length(adam_names)) {
     cli_abort("Number of templates and adam_names differ")
+  }
 
   # templates is a named chr[]
   names(templates) <- adam_names
@@ -128,43 +131,42 @@ verify_templates <- function(pkg = "admiral", ds = NULL) {
   cli_inform("---- Run templates\n")
 
 
-    purrr::map(adam_names, .progress = TRUE, function(adam) {
-        cli_inform("------Template running for {adam}")
-        ##tryCatch({
-        run_template(adam, dir = path$template_dir)
+  purrr::map(adam_names, .progress = TRUE, function(adam) {
+    cli_inform("------Template running for {adam}")
+    ## tryCatch({
+    run_template(adam, dir = path$template_dir)
 
-        # retrieve *.rda file in cache; copy to correct directory
-        dataset_new <- load_rda(paste0(path$cache_dir, "/", adam, ".rda"))
-        for (name in names(dataset_new)) {
-            attr(dataset_new[[name]], "label") <- NULL
-        }
-        saveRDS(dataset_new, file = file.path("inst/verify/new", paste0(adam, ".rds")))
+    # retrieve *.rda file in cache; copy to correct directory
+    dataset_new <- load_rda(paste0(path$cache_dir, "/", adam, ".rda"))
+    for (name in names(dataset_new)) {
+      attr(dataset_new[[name]], "label") <- NULL
+    }
+    saveRDS(dataset_new, file = file.path("inst/verify/new", paste0(adam, ".rds")))
 
 
-        dataset_old <- get_dataset_old(adam, path$adam_old_dir)
-        # remove column attributes from old
-        for (name in names(dataset_old)) {
-            attr(dataset_old[[name]], "label") <- NULL
-        }
-        saveRDS(dataset_old, file = file.path("inst/verify/old", paste0(adam, ".rds")))
+    dataset_old <- get_dataset_old(adam, path$adam_old_dir)
+    # remove column attributes from old
+    for (name in names(dataset_old)) {
+      attr(dataset_old[[name]], "label") <- NULL
+    }
+    saveRDS(dataset_old, file = file.path("inst/verify/old", paste0(adam, ".rds")))
 
-#        # temporary, for testing
-         res = diffdf::diffdf(dataset_new, dataset_old, suppress_warnings = TRUE)
-         if (diffdf::diffdf_has_issues(res)) {
-            print(res)
-            saveRDS(res, file = file.path("inst/verify", paste0(adam, ".diff")))
-         }
+    #        # temporary, for testing
+    res <- diffdf::diffdf(dataset_new, dataset_old, suppress_warnings = TRUE)
+    if (diffdf::diffdf_has_issues(res)) {
+      print(res)
+      saveRDS(res, file = file.path("inst/verify", paste0(adam, ".diff")))
+    }
 
-   #     }, # end expr
+    #     }, # end expr
     #  error = function(e) {
     #       e
     #       message(paste0(adam , " problem: ", e$message))
     #      }
     #   )   # end tryCatch
+  }) # end  purrr::map
 
-})  # end  purrr::map
-
-    cli_inform("---- Done with templates\n")
+  cli_inform("---- Done with templates\n")
 } # end verify
 
 
@@ -202,8 +204,10 @@ display_diff <- function(dir = NULL) {
   map2(
     names(contents), contents,
     function(name, content) {
-      header <- paste("Differences found for ", str_replace_all(name, ".txt", ""),
-                      " ", date(), "\n")
+      header <- paste(
+        "Differences found for ", str_replace_all(name, ".txt", ""),
+        " ", date(), "\n"
+      )
 
       # Display to console
       cli::cli_h1(header)
@@ -273,38 +277,35 @@ compare <- function(base, compare, keys, file = NULL) {
   for (name in names(base)) {
     attr(base[[name]], "label") <- NULL
   }
-
-  }
+}
 #' Copies ADaM datasets from pharmaverseadam
 #' @param adam_names character vector  Set of  ADaMs to download.
 #' @param path Character string. Directory to save downloaded ADaMs.
 download_adam_old <- function(adam_names, path = NULL) {
+  #  # NEW:
+  #  # ds here is singlular
+  #
+  #  f = function(ds) {
+  #      q = call("::", "pharmaverseadam", sym(ds))
+  #      save(q,
+  #          file = file.path(path, paste0(ds, ".rda"))) }
+  #
+  #  walk(.x = adam_names, .f = f)
 
-#  # NEW:
-#  # ds here is singlular
-#
-#  f = function(ds) {
-#      q = call("::", "pharmaverseadam", sym(ds))
-#      save(q,
-#          file = file.path(path, paste0(ds, ".rda"))) }
-#
-#  walk(.x = adam_names, .f = f)
-
-#   LEGACY
-   lapply(adam_names, function(adam) {
-     githubURL <- paste0( # nolint
-       "https://github.com/pharmaverse/pharmaverseadam/raw/refs/heads/main/data/",
-       adam, ".rda?raw=true"
-     )
-     cat("Downloading: ", adam, "\n")
-     download.file(
-       url = githubURL,
-       quiet = TRUE,
-       destfile = paste0(path, "/", adam, ".rda"),
-       mode = "wb"
-     )
-   })
-
+  #   LEGACY
+  lapply(adam_names, function(adam) {
+    githubURL <- paste0( # nolint
+      "https://github.com/pharmaverse/pharmaverseadam/raw/refs/heads/main/data/",
+      adam, ".rda?raw=true"
+    )
+    cat("Downloading: ", adam, "\n")
+    download.file(
+      url = githubURL,
+      quiet = TRUE,
+      destfile = paste0(path, "/", adam, ".rda"),
+      mode = "wb"
+    )
+  })
 }
 
 #' Loads an ADaM dataset from a saved RDA file on disk.
