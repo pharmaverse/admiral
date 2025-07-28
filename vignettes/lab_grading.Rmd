@@ -556,8 +556,8 @@ From the SOC =  "Metabolism and nutrition disorders" there are 14 CTCAE v5.0 Ter
   + Hypomagnesemia
   + Hyponatremia
 
-Note: These are the same terms identified for NCI-CTCAEv4, except “Hypophosphatemia” 
-and “Hyperglycemia” which are not gradable by quantitative lab values in NCICTCAEv5
+Note: These are the same terms identified for NCI-CTCAEv4, except "Hypophosphatemia" 
+and "Hyperglycemia" which are not gradable by quantitative lab values in NCICTCAEv5
 grading criteria.
 
 From the SOC =  "Blood and lymphatic system disorders" there are 2 CTCAE v5.0 Terms:

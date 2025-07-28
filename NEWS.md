@@ -2,6 +2,32 @@
 
 ## New Features
 
+## Updates of Existing Functions
+
+## Breaking Changes
+
+    **Phase 1 (message)**
+  
+    **Phase 2 (warning)**
+
+    **Phase 3 (error)**
+
+    **Phase 4 (removed)**
+    
+## Documentation
+
+- The ADSL template and vignette were updated to make example derivation of `SAFFL` CDISC-compliant. (#2782)
+
+## Various
+
+<details>
+<summary>Developer Notes</summary>
+</details>
+
+# admiral 1.3.0
+
+## New Features
+
 - The documentation was enhanced: (#2585)
     - The default value of an argument is now displayed in the argument description.
     - For some complex functions each example has now a title, which is also shown in
@@ -53,8 +79,6 @@ the derivation is called for all subsets. (#2645)
 - NCICTCAEv4 and NCICTCAEv5 grading criteria (`atoxgr_criteria_ctcv4`, `atoxgr_criteria_ctcv4_uscv`, `atoxgr_criteria_ctcv5`, `atoxgr_criteria_ctcv5_uscv`), 
 updated to add terms `"Acidosis"` and `"Alkalosis"` (#2768).
 
-- The background checks in `derive_summary_records()` were too restrictive: `by_vars` were expected in `dataset` although the code did not require it. This requirement has therefore been dropped (#2686).
-
 - The functions `derive_summary_records()` and `derive_param_exist_flag()` 
 were updated to fix an issue where if a variable was in both `dataset_add` and `dataset_ref`, it was 
 added to the new records even if it was not in `by_vars`. (#2664)
@@ -105,12 +129,26 @@ records. (#2683)
     **Phase 1 (message)**
 	
 	- `call_user_fun()` is deprecated and will have no replacement. (#2678)
+	- `derive_param_extreme_record()` is deprecated and replaced by `derive_extreme_event()`
+  - `derive_var_dthcaus()` is deprecated and replaced by `derive_vars_extreme_event()`
+  - `date_source()` is deprecated and replaced by `event()`
+  - `dthcaus_source()` is deprecated and replaced by `event()`
+  - `derive_var_extreme_dt()` and `derive_var_extreme_dtm()` are deprecated and replaced by     
+  `derive_vars_extreme_event()`
+  - `get_summary_records()` is deprecated. Please use `derive_summary_records()` with the `dataset_add` 
+  argument and without the `dataset` argument.
   
     **Phase 2 (warning)**
     
+    No functions or arguments in this Phase
+
     **Phase 3 (error)**
     
+    No functions or arguments in this Phase
+
     **Phase 4 (removed)**
+    
+    No functions or arguments in this Phase
 
 ## Documentation
 
