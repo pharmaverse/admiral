@@ -10,12 +10,11 @@ editor_options:
 ---
 
 ```{r, echo = FALSE}
-#library(safetyData)
 library(diffdf)
 library(tibble)
 library(stringr)
-#library(haven)
-# base is older ds; 
+# base or input: is older ds; 
+# compare:  is new ds (created by template)
 input_path <- "inst/verify/old"
 comp_path <- "inst/verify/new"
 ```
@@ -38,7 +37,6 @@ input_dataset_paths <- list.files(input_path)
 input_dataset_paths <- input_dataset_paths[endsWith(input_dataset_paths, ".rds") ]
 input_dataset_names <- tools::file_path_sans_ext(input_dataset_paths)
 comp_dataset_paths <- list.files(comp_path)
-#comp_dataset_paths <- comp_dataset_paths[endsWith(comp_dataset_paths, ".xpt") ]
 comp_dataset_names <- tools::file_path_sans_ext(comp_dataset_paths)
 
 # restores files to environment
@@ -61,11 +59,14 @@ for (i in seq_along(comp_dataset_names)) {
 
 ```
 
-`` `r length(input_dataset_names)` `` datasets were found in the `pilot5-submission/pilot5-input/adamdata` directory. The datasets are \``` r input_dataset_names` ``
+<! --
+    #| output: false   # why?
+-->
+
+`` `r length(input_dataset_names)` `` Base ADaM datasets were found in the `admiral/inst/verify/old` directory. The datasets are \``` r input_dataset_names` ``
 
 ```{r data_html}
 #| echo: false
-#| output: false
 sink("qc.Rmd")
 cat("## Verify Templates Check Complete!", "\n\n")
 cat("Date: ", format(Sys.Date()), "\n")
@@ -79,7 +80,6 @@ for (y in input_dataset_names) {
   comp_dataset <- paste0("comp_", y)
   diffs <- diffdf(base = get(comp_dataset), compare =  get(new_dataset))
 #  if  (diffdf::diffdf_has_issues(diffs)) print(diffs)
-    
 #  if (length(diffs) != 0) file.create("qc.fail")
     
   cat("<details>\n")

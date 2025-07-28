@@ -1,3 +1,112 @@
+---
+title: "Verify Templates Report"
+format: html
+date: "2025-07-28"
+editor: visual
+execute:
+  keep-md: true
+editor_options: 
+  chunk_output_type: console
+---
+
+
+::: {.cell}
+
+:::
+
+
+
+
+This is the QC report dated 2025-07-28. 
+
+The report compares the ADaM datasets in the `pharmaverseadam` package with the ADaM `datasets generated from templates during this run`.  The datasets are compared using the `diffdf` package.
+
+This run was initiated by  on the  Git ref.
+
+
+
+
+::: {.cell}
+::: {.cell-output .cell-output-stdout}
+
+```
+R version 4.5.1 (2025-06-13)
+Platform: x86_64-pc-linux-gnu
+Running under: Debian GNU/Linux 13 (trixie)
+
+Matrix products: default
+BLAS:   /usr/lib/x86_64-linux-gnu/blas/libblas.so.3.12.1 
+LAPACK: /usr/lib/x86_64-linux-gnu/lapack/liblapack.so.3.12.1;  LAPACK version 3.12.0
+
+locale:
+ [1] LC_CTYPE=en_US.UTF-8       LC_NUMERIC=C              
+ [3] LC_TIME=en_US.UTF-8        LC_COLLATE=en_US.UTF-8    
+ [5] LC_MONETARY=en_US.UTF-8    LC_MESSAGES=en_US.UTF-8   
+ [7] LC_PAPER=en_US.UTF-8       LC_NAME=C                 
+ [9] LC_ADDRESS=C               LC_TELEPHONE=C            
+[11] LC_MEASUREMENT=en_US.UTF-8 LC_IDENTIFICATION=C       
+
+time zone: America/Los_Angeles
+tzcode source: system (glibc)
+
+attached base packages:
+[1] stats     graphics  grDevices utils     datasets  methods   base     
+
+other attached packages:
+[1] stringr_1.5.1 tibble_3.3.0  diffdf_1.1.1 
+
+loaded via a namespace (and not attached):
+ [1] digest_0.6.37     fastmap_1.2.0     xfun_0.52         magrittr_2.0.3   
+ [5] glue_1.8.0        knitr_1.50        pkgconfig_2.0.3   htmltools_0.5.8.1
+ [9] rmarkdown_2.29    lifecycle_1.0.4   cli_3.6.5         vctrs_0.6.5      
+[13] compiler_4.5.1    tools_4.5.1       evaluate_1.0.3    pillar_1.10.2    
+[17] yaml_2.3.10       rlang_1.1.6       jsonlite_2.0.0    stringi_1.8.7    
+```
+
+
+:::
+:::
+
+::: {.cell}
+
+:::
+
+
+
+
+<! --
+    #| output: false   # why?
+-->
+
+`` 11 `` Base ADaM datasets were found in the `admiral/inst/verify/old` directory. The datasets are \``` r input_dataset_names` ``
+
+
+
+
+::: {.cell}
+::: {.cell-output .cell-output-stderr}
+
+```
+Warning in diffdf(base = get(comp_dataset), compare = get(new_dataset)): 
+There are columns in BASE that are not in COMPARE !!
+```
+
+
+:::
+
+::: {.cell-output .cell-output-stderr}
+
+```
+Warning in diffdf(base = get(comp_dataset), compare = get(new_dataset)): 
+Not all Values Compared Equal
+Warning in diffdf(base = get(comp_dataset), compare = get(new_dataset)): 
+Not all Values Compared Equal
+```
+
+
+:::
+:::
+
 ## Verify Templates Check Complete! 
 
 Date:  2025-07-28 
@@ -7,7 +116,6 @@ BASE:  Generated ADaM Datasets from Templates during Run
 COMPARE:  ADaM Datasets from pharmaverseadam  
 <details>
 <summary>❌ Dataset: adae</summary>
-
 
 ```
 
@@ -32,14 +140,12 @@ There are columns in BASE that are not in COMPARE !!
     DOSEU  
   ---------
 
-
 ```
 
 </details>
 
 <details>
 <summary>✅ Dataset: adcm</summary>
-
 
 ```
 
@@ -50,7 +156,6 @@ No issues were found!
 
 <details>
 <summary>❌ Dataset: adeg</summary>
-
 
 ```
 
@@ -145,14 +250,12 @@ First 10 of 57540 rows are shown in table below
      ATPT         24         1    "AFTER LYING DOWN FOR 5 MINUTES" 
   -----------------------------------------------------------------
 
-
 ```
 
 </details>
 
 <details>
 <summary>✅ Dataset: adex</summary>
-
 
 ```
 
@@ -164,7 +267,6 @@ No issues were found!
 <details>
 <summary>✅ Dataset: adlb</summary>
 
-
 ```
 
 No issues were found!
@@ -174,7 +276,6 @@ No issues were found!
 
 <details>
 <summary>✅ Dataset: admh</summary>
-
 
 ```
 
@@ -186,7 +287,6 @@ No issues were found!
 <details>
 <summary>✅ Dataset: adpp</summary>
 
-
 ```
 
 No issues were found!
@@ -197,7 +297,6 @@ No issues were found!
 <details>
 <summary>✅ Dataset: adppk</summary>
 
-
 ```
 
 No issues were found!
@@ -207,7 +306,6 @@ No issues were found!
 
 <details>
 <summary>❌ Dataset: adsl</summary>
-
 
 ```
 
@@ -248,7 +346,6 @@ First 10 of 52 rows are shown in table below
     SAFFL         46         N     <NA>   
   ----------------------------------------
 
-
 ```
 
 </details>
@@ -256,11 +353,9 @@ First 10 of 52 rows are shown in table below
 <details>
 <summary>✅ Dataset: advs</summary>
 
-
 ```
 
 No issues were found!
 ```
 
 </details>
-
