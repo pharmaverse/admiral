@@ -1,31 +1,11 @@
-# admiral (development version)
+# admiral 1.3.1
 
-## New Features
-
-## Updates of Existing Functions
-
-## Breaking Changes
-
-    **Phase 1 (message)**
-  
-    **Phase 2 (warning)**
-
-    **Phase 3 (error)**
-
-    **Phase 4 (removed)**
-    
 ## Documentation
 
 - The ADSL template and vignette were updated to make example derivation of `SAFFL` CDISC-compliant. (#2782)
 
 - In the function documentation references to vignettes were updated to meet
 CRAN requirements. (#2788)
-
-## Various
-
-<details>
-<summary>Developer Notes</summary>
-</details>
 
 # admiral 1.3.0
 
