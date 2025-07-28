@@ -99,11 +99,4 @@ The function checks if all requirements to access the database are fulfilled
 reads the terms from the database, and checks if the dataset with the terms
 is in the expected format (see \code{assert_terms()}).
 }
-\seealso{
-OCCDS Functions: 
-\code{\link{derive_var_trtemfl}()},
-\code{\link{derive_vars_atc}()},
-\code{\link{derive_vars_query}()}
-}
-\concept{der_occds}
-\keyword{der_occds}
+\keyword{internal}

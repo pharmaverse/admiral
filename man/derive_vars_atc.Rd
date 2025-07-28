@@ -102,8 +102,7 @@ derive_vars_atc(cm, facm, id_vars = exprs(FAGRPID))
 
 OCCDS Functions: 
 \code{\link{derive_var_trtemfl}()},
-\code{\link{derive_vars_query}()},
-\code{\link{get_terms_from_db}()}
+\code{\link{derive_vars_query}()}
 }
 \concept{der_occds}
 \keyword{der_occds}

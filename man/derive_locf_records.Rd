@@ -81,7 +81,7 @@ and add imputed records for missing timepoints from \code{dataset_ref}.
 The dataset is sorted by \code{order} before carrying the last observation
 forward (e.g. \code{AVAL}) within each \code{by_vars}.
 
-For handling of \code{NA}s in sorting variables see \href{../articles/generic.html#sort_order}{Sort Order}.
+For handling of \code{NA}s in sorting variables see the "Sort Order" section in \code{vignette("generic")}.
 
 \describe{
 \item{Default value}{none}

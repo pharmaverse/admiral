@@ -48,7 +48,7 @@ observations up to the confirmation observation the response is "CR" or
 \item{order}{If specified, the specified variables or expressions are used to
 select the first observation.
 
-For handling of \code{NA}s in sorting variables see \href{../articles/generic.html#sort_order}{Sort Order}.
+For handling of \code{NA}s in sorting variables see the "Sort Order" section in \code{vignette("generic")}.
 
 \describe{
 \item{Permitted values}{list of expressions created by \code{exprs()}, e.g.,

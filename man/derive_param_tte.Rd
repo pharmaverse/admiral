@@ -723,5 +723,5 @@ derive_param_tte(
 \subsection{Further examples}{
 
 Further example usages of this function can be found in the
-\href{../articles/bds_tte.html}{Time-to-Event vignette}.}}
+\code{vignette("bds_tte")}.}}
 

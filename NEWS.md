@@ -18,6 +18,9 @@
 
 - The ADSL template and vignette were updated to make example derivation of `SAFFL` CDISC-compliant. (#2782)
 
+- In the function documentation references to vignettes were updated to meet
+CRAN requirements. (#2788)
+
 ## Various
 
 <details>
