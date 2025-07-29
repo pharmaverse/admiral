@@ -27,7 +27,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">admiral</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">1.3.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.3.1.9000</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -79,6 +79,7 @@
     <div class="dropdown-menu" aria-labelledby="dropdown-versions">
     <a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/main">main</a>
 <a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/cran-release">cran-release</a>
+<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v1.3.1">v1.3.1</a>
 <a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v1.3.0">v1.3.0</a>
 <a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v1.2.0">v1.2.0</a>
 <a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v1.1.1">v1.1.1</a>
@@ -121,11 +122,11 @@
 <h2 id="introduction">Introduction<a class="anchor" aria-label="anchor" href="#introduction"></a>
 </h2>
 <p>This vignette aims to discuss some of the common programming concepts
-and conventions that have been adopted within the <a href="https://pharmaverse.github.io/admiral/cran-release/" class="external-link">admiral</a>
+and conventions that have been adopted within the <a href="https://pharmaverse.github.io/admiral/" class="external-link">admiral</a>
 family of packages. It is intended to be a user-facing version of the <a href="https://pharmaverse.github.io/admiraldev/articles/programming_strategy.html" class="external-link">Programming
 Strategy</a> vignette, but users can also read the latter after becoming
 more familiar with the package to expand further on any topics of
-interest. For some of common <a href="https://pharmaverse.github.io/admiral/cran-release/" class="external-link">admiral</a> FAQ, visit the
+interest. For some of common <a href="https://pharmaverse.github.io/admiral/" class="external-link">admiral</a> FAQ, visit the
 corresponding FAQ page provided in the same drop down menu as this
 vignette.</p>
 </div>
@@ -142,7 +143,7 @@ input dataset may not be preserved.</p>
 <h2 id="admiral-functions-and-options">
 <code>{admiral}</code> Functions and Options<a class="anchor" aria-label="anchor" href="#admiral-functions-and-options"></a>
 </h2>
-<p>As a general principle, the behavior of the <a href="https://pharmaverse.github.io/admiral/cran-release/" class="external-link">admiral</a>
+<p>As a general principle, the behavior of the <a href="https://pharmaverse.github.io/admiral/" class="external-link">admiral</a>
 functions is only determined by their input, not by any global object,
 i.e. all inputs like datasets, variable names, options, etc. must be
 provided to the function by arguments. Correspondingly, in general
@@ -168,7 +169,7 @@ R, SAS-style character missing values, i.e. <code>""</code>, are
 are kept as is. This is problematic for any downstream data processing
 as R handles <code>""</code> just as any other string. Thus, before any
 data manipulation is being performed SAS blanks should be converted to R
-<code>NA</code>s using <a href="https://pharmaverse.github.io/admiral/cran-release/" class="external-link">admiral</a>’s
+<code>NA</code>s using <a href="https://pharmaverse.github.io/admiral/" class="external-link">admiral</a>’s
 <code><a href="../reference/convert_blanks_to_na.html">convert_blanks_to_na()</a></code> function, e.g.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">dm</span> <span class="op">&lt;-</span> <span class="fu">haven</span><span class="fu">::</span><span class="fu">read_sas</span><span class="op">(</span><span class="st">"dm.sas7bdat"</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
@@ -202,7 +203,7 @@ input vector is missing.</p>
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="cn">NA</span>, <span class="fl">2</span><span class="op">)</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span><span class="co">#&gt; [1] 1.5</span></span></code></pre></div>
 <p>This is very important to keep in mind when using
-<a href="https://pharmaverse.github.io/admiral/cran-release/" class="external-link">admiral</a>’s aggregation functions such as
+<a href="https://pharmaverse.github.io/admiral/" class="external-link">admiral</a>’s aggregation functions such as
 <code><a href="../reference/derive_summary_records.html">derive_summary_records()</a></code>.</p>
 <p>For handling of <code>NA</code>s in sorting variables see <a href="generic.html#sort_order">Sort Order</a>.</p>
 </div>
@@ -236,7 +237,7 @@ comma-separated items and returns a list of expressions.</p>
 <span><span class="co"># Return an expression</span></span>
 <span><span class="fu"><a href="https://rlang.r-lib.org/reference/expr.html" class="external-link">expr</a></span><span class="op">(</span><span class="va">adae</span><span class="op">)</span></span>
 <span><span class="co">#&gt; adae</span></span></code></pre></div>
-<p>When used within the contest of an <a href="https://pharmaverse.github.io/admiral/cran-release/" class="external-link">admiral</a> derivation
+<p>When used within the contest of an <a href="https://pharmaverse.github.io/admiral/" class="external-link">admiral</a> derivation
 function, <code><a href="https://rlang.r-lib.org/reference/expr.html" class="external-link">expr()</a></code> and <code><a href="../reference/reexport-exprs.html">exprs()</a></code> allow the
 function to evaluate the expressions in the context of the input
 dataset. As an example, <code><a href="https://rlang.r-lib.org/reference/expr.html" class="external-link">expr()</a></code> and <code><a href="../reference/reexport-exprs.html">exprs()</a></code>
@@ -297,7 +298,7 @@ pass it onwards.</p>
 <code class="sourceCode R"><span><span class="fu"><a href="https://rlang.r-lib.org/reference/expr.html" class="external-link">expr</a></span><span class="op">(</span><span class="op">!</span><span class="op">!</span><span class="va">a</span> <span class="op">+</span> <span class="op">!</span><span class="op">!</span><span class="va">b</span><span class="op">)</span></span>
 <span><span class="co">#&gt; 2 + 3</span></span></code></pre></div>
 <p>You can see an example of where <code>!!</code> comes in handy within
-<a href="https://pharmaverse.github.io/admiral/cran-release/" class="external-link">admiral</a> code in <a href="#pitfall1">Common Pitfall 1</a>,
+<a href="https://pharmaverse.github.io/admiral/" class="external-link">admiral</a> code in <a href="#pitfall1">Common Pitfall 1</a>,
 where the contents of an expression is unquoted so that it can be passed
 to <code><a href="../reference/derive_vars_merged.html">derive_vars_merged()</a></code>.</p>
 <p><code>!!!</code> (bang-bang-bang) is the plural version of
@@ -309,10 +310,10 @@ to <code><a href="../reference/derive_vars_merged.html">derive_vars_merged()</a>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; [[2]]</span></span>
 <span><span class="co">#&gt; [1] 3</span></span></code></pre></div>
-<p>Within <a href="https://pharmaverse.github.io/admiral/cran-release/" class="external-link">admiral</a>, this operator can be useful if we need
+<p>Within <a href="https://pharmaverse.github.io/admiral/" class="external-link">admiral</a>, this operator can be useful if we need
 to unquote a list of variables (stored as expressions) to use them
-inside of an <a href="https://pharmaverse.github.io/admiral/cran-release/" class="external-link">admiral</a> or even <a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a> call.
-One example is the <a href="https://pharmaverse.github.io/admiral/cran-release/" class="external-link">admiral</a> subject keys:</p>
+inside of an <a href="https://pharmaverse.github.io/admiral/" class="external-link">admiral</a> or even <a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a> call.
+One example is the <a href="https://pharmaverse.github.io/admiral/" class="external-link">admiral</a> subject keys:</p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/get_admiral_option.html">get_admiral_option</a></span><span class="op">(</span><span class="st">"subject_keys"</span><span class="op">)</span></span>
 <span><span class="co">#&gt; [[1]]</span></span>
@@ -321,7 +322,7 @@ One example is the <a href="https://pharmaverse.github.io/admiral/cran-release/"
 <span><span class="co">#&gt; [[2]]</span></span>
 <span><span class="co">#&gt; USUBJID</span></span></code></pre></div>
 <p>If we want to use the subject keys stored within this
-<a href="https://pharmaverse.github.io/admiral/cran-release/" class="external-link">admiral</a> option to subset a dataset, we need to use
+<a href="https://pharmaverse.github.io/admiral/" class="external-link">admiral</a> option to subset a dataset, we need to use
 <code>!!!</code> to unquote this list. Let’s construct a dummy example
 to illustrate the point:</p>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
@@ -341,16 +342,16 @@ to illustrate the point:</p>
 <span><span class="co">#&gt;   STUDYID USUBJID</span></span>
 <span><span class="co">#&gt; 1     XXX   XXX-1</span></span></code></pre></div>
 <p>You can see another example of <code>!!!</code> in action in <a href="https://github.com/pharmaverse/admiral/blob/c5dd8fb196c2cd3f27a6b02ec88fa1abd6b24d60/inst/templates/ad_adex.R#L162" class="external-link">this
-line</a> of the <a href="https://pharmaverse.github.io/admiral/cran-release/" class="external-link">admiral</a> <code>ADEX</code> template
+line</a> of the <a href="https://pharmaverse.github.io/admiral/" class="external-link">admiral</a> <code>ADEX</code> template
 script, where it is used to dynamically control the by variables passed
-to an <a href="https://pharmaverse.github.io/admiral/cran-release/" class="external-link">admiral</a> function.</p>
+to an <a href="https://pharmaverse.github.io/admiral/" class="external-link">admiral</a> function.</p>
 </div>
 <div class="section level4">
 <h4 id="summary">Summary<a class="anchor" aria-label="anchor" href="#summary"></a>
 </h4>
 <p>In summary, although the expressions framework may seem slightly
 clunky and mysterious to begin with, it allows for such power and
-flexibility that it forms a key part of the <a href="https://pharmaverse.github.io/admiral/cran-release/" class="external-link">admiral</a>
+flexibility that it forms a key part of the <a href="https://pharmaverse.github.io/admiral/" class="external-link">admiral</a>
 package. For a comprehensive treatment of expressions, see <a href="https://adv-r.hadley.nz/expressions.html" class="external-link">Chapter 18</a> and <a href="https://adv-r.hadley.nz/quasiquotation.html" class="external-link">Chapter 19</a> of the
 Advanced R textbook. Chapter 19 specifically covers in much more detail
 the concept of unquoting.</p>
@@ -365,7 +366,7 @@ data to explore common issues that new (or experienced!) programmers may
 encounter when dealing with expressions.</p>
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span>, warn.conflicts <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://pharmaverse.github.io/admiral/cran-release/" class="external-link">admiral</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://pharmaverse.github.io/admiral/" class="external-link">admiral</a></span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">vs</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://tibble.tidyverse.org/reference/tribble.html" class="external-link">tribble</a></span><span class="op">(</span></span>
 <span>  <span class="op">~</span><span class="va">USUBJID</span>, <span class="op">~</span><span class="va">VSTESTCD</span>, <span class="op">~</span><span class="va">VISIT</span>, <span class="op">~</span><span class="va">VSSTRESN</span>, <span class="op">~</span><span class="va">VSSTRESU</span>, <span class="op">~</span><span class="va">VSDTC</span>,</span>
@@ -385,7 +386,7 @@ encounter when dealing with expressions.</p>
 <h4 id="pitfall1">1. Mistakenly passing something that isn’t an expression to an
 argument<a class="anchor" aria-label="anchor" href="#pitfall1"></a>
 </h4>
-<p>When writing more complex <a href="https://pharmaverse.github.io/admiral/cran-release/" class="external-link">admiral</a> code it can be easy
+<p>When writing more complex <a href="https://pharmaverse.github.io/admiral/" class="external-link">admiral</a> code it can be easy
 to mistakenly pass the wrong input to an argument that expects an
 expression. For example, the code below fails because
 <code>my_expression</code> is not an expression - it is the name of an
@@ -470,7 +471,7 @@ Strategy</a></li>
 
 
     <footer><div class="pkgdown-footer-left">
-  <p>Developed by Ben Straub, Stefan Bundfuss, Arianna Cascone, Jeffrey Dickinson, Ross Farrugia, Fanny Gautier, G Gayatri, Solveig Holmgaard, Dinakar Kulkarni, Edoardo Mancini, Gordon Miller, Jim Rothstein, Daniel Sjoberg, Stefan Thoma, Junze Zhang, F. Hoffmann-La Roche AG, GlaxoSmithKline LLC.</p>
+  <p>Developed by F. Hoffmann-La Roche AG, GlaxoSmithKline LLC, Ben Straub, Stefan Bundfuss, Arianna Cascone, Jeffrey Dickinson, Ross Farrugia, Fanny Gautier, G Gayatri, Solveig Holmgaard, Dinakar Kulkarni, Edoardo Mancini, Gordon Miller, Jim Rothstein, Daniel Sjoberg, Stefan Thoma, Junze Zhang.</p>
 </div>
 
 <div class="pkgdown-footer-right">

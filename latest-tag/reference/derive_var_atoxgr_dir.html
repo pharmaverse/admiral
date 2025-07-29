@@ -20,7 +20,7 @@
 <script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><script src="../deps/MathJax-3.2.2/tex-chtml.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Derive Lab Toxicity Grade 0 - 4 — derive_var_atoxgr_dir">
 <meta name="description" content="Derives a character lab grade based on severity/toxicity criteria.">
 <meta property="og:description" content="Derives a character lab grade based on severity/toxicity criteria.">
-<meta property="og:image" content="https:/pharmaverse.github.io/admiral/v1.3.0/logo.png">
+<meta property="og:image" content="https:/pharmaverse.github.io/admiral/v1.3.1/logo.png">
 </head>
 <body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
@@ -30,7 +30,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">admiral</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">1.3.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.3.1.9000</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -82,6 +82,7 @@
     <div class="dropdown-menu" aria-labelledby="dropdown-versions">
     <a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/main">main</a>
 <a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/cran-release">cran-release</a>
+<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v1.3.1">v1.3.1</a>
 <a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v1.3.0">v1.3.0</a>
 <a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v1.2.0">v1.2.0</a>
 <a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v1.1.1">v1.1.1</a>
@@ -188,13 +189,13 @@ criteria. For example: "Anemia" or "INR Increased".</p>
 <dd>
 <p><code>atoxgr_criteria_ctcv4</code>, <code>atoxgr_criteria_ctcv5</code>, <code>atoxgr_criteria_daids</code></p>
 <ul>
-<li><p><code>atoxgr_criteria_ctcv4</code> implements <a href="https://ctep.cancer.gov/protocoldevelopment/electronic_applications/ctc.htm" class="external-link">Common Terminology Criteria for Adverse Events (CTCAE) v4.0</a></p></li>
-<li><p><code>atoxgr_criteria_ctcv5</code> implements <a href="https://ctep.cancer.gov/protocoldevelopment/electronic_applications/ctc.htm" class="external-link">Common Terminology Criteria for Adverse Events (CTCAE) v5.0</a></p></li>
-<li>
-<p><code>atoxgr_criteria_daids</code> implements
-<a href="https://rsc.niaid.nih.gov/sites/default/files/daidsgradingcorrectedv21.pdf" class="external-link">Division of AIDS (DAIDS) Table for Grading the Severity of Adult and Pediatric Adverse Events</a></p>
+<li><p><code>atoxgr_criteria_ctcv4</code> implements <a href="https://dctd.cancer.gov/research/ctep-trials/trial-development#ctcae-and-ctep-codes" class="external-link">Common Terminology Criteria for Adverse Events (CTCAE) v4.0</a></p></li>
+<li><p><code>atoxgr_criteria_ctcv5</code> implements <a href="https://dctd.cancer.gov/research/ctep-trials/for-sites/adverse-events#ctep-ctcae" class="external-link">Common Terminology Criteria for Adverse Events (CTCAE) v5.0</a></p></li>
+<li><p><code>atoxgr_criteria_daids</code> implements
+<a href="https://rsc.niaid.nih.gov/sites/default/files/daidsgradingcorrectedv21.pdf" class="external-link">Division of AIDS (DAIDS) Table for Grading the Severity of Adult and Pediatric Adverse Events</a></p></li>
+</ul>
 <p>The metadata should have the following variables:</p>
-</li>
+<ul>
 <li><p><code>TERM</code>: variable to hold the term describing the criteria applied to a particular lab test,
 eg. "Anemia" or "INR Increased". Note: the variable is case insensitive.</p></li>
 <li><p><code>DIRECTION</code>: variable to hold the direction of the abnormality of a particular lab test
@@ -384,7 +385,7 @@ severe grade</p>
 
 
     <footer><div class="pkgdown-footer-left">
-  <p>Developed by Ben Straub, Stefan Bundfuss, Arianna Cascone, Jeffrey Dickinson, Ross Farrugia, Fanny Gautier, G Gayatri, Solveig Holmgaard, Dinakar Kulkarni, Edoardo Mancini, Gordon Miller, Jim Rothstein, Daniel Sjoberg, Stefan Thoma, Junze Zhang, F. Hoffmann-La Roche AG, GlaxoSmithKline LLC.</p>
+  <p>Developed by F. Hoffmann-La Roche AG, GlaxoSmithKline LLC, Ben Straub, Stefan Bundfuss, Arianna Cascone, Jeffrey Dickinson, Ross Farrugia, Fanny Gautier, G Gayatri, Solveig Holmgaard, Dinakar Kulkarni, Edoardo Mancini, Gordon Miller, Jim Rothstein, Daniel Sjoberg, Stefan Thoma, Junze Zhang.</p>
 </div>
 
 <div class="pkgdown-footer-right">

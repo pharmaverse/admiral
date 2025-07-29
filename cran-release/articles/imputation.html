@@ -27,7 +27,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">admiral</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">1.3.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.3.1.9000</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -79,6 +79,7 @@
     <div class="dropdown-menu" aria-labelledby="dropdown-versions">
     <a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/main">main</a>
 <a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/cran-release">cran-release</a>
+<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v1.3.1">v1.3.1</a>
 <a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v1.3.0">v1.3.0</a>
 <a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v1.2.0">v1.2.0</a>
 <a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v1.1.1">v1.1.1</a>
@@ -131,11 +132,11 @@
 <h2 id="introduction">Introduction<a class="anchor" aria-label="anchor" href="#introduction"></a>
 </h2>
 <p>This vignette is broken into three major sections. The first section
-briefly explores the imputation rules used in <a href="https://pharmaverse.github.io/admiral/cran-release/" class="external-link">admiral</a>.
+briefly explores the imputation rules used in <a href="https://pharmaverse.github.io/admiral/" class="external-link">admiral</a>.
 The second section focuses on imputation functions that work on vectors
 with lots of small examples to explore the imputation rules. These
 <strong>vector-based</strong> functions form the backbone of
-<a href="https://pharmaverse.github.io/admiral/cran-release/" class="external-link">admiral</a>’s more powerful functions
+<a href="https://pharmaverse.github.io/admiral/" class="external-link">admiral</a>’s more powerful functions
 <code><a href="../reference/derive_vars_dt.html">derive_vars_dt()</a></code> and <code><a href="../reference/derive_vars_dtm.html">derive_vars_dtm()</a></code> for
 building ADaM dataset. The final section moves into more detailed
 examples that a user might face while working on ADaMs in need of
@@ -145,7 +146,7 @@ examples that a user might face while working on ADaMs in need of
 </h3>
 <p>The examples of this vignette require the following packages.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://pharmaverse.github.io/admiral/cran-release/" class="external-link">admiral</a></span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://pharmaverse.github.io/admiral/" class="external-link">admiral</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://lubridate.tidyverse.org" class="external-link">lubridate</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://tibble.tidyverse.org/" class="external-link">tibble</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span>, warn.conflicts <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
@@ -162,9 +163,9 @@ if the day and the time is unknown.</p>
 <p>The ADaM timing variables like <code>ADTM</code> (Analysis Datetime)
 or <code>ADY</code> (Analysis Relative Day) are numeric variables. They
 can be derived only if the date or datetime is complete. Therefore
-<a href="https://pharmaverse.github.io/admiral/cran-release/" class="external-link">admiral</a> provides imputation functions which fill in
+<a href="https://pharmaverse.github.io/admiral/" class="external-link">admiral</a> provides imputation functions which fill in
 missing date or time parts according to certain imputation rules.</p>
-<p>In <a href="https://pharmaverse.github.io/admiral/cran-release/" class="external-link">admiral</a> users will primarily use two functions
+<p>In <a href="https://pharmaverse.github.io/admiral/" class="external-link">admiral</a> users will primarily use two functions
 <code><a href="../reference/derive_vars_dt.html">derive_vars_dt()</a></code> and <code><a href="../reference/derive_vars_dtm.html">derive_vars_dtm()</a></code> for
 date and datetime imputations respectively. In all other functions where
 dates can be passed as an argument, we expect full dates or datetimes
@@ -339,7 +340,7 @@ next section.</p>
 </h3>
 <p>In some scenarios the imputed date should not be before or after
 certain dates. For example an imputed date after data cut off date or
-death date is not desirable. The <a href="https://pharmaverse.github.io/admiral/cran-release/" class="external-link">admiral</a> imputation
+death date is not desirable. The <a href="https://pharmaverse.github.io/admiral/" class="external-link">admiral</a> imputation
 functions provide the <code>min_dates</code> and <code>max_dates</code>
 argument to specify those dates. For example:</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
@@ -398,9 +399,9 @@ was used are accompanied by date and/or time imputation flag variables
 <code>ATMF</code> for <code>ADTM</code>). These variables indicate the
 highest level that was imputed, e.g., if minutes and seconds were
 imputed, the imputation flag is set to <code>"M"</code>. The
-<a href="https://pharmaverse.github.io/admiral/cran-release/" class="external-link">admiral</a> functions which derive imputed variables are also
+<a href="https://pharmaverse.github.io/admiral/" class="external-link">admiral</a> functions which derive imputed variables are also
 adding the corresponding imputation flag variables.</p>
-<p>Note: The <a href="https://pharmaverse.github.io/admiral/cran-release/" class="external-link">admiral</a> datetime imputation function
+<p>Note: The <a href="https://pharmaverse.github.io/admiral/" class="external-link">admiral</a> datetime imputation function
 provides the <code>ignore_seconds_flag</code> argument which can be set
 to <code>TRUE</code> in cases where seconds were never collected. This
 is due to the following from ADaM IG: For a given SDTM DTC variable, if
@@ -411,7 +412,7 @@ only hours and minutes are ever collected, and seconds are imputed in
 <div class="section level2">
 <h2 id="imputation-functions">Imputation Functions<a class="anchor" aria-label="anchor" href="#imputation-functions"></a>
 </h2>
-<p><a href="https://pharmaverse.github.io/admiral/cran-release/" class="external-link">admiral</a> provides the following functions for
+<p><a href="https://pharmaverse.github.io/admiral/" class="external-link">admiral</a> provides the following functions for
 imputation:</p>
 <ul>
 <li>
@@ -656,7 +657,7 @@ done by using <code><a href="../reference/slice_derivation.html">slice_derivatio
 
 
     <footer><div class="pkgdown-footer-left">
-  <p>Developed by Ben Straub, Stefan Bundfuss, Arianna Cascone, Jeffrey Dickinson, Ross Farrugia, Fanny Gautier, G Gayatri, Solveig Holmgaard, Dinakar Kulkarni, Edoardo Mancini, Gordon Miller, Jim Rothstein, Daniel Sjoberg, Stefan Thoma, Junze Zhang, F. Hoffmann-La Roche AG, GlaxoSmithKline LLC.</p>
+  <p>Developed by F. Hoffmann-La Roche AG, GlaxoSmithKline LLC, Ben Straub, Stefan Bundfuss, Arianna Cascone, Jeffrey Dickinson, Ross Farrugia, Fanny Gautier, G Gayatri, Solveig Holmgaard, Dinakar Kulkarni, Edoardo Mancini, Gordon Miller, Jim Rothstein, Daniel Sjoberg, Stefan Thoma, Junze Zhang.</p>
 </div>
 
 <div class="pkgdown-footer-right">

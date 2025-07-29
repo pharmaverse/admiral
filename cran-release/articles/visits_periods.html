@@ -27,7 +27,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">admiral</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">1.3.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.3.1.9000</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -79,6 +79,7 @@
     <div class="dropdown-menu" aria-labelledby="dropdown-versions">
     <a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/main">main</a>
 <a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/cran-release">cran-release</a>
+<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v1.3.1">v1.3.1</a>
 <a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v1.3.0">v1.3.0</a>
 <a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v1.2.0">v1.2.0</a>
 <a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v1.1.1">v1.1.1</a>
@@ -135,7 +136,7 @@
 subperiod, or phase variables like <code>APERIOD</code>,
 <code>TRT01A</code>, <code>TRT02A</code>, <code>ASPER</code>,
 <code>PHSDTM</code>, <code>PHEDTM</code>, … is highly study-specific.
-Therefore <a href="https://pharmaverse.github.io/admiral/cran-release/" class="external-link">admiral</a> cannot provide functions which derive
+Therefore <a href="https://pharmaverse.github.io/admiral/" class="external-link">admiral</a> cannot provide functions which derive
 these variables. However, for common scenarios like visit assignments
 based on time windows or deriving BDS period variables from ADSL period
 variables, functions are provided which support those derivations.</p>
@@ -144,7 +145,7 @@ variables, functions are provided which support those derivations.</p>
 </h3>
 <p>The examples of this vignette require the following packages.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://pharmaverse.github.io/admiral/cran-release/" class="external-link">admiral</a></span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://pharmaverse.github.io/admiral/" class="external-link">admiral</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://tibble.tidyverse.org/" class="external-link">tibble</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span>, warn.conflicts <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://lubridate.tidyverse.org" class="external-link">lubridate</a></span><span class="op">)</span></span></code></pre></div>
@@ -217,7 +218,7 @@ vignette will not cover this scenario.</p>
 <h3 id="a-note-on-study-specific-code">A Note on Study Specific Code<a class="anchor" aria-label="anchor" href="#a-note-on-study-specific-code"></a>
 </h3>
 <p>The sections below showcase the available tools in
-<a href="https://pharmaverse.github.io/admiral/cran-release/" class="external-link">admiral</a> to work with period, subperiod and phase
+<a href="https://pharmaverse.github.io/admiral/" class="external-link">admiral</a> to work with period, subperiod and phase
 variables. However, at some point study specific code will always be
 required. There are two options:</p>
 <ul>
@@ -245,7 +246,7 @@ workflows.</p>
 <div class="section level3">
 <h3 id="reference">The Period/Phase Reference Dataset<a class="anchor" aria-label="anchor" href="#reference"></a>
 </h3>
-<p>The <a href="https://pharmaverse.github.io/admiral/cran-release/" class="external-link">admiral</a> functions expect separate reference
+<p>The <a href="https://pharmaverse.github.io/admiral/" class="external-link">admiral</a> functions expect separate reference
 datasets for periods, subperiods, and phases. For periods the numeric
 variable <code>APERIOD</code> is expected, for subperiods the numeric
 variables <code>APERIOD</code> and <code>ASPER</code>, and for phases
@@ -506,7 +507,7 @@ well.</p>
 
 
     <footer><div class="pkgdown-footer-left">
-  <p>Developed by Ben Straub, Stefan Bundfuss, Arianna Cascone, Jeffrey Dickinson, Ross Farrugia, Fanny Gautier, G Gayatri, Solveig Holmgaard, Dinakar Kulkarni, Edoardo Mancini, Gordon Miller, Jim Rothstein, Daniel Sjoberg, Stefan Thoma, Junze Zhang, F. Hoffmann-La Roche AG, GlaxoSmithKline LLC.</p>
+  <p>Developed by F. Hoffmann-La Roche AG, GlaxoSmithKline LLC, Ben Straub, Stefan Bundfuss, Arianna Cascone, Jeffrey Dickinson, Ross Farrugia, Fanny Gautier, G Gayatri, Solveig Holmgaard, Dinakar Kulkarni, Edoardo Mancini, Gordon Miller, Jim Rothstein, Daniel Sjoberg, Stefan Thoma, Junze Zhang.</p>
 </div>
 
 <div class="pkgdown-footer-right">
