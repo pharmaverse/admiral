@@ -57,7 +57,7 @@ dataset (\code{dataset}) with the additional dataset (\code{dataset_add}).
 The observations are ordered by the specified order if \code{join_type = "after"}, \code{join_type = "before"}, \code{first_cond_lower}, \code{first_cond_upper},
 or \code{tmp_obs_nr_var} are specified.
 
-For handling of \code{NA}s in sorting variables see \href{../articles/generic.html#sort_order}{Sort Order}.
+For handling of \code{NA}s in sorting variables see the "Sort Order" section in \code{vignette("generic")}.
 
 \describe{
 \item{Permitted values}{list of variables created by \code{exprs()}, e.g., \code{exprs(USUBJID, VISIT)}}

@@ -381,7 +381,7 @@
 #'
 #' @caption Further examples
 #' @info Further example usages of this function can be found in the
-#'   [Generic Derivations vignette](../articles/generic.html).
+#'   `vignette("generic")`.
 derive_vars_merged <- function(dataset,
                                dataset_add,
                                by_vars,

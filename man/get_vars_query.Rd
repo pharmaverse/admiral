@@ -39,12 +39,11 @@ requested by some users to be present independently from it.
 This function can be used to derive CDISC variables such as
 \code{SMQzzNAM}, \code{SMQzzCD}, \code{SMQzzSC}, \code{SMQzzSCN}, and \code{CQzzNAM} in ADAE and
 ADMH, and variables such as \code{SDGzzNAM}, \code{SDGzzCD}, and \code{SDGzzSC} in ADCM.
-An example usage of this function can be found in the
-\href{../articles/occds.html}{OCCDS vignette}.
+An example usage of this function can be found in the \code{vignette("occds")}.
 
 A query dataset is expected as an input to this function. See the
-\href{../articles/queries_dataset.html}{Queries Dataset Documentation vignette}
-for descriptions, or call \code{data("queries")} for an example of a query dataset.
+\code{vignette("queries_dataset")} for descriptions, or call \code{data("queries")}
+for an example of a query dataset.
 
 For each unique element in \code{PREFIX}, the corresponding "NAM"
 variable will be created. For each unique \code{PREFIX}, if \code{GRPID} is

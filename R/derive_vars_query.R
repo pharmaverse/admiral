@@ -10,12 +10,11 @@
 #' @details This function can be used to derive CDISC variables such as
 #'   `SMQzzNAM`, `SMQzzCD`, `SMQzzSC`, `SMQzzSCN`, and `CQzzNAM` in ADAE and
 #'   ADMH, and variables such as `SDGzzNAM`, `SDGzzCD`, and `SDGzzSC` in ADCM.
-#'   An example usage of this function can be found in the
-#'   [OCCDS vignette](../articles/occds.html).
+#'   An example usage of this function can be found in the `vignette("occds")`.
 #'
 #'   A query dataset is expected as an input to this function. See the
-#'   [Queries Dataset Documentation vignette](../articles/queries_dataset.html)
-#'   for descriptions, or call `data("queries")` for an example of a query dataset.
+#'   `vignette("queries_dataset")` for descriptions, or call `data("queries")`
+#'   for an example of a query dataset.
 #'
 #'   For each unique element in `PREFIX`, the corresponding "NAM"
 #'   variable will be created. For each unique `PREFIX`, if `GRPID` is
@@ -216,12 +215,11 @@ get_vars_query <- function(dataset, dataset_queries) {
 #' @details This function can be used to derive CDISC variables such as
 #'   `SMQzzNAM`, `SMQzzCD`, `SMQzzSC`, `SMQzzSCN`, and `CQzzNAM` in ADAE and
 #'   ADMH, and variables such as `SDGzzNAM`, `SDGzzCD`, and `SDGzzSC` in ADCM.
-#'   An example usage of this function can be found in the
-#'   [OCCDS vignette](../articles/occds.html).
+#'   An example usage of this function can be found in the `vignette("occds")`.
 #'
 #'   A query dataset is expected as an input to this function. See the
-#'   [Queries Dataset Documentation vignette](../articles/queries_dataset.html)
-#'   for descriptions, or call `data("queries")` for an example of a query dataset.
+#'   `vignette("queries_dataset")` for descriptions, or call `data("queries")`
+#'   for an example of a query dataset.
 #'
 #'   For each unique element in `PREFIX`, the corresponding "NAM"
 #'   variable will be created. For each unique `PREFIX`, if `GRPID` is

@@ -234,6 +234,8 @@ if it already exists in the input dataset. However, if \verb{*TMF} already exist
 in the input dataset, a warning is issued and \verb{*TMF} will be overwritten.
 }
 \seealso{
+\code{vignette("imputation")}
+
 Date/Time Derivation Functions that returns variable appended to dataset: 
 \code{\link{derive_var_trtdurd}()},
 \code{\link{derive_vars_dt}()},
@@ -439,5 +441,5 @@ derive_vars_dtm(
 \subsection{Further examples}{
 
 Further example usages of this function can be found in the
-\href{../articles/imputation.html}{Date and Time Imputation vignette}.}}
+\code{vignette("imputation")}.}}
 

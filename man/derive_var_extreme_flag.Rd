@@ -38,7 +38,7 @@ The variables specified by the \code{by_vars} argument are expected to be in the
 The first or last observation is determined with respect to the specified
 order.
 
-For handling of \code{NA}s in sorting variables see \href{../articles/generic.html#sort_order}{Sort Order}.
+For handling of \code{NA}s in sorting variables see the "Sort Order" section in \code{vignette("generic")}.
 
 \describe{
 \item{Permitted values}{list of variables created by \code{exprs()}, e.g., \code{exprs(USUBJID, VISIT)}}

@@ -597,7 +597,7 @@
 #'
 #' @caption Further examples
 #' @info Further example usages of this function can be found in the
-#'   [Time-to-Event vignette](../articles/bds_tte.html).
+#'   `vignette("bds_tte")`.
 derive_param_tte <- function(dataset = NULL,
                              dataset_adsl,
                              source_datasets,

@@ -630,7 +630,7 @@
 #'
 #' @caption Further examples
 #' @info Further example usages of this function can be found in the
-#'   [Generic Derivations vignette](../articles/generic.html).
+#'   `vignette("generic")`.
 #'
 #'   Equivalent examples for using the `exist_flag`, `true_value`, `false_value`,
 #'   `missing_values` and `check_type` arguments can be found in `derive_vars_merged()`.

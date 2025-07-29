@@ -1,11 +1,3 @@
-Datetime
-Durations
-datetime
-datetimes
-recoded
-repo
-reproducibility
-timepoint
 ADAE
 ADCM
 ADEG
@@ -17,7 +9,6 @@ ADNCA
 ADPC
 ADPP
 ADPPK
-ADRS
 ADSL
 ADVS
 ADaM
@@ -72,6 +63,7 @@ CTC
 CTCAE
 CTCAEV
 CTCAEv
+CTEP
 CVD
 Carlucci
 Celine
@@ -84,27 +76,26 @@ Creatine
 Creatinine
 DAIDS
 DAIDs
-DDTHH
 DIABP
 DILI
 DS
 DT
 DTC
-DTF
 DTM
 DURD
 Daniil
-DateTime
 Datetime
 Declan
 Denney
 DuBois
 Duniec
+Durations
 EMA
 EOSSTT
 EPI
 Ehmann
 Enki
+Evaluable
 FACM
 FCVD
 Fibrinogen
@@ -120,7 +111,6 @@ GRPID
 GRPNAME
 GSK
 Gault
-Gayatri
 Gehan
 GlaxoSmithKline
 Glomerular
@@ -131,7 +121,6 @@ HDL
 Hamza
 Haptoglobin
 Hoffmann
-Holmgaard
 Hy's
 Hypercalcemia
 Hyperkalemia
@@ -246,7 +235,6 @@ Shimeng
 Shuliar
 Simms
 Slama
-Solveig
 Stefonishin
 Subperiod
 Subperiods
@@ -261,7 +249,6 @@ TERMCHAR
 TERMNUM
 TID
 TLFs
-TMF
 TNDOSINT
 TOC
 TPDOSE
@@ -279,11 +266,9 @@ WBC
 Walkowiak
 Wenyi
 XXXXXXXX
-YYYY
 Yohann
 Yurovskyi
 Zelos
-Zhang
 Zhu
 admiralci
 admiraldev
@@ -313,6 +298,8 @@ creatinine
 cyclomatic
 dL
 datepart
+datetime
+datetimes
 deps
 der
 desc
@@ -353,6 +340,7 @@ pre
 prev
 prm
 quosures
+recoded
 renv
 repo
 reproducibility
@@ -375,6 +363,7 @@ tidyselect
 tidyverse
 timeframe
 timepart
+timepoint
 tte
 umol
 ungrouped

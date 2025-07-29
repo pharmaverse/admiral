@@ -1,28 +1,13 @@
-# admiral (development version)
+# admiral 1.3.1
 
-## New Features
-
-## Updates of Existing Functions
-
-## Breaking Changes
-
-    **Phase 1 (message)**
-  
-    **Phase 2 (warning)**
-
-    **Phase 3 (error)**
-
-    **Phase 4 (removed)**
-    
 ## Documentation
 
 - The ADSL template and vignette were updated to make example derivation of `SAFFL` CDISC-compliant. (#2782)
 
-## Various
+- In the function documentation references to vignettes were updated to meet
+CRAN requirements. (#2788)
 
-<details>
-<summary>Developer Notes</summary>
-</details>
+- The minimum `{dplyr}` version was updated to 1.1.1. (#2788)
 
 # admiral 1.3.0
 
@@ -1085,7 +1070,7 @@ added for subjects who have both an event or censoring and an observation in
 
 - `ADLB` metadata data set called `atoxgr_criteria_ctcv5` updated to remove unit check for
 `HYPERURICEMIA` as grade criteria based on `ANRHI` only.  This metadata holds criteria for lab grading
-based on [Common Terminology Criteria for Adverse Events (CTCAE) v5.0](https://ctep.cancer.gov/protocoldevelopment/electronic_applications/ctc.htm). (#1650)
+based on [Common Terminology Criteria for Adverse Events (CTCAE) v5.0](https://dctd.cancer.gov/research/ctep-trials/for-sites/adverse-events#ctep-ctcae). (#1650)
 
 - Renamed `derive_var_confirmation_flag()` and `filter_confirmation()` to 
 `derive_var_joined_exist_flag()` and `filter_joined()` respectively. (#1738)
@@ -1156,7 +1141,7 @@ values to the input dataset. (#1564)
 `date_source()`, `dthcaus_source()`, ... (#858)
 
 - New metadata data set called `atoxgr_criteria_ctcv5` which holds criteria for lab grading
-based on [Common Terminology Criteria for Adverse Events (CTCAE) v5.0](https://ctep.cancer.gov/protocoldevelopment/electronic_applications/ctc.htm).
+based on [Common Terminology Criteria for Adverse Events (CTCAE) v5.0](https://dctd.cancer.gov/research/ctep-trials/for-sites/adverse-events#ctep-ctcae).
 
 - Removed the `{assertthat}` dependency in `{admiral}`. (#1392)
 
@@ -1261,7 +1246,7 @@ lab values (`ATOXGRL`) or for high lab values (`ATOXGRH`). The grading is create
 metadata.
 
 - New metadata data set called `atoxgr_criteria_ctcv4` which holds criteria for lab grading
-based on [Common Terminology Criteria for Adverse Events (CTCAE) v4.0](https://ctep.cancer.gov/protocoldevelopment/electronic_applications/ctc.htm)
+based on [Common Terminology Criteria for Adverse Events (CTCAE) v4.0](https://dctd.cancer.gov/research/ctep-trials/trial-development#ctcae-and-ctep-codes)
 
 
 ## Updates of Existing Functions

@@ -51,6 +51,7 @@
 #' @return  The input dataset with the datetime `*DTM` (and the date/time imputation
 #' flag `*DTF`, `*TMF`) added.
 #'
+#' @seealso `vignette("imputation")`
 #'
 #' @family der_date_time
 #'
@@ -197,7 +198,7 @@
 #' )
 #' @caption Further examples
 #' @info Further example usages of this function can be found in the
-#'   [Date and Time Imputation vignette](../articles/imputation.html).
+#'   `vignette("imputation")`.
 derive_vars_dtm <- function(dataset,
                             new_vars_prefix,
                             dtc,
