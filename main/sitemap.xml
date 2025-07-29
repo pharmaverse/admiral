@@ -31,8 +31,10 @@
 <url><loc>https:/pharmaverse.github.io/admiral/main/reference/admiral_adlb.html</loc></url>
 <url><loc>https:/pharmaverse.github.io/admiral/main/reference/admiral_adsl.html</loc></url>
 <url><loc>https:/pharmaverse.github.io/admiral/main/reference/assert_date_imputation.html</loc></url>
+<url><loc>https:/pharmaverse.github.io/admiral/main/reference/assert_db_requirements.html</loc></url>
 <url><loc>https:/pharmaverse.github.io/admiral/main/reference/assert_highest_imputation.html</loc></url>
 <url><loc>https:/pharmaverse.github.io/admiral/main/reference/assert_parameters_argument.html</loc></url>
+<url><loc>https:/pharmaverse.github.io/admiral/main/reference/assert_terms.html</loc></url>
 <url><loc>https:/pharmaverse.github.io/admiral/main/reference/assert_time_imputation.html</loc></url>
 <url><loc>https:/pharmaverse.github.io/admiral/main/reference/atoxgr_criteria_ctcv4.html</loc></url>
 <url><loc>https:/pharmaverse.github.io/admiral/main/reference/atoxgr_criteria_ctcv4_uscv.html</loc></url>
@@ -205,6 +207,8 @@
 <url><loc>https:/pharmaverse.github.io/admiral/main/reference/tte_source.html</loc></url>
 <url><loc>https:/pharmaverse.github.io/admiral/main/reference/tte_source_objects.html</loc></url>
 <url><loc>https:/pharmaverse.github.io/admiral/main/reference/use_ad_template.html</loc></url>
+<url><loc>https:/pharmaverse.github.io/admiral/main/reference/validate_basket_select.html</loc></url>
+<url><loc>https:/pharmaverse.github.io/admiral/main/reference/validate_query.html</loc></url>
 <url><loc>https:/pharmaverse.github.io/admiral/main/reference/yn_to_numeric.html</loc></url>
 </urlset>
 
