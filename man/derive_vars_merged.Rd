@@ -380,7 +380,7 @@ derive_vars_merged(
 #> 3 03         85 YEARS  NA  
 #> G2;H2;Warningh: Dataset contains duplicate records with respect to `STUDYID`, `USUBJID`, and
 #> `convert_dtc_to_dtm(VSDTC)`
-#> i Run `admiral::get_duplicates_dataset()` to access the duplicate records}\if{html}{\out{</div>}}
+#> i Run `admiral::get_duplicates_dataset()` to access the duplicate recordsg}\if{html}{\out{</div>}}
 
 For investigating the issue, the dataset of the duplicate source records
 can be obtained by calling \code{get_duplicates_dataset()}:
