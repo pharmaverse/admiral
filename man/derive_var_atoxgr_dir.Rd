@@ -43,12 +43,14 @@ criteria. For example: "Anemia" or "INR Increased".
 \describe{
 \item{Permitted values}{\code{atoxgr_criteria_ctcv4}, \code{atoxgr_criteria_ctcv5}, \code{atoxgr_criteria_daids}
 \itemize{
-\item \code{atoxgr_criteria_ctcv4} implements \href{https://ctep.cancer.gov/protocoldevelopment/electronic_applications/ctc.htm}{Common Terminology Criteria for Adverse Events (CTCAE) v4.0}
-\item \code{atoxgr_criteria_ctcv5} implements \href{https://ctep.cancer.gov/protocoldevelopment/electronic_applications/ctc.htm}{Common Terminology Criteria for Adverse Events (CTCAE) v5.0}
+\item \code{atoxgr_criteria_ctcv4} implements \href{https://dctd.cancer.gov/research/ctep-trials/trial-development#ctcae-and-ctep-codes}{Common Terminology Criteria for Adverse Events (CTCAE) v4.0}
+\item \code{atoxgr_criteria_ctcv5} implements \href{https://dctd.cancer.gov/research/ctep-trials/for-sites/adverse-events#ctep-ctcae}{Common Terminology Criteria for Adverse Events (CTCAE) v5.0}
 \item \code{atoxgr_criteria_daids} implements
 \href{https://rsc.niaid.nih.gov/sites/default/files/daidsgradingcorrectedv21.pdf}{Division of AIDS (DAIDS) Table for Grading the Severity of Adult and Pediatric Adverse Events}
+}
 
 The metadata should have the following variables:
+\itemize{
 \item \code{TERM}: variable to hold the term describing the criteria applied to a particular lab test,
 eg. "Anemia" or "INR Increased". Note: the variable is case insensitive.
 \item \code{DIRECTION}: variable to hold the direction of the abnormality of a particular lab test
