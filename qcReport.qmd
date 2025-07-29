@@ -66,7 +66,7 @@ for (i in seq_along(comp_dataset_names)) {
 
 ```{r data_html}
 #| echo: false
-withr::with_output_sink("qc.Rmd")
+sink("qc.Rmd")   # nolint
 cat("## Verify Templates Check Complete!", "\n\n")
 cat("Date: ", format(Sys.Date()), "\n")
 cat("Run by: ", Sys.getenv("GITHUB_ACTOR"), "\n")
@@ -91,7 +91,7 @@ for (y in input_dataset_names) {
   cat("</details>")
   cat("\n\n")
 }
-withr::with_output_sink()
+sink() # nolint
 ```
 
 ```{r data_check}

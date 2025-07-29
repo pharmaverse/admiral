@@ -68,15 +68,15 @@ jobs:
           cat qc.Rmd >> $GITHUB_STEP_SUMMARY
 
 # remove this,  keep commit message simple.
-      - name: Comment PR with qc.Rmd (if Pull Request)
-        # This step will only run if the event is a pull_request
-        if: github.event_name == 'pull_request'
-        uses: thollander/actions-comment-pull-request@v3
-        with:
-          file-path: qc.Rmd
-          comment-tag: qc-dataset
-        # Dynamically get the PR number for the current pull request
-          pr-number: ${{ github.event.pull_request.number }}
+#      - name: Comment PR with qc.Rmd (if Pull Request)
+#        # This step will only run if the event is a pull_request
+#        if: github.event_name == 'pull_request'
+#        uses: thollander/actions-comment-pull-request@v3
+#        with:
+#          file-path: qc.Rmd
+#          comment-tag: qc-dataset
+#        # Dynamically get the PR number for the current pull request
+#          pr-number: ${{ github.event.pull_request.number }}
 
       - name: Log qc.Rmd content (if Push or Workflow Dispatch)
         # This step will run for push or workflow_dispatch events
