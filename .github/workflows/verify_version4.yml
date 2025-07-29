@@ -62,6 +62,12 @@ jobs:
           name: qcReport.html
           path: qcReport.html
 
+
+        name: qc.Rmd to appears in summary
+        run: |
+          cat qc.Rmd >> $GITHUB_STEP_SUMMARY
+
+# remove this,  keep commit message simple.
       - name: Comment PR with qc.Rmd (if Pull Request)
         # This step will only run if the event is a pull_request
         if: github.event_name == 'pull_request'
