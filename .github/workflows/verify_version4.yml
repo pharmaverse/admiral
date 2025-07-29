@@ -63,7 +63,7 @@ jobs:
           path: qcReport.html
 
 
-        name: qc.Rmd to appears in summary
+      - name: qc.Rmd to appears in summary
         run: |
           cat qc.Rmd >> $GITHUB_STEP_SUMMARY
 
