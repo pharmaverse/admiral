@@ -7,6 +7,8 @@
 - In the function documentation references to vignettes were updated to meet
 CRAN requirements. (#2788)
 
+- The minimum `{dplyr}` version was updated to 1.1.1. (#2788)
+
 # admiral 1.3.0
 
 ## New Features
