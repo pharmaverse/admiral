@@ -172,6 +172,7 @@ load_rda <- function(filename) {
 #' @param adam_names character vector  Set of  ADaMs to download.
 #' @param path Character string. Directory to save downloaded ADaMs.
 download_adam_old <- function(adam_names, path = NULL) {
+  # nolint start
   #  # NEW:
   #  # ds here is singlular
   #
@@ -181,7 +182,7 @@ download_adam_old <- function(adam_names, path = NULL) {
   #          file = file.path(path, paste0(ds, ".rda"))) }
   #
   #  walk(.x = adam_names, .f = f)
-
+  # nolint end
   #   LEGACY
   lapply(adam_names, function(adam) {
     githubURL <- paste0( # nolint
