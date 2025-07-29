@@ -14,12 +14,11 @@ editor_options:
 library(diffdf)
 library(tibble)
 library(stringr)
-# base or input: is older ds;   
-# compare:  is new ds (created by template) 
+# base or input: is older ds;
+# compare:  is new ds (created by template)
 # nolint end
 input_path <- "inst/verify/old"
 comp_path <- "inst/verify/new"
-
 ```
 
 This is the QC report dated `r Sys.Date()`.
@@ -47,7 +46,7 @@ for (i in seq_along(input_dataset_names)) {
   assign(
     paste0("new_", input_dataset_names[i]),
     readRDS(file.path(input_path, input_dataset_paths[i]))
-    )
+  )
 }
 
 for (i in seq_along(comp_dataset_names)) {
@@ -57,9 +56,8 @@ for (i in seq_along(comp_dataset_names)) {
   assign(
     paste0("comp_", comp_dataset_names[i]),
     readRDS(file.path(comp_path, comp_dataset_paths[i]))
-    )
+  )
 }
-
 ```
 
 \<! -- #\| output: false \# why? --\>
@@ -79,11 +77,11 @@ for (y in input_dataset_names) {
   if (y == "adpc") next()
   new_dataset <- paste0("new_", y)
   comp_dataset <- paste0("comp_", y)
-  diffs <- diffdf(base = get(comp_dataset), compare =  get(new_dataset))
-# nolint start
-#  if  (diffdf::diffdf_has_issues(diffs)) print(diffs)
-#  if (length(diffs) != 0) file.create("qc.fail")
-# nolint end
+  diffs <- diffdf(base = get(comp_dataset), compare = get(new_dataset))
+  # nolint start
+  #  if  (diffdf::diffdf_has_issues(diffs)) print(diffs)
+  #  if (length(diffs) != 0) file.create("qc.fail")
+  # nolint end
   cat("<details>\n")
   status_emoji <- if (length(diffs) == 0) "✅" else "❌"
   cat(str_glue("<summary>{status_emoji} Dataset: {y}</summary>\n\n"))
@@ -91,7 +89,7 @@ for (y in input_dataset_names) {
   print(diffs)
   cat("```\n\n")
   cat("</details>")
-   cat("\n\n")
+  cat("\n\n")
 }
 withr::with_sink()
 ```

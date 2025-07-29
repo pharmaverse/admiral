@@ -153,7 +153,6 @@ verify_templates <- function(pkg = "admiral", ds = NULL) {
       print(res)
       saveRDS(res, file = file.path("inst/verify", paste0(adam, ".diff")))
     }
-
   }) # end  purrr::map
 
   cli_inform("---- Done with templates\n")
@@ -262,9 +261,9 @@ create_directories <- function() {
   )
 }
 
-## ------------------------  
+## ------------------------
 ## ------------------------  Legacy (to be removed)
-## ------------------------  
+## ------------------------
 
 
 ## ------------------------  save_rda
@@ -278,7 +277,7 @@ save_rda <- function(data, file_path, new_name) {
 }
 
 
-## ------------------------  compare 
+## ------------------------  compare
 #'
 #' Loads and compares datasets using diffdf
 #'
