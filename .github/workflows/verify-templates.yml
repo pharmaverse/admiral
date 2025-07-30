@@ -8,6 +8,8 @@ on:
     paths:
       - '**.yml'
 
+run-name: PR Build for ${{ github.event.pull_request.number }} by @${{ github.actor }}
+
 jobs:
   Run-and-compare-templates:
     runs-on: ubuntu-latest
@@ -16,12 +18,25 @@ jobs:
     container:
       image: "rocker/tidyverse:4.2.1"
     steps:
-      - uses: actions/checkout@v4
+      - name: Set US Eastern timezone
+        run: sudo timedatectl set-timezone America/New_York
 
-      - name: Install package and dependencies
+      - name: Check out repository
+        uses: actions/checkout@v4
+        with:
+         ref: ${{ github.event.pull_request.head.ref }} # Checkout the branch of the PR
+         fetch-depth: 0
+
+      - name: Print PR details
         run: |
-          remotes::install_local(dependencies = TRUE)
-        shell: Rscript {0}
+          echo "This workflow is running for PR # ${{ github.event.pull_request.number }}"
+          echo "PR Title: ${{ github.event.pull_request.title }}"
+          echo "Source Branch: ${{ github.event.pull_request.head.ref }}"
+          echo "Target Branch: ${{ github.event.pull_request.base.ref }}"
+          echo "Last commit SHA: ${{ github.sha }}"
+
+      - name: Set up R
+        uses: r-lib/actions/setup-r@v2
 
       - name: Run and compare templates
         run: source("data-raw/run_and_compare_templates.R")
