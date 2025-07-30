@@ -20,7 +20,7 @@ adam_names <- adam_names[adam_names != "adlbhy"]
 adam_names <- c("adsl", "adcm")
 
 # Run templates and compare ----
-diffs <- purrr::map(adam_names, .progress = TRUE, function(adam) {
+diffs <- purrr::map(adam_names, function(adam) {
   cli_inform("Running {adam} template and comparing with pharmaverseadam version...")
 
   ## Get {pharmaverseadam} dataset ----
