@@ -1,4 +1,4 @@
-name: Check post tags
+name: Run and compare templates
 
 on:
   pull_request:
@@ -16,6 +16,6 @@ jobs:
       image: "rocker/tidyverse:4.2.1"
     steps:
       - uses: actions/checkout@v4
-      - name: Run check_post_tags
-        run: source("data-raw/verify_templates.R")
+      - name: Run and compare templates
+        run: source("data-raw/run_and_compare_templates.R")
         shell: Rscript {0}
