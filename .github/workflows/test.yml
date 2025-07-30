@@ -8,15 +8,13 @@ on:
       - main
   workflow_dispatch:
 
-permissions:  read-all
+#permissions:  read-all
 
 jobs:
   import-data:
     runs-on: ubuntu-latest
     env:
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
-    container:
-      image: rocker/r-ver:latest
 
     steps:
       - name: Check out repository
