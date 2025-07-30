@@ -11,12 +11,7 @@ on:
     paths:
       -  '**.yml'
   push:
-# force ?  github actions to "see" this yml file  (this trick works)
-#  push:
-#    branches:
-#      -  verify_version3    # push to this branch
 
-# one tiny change:  will workflow for PR trigger?
 
 run-name: PR Build for ${{ github.event.pull_request.number }} by @${{ github.actor }}
 
