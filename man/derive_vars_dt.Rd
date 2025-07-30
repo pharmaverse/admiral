@@ -186,6 +186,8 @@ The presence of a \verb{*DTF} variable is checked and if it already exists in th
 a warning is issued and \verb{*DTF} will be overwritten.
 }
 \seealso{
+\code{vignette("imputation")}
+
 Date/Time Derivation Functions that returns variable appended to dataset: 
 \code{\link{derive_var_trtdurd}()},
 \code{\link{derive_vars_dtm}()},
@@ -406,5 +408,5 @@ For example, \code{"2019---07"}, will be displayed as \code{"2019-06-07"} rather
 \subsection{Further examples}{
 
 Further example usages of this function can be found in the
-\href{../articles/imputation.html}{Date and Time Imputation vignette}.}}
+\code{vignette("imputation")}.}}
 

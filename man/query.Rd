@@ -87,7 +87,6 @@ Standardized Drug Grouping (SDG), or a customized query (CQ). It is used
 as input to \code{create_query_data()}.
 }
 \examples{
-
 # create a query for an SMQ
 library(tibble)
 library(dplyr, warn.conflicts = FALSE)
@@ -148,7 +147,8 @@ query(
 )
 }
 \seealso{
-\code{\link[=create_query_data]{create_query_data()}}, \code{\link[=basket_select]{basket_select()}}, \href{../articles/queries_dataset.html}{Queries Dataset Documentation}
+\code{\link[=create_query_data]{create_query_data()}}, \code{\link[=basket_select]{basket_select()}},
+\code{vignette("queries_dataset")}
 
 Source Objects: 
 \code{\link{basket_select}()},

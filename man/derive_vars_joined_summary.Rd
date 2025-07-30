@@ -65,7 +65,7 @@ added to the additional dataset and can be used in the filter conditions
 (\code{filter_add}, \code{filter_join}) and for \code{join_vars} and \code{new_vars}. The
 variable is not included in the output dataset.
 
-For handling of \code{NA}s in sorting variables see \href{../articles/generic.html#sort_order}{Sort Order}.
+For handling of \code{NA}s in sorting variables see the "Sort Order" section in \code{vignette("generic")}.
 
 \describe{
 \item{Permitted values}{list of expressions created by \code{exprs()}, e.g., \code{exprs(ADT, desc(AVAL))} or \code{NULL}}

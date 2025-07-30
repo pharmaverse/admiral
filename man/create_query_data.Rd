@@ -76,7 +76,8 @@ argument in \code{derive_vars_query()}
 }
 \description{
 Creates a queries dataset as input dataset to the \code{dataset_queries} argument
-in the \code{derive_vars_query()} function as defined in the \href{../articles/queries_dataset.html}{Queries Dataset Documentation}.
+in the \code{derive_vars_query()} function as defined in the
+\code{vignette("queries_dataset")}.
 }
 \details{
 For each \code{query()} object listed in the \code{queries} argument, the terms belonging
@@ -92,7 +93,8 @@ the data frames and all terms read from the basket database referenced by the
 \code{basket_select()} objects are collated.
 }
 
-The following variables (as described in \href{../articles/queries_dataset.html}{Queries Dataset Documentation}) are created:
+The following variables (as described in \code{vignette("queries_dataset")} are
+created:
 \itemize{
 \item \code{PREFIX}: Prefix of the variables to be created by
 \code{derive_vars_query()} as specified by the \code{prefix} element.
@@ -208,7 +210,8 @@ create_query_data(
 )
 }
 \seealso{
-\code{\link[=derive_vars_query]{derive_vars_query()}}, \code{\link[=query]{query()}}, \code{\link[=basket_select]{basket_select()}}, \href{../articles/queries_dataset.html}{Queries Dataset Documentation}
+\code{\link[=derive_vars_query]{derive_vars_query()}}, \code{\link[=query]{query()}}, \code{\link[=basket_select]{basket_select()}},
+\code{vignette("queries_dataset")}
 
 Creating auxiliary datasets: 
 \code{\link{consolidate_metadata}()},

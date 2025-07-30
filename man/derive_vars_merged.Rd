@@ -63,7 +63,7 @@ specified order.
 
 Variables defined by the \code{new_vars} argument can be used in the sort order.
 
-For handling of \code{NA}s in sorting variables see \href{../articles/generic.html#sort_order}{Sort Order}.
+For handling of \code{NA}s in sorting variables see the "Sort Order" section in \code{vignette("generic")}.
 
 \describe{
 \item{Permitted values}{list of variables created by \code{exprs()}, e.g., \code{exprs(USUBJID, VISIT)}}
@@ -515,5 +515,5 @@ derive_vars_merged(
 \subsection{Further examples}{
 
 Further example usages of this function can be found in the
-\href{../articles/generic.html}{Generic Derivations vignette}.}}
+\code{vignette("generic")}.}}
 

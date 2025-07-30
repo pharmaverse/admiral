@@ -47,6 +47,8 @@
 #' a warning is issued and `*DTF` will be overwritten.
 #'
 #'
+#' @seealso `vignette("imputation")`
+#'
 #' @family der_date_time
 #'
 #' @keywords der_gen der_date_time
@@ -202,7 +204,7 @@
 #' )
 #' @caption Further examples
 #' @info Further example usages of this function can be found in the
-#'   [Date and Time Imputation vignette](../articles/imputation.html).
+#'   `vignette("imputation")`.
 derive_vars_dt <- function(dataset,
                            new_vars_prefix,
                            dtc,

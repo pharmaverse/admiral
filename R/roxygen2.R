@@ -37,8 +37,8 @@ roxygen_param_by_vars <- function(rename = FALSE) {
 
 roxygen_order_na_handling <- function() {
   paste(
-    "For handling of `NA`s in sorting variables see",
-    "[Sort Order](../articles/generic.html#sort_order)."
+    "For handling of `NA`s in sorting variables see the \"Sort Order\" section",
+    "in `vignette(\"generic\")`."
   )
 }
 

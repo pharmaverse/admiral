@@ -2,8 +2,8 @@
 #' `derive_vars_query()`
 #'
 #' Creates a queries dataset as input dataset to the `dataset_queries` argument
-#' in the `derive_vars_query()` function as defined in the [Queries Dataset
-#' Documentation](../articles/queries_dataset.html).
+#' in the `derive_vars_query()` function as defined in the
+#' `vignette("queries_dataset")`.
 #'
 #' @param queries List of queries
 #'
@@ -67,8 +67,8 @@
 #'   the data frames and all terms read from the basket database referenced by the
 #'   `basket_select()` objects are collated.
 #'
-#' The following variables (as described in [Queries Dataset
-#' Documentation](../articles/queries_dataset.html)) are created:
+#' The following variables (as described in `vignette("queries_dataset")` are
+#' created:
 #'
 #'   * `PREFIX`: Prefix of the variables to be created by
 #'   `derive_vars_query()` as specified by the `prefix` element.
@@ -98,8 +98,8 @@
 #' @family create_aux
 #' @keywords create_aux
 #'
-#' @seealso [derive_vars_query()], [query()], [basket_select()], [Queries Dataset
-#' Documentation](../articles/queries_dataset.html)
+#' @seealso [derive_vars_query()], [query()], [basket_select()],
+#'   `vignette("queries_dataset")`
 #'
 #' @export
 #'
@@ -332,8 +332,7 @@ create_query_data <- function(queries,
 #'
 #'   The value is passed to the access function.
 #'
-#' @family der_occds
-#' @keywords der_occds
+#' @keywords internal
 #'
 #' @return Output dataset of the access function
 #'
@@ -418,7 +417,7 @@ get_terms_from_db <- function(version,
 #'
 #' @return An error is issued if `version` or `fun` is null.
 #'
-#' @noRd
+#' @keywords internal
 assert_db_requirements <- function(version, version_arg_name, fun, fun_arg_name, queries, i) {
   if (is.null(fun)) {
     msg <-
@@ -509,8 +508,8 @@ assert_db_requirements <- function(version, version_arg_name, fun, fun_arg_name,
 #'   data frame, or a list of data frames and `basket_select()` objects.
 #'
 #'
-#' @seealso [create_query_data()], [basket_select()], [Queries Dataset
-#' Documentation](../articles/queries_dataset.html)
+#' @seealso [create_query_data()], [basket_select()],
+#'   `vignette("queries_dataset")`
 #'
 #' @family source_specifications
 #' @keywords source_specifications
@@ -520,7 +519,6 @@ assert_db_requirements <- function(version, version_arg_name, fun, fun_arg_name,
 #' @return An object of class `query`.
 #'
 #' @examples
-#'
 #' # create a query for an SMQ
 #' library(tibble)
 #' library(dplyr, warn.conflicts = FALSE)
@@ -611,7 +609,7 @@ query <- function(prefix,
 #' @seealso [query()]
 #'
 #' @return The original object.
-#' @noRd
+#' @keywords internal
 validate_query <- function(obj) {
   assert_s3_class(obj, "query")
   values <- unclass(obj)
@@ -746,7 +744,7 @@ validate_query <- function(obj) {
 #'   )
 #' )
 #'
-#' @noRd
+#' @keywords internal
 assert_terms <- function(terms,
                          expect_grpname = FALSE,
                          expect_grpid = FALSE,
@@ -862,7 +860,7 @@ basket_select <- function(name = NULL,
 #'
 #' @seealso [basket_select()]
 #'
-#' @noRd
+#' @keywords internal
 #'
 #' @return The original object.
 validate_basket_select <- function(obj) {

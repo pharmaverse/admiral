@@ -72,7 +72,7 @@ added to the additional dataset and can be used in the filter conditions
 (\code{filter_add}, \code{filter_join}) and for \code{join_vars} and \code{new_vars}. The
 variable is not included in the output dataset.
 
-For handling of \code{NA}s in sorting variables see \href{../articles/generic.html#sort_order}{Sort Order}.
+For handling of \code{NA}s in sorting variables see the "Sort Order" section in \code{vignette("generic")}.
 
 \describe{
 \item{Permitted values}{list of variables created by \code{exprs()}, e.g., \code{exprs(USUBJID, VISIT)}}
@@ -935,7 +935,7 @@ derive_vars_joined(
 \subsection{Further examples}{
 
 Further example usages of this function can be found in the
-\href{../articles/generic.html}{Generic Derivations vignette}.
+\code{vignette("generic")}.
 
 Equivalent examples for using the \code{exist_flag}, \code{true_value}, \code{false_value},
 \code{missing_values} and \code{check_type} arguments can be found in \code{derive_vars_merged()}.}}
