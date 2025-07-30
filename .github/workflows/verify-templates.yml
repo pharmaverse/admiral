@@ -10,7 +10,7 @@ on:
   push:
 
 jobs:
-  Check-post-tags:
+  Run and compare templates:
     runs-on: ubuntu-latest
     container:
       image: "rocker/tidyverse:4.2.1"

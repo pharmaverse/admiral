@@ -17,11 +17,10 @@ adam_names <- vapply(
 
 # Ignore ADLBHY
 adam_names <- adam_names[adam_names != "adlbhy"]
-adam_names = c("adsl", "adcm")
+adam_names <- c("adsl", "adcm")
 
 # Run templates and compare ----
 diffs <- purrr::map(adam_names, .progress = TRUE, function(adam) {
-
   cli_inform("Running {adam} template and comparing with pharmaverseadam version...")
 
   ## Get {pharmaverseadam} dataset ----
@@ -48,7 +47,7 @@ diffs <- purrr::map(adam_names, .progress = TRUE, function(adam) {
   if (diffdf::diffdf_has_issues(res)) {
     cli_inform("Differences identified in {adam}! See diffdf output at the end.")
     res
-  }else{
+  } else {
     cli_inform("No differences identified in {adam}.\n")
   }
 }) %>%
@@ -59,7 +58,7 @@ cli_inform("Done with running ADaM templates.\n")
 # Print
 diffs_with_issues <- diffs[!sapply(diffs, is.null)]
 
-if(length(diffs_with_issues) > 0){
+if (length(diffs_with_issues) > 0) {
   print(diffs_with_issues)
   cli::cli_abort("Erroring due differences between admiral and pharmaverseadam templates.")
 }
