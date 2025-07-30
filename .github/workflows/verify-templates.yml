@@ -18,9 +18,6 @@ jobs:
     container:
       image: "rocker/tidyverse:4.2.1"
     steps:
-      - name: Set US Eastern timezone
-        run: sudo timedatectl set-timezone America/New_York
-
       - name: Check out repository
         uses: actions/checkout@v4
         with:
