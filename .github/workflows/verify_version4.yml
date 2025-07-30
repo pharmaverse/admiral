@@ -56,16 +56,17 @@ jobs:
       - name: Run QC script
         run: R -e 'quarto::quarto_render("qcReport.qmd")'
 
+      - name: qc.Rmd to appears in summary
+        run: |
+          cat qc.Rmd >> $GITHUB_STEP_SUMMARY
+
+
       - name: Upload report artifact
         uses: actions/upload-artifact@v4
         with:
           name: qcReport.html
           path: qcReport.html
 
-
-      - name: qc.Rmd to appears in summary
-        run: |
-          cat qc.Rmd >> $GITHUB_STEP_SUMMARY
 
 # remove this,  keep commit message simple.
 #      - name: Comment PR with qc.Rmd (if Pull Request)
