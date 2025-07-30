@@ -58,7 +58,7 @@ jobs:
 
 
       - name: Upload qc.Rmd
-        run: |
+        uses: actions/upload-artifact@v4
         with:
           name: qc.Rmd
           path: qc.Rmd
