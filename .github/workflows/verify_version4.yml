@@ -10,6 +10,7 @@ on:
       -  main
     paths:
       -  '**.yml'
+  push:
 # force ?  github actions to "see" this yml file  (this trick works)
 #  push:
 #    branches:
