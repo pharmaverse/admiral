@@ -58,14 +58,15 @@ jobs:
 
 
 
-      - name:  fail
-        run: exit 1
 
       - name: Upload qc.Rmd
         uses: actions/upload-artifact@v4
         with:
           name: qc.Rmd
           path: qc.Rmd
+
+      - name:  fail
+        run: exit 1
 
       - name: Upload report artifact
         uses: actions/upload-artifact@v4
