@@ -57,6 +57,12 @@ jobs:
           cat qc.Rmd >> $GITHUB_STEP_SUMMARY
 
 
+      - name: Upload qc.Rmd
+        run: |
+        with:
+          name: qc.Rmd
+          path: qc.Rmd
+
       - name: Upload report artifact
         uses: actions/upload-artifact@v4
         with:
