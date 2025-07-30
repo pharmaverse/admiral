@@ -2,6 +2,7 @@ library(purrr)
 library(cli)
 library(stringr)
 library(devtools)
+devtools::install_github("pharmaverse/pharmaversesdtm", ref = "main")
 devtools::install_github("pharmaverse/pharmaverseadam", ref = "main")
 library(pharmaverseadam)
 
@@ -14,7 +15,6 @@ adam_names <- vapply(
   templates, function(x) gsub("ad_|\\.R", "", x),
   USE.NAMES = FALSE, character(length = 1)
 )
-adam_names = c("adsl", "adcm")
 
 # Ignore ADLBHY
 adam_names <- adam_names[adam_names != "adlbhy"]
@@ -32,7 +32,7 @@ diffs <- purrr::map(adam_names, function(adam) {
   source(paste0("inst/templates/ad_", adam, ".R"), echo = FALSE)
   dataset_new <- get(adam)
 
-  ## remove column attributes from both ----
+  ## Remove column attributes from both ----
   for (name in names(dataset_new)) {
     attr(dataset_new[[name]], "label") <- NULL
   }
