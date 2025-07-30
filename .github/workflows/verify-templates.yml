@@ -19,8 +19,8 @@ jobs:
       - name: Check out repository
         uses: actions/checkout@v4
         with:
-         ref: ${{ github.event.pull_request.head.ref }} # Checkout the branch of the PR
-         fetch-depth: 0
+          ref: ${{ github.event.pull_request.head.ref }} # Checkout the branch of the PR
+          fetch-depth: 0
 
       - name: Print PR details
         run: |
@@ -35,8 +35,12 @@ jobs:
 
       - name: Install R dependencies
         run: |
+          # Use 'jammy' for ubuntu-22.04 (the OS for ubuntu-latest) to avoid library conflicts
           Rscript -e 'install.packages(c("dplyr", "jsonlite", "quarto", "diffdf", "rmarkdown", "purrr", "devtools", "cli",
-          "safetyData", "tibble", "stringr"), repos = "https://packagemanager.posit.co/cran/__linux__/noble/latest")'
+          "safetyData", "tibble", "stringr"), repos = "https://packagemanager.posit.co/cran/__linux__/jammy/latest")'
+
+      - name: Install admiral from local source
+        run: Rscript -e 'devtools::install()'
 
       - name: Run and compare templates
         run: source("data-raw/run_and_compare_templates.R")
