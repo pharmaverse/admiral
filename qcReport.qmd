@@ -60,7 +60,7 @@ for (i in seq_along(comp_dataset_names)) {
 }
 ```
 
-\<! -- #\| output: false \# why? --\>
+<! -- #\| output: false \# why? -->
 
 `` `r length(input_dataset_names)` `` Base ADaM datasets were found in the `admiral/inst/verify/old` directory. The datasets are \``` r input_dataset_names` ``
 

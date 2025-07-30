@@ -1,10 +1,12 @@
 ---
 title: "Verify Templates Report"
 format: html
-date: "2025-07-15"
+date: "2025-07-29"
 editor: visual
 execute:
   keep-md: true
+editor_options: 
+  chunk_output_type: console
 ---
 
 
@@ -14,7 +16,9 @@ execute:
 
 
 
-This is the QC report dated 2025-07-15. The report compares the datasets in the `pilot5-submission/pilot5-input/adamdata` directory with the datasets in the `~/GitHub/submissions-pilot3-adam/submission/adam` directory. The datasets are compared using the `diffdf` package.
+This is the QC report dated 2025-07-29.
+
+The report compares the ADaM datasets in the `pharmaverseadam` package with the ADaM `datasets generated from templates during this run`. The datasets are compared using the `diffdf` package.
 
 This run was initiated by  on the  Git ref.
 
@@ -53,9 +57,9 @@ loaded via a namespace (and not attached):
  [1] digest_0.6.37     fastmap_1.2.0     xfun_0.52         magrittr_2.0.3   
  [5] glue_1.8.0        knitr_1.50        pkgconfig_2.0.3   htmltools_0.5.8.1
  [9] rmarkdown_2.29    lifecycle_1.0.4   cli_3.6.5         vctrs_0.6.5      
-[13] compiler_4.5.1    tools_4.5.1       pillar_1.10.2     evaluate_1.0.3   
-[17] yaml_2.3.10       rlang_1.1.6       jsonlite_2.0.0    htmlwidgets_1.6.4
-[21] stringi_1.8.7    
+[13] compiler_4.5.1    rstudioapi_0.17.1 tools_4.5.1       pillar_1.10.2    
+[17] evaluate_1.0.3    yaml_2.3.10       rlang_1.1.6       jsonlite_2.0.0   
+[21] htmlwidgets_1.6.4 stringi_1.8.7    
 ```
 
 
@@ -68,21 +72,43 @@ loaded via a namespace (and not attached):
 
 
 
-10 datasets were found in the `pilot5-submission/pilot5-input/adamdata` directory. The datasets are adae, adcm, adeg, adex, adlb, admh, adpp, adppk, adsl, advs
+<! -- #\| output: false \# why? -->
+
+`` 11 `` Base ADaM datasets were found in the `admiral/inst/verify/old` directory. The datasets are \``` r input_dataset_names` ``
 
 
 
 ::: {.cell}
+::: {.cell-output .cell-output-stderr}
+
+```
+Warning in diffdf(base = get(comp_dataset), compare = get(new_dataset)): 
+There are columns in BASE that are not in COMPARE !!
+```
+
 
 :::
 
-## Dataset QC Check Complete! 
+::: {.cell-output .cell-output-stderr}
 
-Date:  2025-07-15 
+```
+Warning in diffdf(base = get(comp_dataset), compare = get(new_dataset)): 
+Not all Values Compared Equal
+Warning in diffdf(base = get(comp_dataset), compare = get(new_dataset)): 
+Not all Values Compared Equal
+```
+
+
+:::
+:::
+
+## Verify Templates Check Complete! 
+
+Date:  2025-07-29 
 Run by:   
 Git Ref:   
-BASE:  Pilot 5 Datasets 
-COMPARE:  Pilot 3 Datasets 
+BASE:  Generated ADaM Datasets from Templates during Run 
+COMPARE:  ADaM Datasets from pharmaverseadam  
 <details>
 <summary>❌ Dataset: adae</summary>
 
@@ -94,29 +120,11 @@ Summary of BASE and COMPARE
   ==================================================================
     PROPERTY             BASE                       COMP            
   ------------------------------------------------------------------
-      Name         get(new_dataset)           get(comp_dataset)     
+      Name         get(comp_dataset)          get(new_dataset)      
      Class     "tbl_df, tbl, data.frame"  "tbl_df, tbl, data.frame" 
     Rows(#)              1191                       1191            
    Columns(#)             107                        105            
   ------------------------------------------------------------------
-
-
-There are columns in BASE and COMPARE with differing attributes !!
-First 10 of 79 rows are shown in table below
-  =======================================================================
-   VARIABLE  ATTR_NAME  VALUES.BASE              VALUES.COMP             
-  -----------------------------------------------------------------------
-    ADURN      label       NULL            "Analysis Duration (N)"       
-    ADURU      label       NULL           "Analysis Duration Units"      
-    AEACN      label       NULL      "Action Taken with Study Treatm..." 
-   AEBDSYCD    label       NULL      "Body System or Organ Class Cod..." 
-   AEBODSYS    label       NULL         "Body System or Organ Class"     
-   AEDECOD     label       NULL           "Dictionary-Derived Term"      
-    AEDTC      label       NULL           "Date/Time of Collection"      
-   AEENDTC     label       NULL       "End Date/Time of Adverse Event"   
-    AEENDY     label       NULL      "Study Day of End of Adverse Ev..." 
-    AEHLGT     label       NULL            "High Level Group Term"       
-  -----------------------------------------------------------------------
 
 
 There are columns in BASE that are not in COMPARE !!
@@ -132,40 +140,11 @@ There are columns in BASE that are not in COMPARE !!
 </details>
 
 <details>
-<summary>❌ Dataset: adcm</summary>
+<summary>✅ Dataset: adcm</summary>
 
 ```
 
-Differences found between the objects!
-
-Summary of BASE and COMPARE
-  ==================================================================
-    PROPERTY             BASE                       COMP            
-  ------------------------------------------------------------------
-      Name         get(new_dataset)           get(comp_dataset)     
-     Class     "tbl_df, tbl, data.frame"  "tbl_df, tbl, data.frame" 
-    Rows(#)              7510                       7510            
-   Columns(#)             95                         95             
-  ------------------------------------------------------------------
-
-
-There are columns in BASE and COMPARE with differing attributes !!
-First 10 of 68 rows are shown in table below
-  =======================================================================
-   VARIABLE  ATTR_NAME  VALUES.BASE              VALUES.COMP             
-  -----------------------------------------------------------------------
-    ADURN      label       NULL            "Analysis Duration (N)"       
-    ADURU      label       NULL           "Analysis Duration Units"      
-    AENDT      label       NULL              "Analysis End Date"         
-    AENDTF     label       NULL      "Analysis End Date Imputation F..." 
-    AENDTM     label       NULL           "Analysis End Date/Time"       
-    AENDY      label       NULL          "Analysis End Relative Day"     
-    AENTMF     label       NULL      "Analysis End Time Imputation F..." 
-    AGEGR1     label       NULL             "Pooled Age Group 1"         
-   ANL01FL     label       NULL              "Analysis Flag 01"          
-   AOCCPFL     label       NULL      "1st Occurrence of Preferred Te..." 
-  -----------------------------------------------------------------------
-
+No issues were found!
 ```
 
 </details>
@@ -181,447 +160,151 @@ Summary of BASE and COMPARE
   ==================================================================
     PROPERTY             BASE                       COMP            
   ------------------------------------------------------------------
-      Name         get(new_dataset)           get(comp_dataset)     
+      Name         get(comp_dataset)          get(new_dataset)      
      Class     "tbl_df, tbl, data.frame"  "tbl_df, tbl, data.frame" 
     Rows(#)              78756                      78756           
    Columns(#)             108                        108            
   ------------------------------------------------------------------
 
 
-There are columns in BASE and COMPARE with differing attributes !!
-First 10 of 82 rows are shown in table below
-  =======================================================================
-   VARIABLE  ATTR_NAME  VALUES.BASE              VALUES.COMP             
-  -----------------------------------------------------------------------
-    ABLFL      label       NULL            "Baseline Record Flag"        
-     ADT       label       NULL                "Analysis Date"           
-     ADTM      label       NULL              "Analysis Datetime"         
-     ADY       label       NULL            "Analysis Relative Day"       
-    AGEGR1     label       NULL             "Pooled Age Group 1"         
-   ANL01FL     label       NULL              "Analysis Flag 01"          
-    ANRHI      label       NULL      "Analysis Normal Range Upper Li..." 
-    ANRIND     label       NULL      "Analysis Reference Range Indic..." 
-    ANRLO      label       NULL      "Analysis Normal Range Lower Li..." 
-     ASEQ      label       NULL          "Analysis Sequence Number"      
-  -----------------------------------------------------------------------
-
-
 Not all Values Compared Equal
-First 10 of 12 rows are shown in table below
   =============================
    Variable  No of Differences 
   -----------------------------
-     ADY           19159       
-   BASETYPE        78756       
-    ABLFL           7112       
-     BASE          76493       
-    BNRIND         25393       
-     CHG           43252       
-     PCHG          43252       
-   ANL01FL         35526       
-   AVALCAT1        43828       
-   CHGCAT1         24784       
+    EGSEQ          26717       
+   EGSTRESU        24660       
+    EGTPT          57540       
+     ATPT          57540       
   -----------------------------
 
 
-First 10 of 19159 rows are shown in table below
+First 10 of 26717 rows are shown in table below
   ========================================
    VARIABLE  ..ROWNUMBER..  BASE  COMPARE 
   ----------------------------------------
-     ADY          15         -7     NA    
-     ADY          19         -2     NA    
-     ADY          23          1     NA    
-     ADY          27         13     NA    
-     ADY          31         15     NA    
-     ADY          35         29     NA    
-     ADY          39         31     NA    
-     ADY          43         42     NA    
-     ADY          47         63     NA    
-     ADY          51         84     NA    
+    EGSEQ          1        127      1    
+    EGSEQ          2        128      2    
+    EGSEQ          3        129      3    
+    EGSEQ          4        130      4    
+    EGSEQ          5        131      5    
+    EGSEQ          6        132      6    
+    EGSEQ          7        133      7    
+    EGSEQ          8        134      8    
+    EGSEQ          9        135      9    
+    EGSEQ         10        136     10    
   ----------------------------------------
 
 
-First 10 of 78756 rows are shown in table below
-  ====================================================
-   VARIABLE  ..ROWNUMBER..        BASE        COMPARE 
-  ----------------------------------------------------
-   BASETYPE        1        "BASELINE DAY 1"   LAST   
-   BASETYPE        2        "BASELINE DAY 1"   LAST   
-   BASETYPE        3        "BASELINE DAY 1"   LAST   
-   BASETYPE        4        "BASELINE DAY 1"   LAST   
-   BASETYPE        5        "BASELINE DAY 1"   LAST   
-   BASETYPE        6        "BASELINE DAY 1"   LAST   
-   BASETYPE        7        "BASELINE DAY 1"   LAST   
-   BASETYPE        8        "BASELINE DAY 1"   LAST   
-   BASETYPE        9        "BASELINE DAY 1"   LAST   
-   BASETYPE       10        "BASELINE DAY 1"   LAST   
-  ----------------------------------------------------
-
-
-First 10 of 7112 rows are shown in table below
-  ========================================
-   VARIABLE  ..ROWNUMBER..  BASE  COMPARE 
-  ----------------------------------------
-    ABLFL          20       <NA>     Y    
-    ABLFL          21       <NA>     Y    
-    ABLFL          22       <NA>     Y    
-    ABLFL          23        Y     <NA>   
-    ABLFL          76       <NA>     Y    
-    ABLFL          77       <NA>     Y    
-    ABLFL          78       <NA>     Y    
-    ABLFL          79        Y     <NA>   
-    ABLFL         132       <NA>     Y    
-    ABLFL         133       <NA>     Y    
-  ----------------------------------------
-
-
-First 10 of 76493 rows are shown in table below
-  ============================================
-   VARIABLE  ..ROWNUMBER..    BASE    COMPARE 
-  --------------------------------------------
-     BASE         12        73.66667    73    
-     BASE         13        73.66667    83    
-     BASE         14        73.66667    65    
-     BASE         15        73.66667    NA    
-     BASE         16        73.66667    73    
-     BASE         17        73.66667    83    
-     BASE         18        73.66667    65    
-     BASE         19        73.66667    NA    
-     BASE         20        73.66667    73    
-     BASE         21        73.66667    83    
-  --------------------------------------------
-
-
-First 10 of 25393 rows are shown in table below
-  ==========================================
-   VARIABLE  ..ROWNUMBER..   BASE   COMPARE 
-  ------------------------------------------
-    BNRIND        15        NORMAL   <NA>   
-    BNRIND        19        NORMAL   <NA>   
-    BNRIND        23        NORMAL   <NA>   
-    BNRIND        27        NORMAL   <NA>   
-    BNRIND        31        NORMAL   <NA>   
-    BNRIND        35        NORMAL   <NA>   
-    BNRIND        39        NORMAL   <NA>   
-    BNRIND        43        NORMAL   <NA>   
-    BNRIND        47        NORMAL   <NA>   
-    BNRIND        51        NORMAL   <NA>   
-  ------------------------------------------
-
-
-First 10 of 43252 rows are shown in table below
+First 10 of 24660 rows are shown in table below
   ===============================================
-   VARIABLE  ..ROWNUMBER..     BASE      COMPARE 
+   VARIABLE  ..ROWNUMBER..    BASE      COMPARE  
   -----------------------------------------------
-     CHG          28        -10.6666667    -10   
-     CHG          29          9.3333333      0   
-     CHG          30         -7.6666667      1   
-     CHG          31         -3.0000000     NA   
-     CHG          32        -12.6666667    -12   
-     CHG          33         -8.6666667    -18   
-     CHG          34          0.3333333      9   
-     CHG          35         -7.0000000     NA   
-     CHG          40         -9.6666667     -9   
-     CHG          41         -9.6666667    -19   
+   EGSTRESU       12        BEATS/MIN  beats/min 
+   EGSTRESU       13        BEATS/MIN  beats/min 
+   EGSTRESU       14        BEATS/MIN  beats/min 
+   EGSTRESU       16        BEATS/MIN  beats/min 
+   EGSTRESU       17        BEATS/MIN  beats/min 
+   EGSTRESU       18        BEATS/MIN  beats/min 
+   EGSTRESU       20        BEATS/MIN  beats/min 
+   EGSTRESU       21        BEATS/MIN  beats/min 
+   EGSTRESU       22        BEATS/MIN  beats/min 
+   EGSTRESU       24        BEATS/MIN  beats/min 
   -----------------------------------------------
 
 
-First 10 of 43252 rows are shown in table below
-  ==================================================
-   VARIABLE  ..ROWNUMBER..     BASE       COMPARE   
-  --------------------------------------------------
-     PCHG         28        -14.4796380  -13.698630 
-     PCHG         29         12.6696833    0.000000 
-     PCHG         30        -10.4072398    1.538462 
-     PCHG         31         -4.0723982          NA 
-     PCHG         32        -17.1945701  -16.438356 
-     PCHG         33        -11.7647059  -21.686747 
-     PCHG         34          0.4524887   13.846154 
-     PCHG         35         -9.5022624          NA 
-     PCHG         40        -13.1221719  -12.328767 
-     PCHG         41        -13.1221719  -22.891566 
-  --------------------------------------------------
+First 10 of 57540 rows are shown in table below
+  =================================================================
+   VARIABLE  ..ROWNUMBER..  BASE              COMPARE              
+  -----------------------------------------------------------------
+    EGTPT         12         1    "AFTER LYING DOWN FOR 5 MINUTES" 
+    EGTPT         13         2     "AFTER STANDING FOR 1 MINUTE"   
+    EGTPT         14         3     "AFTER STANDING FOR 3 MINUTES"  
+    EGTPT         16         1    "AFTER LYING DOWN FOR 5 MINUTES" 
+    EGTPT         17         2     "AFTER STANDING FOR 1 MINUTE"   
+    EGTPT         18         3     "AFTER STANDING FOR 3 MINUTES"  
+    EGTPT         20         1    "AFTER LYING DOWN FOR 5 MINUTES" 
+    EGTPT         21         2     "AFTER STANDING FOR 1 MINUTE"   
+    EGTPT         22         3     "AFTER STANDING FOR 3 MINUTES"  
+    EGTPT         24         1    "AFTER LYING DOWN FOR 5 MINUTES" 
+  -----------------------------------------------------------------
 
 
-First 10 of 35526 rows are shown in table below
-  ========================================
-   VARIABLE  ..ROWNUMBER..  BASE  COMPARE 
-  ----------------------------------------
-   ANL01FL         3        <NA>     Y    
-   ANL01FL         4        <NA>     Y    
-   ANL01FL         5        <NA>     Y    
-   ANL01FL         6        <NA>     Y    
-   ANL01FL         7        <NA>     Y    
-   ANL01FL         8        <NA>     Y    
-   ANL01FL         9        <NA>     Y    
-   ANL01FL        10        <NA>     Y    
-   ANL01FL        11        <NA>     Y    
-   ANL01FL        23         Y     <NA>   
-  ----------------------------------------
-
-
-First 10 of 43828 rows are shown in table below
-  ===========================================================
-   VARIABLE  ..ROWNUMBER..       BASE           COMPARE      
-  -----------------------------------------------------------
-   AVALCAT1       68         "<= 450 ms"     "<= 450 msec"   
-   AVALCAT1       69        ">450<=480 ms"  ">450<=480 msec" 
-   AVALCAT1       70         "<= 450 ms"     "<= 450 msec"   
-   AVALCAT1       71         "<= 450 ms"     "<= 450 msec"   
-   AVALCAT1       72        ">450<=480 ms"  ">450<=480 msec" 
-   AVALCAT1       73          ">500 ms"       ">500 msec"    
-   AVALCAT1       74         "<= 450 ms"     "<= 450 msec"   
-   AVALCAT1       75         "<= 450 ms"     "<= 450 msec"   
-   AVALCAT1       76        ">450<=480 ms"  ">450<=480 msec" 
-   AVALCAT1       77        ">450<=480 ms"  ">450<=480 msec" 
-  -----------------------------------------------------------
-
-
-First 10 of 24784 rows are shown in table below
-  =======================================================
-   VARIABLE  ..ROWNUMBER..      BASE         COMPARE     
-  -------------------------------------------------------
-   CHGCAT1        84         "<= 30 ms"    "<= 30 msec"  
-   CHGCAT1        85        ">30<=60 ms"  ">30<=60 msec" 
-   CHGCAT1        86          ">60 ms"      ">60 msec"   
-   CHGCAT1        87        ">30<=60 ms"       <NA>      
-   CHGCAT1        88         "<= 30 ms"    "<= 30 msec"  
-   CHGCAT1        89        ">30<=60 ms"   "<= 30 msec"  
-   CHGCAT1        90          ">60 ms"      ">60 msec"   
-   CHGCAT1        91         "<= 30 ms"        <NA>      
-   CHGCAT1        96         "<= 30 ms"    "<= 30 msec"  
-   CHGCAT1        97         "<= 30 ms"    "<= 30 msec"  
-  -------------------------------------------------------
-
-
-First 10 of 10955 rows are shown in table below
-  ========================================
-   VARIABLE  ..ROWNUMBER..  BASE  COMPARE 
-  ----------------------------------------
-   CHGCAT1N        87        2      NA    
-   CHGCAT1N        89        2       1    
-   CHGCAT1N        91        1      NA    
-   CHGCAT1N        99        2      NA    
-   CHGCAT1N       100        3       2    
-   CHGCAT1N       101        2       1    
-   CHGCAT1N       103        2      NA    
-   CHGCAT1N       107        1      NA    
-   CHGCAT1N       110        2       3    
-   CHGCAT1N       111        1      NA    
-  ----------------------------------------
-
-
-First 10 of 65742 rows are shown in table below
-  ===================================================================
-   VARIABLE  ..ROWNUMBER..         BASE               COMPARE        
-  -------------------------------------------------------------------
-    PARAM         68        "QT Duration (ms)"  "QT Duration (msec)" 
-    PARAM         69        "QT Duration (ms)"  "QT Duration (msec)" 
-    PARAM         70        "QT Duration (ms)"  "QT Duration (msec)" 
-    PARAM         71        "QT Duration (ms)"  "QT Duration (msec)" 
-    PARAM         72        "QT Duration (ms)"  "QT Duration (msec)" 
-    PARAM         73        "QT Duration (ms)"  "QT Duration (msec)" 
-    PARAM         74        "QT Duration (ms)"  "QT Duration (msec)" 
-    PARAM         75        "QT Duration (ms)"  "QT Duration (msec)" 
-    PARAM         76        "QT Duration (ms)"  "QT Duration (msec)" 
-    PARAM         77        "QT Duration (ms)"  "QT Duration (msec)" 
-  -------------------------------------------------------------------
+First 10 of 57540 rows are shown in table below
+  =================================================================
+   VARIABLE  ..ROWNUMBER..  BASE              COMPARE              
+  -----------------------------------------------------------------
+     ATPT         12         1    "AFTER LYING DOWN FOR 5 MINUTES" 
+     ATPT         13         2     "AFTER STANDING FOR 1 MINUTE"   
+     ATPT         14         3     "AFTER STANDING FOR 3 MINUTES"  
+     ATPT         16         1    "AFTER LYING DOWN FOR 5 MINUTES" 
+     ATPT         17         2     "AFTER STANDING FOR 1 MINUTE"   
+     ATPT         18         3     "AFTER STANDING FOR 3 MINUTES"  
+     ATPT         20         1    "AFTER LYING DOWN FOR 5 MINUTES" 
+     ATPT         21         2     "AFTER STANDING FOR 1 MINUTE"   
+     ATPT         22         3     "AFTER STANDING FOR 3 MINUTES"  
+     ATPT         24         1    "AFTER LYING DOWN FOR 5 MINUTES" 
+  -----------------------------------------------------------------
 
 ```
 
 </details>
 
 <details>
-<summary>❌ Dataset: adex</summary>
+<summary>✅ Dataset: adex</summary>
 
 ```
 
-Differences found between the objects!
-
-Summary of BASE and COMPARE
-  ==================================================================
-    PROPERTY             BASE                       COMP            
-  ------------------------------------------------------------------
-      Name         get(new_dataset)           get(comp_dataset)     
-     Class     "tbl_df, tbl, data.frame"  "tbl_df, tbl, data.frame" 
-    Rows(#)              6315                       6315            
-   Columns(#)             92                         92             
-  ------------------------------------------------------------------
-
-
-There are columns in BASE and COMPARE with differing attributes !!
-First 10 of 66 rows are shown in table below
-  =======================================================================
-   VARIABLE  ATTR_NAME  VALUES.BASE              VALUES.COMP             
-  -----------------------------------------------------------------------
-    AENDT      label       NULL              "Analysis End Date"         
-    AENDTF     label       NULL      "Analysis End Date Imputation F..." 
-    AENDTM     label       NULL            "Analysis End Datetime"       
-    AENDY      label       NULL          "Analysis End Relative Day"     
-    AENTMF     label       NULL      "Analysis End Time Imputation F..." 
-    AGEGR1     label       NULL             "Pooled Age Group 1"         
-     ASEQ      label       NULL          "Analysis Sequence Number"      
-    ASTDT      label       NULL             "Analysis Start Date"        
-    ASTDTF     label       NULL      "Analysis Start Date Imputation..." 
-    ASTDTM     label       NULL           "Analysis Start Datetime"      
-  -----------------------------------------------------------------------
-
+No issues were found!
 ```
 
 </details>
 
 <details>
-<summary>❌ Dataset: adlb</summary>
+<summary>✅ Dataset: adlb</summary>
 
 ```
 
-Differences found between the objects!
-
-Summary of BASE and COMPARE
-  ==================================================================
-    PROPERTY             BASE                       COMP            
-  ------------------------------------------------------------------
-      Name         get(new_dataset)           get(comp_dataset)     
-     Class     "tbl_df, tbl, data.frame"  "tbl_df, tbl, data.frame" 
-    Rows(#)              83652                      83652           
-   Columns(#)             115                        115            
-  ------------------------------------------------------------------
-
-
-There are columns in BASE and COMPARE with differing attributes !!
-First 10 of 89 rows are shown in table below
-  =======================================================================
-   VARIABLE  ATTR_NAME  VALUES.BASE              VALUES.COMP             
-  -----------------------------------------------------------------------
-    ABLFL      label       NULL            "Baseline Record Flag"        
-     ADT       label       NULL                "Analysis Date"           
-     ADY       label       NULL            "Analysis Relative Day"       
-    AGEGR1     label       NULL             "Pooled Age Group 1"         
-   ANL01FL     label       NULL              "Analysis Flag 01"          
-    ANRHI      label       NULL      "Analysis Normal Range Upper Li..." 
-    ANRIND     label       NULL      "Analysis Reference Range Indic..." 
-    ANRLO      label       NULL      "Analysis Normal Range Lower Li..." 
-     ASEQ      label       NULL          "Analysis Sequence Number"      
-   ATOXDSCH    label       NULL      "Analysis Toxicity Description ..." 
-  -----------------------------------------------------------------------
-
+No issues were found!
 ```
 
 </details>
 
 <details>
-<summary>❌ Dataset: admh</summary>
+<summary>✅ Dataset: admh</summary>
 
 ```
 
-Differences found between the objects!
-
-Summary of BASE and COMPARE
-  ==================================================================
-    PROPERTY             BASE                       COMP            
-  ------------------------------------------------------------------
-      Name         get(new_dataset)           get(comp_dataset)     
-     Class     "tbl_df, tbl, data.frame"  "tbl_df, tbl, data.frame" 
-    Rows(#)              1818                       1818            
-   Columns(#)             114                        114            
-  ------------------------------------------------------------------
-
-
-There are columns in BASE and COMPARE with differing attributes !!
-First 10 of 88 rows are shown in table below
-  =======================================================================
-   VARIABLE  ATTR_NAME  VALUES.BASE              VALUES.COMP             
-  -----------------------------------------------------------------------
-     ADT       label       NULL                "Analysis Date"           
-     ADY       label       NULL            "Analysis Relative Day"       
-    AENDT      label       NULL              "Analysis End Date"         
-    AENDY      label       NULL          "Analysis End Relative Day"     
-    AGEGR1     label       NULL             "Pooled Age Group 1"         
-    AHIST      label       NULL      "Response of Med Hx (past or cu..." 
-   ANL01FL     label       NULL              "Analysis Flag 01"          
-    AOCCFL     label       NULL      "1st Occurrence within Subject ..." 
-   AOCCPFL     label       NULL      "1st Occurrence of Preferred Te..." 
-   AOCCSFL     label       NULL         "1st Occurrence of SOC Flag"     
-  -----------------------------------------------------------------------
-
+No issues were found!
 ```
 
 </details>
 
 <details>
-<summary>❌ Dataset: adpp</summary>
+<summary>✅ Dataset: adpc</summary>
 
 ```
 
-Differences found between the objects!
-
-Summary of BASE and COMPARE
-  =================================================
-    PROPERTY         BASE              COMP        
-  -------------------------------------------------
-      Name     get(new_dataset)  get(comp_dataset) 
-     Class        data.frame        data.frame     
-    Rows(#)          2688              2688        
-   Columns(#)         79                79         
-  -------------------------------------------------
-
-
-There are columns in BASE and COMPARE with differing attributes !!
-First 10 of 38 rows are shown in table below
-  =======================================================================
-   VARIABLE  ATTR_NAME  VALUES.BASE              VALUES.COMP             
-  -----------------------------------------------------------------------
-     ADT       label       NULL                "Analysis Date"           
-     ADY       label       NULL            "Analysis Relative Day"       
-    AGEGR1     label       NULL             "Pooled Age Group 1"         
-   AVALCA1N    label       NULL        "Analysis Value Category 1 (N)"   
-   AVALCAT1    label       NULL          "Analysis Value Category 1"     
-    AVISIT     label       NULL               "Analysis Visit"           
-   AVISITN     label       NULL             "Analysis Visit (N)"         
-   DTH30FL     label       NULL      "Death Within 30 Days of Last T..." 
-   DTHA30FL    label       NULL      "Death After 30 Days from Last ..." 
-    DTHADY     label       NULL            "Relative Day of Death"       
-  -----------------------------------------------------------------------
-
+No issues were found!
 ```
 
 </details>
 
 <details>
-<summary>❌ Dataset: adppk</summary>
+<summary>✅ Dataset: adpp</summary>
 
 ```
 
-Differences found between the objects!
+No issues were found!
+```
 
-Summary of BASE and COMPARE
-  ==================================================================
-    PROPERTY             BASE                       COMP            
-  ------------------------------------------------------------------
-      Name         get(new_dataset)           get(comp_dataset)     
-     Class     "tbl_df, tbl, data.frame"  "tbl_df, tbl, data.frame" 
-    Rows(#)              3522                       3522            
-   Columns(#)             61                         61             
-  ------------------------------------------------------------------
+</details>
 
+<details>
+<summary>✅ Dataset: adppk</summary>
 
-There are columns in BASE and COMPARE with differing attributes !!
-First 10 of 45 rows are shown in table below
-  =======================================================================
-   VARIABLE  ATTR_NAME  VALUES.BASE              VALUES.COMP             
-  -----------------------------------------------------------------------
-    AFRLT      label       NULL      "Act. Rel. Time from Analyte Fi..." 
-    ALLOQ      label       NULL      "Analysis Lower Limit of Quanti..." 
-     AMT       label       NULL      "Actual Amount of Dose Received..." 
-    APRLT      label       NULL      "Actual Rel Time from Previous ..." 
-     ASEQ      label       NULL          "Analysis Sequence Number"      
-     AVAL      label       NULL               "Analysis Value"           
-    AVALU      label       NULL             "Analysis Value Unit"        
-    BLQFL      label       NULL      "Below Lower Limit of Quant Fla..." 
-    BLQFN      label       NULL      "Below Lower Limit of Quant Fla..." 
-    BMIBL      label       NULL      "Baseline Body Mass Index (kg/m..." 
-  -----------------------------------------------------------------------
+```
 
+No issues were found!
 ```
 
 </details>
@@ -637,69 +320,47 @@ Summary of BASE and COMPARE
   ==================================================================
     PROPERTY             BASE                       COMP            
   ------------------------------------------------------------------
-      Name         get(new_dataset)           get(comp_dataset)     
+      Name         get(comp_dataset)          get(new_dataset)      
      Class     "tbl_df, tbl, data.frame"  "tbl_df, tbl, data.frame" 
     Rows(#)               306                        306            
    Columns(#)             54                         54             
   ------------------------------------------------------------------
 
 
-There are columns in BASE and COMPARE with differing attributes !!
-First 10 of 27 rows are shown in table below
-  =======================================================================
-   VARIABLE  ATTR_NAME  VALUES.BASE              VALUES.COMP             
-  -----------------------------------------------------------------------
-    AGEGR1     label       NULL             "Pooled Age Group 1"         
-   DTH30FL     label       NULL      "Death Within 30 Days of Last T..." 
-   DTHA30FL    label       NULL      "Death After 30 Days from Last ..." 
-    DTHADY     label       NULL            "Relative Day of Death"       
-   DTHB30FL    label       NULL      "Death Within 30 Days of First ..." 
-    DTHDT      label       NULL                "Date of Death"           
-    DTHDTF     label       NULL        "Date of Death Imputation Flag"   
-    EOSDT      label       NULL              "End of Study Date"         
-    EOSSTT     label       NULL             "End of Study Status"        
-    FRVDT      label       NULL         "Final Retrievel Visit Date"     
-  -----------------------------------------------------------------------
+Not all Values Compared Equal
+  =============================
+   Variable  No of Differences 
+  -----------------------------
+    SAFFL           52         
+  -----------------------------
+
+
+First 10 of 52 rows are shown in table below
+  ========================================
+   VARIABLE  ..ROWNUMBER..  BASE  COMPARE 
+  ----------------------------------------
+    SAFFL          7         N     <NA>   
+    SAFFL         14         N     <NA>   
+    SAFFL         18         N     <NA>   
+    SAFFL         19         N     <NA>   
+    SAFFL         28         N     <NA>   
+    SAFFL         33         N     <NA>   
+    SAFFL         38         N     <NA>   
+    SAFFL         41         N     <NA>   
+    SAFFL         43         N     <NA>   
+    SAFFL         46         N     <NA>   
+  ----------------------------------------
 
 ```
 
 </details>
 
 <details>
-<summary>❌ Dataset: advs</summary>
+<summary>✅ Dataset: advs</summary>
 
 ```
 
-Differences found between the objects!
-
-Summary of BASE and COMPARE
-  ==================================================================
-    PROPERTY             BASE                       COMP            
-  ------------------------------------------------------------------
-      Name         get(new_dataset)           get(comp_dataset)     
-     Class     "tbl_df, tbl, data.frame"  "tbl_df, tbl, data.frame" 
-    Rows(#)              65032                      65032           
-   Columns(#)             105                        105            
-  ------------------------------------------------------------------
-
-
-There are columns in BASE and COMPARE with differing attributes !!
-First 10 of 79 rows are shown in table below
-  =======================================================================
-   VARIABLE  ATTR_NAME  VALUES.BASE              VALUES.COMP             
-  -----------------------------------------------------------------------
-     A1HI      label       NULL        "Analysis Range 1 Upper Limit"    
-     A1LO      label       NULL        "Analysis Range 1 Lower Limit"    
-    ABLFL      label       NULL            "Baseline Record Flag"        
-     ADT       label       NULL                "Analysis Date"           
-     ADY       label       NULL            "Analysis Relative Day"       
-    AGEGR1     label       NULL             "Pooled Age Group 1"         
-   ANL01FL     label       NULL              "Analysis Flag 01"          
-    ANRHI      label       NULL      "Analysis Normal Range Upper Li..." 
-    ANRIND     label       NULL      "Analysis Reference Range Indic..." 
-    ANRLO      label       NULL      "Analysis Normal Range Lower Li..." 
-  -----------------------------------------------------------------------
-
+No issues were found!
 ```
 
 </details>
