@@ -15,8 +15,6 @@ jobs:
     runs-on: ubuntu-latest
     env:
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
-    container:
-      image: "rocker/tidyverse:4.2.1"
     steps:
       - name: Check out repository
         uses: actions/checkout@v4
