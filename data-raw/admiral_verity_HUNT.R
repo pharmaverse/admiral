@@ -18,7 +18,7 @@ comp_dataset_names <- tools::file_path_sans_ext(comp_dataset_paths)
 # restores files to environment
 for (i in seq_along(input_dataset_names)) {
   assign(
-    paste0("new_", input_dataset_names[i]), 
+    paste0("new_", input_dataset_names[i]),
     readRDS(file.path(input_path, input_dataset_paths[i]))
     )
 }
@@ -28,7 +28,7 @@ for (i in seq_along(comp_dataset_names)) {
     next
   }
   assign(
-    paste0("comp_", comp_dataset_names[i]), 
+    paste0("comp_", comp_dataset_names[i]),
     readRDS(file.path(comp_path, comp_dataset_paths[i]))
     )
 }
@@ -43,11 +43,66 @@ dim(old)  # 4479 x 127
 dim(new)  # 3852 x 127
 
 
-# Method A, download raw from github
+##  Focus on pharmaverseadam.  Compare total rows:  installed package vs latest github version
+
+# USE WEBSITE:
+
+# Method A - MANUAL -  in github, download raw file directly from github (https://github.com/pharmaverse/pharmaverseadam/tree/main/data)
 # dim 4479 x 127
+# method C   (package version)
+pak::pak("pharmaverseadam")
+load_all()
+C = pharmaverseadam::adpc
+dim(C)   # 3852 x 127
+
+# method , download from website
+adam_names="adpc"
+adam = "adpc"
+path = "inst/verify/old"
+
+     githubURL <- paste0( # nolint
+       "https://github.com/pharmaverse/pharmaverseadam/raw/refs/heads/main/data/",
+       adam, ".rda?raw=true"
+     )
+     cat("Downloading: ", adam, "\n")
+     download.file(
+       url = githubURL,
+       quiet = TRUE,
+       destfile = paste0(path, "/", adam, ".rda"),
+       mode = "wb"
+     )
+   })
+dim(get(load("inst/verify/old/adpc.rda")))   # 4479 x 127
 
 
-# Method B, as now done = WRONG
+
+# method C   (package version)
+pak::pak("pharmaverseadam")
+load_all()
+C = pharmaverseadam::adpc
+dim(C)   # 3852 x 127
+
+# method , download from website
+adam_names="adpc"
+adam = "adpc"
+path = "inst/verify/old"
+
+     githubURL <- paste0( # nolint
+       "https://github.com/pharmaverse/pharmaverseadam/raw/refs/heads/main/data/",
+       adam, ".rda?raw=true"
+     )
+     cat("Downloading: ", adam, "\n")
+     download.file(
+       url = githubURL,
+       quiet = TRUE,
+       destfile = paste0(path, "/", adam, ".rda"),
+       mode = "wb"
+     )
+   })
+dim(get(load("inst/verify/old/adpc.rda")))   # 4479 x 127
+
+
+# Method B, as now done = WRONG?
 
 libary(pharmaverseadam)
 adam_names=c("adpc")
@@ -62,40 +117,6 @@ path = "inst/verify/old"
 
 B1 = get(load("inst/verify/old/adpc.rda"))
 eval(B1)   # 3852 x 127
-
-
-#' Copies ADaM datasets from pharmaverseadam
-#' @param adam_names character vector  Set of  ADaMs to download.
-#' @param path Character string. Directory to save downloaded ADaMs.
-download_adam_old <- function(adam_names, path = NULL) {
-
-# method C, legacy
-adam_names="adpc"
-adam = "adpc"
-path = "inst/verify/old"
-
-   lapply(adam_names, function(adam) {
-     githubURL <- paste0( # nolint
-       "https://github.com/pharmaverse/pharmaverseadam/raw/refs/heads/main/data/",
-       adam, ".rda?raw=true"
-     )
-     cat("Downloading: ", adam, "\n")
-     download.file(
-       url = githubURL,
-       quiet = TRUE,
-       destfile = paste0(path, "/", adam, ".rda"),
-       mode = "wb"
-     )
-   })
-
-dim(get(load("inst/verify/old/adpc.rda")))   # 4479 x 127
-
-
-# method C
-pak::pak("pharmaverseadam")
-load_all()
-C = pharmaverseadam::adpc
-dim(C)   # 3852 x 127
 
 # D cloned, local copy
 # D = load("~/code/pharmaverseadam/data/adpc.rda")
@@ -115,9 +136,9 @@ for (y in input_dataset_names) {
   comp_dataset <- paste0("comp_", y)
   diffs <- diffdf(base = get(comp_dataset), compare =  get(new_dataset))
 #  if  (diffdf::diffdf_has_issues(diffs)) print(diffs)
-    
+
 #  if (length(diffs) != 0) file.create("qc.fail")
-    
+
   cat("<details>\n")
   status_emoji <- if (length(diffs) == 0) "✅" else "❌"
   cat(str_glue("<summary>{status_emoji} Dataset: {y}</summary>\n\n"))
