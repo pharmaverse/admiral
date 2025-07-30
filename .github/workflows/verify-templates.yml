@@ -10,8 +10,10 @@ on:
   push:
 
 jobs:
-  Run and compare templates:
+  Run-and-compare-templates:
     runs-on: ubuntu-latest
+    env:
+        GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
     container:
       image: "rocker/tidyverse:4.2.1"
     steps:
