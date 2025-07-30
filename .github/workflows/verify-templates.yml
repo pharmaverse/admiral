@@ -37,7 +37,7 @@ jobs:
 
       - name: Install R dependencies
         run: |
-          Rscript -e 'install.packages(c("dplyr", "jsonlite", "quarto", "diffdf", "rmarkdown",
+          Rscript -e 'install.packages(c("dplyr", "jsonlite", "quarto", "diffdf", "rmarkdown", "purrr", "devtools", "cli",
           "safetyData", "tibble", "stringr"), repos = "https://packagemanager.posit.co/cran/__linux__/noble/latest")'
 
       - name: Run and compare templates
