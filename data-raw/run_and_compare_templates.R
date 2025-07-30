@@ -61,7 +61,7 @@ diffs_with_differences <- diffs[!sapply(diffs, is.null)]
 
 if (length(diffs_with_differences) > 0) {
   print(diffs_with_differences)
-  cli::cli_abort("Erroring due differences between admiral and pharmaverseadam templates.")
+  cli::cli_abort("Erroring due to differences between admiral and pharmaverseadam templates.")
 }
 
 # nolint end
