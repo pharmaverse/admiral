@@ -4,20 +4,25 @@ on:
   pull_request:
     types: [opened, reopened, synchronize]
     branches:
-      -  main
+      - main
     paths:
-      -  '**.yml'
-  push:
+      - '**.yml'
 
 jobs:
   Run-and-compare-templates:
     runs-on: ubuntu-latest
     env:
-        GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
+      GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
     container:
       image: "rocker/tidyverse:4.2.1"
     steps:
       - uses: actions/checkout@v4
+
+      - name: Install package and dependencies
+        run: |
+          remotes::install_local(dependencies = TRUE)
+        shell: Rscript {0}
+
       - name: Run and compare templates
         run: source("data-raw/run_and_compare_templates.R")
         shell: Rscript {0}
