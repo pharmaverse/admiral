@@ -57,6 +57,10 @@ jobs:
           cat qc.Rmd >> $GITHUB_STEP_SUMMARY
 
 
+
+      - name:  fail
+        run: exit 1
+
       - name: Upload qc.Rmd
         uses: actions/upload-artifact@v4
         with:
