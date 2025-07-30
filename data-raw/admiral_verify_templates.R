@@ -1,6 +1,8 @@
 library(purrr)
 library(cli)
 library(stringr)
+library(devtools)
+devtools::install_github("pharmaverse/pharmaverseadam", ref = "main")
 library(pharmaverseadam)
 
 # Gather templates ----
