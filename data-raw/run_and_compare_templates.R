@@ -5,7 +5,7 @@ library(devtools)
 devtools::install_github("pharmaverse/pharmaversesdtm", ref = "main")
 devtools::install_github("pharmaverse/pharmaverseadam", ref = "main")
 library(pharmaverseadam)
-#nolint start
+# nolint start
 
 # Gather templates ----
 template_dir <- file.path("inst/templates")
@@ -64,4 +64,4 @@ if (length(diffs_with_differences) > 0) {
   cli::cli_abort("Erroring due differences between admiral and pharmaverseadam templates.")
 }
 
-#nolint end
+# nolint end
