@@ -6,7 +6,7 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
-<meta name="dcterms.date" content="2025-07-29">
+<meta name="dcterms.date" content="2025-07-30">
 
 <title>Verify Templates Report</title>
 <style>
@@ -57,7 +57,7 @@ ul.task-list li input[type="checkbox"] {
     <div>
     <div class="quarto-title-meta-heading">Published</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">July 29, 2025</p>
+      <p class="date">July 30, 2025</p>
     </div>
   </div>
   
@@ -69,7 +69,7 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<p>This is the QC report dated 2025-07-29.</p>
+<p>This is the QC report dated 2025-07-30.</p>
 <p>The report compares the ADaM datasets in the <code>pharmaverseadam</code> package with the ADaM <code>datasets generated from templates during this run</code>. The datasets are compared using the <code>diffdf</code> package.</p>
 <p>This run was initiated by on the Git ref.</p>
 <div class="cell">
@@ -111,28 +111,34 @@ loaded via a namespace (and not attached):
 <p>&lt;! – #| output: false # why? –&gt;</p>
 <p><code>11</code> Base ADaM datasets were found in the <code>admiral/inst/verify/old</code> directory. The datasets are `<code>r input_dataset_names`</code></p>
 <div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>## Verify Templates Check Complete! </code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Date:  2025-07-30 </code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Run by:   </code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Git Ref:   </code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>BASE:  Generated ADaM Datasets from Templates during Run </code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>COMPARE:  ADaM Datasets from pharmaverseadam  </code></pre>
+</div>
 <div class="cell-output cell-output-stderr">
 <pre><code>Warning in diffdf(base = get(comp_dataset), compare = get(new_dataset)): 
 There are columns in BASE that are not in COMPARE !!</code></pre>
 </div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Warning in diffdf(base = get(comp_dataset), compare = get(new_dataset)): 
-Not all Values Compared Equal
-Warning in diffdf(base = get(comp_dataset), compare = get(new_dataset)): 
-Not all Values Compared Equal</code></pre>
-</div>
-</div>
-<section id="verify-templates-check-complete" class="level2">
-<h2 class="anchored" data-anchor-id="verify-templates-check-complete">Verify Templates Check Complete!</h2>
-Date: 2025-07-29 Run by:<br>
-Git Ref:<br>
-BASE: Generated ADaM Datasets from Templates during Run COMPARE: ADaM Datasets from pharmaverseadam<br>
+<div class="cell-output cell-output-stdout">
+<pre><code>&lt;details&gt;
+&lt;summary&gt;❌ Dataset: adae&lt;/summary&gt;
 
-<details>
-<summary>
-❌ Dataset: adae
-</summary>
-<pre><code>
+```
+
 Differences found between the objects!
 
 Summary of BASE and COMPARE
@@ -153,20 +159,31 @@ There are columns in BASE that are not in COMPARE !!
    DOSEON  
     DOSEU  
   ---------
-</code></pre>
-</details>
-<details>
-<summary>
-✅ Dataset: adcm
-</summary>
-<pre><code>
-No issues were found!</code></pre>
-</details>
-<details>
-<summary>
-❌ Dataset: adeg
-</summary>
-<pre><code>
+
+```
+
+&lt;/details&gt;
+
+&lt;details&gt;
+&lt;summary&gt;✅ Dataset: adcm&lt;/summary&gt;
+
+```
+
+No issues were found!
+```
+
+&lt;/details&gt;</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning in diffdf(base = get(comp_dataset), compare = get(new_dataset)): 
+Not all Values Compared Equal</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>&lt;details&gt;
+&lt;summary&gt;❌ Dataset: adeg&lt;/summary&gt;
+
+```
+
 Differences found between the objects!
 
 Summary of BASE and COMPARE
@@ -257,55 +274,81 @@ First 10 of 57540 rows are shown in table below
      ATPT         22         3     "AFTER STANDING FOR 3 MINUTES"  
      ATPT         24         1    "AFTER LYING DOWN FOR 5 MINUTES" 
   -----------------------------------------------------------------
-</code></pre>
-</details>
-<details>
-<summary>
-✅ Dataset: adex
-</summary>
-<pre><code>
-No issues were found!</code></pre>
-</details>
-<details>
-<summary>
-✅ Dataset: adlb
-</summary>
-<pre><code>
-No issues were found!</code></pre>
-</details>
-<details>
-<summary>
-✅ Dataset: admh
-</summary>
-<pre><code>
-No issues were found!</code></pre>
-</details>
-<details>
-<summary>
-✅ Dataset: adpc
-</summary>
-<pre><code>
-No issues were found!</code></pre>
-</details>
-<details>
-<summary>
-✅ Dataset: adpp
-</summary>
-<pre><code>
-No issues were found!</code></pre>
-</details>
-<details>
-<summary>
-✅ Dataset: adppk
-</summary>
-<pre><code>
-No issues were found!</code></pre>
-</details>
-<details>
-<summary>
-❌ Dataset: adsl
-</summary>
-<pre><code>
+
+```
+
+&lt;/details&gt;
+
+&lt;details&gt;
+&lt;summary&gt;✅ Dataset: adex&lt;/summary&gt;
+
+```
+
+No issues were found!
+```
+
+&lt;/details&gt;
+
+&lt;details&gt;
+&lt;summary&gt;✅ Dataset: adlb&lt;/summary&gt;
+
+```
+
+No issues were found!
+```
+
+&lt;/details&gt;
+
+&lt;details&gt;
+&lt;summary&gt;✅ Dataset: admh&lt;/summary&gt;
+
+```
+
+No issues were found!
+```
+
+&lt;/details&gt;
+
+&lt;details&gt;
+&lt;summary&gt;✅ Dataset: adpc&lt;/summary&gt;
+
+```
+
+No issues were found!
+```
+
+&lt;/details&gt;
+
+&lt;details&gt;
+&lt;summary&gt;✅ Dataset: adpp&lt;/summary&gt;
+
+```
+
+No issues were found!
+```
+
+&lt;/details&gt;
+
+&lt;details&gt;
+&lt;summary&gt;✅ Dataset: adppk&lt;/summary&gt;
+
+```
+
+No issues were found!
+```
+
+&lt;/details&gt;</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning in diffdf(base = get(comp_dataset), compare = get(new_dataset)): 
+Not all Values Compared Equal</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>&lt;details&gt;
+&lt;summary&gt;❌ Dataset: adsl&lt;/summary&gt;
+
+```
+
 Differences found between the objects!
 
 Summary of BASE and COMPARE
@@ -342,16 +385,22 @@ First 10 of 52 rows are shown in table below
     SAFFL         43         N     &lt;NA&gt;   
     SAFFL         46         N     &lt;NA&gt;   
   ----------------------------------------
-</code></pre>
-</details>
-<details>
-<summary>
-✅ Dataset: advs
-</summary>
-<pre><code>
-No issues were found!</code></pre>
-</details>
-</section>
+
+```
+
+&lt;/details&gt;
+
+&lt;details&gt;
+&lt;summary&gt;✅ Dataset: advs&lt;/summary&gt;
+
+```
+
+No issues were found!
+```
+
+&lt;/details&gt;</code></pre>
+</div>
+</div>
 
 </main>
 <!-- /main column -->

@@ -1,7 +1,7 @@
 ---
 title: "Verify Templates Report"
 format: html
-date: "2025-07-29"
+date: "2025-07-30"
 editor: visual
 execute:
   keep-md: true
@@ -16,7 +16,7 @@ editor_options:
 
 
 
-This is the QC report dated 2025-07-29.
+This is the QC report dated 2025-07-30.
 
 The report compares the ADaM datasets in the `pharmaverseadam` package with the ADaM `datasets generated from templates during this run`. The datasets are compared using the `diffdf` package.
 
@@ -72,13 +72,67 @@ loaded via a namespace (and not attached):
 
 
 
-<! -- #\| output: false \# why? -->
+\<! -- #\| output: false \# why? --\>
 
 `` 11 `` Base ADaM datasets were found in the `admiral/inst/verify/old` directory. The datasets are \``` r input_dataset_names` ``
 
 
 
 ::: {.cell}
+::: {.cell-output .cell-output-stdout}
+
+```
+## Verify Templates Check Complete! 
+```
+
+
+:::
+
+::: {.cell-output .cell-output-stdout}
+
+```
+Date:  2025-07-30 
+```
+
+
+:::
+
+::: {.cell-output .cell-output-stdout}
+
+```
+Run by:   
+```
+
+
+:::
+
+::: {.cell-output .cell-output-stdout}
+
+```
+Git Ref:   
+```
+
+
+:::
+
+::: {.cell-output .cell-output-stdout}
+
+```
+BASE:  Generated ADaM Datasets from Templates during Run 
+```
+
+
+:::
+
+::: {.cell-output .cell-output-stdout}
+
+```
+COMPARE:  ADaM Datasets from pharmaverseadam  
+```
+
+
+:::
+
 ::: {.cell-output .cell-output-stderr}
 
 ```
@@ -89,26 +143,9 @@ There are columns in BASE that are not in COMPARE !!
 
 :::
 
-::: {.cell-output .cell-output-stderr}
+::: {.cell-output .cell-output-stdout}
 
-```
-Warning in diffdf(base = get(comp_dataset), compare = get(new_dataset)): 
-Not all Values Compared Equal
-Warning in diffdf(base = get(comp_dataset), compare = get(new_dataset)): 
-Not all Values Compared Equal
-```
-
-
-:::
-:::
-
-## Verify Templates Check Complete! 
-
-Date:  2025-07-29 
-Run by:   
-Git Ref:   
-BASE:  Generated ADaM Datasets from Templates during Run 
-COMPARE:  ADaM Datasets from pharmaverseadam  
+````
 <details>
 <summary>❌ Dataset: adae</summary>
 
@@ -148,7 +185,24 @@ No issues were found!
 ```
 
 </details>
+````
 
+
+:::
+
+::: {.cell-output .cell-output-stderr}
+
+```
+Warning in diffdf(base = get(comp_dataset), compare = get(new_dataset)): 
+Not all Values Compared Equal
+```
+
+
+:::
+
+::: {.cell-output .cell-output-stdout}
+
+````
 <details>
 <summary>❌ Dataset: adeg</summary>
 
@@ -308,7 +362,24 @@ No issues were found!
 ```
 
 </details>
+````
 
+
+:::
+
+::: {.cell-output .cell-output-stderr}
+
+```
+Warning in diffdf(base = get(comp_dataset), compare = get(new_dataset)): 
+Not all Values Compared Equal
+```
+
+
+:::
+
+::: {.cell-output .cell-output-stdout}
+
+````
 <details>
 <summary>❌ Dataset: adsl</summary>
 
@@ -364,3 +435,10 @@ No issues were found!
 ```
 
 </details>
+````
+
+
+:::
+:::
+
+

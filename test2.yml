@@ -60,13 +60,13 @@ for (i in seq_along(comp_dataset_names)) {
 }
 ```
 
-\<! -- #\| output: false \# why? --\>
+<! -- #\| output: false \# why? -->
 
 `` `r length(input_dataset_names)` `` Base ADaM datasets were found in the `admiral/inst/verify/old` directory. The datasets are \``` r input_dataset_names` ``
 
 ```{r data_html}
 #| echo: false
-#sink("qc.Rmd")   # nolint
+sink("qc.Rmd")   # nolint
 cat("## Verify Templates Check Complete!", "\n\n")
 cat("Date: ", format(Sys.Date()), "\n")
 cat("Run by: ", Sys.getenv("GITHUB_ACTOR"), "\n")
@@ -91,7 +91,7 @@ for (y in input_dataset_names) {
   cat("</details>")
   cat("\n\n")
 }
-#sink() # nolint
+sink() # nolint
 ```
 
 ```{r data_check}
@@ -99,6 +99,6 @@ for (y in input_dataset_names) {
 #| message: false
 #| echo: false
 #| output: asis
-#readLines("qc.Rmd") |>
-#  cat(sep = "\n")
+readLines("qc.Rmd") |>
+  cat(sep = "\n")
 ```
