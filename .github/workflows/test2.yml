@@ -56,7 +56,7 @@ jobs:
 
       - name: Show QC Summary in GitHub Actions
         run: |
-          cat qc.md >> $GITHUB_STEP_SUMMARY # <--- Change to the actual output
+          cat qcReport.html.md >> $GITHUB_STEP_SUMMARY # <--- Change to the actual output
 
 
       - name: Upload qc.Rmd
