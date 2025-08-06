@@ -16,6 +16,9 @@ on:
 
 run-name: PR Build for ${{ github.event.pull_request.number }} by @${{ github.actor }}
 
+
+permissions: write
+
 jobs:
   verify:
     runs-on: ubuntu-latest
@@ -80,9 +83,6 @@ jobs:
 #          cat qc.Rmd
 #          echo "-------------------------"
 
-    # required for peter-evans action
-    permissions:
-      issues: write
 
         # The 'checkout' action is REQUIRED To access files in your repository.
 #      - name: Checkout repository
@@ -97,7 +97,6 @@ jobs:
           labels: |
             report
             automated issue
-
 
 #      - name: Fail Step if no differences found
 #        if: hashFiles('qc.fail') != ''
