@@ -14,7 +14,6 @@ on:
     branches:
       - 2506_verify_templates_condensed 
 
-
 run-name: PR Build for ${{ github.event.pull_request.number }} by @${{ github.actor }}
 
 jobs:
@@ -72,19 +71,18 @@ jobs:
 
 
 
-      - name: Log qc.Rmd content (if Push or Workflow Dispatch)
-        # This step will run for push or workflow_dispatch events
-        # It logs the content to the workflow run output
-        if: github.event_name == 'push' || github.event_name == 'workflow_dispatch'
-        run: |
-          echo "--- Content of qc.Rmd ---"
-          cat qc.Rmd
-          echo "-------------------------"
+#      - name: Log qc.Rmd content (if Push or Workflow Dispatch)
+#        # This step will run for push or workflow_dispatch events
+#        # It logs the content to the workflow run output
+#        if: github.event_name == 'push' || github.event_name == 'workflow_dispatch'
+#        run: |
+#          echo "--- Content of qc.Rmd ---"
+#          cat qc.Rmd
+#          echo "-------------------------"
 
     # required for peter-evans action
     permissions:
       issues: write
-
 
         # The 'checkout' action is REQUIRED To access files in your repository.
 #      - name: Checkout repository

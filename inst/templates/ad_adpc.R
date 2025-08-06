@@ -81,7 +81,7 @@ ex_dates <- ex %>%
     by_vars = exprs(STUDYID, USUBJID)
   ) %>%
   # Keep records with nonzero dose
-  filter(EXDOSE > 0) %>%
+  dplyr::filter(EXDOSE > 0) %>%
   # Add time and set missing end date to start date
   # Impute missing time to 00:00:00
   # Note all times are missing for dosing records in this example data
@@ -163,7 +163,7 @@ adpc_first_dose <- pc_dates %>%
     mode = "first",
     by_vars = exprs(STUDYID, USUBJID, DRUG)
   ) %>%
-  filter(!is.na(FANLDTM)) %>%
+  dplyr::filter(!is.na(FANLDTM)) %>%
   # Derive AVISIT based on nominal relative time
   # Derive AVISITN to nominal time in whole days using integer division
   # Define AVISIT based on nominal day
@@ -255,7 +255,7 @@ adpc_arrlt <- bind_rows(adpc_nom_next, ex_exp) %>%
   ) %>%
   arrange(USUBJID, ADTM) %>%
   ungroup() %>%
-  filter(ADT <= maxdate) %>%
+  dplyr::filter(ADT <= maxdate) %>%
   # Derive Actual Relative Time from First Dose (AFRLT)
   derive_vars_duration(
     new_var = AFRLT,
@@ -398,7 +398,7 @@ adpc_lloq <- adpc_aval %>%
 # ---- Create DTYPE copy records ----
 
 dtype <- adpc_lloq %>%
-  filter(NFRLT > 0 & NXRLT == 0 & EVID == 0 & !is.na(AVISIT_next)) %>%
+  dplyr::filter(NFRLT > 0 & NXRLT == 0 & EVID == 0 & !is.na(AVISIT_next)) %>%
   select(-PCRFTDT, -PCRFTTM) %>%
   # Re-derive variables in for DTYPE copy records
   mutate(

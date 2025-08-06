@@ -1,9 +1,12 @@
 #  Create dataset:   data/admiral_adlb.rda
-#  This script:  create_admiral_adlb.R creates dataset data/admiral_adlb.rda.
+#  This script:  data-raw/create_admiral_adlb
 
 # Create dataset data/admiral_adlb.rda
 
-# Run template script to create adlb
+# First, retrieve adlb dataset as it is now
+adlb_old <- admiral::admiral_adlb
+
+# Run template script to create new adlb.rda
 source("inst/templates/ad_adlb.R", echo = TRUE) # nolint
 
 # Limit rows by selecting only these USUBJIDs
@@ -22,10 +25,8 @@ usubjids <-
     "01-708-1286"
   )
 
-admiral_adlb <- filter(adlb, USUBJID %in% usubjids)
+admiral_adlb <- dplyr::filter(adlb, USUBJID %in% usubjids)
 
-# Get previous dataset for comparison
-adlb_old <- admiral::admiral_adlb
 
 # Finally, save reduced dataset
 usethis::use_data(admiral_adlb, overwrite = TRUE)
