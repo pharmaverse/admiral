@@ -17,7 +17,8 @@ on:
 run-name: PR Build for ${{ github.event.pull_request.number }} by @${{ github.actor }}
 
 
-permissions: write
+permissions:
+  issues: write
 
 jobs:
   verify:
