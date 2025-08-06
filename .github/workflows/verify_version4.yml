@@ -1,0 +1,109 @@
+# Source:  pilot5, Eli Miller, @ July 15, 2025, modified
+# Changes made with assistance of gemini LLM.
+
+name: Verify Templates ✅
+
+on:
+  pull_request:
+    types: [opened, reopened, synchronize]
+    branches:
+      -  main
+    paths:
+      -  '**.yml'
+  push:
+    branches:
+      - 2506_verify_templates_condensed 
+
+
+run-name: PR Build for ${{ github.event.pull_request.number }} by @${{ github.actor }}
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    env:
+        GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
+
+    steps:
+
+      - name: Set US Eastern timezone
+        run: sudo timedatectl set-timezone America/New_York
+
+      - name: Check out repository
+        uses: actions/checkout@v4
+        with:
+         ref: ${{ github.event.pull_request.head.ref }} # Checkout the branch of the PR
+         fetch-depth: 0
+
+      - name: Print PR details
+        run: |
+          echo "This workflow is running for PR # ${{ github.event.pull_request.number }}"
+          echo "PR Title: ${{ github.event.pull_request.title }}"
+          echo "Source Branch: ${{ github.event.pull_request.head.ref }}"
+          echo "Target Branch: ${{ github.event.pull_request.base.ref }}"
+          echo "Last commit SHA: ${{ github.sha }}"
+
+      - name: Set up R
+        uses: r-lib/actions/setup-r@v2
+
+      - uses: quarto-dev/quarto-actions/setup@v2
+
+      - name: Install R dependencies
+        run: |
+          Rscript -e 'install.packages(c("dplyr", "jsonlite", "quarto", "diffdf", "rmarkdown", "safetyData", "tibble", "stringr"), repos = "https://packagemanager.posit.co/cran/__linux__/noble/latest")'
+
+      - name: Run QC script
+        run: R -e 'quarto::quarto_render("qcReport.qmd")'
+
+      - name: qcReport.html.md appears in summary
+        run: |
+          cat qcReport.html.md >> $GITHUB_STEP_SUMMARY
+
+      - name: Upload qcReport.html.md
+        uses: actions/upload-artifact@v4
+        with:
+          name: qcReport.html.md
+          path: qcReport.html.md
+
+      - name: Upload report artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: qcReport.html
+          path: qcReport.html
+
+
+
+      - name: Log qc.Rmd content (if Push or Workflow Dispatch)
+        # This step will run for push or workflow_dispatch events
+        # It logs the content to the workflow run output
+        if: github.event_name == 'push' || github.event_name == 'workflow_dispatch'
+        run: |
+          echo "--- Content of qc.Rmd ---"
+          cat qc.Rmd
+          echo "-------------------------"
+
+    # required for peter-evans action
+    permissions:
+      issues: write
+
+
+        # The 'checkout' action is REQUIRED To access files in your repository.
+#      - name: Checkout repository
+#        uses: actions/checkout@v4
+
+      - name: Create Issue From File
+        uses: peter-evans/create-issue-from-file@v5
+        with:
+          title: Verify Templates 
+          content-filepath: qcReport.html.md 
+          assignees: jimrothstein
+          labels: |
+            report
+            automated issue
+
+
+#      - name: Fail Step if no differences found
+#        if: hashFiles('qc.fail') != ''
+#        uses: actions/github-script@v3
+#        with:
+#          script: |
+#            core.setFailed('QC Check failed!')
