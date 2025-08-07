@@ -2,7 +2,7 @@
 title: "Verify Templates Report"
 format: gfm 
 date: "`r Sys.Date()`"
-editor: visual
+#editor: visual
 execute:
   keep-md: true
 editor_options: 

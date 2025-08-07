@@ -2,7 +2,7 @@
 title: "Verify Templates Report"
 format: gfm 
 date: "2025-08-06"
-editor: visual
+#editor: visual
 execute:
   keep-md: true
 editor_options: 
