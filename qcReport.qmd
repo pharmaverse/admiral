@@ -1,6 +1,6 @@
 ---
 title: "Verify Templates Report"
-format: html
+format: gfm 
 date: "`r Sys.Date()`"
 editor: visual
 execute:
@@ -91,6 +91,7 @@ for (y in input_dataset_names) {
   cat("</details>")
   cat("\n\n")
 }
+
 #sink() # nolint
 ```
 
