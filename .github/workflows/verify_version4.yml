@@ -60,13 +60,8 @@ jobs:
       - name: qcReport.html.md appears in summary
         run: |
           # cat qcReport.html.md >> $GITHUB_STEP_SUMMARY
-          cat qcReport.gfm.md >> $GITHUB_STEP_SUMMARY
+          cat qcSummary.html >> $GITHUB_STEP_SUMMARY
 
-      - name: Upload qcReport.html.md
-        uses: actions/upload-artifact@v4
-        with:
-          name: qcReport.gfm.md
-          path: qcReport.gfm.md
 
       - name: Upload report artifact
         uses: actions/upload-artifact@v4
@@ -74,6 +69,11 @@ jobs:
           name: qcReport.html
           path: qcReport.html
 
+      - name: Upload report artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: qcSummary.html
+          path: qcSummary.html
 
 
 #      - name: Log qc.Rmd content (if Push or Workflow Dispatch)
@@ -94,7 +94,7 @@ jobs:
         uses: peter-evans/create-issue-from-file@v5
         with:
           title: Verify Templates 
-          content-filepath: qcReport.gfm.md 
+          content-filepath: qcSummary.html 
           assignees: jimrothstein
           labels: |
             report
