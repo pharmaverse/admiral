@@ -67,6 +67,12 @@ for (i in seq_along(comp_dataset_names)) {
 ```{r data_html}
 #| echo: false
 #sink("qc.Rmd")   # nolint
+
+# Neither cat nor writeLines can  accept cli_h1, use html markup symbols
+#
+cat("## Verify Templates Check Complete!", "\n\n", file="junk.html", append=TRUE)
+cat("Date: ", format(Sys.Date()), "\n", file="junk.html", append=TRUE)
+
 cat("## Verify Templates Check Complete!", "\n\n")
 cat("Date: ", format(Sys.Date()), "\n")
 cat("Run by: ", Sys.getenv("GITHUB_ACTOR"), "\n")
