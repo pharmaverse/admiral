@@ -31,11 +31,17 @@ jobs:
       - name: Set US Eastern timezone
         run: sudo timedatectl set-timezone America/New_York
 
-      - name: Check out repository
+# Why this?
+#      - name: Check out repository
+#        uses: actions/checkout@v4
+#        with:
+#         ref: ${{ github.event.pull_request.head.ref }} # Checkout the branch of the PR
+#         fetch-depth: 0
+
+        # The 'checkout' action is REQUIRED To access files in your repository.
+      - name: Checkout repository
         uses: actions/checkout@v4
-        with:
-         ref: ${{ github.event.pull_request.head.ref }} # Checkout the branch of the PR
-         fetch-depth: 0
+
 
       - name: Print PR details
         run: |
@@ -76,7 +82,7 @@ jobs:
           cat qcSummary.html >> $GITHUB_STEP_SUMMARY
 
 
-#      - name: Log qc.Rmd content (if Push or Workflow Dispatch)
+      - name: Log qc.Rmd content (if Push or Workflow Dispatch)
 #        # This step will run for push or workflow_dispatch events
 #        # It logs the content to the workflow run output
 #        if: github.event_name == 'push' || github.event_name == 'workflow_dispatch'
@@ -86,9 +92,6 @@ jobs:
 #          echo "-------------------------"
 
 
-        # The 'checkout' action is REQUIRED To access files in your repository.
-#      - name: Checkout repository
-#        uses: actions/checkout@v4
 
       - name: Create Issue From File
         uses: peter-evans/create-issue-from-file@v5
