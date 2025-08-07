@@ -57,11 +57,6 @@ jobs:
       - name: Run QC script
         run: R -e 'quarto::quarto_render("qcReport.qmd")'
 
-      - name: qcReport.html.md appears in summary
-        run: |
-          # cat qcReport.html.md >> $GITHUB_STEP_SUMMARY
-          cat qcSummary.html >> $GITHUB_STEP_SUMMARY
-
 
       - name: Upload report artifact
         uses: actions/upload-artifact@v4
@@ -74,6 +69,11 @@ jobs:
         with:
           name: qcSummary.html
           path: qcSummary.html
+
+      - name: qcReport.html.md appears in summary
+        run: |
+          # cat qcReport.html.md >> $GITHUB_STEP_SUMMARY
+          cat qcSummary.html >> $GITHUB_STEP_SUMMARY
 
 
 #      - name: Log qc.Rmd content (if Push or Workflow Dispatch)

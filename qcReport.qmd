@@ -65,7 +65,6 @@ for (i in seq_along(comp_dataset_names)) {
 
 ```{r summary_html}
 #| echo: false
-#| include: false
 
 cat("## Verify Templates Check Complete!", "\n\n", file="qcSummary.html", append=TRUE)
 cat("Date: ", format(Sys.Date()), "\n", file="qcSummary.html", append=TRUE)
