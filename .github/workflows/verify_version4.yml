@@ -82,14 +82,14 @@ jobs:
           cat qcSummary.html >> $GITHUB_STEP_SUMMARY
 
 
-      - name: Log qc.Rmd content (if Push or Workflow Dispatch)
+      - name: Log qcSummary.html content (if Push or Workflow Dispatch)
 #        # This step will run for push or workflow_dispatch events
 #        # It logs the content to the workflow run output
-#        if: github.event_name == 'push' || github.event_name == 'workflow_dispatch'
-#        run: |
-#          echo "--- Content of qc.Rmd ---"
-#          cat qc.Rmd
-#          echo "-------------------------"
+        if: github.event_name == 'push' || github.event_name == 'workflow_dispatch'
+        run: |
+          echo "--- Content of qcSummary.html ---"
+          cat qcSummary.html
+          echo "-------------------------"
 
 
 
