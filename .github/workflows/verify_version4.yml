@@ -76,7 +76,7 @@ jobs:
           name: qcSummary.html
           path: qcSummary.html
 
-      - name: qcReport.html.md appears in summary
+      - name: qcSummary.html.md appears in summary
         run: |
           # cat qcReport.html.md >> $GITHUB_STEP_SUMMARY
           cat qcSummary.html >> $GITHUB_STEP_SUMMARY
