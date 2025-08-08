@@ -32,7 +32,7 @@ for (i in seq_along(comp_dataset_names)) {
   )
 }
 
-sink("result.Rmd")
+sink("qcSummary.html")
 cat("## Verify Templates Check Complete!", "\n\n")
 cat("Date: ", format(Sys.Date()), "\n")
 cat("Run by: ", Sys.getenv("GITHUB_ACTOR"), "\n")
@@ -63,7 +63,7 @@ for (y in input_dataset_names) {
   status_emoji <- if (length(diffs) == 0) "✅" else "❌"
   cat(str_glue("<summary>{status_emoji} Dataset: {y}</summary>\n\n"))
   cat("\n\n```\n\n")
-    cat(length(diffs))
+  cat(length(diffs))
   print(diffs)
   cat("```\n\n")
   cat("</details>")

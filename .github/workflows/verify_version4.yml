@@ -66,11 +66,6 @@ jobs:
         run: R -e 'source("qcSummary.R")'
         shell: bash {0}
 
-      - name: Run QC summary2
-        run: source("qcSummary.R")
-        shell: Rscript {0}
-
-
       - name: Upload report artifact
         uses: actions/upload-artifact@v4
         with:
@@ -80,28 +75,28 @@ jobs:
       - name: Upload report artifact
         uses: actions/upload-artifact@v4
         with:
-          name: result.Rmd
-          path: result.Rmd
+          name: qcSummary.html
+          path: qcSummary.html
 
-      - name: # lines of result.Rmd
+      - name: # lines of qcSummary.html
         run: |
-          cat result.rmd | wc -l
+          cat qcSummary.html | wc -l
         shell: bash {0}
 
-      - name: result.Rmd summary via bash
+      - name: qcSummary.html lines via bash
         run: |
-          cat result.html >> $GITHUB_STEP_SUMMARY
+          cat qcSummary.html >> $GITHUB_STEP_SUMMARY
         shell: bash {0}
 
-      - name: result.Rmd via R
+      - name: qcSummary.html via R, 1
         run: |
-          Rscript -e 'readLines("result.Rmd") |> cat(sep = "\n")'
+          Rscript -e 'readLines("qcSummary.html") |> cat(sep = "\n")'
         shell: bash {0}
 
-      - name:  result.Rmd cat to console
+      - name:  qcSummary.html cat to console, 2
         run: |
-          echo " --- result.Rmd ---"
-          cat result.Rmd
+          echo " --- qcSummary.html ---"
+          cat qcSummary.html
           echo " ------------------"
 
 
@@ -120,7 +115,7 @@ jobs:
         uses: peter-evans/create-issue-from-file@v5
         with:
           title: Verify Templates 
-          content-filepath: result.Rmd
+          content-filepath: qcSummary.html
           assignees: jimrothstein
           labels: |
             report
