@@ -272,7 +272,7 @@ is set to `"M"`. The `{admiral}` functions which derive imputed variables are al
 adding the corresponding imputation flag variables.
 
 Note: The `{admiral}` datetime imputation function provides the `ignore_seconds_flag`
-argument which can be set to `TRUE` in cases where seconds were never collected.
+argument which can be set to `FALSE` in cases where seconds are expected.
 This is due to the following from ADaM IG: For a given SDTM DTC variable, if only
 hours and minutes are ever collected, and seconds are imputed in `*DTM` as `00`,
 then it is not necessary to set `*TMF` to `"S"`.
@@ -312,7 +312,7 @@ imputation flags are valid for both the datetime and the date variable.
 ```{r}
 ae <- tribble(
   ~AESTDTC,
-  "2019-08-09T12:34:56",
+  "2019-08-09T12:34",
   "2019-04-12",
   "2010-09",
   NA_character_
@@ -338,7 +338,7 @@ required, it can be derived by the `derive_vars_dt()` function.
 ```{r}
 ae <- tribble(
   ~AESTDTC,
-  "2019-08-09T12:34:56",
+  "2019-08-09T12:34:00",
   "2019-04-12",
   "2010-09",
   NA_character_
@@ -363,7 +363,7 @@ no date is imputed the date imputation flag is not created.
 ```{r}
 ae <- tribble(
   ~AESTDTC,
-  "2019-08-09T12:34:56",
+  "2019-08-09T12:34",
   "2019-04-12",
   "2010-09",
   NA_character_
@@ -389,16 +389,16 @@ summaries. This can be avoided by specifying the treatment start date variable
 
 Please note that `TRTSDTM` is used as imputed date only if the non missing date
 and time parts of `AESTDTC` coincide with those of `TRTSDTM`. Therefore
-`2019-10` is not imputed as `2019-11-11 12:34:56`. This ensures that collected
+`2019-10` is not imputed as `2019-11-11 12:34:00`. This ensures that collected
 information is not changed by the imputation.
 
 ```{r}
 ae <- tribble(
   ~AESTDTC,              ~TRTSDTM,
-  "2019-08-09T12:34:56", ymd_hms("2019-11-11T12:34:56"),
-  "2019-10",             ymd_hms("2019-11-11T12:34:56"),
-  "2019-11",             ymd_hms("2019-11-11T12:34:56"),
-  "2019-12-04",          ymd_hms("2019-11-11T12:34:56")
+  "2019-08-09T12:34:00", ymd_hms("2019-11-11T12:34:00"),
+  "2019-10",             ymd_hms("2019-11-11T12:34:00"),
+  "2019-11",             ymd_hms("2019-11-11T12:34:00"),
+  "2019-12-04",          ymd_hms("2019-11-11T12:34:00")
 ) %>%
   derive_vars_dtm(
     dtc = AESTDTC,
@@ -427,7 +427,7 @@ step.
 ```{r}
 ae <- tribble(
   ~AEENDTC,              ~DTHDT,            ~DCUTDT,
-  "2019-08-09T12:34:56", ymd("2019-11-11"), ymd("2019-12-02"),
+  "2019-08-09T12:34:00", ymd("2019-11-11"), ymd("2019-12-02"),
   "2019-11",             ymd("2019-11-11"), ymd("2019-12-02"),
   "2019-12",             NA,                ymd("2019-12-02"),
   "2019-12-04",          NA,                ymd("2019-12-02")
@@ -479,7 +479,7 @@ using `slice_derivation()`.
 ```{r}
 vs <- tribble(
   ~VSDTC,                ~VSTPT,
-  "2019-08-09T12:34:56", NA,
+  "2019-08-09T12:34:00", NA,
   "2019-10-12",          "PRE-DOSE",
   "2019-11-10",          NA,
   "2019-12-04",          NA

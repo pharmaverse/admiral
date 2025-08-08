@@ -15,7 +15,7 @@ derive_vars_dtm(
   min_dates = NULL,
   max_dates = NULL,
   preserve = FALSE,
-  ignore_seconds_flag = FALSE
+  ignore_seconds_flag = TRUE
 )
 }
 \arguments{
@@ -207,12 +207,12 @@ if only hours and minutes are ever collected, and seconds are imputed in
 (\verb{*DTM}) as 00, then it is not necessary to set (\verb{*TMF}) to \code{"S"}. A user can set this
 to \code{TRUE} so the \code{"S"} Flag is dropped from (\verb{*TMF}).
 
-Please note that the default value of \code{ignore_seconds_flag} will change to \code{TRUE} in
-admiral 1.4.0.
+The default value of \code{ignore_seconds_flag} is set to \code{TRUE} in
+admiral 1.4.0 and later.
 
 \describe{
 \item{Permitted values}{\code{"TRUE"}, \code{"FALSE"}}
-\item{Default value}{\code{FALSE}}
+\item{Default value}{\code{TRUE}}
 }}
 }
 \value{
@@ -259,7 +259,6 @@ library(lubridate)
 
 mhdt <- tribble(
   ~MHSTDTC,
-  "2019-07-18T15:25:40",
   "2019-07-18T15:25",
   "2019-07-18",
   "2019-02",
@@ -273,16 +272,15 @@ derive_vars_dtm(
   new_vars_prefix = "AST",
   dtc = MHSTDTC
 )
-#> # A tibble: 7 × 3
-#>   MHSTDTC               ASTDTM              ASTTMF
-#>   <chr>                 <dttm>              <chr> 
-#> 1 "2019-07-18T15:25:40" 2019-07-18 15:25:40 <NA>  
-#> 2 "2019-07-18T15:25"    2019-07-18 15:25:00 S     
-#> 3 "2019-07-18"          2019-07-18 00:00:00 H     
-#> 4 "2019-02"             NA                  <NA>  
-#> 5 "2019"                NA                  <NA>  
-#> 6 "2019---07"           NA                  <NA>  
-#> 7 ""                    NA                  <NA>  }\if{html}{\out{</div>}}}
+#> # A tibble: 6 × 3
+#>   MHSTDTC            ASTDTM              ASTTMF
+#>   <chr>              <dttm>              <chr> 
+#> 1 "2019-07-18T15:25" 2019-07-18 15:25:00 <NA>  
+#> 2 "2019-07-18"       2019-07-18 00:00:00 H     
+#> 3 "2019-02"          NA                  <NA>  
+#> 4 "2019"             NA                  <NA>  
+#> 5 "2019---07"        NA                  <NA>  
+#> 6 ""                 NA                  <NA>  }\if{html}{\out{</div>}}}
 \subsection{Impute to the latest (\code{date_imputation = "last"})}{
 
 In this example, we set \code{date_imputation = "last"} to get the last month/day
@@ -300,16 +298,15 @@ two flag variables are created.
  time_imputation = "last",
  highest_imputation = "M"
 )
-#> # A tibble: 7 × 4
-#>   MHSTDTC               ASTDTM              ASTDTF ASTTMF
-#>   <chr>                 <dttm>              <chr>  <chr> 
-#> 1 "2019-07-18T15:25:40" 2019-07-18 15:25:40 <NA>   <NA>  
-#> 2 "2019-07-18T15:25"    2019-07-18 15:25:59 <NA>   S     
-#> 3 "2019-07-18"          2019-07-18 23:59:59 <NA>   H     
-#> 4 "2019-02"             2019-02-28 23:59:59 D      H     
-#> 5 "2019"                2019-12-31 23:59:59 M      H     
-#> 6 "2019---07"           2019-12-31 23:59:59 M      H     
-#> 7 ""                    NA                  <NA>   <NA>  }\if{html}{\out{</div>}}}
+#> # A tibble: 6 × 4
+#>   MHSTDTC            ASTDTM              ASTDTF ASTTMF
+#>   <chr>              <dttm>              <chr>  <chr> 
+#> 1 "2019-07-18T15:25" 2019-07-18 15:25:59 <NA>   <NA>  
+#> 2 "2019-07-18"       2019-07-18 23:59:59 <NA>   H     
+#> 3 "2019-02"          2019-02-28 23:59:59 D      H     
+#> 4 "2019"             2019-12-31 23:59:59 M      H     
+#> 5 "2019---07"        2019-12-31 23:59:59 M      H     
+#> 6 ""                 NA                  <NA>   <NA>  }\if{html}{\out{</div>}}}
 \subsection{Suppress imputation flags (\code{flag_imputation = "none"})}{
 
 In this example, we derive \code{ASTDTM} but suppress the \code{ASTTMF}. Note that
@@ -324,16 +321,15 @@ of the final ADaM dataset.
   dtc = MHSTDTC,
   flag_imputation = "none"
 )
-#> # A tibble: 7 × 2
-#>   MHSTDTC               ASTDTM             
-#>   <chr>                 <dttm>             
-#> 1 "2019-07-18T15:25:40" 2019-07-18 15:25:40
-#> 2 "2019-07-18T15:25"    2019-07-18 15:25:00
-#> 3 "2019-07-18"          2019-07-18 00:00:00
-#> 4 "2019-02"             NA                 
-#> 5 "2019"                NA                 
-#> 6 "2019---07"           NA                 
-#> 7 ""                    NA                 }\if{html}{\out{</div>}}}
+#> # A tibble: 6 × 2
+#>   MHSTDTC            ASTDTM             
+#>   <chr>              <dttm>             
+#> 1 "2019-07-18T15:25" 2019-07-18 15:25:00
+#> 2 "2019-07-18"       2019-07-18 00:00:00
+#> 3 "2019-02"          NA                 
+#> 4 "2019"             NA                 
+#> 5 "2019---07"        NA                 
+#> 6 ""                 NA                 }\if{html}{\out{</div>}}}
 \subsection{Avoid imputation after specified datetimes (\code{max_dates})}{
 
 In this example, we derive \code{AENDTM} where AE end date is imputed to the last date.
@@ -426,7 +422,8 @@ derive_vars_dtm(
   highest_imputation = "M",
   date_imputation = "mid",
   time_imputation = "last",
-  preserve = TRUE
+  preserve = TRUE,
+  ignore_seconds_flag = FALSE
 )
 #> # A tibble: 7 × 4
 #>   MHSTDTC             ASTDTM              ASTDTF ASTTMF

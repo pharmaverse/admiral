@@ -4,7 +4,7 @@
 \alias{compute_tmf}
 \title{Derive the Time Imputation Flag}
 \usage{
-compute_tmf(dtc, dtm, ignore_seconds_flag = FALSE)
+compute_tmf(dtc, dtm, ignore_seconds_flag = TRUE)
 }
 \arguments{
 \item{dtc}{The date character vector (\code{--DTC}).
@@ -28,12 +28,12 @@ if only hours and minutes are ever collected, and seconds are imputed in
 (\verb{*DTM}) as 00, then it is not necessary to set (\verb{*TMF}) to \code{"S"}. A user can set this
 to \code{TRUE} so the \code{"S"} Flag is dropped from (\verb{*TMF}).
 
-Please note that the default value of \code{ignore_seconds_flag} will change to \code{TRUE} in
-admiral 1.4.0.
+The default value of \code{ignore_seconds_flag} is set to \code{TRUE} in
+admiral 1.4.0 and later.
 
 \describe{
 \item{Permitted values}{\code{"TRUE"}, \code{"FALSE"}}
-\item{Default value}{\code{FALSE}}
+\item{Default value}{\code{TRUE}}
 }}
 }
 \value{
