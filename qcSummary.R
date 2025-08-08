@@ -48,7 +48,7 @@ for (y in input_dataset_names) {
   #  if  (diffdf::diffdf_has_issues(diffs)) print(diffs)
   #  if (length(diffs) != 0) file.create("qc.fail")
   # nolint end
-  cat("<details>\n", file="qcSummary.html", append = TRUE)
+  cat("<details>\n")
   status_emoji <- if (length(diffs) == 0) "✅" else "❌"
   cat(str_glue("<summary>{status_emoji} Dataset: {y}</summary>\n\n"))
   cat("\n\n```\n\n")
