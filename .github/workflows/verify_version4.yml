@@ -62,11 +62,11 @@ jobs:
       - name: Run QC script
         run: R -e 'quarto::quarto_render("qcReport.qmd")'
 
-      - name: Run QC summary
-        run: R -e 'source("qcSummary.R")'
-        env:
-          LANG: en_US.UTF-8
-        shell: bash {0}
+#      - name: Run QC summary
+#        run: R -e 'source("qcSummary.R")'
+#        env:
+#          LANG: en_US.UTF-8
+#        shell: bash {0}
 
 
       - name: Upload report artifact
@@ -75,13 +75,13 @@ jobs:
           name: qcReport.html
           path: qcReport.html
 
-      - name: Upload report artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: qcSummary.md
-          path: qcSummary.md
+#      - name: Upload report artifact
+#        uses: actions/upload-artifact@v4
+#        with:
+#          name: qcSummary.md
+#          path: qcSummary.md
 
-      - name: # lines of qcSummary.html
+      - name: count lines of qcSummary.md
         run: |
           cat qcSummary.md | wc -l
         shell: bash {0}
