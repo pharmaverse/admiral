@@ -1,3 +1,9 @@
+# admiral 1.4.0
+
+## New Features
+
+- The default value of `ignore_seconds_flag` is set to `TRUE`. (#2798)
+
 # admiral 1.3.1
 
 ## Documentation

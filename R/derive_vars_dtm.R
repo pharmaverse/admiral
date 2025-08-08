@@ -71,7 +71,6 @@
 #'
 #' mhdt <- tribble(
 #'   ~MHSTDTC,
-#'   "2019-07-18T15:25:40",
 #'   "2019-07-18T15:25",
 #'   "2019-07-18",
 #'   "2019-02",
@@ -194,7 +193,8 @@
 #'   highest_imputation = "M",
 #'   date_imputation = "mid",
 #'   time_imputation = "last",
-#'   preserve = TRUE
+#'   preserve = TRUE,
+#'   ignore_seconds_flag = FALSE
 #' )
 #' @caption Further examples
 #' @info Further example usages of this function can be found in the
@@ -209,14 +209,7 @@ derive_vars_dtm <- function(dataset,
                             min_dates = NULL,
                             max_dates = NULL,
                             preserve = FALSE,
-                            ignore_seconds_flag = FALSE) {
-  # Display the argument change message only once during the session
-  if (!admiral_environment$message_displayed) {
-    cli_inform("The default value of {.arg ignore_seconds_flag}
-              will change to {.val TRUE} in admiral 1.4.0.")
-    admiral_environment$message_displayed <- TRUE
-  }
-
+                            ignore_seconds_flag = TRUE) {
   # check and quote arguments
   dtc <- assert_symbol(enexpr(dtc))
   assert_data_frame(dataset, required_vars = exprs(!!dtc))
@@ -728,8 +721,8 @@ restrict_imputed_dtc_dtm <- function(dtc,
 #' (`*DTM`) as 00, then it is not necessary to set (`*TMF`) to `"S"`. A user can set this
 #' to `TRUE` so the `"S"` Flag is dropped from (`*TMF`).
 #'
-#' Please note that the default value of `ignore_seconds_flag` will change to `TRUE` in
-#' admiral 1.4.0.
+#' The default value of `ignore_seconds_flag` is set to `TRUE` in
+#' admiral 1.4.0 and later.
 #'
 #' @permitted [boolean]
 #'
@@ -756,7 +749,7 @@ restrict_imputed_dtc_dtm <- function(dtc,
 #'
 compute_tmf <- function(dtc,
                         dtm,
-                        ignore_seconds_flag = FALSE) {
+                        ignore_seconds_flag = TRUE) {
   assert_date_vector(dtm)
   assert_character_vector(dtc)
   assert_logical_scalar(ignore_seconds_flag)
