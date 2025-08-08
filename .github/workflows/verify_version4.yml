@@ -90,7 +90,7 @@ jobs:
 
       - name: result.Rmd summary via bash
         run: |
-          cat result.Rmd >> $GITHUB_STEP_SUMMARY
+          cat result.html >> $GITHUB_STEP_SUMMARY
         shell: bash {0}
 
       - name: result.Rmd via R
