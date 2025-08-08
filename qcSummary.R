@@ -67,7 +67,7 @@ for (y in input_dataset_names) {
   print(diffs)
   cat("```\n\n")
   cat("</details>")
-    cat("\n\n")
+  cat("\n\n")
 }
 sink()
 
