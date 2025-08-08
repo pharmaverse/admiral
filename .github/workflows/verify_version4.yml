@@ -75,28 +75,28 @@ jobs:
       - name: Upload report artifact
         uses: actions/upload-artifact@v4
         with:
-          name: qcSummary.html
-          path: qcSummary.html
+          name: qcSummary.md
+          path: qcSummary.md
 
       - name: # lines of qcSummary.html
         run: |
-          cat qcSummary.html | wc -l
+          cat qcSummary.md | wc -l
         shell: bash {0}
 
-      - name: qcSummary.html lines via bash
+      - name: qcSummary.md lines via bash
         run: |
-          cat qcSummary.html >> $GITHUB_STEP_SUMMARY
+          cat qcSummary.md >> $GITHUB_STEP_SUMMARY
         shell: bash {0}
 
       - name: qcSummary.html via R, 1
         run: |
-          Rscript -e 'readLines("qcSummary.html") |> cat(sep = "\n")'
+          Rscript -e 'readLines("qcSummary.md") |> cat(sep = "\n")'
         shell: bash {0}
 
       - name:  qcSummary.html cat to console, 2
         run: |
           echo " --- qcSummary.html ---"
-          cat qcSummary.html
+          cat qcSummary.md
           echo " ------------------"
 
 

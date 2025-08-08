@@ -32,7 +32,7 @@ for (i in seq_along(comp_dataset_names)) {
   )
 }
 
-sink("qcSummary.html")
+sink("qcSummary.md")
 cat("## Verify Templates Check Complete!", "\n\n")
 cat("Date: ", format(Sys.Date()), "\n")
 cat("Run by: ", Sys.getenv("GITHUB_ACTOR"), "\n")
