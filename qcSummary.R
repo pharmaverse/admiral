@@ -59,3 +59,5 @@ for (y in input_dataset_names) {
 }
 sink()
 
+cat("--- END ---\n")
+readLines("result.Rmd") |> cat(sep = "\n")
