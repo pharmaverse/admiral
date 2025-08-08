@@ -118,7 +118,7 @@ jobs:
         uses: peter-evans/create-issue-from-file@v5
         with:
           title: Verify Templates 
-          content-filepath: qcSummary.html
+          content-filepath: qcSummary.md
           assignees: jimrothstein
           labels: |
             report
