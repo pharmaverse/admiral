@@ -63,8 +63,12 @@ jobs:
       - name: Run QC script
         run: R -e 'quarto::quarto_render("qcReport.qmd")'
 
-      - name: Run QC script
-        run: R -e 'quarto::quarto_render("qcSummary.qmd")'
+#      - name: Run QC script
+#        run: R -e 'quarto::quarto_render("qcSummary.qmd")'
+
+       - name: summary
+         run: |
+           Rscript -e 'qcSummary.R'
 
       - name: Upload report artifact
         uses: actions/upload-artifact@v4
@@ -78,20 +82,26 @@ jobs:
           name: qcSummary.html
           path: qcSummary.html
 
+      - name: Upload report artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: qcSummary.Rmd
+          path: qcSummary.Rmd
+
       - name: qcSummary.html.md appears in summary
         run: |
           # cat qcReport.html.md >> $GITHUB_STEP_SUMMARY
-          cat qcSummary.html.md >> $GITHUB_STEP_SUMMARY
+          cat qcSummary.Rmd >> $GITHUB_STEP_SUMMARY
 
 
-      - name: Log qcSummary.html content (if Push or Workflow Dispatch)
+#      - name: Log qcSummary.html content (if Push or Workflow Dispatch)
 #        # This step will run for push or workflow_dispatch events
 #        # It logs the content to the workflow run output
-        if: github.event_name == 'push' || github.event_name == 'workflow_dispatch'
-        run: |
-          echo "--- Content of qcSummary.html.md ---"
-          cat qcSummary.html.md
-          echo "-------------------------"
+#        if: github.event_name == 'push' || github.event_name == 'workflow_dispatch'
+#        run: |
+#          echo "--- Content of qcSummary.html.md ---"
+#          cat qcSummary.html.md
+#          echo "-------------------------"
 
 
 

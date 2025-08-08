@@ -1,13 +1,3 @@
----
-title: "Verify Templates Report"
-format: html 
-date: "`r Sys.Date()`"
-#editor: visual
-execute:
-  keep-md: true
-editor_options: 
-  chunk_output_type: console
----
 
 ```{r, echo = FALSE}
 # nolint start
@@ -23,7 +13,6 @@ comp_path <- "inst/verify/new"
 
 
 ```{r data_load}
-#| echo: false
 
 input_dataset_paths <- list.files(input_path)
 input_dataset_paths <- input_dataset_paths[endsWith(input_dataset_paths, ".rds")]
@@ -50,10 +39,7 @@ for (i in seq_along(comp_dataset_names)) {
 }
 ```
 
-`` `r length(input_dataset_names)` `` Base ADaM datasets were found in the `admiral/inst/verify/old` directory. The datasets are \``` r input_dataset_names` ``
-
 ```{r summary_html}
-#| echo: false
 sink("qcSummary.Rmd")
 cat("## Verify Templates Check Complete!", "\n\n")
 cat("Date: ", format(Sys.Date()), "\n")
@@ -80,4 +66,3 @@ for (y in input_dataset_names) {
   cat("\n\n")
 }
 sink()
-```
