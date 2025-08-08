@@ -81,7 +81,7 @@ jobs:
       - name: qcSummary.html.md appears in summary
         run: |
           # cat qcReport.html.md >> $GITHUB_STEP_SUMMARY
-          cat qcSummary.html >> $GITHUB_STEP_SUMMARY
+          cat qcSummary.html.md >> $GITHUB_STEP_SUMMARY
 
 
       - name: Log qcSummary.html content (if Push or Workflow Dispatch)
@@ -89,8 +89,8 @@ jobs:
 #        # It logs the content to the workflow run output
         if: github.event_name == 'push' || github.event_name == 'workflow_dispatch'
         run: |
-          echo "--- Content of qcSummary.html ---"
-          cat qcSummary.html
+          echo "--- Content of qcSummary.html.md ---"
+          cat qcSummary.html.md
           echo "-------------------------"
 
 
@@ -99,7 +99,7 @@ jobs:
         uses: peter-evans/create-issue-from-file@v5
         with:
           title: Verify Templates 
-          content-filepath: qcSummary.html 
+          content-filepath: qcSummary.html.md 
           assignees: jimrothstein
           labels: |
             report
