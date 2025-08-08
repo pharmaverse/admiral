@@ -1,5 +1,3 @@
-
-```{r, echo = FALSE}
 # nolint start
 library(diffdf)
 library(tibble)
@@ -7,27 +5,23 @@ library(stringr)
 # base or input: is older ds;
 # compare:  is new ds (created by template)
 # nolint end
-input_path <- "inst/verify/old"
-comp_path <- "inst/verify/new"
-```
-
-
-```{r data_load}
+input_path <- file.path("inst/verify/old")
+comp_path <- file.path("inst/verify/new")
 
 input_dataset_paths <- list.files(input_path)
 input_dataset_paths <- input_dataset_paths[endsWith(input_dataset_paths, ".rds")]
 input_dataset_names <- tools::file_path_sans_ext(input_dataset_paths)
 comp_dataset_paths <- list.files(comp_path)
 comp_dataset_names <- tools::file_path_sans_ext(comp_dataset_paths)
-
-# restores files to environment
+#
+## restores files to environment
 for (i in seq_along(input_dataset_names)) {
   assign(
     paste0("new_", input_dataset_names[i]),
     readRDS(file.path(input_path, input_dataset_paths[i]))
   )
 }
-
+#
 for (i in seq_along(comp_dataset_names)) {
   if (!file.exists(file.path(comp_path, comp_dataset_paths[i]))) {
     next
@@ -37,10 +31,8 @@ for (i in seq_along(comp_dataset_names)) {
     readRDS(file.path(comp_path, comp_dataset_paths[i]))
   )
 }
-```
 
-```{r summary_html}
-sink("qcSummary.Rmd")
+sink("result.Rmd")
 cat("## Verify Templates Check Complete!", "\n\n")
 cat("Date: ", format(Sys.Date()), "\n")
 cat("Run by: ", Sys.getenv("GITHUB_ACTOR"), "\n")
@@ -66,3 +58,4 @@ for (y in input_dataset_names) {
   cat("\n\n")
 }
 sink()
+

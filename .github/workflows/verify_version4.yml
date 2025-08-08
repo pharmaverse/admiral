@@ -63,7 +63,7 @@ jobs:
         run: R -e 'quarto::quarto_render("qcReport.qmd")'
 
 #      - name: Run QC script
-#        run: R -e 'quarto::quarto_render("qcSummary.qmd")'
+#        run: R -e 'source("qcSummary.R")'
 
       - name: summary
         run: |
@@ -84,13 +84,12 @@ jobs:
       - name: Upload report artifact
         uses: actions/upload-artifact@v4
         with:
-          name: qcSummary.Rmd
-          path: qcSummary.Rmd
+          name: result.Rmd
+          path: result.Rmd
 
       - name: qcSummary.html.md appears in summary
         run: |
-          # cat qcReport.html.md >> $GITHUB_STEP_SUMMARY
-          cat qcSummary.Rmd >> $GITHUB_STEP_SUMMARY
+          cat result.Rmd >> $GITHUB_STEP_SUMMARY
 
 
 #      - name: Log qcSummary.html content (if Push or Workflow Dispatch)
@@ -108,7 +107,7 @@ jobs:
         uses: peter-evans/create-issue-from-file@v5
         with:
           title: Verify Templates 
-          content-filepath: qcSummary.html.md 
+          content-filepath: result.Rmd
           assignees: jimrothstein
           labels: |
             report
