@@ -62,8 +62,13 @@ jobs:
       - name: Run QC script
         run: R -e 'quarto::quarto_render("qcReport.qmd")'
 
-      - name: Run QC summary    
+      - name: Run QC summary
         run: R -e 'source("qcSummary.R")'
+        shell: bash {0}
+
+      - name: Run QC summary2
+        run: source("qcSummary.R")
+        shell: Rscript {0}
 
 
       - name: Upload report artifact
@@ -78,13 +83,20 @@ jobs:
           name: result.Rmd
           path: result.Rmd
 
+      - name: # lines of result.Rmd
+        run: |
+          cat result.rmd | wc -l
+        shell: bash {0}
+
       - name: result.Rmd summary via bash
         run: |
           cat result.Rmd >> $GITHUB_STEP_SUMMARY
+        shell: bash {0}
 
       - name: result.Rmd via R
         run: |
           Rscript -e 'readLines("result.Rmd") |> cat(sep = "\n")'
+        shell: bash {0}
 
       - name:  result.Rmd cat to console
         run: |

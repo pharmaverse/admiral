@@ -11,7 +11,7 @@ COMPARE:  ADaM Datasets from pharmaverseadam
 
 ```
 
-2Differences found between the objects!
+Differences found between the objects!
 
 Summary of BASE and COMPARE
   ==================================================================
@@ -37,24 +37,24 @@ There are columns in BASE that are not in COMPARE !!
 
 </details>
 
-<details>
+2<details>
 <summary>✅ Dataset: adcm</summary>
 
 
 ```
 
-0No issues were found!
+No issues were found!
 ```
 
 </details>
 
-<details>
+0<details>
 <summary>❌ Dataset: adeg</summary>
 
 
 ```
 
-6Differences found between the objects!
+Differences found between the objects!
 
 Summary of BASE and COMPARE
   ==================================================================
@@ -150,79 +150,79 @@ First 10 of 57540 rows are shown in table below
 
 </details>
 
-<details>
+6<details>
 <summary>✅ Dataset: adex</summary>
 
 
 ```
 
-0No issues were found!
+No issues were found!
 ```
 
 </details>
 
-<details>
+0<details>
 <summary>✅ Dataset: adlb</summary>
 
 
 ```
 
-0No issues were found!
+No issues were found!
 ```
 
 </details>
 
-<details>
+0<details>
 <summary>✅ Dataset: admh</summary>
 
 
 ```
 
-0No issues were found!
+No issues were found!
 ```
 
 </details>
 
-<details>
+0<details>
 <summary>✅ Dataset: adpc</summary>
 
 
 ```
 
-0No issues were found!
+No issues were found!
 ```
 
 </details>
 
-<details>
+0<details>
 <summary>✅ Dataset: adpp</summary>
 
 
 ```
 
-0No issues were found!
+No issues were found!
 ```
 
 </details>
 
-<details>
+0<details>
 <summary>✅ Dataset: adppk</summary>
 
 
 ```
 
-0No issues were found!
+No issues were found!
 ```
 
 </details>
 
-<details>
+0<details>
 <summary>❌ Dataset: adsl</summary>
 
 
 ```
 
-3Differences found between the objects!
+Differences found between the objects!
 
 Summary of BASE and COMPARE
   ==================================================================
@@ -264,13 +264,13 @@ First 10 of 52 rows are shown in table below
 
 </details>
 
-<details>
+3<details>
 <summary>✅ Dataset: advs</summary>
 
 
 ```
 
-0No issues were found!
+No issues were found!
 ```
 
 </details>

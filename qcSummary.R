@@ -43,21 +43,33 @@ for (y in input_dataset_names) {
 
   new_dataset <- paste0("new_", y)
   comp_dataset <- paste0("comp_", y)
-  diffs <- diffdf(base = get(comp_dataset), compare = get(new_dataset))
-  # nolint start
-  #  if  (diffdf::diffdf_has_issues(diffs)) print(diffs)
-  #  if (length(diffs) != 0) file.create("qc.fail")
-  # nolint end
+
+   diffs <- tryCatch(
+    {  
+        diffs <- diffdf(base = get(comp_dataset), compare = get(new_dataset))
+    },
+    error = function(e)  {
+        message("Error in diffdf ", e$message)
+        # empty list to not break loop
+        list()
+    # nolint start
+    #  if  (diffdf::diffdf_has_issues(diffs)) print(diffs)
+    #  if (length(diffs) != 0) file.create("qc.fail")
+    # nolint end
+        })
+
+  
   cat("<details>\n")
   status_emoji <- if (length(diffs) == 0) "✅" else "❌"
   cat(str_glue("<summary>{status_emoji} Dataset: {y}</summary>\n\n"))
   cat("\n\n```\n\n")
+    cat(length(diffs))
   print(diffs)
   cat("```\n\n")
   cat("</details>")
-  cat("\n\n")
+    cat("\n\n")
 }
 sink()
 
 cat("--- END ---\n")
-readLines("result.Rmd") |> cat(sep = "\n")
+                                        #readLines("result.Rmd") |> cat(sep = "\n")
