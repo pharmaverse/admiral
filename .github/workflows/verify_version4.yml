@@ -78,9 +78,13 @@ jobs:
           name: result.Rmd
           path: result.Rmd
 
-      - name: qcSummary.html.md appears in summary
+      - name: result.Rmd summary
         run: |
           cat result.Rmd >> $GITHUB_STEP_SUMMARY
+
+      - name: result.Rmd via R
+        run: |
+          Rscript -e 'readLines("result.Rmd") |> cat(sep = "\n")'
 
 
 #      - name: Log qcSummary.html content (if Push or Workflow Dispatch)
