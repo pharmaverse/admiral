@@ -74,4 +74,4 @@ for (y in input_dataset_names) {
   writeLines("\n\n", CON)
 }
 close(CON)
-readLines("log_file.txt") |> cat(sep = "\n")
+readLines("qcSummary.txt") |> cat(sep = "\n")
