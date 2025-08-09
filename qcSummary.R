@@ -1,16 +1,3 @@
----
-title: "Verify Templates - Summary"
-format: html 
-date: "`r Sys.Date()`"
-#editor: visual
-execute:
-  keep-md: true
-editor_options: 
-  chunk_output_type: console
----
-
-```{r, begin}
-#| echo: false
 # nolint start
 library(diffdf)
 library(tibble)
@@ -44,18 +31,18 @@ for (i in seq_along(comp_dataset_names)) {
     readRDS(file.path(comp_path, comp_dataset_paths[i]))
   )
 }
-```
 
-```{r , summary}
-#| echo: false
+# ------------------------  separate1
+library(glue)
 
-# sink("qcSummary.md")
-cat("## Verify Templates Check Complete!", "\n\n")
-cat("Date: ", format(Sys.Date()), "\n")
-cat("Run by: ", Sys.getenv("GITHUB_ACTOR"), "\n")
-cat("Git Ref: ", Sys.getenv("GITHUB_REF"), "\n")
-cat("BASE: ", "Generated ADaM Datasets from Templates during Run", "\n")
-cat("COMPARE: ", "ADaM Datasets from pharmaverseadam ", "\n")
+CON = file("qcSummary.txt", "a")
+writeLines(paste0("## Verify Templates Check Complete!", "\n\n"), CON)
+writeLines(paste0("Date: ", Sys.Date(), "\n"), CON)
+writeLines(paste0("Run by: ", Sys.getenv("GITHUB_ACTOR"), "\n"), CON)
+writeLines(paste0("Git Ref: ", Sys.getenv("GITHUB_REF"), "\n"), CON)
+writeLines(paste0("BASE: ", "Generated ADaM Datasets from Templates during Run", "\n"), CON)
+writeLines(paste0("COMPARE: ", "ADaM Datasets from pharmaverseadam ", "\n"), CON)
+
 for (y in input_dataset_names) {
 
   new_dataset <- paste0("new_", y)
@@ -76,18 +63,15 @@ for (y in input_dataset_names) {
         })
 
   
-  cat("<details>\n")
+  writeLines("<details>\n", CON)
   status_emoji <- if (length(diffs) == 0) "✅" else "❌"
-  cat(str_glue("<summary>{status_emoji} Dataset: {y}</summary>\n\n"))
-  cat("\n\n```\n\n")
-  cat(length(diffs))
-  print(diffs)
-  cat("```\n\n")
-  cat("</details>")
-  cat("\n\n")
+  writeLines(str_glue("<summary>{status_emoji} Dataset: {y}</summary>\n\n"), CON)
+  writeLines("\n\n```\n\n", CON)
+  writeLines(as.character(length(diffs)), CON)
+  writeLines(print(diffs,as_string=TRUE), CON)
+  writeLines("```\n\n", CON)
+  writeLines("</details>", CON)
+  writeLines("\n\n", CON)
 }
-#sink()
-
-cat("--- END ---\n")
-```
-                                        #readLines("result.Rmd") |> cat(sep = "\n")
+close(CON)
+readLines("log_file.txt") |> cat(sep = "\n")

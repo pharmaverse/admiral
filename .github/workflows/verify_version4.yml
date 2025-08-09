@@ -63,7 +63,7 @@ jobs:
         run: R -e 'quarto::quarto_render("qcReport.qmd")'
 
       - name: Run QC summary
-        run: R -e 'quarto::quarto_render("qcSummary.qmd")'
+        run: Rscript -e 'source(qcSummary.R)'
 
 
       - name: Upload report artifact
@@ -75,34 +75,29 @@ jobs:
       - name: Upload report artifact
         uses: actions/upload-artifact@v4
         with:
-          name: qcSummary.html.md
-          path: qcSummary.html.md
+          name: qcSummary.txt
+          path: qcSummary.txt
 
-      - name: Upload report artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: qcSummary.html
-          path: qcSummary.html
 
-      - name: count lines of qcSummary.md
+      - name: count lines of qcSummary.txt
         run: |
-          cat qcSummary.html.md | wc -l >> $GITHUB_STEP_SUMMARY
+          cat qcSummary.txt | wc -l >> $GITHUB_STEP_SUMMARY
         shell: bash {0}
 
       - name: qcSummary.html.md lines via bash
         run: |
-          cat qcSummary.html >> $GITHUB_STEP_SUMMARY
+          cat qcSummary.txt >> $GITHUB_STEP_SUMMARY
         shell: bash {0}
 
-      - name: qcSummary.html via R, 1
+      - name: qcSummary.txt via R, 1
         run: |
-          Rscript -e 'readLines("qcSummary.html.md") |> cat(sep = "\n")'
+          Rscript -e 'readLines("qcSummary.txt") |> cat(sep = "\n")'
         shell: bash {0}
 
       - name:  qcSummary.html.md cat to console, 2
         run: |
-          echo " --- qcSummary.html.md ---"
-          cat qcSummary.html.md
+          echo " --- qcSummary.txt ---"
+          cat qcSummary.txt
           echo " ------------------"
 
 
@@ -112,7 +107,7 @@ jobs:
 #        if: github.event_name == 'push' || github.event_name == 'workflow_dispatch'
 #        run: |
 #          echo "--- Content of qcSummary.html.md ---"
-#          cat qcSummary.html.md
+#          cat qcSummary.txt
 #          echo "-------------------------"
 
 
@@ -121,7 +116,7 @@ jobs:
         uses: peter-evans/create-issue-from-file@v5
         with:
           title: Verify Templates 
-          content-filepath: qcSummary.html.md
+          content-filepath: qcSummary.txt
           assignees: jimrothstein
           labels: |
             report
