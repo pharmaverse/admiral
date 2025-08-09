@@ -63,7 +63,7 @@ jobs:
         run: R -e 'quarto::quarto_render("qcReport.qmd")'
 
       - name: Run QC summary
-        run: Rscript -e 'source(qcSummary.R)'
+        run: Rscript -e 'source("qcSummary.R")'
 
 
       - name: Upload report artifact
