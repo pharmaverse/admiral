@@ -1,13 +1,89 @@
-## Verify Templates Check Complete! 
+---
+title: "Verify Templates - Summary"
+format: html 
+date: "2025-08-08"
+#editor: visual
+execute:
+  keep-md: true
+editor_options: 
+  chunk_output_type: console
+---
 
+
+::: {.cell}
+
+:::
+
+::: {.cell}
+::: {.cell-output .cell-output-stdout}
+
+```
+## Verify Templates Check Complete! 
+```
+
+
+:::
+
+::: {.cell-output .cell-output-stdout}
+
+```
 Date:  2025-08-08 
+```
+
+
+:::
+
+::: {.cell-output .cell-output-stdout}
+
+```
 Run by:   
+```
+
+
+:::
+
+::: {.cell-output .cell-output-stdout}
+
+```
 Git Ref:   
+```
+
+
+:::
+
+::: {.cell-output .cell-output-stdout}
+
+```
 BASE:  Generated ADaM Datasets from Templates during Run 
+```
+
+
+:::
+
+::: {.cell-output .cell-output-stdout}
+
+```
 COMPARE:  ADaM Datasets from pharmaverseadam  
+```
+
+
+:::
+
+::: {.cell-output .cell-output-stderr}
+
+```
+Warning in diffdf(base = get(comp_dataset), compare = get(new_dataset)): 
+There are columns in BASE that are not in COMPARE !!
+```
+
+
+:::
+
+::: {.cell-output .cell-output-stdout}
+
+````
 <details>
 <summary>❌ Dataset: adae</summary>
-
 
 ```
 
@@ -32,7 +108,6 @@ There are columns in BASE that are not in COMPARE !!
     DOSEU  
   ---------
 
-
 ```
 
 </details>
@@ -40,17 +115,32 @@ There are columns in BASE that are not in COMPARE !!
 <details>
 <summary>✅ Dataset: adcm</summary>
 
-
 ```
 
 0No issues were found!
 ```
 
 </details>
+````
 
+
+:::
+
+::: {.cell-output .cell-output-stderr}
+
+```
+Warning in diffdf(base = get(comp_dataset), compare = get(new_dataset)): 
+Not all Values Compared Equal
+```
+
+
+:::
+
+::: {.cell-output .cell-output-stdout}
+
+````
 <details>
 <summary>❌ Dataset: adeg</summary>
-
 
 ```
 
@@ -145,14 +235,12 @@ First 10 of 57540 rows are shown in table below
      ATPT         24         1    "AFTER LYING DOWN FOR 5 MINUTES" 
   -----------------------------------------------------------------
 
-
 ```
 
 </details>
 
 <details>
 <summary>✅ Dataset: adex</summary>
-
 
 ```
 
@@ -164,7 +252,6 @@ First 10 of 57540 rows are shown in table below
 <details>
 <summary>✅ Dataset: adlb</summary>
 
-
 ```
 
 0No issues were found!
@@ -174,7 +261,6 @@ First 10 of 57540 rows are shown in table below
 
 <details>
 <summary>✅ Dataset: admh</summary>
-
 
 ```
 
@@ -186,7 +272,6 @@ First 10 of 57540 rows are shown in table below
 <details>
 <summary>✅ Dataset: adpc</summary>
 
-
 ```
 
 0No issues were found!
@@ -196,7 +281,6 @@ First 10 of 57540 rows are shown in table below
 
 <details>
 <summary>✅ Dataset: adpp</summary>
-
 
 ```
 
@@ -208,17 +292,32 @@ First 10 of 57540 rows are shown in table below
 <details>
 <summary>✅ Dataset: adppk</summary>
 
-
 ```
 
 0No issues were found!
 ```
 
 </details>
+````
 
+
+:::
+
+::: {.cell-output .cell-output-stderr}
+
+```
+Warning in diffdf(base = get(comp_dataset), compare = get(new_dataset)): 
+Not all Values Compared Equal
+```
+
+
+:::
+
+::: {.cell-output .cell-output-stdout}
+
+````
 <details>
 <summary>❌ Dataset: adsl</summary>
-
 
 ```
 
@@ -259,7 +358,6 @@ First 10 of 52 rows are shown in table below
     SAFFL         46         N     <NA>   
   ----------------------------------------
 
-
 ```
 
 </details>
@@ -267,11 +365,26 @@ First 10 of 52 rows are shown in table below
 <details>
 <summary>✅ Dataset: advs</summary>
 
-
 ```
 
 0No issues were found!
 ```
 
 </details>
+````
 
+
+:::
+
+::: {.cell-output .cell-output-stdout}
+
+```
+--- END ---
+```
+
+
+:::
+:::
+
+
+                                        #readLines("result.Rmd") |> cat(sep = "\n")

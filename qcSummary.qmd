@@ -1,3 +1,16 @@
+---
+title: "Verify Templates - Summary"
+format: html 
+date: "`r Sys.Date()`"
+#editor: visual
+execute:
+  keep-md: true
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r, begin}
+#| echo: false
 # nolint start
 library(diffdf)
 library(tibble)
@@ -31,8 +44,12 @@ for (i in seq_along(comp_dataset_names)) {
     readRDS(file.path(comp_path, comp_dataset_paths[i]))
   )
 }
+```
 
-sink("qcSummary.md")
+```{r , summary}
+#| echo: false
+
+# sink("qcSummary.md")
 cat("## Verify Templates Check Complete!", "\n\n")
 cat("Date: ", format(Sys.Date()), "\n")
 cat("Run by: ", Sys.getenv("GITHUB_ACTOR"), "\n")
@@ -69,7 +86,8 @@ for (y in input_dataset_names) {
   cat("</details>")
   cat("\n\n")
 }
-sink()
+#sink()
 
 cat("--- END ---\n")
+```
                                         #readLines("result.Rmd") |> cat(sep = "\n")

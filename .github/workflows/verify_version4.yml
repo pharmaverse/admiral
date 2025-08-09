@@ -63,10 +63,7 @@ jobs:
         run: R -e 'quarto::quarto_render("qcReport.qmd")'
 
       - name: Run QC summary
-        run: R -e 'source("qcSummary.R")'
-        env:
-          LANG: en_US.UTF-8
-        shell: bash {0}
+        run: R -e 'quarto::quarto_render("qcSummary.qmd")'
 
 
       - name: Upload report artifact
@@ -78,12 +75,18 @@ jobs:
       - name: Upload report artifact
         uses: actions/upload-artifact@v4
         with:
-          name: qcSummary.md
-          path: qcSummary.md
+          name: qcSummary.html.md
+          path: qcSummary.html.md
+
+      - name: Upload report artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: qcSummary.html
+          path: qcSummary.html
 
       - name: count lines of qcSummary.md
         run: |
-          cat qcSummary.md | wc -l
+          cat qcSummary.html.md | wc -l >> $GITHUB_STEP_SUMMARY
         shell: bash {0}
 
       - name: qcSummary.md lines via bash
@@ -96,10 +99,10 @@ jobs:
           Rscript -e 'readLines("qcSummary.md") |> cat(sep = "\n")'
         shell: bash {0}
 
-      - name:  qcSummary.html cat to console, 2
+      - name:  qcSummary.html.md cat to console, 2
         run: |
           echo " --- qcSummary.html ---"
-          cat qcSummary.md
+          cat qcSummary.html.md
           echo " ------------------"
 
 
@@ -118,7 +121,7 @@ jobs:
         uses: peter-evans/create-issue-from-file@v5
         with:
           title: Verify Templates 
-          content-filepath: qcSummary.md
+          content-filepath: qcSummary.html.md
           assignees: jimrothstein
           labels: |
             report
