@@ -1,3 +1,20 @@
+# admiral (development version)
+
+## New Features
+
+## Updates of Existing Functions
+
+## Documentation
+
+## Breaking Changes
+
+## Various
+
+<details>
+<summary>Developer Notes</summary>
+</details>
+
+
 # admiral 1.3.1
 
 ## Documentation
