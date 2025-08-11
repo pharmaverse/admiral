@@ -422,7 +422,8 @@ test_that("compute_tmf Test 15: compute TMF", {
   expect_equal(
     compute_tmf(
       dtc = input_dtc,
-      dtm = input_dtm
+      dtm = input_dtm,
+      ignore_seconds_flag = FALSE
     ),
     expected_output
   )
@@ -486,7 +487,8 @@ test_that("derive_vars_dtm Test 18: default behavior", {
     highest_imputation = "h",
     input,
     new_vars_prefix = "AST",
-    dtc = XXSTDTC
+    dtc = XXSTDTC,
+    ignore_seconds_flag = FALSE
   )
 
   expect_dfs_equal(
@@ -514,7 +516,8 @@ test_that("derive_vars_dtm Test 19: date imputed to first, auto DTF/TMF", {
     new_vars_prefix = "AST",
     dtc = XXSTDTC,
     highest_imputation = "M",
-    date_imputation = "first"
+    date_imputation = "first",
+    ignore_seconds_flag = FALSE
   )
 
   expect_dfs_equal(
@@ -604,7 +607,8 @@ test_that("derive_vars_dtm Test 22: date imputed to MID, time to first, TMF only
     highest_imputation = "M",
     date_imputation = "mid",
     flag_imputation = "time",
-    preserve = TRUE
+    preserve = TRUE,
+    ignore_seconds_flag = FALSE
   )
 
   expect_dfs_equal(
@@ -634,7 +638,8 @@ test_that("derive_vars_dtm Test 23: No re-derivation is done if --DTF variable a
       new_vars_prefix = "AST",
       dtc = XXSTDTC,
       highest_imputation = "M",
-      date_imputation = "first"
+      date_imputation = "first",
+      ignore_seconds_flag = FALSE
     )
   )
 

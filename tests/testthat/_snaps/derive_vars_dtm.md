@@ -107,7 +107,7 @@
     Code
       actual_output <- derive_vars_dtm(mutate(input, ASTDTF = c(NA, NA, NA, NA, "D",
         "MD", "M")), new_vars_prefix = "AST", dtc = XXSTDTC, highest_imputation = "M",
-      date_imputation = "first")
+      date_imputation = "first", ignore_seconds_flag = FALSE)
     Message
       The `ASTDTF` variable is already present in the input dataset and will not be re-derived.
 
