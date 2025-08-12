@@ -1,0 +1,47 @@
+name: Run and compare templates
+
+on:
+  pull_request:
+    types: [opened, reopened, synchronize]
+    branches:
+      - main
+    paths:
+      - '**.yml'
+
+run-name: PR Build for ${{ github.event.pull_request.number }} by @${{ github.actor }}
+
+jobs:
+  Run-and-compare-templates:
+    runs-on: ubuntu-latest
+    env:
+      GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.ref }} # Checkout the branch of the PR
+          fetch-depth: 0
+
+      - name: Print PR details
+        run: |
+          echo "This workflow is running for PR # ${{ github.event.pull_request.number }}"
+          echo "PR Title: ${{ github.event.pull_request.title }}"
+          echo "Source Branch: ${{ github.event.pull_request.head.ref }}"
+          echo "Target Branch: ${{ github.event.pull_request.base.ref }}"
+          echo "Last commit SHA: ${{ github.sha }}"
+
+      - name: Set up R
+        uses: r-lib/actions/setup-r@v2
+
+      - name: Install R dependencies
+        run: |
+          # Use 'jammy' for ubuntu-22.04 (the OS for ubuntu-latest) to avoid library conflicts
+          Rscript -e 'install.packages(c("dplyr", "jsonlite", "quarto", "diffdf", "rmarkdown", "purrr", "devtools", "cli",
+          "safetyData", "tibble", "stringr"), repos = "https://packagemanager.posit.co/cran/__linux__/jammy/latest")'
+
+      - name: Install admiral from local source
+        run: Rscript -e 'devtools::install()'
+
+      - name: Run and compare templates
+        run: source("data-raw/run_and_compare_templates.R")
+        shell: Rscript {0}
