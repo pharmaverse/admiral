@@ -19,6 +19,7 @@
 ## Documentation
 
 - The BDS Findings vignette was updated to move derivation of `ASEQ` after any new rows. (#2780)
+- `ADLBHY` template was updated to keep `PARAM` in final dataset. (#2804)
 
 ## Various
 

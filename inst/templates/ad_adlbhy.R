@@ -41,7 +41,7 @@ adlb_annotated <- adlb %>%
       )
     )
   ) %>%
-  select(STUDYID, USUBJID, TRT01A, PARAMCD, LBSEQ, ADT, AVISIT, ADY, AVAL, ANRHI, CRIT1, CRIT1FL)
+  select(STUDYID, USUBJID, TRT01A, PARAMCD, PARAM, LBSEQ, ADT, AVISIT, ADY, AVAL, ANRHI, CRIT1, CRIT1FL)
 
 # Subset Datasets
 altast_records <- adlb_annotated %>%
