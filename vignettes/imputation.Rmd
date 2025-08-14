@@ -395,7 +395,7 @@ information is not changed by the imputation.
 ```{r}
 ae <- tribble(
   ~AESTDTC,              ~TRTSDTM,
-  "2019-08-09T12:34:00", ymd_hms("2019-11-11T12:34:00"),
+  "2019-08-09T12:34:34", ymd_hms("2019-11-11T12:34:34"),
   "2019-10",             ymd_hms("2019-11-11T12:34:00"),
   "2019-11",             ymd_hms("2019-11-11T12:34:00"),
   "2019-12-04",          ymd_hms("2019-11-11T12:34:00")
@@ -406,7 +406,8 @@ ae <- tribble(
     highest_imputation = "M",
     date_imputation = "first",
     time_imputation = "first",
-    min_dates = exprs(TRTSDTM)
+    min_dates = exprs(TRTSDTM),
+    ignore_seconds_flag = FALSE
   )
 ```
 ```{r, echo=FALSE}
@@ -438,7 +439,8 @@ ae <- tribble(
     highest_imputation = "M",
     date_imputation = "last",
     time_imputation = "last",
-    max_dates = exprs(DTHDT, DCUTDT)
+    max_dates = exprs(DTHDT, DCUTDT),
+    ignore_seconds_flag = FALSE
   )
 ```
 ```{r, echo=FALSE}
@@ -488,7 +490,8 @@ vs <- tribble(
     derivation = derive_vars_dtm,
     args = params(
       dtc = VSDTC,
-      new_vars_prefix = "A"
+      new_vars_prefix = "A",
+      ignore_seconds_flag = FALSE
     ),
     derivation_slice(
       filter = VSTPT == "PRE-DOSE",
