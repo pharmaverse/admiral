@@ -176,6 +176,10 @@ get_vars_query <- function(dataset, dataset_queries) {
       )
     )
 
+  # Remove temp_key (if exists) so the below unique key check uses only
+  # original columns in dataset
+  dataset <- dataset %>% select(-any_of("temp_key"))
+
   # prepare input dataset for joining
   static_cols <- setdiff(names(dataset), chr2vars(source_vars))
   # if dataset does not have a unique key, create a temp one
