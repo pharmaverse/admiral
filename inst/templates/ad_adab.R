@@ -376,7 +376,6 @@ is_basetype <- is_afrlt %>%
       ),
     )
 
-
   # Post baseline must be valid post data (result not missing)
   post_data <- is_visit_flags %>%
     filter(VALIDPOST == "Y") %>%
@@ -402,7 +401,6 @@ is_basetype <- is_afrlt %>%
     summarize(RESULT_P = max(RESULT_P)) %>%
     ungroup()
 
-
   most_post_aval <- post_data %>%
     group_by(!!!get_admiral_option("subject_keys"), BASETYPE, ADATYPE, ADAPARM) %>%
     filter(!is.na(AVAL_P)) %>%
@@ -415,29 +413,20 @@ is_basetype <- is_afrlt %>%
     summarize(MAXCHG = max(CHG)) %>%
     ungroup()
 
-
+  # Merge the most_post_result, most_post_aval and most_post_chg into one utility data set
   most_post <- most_post_result %>%
     derive_vars_merged(
       dataset_add = most_post_aval,
       by_vars = exprs(!!!get_admiral_option("subject_keys"), BASETYPE, ADATYPE, ADAPARM)
-    )
-
-  most_post <- most_post %>%
+    ) %>%
     derive_vars_merged(
       dataset_add = most_post_chg,
       by_vars = exprs(!!!get_admiral_option("subject_keys"), BASETYPE, ADATYPE, ADAPARM)
     )
 
-
-
-  # Use outer Join to combine baseline with most post results
+  # Use an outer Join to combine baseline with most post results
   flag_data <- full_join(base_data, most_post, by = c("DRUG", "STUDYID", "USUBJID", "BASETYPE", "ADATYPE", "ADAPARM")
   ) %>%
-    arrange(DRUG, BASETYPE, ADATYPE, ADAPARM, !!!get_admiral_option("subject_keys"), )
-
-
-  # Set the values for AVAL usage (numeric) then later convert to AVALC when creating parameters
-  flag_data <- flag_data %>%
     mutate(
       BFLAG =
         case_when(
@@ -463,8 +452,8 @@ is_basetype <- is_afrlt %>%
         ADATYPE == "ADA_BAB" & PBFLAG == 1 ~ 1,
         ADATYPE == "ADA_BAB" & PBFLAG == 0 ~ 0
       )
-    )
-
+    ) %>%
+    arrange(DRUG, BASETYPE, ADATYPE, ADAPARM, !!!get_admiral_option("subject_keys"), )
 
   # Pull out Main ADA Titer ADASTAT status for NABSTAT option 1 as ADASTAT_MAIN
 
@@ -476,9 +465,7 @@ is_basetype <- is_afrlt %>%
       by_vars = exprs(!!!get_admiral_option("subject_keys"), DRUG)
     )
 
-
   # Compute NABPOSTMISS onto flag_data for NABSTAT
-
   flag_data <- flag_data %>%
     derive_var_merged_exist_flag(
       dataset_add = is_visit_flags,
@@ -487,14 +474,11 @@ is_basetype <- is_afrlt %>%
       by_vars = exprs(!!!get_admiral_option("subject_keys"), BASETYPE, ADATYPE, ADAPARM)
     )
 
-
   # Compute NAB Stat using both methods
   # Note: Options 2 added as a placekeeper, starter method, adjust as needed for
   #   current or study specific specs.
-
   flag_data <- flag_data %>%
     mutate(
-
       # For Option 1, if any post baseline NAB were blank without a Positive (NABPOSTMISS = Y), NABSTAT = missing
       nabstat_opt1 = case_when(
         # Based on ADASTAT (EMERNEG/EMERPOS) and NAB results
@@ -507,15 +491,11 @@ is_basetype <- is_afrlt %>%
         ADATYPE == "ADA_NAB" & ADASTAT_MAIN == 1 ~ 1,
         ADATYPE == "ADA_NAB" & ADASTAT_MAIN == 0 ~ 0,
       ),
-    )
-
-
-
-  # Drop the vars no longer neded from flag_data before merging with main ADAB
-  flag_data <- flag_data %>% select(-BASE, -BASE_RESULT, -AVAL_P, -RESULT_P, -DRUG, -ABLFL)
+    )  %>%
+    # Drop variables no longer neded from flag_data before merging with main ADAB
+    select(-BASE, -BASE_RESULT, -AVAL_P, -RESULT_P, -DRUG, -ABLFL)
 
   # Put TFLAG, BFLAG and PBFLAG onto the main ADAB dataset
-
   is_flagdata <- is_visit_flags %>%
    # main_aab_flagdata
     derive_vars_merged(
@@ -523,7 +503,7 @@ is_basetype <- is_afrlt %>%
       by_vars = exprs(!!!get_admiral_option("subject_keys"), BASETYPE, ADATYPE, ADAPARM)
     )
 
-  # PERSADA and TRANADA
+  # Creat a utility data set to compute PERSADA, TRANADA, INDUCED, ENHANCED related parametrs
 
   per_tran_pre <- is_flagdata %>%
     filter(VALIDPOST == "Y") %>%
@@ -534,43 +514,17 @@ is_basetype <- is_afrlt %>%
     ) %>%
     ungroup() %>%
     mutate(
-      LFLAG = case_when(
-        ADTM == MaxADTM ~ 1
-      ),
       LFLAGPOS = case_when(
         ADTM == MaxADTM & (TFLAGV == 1 | TFLAGV == 2) ~ 1
       )
     )
 
-
-  # KD Update to template code: If last record has two or more dupes, later  keep the one with the higher ISSEQ
-  per_tran <- per_tran_pre %>%
+  # Keep TFLAGV = or TFLAGV = 2 (Any Treatment Emergent)
+  #  Regular Induced PERSADA and TRANADA will later be based on TFLAGV = 1
+  #  TFLAVG= 2 can use for separate PERSADA/TRANADA based on Enhanced
+  per_tran_all <- per_tran_pre %>%
     filter(TFLAGV == 1 | TFLAGV == 2)   %>%
-    group_by(!!!get_admiral_option("subject_keys"), BASETYPE, ADATYPE, ADAPARM, ADTM) %>%
-    mutate(
-      LastSEQ = max(ISSEQ),
-    ) %>%
-    ungroup()  %>%
-    group_by(!!!get_admiral_option("subject_keys"), BASETYPE, ADATYPE, ADAPARM, ADTM) %>%
-    mutate(
-      PARM_N = n()
-    ) %>%
-    ungroup()  %>%
-    mutate(
-      drop_dupe = case_when(
-        LFLAG  == 1 & ISSEQ != LastSEQ ~ TRUE,
-        TRUE ~ FALSE
-      )
-    )
-
-  # Potential last OBS dupe dates
-  per_tran_dupes <- per_tran  %>%
-    filter (PARM_N > 1 & LFLAG == 1)
-
-  # if get dupe signal error below, uncomment this and evaluate the dupes
-  per_tran <- per_tran %>%
-    #filter (drop_dupe == FALSE)  %>%
-    select(-MaxADTM, -LFLAG, -LastSEQ, -drop_dupe, - ISSEQ) %>%
+    select(-MaxADTM,  -ISSEQ) %>%
     group_by(!!!get_admiral_option("subject_keys"), BASETYPE, ADATYPE, ADAPARM,) %>%
     mutate(
       FPPDTM = min(ADTM),
@@ -578,40 +532,32 @@ is_basetype <- is_afrlt %>%
     ) %>%
     ungroup()
 
-  per_tran_inc_last <- per_tran %>%
+  per_tran_inc_last <- per_tran_all %>%
     group_by(!!!get_admiral_option("subject_keys"), BASETYPE, ADATYPE, ADAPARM,) %>%
     summarize(COUNT_INC_LAST = n()) %>%
     ungroup()
 
-
-  per_tran_exc_last <- per_tran %>%
+  per_tran_exc_last <- per_tran_all %>%
     filter(is.na(LFLAGPOS)) %>%
     group_by(!!!get_admiral_option("subject_keys"), BASETYPE, ADATYPE, ADAPARM,) %>%
     summarize(COUNT_EXC_LAST = n()) %>%
     ungroup()
 
-
-  # Reduce per_tran to one record per PARAMCD, use ADTM = LPPDTM to get best last record
-
-  per_tran <- per_tran %>%
-    filter(ADTM == LPPDTM)
-
-
-  per_tran <- per_tran %>%
+  # Reduce "per_tran_all" to one record per by_vars using ADTM = LPPDTM to get best last records
+  #   Then Merge in the Include Last and Exclude Last Flags
+  per_tran_last <- per_tran_all %>%
+    filter(ADTM == LPPDTM) %>%
     derive_vars_merged(
       dataset_add = per_tran_inc_last,
       by_vars = exprs(!!!get_admiral_option("subject_keys"), BASETYPE, ADATYPE, ADAPARM)
-    )
-
-
-  per_tran <- per_tran %>%
+    ) %>%
     derive_vars_merged(
       dataset_add = per_tran_exc_last,
       by_vars = exprs(!!!get_admiral_option("subject_keys"), BASETYPE, ADATYPE, ADAPARM)
     )
 
-
-  per_tran <- per_tran %>%
+  # Compute final parameters
+  per_tran_final <- per_tran_last %>%
     mutate(
       FPPDT = as_date(FPPDTM),
       LPPDT = as_date(LPPDTM),
@@ -630,6 +576,7 @@ is_basetype <- is_afrlt %>%
         !is.na(LPPDTM) & !is.na(LPPDTM) ~ as.numeric(difftime(LPPDTM, FPPDTM, units = "secs")) / (7 * 3600 * 24),
         !is.na(LPPDT) & !is.na(LPPDT) ~ as.numeric(LPPDT - FPPDT + 1) / 7
       ),
+      # Standard TRANADA and PERSADA based on TFLAGV = 1 (Induced)
       TRANADA = case_when(
         TFLAGV == 1 & ((COUNT_EXC_LAST == 1 | (COUNT_INC_LAST >= 2 & tdur < 16)) & is.na(LFLAGPOS)) ~ 1
       ),
@@ -637,6 +584,7 @@ is_basetype <- is_afrlt %>%
         TFLAGV == 1 & (COUNT_INC_LAST == 1 & (COUNT_EXC_LAST <= 0 | is.na(COUNT_EXC_LAST)) |
                          (COUNT_INC_LAST >= 2 & tdur >= 16) | LFLAGPOS == 1) ~ 1
       ),
+      # These TRANADAE and PERSADAE based on TFLAGV = 1 or TFLAGV=2 (Induced or Enhanced)
       TRANADAE = case_when(
         TFLAGV >= 1 & ((COUNT_EXC_LAST == 1 | (COUNT_INC_LAST >= 2 & tdur < 16)) & is.na(LFLAGPOS)) ~ 1
       ),
@@ -652,20 +600,19 @@ is_basetype <- is_afrlt %>%
         TFLAGV == 2 ~ "Y",
         TRUE ~ "N"
       )
-    )
-
-  # Drop temporary vars that do not need to be merged into main ADAB
-  per_tran <- per_tran %>%
+    )  %>%
+    # Drop temporary vars that do not need to be merged into main ADAB
     select(-ADTM, -TFLAGV, -FANLDTM, -FANLDT, -LFLAGPOS, -FPPDT, -LPPDT)
 
-  # Put PERSADA, TRANADA, TDUR, ADADUR onto main ADAB
-
+  # Put PERSADA, TRANADA, INDUCED, ENHANCED, TDUR, ADADUR onto "is_flagdata" as "main_aab_pertran"
+  #  Note: if get a signal_duplicate_records() error, then likely cause is  subject has a duplicate
+  #        record for a given BASETYPE, ADATYPE, ADAPARM and ISDTC. Investigate then add code
+  #        to filter it down to best one record per USUBJID, BASETYPE, ADATYPE and ADAPARM
   main_aab_pertran <- is_flagdata %>%
     derive_vars_merged(
-      dataset_add = per_tran,
+      dataset_add = per_tran_final,
       by_vars = exprs(!!!get_admiral_option("subject_keys"), BASETYPE, ADATYPE, ADAPARM)
     )
-
 
   main_aab_rtimes <- main_aab_pertran %>%
     mutate(
@@ -717,17 +664,9 @@ is_basetype <- is_afrlt %>%
     #filter (USUBJID == "01-703-1439" | USUBJID == "01-704-1017" | USUBJID == "01-716-1063"  )
 
 
+  # Begin Creation of each PARAM for the final ADAB format using main_aab --------
 
-
-
-  # Begin Creation of each PARAM for the final ADAB format using main_aab ---------
-
-  # Note:  Specs for assigning AVALC from AVAL and vice versa may change or vary
-  #   Adjust AVAL and AVALC for each below PARAMCD, PARAM
-  #   as needed for current or study specific requirements.
-
-  # Save as core_aab to be the input for all the param assemblies
-
+  #  First create "core_aab" to be the input for all the parameter sub-assemblies
   core_aab <- main_aab %>%
     mutate(
       # Assign original PARAM (--TEST) to PARCAT1 before customizing PARAM for parameters
@@ -750,13 +689,11 @@ is_basetype <- is_afrlt %>%
       PARAM = paste(PARAM, "Titer Units", sep = " "),
     )
 
-
   # By Visit NAB ISTESTCD Results
   adab_nabvis <- core_aab %>%
     filter(ADATYPE == "ADA_NAB") %>%
     # These two flags, BASE and CHG are only kept on the primary ADA ISTESTCD test
     select(-BASE, -CHG, -ADABLPFL, -ADPBLPFL)
-
 
   # By Visit Main ADA Titer Interpreted RESULT data
   adab_result <- core_aab %>%
@@ -774,6 +711,7 @@ is_basetype <- is_afrlt %>%
     # DTYPE is only kept on the parent ISTESTCD param, recompute CHG and BASE for RESULTy
     select(-BASE, -CHG, -DTYPE)
 
+  # Derive BASE and Calculate Change from Baseline on BAB RESULT records
   adab_result <- adab_result %>%
     derive_var_base(
       by_vars = exprs(!!!get_admiral_option("subject_keys"), BASETYPE, ADATYPE, ADAPARM),
@@ -782,6 +720,7 @@ is_basetype <- is_afrlt %>%
       filter = ABLFL == "Y"
     )
 
+  # Set CHG to na if its the ABFLF record
   adab_result <- derive_var_chg(adab_result) %>%
     mutate(
       CHG = case_when(
@@ -789,12 +728,6 @@ is_basetype <- is_afrlt %>%
         TRUE ~ CHG
       )
     )
-
-  adab_result_review <- adab_result %>%
-    arrange (USUBJID, BASETYPE, ISTESTCD, PARAMCD, AVISIT, NFRLT)  %>%
-    select(USUBJID, BASETYPE, ISTESTCD, PARAMCD, AVISIT, NFRLT, AVALC, AVAL, ABLFL, BASE, CHG)
-
-
 
   # By Visit NAB Interpreted RESULT data (keep all IS vars plus ____)
   adab_nabres <- core_aab %>%
@@ -812,9 +745,7 @@ is_basetype <- is_afrlt %>%
     # These two flags, BASE and CHG are only kept on the primary ADA test
     select(-BASE, -CHG, -ADABLPFL, -ADPBLPFL)
 
-
-  # ---- Derive BASE and Calculate Change from Baseline on NAB RESULT records  ----
-
+  # Derive BASE and Calculate Change from Baseline on NAB RESULT records
   adab_nabres <- adab_nabres %>%
     derive_var_base(
       by_vars = exprs(!!!get_admiral_option("subject_keys"), BASETYPE, ADATYPE, ADAPARM),
@@ -823,6 +754,7 @@ is_basetype <- is_afrlt %>%
       filter = ABLFL == "Y"
     )
 
+  # Set CHG to na if its the ABFLF record
   adab_nabres <- derive_var_chg(adab_nabres) %>%
     mutate(
       CHG = case_when(
