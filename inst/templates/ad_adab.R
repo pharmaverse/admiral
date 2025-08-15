@@ -274,7 +274,7 @@ is_basetype <- is_afrlt %>%
       filter = (NFRLT <= 0 & (ADT <= FANLDT) | (NFRLT > 60000 & (ADT <= FANLDT)) & !is.na(BASETYPE))
     ) %>%
     mutate(
-      # VALID flags for use later:
+      # VALID flags for use later as applicable:
       # VALIDBASE flags non-missing values on baseline (by each ADATYPE and ADAPARM)
       #   Note: VALIDBASE is not used as thie templates allows a baseline to be valid as
       #        as long as its present (can be missing), adapt as needed.
@@ -327,6 +327,10 @@ is_basetype <- is_afrlt %>%
   check_result_change <- is_result_change %>%
     select (USUBJID, BASETYPE, ADATYPE, ADAPARM, AVISIT, ADT, NFRLT, AVAL, AVAL, AVALC, RESULTC, RESULTN, ABLFL, VALIDBASE, VALIDPOST, BASE_RESULT, BASE, CHG)
 
+
+# BEGIN Changes Zone ------------------------------------------------------
+
+
   # Get base only data for use later
   base_data <- is_result_change %>%
     filter(ABLFL == "Y") %>%
@@ -335,15 +339,12 @@ is_basetype <- is_afrlt %>%
       ABLFL
     )
 
-  # ADABLPFL will flag subjects that had a baseline record on main ADA_BAB analytes
-  # ADPBLPFL will flag subjects that had a valid (non missing) post baseline record on main ADA_BAB analytes
-
-
-  # For later use (if just need to merge in the adablpfl flag by paramcd)
+  # Use "is_result_change"to make a ADABLPFL flag data set to merge back in later in the program
+  #  Note:  Based on ABLFL, ABLFL is if had any a baseline record, even if null value
   adablpfl <- is_result_change %>%
     filter(ABLFL == "Y") %>%
     distinct(!!!get_admiral_option("subject_keys"), DRUG, BASETYPE, ADATYPE, ADAPARM, .keep_all = TRUE) %>%
-    select(!!!get_admiral_option("subject_keys"), DRUG, BASETYPE, ADATYPE, ADAPARM, BASE_RESULT, BASE, ABLFL) %>%
+    select(!!!get_admiral_option("subject_keys"), DRUG, BASETYPE, ADATYPE, ADAPARM, ABLFL) %>%
     rename(ADABLPFL = ABLFL)
 
 
@@ -376,29 +377,25 @@ is_basetype <- is_afrlt %>%
     )
 
 
-  # Postbaseline must be valid post data (result not missing)
+  # Post baseline must be valid post data (result not missing)
   post_data <- is_visit_flags %>%
     filter(VALIDPOST == "Y") %>%
     select(
-      !!!get_admiral_option("subject_keys"), DRUG, BASETYPE, ADATYPE, ADAPARM, RESULTN, AVAL, ADTM,
-      CHG, VALIDPOST
+      !!!get_admiral_option("subject_keys"), DRUG, BASETYPE, ADATYPE, ADAPARM, RESULTN, AVAL, ADTM, CHG
     ) %>%
     rename(AVAL_P = AVAL) %>%
     rename(RESULT_P = RESULTN)
 
-
-
+  # Use "post_data" to make a ADPBLPFL flag data set to merge back later in the program
+  #  Note:  "post_data" is if VALIDPOST="Y" (has a non missing post baseline result)
   adpblpfl <- post_data %>%
-    distinct(!!!get_admiral_option("subject_keys"), BASETYPE, ADATYPE, ADAPARM, .keep_all = TRUE) %>%
-    select(!!!get_admiral_option("subject_keys"), BASETYPE, ADATYPE, ADAPARM, RESULT_P, AVAL_P, VALIDPOST) %>%
-    rename(ADPBLPFL = VALIDPOST)
-
-  post_data <- post_data %>% select(-VALIDPOST)
-
-
+    distinct(!!!get_admiral_option("subject_keys"), DRUG, BASETYPE, ADATYPE, ADAPARM, .keep_all = TRUE) %>%
+    select(!!!get_admiral_option("subject_keys"), DRUG, BASETYPE, ADATYPE, ADAPARM) %>%
+    mutate(
+      ADPBLPFL = "Y"
+    )
 
   # Compute BFLAG, TFLAG, PBFLAG ------------------
-
 
   most_post_result <- post_data %>%
     group_by(!!!get_admiral_option("subject_keys"), DRUG, BASETYPE, ADATYPE, ADAPARM) %>%
@@ -694,12 +691,7 @@ is_basetype <- is_afrlt %>%
       NABSTAT = nabstat_opt1
     )
 
-
-  # Put ADABLPFL and ADPBFPFL onto main dataset.  If These are not Y set to N
-  # NOTE: These were computed by ISTESTCD, we only need them for and on the main
-  # Analytes (Original and Interpeted reuslts observations by ISTESTCD and EXTRT)
-
-
+  # Merge ADABLPFL and ADPBFPFL onto main dataset.
   main_aab <- main_aab_rtimes %>%
     derive_vars_merged(
       dataset_add = adablpfl,
@@ -710,22 +702,7 @@ is_basetype <- is_afrlt %>%
       dataset_add = adpblpfl,
       new_vars = exprs(ADPBLPFL),
       by_vars = exprs(!!!get_admiral_option("subject_keys"), BASETYPE, ADATYPE, ADAPARM)
-    ) %>%
-    mutate(
-      ADABLPFL = case_when(
-        ADABLPFL == "Y" ~ "Y",
-        TRUE ~ NA_character_
-      ),
-      ADPBLPFL = case_when(
-        ADPBLPFL == "Y" ~ "Y",
-        TRUE ~ NA_character_
-      )
     )
-
-  view_keys <- main_aab %>%
-    distinct (ISTESTCD, ISTEST,  ISBDAGNT)  %>%
-    arrange (ISTESTCD,  ISTEST,  ISBDAGNT)
-
 
   main_aab_review <- main_aab %>%
     select(
@@ -1232,6 +1209,8 @@ is_basetype <- is_afrlt %>%
     )
 
 
+# END Changes Zone --------------------------------------------------------
+
 
   # Set all the standard PARAM components together -----------------------------------
 
@@ -1398,10 +1377,3 @@ is_basetype <- is_afrlt %>%
 
   # Save as PARQUET file
   arrow::write_parquet(adab, file.path("data/pharmaverse/adab.parquet"))
-
-
-
-
-
-
-
