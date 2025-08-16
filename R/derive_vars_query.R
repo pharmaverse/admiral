@@ -176,19 +176,18 @@ get_vars_query <- function(dataset, dataset_queries) {
       )
     )
 
-  # Remove temp_key (if exists) so the below unique key check uses only
-  # original columns in dataset
-  dataset <- dataset %>% select(-any_of("temp_key"))
-
   # prepare input dataset for joining
   static_cols <- setdiff(names(dataset), chr2vars(source_vars))
+
   # if dataset does not have a unique key, create a temp one
   no_key <- dataset %>%
     select(all_of(static_cols)) %>%
     distinct()
   if (nrow(no_key) != nrow(dataset)) {
-    dataset$temp_key <- seq_len(nrow(dataset))
-    static_cols <- c(static_cols, "temp_key")
+    tmp_key <- get_new_tmp_var(dataset, prefix = "tmp_key")
+    dataset <- dataset %>%
+      mutate(!!tmp_key := seq_len(nrow(dataset)))
+    static_cols <- c(static_cols, as_string(tmp_key))
   }
 
   # Keep static variables - will add back on once non-static vars fixed
@@ -283,9 +282,12 @@ derive_vars_query <- function(dataset, dataset_queries) {
   no_key <- dataset %>%
     select(all_of(static_cols)) %>%
     distinct()
+  # if dataset does not have a unique key, create a temp one
   if (nrow(no_key) != nrow(dataset)) {
-    dataset$temp_key <- seq_len(nrow(dataset))
-    static_cols <- c(static_cols, "temp_key")
+    tmp_key <- get_new_tmp_var(dataset, prefix = "tmp_key")
+    dataset <- dataset %>%
+      mutate(!!tmp_key := seq_len(nrow(dataset)))
+    static_cols <- c(static_cols, as_string(tmp_key))
   }
   tryCatch(
     expr = {
@@ -297,7 +299,7 @@ derive_vars_query <- function(dataset, dataset_queries) {
   )
   # join queries to input dataset, remove temp col(s)
   derive_vars_merged(dataset, dataset_add = joined, by_vars = exprs(!!!syms(static_cols))) %>%
-    select(-starts_with("temp_"))
+    remove_tmp_vars()
 }
 
 #' Verify if a Dataset Has the Required Format as Queries Dataset.
