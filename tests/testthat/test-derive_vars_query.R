@@ -268,8 +268,8 @@ test_that("get_vars_query Test 10: Derive when no unique key columns", {
 
   # Expect the first row to match the query, second not
   expected_output <- tibble::tribble(
-    ~USUBJID, ~ASTDY, ~tmp_key_1, ~CQ40NAM,         ~CQ40CD,
-    "1",           1,     1, "Temp Key Test",        1
+    ~USUBJID, ~ASTDY, ~tmp_key_1, ~CQ40NAM, ~CQ40CD,
+    "1", 1, 1, "Temp Key Test", 1
   )
 
   actual_output <- get_vars_query(my_ae, dataset_queries = query)
