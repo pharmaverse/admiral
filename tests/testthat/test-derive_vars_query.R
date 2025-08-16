@@ -250,8 +250,9 @@ test_that("derive_vars_query Test 9: Error if requested variables already exist"
   )
 })
 
+# get_vars_query ----
 ## Test 10: Derive when no unique key columns ----
-test_that("derive_vars_query Test 10: Derive when no unique key columns", {
+test_that("get_vars_query Test 10: Derive when no unique key columns", {
   query <- tibble::tribble(
     ~PREFIX, ~GRPNAME, ~SRCVAR, ~TERMCHAR, ~GRPID, ~TERMNUM,
     "CQ40", "Temp Key Test", "AEDECOD", "PTSI", 1, NA_real_
@@ -267,19 +268,18 @@ test_that("derive_vars_query Test 10: Derive when no unique key columns", {
 
   # Expect the first row to match the query, second not
   expected_output <- tibble::tribble(
-    ~USUBJID, ~ASTDY, ~AEDECOD, ~CQ40NAM, ~CQ40CD,
-    "1", 1, "PTSI", "Temp Key Test", 1,
-    "1", 1, "something", NA_character_, NA_integer_
+    ~USUBJID, ~ASTDY, ~tmp_key_1, ~CQ40NAM,         ~CQ40CD,
+    "1",           1,     1, "Temp Key Test",        1
   )
 
-  actual_output <- derive_vars_query(my_ae, dataset_queries = query)
+  actual_output <- get_vars_query(my_ae, dataset_queries = query)
 
   expect_equal(actual_output, expected_output)
 })
 
 # assert_valid_queries ----
 ## Test 11: assert_valid_queries checks ----
-test_that("assert_valid_queries Test 10: assert_valid_queries checks", {
+test_that("assert_valid_queries Test 11: assert_valid_queries checks", {
   query <- tibble::tribble(
     ~PREFIX, ~GRPNAME,     ~SRCVAR,   ~TERMCHAR,     ~GRPID, ~TERMNUM,
     "CQ40",  "My Query 1", "AEDECOD", "PTSI",             1,       NA,
