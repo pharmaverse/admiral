@@ -40,16 +40,54 @@ overall_avisitn <- 11111
 # ---- Derivations ----
 
 is_dates <- is %>%
-  # Filter as needed
-  filter( toupper(ISBDAGNT) == "XANOMELINE") %>%
+  # Filter as needed (i.e. exclude ISSTAT has "NOT DONE")
+  filter( is.na(ISSTAT) & toupper(ISBDAGNT) == "XANOMELINE") %>%
+  # Initial prep and core variable
+  mutate(
+    # ADATYPE and ADAPARM are assigned values to serve BY analyte processing
+    # Setting ADATYPE based on SDTM V1.x ISTESTCD
+    ADATYPE = case_when(
+      toupper(ISTESTCD) == "ADATEST1" ~ "ADA_BAB",
+      toupper(ISTESTCD) == "NABTEST1" ~ "ADA_NAB",
+    ),
+    # Setting ADAPARM based on SDTM V1.x ISTESTCD
+    ADAPARM = ISTESTCD,
+    # When SDTM V1.x, Setting ISBDAGNT from ISTESTCD to work with template
+    ISBDAGNT = ISTESTCD,
+    # Setting ADATYPE based on SDTM V2.x ISTESTCD (assumed to have ADA_BAB, ADA_NAB)
+    ADATYPE = ISTESTCD,
+    # Setting ADAPARM based on SDTM V2.x ISBDAGNT
+    ADAPARM =  ISBDAGNT,
+    # Map the analyte test to corresponding DRUG in on EX.EXTRT
+    #  This is especially critical when multipel analytes and EX.EXTRT instances
+    DRUG = case_when(
+      toupper(ADAPARM) == "XANOMELINE" ~ "XANOMELINE",
+    ),
+    # Set AVISIT and AVISITN based on VISIT and VISITNUM
+    AVISIT = VISIT,
+    AVISITN = VISITNUM,
+    # Assign FRLTU (ex: DAYS or HOURS)
+    FRLTU = "DAYS",
+    # Assign NFRLT
+    #   This example maps any discontinuation visits as 77777 and unscheduled as 99999
+    #   Units for this ADAB sample will be Days. If Hours, add NFRLT x 24.
+    NFRLT = case_when (
+      grepl("EARLY DISC", toupper(VISIT)) ~ 77777,
+      grepl("TREATMENT DISC", toupper(VISIT)) ~ 77777,
+      grepl("UNSCHEDULED", toupper(VISIT)) ~ 99999,
+      grepl("BASELINE", toupper(VISIT)) & !is.na(ISTPTNUM) ~ ISTPTNUM  / 24,
+      !is.na(VISITDY) ~ (VISITDY - 1)
+    )
+  )  %>%
   # Join ADSL with is (need TRTSDT for ADY derivation)
   derive_vars_merged(
     dataset_add = adsl,
     new_vars =  exprs(TRTSDT),
     by_vars = exprs(STUDYID, USUBJID)
   ) %>%
-  # Derive analysis date/time
-  # Impute missing time to 00:00:00
+  # Derive analysis date/time then compute ADY
+  # Impute missing time to 00:00:00 or as desired.
+  #   Could replace this code with own imputation code or function
   derive_vars_dtm(
     new_vars_prefix = "A",
     highest_imputation = "s",
@@ -59,53 +97,30 @@ is_dates <- is %>%
   # Derive dates and times from date/times
   derive_vars_dtm_to_dt(exprs(ADTM)) %>%
   derive_vars_dtm_to_tm(exprs(ADTM)) %>%
-  derive_vars_dy(reference_date = TRTSDT, source_vars = exprs(ADT)) %>%
-  # Derive DRUG, ADATYPE nominal relative time from first dose (NFRLT)
-  mutate(
-    # Set AVISIT and AVISITN based on VISIT and VISITNUM
-    AVISIT = VISIT,
-    AVISITN = VISITNUM,
-    # Map the analyte test to matching DRUG based on EX
-    #  This is especially critical when multipel analytes and EX.EXTRT instances
-    DRUG = case_when(
-      toupper(ISBDAGNT) == "XANOMELINE" ~ "XANOMELINE",
-    ),
-    # Set ADATYPE based on SDTM V2.0 ISTESTCD, can also assign using other
-    #   values in local version of IS.
-    ADATYPE = ISTESTCD,
-
-    # Set ADAPARM based on ISBDAGNT or other values
-    #   ADAPARM will later become PARAMCD
-    ADAPARM =  ISBDAGNT,
-
-    # Assing NFRLT basedon how pharmaversesdtm.IS_ADA is structured or study specific
-    #   This example maps any discontinuation visits as 77777 and unscheduled as 99999
-    #   Units for this ADAB sample will be Days.  ISTPTNUM is in hours, VISITDY is days
-    NFRLT = case_when (
-      grepl("EARLY DISC", toupper(VISIT)) ~ 77777,
-      grepl("TREATMENT DISC", toupper(VISIT)) ~ 77777,
-      grepl("UNSCHEDULED", toupper(VISIT)) ~ 99999,
-      grepl("BASELINE", toupper(VISIT)) & !is.na(ISTPTNUM) ~ ISTPTNUM  / 24,
-      !is.na(VISITDY) ~ (VISITDY - 1)
-    ),
-    FRLTU = "DAYS"
-  )
+  derive_vars_dy(reference_date = TRTSDT, source_vars = exprs(ADT))
 
 
 # ---- Get dosing information ----
 
 ex_dates <- ex %>%
-  # Add ADSL Vaiables for ADY
-  derive_vars_merged(
-    dataset_add = adsl,
-    new_vars = exprs(TRTSDT),
-    by_vars = exprs(STUDYID, USUBJID)
-  ) %>%
-  # Keep appliable desired records based on EXTRT and/or dose values (>=0, >0, etc.)
+  # Keep applicable desired records based on EXTRT and/or dose values (>=0, >0, etc.)
   filter(grepl("XANOMELINE", toupper(EXTRT)) |  grepl("PLACEBO", toupper(EXTRT)), EXDOSE >= 0) %>%
+  mutate(
+    # Map EXTRT to DRUG to match DRUG values in is_dates above
+    #  This will be used to merge first dose into IS working data.
+    DRUG = case_when(
+      grepl("XANOMELINE", toupper(EXTRT)) ~  "XANOMELINE",
+      grepl("PLACEBO", toupper(EXTRT)) ~  "XANOMELINE",
+    ),
+    # Compute Nominal Time
+    NFRLT = case_when(
+      VISITDY == 1 ~ 0,
+      TRUE ~ VISITDY
+    )
+  ) %>%
   # Add analysis datetime variables and set missing end date to start date
-  # Impute missing time to 00:00:00
-  # Note all times are missing for dosing records in this example data
+  # Impute missing time to 00:00:00 or as desired.
+  #   Could replace this code with own imputation code or function
   derive_vars_dtm(
     new_vars_prefix = "AST",
     dtc = EXSTDTC,
@@ -116,42 +131,23 @@ ex_dates <- ex %>%
     dtc = EXENDTC,
     time_imputation = "00:00:00"
   ) %>%
-  # Derive dates from date/times
-  derive_vars_dtm_to_dt(exprs(ASTDTM)) %>%
-  derive_vars_dtm_to_dt(exprs(AENDTM)) %>%
-  # Set missing end dates to start date
+  # Set missing end dates to start date or as desired
   mutate(
     AENDTM = case_when(
     is.na(AENDTM) ~ ASTDTM,
     TRUE ~ AENDTM
    )
   ) %>%
+  # Derive dates from date/times
   derive_vars_dtm_to_dt(exprs(ASTDTM)) %>%
-  derive_vars_dy(reference_date = TRTSDT, source_vars = exprs(ASTDT))
+  derive_vars_dtm_to_dt(exprs(AENDTM))
 
- # This template computes only AFRLT, see ADPC template if need EX dose expansion example.
-
-ex_exp <- ex_dates %>%
-  mutate(
-    # Map EXTRT to DRUG to match DRUG values in is_dates above
-    #  This will be used to merge first dose into IS working data.
-    DRUG = case_when(
-      grepl("XANOMELINE", toupper(EXTRT)) ~  "XANOMELINE",
-      grepl("PLACEBO", toupper(EXTRT)) ~  "XANOMELINE",
-    ),
-
-    # Compute Nominal Time
-    NFRLT = case_when(
-      VISITDY == 1 ~ 0,
-      TRUE ~ VISITDY
-    )
-  )
+ # Note: This template computes only AFRLT, see ADPC template if need EX dose expansion example.
 
 # Derive AFRLT in IS data
-
 is_afrlt <- is_dates %>%
   derive_vars_merged(
-    dataset_add = ex_exp,
+    dataset_add = ex_dates,
     filter_add = (EXDOSE >= 0 & !is.na(ASTDTM)),
     new_vars = exprs(FANLDTM = ASTDTM, FANLTMF = ASTTMF),
     order = exprs(ASTDTM, EXSEQ),
@@ -164,17 +160,10 @@ is_afrlt <- is_dates %>%
     new_var = AFRLT,
     start_date = FANLDTM,
     end_date = ADTM,
-    out_unit = "days",
+    out_unit = 'days',
     floor_in = FALSE,
     add_one = FALSE
   ) %>%
-  mutate (
-    ACTTMFDS = as.numeric(difftime(ADTM, FANLDTM, units = "hours")),
-    ACTTMFDS = case_when(
-      FRLTU == "DAYS" ~ ACTTMFDS / 24,
-      FRLTU == "HOURS" ~ ACTTMFDS
-    )
-  )  %>%
   arrange(STUDYID, USUBJID, DRUG, ADATYPE, ADAPARM, ADTM, NFRLT)
 
 
@@ -192,7 +181,7 @@ is_basetype <- is_afrlt %>%
 
   # Review Unique AAB VISITs and NOMTIMES data
   is_basetype  %>%
-    group_by(DRUG, ISTESTCD, ADATYPE, ISBDAGNT, VISIT, AVISIT, AVISITN, ISTPT, NFRLT) %>%
+    group_by(DRUG, ISTESTCD, ADATYPE, ADAPARM, VISIT, AVISIT, AVISITN, ISTPT, NFRLT) %>%
     summarize (n = n()) %>%
     print(n = 100)
 
@@ -201,11 +190,11 @@ is_basetype <- is_afrlt %>%
   is_aval <- is_basetype %>%
     mutate(
       MRT = case_when(
-        ADATYPE == "ADA_BAB" & ISBDAGNT == "XANOMELINE" ~ 1.4,
+        ADATYPE == "ADA_BAB" & ADAPARM == "XANOMELINE" ~ 1.4,
         TRUE ~ NA_real_
       ),
       DTL = case_when(
-        ADATYPE == "ADA_BAB" & ISBDAGNT == "XANOMELINE" ~ 999,
+        ADATYPE == "ADA_BAB" & ADAPARM == "XANOMELINE" ~ 999,
         TRUE ~ NA_real_
       ),
       RESULTC = case_when(
@@ -666,16 +655,19 @@ is_basetype <- is_afrlt %>%
 
   # Begin Creation of each PARAM for the final ADAB format using main_aab --------
 
-  #  First create "core_aab" to be the input for all the parameter sub-assemblies
+  #  First create "core_aab" with PARCAT1 to be the input for all the parameter sub-assemblies
   core_aab <- main_aab %>%
     mutate(
-      # Assign original PARAM (--TEST) to PARCAT1 before customizing PARAM for parameters
-      PARAM = case_when(
+      # SDTM V1.x: Assign PARAM from ISTEST or customize
+      PARCAT1 = ISTEST,
+      # SDTM V2.x: Assign PARAM using text values plus ADAPARM
+      PARCAT1 = case_when(
         ADATYPE == "ADA_BAB" ~ paste ("Anti-", ADAPARM, " Antibody", sep = ""),
         ADATYPE == "ADA_NAB" ~ paste ("Anti-", ADAPARM, " Neutralizing Antibody", sep = ""),
       ),
+      # Initialize PARAMCD and PARAM
       PARAMCD = ADAPARM,
-      PARCAT1 = PARAM
+      PARAM = PARCAT1
     )
 
   core_aab %>%
@@ -686,7 +678,7 @@ is_basetype <- is_afrlt %>%
     filter(ADATYPE == "ADA_BAB") %>%
     mutate(
       # For ADASTAT, append "Titer Units" to PARAM
-      PARAM = paste(PARAM, "Titer Units", sep = " "),
+      PARAM = paste(PARCAT1, "Titer Units", sep = " "),
     )
 
   # By Visit NAB ISTESTCD Results
@@ -822,7 +814,6 @@ is_basetype <- is_afrlt %>%
     select(-BASE, -CHG, -MRT, -DTL, -ADABLPFL, -ADPBLPFL)
 
 
-
   # Next below are the individual params
   # assign the AVISIT and AVISITN for individual params
 
@@ -832,13 +823,12 @@ is_basetype <- is_afrlt %>%
       AVISITN = overall_avisitn
     )
 
-
   # Get Patient flag BFLAG
   adab_bflag <- core_aab %>%
     filter(ADATYPE == "ADA_BAB") %>%
     distinct(
-      !!!get_admiral_option("subject_keys"), BASETYPE, PARAM, ADATYPE, ADAPARM, ISSPEC, ISTESTCD, ISTEST, ISBDAGNT,
-      AVISITN, AVISIT, PARCAT1, BFLAG
+      !!!get_admiral_option("subject_keys"), PARCAT1, BASETYPE, PARAM, ADATYPE, ADAPARM, ISTESTCD, ISTEST, ISCAT, ISBDAGNT,
+      AVISITN, AVISIT, ISSPEC, BFLAG
     ) %>%
     mutate(
       PARAMCD = "BFLAGy",
@@ -857,8 +847,8 @@ is_basetype <- is_afrlt %>%
   adab_incucd <- core_aab %>%
     filter(ADATYPE == "ADA_BAB") %>%
     distinct(
-      !!!get_admiral_option("subject_keys"), BASETYPE, PARAM, ADATYPE, ADAPARM, ISSPEC, ISTESTCD, ISTEST, ISBDAGNT,
-      AVISITN, AVISIT, PARCAT1, TFLAG
+      !!!get_admiral_option("subject_keys"), PARCAT1, BASETYPE, PARAM, ADATYPE, ADAPARM, ISTESTCD, ISTEST, ISCAT, ISBDAGNT,
+      AVISITN, AVISIT, ISSPEC, TFLAG
     ) %>%
     mutate(
       PARAMCD = "INDUCDy",
@@ -879,8 +869,8 @@ is_basetype <- is_afrlt %>%
   adab_enhanc <- core_aab %>%
     filter(ADATYPE == "ADA_BAB") %>%
     distinct(
-      !!!get_admiral_option("subject_keys"), BASETYPE, PARAM, ADATYPE, ADAPARM, ISSPEC, ISTESTCD, ISTEST, ISBDAGNT,
-      AVISITN, AVISIT, PARCAT1, TFLAG
+      !!!get_admiral_option("subject_keys"), PARCAT1, BASETYPE, PARAM, ADATYPE, ADAPARM, ISTESTCD, ISTEST, ISCAT, ISBDAGNT,
+      AVISITN, AVISIT, ISSPEC, TFLAG
     ) %>%
     mutate(
       PARAMCD = "ENHANCy",
@@ -901,8 +891,8 @@ is_basetype <- is_afrlt %>%
   adab_emerpos <- core_aab %>%
     filter(ADATYPE == "ADA_BAB") %>%
     distinct(
-      !!!get_admiral_option("subject_keys"), BASETYPE, PARAM, ADATYPE, ADAPARM, ISSPEC, ISTESTCD, ISTEST, ISBDAGNT,
-      AVISITN, AVISIT, PARCAT1, PBFLAG
+      !!!get_admiral_option("subject_keys"), PARCAT1, BASETYPE, PARAM, ADATYPE, ADAPARM, ISTESTCD, ISTEST, ISCAT, ISBDAGNT,
+      AVISITN, AVISIT, ISSPEC, PBFLAG
     ) %>%
     mutate(
       PARAMCD = "EMERPOSy",
@@ -923,8 +913,8 @@ is_basetype <- is_afrlt %>%
   adab_trunaff <- core_aab %>%
     filter(ADATYPE == "ADA_BAB") %>%
     distinct(
-      !!!get_admiral_option("subject_keys"), BASETYPE, PARAM, ADATYPE, ADAPARM, ISSPEC, ISTESTCD, ISTEST, ISBDAGNT,
-      AVISITN, AVISIT, PARCAT1, TFLAG
+      !!!get_admiral_option("subject_keys"), PARCAT1, BASETYPE, PARAM, ADATYPE, ADAPARM, ISTESTCD, ISTEST, ISCAT, ISBDAGNT,
+      AVISITN, AVISIT, ISSPEC, TFLAG
     ) %>%
     mutate(
       PARAMCD = "TRUNAFFy",
@@ -945,8 +935,8 @@ is_basetype <- is_afrlt %>%
   adab_emerneg <- core_aab %>%
     filter(ADATYPE == "ADA_BAB") %>%
     distinct(
-      !!!get_admiral_option("subject_keys"), BASETYPE, PARAM, ADATYPE, ADAPARM, ISSPEC, ISTESTCD, ISTEST, ISBDAGNT,
-      AVISITN, AVISIT, PARCAT1, PBFLAG
+      !!!get_admiral_option("subject_keys"), PARCAT1, BASETYPE, PARAM, ADATYPE, ADAPARM, ISTESTCD, ISTEST, ISCAT, ISBDAGNT,
+      AVISITN, AVISIT, ISSPEC, PBFLAG
     ) %>%
     mutate(
       PARAMCD = "EMERNEGy",
@@ -967,8 +957,8 @@ is_basetype <- is_afrlt %>%
   adab_notrrel <- core_aab %>%
     filter(ADATYPE == "ADA_BAB") %>%
     distinct(
-      !!!get_admiral_option("subject_keys"), BASETYPE, PARAM, ADATYPE, ADAPARM, ISSPEC, ISTESTCD, ISTEST, ISBDAGNT,
-      AVISITN, AVISIT, PARCAT1, PBFLAG
+      !!!get_admiral_option("subject_keys"), PARCAT1, BASETYPE, PARAM, ADATYPE, ADAPARM, ISTESTCD, ISTEST, ISCAT, ISBDAGNT,
+      AVISITN, AVISIT, ISSPEC, PBFLAG
     ) %>%
     mutate(
       PARAMCD = "NOTRRELy",
@@ -989,8 +979,8 @@ is_basetype <- is_afrlt %>%
   adab_adastat <- core_aab %>%
     filter(ADATYPE == "ADA_BAB") %>%
     distinct(
-      !!!get_admiral_option("subject_keys"), BASETYPE, PARAM, ADATYPE, ADAPARM, ISSPEC, ISTESTCD, ISTEST, ISBDAGNT,
-      AVISITN, AVISIT, PARCAT1, ADASTAT
+      !!!get_admiral_option("subject_keys"), PARCAT1, BASETYPE, PARAM, ADATYPE, ADAPARM, ISTESTCD, ISTEST, ISCAT, ISBDAGNT,
+      AVISITN, AVISIT, ISSPEC, ADASTAT
     ) %>%
     mutate(
       PARAMCD = "ADASTATy",
@@ -1009,8 +999,8 @@ is_basetype <- is_afrlt %>%
   adab_timada <- core_aab %>%
     filter(ADATYPE == "ADA_BAB") %>%
     distinct(
-      !!!get_admiral_option("subject_keys"), BASETYPE, PARAM, ADATYPE, ADAPARM, ISSPEC, ISTESTCD, ISTEST, ISBDAGNT,
-      AVISITN, AVISIT, PARCAT1, TIMADA
+      !!!get_admiral_option("subject_keys"), PARCAT1, BASETYPE, PARAM, ADATYPE, ADAPARM, ISTESTCD, ISTEST, ISCAT, ISBDAGNT,
+      AVISITN, AVISIT, ISSPEC, TIMADA
     ) %>%
     mutate(
       PARAMCD = "TIMADAy",
@@ -1028,8 +1018,8 @@ is_basetype <- is_afrlt %>%
   adab_persada <- core_aab %>%
     filter(ADATYPE == "ADA_BAB") %>%
     distinct(
-      !!!get_admiral_option("subject_keys"), BASETYPE, PARAM, ADATYPE, ADAPARM, ISSPEC, ISTESTCD, ISTEST, ISBDAGNT,
-      AVISITN, AVISIT, PARCAT1, PERSADA
+      !!!get_admiral_option("subject_keys"), PARCAT1, BASETYPE, PARAM, ADATYPE, ADAPARM, ISTESTCD, ISTEST, ISCAT, ISBDAGNT,
+      AVISITN, AVISIT, ISSPEC, PERSADA
     ) %>%
     mutate(
       PARAMCD = "PERSADAy",
@@ -1048,8 +1038,8 @@ is_basetype <- is_afrlt %>%
   adab_tranada <- core_aab %>%
     filter(ADATYPE == "ADA_BAB") %>%
     distinct(
-      !!!get_admiral_option("subject_keys"), BASETYPE, PARAM, ADATYPE, ADAPARM, ISSPEC, ISTESTCD, ISTEST, ISBDAGNT,
-      AVISITN, AVISIT, PARCAT1, TRANADA
+      !!!get_admiral_option("subject_keys"), PARCAT1, BASETYPE, PARAM, ADATYPE, ADAPARM, ISTESTCD, ISTEST, ISCAT, ISBDAGNT,
+      AVISITN, AVISIT, ISSPEC, TRANADA
     ) %>%
     mutate(
       PARAMCD = "TRANADAy",
@@ -1068,8 +1058,8 @@ is_basetype <- is_afrlt %>%
   adab_nabstat <- core_aab %>%
     filter(ADATYPE == "ADA_NAB") %>%
     distinct(
-      !!!get_admiral_option("subject_keys"), BASETYPE, PARAM, ADATYPE, ADAPARM, ISSPEC, ISTESTCD, ISTEST, ISBDAGNT,
-      AVISITN, AVISIT, PARCAT1, NABSTAT
+      !!!get_admiral_option("subject_keys"), PARCAT1, BASETYPE, PARAM, ADATYPE, ADAPARM, ISTESTCD, ISTEST, ISCAT, ISBDAGNT,
+      AVISITN, AVISIT, ISSPEC, NABSTAT
     ) %>%
     mutate(
       PARAMCD = "NABSTATy",
@@ -1088,8 +1078,8 @@ is_basetype <- is_afrlt %>%
   adab_adadur <- core_aab %>%
     filter(ADATYPE == "ADA_BAB") %>%
     distinct(
-      !!!get_admiral_option("subject_keys"), BASETYPE, PARAM, ADATYPE, ADAPARM, ISSPEC, ISTESTCD, ISTEST, ISBDAGNT,
-      AVISITN, AVISIT, PARCAT1, ADADUR
+      !!!get_admiral_option("subject_keys"), PARCAT1, BASETYPE, PARAM, ADATYPE, ADAPARM, ISTESTCD, ISTEST, ISCAT, ISBDAGNT,
+      AVISITN, AVISIT, ISSPEC, ADADUR
     ) %>%
     mutate(
       PARAMCD = "ADADURy",
@@ -1107,8 +1097,8 @@ is_basetype <- is_afrlt %>%
   adab_fppdtm <- core_aab %>%
     filter(ADATYPE == "ADA_BAB") %>%
     distinct(
-      !!!get_admiral_option("subject_keys"), BASETYPE, PARAM, ADATYPE, ADAPARM, ISSPEC, ISTESTCD, ISTEST, ISBDAGNT,
-      AVISITN, AVISIT, PARCAT1, FPPDTM
+      !!!get_admiral_option("subject_keys"), PARCAT1, BASETYPE, PARAM, ADATYPE, ADAPARM, ISTESTCD, ISTEST, ISCAT, ISBDAGNT,
+      AVISITN, AVISIT, ISSPEC, FPPDTM
     ) %>%
     mutate(
       PARAMCD = "FPPDTMy",
@@ -1126,8 +1116,8 @@ is_basetype <- is_afrlt %>%
   adab_lppdtm <- core_aab %>%
     filter(ADATYPE == "ADA_BAB") %>%
     distinct(
-      !!!get_admiral_option("subject_keys"), BASETYPE, PARAM, ADATYPE, ADAPARM, ISSPEC, ISTESTCD, ISTEST, ISBDAGNT,
-      AVISITN, AVISIT, PARCAT1, LPPDTM
+      !!!get_admiral_option("subject_keys"), PARCAT1, BASETYPE, PARAM, ADATYPE, ADAPARM, ISTESTCD, ISTEST, ISCAT, ISBDAGNT,
+      AVISITN, AVISIT, ISSPEC, LPPDTM
     ) %>%
     mutate(
       PARAMCD = "LPPDTMy",
@@ -1163,7 +1153,6 @@ is_basetype <- is_afrlt %>%
   # To include BY VISIT parameters
   adab_study <- bind_rows(adab_paramcds,adab_visits)
 
-
   # Drop Temp vars and ADA Flag vars that are now parameterized
   adab_study <- adab_study %>%
     select(
@@ -1173,15 +1162,12 @@ is_basetype <- is_afrlt %>%
        -tdur, -ADASTAT_MAIN, -NABPOSTMISS, -TRTSDT
     )
 
-
-  # Merge in ADSL Static and Computed Values --------------------------------
-
+  # Merge in ADSL Values --------------------------------
   adab_adsl <- adab_study %>%
     derive_vars_merged(
       dataset_add = adsl,
       by_vars = exprs(!!!get_admiral_option("subject_keys"))
     )
-
 
   # Compute COHORT From ADSL, other source could be ADSUB
   adab_cohort <- adab_adsl %>%
@@ -1190,7 +1176,6 @@ is_basetype <- is_afrlt %>%
       new_vars = exprs(COHORT = ARMCD),
       by_vars = exprs(!!!get_admiral_option("subject_keys"))
     )
-
 
   # Compute ADAFL
   # Other method could be ADSL.SAFFL, ADAB.ADPBLPFL by ISTESTCD, etc.
@@ -1207,7 +1192,6 @@ is_basetype <- is_afrlt %>%
     arrange (ISTESTCD,  ISTEST, ISBDAGNT, PARCAT1, ADAPARM, ADATYPE, PARAMCD, PARAM)
 
 
-
   # Study Specific Specs Post-Processing ------------------------------------
 
   # Create a Tibble to map above processed PARAMCD to the study specs\
@@ -1216,8 +1200,8 @@ is_basetype <- is_afrlt %>%
 
   adab_param_data <- tribble(
     ~PARAMCD,   ~ADATYPE,  ~ADAPARM, ~PARAMCD_NEW, ~PARAM_SUFFIX,
-    "RESULTy",   "ADA_BAB", "XANOMELINE", "RESULT",  NA_character_,
-    "RESULTy",   "ADA_NAB", "XANOMELINE", "RESULT2", NA_character_,
+    "RESULTy",  "ADA_BAB", "XANOMELINE", "RESULT",  NA_character_,
+    "RESULTy",  "ADA_NAB", "XANOMELINE", "RESULT2", NA_character_,
     "BFLAGy",   "ADA_BAB", "XANOMELINE", "BFLAG",   NA_character_,
     "INDUCDy",  "ADA_BAB", "XANOMELINE", "INDUCD",  NA_character_,
     "ENHANCy",  "ADA_BAB", "XANOMELINE", "ENHANC",  NA_character_,
@@ -1255,15 +1239,11 @@ is_basetype <- is_afrlt %>%
       )
     )
 
-
   view_keys2  <- adab_params %>%
     distinct (ISTESTCD, ISTEST, ISBDAGNT, PARCAT1, ADAPARM, PARAMCD, PARAM)  %>%
     arrange (ISTESTCD,  ISTEST, ISBDAGNT, PARCAT1, ADAPARM, PARAMCD, PARAM)
 
-
   # Sort by the standard Key then Compute ASEQ
-
-
   adab_prefinal <- adab_params %>%
     # Calculate ASEQ
     derive_var_obs_number(
@@ -1273,14 +1253,13 @@ is_basetype <- is_afrlt %>%
       check_type = "error"
     )
 
-
-
   review_adab_prefinal <- adab_prefinal  %>%
     select(USUBJID, SUBJID, ISDTC, ADTM, FANLDTM, NFRLT, AFRLT,FRLTU, ASEQ, PARAMCD, PARAM, ISSTRESN, ISSTRESC, AVAL, AVALC, BASE, CHG)   %>%
     filter ( 1==1) %>%
     filter (PARAMCD == "RESULT2")
 
-
+  # Choose final variables to keep
+  # When SDTM V1.x, suggest remove ISBDAGNT
   adab <- adab_prefinal  %>%
     select(
       STUDYID, USUBJID, SUBJID, SITEID, ASEQ,
