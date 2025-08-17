@@ -52,12 +52,12 @@ is_dates <- is %>%
     ),
     # Setting ADAPARM based on SDTM V1.x ISTESTCD
     ADAPARM = ISTESTCD,
-    # When SDTM V1.x, Setting ISBDAGNT from ISTESTCD to work with template
-    ISBDAGNT = ISTESTCD,
     # Setting ADATYPE based on SDTM V2.x ISTESTCD (assumed to have ADA_BAB, ADA_NAB)
     ADATYPE = ISTESTCD,
     # Setting ADAPARM based on SDTM V2.x ISBDAGNT
     ADAPARM =  ISBDAGNT,
+    # When SDTM V1.x, Setting ISBDAGNT from ISTESTCD to work with template
+    # ISBDAGNT = ISTESTCD,
     # Map the analyte test to corresponding DRUG in on EX.EXTRT
     #  This is especially critical when multipel analytes and EX.EXTRT instances
     DRUG = case_when(
@@ -98,7 +98,6 @@ is_dates <- is %>%
   derive_vars_dtm_to_dt(exprs(ADTM)) %>%
   derive_vars_dtm_to_tm(exprs(ADTM)) %>%
   derive_vars_dy(reference_date = TRTSDT, source_vars = exprs(ADT))
-
 
 # ---- Get dosing information ----
 
@@ -413,8 +412,8 @@ is_basetype <- is_afrlt %>%
       by_vars = exprs(!!!get_admiral_option("subject_keys"), BASETYPE, ADATYPE, ADAPARM)
     )
 
-  # Use an outer Join to combine baseline with most post results
-  flag_data <- full_join(base_data, most_post, by = c("DRUG", "STUDYID", "USUBJID", "BASETYPE", "ADATYPE", "ADAPARM")
+  # Use an outer Join to combine baseline with most post results create utility dataset with flag data
+  flagdata_init <- full_join(base_data, most_post, by = c("DRUG", "STUDYID", "USUBJID", "BASETYPE", "ADATYPE", "ADAPARM")
   ) %>%
     mutate(
       BFLAG =
@@ -444,18 +443,18 @@ is_basetype <- is_afrlt %>%
     ) %>%
     arrange(DRUG, BASETYPE, ADATYPE, ADAPARM, !!!get_admiral_option("subject_keys"), )
 
-  # Pull out Main ADA Titer ADASTAT status for NABSTAT option 1 as ADASTAT_MAIN
+  # Merge in out Main ADASTAT status for computing NABSTAT
 
-  flag_data <- flag_data %>%
+  flagdata_adastat <- flagdata_init %>%
     derive_vars_merged(
-      dataset_add = flag_data,
+      dataset_add = flagdata_init,
       filter_add = ADATYPE == "ADA_BAB",
       new_vars = exprs(ADASTAT_MAIN = ADASTAT),
       by_vars = exprs(!!!get_admiral_option("subject_keys"), DRUG)
     )
 
   # Compute NABPOSTMISS onto flag_data for NABSTAT
-  flag_data <- flag_data %>%
+  flagdata_nab <- flagdata_adastat %>%
     derive_var_merged_exist_flag(
       dataset_add = is_visit_flags,
       new_var = NABPOSTMISS,
@@ -464,9 +463,9 @@ is_basetype <- is_afrlt %>%
     )
 
   # Compute NAB Stat using both methods
-  # Note: Options 2 added as a placekeeper, starter method, adjust as needed for
-  #   current or study specific specs.
-  flag_data <- flag_data %>%
+  # Note: Options 2 added as a placekeeper starter method, adjust as needed for
+  #   study specific specs.
+  flagdata_final <- flagdata_nab %>%
     mutate(
       # For Option 1, if any post baseline NAB were blank without a Positive (NABPOSTMISS = Y), NABSTAT = missing
       nabstat_opt1 = case_when(
@@ -484,15 +483,15 @@ is_basetype <- is_afrlt %>%
     # Drop variables no longer neded from flag_data before merging with main ADAB
     select(-BASE, -BASE_RESULT, -AVAL_P, -RESULT_P, -DRUG, -ABLFL)
 
-  # Put TFLAG, BFLAG and PBFLAG onto the main ADAB dataset
+  # Put TFLAG, BFLAG and PBFLAG onto the main ADAB data set
   is_flagdata <- is_visit_flags %>%
    # main_aab_flagdata
     derive_vars_merged(
-      dataset_add = flag_data,
+      dataset_add = flagdata_final,
       by_vars = exprs(!!!get_admiral_option("subject_keys"), BASETYPE, ADATYPE, ADAPARM)
     )
 
-  # Creat a utility data set to compute PERSADA, TRANADA, INDUCED, ENHANCED related parametrs
+  # Creat a utility data set to compute PERSADA, TRANADA, INDUCED, ENHANCED related parameters
 
   per_tran_pre <- is_flagdata %>%
     filter(VALIDPOST == "Y") %>%
@@ -669,9 +668,6 @@ is_basetype <- is_afrlt %>%
       PARAMCD = ADAPARM,
       PARAM = PARCAT1
     )
-
-  core_aab %>%
-    distinct(ADATYPE, PARAMCD, PARAM, PARCAT1)
 
   # By Visit Primary ADA ISTESTCD Titer Results
   adab_titer <- core_aab %>%
