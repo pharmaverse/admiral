@@ -20,13 +20,6 @@ on:
 
 
 
-jobs:
-  example_job:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Example step
-        run: echo "This workflow runs every  Friday at 12:01 AM UTC."
-
 run-name: PR Build for ${{ github.event.pull_request.number }} by @${{ github.actor }}
 
 
@@ -42,6 +35,9 @@ jobs:
     steps:
       - name: Set US Eastern timezone
         run: sudo timedatectl set-timezone America/New_York
+
+      - name: Echo
+        run: echo "This workflow runs every  Friday at 12:01 AM UTC."
 
 # Why this?
 #     - name: Check out repository
