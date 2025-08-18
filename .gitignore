@@ -43,4 +43,4 @@ admiral*.tgz
 /Meta/
 verify_template_comparisons.txt
 # (include .rds, if needed)
-!inst/verify/**/*.rds
+# !inst/verify/**/*.rds
