@@ -1,8 +1,33 @@
-# admiral 1.4.0
+# admiral (development version)
 
 ## New Features
 
+## Updates of Existing Functions
+
 - The default value of `ignore_seconds_flag` is set to `TRUE`. (#2798)
+
+## Breaking Changes
+
+- The following function arguments are entering the next phase of the [deprecation process](https://pharmaverse.github.io/admiraldev/articles/programming_strategy.html#deprecation): 
+
+    **Phase 1 (message)**
+  
+    **Phase 2 (warning)**
+
+    **Phase 3 (error)**
+
+    **Phase 4 (removed)**
+    
+## Documentation
+
+- The BDS Findings vignette was updated to move derivation of `ASEQ` after any new rows. (#2780)
+- `ADLBHY` template was updated to keep `PARAM` in final dataset. (#2804)
+
+## Various
+
+<details>
+<summary>Developer Notes</summary>
+</details>
 
 # admiral 1.3.1
 

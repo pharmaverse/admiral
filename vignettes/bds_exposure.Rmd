@@ -43,7 +43,7 @@ otherwise specified.*
 * [Assign `PARAMCD`, `PARAMN`, etc. from Reference Tables](#paramcd)
 * [Derive Categorization Variables (`AVALCATy`)](#cat)
 * [Assign `ASEQ`](#aseq)
-* [Add ADSL variables `ASEQ`](#adsl_vars)
+* [Add ADSL variables](#adsl_vars)
 * [Add Labels and Attributes](#attributes)
 
 ## Read in Data {#readdata}
