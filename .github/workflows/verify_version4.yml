@@ -1,7 +1,7 @@
 # Source:  pilot5, Eli Miller, @ July 15, 2025, modified
 # Changes made with assistance of gemini LLM.
 
-# Runs 12:01 am, UTC  ( 7:01 pm US East Coast) ,  Monday, Wednesday, Friday     
+# Runs 12:01 am, UTC  ( 7:01 pm US East Coast) ,   Friday     
 
 name: Verify Templates ✅
 
@@ -16,7 +16,7 @@ on:
     branches:
       - 2506_verify_templates_condensed 
   schedule:
-    - cron: "1 0 * * 1,3,5"
+    - cron: "1 0 * * 5"
 
 
 
@@ -25,7 +25,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Example step
-        run: echo "This workflow runs every Monday, Wednesday, and Friday at 12:01 AM UTC."
+        run: echo "This workflow runs every  Friday at 12:01 AM UTC."
 
 run-name: PR Build for ${{ github.event.pull_request.number }} by @${{ github.actor }}
 
@@ -130,7 +130,7 @@ jobs:
         with:
           title: Verify Templates 
           content-filepath: qcSummary.txt
-          assignees: jimrothstein
+          assignees: jimrothstein, bms63
           labels: |
             report
             automated issue
