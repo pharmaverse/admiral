@@ -210,7 +210,8 @@ get_vars_query <- function(dataset, dataset_queries) {
     select(!!!syms(c(static_cols, new_col_names))) %>%
     group_by_at(static_cols) %>%
     summarise_all(~ first(na.omit(.))) %>%
-    ungroup()
+    ungroup() %>%
+    remove_tmp_vars()
 }
 
 #' Derive Query Variables
