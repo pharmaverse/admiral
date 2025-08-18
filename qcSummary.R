@@ -40,7 +40,7 @@ writeLines(paste0("## Verify Templates Check Complete!", "\n\n"), CON)
 writeLines(paste0("Date: ", Sys.Date(), "\n"), CON)
 writeLines(paste0("Run by: ", Sys.getenv("GITHUB_ACTOR"), "\n"), CON)
 writeLines(paste0("Git Ref: ", Sys.getenv("GITHUB_REF"), "\n"), CON)
-writeLines(paste0("BASE: ", "Generated ADaM Datasets from Templates during Run", "\n"), CON)
+writeLines(paste0("BASE: ", "Generated ADaM Datasets from Templates ", "\n"), CON)
 writeLines(paste0("COMPARE: ", "ADaM Datasets from pharmaverseadam ", "\n"), CON)
 
 for (y in input_dataset_names) {

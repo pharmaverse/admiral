@@ -104,7 +104,7 @@ cat("## Verify Templates Check Complete!", "\n\n")
 cat("Date: ", format(Sys.Date()), "\n")
 cat("Run by: ", Sys.getenv("GITHUB_ACTOR"), "\n")
 cat("Git Ref: ", Sys.getenv("GITHUB_REF"), "\n")
-cat("BASE: ", "Generated ADaM Datasets from Templates during Run", "\n")
+cat("BASE: ", "Generated ADaM Datasets from Templates ", "\n")
 cat("COMPARE: ", "ADaM Datasets from pharmaverseadam ", "\n")
 for (y in input_dataset_names) {
 

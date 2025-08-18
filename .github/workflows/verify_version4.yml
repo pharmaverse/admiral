@@ -16,7 +16,7 @@ on:
     branches:
       - 2506_verify_templates_condensed 
   schedule:
-    - cron: "1 0 * * 5"
+    - cron: "1 0 * * 3,5"
 
 
 
@@ -126,9 +126,9 @@ jobs:
         with:
           title: Verify Templates 
           content-filepath: qcSummary.txt
-          assignees: jimrothstein, bms63
+          assignees: jimrothstein, bms63, manciniedoardo
           labels: |
-            report
+            bug
             automated issue
 
 #      - name: Fail Step if no differences found
