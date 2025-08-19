@@ -97,7 +97,7 @@
 
     Code
       compute_tmf(dtc = c("2020-11-11T11:11:11", "2020-11-11T11:11"), dtm = ymd_hms(c(
-        "2020-11-11T11:11:11", "2020-11-11T11:11:00")), ignore_seconds_flag = TRUE)
+        "2020-11-11T11:11:11", "2020-11-11T11:11:00")))
     Condition
       Error in `compute_tmf()`:
       ! Seconds detected in data while `ignore_seconds_flag` is invoked

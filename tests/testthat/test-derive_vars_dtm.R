@@ -429,15 +429,14 @@ test_that("compute_tmf Test 15: compute TMF", {
   )
 })
 
-## Test 16: throws ERROR when ignore_seconds_flag  = T and seconds are present ----
+## Test 16: throws ERROR when ignore_seconds_flag  = T (default) and seconds are present ----
 test_that("compute_tmf Test 16: throws ERROR when ignore_seconds_flag  = T and seconds are present", { # nolint
   expect_snapshot(
     compute_tmf(
       dtc = c("2020-11-11T11:11:11", "2020-11-11T11:11"),
       dtm = ymd_hms(c(
         "2020-11-11T11:11:11", "2020-11-11T11:11:00"
-      )),
-      ignore_seconds_flag = TRUE
+      ))
     ),
     error = TRUE
   )

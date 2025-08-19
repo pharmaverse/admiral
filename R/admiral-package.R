@@ -11,7 +11,8 @@
 #' @importFrom lifecycle deprecate_warn deprecate_stop deprecated
 #' @importFrom lubridate %--% as_datetime ceiling_date date days duration
 #'             floor_date hour hours is.Date is.instant is.POSIXct minute
-#'             minutes rollback second time_length weeks ymd ymd_hms years
+#'             minutes rollback second time_length weeks ymd ymd_hms ymd_hm
+#'             years
 #' @importFrom magrittr %>%
 #' @importFrom purrr compose discard every flatten keep map map_chr map_dbl
 #'             map_if map_lgl map2 modify_at modify_if pmap reduce transpose

@@ -401,8 +401,8 @@ convert_dtc_to_dtm <- function(dtc,
 #' impute_dtc_dtm(
 #'   "2020-11",
 #'   min_dates = list(
-#'    ymd_hms("2020-12-06T12:12:12"),
-#'    ymd_hms("2020-11-11T11:11:11")
+#'    ymd_hm("2020-12-06T12:12"),
+#'    ymd_hm("2020-11-11T11:11")
 #'   ),
 #'   highest_imputation = "M"
 #' )
@@ -520,8 +520,8 @@ convert_dtc_to_dtm <- function(dtc,
 #' impute_dtc_dtm(
 #'   "2020-12",
 #'   min_dates = list(
-#'     ymd_hms("2020-12-06T12:12:12"),
-#'     ymd_hms("2020-11-11T11:11:11")
+#'     ymd_hm("2020-12-06T12:12"),
+#'     ymd_hm("2020-11-11T11:11")
 #'   ),
 #'   highest_imputation = "M"
 #' )
@@ -530,8 +530,8 @@ convert_dtc_to_dtm <- function(dtc,
 #' impute_dtc_dtm(
 #'   c("2020-12", NA_character_),
 #'   min_dates = list(
-#'     ymd_hms("2020-12-06T12:12:12", "2020-01-01T01:01:01"),
-#'     ymd_hms("2020-11-11T11:11:11", NA)
+#'     ymd_hm("2020-12-06T12:12", "2020-01-01T01:01"),
+#'     ymd_hm("2020-11-11T11:11", NA)
 #'   ),
 #'   highest_imputation = "Y"
 #' )
@@ -740,11 +740,11 @@ restrict_imputed_dtc_dtm <- function(dtc,
 #' @examples
 #' library(lubridate)
 #'
-#' compute_tmf(dtc = "2019-07-18T15:25", dtm = ymd_hms("2019-07-18T15:25:00"))
-#' compute_tmf(dtc = "2019-07-18T15", dtm = ymd_hms("2019-07-18T15:25:00"))
+#' compute_tmf(dtc = "2019-07-18T15:25", dtm = ymd_hm("2019-07-18T15:25"))
+#' compute_tmf(dtc = "2019-07-18T15", dtm = ymd_hm("2019-07-18T15:25"))
 #' compute_tmf(dtc = "2019-07-18", dtm = ymd("2019-07-18"))
-#' compute_tmf(dtc = "2022-05--T00:00", dtm = ymd_hms("2022-05-15T23:59:59"))
-#' compute_tmf(dtc = "2022-05--T23:00", dtm = ymd_hms("2022-05-15T23:59:59"))
+#' compute_tmf(dtc = "2022-05--T00:00", dtm = ymd_hm("2022-05-15T23:59"))
+#' compute_tmf(dtc = "2022-05--T23:00", dtm = ymd_hm("2022-05-15T23:59"))
 #' compute_tmf(
 #'   dtc = "2022-05--T23:59:00",
 #'   dtm = ymd_hms("2022-05-15T23:59:59"),
