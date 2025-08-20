@@ -718,8 +718,10 @@ restrict_imputed_dtc_dtm <- function(dtc,
 #'
 #' @param ignore_seconds_flag  ADaM IG states that given SDTM (`--DTC`) variable,
 #' if only hours and minutes are ever collected, and seconds are imputed in
-#' (`*DTM`) as 00, then it is not necessary to set (`*TMF`) to `"S"`. A user can set this
-#' to `TRUE` so the `"S"` Flag is dropped from (`*TMF`).
+#' (`*DTM`) as 00, then it is not necessary to set (`*TMF`) to `"S"`.
+#'
+#' By default it is assumed that no seconds are collected and `*TMF` shouldn't be set to `"S"`.
+#' A user can set this to `FALSE` if seconds are collected.
 #'
 #' The default value of `ignore_seconds_flag` is set to `TRUE` in
 #' admiral 1.4.0 and later.
