@@ -91,7 +91,9 @@
 #' all or part of `23:59:59` for time imputation. Note that `highest_imputation` must
 #' be at least `"D"` to perform date imputation. Here we use `highest_imputation = "M"`
 #' to request imputation of month and day (and time). Also note that
-#' two flag variables are created.
+#' two flag variables are created. By default seconds are not imputed and `ASTTMF` is
+#' set to `<NA>` for times that include minutes. Set `ignore_seconds_flag = FALSE`
+#' to have the `"S"` flag for `ASTTMF`.
 #'
 #' @code
 #' derive_vars_dtm(
@@ -143,11 +145,13 @@
 #'   max_dates = exprs(DTHDT, DCUTDT)
 #' )
 #'
-#' @caption Suppress `"S"` for imputation flag (`ignore_seconds_flag`)
-#' @info In this example, we set `ignore_seconds_flag = TRUE` to suppress `S` for
-#' seconds in the `ASTTMF` variable. The ADaM IG states that given SDTM (`--DTC`)
-#' variable, if only hours and minutes are ever collected, and seconds are imputed
-#' in (`*DTM`) as `00`, then it is not necessary to set (`*TMF`) to `"S"`.
+#' @caption Include `"S"` for time imputation flag (`ignore_seconds_flag`)
+#' @info In this example, we set `ignore_seconds_flag = FALSE` to include `S` for
+#' seconds in the `ASTTMF` variable. The default value of `ignore_seconds_flag`
+#' is `TRUE` so the `"S"` is not normally displayed. The ADaM IG states that given
+#' SDTM (`--DTC`) variable, if only hours and minutes are ever collected, and
+#' seconds are imputed in (`*DTM`) as `00`, then it is not necessary to
+#' set (`*TMF`) to `"S"`.
 #' @code
 #'
 #' mhdt <- tribble(

@@ -25,8 +25,10 @@ A datetime object is expected.
 
 \item{ignore_seconds_flag}{ADaM IG states that given SDTM (\code{--DTC}) variable,
 if only hours and minutes are ever collected, and seconds are imputed in
-(\verb{*DTM}) as 00, then it is not necessary to set (\verb{*TMF}) to \code{"S"}. A user can set this
-to \code{TRUE} so the \code{"S"} Flag is dropped from (\verb{*TMF}).
+(\verb{*DTM}) as 00, then it is not necessary to set (\verb{*TMF}) to \code{"S"}.
+
+By default it is assumed that no seconds are collected and \verb{*TMF} shouldn't be set to \code{"S"}.
+A user can set this to \code{FALSE} if seconds are collected.
 
 The default value of \code{ignore_seconds_flag} is set to \code{TRUE} in
 admiral 1.4.0 and later.

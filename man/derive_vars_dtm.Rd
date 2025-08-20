@@ -204,8 +204,10 @@ For example \code{"2019---07"} would return \verb{"2019-06-07} if \code{preserve
 
 \item{ignore_seconds_flag}{ADaM IG states that given SDTM (\code{--DTC}) variable,
 if only hours and minutes are ever collected, and seconds are imputed in
-(\verb{*DTM}) as 00, then it is not necessary to set (\verb{*TMF}) to \code{"S"}. A user can set this
-to \code{TRUE} so the \code{"S"} Flag is dropped from (\verb{*TMF}).
+(\verb{*DTM}) as 00, then it is not necessary to set (\verb{*TMF}) to \code{"S"}.
+
+By default it is assumed that no seconds are collected and \verb{*TMF} shouldn't be set to \code{"S"}.
+A user can set this to \code{FALSE} if seconds are collected.
 
 The default value of \code{ignore_seconds_flag} is set to \code{TRUE} in
 admiral 1.4.0 and later.
@@ -288,7 +290,9 @@ for partial dates. We also set \code{time_imputation = "last"}. The function wil
 all or part of \code{23:59:59} for time imputation. Note that \code{highest_imputation} must
 be at least \code{"D"} to perform date imputation. Here we use \code{highest_imputation = "M"}
 to request imputation of month and day (and time). Also note that
-two flag variables are created.
+two flag variables are created. By default seconds are not imputed and \code{ASTTMF} is
+set to \verb{<NA>} for times that include minutes. Set \code{ignore_seconds_flag = FALSE}
+to have the \code{"S"} flag for \code{ASTTMF}.
 
 \if{html}{\out{<div class="sourceCode r">}}\preformatted{derive_vars_dtm(
  mhdt,
@@ -362,12 +366,14 @@ derive_vars_dtm(
 #> 2 "2020-11"    2020-12-06 2020-12-24 2020-11-30 23:59:59 D      H     
 #> 3 ""           2020-12-06 2020-12-24 2020-12-06 23:59:59 Y      H     
 #> 4 "2020-12-20" 2020-12-06 2020-12-24 2020-12-20 23:59:59 <NA>   H     }\if{html}{\out{</div>}}}
-\subsection{Suppress \code{"S"} for imputation flag (\code{ignore_seconds_flag})}{
+\subsection{Include \code{"S"} for time imputation flag (\code{ignore_seconds_flag})}{
 
-In this example, we set \code{ignore_seconds_flag = TRUE} to suppress \code{S} for
-seconds in the \code{ASTTMF} variable. The ADaM IG states that given SDTM (\code{--DTC})
-variable, if only hours and minutes are ever collected, and seconds are imputed
-in (\verb{*DTM}) as \code{00}, then it is not necessary to set (\verb{*TMF}) to \code{"S"}.
+In this example, we set \code{ignore_seconds_flag = FALSE} to include \code{S} for
+seconds in the \code{ASTTMF} variable. The default value of \code{ignore_seconds_flag}
+is \code{TRUE} so the \code{"S"} is not normally displayed. The ADaM IG states that given
+SDTM (\code{--DTC}) variable, if only hours and minutes are ever collected, and
+seconds are imputed in (\verb{*DTM}) as \code{00}, then it is not necessary to
+set (\verb{*TMF}) to \code{"S"}.
 
 \if{html}{\out{<div class="sourceCode r">}}\preformatted{
 mhdt <- tribble(

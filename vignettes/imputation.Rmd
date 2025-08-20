@@ -5,9 +5,6 @@ vignette: >
   %\VignetteIndexEntry{Date and Time Imputation}
   %\VignetteEncoding{UTF-8}
   %\VignetteEngine{knitr::rmarkdown}
-editor_options: 
-  markdown: 
-    wrap: 72
 ---
 
 ```{r setup, include = FALSE}
