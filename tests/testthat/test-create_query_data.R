@@ -414,7 +414,7 @@ test_that("query Test 12: error if invalid definition", {
 # validate_query ----
 
 ## Test 13: error if definition element is not a data frame or basket_select ----
-test_that("validate_query Test 13: error if definition element is not a data frame or basket_select", {
+test_that("validate_query Test 13: error if definition is not a data frame or basket_select", {
   obj <- list(
     prefix = "CQ01",
     name = "My CQ",

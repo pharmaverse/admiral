@@ -98,7 +98,7 @@
       ! `definition` expects a <basket_select> object, a data frame, or a list of data frames and <basket_select> objects.
       i An object of the following class was provided: <numeric>
 
-# validate_query Test 13: error if definition element is not a data frame or basket_select
+# validate_query Test 13: error if definition is not a data frame or basket_select
 
     Code
       validate_query(obj)
