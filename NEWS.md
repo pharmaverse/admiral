@@ -25,6 +25,9 @@
 
 <details>
 <summary>Developer Notes</summary>
+
+- Move Lina Patil from Acknowledgement to Author list (#2852)
+
 </details>
 
 # admiral 1.3.1
