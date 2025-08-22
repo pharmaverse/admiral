@@ -26,7 +26,7 @@
 <details>
 <summary>Developer Notes</summary>
 
-- Move Lina Patil from Acknowledgement to Author list (#2852)
+- Moved Lina Patil from Acknowledgements to active Developers list (#2852)
 
 </details>
 
