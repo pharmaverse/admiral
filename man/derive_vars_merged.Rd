@@ -378,17 +378,15 @@ derive_vars_merged(
 #> 1 01         61 YEARS  82.6
 #> 2 02         64 YEARS  NA  
 #> 3 03         85 YEARS  NA  
-#> G2;H2;Warningh: Dataset contains duplicate records with respect to `STUDYID`, `USUBJID`, and
-#> `convert_dtc_to_dtm(VSDTC)`
-#> i Run `admiral::get_duplicates_dataset()` to access the duplicate recordsg}\if{html}{\out{</div>}}
+#> Warning: Dataset contains duplicate records with respect to `STUDYID`, `USUBJID`, and `convert_dtc_to_dtm(VSDTC)`
+#> i Run `admiral::get_duplicates_dataset()` to access the duplicate records}\if{html}{\out{</div>}}
 
 For investigating the issue, the dataset of the duplicate source records
 can be obtained by calling \code{get_duplicates_dataset()}:
 
 \if{html}{\out{<div class="sourceCode r">}}\preformatted{get_duplicates_dataset()
-#> G3;Duplicate records with respect to `STUDYID`, `USUBJID`, and
-#> `convert_dtc_to_dtm(VSDTC)`.
-#> g# A tibble: 2 × 9
+#> Duplicate records with respect to `STUDYID`, `USUBJID`, and `convert_dtc_to_dtm(VSDTC)`.
+#> # A tibble: 2 × 9
 #>   STUDYID USUBJID convert_dtc_to_dtm(VSDT…¹ DOMAIN VSTESTCD VISIT VSSTRESN VSDTC
 #> * <chr>   <chr>   <dttm>                    <chr>  <chr>    <chr>    <dbl> <chr>
 #> 1 AB42    01      2013-09-24 00:00:00       VS     WEIGHT   WEEK…     81.1 2013…
@@ -494,8 +492,7 @@ ex_ext <- derive_vars_dtm(
   new_vars_prefix = "EXST",
   highest_imputation = "M"
 )
-#> The default value of `ignore_seconds_flag` will change to "TRUE" in admiral
-#> 1.4.0.
+#> The default value of `ignore_seconds_flag` will change to "TRUE" in admiral 1.4.0.
 
 derive_vars_merged(
   dm,

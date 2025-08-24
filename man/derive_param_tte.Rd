@@ -349,16 +349,15 @@ derive_param_tte(
 #> 3 02      AB42    END OF STUDY ADSL   EOSDT      NA     1 2021-02-03 2021-01-16
 #> 4 02      AB42    END OF STUDY ADSL   EOSDT      NA     1 2021-02-03 2021-01-16
 #> # i 2 more variables: PARAMCD <chr>, PARAM <chr>
-#> G2;H2;Warningh: Dataset "adae" contains duplicate records with respect to `STUDYID`, `USUBJID`,
-#> `AEDECOD`, and `ASTDT`
-#> i Run `admiral::get_duplicates_dataset()` to access the duplicate recordsg}\if{html}{\out{</div>}}
+#> Warning: Dataset "adae" contains duplicate records with respect to `STUDYID`, `USUBJID`, `AEDECOD`, and `ASTDT`
+#> i Run `admiral::get_duplicates_dataset()` to access the duplicate records}\if{html}{\out{</div>}}
 
 For investigating the issue, the dataset of the duplicate source records
 can be obtained by calling \code{get_duplicates_dataset()}:
 
 \if{html}{\out{<div class="sourceCode r">}}\preformatted{get_duplicates_dataset()
-#> G3;Duplicate records with respect to `STUDYID`, `USUBJID`, `AEDECOD`, and `ASTDT`.
-#> g# A tibble: 2 × 6
+#> Duplicate records with respect to `STUDYID`, `USUBJID`, `AEDECOD`, and `ASTDT`.
+#> # A tibble: 2 × 6
 #>   STUDYID USUBJID AEDECOD ASTDT      AESEQ AESER
 #> * <chr>   <chr>   <chr>   <date>     <dbl> <chr>
 #> 1 AB42    01      Cough   2021-03-04     2 N    
