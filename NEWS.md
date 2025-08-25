@@ -25,6 +25,7 @@
 
 <details>
 <summary>Developer Notes</summary>
+
 </details>
 
 # admiral 1.3.1
