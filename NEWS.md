@@ -26,8 +26,6 @@
 <details>
 <summary>Developer Notes</summary>
 
-- Moved Lina Patil from Acknowledgements to active Developers list (#2852)
-
 </details>
 
 # admiral 1.3.1
