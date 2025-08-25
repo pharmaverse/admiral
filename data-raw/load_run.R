@@ -10,7 +10,6 @@
 install.packages("pak")
 pak::pak("devtools")
 pak::pak("diffdf")
-# pak::pak("teal.data")
 
 
 devtools::load_all()
@@ -22,7 +21,7 @@ templates <- list_all_templates() |> paste()
 templates <- templates[templates != "ADLBHY"]
 
 # To run only 2 templates
-# verify_templates(ds = templates |> tolower() |> head(2))
+# verify_templates(ds = templates |> tolower() |> head(2))  nolint
 
 # run all templates, default is all
 verify_templates()
