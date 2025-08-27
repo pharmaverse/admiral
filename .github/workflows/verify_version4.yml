@@ -13,9 +13,9 @@ on:
       -  main
     paths:
       -  '**.yml'
-#  push:
-#    branches:
-#      - 2506_verify_templates_condensed
+  push:
+    branches:
+      - 2506_verify_templates_condensed
   schedule:
     - cron: "1 0 * * 3,5"
 
