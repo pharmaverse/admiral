@@ -6,8 +6,9 @@
 name: Verify Templates ✅
 
 on:
+  workflow_dispatch:
   pull_request:
-    types: [opened, reopened, synchronize ] # use synchronize to run on every new commit added to PR
+#    types: [opened, reopened, synchronize ] # use synchronize to run on every new commit added to PR
     branches:
       -  main
     paths:
