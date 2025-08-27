@@ -7,7 +7,7 @@ name: Verify Templates ✅
 
 on:
   pull_request:
-    types: [opened, reopened ] # use synchronize to run on every new commit added to PR
+    types: [opened, reopened, synchronize ] # use synchronize to run on every new commit added to PR
     branches:
       -  main
     paths:
