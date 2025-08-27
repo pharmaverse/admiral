@@ -24,8 +24,8 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
-# ${{ github.event}} 
-run-name: Verify Templates: for ${{ github.event.pull_request.number }} by @${{ github.actor }}
+run-name: Verify Templates: ${{ github.event}} for ${{ github.event.pull_request.number }}
+# by @${{ github.actor }}
 
 
 permissions:
