@@ -521,8 +521,8 @@ test_that("assert_time_imputation Test 31: gives error when input not a valid fo
 test_that("impute_date_time Test 32: impute_date_time gives an error if partial and target are different", {
   expect_error(
     admiral:::impute_date_time(
-      partial = list(year="2020",month="05",day=NA_character_),
-      target = list(year="2020",day="05",hour="12")
+      partial = list(year = "2020", month = "05", day = NA_character_),
+      target = list(year = "2020", day = "05", hour = "12")
     ),
     regexp = "Names of `partial` and `target` do not match."
   )
