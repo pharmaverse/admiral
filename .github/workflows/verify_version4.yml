@@ -75,8 +75,8 @@ jobs:
     steps:
 
       - name: skip?
-          run: |
-            echo "Does not contain `[skip]`"
+        run: |
+          echo "Continue:  Does not contain `[skip]`"
 
       - name: Set up R
         if:  ${{ env.EXECUTE == 'true'}} 
