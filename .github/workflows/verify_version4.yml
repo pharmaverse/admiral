@@ -1,7 +1,8 @@
 # Source:  pilot5, Eli Miller, @ July 15, 2025, modified
 # Changes made with assistance of gemini LLM.
 
-# Runs 12:01 am, UTC  ( 7:01 pm US East Coast) ,   Friday
+# Runs 12:01 am, UTC  ( 7:01 pm US East Coast) ,   Wednesday, Friday
+# To skip:   put `[skip]` in commit message
 
 name: Verify Templates ✅
 
@@ -31,11 +32,11 @@ permissions:
   issues: write
 
 jobs:
-  verify:
+  start:
     runs-on: ubuntu-latest
     env:
         GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
-        EXECUTE: "false" 
+        EXECUTE: "false"   # conntrol steps to run
 
     steps:
       - name: Set US Eastern timezone
@@ -63,6 +64,19 @@ jobs:
           echo "Source Branch: ${{ github.event.pull_request.head.ref }}"
           echo "Target Branch: ${{ github.event.pull_request.base.ref }}"
           echo "Last commit SHA: ${{ github.sha }}"
+
+  verify:
+    if: !contains(github.event.commits[0].message, '[skip]')
+    runs-on: ubuntu-latest
+    needs: start
+    env:
+      GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
+      EXECUTE: "false"   # conntrol steps to run
+    steps:
+
+      - name: skip?
+          run: |
+            echo "Does not contain `[skip]`"
 
       - name: Set up R
         if:  ${{ env.EXECUTE == 'true'}} 
