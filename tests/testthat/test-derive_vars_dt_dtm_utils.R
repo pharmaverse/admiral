@@ -513,8 +513,10 @@ test_that("is_partial_datetime Test 30: correctly identifies datetime and date p
 test_that("assert_time_imputation Test 31: gives error when input not a valid format", {
   expect_error(
     admiral:::assert_time_imputation(c("25:00:00"), "H"),
-    regexp = paste0('`time_imputation` must be one of "first", "last" or time specified as',
-    ' "hh:mm:ss": e.g. "12:00:00"')
+    regexp = paste0(
+      '`time_imputation` must be one of "first", "last" or time specified as',
+      ' "hh:mm:ss": e.g. "12:00:00"'
+    )
   )
 })
 
