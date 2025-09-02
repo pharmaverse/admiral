@@ -77,7 +77,7 @@ jobs:
 
       - name: skip?
         run: |
-          echo "Continue:  Does not contain `[skip]`"
+          echo "Continue:  Does not contain `[skip]` !! "
 
       - name: Set up R
         if:  ${{ env.EXECUTE == 'true'}} 
