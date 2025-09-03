@@ -1,4 +1,4 @@
-# is_partial_datetime correctly identifies datetime and date partials
+# is_partial_datetime Test 30: correctly identifies datetime and date partials
 
     Code
       is_partial_datetime(partial_invalid)
