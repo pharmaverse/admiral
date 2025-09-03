@@ -27,7 +27,6 @@ usubjids <-
 
 admiral_adlb <- dplyr::filter(adlb, USUBJID %in% usubjids)
 
-
 # Finally, save reduced dataset
 usethis::use_data(admiral_adlb, overwrite = TRUE)
 
