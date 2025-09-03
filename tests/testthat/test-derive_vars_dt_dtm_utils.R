@@ -470,8 +470,8 @@ test_that("get_partialdatetime Test 29: handle NA input", {
   expect_identical(result, expected)
 })
 
-
-test_that("is_partial_datetime correctly identifies datetime and date partials", {
+## Test 30: correctly identifies datetime and date partials
+test_that("is_partial_datetime Test 30: correctly identifies datetime and date partials", {
   # Test with a full datetime
   partial_datetime <- list(
     year = "2023", month = "05", day = "15",
@@ -506,5 +506,27 @@ test_that("is_partial_datetime correctly identifies datetime and date partials",
   partial_time_only <- list(hour = "14", minute = "30", second = "00")
   expect_snapshot(is_partial_datetime(partial_time_only),
     error = TRUE
+  )
+})
+
+## Test 31: assert_time_imputation gives error when input not in time format ----
+test_that("assert_time_imputation Test 31: gives error when input not a valid format", {
+  expect_error(
+    admiral:::assert_time_imputation(c("25:00:00"), "H"),
+    regexp = paste0(
+      '`time_imputation` must be one of "first", "last" or time specified as',
+      ' "hh:mm:ss": e.g. "12:00:00"'
+    )
+  )
+})
+
+## Test 32: impute_date_time gives an error if structures of partial and target are different
+test_that("impute_date_time Test 32: gives error if partial and target differ.", {
+  expect_error(
+    admiral:::impute_date_time(
+      partial = list(year = "2020", month = "05", day = NA_character_),
+      target = list(year = "2020", day = "05", hour = "12")
+    ),
+    regexp = "Names of `partial` and `target` do not match."
   )
 })

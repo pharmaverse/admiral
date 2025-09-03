@@ -874,4 +874,16 @@ test_that("derive_vars_dtm Test 32: catch ignore_seconds_flag error", {
   )
 })
 
+# Test 33: impute_dtc_dtm returns an empty character vector where dtc is empty
+test_that("derive_vars_dt Test 30: impute_dtc_dt where dtc is empty", {
+  empty_impute <- impute_dtc_dtm(
+    dtc = character()
+  )
+
+  expect_equal(
+    empty_impute,
+    character(0)
+  )
+})
+
 rm(list = c("input"))
