@@ -192,3 +192,12 @@
       Error in `basket_select()`:
       ! argument "type" is missing, with no default
 
+# basket_select Test 24: error if arguments inside ... are not named
+
+    Code
+      basket_select(name = "Noninfectious meningitis", scope = "NARROW", type = "smq",
+        "CHECK 1", "CHECK 3")
+    Condition
+      Error in `basket_select()`:
+      ! All arguments inside `...` must be named
+

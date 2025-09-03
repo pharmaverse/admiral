@@ -413,7 +413,7 @@ test_that("query Test 12: error if invalid definition", {
 
 # validate_query ----
 
-## Test 13: error if definition element is not a data frame or basket_select ----
+## Test 13: error if definition is not a data frame or basket_select ----
 test_that("validate_query Test 13: error if definition is not a data frame or basket_select", {
   obj <- list(
     prefix = "CQ01",
@@ -544,6 +544,20 @@ test_that("basket_select Test 23: error if type is not specified", {
   )
 })
 
+## Test 24: error if arguments inside ... are not named ----
+test_that("basket_select Test 24: error if arguments inside ... are not named", {
+  expect_snapshot(
+    basket_select(
+      name = "Noninfectious meningitis",
+      scope = "NARROW",
+      type = "smq",
+      "CHECK 1",
+      "CHECK 3"
+    ),
+    error = TRUE
+  )
+})
+
 # basket_select customized query defined by SMQs extra arguments ----
 get_smq_oth <- function(basket_select,
                         version,
@@ -573,8 +587,8 @@ get_smq_oth <- function(basket_select,
 }
 
 
-## Test 24: basket_select customized query defined by SMQs extra arguments ----
-test_that("basket_select Test 24: basket_select customized query defined by SMQs extra arguments", {
+## Test 25: basket_select customized query defined by SMQs extra arguments ----
+test_that("basket_select Test 25: basket_select customized query defined by SMQs extra arguments", {
   cq <- query(
     prefix = "CQ02",
     name = "Immune-Mediated Meningoencephalitis",
@@ -624,8 +638,8 @@ test_that("basket_select Test 24: basket_select customized query defined by SMQs
 })
 
 # format.basket_select ----
-## Test 25: formatting is correct (id specified) ----
-test_that("format.basket_select Test 25: formatting is correct (id specified)", {
+## Test 26: formatting is correct (id specified) ----
+test_that("format.basket_select Test 26: formatting is correct (id specified)", {
   expect_equal(
     format(basket_select(
       id = 42,
@@ -637,16 +651,16 @@ test_that("format.basket_select Test 25: formatting is correct (id specified)", 
   )
 })
 
-## Test 26: formatting is correct (name specified) ----
-test_that("format.basket_select Test 26: formatting is correct (name specified)", {
+## Test 27: formatting is correct (name specified) ----
+test_that("format.basket_select Test 27: formatting is correct (name specified)", {
   expect_equal(
     format(basket_select(name = "My SDG", type = "sdg", scope = NA_character_)),
     "basket_select(name = \"My SDG\", id = NULL, scope = NA, type = \"sdg\")"
   )
 })
 
-## Test 27: custom fields ----
-test_that("format.basket_select Test 27: custom fields", {
+## Test 28: custom fields ----
+test_that("format.basket_select Test 28: custom fields", {
   expect_equal(
     format(basket_select(
       name = "My SDG",
@@ -663,8 +677,8 @@ test_that("format.basket_select Test 27: custom fields", {
   )
 })
 
-## Test 28: long expressions ----
-test_that("format.basket_select Test 28: long expressions", {
+## Test 29: long expressions ----
+test_that("format.basket_select Test 29: long expressions", {
   expect_equal(
     format(basket_select(
       name = "My SDG",
