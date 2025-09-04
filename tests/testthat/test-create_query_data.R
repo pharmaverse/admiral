@@ -411,9 +411,31 @@ test_that("query Test 12: error if invalid definition", {
   )
 })
 
+# validate_query ----
+
+## Test 13: error if definition is not a data frame or basket_select ----
+test_that("validate_query Test 13: error if definition is not a data frame or basket_select", {
+  obj <- list(
+    prefix = "CQ01",
+    name = "My CQ",
+    add_scope_num = FALSE,
+    definition = list(
+      name = "Pregnancy and neonatal topics (SMQ)",
+      scope = "NARROW",
+      type = "smq"
+    )
+  )
+  class(obj) <- "query"
+
+  expect_snapshot(
+    validate_query(obj),
+    error = TRUE
+  )
+})
+
 # assert_terms ----
-## Test 13: error if SRCVAR missing ----
-test_that("assert_terms Test 13: error if SRCVAR missing", {
+## Test 14: error if SRCVAR missing ----
+test_that("assert_terms Test 14: error if SRCVAR missing", {
   expect_snapshot(
     assert_terms(
       terms = select(cqterms, -SRCVAR),
@@ -423,8 +445,8 @@ test_that("assert_terms Test 13: error if SRCVAR missing", {
   )
 })
 
-## Test 14: error if SRCVAR and GRPNAME missing ----
-test_that("assert_terms Test 14: error if SRCVAR and GRPNAME missing", {
+## Test 15: error if SRCVAR and GRPNAME missing ----
+test_that("assert_terms Test 15: error if SRCVAR and GRPNAME missing", {
   expect_snapshot(
     assert_terms(
       terms = select(cqterms, -SRCVAR),
@@ -435,8 +457,8 @@ test_that("assert_terms Test 14: error if SRCVAR and GRPNAME missing", {
   )
 })
 
-## Test 15: error if TERMCHAR and TERMNUM missing ----
-test_that("assert_terms Test 15: error if TERMCHAR and TERMNUM missing", {
+## Test 16: error if TERMCHAR and TERMNUM missing ----
+test_that("assert_terms Test 16: error if TERMCHAR and TERMNUM missing", {
   expect_snapshot(
     assert_terms(
       terms = select(cqterms, SRCVAR),
@@ -446,8 +468,8 @@ test_that("assert_terms Test 15: error if TERMCHAR and TERMNUM missing", {
   )
 })
 
-## Test 16: error if no data frame ----
-test_that("assert_terms Test 16: error if no data frame", {
+## Test 17: error if no data frame ----
+test_that("assert_terms Test 17: error if no data frame", {
   expect_snapshot(
     assert_terms(
       terms = 42,
@@ -457,8 +479,8 @@ test_that("assert_terms Test 16: error if no data frame", {
   )
 })
 
-## Test 17: error if no observations ----
-test_that("assert_terms Test 17: error if no observations", {
+## Test 18: error if no observations ----
+test_that("assert_terms Test 18: error if no observations", {
   expect_snapshot(
     assert_terms(
       terms = filter(cqterms, TERMNUM == 42),
@@ -468,8 +490,8 @@ test_that("assert_terms Test 17: error if no observations", {
   )
 })
 
-## Test 18: error if GRPNAME is missing ----
-test_that("assert_terms Test 18: error if GRPNAME is missing", {
+## Test 19: error if GRPNAME is missing ----
+test_that("assert_terms Test 19: error if GRPNAME is missing", {
   expect_snapshot(
     assert_terms(
       terms = cqterms,
@@ -480,8 +502,8 @@ test_that("assert_terms Test 18: error if GRPNAME is missing", {
   )
 })
 
-## Test 19: error if GRPID is missing ----
-test_that("assert_terms Test 19: error if GRPID is missing", {
+## Test 20: error if GRPID is missing ----
+test_that("assert_terms Test 20: error if GRPID is missing", {
   expect_snapshot(
     assert_terms(
       terms = cqterms,
@@ -493,8 +515,8 @@ test_that("assert_terms Test 19: error if GRPID is missing", {
 })
 
 # basket_select ----
-## Test 20: error if name and id specified ----
-test_that("basket_select Test 20: error if name and id specified", {
+## Test 21: error if name and id specified ----
+test_that("basket_select Test 21: error if name and id specified", {
   expect_snapshot(
     basket_select(
       name = "My SMQ",
@@ -506,18 +528,32 @@ test_that("basket_select Test 20: error if name and id specified", {
   )
 })
 
-## Test 21: error if neither name nor id specified ----
-test_that("basket_select Test 21: error if neither name nor id specified", {
+## Test 22: error if neither name nor id specified ----
+test_that("basket_select Test 22: error if neither name nor id specified", {
   expect_snapshot(
     basket_select(scope = "NARROW", type = "smq"),
     error = TRUE
   )
 })
 
-## Test 22: error if type is not specified ----
-test_that("basket_select Test 22: error if type is not specified", {
+## Test 23: error if type is not specified ----
+test_that("basket_select Test 23: error if type is not specified", {
   expect_snapshot(
     basket_select(id = 42, scope = "NARROW"),
+    error = TRUE
+  )
+})
+
+## Test 24: error if arguments inside ... are not named ----
+test_that("basket_select Test 24: error if arguments inside ... are not named", {
+  expect_snapshot(
+    basket_select(
+      name = "Noninfectious meningitis",
+      scope = "NARROW",
+      type = "smq",
+      "CHECK 1",
+      "CHECK 3"
+    ),
     error = TRUE
   )
 })
@@ -551,8 +587,8 @@ get_smq_oth <- function(basket_select,
 }
 
 
-## Test 23: basket_select customized query defined by SMQs extra arguments ----
-test_that("basket_select Test 23: basket_select customized query defined by SMQs extra arguments", {
+## Test 25: basket_select customized query defined by SMQs extra arguments ----
+test_that("basket_select Test 25: basket_select customized query defined by SMQs extra arguments", {
   cq <- query(
     prefix = "CQ02",
     name = "Immune-Mediated Meningoencephalitis",
@@ -602,8 +638,8 @@ test_that("basket_select Test 23: basket_select customized query defined by SMQs
 })
 
 # format.basket_select ----
-## Test 24: formatting is correct (id specified) ----
-test_that("format.basket_select Test 24: formatting is correct (id specified)", {
+## Test 26: formatting is correct (id specified) ----
+test_that("format.basket_select Test 26: formatting is correct (id specified)", {
   expect_equal(
     format(basket_select(
       id = 42,
@@ -615,16 +651,16 @@ test_that("format.basket_select Test 24: formatting is correct (id specified)", 
   )
 })
 
-## Test 25: formatting is correct (name specified) ----
-test_that("format.basket_select Test 25: formatting is correct (name specified)", {
+## Test 27: formatting is correct (name specified) ----
+test_that("format.basket_select Test 27: formatting is correct (name specified)", {
   expect_equal(
     format(basket_select(name = "My SDG", type = "sdg", scope = NA_character_)),
     "basket_select(name = \"My SDG\", id = NULL, scope = NA, type = \"sdg\")"
   )
 })
 
-## Test 26: custom fields ----
-test_that("format.basket_select Test 26: custom fields", {
+## Test 28: custom fields ----
+test_that("format.basket_select Test 28: custom fields", {
   expect_equal(
     format(basket_select(
       name = "My SDG",
@@ -641,8 +677,8 @@ test_that("format.basket_select Test 26: custom fields", {
   )
 })
 
-## Test 27: long expressions ----
-test_that("format.basket_select Test 27: long expressions", {
+## Test 29: long expressions ----
+test_that("format.basket_select Test 29: long expressions", {
   expect_equal(
     format(basket_select(
       name = "My SDG",
