@@ -1,6 +1,6 @@
 list(
   rdx_permitted_values = list(
-    boolean = "`\"TRUE\"`, `\"FALSE\"`",
+    boolean = "`TRUE`, `FALSE`",
     char_scalar = "a character scalar, i.e., a character vector of length one",
     condition = "an unquoted condition, e.g., `AVISIT == \"BASELINE\"`",
     dataset = "a dataset, i.e., a `data.frame` or tibble",

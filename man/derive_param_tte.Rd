@@ -101,7 +101,7 @@ If set to \code{TRUE}, variables \code{ADTM} and \code{STARTDTM} are created. Ot
 variables \code{ADT} and \code{STARTDT} are created.
 
 \describe{
-\item{Permitted values}{\code{"TRUE"}, \code{"FALSE"}}
+\item{Permitted values}{\code{TRUE}, \code{FALSE}}
 \item{Default value}{\code{FALSE}}
 }}
 

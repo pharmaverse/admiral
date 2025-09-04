@@ -90,7 +90,7 @@ A logical value where if set to \code{TRUE}, all records are flagged
 and no error or warning is issued if the first or last record is not unique.
 
 \describe{
-\item{Permitted values}{\code{"TRUE"}, \code{"FALSE"}}
+\item{Permitted values}{\code{TRUE}, \code{FALSE}}
 \item{Default value}{\code{FALSE}}
 }}
 

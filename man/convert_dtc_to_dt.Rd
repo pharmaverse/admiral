@@ -119,7 +119,7 @@ For example \code{"2019---07"} would return \verb{"2019-06-07} if \code{preserve
 (and \code{date_imputation = "MID"}).
 
 \describe{
-\item{Permitted values}{\code{"TRUE"}, \code{"FALSE"}}
+\item{Permitted values}{\code{TRUE}, \code{FALSE}}
 \item{Default value}{\code{FALSE}}
 }}
 }

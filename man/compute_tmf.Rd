@@ -4,7 +4,7 @@
 \alias{compute_tmf}
 \title{Derive the Time Imputation Flag}
 \usage{
-compute_tmf(dtc, dtm, ignore_seconds_flag = FALSE)
+compute_tmf(dtc, dtm, ignore_seconds_flag = TRUE)
 }
 \arguments{
 \item{dtc}{The date character vector (\code{--DTC}).
@@ -25,15 +25,17 @@ A datetime object is expected.
 
 \item{ignore_seconds_flag}{ADaM IG states that given SDTM (\code{--DTC}) variable,
 if only hours and minutes are ever collected, and seconds are imputed in
-(\verb{*DTM}) as 00, then it is not necessary to set (\verb{*TMF}) to \code{"S"}. A user can set this
-to \code{TRUE} so the \code{"S"} Flag is dropped from (\verb{*TMF}).
+(\verb{*DTM}) as 00, then it is not necessary to set (\verb{*TMF}) to \code{"S"}.
 
-Please note that the default value of \code{ignore_seconds_flag} will change to \code{TRUE} in
-admiral 1.4.0.
+By default it is assumed that no seconds are collected and \verb{*TMF} shouldn't be set to \code{"S"}.
+A user can set this to \code{FALSE} if seconds are collected.
+
+The default value of \code{ignore_seconds_flag} is set to \code{TRUE} in
+admiral 1.4.0 and later.
 
 \describe{
-\item{Permitted values}{\code{"TRUE"}, \code{"FALSE"}}
-\item{Default value}{\code{FALSE}}
+\item{Permitted values}{\code{TRUE}, \code{FALSE}}
+\item{Default value}{\code{TRUE}}
 }}
 }
 \value{
@@ -49,12 +51,16 @@ Usually this computation function can not be used with \verb{\%>\%}.
 \examples{
 library(lubridate)
 
-compute_tmf(dtc = "2019-07-18T15:25", dtm = ymd_hms("2019-07-18T15:25:00"))
-compute_tmf(dtc = "2019-07-18T15", dtm = ymd_hms("2019-07-18T15:25:00"))
+compute_tmf(dtc = "2019-07-18T15:25", dtm = ymd_hm("2019-07-18T15:25"))
+compute_tmf(dtc = "2019-07-18T15", dtm = ymd_hm("2019-07-18T15:25"))
 compute_tmf(dtc = "2019-07-18", dtm = ymd("2019-07-18"))
-compute_tmf(dtc = "2022-05--T00:00", dtm = ymd_hms("2022-05-15T23:59:59"))
-compute_tmf(dtc = "2022-05--T23:00", dtm = ymd_hms("2022-05-15T23:59:59"))
-compute_tmf(dtc = "2022-05--T23:59:00", dtm = ymd_hms("2022-05-15T23:59:59"))
+compute_tmf(dtc = "2022-05--T00:00", dtm = ymd_hm("2022-05-15T23:59"))
+compute_tmf(dtc = "2022-05--T23:00", dtm = ymd_hm("2022-05-15T23:59"))
+compute_tmf(
+  dtc = "2022-05--T23:59:00",
+  dtm = ymd_hms("2022-05-15T23:59:59"),
+  ignore_seconds_flag = FALSE
+)
 
 }
 \seealso{

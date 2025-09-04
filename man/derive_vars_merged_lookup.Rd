@@ -149,7 +149,7 @@ If the uniqueness check fails, the specified message is displayed.
 have corresponding records from the lookup table?
 
 \describe{
-\item{Permitted values}{\code{"TRUE"}, \code{"FALSE"}}
+\item{Permitted values}{\code{TRUE}, \code{FALSE}}
 \item{Default value}{\code{TRUE}}
 }}
 }
