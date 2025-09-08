@@ -253,7 +253,7 @@ convert_date_to_dtm <- function(dt,
                                 max_dates = NULL,
                                 preserve = FALSE) {
   if (is.POSIXct(dt)) {
-    return(dt)
+    return(dt)   # nolint
   } else {
     if (is.instant(dt)) {
       dt <- format(dt, "%Y-%m-%d")
@@ -459,7 +459,7 @@ assert_time_imputation <- function(time_imputation, highest_imputation) {
     ))
   }
 
-  return(time_imputation)
+  return(time_imputation)  # nolint
 }
 
 #' Assert Highest Imputation Validity
@@ -524,7 +524,7 @@ assert_highest_imputation <- function(highest_imputation, highest_imputation_val
       "is specified, {.arg max_dates} must be specified."
     ))
   }
-  return(invisible(NULL))
+  return(invisible(NULL))  # nolint
 }
 
 #' Get Range of Partial Date / Datetime
@@ -726,7 +726,7 @@ get_imputation_targets <- function(partial, date_imputation = NULL, time_imputat
     return(c(target_date, target_time))
   }
 
-  return(target_date)
+  return(target_date)   # nolint
 }
 
 #' Adjust Last Day Imputation
@@ -999,9 +999,9 @@ is_partial_datetime <- function(partial) {
   time_components <- c("hour", "minute", "second")
 
   if (all(c(date_components, time_components) %in% names(partial))) {
-    return(TRUE)
+    return(TRUE)  # nolint
   } else if (all(date_components %in% names(partial))) {
-    return(FALSE)
+    return(FALSE) # nolint
   } else {
     cli_abort(paste0(
       "{.arg partial} must be a named list containing either all date components",
