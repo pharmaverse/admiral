@@ -26,7 +26,7 @@
       ! Error in derive_vars_query call of get_vars_query: Error in `get_vars_query()`:
       ! The following variables requested by `dataset_queries` already exist in `dataset`: `SMQ03NAM`, `SMQ03CD`, `SMQ03SC`, and `SMQ03SCN`
 
-# assert_valid_queries Test 10: assert_valid_queries checks
+# assert_valid_queries Test 11: assert_valid_queries checks
 
     Code
       assert_valid_queries(mutate(query, PREFIX = c("30", "55")), "test")
