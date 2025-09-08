@@ -253,7 +253,7 @@ convert_date_to_dtm <- function(dt,
                                 max_dates = NULL,
                                 preserve = FALSE) {
   if (is.POSIXct(dt)) {
-    return(dt)   # nolint
+    return(dt) # nolint
   } else {
     if (is.instant(dt)) {
       dt <- format(dt, "%Y-%m-%d")
@@ -999,7 +999,7 @@ is_partial_datetime <- function(partial) {
   time_components <- c("hour", "minute", "second")
 
   if (all(c(date_components, time_components) %in% names(partial))) {
-    return(TRUE)  # nolint
+    return(TRUE) # nolint
   } else if (all(date_components %in% names(partial))) {
     return(FALSE) # nolint
   } else {
