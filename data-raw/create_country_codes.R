@@ -254,7 +254,7 @@ country_code_lookup <- tribble(
   arrange(country_code)
 
 # Convert ISO 3166 alpha 3 country codes to numbers 1-249
-country_code_lookup$country_number <- as.numeric(seq_len(nrow(country_code_lookup)))
+country_code_lookup$country_number <- as.numeric(seq_along(nrow(country_code_lookup)))
 
 #  create country_code_lookup.rda in data/
 usethis::use_data(country_code_lookup, overwrite = TRUE)

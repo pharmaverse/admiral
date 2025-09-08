@@ -631,7 +631,7 @@ impute_dtc_dtm <- function(dtc,
     max_dates = max_dates
   )
 
-  return(restricted)  # nolint
+  restricted
 }
 
 #' Restrict Imputed DTC date to Minimum/Maximum Dates

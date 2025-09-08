@@ -186,7 +186,7 @@ get_vars_query <- function(dataset, dataset_queries) {
   if (nrow(no_key) != nrow(dataset)) {
     tmp_key <- get_new_tmp_var(dataset, prefix = "tmp_key")
     dataset <- dataset %>%
-      mutate(!!tmp_key := seq_len(nrow(dataset)))
+      mutate(!!tmp_key := seq_along(nrow(dataset)))
     static_cols <- c(static_cols, as_string(tmp_key))
   }
 
@@ -287,7 +287,7 @@ derive_vars_query <- function(dataset, dataset_queries) {
   if (nrow(no_key) != nrow(dataset)) {
     tmp_key <- get_new_tmp_var(dataset, prefix = "tmp_key")
     dataset <- dataset %>%
-      mutate(!!tmp_key := seq_len(nrow(dataset)))
+      mutate(!!tmp_key := seq_along(nrow(dataset)))
     static_cols <- c(static_cols, as_string(tmp_key))
   }
   tryCatch(

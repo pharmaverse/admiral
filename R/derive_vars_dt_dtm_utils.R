@@ -459,7 +459,7 @@ assert_time_imputation <- function(time_imputation, highest_imputation) {
     ))
   }
 
-  return(time_imputation)  # nolint
+  time_imputation
 }
 
 #' Assert Highest Imputation Validity
@@ -524,7 +524,7 @@ assert_highest_imputation <- function(highest_imputation, highest_imputation_val
       "is specified, {.arg max_dates} must be specified."
     ))
   }
-  return(invisible(NULL))  # nolint
+  invisible(NULL)
 }
 
 #' Get Range of Partial Date / Datetime
@@ -726,7 +726,7 @@ get_imputation_targets <- function(partial, date_imputation = NULL, time_imputat
     return(c(target_date, target_time))
   }
 
-  return(target_date)   # nolint
+  target_date
 }
 
 #' Adjust Last Day Imputation

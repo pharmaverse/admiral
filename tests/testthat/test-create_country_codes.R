@@ -85,7 +85,7 @@ test_that("create_country_codes Test 1: Country Codes", {
     arrange(country_code)
 
   # Convert ISO 3166 alpha 3 country codes to numbers 1-249
-  expected$country_number <- as.numeric(seq_len(nrow(expected)))
+  expected$country_number <- as.numeric(seq_along(nrow(expected)))
 
 
   actual <- country_code_lookup

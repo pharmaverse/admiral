@@ -1,3 +1,4 @@
+# nolint start
 library(purrr)
 library(cli)
 library(stringr)
@@ -5,7 +6,6 @@ library(devtools)
 devtools::install_github("pharmaverse/pharmaversesdtm", ref = "main")
 devtools::install_github("pharmaverse/pharmaverseadam", ref = "main")
 library(pharmaverseadam)
-# nolint start
 
 # Gather templates ----
 template_dir <- file.path("inst/templates")
