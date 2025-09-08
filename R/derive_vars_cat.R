@@ -236,7 +236,7 @@ derive_vars_cat <- function(dataset,
       )))
   }, .init = dataset)
 
-  return(new_dataset  # nolint)
+  new_dataset
 }
 
 #' Extend a condition string by adding a new condition based on a variable and its value

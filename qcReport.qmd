@@ -66,14 +66,13 @@ for (i in seq_along(comp_dataset_names)) {
 ```{r summary_html}
 #| echo: false
 
-cat("## Verify Templates Check Complete!", "\n\n", file="qcSummary.html", append=TRUE)
-cat("Date: ", format(Sys.Date()), "\n", file="qcSummary.html", append=TRUE)
-cat("Run by: ", Sys.getenv("GITHUB_ACTOR"), "\n", file="qcSummary.html", append = TRUE)
-cat("Git Ref: ", Sys.getenv("GITHUB_REF"), "\n", file="qcSummary.html", append = TRUE)
-cat("BASE: ", "Generated ADaM Datasets from Templates during Run", "\n", file="qcSummary.html", append = TRUE)
-cat("COMPARE: ", "ADaM Datasets from pharmaverseadam ", "\n", file="qcSummary.html", append = TRUE)
+cat("## Verify Templates Check Complete!", "\n\n", file = "qcSummary.html", append = TRUE)
+cat("Date: ", format(Sys.Date()), "\n", file = "qcSummary.html", append = TRUE)
+cat("Run by: ", Sys.getenv("GITHUB_ACTOR"), "\n", file = "qcSummary.html", append = TRUE)
+cat("Git Ref: ", Sys.getenv("GITHUB_REF"), "\n", file = "qcSummary.html", append = TRUE)
+cat("BASE: ", "Generated ADaM Datasets from Templates during Run", "\n", file = "qcSummary.html", append = TRUE)
+cat("COMPARE: ", "ADaM Datasets from pharmaverseadam ", "\n", file = "qcSummary.html", append = TRUE)
 for (y in input_dataset_names) {
-
   new_dataset <- paste0("new_", y)
   comp_dataset <- paste0("comp_", y)
   diffs <- diffdf(base = get(comp_dataset), compare = get(new_dataset))
@@ -81,21 +80,21 @@ for (y in input_dataset_names) {
   #  if  (diffdf::diffdf_has_issues(diffs)) print(diffs)
   #  if (length(diffs) != 0) file.create("qc.fail")
   # nolint end
-  cat("<details>\n", file="qcSummary.html", append = TRUE)
+  cat("<details>\n", file = "qcSummary.html", append = TRUE)
   status_emoji <- if (length(diffs) == 0) "✅" else "❌"
-  cat(str_glue("<summary>{status_emoji} Dataset: {y}</summary>\n\n"), file="qcSummary.html", append = TRUE)
-  cat("\n\n```\n\n", file="qcSummary.html", append = TRUE)
-  x =print(diffs, as_string = TRUE)
-  cat(x, file="qcSummary.html", append = TRUE) 
-  cat("```\n\n", file="qcSummary.html", append = TRUE)
-  cat("</details>", file="qcSummary.html", append = TRUE)
-  cat("\n\n", file="qcSummary.html", append = TRUE)
+  cat(str_glue("<summary>{status_emoji} Dataset: {y}</summary>\n\n"), file = "qcSummary.html", append = TRUE)
+  cat("\n\n```\n\n", file = "qcSummary.html", append = TRUE)
+  x <- print(diffs, as_string = TRUE)
+  cat(x, file = "qcSummary.html", append = TRUE)
+  cat("```\n\n", file = "qcSummary.html", append = TRUE)
+  cat("</details>", file = "qcSummary.html", append = TRUE)
+  cat("\n\n", file = "qcSummary.html", append = TRUE)
 }
 ```
 
 ```{r data_html}
 #| echo: false
-#sink("qc.Rmd")   # nolint
+# sink("qc.Rmd")   # nolint
 
 # Neither cat nor writeLines can  accept cli_h1, use html markup symbols
 #
@@ -107,7 +106,6 @@ cat("Git Ref: ", Sys.getenv("GITHUB_REF"), "\n")
 cat("BASE: ", "Generated ADaM Datasets from Templates ", "\n")
 cat("COMPARE: ", "ADaM Datasets from pharmaverseadam ", "\n")
 for (y in input_dataset_names) {
-
   new_dataset <- paste0("new_", y)
   comp_dataset <- paste0("comp_", y)
   diffs <- diffdf(base = get(comp_dataset), compare = get(new_dataset))
@@ -125,7 +123,7 @@ for (y in input_dataset_names) {
   cat("\n\n")
 }
 
-#sink() # nolint
+# sink() # nolint
 ```
 
 ```{r data_check}
@@ -133,6 +131,6 @@ for (y in input_dataset_names) {
 #| message: false
 #| echo: false
 #| output: asis
-#readLines("qc.Rmd") |>
+# readLines("qc.Rmd") |>
 #  cat(sep = "\n")
 ```

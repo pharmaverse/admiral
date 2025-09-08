@@ -35,7 +35,7 @@ for (i in seq_along(comp_dataset_names)) {
 # ------------------------  separate1
 library(glue)
 
-CON = file("qcSummary.txt", "a")
+CON <- file("qcSummary.txt", "a")
 writeLines(paste0("## Verify Templates Check Complete!", "\n\n"), CON)
 writeLines(paste0("Date: ", Sys.Date(), "\n"), CON)
 writeLines(paste0("Run by: ", Sys.getenv("GITHUB_ACTOR"), "\n"), CON)
@@ -44,31 +44,31 @@ writeLines(paste0("BASE: ", "Generated ADaM Datasets from Templates ", "\n"), CO
 writeLines(paste0("COMPARE: ", "ADaM Datasets from pharmaverseadam ", "\n"), CON)
 
 for (y in input_dataset_names) {
-
   new_dataset <- paste0("new_", y)
   comp_dataset <- paste0("comp_", y)
 
-   diffs <- tryCatch(
-    {  
-        diffs <- diffdf(base = get(comp_dataset), compare = get(new_dataset))
+  diffs <- tryCatch(
+    {
+      diffs <- diffdf(base = get(comp_dataset), compare = get(new_dataset))
     },
-    error = function(e)  {
-        message("Error in diffdf ", e$message)
-        # empty list to not break loop
-        list()
-    # nolint start
-    #  if  (diffdf::diffdf_has_issues(diffs)) print(diffs)
-    #  if (length(diffs) != 0) file.create("qc.fail")
-    # nolint end
-        })
+    error = function(e) {
+      message("Error in diffdf ", e$message)
+      # empty list to not break loop
+      list()
+      # nolint start
+      #  if  (diffdf::diffdf_has_issues(diffs)) print(diffs)
+      #  if (length(diffs) != 0) file.create("qc.fail")
+      # nolint end
+    }
+  )
 
-  
+
   writeLines("<details>\n", CON)
   status_emoji <- if (length(diffs) == 0) "✅" else "❌"
   writeLines(str_glue("<summary>{status_emoji} Dataset: {y}</summary>\n\n"), CON)
   writeLines("\n\n```\n\n", CON)
   writeLines(as.character(length(diffs)), CON)
-  writeLines(print(diffs,as_string=TRUE), CON)
+  writeLines(print(diffs, as_string = TRUE), CON)
   writeLines("```\n\n", CON)
   writeLines("</details>", CON)
   writeLines("\n\n", CON)
