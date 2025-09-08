@@ -1,0 +1,308 @@
+Differences found for adae   Fri Jul 11 10:21:56 2025 
+
+Differences found between the objects!
+
+Summary of BASE and COMPARE
+  ==================================================================
+    PROPERTY             BASE                       COMP            
+  ------------------------------------------------------------------
+      Name               base                      compare          
+     Class     "tbl_df, tbl, data.frame"  "tbl_df, tbl, data.frame" 
+    Rows(#)              1191                       1191            
+   Columns(#)             105                        107            
+  ------------------------------------------------------------------
+
+
+There are columns in COMPARE that are not in BASE !!
+  =========
+   COLUMNS 
+  ---------
+   DOSEON  
+    DOSEU  
+  ---------
+
+
+
+
+Differences found for adcm   Fri Jul 11 10:21:56 2025 
+
+No issues were found!
+
+
+Differences found for adeg   Fri Jul 11 10:21:57 2025 
+
+Differences found between the objects!
+
+Summary of BASE and COMPARE
+  ==================================================================
+    PROPERTY             BASE                       COMP            
+  ------------------------------------------------------------------
+      Name               base                      compare          
+     Class     "tbl_df, tbl, data.frame"  "tbl_df, tbl, data.frame" 
+    Rows(#)              78756                      78756           
+   Columns(#)             108                        108            
+  ------------------------------------------------------------------
+
+
+Not all Values Compared Equal
+  =============================
+   Variable  No of Differences 
+  -----------------------------
+    EGSEQ          26717       
+   EGSTRESU        24660       
+    EGTPT          57540       
+     ATPT          57540       
+  -----------------------------
+
+
+First 10 of 26717 rows are shown in table below
+  ========================================
+   VARIABLE  ..ROWNUMBER..  BASE  COMPARE 
+  ----------------------------------------
+    EGSEQ          1          1     127   
+    EGSEQ          2          2     128   
+    EGSEQ          3          3     129   
+    EGSEQ          4          4     130   
+    EGSEQ          5          5     131   
+    EGSEQ          6          6     132   
+    EGSEQ          7          7     133   
+    EGSEQ          8          8     134   
+    EGSEQ          9          9     135   
+    EGSEQ         10         10     136   
+  ----------------------------------------
+
+
+First 10 of 24660 rows are shown in table below
+  ===============================================
+   VARIABLE  ..ROWNUMBER..    BASE      COMPARE  
+  -----------------------------------------------
+   EGSTRESU       12        beats/min  BEATS/MIN 
+   EGSTRESU       13        beats/min  BEATS/MIN 
+   EGSTRESU       14        beats/min  BEATS/MIN 
+   EGSTRESU       16        beats/min  BEATS/MIN 
+   EGSTRESU       17        beats/min  BEATS/MIN 
+   EGSTRESU       18        beats/min  BEATS/MIN 
+   EGSTRESU       20        beats/min  BEATS/MIN 
+   EGSTRESU       21        beats/min  BEATS/MIN 
+   EGSTRESU       22        beats/min  BEATS/MIN 
+   EGSTRESU       24        beats/min  BEATS/MIN 
+  -----------------------------------------------
+
+
+First 10 of 57540 rows are shown in table below
+  ====================================================================
+   VARIABLE  ..ROWNUMBER..                BASE                COMPARE 
+  --------------------------------------------------------------------
+    EGTPT         12        "AFTER LYING DOWN FOR 5 MINUTES"     1    
+    EGTPT         13         "AFTER STANDING FOR 1 MINUTE"       2    
+    EGTPT         14         "AFTER STANDING FOR 3 MINUTES"      3    
+    EGTPT         16        "AFTER LYING DOWN FOR 5 MINUTES"     1    
+    EGTPT         17         "AFTER STANDING FOR 1 MINUTE"       2    
+    EGTPT         18         "AFTER STANDING FOR 3 MINUTES"      3    
+    EGTPT         20        "AFTER LYING DOWN FOR 5 MINUTES"     1    
+    EGTPT         21         "AFTER STANDING FOR 1 MINUTE"       2    
+    EGTPT         22         "AFTER STANDING FOR 3 MINUTES"      3    
+    EGTPT         24        "AFTER LYING DOWN FOR 5 MINUTES"     1    
+  --------------------------------------------------------------------
+
+
+First 10 of 57540 rows are shown in table below
+  ====================================================================
+   VARIABLE  ..ROWNUMBER..                BASE                COMPARE 
+  --------------------------------------------------------------------
+     ATPT         12        "AFTER LYING DOWN FOR 5 MINUTES"     1    
+     ATPT         13         "AFTER STANDING FOR 1 MINUTE"       2    
+     ATPT         14         "AFTER STANDING FOR 3 MINUTES"      3    
+     ATPT         16        "AFTER LYING DOWN FOR 5 MINUTES"     1    
+     ATPT         17         "AFTER STANDING FOR 1 MINUTE"       2    
+     ATPT         18         "AFTER STANDING FOR 3 MINUTES"      3    
+     ATPT         20        "AFTER LYING DOWN FOR 5 MINUTES"     1    
+     ATPT         21         "AFTER STANDING FOR 1 MINUTE"       2    
+     ATPT         22         "AFTER STANDING FOR 3 MINUTES"      3    
+     ATPT         24        "AFTER LYING DOWN FOR 5 MINUTES"     1    
+  --------------------------------------------------------------------
+
+
+
+
+Differences found for adex   Fri Jul 11 10:21:57 2025 
+
+No issues were found!
+
+
+Differences found for adlb   Fri Jul 11 10:21:57 2025 
+
+No issues were found!
+
+
+Differences found for admh   Fri Jul 11 10:21:57 2025 
+
+No issues were found!
+
+
+Differences found for adpc   Fri Jul 11 10:21:57 2025 
+
+No issues were found!
+
+
+Differences found for adpp   Fri Jul 11 10:21:57 2025 
+
+No issues were found!
+
+
+Differences found for adppk   Fri Jul 11 10:21:57 2025 
+
+No issues were found!
+
+
+Differences found for adsl   Fri Jul 11 10:21:57 2025 
+
+No issues were found!
+
+
+Differences found for advs   Fri Jul 11 10:21:57 2025 
+
+No issues were found!
+
+
+
+ END of RUN -------
+Differences found for adae   Fri Jul 11 13:51:38 2025 
+
+Differences found between the objects!
+
+Summary of BASE and COMPARE
+  ==================================================================
+    PROPERTY             BASE                       COMP            
+  ------------------------------------------------------------------
+      Name               base                      compare          
+     Class     "tbl_df, tbl, data.frame"  "tbl_df, tbl, data.frame" 
+    Rows(#)              1191                       1191            
+   Columns(#)             105                        107            
+  ------------------------------------------------------------------
+
+
+There are columns in COMPARE that are not in BASE !!
+  =========
+   COLUMNS 
+  ---------
+   DOSEON  
+    DOSEU  
+  ---------
+
+
+
+
+
+ END of RUN -------
+Differences found for adae   Fri Jul 11 13:55:40 2025 
+
+Differences found between the objects!
+
+Summary of BASE and COMPARE
+  ==================================================================
+    PROPERTY             BASE                       COMP            
+  ------------------------------------------------------------------
+      Name               base                      compare          
+     Class     "tbl_df, tbl, data.frame"  "tbl_df, tbl, data.frame" 
+    Rows(#)              1191                       1191            
+   Columns(#)             105                        107            
+  ------------------------------------------------------------------
+
+
+There are columns in COMPARE that are not in BASE !!
+  =========
+   COLUMNS 
+  ---------
+   DOSEON  
+    DOSEU  
+  ---------
+
+
+
+
+
+ END of RUN -------
+Differences found for adae   Fri Jul 11 22:14:06 2025 
+
+Differences found between the objects!
+
+Summary of BASE and COMPARE
+  ==================================================================
+    PROPERTY             BASE                       COMP            
+  ------------------------------------------------------------------
+      Name               base                      compare          
+     Class     "tbl_df, tbl, data.frame"  "tbl_df, tbl, data.frame" 
+    Rows(#)              1191                       1191            
+   Columns(#)             105                        107            
+  ------------------------------------------------------------------
+
+
+There are columns in COMPARE that are not in BASE !!
+  =========
+   COLUMNS 
+  ---------
+   DOSEON  
+    DOSEU  
+  ---------
+
+
+
+
+Differences found for adsl   Fri Jul 11 22:14:06 2025 
+
+No issues were found!
+
+
+
+ END of RUN -------
+ adae   Fri Jul 11 22:23:14 2025 
+
+Differences found between the objects!
+
+Summary of BASE and COMPARE
+  ==================================================================
+    PROPERTY             BASE                       COMP            
+  ------------------------------------------------------------------
+      Name               base                      compare          
+     Class     "tbl_df, tbl, data.frame"  "tbl_df, tbl, data.frame" 
+    Rows(#)              1191                       1191            
+   Columns(#)             105                        107            
+  ------------------------------------------------------------------
+
+
+There are columns in COMPARE that are not in BASE !!
+  =========
+   COLUMNS 
+  ---------
+   DOSEON  
+    DOSEU  
+  ---------
+
+
+
+
+
+ END of RUN -------
+Differences found for  adpp   Sun Jul 13 14:27:49 2025 
+
+No issues were found!
+
+
+Differences found for  adppk   Sun Jul 13 14:27:49 2025 
+
+No issues were found!
+
+
+Differences found for  adsl   Sun Jul 13 14:27:49 2025 
+
+No issues were found!
+
+
+Differences found for  advs   Sun Jul 13 14:27:49 2025 
+
+No issues were found!
+
+
+
+ END of RUN -------

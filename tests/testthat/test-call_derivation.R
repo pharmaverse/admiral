@@ -1,7 +1,7 @@
 ## Test 1: Test that call_derivation generates expected summary  ----
 # ---- call_derivation Test 1:  Test that call_derivation generates expected summary ----
 test_that("call_derivation Test 1:  Test that call_derivation generates expected summary", {
-  input <- pharmaversesdtm::vs[sample(seq_len(nrow(pharmaversesdtm::vs)), 1000), ]
+  input <- pharmaversesdtm::vs[sample(seq_along(nrow(pharmaversesdtm::vs)), 1000), ]
 
   expected_output <- input %>%
     derive_summary_records(
@@ -70,7 +70,7 @@ test_that("call_derivation Test 1:  Test that call_derivation generates expected
 ## Test 2: Test that call_derivation generates expected imputation  ----
 # ---- call_derivation Test 2: Test that call_derivation generates expected imputation ----
 test_that("call_derivation Test 2: Test that call_derivation generates expected imputation", {
-  input <- pharmaversesdtm::ae[sample(seq_len(nrow(pharmaversesdtm::ae)), 1000), ] %>%
+  input <- pharmaversesdtm::ae[sample(seq_along(nrow(pharmaversesdtm::ae)), 1000), ] %>%
     left_join(admiral_adsl, by = "USUBJID")
 
   expected_output <- input %>%
@@ -125,7 +125,7 @@ test_that("call_derivation Test 3: Test that Error is thrown if ... has no argum
 ## Test 4: Error is thrown if ... arguments are not properly named ----
 # ---- call_derivation Test 4: Error is thrown if ... arguments are not properly named ----
 test_that("call_derivation Test 4: Error is thrown if ... arguments are not properly named", {
-  input <- pharmaversesdtm::ae[sample(seq_len(nrow(pharmaversesdtm::ae)), 1000), ] %>%
+  input <- pharmaversesdtm::ae[sample(seq_along(nrow(pharmaversesdtm::ae)), 1000), ] %>%
     left_join(admiral_adsl, by = "USUBJID")
 
   expect_snapshot(
@@ -167,7 +167,7 @@ test_that("call_derivation Test 5: Error is thrown if params is empty", {
 ## Test 6: Error is thrown if passed params are not properly named ----
 # ---- call_derivation Test 6: Error is thrown if passed params are not properly named ----
 test_that("call_derivation Test 6: Error is thrown if passed params are not properly named", {
-  input <- pharmaversesdtm::ae[sample(seq_len(nrow(pharmaversesdtm::ae)), 1000), ] %>%
+  input <- pharmaversesdtm::ae[sample(seq_along(nrow(pharmaversesdtm::ae)), 1000), ] %>%
     left_join(admiral_adsl, by = "USUBJID")
 
   expect_snapshot(
@@ -218,7 +218,7 @@ test_that("call_derivation Test 8: Error is thrown if duplicate parameters", {
 ## Test 9: Test new environment when variable_env != fixed_env  ----
 # ---- call_derivation Test 9: Test new environment when variable_env != fixed_env  ----
 test_that("call_derivation Test 9: Test new environment when variable_env != fixed_env", {
-  input <- pharmaversesdtm::ae[sample(seq_len(nrow(pharmaversesdtm::ae)), 1000), ] %>%
+  input <- pharmaversesdtm::ae[sample(seq_along(nrow(pharmaversesdtm::ae)), 1000), ] %>%
     left_join(admiral_adsl, by = "USUBJID")
 
   # Create a variable in a call_derivation environment
