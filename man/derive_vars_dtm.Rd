@@ -290,8 +290,8 @@ for partial dates. We also set \code{time_imputation = "last"}. The function wil
 all or part of \code{23:59:59} for time imputation. Note that \code{highest_imputation} must
 be at least \code{"D"} to perform date imputation. Here we use \code{highest_imputation = "M"}
 to request imputation of month and day (and time). Also note that
-two flag variables are created. By default seconds are not imputed and \code{ASTTMF} is
-set to \verb{<NA>} for times that include minutes. Set \code{ignore_seconds_flag = FALSE}
+two flag variables are created. By default \code{ASTTMF} is set to \code{NA}
+if only seconds are imputed. Set \code{ignore_seconds_flag = FALSE}
 to have the \code{"S"} flag for \code{ASTTMF}.
 
 \if{html}{\out{<div class="sourceCode r">}}\preformatted{derive_vars_dtm(
