@@ -91,8 +91,8 @@
 #' all or part of `23:59:59` for time imputation. Note that `highest_imputation` must
 #' be at least `"D"` to perform date imputation. Here we use `highest_imputation = "M"`
 #' to request imputation of month and day (and time). Also note that
-#' two flag variables are created. By default seconds are not imputed and `ASTTMF` is
-#' set to `<NA>` for times that include minutes. Set `ignore_seconds_flag = FALSE`
+#' two flag variables are created. By default `ASTTMF` is set to `NA`
+#' if only seconds are imputed. Set `ignore_seconds_flag = FALSE`
 #' to have the `"S"` flag for `ASTTMF`.
 #'
 #' @code
