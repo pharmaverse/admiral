@@ -391,12 +391,12 @@ derive_vars_dtm(
   new_vars_prefix = "AST",
   dtc = MHSTDTC,
   highest_imputation = "M",
-  ignore_seconds_flag = TRUE
+  ignore_seconds_flag = FALSE
 )
 #> # A tibble: 6 × 4
 #>   MHSTDTC            ASTDTM              ASTDTF ASTTMF
 #>   <chr>              <dttm>              <chr>  <chr> 
-#> 1 "2019-07-18T15:25" 2019-07-18 15:25:00 <NA>   <NA>  
+#> 1 "2019-07-18T15:25" 2019-07-18 15:25:00 <NA>   S     
 #> 2 "2019-07-18"       2019-07-18 00:00:00 <NA>   H     
 #> 3 "2019-02"          2019-02-01 00:00:00 D      H     
 #> 4 "2019"             2019-01-01 00:00:00 M      H     

@@ -169,7 +169,7 @@
 #'   new_vars_prefix = "AST",
 #'   dtc = MHSTDTC,
 #'   highest_imputation = "M",
-#'   ignore_seconds_flag = TRUE
+#'   ignore_seconds_flag = FALSE
 #' )
 #'
 #' @caption Preserve lower components if higher ones were imputed (`preserve`)
