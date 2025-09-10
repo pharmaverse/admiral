@@ -745,4 +745,76 @@ test_that("derive_vars_dt Test 28: no date imputation, DTF present", {
   )
 })
 
+## Test 29: correctly imputes last day in February on leap year ----
+test_that("derive_vars_dt Test 29: correctly imputes last day in February on leap year", {
+  leap_input <- tibble::tribble(
+    ~XXSTDTC,
+    "2019-02--",
+    "2020-02--"
+  )
+
+  expected_output <- tibble::tribble(
+    ~XXSTDTC,              ~ASTDT,                 ~ASTDTF,
+    "2019-02--",           as.Date("2019-02-28"),  "D",
+    "2020-02--",           as.Date("2020-02-29"),  "D"
+  )
+
+  actual_output <- derive_vars_dt(
+    leap_input,
+    new_vars_prefix = "AST",
+    dtc = XXSTDTC,
+    highest_imputation = "D",
+    date_imputation = "last"
+  )
+
+  expect_dfs_equal(
+    expected_output,
+    actual_output,
+    keys = c("ASTDT", "ASTDTF")
+  )
+})
+
+# Test 30: impute_dtc_dt returns an empty character vector where dtc is empty
+test_that("derive_vars_dt Test 30: impute_dtc_dt where dtc is empty", {
+  empty_impute <- impute_dtc_dt(
+    dtc = character()
+  )
+
+  expect_equal(
+    empty_impute,
+    character(0)
+  )
+})
+
+## Test 31: Test Min Date Equals Max Date ----
+test_that("derive_vars_dt Test 31: Test Min Date Equals Max Date", {
+  date <- tibble::tribble(
+    ~XXSTDTC,  ~TRTSDT,
+    "2020-05", ymd("2020-05-01"),
+    "2020",    ymd("2020-05-01")
+  )
+
+  expected_output <- tibble::tribble(
+    ~XXSTDTC,   ~TRTSDT,             ~ASTDT,            ~ASTDTF,
+    "2020-05",  ymd("2020-05-01"),   ymd("2020-05-01"), "D",
+    "2020",     ymd("2020-05-01"),   ymd("2020-05-01"), "M"
+  )
+
+  actual_output <- derive_vars_dt(
+    date,
+    new_vars_prefix = "AST",
+    dtc = XXSTDTC,
+    highest_imputation = "M",
+    date_imputation = "last",
+    min_dates = exprs(TRTSDT),
+    max_dates = exprs(TRTSDT)
+  )
+
+  expect_dfs_equal(
+    base = expected_output,
+    compare = actual_output,
+    keys = "XXSTDTC"
+  )
+})
+
 rm(input, input_warnings, inputdt, inputdtc, date)
