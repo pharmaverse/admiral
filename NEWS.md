@@ -6,6 +6,8 @@
 
 ## Breaking Changes
 
+- The default value of `ignore_seconds_flag` is set to `TRUE`. (#2798)
+
 - The following function arguments are entering the next phase of the [deprecation process](https://pharmaverse.github.io/admiraldev/articles/programming_strategy.html#deprecation): 
 
     **Phase 1 (message)**

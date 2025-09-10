@@ -71,7 +71,6 @@
 #'
 #' mhdt <- tribble(
 #'   ~MHSTDTC,
-#'   "2019-07-18T15:25:40",
 #'   "2019-07-18T15:25",
 #'   "2019-07-18",
 #'   "2019-02",
@@ -92,7 +91,9 @@
 #' all or part of `23:59:59` for time imputation. Note that `highest_imputation` must
 #' be at least `"D"` to perform date imputation. Here we use `highest_imputation = "M"`
 #' to request imputation of month and day (and time). Also note that
-#' two flag variables are created.
+#' two flag variables are created. By default `ASTTMF` is set to `NA`
+#' if only seconds are imputed. Set `ignore_seconds_flag = FALSE`
+#' to have the `"S"` flag for `ASTTMF`.
 #'
 #' @code
 #' derive_vars_dtm(
@@ -144,11 +145,13 @@
 #'   max_dates = exprs(DTHDT, DCUTDT)
 #' )
 #'
-#' @caption Suppress `"S"` for imputation flag (`ignore_seconds_flag`)
-#' @info In this example, we set `ignore_seconds_flag = TRUE` to suppress `S` for
-#' seconds in the `ASTTMF` variable. The ADaM IG states that given SDTM (`--DTC`)
-#' variable, if only hours and minutes are ever collected, and seconds are imputed
-#' in (`*DTM`) as `00`, then it is not necessary to set (`*TMF`) to `"S"`.
+#' @caption Include `"S"` for time imputation flag (`ignore_seconds_flag`)
+#' @info In this example, we set `ignore_seconds_flag = FALSE` to include `S` for
+#' seconds in the `ASTTMF` variable. The default value of `ignore_seconds_flag`
+#' is `TRUE` so the `"S"` is not normally displayed. The ADaM IG states that given
+#' SDTM (`--DTC`) variable, if only hours and minutes are ever collected, and
+#' seconds are imputed in (`*DTM`) as `00`, then it is not necessary to
+#' set (`*TMF`) to `"S"`.
 #' @code
 #'
 #' mhdt <- tribble(
@@ -166,7 +169,7 @@
 #'   new_vars_prefix = "AST",
 #'   dtc = MHSTDTC,
 #'   highest_imputation = "M",
-#'   ignore_seconds_flag = TRUE
+#'   ignore_seconds_flag = FALSE
 #' )
 #'
 #' @caption Preserve lower components if higher ones were imputed (`preserve`)
@@ -194,7 +197,8 @@
 #'   highest_imputation = "M",
 #'   date_imputation = "mid",
 #'   time_imputation = "last",
-#'   preserve = TRUE
+#'   preserve = TRUE,
+#'   ignore_seconds_flag = FALSE
 #' )
 #' @caption Further examples
 #' @info Further example usages of this function can be found in the
@@ -209,14 +213,7 @@ derive_vars_dtm <- function(dataset,
                             min_dates = NULL,
                             max_dates = NULL,
                             preserve = FALSE,
-                            ignore_seconds_flag = FALSE) {
-  # Display the argument change message only once during the session
-  if (!admiral_environment$message_displayed) {
-    cli_inform("The default value of {.arg ignore_seconds_flag}
-              will change to {.val TRUE} in admiral 1.4.0.")
-    admiral_environment$message_displayed <- TRUE
-  }
-
+                            ignore_seconds_flag = TRUE) {
   # check and quote arguments
   dtc <- assert_symbol(enexpr(dtc))
   assert_data_frame(dataset, required_vars = exprs(!!dtc))
@@ -408,8 +405,8 @@ convert_dtc_to_dtm <- function(dtc,
 #' impute_dtc_dtm(
 #'   "2020-11",
 #'   min_dates = list(
-#'    ymd_hms("2020-12-06T12:12:12"),
-#'    ymd_hms("2020-11-11T11:11:11")
+#'    ymd_hm("2020-12-06T12:12"),
+#'    ymd_hm("2020-11-11T11:11")
 #'   ),
 #'   highest_imputation = "M"
 #' )
@@ -527,8 +524,8 @@ convert_dtc_to_dtm <- function(dtc,
 #' impute_dtc_dtm(
 #'   "2020-12",
 #'   min_dates = list(
-#'     ymd_hms("2020-12-06T12:12:12"),
-#'     ymd_hms("2020-11-11T11:11:11")
+#'     ymd_hm("2020-12-06T12:12"),
+#'     ymd_hm("2020-11-11T11:11")
 #'   ),
 #'   highest_imputation = "M"
 #' )
@@ -537,8 +534,8 @@ convert_dtc_to_dtm <- function(dtc,
 #' impute_dtc_dtm(
 #'   c("2020-12", NA_character_),
 #'   min_dates = list(
-#'     ymd_hms("2020-12-06T12:12:12", "2020-01-01T01:01:01"),
-#'     ymd_hms("2020-11-11T11:11:11", NA)
+#'     ymd_hm("2020-12-06T12:12", "2020-01-01T01:01"),
+#'     ymd_hm("2020-11-11T11:11", NA)
 #'   ),
 #'   highest_imputation = "Y"
 #' )
@@ -725,11 +722,13 @@ restrict_imputed_dtc_dtm <- function(dtc,
 #'
 #' @param ignore_seconds_flag  ADaM IG states that given SDTM (`--DTC`) variable,
 #' if only hours and minutes are ever collected, and seconds are imputed in
-#' (`*DTM`) as 00, then it is not necessary to set (`*TMF`) to `"S"`. A user can set this
-#' to `TRUE` so the `"S"` Flag is dropped from (`*TMF`).
+#' (`*DTM`) as 00, then it is not necessary to set (`*TMF`) to `"S"`.
 #'
-#' Please note that the default value of `ignore_seconds_flag` will change to `TRUE` in
-#' admiral 1.4.0.
+#' By default it is assumed that no seconds are collected and `*TMF` shouldn't be set to `"S"`.
+#' A user can set this to `FALSE` if seconds are collected.
+#'
+#' The default value of `ignore_seconds_flag` is set to `TRUE` in
+#' admiral 1.4.0 and later.
 #'
 #' @permitted [boolean]
 #'
@@ -747,16 +746,20 @@ restrict_imputed_dtc_dtm <- function(dtc,
 #' @examples
 #' library(lubridate)
 #'
-#' compute_tmf(dtc = "2019-07-18T15:25", dtm = ymd_hms("2019-07-18T15:25:00"))
-#' compute_tmf(dtc = "2019-07-18T15", dtm = ymd_hms("2019-07-18T15:25:00"))
+#' compute_tmf(dtc = "2019-07-18T15:25", dtm = ymd_hm("2019-07-18T15:25"))
+#' compute_tmf(dtc = "2019-07-18T15", dtm = ymd_hm("2019-07-18T15:25"))
 #' compute_tmf(dtc = "2019-07-18", dtm = ymd("2019-07-18"))
-#' compute_tmf(dtc = "2022-05--T00:00", dtm = ymd_hms("2022-05-15T23:59:59"))
-#' compute_tmf(dtc = "2022-05--T23:00", dtm = ymd_hms("2022-05-15T23:59:59"))
-#' compute_tmf(dtc = "2022-05--T23:59:00", dtm = ymd_hms("2022-05-15T23:59:59"))
+#' compute_tmf(dtc = "2022-05--T00:00", dtm = ymd_hm("2022-05-15T23:59"))
+#' compute_tmf(dtc = "2022-05--T23:00", dtm = ymd_hm("2022-05-15T23:59"))
+#' compute_tmf(
+#'   dtc = "2022-05--T23:59:00",
+#'   dtm = ymd_hms("2022-05-15T23:59:59"),
+#'   ignore_seconds_flag = FALSE
+#' )
 #'
 compute_tmf <- function(dtc,
                         dtm,
-                        ignore_seconds_flag = FALSE) {
+                        ignore_seconds_flag = TRUE) {
   assert_date_vector(dtm)
   assert_character_vector(dtc)
   assert_logical_scalar(ignore_seconds_flag)
