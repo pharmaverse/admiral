@@ -45,3 +45,40 @@ atoxgr_criteria_daids_uscv <- atoxgr_criteria %>%
   dplyr::mutate(GRADE_CRITERIA_CODE = gsub("[\r\n]", " ", GRADE_CRITERIA_CODE))
 
 save(atoxgr_criteria_daids_uscv, file = "data/atoxgr_criteria_daids_uscv.rda")
+
+# Read in JSON file - testing
+json_file_path <- "data_raw/adlb_grading/adlb_grading_spec_ncictcaev5.json"
+
+atoxgr_criteria_ctcv5_uscv <- fromJSON(json_file_path) %>%
+  filter(!is.na(GRADE_NA_CODE)) %>%
+  mutate(
+    NEW_GRADE_CODE = "TRUE ~ \"0\"",
+    NEW_GRADE_CODE = if_else(
+      !is.na(GRADE_1_CODE),
+      paste(GRADE_1_CODE, NEW_GRADE_CODE, sep = ", "),
+      NEW_GRADE_CODE
+    ),
+    NEW_GRADE_CODE = if_else(
+      !is.na(GRADE_2_CODE),
+      paste(GRADE_2_CODE, NEW_GRADE_CODE, sep = ", "),
+      NEW_GRADE_CODE
+    ),
+    NEW_GRADE_CODE = if_else(
+      !is.na(GRADE_3_CODE),
+      paste(GRADE_3_CODE, NEW_GRADE_CODE, sep = ", "),
+      NEW_GRADE_CODE
+    ),
+    NEW_GRADE_CODE = if_else(
+      !is.na(GRADE_4_CODE),
+      paste(GRADE_4_CODE, NEW_GRADE_CODE, sep = ", "),
+      NEW_GRADE_CODE
+    ),
+    NEW_GRADE_CODE = if_else(
+      !is.na(GRADE_NA_CODE),
+      paste(GRADE_NA_CODE, NEW_GRADE_CODE, sep = ", "),
+      NEW_GRADE_CODE
+    ),
+    GRADE_CRITERIA_CODE = paste0("case_when(", NEW_GRADE_CODE, ")")
+  )
+
+
