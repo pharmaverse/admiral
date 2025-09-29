@@ -61,7 +61,7 @@ Otherwise, the \code{CRITyFL} variable is set to \code{"Y"} if the condition
 (\code{condition}) evaluates to \code{TRUE}, and to \code{NA} otherwise.
 
 \describe{
-\item{Permitted values}{\code{"TRUE"}, \code{"FALSE"}}
+\item{Permitted values}{\code{TRUE}, \code{FALSE}}
 \item{Default value}{\code{FALSE}}
 }}
 
@@ -71,7 +71,7 @@ If set to \code{TRUE}, the \code{CRITyFN} variable is created. It is set to \cod
 \code{CRITyFL == "Y"}, it set to \code{0} if \code{CRITyFL == "N"}, and to \code{NA} otherwise.
 
 \describe{
-\item{Permitted values}{\code{"TRUE"}, \code{"FALSE"}}
+\item{Permitted values}{\code{TRUE}, \code{FALSE}}
 \item{Default value}{\code{FALSE}}
 }}
 }
