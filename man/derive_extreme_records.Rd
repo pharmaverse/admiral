@@ -219,7 +219,7 @@ dataset is provided, a new dataset is created.
 \seealso{
 \code{\link[=derive_summary_records]{derive_summary_records()}}
 
-BDS-Findings Functions for adding Parameters/Records: 
+BDS-Findings Functions for adding Parameters/Records:
 \code{\link{default_qtc_paramcd}()},
 \code{\link{derive_expected_records}()},
 \code{\link{derive_extreme_event}()},
@@ -415,15 +415,15 @@ derive_extreme_records(
 #>   <chr>   <chr>   <dbl>
 #> 1 1       MINIMUM   123
 #> 2 2       MINIMUM    93
-#> Warning: Dataset contains duplicate records with respect to `USUBJID` and `AVAL`
-#> i Run `admiral::get_duplicates_dataset()` to access the duplicate records}\if{html}{\out{</div>}}
+#> G2;H2;Warningh: Dataset contains duplicate records with respect to `USUBJID` and `AVAL`
+#> i Run `admiral::get_duplicates_dataset()` to access the duplicate recordsg}\if{html}{\out{</div>}}
 
 For investigating the issue, the dataset of the duplicate source records
 can be obtained by calling \code{get_duplicates_dataset()}:
 
 \if{html}{\out{<div class="sourceCode r">}}\preformatted{get_duplicates_dataset()
-#> Duplicate records with respect to `USUBJID` and `AVAL`.
-#> # A tibble: 2 × 3
+#> G3;Duplicate records with respect to `USUBJID` and `AVAL`.
+#> g# A tibble: 2 × 3
 #>   USUBJID  AVAL AVISIT
 #> * <chr>   <dbl> <chr> 
 #> 1 1         123 WEEK 1
