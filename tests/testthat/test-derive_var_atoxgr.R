@@ -4835,7 +4835,7 @@ test_that("derive_var_atoxgr Test 80b: CTCAEv5 Hyponatremia (USCV unit)", {
 ### Grade 1: <LLN - 0.8 mmol/L
 
 
-### SI unit is mg/dL
+### CV unit is mg/dL
 ### Grade 4: <1 mg/dL
 ### Grade 3: <2 - 1 mg/dL
 ### Grade 2: <2.5 - 2 mg/dL
