@@ -4,7 +4,7 @@ on:
   push:
     paths: ["R/**"]
 
-name: Create Manul Pages
+name: Documentation-Create Manual Pages
 
 permissions: read-all
 
