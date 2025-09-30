@@ -2,7 +2,7 @@
 #'
 #' @description
 #' This dummy function demonstrates how to document an R function using roxygen2.
-#' It takes two numeric inputs and returns their element-wise sum.
+#' It takes two numeric inputs and returns their element-wise sum. Make it pretty!!
 #'
 #' @param a A numeric vector.
 #' @param b A numeric vector.
