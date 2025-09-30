@@ -20,7 +20,7 @@
 dummy_function <- function(a, b) {
   # Validate input types
   if (!is.numeric(a) || !is.numeric(b)) {
-    stop("Both 'a' and 'b' must be numeric.")
+    stop("Both 'a' and 'b' must be numeric things")
   }
 
   # Return the element-wise sum
