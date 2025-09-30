@@ -3,20 +3,12 @@ atoxgr_criteria <- system.file("adlb_grading/adlb_grading_spec.xlsx", package = 
 # avoid having to list {readxl} in "Imports" and instead get away with just
 # listing it in "Depends".
 
-
 # create DAIDs metadata for SI units
 atoxgr_criteria_daids <- atoxgr_criteria %>%
   readxl::read_excel(sheet = "DAIDS") %>%
   dplyr::mutate(GRADE_CRITERIA_CODE = gsub("[\r\n]", " ", GRADE_CRITERIA_CODE))
 
 save(atoxgr_criteria_daids, file = "data/atoxgr_criteria_daids.rda")
-
-# create NCICTCAEv4 metadata for USCV units
-atoxgr_criteria_ctcv4_uscv <- atoxgr_criteria %>%
-  readxl::read_excel(sheet = "NCICTCAEv4_CV") %>%
-  dplyr::mutate(GRADE_CRITERIA_CODE = gsub("[\r\n]", " ", GRADE_CRITERIA_CODE))
-
-save(atoxgr_criteria_ctcv4_uscv, file = "data/atoxgr_criteria_ctcv4_uscv.rda")
 
 # create DAIDs metadata for USCV units
 atoxgr_criteria_daids_uscv <- atoxgr_criteria %>%
@@ -63,23 +55,40 @@ atoxgr_json_to_dataframe <- function(dataset, json_file) {
 
 library(dplyr)
 
+# hold core directory path in an object
+json_file_path <- "data-raw/adlb_grading/"
+save_file_path <- "data/atoxgr_criteria_"
+
 # Read in JSON file - for NCICTCAEv4 for SI units
-json_file_path_v4 <- "data-raw/adlb_grading/ncictcaev4.json"
+json_file_path_v4 <- paste0(json_file_path, "ncictcaev4.json")
 
 atoxgr_criteria_ctcv4 <- atoxgr_json_to_dataframe(json_file = json_file_path_v4)
 
-save(atoxgr_criteria_ctcv4, file = "data/atoxgr_criteria_ctcv4.rda")
+save(atoxgr_criteria_ctcv4, file = paste0(save_file_path, "ctcv4.rda"))
+
+
+
+# Read in JSON file - for NCICTCAEv4_CV for CV units
+json_file_path_v4_uscv <- paste0(json_file_path, "ncictcaev4_uscv.json")
+
+atoxgr_criteria_ctcv4_uscv <- atoxgr_json_to_dataframe(json_file = json_file_path_v4_uscv)
+
+save(atoxgr_criteria_ctcv4_uscv, file = paste0(save_file_path, "ctcv4_uscv.rda"))
+
+
 
 # Read in JSON file - for NCICTCAEv5 for SI units
-json_file_path_v5 <- "data-raw/adlb_grading/ncictcaev5.json"
+json_file_path_v5 <- paste0(json_file_path, "ncictcaev5.json")
 
 atoxgr_criteria_ctcv5 <- atoxgr_json_to_dataframe(json_file = json_file_path_v5)
 
-save(atoxgr_criteria_ctcv5, file = "data/atoxgr_criteria_ctcv5.rda")
+save(atoxgr_criteria_ctcv5, file = paste0(save_file_path, "ctcv5.rda"))
 
-# Read in JSON file - for NCICTCAEv5 for CV units
-json_file_path_v5_cv <- "data-raw/adlb_grading/ncictcaev5_cv.json"
 
-atoxgr_criteria_ctcv5_uscv <- atoxgr_json_to_dataframe(json_file = json_file_path_v5_cv)
 
-save(atoxgr_criteria_ctcv5_uscv, file = "data/atoxgr_criteria_ctcv5_uscv.rda")
+# Read in JSON file - for NCICTCAEv5_CV for CV units
+json_file_path_v5_uscv <- paste0(json_file_path, "ncictcaev5_uscv.json")
+
+atoxgr_criteria_ctcv5_uscv <- atoxgr_json_to_dataframe(json_file = json_file_path_v5_uscv)
+
+save(atoxgr_criteria_ctcv5_uscv, file = paste0(save_file_path, "ctcv5_uscv.rda"))

@@ -263,7 +263,7 @@
     "GRADE_NA_CODE": "is.na(AVAL) ~ NA_character_",
     "GRADE_3_CODE": "signif(AVAL, signif_dig) > signif(2.5, signif_dig) ~ \"3\",  !is.na(BASE) & signif(AVAL, signif_dig) > signif(2.5*BASE, signif_dig) ~ \"3\"",
     "GRADE_2_CODE": "signif(AVAL, signif_dig) > signif(1.5, signif_dig) ~ \"2\",  !is.na(BASE) & signif(AVAL, signif_dig) > signif(1.5*BASE, signif_dig) ~ \"2\"",
-    "GRADE_1_CODE": "signif(AVAL, signif_dig) > signif(1.2, signif_dig) ~ \"1\",  !is.na(BASE) & signif(AVAL, signif_dig) > signif(BASE, signif_dig) ~ \"1\"",
+    "GRADE_1_CODE": "signif(AVAL, signif_dig) > signif(1.2, signif_dig) ~ \"1\",  !is.na(BASE) & signif(AVAL, signif_dig) > signif(BASE, signif_dig) ~ \"1\", is.na(BASE) ~ NA_character_",
     "VAR_CHECK": "AVAL, BASE",
     "DIRECTION": "H",
     "COMMENT": "Take worst case and assume \"on anticoagulation\""
