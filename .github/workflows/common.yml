@@ -112,13 +112,13 @@ jobs:
       # Setting to 'false' will require you to create
       # an orphan branch called 'badges' in your repository
       skip-coverage-badges: false
-  man-pages:
-    name: Man Pages
-    uses: pharmaverse/admiralci/.github/workflows/man-pages.yml@main
-    if: github.event_name == 'pull_request'
-    needs: get_r_version
-    with:
-      r-version: "${{ needs.get_r_version.outputs.r-version }}"
+  # man-pages:
+  #   name: Man Pages
+  #   uses: pharmaverse/admiralci/.github/workflows/man-pages.yml@main
+  #   if: github.event_name == 'pull_request'
+  #   needs: get_r_version
+  #   with:
+  #     r-version: "${{ needs.get_r_version.outputs.r-version }}"
   templates:
     name: Check Templates
     uses: pharmaverse/admiralci/.github/workflows/check-templates.yml@main
