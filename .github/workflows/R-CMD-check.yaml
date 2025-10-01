@@ -1,20 +1,22 @@
 # Workflow derived from https://github.com/r-lib/actions/tree/v2/examples
 # Need help debugging build failures? Start at https://github.com/r-lib/actions#where-to-find-help
 on:
-  workflow_run:
-    workflows: ["Documentation Create Manual Pages"]  # Exact match required.
-    types: [completed]
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
 
-name: R-CMD-check # keep as ensures snapshots are running
+name: R-CMD-check # keeps snapshots running
 
 permissions: read-all
 
 jobs:
   R-CMD-check:
     runs-on: ${{ matrix.config.os }}
-
     name: ${{ matrix.config.os }} (${{ matrix.config.r }})
-
     strategy:
       fail-fast: false
       matrix:
@@ -41,7 +43,6 @@ jobs:
       - uses: r-lib/actions/setup-r-dependencies@v2
         with:
           extra-packages: any::rcmdcheck
-          needs: check
 
       - name: Install Development Versions of Dependencies
         if: |
