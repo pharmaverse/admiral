@@ -1,10 +1,9 @@
 # Workflow derived from https://github.com/r-lib/actions/tree/v2/examples
 # Need help debugging build failures? Start at https://github.com/r-lib/actions#where-to-find-help
 on:
-  push:
-    branches: [main, master]
-  pull_request:
-    branches: [main, master]
+  workflow_run:
+    workflows: ["Documentation-Create Manual Pages"]  # Exact match required.
+    types: [completed]
 
 name: R-CMD-check # keep as ensures snapshots are running
 
