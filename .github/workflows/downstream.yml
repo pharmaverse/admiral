@@ -4,7 +4,7 @@ name: Downstream-Tasks
 # Trigger when the Documentation workflow completes
 on:
   workflow_run:
-    workflows: ["Documentation-Create Manual Pages"]
+    workflows: ["Documentation Create Manual Pages"]
     types: [completed]
 
 jobs:

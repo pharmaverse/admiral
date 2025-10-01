@@ -1,5 +1,5 @@
 # .github/workflows/documentation.yml
-name: Documentation-Create Manual Pages
+name: Documentation Create Manual Pages
 
 on:
   push:
