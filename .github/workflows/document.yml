@@ -1,10 +1,12 @@
-# Workflow derived from https://github.com/r-lib/actions/tree/v2/examples
-# Need help debugging build failures? Start at https://github.com/r-lib/actions#where-to-find-help
+# .github/workflows/documentation.yml
+name: Documentation-Create Manual Pages
+
 on:
   push:
-    paths: ["R/**"]
-
-name: Documentation-Create Manual Pages
+    branches: [main, master]   # Instead of filtering only R/**
+    paths:
+      - "R/**"                  # Optionally keep paths filter if desired
+      - ".github/workflows/documentation.yml"  # And/or any other files that should always trigger
 
 permissions: read-all
 
