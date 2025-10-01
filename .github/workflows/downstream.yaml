@@ -1,0 +1,17 @@
+# .github/workflows/downstream.yml
+name: Downstream-Tasks
+
+# Trigger when the Documentation workflow completes
+on:
+  workflow_run:
+    workflows: ["Documentation-Create Manual Pages"]
+    types: [completed]
+
+jobs:
+  run-downstream-tasks:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+      - name: Do downstream work
+        run: echo "Documentation workflow completed. Now running downstream tasks."
