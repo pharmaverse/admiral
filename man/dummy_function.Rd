@@ -25,7 +25,7 @@ A numeric vector containing the element-wise sum of \code{a} and \code{b}.
 \description{
 This dummy function demonstrates how to document an R function using roxygen2.
 It takes two numeric inputs and returns their element-wise sum. Make it pretty!!
-Making it more pretty!!
+Making it more pretty!! TEST
 }
 \examples{
 # Basic addition with scalars
