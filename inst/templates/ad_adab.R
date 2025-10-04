@@ -18,9 +18,13 @@ library(pharmaversesdtm) # Contains example datasets from the CDISC pilot projec
 # For illustration purposes read in admiral test data
 
 # Load IS, EX and ADSL
-# Note: these two lines will be udpated when pharmaversesdtm::is_ada is online
-#is <- pharmaversesdtm::is_ada
+# Note: these read data lines will be updated when pharmaversesdtm::is_ada is online
+
+#  If obtain and locally run the draft pharmaversesdtm is_ada.R program,
+#  can save to a local folder to use this line:
 is <- arrow::read_parquet("data/pharmaverse/is_ada.parquet")
+
+#is <- pharmaversesdtm::is_ada
 ex <- pharmaversesdtm::ex
 adsl <- admiral::admiral_adsl
 
@@ -1280,7 +1284,20 @@ is_basetype <- is_afrlt %>%
       ABLFL, ADABLPFL, ADPBLPFL, ADAFL
     )
 
-  # Save output ----
 
-  # Save as PARQUET file
-  arrow::write_parquet(adab, file.path("data/pharmaverse/adab.parquet"))
+  # Final Steps, Select final variables and Add labels
+  # This process will be based on your metadata, no example given for this reason
+  # ...
+  # ---- Save output ----
+
+  # Change to whichever directory you want to save the dataset in
+  dir <- tools::R_user_dir("admiral_templates_data", which = "cache")
+  if (!file.exists(dir)) {
+    # Create the folder
+    dir.create(dir, recursive = TRUE, showWarnings = FALSE)
+  }
+  save(adab, file = file.path(dir, "adab.rda"), compress = "bzip2")
+
+
+  # TEMP: If want to save as PARQUET file in desired location
+  # arrow::write_parquet(adab, file.path("data/pharmaverse/adab.parquet"))
