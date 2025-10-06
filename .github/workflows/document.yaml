@@ -4,7 +4,7 @@ on:
   push:
     paths: ["R/**"]
 
-name: document.yaml
+name: Regenerate Manual Pages
 
 permissions: read-all
 
