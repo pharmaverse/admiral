@@ -1,0 +1,15 @@
+name: Test Document Command
+
+on:
+  issue_comment:
+    types: [created]
+
+jobs:
+  test-document:
+    if: ${{ github.event.issue.pull_request && startsWith(github.event.comment.body, '/document') }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Debug Event
+        run: echo "${{ toJson(github.event) }}"
+      - name: Success Message
+        run: echo "The /document command has been detected!"
