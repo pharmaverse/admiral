@@ -4,7 +4,7 @@ test_that("list_all_templates Test 1: all templates are listed", {
   expect_equal(
     unclass(list_all_templates()),
     c(
-      "ADAE", "ADCM", "ADEG", "ADEX", "ADLB", "ADLBHY", "ADMH", "ADPC", "ADPP",
+      "ADAB", "ADAE", "ADCM", "ADEG", "ADEX", "ADLB", "ADLBHY", "ADMH", "ADPC", "ADPP",
       "ADPPK", "ADSL", "ADVS"
     ),
     ignore_attr = TRUE
