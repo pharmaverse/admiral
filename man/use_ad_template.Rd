@@ -15,7 +15,7 @@ use_ad_template(
 \arguments{
 \item{adam_name}{An ADaM dataset name. You can use any of the available
 dataset names
-\code{"ADAE"}, \code{"ADCM"}, \code{"ADEG"}, \code{"ADEX"}, \code{"ADLB"}, \code{"ADLBHY"}, \code{"ADMH"}, \code{"ADPC"}, \code{"ADPP"}, \code{"ADPPK"}, \code{"ADSL"}, \code{"ADVS"}.
+\code{"ADAB"}, \code{"ADAE"}, \code{"ADCM"}, \code{"ADEG"}, \code{"ADEX"}, \code{"ADLB"}, \code{"ADLBHY"}, \code{"ADMH"}, \code{"ADPC"}, \code{"ADPP"}, \code{"ADPPK"}, \code{"ADSL"}, \code{"ADVS"}.
 The dataset name is case-insensitive. The default dataset name is \code{"ADSL"}.
 
 \describe{
@@ -62,7 +62,7 @@ if (interactive()) {
 }
 }
 \seealso{
-Utilities used for examples and template scripts: 
+Utilities used for examples and template scripts:
 \code{\link{list_all_templates}()}
 }
 \concept{utils_examples}
