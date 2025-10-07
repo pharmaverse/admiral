@@ -43,11 +43,11 @@ otherwise specified.*
 * [Derive Analysis Ratio (e.g. `R2BASE`)](#analysisratio)
 * [Derive Analysis Flags (e.g. `ANL01FL`)](#analysisrec)
 * [Assign Treatment (`TRTA`, `TRTP`)](#treatment)
-* [Assign `ASEQ`](#aseq)
 * [Derive Categorization Variables (`AVALCATy`)](#cat)
 * [Derive Criterion Variables (`CRITy`, `CRITyFL`, `CRITyFN`)](#crit_vars)
-* [Add ADSL variables](#adsl_vars)
 * [Derive New Rows](#additional)
+* [Assign `ASEQ`](#aseq)
+* [Add ADSL variables](#adsl_vars)
 * [Add Labels and Attributes](#attributes)
 
 ## Read in Data {#readdata}
@@ -836,29 +836,6 @@ count(advs, TRTP, TRTA, TRT01P, TRT01A)
 For studies with periods see the ["Visit and Period Variables"
 vignette](visits_periods.html#treatment_bds).
 
-## Assign `ASEQ` {#aseq}
-
-The `{admiral}` function `derive_var_obs_number()` can be used to derive `ASEQ`. An 
-example call is:
-
-```{r eval=TRUE}
-advs <- derive_var_obs_number(
-  advs,
-  new_var = ASEQ,
-  by_vars = exprs(STUDYID, USUBJID),
-  order = exprs(PARAMCD, ADT, AVISITN, VISITNUM, ATPTN),
-  check_type = "error"
-)
-```
-
-```{r, eval=TRUE, echo=FALSE}
-dataset_vignette(
-  advs,
-  display_vars = exprs(USUBJID, PARAMCD, ADT, AVISITN, ATPTN, VISIT, ADT, ASEQ),
-  filter = USUBJID == "01-701-1015"
-)
-```
-
 ## Derive Categorization Variables (`AVALCATy`) {#cat}
 
 We can use the `derive_vars_cat()` function to derive the categorization variables.
@@ -953,26 +930,6 @@ dataset_vignette(
   arrange(advs, USUBJID, AVISITN, ATPTN),
   display_vars = exprs(USUBJID, PARAMCD, AVAL, CHG, CRIT2, CRIT2FL, CRIT2FN),
   filter = PARAMCD == "SYSBP"
-)
-```
-
-## Add ADSL variables {#adsl_vars}
-If needed, the other `ADSL` variables can now be added.
-List of ADSL variables already merged held in vector `adsl_vars`
-
-```{r eval=TRUE}
-advs <- advs %>%
-  derive_vars_merged(
-    dataset_add = select(adsl, !!!negate_vars(adsl_vars)),
-    by_vars = exprs(STUDYID, USUBJID)
-  )
-```
-
-```{r, eval=TRUE, echo=FALSE}
-dataset_vignette(
-  advs,
-  display_vars = exprs(USUBJID, RFSTDTC, RFENDTC, DTHDTC, DTHFL, AGE, AGEU),
-  filter = USUBJID == "01-701-1015"
 )
 ```
 
@@ -1105,6 +1062,49 @@ dataset_vignette(
   arrange(advs_ex3, USUBJID, VISIT, ATPT, PARAMCD),
   display_vars = exprs(USUBJID, PARAMCD, VISIT, ATPT, AVAL),
   filter = USUBJID == "01-701-1015" & PARAMCD %in% c("MAP2", "SYSBP", "DIABP")
+)
+```
+
+## Assign `ASEQ` {#aseq}
+
+The `{admiral}` function `derive_var_obs_number()` can be used to derive `ASEQ`. An 
+example call is:
+
+```{r eval=TRUE}
+advs <- derive_var_obs_number(
+  advs,
+  new_var = ASEQ,
+  by_vars = exprs(STUDYID, USUBJID),
+  order = exprs(PARAMCD, ADT, AVISITN, VISITNUM, ATPTN),
+  check_type = "error"
+)
+```
+
+```{r, eval=TRUE, echo=FALSE}
+dataset_vignette(
+  advs,
+  display_vars = exprs(USUBJID, PARAMCD, ADT, AVISITN, ATPTN, VISIT, ADT, ASEQ),
+  filter = USUBJID == "01-701-1015"
+)
+```
+
+## Add ADSL variables {#adsl_vars}
+If needed, the other `ADSL` variables can now be added.
+List of ADSL variables already merged held in vector `adsl_vars`
+
+```{r eval=TRUE}
+advs <- advs %>%
+  derive_vars_merged(
+    dataset_add = select(adsl, !!!negate_vars(adsl_vars)),
+    by_vars = exprs(STUDYID, USUBJID)
+  )
+```
+
+```{r, eval=TRUE, echo=FALSE}
+dataset_vignette(
+  advs,
+  display_vars = exprs(USUBJID, RFSTDTC, RFENDTC, DTHDTC, DTHFL, AGE, AGEU),
+  filter = USUBJID == "01-701-1015"
 )
 ```
 
