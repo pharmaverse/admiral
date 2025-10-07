@@ -441,7 +441,7 @@ For term "INR Increased" there is the following criteria:
 atoxgr_criteria_ctcv4 %>%
   filter(str_detect(TERM, "INR")) %>%
   dataset_vignette(
-    display_vars = exprs(TERM, Grade_1)
+    display_vars = exprs(TERM, GRADE_1)
   )
 ```
 <br>
@@ -468,7 +468,7 @@ put in the `COMMENT` field.
 atoxgr_criteria_ctcv4 %>%
   filter(str_detect(TERM, "Hyperuricemia")) %>%
   dataset_vignette(
-    display_vars = exprs(TERM, Grade_1, Grade_3, COMMENT)
+    display_vars = exprs(TERM, GRADE_1, GRADE_3, COMMENT)
   )
 ```
 <br>
@@ -482,7 +482,7 @@ The decision made was put in the `COMMENT` field.
 atoxgr_criteria_ctcv4 %>%
   filter(str_detect(TERM, "Hypokalemia")) %>%
   dataset_vignette(
-    display_vars = exprs(TERM, Grade_1, Grade_2, COMMENT)
+    display_vars = exprs(TERM, GRADE_1, GRADE_2, COMMENT)
   )
 ```
 <br>
@@ -493,7 +493,7 @@ atoxgr_criteria_ctcv4 %>%
   filter(!is.na(COMMENT) & str_detect(TERM, "glycemia", negate = TRUE) &
     str_detect(TERM, "calcemia", negate = TRUE)) %>%
   dataset_vignette(
-    display_vars = exprs(TERM, Grade_1, Grade_2, Grade_3, Grade_4, COMMENT)
+    display_vars = exprs(TERM, GRADE_1, GRADE_2, GRADE_3, GRADE_4, COMMENT)
   )
 ```
 <br>
@@ -605,7 +605,7 @@ For term "INR Increased" there is the following criteria:
 atoxgr_criteria_ctcv5 %>%
   filter(str_detect(TERM, "INR")) %>%
   dataset_vignette(
-    display_vars = exprs(TERM, Grade_1)
+    display_vars = exprs(TERM, GRADE_1)
   )
 ```
 <br>
@@ -629,7 +629,7 @@ Similarly, for terms "Lipase Increased" and "Serum amylase increased" there is t
 atoxgr_criteria_ctcv5 %>%
   filter(str_detect(TERM, "Lipase") | str_detect(TERM, "amylase")) %>%
   dataset_vignette(
-    display_vars = exprs(TERM, Grade_2, Grade_3, Grade_4)
+    display_vars = exprs(TERM, GRADE_2, GRADE_3, GRADE_4)
   )
 ```
 <br>
@@ -656,7 +656,7 @@ put in the `COMMENT` field.
 atoxgr_criteria_ctcv5 %>%
   filter(str_detect(TERM, "Hyperuricemia")) %>%
   dataset_vignette(
-    display_vars = exprs(TERM, Grade_1, Grade_3, COMMENT)
+    display_vars = exprs(TERM, GRADE_1, GRADE_3, COMMENT)
   )
 ```
 <br>
@@ -672,7 +672,7 @@ The decision made was put in the `COMMENT` field.
 atoxgr_criteria_ctcv5 %>%
   filter(str_detect(TERM, "Hypokalemia") | str_detect(TERM, "Hyponatremia")) %>%
   dataset_vignette(
-    display_vars = exprs(TERM, Grade_1, Grade_2, Grade_3, COMMENT)
+    display_vars = exprs(TERM, GRADE_1, GRADE_2, GRADE_3, COMMENT)
   )
 ```
 <br>
@@ -683,7 +683,7 @@ Here is a complete list of all assumptions in the metadata for NCI-CTCAE-v5
 atoxgr_criteria_ctcv5 %>%
   filter(!is.na(COMMENT) & str_detect(TERM, "calcemia", negate = TRUE)) %>%
   dataset_vignette(
-    display_vars = exprs(TERM, Grade_1, Grade_2, Grade_3, Grade_4, COMMENT)
+    display_vars = exprs(TERM, GRADE_1, GRADE_2, GRADE_3, GRADE_4, COMMENT)
   )
 ```
 <br>
@@ -834,7 +834,7 @@ Similarly, for term "Lactate, High", {admiral} only grade 1 and 2, and there is 
 atoxgr_criteria_daids %>%
   filter(str_detect(TERM, "Lactate")) %>%
   dataset_vignette(
-    display_vars = exprs(TERM, Grade_1, Grade_1)
+    display_vars = exprs(TERM, GRADE_1, GRADE_1)
   )
 ```
 <br>

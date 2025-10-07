@@ -41,7 +41,8 @@ atoxgr_json_to_dataframe <- function(dataset, json_file) {
         "NA_character_"
       )
     ) %>%
-    select(-NEW_GRADE_CODE)
+    select(-NEW_GRADE_CODE, -GRADE_NA_CODE, -GRADE_1_CODE, -GRADE_2_CODE,
+           -GRADE_3_CODE, , -GRADE_4_CODE)
 }
 
 # hold core directory path in an object
