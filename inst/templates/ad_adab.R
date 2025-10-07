@@ -17,14 +17,9 @@ library(pharmaversesdtm) # Contains example datasets from the CDISC pilot projec
 # as needed and assign to the variables below.
 # For illustration purposes read in admiral test data
 
-# Load IS, EX and ADSL
-# Note: these read data lines will be updated when pharmaversesdtm::is_ada is online
+# Load IS, EX and ADSL fromo pharmaversesdtm and admiral
 
-#  If obtain and locally run the draft pharmaversesdtm is_ada.R program,
-#  can save to a local folder to use this line:
 is <- arrow::read_parquet("data/pharmaverse/is_ada.parquet")
-
-#is <- pharmaversesdtm::is_ada
 ex <- pharmaversesdtm::ex
 adsl <- admiral::admiral_adsl
 
@@ -53,6 +48,7 @@ is_dates <- is %>%
     ADATYPE = case_when(
       toupper(ISTESTCD) == "ADATEST1" ~ "ADA_BAB",
       toupper(ISTESTCD) == "NABTEST1" ~ "ADA_NAB",
+      TRUE ~ NA_character_
     ),
     # Setting ADAPARM based on SDTM V1.x ISTESTCD
     ADAPARM = ISTESTCD,
@@ -66,6 +62,7 @@ is_dates <- is %>%
     #  This is especially critical when multipel analytes and EX.EXTRT instances
     DRUG = case_when(
       toupper(ADAPARM) == "XANOMELINE" ~ "XANOMELINE",
+      TRUE ~ NA_character_
     ),
     # Set AVISIT and AVISITN based on VISIT and VISITNUM
     AVISIT = VISIT,
@@ -80,7 +77,8 @@ is_dates <- is %>%
       grepl("TREATMENT DISC", toupper(VISIT)) ~ 77777,
       grepl("UNSCHEDULED", toupper(VISIT)) ~ 99999,
       grepl("BASELINE", toupper(VISIT)) & !is.na(ISTPTNUM) ~ ISTPTNUM  / 24,
-      !is.na(VISITDY) ~ (VISITDY - 1)
+      !is.na(VISITDY) ~ (VISITDY - 1),
+      TRUE ~ NA_real_
     )
   )  %>%
   # Join ADSL with is (need TRTSDT for ADY derivation)
@@ -114,6 +112,7 @@ ex_dates <- ex %>%
     DRUG = case_when(
       grepl("XANOMELINE", toupper(EXTRT)) ~  "XANOMELINE",
       grepl("PLACEBO", toupper(EXTRT)) ~  "XANOMELINE",
+      TRUE ~ NA_character_
     ),
     # Compute Nominal Time
     NFRLT = case_when(
@@ -169,7 +168,6 @@ is_afrlt <- is_dates %>%
   ) %>%
   arrange(STUDYID, USUBJID, DRUG, ADATYPE, ADAPARM, ADTM, NFRLT)
 
-
 # Compute or assign BASETYPE, APERIOD and APHASE ----------------------------------
 # Add study specific code as applicable using ADEX or ADSL APx and PHx vars
 
@@ -220,6 +218,7 @@ is_basetype <- is_afrlt %>%
       AVAL = case_when(
         ADATYPE == "ADA_BAB" & toupper(RESULTC) == "POSITIVE" & !is.na(ISSTRESN) ~ ISSTRESN,
         ADATYPE == "ADA_BAB" & toupper(RESULTC) == "POSITIVE" & is.na(ISSTRESN) & !is.na(MRT) ~ MRT,
+        TRUE ~ NA_real_
       ),
       AVALC = case_when(
         # NABSTAT gets ISSTRESC, Standard ADA is special rules when non NEGATIVE results
@@ -273,6 +272,7 @@ is_basetype <- is_afrlt %>%
       # VALIDPOST flags non-missing values on post-baseline (by each ADATYPE and ADAPARM)
       VALIDBASE = case_when(
         ABLFL == 'Y' & (!is.na(AVALC) | !is.na(RESULTC) | !is.na(AVAL)) ~ "Y",
+        TRUE ~ NA_character_
       ),
       VALIDPOST = case_when(
         ADTM > FANLDTM & is.na(ABLFL) & (!is.na(RESULTC) | !is.na(AVAL)) ~ "Y",
@@ -292,20 +292,14 @@ is_basetype <- is_afrlt %>%
       source_var = AVAL,
       new_var = BASE,
       filter = ABLFL == "Y"
-    )
-
-  # If not ABLFL set CHG to NA
-  is_aval_change <- derive_var_chg(is_aval_change) %>%
-    mutate(
-      CHG = case_when(
-        ABLFL == "Y" ~ NA_integer_,
-        TRUE ~ CHG
-      )
+    ) %>%
+    restrict_derivation(
+      derivation = derive_var_chg,
+      filter = is.na(ABLFL)
     )
 
   check_aval_change <- is_aval_change %>%
     select (USUBJID, BASETYPE, ADATYPE, ADAPARM, AVISIT, ADT, NFRLT, AVAL, AVAL, AVALC, RESULTC, RESULTN, ABLFL, VALIDBASE, VALIDPOST, AVAL, BASE, CHG)
-
 
   # Interpreted RESULT BASE
   is_result_change <- is_aval_change %>%
@@ -347,18 +341,16 @@ is_basetype <- is_afrlt %>%
   is_visit_flags <- is_result_change %>%
     mutate(
       TFLAGV = case_when(
-
         VALIDPOST == "Y" & is.na(ABLFL) & ADATYPE == "ADA_BAB" & (BASE_RESULT == 1 & (CHG >= 0.6)) ~ 2,
-
         VALIDPOST == "Y" & is.na(ABLFL) & ADATYPE == "ADA_BAB" &  BASE_RESULT == 1 & (((CHG < 0.6) & !is.na(AVAL)) | (RESULTN == 0)) ~ 3,
-
         VALIDPOST == "Y" & is.na(ABLFL) & ADATYPE == "ADA_BAB" & ((BASE_RESULT == 0 | is.na(BASE_RESULT)) & RESULTN == 0) ~ 0,
-
-        VALIDPOST == "Y" & is.na(ABLFL) & ADATYPE == "ADA_BAB" & ((BASE_RESULT == 0 | is.na(BASE_RESULT)) & RESULTN == 1) ~ 1
+        VALIDPOST == "Y" & is.na(ABLFL) & ADATYPE == "ADA_BAB" & ((BASE_RESULT == 0 | is.na(BASE_RESULT)) & RESULTN == 1) ~ 1,
+        TRUE ~ NA_integer_
       ),
       PBFLAGV = case_when(
         !is.na(TFLAGV) & TFLAGV %in% c(1, 2) ~ 1,
-        !is.na(TFLAGV) & TFLAGV %in% c(0, 3) ~ 0
+        !is.na(TFLAGV) & TFLAGV %in% c(0, 3) ~ 0,
+        TRUE ~ NA_integer_
       ),
       ADASTATV = case_when(
         !is.na(PBFLAGV) & PBFLAGV == 1 ~ "ADA+",
@@ -423,7 +415,8 @@ is_basetype <- is_afrlt %>%
       BFLAG =
         case_when(
           BASE_RESULT == 0 ~ 0,
-          BASE_RESULT == 1 ~ 1
+          BASE_RESULT == 1 ~ 1,
+          TRUE ~ NA_integer_
         ),
       TFLAG =
         case_when(
@@ -431,18 +424,21 @@ is_basetype <- is_afrlt %>%
           (BFLAG == 0 | is.na(BFLAG)) & RESULT_P == 1 ~ 1,
           BFLAG == 1 & (MAXCHG >= 0.6) ~ 2,
           BFLAG == 1 & !is.na(MAXCHG) & (MAXCHG < 0.6) ~ 3,
-          BFLAG == 1 & is.na(MAXCHG) & RESULT_P == 0  ~ 3
+          BFLAG == 1 & is.na(MAXCHG) & RESULT_P == 0  ~ 3,
+          TRUE ~ NA_integer_
         ),
       PBFLAG =
         case_when(
           ADATYPE == "ADA_BAB" & (TFLAG == 1 | TFLAG == 2) ~ 1,
           ADATYPE == "ADA_BAB" & (TFLAG == 0 | TFLAG == 3) ~ 0,
           ADATYPE == "ADA_NAB" & RESULT_P == 0 ~ 0,
-          ADATYPE == "ADA_NAB" & RESULT_P == 1 ~ 1
+          ADATYPE == "ADA_NAB" & RESULT_P == 1 ~ 1,
+          TRUE ~ NA_integer_
         ),
       ADASTAT = case_when(
         ADATYPE == "ADA_BAB" & PBFLAG == 1 ~ 1,
-        ADATYPE == "ADA_BAB" & PBFLAG == 0 ~ 0
+        ADATYPE == "ADA_BAB" & PBFLAG == 0 ~ 0,
+        TRUE ~ NA_integer_
       )
     ) %>%
     arrange(DRUG, BASETYPE, ADATYPE, ADAPARM, !!!get_admiral_option("subject_keys"), )
@@ -476,12 +472,14 @@ is_basetype <- is_afrlt %>%
         # Based on ADASTAT (EMERNEG/EMERPOS) and NAB results
         ADATYPE == "ADA_NAB" & ADASTAT_MAIN == 1 & RESULT_P == 1 ~ 1,
         ADATYPE == "ADA_NAB" & ADASTAT_MAIN == 1 & RESULT_P == 0 &
-                       (is.na(NABPOSTMISS) | NABPOSTMISS == "N")~ 0
+                       (is.na(NABPOSTMISS) | NABPOSTMISS == "N")~ 0,
+        TRUE ~ NA_integer_
       ),
       nabstat_opt2 = case_when(
         # Based on ADASTAT (EMERNEG/EMERPOS) Only.
         ADATYPE == "ADA_NAB" & ADASTAT_MAIN == 1 ~ 1,
         ADATYPE == "ADA_NAB" & ADASTAT_MAIN == 0 ~ 0,
+        TRUE ~ NA_integer_
       ),
     )  %>%
     # Drop variables no longer neded from flag_data before merging with main ADAB
@@ -507,7 +505,8 @@ is_basetype <- is_afrlt %>%
     ungroup() %>%
     mutate(
       LFLAGPOS = case_when(
-        ADTM == MaxADTM & (TFLAGV == 1 | TFLAGV == 2) ~ 1
+        ADTM == MaxADTM & (TFLAGV == 1 | TFLAGV == 2) ~ 1,
+        TRUE ~ NA_integer_
       )
     )
 
@@ -517,7 +516,7 @@ is_basetype <- is_afrlt %>%
   per_tran_all <- per_tran_pre %>%
     filter(TFLAGV == 1 | TFLAGV == 2)   %>%
     select(-MaxADTM,  -ISSEQ) %>%
-    group_by(!!!get_admiral_option("subject_keys"), BASETYPE, ADATYPE, ADAPARM,) %>%
+    group_by(!!!get_admiral_option("subject_keys"), BASETYPE, ADATYPE, ADAPARM) %>%
     mutate(
       FPPDTM = min(ADTM),
       LPPDTM = max(ADTM)
@@ -525,13 +524,13 @@ is_basetype <- is_afrlt %>%
     ungroup()
 
   per_tran_inc_last <- per_tran_all %>%
-    group_by(!!!get_admiral_option("subject_keys"), BASETYPE, ADATYPE, ADAPARM,) %>%
+    group_by(!!!get_admiral_option("subject_keys"), BASETYPE, ADATYPE, ADAPARM) %>%
     summarize(COUNT_INC_LAST = n()) %>%
     ungroup()
 
   per_tran_exc_last <- per_tran_all %>%
     filter(is.na(LFLAGPOS)) %>%
-    group_by(!!!get_admiral_option("subject_keys"), BASETYPE, ADATYPE, ADAPARM,) %>%
+    group_by(!!!get_admiral_option("subject_keys"), BASETYPE, ADATYPE, ADAPARM) %>%
     summarize(COUNT_EXC_LAST = n()) %>%
     ungroup()
 
@@ -558,31 +557,38 @@ is_basetype <- is_afrlt %>%
         !is.na(LPPDTM) & !is.na(FPPDTM)
         ~ ((as.numeric(difftime(LPPDTM, FPPDTM, units = "secs")) / (60 * 60 * 24)) + 1) / 7,
         !is.na(LPPDT) & !is.na(LPPDT)
-        ~ (as.numeric(LPPDT - FPPDT) + 1) / 7
+        ~ (as.numeric(LPPDT - FPPDT) + 1) / 7,
+        TRUE ~ NA_real_
       ),
       TIMADA = case_when(
         !is.na(FPPDTM) & !is.na(FANLDTM) ~ as.numeric(difftime(FPPDTM, FANLDTM, units = "weeks")),
-        !is.na(FPPDT) & !is.na(FANLDT) ~ (as.numeric(FPPDT - FANLDT) + 1) / 7
+        !is.na(FPPDT) & !is.na(FANLDT) ~ (as.numeric(FPPDT - FANLDT) + 1) / 7,
+        TRUE ~ NA_real_
       ),
       tdur = case_when(
         !is.na(LPPDTM) & !is.na(LPPDTM) ~ as.numeric(difftime(LPPDTM, FPPDTM, units = "secs")) / (7 * 3600 * 24),
-        !is.na(LPPDT) & !is.na(LPPDT) ~ as.numeric(LPPDT - FPPDT + 1) / 7
+        !is.na(LPPDT) & !is.na(LPPDT) ~ as.numeric(LPPDT - FPPDT + 1) / 7,
+        TRUE ~ NA_real_
       ),
       # Standard TRANADA and PERSADA based on TFLAGV = 1 (Induced)
       TRANADA = case_when(
-        TFLAGV == 1 & ((COUNT_EXC_LAST == 1 | (COUNT_INC_LAST >= 2 & tdur < 16)) & is.na(LFLAGPOS)) ~ 1
+        TFLAGV == 1 & ((COUNT_EXC_LAST == 1 | (COUNT_INC_LAST >= 2 & tdur < 16)) & is.na(LFLAGPOS)) ~ 1,
+        TRUE ~ NA_integer_
       ),
       PERSADA = case_when(
         TFLAGV == 1 & (COUNT_INC_LAST == 1 & (COUNT_EXC_LAST <= 0 | is.na(COUNT_EXC_LAST)) |
-                         (COUNT_INC_LAST >= 2 & tdur >= 16) | LFLAGPOS == 1) ~ 1
+                         (COUNT_INC_LAST >= 2 & tdur >= 16) | LFLAGPOS == 1) ~ 1,
+        TRUE ~ NA_integer_
       ),
       # These TRANADAE and PERSADAE based on TFLAGV = 1 or TFLAGV=2 (Induced or Enhanced)
       TRANADAE = case_when(
-        TFLAGV >= 1 & ((COUNT_EXC_LAST == 1 | (COUNT_INC_LAST >= 2 & tdur < 16)) & is.na(LFLAGPOS)) ~ 1
+        TFLAGV >= 1 & ((COUNT_EXC_LAST == 1 | (COUNT_INC_LAST >= 2 & tdur < 16)) & is.na(LFLAGPOS)) ~ 1,
+        TRUE ~ NA_integer_
       ),
       PERSADAE = case_when(
         TFLAGV >= 1 & (COUNT_INC_LAST == 1 & (COUNT_EXC_LAST <= 0 | is.na(COUNT_EXC_LAST)) |
-                         (COUNT_INC_LAST >= 2 & tdur >= 16) | LFLAGPOS == 1) ~ 1
+                         (COUNT_INC_LAST >= 2 & tdur >= 16) | LFLAGPOS == 1) ~ 1,
+        TRUE ~ NA_integer_
       ),
       INDUCED = case_when(
         TFLAGV == 1 ~ "Y",
@@ -667,6 +673,7 @@ is_basetype <- is_afrlt %>%
       PARCAT1 = case_when(
         ADATYPE == "ADA_BAB" ~ paste ("Anti-", ADAPARM, " Antibody", sep = ""),
         ADATYPE == "ADA_NAB" ~ paste ("Anti-", ADAPARM, " Neutralizing Antibody", sep = ""),
+        TRUE ~ NA_character_
       ),
       # Initialize PARAMCD and PARAM
       PARAMCD = ADAPARM,
@@ -696,7 +703,8 @@ is_basetype <- is_afrlt %>%
       AVALC = toupper(RESULTC),
       AVAL = case_when(
         AVALC == "NEGATIVE" ~ 0,
-        AVALC == "POSITIVE" ~ 1
+        AVALC == "POSITIVE" ~ 1,
+        TRUE ~ NA_integer_
       ),
       AVALU = NA_character_
     ) %>%
@@ -710,15 +718,10 @@ is_basetype <- is_afrlt %>%
       source_var = AVAL,
       new_var = BASE,
       filter = ABLFL == "Y"
-    )
-
-  # Set CHG to na if its the ABFLF record
-  adab_result <- derive_var_chg(adab_result) %>%
-    mutate(
-      CHG = case_when(
-        ABLFL == "Y" ~ NA_integer_,
-        TRUE ~ CHG
-      )
+    )  %>%
+    restrict_derivation(
+      derivation = derive_var_chg,
+      filter = is.na(ABLFL)
     )
 
   # By Visit NAB Interpreted RESULT data (keep all IS vars plus ____)
@@ -730,7 +733,8 @@ is_basetype <- is_afrlt %>%
       AVALC = toupper(RESULTC),
       AVAL = case_when(
         AVALC == "NEGATIVE" ~ 0,
-        AVALC == "POSITIVE" ~ 1
+        AVALC == "POSITIVE" ~ 1,
+        TRUE ~ NA_integer_
       ),
       AVALU = NA_character_
     ) %>%
@@ -744,15 +748,10 @@ is_basetype <- is_afrlt %>%
       source_var = AVAL,
       new_var = BASE,
       filter = ABLFL == "Y"
-    )
-
-  # Set CHG to na if its the ABFLF record
-  adab_nabres <- derive_var_chg(adab_nabres) %>%
-    mutate(
-      CHG = case_when(
-        ABLFL == "Y" ~ NA_integer_,
-        TRUE ~ CHG
-      )
+    ) %>%
+    restrict_derivation(
+      derivation = derive_var_chg,
+      filter = is.na(ABLFL)
     )
 
   # By Visit Titer TFLAGV data -----------------------
@@ -788,7 +787,8 @@ is_basetype <- is_afrlt %>%
       ),
       AVAL = case_when(
         AVALC == "POSITIVE" ~ 1,
-        AVALC == "NEGATIVE" ~ 0
+        AVALC == "NEGATIVE" ~ 0,
+        TRUE ~ NA_integer_
       ),
       AVALU = NA_character_
     ) %>%
@@ -806,7 +806,8 @@ is_basetype <- is_afrlt %>%
       AVALC = ADASTATV,
       AVAL = case_when(
         AVALC == "ADA+" ~ 1,
-        AVALC == "ADA-" ~ 0
+        AVALC == "ADA-" ~ 0,
+        TRUE ~ NA_integer_
       ),
       AVALU = NA_character_
     ) %>%
@@ -859,7 +860,8 @@ is_basetype <- is_afrlt %>%
       ),
       AVALC = case_when(
         AVAL == 1 ~ "Y",
-        AVAL == 0 ~ "N"
+        AVAL == 0 ~ "N",
+        TRUE ~ NA_character_
       ),
       AVALU = NA_character_
     )
@@ -881,7 +883,8 @@ is_basetype <- is_afrlt %>%
       ),
       AVALC = case_when(
         AVAL == 1 ~ "Y",
-        AVAL == 0 ~ "N"
+        AVAL == 0 ~ "N",
+        TRUE ~ NA_character_
       ),
       AVALU = NA_character_
     )
@@ -903,7 +906,8 @@ is_basetype <- is_afrlt %>%
       ),
       AVALC = case_when(
         AVAL == 1 ~ "Y",
-        AVAL == 0 ~ "N"
+        AVAL == 0 ~ "N",
+        TRUE ~ NA_character_
       ),
       AVALU = NA_character_
     )
@@ -925,7 +929,8 @@ is_basetype <- is_afrlt %>%
       ),
       AVALC = case_when(
         AVAL == 1 ~ "Y",
-        AVAL == 0 ~ "N"
+        AVAL == 0 ~ "N",
+        TRUE ~ NA_character_
       ),
       AVALU = NA_character_
     )
@@ -947,7 +952,8 @@ is_basetype <- is_afrlt %>%
       ),
       AVALC = case_when(
         AVAL == 1 ~ "Y",
-        AVAL == 0 ~ "N"
+        AVAL == 0 ~ "N",
+        TRUE ~ NA_character_
       ),
       AVALU = NA_character_
     )
@@ -969,7 +975,8 @@ is_basetype <- is_afrlt %>%
       ),
       AVALC = case_when(
         AVAL == 1 ~ "Y",
-        AVAL == 0 ~ "N"
+        AVAL == 0 ~ "N",
+        TRUE ~ NA_character_
       ),
       AVALU = NA_character_
     )
@@ -1186,7 +1193,6 @@ is_basetype <- is_afrlt %>%
       by_vars = exprs(!!!get_admiral_option("subject_keys"))
     )
 
-
   view_keys1  <- adab_adafl %>%
     distinct (ISTESTCD, ISTEST, ISBDAGNT, PARCAT1, ADATYPE, ADAPARM, PARAMCD, PARAM)  %>%
     arrange (ISTESTCD,  ISTEST, ISBDAGNT, PARCAT1, ADAPARM, ADATYPE, PARAMCD, PARAM)
@@ -1194,9 +1200,8 @@ is_basetype <- is_afrlt %>%
 
   # Study Specific Specs Post-Processing ------------------------------------
 
-  # Create a Tibble to map above processed PARAMCD to the study specs\
-  #  PARAM and PARAMCD
-
+  # Create a Tibble to map above processed PARAMCD to the study specs
+  # for derived PARAM and PARAMCD final values
 
   adab_param_data <- tribble(
     ~PARAMCD,   ~ADATYPE,  ~ADAPARM, ~PARAMCD_NEW, ~PARAM_SUFFIX,
@@ -1226,16 +1231,22 @@ is_basetype <- is_afrlt %>%
       dataset_add = adab_param_data,
       by_vars = exprs(PARAMCD, ADAPARM,ADATYPE )
     ) %>%
-    # for the original data, use original Test Code full text vars
+    # for the original data, assign PARAM
     mutate(
+      PARAM = case_when(
+        !is.na(PARAM_SUFFIX) ~ paste(PARAM, PARAM_SUFFIX, sep = " "),
+        TRUE ~ PARAM
+      ),
+      # Example to assign PARAMCD based on ADAPARM assigned at program start (i.e. SDTM.IS < v2.0)
       PARAMCD = case_when(
         PARAMCD == ADAPARM ~ PARAMCD,
         TRUE ~ PARAMCD_NEW
       ),
-      # Assign PARAM_NEW based on PARAM and PARAMCD_NEW
-      PARAM = case_when(
-        !is.na(PARAM_SUFFIX) ~ paste(PARAM, PARAM_SUFFIX, sep = " "),
-        TRUE ~ PARAM
+      # Example to assign PARAMCD based ISTESTCD type and last 5 chars of ISBDAGNT (i.e. SDTM.IS >= v2.0)
+      PARAMCD = case_when (
+        ISTESTCD == "ADA_BAB" & PARAMCD == "XANOMELINE" ~ paste("BAB", substr(ISBDAGNT, 1, 5), sep=''),
+        ISTESTCD == "ADA_NAB" & PARAMCD == "XANOMELINE" ~ paste("NAB", substr(ISBDAGNT, 1, 5), sep=''),
+        TRUE ~ PARAMCD
       )
     )
 
