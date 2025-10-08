@@ -20,7 +20,7 @@ library(pharmaversesdtm) # Contains example datasets from the CDISC pilot projec
 
 # Load IS, EX and ADSL fromo pharmaversesdtm and admiral
 
-is <- arrow::read_parquet("data/pharmaverse/is_ada.parquet")
+is <- pharmaversesdtm::is_ada
 ex <- pharmaversesdtm::ex
 adsl <- admiral::admiral_adsl
 
