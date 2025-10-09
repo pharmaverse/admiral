@@ -77,7 +77,6 @@ is_dates <- is %>%
       grepl("EARLY DISC", toupper(VISIT)) ~ 77777,
       grepl("TREATMENT DISC", toupper(VISIT)) ~ 77777,
       grepl("UNSCHEDULED", toupper(VISIT)) ~ 99999,
-      grepl("BASELINE", toupper(VISIT)) & !is.na(ISTPTNUM) ~ ISTPTNUM / 24,
       !is.na(VISITDY) ~ (VISITDY - 1),
       TRUE ~ NA_real_
     )
