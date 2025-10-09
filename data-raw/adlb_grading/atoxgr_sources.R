@@ -65,6 +65,9 @@ json_file_path_v5 <- paste0(json_file_path, "ncictcaev5.json")
 ## NCICTCAEv5 for CV units
 json_file_path_v5_uscv <- paste0(json_file_path, "ncictcaev5_uscv.json")
 
+## NCICTCAEv6 for SI units
+json_file_path_v6 <- paste0(json_file_path, "ncictcaev6.json")
+
 ## DAIDs for SI units
 json_file_path_daids <- paste0(json_file_path, "DAIDS.json")
 
@@ -77,6 +80,7 @@ atoxgr_criteria_ctcv4 <- atoxgr_json_to_dataframe(json_file = json_file_path_v4)
 atoxgr_criteria_ctcv4_uscv <- atoxgr_json_to_dataframe(json_file = json_file_path_v4_uscv)
 atoxgr_criteria_ctcv5 <- atoxgr_json_to_dataframe(json_file = json_file_path_v5)
 atoxgr_criteria_ctcv5_uscv <- atoxgr_json_to_dataframe(json_file = json_file_path_v5_uscv)
+atoxgr_criteria_ctcv6 <- atoxgr_json_to_dataframe(json_file = json_file_path_v6)
 atoxgr_criteria_daids <- atoxgr_json_to_dataframe(json_file = json_file_path_daids)
 atoxgr_criteria_daids_uscv <- atoxgr_json_to_dataframe(json_file = json_file_path_daids_uscv)
 
@@ -86,5 +90,6 @@ save(atoxgr_criteria_ctcv4, file = paste0(save_file_path, "ctcv4.rda"))
 save(atoxgr_criteria_ctcv4_uscv, file = paste0(save_file_path, "ctcv4_uscv.rda"))
 save(atoxgr_criteria_ctcv5, file = paste0(save_file_path, "ctcv5.rda"))
 save(atoxgr_criteria_ctcv5_uscv, file = paste0(save_file_path, "ctcv5_uscv.rda"))
+save(atoxgr_criteria_ctcv6, file = paste0(save_file_path, "ctcv6.rda"))
 save(atoxgr_criteria_daids, file = paste0(save_file_path, "daids.rda"))
 save(atoxgr_criteria_daids_uscv, file = paste0(save_file_path, "daids_uscv.rda"))
