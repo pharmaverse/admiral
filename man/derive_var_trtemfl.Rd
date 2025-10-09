@@ -77,7 +77,7 @@ number of days after end of treatment, are not flagged.
 the event occurred more than \code{end_window} days after end of treatment.
 
 \describe{
-\item{Permitted values}{\code{"TRUE"}, \code{"FALSE"}}
+\item{Permitted values}{\code{TRUE}, \code{FALSE}}
 \item{Default value}{\code{TRUE}}
 }}
 

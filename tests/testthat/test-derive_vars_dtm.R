@@ -422,21 +422,21 @@ test_that("compute_tmf Test 15: compute TMF", {
   expect_equal(
     compute_tmf(
       dtc = input_dtc,
-      dtm = input_dtm
+      dtm = input_dtm,
+      ignore_seconds_flag = FALSE
     ),
     expected_output
   )
 })
 
-## Test 16: throws ERROR when ignore_seconds_flag  = T and seconds are present ----
+## Test 16: throws ERROR when ignore_seconds_flag  = T (default) and seconds are present ----
 test_that("compute_tmf Test 16: throws ERROR when ignore_seconds_flag  = T and seconds are present", { # nolint
   expect_snapshot(
     compute_tmf(
       dtc = c("2020-11-11T11:11:11", "2020-11-11T11:11"),
       dtm = ymd_hms(c(
         "2020-11-11T11:11:11", "2020-11-11T11:11:00"
-      )),
-      ignore_seconds_flag = TRUE
+      ))
     ),
     error = TRUE
   )
@@ -486,7 +486,8 @@ test_that("derive_vars_dtm Test 18: default behavior", {
     highest_imputation = "h",
     input,
     new_vars_prefix = "AST",
-    dtc = XXSTDTC
+    dtc = XXSTDTC,
+    ignore_seconds_flag = FALSE
   )
 
   expect_dfs_equal(
@@ -514,7 +515,8 @@ test_that("derive_vars_dtm Test 19: date imputed to first, auto DTF/TMF", {
     new_vars_prefix = "AST",
     dtc = XXSTDTC,
     highest_imputation = "M",
-    date_imputation = "first"
+    date_imputation = "first",
+    ignore_seconds_flag = FALSE
   )
 
   expect_dfs_equal(
@@ -604,7 +606,8 @@ test_that("derive_vars_dtm Test 22: date imputed to MID, time to first, TMF only
     highest_imputation = "M",
     date_imputation = "mid",
     flag_imputation = "time",
-    preserve = TRUE
+    preserve = TRUE,
+    ignore_seconds_flag = FALSE
   )
 
   expect_dfs_equal(
@@ -634,7 +637,8 @@ test_that("derive_vars_dtm Test 23: No re-derivation is done if --DTF variable a
       new_vars_prefix = "AST",
       dtc = XXSTDTC,
       highest_imputation = "M",
-      date_imputation = "first"
+      date_imputation = "first",
+      ignore_seconds_flag = FALSE
     )
   )
 
@@ -871,6 +875,18 @@ test_that("derive_vars_dtm Test 32: catch ignore_seconds_flag error", {
       ignore_seconds_flag = TRUE
     ),
     error = TRUE
+  )
+})
+
+# Test 33: impute_dtc_dtm returns an empty character vector where dtc is empty
+test_that("derive_vars_dt Test 30: impute_dtc_dt where dtc is empty", {
+  empty_impute <- impute_dtc_dtm(
+    dtc = character()
+  )
+
+  expect_equal(
+    empty_impute,
+    character(0)
   )
 })
 
