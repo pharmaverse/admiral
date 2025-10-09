@@ -587,8 +587,8 @@ test_that("derive_var_atoxgr Test 11: CTCAEv4 Alanine aminotransferase increased
 ### Grade 2: >3.0 - 5.0 x ULN if BL was normal OR >3.0 - 5.0 x BL if BL was abnormal
 ### Grade 1: >ULN - 3.0 x ULN if BL was normal OR >1.5 - 3.0 x BL if BL was abnormal
 
-## Test 12: CTCAEv5 Alanine aminotransferase increased ----
-test_that("derive_var_atoxgr Test 12: CTCAEv5 Alanine aminotransferase increased", {
+## Test 12a: CTCAEv5 Alanine aminotransferase increased ----
+test_that("derive_var_atoxgr Test 12a: CTCAEv5 Alanine aminotransferase increased", {
   # V5 and V4 criteria identical when BASELINE normal
   expected_alt_ctcv5_norm <- expected_alt_ctcv4 %>%
     # set BASE to be normal (not HIGH) and create FLAG
@@ -646,6 +646,73 @@ test_that("derive_var_atoxgr Test 12: CTCAEv5 Alanine aminotransferase increased
   )
 })
 
+### NCICTCAEv6 same criteria as NCICTCAEv4 when BASELINE is normal
+### Grade 4: >20.0 x ULN if baseline was normal or less than normal;
+### >4.0 x baseline if baseline was >ULN
+### Grade 3: >5.0 - 20.0 x ULN if baseline was normal or less than normal;
+### >2.0 - 4.0 x baseline if baseline was >ULN up to 5 x ULN
+### Grade 2: >3.0 - 5.0 x ULN if baseline was normal or less than normal;
+### >1.5 - 2.0 x baseline if baseline was >ULN
+### Grade 1: >ULN - 3.0 x ULN if BL was normal OR >1.5 - 3.0 x BL if BL was abnormal
+
+## Test 12b: CTCAEv6 Alanine aminotransferase increased ----
+test_that("derive_var_atoxgr Test 12b: CTCAEv6 Alanine aminotransferase increased", {
+  # V5 and V4 criteria identical when BASELINE normal
+  expected_alt_ctcv6_norm <- expected_alt_ctcv4 %>%
+    # set BASE to be normal (not HIGH) and create FLAG
+    mutate(
+      BASE = ANRHI,
+      BNRIND = "NORMAL"
+    )
+
+  # create records with baseline abnormal and apply criteria
+  expected_alt_ctcv6_abn <- tibble::tribble(
+    ~ATOXDSCH,                            ~AVAL, ~BASE,        ~AVALU, ~ATOXGRH,
+    "Not a term",                            80,    40, NA_character_,       NA,
+    NA_character_,                           60,    40, NA_character_,       NA,
+    "Alanine aminotransferase Increased",   161,    40, NA_character_,      "4",
+    "Alanine aminotransferase Increased",   160,    40, NA_character_,      "3",
+    "Alanine aminotransferase Increased",    81,    40, NA_character_,      "3",
+    "Alanine aminotransferase Increased",    80,    40, NA_character_,      "2",
+    "Alanine aminotransferase Increased",   121,    40, NA_character_,      "2",
+    "Alanine aminotransferase Increased",   120,    40, NA_character_,      "1",
+    "Alanine aminotransferase Increased",    60,    40, NA_character_,      "1",
+    "Alanine aminotransferase Increased",    59,    40, NA_character_,      "0",
+    # ANRHI missing - cannot grade
+    "Alanine aminotransferase Increased",   100,    NA, NA_character_,       NA,
+    # AVAL missing cannot grade
+    "Alanine aminotransferase Increased",    NA,    40, NA_character_,       NA,
+  ) %>%
+    # set BASE to be HIGH (not normal)
+    mutate(
+      ANRHI = BASE - 1,
+      BNRIND = "HIGH"
+    )
+
+  # combine records with baseline normal and abnormal
+  expected_alt_ctcv5 <- expected_alt_ctcv5_norm %>%
+    bind_rows(expected_alt_ctcv5_abn)
+
+
+  input_alt <- expected_alt_ctcv5 %>%
+    select(-ATOXGRH)
+
+  actual_alt <- derive_var_atoxgr_dir(
+    input_alt,
+    new_var = ATOXGRH,
+    meta_criteria = atoxgr_criteria_ctcv5,
+    tox_description_var = ATOXDSCH,
+    criteria_direction = "H",
+    abnormal_indicator = "HIGH",
+    get_unit_expr = AVALU
+  )
+
+  expect_dfs_equal(
+    base = expected_alt_ctcv5,
+    compare = actual_alt,
+    keys = c("ATOXDSCH", "AVAL", "ANRHI", "BNRIND", "AVALU")
+  )
+})
 
 ### Alkaline phosphatase increased
 ### NCICTCAEv5 same criteria as NCICTCAEv4 when BASELINE is normal
