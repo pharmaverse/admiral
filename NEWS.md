@@ -4,6 +4,9 @@
 
 ## Updates of Existing Functions
 
+- `slice_derivation()` was updated such that it no longer fails if `args = NULL`
+is specified. (#2875)
+
 ## Breaking Changes
 
 - The default value of `ignore_seconds_flag` is set to `TRUE`. (#2798)
