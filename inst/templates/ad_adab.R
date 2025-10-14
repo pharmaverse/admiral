@@ -74,9 +74,9 @@ is_dates <- is %>%
     #   This example maps any discontinuation visits as 77777 and unscheduled as 99999
     #   Units for this ADAB sample will be Days. If Hours, add NFRLT x 24.
     NFRLT = case_when(
-      grepl("EARLY DISC", toupper(VISIT)) ~ 77777,
-      grepl("TREATMENT DISC", toupper(VISIT)) ~ 77777,
-      grepl("UNSCHEDULED", toupper(VISIT)) ~ 99999,
+      str_detect(toupper(VISIT), "EARLY DISC") ~ 77777,
+      str_detect(toupper(VISIT), "TREATMENT DISC") ~ 77777,
+      str_detect(toupper(VISIT), "UNSCHEDULED") ~ 99999,
       !is.na(VISITDY) ~ (VISITDY - 1),
       TRUE ~ NA_real_
     )
@@ -105,13 +105,13 @@ is_dates <- is %>%
 
 ex_dates <- ex %>%
   # Keep applicable desired records based on EXTRT and/or dose values (>=0, >0, etc.)
-  filter(grepl("XANOMELINE", toupper(EXTRT)) | grepl("PLACEBO", toupper(EXTRT)), EXDOSE >= 0) %>%
+  filter(str_detect(toupper(EXTRT), "XANOMELINE") | str_detect(toupper(EXTRT), "PLACEBO"), EXDOSE >= 0) %>%
   mutate(
     # Map EXTRT to DRUG to match DRUG values in is_dates above
     #  This will be used to merge first dose into IS working data.
     DRUG = case_when(
-      grepl("XANOMELINE", toupper(EXTRT)) ~ "XANOMELINE",
-      grepl("PLACEBO", toupper(EXTRT)) ~ "XANOMELINE",
+      str_detect(toupper(EXTRT), "XANOMELINE") ~ "XANOMELINE",
+      str_detect(toupper(EXTRT), "PLACEBO") ~ "XANOMELINE",
       TRUE ~ NA_character_
     ),
     # Compute Nominal Time
@@ -226,7 +226,7 @@ is_aval <- is_basetype %>%
       toupper(RESULTC) == "POSITIVE" & ADATYPE == "ADA_BAB" & !is.na(ISSTRESN) ~
         as.character(ISSTRESN),
       toupper(RESULTC) == "POSITIVE" & ADATYPE == "ADA_BAB" & is.na(ISSTRESN) &
-        (grepl("<", ISSTRESC) | grepl("NEGATIVE TITER", toupper(ISSTRESC))) & !is.na(MRT) ~
+        (str_detect(ISSTRESC, "<") | str_detect(toupper(ISSTRESC), "NEGATIVE TITER")) & !is.na(MRT) ~
         paste("<", as.character(MRT), sep = ""),
       # If positive with no numeric ISSTRESN set to N.C.
       toupper(RESULTC) == "POSITIVE" & ADATYPE == "ADA_BAB" ~ "N.C.",
