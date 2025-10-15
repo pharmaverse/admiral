@@ -4,6 +4,10 @@
 
 ## Updates of Existing Functions
 
+- The functions `derive_param_bmi()`, `derive_param_bsa()`,
+`derive_param_framingham()`, `derive_param_map()`, and `derive_param_qtc()` were
+updated such that they no longer fail if `{admiral}` is not loaded. (#2667)
+
 ## Breaking Changes
 
 - The default value of `ignore_seconds_flag` is set to `TRUE`. (#2798)
