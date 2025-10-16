@@ -162,7 +162,7 @@ derive_param_bmi <- function(dataset,
   )
 
   bmi_formula <- expr(
-    compute_bmi(
+    {{ compute_bmi }}(
       height = !!sym(paste0("AVAL.", height_code)),
       weight = !!sym(paste0("AVAL.", weight_code))
     )

@@ -245,7 +245,7 @@ derive_param_framingham <- function(dataset,
   )
 
   analysis_value <- expr(
-    compute_framingham(
+    {{ compute_framingham }}(
       sysbp = !!sym(paste0("AVAL.", sysbp_code)),
       chol = !!sym(paste0("AVAL.", chol_code)),
       cholhdl = !!sym(paste0("AVAL.", cholhdl_code)),
