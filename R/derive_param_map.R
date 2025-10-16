@@ -133,7 +133,7 @@ derive_param_map <- function(dataset,
 
   if (is.null(hr_code)) {
     analysis_value <- expr(
-      compute_map(
+      {{ compute_map }}(
         diabp = !!sym(paste0("AVAL.", diabp_code)),
         sysbp = !!sym(paste0("AVAL.", sysbp_code))
       )
@@ -142,7 +142,7 @@ derive_param_map <- function(dataset,
     assert_unit(dataset, hr_code, required_unit = "beats/min", get_unit_expr = !!get_unit_expr)
 
     analysis_value <- expr(
-      compute_map(
+      {{ compute_map }}(
         diabp = !!sym(paste0("AVAL.", diabp_code)),
         sysbp = !!sym(paste0("AVAL.", sysbp_code)),
         hr = !!sym(paste0("AVAL.", hr_code))

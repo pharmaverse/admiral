@@ -160,7 +160,7 @@ derive_param_qtc <- function(dataset,
       parameters = c(qt_code, rr_code),
       by_vars = by_vars,
       set_values_to = exprs(
-        AVAL = compute_qtc(
+        AVAL = {{ compute_qtc }}(
           qt = !!sym(paste0("AVAL.", qt_code)),
           rr = !!sym(paste0("AVAL.", rr_code)),
           method = !!method

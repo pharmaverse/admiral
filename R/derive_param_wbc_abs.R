@@ -130,14 +130,16 @@ derive_param_wbc_abs <- function(dataset,
     select(!!!by_vars, PARAMCD, AVAL)
 
   # Only keep records where absolute value do not already exist.
+  temp_flag <- get_new_tmp_var(dataset_temp, prefix = "tmp_flag")
   dataset_abs <- dataset_temp %>%
     filter(PARAMCD == !!set_values_to$PARAMCD) %>%
-    mutate(temp_flag = "Y") %>%
-    select(!!!by_vars, temp_flag)
+    mutate(!!temp_flag := "Y") %>%
+    select(!!!by_vars, !!temp_flag)
 
   dataset_temp <- dataset_temp %>%
     left_join(dataset_abs, by = by_vars_str) %>%
-    filter(is.na(temp_flag))
+    filter(is.na(!!temp_flag)) %>%
+    remove_tmp_vars()
 
   if (diff_type == "percent") {
     analysis_value <- expr(!!sym(paste0("AVAL.", wbc_code)) *
@@ -161,8 +163,7 @@ derive_param_wbc_abs <- function(dataset,
           !!!set_values_to
         )
       ) %>%
-      filter(PARAMCD == !!set_values_to$PARAMCD) %>%
-      select(-starts_with("temp_")),
+      filter(PARAMCD == !!set_values_to$PARAMCD),
     derive_param_computed_all_na = function(cnd) {
       cnd_muffle(cnd)
     }
