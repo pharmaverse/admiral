@@ -140,12 +140,11 @@ derive_var_dthcaus <- function(dataset,
                                ...,
                                source_datasets,
                                subject_keys = get_admiral_option("subject_keys")) {
-  deprecate_inform(
+  deprecate_warn(
     when = "1.2.0",
     what = "derive_var_dthcaus()",
     with = "derive_vars_extreme_event()",
     details = c(
-      x = "This message will turn into a warning at the beginning of 2026.",
       i = "See admiral's deprecation guidance:
       https://pharmaverse.github.io/admiraldev/dev/articles/programming_strategy.html#deprecation"
     )
@@ -328,12 +327,11 @@ dthcaus_source <- function(dataset_name,
                            mode = "first",
                            dthcaus,
                            set_values_to = NULL) {
-  deprecate_inform(
+  deprecate_warn(
     when = "1.2.0",
     what = "dthcaus_source()",
     with = "event()",
     details = c(
-      x = "This message will turn into a warning at the beginning of 2026.",
       i = "See admiral's deprecation guidance:
       https://pharmaverse.github.io/admiraldev/dev/articles/programming_strategy.html#deprecation"
     )

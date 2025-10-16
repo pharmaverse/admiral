@@ -92,7 +92,7 @@
 #' @family der_prm_bds_findings
 #' @keywords der_prm_bds_findings
 #'
-#' @seealso [derive_var_merged_summary()]
+#' @seealso [derive_vars_merged_summary()]
 #'
 #' @export
 #'

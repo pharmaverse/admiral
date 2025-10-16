@@ -39,7 +39,7 @@ print(level_hour)
 level_day > level_hour # TRUE, because "D" is larger than "h".
 }
 \seealso{
-Utilities used for date imputation: 
+Utilities used for date imputation:
 \code{\link{dt_level}()},
 \code{\link{get_imputation_target_date}()},
 \code{\link{get_imputation_target_time}()},

@@ -91,7 +91,7 @@ filter_exist(
 
 }
 \seealso{
-Utilities for Filtering Observations: 
+Utilities for Filtering Observations:
 \code{\link{count_vals}()},
 \code{\link{filter_extreme}()},
 \code{\link{filter_joined}()},

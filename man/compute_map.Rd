@@ -57,7 +57,7 @@ compute_map(diabp = 51, sysbp = 121, hr = 59)
 \seealso{
 \code{\link[=derive_param_map]{derive_param_map()}}
 
-BDS-Findings Functions that returns a vector: 
+BDS-Findings Functions that returns a vector:
 \code{\link{compute_bmi}()},
 \code{\link{compute_bsa}()},
 \code{\link{compute_egfr}()},

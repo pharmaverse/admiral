@@ -100,7 +100,7 @@ derive_vars_atc(cm, facm, id_vars = exprs(FAGRPID))
 \seealso{
 \code{\link[=derive_vars_transposed]{derive_vars_transposed()}}
 
-OCCDS Functions: 
+OCCDS Functions:
 \code{\link{derive_var_trtemfl}()},
 \code{\link{derive_vars_query}()}
 }

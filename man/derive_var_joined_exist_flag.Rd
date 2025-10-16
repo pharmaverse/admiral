@@ -331,7 +331,6 @@ General Derivation Functions for all ADaMs that returns variable appended to dat
 \code{\link{derive_var_extreme_flag}()},
 \code{\link{derive_var_merged_ef_msrc}()},
 \code{\link{derive_var_merged_exist_flag}()},
-\code{\link{derive_var_merged_summary}()},
 \code{\link{derive_var_obs_number}()},
 \code{\link{derive_var_relative_flag}()},
 \code{\link{derive_vars_cat}()},
@@ -340,6 +339,7 @@ General Derivation Functions for all ADaMs that returns variable appended to dat
 \code{\link{derive_vars_joined_summary}()},
 \code{\link{derive_vars_merged}()},
 \code{\link{derive_vars_merged_lookup}()},
+\code{\link{derive_vars_merged_summary}()},
 \code{\link{derive_vars_transposed}()}
 }
 \concept{der_gen}
@@ -819,20 +819,20 @@ derive_var_joined_exist_flag(
 #> 5 2             1     1 Y     Y     
 #> 6 2             2     8 Y     <NA>  
 #> 7 2             2    10 Y     <NA>  
-#> Warning: Dataset `dataset` contains duplicate records with respect to `USUBJID` and
+#> G2;H2;Warningh: Dataset `dataset` contains duplicate records with respect to `USUBJID` and
 #> `AVISITN`
-#> i Run `admiral::get_duplicates_dataset()` to access the duplicate records
-#> Warning: Dataset `dataset_add` contains duplicate records with respect to `USUBJID` and
+#> i Run `admiral::get_duplicates_dataset()` to access the duplicate recordsg
+#> G2;H2;Warningh: Dataset `dataset_add` contains duplicate records with respect to `USUBJID` and
 #> `AVISITN`
-#> i Run `admiral::get_duplicates_dataset()` to access the duplicate records}\if{html}{\out{</div>}}
+#> i Run `admiral::get_duplicates_dataset()` to access the duplicate recordsg}\if{html}{\out{</div>}}
 
 The records for \code{USUBJID == "2"} are not unique with respect to
 \code{USUBJID} and \code{AVISITN}. Thus a warning is issued. The duplicates can be
 accessed by calling \code{get_duplicates_dataset()}:
 
 \if{html}{\out{<div class="sourceCode r">}}\preformatted{get_duplicates_dataset()
-#> Duplicate records with respect to `USUBJID` and `AVISITN`.
-#> # A tibble: 2 × 4
+#> G3;Duplicate records with respect to `USUBJID` and `AVISITN`.
+#> g# A tibble: 2 × 4
 #>   USUBJID AVISITN   ADY AVALC
 #> * <chr>     <dbl> <dbl> <chr>
 #> 1 2             2     8 Y    
