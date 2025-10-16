@@ -7,11 +7,7 @@
 get_imputation_targets(partial, date_imputation = NULL, time_imputation = NULL)
 }
 \arguments{
-\item{partial}{A list of partial date/time components.
-
-\describe{
-\item{Default value}{none}
-}}
+\item{partial}{A list of partial date/time components.}
 
 \item{date_imputation}{The value to impute the day/month when a datepart is
 missing.
@@ -22,10 +18,6 @@ A character value is expected, either as a
 of June,
 \item or as a keyword: \code{"first"}, \code{"mid"}, \code{"last"} to impute to the first/mid/last
 day/month.
-}
-
-\describe{
-\item{Default value}{none}
 }}
 
 \item{time_imputation}{The value to impute the time when a timepart is
@@ -36,10 +28,6 @@ A character value is expected, either as a
 \item format with hour, min and sec specified as \code{"hh:mm:ss"}: e.g. \code{"00:00:00"}
 for the start of the day,
 \item or as a keyword: \code{"first"},\code{"last"} to impute to the start/end of a day.
-}
-
-\describe{
-\item{Default value}{none}
 }}
 }
 \value{

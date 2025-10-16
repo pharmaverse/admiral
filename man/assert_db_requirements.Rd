@@ -14,41 +14,17 @@ assert_db_requirements(
 )
 }
 \arguments{
-\item{version}{Version provided by user
+\item{version}{Version provided by user}
 
-\describe{
-\item{Default value}{none}
-}}
+\item{version_arg_name}{Name of the argument providing the version}
 
-\item{version_arg_name}{Name of the argument providing the version
+\item{fun}{Function provided by user}
 
-\describe{
-\item{Default value}{none}
-}}
+\item{fun_arg_name}{Name of the argument providing the function}
 
-\item{fun}{Function provided by user
+\item{queries}{Queries provide by user}
 
-\describe{
-\item{Default value}{none}
-}}
-
-\item{fun_arg_name}{Name of the argument providing the function
-
-\describe{
-\item{Default value}{none}
-}}
-
-\item{queries}{Queries provide by user
-
-\describe{
-\item{Default value}{none}
-}}
-
-\item{i}{Index of query being checked
-
-\describe{
-\item{Default value}{none}
-}}
+\item{i}{Index of query being checked}
 }
 \value{
 An error is issued if \code{version} or \code{fun} is null.

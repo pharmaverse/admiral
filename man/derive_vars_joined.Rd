@@ -29,34 +29,19 @@ derive_vars_joined(
 \arguments{
 \item{dataset}{Input dataset
 
-The variables specified by the \code{by_vars} argument are expected to be in the dataset.
-
-\describe{
-\item{Permitted values}{a dataset, i.e., a \code{data.frame} or tibble}
-\item{Default value}{none}
-}}
+The variables specified by the \code{by_vars} argument are expected to be in the dataset.}
 
 \item{dataset_add}{Additional dataset
 
 The variables specified by the \code{by_vars}, the \code{new_vars}, the \code{join_vars},
-and the \code{order} argument are expected.
-
-\describe{
-\item{Permitted values}{a dataset, i.e., a \code{data.frame} or tibble}
-\item{Default value}{none}
-}}
+and the \code{order} argument are expected.}
 
 \item{by_vars}{Grouping variables
 
 The two datasets are joined by the specified variables.
 
 Variables can be renamed by naming the element, i.e.
-\verb{by_vars = exprs(<name in input dataset> = <name in additional dataset>)}, similar to the \code{dplyr} joins.
-
-\describe{
-\item{Permitted values}{list of variables created by \code{exprs()}, e.g., \code{exprs(USUBJID, VISIT)}}
-\item{Default value}{\code{NULL}}
-}}
+\verb{by_vars = exprs(<name in input dataset> = <name in additional dataset>)}, similar to the \code{dplyr} joins.}
 
 \item{order}{Sort order
 
@@ -72,12 +57,7 @@ added to the additional dataset and can be used in the filter conditions
 (\code{filter_add}, \code{filter_join}) and for \code{join_vars} and \code{new_vars}. The
 variable is not included in the output dataset.
 
-For handling of \code{NA}s in sorting variables see the "Sort Order" section in \code{vignette("generic")}.
-
-\describe{
-\item{Permitted values}{list of variables created by \code{exprs()}, e.g., \code{exprs(USUBJID, VISIT)}}
-\item{Default value}{\code{NULL}}
-}}
+For handling of \code{NA}s in sorting variables see the "Sort Order" section in \code{vignette("generic")}.}
 
 \item{new_vars}{Variables to add
 
@@ -99,12 +79,7 @@ variable \code{LASTRSP} to the dataset and sets it to the upper case value of
 If the argument is not specified or set to \code{NULL}, all variables from the
 additional dataset (\code{dataset_add}) are added. In the case when a variable
 exists in both datasets, an error is issued to ensure the user either adds
-to \code{by_vars}, removes or renames.
-
-\describe{
-\item{Permitted values}{list of variables created by \code{exprs()}, e.g., \code{exprs(USUBJID, VISIT)}}
-\item{Default value}{\code{NULL}}
-}}
+to \code{by_vars}, removes or renames.}
 
 \item{tmp_obs_nr_var}{Temporary observation number
 
@@ -119,12 +94,7 @@ The variable can be used in the conditions (\code{filter_join},
 consecutive observations or the last observation.
 
 The variable is not included in the output dataset. To include it specify
-it for \code{new_vars}.
-
-\describe{
-\item{Permitted values}{an unquoted symbol, e.g., \code{AVAL}}
-\item{Default value}{\code{NULL}}
-}}
+it for \code{new_vars}.}
 
 \item{join_vars}{Variables to use from additional dataset
 
@@ -139,12 +109,7 @@ additional dataset and can be used in the filter conditions (\code{filter_add},
 \code{filter_join}) and for \code{new_vars}. The variable is not included in the
 output dataset.
 
-The variables are not included in the output dataset.
-
-\describe{
-\item{Permitted values}{list of variables created by \code{exprs()}, e.g., \code{exprs(USUBJID, VISIT)}}
-\item{Default value}{\code{NULL}}
-}}
+The variables are not included in the output dataset.}
 
 \item{join_type}{Observations to keep after joining
 
@@ -158,12 +123,7 @@ be after the assessment. Thus \code{join_type = "after"} could be used.
 
 Whereas, sometimes you might allow for confirmatory observations to occur
 prior to the observation. For example, to identify AEs occurring on or
-after seven days before a COVID AE. Thus \code{join_type = "all"} could be used.
-
-\describe{
-\item{Permitted values}{\code{"before"}, \code{"after"}, \code{"all"}}
-\item{Default value}{none}
-}}
+after seven days before a COVID AE. Thus \code{join_type = "all"} could be used.}
 
 \item{filter_add}{Filter for additional dataset (\code{dataset_add})
 
@@ -175,12 +135,7 @@ Variables created by \code{order} or \code{new_vars} arguments can be used in th
 condition.
 
 The condition can include summary functions like \code{all()} or \code{any()}. The
-additional dataset is grouped by the by variables (\code{by_vars}).
-
-\describe{
-\item{Permitted values}{an unquoted condition, e.g., \code{AVISIT == "BASELINE"}}
-\item{Default value}{\code{NULL}}
-}}
+additional dataset is grouped by the by variables (\code{by_vars}).}
 
 \item{first_cond_lower}{Condition for selecting range of data (before)
 
@@ -193,12 +148,7 @@ considered.
 This argument should be specified if \code{filter_join} contains summary
 functions which should not apply to all observations but only from a
 certain observation before the current observation up to the current
-observation. For an example, see the "Examples" section below.
-
-\describe{
-\item{Permitted values}{an unquoted condition, e.g., \code{AVISIT == "BASELINE"}}
-\item{Default value}{\code{NULL}}
-}}
+observation. For an example, see the "Examples" section below.}
 
 \item{first_cond_upper}{Condition for selecting range of data (after)
 
@@ -209,12 +159,7 @@ observations are considered.
 
 This argument should be specified if \code{filter_join} contains summary
 functions which should not apply to all observations but only up to the
-confirmation assessment. For an example, see the "Examples" section below.
-
-\describe{
-\item{Permitted values}{an unquoted condition, e.g., \code{AVISIT == "BASELINE"}}
-\item{Default value}{\code{NULL}}
-}}
+confirmation assessment. For an example, see the "Examples" section below.}
 
 \item{filter_join}{Filter for the joined dataset
 
@@ -225,68 +170,38 @@ Variables created by \code{order} or \code{new_vars} arguments can be used in th
 condition.
 
 The condition can include summary functions like \code{all()} or \code{any()}. The
-joined dataset is grouped by the original observations.
-
-\describe{
-\item{Permitted values}{an unquoted condition, e.g., \code{AVISIT == "BASELINE"}}
-\item{Default value}{\code{NULL}}
-}}
+joined dataset is grouped by the original observations.}
 
 \item{mode}{Selection mode
 
 Determines if the first or last observation is selected. If the \code{order}
 argument is specified, \code{mode} must be non-null.
 
-If the \code{order} argument is not specified, the \code{mode} argument is ignored.
-
-\describe{
-\item{Permitted values}{\code{"first"}, \code{"last"}}
-\item{Default value}{\code{NULL}}
-}}
+If the \code{order} argument is not specified, the \code{mode} argument is ignored.}
 
 \item{exist_flag}{Exist flag
 
 If the argument is specified (e.g., \code{exist_flag = FLAG}), the specified
 variable (e.g., \code{FLAG}) is added to the input dataset. This variable will
 be the value provided in \code{true_value} for all selected records from \code{dataset_add}
-which are merged into the input dataset, and the value provided in \code{false_value} otherwise.
-
-\describe{
-\item{Permitted values}{an unquoted symbol, e.g., \code{AVAL}}
-\item{Default value}{\code{NULL}}
-}}
+which are merged into the input dataset, and the value provided in \code{false_value} otherwise.}
 
 \item{true_value}{True value
 
 The value for the specified variable \code{exist_flag}, applicable to
-the first or last observation (depending on the mode) of each by group.
-
-\describe{
-\item{Permitted values}{a character scalar, i.e., a character vector of length one}
-\item{Default value}{\code{"Y"}}
-}}
+the first or last observation (depending on the mode) of each by group.}
 
 \item{false_value}{False value
 
 The value for the specified variable \code{exist_flag}, NOT applicable to
-the first or last observation (depending on the mode) of each by group.
-
-\describe{
-\item{Permitted values}{a character scalar, i.e., a character vector of length one}
-\item{Default value}{\code{NA_character_}}
-}}
+the first or last observation (depending on the mode) of each by group.}
 
 \item{missing_values}{Values for non-matching observations
 
 For observations of the input dataset (\code{dataset}) which do not have a
 matching observation in the additional dataset (\code{dataset_add}) the values
 of the specified variables are set to the specified value. Only variables
-specified for \code{new_vars} can be specified for \code{missing_values}.
-
-\describe{
-\item{Permitted values}{list of named expressions created by a formula using \code{exprs()}, e.g., \code{exprs(AVALC = VSSTRESC, AVAL = yn_to_numeric(AVALC))}}
-\item{Default value}{\code{NULL}}
-}}
+specified for \code{new_vars} can be specified for \code{missing_values}.}
 
 \item{check_type}{Check uniqueness?
 
@@ -297,12 +212,7 @@ are not unique with respect to the by variables and the order.
 This argument is ignored if \code{order} is not specified. In this case an error
 is issued independent of \code{check_type} if the restricted joined dataset
 contains more than one observation for any of the observations of the input
-dataset.
-
-\describe{
-\item{Permitted values}{\code{"none"}, \code{"message"}, \code{"warning"}, \code{"error"}}
-\item{Default value}{\code{"warning"}}
-}}
+dataset.}
 }
 \value{
 The output dataset contains all observations and variables of the
@@ -377,566 +287,3 @@ General Derivation Functions for all ADaMs that returns variable appended to dat
 }
 \concept{der_gen}
 \keyword{der_gen}
-\section{Examples}{
-\subsection{Note on usage versus \code{derive_vars_merged()}}{
-
-The question between using \code{derive_vars_merged()} or the more powerful
-\code{derive_vars_joined()} comes down to how you need to select the observations
-to be merged.
-\itemize{
-\item If the observations from \code{dataset_add} to merge can be selected
-by a condition (\code{filter_add}) using \emph{only} variables from \code{dataset_add}, then
-always use \code{derive_vars_merged()} as it requires less resources (time and
-memory). A common example of this would be a randomization date in \code{ADSL},
-where you are simply merging on a date from \code{DS} according to a certain
-\code{DSDECOD} condition such as \code{DSDECOD == "RANDOMIZATION"}.
-\item However, if the selection of the observations from \code{dataset_add} can depend
-on variables from \emph{both} datasets, then use \code{derive_vars_joined()}. An
-example of this would be assigning period variables from \code{ADSL} to an \code{ADAE},
-where you now need to check each adverse event start date against the period
-start and end dates to decide which period value to join.
-}}
-\subsection{Basic join based on a generic time window (\code{filter_join})}{
-
-Derive a visit based on where the study day falls according to a
-scheduled set of time windows.
-\itemize{
-\item The \code{filter_join} argument here can check conditions using variables from
-both the \code{dataset} and \code{dataset_add}, so the study day is compared to the
-start and end of the time window.
-\item As no grouping variables are assigned using the \code{by_vars} argument, a full
-join is performed keeping all variables from \code{dataset_add}.
-}
-
-\if{html}{\out{<div class="sourceCode r">}}\preformatted{library(tibble)
-library(lubridate)
-library(dplyr, warn.conflicts = FALSE)
-library(tidyr, warn.conflicts = FALSE)
-
-adbds <- tribble(
-  ~USUBJID, ~ADY, ~AVAL,
-  "1",       -33,    11,
-  "1",        -7,    10,
-  "1",         1,    12,
-  "1",         8,    12,
-  "1",        15,     9,
-  "1",        20,    14,
-  "1",        24,    12,
-  "2",        -1,    13,
-  "2",        13,     8
-) \%>\%
-  mutate(STUDYID = "AB42")
-
-windows <- tribble(
-  ~AVISIT,    ~AWLO, ~AWHI,
-  "BASELINE",   -30,     1,
-  "WEEK 1",       2,     7,
-  "WEEK 2",       8,    15,
-  "WEEK 3",      16,    22,
-  "WEEK 4",      23,    30
-)
-
-derive_vars_joined(
-  adbds,
-  dataset_add = windows,
-  join_type = "all",
-  filter_join = AWLO <= ADY & ADY <= AWHI
-) \%>\%
-  select(USUBJID, ADY, AWLO, AWHI, AVISIT)
-#> # A tibble: 9 × 5
-#>   USUBJID   ADY  AWLO  AWHI AVISIT  
-#>   <chr>   <dbl> <dbl> <dbl> <chr>   
-#> 1 1         -33    NA    NA <NA>    
-#> 2 1          -7   -30     1 BASELINE
-#> 3 1           1   -30     1 BASELINE
-#> 4 1           8     8    15 WEEK 2  
-#> 5 1          15     8    15 WEEK 2  
-#> 6 1          20    16    22 WEEK 3  
-#> 7 1          24    23    30 WEEK 4  
-#> 8 2          -1   -30     1 BASELINE
-#> 9 2          13     8    15 WEEK 2  }\if{html}{\out{</div>}}}
-\subsection{Join only the lowest/highest value occurring within a condition (\code{filter_join},
-\code{order} and \code{mode})}{
-
-Derive the nadir value for each observation (i.e. the lowest value
-occurring before) by subject.
-\itemize{
-\item Note how \code{dataset} and \code{dataset_add} are the same here, so we are joining
-a dataset with itself. This enables us to compare records within the dataset
-to each other.
-\item Now we use \code{by_vars} as we only want to perform the join by subject.
-\item To find the lowest value we use the \code{order} and \code{mode} arguments.
-\item We subsequently need to check \code{ADY} to only check assessments occurring
-before. As this is not included in \code{by_vars} or \code{order}, we have to ensure
-it also gets joined by adding to \code{join_vars}. Then in \code{filter_join} note
-how \code{ADY.join < ADY} is used as the same variable exists in both datasets,
-so the version from \code{dataset_add} has \code{.join} added.
-\item According to the \code{AVAL} sort order used there could be duplicates (e.g. see
-subject \code{"1"} records at day 1 and 8), but given we only need to join \code{AVAL}
-itself here it doesn't actually matter to us which exact record is taken.
-So, in this example, we silence the uniqueness check by using
-\code{check_type = "none"}.
-}
-
-\if{html}{\out{<div class="sourceCode r">}}\preformatted{derive_vars_joined(
-  adbds,
-  dataset_add = adbds,
-  by_vars = exprs(STUDYID, USUBJID),
-  order = exprs(AVAL),
-  new_vars = exprs(NADIR = AVAL),
-  join_vars = exprs(ADY),
-  join_type = "all",
-  filter_join = ADY.join < ADY,
-  mode = "first",
-  check_type = "none"
-) \%>\%
-  select(USUBJID, ADY, AVAL, NADIR)
-#> # A tibble: 9 × 4
-#>   USUBJID   ADY  AVAL NADIR
-#>   <chr>   <dbl> <dbl> <dbl>
-#> 1 1         -33    11    NA
-#> 2 1          -7    10    11
-#> 3 1           1    12    10
-#> 4 1           8    12    10
-#> 5 1          15     9    10
-#> 6 1          20    14     9
-#> 7 1          24    12     9
-#> 8 2          -1    13    NA
-#> 9 2          13     8    13}\if{html}{\out{</div>}}}
-\subsection{Filtering which records are joined from the additional dataset (\code{filter_add})}{
-
-Imagine we wanted to achieve the same as above, but we now want to derive
-this allowing only post-baseline values to be possible for the nadir.
-\itemize{
-\item The \code{filter_add} argument can be used here as we only need to restrict the
-source data from \code{dataset_add}.
-}
-
-\if{html}{\out{<div class="sourceCode r">}}\preformatted{derive_vars_joined(
-  adbds,
-  dataset_add = adbds,
-  by_vars = exprs(STUDYID, USUBJID),
-  order = exprs(AVAL),
-  new_vars = exprs(NADIR = AVAL),
-  join_vars = exprs(ADY),
-  join_type = "all",
-  filter_add = ADY > 0,
-  filter_join = ADY.join < ADY,
-  mode = "first",
-  check_type = "none"
-) \%>\%
-  select(USUBJID, ADY, AVAL, NADIR)
-#> # A tibble: 9 × 4
-#>   USUBJID   ADY  AVAL NADIR
-#>   <chr>   <dbl> <dbl> <dbl>
-#> 1 1         -33    11    NA
-#> 2 1          -7    10    NA
-#> 3 1           1    12    NA
-#> 4 1           8    12    12
-#> 5 1          15     9    12
-#> 6 1          20    14     9
-#> 7 1          24    12     9
-#> 8 2          -1    13    NA
-#> 9 2          13     8    NA}\if{html}{\out{</div>}}}
-\subsection{Combining all of the above examples}{
-
-Using all of the arguments demonstrated above, here is a more complex
-example to add to \code{ADAE} the highest hemoglobin value occurring within two weeks
-before each adverse event. Also join the day it occurred, taking the earliest
-occurrence if more than one assessment with the same value.
-\itemize{
-\item Note how we used \code{mode = "last"} to get the highest lab value, but then as we
-wanted the earliest occurrence if more than one it means we need to add
-\code{desc(ADY)} to \code{order}. i.e. the last day when in descending order is the first.
-}
-
-\if{html}{\out{<div class="sourceCode r">}}\preformatted{adae <- tribble(
-  ~USUBJID, ~ASTDY,
-  "1",           3,
-  "1",          22,
-  "2",           2
-) \%>\%
-  mutate(STUDYID = "AB42")
-
-adlb <- tribble(
-  ~USUBJID, ~PARAMCD, ~ADY, ~AVAL,
-  "1",      "HGB",       1,   8.5,
-  "1",      "HGB",       3,   7.9,
-  "1",      "HGB",       5,   8.9,
-  "1",      "HGB",       8,   8.0,
-  "1",      "HGB",       9,   8.0,
-  "1",      "HGB",      16,   7.4,
-  "1",      "ALB",       1,    42,
-) \%>\%
-  mutate(STUDYID = "AB42")
-
-derive_vars_joined(
-  adae,
-  dataset_add = adlb,
-  by_vars = exprs(STUDYID, USUBJID),
-  order = exprs(AVAL, desc(ADY)),
-  new_vars = exprs(HGB_MAX = AVAL, HGB_DY = ADY),
-  join_type = "all",
-  filter_add = PARAMCD == "HGB",
-  filter_join = ASTDY - 14 <= ADY & ADY <= ASTDY,
-  mode = "last"
-) \%>\%
-  select(USUBJID, ASTDY, HGB_MAX, HGB_DY)
-#> # A tibble: 3 × 4
-#>   USUBJID ASTDY HGB_MAX HGB_DY
-#>   <chr>   <dbl>   <dbl>  <dbl>
-#> 1 1           3     8.5      1
-#> 2 1          22     8        8
-#> 3 2           2    NA       NA}\if{html}{\out{</div>}}}
-\subsection{Compute values in \code{new_vars} and \code{order}}{
-
-Add to \code{ADAE} the number of days since the last dose of treatment, plus
-1 day. If the dose occurs on the same day as the AE then include it as the
-last dose.
-\itemize{
-\item In the \code{new_vars} argument, other functions can be utilized to modify the
-joined values using variables from both \code{dataset} and \code{dataset_add}.
-For example, in the below case we want to calculate the number of days
-between the AE and the last dose using \code{compute_duration()}. This function
-includes the plus 1 day as default.
-\item Also note how in this example \code{EXSDT} is created via the \code{order} argument
-and then used for \code{new_vars}, \code{filter_add} and \code{filter_join}.
-\item The reason to use \code{join_type = "all"} here instead of \code{"before"} is that we
-want to include any dose occurring on the same day as the AE, hence the
-\code{filter_join = EXSDT <= ASTDT}. Whereas using \code{join_type = "before"}
-would have resulted in the condition \code{EXSDT < ASTDT}. See the next example
-instead for \code{join_type = "before"}.
-}
-
-\if{html}{\out{<div class="sourceCode r">}}\preformatted{adae <- tribble(
-  ~USUBJID, ~ASTDT,
-  "1",      "2020-02-02",
-  "1",      "2020-02-04",
-  "2",      "2021-01-08"
-) \%>\%
-  mutate(
-    ASTDT = ymd(ASTDT),
-    STUDYID = "AB42"
-  )
-
-ex <- tribble(
-  ~USUBJID, ~EXSDTC,
-  "1",      "2020-01-10",
-  "1",      "2020-01",
-  "1",      "2020-01-20",
-  "1",      "2020-02-03",
-  "2",      "2021-01-05"
-) \%>\%
-  mutate(STUDYID = "AB42")
-
-derive_vars_joined(
-  adae,
-  dataset_add = ex,
-  by_vars = exprs(STUDYID, USUBJID),
-  order = exprs(EXSDT = convert_dtc_to_dt(EXSDTC)),
-  join_type = "all",
-  new_vars = exprs(LDRELD = compute_duration(
-    start_date = EXSDT, end_date = ASTDT
-  )),
-  filter_add = !is.na(EXSDT),
-  filter_join = EXSDT <= ASTDT,
-  mode = "last"
-) \%>\%
-  select(USUBJID, ASTDT, LDRELD)
-#> # A tibble: 3 × 3
-#>   USUBJID ASTDT      LDRELD
-#>   <chr>   <date>      <dbl>
-#> 1 1       2020-02-02     14
-#> 2 1       2020-02-04      2
-#> 3 2       2021-01-08      4}\if{html}{\out{</div>}}}
-\subsection{Join records occurring before a condition (\code{join_type = "before"})}{
-
-In an arbitrary dataset where subjects have values of \code{"0"}, \code{"-"}, \code{"+"}
-or \code{"++"}, for any value of \code{"0"} derive the last occurring \code{"++"} day that
-occurs before the \code{"0"}.
-\itemize{
-\item The \code{AVAL.join == "++"} in \code{filter_join}, along with \code{order} and \code{mode}
-taking the last day, identifies the target records to join from
-\code{dataset_add} for each observation of \code{dataset}.
-\item Then \code{join_type = "before"} is now used instead of \code{join_type = "all"}.
-This is because we only want to join the records occurring before the
-current observation in \code{dataset}. Including \code{AVAL == "0"} in \code{filter_join}
-ensures here that we only populate the new variable for records with
-\code{AVAL == "0"} in our \code{dataset}.
-}
-
-\if{html}{\out{<div class="sourceCode r">}}\preformatted{myd <- tribble(
-  ~USUBJID, ~ADY, ~AVAL,
-  "1",         1, "++",
-  "1",         2, "-",
-  "1",         3, "0",
-  "1",         4, "+",
-  "1",         5, "++",
-  "1",         6, "-",
-  "2",         1, "-",
-  "2",         2, "++",
-  "2",         3, "+",
-  "2",         4, "0",
-  "2",         5, "-",
-  "2",         6, "++",
-  "2",         7, "0"
-) \%>\%
-  mutate(STUDYID = "AB42")
-
-derive_vars_joined(
-  myd,
-  dataset_add = myd,
-  by_vars = exprs(STUDYID, USUBJID),
-  order = exprs(ADY),
-  mode = "last",
-  new_vars = exprs(PREVPLDY = ADY),
-  join_vars = exprs(AVAL),
-  join_type = "before",
-  filter_join = AVAL == "0" & AVAL.join == "++"
-) \%>\%
-  select(USUBJID, ADY, AVAL, PREVPLDY)
-#> # A tibble: 13 × 4
-#>    USUBJID   ADY AVAL  PREVPLDY
-#>    <chr>   <dbl> <chr>    <dbl>
-#>  1 1           1 ++          NA
-#>  2 1           2 -           NA
-#>  3 1           3 0            1
-#>  4 1           4 +           NA
-#>  5 1           5 ++          NA
-#>  6 1           6 -           NA
-#>  7 2           1 -           NA
-#>  8 2           2 ++          NA
-#>  9 2           3 +           NA
-#> 10 2           4 0            2
-#> 11 2           5 -           NA
-#> 12 2           6 ++          NA
-#> 13 2           7 0            6}\if{html}{\out{</div>}}}
-\subsection{Join records occurring before a condition and checking all values in
-between (\code{first_cond_lower}, \code{join_type} and \code{filter_join})}{
-
-In the same example as above, now additionally check that in between the
-\code{"++"} and the \code{"0"} all results must be either \code{"+"} or \code{"++"}.
-\itemize{
-\item Firstly, \code{first_cond_lower = AVAL.join == "++"} is used so that for each
-observation of \code{dataset} the joined records from \code{dataset_add} are restricted
-to only include from the last occurring \code{"++"} before. This is necessary
-because of the use of a summary function in \code{filter_join} only on a subset
-of the joined observations as explained below.
-\item The \code{filter_join} condition used here now includes \code{all(AVAL.join \%in\% c("+", "++"))}
-to further restrict the joined records from \code{dataset_add} to only where all
-the values are either \code{"+"} or \code{"++"}.
-\item The \code{order} and \code{mode} arguments ensure only the day of the \code{"++"} value
-is joined. For example, for subject \code{"2"} it selects the day 2 record
-instead of day 3, by using \code{"first"}.
-}
-
-\if{html}{\out{<div class="sourceCode r">}}\preformatted{derive_vars_joined(
-  myd,
-  dataset_add = myd,
-  by_vars = exprs(STUDYID, USUBJID),
-  order = exprs(ADY),
-  mode = "first",
-  new_vars = exprs(PREVPLDY = ADY),
-  join_vars = exprs(AVAL),
-  join_type = "before",
-  first_cond_lower = AVAL.join == "++",
-  filter_join = AVAL == "0" & all(AVAL.join \%in\% c("+", "++"))
-) \%>\%
-  select(USUBJID, ADY, AVAL, PREVPLDY)
-#> # A tibble: 13 × 4
-#>    USUBJID   ADY AVAL  PREVPLDY
-#>    <chr>   <dbl> <chr>    <dbl>
-#>  1 1           1 ++          NA
-#>  2 1           2 -           NA
-#>  3 1           3 0           NA
-#>  4 1           4 +           NA
-#>  5 1           5 ++          NA
-#>  6 1           6 -           NA
-#>  7 2           1 -           NA
-#>  8 2           2 ++          NA
-#>  9 2           3 +           NA
-#> 10 2           4 0            2
-#> 11 2           5 -           NA
-#> 12 2           6 ++          NA
-#> 13 2           7 0            6}\if{html}{\out{</div>}}}
-\subsection{Join records occurring after a condition checking all values in between
-(\code{first_cond_upper}, \code{join_type} and \code{filter_join})}{
-
-Similar to the above, now derive the first \code{"++"} day after any \code{"0"}
-where all results in between are either \code{"+"} or \code{"++"}.
-\itemize{
-\item Note how the main difference here is the use of \code{join_type = "after"},
-\code{mode = "last"} and the \code{first_cond_upper} argument, instead of
-\code{first_cond_lower}.
-}
-
-\if{html}{\out{<div class="sourceCode r">}}\preformatted{derive_vars_joined(
-  myd,
-  dataset_add = myd,
-  by_vars = exprs(STUDYID, USUBJID),
-  order = exprs(ADY),
-  mode = "last",
-  new_vars = exprs(NEXTPLDY = ADY),
-  join_vars = exprs(AVAL),
-  join_type = "after",
-  first_cond_upper = AVAL.join == "++",
-  filter_join = AVAL == "0" & all(AVAL.join \%in\% c("+", "++"))
-) \%>\%
-  select(USUBJID, ADY, AVAL, NEXTPLDY)
-#> # A tibble: 13 × 4
-#>    USUBJID   ADY AVAL  NEXTPLDY
-#>    <chr>   <dbl> <chr>    <dbl>
-#>  1 1           1 ++          NA
-#>  2 1           2 -           NA
-#>  3 1           3 0            5
-#>  4 1           4 +           NA
-#>  5 1           5 ++          NA
-#>  6 1           6 -           NA
-#>  7 2           1 -           NA
-#>  8 2           2 ++          NA
-#>  9 2           3 +           NA
-#> 10 2           4 0           NA
-#> 11 2           5 -           NA
-#> 12 2           6 ++          NA
-#> 13 2           7 0           NA}\if{html}{\out{</div>}}}
-\subsection{Join a value from the next occurring record (\code{join_type = "after"})}{
-
-Add the value from the next occurring record as a new variable.
-\itemize{
-\item The \code{join_type = "after"} here essentially acts as a lag to join variables from
-the next occurring record, and \code{mode = "first"} selects the first of these.
-}
-
-\if{html}{\out{<div class="sourceCode r">}}\preformatted{derive_vars_joined(
-  myd,
-  dataset_add = myd,
-  by_vars = exprs(STUDYID, USUBJID),
-  order = exprs(ADY),
-  mode = "first",
-  new_vars = exprs(NEXTVAL = AVAL),
-  join_vars = exprs(AVAL),
-  join_type = "after"
-) \%>\%
-  select(USUBJID, ADY, AVAL, NEXTVAL)
-#> # A tibble: 13 × 4
-#>    USUBJID   ADY AVAL  NEXTVAL
-#>    <chr>   <dbl> <chr> <chr>  
-#>  1 1           1 ++    -      
-#>  2 1           2 -     0      
-#>  3 1           3 0     +      
-#>  4 1           4 +     ++     
-#>  5 1           5 ++    -      
-#>  6 1           6 -     <NA>   
-#>  7 2           1 -     ++     
-#>  8 2           2 ++    +      
-#>  9 2           3 +     0      
-#> 10 2           4 0     -      
-#> 11 2           5 -     ++     
-#> 12 2           6 ++    0      
-#> 13 2           7 0     <NA>   }\if{html}{\out{</div>}}}
-\subsection{Join records after a condition occurring in consecutive visits
-(\code{tmp_obs_nr_var}, \code{join_type} and \code{filter_join})}{
-
-Find the last occurring value on any of the next 3 unique visit days.
-\itemize{
-\item The \code{tmp_obs_nr_var} argument can be useful as shown here to help pick out
-records happening before or after with respect to \code{order}, as you can see
-in the \code{filter_join}.
-}
-
-\if{html}{\out{<div class="sourceCode r">}}\preformatted{derive_vars_joined(
-  myd,
-  dataset_add = myd,
-  by_vars = exprs(STUDYID, USUBJID),
-  order = exprs(ADY),
-  mode = "last",
-  new_vars = exprs(NEXTVAL = AVAL),
-  tmp_obs_nr_var = tmp_obs_nr,
-  join_vars = exprs(AVAL),
-  join_type = "after",
-  filter_join = tmp_obs_nr + 3 >= tmp_obs_nr.join
-) \%>\%
-  select(USUBJID, ADY, AVAL, NEXTVAL)
-#> # A tibble: 13 × 4
-#>    USUBJID   ADY AVAL  NEXTVAL
-#>    <chr>   <dbl> <chr> <chr>  
-#>  1 1           1 ++    +      
-#>  2 1           2 -     ++     
-#>  3 1           3 0     -      
-#>  4 1           4 +     -      
-#>  5 1           5 ++    -      
-#>  6 1           6 -     <NA>   
-#>  7 2           1 -     0      
-#>  8 2           2 ++    -      
-#>  9 2           3 +     ++     
-#> 10 2           4 0     0      
-#> 11 2           5 -     0      
-#> 12 2           6 ++    0      
-#> 13 2           7 0     <NA>   }\if{html}{\out{</div>}}}
-\subsection{Derive period variables (\code{APERIOD}, \code{APERSDT}, \code{APEREDT})}{
-
-Create a period reference dataset from \code{ADSL} and join this with \code{ADAE}
-to identify within which period each AE occurred.
-
-\if{html}{\out{<div class="sourceCode r">}}\preformatted{adsl <- tribble(
-  ~USUBJID, ~AP01SDT,     ~AP01EDT,     ~AP02SDT,     ~AP02EDT,
-  "1",      "2021-01-04", "2021-02-06", "2021-02-07", "2021-03-07",
-  "2",      "2021-02-02", "2021-03-02", "2021-03-03", "2021-04-01"
-) \%>\%
-  mutate(across(ends_with("DT"), ymd)) \%>\%
-  mutate(STUDYID = "AB42")
-
-period_ref <- create_period_dataset(
-  adsl,
-  new_vars = exprs(APERSDT = APxxSDT, APEREDT = APxxEDT)
-)
-
-period_ref
-#> # A tibble: 4 × 5
-#>   STUDYID USUBJID APERIOD APERSDT    APEREDT   
-#>   <chr>   <chr>     <int> <date>     <date>    
-#> 1 AB42    1             1 2021-01-04 2021-02-06
-#> 2 AB42    1             2 2021-02-07 2021-03-07
-#> 3 AB42    2             1 2021-02-02 2021-03-02
-#> 4 AB42    2             2 2021-03-03 2021-04-01
-
-adae <- tribble(
-  ~USUBJID, ~ASTDT,
-  "1",      "2021-01-01",
-  "1",      "2021-01-05",
-  "1",      "2021-02-05",
-  "1",      "2021-03-05",
-  "1",      "2021-04-05",
-  "2",      "2021-02-15",
-) \%>\%
-  mutate(
-    ASTDT = ymd(ASTDT),
-    STUDYID = "AB42"
-  )
-
-derive_vars_joined(
-  adae,
-  dataset_add = period_ref,
-  by_vars = exprs(STUDYID, USUBJID),
-  join_vars = exprs(APERSDT, APEREDT),
-  join_type = "all",
-  filter_join = APERSDT <= ASTDT & ASTDT <= APEREDT
-) \%>\%
-  select(USUBJID, ASTDT, APERSDT, APEREDT, APERIOD)
-#> # A tibble: 6 × 5
-#>   USUBJID ASTDT      APERSDT    APEREDT    APERIOD
-#>   <chr>   <date>     <date>     <date>       <int>
-#> 1 1       2021-01-01 NA         NA              NA
-#> 2 1       2021-01-05 2021-01-04 2021-02-06       1
-#> 3 1       2021-02-05 2021-01-04 2021-02-06       1
-#> 4 1       2021-03-05 2021-02-07 2021-03-07       2
-#> 5 1       2021-04-05 NA         NA              NA
-#> 6 2       2021-02-15 2021-02-02 2021-03-02       1}\if{html}{\out{</div>}}}
-\subsection{Further examples}{
-
-Further example usages of this function can be found in the
-\code{vignette("generic")}.
-
-Equivalent examples for using the \code{exist_flag}, \code{true_value}, \code{false_value},
-\code{missing_values} and \code{check_type} arguments can be found in \code{derive_vars_merged()}.}}
-

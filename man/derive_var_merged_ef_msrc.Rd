@@ -18,50 +18,25 @@ derive_var_merged_ef_msrc(
 \arguments{
 \item{dataset}{Input dataset
 
-The variables specified by the \code{by_vars} argument are expected to be in the dataset.
+The variables specified by the \code{by_vars} argument are expected to be in the dataset.}
 
-\describe{
-\item{Permitted values}{a dataset, i.e., a \code{data.frame} or tibble}
-\item{Default value}{none}
-}}
-
-\item{by_vars}{Grouping variables
-
-\describe{
-\item{Permitted values}{list of variables created by \code{exprs()}, e.g., \code{exprs(USUBJID, VISIT)}}
-\item{Default value}{none}
-}}
+\item{by_vars}{Grouping variables}
 
 \item{flag_events}{Flag events
 
 A list of \code{flag_event()} objects is expected. For each event the condition
 (\code{condition} field) is evaluated in the source dataset referenced by the
 \code{dataset_name} field. If it evaluates to \code{TRUE} at least once, the new
-variable is set to \code{true_value}.
-
-\describe{
-\item{Permitted values}{a list of \code{flag_event()} objects}
-\item{Default value}{none}
-}}
+variable is set to \code{true_value}.}
 
 \item{source_datasets}{Source datasets
 
 A named list of datasets is expected. The \code{dataset_name} field of
-\code{flag_event()} refers to the dataset provided in the list.
-
-\describe{
-\item{Permitted values}{named list of datasets, e.g., \code{list(adsl = adsl, ae = ae)}}
-\item{Default value}{none}
-}}
+\code{flag_event()} refers to the dataset provided in the list.}
 
 \item{new_var}{New variable
 
-The specified variable is added to the input dataset.
-
-\describe{
-\item{Permitted values}{an unquoted symbol, e.g., \code{AVAL}}
-\item{Default value}{none}
-}}
+The specified variable is added to the input dataset.}
 
 \item{true_value}{True value
 
@@ -70,12 +45,7 @@ groups for which at least one of the source object (\code{sources}) has the
 condition evaluate to \code{TRUE}.
 
 The values of \code{true_value}, \code{false_value}, and \code{missing_value} must be of
-the same type.
-
-\describe{
-\item{Permitted values}{a character scalar, i.e., a character vector of length one}
-\item{Default value}{\code{"Y"}}
-}}
+the same type.}
 
 \item{false_value}{False value
 
@@ -84,12 +54,7 @@ groups which occur in at least one source (\code{sources}) but the condition
 never evaluates to \code{TRUE}.
 
 The values of \code{true_value}, \code{false_value}, and \code{missing_value} must be of
-the same type.
-
-\describe{
-\item{Permitted values}{a character scalar, i.e., a character vector of length one}
-\item{Default value}{\code{NA_character_}}
-}}
+the same type.}
 
 \item{missing_value}{Values used for missing information
 
@@ -97,12 +62,7 @@ The new variable is set to the specified value for all by groups without
 observations in any of the sources (\code{sources}).
 
 The values of \code{true_value}, \code{false_value}, and \code{missing_value} must be of
-the same type.
-
-\describe{
-\item{Permitted values}{a character scalar, i.e., a character vector of length one}
-\item{Default value}{\code{NA_character_}}
-}}
+the same type.}
 }
 \value{
 The output dataset contains all observations and variables of the

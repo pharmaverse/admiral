@@ -7,11 +7,7 @@
 validate_basket_select(obj)
 }
 \arguments{
-\item{obj}{An object to be validated.
-
-\describe{
-\item{Default value}{none}
-}}
+\item{obj}{An object to be validated.}
 }
 \value{
 The original object.

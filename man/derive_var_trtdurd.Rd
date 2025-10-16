@@ -9,33 +9,21 @@ derive_var_trtdurd(dataset, start_date = TRTSDT, end_date = TRTEDT)
 \arguments{
 \item{dataset}{Input dataset
 
-The variables specified by the \code{start_date} and \code{end_date} arguments are expected to be in the dataset.
-
-\describe{
-\item{Default value}{none}
-}}
+The variables specified by the \code{start_date} and \code{end_date} arguments are expected to be in the dataset.}
 
 \item{start_date}{The start date
 
 A date or date-time object is expected.
 
 Refer to \code{derive_vars_dt()} to impute and derive a date from a date
-character vector to a date object.
-
-\describe{
-\item{Default value}{\code{TRTSDT}}
-}}
+character vector to a date object.}
 
 \item{end_date}{The end date
 
 A date or date-time object is expected.
 
 Refer to \code{derive_vars_dt()} to impute and derive a date from a date
-character vector to a date object.
-
-\describe{
-\item{Default value}{\code{TRTEDT}}
-}}
+character vector to a date object.}
 }
 \value{
 The input dataset with \code{TRTDURD} added

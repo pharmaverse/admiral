@@ -21,24 +21,12 @@ derive_vars_duration(
 \arguments{
 \item{dataset}{Input dataset
 
-The variables specified by the \code{start_date} and \code{end_date} arguments are expected to be in the dataset.
+The variables specified by the \code{start_date} and \code{end_date} arguments are expected to be in the dataset.}
 
-\describe{
-\item{Default value}{none}
-}}
-
-\item{new_var}{Name of variable to create
-
-\describe{
-\item{Default value}{none}
-}}
+\item{new_var}{Name of variable to create}
 
 \item{new_var_unit}{Name of the unit variable If the parameter is not
-specified, no variable for the unit is created.
-
-\describe{
-\item{Default value}{\code{NULL}}
-}}
+specified, no variable for the unit is created.}
 
 \item{start_date}{The start date
 
@@ -47,11 +35,7 @@ A date or date-time object is expected.
 Refer to \code{derive_vars_dt()} to impute and derive a date from a date
 character vector to a date object.
 
-Refer to \code{convert_dtc_to_dt()} to obtain a vector of imputed dates.
-
-\describe{
-\item{Default value}{none}
-}}
+Refer to \code{convert_dtc_to_dt()} to obtain a vector of imputed dates.}
 
 \item{end_date}{The end date
 
@@ -60,11 +44,7 @@ A date or date-time object is expected.
 Refer to \code{derive_vars_dt()} to impute and derive a date from a date
 character vector to a date object.
 
-Refer to \code{convert_dtc_to_dt()} to obtain a vector of imputed dates.
-
-\describe{
-\item{Default value}{none}
-}}
+Refer to \code{convert_dtc_to_dt()} to obtain a vector of imputed dates.}
 
 \item{in_unit}{Input unit
 
@@ -82,11 +62,7 @@ For hours: \code{"hour"}, \code{"hours"}, \code{"hr"}, \code{"hrs"}, \code{"h"}
 
 For minutes: \code{"minute"}, \code{"minutes"}, \code{"min"}, \code{"mins"}
 
-For seconds: \code{"second"}, \code{"seconds"}, \code{"sec"}, \code{"secs"}, \code{"s"}
-
-\describe{
-\item{Default value}{\code{"days"}}
-}}
+For seconds: \code{"second"}, \code{"seconds"}, \code{"sec"}, \code{"secs"}, \code{"s"}}
 
 \item{out_unit}{Output unit
 
@@ -106,50 +82,26 @@ For hours: \code{"hour"}, \code{"hours"}, \code{"hr"}, \code{"hrs"}, \code{"h"}
 
 For minutes: \code{"minute"}, \code{"minutes"}, \code{"min"}, \code{"mins"}
 
-For seconds: \code{"second"}, \code{"seconds"}, \code{"sec"}, \code{"secs"}, \code{"s"}
-
-\describe{
-\item{Default value}{\code{"days"}}
-}}
+For seconds: \code{"second"}, \code{"seconds"}, \code{"sec"}, \code{"secs"}, \code{"s"}}
 
 \item{floor_in}{Round down input dates?
 
 The input dates are round down with respect to the input unit, e.g., if the
-input unit is 'days', the time of the input dates is ignored.
-
-\describe{
-\item{Permitted values}{\code{TRUE}, \code{FALSE}}
-\item{Default value}{\code{TRUE}}
-}}
+input unit is 'days', the time of the input dates is ignored.}
 
 \item{add_one}{Add one input unit?
 
 If the duration is non-negative, one input unit is added. i.e., the
-duration can not be zero.
-
-\describe{
-\item{Permitted values}{\code{TRUE}, \code{FALSE}}
-\item{Default value}{\code{TRUE}}
-}}
+duration can not be zero.}
 
 \item{trunc_out}{Return integer part
 
 The fractional part of the duration (in output unit) is removed, i.e., the
-integer part is returned.
-
-\describe{
-\item{Permitted values}{\code{TRUE}, \code{FALSE}}
-\item{Default value}{\code{FALSE}}
-}}
+integer part is returned.}
 
 \item{type}{lubridate duration type.
 
-See below for details.
-
-\describe{
-\item{Permitted values}{\code{"duration"}, \code{"interval"}}
-\item{Default value}{\code{"duration"}}
-}}
+See below for details.}
 }
 \value{
 The input dataset with the duration and unit variable added

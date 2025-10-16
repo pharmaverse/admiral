@@ -7,11 +7,7 @@
 extract_unit(x)
 }
 \arguments{
-\item{x}{A parameter description
-
-\describe{
-\item{Default value}{none}
-}}
+\item{x}{A parameter description}
 }
 \value{
 A string

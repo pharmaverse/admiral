@@ -18,71 +18,37 @@ derive_vars_transposed(
 \arguments{
 \item{dataset}{Input dataset
 
-The variables specified by the \code{by_vars} argument are expected to be in the dataset.
-
-\describe{
-\item{Default value}{none}
-}}
+The variables specified by the \code{by_vars} argument are expected to be in the dataset.}
 
 \item{dataset_merge}{Dataset to transpose and merge
 
 The variables specified by the \code{by_vars}, \code{id_vars}, \code{key_var} and
 \code{value_var} arguments are expected. The variables \code{by_vars}, \code{id_vars},
-\code{key_var} have to be a unique key.
-
-\describe{
-\item{Default value}{none}
-}}
+\code{key_var} have to be a unique key.}
 
 \item{by_vars}{Grouping variables
 
-Keys used to merge \code{dataset_merge} with \code{dataset}.
-
-\describe{
-\item{Default value}{none}
-}}
+Keys used to merge \code{dataset_merge} with \code{dataset}.}
 
 \item{id_vars}{ID variables
 
 Variables (excluding \code{by_vars} and \code{key_var}) that uniquely identify each
-observation in \code{dataset_merge}.
-
-\describe{
-\item{Default value}{\code{NULL}}
-}}
+observation in \code{dataset_merge}.}
 
 \item{key_var}{The variable of \code{dataset_merge} containing the names of the
-transposed variables
-
-\describe{
-\item{Default value}{none}
-}}
+transposed variables}
 
 \item{value_var}{The variable of \code{dataset_merge} containing the values of the
-transposed variables
+transposed variables}
 
-\describe{
-\item{Default value}{none}
-}}
-
-\item{filter}{Expression used to restrict the records of \code{dataset_merge} prior to transposing
-
-\describe{
-\item{Default value}{\code{NULL}}
-}}
+\item{filter}{Expression used to restrict the records of \code{dataset_merge} prior to transposing}
 
 \item{relationship}{Expected merge-relationship between the \code{by_vars}
 variable(s) in \code{dataset} and \code{dataset_merge} (after transposition)
 
 This argument is passed to the \code{dplyr::left_join()} function. See
 \url{https://dplyr.tidyverse.org/reference/mutate-joins.html#arguments} for
-more details.
-
-\describe{
-\item{Permitted values}{\code{"one-to-one"}, \code{"one-to-many"}, \code{"many-to-one"},
-\code{"many-to-many"}, \code{NULL}}
-\item{Default value}{\code{NULL}}
-}}
+more details.}
 }
 \value{
 The input dataset with transposed variables from \code{dataset_merge} added

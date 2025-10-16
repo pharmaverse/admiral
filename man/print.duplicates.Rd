@@ -7,17 +7,9 @@
 \method{print}{duplicates}(x, ...)
 }
 \arguments{
-\item{x}{A \code{duplicates} object
+\item{x}{A \code{duplicates} object}
 
-\describe{
-\item{Default value}{none}
-}}
-
-\item{...}{Not used
-
-\describe{
-\item{Default value}{none}
-}}
+\item{...}{Not used}
 }
 \value{
 No return value, called for side effects

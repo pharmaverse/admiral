@@ -7,14 +7,7 @@
 dtm_level(level)
 }
 \arguments{
-\item{level}{Datetime level
-
-\describe{
-\item{Permitted values}{\code{"Y"} (year, highest level), \code{"M"} (month), \code{"D"}
-(day), \code{"h"} (hour), \code{"m"} (minute), \code{"s"} (second, lowest level), \code{"n"}
-(none)}
-\item{Default value}{none}
-}}
+\item{level}{Datetime level}
 }
 \value{
 A \code{dtm_level} object

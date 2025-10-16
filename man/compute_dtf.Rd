@@ -9,19 +9,11 @@ compute_dtf(dtc, dt)
 \arguments{
 \item{dtc}{The date character vector (\code{--DTC}).
 
-A character date is expected in a format like \code{yyyy-mm-ddThh:mm:ss} (partial or complete).
-
-\describe{
-\item{Default value}{none}
-}}
+A character date is expected in a format like \code{yyyy-mm-ddThh:mm:ss} (partial or complete).}
 
 \item{dt}{The  Date vector to compare.
 
-A date object is expected.
-
-\describe{
-\item{Default value}{none}
-}}
+A date object is expected.}
 }
 \value{
 The date imputation flag (\verb{*DTF}) (character value of \code{"D"}, \code{"M"} , \code{"Y"} or \code{NA})

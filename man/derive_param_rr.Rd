@@ -21,64 +21,34 @@ The variables specified by the \code{by_vars} argument are expected to be in the
 
 The variable specified by \code{by_vars} and \code{PARAMCD} must be a unique key of
 the input dataset after restricting it by the filter condition (\code{filter}
-argument) and to the parameters specified by \code{hr_code}.
-
-\describe{
-\item{Default value}{none}
-}}
+argument) and to the parameters specified by \code{hr_code}.}
 
 \item{by_vars}{Grouping variables
 
 For each group defined by \code{by_vars} an observation is added to the output
 dataset. Only variables specified in \code{by_vars} will be populated
-in the newly created records.
-
-\describe{
-\item{Permitted values}{list of variables created by \code{exprs()}, e.g., \code{exprs(USUBJID, VISIT)}}
-\item{Default value}{none}
-}}
+in the newly created records.}
 
 \item{set_values_to}{Variables to be set
 
 The specified variables are set to the specified values for the new
 observations. For example \code{exprs(PARAMCD = "MAP")} defines the parameter code
-for the new parameter.
-
-\describe{
-\item{Permitted values}{List of variable-value pairs}
-\item{Default value}{\code{exprs(PARAMCD = "MAP")}}
-}}
+for the new parameter.}
 
 \item{hr_code}{HR parameter code
 
 The observations where \code{PARAMCD} equals the specified value are considered
-as the heart rate assessments.
-
-\describe{
-\item{Permitted values}{character value}
-\item{Default value}{\code{"HR"}}
-}}
+as the heart rate assessments.}
 
 \item{get_unit_expr}{An expression providing the unit of the parameter
 
-The result is used to check the units of the input parameters.
-
-\describe{
-\item{Permitted values}{An expression which is evaluable in the input dataset
-and results in a character value}
-\item{Default value}{none}
-}}
+The result is used to check the units of the input parameters.}
 
 \item{filter}{Filter condition
 
 The specified condition is applied to the input dataset before deriving the
 new parameter, i.e., only observations fulfilling the condition are taken
-into account.
-
-\describe{
-\item{Permitted values}{an unquoted condition, e.g., \code{AVISIT == "BASELINE"}}
-\item{Default value}{\code{NULL}}
-}}
+into account.}
 }
 \value{
 The input dataset with the new parameter added. Note, a variable will only

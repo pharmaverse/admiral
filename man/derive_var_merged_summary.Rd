@@ -16,33 +16,18 @@ derive_var_merged_summary(
 \arguments{
 \item{dataset}{Input dataset
 
-The variables specified by the \code{by_vars} argument are expected to be in the dataset.
-
-\describe{
-\item{Permitted values}{a dataset, i.e., a \code{data.frame} or tibble}
-\item{Default value}{none}
-}}
+The variables specified by the \code{by_vars} argument are expected to be in the dataset.}
 
 \item{dataset_add}{Additional dataset
 
 The variables specified by the \code{by_vars} and the variables used on the left
-hand sides of the \code{new_vars} arguments are expected.
-
-\describe{
-\item{Permitted values}{a dataset, i.e., a \code{data.frame} or tibble}
-\item{Default value}{none}
-}}
+hand sides of the \code{new_vars} arguments are expected.}
 
 \item{by_vars}{Grouping variables
 
 The expressions on the left hand sides of \code{new_vars} are evaluated by the
 specified \emph{variables}. Then the resulting values are merged to the input
-dataset (\code{dataset}) by the specified \emph{variables}.
-
-\describe{
-\item{Permitted values}{list of variables created by \code{exprs()}, e.g., \code{exprs(USUBJID, VISIT)}}
-\item{Default value}{none}
-}}
+dataset (\code{dataset}) by the specified \emph{variables}.}
 
 \item{new_vars}{New variables to add
 
@@ -62,35 +47,20 @@ For example:
     DOSESUM = sum(AVAL),
     DOSEMEAN = mean(AVAL)
   )
-}\if{html}{\out{</div>}}
-
-\describe{
-\item{Permitted values}{list of variables created by \code{exprs()}, e.g., \code{exprs(USUBJID, VISIT)}}
-\item{Default value}{\code{NULL}}
-}}
+}\if{html}{\out{</div>}}}
 
 \item{filter_add}{Filter for additional dataset (\code{dataset_add})
 
 Only observations fulfilling the specified condition are taken into account
 for summarizing. If the argument is not specified, all observations are
-considered.
-
-\describe{
-\item{Permitted values}{an unquoted condition, e.g., \code{AVISIT == "BASELINE"}}
-\item{Default value}{\code{NULL}}
-}}
+considered.}
 
 \item{missing_values}{Values for non-matching observations
 
 For observations of the input dataset (\code{dataset}) which do not have a
 matching observation in the additional dataset (\code{dataset_add}) the values
 of the specified variables are set to the specified value. Only variables
-specified for \code{new_vars} can be specified for \code{missing_values}.
-
-\describe{
-\item{Permitted values}{list of named expressions created by a formula using \code{exprs()}, e.g., \code{exprs(AVALC = VSSTRESC, AVAL = yn_to_numeric(AVALC))}}
-\item{Default value}{\code{NULL}}
-}}
+specified for \code{new_vars} can be specified for \code{missing_values}.}
 }
 \value{
 The output dataset contains all observations and variables of the

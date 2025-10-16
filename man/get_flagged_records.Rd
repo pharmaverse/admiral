@@ -7,40 +7,23 @@
 get_flagged_records(dataset, new_var, condition, filter = NULL)
 }
 \arguments{
-\item{dataset}{Input dataset
-
-\describe{
-\item{Default value}{none}
-}}
+\item{dataset}{Input dataset}
 
 \item{new_var}{New variable
 
-The specified variable is added to the input dataset.
-
-\describe{
-\item{Default value}{none}
-}}
+The specified variable is added to the input dataset.}
 
 \item{condition}{Condition
 
 The condition is evaluated at the dataset (\code{dataset}). For
 all rows where it evaluates as \code{TRUE} the new variable
-is set to \code{1} in the new column. Otherwise, it is set to \code{0}.
-
-\describe{
-\item{Default value}{none}
-}}
+is set to \code{1} in the new column. Otherwise, it is set to \code{0}.}
 
 \item{filter}{Filter for additional data
 
 Only observations fulfilling the specified condition are taken into account
 for flagging. If the argument is not specified, all observations are
-considered.
-
-\describe{
-\item{Permitted values}{a condition}
-\item{Default value}{\code{NULL}}
-}}
+considered.}
 }
 \value{
 The output dataset is the input dataset filtered by the \code{filter} condition

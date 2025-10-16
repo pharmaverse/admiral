@@ -9,27 +9,15 @@ compute_map(diabp, sysbp, hr = NULL)
 \arguments{
 \item{diabp}{Diastolic blood pressure
 
-A numeric vector is expected.
-
-\describe{
-\item{Default value}{none}
-}}
+A numeric vector is expected.}
 
 \item{sysbp}{Systolic blood pressure
 
-A numeric vector is expected.
-
-\describe{
-\item{Default value}{none}
-}}
+A numeric vector is expected.}
 
 \item{hr}{Heart rate
 
-A numeric vector or \code{NULL} is expected.
-
-\describe{
-\item{Default value}{\code{NULL}}
-}}
+A numeric vector or \code{NULL} is expected.}
 }
 \value{
 A numeric vector of MAP values
