@@ -626,10 +626,10 @@ test_that("derive_vars_merged_summary Test 24: by_vars with rename", {
 ## Test 25: merge relationship as 'many-to-one' ----
 test_that("derive_vars_merged_summary Test 25: merge relationship as 'many-to-one'", {
   actual <- derive_vars_merged(advs,
-                               dataset_add = adsl,
-                               by_vars = exprs(USUBJID),
-                               new_vars = exprs(SEX),
-                               relationship = "many-to-one"
+    dataset_add = adsl,
+    by_vars = exprs(USUBJID),
+    new_vars = exprs(SEX),
+    relationship = "many-to-one"
   )
 
   expected <- left_join(advs, select(adsl, USUBJID, SEX), by = "USUBJID")
@@ -645,10 +645,10 @@ test_that("derive_vars_merged_summary Test 25: merge relationship as 'many-to-on
 test_that("derive_vars_merged_summary Test 26: error incorrect 'one-to-one'", {
   expect_snapshot(
     derive_vars_merged(advs,
-                       dataset_add = adsl,
-                       by_vars = exprs(USUBJID),
-                       new_vars = exprs(SEX),
-                       relationship = "one-to-one"
+      dataset_add = adsl,
+      by_vars = exprs(USUBJID),
+      new_vars = exprs(SEX),
+      relationship = "one-to-one"
     ),
     error = TRUE
   )
@@ -658,11 +658,11 @@ test_that("derive_vars_merged_summary Test 26: error incorrect 'one-to-one'", {
 test_that("derive_vars_merged_summary Test 27: merge sel vars 'one-to-one'", {
   expect_snapshot(
     derive_vars_merged(adsl,
-                       dataset_add = advs,
-                       by_vars = exprs(USUBJID),
-                       new_vars = exprs(WEIGHTBL = AVAL),
-                       filter_add = AVISIT == "BASELINE",
-                       relationship = "one-to-one"
+      dataset_add = advs,
+      by_vars = exprs(USUBJID),
+      new_vars = exprs(WEIGHTBL = AVAL),
+      filter_add = AVISIT == "BASELINE",
+      relationship = "one-to-one"
     )
   )
 })
@@ -863,7 +863,6 @@ test_that("derive_var_merged_summary Test 35: error if no summary function", {
 
 ## Test 36: test get_not_mapped with unmapped records ----
 test_that("derive_var_merged_summary Test 36: test get_not_mapped with unmapped records", {
-
   # Create a lookup table that doesn't include BMI
   param_lookup <- tibble::tribble(
     ~VSTESTCD, ~VSTEST, ~PARAMCD,  ~DESCRIPTION,
