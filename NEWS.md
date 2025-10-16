@@ -15,6 +15,8 @@ updated such that they no longer fail if `{admiral}` is not loaded. (#2667)
 - The following function arguments are entering the next phase of the [deprecation process](https://pharmaverse.github.io/admiraldev/articles/programming_strategy.html#deprecation): 
 
     **Phase 1 (message)**
+    
+  - `derive_var_merged_summary()` is deprecated and will be replaced by `derive_vars_merged_summary()` (#2874)
   
     **Phase 2 (warning)**
     

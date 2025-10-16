@@ -537,7 +537,165 @@ test_that("get_not_mapped Test 21: not all by_vars have records in the lookup ta
 
 # derive_var_merged_summary ----
 ## Test 22: dataset == dataset_add, no filter ----
-test_that("derive_var_merged_summary Test 22: dataset == dataset_add, no filter", {
+test_that("derive_vars_merged_summary Test 22: dataset == dataset_add, no filter", {
+  expected <- tibble::tribble(
+    ~AVISIT,  ~ASEQ, ~AVAL, ~MEANVIS,
+    "WEEK 1",     1,    10,       10,
+    "WEEK 1",     2,    NA,       10,
+    "WEEK 2",     3,    NA,       NA,
+    "WEEK 3",     4,    42,       42,
+    "WEEK 4",     5,    12,       13,
+    "WEEK 4",     6,    12,       13,
+    "WEEK 4",     7,    15,       13
+  )
+
+  adbds <- select(expected, -MEANVIS)
+
+  expect_dfs_equal(
+    base = expected,
+    compare = derive_vars_merged_summary(
+      adbds,
+      dataset_add = adbds,
+      by_vars = exprs(AVISIT),
+      new_vars = exprs(MEANVIS = mean(AVAL, na.rm = TRUE))
+    ),
+    keys = c("AVISIT", "ASEQ")
+  )
+})
+
+## Test 23: dataset != dataset_add, filter ----
+test_that("derive_vars_merged_summary Test 23: dataset != dataset_add, filter", {
+  expected <- tibble::tribble(
+    ~USUBJID, ~MEANPBL,
+    "1",          13.5,
+    "2",            NA,
+    "3",          42.0
+  )
+
+  adbds <- tibble::tribble(
+    ~USUBJID, ~ADY, ~AVAL,
+    "1",        -3,    10,
+    "1",         2,    12,
+    "1",         8,    15,
+    "3",         4,    42
+  )
+
+  adsl <- select(expected, -MEANPBL)
+
+  expect_dfs_equal(
+    base = expected,
+    compare = derive_vars_merged_summary(
+      adsl,
+      dataset_add = adbds,
+      by_vars = exprs(USUBJID),
+      new_vars = exprs(MEANPBL = mean(AVAL, na.rm = TRUE)),
+      filter_add = ADY > 0
+    ),
+    keys = c("USUBJID")
+  )
+})
+
+## Test 24: by_vars with rename ----
+test_that("derive_vars_merged_summary Test 24: by_vars with rename", {
+  expected <- tibble::tribble(
+    ~AVISIT,  ~ASEQ, ~AVAL, ~MEANVIS,
+    "WEEK 1",     1,    10,       10,
+    "WEEK 1",     2,    NA,       10,
+    "WEEK 2",     3,    NA,       NA,
+    "WEEK 3",     4,    42,       42,
+    "WEEK 4",     5,    12,       13,
+    "WEEK 4",     6,    12,       13,
+    "WEEK 4",     7,    15,       13
+  )
+  adbds <- select(expected, -MEANVIS)
+  adbds1 <- select(expected, -MEANVIS) %>%
+    rename(VISIT = AVISIT)
+
+  expect_dfs_equal(
+    base = expected,
+    compare = derive_vars_merged_summary(
+      adbds,
+      dataset_add = adbds1,
+      by_vars = exprs(AVISIT = VISIT),
+      new_vars = exprs(MEANVIS = mean(AVAL, na.rm = TRUE))
+    ),
+    keys = c("AVISIT", "ASEQ")
+  )
+})
+
+## Test 25: merge relationship as 'many-to-one' ----
+test_that("derive_vars_merged_summary Test 25: merge relationship as 'many-to-one'", {
+  actual <- derive_vars_merged(advs,
+                               dataset_add = adsl,
+                               by_vars = exprs(USUBJID),
+                               new_vars = exprs(SEX),
+                               relationship = "many-to-one"
+  )
+
+  expected <- left_join(advs, select(adsl, USUBJID, SEX), by = "USUBJID")
+
+  expect_dfs_equal(
+    base = expected,
+    compare = actual,
+    keys = c("USUBJID", "AVISIT")
+  )
+})
+
+## Test 26: error incorrect 'one-to-one' ----
+test_that("derive_vars_merged_summary Test 26: error incorrect 'one-to-one'", {
+  expect_snapshot(
+    derive_vars_merged(advs,
+                       dataset_add = adsl,
+                       by_vars = exprs(USUBJID),
+                       new_vars = exprs(SEX),
+                       relationship = "one-to-one"
+    ),
+    error = TRUE
+  )
+})
+
+## Test 27: merge sel vars 'one-to-one' ----
+test_that("derive_vars_merged_summary Test 27: merge sel vars 'one-to-one'", {
+  expect_snapshot(
+    derive_vars_merged(adsl,
+                       dataset_add = advs,
+                       by_vars = exprs(USUBJID),
+                       new_vars = exprs(WEIGHTBL = AVAL),
+                       filter_add = AVISIT == "BASELINE",
+                       relationship = "one-to-one"
+    )
+  )
+})
+
+## Test 28: error if no summary function ----
+test_that("derive_vars_merged_summary Test 28: error if no summary function", {
+  adbds <- tibble::tribble(
+    ~AVISIT,  ~ASEQ, ~AVAL,
+    "WEEK 1",     1,    10,
+    "WEEK 1",     2,    NA,
+    "WEEK 2",     3,    NA,
+    "WEEK 3",     4,    42,
+    "WEEK 4",     5,    12,
+    "WEEK 4",     6,    12,
+    "WEEK 4",     7,    15
+  )
+
+  expect_snapshot(
+    derive_vars_merged_summary(
+      adbds,
+      dataset_add = adbds,
+      by_vars = exprs(AVISIT),
+      new_vars = exprs(MEANVIS = AVAL / 2)
+    ),
+    error = TRUE
+  )
+})
+
+# derive_var_merged_summary ----
+## Test 29: dataset == dataset_add, no filter ----
+test_that("derive_var_merged_summary Test 29: dataset == dataset_add, no filter", {
+  withr::local_options(list(lifecycle_verbosity = "quiet"))
+
   expected <- tibble::tribble(
     ~AVISIT,  ~ASEQ, ~AVAL, ~MEANVIS,
     "WEEK 1",     1,    10,       10,
@@ -563,8 +721,10 @@ test_that("derive_var_merged_summary Test 22: dataset == dataset_add, no filter"
   )
 })
 
-## Test 23: dataset != dataset_add, filter ----
-test_that("derive_var_merged_summary Test 23: dataset != dataset_add, filter", {
+## Test 30: dataset != dataset_add, filter ----
+test_that("derive_var_merged_summary Test 30: dataset != dataset_add, filter", {
+  withr::local_options(list(lifecycle_verbosity = "quiet"))
+
   expected <- tibble::tribble(
     ~USUBJID, ~MEANPBL,
     "1",          13.5,
@@ -595,8 +755,10 @@ test_that("derive_var_merged_summary Test 23: dataset != dataset_add, filter", {
   )
 })
 
-## Test 24: by_vars with rename ----
-test_that("derive_var_merged_summary Test 24: by_vars with rename", {
+## Test 31: by_vars with rename ----
+test_that("derive_var_merged_summary Test 31: by_vars with rename", {
+  withr::local_options(list(lifecycle_verbosity = "quiet"))
+
   expected <- tibble::tribble(
     ~AVISIT,  ~ASEQ, ~AVAL, ~MEANVIS,
     "WEEK 1",     1,    10,       10,
@@ -623,8 +785,10 @@ test_that("derive_var_merged_summary Test 24: by_vars with rename", {
   )
 })
 
-## Test 25: merge relationship as 'many-to-one' ----
-test_that("derive_var_merged_summary Test 25: merge relationship as 'many-to-one'", {
+## Test 32: merge relationship as 'many-to-one' ----
+test_that("derive_var_merged_summary Test 32: merge relationship as 'many-to-one'", {
+  withr::local_options(list(lifecycle_verbosity = "quiet"))
+
   actual <- derive_vars_merged(advs,
     dataset_add = adsl,
     by_vars = exprs(USUBJID),
@@ -641,8 +805,10 @@ test_that("derive_var_merged_summary Test 25: merge relationship as 'many-to-one
   )
 })
 
-## Test 26: error incorrect 'one-to-one' ----
-test_that("derive_var_merged_summary Test 26: error incorrect 'one-to-one'", {
+## Test 33: error incorrect 'one-to-one' ----
+test_that("derive_var_merged_summary Test 33: error incorrect 'one-to-one'", {
+  withr::local_options(list(lifecycle_verbosity = "quiet"))
+
   expect_snapshot(
     derive_vars_merged(advs,
       dataset_add = adsl,
@@ -654,8 +820,10 @@ test_that("derive_var_merged_summary Test 26: error incorrect 'one-to-one'", {
   )
 })
 
-## Test 27: merge sel vars 'one-to-one' ----
-test_that("derive_var_merged_summary Test 27: merge sel vars 'one-to-one'", {
+## Test 34: merge sel vars 'one-to-one' ----
+test_that("derive_var_merged_summary Test 34: merge sel vars 'one-to-one'", {
+  withr::local_options(list(lifecycle_verbosity = "quiet"))
+
   expect_snapshot(
     derive_vars_merged(adsl,
       dataset_add = advs,
@@ -667,8 +835,10 @@ test_that("derive_var_merged_summary Test 27: merge sel vars 'one-to-one'", {
   )
 })
 
-## Test 28: error if no summary function ----
-test_that("derive_var_merged_summary Test 28: error if no summary function", {
+## Test 35: error if no summary function ----
+test_that("derive_var_merged_summary Test 35: error if no summary function", {
+  withr::local_options(list(lifecycle_verbosity = "quiet"))
+
   adbds <- tibble::tribble(
     ~AVISIT,  ~ASEQ, ~AVAL,
     "WEEK 1",     1,    10,
@@ -691,8 +861,9 @@ test_that("derive_var_merged_summary Test 28: error if no summary function", {
   )
 })
 
-## Test 29: test get_not_mapped with unmapped records ----
-test_that("derive_vars_merged_lookup Test 29: test get_not_mapped with unmapped records", {
+## Test 36: test get_not_mapped with unmapped records ----
+test_that("derive_var_merged_summary Test 36: test get_not_mapped with unmapped records", {
+
   # Create a lookup table that doesn't include BMI
   param_lookup <- tibble::tribble(
     ~VSTESTCD, ~VSTEST, ~PARAMCD,  ~DESCRIPTION,
