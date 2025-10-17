@@ -995,11 +995,11 @@ get_not_mapped <- function() {
 #' )
 #'
 derive_vars_merged_summary <- function(dataset,
-                                      dataset_add,
-                                      by_vars,
-                                      new_vars = NULL,
-                                      filter_add = NULL,
-                                      missing_values = NULL) {
+                                       dataset_add,
+                                       by_vars,
+                                       new_vars = NULL,
+                                       filter_add = NULL,
+                                       missing_values = NULL) {
   assert_vars(by_vars)
   by_vars_left <- replace_values_by_names(by_vars)
   by_vars_right <- chr2vars(paste(vars2chr(by_vars)))
@@ -1152,7 +1152,6 @@ derive_var_merged_summary <- function(dataset,
                                       new_vars = NULL,
                                       filter_add = NULL,
                                       missing_values = NULL) {
-
   deprecate_inform(
     when = "1.4",
     what = "derive_var_merged_summary()",
