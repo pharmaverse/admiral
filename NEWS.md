@@ -11,6 +11,10 @@ updated such that they no longer fail if `{admiral}` is not loaded. (#2667)
 ## Breaking Changes
 
 - The default value of `ignore_seconds_flag` is set to `TRUE`. (#2798)
+- `derive_var_merged_summary()` is deprecated and will be replaced by `derive_vars_merged_summary()`.
+    This is just a rename of the function to align with our programming conventions, i.e.
+    functions that can derive multiple variables have `_vars_` in the name rather than
+    `_var_`. (#2874)
 
 - The following function arguments are entering the next phase of the [deprecation process](https://pharmaverse.github.io/admiraldev/articles/programming_strategy.html#deprecation): 
 
