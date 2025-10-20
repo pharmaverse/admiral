@@ -34,7 +34,7 @@ updated such that they no longer fail if `{admiral}` is not loaded. (#2667)
   - `get_summary_records()` is deprecated. Please use `derive_summary_records()` with the `dataset_add` 
   argument and without the `dataset` argument.
 
-    **Phase 3 (error)**
+  **Phase 3 (error)**
 
     **Phase 4 (removed)**
     
