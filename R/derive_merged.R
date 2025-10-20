@@ -1067,7 +1067,9 @@ derive_vars_merged_summary <- function(dataset,
 
 #' Merge Summary Variables
 #'
-#' @description Merge a summary variable from a dataset to the input dataset.
+#' @description
+#' `r lifecycle::badge("deprecated")` The `derive_var_merged_summary()`
+#' function has been deprecated in favor of `derive_vars_merged_summary()`.
 #'
 #' @param dataset
 #'

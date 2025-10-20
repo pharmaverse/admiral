@@ -97,7 +97,8 @@ The output dataset contains all observations and variables of the
 input dataset and additionally the variables specified for \code{new_vars}.
 }
 \description{
-Merge a summary variable from a dataset to the input dataset.
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}} The \code{derive_var_merged_summary()}
+function has been deprecated in favor of \code{derive_vars_merged_summary()}.
 }
 \details{
 \enumerate{
