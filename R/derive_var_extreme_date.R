@@ -239,6 +239,7 @@ derive_var_extreme_dtm <- function(dataset,
     what = "derive_var_extreme_dtm()",
     with = "derive_vars_extreme_event()",
     details = c(
+      x = "This message will turn into an error at the beginning of 2027.",
       i = "See admiral's deprecation guidance:
       https://pharmaverse.github.io/admiraldev/dev/articles/programming_strategy.html#deprecation"
     )
@@ -654,6 +655,7 @@ date_source <- function(dataset_name,
     what = "date_source()",
     with = "event()",
     details = c(
+      x = "This message will turn into an error at the beginning of 2027.",
       i = "See admiral's deprecation guidance:
       https://pharmaverse.github.io/admiraldev/dev/articles/programming_strategy.html#deprecation"
     )
