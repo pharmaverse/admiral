@@ -172,3 +172,25 @@
       Please check `new_vars` if summary functions like `mean()`, `sum()`, ... are used on the right hand side.
       i Run `admiral::get_duplicates_dataset()` to access the duplicate records
 
+# derive_var_merged_summary Test 31: deprecation message
+
+    Code
+      derive_var_merged_summary(adbds, dataset_add = adbds1, by_vars = exprs(AVISIT = VISIT),
+      new_vars = exprs(MEANVIS = mean(AVAL, na.rm = TRUE)))
+    Message
+      `derive_var_merged_summary()` was deprecated in admiral 1.4.
+      i Please use `derive_vars_merged_summary()` instead.
+      x Function is brought inline with our programming strategy - warning will be issued in January 2027
+      i See admiral's deprecation guidance: https://pharmaverse.github.io/admiraldev/dev/articles/programming_strategy.html#deprecation
+    Output
+      # A tibble: 7 x 4
+        AVISIT  ASEQ  AVAL MEANVIS
+        <chr>  <dbl> <dbl>   <dbl>
+      1 WEEK 1     1    10      10
+      2 WEEK 1     2    NA      10
+      3 WEEK 2     3    NA     NaN
+      4 WEEK 3     4    42      42
+      5 WEEK 4     5    12      13
+      6 WEEK 4     6    12      13
+      7 WEEK 4     7    15      13
+

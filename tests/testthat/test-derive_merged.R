@@ -894,3 +894,32 @@ test_that("derive_var_merged_summary Test 36: test get_not_mapped with unmapped 
     keys = c("VSTESTCD", "VSTEST")
   )
 })
+
+test_that("derive_var_merged_summary Test 31: deprecation message", {
+
+  expected <- tibble::tribble(
+    ~AVISIT,  ~ASEQ, ~AVAL, ~MEANVIS,
+    "WEEK 1",     1,    10,       10,
+    "WEEK 1",     2,    NA,       10,
+    "WEEK 2",     3,    NA,       NA,
+    "WEEK 3",     4,    42,       42,
+    "WEEK 4",     5,    12,       13,
+    "WEEK 4",     6,    12,       13,
+    "WEEK 4",     7,    15,       13
+  )
+  adbds <- select(expected, -MEANVIS)
+  adbds1 <- select(expected, -MEANVIS) %>%
+    rename(VISIT = AVISIT)
+
+  expect_snapshot(
+    derive_var_merged_summary(
+      adbds,
+      dataset_add = adbds1,
+      by_vars = exprs(AVISIT = VISIT),
+      new_vars = exprs(MEANVIS = mean(AVAL, na.rm = TRUE))
+    )
+  )
+})
+
+
+
