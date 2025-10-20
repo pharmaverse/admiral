@@ -459,7 +459,7 @@ assert_time_imputation <- function(time_imputation, highest_imputation) {
     ))
   }
 
-  return(time_imputation)
+  time_imputation
 }
 
 #' Assert Highest Imputation Validity
@@ -999,9 +999,9 @@ is_partial_datetime <- function(partial) {
   time_components <- c("hour", "minute", "second")
 
   if (all(c(date_components, time_components) %in% names(partial))) {
-    return(TRUE)
+    TRUE
   } else if (all(date_components %in% names(partial))) {
-    return(FALSE)
+    FALSE
   } else {
     cli_abort(paste0(
       "{.arg partial} must be a named list containing either all date components",

@@ -15,10 +15,6 @@
 #'   the `params()` object passed to the `args` argument or be provided in _every_
 #'   `derivation_slice()`.
 #'
-#' @param args Arguments of the derivation
-#'
-#'   A `params()` object is expected.
-#'
 #' @param ... A `derivation_slice()` object is expected
 #'
 #'   Each slice defines a subset of the input dataset and some of the parameters
@@ -26,6 +22,10 @@
 #'   parameters specified by the `args` parameter and the `args` field of the
 #'   `derivation_slice()` object. If a parameter is specified for both, the
 #'   value in `derivation_slice()` overwrites the one in `args`.
+#'
+#' @param args Arguments of the derivation
+#'
+#'   A `params()` object is expected.
 #'
 #' @details
 #'
@@ -89,8 +89,8 @@
 #'
 slice_derivation <- function(dataset,
                              derivation,
-                             args = NULL,
-                             ...) {
+                             ...,
+                             args = NULL) {
   # check input
   assert_data_frame(dataset)
   assert_function(derivation)
@@ -159,7 +159,11 @@ slice_derivation <- function(dataset,
     obsnr <- which(dataset$temp_slicenr == i)
     # call the derivation for non-empty slices only
     # create environment in which the call to the derivation is evaluated
-    act_env <- attr(args, "env")
+    if (is.null(args)) {
+      act_env <- rlang::caller_env()
+    } else {
+      act_env <- attr(args, "env")
+    }
     slice_env <- attr(slices[[i]]$args, "env")
     if (!identical(act_env, slice_env)) {
       # prefer objects in the slice environment to object in args environment
