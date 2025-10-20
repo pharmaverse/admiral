@@ -22,7 +22,7 @@ updated such that they no longer fail if `{admiral}` is not loaded. (#2667)
     
   - `derive_var_merged_summary()` is deprecated and will be replaced by `derive_vars_merged_summary()` (#2874)
   
-    **Phase 2 (warning)**
+  **Phase 2 (warning)**
     
   - `call_user_fun()` is deprecated and will have no replacement. (#2678)
   - `derive_param_extreme_record()` is deprecated and replaced by `derive_extreme_event()`
