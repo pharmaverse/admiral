@@ -25,7 +25,7 @@ updated such that they no longer fail if `{admiral}` is not loaded. (#2667)
     **Phase 2 (warning)**
     
   - `call_user_fun()` is deprecated and will have no replacement. (#2678)
-	- `derive_param_extreme_record()` is deprecated and replaced by `derive_extreme_event()`
+  - `derive_param_extreme_record()` is deprecated and replaced by `derive_extreme_event()`
   - `derive_var_dthcaus()` is deprecated and replaced by `derive_vars_extreme_event()`
   - `date_source()` is deprecated and replaced by `event()`
   - `dthcaus_source()` is deprecated and replaced by `event()`
