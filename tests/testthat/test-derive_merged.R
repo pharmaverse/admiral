@@ -862,7 +862,7 @@ test_that("derive_var_merged_summary Test 35: error if no summary function", {
 })
 
 ## Test 36: test get_not_mapped with unmapped records ----
-test_that("derive_var_merged_summary Test 36: test get_not_mapped with unmapped records", {
+test_that("derive_vars_merged_lookup Test 36: test get_not_mapped with unmapped records", {
   # Create a lookup table that doesn't include BMI
   param_lookup <- tibble::tribble(
     ~VSTESTCD, ~VSTEST, ~PARAMCD,  ~DESCRIPTION,
