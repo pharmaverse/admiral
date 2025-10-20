@@ -1159,7 +1159,8 @@ derive_var_merged_summary <- function(dataset,
     what = "derive_var_merged_summary()",
     with = "derive_vars_merged_summary()",
     details = c(
-      x = "Function is brought inline with our programming strategy - warning will be issued in January 2027",
+      x = "Function is brought inline with our programming strategy - warning
+      will be issued in January 2027",
       i = "See admiral's deprecation guidance:
       https://pharmaverse.github.io/admiraldev/dev/articles/programming_strategy.html#deprecation"
     )

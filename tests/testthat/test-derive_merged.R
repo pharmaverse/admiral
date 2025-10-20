@@ -896,7 +896,6 @@ test_that("derive_vars_merged_lookup Test 36: test get_not_mapped with unmapped 
 })
 
 test_that("derive_var_merged_summary Test 31: deprecation message", {
-
   expected <- tibble::tribble(
     ~AVISIT,  ~ASEQ, ~AVAL, ~MEANVIS,
     "WEEK 1",     1,    10,       10,
@@ -920,6 +919,3 @@ test_that("derive_var_merged_summary Test 31: deprecation message", {
     )
   )
 })
-
-
-
