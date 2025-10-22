@@ -97,7 +97,7 @@ derive_param_rr <- function(dataset,
       parameters = c(hr_code),
       by_vars = by_vars,
       set_values_to = exprs(
-        AVAL = compute_rr(!!sym(paste0("AVAL.", hr_code))),
+        AVAL = {{ compute_rr }}(!!sym(paste0("AVAL.", hr_code))),
         !!!set_values_to
       )
     ),

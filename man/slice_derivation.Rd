@@ -4,7 +4,7 @@
 \alias{slice_derivation}
 \title{Execute a Derivation with Different Arguments for Subsets of the Input Dataset}
 \usage{
-slice_derivation(dataset, derivation, args = NULL, ...)
+slice_derivation(dataset, derivation, ..., args = NULL)
 }
 \arguments{
 \item{dataset}{Input dataset}
@@ -18,17 +18,25 @@ All expected arguments for the derivation function must be provided through
 the \code{params()} object passed to the \code{args} argument or be provided in \emph{every}
 \code{derivation_slice()}.}
 
-\item{args}{Arguments of the derivation
-
-A \code{params()} object is expected.}
-
 \item{...}{A \code{derivation_slice()} object is expected
 
 Each slice defines a subset of the input dataset and some of the parameters
 for the derivation. The derivation is called on the subset with the
 parameters specified by the \code{args} parameter and the \code{args} field of the
 \code{derivation_slice()} object. If a parameter is specified for both, the
-value in \code{derivation_slice()} overwrites the one in \code{args}.}
+value in \code{derivation_slice()} overwrites the one in \code{args}.
+
+\describe{
+\item{Default value}{none}
+}}
+
+\item{args}{Arguments of the derivation
+
+A \code{params()} object is expected.
+
+\describe{
+\item{Default value}{\code{NULL}}
+}}
 }
 \value{
 The input dataset with the variables derived by the derivation added
