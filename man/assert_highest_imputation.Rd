@@ -13,35 +13,15 @@ assert_highest_imputation(
 )
 }
 \arguments{
-\item{highest_imputation}{A character scalar indicating the highest level of imputation.
+\item{highest_imputation}{A character scalar indicating the highest level of imputation.}
 
-\describe{
-\item{Default value}{none}
-}}
+\item{highest_imputation_values}{A character vector of valid values for \code{highest_imputation}.}
 
-\item{highest_imputation_values}{A character vector of valid values for \code{highest_imputation}.
+\item{date_imputation}{Optional character scalar specifying the imputation method for dates.}
 
-\describe{
-\item{Default value}{none}
-}}
+\item{max_dates}{Optional vector specifying maximum dates for imputation.}
 
-\item{date_imputation}{Optional character scalar specifying the imputation method for dates.
-
-\describe{
-\item{Default value}{\code{NULL}}
-}}
-
-\item{max_dates}{Optional vector specifying maximum dates for imputation.
-
-\describe{
-\item{Default value}{none}
-}}
-
-\item{min_dates}{Optional vector specifying minimum dates for imputation.
-
-\describe{
-\item{Default value}{none}
-}}
+\item{min_dates}{Optional vector specifying minimum dates for imputation.}
 }
 \value{
 Returns \code{NULL} invisibly if assertions pass.

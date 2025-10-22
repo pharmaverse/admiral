@@ -15,51 +15,29 @@ transform_range(
 \arguments{
 \item{source}{A vector of values to be transformed
 
-A numeric vector is expected.
-
-\describe{
-\item{Default value}{none}
-}}
+A numeric vector is expected.}
 
 \item{source_range}{The permitted source range
 
 A numeric vector containing two elements is expected, representing the
-lower and upper bounds of the permitted source range.
-
-\describe{
-\item{Default value}{none}
-}}
+lower and upper bounds of the permitted source range.}
 
 \item{target_range}{The target range
 
 A numeric vector containing two elements is expected, representing the
-lower and upper bounds of the target range.
-
-\describe{
-\item{Default value}{none}
-}}
+lower and upper bounds of the target range.}
 
 \item{flip_direction}{Flip direction of the range?
 
 The transformed values will be reversed within the target range, e.g.
-within the range 0 to 100, 25 would be reversed to 75.
-
-\describe{
-\item{Permitted values}{\code{TRUE}, \code{FALSE}}
-\item{Default value}{\code{FALSE}}
-}}
+within the range 0 to 100, 25 would be reversed to 75.}
 
 \item{outside_range}{Handling of values outside the source range
 
 Values outside the source range (\code{source_range}) are transformed to \code{NA}.
 
 If \code{"warning"} or \code{"error"} is specified, a warning or error is issued if
-\code{source} includes any values outside the source range.
-
-\describe{
-\item{Permitted values}{\code{"NA"}, \code{"warning"}, \code{"error"}}
-\item{Default value}{\code{"NA"}}
-}}
+\code{source} includes any values outside the source range.}
 }
 \value{
 The source linearly transformed to the target range

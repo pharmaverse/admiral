@@ -18,71 +18,34 @@ event(
 \item{dataset_name}{Dataset name of the dataset to be used as input for the
 event. The name refers to the dataset specified for \code{source_datasets} in
 \code{derive_extreme_event()}. If the argument is not specified, the input
-dataset (\code{dataset}) of \code{derive_extreme_event()} is used.
-
-\describe{
-\item{Permitted values}{a character scalar}
-\item{Default value}{\code{NULL}}
-}}
+dataset (\code{dataset}) of \code{derive_extreme_event()} is used.}
 
 \item{condition}{An unquoted condition for selecting the observations, which
 will contribute to the extreme event. If the condition contains summary
-functions like \code{all()}, they are evaluated for each by group separately.
-
-\describe{
-\item{Permitted values}{an unquoted condition}
-\item{Default value}{\code{NULL}}
-}}
+functions like \code{all()}, they are evaluated for each by group separately.}
 
 \item{mode}{If specified, the first or last observation with respect to \code{order} is
-selected for each by group.
-
-\describe{
-\item{Permitted values}{\code{"first"}, \code{"last"}, \code{NULL}}
-\item{Default value}{\code{NULL}}
-}}
+selected for each by group.}
 
 \item{order}{The specified variables or expressions are used to select the
 first or last observation if \code{mode} is specified.
 
-For handling of \code{NA}s in sorting variables see the "Sort Order" section in \code{vignette("generic")}.
-
-\describe{
-\item{Permitted values}{list of expressions created by \code{exprs()}, e.g.,
-\code{exprs(ADT, desc(AVAL))} or \code{NULL}}
-\item{Default value}{\code{NULL}}
-}}
+For handling of \code{NA}s in sorting variables see the "Sort Order" section in \code{vignette("generic")}.}
 
 \item{set_values_to}{A named list returned by \code{exprs()} defining the variables
 to be set for the event, e.g. \code{exprs(PARAMCD = "WSP", PARAM  = "Worst Sleeping Problems")}. The values can be a symbol, a
-character string, a numeric value, \code{NA} or an expression.
-
-\describe{
-\item{Permitted values}{a named list of expressions, e.g., created by \code{exprs()}}
-\item{Default value}{\code{NULL}}
-}}
+character string, a numeric value, \code{NA} or an expression.}
 
 \item{keep_source_vars}{Variables to keep from the source dataset
 
 The specified variables are kept for the selected observations. The
 variables specified for \code{by_vars} (of \code{derive_extreme_event()}) and created
-by \code{set_values_to} are always kept.
-
-\describe{
-\item{Permitted values}{A list of expressions where each element is
-a symbol or a tidyselect expression, e.g., \code{exprs(VISIT, VISITNUM, starts_with("RS"))}.}
-\item{Default value}{\code{NULL}}
-}}
+by \code{set_values_to} are always kept.}
 
 \item{description}{Description of the event
 
 The description does not affect the derivations where the event is used. It
-is intended for documentation only.
-
-\describe{
-\item{Permitted values}{a character scalar}
-\item{Default value}{\code{NULL}}
-}}
+is intended for documentation only.}
 }
 \value{
 An object of class \code{event}

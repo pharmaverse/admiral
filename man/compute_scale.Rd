@@ -15,33 +15,21 @@ compute_scale(
 \arguments{
 \item{source}{A vector of values to be scaled
 
-A numeric vector is expected.
-
-\describe{
-\item{Default value}{none}
-}}
+A numeric vector is expected.}
 
 \item{source_range}{The permitted source range
 
 A numeric vector containing two elements is expected, representing the
 lower and upper bounds of the permitted source range. Alternatively, if no
 argument is specified for \code{source_range} and \code{target_range}, no
-transformation will be performed.
-
-\describe{
-\item{Default value}{\code{NULL}}
-}}
+transformation will be performed.}
 
 \item{target_range}{The target range
 
 A numeric vector containing two elements is expected, representing the
 lower and upper bounds of the target range. Alternatively, if no
 argument is specified for \code{source_range} and \code{target_range}, no
-transformation will be performed.
-
-\describe{
-\item{Default value}{\code{NULL}}
-}}
+transformation will be performed.}
 
 \item{flip_direction}{Flip direction of the scale?
 
@@ -49,12 +37,7 @@ The transformed values will be reversed within the target range, e.g.
 within the range 0 to 100, 25 would be reversed to 75.
 
 This argument will be ignored if \code{source_range} and \code{target_range} aren't
-specified.
-
-\describe{
-\item{Permitted values}{\code{TRUE}, \code{FALSE}}
-\item{Default value}{\code{FALSE}}
-}}
+specified.}
 
 \item{min_n}{Minimum number of values for computation
 
@@ -62,11 +45,7 @@ The minimum number of non-missing values in source for the computation to
 be carried out. If the number of non-missing values is below \code{min_n},
 the result will be set to missing, i.e. \code{NA}.
 
-A positive integer is expected.
-
-\describe{
-\item{Default value}{\code{1}}
-}}
+A positive integer is expected.}
 }
 \value{
 The average of source transformed to the target range or \code{NA} if

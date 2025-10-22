@@ -14,33 +14,17 @@ derive_var_dthcaus(
 \arguments{
 \item{dataset}{Input dataset
 
-The variables specified by the \code{subject_keys} argument are expected to be in the dataset.
+The variables specified by the \code{subject_keys} argument are expected to be in the dataset.}
 
-\describe{
-\item{Default value}{none}
-}}
-
-\item{...}{Objects of class "dthcaus_source" created by \code{\link[=dthcaus_source]{dthcaus_source()}}.
-
-\describe{
-\item{Default value}{none}
-}}
+\item{...}{Objects of class "dthcaus_source" created by \code{\link[=dthcaus_source]{dthcaus_source()}}.}
 
 \item{source_datasets}{A named \code{list} containing datasets in which to search for the
-death cause
-
-\describe{
-\item{Default value}{none}
-}}
+death cause}
 
 \item{subject_keys}{Variables to uniquely identify a subject
 
 A list of expressions where the expressions are symbols as returned by
-\code{exprs()} is expected.
-
-\describe{
-\item{Default value}{\code{get_admiral_option("subject_keys")}}
-}}
+\code{exprs()} is expected.}
 }
 \value{
 The input dataset with \code{DTHCAUS} variable added.

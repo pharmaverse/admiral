@@ -16,35 +16,15 @@ use_ad_template(
 \item{adam_name}{An ADaM dataset name. You can use any of the available
 dataset names
 \code{"ADAE"}, \code{"ADCM"}, \code{"ADEG"}, \code{"ADEX"}, \code{"ADLB"}, \code{"ADLBHY"}, \code{"ADMH"}, \code{"ADPC"}, \code{"ADPP"}, \code{"ADPPK"}, \code{"ADSL"}, \code{"ADVS"}.
-The dataset name is case-insensitive. The default dataset name is \code{"ADSL"}.
+The dataset name is case-insensitive. The default dataset name is \code{"ADSL"}.}
 
-\describe{
-\item{Default value}{\code{"adsl"}}
-}}
+\item{save_path}{Path to save the script.}
 
-\item{save_path}{Path to save the script.
+\item{package}{The R package in which to look for templates. By default \code{"admiral"}.}
 
-\describe{
-\item{Default value}{\code{paste0("./", adam_name, ".R")}}
-}}
+\item{overwrite}{Whether to overwrite an existing file named \code{save_path}.}
 
-\item{package}{The R package in which to look for templates. By default \code{"admiral"}.
-
-\describe{
-\item{Default value}{\code{"admiral"}}
-}}
-
-\item{overwrite}{Whether to overwrite an existing file named \code{save_path}.
-
-\describe{
-\item{Default value}{\code{FALSE}}
-}}
-
-\item{open}{Whether to open the script right away.
-
-\describe{
-\item{Default value}{\code{interactive()}}
-}}
+\item{open}{Whether to open the script right away.}
 }
 \value{
 No return values, called for side effects

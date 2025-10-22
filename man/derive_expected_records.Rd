@@ -14,30 +14,18 @@ derive_expected_records(
 \arguments{
 \item{dataset}{Input dataset
 
-The variables specified by the \code{dataset_ref} and \code{by_vars} arguments are expected to be in the dataset.
-
-\describe{
-\item{Default value}{none}
-}}
+The variables specified by the \code{dataset_ref} and \code{by_vars} arguments are expected to be in the dataset.}
 
 \item{dataset_ref}{Expected observations dataset
 
 Data frame with the expected observations, e.g., all the expected
-combinations of \code{PARAMCD}, \code{PARAM}, \code{AVISIT}, \code{AVISITN}, ...
-
-\describe{
-\item{Default value}{none}
-}}
+combinations of \code{PARAMCD}, \code{PARAM}, \code{AVISIT}, \code{AVISITN}, ...}
 
 \item{by_vars}{Grouping variables
 
 For each group defined by \code{by_vars} those observations from \code{dataset_ref}
 are added to the output dataset which do not have a corresponding observation
-in the input dataset.
-
-\describe{
-\item{Default value}{\code{NULL}}
-}}
+in the input dataset.}
 
 \item{set_values_to}{Variables to be set
 
@@ -49,10 +37,6 @@ A list of variable name-value pairs is expected.
 \item LHS refers to a variable.
 \item RHS refers to the values to set to the variable. This can be a string, a
 symbol, a numeric value, \code{NA}, or expressions, e.g., \code{exprs(PARAMCD =   "TDOSE", PARCAT1 = "OVERALL")}.
-}
-
-\describe{
-\item{Default value}{\code{NULL}}
 }}
 }
 \value{

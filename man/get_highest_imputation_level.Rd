@@ -7,17 +7,9 @@
 get_highest_imputation_level(highest_imputation, create_datetime)
 }
 \arguments{
-\item{highest_imputation}{A character indicating the highest imputation level.
+\item{highest_imputation}{A character indicating the highest imputation level.}
 
-\describe{
-\item{Default value}{none}
-}}
-
-\item{create_datetime}{A logical indicating whether datetime factors levels are required.
-
-\describe{
-\item{Default value}{none}
-}}
+\item{create_datetime}{A logical indicating whether datetime factors levels are required.}
 }
 \value{
 A \code{dt_level()} or \code{dtm_level()} object representing the highest imputation level.

@@ -7,11 +7,7 @@
 format_imputed_dtc(imputed)
 }
 \arguments{
-\item{imputed}{A list of imputed date/time components.
-
-\describe{
-\item{Default value}{none}
-}}
+\item{imputed}{A list of imputed date/time components.}
 }
 \value{
 A character vector of formatted date/datetime strings.

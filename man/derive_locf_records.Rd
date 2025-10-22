@@ -18,47 +18,26 @@ derive_locf_records(
 \arguments{
 \item{dataset}{Input dataset
 
-The variables specified by the \code{by_vars}, \code{analysis_var}, \code{order}, and \code{keep_vars} arguments are expected to be in the dataset.
-
-\describe{
-\item{Default value}{none}
-}}
+The variables specified by the \code{by_vars}, \code{analysis_var}, \code{order}, and \code{keep_vars} arguments are expected to be in the dataset.}
 
 \item{dataset_ref}{Expected observations dataset
 
 Data frame with all the combinations of \code{PARAMCD}, \code{PARAM}, \code{AVISIT},
-\code{AVISITN}, ... which are expected in the dataset is expected.
-
-\describe{
-\item{Default value}{none}
-}}
+\code{AVISITN}, ... which are expected in the dataset is expected.}
 
 \item{by_vars}{Grouping variables
 
 For each group defined by \code{by_vars} those observations from \code{dataset_ref}
 are added to the output dataset which do not have a corresponding observation
 in the input dataset or for which \code{analysis_var} is \code{NA} for the corresponding observation
-in the input dataset.
-
-\describe{
-\item{Default value}{none}
-}}
+in the input dataset.}
 
 \item{id_vars_ref}{Grouping variables in expected observations dataset
 
 The variables to group by in \code{dataset_ref} when determining which observations should be
-added to the input dataset.
+added to the input dataset.}
 
-\describe{
-\item{Default value}{All the variables in \code{dataset_ref}}
-}}
-
-\item{analysis_var}{Analysis variable.
-
-\describe{
-\item{Permitted values}{a variable}
-\item{Default value}{\code{AVAL}}
-}}
+\item{analysis_var}{Analysis variable.}
 
 \item{imputation}{Select the mode of imputation:
 
@@ -69,33 +48,20 @@ timepoints and missing \code{analysis_var} values from \code{dataset_ref}.
 for missing timepoints from \code{dataset_ref}.
 
 \code{update_add}: Keep all original records, update records with missing \code{analysis_var}
-and add imputed records for missing timepoints from \code{dataset_ref}.
-
-\describe{
-\item{Permitted values}{One of these 3 values: \code{"add"}, \code{"update"}, \code{"update_add"}}
-\item{Default value}{\code{"add"}}
-}}
+and add imputed records for missing timepoints from \code{dataset_ref}.}
 
 \item{order}{Sort order
 
 The dataset is sorted by \code{order} before carrying the last observation
 forward (e.g. \code{AVAL}) within each \code{by_vars}.
 
-For handling of \code{NA}s in sorting variables see the "Sort Order" section in \code{vignette("generic")}.
-
-\describe{
-\item{Default value}{none}
-}}
+For handling of \code{NA}s in sorting variables see the "Sort Order" section in \code{vignette("generic")}.}
 
 \item{keep_vars}{Variables that need carrying the last observation forward
 
 Keep variables that need carrying the last observation forward other than \code{analysis_var}
 (e.g., \code{PARAMN}, \code{VISITNUM}). If by default \code{NULL}, only variables specified in
-\code{by_vars} and \code{analysis_var} will be populated in the newly created records.
-
-\describe{
-\item{Default value}{\code{NULL}}
-}}
+\code{by_vars} and \code{analysis_var} will be populated in the newly created records.}
 }
 \value{
 The input dataset with the new "LOCF" observations added for each

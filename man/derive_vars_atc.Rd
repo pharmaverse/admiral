@@ -15,44 +15,24 @@ derive_vars_atc(
 \arguments{
 \item{dataset}{Input dataset
 
-The variables specified by the \code{by_vars} argument are expected to be in the dataset.
-
-\describe{
-\item{Default value}{none}
-}}
+The variables specified by the \code{by_vars} argument are expected to be in the dataset.}
 
 \item{dataset_facm}{FACM dataset
 
 The variables specified by the \code{by_vars}, \code{id_vars}, and \code{value_var}
 arguments and \code{FATESTCD} are required. The variables \code{by_vars}, \code{id_vars},
-and \code{FATESTCD} must be a unique key.
-
-\describe{
-\item{Default value}{none}
-}}
+and \code{FATESTCD} must be a unique key.}
 
 \item{by_vars}{Grouping variables
 
-Keys used to merge \code{dataset_facm} with \code{dataset}.
-
-\describe{
-\item{Default value}{\code{exprs(!!!get_admiral_option("subject_keys"), CMREFID = FAREFID)}}
-}}
+Keys used to merge \code{dataset_facm} with \code{dataset}.}
 
 \item{id_vars}{ID variables
 
-Variables (excluding by_vars) that uniquely identify each observation in \code{dataset_merge}.
-
-\describe{
-\item{Default value}{\code{NULL}}
-}}
+Variables (excluding by_vars) that uniquely identify each observation in \code{dataset_merge}.}
 
 \item{value_var}{The variable of \code{dataset_facm} containing the values of the
-transposed variables
-
-\describe{
-\item{Default value}{\code{FASTRESC}}
-}}
+transposed variables}
 }
 \value{
 The input dataset with ATC variables added

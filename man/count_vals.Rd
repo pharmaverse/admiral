@@ -7,17 +7,9 @@
 count_vals(var, val)
 }
 \arguments{
-\item{var}{A vector
+\item{var}{A vector}
 
-\describe{
-\item{Default value}{none}
-}}
-
-\item{val}{A value
-
-\describe{
-\item{Default value}{none}
-}}
+\item{val}{A value}
 }
 \description{
 Count number of observations where a variable equals a value.

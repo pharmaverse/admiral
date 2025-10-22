@@ -7,11 +7,7 @@
 compute_qual_imputation_dec(character_value_decimal)
 }
 \arguments{
-\item{character_value_decimal}{Character value to determine decimal precision
-
-\describe{
-\item{Default value}{none}
-}}
+\item{character_value_decimal}{Character value to determine decimal precision}
 }
 \value{
 Decimal precision value to add or subtract

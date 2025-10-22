@@ -21,35 +21,20 @@ derive_vars_dtm(
 \arguments{
 \item{dataset}{Input dataset
 
-The variables specified by the \code{dtc} argument are expected to be in the dataset.
-
-\describe{
-\item{Permitted values}{a dataset, i.e., a \code{data.frame} or tibble}
-\item{Default value}{none}
-}}
+The variables specified by the \code{dtc} argument are expected to be in the dataset.}
 
 \item{new_vars_prefix}{Prefix used for the output variable(s).
 
 A character scalar is expected. For the date variable (\verb{*DT}) is appended to
 the specified prefix, for the date imputation flag (\verb{*DTF}), and for the time
 imputation flag (\verb{*TMF}), i.e., for \code{new_vars_prefix = "AST"} the variables
-\code{ASTDT}, \code{ASTDTF}, and \code{ASTTMF} are created.
-
-\describe{
-\item{Permitted values}{a character scalar, i.e., a character vector of length one}
-\item{Default value}{none}
-}}
+\code{ASTDT}, \code{ASTDTF}, and \code{ASTTMF} are created.}
 
 \item{dtc}{The \code{--DTC} date to impute
 
 A character date is expected in a format like \code{yyyy-mm-dd} or
 \code{yyyy-mm-ddThh:mm:ss}. Trailing components can be omitted and \code{-} is a
-valid "missing" value for any component.
-
-\describe{
-\item{Permitted values}{a character date variable}
-\item{Default value}{none}
-}}
+valid "missing" value for any component.}
 
 \item{highest_imputation}{Highest imputation level
 
@@ -65,14 +50,7 @@ missing, \code{NA_character_} is returned.
 
 If \code{"Y"} is specified, \code{date_imputation} should be \code{"first"} or \code{"last"}
 and \code{min_dates} or \code{max_dates} should be specified respectively. Otherwise,
-\code{NA_character_} is returned if the year component is missing.
-
-\describe{
-\item{Permitted values}{\code{"Y"} (year, highest level), \code{"M"} (month), \code{"D"}
-(day), \code{"h"} (hour), \code{"m"} (minute), \code{"s"} (second), \code{"n"} (none, lowest
-level)}
-\item{Default value}{\code{"h"}}
-}}
+\code{NA_character_} is returned if the year component is missing.}
 
 \item{date_imputation}{The value to impute the day/month when a datepart is
 missing.
@@ -94,12 +72,7 @@ middle of the possible range:
 
 The year can not be specified; for imputing the year
 \code{"first"} or \code{"last"} together with \code{min_dates} or \code{max_dates} argument can
-be used (see examples).
-
-\describe{
-\item{Permitted values}{\code{"first"}, \code{"mid"}, \code{"last"}, or user-defined}
-\item{Default value}{\code{"first"}}
-}}
+be used (see examples).}
 
 \item{time_imputation}{The value to impute the time when a timepart is
 missing.
@@ -111,12 +84,7 @@ for the start of the day,
 \item or as a keyword: \code{"first"},\code{"last"} to impute to the start/end of a day.
 }
 
-The argument is ignored if \code{highest_imputation = "n"}.
-
-\describe{
-\item{Permitted values}{\code{"first"}, \code{"last"}, or user-defined}
-\item{Default value}{\code{"first"}}
-}}
+The argument is ignored if \code{highest_imputation = "n"}.}
 
 \item{flag_imputation}{Whether the date/time imputation flag(s) must also be derived.
 
@@ -132,12 +100,7 @@ If \code{"none"} is specified, then no date or time imputation flag is derived.
 
 Please note that CDISC requirements dictate the need for a date/time imputation
 flag if any imputation is performed, so \code{flag_imputation = "none"} should
-only be used if the imputed variable is not part of the final ADaM dataset.
-
-\describe{
-\item{Permitted values}{\code{"auto"}, \code{"date"},\code{"time"}, \code{"both"} or \code{"none"}}
-\item{Default value}{\code{"auto"}}
-}}
+only be used if the imputed variable is not part of the final ADaM dataset.}
 
 \item{min_dates}{Minimum dates
 
@@ -167,12 +130,7 @@ have changed the month although it is not missing (in the \code{dtc} date).
 
 For date variables (not datetime) in the list the time is imputed to
 \code{"00:00:00"}. Specifying date variables makes sense only if the date is
-imputed. If only time is imputed, date variables do not affect the result.
-
-\describe{
-\item{Permitted values}{a list of dates, e.g. \code{list(ymd_hms("2021-07-01T04:03:01"), ymd_hms("2022-05-12T13:57:23"))}}
-\item{Default value}{\code{NULL}}
-}}
+imputed. If only time is imputed, date variables do not affect the result.}
 
 \item{max_dates}{Maximum dates
 
@@ -183,24 +141,14 @@ considered. A date or date-time object is expected.
 
 For date variables (not datetime) in the list the time is imputed to
 \code{"23:59:59"}. Specifying date variables makes sense only if the date is
-imputed. If only time is imputed, date variables do not affect the result.
-
-\describe{
-\item{Permitted values}{a list of dates, e.g. \code{list(ymd_hms("2021-07-01T04:03:01"), ymd_hms("2022-05-12T13:57:23"))}}
-\item{Default value}{\code{NULL}}
-}}
+imputed. If only time is imputed, date variables do not affect the result.}
 
 \item{preserve}{Preserve lower level date/time part when higher order part
 is missing, e.g. preserve day if month is missing or
 preserve minute when hour is missing.
 
 For example \code{"2019---07"} would return \verb{"2019-06-07} if \code{preserve = TRUE}
-(and \code{date_imputation = "mid"}).
-
-\describe{
-\item{Permitted values}{\code{TRUE}, \code{FALSE}}
-\item{Default value}{\code{FALSE}}
-}}
+(and \code{date_imputation = "mid"}).}
 
 \item{ignore_seconds_flag}{ADaM IG states that given SDTM (\code{--DTC}) variable,
 if only hours and minutes are ever collected, and seconds are imputed in
@@ -210,12 +158,7 @@ By default it is assumed that no seconds are collected and \verb{*TMF} shouldn't
 A user can set this to \code{FALSE} if seconds are collected.
 
 The default value of \code{ignore_seconds_flag} is set to \code{TRUE} in
-admiral 1.4.0 and later.
-
-\describe{
-\item{Permitted values}{\code{TRUE}, \code{FALSE}}
-\item{Default value}{\code{TRUE}}
-}}
+admiral 1.4.0 and later.}
 }
 \value{
 The input dataset with the datetime \verb{*DTM} (and the date/time imputation
@@ -249,200 +192,3 @@ Date/Time Derivation Functions that returns variable appended to dataset:
 \concept{der_date_time}
 \keyword{der_date_time}
 \keyword{der_gen}
-\section{Examples}{
-\subsection{Derive a datetime variable imputing time}{
-
-In this example, we derive \code{ASTDTM} from \code{MHSTDTC}. Note that by default the function
-imputes missing time components to \code{00} but doesn't impute missing date components
-and automatically produces the time imputation flag (\code{ASTTMF}).
-
-\if{html}{\out{<div class="sourceCode r">}}\preformatted{library(tibble)
-library(lubridate)
-
-mhdt <- tribble(
-  ~MHSTDTC,
-  "2019-07-18T15:25",
-  "2019-07-18",
-  "2019-02",
-  "2019",
-  "2019---07",
-  ""
-)
-
-derive_vars_dtm(
-  mhdt,
-  new_vars_prefix = "AST",
-  dtc = MHSTDTC
-)
-#> # A tibble: 6 × 3
-#>   MHSTDTC            ASTDTM              ASTTMF
-#>   <chr>              <dttm>              <chr> 
-#> 1 "2019-07-18T15:25" 2019-07-18 15:25:00 <NA>  
-#> 2 "2019-07-18"       2019-07-18 00:00:00 H     
-#> 3 "2019-02"          NA                  <NA>  
-#> 4 "2019"             NA                  <NA>  
-#> 5 "2019---07"        NA                  <NA>  
-#> 6 ""                 NA                  <NA>  }\if{html}{\out{</div>}}}
-\subsection{Impute to the latest (\code{date_imputation = "last"})}{
-
-In this example, we set \code{date_imputation = "last"} to get the last month/day
-for partial dates. We also set \code{time_imputation = "last"}. The function will use
-all or part of \code{23:59:59} for time imputation. Note that \code{highest_imputation} must
-be at least \code{"D"} to perform date imputation. Here we use \code{highest_imputation = "M"}
-to request imputation of month and day (and time). Also note that
-two flag variables are created. By default \code{ASTTMF} is set to \code{NA}
-if only seconds are imputed. Set \code{ignore_seconds_flag = FALSE}
-to have the \code{"S"} flag for \code{ASTTMF}.
-
-\if{html}{\out{<div class="sourceCode r">}}\preformatted{derive_vars_dtm(
- mhdt,
- new_vars_prefix = "AST",
- dtc = MHSTDTC,
- date_imputation = "last",
- time_imputation = "last",
- highest_imputation = "M"
-)
-#> # A tibble: 6 × 4
-#>   MHSTDTC            ASTDTM              ASTDTF ASTTMF
-#>   <chr>              <dttm>              <chr>  <chr> 
-#> 1 "2019-07-18T15:25" 2019-07-18 15:25:59 <NA>   <NA>  
-#> 2 "2019-07-18"       2019-07-18 23:59:59 <NA>   H     
-#> 3 "2019-02"          2019-02-28 23:59:59 D      H     
-#> 4 "2019"             2019-12-31 23:59:59 M      H     
-#> 5 "2019---07"        2019-12-31 23:59:59 M      H     
-#> 6 ""                 NA                  <NA>   <NA>  }\if{html}{\out{</div>}}}
-\subsection{Suppress imputation flags (\code{flag_imputation = "none"})}{
-
-In this example, we derive \code{ASTDTM} but suppress the \code{ASTTMF}. Note that
-function appends missing \code{"hh:mm:ss"} to \code{ASTDTM}. The \code{flag_imputation = "none"}
-call ensures no date/time imputation flag is created. In practice, as per CDISC
-requirements this option can only be selected if the imputed variable is not part
-of the final ADaM dataset.
-
-\if{html}{\out{<div class="sourceCode r">}}\preformatted{derive_vars_dtm(
-  mhdt,
-  new_vars_prefix = "AST",
-  dtc = MHSTDTC,
-  flag_imputation = "none"
-)
-#> # A tibble: 6 × 2
-#>   MHSTDTC            ASTDTM             
-#>   <chr>              <dttm>             
-#> 1 "2019-07-18T15:25" 2019-07-18 15:25:00
-#> 2 "2019-07-18"       2019-07-18 00:00:00
-#> 3 "2019-02"          NA                 
-#> 4 "2019"             NA                 
-#> 5 "2019---07"        NA                 
-#> 6 ""                 NA                 }\if{html}{\out{</div>}}}
-\subsection{Avoid imputation after specified datetimes (\code{max_dates})}{
-
-In this example, we derive \code{AENDTM} where AE end date is imputed to the last date.
-To ensure that the imputed date is not after the death or data cut off date we can
-set \code{max_dates = exprs(DTHDT, DCUTDT)}. Note two flag variables: \code{ASTDTF} and \code{ASTTMF}
-are created. Setting \code{highest_imputation = "Y"} will allow for the missing \code{AEENDTC}
-record to be imputed from \code{max_dates = exprs(DTHDT, DCUTDT)}.
-
-\if{html}{\out{<div class="sourceCode r">}}\preformatted{adae <- tribble(
-   ~AEENDTC,             ~DTHDT,           ~DCUTDT,
-   "2020-12", ymd("2020-12-26"), ymd("2020-12-24"),
-   "2020-11", ymd("2020-12-06"), ymd("2020-12-24"),
-          "", ymd("2020-12-06"), ymd("2020-12-24"),
-"2020-12-20", ymd("2020-12-06"), ymd("2020-12-24")
-)
-
-derive_vars_dtm(
-  adae,
-  dtc = AEENDTC,
-  new_vars_prefix = "AEN",
-  highest_imputation = "Y",
-  date_imputation = "last",
-  time_imputation = "last",
-  max_dates = exprs(DTHDT, DCUTDT)
-)
-#> # A tibble: 4 × 6
-#>   AEENDTC      DTHDT      DCUTDT     AENDTM              AENDTF AENTMF
-#>   <chr>        <date>     <date>     <dttm>              <chr>  <chr> 
-#> 1 "2020-12"    2020-12-26 2020-12-24 2020-12-24 23:59:59 D      H     
-#> 2 "2020-11"    2020-12-06 2020-12-24 2020-11-30 23:59:59 D      H     
-#> 3 ""           2020-12-06 2020-12-24 2020-12-06 23:59:59 Y      H     
-#> 4 "2020-12-20" 2020-12-06 2020-12-24 2020-12-20 23:59:59 <NA>   H     }\if{html}{\out{</div>}}}
-\subsection{Include \code{"S"} for time imputation flag (\code{ignore_seconds_flag})}{
-
-In this example, we set \code{ignore_seconds_flag = FALSE} to include \code{S} for
-seconds in the \code{ASTTMF} variable. The default value of \code{ignore_seconds_flag}
-is \code{TRUE} so the \code{"S"} is not normally displayed. The ADaM IG states that given
-SDTM (\code{--DTC}) variable, if only hours and minutes are ever collected, and
-seconds are imputed in (\verb{*DTM}) as \code{00}, then it is not necessary to
-set (\verb{*TMF}) to \code{"S"}.
-
-\if{html}{\out{<div class="sourceCode r">}}\preformatted{
-mhdt <- tribble(
-~MHSTDTC,
-"2019-07-18T15:25",
-"2019-07-18",
-"2019-02",
-"2019",
-"2019---07",
-""
-)
-
-derive_vars_dtm(
-  mhdt,
-  new_vars_prefix = "AST",
-  dtc = MHSTDTC,
-  highest_imputation = "M",
-  ignore_seconds_flag = FALSE
-)
-#> # A tibble: 6 × 4
-#>   MHSTDTC            ASTDTM              ASTDTF ASTTMF
-#>   <chr>              <dttm>              <chr>  <chr> 
-#> 1 "2019-07-18T15:25" 2019-07-18 15:25:00 <NA>   S     
-#> 2 "2019-07-18"       2019-07-18 00:00:00 <NA>   H     
-#> 3 "2019-02"          2019-02-01 00:00:00 D      H     
-#> 4 "2019"             2019-01-01 00:00:00 M      H     
-#> 5 "2019---07"        2019-01-01 00:00:00 M      H     
-#> 6 ""                 NA                  <NA>   <NA>  }\if{html}{\out{</div>}}}
-\subsection{Preserve lower components if higher ones were imputed (\code{preserve})}{
-
-In this example, we impute dates as the middle month/day with \code{date_imputation = "mid"}
-and impute time as last (\code{23:59:59}) with \code{time_imputation = "last"}.
-We use the \code{preserve} argument to "preserve" partial dates.  For example,
-\code{"2019---18T15:-:05"}, will be displayed as \code{"2019-06-18 15:59:05"} by setting
-\code{preserve = TRUE}.
-
-\if{html}{\out{<div class="sourceCode r">}}\preformatted{mhdt <- tribble(
-~MHSTDTC,
-"2019-07-18T15:25",
-"2019---18T15:-:05",
-"2019-07-18",
-"2019-02",
-"2019",
-"2019---07",
-""
-)
-
-derive_vars_dtm(
-  mhdt,
-  new_vars_prefix = "AST",
-  dtc = MHSTDTC,
-  highest_imputation = "M",
-  date_imputation = "mid",
-  time_imputation = "last",
-  preserve = TRUE,
-  ignore_seconds_flag = FALSE
-)
-#> # A tibble: 7 × 4
-#>   MHSTDTC             ASTDTM              ASTDTF ASTTMF
-#>   <chr>               <dttm>              <chr>  <chr> 
-#> 1 "2019-07-18T15:25"  2019-07-18 15:25:59 <NA>   S     
-#> 2 "2019---18T15:-:05" 2019-06-18 15:59:05 M      M     
-#> 3 "2019-07-18"        2019-07-18 23:59:59 <NA>   H     
-#> 4 "2019-02"           2019-02-15 23:59:59 D      H     
-#> 5 "2019"              2019-06-30 23:59:59 M      H     
-#> 6 "2019---07"         2019-06-07 23:59:59 M      H     
-#> 7 ""                  NA                  <NA>   <NA>  }\if{html}{\out{</div>}}}
-\subsection{Further examples}{
-
-Further example usages of this function can be found in the
-\code{vignette("imputation")}.}}
-

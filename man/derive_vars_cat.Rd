@@ -9,11 +9,7 @@ derive_vars_cat(dataset, definition, by_vars = NULL)
 \arguments{
 \item{dataset}{Input dataset
 
-The variables specified by the \code{by_vars} and \code{definition} arguments are expected to be in the dataset.
-
-\describe{
-\item{Default value}{none}
-}}
+The variables specified by the \code{by_vars} and \code{definition} arguments are expected to be in the dataset.}
 
 \item{definition}{List of expressions created by \code{exprs()}.
 Must be in rectangular format and specified using the same syntax as when creating
@@ -41,22 +37,14 @@ e.g. if \code{by_vars} is specified as \code{exprs(VSTEST)}:
 \if{html}{\out{<div class="sourceCode r">}}\preformatted{exprs(~VSTEST,   ~condition,  ~AVALCAT1, ~AVALCA1N,
       "Height", AVAL >= 140, ">=140 cm",         1,
       "Height",  AVAL < 140,  "<140 cm",         2)
-}\if{html}{\out{</div>}}
-
-\describe{
-\item{Default value}{none}
-}}
+}\if{html}{\out{</div>}}}
 
 \item{by_vars}{list of expressions with one element. \code{NULL} by default.
 Allows for specifying by groups, e.g. \code{exprs(PARAMCD)}.
 Variable must be present in both \code{dataset} and \code{definition}.
 The conditions in \code{definition} are applied only to those records that match \code{by_vars}.
 The categorization variables are set to \code{NA} for records
-not matching any of the by groups in \code{definition}.
-
-\describe{
-\item{Default value}{\code{NULL}}
-}}
+not matching any of the by groups in \code{definition}.}
 }
 \value{
 The input dataset with the new variables defined in \code{definition} added

@@ -14,25 +14,13 @@ derive_var_atoxgr(
 \item{dataset}{Input dataset
 
 The variables specified by the \code{lotox_description_var} and \code{hitox_description_var} arguments are expected to be in the dataset.
-\code{ATOXGRL}, and \code{ATOXGRH} are expected as well.
-
-\describe{
-\item{Default value}{none}
-}}
+\code{ATOXGRL}, and \code{ATOXGRH} are expected as well.}
 
 \item{lotox_description_var}{Variable containing the toxicity grade description
-for low values, eg. "Anemia"
-
-\describe{
-\item{Default value}{\code{ATOXDSCL}}
-}}
+for low values, eg. "Anemia"}
 
 \item{hitox_description_var}{Variable containing the toxicity grade description
-for high values, eg. "Hemoglobin Increased".
-
-\describe{
-\item{Default value}{\code{ATOXDSCH}}
-}}
+for high values, eg. "Hemoglobin Increased".}
 }
 \value{
 The input data set with the character variable added

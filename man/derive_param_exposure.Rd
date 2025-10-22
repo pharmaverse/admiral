@@ -16,42 +16,25 @@ derive_param_exposure(
 \arguments{
 \item{dataset}{Input dataset
 
-The variables specified by the \code{by_vars} argument are expected to be in the dataset.
-
-\describe{
-\item{Default value}{\code{NULL}}
-}}
+The variables specified by the \code{by_vars} argument are expected to be in the dataset.}
 
 \item{dataset_add}{Additional dataset
 
 The variables specified for \code{by_vars}, \code{analysis_var}, \code{PARAMCD},
 alongside either \code{ASTDTM} and \code{AENDTM} or \code{ASTDT} and \code{AENDT} are also expected.
 Observations from the specified dataset are going to be used to calculate and added
-as new records to the input dataset (\code{dataset}).
-
-\describe{
-\item{Default value}{none}
-}}
+as new records to the input dataset (\code{dataset}).}
 
 \item{by_vars}{Grouping variables
 
 For each group defined by \code{by_vars} an observation is added to the output
 dataset. Only variables specified in \code{by_vars} will be populated
-in the newly created records.
-
-\describe{
-\item{Default value}{none}
-}}
+in the newly created records.}
 
 \item{input_code}{Required parameter code
 
 The observations where \code{PARAMCD} equals the specified value are considered to compute the
-summary record.
-
-\describe{
-\item{Permitted values}{A character of \code{PARAMCD} value}
-\item{Default value}{none}
-}}
+summary record.}
 
 \item{filter_add}{Filter condition as logical expression to apply during
 summary calculation. By default, filtering expressions are computed within
@@ -64,10 +47,6 @@ For example,
 values greater than mean of \code{AVAL} with in \code{by_vars}.
 \item \code{filter_add = (dplyr::n() > 2)} will filter n count of \code{by_vars} greater
 than 2.
-}
-
-\describe{
-\item{Default value}{\code{NULL}}
 }}
 
 \item{set_values_to}{Variable-value pairs
@@ -78,11 +57,6 @@ Set a list of variables to some specified value for the new observation(s)
 \item RHS refers to the values to set to the variable. This can be a string, a symbol, a numeric
 value, \code{NA}, or an expression.
 (e.g.  \code{exprs(PARAMCD = "TDOSE",PARCAT1 = "OVERALL")}).
-}
-
-\describe{
-\item{Permitted values}{List of variable-value pairs}
-\item{Default value}{\code{NULL}}
 }}
 }
 \value{
