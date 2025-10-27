@@ -47,14 +47,14 @@ jobs:
         shell: bash
   style:
     name: Code Style
-    uses: pharmaverse/admiralci/.github/workflows/style.yml@main
+    uses: pharmaverse/admiralci/.github/workflows/style.yml@206_fix_cicd
     if: github.event_name == 'pull_request'
     needs: get_r_version
     with:
       r-version: "${{ needs.get_r_version.outputs.r-version }}"
   spellcheck:
     name: Spelling
-    uses: pharmaverse/admiralci/.github/workflows/spellcheck.yml@main
+    uses: pharmaverse/admiralci/.github/workflows/spellcheck.yml@206_fix_cicd
     if: github.event_name == 'pull_request'
     needs: get_r_version
     with:
@@ -68,7 +68,7 @@ jobs:
       r-version: "${{ needs.get_r_version.outputs.r-version }}"
   check:
     name: Check
-    uses: pharmaverse/admiralci/.github/workflows/r-cmd-check.yml@main
+    uses: pharmaverse/admiralci/.github/workflows/r-cmd-check.yml@206_fix_cicd
     with:
       error-on: warning # TODO: find a way to ignore specific notes
     if: github.event_name == 'pull_request'
@@ -91,14 +91,14 @@ jobs:
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
   linter:
     name: Lint
-    uses: pharmaverse/admiralci/.github/workflows/lintr.yml@main
+    uses: pharmaverse/admiralci/.github/workflows/lintr.yml@206_fix_cicd
     needs: get_r_version
     if: github.event_name == 'pull_request'
     with:
       r-version: "${{ needs.get_r_version.outputs.r-version }}"
   links:
     name: Links
-    uses: pharmaverse/admiralci/.github/workflows/links.yml@main
+    uses: pharmaverse/admiralci/.github/workflows/links.yml@206_fix_cicd
     if: github.event_name == 'pull_request'
   coverage:
     name: Code Coverage
@@ -114,7 +114,7 @@ jobs:
       skip-coverage-badges: false
   man-pages:
     name: Man Pages
-    uses: pharmaverse/admiralci/.github/workflows/man-pages.yml@main
+    uses: pharmaverse/admiralci/.github/workflows/man-pages.yml@206_fix_cicd
     if: github.event_name == 'pull_request'
     needs: get_r_version
     with:
