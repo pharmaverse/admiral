@@ -1,7 +1,9 @@
 #' Derive First or Last Datetime from Multiple Sources
 #'
 #' @description
-#' `r lifecycle::badge("deprecated")` The `derive_var_extreme_dtm()`
+#' `r lifecycle::badge("deprecated")`
+#'
+#' The `derive_var_extreme_dtm()`
 #' function has been deprecated in favor of `derive_vars_extreme_event()`.
 #'
 #' Add the first or last datetime from multiple sources to the dataset, e.g.,

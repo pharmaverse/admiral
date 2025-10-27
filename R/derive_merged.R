@@ -1166,67 +1166,20 @@ derive_var_merged_summary <- function(dataset,
     )
   )
 
+  # Function code now replaced with call to new function derive_vars_merged_summary(),
+  # minimal checks are executed prior to call to ensure all required arguments are present
+
+  assert_data_frame(dataset)
+  assert_data_frame(dataset_add)
   assert_vars(by_vars)
-  by_vars_left <- replace_values_by_names(by_vars)
-  by_vars_right <- chr2vars(paste(vars2chr(by_vars)))
-  # once new_var is removed new_vars should be mandatory
-  assert_expr_list(new_vars, named = TRUE, optional = TRUE)
-  filter_add <-
-    assert_filter_cond(enexpr(filter_add), optional = TRUE)
-  assert_data_frame(
-    dataset,
-    required_vars = by_vars_left
-  )
-  assert_data_frame(
-    dataset_add,
-    required_vars = expr_c(by_vars_right, extract_vars(new_vars))
+
+  derive_vars_merged_summary(
+    dataset = dataset,
+    dataset_add = dataset_add,
+    by_vars = by_vars,
+    new_vars = new_vars,
+    filter_add = !!enexpr(filter_add),
+    missing_values = missing_values
   )
 
-  # Summarise the analysis value and merge to the original dataset
-  # If for one of the new variables no summary function is used, i.e., more than
-  # one record is created per by group, the error from signal_duplicates_records()
-  # need to be updated and the warning from dplyr needs to be suppressed as it
-  # is misleading.
-  tryCatch(
-    withCallingHandlers(
-      derive_vars_merged(
-        dataset,
-        dataset_add = derive_summary_records(
-          dataset_add = dataset_add,
-          by_vars = by_vars_right,
-          filter_add = !!filter_add,
-          set_values_to = new_vars,
-        ) %>%
-          select(!!!by_vars_right, names(new_vars)),
-        by_vars = by_vars,
-        missing_values = missing_values
-      ),
-      warning = function(cnd) {
-        if (any(str_detect(
-          cnd$message,
-          fixed("Returning more (or less) than 1 row per `summarise()` group was deprecated")
-        ))) {
-          cnd_muffle(cnd)
-        }
-      }
-    ),
-    duplicate_records = function(cnd) {
-      cli_abort(
-        c(
-          paste(
-            "After summarising, the dataset contains duplicate records with",
-            "respect to {.var {cnd$by_vars}}."
-          ),
-          paste(
-            "Please check {.arg new_vars} if summary functions like {.fun mean},",
-            "{.fun sum}, ... are used on the right hand side."
-          ),
-          i = "Run {.run admiral::get_duplicates_dataset()} to access the duplicate records"
-        ),
-        class = cnd$class,
-        call = NULL,
-        by_vars = cnd$by_vars
-      )
-    }
-  )
 }
