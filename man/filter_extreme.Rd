@@ -115,7 +115,7 @@ ex \%>\%
   select(USUBJID, EXTRT, EXDOSE)
 }
 \seealso{
-Utilities for Filtering Observations: 
+Utilities for Filtering Observations:
 \code{\link{count_vals}()},
 \code{\link{filter_exist}()},
 \code{\link{filter_joined}()},

@@ -60,7 +60,7 @@ compute_qtc(qt = 350, rr = 857, method = "Sagie")
 \seealso{
 \code{\link[=derive_param_qtc]{derive_param_qtc()}}
 
-BDS-Findings Functions that returns a vector: 
+BDS-Findings Functions that returns a vector:
 \code{\link{compute_bmi}()},
 \code{\link{compute_bsa}()},
 \code{\link{compute_egfr}()},

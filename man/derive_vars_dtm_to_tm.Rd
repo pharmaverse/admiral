@@ -63,7 +63,7 @@ adcm \%>\%
   select(USUBJID, starts_with("TRT"), starts_with("AS"), starts_with("AE"))
 }
 \seealso{
-Date/Time Derivation Functions that returns variable appended to dataset: 
+Date/Time Derivation Functions that returns variable appended to dataset:
 \code{\link{derive_var_trtdurd}()},
 \code{\link{derive_vars_dt}()},
 \code{\link{derive_vars_dtm}()},

@@ -219,7 +219,7 @@ dataset is provided, a new dataset is created.
 \seealso{
 \code{\link[=derive_summary_records]{derive_summary_records()}}
 
-BDS-Findings Functions for adding Parameters/Records: 
+BDS-Findings Functions for adding Parameters/Records:
 \code{\link{default_qtc_paramcd}()},
 \code{\link{derive_expected_records}()},
 \code{\link{derive_extreme_event}()},
