@@ -29,6 +29,7 @@ is specified. (#2875)
 
 - The BDS Findings vignette was updated to move derivation of `ASEQ` after any new rows. (#2780)
 - `ADLBHY` template was updated to keep `PARAM` in final dataset. (#2804)
+- A link to the [{admiral} ecosystem](https://pharmaverse.org/e2eclinical/adam/) page was added to the README sidebar and main text. (#2881)
 
 ## Various
 
