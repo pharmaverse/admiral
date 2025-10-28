@@ -402,10 +402,10 @@ derive_vars_merged <- function(dataset,
   by_vars_right <- chr2vars(paste(vars2chr(by_vars)))
   assert_expr_list(order, optional = TRUE)
   assert_expr_list(new_vars, optional = TRUE)
-  assert_data_frame(dataset, required_vars = by_vars_left)
+  assert_data_frame(dataset,required_vars = by_vars_left)
   assert_data_frame(
     dataset_add,
-    required_vars = expr_c(
+    required_vars=expr_c(
       by_vars_right,
       setdiff(extract_vars(order), replace_values_by_names(new_vars)),
       extract_vars(new_vars)
