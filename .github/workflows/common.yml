@@ -70,7 +70,7 @@ jobs:
     name: Check
     uses: pharmaverse/admiralci/.github/workflows/r-cmd-check.yml@206_fix_cicd
     with:
-      error-on: warning # TODO: find a way to ignore specific notes
+      error-on: note # TODO: find a way to ignore specific notes
     if: github.event_name == 'pull_request'
   docs:
     name: Documentation
@@ -121,7 +121,7 @@ jobs:
       r-version: "${{ needs.get_r_version.outputs.r-version }}"
   templates:
     name: Check Templates
-    uses: pharmaverse/admiralci/.github/workflows/check-templates.yml@main
+    uses: pharmaverse/admiralci/.github/workflows/check-templates.yml@206_fix_cicd
     secrets: inherit
     if: github.event_name == 'pull_request' || github.event_name == 'workflow_dispatch'
     needs: get_r_version
