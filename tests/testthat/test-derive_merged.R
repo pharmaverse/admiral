@@ -706,7 +706,7 @@ test_that("derive_vars_merged_lookup Test 29: test get_not_mapped with unmapped 
     dataset_add = param_lookup,
     by_vars = exprs(VSTESTCD, VSTEST),
     new_vars = exprs(PARAMCD, PARAM = DESCRIPTION),
-    print_not_mapped = TRUE
+    print_not_mapped = FALSE
   )
 
   # Get the not mapped records
