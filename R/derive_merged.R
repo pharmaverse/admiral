@@ -3,7 +3,7 @@
 #'
 #' Add new variable(s) to the input dataset based on variables from another
 #' dataset. The observations to merge can be selected by a condition
-#' (`filter_add` argument) and/or selecting the first or last observation for
+#' (`filter_add` argument) and/or selcting the first or last observation for
 #' each by group (`order` and `mode` argument).
 #'
 #' @param dataset
@@ -400,12 +400,12 @@ derive_vars_merged <- function(dataset,
   assert_vars(by_vars)
   by_vars_left <- replace_values_by_names(by_vars)
   by_vars_right <- chr2vars(paste(vars2chr(by_vars)))
-  assert_expr_list(order, optional = TRUE)
+  assert_expr_list(order,optional = TRUE)
   assert_expr_list(new_vars, optional = TRUE)
   assert_data_frame(dataset, required_vars = by_vars_left)
   assert_data_frame(
     dataset_add,
-    required_vars = expr_c(
+    required_vars=expr_c(
       by_vars_right,
       setdiff(extract_vars(order), replace_values_by_names(new_vars)),
       extract_vars(new_vars)
