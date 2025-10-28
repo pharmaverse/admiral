@@ -701,12 +701,14 @@ test_that("derive_vars_merged_lookup Test 29: test get_not_mapped with unmapped 
   )
 
   # Run derive_vars_merged_lookup with print_not_mapped = TRUE
-  actual <- derive_vars_merged_lookup(
-    vs,
-    dataset_add = param_lookup,
-    by_vars = exprs(VSTESTCD, VSTEST),
-    new_vars = exprs(PARAMCD, PARAM = DESCRIPTION),
-    print_not_mapped = FALSE
+  expect_snapshot(
+    actual <- derive_vars_merged_lookup(
+      vs,
+      dataset_add = param_lookup,
+      by_vars = exprs(VSTESTCD, VSTEST),
+      new_var = exprs(PARAMCD, PARAM = DESCRIPTION),
+      print_not_mapped = TRUE
+    )
   )
 
   # Get the not mapped records

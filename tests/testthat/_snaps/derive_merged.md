@@ -136,3 +136,17 @@
       Please check `new_vars` if summary functions like `mean()`, `sum()`, ... are used on the right hand side.
       i Run `admiral::get_duplicates_dataset()` to access the duplicate records
 
+# derive_vars_merged_lookup Test 29: test get_not_mapped with unmapped records
+
+    Code
+      actual <- derive_vars_merged_lookup(vs, dataset_add = param_lookup, by_vars = exprs(
+        VSTESTCD, VSTEST), new_var = exprs(PARAMCD, PARAM = DESCRIPTION),
+      print_not_mapped = TRUE)
+    Message
+      List of `VSTESTCD` and `VSTEST` not mapped:
+      # A tibble: 1 x 2
+      VSTESTCD VSTEST
+      <chr> <chr>
+      1 DIABP Diastolic Blood Pressure
+      i Run `admiral::get_not_mapped()` to access the full list.
+
