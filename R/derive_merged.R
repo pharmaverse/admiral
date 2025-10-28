@@ -398,14 +398,14 @@ derive_vars_merged <- function(dataset,
                                relationship = NULL) {
   filter_add <- assert_filter_cond(enexpr(filter_add), optional = TRUE)
   assert_vars(by_vars)
-  by_vars_left <-replace_values_by_names(by_vars)
+  by_vars_left <- replace_values_by_names(by_vars)
   by_vars_right <- chr2vars(paste(vars2chr(by_vars)))
   assert_expr_list(order, optional = TRUE)
   assert_expr_list(new_vars, optional = TRUE)
-  assert_data_frame(dataset,required_vars = by_vars_left)
+  assert_data_frame(dataset, required_vars = by_vars_left)
   assert_data_frame(
     dataset_add,
-    required_vars=expr_c(
+    required_vars = expr_c(
       by_vars_right,
       setdiff(extract_vars(order), replace_values_by_names(new_vars)),
       extract_vars(new_vars)
