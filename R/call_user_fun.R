@@ -1,7 +1,8 @@
 #' Calls a Function Provided by the User
 #'
 #' @description
-#' r lifecycle::badge("deprecated")
+#' `r lifecycle::badge("deprecated")`
+#'
 #' Calls a function provided by the user and adds the function call to the error
 #' message if the call fails.
 
