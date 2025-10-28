@@ -216,7 +216,7 @@ the additional dataset (\code{dataset_add}).
 \description{
 Add new variable(s) to the input dataset based on variables from another
 dataset. The observations to merge can be selected by a condition
-(\code{filter_add} argument) and/or selcting the first or last observation for
+(\code{filter_add} argument) and/or selecting the first or last observation for
 each by group (\code{order} and \code{mode} argument).
 }
 \details{
