@@ -2,7 +2,7 @@
 % Please edit documentation in R/derive_param_bsa.R
 \name{compute_bsa}
 \alias{compute_bsa}
-\title{Compute Body Face Area (BSA)}
+\title{Compute Body Surface Area (BSA)}
 \usage{
 compute_bsa(height = height, weight = weight, method)
 }
