@@ -348,10 +348,53 @@ test_that("derive_vars_merged Test 15: error if not unique, no order, check_type
   )
 })
 
+## Test 16: merge relationship as 'many-to-one' ----
+test_that("derive_vars_merged_summary Test 16: merge relationship as 'many-to-one'", {
+  actual <- derive_vars_merged(advs,
+                               dataset_add = adsl,
+                               by_vars = exprs(USUBJID),
+                               new_vars = exprs(SEX),
+                               relationship = "many-to-one"
+  )
+
+  expected <- left_join(advs, select(adsl, USUBJID, SEX), by = "USUBJID")
+
+  expect_dfs_equal(
+    base = expected,
+    compare = actual,
+    keys = c("USUBJID", "AVISIT")
+  )
+})
+
+## Test 17: error incorrect 'one-to-one' ----
+test_that("derive_vars_merged_summary Test 17: error incorrect 'one-to-one'", {
+  expect_snapshot(
+    derive_vars_merged(advs,
+                       dataset_add = adsl,
+                       by_vars = exprs(USUBJID),
+                       new_vars = exprs(SEX),
+                       relationship = "one-to-one"
+    ),
+    error = TRUE
+  )
+})
+
+## Test 18: merge sel vars 'one-to-one' ----
+test_that("derive_vars_merged_summary Test 18: merge sel vars 'one-to-one'", {
+  expect_snapshot(
+    derive_vars_merged(adsl,
+                       dataset_add = advs,
+                       by_vars = exprs(USUBJID),
+                       new_vars = exprs(WEIGHTBL = AVAL),
+                       filter_add = AVISIT == "BASELINE",
+                       relationship = "one-to-one"
+    )
+  )
+})
 
 # derive_var_merged_exist_flag ----
-## Test 16: merge existence flag ----
-test_that("derive_var_merged_exist_flag Test 16: merge existence flag", {
+## Test 19: merge existence flag ----
+test_that("derive_var_merged_exist_flag Test 19: merge existence flag", {
   actual <- derive_var_merged_exist_flag(
     adsl,
     advs,
@@ -368,8 +411,8 @@ test_that("derive_var_merged_exist_flag Test 16: merge existence flag", {
   )
 })
 
-## Test 17: by_vars with rename ----
-test_that("derive_var_merged_exist_flag Test 17: by_vars with rename", {
+## Test 20: by_vars with rename ----
+test_that("derive_var_merged_exist_flag Test 20: by_vars with rename", {
   actual <- derive_var_merged_exist_flag(
     adsl,
     dataset_add = advs1,
@@ -390,8 +433,8 @@ test_that("derive_var_merged_exist_flag Test 17: by_vars with rename", {
 })
 
 # derive_vars_merged_lookup ----
-## Test 18: merge lookup table ----
-test_that("derive_vars_merged_lookup Test 18: merge lookup table", {
+## Test 21: merge lookup table ----
+test_that("derive_vars_merged_lookup Test 21: merge lookup table", {
   param_lookup <- tibble::tribble(
     ~VSTESTCD, ~VSTEST, ~PARAMCD, ~DESCRIPTION,
     "WEIGHT", "Weight", "WEIGHT", "Weight (kg)",
@@ -426,8 +469,8 @@ test_that("derive_vars_merged_lookup Test 18: merge lookup table", {
 
 
 ## the lookup table
-## Test 19:  all by_vars have records in the lookup table ----
-test_that("derive_vars_merged_lookup Test 19:  all by_vars have records in the lookup table", {
+## Test 22:  all by_vars have records in the lookup table ----
+test_that("derive_vars_merged_lookup Test 22:  all by_vars have records in the lookup table", {
   param_lookup <- tibble::tribble(
     ~VSTESTCD, ~VSTEST, ~PARAMCD, ~DESCRIPTION,
     "WEIGHT", "Weight", "WEIGHT", "Weight (kg)",
@@ -462,8 +505,8 @@ test_that("derive_vars_merged_lookup Test 19:  all by_vars have records in the l
   )
 })
 
-## Test 20: by_vars with rename ----
-test_that("derive_vars_merged_lookup Test 20: by_vars with rename", {
+## Test 23: by_vars with rename ----
+test_that("derive_vars_merged_lookup Test 23: by_vars with rename", {
   param_lookup <- tibble::tribble(
     ~TESTCD, ~VSTEST, ~PARAMCD, ~DESCRIPTION,
     "WEIGHT", "Weight", "WEIGHT", "Weight (kg)",
@@ -497,8 +540,8 @@ test_that("derive_vars_merged_lookup Test 20: by_vars with rename", {
 
 
 # get_not_mapped ----
-## Test 21: not all by_vars have records in the lookup table ----
-test_that("get_not_mapped Test 21: not all by_vars have records in the lookup table", {
+## Test 24: not all by_vars have records in the lookup table ----
+test_that("get_not_mapped Test 24: not all by_vars have records in the lookup table", {
   param_lookup <- tibble::tribble(
     ~VSTESTCD, ~VSTEST, ~PARAMCD, ~DESCRIPTION,
     "WEIGHT", "Weight", "WEIGHT", "Weight (kg)",
@@ -535,8 +578,8 @@ test_that("get_not_mapped Test 21: not all by_vars have records in the lookup ta
 })
 
 # derive_vars_merged_summary ----
-## Test 22: dataset == dataset_add, no filter ----
-test_that("derive_vars_merged_summary Test 22: dataset == dataset_add, no filter", {
+## Test 25: dataset == dataset_add, no filter ----
+test_that("derive_vars_merged_summary Test 25: dataset == dataset_add, no filter", {
   expected <- tibble::tribble(
     ~AVISIT,  ~ASEQ, ~AVAL, ~MEANVIS,
     "WEEK 1",     1,    10,       10,
@@ -562,8 +605,8 @@ test_that("derive_vars_merged_summary Test 22: dataset == dataset_add, no filter
   )
 })
 
-## Test 23: dataset != dataset_add, filter ----
-test_that("derive_vars_merged_summary Test 23: dataset != dataset_add, filter", {
+## Test 26: dataset != dataset_add, filter ----
+test_that("derive_vars_merged_summary Test 26: dataset != dataset_add, filter", {
   expected <- tibble::tribble(
     ~USUBJID, ~MEANPBL,
     "1",          13.5,
@@ -594,8 +637,8 @@ test_that("derive_vars_merged_summary Test 23: dataset != dataset_add, filter", 
   )
 })
 
-## Test 24: by_vars with rename ----
-test_that("derive_vars_merged_summary Test 24: by_vars with rename", {
+## Test 27: by_vars with rename ----
+test_that("derive_vars_merged_summary Test 27: by_vars with rename", {
   expected <- tibble::tribble(
     ~AVISIT,  ~ASEQ, ~AVAL, ~MEANVIS,
     "WEEK 1",     1,    10,       10,
@@ -619,50 +662,6 @@ test_that("derive_vars_merged_summary Test 24: by_vars with rename", {
       new_vars = exprs(MEANVIS = mean(AVAL, na.rm = TRUE))
     ),
     keys = c("AVISIT", "ASEQ")
-  )
-})
-
-## Test 25: merge relationship as 'many-to-one' ----
-test_that("derive_vars_merged_summary Test 25: merge relationship as 'many-to-one'", {
-  actual <- derive_vars_merged(advs,
-    dataset_add = adsl,
-    by_vars = exprs(USUBJID),
-    new_vars = exprs(SEX),
-    relationship = "many-to-one"
-  )
-
-  expected <- left_join(advs, select(adsl, USUBJID, SEX), by = "USUBJID")
-
-  expect_dfs_equal(
-    base = expected,
-    compare = actual,
-    keys = c("USUBJID", "AVISIT")
-  )
-})
-
-## Test 26: error incorrect 'one-to-one' ----
-test_that("derive_vars_merged_summary Test 26: error incorrect 'one-to-one'", {
-  expect_snapshot(
-    derive_vars_merged(advs,
-      dataset_add = adsl,
-      by_vars = exprs(USUBJID),
-      new_vars = exprs(SEX),
-      relationship = "one-to-one"
-    ),
-    error = TRUE
-  )
-})
-
-## Test 27: merge sel vars 'one-to-one' ----
-test_that("derive_vars_merged_summary Test 27: merge sel vars 'one-to-one'", {
-  expect_snapshot(
-    derive_vars_merged(adsl,
-      dataset_add = advs,
-      by_vars = exprs(USUBJID),
-      new_vars = exprs(WEIGHTBL = AVAL),
-      filter_add = AVISIT == "BASELINE",
-      relationship = "one-to-one"
-    )
   )
 })
 
