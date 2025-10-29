@@ -861,7 +861,8 @@ test_that("derive_var_merged_summary Test 35: error if no summary function", {
   )
 })
 
-test_that("derive_var_merged_summary Test 31: deprecation message", {
+## Test 36: deprecation message ----
+test_that("derive_var_merged_summary Test 36: deprecation message", {
   expected <- tibble::tribble(
     ~AVISIT,  ~ASEQ, ~AVAL, ~MEANVIS,
     "WEEK 1",     1,    10,       10,

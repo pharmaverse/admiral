@@ -1181,5 +1181,4 @@ derive_var_merged_summary <- function(dataset,
     filter_add = !!enexpr(filter_add),
     missing_values = missing_values
   )
-
 }

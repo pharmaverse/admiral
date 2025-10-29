@@ -172,7 +172,7 @@
       Please check `new_vars` if summary functions like `mean()`, `sum()`, ... are used on the right hand side.
       i Run `admiral::get_duplicates_dataset()` to access the duplicate records
 
-# derive_var_merged_summary Test 31: deprecation message
+# derive_var_merged_summary Test 36: deprecation message
 
     Code
       derive_var_merged_summary(adbds, dataset_add = adbds1, by_vars = exprs(AVISIT = VISIT),
