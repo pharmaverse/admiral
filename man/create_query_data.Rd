@@ -213,7 +213,7 @@ create_query_data(
 \code{\link[=derive_vars_query]{derive_vars_query()}}, \code{\link[=query]{query()}}, \code{\link[=basket_select]{basket_select()}},
 \code{vignette("queries_dataset")}
 
-Creating auxiliary datasets: 
+Creating auxiliary datasets:
 \code{\link{consolidate_metadata}()},
 \code{\link{create_period_dataset}()},
 \code{\link{create_single_dose_dataset}()}

@@ -152,7 +152,7 @@ derive_vars_period(
 \seealso{
 \code{\link[=create_period_dataset]{create_period_dataset()}}
 
-ADSL Functions that returns variable appended to dataset: 
+ADSL Functions that returns variable appended to dataset:
 \code{\link{derive_var_age_years}()},
 \code{\link{derive_vars_aage}()},
 \code{\link{derive_vars_extreme_event}()}

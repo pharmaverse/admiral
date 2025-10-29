@@ -40,7 +40,7 @@ compute_bmi(height = 170, weight = 75)
 \seealso{
 \code{\link[=derive_param_bmi]{derive_param_bmi()}}
 
-BDS-Findings Functions that returns a vector: 
+BDS-Findings Functions that returns a vector:
 \code{\link{compute_bsa}()},
 \code{\link{compute_egfr}()},
 \code{\link{compute_framingham}()},

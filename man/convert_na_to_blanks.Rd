@@ -53,7 +53,7 @@ print(df)
 convert_na_to_blanks(df)
 }
 \seealso{
-Utilities for Formatting Observations: 
+Utilities for Formatting Observations:
 \code{\link{convert_blanks_to_na}()},
 \code{\link{yn_to_numeric}()}
 }
