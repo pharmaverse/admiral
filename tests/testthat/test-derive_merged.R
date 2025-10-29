@@ -786,7 +786,7 @@ test_that("derive_var_merged_summary Test 31: by_vars with rename", {
 })
 
 ## Test 32: merge relationship as 'many-to-one' ----
-test_that("derive_var_merged_summary Test 32: merge relationship as 'many-to-one'", {
+test_that("derive_var_merged Test 32: merge relationship as 'many-to-one'", {
   withr::local_options(list(lifecycle_verbosity = "quiet"))
 
   actual <- derive_vars_merged(advs,
@@ -806,7 +806,7 @@ test_that("derive_var_merged_summary Test 32: merge relationship as 'many-to-one
 })
 
 ## Test 33: error incorrect 'one-to-one' ----
-test_that("derive_var_merged_summary Test 33: error incorrect 'one-to-one'", {
+test_that("derive_var_merged Test 33: error incorrect 'one-to-one'", {
   withr::local_options(list(lifecycle_verbosity = "quiet"))
 
   expect_snapshot(
@@ -821,7 +821,7 @@ test_that("derive_var_merged_summary Test 33: error incorrect 'one-to-one'", {
 })
 
 ## Test 34: merge sel vars 'one-to-one' ----
-test_that("derive_var_merged_summary Test 34: merge sel vars 'one-to-one'", {
+test_that("derive_var_merged Test 34: merge sel vars 'one-to-one'", {
   withr::local_options(list(lifecycle_verbosity = "quiet"))
 
   expect_snapshot(

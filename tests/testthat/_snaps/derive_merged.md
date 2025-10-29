@@ -136,7 +136,7 @@
       Please check `new_vars` if summary functions like `mean()`, `sum()`, ... are used on the right hand side.
       i Run `admiral::get_duplicates_dataset()` to access the duplicate records
 
-# derive_var_merged_summary Test 33: error incorrect 'one-to-one'
+# derive_var_merged Test 33: error incorrect 'one-to-one'
 
     Code
       derive_vars_merged(advs, dataset_add = adsl, by_vars = exprs(USUBJID),
@@ -146,7 +146,7 @@
       ! Each row in `dataset_add` must match at most 1 row in `dataset`.
       i Row 1 of `dataset_add` matches multiple rows in `dataset`.
 
-# derive_var_merged_summary Test 34: merge sel vars 'one-to-one'
+# derive_var_merged Test 34: merge sel vars 'one-to-one'
 
     Code
       derive_vars_merged(adsl, dataset_add = advs, by_vars = exprs(USUBJID),
