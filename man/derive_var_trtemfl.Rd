@@ -182,7 +182,7 @@ treatment-emergent AE assignment in the following
 See the final example in the examples section below.
 }
 \seealso{
-OCCDS Functions: 
+OCCDS Functions:
 \code{\link{derive_vars_atc}()},
 \code{\link{derive_vars_query}()}
 }

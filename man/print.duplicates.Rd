@@ -26,7 +26,7 @@ No return value, called for side effects
 Print \code{duplicates} Objects
 }
 \seealso{
-Utilities for printing: 
+Utilities for printing:
 \code{\link{print.adam_templates}()},
 \code{\link{print.source}()},
 \code{\link{print_named_list}()}

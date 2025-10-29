@@ -496,7 +496,7 @@ derive_param_computed <- function(dataset = NULL,
     hori_data <- filter(
       hori_data,
       !!!parse_exprs(map_chr(
-        na_vars,
+        unname(na_vars),
         ~ str_c("!is.na(", .x, ")")
       ))
     )
@@ -721,7 +721,7 @@ get_hori_data <- function(dataset,
 
   list(
     hori_data = bind_rows(hori_data) %>%
-      select(!!!by_vars, any_of(analysis_vars_chr)),
+      select(!!!by_vars, any_of(unname(analysis_vars_chr))),
     analysis_vars_chr = analysis_vars_chr[str_detect(analysis_vars_chr, "\\.")]
   )
 }

@@ -231,7 +231,7 @@ test_that("slice_derivation Test 6: slice on 0-row dataset", {
   )
 })
 
-## Test 7: Error thrown if a mandatory argument is not in arg or all slices----
+## Test 7: Error if a mandatory argument is not in arg or all slices ----
 test_that("slice_derivation Test 7: Error if a mandatory argument is not in arg or all slices", {
   advs <- tibble::tribble(
     ~USUBJID, ~VSDTC,       ~VSTPT,             ~VSSEQ,
@@ -256,5 +256,37 @@ test_that("slice_derivation Test 7: Error if a mandatory argument is not in arg 
       )
     ),
     error = TRUE
+  )
+})
+
+## Test 8: args = NULL works ----
+test_that("slice_derivation Test 8: args = NULL works", {
+  expected <- tibble::tribble(
+    ~PARAMCD, ~AVAL, ~AVALCAT1,
+    "A",         -1, "negative",
+    "A",          1, "positive",
+    "B",       1000, "large",
+    "B",          3, "small"
+  )
+
+  adbds <- select(expected, -AVALCAT1)
+
+  actual <- slice_derivation(
+    adbds,
+    derivation = mutate,
+    derivation_slice(
+      filter = PARAMCD == "A",
+      args = params(AVALCAT1 = if_else(AVAL < 0, "negative", "positive"))
+    ),
+    derivation_slice(
+      filter = PARAMCD == "B",
+      args = params(AVALCAT1 = if_else(AVAL > 100, "large", "small"))
+    )
+  )
+
+  expect_dfs_equal(
+    base = expected,
+    compare = actual,
+    keys = c("PARAMCD", "AVAL")
   )
 })

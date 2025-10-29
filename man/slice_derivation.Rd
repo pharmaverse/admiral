@@ -4,7 +4,7 @@
 \alias{slice_derivation}
 \title{Execute a Derivation with Different Arguments for Subsets of the Input Dataset}
 \usage{
-slice_derivation(dataset, derivation, args = NULL, ...)
+slice_derivation(dataset, derivation, ..., args = NULL)
 }
 \arguments{
 \item{dataset}{Input dataset
@@ -26,14 +26,6 @@ the \code{params()} object passed to the \code{args} argument or be provided in 
 \item{Default value}{none}
 }}
 
-\item{args}{Arguments of the derivation
-
-A \code{params()} object is expected.
-
-\describe{
-\item{Default value}{\code{NULL}}
-}}
-
 \item{...}{A \code{derivation_slice()} object is expected
 
 Each slice defines a subset of the input dataset and some of the parameters
@@ -44,6 +36,14 @@ value in \code{derivation_slice()} overwrites the one in \code{args}.
 
 \describe{
 \item{Default value}{none}
+}}
+
+\item{args}{Arguments of the derivation
+
+A \code{params()} object is expected.
+
+\describe{
+\item{Default value}{\code{NULL}}
 }}
 }
 \value{
@@ -106,7 +106,7 @@ slice_derivation(
 \seealso{
 \code{\link[=params]{params()}} \code{\link[=restrict_derivation]{restrict_derivation()}} \code{\link[=call_derivation]{call_derivation()}}
 
-Higher Order Functions: 
+Higher Order Functions:
 \code{\link{call_derivation}()},
 \code{\link{derivation_slice}()},
 \code{\link{restrict_derivation}()}

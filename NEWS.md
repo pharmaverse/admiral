@@ -7,6 +7,13 @@ Antibody Analysis Dataset (#2805).
 
 ## Updates of Existing Functions
 
+- The functions `derive_param_bmi()`, `derive_param_bsa()`,
+`derive_param_framingham()`, `derive_param_map()`, and `derive_param_qtc()` were
+updated such that they no longer fail if `{admiral}` is not loaded. (#2667)
+
+- `slice_derivation()` was updated such that it no longer fails if `args = NULL`
+is specified. (#2875)
+
 ## Breaking Changes
 
 - The default value of `ignore_seconds_flag` is set to `TRUE`. (#2798)

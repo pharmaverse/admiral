@@ -249,7 +249,7 @@ impute_dtc_dtm(
 )
 }
 \seealso{
-Date/Time Computation Functions that returns a vector: 
+Date/Time Computation Functions that returns a vector:
 \code{\link{compute_age_years}()},
 \code{\link{compute_dtf}()},
 \code{\link{compute_duration}()},

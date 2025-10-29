@@ -51,7 +51,7 @@ The \code{records_source} object is used to find extreme records of interest.
 \seealso{
 \code{\link[=derive_param_extreme_record]{derive_param_extreme_record()}}
 
-Source Objects: 
+Source Objects:
 \code{\link{basket_select}()},
 \code{\link{censor_source}()},
 \code{\link{death_event}},
