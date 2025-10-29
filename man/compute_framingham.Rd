@@ -147,7 +147,7 @@ compute_framingham(
 \seealso{
 \code{\link[=derive_param_framingham]{derive_param_framingham()}}
 
-BDS-Findings Functions that returns a vector: 
+BDS-Findings Functions that returns a vector:
 \code{\link{compute_bmi}()},
 \code{\link{compute_bsa}()},
 \code{\link{compute_egfr}()},

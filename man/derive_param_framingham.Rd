@@ -273,7 +273,7 @@ derive_param_framingham(
 \seealso{
 \code{\link[=compute_framingham]{compute_framingham()}}
 
-BDS-Findings Functions for adding Parameters/Records: 
+BDS-Findings Functions for adding Parameters/Records:
 \code{\link{default_qtc_paramcd}()},
 \code{\link{derive_expected_records}()},
 \code{\link{derive_extreme_event}()},

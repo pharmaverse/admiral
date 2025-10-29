@@ -60,7 +60,7 @@ for (obj in list_tte_source_objects()$object) {
 \seealso{
 \code{\link[=derive_param_tte]{derive_param_tte()}}, \code{\link[=tte_source]{tte_source()}}, \code{\link[=event_source]{event_source()}}, \code{\link[=censor_source]{censor_source()}}
 
-Source Objects: 
+Source Objects:
 \code{\link{basket_select}()},
 \code{\link{censor_source}()},
 \code{\link{event}()},

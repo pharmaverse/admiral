@@ -100,7 +100,7 @@ fulfilled and to \code{NA} otherwise if \code{CRITyFL} is populated with \code{"
 }
 }
 \seealso{
-BDS-Findings Functions that returns variable appended to dataset: 
+BDS-Findings Functions that returns variable appended to dataset:
 \code{\link{derive_basetype_records}()},
 \code{\link{derive_var_analysis_ratio}()},
 \code{\link{derive_var_anrind}()},

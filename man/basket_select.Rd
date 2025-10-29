@@ -57,7 +57,7 @@ Exactly one of \code{name} or \code{id} must be specified.
 \seealso{
 \code{\link[=create_query_data]{create_query_data()}}, \code{\link[=query]{query()}}
 
-Source Objects: 
+Source Objects:
 \code{\link{censor_source}()},
 \code{\link{death_event}},
 \code{\link{event}()},
