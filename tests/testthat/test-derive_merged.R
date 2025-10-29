@@ -351,10 +351,10 @@ test_that("derive_vars_merged Test 15: error if not unique, no order, check_type
 ## Test 16: merge relationship as 'many-to-one' ----
 test_that("derive_vars_merged_summary Test 16: merge relationship as 'many-to-one'", {
   actual <- derive_vars_merged(advs,
-                               dataset_add = adsl,
-                               by_vars = exprs(USUBJID),
-                               new_vars = exprs(SEX),
-                               relationship = "many-to-one"
+    dataset_add = adsl,
+    by_vars = exprs(USUBJID),
+    new_vars = exprs(SEX),
+    relationship = "many-to-one"
   )
 
   expected <- left_join(advs, select(adsl, USUBJID, SEX), by = "USUBJID")
@@ -370,10 +370,10 @@ test_that("derive_vars_merged_summary Test 16: merge relationship as 'many-to-on
 test_that("derive_vars_merged_summary Test 17: error incorrect 'one-to-one'", {
   expect_snapshot(
     derive_vars_merged(advs,
-                       dataset_add = adsl,
-                       by_vars = exprs(USUBJID),
-                       new_vars = exprs(SEX),
-                       relationship = "one-to-one"
+      dataset_add = adsl,
+      by_vars = exprs(USUBJID),
+      new_vars = exprs(SEX),
+      relationship = "one-to-one"
     ),
     error = TRUE
   )
@@ -383,11 +383,11 @@ test_that("derive_vars_merged_summary Test 17: error incorrect 'one-to-one'", {
 test_that("derive_vars_merged_summary Test 18: merge sel vars 'one-to-one'", {
   expect_snapshot(
     derive_vars_merged(adsl,
-                       dataset_add = advs,
-                       by_vars = exprs(USUBJID),
-                       new_vars = exprs(WEIGHTBL = AVAL),
-                       filter_add = AVISIT == "BASELINE",
-                       relationship = "one-to-one"
+      dataset_add = advs,
+      by_vars = exprs(USUBJID),
+      new_vars = exprs(WEIGHTBL = AVAL),
+      filter_add = AVISIT == "BASELINE",
+      relationship = "one-to-one"
     )
   )
 })

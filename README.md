@@ -5,10 +5,10 @@
 [![CRAN status](https://www.r-pkg.org/badges/version/admiral)](https://CRAN.R-project.org/package=admiral)
 ![Test Coverage](https://raw.githubusercontent.com/pharmaverse/admiral/badges/main/test-coverage.svg)
 [![Total Downloads](http://cranlogs.r-pkg.org/badges/grand-total/admiral?color=green)](https://cran.r-project.org/package=admiral)
-[![R-CMD-check](https://github.com/pharmaverse/admiral/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/pharmaverse/admiral/actions/workflows/R-CMD-check.yaml)
+[![admiral CI/CD Workflows](https://github.com/pharmaverse/admiral/actions/workflows/common.yml/badge.svg)](https://github.com/pharmaverse/admiral/actions/workflows/common.yml)
 
 <!-- end badges -->
-
+https://github.com/pharmaverse/admiral/actions/workflows/common.yml/badge.svg)
 ADaM in R Asset Library
 
 ## Purpose
