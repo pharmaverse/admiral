@@ -535,7 +535,7 @@ test_that("get_not_mapped Test 21: not all by_vars have records in the lookup ta
   )
 })
 
-# derive_var_merged_summary ----
+# derive_vars_merged_summary ----
 ## Test 22: dataset == dataset_add, no filter ----
 test_that("derive_vars_merged_summary Test 22: dataset == dataset_add, no filter", {
   expected <- tibble::tribble(
