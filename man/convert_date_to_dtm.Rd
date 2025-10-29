@@ -173,7 +173,7 @@ convert_date_to_dtm("2019-07-18", time_imputation = "23:59:59")
 convert_date_to_dtm("2019-07-18")
 }
 \seealso{
-Date/Time Computation Functions that returns a vector: 
+Date/Time Computation Functions that returns a vector:
 \code{\link{compute_age_years}()},
 \code{\link{compute_dtf}()},
 \code{\link{compute_duration}()},

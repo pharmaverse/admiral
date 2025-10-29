@@ -42,7 +42,7 @@ compute_dtf(dtc = "2022---01T00:00", dt = as.Date("2022-06-01"))
 compute_dtf(dtc = "2022----T00:00", dt = as.Date("2022-06-01"))
 }
 \seealso{
-Date/Time Computation Functions that returns a vector: 
+Date/Time Computation Functions that returns a vector:
 \code{\link{compute_age_years}()},
 \code{\link{compute_duration}()},
 \code{\link{compute_tmf}()},
