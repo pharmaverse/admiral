@@ -425,7 +425,6 @@ test_that("derive_vars_merged_lookup Test 18: merge lookup table", {
 })
 
 
-
 ## the lookup table
 ## Test 19:  all by_vars have records in the lookup table ----
 test_that("derive_vars_merged_lookup Test 19:  all by_vars have records in the lookup table", {

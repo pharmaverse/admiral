@@ -47,8 +47,6 @@
       i Please use `derive_vars_extreme_event()` instead.
       x This message will turn into an error at the beginning of 2027.
       i See admiral's deprecation guidance: https://pharmaverse.github.io/admiraldev/dev/articles/programming_strategy.html#deprecation
-      i The deprecated feature was likely used in the admiral package.
-        Please report the issue at <https://github.com/pharmaverse/admiral/issues>.
     Output
       # A tibble: 3 x 6
         STUDYID USUBJID TRTEDTM             DTHDTC  DTHDT      LSTALVDT  
