@@ -58,7 +58,7 @@
       ! Dataset `dataset_add` contains duplicate records with respect to `STUDYID` and `ID`.
       i Run `admiral::get_duplicates_dataset()` to access the duplicate records
 
-# derive_vars_merged_summary Test 17: error incorrect 'one-to-one'
+# derive_vars_merged Test 17: error incorrect 'one-to-one'
 
     Code
       derive_vars_merged(advs, dataset_add = adsl, by_vars = exprs(USUBJID),
@@ -68,7 +68,7 @@
       ! Each row in `dataset_add` must match at most 1 row in `dataset`.
       i Row 1 of `dataset_add` matches multiple rows in `dataset`.
 
-# derive_vars_merged_summary Test 18: merge sel vars 'one-to-one'
+# derive_vars_merged Test 18: merge sel vars 'one-to-one'
 
     Code
       derive_vars_merged(adsl, dataset_add = advs, by_vars = exprs(USUBJID),
@@ -136,32 +136,7 @@
       Please check `new_vars` if summary functions like `mean()`, `sum()`, ... are used on the right hand side.
       i Run `admiral::get_duplicates_dataset()` to access the duplicate records
 
-# derive_var_merged Test 33: error incorrect 'one-to-one'
-
-    Code
-      derive_vars_merged(advs, dataset_add = adsl, by_vars = exprs(USUBJID),
-      new_vars = exprs(SEX), relationship = "one-to-one")
-    Condition
-      Error in `derive_vars_merged()`:
-      ! Each row in `dataset_add` must match at most 1 row in `dataset`.
-      i Row 1 of `dataset_add` matches multiple rows in `dataset`.
-
-# derive_var_merged Test 34: merge sel vars 'one-to-one'
-
-    Code
-      derive_vars_merged(adsl, dataset_add = advs, by_vars = exprs(USUBJID),
-      new_vars = exprs(WEIGHTBL = AVAL), filter_add = AVISIT == "BASELINE",
-      relationship = "one-to-one")
-    Output
-      # A tibble: 4 x 5
-        USUBJID SEX   COUNTRY STUDYID WEIGHTBL
-        <chr>   <chr> <chr>   <chr>      <dbl>
-      1 ST42-1  F     AUT     ST42          66
-      2 ST42-2  M     MWI     ST42          88
-      3 ST42-3  M     NOR     ST42          NA
-      4 ST42-4  F     UGA     ST42          NA
-
-# derive_var_merged_summary Test 35: error if no summary function
+# derive_var_merged_summary Test 32: error if no summary function
 
     Code
       derive_var_merged_summary(adbds, dataset_add = adbds, by_vars = exprs(AVISIT),
@@ -172,7 +147,7 @@
       Please check `new_vars` if summary functions like `mean()`, `sum()`, ... are used on the right hand side.
       i Run `admiral::get_duplicates_dataset()` to access the duplicate records
 
-# derive_var_merged_summary Test 36: deprecation message
+# derive_var_merged_summary Test 33: deprecation message
 
     Code
       derive_var_merged_summary(adbds, dataset_add = adbds1, by_vars = exprs(AVISIT = VISIT),
