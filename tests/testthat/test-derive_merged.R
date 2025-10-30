@@ -349,7 +349,7 @@ test_that("derive_vars_merged Test 15: error if not unique, no order, check_type
 })
 
 ## Test 16: merge relationship as 'many-to-one' ----
-test_that("derive_vars_merged_summary Test 16: merge relationship as 'many-to-one'", {
+test_that("derive_vars_merged Test 16: merge relationship as 'many-to-one'", {
   actual <- derive_vars_merged(advs,
     dataset_add = adsl,
     by_vars = exprs(USUBJID),
@@ -367,7 +367,7 @@ test_that("derive_vars_merged_summary Test 16: merge relationship as 'many-to-on
 })
 
 ## Test 17: error incorrect 'one-to-one' ----
-test_that("derive_vars_merged_summary Test 17: error incorrect 'one-to-one'", {
+test_that("derive_vars_merged Test 17: error incorrect 'one-to-one'", {
   expect_snapshot(
     derive_vars_merged(advs,
       dataset_add = adsl,
@@ -380,7 +380,7 @@ test_that("derive_vars_merged_summary Test 17: error incorrect 'one-to-one'", {
 })
 
 ## Test 18: merge sel vars 'one-to-one' ----
-test_that("derive_vars_merged_summary Test 18: merge sel vars 'one-to-one'", {
+test_that("derive_vars_merged Test 18: merge sel vars 'one-to-one'", {
   expect_snapshot(
     derive_vars_merged(adsl,
       dataset_add = advs,
@@ -783,58 +783,8 @@ test_that("derive_var_merged_summary Test 31: by_vars with rename", {
   )
 })
 
-## Test 32: merge relationship as 'many-to-one' ----
-test_that("derive_var_merged Test 32: merge relationship as 'many-to-one'", {
-  withr::local_options(list(lifecycle_verbosity = "quiet"))
-
-  actual <- derive_vars_merged(advs,
-    dataset_add = adsl,
-    by_vars = exprs(USUBJID),
-    new_vars = exprs(SEX),
-    relationship = "many-to-one"
-  )
-
-  expected <- left_join(advs, select(adsl, USUBJID, SEX), by = "USUBJID")
-
-  expect_dfs_equal(
-    base = expected,
-    compare = actual,
-    keys = c("USUBJID", "AVISIT")
-  )
-})
-
-## Test 33: error incorrect 'one-to-one' ----
-test_that("derive_var_merged Test 33: error incorrect 'one-to-one'", {
-  withr::local_options(list(lifecycle_verbosity = "quiet"))
-
-  expect_snapshot(
-    derive_vars_merged(advs,
-      dataset_add = adsl,
-      by_vars = exprs(USUBJID),
-      new_vars = exprs(SEX),
-      relationship = "one-to-one"
-    ),
-    error = TRUE
-  )
-})
-
-## Test 34: merge sel vars 'one-to-one' ----
-test_that("derive_var_merged Test 34: merge sel vars 'one-to-one'", {
-  withr::local_options(list(lifecycle_verbosity = "quiet"))
-
-  expect_snapshot(
-    derive_vars_merged(adsl,
-      dataset_add = advs,
-      by_vars = exprs(USUBJID),
-      new_vars = exprs(WEIGHTBL = AVAL),
-      filter_add = AVISIT == "BASELINE",
-      relationship = "one-to-one"
-    )
-  )
-})
-
-## Test 35: error if no summary function ----
-test_that("derive_var_merged_summary Test 35: error if no summary function", {
+## Test 32: error if no summary function ----
+test_that("derive_var_merged_summary Test 32: error if no summary function", {
   withr::local_options(list(lifecycle_verbosity = "quiet"))
 
   adbds <- tibble::tribble(
@@ -859,8 +809,8 @@ test_that("derive_var_merged_summary Test 35: error if no summary function", {
   )
 })
 
-## Test 36: deprecation message ----
-test_that("derive_var_merged_summary Test 36: deprecation message", {
+## Test 33: deprecation message ----
+test_that("derive_var_merged_summary Test 33: deprecation message", {
   expected <- tibble::tribble(
     ~AVISIT,  ~ASEQ, ~AVAL, ~MEANVIS,
     "WEEK 1",     1,    10,       10,

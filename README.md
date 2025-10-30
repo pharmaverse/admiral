@@ -8,7 +8,6 @@
 [![admiral CI/CD Workflows](https://github.com/pharmaverse/admiral/actions/workflows/common.yml/badge.svg)](https://github.com/pharmaverse/admiral/actions/workflows/common.yml)
 
 <!-- end badges -->
-https://github.com/pharmaverse/admiral/actions/workflows/common.yml/badge.svg)
 ADaM in R Asset Library
 
 ## Purpose
