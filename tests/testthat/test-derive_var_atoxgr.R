@@ -635,7 +635,7 @@ test_that("derive_var_atoxgr Test 12a: CTCAEv5 Alanine aminotransferase increase
     meta_criteria = atoxgr_criteria_ctcv5,
     tox_description_var = ATOXDSCH,
     criteria_direction = "H",
-    abnormal_indicator = "HIGH",
+    high_indicator = "HIGH",
     get_unit_expr = AVALU
   )
 
@@ -647,17 +647,19 @@ test_that("derive_var_atoxgr Test 12a: CTCAEv5 Alanine aminotransferase increase
 })
 
 ### NCICTCAEv6 same criteria as NCICTCAEv4 when BASELINE is normal
+
 ### Grade 4: >20.0 x ULN if baseline was normal or less than normal;
 ### >4.0 x baseline if baseline was >ULN
 ### Grade 3: >5.0 - 20.0 x ULN if baseline was normal or less than normal;
 ### >2.0 - 4.0 x baseline if baseline was >ULN up to 5 x ULN
 ### Grade 2: >3.0 - 5.0 x ULN if baseline was normal or less than normal;
 ### >1.5 - 2.0 x baseline if baseline was >ULN
-### Grade 1: >ULN - 3.0 x ULN if BL was normal OR >1.5 - 3.0 x BL if BL was abnormal
+### Grade 1: >ULN - 3.0 x ULN if BL was normal or less than normal;
+### 1.0 - 1.5 x baseline if baseline was >ULN
 
 ## Test 12b: CTCAEv6 Alanine aminotransferase increased ----
 test_that("derive_var_atoxgr Test 12b: CTCAEv6 Alanine aminotransferase increased", {
-  # V5 and V4 criteria identical when BASELINE normal
+  # V6 and V5 criteria identical when BASELINE normal
   expected_alt_ctcv6_norm <- expected_alt_ctcv4 %>%
     # set BASE to be normal (not HIGH) and create FLAG
     mutate(
@@ -674,10 +676,10 @@ test_that("derive_var_atoxgr Test 12b: CTCAEv6 Alanine aminotransferase increase
     "Alanine aminotransferase Increased",   160,    40, NA_character_,      "3",
     "Alanine aminotransferase Increased",    81,    40, NA_character_,      "3",
     "Alanine aminotransferase Increased",    80,    40, NA_character_,      "2",
-    "Alanine aminotransferase Increased",   121,    40, NA_character_,      "2",
-    "Alanine aminotransferase Increased",   120,    40, NA_character_,      "1",
+    "Alanine aminotransferase Increased",    61,    40, NA_character_,      "2",
     "Alanine aminotransferase Increased",    60,    40, NA_character_,      "1",
-    "Alanine aminotransferase Increased",    59,    40, NA_character_,      "0",
+    "Alanine aminotransferase Increased",    40,    40, NA_character_,      "1",
+    "Alanine aminotransferase Increased",    39,    40, NA_character_,      "0",
     # ANRHI missing - cannot grade
     "Alanine aminotransferase Increased",   100,    NA, NA_character_,       NA,
     # AVAL missing cannot grade
@@ -690,25 +692,25 @@ test_that("derive_var_atoxgr Test 12b: CTCAEv6 Alanine aminotransferase increase
     )
 
   # combine records with baseline normal and abnormal
-  expected_alt_ctcv5 <- expected_alt_ctcv5_norm %>%
-    bind_rows(expected_alt_ctcv5_abn)
+  expected_alt_ctcv6 <- expected_alt_ctcv6_norm %>%
+    bind_rows(expected_alt_ctcv6_abn)
 
 
-  input_alt <- expected_alt_ctcv5 %>%
+  input_alt <- expected_alt_ctcv6 %>%
     select(-ATOXGRH)
 
   actual_alt <- derive_var_atoxgr_dir(
     input_alt,
     new_var = ATOXGRH,
-    meta_criteria = atoxgr_criteria_ctcv5,
+    meta_criteria = atoxgr_criteria_ctcv6,
     tox_description_var = ATOXDSCH,
     criteria_direction = "H",
-    abnormal_indicator = "HIGH",
+    high_indicator = "HIGH",
     get_unit_expr = AVALU
   )
 
   expect_dfs_equal(
-    base = expected_alt_ctcv5,
+    base = expected_alt_ctcv6,
     compare = actual_alt,
     keys = c("ATOXDSCH", "AVAL", "ANRHI", "BNRIND", "AVALU")
   )
@@ -815,7 +817,7 @@ test_that("derive_var_atoxgr Test 14a: CTCAEv5 Alkaline phosphatase increased", 
     meta_criteria = atoxgr_criteria_ctcv5,
     tox_description_var = ATOXDSCH,
     criteria_direction = "H",
-    abnormal_indicator = "HIGH",
+    high_indicator = "HIGH",
     get_unit_expr = AVALU
   )
 
@@ -861,7 +863,7 @@ test_that("derive_var_atoxgr Test 14b: CTCAEv6 Alkaline phosphatase increased", 
     meta_criteria = atoxgr_criteria_ctcv6,
     tox_description_var = ATOXDSCH,
     criteria_direction = "H",
-    abnormal_indicator = "HIGH",
+    high_indicator = "HIGH",
     get_unit_expr = AVALU
   )
 
@@ -972,7 +974,7 @@ test_that("derive_var_atoxgr Test 16a: CTCAEv5 Aspartate aminotransferase increa
     meta_criteria = atoxgr_criteria_ctcv5,
     tox_description_var = ATOXDSCH,
     criteria_direction = "H",
-    abnormal_indicator = c("HIGH", "H"),
+    high_indicator = c("HIGH", "H"),
     get_unit_expr = AVALU
   )
 
@@ -1040,7 +1042,7 @@ test_that("derive_var_atoxgr Test 16b: CTCAEv6 Aspartate aminotransferase increa
     meta_criteria = atoxgr_criteria_ctcv6,
     tox_description_var = ATOXDSCH,
     criteria_direction = "H",
-    abnormal_indicator = c("HIGH", "H"),
+    high_indicator = c("HIGH", "H"),
     get_unit_expr = AVALU
   )
 
@@ -1127,7 +1129,7 @@ test_that("derive_var_atoxgr Test 18a: CTCAEv5  Blood bilirubin increased", {
     meta_criteria = atoxgr_criteria_ctcv5,
     tox_description_var = ATOXDSCH,
     criteria_direction = "H",
-    abnormal_indicator = "HIGH",
+    high_indicator = "HIGH",
     get_unit_expr = AVALU
   )
 
@@ -1195,7 +1197,7 @@ test_that("derive_var_atoxgr Test 18b: CTCAEv6  Blood bilirubin increased", {
     meta_criteria = atoxgr_criteria_ctcv6,
     tox_description_var = ATOXDSCH,
     criteria_direction = "H",
-    abnormal_indicator = "HIGH",
+    high_indicator = "HIGH",
     get_unit_expr = AVALU
   )
 
@@ -1653,8 +1655,8 @@ test_that("derive_var_atoxgr Test 25: CTCAEv4 Creatinine increased", {
 ### Grade 2: >1.5 - 3.0 x baseline; >1.5 - 3.0 x ULN
 ### Grade 1: >ULN - 1.5 x ULN
 
-## Test 26: CTCAEv4 Creatinine increased ----
-test_that("derive_var_atoxgr Test 26: CTCAEv4 Creatinine increased", {
+## Test 26a: CTCAEv5 Creatinine increased ----
+test_that("derive_var_atoxgr Test 26a: CTCAEv5 Creatinine increased", {
   expected_creatn <- expected_creatn %>%
     filter(V5 == "Y")
 
@@ -1674,6 +1676,63 @@ test_that("derive_var_atoxgr Test 26: CTCAEv4 Creatinine increased", {
     base = expected_creatn,
     compare = actual_creatn,
     keys = c("ATOXDSCH", "AVAL", "BASE", "ANRHI", "AVALU")
+  )
+})
+
+### Creatinine increased (NCICTCv6)
+
+### Grade 4: >6.0 x ULN
+### Grade 3: >3.0 x if baseline is below LLN; >3.0 - 6.0 x ULN
+### Grade 2: >1.5 - 3.0 x if baseline is below LLN; >1.5 - 3.0 x ULN
+### Grade 1: >ULN - 1.5 x ULN
+
+## Test 26b: CTCAEv6 Creatinine increased ----
+test_that("derive_var_atoxgr Test 26b: CTCAEv6 Creatinine increased", {
+
+  expected_creatn <- tibble::tribble(
+    ~ATOXDSCH,               ~AVAL,  ~BASE, ~ANRHI, ~AVALU,          ~BNRIND,       ~ATOXGRH,
+    "Not a term",            80,     80,    40,     NA_character_,  "NORMAL",       NA_character_,
+    NA_character_,           60,     60,    40,     NA_character_,  "NORMAL",       NA_character_,
+    # GRADE derived from AVAL against ANRHI
+    "Creatinine increased",  241,    40,    40,     NA_character_,  "NORMAL",       "4",
+    "Creatinine increased",  240,    40,    40,     NA_character_,  "NORMAL",       "3",
+    "Creatinine increased",  121,    40,    40,     NA_character_,  "NORMAL",       "3",
+    "Creatinine increased",  120,    40,    40,     NA_character_,  "NORMAL",       "2",
+    "Creatinine increased",  61,     40,    40,     NA_character_,  "NORMAL",       "2",
+    "Creatinine increased",  60,     40,    40,     NA_character_,  "NORMAL",       "1",
+    "Creatinine increased",  41,     40,    40,     NA_character_,  "NORMAL",       "1",
+    "Creatinine increased",  40,     40,    40,     NA_character_,  "NORMAL",       "0",
+    # GRADE derived from AVAL against BASE when baseline is below LLN
+    "Creatinine increased", 121,     40,    41,     NA_character_,  "LOW",          "3",
+    "Creatinine increased", 120,     40,    41,     NA_character_,  "LOW",          "2",
+    "Creatinine increased",  61,     40,    41,     NA_character_,  "LOW",          "2",
+    "Creatinine increased",  60,     40,    60,     NA_character_,  "LOW",          "0",
+    # BASE missing - AVAL <= ANRLO can grade as NORMAL
+    "Creatinine increased",  42,     NA,    42,     NA_character_,  NA_character_,  "0",
+    # ANRHI missing - baseline is below LLN and AVAL <= 1.5 x BASE but cannot grade as NORMAL
+    "Creatinine increased",  60,     40,    NA,     NA_character_,  "LOW",          NA_character_,
+    # AVAL missing cannot grade
+    "Creatinine increased",  NA,     0,     40,     NA_character_,  "NORMAL",       NA_character_,
+  )
+
+  input_creatn <- expected_creatn %>%
+    select(-ATOXGRH)
+
+  actual_creatn <- derive_var_atoxgr_dir(
+    input_creatn,
+    new_var = ATOXGRH,
+    meta_criteria = atoxgr_criteria_ctcv6,
+    tox_description_var = ATOXDSCH,
+    criteria_direction = "H",
+    high_indicator = "HIGH",
+    low_indicator = "LOW",
+    get_unit_expr = AVALU
+  )
+
+  expect_dfs_equal(
+    base = expected_creatn,
+    compare = actual_creatn,
+    keys = c("ATOXDSCH", "AVAL", "BASE", "ANRHI", "BNRIND")
   )
 })
 
@@ -1939,7 +1998,7 @@ test_that("derive_var_atoxgr Test 30a: CTCAEv5 GGT increased", {
     "GGT increased", NA,    0,      NA,     NA_character_, NA,
   ) %>%
     # set BASE to be abnormal (HIGH HIGH) and create FLAG
-    # set abnormal_indicator to "HIGH HIGH" also in function call
+    # set high_indicator to "HIGH HIGH" also in function call
     mutate(
       ANRHI = BASE - 1,
       BNRIND = "HIGH HIGH"
@@ -1958,7 +2017,7 @@ test_that("derive_var_atoxgr Test 30a: CTCAEv5 GGT increased", {
     meta_criteria = atoxgr_criteria_ctcv5,
     tox_description_var = ATOXDSCH,
     criteria_direction = "H",
-    abnormal_indicator = "HIGH HIGH",
+    high_indicator = "HIGH HIGH",
     get_unit_expr = AVALU
   )
 
@@ -2005,7 +2064,7 @@ test_that("derive_var_atoxgr Test 30b: CTCAEv6 GGT increased", {
     "GGT increased", NA,    0,      NA,     NA_character_, NA,
   ) %>%
     # set BASE to be abnormal (HIGH HIGH) and create FLAG
-    # set abnormal_indicator to "HIGH HIGH" also in function call
+    # set high_indicator to "HIGH HIGH" also in function call
     mutate(
       ANRHI = BASE - 1,
       BNRIND = "HIGH HIGH"
@@ -2024,7 +2083,7 @@ test_that("derive_var_atoxgr Test 30b: CTCAEv6 GGT increased", {
     meta_criteria = atoxgr_criteria_ctcv6,
     tox_description_var = ATOXDSCH,
     criteria_direction = "H",
-    abnormal_indicator = "HIGH HIGH",
+    high_indicator = "HIGH HIGH",
     get_unit_expr = AVALU
   )
 
@@ -3185,6 +3244,53 @@ test_that("derive_var_atoxgr Test 46c: CTCAEv5 Platelet count decreased (legacy 
     keys = c("TESTNUM")
   )
 })
+
+### For NCICTCAEv6 Term: Thrombocytopenia replaces Term: Platelet count decreased in NCICTCAEv5
+### NCICTCAEv5 and NCICTCAEv6 criteria is the same apart from grade 4
+### For Grade 4: it was <25.0 x 10e9 /L but is now <10.0 x 10e9 /L
+### SI unit is 10^9/L
+### CV unit is 10^3/uL (= SI unit)
+### Legacy CV unit is 10^3/mL (= 1000 * SI unit)
+### Grade 4: <10.0 x 10e9 /L
+### Grade 3: <50.0 - 25.0 x 10e9 /L
+### Grade 2: <75.0 - 50.0 x 10e9 /L
+### Grade 1: <LLN - 75.0 x 10e9 /L
+
+## Test 46d: CTCAEv6 Thrombocytopenia (SI unit) ----
+test_that("derive_var_atoxgr Test 46d: CTCAEv6 Platelet count decreased (SI unit)", {
+
+  expected_plate_v6_si <- expected_plate_si %>%
+    mutate(
+      ATOXDSCL = if_else(
+        ATOXDSCL == "Platelet count decreased", "Thrombocytopenia", ATOXDSCL
+      ),
+      AVAL = case_when(
+        AVAL == 24 ~ 9,
+        AVAL == 25 ~ 10,
+        TRUE ~ AVAL
+      )
+    )
+
+  input_plate_v6_si <- expected_plate_v6_si %>%
+    select(-ATOXGRL)
+
+  actual_plate_si <- derive_var_atoxgr_dir(
+    input_plate_v6_si,
+    new_var = ATOXGRL,
+    meta_criteria = atoxgr_criteria_ctcv6,
+    tox_description_var = ATOXDSCL,
+    criteria_direction = "L",
+    get_unit_expr = AVALU
+  )
+
+  expect_dfs_equal(
+    base = expected_plate_v6_si,
+    compare = actual_plate_si,
+    keys = c("TESTNUM")
+  )
+})
+
+
 
 ### Serum amylase increased
 ### NCICTCAEv4 and NCICTCAEv5 criteria essentially the same
