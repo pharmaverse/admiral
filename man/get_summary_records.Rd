@@ -163,7 +163,7 @@ get_summary_records(
 )
 }
 \seealso{
-\code{\link[=derive_summary_records]{derive_summary_records()}}, \code{\link[=derive_var_merged_summary]{derive_var_merged_summary()}}
+\code{\link[=derive_summary_records]{derive_summary_records()}}, \code{\link[=derive_vars_merged_summary]{derive_vars_merged_summary()}}
 
 Other deprecated: 
 \code{\link{call_user_fun}()},
@@ -172,6 +172,7 @@ Other deprecated:
 \code{\link{derive_var_dthcaus}()},
 \code{\link{derive_var_extreme_dt}()},
 \code{\link{derive_var_extreme_dtm}()},
+\code{\link{derive_var_merged_summary}()},
 \code{\link{dthcaus_source}()}
 }
 \concept{deprecated}

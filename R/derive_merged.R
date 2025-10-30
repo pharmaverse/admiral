@@ -952,7 +952,7 @@ get_not_mapped <- function() {
 #'   "2",      "WEEK 4",      2,    22
 #' )
 #'
-#' derive_var_merged_summary(
+#' derive_vars_merged_summary(
 #'   adbds,
 #'   dataset_add = adbds,
 #'   by_vars = exprs(USUBJID, AVISIT),
@@ -986,7 +986,7 @@ get_not_mapped <- function() {
 #'   "2",         "WEEK 1",  "INV-N1"
 #' )
 #'
-#' derive_var_merged_summary(
+#' derive_vars_merged_summary(
 #'   adsl,
 #'   dataset_add = adtr,
 #'   by_vars = exprs(USUBJID),
@@ -994,12 +994,12 @@ get_not_mapped <- function() {
 #'   new_vars = exprs(LESIONSBL = paste(LESIONID, collapse = ", "))
 #' )
 #'
-derive_var_merged_summary <- function(dataset,
-                                      dataset_add,
-                                      by_vars,
-                                      new_vars = NULL,
-                                      filter_add = NULL,
-                                      missing_values = NULL) {
+derive_vars_merged_summary <- function(dataset,
+                                       dataset_add,
+                                       by_vars,
+                                       new_vars = NULL,
+                                       filter_add = NULL,
+                                       missing_values = NULL) {
   assert_vars(by_vars)
   by_vars_left <- replace_values_by_names(by_vars)
   by_vars_right <- chr2vars(paste(vars2chr(by_vars)))
@@ -1062,5 +1062,123 @@ derive_var_merged_summary <- function(dataset,
         by_vars = cnd$by_vars
       )
     }
+  )
+}
+
+#' Merge Summary Variables
+#'
+#' @description
+#' `r lifecycle::badge("deprecated")` The `derive_var_merged_summary()`
+#' function has been deprecated in favor of `derive_vars_merged_summary()`.
+#'
+#' @param dataset
+#'
+#' `r roxygen_param_dataset(expected_vars = c("by_vars"))`
+#'
+#' @permitted [dataset]
+#'
+#' @param dataset_add Additional dataset
+#'
+#'   The variables specified by the `by_vars` and the variables used on the left
+#'   hand sides of the `new_vars` arguments are expected.
+#'
+#' @permitted [dataset]
+#'
+#' @param by_vars Grouping variables
+#'
+#'   The expressions on the left hand sides of `new_vars` are evaluated by the
+#'   specified *variables*. Then the resulting values are merged to the input
+#'   dataset (`dataset`) by the specified *variables*.
+#'
+#'   `r roxygen_param_by_vars()`
+#'
+#' @permitted [var_list]
+#'
+#' @param new_vars New variables to add
+#'
+#'   The specified variables are added to the input dataset.
+#'
+#'   A named list of expressions is expected:
+#'   + LHS refer to a variable.
+#'   + RHS refers to the values to set to the variable. This can be a string, a
+#'   symbol, a numeric value, an expression or NA. If summary functions are
+#'   used, the values are summarized by the variables specified for `by_vars`.
+#'
+#'   For example:
+#'   ```
+#'     new_vars = exprs(
+#'       DOSESUM = sum(AVAL),
+#'       DOSEMEAN = mean(AVAL)
+#'     )
+#'   ```
+#'
+#' @permitted [var_list]
+#'
+#' @param filter_add Filter for additional dataset (`dataset_add`)
+#'
+#'   Only observations fulfilling the specified condition are taken into account
+#'   for summarizing. If the argument is not specified, all observations are
+#'   considered.
+#'
+#' @permitted [condition]
+#'
+#' @inheritParams derive_vars_merged
+#'
+#' @details
+#'
+#'   1. The records from the additional dataset (`dataset_add`) are restricted
+#'   to those matching the `filter_add` condition.
+#'
+#'   1. The new variables (`new_vars`) are created for each by group (`by_vars`)
+#'   in the additional dataset (`dataset_add`) by calling `summarize()`. I.e.,
+#'   all observations of a by group are summarized to a single observation.
+#'
+#'   1. The new variables are merged to the input dataset. For observations
+#'   without a matching observation in the additional dataset the new variables
+#'   are set to `NA`. Observations in the additional dataset which have no
+#'   matching observation in the input dataset are ignored.
+#'
+#' @return The output dataset contains all observations and variables of the
+#'   input dataset and additionally the variables specified for `new_vars`.
+#'
+#' @family deprecated
+#' @keywords deprecated
+#'
+#' @seealso [derive_summary_records()], [get_summary_records()]
+#'
+#' @export
+#'
+derive_var_merged_summary <- function(dataset,
+                                      dataset_add,
+                                      by_vars,
+                                      new_vars = NULL,
+                                      filter_add = NULL,
+                                      missing_values = NULL) {
+  deprecate_inform(
+    when = "1.4",
+    what = "derive_var_merged_summary()",
+    with = "derive_vars_merged_summary()",
+    details = c(
+      x = "Function is brought inline with our programming strategy - warning
+      will be issued in January 2027",
+      i = "See admiral's deprecation guidance:
+      https://pharmaverse.github.io/admiraldev/dev/articles/programming_strategy.html#deprecation"
+    )
+  )
+
+  # Function code now replaced with call to new function derive_vars_merged_summary(),
+  # minimal checks are executed prior to call to ensure all required arguments are present
+
+  assert_data_frame(dataset)
+  assert_data_frame(dataset_add)
+  assert_vars(by_vars)
+
+  derive_vars_merged_summary(
+    dataset = dataset,
+    dataset_add = dataset_add,
+    by_vars = by_vars,
+    new_vars = new_vars,
+    filter_add = !!enexpr(filter_add),
+    missing_values = missing_values
   )
 }

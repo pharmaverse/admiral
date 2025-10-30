@@ -17,7 +17,8 @@ call_user_fun(call)
 The return value of the function call
 }
 \description{
-r lifecycle::badge("deprecated")
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}}
+
 Calls a function provided by the user and adds the function call to the error
 message if the call fails.
 }
@@ -39,6 +40,7 @@ Other deprecated:
 \code{\link{derive_var_dthcaus}()},
 \code{\link{derive_var_extreme_dt}()},
 \code{\link{derive_var_extreme_dtm}()},
+\code{\link{derive_var_merged_summary}()},
 \code{\link{dthcaus_source}()},
 \code{\link{get_summary_records}()}
 }

@@ -109,6 +109,7 @@ Other deprecated:
 \code{\link{derive_var_dthcaus}()},
 \code{\link{derive_var_extreme_dt}()},
 \code{\link{derive_var_extreme_dtm}()},
+\code{\link{derive_var_merged_summary}()},
 \code{\link{get_summary_records}()}
 }
 \concept{deprecated}
