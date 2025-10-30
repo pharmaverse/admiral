@@ -1,7 +1,9 @@
 #' Derive First or Last Datetime from Multiple Sources
 #'
 #' @description
-#' `r lifecycle::badge("deprecated")` The `derive_var_extreme_dtm()`
+#' `r lifecycle::badge("deprecated")`
+#'
+#' The `derive_var_extreme_dtm()`
 #' function has been deprecated in favor of `derive_vars_extreme_event()`.
 #'
 #' Add the first or last datetime from multiple sources to the dataset, e.g.,
@@ -234,12 +236,12 @@ derive_var_extreme_dtm <- function(dataset,
                                    source_datasets,
                                    mode,
                                    subject_keys = get_admiral_option("subject_keys")) {
-  deprecate_inform(
+  deprecate_warn(
     when = "1.2.0",
     what = "derive_var_extreme_dtm()",
     with = "derive_vars_extreme_event()",
     details = c(
-      x = "This message will turn into a warning at the beginning of 2026.",
+      x = "This message will turn into an error at the beginning of 2027.",
       i = "See admiral's deprecation guidance:
       https://pharmaverse.github.io/admiraldev/dev/articles/programming_strategy.html#deprecation"
     )
@@ -567,12 +569,12 @@ derive_var_extreme_dt <- function(dataset,
                                   source_datasets,
                                   mode,
                                   subject_keys = get_admiral_option("subject_keys")) {
-  deprecate_inform(
+  deprecate_warn(
     when = "1.2.0",
     what = "derive_var_extreme_dt()",
     with = "derive_vars_extreme_event()",
     details = c(
-      x = "This message will turn into a warning at the beginning of 2026.",
+      x = "This message will turn into an error at the beginning of 2027.",
       i = "See admiral's deprecation guidance:
       https://pharmaverse.github.io/admiraldev/dev/articles/programming_strategy.html#deprecation"
     )
@@ -651,12 +653,12 @@ date_source <- function(dataset_name,
                         filter = NULL,
                         date,
                         set_values_to = NULL) {
-  deprecate_inform(
+  deprecate_warn(
     when = "1.2.0",
     what = "date_source()",
     with = "event()",
     details = c(
-      x = "This message will turn into a warning at the beginning of 2026.",
+      x = "This message will turn into an error at the beginning of 2027.",
       i = "See admiral's deprecation guidance:
       https://pharmaverse.github.io/admiraldev/dev/articles/programming_strategy.html#deprecation"
     )

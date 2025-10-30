@@ -14,14 +14,30 @@ is specified. (#2875)
 ## Breaking Changes
 
 - The default value of `ignore_seconds_flag` is set to `TRUE`. (#2798)
+- `derive_var_merged_summary()` is deprecated and will be replaced by `derive_vars_merged_summary()`.
+    This is just a rename of the function to align with our programming conventions, i.e.
+    functions that can derive multiple variables have `_vars_` in the name rather than
+    `_var_`. (#2874)
 
 - The following function arguments are entering the next phase of the [deprecation process](https://pharmaverse.github.io/admiraldev/articles/programming_strategy.html#deprecation): 
 
-    **Phase 1 (message)**
+  **Phase 1 (message)**
+    
+  - `derive_var_merged_summary()` is deprecated and will be replaced by `derive_vars_merged_summary()` (#2874)
   
-    **Phase 2 (warning)**
+  **Phase 2 (warning)**
+    
+  - `call_user_fun()` is deprecated and will have no replacement. (#2678)
+  - `derive_param_extreme_record()` is deprecated and replaced by `derive_extreme_event()`
+  - `derive_var_dthcaus()` is deprecated and replaced by `derive_vars_extreme_event()`
+  - `date_source()` is deprecated and replaced by `event()`
+  - `dthcaus_source()` is deprecated and replaced by `event()`
+  - `derive_var_extreme_dt()` and `derive_var_extreme_dtm()` are deprecated and replaced by     
+  `derive_vars_extreme_event()`
+  - `get_summary_records()` is deprecated. Please use `derive_summary_records()` with the `dataset_add` 
+  argument and without the `dataset` argument.
 
-    **Phase 3 (error)**
+  **Phase 3 (error)**
 
     **Phase 4 (removed)**
     
