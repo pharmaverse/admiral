@@ -261,6 +261,24 @@ test_that("derive_var_atoxgr Test 6c: CTCAEv6 Anemia (SI unit)", {
   )
 })
 
+## Test 6d: CTCAEv6 Anemia (CV unit) ----
+test_that("derive_var_atoxgr Test 6d: CTCAEv6 Anemia (CV unit)", {
+  actual_anemia_ctcv6_cv <- derive_var_atoxgr_dir(
+    input_anemia_cv,
+    new_var = ATOXGRL,
+    meta_criteria = atoxgr_criteria_ctcv6_uscv,
+    tox_description_var = ATOXDSCL,
+    criteria_direction = "L",
+    get_unit_expr = AVALU
+  )
+
+  expect_dfs_equal(
+    base = expected_anemia_cv,
+    compare = actual_anemia_ctcv6_cv,
+    keys = c("TESTNUM")
+  )
+})
+
 ### Leukocytosis
 ### NCICTCAEv4 and NCICTCAEv5 criteria is the same
 ### Si unit is 10^9/L
@@ -430,6 +448,43 @@ test_that("derive_var_atoxgr Test 8d: CTCAEv6 Leukocytosis (SI unit)", {
   )
 })
 
+## Test 8e: CTCAEv6 Leukocytosis (USCV unit) ----
+test_that("derive_var_atoxgr Test 8e: CTCAEv6 Leukocytosis (USCV unit)", {
+  actual_leukocytosis_cv <- derive_var_atoxgr_dir(
+    input_leukocytosis_cv,
+    new_var = ATOXGRH,
+    meta_criteria = atoxgr_criteria_ctcv6_uscv,
+    tox_description_var = ATOXDSCH,
+    criteria_direction = "H",
+    get_unit_expr = AVALU
+  )
+
+  expect_dfs_equal(
+    base = expected_leukocytosis_cv,
+    compare = actual_leukocytosis_cv,
+    keys = c("ATOXDSCH", "AVAL", "ANRLO", "ANRHI", "AVALU")
+  )
+})
+
+## Test 8f: CTCAEv6 Leukocytosis (legacy USCV unit) ----
+test_that("derive_var_atoxgr Test 8f: CTCAEv6 Leukocytosis (legacy USCV unit)", {
+  actual_leukocytosis_cv2 <- derive_var_atoxgr_dir(
+    input_leukocytosis_cv2,
+    new_var = ATOXGRH,
+    meta_criteria = atoxgr_criteria_ctcv6_uscv,
+    tox_description_var = ATOXDSCH,
+    criteria_direction = "H",
+    get_unit_expr = AVALU
+  )
+
+  expect_dfs_equal(
+    base = expected_leukocytosis_cv2,
+    compare = actual_leukocytosis_cv2,
+    keys = c("ATOXDSCH", "AVAL", "ANRLO", "ANRHI", "AVALU")
+  )
+})
+
+
 ## Investigations
 
 ### Activated partial thromboplastin time prolonged
@@ -522,6 +577,24 @@ test_that("derive_var_atoxgr Test 10b: CTCAEv6 Activated partial thromboplastin 
     input_aptt,
     new_var = ATOXGRH,
     meta_criteria = atoxgr_criteria_ctcv6,
+    tox_description_var = ATOXDSCH,
+    criteria_direction = "H",
+    get_unit_expr = AVALU
+  )
+
+  expect_dfs_equal(
+    base = expected_aptt,
+    compare = actual_aptt,
+    keys = c("ATOXDSCH", "AVAL", "ANRHI", "AVALU")
+  )
+})
+
+## Test 10c: CTCAEv6 Activated partial thromboplastin time prolonged (CV unit) ----
+test_that("derive_var_atoxgr Test 10c: CTCAEv6 Activated partial thromboplastin time prolonged (CV unit)", {
+  actual_aptt <- derive_var_atoxgr_dir(
+    input_aptt,
+    new_var = ATOXGRH,
+    meta_criteria = atoxgr_criteria_ctcv6_uscv,
     tox_description_var = ATOXDSCH,
     criteria_direction = "H",
     get_unit_expr = AVALU
@@ -832,33 +905,33 @@ test_that("derive_var_atoxgr Test 14a: CTCAEv5 Alkaline phosphatase increased", 
 ### NCICTCAEv6 different to NCICTCAEv5
 ### Grade 1: >Baseline and ULN
 
+expected_alkph_ctcv6 <- tibble::tribble(
+  ~ATOXDSCH,                         ~AVAL,  ~BASE,  ~ANRHI,  ~ATOXGRH,
+  "Not a term",                      80,     40,     40,      NA,
+  NA_character_,                     60,     40,     40,      NA,
+  "Alkaline phosphatase increased",  41,     40,     40,      "1",
+  "Alkaline phosphatase increased",  40,     40,     40,      "0",
+  "Alkaline phosphatase increased",  41,     41,     40,      "0",
+  "Alkaline phosphatase increased",  41,     40,     41,      "0",
+  "Alkaline phosphatase increased",  40,     40,     NA,      "0",
+  "Alkaline phosphatase increased",  40,     NA,     40,      "0",
+  # ANRHI missing - cannot grade
+  "Alkaline phosphatase increased",  100,    40,     NA,      NA,
+  # BASE missing - cannot grade
+  "Alkaline phosphatase increased",  41,     NA,     40,      NA,
+  # AVAL missing cannot grade
+  "Alkaline phosphatase increased",  NA,     40,     40,      NA,
+) %>%
+  mutate(AVALU = NA_character_)
+
+input_alkph_ctcv6 <- expected_alkph_ctcv6 %>%
+  select(-ATOXGRH)
+
 ## Test 14b: CTCAEv6 Alkaline phosphatase increased ----
 test_that("derive_var_atoxgr Test 14b: CTCAEv6 Alkaline phosphatase increased", {
 
-  expected_alkph_ctcv6 <- tibble::tribble(
-    ~ATOXDSCH,                         ~AVAL,  ~BASE,  ~ANRHI,  ~ATOXGRH,
-    "Not a term",                      80,     40,     40,      NA,
-    NA_character_,                     60,     40,     40,      NA,
-    "Alkaline phosphatase increased",  41,     40,     40,      "1",
-    "Alkaline phosphatase increased",  40,     40,     40,      "0",
-    "Alkaline phosphatase increased",  41,     41,     40,      "0",
-    "Alkaline phosphatase increased",  41,     40,     41,      "0",
-    "Alkaline phosphatase increased",  40,     40,     NA,      "0",
-    "Alkaline phosphatase increased",  40,     NA,     40,      "0",
-    # ANRHI missing - cannot grade
-    "Alkaline phosphatase increased",  100,    40,     NA,      NA,
-    # BASE missing - cannot grade
-    "Alkaline phosphatase increased",  41,     NA,     40,      NA,
-    # AVAL missing cannot grade
-    "Alkaline phosphatase increased",  NA,     40,     40,      NA,
-  ) %>%
-    mutate(AVALU = NA_character_)
-
-  input_alkph <- expected_alkph_ctcv6 %>%
-    select(-ATOXGRH)
-
-  actual_alkph <- derive_var_atoxgr_dir(
-    input_alkph,
+  actual_alkph_ctcv6 <- derive_var_atoxgr_dir(
+    input_alkph_ctcv6,
     new_var = ATOXGRH,
     meta_criteria = atoxgr_criteria_ctcv6,
     tox_description_var = ATOXDSCH,
@@ -869,7 +942,27 @@ test_that("derive_var_atoxgr Test 14b: CTCAEv6 Alkaline phosphatase increased", 
 
   expect_dfs_equal(
     base = expected_alkph_ctcv6,
-    compare = actual_alkph,
+    compare = actual_alkph_ctcv6,
+    keys = c("ATOXDSCH", "AVAL", "ANRHI", "BASE")
+  )
+})
+
+## Test 14c: CTCAEv6 Alkaline phosphatase increased (CV unit) ----
+test_that("derive_var_atoxgr Test 14b: CTCAEv6 Alkaline phosphatase increased (CV unit)", {
+
+  actual_alkph_ctcv6 <- derive_var_atoxgr_dir(
+    input_alkph_ctcv6,
+    new_var = ATOXGRH,
+    meta_criteria = atoxgr_criteria_ctcv6_uscv,
+    tox_description_var = ATOXDSCH,
+    criteria_direction = "H",
+    high_indicator = "HIGH",
+    get_unit_expr = AVALU
+  )
+
+  expect_dfs_equal(
+    base = expected_alkph_ctcv6,
+    compare = actual_alkph_ctcv6,
     keys = c("ATOXDSCH", "AVAL", "ANRHI", "BASE")
   )
 })
@@ -3256,20 +3349,20 @@ test_that("derive_var_atoxgr Test 46c: CTCAEv5 Platelet count decreased (legacy 
 ### Grade 2: <75.0 - 50.0 x 10e9 /L
 ### Grade 1: <LLN - 75.0 x 10e9 /L
 
+expected_plate_v6_si <- expected_plate_si %>%
+  mutate(
+    ATOXDSCL = if_else(
+      ATOXDSCL == "Platelet count decreased", "Thrombocytopenia", ATOXDSCL
+    ),
+    AVAL = case_when(
+      AVAL == 24 ~ 9,
+      AVAL == 25 ~ 10,
+      TRUE ~ AVAL
+    )
+  )
+
 ## Test 46d: CTCAEv6 Thrombocytopenia (SI unit) ----
 test_that("derive_var_atoxgr Test 46d: CTCAEv6 Platelet count decreased (SI unit)", {
-
-  expected_plate_v6_si <- expected_plate_si %>%
-    mutate(
-      ATOXDSCL = if_else(
-        ATOXDSCL == "Platelet count decreased", "Thrombocytopenia", ATOXDSCL
-      ),
-      AVAL = case_when(
-        AVAL == 24 ~ 9,
-        AVAL == 25 ~ 10,
-        TRUE ~ AVAL
-      )
-    )
 
   input_plate_v6_si <- expected_plate_v6_si %>%
     select(-ATOXGRL)
@@ -3286,6 +3379,61 @@ test_that("derive_var_atoxgr Test 46d: CTCAEv6 Platelet count decreased (SI unit
   expect_dfs_equal(
     base = expected_plate_v6_si,
     compare = actual_plate_si,
+    keys = c("TESTNUM")
+  )
+})
+
+## Test 46e: CTCAEv6 Thrombocytopenia (USCV unit) ----
+test_that("derive_var_atoxgr Test 46e: CTCAEv6 Platelet count decreased (USCV unit)", {
+
+  expected_plate_v6_cv <- expected_plate_v6_si %>%
+    mutate(AVALU = if_else(str_to_upper(AVALU) == "10^9/L", "10^3/uL", AVALU))
+
+  input_plate_v6_cv <- expected_plate_v6_cv %>%
+    select(-ATOXGRL)
+
+  actual_plate_cv <- derive_var_atoxgr_dir(
+    input_plate_v6_cv,
+    new_var = ATOXGRL,
+    meta_criteria = atoxgr_criteria_ctcv6_uscv,
+    tox_description_var = ATOXDSCL,
+    criteria_direction = "L",
+    get_unit_expr = AVALU
+  )
+
+  expect_dfs_equal(
+    base = expected_plate_v6_cv,
+    compare = actual_plate_cv,
+    keys = c("TESTNUM")
+  )
+})
+
+## Test 46f: CTCAEv6 Thrombocytopenia (legacy USCV unit) ----
+test_that("derive_var_atoxgr Test 46e: CTCAEv6 Platelet count decreased (legacy USCV unit)", {
+
+  expected_plate_v6_cv2 <- expected_plate_v6_si %>%
+    mutate(
+      AVAL = AVAL * 1000,
+      ANRLO = ANRLO * 1000,
+      ANRHI = ANRHI * 1000,
+      AVALU = if_else(str_to_upper(AVALU) == "10^9/L", "10^3/mL", AVALU)
+  )
+
+  input_plate_v6_cv2 <- expected_plate_v6_cv2 %>%
+    select(-ATOXGRL)
+
+  actual_plate_cv2 <- derive_var_atoxgr_dir(
+    input_plate_v6_cv2,
+    new_var = ATOXGRL,
+    meta_criteria = atoxgr_criteria_ctcv6_uscv,
+    tox_description_var = ATOXDSCL,
+    criteria_direction = "L",
+    get_unit_expr = AVALU
+  )
+
+  expect_dfs_equal(
+    base = expected_plate_v6_cv2,
+    compare = actual_plate_cv2,
     keys = c("TESTNUM")
   )
 })
@@ -10279,6 +10427,208 @@ test_that("derive_var_atoxgr Test 123c: DAIDS White blood cell decreased (USCV u
   expect_dfs_equal(
     base = expected_wbcd_daids_cv2,
     compare = actual_wbcd_daids_cv2,
+    keys = c("TESTNUM")
+  )
+})
+
+# NCICTCAEv6 new grading----
+
+### Blood lactate dehydrogenase increased
+
+### Grade 1: >ULN
+
+## Test 124: CTCAEv6 LDH (SI unit) ----
+test_that("derive_var_atoxgr Test 124: CTCAEv6 LDH increased (SI unit)", {
+
+  expected_ldhi_si <- tibble::tribble(
+    ~ATOXDSCH,                               ~AVAL, ~ANRHI,      ~ATOXGRH,  ~TESTNUM,
+    "Not a term",                              1.1,      1, NA_character_,         1,
+    NA_character_,                             1.1,      1, NA_character_,         2,
+    "Blood lactate dehydrogenase increased",   1.1,      1,           "1",         3,
+    "Blood lactate dehydrogenase increased",     1,      1,           "0",         4,
+    "Blood lactate dehydrogenase increased",    NA,      1, NA_character_,         5,
+    "Blood lactate dehydrogenase increased",     1,     NA, NA_character_,         6,
+  ) %>%
+    mutate(AVALU = NA_character_)
+
+  input_ldhi_si <- expected_ldhi_si %>%
+    select(-ATOXGRH)
+
+  actual_ldhi_si <- derive_var_atoxgr_dir(
+    input_ldhi_si,
+    new_var = ATOXGRH,
+    meta_criteria = atoxgr_criteria_ctcv6,
+    tox_description_var = ATOXDSCH,
+    criteria_direction = "H",
+    get_unit_expr = AVALU
+  )
+
+  expect_dfs_equal(
+    base = expected_ldhi_si,
+    compare = actual_ldhi_si,
+    keys = c("TESTNUM")
+  )
+})
+
+## Test 125: CTCAEv6 HDL decreased (SI unit) ----
+test_that("derive_var_atoxgr Test 125: CTCAEv6 HDL decreased (SI unit)", {
+
+  expected_hdld_si <- tibble::tribble(
+    ~ATOXDSCL,       ~AVAL, ~ANRLO,      ~ATOXGRL,  ~TESTNUM,
+    "Not a term",      0.9,      1, NA_character_,         1,
+    NA_character_,     0.9,      1, NA_character_,         2,
+    "HDL decreased",   0.9,      1,           "1",         3,
+    "HDL decreased",     1,      1,           "0",         4,
+    "HDL decreased",    NA,      1, NA_character_,         5,
+    "HDL decreased",     1,     NA, NA_character_,         6,
+  ) %>%
+    mutate(AVALU = NA_character_)
+
+  input_hdld_si <- expected_hdld_si %>%
+    select(-ATOXGRL)
+
+  actual_hdld_si <- derive_var_atoxgr_dir(
+    input_hdld_si,
+    new_var = ATOXGRL,
+    meta_criteria = atoxgr_criteria_ctcv6,
+    tox_description_var = ATOXDSCL,
+    criteria_direction = "L",
+    get_unit_expr = AVALU
+  )
+
+  expect_dfs_equal(
+    base = expected_hdld_si,
+    compare = actual_hdld_si,
+    keys = c("TESTNUM")
+  )
+})
+
+## Test 126: CTCAEv6 LDL increased (SI unit) ----
+test_that("derive_var_atoxgr Test 126: CTCAEv6 LDL increased (SI unit)", {
+
+  expected_ldli_si <- tibble::tribble(
+    ~ATOXDSCH,       ~AVAL, ~ANRHI,      ~ATOXGRH,  ~TESTNUM,
+    "Not a term",      1.1,      1, NA_character_,         1,
+    NA_character_,     1.1,      1, NA_character_,         2,
+    "LDL increased",   1.1,      1,           "1",         3,
+    "LDL increased",     1,      1,           "0",         4,
+    "LDL increased",    NA,      1, NA_character_,         5,
+    "LDL increased",     1,     NA, NA_character_,         6,
+  ) %>%
+    mutate(AVALU = NA_character_)
+
+  input_ldli_si <- expected_ldli_si %>%
+    select(-ATOXGRH)
+
+  actual_ldli_si <- derive_var_atoxgr_dir(
+    input_ldli_si,
+    new_var = ATOXGRH,
+    meta_criteria = atoxgr_criteria_ctcv6,
+    tox_description_var = ATOXDSCH,
+    criteria_direction = "H",
+    get_unit_expr = AVALU
+  )
+
+  expect_dfs_equal(
+    base = expected_ldli_si,
+    compare = actual_ldli_si,
+    keys = c("TESTNUM")
+  )
+})
+
+### Acidosis
+### GRADE_3: pH <7.3
+### GRADE_1: pH <normal, but >=7.3
+
+## Test 127: CTCAEv6 Acidosis (SI unit) ----
+test_that("derive_var_atoxgr Test 127: CTCAEv6 Acidosis (SI unit)", {
+
+  expected_acido <- tibble::tribble(
+    ~ATOXDSCL,     ~AVAL,  ~ANRLO, ~ANRHI, ~ATOXGRL, ~TESTNUM,
+    "Not a term",  7.3,    7.35,   7.4,    NA,       1,
+    NA_character_, 7.3,    7.35,   7.4,    NA,       2,
+    # ANRLO not missing
+    "Acidosis",    7.29,   7.35,   7.4,    "3",      3,
+    "Acidosis",    7.3,    7.35,   7.4,    "1",      4,
+    "Acidosis",    7.34,   7.35,   7.4,    "1",      5,
+    "Acidosis",    7.35,   7.35,   7.4,    "0",      6,
+    "Acidosis",    7.36,   7.35,   7.4,    "0",      7,
+    # ANRLO missing - can grade 4
+    "Acidosis",    7.29,   NA,     7.4,    "3",      8,
+    # ANRLO missing - can NOT grade 0 or 1
+    "Acidosis",    7.3,    NA,     7.4,    NA,       9,
+    "Acidosis",    7.34,   NA,     7.4,    NA,       10,
+    "Acidosis",    7.35,   NA,     7.4,    NA,       11,
+    "Acidosis",    7.36,   NA,     7.4,    NA,       12,
+    # AVAL missing cannot grade
+    "Acidosis",    NA,     1.1,    1.4,    NA,       13,
+  ) %>%
+    mutate(AVALU = NA_character_)
+
+  input_acido <- expected_acido %>%
+    select(-ATOXGRL)
+
+  actual_acido <- derive_var_atoxgr_dir(
+    input_acido,
+    new_var = ATOXGRL,
+    meta_criteria = atoxgr_criteria_ctcv6,
+    tox_description_var = ATOXDSCL,
+    criteria_direction = "L",
+    get_unit_expr = AVALU
+  )
+
+  expect_dfs_equal(
+    base = expected_acido,
+    compare = actual_acido,
+    keys = c("TESTNUM")
+  )
+})
+
+
+### Acidosis
+### GRADE_3: pH >7.5
+### GRADE_1: pH >normal, but <=7.5
+
+## Test 128: CTCAEv6 Alkalosis (SI unit) ----
+test_that("derive_var_atoxgr Test 128: CTCAEv6 Alkalosis (SI unit)", {
+
+  expected_alkalo <- tibble::tribble(
+    ~ATOXDSCH,     ~AVAL,  ~ANRLO, ~ANRHI, ~ATOXGRH, ~TESTNUM,
+    "Not a term",  7.3,    7.35,   7.4,    NA,       1,
+    NA_character_, 7.3,    7.35,   7.4,    NA,       2,
+    # ANRHI not missing
+    "Alkalosis",   7.51,   7.35,   7.4,    "3",      3,
+    "Alkalosis",   7.5,    7.35,   7.4,    "1",      4,
+    "Alkalosis",   7.41,   7.35,   7.4,    "1",      5,
+    "Alkalosis",   7.4,    7.35,   7.4,    "0",      6,
+    "Alkalosis",   7.39,   7.35,   7.4,    "0",      7,
+    # ANRHI missing - can grade 3
+    "Alkalosis",   7.51,   7.35,   NA,     "3",      8,
+    # ANRHI missing - can NOT grade 0 or 1
+    "Alkalosis",   7.5,    7.35,   NA,     NA,       9,
+    "Alkalosis",   7.41,   7.35,   NA,     NA,       10,
+    "Alkalosis",   7.4,    7.35,   NA,     NA,       11,
+    "Alkalosis",   7.39,   7.35,   NA,     NA,       12,
+    # AVAL missing cannot grade
+    "Alkalosis",   NA,     1.1,    NA,     NA,       13,
+  ) %>%
+    mutate(AVALU = NA_character_)
+
+  input_alkalo <- expected_alkalo %>%
+    select(-ATOXGRH)
+
+  actual_alkalo <- derive_var_atoxgr_dir(
+    input_alkalo,
+    new_var = ATOXGRH,
+    meta_criteria = atoxgr_criteria_ctcv6,
+    tox_description_var = ATOXDSCH,
+    criteria_direction = "H",
+    get_unit_expr = AVALU
+  )
+
+  expect_dfs_equal(
+    base = expected_alkalo,
+    compare = actual_alkalo,
     keys = c("TESTNUM")
   )
 })
