@@ -279,7 +279,7 @@ the admiral option \code{save_memory} to \code{TRUE} (see \code{set_admiral_opti
 This reduces the memory consumption but increases the run-time.
 }
 \seealso{
-\code{\link[=derive_vars_joined]{derive_vars_joined()}}, \code{\link[=derive_var_merged_summary]{derive_var_merged_summary()}},
+\code{\link[=derive_vars_joined]{derive_vars_joined()}}, \code{\link[=derive_vars_merged_summary]{derive_vars_merged_summary()}},
 \code{\link[=derive_var_joined_exist_flag]{derive_var_joined_exist_flag()}}, \code{\link[=filter_joined]{filter_joined()}}
 
 General Derivation Functions for all ADaMs that returns variable appended to dataset:
@@ -287,7 +287,6 @@ General Derivation Functions for all ADaMs that returns variable appended to dat
 \code{\link{derive_var_joined_exist_flag}()},
 \code{\link{derive_var_merged_ef_msrc}()},
 \code{\link{derive_var_merged_exist_flag}()},
-\code{\link{derive_var_merged_summary}()},
 \code{\link{derive_var_obs_number}()},
 \code{\link{derive_var_relative_flag}()},
 \code{\link{derive_vars_cat}()},
@@ -295,6 +294,7 @@ General Derivation Functions for all ADaMs that returns variable appended to dat
 \code{\link{derive_vars_joined}()},
 \code{\link{derive_vars_merged}()},
 \code{\link{derive_vars_merged_lookup}()},
+\code{\link{derive_vars_merged_summary}()},
 \code{\link{derive_vars_transposed}()}
 }
 \concept{der_gen}

@@ -58,49 +58,7 @@
       ! Dataset `dataset_add` contains duplicate records with respect to `STUDYID` and `ID`.
       i Run `admiral::get_duplicates_dataset()` to access the duplicate records
 
-# derive_vars_merged_lookup Test 18: merge lookup table
-
-    Code
-      actual <- derive_vars_merged_lookup(vs, dataset_add = param_lookup, by_vars = exprs(
-        VSTESTCD, VSTEST), new_var = exprs(PARAMCD, PARAM = DESCRIPTION),
-      print_not_mapped = TRUE)
-    Message
-      List of `VSTESTCD` and `VSTEST` not mapped:
-      # A tibble: 1 x 2
-      VSTESTCD VSTEST
-      <chr> <chr>
-      1 DIABP Diastolic Blood Pressure
-      i Run `admiral::get_not_mapped()` to access the full list.
-
-# derive_vars_merged_lookup Test 20: by_vars with rename
-
-    Code
-      actual <- derive_vars_merged_lookup(vs, dataset_add = param_lookup, by_vars = exprs(
-        VSTESTCD = TESTCD, VSTEST), new_var = exprs(PARAMCD, PARAM = DESCRIPTION),
-      print_not_mapped = TRUE)
-    Message
-      List of `VSTESTCD` and `VSTEST` not mapped:
-      # A tibble: 1 x 2
-      VSTESTCD VSTEST
-      <chr> <chr>
-      1 DIABP Diastolic Blood Pressure
-      i Run `admiral::get_not_mapped()` to access the full list.
-
-# get_not_mapped Test 21: not all by_vars have records in the lookup table
-
-    Code
-      act_vs_param <- derive_vars_merged_lookup(vs, dataset_add = param_lookup,
-        by_vars = exprs(VSTESTCD, VSTEST), new_var = exprs(PARAMCD, PARAM = DESCRIPTION),
-        print_not_mapped = TRUE)
-    Message
-      List of `VSTESTCD` and `VSTEST` not mapped:
-      # A tibble: 1 x 2
-      VSTESTCD VSTEST
-      <chr> <chr>
-      1 DIABP Diastolic Blood Pressure
-      i Run `admiral::get_not_mapped()` to access the full list.
-
-# derive_var_merged_summary Test 26: error incorrect 'one-to-one'
+# derive_vars_merged Test 17: error incorrect 'one-to-one'
 
     Code
       derive_vars_merged(advs, dataset_add = adsl, by_vars = exprs(USUBJID),
@@ -110,7 +68,7 @@
       ! Each row in `dataset_add` must match at most 1 row in `dataset`.
       i Row 1 of `dataset_add` matches multiple rows in `dataset`.
 
-# derive_var_merged_summary Test 27: merge sel vars 'one-to-one'
+# derive_vars_merged Test 18: merge sel vars 'one-to-one'
 
     Code
       derive_vars_merged(adsl, dataset_add = advs, by_vars = exprs(USUBJID),
@@ -125,7 +83,60 @@
       3 ST42-3  M     NOR     ST42          NA
       4 ST42-4  F     UGA     ST42          NA
 
-# derive_var_merged_summary Test 28: error if no summary function
+# derive_vars_merged_lookup Test 21: merge lookup table
+
+    Code
+      actual <- derive_vars_merged_lookup(vs, dataset_add = param_lookup, by_vars = exprs(
+        VSTESTCD, VSTEST), new_var = exprs(PARAMCD, PARAM = DESCRIPTION),
+      print_not_mapped = TRUE)
+    Message
+      List of `VSTESTCD` and `VSTEST` not mapped:
+      # A tibble: 1 x 2
+      VSTESTCD VSTEST
+      <chr> <chr>
+      1 DIABP Diastolic Blood Pressure
+      i Run `admiral::get_not_mapped()` to access the full list.
+
+# derive_vars_merged_lookup Test 23: by_vars with rename
+
+    Code
+      actual <- derive_vars_merged_lookup(vs, dataset_add = param_lookup, by_vars = exprs(
+        VSTESTCD = TESTCD, VSTEST), new_var = exprs(PARAMCD, PARAM = DESCRIPTION),
+      print_not_mapped = TRUE)
+    Message
+      List of `VSTESTCD` and `VSTEST` not mapped:
+      # A tibble: 1 x 2
+      VSTESTCD VSTEST
+      <chr> <chr>
+      1 DIABP Diastolic Blood Pressure
+      i Run `admiral::get_not_mapped()` to access the full list.
+
+# get_not_mapped Test 24: not all by_vars have records in the lookup table
+
+    Code
+      act_vs_param <- derive_vars_merged_lookup(vs, dataset_add = param_lookup,
+        by_vars = exprs(VSTESTCD, VSTEST), new_var = exprs(PARAMCD, PARAM = DESCRIPTION),
+        print_not_mapped = TRUE)
+    Message
+      List of `VSTESTCD` and `VSTEST` not mapped:
+      # A tibble: 1 x 2
+      VSTESTCD VSTEST
+      <chr> <chr>
+      1 DIABP Diastolic Blood Pressure
+      i Run `admiral::get_not_mapped()` to access the full list.
+
+# derive_vars_merged_summary Test 28: error if no summary function
+
+    Code
+      derive_vars_merged_summary(adbds, dataset_add = adbds, by_vars = exprs(AVISIT),
+      new_vars = exprs(MEANVIS = AVAL / 2))
+    Condition
+      Error:
+      ! After summarising, the dataset contains duplicate records with respect to `AVISIT`.
+      Please check `new_vars` if summary functions like `mean()`, `sum()`, ... are used on the right hand side.
+      i Run `admiral::get_duplicates_dataset()` to access the duplicate records
+
+# derive_var_merged_summary Test 32: error if no summary function
 
     Code
       derive_var_merged_summary(adbds, dataset_add = adbds, by_vars = exprs(AVISIT),
@@ -135,4 +146,26 @@
       ! After summarising, the dataset contains duplicate records with respect to `AVISIT`.
       Please check `new_vars` if summary functions like `mean()`, `sum()`, ... are used on the right hand side.
       i Run `admiral::get_duplicates_dataset()` to access the duplicate records
+
+# derive_var_merged_summary Test 33: deprecation message
+
+    Code
+      derive_var_merged_summary(adbds, dataset_add = adbds1, by_vars = exprs(AVISIT = VISIT),
+      new_vars = exprs(MEANVIS = mean(AVAL, na.rm = TRUE)))
+    Message
+      `derive_var_merged_summary()` was deprecated in admiral 1.4.
+      i Please use `derive_vars_merged_summary()` instead.
+      x Function is brought inline with our programming strategy - warning will be issued in January 2027
+      i See admiral's deprecation guidance: https://pharmaverse.github.io/admiraldev/dev/articles/programming_strategy.html#deprecation
+    Output
+      # A tibble: 7 x 4
+        AVISIT  ASEQ  AVAL MEANVIS
+        <chr>  <dbl> <dbl>   <dbl>
+      1 WEEK 1     1    10      10
+      2 WEEK 1     2    NA      10
+      3 WEEK 2     3    NA     NaN
+      4 WEEK 3     4    42      42
+      5 WEEK 4     5    12      13
+      6 WEEK 4     6    12      13
+      7 WEEK 4     7    15      13
 

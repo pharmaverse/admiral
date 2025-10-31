@@ -1,7 +1,8 @@
 #' Calls a Function Provided by the User
 #'
 #' @description
-#' r lifecycle::badge("deprecated")
+#' `r lifecycle::badge("deprecated")`
+#'
 #' Calls a function provided by the user and adds the function call to the error
 #' message if the call fails.
 
@@ -26,7 +27,7 @@
 #'   weight = "hallo"
 #' )))
 call_user_fun <- function(call) {
-  deprecate_inform(
+  deprecate_warn(
     when = "1.3.0",
     what = "call_user_fun()",
     details = c(
