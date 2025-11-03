@@ -195,7 +195,7 @@
 #'   input dataset and additionally the variables specified for `new_vars`
 #'   derived from the additional dataset (`dataset_add`).
 #'
-#' @seealso [derive_vars_joined()], [derive_var_merged_summary()],
+#' @seealso [derive_vars_joined()], [derive_vars_merged_summary()],
 #' [derive_var_joined_exist_flag()], [filter_joined()]
 #'
 #' @keywords der_gen
@@ -484,7 +484,7 @@ derive_vars_joined_summary <- function(dataset,
     chr2vars(setdiff(intersect(colnames(data), colnames(dataset_add)), vars2chr(by_vars)))
   # merge new variables to the input dataset and rename them
   data %>%
-    derive_var_merged_summary(
+    derive_vars_merged_summary(
       dataset_add = data_joined,
       by_vars = exprs(!!!by_vars_left, !!tmp_obs_nr),
       new_vars = add_suffix_to_vars(new_vars, vars = common_vars, suffix = ".join"),

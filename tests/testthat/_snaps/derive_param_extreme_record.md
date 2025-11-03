@@ -8,9 +8,10 @@
             PRSTDTC), AVALC = PRDECOD))), source_datasets = list(cm = cm, pr = pr),
       by_vars = exprs(STUDYID, USUBJID), order = exprs(ADT), mode = "first",
       set_values_to = exprs(PARAMCD = "FIRSTACT", PARAM = "First Anti-Cancer Therapy"))
-    Message
+    Condition
+      Warning:
       `derive_param_extreme_record()` was deprecated in admiral 1.2.0.
       i Please use `derive_extreme_event()` instead.
-      x This message will turn into a warning at the beginning of 2026.
+      x This message will turn into an error at the beginning of 2027.
       i See admiral's deprecation guidance: https://pharmaverse.github.io/admiraldev/dev/articles/programming_strategy.html#deprecation
 
