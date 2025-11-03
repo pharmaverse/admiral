@@ -78,7 +78,7 @@ consolidate_metadata(
 )
 }
 \seealso{
-Creating auxiliary datasets: 
+Creating auxiliary datasets:
 \code{\link{create_period_dataset}()},
 \code{\link{create_query_data}()},
 \code{\link{create_single_dose_dataset}()}

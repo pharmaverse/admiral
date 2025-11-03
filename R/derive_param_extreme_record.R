@@ -136,12 +136,12 @@ derive_param_extreme_record <- function(dataset = NULL,
                                         order,
                                         mode,
                                         set_values_to) {
-  deprecate_inform(
+  deprecate_warn(
     when = "1.2.0",
     what = "derive_param_extreme_record()",
     with = "derive_extreme_event()",
     details = c(
-      x = "This message will turn into a warning at the beginning of 2026.",
+      x = "This message will turn into an error at the beginning of 2027.",
       i = "See admiral's deprecation guidance:
       https://pharmaverse.github.io/admiraldev/dev/articles/programming_strategy.html#deprecation"
     )

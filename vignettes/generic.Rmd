@@ -62,22 +62,22 @@ functions and their properties.
 library(reactable)
 
 generic_derivations <- tibble::tribble(
-  ~Derivation,                      ~Method,       ~What,       ~Source,
-  "derive_var_extreme_flag()",      "selection",   "variables", "single",
-  "derive_var_joined_exist_flag()", "selection",   "variables", "single",
-  "derive_var_merged_ef_msrc()",    "selection",   "variables", "multiple",
-  "derive_var_merged_exist_flag()", "selection",   "variables", "single",
-  "derive_vars_joined_summary()",   "summary",     "variables", "single",
-  "derive_var_merged_summary()",    "summary",     "variables", "single",
-  "derive_vars_joined()",           "selection",   "variables", "single",
-  "derive_vars_merged()",           "selection",   "variables", "single",
-  "derive_vars_extreme_event()",    "selection",   "variables", "multiple",
-  "derive_vars_computed()",         "computation", "variables", "single",
-  "derive_extreme_event()",         "selection",   "records",   "multiple",
-  "derive_extreme_records()",       "selection",   "records",   "single",
-  "derive_param_computed()",        "computation", "records",   "single",
-  "derive_param_exist_flag()",      "selection",   "records",   "single",
-  "derive_summary_records()",       "summary",     "records",   "single"
+  ~Derivation, ~Method, ~What, ~Source,
+  "derive_var_extreme_flag()", "selection", "variables", "single",
+  "derive_var_joined_exist_flag()", "selection", "variables", "single",
+  "derive_var_merged_ef_msrc()", "selection", "variables", "multiple",
+  "derive_var_merged_exist_flag()", "selection", "variables", "single",
+  "derive_vars_joined_summary()", "summary", "variables", "single",
+  "derive_vars_merged_summary()", "summary", "variables", "single",
+  "derive_vars_joined()", "selection", "variables", "single",
+  "derive_vars_merged()", "selection", "variables", "single",
+  "derive_vars_extreme_event()", "selection", "variables", "multiple",
+  "derive_vars_computed()", "computation", "variables", "single",
+  "derive_extreme_event()", "selection", "records", "multiple",
+  "derive_extreme_records()", "selection", "records", "single",
+  "derive_param_computed()", "computation", "records", "single",
+  "derive_param_exist_flag()", "selection", "records", "single",
+  "derive_summary_records()", "summary", "records", "single"
 ) %>% dplyr::select(Derivation, What, Source, Method)
 
 reactable(
@@ -470,7 +470,7 @@ and `false_value` argument can be used.
 
 If the new values should be derived by summarizing values, e.g., sum, average,
 concatenation, ..., the functions `derive_summary_records()`,
-`derive_var_merged_summary()`, or `derive_vars_joined_summary()` can be used.
+`derive_vars_merged_summary()`, or `derive_vars_joined_summary()` can be used.
 For example, adding an average dose parameter to `ADEX` can be done by the
 following:
 ```{r}
@@ -508,7 +508,7 @@ adsl <- tribble(
   "3"
 )
 
-derive_var_merged_summary(
+derive_vars_merged_summary(
   adsl,
   dataset_add = adex,
   filter_add = AVAL > 0,

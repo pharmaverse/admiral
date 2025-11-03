@@ -67,7 +67,8 @@ The output dataset contains all observations and variables of the
 input dataset and additionally the variables specified for \code{new_vars}.
 }
 \description{
-Merge a summary variable from a dataset to the input dataset.
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}} The \code{derive_var_merged_summary()}
+function has been deprecated in favor of \code{derive_vars_merged_summary()}.
 }
 \details{
 \enumerate{
@@ -82,83 +83,18 @@ are set to \code{NA}. Observations in the additional dataset which have no
 matching observation in the input dataset are ignored.
 }
 }
-\examples{
-library(tibble)
-
-# Add a variable for the mean of AVAL within each visit
-adbds <- tribble(
-  ~USUBJID,  ~AVISIT,  ~ASEQ, ~AVAL,
-  "1",      "WEEK 1",      1,    10,
-  "1",      "WEEK 1",      2,    NA,
-  "1",      "WEEK 2",      3,    NA,
-  "1",      "WEEK 3",      4,    42,
-  "1",      "WEEK 4",      5,    12,
-  "1",      "WEEK 4",      6,    12,
-  "1",      "WEEK 4",      7,    15,
-  "2",      "WEEK 1",      1,    21,
-  "2",      "WEEK 4",      2,    22
-)
-
-derive_var_merged_summary(
-  adbds,
-  dataset_add = adbds,
-  by_vars = exprs(USUBJID, AVISIT),
-  new_vars = exprs(
-    MEANVIS = mean(AVAL, na.rm = TRUE),
-    MAXVIS = max(AVAL, na.rm = TRUE)
-  )
-)
-
-# Add a variable listing the lesion ids at baseline
-adsl <- tribble(
-  ~USUBJID,
-  "1",
-  "2",
-  "3"
-)
-
-adtr <- tribble(
-  ~USUBJID,     ~AVISIT, ~LESIONID,
-  "1",       "BASELINE",  "INV-T1",
-  "1",       "BASELINE",  "INV-T2",
-  "1",       "BASELINE",  "INV-T3",
-  "1",       "BASELINE",  "INV-T4",
-  "1",         "WEEK 1",  "INV-T1",
-  "1",         "WEEK 1",  "INV-T2",
-  "1",         "WEEK 1",  "INV-T4",
-  "2",       "BASELINE",  "INV-T1",
-  "2",       "BASELINE",  "INV-T2",
-  "2",       "BASELINE",  "INV-T3",
-  "2",         "WEEK 1",  "INV-T1",
-  "2",         "WEEK 1",  "INV-N1"
-)
-
-derive_var_merged_summary(
-  adsl,
-  dataset_add = adtr,
-  by_vars = exprs(USUBJID),
-  filter_add = AVISIT == "BASELINE",
-  new_vars = exprs(LESIONSBL = paste(LESIONID, collapse = ", "))
-)
-
-}
 \seealso{
 \code{\link[=derive_summary_records]{derive_summary_records()}}, \code{\link[=get_summary_records]{get_summary_records()}}
 
-General Derivation Functions for all ADaMs that returns variable appended to dataset:
-\code{\link{derive_var_extreme_flag}()},
-\code{\link{derive_var_joined_exist_flag}()},
-\code{\link{derive_var_merged_ef_msrc}()},
-\code{\link{derive_var_merged_exist_flag}()},
-\code{\link{derive_var_obs_number}()},
-\code{\link{derive_var_relative_flag}()},
-\code{\link{derive_vars_cat}()},
-\code{\link{derive_vars_computed}()},
-\code{\link{derive_vars_joined}()},
-\code{\link{derive_vars_joined_summary}()},
-\code{\link{derive_vars_merged}()},
-\code{\link{derive_vars_merged_lookup}()},
-\code{\link{derive_vars_transposed}()}
+Other deprecated: 
+\code{\link{call_user_fun}()},
+\code{\link{date_source}()},
+\code{\link{derive_param_extreme_record}()},
+\code{\link{derive_var_dthcaus}()},
+\code{\link{derive_var_extreme_dt}()},
+\code{\link{derive_var_extreme_dtm}()},
+\code{\link{dthcaus_source}()},
+\code{\link{get_summary_records}()}
 }
-\concept{der_gen}
-\keyword{der_gen}
+\concept{deprecated}
+\keyword{deprecated}
