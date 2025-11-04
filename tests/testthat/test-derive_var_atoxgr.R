@@ -3487,7 +3487,7 @@ expected_plate_v6_si <- expected_plate_si %>%
   )
 
 ## Test 46d: CTCAEv6 Thrombocytopenia (SI unit) ----
-test_that("derive_var_atoxgr Test 46d: CTCAEv6 Platelet count decreased (SI unit)", {
+test_that("derive_var_atoxgr Test 46d: CTCAEv6 Thrombocytopenia (SI unit)", {
   input_plate_v6_si <- expected_plate_v6_si %>%
     select(-ATOXGRL)
 
@@ -3508,7 +3508,7 @@ test_that("derive_var_atoxgr Test 46d: CTCAEv6 Platelet count decreased (SI unit
 })
 
 ## Test 46e: CTCAEv6 Thrombocytopenia (USCV unit) ----
-test_that("derive_var_atoxgr Test 46e: CTCAEv6 Platelet count decreased (USCV unit)", {
+test_that("derive_var_atoxgr Test 46e: CTCAEv6 Thrombocytopenia (USCV unit)", {
   expected_plate_v6_cv <- expected_plate_v6_si %>%
     mutate(AVALU = if_else(str_to_upper(AVALU) == "10^9/L", "10^3/uL", AVALU))
 
@@ -3559,8 +3559,6 @@ test_that("derive_var_atoxgr Test 46e: CTCAEv6 Platelet count decreased (legacy 
     keys = c("TESTNUM")
   )
 })
-
-
 
 ### Serum amylase increased
 ### NCICTCAEv4 and NCICTCAEv5 criteria essentially the same
