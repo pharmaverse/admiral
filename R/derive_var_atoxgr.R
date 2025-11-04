@@ -157,17 +157,16 @@ derive_var_atoxgr_dir <- function(dataset,
       what = "derive_var_atoxgr_dir(abnormal_indicator = )",
       details = c(
         x = "This message will turn into a warning at the beginning of 2027.",
-        i = "See admiral's deprecation guidance:
-              https://pharmaverse.github.io/admiraldev/dev/articles/programming_strategy.html#deprecation",
+        i = "See admiral's deprecation guidance: https://pharmaverse.github.io/admiraldev/dev/articles/programming_strategy.html#deprecation",
         x = "argument will be mapped to `low_indicator` if `criteria_direction` == \"L\"",
         x = "otherwise mapped to  `high_indicator`."
       )
     )
 
     if (criteria_direction == "L") {
-      low_indicator = abnormal_indicator
+      low_indicator <- abnormal_indicator
     } else {
-      high_indicator = abnormal_indicator
+      high_indicator <- abnormal_indicator
     }
   }
 

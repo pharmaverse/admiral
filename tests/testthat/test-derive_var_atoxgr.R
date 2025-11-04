@@ -1828,8 +1828,8 @@ test_that("derive_var_atoxgr Test 26b: CTCAEv6 Creatinine increased", {
     "Creatinine increased",  41,     40,    40,     NA_character_,  "NORMAL",       "1",
     "Creatinine increased",  40,     40,    40,     NA_character_,  "NORMAL",       "0",
     # GRADE derived from AVAL against BASE when baseline is below LLN
-    "Creatinine increased", 121,     40,    41,     NA_character_,  "LOW",          "3",
-    "Creatinine increased", 120,     40,    41,     NA_character_,  "LOW",          "2",
+    "Creatinine increased",  121,    40,    41,     NA_character_,  "LOW",          "3",
+    "Creatinine increased",  120,    40,    41,     NA_character_,  "LOW",          "2",
     "Creatinine increased",  61,     40,    41,     NA_character_,  "LOW",          "2",
     "Creatinine increased",  60,     40,    60,     NA_character_,  "LOW",          "0",
     # BASE missing - AVAL <= ANRLO can grade as NORMAL
@@ -2479,8 +2479,6 @@ test_that("derive_var_atoxgr Test 34d: CTCAEv6 Hemoglobin increased (USCV unit)"
     keys = c("TESTNUM")
   )
 })
-
-
 
 ### INR increased (NCICTCV4)
 ### NCICTCV5 different for grade 1
@@ -3541,7 +3539,7 @@ test_that("derive_var_atoxgr Test 46e: CTCAEv6 Platelet count decreased (legacy 
       ANRLO = ANRLO * 1000,
       ANRHI = ANRHI * 1000,
       AVALU = if_else(str_to_upper(AVALU) == "10^9/L", "10^3/mL", AVALU)
-  )
+    )
 
   input_plate_v6_cv2 <- expected_plate_v6_cv2 %>%
     select(-ATOXGRL)
@@ -11007,8 +11005,8 @@ test_that("derive_var_atoxgr Test 129: CTCAEv6  Blood bilirubin increased", {
 })
 
 ## Test when high_indicator not defined - should map to high_indicator
-## Test 130: CTCAEv6  Blood bilirubin increased high_indicator not defined ----
-test_that("derive_var_atoxgr Test 130: CTCAEv6  Blood bilirubin increased high_indicator not defined", {
+## Test 130: CTCAEv6  Blood bilirubin incr. high_indicator not defined ----
+test_that("derive_var_atoxgr Test 130: CTCAEv6  Blood bilirubin incr. high_indicator not defined", {
   expect_error(
     actual_bili_ctcv6 <- derive_var_atoxgr_dir(
       input_bili_ctcv6,
@@ -11046,6 +11044,4 @@ test_that("derive_var_atoxgr Test 131: CTCAEv6 Creatinine increased low_indicato
     ),
     class = "assert_character_vector"
   )
-
 })
-
