@@ -782,7 +782,7 @@ The following functions are helpful for many ADSL derivations:
 
   - `derive_vars_merged()` - Merge Variables from a Dataset to the Input Dataset
   - `derive_var_merged_exist_flag()` - Merge an Existence Flag
-  - `derive_var_merged_summary()` - Merge Summary Variables
+  - `derive_vars_merged_summary()` - Merge Summary Variables
 
 See also [Generic Functions](generic.html).
 

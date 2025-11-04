@@ -65,7 +65,9 @@ A list of expressions where the expressions are symbols as returned by
 The input dataset with the new variable added.
 }
 \description{
-\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}} The \code{derive_var_extreme_dtm()}
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}}
+
+The \code{derive_var_extreme_dtm()}
 function has been deprecated in favor of \code{derive_vars_extreme_event()}.
 
 Add the first or last datetime from multiple sources to the dataset, e.g.,
@@ -267,6 +269,7 @@ Other deprecated:
 \code{\link{derive_param_extreme_record}()},
 \code{\link{derive_var_dthcaus}()},
 \code{\link{derive_var_extreme_dt}()},
+\code{\link{derive_var_merged_summary}()},
 \code{\link{dthcaus_source}()},
 \code{\link{get_summary_records}()}
 }

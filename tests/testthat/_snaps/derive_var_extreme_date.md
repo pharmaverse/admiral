@@ -2,44 +2,50 @@
 
     Code
       ae_start <- date_source(dataset_name = "ae", date = AESTDTM)
-    Message
+    Condition
+      Warning:
       `date_source()` was deprecated in admiral 1.2.0.
       i Please use `event()` instead.
-      x This message will turn into a warning at the beginning of 2026.
+      x This message will turn into an error at the beginning of 2027.
       i See admiral's deprecation guidance: https://pharmaverse.github.io/admiraldev/dev/articles/programming_strategy.html#deprecation
     Code
       ae_end <- date_source(dataset_name = "ae", date = AEENDTM)
-    Message
+    Condition
+      Warning:
       `date_source()` was deprecated in admiral 1.2.0.
       i Please use `event()` instead.
-      x This message will turn into a warning at the beginning of 2026.
+      x This message will turn into an error at the beginning of 2027.
       i See admiral's deprecation guidance: https://pharmaverse.github.io/admiraldev/dev/articles/programming_strategy.html#deprecation
     Code
       adsl_trtdate <- date_source(dataset_name = "adsl", date = TRTEDTM)
-    Message
+    Condition
+      Warning:
       `date_source()` was deprecated in admiral 1.2.0.
       i Please use `event()` instead.
-      x This message will turn into a warning at the beginning of 2026.
+      x This message will turn into an error at the beginning of 2027.
       i See admiral's deprecation guidance: https://pharmaverse.github.io/admiraldev/dev/articles/programming_strategy.html#deprecation
     Code
       adsl_dthdate <- date_source(dataset_name = "adsl", date = DTHDT, filter = nchar(
         DTHDTC) >= 10)
-    Message
+    Condition
+      Warning:
       `date_source()` was deprecated in admiral 1.2.0.
       i Please use `event()` instead.
-      x This message will turn into a warning at the beginning of 2026.
+      x This message will turn into an error at the beginning of 2027.
       i See admiral's deprecation guidance: https://pharmaverse.github.io/admiraldev/dev/articles/programming_strategy.html#deprecation
     Code
       derive_var_extreme_dt(adsl, new_var = LSTALVDT, source_datasets = list(ae = ae,
         adsl = adsl), ae_start, ae_end, adsl_trtdate, adsl_dthdate, mode = "last")
-    Message
+    Condition
+      Warning:
       `derive_var_extreme_dt()` was deprecated in admiral 1.2.0.
       i Please use `derive_vars_extreme_event()` instead.
-      x This message will turn into a warning at the beginning of 2026.
+      x This message will turn into an error at the beginning of 2027.
       i See admiral's deprecation guidance: https://pharmaverse.github.io/admiraldev/dev/articles/programming_strategy.html#deprecation
+      Warning:
       `derive_var_extreme_dtm()` was deprecated in admiral 1.2.0.
       i Please use `derive_vars_extreme_event()` instead.
-      x This message will turn into a warning at the beginning of 2026.
+      x This message will turn into an error at the beginning of 2027.
       i See admiral's deprecation guidance: https://pharmaverse.github.io/admiraldev/dev/articles/programming_strategy.html#deprecation
     Output
       # A tibble: 3 x 6
@@ -54,43 +60,48 @@
     Code
       ae_start <- date_source(dataset_name = "ae", date = convert_dtc_to_dtm(AESTDTC),
       set_values_to = exprs(LALVDOM = "AE", LALVSEQ = AESEQ, LALVVAR = "AESTDTC"))
-    Message
+    Condition
+      Warning:
       `date_source()` was deprecated in admiral 1.2.0.
       i Please use `event()` instead.
-      x This message will turn into a warning at the beginning of 2026.
+      x This message will turn into an error at the beginning of 2027.
       i See admiral's deprecation guidance: https://pharmaverse.github.io/admiraldev/dev/articles/programming_strategy.html#deprecation
     Code
       ae_end <- date_source(dataset_name = "ae", date = AEENDTM, set_values_to = exprs(
         LALVDOM = "AE", LALVSEQ = AESEQ, LALVVAR = "AEENDTC"))
-    Message
+    Condition
+      Warning:
       `date_source()` was deprecated in admiral 1.2.0.
       i Please use `event()` instead.
-      x This message will turn into a warning at the beginning of 2026.
+      x This message will turn into an error at the beginning of 2027.
       i See admiral's deprecation guidance: https://pharmaverse.github.io/admiraldev/dev/articles/programming_strategy.html#deprecation
     Code
       adsl_trtdate <- date_source(dataset_name = "adsl", date = TRTEDTM,
         set_values_to = exprs(LALVDOM = "ADSL", LALVSEQ = NA_integer_, LALVVAR = "TRTEDTM"))
-    Message
+    Condition
+      Warning:
       `date_source()` was deprecated in admiral 1.2.0.
       i Please use `event()` instead.
-      x This message will turn into a warning at the beginning of 2026.
+      x This message will turn into an error at the beginning of 2027.
       i See admiral's deprecation guidance: https://pharmaverse.github.io/admiraldev/dev/articles/programming_strategy.html#deprecation
     Code
       adsl_dthdate <- date_source(dataset_name = "adsl", date = DTHDT, filter = nchar(
         DTHDTC) >= 10, set_values_to = exprs(LALVDOM = "ADSL", LALVSEQ = NA_integer_,
         LALVVAR = "DTHDTC"))
-    Message
+    Condition
+      Warning:
       `date_source()` was deprecated in admiral 1.2.0.
       i Please use `event()` instead.
-      x This message will turn into a warning at the beginning of 2026.
+      x This message will turn into an error at the beginning of 2027.
       i See admiral's deprecation guidance: https://pharmaverse.github.io/admiraldev/dev/articles/programming_strategy.html#deprecation
     Code
       derive_var_extreme_dtm(adsl, new_var = LSTALVDTM, source_datasets = list(ae = ae,
         adsl = adsl), ae_start, ae_end, adsl_trtdate, adsl_dthdate, mode = "last")
-    Message
+    Condition
+      Warning:
       `derive_var_extreme_dtm()` was deprecated in admiral 1.2.0.
       i Please use `derive_vars_extreme_event()` instead.
-      x This message will turn into a warning at the beginning of 2026.
+      x This message will turn into an error at the beginning of 2027.
       i See admiral's deprecation guidance: https://pharmaverse.github.io/admiraldev/dev/articles/programming_strategy.html#deprecation
     Output
       # A tibble: 3 x 9

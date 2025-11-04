@@ -47,7 +47,6 @@ test_that("derive_var_extreme_dt Test 1: deprecation message if function is call
       filter = nchar(DTHDTC) >= 10
     )
 
-
     derive_var_extreme_dt(
       adsl,
       new_var = LSTALVDT,
