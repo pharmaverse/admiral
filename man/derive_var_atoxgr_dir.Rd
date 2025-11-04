@@ -10,6 +10,7 @@ derive_var_atoxgr_dir(
   tox_description_var,
   meta_criteria,
   criteria_direction,
+  abnormal_indicator = NULL,
   high_indicator = NULL,
   low_indicator = NULL,
   get_unit_expr,
@@ -42,7 +43,8 @@ criteria. For example: "Anemia" or "INR Increased".
 \item{meta_criteria}{Metadata data set holding the criteria (normally a case statement)
 
 \describe{
-\item{Permitted values}{\code{atoxgr_criteria_ctcv4}, \code{atoxgr_criteria_ctcv5}, \code{atoxgr_criteria_ctcv6}, \code{atoxgr_criteria_daids}
+\item{Permitted values}{\code{atoxgr_criteria_ctcv4}, \code{atoxgr_criteria_ctcv5}, \code{atoxgr_criteria_ctcv6},
+\code{atoxgr_criteria_daids}
 \itemize{
 \item \code{atoxgr_criteria_ctcv4} implements \href{https://dctd.cancer.gov/research/ctep-trials/trial-development#ctcae-and-ctep-codes}{Common Terminology Criteria for Adverse Events (CTCAE) v4.0}
 \item \code{atoxgr_criteria_ctcv5} implements \href{https://dctd.cancer.gov/research/ctep-trials/for-sites/adverse-events#ctep-ctcae}{Common Terminology Criteria for Adverse Events (CTCAE) v5.0}
@@ -75,12 +77,19 @@ based on a subset of subjects (e.g. AGE > 18 YEARS)
 \item{Default value}{none}
 }}
 
+\item{abnormal_indicator}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}} Please use \code{low_indicator} and
+\code{high_indicator} instead.
+
+\describe{
+\item{Default value}{\code{NULL}}
+}}
+
 \item{high_indicator}{Value in \code{BNRIND} derivation to indicate an abnormal high value.
 Usually "HIGH" for \code{criteria_direction} = "H".
 
 This is only required when \code{meta_criteria = atoxgr_criteria_ctcv5} or
-\code{meta_criteria = atoxgr_criteria_ctcv6} and \code{BNRIND} is a required variable. Currently, for terms
-\code{"Alanine aminotransferase increased"}, \code{"Aspartate aminotransferase increased"},
+\code{meta_criteria = atoxgr_criteria_ctcv6} and \code{BNRIND} is a required variable. Currently, for
+terms \code{"Alanine aminotransferase increased"}, \code{"Aspartate aminotransferase increased"},
 \code{"Blood bilirubin increased"} and \code{"GGT increased"} for both sets of criteria. Also, term
 \code{"Alkaline phosphatase increased"} for \code{meta_criteria = atoxgr_criteria_ctcv5}.
 

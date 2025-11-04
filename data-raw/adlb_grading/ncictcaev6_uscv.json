@@ -426,7 +426,7 @@
     "GRADE_3_CODE": "signif(AVAL, signif_dig) < 500 ~ \"3\"",
     "GRADE_2_CODE": "signif(AVAL, signif_dig) < 1000 ~ \"2\"",
     "GRADE_1_CODE": "signif(AVAL, signif_dig) < 1500 ~ \"1\"",
-    "UNIT_CHECK": "10^3/uL",
+    "UNIT_CHECK": "10^3/mL",
     "VAR_CHECK": "AVAL",
     "DIRECTION": "L",
     "COMMENT": "Legacy CV unit of 10^3/mL"
