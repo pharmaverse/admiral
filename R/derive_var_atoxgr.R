@@ -152,22 +152,30 @@ derive_var_atoxgr_dir <- function(dataset,
   assert_character_scalar(criteria_direction, values = c("L", "H"))
 
   if (!missing(abnormal_indicator)) {
+    assert_character_vector(abnormal_indicator, optional = TRUE)
+    if (criteria_direction == "L") {
+      low_indicator <- abnormal_indicator
+      mapping <- paste0(
+        "The argument is mapped to `low_indicator`, i.e., `low_indicator = \"",
+        abnormal_indicator, "\"`"
+      )
+    } else {
+      high_indicator <- abnormal_indicator
+      mapping <- paste0(
+        "The argument is mapped to `high_indicator`, i.e., `high_indicator = \"",
+        abnormal_indicator, "\"`"
+      )
+    }
+
     deprecate_inform(
       when = "1.4.0",
       what = "derive_var_atoxgr_dir(abnormal_indicator = )",
       details = c(
         x = "This message will turn into a warning at the beginning of 2027.",
         i = "See admiral's deprecation guidance: https://pharmaverse.github.io/admiraldev/dev/articles/programming_strategy.html#deprecation",
-        x = "argument will be mapped to `low_indicator` if `criteria_direction` == \"L\"",
-        x = "otherwise mapped to  `high_indicator`."
+        x = mapping
       )
     )
-
-    if (criteria_direction == "L") {
-      low_indicator <- abnormal_indicator
-    } else {
-      high_indicator <- abnormal_indicator
-    }
   }
 
   # check input parameter is character value
