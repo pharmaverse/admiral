@@ -10992,14 +10992,14 @@ test_that("derive_var_atoxgr Test 129: CTCAEv6  Blood bilirubin increased", {
       criteria_direction = "H",
       abnormal_indicator = "HIGH",
       get_unit_expr = AVALU
-      )
+    )
   )
 
   expect_dfs_equal(
-      base = expected_bili_ctcv6,
-      compare = actual_bili_ctcv6,
-      keys = c("ATOXDSCH", "AVAL", "ANRHI", "BNRIND", "AVALU")
-    )
+    base = expected_bili_ctcv6,
+    compare = actual_bili_ctcv6,
+    keys = c("ATOXDSCH", "AVAL", "ANRHI", "BNRIND", "AVALU")
+  )
 })
 
 ## Test when high_indicator not defined - should map to high_indicator
