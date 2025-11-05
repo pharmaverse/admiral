@@ -5564,7 +5564,7 @@ test_that("derive_var_atoxgr Test 70b: CTCAEv5 Hypocalcemia (USCV unit)", {
 })
 
 ## Test 70c: CTCAEv6 Hypocalcemia (SI unit) ----
-test_that("derive_var_atoxgr Test 70a=c: CTCAEv6 Hypocalcemia (SI unit)", {
+test_that("derive_var_atoxgr Test 70c: CTCAEv6 Hypocalcemia (SI unit)", {
   actual_calcd_si <- derive_var_atoxgr_dir(
     input_calcd_si,
     new_var = ATOXGRL,
@@ -10983,23 +10983,23 @@ test_that("derive_var_atoxgr Test 128: CTCAEv6 Alkalosis (SI unit)", {
 ## Test when deprecated abnormal_indicator used - should map to high_indicator
 ## Test 129: CTCAEv6  Blood bilirubin increased ----
 test_that("derive_var_atoxgr Test 129: CTCAEv6  Blood bilirubin increased", {
-  actual_bili_ctcv6 <- derive_var_atoxgr_dir(
-    input_bili_ctcv6,
-    new_var = ATOXGRH,
-    meta_criteria = atoxgr_criteria_ctcv6,
-    tox_description_var = ATOXDSCH,
-    criteria_direction = "H",
-    abnormal_indicator = "HIGH",
-    get_unit_expr = AVALU
+  expect_snapshot(
+    actual_bili_ctcv6 <- derive_var_atoxgr_dir(
+      input_bili_ctcv6,
+      new_var = ATOXGRH,
+      meta_criteria = atoxgr_criteria_ctcv6,
+      tox_description_var = ATOXDSCH,
+      criteria_direction = "H",
+      abnormal_indicator = "HIGH",
+      get_unit_expr = AVALU
+      )
   )
 
-  expect_snapshot(
-    expect_dfs_equal(
+  expect_dfs_equal(
       base = expected_bili_ctcv6,
       compare = actual_bili_ctcv6,
       keys = c("ATOXDSCH", "AVAL", "ANRHI", "BNRIND", "AVALU")
     )
-  )
 })
 
 ## Test when high_indicator not defined - should map to high_indicator
