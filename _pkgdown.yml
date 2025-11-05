@@ -20,6 +20,7 @@ template:
       data-consent-screen-disclaimer="By clicking 'Allow tracking', you consent to anonymous user tracking which helps us improve our service. We don't collect any personally identifiable information."
       data-consent-screen-accept-button-text="Allow tracking"
       data-consent-screen-reject-button-text="No, thanks"
+      data-modal-example-questions="Tell me a little about the {admiral} package., What are some important {admiral} functions and what do they do?"
       data-modal-z-index="9999"
       ></script>
 search:
