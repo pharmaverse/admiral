@@ -10,6 +10,8 @@
 <!-- end badges -->
 ADaM in R Asset Library
 
+*Explore all the other packages in the [{admiral} ecosystem](https://pharmaverse.org/e2eclinical/adam/) to learn more about ADaM programming in R.*
+
 ## Purpose
 
 To provide an open source, modularized toolbox that enables the pharmaceutical programming community
