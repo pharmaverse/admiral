@@ -719,7 +719,7 @@ adab_titer <- core_aab %>%
   filter(ADATYPE == "ADA_BAB") %>%
   mutate(
     # For ADASTAT, append "Titer Units" to PARAM
-    PARAM = paste(PARCAT1, "Titer Units", sep = " "),
+    PARAM = paste(PARCAT1, ", Titer Units", sep = ""),
   )
 
 # By Visit NAB ISTESTCD Results
@@ -763,7 +763,7 @@ adab_nabres <- core_aab %>%
   filter(ADATYPE == "ADA_NAB") %>%
   mutate(
     PARAMCD = "RESULTy",
-    PARAM = paste("NAB interpreted per sample result,", PARCAT1, sep = " "),
+    PARAM = paste("Nab interpreted per sample result,", PARCAT1, sep = " "),
     AVALC = toupper(RESULTC),
     AVAL = case_when(
       AVALC == "NEGATIVE" ~ 0,
@@ -1084,7 +1084,7 @@ adab_nabstat <- core_aab %>%
   ) %>%
   mutate(
     PARAMCD = "NABSTATy",
-    PARAM = paste("NAB Status of a patient,", PARCAT1, sep = " "),
+    PARAM = paste("Nab Status,", PARCAT1, sep = " "),
     AVAL = NABSTAT,
     AVALC = case_when(
       AVAL == 1 ~ "POSITIVE",
@@ -1202,31 +1202,37 @@ view_keys1 <- adab_adafl %>%
 
 # Study Specific Specs Post-Processing ------------------------------------
 
-# Create a Tibble to map above processed PARAMCD to the study specs
-# for derived PARAM and PARAMCD final values
+# Create a Tibble to map above PARAMCD and PARAM to final study spec values
+# Multiple NAB and ADA analytes example usage:
+# If ISTESTCD is 'ADA_BAB' and ISBDAGNT is 'XANOMELINE', RESULT1, ADASTAT1, etc. PARAM_SUFFIX = '(1)'
+# If ISTESTCD is 'ADA_BAB' and ISBDAGNT is 'Y012345678', RESULT2, ADASTAT2, etc. PARAM_SUFFIX = '(2)'
+# If ISTESTCD is 'ADA_NAB' and ISBDAGNT is 'XANOMELINE', RESULT3, etc. PARAM_SUFFIX = '(3)'
+# If ISTESTCD is 'ADA_NAB' and ISBDAGNT is 'Y012345678', RESULT4, etc. PARAM_SUFFIX = '(4)'
 
 adab_param_data <- tribble(
   ~PARAMCD, ~ADATYPE, ~ADAPARM, ~PARAMCD_NEW, ~PARAM_SUFFIX,
-  "RESULTy", "ADA_BAB", "XANOMELINE", "RESULT", NA_character_,
-  "RESULTy", "ADA_NAB", "XANOMELINE", "RESULT2", NA_character_,
-  "BFLAGy", "ADA_BAB", "XANOMELINE", "BFLAG", NA_character_,
-  "INDUCDy", "ADA_BAB", "XANOMELINE", "INDUCD", NA_character_,
-  "ENHANCy", "ADA_BAB", "XANOMELINE", "ENHANC", NA_character_,
-  "EMERPOSy", "ADA_BAB", "XANOMELINE", "EMERPOS", NA_character_,
-  "TRUNAFFy", "ADA_BAB", "XANOMELINE", "TRUNAFF", NA_character_,
-  "EMERNEGy", "ADA_BAB", "XANOMELINE", "EMERNEG", NA_character_,
-  "NOTRRELy", "ADA_BAB", "XANOMELINE", "NOTRREL", NA_character_,
-  "ADASTATy", "ADA_BAB", "XANOMELINE", "ADASTAT", NA_character_,
-  "TIMADAy", "ADA_BAB", "XANOMELINE", "TIMADA", NA_character_,
-  "PERSADAy", "ADA_BAB", "XANOMELINE", "PERSADA", NA_character_,
-  "TRANADAy", "ADA_BAB", "XANOMELINE", "TRANADA", NA_character_,
-  "NABSTATy", "ADA_NAB", "XANOMELINE", "NABSTAT", NA_character_,
-  "ADASTATV", "ADA_BAB", "XANOMELINE", "ADASTTV", NA_character_,
-  "TFLAGV", "ADA_BAB", "XANOMELINE", "TFLAGV", NA_character_,
-  "PBFLAGV", "ADA_BAB", "XANOMELINE", "PBFLAGV", NA_character_,
-  "LPPDTMy", "ADA_BAB", "XANOMELINE", "LPPDTM", NA_character_,
-  "FPPDTMy", "ADA_BAB", "XANOMELINE", "FPPDTM", NA_character_,
-  "ADADURy", "ADA_BAB", "XANOMELINE", "ADADUR", NA_character_,
+  "XANOMELINE", "ADA_BAB", "XANOMELINE", "XANOMELINE", "(1)",
+  "XANOMELINE", "ADA_NAB", "XANOMELINE", "XANOMELINE", "(1)",
+  "RESULTy", "ADA_BAB", "XANOMELINE", "RESULT1", "(1)",
+  "RESULTy", "ADA_NAB", "XANOMELINE", "RESULT2", "(2)",
+  "BFLAGy", "ADA_BAB", "XANOMELINE", "BFLAG1", "(1)",
+  "INDUCDy", "ADA_BAB", "XANOMELINE", "INDUCD1", "(1)",
+  "ENHANCy", "ADA_BAB", "XANOMELINE", "ENHANC1", "(1)",
+  "EMERPOSy", "ADA_BAB", "XANOMELINE", "EMERPOS1", "(1)",
+  "TRUNAFFy", "ADA_BAB", "XANOMELINE", "TRUNAFF1", "(1)",
+  "EMERNEGy", "ADA_BAB", "XANOMELINE", "EMERNEG1", "(1)",
+  "NOTRRELy", "ADA_BAB", "XANOMELINE", "NOTRREL1", "(1)",
+  "ADASTATy", "ADA_BAB", "XANOMELINE", "ADASTAT1", "(1)",
+  "TIMADAy", "ADA_BAB", "XANOMELINE", "TIMADA1", "(1)",
+  "PERSADAy", "ADA_BAB", "XANOMELINE", "PERSADA1", "(1)",
+  "TRANADAy", "ADA_BAB", "XANOMELINE", "TRANADA1", "(1)",
+  "NABSTATy", "ADA_NAB", "XANOMELINE", "NABSTAT1", "(1)",
+  "ADASTATV", "ADA_BAB", "XANOMELINE", "ADASTTV1", "(1)",
+  "TFLAGV", "ADA_BAB", "XANOMELINE", "TFLAGV1", "(1)",
+  "PBFLAGV", "ADA_BAB", "XANOMELINE", "PBFLAGV1", "(1)",
+  "LPPDTMy", "ADA_BAB", "XANOMELINE", "LPPDTM1", "(1)",
+  "FPPDTMy", "ADA_BAB", "XANOMELINE", "FPPDTM1", "(1)",
+  "ADADURy", "ADA_BAB", "XANOMELINE", "ADADUR1", "(1)",
 )
 
 # Merge the Paramter dataset into the main data
