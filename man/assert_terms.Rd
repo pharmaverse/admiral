@@ -7,13 +7,29 @@
 assert_terms(terms, expect_grpname = FALSE, expect_grpid = FALSE, source_text)
 }
 \arguments{
-\item{terms}{Terms provided by user}
+\item{terms}{Terms provided by user
 
-\item{expect_grpname}{Is the \code{GRPNAME} column expected?}
+\describe{
+\item{Default value}{none}
+}}
 
-\item{expect_grpid}{Is the \code{GRPID} column expected?}
+\item{expect_grpname}{Is the \code{GRPNAME} column expected?
 
-\item{source_text}{Text describing the source of the terms, e.g., \verb{"the data frame provided for the }definition\verb{ element"}.}
+\describe{
+\item{Default value}{\code{FALSE}}
+}}
+
+\item{expect_grpid}{Is the \code{GRPID} column expected?
+
+\describe{
+\item{Default value}{\code{FALSE}}
+}}
+
+\item{source_text}{Text describing the source of the terms, e.g., \verb{"the data frame provided for the }definition\verb{ element"}.
+
+\describe{
+\item{Default value}{none}
+}}
 }
 \value{
 An error is issued if

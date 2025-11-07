@@ -7,7 +7,11 @@
 params(...)
 }
 \arguments{
-\item{...}{One or more named arguments}
+\item{...}{One or more named arguments
+
+\describe{
+\item{Default value}{none}
+}}
 }
 \value{
 An object of class \code{params}

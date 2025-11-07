@@ -11,10 +11,18 @@ get_partialdatetime(dtc, create_datetime)
 
 A character date is expected in a format like \code{yyyy-mm-dd} or
 \code{yyyy-mm-ddThh:mm:ss}. Trailing components can be omitted and \code{-} is a
-valid value for any component.}
+valid value for any component.
+
+\describe{
+\item{Default value}{none}
+}}
 
 \item{create_datetime}{logical scalar. If \code{TRUE} returns Datetime components.
-If \code{FALSE} returns Date components.}
+If \code{FALSE} returns Date components.
+
+\describe{
+\item{Default value}{none}
+}}
 }
 \value{
 A list of character vectors. The elements of the list are named

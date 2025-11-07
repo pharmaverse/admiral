@@ -9,26 +9,49 @@ get_hori_data(dataset, by_vars, parameters, set_values_to, filter)
 \arguments{
 \item{dataset}{Input dataset
 
-The variables specified by the \code{by_vars} argument are expected to be in the dataset.}
+The variables specified by the \code{by_vars} argument are expected to be in the dataset.
 
-\item{by_vars}{Grouping variables}
+\describe{
+\item{Default value}{none}
+}}
+
+\item{by_vars}{Grouping variables
+
+\describe{
+\item{Default value}{none}
+}}
 
 \item{parameters}{List of parameter codes
 
 The input dataset is restricted to the specified parameter codes. If an
 expression is specified, a new parameter code is added to the input
 dataset. The name of the element defines the parameter code and the
-expression the observations to select.}
+expression the observations to select.
+
+\describe{
+\item{Permitted values}{A character vector of \code{PARAMCD} values or a list of expressions}
+\item{Default value}{none}
+}}
 
 \item{set_values_to}{All variables of the form \verb{<variable>.<parameter>} like \code{AVAL.WEIGHT} are
 added to the input dataset. They are set to the value of the variable for
 the parameter. E.g., \code{AVAL.WEIGHT} is set to the value of \code{AVAL} where
-\code{PARAMCD == "WEIGHT"}.}
+\code{PARAMCD == "WEIGHT"}.
+
+\describe{
+\item{Permitted values}{}
+\item{Default value}{none}
+}}
 
 \item{filter}{Filter condition used for restricting the input dataset
 
 The specified filter condition is used in the warnings only. It is not
-applied to the input dataset.}
+applied to the input dataset.
+
+\describe{
+\item{Permitted values}{An unquoted expression}
+\item{Default value}{none}
+}}
 }
 \value{
 A dataset with one observation per by group. It contains the

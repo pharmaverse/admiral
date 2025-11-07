@@ -21,14 +21,22 @@ derive_param_exist_flag(
 \item{dataset}{Input dataset
 
 The variables specified by the \code{by_vars} argument are expected to be in the dataset.
-\code{PARAMCD} is expected as well.}
+\code{PARAMCD} is expected as well.
+
+\describe{
+\item{Default value}{\code{NULL}}
+}}
 
 \item{dataset_ref}{Reference dataset, e.g., ADSL
 
 The variables specified in \code{by_vars} are expected. For each group
 (as defined by \code{by_vars}) from the specified dataset (\code{dataset_ref}),
 the existence flag is calculated and added as a new observation to the
-input datasets (\code{dataset}).}
+input datasets (\code{dataset}).
+
+\describe{
+\item{Default value}{none}
+}}
 
 \item{dataset_add}{Additional dataset
 
@@ -36,7 +44,11 @@ The variables specified by the \code{by_vars} parameter are expected.
 
 This dataset is used to check if an event occurred or not. Any observation
 in the dataset fulfilling the event condition (\code{condition}) is considered
-as an event.}
+as an event.
+
+\describe{
+\item{Default value}{none}
+}}
 
 \item{condition}{Event condition
 
@@ -49,38 +61,70 @@ For all groups where it evaluates as \code{FALSE} or \code{NA} for all observati
 \code{AVALC} is set to the false value (\code{false_value}).
 
 For all groups not present in the additional dataset \code{AVALC} is set to
-the missing value (\code{missing_value}).}
+the missing value (\code{missing_value}).
+
+\describe{
+\item{Default value}{none}
+}}
 
 \item{true_value}{True value
 
 For all groups with at least one observations in the additional dataset
 (\code{dataset_add}) fulfilling the event condition (\code{condition}), \code{AVALC} is
-set to the specified value (\code{true_value}).}
+set to the specified value (\code{true_value}).
+
+\describe{
+\item{Permitted values}{A character scalar}
+\item{Default value}{\code{"Y"}}
+}}
 
 \item{false_value}{False value
 
 For all groups with at least one observations in the additional dataset
 (\code{dataset_add}) but none of them is fulfilling the event condition
-(\code{condition}), \code{AVALC} is set to the specified value (\code{false_value}).}
+(\code{condition}), \code{AVALC} is set to the specified value (\code{false_value}).
+
+\describe{
+\item{Permitted values}{A character scalar}
+\item{Default value}{\code{NA_character_}}
+}}
 
 \item{missing_value}{Values used for missing information
 
 For all groups without an observation in the additional dataset
-(\code{dataset_add}), \code{AVALC} is set to the specified value (\code{missing_value}).}
+(\code{dataset_add}), \code{AVALC} is set to the specified value (\code{missing_value}).
+
+\describe{
+\item{Permitted values}{A character scalar}
+\item{Default value}{\code{NA_character_}}
+}}
 
 \item{filter_add}{Filter for additional data
 
 Only observations fulfilling the specified condition are taken into account
 for flagging. If the parameter is not specified, all observations are
-considered.}
+considered.
 
-\item{by_vars}{Grouping variables}
+\describe{
+\item{Permitted values}{a condition}
+\item{Default value}{\code{NULL}}
+}}
+
+\item{by_vars}{Grouping variables
+
+\describe{
+\item{Default value}{\code{get_admiral_option("subject_keys")}}
+}}
 
 \item{set_values_to}{Variables to set
 
 A named list returned by \code{exprs()} defining the variables to be set for the
 new parameter, e.g. \code{exprs(PARAMCD = "MDIS", PARAM = "Measurable Disease at Baseline")} is expected. The values must be symbols, character strings,
-numeric values, \code{NA}, or expressions.}
+numeric values, \code{NA}, or expressions.
+
+\describe{
+\item{Default value}{none}
+}}
 }
 \value{
 The input dataset with a new parameter indicating if an event

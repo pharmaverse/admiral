@@ -25,12 +25,22 @@ derive_vars_merged(
 \arguments{
 \item{dataset}{Input dataset
 
-The variables specified by the \code{by_vars} argument are expected to be in the dataset.}
+The variables specified by the \code{by_vars} argument are expected to be in the dataset.
+
+\describe{
+\item{Permitted values}{a dataset, i.e., a \code{data.frame} or tibble}
+\item{Default value}{none}
+}}
 
 \item{dataset_add}{Additional dataset
 
 The variables specified by the \code{by_vars}, the \code{new_vars}, and the \code{order}
-argument are expected.}
+argument are expected.
+
+\describe{
+\item{Permitted values}{a dataset, i.e., a \code{data.frame} or tibble}
+\item{Default value}{none}
+}}
 
 \item{by_vars}{Grouping variables
 
@@ -38,7 +48,12 @@ The input dataset and the selected observations from the additional dataset
 are merged by the specified variables.
 
 Variables can be renamed by naming the element, i.e.
-\verb{by_vars = exprs(<name in input dataset> = <name in additional dataset>)}, similar to the \code{dplyr} joins.}
+\verb{by_vars = exprs(<name in input dataset> = <name in additional dataset>)}, similar to the \code{dplyr} joins.
+
+\describe{
+\item{Permitted values}{list of variables created by \code{exprs()}, e.g., \code{exprs(USUBJID, VISIT)}}
+\item{Default value}{none}
+}}
 
 \item{order}{Sort order
 
@@ -48,7 +63,12 @@ specified order.
 
 Variables defined by the \code{new_vars} argument can be used in the sort order.
 
-For handling of \code{NA}s in sorting variables see the "Sort Order" section in \code{vignette("generic")}.}
+For handling of \code{NA}s in sorting variables see the "Sort Order" section in \code{vignette("generic")}.
+
+\describe{
+\item{Permitted values}{list of variables created by \code{exprs()}, e.g., \code{exprs(USUBJID, VISIT)}}
+\item{Default value}{\code{NULL}}
+}}
 
 \item{new_vars}{Variables to add
 
@@ -70,7 +90,12 @@ variable \code{LASTRSP} to the dataset and sets it to the upper case value of
 If the argument is not specified or set to \code{NULL}, all variables from the
 additional dataset (\code{dataset_add}) are added. In the case when a variable
 exists in both datasets, an error is issued to ensure the user either adds
-to \code{by_vars}, removes or renames.}
+to \code{by_vars}, removes or renames.
+
+\describe{
+\item{Permitted values}{list of variables created by \code{exprs()}, e.g., \code{exprs(USUBJID, VISIT)}}
+\item{Default value}{\code{NULL}}
+}}
 
 \item{filter_add}{Filter for additional dataset (\code{dataset_add})
 
@@ -79,38 +104,68 @@ for merging. If the argument is not specified, all observations are
 considered.
 
 Variables defined by the \code{new_vars} argument can be used in the filter
-condition.}
+condition.
+
+\describe{
+\item{Permitted values}{an unquoted condition, e.g., \code{AVISIT == "BASELINE"}}
+\item{Default value}{\code{NULL}}
+}}
 
 \item{mode}{Selection mode
 
 Determines if the first or last observation is selected. If the \code{order}
 argument is specified, \code{mode} must be non-null.
 
-If the \code{order} argument is not specified, the \code{mode} argument is ignored.}
+If the \code{order} argument is not specified, the \code{mode} argument is ignored.
+
+\describe{
+\item{Permitted values}{\code{"first"}, \code{"last"}}
+\item{Default value}{\code{NULL}}
+}}
 
 \item{exist_flag}{Exist flag
 
 If the argument is specified (e.g., \code{exist_flag = FLAG}), the specified
 variable (e.g., \code{FLAG}) is added to the input dataset. This variable will
 be the value provided in \code{true_value} for all selected records from \code{dataset_add}
-which are merged into the input dataset, and the value provided in \code{false_value} otherwise.}
+which are merged into the input dataset, and the value provided in \code{false_value} otherwise.
+
+\describe{
+\item{Permitted values}{an unquoted symbol, e.g., \code{AVAL}}
+\item{Default value}{\code{NULL}}
+}}
 
 \item{true_value}{True value
 
 The value for the specified variable \code{exist_flag}, applicable to
-the first or last observation (depending on the mode) of each by group.}
+the first or last observation (depending on the mode) of each by group.
+
+\describe{
+\item{Permitted values}{a character scalar, i.e., a character vector of length one}
+\item{Default value}{\code{"Y"}}
+}}
 
 \item{false_value}{False value
 
 The value for the specified variable \code{exist_flag}, NOT applicable to
-the first or last observation (depending on the mode) of each by group.}
+the first or last observation (depending on the mode) of each by group.
+
+\describe{
+\item{Permitted values}{a character scalar, i.e., a character vector of length one}
+\item{Default value}{\code{NA_character_}}
+}}
 
 \item{missing_values}{Values for non-matching observations
 
 For observations of the input dataset (\code{dataset}) which do not have a
 matching observation in the additional dataset (\code{dataset_add}) the values
 of the specified variables are set to the specified value. Only variables
-specified for \code{new_vars} can be specified for \code{missing_values}.}
+specified for \code{new_vars} can be specified for \code{missing_values}.
+
+\describe{
+\item{Permitted values}{list of named expressions created by a formula using \code{exprs()}, e.g., \code{exprs(AVALC = VSSTRESC, AVAL = yn_to_numeric(AVALC))}}
+\item{Default value}{\code{NULL}}
+}}
 
 \item{check_type}{Check uniqueness?
 
@@ -120,11 +175,25 @@ with respect to the by variables and the order.
 
 If the \code{order} argument is not specified, the \code{check_type} argument is ignored:
 if the observations of the (restricted) additional dataset are not unique with respect
-to the by variables, an error is issued.}
+to the by variables, an error is issued.
+
+\describe{
+\item{Permitted values}{\code{"none"}, \code{"message"}, \code{"warning"}, \code{"error"}}
+\item{Default value}{\code{"warning"}}
+}}
 
 \item{duplicate_msg}{Message of unique check
 
-If the uniqueness check fails, the specified message is displayed.}
+If the uniqueness check fails, the specified message is displayed.
+
+\describe{
+\item{Permitted values}{a console message to be printed, e.g. \code{"Attention"} or for longer messages use \code{paste("Line 1", "Line 2")}}
+\item{Default value}{\if{html}{\out{<div class="sourceCode r">}}\preformatted{paste(
+  "Dataset \{.arg dataset_add\} contains duplicate records with respect to",
+  "\{.var \{vars2chr(by_vars)\}\}."
+)
+}\if{html}{\out{</div>}}}
+}}
 
 \item{relationship}{Expected merge-relationship between the \code{by_vars}
 variable(s) in \code{dataset} (input dataset) and the \code{dataset_add} (additional dataset)
@@ -132,7 +201,12 @@ containing the additional \code{new_vars}.
 
 This argument is passed to the \code{dplyr::left_join()} function. See
 \url{https://dplyr.tidyverse.org/reference/mutate-joins.html#arguments} for
-more details.}
+more details.
+
+\describe{
+\item{Permitted values}{\code{"one-to-one"}, \code{"many-to-one"}}
+\item{Default value}{\code{NULL}}
+}}
 }
 \value{
 The output dataset contains all observations and variables of the
@@ -180,3 +254,264 @@ General Derivation Functions for all ADaMs that returns variable appended to dat
 }
 \concept{der_gen}
 \keyword{der_gen}
+\section{Examples}{
+\subsection{Note on usage versus \code{derive_vars_joined()}}{
+
+The question between using \code{derive_vars_merged()} or the more powerful
+\code{derive_vars_joined()} comes down to how you need to select the observations
+to be merged.
+\itemize{
+\item If the observations from \code{dataset_add} to merge can be selected
+by a condition (\code{filter_add}) using \emph{only} variables from \code{dataset_add}, then
+always use \code{derive_vars_merged()} as it requires less resources (time and
+memory). A common example of this would be a randomization date in \code{ADSL},
+where you are simply merging on a date from \code{DS} according to a certain
+\code{DSDECOD} condition such as \code{DSDECOD == "RANDOMIZATION"}.
+\item However, if the selection of the observations from \code{dataset_add} can depend
+on variables from \emph{both} datasets, then use \code{derive_vars_joined()}. An
+example of this would be assigning period variables from \code{ADSL} to an \code{ADAE},
+where you now need to check each adverse event start date against the period
+start and end dates to decide which period value to join.
+}}
+\subsection{Basic merge of a full dataset}{
+
+Merge all demographic variables onto a vital signs dataset.
+\itemize{
+\item The variable \code{DOMAIN} exists in both datasets so note the use of
+\code{select(dm, -DOMAIN)} in the \code{dataset_add} argument. Without this an error
+would be issued to notify the user.
+}
+
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{library(tibble)
+library(dplyr, warn.conflicts = FALSE)
+vs <- tribble(
+  ~DOMAIN,  ~USUBJID, ~VSTESTCD, ~VISIT,      ~VSSTRESN, ~VSDTC,
+  "VS",     "01",     "HEIGHT",  "SCREENING",     178.0, "2013-08-20",
+  "VS",     "01",     "WEIGHT",  "SCREENING",      81.9, "2013-08-20",
+  "VS",     "01",     "WEIGHT",  "BASELINE",       82.1, "2013-08-29",
+  "VS",     "01",     "WEIGHT",  "WEEK 2",         81.9, "2013-09-15",
+  "VS",     "01",     "WEIGHT",  "WEEK 4",         82.6, "2013-09-24",
+  "VS",     "02",     "WEIGHT",  "BASELINE",       58.6, "2014-01-11"
+) \%>\%
+  mutate(STUDYID = "AB42")
+
+dm <- tribble(
+  ~DOMAIN, ~USUBJID, ~AGE, ~AGEU,
+  "DM",    "01",       61, "YEARS",
+  "DM",    "02",       64, "YEARS",
+  "DM",    "03",       85, "YEARS"
+) \%>\%
+  mutate(STUDYID = "AB42")
+
+derive_vars_merged(
+  vs,
+  dataset_add = select(dm, -DOMAIN),
+  by_vars = exprs(STUDYID, USUBJID)
+) \%>\%
+  select(USUBJID, VSTESTCD, VISIT, VSSTRESN, AGE, AGEU)
+#> # A tibble: 6 × 6
+#>   USUBJID VSTESTCD VISIT     VSSTRESN   AGE AGEU 
+#>   <chr>   <chr>    <chr>        <dbl> <dbl> <chr>
+#> 1 01      HEIGHT   SCREENING    178      61 YEARS
+#> 2 01      WEIGHT   SCREENING     81.9    61 YEARS
+#> 3 01      WEIGHT   BASELINE      82.1    61 YEARS
+#> 4 01      WEIGHT   WEEK 2        81.9    61 YEARS
+#> 5 01      WEIGHT   WEEK 4        82.6    61 YEARS
+#> 6 02      WEIGHT   BASELINE      58.6    64 YEARS}\if{html}{\out{</div>}}}
+\subsection{Merge only the first/last value (\code{order} and \code{mode})}{
+
+Merge the last occurring weight for each subject to the demographics dataset.
+\itemize{
+\item To enable sorting by visit date \code{convert_dtc_to_dtm()} is used to convert
+to a datetime, within the \code{order} argument.
+\item Then the \code{mode} argument is set to \code{"last"} to ensure the last sorted value
+is taken. Be cautious if \code{NA} values are possible in the \code{order} variables -
+see \href{https://pharmaverse.github.io/admiral/articles/generic.html#sort_order}{Sort Order}.
+\item The \code{filter_add} argument is used to restrict the vital signs records only
+to weight assessments.
+}
+
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{derive_vars_merged(
+  dm,
+  dataset_add = vs,
+  by_vars = exprs(STUDYID, USUBJID),
+  order = exprs(convert_dtc_to_dtm(VSDTC)),
+  mode = "last",
+  new_vars = exprs(LSTWT = VSSTRESN),
+  filter_add = VSTESTCD == "WEIGHT"
+) \%>\%
+  select(USUBJID, AGE, AGEU, LSTWT)
+#> # A tibble: 3 × 4
+#>   USUBJID   AGE AGEU  LSTWT
+#>   <chr>   <dbl> <chr> <dbl>
+#> 1 01         61 YEARS  82.6
+#> 2 02         64 YEARS  58.6
+#> 3 03         85 YEARS  NA  }\if{html}{\out{</div>}}}
+\subsection{Handling duplicates (\code{check_type})}{
+
+The source records are checked regarding duplicates with respect to the
+by variables and the order specified.
+By default, a warning is issued if any duplicates are found.
+Note the results here with a new vital signs dataset containing a
+duplicate last weight assessment date.
+
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{vs_dup <- tribble(
+  ~DOMAIN,  ~USUBJID, ~VSTESTCD, ~VISIT,      ~VSSTRESN, ~VSDTC,
+  "VS",     "01",     "WEIGHT",  "WEEK 2",        81.1, "2013-09-24",
+  "VS",     "01",     "WEIGHT",  "WEEK 4",        82.6, "2013-09-24"
+) \%>\%
+  mutate(STUDYID = "AB42")
+
+derive_vars_merged(
+  dm,
+  dataset_add = vs_dup,
+  by_vars = exprs(STUDYID, USUBJID),
+  order = exprs(convert_dtc_to_dtm(VSDTC)),
+  mode = "last",
+  new_vars = exprs(LSTWT = VSSTRESN),
+  filter_add = VSTESTCD == "WEIGHT"
+) \%>\%
+  select(USUBJID, AGE, AGEU, LSTWT)
+#> # A tibble: 3 × 4
+#>   USUBJID   AGE AGEU  LSTWT
+#>   <chr>   <dbl> <chr> <dbl>
+#> 1 01         61 YEARS  82.6
+#> 2 02         64 YEARS  NA  
+#> 3 03         85 YEARS  NA  
+#> Avis : Dataset contains duplicate records with respect to `STUDYID`, `USUBJID`, and
+#> `convert_dtc_to_dtm(VSDTC)`
+#> i Run `admiral::get_duplicates_dataset()` to access the duplicate records}\if{html}{\out{</div>}}
+
+For investigating the issue, the dataset of the duplicate source records
+can be obtained by calling \code{get_duplicates_dataset()}:
+
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{get_duplicates_dataset()
+#> Duplicate records with respect to `STUDYID`, `USUBJID`, and
+#> `convert_dtc_to_dtm(VSDTC)`.
+#> # A tibble: 2 × 9
+#>   STUDYID USUBJID convert_dtc_to_dtm(VSDT…¹ DOMAIN VSTESTCD VISIT VSSTRESN VSDTC
+#> * <chr>   <chr>   <dttm>                    <chr>  <chr>    <chr>    <dbl> <chr>
+#> 1 AB42    01      2013-09-24 00:00:00       VS     WEIGHT   WEEK…     81.1 2013…
+#> 2 AB42    01      2013-09-24 00:00:00       VS     WEIGHT   WEEK…     82.6 2013…
+#> # i abbreviated name: ¹`convert_dtc_to_dtm(VSDTC)`
+#> # i 1 more variable: LSTWT <dbl>}\if{html}{\out{</div>}}
+
+Common options to solve the issue:
+\itemize{
+\item Specifying additional variables for \code{order} - this is the most common approach,
+adding something like a sequence variable.
+\item Restricting the source records by specifying/updating the \code{filter_add} argument.
+\item Setting \code{check_type = "none"} to ignore any duplicates, but then in this case
+the last occurring record would be chosen according to the sort order of the
+input \code{dataset_add}. This is not often advisable, unless the order has no impact
+on the result, as the temporary sort order can be prone to variation across
+an ADaM script.
+}}
+\subsection{Modify values dependent on the merge (\code{new_vars} and \code{missing_values})}{
+
+For the last occurring weight for each subject, add a categorization of
+which visit it occurred at to the demographics dataset.
+\itemize{
+\item In the \code{new_vars} argument, other functions can be utilized to modify the
+merged values. For example, in the below case we want to categorize the
+visit as \code{"BASELINE"} or \code{"POST-BASELINE"} using \code{if_else()}.
+\item The \code{missing_values} argument assigns a specific value for subjects with
+no matching observations - see subject \code{"03"} in the below example.
+}
+
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{derive_vars_merged(
+  dm,
+  dataset_add = vs,
+  by_vars = exprs(STUDYID, USUBJID),
+  order = exprs(convert_dtc_to_dtm(VSDTC)),
+  mode = "last",
+  new_vars = exprs(
+    LSTWTCAT = if_else(VISIT == "BASELINE", "BASELINE", "POST-BASELINE")
+  ),
+  filter_add = VSTESTCD == "WEIGHT",
+  missing_values = exprs(LSTWTCAT = "MISSING")
+) \%>\%
+  select(USUBJID, AGE, AGEU, LSTWTCAT)
+#> # A tibble: 3 × 4
+#>   USUBJID   AGE AGEU  LSTWTCAT     
+#>   <chr>   <dbl> <chr> <chr>        
+#> 1 01         61 YEARS POST-BASELINE
+#> 2 02         64 YEARS BASELINE     
+#> 3 03         85 YEARS MISSING      }\if{html}{\out{</div>}}}
+\subsection{Check existence of records to merge (\code{exist_flag}, \code{true_value} and \code{false_value})}{
+
+Similar to the above example, now we prefer to have a separate flag
+variable to show whether a selected record was merged.
+\itemize{
+\item The name of the new variable is set with the \code{exist_flag} argument.
+\item The values of this new variable are assigned via the \code{true_value} and
+\code{false_value} arguments.
+}
+
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{derive_vars_merged(
+  dm,
+  dataset_add = vs,
+  by_vars = exprs(STUDYID, USUBJID),
+  order = exprs(convert_dtc_to_dtm(VSDTC)),
+  mode = "last",
+  new_vars = exprs(
+    LSTWTCAT = if_else(VISIT == "BASELINE", "BASELINE", "POST-BASELINE")
+  ),
+  filter_add = VSTESTCD == "WEIGHT",
+  exist_flag = WTCHECK,
+  true_value = "Y",
+  false_value = "MISSING"
+) \%>\%
+  select(USUBJID, AGE, AGEU, LSTWTCAT, WTCHECK)
+#> # A tibble: 3 × 5
+#>   USUBJID   AGE AGEU  LSTWTCAT      WTCHECK
+#>   <chr>   <dbl> <chr> <chr>         <chr>  
+#> 1 01         61 YEARS POST-BASELINE Y      
+#> 2 02         64 YEARS BASELINE      Y      
+#> 3 03         85 YEARS <NA>          MISSING}\if{html}{\out{</div>}}}
+\subsection{Creating more than one variable from the merge (\code{new_vars})}{
+
+Derive treatment start datetime and associated imputation flags.
+\itemize{
+\item In this example we first impute exposure datetime and associated flag
+variables as a separate first step to be used in the \code{order} argument.
+\item In the \code{new_vars} arguments, you can see how both datetime and the date and
+time imputation flags are all merged in one call.
+}
+
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{ex <- tribble(
+  ~DOMAIN, ~USUBJID, ~EXSTDTC,
+  "EX",    "01",     "2013-08-29",
+  "EX",    "01",     "2013-09-16",
+  "EX",    "02",     "2014-01-11",
+  "EX",    "02",     "2014-01-25"
+) \%>\%
+  mutate(STUDYID = "AB42")
+
+ex_ext <- derive_vars_dtm(
+  ex,
+  dtc = EXSTDTC,
+  new_vars_prefix = "EXST",
+  highest_imputation = "M"
+)
+
+derive_vars_merged(
+  dm,
+  dataset_add = ex_ext,
+  by_vars = exprs(STUDYID, USUBJID),
+  new_vars = exprs(TRTSDTM = EXSTDTM, TRTSDTF = EXSTDTF, TRTSTMF = EXSTTMF),
+  order = exprs(EXSTDTM),
+  mode = "first"
+) \%>\%
+  select(USUBJID, TRTSDTM, TRTSDTF, TRTSTMF)
+#> # A tibble: 3 × 4
+#>   USUBJID TRTSDTM             TRTSDTF TRTSTMF
+#>   <chr>   <dttm>              <chr>   <chr>  
+#> 1 01      2013-08-29 00:00:00 <NA>    H      
+#> 2 02      2014-01-11 00:00:00 <NA>    H      
+#> 3 03      NA                  <NA>    <NA>   }\if{html}{\out{</div>}}}
+\subsection{Further examples}{
+
+Further example usages of this function can be found in the
+\code{vignette("generic")}.}}
+

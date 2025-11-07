@@ -15,26 +15,49 @@ derive_var_obs_number(
 \arguments{
 \item{dataset}{Input dataset
 
-The variables specified by the \code{by_vars} and \code{order} arguments are expected to be in the dataset.}
+The variables specified by the \code{by_vars} and \code{order} arguments are expected to be in the dataset.
 
-\item{by_vars}{Grouping variables}
+\describe{
+\item{Default value}{none}
+}}
+
+\item{by_vars}{Grouping variables
+
+\describe{
+\item{Default value}{\code{NULL}}
+}}
 
 \item{order}{Sort order
 
 Within each by group the observations are ordered by the specified order.
 
-For handling of \code{NA}s in sorting variables see the "Sort Order" section in \code{vignette("generic")}.}
+For handling of \code{NA}s in sorting variables see the "Sort Order" section in \code{vignette("generic")}.
+
+\describe{
+\item{Permitted values}{list of variables or functions of variables}
+\item{Default value}{\code{NULL}}
+}}
 
 \item{new_var}{Name of variable to create
 
 The new variable is set to the observation number for each by group. The
-numbering starts with 1.}
+numbering starts with 1.
+
+\describe{
+\item{Permitted values}{an unquoted symbol, e.g., \code{AVAL}}
+\item{Default value}{\code{ASEQ}}
+}}
 
 \item{check_type}{Check uniqueness?
 
 If \code{"message"}, \code{"warning"} or \code{"error"} is specified, the specified
 message is issued if the observations of the input dataset are not unique
-with respect to the by variables and the order.}
+with respect to the by variables and the order.
+
+\describe{
+\item{Permitted values}{\code{"none"}, \code{"message"}, \code{"warning"}, \code{"error"}}
+\item{Default value}{\code{"none"}}
+}}
 }
 \value{
 A dataset containing all observations and variables of the input

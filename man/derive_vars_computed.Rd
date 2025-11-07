@@ -16,7 +16,11 @@ derive_vars_computed(
 )
 }
 \arguments{
-\item{dataset}{The variables specified by the \code{by_vars} parameter are expected.}
+\item{dataset}{The variables specified by the \code{by_vars} parameter are expected.
+
+\describe{
+\item{Default value}{none}
+}}
 
 \item{dataset_add}{Additional dataset
 
@@ -24,12 +28,21 @@ The variables specified by the \code{by_vars} parameter are expected.
 
 The variable specified by \code{by_vars} and \code{PARAMCD} must be a unique key of
 the additional dataset after restricting it by the filter condition
-(\code{filter_add} parameter) and to the parameters specified by \code{parameters}.}
+(\code{filter_add} parameter) and to the parameters specified by \code{parameters}.
+
+\describe{
+\item{Default value}{none}
+}}
 
 \item{by_vars}{Grouping variables
 
 Grouping variables uniquely identifying a set of records for which
-\code{new_vars} are to be calculated.}
+\code{new_vars} are to be calculated.
+
+\describe{
+\item{Permitted values}{list of variables created by exprs()}
+\item{Default value}{none}
+}}
 
 \item{parameters}{Required parameter codes
 
@@ -49,7 +62,12 @@ them to the observations to consider.
 
 Unnamed elements in the list of expressions are considered as parameter
 codes. For example, \code{parameters = exprs(WEIGHT, HGHT = VSTESTCD == "HEIGHT")} uses the parameter code \code{"WEIGHT"} and creates a temporary
-parameter code \code{"HGHT"}.}
+parameter code \code{"HGHT"}.
+
+\describe{
+\item{Permitted values}{A character vector of \code{PARAMCD} values or a list of expressions}
+\item{Default value}{none}
+}}
 
 \item{new_vars}{Name of the newly created variables
 
@@ -64,19 +82,34 @@ variables of the parameters specified by \code{parameters} can be accessed using
 
 defines the value for the new variable.
 
-Variable names in the expression must not contain more than one dot.}
+Variable names in the expression must not contain more than one dot.
+
+\describe{
+\item{Permitted values}{List of variable-value pairs}
+\item{Default value}{none}
+}}
 
 \item{filter_add}{Filter condition of additional dataset
 
 The specified condition is applied to the additional dataset before
 deriving the new variable, i.e., only observations fulfilling the
-condition are taken into account.}
+condition are taken into account.
+
+\describe{
+\item{Permitted values}{a condition}
+\item{Default value}{\code{NULL}}
+}}
 
 \item{constant_by_vars}{By variables for constant parameters
 
 The constant parameters (parameters that are measured only once) are merged
 to the other parameters using the specified variables.
-(Refer to the Example)}
+(Refer to the Example)
+
+\describe{
+\item{Permitted values}{list of variables}
+\item{Default value}{\code{NULL}}
+}}
 
 \item{constant_parameters}{Required constant parameter codes
 
@@ -97,7 +130,12 @@ observations to consider.
 
 Unnamed elements in the list of expressions are considered as parameter
 codes. For example, \code{constant_parameters = exprs(WEIGHT, HGHT = VSTESTCD == "HEIGHT")} uses the parameter code \code{"WEIGHT"} and creates a temporary
-parameter code \code{"HGHT"}.}
+parameter code \code{"HGHT"}.
+
+\describe{
+\item{Permitted values}{A character vector of \code{PARAMCD} values or a list of expressions}
+\item{Default value}{\code{NULL}}
+}}
 }
 \value{
 The input dataset with the new variables added.

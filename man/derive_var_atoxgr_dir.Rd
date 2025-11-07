@@ -18,17 +18,60 @@ derive_var_atoxgr_dir(
 \arguments{
 \item{dataset}{Input dataset
 
-The variables specified by the \code{tox_description_var} argument are expected to be in the dataset.}
+The variables specified by the \code{tox_description_var} argument are expected to be in the dataset.
+
+\describe{
+\item{Default value}{none}
+}}
 
 \item{new_var}{Name of the character grade variable to create, for example, \code{ATOXGRH}
-or \code{ATOXGRL}.}
+or \code{ATOXGRL}.
+
+\describe{
+\item{Default value}{none}
+}}
 
 \item{tox_description_var}{Variable containing the description of the grading
-criteria. For example: "Anemia" or "INR Increased".}
+criteria. For example: "Anemia" or "INR Increased".
 
-\item{meta_criteria}{Metadata data set holding the criteria (normally a case statement)}
+\describe{
+\item{Default value}{none}
+}}
 
-\item{criteria_direction}{Direction (L= Low, H = High) of toxicity grade.}
+\item{meta_criteria}{Metadata data set holding the criteria (normally a case statement)
+
+\describe{
+\item{Permitted values}{\code{atoxgr_criteria_ctcv4}, \code{atoxgr_criteria_ctcv5}, \code{atoxgr_criteria_daids}
+\itemize{
+\item \code{atoxgr_criteria_ctcv4} implements \href{https://dctd.cancer.gov/research/ctep-trials/trial-development#ctcae-and-ctep-codes}{Common Terminology Criteria for Adverse Events (CTCAE) v4.0}
+\item \code{atoxgr_criteria_ctcv5} implements \href{https://dctd.cancer.gov/research/ctep-trials/for-sites/adverse-events#ctep-ctcae}{Common Terminology Criteria for Adverse Events (CTCAE) v5.0}
+\item \code{atoxgr_criteria_daids} implements
+\href{https://rsc.niaid.nih.gov/sites/default/files/daidsgradingcorrectedv21.pdf}{Division of AIDS (DAIDS) Table for Grading the Severity of Adult and Pediatric Adverse Events}
+}
+
+The metadata should have the following variables:
+\itemize{
+\item \code{TERM}: variable to hold the term describing the criteria applied to a particular lab test,
+eg. "Anemia" or "INR Increased". Note: the variable is case insensitive.
+\item \code{DIRECTION}: variable to hold the direction of the abnormality of a particular lab test
+value. "L" is for LOW values, "H" is for HIGH values. Note: the variable is case insensitive.
+\item \code{UNIT_CHECK}: variable to hold unit of particular lab test. Used to check against input data
+if criteria is based on absolute values.
+\item \code{VAR_CHECK}: variable to hold comma separated list of variables used in criteria. Used to check
+against input data that variables exist.
+\item \code{GRADE_CRITERIA_CODE}: variable to hold code that creates grade based on defined criteria.
+\item \code{FILTER}: Required only for DAIDS grading, specifies \code{admiral} code to filter the lab data
+based on a subset of subjects (e.g. AGE > 18 YEARS)
+}}
+\item{Default value}{none}
+}}
+
+\item{criteria_direction}{Direction (L= Low, H = High) of toxicity grade.
+
+\describe{
+\item{Permitted values}{"L", "H"}
+\item{Default value}{none}
+}}
 
 \item{abnormal_indicator}{Value in \code{BNRIND} derivation to indicate an abnormal value.
 Usually "HIGH" for \code{criteria_direction} = "H" and "LOW" for \code{criteria_direction} = "L".
@@ -36,18 +79,32 @@ Usually "HIGH" for \code{criteria_direction} = "H" and "LOW" for \code{criteria_
 This is only required when \code{meta_criteria = atoxgr_criteria_ctcv5} and \code{BNRIND} is a required
 variable. Currently for terms \code{"Alanine aminotransferase increased"},
 \code{"Alkaline phosphatase increased"}, \code{"Aspartate aminotransferase increased"},
-\code{"Blood bilirubin increased"} and \code{"GGT increased"}}
+\code{"Blood bilirubin increased"} and \code{"GGT increased"}
+
+\describe{
+\item{Default value}{\code{NULL}}
+}}
 
 \item{get_unit_expr}{An expression providing the unit of the parameter
 
 The result is used to check the units of the input parameters. Compared with
-\code{UNIT_CHECK} in metadata (see \code{meta_criteria} parameter).}
+\code{UNIT_CHECK} in metadata (see \code{meta_criteria} parameter).
+
+\describe{
+\item{Permitted values}{A variable containing unit from the input dataset, or a function call,
+for example, \code{get_unit_expr = extract_unit(PARAM)}.}
+\item{Default value}{none}
+}}
 
 \item{signif_dig}{Number of significant digits to use when comparing a lab value against another
 value.
 
 Significant digits used to avoid floating point discrepancies when comparing numeric values.
-See blog: \href{https://pharmaverse.github.io/blog/posts/2023-10-30_floating_point/floating_point.html}{How admiral handles floating points}}
+See blog: \href{https://pharmaverse.github.io/blog/posts/2023-10-30_floating_point/floating_point.html}{How admiral handles floating points}
+
+\describe{
+\item{Default value}{\code{get_admiral_option("signif_digits")}}
+}}
 }
 \value{
 The input dataset with the character variable added
