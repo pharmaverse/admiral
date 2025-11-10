@@ -2,6 +2,8 @@
 
 ## New Features
 
+-  New function "my_first_fcn_ld()" as dummy practice (#1839)
+
 ## Updates of Existing Functions
 
 - The functions `derive_param_bmi()`, `derive_param_bsa()`,
