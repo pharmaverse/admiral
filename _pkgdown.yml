@@ -175,6 +175,10 @@ reference:
   contents:
   - has_keyword("deprecated")
 
+- title: Dummy function
+  contents:
+    - my_first_fcn
+
 navbar:
   structure:
     left: [getstarted, reference, articles, admiraldiscovery, news, versions]

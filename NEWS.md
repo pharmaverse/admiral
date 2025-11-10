@@ -2,7 +2,7 @@
 
 ## New Features
 
--  New function "my_first_fcn_ld()" as dummy practice (#1839)
+-  New function "my_first_fcn()" as dummy practice (#1839)
 
 ## Updates of Existing Functions
 
