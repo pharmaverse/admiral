@@ -52,7 +52,6 @@ Biologics
 CBOR
 CDISC
 CKD
-CMD
 CODEOWNERS
 COVID
 CPK
@@ -151,6 +150,7 @@ Kumar
 Kumari
 LDL
 LLC
+LLM
 LLOQ
 LOCF
 Leena
@@ -321,7 +321,6 @@ funder
 glomerular
 groupwise
 kapa
-lifecycle
 lubridate
 mL
 magrittr
