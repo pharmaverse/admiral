@@ -386,7 +386,7 @@ convert_dtc_to_dt <- function(dtc,
 #'   missing, `NA_character_` is returned. For example, for `highest_imputation
 #'   = "D"` `"2020"` results in `NA_character_` because the month is missing.
 #'
-#'   If `"n" (none, lowest level) is specified no imputation is performed, i.e., if any component is
+#'   If `"n"` (none, lowest level) is specified no imputation is performed, i.e., if any component is
 #'   missing, `NA_character_` is returned.
 #'
 #'   If `"Y"` (year, highest level) is specified, `date_imputation` must be `"first"` or `"last"`
