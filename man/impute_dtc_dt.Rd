@@ -34,7 +34,8 @@ level are imputed.
 If a component at a higher level than the highest imputation level is
 missing, \code{NA_character_} is returned. For example, for \code{highest_imputation = "D"} \code{"2020"} results in \code{NA_character_} because the month is missing.
 
-If \verb{"n" (none, lowest level) is specified no imputation is performed, i.e., if any component is missing, }NA_character_` is returned.
+If \code{"n"} (none, lowest level) is specified no imputation is performed, i.e., if any component is
+missing, \code{NA_character_} is returned.
 
 If \code{"Y"} (year, highest level) is specified, \code{date_imputation} must be \code{"first"} or \code{"last"}
 and \code{min_dates} or \code{max_dates} must be specified respectively. Otherwise,

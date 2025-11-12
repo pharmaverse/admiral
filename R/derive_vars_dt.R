@@ -173,11 +173,11 @@
 #' to apply the treatment start date (TRTSDTM) as a lower boundary for imputation
 #' via the `min_dates` argument.
 #' This means:
-#' 1. For partial dates that could potentially include TRTSDTM (case 1 & 2),
+#' - For partial dates that could potentially include TRTSDTM (case 1 & 2),
 #' the imputed date is adjusted to TRTSDTM
-#' 2. For partial dates that are entirely before TRTSDTM (case 3 & 4),
+#' - For partial dates that are entirely before TRTSDTM (case 3 & 4),
 #' standard imputation rules apply without adjustment
-#' 3. For partial dates that are entirely after TRTSDTM (case 5),
+#' - For partial dates that are entirely after TRTSDTM (case 5),
 #' standard imputation rules apply
 #'
 #' @code
@@ -202,16 +202,17 @@
 #' @caption Applying an upper boundary to date imputation with (`max_dates`)
 #' @info In this example, we derive `ASTDT` where `AESTDTC` is all partial dates in
 #' need of imputation. Using `max_dates = exprs(TRTEDTM)`, we are telling the function
-#' to apply the treatment start date (TRTSDTM) as a lower boundary for imputation
+#' to apply the treatment end date (TRTEDTM) as a upper boundary for imputation
 #' via the `max_dates` argument.
 #' This means:
-#' 1. For partial dates that could potentially include `TRTEDTM` (case 1 & 2),
+#' - For partial dates that could potentially include `TRTEDTM` (case 1 & 2),
 #' the imputed date is adjusted to `TRTEDTM`
-#' 2. For partial dates that are entirely before `TRTEDTM` (case 3 & 4),
+#' - For partial dates that are entirely before `TRTEDTM` (case 3 & 4),
 #' standard imputation rules apply without adjustment
-#' 3. For partial dates that are entirely after `TRTEDTM` (case 5),
+#' - For partial dates that are entirely after `TRTEDTM` (case 5),
 #' standard imputation rules apply
 #'
+#' @code
 #' adae <- tribble(
 #'   ~AESTDTC, ~TRTSDTM, ~TRTEDTM,
 #'   "2020-12", ymd_hms("2020-01-01T12:12:12"), ymd_hms("2020-12-20T23:59:59"),
