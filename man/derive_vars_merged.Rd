@@ -378,7 +378,7 @@ derive_vars_merged(
 #> 1 01         61 YEARS  82.6
 #> 2 02         64 YEARS  NA  
 #> 3 03         85 YEARS  NA  
-#> Avis : Dataset contains duplicate records with respect to `STUDYID`, `USUBJID`, and
+#> Warning : Dataset contains duplicate records with respect to `STUDYID`, `USUBJID`, and
 #> `convert_dtc_to_dtm(VSDTC)`
 #> i Run `admiral::get_duplicates_dataset()` to access the duplicate records}\if{html}{\out{</div>}}
 
