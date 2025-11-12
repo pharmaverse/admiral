@@ -202,7 +202,7 @@
 #' @caption Applying an upper boundary to date imputation with (`max_dates`)
 #' @info In this example, we derive `ASTDT` where `AESTDTC` is all partial dates in
 #' need of imputation. Using `max_dates = exprs(TRTEDTM)`, we are telling the function
-#' to apply the treatment end date (TRTEDTM) as a upper boundary for imputation
+#' to apply the treatment end date (TRTEDTM) as an upper boundary for imputation
 #' via the `max_dates` argument.
 #' This means:
 #' - For partial dates that could potentially include `TRTEDTM` (case 1 & 2),
