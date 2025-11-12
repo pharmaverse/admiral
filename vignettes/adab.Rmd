@@ -37,9 +37,6 @@ elements of this template reflect methods from a couple members and can serve
 as a baseline for when a guide is released.  CDISC ADaM conventions and similiar
 domains (such as ADPC) are followed.
 
-
-# Section 1 Staging the data ---------------------------------------------------
-
 This example presented uses underlying `EX` and `IS` domains where the
 `EX` and `IS` domains represent data as collected and the `ADAB` ADaM is
 output. For purposes of the examples, the surrogate data for ADA is called
@@ -69,24 +66,20 @@ unless otherwise specified.*
 
 -   [Read in Data](#readdata)
 
--   [Find First Dose Date using 'EX' ](#firstdose)
+-   [Find First Dose Date using 'EX' and Derive AFRLT](#firstdose)
 
--   [Merge `IS` and `EX` Records and Derive Relative Time
-    Variables](#relative)
-
--   [Derive Asssigned Variables](#assigned)
-
--   [Calculate Change from Baseline and Assign `ASEQ`](#aseq)
+-   [Derive Assigned Variables](#assigned)
 
 -   [Derive Analysis Variables](#analysis)
 
--   [Populate `DTYPE` for Imputed values](#lloq)
-
--   [Add Additional Population Flag Variables](#baselines)
+-   [Assemble into Parameter Based Dataset](#parameters)
 
 -   [Add ADSL variables](#adsl_vars)
 
 -   [Add Labels and Attributes](#attributes)
+
+
+# Section 1 Staging the data ---------------------------------------------------
 
 ## Read in Data {#readdata}
 
@@ -289,6 +282,8 @@ At this step, we use `derive_vars_merged()` to join our prepared 'EX' data into 
 'IS' data to compute FANLDTM, AFRLT and keep FANLTMF from ASTTMF in case the first dose
 was imputed.
 
+## Find First Dose Date using 'EX' and Derive AFRLT {#firstdose}
+
 ```{r message=FALSE}
 
 # Derive AFRLT in IS data
@@ -357,6 +352,7 @@ However, If ISSTRESC is "POSITIVE" with a missing IS.ISSTRESN, this template pro
 a sample method to assign AVAL using the assigned MRT and set AVALC to 'N.C.' (not commutable)
 and document the operation using DTYPE='MRT'.  
 
+## Derive Assigned Variables {#assigned}
 
 ```{r message=FALSE}
 
@@ -427,6 +423,8 @@ is_aval <- is_basetype %>%
 
 
 # Section 2 - Analysis Variables  ----------------------------------------------
+
+## Derive Analysis Variables {#analysis}
 
 IN this first section, we compute ABLFL, BASE and CHG.
 VALIDBASE and VALIDPOST are assigned to accommodate if sponsor has restrictions
@@ -922,6 +920,8 @@ main_aab <- main_aab_rtimes %>%
 
 
 # Section 3 - Prepare and create the final ADAB PARAM based data set ------------
+
+## Assemble into Parameter Based Dataset {#parameters}
 
 In this section, we turn original IS records, the duplicated interpreted records plus
 each Analysis variable into separate preparaed data frames.  These will then be
@@ -1425,6 +1425,7 @@ adab_study <- adab_study %>%
 
 In this section, compute or merge in any additional flags or ADSL variables.
 
+## Add ADSL variables {#adsl_vars}
 
 ```{r message=FALSE}
 
