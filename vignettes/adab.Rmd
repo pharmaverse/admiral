@@ -28,7 +28,7 @@ and/or user feedback.
 This article describes creating an Anti-Drug Antibody (ADA) ADaM (ADAB).
 The first part of the article describes the data staging, second part
 describes the methods of computation of parameters, the third part describes
-assembling he final dataset into original, by visit and parameterized records 
+assembling he final data set into by visit and parametee based records 
 then adding final flags, ADSL variables then compute ASEQ.
 
 Note: It should be noted at this point that CDISC does not currently have
@@ -62,11 +62,13 @@ the names in the CDISC Implementation Guide.
 **Note**: *All examples assume CDISC SDTM and/or ADaM format as input
 unless otherwise specified.*
 
-# `ADAB` Programming Workflow
+# Programming Workflow
 
--   [Read in Data](#readdata)
+-   [Read in Source Data](#readdata)
 
--   [Find First Dose Date using 'EX' and Derive AFRLT](#firstdose)
+-   [Prepare 'EX', Find First Dose and Derive AFRLT](#firstdose)
+
+-   [Assign Periods, Phases and BASETYPE](#basetype)
 
 -   [Derive Assigned Variables](#assigned)
 
@@ -79,9 +81,7 @@ unless otherwise specified.*
 -   [Add Labels and Attributes](#attributes)
 
 
-# Section 1 Staging the data ---------------------------------------------------
-
-## Read in Data {#readdata}
+## Read in Source Data {#readdata}
 
 To start, all data frames needed for the creation of `ADAB` should be
 read into the environment. This could be a company specific process. 
@@ -216,6 +216,7 @@ is_dates <- is %>%
   derive_vars_dy(reference_date = TRTSDT, source_vars = exprs(ADT))
 ```
 
+## Prepare 'EX', Find First Dose and Derive AFRLT {#firstdose}
 
 At this step, we stage 'EX' data. Filter the data as desired to match 
 the 'IS' analytes. As with 'IS', DRUG is assigned as a common merge var.
@@ -280,7 +281,6 @@ At this step, we use `derive_vars_merged()` to join our prepared 'EX' data into 
 'IS' data to compute FANLDTM, AFRLT and keep FANLTMF from ASTTMF in case the first dose
 was imputed.
 
-## Find First Dose Date using 'EX' and Derive AFRLT {#firstdose}
 
 ```{r message=FALSE}
 # Derive AFRLT in IS data
@@ -306,6 +306,8 @@ is_afrlt <- is_dates %>%
   arrange(STUDYID, USUBJID, DRUG, ADATYPE, ADAPARM, ADTM, NFRLT)
 ```
 
+
+## Assign Periods, Phases and BASETYPE {#basetype}
 
 At this step compute or assign applicable APERIOD, APHASE and/or BASETYPE.
 Note: In ADAB, BASETYPE is Phase or Period but the method for assigning BASE
@@ -413,8 +415,6 @@ is_aval <- is_basetype %>%
 ```
 
 
-# Section 2 - Analysis Variables  ----------------------------------------------
-
 ## Derive Analysis Variables {#analysis}
 
 IN this first section, we compute ABLFL, BASE and CHG.
@@ -427,8 +427,8 @@ missing baseline but required post baseline to be not missing values.
 
 ```{r message=FALSE}
 is_baseline <- is_aval %>%
-  # Calculate ABLFL, if more than one record for the 'order' and 'filter', will throw a duplicate
-  # record warning. User can decide how to adjust the order, filter or prior data step.
+  # Calculate ABLFL. If more than one record for the 'order' and 'filter' will throw a duplicate
+  # record warning, user can decide how to adjust the mode, order, filter or adjust in prior step.
   restrict_derivation(
     derivation = derive_var_extreme_flag,
     args = params(
@@ -497,14 +497,19 @@ This section computes main ADA analyte parameters into a horizontal dataset.
 Sections are commented appropriately. 
 Final Key Variables this section:
 Subject By Visit analysis variables (sponsor or molecule specific or optional)
-TFLAGV - By visit Treatment Emergent Category (0=,1=,2=,3=).
+TFLAGV - By visit Treatment Emergent Category (see *T-Flags).
 PBFLAGV - Post Baseline Status y Visit
 ADASTATV - Overall ADA Status by Visit (ADA Positive or Negative)
 Subject Overall analysis variables
 BFLAG  - Baseline Positive/Negative Flag
-TFLAG  - Overall Treatment Emergent Category
+TFLAG  - Overall Treatment Emergent Category  (see *T-Flags)
 PBFLAG  - Post Baseline Status
 ADASTAT - Overall Subject ADA Status (ADA Positive or Negative)
+
+*T-Flags: 0=Negative, 1=Induced, 2=Enhanced, 3=Treatment Unaffected
+Induced: Negative at Baseline to Positive Post-Baseline
+Enhanced:  Positive at Baseline to Positive Post-Baseline where Change from Baseline >= 0.60
+Treatment Unaffected: Positive at Baseline to Positive where Change from Baseline < 0.60
 
 ```{r message=FALSE}
 # Use "is_result_change"to make a ADABLPFL flag data set to merge back in later in the program
@@ -705,8 +710,8 @@ FPPDT  - Date of first ADA Positive
 LPPDT  - Date of Last ADA Positive
 ADADUR - Duration of ADA (LPPDT - FPPDT)
 TIMADA - Time to ADA Positive (from first dose)
-INDUCED - Negative at Baseline to Positve
-ENHANCED - Positive as Baseline to Positive where CHG (ISSTRESN) > 0.60
+INDUCED - Negative at Baseline to Positive Post-Baseline
+ENHANCED - Positive at Baseline to Positive Post-Baseline where CHG >= 0.60
 TRANADA  - Transient ADA  (either of): 
              INDUCED and Positive at any Post Baseline other than Last
              INDUCED and multiple post baseline positive (other than last)
@@ -722,7 +727,7 @@ TRANADAE  - Any Treatment Emergent Transient ADA  (either of):
 PERSADAE - Any Treatment Emergent Persistent ADA (either of):
              INDUCED or ENHANCED and Positive at the last post baseline result.
              INDUCED  or ENHANCED and multiple post baseline positive (other than last)
-ADABLPFL - Baseline ADA Evaluable - Baseline test exist (ABLFL = Y or sponsor defined)
+ADABLPFL - Baseline ADA Evaluable - Baseline test exists (ABLFL = Y)
 ADPBFPFL - Post Baseline ADA Evaluable - At least one Valid (non-missing) post-baseline result.
 
 
@@ -898,9 +903,6 @@ main_aab <- main_aab_rtimes %>%
   )
 ```
 
-
-
-# Section 3 - Prepare and create the final ADAB PARAM based data set ------------
 
 ## Assemble into Parameter Based Dataset {#parameters}
 
