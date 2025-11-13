@@ -383,16 +383,16 @@ derive_var_joined_exist_flag(
 )
 #> # A tibble: 10 × 5
 #>    USUBJID   ADY ACOVFL ADURN ALCOVFL
-#>    <chr>   <dbl> <chr>  <dbl> <chr>  
-#>  1 1          10 N          1 <NA>   
-#>  2 1          21 N         50 Y      
-#>  3 1          23 Y         14 <NA>   
-#>  4 1          32 N         31 Y      
-#>  5 1          42 N         20 <NA>   
-#>  6 2          11 Y         13 <NA>   
-#>  7 2          23 N          2 <NA>   
-#>  8 3          13 Y         12 <NA>   
-#>  9 4          14 N         32 <NA>   
+#>    <chr>   <dbl> <chr>  <dbl> <chr>
+#>  1 1          10 N          1 <NA>
+#>  2 1          21 N         50 Y
+#>  3 1          23 Y         14 <NA>
+#>  4 1          32 N         31 Y
+#>  5 1          42 N         20 <NA>
+#>  6 2          11 Y         13 <NA>
+#>  7 2          23 N          2 <NA>
+#>  8 3          13 Y         12 <NA>
+#>  9 4          14 N         32 <NA>
 #> 10 4          21 N         41 <NA>   }\if{html}{\out{</div>}}}
 \subsection{Considering only records after the current one (\code{join_type = "after"}, \code{true_value}, \code{false_value})}{
 
@@ -478,19 +478,19 @@ up to the \code{"0"} (excluding the \code{"0"}) are \code{"+"} or \code{"++"} th
   filter_join = val == "0" & all(val.join \%in\% c("+", "++"))
 )
 #> # A tibble: 12 × 4
-#>    subj    day val   flag 
+#>    subj    day val   flag
 #>    <chr> <dbl> <chr> <chr>
-#>  1 1         1 ++    <NA> 
-#>  2 1         2 -     <NA> 
-#>  3 1         3 0     <NA> 
-#>  4 1         4 +     <NA> 
-#>  5 1         5 ++    <NA> 
-#>  6 1         6 -     <NA> 
-#>  7 2         1 -     <NA> 
-#>  8 2         2 ++    <NA> 
-#>  9 2         3 +     <NA> 
-#> 10 2         4 0     Y    
-#> 11 2         5 -     <NA> 
+#>  1 1         1 ++    <NA>
+#>  2 1         2 -     <NA>
+#>  3 1         3 0     <NA>
+#>  4 1         4 +     <NA>
+#>  5 1         5 ++    <NA>
+#>  6 1         6 -     <NA>
+#>  7 2         1 -     <NA>
+#>  8 2         2 ++    <NA>
+#>  9 2         3 +     <NA>
+#> 10 2         4 0     Y
+#> 11 2         5 -     <NA>
 #> 12 2         6 ++    <NA> }\if{html}{\out{</div>}}
 
 To flag \code{"0"} where all results from the \code{"0"} (excluding the \code{"0"}) up
@@ -509,19 +509,19 @@ to the first \code{"++"} after the \code{"0"} are \code{"+"} or \code{"++"} the
   filter_join = val == "0" & all(val.join \%in\% c("+", "++"))
 )
 #> # A tibble: 12 × 4
-#>    subj    day val   flag 
+#>    subj    day val   flag
 #>    <chr> <dbl> <chr> <chr>
-#>  1 1         1 ++    <NA> 
-#>  2 1         2 -     <NA> 
-#>  3 1         3 0     Y    
-#>  4 1         4 +     <NA> 
-#>  5 1         5 ++    <NA> 
-#>  6 1         6 -     <NA> 
-#>  7 2         1 -     <NA> 
-#>  8 2         2 ++    <NA> 
-#>  9 2         3 +     <NA> 
-#> 10 2         4 0     <NA> 
-#> 11 2         5 -     <NA> 
+#>  1 1         1 ++    <NA>
+#>  2 1         2 -     <NA>
+#>  3 1         3 0     Y
+#>  4 1         4 +     <NA>
+#>  5 1         5 ++    <NA>
+#>  6 1         6 -     <NA>
+#>  7 2         1 -     <NA>
+#>  8 2         2 ++    <NA>
+#>  9 2         3 +     <NA>
+#> 10 2         4 0     <NA>
+#> 11 2         5 -     <NA>
 #> 12 2         6 ++    <NA> }\if{html}{\out{</div>}}}
 \subsection{Considering only records up to a condition (\code{first_cond_upper})}{
 
@@ -571,20 +571,20 @@ derive_var_joined_exist_flag(
 )
 #> # A tibble: 14 × 4
 #>    USUBJID AVISITN AVALC CONFFL
-#>    <chr>     <dbl> <chr> <chr> 
-#>  1 1             1 PR    <NA>  
-#>  2 1             2 CR    Y     
-#>  3 1             3 NE    <NA>  
-#>  4 1             4 CR    <NA>  
-#>  5 1             5 NE    <NA>  
-#>  6 2             1 CR    <NA>  
-#>  7 2             2 PR    <NA>  
-#>  8 2             3 CR    <NA>  
-#>  9 3             1 CR    <NA>  
-#> 10 4             1 CR    <NA>  
-#> 11 4             2 NE    <NA>  
-#> 12 4             3 NE    <NA>  
-#> 13 4             4 CR    <NA>  
+#>    <chr>     <dbl> <chr> <chr>
+#>  1 1             1 PR    <NA>
+#>  2 1             2 CR    Y
+#>  3 1             3 NE    <NA>
+#>  4 1             4 CR    <NA>
+#>  5 1             5 NE    <NA>
+#>  6 2             1 CR    <NA>
+#>  7 2             2 PR    <NA>
+#>  8 2             3 CR    <NA>
+#>  9 3             1 CR    <NA>
+#> 10 4             1 CR    <NA>
+#> 11 4             2 NE    <NA>
+#> 12 4             3 NE    <NA>
+#> 13 4             4 CR    <NA>
 #> 14 4             5 PR    <NA>  }\if{html}{\out{</div>}}}
 \subsection{Considering order of values (\code{min_cond()}, \code{max_cond()})}{
 
@@ -643,20 +643,20 @@ derive_var_joined_exist_flag(
 )
 #> # A tibble: 14 × 4
 #>    USUBJID   ADY AVALC CONFFL
-#>    <chr>   <dbl> <chr> <chr> 
-#>  1 1           6 PR    <NA>  
-#>  2 1          12 CR    <NA>  
-#>  3 1          24 NE    <NA>  
-#>  4 1          32 CR    <NA>  
-#>  5 1          48 PR    <NA>  
-#>  6 2           3 PR    <NA>  
-#>  7 2          21 CR    <NA>  
-#>  8 2          33 PR    <NA>  
-#>  9 3          11 PR    <NA>  
-#> 10 4           7 PR    <NA>  
-#> 11 4          12 NE    <NA>  
-#> 12 4          24 NE    <NA>  
-#> 13 4          32 PR    Y     
+#>    <chr>   <dbl> <chr> <chr>
+#>  1 1           6 PR    <NA>
+#>  2 1          12 CR    <NA>
+#>  3 1          24 NE    <NA>
+#>  4 1          32 CR    <NA>
+#>  5 1          48 PR    <NA>
+#>  6 2           3 PR    <NA>
+#>  7 2          21 CR    <NA>
+#>  8 2          33 PR    <NA>
+#>  9 3          11 PR    <NA>
+#> 10 4           7 PR    <NA>
+#> 11 4          12 NE    <NA>
+#> 12 4          24 NE    <NA>
+#> 13 4          32 PR    Y
 #> 14 4          55 PR    <NA>  }\if{html}{\out{</div>}}}
 \subsection{Considering the order of records (\code{tmp_obs_nr_var})}{
 
@@ -694,16 +694,16 @@ derive_var_joined_exist_flag(
 )
 #> # A tibble: 10 × 4
 #>    USUBJID AVISITN CRIT1FL CONFFL
-#>    <chr>     <dbl> <chr>   <chr> 
-#>  1 1             1 Y       <NA>  
-#>  2 1             2 N       <NA>  
-#>  3 1             3 Y       <NA>  
-#>  4 1             5 N       <NA>  
-#>  5 2             1 Y       Y     
-#>  6 2             3 Y       <NA>  
-#>  7 2             5 N       <NA>  
-#>  8 3             1 Y       Y     
-#>  9 4             1 Y       <NA>  
+#>    <chr>     <dbl> <chr>   <chr>
+#>  1 1             1 Y       <NA>
+#>  2 1             2 N       <NA>
+#>  3 1             3 Y       <NA>
+#>  4 1             5 N       <NA>
+#>  5 2             1 Y       Y
+#>  6 2             3 Y       <NA>
+#>  7 2             5 N       <NA>
+#>  8 3             1 Y       Y
+#>  9 4             1 Y       <NA>
 #> 10 4             2 N       <NA>  }\if{html}{\out{</div>}}}
 \subsection{Flag each dose which is lower than the previous dose
 (\code{tmp_obs_nr_var})}{
@@ -736,13 +736,13 @@ derive_var_joined_exist_flag(
 )
 #> # A tibble: 7 × 4
 #>   USUBJID EXSTDTM          EXDOSE DOSREDFL
-#>   <chr>   <chr>             <dbl> <chr>   
-#> 1 1       2024-01-01T08:00      2 <NA>    
-#> 2 1       2024-01-02T08:00      4 <NA>    
-#> 3 2       2024-01-01T08:30      1 <NA>    
-#> 4 2       2024-01-02T08:30      4 <NA>    
-#> 5 2       2024-01-03T08:30      3 Y       
-#> 6 2       2024-01-04T08:30      2 Y       
+#>   <chr>   <chr>             <dbl> <chr>
+#> 1 1       2024-01-01T08:00      2 <NA>
+#> 2 1       2024-01-02T08:00      4 <NA>
+#> 3 2       2024-01-01T08:30      1 <NA>
+#> 4 2       2024-01-02T08:30      4 <NA>
+#> 5 2       2024-01-03T08:30      3 Y
+#> 6 2       2024-01-04T08:30      2 Y
 #> 7 2       2024-01-05T08:30      2 <NA>    }\if{html}{\out{</div>}}}
 \subsection{Derive definitive deterioration flag}{
 
@@ -773,13 +773,13 @@ derive_var_joined_exist_flag(
 )
 #> # A tibble: 7 × 5
 #>   USUBJID PARAMCD   ADY CHGCAT1  DDETERFL
-#>   <chr>   <chr>   <dbl> <chr>    <chr>   
-#> 1 1       QS1        10 Improved <NA>    
-#> 2 1       QS1        21 Improved <NA>    
-#> 3 1       QS1        23 Improved <NA>    
-#> 4 1       QS2        32 Worsened <NA>    
-#> 5 1       QS2        42 Improved <NA>    
-#> 6 2       QS1        11 Worsened Y       
+#>   <chr>   <chr>   <dbl> <chr>    <chr>
+#> 1 1       QS1        10 Improved <NA>
+#> 2 1       QS1        21 Improved <NA>
+#> 3 1       QS1        23 Improved <NA>
+#> 4 1       QS2        32 Worsened <NA>
+#> 5 1       QS2        42 Improved <NA>
+#> 6 2       QS1        11 Worsened Y
 #> 7 2       QS1        24 Worsened Y       }\if{html}{\out{</div>}}}
 \subsection{Handling duplicates (\code{check_type})}{
 
@@ -811,18 +811,18 @@ derive_var_joined_exist_flag(
 )
 #> # A tibble: 7 × 5
 #>   USUBJID AVISITN   ADY AVALC CONFFL
-#>   <chr>     <dbl> <dbl> <chr> <chr> 
-#> 1 1             1     1 Y     Y     
-#> 2 1             2     8 N     <NA>  
-#> 3 1             3    15 Y     <NA>  
-#> 4 1             4    22 N     <NA>  
-#> 5 2             1     1 Y     Y     
-#> 6 2             2     8 Y     <NA>  
-#> 7 2             2    10 Y     <NA>  
-#> Avis : Dataset `dataset` contains duplicate records with respect to `USUBJID` and
+#>   <chr>     <dbl> <dbl> <chr> <chr>
+#> 1 1             1     1 Y     Y
+#> 2 1             2     8 N     <NA>
+#> 3 1             3    15 Y     <NA>
+#> 4 1             4    22 N     <NA>
+#> 5 2             1     1 Y     Y
+#> 6 2             2     8 Y     <NA>
+#> 7 2             2    10 Y     <NA>
+#> Warning: Dataset `dataset` contains duplicate records with respect to `USUBJID` and
 #> `AVISITN`
 #> i Run `admiral::get_duplicates_dataset()` to access the duplicate records
-#> Avis : Dataset `dataset_add` contains duplicate records with respect to `USUBJID` and
+#> Warning: Dataset `dataset_add` contains duplicate records with respect to `USUBJID` and
 #> `AVISITN`
 #> i Run `admiral::get_duplicates_dataset()` to access the duplicate records}\if{html}{\out{</div>}}
 
@@ -835,7 +835,7 @@ accessed by calling \code{get_duplicates_dataset()}:
 #> # A tibble: 2 × 4
 #>   USUBJID AVISITN   ADY AVALC
 #> * <chr>     <dbl> <dbl> <chr>
-#> 1 2             2     8 Y    
+#> 1 2             2     8 Y
 #> 2 2             2    10 Y    }\if{html}{\out{</div>}}
 
 In this example, confirmation is required at a subsequent \emph{visit}.
@@ -855,12 +855,12 @@ flagged. Thus the warning can be suppressed by specifying \code{check_type = "no
 )
 #> # A tibble: 7 × 5
 #>   USUBJID AVISITN   ADY AVALC CONFFL
-#>   <chr>     <dbl> <dbl> <chr> <chr> 
-#> 1 1             1     1 Y     Y     
-#> 2 1             2     8 N     <NA>  
-#> 3 1             3    15 Y     <NA>  
-#> 4 1             4    22 N     <NA>  
-#> 5 2             1     1 Y     Y     
-#> 6 2             2     8 Y     <NA>  
+#>   <chr>     <dbl> <dbl> <chr> <chr>
+#> 1 1             1     1 Y     Y
+#> 2 1             2     8 N     <NA>
+#> 3 1             3    15 Y     <NA>
+#> 4 1             4    22 N     <NA>
+#> 5 2             1     1 Y     Y
+#> 6 2             2     8 Y     <NA>
 #> 7 2             2    10 Y     <NA>  }\if{html}{\out{</div>}}}}
 

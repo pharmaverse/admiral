@@ -342,14 +342,14 @@ derive_param_tte(
   )
 )
 #> # A tibble: 4 × 11
-#>   USUBJID STUDYID EVNTDESC     SRCDOM SRCVAR SRCSEQ  CNSR ADT        STARTDT   
-#>   <chr>   <chr>   <chr>        <chr>  <chr>   <dbl> <int> <date>     <date>    
+#>   USUBJID STUDYID EVNTDESC     SRCDOM SRCVAR SRCSEQ  CNSR ADT        STARTDT
+#>   <chr>   <chr>   <chr>        <chr>  <chr>   <dbl> <int> <date>     <date>
 #> 1 01      AB42    AE           ADAE   ASTDT       2     0 2021-03-04 2020-12-06
 #> 2 01      AB42    AE           ADAE   ASTDT       1     0 2021-01-03 2020-12-06
 #> 3 02      AB42    END OF STUDY ADSL   EOSDT      NA     1 2021-02-03 2021-01-16
 #> 4 02      AB42    END OF STUDY ADSL   EOSDT      NA     1 2021-02-03 2021-01-16
 #> # i 2 more variables: PARAMCD <chr>, PARAM <chr>
-#> Avis : Dataset "adae" contains duplicate records with respect to `STUDYID`, `USUBJID`,
+#> Warning: Dataset "adae" contains duplicate records with respect to `STUDYID`, `USUBJID`,
 #> `AEDECOD`, and `ASTDT`
 #> i Run `admiral::get_duplicates_dataset()` to access the duplicate records}\if{html}{\out{</div>}}
 
@@ -361,7 +361,7 @@ can be obtained by calling \code{get_duplicates_dataset()}:
 #> # A tibble: 2 × 6
 #>   STUDYID USUBJID AEDECOD ASTDT      AESEQ AESER
 #> * <chr>   <chr>   <chr>   <date>     <dbl> <chr>
-#> 1 AB42    01      Cough   2021-03-04     2 N    
+#> 1 AB42    01      Cough   2021-03-04     2 N
 #> 2 AB42    01      Cough   2021-03-04     3 Y    }\if{html}{\out{</div>}}
 
 Common options to solve the issue:
