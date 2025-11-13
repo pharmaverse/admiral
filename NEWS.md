@@ -46,6 +46,9 @@ is specified. (#2875)
     
 ## Documentation
 
+- The "Ask AI" widget was added to the bottom right of each page. It enables users to ask questions about `{admiral}` and `{admiraldev}` 
+and receive answers from an LLM. It is trained on the documentation of both packages and provided by 
+[kapa.ai](https://docs.kapa.ai/kapa-for-open-source). (#2887)
 - The BDS Findings vignette was updated to move derivation of `ASEQ` after any new rows. (#2780)
 - `ADLBHY` template was updated to keep `PARAM` in final dataset. (#2804)
 - A link to the [{admiral} ecosystem](https://pharmaverse.org/e2eclinical/adam/) page was added to the README sidebar and main text. (#2881)
