@@ -96,6 +96,7 @@ is_dates <- is %>%
     new_vars_prefix = "A",
     highest_imputation = "s",
     dtc = ISDTC,
+    ignore_seconds_flag = FALSE,
     time_imputation = "00:00:00"
   ) %>%
   # Derive dates and times from date/times
