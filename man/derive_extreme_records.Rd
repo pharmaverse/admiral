@@ -415,7 +415,7 @@ derive_extreme_records(
 #>   <chr>   <chr>   <dbl>
 #> 1 1       MINIMUM   123
 #> 2 2       MINIMUM    93
-#> Warning: Dataset contains duplicate records with respect to `USUBJID` and `AVAL`
+#> Avis : Dataset contains duplicate records with respect to `USUBJID` and `AVAL`
 #> i Run `admiral::get_duplicates_dataset()` to access the duplicate records}\if{html}{\out{</div>}}
 
 For investigating the issue, the dataset of the duplicate source records
@@ -425,7 +425,7 @@ can be obtained by calling \code{get_duplicates_dataset()}:
 #> Duplicate records with respect to `USUBJID` and `AVAL`.
 #> # A tibble: 2 × 3
 #>   USUBJID  AVAL AVISIT
-#> * <chr>   <dbl> <chr>
+#> * <chr>   <dbl> <chr> 
 #> 1 1         123 WEEK 1
 #> 2 1         123 WEEK 2}\if{html}{\out{</div>}}
 
@@ -490,8 +490,8 @@ derive_extreme_records(
 #> # A tibble: 3 × 5
 #>   USUBJID PARAMCD ADT        DTHDT      AVALC
 #>   <chr>   <chr>   <date>     <date>     <chr>
-#> 1 1       DEATH   2022-05-13 2022-05-13 Y
-#> 2 2       DEATH   NA         NA         N
+#> 1 1       DEATH   2022-05-13 2022-05-13 Y    
+#> 2 2       DEATH   NA         NA         N    
 #> 3 3       DEATH   NA         NA         N    }\if{html}{\out{</div>}}}
 \subsection{Derive \code{DTYPE = "LOV"}}{
 
@@ -532,21 +532,21 @@ derive_extreme_records(
 #> # A tibble: 16 × 8
 #>    STUDYID USUBJID AVISIT   AVISITN PARAMCD  AVAL LBSEQ DTYPE
 #>    <chr>   <chr>   <chr>      <dbl> <chr>   <dbl> <dbl> <chr>
-#>  1 XYZ     1       BASELINE       1 ABC       120     1 <NA>
-#>  2 XYZ     1       WEEK 1         2 ABC       113     2 <NA>
-#>  3 XYZ     1       WEEK 1         2 ABC       117     3 <NA>
-#>  4 XYZ     2       BASELINE       1 ABC       101     1 <NA>
-#>  5 XYZ     2       WEEK 1         2 ABC       101     2 <NA>
-#>  6 XYZ     2       WEEK 2         3 ABC        95     3 <NA>
-#>  7 XYZ     1       BASELINE       1 DEF        17     1 <NA>
-#>  8 XYZ     1       WEEK 1         2 DEF        NA     2 <NA>
-#>  9 XYZ     1       WEEK 1         2 DEF        13     3 <NA>
-#> 10 XYZ     2       BASELINE       1 DEF         9     1 <NA>
-#> 11 XYZ     2       WEEK 1         2 DEF        10     2 <NA>
-#> 12 XYZ     2       WEEK 2         3 DEF        12     3 <NA>
-#> 13 XYZ     1       PBL LAST      99 ABC       117     3 LOV
-#> 14 XYZ     1       PBL LAST      99 DEF        13     3 LOV
-#> 15 XYZ     2       PBL LAST      99 ABC        95     3 LOV
+#>  1 XYZ     1       BASELINE       1 ABC       120     1 <NA> 
+#>  2 XYZ     1       WEEK 1         2 ABC       113     2 <NA> 
+#>  3 XYZ     1       WEEK 1         2 ABC       117     3 <NA> 
+#>  4 XYZ     2       BASELINE       1 ABC       101     1 <NA> 
+#>  5 XYZ     2       WEEK 1         2 ABC       101     2 <NA> 
+#>  6 XYZ     2       WEEK 2         3 ABC        95     3 <NA> 
+#>  7 XYZ     1       BASELINE       1 DEF        17     1 <NA> 
+#>  8 XYZ     1       WEEK 1         2 DEF        NA     2 <NA> 
+#>  9 XYZ     1       WEEK 1         2 DEF        13     3 <NA> 
+#> 10 XYZ     2       BASELINE       1 DEF         9     1 <NA> 
+#> 11 XYZ     2       WEEK 1         2 DEF        10     2 <NA> 
+#> 12 XYZ     2       WEEK 2         3 DEF        12     3 <NA> 
+#> 13 XYZ     1       PBL LAST      99 ABC       117     3 LOV  
+#> 14 XYZ     1       PBL LAST      99 DEF        13     3 LOV  
+#> 15 XYZ     2       PBL LAST      99 ABC        95     3 LOV  
 #> 16 XYZ     2       PBL LAST      99 DEF        12     3 LOV  }\if{html}{\out{</div>}}}
 \subsection{Derive \code{DTYPE = "MINIMUM"}}{
 
@@ -570,20 +570,20 @@ respect to \code{AVISIT} and \code{LBSEQ} should be selected. For the new record
   )
 )
 #> # A tibble: 16 × 8
-#>    STUDYID USUBJID AVISIT   AVISITN PARAMCD  AVAL LBSEQ DTYPE
-#>    <chr>   <chr>   <chr>      <dbl> <chr>   <dbl> <dbl> <chr>
-#>  1 XYZ     1       BASELINE       1 ABC       120     1 <NA>
-#>  2 XYZ     1       WEEK 1         2 ABC       113     2 <NA>
-#>  3 XYZ     1       WEEK 1         2 ABC       117     3 <NA>
-#>  4 XYZ     2       BASELINE       1 ABC       101     1 <NA>
-#>  5 XYZ     2       WEEK 1         2 ABC       101     2 <NA>
-#>  6 XYZ     2       WEEK 2         3 ABC        95     3 <NA>
-#>  7 XYZ     1       BASELINE       1 DEF        17     1 <NA>
-#>  8 XYZ     1       WEEK 1         2 DEF        NA     2 <NA>
-#>  9 XYZ     1       WEEK 1         2 DEF        13     3 <NA>
-#> 10 XYZ     2       BASELINE       1 DEF         9     1 <NA>
-#> 11 XYZ     2       WEEK 1         2 DEF        10     2 <NA>
-#> 12 XYZ     2       WEEK 2         3 DEF        12     3 <NA>
+#>    STUDYID USUBJID AVISIT   AVISITN PARAMCD  AVAL LBSEQ DTYPE  
+#>    <chr>   <chr>   <chr>      <dbl> <chr>   <dbl> <dbl> <chr>  
+#>  1 XYZ     1       BASELINE       1 ABC       120     1 <NA>   
+#>  2 XYZ     1       WEEK 1         2 ABC       113     2 <NA>   
+#>  3 XYZ     1       WEEK 1         2 ABC       117     3 <NA>   
+#>  4 XYZ     2       BASELINE       1 ABC       101     1 <NA>   
+#>  5 XYZ     2       WEEK 1         2 ABC       101     2 <NA>   
+#>  6 XYZ     2       WEEK 2         3 ABC        95     3 <NA>   
+#>  7 XYZ     1       BASELINE       1 DEF        17     1 <NA>   
+#>  8 XYZ     1       WEEK 1         2 DEF        NA     2 <NA>   
+#>  9 XYZ     1       WEEK 1         2 DEF        13     3 <NA>   
+#> 10 XYZ     2       BASELINE       1 DEF         9     1 <NA>   
+#> 11 XYZ     2       WEEK 1         2 DEF        10     2 <NA>   
+#> 12 XYZ     2       WEEK 2         3 DEF        12     3 <NA>   
 #> 13 XYZ     1       PBL MIN       97 ABC       113     2 MINIMUM
 #> 14 XYZ     1       PBL MIN       97 DEF        13     3 MINIMUM
 #> 15 XYZ     2       PBL MIN       97 ABC        95     3 MINIMUM
@@ -610,20 +610,20 @@ respect to \code{AVISIT} and \code{LBSEQ} should be selected. For the new record
   )
 )
 #> # A tibble: 16 × 8
-#>    STUDYID USUBJID AVISIT   AVISITN PARAMCD  AVAL LBSEQ DTYPE
-#>    <chr>   <chr>   <chr>      <dbl> <chr>   <dbl> <dbl> <chr>
-#>  1 XYZ     1       BASELINE       1 ABC       120     1 <NA>
-#>  2 XYZ     1       WEEK 1         2 ABC       113     2 <NA>
-#>  3 XYZ     1       WEEK 1         2 ABC       117     3 <NA>
-#>  4 XYZ     2       BASELINE       1 ABC       101     1 <NA>
-#>  5 XYZ     2       WEEK 1         2 ABC       101     2 <NA>
-#>  6 XYZ     2       WEEK 2         3 ABC        95     3 <NA>
-#>  7 XYZ     1       BASELINE       1 DEF        17     1 <NA>
-#>  8 XYZ     1       WEEK 1         2 DEF        NA     2 <NA>
-#>  9 XYZ     1       WEEK 1         2 DEF        13     3 <NA>
-#> 10 XYZ     2       BASELINE       1 DEF         9     1 <NA>
-#> 11 XYZ     2       WEEK 1         2 DEF        10     2 <NA>
-#> 12 XYZ     2       WEEK 2         3 DEF        12     3 <NA>
+#>    STUDYID USUBJID AVISIT   AVISITN PARAMCD  AVAL LBSEQ DTYPE  
+#>    <chr>   <chr>   <chr>      <dbl> <chr>   <dbl> <dbl> <chr>  
+#>  1 XYZ     1       BASELINE       1 ABC       120     1 <NA>   
+#>  2 XYZ     1       WEEK 1         2 ABC       113     2 <NA>   
+#>  3 XYZ     1       WEEK 1         2 ABC       117     3 <NA>   
+#>  4 XYZ     2       BASELINE       1 ABC       101     1 <NA>   
+#>  5 XYZ     2       WEEK 1         2 ABC       101     2 <NA>   
+#>  6 XYZ     2       WEEK 2         3 ABC        95     3 <NA>   
+#>  7 XYZ     1       BASELINE       1 DEF        17     1 <NA>   
+#>  8 XYZ     1       WEEK 1         2 DEF        NA     2 <NA>   
+#>  9 XYZ     1       WEEK 1         2 DEF        13     3 <NA>   
+#> 10 XYZ     2       BASELINE       1 DEF         9     1 <NA>   
+#> 11 XYZ     2       WEEK 1         2 DEF        10     2 <NA>   
+#> 12 XYZ     2       WEEK 2         3 DEF        12     3 <NA>   
 #> 13 XYZ     1       PBL MAX       99 ABC       117     3 MAXIMUM
 #> 14 XYZ     1       PBL MAX       99 DEF        13     3 MAXIMUM
 #> 15 XYZ     2       PBL MAX       99 ABC       101     2 MAXIMUM
@@ -659,21 +659,21 @@ for \code{PARAMCD = "DEF"}.
 #> # A tibble: 16 × 8
 #>    STUDYID USUBJID AVISIT    AVISITN PARAMCD  AVAL LBSEQ DTYPE
 #>    <chr>   <chr>   <chr>       <dbl> <chr>   <dbl> <dbl> <chr>
-#>  1 XYZ     1       BASELINE        1 ABC       120     1 <NA>
-#>  2 XYZ     1       WEEK 1          2 ABC       113     2 <NA>
-#>  3 XYZ     1       WEEK 1          2 ABC       117     3 <NA>
-#>  4 XYZ     2       BASELINE        1 ABC       101     1 <NA>
-#>  5 XYZ     2       WEEK 1          2 ABC       101     2 <NA>
-#>  6 XYZ     2       WEEK 2          3 ABC        95     3 <NA>
-#>  7 XYZ     1       BASELINE        1 DEF        17     1 <NA>
-#>  8 XYZ     1       WEEK 1          2 DEF        NA     2 <NA>
-#>  9 XYZ     1       WEEK 1          2 DEF        13     3 <NA>
-#> 10 XYZ     2       BASELINE        1 DEF         9     1 <NA>
-#> 11 XYZ     2       WEEK 1          2 DEF        10     2 <NA>
-#> 12 XYZ     2       WEEK 2          3 DEF        12     3 <NA>
-#> 13 XYZ     1       PBL WORST      96 ABC       117     3 WOC
-#> 14 XYZ     1       PBL WORST      96 DEF        13     3 WOC
-#> 15 XYZ     2       PBL WORST      96 ABC       101     2 WOC
+#>  1 XYZ     1       BASELINE        1 ABC       120     1 <NA> 
+#>  2 XYZ     1       WEEK 1          2 ABC       113     2 <NA> 
+#>  3 XYZ     1       WEEK 1          2 ABC       117     3 <NA> 
+#>  4 XYZ     2       BASELINE        1 ABC       101     1 <NA> 
+#>  5 XYZ     2       WEEK 1          2 ABC       101     2 <NA> 
+#>  6 XYZ     2       WEEK 2          3 ABC        95     3 <NA> 
+#>  7 XYZ     1       BASELINE        1 DEF        17     1 <NA> 
+#>  8 XYZ     1       WEEK 1          2 DEF        NA     2 <NA> 
+#>  9 XYZ     1       WEEK 1          2 DEF        13     3 <NA> 
+#> 10 XYZ     2       BASELINE        1 DEF         9     1 <NA> 
+#> 11 XYZ     2       WEEK 1          2 DEF        10     2 <NA> 
+#> 12 XYZ     2       WEEK 2          3 DEF        12     3 <NA> 
+#> 13 XYZ     1       PBL WORST      96 ABC       117     3 WOC  
+#> 14 XYZ     1       PBL WORST      96 DEF        13     3 WOC  
+#> 15 XYZ     2       PBL WORST      96 ABC       101     2 WOC  
 #> 16 XYZ     2       PBL WORST      96 DEF        10     2 WOC  }\if{html}{\out{</div>}}}
 \subsection{Derive a parameter for the first disease progression (PD)}{
 
@@ -763,8 +763,8 @@ created which indicates whether the subject died (set \code{AVALC = "Y"}, \code{
 #> # A tibble: 3 × 6
 #>   STUDYID USUBJID PARAMCD PARAM ADT        AVALC
 #>   <chr>   <chr>   <chr>   <chr> <date>     <chr>
-#> 1 XX1234  1       DEATH   Death 2022-05-13 Y
-#> 2 XX1234  2       DEATH   Death NA         N
+#> 1 XX1234  1       DEATH   Death 2022-05-13 Y    
+#> 2 XX1234  2       DEATH   Death NA         N    
 #> 3 XX1234  3       DEATH   Death NA         N    }\if{html}{\out{</div>}}
 
 The \code{keep_source_vars} argument is specified to avoid that all \code{ADSL}

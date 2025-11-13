@@ -310,7 +310,7 @@ derive_vars_merged(
 ) \%>\%
   select(USUBJID, VSTESTCD, VISIT, VSSTRESN, AGE, AGEU)
 #> # A tibble: 6 × 6
-#>   USUBJID VSTESTCD VISIT     VSSTRESN   AGE AGEU
+#>   USUBJID VSTESTCD VISIT     VSSTRESN   AGE AGEU 
 #>   <chr>   <chr>    <chr>        <dbl> <dbl> <chr>
 #> 1 01      HEIGHT   SCREENING    178      61 YEARS
 #> 2 01      WEIGHT   SCREENING     81.9    61 YEARS
@@ -376,9 +376,9 @@ derive_vars_merged(
 #>   USUBJID   AGE AGEU  LSTWT
 #>   <chr>   <dbl> <chr> <dbl>
 #> 1 01         61 YEARS  82.6
-#> 2 02         64 YEARS  NA
-#> 3 03         85 YEARS  NA
-#> Warning: Dataset contains duplicate records with respect to `STUDYID`, `USUBJID`, and
+#> 2 02         64 YEARS  NA  
+#> 3 03         85 YEARS  NA  
+#> Avis : Dataset contains duplicate records with respect to `STUDYID`, `USUBJID`, and
 #> `convert_dtc_to_dtm(VSDTC)`
 #> i Run `admiral::get_duplicates_dataset()` to access the duplicate records}\if{html}{\out{</div>}}
 
@@ -433,10 +433,10 @@ no matching observations - see subject \code{"03"} in the below example.
 ) \%>\%
   select(USUBJID, AGE, AGEU, LSTWTCAT)
 #> # A tibble: 3 × 4
-#>   USUBJID   AGE AGEU  LSTWTCAT
-#>   <chr>   <dbl> <chr> <chr>
+#>   USUBJID   AGE AGEU  LSTWTCAT     
+#>   <chr>   <dbl> <chr> <chr>        
 #> 1 01         61 YEARS POST-BASELINE
-#> 2 02         64 YEARS BASELINE
+#> 2 02         64 YEARS BASELINE     
 #> 3 03         85 YEARS MISSING      }\if{html}{\out{</div>}}}
 \subsection{Check existence of records to merge (\code{exist_flag}, \code{true_value} and \code{false_value})}{
 
@@ -465,9 +465,9 @@ variable to show whether a selected record was merged.
   select(USUBJID, AGE, AGEU, LSTWTCAT, WTCHECK)
 #> # A tibble: 3 × 5
 #>   USUBJID   AGE AGEU  LSTWTCAT      WTCHECK
-#>   <chr>   <dbl> <chr> <chr>         <chr>
-#> 1 01         61 YEARS POST-BASELINE Y
-#> 2 02         64 YEARS BASELINE      Y
+#>   <chr>   <dbl> <chr> <chr>         <chr>  
+#> 1 01         61 YEARS POST-BASELINE Y      
+#> 2 02         64 YEARS BASELINE      Y      
 #> 3 03         85 YEARS <NA>          MISSING}\if{html}{\out{</div>}}}
 \subsection{Creating more than one variable from the merge (\code{new_vars})}{
 
@@ -506,9 +506,9 @@ derive_vars_merged(
   select(USUBJID, TRTSDTM, TRTSDTF, TRTSTMF)
 #> # A tibble: 3 × 4
 #>   USUBJID TRTSDTM             TRTSDTF TRTSTMF
-#>   <chr>   <dttm>              <chr>   <chr>
-#> 1 01      2013-08-29 00:00:00 <NA>    H
-#> 2 02      2014-01-11 00:00:00 <NA>    H
+#>   <chr>   <dttm>              <chr>   <chr>  
+#> 1 01      2013-08-29 00:00:00 <NA>    H      
+#> 2 02      2014-01-11 00:00:00 <NA>    H      
 #> 3 03      NA                  <NA>    <NA>   }\if{html}{\out{</div>}}}
 \subsection{Further examples}{
 
