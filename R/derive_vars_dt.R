@@ -170,14 +170,14 @@
 #' @caption Applying a lower boundary to date imputation with (`min_dates`)
 #' @info In this example, we derive `ASTDT` where `AESTDTC` is all partial dates in
 #' need of imputation. Using `min_dates = exprs(TRTSDTM)`, we are telling the function
-#' to apply the treatment start date (TRTSDTM) as a lower boundary for imputation
+#' to apply the treatment start date `(TRTSDTM)` as a lower boundary for imputation
 #' via the `min_dates` argument.
 #' This means:
-#' - For partial dates that could potentially include TRTSDTM (case 1 & 2),
-#' the imputed date is adjusted to TRTSDTM
-#' - For partial dates that are entirely before TRTSDTM (case 3 & 4),
+#' - For partial dates that could potentially include `TRTSDTM` (case 1 & 2),
+#' the imputed date is adjusted to `TRTSDTM`
+#' - For partial dates that are entirely before `TRTSDTM` (case 3 & 4),
 #' standard imputation rules apply without adjustment
-#' - For partial dates that are entirely after TRTSDTM (case 5),
+#' - For partial dates that are entirely after `TRTSDTM` (case 5),
 #' standard imputation rules apply
 #'
 #' @code
@@ -202,7 +202,7 @@
 #' @caption Applying an upper boundary to date imputation with (`max_dates`)
 #' @info In this example, we derive `ASTDT` where `AESTDTC` is all partial dates in
 #' need of imputation. Using `max_dates = exprs(TRTEDTM)`, we are telling the function
-#' to apply the treatment end date (TRTEDTM) as an upper boundary for imputation
+#' to apply the treatment end date `(TRTEDTM)` as an upper boundary for imputation
 #' via the `max_dates` argument.
 #' This means:
 #' - For partial dates that could potentially include `TRTEDTM` (case 1 & 2),
