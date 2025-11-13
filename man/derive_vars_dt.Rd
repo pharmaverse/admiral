@@ -359,15 +359,15 @@ imputation of the record with \code{"2019-02"}.
 
 In this example, we derive \code{ASTDT} where \code{AESTDTC} is all partial dates in
 need of imputation. Using \code{min_dates = exprs(TRTSDTM)}, we are telling the function
-to apply the treatment start date (TRTSDTM) as a lower boundary for imputation
+to apply the treatment start date \code{(TRTSDTM)} as a lower boundary for imputation
 via the \code{min_dates} argument.
 This means:
 \itemize{
-\item For partial dates that could potentially include TRTSDTM (case 1 & 2),
-the imputed date is adjusted to TRTSDTM
-\item For partial dates that are entirely before TRTSDTM (case 3 & 4),
+\item For partial dates that could potentially include \code{TRTSDTM} (case 1 & 2),
+the imputed date is adjusted to \code{TRTSDTM}
+\item For partial dates that are entirely before \code{TRTSDTM} (case 3 & 4),
 standard imputation rules apply without adjustment
-\item For partial dates that are entirely after TRTSDTM (case 5),
+\item For partial dates that are entirely after \code{TRTSDTM} (case 5),
 standard imputation rules apply
 }
 
@@ -400,7 +400,7 @@ derive_vars_dt(
 
 In this example, we derive \code{ASTDT} where \code{AESTDTC} is all partial dates in
 need of imputation. Using \code{max_dates = exprs(TRTEDTM)}, we are telling the function
-to apply the treatment end date (TRTEDTM) as an upper boundary for imputation
+to apply the treatment end date \code{(TRTEDTM)} as an upper boundary for imputation
 via the \code{max_dates} argument.
 This means:
 \itemize{
