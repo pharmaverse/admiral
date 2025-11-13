@@ -123,7 +123,7 @@
 #'   date_imputation = "last"
 #' )
 #'
-#' @caption Impute to the middle (`date_imputaton = "mid"`) and suppress
+#' @caption Impute to the middle (`date_imputation = "mid"`) and suppress
 #' imputation flag (`flag_imputation = "none"`)
 #' @info In this example, we will derive `TRTSDT` with date imputation flag
 #' (`*DTF`) suppressed. Since `date_imputation = "mid"`, partial date imputation
