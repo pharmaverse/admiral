@@ -293,7 +293,7 @@ derive_vars_dt(
 #> 5 "2019"                2019-12-31 M    
 #> 6 "2019---07"           2019-12-31 M    
 #> 7 ""                    NA         <NA> }\if{html}{\out{</div>}}}
-\subsection{Impute to the middle (\code{date_imputaton = "mid"}) and suppress
+\subsection{Impute to the middle (\code{date_imputation = "mid"}) and suppress
 imputation flag (\code{flag_imputation = "none"})}{
 
 In this example, we will derive \code{TRTSDT} with date imputation flag
