@@ -252,8 +252,8 @@ is_aval <- is_basetype %>%
 # Baseline is NFRLT <= 0 or Unscheduled AND the ADA Date is on or before the date of first dose.
 
 is_baseline <- is_aval %>%
-  # Calculate ABLFL, if more than one record for the 'order' and 'filter', will throw a duplicate
-  # record warning. User can decide how to adjust the order, filter or prior data step.
+  # Calculate ABLFL. If more than one record for the 'order' and 'filter' will throw a duplicate
+  # record warning, user can decide how to adjust the mode, order, filter or adjust in prior step.
   restrict_derivation(
     derivation = derive_var_extreme_flag,
     args = params(
