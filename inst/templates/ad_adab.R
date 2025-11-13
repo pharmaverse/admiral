@@ -183,11 +183,6 @@ is_basetype <- is_afrlt %>%
     BASETYPE = "DOUBLE_BLINDED"
   )
 
-# Review Unique AAB VISITs and NOMTIMES data
-is_basetype %>%
-  group_by(DRUG, ISTESTCD, ADATYPE, ADAPARM, VISIT, AVISIT, AVISITN, ISTPT, NFRLT) %>%
-  summarize(n = n()) %>%
-  print(n = 100)
 
 # Assign AVAL, AVALC, AVALU and DTYPE for each ISTESTCD and ISBDAGNT
 
@@ -332,8 +327,6 @@ check_result_change <- is_result_change %>%
     RESULTN, ABLFL, VALIDBASE, VALIDPOST, BASE_RESULT, BASE, CHG
   )
 
-# BEGIN Changes Zone ------------------------------------------------------
-
 # Get base only data for use later
 base_data <- is_result_change %>%
   filter(ABLFL == "Y") %>%
@@ -414,14 +407,14 @@ most_post_result <- post_data %>%
   ungroup()
 
 most_post_aval <- post_data %>%
-  group_by(!!!get_admiral_option("subject_keys"), BASETYPE, ADATYPE, ADAPARM) %>%
   filter(!is.na(AVAL_P)) %>%
+  group_by(!!!get_admiral_option("subject_keys"), BASETYPE, ADATYPE, ADAPARM) %>%
   summarize(AVAL_P = max(AVAL_P)) %>%
   ungroup()
 
 most_post_chg <- post_data %>%
-  group_by(!!!get_admiral_option("subject_keys"), BASETYPE, ADATYPE, ADAPARM) %>%
   filter(!is.na(AVAL_P)) %>%
+  group_by(!!!get_admiral_option("subject_keys"), BASETYPE, ADATYPE, ADAPARM) %>%
   summarize(MAXCHG = max(CHG)) %>%
   ungroup()
 
@@ -1143,8 +1136,6 @@ adab_lppdtm <- core_aab %>%
     ),
     AVALU = NA_character_
   )
-
-# END Changes Zone --------------------------------------------------------
 
 # Set all the standard PARAM components together -----------------------------------
 
