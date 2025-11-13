@@ -592,14 +592,14 @@ most_post_result <- post_data %>%
   ungroup()
 
 most_post_aval <- post_data %>%
-  group_by(!!!get_admiral_option("subject_keys"), BASETYPE, ADATYPE, ADAPARM) %>%
   filter(!is.na(AVAL_P)) %>%
+  group_by(!!!get_admiral_option("subject_keys"), BASETYPE, ADATYPE, ADAPARM) %>%
   summarize(AVAL_P = max(AVAL_P)) %>%
   ungroup()
 
 most_post_chg <- post_data %>%
-  group_by(!!!get_admiral_option("subject_keys"), BASETYPE, ADATYPE, ADAPARM) %>%
   filter(!is.na(AVAL_P)) %>%
+  group_by(!!!get_admiral_option("subject_keys"), BASETYPE, ADATYPE, ADAPARM) %>%
   summarize(MAXCHG = max(CHG)) %>%
   ungroup()
 
