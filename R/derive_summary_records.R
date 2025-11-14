@@ -58,6 +58,19 @@
 #'
 #' @permitted [condition]
 #'
+#' @param constant_values Constant variables to set
+#'
+#'   The specified variables are set to the specified values for all new
+#'   summary records, including those with data in dataset_add and those with
+#'   no data imputed using dataset_ref and missing_values.
+#'
+#'   Set a list of variables to some specified value for the new records
+#'   + LHS refer to a variable.
+#'   + RHS refers to the values to set to the variable. This can be a string
+#'   or a numeric value.
+#'
+#' @permitted [expr_list_summary]
+#'
 #' @param set_values_to Variables to be set
 #'
 #'   The specified variables are set to the specified values for the new
@@ -134,10 +147,12 @@
 #'   adeg,
 #'   dataset_add = adeg,
 #'   by_vars = exprs(USUBJID, PARAM, AVISIT),
+#'   constant_values = exprs(
+#'     DTYPE = "AVERAGE"
+#'   ),
 #'   set_values_to = exprs(
 #'     AVAL = mean(AVAL, na.rm = TRUE),
-#'     ADTM = max(ADTM),
-#'     DTYPE = "AVERAGE"
+#'     ADTM = max(ADTM)
 #'   )
 #' ) %>%
 #'   arrange(USUBJID, AVISIT)
@@ -153,11 +168,13 @@
 #'   adeg,
 #'   dataset_add = adeg,
 #'   by_vars = exprs(USUBJID, PARAM, AVISIT),
+#'   constant_values = exprs(
+#'     DTYPE = "AVERAGE"
+#'   ),
 #'   set_values_to = exprs(
 #'     OUTLIEFL = if_else(any(AVAL >= 500 | AVAL <= 300), "Y", "N"),
 #'     AVAL = mean(AVAL, na.rm = TRUE),
-#'     ADTM = max(ADTM),
-#'     DTYPE = "AVERAGE"
+#'     ADTM = max(ADTM)
 #'   )
 #' ) %>%
 #'   arrange(USUBJID, AVISIT)
@@ -174,9 +191,11 @@
 #'   dataset_add = adeg,
 #'   by_vars = exprs(USUBJID, PARAM, AVISIT),
 #'   filter_add = AVISIT == "Baseline",
-#'   set_values_to = exprs(
-#'     AVAL = mean(AVAL, na.rm = TRUE),
+#'   constant_values = exprs(
 #'     DTYPE = "AVERAGE"
+#'   ),
+#'   set_values_to = exprs(
+#'     AVAL = mean(AVAL, na.rm = TRUE)
 #'   )
 #' ) %>%
 #'   arrange(USUBJID, AVISIT)
@@ -192,9 +211,11 @@
 #'   dataset_add = adeg,
 #'   by_vars = exprs(USUBJID, PARAM, AVISIT),
 #'   filter_add = n() > 2,
-#'   set_values_to = exprs(
-#'     AVAL = mean(AVAL, na.rm = TRUE),
+#'   constant_values = exprs(
 #'     DTYPE = "AVERAGE"
+#'   ),
+#'   set_values_to = exprs(
+#'     AVAL = mean(AVAL, na.rm = TRUE)
 #'   )
 #' ) %>%
 #'   arrange(USUBJID, AVISIT)
@@ -237,12 +258,14 @@
 #'   )
 #' ) %>%
 #'   arrange(USUBJID, AVISIT)
+#'
 
 derive_summary_records <- function(dataset = NULL,
                                    dataset_add,
                                    dataset_ref = NULL,
                                    by_vars,
                                    filter_add = NULL,
+                                   constant_values = NULL,
                                    set_values_to,
                                    missing_values = NULL) {
   assert_vars(by_vars)
@@ -255,15 +278,25 @@ derive_summary_records <- function(dataset = NULL,
   )
 
   assert_varval_list(set_values_to)
+  assert_varval_list(constant_values, optional = TRUE)
   assert_expr_list(missing_values, named = TRUE, optional = TRUE)
 
   filter_add <- assert_filter_cond(enexpr(filter_add), optional = TRUE)
+  if (!is.null(constant_values)){
+    summary_records <- dataset_add %>%
+      group_by(!!!by_vars) %>%
+      filter_if(filter_add) %>%
+      summarise(!!!set_values_to) %>%
+      ungroup() %>%
+      mutate(!!!constant_values)
+  } else {
+    summary_records <- dataset_add %>%
+      group_by(!!!by_vars) %>%
+      filter_if(filter_add) %>%
+      summarise(!!!set_values_to) %>%
+      ungroup()
+  }
 
-  summary_records <- dataset_add %>%
-    group_by(!!!by_vars) %>%
-    filter_if(filter_add) %>%
-    summarise(!!!set_values_to) %>%
-    ungroup()
 
   df_return <- bind_rows(
     dataset,
@@ -279,7 +312,7 @@ derive_summary_records <- function(dataset = NULL,
 
     if (!is.null(missing_values)) {
       new_ref_obs <- new_ref_obs %>%
-        mutate(!!!missing_values)
+        mutate(!!!missing_values, !!!constant_values)
     }
 
     df_return <- bind_rows(
