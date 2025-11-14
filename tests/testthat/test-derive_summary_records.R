@@ -15,9 +15,7 @@ test_that("derive_summary_records Test 1: creates new record per group and group
       by_vars = exprs(subj, visit),
       set_values_to = exprs(
         val = mean(val),
-        seq = max(seq)
-      ),
-      constant_values = exprs(
+        seq = max(seq),
         type = "AVERAGE"
       )
     )

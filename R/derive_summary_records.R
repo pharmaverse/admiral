@@ -282,21 +282,17 @@ derive_summary_records <- function(dataset = NULL,
   assert_expr_list(missing_values, named = TRUE, optional = TRUE)
 
   filter_add <- assert_filter_cond(enexpr(filter_add), optional = TRUE)
-  if (!is.null(constant_values)){
-    summary_records <- dataset_add %>%
-      group_by(!!!by_vars) %>%
-      filter_if(filter_add) %>%
-      summarise(!!!set_values_to) %>%
-      ungroup() %>%
-      mutate(!!!constant_values)
-  } else {
-    summary_records <- dataset_add %>%
-      group_by(!!!by_vars) %>%
-      filter_if(filter_add) %>%
-      summarise(!!!set_values_to) %>%
-      ungroup()
-  }
 
+  summary_records <- dataset_add %>%
+    group_by(!!!by_vars) %>%
+    filter_if(filter_add) %>%
+    summarise(!!!set_values_to) %>%
+    ungroup()
+
+  if (!is.null(constant_values)){
+    summary_records <- summary_records %>%
+      mutate(!!!constant_values)
+  }
 
   df_return <- bind_rows(
     dataset,
@@ -312,7 +308,12 @@ derive_summary_records <- function(dataset = NULL,
 
     if (!is.null(missing_values)) {
       new_ref_obs <- new_ref_obs %>%
-        mutate(!!!missing_values, !!!constant_values)
+        mutate(!!!missing_values)
+    }
+
+    if (!is.null(constant_values)) {
+      new_ref_obs <- new_ref_obs %>%
+        mutate(!!!constant_values)
     }
 
     df_return <- bind_rows(
