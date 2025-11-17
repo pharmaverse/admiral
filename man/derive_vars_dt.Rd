@@ -372,12 +372,12 @@ standard imputation rules apply
 }
 
 \if{html}{\out{<div class="sourceCode r">}}\preformatted{adae <- tribble(
-~AESTDTC, ~TRTSDTM,
-"2020-12", ymd_hms("2020-12-06T12:12:12"),
-"2020", ymd_hms("2020-12-06T12:12:12"),
-"2020-11", ymd_hms("2020-12-06T12:12:12"),
-"2020-01", ymd_hms("2020-12-06T12:12:12"),
-"2021-01", ymd_hms("2020-12-06T12:12:12")
+  ~case, ~AESTDTC, ~TRTSDTM,
+  1, "2020-12", ymd_hms("2020-12-06T12:12:12"),
+  2, "2020", ymd_hms("2020-12-06T12:12:12"),
+  3, "2020-11", ymd_hms("2020-12-06T12:12:12"),
+  4, "2020-01", ymd_hms("2020-12-06T12:12:12"),
+  5, "2021-01", ymd_hms("2020-12-06T12:12:12")
 )
 
 derive_vars_dt(
@@ -388,14 +388,14 @@ derive_vars_dt(
   date_imputation = "first",
   min_dates = exprs(TRTSDTM)
   )
-#> # A tibble: 5 × 4
-#>   AESTDTC TRTSDTM             ASTDT      ASTDTF
-#>   <chr>   <dttm>              <date>     <chr> 
-#> 1 2020-12 2020-12-06 12:12:12 2020-12-06 D     
-#> 2 2020    2020-12-06 12:12:12 2020-12-06 M     
-#> 3 2020-11 2020-12-06 12:12:12 2020-11-01 D     
-#> 4 2020-01 2020-12-06 12:12:12 2020-01-01 D     
-#> 5 2021-01 2020-12-06 12:12:12 2021-01-01 D     }\if{html}{\out{</div>}}}
+#> # A tibble: 5 × 5
+#>    case AESTDTC TRTSDTM             ASTDT      ASTDTF
+#>   <dbl> <chr>   <dttm>              <date>     <chr> 
+#> 1     1 2020-12 2020-12-06 12:12:12 2020-12-06 D     
+#> 2     2 2020    2020-12-06 12:12:12 2020-12-06 M     
+#> 3     3 2020-11 2020-12-06 12:12:12 2020-11-01 D     
+#> 4     4 2020-01 2020-12-06 12:12:12 2020-01-01 D     
+#> 5     5 2021-01 2020-12-06 12:12:12 2021-01-01 D     }\if{html}{\out{</div>}}}
 \subsection{Applying an upper boundary to date imputation with (\code{max_dates})}{
 
 In this example, we derive \code{ASTDT} where \code{AESTDTC} is all partial dates in
@@ -413,12 +413,12 @@ standard imputation rules apply
 }
 
 \if{html}{\out{<div class="sourceCode r">}}\preformatted{adae <- tribble(
-  ~AESTDTC, ~TRTSDTM, ~TRTEDTM,
-  "2020-12", ymd_hms("2020-01-01T12:12:12"), ymd_hms("2020-12-20T23:59:59"),
-  "2020", ymd_hms("2020-01-01T12:12:12"), ymd_hms("2020-12-20T23:59:59"),
-  "2020-11", ymd_hms("2020-01-01T12:12:12"), ymd_hms("2020-12-20T23:59:59"),
-  "2020-01", ymd_hms("2020-01-01T12:12:12"), ymd_hms("2020-12-20T23:59:59"),
-  "2021-01", ymd_hms("2020-01-01T12:12:12"), ymd_hms("2020-12-20T23:59:59")
+  ~case, ~AESTDTC, ~TRTSDTM, ~TRTEDTM,
+  1, "2020-12", ymd_hms("2020-01-01T12:12:12"), ymd_hms("2020-12-20T23:59:59"),
+  2, "2020", ymd_hms("2020-01-01T12:12:12"), ymd_hms("2020-12-20T23:59:59"),
+  3, "2020-11", ymd_hms("2020-01-01T12:12:12"), ymd_hms("2020-12-20T23:59:59"),
+  4, "2020-01", ymd_hms("2020-01-01T12:12:12"), ymd_hms("2020-12-20T23:59:59"),
+  5, "2021-01", ymd_hms("2020-01-01T12:12:12"), ymd_hms("2020-12-20T23:59:59")
 )
 
 derive_vars_dt(
@@ -429,14 +429,14 @@ derive_vars_dt(
   date_imputation = "last",
   max_dates = exprs(TRTEDTM)
 )
-#> # A tibble: 5 × 5
-#>   AESTDTC TRTSDTM             TRTEDTM             ASTDT      ASTDTF
-#>   <chr>   <dttm>              <dttm>              <date>     <chr> 
-#> 1 2020-12 2020-01-01 12:12:12 2020-12-20 23:59:59 2020-12-20 D     
-#> 2 2020    2020-01-01 12:12:12 2020-12-20 23:59:59 2020-12-20 M     
-#> 3 2020-11 2020-01-01 12:12:12 2020-12-20 23:59:59 2020-11-30 D     
-#> 4 2020-01 2020-01-01 12:12:12 2020-12-20 23:59:59 2020-01-31 D     
-#> 5 2021-01 2020-01-01 12:12:12 2020-12-20 23:59:59 2021-01-31 D     }\if{html}{\out{</div>}}}
+#> # A tibble: 5 × 6
+#>    case AESTDTC TRTSDTM             TRTEDTM             ASTDT      ASTDTF
+#>   <dbl> <chr>   <dttm>              <dttm>              <date>     <chr> 
+#> 1     1 2020-12 2020-01-01 12:12:12 2020-12-20 23:59:59 2020-12-20 D     
+#> 2     2 2020    2020-01-01 12:12:12 2020-12-20 23:59:59 2020-12-20 M     
+#> 3     3 2020-11 2020-01-01 12:12:12 2020-12-20 23:59:59 2020-11-30 D     
+#> 4     4 2020-01 2020-01-01 12:12:12 2020-12-20 23:59:59 2020-01-31 D     
+#> 5     5 2021-01 2020-01-01 12:12:12 2020-12-20 23:59:59 2021-01-31 D     }\if{html}{\out{</div>}}}
 \subsection{Preserve lower components if higher ones were imputed (\code{preserve})}{
 
 The \code{preserve} argument can be used to "preserve" information from the partial dates.
