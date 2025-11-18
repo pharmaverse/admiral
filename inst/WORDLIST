@@ -52,7 +52,6 @@ Biologics
 CBOR
 CDISC
 CKD
-CMD
 CODEOWNERS
 COVID
 CPK
@@ -151,12 +150,14 @@ Kumar
 Kumari
 LDL
 LLC
+LLM
 LLOQ
 LOCF
 Leena
 Leukocytosis
 Lipase
 Liu
+LLM
 MDRD
 MH
 MRRLT
@@ -279,6 +280,7 @@ admiralpeds
 admiralvaccine
 admiralxxx
 adsl
+ai
 alanine
 aminotransferase
 analyte
@@ -320,6 +322,7 @@ glomerular
 groupwise
 json
 lifecycle
+kapa
 lubridate
 mL
 magrittr

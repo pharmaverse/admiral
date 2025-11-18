@@ -57,10 +57,10 @@ level are imputed.
 If a component at a higher level than the highest imputation level is
 missing, \code{NA_character_} is returned. For example, for \code{highest_imputation = "D"} \code{"2020"} results in \code{NA_character_} because the month is missing.
 
-If \code{"n"} is specified no imputation is performed, i.e., if any component is
-missing, \code{NA_character_} is returned.
+If \code{"n"} (none, lowest level) is specified no imputation is performed, i.e.,
+if any component is missing, \code{NA_character_} is returned.
 
-If \code{"Y"} is specified, \code{date_imputation} must be \code{"first"} or \code{"last"}
+If \code{"Y"} (year, highest level) is specified, \code{date_imputation} must be \code{"first"} or \code{"last"}
 and \code{min_dates} or \code{max_dates} must be specified respectively. Otherwise,
 an error is thrown.
 
@@ -293,7 +293,7 @@ derive_vars_dt(
 #> 5 "2019"                2019-12-31 M    
 #> 6 "2019---07"           2019-12-31 M    
 #> 7 ""                    NA         <NA> }\if{html}{\out{</div>}}}
-\subsection{Impute to the middle (\code{date_imputaton = "mid"}) and suppress
+\subsection{Impute to the middle (\code{date_imputation = "mid"}) and suppress
 imputation flag (\code{flag_imputation = "none"})}{
 
 In this example, we will derive \code{TRTSDT} with date imputation flag
@@ -344,7 +344,7 @@ imputation of the record with \code{"2019-02"}.
   dtc = MHSTDTC,
   highest_imputation = "M",
   date_imputation = "04-06"
-)
+  )
 #> # A tibble: 7 × 3
 #>   MHSTDTC               ASTDT      ASTDTF
 #>   <chr>                 <date>     <chr> 
@@ -355,18 +355,29 @@ imputation of the record with \code{"2019-02"}.
 #> 5 "2019"                2019-04-06 M     
 #> 6 "2019---07"           2019-04-06 M     
 #> 7 ""                    NA         <NA>  }\if{html}{\out{</div>}}}
-\subsection{Avoid imputation before a user-defined date (\code{min_dates})}{
+\subsection{Applying a lower boundary to date imputation with (\code{min_dates})}{
 
 In this example, we derive \code{ASTDT} where \code{AESTDTC} is all partial dates in
 need of imputation. Using \code{min_dates = exprs(TRTSDTM)}, we are telling the function
-to not allow imputation dates to be before the treatment start date
-via \code{min_dates} argument. Note that the second record does not get imputed
-as it is before \code{TRTSDTM}.
+to apply the treatment start date \code{(TRTSDTM)} as a lower boundary for imputation
+via the \code{min_dates} argument.
+This means:
+\itemize{
+\item For partial dates that could potentially include \code{TRTSDTM} (case 1 & 2),
+the imputed date is adjusted to \code{TRTSDTM}
+\item For partial dates that are entirely before \code{TRTSDTM} (case 3 & 4),
+standard imputation rules apply without adjustment
+\item For partial dates that are entirely after \code{TRTSDTM} (case 5),
+standard imputation rules apply
+}
 
 \if{html}{\out{<div class="sourceCode r">}}\preformatted{adae <- tribble(
-  ~AESTDTC, ~TRTSDTM,
-  "2020-12", ymd_hms("2020-12-06T12:12:12"),
-  "2020-11", ymd_hms("2020-12-06T12:12:12")
+  ~case, ~AESTDTC, ~TRTSDTM,
+  1, "2020-12", ymd_hms("2020-12-06T12:12:12"),
+  2, "2020", ymd_hms("2020-12-06T12:12:12"),
+  3, "2020-11", ymd_hms("2020-12-06T12:12:12"),
+  4, "2020-01", ymd_hms("2020-12-06T12:12:12"),
+  5, "2021-01", ymd_hms("2020-12-06T12:12:12")
 )
 
 derive_vars_dt(
@@ -374,13 +385,58 @@ derive_vars_dt(
   dtc = AESTDTC,
   new_vars_prefix = "AST",
   highest_imputation = "M",
+  date_imputation = "first",
   min_dates = exprs(TRTSDTM)
+  )
+#> # A tibble: 5 × 5
+#>    case AESTDTC TRTSDTM             ASTDT      ASTDTF
+#>   <dbl> <chr>   <dttm>              <date>     <chr> 
+#> 1     1 2020-12 2020-12-06 12:12:12 2020-12-06 D     
+#> 2     2 2020    2020-12-06 12:12:12 2020-12-06 M     
+#> 3     3 2020-11 2020-12-06 12:12:12 2020-11-01 D     
+#> 4     4 2020-01 2020-12-06 12:12:12 2020-01-01 D     
+#> 5     5 2021-01 2020-12-06 12:12:12 2021-01-01 D     }\if{html}{\out{</div>}}}
+\subsection{Applying an upper boundary to date imputation with (\code{max_dates})}{
+
+In this example, we derive \code{ASTDT} where \code{AESTDTC} is all partial dates in
+need of imputation. Using \code{max_dates = exprs(TRTEDTM)}, we are telling the function
+to apply the treatment end date \code{(TRTEDTM)} as an upper boundary for imputation
+via the \code{max_dates} argument.
+This means:
+\itemize{
+\item For partial dates that could potentially include \code{TRTEDTM} (case 1 & 2),
+the imputed date is adjusted to \code{TRTEDTM}
+\item For partial dates that are entirely before \code{TRTEDTM} (case 3 & 4),
+standard imputation rules apply without adjustment
+\item For partial dates that are entirely after \code{TRTEDTM} (case 5),
+standard imputation rules apply
+}
+
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{adae <- tribble(
+  ~case, ~AESTDTC, ~TRTSDTM, ~TRTEDTM,
+  1, "2020-12", ymd_hms("2020-01-01T12:12:12"), ymd_hms("2020-12-20T23:59:59"),
+  2, "2020", ymd_hms("2020-01-01T12:12:12"), ymd_hms("2020-12-20T23:59:59"),
+  3, "2020-11", ymd_hms("2020-01-01T12:12:12"), ymd_hms("2020-12-20T23:59:59"),
+  4, "2020-01", ymd_hms("2020-01-01T12:12:12"), ymd_hms("2020-12-20T23:59:59"),
+  5, "2021-01", ymd_hms("2020-01-01T12:12:12"), ymd_hms("2020-12-20T23:59:59")
 )
-#> # A tibble: 2 × 4
-#>   AESTDTC TRTSDTM             ASTDT      ASTDTF
-#>   <chr>   <dttm>              <date>     <chr> 
-#> 1 2020-12 2020-12-06 12:12:12 2020-12-06 D     
-#> 2 2020-11 2020-12-06 12:12:12 2020-11-01 D     }\if{html}{\out{</div>}}}
+
+derive_vars_dt(
+  adae,
+  dtc = AESTDTC,
+  new_vars_prefix = "AST",
+  highest_imputation = "M",
+  date_imputation = "last",
+  max_dates = exprs(TRTEDTM)
+)
+#> # A tibble: 5 × 6
+#>    case AESTDTC TRTSDTM             TRTEDTM             ASTDT      ASTDTF
+#>   <dbl> <chr>   <dttm>              <dttm>              <date>     <chr> 
+#> 1     1 2020-12 2020-01-01 12:12:12 2020-12-20 23:59:59 2020-12-20 D     
+#> 2     2 2020    2020-01-01 12:12:12 2020-12-20 23:59:59 2020-12-20 M     
+#> 3     3 2020-11 2020-01-01 12:12:12 2020-12-20 23:59:59 2020-11-30 D     
+#> 4     4 2020-01 2020-01-01 12:12:12 2020-12-20 23:59:59 2020-01-31 D     
+#> 5     5 2021-01 2020-01-01 12:12:12 2020-12-20 23:59:59 2021-01-31 D     }\if{html}{\out{</div>}}}
 \subsection{Preserve lower components if higher ones were imputed (\code{preserve})}{
 
 The \code{preserve} argument can be used to "preserve" information from the partial dates.
