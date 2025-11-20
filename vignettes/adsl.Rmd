@@ -388,8 +388,7 @@ The function `derive_vars_aage()` can be used to derive analysis age (`AAGE`) an
 analysis age unit (`AAGEU`). The function derives the age based on the birth date 
 (`BRTHDT`) and a reference date, which is typically the randomization date (`RANDDT`).
 
-Note that `BRTHDT` must be derived first from `BRTHDTC` using `derive_vars_dt()` (see 
-[Derive Treatment Variables](#treatmentvar) section above).
+Note that `BRTHDT` must be derived first from `BRTHDTC` using `derive_vars_dt()`.
 
 ```{r eval=TRUE}
 adsl <- adsl %>%
