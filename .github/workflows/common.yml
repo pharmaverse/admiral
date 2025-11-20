@@ -98,7 +98,7 @@ jobs:
       r-version: "${{ needs.get_r_version.outputs.r-version }}"
   links:
     name: Links
-    uses: pharmaverse/admiralci/.github/workflows/links.yml@main
+    uses: pharmaverse/admiralci/.github/workflows/links.yml@60_set_output
     if: github.event_name == 'pull_request'
   coverage:
     name: Code Coverage
