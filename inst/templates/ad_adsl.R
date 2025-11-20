@@ -100,6 +100,11 @@ adsl <- dm %>%
   # See also the "Visit and Period Variables" vignette
   # (https://pharmaverse.github.io/admiral/cran-release/articles/visits_periods.html#treatment_adsl)
   mutate(TRT01P = ARM, TRT01A = ACTARM) %>%
+  ## derive birth date (BRTHDT) ----
+  derive_vars_dt(
+    new_vars_prefix = "BRTH",
+    dtc = BRTHDTC
+  ) %>%
   ## derive treatment start date (TRTSDTM) ----
   derive_vars_merged(
     dataset_add = ex_ext,
@@ -171,6 +176,11 @@ adsl <- adsl %>%
     filter_add = DSDECOD == "RANDOMIZED",
     by_vars = exprs(STUDYID, USUBJID),
     new_vars = exprs(RANDDT = DSSTDT)
+  ) %>%
+  ## Derive analysis age (AAGE, AAGEU) ----
+  derive_vars_aage(
+    start_date = BRTHDT,
+    end_date = RANDDT
   ) %>%
   # Death date - impute partial date to first day/month
   derive_vars_dt(

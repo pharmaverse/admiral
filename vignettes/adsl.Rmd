@@ -37,6 +37,7 @@ otherwise specified.*
   * [Disposition Status (e.g. `EOSTT`)](#disposition_status)
   * [Disposition Reason(s) (e.g. `DCSREAS`, `DCSREASP`)](#disposition_reason)
   * [Randomization Date (`RANDDT`)](#randomization_date)
+* [Derive Analysis Age (`AAGE`, `AAGEU`)](#aage)
 * [Derive Death Variables](#death)
   * [Death Date (`DTHDT`)](#death_date)
   * [Cause of Death (`DTHCAUS`)](#death_cause)
@@ -109,6 +110,15 @@ example mapping for a study without periods may be:
 ```{r eval=TRUE}
 adsl <- dm %>%
   mutate(TRT01P = ARM, TRT01A = ACTARM)
+```
+
+```{r eval=TRUE}
+# Derive birth date from BRTHDTC
+adsl <- adsl %>%
+  derive_vars_dt(
+    new_vars_prefix = "BRTH",
+    dtc = BRTHDTC
+  )
 ```
 
 For studies with periods see the ["Visit and Period Variables"
@@ -371,6 +381,30 @@ This call would return the input dataset with the column `RANDDT` is added.
 ```{r, eval=TRUE, echo=FALSE}
 dataset_vignette(adsl, display_vars = exprs(USUBJID, RANDDT))
 ```
+
+## Derive Analysis Age (`AAGE`, `AAGEU`) {#aage}
+
+The function `derive_vars_aage()` can be used to derive analysis age (`AAGE`) and 
+analysis age unit (`AAGEU`). The function derives the age based on the birth date 
+(`BRTHDT`) and a reference date, which is typically the randomization date (`RANDDT`).
+
+Note that `BRTHDT` must be derived first from `BRTHDTC` using `derive_vars_dt()` (see 
+[Derive Treatment Variables](#treatmentvar) section above).
+
+```{r eval=TRUE}
+adsl <- adsl %>%
+  derive_vars_aage(
+    start_date = BRTHDT,
+    end_date = RANDDT
+  )
+```
+
+```{r, eval=TRUE, echo=FALSE}
+dataset_vignette(adsl, display_vars = exprs(USUBJID, BRTHDT, RANDDT, AAGE, AAGEU))
+```
+
+This call returns the input dataset with `AAGE` and `AAGEU` added. By default, 
+the age is calculated in years.
 
 ## Derive Death Variables {#death}
 
