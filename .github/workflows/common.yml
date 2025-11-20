@@ -102,7 +102,7 @@ jobs:
     if: github.event_name == 'pull_request'
   coverage:
     name: Code Coverage
-    uses: pharmaverse/admiralci/.github/workflows/code-coverage.yml@main
+    uses: pharmaverse/admiralci/.github/workflows/code-coverage.yml@216_no_cov_badge
     if: >
       github.event_name != 'release'
     needs: get_r_version
