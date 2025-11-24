@@ -284,6 +284,74 @@ filter_vs_and_merge(expr(VSTESTCD == "WEIGHT" & VISIT == "SCREENING" & VSTPT == 
 
 The second call fails because hidden within the expression is a mention of `VSTPT`, which was dropped from `vs` in `filter_vs_and_merge()`.
 
+# Handling of Variable Attributes and Labels {#attributes}
+
+## Background
+
+In the pharmaceutical industry, datasets often include variable-level metadata such as labels, which provide human-readable descriptions of variables (e.g., "Age in years" for an `AGE` variable). In SAS, these labels are fundamental to dataset documentation and reporting. When working with R, especially when reading SAS datasets or preparing datasets for SAS export, preserving these attributes throughout data manipulation is crucial.
+
+## How Attributes Are Preserved or Lost
+
+### Operations That Generally Preserve Attributes
+
+Most `{dplyr}` operations (version 1.0.0 and later) preserve attributes on existing columns:
+
+- **`filter()`**: Preserves attributes on all columns when subsetting rows
+- **`select()`**: Preserves attributes on selected columns
+- **`arrange()`**: Preserves attributes when reordering rows
+- **`slice()`**: Preserves attributes when selecting specific rows
+
+### Operations That May Not Preserve Attributes
+
+Some operations create new columns or transform data in ways that do not automatically preserve or transfer attributes:
+
+- **`mutate()` with new columns**: New columns created via calculations or transformations do not inherit attributes from source columns. You must explicitly set attributes on new columns if needed.
+- **`summarize()`/`summarise()`**: Summary operations create new columns without attributes, even when aggregating columns that have attributes.
+- **Base R operations**: Many base R functions (e.g., `c()`, `[`, `ifelse()`) may drop attributes. The `{dplyr}` function `if_else()` is designed to better preserve attributes compared to base R's `ifelse()`.
+
+### Admiral Functions
+
+Admiral functions are designed with the understanding that attributes may be lost during transformations:
+
+- **`convert_blanks_to_na()`** and **`convert_na_to_blanks()`**: These utility functions explicitly preserve *all* attributes, including labels, when converting between blank strings and `NA` values. See their documentation for details.
+- **Derivation functions**: Most `{admiral}` derivation functions (e.g., `derive_vars_merged()`, `derive_vars_dt()`) rely on `{dplyr}` operations. Attributes on existing columns are generally preserved, but newly derived columns will not have attributes unless explicitly added.
+
+## Best Practices for Preserving Attributes
+
+1. **Add attributes at the end**: The recommended approach is to apply labels and other attributes as a final step in your data derivation process, after all transformations are complete. The [metacore](https://atorus-research.github.io/metacore/), [metatools](https://pharmaverse.github.io/metatools/), and [xportr](https://atorus-research.github.io/xportr/) packages provide tools for applying metadata to datasets.
+
+2. **Use `{dplyr}` over base R when possible**: `{dplyr}` functions like `if_else()` are more likely to preserve attributes compared to their base R equivalents.
+
+3. **Document your metadata separately**: Maintain variable labels and other metadata in a separate metadata specification (e.g., using `{metacore}`) rather than relying on attributes to persist through every operation.
+
+4. **Test attribute preservation**: When attributes are critical (e.g., for regulatory submissions), verify that required attributes are present in your final datasets.
+
+## Example: Attributes in Practice
+
+```r
+# Reading a SAS dataset with labels
+dm <- haven::read_sas("dm.sas7bdat")
+
+# The labels are preserved through most dplyr operations
+dm_filtered <- dm %>%
+  filter(AGE >= 18) %>%           # Attributes preserved
+  select(USUBJID, AGE, SEX)       # Attributes preserved on selected columns
+
+# However, newly derived variables won't have labels
+dm_derived <- dm %>%
+  mutate(
+    AGEGR1 = case_when(           # AGEGR1 will not have a label
+      AGE < 65 ~ "<65",
+      AGE >= 65 ~ ">=65"
+    )
+  )
+
+# Best practice: Apply labels after derivations using a metadata framework
+# See the "Add Labels and Attributes" section in the ADSL vignette for more details
+```
+
+For more information on adding labels and attributes to your final datasets, please refer to the "Add Labels and Attributes" sections in the ADaM dataset vignettes (e.g., [ADSL](adsl.html#attributes)).
+
 # See also
 
 - [Programming Strategy](https://pharmaverse.github.io/admiraldev/articles/programming_strategy.html)
