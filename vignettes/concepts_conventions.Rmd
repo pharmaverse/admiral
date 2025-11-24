@@ -350,7 +350,7 @@ dm_derived <- dm %>%
 # See the "Add Labels and Attributes" section in the ADSL vignette for more details
 ```
 
-For more information on adding labels and attributes to your final datasets, please refer to the "Add Labels and Attributes" sections in the ADaM dataset vignettes (e.g., [ADSL](adsl.html#attributes)).
+For more information on adding labels and attributes to your final datasets, please refer to the "Add Labels and Attributes" sections in the ADaM dataset vignettes such as [ADSL](adsl.html#attributes), [BDS Finding](bds_finding.html#attributes), or [OCCDS](occds.html#attributes).
 
 # See also
 
