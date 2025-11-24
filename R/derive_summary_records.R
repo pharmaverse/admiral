@@ -289,7 +289,7 @@ derive_summary_records <- function(dataset = NULL,
     summarise(!!!set_values_to) %>%
     ungroup()
 
-  if (!is.null(constant_values)){
+  if (!is.null(constant_values)) {
     summary_records <- summary_records %>%
       mutate(!!!constant_values)
   }
