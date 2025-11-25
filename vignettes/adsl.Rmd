@@ -127,8 +127,8 @@ and impute missing date or time components. Conversion and imputation is done by
 Example calls:
 
 ```{r eval=TRUE}
-# impute start and end time of exposure to first and last respectively,
-# do not impute date
+# Impute start and end time of exposure to first and last respectively,
+# Do not impute date
 ex_ext <- ex %>%
   derive_vars_dtm(
     dtc = EXSTDTC,
@@ -207,7 +207,7 @@ selected by adjusting the `filter_add` argument.
 To add the End of Study date (`EOSDT`) to the input dataset, a call could be:
 
 ```{r eval=TRUE}
-# convert character date to numeric date without imputation
+# Convert character date to numeric date without imputation
 ds_ext <- derive_vars_dt(
   ds,
   dtc = DSSTDTC,
@@ -506,7 +506,7 @@ that domain). The traceability variables should be added to the `event()` calls 
 
 ```{r eval=TRUE}
 adsl <- adsl %>%
-  select(-DTHCAUS) %>% # remove it before deriving it again
+  select(-DTHCAUS) %>% # Remove it before deriving it again
   derive_vars_extreme_event(
     by_vars = exprs(STUDYID, USUBJID),
     events = list(
@@ -651,7 +651,7 @@ Traceability variables can be added by specifying the variables in the `set_valu
 
 ```{r eval=TRUE}
 adsl <- adsl %>%
-  select(-LSTALVDT) %>% # created in the previous call
+  select(-LSTALVDT) %>% # Created in the previous call
   derive_vars_extreme_event(
     by_vars = exprs(STUDYID, USUBJID),
     events = list(
@@ -727,7 +727,7 @@ That means *catch-all* conditions must come after specific conditions, e.g. `!is
 must come after `COUNTRY %in% c("CAN", "USA")`.
 
 ```{r eval=TRUE}
-# create lookup tables
+# Create lookup tables
 agegr1_lookup <- exprs(
   ~condition,           ~AGEGR1,
   AGE < 18,               "<18",

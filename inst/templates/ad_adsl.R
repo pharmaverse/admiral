@@ -96,11 +96,11 @@ ex_ext <- ex %>%
   )
 
 adsl <- dm %>%
-  ## derive treatment variables (TRT01P, TRT01A) ----
+  ## Derive treatment variables (TRT01P, TRT01A) ----
   # See also the "Visit and Period Variables" vignette
   # (https://pharmaverse.github.io/admiral/cran-release/articles/visits_periods.html#treatment_adsl)
   mutate(TRT01P = ARM, TRT01A = ACTARM) %>%
-  ## derive treatment start date (TRTSDTM) ----
+  ## Derive treatment start date (TRTSDTM) ----
   derive_vars_merged(
     dataset_add = ex_ext,
     filter_add = (EXDOSE > 0 |
@@ -112,7 +112,7 @@ adsl <- dm %>%
     mode = "first",
     by_vars = exprs(STUDYID, USUBJID)
   ) %>%
-  ## derive treatment end date (TRTEDTM) ----
+  ## Derive treatment end date (TRTEDTM) ----
   derive_vars_merged(
     dataset_add = ex_ext,
     filter_add = (EXDOSE > 0 |
@@ -125,11 +125,11 @@ adsl <- dm %>%
   ) %>%
   ## Derive treatment end/start date TRTSDT/TRTEDT ----
   derive_vars_dtm_to_dt(source_vars = exprs(TRTSDTM, TRTEDTM)) %>%
-  ## derive treatment duration (TRTDURD) ----
+  ## Derive treatment duration (TRTDURD) ----
   derive_var_trtdurd()
 
 ## Disposition dates, status ----
-# convert character date to numeric date without imputation
+# Convert character date to numeric date without imputation
 ds_ext <- derive_vars_dt(
   ds,
   dtc = DSSTDTC,
@@ -172,7 +172,7 @@ adsl <- adsl %>%
     by_vars = exprs(STUDYID, USUBJID),
     new_vars = exprs(RANDDT = DSSTDT)
   ) %>%
-  ## derive birth date (BRTHDT) ----
+  ## Derive birth date (BRTHDT) ----
   derive_vars_dt(
     new_vars_prefix = "BRTH",
     dtc = BRTHDTC
