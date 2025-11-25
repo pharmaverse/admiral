@@ -37,8 +37,8 @@ otherwise specified.*
   * [Disposition Status (e.g. `EOSTT`)](#disposition_status)
   * [Disposition Reason(s) (e.g. `DCSREAS`, `DCSREASP`)](#disposition_reason)
   * [Randomization Date (`RANDDT`)](#randomization_date)
-  * [Birth Date (BRTHDT from BRTHDTC )](#birth)
 * [Derive Analysis Age (`AAGE`, `AAGEU`)](#aage)
+  * [Birth Date (BRTHDT from BRTHDTC )](#birth)
 * [Derive Death Variables](#death)
   * [Death Date (`DTHDT`)](#death_date)
   * [Cause of Death (`DTHCAUS`)](#death_cause)
@@ -374,6 +374,14 @@ This call would return the input dataset with the column `RANDDT` is added.
 dataset_vignette(adsl, display_vars = exprs(USUBJID, RANDDT))
 ```
 
+## Derive Analysis Age (`AAGE`, `AAGEU`) {#aage}
+
+The function `derive_vars_aage()` can be used to derive analysis age (`AAGE`) and 
+analysis age unit (`AAGEU`). The function derives the age based on the birth date 
+(`BRTHDT`) and a reference date, which is typically the randomization date (`RANDDT`).
+
+Note that `BRTHDT` must be derived first from `BRTHDTC` using `derive_vars_dt()`.
+
 ### Derive BRTHDT from BRTHDTC {#birth}
 
 ```{r eval=TRUE}
@@ -385,15 +393,9 @@ adsl <- adsl %>%
   )
 ```
 
-Typically, days of birth are collected only as years. However, this data has complete birth dates.  The function `derive_vars_dt()` has the flexibility to do imputation on partial date.  Please see the `derive_vars_dt()` documentation and examples for more details.
+Typically, days of birth are collected only as years. However, this data has complete birth dates.  The function `derive_vars_dt()` has the flexibility to do imputation on partial dates.  Please see the `derive_vars_dt()` documentation and examples for more details.
 
-## Derive Analysis Age (`AAGE`, `AAGEU`) {#aage}
-
-The function `derive_vars_aage()` can be used to derive analysis age (`AAGE`) and 
-analysis age unit (`AAGEU`). The function derives the age based on the birth date 
-(`BRTHDT`) and a reference date, which is typically the randomization date (`RANDDT`).
-
-Note that `BRTHDT` must be derived first from `BRTHDTC` using `derive_vars_dt()`.
+Now that we have `BRTHDT`, we can use `derive_var_aage()` to derive `AAGE` and `AAGEU`.
 
 ```{r eval=TRUE}
 adsl <- adsl %>%
