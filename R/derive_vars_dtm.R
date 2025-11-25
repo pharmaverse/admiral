@@ -361,7 +361,7 @@ convert_dtc_to_dtm <- function(dtc,
 #'
 #' @param highest_imputation Highest imputation level
 #'
-#'   The `highest_imputation` argument controls which components of the DTC
+#'   The `highest_imputation` argument controls which components of the `--DTC`
 #'   value are imputed if they are missing. All components up to the specified
 #'   level are imputed.
 #'
@@ -631,18 +631,18 @@ impute_dtc_dtm <- function(dtc,
   return(restricted)
 }
 
-#' Restrict Imputed DTC date to Minimum/Maximum Dates
+#' Restrict Imputed `--DTC` date to Minimum/Maximum Dates
 #'
-#' @param imputed_dtc The imputed DTC date
+#' @param imputed_dtc The imputed `--DTC` date
 #'
 #' @inheritParams impute_dtc_dtm
 #'
 #' @returns
 #'   - The last of the minimum dates (`min_dates`) which are in the range of the
-#'   partial DTC date (`dtc`)
+#'   partial `--DTC` date (`dtc`)
 #'   - The first of the maximum dates (`max_dates`) which are in the range of the
-#'   partial DTC date (`dtc`)
-#'   - `imputed_dtc` if the partial DTC date (`dtc`) is not in range of any of
+#'   partial `--DTC` date (`dtc`)
+#'   - `imputed_dtc` if the partial `--DTC` date (`dtc`) is not in range of any of
 #'   the minimum or maximum dates.
 #'
 #'

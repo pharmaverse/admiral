@@ -45,7 +45,7 @@ otherwise \code{"15"} returned.
 }
 
 \code{"xxxx"} indicates that the component is undefined. If an undefined
-component occurs in the imputed DTC value, the imputed DTC value is set to
+component occurs in the imputed \code{--DTC} value, the imputed \code{--DTC} value is set to
 \code{NA_character_} in the imputation functions.
 }
 \examples{
