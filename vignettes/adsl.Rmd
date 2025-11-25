@@ -405,12 +405,12 @@ adsl <- adsl %>%
   )
 ```
 
+This call returns the input dataset with `AAGE` and `AAGEU` added. By default, 
+the age is calculated in years.
+
 ```{r, eval=TRUE, echo=FALSE}
 dataset_vignette(adsl, display_vars = exprs(USUBJID, BRTHDT, RANDDT, AAGE, AAGEU))
 ```
-
-This call returns the input dataset with `AAGE` and `AAGEU` added. By default, 
-the age is calculated in years.
 
 ## Derive Death Variables {#death}
 
