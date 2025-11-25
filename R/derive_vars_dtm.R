@@ -237,7 +237,7 @@ derive_vars_dtm <- function(dataset,
 
   dtm <- paste0(new_vars_prefix, "DTM")
 
-  # Issue a warning if --DTM already exists
+  # Issue a warning if *DTM already exists
   warn_if_vars_exist(dataset, dtm)
   mask <- as_data_mask(dataset)
 
@@ -253,7 +253,7 @@ derive_vars_dtm <- function(dataset,
 
   if (flag_imputation %in% c("both", "date") ||
     flag_imputation == "auto" && dtm_level(highest_imputation) > dtm_level("h")) {
-    # add --DTF if not there already
+    # add *DTF if not there already
     dtf <- paste0(new_vars_prefix, "DTF")
     dtf_exist <- dtf %in% colnames(dataset)
     if (!dtf_exist) {
@@ -269,7 +269,7 @@ derive_vars_dtm <- function(dataset,
 
   if (flag_imputation %in% c("both", "time") ||
     flag_imputation == "auto" && highest_imputation != "n") {
-    # add --TMF variable
+    # add *TMF variable
     tmf <- paste0(new_vars_prefix, "TMF")
     warn_if_vars_exist(dataset, tmf)
 
