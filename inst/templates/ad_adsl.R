@@ -47,7 +47,7 @@ format_racegr1 <- function(x) {
   )
 }
 
-format_agegr1 <- function(x) {
+format_aagegr1 <- function(x) {
   case_when(
     x < 18 ~ "<18",
     between(x, 18, 64) ~ "18-64",
@@ -100,11 +100,6 @@ adsl <- dm %>%
   # See also the "Visit and Period Variables" vignette
   # (https://pharmaverse.github.io/admiral/cran-release/articles/visits_periods.html#treatment_adsl)
   mutate(TRT01P = ARM, TRT01A = ACTARM) %>%
-  ## derive birth date (BRTHDT) ----
-  derive_vars_dt(
-    new_vars_prefix = "BRTH",
-    dtc = BRTHDTC
-  ) %>%
   ## derive treatment start date (TRTSDTM) ----
   derive_vars_merged(
     dataset_add = ex_ext,
@@ -176,6 +171,11 @@ adsl <- adsl %>%
     filter_add = DSDECOD == "RANDOMIZED",
     by_vars = exprs(STUDYID, USUBJID),
     new_vars = exprs(RANDDT = DSSTDT)
+  ) %>%
+  ## derive birth date (BRTHDT) ----
+  derive_vars_dt(
+    new_vars_prefix = "BRTH",
+    dtc = BRTHDTC
   ) %>%
   ## Derive analysis age (AAGE, AAGEU) ----
   derive_vars_aage(
@@ -289,7 +289,7 @@ adsl <- adsl %>%
   ## Groupings and others variables ----
   mutate(
     RACEGR1 = format_racegr1(RACE),
-    AGEGR1 = format_agegr1(AGE),
+    AGEGR1 = format_aagegr1(AGE),
     REGION1 = format_region1(COUNTRY),
     LDDTHGR1 = format_lddthgr1(LDDTHELD),
     DTH30FL = if_else(LDDTHGR1 == "<= 30", "Y", NA_character_),
