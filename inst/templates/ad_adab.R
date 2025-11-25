@@ -32,6 +32,7 @@ adsl <- admiral::admiral_adsl
 
 ex <- convert_blanks_to_na(ex)
 is <- convert_blanks_to_na(is)
+adsl <- convert_blanks_to_na(adsl)
 
 # Define values for records with overall values
 # Suggested are AVISIT=Overall, AVISITN=11111
