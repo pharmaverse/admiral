@@ -18,7 +18,7 @@ library(pharmaversesdtm) # Contains example datasets from the CDISC pilot projec
 # as needed and assign to the variables below.
 # For illustration purposes read in admiral test data
 
-# Load IS, EX and ADSL fromo pharmaversesdtm and admiral
+# Load IS, EX and ADSL from pharmaversesdtm and admiral
 
 is <- pharmaversesdtm::is_ada
 ex <- pharmaversesdtm::ex
@@ -61,7 +61,7 @@ is_dates <- is %>%
     # When SDTM V1.x, Setting ISBDAGNT from ISTESTCD to work with template
     # ISBDAGNT = ISTESTCD,
     # Map the analyte test to corresponding DRUG in on EX.EXTRT
-    #  This is especially critical when multipel analytes and EX.EXTRT instances
+    #  This is especially critical when multiple  analytes and EX.EXTRT instances
     DRUG = case_when(
       toupper(ADAPARM) == "XANOMELINE" ~ "XANOMELINE",
       toupper(ADAPARM) == "OTHER_DRUG" ~ "OTHER_DRUG",
@@ -268,7 +268,7 @@ is_baseline <- is_aval %>%
   mutate(
     # VALID flags for use later as applicable:
     # VALIDBASE flags non-missing values on baseline (by each ADATYPE and ADAPARM)
-    #   Note: VALIDBASE is not used as thie templates allows a baseline to be valid as
+    #   Note: VALIDBASE is not used as this templates allows a baseline to be valid as
     #        as long as its present (can be missing), adapt as needed.
     # VALIDPOST flags non-missing values on post-baseline (by each ADATYPE and ADAPARM)
     VALIDBASE = case_when(
@@ -506,7 +506,7 @@ flagdata_final <- flagdata_nab %>%
       TRUE ~ NA_integer_
     ),
   ) %>%
-  # Drop variables no longer neded from flag_data before merging with main ADAB
+  # Drop variables no longer needed from flag_data before merging with main ADAB
   select(-BASE, -BASE_RESULT, -AVAL_P, -RESULT_P, -DRUG, -ABLFL)
 
 # Put TFLAG, BFLAG and PBFLAG onto the main ADAB data set
@@ -517,7 +517,7 @@ is_flagdata <- is_visit_flags %>%
     by_vars = exprs(!!!get_admiral_option("subject_keys"), BASETYPE, ADATYPE, ADAPARM)
   )
 
-# Creat a utility data set to compute PERSADA, TRANADA, INDUCED, ENHANCED related parameters
+# Create a utility data set to compute PERSADA, TRANADA, INDUCED, ENHANCED related parameters
 
 per_tran_pre <- is_flagdata %>%
   filter(VALIDPOST == "Y") %>%
@@ -540,7 +540,7 @@ per_tran_pre <- is_flagdata %>%
 
 # Keep TFLAGV = or TFLAGV = 2 (Any Treatment Emergent)
 #  Regular Induced PERSADA and TRANADA will later be based on TFLAGV = 1
-#  TFLAVG= 2 can use for separate PERSADA/TRANADA based on Enhanced
+#  TFLAGV = 2 can use for separate PERSADA/TRANADA based on Enhanced
 per_tran_all <- per_tran_pre %>%
   filter(TFLAGV == 1 | TFLAGV == 2) %>%
   select(-MaxADTM, -ISSEQ) %>%
@@ -584,7 +584,7 @@ per_tran_final <- per_tran_last %>%
       LPPDTM - FPPDTM == 0 & (!is.na(LPPDTM) & !is.na(FPPDTM)) ~ 1 / 7,
       !is.na(LPPDTM) & !is.na(FPPDTM)
       ~ ((as.numeric(difftime(LPPDTM, FPPDTM, units = "secs")) / (60 * 60 * 24)) + 1) / 7,
-      !is.na(LPPDT) & !is.na(LPPDT)
+      !is.na(LPPDT) & !is.na(FPPDT)
       ~ (as.numeric(LPPDT - FPPDT) + 1) / 7,
       TRUE ~ NA_real_
     ),
@@ -596,7 +596,7 @@ per_tran_final <- per_tran_last %>%
     tdur = case_when(
       !is.na(LPPDTM) & !is.na(LPPDTM) ~
         as.numeric(difftime(LPPDTM, FPPDTM, units = "secs")) / (7 * 3600 * 24),
-      !is.na(LPPDT) & !is.na(LPPDT) ~ as.numeric(LPPDT - FPPDT + 1) / 7,
+      !is.na(LPPDT) & !is.na(FPPDT) ~ as.numeric(LPPDT - FPPDT + 1) / 7,
       TRUE ~ NA_real_
     ),
     # Standard TRANADA and PERSADA based on TFLAGV = 1 (Induced)
@@ -805,8 +805,8 @@ adab_pbflagv <- core_aab %>%
     PARAMCD = "PBFLAGV",
     PARAM = paste("Post Baseline Pos/Neg by Visit,", PARCAT1, sep = " "),
     AVALC = case_when(
-      PBFLAGV == "1" | PBFLAGV == "2" ~ "POSITIVE",
-      PBFLAGV == "0" | PBFLAGV == "3" ~ "NEGATIVE",
+      PBFLAGV == 1 | PBFLAGV == 2 ~ "POSITIVE",
+      PBFLAGV == 0 | PBFLAGV == 3 ~ "NEGATIVE",
       TRUE ~ "MISSING"
     ),
     AVAL = case_when(
@@ -1227,7 +1227,7 @@ adab_param_data <- tribble(
   "ADADURy", "ADA_BAB", "XANOMELINE", "ADADUR1", "(1)",
 )
 
-# Merge the Paramter dataset into the main data
+# Merge the Parameter dataset into the main data
 adab_params <- adab_adafl %>%
   derive_vars_merged(
     dataset_add = adab_param_data,
