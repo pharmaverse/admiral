@@ -182,6 +182,7 @@ adsl <- adsl %>%
     start_date = BRTHDT,
     end_date = RANDDT
   ) %>%
+  ## Derive Death Variables ----
   # Death date - impute partial date to first day/month
   derive_vars_dt(
     new_vars_prefix = "DTH",
