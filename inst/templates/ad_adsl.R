@@ -96,11 +96,11 @@ ex_ext <- ex %>%
   )
 
 adsl <- dm %>%
-  ## Derive treatment variables (TRT01P, TRT01A) ----
+  ## derive treatment variables (TRT01P, TRT01A) ----
   # See also the "Visit and Period Variables" vignette
   # (https://pharmaverse.github.io/admiral/cran-release/articles/visits_periods.html#treatment_adsl)
   mutate(TRT01P = ARM, TRT01A = ACTARM) %>%
-  ## Derive treatment start date (TRTSDTM) ----
+  ## derive treatment start date (TRTSDTM) ----
   derive_vars_merged(
     dataset_add = ex_ext,
     filter_add = (EXDOSE > 0 |
@@ -112,7 +112,7 @@ adsl <- dm %>%
     mode = "first",
     by_vars = exprs(STUDYID, USUBJID)
   ) %>%
-  ## Derive treatment end date (TRTEDTM) ----
+  ## derive treatment end date (TRTEDTM) ----
   derive_vars_merged(
     dataset_add = ex_ext,
     filter_add = (EXDOSE > 0 |
@@ -125,11 +125,11 @@ adsl <- dm %>%
   ) %>%
   ## Derive treatment end/start date TRTSDT/TRTEDT ----
   derive_vars_dtm_to_dt(source_vars = exprs(TRTSDTM, TRTEDTM)) %>%
-  ## Derive treatment duration (TRTDURD) ----
+  ## derive treatment duration (TRTDURD) ----
   derive_var_trtdurd()
 
 ## Disposition dates, status ----
-# Convert character date to numeric date without imputation
+# convert character date to numeric date without imputation
 ds_ext <- derive_vars_dt(
   ds,
   dtc = DSSTDTC,
@@ -172,17 +172,6 @@ adsl <- adsl %>%
     by_vars = exprs(STUDYID, USUBJID),
     new_vars = exprs(RANDDT = DSSTDT)
   ) %>%
-  ## Derive birth date (BRTHDT) ----
-  derive_vars_dt(
-    new_vars_prefix = "BRTH",
-    dtc = BRTHDTC
-  ) %>%
-  ## Derive analysis age (AAGE, AAGEU) ----
-  derive_vars_aage(
-    start_date = BRTHDT,
-    end_date = RANDDT
-  ) %>%
-  ## Derive Death Variables ----
   # Death date - impute partial date to first day/month
   derive_vars_dt(
     new_vars_prefix = "DTH",
@@ -290,7 +279,7 @@ adsl <- adsl %>%
   ## Groupings and others variables ----
   mutate(
     RACEGR1 = format_racegr1(RACE),
-    AGEGR1 = format_agegr1(AAGE),
+    AGEGR1 = format_agegr1(AGE),
     REGION1 = format_region1(COUNTRY),
     LDDTHGR1 = format_lddthgr1(LDDTHELD),
     DTH30FL = if_else(LDDTHGR1 == "<= 30", "Y", NA_character_),
