@@ -290,7 +290,7 @@ adsl <- adsl %>%
   ## Groupings and others variables ----
   mutate(
     RACEGR1 = format_racegr1(RACE),
-    AGEGR1 = format_aagegr1(AGE),
+    AGEGR1 = format_agegr1(AAGE),
     REGION1 = format_region1(COUNTRY),
     LDDTHGR1 = format_lddthgr1(LDDTHELD),
     DTH30FL = if_else(LDDTHGR1 == "<= 30", "Y", NA_character_),
