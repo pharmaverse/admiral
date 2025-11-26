@@ -373,7 +373,7 @@ This call would return the input dataset with the column `RANDDT` is added.
 dataset_vignette(adsl, display_vars = exprs(USUBJID, RANDDT))
 ```
 
-## Derive Analysis Age (`AAGE`, `AAGEU`) {#aage}
+## Derive Birth Date and Analysis Age (`BRTHDT`, `AAGE`, `AAGEU`) {#aage}
 
 The function `derive_vars_aage()` can be used to derive analysis age (`AAGE`) and 
 analysis age unit (`AAGEU`). The function derives the age based on the birth date 
