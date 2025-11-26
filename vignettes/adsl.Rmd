@@ -430,19 +430,7 @@ adsl <- adsl %>%
 dataset_vignette(adsl %>% filter(!is.na(DTHDT) | row_number() %% 50 == 0), display_vars = exprs(USUBJID, TRTEDT, DTHDTC, DTHDT, DTHFL))
 ```
 
-If imputation is needed and the date is to be imputed to the first day of the month/year 
-the call would be:
-
-```{r eval=FALSE}
-adsl <- adsl %>%
-  derive_vars_dt(
-    new_vars_prefix = "DTH",
-    dtc = DTHDTC,
-    date_imputation = "first"
-  )
-```
-
-Please see the `derive_vars_dt()` documentation and examples for more details or check out the [Date and Time Imputation](imputation.html) vignette. 
+If you have partial dates and are in need of imputation then please see the `derive_vars_dt()` documentation and examples for more details or check out the [Date and Time Imputation](imputation.html) vignette. 
 
 ### Cause of Death  (`DTHCAUS`) {#death_cause}
 
