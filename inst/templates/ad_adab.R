@@ -47,20 +47,28 @@ is_dates <- is %>%
   # Initial prep and core variable
   mutate(
     # ADATYPE and ADAPARM are assigned values to serve BY analyte processing
-    # Setting ADATYPE based on SDTM V1.x ISTESTCD
-    ADATYPE = case_when(
-      toupper(ISTESTCD) == "ADATEST1" ~ "ADA_BAB",
-      toupper(ISTESTCD) == "NABTEST1" ~ "ADA_NAB",
-      TRUE ~ NA_character_
-    ),
-    # Setting ADAPARM based on SDTM V1.x ISTESTCD
-    ADAPARM = ISTESTCD,
+
+    # Uncomment if Setting ADATYPE based on SDTM V1.x ISTESTCD
+    # ADATYPE = case_when(
+    #   toupper(ISTESTCD) == "ADATEST1" ~ "ADA_BAB",
+    #   toupper(ISTESTCD) == "NABTEST1" ~ "ADA_NAB",
+    #   TRUE ~ NA_character_
+    # ),
+
+    # Uncomment if Setting ADAPARM based on SDTM V1.x ISTESTCD
+    # ADAPARM = ISTESTCD,
+
     # Setting ADATYPE based on SDTM V2.x ISTESTCD (assumed to have ADA_BAB, ADA_NAB)
+    # Remove or comment out if not >= SDTM V2.x
     ADATYPE = ISTESTCD,
+
     # Setting ADAPARM based on SDTM V2.x ISBDAGNT
+    # Remove or comment out if not >= SDTM V2.x
     ADAPARM = ISBDAGNT,
+
     # When SDTM V1.x, Setting ISBDAGNT from ISTESTCD to work with template
     # ISBDAGNT = ISTESTCD,
+
     # Map the analyte test to corresponding DRUG in on EX.EXTRT
     #  This is especially critical when multiple  analytes and EX.EXTRT instances
     DRUG = case_when(
@@ -264,7 +272,8 @@ is_baseline <- is_aval %>%
       mode = "last"
     ),
     # flag baseline based on time not values due to ADA parameters can in some cases permit missing.
-    filter = (NFRLT <= 0 & (ADT <= FANLDT) | (NFRLT > 60000 & (ADT <= FANLDT)) & !is.na(BASETYPE))
+    # If special visits (i.e. > 60000) are eligible as baselines, include those
+    filter = ((NFRLT <= 0 | NFRLT > 60000) & (ADT <= FANLDT) & !is.na(BASETYPE))
   ) %>%
   mutate(
     # VALID flags for use later as applicable:
@@ -595,7 +604,7 @@ per_tran_final <- per_tran_last %>%
       TRUE ~ NA_real_
     ),
     tdur = case_when(
-      !is.na(LPPDTM) & !is.na(LPPDTM) ~
+      !is.na(LPPDTM) & !is.na(FPPDTM) ~
         as.numeric(difftime(LPPDTM, FPPDTM, units = "secs")) / (7 * 3600 * 24),
       !is.na(LPPDT) & !is.na(FPPDT) ~ as.numeric(LPPDT - FPPDT + 1) / 7,
       TRUE ~ NA_real_
