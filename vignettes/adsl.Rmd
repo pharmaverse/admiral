@@ -393,7 +393,7 @@ adsl <- adsl %>%
   )
 ```
 
-Typically, dates of birth are collected only as years. However, this data has complete birth dates.  The function `derive_vars_dt()` has the flexibility to do imputation on partial dates.  Please see the `derive_vars_dt()` documentation and examples for more details.
+Typically, dates of birth are collected only as years. However, this data has complete birth dates. The function `derive_vars_dt()` has the flexibility to do imputation on partial dates. Please see the `derive_vars_dt()` documentation and examples for more details or check out [Derive Death Variables](#death) section below.
 
 Now that we have `BRTHDT`, we can use `derive_var_aage()` to derive `AAGE` and `AAGEU`.
 
@@ -774,7 +774,7 @@ format_region1 <- function(var_input) {
 
 adsl %>%
   mutate(
-    AGEGR1 = format_agegr1(AGE),
+    AGEGR1 = format_agegr1(AAGE),
     REGION1 = format_region1(COUNTRY)
   )
 ```

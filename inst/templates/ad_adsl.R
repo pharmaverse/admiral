@@ -47,7 +47,7 @@ format_racegr1 <- function(x) {
   )
 }
 
-format_aagegr1 <- function(x) {
+format_agegr1 <- function(x) {
   case_when(
     x < 18 ~ "<18",
     between(x, 18, 64) ~ "18-64",
