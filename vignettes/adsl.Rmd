@@ -393,7 +393,7 @@ adsl <- adsl %>%
   )
 ```
 
-Typically, days of birth are collected only as years. However, this data has complete birth dates.  The function `derive_vars_dt()` has the flexibility to do imputation on partial dates.  Please see the `derive_vars_dt()` documentation and examples for more details.
+Typically, dates of birth are collected only as years. However, this data has complete birth dates.  The function `derive_vars_dt()` has the flexibility to do imputation on partial dates.  Please see the `derive_vars_dt()` documentation and examples for more details.
 
 Now that we have `BRTHDT`, we can use `derive_var_aage()` to derive `AAGE` and `AAGEU`.
 
