@@ -141,7 +141,7 @@ Common variables as such `AVISIT`, `AVISITN`, `FRLTU` are assigned.
 also be for all values or to get unplanned visits (i.e. 'End of Study', 'Unscheduled').
 
 We use `derive_vars_merged()` to merge `ADSL.TRTSDT` and compute `ADY`. `ADY` is assumed to be
-based on the ADSL.TRTSDT while ADAB.AFRLT is based on the matching EX.EXTRT for the corresponding 
+based on the `ADSL.TRTSDT` while `ADAB.AFRLT` is based on the matching `EX.EXTRT` for the corresponding 
 IS analyte.
 
 If IS.ISDTC is missing the time part, 00:00 is used for the impute.  Individual companies and 
