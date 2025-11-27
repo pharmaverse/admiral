@@ -1452,7 +1452,7 @@ After merging the 'adab_param_data', final adjustments are made to PARAMCD and P
 These adjustments depend on whether `IS` is based on SDTM v2.0 or an earlier version (prior to v1.8).
 
 Last step is computing `ASEQ`. `ASEQ` should be computed last since the sort key includes
-values in PARAMCD and PARAM.
+values in `PARAMCD` and `PARAM`.
 
 
 ```{r message=FALSE}
