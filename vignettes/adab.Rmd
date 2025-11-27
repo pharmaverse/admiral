@@ -132,7 +132,7 @@ This code provides a mechanism to process either version, see below comments for
 in the event `IS` from pre version 2.0 are used. `IS.ISTESTCD`, and `IS.ISBDAGNT` from version 2.0
 could be substituted if desired.
 
-DRUG (similar to ADPC.DRUG) is an assigned variable so IS Analytes can be merged matching 
+`DRUG` (similar to `ADPC.DRUG`) is an assigned variable so `IS` Analytes can be merged matching 
 EX.EXTRT value(s) for purpose of computing reference dose and time from first dose.
 
 Common variables as such AVISIT, AVISITN, FRLTU are assigned.  
