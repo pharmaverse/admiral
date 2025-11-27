@@ -1451,7 +1451,7 @@ RESULT for ADA and Nab for Drug ABC.  There could be two analytes/drug combos
 After merging the 'adab_param_data', final adjustments are made to PARAMCD and PARAM values.
 These adjustments depend on whether `IS` is based on SDTM v2.0 or an earlier version (prior to v1.8).
 
-Last step is computing ASEQ.  ASEQ should be computed last since the sort key includes
+Last step is computing `ASEQ`. `ASEQ` should be computed last since the sort key includes
 values in PARAMCD and PARAM.
 
 
