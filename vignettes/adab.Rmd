@@ -35,7 +35,7 @@ Note: It should be noted at this point that CDISC does not currently have
 an model or implementation guide for ADA (ADAMB). There is a committee and the
 elements of this template reflect methods from a couple members and can serve
 as a baseline for when a guide is released.  CDISC ADaM conventions and similar
-domains (such as ADPC) are followed.
+domains (such as `ADPC`) are followed.
 
 This example presented uses underlying `EX` and `IS` domains where the
 `EX` and `IS` domains represent data as collected and the `ADAB` ADaM is
