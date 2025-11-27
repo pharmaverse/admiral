@@ -1488,7 +1488,7 @@ adab_param_data <- tribble(
   "ADADURy", "ADA_BAB", "XANOMELINE", "ADADUR1", "(1)",
 )
 
-# Merge the Paramter dataset into the main data
+# Merge the Parameter dataset into the main data
 adab_params <- adab_adafl %>%
   derive_vars_merged(
     dataset_add = adab_param_data,
