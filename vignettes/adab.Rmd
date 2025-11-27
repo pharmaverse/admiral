@@ -135,7 +135,7 @@ could be substituted if desired.
 `DRUG` (similar to `ADPC.DRUG`) is an assigned variable so `IS` Analytes can be merged matching 
 `EX.EXTRT` value(s) for purpose of computing reference dose and time from first dose.
 
-Common variables as such AVISIT, AVISITN, FRLTU are assigned.  
+Common variables as such `AVISIT`, `AVISITN`, `FRLTU` are assigned.  
 
 NFRLT is nominal time from first dose. Common sources are IS.VISITDY. IS.VISIT information can
 also be for all values or to get unplanned visits (i.e. 'End of Study', 'Unscheduled').
