@@ -819,20 +819,20 @@ derive_var_joined_exist_flag(
 #> 5 2             1     1 Y     Y     
 #> 6 2             2     8 Y     <NA>  
 #> 7 2             2    10 Y     <NA>  
-#> G2;H2;Warningh: Dataset `dataset` contains duplicate records with respect to `USUBJID` and
+#> Warning: Dataset `dataset` contains duplicate records with respect to `USUBJID` and
 #> `AVISITN`
-#> i Run `admiral::get_duplicates_dataset()` to access the duplicate recordsg
-#> G2;H2;Warningh: Dataset `dataset_add` contains duplicate records with respect to `USUBJID` and
+#> i Run `admiral::get_duplicates_dataset()` to access the duplicate records
+#> Warning: Dataset `dataset_add` contains duplicate records with respect to `USUBJID` and
 #> `AVISITN`
-#> i Run `admiral::get_duplicates_dataset()` to access the duplicate recordsg}\if{html}{\out{</div>}}
+#> i Run `admiral::get_duplicates_dataset()` to access the duplicate records}\if{html}{\out{</div>}}
 
 The records for \code{USUBJID == "2"} are not unique with respect to
 \code{USUBJID} and \code{AVISITN}. Thus a warning is issued. The duplicates can be
 accessed by calling \code{get_duplicates_dataset()}:
 
 \if{html}{\out{<div class="sourceCode r">}}\preformatted{get_duplicates_dataset()
-#> G3;Duplicate records with respect to `USUBJID` and `AVISITN`.
-#> g# A tibble: 2 × 4
+#> Duplicate records with respect to `USUBJID` and `AVISITN`.
+#> # A tibble: 2 × 4
 #>   USUBJID AVISITN   ADY AVALC
 #> * <chr>     <dbl> <dbl> <chr>
 #> 1 2             2     8 Y    
