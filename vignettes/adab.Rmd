@@ -1516,7 +1516,7 @@ adab_params <- adab_adafl %>%
   )
 
 
-# Sort by the standard Key then Compute ASEQ
+# Sort by the standard Key variables then Compute ASEQ
 adab_prefinal <- adab_params %>%
   # Calculate ASEQ
   derive_var_obs_number(
