@@ -123,7 +123,7 @@ overall_avisitn <- 11111
 ```
 
 
-At this step, we first adjust for whether our source data is IS using SDTM v2.0 standard
+At this step, we first adjust for whether our source data is `IS` using SDTM v2.0 standard
 or pre SDTM v1.8. Version 2.0 replaced `ISTESTCD` and `ISTEST` with general ADA categories,
 what was stored in pre-version 1.8 in ISTESTCD or ISTEST is now stored in IS.ISBDAGNT.
 This code provides a mechanism to process either version, see below comments for usage.
