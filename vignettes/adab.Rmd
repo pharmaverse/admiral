@@ -47,7 +47,7 @@ added to the `{pharmaversesdtm}` for ADA data.
 One of the important aspects of the dataset is the separate derivation of
 original 'by visit' data, by visit interpreted results and parameter variables
 (like ADEX summary parameters).  A good analogy would be ADEX that has a mix
-of original by visit records and summary records.  These will be illustrated later
+of original by visit records and summary records. These will be illustrated later
 in this vignette.
 
 Here are the relative time variables we will use for by visit records. These correspond to
