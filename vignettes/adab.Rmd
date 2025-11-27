@@ -129,7 +129,7 @@ what was stored in pre-version 1.8 in `ISTESTCD` or `ISTEST` is now stored in `I
 This code provides a mechanism to process either version, see below comments for usage.
 
 `ADAPARM` and `ADATYPE` are assigned to assure consistent merge variables as values are calculated
-in the event IS from pre version 2.0 are used. IS.ISTESTCD, and IS.ISBDAGNT from version 2.0
+in the event `IS` from pre version 2.0 are used. `IS.ISTESTCD`, and `IS.ISBDAGNT` from version 2.0
 could be substituted if desired.
 
 DRUG (similar to ADPC.DRUG) is an assigned variable so IS Analytes can be merged matching 
