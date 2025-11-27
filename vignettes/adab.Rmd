@@ -137,7 +137,7 @@ could be substituted if desired.
 
 Common variables as such `AVISIT`, `AVISITN`, `FRLTU` are assigned.  
 
-NFRLT is nominal time from first dose. Common sources are IS.VISITDY. IS.VISIT information can
+`NFRLT` is nominal time from first dose. Common sources are `IS.VISITDY`. `IS.VISIT` information can
 also be for all values or to get unplanned visits (i.e. 'End of Study', 'Unscheduled').
 
 We use `derive_vars_merged()` is used to merge ADSL.TRTSDT to compute ADY.  ADY is assumed to be
