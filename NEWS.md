@@ -52,6 +52,7 @@ and receive answers from an LLM. It is trained on the documentation of both pack
 - `ADLBHY` template was updated to keep `PARAM` in final dataset. (#2804)
 - A link to the [{admiral} ecosystem](https://pharmaverse.org/e2eclinical/adam/) page was added to the README sidebar and main text. (#2881)
 - The ADSL template and vignette were updated to add derivation of analysis age (`AAGE`/`AAGEU`) using `derive_vars_aage()`. This includes deriving birth date (`BRTHDT`) from birth date character variable (`BRTHDTC`) using `derive_vars_dt()`. (#2584)
+- Standardized variable notation across documentation to use `--` for SDTM variables (e.g., `--DTC`) and `*` for ADaM variables (e.g., `*DTM`, `*DT`). (#2757)
 
 ## Various
 

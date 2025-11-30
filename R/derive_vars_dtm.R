@@ -237,7 +237,7 @@ derive_vars_dtm <- function(dataset,
 
   dtm <- paste0(new_vars_prefix, "DTM")
 
-  # Issue a warning if --DTM already exists
+  # Issue a warning if *DTM already exists
   warn_if_vars_exist(dataset, dtm)
   mask <- as_data_mask(dataset)
 
@@ -253,7 +253,7 @@ derive_vars_dtm <- function(dataset,
 
   if (flag_imputation %in% c("both", "date") ||
     flag_imputation == "auto" && dtm_level(highest_imputation) > dtm_level("h")) {
-    # add --DTF if not there already
+    # add *DTF if not there already
     dtf <- paste0(new_vars_prefix, "DTF")
     dtf_exist <- dtf %in% colnames(dataset)
     if (!dtf_exist) {
@@ -269,7 +269,7 @@ derive_vars_dtm <- function(dataset,
 
   if (flag_imputation %in% c("both", "time") ||
     flag_imputation == "auto" && highest_imputation != "n") {
-    # add --TMF variable
+    # add *TMF variable
     tmf <- paste0(new_vars_prefix, "TMF")
     warn_if_vars_exist(dataset, tmf)
 
@@ -361,7 +361,7 @@ convert_dtc_to_dtm <- function(dtc,
 #'
 #' @param highest_imputation Highest imputation level
 #'
-#'   The `highest_imputation` argument controls which components of the DTC
+#'   The `highest_imputation` argument controls which components of the `--DTC`
 #'   value are imputed if they are missing. All components up to the specified
 #'   level are imputed.
 #'
@@ -631,18 +631,18 @@ impute_dtc_dtm <- function(dtc,
   return(restricted)
 }
 
-#' Restrict Imputed DTC date to Minimum/Maximum Dates
+#' Restrict Imputed `--DTC` date to Minimum/Maximum Dates
 #'
-#' @param imputed_dtc The imputed DTC date
+#' @param imputed_dtc The imputed `--DTC` date
 #'
 #' @inheritParams impute_dtc_dtm
 #'
 #' @returns
 #'   - The last of the minimum dates (`min_dates`) which are in the range of the
-#'   partial DTC date (`dtc`)
+#'   partial `--DTC` date (`dtc`)
 #'   - The first of the maximum dates (`max_dates`) which are in the range of the
-#'   partial DTC date (`dtc`)
-#'   - `imputed_dtc` if the partial DTC date (`dtc`) is not in range of any of
+#'   partial `--DTC` date (`dtc`)
+#'   - `imputed_dtc` if the partial `--DTC` date (`dtc`) is not in range of any of
 #'   the minimum or maximum dates.
 #'
 #'

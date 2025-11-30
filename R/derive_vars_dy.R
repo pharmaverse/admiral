@@ -1,6 +1,6 @@
 #' Derive Relative Day Variables
 #'
-#' Adds relative day variables (`--DY`) to the dataset, e.g., `ASTDY` and
+#' Adds relative day variables (`*DY`) to the dataset, e.g., `ASTDY` and
 #' `AENDY`.
 #'
 #' @param dataset
@@ -14,10 +14,10 @@
 #'
 #' @param source_vars A list of datetime or date variables created using
 #'   `exprs()` from which dates are to be extracted. This can either be a list of
-#'   date(time) variables or named `--DY` variables and corresponding --DT(M)
+#'   date(time) variables or named `*DY` variables and corresponding `*DT(M)`
 #'   variables e.g. `exprs(TRTSDTM, ASTDTM, AENDT)` or `exprs(TRTSDT, ASTDTM,
-#'   AENDT, DEATHDY = DTHDT)`. If the source variable does not end in --DT(M), a
-#'   name for the resulting `--DY` variable must be provided.
+#'   AENDT, DEATHDY = DTHDT)`. If the source variable does not end in `*DT(M)`, a
+#'   name for the resulting `*DY` variable must be provided.
 #'
 #'
 #' @details The relative day is derived as number of days from the reference
@@ -27,7 +27,7 @@
 #'   from the source variable name by replacing DT (or DTM as appropriate) with
 #'   DY.
 #'
-#' @return The input dataset with `--DY` corresponding to the `--DTM` or `--DT`
+#' @return The input dataset with `*DY` corresponding to the `*DTM` or `*DT`
 #'   source variable(s) added
 #'
 #' @family der_date_time
@@ -79,7 +79,7 @@ derive_vars_dy <- function(dataset,
   assert_vars(source_vars)
   assert_data_frame(dataset, required_vars = expr_c(source_vars, reference_date))
 
-  # Warn if `--DY` variables already exist
+  # Warn if `*DY` variables already exist
   n_vars <- length(source_vars)
   source_names <- names(source_vars)
 
