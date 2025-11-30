@@ -550,7 +550,7 @@ dataset_vignette(
 Similarly as for the cause of death (`DTHCAUS`), the last known alive date
 (`LSTALVDT`) can be derived from multiples sources using `derive_vars_extreme_event()`.
 
-An example could be (DTC dates are converted to numeric dates imputing missing
+An example could be (`--DTC` dates are converted to numeric dates imputing missing
 day and month to the first):
 
 ```{r eval=TRUE}
