@@ -168,9 +168,31 @@ get_summary_records <- function(dataset,
   assert_varval_list(set_values_to)
 
   # Summarise the analysis value
-  dataset %>%
-    group_by(!!!by_vars) %>%
-    filter_if(filter) %>%
-    summarise(!!!set_values_to) %>%
-    ungroup()
+  withCallingHandlers(
+    dataset %>%
+      group_by(!!!by_vars) %>%
+      filter_if(filter) %>%
+      summarise(!!!set_values_to) %>%
+      ungroup(),
+    warning = function(cnd) {
+      if (any(str_detect(
+        cnd$message,
+        fixed("Returning more (or less) than 1 row per `summarise()` group was deprecated")
+      ))) {
+        cli_abort(
+          c(
+            paste(
+              "Column(s) in {.arg set_values_to} must return a single value per",
+              "{.arg by_vars} group."
+            ),
+            paste(
+              "Please check {.arg set_values_to} if summary functions like",
+              "{.fun mean}, {.fun sum}, ... are used on the right hand side."
+            )
+          ),
+          call = NULL
+        )
+      }
+    }
+  )
 }

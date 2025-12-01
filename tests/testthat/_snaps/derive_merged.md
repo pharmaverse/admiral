@@ -132,9 +132,8 @@
       new_vars = exprs(MEANVIS = AVAL / 2))
     Condition
       Error:
-      ! After summarising, the dataset contains duplicate records with respect to `AVISIT`.
-      Please check `new_vars` if summary functions like `mean()`, `sum()`, ... are used on the right hand side.
-      i Run `admiral::get_duplicates_dataset()` to access the duplicate records
+      ! Column(s) in `set_values_to` must return a single value per `by_vars` group.
+      Please check `set_values_to` if summary functions like `mean()`, `sum()`, ... are used on the right hand side.
 
 # derive_var_merged_summary Test 32: error if no summary function
 
@@ -143,9 +142,8 @@
       new_vars = exprs(MEANVIS = AVAL / 2))
     Condition
       Error:
-      ! After summarising, the dataset contains duplicate records with respect to `AVISIT`.
-      Please check `new_vars` if summary functions like `mean()`, `sum()`, ... are used on the right hand side.
-      i Run `admiral::get_duplicates_dataset()` to access the duplicate records
+      ! Column(s) in `set_values_to` must return a single value per `by_vars` group.
+      Please check `set_values_to` if summary functions like `mean()`, `sum()`, ... are used on the right hand side.
 
 # derive_var_merged_summary Test 33: deprecation message
 
