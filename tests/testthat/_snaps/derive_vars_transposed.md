@@ -21,7 +21,7 @@
     Condition
       Error in `tryCatch()`:
       ! Each row in `dataset` must match at most 1 row in the transposed `dataset_merge`.
-      i Row 2 of `dataset` matches multiple rows in the transposed `dataset_merge`.
+      Row 2 of `dataset` matches multiple rows in the transposed `dataset_merge`.
 
 ---
 
@@ -32,5 +32,5 @@
     Condition
       Error in `derive_vars_transposed()`:
       ! Each row in `dataset` must match at most 1 row in the transposed `dataset_merge`.
-      i Row 2 of `dataset` matches multiple rows in the transposed `dataset_merge`.
+      Row 2 of `dataset` matches multiple rows in the transposed `dataset_merge`.
 

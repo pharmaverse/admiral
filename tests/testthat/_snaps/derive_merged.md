@@ -66,7 +66,7 @@
     Condition
       Error in `derive_vars_merged()`:
       ! Each row in `dataset_add` must match at most 1 row in `dataset`.
-      i Row 1 of `dataset_add` matches multiple rows in `dataset`.
+      Row 1 of `dataset_add` matches multiple rows in `dataset`.
 
 # derive_vars_merged Test 18: merge sel vars 'one-to-one'
 
