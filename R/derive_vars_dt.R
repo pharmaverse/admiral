@@ -123,7 +123,7 @@
 #'   date_imputation = "last"
 #' )
 #'
-#' @caption Impute to the middle (`date_imputaton = "mid"`) and suppress
+#' @caption Impute to the middle (`date_imputation = "mid"`) and suppress
 #' imputation flag (`flag_imputation = "none"`)
 #' @info In this example, we will derive `TRTSDT` with date imputation flag
 #' (`*DTF`) suppressed. Since `date_imputation = "mid"`, partial date imputation
@@ -165,19 +165,29 @@
 #'   dtc = MHSTDTC,
 #'   highest_imputation = "M",
 #'   date_imputation = "04-06"
-#' )
-#' @caption Avoid imputation before a user-defined date (`min_dates`)
+#'   )
+#'
+#' @caption Applying a lower boundary to date imputation with (`min_dates`)
 #' @info In this example, we derive `ASTDT` where `AESTDTC` is all partial dates in
 #' need of imputation. Using `min_dates = exprs(TRTSDTM)`, we are telling the function
-#' to not allow imputation dates to be before the treatment start date
-#' via `min_dates` argument. Note that the second record does not get imputed
-#' as it is before `TRTSDTM`.
+#' to apply the treatment start date `(TRTSDTM)` as a lower boundary for imputation
+#' via the `min_dates` argument.
+#' This means:
+#' - For partial dates that could potentially include `TRTSDTM` (case 1 & 2),
+#' the imputed date is adjusted to `TRTSDTM`
+#' - For partial dates that are entirely before `TRTSDTM` (case 3 & 4),
+#' standard imputation rules apply without adjustment
+#' - For partial dates that are entirely after `TRTSDTM` (case 5),
+#' standard imputation rules apply
 #'
 #' @code
 #' adae <- tribble(
-#'   ~AESTDTC, ~TRTSDTM,
-#'   "2020-12", ymd_hms("2020-12-06T12:12:12"),
-#'   "2020-11", ymd_hms("2020-12-06T12:12:12")
+#'   ~case, ~AESTDTC, ~TRTSDTM,
+#'   1, "2020-12", ymd_hms("2020-12-06T12:12:12"),
+#'   2, "2020", ymd_hms("2020-12-06T12:12:12"),
+#'   3, "2020-11", ymd_hms("2020-12-06T12:12:12"),
+#'   4, "2020-01", ymd_hms("2020-12-06T12:12:12"),
+#'   5, "2021-01", ymd_hms("2020-12-06T12:12:12")
 #' )
 #'
 #' derive_vars_dt(
@@ -185,7 +195,40 @@
 #'   dtc = AESTDTC,
 #'   new_vars_prefix = "AST",
 #'   highest_imputation = "M",
+#'   date_imputation = "first",
 #'   min_dates = exprs(TRTSDTM)
+#'   )
+#'
+#' @caption Applying an upper boundary to date imputation with (`max_dates`)
+#' @info In this example, we derive `ASTDT` where `AESTDTC` is all partial dates in
+#' need of imputation. Using `max_dates = exprs(TRTEDTM)`, we are telling the function
+#' to apply the treatment end date `(TRTEDTM)` as an upper boundary for imputation
+#' via the `max_dates` argument.
+#' This means:
+#' - For partial dates that could potentially include `TRTEDTM` (case 1 & 2),
+#' the imputed date is adjusted to `TRTEDTM`
+#' - For partial dates that are entirely before `TRTEDTM` (case 3 & 4),
+#' standard imputation rules apply without adjustment
+#' - For partial dates that are entirely after `TRTEDTM` (case 5),
+#' standard imputation rules apply
+#'
+#' @code
+#' adae <- tribble(
+#'   ~case, ~AESTDTC, ~TRTSDTM, ~TRTEDTM,
+#'   1, "2020-12", ymd_hms("2020-01-01T12:12:12"), ymd_hms("2020-12-20T23:59:59"),
+#'   2, "2020", ymd_hms("2020-01-01T12:12:12"), ymd_hms("2020-12-20T23:59:59"),
+#'   3, "2020-11", ymd_hms("2020-01-01T12:12:12"), ymd_hms("2020-12-20T23:59:59"),
+#'   4, "2020-01", ymd_hms("2020-01-01T12:12:12"), ymd_hms("2020-12-20T23:59:59"),
+#'   5, "2021-01", ymd_hms("2020-01-01T12:12:12"), ymd_hms("2020-12-20T23:59:59")
+#' )
+#'
+#' derive_vars_dt(
+#'   adae,
+#'   dtc = AESTDTC,
+#'   new_vars_prefix = "AST",
+#'   highest_imputation = "M",
+#'   date_imputation = "last",
+#'   max_dates = exprs(TRTEDTM)
 #' )
 #'
 #' @caption Preserve lower components if higher ones were imputed (`preserve`)
@@ -344,10 +387,10 @@ convert_dtc_to_dt <- function(dtc,
 #'   missing, `NA_character_` is returned. For example, for `highest_imputation
 #'   = "D"` `"2020"` results in `NA_character_` because the month is missing.
 #'
-#'   If `"n"` is specified no imputation is performed, i.e., if any component is
-#'   missing, `NA_character_` is returned.
+#'   If `"n"` (none, lowest level) is specified no imputation is performed, i.e.,
+#'   if any component is missing, `NA_character_` is returned.
 #'
-#'   If `"Y"` is specified, `date_imputation` must be `"first"` or `"last"`
+#'   If `"Y"` (year, highest level) is specified, `date_imputation` must be `"first"` or `"last"`
 #'   and `min_dates` or `max_dates` must be specified respectively. Otherwise,
 #'   an error is thrown.
 #'
@@ -570,18 +613,18 @@ impute_dtc_dt <- function(dtc,
   return(restricted)
 }
 
-#' Restrict Imputed DTC date to Minimum/Maximum Dates
+#' Restrict Imputed `--DTC` date to Minimum/Maximum Dates
 #'
-#' @param imputed_dtc The imputed DTC date
+#' @param imputed_dtc The imputed `--DTC` date
 #'
 #' @inheritParams impute_dtc_dt
 #'
 #' @returns
 #'   - The last of the minimum dates (`min_dates`) which are in the range of the
-#'   partial DTC date (`dtc`)
+#'   partial `--DTC` date (`dtc`)
 #'   - The first of the maximum dates (`max_dates`) which are in the range of the
-#'   partial DTC date (`dtc`)
-#'   - `imputed_dtc` if the partial DTC date (`dtc`) is not in range of any of
+#'   partial `--DTC` date (`dtc`)
+#'   - `imputed_dtc` if the partial `--DTC` date (`dtc`) is not in range of any of
 #'   the minimum or maximum dates.
 #'
 #'
