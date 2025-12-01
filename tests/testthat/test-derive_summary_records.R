@@ -104,6 +104,18 @@ test_that("derive_summary_records Test 3: Errors", {
     ),
     class = "assert_data_frame"
   )
+
+  # Error when set_values_to returns more than one value per by group
+  expect_error(
+    derive_summary_records(
+      dataset_add = input,
+      by_vars = exprs(x),
+      set_values_to = exprs(
+        z = z
+      )
+    ),
+    regexp = "Column\\(s\\) in `set_values_to` must return a single value"
+  )
 })
 
 ## Test 4: make sure dataset_add works ----

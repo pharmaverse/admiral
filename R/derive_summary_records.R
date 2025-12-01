@@ -259,11 +259,33 @@ derive_summary_records <- function(dataset = NULL,
 
   filter_add <- assert_filter_cond(enexpr(filter_add), optional = TRUE)
 
-  summary_records <- dataset_add %>%
-    group_by(!!!by_vars) %>%
-    filter_if(filter_add) %>%
-    summarise(!!!set_values_to) %>%
-    ungroup()
+  summary_records <- withCallingHandlers(
+    dataset_add %>%
+      group_by(!!!by_vars) %>%
+      filter_if(filter_add) %>%
+      summarise(!!!set_values_to) %>%
+      ungroup(),
+    warning = function(cnd) {
+      if (any(str_detect(
+        cnd$message,
+        fixed("Returning more (or less) than 1 row per `summarise()` group was deprecated")
+      ))) {
+        cli_abort(
+          c(
+            paste(
+              "Column(s) in {.arg set_values_to} must return a single value per",
+              "{.arg by_vars} group."
+            ),
+            paste(
+              "Please check {.arg set_values_to} if summary functions like",
+              "{.fun mean}, {.fun sum}, ... are used on the right hand side."
+            )
+          ),
+          call = NULL
+        )
+      }
+    }
+  )
 
   df_return <- bind_rows(
     dataset,

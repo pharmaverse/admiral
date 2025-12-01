@@ -197,3 +197,22 @@ test_that("get_summary_records Test 4: Compute avg AVAL only if >2 records withi
     keys = c("USUBJID", "PARAM", "AVISIT")
   )
 })
+
+## Test 5: Error when set_values_to returns more than one value per by group ----
+test_that("get_summary_records Test 5: Error when set_values_to returns more than one value", {
+  # Suppress lifecycle messages within the test environment
+  withr::local_options(list(lifecycle_verbosity = "quiet"))
+
+  input <- tibble::tibble(x = rep(1:4, each = 4), y = rep(1:2, each = 8), z = runif(16))
+
+  expect_error(
+    get_summary_records(
+      input,
+      by_vars = exprs(x),
+      set_values_to = exprs(
+        z = z
+      )
+    ),
+    regexp = "Column\\(s\\) in `set_values_to` must return a single value"
+  )
+})
