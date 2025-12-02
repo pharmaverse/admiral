@@ -13,6 +13,9 @@ is specified. (#2875)
 
 - `derive_vars_dt()` Documentation: clarify highest_imputation definitions and expand date examples (#2841)
 
+- `derive_summary_records()` updated to allow constants to be provided under the 
+'constant_values' parameter, which will be present in both summary and missing rows (#2668)
+
 ## Breaking Changes
 
 - The default value of `ignore_seconds_flag` is set to `TRUE`. (#2798)

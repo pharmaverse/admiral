@@ -10,6 +10,7 @@ derive_summary_records(
   dataset_ref = NULL,
   by_vars,
   filter_add = NULL,
+  constant_values = NULL,
   set_values_to,
   missing_values = NULL
 )
@@ -73,6 +74,24 @@ than 2.
 
 \describe{
 \item{Permitted values}{an unquoted condition, e.g., \code{AVISIT == "BASELINE"}}
+\item{Default value}{\code{NULL}}
+}}
+
+\item{constant_values}{Constant variables to set
+
+The specified variables are set to the specified values for all new
+summary records, including those with data in dataset_add and those with
+no data imputed using dataset_ref and missing_values.
+
+Set a list of variables to some specified value for the new records
+\itemize{
+\item LHS refer to a variable.
+\item RHS refers to the values to set to the variable. This can be a string
+or a numeric value.
+}
+
+\describe{
+\item{Permitted values}{list of named expressions created by \code{exprs()}, e.g., \code{exprs(CUMDOSA = sum(AVAL, na.rm = TRUE), AVALU = "ml")}}
 \item{Default value}{\code{NULL}}
 }}
 
@@ -184,10 +203,12 @@ within the \code{set_values_to} argument.
   adeg,
   dataset_add = adeg,
   by_vars = exprs(USUBJID, PARAM, AVISIT),
+  constant_values = exprs(
+    DTYPE = "AVERAGE"
+  ),
   set_values_to = exprs(
     AVAL = mean(AVAL, na.rm = TRUE),
-    ADTM = max(ADTM),
-    DTYPE = "AVERAGE"
+    ADTM = max(ADTM)
   )
 ) \%>\%
   arrange(USUBJID, AVISIT)
@@ -222,11 +243,13 @@ is set for the summary record. Otherwise, referencing \code{AVAL} later on would
   adeg,
   dataset_add = adeg,
   by_vars = exprs(USUBJID, PARAM, AVISIT),
+  constant_values = exprs(
+    DTYPE = "AVERAGE"
+  ),
   set_values_to = exprs(
     OUTLIEFL = if_else(any(AVAL >= 500 | AVAL <= 300), "Y", "N"),
     AVAL = mean(AVAL, na.rm = TRUE),
-    ADTM = max(ADTM),
-    DTYPE = "AVERAGE"
+    ADTM = max(ADTM)
   )
 ) \%>\%
   arrange(USUBJID, AVISIT)
@@ -261,9 +284,11 @@ by passing \code{filter_add = AVISIT == "Baseline"}.
   dataset_add = adeg,
   by_vars = exprs(USUBJID, PARAM, AVISIT),
   filter_add = AVISIT == "Baseline",
-  set_values_to = exprs(
-    AVAL = mean(AVAL, na.rm = TRUE),
+  constant_values = exprs(
     DTYPE = "AVERAGE"
+  ),
+  set_values_to = exprs(
+    AVAL = mean(AVAL, na.rm = TRUE)
   )
 ) \%>\%
   arrange(USUBJID, AVISIT)
@@ -295,9 +320,11 @@ by passing \code{filter_add = n() > 2}.
   dataset_add = adeg,
   by_vars = exprs(USUBJID, PARAM, AVISIT),
   filter_add = n() > 2,
-  set_values_to = exprs(
-    AVAL = mean(AVAL, na.rm = TRUE),
+  constant_values = exprs(
     DTYPE = "AVERAGE"
+  ),
+  set_values_to = exprs(
+    AVAL = mean(AVAL, na.rm = TRUE)
   )
 ) \%>\%
   arrange(USUBJID, AVISIT)
