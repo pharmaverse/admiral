@@ -1,4 +1,4 @@
-# derive_var_atoxgr Test 129: CTCAEv6  Blood bilirubin increased
+# derive_var_atoxgr_dir Test 130: CTCAEv6  Blood bilirubin increased
 
     Code
       actual_bili_ctcv6 <- derive_var_atoxgr_dir(input_bili_ctcv6, new_var = ATOXGRH,

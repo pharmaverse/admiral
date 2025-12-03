@@ -217,6 +217,22 @@
   },
   {
     "SOC": "Investigations",
+    "TERM": "Creatinine clearance decreased",
+    "GRADE_1": "-",
+    "GRADE_2": "26 - 49 ml/min",
+    "GRADE_3": "10 - 25 ml/min",
+    "GRADE_4": "-",
+    "GRADE_5": "-",
+    "Definition": " A finding based on laboratory test results that indicate a decrease in creatinine clearance (CrCl) in a 24-hour urine collection.",
+    "GRADE_NA_CODE": "is.na(AVAL) ~ NA_character_, signif(AVAL, signif_dig) < 10 ~ NA_character_",
+    "GRADE_3_CODE": "signif(AVAL, signif_dig) <= 25 & signif(AVAL, signif_dig) >= 10 ~ \"3\"",
+    "GRADE_2_CODE": "signif(AVAL, signif_dig) <= 49 & signif(AVAL, signif_dig) > 25 ~ \"2\"",
+    "UNIT_CHECK": "mL/min",
+    "VAR_CHECK": "AVAL",
+    "DIRECTION": "L"
+  },
+  {
+    "SOC": "Investigations",
     "TERM": "Creatinine increased",
     "GRADE_1": ">ULN - 1.5 x ULN",
     "GRADE_2": ">1.5 - 3.0 x if baseline is below LLN; >1.5 - 3.0 x ULN",

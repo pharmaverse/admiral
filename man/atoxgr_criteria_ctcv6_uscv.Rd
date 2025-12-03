@@ -5,7 +5,7 @@
 \alias{atoxgr_criteria_ctcv6_uscv}
 \title{Metadata Holding Grading Criteria for NCI-CTCAEv6 using USCV unit where applicable}
 \format{
-An object of class \code{data.frame} with 47 rows and 13 columns.
+An object of class \code{data.frame} with 48 rows and 13 columns.
 }
 \usage{
 atoxgr_criteria_ctcv6_uscv

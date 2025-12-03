@@ -10980,9 +10980,52 @@ test_that("derive_var_atoxgr_dir Test 128: CTCAEv6 Alkalosis (SI unit)", {
   )
 })
 
+### Creatinine clearance decreased
+### GRADE_3: 10 - 25 ml/min
+### GRADE_2: 26 - 49 ml/min
+
+## Test 129: CTCAEv6 Creat. clear. dec. (SI unit) ----
+test_that("derive_var_atoxgr_dir Test 129: CTCAEv6 Creat. clear. dec. (SI unit)", {
+  expected_crcl_d <- tibble::tribble(
+    ~ATOXDSCL,                         ~AVAL,  ~ATOXGRL,  ~AVALU,    ~TESTNUM,
+    "Not a term",                      27,     NA,        "mL/min",  1,
+    NA_character_,                     27,     NA,        "mL/min",  2,
+    # AVAL < 10 - should be missing grade
+    "Creatinine clearance decreased",  9,      NA,        "mL/min",  3,
+    # get grade 3 and 2
+    "Creatinine clearance decreased",  10,     "3",       "mL/min",  4,
+    "Creatinine clearance decreased",  25,     "3",       "mL/min",  5,
+    "Creatinine clearance decreased",  26,     "2",       "mL/min",  6,
+    "Creatinine clearance decreased",  49,     "2",       "mL/min",  7,
+    "Creatinine clearance decreased",  50,     "0",       "mL/min",  8,
+    # AVAL missing cannot grade
+    "Creatinine clearance decreased",  NA,     NA,        "mL/min",  13,
+    # unit incorrect cannot grade
+    "Creatinine clearance decreased",  50,     NA,        "L/min",   14,
+  )
+
+  input_crcl_d <- expected_crcl_d %>%
+    select(-ATOXGRL)
+
+  actual_crcl_d <- derive_var_atoxgr_dir(
+    input_crcl_d,
+    new_var = ATOXGRL,
+    meta_criteria = atoxgr_criteria_ctcv6,
+    tox_description_var = ATOXDSCL,
+    criteria_direction = "L",
+    get_unit_expr = AVALU
+  )
+
+  expect_dfs_equal(
+    base = expected_crcl_d,
+    compare = actual_crcl_d,
+    keys = c("TESTNUM")
+  )
+})
+
 ## Test when deprecated abnormal_indicator used - should map to high_indicator
-## Test 129: CTCAEv6  Blood bilirubin increased ----
-test_that("derive_var_atoxgr_dir Test 129: CTCAEv6  Blood bilirubin increased", {
+## Test 130: CTCAEv6  Blood bilirubin increased ----
+test_that("derive_var_atoxgr_dir Test 130: CTCAEv6  Blood bilirubin increased", {
   expect_snapshot(
     actual_bili_ctcv6 <- derive_var_atoxgr_dir(
       input_bili_ctcv6,
@@ -11003,8 +11046,8 @@ test_that("derive_var_atoxgr_dir Test 129: CTCAEv6  Blood bilirubin increased", 
 })
 
 ## Test when high_indicator not defined - should map to high_indicator
-## Test 130: CTCAEv6  Blood bilirubin incr. high_indicator not defined ----
-test_that("derive_var_atoxgr_dir Test 130: CTCAEv6  Blood bilirubin incr. high_indicator not defined", {
+## Test 131: CTCAEv6  Blood bilirubin incr. high_indicator not defined ----
+test_that("derive_var_atoxgr_dir Test 131: CTCAEv6  Blood bilirubin incr. high_indicator not defined", {
   expect_error(
     actual_bili_ctcv6 <- derive_var_atoxgr_dir(
       input_bili_ctcv6,
@@ -11019,8 +11062,8 @@ test_that("derive_var_atoxgr_dir Test 130: CTCAEv6  Blood bilirubin incr. high_i
   )
 })
 
-## Test 131: CTCAEv6 Creatinine increased low_indicator not defined ----
-test_that("derive_var_atoxgr_dir Test 131: CTCAEv6 Creatinine increased low_indicator not defined", {
+## Test 132: CTCAEv6 Creatinine increased low_indicator not defined ----
+test_that("derive_var_atoxgr_dir Test 132: CTCAEv6 Creatinine increased low_indicator not defined", {
   expected_creatn <- tibble::tribble(
     ~ATOXDSCH,               ~AVAL,  ~BASE, ~ANRHI, ~AVALU,         ~BNRIND,        ~ATOXGRH,
     "Creatinine increased",  241,    40,    40,     NA_character_,  "NORMAL",       "4",
