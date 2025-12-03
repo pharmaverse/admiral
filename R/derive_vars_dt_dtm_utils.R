@@ -103,7 +103,7 @@ dt_level <- function(level) {
 #'  - For `date_imputation = "<mm>-<dd>"` `"xxxx"`, `"<mm>"`, `"<dd>"` are returned.
 #'
 #'  `"xxxx"` indicates that the component is undefined. If an undefined
-#'  component occurs in the imputed DTC value, the imputed DTC value is set to
+#'  component occurs in the imputed `--DTC` value, the imputed `--DTC` value is set to
 #'  `NA_character_` in the imputation functions.
 #'
 #' @examples
@@ -272,7 +272,7 @@ convert_date_to_dtm <- function(dt,
   }
 }
 
-#' Parse DTC variable and Determine Components
+#' Parse `--DTC` variable and Determine Components
 #'
 #' @param dtc The `'--DTC'` date to parse
 #'
