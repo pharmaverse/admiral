@@ -131,7 +131,6 @@ a way to look up common ADaM variables with recommended `{admiral}` functions to
 * Most `{admiral}` derivation functions rely on `{dplyr}` operations, which generally preserve attributes on existing columns but do not automatically transfer attributes to newly created columns.
 * Admiral utility functions like `convert_blanks_to_na()` and `convert_na_to_blanks()` are explicitly designed to preserve all attributes.
 * The recommended approach is to apply variable labels and other metadata as a final step in your data derivation process using packages like [metacore](https://atorus-research.github.io/metacore/), [metatools](https://pharmaverse.github.io/metatools/), and [xportr](https://atorus-research.github.io/xportr/).
-* For detailed information about how different operations handle attributes, see the [Handling of Variable Attributes and Labels](concepts_conventions.html#attributes) section in the Programming Concepts and Conventions vignette.
 
 ##### Are there any **presentations** available about `{admiral}`?
 
