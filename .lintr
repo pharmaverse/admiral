@@ -3,7 +3,8 @@ linters: linters_with_defaults(
     object_usage_linter=NULL,
     cyclocomp_linter(complexity_limit = 19),
     indentation_linter=NULL,
-    undesirable_function_linter = undesirable_function_linter(symbol_is_undesirable = FALSE)
+    undesirable_function_linter = undesirable_function_linter(symbol_is_undesirable = FALSE),
+    pipe_consistency_linter = pipe_consistency_linter("auto")
   )
 exclusions: list(
     "R/data.R" = Inf,
