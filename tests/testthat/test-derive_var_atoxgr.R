@@ -553,8 +553,8 @@ test_that(paste(
   )
 })
 
-## Test 10a: CTCAEv5 Activated partial thromboplastin time prolonged ----
-test_that("derive_var_atoxgr_dir Test 10a: CTCAEv5 Activated partial thromboplastin time prolonged", {
+## Test 10a: CTCAEv5 Act. partial thromboplastin time prolonged ----
+test_that("derive_var_atoxgr_dir Test 10a: CTCAEv5 Act. partial thromboplastin time prolonged", {
   actual_aptt <- derive_var_atoxgr_dir(
     input_aptt,
     new_var = ATOXGRH,
@@ -571,8 +571,9 @@ test_that("derive_var_atoxgr_dir Test 10a: CTCAEv5 Activated partial thromboplas
   )
 })
 
-## Test 10b: CTCAEv6 Activated partial thromboplastin time prolonged ----
-test_that("derive_var_atoxgr_dir Test 10b: CTCAEv6 Activated partial thromboplastin time prolonged", {
+## Test 10b: CTCAEv6 Act. partial thromboplastin time prolonged ----
+test_that("derive_var_atoxgr_dir Test 10b: CTCAEv6 Act. partial thromboplastin time prolonged", {
+0123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789
   actual_aptt <- derive_var_atoxgr_dir(
     input_aptt,
     new_var = ATOXGRH,
@@ -589,8 +590,9 @@ test_that("derive_var_atoxgr_dir Test 10b: CTCAEv6 Activated partial thromboplas
   )
 })
 
-## Test 10c: CTCAEv6 Activated partial thromboplastin time prolonged (CV unit) ----
-test_that("derive_var_atoxgr_dir Test 10c: CTCAEv6 Act. part thromboplastin time prolonged (CV unit)", {
+## Test 10c: CTCAEv6 Act. part. thromboplastin time prolonged (CV) ----
+test_that("derive_var_atoxgr_dir Test 10c: CTCAEv6 Act. part. thromboplastin time prolonged (CV)", {
+0123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789
   actual_aptt <- derive_var_atoxgr_dir(
     input_aptt,
     new_var = ATOXGRH,
@@ -9771,8 +9773,8 @@ expected_lymphd_daids_cv2 <- expected_lymphd_daids_si %>%
 input_lymphd_daids_cv2 <- expected_lymphd_daids_cv2 %>%
   select(-ATOXGRL)
 
-## Test 114c: DAIDS Absolute Lymphocyte Count, Low (legacy USCV unit) ----
-test_that("derive_var_atoxgr_dir Test 114c: DAIDS Absolute Lymphocyte Count, Low (legacy USCV unit)", {
+## Test 114c: DAIDS Absolute Lymph. Count, Low (legacy USCV unit) ----
+test_that("derive_var_atoxgr_dir Test 114c: DAIDS Absolute Lymph. Count, Low (legacy USCV unit)", {
   actual_lymphd_daids_cv2 <- derive_var_atoxgr_dir(
     input_lymphd_daids_cv2,
     new_var = ATOXGRL,
@@ -11046,8 +11048,8 @@ test_that("derive_var_atoxgr_dir Test 130: CTCAEv6  Blood bilirubin increased", 
 })
 
 ## Test when high_indicator not defined - should map to high_indicator
-## Test 131: CTCAEv6  Blood bilirubin incr. high_indicator not defined ----
-test_that("derive_var_atoxgr_dir Test 131: CTCAEv6  Blood bilirubin incr. high_indicator not defined", {
+## Test 131: CTCAEv6  Blood bili incr. high_indicator not defined ----
+test_that("derive_var_atoxgr_dir Test 131: CTCAEv6  Blood bili incr. high_indicator not defined", {
   expect_error(
     actual_bili_ctcv6 <- derive_var_atoxgr_dir(
       input_bili_ctcv6,
@@ -11062,8 +11064,8 @@ test_that("derive_var_atoxgr_dir Test 131: CTCAEv6  Blood bilirubin incr. high_i
   )
 })
 
-## Test 132: CTCAEv6 Creatinine increased low_indicator not defined ----
-test_that("derive_var_atoxgr_dir Test 132: CTCAEv6 Creatinine increased low_indicator not defined", {
+## Test 132: CTCAEv6 Creatinine incr. low_indicator not defined ----
+test_that("derive_var_atoxgr_dir Test 132: CTCAEv6 Creatinine incr. low_indicator not defined", {
   expected_creatn <- tibble::tribble(
     ~ATOXDSCH,               ~AVAL,  ~BASE, ~ANRHI, ~AVALU,         ~BNRIND,        ~ATOXGRH,
     "Creatinine increased",  241,    40,    40,     NA_character_,  "NORMAL",       "4",
