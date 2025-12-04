@@ -101,7 +101,6 @@ test_that("derive_var_atoxgr Test 4: ATOXGR < 0 (HYPO)", {
 ### Grade 2: <100 - 80g/L
 ### Grade 1: <LLN - 100 g/L
 
-
 expected_anemia_si <- tibble::tribble(
   ~ATOXDSCL,      ~AVAL,  ~ANRLO, ~ANRHI, ~AVALU, ~ATOXGRL, ~TESTNUM,
   "Not a term",   80,     120,    200,    "G/L",  NA,       1,
@@ -1144,7 +1143,6 @@ test_that("derive_var_atoxgr_dir Test 16b: CTCAEv6 Aspartate aminotransferase in
   )
 })
 
-
 ### Blood bilirubin increased
 ### NCICTCAEv5 same criteria as NCICTCAEv4 when BASELINE is normal
 ### Grade 4: >10.0 x ULN
@@ -1297,7 +1295,6 @@ test_that("derive_var_atoxgr_dir Test 18b: CTCAEv6  Blood bilirubin increased", 
     keys = c("ATOXDSCH", "AVAL", "ANRHI", "BNRIND", "AVALU")
   )
 })
-
 
 ### CD4 Lymphocytes decreased
 ### NCICTCAEv5 and NCICTCAEv6 same criteria as NCICTCAEv4
