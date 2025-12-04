@@ -175,7 +175,7 @@ derive_var_atoxgr_dir <- function(dataset,
         i = paste(
           "See admiral's deprecation guidance:",
           "https://pharmaverse.github.io/admiraldev/dev/articles/programming_strategy.html#deprecation"
-          ),
+        ),
         x = mapping
       )
     )

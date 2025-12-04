@@ -573,7 +573,6 @@ test_that("derive_var_atoxgr_dir Test 10a: CTCAEv5 Act. partial thromboplastin t
 
 ## Test 10b: CTCAEv6 Act. partial thromboplastin time prolonged ----
 test_that("derive_var_atoxgr_dir Test 10b: CTCAEv6 Act. partial thromboplastin time prolonged", {
-0123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789
   actual_aptt <- derive_var_atoxgr_dir(
     input_aptt,
     new_var = ATOXGRH,
@@ -592,7 +591,6 @@ test_that("derive_var_atoxgr_dir Test 10b: CTCAEv6 Act. partial thromboplastin t
 
 ## Test 10c: CTCAEv6 Act. part. thromboplastin time prolonged (CV) ----
 test_that("derive_var_atoxgr_dir Test 10c: CTCAEv6 Act. part. thromboplastin time prolonged (CV)", {
-0123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789
   actual_aptt <- derive_var_atoxgr_dir(
     input_aptt,
     new_var = ATOXGRH,
