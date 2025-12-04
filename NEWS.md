@@ -2,19 +2,12 @@
 
 ## New Features
 
-- **Major Enhancement:** `{admiral}` now provides comprehensive lab grading metadata for **NCI-CTCAE version 6.0**, 
-the latest version of the Common Terminology Criteria for Adverse Events! This groundbreaking addition includes 
-complete grading criteria for both SI and US (Conventional) units via `atoxgr_criteria_ctcv6` and 
-`atoxgr_criteria_ctcv6_uscv`, enabling users to apply the most current toxicity grading standards in their ADLB 
-derivations. The new metadata covers an extensive range of laboratory tests including the newly added 
-**Creatinine Clearance decreased** grading. (#1858)
+- Lab grading metadata for NCI-CTCAE version 6.0 is now available for both SI and US (Conventional) units 
+via `atoxgr_criteria_ctcv6` and `atoxgr_criteria_ctcv6_uscv`. This includes grading criteria for Creatinine 
+Clearance decreased. (#1858)
 
-- **Revolutionary Metadata Infrastructure:** All lab grading metadata has been modernized with a robust JSON-based 
-architecture! The new system provides enhanced maintainability, improved readability, and easier extensibility for 
-future criteria updates. JSON source files are now available for all supported grading criteria 
-(NCI-CTCAEv4, NCI-CTCAEv5, NCI-CTCAEv6, and DAIDS) in both SI and US conventional unit systems, making it 
-straightforward to review, validate, and update grading specifications. The JSON files feature a structured format 
-that breaks down complex case statements into clear, manageable components. (#1858)
+- Lab grading metadata is now maintained in JSON format for all supported criteria (NCI-CTCAEv4, NCI-CTCAEv5, 
+NCI-CTCAEv6, and DAIDS) in both SI and US conventional unit systems, improving maintainability and readability. (#1858)
 
 ## Updates of Existing Functions
 
@@ -29,14 +22,10 @@ is specified. (#2875)
 
 ## Breaking Changes
 
-- **Enhanced Lab Grading Flexibility:** The `derive_var_atoxgr_dir()` function has been significantly improved! 
-The `abnormal_indicator` argument is now deprecated and replaced with two new, more flexible arguments: 
-`low_indicator` and `high_indicator`. This powerful enhancement enables precise control over baseline range 
-indicators for both low and high abnormalities independently, which is essential for properly implementing 
-**NCI-CTCAE version 6.0** criteria. For example, the "Creatinine increased" grading in v6 requires checking both 
-low baseline indicators (for grades when baseline is below LLN) and high indicators (for standard high grades). 
-The deprecated `abnormal_indicator` argument will continue to work with a deprecation message until the beginning 
-of 2027, providing ample time for migration. (#1858)
+- In `derive_var_atoxgr_dir()`, the `abnormal_indicator` argument is deprecated and replaced with `low_indicator` 
+and `high_indicator` arguments. This change enables independent control of baseline range indicators for low and 
+high abnormalities, which is required for NCI-CTCAE version 6.0 criteria. The deprecated argument will continue 
+to work with a deprecation message until the beginning of 2027. (#1858)
 
 - The default value of `ignore_seconds_flag` is set to `TRUE`. (#2798)
 - `derive_var_merged_summary()` is deprecated and will be replaced by `derive_vars_merged_summary()`.
@@ -70,12 +59,8 @@ of 2027, providing ample time for migration. (#1858)
     
 ## Documentation
 
-- **Lab Grading Vignette Transformation:** The lab grading vignette has been extensively enhanced with comprehensive 
-examples and guidance for **NCI-CTCAE version 6.0** criteria! The updated vignette now includes detailed examples 
-demonstrating the new `low_indicator` and `high_indicator` arguments, showcasing how to properly handle complex 
-grading scenarios like "Creatinine increased" that require checking baseline ranges in multiple directions. The 
-vignette also provides clear migration guidance for users transitioning from the deprecated `abnormal_indicator` 
-argument. (#1858)
+- The lab grading vignette has been updated with examples for NCI-CTCAE version 6.0 criteria, including 
+usage of the new `low_indicator` and `high_indicator` arguments. (#1858)
 
 - The "Ask AI" widget was added to the bottom right of each page. It enables users to ask questions about `{admiral}` and `{admiraldev}` 
 and receive answers from an LLM. It is trained on the documentation of both packages and provided by 
