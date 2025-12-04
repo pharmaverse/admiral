@@ -374,7 +374,7 @@ derive_var_extreme_flag <- function(dataset,
   }
 
   if (flag_all) {
-    flag_direction <- ifelse(mode == "first", "down", "up")
+    flag_direction <- if_else(mode == "first", "down", "up")
     data <- data %>%
       group_by(!!!by_vars, !!!order) %>%
       fill(!!new_var, .direction = flag_direction) %>%

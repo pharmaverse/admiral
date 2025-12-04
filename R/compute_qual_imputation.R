@@ -22,13 +22,14 @@
 #' @examples
 #' compute_qual_imputation_dec("<40.1")
 compute_qual_imputation_dec <- function(character_value_decimal) {
-  decimal <- ifelse(str_detect(character_value_decimal, "\\."),
-    1 / (10^(str_length(str_trim(character_value_decimal)) - # nolint
-      str_locate(str_trim(character_value_decimal), "\\."))),
-    1 / (10^0)
-  )
+  if (str_detect(character_value_decimal, "\\.")) {
+    decimal <- 1 / (10^(str_length(str_trim(character_value_decimal)) - # nolint
+      str_locate(str_trim(character_value_decimal), "\\.")))
+  } else {
+    decimal <- 1 / (10^0)
+  }
 
-  decimal
+  decimal[1]
 }
 
 #' Function to Impute Values When Qualifier Exists in Character Result
@@ -61,10 +62,11 @@ compute_qual_imputation_dec <- function(character_value_decimal) {
 #' @examples
 #' compute_qual_imputation("<40")
 compute_qual_imputation <- function(character_value, imputation_type = 1, factor = 0) {
-  numeric_value <- ifelse(grepl("[A-z]", character_value),
-    NA_real_,
-    as.numeric(gsub("=|>|<", "", character_value))
-  )
+  if (str_detect(character_value, "[A-z]")) {
+    numeric_value <- NA_real_
+  } else {
+    numeric_value <- as.numeric(gsub("=|>|<", "", character_value))
+  }
 
   if (imputation_type == 1) {
     numeric_value <-

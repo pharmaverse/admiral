@@ -39,7 +39,7 @@ ex_single <- dates %>%
   mutate(EXSEQ = row_number()) %>%
   # adjust EXSTDY and EXENDY
   mutate(
-    EXSTDY = ifelse(EXSTDTC == min(EXSTDTC), 1, as.numeric(EXSTDTC - min(EXSTDTC)) + 1),
+    EXSTDY = if_else(EXSTDTC == min(EXSTDTC), 1, as.numeric(EXSTDTC - min(EXSTDTC)) + 1),
     EXENDY = EXSTDY
   ) %>%
   ungroup() %>%
