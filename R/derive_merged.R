@@ -530,7 +530,7 @@ derive_vars_merged <- function(dataset,
 
   if (!is.null(exist_flag)) {
     dataset <- dataset %>%
-      mutate(!!exist_flag := ifelse(is.na(!!match_flag_var), false_value, true_value))
+      mutate(!!exist_flag := if_else(is.na(!!match_flag_var), false_value, true_value))
   }
 
   dataset %>%

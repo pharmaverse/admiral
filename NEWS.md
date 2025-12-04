@@ -58,7 +58,7 @@ and receive answers from an LLM. It is trained on the documentation of both pack
 
 <details>
 <summary>Developer Notes</summary>
-- Updated the `{lintr}` preferences to use the shared `{admiraldev}` configurations (excluding undesirable functions). (#2863)
+- Updated the `{lintr}` preferences to use the shared `{admiraldev}` configurations. (#2863) and (#2913)
 </details>
 
 # admiral 1.3.1

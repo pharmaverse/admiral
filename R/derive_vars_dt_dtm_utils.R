@@ -391,7 +391,7 @@ assert_date_imputation <- function(date_imputation, highest_imputation) {
   }
 
   if (highest_imputation == "M") {
-    is_mm_dd_format <- grepl("^(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])$", date_imputation)
+    is_mm_dd_format <- str_detect(date_imputation, "^(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])$")
     is_one_of_keys <- date_imputation %in% c("first", "mid", "last")
     if (!{
       is_mm_dd_format || is_one_of_keys
@@ -443,9 +443,9 @@ assert_time_imputation <- function(time_imputation, highest_imputation) {
 
   time_imputation <- tolower(time_imputation)
 
-  is_hh_mm_ss_format <- grepl(
-    "^((0[0-9]|1[0-9]|2[0-3]):([0-5][0-9]):([0-5][0-9])|24:00:00)$",
-    time_imputation
+  is_hh_mm_ss_format <- str_detect(
+    time_imputation,
+    "^((0[0-9]|1[0-9]|2[0-3]):([0-5][0-9]):([0-5][0-9])|24:00:00)$"
   )
   is_one_of_keys <- time_imputation %in% c("first", "last")
 

@@ -60,7 +60,7 @@ diffdf::diffdf(
 # example to use for ADMH:
 queries_mh <- queries %>%
   filter(SRCVAR %in% c("AELLT", "AEDECOD")) %>%
-  mutate(SRCVAR = ifelse(SRCVAR == "AELLT", "MHLLT", "MHDECOD"))
+  mutate(SRCVAR = if_else(SRCVAR == "AELLT", "MHLLT", "MHDECOD"))
 
 admiral:::assert_valid_queries(queries)
 
