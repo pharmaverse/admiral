@@ -459,7 +459,7 @@ test_that("derive_locf_records Test 9: fill variables other than analysis_var fo
     imputation = "update_add",
     order = exprs(AVISITN, AVISIT),
     keep_vars = exprs(PARAMN, DATEC, DAY),
-  ) |>
+  ) %>%
     arrange(USUBJID, PARAMCD, AVISITN, desc(is.na(DTYPE)), DTYPE)
 
   expect_dfs_equal(

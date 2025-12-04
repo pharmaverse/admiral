@@ -261,7 +261,6 @@ test_that("get_imputation_target_time Test 15: correctly generate imputation tar
 })
 
 
-
 # Test for adjust_last_day_imputation
 ## Test 16: correctly adjust last day imputation ----
 test_that("get_imputation_target_time Test 16: correctly adjust last day imputation", {

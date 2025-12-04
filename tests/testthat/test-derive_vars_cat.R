@@ -55,7 +55,6 @@ test_that("derive_vars_cat Test 2: Basic functionality with by_vars", {
   )
 
 
-
   expect_dfs_equal(
     base =
       derive_vars_cat(

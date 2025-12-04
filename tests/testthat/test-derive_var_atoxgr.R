@@ -819,10 +819,6 @@ test_that("derive_var_atoxgr Test 16: CTCAEv5 Aspartate aminotransferase increas
 })
 
 
-
-
-
-
 ### Blood bilirubin increased
 ### NCICTCAEv5 same criteria as NCICTCAEv4 when BASELINE is normal
 ### Grade 4: >10.0 x ULN
@@ -915,7 +911,6 @@ test_that("derive_var_atoxgr Test 18: CTCAEv5  Blood bilirubin increased", {
     keys = c("ATOXDSCH", "AVAL", "ANRHI", "BNRIND", "AVALU")
   )
 })
-
 
 
 ### CD4 Lymphocytes decreased
