@@ -172,9 +172,10 @@ derive_var_atoxgr_dir <- function(dataset,
       what = "derive_var_atoxgr_dir(abnormal_indicator = )",
       details = c(
         x = "This message will turn into a warning at the beginning of 2027.",
-        i = paste(
-          "See admiral's deprecation guidance:",
-          "https://pharmaverse.github.io/admiraldev/dev/articles/programming_strategy.html#deprecation"
+        i = paste0(
+          "See admiral's deprecation guidance: ",
+          "https://pharmaverse.github.io/admiraldev/dev/articles/",
+          "programming_strategy.html#deprecation"
         ),
         x = mapping
       )
