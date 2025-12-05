@@ -235,7 +235,7 @@ As with 'IS' dataset, `NFRLT` is assigned using `VISITDY` (or the user could sub
 Assign `ASTDTM` using `EX.EXSTDTC`. As previously seen with `IS.ISDTC`, if `EX.EXSTDTC` is missing the time part,
 "00:00" is used for the imputation. Individual companies and studies may have custom imputation methods.
 If this is the case, the function `derive_vars_dtm()` would be either replaced or post-processed to 
-get the desired imputed time part. For example a common method is to use IS.ISDTC time part 
+get the desired imputed time part. For example a common method is to use the time part from `IS.ISDTC` 
 (match merged by IS and EX date parts) then EX missing time is adjusted for 
 pre-dose sampling planned time. User would add custom code for this.
 AENDTM from EX.EXENDTC is also computed in case needed.  Both dates then create
