@@ -144,7 +144,7 @@ We use `derive_vars_merged()` to merge `ADSL.TRTSDT` and compute `ADY`. `ADY` is
 based on the `ADSL.TRTSDT` while `ADAB.AFRLT` is based on the matching `EX.EXTRT` for the corresponding 
 `IS` analytes.
 
-If IS.ISDTC is missing the time part, 00:00 is used for the impute.  Individual companies and 
+If `IS.ISDTC` is missing the time part, "00:00" is used for the imputation. Individual companies and 
 studies may have custom impute methods.  If this is the case, the` derive_vars_dtm()`
 would be either replaced or post-processed to get the desired imputed time part. For example,
 a common method is to use EX.EXSTDTC time part (match merged by IS and EX date parts) 
