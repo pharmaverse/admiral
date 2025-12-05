@@ -148,7 +148,7 @@ If `IS.ISDTC` is missing the time part, "00:00" is used for the imputation. Indi
 studies may have custom imputation methods. If this is the case, the function `derive_vars_dtm()`
 would be either replaced or post-processed to get the desired imputed time part. For example,
 a common method is to use the time part from `EX.EXSTDTC` (matched by the `IS` and `EX` date parts), 
-then IS time is adjusted for pre-dose sampling planned time.  User would add custom code for this.
+then the `IS` time is adjusted for pre-dose sampling planned time. User would add custom code for this.
 
 
 ```{r message=FALSE}
