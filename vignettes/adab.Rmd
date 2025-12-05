@@ -155,7 +155,7 @@ then the `IS` time is adjusted for pre-dose sampling planned time. User would ad
 is_dates <- is %>%
   # Filter as needed (i.e. exclude ISSTAT has "NOT DONE")
   filter(is.na(ISSTAT) & toupper(ISBDAGNT) == "XANOMELINE") %>%
-  # Initial prep and core variable
+  # Initial preparation and core variables
   mutate(
     # ADATYPE and ADAPARM are assigned values to serve BY analyte processing
 
