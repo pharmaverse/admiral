@@ -228,7 +228,7 @@ is_dates <- is %>%
 ## Prepare 'EX', Find First Dose and Derive AFRLT {#firstdose}
 
 At this step, we stage 'EX' data. Filter the data as desired to match 
-the 'IS' analytes. As with 'IS', DRUG is assigned as a common merge var.
+the 'IS' analytes. As with 'IS' dataset, `DRUG` is assigned as a common merge variable.
 As with 'IS', NFRLT is assigned using VISITDY (or the user could substitute
 EX.VISIT values).
 
