@@ -267,6 +267,74 @@ yn_to_numeric <- function(arg) {
   )
 }
 
+#' Convert PCTPT Strings to Hours
+#'
+#' Converts pharmacokinetic/pharmacodynamic timepoint strings (PCTPT) into
+#' numeric hours. The function handles common dose-centric formats like
+#' Pre-dose, Post-dose (hours/minutes), and simple time-only values.
+#'
+#' @param pctpt A character vector of pharmacokinetic timepoint descriptions
+#'
+#' @details
+#' The function recognizes the following patterns:
+#' * `"Pre-dose"` or `"Predose"` → 0
+#' * `"X Min Post-dose"` → X/60 (converts minutes to hours)
+#' * `"Xh Post-dose"` → X (hours)
+#' * `"X.Yh Post-dose"` → X.Y (decimal hours)
+#' * `"X-Yh Post-dose"` → Y (end of time range)
+#' * Non-numeric event markers (e.g., `"EOI"`, `"EOS"`, `"EOT"`) → `NA_real_`
+#' * Unrecognized formats → `NA_real_`
+#'
+#' @return A numeric vector of timepoints in hours
+#'
+#' @keywords utils_fmt
+#' @family utils_fmt
+#'
+#' @export
+#'
+#' @examples
+#' pctpt_to_hours(c("Pre-dose", "5 Min Post-dose", "1h Post-dose"))
+#' pctpt_to_hours(c("1.5h Post-dose", "2h Post-dose", "0-6h Post-dose"))
+#' pctpt_to_hours(c("EOI", "EOS", "EOT"))
+pctpt_to_hours <- function(pctpt) {
+  assert_character_vector(pctpt)
+
+  # Initialize result vector
+  result <- rep(NA_real_, length(pctpt))
+
+  # Handle Pre-dose (case-insensitive)
+  predose_pattern <- "^[Pp]re-?dose$"
+  result[str_detect(pctpt, predose_pattern)] <- 0
+
+  # Handle minutes (e.g., "5 Min Post-dose" -> 0.0833)
+  min_pattern <- "^(\\d+(?:\\.\\d+)?)\\s*[Mm]in(?:ute)?(?:s)?\\s+[Pp]ost-?dose$"
+  min_matches <- str_match(pctpt, min_pattern)
+  min_idx <- !is.na(min_matches[, 1])
+  if (any(min_idx)) {
+    result[min_idx] <- as.numeric(min_matches[min_idx, 2]) / 60
+  }
+
+  # Handle time ranges (e.g., "0-6h Post-dose" -> 6, take the end value)
+  # Must have a dash to be a range
+  range_pattern <- "^\\d+(?:\\.\\d+)?-(\\d+(?:\\.\\d+)?)h\\s+[Pp]ost-?dose$"
+  range_matches <- str_match(pctpt, range_pattern)
+  range_idx <- !is.na(range_matches[, 1])
+  if (any(range_idx)) {
+    result[range_idx] <- as.numeric(range_matches[range_idx, 2])
+  }
+
+  # Handle hours (e.g., "1h Post-dose" -> 1, "1.5h Post-dose" -> 1.5)
+  # This must come after range pattern to avoid conflicts
+  hour_pattern <- "^(\\d+(?:\\.\\d+)?)h\\s+[Pp]ost-?dose$"
+  hour_matches <- str_match(pctpt, hour_pattern)
+  hour_idx <- !is.na(hour_matches[, 1]) & is.na(result)
+  if (any(hour_idx)) {
+    result[hour_idx] <- as.numeric(hour_matches[hour_idx, 2])
+  }
+
+  result
+}
+
 #' Print `source` Objects
 #'
 #' @param x An `source` object
