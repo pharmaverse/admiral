@@ -324,7 +324,9 @@ pctpt_to_hours <- function(pctpt) {
   }
 
   # Handle hours (e.g., "1h Post-dose" -> 1, "1.5h Post-dose" -> 1.5)
-  # This must come after range pattern to avoid conflicts
+  # This must come after range pattern to avoid conflicts.
+  # The `is.na(result)` check ensures we don't override values already set by the range pattern,
+  # since range patterns like "0-6h" would also match the hour pattern.
   hour_pattern <- "^(\\d+(?:\\.\\d+)?)h\\s+[Pp]ost-?dose$"
   hour_matches <- str_match(pctpt, hour_pattern)
   hour_idx <- !is.na(hour_matches[, 1]) & is.na(result)
