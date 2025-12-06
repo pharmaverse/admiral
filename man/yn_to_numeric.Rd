@@ -26,7 +26,8 @@ yn_to_numeric(c("Y", "N", NA_character_))
 \seealso{
 Utilities for Formatting Observations:
 \code{\link{convert_blanks_to_na}()},
-\code{\link{convert_na_to_blanks}()}
+\code{\link{convert_na_to_blanks}()},
+\code{\link{pctpt_to_hours}()}
 }
 \concept{utils_fmt}
 \keyword{utils_fmt}

@@ -254,3 +254,105 @@ test_that("print_named_list Test 18: named list with unamed list", {
     ))
   )
 })
+
+# pctpt_to_hours ----
+## Test 19: Pre-dose is converted to 0 ----
+test_that("pctpt_to_hours Test 19: Pre-dose is converted to 0", {
+  expect_equal(
+    pctpt_to_hours(c("Pre-dose", "Predose", "pre-dose")),
+    c(0, 0, 0)
+  )
+})
+
+## Test 20: Minutes are converted to hours ----
+test_that("pctpt_to_hours Test 20: Minutes are converted to hours", {
+  expect_equal(
+    pctpt_to_hours(c("5 Min Post-dose", "30 Min Post-dose", "45 Min Post-dose")),
+    c(5 / 60, 30 / 60, 45 / 60)
+  )
+})
+
+## Test 21: Hours are extracted correctly ----
+test_that("pctpt_to_hours Test 21: Hours are extracted correctly", {
+  expect_equal(
+    pctpt_to_hours(c("1h Post-dose", "2h Post-dose", "4h Post-dose", "24h Post-dose")),
+    c(1, 2, 4, 24)
+  )
+})
+
+## Test 22: Decimal hours are extracted correctly ----
+test_that("pctpt_to_hours Test 22: Decimal hours are extracted correctly", {
+  expect_equal(
+    pctpt_to_hours(c("1.5h Post-dose", "2.5h Post-dose", "0.5h Post-dose")),
+    c(1.5, 2.5, 0.5)
+  )
+})
+
+## Test 23: Time ranges return the end value ----
+test_that("pctpt_to_hours Test 23: Time ranges return the end value", {
+  expect_equal(
+    pctpt_to_hours(c("0-6h Post-dose", "6-12h Post-dose", "12-24h Post-dose", "24-48h Post-dose")),
+    c(6, 12, 24, 48)
+  )
+})
+
+## Test 24: Non-numeric event markers return NA ----
+test_that("pctpt_to_hours Test 24: Non-numeric event markers return NA", {
+  expect_equal(
+    pctpt_to_hours(c("EOI", "EOS", "EOT", "Unknown")),
+    c(NA_real_, NA_real_, NA_real_, NA_real_)
+  )
+})
+
+## Test 25: Mixed input handles all formats correctly ----
+test_that("pctpt_to_hours Test 25: Mixed input handles all formats correctly", {
+  input <- c(
+    "Pre-dose",
+    "5 Min Post-dose",
+    "30 Min Post-dose",
+    "1h Post-dose",
+    "1.5h Post-dose",
+    "2h Post-dose",
+    "4h Post-dose",
+    "6h Post-dose",
+    "8h Post-dose",
+    "12h Post-dose",
+    "16h Post-dose",
+    "24h Post-dose",
+    "36h Post-dose",
+    "48h Post-dose",
+    "0-6h Post-dose",
+    "6-12h Post-dose",
+    "12-24h Post-dose",
+    "24-48h Post-dose"
+  )
+  expected <- c(
+    0,
+    5 / 60,
+    30 / 60,
+    1,
+    1.5,
+    2,
+    4,
+    6,
+    8,
+    12,
+    16,
+    24,
+    36,
+    48,
+    6,
+    12,
+    24,
+    48
+  )
+  expect_equal(pctpt_to_hours(input), expected)
+})
+
+## Test 26: NA values are preserved ----
+test_that("pctpt_to_hours Test 26: NA values are preserved", {
+  expect_equal(
+    pctpt_to_hours(c("Pre-dose", NA_character_, "1h Post-dose")),
+    c(0, NA_real_, 1)
+  )
+})
