@@ -98,11 +98,11 @@ jobs:
       r-version: "${{ needs.get_r_version.outputs.r-version }}"
   links:
     name: Links
-    uses: pharmaverse/admiralci/.github/workflows/links.yml@main
+    uses: pharmaverse/admiralci/.github/workflows/links.yml@60_set_output
     if: github.event_name == 'pull_request'
   coverage:
     name: Code Coverage
-    uses: pharmaverse/admiralci/.github/workflows/code-coverage.yml@main
+    uses: pharmaverse/admiralci/.github/workflows/code-coverage.yml@216_no_cov_badge
     if: >
       github.event_name != 'release'
     needs: get_r_version
@@ -119,6 +119,7 @@ jobs:
     needs: get_r_version
     with:
       r-version: "${{ needs.get_r_version.outputs.r-version }}"
+      install-package: true
   templates:
     name: Check Templates
     uses: pharmaverse/admiralci/.github/workflows/check-templates.yml@main
