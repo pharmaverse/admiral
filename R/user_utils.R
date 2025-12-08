@@ -307,7 +307,10 @@ yn_to_numeric <- function(arg) {
 #' convert_xxtpt_to_hours(c("1h Post-dose", "1hr Post-dose", "1hour Post-dose", "1hours Post-dose"))
 #' 
 #' # Different minute patterns (all equivalent)
-#' convert_xxtpt_to_hours(c("5m Post-dose", "5min Post-dose", "5minute Post-dose", "5minutes Post-dose"))
+#' convert_xxtpt_to_hours(c(
+#'   "5m Post-dose", "5min Post-dose",
+#'   "5minute Post-dose", "5minutes Post-dose"
+#' ))
 #' 
 #' # Optional space between number and unit (all equivalent)
 #' convert_xxtpt_to_hours(c("3h Post-dose", "3 h Post-dose", "3HR Post-dose", "3 HR Post-dose"))
@@ -331,7 +334,10 @@ convert_xxtpt_to_hours <- function(xxtpt) {
   # Handle minutes (e.g., "5 Min Post-dose" -> 0.0833)
   # Supports: m, min, minute, minutes (all case-insensitive)
   # Supports optional space between number and unit: "5m" or "5 m"
-  min_pattern <- "^(\\d+(?:\\.\\d+)?)\\s*(?:[Mm]|[Mm][Ii][Nn](?:[Uu][Tt][Ee])?(?:[Ss])?)\\s+[Pp][Oo][Ss][Tt]-?[Dd][Oo][Ss][Ee]$"
+  min_pattern <- paste0(
+    "^(\\d+(?:\\.\\d+)?)\\s*(?:[Mm]|[Mm][Ii][Nn](?:[Uu][Tt][Ee])?(?:[Ss])?)\\s+",
+    "[Pp][Oo][Ss][Tt]-?[Dd][Oo][Ss][Ee]$"
+  )
   min_matches <- str_match(xxtpt, min_pattern)
   min_idx <- !is.na(min_matches[, 1])
   if (any(min_idx)) {
@@ -342,7 +348,11 @@ convert_xxtpt_to_hours <- function(xxtpt) {
   # Must have a dash to be a range
   # Supports: h, hr, hour, hours (all case-insensitive)
   # Supports optional space between number and unit: "0-6h" or "0-6 h"
-  range_pattern <- "^\\d+(?:\\.\\d+)?-(\\d+(?:\\.\\d+)?)\\s*(?:[Hh]|[Hh][Rr]|[Hh][Oo][Uu][Rr](?:[Ss])?)\\s+[Pp][Oo][Ss][Tt]-?[Dd][Oo][Ss][Ee]$"
+  range_pattern <- paste0(
+    "^\\d+(?:\\.\\d+)?-(\\d+(?:\\.\\d+)?)\\s*",
+    "(?:[Hh]|[Hh][Rr]|[Hh][Oo][Uu][Rr](?:[Ss])?)\\s+",
+    "[Pp][Oo][Ss][Tt]-?[Dd][Oo][Ss][Ee]$"
+  )
   range_matches <- str_match(xxtpt, range_pattern)
   range_idx <- !is.na(range_matches[, 1])
   if (any(range_idx)) {
@@ -351,11 +361,15 @@ convert_xxtpt_to_hours <- function(xxtpt) {
 
   # Handle hours (e.g., "1h Post-dose" -> 1, "1.5h Post-dose" -> 1.5)
   # This must come after range pattern to avoid conflicts.
-  # The `is.na(result)` check ensures we don't override values already set by the range pattern,
-  # since range patterns like "0-6h" would also match the hour pattern.
+  # The `is.na(result)` check ensures we don't override values already set
+  # by the range pattern, since range patterns like "0-6h" would also match
+  # the hour pattern.
   # Supports: h, hr, hour, hours (all case-insensitive)
   # Supports optional space between number and unit: "1h" or "1 h"
-  hour_pattern <- "^(\\d+(?:\\.\\d+)?)\\s*(?:[Hh]|[Hh][Rr]|[Hh][Oo][Uu][Rr](?:[Ss])?)\\s+[Pp][Oo][Ss][Tt]-?[Dd][Oo][Ss][Ee]$"
+  hour_pattern <- paste0(
+    "^(\\d+(?:\\.\\d+)?)\\s*(?:[Hh]|[Hh][Rr]|[Hh][Oo][Uu][Rr](?:[Ss])?)\\s+",
+    "[Pp][Oo][Ss][Tt]-?[Dd][Oo][Ss][Ee]$"
+  )
   hour_matches <- str_match(xxtpt, hour_pattern)
   hour_idx <- !is.na(hour_matches[, 1]) & is.na(result)
   if (any(hour_idx)) {
