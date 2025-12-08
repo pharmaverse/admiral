@@ -55,7 +55,7 @@ convert_blanks_to_na(df)
 \seealso{
 Utilities for Formatting Observations:
 \code{\link{convert_na_to_blanks}()},
-\code{\link{pctpt_to_hours}()},
+\code{\link{convert_xxtpt_to_hours}()},
 \code{\link{yn_to_numeric}()}
 }
 \concept{utils_fmt}
