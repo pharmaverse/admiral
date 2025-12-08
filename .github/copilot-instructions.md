@@ -384,7 +384,7 @@ When removing or replacing functions:
 **Most Important Principle**: Readability and documentation are paramount. Code will be reviewed by health authorities and users need to understand and trust the implementations. When in doubt, prioritize clarity over cleverness.
 
 **Key Files to Review for Patterns:**
-- `R/user_utils.R` - Simple utility functions
+- `R/user_utils.R` - Core utility functions with S3 methods
 - `R/derive_vars_dt.R` - Date derivations (common pattern)
 - `tests/testthat/test-user_utils.R` - Testing patterns
 - `inst/templates/ad_adsl.R` - Complete ADaM dataset template
