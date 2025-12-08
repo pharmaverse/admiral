@@ -273,7 +273,7 @@ yn_to_numeric <- function(arg) {
 #' numeric hours. The function handles common dose-centric formats like
 #' Pre-dose, Post-dose (hours/minutes), and simple time-only values.
 #'
-#' @param xxtpt A character vector of timepoint descriptions (e.g., from `PCTPT`, `VSTPT`, 
+#' @param xxtpt A character vector of timepoint descriptions (e.g., from `PCTPT`, `VSTPT`,
 #'   `EGTPT`, `ISTPT`, `LBTPT`, or any other `--TPT` variable)
 #'
 #' @details
@@ -302,23 +302,23 @@ yn_to_numeric <- function(arg) {
 #' # Pharmacokinetic timepoints (PCTPT)
 #' convert_xxtpt_to_hours(c("Pre-dose", "5 Min Post-dose", "1h Post-dose"))
 #' convert_xxtpt_to_hours(c("1.5h Post-dose", "2h Post-dose", "0-6h Post-dose"))
-#' 
+#'
 #' # Different hour patterns (all equivalent)
 #' convert_xxtpt_to_hours(c("1h Post-dose", "1hr Post-dose", "1hour Post-dose", "1hours Post-dose"))
-#' 
+#'
 #' # Different minute patterns (all equivalent)
 #' convert_xxtpt_to_hours(c(
 #'   "5m Post-dose", "5min Post-dose",
 #'   "5minute Post-dose", "5minutes Post-dose"
 #' ))
-#' 
+#'
 #' # Optional space between number and unit (all equivalent)
 #' convert_xxtpt_to_hours(c("3h Post-dose", "3 h Post-dose", "3HR Post-dose", "3 HR Post-dose"))
 #' convert_xxtpt_to_hours(c("5m Post-dose", "5 m Post-dose", "5MIN Post-dose", "5 MIN Post-dose"))
-#' 
+#'
 #' # Vital signs timepoints (VSTPT)
 #' convert_xxtpt_to_hours(c("Pre-dose", "1h Post-dose", "2h Post-dose"))
-#' 
+#'
 #' # Non-numeric event markers
 #' convert_xxtpt_to_hours(c("EOI", "EOS", "EOT"))
 convert_xxtpt_to_hours <- function(xxtpt) {

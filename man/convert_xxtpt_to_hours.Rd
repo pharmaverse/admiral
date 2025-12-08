@@ -23,13 +23,24 @@ numeric hours. The function handles common dose-centric formats like
 Pre-dose, Post-dose (hours/minutes), and simple time-only values.
 }
 \details{
-The function recognizes the following patterns:
+The function recognizes the following patterns (all case-insensitive):
 \itemize{
 \item \code{"Pre-dose"} or \code{"Predose"} → 0
 \item \code{"X Min Post-dose"} → X/60 (converts minutes to hours)
+\itemize{
+\item Supports: m, min, minute, minutes
+\item Optional space between number and unit: "5m" or "5 m"
+}
 \item \code{"Xh Post-dose"} → X (hours)
+\itemize{
+\item Supports: h, hr, hour, hours
+\item Optional space between number and unit: "3h" or "3 h"
+}
 \item \code{"X.Yh Post-dose"} → X.Y (decimal hours)
 \item \code{"X-Yh Post-dose"} → Y (end of time range)
+\itemize{
+\item Optional space between number and unit: "0-6h" or "0-6 h"
+}
 \item Non-numeric event markers (e.g., \code{"EOI"}, \code{"EOS"}, \code{"EOT"}) → \code{NA_real_}
 \item Unrecognized formats → \code{NA_real_}
 }
@@ -38,6 +49,19 @@ The function recognizes the following patterns:
 # Pharmacokinetic timepoints (PCTPT)
 convert_xxtpt_to_hours(c("Pre-dose", "5 Min Post-dose", "1h Post-dose"))
 convert_xxtpt_to_hours(c("1.5h Post-dose", "2h Post-dose", "0-6h Post-dose"))
+
+# Different hour patterns (all equivalent)
+convert_xxtpt_to_hours(c("1h Post-dose", "1hr Post-dose", "1hour Post-dose", "1hours Post-dose"))
+
+# Different minute patterns (all equivalent)
+convert_xxtpt_to_hours(c(
+  "5m Post-dose", "5min Post-dose",
+  "5minute Post-dose", "5minutes Post-dose"
+))
+
+# Optional space between number and unit (all equivalent)
+convert_xxtpt_to_hours(c("3h Post-dose", "3 h Post-dose", "3HR Post-dose", "3 HR Post-dose"))
+convert_xxtpt_to_hours(c("5m Post-dose", "5 m Post-dose", "5MIN Post-dose", "5 MIN Post-dose"))
 
 # Vital signs timepoints (VSTPT)
 convert_xxtpt_to_hours(c("Pre-dose", "1h Post-dose", "2h Post-dose"))
