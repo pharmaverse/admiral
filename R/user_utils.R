@@ -271,25 +271,28 @@ yn_to_numeric <- function(arg) {
 #'
 #' Converts timepoint strings (e.g., `PCTPT`, `VSTPT`, `EGTPT`, `ISTPT`, `LBTPT`) into
 #' numeric hours. The function handles common dose-centric formats like
-#' Pre-dose, Post-dose (hours/minutes), and simple time-only values.
+#' Pre-dose, Post-dose (hours/minutes), days, and special time markers.
 #'
 #' @param xxtpt A character vector of timepoint descriptions (e.g., from `PCTPT`, `VSTPT`,
 #'   `EGTPT`, `ISTPT`, `LBTPT`, or any other `--TPT` variable)
 #'
 #' @details
 #' The function recognizes the following patterns (all case-insensitive):
-#' * `"Pre-dose"` or `"Predose"` → 0
-#' * `"X Min Post-dose"` → X/60 (converts minutes to hours)
-#'   - Supports: m, min, minute, minutes
-#'   - Optional space between number and unit: "5m" or "5 m"
-#' * `"Xh Post-dose"` → X (hours)
-#'   - Supports: h, hr, hour, hours
-#'   - Optional space between number and unit: "3h" or "3 h"
-#' * `"X.Yh Post-dose"` → X.Y (decimal hours)
-#' * `"X-Yh Post-dose"` → Y (end of time range)
-#'   - Optional space between number and unit: "0-6h" or "0-6 h"
-#' * Non-numeric event markers (e.g., `"EOI"`, `"EOS"`, `"EOT"`) → `NA_real_`
-#' * Unrecognized formats → `NA_real_`
+#'
+#' **Special Cases:**
+#' * `"Screening"` → -1
+#' * `"Pre-dose"`, `"Predose"`, `"Pre-infusion"`, `"Infusion"`, `"0H"`, `"0 H"` → 0
+#' * `"EOI"`, `"End of Infusion"` → 1
+#' * `"Morning"`, `"Evening"` → `NA_real_`
+#'
+#' **Time-based Conversions:**
+#' * Days: `"2D"`, `"Day 2"`, `"2 days"` → multiply by 24 (e.g., 48 hours)
+#' * Hours + Minutes: `"1H30M"`, `"1 hour 30 min"` → hours + minutes/60 (e.g., 1.5)
+#' * Hours only: `"1H"`, `"2 hours"`, `"0.5HR"` → as-is (e.g., 2)
+#' * Minutes only: `"30M"`, `"45 min"` → divide by 60 (e.g., 0.5)
+#'
+#' The function supports various unit formats (H/h, HR/hr, HOUR/hour, M/m, MIN/min,
+#' MINUTE/minute, D/d, DAY/day) with optional plurals and whitespace.
 #'
 #' @return A numeric vector of timepoints in hours
 #'
@@ -299,81 +302,134 @@ yn_to_numeric <- function(arg) {
 #' @export
 #'
 #' @examples
-#' # Pharmacokinetic timepoints (PCTPT)
-#' convert_xxtpt_to_hours(c("Pre-dose", "5 Min Post-dose", "1h Post-dose"))
-#' convert_xxtpt_to_hours(c("1.5h Post-dose", "2h Post-dose", "0-6h Post-dose"))
+#' # Special cases
+#' convert_xxtpt_to_hours(c("Screening", "Pre-dose", "EOI", "Morning"))
 #'
-#' # Different hour patterns (all equivalent)
-#' convert_xxtpt_to_hours(c("1h Post-dose", "1hr Post-dose", "1hour Post-dose", "1hours Post-dose"))
+#' # Days
+#' convert_xxtpt_to_hours(c("Day 2", "2D", "3 days"))
 #'
-#' # Different minute patterns (all equivalent)
-#' convert_xxtpt_to_hours(c(
-#'   "5m Post-dose", "5min Post-dose",
-#'   "5minute Post-dose", "5minutes Post-dose"
-#' ))
+#' # Hours and minutes
+#' convert_xxtpt_to_hours(c("1H", "30MIN", "1H30M", "2 hours"))
 #'
-#' # Optional space between number and unit (all equivalent)
-#' convert_xxtpt_to_hours(c("3h Post-dose", "3 h Post-dose", "3HR Post-dose", "3 HR Post-dose"))
-#' convert_xxtpt_to_hours(c("5m Post-dose", "5 m Post-dose", "5MIN Post-dose", "5 MIN Post-dose"))
-#'
-#' # Vital signs timepoints (VSTPT)
-#' convert_xxtpt_to_hours(c("Pre-dose", "1h Post-dose", "2h Post-dose"))
-#'
-#' # Non-numeric event markers
-#' convert_xxtpt_to_hours(c("EOI", "EOS", "EOT"))
+#' # With Post-dose suffix
+#' convert_xxtpt_to_hours(c("1h Post-dose", "30 Min Post-dose"))
 convert_xxtpt_to_hours <- function(xxtpt) {
   assert_character_vector(xxtpt)
 
-  # Initialize result vector
+  # Initialize result vector with NA
   result <- rep(NA_real_, length(xxtpt))
 
-  # Handle Pre-dose (case-insensitive)
-  predose_pattern <- "^[Pp][Rr][Ee]-?[Dd][Oo][Ss][Ee]$"
-  result[str_detect(xxtpt, predose_pattern)] <- 0
+  # 1. Check special cases first (exact matches, case-insensitive)
+  
+  # Screening -> -1
+  screening_pattern <- regex("^screening$", ignore_case = TRUE)
+  screening_idx <- str_detect(xxtpt, screening_pattern)
+  result[screening_idx] <- -1
 
-  # Handle minutes (e.g., "5 Min Post-dose" -> 0.0833)
-  # Supports: m, min, minute, minutes (all case-insensitive)
-  # Supports optional space between number and unit: "5m" or "5 m"
-  min_pattern <- paste0(
-    "^(\\d+(?:\\.\\d+)?)\\s*(?:[Mm]|[Mm][Ii][Nn](?:[Uu][Tt][Ee])?(?:[Ss])?)\\s+",
-    "[Pp][Oo][Ss][Tt]-?[Dd][Oo][Ss][Ee]$"
+  # Pre-dose, Predose, Pre-infusion, Infusion, 0H, 0 H -> 0
+  zero_pattern <- regex(
+    "^(pre-?dose|pre-?infusion|infusion|0\\s*h(?:r|our)?(?:s)?)$",
+    ignore_case = TRUE
   )
-  min_matches <- str_match(xxtpt, min_pattern)
-  min_idx <- !is.na(min_matches[, 1])
-  if (any(min_idx)) {
-    result[min_idx] <- as.numeric(min_matches[min_idx, 2]) / 60
+  zero_idx <- str_detect(xxtpt, zero_pattern) & is.na(result)
+  result[zero_idx] <- 0
+
+  # EOI, End of Infusion -> 1
+  eoi_pattern <- regex("^(eoi|end\\s+of\\s+infusion)$", ignore_case = TRUE)
+  eoi_idx <- str_detect(xxtpt, eoi_pattern) & is.na(result)
+  result[eoi_idx] <- 1
+
+  # Morning, Evening -> NA (already NA, but mark as processed)
+  # We don't need to do anything as result is already NA
+
+  # 2. Check days (convert to hours by multiplying by 24)
+  # Matches: "2D", "Day 2", "2 days", "2 day"
+  days_pattern <- regex(
+    paste0(
+      "^(?:day\\s+)?(\\d+(?:\\.\\d+)?)\\s*",  # number with optional "day " prefix
+      "d(?:ay)?(?:s)?",                         # d/day/days
+      "(?:\\s+post-?dose)?$"                    # optional post-dose suffix
+    ),
+    ignore_case = TRUE,
+    comments = TRUE
+  )
+  days_matches <- str_match(xxtpt, days_pattern)
+  days_idx <- !is.na(days_matches[, 1]) & is.na(result)
+  if (any(days_idx)) {
+    result[days_idx] <- as.numeric(days_matches[days_idx, 2]) * 24
   }
 
-  # Handle time ranges (e.g., "0-6h Post-dose" -> 6, take the end value)
-  # Must have a dash to be a range
-  # Supports: h, hr, hour, hours (all case-insensitive)
-  # Supports optional space between number and unit: "0-6h" or "0-6 h"
-  range_pattern <- paste0(
-    "^\\d+(?:\\.\\d+)?-(\\d+(?:\\.\\d+)?)\\s*",
-    "(?:[Hh]|[Hh][Rr]|[Hh][Oo][Uu][Rr](?:[Ss])?)\\s+",
-    "[Pp][Oo][Ss][Tt]-?[Dd][Oo][Ss][Ee]$"
+  # 3. Check hours+minutes combinations
+  # Matches: "1H30M", "1 hour 30 min", "1h 30m"
+  hm_pattern <- regex(
+    paste0(
+      "^(\\d+(?:\\.\\d+)?)\\s*",              # hours number
+      "h(?:r|our)?(?:s)?",                    # h/hr/hour/hours
+      "\\s*",                                  # optional space
+      "(\\d+(?:\\.\\d+)?)\\s*",               # minutes number
+      "m(?:in|inute)?(?:s)?",                 # m/min/minute/minutes
+      "(?:\\s+post-?dose)?$"                  # optional post-dose suffix
+    ),
+    ignore_case = TRUE,
+    comments = TRUE
+  )
+  hm_matches <- str_match(xxtpt, hm_pattern)
+  hm_idx <- !is.na(hm_matches[, 1]) & is.na(result)
+  if (any(hm_idx)) {
+    hours <- as.numeric(hm_matches[hm_idx, 2])
+    minutes <- as.numeric(hm_matches[hm_idx, 3])
+    result[hm_idx] <- hours + minutes / 60
+  }
+
+  # 4. Check hours only
+  # Matches: "1H", "2 hours", "0.5HR", "1h Post-dose"
+  hours_pattern <- regex(
+    paste0(
+      "^(\\d+(?:\\.\\d+)?)\\s*",              # number
+      "h(?:r|our)?(?:s)?",                    # h/hr/hour/hours
+      "(?:\\s+post-?dose)?$"                  # optional post-dose suffix
+    ),
+    ignore_case = TRUE,
+    comments = TRUE
+  )
+  hours_matches <- str_match(xxtpt, hours_pattern)
+  hours_idx <- !is.na(hours_matches[, 1]) & is.na(result)
+  if (any(hours_idx)) {
+    result[hours_idx] <- as.numeric(hours_matches[hours_idx, 2])
+  }
+
+  # 5. Check minutes only
+  # Matches: "30M", "45 min", "30 Min Post-dose"
+  minutes_pattern <- regex(
+    paste0(
+      "^(\\d+(?:\\.\\d+)?)\\s*",              # number
+      "m(?:in|inute)?(?:s)?",                 # m/min/minute/minutes
+      "(?:\\s+post-?dose)?$"                  # optional post-dose suffix
+    ),
+    ignore_case = TRUE,
+    comments = TRUE
+  )
+  minutes_matches <- str_match(xxtpt, minutes_pattern)
+  minutes_idx <- !is.na(minutes_matches[, 1]) & is.na(result)
+  if (any(minutes_idx)) {
+    result[minutes_idx] <- as.numeric(minutes_matches[minutes_idx, 2]) / 60
+  }
+
+  # 6. Handle time ranges (e.g., "0-6h Post-dose" -> 6, take the end value)
+  # This is handled last as it's a special case
+  range_pattern <- regex(
+    paste0(
+      "^\\d+(?:\\.\\d+)?-(\\d+(?:\\.\\d+)?)\\s*",  # range with end value
+      "h(?:r|our)?(?:s)?",                          # h/hr/hour/hours
+      "(?:\\s+post-?dose)?$"                        # optional post-dose suffix
+    ),
+    ignore_case = TRUE,
+    comments = TRUE
   )
   range_matches <- str_match(xxtpt, range_pattern)
-  range_idx <- !is.na(range_matches[, 1])
+  range_idx <- !is.na(range_matches[, 1]) & is.na(result)
   if (any(range_idx)) {
     result[range_idx] <- as.numeric(range_matches[range_idx, 2])
-  }
-
-  # Handle hours (e.g., "1h Post-dose" -> 1, "1.5h Post-dose" -> 1.5)
-  # This must come after range pattern to avoid conflicts.
-  # The `is.na(result)` check ensures we don't override values already set
-  # by the range pattern, since range patterns like "0-6h" would also match
-  # the hour pattern.
-  # Supports: h, hr, hour, hours (all case-insensitive)
-  # Supports optional space between number and unit: "1h" or "1 h"
-  hour_pattern <- paste0(
-    "^(\\d+(?:\\.\\d+)?)\\s*(?:[Hh]|[Hh][Rr]|[Hh][Oo][Uu][Rr](?:[Ss])?)\\s+",
-    "[Pp][Oo][Ss][Tt]-?[Dd][Oo][Ss][Ee]$"
-  )
-  hour_matches <- str_match(xxtpt, hour_pattern)
-  hour_idx <- !is.na(hour_matches[, 1]) & is.na(result)
-  if (any(hour_idx)) {
-    result[hour_idx] <- as.numeric(hour_matches[hour_idx, 2])
   }
 
   result

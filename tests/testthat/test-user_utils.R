@@ -500,3 +500,118 @@ test_that("convert_xxtpt_to_hours Test 44: Optional space with uppercase and dif
     c(3, 3, 5 / 60, 5 / 60)
   )
 })
+
+## Test 45: Special case - Screening returns -1 ----
+test_that("convert_xxtpt_to_hours Test 45: Special case - Screening returns -1", {
+  expect_equal(
+    convert_xxtpt_to_hours(c("Screening", "SCREENING", "screening")),
+    c(-1, -1, -1)
+  )
+})
+
+## Test 46: Special case - EOI and End of Infusion return 1 ----
+test_that("convert_xxtpt_to_hours Test 46: Special case - EOI and End of Infusion return 1", {
+  expect_equal(
+    convert_xxtpt_to_hours(c("EOI", "eoi", "End of Infusion", "END OF INFUSION")),
+    c(1, 1, 1, 1)
+  )
+})
+
+## Test 47: Special case - Pre-infusion and Infusion return 0 ----
+test_that("convert_xxtpt_to_hours Test 47: Special case - Pre-infusion and Infusion return 0", {
+  expect_equal(
+    convert_xxtpt_to_hours(c("Pre-infusion", "Preinfusion", "Infusion", "0H", "0 H")),
+    c(0, 0, 0, 0, 0)
+  )
+})
+
+## Test 48: Special case - Morning and Evening return NA ----
+test_that("convert_xxtpt_to_hours Test 48: Special case - Morning and Evening return NA", {
+  expect_equal(
+    convert_xxtpt_to_hours(c("Morning", "MORNING", "Evening", "evening")),
+    c(NA_real_, NA_real_, NA_real_, NA_real_)
+  )
+})
+
+## Test 49: Days - basic day patterns ----
+test_that("convert_xxtpt_to_hours Test 49: Days - basic day patterns", {
+  expect_equal(
+    convert_xxtpt_to_hours(c("2D", "2 D", "3 days", "Day 2")),
+    c(48, 48, 72, 48)
+  )
+})
+
+## Test 50: Days - with Post-dose suffix ----
+test_that("convert_xxtpt_to_hours Test 50: Days - with Post-dose suffix", {
+  expect_equal(
+    convert_xxtpt_to_hours(c("2D Post-dose", "3 days Post-dose", "Day 2 Post-dose")),
+    c(48, 72, 48)
+  )
+})
+
+## Test 51: Hours + Minutes combinations ----
+test_that("convert_xxtpt_to_hours Test 51: Hours + Minutes combinations", {
+  expect_equal(
+    convert_xxtpt_to_hours(c("1H30M", "1 hour 30 min", "2h15m", "0H30M")),
+    c(1.5, 1.5, 2.25, 0.5)
+  )
+})
+
+## Test 52: Hours + Minutes with Post-dose ----
+test_that("convert_xxtpt_to_hours Test 52: Hours + Minutes with Post-dose", {
+  expect_equal(
+    convert_xxtpt_to_hours(c("1H30M Post-dose", "2 hours 45 minutes Post-dose")),
+    c(1.5, 2.75)
+  )
+})
+
+## Test 53: Hours without Post-dose suffix ----
+test_that("convert_xxtpt_to_hours Test 53: Hours without Post-dose suffix", {
+  expect_equal(
+    convert_xxtpt_to_hours(c("1H", "2HR", "3 hours", "0.5H")),
+    c(1, 2, 3, 0.5)
+  )
+})
+
+## Test 54: Minutes without Post-dose suffix ----
+test_that("convert_xxtpt_to_hours Test 54: Minutes without Post-dose suffix", {
+  expect_equal(
+    convert_xxtpt_to_hours(c("30M", "45 min", "60 minutes", "15MIN")),
+    c(0.5, 0.75, 1, 0.25)
+  )
+})
+
+## Test 55: Comprehensive test matching requirements example ----
+test_that("convert_xxtpt_to_hours Test 55: Comprehensive test matching requirements example", {
+  test_values <- c(
+    "PREDOSE",
+    "Pre-dose",
+    "1H",
+    "30MIN",
+    "2 hours",
+    "1H30M",
+    "Day 2",
+    "Screening",
+    "Morning"
+  )
+  expected <- c(0, 0, 1, 0.5, 2, 1.5, 48, -1, NA_real_)
+  expect_equal(convert_xxtpt_to_hours(test_values), expected)
+})
+
+## Test 56: Time ranges without Post-dose ----
+test_that("convert_xxtpt_to_hours Test 56: Time ranges without Post-dose", {
+  expect_equal(
+    convert_xxtpt_to_hours(c("0-6h", "6-12hr", "12-24hours")),
+    c(6, 12, 24)
+  )
+})
+
+## Test 57: Decimal days ----
+test_that("convert_xxtpt_to_hours Test 57: Decimal days", {
+  expect_equal(
+    convert_xxtpt_to_hours(c("1.5D", "2.5 days", "Day 1.5")),
+    c(36, 60, 36)
+  )
+})
+  )
+})
