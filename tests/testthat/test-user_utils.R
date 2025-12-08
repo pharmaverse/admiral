@@ -356,3 +356,67 @@ test_that("convert_xxtpt_to_hours Test 26: NA values are preserved", {
     c(0, NA_real_, 1)
   )
 })
+
+## Test 27: Empty vector returns empty vector ----
+test_that("convert_xxtpt_to_hours Test 27: Empty vector returns empty vector", {
+  expect_equal(
+    convert_xxtpt_to_hours(character(0)),
+    numeric(0)
+  )
+})
+
+## Test 28: All NA input returns all NA ----
+test_that("convert_xxtpt_to_hours Test 28: All NA input returns all NA", {
+  expect_equal(
+    convert_xxtpt_to_hours(c(NA_character_, NA_character_, NA_character_)),
+    c(NA_real_, NA_real_, NA_real_)
+  )
+})
+
+## Test 29: Decimal minutes are converted correctly ----
+test_that("convert_xxtpt_to_hours Test 29: Decimal minutes are converted correctly", {
+  expect_equal(
+    convert_xxtpt_to_hours(c("2.5 Min Post-dose", "7.5 Min Post-dose")),
+    c(2.5 / 60, 7.5 / 60)
+  )
+})
+
+## Test 30: Decimal time ranges work correctly ----
+test_that("convert_xxtpt_to_hours Test 30: Decimal time ranges work correctly", {
+  expect_equal(
+    convert_xxtpt_to_hours(c("0.5-6.5h Post-dose", "1.5-12.5h Post-dose")),
+    c(6.5, 12.5)
+  )
+})
+
+## Test 31: Case variations in Post-dose ----
+test_that("convert_xxtpt_to_hours Test 31: Case variations in Post-dose", {
+  expect_equal(
+    convert_xxtpt_to_hours(c("1h POST-dose", "1h post-dose", "1h Post-Dose")),
+    c(1, 1, 1)
+  )
+})
+
+## Test 32: Case variations in minutes ----
+test_that("convert_xxtpt_to_hours Test 32: Case variations in minutes", {
+  expect_equal(
+    convert_xxtpt_to_hours(c("5 MIN Post-dose", "5 min Post-dose", "5 Min POST-dose")),
+    c(5 / 60, 5 / 60, 5 / 60)
+  )
+})
+
+## Test 33: Pre-dose with capital P ----
+test_that("convert_xxtpt_to_hours Test 33: Pre-dose with capital P", {
+  expect_equal(
+    convert_xxtpt_to_hours(c("PRE-DOSE", "Predose", "PREDOSE")),
+    c(0, 0, 0)
+  )
+})
+
+## Test 34: Minute variations (minute, minutes) ----
+test_that("convert_xxtpt_to_hours Test 34: Minute variations (minute, minutes)", {
+  expect_equal(
+    convert_xxtpt_to_hours(c("5 Minute Post-dose", "10 Minutes Post-dose")),
+    c(5 / 60, 10 / 60)
+  )
+})
