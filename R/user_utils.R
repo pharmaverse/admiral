@@ -320,7 +320,7 @@ convert_xxtpt_to_hours <- function(xxtpt) {
   result <- rep(NA_real_, length(xxtpt))
 
   # 1. Check special cases first (exact matches, case-insensitive)
-  
+
   # Screening -> -1
   screening_pattern <- regex("^screening$", ignore_case = TRUE)
   screening_idx <- str_detect(xxtpt, screening_pattern)
@@ -346,9 +346,9 @@ convert_xxtpt_to_hours <- function(xxtpt) {
   # Matches: "2D", "Day 2", "2 days", "2 day"
   days_pattern <- regex(
     paste0(
-      "^(?:day\\s+)?(\\d+(?:\\.\\d+)?)\\s*",  # number with optional "day " prefix
-      "d(?:ay)?(?:s)?",                         # d/day/days
-      "(?:\\s+post-?dose)?$"                    # optional post-dose suffix
+      "^(?:day\\s+)?(\\d+(?:\\.\\d+)?)\\s*", # number with optional "day " prefix
+      "d(?:ay)?(?:s)?", # d/day/days
+      "(?:\\s+post-?dose)?$" # optional post-dose suffix
     ),
     ignore_case = TRUE,
     comments = TRUE
@@ -363,12 +363,12 @@ convert_xxtpt_to_hours <- function(xxtpt) {
   # Matches: "1H30M", "1 hour 30 min", "1h 30m"
   hm_pattern <- regex(
     paste0(
-      "^(\\d+(?:\\.\\d+)?)\\s*",              # hours number
-      "h(?:r|our)?(?:s)?",                    # h/hr/hour/hours
-      "\\s*",                                  # optional space
-      "(\\d+(?:\\.\\d+)?)\\s*",               # minutes number
-      "m(?:in|inute)?(?:s)?",                 # m/min/minute/minutes
-      "(?:\\s+post-?dose)?$"                  # optional post-dose suffix
+      "^(\\d+(?:\\.\\d+)?)\\s*", # hours number
+      "h(?:r|our)?(?:s)?", # h/hr/hour/hours
+      "\\s*", # optional space
+      "(\\d+(?:\\.\\d+)?)\\s*", # minutes number
+      "m(?:in|inute)?(?:s)?", # m/min/minute/minutes
+      "(?:\\s+post-?dose)?$" # optional post-dose suffix
     ),
     ignore_case = TRUE,
     comments = TRUE
@@ -385,9 +385,9 @@ convert_xxtpt_to_hours <- function(xxtpt) {
   # Matches: "1H", "2 hours", "0.5HR", "1h Post-dose"
   hours_pattern <- regex(
     paste0(
-      "^(\\d+(?:\\.\\d+)?)\\s*",              # number
-      "h(?:r|our)?(?:s)?",                    # h/hr/hour/hours
-      "(?:\\s+post-?dose)?$"                  # optional post-dose suffix
+      "^(\\d+(?:\\.\\d+)?)\\s*", # number
+      "h(?:r|our)?(?:s)?", # h/hr/hour/hours
+      "(?:\\s+post-?dose)?$" # optional post-dose suffix
     ),
     ignore_case = TRUE,
     comments = TRUE
@@ -402,9 +402,9 @@ convert_xxtpt_to_hours <- function(xxtpt) {
   # Matches: "30M", "45 min", "30 Min Post-dose"
   minutes_pattern <- regex(
     paste0(
-      "^(\\d+(?:\\.\\d+)?)\\s*",              # number
-      "m(?:in|inute)?(?:s)?",                 # m/min/minute/minutes
-      "(?:\\s+post-?dose)?$"                  # optional post-dose suffix
+      "^(\\d+(?:\\.\\d+)?)\\s*", # number
+      "m(?:in|inute)?(?:s)?", # m/min/minute/minutes
+      "(?:\\s+post-?dose)?$" # optional post-dose suffix
     ),
     ignore_case = TRUE,
     comments = TRUE
@@ -419,9 +419,9 @@ convert_xxtpt_to_hours <- function(xxtpt) {
   # This is handled last as it's a special case
   range_pattern <- regex(
     paste0(
-      "^\\d+(?:\\.\\d+)?-(\\d+(?:\\.\\d+)?)\\s*",  # range with end value
-      "h(?:r|our)?(?:s)?",                          # h/hr/hour/hours
-      "(?:\\s+post-?dose)?$"                        # optional post-dose suffix
+      "^\\d+(?:\\.\\d+)?-(\\d+(?:\\.\\d+)?)\\s*", # range with end value
+      "h(?:r|our)?(?:s)?", # h/hr/hour/hours
+      "(?:\\s+post-?dose)?$" # optional post-dose suffix
     ),
     ignore_case = TRUE,
     comments = TRUE

@@ -20,54 +20,42 @@ A numeric vector of timepoints in hours
 \description{
 Converts timepoint strings (e.g., \code{PCTPT}, \code{VSTPT}, \code{EGTPT}, \code{ISTPT}, \code{LBTPT}) into
 numeric hours. The function handles common dose-centric formats like
-Pre-dose, Post-dose (hours/minutes), and simple time-only values.
+Pre-dose, Post-dose (hours/minutes), days, and special time markers.
 }
 \details{
 The function recognizes the following patterns (all case-insensitive):
+
+\strong{Special Cases:}
 \itemize{
-\item \code{"Pre-dose"} or \code{"Predose"} → 0
-\item \code{"X Min Post-dose"} → X/60 (converts minutes to hours)
+\item \code{"Screening"} → -1
+\item \code{"Pre-dose"}, \code{"Predose"}, \code{"Pre-infusion"}, \code{"Infusion"}, \code{"0H"}, \code{"0 H"} → 0
+\item \code{"EOI"}, \code{"End of Infusion"} → 1
+\item \code{"Morning"}, \code{"Evening"} → \code{NA_real_}
+}
+
+\strong{Time-based Conversions:}
 \itemize{
-\item Supports: m, min, minute, minutes
-\item Optional space between number and unit: "5m" or "5 m"
+\item Days: \code{"2D"}, \code{"Day 2"}, \code{"2 days"} → multiply by 24 (e.g., 48 hours)
+\item Hours + Minutes: \code{"1H30M"}, \code{"1 hour 30 min"} → hours + minutes/60 (e.g., 1.5)
+\item Hours only: \code{"1H"}, \code{"2 hours"}, \code{"0.5HR"} → as-is (e.g., 2)
+\item Minutes only: \code{"30M"}, \code{"45 min"} → divide by 60 (e.g., 0.5)
 }
-\item \code{"Xh Post-dose"} → X (hours)
-\itemize{
-\item Supports: h, hr, hour, hours
-\item Optional space between number and unit: "3h" or "3 h"
-}
-\item \code{"X.Yh Post-dose"} → X.Y (decimal hours)
-\item \code{"X-Yh Post-dose"} → Y (end of time range)
-\itemize{
-\item Optional space between number and unit: "0-6h" or "0-6 h"
-}
-\item Non-numeric event markers (e.g., \code{"EOI"}, \code{"EOS"}, \code{"EOT"}) → \code{NA_real_}
-\item Unrecognized formats → \code{NA_real_}
-}
+
+The function supports various unit formats (H/h, HR/hr, HOUR/hour, M/m, MIN/min,
+MINUTE/minute, D/d, DAY/day) with optional plurals and whitespace.
 }
 \examples{
-# Pharmacokinetic timepoints (PCTPT)
-convert_xxtpt_to_hours(c("Pre-dose", "5 Min Post-dose", "1h Post-dose"))
-convert_xxtpt_to_hours(c("1.5h Post-dose", "2h Post-dose", "0-6h Post-dose"))
+# Special cases
+convert_xxtpt_to_hours(c("Screening", "Pre-dose", "EOI", "Morning"))
 
-# Different hour patterns (all equivalent)
-convert_xxtpt_to_hours(c("1h Post-dose", "1hr Post-dose", "1hour Post-dose", "1hours Post-dose"))
+# Days
+convert_xxtpt_to_hours(c("Day 2", "2D", "3 days"))
 
-# Different minute patterns (all equivalent)
-convert_xxtpt_to_hours(c(
-  "5m Post-dose", "5min Post-dose",
-  "5minute Post-dose", "5minutes Post-dose"
-))
+# Hours and minutes
+convert_xxtpt_to_hours(c("1H", "30MIN", "1H30M", "2 hours"))
 
-# Optional space between number and unit (all equivalent)
-convert_xxtpt_to_hours(c("3h Post-dose", "3 h Post-dose", "3HR Post-dose", "3 HR Post-dose"))
-convert_xxtpt_to_hours(c("5m Post-dose", "5 m Post-dose", "5MIN Post-dose", "5 MIN Post-dose"))
-
-# Vital signs timepoints (VSTPT)
-convert_xxtpt_to_hours(c("Pre-dose", "1h Post-dose", "2h Post-dose"))
-
-# Non-numeric event markers
-convert_xxtpt_to_hours(c("EOI", "EOS", "EOT"))
+# With Post-dose suffix
+convert_xxtpt_to_hours(c("1h Post-dose", "30 Min Post-dose"))
 }
 \seealso{
 Utilities for Formatting Observations:
