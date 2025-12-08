@@ -267,13 +267,14 @@ yn_to_numeric <- function(arg) {
   )
 }
 
-#' Convert PCTPT Strings to Hours
+#' Convert XXTPT Strings to Hours
 #'
-#' Converts pharmacokinetic/pharmacodynamic timepoint strings (PCTPT) into
+#' Converts timepoint strings (e.g., `PCTPT`, `VSTPT`, `EGTPT`, `ISTPT`, `LBTPT`) into
 #' numeric hours. The function handles common dose-centric formats like
 #' Pre-dose, Post-dose (hours/minutes), and simple time-only values.
 #'
-#' @param pctpt A character vector of pharmacokinetic timepoint descriptions
+#' @param xxtpt A character vector of timepoint descriptions (e.g., from `PCTPT`, `VSTPT`, 
+#'   `EGTPT`, `ISTPT`, `LBTPT`, or any other `--TPT` variable)
 #'
 #' @details
 #' The function recognizes the following patterns:
@@ -293,22 +294,28 @@ yn_to_numeric <- function(arg) {
 #' @export
 #'
 #' @examples
-#' pctpt_to_hours(c("Pre-dose", "5 Min Post-dose", "1h Post-dose"))
-#' pctpt_to_hours(c("1.5h Post-dose", "2h Post-dose", "0-6h Post-dose"))
-#' pctpt_to_hours(c("EOI", "EOS", "EOT"))
-pctpt_to_hours <- function(pctpt) {
-  assert_character_vector(pctpt)
+#' # Pharmacokinetic timepoints (PCTPT)
+#' convert_xxtpt_to_hours(c("Pre-dose", "5 Min Post-dose", "1h Post-dose"))
+#' convert_xxtpt_to_hours(c("1.5h Post-dose", "2h Post-dose", "0-6h Post-dose"))
+#' 
+#' # Vital signs timepoints (VSTPT)
+#' convert_xxtpt_to_hours(c("Pre-dose", "1h Post-dose", "2h Post-dose"))
+#' 
+#' # Non-numeric event markers
+#' convert_xxtpt_to_hours(c("EOI", "EOS", "EOT"))
+convert_xxtpt_to_hours <- function(xxtpt) {
+  assert_character_vector(xxtpt)
 
   # Initialize result vector
-  result <- rep(NA_real_, length(pctpt))
+  result <- rep(NA_real_, length(xxtpt))
 
   # Handle Pre-dose (case-insensitive)
   predose_pattern <- "^[Pp]re-?dose$"
-  result[str_detect(pctpt, predose_pattern)] <- 0
+  result[str_detect(xxtpt, predose_pattern)] <- 0
 
   # Handle minutes (e.g., "5 Min Post-dose" -> 0.0833)
   min_pattern <- "^(\\d+(?:\\.\\d+)?)\\s*[Mm]in(?:ute)?(?:s)?\\s+[Pp]ost-?dose$"
-  min_matches <- str_match(pctpt, min_pattern)
+  min_matches <- str_match(xxtpt, min_pattern)
   min_idx <- !is.na(min_matches[, 1])
   if (any(min_idx)) {
     result[min_idx] <- as.numeric(min_matches[min_idx, 2]) / 60
@@ -317,7 +324,7 @@ pctpt_to_hours <- function(pctpt) {
   # Handle time ranges (e.g., "0-6h Post-dose" -> 6, take the end value)
   # Must have a dash to be a range
   range_pattern <- "^\\d+(?:\\.\\d+)?-(\\d+(?:\\.\\d+)?)h\\s+[Pp]ost-?dose$"
-  range_matches <- str_match(pctpt, range_pattern)
+  range_matches <- str_match(xxtpt, range_pattern)
   range_idx <- !is.na(range_matches[, 1])
   if (any(range_idx)) {
     result[range_idx] <- as.numeric(range_matches[range_idx, 2])
@@ -328,7 +335,7 @@ pctpt_to_hours <- function(pctpt) {
   # The `is.na(result)` check ensures we don't override values already set by the range pattern,
   # since range patterns like "0-6h" would also match the hour pattern.
   hour_pattern <- "^(\\d+(?:\\.\\d+)?)h\\s+[Pp]ost-?dose$"
-  hour_matches <- str_match(pctpt, hour_pattern)
+  hour_matches <- str_match(xxtpt, hour_pattern)
   hour_idx <- !is.na(hour_matches[, 1]) & is.na(result)
   if (any(hour_idx)) {
     result[hour_idx] <- as.numeric(hour_matches[hour_idx, 2])
