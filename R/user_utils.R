@@ -277,10 +277,12 @@ yn_to_numeric <- function(arg) {
 #'   `EGTPT`, `ISTPT`, `LBTPT`, or any other `--TPT` variable)
 #'
 #' @details
-#' The function recognizes the following patterns:
+#' The function recognizes the following patterns (all case-insensitive):
 #' * `"Pre-dose"` or `"Predose"` → 0
 #' * `"X Min Post-dose"` → X/60 (converts minutes to hours)
+#'   - Supports: m, min, minute, minutes
 #' * `"Xh Post-dose"` → X (hours)
+#'   - Supports: h, hr, hour, hours
 #' * `"X.Yh Post-dose"` → X.Y (decimal hours)
 #' * `"X-Yh Post-dose"` → Y (end of time range)
 #' * Non-numeric event markers (e.g., `"EOI"`, `"EOS"`, `"EOT"`) → `NA_real_`
@@ -298,6 +300,12 @@ yn_to_numeric <- function(arg) {
 #' convert_xxtpt_to_hours(c("Pre-dose", "5 Min Post-dose", "1h Post-dose"))
 #' convert_xxtpt_to_hours(c("1.5h Post-dose", "2h Post-dose", "0-6h Post-dose"))
 #' 
+#' # Different hour patterns (all equivalent)
+#' convert_xxtpt_to_hours(c("1h Post-dose", "1hr Post-dose", "1hour Post-dose", "1hours Post-dose"))
+#' 
+#' # Different minute patterns (all equivalent)
+#' convert_xxtpt_to_hours(c("5m Post-dose", "5min Post-dose", "5minute Post-dose", "5minutes Post-dose"))
+#' 
 #' # Vital signs timepoints (VSTPT)
 #' convert_xxtpt_to_hours(c("Pre-dose", "1h Post-dose", "2h Post-dose"))
 #' 
@@ -314,7 +322,8 @@ convert_xxtpt_to_hours <- function(xxtpt) {
   result[str_detect(xxtpt, predose_pattern)] <- 0
 
   # Handle minutes (e.g., "5 Min Post-dose" -> 0.0833)
-  min_pattern <- "^(\\d+(?:\\.\\d+)?)\\s*[Mm][Ii][Nn](?:[Uu][Tt][Ee])?(?:[Ss])?\\s+[Pp][Oo][Ss][Tt]-?[Dd][Oo][Ss][Ee]$"
+  # Supports: m, min, minute, minutes (all case-insensitive)
+  min_pattern <- "^(\\d+(?:\\.\\d+)?)\\s*(?:[Mm]|[Mm][Ii][Nn](?:[Uu][Tt][Ee])?(?:[Ss])?)\\s+[Pp][Oo][Ss][Tt]-?[Dd][Oo][Ss][Ee]$"
   min_matches <- str_match(xxtpt, min_pattern)
   min_idx <- !is.na(min_matches[, 1])
   if (any(min_idx)) {
@@ -323,7 +332,8 @@ convert_xxtpt_to_hours <- function(xxtpt) {
 
   # Handle time ranges (e.g., "0-6h Post-dose" -> 6, take the end value)
   # Must have a dash to be a range
-  range_pattern <- "^\\d+(?:\\.\\d+)?-(\\d+(?:\\.\\d+)?)h\\s+[Pp][Oo][Ss][Tt]-?[Dd][Oo][Ss][Ee]$"
+  # Supports: h, hr, hour, hours (all case-insensitive)
+  range_pattern <- "^\\d+(?:\\.\\d+)?-(\\d+(?:\\.\\d+)?)(?:[Hh]|[Hh][Rr]|[Hh][Oo][Uu][Rr](?:[Ss])?)\\s+[Pp][Oo][Ss][Tt]-?[Dd][Oo][Ss][Ee]$"
   range_matches <- str_match(xxtpt, range_pattern)
   range_idx <- !is.na(range_matches[, 1])
   if (any(range_idx)) {
@@ -334,7 +344,8 @@ convert_xxtpt_to_hours <- function(xxtpt) {
   # This must come after range pattern to avoid conflicts.
   # The `is.na(result)` check ensures we don't override values already set by the range pattern,
   # since range patterns like "0-6h" would also match the hour pattern.
-  hour_pattern <- "^(\\d+(?:\\.\\d+)?)h\\s+[Pp][Oo][Ss][Tt]-?[Dd][Oo][Ss][Ee]$"
+  # Supports: h, hr, hour, hours (all case-insensitive)
+  hour_pattern <- "^(\\d+(?:\\.\\d+)?)(?:[Hh]|[Hh][Rr]|[Hh][Oo][Uu][Rr](?:[Ss])?)\\s+[Pp][Oo][Ss][Tt]-?[Dd][Oo][Ss][Ee]$"
   hour_matches <- str_match(xxtpt, hour_pattern)
   hour_idx <- !is.na(hour_matches[, 1]) & is.na(result)
   if (any(hour_idx)) {

@@ -420,3 +420,51 @@ test_that("convert_xxtpt_to_hours Test 34: Minute variations (minute, minutes)",
     c(5 / 60, 10 / 60)
   )
 })
+
+## Test 35: Hour pattern variations (h, hr, hour, hours) ----
+test_that("convert_xxtpt_to_hours Test 35: Hour pattern variations (h, hr, hour, hours)", {
+  expect_equal(
+    convert_xxtpt_to_hours(c("1h Post-dose", "2hr Post-dose", "3hour Post-dose", "4hours Post-dose")),
+    c(1, 2, 3, 4)
+  )
+})
+
+## Test 36: Hour pattern variations with case sensitivity ----
+test_that("convert_xxtpt_to_hours Test 36: Hour pattern variations with case sensitivity", {
+  expect_equal(
+    convert_xxtpt_to_hours(c("1H Post-dose", "2HR Post-dose", "3HOUR Post-dose", "4HOURS Post-dose")),
+    c(1, 2, 3, 4)
+  )
+})
+
+## Test 37: Minute pattern variations (m, min, minute, minutes) ----
+test_that("convert_xxtpt_to_hours Test 37: Minute pattern variations (m, min, minute, minutes)", {
+  expect_equal(
+    convert_xxtpt_to_hours(c("5m Post-dose", "10min Post-dose", "15minute Post-dose", "20minutes Post-dose")),
+    c(5 / 60, 10 / 60, 15 / 60, 20 / 60)
+  )
+})
+
+## Test 38: Minute pattern variations with case sensitivity ----
+test_that("convert_xxtpt_to_hours Test 38: Minute pattern variations with case sensitivity", {
+  expect_equal(
+    convert_xxtpt_to_hours(c("5M Post-dose", "10MIN Post-dose", "15MINUTE Post-dose", "20MINUTES Post-dose")),
+    c(5 / 60, 10 / 60, 15 / 60, 20 / 60)
+  )
+})
+
+## Test 39: Time range variations with different hour patterns ----
+test_that("convert_xxtpt_to_hours Test 39: Time range variations with different hour patterns", {
+  expect_equal(
+    convert_xxtpt_to_hours(c("0-6hr Post-dose", "0-6hour Post-dose", "0-6hours Post-dose")),
+    c(6, 6, 6)
+  )
+})
+
+## Test 40: Decimal values with different patterns ----
+test_that("convert_xxtpt_to_hours Test 40: Decimal values with different patterns", {
+  expect_equal(
+    convert_xxtpt_to_hours(c("1.5hr Post-dose", "2.5hours Post-dose", "3.5m Post-dose")),
+    c(1.5, 2.5, 3.5 / 60)
+  )
+})
