@@ -200,4 +200,11 @@ We use the following for support and communications between user and developer c
 
 Along with the authors and contributors, thanks to the following people for their work on the package:
 
-Jaxon Abercrombie, Mahdi About, Teckla Akinyi, Anthony Arroyo, Alex Assuied, James Black, Claudia Carlucci, Asha Chakma, Liming Clark, Bill Denney, Kamila Duniec, Alice Ehmann, Romain Francois, Ania Golab, Alana Harris, Declan Hodges, Anthony Howard, Shimeng Huang, Samia Kabi, James Kim, John Kirkpatrick, Leena Khatri, Robin Koeger, Konstantina Koukourikou, Pavan Kumar, Pooja Kumari, Shan Lee, Wenyi Liu, Sadchla Mascary, Iain McCay, Jack McGavigan, Jordanna Morrish, Syed Mubasheer, Kirill Muller, Thomas Neitmann, Yohann Omnes, Barbara O'Reilly, Celine Piraux, Hamza Rahal, Nick Ramirez, Tom Ratford, Sukalpo Saha, Tamara Senior, Eric Simms, Sophie Shapcott, Vladyslav Shuliar, Ondrej Slama, Andrew Smith, Daniil Stefonishin, Steven Ting, Vignesh Thanikachalam, Michael Thorpe, Annie Yang, Ojesh Upadhyay, Franciszek Walkowiak, Enki Wang, Phillip Webster, Andrii Yurovskyi, Kangjie Zhang and Zelos Zhu.
+Jaxon Abercrombie, Mahdi About, Teckla Akinyi, Anthony Arroyo, Alex Assuied, James Black, Claudia Carlucci, Asha Chakma, 
+Liming Clark, Bill Denney, Kamila Duniec, Alice Ehmann, Romain Francois, G Gayatri, Ania Golab, Alana Harris, Declan Hodges,
+Solveig Holmgaard, Anthony Howard, Shimeng Huang, Samia Kabi, Leena Khatri, James Kim, John Kirkpatrick, Robin Koeger, Konstantina Koukourikou, 
+Dinakar Kulkarni, Pavan Kumar, Pooja Kumari, Shan Lee, Wenyi Liu, Sadchla Mascary, Iain McCay, Jack McGavigan, Jordanna Morrish, Syed Mubasheer,
+Kirill Muller, Thomas Neitmann, Yohann Omnes, Barbara O'Reilly, Celine Piraux, Hamza Rahal, Nick Ramirez, Tom Ratford, 
+Sukalpo Saha, Tamara Senior, Sophie Shapcott, Vladyslav Shuliar, Eric Simms, Daniel Sjoberg, Ondrej Slama, Andrew Smith, Daniil Stefonishin,
+Vignesh Thanikachalam, Michael Thorpe, Steven Ting, Ojesh Upadhyay, Franciszek Walkowiak, Enki Wang, Phillip Webster, 
+Annie Yang, Andrii Yurovskyi, Junze Zhang, Kangjie Zhang, Zelos Zhu
