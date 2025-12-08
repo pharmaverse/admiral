@@ -468,3 +468,35 @@ test_that("convert_xxtpt_to_hours Test 40: Decimal values with different pattern
     c(1.5, 2.5, 3.5 / 60)
   )
 })
+
+## Test 41: Optional space between number and hour unit ----
+test_that("convert_xxtpt_to_hours Test 41: Optional space between number and hour unit", {
+  expect_equal(
+    convert_xxtpt_to_hours(c("1h Post-dose", "1 h Post-dose", "2hr Post-dose", "2 hr Post-dose")),
+    c(1, 1, 2, 2)
+  )
+})
+
+## Test 42: Optional space between number and minute unit ----
+test_that("convert_xxtpt_to_hours Test 42: Optional space between number and minute unit", {
+  expect_equal(
+    convert_xxtpt_to_hours(c("5m Post-dose", "5 m Post-dose", "10min Post-dose", "10 min Post-dose")),
+    c(5 / 60, 5 / 60, 10 / 60, 10 / 60)
+  )
+})
+
+## Test 43: Optional space in ranges ----
+test_that("convert_xxtpt_to_hours Test 43: Optional space in ranges", {
+  expect_equal(
+    convert_xxtpt_to_hours(c("0-6h Post-dose", "0-6 h Post-dose", "0-6hr Post-dose", "0-6 hr Post-dose")),
+    c(6, 6, 6, 6)
+  )
+})
+
+## Test 44: Optional space with uppercase and different patterns ----
+test_that("convert_xxtpt_to_hours Test 44: Optional space with uppercase and different patterns", {
+  expect_equal(
+    convert_xxtpt_to_hours(c("3HR Post-dose", "3 HR Post-dose", "5M Post-dose", "5 M Post-dose")),
+    c(3, 3, 5 / 60, 5 / 60)
+  )
+})
