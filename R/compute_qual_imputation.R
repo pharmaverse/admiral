@@ -26,7 +26,7 @@ compute_qual_imputation_dec <- function(character_value_decimal) {
   x <- str_trim(character_value_decimal)
 
   decimal <- case_when(
-    str_detect(x, "\\.") ~ 1 / (10^(str_length(x) - str_locate(x, "\\.")[,1])),
+    str_detect(x, "\\.") ~ 1 / (10^(str_length(x) - str_locate(x, "\\.")[, 1])),
     TRUE ~ 1
   )
 
@@ -64,7 +64,6 @@ compute_qual_imputation_dec <- function(character_value_decimal) {
 #' compute_qual_imputation("<40")
 #' compute_qual_imputation(c("3", ">30.2"))
 compute_qual_imputation <- function(character_value, imputation_type = 1, factor = 0) {
-
   clean_value <- character_value
 
   # Identify strings with letters and set to NA immediately to avoid warning with as.numeric() later down
