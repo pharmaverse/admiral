@@ -56,3 +56,6 @@ admiral*.tgz
 .Rprofile
 /doc/
 /Meta/
+
+# Ignore log files
+logs/*.log
