@@ -44,7 +44,8 @@ The function recognizes the following patterns (all case-insensitive):
 \strong{Time-based Conversions:}
 \itemize{
 \item \strong{Days}: \code{"Day 1"}, \code{"2D"}, \code{"2 days"}, \code{"1.5 days"} → multiply by 24 (e.g., 24, 48, 36)
-\item \strong{Hours + Minutes}: \code{"1H30M"}, \code{"1 hour 30 min"}, \code{"2HR15MIN"} → hours + minutes/60 (e.g., 1.5, 2.25)
+\item \strong{Hours + Minutes}: \code{"1H30M"}, \code{"1 hour 30 min"}, \code{"2HR15MIN"} → hours +
+minutes/60 (e.g., 1.5, 2.25)
 \item \strong{Time Ranges}: \code{"0-6h"}, \code{"6-12h Post-dose"}, \code{"0.5 - 6.5h"} → end value (e.g., 6, 12, 6.5)
 \item \strong{Hours only}: \code{"1H"}, \code{"2 hours"}, \code{"0.5HR"}, \code{"4hr Post-dose"} → as-is (e.g., 1, 2, 0.5, 4)
 \item \strong{Minutes only}: \code{"30M"}, \code{"45 min"}, \code{"2.5 Min"} → divide by 60 (e.g., 0.5, 0.75, 0.042)
