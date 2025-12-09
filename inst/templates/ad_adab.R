@@ -39,7 +39,7 @@ adsl <- convert_blanks_to_na(adsl)
 overall_avisit <- "OVERALL"
 overall_avisitn <- 11111
 
-# ---- Derivations ----
+# Derivations ----
 
 is_dates <- is %>%
   # Filter as needed (i.e. exclude ISSTAT has "NOT DONE")
