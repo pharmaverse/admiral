@@ -66,7 +66,8 @@ compute_qual_imputation_dec <- function(character_value_decimal) {
 compute_qual_imputation <- function(character_value, imputation_type = 1, factor = 0) {
   clean_value <- character_value
 
-  # Identify strings with letters and set to NA immediately to avoid warning with as.numeric() later down
+  # Identify strings with letters and set to NA immediately to avoid warning with
+  # as.numeric() later down
   has_letters <- str_detect(clean_value, "[A-Za-z]")
   clean_value[has_letters] <- NA_character_
 
