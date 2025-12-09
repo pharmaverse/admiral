@@ -316,14 +316,22 @@ yn_to_numeric <- function(arg) {
 convert_xxtpt_to_hours <- function(xxtpt) {
   assert_character_vector(xxtpt)
 
+  # Handle empty input
+  if (length(xxtpt) == 0) {
+    return(numeric(0))
+  }
+
   # Initialize result vector with NA
   result <- rep(NA_real_, length(xxtpt))
+
+  # Handle NA inputs
+  na_idx <- is.na(xxtpt)
 
   # 1. Check special cases first (exact matches, case-insensitive)
 
   # Screening -> -1
   screening_pattern <- regex("^screening$", ignore_case = TRUE)
-  screening_idx <- str_detect(xxtpt, screening_pattern)
+  screening_idx <- str_detect(xxtpt, screening_pattern) & !na_idx
   result[screening_idx] <- -1
 
   # Pre-dose, Predose, Pre-infusion, Infusion, 0H, 0 H -> 0
@@ -331,102 +339,103 @@ convert_xxtpt_to_hours <- function(xxtpt) {
     "^(pre-?dose|pre-?infusion|infusion|0\\s*h(?:r|our)?s?)$",
     ignore_case = TRUE
   )
-  zero_idx <- str_detect(xxtpt, zero_pattern) & is.na(result)
+  zero_idx <- str_detect(xxtpt, zero_pattern) & is.na(result) & !na_idx
   result[zero_idx] <- 0
 
   # EOI, End of Infusion -> 1
   eoi_pattern <- regex("^(eoi|end\\s+of\\s+infusion)$", ignore_case = TRUE)
-  eoi_idx <- str_detect(xxtpt, eoi_pattern) & is.na(result)
+  eoi_idx <- str_detect(xxtpt, eoi_pattern) & is.na(result) & !na_idx
   result[eoi_idx] <- 1
 
   # Morning, Evening -> NA (already NA, no action needed)
 
   # 2. Check days (convert to hours by multiplying by 24)
-  # Matches: "2D", "2 days", "Day 2", "2 day"
+  # Matches: "2D", "2 days", "Day 2", "2 day", "1.5 days"
   days_pattern <- regex(
     paste0(
       "^(?:day\\s+)?(\\d+(?:\\.\\d+)?)\\s*", # optional "day " prefix, then number
-      "(?:d|day)(?:s)?", # d/day/days
-      "(?:\\s+post-?dose)?$" # optional post-dose suffix
+      "(?:d|day|days)",                       # d/day/days
+      "(?:\\s+post-?dose)?$"                  # optional post-dose suffix
     ),
     ignore_case = TRUE,
     comments = TRUE
   )
   days_matches <- str_match(xxtpt, days_pattern)
-  days_idx <- !is.na(days_matches[, 1]) & is.na(result)
+  days_idx <- !is.na(days_matches[, 1]) & is.na(result) & !na_idx
   if (any(days_idx)) {
     result[days_idx] <- as.numeric(days_matches[days_idx, 2]) * 24
   }
 
   # 3. Check hours+minutes combinations
-  # Matches: "1H30M", "1 hour 30 min", "1h 30m"
+  # Matches: "1H30M", "1 hour 30 min", "1h 30m", "2HR15MIN"
   hm_pattern <- regex(
     paste0(
-      "^(\\d+(?:\\.\\d+)?)\\s*", # hours number
-      "h(?:r|our)?s?", # h/hr/hour/hours
-      "\\s*", # optional space
-      "(\\d+(?:\\.\\d+)?)\\s*", # minutes number
-      "m(?:in|inute)?s?", # m/min/minute/minutes
-      "(?:\\s+post-?dose)?$" # optional post-dose suffix
+      "^(\\d+(?:\\.\\d+)?)\\s*",       # hours number
+      "h(?:r|our)?s?",                 # h/hr/hour/hours
+      "\\s*",                          # optional space
+      "(\\d+(?:\\.\\d+)?)\\s*",        # minutes number
+      "m(?:in|inute)?s?",              # m/min/minute/minutes
+      "(?:\\s+post-?dose)?$"           # optional post-dose suffix
     ),
     ignore_case = TRUE,
     comments = TRUE
   )
   hm_matches <- str_match(xxtpt, hm_pattern)
-  hm_idx <- !is.na(hm_matches[, 1]) & is.na(result)
+  hm_idx <- !is.na(hm_matches[, 1]) & is.na(result) & !na_idx
   if (any(hm_idx)) {
     hours <- as.numeric(hm_matches[hm_idx, 2])
     minutes <- as.numeric(hm_matches[hm_idx, 3])
     result[hm_idx] <- hours + minutes / 60
   }
 
-  # 4. Check time ranges (e.g., "0-6h Post-dose" -> 6, take the end value)
+  # 4. Check time ranges (e.g., "0-6h Post-dose" -> 6, "0.5 - 6.5h" -> 6.5)
   # Process before simple hours to avoid conflicts
+  # Fixed: Allow spaces around the dash and decimal numbers
   range_pattern <- regex(
     paste0(
-      "^\\d+(?:\\.\\d+)?-(\\d+(?:\\.\\d+)?)\\s*", # range with end value captured
-      "h(?:r|our)?s?", # h/hr/hour/hours
-      "(?:\\s+post-?dose)?$" # optional post-dose suffix
+      "^\\d+(?:\\.\\d+)?\\s*-\\s*(\\d+(?:\\.\\d+)?)\\s*", # range with end value captured, spaces allowed
+      "h(?:r|our)?s?",                                     # h/hr/hour/hours
+      "(?:\\s+post-?dose)?$"                               # optional post-dose suffix
     ),
     ignore_case = TRUE,
     comments = TRUE
   )
   range_matches <- str_match(xxtpt, range_pattern)
-  range_idx <- !is.na(range_matches[, 1]) & is.na(result)
+  range_idx <- !is.na(range_matches[, 1]) & is.na(result) & !na_idx
   if (any(range_idx)) {
     result[range_idx] <- as.numeric(range_matches[range_idx, 2])
   }
 
   # 5. Check hours only
-  # Matches: "1H", "2 hours", "0.5HR", "1h Post-dose"
+  # Matches: "1H", "2 hours", "0.5HR", "1h Post-dose", "8 hour", "12 HOURS"
   hours_pattern <- regex(
     paste0(
-      "^(\\d+(?:\\.\\d+)?)\\s*", # number
-      "h(?:r|our)?s?", # h/hr/hour/hours
-      "(?:\\s+post-?dose)?$" # optional post-dose suffix
+      "^(\\d+(?:\\.\\d+)?)\\s*",       # number
+      "h(?:r|our)?s?",                 # h/hr/hour/hours
+      "(?:\\s+post-?dose)?$"           # optional post-dose suffix
     ),
     ignore_case = TRUE,
     comments = TRUE
   )
   hours_matches <- str_match(xxtpt, hours_pattern)
-  hours_idx <- !is.na(hours_matches[, 1]) & is.na(result)
+  hours_idx <- !is.na(hours_matches[, 1]) & is.na(result) & !na_idx
   if (any(hours_idx)) {
     result[hours_idx] <- as.numeric(hours_matches[hours_idx, 2])
   }
 
   # 6. Check minutes only
-  # Matches: "30M", "45 min", "30 Min Post-dose"
+  # Matches: "30M", "45 min", "30 Min Post-dose", "2.5 Min"
   minutes_pattern <- regex(
     paste0(
-      "^(\\d+(?:\\.\\d+)?)\\s*", # number
-      "m(?:in|inute)?s?", # m/min/minute/minutes
-      "(?:\\s+post-?dose)?$" # optional post-dose suffix
+      "^(\\d+(?:\\.\\d+)?)\\s*",       # number
+      "m(?:in|inute)?s?",              # m/min/minute/minutes
+      "(?:\\s+post-?dose)?$"           # optional post-dose suffix
     ),
     ignore_case = TRUE,
     comments = TRUE
   )
   minutes_matches <- str_match(xxtpt, minutes_pattern)
-  minutes_idx <- !is.na(minutes_matches[, 1]) & is.na(result)
+  minutes_idx <- !is.na(minutes_matches[, 1]) & is.na(result) & !na_idx
   if (any(minutes_idx)) {
     result[minutes_idx] <- as.numeric(minutes_matches[minutes_idx, 2]) / 60
   }
