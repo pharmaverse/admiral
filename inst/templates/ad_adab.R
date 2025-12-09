@@ -70,7 +70,7 @@ is_dates <- is %>%
     # ISBDAGNT = ISTESTCD,
 
     # Map the analyte test to corresponding DRUG in on EX.EXTRT
-    #  This is especially critical when multiple  analytes and EX.EXTRT instances
+    # This is especially critical when multiple analytes and EX.EXTRT instances
     DRUG = case_when(
       toupper(ADAPARM) == "XANOMELINE" ~ "XANOMELINE",
       toupper(ADAPARM) == "OTHER_DRUG" ~ "OTHER_DRUG",
