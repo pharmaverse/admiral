@@ -2,7 +2,7 @@
 
 ## New Features
 
-- New ADAB template script available `ad_adab.R` which creates Anti-drug 
+- New experimental ADAB template script available `ad_adab.R` which creates Anti-drug 
 Antibody Analysis Dataset (#2805). 
 
 ## Updates of Existing Functions
