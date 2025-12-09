@@ -172,6 +172,7 @@ get_vars_query <- function(dataset, dataset_queries) {
     # numeric -> TERMNUM, character -> TERMCHAR, otherwise -> error
     mutate(
       tmp_col_type = vapply(dataset[SRCVAR], typeof, character(1)),
+      # ifelse() used as if_else() would evaluate both the TRUE and FALSE conditions even if one not used
       TERM_NAME_ID = ifelse(tmp_col_type %in% "character", toupper(TERMCHAR), as.character(TERMNUM)) # nolint
     )
 
