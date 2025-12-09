@@ -14,7 +14,7 @@ check_cond <- ex %>%
   ungroup() %>%
   distinct(check1, check2)
 
-if(any(c(check_cond$check1 == 1 && check_cond$check2 == 1))){
+if (any(c(check_cond$check1 == 1 && check_cond$check2 == 1))) {
   cli_abort(
     paste(
       "There are multiple start or end dates of exposure for a subject",
