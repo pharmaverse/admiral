@@ -256,7 +256,7 @@ test_that("print_named_list Test 18: named list with unamed list", {
 })
 # convert_xxtpt_to_hours ----
 
-## Test 1: Special case values ----
+## Test 19: Special case values ----
 test_that("convert_xxtpt_to_hours Test 1: Special case values", {
   expect_equal(
     convert_xxtpt_to_hours(c(
@@ -269,7 +269,7 @@ test_that("convert_xxtpt_to_hours Test 1: Special case values", {
   )
 })
 
-## Test 2: Days conversion ----
+## Test 20: Days conversion ----
 test_that("convert_xxtpt_to_hours Test 2: Days convert to hours (x24)", {
   expect_equal(
     convert_xxtpt_to_hours(c("Day 1", "2D", "1.5 days", "Day 7")),
@@ -277,7 +277,7 @@ test_that("convert_xxtpt_to_hours Test 2: Days convert to hours (x24)", {
   )
 })
 
-## Test 3: Hours and minutes combinations ----
+## Test 21: Hours and minutes combinations ----
 test_that("convert_xxtpt_to_hours Test 3: Hours+Minutes combinations", {
   expect_equal(
     convert_xxtpt_to_hours(c("1H30M", "1 hour 30 min", "2HR15MIN")),
@@ -285,7 +285,7 @@ test_that("convert_xxtpt_to_hours Test 3: Hours+Minutes combinations", {
   )
 })
 
-## Test 4: Time ranges return end value ----
+## Test 22: Time ranges return end value ----
 test_that("convert_xxtpt_to_hours Test 4: Time ranges return end value", {
   expect_equal(
     convert_xxtpt_to_hours(c("0-6h", "6-12h Post-dose", "0.5 - 6.5h")),
@@ -293,7 +293,7 @@ test_that("convert_xxtpt_to_hours Test 4: Time ranges return end value", {
   )
 })
 
-## Test 5: Hours only - various formats ----
+## Test 23: Hours only - various formats ----
 test_that("convert_xxtpt_to_hours Test 5: Hours with format variations", {
   expect_equal(
     convert_xxtpt_to_hours(c(
@@ -303,7 +303,7 @@ test_that("convert_xxtpt_to_hours Test 5: Hours with format variations", {
   )
 })
 
-## Test 6: Minutes only - various formats ----
+## Test 24: Minutes only - various formats ----
 test_that("convert_xxtpt_to_hours Test 6: Minutes with format variations", {
   expect_equal(
     convert_xxtpt_to_hours(c(
@@ -313,7 +313,7 @@ test_that("convert_xxtpt_to_hours Test 6: Minutes with format variations", {
   )
 })
 
-## Test 7: Case insensitivity and spacing ----
+## Test 25: Case insensitivity and spacing ----
 test_that("convert_xxtpt_to_hours Test 7: Case and spacing variations", {
   expect_equal(
     convert_xxtpt_to_hours(c(
@@ -324,7 +324,7 @@ test_that("convert_xxtpt_to_hours Test 7: Case and spacing variations", {
   )
 })
 
-## Test 8: NA and edge cases ----
+## Test 26: NA and edge cases ----
 test_that("convert_xxtpt_to_hours Test 8: NA and edge cases", {
   expect_equal(
     convert_xxtpt_to_hours(c(NA_character_, "Unknown", "EOS", "Pre-dose")),
@@ -333,7 +333,7 @@ test_that("convert_xxtpt_to_hours Test 8: NA and edge cases", {
   expect_equal(convert_xxtpt_to_hours(character(0)), numeric(0))
 })
 
-## Test 9: Comprehensive mixed input ----
+## Test 27: Comprehensive mixed input ----
 test_that("convert_xxtpt_to_hours Test 9: Mixed comprehensive input", {
   input <- c(
     "Screening", "Pre-dose", "5 Min Post-dose", "30M", "1H30M",

@@ -7,20 +7,27 @@
 convert_xxtpt_to_hours(xxtpt)
 }
 \arguments{
-\item{xxtpt}{A character vector of timepoint descriptions (e.g., from \code{PCTPT}, \code{VSTPT},
-\code{EGTPT}, \code{ISTPT}, \code{LBTPT}, or any other \code{--TPT} variable)
+\item{xxtpt}{A character vector of timepoint descriptions from SDTM \code{--TPT} variables
+(e.g., \code{PCTPT}, \code{VSTPT}, \code{EGTPT}, \code{ISTPT}, \code{LBTPT}). Can contain \code{NA} values.
 
 \describe{
 \item{Default value}{none}
 }}
 }
 \value{
-A numeric vector of timepoints in hours
+A numeric vector of timepoints in hours. Returns \code{NA_real_} for:
+\itemize{
+\item Input \code{NA} values
+\item Unrecognized timepoint formats
+\item Non-time descriptors (e.g., "Morning", "Evening")
+Returns \code{numeric(0)} for empty input.
+}
 }
 \description{
-Converts timepoint strings (e.g., \code{PCTPT}, \code{VSTPT}, \code{EGTPT}, \code{ISTPT}, \code{LBTPT}) into
-numeric hours. The function handles common dose-centric formats like
-Pre-dose, Post-dose (hours/minutes), days, and special time markers.
+Converts CDISC timepoint strings (e.g., \code{PCTPT}, \code{VSTPT}, \code{EGTPT}, \code{ISTPT}, \code{LBTPT})
+into numeric hours for analysis. The function handles common dose-centric formats
+including pre-dose, post-dose (hours/minutes), days, time ranges, and special
+time markers.
 }
 \details{
 The function recognizes the following patterns (all case-insensitive):
@@ -31,31 +38,77 @@ The function recognizes the following patterns (all case-insensitive):
 \item \code{"Pre-dose"}, \code{"Predose"}, \code{"Pre-infusion"}, \code{"Infusion"}, \code{"0H"}, \code{"0 H"} → 0
 \item \code{"EOI"}, \code{"End of Infusion"} → 1
 \item \code{"Morning"}, \code{"Evening"} → \code{NA_real_}
+\item Unrecognized values → \code{NA_real_}
 }
 
 \strong{Time-based Conversions:}
 \itemize{
-\item Days: \code{"2D"}, \code{"Day 2"}, \code{"2 days"} → multiply by 24 (e.g., 48 hours)
-\item Hours + Minutes: \code{"1H30M"}, \code{"1 hour 30 min"} → hours + minutes/60 (e.g., 1.5)
-\item Hours only: \code{"1H"}, \code{"2 hours"}, \code{"0.5HR"} → as-is (e.g., 2)
-\item Minutes only: \code{"30M"}, \code{"45 min"} → divide by 60 (e.g., 0.5)
+\item \strong{Days}: \code{"Day 1"}, \code{"2D"}, \code{"2 days"}, \code{"1.5 days"} → multiply by 24 (e.g., 24, 48, 36)
+\item \strong{Hours + Minutes}: \code{"1H30M"}, \code{"1 hour 30 min"}, \code{"2HR15MIN"} → hours + minutes/60 (e.g., 1.5, 2.25)
+\item \strong{Time Ranges}: \code{"0-6h"}, \code{"6-12h Post-dose"}, \code{"0.5 - 6.5h"} → end value (e.g., 6, 12, 6.5)
+\item \strong{Hours only}: \code{"1H"}, \code{"2 hours"}, \code{"0.5HR"}, \code{"4hr Post-dose"} → as-is (e.g., 1, 2, 0.5, 4)
+\item \strong{Minutes only}: \code{"30M"}, \code{"45 min"}, \code{"2.5 Min"} → divide by 60 (e.g., 0.5, 0.75, 0.042)
 }
 
-The function supports various unit formats (H/h, HR/hr, HOUR/hour, M/m, MIN/min,
-MINUTE/minute, D/d, DAY/day) with optional plurals and whitespace.
+\strong{Supported Unit Formats:}
+\itemize{
+\item Hours: H, h, HR, hr, HOUR, hour, HOURS, hours
+\item Minutes: M, m, MIN, min, MINUTE, minute, MINUTES, minutes
+\item Days: D, d, DAY, day, DAYS, days
+\item All with optional plurals and flexible whitespace
+\item Optional "Post-dose" or "Post dose" suffix supported for all patterns
+}
+
+\strong{Processing Order:}
+The function processes patterns in this order to avoid conflicts:
+\enumerate{
+\item Special cases (exact matches)
+\item Days
+\item Hours + Minutes combinations
+\item Time ranges (returns end value)
+\item Hours only
+\item Minutes only
+}
 }
 \examples{
 # Special cases
 convert_xxtpt_to_hours(c("Screening", "Pre-dose", "EOI", "Morning"))
+# Returns: -1, 0, 1, NA
 
-# Days
-convert_xxtpt_to_hours(c("Day 2", "2D", "3 days"))
+# Days converted to hours
+convert_xxtpt_to_hours(c("Day 1", "Day 2", "2D", "3 days", "1.5 days"))
+# Returns: 24, 48, 48, 72, 36
 
-# Hours and minutes
-convert_xxtpt_to_hours(c("1H", "30MIN", "1H30M", "2 hours"))
+# Hours in various formats
+convert_xxtpt_to_hours(c("1H", "2 hours", "0.5HR", "4hr Post-dose", "12 HOURS"))
+# Returns: 1, 2, 0.5, 4, 12
 
-# With Post-dose suffix
-convert_xxtpt_to_hours(c("1h Post-dose", "30 Min Post-dose"))
+# Minutes converted to hours
+convert_xxtpt_to_hours(c("30M", "45 min", "15 MINUTES", "2.5 Min"))
+# Returns: 0.5, 0.75, 0.25, 0.042
+
+# Hours and minutes combinations
+convert_xxtpt_to_hours(c("1H30M", "1 hour 30 min", "2HR15MIN"))
+# Returns: 1.5, 1.5, 2.25
+
+# Time ranges (returns end value)
+convert_xxtpt_to_hours(c("0-6h", "6-12h Post-dose", "0.5 - 6.5h"))
+# Returns: 6, 12, 6.5
+
+# Case insensitivity and spacing variations
+convert_xxtpt_to_hours(c("1h POST-DOSE", "PRE-DOSE", "Predose"))
+# Returns: 1, 0, 0
+
+# Handling NA and unrecognized values
+convert_xxtpt_to_hours(c(NA_character_, "Unknown", "EOS", "Pre-dose"))
+# Returns: NA, NA, NA, 0
+
+# Comprehensive mixed example
+convert_xxtpt_to_hours(c(
+  "Screening", "Pre-dose", "5 Min Post-dose", "30M",
+  "1H30M", "2h", "0-6h Post-dose", "Day 1", "24h"
+))
+# Returns: -1, 0, 0.083, 0.5, 1.5, 2, 6, 24, 24
 }
 \seealso{
 Utilities for Formatting Observations:
