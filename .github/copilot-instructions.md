@@ -4,11 +4,11 @@ This file provides context to GitHub Copilot about admiraldev programming standa
 and best practices. Copilot will automatically reference these guidelines when
 providing code suggestions in this repository.
 
-**Auto-generated:** 2025-12-09 19:23:35
-**admiraldev Version:** GitHub main branch
+**Auto-generated:** 2025-12-09 21:56:30  
+**admiraldev Version:** GitHub main branch  
 **Source:** https://github.com/pharmaverse/admiraldev
 
-⚠️ **DO NOT EDIT MANUALLY** - Run `source('scripts/sync_admiraldev_docs.R')` to update
+<e2><9a><a0><ef><b8><8f> **DO NOT EDIT MANUALLY** - Run `source('.github/scripts/sync_admiraldev_docs.R')` to update
 
 ---
 
@@ -16,11 +16,11 @@ providing code suggestions in this repository.
 
 These guidelines ensure that code in this repository follows admiral ecosystem standards:
 
-- ✅ Consistent programming patterns across admiral packages
-- ✅ Proper function design and documentation
-- ✅ High-quality vignettes that help users
-- ✅ Comprehensive unit tests with good coverage
-- ✅ Code that is maintainable and readable
+- <e2><9c><85> Consistent programming patterns across admiral packages
+- <e2><9c><85> Proper function design and documentation
+- <e2><9c><85> High-quality vignettes that help users
+- <e2><9c><85> Comprehensive unit tests with good coverage
+- <e2><9c><85> Code that is maintainable and readable
 
 GitHub Copilot will use these guidelines to provide better suggestions that align
 with admiral best practices.
@@ -37,9 +37,9 @@ with admiral best practices.
 
 # Programming Strategy
 
-**Description:** Core programming principles and strategies for admiral packages
-**Source File:** `programming_strategy.Rmd`
-**Source:** GitHub (pharmaverse/admiraldev)
+**Description:** Core programming principles and strategies for admiral packages  
+**Source File:** `programming_strategy.Rmd`  
+**Source:** GitHub (pharmaverse/admiraldev)  
 **URL:** https://raw.githubusercontent.com/pharmaverse/admiraldev/main/vignettes/programming_strategy.Rmd
 
 ---
@@ -138,7 +138,7 @@ If `BASE` is used, the values are categorized while if `ANRIND` is used, the val
 ## Input, Output, and Side-effects
 
 * The behavior of the function is only determined by its input, not by any global object,  
-i.e. all input like datasets, variable names, options, … must be provided to the function by arguments.
+i.e. all input like datasets, variable names, options, <U+2026> must be provided to the function by arguments.
 * It is expected that the input datasets are not grouped. If any are grouped, the function must issue an error.
 * If a function requires grouping, the function must provide the `by_vars` argument.
 * The output dataset must be ungrouped.
@@ -411,7 +411,7 @@ down for more details.
 
 In addition to the standard roxygen2 tags, the `@family` and `@keywords` tags are also used. 
 
-The family/keywords are used to categorize the function, which is used both on our website and the internal package help pages. Please see section [Categorization of functions](programming_strategy.html#categorization-of-functions).
+The family/keywords are used to categorize the function, which is used both on our website and the internal package help pages. Please see section [Categorization of functions](https://pharmaverse.github.io/admiraldev/articles/programming_strategy.html#categorization-of-functions).
 
 An example is given below:
 
@@ -510,13 +510,13 @@ this function). Make sure to align columns as this ensures quick code
 readability. If other functions are called in the example, please specify
 `library(pkg_name)` then refer to the respective function `fun()` as opposed to
 the preferred `pkg_name::fun()` notation as specified in [Unit Test
-Guidance](unit_test_guidance.html#set-up-the-test-script).
+Guidance](https://pharmaverse.github.io/admiraldev/articles/unit_test_guidance.html#set-up-the-test-script).
 
     The `@examples` tag should be used for simple functions which require only a
     few examples and no explanation. For more complex functions, the (custom) 
     `@caption`, `@info`, and `@code` tags should be used. Please see the separate 
     vignette on 
-    [Writing Custom Examples](writing_custom_examples.html)
+    [Writing Custom Examples](https://pharmaverse.github.io/admiraldev/articles/writing_custom_examples.html)
     for detailed guidance on how these are constructed, and [`derive_extreme_records.R` in             admiral](https://github.com/pharmaverse/admiral/blob/main/R/derive_extreme_records.R) 
     for an example of this in action.
 
@@ -665,7 +665,7 @@ Functions should only perform the derivation logic and not add any kind of metad
 # Unit Testing
 
 A function requires a set of unit tests to verify it produces the expected result.
-See [Writing Unit Tests in {admiral}](unit_test_guidance.html#writing-unit-tests-in-admiral) for details.
+See [Writing Unit Tests in {admiral}](https://pharmaverse.github.io/admiraldev/articles/unit_test_guidance.html#writing-unit-tests-in-admiral) for details.
 
 # Deprecation
 
@@ -869,7 +869,7 @@ it is defined in `examples.R`, the unit tests are in
 `tests/testthat/test-examples.R`.
 
 The unit-test should follow the corresponding format, per the [unit test
-guidance](unit_test_guidance.html#writing-unit-tests-in-admiral).
+guidance](https://pharmaverse.github.io/admiraldev/articles/unit_test_guidance.html#writing-unit-tests-in-admiral).
 
 ### For Deprecated Functions that Issue a Message (Phase 1)
 
@@ -952,9 +952,9 @@ These functions are implemented in `roxygen2.R` and the naming convention for ea
 
 # Writing Vignettes
 
-**Description:** Guidelines for creating comprehensive and useful vignettes
-**Source File:** `writing_vignettes.Rmd`
-**Source:** GitHub (pharmaverse/admiraldev)
+**Description:** Guidelines for creating comprehensive and useful vignettes  
+**Source File:** `writing_vignettes.Rmd`  
+**Source:** GitHub (pharmaverse/admiraldev)  
 **URL:** https://raw.githubusercontent.com/pharmaverse/admiraldev/main/vignettes/writing_vignettes.Rmd
 
 ---
@@ -1216,14 +1216,13 @@ ADxx | [ad_adxx.R](https://github.com/pharmaverse/admiral/blob/main/inst/templat
 
 
 
-
 ---
 
 # Unit Test Guidance
 
-**Description:** Best practices for writing unit tests in admiral packages
-**Source File:** `unit_test_guidance.Rmd`
-**Source:** GitHub (pharmaverse/admiraldev)
+**Description:** Best practices for writing unit tests in admiral packages  
+**Source File:** `unit_test_guidance.Rmd`  
+**Source:** GitHub (pharmaverse/admiraldev)  
 **URL:** https://raw.githubusercontent.com/pharmaverse/admiraldev/main/vignettes/unit_test_guidance.Rmd
 
 ---
@@ -1271,7 +1270,7 @@ code can be an incentive for better architecture.
 
 If ease of adding unit tests to a code base is a good sign, the opposite is also
 true. Having a hard time creating unit tests for a given piece of code might be 
-a sign of code smells in the code—e.g. functions that are too complex.
+a sign of code smells in the code<U+2014>e.g. functions that are too complex.
 
 # Writing Good Unit Tests
 
@@ -1425,7 +1424,7 @@ The input and expected output for the unit tests must follow the following rules
 * Values should be hard-coded whenever possible.
 * If values need to be derived, only unit tested functions can be used.
 
-In contrast to the [Programming Strategy](programming_strategy.html#function-header-documentation) documentation for function examples, test files should not include `library(pkg_name)` calls. 
+In contrast to the [Programming Strategy](https://pharmaverse.github.io/admiraldev/articles/programming_strategy.html#function-header-documentation) documentation for function examples, test files should not include `library(pkg_name)` calls. 
 If a dataset needs to be created for testing purposes, it should be done so using the function `tribble()` from the `tibble` package with the following command `dplyr::tribble(<data here>)`. 
 Furthermore, if other functions need to be called, it should also be done using `pkg_name::fun()`notation. 
 Make sure to align columns as well. This ensures quick code readability.
@@ -1562,14 +1561,14 @@ knitr::include_graphics("./unit_test_guidance.png")
 
 ## Keeping This Document Updated
 
-**Generated:** 2025-12-09 19:23:36
-**admiraldev Version:** GitHub main branch
-**Vignettes Included:** 3 of 3
+**Generated:** 2025-12-09 21:56:31  
+**admiraldev Version:** GitHub main branch  
+**Vignettes Included:** 3 of 3  
 **Output File:** `/home/jeffreyd/admiral/.github/copilot-instructions.md`
 
 ### Manual Update
 ```r
-source('scripts/sync_admiraldev_docs.R')
+source('.github/scripts/sync_admiraldev_docs.R')
 ```
 
 ### Automatic Updates
@@ -1577,7 +1576,7 @@ source('scripts/sync_admiraldev_docs.R')
 Consider setting up a monthly cron job or GitHub Action to keep these
 guidelines synchronized with the latest admiraldev version.
 
-See `scripts/sync_admiraldev_docs.R` for setup instructions.
+See `.github/scripts/sync_admiraldev_docs.R` for setup instructions.
 
 ---
 
@@ -1587,7 +1586,7 @@ GitHub Copilot automatically reads files in `.github/` directories and uses them
 as context when providing code suggestions. By keeping admiraldev guidelines here:
 
 1. **Copilot suggests code** that follows admiral conventions
-2. **Function names and patterns** match admiral ecosystem standards
+2. **Function names and patterns** match admiral ecosystem standards  
 3. **Documentation style** aligns with admiral expectations
 4. **Test structures** follow unit test guidance
 5. **Vignette examples** use recommended patterns

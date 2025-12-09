@@ -14,6 +14,7 @@
 suppressPackageStartupMessages({
   library(fs)
   library(glue)
+  library(stringr)
 })
 
 # Determine project root (works from any subdirectory)
@@ -22,8 +23,8 @@ if (require("here", quietly = TRUE)) {
 } else {
   # Fallback: find .git directory or use current directory
   project_root <- getwd()
-  while (!dir_exists(file.path(project_root, ".git")) &&
-    project_root != dirname(project_root)) {
+  while (!dir_exists(file.path(project_root, ".git")) && 
+         project_root != dirname(project_root)) {
     project_root <- dirname(project_root)
   }
 }
@@ -31,7 +32,7 @@ if (require("here", quietly = TRUE)) {
 # Configuration (relative to project root)
 output_file <- file.path(project_root, ".github", "copilot-instructions.md")
 log_dir <- file.path(project_root, "logs")
-use_github <- TRUE # Set to TRUE to pull from GitHub, FALSE to use local package
+use_github <- TRUE  # Set to TRUE to pull from GitHub, FALSE to use local package
 
 cat(glue("Working from project root: {project_root}\n\n"))
 
@@ -50,8 +51,34 @@ cat("admiraldev Documentation Sync\n")
 cat("Started:", format(Sys.time()), "\n")
 cat("=================================\n\n")
 
+# Function to fix relative links in vignette content
+fix_relative_links <- function(content, github_base_url) {
+  # Convert to single string for easier processing
+  text <- paste(content, collapse = "\n")
+  
+  # Fix markdown links: [text](vignette.html) or [text](vignette.html#anchor)
+  # Convert to: [text](https://pharmaverse.github.io/admiraldev/articles/vignette.html#anchor)
+  text <- str_replace_all(
+    text,
+    "\\]\\(([a-zA-Z0-9_-]+\\.html(?:#[a-zA-Z0-9_-]+)?)\\)",
+    paste0("](", github_base_url, "/\\1)")
+  )
+  
+  # Fix relative paths without .html: [text](programming_strategy#anchor)
+  # These should also point to the full URL
+  text <- str_replace_all(
+    text,
+    "\\]\\(([a-zA-Z0-9_-]+)(#[a-zA-Z0-9_-]+)\\)",
+    paste0("](", github_base_url, "/\\1.html\\2)")
+  )
+  
+  # Split back into lines
+  strsplit(text, "\n", fixed = TRUE)[[1]]
+}
+
 # Main execution wrapped in tryCatch
 tryCatch({
+  
   # Define vignettes to copy with their display names
   vignettes_info <- list(
     list(
@@ -70,36 +97,40 @@ tryCatch({
       description = "Best practices for writing unit tests in admiral packages"
     )
   )
-
+  
   if (use_github) {
     cat("Using GitHub source for vignettes...\n\n")
-
-    # GitHub raw URL base
-    github_base <- "https://raw.githubusercontent.com/pharmaverse/admiraldev/main/vignettes"
-
+    
+    # GitHub URLs
+    github_raw_base <- "https://raw.githubusercontent.com/pharmaverse/admiraldev/main/vignettes"
+    github_docs_base <- "https://pharmaverse.github.io/admiraldev/articles"
+    
     # Function to download vignette from GitHub
     download_vignette <- function(vignette_info) {
       file_name <- vignette_info$file
       title <- vignette_info$title
       description <- vignette_info$description
-
-      url <- file.path(github_base, file_name)
-
+      
+      url <- file.path(github_raw_base, file_name)
+      
       cat(glue("✓ Downloading: {file_name} from GitHub\n"))
-
-      tryCatch(
-        {
-          # Download content
-          content <- readLines(url, warn = FALSE)
-
-          # Create formatted section
-          formatted <- glue("
+      
+      tryCatch({
+        # Download content
+        content <- readLines(url, warn = FALSE)
+        
+        # Fix relative links
+        cat(glue("  Fixing relative links in {file_name}...\n"))
+        content <- fix_relative_links(content, github_docs_base)
+        
+        # Create formatted section
+        formatted <- glue("
 
 # {title}
 
-**Description:** {description}
-**Source File:** `{file_name}`
-**Source:** GitHub (pharmaverse/admiraldev)
+**Description:** {description}  
+**Source File:** `{file_name}`  
+**Source:** GitHub (pharmaverse/admiraldev)  
 **URL:** {url}
 
 ---
@@ -109,42 +140,40 @@ tryCatch({
 ---
 
 ")
-          return(formatted)
-        },
-        error = function(e) {
-          warning(glue("✗ Failed to download {file_name}: {e$message}"))
-          return(NULL)
-        }
-      )
+        return(formatted)
+        
+      }, error = function(e) {
+        warning(glue("✗ Failed to download {file_name}: {e$message}"))
+        return(NULL)
+      })
     }
-
+    
     admiraldev_version <- "GitHub main branch"
     admiraldev_path <- "https://github.com/pharmaverse/admiraldev"
+    
   } else {
     cat("Using local package installation...\n\n")
-
+    
     # Try to find admiraldev package location
     admiraldev_path <- system.file(package = "admiraldev")
-
+    
     if (admiraldev_path == "") {
-      stop(
-        "admiraldev package not found. Please install it with:\n",
-        "  install.packages('admiraldev', dependencies = TRUE, build_vignettes = TRUE)\n",
-        "or from GitHub:\n",
-        "  remotes::install_github('pharmaverse/admiraldev', build_vignettes = TRUE)\n",
-        "Or set use_github = TRUE in this script to download from GitHub directly."
-      )
+      stop("admiraldev package not found. Please install it with:\n",
+           "  install.packages('admiraldev', dependencies = TRUE, build_vignettes = TRUE)\n",
+           "or from GitHub:\n",
+           "  remotes::install_github('pharmaverse/admiraldev', build_vignettes = TRUE)\n",
+           "Or set use_github = TRUE in this script to download from GitHub directly.")
     }
-
+    
     cat(glue("✓ Found admiraldev at: {admiraldev_path}\n"))
-
+    
     # Check multiple possible vignette locations
     possible_dirs <- c(
       file.path(admiraldev_path, "doc"),
       file.path(admiraldev_path, "vignettes"),
       file.path(admiraldev_path, "inst", "doc")
     )
-
+    
     vignettes_dir <- NULL
     for (dir in possible_dirs) {
       if (dir_exists(dir)) {
@@ -158,30 +187,31 @@ tryCatch({
         }
       }
     }
-
+    
     if (is.null(vignettes_dir)) {
-      stop(glue(
-        "Vignettes directory not found. Tried:\n",
-        "  {paste(possible_dirs, collapse = '\n  ')}\n\n",
-        "The package may have been installed without vignettes.\n",
-        "Try reinstalling with:\n",
-        "  install.packages('admiraldev', dependencies = TRUE, build_vignettes = TRUE)\n",
-        "Or set use_github = TRUE in this script."
-      ))
+      stop(glue("Vignettes directory not found. Tried:\n",
+                "  {paste(possible_dirs, collapse = '\n  ')}\n\n",
+                "The package may have been installed without vignettes.\n",
+                "Try reinstalling with:\n",
+                "  install.packages('admiraldev', dependencies = TRUE, build_vignettes = TRUE)\n",
+                "Or set use_github = TRUE in this script."))
     }
-
+    
     cat("\n")
-
+    
+    # GitHub docs base for link fixing
+    github_docs_base <- "https://pharmaverse.github.io/admiraldev/articles"
+    
     # Function to process and format vignette content from local files
     download_vignette <- function(vignette_info) {
       file_name <- vignette_info$file
       title <- vignette_info$title
       description <- vignette_info$description
-
+      
       # Try .Rmd first, then .html as fallback
       rmd_path <- file.path(vignettes_dir, file_name)
       html_path <- file.path(vignettes_dir, sub("\\.Rmd$", ".html", file_name))
-
+      
       if (file_exists(rmd_path)) {
         cat(glue("✓ Processing: {file_name}\n"))
         content <- readLines(rmd_path, warn = FALSE)
@@ -196,14 +226,18 @@ tryCatch({
         warning(glue("✗ Vignette not found: {file_name}"))
         return(NULL)
       }
-
+      
+      # Fix relative links
+      cat(glue("  Fixing relative links in {file_name}...\n"))
+      content <- fix_relative_links(content, github_docs_base)
+      
       # Create formatted section
       formatted <- glue("
 
 # {title}
 
-**Description:** {description}
-**Source File:** `{basename(source_path)}`
+**Description:** {description}  
+**Source File:** `{basename(source_path)}`  
 **Format:** {source_type}
 
 ---
@@ -213,13 +247,13 @@ tryCatch({
 ---
 
 ")
-
+      
       return(formatted)
     }
-
-    admiraldev_version <- as.character(packageVersion("admiraldev"))
+    
+    admiraldev_version <- as.character(packageVersion('admiraldev'))
   }
-
+  
   # Create table of contents
   toc_items <- character(length(vignettes_info))
   for (i in seq_along(vignettes_info)) {
@@ -228,7 +262,7 @@ tryCatch({
     toc_items[i] <- paste0(i, ". [", title, "](#", anchor, ")")
   }
   toc_text <- paste(toc_items, collapse = "\n")
-
+  
   # Create header for the combined file
   header <- glue("
 # GitHub Copilot Instructions - admiraldev Guidelines
@@ -237,11 +271,11 @@ This file provides context to GitHub Copilot about admiraldev programming standa
 and best practices. Copilot will automatically reference these guidelines when
 providing code suggestions in this repository.
 
-**Auto-generated:** {format(Sys.time(), '%Y-%m-%d %H:%M:%S')}
-**admiraldev Version:** {admiraldev_version}
+**Auto-generated:** {format(Sys.time(), '%Y-%m-%d %H:%M:%S')}  
+**admiraldev Version:** {admiraldev_version}  
 **Source:** {admiraldev_path}
 
-⚠️ **DO NOT EDIT MANUALLY** - Run `source('scripts/sync_admiraldev_docs.R')` to update
+⚠️ **DO NOT EDIT MANUALLY** - Run `source('.github/scripts/sync_admiraldev_docs.R')` to update
 
 ---
 
@@ -267,11 +301,11 @@ with admiral best practices.
 ---
 
 ")
-
+  
   # Combine all content
   cat("Processing vignettes...\n")
   combined_content <- header
-
+  
   processed_count <- 0
   for (vignette_info in vignettes_info) {
     vignette_content <- download_vignette(vignette_info)
@@ -280,7 +314,7 @@ with admiral best practices.
       processed_count <- processed_count + 1
     }
   }
-
+  
   # Add footer
   footer <- glue("
 
@@ -288,14 +322,14 @@ with admiral best practices.
 
 ## Keeping This Document Updated
 
-**Generated:** {format(Sys.time(), '%Y-%m-%d %H:%M:%S')}
-**admiraldev Version:** {admiraldev_version}
-**Vignettes Included:** {processed_count} of {length(vignettes_info)}
+**Generated:** {format(Sys.time(), '%Y-%m-%d %H:%M:%S')}  
+**admiraldev Version:** {admiraldev_version}  
+**Vignettes Included:** {processed_count} of {length(vignettes_info)}  
 **Output File:** `{output_file}`
 
 ### Manual Update
 ```r
-source('scripts/sync_admiraldev_docs.R')
+source('.github/scripts/sync_admiraldev_docs.R')
 ```
 
 ### Automatic Updates
@@ -303,7 +337,7 @@ source('scripts/sync_admiraldev_docs.R')
 Consider setting up a monthly cron job or GitHub Action to keep these
 guidelines synchronized with the latest admiraldev version.
 
-See `scripts/sync_admiraldev_docs.R` for setup instructions.
+See `.github/scripts/sync_admiraldev_docs.R` for setup instructions.
 
 ---
 
@@ -313,7 +347,7 @@ GitHub Copilot automatically reads files in `.github/` directories and uses them
 as context when providing code suggestions. By keeping admiraldev guidelines here:
 
 1. **Copilot suggests code** that follows admiral conventions
-2. **Function names and patterns** match admiral ecosystem standards
+2. **Function names and patterns** match admiral ecosystem standards  
 3. **Documentation style** aligns with admiral expectations
 4. **Test structures** follow unit test guidance
 5. **Vignette examples** use recommended patterns
@@ -325,12 +359,12 @@ is enough for Copilot to use it.
 
 *This is an automated sync of admiraldev documentation for GitHub Copilot context.*
 ")
-
+  
   combined_content <- paste0(combined_content, footer)
-
+  
   # Write to output file
   writeLines(combined_content, output_file)
-
+  
   # Summary
   cat("\n=================================\n")
   cat("✓ Sync completed successfully!\n")
@@ -339,12 +373,13 @@ is enough for Copilot to use it.
   cat(glue("📊 Processed: {processed_count}/{length(vignettes_info)} vignettes\n"))
   cat(glue("📝 Log file: {log_file}\n"))
   cat(glue("⏰ Completed: {format(Sys.time())}\n\n"))
-
+  
   cat("GitHub Copilot will now use these guidelines automatically!\n")
   cat("No need to open the file - Copilot reads .github/ automatically.\n\n")
-
+  
   # Return success status
   invisible(TRUE)
+  
 }, error = function(e) {
   cat("\n=================================\n")
   cat("✗ ERROR during sync\n")
@@ -353,9 +388,10 @@ is enough for Copilot to use it.
   cat(conditionMessage(e), "\n\n")
   cat("Traceback:\n")
   print(sys.calls())
-
+  
   # Return failure status
   invisible(FALSE)
+  
 }, finally = {
   # Clean up logging
   sink(type = "message")
