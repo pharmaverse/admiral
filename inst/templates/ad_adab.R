@@ -303,7 +303,7 @@ check_baseline <- is_baseline %>%
 # Compute BASE and CHG
 is_aval_change <- is_baseline %>%
   derive_var_base(
-    by_vars = exprs(!!!get_admiral_option("subject_keys"), BASETYPE, ADATYPE, ADAPARM),
+    by_vars = exprs(STUDYID, USUBJID, BASETYPE, ADATYPE, ADAPARM),
     source_var = AVAL,
     new_var = BASE,
     filter = ABLFL == "Y"
