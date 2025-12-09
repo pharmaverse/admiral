@@ -409,7 +409,7 @@ adpblpfl <- post_data %>%
     ADPBLPFL = "Y"
   )
 
-# Compute BFLAG, TFLAG, PBFLAG ------------------
+# Compute BFLAG, TFLAG, PBFLAG ----
 
 most_post_result <- post_data %>%
   group_by(!!!get_admiral_option("subject_keys"), DRUG, BASETYPE, ADATYPE, ADAPARM) %>%
