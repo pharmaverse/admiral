@@ -125,7 +125,7 @@ ex_dates <- ex %>%
     # DRUG is a merge var to map and merge ADA data with EX.EXTRT
     # This will be used to merge first dose into IS working data.
     # PLACEBO example is for if/when ADA was also collected on Placebo subjects
-    #   or treatments are scrambled prior to database lock.
+    # or treatments are scrambled prior to database lock.
     DRUG = case_when(
       str_detect(toupper(EXTRT), "XANOMELINE") ~ "XANOMELINE",
       str_detect(toupper(EXTRT), "PLACEBO") ~ "XANOMELINE",
