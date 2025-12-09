@@ -289,7 +289,8 @@ yn_to_numeric <- function(arg) {
 #'
 #' **Time-based Conversions:**
 #' * **Days**: `"Day 1"`, `"2D"`, `"2 days"`, `"1.5 days"` → multiply by 24 (e.g., 24, 48, 36)
-#' * **Hours + Minutes**: `"1H30M"`, `"1 hour 30 min"`, `"2HR15MIN"` → hours + minutes/60 (e.g., 1.5, 2.25)
+#' * **Hours + Minutes**: `"1H30M"`, `"1 hour 30 min"`, `"2HR15MIN"` → hours +
+#' minutes/60 (e.g., 1.5, 2.25)
 #' * **Time Ranges**: `"0-6h"`, `"6-12h Post-dose"`, `"0.5 - 6.5h"` → end value (e.g., 6, 12, 6.5)
 #' * **Hours only**: `"1H"`, `"2 hours"`, `"0.5HR"`, `"4hr Post-dose"` → as-is (e.g., 1, 2, 0.5, 4)
 #' * **Minutes only**: `"30M"`, `"45 min"`, `"2.5 Min"` → divide by 60 (e.g., 0.5, 0.75, 0.042)
@@ -376,7 +377,7 @@ convert_xxtpt_to_hours <- function(xxtpt) {
 
   # 1. Check special cases first (exact matches, case-insensitive)
 
-  # Screening -> -1
+  # Screening
   screening_pattern <- regex("^screening$", ignore_case = TRUE)
   screening_idx <- str_detect(xxtpt, screening_pattern) & !na_idx
   result[screening_idx] <- -1
@@ -400,9 +401,12 @@ convert_xxtpt_to_hours <- function(xxtpt) {
   # Matches: "2D", "2 days", "Day 2", "2 day", "1.5 days", "Day 1"
   days_pattern <- regex(
     paste0(
-      "^(?:day\\s+)?(\\d+(?:\\.\\d+)?)\\s*", # optional "day " prefix, then number
-      "(?:d|day|days)?", # OPTIONAL d/day/days suffix
-      "(?:\\s+post-?dose)?$" # optional post-dose suffix
+      "^(?:day\\s+)?(\\d+(?:\\.\\d+)?)\\s*",
+      # optional "day " prefix, then number
+      "(?:d|day|days)?",
+      # OPTIONAL days suffix
+      "(?:\\s+post-?dose)?$"
+      # optional post-dose suffix
     ),
     ignore_case = TRUE,
     comments = TRUE
@@ -417,12 +421,18 @@ convert_xxtpt_to_hours <- function(xxtpt) {
   # Matches: "1H30M", "1 hour 30 min", "1h 30m", "2HR15MIN"
   hm_pattern <- regex(
     paste0(
-      "^(\\d+(?:\\.\\d+)?)\\s*", # hours number
-      "h(?:r|our)?s?", # h/hr/hour/hours
-      "\\s*", # optional space
-      "(\\d+(?:\\.\\d+)?)\\s*", # minutes number
-      "m(?:in|inute)?s?", # m/min/minute/minutes
-      "(?:\\s+post-?dose)?$" # optional post-dose suffix
+      "^(\\d+(?:\\.\\d+)?)\\s*",
+      # hours number
+      "h(?:r|our)?s?",
+      # hours
+      "\\s*",
+      # optional space
+      "(\\d+(?:\\.\\d+)?)\\s*",
+      # minutes number
+      "m(?:in|inute)?s?",
+      # minutes
+      "(?:\\s+post-?dose)?$"
+      # optional post-dose suffix
     ),
     ignore_case = TRUE,
     comments = TRUE
@@ -439,9 +449,12 @@ convert_xxtpt_to_hours <- function(xxtpt) {
   # Process before simple hours to avoid conflicts
   range_pattern <- regex(
     paste0(
-      "^\\d+(?:\\.\\d+)?\\s*-\\s*(\\d+(?:\\.\\d+)?)\\s*", # range with end value captured, spaces allowed
-      "h(?:r|our)?s?", # h/hr/hour/hours
-      "(?:\\s+post-?dose)?$" # optional post-dose suffix
+      "^\\d+(?:\\.\\d+)?\\s*-\\s*(\\d+(?:\\.\\d+)?)\\s*",
+      # range with end value captured, spaces allowed
+      "h(?:r|our)?s?",
+      # hours
+      "(?:\\s+post-?dose)?$"
+      # optional post-dose suffix
     ),
     ignore_case = TRUE,
     comments = TRUE
@@ -456,9 +469,12 @@ convert_xxtpt_to_hours <- function(xxtpt) {
   # Matches: "1H", "2 hours", "0.5HR", "1h Post-dose", "8 hour", "12 HOURS"
   hours_pattern <- regex(
     paste0(
-      "^(\\d+(?:\\.\\d+)?)\\s*", # number
-      "h(?:r|our)?s?", # h/hr/hour/hours
-      "(?:\\s+post-?dose)?$" # optional post-dose suffix
+      "^(\\d+(?:\\.\\d+)?)\\s*",
+      # number
+      "h(?:r|our)?s?",
+      # hours
+      "(?:\\s+post-?dose)?$"
+      # optional post-dose suffix
     ),
     ignore_case = TRUE,
     comments = TRUE
@@ -473,9 +489,12 @@ convert_xxtpt_to_hours <- function(xxtpt) {
   # Matches: "30M", "45 min", "30 Min Post-dose", "2.5 Min"
   minutes_pattern <- regex(
     paste0(
-      "^(\\d+(?:\\.\\d+)?)\\s*", # number
-      "m(?:in|inute)?s?", # m/min/minute/minutes
-      "(?:\\s+post-?dose)?$" # optional post-dose suffix
+      "^(\\d+(?:\\.\\d+)?)\\s*",
+      # number
+      "m(?:in|inute)?s?",
+      # minutes
+      "(?:\\s+post-?dose)?$"
+      # optional post-dose suffix
     ),
     ignore_case = TRUE,
     comments = TRUE
