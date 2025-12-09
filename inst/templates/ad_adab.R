@@ -277,7 +277,7 @@ is_baseline <- is_aval %>%
   mutate(
     # VALID flags for use later as applicable:
     # VALIDBASE flags non-missing values on baseline (by each ADATYPE and ADAPARM)
-    #   Note: VALIDBASE is not used as this templates allows a baseline to be valid as
+    #   Note: VALIDBASE is not used as this template allows a baseline to be valid as
     #        as long as its present (can be missing), adapt as needed.
     # VALIDPOST flags non-missing values on post-baseline (by each ADATYPE and ADAPARM)
     VALIDBASE = case_when(
