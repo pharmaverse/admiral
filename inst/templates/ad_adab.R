@@ -137,7 +137,6 @@ ex_dates <- ex %>%
   ) %>%
   # Add analysis datetime variables and set missing end date to start date
   # Impute missing time to 00:00:00 or as desired.
-  #   Could replace this code with own imputation code or function
   derive_vars_dtm(
     new_vars_prefix = "AST",
     dtc = EXSTDTC,
