@@ -328,7 +328,7 @@ convert_xxtpt_to_hours <- function(xxtpt) {
 
   # Pre-dose, Predose, Pre-infusion, Infusion, 0H, 0 H -> 0
   zero_pattern <- regex(
-    "^(pre-?dose|pre-?infusion|infusion|0\\s*h(?:r|our)?(?:s)?)$",
+    "^(pre-?dose|pre-?infusion|infusion|0\\s*h(?:r|our)?s?)$",
     ignore_case = TRUE
   )
   zero_idx <- str_detect(xxtpt, zero_pattern) & is.na(result)
@@ -339,16 +339,15 @@ convert_xxtpt_to_hours <- function(xxtpt) {
   eoi_idx <- str_detect(xxtpt, eoi_pattern) & is.na(result)
   result[eoi_idx] <- 1
 
-  # Morning, Evening -> NA (already NA, but mark as processed)
-  # We don't need to do anything as result is already NA
+  # Morning, Evening -> NA (already NA, no action needed)
 
   # 2. Check days (convert to hours by multiplying by 24)
-  # Matches: "2D", "Day 2", "2 days", "2 day"
+  # Matches: "2D", "2 days", "Day 2", "2 day"
   days_pattern <- regex(
     paste0(
-      "^(?:day\\s+)?(\\d+(?:\\.\\d+)?)\\s*", # number with optional "day " prefix
-      "d(?:ay)?(?:s)?", # d/day/days
-      "(?:\\s+post-?dose)?$" # optional post-dose suffix
+      "^(?:day\\s+)?(\\d+(?:\\.\\d+)?)\\s*", # optional "day " prefix, then number
+      "(?:d|day)(?:s)?",                      # d/day/days
+      "(?:\\s+post-?dose)?$"                  # optional post-dose suffix
     ),
     ignore_case = TRUE,
     comments = TRUE
@@ -363,12 +362,12 @@ convert_xxtpt_to_hours <- function(xxtpt) {
   # Matches: "1H30M", "1 hour 30 min", "1h 30m"
   hm_pattern <- regex(
     paste0(
-      "^(\\d+(?:\\.\\d+)?)\\s*", # hours number
-      "h(?:r|our)?(?:s)?", # h/hr/hour/hours
-      "\\s*", # optional space
-      "(\\d+(?:\\.\\d+)?)\\s*", # minutes number
-      "m(?:in|inute)?(?:s)?", # m/min/minute/minutes
-      "(?:\\s+post-?dose)?$" # optional post-dose suffix
+      "^(\\d+(?:\\.\\d+)?)\\s*",       # hours number
+      "h(?:r|our)?s?",                 # h/hr/hour/hours
+      "\\s*",                          # optional space
+      "(\\d+(?:\\.\\d+)?)\\s*",        # minutes number
+      "m(?:in|inute)?s?",              # m/min/minute/minutes
+      "(?:\\s+post-?dose)?$"           # optional post-dose suffix
     ),
     ignore_case = TRUE,
     comments = TRUE
@@ -381,13 +380,30 @@ convert_xxtpt_to_hours <- function(xxtpt) {
     result[hm_idx] <- hours + minutes / 60
   }
 
-  # 4. Check hours only
+  # 4. Check time ranges (e.g., "0-6h Post-dose" -> 6, take the end value)
+  # Process before simple hours to avoid conflicts
+  range_pattern <- regex(
+    paste0(
+      "^\\d+(?:\\.\\d+)?-(\\d+(?:\\.\\d+)?)\\s*", # range with end value captured
+      "h(?:r|our)?s?",                             # h/hr/hour/hours
+      "(?:\\s+post-?dose)?$"                       # optional post-dose suffix
+    ),
+    ignore_case = TRUE,
+    comments = TRUE
+  )
+  range_matches <- str_match(xxtpt, range_pattern)
+  range_idx <- !is.na(range_matches[, 1]) & is.na(result)
+  if (any(range_idx)) {
+    result[range_idx] <- as.numeric(range_matches[range_idx, 2])
+  }
+
+  # 5. Check hours only
   # Matches: "1H", "2 hours", "0.5HR", "1h Post-dose"
   hours_pattern <- regex(
     paste0(
-      "^(\\d+(?:\\.\\d+)?)\\s*", # number
-      "h(?:r|our)?(?:s)?", # h/hr/hour/hours
-      "(?:\\s+post-?dose)?$" # optional post-dose suffix
+      "^(\\d+(?:\\.\\d+)?)\\s*",       # number
+      "h(?:r|our)?s?",                 # h/hr/hour/hours
+      "(?:\\s+post-?dose)?$"           # optional post-dose suffix
     ),
     ignore_case = TRUE,
     comments = TRUE
@@ -398,13 +414,13 @@ convert_xxtpt_to_hours <- function(xxtpt) {
     result[hours_idx] <- as.numeric(hours_matches[hours_idx, 2])
   }
 
-  # 5. Check minutes only
+  # 6. Check minutes only
   # Matches: "30M", "45 min", "30 Min Post-dose"
   minutes_pattern <- regex(
     paste0(
-      "^(\\d+(?:\\.\\d+)?)\\s*", # number
-      "m(?:in|inute)?(?:s)?", # m/min/minute/minutes
-      "(?:\\s+post-?dose)?$" # optional post-dose suffix
+      "^(\\d+(?:\\.\\d+)?)\\s*",       # number
+      "m(?:in|inute)?s?",              # m/min/minute/minutes
+      "(?:\\s+post-?dose)?$"           # optional post-dose suffix
     ),
     ignore_case = TRUE,
     comments = TRUE
@@ -413,23 +429,6 @@ convert_xxtpt_to_hours <- function(xxtpt) {
   minutes_idx <- !is.na(minutes_matches[, 1]) & is.na(result)
   if (any(minutes_idx)) {
     result[minutes_idx] <- as.numeric(minutes_matches[minutes_idx, 2]) / 60
-  }
-
-  # 6. Handle time ranges (e.g., "0-6h Post-dose" -> 6, take the end value)
-  # This is handled last as it's a special case
-  range_pattern <- regex(
-    paste0(
-      "^\\d+(?:\\.\\d+)?-(\\d+(?:\\.\\d+)?)\\s*", # range with end value
-      "h(?:r|our)?(?:s)?", # h/hr/hour/hours
-      "(?:\\s+post-?dose)?$" # optional post-dose suffix
-    ),
-    ignore_case = TRUE,
-    comments = TRUE
-  )
-  range_matches <- str_match(xxtpt, range_pattern)
-  range_idx <- !is.na(range_matches[, 1]) & is.na(result)
-  if (any(range_idx)) {
-    result[range_idx] <- as.numeric(range_matches[range_idx, 2])
   }
 
   result
