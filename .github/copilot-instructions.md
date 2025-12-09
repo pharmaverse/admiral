@@ -4,7 +4,7 @@ This file provides context to GitHub Copilot about admiraldev programming standa
 and best practices. Copilot will automatically reference these guidelines when
 providing code suggestions in this repository.
 
-**Auto-generated:** 2025-12-09 19:18:02
+**Auto-generated:** 2025-12-09 19:23:35
 **admiraldev Version:** GitHub main branch
 **Source:** https://github.com/pharmaverse/admiraldev
 
@@ -1562,7 +1562,7 @@ knitr::include_graphics("./unit_test_guidance.png")
 
 ## Keeping This Document Updated
 
-**Generated:** 2025-12-09 19:18:03
+**Generated:** 2025-12-09 19:23:36
 **admiraldev Version:** GitHub main branch
 **Vignettes Included:** 3 of 3
 **Output File:** `/home/jeffreyd/admiral/.github/copilot-instructions.md`

@@ -23,7 +23,7 @@ if (require("here", quietly = TRUE)) {
   # Fallback: find .git directory or use current directory
   project_root <- getwd()
   while (!dir_exists(file.path(project_root, ".git")) &&
-         project_root != dirname(project_root)) {
+    project_root != dirname(project_root)) {
     project_root <- dirname(project_root)
   }
 }
@@ -31,7 +31,7 @@ if (require("here", quietly = TRUE)) {
 # Configuration (relative to project root)
 output_file <- file.path(project_root, ".github", "copilot-instructions.md")
 log_dir <- file.path(project_root, "logs")
-use_github <- TRUE  # Set to TRUE to pull from GitHub, FALSE to use local package
+use_github <- TRUE # Set to TRUE to pull from GitHub, FALSE to use local package
 
 cat(glue("Working from project root: {project_root}\n\n"))
 
@@ -52,7 +52,6 @@ cat("=================================\n\n")
 
 # Main execution wrapped in tryCatch
 tryCatch({
-
   # Define vignettes to copy with their display names
   vignettes_info <- list(
     list(
@@ -88,12 +87,13 @@ tryCatch({
 
       cat(glue("✓ Downloading: {file_name} from GitHub\n"))
 
-      tryCatch({
-        # Download content
-        content <- readLines(url, warn = FALSE)
+      tryCatch(
+        {
+          # Download content
+          content <- readLines(url, warn = FALSE)
 
-        # Create formatted section
-        formatted <- glue("
+          # Create formatted section
+          formatted <- glue("
 
 # {title}
 
@@ -109,17 +109,17 @@ tryCatch({
 ---
 
 ")
-        return(formatted)
-
-      }, error = function(e) {
-        warning(glue("✗ Failed to download {file_name}: {e$message}"))
-        return(NULL)
-      })
+          return(formatted)
+        },
+        error = function(e) {
+          warning(glue("✗ Failed to download {file_name}: {e$message}"))
+          return(NULL)
+        }
+      )
     }
 
     admiraldev_version <- "GitHub main branch"
     admiraldev_path <- "https://github.com/pharmaverse/admiraldev"
-
   } else {
     cat("Using local package installation...\n\n")
 
@@ -127,11 +127,13 @@ tryCatch({
     admiraldev_path <- system.file(package = "admiraldev")
 
     if (admiraldev_path == "") {
-      stop("admiraldev package not found. Please install it with:\n",
-           "  install.packages('admiraldev', dependencies = TRUE, build_vignettes = TRUE)\n",
-           "or from GitHub:\n",
-           "  remotes::install_github('pharmaverse/admiraldev', build_vignettes = TRUE)\n",
-           "Or set use_github = TRUE in this script to download from GitHub directly.")
+      stop(
+        "admiraldev package not found. Please install it with:\n",
+        "  install.packages('admiraldev', dependencies = TRUE, build_vignettes = TRUE)\n",
+        "or from GitHub:\n",
+        "  remotes::install_github('pharmaverse/admiraldev', build_vignettes = TRUE)\n",
+        "Or set use_github = TRUE in this script to download from GitHub directly."
+      )
     }
 
     cat(glue("✓ Found admiraldev at: {admiraldev_path}\n"))
@@ -158,12 +160,14 @@ tryCatch({
     }
 
     if (is.null(vignettes_dir)) {
-      stop(glue("Vignettes directory not found. Tried:\n",
-                "  {paste(possible_dirs, collapse = '\n  ')}\n\n",
-                "The package may have been installed without vignettes.\n",
-                "Try reinstalling with:\n",
-                "  install.packages('admiraldev', dependencies = TRUE, build_vignettes = TRUE)\n",
-                "Or set use_github = TRUE in this script."))
+      stop(glue(
+        "Vignettes directory not found. Tried:\n",
+        "  {paste(possible_dirs, collapse = '\n  ')}\n\n",
+        "The package may have been installed without vignettes.\n",
+        "Try reinstalling with:\n",
+        "  install.packages('admiraldev', dependencies = TRUE, build_vignettes = TRUE)\n",
+        "Or set use_github = TRUE in this script."
+      ))
     }
 
     cat("\n")
@@ -213,7 +217,7 @@ tryCatch({
       return(formatted)
     }
 
-    admiraldev_version <- as.character(packageVersion('admiraldev'))
+    admiraldev_version <- as.character(packageVersion("admiraldev"))
   }
 
   # Create table of contents
@@ -341,7 +345,6 @@ is enough for Copilot to use it.
 
   # Return success status
   invisible(TRUE)
-
 }, error = function(e) {
   cat("\n=================================\n")
   cat("✗ ERROR during sync\n")
@@ -353,7 +356,6 @@ is enough for Copilot to use it.
 
   # Return failure status
   invisible(FALSE)
-
 }, finally = {
   # Clean up logging
   sink(type = "message")
