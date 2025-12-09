@@ -2,6 +2,8 @@
 
 ## New Features
 
+- Added function `convert_xxtpt_to_hours()` to parse timepoint values (e.g. `PCTPT`, `EGTPT`, `VSTPT`) into hours (#2916).
+
 ## Updates of Existing Functions
 
 - The functions `derive_param_bmi()`, `derive_param_bsa()`,

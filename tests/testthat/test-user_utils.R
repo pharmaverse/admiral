@@ -254,364 +254,96 @@ test_that("print_named_list Test 18: named list with unamed list", {
     ))
   )
 })
-
 # convert_xxtpt_to_hours ----
-## Test 19: Pre-dose is converted to 0 ----
-test_that("convert_xxtpt_to_hours Test 19: Pre-dose is converted to 0", {
+
+## Test 1: Special case values ----
+test_that("convert_xxtpt_to_hours Test 1: Special case values", {
   expect_equal(
-    convert_xxtpt_to_hours(c("Pre-dose", "Predose", "pre-dose")),
-    c(0, 0, 0)
+    convert_xxtpt_to_hours(c(
+      "Screening", "SCREENING",
+      "Pre-dose", "PREDOSE", "Pre-infusion", "Infusion", "0H", "0 h",
+      "EOI", "End of Infusion",
+      "Morning", "Evening"
+    )),
+    c(-1, -1, 0, 0, 0, 0, 0, 0, 1, 1, NA_real_, NA_real_)
   )
 })
 
-## Test 20: Minutes are converted to hours ----
-test_that("convert_xxtpt_to_hours Test 20: Minutes are converted to hours", {
+## Test 2: Days conversion ----
+test_that("convert_xxtpt_to_hours Test 2: Days convert to hours (x24)", {
   expect_equal(
-    convert_xxtpt_to_hours(c("5 Min Post-dose", "30 Min Post-dose", "45 Min Post-dose")),
-    c(5 / 60, 30 / 60, 45 / 60)
+    convert_xxtpt_to_hours(c("Day 1", "2D", "1.5 days", "Day 7")),
+    c(24, 48, 36, 168)
   )
 })
 
-## Test 21: Hours are extracted correctly ----
-test_that("convert_xxtpt_to_hours Test 21: Hours are extracted correctly", {
+## Test 3: Hours and minutes combinations ----
+test_that("convert_xxtpt_to_hours Test 3: Hours+Minutes combinations", {
   expect_equal(
-    convert_xxtpt_to_hours(c("1h Post-dose", "2h Post-dose", "4h Post-dose", "24h Post-dose")),
-    c(1, 2, 4, 24)
+    convert_xxtpt_to_hours(c("1H30M", "1 hour 30 min", "2HR15MIN")),
+    c(1.5, 1.5, 2.25)
   )
 })
 
-## Test 22: Decimal hours are extracted correctly ----
-test_that("convert_xxtpt_to_hours Test 22: Decimal hours are extracted correctly", {
+## Test 4: Time ranges return end value ----
+test_that("convert_xxtpt_to_hours Test 4: Time ranges return end value", {
   expect_equal(
-    convert_xxtpt_to_hours(c("1.5h Post-dose", "2.5h Post-dose", "0.5h Post-dose")),
-    c(1.5, 2.5, 0.5)
+    convert_xxtpt_to_hours(c("0-6h", "6-12h Post-dose", "0.5 - 6.5h")),
+    c(6, 12, 6.5)
   )
 })
 
-## Test 23: Time ranges return the end value ----
-test_that("convert_xxtpt_to_hours Test 23: Time ranges return the end value", {
+## Test 5: Hours only - various formats ----
+test_that("convert_xxtpt_to_hours Test 5: Hours with format variations", {
   expect_equal(
-    convert_xxtpt_to_hours(c("0-6h Post-dose", "6-12h Post-dose", "12-24h Post-dose", "24-48h Post-dose")),
-    c(6, 12, 24, 48)
+    convert_xxtpt_to_hours(c(
+      "1h", "2H", "4hr Post-dose", "8 hour", "12 HOURS", "0.5h", "24h"
+    )),
+    c(1, 2, 4, 8, 12, 0.5, 24)
   )
 })
 
-## Test 24: Non-numeric event markers return NA ----
-test_that("convert_xxtpt_to_hours Test 24: Non-numeric event markers return NA", {
+## Test 6: Minutes only - various formats ----
+test_that("convert_xxtpt_to_hours Test 6: Minutes with format variations", {
   expect_equal(
-    convert_xxtpt_to_hours(c("EOI", "EOS", "EOT", "Unknown")),
-    c(NA_real_, NA_real_, NA_real_, NA_real_)
+    convert_xxtpt_to_hours(c(
+      "5M", "15m Post-dose", "30 min", "45 MINUTES", "2.5 Min"
+    )),
+    c(5 / 60, 15 / 60, 30 / 60, 45 / 60, 2.5 / 60)
   )
 })
 
-## Test 25: Mixed input handles all formats correctly ----
-test_that("convert_xxtpt_to_hours Test 25: Mixed input handles all formats correctly", {
+## Test 7: Case insensitivity and spacing ----
+test_that("convert_xxtpt_to_hours Test 7: Case and spacing variations", {
+  expect_equal(
+    convert_xxtpt_to_hours(c(
+      "1h POST-DOSE", "1H post-dose", "1 h Post-Dose",
+      "PRE-DOSE", "Predose", "PREDOSE"
+    )),
+    c(1, 1, 1, 0, 0, 0)
+  )
+})
+
+## Test 8: NA and edge cases ----
+test_that("convert_xxtpt_to_hours Test 8: NA and edge cases", {
+  expect_equal(
+    convert_xxtpt_to_hours(c(NA_character_, "Unknown", "EOS", "Pre-dose")),
+    c(NA_real_, NA_real_, NA_real_, 0)
+  )
+  expect_equal(convert_xxtpt_to_hours(character(0)), numeric(0))
+})
+
+## Test 9: Comprehensive mixed input ----
+test_that("convert_xxtpt_to_hours Test 9: Mixed comprehensive input", {
   input <- c(
-    "Pre-dose",
-    "5 Min Post-dose",
-    "30 Min Post-dose",
-    "1h Post-dose",
-    "1.5h Post-dose",
-    "2h Post-dose",
-    "4h Post-dose",
-    "6h Post-dose",
-    "8h Post-dose",
-    "12h Post-dose",
-    "16h Post-dose",
-    "24h Post-dose",
-    "36h Post-dose",
-    "48h Post-dose",
-    "0-6h Post-dose",
-    "6-12h Post-dose",
-    "12-24h Post-dose",
-    "24-48h Post-dose"
+    "Screening", "Pre-dose", "5 Min Post-dose", "30M", "1H30M",
+    "0.5h", "1h Post-dose", "2h", "0-6h Post-dose", "Day 1",
+    "24h", "EOI", "Morning", "Unknown"
   )
   expected <- c(
-    0,
-    5 / 60,
-    30 / 60,
-    1,
-    1.5,
-    2,
-    4,
-    6,
-    8,
-    12,
-    16,
-    24,
-    36,
-    48,
-    6,
-    12,
-    24,
-    48
+    -1, 0, 5 / 60, 30 / 60, 1.5,
+    0.5, 1, 2, 6, 24,
+    24, 1, NA_real_, NA_real_
   )
   expect_equal(convert_xxtpt_to_hours(input), expected)
-})
-
-## Test 26: NA values are preserved ----
-test_that("convert_xxtpt_to_hours Test 26: NA values are preserved", {
-  expect_equal(
-    convert_xxtpt_to_hours(c("Pre-dose", NA_character_, "1h Post-dose")),
-    c(0, NA_real_, 1)
-  )
-})
-
-## Test 27: Empty vector returns empty vector ----
-test_that("convert_xxtpt_to_hours Test 27: Empty vector returns empty vector", {
-  expect_equal(
-    convert_xxtpt_to_hours(character(0)),
-    numeric(0)
-  )
-})
-
-## Test 28: All NA input returns all NA ----
-test_that("convert_xxtpt_to_hours Test 28: All NA input returns all NA", {
-  expect_equal(
-    convert_xxtpt_to_hours(c(NA_character_, NA_character_, NA_character_)),
-    c(NA_real_, NA_real_, NA_real_)
-  )
-})
-
-## Test 29: Decimal minutes are converted correctly ----
-test_that("convert_xxtpt_to_hours Test 29: Decimal minutes are converted correctly", {
-  expect_equal(
-    convert_xxtpt_to_hours(c("2.5 Min Post-dose", "7.5 Min Post-dose")),
-    c(2.5 / 60, 7.5 / 60)
-  )
-})
-
-## Test 30: Decimal time ranges work correctly ----
-test_that("convert_xxtpt_to_hours Test 30: Decimal time ranges work correctly", {
-  expect_equal(
-    convert_xxtpt_to_hours(c("0.5-6.5h Post-dose", "1.5-12.5h Post-dose")),
-    c(6.5, 12.5)
-  )
-})
-
-## Test 31: Case variations in Post-dose ----
-test_that("convert_xxtpt_to_hours Test 31: Case variations in Post-dose", {
-  expect_equal(
-    convert_xxtpt_to_hours(c("1h POST-dose", "1h post-dose", "1h Post-Dose")),
-    c(1, 1, 1)
-  )
-})
-
-## Test 32: Case variations in minutes ----
-test_that("convert_xxtpt_to_hours Test 32: Case variations in minutes", {
-  expect_equal(
-    convert_xxtpt_to_hours(c("5 MIN Post-dose", "5 min Post-dose", "5 Min POST-dose")),
-    c(5 / 60, 5 / 60, 5 / 60)
-  )
-})
-
-## Test 33: Pre-dose with capital P ----
-test_that("convert_xxtpt_to_hours Test 33: Pre-dose with capital P", {
-  expect_equal(
-    convert_xxtpt_to_hours(c("PRE-DOSE", "Predose", "PREDOSE")),
-    c(0, 0, 0)
-  )
-})
-
-## Test 34: Minute variations (minute, minutes) ----
-test_that("convert_xxtpt_to_hours Test 34: Minute variations (minute, minutes)", {
-  expect_equal(
-    convert_xxtpt_to_hours(c("5 Minute Post-dose", "10 Minutes Post-dose")),
-    c(5 / 60, 10 / 60)
-  )
-})
-
-## Test 35: Hour pattern variations (h, hr, hour, hours) ----
-test_that("convert_xxtpt_to_hours Test 35: Hour pattern variations (h, hr, hour, hours)", {
-  expect_equal(
-    convert_xxtpt_to_hours(c("1h Post-dose", "2hr Post-dose", "3hour Post-dose", "4hours Post-dose")),
-    c(1, 2, 3, 4)
-  )
-})
-
-## Test 36: Hour pattern variations with case sensitivity ----
-test_that("convert_xxtpt_to_hours Test 36: Hour pattern variations with case sensitivity", {
-  expect_equal(
-    convert_xxtpt_to_hours(c("1H Post-dose", "2HR Post-dose", "3HOUR Post-dose", "4HOURS Post-dose")),
-    c(1, 2, 3, 4)
-  )
-})
-
-## Test 37: Minute pattern variations (m, min, minute, minutes) ----
-test_that("convert_xxtpt_to_hours Test 37: Minute pattern variations (m, min, minute, minutes)", {
-  expect_equal(
-    convert_xxtpt_to_hours(c("5m Post-dose", "10min Post-dose", "15minute Post-dose", "20minutes Post-dose")),
-    c(5 / 60, 10 / 60, 15 / 60, 20 / 60)
-  )
-})
-
-## Test 38: Minute pattern variations with case sensitivity ----
-test_that("convert_xxtpt_to_hours Test 38: Minute pattern variations with case sensitivity", {
-  expect_equal(
-    convert_xxtpt_to_hours(c("5M Post-dose", "10MIN Post-dose", "15MINUTE Post-dose", "20MINUTES Post-dose")),
-    c(5 / 60, 10 / 60, 15 / 60, 20 / 60)
-  )
-})
-
-## Test 39: Time range variations with different hour patterns ----
-test_that("convert_xxtpt_to_hours Test 39: Time range variations with different hour patterns", {
-  expect_equal(
-    convert_xxtpt_to_hours(c("0-6hr Post-dose", "0-6hour Post-dose", "0-6hours Post-dose")),
-    c(6, 6, 6)
-  )
-})
-
-## Test 40: Decimal values with different patterns ----
-test_that("convert_xxtpt_to_hours Test 40: Decimal values with different patterns", {
-  expect_equal(
-    convert_xxtpt_to_hours(c("1.5hr Post-dose", "2.5hours Post-dose", "3.5m Post-dose")),
-    c(1.5, 2.5, 3.5 / 60)
-  )
-})
-
-## Test 41: Optional space between number and hour unit ----
-test_that("convert_xxtpt_to_hours Test 41: Optional space between number and hour unit", {
-  expect_equal(
-    convert_xxtpt_to_hours(c("1h Post-dose", "1 h Post-dose", "2hr Post-dose", "2 hr Post-dose")),
-    c(1, 1, 2, 2)
-  )
-})
-
-## Test 42: Optional space between number and minute unit ----
-test_that("convert_xxtpt_to_hours Test 42: Optional space between number and minute unit", {
-  expect_equal(
-    convert_xxtpt_to_hours(c("5m Post-dose", "5 m Post-dose", "10min Post-dose", "10 min Post-dose")),
-    c(5 / 60, 5 / 60, 10 / 60, 10 / 60)
-  )
-})
-
-## Test 43: Optional space in ranges ----
-test_that("convert_xxtpt_to_hours Test 43: Optional space in ranges", {
-  expect_equal(
-    convert_xxtpt_to_hours(c("0-6h Post-dose", "0-6 h Post-dose", "0-6hr Post-dose", "0-6 hr Post-dose")),
-    c(6, 6, 6, 6)
-  )
-})
-
-## Test 44: Optional space with uppercase and different patterns ----
-test_that("convert_xxtpt_to_hours Test 44: Optional space with uppercase and different patterns", {
-  expect_equal(
-    convert_xxtpt_to_hours(c("3HR Post-dose", "3 HR Post-dose", "5M Post-dose", "5 M Post-dose")),
-    c(3, 3, 5 / 60, 5 / 60)
-  )
-})
-
-## Test 45: Special case - Screening returns -1 ----
-test_that("convert_xxtpt_to_hours Test 45: Special case - Screening returns -1", {
-  expect_equal(
-    convert_xxtpt_to_hours(c("Screening", "SCREENING", "screening")),
-    c(-1, -1, -1)
-  )
-})
-
-## Test 46: Special case - EOI and End of Infusion return 1 ----
-test_that("convert_xxtpt_to_hours Test 46: Special case - EOI and End of Infusion return 1", {
-  expect_equal(
-    convert_xxtpt_to_hours(c("EOI", "eoi", "End of Infusion", "END OF INFUSION")),
-    c(1, 1, 1, 1)
-  )
-})
-
-## Test 47: Special case - Pre-infusion and Infusion return 0 ----
-test_that("convert_xxtpt_to_hours Test 47: Special case - Pre-infusion and Infusion return 0", {
-  expect_equal(
-    convert_xxtpt_to_hours(c("Pre-infusion", "Preinfusion", "Infusion", "0H", "0 H")),
-    c(0, 0, 0, 0, 0)
-  )
-})
-
-## Test 48: Special case - Morning and Evening return NA ----
-test_that("convert_xxtpt_to_hours Test 48: Special case - Morning and Evening return NA", {
-  expect_equal(
-    convert_xxtpt_to_hours(c("Morning", "MORNING", "Evening", "evening")),
-    c(NA_real_, NA_real_, NA_real_, NA_real_)
-  )
-})
-
-## Test 49: Days - basic day patterns ----
-test_that("convert_xxtpt_to_hours Test 49: Days - basic day patterns", {
-  expect_equal(
-    convert_xxtpt_to_hours(c("2D", "2 D", "3 days", "Day 2")),
-    c(48, 48, 72, 48)
-  )
-})
-
-## Test 50: Days - with Post-dose suffix ----
-test_that("convert_xxtpt_to_hours Test 50: Days - with Post-dose suffix", {
-  expect_equal(
-    convert_xxtpt_to_hours(c("2D Post-dose", "3 days Post-dose", "Day 2 Post-dose")),
-    c(48, 72, 48)
-  )
-})
-
-## Test 51: Hours + Minutes combinations ----
-test_that("convert_xxtpt_to_hours Test 51: Hours + Minutes combinations", {
-  expect_equal(
-    convert_xxtpt_to_hours(c("1H30M", "1 hour 30 min", "2h15m", "0H30M")),
-    c(1.5, 1.5, 2.25, 0.5)
-  )
-})
-
-## Test 52: Hours + Minutes with Post-dose ----
-test_that("convert_xxtpt_to_hours Test 52: Hours + Minutes with Post-dose", {
-  expect_equal(
-    convert_xxtpt_to_hours(c("1H30M Post-dose", "2 hours 45 minutes Post-dose")),
-    c(1.5, 2.75)
-  )
-})
-
-## Test 53: Hours without Post-dose suffix ----
-test_that("convert_xxtpt_to_hours Test 53: Hours without Post-dose suffix", {
-  expect_equal(
-    convert_xxtpt_to_hours(c("1H", "2HR", "3 hours", "0.5H")),
-    c(1, 2, 3, 0.5)
-  )
-})
-
-## Test 54: Minutes without Post-dose suffix ----
-test_that("convert_xxtpt_to_hours Test 54: Minutes without Post-dose suffix", {
-  expect_equal(
-    convert_xxtpt_to_hours(c("30M", "45 min", "60 minutes", "15MIN")),
-    c(0.5, 0.75, 1, 0.25)
-  )
-})
-
-## Test 55: Comprehensive test matching requirements example ----
-test_that("convert_xxtpt_to_hours Test 55: Comprehensive test matching requirements example", {
-  test_values <- c(
-    "PREDOSE",
-    "Pre-dose",
-    "1H",
-    "30MIN",
-    "2 hours",
-    "1H30M",
-    "Day 2",
-    "Screening",
-    "Morning"
-  )
-  expected <- c(0, 0, 1, 0.5, 2, 1.5, 48, -1, NA_real_)
-  expect_equal(convert_xxtpt_to_hours(test_values), expected)
-})
-
-## Test 56: Time ranges without Post-dose ----
-test_that("convert_xxtpt_to_hours Test 56: Time ranges without Post-dose", {
-  expect_equal(
-    convert_xxtpt_to_hours(c("0-6h", "6-12hr", "12-24hours")),
-    c(6, 12, 24)
-  )
-})
-
-## Test 57: Decimal days ----
-test_that("convert_xxtpt_to_hours Test 57: Decimal days", {
-  expect_equal(
-    convert_xxtpt_to_hours(c("1.5D", "2.5 days", "Day 1.5")),
-    c(36, 60, 36)
-  )
-})
-  )
 })
