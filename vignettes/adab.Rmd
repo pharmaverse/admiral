@@ -1442,7 +1442,7 @@ adab_adafl <- adab_cohort %>%
 In this section we create a Tibble to map above `PARAMCD` and `PARAM` to final study spec values.
 This step is important as we want unique `PARAMCD`/`PARAM` values. The number suffixes start 
 with '1' and increment as the core parameter name is repeated. This could be due to having
-RESULT for ADA and Nab for Drug ABC.  There could be two analytes/drug combos 
+`RESULT` for ADA and Nab for Drug ABC. There could be two analytes/drug combos 
 (ISBDAGNT is 'XANOMELINE' and ISBDAGNT is 'Y012345678').
 
 After merging the 'adab_param_data', final adjustments are made to PARAMCD and PARAM values.
