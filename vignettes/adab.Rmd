@@ -733,7 +733,7 @@ The remaining pertinent analysis variables computed in this section are:
                 and duration between first and last positive result is < 16 weeks.
 `PERSADAE` - Any Treatment Emergent Persistent ADA (either of):
              `INDUCED` or `ENHANCED` and Positive at the last post-baseline result.
-             INDUCED  or ENHANCED and multiple post baseline positive (other than last)
+             `INDUCED` or `ENHANCED` and multiple post-baseline positive (other than last result)
 ADABLPFL - Baseline ADA Evaluable - Baseline test exists (ABLFL = Y)
 ADPBFPFL - Post Baseline ADA Evaluable - At least one Valid (non-missing) post-baseline result.
 
