@@ -571,7 +571,7 @@ post_data <- is_visit_flags %>%
   rename(AVAL_P = AVAL) %>%
   rename(RESULT_P = RESULTN)
 
-# Use "post_data" to make a ADPBLPFL flag data set to merge back later in the program
+# Use the "post_data" dataset to create the ADPBLPFL flag, which will be merged back later in the program
 #  Note:  "post_data" is if VALIDPOST="Y" (has a non missing post baseline result)
 adpblpfl <- post_data %>%
   distinct(!!!get_admiral_option("subject_keys"), DRUG, BASETYPE, ADATYPE,
