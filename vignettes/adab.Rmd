@@ -318,7 +318,7 @@ is_afrlt <- is_dates %>%
 
 ## Assign Periods, Phases and BASETYPE {#basetype}
 
-At this step compute or assign applicable APERIOD, APHASE and/or BASETYPE.
+At this step compute or assign applicable `APERIOD`, `APHASE` and/or `BASETYPE` variables.
 Note: In ADAB, BASETYPE is Phase or Period but the method for assigning BASE
 could be appended to BASETYPE (i.e. "DOUBLE_BLINDED LAST"). 
 BASETYPE is carried though through the remaining steps of this template as a by 
