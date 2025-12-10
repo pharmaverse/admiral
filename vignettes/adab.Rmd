@@ -519,7 +519,7 @@ Enhanced: Positive at Baseline to Positive Post-Baseline where Change from Basel
 Treatment Unaffected: Positive at Baseline to Positive where Change from Baseline < 0.60
 
 ```{r message=FALSE}
-# Use "is_result_change"to make a ADABLPFL flag data set to merge back in later in the program
+# Use the "is_result_change" dataset to create the ADABLPFL flag, which will be merged back later in the program
 #  Note:  Based on ABLFL, ABLFL is if had any a baseline record, even if null value
 adablpfl <- is_result_change %>%
   filter(ABLFL == "Y") %>%
