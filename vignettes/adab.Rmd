@@ -428,7 +428,7 @@ In this first section, we compute `ABLFL`, `BASE` and `CHG`.
 to use directly or use later to qualify a record as baseline or post-baseline
 as analysis variables are computed.  For example, a missing value at baseline
 could be considered negative while non missing post baseline might required
-(or considered Negative if sponsor defined as such).  This example allows
+(or considered Negative if sponsor defined as such). This example allows
 missing baseline but required post baseline to be not missing values.
 
 ```{r message=FALSE}
