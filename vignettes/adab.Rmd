@@ -864,7 +864,7 @@ per_tran_final <- per_tran_last %>%
 
 # Put PERSADA, TRANADA, INDUCED, ENHANCED, TDUR, ADADUR onto "is_flagdata" as "main_aab_pertran"
 # Note: signal_duplicate_records() error usually occurs when a subject has duplicate
-#        record for a given BASETYPE, ADATYPE, ADAPARM and ISDTC. Investigate then add code
+#        records for a given BASETYPE, ADATYPE, ADAPARM and ISDTC. Investigate then add code
 #        to filter it down to best one record per USUBJID, BASETYPE, ADATYPE and ADAPARM
 main_aab_pertran <- is_flagdata %>%
   derive_vars_merged(
