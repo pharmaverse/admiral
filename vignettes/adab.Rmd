@@ -723,7 +723,7 @@ The remaining pertinent analysis variables computed in this section are:
              INDUCED and Positive at any Post Baseline other than Last
              INDUCED and multiple post baseline positive (other than last)
                 and duration between first and last positive is < 16 weeks.
-PERSADA -  Persistent ADA (either of):
+`PERSADA` -  Persistent ADA (either of):
              INDUCED and Positive at the last post baseline result.
              INDUCED and multiple post baseline positive (other than last)
                 and duration between first and last positive is >= 16 weeks.
