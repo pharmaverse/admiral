@@ -344,7 +344,7 @@ is_basetype <- is_afrlt %>%
 ```
 
 
-At this step, we assign MRT (Minimum Reportable Titer) and an Optional
+At this step, we assign `MRT` (Minimum Reportable Titer) and an Optional
 DTL (both are user/protocol specific assigned values).  RESULTC is the
 the standard interpreted result (POSITIVE or NEGATIVE) based valued found
 in IS.ISSTRESC (these values will be sponsor specific as applicable, starter
