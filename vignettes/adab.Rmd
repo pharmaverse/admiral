@@ -351,8 +351,8 @@ to aid with user review of the progression of the program.
 
 When `IS.ISSTERC` is "POSITIVE",  `IS.ISSTRESN` is commonly populated with values >0. 
 However, if `ISSTRESC` is "POSITIVE" with a missing `IS.ISSTRESN`, this template provides
-a sample method to assign AVAL using the assigned MRT and set AVALC to 'N.C.' (not commutable)
-and document the operation using DTYPE='MRT'.  
+a method to assign AVAL using the assigned MRT value, sets AVALC to 'N.C.' (Not Calculable)
+and documents the operation by setting DTYPE='MRT'.  
 
 ## Derive Assigned Variables {#assigned}
 
