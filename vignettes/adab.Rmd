@@ -709,7 +709,7 @@ flagdata_final <- flagdata_nab %>%
 
 In this section, we bring together all the prior section variables into a single horizontal dataset
 then we compute the remaining analysis variables into a final horizontal dataset 
-by STUDYID, USUBJID, BASETYPE, ADATYPE (Nab or ADA), ADAPARM (Drug specific value for the Nab or ADA test)
+by `STUDYID`, `USUBJID`, `BASETYPE`, `ADATYPE` (Nab or ADA), `ADAPARM` (Drug specific value for the Nab or ADA test)
 The subject level variable values are repeated on each VISIT/ISDTC by BASETYPE, ADATYPE, ADAPARM.
 
 The remaining pertinent analysis variables  computed in this section are:
