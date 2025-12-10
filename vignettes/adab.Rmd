@@ -424,7 +424,7 @@ is_aval <- is_basetype %>%
 ## Derive Analysis Variables {#analysis}
 
 In this first section, we compute `ABLFL`, `BASE` and `CHG`.
-VALIDBASE and VALIDPOST are assigned to accommodate if sponsor has restrictions
+`VALIDBASE` and `VALIDPOST` variables are assigned to accommodate if sponsor has restrictions
 to use directly or use later to qualify a record as baseline or post-baseline
 as analysis variables are computed.  For example, a missing value at baseline
 could be considered negative while non missing post baseline might required
