@@ -654,7 +654,7 @@ flagdata_init <- full_join(base_data, most_post, by = c(
 
 In this section, we compute Neutralizing Antibody (Nab) Status (optional and if applicable).
 Nab is typically obtained from samples where the subject has positive finding for its 
-parent main analyte.  Reminder that ADA and Nab are drug specific.  Drug ABC can have ADA
+parent main analyte. Reminder that ADA and Nab are drug specific. Drug ABC can have ADA
 and optional Nab tests; Drug XYZ can also have the same pairs and are processed separately.
 
 The target variable for Nab is NABSTAT (subject Nab Status for the the matching parent analyte)
