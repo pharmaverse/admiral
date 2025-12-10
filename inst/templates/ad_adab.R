@@ -472,7 +472,7 @@ flagdata_nab <- flagdata_adastat %>%
   )
 
 # Compute NAB Stat using both methods
-# Note: Options 2 added as a placekeeper starter method, adjust as needed for
+# Note: Option 2 added as a placekeeper starter method, adjust as needed for
 #   study specific specs.
 flagdata_final <- flagdata_nab %>%
   mutate(
@@ -618,8 +618,8 @@ per_tran_final <- per_tran_last %>%
   select(-ADTM, -TFLAGV, -FANLDTM, -FANLDT, -LFLAGPOS, -FPPDT, -LPPDT)
 
 # Put PERSADA, TRANADA, INDUCED, ENHANCED, TDUR, ADADUR onto "is_flagdata" as "main_aab_pertran"
-#  Note: if get a signal_duplicate_records() error, then likely cause is  subject has a duplicate
-#        record for a given BASETYPE, ADATYPE, ADAPARM and ISDTC. Investigate then add code
+# Note: Note: signal_duplicate_records() error usually occurs when a subject has duplicate
+#        records for a given BASETYPE, ADATYPE, ADAPARM and ISDTC. Investigate then add code
 #        to filter it down to best one record per USUBJID, BASETYPE, ADATYPE and ADAPARM
 main_aab_pertran <- is_flagdata %>%
   derive_vars_merged(
@@ -738,7 +738,7 @@ adab_result <- adab_result %>%
     filter = is.na(ABLFL)
   )
 
-# By Visit NAB Interpreted RESULT data (keep all IS vars plus ____)
+# By Visit NAB Interpreted RESULT data
 adab_nabres <- core_aab %>%
   filter(ADATYPE == "ADA_NAB") %>%
   mutate(
@@ -770,7 +770,7 @@ adab_nabres <- adab_nabres %>%
 
 # By Visit Titer TFLAGV data -----------------------
 
-# Note: By Visit parameters do not keep CHG, MRT and DTL
+# Note: By Visit parameters do not keep CHG, MRT and DTL variables
 adab_tflagv <- core_aab %>%
   filter(ADATYPE == "ADA_BAB") %>%
   mutate(
@@ -784,7 +784,7 @@ adab_tflagv <- core_aab %>%
   select(-BASE, -CHG, -MRT, -DTL, -ADABLPFL, -ADPBLPFL)
 
 # By Visit Titer PBFLAGV data ---------------------
-# Note: By Visit parameters do not keep CHG, MRT and DTL
+# Note: By Visit parameters do not keep CHG, MRT and DTL variables
 adab_pbflagv <- core_aab %>%
   filter(ADATYPE == "ADA_BAB") %>%
   mutate(
@@ -806,7 +806,7 @@ adab_pbflagv <- core_aab %>%
   select(-BASE, -CHG, -MRT, -DTL, -ADABLPFL, -ADPBLPFL)
 
 # By Visit Titer ADASTATV data
-# Note: By Visit parameters do not keep CHG, MRT and DTL
+# Note: By Visit parameters do not keep CHG, MRT and DTL variables
 adab_adastatv <- core_aab %>%
   filter(ADATYPE == "ADA_BAB") %>%
   mutate(
