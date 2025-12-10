@@ -1033,7 +1033,7 @@ adab_tflagv <- core_aab %>%
   select(-BASE, -CHG, -MRT, -DTL, -ADABLPFL, -ADPBLPFL)
 
 # By Visit Titer PBFLAGV data ---------------------
-# Note: By Visit parameters do not keep CHG, MRT and DTL
+# Note: By Visit parameters do not keep CHG, MRT and DTL variables
 adab_pbflagv <- core_aab %>%
   filter(ADATYPE == "ADA_BAB") %>%
   mutate(
