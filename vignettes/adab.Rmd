@@ -728,7 +728,7 @@ The remaining pertinent analysis variables computed in this section are:
              `INDUCED` and multiple post-baseline positive (other than last result)
                 and duration between first and last positive result is >= 16 weeks.
 `TRANADAE`  - Any Treatment Emergent Transient ADA (either of): 
-             INDUCED and Positive at any Post Baseline other than Last
+             `INDUCED` and Positive at any Post-Baseline other than last result
              INDUCED and multiple post baseline positive (other than last)
                 and duration between first and last positive is < 16 weeks.
 PERSADAE - Any Treatment Emergent Persistent ADA (either of):
