@@ -725,7 +725,7 @@ The remaining pertinent analysis variables computed in this section are:
                 and duration between first and last positive is < 16 weeks.
 `PERSADA` -  Persistent ADA (either of):
              `INDUCED` and Positive at the last post-baseline result.
-             INDUCED and multiple post baseline positive (other than last)
+             `INDUCED` and multiple post-baseline positive (other than last result)
                 and duration between first and last positive is >= 16 weeks.
 TRANADAE  - Any Treatment Emergent Transient ADA  (either of): 
              INDUCED and Positive at any Post Baseline other than Last
