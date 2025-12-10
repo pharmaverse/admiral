@@ -921,7 +921,7 @@ Certain computed variables are limited to only by visit records or for the main 
 These are noted in each step as code or comments.
 
 On the OVERALL data sets, we also keep: `PARCAT1`, `BASETYPE`, `PARAM`, `ADATYPE`, `ADAPARM`,
-    ISTESTCD, ISTEST, ISCAT, ISBDAGNT, AVISITN, AVISIT, ISSPEC, {analysis variable}
+    `ISTESTCD`, `ISTEST`, `ISCAT`, `ISBDAGNT`, `AVISITN`, `AVISIT`, `ISSPEC`, `{analysis variable}`.
 Note: ADATYPE, ADAPARM and  {analysis variable} are not kept in the final ADAB dataset.
 
 ```{r message=FALSE}
