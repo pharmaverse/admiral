@@ -325,7 +325,7 @@ could be appended to `BASETYPE` (i.e. "DOUBLE_BLINDED LAST").
 variable for computing parameters. For example, if there is a main
 phase and a later maintenance phase, you might want to compute all the ADA 
 parameters by `BASETYPE`. If re-baselining does not occur in a later phase, the 
-BASE from the first phase could be appended to the main data and adjust the 
+`BASE` from the first phase could be appended to the main data and adjust the 
 BASETYPE construct with a key word to explain this.
 
 
