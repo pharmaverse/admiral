@@ -1376,7 +1376,7 @@ adab_lppdtm <- core_aab %>%
 
 In this section, we set together the desired parameter data sets created in the prior section.
 In this example, all are kept. A specific study might not have Nab or need the by visit parameters (`TFLAGV`, `PBFLAGV`, `ADASTATV`)
-or need vars like ADADUR, LPPDTM and FPPDTM.
+or need variables like `ADADUR`, `LPPDTM` and `FPPDTM`.
 
 ```{r message=FALSE}
 adab_paramcds <- bind_rows(
