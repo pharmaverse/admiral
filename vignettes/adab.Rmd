@@ -712,7 +712,7 @@ then we compute the remaining analysis variables into a final horizontal dataset
 by `STUDYID`, `USUBJID`, `BASETYPE`, `ADATYPE` (Nab or ADA), `ADAPARM` (Drug specific value for the Nab or ADA test)
 The subject level variable values are repeated on each `VISIT`/`ISDTC` by `BASETYPE`, `ADATYPE`, `ADAPARM`.
 
-The remaining pertinent analysis variables  computed in this section are:
+The remaining pertinent analysis variables computed in this section are:
 FPPDT  - Date of first ADA Positive
 LPPDT  - Date of Last ADA Positive
 ADADUR - Duration of ADA (LPPDT - FPPDT)
