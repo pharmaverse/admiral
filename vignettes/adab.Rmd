@@ -683,7 +683,7 @@ flagdata_nab <- flagdata_adastat %>%
   )
 
 # Compute NAB Stat using both methods
-# Note: Options 2 added as a placekeeper starter method, adjust as needed for
+# Note: Option 2 added as a placekeeper starter method, adjust as needed for
 #   study specific specs.
 flagdata_final <- flagdata_nab %>%
   mutate(
