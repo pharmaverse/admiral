@@ -520,7 +520,7 @@ Treatment Unaffected: Positive at Baseline to Positive where Change from Baselin
 
 ```{r message=FALSE}
 # Use the "is_result_change" dataset to create the ADABLPFL flag, which will be merged back later in the program
-#  Note:  Based on ABLFL, ABLFL is if had any a baseline record, even if null value
+#  Note: Based on ABLFL, ABLFL is if had any a baseline record, even if null value
 adablpfl <- is_result_change %>%
   filter(ABLFL == "Y") %>%
   distinct(!!!get_admiral_option("subject_keys"), DRUG, BASETYPE,
