@@ -510,7 +510,7 @@ ADASTATV - Overall ADA Status by Visit (ADA Positive or Negative)
 Subject Overall analysis variables
 BFLAG  - Baseline Positive/Negative Flag
 TFLAG  - Overall Treatment Emergent Category  (see *T-Flags)
-PBFLAG  - Post Baseline Status
+PBFLAG  - Post-Baseline Status
 ADASTAT - Overall Subject ADA Status (ADA Positive or Negative)
 
 *T-Flags: 0=Negative, 1=Induced, 2=Enhanced, 3=Treatment Unaffected
