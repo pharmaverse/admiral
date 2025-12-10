@@ -713,7 +713,7 @@ by `STUDYID`, `USUBJID`, `BASETYPE`, `ADATYPE` (Nab or ADA), `ADAPARM` (Drug spe
 The subject level variable values are repeated on each `VISIT`/`ISDTC` by `BASETYPE`, `ADATYPE`, `ADAPARM`.
 
 The remaining pertinent analysis variables computed in this section are:
-FPPDT  - Date of first ADA Positive
+`FPPDT`  - Date of first ADA Positive
 LPPDT  - Date of Last ADA Positive
 ADADUR - Duration of ADA (LPPDT - FPPDT)
 TIMADA - Time to ADA Positive (from first dose)
