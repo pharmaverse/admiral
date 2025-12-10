@@ -2,7 +2,7 @@
 % Please edit documentation in R/convert_xxtpt_to_hours.R
 \name{convert_xxtpt_to_hours}
 \alias{convert_xxtpt_to_hours}
-\title{Convert XXTPT Strings to Hours}
+\title{Convert \code{XXTPT} Strings to Hours}
 \usage{
 convert_xxtpt_to_hours(xxtpt)
 }
@@ -20,8 +20,9 @@ A numeric vector of timepoints in hours. Returns \code{NA_real_} for:
 \item Input \code{NA} values
 \item Unrecognized timepoint formats
 \item Non-time descriptors (e.g., "Morning", "Evening")
-Returns \code{numeric(0)} for empty input.
 }
+
+Returns \code{numeric(0)} for empty input.
 }
 \description{
 Converts CDISC timepoint strings (e.g., \code{PCTPT}, \code{VSTPT}, \code{EGTPT}, \code{ISTPT}, \code{LBTPT})
@@ -59,57 +60,12 @@ minutes/60 (e.g., 1.5, 2.25)
 \item All with optional plurals and flexible whitespace
 \item Optional "Post-dose" or "Post dose" suffix supported for all patterns
 }
-
-\strong{Processing Order:}
-The function processes patterns in this order to avoid conflicts:
-\enumerate{
-\item Special cases (exact matches)
-\item Days
-\item Hours + Minutes combinations
-\item Time ranges (returns end value)
-\item Hours only
-\item Minutes only
-}
 }
 \examples{
-# Special cases
-convert_xxtpt_to_hours(c("Screening", "Pre-dose", "EOI", "Morning"))
-# Returns: -1, 0, 1, NA
-
-# Days converted to hours
-convert_xxtpt_to_hours(c("Day 1", "Day 2", "2D", "3 days", "1.5 days"))
-# Returns: 24, 48, 48, 72, 36
-
-# Hours in various formats
-convert_xxtpt_to_hours(c("1H", "2 hours", "0.5HR", "4hr Post-dose", "12 HOURS"))
-# Returns: 1, 2, 0.5, 4, 12
-
-# Minutes converted to hours
-convert_xxtpt_to_hours(c("30M", "45 min", "15 MINUTES", "2.5 Min"))
-# Returns: 0.5, 0.75, 0.25, 0.042
-
-# Hours and minutes combinations
-convert_xxtpt_to_hours(c("1H30M", "1 hour 30 min", "2HR15MIN"))
-# Returns: 1.5, 1.5, 2.25
-
-# Time ranges (returns end value)
-convert_xxtpt_to_hours(c("0-6h", "6-12h Post-dose", "0.5 - 6.5h"))
-# Returns: 6, 12, 6.5
-
-# Case insensitivity and spacing variations
-convert_xxtpt_to_hours(c("1h POST-DOSE", "PRE-DOSE", "Predose"))
-# Returns: 1, 0, 0
-
-# Handling NA and unrecognized values
-convert_xxtpt_to_hours(c(NA_character_, "Unknown", "EOS", "Pre-dose"))
-# Returns: NA, NA, NA, 0
-
-# Comprehensive mixed example
 convert_xxtpt_to_hours(c(
-  "Screening", "Pre-dose", "5 Min Post-dose", "30M",
-  "1H30M", "2h", "0-6h Post-dose", "Day 1", "24h"
+  "Screening", "Pre-dose", "EOI", "5 Min Post-dose", "10 MIN POSTDOSE", "30M",
+  "1H30M", "2H POSTDOSE", "0-6h Post-dose", "Day 1", "24h", "48 HR"
 ))
-# Returns: -1, 0, 0.083, 0.5, 1.5, 2, 6, 24, 24
 }
 \seealso{
 Utilities for Formatting Observations:

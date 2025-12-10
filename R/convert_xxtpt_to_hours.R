@@ -1,4 +1,4 @@
-#' Convert XXTPT Strings to Hours
+#' Convert `XXTPT` Strings to Hours
 #'
 #' Converts CDISC timepoint strings (e.g., `PCTPT`, `VSTPT`, `EGTPT`, `ISTPT`, `LBTPT`)
 #' into numeric hours for analysis. The function handles common dose-centric formats
@@ -33,15 +33,6 @@
 #' * All with optional plurals and flexible whitespace
 #' * Optional "Post-dose" or "Post dose" suffix supported for all patterns
 #'
-#' **Processing Order:**
-#' The function processes patterns in this order to avoid conflicts:
-#' 1. Special cases (exact matches)
-#' 2. Days
-#' 3. Hours + Minutes combinations
-#' 4. Time ranges (returns end value)
-#' 5. Hours only
-#' 6. Minutes only
-#'
 #' @return A numeric vector of timepoints in hours. Returns `NA_real_` for:
 #' * Input `NA` values
 #' * Unrecognized timepoint formats
@@ -55,34 +46,9 @@
 #' @export
 #'
 #' @examples
-#' # Special cases
-#' convert_xxtpt_to_hours(c("Screening", "Pre-dose", "EOI", "Morning"))
-#'
-#' # Days converted to hours
-#' convert_xxtpt_to_hours(c("Day 1", "Day 2", "2D", "3 days", "1.5 days"))
-#'
-#' # Hours in various formats
-#' convert_xxtpt_to_hours(c("1H", "2 hours", "0.5HR", "4hr Post-dose", "12 HOURS"))
-#'
-#' # Minutes converted to hours
-#' convert_xxtpt_to_hours(c("30M", "45 min", "15 MINUTES", "2.5 Min"))
-#'
-#' # Hours and minutes combinations
-#' convert_xxtpt_to_hours(c("1H30M", "1 hour 30 min", "2HR15MIN"))
-#'
-#' # Time ranges (returns end value)
-#' convert_xxtpt_to_hours(c("0-6h", "6-12h Post-dose", "0.5 - 6.5h"))
-#'
-#' # Case insensitivity and spacing variations
-#' convert_xxtpt_to_hours(c("1h POST-DOSE", "PRE-DOSE", "Predose"))
-#'
-#' # Handling NA and unrecognized values
-#' convert_xxtpt_to_hours(c(NA_character_, "Unknown", "EOS", "Pre-dose"))
-#'
-#' # Comprehensive mixed example
 #' convert_xxtpt_to_hours(c(
-#'   "Screening", "Pre-dose", "5 Min Post-dose", "30M",
-#'   "1H30M", "2h", "0-6h Post-dose", "Day 1", "24h"
+#'   "Screening", "Pre-dose", "EOI", "5 Min Post-dose", "10 MIN POSTDOSE", "30M",
+#'   "1H30M", "2H POSTDOSE", "0-6h Post-dose", "Day 1", "24h", "48 HR"
 #' ))
 convert_xxtpt_to_hours <- function(xxtpt) {
   assert_character_vector(xxtpt)
