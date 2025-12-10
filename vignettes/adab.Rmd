@@ -913,7 +913,7 @@ main_aab <- main_aab_rtimes %>%
 
 ## Assemble into Parameter Based Dataset {#parameters}
 
-In this section, we turn original IS records, the duplicated interpreted records plus
+In this section, we turn original `IS` records, the duplicated interpreted records plus
 each Analysis variable into separate prepared data frames.  These will then be
 appended together into the final ADAB product.
 
