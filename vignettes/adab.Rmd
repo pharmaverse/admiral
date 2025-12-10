@@ -1019,7 +1019,7 @@ adab_nabres <- adab_nabres %>%
 
 # By Visit Titer TFLAGV data -----------------------
 
-# Note: By Visit parameters do not keep CHG, MRT and DTL
+# Note: By Visit parameters do not keep CHG, MRT and DTL variables
 adab_tflagv <- core_aab %>%
   filter(ADATYPE == "ADA_BAB") %>%
   mutate(
