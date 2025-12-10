@@ -1408,7 +1408,7 @@ adab_study <- adab_study %>%
 
 
 
-In this section, compute or merge in any additional flags or ADSL variables.
+In this section, compute or merge in any additional flags or `ADSL` variables.
 
 ## Add ADSL variables {#adsl_vars}
 
