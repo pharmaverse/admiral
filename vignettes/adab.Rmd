@@ -331,7 +331,7 @@ BASETYPE construct with a key word to explain this.
 
 ```{r message=FALSE}
 # Compute or assign BASETYPE, APERIOD and APHASE ----------------------------------
-# Add study specific code as applicable using ADEX or ADSL APx and PHx vars
+# Add study specific code as applicable using ADEX or ADSL APx and PHx variables
 
 is_basetype <- is_afrlt %>%
   mutate(
