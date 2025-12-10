@@ -286,7 +286,7 @@ ex_dates <- ex %>%
 ```
 
 
-At this step, we use `derive_vars_merged()` to join our prepared 'EX' data into the prepared
+At this step, we use `derive_vars_merged()` to join our prepared `EX` data into the prepared
 `IS` data to compute `FANLDTM`, `AFRLT` and keep `FANLTMF` from `ASTTMF` in case the first dose
 was imputed.
 
