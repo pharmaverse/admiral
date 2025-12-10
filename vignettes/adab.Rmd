@@ -319,14 +319,11 @@ is_afrlt <- is_dates %>%
 ## Assign Periods, Phases and BASETYPE {#basetype}
 
 At this step compute or assign applicable `APERIOD`, `APHASE` and/or `BASETYPE` variables.
-Note: In `ADAB` dataset, `BASETYPE` represents Phase or Period but the method for assigning `BASE` variable
-could be appended to `BASETYPE` (i.e. "DOUBLE_BLINDED LAST"). 
-`BASETYPE` is carried through the remaining steps of this template as a BY 
-variable for computing parameters. For example, if there is a main
-phase and a later maintenance phase, you might want to compute all the ADA 
-parameters by `BASETYPE`. If re-baselining does not occur in a later phase, the 
-`BASE` from the first phase could be appended to the main data and adjust the 
-BASETYPE construct with a key word to explain this.
+Note: In the `ADAB` dataset, `BASETYPE` could represent Phase or Period but the method for assigning
+the `BASE` variable for the given Phase or Period could be appended to `BASETYPE` (i.e. "DOUBLE_BLINDED LAST"). 
+`BASETYPE` is carried through the remaining steps of this template as a BY variable for computing 
+parameters. For example, if there is a main phase and a later maintenance phase, you might want to
+compute all the ADA parameters by `BASETYPE`.
 
 
 ```{r message=FALSE}
