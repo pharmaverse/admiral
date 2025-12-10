@@ -717,7 +717,7 @@ The remaining pertinent analysis variables computed in this section are:
 `LPPDT`  - Date of Last ADA Positive
 `ADADUR` - Duration of ADA (`LPPDT` - `FPPDT`)
 `TIMADA` - Time to ADA Positive (from first dose)
-INDUCED - Negative at Baseline to Positive Post-Baseline
+`INDUCED` - Negative at Baseline to Positive Post-Baseline
 ENHANCED - Positive at Baseline to Positive Post-Baseline where CHG >= 0.60
 TRANADA  - Transient ADA  (either of): 
              INDUCED and Positive at any Post Baseline other than Last
