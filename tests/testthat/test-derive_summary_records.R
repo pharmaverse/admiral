@@ -347,7 +347,8 @@ test_that("derive_summary_records Test 11: error when max() is used but returns 
       dataset_add = input,
       by_vars = exprs(USUBJID, AVISIT),
       set_values_to = exprs(
-        AVAL = c(max(AVAL, na.rm = TRUE), min(AVAL, na.rm = TRUE))
+        AVAL = c(max(AVAL, na.rm = TRUE), min(AVAL, na.rm = TRUE)),
+        DTYPE = c("MINIMUM", "MAXIMUM")
       )
     ),
     regexp = "Column\\(s\\) in `set_values_to` must return a single value"

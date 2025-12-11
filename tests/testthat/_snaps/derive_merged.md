@@ -141,9 +141,9 @@
       derive_var_merged_summary(adbds, dataset_add = adbds, by_vars = exprs(AVISIT),
       new_vars = exprs(MEANVIS = AVAL / 2))
     Condition
-      Error:
-      ! Column(s) in `set_values_to` must return a single value per `by_vars` group.
-      Please check `set_values_to` if summary functions like `mean()`, `sum()`, ... are used on the right hand side.
+      Error in `signal_duplicate_records()`:
+      ! Dataset `dataset_add` contains duplicate records with respect to `AVISIT`.
+      i Run `admiral::get_duplicates_dataset()` to access the duplicate records
 
 # derive_var_merged_summary Test 33: deprecation message
 
