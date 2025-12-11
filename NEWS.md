@@ -13,6 +13,8 @@ is specified. (#2875)
 
 - `derive_vars_dt()` Documentation: clarify highest_imputation definitions and expand date examples (#2841)
 
+- `derive_summary_records()` issues an error if a summary results in more or less than one record per by group (#2872)
+
 ## Breaking Changes
 
 - The default value of `ignore_seconds_flag` is set to `TRUE`. (#2798)

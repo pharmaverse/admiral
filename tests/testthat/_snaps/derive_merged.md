@@ -133,7 +133,7 @@
     Condition
       Error:
       ! Column(s) in `set_values_to` must return a single value per `by_vars` group.
-      Please check `set_values_to` if summary functions like `mean()`, `sum()`, ... are used on the right hand side.
+      Please check the argument `set_values_to` in `derive_summary_records()` if summary functions like `mean()`, `sum()`, ... are used on the right hand side.
 
 # derive_var_merged_summary Test 32: error if no summary function
 

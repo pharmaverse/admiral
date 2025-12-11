@@ -277,8 +277,9 @@ derive_summary_records <- function(dataset = NULL,
               "{.arg by_vars} group."
             ),
             paste(
-              "Please check {.arg set_values_to} if summary functions like",
-              "{.fun mean}, {.fun sum}, ... are used on the right hand side."
+              "Please check the argument {.arg set_values_to} in",
+              "{.fun derive_summary_records} if summary functions like {.fun mean},",
+              "{.fun sum}, ... are used on the right hand side."
             )
           ),
           call = NULL
