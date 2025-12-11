@@ -333,9 +333,7 @@ adablpfl <- is_result_change %>%
   select(STUDYID, USUBJID, DRUG, BASETYPE, ADATYPE, ADAPARM, ABLFL) %>%
   rename(ADABLPFL = ABLFL)
 
-# Add Base_data then Compute CHG and By Visit ADA Flags
-# Note: sample assumes one BASETYPE, if multiple APERIOD,
-#    Add additional code per specs as needed.
+# Calculate the By Visit parameters
 
 is_visit_flags <- is_result_change %>%
   mutate(
@@ -1141,7 +1139,8 @@ adab_visits <- bind_rows(adab_tflagv, adab_pbflagv, adab_adastatv)
 # To include BY VISIT parameters
 adab_study <- bind_rows(adab_paramcds, adab_visits, adab_adadur, adab_fppdtm, adab_lppdtm)
 
-# Drop Temp vars and ADA Flag vars that are now parameterized
+# Drop temporary variables and ADA Flag variables that are now parameterized, further below is a
+# final 'select' statement to to customize the final select.
 adab_study <- adab_study %>%
   select(
     -TIMADA, -ADADUR, -TRANADA, -PERSADA, -TRANADAE, -PERSADAE, -INDUCED, -ENHANCED,
