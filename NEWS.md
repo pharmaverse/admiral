@@ -14,6 +14,8 @@ updated such that they no longer fail if `{admiral}` is not loaded. (#2667)
 - `slice_derivation()` was updated such that it no longer fails if `args = NULL`
 is specified. (#2875)
 
+- `derive_vars_dt()` Documentation: clarify highest_imputation definitions and expand date examples (#2841)
+
 ## Breaking Changes
 
 - The default value of `ignore_seconds_flag` is set to `TRUE`. (#2798)
@@ -52,12 +54,14 @@ and receive answers from an LLM. It is trained on the documentation of both pack
 - The BDS Findings vignette was updated to move derivation of `ASEQ` after any new rows. (#2780)
 - `ADLBHY` template was updated to keep `PARAM` in final dataset. (#2804)
 - A link to the [{admiral} ecosystem](https://pharmaverse.org/e2eclinical/adam/) page was added to the README sidebar and main text. (#2881)
+- The ADSL template and vignette were updated to add derivation of analysis age (`AAGE`/`AAGEU`) using `derive_vars_aage()`. This includes deriving birth date (`BRTHDT`) from birth date character variable (`BRTHDTC`) using `derive_vars_dt()`. (#2584)
+- Standardized variable notation across documentation to use `--` for SDTM variables (e.g., `--DTC`) and `*` for ADaM variables (e.g., `*DTM`, `*DT`). (#2757)
 
 ## Various
 
 <details>
 <summary>Developer Notes</summary>
-
+- Updated the `{lintr}` preferences to use the shared `{admiraldev}` configurations (excluding undesirable functions). (#2863)
 </details>
 
 # admiral 1.3.1
