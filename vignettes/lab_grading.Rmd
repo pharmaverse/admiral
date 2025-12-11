@@ -800,18 +800,18 @@ atoxgr_criteria_ctcv6 %>%
 
 ## Criteria dependent on the Baseline Value
 
-For terms "Alanine aminotransferase increased", "Aspartate aminotransferase increased", "Blood bilirubin increased"
-and "GGT increased" the criteria is dependent on the Baseline Value being normal or abnormal. We use the variable
-`BNRIND` to determine this, and users can pass in the value(s) of `BNRIND` that indicate the baseline is abnormal
+For terms "Alanine aminotransferase increased", "Aspartate aminotransferase increased", "Blood bilirubin increased",
+"Creatinine increased" and "GGT increased" the criteria is dependent on the Baseline Value being normal or abnormal. We use
+the variable `BNRIND` to determine this, and users can pass in the value(s) of `BNRIND` that indicate the baseline is abnormal
 via the arguments `high_indicator` and `low_indicator` in the function `derive_var_atoxgr_dir()`.
 For example, setting `high_indicator = "HIGH"` would mean any observations with `BNRIND = "HIGH"` would
 be deemed to have a high abnormal Baseline Value. Likewise, setting `low_indicator = "LOW"` would mean any
 observations with `BNRIND = "LOW"` would be deemed to have a low abnormal Baseline Value.
 Note: you can pass in multiple values, `abnormal_indicator = c("H", "HIGH")`
 
-For these 4 terms, this means if `BNRIND` is abnormal then the grade is always one for the baseline observation.
-Additionally, for "Alkaline phosphatase increased" the baseline grade is always zero, as the value has to be above the 
-baseline value to have a grade greater than zero.
+Excluding "Creatinine increased", for the other 4 terms, this means if `BNRIND` is abnormal then the grade is always one for the
+baseline observation. Additionally, for "Alkaline phosphatase increased" the baseline grade is always zero, as the value has to
+be above the baseline value to have a grade greater than zero.
 This is the conservative approach, some companies may not want the baseline observation graded at all, so would post-process,
 if necessary.
 
