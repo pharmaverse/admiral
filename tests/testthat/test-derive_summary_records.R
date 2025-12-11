@@ -128,9 +128,9 @@ test_that("derive_summary_records Test 4: no error when set_values_to uses max()
   expected_output <- bind_rows(
     input,
     tibble::tribble(
-      ~USUBJID, ~AVISIT,  ~AVAL,    ~DTYPE,
-      "1",      "WEEK 1",    14,   "MAXIMUM",
-      "2",      "WEEK 1",    12,   "MAXIMUM"
+      ~USUBJID, ~AVISIT, ~AVAL, ~DTYPE,
+      "1",      "WEEK 1",   14, "MAXIMUM",
+      "2",      "WEEK 1",   12, "MAXIMUM"
     )
   )
 
