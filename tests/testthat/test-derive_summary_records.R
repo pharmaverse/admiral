@@ -77,77 +77,8 @@ test_that("derive_summary_records Test 2: Filter record within `by_vars`", {
   )
 })
 
-## Test 3: error if by_vars is not an exprs() object ----
-test_that("derive_summary_records Test 3: error if by_vars is not an exprs() object", {
-  input <- tibble::tribble(
-    ~USUBJID, ~AVISIT,  ~AVAL,
-    "1",      "WEEK 1",    10,
-    "1",      "WEEK 1",    14,
-    "1",      "WEEK 1",     9,
-    "2",      "WEEK 1",    11,
-    "2",      "WEEK 1",    12
-  )
-
-  expect_error(
-    derive_summary_records(
-      dataset_add = input,
-      by_vars = "USUBJID",
-      set_values_to = exprs(
-        AVAL = mean(AVAL)
-      )
-    ),
-    class = "assert_vars"
-  )
-})
-
-## Test 4: error if by_vars does not exist in input dataset ----
-test_that("derive_summary_records Test 4: error if by_vars does not exist in input dataset", {
-  input <- tibble::tribble(
-    ~USUBJID, ~AVISIT,  ~AVAL,
-    "1",      "WEEK 1",    10,
-    "1",      "WEEK 1",    14,
-    "1",      "WEEK 1",     9,
-    "2",      "WEEK 1",    11,
-    "2",      "WEEK 1",    12
-  )
-
-  expect_error(
-    derive_summary_records(
-      dataset_add = input,
-      by_vars = exprs(USUBJID, NONEXISTENT),
-      set_values_to = exprs(
-        AVAL = mean(AVAL)
-      )
-    ),
-    class = "assert_data_frame"
-  )
-})
-
-## Test 5: error if set_values_to returns more than one value per by group ----
-test_that("derive_summary_records Test 5: error if set_values_to returns more than one value per by group", {
-  input <- tibble::tribble(
-    ~USUBJID, ~AVISIT,  ~AVAL, ~ASEQ,
-    "1",      "WEEK 1",    10,     1,
-    "1",      "WEEK 1",    14,     2,
-    "1",      "WEEK 1",     9,     3,
-    "2",      "WEEK 1",    11,     1,
-    "2",      "WEEK 1",    12,     2
-  )
-
-  expect_error(
-    derive_summary_records(
-      dataset_add = input,
-      by_vars = exprs(USUBJID, AVISIT),
-      set_values_to = exprs(
-        AVAL = AVAL
-      )
-    ),
-    regexp = "Column\\(s\\) in `set_values_to` must return a single value"
-  )
-})
-
-## Test 6: no error when set_values_to uses mean() properly ----
-test_that("derive_summary_records Test 6: no error when set_values_to uses mean() properly", {
+## Test 3: no error when set_values_to uses mean() properly ----
+test_that("derive_summary_records Test 3: no error when set_values_to uses mean() properly", {
   input <- tibble::tribble(
     ~USUBJID, ~AVISIT,  ~AVAL, ~ASEQ,
     "1",      "WEEK 1",    10,     1,
@@ -183,8 +114,8 @@ test_that("derive_summary_records Test 6: no error when set_values_to uses mean(
   )
 })
 
-## Test 7: no error when set_values_to uses max() properly ----
-test_that("derive_summary_records Test 7: no error when set_values_to uses max() properly", {
+## Test 4: no error when set_values_to uses max() properly ----
+test_that("derive_summary_records Test 4: no error when set_values_to uses max() properly", {
   input <- tibble::tribble(
     ~USUBJID, ~AVISIT,  ~AVAL, ~ASEQ,
     "1",      "WEEK 1",    10,     1,
@@ -220,54 +151,8 @@ test_that("derive_summary_records Test 7: no error when set_values_to uses max()
   )
 })
 
-## Test 8: error when mean() is used but returns multiple values per group ----
-test_that("derive_summary_records Test 8: error when mean() is used but returns multiple values per group", {
-  input <- tibble::tribble(
-    ~USUBJID, ~AVISIT,  ~AVAL, ~ASEQ,
-    "1",      "WEEK 1",    10,     1,
-    "1",      "WEEK 1",    14,     2,
-    "1",      "WEEK 1",     9,     3,
-    "2",      "WEEK 1",    11,     1,
-    "2",      "WEEK 1",    12,     2
-  )
-
-  expect_error(
-    derive_summary_records(
-      dataset_add = input,
-      by_vars = exprs(USUBJID, AVISIT),
-      set_values_to = exprs(
-        AVAL = c(mean(AVAL, na.rm = TRUE), max(AVAL, na.rm = TRUE))
-      )
-    ),
-    regexp = "Column\\(s\\) in `set_values_to` must return a single value"
-  )
-})
-
-## Test 9: error when max() is used but returns multiple values per group ----
-test_that("derive_summary_records Test 9: error when max() is used but returns multiple values per group", {
-  input <- tibble::tribble(
-    ~USUBJID, ~AVISIT,  ~AVAL, ~ASEQ,
-    "1",      "WEEK 1",    10,     1,
-    "1",      "WEEK 1",    14,     2,
-    "1",      "WEEK 1",     9,     3,
-    "2",      "WEEK 1",    11,     1,
-    "2",      "WEEK 1",    12,     2
-  )
-
-  expect_error(
-    derive_summary_records(
-      dataset_add = input,
-      by_vars = exprs(USUBJID, AVISIT),
-      set_values_to = exprs(
-        AVAL = c(max(AVAL, na.rm = TRUE), min(AVAL, na.rm = TRUE))
-      )
-    ),
-    regexp = "Column\\(s\\) in `set_values_to` must return a single value"
-  )
-})
-
-## Test 10: make sure dataset_add works ----
-test_that("derive_summary_records Test 10: make sure dataset_add works", {
+## Test 5: make sure dataset_add works ----
+test_that("derive_summary_records Test 5: make sure dataset_add works", {
   input <- tibble::tribble(
     ~subj, ~visit,       ~val, ~seq,
     "1",        1,         10,    1,
@@ -305,8 +190,8 @@ test_that("derive_summary_records Test 10: make sure dataset_add works", {
   )
 })
 
-## Test 11: test missing values ----
-test_that("derive_summary_records Test 11: test missing values with dataset_ref", {
+## Test 6: test missing values ----
+test_that("derive_summary_records Test 6: test missing values with dataset_ref", {
   input <- tibble::tribble(
     ~subj, ~visit,       ~val, ~seq,
     "1",        1,         10,    1,
@@ -351,5 +236,120 @@ test_that("derive_summary_records Test 11: test missing values with dataset_ref"
     base = expected_output,
     compare = actual_output,
     keys = c("subj", "visit", "seq", "type")
+  )
+})
+
+## Test 7: error if by_vars is not an exprs() object ----
+test_that("derive_summary_records Test 7: error if by_vars is not an exprs() object", {
+  input <- tibble::tribble(
+    ~USUBJID, ~AVISIT,  ~AVAL,
+    "1",      "WEEK 1",    10,
+    "1",      "WEEK 1",    14,
+    "1",      "WEEK 1",     9,
+    "2",      "WEEK 1",    11,
+    "2",      "WEEK 1",    12
+  )
+
+  expect_error(
+    derive_summary_records(
+      dataset_add = input,
+      by_vars = "USUBJID",
+      set_values_to = exprs(
+        AVAL = mean(AVAL)
+      )
+    ),
+    class = "assert_vars"
+  )
+})
+
+## Test 8: error if by_vars does not exist in input dataset ----
+test_that("derive_summary_records Test 8: error if by_vars does not exist in input dataset", {
+  input <- tibble::tribble(
+    ~USUBJID, ~AVISIT,  ~AVAL,
+    "1",      "WEEK 1",    10,
+    "1",      "WEEK 1",    14,
+    "1",      "WEEK 1",     9,
+    "2",      "WEEK 1",    11,
+    "2",      "WEEK 1",    12
+  )
+
+  expect_error(
+    derive_summary_records(
+      dataset_add = input,
+      by_vars = exprs(USUBJID, NONEXISTENT),
+      set_values_to = exprs(
+        AVAL = mean(AVAL)
+      )
+    ),
+    class = "assert_data_frame"
+  )
+})
+
+## Test 9: error if set_values_to returns more than one value per by group ----
+test_that("derive_summary_records Test 9: error if set_values_to returns more than one value per by group", {
+  input <- tibble::tribble(
+    ~USUBJID, ~AVISIT,  ~AVAL, ~ASEQ,
+    "1",      "WEEK 1",    10,     1,
+    "1",      "WEEK 1",    14,     2,
+    "1",      "WEEK 1",     9,     3,
+    "2",      "WEEK 1",    11,     1,
+    "2",      "WEEK 1",    12,     2
+  )
+
+  expect_error(
+    derive_summary_records(
+      dataset_add = input,
+      by_vars = exprs(USUBJID, AVISIT),
+      set_values_to = exprs(
+        AVAL = AVAL
+      )
+    ),
+    regexp = "Column\\(s\\) in `set_values_to` must return a single value"
+  )
+})
+
+## Test 10: error when mean() is used but returns multiple values per group ----
+test_that("derive_summary_records Test 10: error when mean() is used but returns multiple values per group", {
+  input <- tibble::tribble(
+    ~USUBJID, ~AVISIT,  ~AVAL, ~ASEQ,
+    "1",      "WEEK 1",    10,     1,
+    "1",      "WEEK 1",    14,     2,
+    "1",      "WEEK 1",     9,     3,
+    "2",      "WEEK 1",    11,     1,
+    "2",      "WEEK 1",    12,     2
+  )
+
+  expect_error(
+    derive_summary_records(
+      dataset_add = input,
+      by_vars = exprs(USUBJID, AVISIT),
+      set_values_to = exprs(
+        AVAL = c(mean(AVAL, na.rm = TRUE), max(AVAL, na.rm = TRUE))
+      )
+    ),
+    regexp = "Column\\(s\\) in `set_values_to` must return a single value"
+  )
+})
+
+## Test 11: error when max() is used but returns multiple values per group ----
+test_that("derive_summary_records Test 11: error when max() is used but returns multiple values per group", {
+  input <- tibble::tribble(
+    ~USUBJID, ~AVISIT,  ~AVAL, ~ASEQ,
+    "1",      "WEEK 1",    10,     1,
+    "1",      "WEEK 1",    14,     2,
+    "1",      "WEEK 1",     9,     3,
+    "2",      "WEEK 1",    11,     1,
+    "2",      "WEEK 1",    12,     2
+  )
+
+  expect_error(
+    derive_summary_records(
+      dataset_add = input,
+      by_vars = exprs(USUBJID, AVISIT),
+      set_values_to = exprs(
+        AVAL = c(max(AVAL, na.rm = TRUE), min(AVAL, na.rm = TRUE))
+      )
+    ),
+    regexp = "Column\\(s\\) in `set_values_to` must return a single value"
   )
 })
