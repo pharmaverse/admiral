@@ -91,7 +91,7 @@ convert_xxtpt_to_hours <- function(xxtpt) {
   days_pattern <- regex(
     paste0(
       # optional "day " prefix, then number
-      "^(?:day\\s+)?(\\d+(?:\\.\\d+)?)\\s*",
+      "^(?:day\\s+)?(?<days>\\d+(?:\\.\\d+)?)\\s*",
       # OPTIONAL days suffix
       "(?:d|day|days)?",
       # optional post-dose suffix
@@ -103,7 +103,7 @@ convert_xxtpt_to_hours <- function(xxtpt) {
   days_matches <- str_match(xxtpt, days_pattern)
   days_idx <- !is.na(days_matches[, 1]) & is.na(result) & !na_idx
   if (any(days_idx)) {
-    result[days_idx] <- as.numeric(days_matches[days_idx, 2]) * 24
+    result[days_idx] <- as.numeric(days_matches[days_idx, "days"]) * 24
   }
 
   # 3. Check hours+minutes combinations
@@ -111,13 +111,13 @@ convert_xxtpt_to_hours <- function(xxtpt) {
   hm_pattern <- regex(
     paste0(
       # hours number
-      "^(\\d+(?:\\.\\d+)?)\\s*",
+      "^(?<hours>\\d+(?:\\.\\d+)?)\\s*",
       # hours
       "h(?:r|our)?s?",
       # optional space
       "\\s*",
       # minutes number
-      "(\\d+(?:\\.\\d+)?)\\s*",
+      "(?<minutes>\\d+(?:\\.\\d+)?)\\s*",
       # minutes
       "m(?:in|inute)?s?",
       # optional post-dose suffix
@@ -129,8 +129,8 @@ convert_xxtpt_to_hours <- function(xxtpt) {
   hm_matches <- str_match(xxtpt, hm_pattern)
   hm_idx <- !is.na(hm_matches[, 1]) & is.na(result) & !na_idx
   if (any(hm_idx)) {
-    hours <- as.numeric(hm_matches[hm_idx, 2])
-    minutes <- as.numeric(hm_matches[hm_idx, 3])
+    hours <- as.numeric(hm_matches[hm_idx, "hours"])
+    minutes <- as.numeric(hm_matches[hm_idx, "minutes"])
     result[hm_idx] <- hours + minutes / 60
   }
 
@@ -139,7 +139,7 @@ convert_xxtpt_to_hours <- function(xxtpt) {
   range_pattern <- regex(
     paste0(
       # range with end value captured, spaces allowed
-      "^\\d+(?:\\.\\d+)?\\s*-\\s*(\\d+(?:\\.\\d+)?)\\s*",
+      "^(?<start>\\d+(?:\\.\\d+)?)\\s*-\\s*(?<end>\\d+(?:\\.\\d+)?)\\s*",
       # hours
       "h(?:r|our)?s?",
       # optional post-dose suffix
@@ -151,7 +151,7 @@ convert_xxtpt_to_hours <- function(xxtpt) {
   range_matches <- str_match(xxtpt, range_pattern)
   range_idx <- !is.na(range_matches[, 1]) & is.na(result) & !na_idx
   if (any(range_idx)) {
-    result[range_idx] <- as.numeric(range_matches[range_idx, 2])
+    result[range_idx] <- as.numeric(range_matches[range_idx, "end"])
   }
 
   # 5. Check hours only
@@ -159,7 +159,7 @@ convert_xxtpt_to_hours <- function(xxtpt) {
   hours_pattern <- regex(
     paste0(
       # number
-      "^(\\d+(?:\\.\\d+)?)\\s*",
+      "^(?<hours>\\d+(?:\\.\\d+)?)\\s*",
       # hours
       "h(?:r|our)?s?",
       # optional post-dose suffix
@@ -171,7 +171,7 @@ convert_xxtpt_to_hours <- function(xxtpt) {
   hours_matches <- str_match(xxtpt, hours_pattern)
   hours_idx <- !is.na(hours_matches[, 1]) & is.na(result) & !na_idx
   if (any(hours_idx)) {
-    result[hours_idx] <- as.numeric(hours_matches[hours_idx, 2])
+    result[hours_idx] <- as.numeric(hours_matches[hours_idx, "hours"])
   }
 
   # 6. Check minutes only
@@ -179,7 +179,7 @@ convert_xxtpt_to_hours <- function(xxtpt) {
   minutes_pattern <- regex(
     paste0(
       # number
-      "^(\\d+(?:\\.\\d+)?)\\s*",
+      "^(?<minutes>\\d+(?:\\.\\d+)?)\\s*",
       # minutes
       "m(?:in|inute)?s?",
       # optional post-dose suffix
@@ -191,7 +191,7 @@ convert_xxtpt_to_hours <- function(xxtpt) {
   minutes_matches <- str_match(xxtpt, minutes_pattern)
   minutes_idx <- !is.na(minutes_matches[, 1]) & is.na(result) & !na_idx
   if (any(minutes_idx)) {
-    result[minutes_idx] <- as.numeric(minutes_matches[minutes_idx, 2]) / 60
+    result[minutes_idx] <- as.numeric(minutes_matches[minutes_idx, "minutes"]) / 60
   }
 
   result
