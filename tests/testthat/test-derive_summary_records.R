@@ -77,49 +77,77 @@ test_that("derive_summary_records Test 2: Filter record within `by_vars`", {
   )
 })
 
-## Test 3: Errors ----
-test_that("derive_summary_records Test 3: Errors", {
-  input <- tibble::tibble(x = rep(1:4, each = 4), y = rep(1:2, each = 8), z = runif(16))
+## Test 3: error if by_vars is not an exprs() object ----
+test_that("derive_summary_records Test 3: error if by_vars is not an exprs() object", {
+  input <- tibble::tribble(
+    ~USUBJID, ~AVISIT,  ~AVAL,
+    "1",      "WEEK 1",    10,
+    "1",      "WEEK 1",    14,
+    "1",      "WEEK 1",     9,
+    "2",      "WEEK 1",    11,
+    "2",      "WEEK 1",    12
+  )
 
-  # Is by_vars `exprs()` object?
   expect_error(
     derive_summary_records(
-      input,
-      by_vars = "x",
+      dataset_add = input,
+      by_vars = "USUBJID",
       set_values_to = exprs(
-        z = mean(z)
+        AVAL = mean(AVAL)
       )
     ),
     class = "assert_vars"
   )
+})
 
-  # Does by_vars exist in input dataset?
+## Test 4: error if by_vars does not exist in input dataset ----
+test_that("derive_summary_records Test 4: error if by_vars does not exist in input dataset", {
+  input <- tibble::tribble(
+    ~USUBJID, ~AVISIT,  ~AVAL,
+    "1",      "WEEK 1",    10,
+    "1",      "WEEK 1",    14,
+    "1",      "WEEK 1",     9,
+    "2",      "WEEK 1",    11,
+    "2",      "WEEK 1",    12
+  )
+
   expect_error(
     derive_summary_records(
       dataset_add = input,
-      by_vars = exprs(a),
+      by_vars = exprs(USUBJID, NONEXISTENT),
       set_values_to = exprs(
-        z = mean(z)
+        AVAL = mean(AVAL)
       )
     ),
     class = "assert_data_frame"
   )
+})
 
-  # Error when set_values_to returns more than one value per by group
+## Test 5: error if set_values_to returns more than one value per by group ----
+test_that("derive_summary_records Test 5: error if set_values_to returns more than one value per by group", {
+  input <- tibble::tribble(
+    ~USUBJID, ~AVISIT,  ~AVAL, ~ASEQ,
+    "1",      "WEEK 1",    10,     1,
+    "1",      "WEEK 1",    14,     2,
+    "1",      "WEEK 1",     9,     3,
+    "2",      "WEEK 1",    11,     1,
+    "2",      "WEEK 1",    12,     2
+  )
+
   expect_error(
     derive_summary_records(
       dataset_add = input,
-      by_vars = exprs(x),
+      by_vars = exprs(USUBJID, AVISIT),
       set_values_to = exprs(
-        z = z
+        AVAL = AVAL
       )
     ),
     regexp = "Column\\(s\\) in `set_values_to` must return a single value"
   )
 })
 
-## Test 4: make sure dataset_add works ----
-test_that("derive_summary_records Test 5: make sure dataset_add works", {
+## Test 6: make sure dataset_add works ----
+test_that("derive_summary_records Test 6: make sure dataset_add works", {
   input <- tibble::tribble(
     ~subj, ~visit,       ~val, ~seq,
     "1",        1,         10,    1,
@@ -157,8 +185,8 @@ test_that("derive_summary_records Test 5: make sure dataset_add works", {
   )
 })
 
-## Test 5: test missing values ----
-test_that("derive_summary_records Test 6: test missing values with dataset_ref", {
+## Test 7: test missing values ----
+test_that("derive_summary_records Test 7: test missing values with dataset_ref", {
   input <- tibble::tribble(
     ~subj, ~visit,       ~val, ~seq,
     "1",        1,         10,    1,
