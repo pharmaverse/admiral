@@ -103,7 +103,7 @@ dt_level <- function(level) {
 #'  - For `date_imputation = "<mm>-<dd>"` `"xxxx"`, `"<mm>"`, `"<dd>"` are returned.
 #'
 #'  `"xxxx"` indicates that the component is undefined. If an undefined
-#'  component occurs in the imputed DTC value, the imputed DTC value is set to
+#'  component occurs in the imputed `--DTC` value, the imputed `--DTC` value is set to
 #'  `NA_character_` in the imputation functions.
 #'
 #' @examples
@@ -253,7 +253,7 @@ convert_date_to_dtm <- function(dt,
                                 max_dates = NULL,
                                 preserve = FALSE) {
   if (is.POSIXct(dt)) {
-    return(dt)
+    dt
   } else {
     if (is.instant(dt)) {
       dt <- format(dt, "%Y-%m-%d")
@@ -272,7 +272,7 @@ convert_date_to_dtm <- function(dt,
   }
 }
 
-#' Parse DTC variable and Determine Components
+#' Parse `--DTC` variable and Determine Components
 #'
 #' @param dtc The `'--DTC'` date to parse
 #'
@@ -524,7 +524,7 @@ assert_highest_imputation <- function(highest_imputation, highest_imputation_val
       "is specified, {.arg max_dates} must be specified."
     ))
   }
-  return(invisible(NULL))
+  invisible(NULL)
 }
 
 #' Get Range of Partial Date / Datetime
@@ -726,7 +726,7 @@ get_imputation_targets <- function(partial, date_imputation = NULL, time_imputat
     return(c(target_date, target_time))
   }
 
-  return(target_date)
+  target_date
 }
 
 #' Adjust Last Day Imputation

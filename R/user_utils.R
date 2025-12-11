@@ -315,7 +315,7 @@ print.source <- function(x, ...) {
 print_named_list <- function(list, indent = 0) {
   names <- names(list)
   if (is.null(names)) {
-    names <- seq_len(length.out = length(list))
+    names <- seq_along(list)
   }
   for (name in names) {
     if (inherits(list[[name]], "source")) {

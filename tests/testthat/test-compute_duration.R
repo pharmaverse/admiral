@@ -181,7 +181,6 @@ test_that("compute_duration Test 13: Duration in seconds (seconds option)", {
 })
 
 
-
 ## Test 14: Duration in seconds (sec option) ----
 test_that("compute_duration Test 14: Duration in seconds (sec option)", {
   expect_equal(
