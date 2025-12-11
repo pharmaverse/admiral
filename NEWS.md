@@ -2,6 +2,13 @@
 
 ## New Features
 
+- Lab grading metadata for NCI-CTCAE version 6.0 is now available for both SI and US (Conventional) units 
+via `atoxgr_criteria_ctcv6` and `atoxgr_criteria_ctcv6_uscv`. This includes grading criteria for Creatinine 
+Clearance decreased. (#1858)
+
+- Lab grading metadata is now maintained in JSON format for all supported criteria (NCI-CTCAEv4, NCI-CTCAEv5, 
+NCI-CTCAEv6, and DAIDS) in both SI and US conventional unit systems, improving maintainability and readability. (#1858)
+
 ## Updates of Existing Functions
 
 - The functions `derive_param_bmi()`, `derive_param_bsa()`,
@@ -15,6 +22,11 @@ is specified. (#2875)
 
 ## Breaking Changes
 
+- In `derive_var_atoxgr_dir()`, the `abnormal_indicator` argument is deprecated and replaced with `low_indicator` 
+and `high_indicator` arguments. This change enables independent control of baseline range indicators for low and 
+high abnormalities, which is required for NCI-CTCAE version 6.0 criteria. The deprecated argument will continue 
+to work with a deprecation message until the beginning of 2027. (#1858)
+
 - The default value of `ignore_seconds_flag` is set to `TRUE`. (#2798)
 - `derive_var_merged_summary()` is deprecated and will be replaced by `derive_vars_merged_summary()`.
     This is just a rename of the function to align with our programming conventions, i.e.
@@ -25,6 +37,8 @@ is specified. (#2875)
 
   **Phase 1 (message)**
     
+  - `derive_var_atoxgr_dir(abnormal_indicator = )` is deprecated and replaced by the new `low_indicator` and 
+  `high_indicator` arguments for enhanced flexibility in lab grading. (#1858)
   - `derive_var_merged_summary()` is deprecated and will be replaced by `derive_vars_merged_summary()` (#2874)
   
   **Phase 2 (warning)**
@@ -44,6 +58,9 @@ is specified. (#2875)
     **Phase 4 (removed)**
     
 ## Documentation
+
+- The lab grading vignette has been updated with examples for NCI-CTCAE version 6.0 criteria, including 
+usage of the new `low_indicator` and `high_indicator` arguments. (#1858)
 
 - The "Ask AI" widget was added to the bottom right of each page. It enables users to ask questions about `{admiral}` and `{admiraldev}` 
 and receive answers from an LLM. It is trained on the documentation of both packages and provided by 
