@@ -505,7 +505,7 @@ Sections are commented appropriately.
 Final Key Variables this section:
 Subject By Visit analysis variables (sponsor or molecule specific or optional)
 TFLAGV - By visit Treatment Emergent Category (see *T-Flags).
-PBFLAGV - Post Baseline Status by Visit
+PBFLAGV - Post-Baseline Status by Visit
 ADASTATV - Overall ADA Status by Visit (ADA Positive or Negative)
 Subject Overall analysis variables
 BFLAG  - Baseline Positive/Negative Flag
@@ -530,10 +530,7 @@ adablpfl <- is_result_change %>%
   select(!!!get_admiral_option("subject_keys"), DRUG, BASETYPE, ADATYPE, ADAPARM, ABLFL) %>%
   rename(ADABLPFL = ABLFL)
 
-
-# Add Base_data then Compute CHG and By Visit ADA Flags
-# Note: sample assumes one BASETYPE, if multiple APERIOD,
-#    Add additional code per specs as needed.
+# Calculate the By Visit parameters
 
 is_visit_flags <- is_result_change %>%
   mutate(
@@ -659,8 +656,8 @@ and optional Nab tests; Drug XYZ can also have the same pairs and are processed 
 
 The target variable for Nab is NABSTAT (subject Nab Status for the the matching parent analyte)
 In the example template, to be `NABSTAT = "Positive" or "Negative"`, the subject has to 
-ADASTAT="Positive" on the main parent matching analyte. If not ADASTAT  = Positive,  NABSTAT is 
-set to either NA or 'MISSING" as desired.
+`ADATAT="Positive"` on the main parent matching analyte. If not `ADASTAT  = "Positive"`, `NABSTAT`
+is set to either NA or 'MISSING" as desired.
 
 ```{r message=FALSE}
 # Get overall ADASTAT status for computing NABSTAT
@@ -987,7 +984,7 @@ adab_result <- adab_result %>%
     filter = is.na(ABLFL)
   )
 
-# By Visit NAB Interpreted RESULT data (keep all IS vars plus ____)
+# By Visit NAB Interpreted RESULT data
 adab_nabres <- core_aab %>%
   filter(ADATYPE == "ADA_NAB") %>%
   mutate(
