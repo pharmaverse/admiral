@@ -146,7 +146,81 @@ test_that("derive_summary_records Test 5: error if set_values_to returns more th
   )
 })
 
-## Test 6: make sure dataset_add works ----
+## Test 6: no error when set_values_to uses mean() properly ----
+test_that("derive_summary_records Test 6: no error when set_values_to uses mean() properly", {
+  input <- tibble::tribble(
+    ~USUBJID, ~AVISIT,  ~AVAL, ~ASEQ,
+    "1",      "WEEK 1",    10,     1,
+    "1",      "WEEK 1",    14,     2,
+    "1",      "WEEK 1",     9,     3,
+    "2",      "WEEK 1",    11,     1,
+    "2",      "WEEK 1",    12,     2
+  )
+
+  expected_output <- bind_rows(
+    input,
+    tibble::tribble(
+      ~USUBJID, ~AVISIT,  ~AVAL,       ~DTYPE,
+      "1",      "WEEK 1",    11,    "AVERAGE",
+      "2",      "WEEK 1",  11.5,    "AVERAGE"
+    )
+  )
+
+  actual_output <- input %>%
+    derive_summary_records(
+      dataset_add = input,
+      by_vars = exprs(USUBJID, AVISIT),
+      set_values_to = exprs(
+        AVAL = mean(AVAL, na.rm = TRUE),
+        DTYPE = "AVERAGE"
+      )
+    )
+
+  expect_dfs_equal(
+    base = expected_output,
+    compare = actual_output,
+    keys = c("USUBJID", "AVISIT", "ASEQ", "DTYPE")
+  )
+})
+
+## Test 7: no error when set_values_to uses max() properly ----
+test_that("derive_summary_records Test 7: no error when set_values_to uses max() properly", {
+  input <- tibble::tribble(
+    ~USUBJID, ~AVISIT,  ~AVAL, ~ASEQ,
+    "1",      "WEEK 1",    10,     1,
+    "1",      "WEEK 1",    14,     2,
+    "1",      "WEEK 1",     9,     3,
+    "2",      "WEEK 1",    11,     1,
+    "2",      "WEEK 1",    12,     2
+  )
+
+  expected_output <- bind_rows(
+    input,
+    tibble::tribble(
+      ~USUBJID, ~AVISIT,  ~AVAL,    ~DTYPE,
+      "1",      "WEEK 1",    14,   "MAXIMUM",
+      "2",      "WEEK 1",    12,   "MAXIMUM"
+    )
+  )
+
+  actual_output <- input %>%
+    derive_summary_records(
+      dataset_add = input,
+      by_vars = exprs(USUBJID, AVISIT),
+      set_values_to = exprs(
+        AVAL = max(AVAL, na.rm = TRUE),
+        DTYPE = "MAXIMUM"
+      )
+    )
+
+  expect_dfs_equal(
+    base = expected_output,
+    compare = actual_output,
+    keys = c("USUBJID", "AVISIT", "ASEQ", "DTYPE")
+  )
+})
+
+## Test 8: make sure dataset_add works ----
 test_that("derive_summary_records Test 6: make sure dataset_add works", {
   input <- tibble::tribble(
     ~subj, ~visit,       ~val, ~seq,
@@ -185,8 +259,8 @@ test_that("derive_summary_records Test 6: make sure dataset_add works", {
   )
 })
 
-## Test 7: test missing values ----
-test_that("derive_summary_records Test 7: test missing values with dataset_ref", {
+## Test 9: test missing values ----
+test_that("derive_summary_records Test 9: test missing values with dataset_ref", {
   input <- tibble::tribble(
     ~subj, ~visit,       ~val, ~seq,
     "1",        1,         10,    1,
