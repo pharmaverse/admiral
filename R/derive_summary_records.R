@@ -262,8 +262,23 @@ derive_summary_records <- function(dataset = NULL,
   summary_records <- dataset_add %>%
     group_by(!!!by_vars) %>%
     filter_if(filter_add) %>%
-    summarise(!!!set_values_to) %>%
-    ungroup()
+    reframe(!!!set_values_to)
+
+  signal_duplicate_records(
+    summary_records,
+    by_vars = by_vars,
+    msg = c(
+      paste(
+        "After summarising, the dataset contains duplicate records with",
+        "respect to {.var {by_vars}}."
+      ),
+      paste(
+        "Please check {.arg set_values_to} if summary functions like {.fun mean},",
+        "{.fun sum}, ... are used on the right hand side."
+      )
+    ),
+    class = "multiple_summary_records"
+  )
 
   df_return <- bind_rows(
     dataset,

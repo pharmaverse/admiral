@@ -1022,29 +1022,19 @@ derive_vars_merged_summary <- function(dataset,
   # need to be updated and the warning from dplyr needs to be suppressed as it
   # is misleading.
   tryCatch(
-    withCallingHandlers(
-      derive_vars_merged(
-        dataset,
-        dataset_add = derive_summary_records(
-          dataset_add = dataset_add,
-          by_vars = by_vars_right,
-          filter_add = !!filter_add,
-          set_values_to = new_vars,
-        ) %>%
-          select(!!!by_vars_right, names(new_vars)),
-        by_vars = by_vars,
-        missing_values = missing_values
-      ),
-      warning = function(cnd) {
-        if (any(str_detect(
-          cnd$message,
-          fixed("Returning more (or less) than 1 row per `summarise()` group was deprecated")
-        ))) {
-          cnd_muffle(cnd)
-        }
-      }
+    derive_vars_merged(
+      dataset,
+      dataset_add = derive_summary_records(
+        dataset_add = dataset_add,
+        by_vars = by_vars_right,
+        filter_add = !!filter_add,
+        set_values_to = new_vars,
+      ) %>%
+        select(!!!by_vars_right, names(new_vars)),
+      by_vars = by_vars,
+      missing_values = missing_values
     ),
-    duplicate_records = function(cnd) {
+    multiple_summary_records = function(cnd) {
       cli_abort(
         c(
           paste(
