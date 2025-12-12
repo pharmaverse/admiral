@@ -655,57 +655,107 @@ restrict_imputed_dtc_dtm <- function(dtc,
                                      imputed_dtc,
                                      min_dates,
                                      max_dates) {
-  any_mindate <- !(is.null(min_dates) || length(min_dates) == 0)
-  any_maxdate <- !(is.null(max_dates) || length(max_dates) == 0)
-  if (any_mindate || any_maxdate) {
-    dtc_range <-
-      get_dt_dtm_range(
-        dtc,
-        create_datetime = TRUE
-      )
-    min_dtc <- dtc_range[["lower"]]
-    max_dtc <- dtc_range[["upper"]]
+  any_mindate <- !(is.null(min_dates) || length(min_dates) == 0L)
+  any_maxdate <- !(is.null(max_dates) || length(max_dates) == 0L)
+
+  # Nothing to do if no bounds are provided
+  if (!any_mindate && !any_maxdate) {
+    return(imputed_dtc)
   }
+
+  # Range of possible dates implied by partial dtc
+  dtc_range <- get_dt_dtm_range(dtc, create_datetime = TRUE)
+  min_dtc   <- dtc_range[["lower"]]
+  max_dtc   <- dtc_range[["upper"]]
+
+  n <- length(imputed_dtc)
+
+  ## ---- Effective minimum bound: last min date within DTC range ---------
   if (any_mindate) {
-    if (length(unique(c(length(imputed_dtc), unlist(lapply(min_dates, length))))) != 1) {
+    if (length(unique(c(n, unlist(lapply(min_dates, length))))) != 1L) {
       cli_abort("Length of {.arg min_dates} do not match length of dates to be imputed.")
     }
-    # for each minimum date within the range ensure that the imputed date is not
-    # before it
-    for (min_date in min_dates) {
-      assert_date_vector(min_date)
-      min_date_iso <- strftime(min_date, format = "%Y-%m-%dT%H:%M:%S", tz = "UTC")
-      imputed_dtc <- if_else(
-        min_dtc <= min_date_iso & min_date_iso <= max_dtc,
-        pmax(imputed_dtc, min_date_iso),
-        imputed_dtc,
-        missing = imputed_dtc
+
+    min_bound <- rep(NA_character_, n)
+
+    for (md in min_dates) {
+      assert_date_vector(md)
+      md_iso <- strftime(md, format = "%Y-%m-%dT%H:%M:%S", tz = "UTC")
+
+      in_range <- min_dtc <= md_iso & md_iso <= max_dtc
+
+      # keep the *latest* min date that is in range
+      min_bound <- if_else(
+        in_range & (is.na(min_bound) | md_iso > min_bound),
+        md_iso,
+        min_bound,
+        missing = min_bound
       )
     }
+  } else {
+    min_bound <- rep(NA_character_, n)
   }
+
+  ## ---- Effective maximum bound: first max date within DTC range --------
   if (any_maxdate) {
-    if (length(unique(c(length(imputed_dtc), unlist(lapply(max_dates, length))))) != 1) {
+    if (length(unique(c(n, unlist(lapply(max_dates, length))))) != 1L) {
       cli_abort("Length of {.arg max_dates} do not match length of dates to be imputed.")
     }
-    # for each maximum date within the range ensure that the imputed date is not
-    # after it
-    for (max_date in max_dates) {
-      assert_date_vector(max_date)
-      max_date <- convert_date_to_dtm(
-        max_date,
-        time_imputation = "last"
-      )
-      max_date_iso <- strftime(max_date, format = "%Y-%m-%dT%H:%M:%S", tz = "UTC")
-      imputed_dtc <- if_else(
-        min_dtc <= max_date_iso & max_date_iso <= max_dtc,
-        pmin(imputed_dtc, max_date_iso),
-        imputed_dtc,
-        missing = imputed_dtc
+
+    max_bound <- rep(NA_character_, n)
+
+    for (xd in max_dates) {
+      assert_date_vector(xd)
+
+      xd <- convert_date_to_dtm(xd, time_imputation = "last")
+      xd_iso <- strftime(xd, format = "%Y-%m-%dT%H:%M:%S", tz = "UTC")
+
+      in_range <- min_dtc <= xd_iso & xd_iso <= max_dtc
+
+      # keep the *earliest* max date that is in range
+      max_bound <- if_else(
+        in_range & (is.na(max_bound) | xd_iso < max_bound),
+        xd_iso,
+        max_bound,
+        missing = max_bound
       )
     }
+  } else {
+    max_bound <- rep(NA_character_, n)
   }
-  imputed_dtc
+
+  ## ---- Handle inconsistent bounds: max < min ---------------------------
+  # If both bounds are present but max < min, treat them as inconsistent
+  # and fall back to the original imputed value (ignore both bounds).
+  inconsistent <- !is.na(min_bound) & !is.na(max_bound) & max_bound < min_bound
+  if (any(inconsistent)) {
+    # Optional: could cli_inform() here if you want a warning
+    min_bound[inconsistent] <- NA_character_
+    max_bound[inconsistent] <- NA_character_
+  }
+
+  ## ---- Apply remaining bounds -----------------------------------------
+  out <- imputed_dtc
+
+  # Enforce minimum where present
+  out <- if_else(
+    !is.na(min_bound) & out < min_bound,
+    min_bound,
+    out,
+    missing = out
+  )
+
+  # Enforce maximum where present
+  out <- if_else(
+    !is.na(max_bound) & out > max_bound,
+    max_bound,
+    out,
+    missing = out
+  )
+
+  out
 }
+
 
 #' Derive the Time Imputation Flag
 #'
