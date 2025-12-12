@@ -134,32 +134,31 @@ dt_level <- function(level) {
 #' @seealso [impute_dtc_dtm()], [impute_dtc_dt()]
 get_imputation_target_date <- function(date_imputation,
                                        month) {
-  target <- vector("list", 3)
-  names(target) <- c("year", "month", "day")
-  target <- case_when(
-    date_imputation == "first" ~ list(
+  if (date_imputation == "first") {
+    list(
       year = "0000",
       month = "01",
       day = "01"
-    ),
-    date_imputation == "mid" ~ list(
+    )
+  } else if (date_imputation == "mid") {
+    list(
       year = "xxxx",
       month = "06",
       day = if_else(is.na(month), "30", "15")
-    ),
-    date_imputation == "last" ~ list(
+    )
+  } else if(date_imputation == "last") {
+    list(
       year = "9999",
       month = "12",
       day = "28"
-    ),
-    TRUE ~ list(
+    )
+  } else {
+    list(
       year = "xxxx",
       month = str_sub(date_imputation, 1, 2),
       day = str_sub(date_imputation, 4, 5)
     )
-  )
-
-  target
+  }
 }
 
 #' Get Time Imputation Targets
@@ -200,19 +199,17 @@ get_imputation_target_date <- function(date_imputation,
 #'
 #' @seealso  [impute_dtc_dtm()]
 get_imputation_target_time <- function(time_imputation) {
-  target <- vector("list", 3)
-  names(target) <- c("hour", "minute", "second")
-  target <- case_when(
-    time_imputation == "first" ~ list(hour = "00", minute = "00", second = "00"),
-    time_imputation == "last" ~ list(hour = "23", minute = "59", second = "59"),
-    TRUE ~ list(
+  if(time_imputation == "first") {
+    list(hour = "00", minute = "00", second = "00")
+  } else if (time_imputation == "last") {
+    list(hour = "23", minute = "59", second = "59")
+  } else {
+    list(
       hour = str_sub(time_imputation, 1, 2),
       minute = str_sub(time_imputation, 4, 5),
       second = str_sub(time_imputation, 7, -1)
     )
-  )
-
-  target
+  }
 }
 
 #' Convert a Date into a Datetime Object
