@@ -322,8 +322,7 @@ base_data <- is_result_change %>%
     ABLFL
   )
 
-# Use "is_result_change"to make a ADABLPFL flag data set to merge back in later in the program
-#  Note:  Based on ABLFL, ABLFL is if had any a baseline record, even if null value
+# Assign and save ADABLPFL for later use
 adablpfl <- is_result_change %>%
   filter(ABLFL == "Y") %>%
   distinct(STUDYID, USUBJID, DRUG, BASETYPE,
@@ -334,7 +333,6 @@ adablpfl <- is_result_change %>%
   rename(ADABLPFL = ABLFL)
 
 # Calculate the By Visit parameters
-
 is_visit_flags <- is_result_change %>%
   mutate(
     TFLAGV = case_when(
@@ -360,6 +358,9 @@ is_visit_flags <- is_result_change %>%
       TRUE ~ "MISSING"
     ),
   )
+
+# These next code segments create utility datasets that will
+# then get merged back into the main dataset (is_visit_flags)
 
 # Post baseline must be valid post data (result not missing)
 post_data <- is_visit_flags %>%
@@ -451,7 +452,6 @@ flagdata_init <- full_join(base_data, most_post, by = c(
   arrange(DRUG, BASETYPE, ADATYPE, ADAPARM, STUDYID, USUBJID)
 
 # Merge in out Main ADASTAT status for computing NABSTAT
-
 flagdata_adastat <- flagdata_init %>%
   derive_vars_merged(
     dataset_add = flagdata_init,
@@ -493,7 +493,8 @@ flagdata_final <- flagdata_nab %>%
   # Drop variables no longer needed from flag_data before merging with main ADAB
   select(-BASE, -BASE_RESULT, -AVAL_P, -RESULT_P, -DRUG, -ABLFL)
 
-# Put TFLAG, BFLAG and PBFLAG onto the main ADAB data set
+# Put TFLAG, BFLAG and PBFLAG and the nabstat_ variables onto the main
+# dataset (is_flagdata from is_visit_flags)
 is_flagdata <- is_visit_flags %>%
   # main_aab_flagdata
   derive_vars_merged(
@@ -522,9 +523,9 @@ per_tran_pre <- is_flagdata %>%
     )
   )
 
-# Keep TFLAGV = or TFLAGV = 2 (Any Treatment Emergent)
-#  Regular Induced PERSADA and TRANADA will later be based on TFLAGV = 1
-#  TFLAGV = 2 can use for separate PERSADA/TRANADA based on Enhanced
+# Keep TFLAGV = 1 or TFLAGV = 2 (Any Treatment Emergent)
+# Regular Induced PERSADA and TRANADA will later be based on TFLAGV = 1
+# TFLAGV = 2 can use for separate PERSADA/TRANADA based on Enhanced
 per_tran_all <- per_tran_pre %>%
   filter(TFLAGV == 1 | TFLAGV == 2) %>%
   select(-MaxADTM, -ISSEQ) %>%
