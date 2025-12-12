@@ -146,7 +146,7 @@ get_imputation_target_date <- function(date_imputation,
       month = "06",
       day = if_else(is.na(month), "30", "15")
     )
-  } else if(date_imputation == "last") {
+  } else if (date_imputation == "last") {
     list(
       year = "9999",
       month = "12",
@@ -199,7 +199,7 @@ get_imputation_target_date <- function(date_imputation,
 #'
 #' @seealso  [impute_dtc_dtm()]
 get_imputation_target_time <- function(time_imputation) {
-  if(time_imputation == "first") {
+  if (time_imputation == "first") {
     list(hour = "00", minute = "00", second = "00")
   } else if (time_imputation == "last") {
     list(hour = "23", minute = "59", second = "59")

@@ -1183,14 +1183,13 @@ get_joined_sub_data <- function(dataset,
                                 first_cond_upper,
                                 first_cond_lower,
                                 filter_join) {
-
   if (is.null(by_vars)) {
-  data_joined <-
-    cross_join(
-      dataset,
-      dataset_add,
-      suffix = c("", ".join")
-    )
+    data_joined <-
+      cross_join(
+        dataset,
+        dataset_add,
+        suffix = c("", ".join")
+      )
   } else {
     data_joined <-
       left_join(
