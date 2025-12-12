@@ -69,8 +69,8 @@
 get_vars_query <- function(dataset, dataset_queries) {
   source_vars <- unique(dataset_queries$SRCVAR)
   assert_data_frame(dataset,
-    required_vars = chr2vars(source_vars),
-    optional = FALSE
+                    required_vars = chr2vars(source_vars),
+                    optional = FALSE
   )
 
   # check optionality of TERMNUM or TERMCHAR based on SRCVAR type
@@ -95,7 +95,7 @@ get_vars_query <- function(dataset, dataset_queries) {
   if (length(expected_termvars) > 1) {
     # check illegal term name
     if (any(is.na(dataset_queries$TERMCHAR) & is.na(dataset_queries$TERMNUM)) ||
-      any(dataset_queries$TERMCHAR == "" & is.na(dataset_queries$TERMNUM))) {
+        any(dataset_queries$TERMCHAR == "" & is.na(dataset_queries$TERMNUM))) {
       cli_abort(paste0(
         "Either {.var TERMCHAR} or {.var TERMNUM} need to be specified",
         " in {.arg dataset_queries}. ",
@@ -121,18 +121,9 @@ get_vars_query <- function(dataset, dataset_queries) {
     group_by(PREFIX) %>%
     mutate(
       NAM = paste0(PREFIX, "NAM"),
-      CD = case_when(
-        !all(is.na(GRPID)) ~ paste0(PREFIX, "CD"),
-        TRUE ~ NA_character_
-      ),
-      SC = case_when(
-        !all(is.na(SCOPE)) ~ paste0(PREFIX, "SC"),
-        TRUE ~ NA_character_
-      ),
-      SCN = case_when(
-        !all(is.na(SCOPEN)) ~ paste0(PREFIX, "SCN"),
-        TRUE ~ NA_character_
-      )
+      CD = ifelse(!all(is.na(GRPID)), paste0(PREFIX, "CD"), NA_character_), # nolint
+      SC = ifelse(!all(is.na(SCOPE)), paste0(PREFIX, "SC"), NA_character_), # nolint
+      SCN = ifelse(!all(is.na(SCOPEN)), paste0(PREFIX, "SCN"), NA_character_) # nolint
     ) %>%
     ungroup() %>%
     select(NAM, CD, SC, SCN) %>%
@@ -385,7 +376,7 @@ assert_valid_queries <- function(queries, queries_name) {
 
   # check illegal query scope
   if ("SCOPE" %in% names(queries) &&
-    any(unique(queries$SCOPE) %notin% c("BROAD", "NARROW", "", NA_character_))) {
+      any(unique(queries$SCOPE) %notin% c("BROAD", "NARROW", "", NA_character_))) {
     cli_abort(
       "{.var SCOPE} in {.arg {queries_name}} can only be 'BROAD', 'NARROW' or `NA`."
     )
