@@ -48,34 +48,34 @@ atoxgr_json_to_dataframe <- function(dataset, json_file) {
 }
 
 # hold core directory path in an object
-json_file_path <- "data-raw/adlb_grading/"
-save_file_path <- "data/atoxgr_criteria_"
+json_file_path <- "data-raw/adlb_grading"
+save_file_path <- "data"
 
 # Point to JSON files for each criteria
 
 ## NCICTCAEv4 for SI units
-json_file_path_v4 <- paste0(json_file_path, "ncictcaev4.json")
+json_file_path_v4a <- file.path(json_file_path, "ncictcaev4.json")
 
 ## NCICTCAEv4 for CV units
-json_file_path_v4_uscv <- paste0(json_file_path, "ncictcaev4_uscv.json")
+json_file_path_v4_uscv <- file.path(json_file_path, "ncictcaev4_uscv.json")
 
 ## NCICTCAEv5 for SI units
-json_file_path_v5 <- paste0(json_file_path, "ncictcaev5.json")
+json_file_path_v5 <- file.path(json_file_path, "ncictcaev5.json")
 
 ## NCICTCAEv5 for CV units
-json_file_path_v5_uscv <- paste0(json_file_path, "ncictcaev5_uscv.json")
+json_file_path_v5_uscv <- file.path(json_file_path, "ncictcaev5_uscv.json")
 
 ## NCICTCAEv6 for SI units
-json_file_path_v6 <- paste0(json_file_path, "ncictcaev6.json")
+json_file_path_v6 <- file.path(json_file_path, "ncictcaev6.json")
 
 ## NCICTCAEv6 for CV units
-json_file_path_v6_uscv <- paste0(json_file_path, "ncictcaev6_uscv.json")
+json_file_path_v6_uscv <- file.path(json_file_path, "ncictcaev6_uscv.json")
 
 ## DAIDs for SI units
-json_file_path_daids <- paste0(json_file_path, "DAIDS.json")
+json_file_path_daids <- file.path(json_file_path, "DAIDS.json")
 
 ## DAIDs for CV units
-json_file_path_daids_uscv <- paste0(json_file_path, "DAIDS_uscv.json")
+json_file_path_daids_uscv <- file.path(json_file_path, "DAIDS_uscv.json")
 
 ## Read in JSON files and create metadata for each criteria
 
@@ -90,11 +90,11 @@ atoxgr_criteria_daids_uscv <- atoxgr_json_to_dataframe(json_file = json_file_pat
 
 ## Save metadata for each criteria
 
-save(atoxgr_criteria_ctcv4, file = paste0(save_file_path, "ctcv4.rda"))
-save(atoxgr_criteria_ctcv4_uscv, file = paste0(save_file_path, "ctcv4_uscv.rda"))
-save(atoxgr_criteria_ctcv5, file = paste0(save_file_path, "ctcv5.rda"))
-save(atoxgr_criteria_ctcv5_uscv, file = paste0(save_file_path, "ctcv5_uscv.rda"))
-save(atoxgr_criteria_ctcv6, file = paste0(save_file_path, "ctcv6.rda"))
-save(atoxgr_criteria_ctcv6_uscv, file = paste0(save_file_path, "ctcv6_uscv.rda"))
-save(atoxgr_criteria_daids, file = paste0(save_file_path, "daids.rda"))
-save(atoxgr_criteria_daids_uscv, file = paste0(save_file_path, "daids_uscv.rda"))
+save(atoxgr_criteria_ctcv4, file = file.path(save_file_path, "atoxgr_criteria_ctcv4.rda"))
+save(atoxgr_criteria_ctcv4_uscv, file = file.path(save_file_path, "atoxgr_criteria_ctcv4_uscv.rda"))
+save(atoxgr_criteria_ctcv5, file = file.path(save_file_path, "atoxgr_criteria_ctcv5.rda"))
+save(atoxgr_criteria_ctcv5_uscv, file = file.path(save_file_path, "atoxgr_criteria_ctcv5_uscv.rda"))
+save(atoxgr_criteria_ctcv6, file = file.path(save_file_path, "atoxgr_criteria_ctcv6.rda"))
+save(atoxgr_criteria_ctcv6_uscv, file = file.path(save_file_path, "atoxgr_criteria_ctcv6_uscv.rda"))
+save(atoxgr_criteria_daids, file = file.path(save_file_path, "atoxgr_criteria_daids.rda"))
+save(atoxgr_criteria_daids_uscv, file = file.path(save_file_path, "atoxgr_criteria_daids_uscv.rda"))
