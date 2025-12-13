@@ -470,7 +470,7 @@ is_baseline <- is_aval %>%
 # Compute BASE and CHG
 is_aval_change <- is_baseline %>%
   derive_var_base(
-    by_vars = exprs(!!!get_admiral_option("subject_keys"), BASETYPE, ADATYPE, ADAPARM),
+    by_vars = exprs(STUDYID, USUBJID, BASETYPE, ADATYPE, ADAPARM),
     source_var = AVAL,
     new_var = BASE,
     filter = ABLFL == "Y"
@@ -483,7 +483,7 @@ is_aval_change <- is_baseline %>%
 # Interpreted Result Baseline
 is_result_change <- is_aval_change %>%
   derive_var_base(
-    by_vars = exprs(!!!get_admiral_option("subject_keys"), BASETYPE, ADATYPE, ADAPARM),
+    by_vars = exprs(STUDYID, USUBJID, BASETYPE, ADATYPE, ADAPARM),
     source_var = RESULTN,
     new_var = BASE_RESULT,
     filter = ABLFL == "Y"
@@ -494,7 +494,7 @@ is_result_change <- is_aval_change %>%
 base_data <- is_result_change %>%
   filter(ABLFL == "Y") %>%
   select(
-    !!!get_admiral_option("subject_keys"), DRUG, BASETYPE, ADATYPE, ADAPARM, BASE_RESULT, BASE,
+    STUDYID, USUBJID, DRUG, BASETYPE, ADATYPE, ADAPARM, BASE_RESULT, BASE,
     ABLFL
   )
 ```
@@ -523,11 +523,11 @@ Treatment Unaffected: Positive at Baseline to Positive where Change from Baselin
 # Assign and save ADABLPFL for later use
 adablpfl <- is_result_change %>%
   filter(ABLFL == "Y") %>%
-  distinct(!!!get_admiral_option("subject_keys"), DRUG, BASETYPE,
+  distinct(STUDYID, USUBJID, DRUG, BASETYPE,
     ADATYPE, ADAPARM,
     .keep_all = TRUE
   ) %>%
-  select(!!!get_admiral_option("subject_keys"), DRUG, BASETYPE, ADATYPE, ADAPARM, ABLFL) %>%
+  select(STUDYID, USUBJID, DRUG, BASETYPE, ADATYPE, ADAPARM, ABLFL) %>%
   rename(ADABLPFL = ABLFL)
 
 # Calculate the By Visit parameters
@@ -565,7 +565,7 @@ is_visit_flags <- is_result_change %>%
 post_data <- is_visit_flags %>%
   filter(VALIDPOST == "Y") %>%
   select(
-    !!!get_admiral_option("subject_keys"), DRUG, BASETYPE, ADATYPE, ADAPARM, RESULTN,
+    STUDYID, USUBJID, DRUG, BASETYPE, ADATYPE, ADAPARM, RESULTN,
     AVAL, ADTM, CHG
   ) %>%
   rename(AVAL_P = AVAL) %>%
@@ -574,11 +574,11 @@ post_data <- is_visit_flags %>%
 # Use the "post_data" dataset to create the ADPBLPFL flag, which will be merged back later in the program
 #  Note:  "post_data" is if VALIDPOST="Y" (has a non missing post baseline result)
 adpblpfl <- post_data %>%
-  distinct(!!!get_admiral_option("subject_keys"), DRUG, BASETYPE, ADATYPE,
+  distinct(STUDYID, USUBJID, DRUG, BASETYPE, ADATYPE,
     ADAPARM,
     .keep_all = TRUE
   ) %>%
-  select(!!!get_admiral_option("subject_keys"), DRUG, BASETYPE, ADATYPE, ADAPARM) %>%
+  select(STUDYID, USUBJID, DRUG, BASETYPE, ADATYPE, ADAPARM) %>%
   mutate(
     ADPBLPFL = "Y"
   )
@@ -586,19 +586,19 @@ adpblpfl <- post_data %>%
 # Compute BFLAG, TFLAG, PBFLAG ----
 
 most_post_result <- post_data %>%
-  group_by(!!!get_admiral_option("subject_keys"), DRUG, BASETYPE, ADATYPE, ADAPARM) %>%
+  group_by(STUDYID, USUBJID, DRUG, BASETYPE, ADATYPE, ADAPARM) %>%
   summarize(RESULT_P = max(RESULT_P)) %>%
   ungroup()
 
 most_post_aval <- post_data %>%
   filter(!is.na(AVAL_P)) %>%
-  group_by(!!!get_admiral_option("subject_keys"), BASETYPE, ADATYPE, ADAPARM) %>%
+  group_by(STUDYID, USUBJID, BASETYPE, ADATYPE, ADAPARM) %>%
   summarize(AVAL_P = max(AVAL_P)) %>%
   ungroup()
 
 most_post_chg <- post_data %>%
   filter(!is.na(AVAL_P)) %>%
-  group_by(!!!get_admiral_option("subject_keys"), BASETYPE, ADATYPE, ADAPARM) %>%
+  group_by(STUDYID, USUBJID, BASETYPE, ADATYPE, ADAPARM) %>%
   summarize(MAXCHG = max(CHG)) %>%
   ungroup()
 
@@ -606,11 +606,11 @@ most_post_chg <- post_data %>%
 most_post <- most_post_result %>%
   derive_vars_merged(
     dataset_add = most_post_aval,
-    by_vars = exprs(!!!get_admiral_option("subject_keys"), BASETYPE, ADATYPE, ADAPARM)
+    by_vars = exprs(STUDYID, USUBJID, BASETYPE, ADATYPE, ADAPARM)
   ) %>%
   derive_vars_merged(
     dataset_add = most_post_chg,
-    by_vars = exprs(!!!get_admiral_option("subject_keys"), BASETYPE, ADATYPE, ADAPARM)
+    by_vars = exprs(STUDYID, USUBJID, BASETYPE, ADATYPE, ADAPARM)
   )
 
 # Use an outer Join to combine baseline with most post results create utility dataset with flag data
@@ -648,7 +648,7 @@ flagdata_init <- full_join(base_data, most_post, by = c(
       TRUE ~ NA_integer_
     )
   ) %>%
-  arrange(DRUG, BASETYPE, ADATYPE, ADAPARM, !!!get_admiral_option("subject_keys"))
+  arrange(DRUG, BASETYPE, ADATYPE, ADAPARM, STUDYID, USUBJID)
 ```
 
 
@@ -670,7 +670,7 @@ flagdata_adastat <- flagdata_init %>%
     dataset_add = flagdata_init,
     filter_add = ADATYPE == "ADA_BAB",
     new_vars = exprs(ADASTAT_MAIN = ADASTAT),
-    by_vars = exprs(!!!get_admiral_option("subject_keys"), DRUG)
+    by_vars = exprs(STUDYID, USUBJID, DRUG)
   )
 
 # Compute NABPOSTMISS onto flag_data for NABSTAT
@@ -679,7 +679,7 @@ flagdata_nab <- flagdata_adastat %>%
     dataset_add = is_visit_flags,
     new_var = NABPOSTMISS,
     condition = is.na(ABLFL) & VALIDPOST == "N" & ADATYPE == "ADA_NAB",
-    by_vars = exprs(!!!get_admiral_option("subject_keys"), BASETYPE, ADATYPE, ADAPARM)
+    by_vars = exprs(STUDYID, USUBJID, BASETYPE, ADATYPE, ADAPARM)
   )
 
 # Compute NAB Stat using both methods
@@ -746,7 +746,7 @@ is_flagdata <- is_visit_flags %>%
   # main_aab_flagdata
   derive_vars_merged(
     dataset_add = flagdata_final,
-    by_vars = exprs(!!!get_admiral_option("subject_keys"), BASETYPE, ADATYPE, ADAPARM)
+    by_vars = exprs(STUDYID, USUBJID, BASETYPE, ADATYPE, ADAPARM)
   )
 
 # Create a utility data set to compute PERSADA, TRANADA, INDUCED, ENHANCED related parameters
@@ -754,10 +754,10 @@ is_flagdata <- is_visit_flags %>%
 per_tran_pre <- is_flagdata %>%
   filter(VALIDPOST == "Y") %>%
   select(
-    !!!get_admiral_option("subject_keys"), BASETYPE, ADATYPE, ADAPARM, ADTM, FANLDTM, FANLDT,
+    STUDYID, USUBJID, BASETYPE, ADATYPE, ADAPARM, ADTM, FANLDTM, FANLDT,
     TFLAGV, ISSEQ
   ) %>%
-  group_by(!!!get_admiral_option("subject_keys"), BASETYPE, ADATYPE, ADAPARM ) %>%
+  group_by(STUDYID, USUBJID, BASETYPE, ADATYPE, ADAPARM ) %>%
   mutate(
     MaxADTM = max(ADTM)
   ) %>%
@@ -776,7 +776,7 @@ per_tran_pre <- is_flagdata %>%
 per_tran_all <- per_tran_pre %>%
   filter(TFLAGV == 1 | TFLAGV == 2) %>%
   select(-MaxADTM, -ISSEQ) %>%
-  group_by(!!!get_admiral_option("subject_keys"), BASETYPE, ADATYPE, ADAPARM) %>%
+  group_by(STUDYID, USUBJID, BASETYPE, ADATYPE, ADAPARM) %>%
   mutate(
     FPPDTM = min(ADTM),
     LPPDTM = max(ADTM)
@@ -784,13 +784,13 @@ per_tran_all <- per_tran_pre %>%
   ungroup()
 
 per_tran_inc_last <- per_tran_all %>%
-  group_by(!!!get_admiral_option("subject_keys"), BASETYPE, ADATYPE, ADAPARM) %>%
+  group_by(STUDYID, USUBJID, BASETYPE, ADATYPE, ADAPARM) %>%
   summarize(COUNT_INC_LAST = n()) %>%
   ungroup()
 
 per_tran_exc_last <- per_tran_all %>%
   filter(is.na(LFLAGPOS)) %>%
-  group_by(!!!get_admiral_option("subject_keys"), BASETYPE, ADATYPE, ADAPARM) %>%
+  group_by(STUDYID, USUBJID, BASETYPE, ADATYPE, ADAPARM) %>%
   summarize(COUNT_EXC_LAST = n()) %>%
   ungroup()
 
@@ -800,11 +800,11 @@ per_tran_last <- per_tran_all %>%
   filter(ADTM == LPPDTM) %>%
   derive_vars_merged(
     dataset_add = per_tran_inc_last,
-    by_vars = exprs(!!!get_admiral_option("subject_keys"), BASETYPE, ADATYPE, ADAPARM)
+    by_vars = exprs(STUDYID, USUBJID, BASETYPE, ADATYPE, ADAPARM)
   ) %>%
   derive_vars_merged(
     dataset_add = per_tran_exc_last,
-    by_vars = exprs(!!!get_admiral_option("subject_keys"), BASETYPE, ADATYPE, ADAPARM)
+    by_vars = exprs(STUDYID, USUBJID, BASETYPE, ADATYPE, ADAPARM)
   )
 
 # Compute final parameters
@@ -870,7 +870,7 @@ per_tran_final <- per_tran_last %>%
 main_aab_pertran <- is_flagdata %>%
   derive_vars_merged(
     dataset_add = per_tran_final,
-    by_vars = exprs(!!!get_admiral_option("subject_keys"), BASETYPE, ADATYPE, ADAPARM)
+    by_vars = exprs(STUDYID, USUBJID, BASETYPE, ADATYPE, ADAPARM)
   )
 
 main_aab_rtimes <- main_aab_pertran %>%
@@ -902,12 +902,12 @@ main_aab <- main_aab_rtimes %>%
   derive_vars_merged(
     dataset_add = adablpfl,
     new_vars = exprs(ADABLPFL),
-    by_vars = exprs(!!!get_admiral_option("subject_keys"), BASETYPE, ADATYPE, ADAPARM)
+    by_vars = exprs(STUDYID, USUBJID, BASETYPE, ADATYPE, ADAPARM)
   ) %>%
   derive_vars_merged(
     dataset_add = adpblpfl,
     new_vars = exprs(ADPBLPFL),
-    by_vars = exprs(!!!get_admiral_option("subject_keys"), BASETYPE, ADATYPE, ADAPARM)
+    by_vars = exprs(STUDYID, USUBJID, BASETYPE, ADATYPE, ADAPARM)
   )
 ```
 
@@ -978,7 +978,7 @@ adab_result <- core_aab %>%
 # Derive BASE and Calculate Change from Baseline on BAB RESULT records
 adab_result <- adab_result %>%
   derive_var_base(
-    by_vars = exprs(!!!get_admiral_option("subject_keys"), BASETYPE, ADATYPE, ADAPARM),
+    by_vars = exprs(STUDYID, USUBJID, BASETYPE, ADATYPE, ADAPARM),
     source_var = AVAL,
     new_var = BASE,
     filter = ABLFL == "Y"
@@ -1008,7 +1008,7 @@ adab_nabres <- core_aab %>%
 # Derive BASE and Calculate Change from Baseline on NAB RESULT records
 adab_nabres <- adab_nabres %>%
   derive_var_base(
-    by_vars = exprs(!!!get_admiral_option("subject_keys"), BASETYPE, ADATYPE, ADAPARM),
+    by_vars = exprs(STUDYID, USUBJID, BASETYPE, ADATYPE, ADAPARM),
     source_var = AVAL,
     new_var = BASE,
     filter = ABLFL == "Y"
@@ -1086,7 +1086,7 @@ core_aab <- core_aab %>%
 adab_bflag <- core_aab %>%
   filter(ADATYPE == "ADA_BAB") %>%
   distinct(
-    !!!get_admiral_option("subject_keys"), PARCAT1, BASETYPE, PARAM, ADATYPE, ADAPARM,
+    STUDYID, USUBJID, PARCAT1, BASETYPE, PARAM, ADATYPE, ADAPARM,
     ISTESTCD, ISTEST, ISCAT, ISBDAGNT, AVISITN, AVISIT, ISSPEC, BFLAG
   ) %>%
   mutate(
@@ -1105,7 +1105,7 @@ adab_bflag <- core_aab %>%
 adab_incucd <- core_aab %>%
   filter(ADATYPE == "ADA_BAB") %>%
   distinct(
-    !!!get_admiral_option("subject_keys"), PARCAT1, BASETYPE, PARAM, ADATYPE, ADAPARM,
+    STUDYID, USUBJID, PARCAT1, BASETYPE, PARAM, ADATYPE, ADAPARM,
     ISTESTCD, ISTEST, ISCAT, ISBDAGNT, AVISITN, AVISIT, ISSPEC, TFLAG
   ) %>%
   mutate(
@@ -1127,7 +1127,7 @@ adab_incucd <- core_aab %>%
 adab_enhanc <- core_aab %>%
   filter(ADATYPE == "ADA_BAB") %>%
   distinct(
-    !!!get_admiral_option("subject_keys"), PARCAT1, BASETYPE, PARAM, ADATYPE, ADAPARM,
+    STUDYID, USUBJID, PARCAT1, BASETYPE, PARAM, ADATYPE, ADAPARM,
     ISTESTCD, ISTEST, ISCAT, ISBDAGNT, AVISITN, AVISIT, ISSPEC, TFLAG
   ) %>%
   mutate(
@@ -1149,7 +1149,7 @@ adab_enhanc <- core_aab %>%
 adab_emerpos <- core_aab %>%
   filter(ADATYPE == "ADA_BAB") %>%
   distinct(
-    !!!get_admiral_option("subject_keys"), PARCAT1, BASETYPE, PARAM, ADATYPE, ADAPARM,
+    STUDYID, USUBJID, PARCAT1, BASETYPE, PARAM, ADATYPE, ADAPARM,
     ISTESTCD, ISTEST, ISCAT, ISBDAGNT, AVISITN, AVISIT, ISSPEC, PBFLAG
   ) %>%
   mutate(
@@ -1171,7 +1171,7 @@ adab_emerpos <- core_aab %>%
 adab_trunaff <- core_aab %>%
   filter(ADATYPE == "ADA_BAB") %>%
   distinct(
-    !!!get_admiral_option("subject_keys"), PARCAT1, BASETYPE, PARAM, ADATYPE, ADAPARM,
+    STUDYID, USUBJID, PARCAT1, BASETYPE, PARAM, ADATYPE, ADAPARM,
     ISTESTCD, ISTEST, ISCAT, ISBDAGNT, AVISITN, AVISIT, ISSPEC, TFLAG
   ) %>%
   mutate(
@@ -1193,7 +1193,7 @@ adab_trunaff <- core_aab %>%
 adab_emerneg <- core_aab %>%
   filter(ADATYPE == "ADA_BAB") %>%
   distinct(
-    !!!get_admiral_option("subject_keys"), PARCAT1, BASETYPE, PARAM, ADATYPE, ADAPARM,
+    STUDYID, USUBJID, PARCAT1, BASETYPE, PARAM, ADATYPE, ADAPARM,
     ISTESTCD, ISTEST, ISCAT, ISBDAGNT, AVISITN, AVISIT, ISSPEC, PBFLAG
   ) %>%
   mutate(
@@ -1215,7 +1215,7 @@ adab_emerneg <- core_aab %>%
 adab_notrrel <- core_aab %>%
   filter(ADATYPE == "ADA_BAB") %>%
   distinct(
-    !!!get_admiral_option("subject_keys"), PARCAT1, BASETYPE, PARAM, ADATYPE, ADAPARM,
+    STUDYID, USUBJID, PARCAT1, BASETYPE, PARAM, ADATYPE, ADAPARM,
     ISTESTCD, ISTEST, ISCAT, ISBDAGNT, AVISITN, AVISIT, ISSPEC, PBFLAG
   ) %>%
   mutate(
@@ -1237,7 +1237,7 @@ adab_notrrel <- core_aab %>%
 adab_adastat <- core_aab %>%
   filter(ADATYPE == "ADA_BAB") %>%
   distinct(
-    !!!get_admiral_option("subject_keys"), PARCAT1, BASETYPE, PARAM, ADATYPE, ADAPARM,
+    STUDYID, USUBJID, PARCAT1, BASETYPE, PARAM, ADATYPE, ADAPARM,
     ISTESTCD, ISTEST, ISCAT, ISBDAGNT, AVISITN, AVISIT, ISSPEC, ADASTAT
   ) %>%
   mutate(
@@ -1256,7 +1256,7 @@ adab_adastat <- core_aab %>%
 adab_timada <- core_aab %>%
   filter(ADATYPE == "ADA_BAB") %>%
   distinct(
-    !!!get_admiral_option("subject_keys"), PARCAT1, BASETYPE, PARAM, ADATYPE, ADAPARM,
+    STUDYID, USUBJID, PARCAT1, BASETYPE, PARAM, ADATYPE, ADAPARM,
     ISTESTCD, ISTEST, ISCAT, ISBDAGNT, AVISITN, AVISIT, ISSPEC, TIMADA
   ) %>%
   mutate(
@@ -1271,7 +1271,7 @@ adab_timada <- core_aab %>%
 adab_persada <- core_aab %>%
   filter(ADATYPE == "ADA_BAB") %>%
   distinct(
-    !!!get_admiral_option("subject_keys"), PARCAT1, BASETYPE, PARAM, ADATYPE, ADAPARM,
+    STUDYID, USUBJID, PARCAT1, BASETYPE, PARAM, ADATYPE, ADAPARM,
     ISTESTCD, ISTEST, ISCAT, ISBDAGNT, AVISITN, AVISIT, ISSPEC, PERSADA
   ) %>%
   mutate(
@@ -1290,7 +1290,7 @@ adab_persada <- core_aab %>%
 adab_tranada <- core_aab %>%
   filter(ADATYPE == "ADA_BAB") %>%
   distinct(
-    !!!get_admiral_option("subject_keys"), PARCAT1, BASETYPE, PARAM, ADATYPE, ADAPARM,
+    STUDYID, USUBJID, PARCAT1, BASETYPE, PARAM, ADATYPE, ADAPARM,
     ISTESTCD, ISTEST, ISCAT, ISBDAGNT, AVISITN, AVISIT, ISSPEC, TRANADA
   ) %>%
   mutate(
@@ -1309,7 +1309,7 @@ adab_tranada <- core_aab %>%
 adab_nabstat <- core_aab %>%
   filter(ADATYPE == "ADA_NAB") %>%
   distinct(
-    !!!get_admiral_option("subject_keys"), PARCAT1, BASETYPE, PARAM, ADATYPE, ADAPARM,
+    STUDYID, USUBJID, PARCAT1, BASETYPE, PARAM, ADATYPE, ADAPARM,
     ISTESTCD, ISTEST, ISCAT, ISBDAGNT, AVISITN, AVISIT, ISSPEC, NABSTAT
   ) %>%
   mutate(
@@ -1328,7 +1328,7 @@ adab_nabstat <- core_aab %>%
 adab_adadur <- core_aab %>%
   filter(ADATYPE == "ADA_BAB") %>%
   distinct(
-    !!!get_admiral_option("subject_keys"), PARCAT1, BASETYPE, PARAM, ADATYPE, ADAPARM,
+    STUDYID, USUBJID, PARCAT1, BASETYPE, PARAM, ADATYPE, ADAPARM,
     ISTESTCD, ISTEST, ISCAT, ISBDAGNT, AVISITN, AVISIT, ISSPEC, ADADUR
   ) %>%
   mutate(
@@ -1343,7 +1343,7 @@ adab_adadur <- core_aab %>%
 adab_fppdtm <- core_aab %>%
   filter(ADATYPE == "ADA_BAB") %>%
   distinct(
-    !!!get_admiral_option("subject_keys"), PARCAT1, BASETYPE, PARAM, ADATYPE, ADAPARM,
+    STUDYID, USUBJID, PARCAT1, BASETYPE, PARAM, ADATYPE, ADAPARM,
     ISTESTCD, ISTEST, ISCAT, ISBDAGNT, AVISITN, AVISIT, ISSPEC, FPPDTM
   ) %>%
   mutate(
@@ -1360,7 +1360,7 @@ adab_fppdtm <- core_aab %>%
 adab_lppdtm <- core_aab %>%
   filter(ADATYPE == "ADA_BAB") %>%
   distinct(
-    !!!get_admiral_option("subject_keys"), PARCAT1, BASETYPE, PARAM, ADATYPE, ADAPARM,
+    STUDYID, USUBJID, PARCAT1, BASETYPE, PARAM, ADATYPE, ADAPARM,
     ISTESTCD, ISTEST, ISCAT, ISBDAGNT, AVISITN, AVISIT, ISSPEC, LPPDTM
   ) %>%
   mutate(
@@ -1418,7 +1418,7 @@ In this section, compute or merge in any additional flags or `ADSL` variables.
 adab_adsl <- adab_study %>%
   derive_vars_merged(
     dataset_add = adsl,
-    by_vars = exprs(!!!get_admiral_option("subject_keys"))
+    by_vars = exprs(STUDYID, USUBJID)
   )
 
 # Compute COHORT From ADSL, other source could be ADSUB
@@ -1426,7 +1426,7 @@ adab_cohort <- adab_adsl %>%
   derive_vars_merged(
     dataset_add = adsl,
     new_vars = exprs(COHORT = ARMCD),
-    by_vars = exprs(!!!get_admiral_option("subject_keys"))
+    by_vars = exprs(STUDYID, USUBJID)
   )
 
 # Compute ADAFL
@@ -1435,7 +1435,7 @@ adab_adafl <- adab_cohort %>%
   derive_vars_merged(
     dataset_add = adsl,
     new_vars = exprs(ADAFL = SAFFL),
-    by_vars = exprs(!!!get_admiral_option("subject_keys"))
+    by_vars = exprs(STUDYID, USUBJID)
   )
 ```
 
@@ -1519,7 +1519,7 @@ adab_prefinal <- adab_params %>%
   # Calculate ASEQ
   derive_var_obs_number(
     new_var = ASEQ,
-    by_vars = exprs(!!!get_admiral_option("subject_keys")),
+    by_vars = exprs(STUDYID, USUBJID),
     order = exprs(PARCAT1, PARAMCD, BASETYPE, NFRLT, AFRLT, ISSEQ),
     check_type = "error"
   )
