@@ -152,9 +152,11 @@ then the `IS` time is adjusted for pre-dose sampling planned time. User would ad
 
 
 ```{r message=FALSE}
+# Derivations ----
+
 is_dates <- is %>%
   # Filter as needed (i.e. exclude ISSTAT has "NOT DONE")
-  filter(is.na(ISSTAT) & toupper(ISBDAGNT) == "XANOMELINE") %>%
+  filter(!(ISSTAT %in% c("NOT DONE")) & toupper(ISBDAGNT) == "XANOMELINE") %>%
   # Initial preparation and core variables
   mutate(
     # ADATYPE and ADAPARM are assigned values to serve BY analyte processing
@@ -181,7 +183,7 @@ is_dates <- is %>%
     # ISBDAGNT = ISTESTCD,
 
     # Map the analyte test to corresponding DRUG in on EX.EXTRT
-    #  This is especially critical when multiple analytes and EX.EXTRT instances
+    # This is especially critical when multiple analytes and EX.EXTRT instances
     DRUG = case_when(
       toupper(ADAPARM) == "XANOMELINE" ~ "XANOMELINE",
       toupper(ADAPARM) == "OTHER_DRUG" ~ "OTHER_DRUG",
@@ -211,7 +213,7 @@ is_dates <- is %>%
   ) %>%
   # Derive analysis date/time then compute ADY
   # Impute missing time to 00:00:00 or as desired.
-  #   Could replace this code with own imputation code or function
+  # Could replace this code with own imputation code or function
   derive_vars_dtm(
     new_vars_prefix = "A",
     highest_imputation = "s",
@@ -251,9 +253,9 @@ ex_dates <- ex %>%
   ) %>%
   mutate(
     # DRUG is a merge variable to map and merge ADA data with EX.EXTRT
-    #   This will be used to merge first dose into IS working data.
+    # This will be used to merge first dose into IS working data.
     # PLACEBO example is for if/when ADA was also collected on Placebo subjects
-    #   or treatments are scrambled prior to database lock.
+    # or treatments are scrambled prior to database lock.
     DRUG = case_when(
       str_detect(toupper(EXTRT), "XANOMELINE") ~ "XANOMELINE",
       str_detect(toupper(EXTRT), "PLACEBO") ~ "XANOMELINE",
@@ -311,8 +313,7 @@ is_afrlt <- is_dates %>%
     out_unit = "days",
     floor_in = FALSE,
     add_one = FALSE
-  ) %>%
-  arrange(STUDYID, USUBJID, DRUG, ADATYPE, ADAPARM, ADTM, NFRLT)
+  )
 ```
 
 
@@ -450,7 +451,7 @@ is_baseline <- is_aval %>%
   mutate(
     # VALID flags for use later as applicable:
     # VALIDBASE flags non-missing values on baseline (by each ADATYPE and ADAPARM)
-    #   Note: VALIDBASE is not used as this templates allows a baseline to be valid as
+    #   Note: VALIDBASE is not used as this template allows a baseline to be valid as
     #        as long as its present (can be missing), adapt as needed.
     # VALIDPOST flags non-missing values on post-baseline (by each ADATYPE and ADAPARM)
     VALIDBASE = case_when(
@@ -519,8 +520,7 @@ Enhanced: Positive at Baseline to Positive Post-Baseline where Change from Basel
 Treatment Unaffected: Positive at Baseline to Positive where Change from Baseline < 0.60
 
 ```{r message=FALSE}
-# Use the "is_result_change" dataset to create the ADABLPFL flag, which will be merged back later in the program
-#  Note: Based on ABLFL, ABLFL is if had any a baseline record, even if null value
+# Assign and save ADABLPFL for later use
 adablpfl <- is_result_change %>%
   filter(ABLFL == "Y") %>%
   distinct(!!!get_admiral_option("subject_keys"), DRUG, BASETYPE,
@@ -558,6 +558,9 @@ is_visit_flags <- is_result_change %>%
     ),
   )
 
+# These next code segments create utility datasets that will
+# then get merged back into the main dataset (is_visit_flags)
+
 # Post baseline must be valid post data (result not missing)
 post_data <- is_visit_flags %>%
   filter(VALIDPOST == "Y") %>%
@@ -580,7 +583,7 @@ adpblpfl <- post_data %>%
     ADPBLPFL = "Y"
   )
 
-# Compute BFLAG, TFLAG, PBFLAG ------------------
+# Compute BFLAG, TFLAG, PBFLAG ----
 
 most_post_result <- post_data %>%
   group_by(!!!get_admiral_option("subject_keys"), DRUG, BASETYPE, ADATYPE, ADAPARM) %>%
@@ -737,7 +740,8 @@ The remaining pertinent analysis variables computed in this section are:
 
 
 ```{r message=FALSE}
-# Put TFLAG, BFLAG and PBFLAG onto the main ADAB data set
+# Put TFLAG, BFLAG and PBFLAG and the nabstat_ variables onto the main
+# data set (is_flagdata from is_visit_flags)
 is_flagdata <- is_visit_flags %>%
   # main_aab_flagdata
   derive_vars_merged(
@@ -767,8 +771,8 @@ per_tran_pre <- is_flagdata %>%
   )
 
 # Keep TFLAGV = 1 or TFLAGV = 2 (Any Treatment Emergent)
-#  Regular Induced PERSADA and TRANADA will later be based on TFLAGV = 1
-#  TFLAGV = 2 can use for separate PERSADA/TRANADA based on Enhanced
+# Regular Induced PERSADA and TRANADA will later be based on TFLAGV = 1
+# TFLAGV = 2 can use for separate PERSADA/TRANADA based on Enhanced
 per_tran_all <- per_tran_pre %>%
   filter(TFLAGV == 1 | TFLAGV == 2) %>%
   select(-MaxADTM, -ISSEQ) %>%
