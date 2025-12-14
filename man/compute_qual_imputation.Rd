@@ -40,6 +40,7 @@ Derive an imputed value
 }
 \examples{
 compute_qual_imputation("<40")
+compute_qual_imputation(c("3", ">30.2"))
 }
 \seealso{
 BDS-Findings Functions that returns a vector:
