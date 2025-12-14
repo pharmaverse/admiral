@@ -4,13 +4,7 @@ temp_env <- new.env(parent = globalenv())
 source(system.file("lintr/linters.R", package = "admiraldev"), local = temp_env)
 
 linters <- temp_env$admiral_linters(
-  cyclocomp = cyclocomp_linter(complexity_limit = 21),
-  undesirable_function = lintr::undesirable_function_linter(
-    fun = c(
-      lintr::default_undesirable_functions
-    ),
-    symbol_is_undesirable = FALSE
-  )
+  cyclocomp = cyclocomp_linter(complexity_limit = 21)
 )
 
 # remove temporary environment to avoid lintr warning regarding "unused settings"
