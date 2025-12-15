@@ -11,8 +11,8 @@ updated such that they no longer fail if `{admiral}` is not loaded. (#2667)
 - `slice_derivation()` was updated such that it no longer fails if `args = NULL`
 is specified. (#2875)
 
-- `derive_summary_records()` issues now an error if a non summary function is
-used in `set_values_to` as this results in multiple records per by group. (#2872)
+- `derive_summary_records()` now issues an error if a non summary function is
+used in `set_values_to` which results in multiple records per by group. (#2872)
 
 ## Breaking Changes
 
