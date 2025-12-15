@@ -5,7 +5,7 @@
       set_values_to = exprs(MEANVIS = AVAL / 2))
     Condition
       Error in `signal_duplicate_records()`:
-      ! After summarising, the dataset contains duplicate records with respect to `AVISIT`.
-      Please check `set_values_to` if summary functions like `mean()`, `sum()`, ... are used on the right hand side.
+      ! After summarising, the dataset contains mulitple records with respect to `AVISIT`.
+      Please check the `set_values_to` argument if summary functions like `mean()`, `sum()`, ... are used on the right hand side.
       i Run `admiral::get_duplicates_dataset()` to access the duplicate records
 
