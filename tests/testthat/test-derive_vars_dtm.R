@@ -894,7 +894,7 @@ rm(list = c("input"))
 
 ## Test 34: min_dates and max_dates with conflicting bounds use dtc-based imputation ----
 test_that("derive_vars_dtm Test 34: min_dates and max_dates with conflicting bounds use dtc-based imputation", { # nolint
-  AESTDTC <- c(  # nolint
+  AESTDTC <- c( # nolint
     "2022-01",
     "2022-01",
     "2022-01",
@@ -904,7 +904,7 @@ test_that("derive_vars_dtm Test 34: min_dates and max_dates with conflicting bou
     "2022-11"
   )
 
-  AEENDTC <- c(   # nolint
+  AEENDTC <- c( # nolint
     "2021-12-31",
     "2022-01-30",
     "2022-02-28",
@@ -946,14 +946,14 @@ test_that("derive_vars_dtm Test 34: min_dates and max_dates with conflicting bou
 
 ## Test 35: min_dates and max_dates are applied when consistent and in range ----
 test_that("derive_vars_dtm 35: min_dates and max_dates are applied when consistent and in range", { # nolint
-  AESTDTC <- c("2022-01", "2022-01")  # nolint
+  AESTDTC <- c("2022-01", "2022-01") # nolint
 
-  AEENDTC <- c(     # nolint
+  AEENDTC <- c( # nolint
     "2022-02-01",
     "2022-01-20"
   )
 
-  TRTSDT <- c(  # nolint
+  TRTSDT <- c( # nolint
     as.Date("2021-12-15"),
     as.Date("2022-01-10")
   )
@@ -982,9 +982,9 @@ test_that("derive_vars_dtm 35: min_dates and max_dates are applied when consiste
 
 ## Test 36: only min_dates are respected ----
 test_that("derive_vars_dtm test 36: only min_dates are respected", {
-  AESTDTC <- c("2022-01", "2022-01")   # nolint
+  AESTDTC <- c("2022-01", "2022-01") # nolint
 
-  TRTSDT <- c(   # nolint
+  TRTSDT <- c( # nolint
     as.Date("2021-12-15"),
     as.Date("2022-01-10")
   )
@@ -1013,9 +1013,9 @@ test_that("derive_vars_dtm test 36: only min_dates are respected", {
 
 ## Test 37: only max_dates are respected ----
 test_that("derive_vars_dtm test 37: only max_dates are respected", {
-  AESTDTC <- c("2022-01", "2022-01")  # nolint
+  AESTDTC <- c("2022-01", "2022-01") # nolint
 
-  AEENDTC <- c(  # nolint
+  AEENDTC <- c( # nolint
     "2021-12-31",
     "2022-01-20"
   )
