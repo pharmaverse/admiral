@@ -46,9 +46,9 @@ used in `set_values_to` which results in multiple records per by group. (#2872)
     
 ## Documentation
 
-- The "Ask AI" widget was added to the bottom right of each page. It enables users to ask questions about `{admiral}` and `{admiraldev}` 
-and receive answers from an LLM. It is trained on the documentation of both packages and provided by 
-[kapa.ai](https://docs.kapa.ai/kapa-for-open-source). (#2887)
+- The "Ask AI" widget was added to the bottom right of each page. It enables users to ask questions about `{admiral}` and the
+rest of the `{admiral}` ecosystem and receive answers from an LLM. It is trained on the documentation of all `{admiral}` packages
+and provided by [kapa.ai](https://docs.kapa.ai/kapa-for-open-source). (#2887)
 - The BDS Findings vignette was updated to move derivation of `ASEQ` after any new rows. (#2780)
 - `ADLBHY` template was updated to keep `PARAM` in final dataset. (#2804)
 - A link to the [{admiral} ecosystem](https://pharmaverse.org/e2eclinical/adam/) page was added to the README sidebar and main text. (#2881)
@@ -60,7 +60,7 @@ and receive answers from an LLM. It is trained on the documentation of both pack
 
 <details>
 <summary>Developer Notes</summary>
-- Updated the `{lintr}` preferences to use the shared `{admiraldev}` configurations (excluding undesirable functions). (#2863)
+- Updated the `{lintr}` preferences to use the shared `{admiraldev}` configurations. (#2863) and (#2913)
 </details>
 
 # admiral 1.3.1

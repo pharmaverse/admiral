@@ -103,7 +103,7 @@ test_that("restrict_derivation Test 4: allow dplyr functions", {
   )
 
   expected <- adlb %>%
-    mutate(AVAL = ifelse(USUBJID == "1", AVAL + 1, AVAL))
+    mutate(AVAL = if_else(USUBJID == "1", AVAL + 1, AVAL))
 
   expect_dfs_equal(
     base = expected,
