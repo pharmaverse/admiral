@@ -878,8 +878,8 @@ test_that("derive_vars_dtm Test 32: catch ignore_seconds_flag error", {
   )
 })
 
-# Test 33: impute_dtc_dtm returns an empty character vector where dtc is empty
-test_that("derive_vars_dt Test 30: impute_dtc_dt where dtc is empty", {
+# Test 33: impute_dtc_dtm returns an empty character vector where dtc is empty ----
+test_that("derive_vars_dt Test 33: impute_dtc_dt where dtc is empty", {
   empty_impute <- impute_dtc_dtm(
     dtc = character()
   )
@@ -891,3 +891,152 @@ test_that("derive_vars_dt Test 30: impute_dtc_dt where dtc is empty", {
 })
 
 rm(list = c("input"))
+
+## Test 34: min_dates and max_dates with conflicting bounds use dtc-based imputation ----
+test_that("derive_vars_dtm Test 34: min_dates and max_dates with conflicting bounds use dtc-based imputation", { # nolint
+  AESTDTC <- c(
+    "2022-01",
+    "2022-01",
+    "2022-01",
+    "2022-01",
+    "2022-01",
+    "2022-01",
+    "2022-11"
+  )
+
+  AEENDTC <- c(
+    "2021-12-31",
+    "2022-01-30",
+    "2022-02-28",
+    "2022-11-05",
+    "2022-11-30",
+    "2022-12-31",
+    "2022-11-02"
+  )
+
+  ae <- data.frame(AESTDTC, AEENDTC) %>%
+    mutate(
+      AESTDTC     = as.character(AESTDTC),
+      TRTSDT      = as.Date("2022-11-08"),
+      AEENDTCdate = as.Date(AEENDTC)
+    ) %>%
+    derive_vars_dtm(
+      dtc = AESTDTC,
+      new_vars_prefix = "AST",
+      highest_imputation = "M",
+      date_imputation = "first",
+      min_dates = exprs(TRTSDT),
+      max_dates = exprs(AEENDTCdate),
+      flag_imputation = "date"
+    )
+
+  expected_astdtm <- ymd_hms(c(
+    "2022-01-01T00:00:00",
+    "2022-01-01T00:00:00",
+    "2022-01-01T00:00:00",
+    "2022-01-01T00:00:00",
+    "2022-01-01T00:00:00",
+    "2022-01-01T00:00:00",
+    "2022-11-01T00:00:00"
+  ))
+
+  expect_equal(ae$ASTDTM, expected_astdtm)
+  expect_equal(ae$ASTDTM[7], ymd_hms("2022-11-01T00:00:00"))
+})
+
+## Test 35: min_dates and max_dates are applied when consistent and in range ----
+test_that("derive_vars_dtm 35: min_dates and max_dates are applied when consistent and in range", { # nolint
+  AESTDTC <- c("2022-01", "2022-01")
+
+  AEENDTC <- c(
+    "2022-02-01",
+    "2022-01-20"
+  )
+
+  TRTSDT <- c(
+    as.Date("2021-12-15"),
+    as.Date("2022-01-10")
+  )
+
+  ae <- data.frame(AESTDTC, AEENDTC, stringsAsFactors = FALSE) %>%
+    mutate(
+      TRTSDT      = TRTSDT,
+      AEENDTCdate = as.Date(AEENDTC)
+    ) %>%
+    derive_vars_dtm(
+      dtc = AESTDTC,
+      new_vars_prefix = "AST",
+      highest_imputation = "M",
+      date_imputation = "first",
+      min_dates = exprs(TRTSDT),
+      max_dates = exprs(AEENDTCdate),
+      flag_imputation = "date"
+    )
+  expected_astdtm <- ymd_hms(c(
+    "2022-01-01T00:00:00",
+    "2022-01-10T00:00:00"
+  ))
+
+  expect_equal(ae$ASTDTM, expected_astdtm)
+})
+
+## Test 36: only min_dates are respected ----
+test_that("derive_vars_dtm test 36: only min_dates are respected", {
+  AESTDTC <- c("2022-01", "2022-01")
+
+  TRTSDT <- c(
+    as.Date("2021-12-15"),
+    as.Date("2022-01-10")
+  )
+
+  ae <- data.frame(AESTDTC, stringsAsFactors = FALSE) %>%
+    mutate(
+      TRTSDT = TRTSDT
+    ) %>%
+    derive_vars_dtm(
+      dtc = AESTDTC,
+      new_vars_prefix = "AST",
+      highest_imputation = "M",
+      date_imputation = "first",
+      min_dates = exprs(TRTSDT),
+      max_dates = NULL,
+      flag_imputation = "date"
+    )
+
+  expected_astdtm <- ymd_hms(c(
+    "2022-01-01T00:00:00",
+    "2022-01-10T00:00:00"
+  ))
+
+  expect_equal(ae$ASTDTM, expected_astdtm)
+})
+
+## Test 37: only max_dates are respected ----
+test_that("derive_vars_dtm test 37: only max_dates are respected", {
+  AESTDTC <- c("2022-01", "2022-01")
+
+  AEENDTC <- c(
+    "2021-12-31",
+    "2022-01-20"
+  )
+
+  ae <- data.frame(AESTDTC, AEENDTC, stringsAsFactors = FALSE) %>%
+    mutate(
+      AEENDTCdate = as.Date(AEENDTC)
+    ) %>%
+    derive_vars_dtm(
+      dtc = AESTDTC,
+      new_vars_prefix = "AST",
+      highest_imputation = "M",
+      date_imputation = "last",
+      max_dates = exprs(AEENDTCdate),
+      min_dates = NULL,
+      flag_imputation = "date"
+    )
+  expected_astdtm <- ymd_hms(c(
+    "2022-01-31T00:00:00",
+    "2022-01-20T23:59:59"
+  ))
+
+  expect_equal(ae$ASTDTM, expected_astdtm)
+})

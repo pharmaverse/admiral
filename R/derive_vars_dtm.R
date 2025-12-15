@@ -665,8 +665,8 @@ restrict_imputed_dtc_dtm <- function(dtc,
 
   # Range of possible dates implied by partial dtc
   dtc_range <- get_dt_dtm_range(dtc, create_datetime = TRUE)
-  min_dtc   <- dtc_range[["lower"]]
-  max_dtc   <- dtc_range[["upper"]]
+  min_dtc <- dtc_range[["lower"]]
+  max_dtc <- dtc_range[["upper"]]
 
   n <- length(imputed_dtc)
 
