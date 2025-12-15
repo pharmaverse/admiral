@@ -1038,12 +1038,12 @@ derive_vars_merged_summary <- function(dataset,
       cli_abort(
         c(
           paste(
-            "After summarising, the dataset contains duplicate records with",
+            "After summarising, the dataset contains multiple records with",
             "respect to {.var {cnd$by_vars}}."
           ),
           paste(
-            "Please check {.arg new_vars} if summary functions like {.fun mean},",
-            "{.fun sum}, ... are used on the right hand side."
+            "Please check the {.arg new_vars} argument if summary functions",
+            "like {.fun mean}, {.fun sum}, ... are used on the right hand side."
           ),
           i = "Run {.run admiral::get_duplicates_dataset()} to access the duplicate records"
         ),

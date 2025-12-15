@@ -270,12 +270,12 @@ derive_summary_records <- function(dataset = NULL,
     by_vars = by_vars,
     msg = c(
       paste(
-        "After summarising, the dataset contains duplicate records with",
+        "After summarising, the dataset contains mulitple records with",
         "respect to {.var {by_vars}}."
       ),
       paste(
-        "Please check {.arg set_values_to} if summary functions like {.fun mean},",
-        "{.fun sum}, ... are used on the right hand side."
+        "Please check the {.arg set_values_to} argument if summary functions",
+        "like {.fun mean}, {.fun sum}, ... are used on the right hand side."
       )
     ),
     class = "multiple_summary_records"
