@@ -11,7 +11,8 @@ updated such that they no longer fail if `{admiral}` is not loaded. (#2667)
 - `slice_derivation()` was updated such that it no longer fails if `args = NULL`
 is specified. (#2875)
 
-- `derive_vars_dt()` Documentation: clarify highest_imputation definitions and expand date examples (#2841)
+- `derive_summary_records()` now issues an error if a non summary function is
+used in `set_values_to` which results in multiple records per by group. (#2872)
 
 ## Breaking Changes
 
@@ -53,6 +54,7 @@ and provided by [kapa.ai](https://docs.kapa.ai/kapa-for-open-source). (#2887)
 - A link to the [{admiral} ecosystem](https://pharmaverse.org/e2eclinical/adam/) page was added to the README sidebar and main text. (#2881)
 - The ADSL template and vignette were updated to add derivation of analysis age (`AAGE`/`AAGEU`) using `derive_vars_aage()`. This includes deriving birth date (`BRTHDT`) from birth date character variable (`BRTHDTC`) using `derive_vars_dt()`. (#2584)
 - Standardized variable notation across documentation to use `--` for SDTM variables (e.g., `--DTC`) and `*` for ADaM variables (e.g., `*DTM`, `*DT`). (#2757)
+- For `derive_vars_dt()`, clarify `highest_imputation` definitions and expand date examples. (#2841)
 
 ## Various
 
