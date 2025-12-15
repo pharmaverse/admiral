@@ -61,7 +61,6 @@ to work with a deprecation message until the beginning of 2027. (#1858)
 
 - The lab grading vignette has been updated with examples for NCI-CTCAE version 6.0 criteria, including 
 usage of the new `low_indicator` and `high_indicator` arguments. (#1858)
-
 - The "Ask AI" widget was added to the bottom right of each page. It enables users to ask questions about `{admiral}` and `{admiraldev}` 
 and receive answers from an LLM. It is trained on the documentation of both packages and provided by 
 [kapa.ai](https://docs.kapa.ai/kapa-for-open-source). (#2887)
@@ -75,7 +74,7 @@ and receive answers from an LLM. It is trained on the documentation of both pack
 
 <details>
 <summary>Developer Notes</summary>
-- Updated the `{lintr}` preferences to use the shared `{admiraldev}` configurations (excluding undesirable functions). (#2863)
+- Updated the `{lintr}` preferences to use the shared `{admiraldev}` configurations. (#2863) and (#2913)
 </details>
 
 # admiral 1.3.1
