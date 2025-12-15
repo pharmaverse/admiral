@@ -107,3 +107,7 @@ test_that("compute_qual_imputation Test 25: Method 2, No Qualifier", {
 test_that("compute_qual_imputation Test 26: Method 2, No Qualifier, Character Value", {
   expect_equal(compute_qual_imputation("AB", imputation_type = 1), NA_real_)
 })
+
+test_that("compute_qual_imputation Test 27: Vector of Values", {
+  expect_equal(compute_qual_imputation(c("3", ">30.2")), c(3.0, 30.2))
+})
