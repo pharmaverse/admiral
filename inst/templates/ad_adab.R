@@ -2,7 +2,7 @@
 #
 # Label: Anti-Drug Antibody Analysis Dataset
 #
-# Description: Based on simulated data, create ADAB analysis dataset
+# Description: Experimental. Based on simulated data, create ADAB analysis dataset
 #
 # Input: is_ada, ex, adsl
 
@@ -27,8 +27,7 @@ adsl <- admiral::admiral_adsl
 # When SAS datasets are imported into R using haven::read_sas(), missing
 # character values from SAS appear as "" characters in R, instead of appearing
 # as NA values. Further details can be obtained via the following link:
-# https://pharmaverse.github.io/admiral/cran-release/articles/admiral.html#handling-of-missing-values
-# nolint
+# https://pharmaverse.github.io/admiral/cran-release/articles/admiral.html#handling-of-missing-values # nolint
 
 ex <- convert_blanks_to_na(ex)
 is <- convert_blanks_to_na(is)
@@ -1174,10 +1173,6 @@ adab_adafl <- adab_cohort %>%
     by_vars = exprs(STUDYID, USUBJID)
   )
 
-view_keys1 <- adab_adafl %>%
-  distinct(ISTESTCD, ISTEST, ISBDAGNT, PARCAT1, ADATYPE, ADAPARM, PARAMCD, PARAM) %>%
-  arrange(ISTESTCD, ISTEST, ISBDAGNT, PARCAT1, ADAPARM, ADATYPE, PARAMCD, PARAM)
-
 # Study Specific Specs Post-Processing ------------------------------------
 
 # Create a Tibble to map above PARAMCD and PARAM to final study spec values
@@ -1240,10 +1235,6 @@ adab_params <- adab_adafl %>%
     )
   )
 
-view_keys2 <- adab_params %>%
-  distinct(ISTESTCD, ISTEST, ISBDAGNT, PARCAT1, ADAPARM, PARAMCD, PARAM) %>%
-  arrange(ISTESTCD, ISTEST, ISBDAGNT, PARCAT1, ADAPARM, PARAMCD, PARAM)
-
 # Sort by the standard Key then Compute ASEQ
 adab_prefinal <- adab_params %>%
   # Calculate ASEQ
@@ -1253,15 +1244,6 @@ adab_prefinal <- adab_params %>%
     order = exprs(PARCAT1, PARAMCD, BASETYPE, NFRLT, AFRLT, ISSEQ),
     check_type = "error"
   )
-
-# This will dropped for final merge to main/prod
-review_adab_prefinal <- adab_prefinal %>%
-  select(
-    USUBJID, SUBJID, ISDTC, ADTM, FANLDTM, NFRLT, AFRLT, FRLTU, ASEQ, PARAMCD, PARAM,
-    ISSTRESN, ISSTRESC, AVAL, AVALC, BASE, CHG
-  ) %>%
-  filter(1 == 1) %>%
-  filter(PARAMCD == "RESULT")
 
 # Choose final variables to keep
 # When SDTM V1.x, suggest remove ISBDAGNT
@@ -1301,7 +1283,3 @@ if (!file.exists(dir)) {
   dir.create(dir, recursive = TRUE, showWarnings = FALSE)
 }
 save(adab, file = file.path(dir, "adab.rda"), compress = "bzip2")
-
-# TEMP: If want to save as PARQUET file in desired location
-# These lines will be removed when this template is close to approved.
-# arrow::write_parquet(adab, file.path("data/pharmaverse/adab.parquet"))
