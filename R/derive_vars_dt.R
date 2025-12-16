@@ -727,7 +727,7 @@ compute_dtf <- function(dtc, dt) {
   warn_if_invalid_dtc(dtc, valid_dtc)
 
   # Find date portion
-  date_portion <- ifelse(grepl("T", dtc),
+  date_portion <- if_else(str_detect(dtc, "T"),
     gsub("T", "", substr(dtc, 1, str_locate(dtc, "T")[, 1])),
     substr(dtc, 1, 10)
   )
