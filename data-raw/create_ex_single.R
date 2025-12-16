@@ -13,7 +13,15 @@ check_cond <- ex %>%
   summarise(check1 = n_distinct(EXSTDTC), check2 = n_distinct(EXENDTC)) %>%
   ungroup() %>%
   distinct(check1, check2)
-stopifnot(check_cond$check1 == 1 && check_cond$check2 == 1)
+
+if (any(c(check_cond$check1 == 1 && check_cond$check2 == 1))) {
+  cli_abort(
+    paste(
+      "There are multiple start or end dates of exposure for a subject",
+      "and visit combination in ex dataset."
+    )
+  )
+}
 
 dates <- ex %>%
   filter(EXDOSE %in% c(0, 54)) %>%
@@ -39,7 +47,7 @@ ex_single <- dates %>%
   mutate(EXSEQ = row_number()) %>%
   # adjust EXSTDY and EXENDY
   mutate(
-    EXSTDY = ifelse(EXSTDTC == min(EXSTDTC), 1, as.numeric(EXSTDTC - min(EXSTDTC)) + 1),
+    EXSTDY = if_else(EXSTDTC == min(EXSTDTC), 1, as.numeric(EXSTDTC - min(EXSTDTC)) + 1),
     EXENDY = EXSTDY
   ) %>%
   ungroup() %>%
