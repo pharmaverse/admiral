@@ -29,6 +29,7 @@ Derive an imputed value
 }
 \examples{
 compute_qual_imputation_dec("<40.1")
+compute_qual_imputation_dec(c("0.35", "1"))
 }
 \seealso{
 BDS-Findings Functions that returns a vector:
