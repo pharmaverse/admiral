@@ -17,8 +17,9 @@ Can contain \code{NA} values.
 }}
 
 \item{infusion_duration}{Numeric value specifying the duration of infusion
-in hours. Used to convert "EOI" (End of Infusion) patterns. Must be a
-positive number. Default is 1 hour.
+in hours. Used to convert "EOI" (End of Infusion) patterns and patterns
+describing time after end of infusion. Must be a positive number.
+Default is 1 hour.
 
 \describe{
 \item{Permitted values}{numeric scalar (positive)}
@@ -31,7 +32,6 @@ A numeric vector of timepoints in hours. Returns \code{NA_real_} for:
 \item Input \code{NA} values
 \item Unrecognized timepoint formats
 \item Non-time descriptors (e.g., "Morning", "Evening")
-\item Vague patterns without specific time values (with warning)
 \item Time range patterns with direction (with warning)
 }
 
@@ -49,15 +49,16 @@ The function recognizes the following patterns (all case-insensitive):
 \strong{Special Cases:}
 \itemize{
 \item \code{"Screening"} → -1
-\item \code{"Pre-dose"}, \code{"Predose"}, \code{"Pre-infusion"}, \code{"Infusion"}, \code{"0H"} → 0
-\item \code{"EOI"}, \code{"End of Infusion"} → \code{infusion_duration} (default: 1)
+\item \code{"Pre-dose"}, \code{"Predose"}, \code{"Pre-infusion"}, \code{"Pre-inf"}, \code{"Infusion"},
+\code{"0H"} → 0
+\item \code{"EOI"}, \code{"End of Infusion"}, \code{"After End of Infusion"},
+\code{"After End of Treatment"} → \code{infusion_duration} (default: 1)
 \item \code{"Morning"}, \code{"Evening"} → \code{NA_real_}
 \item Unrecognized values → \code{NA_real_}
 }
 
 \strong{Patterns Returning NA with Warning:}
 \itemize{
-\item Vague patterns: \code{"PRE-INF"}, \code{"AFTER END OF INFUSION"}
 \item Time ranges with direction: \code{"0-4H PRIOR START OF INFUSION"}
 }
 
@@ -69,8 +70,9 @@ The function recognizes the following patterns (all case-insensitive):
 \item \strong{Hours}: \code{"2 hours"} → 2, \code{"1 HOUR POST"} → 1
 \item \strong{Minutes}: \code{"30M"} → 0.5, \code{"30 MIN POST"} → 0.5
 \item \strong{Predose}: \code{"5 MIN PREDOSE"} → -0.0833
-\item \strong{Post EOI/EOT}: \code{"1 HOUR POST EOI"} → 1, \code{"24 HR POST INF"} → 24
-\item \strong{After end}: \code{"30MIN AFTER END OF INFUSION"} → 0.5
+\item \strong{Post EOI/EOT}: \code{"1 HOUR POST EOI"} → infusion_duration + 1,
+\code{"24 HR POST INF"} → infusion_duration + 24
+\item \strong{After end}: \code{"30MIN AFTER END OF INFUSION"} → infusion_duration + 0.5
 \item \strong{Start of infusion}: \code{"8H PRIOR START OF INFUSION"} → -8
 \item \strong{Pre EOI}: \code{"10MIN PRE EOI"} → -0.1667
 }
@@ -85,12 +87,11 @@ suffixes
 }
 }
 \examples{
-library(admiraldev)
-
 # Basic dose-centric patterns
 convert_xxtpt_to_hours(c(
   "Screening",
   "Pre-dose",
+  "Pre-inf",
   "30M",
   "1H",
   "2H POSTDOSE",
@@ -113,10 +114,14 @@ convert_xxtpt_to_hours(c(
 convert_xxtpt_to_hours(c("1H30M", "0-6h Post-dose", "30 DAYS AFTER LAST"))
 
 # Custom infusion duration (2 hours)
-convert_xxtpt_to_hours(c("EOI", "End of Infusion"), infusion_duration = 2)
+# Note: "1 HOUR POST EOI" = 2 (infusion) + 1 (post) = 3 hours
+convert_xxtpt_to_hours(
+  c("EOI", "End of Infusion", "1 HOUR POST EOI"),
+  infusion_duration = 2
+)
 
-# Vague patterns return NA with warning
-convert_xxtpt_to_hours(c("PRE-INF", "AFTER END OF INFUSION"))
+# After end patterns equal infusion_duration
+convert_xxtpt_to_hours(c("AFTER END OF INFUSION", "AFTER END OF TREATMENT"))
 
 # Range patterns with direction return NA with warning
 convert_xxtpt_to_hours(c("0-4H PRIOR START OF INFUSION"))

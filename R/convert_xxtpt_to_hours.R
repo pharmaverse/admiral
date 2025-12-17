@@ -12,8 +12,9 @@
 #' @permitted character vector
 #'
 #' @param infusion_duration Numeric value specifying the duration of infusion
-#'   in hours. Used to convert "EOI" (End of Infusion) patterns. Must be a
-#'   positive number. Default is 1 hour.
+#'   in hours. Used to convert "EOI" (End of Infusion) patterns and patterns
+#'   describing time after end of infusion. Must be a positive number.
+#'   Default is 1 hour.
 #'
 #' @permitted numeric scalar (positive)
 #'
@@ -22,13 +23,14 @@
 #'
 #' **Special Cases:**
 #' * `"Screening"` → -1
-#' * `"Pre-dose"`, `"Predose"`, `"Pre-infusion"`, `"Infusion"`, `"0H"` → 0
-#' * `"EOI"`, `"End of Infusion"` → `infusion_duration` (default: 1)
+#' * `"Pre-dose"`, `"Predose"`, `"Pre-infusion"`, `"Pre-inf"`, `"Infusion"`,
+#'   `"0H"` → 0
+#' * `"EOI"`, `"End of Infusion"`, `"After End of Infusion"`,
+#'   `"After End of Treatment"` → `infusion_duration` (default: 1)
 #' * `"Morning"`, `"Evening"` → `NA_real_`
 #' * Unrecognized values → `NA_real_`
 #'
 #' **Patterns Returning NA with Warning:**
-#' * Vague patterns: `"PRE-INF"`, `"AFTER END OF INFUSION"`
 #' * Time ranges with direction: `"0-4H PRIOR START OF INFUSION"`
 #'
 #' **Time-based Conversions:**
@@ -38,8 +40,9 @@
 #' * **Hours**: `"2 hours"` → 2, `"1 HOUR POST"` → 1
 #' * **Minutes**: `"30M"` → 0.5, `"30 MIN POST"` → 0.5
 #' * **Predose**: `"5 MIN PREDOSE"` → -0.0833
-#' * **Post EOI/EOT**: `"1 HOUR POST EOI"` → 1, `"24 HR POST INF"` → 24
-#' * **After end**: `"30MIN AFTER END OF INFUSION"` → 0.5
+#' * **Post EOI/EOT**: `"1 HOUR POST EOI"` → infusion_duration + 1,
+#'   `"24 HR POST INF"` → infusion_duration + 24
+#' * **After end**: `"30MIN AFTER END OF INFUSION"` → infusion_duration + 0.5
 #' * **Start of infusion**: `"8H PRIOR START OF INFUSION"` → -8
 #' * **Pre EOI**: `"10MIN PRE EOI"` → -0.1667
 #'
@@ -54,7 +57,6 @@
 #' * Input `NA` values
 #' * Unrecognized timepoint formats
 #' * Non-time descriptors (e.g., "Morning", "Evening")
-#' * Vague patterns without specific time values (with warning)
 #' * Time range patterns with direction (with warning)
 #'
 #' Returns `numeric(0)` for empty input.
@@ -65,12 +67,11 @@
 #' @export
 #'
 #' @examples
-#' library(admiraldev)
-#'
 #' # Basic dose-centric patterns
 #' convert_xxtpt_to_hours(c(
 #'   "Screening",
 #'   "Pre-dose",
+#'   "Pre-inf",
 #'   "30M",
 #'   "1H",
 #'   "2H POSTDOSE",
@@ -93,10 +94,14 @@
 #' convert_xxtpt_to_hours(c("1H30M", "0-6h Post-dose", "30 DAYS AFTER LAST"))
 #'
 #' # Custom infusion duration (2 hours)
-#' convert_xxtpt_to_hours(c("EOI", "End of Infusion"), infusion_duration = 2)
+#' # Note: "1 HOUR POST EOI" = 2 (infusion) + 1 (post) = 3 hours
+#' convert_xxtpt_to_hours(
+#'   c("EOI", "End of Infusion", "1 HOUR POST EOI"),
+#'   infusion_duration = 2
+#' )
 #'
-#' # Vague patterns return NA with warning
-#' convert_xxtpt_to_hours(c("PRE-INF", "AFTER END OF INFUSION"))
+#' # After end patterns equal infusion_duration
+#' convert_xxtpt_to_hours(c("AFTER END OF INFUSION", "AFTER END OF TREATMENT"))
 #'
 #' # Range patterns with direction return NA with warning
 #' convert_xxtpt_to_hours(c("0-4H PRIOR START OF INFUSION"))
@@ -126,7 +131,6 @@ convert_xxtpt_to_hours <- function(xxtpt, infusion_duration = 1) {
   na_idx <- is.na(xxtpt)
 
   # Track warnings for ambiguous/unsupported patterns
-  vague_values <- character(0)
   range_values <- character(0)
 
   # Check special cases first (exact matches, case-insensitive) ----
@@ -136,36 +140,26 @@ convert_xxtpt_to_hours <- function(xxtpt, infusion_duration = 1) {
   screening_idx <- str_detect(xxtpt, screening_pattern) & !na_idx
   result[screening_idx] <- -1
 
-  # Pre-dose, Predose, Pre-infusion, Infusion, 0H, 0 H -> 0
+  # Pre-dose, Predose, Pre-infusion, Pre-inf, Infusion, 0H, 0 H -> 0
   zero_pattern <- regex(
-    "^(pre-?dose|pre-?infusion|infusion|0\\s*h(?:r|our)?s?)$",
+    "^(pre-?dose|pre-?inf(?:usion)?|infusion|0\\s*h(?:r|our)?s?)$",
     ignore_case = TRUE
   )
   zero_idx <- str_detect(xxtpt, zero_pattern) & is.na(result) & !na_idx
   result[zero_idx] <- 0
 
-  # EOI, End of Infusion -> infusion_duration
+  # EOI, End of Infusion, After End of Infusion/Treatment -> infusion_duration
   eoi_pattern <- regex(
-    "^(eoi|end\\s+of\\s+infusion)$",
+    paste0(
+      "^(eoi|end\\s+of\\s+infusion|",
+      "after\\s+end\\s+of\\s+(?:infusion|treatment))$"
+    ),
     ignore_case = TRUE
   )
   eoi_idx <- str_detect(xxtpt, eoi_pattern) & is.na(result) & !na_idx
   result[eoi_idx] <- infusion_duration
 
   # Morning, Evening -> NA (already NA, no action needed)
-
-  # Check for vague patterns (return NA with warning) ----
-  vague_pattern <- regex(
-    paste0(
-      "^(pre-inf|after\\s+end\\s+of\\s+infusion|",
-      "after\\s+end\\s+of\\s+treatment)$"
-    ),
-    ignore_case = TRUE
-  )
-  vague_idx <- str_detect(xxtpt, vague_pattern) & is.na(result) & !na_idx
-  if (any(vague_idx)) {
-    vague_values <- c(vague_values, unique(xxtpt[vague_idx]))
-  }
 
   # Check for range patterns with direction (return NA with warning) ----
   # Only patterns like "0-4H PRIOR START OF INFUSION" should warn
@@ -292,10 +286,11 @@ convert_xxtpt_to_hours <- function(xxtpt, infusion_duration = 1) {
     time_value <- as.numeric(post_eoi_matches[post_eoi_idx, "value"])
     unit <- tolower(post_eoi_matches[post_eoi_idx, "unit"])
     is_minutes <- substr(unit, 1, 1) == "m"
+    # Add infusion_duration since this is time AFTER end of infusion
     result[post_eoi_idx] <- if_else(
       is_minutes,
-      time_value / 60,
-      time_value
+      infusion_duration + time_value / 60,
+      infusion_duration + time_value
     )
   }
 
@@ -315,10 +310,11 @@ convert_xxtpt_to_hours <- function(xxtpt, infusion_duration = 1) {
     time_value <- as.numeric(after_end_matches[after_end_idx, "value"])
     unit <- tolower(after_end_matches[after_end_idx, "unit"])
     is_minutes <- substr(unit, 1, 1) == "m"
+    # Add infusion_duration since this is time AFTER end of infusion
     result[after_end_idx] <- if_else(
       is_minutes,
-      time_value / 60,
-      time_value
+      infusion_duration + time_value / 60,
+      infusion_duration + time_value
     )
   }
 
@@ -334,7 +330,9 @@ convert_xxtpt_to_hours <- function(xxtpt, infusion_duration = 1) {
   hr_post_matches <- str_match(xxtpt, hr_post_pattern)
   hr_post_idx <- !is.na(hr_post_matches[, 1]) & is.na(result) & !na_idx
   if (any(hr_post_idx)) {
-    result[hr_post_idx] <- as.numeric(hr_post_matches[hr_post_idx, "value"])
+    # Add infusion_duration since this is time AFTER end of infusion
+    result[hr_post_idx] <- infusion_duration +
+      as.numeric(hr_post_matches[hr_post_idx, "value"])
   }
 
   # Check "XH PRIOR/POST START OF INFUSION" (compact H) ----
@@ -443,15 +441,6 @@ convert_xxtpt_to_hours <- function(xxtpt, infusion_duration = 1) {
   }
 
   # Issue warnings for ambiguous patterns ----
-  if (length(vague_values) > 0) {
-    cli_warn(
-      c(
-        "Vague timepoint descriptions cannot be converted to numeric hours.",
-        "i" = "Returning NA for: {.val {vague_values}}"
-      )
-    )
-  }
-
   if (length(range_values) > 0) {
     cli_warn(
       c(
