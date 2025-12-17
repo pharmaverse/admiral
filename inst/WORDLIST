@@ -254,6 +254,7 @@ TPDOSE
 Takahira
 Teckla
 Thanikachalam
+Thrombocytopenia
 ULN
 USCV
 USUBJID
@@ -319,6 +320,8 @@ framingham
 funder
 glomerular
 groupwise
+json
+lifecycle
 kapa
 lubridate
 mL
