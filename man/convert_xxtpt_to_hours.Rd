@@ -11,6 +11,7 @@ convert_xxtpt_to_hours(xxtpt)
 (e.g., \code{PCTPT}, \code{VSTPT}, \code{EGTPT}, \code{ISTPT}, \code{LBTPT}). Can contain \code{NA} values.
 
 \describe{
+\item{Permitted values}{character vector}
 \item{Default value}{none}
 }}
 }
@@ -20,6 +21,8 @@ A numeric vector of timepoints in hours. Returns \code{NA_real_} for:
 \item Input \code{NA} values
 \item Unrecognized timepoint formats
 \item Non-time descriptors (e.g., "Morning", "Evening")
+\item Vague patterns without specific time values (with warning)
+\item Time range patterns with direction (with warning)
 }
 
 Returns \code{numeric(0)} for empty input.
@@ -27,7 +30,7 @@ Returns \code{numeric(0)} for empty input.
 \description{
 Converts CDISC timepoint strings (e.g., \code{PCTPT}, \code{VSTPT}, \code{EGTPT}, \code{ISTPT}, \code{LBTPT})
 into numeric hours for analysis. The function handles common dose-centric formats
-including pre-dose, post-dose (hours/minutes), days, time ranges, and special
+including pre-dose, post-dose (hours/minutes), days, time ranges, and infusion-related
 time markers.
 }
 \details{
@@ -36,42 +39,85 @@ The function recognizes the following patterns (all case-insensitive):
 \strong{Special Cases:}
 \itemize{
 \item \code{"Screening"} → -1
-\item \code{"Pre-dose"}, \code{"Predose"}, \code{"Pre-infusion"}, \code{"Infusion"}, \code{"0H"}, \code{"0 H"} → 0
+\item \code{"Pre-dose"}, \code{"Predose"}, \code{"Pre-infusion"}, \code{"Infusion"}, \code{"0H"} → 0
 \item \code{"EOI"}, \code{"End of Infusion"} → 1
 \item \code{"Morning"}, \code{"Evening"} → \code{NA_real_}
 \item Unrecognized values → \code{NA_real_}
 }
 
+\strong{Patterns Returning NA with Warning:}
+\itemize{
+\item Vague patterns: \code{"PRE-INF"}, \code{"AFTER END OF INFUSION"}
+\item Time ranges with direction: \code{"0-4H PRIOR START OF INFUSION"}
+}
+
 \strong{Time-based Conversions:}
 \itemize{
-\item \strong{Days}: \code{"Day 1"}, \code{"2D"}, \code{"2 days"}, \code{"1.5 days"} → multiply by 24 (e.g., 24, 48, 36)
-\item \strong{Hours + Minutes}: \code{"1H30M"}, \code{"1 hour 30 min"}, \code{"2HR15MIN"} → hours +
-minutes/60 (e.g., 1.5, 2.25)
-\item \strong{Time Ranges}: \code{"0-6h"}, \code{"6-12h Post-dose"}, \code{"0.5 - 6.5h"} → end value (e.g., 6, 12, 6.5)
-\item \strong{Hours only}: \code{"1H"}, \code{"2 hours"}, \code{"0.5HR"}, \code{"4hr Post-dose"} → as-is (e.g., 1, 2, 0.5, 4)
-\item \strong{Minutes only}: \code{"30M"}, \code{"45 min"}, \code{"2.5 Min"} → divide by 60 (e.g., 0.5, 0.75, 0.042)
+\item \strong{Days}: \code{"Day 1"} → 24, \code{"30 DAYS AFTER LAST"} → 720
+\item \strong{Hours + Minutes}: \code{"1H30M"} → 1.5
+\item \strong{Time Ranges}: \code{"0-6h"} → 6 (end value)
+\item \strong{Hours}: \code{"2 hours"} → 2, \code{"1 HOUR POST"} → 1
+\item \strong{Minutes}: \code{"30M"} → 0.5, \code{"30 MIN POST"} → 0.5
+\item \strong{Predose}: \code{"5 MIN PREDOSE"} → -0.0833
+\item \strong{Post EOI/EOT}: \code{"1 HOUR POST EOI"} → 1, \code{"24 HR POST INF"} → 24
+\item \strong{After end}: \code{"30MIN AFTER END OF INFUSION"} → 0.5
+\item \strong{Start of infusion}: \code{"8H PRIOR START OF INFUSION"} → -8
+\item \strong{Pre EOI}: \code{"10MIN PRE EOI"} → -0.1667
 }
 
 \strong{Supported Unit Formats:}
 \itemize{
-\item Hours: H, h, HR, hr, HOUR, hour, HOURS, hours
-\item Minutes: M, m, MIN, min, MINUTE, minute, MINUTES, minutes
-\item Days: D, d, DAY, day, DAYS, days
-\item All with optional plurals and flexible whitespace
-\item Optional "Post-dose" or "Post dose" suffix supported for all patterns
+\item Hours: H, h, HR, hr, HOUR, hour (with optional plurals)
+\item Minutes: M, m, MIN, min, MINUTE, minute (with optional plurals)
+\item Days: D, d, DAY, day (with optional plurals)
+\item Flexible whitespace and optional "Post-dose", "POST", "After last" suffixes
 }
 }
 \examples{
+library(admiraldev)
+
+# Basic dose-centric patterns
 convert_xxtpt_to_hours(c(
-  "Screening", "Pre-dose", "EOI", "5 Min Post-dose", "10 MIN POSTDOSE", "30M",
-  "1H30M", "2H POSTDOSE", "0-6h Post-dose", "Day 1", "24h", "48 HR"
+  "Screening",
+  "Pre-dose",
+  "30M",
+  "1H",
+  "2H POSTDOSE",
+  "Day 1"
 ))
+
+# Predose patterns (negative times)
+convert_xxtpt_to_hours(c("5 MIN PREDOSE", "1 HOUR PREDOSE"))
+
+# Infusion-related patterns
+convert_xxtpt_to_hours(c(
+  "1 HOUR POST EOI",
+  "24 HR POST INF",
+  "30MIN AFTER END OF INFUSION",
+  "8H PRIOR START OF INFUSION",
+  "10MIN PRE EOI"
+))
+
+# Time ranges and combined units
+convert_xxtpt_to_hours(c("1H30M", "0-6h Post-dose", "30 DAYS AFTER LAST"))
+
+# Vague patterns return NA with warning
+convert_xxtpt_to_hours(c("PRE-INF", "AFTER END OF INFUSION"))
+
+# Range patterns with direction return NA with warning
+convert_xxtpt_to_hours(c("0-4H PRIOR START OF INFUSION"))
 }
 \seealso{
-Utilities for Formatting Observations:
-\code{\link{convert_blanks_to_na}()},
-\code{\link{convert_na_to_blanks}()},
-\code{\link{yn_to_numeric}()}
+Date/Time Computation Functions that returns a vector:
+\code{\link{compute_age_years}()},
+\code{\link{compute_dtf}()},
+\code{\link{compute_duration}()},
+\code{\link{compute_tmf}()},
+\code{\link{convert_date_to_dtm}()},
+\code{\link{convert_dtc_to_dt}()},
+\code{\link{convert_dtc_to_dtm}()},
+\code{\link{impute_dtc_dt}()},
+\code{\link{impute_dtc_dtm}()}
 }
-\concept{utils_fmt}
-\keyword{utils_fmt}
+\concept{com_date_time}
+\keyword{com_date_time}

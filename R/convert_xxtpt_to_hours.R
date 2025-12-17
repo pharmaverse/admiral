@@ -2,8 +2,8 @@
 #'
 #' Converts CDISC timepoint strings (e.g., `PCTPT`, `VSTPT`, `EGTPT`, `ISTPT`, `LBTPT`)
 #' into numeric hours for analysis. The function handles common dose-centric formats
-#' including pre-dose, post-dose (hours/minutes), days, time ranges, and special
-#' time markers, as well as infusion-related patterns.
+#' including pre-dose, post-dose (hours/minutes), days, time ranges, and infusion-related
+#' time markers.
 #'
 #' @param xxtpt A character vector of timepoint descriptions from SDTM `--TPT` variables
 #'   (e.g., `PCTPT`, `VSTPT`, `EGTPT`, `ISTPT`, `LBTPT`). Can contain `NA` values.
@@ -15,40 +15,32 @@
 #'
 #' **Special Cases:**
 #' * `"Screening"` → -1
-#' * `"Pre-dose"`, `"Predose"`, `"Pre-infusion"`, `"Infusion"`, `"0H"`, `"0 H"` → 0
+#' * `"Pre-dose"`, `"Predose"`, `"Pre-infusion"`, `"Infusion"`, `"0H"` → 0
 #' * `"EOI"`, `"End of Infusion"` → 1
 #' * `"Morning"`, `"Evening"` → `NA_real_`
 #' * Unrecognized values → `NA_real_`
 #'
 #' **Patterns Returning NA with Warning:**
-#' * Vague patterns without specific time: `"PRE-INF"`, `"AFTER END OF INFUSION"`
-#' * Time ranges with direction: `"0-4H PRIOR START OF INFUSION"`, `"8-16H POST START OF INFUSION"`
+#' * Vague patterns: `"PRE-INF"`, `"AFTER END OF INFUSION"`
+#' * Time ranges with direction: `"0-4H PRIOR START OF INFUSION"`
 #'
 #' **Time-based Conversions:**
-#' * **Days**: `"Day 1"`, `"2D"`, `"2 days"`, `"1.5 days"`, `"30 DAYS AFTER LAST"` →
-#'   multiply by 24 (e.g., 24, 48, 36, 720)
-#' * **Hours + Minutes**: `"1H30M"`, `"1 hour 30 min"`, `"2HR15MIN"` → hours +
-#'   minutes/60 (e.g., 1.5, 2.25)
-#' * **Time Ranges**: `"0-6h"`, `"6-12h Post-dose"`, `"0.5 - 6.5h"` → end value (e.g., 6, 12, 6.5)
-#' * **Hours only**: `"1H"`, `"2 hours"`, `"0.5HR"`, `"4hr Post-dose"`, `"1 HOUR POST"` →
-#'   as-is (e.g., 1, 2, 0.5, 4, 1)
-#' * **Minutes only**: `"30M"`, `"45 min"`, `"2.5 Min"`, `"30 MIN POST"` →
-#'   divide by 60 (e.g., 0.5, 0.75, 0.042, 0.5)
-#' * **Predose patterns**: `"5 MIN PREDOSE"` → negative time (-0.0833)
-#' * **Post EOI/EOT patterns**: `"1 HOUR POST EOI"`, `"30 MIN POST EOT"`, `"24 HR POST INF"` →
-#'   positive time (1, 0.5, 24)
-#' * **After end patterns**: `"30MIN AFTER END OF INFUSION"`, `"30MIN AFTER END OF TREATMENT"` →
-#'   positive time (0.5, 0.5)
-#' * **Start of infusion patterns**: `"8H PRIOR START OF INFUSION"`, `"8H POST START OF INFUSION"`,
-#'   `"60 MIN AFTER START INF"` → signed time (-8, 8, 1)
-#' * **Pre EOI patterns**: `"10MIN PRE EOI"` → negative time (-0.1667)
+#' * **Days**: `"Day 1"` → 24, `"30 DAYS AFTER LAST"` → 720
+#' * **Hours + Minutes**: `"1H30M"` → 1.5
+#' * **Time Ranges**: `"0-6h"` → 6 (end value)
+#' * **Hours**: `"2 hours"` → 2, `"1 HOUR POST"` → 1
+#' * **Minutes**: `"30M"` → 0.5, `"30 MIN POST"` → 0.5
+#' * **Predose**: `"5 MIN PREDOSE"` → -0.0833
+#' * **Post EOI/EOT**: `"1 HOUR POST EOI"` → 1, `"24 HR POST INF"` → 24
+#' * **After end**: `"30MIN AFTER END OF INFUSION"` → 0.5
+#' * **Start of infusion**: `"8H PRIOR START OF INFUSION"` → -8
+#' * **Pre EOI**: `"10MIN PRE EOI"` → -0.1667
 #'
 #' **Supported Unit Formats:**
-#' * Hours: H, h, HR, hr, HOUR, hour, HOURS, hours
-#' * Minutes: M, m, MIN, min, MINUTE, minute, MINUTES, minutes
-#' * Days: D, d, DAY, day, DAYS, days
-#' * All with optional plurals and flexible whitespace
-#' * Optional "Post-dose", "Post dose", "POST", "After last" suffixes supported for patterns
+#' * Hours: H, h, HR, hr, HOUR, hour (with optional plurals)
+#' * Minutes: M, m, MIN, min, MINUTE, minute (with optional plurals)
+#' * Days: D, d, DAY, day (with optional plurals)
+#' * Flexible whitespace and optional "Post-dose", "POST", "After last" suffixes
 #'
 #' @return A numeric vector of timepoints in hours. Returns `NA_real_` for:
 #' * Input `NA` values
@@ -65,12 +57,38 @@
 #' @export
 #'
 #' @examples
+#' library(admiraldev)
 #'
-#' # Basic examples showing default behavior
+#' # Basic dose-centric patterns
 #' convert_xxtpt_to_hours(c(
-#'   "Screening", "Pre-dose", "EOI", "5 Min Post-dose", "10 MIN POSTDOSE", "30M",
-#'   "1H30M", "2H POSTDOSE", "0-6h Post-dose", "Day 1", "24h", "48 HR"
+#'   "Screening",
+#'   "Pre-dose",
+#'   "30M",
+#'   "1H",
+#'   "2H POSTDOSE",
+#'   "Day 1"
 #' ))
+#'
+#' # Predose patterns (negative times)
+#' convert_xxtpt_to_hours(c("5 MIN PREDOSE", "1 HOUR PREDOSE"))
+#'
+#' # Infusion-related patterns
+#' convert_xxtpt_to_hours(c(
+#'   "1 HOUR POST EOI",
+#'   "24 HR POST INF",
+#'   "30MIN AFTER END OF INFUSION",
+#'   "8H PRIOR START OF INFUSION",
+#'   "10MIN PRE EOI"
+#' ))
+#'
+#' # Time ranges and combined units
+#' convert_xxtpt_to_hours(c("1H30M", "0-6h Post-dose", "30 DAYS AFTER LAST"))
+#'
+#' # Vague patterns return NA with warning
+#' convert_xxtpt_to_hours(c("PRE-INF", "AFTER END OF INFUSION"))
+#'
+#' # Range patterns with direction return NA with warning
+#' convert_xxtpt_to_hours(c("0-4H PRIOR START OF INFUSION"))
 convert_xxtpt_to_hours <- function(xxtpt) {
   assert_character_vector(xxtpt)
 
@@ -79,10 +97,13 @@ convert_xxtpt_to_hours <- function(xxtpt) {
     return(numeric(0))
   }
 
+  # Trim whitespace from all inputs
+  xxtpt <- trimws(xxtpt)
+
   # Initialize result vector with NA
   result <- rep(NA_real_, length(xxtpt))
 
-  # Handle NA inputs
+  # Handle NA inputs (after trimming)
   na_idx <- is.na(xxtpt)
 
   # Track warnings for ambiguous/unsupported patterns
@@ -121,9 +142,11 @@ convert_xxtpt_to_hours <- function(xxtpt) {
     vague_values <- c(vague_values, unique(xxtpt[vague_idx]))
   }
 
-  # Check for range patterns (return NA with warning) ----
+  # Check for range patterns with direction (return NA with warning) ----
+  # Only patterns like "0-4H PRIOR START OF INFUSION" should warn
+  # Simple ranges like "0-6h Post-dose" are valid and handled below
   range_check_pattern <- regex(
-    "^\\d+\\s*-\\s*\\d+\\s*h(?:r|our)?s?\\s+(prior|post)",
+    "^\\d+\\s*-\\s*\\d+\\s*h(?:r|our)?s?\\s+(?:prior|post)\\s+(?:start|end)",
     ignore_case = TRUE
   )
   range_check_idx <- str_detect(xxtpt, range_check_pattern) & is.na(result) & !na_idx
@@ -141,7 +164,7 @@ convert_xxtpt_to_hours <- function(xxtpt) {
       # OPTIONAL days suffix
       "(?:d|day|days)?",
       # optional "after last" or post-dose suffix
-      "(?:\\s+(?:after\\s+last|post-?dose))?$"
+      "(?:\\s+(?:after\\s+last|post(?:\\s*-?\\s*dose)?))?$"
     ),
     ignore_case = TRUE,
     comments = TRUE
@@ -167,7 +190,7 @@ convert_xxtpt_to_hours <- function(xxtpt) {
       # minutes
       "m(?:in|inute)?s?",
       # optional post-dose suffix
-      "(?:\\s+post-?dose)?$"
+      "(?:\\s+post(?:\\s*-?\\s*dose)?)?$"
     ),
     ignore_case = TRUE,
     comments = TRUE
@@ -189,7 +212,7 @@ convert_xxtpt_to_hours <- function(xxtpt) {
       # hours
       "h(?:r|our)?s?",
       # optional post-dose suffix
-      "(?:\\s+post-?dose)?$"
+      "(?:\\s+post(?:\\s*-?\\s*dose)?)?$"
     ),
     ignore_case = TRUE,
     comments = TRUE
@@ -304,7 +327,10 @@ convert_xxtpt_to_hours <- function(xxtpt) {
   min_after_start_matches <- str_match(xxtpt, min_after_start_pattern)
   min_after_start_idx <- !is.na(min_after_start_matches[, 1]) & is.na(result) & !na_idx
   if (any(min_after_start_idx)) {
-    result[min_after_start_idx] <- as.numeric(min_after_start_matches[min_after_start_idx, "value"]) / 60
+    result[min_after_start_idx] <- as.numeric(min_after_start_matches[
+      min_after_start_idx,
+      "value"
+    ]) / 60
   }
 
   # Check "XMIN PRE EOI" (compact, pre end of infusion) ----
@@ -324,16 +350,16 @@ convert_xxtpt_to_hours <- function(xxtpt) {
   }
 
   # Check hours only ----
-  # Matches: "1H", "2 hours", "0.5HR", "1h Post-dose", "8 hour", "12 HOURS"
-  # Also: "1 HOUR POST", "X HOUR POST EOI" (if not caught by earlier patterns)
+  # Matches: "1H", "2 hours", "0.5HR", "1h Post-dose", "1H Post dose", "8 hour", "12 HOURS"
+  # Also: "1 HOUR POST"
   hours_pattern <- regex(
     paste0(
       # number
       "^(?<hours>\\d+(?:\\.\\d+)?)\\s*",
       # hours
       "h(?:r|our)?s?",
-      # optional post/post-dose suffix
-      "(?:\\s+(?:post|post-?dose))?$"
+      # optional post/post-dose suffix (flexible spacing)
+      "(?:\\s+post(?:\\s*-?\\s*dose)?)?$"
     ),
     ignore_case = TRUE,
     comments = TRUE
@@ -345,16 +371,16 @@ convert_xxtpt_to_hours <- function(xxtpt) {
   }
 
   # Check minutes only ----
-  # Matches: "30M", "45 min", "30 Min Post-dose", "2.5 Min"
-  # Also: "X MIN POST" (if not caught by earlier patterns)
+  # Matches: "30M", "45 min", "30 Min Post-dose", "30 MIN Post dose", "2.5 Min"
+  # Also: "X MIN POST"
   minutes_pattern <- regex(
     paste0(
       # number
       "^(?<minutes>\\d+(?:\\.\\d+)?)\\s*",
       # minutes
       "m(?:in|inute)?s?",
-      # optional post/post-dose suffix
-      "(?:\\s+(?:post|post-?dose))?$"
+      # optional post/post-dose suffix (flexible spacing)
+      "(?:\\s+post(?:\\s*-?\\s*dose)?)?$"
     ),
     ignore_case = TRUE,
     comments = TRUE
@@ -367,21 +393,19 @@ convert_xxtpt_to_hours <- function(xxtpt) {
 
   # Issue warnings for ambiguous patterns ----
   if (length(vague_values) > 0) {
-    warn_if_invalid_values(
-      vague_values,
-      paste(
+    cli_warn(
+      c(
         "Vague timepoint descriptions cannot be converted to numeric hours.",
-        "Returning NA for these values."
+        "i" = "Returning NA for: {.val {vague_values}}"
       )
     )
   }
 
   if (length(range_values) > 0) {
-    warn_if_invalid_values(
-      range_values,
-      paste(
+    cli_warn(
+      c(
         "Time range patterns with direction cannot be converted to single numeric hours.",
-        "Returning NA for these values."
+        "i" = "Returning NA for: {.val {range_values}}"
       )
     )
   }
