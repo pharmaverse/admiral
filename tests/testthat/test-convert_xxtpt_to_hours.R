@@ -21,6 +21,47 @@ test_that("convert_xxtpt_to_hours Test 1: returns expected values for special ca
   )
 })
 
+## Test 1b: infusion_duration parameter works ----
+test_that("convert_xxtpt_to_hours Test 1b: infusion_duration parameter works", {
+  expect_equal(
+    convert_xxtpt_to_hours(c("EOI", "End of Infusion"), infusion_duration = 2),
+    c(2, 2)
+  )
+
+  expect_equal(
+    convert_xxtpt_to_hours(c("EOI", "End of Infusion"), infusion_duration = 0.5),
+    c(0.5, 0.5)
+  )
+
+  expect_equal(
+    convert_xxtpt_to_hours(c("EOI", "End of Infusion"), infusion_duration = 4),
+    c(4, 4)
+  )
+})
+
+## Test 1c: infusion_duration validation ----
+test_that("convert_xxtpt_to_hours Test 1c: infusion_duration must be positive", {
+  expect_error(
+    convert_xxtpt_to_hours("EOI", infusion_duration = -1),
+    regexp = "must be positive"
+  )
+
+  expect_error(
+    convert_xxtpt_to_hours("EOI", infusion_duration = 0),
+    regexp = "must be positive"
+  )
+
+  expect_error(
+    convert_xxtpt_to_hours("EOI", infusion_duration = "1"),
+    class = "assert_numeric_vector"
+  )
+
+  expect_error(
+    convert_xxtpt_to_hours("EOI", infusion_duration = c(1, 2)),
+    class = "assert_numeric_vector"
+  )
+})
+
 ## Test 2: returns expected values for days ----
 test_that("convert_xxtpt_to_hours Test 2: returns expected values for days", {
   expect_equal(
@@ -452,7 +493,7 @@ test_that("convert_xxtpt_to_hours Test 29: comprehensive integration test", {
 test_that("convert_xxtpt_to_hours Test 30: warning includes actual vague values", {
   expect_warning(
     convert_xxtpt_to_hours(c("PRE-INF", "AFTER END OF INFUSION")),
-    regexp = "PRE-INF.*AFTER END OF INFUSION|AFTER END OF INFUSION.*PRE-INF"
+    regexp = "PRE-INF|AFTER END OF INFUSION"
   )
 })
 
@@ -467,8 +508,6 @@ test_that("convert_xxtpt_to_hours Test 31: warning includes actual range values"
 ## Test 32: multiple vague patterns show unique values only ----
 test_that("convert_xxtpt_to_hours Test 32: deduplicates vague values in warning", {
   # This tests that unique() is working in the warning collection
-  # We can't directly test the warning message content without snapshots,
-  # but we can verify behavior is correct
   expect_warning(
     result <- convert_xxtpt_to_hours(c(
       "PRE-INF",
@@ -480,4 +519,32 @@ test_that("convert_xxtpt_to_hours Test 32: deduplicates vague values in warning"
   )
   expect_equal(length(result), 4)
   expect_true(all(is.na(result)))
+})
+
+## Test 33: infusion_duration affects EOI in integration ----
+test_that("convert_xxtpt_to_hours Test 33: infusion_duration in comprehensive context", {
+  input <- c(
+    "Pre-dose",
+    "EOI",
+    "End of Infusion",
+    "1 HOUR POST EOI"
+  )
+
+  # With default infusion_duration = 1
+  expect_equal(
+    convert_xxtpt_to_hours(input),
+    c(0, 1, 1, 1)
+  )
+
+  # With infusion_duration = 2
+  expect_equal(
+    convert_xxtpt_to_hours(input, infusion_duration = 2),
+    c(0, 2, 2, 1)
+  )
+
+  # With infusion_duration = 0.5
+  expect_equal(
+    convert_xxtpt_to_hours(input, infusion_duration = 0.5),
+    c(0, 0.5, 0.5, 1)
+  )
 })

@@ -4,15 +4,25 @@
 \alias{convert_xxtpt_to_hours}
 \title{Convert \code{XXTPT} Strings to Hours}
 \usage{
-convert_xxtpt_to_hours(xxtpt)
+convert_xxtpt_to_hours(xxtpt, infusion_duration = 1)
 }
 \arguments{
-\item{xxtpt}{A character vector of timepoint descriptions from SDTM \code{--TPT} variables
-(e.g., \code{PCTPT}, \code{VSTPT}, \code{EGTPT}, \code{ISTPT}, \code{LBTPT}). Can contain \code{NA} values.
+\item{xxtpt}{A character vector of timepoint descriptions from SDTM
+\code{--TPT} variables (e.g., \code{PCTPT}, \code{VSTPT}, \code{EGTPT}, \code{ISTPT}, \code{LBTPT}).
+Can contain \code{NA} values.
 
 \describe{
 \item{Permitted values}{character vector}
 \item{Default value}{none}
+}}
+
+\item{infusion_duration}{Numeric value specifying the duration of infusion
+in hours. Used to convert "EOI" (End of Infusion) patterns. Must be a
+positive number. Default is 1 hour.
+
+\describe{
+\item{Permitted values}{numeric scalar (positive)}
+\item{Default value}{\code{1}}
 }}
 }
 \value{
@@ -28,10 +38,10 @@ A numeric vector of timepoints in hours. Returns \code{NA_real_} for:
 Returns \code{numeric(0)} for empty input.
 }
 \description{
-Converts CDISC timepoint strings (e.g., \code{PCTPT}, \code{VSTPT}, \code{EGTPT}, \code{ISTPT}, \code{LBTPT})
-into numeric hours for analysis. The function handles common dose-centric formats
-including pre-dose, post-dose (hours/minutes), days, time ranges, and infusion-related
-time markers.
+Converts CDISC timepoint strings (e.g., \code{PCTPT}, \code{VSTPT}, \code{EGTPT},
+\code{ISTPT}, \code{LBTPT}) into numeric hours for analysis. The function handles
+common dose-centric formats including pre-dose, post-dose (hours/minutes),
+days, time ranges, and infusion-related time markers.
 }
 \details{
 The function recognizes the following patterns (all case-insensitive):
@@ -40,7 +50,7 @@ The function recognizes the following patterns (all case-insensitive):
 \itemize{
 \item \code{"Screening"} → -1
 \item \code{"Pre-dose"}, \code{"Predose"}, \code{"Pre-infusion"}, \code{"Infusion"}, \code{"0H"} → 0
-\item \code{"EOI"}, \code{"End of Infusion"} → 1
+\item \code{"EOI"}, \code{"End of Infusion"} → \code{infusion_duration} (default: 1)
 \item \code{"Morning"}, \code{"Evening"} → \code{NA_real_}
 \item Unrecognized values → \code{NA_real_}
 }
@@ -70,7 +80,8 @@ The function recognizes the following patterns (all case-insensitive):
 \item Hours: H, h, HR, hr, HOUR, hour (with optional plurals)
 \item Minutes: M, m, MIN, min, MINUTE, minute (with optional plurals)
 \item Days: D, d, DAY, day (with optional plurals)
-\item Flexible whitespace and optional "Post-dose", "POST", "After last" suffixes
+\item Flexible whitespace and optional "Post-dose", "POST", "After last"
+suffixes
 }
 }
 \examples{
@@ -100,6 +111,9 @@ convert_xxtpt_to_hours(c(
 
 # Time ranges and combined units
 convert_xxtpt_to_hours(c("1H30M", "0-6h Post-dose", "30 DAYS AFTER LAST"))
+
+# Custom infusion duration (2 hours)
+convert_xxtpt_to_hours(c("EOI", "End of Infusion"), infusion_duration = 2)
 
 # Vague patterns return NA with warning
 convert_xxtpt_to_hours(c("PRE-INF", "AFTER END OF INFUSION"))

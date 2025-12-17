@@ -1,14 +1,21 @@
 #' Convert `XXTPT` Strings to Hours
 #'
-#' Converts CDISC timepoint strings (e.g., `PCTPT`, `VSTPT`, `EGTPT`, `ISTPT`, `LBTPT`)
-#' into numeric hours for analysis. The function handles common dose-centric formats
-#' including pre-dose, post-dose (hours/minutes), days, time ranges, and infusion-related
-#' time markers.
+#' Converts CDISC timepoint strings (e.g., `PCTPT`, `VSTPT`, `EGTPT`,
+#' `ISTPT`, `LBTPT`) into numeric hours for analysis. The function handles
+#' common dose-centric formats including pre-dose, post-dose (hours/minutes),
+#' days, time ranges, and infusion-related time markers.
 #'
-#' @param xxtpt A character vector of timepoint descriptions from SDTM `--TPT` variables
-#'   (e.g., `PCTPT`, `VSTPT`, `EGTPT`, `ISTPT`, `LBTPT`). Can contain `NA` values.
+#' @param xxtpt A character vector of timepoint descriptions from SDTM
+#'   `--TPT` variables (e.g., `PCTPT`, `VSTPT`, `EGTPT`, `ISTPT`, `LBTPT`).
+#'   Can contain `NA` values.
 #'
 #' @permitted character vector
+#'
+#' @param infusion_duration Numeric value specifying the duration of infusion
+#'   in hours. Used to convert "EOI" (End of Infusion) patterns. Must be a
+#'   positive number. Default is 1 hour.
+#'
+#' @permitted numeric scalar (positive)
 #'
 #' @details
 #' The function recognizes the following patterns (all case-insensitive):
@@ -16,7 +23,7 @@
 #' **Special Cases:**
 #' * `"Screening"` → -1
 #' * `"Pre-dose"`, `"Predose"`, `"Pre-infusion"`, `"Infusion"`, `"0H"` → 0
-#' * `"EOI"`, `"End of Infusion"` → 1
+#' * `"EOI"`, `"End of Infusion"` → `infusion_duration` (default: 1)
 #' * `"Morning"`, `"Evening"` → `NA_real_`
 #' * Unrecognized values → `NA_real_`
 #'
@@ -40,7 +47,8 @@
 #' * Hours: H, h, HR, hr, HOUR, hour (with optional plurals)
 #' * Minutes: M, m, MIN, min, MINUTE, minute (with optional plurals)
 #' * Days: D, d, DAY, day (with optional plurals)
-#' * Flexible whitespace and optional "Post-dose", "POST", "After last" suffixes
+#' * Flexible whitespace and optional "Post-dose", "POST", "After last"
+#'   suffixes
 #'
 #' @return A numeric vector of timepoints in hours. Returns `NA_real_` for:
 #' * Input `NA` values
@@ -84,13 +92,24 @@
 #' # Time ranges and combined units
 #' convert_xxtpt_to_hours(c("1H30M", "0-6h Post-dose", "30 DAYS AFTER LAST"))
 #'
+#' # Custom infusion duration (2 hours)
+#' convert_xxtpt_to_hours(c("EOI", "End of Infusion"), infusion_duration = 2)
+#'
 #' # Vague patterns return NA with warning
 #' convert_xxtpt_to_hours(c("PRE-INF", "AFTER END OF INFUSION"))
 #'
 #' # Range patterns with direction return NA with warning
 #' convert_xxtpt_to_hours(c("0-4H PRIOR START OF INFUSION"))
-convert_xxtpt_to_hours <- function(xxtpt) {
+convert_xxtpt_to_hours <- function(xxtpt, infusion_duration = 1) {
   assert_character_vector(xxtpt)
+  assert_numeric_vector(infusion_duration, length = 1)
+
+  # Additional validation for positive value
+  if (infusion_duration <= 0) {
+    cli_abort(
+      "{.arg infusion_duration} must be positive, but is {infusion_duration}."
+    )
+  }
 
   # Handle empty input
   if (length(xxtpt) == 0) {
@@ -125,16 +144,22 @@ convert_xxtpt_to_hours <- function(xxtpt) {
   zero_idx <- str_detect(xxtpt, zero_pattern) & is.na(result) & !na_idx
   result[zero_idx] <- 0
 
-  # EOI, End of Infusion -> 1
-  eoi_pattern <- regex("^(eoi|end\\s+of\\s+infusion)$", ignore_case = TRUE)
+  # EOI, End of Infusion -> infusion_duration
+  eoi_pattern <- regex(
+    "^(eoi|end\\s+of\\s+infusion)$",
+    ignore_case = TRUE
+  )
   eoi_idx <- str_detect(xxtpt, eoi_pattern) & is.na(result) & !na_idx
-  result[eoi_idx] <- 1
+  result[eoi_idx] <- infusion_duration
 
   # Morning, Evening -> NA (already NA, no action needed)
 
   # Check for vague patterns (return NA with warning) ----
   vague_pattern <- regex(
-    "^(pre-inf|after\\s+end\\s+of\\s+infusion|after\\s+end\\s+of\\s+treatment)$",
+    paste0(
+      "^(pre-inf|after\\s+end\\s+of\\s+infusion|",
+      "after\\s+end\\s+of\\s+treatment)$"
+    ),
     ignore_case = TRUE
   )
   vague_idx <- str_detect(xxtpt, vague_pattern) & is.na(result) & !na_idx
@@ -146,10 +171,14 @@ convert_xxtpt_to_hours <- function(xxtpt) {
   # Only patterns like "0-4H PRIOR START OF INFUSION" should warn
   # Simple ranges like "0-6h Post-dose" are valid and handled below
   range_check_pattern <- regex(
-    "^\\d+\\s*-\\s*\\d+\\s*h(?:r|our)?s?\\s+(?:prior|post)\\s+(?:start|end)",
+    paste0(
+      "^\\d+\\s*-\\s*\\d+\\s*h(?:r|our)?s?\\s+",
+      "(?:prior|post)\\s+(?:start|end)"
+    ),
     ignore_case = TRUE
   )
-  range_check_idx <- str_detect(xxtpt, range_check_pattern) & is.na(result) & !na_idx
+  range_check_idx <- str_detect(xxtpt, range_check_pattern) &
+    is.na(result) & !na_idx
   if (any(range_check_idx)) {
     range_values <- c(range_values, unique(xxtpt[range_check_idx]))
   }
@@ -240,7 +269,11 @@ convert_xxtpt_to_hours <- function(xxtpt) {
     unit <- tolower(predose_matches[predose_idx, "unit"])
     # Check if unit starts with 'm' (minutes)
     is_minutes <- substr(unit, 1, 1) == "m"
-    result[predose_idx] <- if_else(is_minutes, -time_value / 60, -time_value)
+    result[predose_idx] <- if_else(
+      is_minutes,
+      -time_value / 60,
+      -time_value
+    )
   }
 
   # Check "X HOUR/MIN POST EOI/EOT" patterns ----
@@ -259,7 +292,11 @@ convert_xxtpt_to_hours <- function(xxtpt) {
     time_value <- as.numeric(post_eoi_matches[post_eoi_idx, "value"])
     unit <- tolower(post_eoi_matches[post_eoi_idx, "unit"])
     is_minutes <- substr(unit, 1, 1) == "m"
-    result[post_eoi_idx] <- if_else(is_minutes, time_value / 60, time_value)
+    result[post_eoi_idx] <- if_else(
+      is_minutes,
+      time_value / 60,
+      time_value
+    )
   }
 
   # Check "XMIN/XHOUR AFTER END OF INFUSION/TREATMENT" (compact format) ----
@@ -278,7 +315,11 @@ convert_xxtpt_to_hours <- function(xxtpt) {
     time_value <- as.numeric(after_end_matches[after_end_idx, "value"])
     unit <- tolower(after_end_matches[after_end_idx, "unit"])
     is_minutes <- substr(unit, 1, 1) == "m"
-    result[after_end_idx] <- if_else(is_minutes, time_value / 60, time_value)
+    result[after_end_idx] <- if_else(
+      is_minutes,
+      time_value / 60,
+      time_value
+    )
   }
 
   # Check "X HR POST INF/EOI/EOT" patterns ----
@@ -307,11 +348,16 @@ convert_xxtpt_to_hours <- function(xxtpt) {
     comments = TRUE
   )
   h_start_inf_matches <- str_match(xxtpt, h_start_inf_pattern)
-  h_start_inf_idx <- !is.na(h_start_inf_matches[, 1]) & is.na(result) & !na_idx
+  h_start_inf_idx <- !is.na(h_start_inf_matches[, 1]) &
+    is.na(result) & !na_idx
   if (any(h_start_inf_idx)) {
     time_value <- as.numeric(h_start_inf_matches[h_start_inf_idx, "value"])
     direction <- tolower(h_start_inf_matches[h_start_inf_idx, "direction"])
-    result[h_start_inf_idx] <- if_else(direction == "prior", -time_value, time_value)
+    result[h_start_inf_idx] <- if_else(
+      direction == "prior",
+      -time_value,
+      time_value
+    )
   }
 
   # Check "X MIN AFTER START INF" ----
@@ -325,12 +371,12 @@ convert_xxtpt_to_hours <- function(xxtpt) {
     comments = TRUE
   )
   min_after_start_matches <- str_match(xxtpt, min_after_start_pattern)
-  min_after_start_idx <- !is.na(min_after_start_matches[, 1]) & is.na(result) & !na_idx
+  min_after_start_idx <- !is.na(min_after_start_matches[, 1]) &
+    is.na(result) & !na_idx
   if (any(min_after_start_idx)) {
-    result[min_after_start_idx] <- as.numeric(min_after_start_matches[
-      min_after_start_idx,
-      "value"
-    ]) / 60
+    result[min_after_start_idx] <- as.numeric(
+      min_after_start_matches[min_after_start_idx, "value"]
+    ) / 60
   }
 
   # Check "XMIN PRE EOI" (compact, pre end of infusion) ----
@@ -344,14 +390,17 @@ convert_xxtpt_to_hours <- function(xxtpt) {
     comments = TRUE
   )
   min_pre_eoi_matches <- str_match(xxtpt, min_pre_eoi_pattern)
-  min_pre_eoi_idx <- !is.na(min_pre_eoi_matches[, 1]) & is.na(result) & !na_idx
+  min_pre_eoi_idx <- !is.na(min_pre_eoi_matches[, 1]) &
+    is.na(result) & !na_idx
   if (any(min_pre_eoi_idx)) {
-    result[min_pre_eoi_idx] <- -as.numeric(min_pre_eoi_matches[min_pre_eoi_idx, "value"]) / 60
+    result[min_pre_eoi_idx] <- -as.numeric(
+      min_pre_eoi_matches[min_pre_eoi_idx, "value"]
+    ) / 60
   }
 
   # Check hours only ----
-  # Matches: "1H", "2 hours", "0.5HR", "1h Post-dose", "1H Post dose", "8 hour", "12 HOURS"
-  # Also: "1 HOUR POST"
+  # Matches: "1H", "2 hours", "0.5HR", "1h Post-dose", "1H Post dose",
+  # "8 hour", "12 HOURS". Also: "1 HOUR POST"
   hours_pattern <- regex(
     paste0(
       # number
@@ -371,8 +420,8 @@ convert_xxtpt_to_hours <- function(xxtpt) {
   }
 
   # Check minutes only ----
-  # Matches: "30M", "45 min", "30 Min Post-dose", "30 MIN Post dose", "2.5 Min"
-  # Also: "X MIN POST"
+  # Matches: "30M", "45 min", "30 Min Post-dose", "30 MIN Post dose",
+  # "2.5 Min". Also: "X MIN POST"
   minutes_pattern <- regex(
     paste0(
       # number
@@ -388,7 +437,9 @@ convert_xxtpt_to_hours <- function(xxtpt) {
   minutes_matches <- str_match(xxtpt, minutes_pattern)
   minutes_idx <- !is.na(minutes_matches[, 1]) & is.na(result) & !na_idx
   if (any(minutes_idx)) {
-    result[minutes_idx] <- as.numeric(minutes_matches[minutes_idx, "minutes"]) / 60
+    result[minutes_idx] <- as.numeric(
+      minutes_matches[minutes_idx, "minutes"]
+    ) / 60
   }
 
   # Issue warnings for ambiguous patterns ----
@@ -404,7 +455,10 @@ convert_xxtpt_to_hours <- function(xxtpt) {
   if (length(range_values) > 0) {
     cli_warn(
       c(
-        "Time range patterns with direction cannot be converted to single numeric hours.",
+        paste(
+          "Time range patterns with direction cannot be converted",
+          "to single numeric hours."
+        ),
         "i" = "Returning NA for: {.val {range_values}}"
       )
     )
