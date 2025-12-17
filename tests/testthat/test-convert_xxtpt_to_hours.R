@@ -406,21 +406,21 @@ test_that("convert_xxtpt_to_hours Test 28: prioritizes specific patterns correct
 ## Test 29: comprehensive integration test ----
 test_that("convert_xxtpt_to_hours Test 29: comprehensive integration test", {
   input <- c(
-    "Screening", # -1
-    "Pre-dose", # 0
-    "30M", # 0.5
-    "1H", # 1
-    "1H30M", # 1.5
-    "2 hours Post-dose", # 2
-    "0-6h", # 6
-    "Day 1", # 24
-    "2D", # 48
-    "5 MIN PREDOSE", # -5/60
-    "1 HOUR POST EOI", # 1
-    "24 HR POST INF", # 24
-    "30 DAYS AFTER LAST", # 720
-    NA, # NA
-    "Morning" # NA
+    "Screening",
+    "Pre-dose",
+    "30M",
+    "1H",
+    "1H30M",
+    "2 hours Post-dose",
+    "0-6h",
+    "Day 1",
+    "2D",
+    "5 MIN PREDOSE",
+    "1 HOUR POST EOI",
+    "24 HR POST INF",
+    "30 DAYS AFTER LAST",
+    NA,
+    "Morning"
   )
 
   expected <- c(
