@@ -4,7 +4,7 @@
 \alias{convert_xxtpt_to_hours}
 \title{Convert \code{XXTPT} Strings to Hours}
 \usage{
-convert_xxtpt_to_hours(xxtpt, infusion_duration = 1)
+convert_xxtpt_to_hours(xxtpt, infusion_duration = 1, range_method = "midpoint")
 }
 \arguments{
 \item{xxtpt}{A character vector of timepoint descriptions from SDTM
@@ -25,6 +25,15 @@ Default is 1 hour.
 \item{Permitted values}{numeric scalar (positive)}
 \item{Default value}{\code{1}}
 }}
+
+\item{range_method}{Method for converting time ranges to single values.
+Options are "midpoint" (default), "start", or "end". For example,
+"0-6h" with midpoint returns 3, with start returns 0, with end returns 6.
+
+\describe{
+\item{Permitted values}{character scalar ("midpoint", "start", or "end")}
+\item{Default value}{\code{"midpoint"}}
+}}
 }
 \value{
 A numeric vector of timepoints in hours. Returns \code{NA_real_} for:
@@ -32,7 +41,6 @@ A numeric vector of timepoints in hours. Returns \code{NA_real_} for:
 \item Input \code{NA} values
 \item Unrecognized timepoint formats
 \item Non-time descriptors (e.g., "Morning", "Evening")
-\item Time range patterns with direction (with warning)
 }
 
 Returns \code{numeric(0)} for empty input.
@@ -57,16 +65,20 @@ The function recognizes the following patterns (all case-insensitive):
 \item Unrecognized values → \code{NA_real_}
 }
 
-\strong{Patterns Returning NA with Warning:}
+\strong{Time Ranges:}
+Time ranges are converted based on the \code{range_method} parameter:
 \itemize{
-\item Time ranges with direction: \code{"0-4H PRIOR START OF INFUSION"}
+\item \code{"0-6h Post-dose"} with \code{range_method = "midpoint"} (default) → 3
+\item \code{"0-6h Post-dose"} with \code{range_method = "start"} → 0
+\item \code{"0-6h Post-dose"} with \code{range_method = "end"} → 6
+\item \code{"0-4H PRIOR START OF INFUSION"} with midpoint → -2 (negative for prior)
+\item \code{"8-16H POST START OF INFUSION"} with midpoint → 12
 }
 
 \strong{Time-based Conversions:}
 \itemize{
 \item \strong{Days}: \code{"Day 1"} → 24, \code{"30 DAYS AFTER LAST"} → 720
 \item \strong{Hours + Minutes}: \code{"1H30M"} → 1.5
-\item \strong{Time Ranges}: \code{"0-6h"} → 6 (end value)
 \item \strong{Hours}: \code{"2 hours"} → 2, \code{"1 HOUR POST"} → 1
 \item \strong{Minutes}: \code{"30M"} → 0.5, \code{"30 MIN POST"} → 0.5
 \item \strong{Predose}: \code{"5 MIN PREDOSE"} → -0.0833
@@ -110,8 +122,16 @@ convert_xxtpt_to_hours(c(
   "10MIN PRE EOI"
 ))
 
-# Time ranges and combined units
-convert_xxtpt_to_hours(c("1H30M", "0-6h Post-dose", "30 DAYS AFTER LAST"))
+# Time ranges - default midpoint
+convert_xxtpt_to_hours(c(
+  "0-6h Post-dose",
+  "0-4H PRIOR START OF INFUSION",
+  "8-16H POST START OF INFUSION"
+))
+
+# Time ranges - specify method
+convert_xxtpt_to_hours("0-6h Post-dose", range_method = "end")
+convert_xxtpt_to_hours("0-6h Post-dose", range_method = "start")
 
 # Custom infusion duration (2 hours)
 # Note: "1 HOUR POST EOI" = 2 (infusion) + 1 (post) = 3 hours
@@ -122,9 +142,6 @@ convert_xxtpt_to_hours(
 
 # After end patterns equal infusion_duration
 convert_xxtpt_to_hours(c("AFTER END OF INFUSION", "AFTER END OF TREATMENT"))
-
-# Range patterns with direction return NA with warning
-convert_xxtpt_to_hours(c("0-4H PRIOR START OF INFUSION"))
 }
 \seealso{
 Date/Time Computation Functions that returns a vector:

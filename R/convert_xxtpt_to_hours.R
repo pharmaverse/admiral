@@ -18,6 +18,12 @@
 #'
 #' @permitted numeric scalar (positive)
 #'
+#' @param range_method Method for converting time ranges to single values.
+#'   Options are "midpoint" (default), "start", or "end". For example,
+#'   "0-6h" with midpoint returns 3, with start returns 0, with end returns 6.
+#'
+#' @permitted character scalar ("midpoint", "start", or "end")
+#'
 #' @details
 #' The function recognizes the following patterns (all case-insensitive):
 #'
@@ -30,13 +36,17 @@
 #' * `"Morning"`, `"Evening"` → `NA_real_`
 #' * Unrecognized values → `NA_real_`
 #'
-#' **Patterns Returning NA with Warning:**
-#' * Time ranges with direction: `"0-4H PRIOR START OF INFUSION"`
+#' **Time Ranges:**
+#' Time ranges are converted based on the `range_method` parameter:
+#' * `"0-6h Post-dose"` with `range_method = "midpoint"` (default) → 3
+#' * `"0-6h Post-dose"` with `range_method = "start"` → 0
+#' * `"0-6h Post-dose"` with `range_method = "end"` → 6
+#' * `"0-4H PRIOR START OF INFUSION"` with midpoint → -2 (negative for prior)
+#' * `"8-16H POST START OF INFUSION"` with midpoint → 12
 #'
 #' **Time-based Conversions:**
 #' * **Days**: `"Day 1"` → 24, `"30 DAYS AFTER LAST"` → 720
 #' * **Hours + Minutes**: `"1H30M"` → 1.5
-#' * **Time Ranges**: `"0-6h"` → 6 (end value)
 #' * **Hours**: `"2 hours"` → 2, `"1 HOUR POST"` → 1
 #' * **Minutes**: `"30M"` → 0.5, `"30 MIN POST"` → 0.5
 #' * **Predose**: `"5 MIN PREDOSE"` → -0.0833
@@ -57,7 +67,6 @@
 #' * Input `NA` values
 #' * Unrecognized timepoint formats
 #' * Non-time descriptors (e.g., "Morning", "Evening")
-#' * Time range patterns with direction (with warning)
 #'
 #' Returns `numeric(0)` for empty input.
 #'
@@ -90,8 +99,16 @@
 #'   "10MIN PRE EOI"
 #' ))
 #'
-#' # Time ranges and combined units
-#' convert_xxtpt_to_hours(c("1H30M", "0-6h Post-dose", "30 DAYS AFTER LAST"))
+#' # Time ranges - default midpoint
+#' convert_xxtpt_to_hours(c(
+#'   "0-6h Post-dose",
+#'   "0-4H PRIOR START OF INFUSION",
+#'   "8-16H POST START OF INFUSION"
+#' ))
+#'
+#' # Time ranges - specify method
+#' convert_xxtpt_to_hours("0-6h Post-dose", range_method = "end")
+#' convert_xxtpt_to_hours("0-6h Post-dose", range_method = "start")
 #'
 #' # Custom infusion duration (2 hours)
 #' # Note: "1 HOUR POST EOI" = 2 (infusion) + 1 (post) = 3 hours
@@ -102,12 +119,22 @@
 #'
 #' # After end patterns equal infusion_duration
 #' convert_xxtpt_to_hours(c("AFTER END OF INFUSION", "AFTER END OF TREATMENT"))
-#'
-#' # Range patterns with direction return NA with warning
-#' convert_xxtpt_to_hours(c("0-4H PRIOR START OF INFUSION"))
-convert_xxtpt_to_hours <- function(xxtpt, infusion_duration = 1) {
+convert_xxtpt_to_hours <- function(xxtpt,
+                                   infusion_duration = 1,
+                                   range_method = "midpoint") {
   assert_character_vector(xxtpt)
   assert_numeric_vector(infusion_duration, length = 1)
+  assert_character_vector(range_method, values = c("start", "end", "midpoint"))
+
+  # Validate range_method
+  if (!range_method %in% c("midpoint", "start", "end")) {
+    cli_abort(
+      paste0(
+        "{.arg range_method} must be one of \"midpoint\", \"start\", ",
+        "or \"end\", not {.val {range_method}}."
+      )
+    )
+  }
 
   # Additional validation for positive value
   if (infusion_duration <= 0) {
@@ -129,9 +156,6 @@ convert_xxtpt_to_hours <- function(xxtpt, infusion_duration = 1) {
 
   # Handle NA inputs (after trimming)
   na_idx <- is.na(xxtpt)
-
-  # Track warnings for ambiguous/unsupported patterns
-  range_values <- character(0)
 
   # Check special cases first (exact matches, case-insensitive) ----
 
@@ -160,22 +184,6 @@ convert_xxtpt_to_hours <- function(xxtpt, infusion_duration = 1) {
   result[eoi_idx] <- infusion_duration
 
   # Morning, Evening -> NA (already NA, no action needed)
-
-  # Check for range patterns with direction (return NA with warning) ----
-  # Only patterns like "0-4H PRIOR START OF INFUSION" should warn
-  # Simple ranges like "0-6h Post-dose" are valid and handled below
-  range_check_pattern <- regex(
-    paste0(
-      "^\\d+\\s*-\\s*\\d+\\s*h(?:r|our)?s?\\s+",
-      "(?:prior|post)\\s+(?:start|end)"
-    ),
-    ignore_case = TRUE
-  )
-  range_check_idx <- str_detect(xxtpt, range_check_pattern) &
-    is.na(result) & !na_idx
-  if (any(range_check_idx)) {
-    range_values <- c(range_values, unique(xxtpt[range_check_idx]))
-  }
 
   # Check days (convert to hours by multiplying by 24) ----
   # Matches: "2D", "2 days", "Day 2", "2 day", "1.5 days", "Day 1"
@@ -226,11 +234,45 @@ convert_xxtpt_to_hours <- function(xxtpt, infusion_duration = 1) {
     result[hm_idx] <- hours + minutes / 60
   }
 
-  # Check time ranges (e.g., "0-6h Post-dose" -> 6, "0.5 - 6.5h" -> 6.5) ----
+  # Check time ranges with direction (PRIOR/POST START/END) ----
+  # Process before simple ranges to catch these first
+  range_dir_pattern <- regex(
+    paste0(
+      "^(?<start>\\d+(?:\\.\\d+)?)\\s*-\\s*(?<end>\\d+(?:\\.\\d+)?)\\s*",
+      "h(?:r|our)?s?\\s+",
+      "(?<direction>prior|post)\\s+(?:start|end)"
+    ),
+    ignore_case = TRUE
+  )
+  range_dir_matches <- str_match(xxtpt, range_dir_pattern)
+  range_dir_idx <- !is.na(range_dir_matches[, 1]) & is.na(result) & !na_idx
+  if (any(range_dir_idx)) {
+    start_val <- as.numeric(range_dir_matches[range_dir_idx, "start"])
+    end_val <- as.numeric(range_dir_matches[range_dir_idx, "end"])
+    direction <- tolower(range_dir_matches[range_dir_idx, "direction"])
+
+    # Calculate based on range_method
+    range_val <- if (range_method == "start") {
+      start_val
+    } else if (range_method == "end") {
+      end_val
+    } else {
+      (start_val + end_val) / 2
+    }
+
+    # Apply direction (PRIOR is negative, POST is positive)
+    result[range_dir_idx] <- if_else(
+      direction == "prior",
+      -range_val,
+      range_val
+    )
+  }
+
+  # Check simple time ranges (e.g., "0-6h Post-dose") ----
   # Process before simple hours to avoid conflicts
   range_pattern <- regex(
     paste0(
-      # range with end value captured, spaces allowed
+      # range with start and end values captured, spaces allowed
       "^(?<start>\\d+(?:\\.\\d+)?)\\s*-\\s*(?<end>\\d+(?:\\.\\d+)?)\\s*",
       # hours
       "h(?:r|our)?s?",
@@ -243,7 +285,17 @@ convert_xxtpt_to_hours <- function(xxtpt, infusion_duration = 1) {
   range_matches <- str_match(xxtpt, range_pattern)
   range_idx <- !is.na(range_matches[, 1]) & is.na(result) & !na_idx
   if (any(range_idx)) {
-    result[range_idx] <- as.numeric(range_matches[range_idx, "end"])
+    start_val <- as.numeric(range_matches[range_idx, "start"])
+    end_val <- as.numeric(range_matches[range_idx, "end"])
+
+    # Calculate based on range_method
+    result[range_idx] <- if (range_method == "start") {
+      start_val
+    } else if (range_method == "end") {
+      end_val
+    } else {
+      (start_val + end_val) / 2
+    }
   }
 
   # Check "X MIN/HOUR PREDOSE" (negative time) ----
@@ -438,19 +490,6 @@ convert_xxtpt_to_hours <- function(xxtpt, infusion_duration = 1) {
     result[minutes_idx] <- as.numeric(
       minutes_matches[minutes_idx, "minutes"]
     ) / 60
-  }
-
-  # Issue warnings for ambiguous patterns ----
-  if (length(range_values) > 0) {
-    cli_warn(
-      c(
-        paste(
-          "Time range patterns with direction cannot be converted",
-          "to single numeric hours."
-        ),
-        "i" = "Returning NA for: {.val {range_values}}"
-      )
-    )
   }
 
   result
