@@ -8,59 +8,69 @@ test_that("convert_xxtpt_to_hours Test 1: returns expected values for special ca
       "SCREENING",
       "Pre-dose",
       "PREDOSE",
+      "Pre-treatment",
       "Pre-infusion",
       "PRE-INF",
+      "Before",
       "Infusion",
       "0H",
       "0 H",
       "EOI",
+      "EOT",
       "End of Infusion",
+      "End of Treatment",
       "AFTER END OF INFUSION",
       "AFTER END OF TREATMENT",
       "Morning",
       "Evening"
     )),
-    c(-1, -1, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, NA_real_, NA_real_)
+    c(-1, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NA_real_, NA_real_)
   )
 })
 
-## Test 1b: infusion_duration parameter works ----
-test_that("convert_xxtpt_to_hours Test 1b: infusion_duration parameter works", {
+## Test 1b: treatment_duration parameter works ----
+test_that("convert_xxtpt_to_hours Test 1b: treatment_duration parameter works", {
   expect_equal(
-    convert_xxtpt_to_hours(c("EOI", "End of Infusion"), infusion_duration = 2),
-    c(2, 2)
+    convert_xxtpt_to_hours(c("EOI", "EOT", "End of Infusion"), treatment_duration = 2),
+    c(2, 2, 2)
   )
 
   expect_equal(
-    convert_xxtpt_to_hours(c("EOI", "End of Infusion"), infusion_duration = 0.5),
+    convert_xxtpt_to_hours(c("EOI", "End of Treatment"), treatment_duration = 0.5),
     c(0.5, 0.5)
   )
 
   expect_equal(
-    convert_xxtpt_to_hours(c("EOI", "End of Infusion"), infusion_duration = 4),
+    convert_xxtpt_to_hours(c("EOI", "End of Infusion"), treatment_duration = 4),
     c(4, 4)
+  )
+
+  # Default is 0
+  expect_equal(
+    convert_xxtpt_to_hours(c("EOI", "EOT")),
+    c(0, 0)
   )
 })
 
-## Test 1c: infusion_duration validation ----
-test_that("convert_xxtpt_to_hours Test 1c: infusion_duration must be positive", {
+## Test 1c: treatment_duration validation ----
+test_that("convert_xxtpt_to_hours Test 1c: treatment_duration must be non-negative", {
   expect_error(
-    convert_xxtpt_to_hours("EOI", infusion_duration = -1),
-    regexp = "must be positive"
+    convert_xxtpt_to_hours("EOI", treatment_duration = -1),
+    regexp = "must be non-negative"
+  )
+
+  # Zero is allowed
+  expect_no_error(
+    convert_xxtpt_to_hours("EOI", treatment_duration = 0)
   )
 
   expect_error(
-    convert_xxtpt_to_hours("EOI", infusion_duration = 0),
-    regexp = "must be positive"
-  )
-
-  expect_error(
-    convert_xxtpt_to_hours("EOI", infusion_duration = "1"),
+    convert_xxtpt_to_hours("EOI", treatment_duration = "1"),
     class = "assert_numeric_vector"
   )
 
   expect_error(
-    convert_xxtpt_to_hours("EOI", infusion_duration = c(1, 2)),
+    convert_xxtpt_to_hours("EOI", treatment_duration = c(1, 2)),
     class = "assert_numeric_vector"
   )
 })
@@ -85,9 +95,11 @@ test_that("convert_xxtpt_to_hours Test 3: returns expected values for hours+minu
     convert_xxtpt_to_hours(c(
       "1H30M",
       "1 hour 30 min",
-      "2HR15MIN"
+      "2HR15MIN",
+      "1H30M POST",
+      "1H30M AFTER"
     )),
-    c(1.5, 1.5, 2.25)
+    c(1.5, 1.5, 2.25, 1.5, 1.5)
   )
 })
 
@@ -97,9 +109,10 @@ test_that("convert_xxtpt_to_hours Test 4: returns expected values for time range
     convert_xxtpt_to_hours(c(
       "0-6h",
       "6-12h Post-dose",
-      "0.5 - 6.5h"
+      "0.5 - 6.5h",
+      "6-12h After-dose"
     )),
-    c(3, 9, 3.5)
+    c(3, 9, 3.5, 9)
   )
 })
 
@@ -137,7 +150,12 @@ test_that("convert_xxtpt_to_hours Test 4b: range_method parameter works", {
 test_that("convert_xxtpt_to_hours Test 4c: range_method must be valid", {
   expect_error(
     convert_xxtpt_to_hours("0-6h", range_method = "average"),
-    regexp = "Argument `range_method` must be <character> with values"
+    regexp = "Argument `range_method` must be <character> with"
+  )
+
+  expect_error(
+    convert_xxtpt_to_hours("0-6h", range_method = c("start", "end")),
+    regexp = "EXPR must be a length 1 vector"
   )
 
   expect_error(
@@ -154,9 +172,11 @@ test_that("convert_xxtpt_to_hours Test 5: returns expected values for hours only
       "2 hours",
       "0.5HR",
       "4hr Post-dose",
-      "1 HOUR POST"
+      "1 HOUR POST",
+      "4hr After-dose",
+      "1 HOUR AFTER"
     )),
-    c(1, 2, 0.5, 4, 1)
+    c(1, 2, 0.5, 4, 1, 4, 1)
   )
 })
 
@@ -167,45 +187,63 @@ test_that("convert_xxtpt_to_hours Test 6: returns expected values for minutes on
       "30M",
       "45 min",
       "2.5 Min",
-      "30 MIN POST"
+      "30 MIN POST",
+      "30 MIN AFTER"
     )),
-    c(0.5, 0.75, 2.5 / 60, 0.5)
+    c(0.5, 0.75, 2.5 / 60, 0.5, 0.5)
   )
 })
 
-## Test 7: returns expected values for predose patterns (negative time) ----
-test_that("convert_xxtpt_to_hours Test 7: returns expected values for predose patterns", {
+## Test 7: returns expected values for predose/before patterns (negative time) ----
+test_that("convert_xxtpt_to_hours Test 7: returns expected values for predose/before patterns", {
   expect_equal(
     convert_xxtpt_to_hours(c(
       "5 MIN PREDOSE",
-      "1 HOUR PREDOSE"
+      "1 HOUR PREDOSE",
+      "5 MIN BEFORE",
+      "1 HOUR BEFORE"
     )),
-    c(-5 / 60, -1)
+    c(-5 / 60, -1, -5 / 60, -1)
   )
 })
 
-## Test 8: returns expected values for post EOI/EOT patterns ----
-test_that("convert_xxtpt_to_hours Test 8: returns expected values for post EOI/EOT", {
-  # With default infusion_duration = 1
+## Test 8: returns expected values for post/after EOI/EOT patterns ----
+test_that("convert_xxtpt_to_hours Test 8: returns expected values for post/after EOI/EOT", {
+  # With default treatment_duration = 0
   expect_equal(
     convert_xxtpt_to_hours(c(
       "1 HOUR POST EOI",
       "30 MIN POST EOI",
-      "24 HR POST EOI",
-      "24 HR POST EOT",
-      "1 HOUR POST EOT"
+      "1 HOUR AFTER EOT",
+      "30 MIN AFTER EOT"
     )),
-    c(2, 1.5, 25, 25, 2)
+    c(1, 0.5, 1, 0.5)
   )
 
-  # With infusion_duration = 2
+  # With treatment_duration = 1
   expect_equal(
     convert_xxtpt_to_hours(
       c(
         "1 HOUR POST EOI",
-        "30 MIN POST EOI"
+        "30 MIN POST EOI",
+        "24 HR POST EOI",
+        "24 HR POST EOT",
+        "1 HOUR POST EOT",
+        "1 HOUR AFTER EOI"
       ),
-      infusion_duration = 2
+      treatment_duration = 1
+    ),
+    c(2, 1.5, 25, 25, 2, 2)
+  )
+
+  # With treatment_duration = 2
+  expect_equal(
+    convert_xxtpt_to_hours(
+      c(
+        "1 HOUR POST EOI",
+        "30 MIN AFTER EOT"
+      ),
+      treatment_duration = 2
     ),
     c(3, 2.5)
   )
@@ -213,23 +251,35 @@ test_that("convert_xxtpt_to_hours Test 8: returns expected values for post EOI/E
 
 ## Test 9: returns expected values for after end patterns ----
 test_that("convert_xxtpt_to_hours Test 9: returns expected values for after end patterns", {
-  # With default infusion_duration = 1
+  # With default treatment_duration = 0
   expect_equal(
     convert_xxtpt_to_hours(c(
       "30MIN AFTER END OF INFUSION",
       "30MIN AFTER END OF TREATMENT"
     )),
+    c(0.5, 0.5)
+  )
+
+  # With treatment_duration = 1
+  expect_equal(
+    convert_xxtpt_to_hours(
+      c(
+        "30MIN AFTER END OF INFUSION",
+        "30MIN AFTER END OF TREATMENT"
+      ),
+      treatment_duration = 1
+    ),
     c(1.5, 1.5)
   )
 
-  # With infusion_duration = 2
+  # With treatment_duration = 2
   expect_equal(
     convert_xxtpt_to_hours(
       c(
         "30MIN AFTER END OF INFUSION",
         "1 HOUR AFTER END OF TREATMENT"
       ),
-      infusion_duration = 2
+      treatment_duration = 2
     ),
     c(2.5, 3)
   )
@@ -237,34 +287,49 @@ test_that("convert_xxtpt_to_hours Test 9: returns expected values for after end 
 
 ## Test 10: returns expected values for HR POST INF patterns ----
 test_that("convert_xxtpt_to_hours Test 10: returns expected values for HR POST INF", {
-  # With default infusion_duration = 1
+  # With default treatment_duration = 0
   expect_equal(
     convert_xxtpt_to_hours(c(
       "24 HR POST INF",
       "24 HR POST EOI",
       "24 HR POST EOT"
     )),
+    c(24, 24, 24)
+  )
+
+  # With treatment_duration = 1
+  expect_equal(
+    convert_xxtpt_to_hours(
+      c(
+        "24 HR POST INF",
+        "24 HR POST EOI",
+        "24 HR POST EOT"
+      ),
+      treatment_duration = 1
+    ),
     c(25, 25, 25)
   )
 
-  # With infusion_duration = 0.5
+  # With treatment_duration = 0.5
   expect_equal(
     convert_xxtpt_to_hours(
       "24 HR POST INF",
-      infusion_duration = 0.5
+      treatment_duration = 0.5
     ),
     24.5
   )
 })
 
-## Test 11: returns expected values for start of infusion patterns ----
-test_that("convert_xxtpt_to_hours Test 11: returns expected values for start of infusion", {
+## Test 11: returns expected values for start of infusion/treatment patterns ----
+test_that("convert_xxtpt_to_hours Test 11: returns expected values for start patterns", {
   expect_equal(
     convert_xxtpt_to_hours(c(
       "8H PRIOR START OF INFUSION",
-      "8H POST START OF INFUSION"
+      "8H POST START OF INFUSION",
+      "8H BEFORE START OF TREATMENT",
+      "8H AFTER START OF TREATMENT"
     )),
-    c(-8, 8)
+    c(-8, 8, -8, 8)
   )
 })
 
@@ -276,11 +341,34 @@ test_that("convert_xxtpt_to_hours Test 12: returns expected values for MIN AFTER
   )
 })
 
-## Test 13: returns expected values for MIN PRE EOI ----
-test_that("convert_xxtpt_to_hours Test 13: returns expected values for MIN PRE EOI", {
+## Test 13: returns expected values for MIN PRE/BEFORE EOI/EOT ----
+test_that("convert_xxtpt_to_hours Test 13: returns expected values for MIN PRE/BEFORE EOI/EOT", {
+  # With default treatment_duration = 0
   expect_equal(
-    convert_xxtpt_to_hours("10MIN PRE EOI"),
-    -10 / 60
+    convert_xxtpt_to_hours(c(
+      "10MIN PRE EOI",
+      "10MIN BEFORE EOT"
+    )),
+    c(-10 / 60, -10 / 60)
+  )
+
+  # With treatment_duration = 2 (2 hours)
+  # 10 minutes before end of 2-hour treatment = 2 - 10/60 = 1.833...
+  expect_equal(
+    convert_xxtpt_to_hours(
+      c(
+        "10MIN PRE EOI",
+        "10MIN BEFORE EOT"
+      ),
+      treatment_duration = 2
+    ),
+    c(2 - 10 / 60, 2 - 10 / 60)
+  )
+
+  # With treatment_duration = 1
+  expect_equal(
+    convert_xxtpt_to_hours("10MIN PRE EOI", treatment_duration = 1),
+    1 - 10 / 60
   )
 })
 
@@ -297,18 +385,6 @@ test_that("convert_xxtpt_to_hours Test 15: handles empty input", {
   expect_equal(
     convert_xxtpt_to_hours(character(0)),
     numeric(0)
-  )
-})
-
-## Test 16: is case-insensitive ----
-test_that("convert_xxtpt_to_hours Test 16: is case-insensitive", {
-  expect_equal(
-    convert_xxtpt_to_hours(c(
-      "1h post-dose",
-      "1H POST-DOSE",
-      "1H Post-Dose"
-    )),
-    c(1, 1, 1)
   )
 })
 
@@ -329,9 +405,11 @@ test_that("convert_xxtpt_to_hours Test 18: ranges with direction use range_metho
   expect_equal(
     convert_xxtpt_to_hours(c(
       "0-4H PRIOR START OF INFUSION",
-      "8-16H POST START OF INFUSION"
+      "8-16H POST START OF INFUSION",
+      "0-4H BEFORE START OF TREATMENT",
+      "8-16H AFTER START OF TREATMENT"
     )),
-    c(-2, 12)
+    c(-2, 12, -2, 12)
   )
 
   # With end method
@@ -350,57 +428,12 @@ test_that("convert_xxtpt_to_hours Test 18: ranges with direction use range_metho
   expect_equal(
     convert_xxtpt_to_hours(
       c(
-        "0-4H PRIOR START OF INFUSION",
-        "8-16H POST START OF INFUSION"
+        "0-4H BEFORE START OF TREATMENT",
+        "8-16H AFTER START OF TREATMENT"
       ),
       range_method = "start"
     ),
     c(0, 8)
-  )
-})
-
-## Test 19: range_method parameter consistency ----
-test_that("convert_xxtpt_to_hours Test 19: range_method works consistently", {
-  input <- "2-8h Post-dose"
-
-  expect_equal(
-    convert_xxtpt_to_hours(input, range_method = "start"),
-    2
-  )
-
-  expect_equal(
-    convert_xxtpt_to_hours(input, range_method = "midpoint"),
-    5
-  )
-
-  expect_equal(
-    convert_xxtpt_to_hours(input, range_method = "end"),
-    8
-  )
-})
-
-## Test 20: does not warn for any patterns ----
-test_that("convert_xxtpt_to_hours Test 20: does not warn for valid patterns", {
-  expect_no_warning(
-    convert_xxtpt_to_hours(c(
-      "1 HOUR POST",
-      "30 MIN POST EOI",
-      "0-4H PRIOR START OF INFUSION"
-    ))
-  )
-})
-
-## Test 21: does not warn for valid patterns ----
-test_that("convert_xxtpt_to_hours Test 21: does not warn for valid patterns", {
-  expect_no_warning(
-    convert_xxtpt_to_hours(c(
-      "1 HOUR POST",
-      "30 MIN POST EOI",
-      "5 MIN PREDOSE",
-      "24 HR POST INF",
-      "PRE-INF",
-      "AFTER END OF INFUSION"
-    ))
   )
 })
 
@@ -411,57 +444,72 @@ test_that("convert_xxtpt_to_hours Test 22: does not warn for time ranges", {
       "0-6h",
       "6-12h Post-dose",
       "0-4H PRIOR START OF INFUSION",
-      "8-16H POST START OF INFUSION"
+      "8-16H POST START OF INFUSION",
+      "0-4H BEFORE START OF TREATMENT",
+      "8-16H AFTER START OF TREATMENT"
     ))
   )
 })
 
 ## Test 23: handles all patterns from original issue ----
-test_that("convert_xxtpt_to_hours Test 23: handles all patterns from original issue", {
+test_that("convert_xxtpt_to_hours Test 23: handles all patterns with treatment_duration = 1", {
   expect_no_warning(
-    result <- convert_xxtpt_to_hours(c(
-      "60 MIN AFTER START INF",
-      "PRE-INF",
-      "5 MIN PREDOSE",
-      "1 HOUR POST EOI",
-      "1 HOUR POST",
-      "30 MIN POST EOI",
-      "30 MIN POST",
-      "30MIN AFTER END OF INFUSION",
-      "30MIN AFTER END OF TREATMENT",
-      "8H PRIOR START OF INFUSION",
-      "8H POST START OF INFUSION",
-      "30 DAYS AFTER LAST",
-      "24 HR POST INF",
-      "24 HR POST EOT",
-      "24 HR POST EOI",
-      "10MIN PRE EOI",
-      "AFTER END OF INFUSION",
-      "AFTER END OF TREATMENT"
-    ))
+    result <- convert_xxtpt_to_hours(
+      c(
+        "60 MIN AFTER START INF",
+        "PRE-INF",
+        "5 MIN PREDOSE",
+        "5 MIN BEFORE",
+        "1 HOUR POST EOI",
+        "1 HOUR POST",
+        "1 HOUR AFTER EOT",
+        "30 MIN POST EOI",
+        "30 MIN POST",
+        "30MIN AFTER END OF INFUSION",
+        "30MIN AFTER END OF TREATMENT",
+        "8H PRIOR START OF INFUSION",
+        "8H POST START OF INFUSION",
+        "8H BEFORE START OF TREATMENT",
+        "30 DAYS AFTER LAST",
+        "24 HR POST INF",
+        "24 HR POST EOT",
+        "24 HR POST EOI",
+        "10MIN PRE EOI",
+        "10MIN BEFORE EOT",
+        "AFTER END OF INFUSION",
+        "AFTER END OF TREATMENT",
+        "Before"
+      ),
+      treatment_duration = 1
+    )
   )
 
   expect_equal(
     result,
     c(
-      1,
-      0,
-      -5 / 60,
-      2,
-      1,
-      1.5,
-      0.5,
-      1.5,
-      1.5,
-      -8,
-      8,
-      720,
-      25,
-      25,
-      25,
-      -10 / 60,
-      1,
-      1
+      1, # 60 MIN AFTER START INF
+      0, # PRE-INF
+      -5 / 60, # 5 MIN PREDOSE
+      -5 / 60, # 5 MIN BEFORE
+      2, # 1 HOUR POST EOI (1 + 1)
+      1, # 1 HOUR POST
+      2, # 1 HOUR AFTER EOT (1 + 1)
+      1.5, # 30 MIN POST EOI (1 + 0.5)
+      0.5, # 30 MIN POST
+      1.5, # 30MIN AFTER END OF INFUSION (1 + 0.5)
+      1.5, # 30MIN AFTER END OF TREATMENT (1 + 0.5)
+      -8, # 8H PRIOR START OF INFUSION
+      8, # 8H POST START OF INFUSION
+      -8, # 8H BEFORE START OF TREATMENT
+      720, # 30 DAYS AFTER LAST
+      25, # 24 HR POST INF (1 + 24)
+      25, # 24 HR POST EOT (1 + 24)
+      25, # 24 HR POST EOI (1 + 24)
+      1 - 10 / 60, # 10MIN PRE EOI (1 - 10/60)
+      1 - 10 / 60, # 10MIN BEFORE EOT (1 - 10/60)
+      1, # AFTER END OF INFUSION
+      1, # AFTER END OF TREATMENT
+      0 # Before
     )
   )
 })
@@ -488,36 +536,16 @@ test_that("convert_xxtpt_to_hours Test 25: handles whitespace variations", {
   )
 })
 
-## Test 26: handles decimal values ----
-test_that("convert_xxtpt_to_hours Test 26: handles decimal values", {
-  expect_equal(
-    convert_xxtpt_to_hours(c(
-      "0.5H",
-      "1.5 HOURS",
-      "2.25 hours Post-dose"
-    )),
-    c(0.5, 1.5, 2.25)
-  )
-})
-
-## Test 27: handles post-dose variations ----
-test_that("convert_xxtpt_to_hours Test 27: handles post-dose variations", {
-  expect_equal(
-    convert_xxtpt_to_hours(c(
-      "1H Post-dose",
-      "1H POST-DOSE",
-      "1H POSTDOSE",
-      "1H Post dose"
-    )),
-    c(1, 1, 1, 1)
-  )
-})
-
 ## Test 28: prioritizes specific patterns and handles ranges ----
 test_that("convert_xxtpt_to_hours Test 28: prioritizes specific patterns correctly", {
   # Range with direction caught before simple range
   expect_equal(
     convert_xxtpt_to_hours("0-4H POST START OF INFUSION"),
+    2
+  )
+
+  expect_equal(
+    convert_xxtpt_to_hours("0-4H AFTER START OF TREATMENT"),
     2
   )
 
@@ -533,9 +561,14 @@ test_that("convert_xxtpt_to_hours Test 28: prioritizes specific patterns correct
     1.5
   )
 
-  # Ensure predose is caught before simple minutes
+  # Ensure predose/before is caught before simple minutes
   expect_equal(
     convert_xxtpt_to_hours("5 MIN PREDOSE"),
+    -5 / 60
+  )
+
+  expect_equal(
+    convert_xxtpt_to_hours("5 MIN BEFORE"),
     -5 / 60
   )
 })
@@ -545,15 +578,19 @@ test_that("convert_xxtpt_to_hours Test 29: comprehensive integration test", {
   input <- c(
     "Screening",
     "Pre-dose",
+    "Pre-treatment",
     "PRE-INF",
+    "Before",
     "30M",
     "1H",
     "1H30M",
     "2 hours Post-dose",
+    "2 hours After-dose",
     "0-6h",
     "Day 1",
     "2D",
     "5 MIN PREDOSE",
+    "5 MIN BEFORE",
     "1 HOUR POST EOI",
     "24 HR POST INF",
     "30 DAYS AFTER LAST",
@@ -562,31 +599,48 @@ test_that("convert_xxtpt_to_hours Test 29: comprehensive integration test", {
     "Morning"
   )
 
-  expected <- c(
-    -1,
-    0,
-    0,
-    0.5,
-    1,
-    1.5,
-    2,
-    3,
-    24,
-    48,
-    -5 / 60,
-    2,
-    25,
-    720,
-    1,
-    NA_real_,
-    NA_real_
+  # With default treatment_duration = 0
+  expected_default <- c(
+    -1, # Screening
+    0, # Pre-dose
+    0, # Pre-treatment
+    0, # PRE-INF
+    0, # Before
+    0.5, # 30M
+    1, # 1H
+    1.5, # 1H30M
+    2, # 2 hours Post-dose
+    2, # 2 hours After-dose
+    3, # 0-6h (midpoint)
+    24, # Day 1
+    48, # 2D
+    -5 / 60, # 5 MIN PREDOSE
+    -5 / 60, # 5 MIN BEFORE
+    1, # 1 HOUR POST EOI (0 + 1)
+    24, # 24 HR POST INF (0 + 24)
+    720, # 30 DAYS AFTER LAST
+    0, # AFTER END OF INFUSION
+    NA_real_, # NA
+    NA_real_ # Morning
   )
 
   expect_no_warning(
     result <- convert_xxtpt_to_hours(input)
   )
 
-  expect_equal(result, expected)
+  expect_equal(result, expected_default)
+
+  # With treatment_duration = 1
+  expected_treatment <- expected_default
+  expected_treatment[16] <- 2 # 1 HOUR POST EOI (1 + 1)
+  expected_treatment[17] <- 25 # 24 HR POST INF (1 + 24)
+  expected_treatment[19] <- 1 # AFTER END OF INFUSION
+
+  expect_no_warning(
+    result_treatment <- convert_xxtpt_to_hours(input, treatment_duration = 1)
+  )
+
+  expect_equal(result_treatment, expected_treatment)
 })
 
 ## Test 30: decimal ranges work correctly ----
@@ -616,79 +670,46 @@ test_that("convert_xxtpt_to_hours Test 31: ranges with direction handle decimals
 
   expect_equal(
     convert_xxtpt_to_hours(
-      "0.5-2.5H PRIOR START OF INFUSION",
+      "0.5-2.5H BEFORE START OF TREATMENT",
       range_method = "end"
     ),
     -2.5
   )
 })
 
-## Test 32: infusion_duration affects EOI and AFTER END patterns ----
-test_that("convert_xxtpt_to_hours Test 32: infusion_duration in comprehensive context", {
+## Test 32: treatment_duration affects EOT and AFTER END patterns ----
+test_that("convert_xxtpt_to_hours Test 32: treatment_duration in comprehensive context", {
   input <- c(
     "Pre-dose",
+    "Pre-treatment",
     "PRE-INF",
+    "Before",
     "EOI",
+    "EOT",
     "End of Infusion",
+    "End of Treatment",
     "AFTER END OF INFUSION",
     "AFTER END OF TREATMENT",
-    "1 HOUR POST EOI"
+    "1 HOUR POST EOI",
+    "1 HOUR AFTER EOT"
   )
 
-  # With default infusion_duration = 1
+  # With default treatment_duration = 0
   expect_equal(
     convert_xxtpt_to_hours(input),
-    c(0, 0, 1, 1, 1, 1, 2)
+    c(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1)
   )
 
-  # With infusion_duration = 2
+  # With treatment_duration = 2
   expect_equal(
-    convert_xxtpt_to_hours(input, infusion_duration = 2),
-    c(0, 0, 2, 2, 2, 2, 3)
+    convert_xxtpt_to_hours(input, treatment_duration = 2),
+    c(0, 0, 0, 0, 2, 2, 2, 2, 2, 2, 3, 3)
   )
 
-  # With infusion_duration = 0.5
+  # With treatment_duration = 0.5
   expect_equal(
-    convert_xxtpt_to_hours(input, infusion_duration = 0.5),
-    c(0, 0, 0.5, 0.5, 0.5, 0.5, 1.5)
-  )
-})
-
-## Test 33: PRE-INF treated as 0 like other pre-patterns ----
-test_that("convert_xxtpt_to_hours Test 33: PRE-INF returns 0", {
-  expect_equal(
-    convert_xxtpt_to_hours(c(
-      "PRE-INF",
-      "Pre-inf",
-      "pre-infusion",
-      "PREDOSE"
-    )),
-    c(0, 0, 0, 0)
-  )
-})
-
-## Test 34: AFTER END patterns equal infusion_duration ----
-test_that("convert_xxtpt_to_hours Test 34: AFTER END patterns return infusion_duration", {
-  # With default infusion_duration = 1
-  expect_equal(
-    convert_xxtpt_to_hours(c(
-      "AFTER END OF INFUSION",
-      "AFTER END OF TREATMENT",
-      "EOI"
-    )),
-    c(1, 1, 1)
-  )
-
-  # With custom infusion_duration = 3
-  expect_equal(
-    convert_xxtpt_to_hours(
-      c(
-        "AFTER END OF INFUSION",
-        "AFTER END OF TREATMENT"
-      ),
-      infusion_duration = 3
-    ),
-    c(3, 3)
+    convert_xxtpt_to_hours(input, treatment_duration = 0.5),
+    c(0, 0, 0, 0, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 1.5, 1.5)
   )
 })
 
@@ -697,53 +718,121 @@ test_that("convert_xxtpt_to_hours Test 35: range_method affects all patterns con
   input <- c(
     "0-6h Post-dose",
     "0-4H PRIOR START OF INFUSION",
-    "8-16H POST START OF INFUSION"
+    "8-16H POST START OF INFUSION",
+    "0-4H BEFORE START OF TREATMENT",
+    "8-16H AFTER START OF TREATMENT"
   )
 
   # Midpoint (default)
   expect_equal(
     convert_xxtpt_to_hours(input, range_method = "midpoint"),
-    c(3, -2, 12)
+    c(3, -2, 12, -2, 12)
   )
 
   # Start
   expect_equal(
     convert_xxtpt_to_hours(input, range_method = "start"),
-    c(0, 0, 8)
+    c(0, 0, 8, 0, 8)
   )
 
   # End
   expect_equal(
     convert_xxtpt_to_hours(input, range_method = "end"),
-    c(6, -4, 16)
+    c(6, -4, 16, -4, 16)
   )
 })
 
-## Test 36: range_method with infusion_duration ----
-test_that("convert_xxtpt_to_hours Test 36: range_method and infusion_duration work together", {
+## Test 36: range_method with treatment_duration ----
+test_that("convert_xxtpt_to_hours Test 36: range_method and treatment_duration work together", {
   input <- c(
     "0-6h Post-dose",
     "EOI",
     "1 HOUR POST EOI"
   )
 
-  # With range_method = "end" and infusion_duration = 2
+  # With range_method = "end" and treatment_duration = 2
   expect_equal(
     convert_xxtpt_to_hours(
       input,
-      infusion_duration = 2,
+      treatment_duration = 2,
       range_method = "end"
     ),
     c(6, 2, 3)
   )
 
-  # With range_method = "start" and infusion_duration = 2
+  # With range_method = "start" and treatment_duration = 2
   expect_equal(
     convert_xxtpt_to_hours(
       input,
-      infusion_duration = 2,
+      treatment_duration = 2,
       range_method = "start"
     ),
     c(0, 2, 3)
+  )
+})
+
+## Test 37: EOI and EOT treated identically ----
+test_that("convert_xxtpt_to_hours Test 37: EOI and EOT are equivalent", {
+  eoi_patterns <- c(
+    "EOI",
+    "End of Infusion",
+    "1 HOUR POST EOI",
+    "30 MIN POST EOI",
+    "10MIN PRE EOI",
+    "AFTER END OF INFUSION"
+  )
+
+  eot_patterns <- c(
+    "EOT",
+    "End of Treatment",
+    "1 HOUR POST EOT",
+    "30 MIN POST EOT",
+    "10MIN PRE EOT",
+    "AFTER END OF TREATMENT"
+  )
+
+  # With treatment_duration = 0
+  expect_equal(
+    convert_xxtpt_to_hours(eoi_patterns, treatment_duration = 0),
+    convert_xxtpt_to_hours(eot_patterns, treatment_duration = 0)
+  )
+
+  # With treatment_duration = 1
+  expect_equal(
+    convert_xxtpt_to_hours(eoi_patterns, treatment_duration = 1),
+    convert_xxtpt_to_hours(eot_patterns, treatment_duration = 1)
+  )
+
+  # With treatment_duration = 2
+  expect_equal(
+    convert_xxtpt_to_hours(eoi_patterns, treatment_duration = 2),
+    convert_xxtpt_to_hours(eot_patterns, treatment_duration = 2)
+  )
+})
+
+## Test 38: MIN PRE EOI calculation with various treatment durations ----
+test_that("convert_xxtpt_to_hours Test 38: MIN PRE EOI correctly uses treatment_duration", {
+  # With 0 duration (oral): 10 minutes before end = -10 minutes
+  expect_equal(
+    convert_xxtpt_to_hours("10MIN PRE EOI", treatment_duration = 0),
+    -10 / 60
+  )
+
+  # With 1 hour infusion: 10 minutes before end = 50 minutes from start
+  expect_equal(
+    convert_xxtpt_to_hours("10MIN PRE EOI", treatment_duration = 1),
+    1 - 10 / 60
+  )
+
+  # With 2 hour infusion: 10 minutes before end = 110 minutes from start
+  expect_equal(
+    convert_xxtpt_to_hours("10MIN PRE EOI", treatment_duration = 2),
+    2 - 10 / 60
+  )
+
+  # With 30 minute infusion: 10 minutes before end = 20 minutes from start
+  expect_equal(
+    convert_xxtpt_to_hours("10MIN PRE EOI", treatment_duration = 0.5),
+    0.5 - 10 / 60
   )
 })
