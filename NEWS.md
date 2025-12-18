@@ -2,6 +2,9 @@
 
 ## New Features
 
+- New experimental ADAB template script available `ad_adab.R` which creates Anti-drug 
+Antibody Analysis Dataset (#2805). 
+
 - Lab grading metadata for NCI-CTCAE version 6.0 is now available for both SI and US (Conventional) units 
 via `atoxgr_criteria_ctcv6` and `atoxgr_criteria_ctcv6_uscv`. This includes grading criteria for Creatinine 
 Clearance decreased. (#1858)
