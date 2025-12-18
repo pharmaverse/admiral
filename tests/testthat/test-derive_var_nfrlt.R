@@ -99,7 +99,7 @@ test_that("derive_var_nfrlt Test 4: custom first dose day", {
 
   expect_equal(
     result$NFRLT,
-    c(0, 2, 8, 24)
+    c(0, 2, 8, 48)
   )
 })
 
@@ -185,21 +185,35 @@ test_that("derive_var_nfrlt Test 8: preserves existing columns", {
   expect_equal(result$AVAL, c(10.5, 25.3))
 })
 
-## Test 9: error if tpt_var missing ----
-test_that("derive_var_nfrlt Test 9: error if tpt_var missing", {
+## Test 9: does not error if tpt_var missing from dataset ----
+test_that("derive_var_nfrlt Test 9: handles missing tpt_var from dataset gracefully", {
   input <- tibble::tribble(
     ~USUBJID, ~VISITDY,
-    "001",    1
+    "001",    1,
+    "001",    8
   )
 
-  expect_error(
-    derive_var_nfrlt(
+  # Should not error - treats as if tpt_var was not provided
+  expect_no_error(
+    result <- derive_var_nfrlt(
       input,
       new_var = NFRLT,
-      tpt_var = PCTPT,
+      tpt_var = PCTPT, # PCTPT doesn't exist in dataset
       visit_day = VISITDY
-    ),
-    class = "assert_data_frame"
+    )
+  )
+
+  # NFRLT should be calculated with timepoint contribution = 0
+  result <- derive_var_nfrlt(
+    input,
+    new_var = NFRLT,
+    tpt_var = PCTPT,
+    visit_day = VISITDY
+  )
+
+  expect_equal(
+    result$NFRLT,
+    c(0, 168) # Just day offsets, no timepoint contribution
   )
 })
 
@@ -502,4 +516,187 @@ test_that("derive_var_nfrlt Test 20: PRE EOI/EOT correctly uses treatment_durati
     treatment_duration = 2
   )
   expect_equal(result_2$NFRLT, c(2 - 10 / 60, 2 - 10 / 60))
+})
+
+## Test 21: works without tpt_var (for EX records) ----
+test_that("derive_var_nfrlt Test 21: works without tpt_var", {
+  input <- tibble::tribble(
+    ~USUBJID, ~VISITDY,
+    "001",    1,
+    "001",    8,
+    "001",    15
+  )
+
+  result <- derive_var_nfrlt(
+    input,
+    new_var = NFRLT,
+    visit_day = VISITDY
+  )
+
+  # Without tpt_var, NFRLT should just be day offset * 24
+  expect_equal(
+    result$NFRLT,
+    c(0, 168, 336)
+  )
+})
+
+## Test 22: handles unscheduled visits with VISIT variable ----
+test_that("derive_var_nfrlt Test 22: handles unscheduled visits", {
+  input <- tibble::tribble(
+    ~USUBJID, ~VISITDY, ~VISIT,        ~PCTPT,
+    "001",    1,        "VISIT 1",     "Pre-dose",
+    "001",    1,        "VISIT 1",     "2H Post-dose",
+    "001",    NA_real_, "UNSCHEDULED", "Pre-dose",
+    "001",    NA_real_, "UNSCHEDULED", "2H Post-dose"
+  )
+
+  result <- derive_var_nfrlt(
+    input,
+    new_var = NFRLT,
+    tpt_var = PCTPT,
+    visit_day = VISITDY,
+    set_values_to_na = VISIT == "UNSCHEDULED"
+  )
+
+  expect_equal(
+    result$NFRLT,
+    c(0, 2, NA_real_, NA_real_)
+  )
+})
+
+## Test 23: handles early discontinuation visits ----
+test_that("derive_var_nfrlt Test 23: handles early discontinuation", {
+  input <- tibble::tribble(
+    ~USUBJID, ~VISITDY, ~VISIT,                              ~PCTPT,
+    "001",    1,        "VISIT 1",                           "Pre-dose",
+    "001",    1,        "VISIT 1",                           "2H Post-dose",
+    "001",    NA_real_, "STUDY DRUG EARLY DISCONTINUATION",  "Pre-dose"
+  )
+
+  result <- derive_var_nfrlt(
+    input,
+    new_var = NFRLT,
+    tpt_var = PCTPT,
+    visit_day = VISITDY,
+    set_values_to_na = VISIT == "STUDY DRUG EARLY DISCONTINUATION"
+  )
+
+  expect_equal(
+    result$NFRLT,
+    c(0, 2, NA_real_)
+  )
+})
+
+## Test 24: handles multiple exclusion criteria ----
+test_that("derive_var_nfrlt Test 24: handles multiple exclusion criteria", {
+  input <- tibble::tribble(
+    ~USUBJID, ~VISITDY, ~VISIT,                              ~PCTPT,
+    "001",    1,        "VISIT 1",                           "Pre-dose",
+    "001",    8,        "VISIT 2",                           "Pre-dose",
+    "001",    NA_real_, "UNSCHEDULED",                       "Pre-dose",
+    "001",    NA_real_, "STUDY DRUG EARLY DISCONTINUATION",  "2H Post-dose"
+  )
+
+  result <- derive_var_nfrlt(
+    input,
+    new_var = NFRLT,
+    tpt_var = PCTPT,
+    visit_day = VISITDY,
+    set_values_to_na = VISIT %in% c("UNSCHEDULED", "STUDY DRUG EARLY DISCONTINUATION")
+  )
+
+  expect_equal(
+    result$NFRLT,
+    c(0, 168, NA_real_, NA_real_)
+  )
+})
+
+## Test 25: works without tpt_var and with set_values_to_na ----
+test_that("derive_var_nfrlt Test 25: works without tpt_var and with set_values_to_na", {
+  input <- tibble::tribble(
+    ~USUBJID, ~VISITDY, ~VISIT,
+    "001",    1,        "VISIT 1",
+    "001",    8,        "VISIT 2",
+    "001",    NA_real_, "UNSCHEDULED"
+  )
+
+  result <- derive_var_nfrlt(
+    input,
+    new_var = NFRLT,
+    visit_day = VISITDY,
+    set_values_to_na = VISIT == "UNSCHEDULED"
+  )
+
+  expect_equal(
+    result$NFRLT,
+    c(0, 168, NA_real_)
+  )
+})
+
+## Test 26: tpt_var provided but doesn't exist in dataset ----
+test_that("derive_var_nfrlt Test 26: handles missing tpt_var gracefully", {
+  input <- tibble::tribble(
+    ~USUBJID, ~VISITDY,
+    "001",    1,
+    "001",    8
+  )
+
+  # If tpt_var doesn't exist in dataset, should behave as if not provided
+  result <- derive_var_nfrlt(
+    input,
+    new_var = NFRLT,
+    tpt_var = PCTPT, # PCTPT doesn't exist
+    visit_day = VISITDY
+  )
+
+  expect_equal(
+    result$NFRLT,
+    c(0, 168)
+  )
+})
+
+## Test 27: NA in VISITDY results in NA for NFRLT ----
+test_that("derive_var_nfrlt Test 27: NA in VISITDY results in NA", {
+  input <- tibble::tribble(
+    ~USUBJID, ~VISITDY, ~PCTPT,
+    "001",    1,        "Pre-dose",
+    "001",    NA_real_, "Pre-dose"
+  )
+
+  result <- derive_var_nfrlt(
+    input,
+    new_var = NFRLT,
+    tpt_var = PCTPT,
+    visit_day = VISITDY
+  )
+
+  expect_equal(
+    result$NFRLT,
+    c(0, NA_real_)
+  )
+})
+
+## Test 28: set_values_to_na with complex condition ----
+test_that("derive_var_nfrlt Test 28: set_values_to_na with complex condition", {
+  input <- tibble::tribble(
+    ~USUBJID, ~VISITDY, ~VISIT,        ~PCTPT,
+    "001",    1,        "VISIT 1",     "Pre-dose",
+    "001",    NA_real_, "UNSCHEDULED", "Pre-dose",
+    "002",    1,        "VISIT 1",     "Pre-dose",
+    "002",    NA_real_, "VISIT 2",     "Pre-dose"
+  )
+
+  # Set to NA if VISITDY is NA OR VISIT is UNSCHEDULED
+  result <- derive_var_nfrlt(
+    input,
+    new_var = NFRLT,
+    tpt_var = PCTPT,
+    visit_day = VISITDY,
+    set_values_to_na = is.na(VISITDY) | VISIT == "UNSCHEDULED"
+  )
+
+  expect_equal(
+    result$NFRLT,
+    c(0, NA_real_, 0, NA_real_)
+  )
 })

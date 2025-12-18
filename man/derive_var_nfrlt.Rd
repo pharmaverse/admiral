@@ -7,15 +7,17 @@
 derive_var_nfrlt(
   dataset,
   new_var = NFRLT,
-  tpt_var,
+  tpt_var = NULL,
   visit_day,
   first_dose_day = 1,
   treatment_duration = 0,
-  range_method = "midpoint"
+  range_method = "midpoint",
+  set_values_to_na = NULL
 )
 }
 \arguments{
-\item{dataset}{Input dataset containing timepoint and visit day variables.
+\item{dataset}{Input dataset containing visit day variable and optionally
+timepoint variable.
 
 \describe{
 \item{Permitted values}{A data frame or tibble}
@@ -31,15 +33,18 @@ derive_var_nfrlt(
 }}
 
 \item{tpt_var}{Timepoint variable containing descriptions like "Pre-dose",
-"1H Post-dose", etc. (unquoted).
+"1H Post-dose", etc. (unquoted). If not provided or if the variable doesn't
+exist in the dataset, only the visit day offset is calculated (timepoint
+contribution is 0).
 
 \describe{
-\item{Permitted values}{Unquoted variable name}
-\item{Default value}{none}
+\item{Permitted values}{Unquoted variable name (optional)}
+\item{Default value}{\code{NULL}}
 }}
 
 \item{visit_day}{Visit day variable (unquoted). This should be the planned/
-nominal visit day (e.g., \code{VISITDY}).
+nominal visit day (e.g., \code{VISITDY}). Records with \code{NA} in this variable
+will have NFRLT set to \code{NA}.
 
 \describe{
 \item{Permitted values}{Unquoted variable name}
@@ -72,6 +77,16 @@ with start returns 0, with end returns 6.
 \item{Permitted values}{Character scalar ("midpoint", "start", or "end")}
 \item{Default value}{\code{"midpoint"}}
 }}
+
+\item{set_values_to_na}{An optional condition that marks derived NFRLT values
+as \code{NA}. For example, \code{set_values_to_na = VISIT == "UNSCHEDULED"} will set
+NFRLT to \code{NA} for all unscheduled visits. Can use any variables in the
+dataset.
+
+\describe{
+\item{Permitted values}{Condition (optional)}
+\item{Default value}{\code{NULL}}
+}}
 }
 \value{
 The input dataset with the new nominal relative time variable added.
@@ -92,7 +107,7 @@ Where:
 \item \code{visit_day} is the planned visit day (e.g., 1, 2, 8, 15)
 \item \code{first_dose_day} is the day of first dose (typically 1)
 \item \code{timepoint_hours} is derived from the timepoint description using
-\code{convert_xxtpt_to_hours()}
+\code{convert_xxtpt_to_hours()}, or 0 if \code{tpt_var} is not provided
 }
 
 \strong{Common Use Cases:}
@@ -107,6 +122,10 @@ days
 instantaneous absorption
 \item \strong{IV infusions}: Specify \code{treatment_duration} as infusion duration in
 hours
+\item \strong{Exposure records (EX)}: Can be called without \code{tpt_var} to derive NFRLT
+based only on visit day
+\item \strong{Unscheduled visits}: Use \code{set_values_to_na} to set NFRLT to \code{NA} for
+unscheduled or early discontinuation visits
 }
 
 \strong{Important Notes:}
@@ -120,7 +139,24 @@ have \code{visit_day = 4}.
 \item For crossover studies, consider deriving NFRLT separately per period
 \item \code{NA} values in either \code{visit_day} or \code{tpt_var} will result in \code{NA} for
 NFRLT
+\item Records matching the \code{set_values_to_na} condition will have NFRLT set to \code{NA}
+\item If \code{tpt_var} is not provided or doesn't exist in the dataset, timepoint
+contribution is assumed to be 0 hours
 }
+
+\strong{Setting Special Values:}
+
+If you need to set NFRLT to a specific value (e.g., 99999) for certain visits
+instead of \code{NA}, use \code{set_values_to_na} first to set them to \code{NA}, then use
+a subsequent \code{mutate()} call to replace those \code{NA} values:
+
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{dataset \%>\%
+  derive_var_nfrlt(
+    ...,
+    set_values_to_na = VISIT == "UNSCHEDULED"
+  ) \%>\%
+  mutate(NFRLT = if_else(is.na(NFRLT) & VISIT == "UNSCHEDULED", 99999, NFRLT))
+}\if{html}{\out{</div>}}
 }
 \examples{
 library(dplyr)
@@ -178,6 +214,69 @@ derive_var_nfrlt(
   treatment_duration = 2
 )
 
+# Exposure records without timepoint variable
+ex <- tribble(
+  ~USUBJID, ~VISITDY,
+  "001",    1,
+  "001",    8,
+  "001",    15
+)
+
+derive_var_nfrlt(
+  ex,
+  new_var = NFRLT,
+  visit_day = VISITDY
+)
+
+# With unscheduled visits
+adpc_unsched <- tribble(
+  ~USUBJID, ~VISITDY, ~VISIT,        ~PCTPT,
+  "001",    1,        "VISIT 1",     "Pre-dose",
+  "001",    1,        "VISIT 1",     "2H Post-dose",
+  "001",    NA_real_, "UNSCHEDULED", "Pre-dose",
+  "001",    NA_real_, "UNSCHEDULED", "2H Post-dose"
+)
+
+derive_var_nfrlt(
+  adpc_unsched,
+  new_var = NFRLT,
+  tpt_var = PCTPT,
+  visit_day = VISITDY,
+  set_values_to_na = VISIT == "UNSCHEDULED"
+)
+
+# With early discontinuation
+adpc_disc <- tribble(
+  ~USUBJID, ~VISITDY, ~VISIT,                              ~PCTPT,
+  "001",    1,        "VISIT 1",                           "Pre-dose",
+  "001",    1,        "VISIT 1",                           "2H Post-dose",
+  "001",    NA_real_, "STUDY DRUG EARLY DISCONTINUATION",  "Pre-dose"
+)
+
+derive_var_nfrlt(
+  adpc_disc,
+  new_var = NFRLT,
+  tpt_var = PCTPT,
+  visit_day = VISITDY,
+  set_values_to_na = VISIT == "STUDY DRUG EARLY DISCONTINUATION"
+)
+
+# With multiple exclusion criteria
+adpc_multi <- tribble(
+  ~USUBJID, ~VISITDY, ~VISIT,                              ~PCTPT,
+  "001",    1,        "VISIT 1",                           "Pre-dose",
+  "001",    NA_real_, "UNSCHEDULED",                       "Pre-dose",
+  "001",    NA_real_, "STUDY DRUG EARLY DISCONTINUATION",  "Pre-dose"
+)
+
+derive_var_nfrlt(
+  adpc_multi,
+  new_var = NFRLT,
+  tpt_var = PCTPT,
+  visit_day = VISITDY,
+  set_values_to_na = VISIT \%in\% c("UNSCHEDULED", "STUDY DRUG EARLY DISCONTINUATION")
+)
+
 # Custom range method (use end of range instead of midpoint)
 adpc_range <- tribble(
   ~USUBJID, ~VISITDY, ~PCTPT,
@@ -225,6 +324,26 @@ derive_var_nfrlt(
   visit_day = VISITDY,
   first_dose_day = 3
 )
+# Setting NFRLT to a specific value (e.g., 99999) for unscheduled visits
+# This can be done in a separate mutate step after deriving NFRLT
+adpc_unsched_value <- tribble(
+  ~USUBJID, ~VISITDY, ~VISIT,        ~PCTPT,
+  "001",    1,        "VISIT 1",     "Pre-dose",
+  "001",    1,        "VISIT 1",     "2H Post-dose",
+  "001",    NA_real_, "UNSCHEDULED", "Pre-dose",
+  "001",    NA_real_, "UNSCHEDULED", "2H Post-dose"
+)
+
+adpc_unsched_value \%>\%
+  derive_var_nfrlt(
+    new_var = NFRLT,
+    tpt_var = PCTPT,
+    visit_day = VISITDY,
+    set_values_to_na = VISIT == "UNSCHEDULED"
+  ) \%>\%
+  mutate(
+    NFRLT = if_else(is.na(NFRLT) & VISIT == "UNSCHEDULED", 99999, NFRLT)
+  )
 }
 \seealso{
 \code{\link[=convert_xxtpt_to_hours]{convert_xxtpt_to_hours()}}
