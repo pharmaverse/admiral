@@ -134,14 +134,10 @@ convert_xxtpt_to_hours("0-6h Post-dose", range_method = "end")
 convert_xxtpt_to_hours("0-6h Post-dose", range_method = "start")
 
 # Custom infusion duration (2 hours)
-# Note: "1 HOUR POST EOI" = 2 (infusion) + 1 (post) = 3 hours
 convert_xxtpt_to_hours(
   c("EOI", "End of Infusion", "1 HOUR POST EOI"),
   infusion_duration = 2
 )
-
-# After end patterns equal infusion_duration
-convert_xxtpt_to_hours(c("AFTER END OF INFUSION", "AFTER END OF TREATMENT"))
 }
 \seealso{
 Date/Time Computation Functions that returns a vector:
