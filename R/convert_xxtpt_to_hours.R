@@ -123,15 +123,6 @@ convert_xxtpt_to_hours <- function(xxtpt,
   assert_numeric_vector(infusion_duration, length = 1)
   assert_character_vector(range_method, values = c("start", "end", "midpoint"))
 
-  if (!range_method %in% c("midpoint", "start", "end")) {
-    cli_abort(
-      paste0(
-        "{.arg range_method} must be one of \"midpoint\", \"start\", ",
-        "or \"end\", not {.val {range_method}}."
-      )
-    )
-  }
-
   if (infusion_duration <= 0) {
     cli_abort(
       "{.arg infusion_duration} must be positive, but is {infusion_duration}."
@@ -159,6 +150,26 @@ convert_xxtpt_to_hours <- function(xxtpt,
 # Helper Functions ----
 
 #' Convert Special Case Patterns
+#'
+#' Converts special case timepoint patterns to numeric hours including screening,
+#' pre-dose, pre-infusion, and end of infusion markers.
+#'
+#' @param xxtpt Character vector of timepoint descriptions (trimmed, no leading/
+#'   trailing whitespace)
+#' @param result Numeric vector of results (partially filled, may contain NA)
+#' @param na_idx Logical vector indicating which positions in xxtpt are NA
+#' @param infusion_duration Duration of infusion in hours (positive numeric)
+#'
+#' @details
+#' Recognizes and converts the following patterns:
+#' * "Screening" → -1
+#' * "Pre-dose", "Predose", "Pre-infusion", "Pre-inf", "Infusion", "0H" → 0
+#' * "EOI", "End of Infusion", "After End of Infusion/Treatment" → infusion_duration
+#'
+#' Only updates result for positions where result is currently NA and xxtpt is not NA.
+#'
+#' @return Updated numeric vector with special case patterns converted to hours
+#'
 #' @keywords internal
 #' @noRd
 convert_special_cases <- function(xxtpt, result, na_idx, infusion_duration) {
@@ -189,7 +200,24 @@ convert_special_cases <- function(xxtpt, result, na_idx, infusion_duration) {
   result
 }
 
-#' Convert Time Unit Patterns (Days, Hours+Minutes)
+#' Convert Time Unit Patterns
+#'
+#' Converts days and hours+minutes combination patterns to numeric hours.
+#'
+#' @param xxtpt Character vector of timepoint descriptions (trimmed, no leading/
+#'   trailing whitespace)
+#' @param result Numeric vector of results (partially filled, may contain NA)
+#' @param na_idx Logical vector indicating which positions in xxtpt are NA
+#'
+#' @details
+#' Recognizes and converts the following patterns:
+#' * Days: "Day 1" → 24, "2D" → 48, "30 DAYS AFTER LAST" → 720
+#' * Hours+minutes: "1H30M" → 1.5, "2HR15MIN" → 2.25
+#'
+#' Only updates result for positions where result is currently NA and xxtpt is not NA.
+#'
+#' @return Updated numeric vector with time unit patterns converted to hours
+#'
 #' @keywords internal
 #' @noRd
 convert_time_units <- function(xxtpt, result, na_idx) {
@@ -231,6 +259,29 @@ convert_time_units <- function(xxtpt, result, na_idx) {
 }
 
 #' Convert Range Patterns
+#'
+#' Converts time range patterns to numeric hours using specified range method
+#' (start, midpoint, or end).
+#'
+#' @param xxtpt Character vector of timepoint descriptions (trimmed, no leading/
+#'   trailing whitespace)
+#' @param result Numeric vector of results (partially filled, may contain NA)
+#' @param na_idx Logical vector indicating which positions in xxtpt are NA
+#' @param range_method Method for selecting value from range: "start", "midpoint",
+#'   or "end"
+#'
+#' @details
+#' Recognizes and converts the following range patterns:
+#' * Ranges with direction: "0-4H PRIOR START OF INFUSION" → -2 (with midpoint)
+#' * Simple ranges: "0-6h Post-dose" → 3 (with midpoint)
+#'
+#' Direction affects sign: "PRIOR" results in negative values, "POST" in positive.
+#' Processes ranges with direction before simple ranges to ensure correct matching.
+#'
+#' Only updates result for positions where result is currently NA and xxtpt is not NA.
+#'
+#' @return Updated numeric vector with range patterns converted to hours
+#'
 #' @keywords internal
 #' @noRd
 convert_ranges <- function(xxtpt, result, na_idx, range_method) {
@@ -278,6 +329,21 @@ convert_ranges <- function(xxtpt, result, na_idx, range_method) {
 }
 
 #' Calculate Range Value Based on Method
+#'
+#' Calculates a single numeric value from a range (start and end) using the
+#' specified method.
+#'
+#' @param start_val Numeric vector of start values
+#' @param end_val Numeric vector of end values (same length as start_val)
+#' @param range_method Method for calculation: "start", "midpoint", or "end"
+#'
+#' @details
+#' * "start": Returns start_val
+#' * "end": Returns end_val
+#' * "midpoint": Returns (start_val + end_val) / 2
+#'
+#' @return Numeric vector of calculated values
+#'
 #' @keywords internal
 #' @noRd
 calculate_range_value <- function(start_val, end_val, range_method) {
@@ -289,6 +355,28 @@ calculate_range_value <- function(start_val, end_val, range_method) {
 }
 
 #' Convert Infusion-Related Patterns
+#'
+#' Orchestrates conversion of all infusion-related timepoint patterns by calling
+#' specialized helper functions for each pattern type.
+#'
+#' @param xxtpt Character vector of timepoint descriptions (trimmed, no leading/
+#'   trailing whitespace)
+#' @param result Numeric vector of results (partially filled, may contain NA)
+#' @param na_idx Logical vector indicating which positions in xxtpt are NA
+#' @param infusion_duration Duration of infusion in hours (positive numeric)
+#'
+#' @details
+#' Calls helper functions in sequence to convert:
+#' * Predose patterns (negative times)
+#' * Post EOI/EOT patterns
+#' * After end of infusion/treatment patterns
+#' * HR POST INF patterns
+#' * Start of infusion patterns
+#' * MIN AFTER START patterns
+#' * MIN PRE EOI patterns
+#'
+#' @return Updated numeric vector with all infusion-related patterns converted
+#'
 #' @keywords internal
 #' @noRd
 convert_infusion_patterns <- function(xxtpt, result, na_idx, infusion_duration) {
@@ -302,7 +390,26 @@ convert_infusion_patterns <- function(xxtpt, result, na_idx, infusion_duration) 
   result
 }
 
-#' Convert Predose Patterns (Negative Time)
+#' Convert Predose Patterns
+#'
+#' Converts predose timepoint patterns to negative numeric hours (time before dose).
+#'
+#' @param xxtpt Character vector of timepoint descriptions (trimmed, no leading/
+#'   trailing whitespace)
+#' @param result Numeric vector of results (partially filled, may contain NA)
+#' @param na_idx Logical vector indicating which positions in xxtpt are NA
+#'
+#' @details
+#' Recognizes patterns like:
+#' * "5 MIN PREDOSE" → -0.0833 (negative 5 minutes)
+#' * "1 HOUR PREDOSE" → -1 (negative 1 hour)
+#'
+#' Returns negative values to indicate time before dose.
+#'
+#' Only updates result for positions where result is currently NA and xxtpt is not NA.
+#'
+#' @return Updated numeric vector with predose patterns converted to negative hours
+#'
 #' @keywords internal
 #' @noRd
 convert_predose_patterns <- function(xxtpt, result, na_idx) {
@@ -330,6 +437,29 @@ convert_predose_patterns <- function(xxtpt, result, na_idx) {
 }
 
 #' Convert Post EOI/EOT Patterns
+#'
+#' Converts "post end of infusion/treatment" patterns to numeric hours, adding
+#' the infusion duration to account for time after infusion completion.
+#'
+#' @param xxtpt Character vector of timepoint descriptions (trimmed, no leading/
+#'   trailing whitespace)
+#' @param result Numeric vector of results (partially filled, may contain NA)
+#' @param na_idx Logical vector indicating which positions in xxtpt are NA
+#' @param infusion_duration Duration of infusion in hours (positive numeric)
+#'
+#' @details
+#' Recognizes patterns like:
+#' * "1 HOUR POST EOI" → infusion_duration + 1
+#' * "30 MIN POST EOT" → infusion_duration + 0.5
+#'
+#' Adds infusion_duration because these patterns describe time AFTER the end of
+#' infusion, so total time from dose start includes the infusion duration plus
+#' the additional time.
+#'
+#' Only updates result for positions where result is currently NA and xxtpt is not NA.
+#'
+#' @return Updated numeric vector with post EOI/EOT patterns converted to hours
+#'
 #' @keywords internal
 #' @noRd
 convert_post_eoi_patterns <- function(xxtpt, result, na_idx, infusion_duration) {
@@ -357,6 +487,28 @@ convert_post_eoi_patterns <- function(xxtpt, result, na_idx, infusion_duration) 
 }
 
 #' Convert After End of Infusion/Treatment Patterns
+#'
+#' Converts "after end of infusion/treatment" patterns (compact format) to numeric
+#' hours, adding the infusion duration.
+#'
+#' @param xxtpt Character vector of timepoint descriptions (trimmed, no leading/
+#'   trailing whitespace)
+#' @param result Numeric vector of results (partially filled, may contain NA)
+#' @param na_idx Logical vector indicating which positions in xxtpt are NA
+#' @param infusion_duration Duration of infusion in hours (positive numeric)
+#'
+#' @details
+#' Recognizes patterns like:
+#' * "30MIN AFTER END OF INFUSION" → infusion_duration + 0.5
+#' * "1 HOUR AFTER END OF TREATMENT" → infusion_duration + 1
+#'
+#' Adds infusion_duration because these patterns describe time AFTER the end of
+#' infusion.
+#'
+#' Only updates result for positions where result is currently NA and xxtpt is not NA.
+#'
+#' @return Updated numeric vector with after end patterns converted to hours
+#'
 #' @keywords internal
 #' @noRd
 convert_after_end_patterns <- function(xxtpt, result, na_idx, infusion_duration) {
@@ -385,6 +537,28 @@ convert_after_end_patterns <- function(xxtpt, result, na_idx, infusion_duration)
 }
 
 #' Convert HR POST INF/EOI/EOT Patterns
+#'
+#' Converts "HR POST INF/EOI/EOT" patterns to numeric hours, adding the infusion
+#' duration.
+#'
+#' @param xxtpt Character vector of timepoint descriptions (trimmed, no leading/
+#'   trailing whitespace)
+#' @param result Numeric vector of results (partially filled, may contain NA)
+#' @param na_idx Logical vector indicating which positions in xxtpt are NA
+#' @param infusion_duration Duration of infusion in hours (positive numeric)
+#'
+#' @details
+#' Recognizes patterns like:
+#' * "24 HR POST INF" → infusion_duration + 24
+#' * "24 HR POST EOI" → infusion_duration + 24
+#'
+#' Adds infusion_duration because these patterns describe time AFTER the end of
+#' infusion.
+#'
+#' Only updates result for positions where result is currently NA and xxtpt is not NA.
+#'
+#' @return Updated numeric vector with HR POST patterns converted to hours
+#'
 #' @keywords internal
 #' @noRd
 convert_hr_post_patterns <- function(xxtpt, result, na_idx, infusion_duration) {
@@ -403,6 +577,26 @@ convert_hr_post_patterns <- function(xxtpt, result, na_idx, infusion_duration) {
 }
 
 #' Convert Start of Infusion Patterns
+#'
+#' Converts patterns relative to the start of infusion to numeric hours, with
+#' sign based on direction (prior = negative, post = positive).
+#'
+#' @param xxtpt Character vector of timepoint descriptions (trimmed, no leading/
+#'   trailing whitespace)
+#' @param result Numeric vector of results (partially filled, may contain NA)
+#' @param na_idx Logical vector indicating which positions in xxtpt are NA
+#'
+#' @details
+#' Recognizes patterns like:
+#' * "8H PRIOR START OF INFUSION" → -8
+#' * "8H POST START OF INFUSION" → 8
+#'
+#' Direction affects sign: "PRIOR" results in negative values, "POST" in positive.
+#'
+#' Only updates result for positions where result is currently NA and xxtpt is not NA.
+#'
+#' @return Updated numeric vector with start of infusion patterns converted to hours
+#'
 #' @keywords internal
 #' @noRd
 convert_start_inf_patterns <- function(xxtpt, result, na_idx) {
@@ -429,6 +623,24 @@ convert_start_inf_patterns <- function(xxtpt, result, na_idx) {
 }
 
 #' Convert MIN AFTER START INF Patterns
+#'
+#' Converts "minutes after start of infusion" patterns to numeric hours.
+#'
+#' @param xxtpt Character vector of timepoint descriptions (trimmed, no leading/
+#'   trailing whitespace)
+#' @param result Numeric vector of results (partially filled, may contain NA)
+#' @param na_idx Logical vector indicating which positions in xxtpt are NA
+#'
+#' @details
+#' Recognizes patterns like:
+#' * "60 MIN AFTER START INF" → 1
+#'
+#' Converts minutes to hours by dividing by 60.
+#'
+#' Only updates result for positions where result is currently NA and xxtpt is not NA.
+#'
+#' @return Updated numeric vector with MIN AFTER START patterns converted to hours
+#'
 #' @keywords internal
 #' @noRd
 convert_min_after_start <- function(xxtpt, result, na_idx) {
@@ -449,6 +661,26 @@ convert_min_after_start <- function(xxtpt, result, na_idx) {
 }
 
 #' Convert MIN PRE EOI Patterns
+#'
+#' Converts "minutes pre end of infusion" patterns to negative numeric hours
+#' (time before end of infusion).
+#'
+#' @param xxtpt Character vector of timepoint descriptions (trimmed, no leading/
+#'   trailing whitespace)
+#' @param result Numeric vector of results (partially filled, may contain NA)
+#' @param na_idx Logical vector indicating which positions in xxtpt are NA
+#'
+#' @details
+#' Recognizes patterns like:
+#' * "10MIN PRE EOI" → -0.1667
+#'
+#' Returns negative values to indicate time before end of infusion.
+#' Converts minutes to hours by dividing by 60.
+#'
+#' Only updates result for positions where result is currently NA and xxtpt is not NA.
+#'
+#' @return Updated numeric vector with MIN PRE EOI patterns converted to negative hours
+#'
 #' @keywords internal
 #' @noRd
 convert_min_pre_eoi <- function(xxtpt, result, na_idx) {
@@ -467,7 +699,27 @@ convert_min_pre_eoi <- function(xxtpt, result, na_idx) {
   result
 }
 
-#' Convert Simple Time Unit Patterns (Hours Only, Minutes Only)
+#' Convert Simple Time Unit Patterns
+#'
+#' Converts simple hours-only and minutes-only patterns to numeric hours.
+#'
+#' @param xxtpt Character vector of timepoint descriptions (trimmed, no leading/
+#'   trailing whitespace)
+#' @param result Numeric vector of results (partially filled, may contain NA)
+#' @param na_idx Logical vector indicating which positions in xxtpt are NA
+#'
+#' @details
+#' Recognizes and converts:
+#' * Hours only: "1H", "2 hours", "4hr Post-dose" → 1, 2, 4
+#' * Minutes only: "30M", "45 min", "30 MIN POST" → 0.5, 0.75, 0.5
+#'
+#' Processes hours first, then minutes. This function is called last to avoid
+#' matching patterns that should be handled by more specific functions.
+#'
+#' Only updates result for positions where result is currently NA and xxtpt is not NA.
+#'
+#' @return Updated numeric vector with simple unit patterns converted to hours
+#'
 #' @keywords internal
 #' @noRd
 convert_simple_units <- function(xxtpt, result, na_idx) {
