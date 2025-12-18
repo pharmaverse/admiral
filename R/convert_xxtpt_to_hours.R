@@ -11,12 +11,16 @@
 #'
 #' @permitted character vector
 #'
-#' @param treatment_duration Numeric value specifying the duration of treatment
+#' @param treatment_duration Numeric value(s) specifying the duration of treatment
 #'   in hours. Used to convert "EOI/EOT" (End of Infusion/Treatment) patterns
 #'   and patterns describing time after end of treatment. Must be non-negative.
+#'   Can be either:
+#'   * A single value (used for all timepoints), or
+#'   * A vector of the same length as `xxtpt` (one value per timepoint)
+#'
 #'   Default is 0 hours (for instantaneous treatments like oral medications).
 #'
-#' @permitted numeric scalar (non-negative)
+#' @permitted numeric scalar or vector (non-negative)
 #'
 #' @param range_method Method for converting time ranges to single values.
 #'   Options are "midpoint" (default), "start", or "end". For example,
@@ -68,6 +72,12 @@
 #' * Flexible whitespace and optional "Post-dose", "POST", "After last"
 #'   suffixes
 #'
+#' **Vectorized Treatment Duration:**
+#'
+#' When `treatment_duration` is a vector, each timepoint uses its corresponding
+#' treatment duration value. This is useful when different records have different
+#' treatment durations (e.g., different infusion lengths).
+#'
 #' @return A numeric vector of timepoints in hours. Returns `NA_real_` for:
 #' * Input `NA` values
 #' * Unrecognized timepoint formats
@@ -104,7 +114,7 @@
 #'   "After End of Treatment"
 #' ))
 #'
-#' # Infusion-related patterns with treatment_duration = 1 hour
+#' # Infusion-related patterns with treatment_duration = 1 hour (scalar)
 #' convert_xxtpt_to_hours(
 #'   c(
 #'     "EOI",
@@ -117,6 +127,12 @@
 #'   treatment_duration = 1
 #' )
 #'
+#' # Vectorized treatment_duration - different durations per timepoint
+#' convert_xxtpt_to_hours(
+#'   c("EOI", "1 HOUR POST EOI", "EOI", "1 HOUR POST EOI"),
+#'   treatment_duration = c(1, 1, 2, 2)
+#' )
+#'
 #' # Time ranges - default midpoint
 #' convert_xxtpt_to_hours(c(
 #'   "0-6h Post-dose",
@@ -127,23 +143,36 @@
 #' # Time ranges - specify method
 #' convert_xxtpt_to_hours("0-6h Post-dose", range_method = "end")
 #' convert_xxtpt_to_hours("0-6h Post-dose", range_method = "start")
-#'
-#' # IV infusion with 2 hour duration
-#' convert_xxtpt_to_hours(
-#'   c("EOI", "End of Infusion", "1 HOUR POST EOI", "10MIN PRE EOI"),
-#'   treatment_duration = 2
-#' )
 convert_xxtpt_to_hours <- function(xxtpt,
                                    treatment_duration = 0,
                                    range_method = "midpoint") {
   # Validate inputs
   assert_character_vector(xxtpt)
-  assert_numeric_vector(treatment_duration, length = 1)
+  assert_numeric_vector(treatment_duration)
   assert_character_vector(range_method, values = c("start", "end", "midpoint"))
 
-  if (treatment_duration < 0) {
+  # Validate treatment_duration length
+  if (length(treatment_duration) != 1 && length(treatment_duration) != length(xxtpt)) {
     cli_abort(
-      "{.arg treatment_duration} must be non-negative, but is {treatment_duration}."
+      c(
+        "{.arg treatment_duration} must be either:",
+        "i" = "A single value (used for all timepoints), or",
+        "i" = "A vector of length {length(xxtpt)} (one value per timepoint)",
+        "x" = "You've supplied a vector of length {length(treatment_duration)}
+        for {length(xxtpt)} timepoint{?s}."
+      )
+    )
+  }
+
+  # Recycle if scalar
+  if (length(treatment_duration) == 1 && length(xxtpt) > 1) {
+    treatment_duration <- rep(treatment_duration, length(xxtpt))
+  }
+
+  # Validate all values are non-negative
+  if (any(treatment_duration < 0, na.rm = TRUE)) {
+    cli_abort(
+      "{.arg treatment_duration} must be non-negative for all values."
     )
   }
 
@@ -176,7 +205,8 @@ convert_xxtpt_to_hours <- function(xxtpt,
 #'   trailing whitespace)
 #' @param result Numeric vector of results (partially filled, may contain NA)
 #' @param na_idx Logical vector indicating which positions in xxtpt are NA
-#' @param treatment_duration Duration of treatment in hours (non-negative numeric)
+#' @param treatment_duration Duration of treatment in hours (non-negative numeric
+#'   vector, same length as xxtpt)
 #'
 #' @details
 #' Recognizes and converts the following patterns:
@@ -218,7 +248,7 @@ convert_special_cases <- function(xxtpt, result, na_idx, treatment_duration) {
     ignore_case = TRUE
   )
   eot_idx <- str_detect(xxtpt, eot_pattern) & is.na(result) & !na_idx
-  result[eot_idx] <- treatment_duration
+  result[eot_idx] <- treatment_duration[eot_idx]
 
   result
 }
@@ -391,7 +421,8 @@ calculate_range_value <- function(start_val, end_val, range_method) {
 #'   trailing whitespace)
 #' @param result Numeric vector of results (partially filled, may contain NA)
 #' @param na_idx Logical vector indicating which positions in xxtpt are NA
-#' @param treatment_duration Duration of treatment in hours (non-negative numeric)
+#' @param treatment_duration Duration of treatment in hours (non-negative numeric
+#'   vector, same length as xxtpt)
 #'
 #' @details
 #' Calls helper functions in sequence to convert:
@@ -399,6 +430,7 @@ calculate_range_value <- function(start_val, end_val, range_method) {
 #' * Post EOI/EOT patterns
 #' * After end of infusion/treatment patterns
 #' * HR POST INF patterns
+#' * POST INFUSION/INF patterns
 #' * Start of infusion/treatment patterns
 #' * MIN AFTER START patterns
 #' * MIN PRE/BEFORE EOI/EOT patterns
@@ -476,7 +508,8 @@ convert_predose_patterns <- function(xxtpt, result, na_idx) {
 #'   trailing whitespace)
 #' @param result Numeric vector of results (partially filled, may contain NA)
 #' @param na_idx Logical vector indicating which positions in xxtpt are NA
-#' @param treatment_duration Duration of treatment in hours (non-negative numeric)
+#' @param treatment_duration Duration of treatment in hours (non-negative numeric
+#'   vector, same length as xxtpt)
 #'
 #' @details
 #' Recognizes patterns like:
@@ -512,8 +545,8 @@ convert_post_eot_patterns <- function(xxtpt, result, na_idx, treatment_duration)
     is_minutes <- substr(unit, 1, 1) == "m"
     result[post_eot_idx] <- if_else(
       is_minutes,
-      treatment_duration + time_value / 60,
-      treatment_duration + time_value
+      treatment_duration[post_eot_idx] + time_value / 60,
+      treatment_duration[post_eot_idx] + time_value
     )
   }
   result
@@ -528,7 +561,8 @@ convert_post_eot_patterns <- function(xxtpt, result, na_idx, treatment_duration)
 #'   trailing whitespace)
 #' @param result Numeric vector of results (partially filled, may contain NA)
 #' @param na_idx Logical vector indicating which positions in xxtpt are NA
-#' @param treatment_duration Duration of treatment in hours (non-negative numeric)
+#' @param treatment_duration Duration of treatment in hours (non-negative numeric
+#'   vector, same length as xxtpt)
 #'
 #' @details
 #' Recognizes patterns like:
@@ -562,8 +596,8 @@ convert_after_end_patterns <- function(xxtpt, result, na_idx, treatment_duration
     is_minutes <- substr(unit, 1, 1) == "m"
     result[after_end_idx] <- if_else(
       is_minutes,
-      treatment_duration + time_value / 60,
-      treatment_duration + time_value
+      treatment_duration[after_end_idx] + time_value / 60,
+      treatment_duration[after_end_idx] + time_value
     )
   }
   result
@@ -578,7 +612,8 @@ convert_after_end_patterns <- function(xxtpt, result, na_idx, treatment_duration
 #'   trailing whitespace)
 #' @param result Numeric vector of results (partially filled, may contain NA)
 #' @param na_idx Logical vector indicating which positions in xxtpt are NA
-#' @param treatment_duration Duration of treatment in hours (non-negative numeric)
+#' @param treatment_duration Duration of treatment in hours (non-negative numeric
+#'   vector, same length as xxtpt)
 #'
 #' @details
 #' Recognizes patterns like:
@@ -604,7 +639,7 @@ convert_hr_post_patterns <- function(xxtpt, result, na_idx, treatment_duration) 
   hr_post_matches <- str_match(xxtpt, hr_post_pattern)
   hr_post_idx <- !is.na(hr_post_matches[, 1]) & is.na(result) & !na_idx
   if (any(hr_post_idx)) {
-    result[hr_post_idx] <- treatment_duration +
+    result[hr_post_idx] <- treatment_duration[hr_post_idx] +
       as.numeric(hr_post_matches[hr_post_idx, "value"])
   }
   result
@@ -619,7 +654,8 @@ convert_hr_post_patterns <- function(xxtpt, result, na_idx, treatment_duration) 
 #'   trailing whitespace)
 #' @param result Numeric vector of results (partially filled, may contain NA)
 #' @param na_idx Logical vector indicating which positions in xxtpt are NA
-#' @param treatment_duration Duration of treatment in hours (non-negative numeric)
+#' @param treatment_duration Duration of treatment in hours (non-negative numeric
+#'   vector, same length as xxtpt)
 #'
 #' @details
 #' Recognizes patterns like:
@@ -653,8 +689,8 @@ convert_post_inf_patterns <- function(xxtpt, result, na_idx, treatment_duration)
     is_minutes <- substr(unit, 1, 1) == "m"
     result[post_inf_idx] <- if_else(
       is_minutes,
-      treatment_duration + time_value / 60,
-      treatment_duration + time_value
+      treatment_duration[post_inf_idx] + time_value / 60,
+      treatment_duration[post_inf_idx] + time_value
     )
   }
   result
@@ -758,7 +794,8 @@ convert_min_after_start <- function(xxtpt, result, na_idx) {
 #'   trailing whitespace)
 #' @param result Numeric vector of results (partially filled, may contain NA)
 #' @param na_idx Logical vector indicating which positions in xxtpt are NA
-#' @param treatment_duration Duration of treatment in hours (non-negative numeric)
+#' @param treatment_duration Duration of treatment in hours (non-negative numeric
+#'   vector, same length as xxtpt)
 #'
 #' @details
 #' Recognizes patterns like:
@@ -788,7 +825,7 @@ convert_min_pre_eot <- function(xxtpt, result, na_idx, treatment_duration) {
   min_pre_eot_matches <- str_match(xxtpt, min_pre_eot_pattern)
   min_pre_eot_idx <- !is.na(min_pre_eot_matches[, 1]) & is.na(result) & !na_idx
   if (any(min_pre_eot_idx)) {
-    result[min_pre_eot_idx] <- treatment_duration - as.numeric(
+    result[min_pre_eot_idx] <- treatment_duration[min_pre_eot_idx] - as.numeric(
       min_pre_eot_matches[min_pre_eot_idx, "value"]
     ) / 60
   }

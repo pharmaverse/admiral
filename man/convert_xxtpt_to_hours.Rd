@@ -20,13 +20,19 @@ Can contain \code{NA} values.
 \item{Default value}{none}
 }}
 
-\item{treatment_duration}{Numeric value specifying the duration of treatment
+\item{treatment_duration}{Numeric value(s) specifying the duration of treatment
 in hours. Used to convert "EOI/EOT" (End of Infusion/Treatment) patterns
 and patterns describing time after end of treatment. Must be non-negative.
+Can be either:
+\itemize{
+\item A single value (used for all timepoints), or
+\item A vector of the same length as \code{xxtpt} (one value per timepoint)
+}
+
 Default is 0 hours (for instantaneous treatments like oral medications).
 
 \describe{
-\item{Permitted values}{numeric scalar (non-negative)}
+\item{Permitted values}{numeric scalar or vector (non-negative)}
 \item{Default value}{\code{0}}
 }}
 
@@ -106,6 +112,12 @@ Time ranges are converted based on the \code{range_method} parameter:
 \item Flexible whitespace and optional "Post-dose", "POST", "After last"
 suffixes
 }
+
+\strong{Vectorized Treatment Duration:}
+
+When \code{treatment_duration} is a vector, each timepoint uses its corresponding
+treatment duration value. This is useful when different records have different
+treatment durations (e.g., different infusion lengths).
 }
 \examples{
 # Basic dose-centric patterns
@@ -131,7 +143,7 @@ convert_xxtpt_to_hours(c(
   "After End of Treatment"
 ))
 
-# Infusion-related patterns with treatment_duration = 1 hour
+# Infusion-related patterns with treatment_duration = 1 hour (scalar)
 convert_xxtpt_to_hours(
   c(
     "EOI",
@@ -144,6 +156,12 @@ convert_xxtpt_to_hours(
   treatment_duration = 1
 )
 
+# Vectorized treatment_duration - different durations per timepoint
+convert_xxtpt_to_hours(
+  c("EOI", "1 HOUR POST EOI", "EOI", "1 HOUR POST EOI"),
+  treatment_duration = c(1, 1, 2, 2)
+)
+
 # Time ranges - default midpoint
 convert_xxtpt_to_hours(c(
   "0-6h Post-dose",
@@ -154,12 +172,6 @@ convert_xxtpt_to_hours(c(
 # Time ranges - specify method
 convert_xxtpt_to_hours("0-6h Post-dose", range_method = "end")
 convert_xxtpt_to_hours("0-6h Post-dose", range_method = "start")
-
-# IV infusion with 2 hour duration
-convert_xxtpt_to_hours(
-  c("EOI", "End of Infusion", "1 HOUR POST EOI", "10MIN PRE EOI"),
-  treatment_duration = 2
-)
 }
 \seealso{
 Date/Time Computation Functions that returns a vector:
