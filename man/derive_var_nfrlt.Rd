@@ -61,6 +61,16 @@ in hours. Passed to \code{convert_xxtpt_to_hours()}. Default is 1 hour.
 \item{Permitted values}{Numeric scalar (positive)}
 \item{Default value}{\code{1}}
 }}
+
+\item{range_method}{Method for converting time ranges to single values.
+Options are "midpoint" (default), "start", or "end". Passed to
+\code{convert_xxtpt_to_hours()}. For example, "0-6h" with midpoint returns 3,
+with start returns 0, with end returns 6.
+
+\describe{
+\item{Permitted values}{Character scalar ("midpoint", "start", or "end")}
+\item{Default value}{\code{"midpoint"}}
+}}
 }
 \value{
 The input dataset with the new nominal relative time variable added.
@@ -158,12 +168,27 @@ derive_var_nfrlt(
   infusion_duration = 2
 )
 
+# Custom range method (use end of range instead of midpoint)
+adpc_range <- tribble(
+  ~USUBJID, ~VISITDY, ~PCTPT,
+  "001",    1,        "Pre-dose",
+  "001",    1,        "0-6h Post-dose"
+)
+
+derive_var_nfrlt(
+  adpc_range,
+  new_var = NFRLT,
+  tpt_var = PCTPT,
+  visit_day = VISITDY,
+  range_method = "end"
+)
+
 # Custom first dose day (e.g., dose on Day 3)
 adpc_custom <- tribble(
   ~USUBJID, ~VISITDY, ~PCTPT,
   "001",    3,        "Pre-dose",
   "001",    3,        "2H Post-dose",
-  "001",    3,        "24H Post-dose"
+  "001",    4,        "24H Post-dose"
 )
 
 derive_var_nfrlt(

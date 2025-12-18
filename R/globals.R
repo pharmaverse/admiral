@@ -38,6 +38,7 @@ globalVariables(c(
   "IDVAR",
   "IDVARVAL",
   "LSTALVDT",
+  "NFRLT",
   "ONTRTFL",
   "PARAMCD",
   "RANDDT",
