@@ -113,6 +113,7 @@ BDS-Findings Functions that returns variable appended to dataset:
 \code{\link{derive_var_atoxgr_dir}()},
 \code{\link{derive_var_base}()},
 \code{\link{derive_var_chg}()},
+\code{\link{derive_var_nfrlt}()},
 \code{\link{derive_var_ontrtfl}()},
 \code{\link{derive_var_pchg}()},
 \code{\link{derive_var_shift}()},
