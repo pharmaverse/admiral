@@ -2,6 +2,7 @@
 
 ## New Features
 
+- Added function `convert_xxtpt_to_hours()` to parse timepoint values (e.g. `PCTPT`, `EGTPT`, `VSTPT`) into hours (#2916).
 - Lab grading metadata for NCI-CTCAE version 6.0 is now available for both SI and US (Conventional) units 
 via `atoxgr_criteria_ctcv6` and `atoxgr_criteria_ctcv6_uscv`. This includes grading criteria for Creatinine 
 Clearance decreased. (#1858)
