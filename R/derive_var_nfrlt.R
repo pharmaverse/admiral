@@ -29,10 +29,11 @@
 #'
 #' @permitted Numeric scalar (positive integer)
 #'
-#' @param infusion_duration Numeric value specifying the duration of infusion
-#'   in hours. Passed to `convert_xxtpt_to_hours()`. Default is 1 hour.
+#' @param treatment_duration Numeric value specifying the duration of treatment
+#'   in hours. Passed to `convert_xxtpt_to_hours()`. Default is 0 hours (for
+#'   instantaneous treatments like oral medications).
 #'
-#' @permitted Numeric scalar (positive)
+#' @permitted Numeric scalar (non-negative)
 #'
 #' @param range_method Method for converting time ranges to single values.
 #'   Options are "midpoint" (default), "start", or "end". Passed to
@@ -60,6 +61,10 @@
 #'   Day 15) with samples around each dose
 #' * **Steady state study**: Multiple daily doses with sampling on specific
 #'   days
+#' * **Oral medications**: Use default `treatment_duration = 0` for
+#'   instantaneous absorption
+#' * **IV infusions**: Specify `treatment_duration` as infusion duration in
+#'   hours
 #'
 #' **Important Notes:**
 #'
@@ -86,7 +91,7 @@
 #' library(dplyr)
 #' library(tibble)
 #'
-#' # Single dose study - Day 1 only
+#' # Single dose study - Day 1 only (oral medication)
 #' adpc <- tribble(
 #'   ~USUBJID, ~VISITDY, ~PCTPT,
 #'   "001",    1,        "Pre-dose",
@@ -121,12 +126,13 @@
 #'   visit_day = VISITDY
 #' )
 #'
-#' # Custom infusion duration (2 hours)
+#' # IV infusion with 2 hour treatment duration
 #' adpc_inf <- tribble(
 #'   ~USUBJID, ~VISITDY, ~PCTPT,
 #'   "001",    1,        "Pre-dose",
 #'   "001",    1,        "EOI",
-#'   "001",    1,        "1H Post EOI"
+#'   "001",    1,        "1H Post EOI",
+#'   "001",    1,        "10MIN PRE EOI"
 #' )
 #'
 #' derive_var_nfrlt(
@@ -134,7 +140,7 @@
 #'   new_var = NFRLT,
 #'   tpt_var = PCTPT,
 #'   visit_day = VISITDY,
-#'   infusion_duration = 2
+#'   treatment_duration = 2
 #' )
 #'
 #' # Custom range method (use end of range instead of midpoint)
@@ -150,6 +156,21 @@
 #'   tpt_var = PCTPT,
 #'   visit_day = VISITDY,
 #'   range_method = "end"
+#' )
+#'
+#' # Using "Before" and "After" terminology
+#' adpc_alt <- tribble(
+#'   ~USUBJID, ~VISITDY, ~PCTPT,
+#'   "001",    1,        "Before",
+#'   "001",    1,        "1H After",
+#'   "001",    1,        "2H After"
+#' )
+#'
+#' derive_var_nfrlt(
+#'   adpc_alt,
+#'   new_var = NFRLT,
+#'   tpt_var = PCTPT,
+#'   visit_day = VISITDY
 #' )
 #'
 #' # Custom first dose day (e.g., dose on Day 3)
@@ -174,7 +195,7 @@ derive_var_nfrlt <- function(dataset,
                              tpt_var,
                              visit_day,
                              first_dose_day = 1,
-                             infusion_duration = 1,
+                             treatment_duration = 0,
                              range_method = "midpoint") {
   new_var <- assert_symbol(enexpr(new_var))
   tpt_var <- assert_symbol(enexpr(tpt_var))
@@ -182,7 +203,7 @@ derive_var_nfrlt <- function(dataset,
 
   assert_data_frame(dataset, required_vars = exprs(!!tpt_var, !!visit_day))
   assert_numeric_vector(first_dose_day, length = 1)
-  assert_numeric_vector(infusion_duration, length = 1)
+  assert_numeric_vector(treatment_duration, length = 1)
   assert_character_vector(range_method, values = c("start", "end", "midpoint"))
 
   # Validate first_dose_day is positive
@@ -192,17 +213,17 @@ derive_var_nfrlt <- function(dataset,
     )
   }
 
-  # Validate infusion_duration is positive
-  if (infusion_duration <= 0) {
+  # Validate treatment_duration is non-negative
+  if (treatment_duration < 0) {
     cli_abort(
-      "{.arg infusion_duration} must be positive, but is {infusion_duration}."
+      "{.arg treatment_duration} must be non-negative, but is {treatment_duration}."
     )
   }
 
   # Convert timepoint to hours
   tpt_hours <- convert_xxtpt_to_hours(
     dataset[[as_name(tpt_var)]],
-    infusion_duration = infusion_duration,
+    treatment_duration = treatment_duration,
     range_method = range_method
   )
 

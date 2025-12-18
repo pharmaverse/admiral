@@ -10,7 +10,7 @@ derive_var_nfrlt(
   tpt_var,
   visit_day,
   first_dose_day = 1,
-  infusion_duration = 1,
+  treatment_duration = 0,
   range_method = "midpoint"
 )
 }
@@ -54,12 +54,13 @@ Default is 1. For multiple-dose studies, this is typically Day 1.
 \item{Default value}{\code{1}}
 }}
 
-\item{infusion_duration}{Numeric value specifying the duration of infusion
-in hours. Passed to \code{convert_xxtpt_to_hours()}. Default is 1 hour.
+\item{treatment_duration}{Numeric value specifying the duration of treatment
+in hours. Passed to \code{convert_xxtpt_to_hours()}. Default is 0 hours (for
+instantaneous treatments like oral medications).
 
 \describe{
-\item{Permitted values}{Numeric scalar (positive)}
-\item{Default value}{\code{1}}
+\item{Permitted values}{Numeric scalar (non-negative)}
+\item{Default value}{\code{0}}
 }}
 
 \item{range_method}{Method for converting time ranges to single values.
@@ -102,6 +103,10 @@ Where:
 Day 15) with samples around each dose
 \item \strong{Steady state study}: Multiple daily doses with sampling on specific
 days
+\item \strong{Oral medications}: Use default \code{treatment_duration = 0} for
+instantaneous absorption
+\item \strong{IV infusions}: Specify \code{treatment_duration} as infusion duration in
+hours
 }
 
 \strong{Important Notes:}
@@ -121,7 +126,7 @@ NFRLT
 library(dplyr)
 library(tibble)
 
-# Single dose study - Day 1 only
+# Single dose study - Day 1 only (oral medication)
 adpc <- tribble(
   ~USUBJID, ~VISITDY, ~PCTPT,
   "001",    1,        "Pre-dose",
@@ -156,12 +161,13 @@ derive_var_nfrlt(
   visit_day = VISITDY
 )
 
-# Custom infusion duration (2 hours)
+# IV infusion with 2 hour treatment duration
 adpc_inf <- tribble(
   ~USUBJID, ~VISITDY, ~PCTPT,
   "001",    1,        "Pre-dose",
   "001",    1,        "EOI",
-  "001",    1,        "1H Post EOI"
+  "001",    1,        "1H Post EOI",
+  "001",    1,        "10MIN PRE EOI"
 )
 
 derive_var_nfrlt(
@@ -169,7 +175,7 @@ derive_var_nfrlt(
   new_var = NFRLT,
   tpt_var = PCTPT,
   visit_day = VISITDY,
-  infusion_duration = 2
+  treatment_duration = 2
 )
 
 # Custom range method (use end of range instead of midpoint)
@@ -185,6 +191,21 @@ derive_var_nfrlt(
   tpt_var = PCTPT,
   visit_day = VISITDY,
   range_method = "end"
+)
+
+# Using "Before" and "After" terminology
+adpc_alt <- tribble(
+  ~USUBJID, ~VISITDY, ~PCTPT,
+  "001",    1,        "Before",
+  "001",    1,        "1H After",
+  "001",    1,        "2H After"
+)
+
+derive_var_nfrlt(
+  adpc_alt,
+  new_var = NFRLT,
+  tpt_var = PCTPT,
+  visit_day = VISITDY
 )
 
 # Custom first dose day (e.g., dose on Day 3)
