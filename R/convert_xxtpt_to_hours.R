@@ -412,7 +412,8 @@ convert_treatment_patterns <- function(xxtpt, result, na_idx, treatment_duration
   result <- convert_post_eot_patterns(xxtpt, result, na_idx, treatment_duration)
   result <- convert_after_end_patterns(xxtpt, result, na_idx, treatment_duration)
   result <- convert_hr_post_patterns(xxtpt, result, na_idx, treatment_duration)
-  result <- convert_start_treatment_patterns(xxtpt, result, na_idx)
+  result <- convert_post_inf_patterns(xxtpt, result, na_idx, treatment_duration)
+  result <- convert_start_patterns(xxtpt, result, na_idx)
   result <- convert_min_after_start(xxtpt, result, na_idx)
   result <- convert_min_pre_eot(xxtpt, result, na_idx, treatment_duration)
   result
@@ -609,6 +610,56 @@ convert_hr_post_patterns <- function(xxtpt, result, na_idx, treatment_duration) 
   result
 }
 
+#' Convert POST INFUSION/INF Patterns
+#'
+#' Converts "post infusion/inf" patterns (without EOI/EOT) to numeric hours,
+#' adding the treatment duration.
+#'
+#' @param xxtpt Character vector of timepoint descriptions (trimmed, no leading/
+#'   trailing whitespace)
+#' @param result Numeric vector of results (partially filled, may contain NA)
+#' @param na_idx Logical vector indicating which positions in xxtpt are NA
+#' @param treatment_duration Duration of treatment in hours (non-negative numeric)
+#'
+#' @details
+#' Recognizes patterns like:
+#' * "30 MIN POST INFUSION" → treatment_duration + 0.5
+#' * "1 HOUR POST INF" → treatment_duration + 1
+#'
+#' Adds treatment_duration because these patterns describe time AFTER the end of
+#' infusion/treatment.
+#'
+#' Only updates result for positions where result is currently NA and xxtpt is not NA.
+#'
+#' @return Updated numeric vector with post infusion patterns converted to hours
+#'
+#' @keywords internal
+#' @noRd
+convert_post_inf_patterns <- function(xxtpt, result, na_idx, treatment_duration) {
+  post_inf_pattern <- regex(
+    paste0(
+      "^(?<value>\\d+(?:\\.\\d+)?)\\s*",
+      "(?<unit>m(?:in|inute)?|h(?:r|our)?)s?\\s+",
+      "post\\s+inf(?:usion)?$"
+    ),
+    ignore_case = TRUE,
+    comments = TRUE
+  )
+  post_inf_matches <- str_match(xxtpt, post_inf_pattern)
+  post_inf_idx <- !is.na(post_inf_matches[, 1]) & is.na(result) & !na_idx
+  if (any(post_inf_idx)) {
+    time_value <- as.numeric(post_inf_matches[post_inf_idx, "value"])
+    unit <- tolower(post_inf_matches[post_inf_idx, "unit"])
+    is_minutes <- substr(unit, 1, 1) == "m"
+    result[post_inf_idx] <- if_else(
+      is_minutes,
+      treatment_duration + time_value / 60,
+      treatment_duration + time_value
+    )
+  }
+  result
+}
+
 #' Convert Start of Infusion/Treatment Patterns
 #'
 #' Converts patterns relative to the start of infusion/treatment to numeric hours,
@@ -635,7 +686,7 @@ convert_hr_post_patterns <- function(xxtpt, result, na_idx, treatment_duration) 
 #'
 #' @keywords internal
 #' @noRd
-convert_start_treatment_patterns <- function(xxtpt, result, na_idx) {
+convert_start_patterns <- function(xxtpt, result, na_idx) {
   h_start_treatment_pattern <- regex(
     paste0(
       "^(?<value>\\d+(?:\\.\\d+)?)h\\s+",
