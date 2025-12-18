@@ -836,3 +836,38 @@ test_that("convert_xxtpt_to_hours Test 38: MIN PRE EOI correctly uses treatment_
     0.5 - 10 / 60
   )
 })
+
+## Test 39: POST INFUSION/INF patterns work ----
+test_that("convert_xxtpt_to_hours Test 39: POST INFUSION/INF patterns work", {
+  # With default treatment_duration = 0
+  expect_equal(
+    convert_xxtpt_to_hours(c(
+      "30 MIN POST INFUSION",
+      "30 MIN POST INF",
+      "1 HOUR POST INFUSION",
+      "2 HR POST INF"
+    )),
+    c(0.5, 0.5, 1, 2)
+  )
+
+  # With treatment_duration = 1
+  expect_equal(
+    convert_xxtpt_to_hours(
+      c(
+        "30 MIN POST INFUSION",
+        "30 MIN POST INF"
+      ),
+      treatment_duration = 1
+    ),
+    c(1.5, 1.5)
+  )
+
+  # With treatment_duration = 2
+  expect_equal(
+    convert_xxtpt_to_hours(
+      "1 HOUR POST INFUSION",
+      treatment_duration = 2
+    ),
+    3
+  )
+})
