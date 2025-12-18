@@ -52,8 +52,9 @@ test_that("convert_xxtpt_to_hours Test 1b: treatment_duration parameter works", 
   )
 })
 
-## Test 1c: treatment_duration validation ----
+## Test 1c: treatment_duration must be non-negative ----
 test_that("convert_xxtpt_to_hours Test 1c: treatment_duration must be non-negative", {
+  # Negative value should error
   expect_error(
     convert_xxtpt_to_hours("EOI", treatment_duration = -1),
     regexp = "must be non-negative"
@@ -64,14 +65,16 @@ test_that("convert_xxtpt_to_hours Test 1c: treatment_duration must be non-negati
     convert_xxtpt_to_hours("EOI", treatment_duration = 0)
   )
 
+  # Must be numeric
   expect_error(
     convert_xxtpt_to_hours("EOI", treatment_duration = "1"),
     class = "assert_numeric_vector"
   )
 
+  # Negative in vector should also error
   expect_error(
-    convert_xxtpt_to_hours("EOI", treatment_duration = c(1, 2)),
-    class = "assert_numeric_vector"
+    convert_xxtpt_to_hours(c("EOI", "Pre-dose"), treatment_duration = c(1, -1)),
+    regexp = "must be non-negative"
   )
 })
 
@@ -869,5 +872,50 @@ test_that("convert_xxtpt_to_hours Test 39: POST INFUSION/INF patterns work", {
       treatment_duration = 2
     ),
     3
+  )
+})
+
+## Test 40: vectorized treatment_duration works ----
+test_that("convert_xxtpt_to_hours Test 40: vectorized treatment_duration works", {
+  # Different durations for each timepoint
+  expect_equal(
+    convert_xxtpt_to_hours(
+      c("EOI", "1 HOUR POST EOI", "EOI", "1 HOUR POST EOI"),
+      treatment_duration = c(1, 1, 2, 2)
+    ),
+    c(1, 2, 2, 3)
+  )
+
+  # With PRE EOI patterns
+  expect_equal(
+    convert_xxtpt_to_hours(
+      c("10MIN PRE EOI", "10MIN PRE EOI"),
+      treatment_duration = c(1, 2)
+    ),
+    c(1 - 10 / 60, 2 - 10 / 60)
+  )
+})
+
+## Test 41: treatment_duration vector length validation ----
+test_that("convert_xxtpt_to_hours Test 41: treatment_duration vector length validated", {
+  expect_error(
+    convert_xxtpt_to_hours(
+      c("EOI", "1 HOUR POST EOI", "EOI"),
+      treatment_duration = c(1, 2) # Wrong length
+    ),
+    regexp = "must be either"
+  )
+})
+
+## Test 42: treatment_duration with NA values ----
+test_that("convert_xxtpt_to_hours Test 42: handles NA in treatment_duration", {
+  result <- convert_xxtpt_to_hours(
+    c("EOI", "1 HOUR POST EOI", "Pre-dose"),
+    treatment_duration = c(1, NA, 1)
+  )
+
+  expect_equal(
+    result,
+    c(1, NA_real_, 0)
   )
 })
