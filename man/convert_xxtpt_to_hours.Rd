@@ -4,7 +4,11 @@
 \alias{convert_xxtpt_to_hours}
 \title{Convert \code{XXTPT} Strings to Hours}
 \usage{
-convert_xxtpt_to_hours(xxtpt, infusion_duration = 1, range_method = "midpoint")
+convert_xxtpt_to_hours(
+  xxtpt,
+  treatment_duration = 0,
+  range_method = "midpoint"
+)
 }
 \arguments{
 \item{xxtpt}{A character vector of timepoint descriptions from SDTM
@@ -16,14 +20,14 @@ Can contain \code{NA} values.
 \item{Default value}{none}
 }}
 
-\item{infusion_duration}{Numeric value specifying the duration of infusion
-in hours. Used to convert "EOI" (End of Infusion) patterns and patterns
-describing time after end of infusion. Must be a positive number.
-Default is 1 hour.
+\item{treatment_duration}{Numeric value specifying the duration of treatment
+in hours. Used to convert "EOI/EOT" (End of Infusion/Treatment) patterns
+and patterns describing time after end of treatment. Must be non-negative.
+Default is 0 hours (for instantaneous treatments like oral medications).
 
 \describe{
-\item{Permitted values}{numeric scalar (positive)}
-\item{Default value}{\code{1}}
+\item{Permitted values}{numeric scalar (non-negative)}
+\item{Default value}{\code{0}}
 }}
 
 \item{range_method}{Method for converting time ranges to single values.
@@ -49,7 +53,7 @@ Returns \code{numeric(0)} for empty input.
 Converts CDISC timepoint strings (e.g., \code{PCTPT}, \code{VSTPT}, \code{EGTPT},
 \code{ISTPT}, \code{LBTPT}) into numeric hours for analysis. The function handles
 common dose-centric formats including pre-dose, post-dose (hours/minutes),
-days, time ranges, and infusion-related time markers.
+days, time ranges, and treatment-related time markers.
 }
 \details{
 The function recognizes the following patterns (all case-insensitive):
@@ -57,10 +61,11 @@ The function recognizes the following patterns (all case-insensitive):
 \strong{Special Cases:}
 \itemize{
 \item \code{"Screening"} → -1
-\item \code{"Pre-dose"}, \code{"Predose"}, \code{"Pre-infusion"}, \code{"Pre-inf"}, \code{"Infusion"},
-\code{"0H"} → 0
-\item \code{"EOI"}, \code{"End of Infusion"}, \code{"After End of Infusion"},
-\code{"After End of Treatment"} → \code{infusion_duration} (default: 1)
+\item \code{"Pre-dose"}, \code{"Predose"}, \code{"Pre-treatment"}, \code{"Pre-infusion"},
+\code{"Pre-inf"}, \code{"Before"}, \code{"Infusion"}, \code{"0H"} → 0
+\item \code{"EOI"}, \code{"EOT"}, \code{"End of Infusion"}, \code{"End of Treatment"},
+\code{"After End of Infusion"}, \code{"After End of Treatment"} → \code{treatment_duration}
+(default: 0)
 \item \code{"Morning"}, \code{"Evening"} → \code{NA_real_}
 \item Unrecognized values → \code{NA_real_}
 }
@@ -82,11 +87,15 @@ Time ranges are converted based on the \code{range_method} parameter:
 \item \strong{Hours}: \code{"2 hours"} → 2, \code{"1 HOUR POST"} → 1
 \item \strong{Minutes}: \code{"30M"} → 0.5, \code{"30 MIN POST"} → 0.5
 \item \strong{Predose}: \code{"5 MIN PREDOSE"} → -0.0833
-\item \strong{Post EOI/EOT}: \code{"1 HOUR POST EOI"} → infusion_duration + 1,
-\code{"24 HR POST INF"} → infusion_duration + 24
-\item \strong{After end}: \code{"30MIN AFTER END OF INFUSION"} → infusion_duration + 0.5
-\item \strong{Start of infusion}: \code{"8H PRIOR START OF INFUSION"} → -8
-\item \strong{Pre EOI}: \code{"10MIN PRE EOI"} → -0.1667
+\item \strong{Before treatment}: \code{"5 MIN BEFORE"} → -0.0833
+\item \strong{Post EOI/EOT}: \code{"1 HOUR POST EOI"} → treatment_duration + 1,
+\code{"24 HR POST INF"} → treatment_duration + 24,
+\code{"1 HOUR AFTER EOT"} → treatment_duration + 1
+\item \strong{After end}: \code{"30MIN AFTER END OF INFUSION"} → treatment_duration + 0.5
+\item \strong{Start of infusion/treatment}: \code{"8H PRIOR START OF INFUSION"} → -8,
+\code{"8H BEFORE START OF TREATMENT"} → -8
+\item \strong{Pre EOI/EOT}: \code{"10MIN PRE EOI"} → treatment_duration - 1/6,
+\code{"10MIN BEFORE EOT"} → treatment_duration - 1/6
 }
 
 \strong{Supported Unit Formats:}
@@ -103,24 +112,37 @@ suffixes
 convert_xxtpt_to_hours(c(
   "Screening",
   "Pre-dose",
-  "Pre-inf",
+  "Pre-treatment",
+  "Before",
   "30M",
   "1H",
   "2H POSTDOSE",
   "Day 1"
 ))
 
-# Predose patterns (negative times)
-convert_xxtpt_to_hours(c("5 MIN PREDOSE", "1 HOUR PREDOSE"))
+# Predose/before patterns (negative times)
+convert_xxtpt_to_hours(c("5 MIN PREDOSE", "1 HOUR BEFORE"))
 
-# Infusion-related patterns
+# Treatment-related patterns with default treatment_duration = 0 (oral)
 convert_xxtpt_to_hours(c(
-  "1 HOUR POST EOI",
-  "24 HR POST INF",
-  "30MIN AFTER END OF INFUSION",
-  "8H PRIOR START OF INFUSION",
-  "10MIN PRE EOI"
+  "EOT",
+  "1 HOUR POST EOT",
+  "1 HOUR AFTER EOT",
+  "After End of Treatment"
 ))
+
+# Infusion-related patterns with treatment_duration = 1 hour
+convert_xxtpt_to_hours(
+  c(
+    "EOI",
+    "1 HOUR POST EOI",
+    "24 HR POST INF",
+    "30MIN AFTER END OF INFUSION",
+    "8H PRIOR START OF INFUSION",
+    "10MIN PRE EOI"
+  ),
+  treatment_duration = 1
+)
 
 # Time ranges - default midpoint
 convert_xxtpt_to_hours(c(
@@ -133,10 +155,10 @@ convert_xxtpt_to_hours(c(
 convert_xxtpt_to_hours("0-6h Post-dose", range_method = "end")
 convert_xxtpt_to_hours("0-6h Post-dose", range_method = "start")
 
-# Custom infusion duration (2 hours)
+# IV infusion with 2 hour duration
 convert_xxtpt_to_hours(
-  c("EOI", "End of Infusion", "1 HOUR POST EOI"),
-  infusion_duration = 2
+  c("EOI", "End of Infusion", "1 HOUR POST EOI", "10MIN PRE EOI"),
+  treatment_duration = 2
 )
 }
 \seealso{
