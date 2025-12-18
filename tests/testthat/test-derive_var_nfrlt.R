@@ -43,12 +43,12 @@ test_that("derive_var_nfrlt Test 2: multiple dose study", {
   )
 
   expected_nfrlt <- c(
-    0,         # Day 1, Pre-dose
-    2,         # Day 1, 2H Post-dose
-    168,       # Day 8, Pre-dose (7 * 24 = 168)
-    170,       # Day 8, 2H Post-dose
-    336,       # Day 15, Pre-dose (14 * 24 = 336)
-    338        # Day 15, 2H Post-dose
+    0, # Day 1, Pre-dose
+    2, # Day 1, 2H Post-dose
+    168, # Day 8, Pre-dose (7 * 24 = 168)
+    170, # Day 8, 2H Post-dose
+    336, # Day 15, Pre-dose (14 * 24 = 336)
+    338 # Day 15, 2H Post-dose
   )
 
   expect_equal(result$NFRLT, expected_nfrlt)
@@ -166,9 +166,9 @@ test_that("derive_var_nfrlt Test 7: custom new variable name", {
 ## Test 8: preserves existing columns ----
 test_that("derive_var_nfrlt Test 8: preserves existing columns", {
   input <- tibble::tribble(
-    ~USUBJID, ~VISITDY, ~PCTPT,       ~AVAL,
-    "001",    1,        "Pre-dose",   10.5,
-    "001",    1,        "1H Post-dose", 25.3
+    ~USUBJID, ~VISITDY, ~PCTPT, ~AVAL,
+    "001", 1, "Pre-dose", 10.5,
+    "001", 1, "1H Post-dose", 25.3
   )
 
   result <- derive_var_nfrlt(
