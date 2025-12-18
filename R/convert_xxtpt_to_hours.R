@@ -111,22 +111,18 @@
 #' convert_xxtpt_to_hours("0-6h Post-dose", range_method = "start")
 #'
 #' # Custom infusion duration (2 hours)
-#' # Note: "1 HOUR POST EOI" = 2 (infusion) + 1 (post) = 3 hours
 #' convert_xxtpt_to_hours(
 #'   c("EOI", "End of Infusion", "1 HOUR POST EOI"),
 #'   infusion_duration = 2
 #' )
-#'
-#' # After end patterns equal infusion_duration
-#' convert_xxtpt_to_hours(c("AFTER END OF INFUSION", "AFTER END OF TREATMENT"))
 convert_xxtpt_to_hours <- function(xxtpt,
                                    infusion_duration = 1,
                                    range_method = "midpoint") {
+  # Validate inputs
   assert_character_vector(xxtpt)
   assert_numeric_vector(infusion_duration, length = 1)
   assert_character_vector(range_method, values = c("start", "end", "midpoint"))
 
-  # Validate range_method
   if (!range_method %in% c("midpoint", "start", "end")) {
     cli_abort(
       paste0(
@@ -136,35 +132,42 @@ convert_xxtpt_to_hours <- function(xxtpt,
     )
   }
 
-  # Additional validation for positive value
   if (infusion_duration <= 0) {
     cli_abort(
       "{.arg infusion_duration} must be positive, but is {infusion_duration}."
     )
   }
 
-  # Handle empty input
   if (length(xxtpt) == 0) {
     return(numeric(0))
   }
 
-  # Trim whitespace from all inputs
   xxtpt <- trimws(xxtpt)
-
-  # Initialize result vector with NA
   result <- rep(NA_real_, length(xxtpt))
-
-  # Handle NA inputs (after trimming)
   na_idx <- is.na(xxtpt)
 
-  # Check special cases first (exact matches, case-insensitive) ----
+  # Process patterns in order of specificity
+  result <- convert_special_cases(xxtpt, result, na_idx, infusion_duration)
+  result <- convert_time_units(xxtpt, result, na_idx)
+  result <- convert_ranges(xxtpt, result, na_idx, range_method)
+  result <- convert_infusion_patterns(xxtpt, result, na_idx, infusion_duration)
+  result <- convert_simple_units(xxtpt, result, na_idx)
 
+  result
+}
+
+# Helper Functions ----
+
+#' Convert Special Case Patterns
+#' @keywords internal
+#' @noRd
+convert_special_cases <- function(xxtpt, result, na_idx, infusion_duration) {
   # Screening
   screening_pattern <- regex("^screening$", ignore_case = TRUE)
   screening_idx <- str_detect(xxtpt, screening_pattern) & !na_idx
   result[screening_idx] <- -1
 
-  # Pre-dose, Predose, Pre-infusion, Pre-inf, Infusion, 0H, 0 H -> 0
+  # Pre-dose, Predose, Pre-infusion, Pre-inf, Infusion, 0H -> 0
   zero_pattern <- regex(
     "^(pre-?dose|pre-?inf(?:usion)?|infusion|0\\s*h(?:r|our)?s?)$",
     ignore_case = TRUE
@@ -183,18 +186,18 @@ convert_xxtpt_to_hours <- function(xxtpt,
   eoi_idx <- str_detect(xxtpt, eoi_pattern) & is.na(result) & !na_idx
   result[eoi_idx] <- infusion_duration
 
-  # Morning, Evening -> NA (already NA, no action needed)
+  result
+}
 
-  # Check days (convert to hours by multiplying by 24) ----
-  # Matches: "2D", "2 days", "Day 2", "2 day", "1.5 days", "Day 1"
-  # Also: "30 DAYS AFTER LAST"
+#' Convert Time Unit Patterns (Days, Hours+Minutes)
+#' @keywords internal
+#' @noRd
+convert_time_units <- function(xxtpt, result, na_idx) {
+  # Days (convert to hours by multiplying by 24)
   days_pattern <- regex(
     paste0(
-      # optional "day " prefix, then number
       "^(?:day\\s+)?(?<days>\\d+(?:\\.\\d+)?)\\s*",
-      # OPTIONAL days suffix
       "(?:d|day|days)?",
-      # optional "after last" or post-dose suffix
       "(?:\\s+(?:after\\s+last|post(?:\\s*-?\\s*dose)?))?$"
     ),
     ignore_case = TRUE,
@@ -206,21 +209,11 @@ convert_xxtpt_to_hours <- function(xxtpt,
     result[days_idx] <- as.numeric(days_matches[days_idx, "days"]) * 24
   }
 
-  # Check hours+minutes combinations ----
-  # Matches: "1H30M", "1 hour 30 min", "1h 30m", "2HR15MIN"
+  # Hours+minutes combinations
   hm_pattern <- regex(
     paste0(
-      # hours number
-      "^(?<hours>\\d+(?:\\.\\d+)?)\\s*",
-      # hours
-      "h(?:r|our)?s?",
-      # optional space
-      "\\s*",
-      # minutes number
-      "(?<minutes>\\d+(?:\\.\\d+)?)\\s*",
-      # minutes
-      "m(?:in|inute)?s?",
-      # optional post-dose suffix
+      "^(?<hours>\\d+(?:\\.\\d+)?)\\s*h(?:r|our)?s?\\s*",
+      "(?<minutes>\\d+(?:\\.\\d+)?)\\s*m(?:in|inute)?s?",
       "(?:\\s+post(?:\\s*-?\\s*dose)?)?$"
     ),
     ignore_case = TRUE,
@@ -234,13 +227,18 @@ convert_xxtpt_to_hours <- function(xxtpt,
     result[hm_idx] <- hours + minutes / 60
   }
 
-  # Check time ranges with direction (PRIOR/POST START/END) ----
-  # Process before simple ranges to catch these first
+  result
+}
+
+#' Convert Range Patterns
+#' @keywords internal
+#' @noRd
+convert_ranges <- function(xxtpt, result, na_idx, range_method) {
+  # Ranges with direction (PRIOR/POST START/END)
   range_dir_pattern <- regex(
     paste0(
       "^(?<start>\\d+(?:\\.\\d+)?)\\s*-\\s*(?<end>\\d+(?:\\.\\d+)?)\\s*",
-      "h(?:r|our)?s?\\s+",
-      "(?<direction>prior|post)\\s+(?:start|end)"
+      "h(?:r|our)?s?\\s+(?<direction>prior|post)\\s+(?:start|end)"
     ),
     ignore_case = TRUE
   )
@@ -251,16 +249,7 @@ convert_xxtpt_to_hours <- function(xxtpt,
     end_val <- as.numeric(range_dir_matches[range_dir_idx, "end"])
     direction <- tolower(range_dir_matches[range_dir_idx, "direction"])
 
-    # Calculate based on range_method
-    range_val <- if (range_method == "start") {
-      start_val
-    } else if (range_method == "end") {
-      end_val
-    } else {
-      (start_val + end_val) / 2
-    }
-
-    # Apply direction (PRIOR is negative, POST is positive)
+    range_val <- calculate_range_value(start_val, end_val, range_method)
     result[range_dir_idx] <- if_else(
       direction == "prior",
       -range_val,
@@ -268,16 +257,11 @@ convert_xxtpt_to_hours <- function(xxtpt,
     )
   }
 
-  # Check simple time ranges (e.g., "0-6h Post-dose") ----
-  # Process before simple hours to avoid conflicts
+  # Simple time ranges
   range_pattern <- regex(
     paste0(
-      # range with start and end values captured, spaces allowed
       "^(?<start>\\d+(?:\\.\\d+)?)\\s*-\\s*(?<end>\\d+(?:\\.\\d+)?)\\s*",
-      # hours
-      "h(?:r|our)?s?",
-      # optional post-dose suffix
-      "(?:\\s+post(?:\\s*-?\\s*dose)?)?$"
+      "h(?:r|our)?s?(?:\\s+post(?:\\s*-?\\s*dose)?)?$"
     ),
     ignore_case = TRUE,
     comments = TRUE
@@ -287,23 +271,45 @@ convert_xxtpt_to_hours <- function(xxtpt,
   if (any(range_idx)) {
     start_val <- as.numeric(range_matches[range_idx, "start"])
     end_val <- as.numeric(range_matches[range_idx, "end"])
-
-    # Calculate based on range_method
-    result[range_idx] <- if (range_method == "start") {
-      start_val
-    } else if (range_method == "end") {
-      end_val
-    } else {
-      (start_val + end_val) / 2
-    }
+    result[range_idx] <- calculate_range_value(start_val, end_val, range_method)
   }
 
-  # Check "X MIN/HOUR PREDOSE" (negative time) ----
+  result
+}
+
+#' Calculate Range Value Based on Method
+#' @keywords internal
+#' @noRd
+calculate_range_value <- function(start_val, end_val, range_method) {
+  switch(range_method,
+    start = start_val,
+    end = end_val,
+    midpoint = (start_val + end_val) / 2
+  )
+}
+
+#' Convert Infusion-Related Patterns
+#' @keywords internal
+#' @noRd
+convert_infusion_patterns <- function(xxtpt, result, na_idx, infusion_duration) {
+  result <- convert_predose_patterns(xxtpt, result, na_idx)
+  result <- convert_post_eoi_patterns(xxtpt, result, na_idx, infusion_duration)
+  result <- convert_after_end_patterns(xxtpt, result, na_idx, infusion_duration)
+  result <- convert_hr_post_patterns(xxtpt, result, na_idx, infusion_duration)
+  result <- convert_start_inf_patterns(xxtpt, result, na_idx)
+  result <- convert_min_after_start(xxtpt, result, na_idx)
+  result <- convert_min_pre_eoi(xxtpt, result, na_idx)
+  result
+}
+
+#' Convert Predose Patterns (Negative Time)
+#' @keywords internal
+#' @noRd
+convert_predose_patterns <- function(xxtpt, result, na_idx) {
   predose_pattern <- regex(
     paste0(
       "^(?<value>\\d+(?:\\.\\d+)?)\\s*",
-      "(?<unit>m(?:in|inute)?|h(?:r|our)?)s?\\s+",
-      "predose$"
+      "(?<unit>m(?:in|inute)?|h(?:r|our)?)s?\\s+predose$"
     ),
     ignore_case = TRUE,
     comments = TRUE
@@ -313,7 +319,6 @@ convert_xxtpt_to_hours <- function(xxtpt,
   if (any(predose_idx)) {
     time_value <- as.numeric(predose_matches[predose_idx, "value"])
     unit <- tolower(predose_matches[predose_idx, "unit"])
-    # Check if unit starts with 'm' (minutes)
     is_minutes <- substr(unit, 1, 1) == "m"
     result[predose_idx] <- if_else(
       is_minutes,
@@ -321,13 +326,17 @@ convert_xxtpt_to_hours <- function(xxtpt,
       -time_value
     )
   }
+  result
+}
 
-  # Check "X HOUR/MIN POST EOI/EOT" patterns ----
+#' Convert Post EOI/EOT Patterns
+#' @keywords internal
+#' @noRd
+convert_post_eoi_patterns <- function(xxtpt, result, na_idx, infusion_duration) {
   post_eoi_pattern <- regex(
     paste0(
       "^(?<value>\\d+(?:\\.\\d+)?)\\s*",
-      "(?<unit>m(?:in|inute)?|h(?:r|our)?)s?\\s+",
-      "post\\s+(?:eoi|eot)$"
+      "(?<unit>m(?:in|inute)?|h(?:r|our)?)s?\\s+post\\s+(?:eoi|eot)$"
     ),
     ignore_case = TRUE,
     comments = TRUE
@@ -338,15 +347,19 @@ convert_xxtpt_to_hours <- function(xxtpt,
     time_value <- as.numeric(post_eoi_matches[post_eoi_idx, "value"])
     unit <- tolower(post_eoi_matches[post_eoi_idx, "unit"])
     is_minutes <- substr(unit, 1, 1) == "m"
-    # Add infusion_duration since this is time AFTER end of infusion
     result[post_eoi_idx] <- if_else(
       is_minutes,
       infusion_duration + time_value / 60,
       infusion_duration + time_value
     )
   }
+  result
+}
 
-  # Check "XMIN/XHOUR AFTER END OF INFUSION/TREATMENT" (compact format) ----
+#' Convert After End of Infusion/Treatment Patterns
+#' @keywords internal
+#' @noRd
+convert_after_end_patterns <- function(xxtpt, result, na_idx, infusion_duration) {
   after_end_pattern <- regex(
     paste0(
       "^(?<value>\\d+(?:\\.\\d+)?)\\s*",
@@ -362,44 +375,47 @@ convert_xxtpt_to_hours <- function(xxtpt,
     time_value <- as.numeric(after_end_matches[after_end_idx, "value"])
     unit <- tolower(after_end_matches[after_end_idx, "unit"])
     is_minutes <- substr(unit, 1, 1) == "m"
-    # Add infusion_duration since this is time AFTER end of infusion
     result[after_end_idx] <- if_else(
       is_minutes,
       infusion_duration + time_value / 60,
       infusion_duration + time_value
     )
   }
+  result
+}
 
-  # Check "X HR POST INF/EOI/EOT" patterns ----
+#' Convert HR POST INF/EOI/EOT Patterns
+#' @keywords internal
+#' @noRd
+convert_hr_post_patterns <- function(xxtpt, result, na_idx, infusion_duration) {
   hr_post_pattern <- regex(
-    paste0(
-      "^(?<value>\\d+(?:\\.\\d+)?)\\s*",
-      "hr\\s+post\\s+(?:inf|eoi|eot)$"
-    ),
+    "^(?<value>\\d+(?:\\.\\d+)?)\\s*hr\\s+post\\s+(?:inf|eoi|eot)$",
     ignore_case = TRUE,
     comments = TRUE
   )
   hr_post_matches <- str_match(xxtpt, hr_post_pattern)
   hr_post_idx <- !is.na(hr_post_matches[, 1]) & is.na(result) & !na_idx
   if (any(hr_post_idx)) {
-    # Add infusion_duration since this is time AFTER end of infusion
     result[hr_post_idx] <- infusion_duration +
       as.numeric(hr_post_matches[hr_post_idx, "value"])
   }
+  result
+}
 
-  # Check "XH PRIOR/POST START OF INFUSION" (compact H) ----
+#' Convert Start of Infusion Patterns
+#' @keywords internal
+#' @noRd
+convert_start_inf_patterns <- function(xxtpt, result, na_idx) {
   h_start_inf_pattern <- regex(
     paste0(
       "^(?<value>\\d+(?:\\.\\d+)?)h\\s+",
-      "(?<direction>prior|post)\\s+",
-      "start\\s+of\\s+infusion$"
+      "(?<direction>prior|post)\\s+start\\s+of\\s+infusion$"
     ),
     ignore_case = TRUE,
     comments = TRUE
   )
   h_start_inf_matches <- str_match(xxtpt, h_start_inf_pattern)
-  h_start_inf_idx <- !is.na(h_start_inf_matches[, 1]) &
-    is.na(result) & !na_idx
+  h_start_inf_idx <- !is.na(h_start_inf_matches[, 1]) & is.na(result) & !na_idx
   if (any(h_start_inf_idx)) {
     time_value <- as.numeric(h_start_inf_matches[h_start_inf_idx, "value"])
     direction <- tolower(h_start_inf_matches[h_start_inf_idx, "direction"])
@@ -409,14 +425,15 @@ convert_xxtpt_to_hours <- function(xxtpt,
       time_value
     )
   }
+  result
+}
 
-  # Check "X MIN AFTER START INF" ----
+#' Convert MIN AFTER START INF Patterns
+#' @keywords internal
+#' @noRd
+convert_min_after_start <- function(xxtpt, result, na_idx) {
   min_after_start_pattern <- regex(
-    paste0(
-      "^(?<value>\\d+(?:\\.\\d+)?)\\s*",
-      "m(?:in|inute)?s?\\s+",
-      "after\\s+start\\s+inf$"
-    ),
+    "^(?<value>\\d+(?:\\.\\d+)?)\\s*m(?:in|inute)?s?\\s+after\\s+start\\s+inf$",
     ignore_case = TRUE,
     comments = TRUE
   )
@@ -428,36 +445,36 @@ convert_xxtpt_to_hours <- function(xxtpt,
       min_after_start_matches[min_after_start_idx, "value"]
     ) / 60
   }
+  result
+}
 
-  # Check "XMIN PRE EOI" (compact, pre end of infusion) ----
+#' Convert MIN PRE EOI Patterns
+#' @keywords internal
+#' @noRd
+convert_min_pre_eoi <- function(xxtpt, result, na_idx) {
   min_pre_eoi_pattern <- regex(
-    paste0(
-      "^(?<value>\\d+(?:\\.\\d+)?)\\s*",
-      "m(?:in|inute)?s?\\s+",
-      "pre\\s+eoi$"
-    ),
+    "^(?<value>\\d+(?:\\.\\d+)?)\\s*m(?:in|inute)?s?\\s+pre\\s+eoi$",
     ignore_case = TRUE,
     comments = TRUE
   )
   min_pre_eoi_matches <- str_match(xxtpt, min_pre_eoi_pattern)
-  min_pre_eoi_idx <- !is.na(min_pre_eoi_matches[, 1]) &
-    is.na(result) & !na_idx
+  min_pre_eoi_idx <- !is.na(min_pre_eoi_matches[, 1]) & is.na(result) & !na_idx
   if (any(min_pre_eoi_idx)) {
     result[min_pre_eoi_idx] <- -as.numeric(
       min_pre_eoi_matches[min_pre_eoi_idx, "value"]
     ) / 60
   }
+  result
+}
 
-  # Check hours only ----
-  # Matches: "1H", "2 hours", "0.5HR", "1h Post-dose", "1H Post dose",
-  # "8 hour", "12 HOURS". Also: "1 HOUR POST"
+#' Convert Simple Time Unit Patterns (Hours Only, Minutes Only)
+#' @keywords internal
+#' @noRd
+convert_simple_units <- function(xxtpt, result, na_idx) {
+  # Hours only
   hours_pattern <- regex(
     paste0(
-      # number
-      "^(?<hours>\\d+(?:\\.\\d+)?)\\s*",
-      # hours
-      "h(?:r|our)?s?",
-      # optional post/post-dose suffix (flexible spacing)
+      "^(?<hours>\\d+(?:\\.\\d+)?)\\s*h(?:r|our)?s?",
       "(?:\\s+post(?:\\s*-?\\s*dose)?)?$"
     ),
     ignore_case = TRUE,
@@ -469,16 +486,10 @@ convert_xxtpt_to_hours <- function(xxtpt,
     result[hours_idx] <- as.numeric(hours_matches[hours_idx, "hours"])
   }
 
-  # Check minutes only ----
-  # Matches: "30M", "45 min", "30 Min Post-dose", "30 MIN Post dose",
-  # "2.5 Min". Also: "X MIN POST"
+  # Minutes only
   minutes_pattern <- regex(
     paste0(
-      # number
-      "^(?<minutes>\\d+(?:\\.\\d+)?)\\s*",
-      # minutes
-      "m(?:in|inute)?s?",
-      # optional post/post-dose suffix (flexible spacing)
+      "^(?<minutes>\\d+(?:\\.\\d+)?)\\s*m(?:in|inute)?s?",
       "(?:\\s+post(?:\\s*-?\\s*dose)?)?$"
     ),
     ignore_case = TRUE,
