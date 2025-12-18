@@ -33,11 +33,15 @@
 #'
 #' @permitted Numeric scalar (positive integer)
 #'
-#' @param treatment_duration Numeric value specifying the duration of treatment
-#'   in hours. Passed to `convert_xxtpt_to_hours()`. Default is 0 hours (for
-#'   instantaneous treatments like oral medications).
+#' @param treatment_duration Duration of treatment in hours. Can be either:
+#'   * A numeric scalar (used for all records), or
+#'   * An unquoted variable name from the dataset (e.g., `EXDUR`) where each
+#'     record can have a different treatment duration
 #'
-#' @permitted Numeric scalar (non-negative)
+#'   Passed to `convert_xxtpt_to_hours()`. Must be non-negative. Default is 0
+#'   hours (for instantaneous treatments like oral medications).
+#'
+#' @permitted Numeric scalar or unquoted variable name (non-negative)
 #'
 #' @param range_method Method for converting time ranges to single values.
 #'   Options are "midpoint" (default), "start", or "end". Passed to
@@ -75,11 +79,13 @@
 #' * **Oral medications**: Use default `treatment_duration = 0` for
 #'   instantaneous absorption
 #' * **IV infusions**: Specify `treatment_duration` as infusion duration in
-#'   hours
+#'   hours (scalar) or as a variable name containing duration per record
 #' * **Exposure records (EX)**: Can be called without `tpt_var` to derive NFRLT
 #'   based only on visit day
 #' * **Unscheduled visits**: Use `set_values_to_na` to set NFRLT to `NA` for
 #'   unscheduled or early discontinuation visits
+#' * **Variable treatment durations**: Use a variable name (e.g., `EXDUR`) when
+#'   different subjects or visits have different treatment durations
 #'
 #' **Important Notes:**
 #'
@@ -90,9 +96,14 @@
 #'   dosing occurs on Day 3, a "24H Post-dose" sample taken on Day 4 should
 #'   have `visit_day = 4`.
 #' * For crossover studies, consider deriving NFRLT separately per period
-#' * `NA` values in either `visit_day` or `tpt_var` will result in `NA` for
-#'   NFRLT
-#' * Records matching the `set_values_to_na` condition will have NFRLT set to `NA`
+#' * `NA` values in `visit_day` will automatically result in `NA` for NFRLT
+#'   (no need to use `set_values_to_na` for this case)
+#' * `NA` values in `tpt_var` will result in `NA` for NFRLT
+#' * `NA` values in the `treatment_duration` variable (if using a variable) will
+#'   result in `NA` for NFRLT for those records
+#' * Use `set_values_to_na` when you need to set NFRLT to `NA` based on other
+#'   variables (e.g., `VISIT == "UNSCHEDULED"`), especially when `visit_day`
+#'   is populated but should not be used for the NFRLT calculation
 #' * If `tpt_var` is not provided or doesn't exist in the dataset, timepoint
 #'   contribution is assumed to be 0 hours
 #'
@@ -110,6 +121,7 @@
 #'   ) %>%
 #'   mutate(NFRLT = if_else(is.na(NFRLT) & VISIT == "UNSCHEDULED", 99999, NFRLT))
 #' ```
+#'
 #' @return The input dataset with the new nominal relative time variable added.
 #'
 #' @keywords der_bds_findings
@@ -158,7 +170,7 @@
 #'   visit_day = VISITDY
 #' )
 #'
-#' # IV infusion with 2 hour treatment duration
+#' # IV infusion with 2 hour treatment duration (scalar)
 #' adpc_inf <- tribble(
 #'   ~USUBJID, ~VISITDY, ~PCTPT,
 #'   "001",    1,        "Pre-dose",
@@ -173,6 +185,25 @@
 #'   tpt_var = PCTPT,
 #'   visit_day = VISITDY,
 #'   treatment_duration = 2
+#' )
+#'
+#' # Variable treatment duration - different per subject
+#' adpc_var_dur <- tribble(
+#'   ~USUBJID, ~VISITDY, ~PCTPT,           ~EXDUR,
+#'   "001",    1,        "Pre-dose",       1,
+#'   "001",    1,        "EOI",            1,
+#'   "001",    1,        "1H POST EOI",    1,
+#'   "002",    1,        "Pre-dose",       2,
+#'   "002",    1,        "EOI",            2,
+#'   "002",    1,        "1H POST EOI",    2
+#' )
+#'
+#' derive_var_nfrlt(
+#'   adpc_var_dur,
+#'   new_var = NFRLT,
+#'   tpt_var = PCTPT,
+#'   visit_day = VISITDY,
+#'   treatment_duration = EXDUR  # Variable name!
 #' )
 #'
 #' # Exposure records without timepoint variable
@@ -238,6 +269,26 @@
 #'   set_values_to_na = VISIT %in% c("UNSCHEDULED", "STUDY DRUG EARLY DISCONTINUATION")
 #' )
 #'
+#' # Setting NFRLT to 99999 for unscheduled visits
+#' adpc_unsched_value <- tribble(
+#'   ~USUBJID, ~VISITDY, ~VISIT,        ~PCTPT,
+#'   "001",    1,        "VISIT 1",     "Pre-dose",
+#'   "001",    1,        "VISIT 1",     "2H Post-dose",
+#'   "001",    NA_real_, "UNSCHEDULED", "Pre-dose",
+#'   "001",    NA_real_, "UNSCHEDULED", "2H Post-dose"
+#' )
+#'
+#' adpc_unsched_value %>%
+#'   derive_var_nfrlt(
+#'     new_var = NFRLT,
+#'     tpt_var = PCTPT,
+#'     visit_day = VISITDY,
+#'     set_values_to_na = VISIT == "UNSCHEDULED"
+#'   ) %>%
+#'   mutate(
+#'     NFRLT = if_else(is.na(NFRLT) & VISIT == "UNSCHEDULED", 99999, NFRLT)
+#'   )
+#'
 #' # Custom range method (use end of range instead of midpoint)
 #' adpc_range <- tribble(
 #'   ~USUBJID, ~VISITDY, ~PCTPT,
@@ -285,26 +336,6 @@
 #'   visit_day = VISITDY,
 #'   first_dose_day = 3
 #' )
-#' # Setting NFRLT to a specific value (e.g., 99999) for unscheduled visits
-#' # This can be done in a separate mutate step after deriving NFRLT
-#' adpc_unsched_value <- tribble(
-#'   ~USUBJID, ~VISITDY, ~VISIT,        ~PCTPT,
-#'   "001",    1,        "VISIT 1",     "Pre-dose",
-#'   "001",    1,        "VISIT 1",     "2H Post-dose",
-#'   "001",    NA_real_, "UNSCHEDULED", "Pre-dose",
-#'   "001",    NA_real_, "UNSCHEDULED", "2H Post-dose"
-#' )
-#'
-#' adpc_unsched_value %>%
-#'   derive_var_nfrlt(
-#'     new_var = NFRLT,
-#'     tpt_var = PCTPT,
-#'     visit_day = VISITDY,
-#'     set_values_to_na = VISIT == "UNSCHEDULED"
-#'   ) %>%
-#'   mutate(
-#'     NFRLT = if_else(is.na(NFRLT) & VISIT == "UNSCHEDULED", 99999, NFRLT)
-#'   )
 derive_var_nfrlt <- function(dataset,
                              new_var = NFRLT,
                              tpt_var = NULL,
@@ -330,7 +361,6 @@ derive_var_nfrlt <- function(dataset,
 
   assert_data_frame(dataset, required_vars = required_vars)
   assert_numeric_vector(first_dose_day, length = 1)
-  assert_numeric_vector(treatment_duration, length = 1)
   assert_character_vector(range_method, values = c("start", "end", "midpoint"))
 
   # Validate first_dose_day is positive
@@ -340,10 +370,24 @@ derive_var_nfrlt <- function(dataset,
     )
   }
 
-  # Validate treatment_duration is non-negative
-  if (treatment_duration < 0) {
+  # Handle treatment_duration - can be variable name or scalar
+  treatment_duration_expr <- enexpr(treatment_duration)
+
+  if (is.symbol(treatment_duration_expr) &&
+      as_name(treatment_duration_expr) %in% names(dataset)) {
+    # It's a variable in the dataset
+    treatment_duration_vec <- dataset[[as_name(treatment_duration_expr)]]
+    assert_numeric_vector(treatment_duration_vec)
+  } else {
+    # It's a scalar value
+    treatment_duration_vec <- eval(treatment_duration_expr)
+    assert_numeric_vector(treatment_duration_vec)
+  }
+
+  # Validate all values are non-negative
+  if (any(treatment_duration_vec < 0, na.rm = TRUE)) {
     cli_abort(
-      "{.arg treatment_duration} must be non-negative, but is {treatment_duration}."
+      "{.arg treatment_duration} must be non-negative for all values."
     )
   }
 
@@ -351,7 +395,7 @@ derive_var_nfrlt <- function(dataset,
   if (has_tpt_var) {
     tpt_hours <- convert_xxtpt_to_hours(
       dataset[[as_name(tpt_var)]],
-      treatment_duration = treatment_duration,
+      treatment_duration = treatment_duration_vec,  # Pass as vector
       range_method = range_method
     )
   } else {

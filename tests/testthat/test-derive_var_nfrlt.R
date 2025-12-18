@@ -700,3 +700,51 @@ test_that("derive_var_nfrlt Test 28: set_values_to_na with complex condition", {
     c(0, NA_real_, 0, NA_real_)
   )
 })
+## Test 29: treatment_duration as variable ----
+test_that("derive_var_nfrlt Test 29: treatment_duration as variable", {
+  input <- tibble::tribble(
+    ~USUBJID, ~VISITDY, ~PCTPT,           ~EXDUR,
+    "001",    1,        "Pre-dose",       1,
+    "001",    1,        "EOI",            1,
+    "001",    1,        "1H POST EOI",    1,
+    "002",    1,        "Pre-dose",       2,
+    "002",    1,        "EOI",            2,
+    "002",    1,        "1H POST EOI",    2
+  )
+
+  result <- derive_var_nfrlt(
+    input,
+    new_var = NFRLT,
+    tpt_var = PCTPT,
+    visit_day = VISITDY,
+    treatment_duration = EXDUR  # Variable!
+  )
+
+  expect_equal(
+    result$NFRLT,
+    c(0, 1, 2, 0, 2, 3)
+  )
+})
+
+## Test 30: treatment_duration as variable with NA ----
+test_that("derive_var_nfrlt Test 30: handles NA in treatment_duration variable", {
+  input <- tibble::tribble(
+    ~USUBJID, ~VISITDY, ~PCTPT,     ~EXDUR,
+    "001",    1,        "Pre-dose", 1,
+    "001",    1,        "EOI",      NA_real_,
+    "001",    1,        "Pre-dose", 2
+  )
+
+  result <- derive_var_nfrlt(
+    input,
+    new_var = NFRLT,
+    tpt_var = PCTPT,
+    visit_day = VISITDY,
+    treatment_duration = EXDUR
+  )
+
+  expect_equal(
+    result$NFRLT,
+    c(0, NA_real_, 0)
+  )
+})
