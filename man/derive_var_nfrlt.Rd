@@ -108,6 +108,10 @@ days
 \itemize{
 \item The function assumes \code{visit_day} represents the nominal/planned day, not
 the actual study day
+\item For timepoints that span multiple days (e.g., "24H Post-dose"), ensure
+\code{visit_day} is set to the day when the sample was taken. For example, if
+dosing occurs on Day 3, a "24H Post-dose" sample taken on Day 4 should
+have \code{visit_day = 4}.
 \item For crossover studies, consider deriving NFRLT separately per period
 \item \code{NA} values in either \code{visit_day} or \code{tpt_var} will result in \code{NA} for
 NFRLT
@@ -184,10 +188,12 @@ derive_var_nfrlt(
 )
 
 # Custom first dose day (e.g., dose on Day 3)
+# Note: 24H Post-dose sample is on Day 4
 adpc_custom <- tribble(
   ~USUBJID, ~VISITDY, ~PCTPT,
   "001",    3,        "Pre-dose",
   "001",    3,        "2H Post-dose",
+  "001",    3,        "8H Post-dose",
   "001",    4,        "24H Post-dose"
 )
 

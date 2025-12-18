@@ -65,6 +65,10 @@
 #'
 #' * The function assumes `visit_day` represents the nominal/planned day, not
 #'   the actual study day
+#' * For timepoints that span multiple days (e.g., "24H Post-dose"), ensure
+#'   `visit_day` is set to the day when the sample was taken. For example, if
+#'   dosing occurs on Day 3, a "24H Post-dose" sample taken on Day 4 should
+#'   have `visit_day = 4`.
 #' * For crossover studies, consider deriving NFRLT separately per period
 #' * `NA` values in either `visit_day` or `tpt_var` will result in `NA` for
 #'   NFRLT
@@ -149,10 +153,12 @@
 #' )
 #'
 #' # Custom first dose day (e.g., dose on Day 3)
+#' # Note: 24H Post-dose sample is on Day 4
 #' adpc_custom <- tribble(
 #'   ~USUBJID, ~VISITDY, ~PCTPT,
 #'   "001",    3,        "Pre-dose",
 #'   "001",    3,        "2H Post-dose",
+#'   "001",    3,        "8H Post-dose",
 #'   "001",    4,        "24H Post-dose"
 #' )
 #'
@@ -177,6 +183,7 @@ derive_var_nfrlt <- function(dataset,
   assert_data_frame(dataset, required_vars = exprs(!!tpt_var, !!visit_day))
   assert_numeric_vector(first_dose_day, length = 1)
   assert_numeric_vector(infusion_duration, length = 1)
+  assert_character_vector(range_method, values = c("start", "end", "midpoint"))
 
   # Validate first_dose_day is positive
   if (first_dose_day <= 0) {
