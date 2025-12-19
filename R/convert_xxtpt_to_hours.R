@@ -235,9 +235,9 @@ convert_xxtpt_to_hours <- function(xxtpt,
   # Process patterns in order of specificity
   result <- convert_special_cases(xxtpt, result, na_idx, treatment_duration)
   result <- convert_time_units(xxtpt, result, na_idx)
-  result <- convert_ranges(xxtpt, result, na_idx, range_method)
   result <- convert_ranges_eot(xxtpt, result, na_idx, treatment_duration, range_method)
   result <- convert_ranges_after_end(xxtpt, result, na_idx, treatment_duration, range_method)
+  result <- convert_ranges(xxtpt, result, na_idx, range_method)
   result <- convert_treatment_patterns(xxtpt, result, na_idx, treatment_duration)
   result <- convert_simple_units(xxtpt, result, na_idx)
 
