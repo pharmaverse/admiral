@@ -919,3 +919,115 @@ test_that("convert_xxtpt_to_hours Test 42: handles NA in treatment_duration", {
     c(1, NA_real_, 0)
   )
 })
+
+## Test 43: ranges relative to EOI/EOT ----
+test_that("convert_xxtpt_to_hours Test 43: ranges relative to EOI/EOT", {
+  # With default treatment_duration = 0 and default midpoint
+  expect_equal(
+    convert_xxtpt_to_hours(c(
+      "0-4H AFTER EOI",
+      "0-4H EOI",
+      "0-4H AFTER EOT",
+      "0-4H EOT"
+    )),
+    c(2, 2, 2, 2) # midpoint of 0-4 is 2, plus 0 duration = 2
+  )
+
+  # With treatment_duration = 1
+  expect_equal(
+    convert_xxtpt_to_hours(
+      c(
+        "0-4H AFTER EOI",
+        "0-4H EOI",
+        "0-4H AFTER EOT",
+        "0-4H EOT"
+      ),
+      treatment_duration = 1
+    ),
+    c(3, 3, 3, 3) # midpoint of 0-4 is 2, plus 1 duration = 3
+  )
+
+  # With range_method = "start"
+  expect_equal(
+    convert_xxtpt_to_hours(
+      c("0-4H AFTER EOI", "0-4H EOT"),
+      treatment_duration = 1,
+      range_method = "start"
+    ),
+    c(1, 1) # start of 0-4 is 0, plus 1 duration = 1
+  )
+
+  # With range_method = "end"
+  expect_equal(
+    convert_xxtpt_to_hours(
+      c("0-4H AFTER EOI", "0-4H EOT"),
+      treatment_duration = 1,
+      range_method = "end"
+    ),
+    c(5, 5) # end of 0-4 is 4, plus 1 duration = 5
+  )
+
+  # With vectorized treatment_duration
+  expect_equal(
+    convert_xxtpt_to_hours(
+      c("0-4H EOI", "0-4H EOT"),
+      treatment_duration = c(1, 2)
+    ),
+    c(3, 4) # 1+2=3, 2+2=4
+  )
+})
+
+## Test 44: POST vs POST EOI distinction ----
+test_that("convert_xxtpt_to_hours Test 44: POST without EOI is relative to start", {
+  # "POST" alone should NOT add treatment_duration (relative to start)
+  expect_equal(
+    convert_xxtpt_to_hours(
+      c("1H POST", "30M AFTER"),
+      treatment_duration = 2
+    ),
+    c(1, 0.5) # Just the time, no treatment_duration added
+  )
+
+  # "POST EOI" SHOULD add treatment_duration (relative to end)
+  expect_equal(
+    convert_xxtpt_to_hours(
+      c("1H POST EOI", "30M AFTER EOT"),
+      treatment_duration = 2
+    ),
+    c(3, 2.5)
+  )
+
+  # Same pattern, different durations to show the difference
+  expect_equal(
+    convert_xxtpt_to_hours(
+      c("1H POST", "1H POST EOI"),
+      treatment_duration = 2
+    ),
+    c(1, 3) # 1 vs (2+1)
+  )
+
+  # POST INFUSION should also add treatment_duration
+  expect_equal(
+    convert_xxtpt_to_hours(
+      c("1H POST", "1H POST INFUSION"),
+      treatment_duration = 2
+    ),
+    c(1, 3)
+  )
+
+  # Comprehensive comparison
+  expect_equal(
+    convert_xxtpt_to_hours(
+      c(
+        "Pre-dose",
+        "1H POST",
+        "2H POST",
+        "EOI",
+        "1H POST EOI",
+        "2H POST EOI"
+      ),
+      treatment_duration = 2
+    ),
+    c(0, 1, 2, 2, 3, 4)
+  )
+})
