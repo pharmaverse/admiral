@@ -2,8 +2,6 @@
 upstream_repos:
 - repo: pharmaverse/pharmaversesdtm
   host: https://github.com
-- repo: pharmaverse/admiraldev
-  host: https://github.com
 
 downstream_repos:
 
