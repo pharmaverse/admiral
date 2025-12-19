@@ -205,7 +205,8 @@ convert_xxtpt_to_hours <- function(xxtpt,
         "{.arg treatment_duration} must be either:",
         "i" = "A single value (used for all timepoints), or",
         "i" = "A vector of length {length(xxtpt)} (one value per timepoint)",
-        "x" = "You've supplied a vector of length {length(treatment_duration)} for {length(xxtpt)} timepoint{?s}."
+        "x" = "You've supplied a vector of length {length(treatment_duration)}
+        for {length(xxtpt)} timepoint{?s}."
       )
     )
   }

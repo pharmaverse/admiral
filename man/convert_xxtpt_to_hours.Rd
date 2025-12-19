@@ -84,6 +84,8 @@ Time ranges are converted based on the \code{range_method} parameter:
 \item \code{"0-6h Post-dose"} with \code{range_method = "end"} → 6
 \item \code{"0-4H PRIOR START OF INFUSION"} with midpoint → -2 (negative for prior)
 \item \code{"8-16H POST START OF INFUSION"} with midpoint → 12
+\item \code{"0-4H AFTER EOI"} with midpoint and treatment_duration=1 → 3 (1 + 2)
+\item \code{"0-4H EOT"} with midpoint and treatment_duration=0 → 2
 }
 
 \strong{Time-based Conversions:}
@@ -112,6 +114,30 @@ Time ranges are converted based on the \code{range_method} parameter:
 \item Flexible whitespace and optional "Post-dose", "POST", "After last"
 suffixes
 }
+
+\strong{Understanding POST/AFTER Patterns:}
+
+It's important to distinguish between patterns relative to treatment \strong{start}
+versus treatment \strong{end}:
+\itemize{
+\item \strong{Relative to START} (treatment_duration NOT added):
+\itemize{
+\item \code{"1H POST"}, \code{"1H AFTER"}, \code{"30M POST"} → Time from dose/treatment start
+\item These patterns assume treatment starts at time 0
+\item Example: \code{"1H POST"} → 1 hour (regardless of treatment_duration)
+}
+\item \strong{Relative to END} (treatment_duration IS added):
+\itemize{
+\item \code{"1H POST EOI"}, \code{"1H AFTER EOT"}, \code{"1H POST INFUSION"} → Time from
+treatment end
+\item These patterns account for when treatment ends (start + duration)
+\item Example: \code{"1H POST EOI"} with treatment_duration=2 → 3 hours (2 + 1)
+}
+}
+
+This distinction follows standard pharmacokinetic conventions where "post-dose"
+refers to time from treatment initiation, while "post end of infusion" refers
+to time from treatment completion.
 
 \strong{Vectorized Treatment Duration:}
 
@@ -172,6 +198,31 @@ convert_xxtpt_to_hours(c(
 # Time ranges - specify method
 convert_xxtpt_to_hours("0-6h Post-dose", range_method = "end")
 convert_xxtpt_to_hours("0-6h Post-dose", range_method = "start")
+
+# Demonstrating POST vs POST EOI distinction
+# POST alone = relative to treatment START (no duration added)
+convert_xxtpt_to_hours(
+  c("Pre-dose", "1H POST", "2H POST", "4H POST"),
+  treatment_duration = 2  # 2-hour infusion
+)
+# Returns: 0, 1, 2, 4 (treatment_duration NOT added)
+
+# POST EOI = relative to treatment END (duration added)
+convert_xxtpt_to_hours(
+  c("Pre-dose", "EOI", "1H POST EOI", "2H POST EOI"),
+  treatment_duration = 2  # 2-hour infusion
+)
+# Returns: 0, 2, 3, 4 (treatment_duration IS added)
+
+# Comparing the two patterns side by side
+convert_xxtpt_to_hours(
+  c("1H POST", "1H POST EOI", "1H POST INFUSION"),
+  treatment_duration = 2
+)
+# Returns: 1, 3, 3
+# "1H POST" = 1 hour from start
+# "1H POST EOI" = 1 hour after 2-hour infusion ends = 3 hours from start
+# "1H POST INFUSION" = same as POST EOI
 }
 \seealso{
 Date/Time Computation Functions that returns a vector:
