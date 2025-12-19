@@ -86,6 +86,7 @@ Time ranges are converted based on the \code{range_method} parameter:
 \item \code{"8-16H POST START OF INFUSION"} with midpoint → 12
 \item \code{"0-4H AFTER EOI"} with midpoint and treatment_duration=1 → 3 (1 + 2)
 \item \code{"0-4H EOT"} with midpoint and treatment_duration=0 → 2
+\item \code{"4-8H AFTER END OF INFUSION"} with midpoint and treatment_duration=1 → 7 (1 + 6)
 }
 
 \strong{Time-based Conversions:}
@@ -203,14 +204,14 @@ convert_xxtpt_to_hours("0-6h Post-dose", range_method = "start")
 # POST alone = relative to treatment START (no duration added)
 convert_xxtpt_to_hours(
   c("Pre-dose", "1H POST", "2H POST", "4H POST"),
-  treatment_duration = 2  # 2-hour infusion
+  treatment_duration = 2 # 2-hour infusion
 )
 # Returns: 0, 1, 2, 4 (treatment_duration NOT added)
 
 # POST EOI = relative to treatment END (duration added)
 convert_xxtpt_to_hours(
   c("Pre-dose", "EOI", "1H POST EOI", "2H POST EOI"),
-  treatment_duration = 2  # 2-hour infusion
+  treatment_duration = 2 # 2-hour infusion
 )
 # Returns: 0, 2, 3, 4 (treatment_duration IS added)
 

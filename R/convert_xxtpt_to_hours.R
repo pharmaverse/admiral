@@ -50,6 +50,7 @@
 #' * `"8-16H POST START OF INFUSION"` with midpoint → 12
 #' * `"0-4H AFTER EOI"` with midpoint and treatment_duration=1 → 3 (1 + 2)
 #' * `"0-4H EOT"` with midpoint and treatment_duration=0 → 2
+#' * `"4-8H AFTER END OF INFUSION"` with midpoint and treatment_duration=1 → 7 (1 + 6)
 #'
 #' **Time-based Conversions:**
 #' * **Days**: `"Day 1"` → 24, `"30 DAYS AFTER LAST"` → 720
@@ -170,14 +171,14 @@
 #' # POST alone = relative to treatment START (no duration added)
 #' convert_xxtpt_to_hours(
 #'   c("Pre-dose", "1H POST", "2H POST", "4H POST"),
-#'   treatment_duration = 2  # 2-hour infusion
+#'   treatment_duration = 2 # 2-hour infusion
 #' )
 #' # Returns: 0, 1, 2, 4 (treatment_duration NOT added)
 #'
 #' # POST EOI = relative to treatment END (duration added)
 #' convert_xxtpt_to_hours(
 #'   c("Pre-dose", "EOI", "1H POST EOI", "2H POST EOI"),
-#'   treatment_duration = 2  # 2-hour infusion
+#'   treatment_duration = 2 # 2-hour infusion
 #' )
 #' # Returns: 0, 2, 3, 4 (treatment_duration IS added)
 #'
@@ -234,8 +235,9 @@ convert_xxtpt_to_hours <- function(xxtpt,
   # Process patterns in order of specificity
   result <- convert_special_cases(xxtpt, result, na_idx, treatment_duration)
   result <- convert_time_units(xxtpt, result, na_idx)
-  result <- convert_ranges(xxtpt, result, na_idx, range_method)
   result <- convert_ranges_eot(xxtpt, result, na_idx, treatment_duration, range_method)
+  result <- convert_ranges_after_end(xxtpt, result, na_idx, treatment_duration, range_method)
+  result <- convert_ranges(xxtpt, result, na_idx, range_method)
   result <- convert_treatment_patterns(xxtpt, result, na_idx, treatment_duration)
   result <- convert_simple_units(xxtpt, result, na_idx)
 
@@ -454,9 +456,9 @@ convert_ranges <- function(xxtpt, result, na_idx, range_method) {
 #' @noRd
 calculate_range_value <- function(start_val, end_val, range_method) {
   switch(range_method,
-         start = start_val,
-         end = end_val,
-         midpoint = (start_val + end_val) / 2
+    start = start_val,
+    end = end_val,
+    midpoint = (start_val + end_val) / 2
   )
 }
 
@@ -506,6 +508,56 @@ convert_ranges_eot <- function(xxtpt, result, na_idx, treatment_duration, range_
     end_val <- as.numeric(range_eot_matches[range_eot_idx, "end"])
     range_val <- calculate_range_value(start_val, end_val, range_method)
     result[range_eot_idx] <- treatment_duration[range_eot_idx] + range_val
+  }
+
+  result
+}
+
+#' Convert Range Patterns After End of Infusion/Treatment
+#'
+#' Converts time range patterns after end of infusion/treatment (long form) to
+#' numeric hours using specified range method, adding the treatment duration.
+#'
+#' @param xxtpt Character vector of timepoint descriptions (trimmed, no leading/
+#'   trailing whitespace)
+#' @param result Numeric vector of results (partially filled, may contain NA)
+#' @param na_idx Logical vector indicating which positions in xxtpt are NA
+#' @param treatment_duration Duration of treatment in hours (non-negative numeric
+#'   vector, same length as xxtpt)
+#' @param range_method Method for selecting value from range: "start", "midpoint",
+#'   or "end"
+#'
+#' @details
+#' Recognizes and converts the following range patterns:
+#' * "4-8H AFTER END OF INFUSION" → treatment_duration + range_value
+#' * "4-8H AFTER END OF TREATMENT" → treatment_duration + range_value
+#'
+#' With midpoint method, "4-8H AFTER END OF INFUSION" with treatment_duration=1
+#' → 1 + 6 = 7
+#'
+#' Only updates result for positions where result is currently NA and xxtpt is not NA.
+#'
+#' @return Updated numeric vector with after end range patterns converted to hours
+#'
+#' @keywords internal
+#' @noRd
+convert_ranges_after_end <- function(xxtpt, result, na_idx, treatment_duration, range_method) {
+  # Ranges after end of infusion/treatment (long form)
+  range_after_end_pattern <- regex(
+    paste0(
+      "^(?<start>\\d+(?:\\.\\d+)?)\\s*-\\s*(?<end>\\d+(?:\\.\\d+)?)\\s*",
+      "h(?:r|our)?s?\\s+",
+      "after\\s+end\\s+of\\s+(?:infusion|treatment)$"
+    ),
+    ignore_case = TRUE
+  )
+  range_after_end_matches <- str_match(xxtpt, range_after_end_pattern)
+  range_after_end_idx <- !is.na(range_after_end_matches[, 1]) & is.na(result) & !na_idx
+  if (any(range_after_end_idx)) {
+    start_val <- as.numeric(range_after_end_matches[range_after_end_idx, "start"])
+    end_val <- as.numeric(range_after_end_matches[range_after_end_idx, "end"])
+    range_val <- calculate_range_value(start_val, end_val, range_method)
+    result[range_after_end_idx] <- treatment_duration[range_after_end_idx] + range_val
   }
 
   result
