@@ -947,33 +947,47 @@ test_that("convert_xxtpt_to_hours Test 43: ranges relative to EOI/EOT", {
     c(3, 3, 3, 3) # midpoint of 0-4 is 2, plus 1 duration = 3
   )
 
+  # Long form: AFTER END OF INFUSION/TREATMENT
+  expect_equal(
+    convert_xxtpt_to_hours(
+      c(
+        "4-8H AFTER END OF INFUSION",
+        "4-8H AFTER END OF TREATMENT",
+        "4-8H AFTER EOI",
+        "4-8H AFTER EOT"
+      ),
+      treatment_duration = 1
+    ),
+    c(7, 7, 7, 7) # midpoint of 4-8 is 6, plus 1 duration = 7
+  )
+
   # With range_method = "start"
   expect_equal(
     convert_xxtpt_to_hours(
-      c("0-4H AFTER EOI", "0-4H EOT"),
+      c("0-4H AFTER EOI", "4-8H AFTER END OF INFUSION"),
       treatment_duration = 1,
       range_method = "start"
     ),
-    c(1, 1) # start of 0-4 is 0, plus 1 duration = 1
+    c(1, 5) # start of 0-4 is 0, start of 4-8 is 4, plus 1 duration each
   )
 
   # With range_method = "end"
   expect_equal(
     convert_xxtpt_to_hours(
-      c("0-4H AFTER EOI", "0-4H EOT"),
+      c("0-4H AFTER EOI", "4-8H AFTER END OF TREATMENT"),
       treatment_duration = 1,
       range_method = "end"
     ),
-    c(5, 5) # end of 0-4 is 4, plus 1 duration = 5
+    c(5, 9) # end of 0-4 is 4, end of 4-8 is 8, plus 1 duration each
   )
 
   # With vectorized treatment_duration
   expect_equal(
     convert_xxtpt_to_hours(
-      c("0-4H EOI", "0-4H EOT"),
+      c("0-4H EOI", "4-8H AFTER END OF INFUSION"),
       treatment_duration = c(1, 2)
     ),
-    c(3, 4) # 1+2=3, 2+2=4
+    c(3, 8) # 1+2=3, 2+6=8
   )
 })
 
