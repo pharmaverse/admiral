@@ -69,6 +69,8 @@ Suggests:
     testthat (>= 3.0.0),
     tibble,
     withr
+Remotes:
+  github::pharmaverse/admiraldev@copilot/drop-function-in-joins-r
 VignetteBuilder:
     knitr
 Config/Needs/website: gert
