@@ -106,14 +106,37 @@ day-based offset.
 \details{
 The nominal relative time is calculated as:
 
-\code{NFRLT = (visit_day - first_dose_day) * 24 + timepoint_hours}
+\code{NFRLT = day_offset * 24 + timepoint_hours}
 
 Where:
 \itemize{
-\item \code{visit_day} is the planned visit day (e.g., 1, 2, 8, 15)
-\item \code{first_dose_day} is the day of first dose (typically 1)
+\item \code{day_offset} is calculated from \code{visit_day} and \code{first_dose_day}, accounting
+for the absence of Day 0 in clinical trial convention
 \item \code{timepoint_hours} is derived from the timepoint description using
 \code{convert_xxtpt_to_hours()}, or 0 if \code{tpt_var} is not provided
+}
+
+\strong{Handling "No Day 0":}
+
+In clinical trials, day numbering typically follows the convention:
+..., Day -2, Day -1, Day 1, Day 2, ... (no Day 0). This function accounts
+for this by adjusting the day offset when \code{visit_day} is negative and
+\code{first_dose_day} is positive.
+
+For example, with \code{first_dose_day = 1}:
+\itemize{
+\item Day -1 → -24 hours (1 day before Day 1, not 2 days)
+\item Day -7 → -168 hours (7 days before Day 1)
+\item Day 1 → 0 hours (first dose day)
+\item Day 8 → 168 hours (7 days after Day 1)
+}
+
+With \code{first_dose_day = 7}:
+\itemize{
+\item Day -1 → -168 hours (7 days before Day 7, accounting for no Day 0)
+\item Day 1 → -144 hours (6 days before Day 7)
+\item Day 6 → -24 hours (1 day before Day 7)
+\item Day 7 → 0 hours (first dose day)
 }
 
 \strong{Common Use Cases:}
@@ -122,6 +145,8 @@ Where:
 (e.g., Pre-dose, 1H, 2H, 4H, 8H, 24H)
 \item \strong{Multiple dose study}: Dosing on multiple days (e.g., Day 1, Day 8,
 Day 15) with samples around each dose
+\item \strong{Screening visits}: Negative visit days (e.g., Day -14, Day -7) before
+first dose
 \item \strong{Steady state study}: Multiple daily doses with sampling on specific
 days
 \item \strong{Oral medications}: Use default \code{treatment_duration = 0} for
@@ -140,6 +165,7 @@ different subjects or visits have different treatment durations
 \itemize{
 \item The function assumes \code{visit_day} represents the nominal/planned day, not
 the actual study day
+\item Day numbering follows clinical trial convention with no Day 0
 \item For timepoints that span multiple days (e.g., "24H Post-dose"), ensure
 \code{visit_day} is set to the day when the sample was taken. For example, if
 dosing occurs on Day 3, a "24H Post-dose" sample taken on Day 4 should
@@ -192,6 +218,25 @@ derive_var_nfrlt(
   visit_day = VISITDY
 )
 
+# Study with screening visits (negative days)
+adpc_screen <- tribble(
+  ~USUBJID, ~VISITDY, ~PCTPT,
+  "001",    -14,      "Pre-dose",
+  "001",    -7,       "Pre-dose",
+  "001",    -1,       "Pre-dose",
+  "001",    1,        "Pre-dose",
+  "001",    1,        "2H Post-dose"
+)
+
+derive_var_nfrlt(
+  adpc_screen,
+  new_var = NFRLT,
+  tpt_var = PCTPT,
+  visit_day = VISITDY
+)
+# Returns: -336, -168, -24, 0, 2
+# Note: Day -1 is 24 hours before Day 1 (no Day 0)
+
 # Multiple dose study - Days 1, 8, 15
 adpc_md <- tribble(
   ~USUBJID, ~VISITDY, ~PCTPT,
@@ -209,6 +254,27 @@ derive_var_nfrlt(
   tpt_var = PCTPT,
   visit_day = VISITDY
 )
+
+# First dose on Day 7 instead of Day 1
+adpc_day7 <- tribble(
+  ~USUBJID, ~VISITDY, ~PCTPT,
+  "001",    -1,       "Pre-dose",
+  "001",    1,        "Pre-dose",
+  "001",    6,        "Pre-dose",
+  "001",    7,        "Pre-dose",
+  "001",    8,        "Pre-dose"
+)
+
+derive_var_nfrlt(
+  adpc_day7,
+  new_var = NFRLT,
+  tpt_var = PCTPT,
+  visit_day = VISITDY,
+  first_dose_day = 7
+)
+# Returns: -168, -144, -24, 0, 24
+# Day -1 is 7 days (168 hours) before Day 7
+# Day 1 is 6 days (144 hours) before Day 7
 
 # IV infusion with 2 hour treatment duration (scalar)
 adpc_inf <- tribble(
