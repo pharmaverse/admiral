@@ -95,7 +95,7 @@ Time ranges are converted based on the \code{range_method} parameter:
 \item \strong{Hours + Minutes}: \code{"1H30M"} → 1.5
 \item \strong{Hours}: \code{"2 hours"} → 2, \code{"1 HOUR POST"} → 1
 \item \strong{Minutes}: \code{"30M"} → 0.5, \code{"30 MIN POST"} → 0.5
-\item \strong{Predose}: \code{"5 MIN PREDOSE"} → -0.0833
+\item \strong{Predose}: \code{"5 MIN PREDOSE"} → -0.0833, \code{"5 MIN PRE-DOSE"} → -0.0833
 \item \strong{Before treatment}: \code{"5 MIN BEFORE"} → -0.0833
 \item \strong{Post EOI/EOT}: \code{"1 HOUR POST EOI"} → treatment_duration + 1,
 \code{"24 HR POST INF"} → treatment_duration + 24,
@@ -160,7 +160,7 @@ convert_xxtpt_to_hours(c(
 ))
 
 # Predose/before patterns (negative times)
-convert_xxtpt_to_hours(c("5 MIN PREDOSE", "1 HOUR BEFORE"))
+convert_xxtpt_to_hours(c("5 MIN PREDOSE", "5 MIN PRE-DOSE", "1 HOUR BEFORE"))
 
 # Treatment-related patterns with default treatment_duration = 0 (oral)
 convert_xxtpt_to_hours(c(
