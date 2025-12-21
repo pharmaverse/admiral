@@ -5,7 +5,7 @@
 \alias{atoxgr_criteria_ctcv5_uscv}
 \title{Metadata Holding Grading Criteria for NCI-CTCAEv5 using USCV unit where applicable}
 \format{
-An object of class \code{tbl_df} (inherits from \code{tbl}, \code{data.frame}) with 45 rows and 13 columns.
+An object of class \code{data.frame} with 45 rows and 13 columns.
 }
 \usage{
 atoxgr_criteria_ctcv5_uscv
@@ -14,10 +14,10 @@ atoxgr_criteria_ctcv5_uscv
 Metadata Holding Grading Criteria for NCI-CTCAEv5 using USCV unit where applicable
 }
 \details{
-This metadata has its origin in the ADLB Grading Spec Excel file which ships with \code{{admiral}}
-and can be accessed using \code{system.file("adlb_grading/adlb_grading_spec.xlsx", package = "admiral")}
-in sheet = "NCICTCAEv5_CV".
-The dataset contained in there has the following columns:
+This metadata has its origin in the ADLB Grading Spec json file \code{data-raw/adlb_grading/ncictcaev5_uscv.json}.
+The variables \code{GRADE_NA_CODE}, \code{GRADE_4_CODE}, \code{GRADE_3_CODE}, \code{GRADE_2_CODE} and \code{GRADE_1_CODE} in
+the json file are combined to create \code{GRADE_CRITERIA_CODE}, and then dropped from metadata.
+The dataset contains the following columns:
 \itemize{
 \item \code{SOC}: variable to hold the SOC of the lab test criteria.
 \item \code{TERM}: variable to hold the term describing the criteria applied to a particular lab test,
@@ -49,6 +49,8 @@ Other metadata:
 \code{\link{atoxgr_criteria_ctcv4}},
 \code{\link{atoxgr_criteria_ctcv4_uscv}},
 \code{\link{atoxgr_criteria_ctcv5}},
+\code{\link{atoxgr_criteria_ctcv6}},
+\code{\link{atoxgr_criteria_ctcv6_uscv}},
 \code{\link{atoxgr_criteria_daids}},
 \code{\link{atoxgr_criteria_daids_uscv}},
 \code{\link{country_code_lookup}},

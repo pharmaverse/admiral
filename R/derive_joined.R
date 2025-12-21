@@ -1183,14 +1183,23 @@ get_joined_sub_data <- function(dataset,
                                 first_cond_upper,
                                 first_cond_lower,
                                 filter_join) {
-  data_joined <-
-    left_join(
-      dataset,
-      dataset_add,
-      by = vars2chr(by_vars),
-      suffix = c("", ".join"),
-      relationship = "many-to-many"
-    )
+  if (is.null(by_vars)) {
+    data_joined <-
+      cross_join(
+        dataset,
+        dataset_add,
+        suffix = c("", ".join")
+      )
+  } else {
+    data_joined <-
+      left_join(
+        dataset,
+        dataset_add,
+        by = vars2chr(by_vars),
+        suffix = c("", ".join"),
+        relationship = "many-to-many"
+      )
+  }
 
   if (join_type != "all") {
     operator <- c(before = "<", after = ">")

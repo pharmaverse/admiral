@@ -40,7 +40,7 @@ test_that("derive_var_dthcaus Test 1: deprecation message if function is called"
 
     src_ds <- dthcaus_source(
       dataset_name = "ds",
-      filter = DSDECOD == "DEATH" & grepl("DEATH DUE TO", DSTERM),
+      filter = DSDECOD == "DEATH" & str_detect(DSTERM, "DEATH DUE TO", ),
       date = convert_dtc_to_dt(DSSTDTC),
       mode = "first",
       dthcaus = str_to_upper(DSTERM)
@@ -113,7 +113,7 @@ test_that("derive_var_dthcaus Test 3: DTHCAUS is added from AE and DS", {
 
   src_ds <- dthcaus_source(
     dataset_name = "ds",
-    filter = DSDECOD == "DEATH" & grepl("DEATH DUE TO", DSTERM),
+    filter = DSDECOD == "DEATH" & str_detect(DSTERM, "DEATH DUE TO"),
     date = convert_dtc_to_dt(DSSTDTC),
     mode = "first",
     dthcaus = str_to_upper(DSTERM)
@@ -178,7 +178,7 @@ test_that("derive_var_dthcaus Test 4: `dthcaus` handles symbols and string liter
 
   src_ds <- dthcaus_source(
     dataset_name = "ds",
-    filter = DSDECOD == "DEATH" & grepl("DEATH DUE TO", DSTERM),
+    filter = DSDECOD == "DEATH" & str_detect(DSTERM, "DEATH DUE TO"),
     date = DSSTDT,
     mode = "first",
     dthcaus = DSTERM
@@ -247,7 +247,7 @@ test_that("derive_var_dthcaus Test 5: traceability variables are added from AE a
 
   src_ds <- dthcaus_source(
     dataset_name = "ds",
-    filter = DSDECOD == "DEATH" & grepl("DEATH DUE TO", DSTERM),
+    filter = DSDECOD == "DEATH" & str_detect(DSTERM, "DEATH DUE TO"),
     date = DSSTDT,
     mode = "first",
     dthcaus = DSTERM,
@@ -319,7 +319,7 @@ test_that("derive_var_dthcaus Test 6: DTHCAUS/traceabiity are added from 2 input
 
   src_ds <- dthcaus_source(
     dataset_name = "ds",
-    filter = DSDECOD == "DEATH" & grepl("DEATH DUE TO", DSTERM),
+    filter = DSDECOD == "DEATH" & str_detect(DSTERM, "DEATH DUE TO"),
     date = DSSTDT,
     mode = "first",
     dthcaus = DSTERM,
@@ -471,7 +471,7 @@ test_that("derive_var_dthcaus Test 9: `dataset` is sorted using the `order` para
 
   src_ds <- dthcaus_source(
     dataset_name = "ds",
-    filter = DSDECOD == "DEATH" & grepl("DEATH DUE TO", DSTERM),
+    filter = DSDECOD == "DEATH" & str_detect(DSTERM, "DEATH DUE TO"),
     date = DSSTDT,
     order = exprs(DSSEQ),
     mode = "last",
@@ -537,7 +537,7 @@ test_that("derive_var_dthcaus Test 10: multiple observations from different sour
 
   src_ds <- dthcaus_source(
     dataset_name = "ds",
-    filter = DSDECOD == "DEATH" & grepl("DEATH DUE TO", DSTERM),
+    filter = DSDECOD == "DEATH" & str_detect(DSTERM, "DEATH DUE TO"),
     date = convert_dtc_to_dt(DSSTDTC),
     mode = "first",
     dthcaus = DSTERM
@@ -596,7 +596,7 @@ test_that("derive_var_dthcaus Test 11: multiple observations with same date", {
 
   src_ds <- dthcaus_source(
     dataset_name = "ds",
-    filter = DSDECOD == "DEATH" & grepl("DEATH DUE TO", DSTERM),
+    filter = DSDECOD == "DEATH" & str_detect(DSTERM, "DEATH DUE TO"),
     date = convert_dtc_to_dt(DSSTDTC),
     mode = "first",
     dthcaus = DSTERM
@@ -655,7 +655,7 @@ test_that("derive_var_dthcaus Test 12: error if source dataset is not available"
 
   src_ds <- dthcaus_source(
     dataset_name = "ds",
-    filter = DSDECOD == "DEATH" & grepl("DEATH DUE TO", DSTERM),
+    filter = DSDECOD == "DEATH" & str_detect(DSTERM, "DEATH DUE TO"),
     date = convert_dtc_to_dt(DSSTDTC),
     mode = "first",
     dthcaus = str_to_upper(DSTERM)
