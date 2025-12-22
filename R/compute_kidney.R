@@ -200,5 +200,5 @@ compute_egfr <- function(creat, creatu = "SI", age, weight, sex, race = NULL, me
       gender_coefficent
   }
 
-  return(egfr)
+  egfr
 }

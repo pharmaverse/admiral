@@ -14,12 +14,15 @@
 #'
 #' @param meta_criteria Metadata data set holding the criteria (normally a case statement)
 #'
-#' @permitted `atoxgr_criteria_ctcv4`, `atoxgr_criteria_ctcv5`, `atoxgr_criteria_daids`
+#' @permitted `atoxgr_criteria_ctcv4`, `atoxgr_criteria_ctcv5`, `atoxgr_criteria_ctcv6`,
+#' `atoxgr_criteria_daids`
 #'
 #' - `atoxgr_criteria_ctcv4` implements [Common Terminology Criteria for Adverse Events (CTCAE)
 #'    v4.0](https://dctd.cancer.gov/research/ctep-trials/trial-development#ctcae-and-ctep-codes)
 #' - `atoxgr_criteria_ctcv5` implements [Common Terminology Criteria for Adverse Events (CTCAE)
 #'    v5.0](https://dctd.cancer.gov/research/ctep-trials/for-sites/adverse-events#ctep-ctcae)
+#' - `atoxgr_criteria_ctcv6` implements [Common Terminology Criteria for Adverse Events (CTCAE)
+#'    v6.0](https://dctd.cancer.gov/research/ctep-trials/for-sites/adverse-events#ctep-ctcae)
 #' - `atoxgr_criteria_daids` implements
 #'    [Division of AIDS (DAIDS) Table for Grading the Severity of Adult and Pediatric Adverse
 #'    Events](https://rsc.niaid.nih.gov/sites/default/files/daidsgradingcorrectedv21.pdf)
@@ -42,13 +45,23 @@
 #'
 #' @permitted "L", "H"
 #'
-#' @param abnormal_indicator Value in `BNRIND` derivation to indicate an abnormal value.
-#' Usually "HIGH" for `criteria_direction` = "H" and "LOW" for `criteria_direction` = "L".
+#' @param abnormal_indicator `r lifecycle::badge("deprecated")` Please use `low_indicator` and
+#' `high_indicator` instead.
 #'
-#'   This is only required when `meta_criteria = atoxgr_criteria_ctcv5` and `BNRIND` is a required
-#'   variable. Currently for terms `"Alanine aminotransferase increased"`,
-#'   `"Alkaline phosphatase increased"`, `"Aspartate aminotransferase increased"`,
-#'   `"Blood bilirubin increased"` and `"GGT increased"`
+#' @param low_indicator Value in `BNRIND` derivation to indicate an abnormal low value.
+#' Usually "LOW" for `criteria_direction` = "L".
+#'
+#'   This is only required when `meta_criteria = atoxgr_criteria_ctcv6` and `BNRIND` is a required
+#'   variable. Currently, only for term `"Creatinine increased"`.
+#'
+#' @param high_indicator Value in `BNRIND` derivation to indicate an abnormal high value.
+#' Usually "HIGH" for `criteria_direction` = "H".
+#'
+#'   This is only required when `meta_criteria = atoxgr_criteria_ctcv5` or
+#'   `meta_criteria = atoxgr_criteria_ctcv6` and `BNRIND` is a required variable. Currently, for
+#'   terms `"Alanine aminotransferase increased"`, `"Aspartate aminotransferase increased"`,
+#'   `"Blood bilirubin increased"` and `"GGT increased"` for both sets of criteria. Also, term
+#'   `"Alkaline phosphatase increased"` for `meta_criteria = atoxgr_criteria_ctcv5`.
 #'
 #' @param get_unit_expr An expression providing the unit of the parameter
 #'
@@ -127,6 +140,8 @@ derive_var_atoxgr_dir <- function(dataset,
                                   meta_criteria,
                                   criteria_direction,
                                   abnormal_indicator = NULL,
+                                  high_indicator = NULL,
+                                  low_indicator = NULL,
                                   get_unit_expr,
                                   signif_dig = get_admiral_option("signif_digits")) {
   new_var <- assert_symbol(enexpr(new_var))
@@ -136,8 +151,40 @@ derive_var_atoxgr_dir <- function(dataset,
   # check input parameter has correct value
   assert_character_scalar(criteria_direction, values = c("L", "H"))
 
+  if (!missing(abnormal_indicator)) {
+    assert_character_vector(abnormal_indicator, optional = TRUE)
+    if (criteria_direction == "L") {
+      low_indicator <- abnormal_indicator
+      mapping <- paste0(
+        "The argument is mapped to `low_indicator`, i.e., `low_indicator = \"",
+        abnormal_indicator, "\"`"
+      )
+    } else {
+      high_indicator <- abnormal_indicator
+      mapping <- paste0(
+        "The argument is mapped to `high_indicator`, i.e., `high_indicator = \"",
+        abnormal_indicator, "\"`"
+      )
+    }
+
+    deprecate_inform(
+      when = "1.4.0",
+      what = "derive_var_atoxgr_dir(abnormal_indicator = )",
+      details = c(
+        x = "This message will turn into a warning at the beginning of 2027.",
+        i = paste0(
+          "See admiral's deprecation guidance: ",
+          "https://pharmaverse.github.io/admiraldev/dev/articles/",
+          "programming_strategy.html#deprecation"
+        ),
+        x = mapping
+      )
+    )
+  }
+
   # check input parameter is character value
-  assert_character_vector(abnormal_indicator, optional = TRUE)
+  assert_character_vector(high_indicator, optional = TRUE)
+  assert_character_vector(low_indicator, optional = TRUE)
 
   # check input parameter holding significant digits has correct value
   assert_integer_scalar(signif_dig, subset = "positive")
@@ -245,9 +292,11 @@ derive_var_atoxgr_dir <- function(dataset,
         # check variables required in criteria exist on data
         assert_data_frame(grade_this_filter_unit, required_vars = exprs(!!!syms(list_of_vars)))
 
-        if ("BNRIND" %in% list_of_vars) {
-          # check input parameter is character value
-          assert_character_vector(abnormal_indicator, optional = FALSE)
+        if (str_detect(meta_this_filter_unit$GRADE_CRITERIA_CODE, "high_indicator")) {
+          assert_character_vector(high_indicator, optional = FALSE)
+        }
+        if (str_detect(meta_this_filter_unit$GRADE_CRITERIA_CODE, "low_indicator")) {
+          assert_character_vector(low_indicator, optional = FALSE)
         }
 
         # apply criteria when SI or CV unit matches

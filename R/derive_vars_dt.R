@@ -610,21 +610,21 @@ impute_dtc_dt <- function(dtc,
     max_dates = max_dates
   )
 
-  return(restricted)
+  restricted
 }
 
-#' Restrict Imputed DTC date to Minimum/Maximum Dates
+#' Restrict Imputed `--DTC` date to Minimum/Maximum Dates
 #'
-#' @param imputed_dtc The imputed DTC date
+#' @param imputed_dtc The imputed `--DTC` date
 #'
 #' @inheritParams impute_dtc_dt
 #'
 #' @returns
 #'   - The last of the minimum dates (`min_dates`) which are in the range of the
-#'   partial DTC date (`dtc`)
+#'   partial `--DTC` date (`dtc`)
 #'   - The first of the maximum dates (`max_dates`) which are in the range of the
-#'   partial DTC date (`dtc`)
-#'   - `imputed_dtc` if the partial DTC date (`dtc`) is not in range of any of
+#'   partial `--DTC` date (`dtc`)
+#'   - `imputed_dtc` if the partial `--DTC` date (`dtc`) is not in range of any of
 #'   the minimum or maximum dates.
 #'
 #'
@@ -727,7 +727,7 @@ compute_dtf <- function(dtc, dt) {
   warn_if_invalid_dtc(dtc, valid_dtc)
 
   # Find date portion
-  date_portion <- ifelse(grepl("T", dtc),
+  date_portion <- if_else(str_detect(dtc, "T"),
     gsub("T", "", substr(dtc, 1, str_locate(dtc, "T")[, 1])),
     substr(dtc, 1, 10)
   )

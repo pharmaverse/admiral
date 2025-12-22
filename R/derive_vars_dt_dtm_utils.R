@@ -103,7 +103,7 @@ dt_level <- function(level) {
 #'  - For `date_imputation = "<mm>-<dd>"` `"xxxx"`, `"<mm>"`, `"<dd>"` are returned.
 #'
 #'  `"xxxx"` indicates that the component is undefined. If an undefined
-#'  component occurs in the imputed DTC value, the imputed DTC value is set to
+#'  component occurs in the imputed `--DTC` value, the imputed `--DTC` value is set to
 #'  `NA_character_` in the imputation functions.
 #'
 #' @examples
@@ -134,32 +134,31 @@ dt_level <- function(level) {
 #' @seealso [impute_dtc_dtm()], [impute_dtc_dt()]
 get_imputation_target_date <- function(date_imputation,
                                        month) {
-  target <- vector("list", 3)
-  names(target) <- c("year", "month", "day")
-  target <- case_when(
-    date_imputation == "first" ~ list(
+  if (date_imputation == "first") {
+    list(
       year = "0000",
       month = "01",
       day = "01"
-    ),
-    date_imputation == "mid" ~ list(
+    )
+  } else if (date_imputation == "mid") {
+    list(
       year = "xxxx",
       month = "06",
       day = if_else(is.na(month), "30", "15")
-    ),
-    date_imputation == "last" ~ list(
+    )
+  } else if (date_imputation == "last") {
+    list(
       year = "9999",
       month = "12",
       day = "28"
-    ),
-    TRUE ~ list(
+    )
+  } else {
+    list(
       year = "xxxx",
       month = str_sub(date_imputation, 1, 2),
       day = str_sub(date_imputation, 4, 5)
     )
-  )
-
-  target
+  }
 }
 
 #' Get Time Imputation Targets
@@ -200,19 +199,17 @@ get_imputation_target_date <- function(date_imputation,
 #'
 #' @seealso  [impute_dtc_dtm()]
 get_imputation_target_time <- function(time_imputation) {
-  target <- vector("list", 3)
-  names(target) <- c("hour", "minute", "second")
-  target <- case_when(
-    time_imputation == "first" ~ list(hour = "00", minute = "00", second = "00"),
-    time_imputation == "last" ~ list(hour = "23", minute = "59", second = "59"),
-    TRUE ~ list(
+  if (time_imputation == "first") {
+    list(hour = "00", minute = "00", second = "00")
+  } else if (time_imputation == "last") {
+    list(hour = "23", minute = "59", second = "59")
+  } else {
+    list(
       hour = str_sub(time_imputation, 1, 2),
       minute = str_sub(time_imputation, 4, 5),
       second = str_sub(time_imputation, 7, -1)
     )
-  )
-
-  target
+  }
 }
 
 #' Convert a Date into a Datetime Object
@@ -253,7 +250,7 @@ convert_date_to_dtm <- function(dt,
                                 max_dates = NULL,
                                 preserve = FALSE) {
   if (is.POSIXct(dt)) {
-    return(dt)
+    dt
   } else {
     if (is.instant(dt)) {
       dt <- format(dt, "%Y-%m-%d")
@@ -272,7 +269,7 @@ convert_date_to_dtm <- function(dt,
   }
 }
 
-#' Parse DTC variable and Determine Components
+#' Parse `--DTC` variable and Determine Components
 #'
 #' @param dtc The `'--DTC'` date to parse
 #'
@@ -391,7 +388,7 @@ assert_date_imputation <- function(date_imputation, highest_imputation) {
   }
 
   if (highest_imputation == "M") {
-    is_mm_dd_format <- grepl("^(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])$", date_imputation)
+    is_mm_dd_format <- str_detect(date_imputation, "^(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])$")
     is_one_of_keys <- date_imputation %in% c("first", "mid", "last")
     if (!{
       is_mm_dd_format || is_one_of_keys
@@ -443,9 +440,9 @@ assert_time_imputation <- function(time_imputation, highest_imputation) {
 
   time_imputation <- tolower(time_imputation)
 
-  is_hh_mm_ss_format <- grepl(
-    "^((0[0-9]|1[0-9]|2[0-3]):([0-5][0-9]):([0-5][0-9])|24:00:00)$",
-    time_imputation
+  is_hh_mm_ss_format <- str_detect(
+    time_imputation,
+    "^((0[0-9]|1[0-9]|2[0-3]):([0-5][0-9]):([0-5][0-9])|24:00:00)$"
   )
   is_one_of_keys <- time_imputation %in% c("first", "last")
 
@@ -524,7 +521,7 @@ assert_highest_imputation <- function(highest_imputation, highest_imputation_val
       "is specified, {.arg max_dates} must be specified."
     ))
   }
-  return(invisible(NULL))
+  invisible(NULL)
 }
 
 #' Get Range of Partial Date / Datetime
@@ -726,7 +723,7 @@ get_imputation_targets <- function(partial, date_imputation = NULL, time_imputat
     return(c(target_date, target_time))
   }
 
-  return(target_date)
+  target_date
 }
 
 #' Adjust Last Day Imputation

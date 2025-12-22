@@ -30,7 +30,6 @@ test_that("create_single_dose_dataset Test 1: Works as expected for Q*/EVERY * c
 })
 
 
-
 ## Test 2: Works as expected for # TIMES PER cases ----
 test_that("create_single_dose_dataset Test 2: Works as expected for # TIMES PER cases", {
   input <- tibble::tribble(
