@@ -251,6 +251,38 @@
 #' ) %>%
 #'   arrange(USUBJID, AVISIT)
 #'
+#' @caption Adding constant values using `constant_values` argument
+#'
+#' @info Adding records
+#'
+#' @code
+#' library(tibble)
+#'
+#' adsl <- tibble(USUBJID = c("1", "2"))
+#'
+#' adae <- tribble(
+#'  ~USUBJID, ~AEDECOD,
+#'  "1",      "Illness",
+#'  "1",      "Pain"
+#' )
+#'
+#' derive_summary_records(
+#'   dataset_add = adae,
+#'   dataset_ref = adsl,
+#'   by_vars = exprs(USUBJID),
+#'   constant_values = exprs(
+#'     PARAMCD = "AECOUNT",
+#'     PARAM = "Number of adverse events",
+#'     PARCAT1 = "Adverse events"
+#'   ),
+#'   set_values_to = exprs(
+#'     AVAL = n_distinct(AEDECOD),
+#'     SRCDOM = "ADAE"
+#'   ),
+#'     missing_values = exprs(
+#'     AVAL = 0
+#'   )
+#' )
 
 derive_summary_records <- function(dataset = NULL,
                                    dataset_add,
