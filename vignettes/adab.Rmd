@@ -103,25 +103,31 @@ library(admiral)
 library(dplyr)
 library(lubridate)
 library(stringr)
-library(pharmaversesdtm)
+library(pharmaversesdtm) # Contains example datasets from the CDISC pilot project or simulated
 
-ex <- pharmaversesdtm::ex
+# ---- Load source datasets ----
+
+# Use e.g. haven::read_sas to read in .sas7bdat, or other suitable functions
+# as needed and assign to the variables below.
+# For illustration purposes read in admiral test data
+
+# Load IS, EX and ADSL from pharmaversesdtm and admiral
+
 is <- pharmaversesdtm::is_ada
+ex <- pharmaversesdtm::ex
 adsl <- admiral::admiral_adsl
+
+# When SAS datasets are imported into R using haven::read_sas(), missing
+# character values from SAS appear as "" characters in R, instead of appearing
+# as NA values. Further details can be obtained via the following link:
+# https://pharmaverse.github.io/admiral/cran-release/articles/admiral.html#handling-of-missing-values # nolint
 
 ex <- convert_blanks_to_na(ex)
 is <- convert_blanks_to_na(is)
 adsl <- convert_blanks_to_na(adsl)
 
-# ---- Lookup tables ----
-param_lookup <- tibble::tribble(
-  ~PCTESTCD, ~PARAMCD, ~PARAM, ~PARAMN,
-  "XAN", "XAN", "Pharmacokinetic concentration of Xanomeline", 1,
-  "DOSE", "DOSE", "Xanomeline Patch Dose", 2,
-)
-
-# Similar to ADEX, assign a value for parameterized summary records
-# Suggested are AVISIT=OVERALL, AVISITN=11111
+# Define values for records with overall values
+# Suggested are AVISIT=Overall, AVISITN=11111
 overall_avisit <- "OVERALL"
 overall_avisitn <- 11111
 ```
@@ -164,7 +170,7 @@ then the `IS` time is adjusted for pre-dose sampling planned time. User would ad
 is_dates <- is %>%
   # Filter as needed (i.e. exclude ISSTAT has "NOT DONE")
   filter(!(ISSTAT %in% c("NOT DONE")) & toupper(ISBDAGNT) == "XANOMELINE") %>%
-  # Initial preparation and core variables
+  # Initial prep and core variable
   mutate(
     # ADATYPE and ADAPARM are assigned values to serve BY analyte processing
 
@@ -220,7 +226,7 @@ is_dates <- is %>%
   ) %>%
   # Derive analysis date/time then compute ADY
   # Impute missing time to 00:00:00 or as desired.
-  # Could replace this code with own imputation code or function
+  #   Could replace this code with own imputation code or function
   derive_vars_dtm(
     new_vars_prefix = "A",
     highest_imputation = "s",
@@ -252,6 +258,8 @@ date part variables using `derive_vars_dtm_to_dt()`
 
 
 ```{r message=FALSE}
+# ---- Get dosing information ----
+
 ex_dates <- ex %>%
   # Keep applicable desired records based on EXTRT and/or dose values (>=0, >0, etc.)
   filter(
@@ -259,7 +267,7 @@ ex_dates <- ex %>%
     EXDOSE >= 0
   ) %>%
   mutate(
-    # DRUG is a merge variable to map and merge ADA data with EX.EXTRT
+    # DRUG is a merge var to map and merge ADA data with EX.EXTRT
     # This will be used to merge first dose into IS working data.
     # PLACEBO example is for if/when ADA was also collected on Placebo subjects
     # or treatments are scrambled prior to database lock.
@@ -300,6 +308,8 @@ was imputed.
 
 
 ```{r message=FALSE}
+# Note: This template computes only AFRLT, see ADPC template if need EX dose expansion example.
+
 # Derive AFRLT in IS data
 is_afrlt <- is_dates %>%
   derive_vars_merged(
@@ -319,7 +329,8 @@ is_afrlt <- is_dates %>%
     out_unit = "days",
     floor_in = FALSE,
     add_one = FALSE
-  )
+  ) %>%
+  arrange(STUDYID, USUBJID, DRUG, ADATYPE, ADAPARM, ADTM, NFRLT)
 ```
 
 
@@ -335,7 +346,7 @@ compute all the ADA parameters by `BASETYPE`.
 
 ```{r message=FALSE}
 # Compute or assign BASETYPE, APERIOD and APHASE ----------------------------------
-# Add study specific code as applicable using ADEX or ADSL APx and PHx variables
+# Add study specific code as applicable using ADEX or ADSL APx and PHx vars
 
 is_basetype <- is_afrlt %>%
   mutate(
@@ -442,6 +453,11 @@ could be considered negative while non missing post-baseline might required
 missing baseline but required post-baseline to be not missing values.
 
 ```{r message=FALSE}
+# Begin computation of parameters -----------------------------------------
+
+# Identify Best Baseline for each analyte and parameter type
+# Baseline is NFRLT <= 0 or Unscheduled AND the ADA Date is on or before the date of first dose.
+
 is_baseline <- is_aval %>%
   # Calculate ABLFL. If more than one record for the 'order' and 'filter' will throw a duplicate
   # record warning, user can decide how to adjust the mode, order, filter or adjust in prior step.
@@ -473,8 +489,7 @@ is_baseline <- is_aval %>%
       ADTM > FANLDTM & is.na(ABLFL) & (is.na(RESULTC) & is.na(AVAL)) ~ "N",
       TRUE ~ NA_character_
     )
-  ) %>%
-  arrange(STUDYID, USUBJID, DRUG, ADATYPE, ADAPARM, ADTM, NFRLT)
+  )
 
 # Compute BASE and CHG
 is_aval_change <- is_baseline %>%
@@ -489,7 +504,7 @@ is_aval_change <- is_baseline %>%
     filter = is.na(ABLFL)
   )
 
-# Interpreted Result Baseline
+# Interpreted RESULT BASE
 is_result_change <- is_aval_change %>%
   derive_var_base(
     by_vars = exprs(STUDYID, USUBJID, BASETYPE, ADATYPE, ADAPARM),
@@ -498,8 +513,7 @@ is_result_change <- is_aval_change %>%
     filter = ABLFL == "Y"
   )
 
-
-# Get base only data for use later in a FULL JOIN.
+# Get base only data for use later
 base_data <- is_result_change %>%
   filter(ABLFL == "Y") %>%
   select(
@@ -507,7 +521,6 @@ base_data <- is_result_change %>%
     ABLFL
   )
 ```
-
 
 
 This section computes main ADA analyte parameters into a horizontal dataset.
@@ -540,7 +553,6 @@ adablpfl <- is_result_change %>%
   rename(ADABLPFL = ABLFL)
 
 # Calculate the By Visit parameters
-
 is_visit_flags <- is_result_change %>%
   mutate(
     TFLAGV = case_when(
@@ -580,7 +592,7 @@ post_data <- is_visit_flags %>%
   rename(AVAL_P = AVAL) %>%
   rename(RESULT_P = RESULTN)
 
-# Use the "post_data" dataset to create the ADPBLPFL flag, which will be merged back later in the program
+# Use "post_data" to make a ADPBLPFL flag data set to merge back later in the program
 #  Note:  "post_data" is if VALIDPOST="Y" (has a non missing post baseline result)
 adpblpfl <- post_data %>%
   distinct(STUDYID, USUBJID, DRUG, BASETYPE, ADATYPE,
@@ -672,8 +684,7 @@ In the example template, to be `NABSTAT = "Positive" or "Negative"`, the subject
 is set to either NA or 'MISSING" as desired.
 
 ```{r message=FALSE}
-# Get overall ADASTAT status for computing NABSTAT
-
+# Merge in out Main ADASTAT status for computing NABSTAT
 flagdata_adastat <- flagdata_init %>%
   derive_vars_merged(
     dataset_add = flagdata_init,
@@ -750,7 +761,7 @@ The remaining pertinent analysis variables computed in this section are:
 
 ```{r message=FALSE}
 # Put TFLAG, BFLAG and PBFLAG and the nabstat_ variables onto the main
-# data set (is_flagdata from is_visit_flags)
+# dataset (is_flagdata from is_visit_flags)
 is_flagdata <- is_visit_flags %>%
   # main_aab_flagdata
   derive_vars_merged(
@@ -766,7 +777,7 @@ per_tran_pre <- is_flagdata %>%
     STUDYID, USUBJID, BASETYPE, ADATYPE, ADAPARM, ADTM, FANLDTM, FANLDT,
     TFLAGV, ISSEQ
   ) %>%
-  group_by(STUDYID, USUBJID, BASETYPE, ADATYPE, ADAPARM ) %>%
+  group_by(STUDYID, USUBJID, BASETYPE, ADATYPE, ADAPARM) %>%
   mutate(
     MaxADTM = max(ADTM)
   ) %>%
@@ -873,7 +884,7 @@ per_tran_final <- per_tran_last %>%
   select(-ADTM, -TFLAGV, -FANLDTM, -FANLDT, -LFLAGPOS, -FPPDT, -LPPDT)
 
 # Put PERSADA, TRANADA, INDUCED, ENHANCED, TDUR, ADADUR onto "is_flagdata" as "main_aab_pertran"
-# Note: signal_duplicate_records() error usually occurs when a subject has duplicate
+# Note: Note: signal_duplicate_records() error usually occurs when a subject has duplicate
 #        records for a given BASETYPE, ADATYPE, ADAPARM and ISDTC. Investigate then add code
 #        to filter it down to best one record per USUBJID, BASETYPE, ADATYPE and ADAPARM
 main_aab_pertran <- is_flagdata %>%
@@ -918,6 +929,18 @@ main_aab <- main_aab_rtimes %>%
     new_vars = exprs(ADPBLPFL),
     by_vars = exprs(STUDYID, USUBJID, BASETYPE, ADATYPE, ADAPARM)
   )
+
+# This will be dropped for final merge to prod/main
+main_aab_review <- main_aab %>%
+  select(
+    STUDYID, USUBJID, VISIT, ISTESTCD, ISBDAGNT, DRUG, ADTM, ADT, ADY,
+    BASETYPE, ADATYPE, ADAPARM, MRT, DTL, ABLFL, ADABLPFL, ADPBLPFL, VALIDBASE, VALIDPOST,
+    NFRLT, AFRLT, RESULTC, RESULTN, ISSTRESC, ISSTRESN, AVALC, AVAL, AVALU, BASE, BFLAG, TFLAG,
+    PBFLAG, ADASTAT, ADASTAT_MAIN, NABSTAT, nabstat_opt1, tdur, ADADUR, TIMADA, TRANADA, PERSADA
+  ) %>%
+  arrange(USUBJID, ISTESTCD, ADY) %>%
+  filter(1 == 1) %>%
+  filter(ADATYPE == "ADA_NAB" & NABSTAT == 0)
 ```
 
 
@@ -1392,6 +1415,8 @@ In this example, all are kept. A specific study might not have Nab or need the b
 or need variables like `ADADUR`, `LPPDTM` and `FPPDTM`.
 
 ```{r message=FALSE}
+# Set all the standard PARAM components together -----------------------------------
+
 adab_paramcds <- bind_rows(
   adab_titer, adab_nabvis, adab_result, adab_nabres, adab_bflag,
   adab_incucd, adab_enhanc, adab_emerpos, adab_trunaff, adab_emerneg, adab_notrrel,
@@ -1403,13 +1428,13 @@ adab_visits <- bind_rows(adab_tflagv, adab_pbflagv, adab_adastatv)
 
 # Create the final parameterized dataset --------------------------------------------
 
-# To keep only Standard parameters:
+# Standard parameters:
 # adab_study <- adab_paramcds
-# To include BY VISIT parameters and others
+# To include BY VISIT parameters
 adab_study <- bind_rows(adab_paramcds, adab_visits, adab_adadur, adab_fppdtm, adab_lppdtm)
 
-# Drop temporary variables and ADA Flag variables that are now parameterized, further below is a final 'select' statement to
-# to customize the final select.
+# Drop temporary variables and ADA Flag variables that are now parameterized, further below is a
+# final 'select' statement to to customize the final select.
 adab_study <- adab_study %>%
   select(
     -TIMADA, -ADADUR, -TRANADA, -PERSADA, -TRANADAE, -PERSADAE, -INDUCED, -ENHANCED,
@@ -1418,7 +1443,6 @@ adab_study <- adab_study %>%
     -tdur, -ADASTAT_MAIN, -NABPOSTMISS, -TRTSDT
   )
 ```
-
 
 
 In this section, compute or merge in any additional flags or `ADSL` variables.
@@ -1466,6 +1490,9 @@ values in `PARAMCD` and `PARAM`.
 
 
 ```{r message=FALSE}
+# Study Specific Specs Post-Processing ------------------------------------
+
+# Create a Tibble to map above PARAMCD and PARAM to final study spec values
 # Multiple NAB and ADA analytes example usage:
 # If ISTESTCD is 'ADA_BAB' and ISBDAGNT is 'XANOMELINE', RESULT1, ADASTAT1, etc. PARAM_SUFFIX = '(1)'
 # If ISTESTCD is 'ADA_BAB' and ISBDAGNT is 'Y012345678', RESULT2, ADASTAT2, etc. PARAM_SUFFIX = '(2)'
@@ -1525,8 +1552,7 @@ adab_params <- adab_adafl %>%
     )
   )
 
-
-# Sort by the standard Key variables then Compute ASEQ
+# Sort by the standard Key then Compute ASEQ
 adab_prefinal <- adab_params %>%
   # Calculate ASEQ
   derive_var_obs_number(
@@ -1536,7 +1562,6 @@ adab_prefinal <- adab_params %>%
     check_type = "error"
   )
 ```
-
 
 
 Select final variables to keep into ADAB
