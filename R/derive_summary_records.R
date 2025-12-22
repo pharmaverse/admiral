@@ -61,8 +61,8 @@
 #' @param constant_values Constant variables to set
 #'
 #'   The specified variables are set to the specified values for all new
-#'   summary records, including those with data in dataset_add and those with
-#'   no data imputed using dataset_ref and missing_values.
+#'   summary records, including those with data in `dataset_add` and those with
+#'   no data imputed using `dataset_ref` and `missing_values`.
 #'
 #'   Set a list of variables to some specified value for the new records
 #'   + LHS refer to a variable.
