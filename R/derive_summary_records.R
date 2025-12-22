@@ -66,8 +66,8 @@
 #'
 #'   Set a list of variables to some specified value for the new records
 #'   + LHS refer to a variable.
-#'   + RHS refers to the values to set to the variable. This can be a string
-#'   or a numeric value.
+#'   + RHS refers to the values to set to the variable. This can be an
+#'   expression.
 #'
 #' @permitted [expr_list_summary]
 #'
