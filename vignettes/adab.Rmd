@@ -44,6 +44,10 @@ output. For purposes of the examples, the surrogate data for ADA is called
 domain is intended for multiple classes of findings so a dedicated 'IS_ADA' was
 added to the `{pharmaversesdtm}` for ADA data.
 
+This template and the sample `IS` dataset works off of `IS` having primary
+Anti-Drug Antibody results (ex: `ISTESTCD` = 'ADA_BAB') and Neutralizing Antibody 
+(ex:`ISTESTCD` = 'ADA_NAB') records present when 'ADA_BAB' has a positive finding.
+
 One of the important aspects of the dataset is the separate derivation of
 original 'by visit' data, by visit interpreted results and parameter variables
 (like `ADEX` summary parameters). A good analogy would be `ADEX` that has a mix
@@ -127,6 +131,9 @@ At this step, we first adjust for whether our source data is `IS` using SDTM v2.
 or pre SDTM v1.8. Version 2.0 replaced `ISTESTCD` and `ISTEST` with general ADA categories,
 what was stored in pre-version 1.8 in `ISTESTCD` or `ISTEST` is now stored in `IS.ISBDAGNT`.
 This code provides a mechanism to process either version, see below comments for usage.
+
+If your `IS` dataset has values in `ISTESTCD` and `ISTEST` different then the example (or has 
+additional tests suitable for the `ADAB` domain), adjust this step accordingly. 
 
 `ADAPARM` and `ADATYPE` are assigned to assure consistent merge variables as values are calculated
 in the event `IS` from pre version 2.0 are used. `IS.ISTESTCD`, and `IS.ISBDAGNT` from version 2.0
@@ -353,6 +360,9 @@ When `IS.ISSTERC` is "POSITIVE",  `IS.ISSTRESN` is commonly populated with value
 However, if `ISSTRESC` is "POSITIVE" with a missing `IS.ISSTRESN`, this template provides
 a method to assign AVAL using the assigned MRT value, sets AVALC to 'N.C.' (Not Calculable)
 and documents the operation by setting `DTYPE='MRT'`.  
+
+If your `IS` dataset has additional sponsor specific tests kept and suitable for this template, 
+adjust or expand variable assignments in this step accordingly.
 
 ## Derive Assigned Variables {#assigned}
 
@@ -919,6 +929,9 @@ appended together into the final ADAB product.
 
 Certain computed variables are limited to only by visit records or for the main analyte.
 These are noted in each step as code or comments.
+
+If your `IS` dataset has additional sponsor specific tests that were added into the preceding code segments,
+add additional parameter data frames here to ultimately include in the final `ADAB` dataset.
 
 On the OVERALL data sets, we also keep: `PARCAT1`, `BASETYPE`, `PARAM`, `ADATYPE`, `ADAPARM`,
     `ISTESTCD`, `ISTEST`, `ISCAT`, `ISBDAGNT`, `AVISITN`, `AVISIT`, `ISSPEC`, `{analysis variable}`.
