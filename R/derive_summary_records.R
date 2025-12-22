@@ -81,6 +81,7 @@
 #'   + RHS refers to the values to set to the variable. This can be a string, a
 #'   symbol, a numeric value, an expression or NA. If summary functions are
 #'   used, the values are summarized by the variables specified for `by_vars`.
+#'   Any expression on the RHS must result in a single value per by group.
 #'
 #'   For example:
 #'   ```
@@ -310,8 +311,23 @@ derive_summary_records <- function(dataset = NULL,
   summary_records <- dataset_add %>%
     group_by(!!!by_vars) %>%
     filter_if(filter_add) %>%
-    summarise(!!!set_values_to) %>%
-    ungroup()
+    reframe(!!!set_values_to)
+
+  signal_duplicate_records(
+    summary_records,
+    by_vars = by_vars,
+    msg = c(
+      paste(
+        "After summarising, the dataset contains mulitple records with",
+        "respect to {.var {by_vars}}."
+      ),
+      paste(
+        "Please check the {.arg set_values_to} argument if summary functions",
+        "like {.fun mean}, {.fun sum}, ... are used on the right hand side."
+      )
+    ),
+    class = "multiple_summary_records"
+  )
 
   if (!is.null(constant_values)) {
     summary_records <- summary_records %>%

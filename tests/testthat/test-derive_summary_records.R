@@ -107,7 +107,7 @@ test_that("derive_summary_records Test 3: Errors", {
 })
 
 ## Test 4: make sure dataset_add works ----
-test_that("derive_summary_records Test 5: make sure dataset_add works", {
+test_that("derive_summary_records Test 4: make sure dataset_add works", {
   input <- tibble::tribble(
     ~subj, ~visit,       ~val, ~seq,
     "1",        1,         10,    1,
@@ -145,8 +145,8 @@ test_that("derive_summary_records Test 5: make sure dataset_add works", {
   )
 })
 
-## Test 5: test missing values ----
-test_that("derive_summary_records Test 6: test missing values with dataset_ref", {
+## Test 5: test missing values with dataset_ref ----
+test_that("derive_summary_records Test 5: test missing values with dataset_ref", {
   input <- tibble::tribble(
     ~subj, ~visit,       ~val, ~seq,
     "1",        1,         10,    1,
@@ -288,3 +288,25 @@ test_that("derive_summary_records Test 8: test missing values using constant_val
 })
 
 
+## Test 6: error if no summary function ----
+test_that("derive_summary_records Test 6: error if no summary function", {
+  adbds <- tibble::tribble(
+    ~AVISIT,  ~ASEQ, ~AVAL,
+    "WEEK 1",     1,    10,
+    "WEEK 1",     2,    NA,
+    "WEEK 2",     3,    NA,
+    "WEEK 3",     4,    42,
+    "WEEK 4",     5,    12,
+    "WEEK 4",     6,    12,
+    "WEEK 4",     7,    15
+  )
+
+  expect_snapshot(
+    derive_summary_records(
+      dataset_add = adbds,
+      by_vars = exprs(AVISIT),
+      set_values_to = exprs(MEANVIS = AVAL / 2)
+    ),
+    error = TRUE
+  )
+})

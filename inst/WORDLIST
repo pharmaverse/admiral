@@ -1,3 +1,4 @@
+ADAB
 ADAE
 ADCM
 ADEG
@@ -157,7 +158,6 @@ Leena
 Leukocytosis
 Lipase
 Liu
-LLM
 MDRD
 MH
 MRRLT
@@ -255,6 +255,7 @@ TPDOSE
 Takahira
 Teckla
 Thanikachalam
+Thrombocytopenia
 ULN
 USCV
 USUBJID
@@ -320,6 +321,8 @@ framingham
 funder
 glomerular
 groupwise
+json
+lifecycle
 kapa
 lubridate
 mL

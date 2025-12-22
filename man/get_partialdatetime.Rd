@@ -2,7 +2,7 @@
 % Please edit documentation in R/derive_vars_dt_dtm_utils.R
 \name{get_partialdatetime}
 \alias{get_partialdatetime}
-\title{Parse DTC variable and Determine Components}
+\title{Parse \code{--DTC} variable and Determine Components}
 \usage{
 get_partialdatetime(dtc, create_datetime)
 }
@@ -30,7 +30,7 @@ A list of character vectors. The elements of the list are named
 are set to \code{NA_character_}.
 }
 \description{
-Parse DTC variable and Determine Components
+Parse \code{--DTC} variable and Determine Components
 }
 \details{
 The function can be replaced by the parttime parser once it is
