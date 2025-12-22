@@ -80,14 +80,14 @@ than 2.
 \item{constant_values}{Constant variables to set
 
 The specified variables are set to the specified values for all new
-summary records, including those with data in dataset_add and those with
-no data imputed using dataset_ref and missing_values.
+summary records, including those with data in \code{dataset_add} and those with
+no data imputed using \code{dataset_ref} and \code{missing_values}.
 
 Set a list of variables to some specified value for the new records
 \itemize{
 \item LHS refer to a variable.
-\item RHS refers to the values to set to the variable. This can be a string
-or a numeric value.
+\item RHS refers to the values to set to the variable. This can be an
+expression.
 }
 
 \describe{
