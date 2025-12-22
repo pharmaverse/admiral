@@ -147,12 +147,10 @@
 #'   adeg,
 #'   dataset_add = adeg,
 #'   by_vars = exprs(USUBJID, PARAM, AVISIT),
-#'   constant_values = exprs(
-#'     DTYPE = "AVERAGE"
-#'   ),
 #'   set_values_to = exprs(
 #'     AVAL = mean(AVAL, na.rm = TRUE),
-#'     ADTM = max(ADTM)
+#'     ADTM = max(ADTM),
+#'     DTYPE = "AVERAGE"
 #'   )
 #' ) %>%
 #'   arrange(USUBJID, AVISIT)
@@ -168,13 +166,11 @@
 #'   adeg,
 #'   dataset_add = adeg,
 #'   by_vars = exprs(USUBJID, PARAM, AVISIT),
-#'   constant_values = exprs(
-#'     DTYPE = "AVERAGE"
-#'   ),
 #'   set_values_to = exprs(
 #'     OUTLIEFL = if_else(any(AVAL >= 500 | AVAL <= 300), "Y", "N"),
 #'     AVAL = mean(AVAL, na.rm = TRUE),
-#'     ADTM = max(ADTM)
+#'     ADTM = max(ADTM),
+#'     DTYPE = "AVERAGE"
 #'   )
 #' ) %>%
 #'   arrange(USUBJID, AVISIT)
@@ -191,11 +187,9 @@
 #'   dataset_add = adeg,
 #'   by_vars = exprs(USUBJID, PARAM, AVISIT),
 #'   filter_add = AVISIT == "Baseline",
-#'   constant_values = exprs(
-#'     DTYPE = "AVERAGE"
-#'   ),
 #'   set_values_to = exprs(
-#'     AVAL = mean(AVAL, na.rm = TRUE)
+#'     AVAL = mean(AVAL, na.rm = TRUE),
+#'     DTYPE = "AVERAGE"
 #'   )
 #' ) %>%
 #'   arrange(USUBJID, AVISIT)
@@ -211,11 +205,9 @@
 #'   dataset_add = adeg,
 #'   by_vars = exprs(USUBJID, PARAM, AVISIT),
 #'   filter_add = n() > 2,
-#'   constant_values = exprs(
-#'     DTYPE = "AVERAGE"
-#'   ),
 #'   set_values_to = exprs(
-#'     AVAL = mean(AVAL, na.rm = TRUE)
+#'     AVAL = mean(AVAL, na.rm = TRUE),
+#'     DTYPE = "AVERAGE"
 #'   )
 #' ) %>%
 #'   arrange(USUBJID, AVISIT)

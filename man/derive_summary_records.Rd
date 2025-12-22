@@ -203,12 +203,10 @@ within the \code{set_values_to} argument.
   adeg,
   dataset_add = adeg,
   by_vars = exprs(USUBJID, PARAM, AVISIT),
-  constant_values = exprs(
-    DTYPE = "AVERAGE"
-  ),
   set_values_to = exprs(
     AVAL = mean(AVAL, na.rm = TRUE),
-    ADTM = max(ADTM)
+    ADTM = max(ADTM),
+    DTYPE = "AVERAGE"
   )
 ) \%>\%
   arrange(USUBJID, AVISIT)
@@ -243,13 +241,11 @@ is set for the summary record. Otherwise, referencing \code{AVAL} later on would
   adeg,
   dataset_add = adeg,
   by_vars = exprs(USUBJID, PARAM, AVISIT),
-  constant_values = exprs(
-    DTYPE = "AVERAGE"
-  ),
   set_values_to = exprs(
     OUTLIEFL = if_else(any(AVAL >= 500 | AVAL <= 300), "Y", "N"),
     AVAL = mean(AVAL, na.rm = TRUE),
-    ADTM = max(ADTM)
+    ADTM = max(ADTM),
+    DTYPE = "AVERAGE"
   )
 ) \%>\%
   arrange(USUBJID, AVISIT)
@@ -284,11 +280,9 @@ by passing \code{filter_add = AVISIT == "Baseline"}.
   dataset_add = adeg,
   by_vars = exprs(USUBJID, PARAM, AVISIT),
   filter_add = AVISIT == "Baseline",
-  constant_values = exprs(
-    DTYPE = "AVERAGE"
-  ),
   set_values_to = exprs(
-    AVAL = mean(AVAL, na.rm = TRUE)
+    AVAL = mean(AVAL, na.rm = TRUE),
+    DTYPE = "AVERAGE"
   )
 ) \%>\%
   arrange(USUBJID, AVISIT)
@@ -320,11 +314,9 @@ by passing \code{filter_add = n() > 2}.
   dataset_add = adeg,
   by_vars = exprs(USUBJID, PARAM, AVISIT),
   filter_add = n() > 2,
-  constant_values = exprs(
-    DTYPE = "AVERAGE"
-  ),
   set_values_to = exprs(
-    AVAL = mean(AVAL, na.rm = TRUE)
+    AVAL = mean(AVAL, na.rm = TRUE),
+    DTYPE = "AVERAGE"
   )
 ) \%>\%
   arrange(USUBJID, AVISIT)
