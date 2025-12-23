@@ -609,7 +609,7 @@ per_tran_final <- per_tran_last %>%
       TRUE ~ "N"
     )
   ) %>%
-  # Drop temporary vars that do not need to be merged into main ADAB
+  # Drop temporary variables that do not need to be merged into main ADAB
   select(-ADTM, -TFLAGV, -FANLDTM, -FANLDT, -LFLAGPOS, -FPPDT, -LPPDT)
 
 # Put PERSADA, TRANADA, INDUCED, ENHANCED, TDUR, ADADUR onto "is_flagdata" as "main_aab_pertran"
