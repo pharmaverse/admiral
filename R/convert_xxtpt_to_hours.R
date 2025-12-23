@@ -113,8 +113,11 @@
 #'
 #' @export
 #'
-#' @examples
-#' # Basic dose-centric patterns
+#' @examplesx
+#'
+#' @caption Basic timepoint patterns
+#' @info Convert basic dose-centric patterns to hours
+#' @code
 #' convert_xxtpt_to_hours(c(
 #'   "Screening",
 #'   "Pre-dose",
@@ -126,10 +129,14 @@
 #'   "Day 1"
 #' ))
 #'
-#' # Predose/before patterns (negative times)
+#' @caption Predose and before patterns
+#' @info Convert predose/before patterns that return negative times
+#' @code
 #' convert_xxtpt_to_hours(c("5 MIN PREDOSE", "5 MIN PRE-DOSE", "1 HOUR BEFORE"))
 #'
-#' # Treatment-related patterns with default treatment_duration = 0 (oral)
+#' @caption Treatment-related patterns (oral medications)
+#' @info With default treatment_duration = 0 for oral medications
+#' @code
 #' convert_xxtpt_to_hours(c(
 #'   "EOT",
 #'   "1 HOUR POST EOT",
@@ -137,7 +144,9 @@
 #'   "After End of Treatment"
 #' ))
 #'
-#' # Infusion-related patterns with treatment_duration = 1 hour (scalar)
+#' @caption Infusion-related patterns
+#' @info With treatment_duration = 1 hour for IV infusions
+#' @code
 #' convert_xxtpt_to_hours(
 #'   c(
 #'     "EOI",
@@ -150,24 +159,32 @@
 #'   treatment_duration = 1
 #' )
 #'
-#' # Vectorized treatment_duration - different durations per timepoint
+#' @caption Vectorized treatment duration
+#' @info Different treatment durations per timepoint
+#' @code
 #' convert_xxtpt_to_hours(
 #'   c("EOI", "1 HOUR POST EOI", "EOI", "1 HOUR POST EOI"),
 #'   treatment_duration = c(1, 1, 2, 2)
 #' )
 #'
-#' # Time ranges - default midpoint
+#' @caption Time ranges with midpoint method
+#' @info Default midpoint method for ranges
+#' @code
 #' convert_xxtpt_to_hours(c(
 #'   "0-6h Post-dose",
 #'   "0-4H PRIOR START OF INFUSION",
 #'   "8-16H POST START OF INFUSION"
 #' ))
 #'
-#' # Time ranges - specify method
+#' @caption Time ranges with custom methods
+#' @info Specify start or end method for ranges
+#' @code
 #' convert_xxtpt_to_hours("0-6h Post-dose", range_method = "end")
 #' convert_xxtpt_to_hours("0-6h Post-dose", range_method = "start")
 #'
-#' # Time ranges relative to EOI/EOT
+#' @caption Ranges relative to EOI/EOT
+#' @info Time ranges after end of infusion/treatment
+#' @code
 #' convert_xxtpt_to_hours(
 #'   c(
 #'     "0-4H AFTER EOI",
@@ -177,30 +194,26 @@
 #'   treatment_duration = 1
 #' )
 #'
-#' # Demonstrating POST vs POST EOI distinction
+#' @caption POST vs POST EOI distinction
+#' @info Demonstrates the difference between POST (from start) and POST EOI (from end)
+#' @code
 #' # POST alone = relative to treatment START (no duration added)
 #' convert_xxtpt_to_hours(
 #'   c("Pre-dose", "1H POST", "2H POST", "4H POST"),
-#'   treatment_duration = 2 # 2-hour infusion
+#'   treatment_duration = 2  # 2-hour infusion
 #' )
-#' # Returns: 0, 1, 2, 4 (treatment_duration NOT added)
 #'
 #' # POST EOI = relative to treatment END (duration added)
 #' convert_xxtpt_to_hours(
 #'   c("Pre-dose", "EOI", "1H POST EOI", "2H POST EOI"),
-#'   treatment_duration = 2 # 2-hour infusion
+#'   treatment_duration = 2  # 2-hour infusion
 #' )
-#' # Returns: 0, 2, 3, 4 (treatment_duration IS added)
 #'
-#' # Comparing the two patterns side by side
+#' # Side by side comparison
 #' convert_xxtpt_to_hours(
 #'   c("1H POST", "1H POST EOI", "1H POST INFUSION"),
 #'   treatment_duration = 2
 #' )
-#' # Returns: 1, 3, 3
-#' # "1H POST" = 1 hour from start
-#' # "1H POST EOI" = 1 hour after 2-hour infusion ends = 3 hours from start
-#' # "1H POST INFUSION" = same as POST EOI
 convert_xxtpt_to_hours <- function(xxtpt,
                                    treatment_duration = 0,
                                    range_method = "midpoint") {
