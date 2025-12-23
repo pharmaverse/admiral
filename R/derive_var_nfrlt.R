@@ -153,11 +153,14 @@
 #'
 #' @export
 #'
-#' @examples
+#' @examplesx
+#'
+#' @caption Single dose study
+#' @info Day 1 only with oral medication
+#' @code
 #' library(dplyr)
 #' library(tibble)
 #'
-#' # Single dose study - Day 1 only (oral medication)
 #' adpc <- tribble(
 #'   ~USUBJID, ~VISITDY, ~PCTPT,
 #'   "001",    1,        "Pre-dose",
@@ -174,7 +177,9 @@
 #'   visit_day = VISITDY
 #' )
 #'
-#' # Study with screening visits (negative days)
+#' @caption Study with screening visits
+#' @info Handling negative visit days (no Day 0 in clinical trials)
+#' @code
 #' adpc_screen <- tribble(
 #'   ~USUBJID, ~VISITDY, ~PCTPT,
 #'   "001",    -14,      "Screening",
@@ -190,10 +195,10 @@
 #'   tpt_var = PCTPT,
 #'   visit_day = VISITDY
 #' )
-#' # Returns: -336, -168, -24, 0, 2
-#' # Note: Day -1 is 24 hours before Day 1 (no Day 0)
 #'
-#' # Multiple dose study - Days 1, 8, 15
+#' @caption Multiple dose study
+#' @info Dosing on Days 1, 8, and 15
+#' @code
 #' adpc_md <- tribble(
 #'   ~USUBJID, ~VISITDY, ~PCTPT,
 #'   "001",    1,        "Pre-dose",
@@ -211,7 +216,9 @@
 #'   visit_day = VISITDY
 #' )
 #'
-#' # First dose on Day 7 instead of Day 1
+#' @caption Custom first dose day
+#' @info First dose on Day 7 instead of Day 1
+#' @code
 #' adpc_day7 <- tribble(
 #'   ~USUBJID, ~VISITDY, ~PCTPT,
 #'   "001",    -1,       "Pre-dose",
@@ -228,11 +235,10 @@
 #'   visit_day = VISITDY,
 #'   first_dose_day = 7
 #' )
-#' # Returns: -168, -144, -24, 0, 24
-#' # Day -1 is 7 days (168 hours) before Day 7
-#' # Day 1 is 6 days (144 hours) before Day 7
 #'
-#' # IV infusion with 2 hour treatment duration (scalar)
+#' @caption IV infusion with scalar treatment duration
+#' @info 2-hour infusion duration for all records
+#' @code
 #' adpc_inf <- tribble(
 #'   ~USUBJID, ~VISITDY, ~PCTPT,
 #'   "001",    1,        "Pre-dose",
@@ -249,7 +255,9 @@
 #'   treatment_duration = 2
 #' )
 #'
-#' # Variable treatment duration - different per subject
+#' @caption Variable treatment duration
+#' @info Different treatment durations per subject using a variable
+#' @code
 #' adpc_var_dur <- tribble(
 #'   ~USUBJID, ~VISITDY, ~PCTPT,           ~EXDUR,
 #'   "001",    1,        "Pre-dose",       1,
@@ -265,10 +273,12 @@
 #'   new_var = NFRLT,
 #'   tpt_var = PCTPT,
 #'   visit_day = VISITDY,
-#'   treatment_duration = EXDUR  # Variable name!
+#'   treatment_duration = EXDUR
 #' )
 #'
-#' # Exposure records without timepoint variable
+#' @caption Exposure records without timepoint variable
+#' @info Deriving NFRLT based only on visit day
+#' @code
 #' ex <- tribble(
 #'   ~USUBJID, ~VISITDY,
 #'   "001",    1,
@@ -282,7 +292,9 @@
 #'   visit_day = VISITDY
 #' )
 #'
-#' # With unscheduled visits
+#' @caption Unscheduled visits
+#' @info Setting NFRLT to NA for unscheduled visits
+#' @code
 #' adpc_unsched <- tribble(
 #'   ~USUBJID, ~VISITDY, ~VISIT,        ~PCTPT,
 #'   "001",    1,        "VISIT 1",     "Pre-dose",
@@ -299,7 +311,9 @@
 #'   set_values_to_na = VISIT == "UNSCHEDULED"
 #' )
 #'
-#' # With early discontinuation
+#' @caption Early discontinuation visits
+#' @info Handling study drug early discontinuation
+#' @code
 #' adpc_disc <- tribble(
 #'   ~USUBJID, ~VISITDY, ~VISIT,                              ~PCTPT,
 #'   "001",    1,        "VISIT 1",                           "Pre-dose",
@@ -315,7 +329,9 @@
 #'   set_values_to_na = VISIT == "STUDY DRUG EARLY DISCONTINUATION"
 #' )
 #'
-#' # With multiple exclusion criteria
+#' @caption Multiple exclusion criteria
+#' @info Excluding multiple visit types
+#' @code
 #' adpc_multi <- tribble(
 #'   ~USUBJID, ~VISITDY, ~VISIT,                              ~PCTPT,
 #'   "001",    1,        "VISIT 1",                           "Pre-dose",
@@ -331,7 +347,9 @@
 #'   set_values_to_na = VISIT %in% c("UNSCHEDULED", "STUDY DRUG EARLY DISCONTINUATION")
 #' )
 #'
-#' # Setting NFRLT to 99999 for unscheduled visits
+#' @caption Setting special values instead of NA
+#' @info Using mutate to set NFRLT to 99999 for unscheduled visits
+#' @code
 #' adpc_unsched_value <- tribble(
 #'   ~USUBJID, ~VISITDY, ~VISIT,        ~PCTPT,
 #'   "001",    1,        "VISIT 1",     "Pre-dose",
@@ -351,7 +369,9 @@
 #'     NFRLT = if_else(is.na(NFRLT) & VISIT == "UNSCHEDULED", 99999, NFRLT)
 #'   )
 #'
-#' # Custom range method (use end of range instead of midpoint)
+#' @caption Custom range method
+#' @info Using end of range instead of midpoint
+#' @code
 #' adpc_range <- tribble(
 #'   ~USUBJID, ~VISITDY, ~PCTPT,
 #'   "001",    1,        "Pre-dose",
@@ -366,7 +386,9 @@
 #'   range_method = "end"
 #' )
 #'
-#' # Using "Before" and "After" terminology
+#' @caption Alternative terminology
+#' @info Using "Before" and "After" terminology
+#' @code
 #' adpc_alt <- tribble(
 #'   ~USUBJID, ~VISITDY, ~PCTPT,
 #'   "001",    1,        "Before",
@@ -379,23 +401,6 @@
 #'   new_var = NFRLT,
 #'   tpt_var = PCTPT,
 #'   visit_day = VISITDY
-#' )
-#'
-#' # Custom first dose day (e.g., dose on Day 3)
-#' adpc_custom <- tribble(
-#'   ~USUBJID, ~VISITDY, ~PCTPT,
-#'   "001",    3,        "Pre-dose",
-#'   "001",    3,        "2H Post-dose",
-#'   "001",    3,        "8H Post-dose",
-#'   "001",    3,        "24H Post-dose"
-#' )
-#'
-#' derive_var_nfrlt(
-#'   adpc_custom,
-#'   new_var = NFRLT,
-#'   tpt_var = PCTPT,
-#'   visit_day = VISITDY,
-#'   first_dose_day = 3
 #' )
 derive_var_nfrlt <- function(dataset,
                              new_var = NFRLT,
@@ -435,7 +440,7 @@ derive_var_nfrlt <- function(dataset,
   treatment_duration_expr <- enexpr(treatment_duration)
 
   if (is.symbol(treatment_duration_expr) &&
-      as_name(treatment_duration_expr) %in% names(dataset)) {
+    as_name(treatment_duration_expr) %in% names(dataset)) {
     # It's a variable in the dataset
     treatment_duration_vec <- dataset[[as_name(treatment_duration_expr)]]
     assert_numeric_vector(treatment_duration_vec)

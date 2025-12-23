@@ -197,251 +197,6 @@ a subsequent \code{mutate()} call to replace those \code{NA} values:
   mutate(NFRLT = if_else(is.na(NFRLT) & VISIT == "UNSCHEDULED", 99999, NFRLT))
 }\if{html}{\out{</div>}}
 }
-\examples{
-library(dplyr)
-library(tibble)
-
-# Single dose study - Day 1 only (oral medication)
-adpc <- tribble(
-  ~USUBJID, ~VISITDY, ~PCTPT,
-  "001",    1,        "Pre-dose",
-  "001",    1,        "1H Post-dose",
-  "001",    1,        "2H Post-dose",
-  "001",    1,        "4H Post-dose",
-  "001",    1,        "24H Post-dose"
-)
-
-derive_var_nfrlt(
-  adpc,
-  new_var = NFRLT,
-  tpt_var = PCTPT,
-  visit_day = VISITDY
-)
-
-# Study with screening visits (negative days)
-adpc_screen <- tribble(
-  ~USUBJID, ~VISITDY, ~PCTPT,
-  "001",    -14,      "Screening",
-  "001",    -7,       "Pre-dose",
-  "001",    -1,       "Pre-dose",
-  "001",    1,        "Pre-dose",
-  "001",    1,        "2H Post-dose"
-)
-
-derive_var_nfrlt(
-  adpc_screen,
-  new_var = NFRLT,
-  tpt_var = PCTPT,
-  visit_day = VISITDY
-)
-# Returns: -336, -168, -24, 0, 2
-# Note: Day -1 is 24 hours before Day 1 (no Day 0)
-
-# Multiple dose study - Days 1, 8, 15
-adpc_md <- tribble(
-  ~USUBJID, ~VISITDY, ~PCTPT,
-  "001",    1,        "Pre-dose",
-  "001",    1,        "2H Post-dose",
-  "001",    8,        "Pre-dose",
-  "001",    8,        "2H Post-dose",
-  "001",    15,       "Pre-dose",
-  "001",    15,       "2H Post-dose"
-)
-
-derive_var_nfrlt(
-  adpc_md,
-  new_var = NFRLT,
-  tpt_var = PCTPT,
-  visit_day = VISITDY
-)
-
-# First dose on Day 7 instead of Day 1
-adpc_day7 <- tribble(
-  ~USUBJID, ~VISITDY, ~PCTPT,
-  "001",    -1,       "Pre-dose",
-  "001",    1,        "Pre-dose",
-  "001",    6,        "Pre-dose",
-  "001",    7,        "Pre-dose",
-  "001",    8,        "Pre-dose"
-)
-
-derive_var_nfrlt(
-  adpc_day7,
-  new_var = NFRLT,
-  tpt_var = PCTPT,
-  visit_day = VISITDY,
-  first_dose_day = 7
-)
-# Returns: -168, -144, -24, 0, 24
-# Day -1 is 7 days (168 hours) before Day 7
-# Day 1 is 6 days (144 hours) before Day 7
-
-# IV infusion with 2 hour treatment duration (scalar)
-adpc_inf <- tribble(
-  ~USUBJID, ~VISITDY, ~PCTPT,
-  "001",    1,        "Pre-dose",
-  "001",    1,        "EOI",
-  "001",    1,        "1H Post EOI",
-  "001",    1,        "10MIN PRE EOI"
-)
-
-derive_var_nfrlt(
-  adpc_inf,
-  new_var = NFRLT,
-  tpt_var = PCTPT,
-  visit_day = VISITDY,
-  treatment_duration = 2
-)
-
-# Variable treatment duration - different per subject
-adpc_var_dur <- tribble(
-  ~USUBJID, ~VISITDY, ~PCTPT,           ~EXDUR,
-  "001",    1,        "Pre-dose",       1,
-  "001",    1,        "EOI",            1,
-  "001",    1,        "1H POST EOI",    1,
-  "002",    1,        "Pre-dose",       2,
-  "002",    1,        "EOI",            2,
-  "002",    1,        "1H POST EOI",    2
-)
-
-derive_var_nfrlt(
-  adpc_var_dur,
-  new_var = NFRLT,
-  tpt_var = PCTPT,
-  visit_day = VISITDY,
-  treatment_duration = EXDUR  # Variable name!
-)
-
-# Exposure records without timepoint variable
-ex <- tribble(
-  ~USUBJID, ~VISITDY,
-  "001",    1,
-  "001",    8,
-  "001",    15
-)
-
-derive_var_nfrlt(
-  ex,
-  new_var = NFRLT,
-  visit_day = VISITDY
-)
-
-# With unscheduled visits
-adpc_unsched <- tribble(
-  ~USUBJID, ~VISITDY, ~VISIT,        ~PCTPT,
-  "001",    1,        "VISIT 1",     "Pre-dose",
-  "001",    1,        "VISIT 1",     "2H Post-dose",
-  "001",    NA_real_, "UNSCHEDULED", "Pre-dose",
-  "001",    NA_real_, "UNSCHEDULED", "2H Post-dose"
-)
-
-derive_var_nfrlt(
-  adpc_unsched,
-  new_var = NFRLT,
-  tpt_var = PCTPT,
-  visit_day = VISITDY,
-  set_values_to_na = VISIT == "UNSCHEDULED"
-)
-
-# With early discontinuation
-adpc_disc <- tribble(
-  ~USUBJID, ~VISITDY, ~VISIT,                              ~PCTPT,
-  "001",    1,        "VISIT 1",                           "Pre-dose",
-  "001",    1,        "VISIT 1",                           "2H Post-dose",
-  "001",    NA_real_, "STUDY DRUG EARLY DISCONTINUATION",  "Pre-dose"
-)
-
-derive_var_nfrlt(
-  adpc_disc,
-  new_var = NFRLT,
-  tpt_var = PCTPT,
-  visit_day = VISITDY,
-  set_values_to_na = VISIT == "STUDY DRUG EARLY DISCONTINUATION"
-)
-
-# With multiple exclusion criteria
-adpc_multi <- tribble(
-  ~USUBJID, ~VISITDY, ~VISIT,                              ~PCTPT,
-  "001",    1,        "VISIT 1",                           "Pre-dose",
-  "001",    NA_real_, "UNSCHEDULED",                       "Pre-dose",
-  "001",    NA_real_, "STUDY DRUG EARLY DISCONTINUATION",  "Pre-dose"
-)
-
-derive_var_nfrlt(
-  adpc_multi,
-  new_var = NFRLT,
-  tpt_var = PCTPT,
-  visit_day = VISITDY,
-  set_values_to_na = VISIT \%in\% c("UNSCHEDULED", "STUDY DRUG EARLY DISCONTINUATION")
-)
-
-# Setting NFRLT to 99999 for unscheduled visits
-adpc_unsched_value <- tribble(
-  ~USUBJID, ~VISITDY, ~VISIT,        ~PCTPT,
-  "001",    1,        "VISIT 1",     "Pre-dose",
-  "001",    1,        "VISIT 1",     "2H Post-dose",
-  "001",    NA_real_, "UNSCHEDULED", "Pre-dose",
-  "001",    NA_real_, "UNSCHEDULED", "2H Post-dose"
-)
-
-adpc_unsched_value \%>\%
-  derive_var_nfrlt(
-    new_var = NFRLT,
-    tpt_var = PCTPT,
-    visit_day = VISITDY,
-    set_values_to_na = VISIT == "UNSCHEDULED"
-  ) \%>\%
-  mutate(
-    NFRLT = if_else(is.na(NFRLT) & VISIT == "UNSCHEDULED", 99999, NFRLT)
-  )
-
-# Custom range method (use end of range instead of midpoint)
-adpc_range <- tribble(
-  ~USUBJID, ~VISITDY, ~PCTPT,
-  "001",    1,        "Pre-dose",
-  "001",    1,        "0-6h Post-dose"
-)
-
-derive_var_nfrlt(
-  adpc_range,
-  new_var = NFRLT,
-  tpt_var = PCTPT,
-  visit_day = VISITDY,
-  range_method = "end"
-)
-
-# Using "Before" and "After" terminology
-adpc_alt <- tribble(
-  ~USUBJID, ~VISITDY, ~PCTPT,
-  "001",    1,        "Before",
-  "001",    1,        "1H After",
-  "001",    1,        "2H After"
-)
-
-derive_var_nfrlt(
-  adpc_alt,
-  new_var = NFRLT,
-  tpt_var = PCTPT,
-  visit_day = VISITDY
-)
-
-# Custom first dose day (e.g., dose on Day 3)
-adpc_custom <- tribble(
-  ~USUBJID, ~VISITDY, ~PCTPT,
-  "001",    3,        "Pre-dose",
-  "001",    3,        "2H Post-dose",
-  "001",    3,        "8H Post-dose",
-  "001",    3,        "24H Post-dose"
-)
-
-derive_var_nfrlt(
-  adpc_custom,
-  new_var = NFRLT,
-  tpt_var = PCTPT,
-  visit_day = VISITDY,
-  first_dose_day = 3
-)
-}
 \seealso{
 \code{\link[=convert_xxtpt_to_hours]{convert_xxtpt_to_hours()}}
 
@@ -461,3 +216,345 @@ BDS-Findings Functions that returns variable appended to dataset:
 \concept{der_bds_findings}
 \keyword{der_bds_findings}
 \keyword{experimental}
+\section{Examples}{
+\subsection{Single dose study}{
+
+Day 1 only with oral medication
+
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{library(dplyr)
+library(tibble)
+
+adpc <- tribble(
+  ~USUBJID, ~VISITDY, ~PCTPT,
+  "001",    1,        "Pre-dose",
+  "001",    1,        "1H Post-dose",
+  "001",    1,        "2H Post-dose",
+  "001",    1,        "4H Post-dose",
+  "001",    1,        "24H Post-dose"
+)
+
+derive_var_nfrlt(
+  adpc,
+  new_var = NFRLT,
+  tpt_var = PCTPT,
+  visit_day = VISITDY
+)
+#> # A tibble: 5 × 4
+#>   USUBJID VISITDY PCTPT         NFRLT
+#>   <chr>     <dbl> <chr>         <dbl>
+#> 1 001           1 Pre-dose          0
+#> 2 001           1 1H Post-dose      1
+#> 3 001           1 2H Post-dose      2
+#> 4 001           1 4H Post-dose      4
+#> 5 001           1 24H Post-dose    24}\if{html}{\out{</div>}}}
+\subsection{Study with screening visits}{
+
+Handling negative visit days (no Day 0 in clinical trials)
+
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{adpc_screen <- tribble(
+  ~USUBJID, ~VISITDY, ~PCTPT,
+  "001",    -14,      "Screening",
+  "001",    -7,       "Pre-dose",
+  "001",    -1,       "Pre-dose",
+  "001",    1,        "Pre-dose",
+  "001",    1,        "2H Post-dose"
+)
+
+derive_var_nfrlt(
+  adpc_screen,
+  new_var = NFRLT,
+  tpt_var = PCTPT,
+  visit_day = VISITDY
+)
+#> # A tibble: 5 × 4
+#>   USUBJID VISITDY PCTPT        NFRLT
+#>   <chr>     <dbl> <chr>        <dbl>
+#> 1 001         -14 Screening     -336
+#> 2 001          -7 Pre-dose      -168
+#> 3 001          -1 Pre-dose       -24
+#> 4 001           1 Pre-dose         0
+#> 5 001           1 2H Post-dose     2}\if{html}{\out{</div>}}}
+\subsection{Multiple dose study}{
+
+Dosing on Days 1, 8, and 15
+
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{adpc_md <- tribble(
+  ~USUBJID, ~VISITDY, ~PCTPT,
+  "001",    1,        "Pre-dose",
+  "001",    1,        "2H Post-dose",
+  "001",    8,        "Pre-dose",
+  "001",    8,        "2H Post-dose",
+  "001",    15,       "Pre-dose",
+  "001",    15,       "2H Post-dose"
+)
+
+derive_var_nfrlt(
+  adpc_md,
+  new_var = NFRLT,
+  tpt_var = PCTPT,
+  visit_day = VISITDY
+)
+#> # A tibble: 6 × 4
+#>   USUBJID VISITDY PCTPT        NFRLT
+#>   <chr>     <dbl> <chr>        <dbl>
+#> 1 001           1 Pre-dose         0
+#> 2 001           1 2H Post-dose     2
+#> 3 001           8 Pre-dose       168
+#> 4 001           8 2H Post-dose   170
+#> 5 001          15 Pre-dose       336
+#> 6 001          15 2H Post-dose   338}\if{html}{\out{</div>}}}
+\subsection{Custom first dose day}{
+
+First dose on Day 7 instead of Day 1
+
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{adpc_day7 <- tribble(
+  ~USUBJID, ~VISITDY, ~PCTPT,
+  "001",    -1,       "Pre-dose",
+  "001",    1,        "Pre-dose",
+  "001",    6,        "Pre-dose",
+  "001",    7,        "Pre-dose",
+  "001",    8,        "Pre-dose"
+)
+
+derive_var_nfrlt(
+  adpc_day7,
+  new_var = NFRLT,
+  tpt_var = PCTPT,
+  visit_day = VISITDY,
+  first_dose_day = 7
+)
+#> # A tibble: 5 × 4
+#>   USUBJID VISITDY PCTPT    NFRLT
+#>   <chr>     <dbl> <chr>    <dbl>
+#> 1 001          -1 Pre-dose  -168
+#> 2 001           1 Pre-dose  -144
+#> 3 001           6 Pre-dose   -24
+#> 4 001           7 Pre-dose     0
+#> 5 001           8 Pre-dose    24}\if{html}{\out{</div>}}}
+\subsection{IV infusion with scalar treatment duration}{
+
+2-hour infusion duration for all records
+
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{adpc_inf <- tribble(
+  ~USUBJID, ~VISITDY, ~PCTPT,
+  "001",    1,        "Pre-dose",
+  "001",    1,        "EOI",
+  "001",    1,        "1H Post EOI",
+  "001",    1,        "10MIN PRE EOI"
+)
+
+derive_var_nfrlt(
+  adpc_inf,
+  new_var = NFRLT,
+  tpt_var = PCTPT,
+  visit_day = VISITDY,
+  treatment_duration = 2
+)
+#> # A tibble: 4 × 4
+#>   USUBJID VISITDY PCTPT         NFRLT
+#>   <chr>     <dbl> <chr>         <dbl>
+#> 1 001           1 Pre-dose       0   
+#> 2 001           1 EOI            2   
+#> 3 001           1 1H Post EOI    3   
+#> 4 001           1 10MIN PRE EOI  1.83}\if{html}{\out{</div>}}}
+\subsection{Variable treatment duration}{
+
+Different treatment durations per subject using a variable
+
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{adpc_var_dur <- tribble(
+  ~USUBJID, ~VISITDY, ~PCTPT,           ~EXDUR,
+  "001",    1,        "Pre-dose",       1,
+  "001",    1,        "EOI",            1,
+  "001",    1,        "1H POST EOI",    1,
+  "002",    1,        "Pre-dose",       2,
+  "002",    1,        "EOI",            2,
+  "002",    1,        "1H POST EOI",    2
+)
+
+derive_var_nfrlt(
+  adpc_var_dur,
+  new_var = NFRLT,
+  tpt_var = PCTPT,
+  visit_day = VISITDY,
+  treatment_duration = EXDUR
+)
+#> # A tibble: 6 × 5
+#>   USUBJID VISITDY PCTPT       EXDUR NFRLT
+#>   <chr>     <dbl> <chr>       <dbl> <dbl>
+#> 1 001           1 Pre-dose        1     0
+#> 2 001           1 EOI             1     1
+#> 3 001           1 1H POST EOI     1     2
+#> 4 002           1 Pre-dose        2     0
+#> 5 002           1 EOI             2     2
+#> 6 002           1 1H POST EOI     2     3}\if{html}{\out{</div>}}}
+\subsection{Exposure records without timepoint variable}{
+
+Deriving NFRLT based only on visit day
+
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{ex <- tribble(
+  ~USUBJID, ~VISITDY,
+  "001",    1,
+  "001",    8,
+  "001",    15
+)
+
+derive_var_nfrlt(
+  ex,
+  new_var = NFRLT,
+  visit_day = VISITDY
+)
+#> # A tibble: 3 × 3
+#>   USUBJID VISITDY NFRLT
+#>   <chr>     <dbl> <dbl>
+#> 1 001           1     0
+#> 2 001           8   168
+#> 3 001          15   336}\if{html}{\out{</div>}}}
+\subsection{Unscheduled visits}{
+
+Setting NFRLT to NA for unscheduled visits
+
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{adpc_unsched <- tribble(
+  ~USUBJID, ~VISITDY, ~VISIT,        ~PCTPT,
+  "001",    1,        "VISIT 1",     "Pre-dose",
+  "001",    1,        "VISIT 1",     "2H Post-dose",
+  "001",    NA_real_, "UNSCHEDULED", "Pre-dose",
+  "001",    NA_real_, "UNSCHEDULED", "2H Post-dose"
+)
+
+derive_var_nfrlt(
+  adpc_unsched,
+  new_var = NFRLT,
+  tpt_var = PCTPT,
+  visit_day = VISITDY,
+  set_values_to_na = VISIT == "UNSCHEDULED"
+)
+#> # A tibble: 4 × 5
+#>   USUBJID VISITDY VISIT       PCTPT        NFRLT
+#>   <chr>     <dbl> <chr>       <chr>        <dbl>
+#> 1 001           1 VISIT 1     Pre-dose         0
+#> 2 001           1 VISIT 1     2H Post-dose     2
+#> 3 001          NA UNSCHEDULED Pre-dose        NA
+#> 4 001          NA UNSCHEDULED 2H Post-dose    NA}\if{html}{\out{</div>}}}
+\subsection{Early discontinuation visits}{
+
+Handling study drug early discontinuation
+
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{adpc_disc <- tribble(
+  ~USUBJID, ~VISITDY, ~VISIT,                              ~PCTPT,
+  "001",    1,        "VISIT 1",                           "Pre-dose",
+  "001",    1,        "VISIT 1",                           "2H Post-dose",
+  "001",    NA_real_, "STUDY DRUG EARLY DISCONTINUATION",  "Pre-dose"
+)
+
+derive_var_nfrlt(
+  adpc_disc,
+  new_var = NFRLT,
+  tpt_var = PCTPT,
+  visit_day = VISITDY,
+  set_values_to_na = VISIT == "STUDY DRUG EARLY DISCONTINUATION"
+)
+#> # A tibble: 3 × 5
+#>   USUBJID VISITDY VISIT                            PCTPT        NFRLT
+#>   <chr>     <dbl> <chr>                            <chr>        <dbl>
+#> 1 001           1 VISIT 1                          Pre-dose         0
+#> 2 001           1 VISIT 1                          2H Post-dose     2
+#> 3 001          NA STUDY DRUG EARLY DISCONTINUATION Pre-dose        NA}\if{html}{\out{</div>}}}
+\subsection{Multiple exclusion criteria}{
+
+Excluding multiple visit types
+
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{adpc_multi <- tribble(
+  ~USUBJID, ~VISITDY, ~VISIT,                              ~PCTPT,
+  "001",    1,        "VISIT 1",                           "Pre-dose",
+  "001",    NA_real_, "UNSCHEDULED",                       "Pre-dose",
+  "001",    NA_real_, "STUDY DRUG EARLY DISCONTINUATION",  "Pre-dose"
+)
+
+derive_var_nfrlt(
+  adpc_multi,
+  new_var = NFRLT,
+  tpt_var = PCTPT,
+  visit_day = VISITDY,
+  set_values_to_na = VISIT \%in\% c("UNSCHEDULED", "STUDY DRUG EARLY DISCONTINUATION")
+)
+#> # A tibble: 3 × 5
+#>   USUBJID VISITDY VISIT                            PCTPT    NFRLT
+#>   <chr>     <dbl> <chr>                            <chr>    <dbl>
+#> 1 001           1 VISIT 1                          Pre-dose     0
+#> 2 001          NA UNSCHEDULED                      Pre-dose    NA
+#> 3 001          NA STUDY DRUG EARLY DISCONTINUATION Pre-dose    NA}\if{html}{\out{</div>}}}
+\subsection{Setting special values instead of NA}{
+
+Using mutate to set NFRLT to 99999 for unscheduled visits
+
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{adpc_unsched_value <- tribble(
+  ~USUBJID, ~VISITDY, ~VISIT,        ~PCTPT,
+  "001",    1,        "VISIT 1",     "Pre-dose",
+  "001",    1,        "VISIT 1",     "2H Post-dose",
+  "001",    NA_real_, "UNSCHEDULED", "Pre-dose",
+  "001",    NA_real_, "UNSCHEDULED", "2H Post-dose"
+)
+
+adpc_unsched_value \%>\%
+  derive_var_nfrlt(
+    new_var = NFRLT,
+    tpt_var = PCTPT,
+    visit_day = VISITDY,
+    set_values_to_na = VISIT == "UNSCHEDULED"
+  ) \%>\%
+  mutate(
+    NFRLT = if_else(is.na(NFRLT) & VISIT == "UNSCHEDULED", 99999, NFRLT)
+  )
+#> # A tibble: 4 × 5
+#>   USUBJID VISITDY VISIT       PCTPT        NFRLT
+#>   <chr>     <dbl> <chr>       <chr>        <dbl>
+#> 1 001           1 VISIT 1     Pre-dose         0
+#> 2 001           1 VISIT 1     2H Post-dose     2
+#> 3 001          NA UNSCHEDULED Pre-dose     99999
+#> 4 001          NA UNSCHEDULED 2H Post-dose 99999}\if{html}{\out{</div>}}}
+\subsection{Custom range method}{
+
+Using end of range instead of midpoint
+
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{adpc_range <- tribble(
+  ~USUBJID, ~VISITDY, ~PCTPT,
+  "001",    1,        "Pre-dose",
+  "001",    1,        "0-6h Post-dose"
+)
+
+derive_var_nfrlt(
+  adpc_range,
+  new_var = NFRLT,
+  tpt_var = PCTPT,
+  visit_day = VISITDY,
+  range_method = "end"
+)
+#> # A tibble: 2 × 4
+#>   USUBJID VISITDY PCTPT          NFRLT
+#>   <chr>     <dbl> <chr>          <dbl>
+#> 1 001           1 Pre-dose           0
+#> 2 001           1 0-6h Post-dose     6}\if{html}{\out{</div>}}}
+\subsection{Alternative terminology}{
+
+Using "Before" and "After" terminology
+
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{adpc_alt <- tribble(
+  ~USUBJID, ~VISITDY, ~PCTPT,
+  "001",    1,        "Before",
+  "001",    1,        "1H After",
+  "001",    1,        "2H After"
+)
+
+derive_var_nfrlt(
+  adpc_alt,
+  new_var = NFRLT,
+  tpt_var = PCTPT,
+  visit_day = VISITDY
+)
+#> # A tibble: 3 × 4
+#>   USUBJID VISITDY PCTPT    NFRLT
+#>   <chr>     <dbl> <chr>    <dbl>
+#> 1 001           1 Before       0
+#> 2 001           1 1H After     1
+#> 3 001           1 2H After     2}\if{html}{\out{</div>}}}}
+
