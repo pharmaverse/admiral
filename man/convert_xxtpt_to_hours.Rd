@@ -200,6 +200,16 @@ convert_xxtpt_to_hours(c(
 convert_xxtpt_to_hours("0-6h Post-dose", range_method = "end")
 convert_xxtpt_to_hours("0-6h Post-dose", range_method = "start")
 
+# Time ranges relative to EOI/EOT
+convert_xxtpt_to_hours(
+  c(
+    "0-4H AFTER EOI",
+    "4-8H AFTER END OF INFUSION",
+    "4-8H AFTER EOT"
+  ),
+  treatment_duration = 1
+)
+
 # Demonstrating POST vs POST EOI distinction
 # POST alone = relative to treatment START (no duration added)
 convert_xxtpt_to_hours(
@@ -239,3 +249,4 @@ Date/Time Computation Functions that returns a vector:
 }
 \concept{com_date_time}
 \keyword{com_date_time}
+\keyword{experimental}

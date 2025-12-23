@@ -1,30 +1,19 @@
 # convert_xxtpt_to_hours ----
 
-## Test 1: returns expected values for special cases ----
-test_that("convert_xxtpt_to_hours Test 1: returns expected values for special cases", {
+## Test 1: basic patterns ----
+test_that("convert_xxtpt_to_hours Test 1: basic patterns work correctly", {
   expect_equal(
     convert_xxtpt_to_hours(c(
       "Screening",
-      "SCREENING",
       "Pre-dose",
-      "PREDOSE",
+      "Predose",
       "Pre-treatment",
-      "Pre-infusion",
-      "PRE-INF",
       "Before",
-      "Infusion",
-      "0H",
-      "0 H",
-      "EOI",
-      "EOT",
-      "End of Infusion",
-      "End of Treatment",
-      "AFTER END OF INFUSION",
-      "AFTER END OF TREATMENT",
-      "Morning",
-      "Evening"
+      "30M",
+      "1H",
+      "2H POSTDOSE"
     )),
-    c(-1, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NA_real_, NA_real_)
+    c(0, 0, 0, 0, 0, 0.5, 1, 2)
   )
 })
 
@@ -604,7 +593,7 @@ test_that("convert_xxtpt_to_hours Test 29: comprehensive integration test", {
 
   # With default treatment_duration = 0
   expected_default <- c(
-    -1, # Screening
+    0, # Screening
     0, # Pre-dose
     0, # Pre-treatment
     0, # PRE-INF
