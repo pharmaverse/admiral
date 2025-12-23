@@ -132,6 +132,16 @@ overall_avisit <- "OVERALL"
 overall_avisitn <- 11111
 ```
 
+```{r echo=FALSE}
+ex <- filter(ex, USUBJID %in% c(
+  "01-701-1015", "01-701-1023", "01-701-1442", "01-701-1034", "01-701-1133", "01-701-1028",
+  "01-704-1008", "01-704-1017", "01-704-1093", "01-710-1249"
+))
+is <- filter(is, USUBJID %in% c(
+  "01-701-1015", "01-701-1023", "01-701-1442", "01-701-1034", "01-701-1133", "01-701-1028",
+  "01-704-1008", "01-704-1017", "01-704-1093", "01-710-1249"
+))
+```
 
 At this step, we first adjust for whether our source data is `IS` using SDTM v2.0 standard
 or pre SDTM v1.8. Version 2.0 replaced `ISTESTCD` and `ISTEST` with general ADA categories,
@@ -162,7 +172,6 @@ studies may have custom imputation methods. If this is the case, the function `d
 would be either replaced or post-processed to get the desired imputed time part. For example,
 a common method is to use the time part from `EX.EXSTDTC` (matched by the `IS` and `EX` date parts), 
 then the `IS` time is adjusted for pre-dose sampling planned time. User would add custom code for this.
-
 
 ```{r message=FALSE}
 # Derivations ----
@@ -240,6 +249,15 @@ is_dates <- is %>%
   derive_vars_dy(reference_date = TRTSDT, source_vars = exprs(ADT))
 ```
 
+```{r, eval=TRUE, echo=FALSE}
+dataset_vignette(
+  is_dates,
+  display_vars = exprs(
+    USUBJID, ISBDAGNT, ADATYPE, ADAPARM, DRUG, VISIT, ADTM, NFRLT
+  )
+)
+```
+
 ## Prepare 'EX', Find First Dose and Derive AFRLT {#firstdose}
 
 At this step, we stage 'EX' data. Filter the data as desired to match 
@@ -255,7 +273,6 @@ get the desired imputed time part. For example a common method is to use the tim
 pre-dose sampling planned time. User would add custom code for this.
 AENDTM from EX.EXENDTC is also computed in case needed.  Both dates then create
 date part variables using `derive_vars_dtm_to_dt()`
-
 
 ```{r message=FALSE}
 # ---- Get dosing information ----
@@ -301,11 +318,18 @@ ex_dates <- ex %>%
   derive_vars_dtm_to_dt(exprs(AENDTM))
 ```
 
+```{r, eval=TRUE, echo=FALSE}
+dataset_vignette(
+  ex_dates,
+  display_vars = exprs(
+    USUBJID, EXTRT, DRUG, VISIT, ASTDTM, NFRLT
+  )
+)
+```
 
 At this step, we use `derive_vars_merged()` to join our prepared `EX` data into the prepared
 `IS` data to compute `FANLDTM`, `AFRLT` and keep `FANLTMF` from `ASTTMF` in case the first dose
 was imputed.
-
 
 ```{r message=FALSE}
 # Note: This template computes only AFRLT, see ADPC template if need EX dose expansion example.
@@ -329,10 +353,17 @@ is_afrlt <- is_dates %>%
     out_unit = "days",
     floor_in = FALSE,
     add_one = FALSE
-  ) %>%
-  arrange(STUDYID, USUBJID, DRUG, ADATYPE, ADAPARM, ADTM, NFRLT)
+  )
 ```
 
+```{r, eval=TRUE, echo=FALSE}
+dataset_vignette(
+  is_afrlt,
+  display_vars = exprs(
+    USUBJID, ISBDAGNT, ADATYPE, ADAPARM, DRUG, VISIT, ADTM, FANLDTM, NFRLT, AFRLT
+  )
+)
+```
 
 ## Assign Periods, Phases and BASETYPE {#basetype}
 
@@ -342,7 +373,6 @@ the `BASE` variable for the given Phase or Period could be appended to `BASETYPE
 `BASETYPE` is carried through the remaining steps of this template as a BY variable for computing 
 parameters. For example, if there is a main phase and a later maintenance phase, you might want to
 compute all the ADA parameters by `BASETYPE`.
-
 
 ```{r message=FALSE}
 # Compute or assign BASETYPE, APERIOD and APHASE ----------------------------------
@@ -358,6 +388,16 @@ is_basetype <- is_afrlt %>%
   )
 ```
 
+```{r, eval=TRUE, echo=FALSE}
+dataset_vignette(
+  is_basetype,
+  display_vars = exprs(
+    USUBJID, BASETYPE, ADATYPE, ADAPARM, DRUG, VISIT, NFRLT, AFRLT
+  )
+)
+```
+
+## Derive Assigned Variables {#assigned}
 
 At this step, we assign `MRT` (Minimum Reportable Titer) and an Optional
 `DTL` (both are user/protocol specific assigned values). `RESULTC` is the
@@ -374,8 +414,6 @@ and documents the operation by setting `DTYPE='MRT'`.
 
 If your `IS` dataset has additional sponsor specific tests kept and suitable for this template, 
 adjust or expand variable assignments in this step accordingly.
-
-## Derive Assigned Variables {#assigned}
 
 ```{r message=FALSE}
 # Assign AVAL, AVALC, AVALU and DTYPE for each ISTESTCD and ISBDAGNT
@@ -441,6 +479,14 @@ is_aval <- is_basetype %>%
   )
 ```
 
+```{r, eval=TRUE, echo=FALSE}
+dataset_vignette(
+  is_aval,
+  display_vars = exprs(
+    USUBJID, ADATYPE, ADAPARM, VISIT, NFRLT, RESULTN, RESULTC, AVAL, AVALC, AVALU, MRT, DTL, DTYPE
+  )
+)
+```
 
 ## Derive Analysis Variables {#analysis}
 
@@ -522,6 +568,15 @@ base_data <- is_result_change %>%
   )
 ```
 
+```{r, eval=TRUE, echo=FALSE}
+dataset_vignette(
+  is_result_change,
+  display_vars = exprs(
+    USUBJID, ADATYPE, ADAPARM, VISIT, NFRLT, RESULTN, RESULTC, AVAL, AVALC, ABLFL, 
+    BASE, CHG, BASE_RESULT
+  )
+)
+```
 
 This section computes main ADA analyte parameters into a horizontal dataset.
 Sections are commented appropriately. 
@@ -668,10 +723,14 @@ flagdata_init <- full_join(base_data, most_post, by = c(
       ADATYPE == "ADA_BAB" & PBFLAG == 0 ~ 0,
       TRUE ~ NA_integer_
     )
-  ) %>%
-  arrange(DRUG, BASETYPE, ADATYPE, ADAPARM, STUDYID, USUBJID)
+  )
 ```
 
+```{r, eval=TRUE, echo=FALSE}
+dataset_vignette(
+  flagdata_init
+)
+```
 
 In this section, we compute Neutralizing Antibody (Nab) Status (optional and if applicable).
 Nab is typically obtained from samples where the subject has positive finding for its 
@@ -727,6 +786,12 @@ flagdata_final <- flagdata_nab %>%
   select(-BASE, -BASE_RESULT, -AVAL_P, -RESULT_P, -DRUG, -ABLFL)
 ```
 
+```{r, eval=TRUE, echo=FALSE}
+dataset_vignette(
+  flagdata_final
+)
+```
+
 In this section, we bring together all the prior section variables into a single horizontal dataset
 then we compute the remaining analysis variables into a final horizontal dataset 
 by `STUDYID`, `USUBJID`, `BASETYPE`, `ADATYPE` (Nab or ADA), `ADAPARM` (Drug specific value for the Nab or ADA test)
@@ -756,8 +821,6 @@ The remaining pertinent analysis variables computed in this section are:
              `INDUCED` or `ENHANCED` and multiple post-baseline positive (other than last result)
 `ADABLPFL` - Baseline ADA Evaluable - Baseline test exists (`ABLFL = "Y"`)
 `ADPBFPFL` - Post-Baseline ADA Evaluable - At least one Valid (non-missing) post-baseline result.
-
-
 
 ```{r message=FALSE}
 # Put TFLAG, BFLAG and PBFLAG and the nabstat_ variables onto the main
@@ -929,20 +992,17 @@ main_aab <- main_aab_rtimes %>%
     new_vars = exprs(ADPBLPFL),
     by_vars = exprs(STUDYID, USUBJID, BASETYPE, ADATYPE, ADAPARM)
   )
-
-# This will be dropped for final merge to prod/main
-main_aab_review <- main_aab %>%
-  select(
-    STUDYID, USUBJID, VISIT, ISTESTCD, ISBDAGNT, DRUG, ADTM, ADT, ADY,
-    BASETYPE, ADATYPE, ADAPARM, MRT, DTL, ABLFL, ADABLPFL, ADPBLPFL, VALIDBASE, VALIDPOST,
-    NFRLT, AFRLT, RESULTC, RESULTN, ISSTRESC, ISSTRESN, AVALC, AVAL, AVALU, BASE, BFLAG, TFLAG,
-    PBFLAG, ADASTAT, ADASTAT_MAIN, NABSTAT, nabstat_opt1, tdur, ADADUR, TIMADA, TRANADA, PERSADA
-  ) %>%
-  arrange(USUBJID, ISTESTCD, ADY) %>%
-  filter(1 == 1) %>%
-  filter(ADATYPE == "ADA_NAB" & NABSTAT == 0)
 ```
 
+```{r, eval=TRUE, echo=FALSE}
+dataset_vignette(
+  main_aab,
+  display_vars = exprs( USUBJID, VISIT, ADATYPE, ADAPARM, MRT, DTL, ABLFL, ADABLPFL, ADPBLPFL,
+    NFRLT, AFRLT, RESULTC, RESULTN, ISSTRESC, ISSTRESN, AVALC, AVAL, AVALU, BASE, BFLAG, TFLAG,
+    PBFLAG, ADASTAT, ADASTAT_MAIN, NABSTAT, ADADUR, TIMADA, TRANADA, PERSADA
+  )
+)
+```
 
 ## Assemble into Parameter Based Dataset {#parameters}
 
@@ -1409,7 +1469,6 @@ adab_lppdtm <- core_aab %>%
   )
 ```
 
-
 In this section, we set together the desired parameter data sets created in the prior section.
 In this example, all are kept. A specific study might not have Nab or need the by visit parameters (`TFLAGV`, `PBFLAGV`, `ADASTATV`)
 or need variables like `ADADUR`, `LPPDTM` and `FPPDTM`.
@@ -1444,6 +1503,13 @@ adab_study <- adab_study %>%
   )
 ```
 
+```{r, eval=TRUE, echo=FALSE}
+dataset_vignette(
+  adab_study,
+  display_vars = exprs( USUBJID, VISIT, ADATYPE, ADAPARM, ABLFL, PARAMCD, PARAM, AVAL, AVALC, AVALU
+  )
+)
+```
 
 In this section, compute or merge in any additional flags or `ADSL` variables.
 
@@ -1474,7 +1540,6 @@ adab_adafl <- adab_cohort %>%
     by_vars = exprs(STUDYID, USUBJID)
   )
 ```
-
 
 In this section we create a Tibble to map above `PARAMCD` and `PARAM` to final study spec values.
 This step is important as we want unique `PARAMCD`/`PARAM` values. The number suffixes start 
@@ -1563,6 +1628,13 @@ adab_prefinal <- adab_params %>%
   )
 ```
 
+```{r, eval=TRUE, echo=FALSE}
+dataset_vignette(
+  adab_study,
+  display_vars = exprs( USUBJID, VISIT, ABLFL, PARCAT1, PARAMCD, PARAM, AVAL, AVALC, AVALU
+  )
+)
+```
 
 Select final variables to keep into ADAB
 
@@ -1593,7 +1665,6 @@ adab <- adab_prefinal %>%
     ABLFL, ADABLPFL, ADPBLPFL, ADAFL
   )
 ```
-
 
 # Add Labels and Attributes {#attributes}
 
