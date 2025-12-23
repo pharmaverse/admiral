@@ -221,7 +221,7 @@ derive_var_nfrlt(
 # Study with screening visits (negative days)
 adpc_screen <- tribble(
   ~USUBJID, ~VISITDY, ~PCTPT,
-  "001",    -14,      "Pre-dose",
+  "001",    -14,      "Screening",
   "001",    -7,       "Pre-dose",
   "001",    -1,       "Pre-dose",
   "001",    1,        "Pre-dose",
@@ -426,13 +426,12 @@ derive_var_nfrlt(
 )
 
 # Custom first dose day (e.g., dose on Day 3)
-# Note: 24H Post-dose sample is on Day 4
 adpc_custom <- tribble(
   ~USUBJID, ~VISITDY, ~PCTPT,
   "001",    3,        "Pre-dose",
   "001",    3,        "2H Post-dose",
   "001",    3,        "8H Post-dose",
-  "001",    4,        "24H Post-dose"
+  "001",    3,        "24H Post-dose"
 )
 
 derive_var_nfrlt(
@@ -461,3 +460,4 @@ BDS-Findings Functions that returns variable appended to dataset:
 }
 \concept{der_bds_findings}
 \keyword{der_bds_findings}
+\keyword{experimental}
