@@ -43,7 +43,7 @@ overall_avisitn <- 11111
 is_dates <- is %>%
   # Filter as needed (i.e. exclude ISSTAT has "NOT DONE")
   filter(!(ISSTAT %in% c("NOT DONE")) & toupper(ISBDAGNT) == "XANOMELINE") %>%
-  # Initial prep and core variable
+  # Initial preparation and core variables
   mutate(
     # ADATYPE and ADAPARM are assigned values to serve BY analyte processing
 
@@ -99,7 +99,7 @@ is_dates <- is %>%
   ) %>%
   # Derive analysis date/time then compute ADY
   # Impute missing time to 00:00:00 or as desired.
-  #   Could replace this code with own imputation code or function
+  # Could replace this code with custom imputation code or function
   derive_vars_dtm(
     new_vars_prefix = "A",
     highest_imputation = "s",
@@ -121,7 +121,7 @@ ex_dates <- ex %>%
     EXDOSE >= 0
   ) %>%
   mutate(
-    # DRUG is a merge var to map and merge ADA data with EX.EXTRT
+    # DRUG is a merge variable to map and merge ADA data with EX.EXTRT
     # This will be used to merge first dose into IS working data.
     # PLACEBO example is for if/when ADA was also collected on Placebo subjects
     # or treatments are scrambled prior to database lock.
@@ -175,11 +175,10 @@ is_afrlt <- is_dates %>%
     out_unit = "days",
     floor_in = FALSE,
     add_one = FALSE
-  ) %>%
-  arrange(STUDYID, USUBJID, DRUG, ADATYPE, ADAPARM, ADTM, NFRLT)
+  )
 
 # Compute or assign BASETYPE, APERIOD and APHASE ----------------------------------
-# Add study specific code as applicable using ADEX or ADSL APx and PHx vars
+# Add study specific code as applicable using ADEX or ADSL APxx / PHw variables
 
 is_basetype <- is_afrlt %>%
   mutate(
@@ -189,7 +188,6 @@ is_basetype <- is_afrlt %>%
     APHASEN = NA_integer_,
     BASETYPE = "DOUBLE_BLINDED"
   )
-
 
 # Assign AVAL, AVALC, AVALU and DTYPE for each ISTESTCD and ISBDAGNT
 
@@ -304,7 +302,7 @@ is_aval_change <- is_baseline %>%
     filter = is.na(ABLFL)
   )
 
-# Interpreted RESULT BASE
+# Interpreted Result Baseline
 is_result_change <- is_aval_change %>%
   derive_var_base(
     by_vars = exprs(STUDYID, USUBJID, BASETYPE, ADATYPE, ADAPARM),
@@ -447,10 +445,9 @@ flagdata_init <- full_join(base_data, most_post, by = c(
       ADATYPE == "ADA_BAB" & PBFLAG == 0 ~ 0,
       TRUE ~ NA_integer_
     )
-  ) %>%
-  arrange(DRUG, BASETYPE, ADATYPE, ADAPARM, STUDYID, USUBJID)
+  )
 
-# Merge in out Main ADASTAT status for computing NABSTAT
+# Get overall ADASTAT status for computing NABSTAT
 flagdata_adastat <- flagdata_init %>%
   derive_vars_merged(
     dataset_add = flagdata_init,
@@ -612,13 +609,13 @@ per_tran_final <- per_tran_last %>%
       TRUE ~ "N"
     )
   ) %>%
-  # Drop temporary vars that do not need to be merged into main ADAB
+  # Drop temporary variables that do not need to be merged into main ADAB
   select(-ADTM, -TFLAGV, -FANLDTM, -FANLDT, -LFLAGPOS, -FPPDT, -LPPDT)
 
 # Put PERSADA, TRANADA, INDUCED, ENHANCED, TDUR, ADADUR onto "is_flagdata" as "main_aab_pertran"
-# Note: Note: signal_duplicate_records() error usually occurs when a subject has duplicate
-#        records for a given BASETYPE, ADATYPE, ADAPARM and ISDTC. Investigate then add code
-#        to filter it down to best one record per USUBJID, BASETYPE, ADATYPE and ADAPARM
+# Note: signal_duplicate_records() error usually occurs when a subject has duplicate
+# records for a given BASETYPE, ADATYPE, ADAPARM and ISDTC. Investigate then add code
+# to filter it down to best one record per USUBJID, BASETYPE, ADATYPE and ADAPARM
 main_aab_pertran <- is_flagdata %>%
   derive_vars_merged(
     dataset_add = per_tran_final,
@@ -661,18 +658,6 @@ main_aab <- main_aab_rtimes %>%
     new_vars = exprs(ADPBLPFL),
     by_vars = exprs(STUDYID, USUBJID, BASETYPE, ADATYPE, ADAPARM)
   )
-
-# This will be dropped for final merge to prod/main
-main_aab_review <- main_aab %>%
-  select(
-    STUDYID, USUBJID, VISIT, ISTESTCD, ISBDAGNT, DRUG, ADTM, ADT, ADY,
-    BASETYPE, ADATYPE, ADAPARM, MRT, DTL, ABLFL, ADABLPFL, ADPBLPFL, VALIDBASE, VALIDPOST,
-    NFRLT, AFRLT, RESULTC, RESULTN, ISSTRESC, ISSTRESN, AVALC, AVAL, AVALU, BASE, BFLAG, TFLAG,
-    PBFLAG, ADASTAT, ADASTAT_MAIN, NABSTAT, nabstat_opt1, tdur, ADADUR, TIMADA, TRANADA, PERSADA
-  ) %>%
-  arrange(USUBJID, ISTESTCD, ADY) %>%
-  filter(1 == 1) %>%
-  filter(ADATYPE == "ADA_NAB" & NABSTAT == 0)
 
 # Begin Creation of each PARAM for the final ADAB format using main_aab --------
 
@@ -1122,7 +1107,6 @@ adab_lppdtm <- core_aab %>%
   )
 
 # Set all the standard PARAM components together -----------------------------------
-
 adab_paramcds <- bind_rows(
   adab_titer, adab_nabvis, adab_result, adab_nabres, adab_bflag,
   adab_incucd, adab_enhanc, adab_emerpos, adab_trunaff, adab_emerneg, adab_notrrel,
@@ -1134,9 +1118,9 @@ adab_visits <- bind_rows(adab_tflagv, adab_pbflagv, adab_adastatv)
 
 # Create the final parameterized dataset --------------------------------------------
 
-# Standard parameters:
+# To keep only standard parameters:
 # adab_study <- adab_paramcds
-# To include BY VISIT parameters
+# To include BY VISIT parameters and/or others:
 adab_study <- bind_rows(adab_paramcds, adab_visits, adab_adadur, adab_fppdtm, adab_lppdtm)
 
 # Drop temporary variables and ADA Flag variables that are now parameterized, further below is a
@@ -1235,7 +1219,7 @@ adab_params <- adab_adafl %>%
     )
   )
 
-# Sort by the standard Key then Compute ASEQ
+# Sort by the key variables then compute ASEQ
 adab_prefinal <- adab_params %>%
   # Calculate ASEQ
   derive_var_obs_number(
