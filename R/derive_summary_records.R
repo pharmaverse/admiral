@@ -298,7 +298,7 @@
 #'     AVAL = n_distinct(AEDECOD),
 #'     SRCDOM = "ADAE"
 #'   ),
-#'     missing_values = exprs(
+#'   missing_values = exprs(
 #'     AVAL = 0
 #'   )
 #' )
