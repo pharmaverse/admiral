@@ -24,6 +24,9 @@ is specified. (#2875)
 - `derive_summary_records()` now issues an error if a non summary function is
 used in `set_values_to` which results in multiple records per by group. (#2872)
 
+- `derive_summary_records()` updated to allow constants to be provided under the 
+`constant_values` argument, which will be present in both summary and missing rows (#2668)
+
 ## Breaking Changes
 
 - In `derive_var_atoxgr_dir()`, the `abnormal_indicator` argument is deprecated and replaced with `low_indicator` 
