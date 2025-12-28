@@ -3,7 +3,12 @@
 ## New Features
 
 - Added function `derive_var_nfrlt()` to derive `NFRLT` from timepoint and visit (e.g. `VISITDY` and `PCTPT`) (#2929).
+
 - Added function `convert_xxtpt_to_hours()` to parse timepoint values (e.g. `PCTPT`, `EGTPT`, `VSTPT`) into hours (#2916).
+
+- New experimental ADAB template script available `ad_adab.R` which creates Anti-drug 
+Antibody Analysis Dataset (#2805). 
+
 - Lab grading metadata for NCI-CTCAE version 6.0 is now available for both SI and US (Conventional) units 
 via `atoxgr_criteria_ctcv6` and `atoxgr_criteria_ctcv6_uscv`. This includes grading criteria for Creatinine 
 Clearance decreased. (#1858)
@@ -22,6 +27,9 @@ is specified. (#2875)
 
 - `derive_summary_records()` now issues an error if a non summary function is
 used in `set_values_to` which results in multiple records per by group. (#2872)
+
+- `derive_summary_records()` updated to allow constants to be provided under the 
+`constant_values` argument, which will be present in both summary and missing rows (#2668)
 
 ## Breaking Changes
 
