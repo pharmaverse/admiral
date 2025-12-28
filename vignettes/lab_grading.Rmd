@@ -27,13 +27,13 @@ a set of criteria for particular lab tests that grade the severity or abnormalit
 a lab value. The grades are from 0 to 4, where grade 0 can be viewed generally as a 
 "NORMAL" value. The higher the grade the more severe or more abnormal the lab value is.
 There are several sets of lab grading criteria, currently `{admiral}` has implemented
-NCI-CTCAEv4, NCI-CTCAEv5 and DAIDS grading criteria. In future releases `{admiral}` may look
-to implement further grading criteria.
+NCI-CTCAEv4, NCI-CTCAEv5, NCI-CTCAEv6 and DAIDS grading criteria. In future releases
+`{admiral}` may look to implement further grading criteria.
 
 The NCI-CTCAEv4 criteria can be found under the heading
 [**CTCAE and CTEP Codes**](https://dctd.cancer.gov/research/ctep-trials/trial-development#ctcae-and-ctep-codes)
 
-The NCI-CTCAEv5 criteria can be found under the heading
+The NCI-CTCAEv5 and NCI-CTCAEv6 criteria can be found under the heading
 [**CTEP CTCAE**](https://dctd.cancer.gov/research/ctep-trials/for-sites/adverse-events#ctep-ctcae)
 
 The DAIDS grading criteria can be found 
@@ -49,14 +49,22 @@ The DAIDS criteria can be found under the heading
 `{admiral}`, one for SI units, and one for US (conventional) units. These are as follows:
 
 NCI-CTCAEv4
+
   + `atoxgr_criteria_ctcv4` for SI units.
   + `atoxgr_criteria_ctcv4_uscv` for US (conventional) units.
 
 NCI-CTCAEv5
+
   + `atoxgr_criteria_ctcv5` for SI units.
   + `atoxgr_criteria_ctcv5_uscv` for US (conventional) units.
 
+NCI-CTCAEv6
+
+  + `atoxgr_criteria_ctcv6` for SI units.
+  + `atoxgr_criteria_ctcv6_uscv` for US (conventional) units.
+
 DAIDS
+
   + `atoxgr_criteria_daids` for SI units.
   + `atoxgr_criteria_daids_uscv` for US (conventional) units.
 
@@ -141,6 +149,19 @@ which are not present in NCI-CTCAEv5.
 
 ```{r, eval=TRUE, echo=FALSE}
 atoxgr_criteria_ctcv5 %>%
+  filter(!is.na(TERM)) %>%
+  dataset_vignette(
+    display_vars = exprs(TERM)
+  )
+```
+<br>
+
+<br>
+Similarly, the list of terms defined in the `{admiral}` metadata to implement NCI-CTCAEv6 is below:
+<br>
+
+```{r, eval=TRUE, echo=FALSE}
+atoxgr_criteria_ctcv6 %>%
   filter(!is.na(TERM)) %>%
   dataset_vignette(
     display_vars = exprs(TERM)
@@ -441,7 +462,7 @@ For term "INR Increased" there is the following criteria:
 atoxgr_criteria_ctcv4 %>%
   filter(str_detect(TERM, "INR")) %>%
   dataset_vignette(
-    display_vars = exprs(TERM, Grade_1)
+    display_vars = exprs(TERM, GRADE_1)
   )
 ```
 <br>
@@ -468,7 +489,7 @@ put in the `COMMENT` field.
 atoxgr_criteria_ctcv4 %>%
   filter(str_detect(TERM, "Hyperuricemia")) %>%
   dataset_vignette(
-    display_vars = exprs(TERM, Grade_1, Grade_3, COMMENT)
+    display_vars = exprs(TERM, GRADE_1, GRADE_3, COMMENT)
   )
 ```
 <br>
@@ -482,7 +503,7 @@ The decision made was put in the `COMMENT` field.
 atoxgr_criteria_ctcv4 %>%
   filter(str_detect(TERM, "Hypokalemia")) %>%
   dataset_vignette(
-    display_vars = exprs(TERM, Grade_1, Grade_2, COMMENT)
+    display_vars = exprs(TERM, GRADE_1, GRADE_2, COMMENT)
   )
 ```
 <br>
@@ -493,7 +514,7 @@ atoxgr_criteria_ctcv4 %>%
   filter(!is.na(COMMENT) & str_detect(TERM, "glycemia", negate = TRUE) &
     str_detect(TERM, "calcemia", negate = TRUE)) %>%
   dataset_vignette(
-    display_vars = exprs(TERM, Grade_1, Grade_2, Grade_3, Grade_4, COMMENT)
+    display_vars = exprs(TERM, GRADE_1, GRADE_2, GRADE_3, GRADE_4, COMMENT)
   )
 ```
 <br>
@@ -585,11 +606,12 @@ atoxgr_criteria_ctcv5 %>%
 For terms "Alanine aminotransferase increased", "Alkaline phosphatase increased",
 "Aspartate aminotransferase increased", "Blood bilirubin increased" and "GGT increased" the criteria
 is dependent on the Baseline Value being normal or abnormal. We use the variable `BNRIND` to determine
-this, and users can pass in the value(s) of `BNRIND` that indicate the baseline is abnormal via the argument
-`abnormal_indicator` in the function `derive_var_atoxgr_dir()`.
-For example, setting `abnormal_indicator = "HIGH"` would mean any observations with `BNRIND = "HIGH"` would
-be deemed to have an abnormal Baseline Value.
-Note: you can pass in multiple values, `abnormal_indicator = c("H", "HIGH")`
+this, and users can pass in the value(s) of `BNRIND` that indicate the baseline is abnormal via the arguments
+`high_indicator` and `low_indicator` in the function `derive_var_atoxgr_dir()`.
+For example, setting `high_indicator = "HIGH"` would mean any observations with `BNRIND = "HIGH"` would
+be deemed to have a high abnormal Baseline Value. Likewise, setting `low_indicator = "LOW"` would mean any
+observations with `BNRIND = "LOW"` would be deemed to have a low abnormal Baseline Value.
+Note: you can pass in multiple values, `high_indicator = c("H", "HIGH")`
 
 For these 5 terms, this means if `BNRIND` is abnormal then the grade is always zero for the baseline observation.
 This is the conservative approach, to ensure you don't see big changes in grade for a patient after they take treatment.
@@ -605,7 +627,7 @@ For term "INR Increased" there is the following criteria:
 atoxgr_criteria_ctcv5 %>%
   filter(str_detect(TERM, "INR")) %>%
   dataset_vignette(
-    display_vars = exprs(TERM, Grade_1)
+    display_vars = exprs(TERM, GRADE_1)
   )
 ```
 <br>
@@ -629,7 +651,7 @@ Similarly, for terms "Lipase Increased" and "Serum amylase increased" there is t
 atoxgr_criteria_ctcv5 %>%
   filter(str_detect(TERM, "Lipase") | str_detect(TERM, "amylase")) %>%
   dataset_vignette(
-    display_vars = exprs(TERM, Grade_2, Grade_3, Grade_4)
+    display_vars = exprs(TERM, GRADE_2, GRADE_3, GRADE_4)
   )
 ```
 <br>
@@ -656,7 +678,7 @@ put in the `COMMENT` field.
 atoxgr_criteria_ctcv5 %>%
   filter(str_detect(TERM, "Hyperuricemia")) %>%
   dataset_vignette(
-    display_vars = exprs(TERM, Grade_1, Grade_3, COMMENT)
+    display_vars = exprs(TERM, GRADE_1, GRADE_3, COMMENT)
   )
 ```
 <br>
@@ -672,7 +694,7 @@ The decision made was put in the `COMMENT` field.
 atoxgr_criteria_ctcv5 %>%
   filter(str_detect(TERM, "Hypokalemia") | str_detect(TERM, "Hyponatremia")) %>%
   dataset_vignette(
-    display_vars = exprs(TERM, Grade_1, Grade_2, Grade_3, COMMENT)
+    display_vars = exprs(TERM, GRADE_1, GRADE_2, GRADE_3, COMMENT)
   )
 ```
 <br>
@@ -683,7 +705,205 @@ Here is a complete list of all assumptions in the metadata for NCI-CTCAE-v5
 atoxgr_criteria_ctcv5 %>%
   filter(!is.na(COMMENT) & str_detect(TERM, "calcemia", negate = TRUE)) %>%
   dataset_vignette(
-    display_vars = exprs(TERM, Grade_1, Grade_2, Grade_3, Grade_4, COMMENT)
+    display_vars = exprs(TERM, GRADE_1, GRADE_2, GRADE_3, GRADE_4, COMMENT)
+  )
+```
+<br>
+
+# NCI-CTCAEV6 implementation {#implement_ctcv6}
+
+## Terms graded
+
+Grading is implemented for those lab tests where a lab value is included in the grading definition,
+`{admiral}` does NOT try to read any other data to determine the grade, and only the `ADLB` dataset is used.
+The following CTCAE v6.0 SOC values were identified for grading, these are "Investigations", 
+"Metabolism and nutrition disorders" and "Blood and lymphatic system disorders".
+
+From these SOC values the following terms criteria is implemented in `{admiral}` 
+
+From SOC = "Investigations" there are 22 CTCAE v6.0 Terms:
+
+  + Activated partial thromboplastin time prolonged
+  + Alanine aminotransferase increased
+  + Alkaline phosphatase increased
+  + Aspartate aminotransferase increased
+  + Blood bilirubin increased
+  + Blood lactate dehydrogenase increased
+  + CD4 lymphocytes decreased
+  + Cholesterol high
+  + Creatinine clearance decreased
+  + Creatinine increased
+  + Fibrinogen decreased
+  + GGT increased
+  + Haptoglobin decreased
+  + HDL decreased
+  + Hemoglobin increased
+  + INR increased
+  + LDL increased
+  + Lipase increased
+  + Lymphocyte count increased
+  + Neutrophil count decreased
+  + Serum amylase increased
+  + White blood cell decreased
+  
+Note: These are 4 new terms added and 3 removed from the terms identified for NCI-CTCAEv5.
+"Blood lactate dehydrogenase increased", "Creatinine clearance decreased", "HDL decreased" and
+"LDL increased" have been added, and "CPK increased" and "Lymphocyte count decreased" have been
+removed, and "Platelet count decreased" has been moved to "Thrombocytopenia" under SOC 
+"Blood and lymphatic system disorders".
+
+From the SOC =  "Metabolism and nutrition disorders" there are 15 CTCAE v6.0 Terms:
+
+  + Acidosis
+  + Alkalosis
+  + Hypercalcemia
+  + Hyperglycemia
+  + Hyperkalemia
+  + Hypermagnesemia
+  + Hypernatremia
+  + Hypertriglyceridemia
+  + Hyperuricemia
+  + Hypoalbuminemia
+  + Hypocalcemia
+  + Hypoglycemia
+  + Hypokalemia
+  + Hypomagnesemia
+  + Hyponatremia
+
+Note: These are the same terms identified for NCI-CTCAEv5, except "Hyperglycemia" which has been added 
+to NCICTCAEv6 grading criteria.
+
+From the SOC =  "Blood and lymphatic system disorders" there are 3 CTCAE v6.0 Terms:
+
+  + Anemia
+  + Leukocytosis
+  + Thrombocytopenia
+
+Note: These are the same terms identified for NCI-CTCAEv5, except "Thrombocytopenia" which as mentioned above
+has moved from "Platelet count decreased" under SOC "Investigations".
+
+## Updates made to TERM
+
+For terms "Hypocalcemia" and "Hypercalcemia" the criteria is provided for Calcium and Ionized Calcium,
+therefore `{admiral}` created a row for each in the metadata, this is noted in the COMMENT variable of
+the metadata:
+<br>
+
+```{r, eval=TRUE, echo=FALSE}
+atoxgr_criteria_ctcv6 %>%
+  filter(str_detect(TERM, "calcemia")) %>%
+  dataset_vignette(
+    display_vars = exprs(TERM, COMMENT)
+  )
+```
+<br>
+
+## Criteria dependent on the Baseline Value
+
+For terms "Alanine aminotransferase increased", "Aspartate aminotransferase increased", "Blood bilirubin increased",
+"Creatinine increased" and "GGT increased" the criteria is dependent on the Baseline Value being normal or abnormal. We use
+the variable `BNRIND` to determine this, and users can pass in the value(s) of `BNRIND` that indicate the baseline is abnormal
+via the arguments `high_indicator` and `low_indicator` in the function `derive_var_atoxgr_dir()`.
+For example, setting `high_indicator = "HIGH"` would mean any observations with `BNRIND = "HIGH"` would
+be deemed to have a high abnormal Baseline Value. Likewise, setting `low_indicator = "LOW"` would mean any
+observations with `BNRIND = "LOW"` would be deemed to have a low abnormal Baseline Value.
+Note: you can pass in multiple values, `abnormal_indicator = c("H", "HIGH")`
+
+Excluding "Creatinine increased", for the other 4 terms, this means if `BNRIND` is abnormal then the grade is always one for the
+baseline observation. Additionally, for "Alkaline phosphatase increased" the baseline grade is always zero, as the value has to
+be above the baseline value to have a grade greater than zero.
+This is the conservative approach, some companies may not want the baseline observation graded at all, so would post-process,
+if necessary.
+
+
+## Assumptions made when grading
+
+For term "INR Increased" there is the following criteria:
+
+<br>
+```{r, eval=TRUE, echo=FALSE}
+atoxgr_criteria_ctcv6 %>%
+  filter(str_detect(TERM, "INR")) %>%
+  dataset_vignette(
+    display_vars = exprs(TERM, GRADE_1)
+  )
+```
+<br>
+
+`{admiral}` assumed worst case and used both parts of the criteria for grading, so comparing
+lab value against ULN and also BASE. The decision made was put in the `COMMENT` field.
+
+<br>
+```{r, eval=TRUE, echo=FALSE}
+atoxgr_criteria_ctcv6 %>%
+  filter(str_detect(TERM, "INR")) %>%
+  dataset_vignette(
+    display_vars = exprs(TERM, COMMENT)
+  )
+```
+<br>
+Similarly, for terms "Lipase Increased" and "Serum amylase increased" there is the following criteria:
+
+<br>
+```{r, eval=TRUE, echo=FALSE}
+atoxgr_criteria_ctcv6 %>%
+  filter(str_detect(TERM, "Lipase") | str_detect(TERM, "amylase")) %>%
+  dataset_vignette(
+    display_vars = exprs(TERM, GRADE_2, GRADE_3, GRADE_4)
+  )
+```
+<br>
+
+`{admiral}` assumed worst case and implemented highest grade possible. 
+The decision made was put in the `COMMENT` field.
+
+<br>
+```{r, eval=TRUE, echo=FALSE}
+atoxgr_criteria_ctcv6 %>%
+  filter(str_detect(TERM, "Lipase") | str_detect(TERM, "amylase")) %>%
+  dataset_vignette(
+    display_vars = exprs(TERM, COMMENT)
+  )
+```
+<br>
+
+For TERM "Hyperuricemia", the criteria for Grade 1 and Grade 3 is the same with respect
+to the lab value, so worse case is assumed as grade 3. The decision made was 
+put in the `COMMENT` field.
+
+<br>
+```{r, eval=TRUE, echo=FALSE}
+atoxgr_criteria_ctcv6 %>%
+  filter(str_detect(TERM, "Hyperuricemia")) %>%
+  dataset_vignette(
+    display_vars = exprs(TERM, GRADE_1, GRADE_3, COMMENT)
+  )
+```
+<br>
+
+A similar approach was taken for TERM "Hypokalemia" and "Hyponatremia". For "Hypokalemia",
+where Grade 1 and Grade 2 criteria is the same with respect to the lab value, then worse case
+is assumed as grade 2. For "Hyponatremia", where Grade 2 and Grade 3 criteria is the same with
+respect to the lab value, then worse case is assumed as grade 3.
+The decision made was put in the `COMMENT` field.
+
+<br>
+```{r, eval=TRUE, echo=FALSE}
+atoxgr_criteria_ctcv6 %>%
+  filter(str_detect(TERM, "Hypokalemia") | str_detect(TERM, "Hyponatremia")) %>%
+  dataset_vignette(
+    display_vars = exprs(TERM, GRADE_1, GRADE_2, GRADE_3, COMMENT)
+  )
+```
+<br>
+
+Here is a complete list of all assumptions in the metadata for NCI-CTCAE-v6
+<br>
+```{r, eval=TRUE, echo=FALSE}
+atoxgr_criteria_ctcv6 %>%
+  filter(!is.na(COMMENT) & str_detect(TERM, "calcemia", negate = TRUE)) %>%
+  dataset_vignette(
+    display_vars = exprs(TERM, GRADE_1, GRADE_2, GRADE_3, GRADE_4, COMMENT)
   )
 ```
 <br>
@@ -834,7 +1054,7 @@ Similarly, for term "Lactate, High", {admiral} only grade 1 and 2, and there is 
 atoxgr_criteria_daids %>%
   filter(str_detect(TERM, "Lactate")) %>%
   dataset_vignette(
-    display_vars = exprs(TERM, Grade_1, Grade_1)
+    display_vars = exprs(TERM, GRADE_1, GRADE_1)
   )
 ```
 <br>
@@ -895,7 +1115,7 @@ reflect this.
 
 # Conclusion
 
-With NCI-CTCAEv4, NCI-CTCAEv5 and DAIDS grading now implemented, {admiral} may look to 
+With NCI-CTCAEv4, NCI-CTCAEv5, NCI-CTCAEv6 and DAIDS grading now implemented, {admiral} may look to 
 implement other industry standard grading criteria. Providing tools for users to easily
 interact with the metadata to update criteria, based on their companies needs will also
 be looked at. Ideally, users should be able to create their own metadata for company specific
