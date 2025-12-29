@@ -262,7 +262,7 @@ dataset_vignette(
 
 At this step, we stage `EX` data. Filter the data as desired to match 
 the `IS` analytes. As with `IS` dataset, `DRUG` is assigned as a common merge variable.
-As with 'IS' dataset, `NFRLT` is assigned using `VISITDY` (or the user could substitute
+As with `IS` dataset, `NFRLT` is assigned using `VISITDY` (or the user could substitute
 `EX.VISIT` values).
 
 Assign `ASTDTM` using `EX.EXSTDTC`. As previously seen with `IS.ISDTC`, if `EX.EXSTDTC` is missing the time part,
