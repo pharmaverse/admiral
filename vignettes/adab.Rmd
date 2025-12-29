@@ -96,7 +96,7 @@ baseline variables if needed. These may come from either the SDTM or
 ADaM source.
 
 For the purpose of example, the CDISC Pilot SDTM and ADaM
-datasets---which are included in `{pharmaversesdtm}`---are used.
+datasets--which are included in `{pharmaversesdtm}`--are used.
 
 ```{r message=FALSE}
 library(admiral)
