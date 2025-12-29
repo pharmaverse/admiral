@@ -23,7 +23,7 @@ library(admiraldev)
 # Introduction
 
 This article describes creating an Anti-Drug Antibody (ADA) ADaM (`ADAB`).
-The first part of the article describes the data staging, second part
+The first part of the article describes the data staging, the second part
 describes the methods of computation of parameters, the third part describes
 assembling the final data set into by visit and parameter based records 
 then adding final flags, ADSL variables then compute ASEQ.
@@ -43,14 +43,13 @@ This template and the sample `IS` dataset works off of `IS` having primary
 Anti-Drug Antibody results (ex: `ISTESTCD = "ADA_BAB"`) and Neutralizing Antibody 
 (ex:`ISTESTCD = "ADA_NAB"`) records present when `ADA_BAB` has a positive finding.
 
-One of the important aspects of the dataset is the separate derivation of
-original "by visit" data, by visit interpreted results and parameter variables
-(like `ADEX` summary parameters). A good analogy would be `ADEX` that has a mix
-of original by visit records and summary records. These will be illustrated later
-in this vignette.
+An important aspect of this dataset is the separation of original by visit data,
+adding by visit interpreted results and creation of summary parameters. An analogy 
+to `ADAB` structure would be `ADEX` as it has a mix of original visit based records and
+overall/summary records. These will be illustrated later in this vignette.
 
 Here are the relative time variables we will use for by visit records. These correspond to
-the names in the CDISC Implementation Guide.
+the names in the CDISC Implementation Guide:
 
 | Variable | Variable Label                         |
 |----------|----------------------------------------|
@@ -82,9 +81,8 @@ unless otherwise specified.*
 
 ## Read in Source Data {#readdata}
 
-To start, all data frames needed for the creation of `ADAB` should be
-read into the environment. This could be a company specific process. 
-Data frames needed likely will be `IS`, `EX`, and `ADSL`.
+To start, all datasets needed for the creation of `ADAB` should be
+read into the environment. Datasets needed will be `IS`, `EX`, and `ADSL`.
 
 Additional domains such as `VS` and `LB` may be used for additional
 baseline variables if needed. These may come from either the SDTM or
@@ -138,25 +136,25 @@ is <- filter(is, USUBJID %in% c(
 ))
 ```
 
-At this step, we first adjust for whether our source data is `IS` using SDTM v2.0 standard
-or pre SDTM v1.8. Version 2.0 replaced `ISTESTCD` and `ISTEST` with general ADA categories,
-what was stored in pre-version 1.8 in `ISTESTCD` or `ISTEST` is now stored in `IS.ISBDAGNT`.
-This code provides a mechanism to process either version, see below comments for usage.
+At this step, we first adjust for whether our source data is `IS` using SDTM v2.0 standards
+or from pre-SDTM v1.8. Version 2.0 replaced `ISTESTCD` and `ISTEST` with general ADA categories.
+For example, values stored (in pre-version 1.8) in `ISTESTCD` or `ISTEST` might now be found in `IS.ISBDAGNT`.
+This template provides a mechanism to process either version, see below comments for usage.
 
 If your `IS` dataset has different values in `ISTESTCD` and `ISTEST` than the example (or has 
 additional tests suitable for the `ADAB` domain), adjust this step accordingly. 
 
 `ADAPARM` and `ADATYPE` are assigned to ensure consistent merge variables as values are calculated
-in the event `IS` from pre version 2.0 are used. `IS.ISTESTCD`, and `IS.ISBDAGNT` from version 2.0
-could be substituted if desired.
+in the event `IS` data from pre-version 2.0 are used. `IS.ISTESTCD`, and `IS.ISBDAGNT` from 
+version 2.0 could be substituted if desired.
 
-`DRUG` (similar to `ADPC.DRUG`) is an assigned variable so `IS` Analytes can be merged matching 
+`DRUG` (similar to `ADPC.DRUG`) is an assigned variable so `IS` analytes can be merged by matching 
 `EX.EXTRT` value(s) for purpose of computing reference dose and time from first dose.
 
 Common variables as such `AVISIT`, `AVISITN`, `FRLTU` are assigned.  
 
 `NFRLT` is nominal time from first dose. Common sources are `IS.VISITDY`. `IS.VISIT` information can
-also be for all values or to get unplanned visits (i.e. "End of Study", "Unscheduled").
+also be parsed for timing values or to assign values for special visits (i.e. "End of Study", "Unscheduled").
 
 We use `derive_vars_merged()` to merge `ADSL.TRTSDT` and compute `ADY`. `ADY` is assumed to be
 based on the `ADSL.TRTSDT` while `ADAB.AFRLT` is based on the matching `EX.EXTRT` for the corresponding 
@@ -165,8 +163,8 @@ based on the `ADSL.TRTSDT` while `ADAB.AFRLT` is based on the matching `EX.EXTRT
 If `IS.ISDTC` is missing the time part, "00:00" is used for the imputation. Individual companies and 
 studies may have custom imputation methods. If this is the case, the function `derive_vars_dtm()`
 would be either replaced or post-processed to get the desired imputed time part. For example,
-a common method is to use the time part from `EX.EXSTDTC` (matched by the `IS` and `EX` date parts), 
-then the `IS` time is adjusted for pre-dose sampling planned time. User would add custom code for this.
+a method might be to use the time part from `EX.EXSTDTC` (matched by the `IS` and `EX` date parts), 
+then the `IS.ISDTC` time is adjusted for pre-dose sampling planned time. User would add custom code for this.
 
 ```{r message=FALSE}
 # Derivations ----
@@ -255,19 +253,17 @@ dataset_vignette(
 
 ## Prepare 'EX', Find First Dose and Derive AFRLT {#firstdose}
 
-At this step, we stage `EX` data. Filter the data as desired to match 
-the `IS` analytes. As with `IS` dataset, `DRUG` is assigned as a common merge variable.
-As with `IS` dataset, `NFRLT` is assigned using `VISITDY` (or the user could substitute
-`EX.VISIT` values).
+At this step, we stage the `EX` data. Filter the data as desired to match 
+the `IS` analyte(s). As with the `IS` dataset staging, `DRUG` is also assigned as a common merge variable.
+As with `IS` dataset, `NFRLT` is assigned using `VISITDY` (or could substitute parsed `EX.VISIT` values).
 
-Assign `ASTDTM` using `EX.EXSTDTC`. As previously seen with `IS.ISDTC`, if `EX.EXSTDTC` is missing the time part,
-"00:00" is used for the imputation. Individual companies and studies may have custom imputation methods.
-If this is the case, the function `derive_vars_dtm()` would be either replaced or post-processed to 
-get the desired imputed time part. For example a common method is to use the time part from `IS.ISDTC` 
-(matched by the `IS` and `EX` date parts), then the `EX` missing time is adjusted for 
-pre-dose sampling planned time. User would add custom code for this.
-`AENDTM` from `EX.EXENDTC` is also computed in case needed.  Both dates then create
-date part variables using `derive_vars_dtm_to_dt()`
+Assign `ASTDTM` using `EX.EXSTDTC`. As previously described with `IS.ISDTC`, if `EX.EXSTDTC` is missing 
+the time part, "00:00" is used for the imputation. Individual companies and studies may have custom imputation
+methods. If this is the case, the function `derive_vars_dtm()` would be either replaced or post-processed to 
+get the desired imputed time part. For example a method might be to use the time part from `IS.ISDTC` 
+(matched by the `IS` and `EX` date parts), then the `EX` missing time is adjusted for pre-dose sampling 
+planned time. User would add custom code for this. `AENDTM` from `EX.EXENDTC` is also computed in case needed.
+Both dates then create date part variables using `derive_vars_dtm_to_dt()`
 
 ```{r message=FALSE}
 # ---- Get dosing information ----
@@ -324,7 +320,7 @@ dataset_vignette(
 
 At this step, we use `derive_vars_merged()` to join our prepared `EX` data into the prepared
 `IS` data to compute `FANLDTM`, `AFRLT` and keep `FANLTMF` from `ASTTMF` in case the first dose
-was imputed.
+timepart was imputed.
 
 ```{r message=FALSE}
 # Note: This template computes only AFRLT, see ADPC template if need EX dose expansion example.
@@ -394,15 +390,15 @@ dataset_vignette(
 
 ## Derive Assigned Variables {#assigned}
 
-At this step, we assign `MRT` (Minimum Reportable Titer) and an Optional
-`DTL` (both are user/protocol specific assigned values). `RESULTC` is the
-the standard interpreted result (`POSITIVE` or `NEGATIVE`) based values found
-in `IS.ISSTRESC` (these values will be sponsor specific as applicable, starter
-values supplied to demonstrate.). `RESULTN` is assigned `0`/`1` as the numeric version for `RESULTC`.
-`RESULTN` and `RESULTC` are pre-cursors to `AVAL` and `AVALC` and serve as interim stores
-to aid with user review of the progression of the program.
+At this step, we assign `MRT` (Minimum Reportable Titer) and an optional
+`DTL` (Drug Tolerance Level onto the main ADA analyte records (`ADATYPE == "ADA_BAB"`).
+Both are sponsor/protocol specific assigned values.  `RESULTC` is the the standard interpreted 
+character result (`POSITIVE` or `NEGATIVE`) based values found in `IS.ISSTRESC` (these values will 
+be sponsor specific as applicable, starter values are supplied to demonstrate). `RESULTN` is assigned `0`/`1` 
+as the numeric version of `RESULTC`. `RESULTN` and `RESULTC` are precursors to `AVAL` and `AVALC` and 
+will serve as interim variables to facilitate progression of the program and its derivations.
 
-When `IS.ISSTERC` is "POSITIVE",  `IS.ISSTRESN` is commonly populated with values >0. 
+When `IS.ISSTRESC` is "POSITIVE", `IS.ISSTRESN` is commonly populated with values >0. 
 However, if `ISSTRESC` is "POSITIVE" with a missing `IS.ISSTRESN`, this template provides
 a method to assign `AVAL` using the assigned MRT value, sets `AVALC` to "N.C." (Not Calculable)
 and documents the operation by setting `DTYPE='MRT'`.  
@@ -489,9 +485,9 @@ In this first section, we compute `ABLFL`, `BASE` and `CHG`.
 `VALIDBASE` and `VALIDPOST` variables are assigned to accommodate if sponsor has restrictions
 to use directly or use later to qualify a record as baseline or post-baseline
 as analysis variables are computed.  For example, a missing value at baseline
-could be considered negative while non missing post-baseline might required
+could be considered negative while non missing post-baseline values might required
 (or considered Negative if sponsor defined as such). This example allows
-missing baseline but required post-baseline to be not missing values.
+missing baseline but requires post-baseline to not have missing values.
 
 ```{r message=FALSE}
 # Begin computation of parameters -----------------------------------------
@@ -574,22 +570,30 @@ dataset_vignette(
 ```
 
 This section computes main ADA analyte parameters into a horizontal dataset.
-Sections are commented appropriately. 
-Final Key Variables this section:
-Subject By Visit analysis variables (sponsor or molecule specific or optional)
-`TFLAGV` - By visit Treatment Emergent Category (see *T-Flags).
-`PBFLAGV` - Post-Baseline Status by Visit
-`ADASTATV` - Overall ADA Status by Visit (ADA Positive or Negative)
-Subject Overall analysis variables
-`BFLAG`  - Baseline Positive/Negative Flag
-`TFLAG`  - Overall Treatment Emergent Category  (see *T-Flags)
-`PBFLAG`  - Post-Baseline Status
-`ADASTAT` - Overall Subject ADA Status (ADA Positive or Negative)
 
-*T-Flags: 0 = Negative, 1 = Induced, 2 = Enhanced, 3 = Treatment Unaffected
-Induced: Negative at Baseline to Positive Post-Baseline
-Enhanced: Positive at Baseline to Positive Post-Baseline where Change from Baseline >= 0.60
-Treatment Unaffected: Positive at Baseline to Positive where Change from Baseline < 0.60
+Key Subject By Visit analysis variables (sponsor or molecule specific or optional):
+
+| Variable | Meaning                                                  |
+|----------|----------------------------------------------------------|
+| `TFLAGV`  | By visit Treatment Emergent Category (see *T-Flags)      |
+| `PBFLAGV` | Post-Baseline Status by Visit                            |
+| `ADASTATV`| Overall ADA Status by Visit (ADA Positive or Negative)   |
+
+
+Key Subject Overall analysis variables:
+
+| Variable | Meaning                                                  |
+|----------|----------------------------------------------------------|
+| `BFLAG`   | Baseline Positive/Negative Flag                          |
+| `TFLAG`   | Overall Treatment Emergent Category  (see *T-Flags)      |
+| `PBFLAG`  | Post-Baseline Status                                     |
+| `ADASTAT` | Overall Subject ADA Status (ADA Positive or Negative)    |
+
+
+*T-Flags: 0 = Negative, 1 = Induced, 2 = Enhanced, 3 = Treatment Unaffected  
+Induced: Negative at Baseline to Positive Post-Baseline  
+Enhanced: Positive at Baseline to Positive Post-Baseline where Change from Baseline >= 0.60  
+Treatment Unaffected: Positive at Baseline to Positive where Change from Baseline < 0.60  
 
 ```{r message=FALSE}
 # Assign and save ADABLPFL for later use
@@ -728,13 +732,13 @@ dataset_vignette(
 ```
 
 In this section, we compute Neutralizing Antibody (Nab) Status (optional and if applicable).
-Nab is typically obtained from samples where the subject has positive finding for its 
+Nab is typically obtained from samples where the subject has a positive finding for its 
 parent main analyte. Reminder that ADA and Nab are drug specific. Drug ABC can have ADA
 and optional Nab tests; Drug XYZ can also have the same pairs and are processed separately.
 
 The target variable for Nab is `NABSTAT` (subject Nab Status for the the matching parent analyte)
-In the example template, to be `NABSTAT = "Positive" or "Negative"`, the subject has to 
-`ADATAT="Positive"` on the main parent matching analyte. If not `ADASTAT  = "Positive"`, `NABSTAT`
+In this template, to be `NABSTAT = "Positive" or "Negative"`, the subject has to first be
+`ADASTAT="Positive"` on the main parent matching analyte. If not `ADASTAT = "Positive"`, `NABSTAT`
 is set to either NA or "MISSING" as desired.
 
 ```{r message=FALSE}
@@ -787,35 +791,24 @@ dataset_vignette(
 )
 ```
 
-In this section, we bring together all the prior section variables into a single horizontal dataset
-then we compute the remaining analysis variables into a final horizontal dataset 
-by `STUDYID`, `USUBJID`, `BASETYPE`, `ADATYPE` (Nab or ADA), `ADAPARM` (Drug specific value for the Nab or ADA test)
-The subject level variable values are repeated on each `VISIT`/`ISDTC` by `BASETYPE`, `ADATYPE`, `ADAPARM`.
+In this section, we bring together the prior section variables then compute the remaining variables into a final horizontal dataset by `STUDYID`, `USUBJID`, `BASETYPE`, `ADATYPE` (Nab or ADA), and `ADAPARM`. The subject level variable values are repeated on each `VISIT`/`ISDTC` by `BASETYPE`, `ADATYPE`, `ADAPARM`.
 
-The remaining pertinent analysis variables computed in this section are:
-`FPPDT`  - Date of first ADA Positive
-`LPPDT`  - Date of Last ADA Positive
-`ADADUR` - Duration of ADA (`LPPDT` - `FPPDT`)
-`TIMADA` - Time to ADA Positive (from first dose)
-`INDUCED` - Negative at Baseline to Positive Post-Baseline
-`ENHANCED` - Positive at Baseline to Positive Post-Baseline where `CHG >= 0.60`
-`TRANADA`  - Transient ADA (either of): 
-             INDUCED and Positive at any Post Baseline other than Last
-             INDUCED and multiple post baseline positive (other than last)
-                and duration between first and last positive is < 16 weeks.
-`PERSADA` -  Persistent ADA (either of):
-             `INDUCED` and Positive at the last post-baseline result.
-             `INDUCED` and multiple post-baseline positive (other than last result)
-                and duration between first and last positive result is >= 16 weeks.
-`TRANADAE`  - Any Treatment Emergent Transient ADA (either of): 
-             `INDUCED` and Positive at any Post-Baseline other than last result
-             `INDUCED` and multiple post-baseline positive (other than last result)
-                and duration between first and last positive result is < 16 weeks.
-`PERSADAE` - Any Treatment Emergent Persistent ADA (either of):
-             `INDUCED` or `ENHANCED` and Positive at the last post-baseline result.
-             `INDUCED` or `ENHANCED` and multiple post-baseline positive (other than last result)
-`ADABLPFL` - Baseline ADA Evaluable - Baseline test exists (`ABLFL = "Y"`)
-`ADPBFPFL` - Post-Baseline ADA Evaluable - At least one Valid (non-missing) post-baseline result.
+The key analysis variables computed in this section are:  
+
+|  Variable  | Meaning                                                   |
+|------------|-----------------------------------------------------------|
+| `FPPDT`    | Date of first ADA Positive                               |
+| `LPPDT`    | Date of Last ADA Positive                                |
+| `ADADUR`   | Duration of ADA (`LPPDT` - `FPPDT`)                      |
+| `TIMADA`   | Time to ADA Positive (from date of first of dose of corresponding drug) |
+| `INDUCED`  | Negative at Baseline to Positive Post-Baseline           |
+| `ENHANCED` | Positive at Baseline to Positive Post-Baseline where `CHG` >= 0.60 |
+| `TRANADA`  | Transient ADA (either of):  (1) `INDUCED` and Positive at any post-baseline (other than the last result) or (2) `INDUCED`and multiple post baseline positive (other than the last result) and duration between the first and last positive is < 16 weeks |
+| `PERSADA`  | Persistent ADA (either of):  (1) `INDUCED` and Positive at the last post-baseline result or (2) `INDUCED` and multiple post-baseline positive (other than the last result) and duration between the first and last positive is >= 16 weeks|
+| `TRANADAE` | Any Treatment Emergent Transient ADA (either of):  (1) `INDUCED` or `ENHANCED` and Positive at any post-baseline (other than the last result) or (2) `INDUCED` or `ENHANCED` and multiple post-baseline positive (other than the last result) and duration between the first and last positive result is < 16 weeks |
+| `PERSADAE` | Any Treatment Emergent Persistent ADA (either of):  (1) `INDUCED` or `ENHANCED` and Positive at the last post-baseline result or (2) `INDUCED` or `ENHANCED` and multiple post-baseline positive (other than the last result) and duration between the first and last positive is >= 16 weeks |
+| `ADABLPFL` | Baseline ADA Evaluable - a baseline record exists (`ABLFL = "Y"`)   |
+| `ADPBFPFL` | Post-Baseline ADA Evaluable - At least one valid (non-missing) post-baseline result  |
 
 ```{r message=FALSE}
 # Put TFLAG, BFLAG and PBFLAG and the nabstat_ variables onto the main
@@ -975,7 +968,7 @@ main_aab_rtimes <- main_aab_pertran %>%
     NABSTAT = nabstat_opt1
   )
 
-# Merge ADABLPFL and ADPBFPFL onto main dataset.
+# Merge ADABLPFL and ADPBLPFL onto main dataset.
 main_aab <- main_aab_rtimes %>%
   derive_vars_merged(
     dataset_add = adablpfl,
@@ -1002,18 +995,18 @@ dataset_vignette(
 ## Assemble into Parameter Based Dataset {#parameters}
 
 In this section, we turn original `IS` records, the duplicated interpreted records plus
-each Analysis variable into separate prepared data frames. These will then be
+each analysis variable into separate prepared data frames. These will then be
 appended together into the final ADAB product.
 
 Certain computed variables are limited to only by visit records or for the main analyte.
-These are noted in each step as code or comments.
+These are noted in comments if as applicable.
 
 If your `IS` dataset has additional sponsor specific tests that were added into the preceding code segments,
 add additional parameter data frames here to ultimately include in the final `ADAB` dataset.
-
-On the OVERALL data sets, we also keep: `PARCAT1`, `BASETYPE`, `PARAM`, `ADATYPE`, `ADAPARM`,
-    `ISTESTCD`, `ISTEST`, `ISCAT`, `ISBDAGNT`, `AVISITN`, `AVISIT`, `ISSPEC`, `{analysis variable}`.
-Note: `ADATYPE`, `ADAPARM` and `{analysis variable}` are not kept in the final ADAB dataset.
+    
+On the records where the parameter is OVERALL, we also keep: `PARCAT1`, `BASETYPE`, `PARAM`, `ADATYPE`, `ADAPARM`, `ISTESTCD`, `ISTEST`, `ISCAT`, `ISBDAGNT`, `AVISITN`, `AVISIT` and `ISSPEC`.
+Note: `ADATYPE`, `ADAPARM` and other interim variables computed earlier are not kept in the final ADAB dataset.
+If a parameter has unique keeps or drops, they are noted below as comments.
 
 ```{r message=FALSE}
 # Begin Creation of each PARAM for the final ADAB format using main_aab --------
@@ -1536,7 +1529,7 @@ adab_adafl <- adab_cohort %>%
   )
 ```
 
-In this section we create a Tibble to map above `PARAMCD` and `PARAM` to final study spec values.
+In this section we create a data frame to map above `PARAMCD` and `PARAM` to final specific values.
 This step is important as we want unique `PARAMCD`/`PARAM` values. The number suffixes start 
 with '1' and increment as the core parameter name is repeated. This could be due to having
 `RESULT` for ADA and Nab for Drug ABC. There could be two analytes/drug combos 
