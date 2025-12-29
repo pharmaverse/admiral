@@ -49,7 +49,7 @@ Anti-Drug Antibody results (ex: `ISTESTCD = "ADA_BAB"`) and Neutralizing Antibod
 (ex:`ISTESTCD = "ADA_NAB"`) records present when `ADA_BAB` has a positive finding.
 
 One of the important aspects of the dataset is the separate derivation of
-original 'by visit' data, by visit interpreted results and parameter variables
+original "by visit" data, by visit interpreted results and parameter variables
 (like `ADEX` summary parameters). A good analogy would be `ADEX` that has a mix
 of original by visit records and summary records. These will be illustrated later
 in this vignette.
