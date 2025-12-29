@@ -737,7 +737,7 @@ Nab is typically obtained from samples where the subject has positive finding fo
 parent main analyte. Reminder that ADA and Nab are drug specific. Drug ABC can have ADA
 and optional Nab tests; Drug XYZ can also have the same pairs and are processed separately.
 
-The target variable for Nab is NABSTAT (subject Nab Status for the the matching parent analyte)
+The target variable for Nab is `NABSTAT` (subject Nab Status for the the matching parent analyte)
 In the example template, to be `NABSTAT = "Positive" or "Negative"`, the subject has to 
 `ADATAT="Positive"` on the main parent matching analyte. If not `ADASTAT  = "Positive"`, `NABSTAT`
 is set to either NA or 'MISSING" as desired.
