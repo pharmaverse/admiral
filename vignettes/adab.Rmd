@@ -22,9 +22,6 @@ library(admiraldev)
 
 # Introduction
 
-NOTE: This document is in a draft state, still in the works by author 
-and/or user feedback.
-
 This article describes creating an Anti-Drug Antibody (ADA) ADaM (`ADAB`).
 The first part of the article describes the data staging, second part
 describes the methods of computation of parameters, the third part describes
@@ -32,10 +29,8 @@ assembling the final data set into by visit and parameter based records
 then adding final flags, ADSL variables then compute ASEQ.
 
 Note: It should be noted at this point that CDISC does not currently have
-an model or implementation guide for ADA (ADAMB). There is a committee and the
-elements of this template reflect methods from a couple members and can serve
-as a baseline for when a guide is released.  CDISC ADaM conventions and similar
-domains (such as `ADPC`) are followed.
+a model or implementation guide for ADA (`ADAB`). This adab.R template
+is currently considered experimental.
 
 This example presented uses underlying `EX` and `IS` domains where the
 `EX` and `IS` domains represent data as collected and the `ADAB` ADaM is
