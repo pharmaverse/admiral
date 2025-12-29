@@ -582,14 +582,14 @@ This section computes main ADA analyte parameters into a horizontal dataset.
 Sections are commented appropriately. 
 Final Key Variables this section:
 Subject By Visit analysis variables (sponsor or molecule specific or optional)
-TFLAGV - By visit Treatment Emergent Category (see *T-Flags).
-PBFLAGV - Post-Baseline Status by Visit
-ADASTATV - Overall ADA Status by Visit (ADA Positive or Negative)
+`TFLAGV` - By visit Treatment Emergent Category (see *T-Flags).
+`PBFLAGV` - Post-Baseline Status by Visit
+`ADASTATV` - Overall ADA Status by Visit (ADA Positive or Negative)
 Subject Overall analysis variables
-BFLAG  - Baseline Positive/Negative Flag
-TFLAG  - Overall Treatment Emergent Category  (see *T-Flags)
-PBFLAG  - Post-Baseline Status
-ADASTAT - Overall Subject ADA Status (ADA Positive or Negative)
+`BFLAG`  - Baseline Positive/Negative Flag
+`TFLAG`  - Overall Treatment Emergent Category  (see *T-Flags)
+`PBFLAG`  - Post-Baseline Status
+`ADASTAT` - Overall Subject ADA Status (ADA Positive or Negative)
 
 *T-Flags: 0 = Negative, 1 = Induced, 2 = Enhanced, 3 = Treatment Unaffected
 Induced: Negative at Baseline to Positive Post-Baseline
