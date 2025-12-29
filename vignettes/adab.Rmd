@@ -70,7 +70,7 @@ unless otherwise specified.*
 
 -   [Read in Source Data](#readdata)
 
--   [Prepare 'EX', Find First Dose and Derive AFRLT](#firstdose)
+-   [Prepare `EX`, Find First Dose and Derive `AFRLT`](#firstdose)
 
 -   [Assign Periods, Phases and BASETYPE](#basetype)
 
