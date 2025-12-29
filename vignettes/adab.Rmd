@@ -46,7 +46,7 @@ added to the `{pharmaversesdtm}` for ADA data.
 
 This template and the sample `IS` dataset works off of `IS` having primary
 Anti-Drug Antibody results (ex: `ISTESTCD = "ADA_BAB"`) and Neutralizing Antibody 
-(ex:`ISTESTCD` = 'ADA_NAB') records present when 'ADA_BAB' has a positive finding.
+(ex:`ISTESTCD = "ADA_NAB"`) records present when `ADA_BAB` has a positive finding.
 
 One of the important aspects of the dataset is the separate derivation of
 original 'by visit' data, by visit interpreted results and parameter variables
