@@ -404,7 +404,7 @@ At this step, we assign `MRT` (Minimum Reportable Titer) and an Optional
 the standard interpreted result (`POSITIVE` or `NEGATIVE`) based values found
 in `IS.ISSTRESC` (these values will be sponsor specific as applicable, starter
 values supplied to demonstrate.). `RESULTN` is assigned `0`/`1` as the numeric version for `RESULTC`.
-RESULTN and RESULTC are pre-cursors to AVAL and AVALC and serve as interim stores
+`RESULTN` and `RESULTC` are pre-cursors to `AVAL` and `AVALC` and serve as interim stores
 to aid with user review of the progression of the program.
 
 When `IS.ISSTERC` is "POSITIVE",  `IS.ISSTRESN` is commonly populated with values >0. 
