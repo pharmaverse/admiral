@@ -591,7 +591,7 @@ TFLAG  - Overall Treatment Emergent Category  (see *T-Flags)
 PBFLAG  - Post-Baseline Status
 ADASTAT - Overall Subject ADA Status (ADA Positive or Negative)
 
-*T-Flags: 0=Negative, 1=Induced, 2=Enhanced, 3=Treatment Unaffected
+*T-Flags: 0 = Negative, 1 = Induced, 2 = Enhanced, 3 = Treatment Unaffected
 Induced: Negative at Baseline to Positive Post-Baseline
 Enhanced: Positive at Baseline to Positive Post-Baseline where Change from Baseline >= 0.60
 Treatment Unaffected: Positive at Baseline to Positive where Change from Baseline < 0.60
