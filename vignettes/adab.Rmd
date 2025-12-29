@@ -1547,7 +1547,7 @@ with '1' and increment as the core parameter name is repeated. This could be due
 `RESULT` for ADA and Nab for Drug ABC. There could be two analytes/drug combos 
 (`ISBDAGNT` is "XANOMELINE" and `ISBDAGNT` is "Y012345678").
 
-After merging the 'adab_param_data', final adjustments are made to PARAMCD and PARAM values.
+After merging the `adab_param_data`, final adjustments are made to `PARAMCD` and `PARAM` values.
 These adjustments depend on whether `IS` is based on SDTM v2.0 or an earlier version (prior to v1.8).
 
 Last step is computing `ASEQ`. `ASEQ` should be computed last since the sort key includes
