@@ -151,7 +151,7 @@ This code provides a mechanism to process either version, see below comments for
 If your `IS` dataset has different values in `ISTESTCD` and `ISTEST` than the example (or has 
 additional tests suitable for the `ADAB` domain), adjust this step accordingly. 
 
-`ADAPARM` and `ADATYPE` are assigned to assure consistent merge variables as values are calculated
+`ADAPARM` and `ADATYPE` are assigned to ensure consistent merge variables as values are calculated
 in the event `IS` from pre version 2.0 are used. `IS.ISTESTCD`, and `IS.ISBDAGNT` from version 2.0
 could be substituted if desired.
 
