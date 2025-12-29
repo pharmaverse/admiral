@@ -740,7 +740,7 @@ and optional Nab tests; Drug XYZ can also have the same pairs and are processed 
 The target variable for Nab is `NABSTAT` (subject Nab Status for the the matching parent analyte)
 In the example template, to be `NABSTAT = "Positive" or "Negative"`, the subject has to 
 `ADATAT="Positive"` on the main parent matching analyte. If not `ADASTAT  = "Positive"`, `NABSTAT`
-is set to either NA or 'MISSING" as desired.
+is set to either NA or "MISSING" as desired.
 
 ```{r message=FALSE}
 # Get overall ADASTAT status for computing NABSTAT
