@@ -218,7 +218,7 @@ navbar:
         href: articles/questionnaires.html
       - text: Creating a PK NCA or Population PK ADaM
         href: articles/pk_adnca.html
-      - text: Creating an ADAB ADaM
+      - text: Creating an Antidrug Antibody ADaM
         href: articles/adab.html
       - text: Hy's Law Implementation
         href: articles/hys_law.html
