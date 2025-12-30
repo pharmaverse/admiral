@@ -233,8 +233,8 @@
 #'   ~VSTEST,   ~condition,  ~AVALCAT1, ~AVALCA1N, ~AVALCAT2,      ~AVALCA2N, ~AVALCAT3,
 #'   "Height",  AVAL > 160,  ">160 cm",         1,    "Tall",              1,   "Group A",
 #'   "Height", AVAL <= 160, "<=160 cm",         2,   "Short",              2,   "Group B",
-#'   "Weight",   AVAL > 70,   ">70 kg",         1,   "Heavy",              1,   "Group C",
-#'   "Weight",  AVAL <= 70,  "<=70 kg",         2,   "Light",              2,   "Group D"
+#'   "Weight",   AVAL > 70,   ">70 kg",         3,   "Heavy",              3,   "Group C",
+#'   "Weight",  AVAL <= 70,  "<=70 kg",         4,   "Light",              4,   "Group D"
 #' )
 #'
 #' derive_vars_cat(
