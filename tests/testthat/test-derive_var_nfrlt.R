@@ -88,7 +88,7 @@ test_that("derive_var_nfrlt Test 4: custom first dose day", {
     "001",    3,        "8H Post-dose",
     "001",    3,        "24H Post-dose"
   )
-  
+
   result <- derive_var_nfrlt(
     input,
     new_var = NFRLT,
@@ -96,10 +96,10 @@ test_that("derive_var_nfrlt Test 4: custom first dose day", {
     visit_day = VISITDY,
     first_dose_day = 3
   )
-  
+
   expect_equal(
     result$NFRLT,
-    c(0, 2, 8, 24)  # Day 4 is 24 hours after Day 3
+    c(0, 2, 8, 24) # Day 4 is 24 hours after Day 3
   )
 })
 
@@ -717,7 +717,7 @@ test_that("derive_var_nfrlt Test 29: treatment_duration as variable", {
     new_var = NFRLT,
     tpt_var = PCTPT,
     visit_day = VISITDY,
-    treatment_duration = EXDUR  # Variable!
+    treatment_duration = EXDUR # Variable!
   )
 
   expect_equal(
@@ -760,7 +760,7 @@ test_that("derive_var_nfrlt Test 31: handles negative visit days correctly", {
     "001",    1,        "Pre-dose",
     "001",    2,        "Pre-dose"
   )
-  
+
   result <- derive_var_nfrlt(
     input,
     new_var = NFRLT,
@@ -768,7 +768,7 @@ test_that("derive_var_nfrlt Test 31: handles negative visit days correctly", {
     visit_day = VISITDY,
     first_dose_day = 1
   )
-  
+
   # No Day 0, so Day -1 is 24 hours before Day 1
   expect_equal(
     result$NFRLT,
@@ -785,7 +785,7 @@ test_that("derive_var_nfrlt Test 32: negative days with timepoints", {
     "001",    1,        "Pre-dose",
     "001",    1,        "2H Post-dose"
   )
-  
+
   result <- derive_var_nfrlt(
     input,
     new_var = NFRLT,
@@ -793,7 +793,7 @@ test_that("derive_var_nfrlt Test 32: negative days with timepoints", {
     visit_day = VISITDY,
     first_dose_day = 1
   )
-  
+
   expect_equal(
     result$NFRLT,
     c(-24, -22, 0, 2)
@@ -810,7 +810,7 @@ test_that("derive_var_nfrlt Test 33: first_dose_day = 7 with negative days", {
     "001",    7,        "Pre-dose",
     "001",    8,        "Pre-dose"
   )
-  
+
   result <- derive_var_nfrlt(
     input,
     new_var = NFRLT,
@@ -818,7 +818,7 @@ test_that("derive_var_nfrlt Test 33: first_dose_day = 7 with negative days", {
     visit_day = VISITDY,
     first_dose_day = 7
   )
-  
+
   # Day -1 is 7 days before Day 7 (accounting for no Day 0)
   # Day 1 is 6 days before Day 7
   # Day 6 is 1 day before Day 7
@@ -839,7 +839,7 @@ test_that("derive_var_nfrlt Test 34: all positive days require no adjustment", {
     "001",    8,        "Pre-dose",
     "001",    15,       "Pre-dose"
   )
-  
+
   result <- derive_var_nfrlt(
     input,
     new_var = NFRLT,
@@ -847,7 +847,7 @@ test_that("derive_var_nfrlt Test 34: all positive days require no adjustment", {
     visit_day = VISITDY,
     first_dose_day = 1
   )
-  
+
   # All positive days, normal calculation
   expect_equal(
     result$NFRLT,
@@ -862,7 +862,7 @@ test_that("derive_var_nfrlt Test 35: edge case Day -1 to Day 1", {
     "001",    -1,       "12H Post-dose",
     "001",    1,        "12H Post-dose"
   )
-  
+
   result <- derive_var_nfrlt(
     input,
     new_var = NFRLT,
@@ -870,7 +870,7 @@ test_that("derive_var_nfrlt Test 35: edge case Day -1 to Day 1", {
     visit_day = VISITDY,
     first_dose_day = 1
   )
-  
+
   # Day -1 at 12H = -24 + 12 = -12
   # Day 1 at 12H = 0 + 12 = 12
   expect_equal(
@@ -888,14 +888,14 @@ test_that("derive_var_nfrlt Test 36: negative days without tpt_var", {
     "001",    1,
     "001",    8
   )
-  
+
   result <- derive_var_nfrlt(
     input,
     new_var = NFRLT,
     visit_day = VISITDY,
     first_dose_day = 1
   )
-  
+
   expect_equal(
     result$NFRLT,
     c(-168, -24, 0, 168)
@@ -914,7 +914,7 @@ test_that("derive_var_nfrlt Test 37: first_dose_day = 8 with mixed days", {
     "001",    8,        "Pre-dose",
     "001",    15,       "Pre-dose"
   )
-  
+
   result <- derive_var_nfrlt(
     input,
     new_var = NFRLT,
@@ -922,7 +922,7 @@ test_that("derive_var_nfrlt Test 37: first_dose_day = 8 with mixed days", {
     visit_day = VISITDY,
     first_dose_day = 8
   )
-  
+
   # Day -14: (-14 - 8 + 1) * 24 = -21 * 24 = -504
   # Day -7: (-7 - 8 + 1) * 24 = -14 * 24 = -336
   # Day -1: (-1 - 8 + 1) * 24 = -8 * 24 = -192
