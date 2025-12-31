@@ -769,7 +769,6 @@ test_that("derive_var_nfrlt Test 31: handles negative visit days correctly", {
     first_dose_day = 1
   )
 
-  # No Day 0, so Day -1 is 24 hours before Day 1
   expect_equal(
     result$NFRLT,
     c(-336, -168, -48, -24, 0, 24)
@@ -819,11 +818,6 @@ test_that("derive_var_nfrlt Test 33: first_dose_day = 7 with negative days", {
     first_dose_day = 7
   )
 
-  # Day -1 is 7 days before Day 7 (accounting for no Day 0)
-  # Day 1 is 6 days before Day 7
-  # Day 6 is 1 day before Day 7
-  # Day 7 is dose day (0 hours)
-  # Day 8 is 1 day after Day 7
   expect_equal(
     result$NFRLT,
     c(-168, -144, -24, 0, 24)
@@ -871,8 +865,6 @@ test_that("derive_var_nfrlt Test 35: edge case Day -1 to Day 1", {
     first_dose_day = 1
   )
 
-  # Day -1 at 12H = -24 + 12 = -12
-  # Day 1 at 12H = 0 + 12 = 12
   expect_equal(
     result$NFRLT,
     c(-12, 12)
@@ -923,13 +915,6 @@ test_that("derive_var_nfrlt Test 37: first_dose_day = 8 with mixed days", {
     first_dose_day = 8
   )
 
-  # Day -14: (-14 - 8 + 1) * 24 = -21 * 24 = -504
-  # Day -7: (-7 - 8 + 1) * 24 = -14 * 24 = -336
-  # Day -1: (-1 - 8 + 1) * 24 = -8 * 24 = -192
-  # Day 1: (1 - 8) * 24 = -7 * 24 = -168 (no adjustment, both positive)
-  # Day 7: (7 - 8) * 24 = -1 * 24 = -24
-  # Day 8: (8 - 8) * 24 = 0
-  # Day 15: (15 - 8) * 24 = 7 * 24 = 168
   expect_equal(
     result$NFRLT,
     c(-504, -336, -192, -168, -24, 0, 168)
