@@ -62,6 +62,8 @@ globalVariables(c(
   "Dataset",
   "dataset_name",
   "datedtc___",
+  "day_diff",
+  "day_diff_adjusted",
   "Derivation",
   "Derivation / Comment",
   "desc",
