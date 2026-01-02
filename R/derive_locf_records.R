@@ -96,8 +96,8 @@
 #'
 #' - The reference dataset for the imputed records is specified by the `dataset_add`
 #'   argument. It should contain all expected combinations of variables. In this case,
-#'   it is `advs_expected_obsv`, which includes all combinations of PARAMCD, AVISITN,
-#'   and AVISIT.
+#'   `advs_expected_obsv` is created by `crossing()` datasets `paramcd` and `avisit`, which
+#'   includes all combinations of PARAMCD, AVISITN, and AVISIT.
 #' - The groups for which new records are added are specified by the `by_vars`
 #'   argument. Here, one record should be added for each *subject* and *parameter*.
 #'   Therefore, `by_vars = exprs(STUDYID, USUBJID, PARAMCD)` is specified.
@@ -105,13 +105,14 @@
 #'   records with missing analysis values *add* records from `dataset_ref` after the
 #'   data are sorted by the variables in `by_vars` and by visit (`AVISITN` and `AVISIT`),
 #'   as specified in the `order` argument.
-#' - Variables other than `analysis_var` and `by_vars` that require last-observation-
-#'   carried-forward handling (in this case, `PARAMN`) are specified in the `keep_vars`
+#' - Variables other than `analysis_var` and `by_vars` that require LOCF (Last-Observation-
+#'   Carried-Forward handling (in this case, `PARAMN`) are specified in the `keep_vars`
 #'   argument.
 #'
 #' @code
 #' library(dplyr)
 #' library(tibble)
+#' library(tidyr)
 #'
 #' advs <- tribble(
 #'   ~STUDYID,  ~USUBJID,      ~VSSEQ, ~PARAMCD, ~PARAMN, ~AVAL, ~AVISITN, ~AVISIT,
@@ -124,19 +125,23 @@
 #'   "CDISC01", "01-701-1015",      7, "SYSBP",        3,   132,        2, "WEEK 2"
 #' )
 #'
-#' advs_expected_obsv <- tribble(
-#'   ~PARAMCD, ~AVISITN, ~AVISIT,
-#'   "PULSE",         0, "BASELINE",
-#'   "PULSE",         6, "WEEK 6",
-#'   "DIABP",         0, "BASELINE",
-#'   "DIABP",         2, "WEEK 2",
-#'   "DIABP",         4, "WEEK 4",
-#'   "DIABP",         6, "WEEK 6",
-#'   "SYSBP",         0, "BASELINE",
-#'   "SYSBP",         2, "WEEK 2",
-#'   "SYSBP",         4, "WEEK 4",
-#'   "SYSBP",         6, "WEEK 6"
+#' paramcd <- tribble(
+#' ~PARAMCD,
+#' "PULSE",
+#' "DIABP",
+#' "SYSBP"
 #' )
+#'
+#' avisit <- tribble(
+#' ~AVISITN, ~AVISIT,
+#' 0, "BASELINE",
+#' 2, "WEEK 2",
+#' 4, "WEEK 4",
+#' 6, "WEEK 6"
+#' )
+#'
+#' advs_expected_obsv <- paramcd %>%
+#' crossing(avisit)
 #'
 #' derive_locf_records(
 #'   dataset = advs,

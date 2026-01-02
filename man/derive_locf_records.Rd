@@ -155,8 +155,8 @@ Imputed records should be added for missing timepoints and for missing
 \itemize{
 \item The reference dataset for the imputed records is specified by the \code{dataset_add}
 argument. It should contain all expected combinations of variables. In this case,
-it is \code{advs_expected_obsv}, which includes all combinations of PARAMCD, AVISITN,
-and AVISIT.
+\code{advs_expected_obsv} is created by \code{crossing()} datasets \code{paramcd} and \code{avisit}, which
+includes all combinations of PARAMCD, AVISITN, and AVISIT.
 \item The groups for which new records are added are specified by the \code{by_vars}
 argument. Here, one record should be added for each \emph{subject} and \emph{parameter}.
 Therefore, \code{by_vars = exprs(STUDYID, USUBJID, PARAMCD)} is specified.
@@ -164,13 +164,14 @@ Therefore, \code{by_vars = exprs(STUDYID, USUBJID, PARAMCD)} is specified.
 records with missing analysis values \emph{add} records from \code{dataset_ref} after the
 data are sorted by the variables in \code{by_vars} and by visit (\code{AVISITN} and \code{AVISIT}),
 as specified in the \code{order} argument.
-\item Variables other than \code{analysis_var} and \code{by_vars} that require last-observation-
-carried-forward handling (in this case, \code{PARAMN}) are specified in the \code{keep_vars}
+\item Variables other than \code{analysis_var} and \code{by_vars} that require LOCF (Last-Observation-
+Carried-Forward handling (in this case, \code{PARAMN}) are specified in the \code{keep_vars}
 argument.
 }
 
 \if{html}{\out{<div class="sourceCode r">}}\preformatted{library(dplyr)
 library(tibble)
+library(tidyr)
 
 advs <- tribble(
   ~STUDYID,  ~USUBJID,      ~VSSEQ, ~PARAMCD, ~PARAMN, ~AVAL, ~AVISITN, ~AVISIT,
@@ -183,19 +184,23 @@ advs <- tribble(
   "CDISC01", "01-701-1015",      7, "SYSBP",        3,   132,        2, "WEEK 2"
 )
 
-advs_expected_obsv <- tribble(
-  ~PARAMCD, ~AVISITN, ~AVISIT,
-  "PULSE",         0, "BASELINE",
-  "PULSE",         6, "WEEK 6",
-  "DIABP",         0, "BASELINE",
-  "DIABP",         2, "WEEK 2",
-  "DIABP",         4, "WEEK 4",
-  "DIABP",         6, "WEEK 6",
-  "SYSBP",         0, "BASELINE",
-  "SYSBP",         2, "WEEK 2",
-  "SYSBP",         4, "WEEK 4",
-  "SYSBP",         6, "WEEK 6"
+paramcd <- tribble(
+~PARAMCD,
+"PULSE",
+"DIABP",
+"SYSBP"
 )
+
+avisit <- tribble(
+~AVISITN, ~AVISIT,
+0, "BASELINE",
+2, "WEEK 2",
+4, "WEEK 4",
+6, "WEEK 6"
+)
+
+advs_expected_obsv <- paramcd \%>\%
+crossing(avisit)
 
 derive_locf_records(
   dataset = advs,
@@ -206,7 +211,7 @@ derive_locf_records(
   keep_vars = exprs(PARAMN)
 ) |>
   arrange(USUBJID, PARAMCD, AVISIT)
-#> # A tibble: 12 × 9
+#> # A tibble: 14 × 9
 #>    STUDYID USUBJID     VSSEQ PARAMCD PARAMN  AVAL AVISITN AVISIT   DTYPE
 #>    <chr>   <chr>       <dbl> <chr>    <dbl> <dbl>   <dbl> <chr>    <chr>
 #>  1 CDISC01 01-701-1015     2 DIABP        2    79       0 BASELINE <NA> 
@@ -216,11 +221,13 @@ derive_locf_records(
 #>  5 CDISC01 01-701-1015    NA DIABP        2    80       6 WEEK 6   LOCF 
 #>  6 CDISC01 01-701-1015     5 DIABP        2    NA       6 WEEK 6   <NA> 
 #>  7 CDISC01 01-701-1015     1 PULSE        1    65       0 BASELINE <NA> 
-#>  8 CDISC01 01-701-1015    NA PULSE        1    65       6 WEEK 6   LOCF 
-#>  9 CDISC01 01-701-1015     6 SYSBP        3   130       0 BASELINE <NA> 
-#> 10 CDISC01 01-701-1015     7 SYSBP        3   132       2 WEEK 2   <NA> 
-#> 11 CDISC01 01-701-1015    NA SYSBP        3   132       4 WEEK 4   LOCF 
-#> 12 CDISC01 01-701-1015    NA SYSBP        3   132       6 WEEK 6   LOCF }\if{html}{\out{</div>}}}
+#>  8 CDISC01 01-701-1015    NA PULSE        1    65       2 WEEK 2   LOCF 
+#>  9 CDISC01 01-701-1015    NA PULSE        1    65       4 WEEK 4   LOCF 
+#> 10 CDISC01 01-701-1015    NA PULSE        1    65       6 WEEK 6   LOCF 
+#> 11 CDISC01 01-701-1015     6 SYSBP        3   130       0 BASELINE <NA> 
+#> 12 CDISC01 01-701-1015     7 SYSBP        3   132       2 WEEK 2   <NA> 
+#> 13 CDISC01 01-701-1015    NA SYSBP        3   132       4 WEEK 4   LOCF 
+#> 14 CDISC01 01-701-1015    NA SYSBP        3   132       6 WEEK 6   LOCF }\if{html}{\out{</div>}}}
 \subsection{Update records for missing analysis variable}{
 
 When the \code{imputation} mode is set to \emph{update}, missing \code{analysis_var} values
@@ -236,7 +243,7 @@ are updated using values from the last record after the dataset is sorted by
   order = exprs(AVISITN, AVISIT),
 ) |>
   arrange(USUBJID, PARAMCD, AVISIT)
-#> # A tibble: 10 × 9
+#> # A tibble: 12 × 9
 #>    STUDYID USUBJID     VSSEQ PARAMCD PARAMN  AVAL AVISITN AVISIT   DTYPE
 #>    <chr>   <chr>       <dbl> <chr>    <dbl> <dbl>   <dbl> <chr>    <chr>
 #>  1 CDISC01 01-701-1015     2 DIABP        2    79       0 BASELINE <NA> 
@@ -244,11 +251,13 @@ are updated using values from the last record after the dataset is sorted by
 #>  3 CDISC01 01-701-1015     4 DIABP        2    80       4 WEEK 4   LOCF 
 #>  4 CDISC01 01-701-1015     5 DIABP        2    80       6 WEEK 6   LOCF 
 #>  5 CDISC01 01-701-1015     1 PULSE        1    65       0 BASELINE <NA> 
-#>  6 CDISC01 01-701-1015    NA PULSE       NA    65       6 WEEK 6   LOCF 
-#>  7 CDISC01 01-701-1015     6 SYSBP        3   130       0 BASELINE <NA> 
-#>  8 CDISC01 01-701-1015     7 SYSBP        3   132       2 WEEK 2   <NA> 
-#>  9 CDISC01 01-701-1015    NA SYSBP       NA   132       4 WEEK 4   LOCF 
-#> 10 CDISC01 01-701-1015    NA SYSBP       NA   132       6 WEEK 6   LOCF }\if{html}{\out{</div>}}}
+#>  6 CDISC01 01-701-1015    NA PULSE       NA    65       2 WEEK 2   LOCF 
+#>  7 CDISC01 01-701-1015    NA PULSE       NA    65       4 WEEK 4   LOCF 
+#>  8 CDISC01 01-701-1015    NA PULSE       NA    65       6 WEEK 6   LOCF 
+#>  9 CDISC01 01-701-1015     6 SYSBP        3   130       0 BASELINE <NA> 
+#> 10 CDISC01 01-701-1015     7 SYSBP        3   132       2 WEEK 2   <NA> 
+#> 11 CDISC01 01-701-1015    NA SYSBP       NA   132       4 WEEK 4   LOCF 
+#> 12 CDISC01 01-701-1015    NA SYSBP       NA   132       6 WEEK 6   LOCF }\if{html}{\out{</div>}}}
 \subsection{Update records for missing analysis variable while keeping the original records}{
 
 When the \code{imputation} mode is set to \emph{update_add}, the missing \code{analysis_var}
@@ -265,7 +274,7 @@ for missing timepoints (from \code{dataset_ref}).
   order = exprs(AVISITN, AVISIT),
 ) |>
   arrange(USUBJID, PARAMCD, AVISIT)
-#> # A tibble: 12 × 9
+#> # A tibble: 14 × 9
 #>    STUDYID USUBJID     VSSEQ PARAMCD PARAMN  AVAL AVISITN AVISIT   DTYPE
 #>    <chr>   <chr>       <dbl> <chr>    <dbl> <dbl>   <dbl> <chr>    <chr>
 #>  1 CDISC01 01-701-1015     2 DIABP        2    79       0 BASELINE <NA> 
@@ -275,9 +284,11 @@ for missing timepoints (from \code{dataset_ref}).
 #>  5 CDISC01 01-701-1015     5 DIABP        2    80       6 WEEK 6   LOCF 
 #>  6 CDISC01 01-701-1015     5 DIABP        2    NA       6 WEEK 6   <NA> 
 #>  7 CDISC01 01-701-1015     1 PULSE        1    65       0 BASELINE <NA> 
-#>  8 CDISC01 01-701-1015    NA PULSE       NA    65       6 WEEK 6   LOCF 
-#>  9 CDISC01 01-701-1015     6 SYSBP        3   130       0 BASELINE <NA> 
-#> 10 CDISC01 01-701-1015     7 SYSBP        3   132       2 WEEK 2   <NA> 
-#> 11 CDISC01 01-701-1015    NA SYSBP       NA   132       4 WEEK 4   LOCF 
-#> 12 CDISC01 01-701-1015    NA SYSBP       NA   132       6 WEEK 6   LOCF }\if{html}{\out{</div>}}}}
+#>  8 CDISC01 01-701-1015    NA PULSE       NA    65       2 WEEK 2   LOCF 
+#>  9 CDISC01 01-701-1015    NA PULSE       NA    65       4 WEEK 4   LOCF 
+#> 10 CDISC01 01-701-1015    NA PULSE       NA    65       6 WEEK 6   LOCF 
+#> 11 CDISC01 01-701-1015     6 SYSBP        3   130       0 BASELINE <NA> 
+#> 12 CDISC01 01-701-1015     7 SYSBP        3   132       2 WEEK 2   <NA> 
+#> 13 CDISC01 01-701-1015    NA SYSBP       NA   132       4 WEEK 4   LOCF 
+#> 14 CDISC01 01-701-1015    NA SYSBP       NA   132       6 WEEK 6   LOCF }\if{html}{\out{</div>}}}}
 
