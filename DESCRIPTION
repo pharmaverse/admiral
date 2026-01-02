@@ -68,7 +68,8 @@ Suggests:
     rmarkdown,
     testthat (>= 3.0.0),
     tibble,
-    withr
+    withr,
+    here
 VignetteBuilder:
     knitr
 Config/Needs/website: gert
