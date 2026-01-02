@@ -2,6 +2,9 @@
 
 ## New Features
 
+- New vignette "Explore ADaM Templates" added under the "Get Started" section to allow users to peruse the `{admiral}`
+ADaM templates directly from the documentation website. (#2935)
+
 - New experimental ADAB template script available `ad_adab.R` which creates Anti-drug 
 Antibody Analysis Dataset (#2805). 
 

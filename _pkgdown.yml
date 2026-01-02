@@ -187,6 +187,8 @@ navbar:
         href: articles/admiral.html
       - text: Cheatsheet
         href: https://github.com/pharmaverse/admiral/blob/main/inst/cheatsheet/admiral_cheatsheet.pdf
+      - text: Explore ADaM Templates 🧭
+        href: articles/templates.html
       - text: Presentation Archive
         href: https://pharmaverse.github.io/admiraldiscovery/articles/presentation_archive.html
     reference:
