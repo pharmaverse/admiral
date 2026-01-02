@@ -2,6 +2,8 @@
 
 ## New Features
 
+- Updated PK programming vignette to use new experimental functions for deriving `NFRLT` (#2927).
+
 - Added function `derive_var_nfrlt()` to derive `NFRLT` from timepoint and visit (e.g. `VISITDY` and `PCTPT`) (#2929).
 
 - Added function `convert_xxtpt_to_hours()` to parse timepoint values (e.g. `PCTPT`, `EGTPT`, `VSTPT`) into hours (#2916).

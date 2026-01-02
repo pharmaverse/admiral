@@ -154,10 +154,11 @@ In this segment we will use `derive_vars_merged()` to join the `ADSL`
 variables and the following `{admiral}` functions to derive analysis
 dates, times and days: `derive_vars_dtm()`, `derive_vars_dtm_to_dt()`,
 `derive_vars_dtm_to_tm()`, `derive_vars_dy()`. We will also create
-`NFRLT` for `PC` data based on `PCTPTNUM`. We will create an event ID
-(`EVID`) of 0 for concentration records and 1 for dosing records. This
-is a traditional variable that will provide a handy tool to identify
-records but will be dropped from the final dataset in this example.
+`NFRLT` for `PC` data based on `VISTDY` and `PCTPT` using
+`derive_var_nfrlt()`. We will create an event ID (`EVID`) of 0 for
+concentration records and 1 for dosing records. This is a traditional
+variable that will provide a handy tool to identify records but will be
+dropped from the final dataset in this example.
 
 ```{r eval=TRUE}
 adsl_vars <- exprs(TRTSDT, TRTSDTM, TRT01P, TRT01A)
@@ -185,7 +186,14 @@ pc_dates <- pc %>%
   mutate(
     EVID = 0,
     DRUG = PCTEST,
-    NFRLT = if_else(PCTPTNUM < 0, 0, PCTPTNUM), .after = USUBJID
+    VISITDY = if_else(VISIT == "BASELINE", 1, as.numeric(word(VISIT, 2)) * 7)
+  ) %>%
+  derive_var_nfrlt(
+    new_var = NFRLT,
+    tpt_var = PCTPT,
+    visit_day = VISITDY,
+    treatment_duration = 0,
+    range_method = "midpoint"
   )
 ```
 
@@ -232,11 +240,11 @@ ex_dates <- ex %>%
   ) %>%
   # Derive event ID and nominal relative time from first dose (NFRLT)
   mutate(
-    EVID = 1,
-    NFRLT = case_when(
-      VISITDY == 1 ~ 0,
-      TRUE ~ 24 * VISITDY
-    )
+    EVID = 1
+  ) %>%
+  derive_var_nfrlt(
+    new_var = NFRLT,
+    visit_day = VISITDY
   ) %>%
   # Set missing end dates to start date
   mutate(AENDTM = case_when(
@@ -1481,10 +1489,10 @@ packages like:
     file(xpt)](https://documentation.sas.com/doc/en/pgmsascdc/9.4_3.5/movefile/n1xbwdre0giahfn11c99yjkpi2yb.htm).
 
 NOTE: Together with `{admiral}` these packages comprise an End to End
-pipeline under the umbrella of the [pharmaverse](https://github.com/pharmaverse). An
-example of applying metadata and perform associated checks can be found
-at the [pharmaverse E2E
-example](https://pharmaverse.github.io/examples/adam/adsl).
+pipeline under the umbrella of the
+[pharmaverse](https://github.com/pharmaverse). An example of applying
+metadata and perform associated checks can be found at the [pharmaverse
+E2E example](https://pharmaverse.github.io/examples/adam/adsl).
 
 # Example Scripts {#example}
 
