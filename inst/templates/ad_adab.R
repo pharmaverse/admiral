@@ -145,7 +145,6 @@ ex_dates <- ex %>%
   # Units for this ADAB sample will be Days, divide result by 24
   derive_var_nfrlt(
     new_var = NFRLT,
-    tpt_var = PCTPT,
     visit_day = VISITDY,
     treatment_duration = 0
   ) %>%
