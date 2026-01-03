@@ -79,15 +79,24 @@ is_dates <- is %>%
     AVISIT = VISIT,
     AVISITN = VISITNUM,
     # Assign FRLTU (ex: DAYS or HOURS)
-    FRLTU = "DAYS",
-    # Assign NFRLT
-    #   This example maps any discontinuation visits as 77777 and unscheduled as 99999
-    #   Units for this ADAB sample will be Days. If Hours, add NFRLT x 24.
+    FRLTU = "DAYS"
+  ) %>%
+  # Assign nominal time to NFRLT
+  # Special visits can be set to NA then can add more code to assign custom values
+  #   (i.e. UNSCHEDULED to 99999, etc.)
+  # Units for this ADAB sample will be Days, divide result by 24
+  derive_var_nfrlt(
+    new_var = NFRLT,
+    tpt_var = ISTPT,
+    visit_day = VISITDY,
+    treatment_duration = 0,
+    set_values_to_na = str_detect(toupper(VISIT), "UNSCHED") | str_detect(toupper(VISIT), "TREATMENT DISC")
+  ) %>%
+  mutate(
     NFRLT = case_when(
-      str_detect(toupper(VISIT), "EARLY DISC") ~ 77777,
-      str_detect(toupper(VISIT), "TREATMENT DISC") ~ 77777,
-      str_detect(toupper(VISIT), "UNSCHEDULED") ~ 99999,
-      !is.na(VISITDY) ~ (VISITDY - 1),
+      !is.na(NFRLT) ~ NFRLT / 24,
+      str_detect(toupper(VISIT), "TREATMENT DISC") ~ 99997,
+      str_detect(toupper(VISIT), "UNSCHED") ~ 99999,
       TRUE ~ NA_real_
     )
   ) %>%
@@ -130,9 +139,18 @@ ex_dates <- ex %>%
       str_detect(toupper(EXTRT), "PLACEBO") ~ "XANOMELINE",
       str_detect(toupper(EXTRT), "OTHER_DRUG") ~ "OTHER_DRUG",
       TRUE ~ NA_character_
-    ),
-    # Compute Nominal Time
-    NFRLT = VISITDY - 1
+    )
+  ) %>%
+  # Assign nominal time to NFRLT
+  # Units for this ADAB sample will be Days, divide result by 24
+  derive_var_nfrlt(
+    new_var = NFRLT,
+    tpt_var = PCTPT,
+    visit_day = VISITDY,
+    treatment_duration = 0
+  ) %>%
+  mutate(
+    NFRLT = if_else(!is.na(NFRLT), NFRLT / 24, NA_real_)
   ) %>%
   # Add analysis datetime variables and set missing end date to start date
   # Impute missing time to 00:00:00 or as desired.
