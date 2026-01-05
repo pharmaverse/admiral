@@ -32,7 +32,7 @@
 #' The function recognizes the following patterns (all case-insensitive):
 #'
 #' **Special Cases:**
-#' * `"Screening"` → -1
+#' * `"Screening"` → 0
 #' * `"Pre-dose"`, `"Predose"`, `"Pre-treatment"`, `"Pre-infusion"`,
 #'   `"Pre-inf"`, `"Before"`, `"Infusion"`, `"0H"` → 0
 #' * `"EOI"`, `"EOT"`, `"End of Infusion"`, `"End of Treatment"`,
@@ -51,6 +51,7 @@
 #' * `"0-4H AFTER EOI"` with midpoint and treatment_duration=1 → 3 (1 + 2)
 #' * `"0-4H EOT"` with midpoint and treatment_duration=0 → 2
 #' * `"4-8H AFTER END OF INFUSION"` with midpoint and treatment_duration=1 → 7 (1 + 6)
+#' * `"4-8H POST INFUSION"` with midpoint and treatment_duration=1 → 7 (1 + 6)
 #'
 #' **Time-based Conversions:**
 #' * **Days**: `"Day 1"` → 24, `"30 DAYS AFTER LAST"` → 720
@@ -119,14 +120,14 @@
 #' @info Convert basic dose-centric patterns to hours
 #' @code
 #' convert_xxtpt_to_hours(c(
-#'   "Screening",
-#'   "Pre-dose",
-#'   "Pre-treatment",
-#'   "Before",
-#'   "30M",
-#'   "1H",
-#'   "2H POSTDOSE",
-#'   "Day 1"
+#'   "Screening",      # 0
+#'   "Pre-dose",       # 0
+#'   "Pre-treatment",  # 0
+#'   "Before",         # 0
+#'   "30M",            # 0.5
+#'   "1H",             # 1
+#'   "2H POSTDOSE",    # 2
+#'   "Day 1"           # 24
 #' ))
 #'
 #' @caption Predose and before patterns
@@ -189,7 +190,8 @@
 #'   c(
 #'     "0-4H AFTER EOI",
 #'     "4-8H AFTER END OF INFUSION",
-#'     "4-8H AFTER EOT"
+#'     "4-8H AFTER EOT",
+#'     "4-8H POST INFUSION"
 #'   ),
 #'   treatment_duration = 1
 #' )
@@ -229,8 +231,7 @@ convert_xxtpt_to_hours <- function(xxtpt,
         "{.arg treatment_duration} must be either:",
         "i" = "A single value (used for all timepoints), or",
         "i" = "A vector of length {length(xxtpt)} (one value per timepoint)",
-        "x" = "You've supplied a vector of length {length(treatment_duration)}
-        for {length(xxtpt)} timepoint{?s}."
+        "x" = "You've supplied a vector of length {length(treatment_duration)} for {length(xxtpt)} timepoint{?s}."
       )
     )
   }
@@ -282,7 +283,7 @@ convert_xxtpt_to_hours <- function(xxtpt,
 #'
 #' @details
 #' Recognizes and converts the following patterns:
-#' * "Screening" → 0 (time within the screening visit day)
+#' * "Screening" → 0
 #' * "Pre-dose", "Predose", "Pre-treatment", "Pre-infusion", "Pre-inf",
 #'   "Before", "Infusion", "0H" → 0
 #' * "EOI", "EOT", "End of Infusion", "End of Treatment",
@@ -483,7 +484,8 @@ calculate_range_value <- function(start_val, end_val, range_method) {
 #'
 #' Converts time range patterns relative to end of infusion/treatment to numeric
 #' hours using specified range method, adding the treatment duration. Handles both
-#' short form (EOI/EOT) and long form (END OF INFUSION/TREATMENT).
+#' short form (EOI/EOT) and long form (END OF INFUSION/TREATMENT), as well as
+#' POST INFUSION patterns.
 #'
 #' @param xxtpt Character vector of timepoint descriptions (trimmed, no leading/
 #'   trailing whitespace)
@@ -502,9 +504,15 @@ calculate_range_value <- function(start_val, end_val, range_method) {
 #' * "0-4H EOT" → treatment_duration + range_value
 #' * "4-8H AFTER END OF INFUSION" → treatment_duration + range_value
 #' * "4-8H AFTER END OF TREATMENT" → treatment_duration + range_value
+#' * "4-8H POST INFUSION" → treatment_duration + range_value
+#' * "4-8H POST INF" → treatment_duration + range_value
 #'
 #' With midpoint method, "0-4H AFTER EOI" with treatment_duration=1 → 1 + 2 = 3
 #' With midpoint method, "4-8H AFTER END OF INFUSION" with treatment_duration=1 → 1 + 6 = 7
+#' With midpoint method, "4-8H POST INFUSION" with treatment_duration=1 → 1 + 6 = 7
+#'
+#' Note: This is consistent with non-range behavior where "24 HR POST INF" means
+#' 24 hours after end of infusion (treatment_duration + 24).
 #'
 #' Only updates result for positions where result is currently NA and xxtpt is not NA.
 #'
@@ -513,16 +521,19 @@ calculate_range_value <- function(start_val, end_val, range_method) {
 #' @keywords internal
 #' @noRd
 convert_ranges_eot <- function(xxtpt, result, na_idx, treatment_duration, range_method) {
-  # Ranges relative to EOI/EOT (both short and long forms)
+  # Ranges relative to EOI/EOT (all forms)
   # This pattern matches:
   # - "4-8H AFTER EOI" or "4-8H EOI" (short form)
   # - "4-8H AFTER END OF INFUSION/TREATMENT" (long form)
+  # - "4-8H POST INF/INFUSION" (consistent with single value behavior)
   range_eot_pattern <- regex(
     paste0(
       "^(?<start>\\d+(?:\\.\\d+)?)\\s*-\\s*(?<end>\\d+(?:\\.\\d+)?)\\s*",
       "h(?:r|our)?s?\\s+",
       "(?:after\\s+)?", # Optional AFTER
-      "(?:eo[it]|end\\s+of\\s+(?:infusion|treatment))$" # EOI/EOT or long form
+      "(?:eo[it]|", # EOI/EOT
+      "end\\s+of\\s+(?:infusion|treatment)|", # END OF forms
+      "post\\s+inf(?:usion)?)$" # POST INF/INFUSION (consistent with single value behavior)
     ),
     ignore_case = TRUE
   )
@@ -653,6 +664,11 @@ convert_predose_patterns <- function(xxtpt, result, na_idx) {
 #' @noRd
 convert_post_end_patterns <- function(xxtpt, result, na_idx, treatment_duration) {
   # Unified pattern for all post-end variations:
+  # - "1H POST EOI/EOT"
+  # - "1H AFTER EOI/EOT"
+  # - "24 HR POST INF/EOI/EOT"
+  # - "1H POST INFUSION/INF"
+  # - "1H AFTER END OF INFUSION/TREATMENT"
   post_end_pattern <- regex(
     paste0(
       "^(?<value>\\d+(?:\\.\\d+)?)\\s*",
