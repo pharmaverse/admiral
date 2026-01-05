@@ -168,14 +168,14 @@ Date/Time Computation Functions that returns a vector:
 Convert basic dose-centric patterns to hours
 
 \if{html}{\out{<div class="sourceCode r">}}\preformatted{convert_xxtpt_to_hours(c(
-  "Screening",      # 0
-  "Pre-dose",       # 0
-  "Pre-treatment",  # 0
-  "Before",         # 0
-  "30M",            # 0.5
-  "1H",             # 1
-  "2H POSTDOSE",    # 2
-  "Day 1"           # 24
+  "Screening",
+  "Pre-dose",
+  "Pre-treatment",
+  "Before",
+  "30M",
+  "1H",
+  "2H POSTDOSE",
+  "Day 1"
 ))
 #> [1]  0.0  0.0  0.0  0.0  0.5  1.0  2.0 24.0}\if{html}{\out{</div>}}}
 \subsection{Predose and before patterns}{
@@ -254,23 +254,20 @@ Time ranges after end of infusion/treatment
 #> [1] 3 7 7 7}\if{html}{\out{</div>}}}
 \subsection{POST vs POST EOI distinction}{
 
-Demonstrates the difference between POST (from start) and POST EOI (from end)
+Difference between POST (from start) and POST EOI (from end)
 
-\if{html}{\out{<div class="sourceCode r">}}\preformatted{# POST alone = relative to treatment START (no duration added)
-convert_xxtpt_to_hours(
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{convert_xxtpt_to_hours(
   c("Pre-dose", "1H POST", "2H POST", "4H POST"),
-  treatment_duration = 2  # 2-hour infusion
+  treatment_duration = 2
 )
 #> [1] 0 1 2 4
 
-# POST EOI = relative to treatment END (duration added)
 convert_xxtpt_to_hours(
   c("Pre-dose", "EOI", "1H POST EOI", "2H POST EOI"),
-  treatment_duration = 2  # 2-hour infusion
+  treatment_duration = 2
 )
 #> [1] 0 2 3 4
 
-# Side by side comparison
 convert_xxtpt_to_hours(
   c("1H POST", "1H POST EOI", "1H POST INFUSION"),
   treatment_duration = 2

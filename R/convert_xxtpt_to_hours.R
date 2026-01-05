@@ -228,7 +228,8 @@ convert_xxtpt_to_hours <- function(xxtpt,
         "{.arg treatment_duration} must be either:",
         "i" = "A single value (used for all timepoints), or",
         "i" = "A vector of length {length(xxtpt)} (one value per timepoint)",
-        "x" = "You've supplied a vector of length {length(treatment_duration)} for {length(xxtpt)} timepoint{?s}."
+        "x" = "Length mismatch: {length(treatment_duration)} values for ",
+        "x" = "{length(xxtpt)} timepoint{?s}."
       )
     )
   }
@@ -504,7 +505,8 @@ calculate_range_value <- function(start_val, end_val, range_method) {
 #' * "4-8H POST INFUSION" → treatment_duration + range_value
 #' * "4-8H POST INF" → treatment_duration + range_value
 #'
-#' With midpoint method, "0-4H AFTER EOI" with treatment_duration=1 → 1 + 2 = 3.
+#' With midpoint method, "0-4H AFTER EOI" with treatment_duration=1 gives
+#' 1 + 2 = 3.
 #' With midpoint method, "4-8H AFTER END OF INFUSION" with treatment_duration=1
 #' gives 1 + 6 = 7.
 #'
