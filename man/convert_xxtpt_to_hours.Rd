@@ -93,7 +93,7 @@ Time ranges are converted based on the \code{range_method} parameter:
 
 \strong{Time-based Conversions:}
 \itemize{
-\item \strong{Days}: \code{"Day 1"} → 24, \code{"30 DAYS AFTER LAST"} → 720
+\item \strong{Days}: \code{"Day 1"} → 24, \code{"2D"} → 48, \code{"30 DAYS AFTER LAST"} → 720
 \item \strong{Hours + Minutes}: \code{"1H30M"} → 1.5
 \item \strong{Hours}: \code{"2 hours"} → 2, \code{"1 HOUR POST"} → 1
 \item \strong{Minutes}: \code{"30M"} → 0.5, \code{"30 MIN POST"} → 0.5

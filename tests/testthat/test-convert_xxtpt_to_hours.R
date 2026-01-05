@@ -1034,3 +1034,35 @@ test_that("convert_xxtpt_to_hours Test 44: POST without EOI is relative to start
     c(0, 1, 2, 2, 3, 4)
   )
 })
+
+## Test 45: bare numbers return NA (no unit ambiguity) ----
+test_that("convert_xxtpt_to_hours: bare numbers without units return NA", {
+  # Bare numbers without units should return NA (ambiguous)
+  expect_equal(
+    convert_xxtpt_to_hours(c("2", "1.5", "30")),
+    c(NA_real_, NA_real_, NA_real_)
+  )
+
+  # With hour units, they work correctly
+  expect_equal(
+    convert_xxtpt_to_hours(c("2H", "1.5H", "30M")),
+    c(2, 1.5, 0.5)
+  )
+
+  # Days patterns require at least one unit indicator
+  expect_equal(
+    convert_xxtpt_to_hours(c(
+      "Day 1", # "Day" prefix
+      "2D", # "D" suffix
+      "2 days", # "days" suffix
+      "30 DAYS AFTER LAST" # "DAYS AFTER LAST" context
+    )),
+    c(24, 48, 48, 720)
+  )
+
+  # More day variations
+  expect_equal(
+    convert_xxtpt_to_hours(c("Day 2", "3 day", "14D")),
+    c(48, 72, 336)
+  )
+})

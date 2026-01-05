@@ -55,7 +55,7 @@
 #' * `"4-8H POST-INF"` with midpoint and treatment_duration=1 → 7 (1 + 6)
 #'
 #' **Time-based Conversions:**
-#' * **Days**: `"Day 1"` → 24, `"30 DAYS AFTER LAST"` → 720
+#' * **Days**: `"Day 1"` → 24, `"2D"` → 48, `"30 DAYS AFTER LAST"` → 720
 #' * **Hours + Minutes**: `"1H30M"` → 1.5
 #' * **Hours**: `"2 hours"` → 2, `"1 HOUR POST"` → 1
 #' * **Minutes**: `"30M"` → 0.5, `"30 MIN POST"` → 0.5
@@ -323,32 +323,19 @@ convert_special_cases <- function(xxtpt, result, na_idx, treatment_duration) {
   result
 }
 
-#' Convert Time Unit Patterns
-#'
-#' Converts days and hours+minutes combination patterns to numeric hours.
-#'
-#' @param xxtpt Character vector of timepoint descriptions (trimmed, no leading/
-#'   trailing whitespace)
-#' @param result Numeric vector of results (partially filled, may contain NA)
-#' @param na_idx Logical vector indicating which positions in xxtpt are NA
-#'
-#' @details
-#' Recognizes and converts the following patterns:
-#' * Days: "Day 1" → 24, "2D" → 48, "30 DAYS AFTER LAST" → 720
-#' * Hours+minutes: "1H30M" → 1.5, "2HR15MIN" → 2.25
-#'
-#' Only updates result for positions where result is currently NA and xxtpt is not NA.
-#'
-#' @return Updated numeric vector with time unit patterns converted to hours
-#'
-#' @keywords internal
-#' @noRd
 convert_time_units <- function(xxtpt, result, na_idx) {
+  # Days - require at least one unit indicator to avoid ambiguity
+  # Matches: "Day 1", "2D", "2 days", "30 DAYS AFTER LAST", "2 POST-DOSE"
+  # Does NOT match: "2" (bare number - ambiguous, could be hours)
   days_pattern <- regex(
     paste0(
-      "^(?:day\\s+)?(?<days>\\d+(?:\\.\\d+)?)\\s*",
-      "(?:d|day|days)?",
-      "(?:\\s+(?:after\\s+last|post(?:\\s*-?\\s*dose)?))?$"
+      "^(?:",
+      "(?:day\\s+)(?<days1>\\d+(?:\\.\\d+)?)\\s*(?:d|day|days)?|",
+      "(?<days2>\\d+(?:\\.\\d+)?)\\s*(?:d|day|days)(?!\\s*h(?:r|our)?)|",
+      "(?<days3>\\d+(?:\\.\\d+)?)\\s+(?:days?\\s+)?",
+      "(?:after\\s+last|post(?:\\s*-?\\s*dose)?)",
+      ")",
+      "$"
     ),
     ignore_case = TRUE,
     comments = TRUE
@@ -356,9 +343,16 @@ convert_time_units <- function(xxtpt, result, na_idx) {
   days_matches <- str_match(xxtpt, days_pattern)
   days_idx <- !is.na(days_matches[, 1]) & is.na(result) & !na_idx
   if (any(days_idx)) {
-    result[days_idx] <- as.numeric(days_matches[days_idx, "days"]) * 24
+    # Extract whichever capture group matched
+    days_value <- coalesce(
+      as.numeric(days_matches[days_idx, "days1"]),
+      as.numeric(days_matches[days_idx, "days2"]),
+      as.numeric(days_matches[days_idx, "days3"])
+    )
+    result[days_idx] <- days_value * 24
   }
 
+  # Hours+minutes combinations
   hm_pattern <- regex(
     paste0(
       "^(?<hours>\\d+(?:\\.\\d+)?)\\s*h(?:r|our)?s?\\s*",
