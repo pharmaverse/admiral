@@ -88,6 +88,7 @@ Time ranges are converted based on the \code{range_method} parameter:
 \item \code{"0-4H EOT"} with midpoint and treatment_duration=0 → 2
 \item \code{"4-8H AFTER END OF INFUSION"} with midpoint and treatment_duration=1 → 7 (1 + 6)
 \item \code{"4-8H POST INFUSION"} with midpoint and treatment_duration=1 → 7 (1 + 6)
+\item \code{"4-8H POST-INF"} with midpoint and treatment_duration=1 → 7 (1 + 6)
 }
 
 \strong{Time-based Conversions:}
@@ -100,6 +101,7 @@ Time ranges are converted based on the \code{range_method} parameter:
 \item \strong{Before treatment}: \code{"5 MIN BEFORE"} → -0.0833
 \item \strong{Post EOI/EOT}: \code{"1 HOUR POST EOI"} → treatment_duration + 1,
 \code{"24 HR POST INF"} → treatment_duration + 24,
+\code{"24 HR POST-INF"} → treatment_duration + 24,
 \code{"1 HOUR AFTER EOT"} → treatment_duration + 1
 \item \strong{After end}: \code{"30MIN AFTER END OF INFUSION"} → treatment_duration + 0.5
 \item \strong{Start of infusion/treatment}: \code{"8H PRIOR START OF INFUSION"} → -8,
@@ -115,6 +117,7 @@ Time ranges are converted based on the \code{range_method} parameter:
 \item Days: D, d, DAY, day (with optional plurals)
 \item Flexible whitespace and optional "Post-dose", "POST", "After last"
 suffixes
+\item Hyphens in compound terms: "PRE-DOSE", "POST-INF", "POST-INFUSION"
 }
 
 \strong{Understanding POST/AFTER Patterns:}
@@ -204,13 +207,14 @@ With treatment_duration = 1 hour for IV infusions
     "EOI",
     "1 HOUR POST EOI",
     "24 HR POST INF",
+    "24 HR POST-INF",
     "30MIN AFTER END OF INFUSION",
     "8H PRIOR START OF INFUSION",
     "10MIN PRE EOI"
   ),
   treatment_duration = 1
 )
-#> [1]  1.0000000  2.0000000 25.0000000  1.5000000 -8.0000000  0.8333333}\if{html}{\out{</div>}}}
+#> [1]  1.0000000  2.0000000 25.0000000 25.0000000  1.5000000 -8.0000000  0.8333333}\if{html}{\out{</div>}}}
 \subsection{Vectorized treatment duration}{
 
 Different treatment durations per timepoint
@@ -245,13 +249,15 @@ Time ranges after end of infusion/treatment
 \if{html}{\out{<div class="sourceCode r">}}\preformatted{convert_xxtpt_to_hours(
   c(
     "0-4H AFTER EOI",
+    "0-4H POST EOI",
     "4-8H AFTER END OF INFUSION",
     "4-8H AFTER EOT",
-    "4-8H POST INFUSION"
+    "4-8H POST INFUSION",
+    "4-8H POST-INF"
   ),
   treatment_duration = 1
 )
-#> [1] 3 7 7 7}\if{html}{\out{</div>}}}
+#> [1] 3 3 7 7 7 7}\if{html}{\out{</div>}}}
 \subsection{POST vs POST EOI distinction}{
 
 Difference between POST (from start) and POST EOI (from end)
