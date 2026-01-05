@@ -120,14 +120,14 @@
 #' @info Convert basic dose-centric patterns to hours
 #' @code
 #' convert_xxtpt_to_hours(c(
-#'   "Screening",      # 0
-#'   "Pre-dose",       # 0
-#'   "Pre-treatment",  # 0
-#'   "Before",         # 0
-#'   "30M",            # 0.5
-#'   "1H",             # 1
-#'   "2H POSTDOSE",    # 2
-#'   "Day 1"           # 24
+#'   "Screening",
+#'   "Pre-dose",
+#'   "Pre-treatment",
+#'   "Before",
+#'   "30M",
+#'   "1H",
+#'   "2H POSTDOSE",
+#'   "Day 1"
 #' ))
 #'
 #' @caption Predose and before patterns
@@ -197,21 +197,18 @@
 #' )
 #'
 #' @caption POST vs POST EOI distinction
-#' @info Demonstrates the difference between POST (from start) and POST EOI (from end)
+#' @info Difference between POST (from start) and POST EOI (from end)
 #' @code
-#' # POST alone = relative to treatment START (no duration added)
 #' convert_xxtpt_to_hours(
 #'   c("Pre-dose", "1H POST", "2H POST", "4H POST"),
-#'   treatment_duration = 2  # 2-hour infusion
+#'   treatment_duration = 2
 #' )
 #'
-#' # POST EOI = relative to treatment END (duration added)
 #' convert_xxtpt_to_hours(
 #'   c("Pre-dose", "EOI", "1H POST EOI", "2H POST EOI"),
-#'   treatment_duration = 2  # 2-hour infusion
+#'   treatment_duration = 2
 #' )
 #'
-#' # Side by side comparison
 #' convert_xxtpt_to_hours(
 #'   c("1H POST", "1H POST EOI", "1H POST INFUSION"),
 #'   treatment_duration = 2
@@ -507,12 +504,12 @@ calculate_range_value <- function(start_val, end_val, range_method) {
 #' * "4-8H POST INFUSION" → treatment_duration + range_value
 #' * "4-8H POST INF" → treatment_duration + range_value
 #'
-#' With midpoint method, "0-4H AFTER EOI" with treatment_duration=1 → 1 + 2 = 3
-#' With midpoint method, "4-8H AFTER END OF INFUSION" with treatment_duration=1 → 1 + 6 = 7
-#' With midpoint method, "4-8H POST INFUSION" with treatment_duration=1 → 1 + 6 = 7
+#' With midpoint method, "0-4H AFTER EOI" with treatment_duration=1 → 1 + 2 = 3.
+#' With midpoint method, "4-8H AFTER END OF INFUSION" with treatment_duration=1
+#' gives 1 + 6 = 7.
 #'
-#' Note: This is consistent with non-range behavior where "24 HR POST INF" means
-#' 24 hours after end of infusion (treatment_duration + 24).
+#' Note: Consistent with non-range "24 HR POST INF" behavior which adds
+#' treatment_duration.
 #'
 #' Only updates result for positions where result is currently NA and xxtpt is not NA.
 #'
@@ -521,19 +518,14 @@ calculate_range_value <- function(start_val, end_val, range_method) {
 #' @keywords internal
 #' @noRd
 convert_ranges_eot <- function(xxtpt, result, na_idx, treatment_duration, range_method) {
-  # Ranges relative to EOI/EOT (all forms)
-  # This pattern matches:
-  # - "4-8H AFTER EOI" or "4-8H EOI" (short form)
-  # - "4-8H AFTER END OF INFUSION/TREATMENT" (long form)
-  # - "4-8H POST INF/INFUSION" (consistent with single value behavior)
   range_eot_pattern <- regex(
     paste0(
       "^(?<start>\\d+(?:\\.\\d+)?)\\s*-\\s*(?<end>\\d+(?:\\.\\d+)?)\\s*",
       "h(?:r|our)?s?\\s+",
-      "(?:after\\s+)?", # Optional AFTER
-      "(?:eo[it]|", # EOI/EOT
-      "end\\s+of\\s+(?:infusion|treatment)|", # END OF forms
-      "post\\s+inf(?:usion)?)$" # POST INF/INFUSION (consistent with single value behavior)
+      "(?:after\\s+)?",
+      "(?:eo[it]|",
+      "end\\s+of\\s+(?:infusion|treatment)|",
+      "post\\s+inf(?:usion)?)$"
     ),
     ignore_case = TRUE
   )
@@ -611,7 +603,7 @@ convert_predose_patterns <- function(xxtpt, result, na_idx) {
     paste0(
       "^(?<value>\\d+(?:\\.\\d+)?)\\s*",
       "(?<unit>m(?:in|inute)?|h(?:r|our)?)s?\\s+",
-      "(?:pre-?dose|before)$" # pre-?dose allows both PREDOSE and PRE-DOSE
+      "(?:pre-?dose|before)$"
     ),
     ignore_case = TRUE,
     comments = TRUE
@@ -663,12 +655,6 @@ convert_predose_patterns <- function(xxtpt, result, na_idx) {
 #' @keywords internal
 #' @noRd
 convert_post_end_patterns <- function(xxtpt, result, na_idx, treatment_duration) {
-  # Unified pattern for all post-end variations:
-  # - "1H POST EOI/EOT"
-  # - "1H AFTER EOI/EOT"
-  # - "24 HR POST INF/EOI/EOT"
-  # - "1H POST INFUSION/INF"
-  # - "1H AFTER END OF INFUSION/TREATMENT"
   post_end_pattern <- regex(
     paste0(
       "^(?<value>\\d+(?:\\.\\d+)?)\\s*",
