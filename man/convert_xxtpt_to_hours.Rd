@@ -66,7 +66,7 @@ The function recognizes the following patterns (all case-insensitive):
 
 \strong{Special Cases:}
 \itemize{
-\item \code{"Screening"} → -1
+\item \code{"Screening"} → 0
 \item \code{"Pre-dose"}, \code{"Predose"}, \code{"Pre-treatment"}, \code{"Pre-infusion"},
 \code{"Pre-inf"}, \code{"Before"}, \code{"Infusion"}, \code{"0H"} → 0
 \item \code{"EOI"}, \code{"EOT"}, \code{"End of Infusion"}, \code{"End of Treatment"},
@@ -87,11 +87,13 @@ Time ranges are converted based on the \code{range_method} parameter:
 \item \code{"0-4H AFTER EOI"} with midpoint and treatment_duration=1 → 3 (1 + 2)
 \item \code{"0-4H EOT"} with midpoint and treatment_duration=0 → 2
 \item \code{"4-8H AFTER END OF INFUSION"} with midpoint and treatment_duration=1 → 7 (1 + 6)
+\item \code{"4-8H POST INFUSION"} with midpoint and treatment_duration=1 → 7 (1 + 6)
+\item \code{"4-8H POST-INF"} with midpoint and treatment_duration=1 → 7 (1 + 6)
 }
 
 \strong{Time-based Conversions:}
 \itemize{
-\item \strong{Days}: \code{"Day 1"} → 24, \code{"30 DAYS AFTER LAST"} → 720
+\item \strong{Days}: \code{"Day 1"} → 24, \code{"2D"} → 48, \code{"30 DAYS AFTER LAST"} → 720
 \item \strong{Hours + Minutes}: \code{"1H30M"} → 1.5
 \item \strong{Hours}: \code{"2 hours"} → 2, \code{"1 HOUR POST"} → 1
 \item \strong{Minutes}: \code{"30M"} → 0.5, \code{"30 MIN POST"} → 0.5
@@ -99,6 +101,7 @@ Time ranges are converted based on the \code{range_method} parameter:
 \item \strong{Before treatment}: \code{"5 MIN BEFORE"} → -0.0833
 \item \strong{Post EOI/EOT}: \code{"1 HOUR POST EOI"} → treatment_duration + 1,
 \code{"24 HR POST INF"} → treatment_duration + 24,
+\code{"24 HR POST-INF"} → treatment_duration + 24,
 \code{"1 HOUR AFTER EOT"} → treatment_duration + 1
 \item \strong{After end}: \code{"30MIN AFTER END OF INFUSION"} → treatment_duration + 0.5
 \item \strong{Start of infusion/treatment}: \code{"8H PRIOR START OF INFUSION"} → -8,
@@ -114,6 +117,7 @@ Time ranges are converted based on the \code{range_method} parameter:
 \item Days: D, d, DAY, day (with optional plurals)
 \item Flexible whitespace and optional "Post-dose", "POST", "After last"
 suffixes
+\item Hyphens in compound terms: "PRE-DOSE", "POST-INF", "POST-INFUSION"
 }
 
 \strong{Understanding POST/AFTER Patterns:}
@@ -203,13 +207,14 @@ With treatment_duration = 1 hour for IV infusions
     "EOI",
     "1 HOUR POST EOI",
     "24 HR POST INF",
+    "24 HR POST-INF",
     "30MIN AFTER END OF INFUSION",
     "8H PRIOR START OF INFUSION",
     "10MIN PRE EOI"
   ),
   treatment_duration = 1
 )
-#> [1]  1.0000000  2.0000000 25.0000000  1.5000000 -8.0000000  0.8333333}\if{html}{\out{</div>}}}
+#> [1]  1.0000000  2.0000000 25.0000000 25.0000000  1.5000000 -8.0000000  0.8333333}\if{html}{\out{</div>}}}
 \subsection{Vectorized treatment duration}{
 
 Different treatment durations per timepoint
@@ -244,31 +249,31 @@ Time ranges after end of infusion/treatment
 \if{html}{\out{<div class="sourceCode r">}}\preformatted{convert_xxtpt_to_hours(
   c(
     "0-4H AFTER EOI",
+    "0-4H POST EOI",
     "4-8H AFTER END OF INFUSION",
-    "4-8H AFTER EOT"
+    "4-8H AFTER EOT",
+    "4-8H POST INFUSION",
+    "4-8H POST-INF"
   ),
   treatment_duration = 1
 )
-#> [1] 3 7 7}\if{html}{\out{</div>}}}
+#> [1] 3 3 7 7 7 7}\if{html}{\out{</div>}}}
 \subsection{POST vs POST EOI distinction}{
 
-Demonstrates the difference between POST (from start) and POST EOI (from end)
+Difference between POST (from start) and POST EOI (from end)
 
-\if{html}{\out{<div class="sourceCode r">}}\preformatted{# POST alone = relative to treatment START (no duration added)
-convert_xxtpt_to_hours(
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{convert_xxtpt_to_hours(
   c("Pre-dose", "1H POST", "2H POST", "4H POST"),
-  treatment_duration = 2  # 2-hour infusion
+  treatment_duration = 2
 )
 #> [1] 0 1 2 4
 
-# POST EOI = relative to treatment END (duration added)
 convert_xxtpt_to_hours(
   c("Pre-dose", "EOI", "1H POST EOI", "2H POST EOI"),
-  treatment_duration = 2  # 2-hour infusion
+  treatment_duration = 2
 )
 #> [1] 0 2 3 4
 
-# Side by side comparison
 convert_xxtpt_to_hours(
   c("1H POST", "1H POST EOI", "1H POST INFUSION"),
   treatment_duration = 2
