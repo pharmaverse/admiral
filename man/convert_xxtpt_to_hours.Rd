@@ -66,7 +66,7 @@ The function recognizes the following patterns (all case-insensitive):
 
 \strong{Special Cases:}
 \itemize{
-\item \code{"Screening"} → -1
+\item \code{"Screening"} → 0
 \item \code{"Pre-dose"}, \code{"Predose"}, \code{"Pre-treatment"}, \code{"Pre-infusion"},
 \code{"Pre-inf"}, \code{"Before"}, \code{"Infusion"}, \code{"0H"} → 0
 \item \code{"EOI"}, \code{"EOT"}, \code{"End of Infusion"}, \code{"End of Treatment"},
@@ -87,6 +87,7 @@ Time ranges are converted based on the \code{range_method} parameter:
 \item \code{"0-4H AFTER EOI"} with midpoint and treatment_duration=1 → 3 (1 + 2)
 \item \code{"0-4H EOT"} with midpoint and treatment_duration=0 → 2
 \item \code{"4-8H AFTER END OF INFUSION"} with midpoint and treatment_duration=1 → 7 (1 + 6)
+\item \code{"4-8H POST INFUSION"} with midpoint and treatment_duration=1 → 7 (1 + 6)
 }
 
 \strong{Time-based Conversions:}
@@ -167,14 +168,14 @@ Date/Time Computation Functions that returns a vector:
 Convert basic dose-centric patterns to hours
 
 \if{html}{\out{<div class="sourceCode r">}}\preformatted{convert_xxtpt_to_hours(c(
-  "Screening",
-  "Pre-dose",
-  "Pre-treatment",
-  "Before",
-  "30M",
-  "1H",
-  "2H POSTDOSE",
-  "Day 1"
+  "Screening",      # 0
+  "Pre-dose",       # 0
+  "Pre-treatment",  # 0
+  "Before",         # 0
+  "30M",            # 0.5
+  "1H",             # 1
+  "2H POSTDOSE",    # 2
+  "Day 1"           # 24
 ))
 #> [1]  0.0  0.0  0.0  0.0  0.5  1.0  2.0 24.0}\if{html}{\out{</div>}}}
 \subsection{Predose and before patterns}{
@@ -245,11 +246,12 @@ Time ranges after end of infusion/treatment
   c(
     "0-4H AFTER EOI",
     "4-8H AFTER END OF INFUSION",
-    "4-8H AFTER EOT"
+    "4-8H AFTER EOT",
+    "4-8H POST INFUSION"
   ),
   treatment_duration = 1
 )
-#> [1] 3 7 7}\if{html}{\out{</div>}}}
+#> [1] 3 7 7 7}\if{html}{\out{</div>}}}
 \subsection{POST vs POST EOI distinction}{
 
 Demonstrates the difference between POST (from start) and POST EOI (from end)
