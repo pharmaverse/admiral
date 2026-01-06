@@ -391,7 +391,7 @@ will serve as interim variables to facilitate progression of the program and its
 When `IS.ISSTRESC` is "POSITIVE", `IS.ISSTRESN` is commonly populated with values >0. 
 However, if `ISSTRESC` is "POSITIVE" with a missing `IS.ISSTRESN`, this template provides
 a method to assign `AVAL` using the assigned MRT value, sets `AVALC` to "N.C." (Not Calculable)
-and documents the operation by setting `DTYPE='MRT'`.  
+and documents the operation by setting `DTYPE = "MRT"`.  
 
 If your `IS` dataset has additional sponsor specific tests kept and suitable for this template, 
 adjust or expand variable assignments in this step accordingly.
