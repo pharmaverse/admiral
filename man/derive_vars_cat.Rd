@@ -306,8 +306,8 @@ from the same set of conditions.
   ~VSTEST,   ~condition,  ~AVALCAT1, ~AVALCA1N, ~AVALCAT2,      ~AVALCA2N, ~AVALCAT3,
   "Height",  AVAL > 160,  ">160 cm",         1,    "Tall",              1,   "Group A",
   "Height", AVAL <= 160, "<=160 cm",         2,   "Short",              2,   "Group B",
-  "Weight",   AVAL > 70,   ">70 kg",         1,   "Heavy",              1,   "Group C",
-  "Weight",  AVAL <= 70,  "<=70 kg",         2,   "Light",              2,   "Group D"
+  "Weight",   AVAL > 70,   ">70 kg",         3,   "Heavy",              3,   "Group C",
+  "Weight",  AVAL <= 70,  "<=70 kg",         4,   "Light",              4,   "Group D"
 )
 
 derive_vars_cat(
@@ -319,11 +319,11 @@ derive_vars_cat(
 #>   USUBJID     VSTEST  AVAL AVALCAT1 AVALCA1N AVALCAT2 AVALCA2N AVALCAT3
 #>   <chr>       <chr>  <dbl> <chr>       <dbl> <chr>       <dbl> <chr>   
 #> 1 01-701-1015 Height 147.  <=160 cm        2 Short           2 Group B 
-#> 2 01-701-1015 Weight  54.0 <=70 kg         2 Light           2 Group D 
+#> 2 01-701-1015 Weight  54.0 <=70 kg         4 Light           4 Group D 
 #> 3 01-701-1023 Height 163.  >160 cm         1 Tall            1 Group A 
 #> 4 01-701-1023 Weight  NA   <NA>           NA <NA>           NA <NA>    
 #> 5 01-701-1028 Height  NA   <NA>           NA <NA>           NA <NA>    
 #> 6 01-701-1028 Weight  NA   <NA>           NA <NA>           NA <NA>    
 #> 7 01-701-1033 Height 175.  >160 cm         1 Tall            1 Group A 
-#> 8 01-701-1033 Weight  88.4 >70 kg          1 Heavy           1 Group C }\if{html}{\out{</div>}}}}
+#> 8 01-701-1033 Weight  88.4 >70 kg          3 Heavy           3 Group C }\if{html}{\out{</div>}}}}
 
