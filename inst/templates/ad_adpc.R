@@ -69,7 +69,6 @@ pc_dates <- pc %>%
   mutate(
     EVID = 0,
     DRUG = PCTEST,
-    VISITDY = if_else(VISIT == "BASELINE", 1, as.numeric(word(VISIT, 2)) * 7)
   ) %>%
   derive_var_nfrlt(
     new_var = NFRLT,
@@ -473,7 +472,7 @@ adpc_aseq <- adpc_chg %>%
   select(
     -DOMAIN, -PCSEQ, -starts_with("min"),
     -starts_with("max"), -starts_with("EX"), -ends_with("next"),
-    -ends_with("prev"), -DRUG, -EVID, -AXRLT, -NXRLT, -VISITDY
+    -ends_with("prev"), -DRUG, -EVID, -AXRLT, -NXRLT
   ) %>%
   # Derive PARAM and PARAMN
   derive_vars_merged(dataset_add = select(param_lookup, -PCTESTCD), by_vars = exprs(PARAMCD))
