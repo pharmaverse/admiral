@@ -61,19 +61,12 @@ unless otherwise specified.*
 # Programming Workflow
 
 -   [Read in Source Data](#readdata)
-
 -   [Prepare `EX`, Find First Dose and Derive `AFRLT`](#firstdose)
-
 -   [Assign Periods, Phases and BASETYPE](#basetype)
-
 -   [Derive Assigned Variables](#assigned)
-
 -   [Derive Analysis Variables](#analysis)
-
 -   [Assemble into Parameter Based Dataset](#parameters)
-
 -   [Add ADSL variables](#adsl_vars)
-
 -   [Add Labels and Attributes](#attributes)
 
 
