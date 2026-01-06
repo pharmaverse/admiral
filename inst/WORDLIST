@@ -31,6 +31,8 @@ ASTDTM
 ATC
 ATOXGR
 AVAL
+AVISIT
+AVISITN
 Abercrombie
 Akinyi
 Alanine
@@ -95,6 +97,8 @@ EOSSTT
 EPI
 Ehmann
 Enki
+EOI
+EOT
 Evaluable
 FACM
 FCVD
@@ -204,6 +208,7 @@ Phosphatase
 Piraux
 Pooja
 Pre
+Predose
 Premarketing
 QD
 QID
@@ -292,6 +297,7 @@ aspartate
 basetypes
 bds
 censorings
+centric
 chk
 codebase
 codespace
@@ -336,11 +342,13 @@ msec
 occds
 onwards
 parttime
+pharmacokinetic
 pharmaverse
 pharmaverseadam
 pharmaversesdtm
 phosphatase
 pre
+predose
 prev
 prm
 quosures
