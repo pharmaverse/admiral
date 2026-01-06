@@ -1,5 +1,8 @@
 #' Derive Nominal Relative Time from First Dose (NFRLT)
 #'
+#' @description
+#' `r lifecycle::badge("experimental")`
+#'
 #' Derives nominal/planned time from first dose in hours by combining visit day
 #' information with timepoint descriptions. The function converts timepoint
 #' strings to hours using `convert_xxtpt_to_hours()` and adds them to the
@@ -76,16 +79,16 @@
 #' `first_dose_day` is positive.
 #'
 #' For example, with `first_dose_day = 1`:
-#' * Day -1 → -24 hours (1 day before Day 1, not 2 days)
-#' * Day -7 → -168 hours (7 days before Day 1)
-#' * Day 1 → 0 hours (first dose day)
-#' * Day 8 → 168 hours (7 days after Day 1)
+#' * Day -1 -> -24 hours (1 day before Day 1, not 2 days)
+#' * Day -7 -> -168 hours (7 days before Day 1)
+#' * Day 1 -> 0 hours (first dose day)
+#' * Day 8 -> 168 hours (7 days after Day 1)
 #'
 #' With `first_dose_day = 7`:
-#' * Day -1 → -168 hours (7 days before Day 7, accounting for no Day 0)
-#' * Day 1 → -144 hours (6 days before Day 7)
-#' * Day 6 → -24 hours (1 day before Day 7)
-#' * Day 7 → 0 hours (first dose day)
+#' * Day -1 -> -168 hours (7 days before Day 7, accounting for no Day 0)
+#' * Day 1 -> -144 hours (6 days before Day 7)
+#' * Day 6 -> -24 hours (1 day before Day 7)
+#' * Day 7 -> 0 hours (first dose day)
 #'
 #' **Common Use Cases:**
 #'
