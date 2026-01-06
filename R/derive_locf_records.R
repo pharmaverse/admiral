@@ -89,10 +89,30 @@
 #'
 #' @export
 #'
-#' @examples
+#' @examplesx
+#' @caption Add records for missing analysis variable using reference dataset
+#' @info Imputed records should be added for missing timepoints and for missing
+#'       `analysis_var` (from `dataset_ref`), while retaining all original records.
 #'
+#' - The reference dataset for the imputed records is specified by the `dataset_add`
+#'   argument. It should contain all expected combinations of variables. In this case,
+#'   `advs_expected_obsv` is created by `crossing()` datasets `paramcd` and `avisit`, which
+#'   includes all combinations of PARAMCD, AVISITN, and AVISIT.
+#' - The groups for which new records are added are specified by the `by_vars`
+#'   argument. Here, one record should be added for each *subject* and *parameter*.
+#'   Therefore, `by_vars = exprs(STUDYID, USUBJID, PARAMCD)` is specified.
+#' - The imputation method is specified using the `imputation` argument. In this case,
+#'   records with missing analysis values *add* records from `dataset_ref` after the
+#'   data are sorted by the variables in `by_vars` and by visit (`AVISITN` and `AVISIT`),
+#'   as specified in the `order` argument.
+#' - Variables other than `analysis_var` and `by_vars` that require LOCF (Last-Observation-
+#'   Carried-Forward handling (in this case, `PARAMN`) are specified in the `keep_vars`
+#'   argument.
+#'
+#' @code
 #' library(dplyr)
 #' library(tibble)
+#' library(tidyr)
 #'
 #' advs <- tribble(
 #'   ~STUDYID,  ~USUBJID,      ~VSSEQ, ~PARAMCD, ~PARAMN, ~AVAL, ~AVISITN, ~AVISIT,
@@ -105,24 +125,24 @@
 #'   "CDISC01", "01-701-1015",      7, "SYSBP",        3,   132,        2, "WEEK 2"
 #' )
 #'
-#' # A dataset with all the combinations of PARAMCD, PARAM, AVISIT, AVISITN, ...
-#' # which are expected.
-#' advs_expected_obsv <- tribble(
-#'   ~PARAMCD, ~AVISITN, ~AVISIT,
-#'   "PULSE",         0, "BASELINE",
-#'   "PULSE",         6, "WEEK 6",
-#'   "DIABP",         0, "BASELINE",
-#'   "DIABP",         2, "WEEK 2",
-#'   "DIABP",         4, "WEEK 4",
-#'   "DIABP",         6, "WEEK 6",
-#'   "SYSBP",         0, "BASELINE",
-#'   "SYSBP",         2, "WEEK 2",
-#'   "SYSBP",         4, "WEEK 4",
-#'   "SYSBP",         6, "WEEK 6"
+#' paramcd <- tribble(
+#' ~PARAMCD,
+#' "PULSE",
+#' "DIABP",
+#' "SYSBP"
 #' )
 #'
-#' # Example 1: Add imputed records for missing timepoints and for missing
-#' #            `analysis_var` values (from `dataset_ref`), keeping all the original records.
+#' avisit <- tribble(
+#' ~AVISITN, ~AVISIT,
+#' 0, "BASELINE",
+#' 2, "WEEK 2",
+#' 4, "WEEK 4",
+#' 6, "WEEK 6"
+#' )
+#'
+#' advs_expected_obsv <- paramcd %>%
+#' crossing(avisit)
+#'
 #' derive_locf_records(
 #'   dataset = advs,
 #'   dataset_ref = advs_expected_obsv,
@@ -134,8 +154,13 @@
 #'   arrange(USUBJID, PARAMCD, AVISIT)
 #'
 #'
-#' # Example 2: Add imputed records for missing timepoints (from `dataset_ref`)
-#' #            and update missing `analysis_var` values.
+#' @caption Update records for missing analysis variable
+#' @info When the `imputation` mode is set to *update*, missing `analysis_var` values
+#'       are updated using values from the last record after the dataset is sorted by
+#'       `by_vars` and `order`. Imputed records are added for missing timepoints (from
+#'       `dataset_ref`).
+#'
+#' @code
 #' derive_locf_records(
 #'   dataset = advs,
 #'   dataset_ref = advs_expected_obsv,
@@ -146,8 +171,14 @@
 #'   arrange(USUBJID, PARAMCD, AVISIT)
 #'
 #'
-#' # Example 3: Add imputed records for missing timepoints (from `dataset_ref`) and
-#' #            update missing `analysis_var` values, keeping all the original records.
+#' @caption Update records for missing analysis variable while keeping the original records
+#' @info When the `imputation` mode is set to *update_add*, the missing `analysis_var`
+#'       values are updated using values from the last record after the dataset is sorted
+#'       by `by_vars` and `order`. The updated values are added as new records, while the
+#'       original records with missing `analysis_var` are retained. Imputed records are added
+#'       for missing timepoints (from `dataset_ref`).
+#'
+#' @code
 #' derive_locf_records(
 #'   dataset = advs,
 #'   dataset_ref = advs_expected_obsv,
