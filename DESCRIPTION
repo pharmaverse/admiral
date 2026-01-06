@@ -72,7 +72,7 @@ Suggests:
     here
 VignetteBuilder:
     knitr
-Config/Needs/website: gert
+Config/Needs/website: gert, rmarkdown
 Config/testthat/edition: 3
 Encoding: UTF-8
 Language: en-US
