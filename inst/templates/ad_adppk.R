@@ -67,8 +67,7 @@ pc_dates <- pc %>%
   # Derive event ID and nominal relative time from first dose (NFRLT)
   mutate(
     EVID = 0,
-    DRUG = PCTEST,
-    VISITDY = if_else(VISIT == "BASELINE", 1, as.numeric(word(VISIT, 2)) * 7)
+    DRUG = PCTEST
   ) %>%
   derive_var_nfrlt(
     new_var = NFRLT,
