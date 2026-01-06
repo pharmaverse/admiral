@@ -33,9 +33,8 @@ Note:  CDISC does not currently have a model or implementation guide for ADA (`A
 This example presented uses underlying `EX` and `IS` domains where the
 `EX` and `IS` domains represent data as collected and the `ADAB` ADaM is
 output. For purposes of the examples, the surrogate data for ADA is called
-`IS_ADA`. `IS_ADA` is a product of the pharmaverse `IS_ADA` data. The `IS`
-domain is intended for multiple classes of findings so a dedicated `IS_ADA` was
-added to the `{pharmaversesdtm}` for ADA data.
+`IS_ADA`. The `IS` domain is intended for multiple classes of findings so a 
+dedicated `IS_ADA` was added to the `{pharmaversesdtm}` for ADA data.
 
 This template and the sample `IS` dataset works off of `IS` having primary
 Anti-Drug Antibody results (ex: `ISTESTCD = "ADA_BAB"`) and Neutralizing Antibody 
