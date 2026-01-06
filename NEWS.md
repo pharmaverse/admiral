@@ -80,6 +80,8 @@ and receive answers from an LLM. It is trained on the documentation of both pack
 - The ADSL template and vignette were updated to add derivation of analysis age (`AAGE`/`AAGEU`) using `derive_vars_aage()`. This includes deriving birth date (`BRTHDT`) from birth date character variable (`BRTHDTC`) using `derive_vars_dt()`. (#2584)
 - Standardized variable notation across documentation to use `--` for SDTM variables (e.g., `--DTC`) and `*` for ADaM variables (e.g., `*DTM`, `*DT`). (#2757)
 - For `derive_vars_dt()`, clarify `highest_imputation` definitions and expand date examples. (#2841)
+- The documentation was enhanced: (#2585)
+    - For `derive_locf_records()`, each example now has a title (which is also shown in the TOC) and a description, improving readability. (#2889)
 
 ## Various
 
