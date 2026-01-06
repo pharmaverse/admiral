@@ -56,6 +56,8 @@ A numeric vector of timepoints in hours. Returns \code{NA_real_} for:
 Returns \code{numeric(0)} for empty input.
 }
 \description{
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
+
 Converts CDISC timepoint strings (e.g., \code{PCTPT}, \code{VSTPT}, \code{EGTPT},
 \code{ISTPT}, \code{LBTPT}) into numeric hours for analysis. The function handles
 common dose-centric formats including pre-dose, post-dose (hours/minutes),
@@ -66,48 +68,49 @@ The function recognizes the following patterns (all case-insensitive):
 
 \strong{Special Cases:}
 \itemize{
-\item \code{"Screening"} → 0
+\item \code{"Screening"} -> 0
 \item \code{"Pre-dose"}, \code{"Predose"}, \code{"Pre-treatment"}, \code{"Pre-infusion"},
-\code{"Pre-inf"}, \code{"Before"}, \code{"Infusion"}, \code{"0H"} → 0
+\code{"Pre-inf"}, \code{"Before"}, \code{"Infusion"}, \code{"0H"} -> 0
 \item \code{"EOI"}, \code{"EOT"}, \code{"End of Infusion"}, \code{"End of Treatment"},
-\code{"After End of Infusion"}, \code{"After End of Treatment"} → \code{treatment_duration}
+\code{"After End of Infusion"}, \code{"After End of Treatment"} -> \code{treatment_duration}
 (default: 0)
-\item \code{"Morning"}, \code{"Evening"} → \code{NA_real_}
-\item Unrecognized values → \code{NA_real_}
+\item \code{"Morning"}, \code{"Evening"} -> \code{NA_real_}
+\item Unrecognized values -> \code{NA_real_}
 }
 
 \strong{Time Ranges:}
 Time ranges are converted based on the \code{range_method} parameter:
 \itemize{
-\item \code{"0-6h Post-dose"} with \code{range_method = "midpoint"} (default) → 3
-\item \code{"0-6h Post-dose"} with \code{range_method = "start"} → 0
-\item \code{"0-6h Post-dose"} with \code{range_method = "end"} → 6
-\item \code{"0-4H PRIOR START OF INFUSION"} with midpoint → -2 (negative for prior)
-\item \code{"8-16H POST START OF INFUSION"} with midpoint → 12
-\item \code{"0-4H AFTER EOI"} with midpoint and treatment_duration=1 → 3 (1 + 2)
-\item \code{"0-4H EOT"} with midpoint and treatment_duration=0 → 2
-\item \code{"4-8H AFTER END OF INFUSION"} with midpoint and treatment_duration=1 → 7 (1 + 6)
-\item \code{"4-8H POST INFUSION"} with midpoint and treatment_duration=1 → 7 (1 + 6)
-\item \code{"4-8H POST-INF"} with midpoint and treatment_duration=1 → 7 (1 + 6)
+\item \code{"0-6h Post-dose"} with \code{range_method = "midpoint"} (default) -> 3
+\item \code{"0-6h Post-dose"} with \code{range_method = "start"} -> 0
+\item \code{"0-6h Post-dose"} with \code{range_method = "end"} -> 6
+\item \code{"0-4H PRIOR START OF INFUSION"} with midpoint -> -2 (negative for prior)
+\item \code{"8-16H POST START OF INFUSION"} with midpoint -> 12
+\item \code{"0-4H AFTER EOI"} with midpoint and treatment_duration=1 -> 3 (1 + 2)
+\item \code{"0-4H EOT"} with midpoint and treatment_duration=0 -> 2
+\item \code{"4-8H AFTER END OF INFUSION"} with midpoint and treatment_duration=1 -> 7 (1 + 6)
+\item \code{"4-8H POST INFUSION"} with midpoint and treatment_duration=1 -> 7 (1 + 6)
+\item \code{"4-8H POST-INF"} with midpoint and treatment_duration=1 -> 7 (1 + 6)
 }
 
 \strong{Time-based Conversions:}
 \itemize{
-\item \strong{Days}: \code{"Day 1"} → 24, \code{"2D"} → 48, \code{"30 DAYS AFTER LAST"} → 720
-\item \strong{Hours + Minutes}: \code{"1H30M"} → 1.5
-\item \strong{Hours}: \code{"2 hours"} → 2, \code{"1 HOUR POST"} → 1
-\item \strong{Minutes}: \code{"30M"} → 0.5, \code{"30 MIN POST"} → 0.5
-\item \strong{Predose}: \code{"5 MIN PREDOSE"} → -0.0833, \code{"5 MIN PRE-DOSE"} → -0.0833
-\item \strong{Before treatment}: \code{"5 MIN BEFORE"} → -0.0833
-\item \strong{Post EOI/EOT}: \code{"1 HOUR POST EOI"} → treatment_duration + 1,
-\code{"24 HR POST INF"} → treatment_duration + 24,
-\code{"24 HR POST-INF"} → treatment_duration + 24,
-\code{"1 HOUR AFTER EOT"} → treatment_duration + 1
-\item \strong{After end}: \code{"30MIN AFTER END OF INFUSION"} → treatment_duration + 0.5
-\item \strong{Start of infusion/treatment}: \code{"8H PRIOR START OF INFUSION"} → -8,
-\code{"8H BEFORE START OF TREATMENT"} → -8
-\item \strong{Pre EOI/EOT}: \code{"10MIN PRE EOI"} → treatment_duration - 1/6,
-\code{"10MIN BEFORE EOT"} → treatment_duration - 1/6
+\item \strong{Days}: \code{"Day 1"} -> 24, \code{"2D"} -> 48, \code{"30 DAYS AFTER LAST"} -> 720
+(requires unit indicator; bare numbers like \code{"2"} return \code{NA})
+\item \strong{Hours + Minutes}: \code{"1H30M"} -> 1.5
+\item \strong{Hours}: \code{"2 hours"} -> 2, \code{"1 HOUR POST"} -> 1
+\item \strong{Minutes}: \code{"30M"} -> 0.5, \code{"30 MIN POST"} -> 0.5
+\item \strong{Predose}: \code{"5 MIN PREDOSE"} -> -0.0833, \code{"5 MIN PRE-DOSE"} -> -0.0833
+\item \strong{Before treatment}: \code{"5 MIN BEFORE"} -> -0.0833
+\item \strong{Post EOI/EOT}: \code{"1 HOUR POST EOI"} -> treatment_duration + 1,
+\code{"24 HR POST INF"} -> treatment_duration + 24,
+\code{"24 HR POST-INF"} -> treatment_duration + 24,
+\code{"1 HOUR AFTER EOT"} -> treatment_duration + 1
+\item \strong{After end}: \code{"30MIN AFTER END OF INFUSION"} -> treatment_duration + 0.5
+\item \strong{Start of infusion/treatment}: \code{"8H PRIOR START OF INFUSION"} -> -8,
+\code{"8H BEFORE START OF TREATMENT"} -> -8
+\item \strong{Pre EOI/EOT}: \code{"10MIN PRE EOI"} -> treatment_duration - 1/6,
+\code{"10MIN BEFORE EOT"} -> treatment_duration - 1/6
 }
 
 \strong{Supported Unit Formats:}
@@ -127,16 +130,16 @@ versus treatment \strong{end}:
 \itemize{
 \item \strong{Relative to START} (treatment_duration NOT added):
 \itemize{
-\item \code{"1H POST"}, \code{"1H AFTER"}, \code{"30M POST"} → Time from dose/treatment start
+\item \code{"1H POST"}, \code{"1H AFTER"}, \code{"30M POST"} -> Time from dose/treatment start
 \item These patterns assume treatment starts at time 0
-\item Example: \code{"1H POST"} → 1 hour (regardless of treatment_duration)
+\item Example: \code{"1H POST"} -> 1 hour (regardless of treatment_duration)
 }
 \item \strong{Relative to END} (treatment_duration IS added):
 \itemize{
-\item \code{"1H POST EOI"}, \code{"1H AFTER EOT"}, \code{"1H POST INFUSION"} → Time from
+\item \code{"1H POST EOI"}, \code{"1H AFTER EOT"}, \code{"1H POST INFUSION"} -> Time from
 treatment end
 \item These patterns account for when treatment ends (start + duration)
-\item Example: \code{"1H POST EOI"} with treatment_duration=2 → 3 hours (2 + 1)
+\item Example: \code{"1H POST EOI"} with treatment_duration=2 -> 3 hours (2 + 1)
 }
 }
 
