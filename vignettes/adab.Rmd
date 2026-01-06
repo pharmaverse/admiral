@@ -241,7 +241,7 @@ dataset_vignette(
 )
 ```
 
-## Prepare 'EX', Find First Dose and Derive AFRLT {#firstdose}
+## Prepare `EX`, Find First Dose and Derive AFRLT {#firstdose}
 
 At this step, we stage the `EX` data. Filter the data as desired to match 
 the `IS` analyte(s). As with the `IS` dataset staging, `DRUG` is also assigned as a common merge variable.
