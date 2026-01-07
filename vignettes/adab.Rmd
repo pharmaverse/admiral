@@ -143,8 +143,8 @@ version 2.0 could be substituted if desired.
 
 Common variables as such `AVISIT`, `AVISITN`, `FRLTU` are assigned.  
 
-`NFRLT` is nominal time from first dose. Common sources are `IS.VISITDY`. `IS.VISIT` information can
-also be parsed for timing values or to assign values for special visits (i.e. "End of Study", "Unscheduled").
+Compute `NFRLT` using `derive_var_nfrlt()` to add nominal time from first dose. A common source is `IS.VISITDY`. 
+`IS.VISIT` information can also be parsed for timing values or to assign values for special visits (i.e. "Treatment Discontinuation", "Unscheduled"). The below code has examples to assign special visits from `IS.VISIT`.
 
 We use `derive_vars_merged()` to merge `ADSL.TRTSDT` and compute `ADY`. `ADY` is assumed to be
 based on the `ADSL.TRTSDT` while `ADAB.AFRLT` is based on the matching `EX.EXTRT` for the corresponding 
@@ -198,15 +198,24 @@ is_dates <- is %>%
     AVISIT = VISIT,
     AVISITN = VISITNUM,
     # Assign FRLTU (ex: DAYS or HOURS)
-    FRLTU = "DAYS",
-    # Assign NFRLT
-    #   This example maps any discontinuation visits as 77777 and unscheduled as 99999
-    #   Units for this ADAB sample will be Days. If Hours, add NFRLT x 24.
+    FRLTU = "DAYS"
+  ) %>%
+  # Assign nominal time to NFRLT
+  # Special visits can be set to NA then can add more code to assign custom values
+  #   (i.e. UNSCHEDULED to 99999, etc.)
+  # Units for this ADAB sample will be Days, divide result by 24
+  derive_var_nfrlt(
+    new_var = NFRLT,
+    tpt_var = ISTPT,
+    visit_day = VISITDY,
+    treatment_duration = 0,
+    set_values_to_na = str_detect(toupper(VISIT), "UNSCHED") | str_detect(toupper(VISIT), "TREATMENT DISC")
+  ) %>%
+  mutate(
     NFRLT = case_when(
-      str_detect(toupper(VISIT), "EARLY DISC") ~ 77777,
-      str_detect(toupper(VISIT), "TREATMENT DISC") ~ 77777,
-      str_detect(toupper(VISIT), "UNSCHEDULED") ~ 99999,
-      !is.na(VISITDY) ~ (VISITDY - 1),
+      !is.na(NFRLT) ~ NFRLT / 24,
+      str_detect(toupper(VISIT), "TREATMENT DISC") ~ 99997,
+      str_detect(toupper(VISIT), "UNSCHED") ~ 99999,
       TRUE ~ NA_real_
     )
   ) %>%
@@ -245,7 +254,7 @@ dataset_vignette(
 
 At this step, we stage the `EX` data. Filter the data as desired to match 
 the `IS` analyte(s). As with the `IS` dataset staging, `DRUG` is also assigned as a common merge variable.
-As with `IS` dataset, `NFRLT` is assigned using `VISITDY` (or could substitute parsed `EX.VISIT` values).
+`NFRLT` is assigned to the `EX` data from `EX.VISITDY` using `derive_var_nfrlt()`.
 
 Assign `ASTDTM` using `EX.EXSTDTC`. As previously described with `IS.ISDTC`, if `EX.EXSTDTC` is missing 
 the time part, "00:00" is used for the imputation. Individual companies and studies may have custom imputation
@@ -274,9 +283,17 @@ ex_dates <- ex %>%
       str_detect(toupper(EXTRT), "PLACEBO") ~ "XANOMELINE",
       str_detect(toupper(EXTRT), "OTHER_DRUG") ~ "OTHER_DRUG",
       TRUE ~ NA_character_
-    ),
-    # Compute Nominal Time
-    NFRLT = VISITDY - 1
+    )
+  ) %>%
+  # Assign nominal time to NFRLT
+  # Units for this ADAB sample will be Days, divide result by 24
+  derive_var_nfrlt(
+    new_var = NFRLT,
+    visit_day = VISITDY,
+    treatment_duration = 0
+  ) %>%
+  mutate(
+    NFRLT = if_else(!is.na(NFRLT), NFRLT / 24, NA_real_)
   ) %>%
   # Add analysis datetime variables and set missing end date to start date
   # Impute missing time to 00:00:00 or as desired.
@@ -553,7 +570,7 @@ base_data <- is_result_change %>%
 dataset_vignette(
   is_result_change,
   display_vars = exprs(
-    USUBJID, ADATYPE, ADAPARM, VISIT, NFRLT, RESULTN, RESULTC, AVAL, AVALC, ABLFL, 
+    USUBJID, ADATYPE, ADAPARM, VISIT, NFRLT, RESULTN, RESULTC, AVAL, AVALC, ABLFL,
     BASE, CHG, BASE_RESULT
   )
 )
@@ -975,7 +992,8 @@ main_aab <- main_aab_rtimes %>%
 ```{r, eval=TRUE, echo=FALSE}
 dataset_vignette(
   main_aab,
-  display_vars = exprs( USUBJID, VISIT, ADATYPE, ADAPARM, MRT, DTL, ABLFL, ADABLPFL, ADPBLPFL,
+  display_vars = exprs(
+    USUBJID, VISIT, ADATYPE, ADAPARM, MRT, DTL, ABLFL, ADABLPFL, ADPBLPFL,
     NFRLT, AFRLT, RESULTC, RESULTN, ISSTRESC, ISSTRESN, AVALC, AVAL, AVALU, BASE, BFLAG, TFLAG,
     PBFLAG, ADASTAT, ADASTAT_MAIN, NABSTAT, ADADUR, TIMADA, TRANADA, PERSADA
   )
@@ -1484,8 +1502,7 @@ adab_study <- adab_study %>%
 ```{r, eval=TRUE, echo=FALSE}
 dataset_vignette(
   adab_study,
-  display_vars = exprs( USUBJID, VISIT, ADATYPE, ADAPARM, ABLFL, PARAMCD, PARAM, AVAL, AVALC, AVALU
-  )
+  display_vars = exprs(USUBJID, VISIT, ADATYPE, ADAPARM, ABLFL, PARAMCD, PARAM, AVAL, AVALC, AVALU)
 )
 ```
 
@@ -1609,8 +1626,7 @@ adab_prefinal <- adab_params %>%
 ```{r, eval=TRUE, echo=FALSE}
 dataset_vignette(
   adab_study,
-  display_vars = exprs( USUBJID, VISIT, ABLFL, PARCAT1, PARAMCD, PARAM, AVAL, AVALC, AVALU
-  )
+  display_vars = exprs(USUBJID, VISIT, ABLFL, PARCAT1, PARAMCD, PARAM, AVAL, AVALC, AVALU)
 )
 ```
 
