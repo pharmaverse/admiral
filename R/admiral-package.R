@@ -26,7 +26,7 @@
 #'             str_length str_locate str_locate_all str_match str_remove
 #'             str_remove_all str_replace str_replace_all str_split str_starts
 #'             str_sub str_subset str_to_lower str_to_title str_to_upper
-#'             str_trim
+#'             str_trim regex
 #' @importFrom tidyr crossing drop_na fill nest pivot_longer pivot_wider unnest
 #' @importFrom tidyselect all_of any_of contains matches vars_select
 #' @importFrom utils capture.output file.edit object.size str

@@ -2,6 +2,9 @@
 
 ## New Features
 
+- Added experimental function `derive_var_nfrlt()` to derive `NFRLT` from timepoint and visit (e.g. `VISITDY` and `PCTPT`) (#2929).
+
+- Added experimental function `convert_xxtpt_to_hours()` to parse timepoint values (e.g. `PCTPT`, `EGTPT`, `VSTPT`) into hours (#2916).
 - New experimental ADAB template script available `ad_adab.R` which creates Anti-drug 
 Antibody Analysis Dataset (#2805). 
 
