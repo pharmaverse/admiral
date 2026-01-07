@@ -1,5 +1,8 @@
 #' Convert `XXTPT` Strings to Hours
 #'
+#' @description
+#' `r lifecycle::badge("experimental")`
+#'
 #' Converts CDISC timepoint strings (e.g., `PCTPT`, `VSTPT`, `EGTPT`,
 #' `ISTPT`, `LBTPT`) into numeric hours for analysis. The function handles
 #' common dose-centric formats including pre-dose, post-dose (hours/minutes),
@@ -32,44 +35,45 @@
 #' The function recognizes the following patterns (all case-insensitive):
 #'
 #' **Special Cases:**
-#' * `"Screening"` → 0
+#' * `"Screening"` -> 0
 #' * `"Pre-dose"`, `"Predose"`, `"Pre-treatment"`, `"Pre-infusion"`,
-#'   `"Pre-inf"`, `"Before"`, `"Infusion"`, `"0H"` → 0
+#'   `"Pre-inf"`, `"Before"`, `"Infusion"`, `"0H"` -> 0
 #' * `"EOI"`, `"EOT"`, `"End of Infusion"`, `"End of Treatment"`,
-#'   `"After End of Infusion"`, `"After End of Treatment"` → `treatment_duration`
+#'   `"After End of Infusion"`, `"After End of Treatment"` -> `treatment_duration`
 #'   (default: 0)
-#' * `"Morning"`, `"Evening"` → `NA_real_`
-#' * Unrecognized values → `NA_real_`
+#' * `"Morning"`, `"Evening"` -> `NA_real_`
+#' * Unrecognized values -> `NA_real_`
 #'
 #' **Time Ranges:**
 #' Time ranges are converted based on the `range_method` parameter:
-#' * `"0-6h Post-dose"` with `range_method = "midpoint"` (default) → 3
-#' * `"0-6h Post-dose"` with `range_method = "start"` → 0
-#' * `"0-6h Post-dose"` with `range_method = "end"` → 6
-#' * `"0-4H PRIOR START OF INFUSION"` with midpoint → -2 (negative for prior)
-#' * `"8-16H POST START OF INFUSION"` with midpoint → 12
-#' * `"0-4H AFTER EOI"` with midpoint and treatment_duration=1 → 3 (1 + 2)
-#' * `"0-4H EOT"` with midpoint and treatment_duration=0 → 2
-#' * `"4-8H AFTER END OF INFUSION"` with midpoint and treatment_duration=1 → 7 (1 + 6)
-#' * `"4-8H POST INFUSION"` with midpoint and treatment_duration=1 → 7 (1 + 6)
-#' * `"4-8H POST-INF"` with midpoint and treatment_duration=1 → 7 (1 + 6)
+#' * `"0-6h Post-dose"` with `range_method = "midpoint"` (default) -> 3
+#' * `"0-6h Post-dose"` with `range_method = "start"` -> 0
+#' * `"0-6h Post-dose"` with `range_method = "end"` -> 6
+#' * `"0-4H PRIOR START OF INFUSION"` with midpoint -> -2 (negative for prior)
+#' * `"8-16H POST START OF INFUSION"` with midpoint -> 12
+#' * `"0-4H AFTER EOI"` with midpoint and treatment_duration=1 -> 3 (1 + 2)
+#' * `"0-4H EOT"` with midpoint and treatment_duration=0 -> 2
+#' * `"4-8H AFTER END OF INFUSION"` with midpoint and treatment_duration=1 -> 7 (1 + 6)
+#' * `"4-8H POST INFUSION"` with midpoint and treatment_duration=1 -> 7 (1 + 6)
+#' * `"4-8H POST-INF"` with midpoint and treatment_duration=1 -> 7 (1 + 6)
 #'
 #' **Time-based Conversions:**
-#' * **Days**: `"Day 1"` → 24, `"2D"` → 48, `"30 DAYS AFTER LAST"` → 720
-#' * **Hours + Minutes**: `"1H30M"` → 1.5
-#' * **Hours**: `"2 hours"` → 2, `"1 HOUR POST"` → 1
-#' * **Minutes**: `"30M"` → 0.5, `"30 MIN POST"` → 0.5
-#' * **Predose**: `"5 MIN PREDOSE"` → -0.0833, `"5 MIN PRE-DOSE"` → -0.0833
-#' * **Before treatment**: `"5 MIN BEFORE"` → -0.0833
-#' * **Post EOI/EOT**: `"1 HOUR POST EOI"` → treatment_duration + 1,
-#'   `"24 HR POST INF"` → treatment_duration + 24,
-#'   `"24 HR POST-INF"` → treatment_duration + 24,
-#'   `"1 HOUR AFTER EOT"` → treatment_duration + 1
-#' * **After end**: `"30MIN AFTER END OF INFUSION"` → treatment_duration + 0.5
-#' * **Start of infusion/treatment**: `"8H PRIOR START OF INFUSION"` → -8,
-#'   `"8H BEFORE START OF TREATMENT"` → -8
-#' * **Pre EOI/EOT**: `"10MIN PRE EOI"` → treatment_duration - 1/6,
-#'   `"10MIN BEFORE EOT"` → treatment_duration - 1/6
+#' * **Days**: `"Day 1"` -> 24, `"2D"` -> 48, `"30 DAYS AFTER LAST"` -> 720
+#'   (requires unit indicator; bare numbers like `"2"` return `NA`)
+#' * **Hours + Minutes**: `"1H30M"` -> 1.5
+#' * **Hours**: `"2 hours"` -> 2, `"1 HOUR POST"` -> 1
+#' * **Minutes**: `"30M"` -> 0.5, `"30 MIN POST"` -> 0.5
+#' * **Predose**: `"5 MIN PREDOSE"` -> -0.0833, `"5 MIN PRE-DOSE"` -> -0.0833
+#' * **Before treatment**: `"5 MIN BEFORE"` -> -0.0833
+#' * **Post EOI/EOT**: `"1 HOUR POST EOI"` -> treatment_duration + 1,
+#'   `"24 HR POST INF"` -> treatment_duration + 24,
+#'   `"24 HR POST-INF"` -> treatment_duration + 24,
+#'   `"1 HOUR AFTER EOT"` -> treatment_duration + 1
+#' * **After end**: `"30MIN AFTER END OF INFUSION"` -> treatment_duration + 0.5
+#' * **Start of infusion/treatment**: `"8H PRIOR START OF INFUSION"` -> -8,
+#'   `"8H BEFORE START OF TREATMENT"` -> -8
+#' * **Pre EOI/EOT**: `"10MIN PRE EOI"` -> treatment_duration - 1/6,
+#'   `"10MIN BEFORE EOT"` -> treatment_duration - 1/6
 #'
 #' **Supported Unit Formats:**
 #' * Hours: H, h, HR, hr, HOUR, hour (with optional plurals)
@@ -85,15 +89,15 @@
 #' versus treatment **end**:
 #'
 #' * **Relative to START** (treatment_duration NOT added):
-#'   - `"1H POST"`, `"1H AFTER"`, `"30M POST"` → Time from dose/treatment start
+#'   - `"1H POST"`, `"1H AFTER"`, `"30M POST"` -> Time from dose/treatment start
 #'   - These patterns assume treatment starts at time 0
-#'   - Example: `"1H POST"` → 1 hour (regardless of treatment_duration)
+#'   - Example: `"1H POST"` -> 1 hour (regardless of treatment_duration)
 #'
 #' * **Relative to END** (treatment_duration IS added):
-#'   - `"1H POST EOI"`, `"1H AFTER EOT"`, `"1H POST INFUSION"` → Time from
+#'   - `"1H POST EOI"`, `"1H AFTER EOT"`, `"1H POST INFUSION"` -> Time from
 #'     treatment end
 #'   - These patterns account for when treatment ends (start + duration)
-#'   - Example: `"1H POST EOI"` with treatment_duration=2 → 3 hours (2 + 1)
+#'   - Example: `"1H POST EOI"` with treatment_duration=2 -> 3 hours (2 + 1)
 #'
 #' This distinction follows standard pharmacokinetic conventions where "post-dose"
 #' refers to time from treatment initiation, while "post end of infusion" refers
@@ -287,11 +291,11 @@ convert_xxtpt_to_hours <- function(xxtpt,
 #'
 #' @details
 #' Recognizes and converts the following patterns:
-#' * "Screening" → 0
+#' * "Screening" -> 0
 #' * "Pre-dose", "Predose", "Pre-treatment", "Pre-infusion", "Pre-inf",
-#'   "Before", "Infusion", "0H" → 0
+#'   "Before", "Infusion", "0H" -> 0
 #' * "EOI", "EOT", "End of Infusion", "End of Treatment",
-#'   "After End of Infusion", "After End of Treatment" → treatment_duration
+#'   "After End of Infusion", "After End of Treatment" -> treatment_duration
 #'
 #' Only updates result for positions where result is currently NA and xxtpt is not NA.
 #'
@@ -323,6 +327,29 @@ convert_special_cases <- function(xxtpt, result, na_idx, treatment_duration) {
   result
 }
 
+#' Convert Time Unit Patterns
+#'
+#' Converts days and hours+minutes combination patterns to numeric hours.
+#'
+#' @param xxtpt Character vector of timepoint descriptions (trimmed, no leading/
+#'   trailing whitespace)
+#' @param result Numeric vector of results (partially filled, may contain NA)
+#' @param na_idx Logical vector indicating which positions in xxtpt are NA
+#'
+#' @details
+#' Recognizes and converts the following patterns:
+#' * Days: "Day 1" -> 24, "2D" -> 48, "2 days" -> 48, "30 DAYS AFTER LAST" -> 720
+#'   Requires at least one unit indicator (day prefix, d/day/days suffix, or
+#'   contextual suffix). Bare numbers without units (e.g., "2") are not
+#'   interpreted as days to avoid ambiguity.
+#' * Hours+minutes: "1H30M" -> 1.5, "2HR15MIN" -> 2.25
+#'
+#' Only updates result for positions where result is currently NA and xxtpt is not NA.
+#'
+#' @return Updated numeric vector with time unit patterns converted to hours
+#'
+#' @keywords internal
+#' @noRd
 convert_time_units <- function(xxtpt, result, na_idx) {
   # Days - require at least one unit indicator to avoid ambiguity
   # Matches: "Day 1", "2D", "2 days", "30 DAYS AFTER LAST", "2 POST-DOSE"
@@ -387,9 +414,9 @@ convert_time_units <- function(xxtpt, result, na_idx) {
 #'
 #' @details
 #' Recognizes and converts the following range patterns:
-#' * Ranges with direction: "0-4H PRIOR START OF INFUSION" → -2 (with midpoint),
-#'   "0-4H BEFORE START OF TREATMENT" → -2 (with midpoint)
-#' * Simple ranges: "0-6h Post-dose" → 3 (with midpoint)
+#' * Ranges with direction: "0-4H PRIOR START OF INFUSION" -> -2 (with midpoint),
+#'   "0-4H BEFORE START OF TREATMENT" -> -2 (with midpoint)
+#' * Simple ranges: "0-6h Post-dose" -> 3 (with midpoint)
 #'
 #' Direction affects sign: "PRIOR/BEFORE" results in negative values, "POST/AFTER"
 #' in positive. Accepts both "INFUSION" and "TREATMENT" terminology.
@@ -490,16 +517,16 @@ calculate_range_value <- function(start_val, end_val, range_method) {
 #'
 #' @details
 #' Recognizes and converts the following range patterns:
-#' * "0-4H AFTER EOI" → treatment_duration + range_value
-#' * "0-4H POST EOI" → treatment_duration + range_value
-#' * "0-4H EOI" → treatment_duration + range_value
-#' * "0-4H AFTER EOT" → treatment_duration + range_value
-#' * "0-4H EOT" → treatment_duration + range_value
-#' * "4-8H AFTER END OF INFUSION" → treatment_duration + range_value
-#' * "4-8H AFTER END OF TREATMENT" → treatment_duration + range_value
-#' * "4-8H POST INFUSION" → treatment_duration + range_value
-#' * "4-8H POST INF" → treatment_duration + range_value
-#' * "4-8H POST-INF" → treatment_duration + range_value
+#' * "0-4H AFTER EOI" -> treatment_duration + range_value
+#' * "0-4H POST EOI" -> treatment_duration + range_value
+#' * "0-4H EOI" -> treatment_duration + range_value
+#' * "0-4H AFTER EOT" -> treatment_duration + range_value
+#' * "0-4H EOT" -> treatment_duration + range_value
+#' * "4-8H AFTER END OF INFUSION" -> treatment_duration + range_value
+#' * "4-8H AFTER END OF TREATMENT" -> treatment_duration + range_value
+#' * "4-8H POST INFUSION" -> treatment_duration + range_value
+#' * "4-8H POST INF" -> treatment_duration + range_value
+#' * "4-8H POST-INF" -> treatment_duration + range_value
 #'
 #' With midpoint method, "0-4H AFTER EOI" with treatment_duration=1 gives
 #' 1 + 2 = 3.
@@ -583,9 +610,9 @@ convert_treatment_patterns <- function(xxtpt, result, na_idx, treatment_duration
 #'
 #' @details
 #' Recognizes patterns like:
-#' * "5 MIN PREDOSE" → -0.0833 (negative 5 minutes)
-#' * "5 MIN PRE-DOSE" → -0.0833 (negative 5 minutes)
-#' * "1 HOUR BEFORE" → -1 (negative 1 hour)
+#' * "5 MIN PREDOSE" -> -0.0833 (negative 5 minutes)
+#' * "5 MIN PRE-DOSE" -> -0.0833 (negative 5 minutes)
+#' * "1 HOUR BEFORE" -> -1 (negative 1 hour)
 #'
 #' Returns negative values to indicate time before dose/treatment.
 #'
@@ -635,14 +662,14 @@ convert_predose_patterns <- function(xxtpt, result, na_idx) {
 #'
 #' @details
 #' Recognizes all variations of post-end patterns:
-#' * "1 HOUR POST EOI" → treatment_duration + 1
-#' * "30 MIN AFTER EOT" → treatment_duration + 0.5
-#' * "24 HR POST INF" → treatment_duration + 24
-#' * "24 HR POST-INF" → treatment_duration + 24
-#' * "1 HOUR POST INFUSION" → treatment_duration + 1
-#' * "1 HOUR POST-INFUSION" → treatment_duration + 1
-#' * "30MIN AFTER END OF INFUSION" → treatment_duration + 0.5
-#' * "1 HOUR AFTER END OF TREATMENT" → treatment_duration + 1
+#' * "1 HOUR POST EOI" -> treatment_duration + 1
+#' * "30 MIN AFTER EOT" -> treatment_duration + 0.5
+#' * "24 HR POST INF" -> treatment_duration + 24
+#' * "24 HR POST-INF" -> treatment_duration + 24
+#' * "1 HOUR POST INFUSION" -> treatment_duration + 1
+#' * "1 HOUR POST-INFUSION" -> treatment_duration + 1
+#' * "30MIN AFTER END OF INFUSION" -> treatment_duration + 0.5
+#' * "1 HOUR AFTER END OF TREATMENT" -> treatment_duration + 1
 #'
 #' Adds treatment_duration because these patterns describe time AFTER the end of
 #' treatment, so total time from treatment start includes the treatment duration
@@ -692,10 +719,10 @@ convert_post_end_patterns <- function(xxtpt, result, na_idx, treatment_duration)
 #'
 #' @details
 #' Recognizes patterns like:
-#' * "8H PRIOR START OF INFUSION" → -8
-#' * "8H BEFORE START OF TREATMENT" → -8
-#' * "8H POST START OF INFUSION" → 8
-#' * "8H AFTER START OF TREATMENT" → 8
+#' * "8H PRIOR START OF INFUSION" -> -8
+#' * "8H BEFORE START OF TREATMENT" -> -8
+#' * "8H POST START OF INFUSION" -> 8
+#' * "8H AFTER START OF TREATMENT" -> 8
 #'
 #' Direction affects sign: "PRIOR/BEFORE" results in negative values,
 #' "POST/AFTER" in positive. Accepts both "INFUSION" and "TREATMENT" terminology.
@@ -742,7 +769,7 @@ convert_start_patterns <- function(xxtpt, result, na_idx) {
 #'
 #' @details
 #' Recognizes patterns like:
-#' * "60 MIN AFTER START INF" → 1
+#' * "60 MIN AFTER START INF" -> 1
 #'
 #' Converts minutes to hours by dividing by 60.
 #'
@@ -783,8 +810,8 @@ convert_min_after_start <- function(xxtpt, result, na_idx) {
 #'
 #' @details
 #' Recognizes patterns like:
-#' * "10MIN PRE EOI" → treatment_duration - 1/6
-#' * "10MIN BEFORE EOT" → treatment_duration - 1/6
+#' * "10MIN PRE EOI" -> treatment_duration - 1/6
+#' * "10MIN BEFORE EOT" -> treatment_duration - 1/6
 #'
 #' Returns treatment_duration minus the specified time to indicate time before
 #' end of treatment. For example, with treatment_duration = 2 hours, "10MIN PRE EOI"
@@ -827,8 +854,8 @@ convert_min_pre_eot <- function(xxtpt, result, na_idx, treatment_duration) {
 #'
 #' @details
 #' Recognizes and converts:
-#' * Hours only: "1H", "2 hours", "4hr Post-dose", "4hr After-dose" → 1, 2, 4, 4
-#' * Minutes only: "30M", "45 min", "30 MIN POST", "30 MIN AFTER" → 0.5, 0.75, 0.5, 0.5
+#' * Hours only: "1H", "2 hours", "4hr Post-dose", "4hr After-dose" -> 1, 2, 4, 4
+#' * Minutes only: "30M", "45 min", "30 MIN POST", "30 MIN AFTER" -> 0.5, 0.75, 0.5, 0.5
 #'
 #' Processes hours first, then minutes. This function is called last to avoid
 #' matching patterns that should be handled by more specific functions.

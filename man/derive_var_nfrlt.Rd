@@ -98,6 +98,8 @@ dataset.
 The input dataset with the new nominal relative time variable added.
 }
 \description{
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
+
 Derives nominal/planned time from first dose in hours by combining visit day
 information with timepoint descriptions. The function converts timepoint
 strings to hours using \code{convert_xxtpt_to_hours()} and adds them to the
@@ -125,18 +127,18 @@ for this by adjusting the day offset when \code{visit_day} is negative and
 
 For example, with \code{first_dose_day = 1}:
 \itemize{
-\item Day -1 → -24 hours (1 day before Day 1, not 2 days)
-\item Day -7 → -168 hours (7 days before Day 1)
-\item Day 1 → 0 hours (first dose day)
-\item Day 8 → 168 hours (7 days after Day 1)
+\item Day -1 -> -24 hours (1 day before Day 1, not 2 days)
+\item Day -7 -> -168 hours (7 days before Day 1)
+\item Day 1 -> 0 hours (first dose day)
+\item Day 8 -> 168 hours (7 days after Day 1)
 }
 
 With \code{first_dose_day = 7}:
 \itemize{
-\item Day -1 → -168 hours (7 days before Day 7, accounting for no Day 0)
-\item Day 1 → -144 hours (6 days before Day 7)
-\item Day 6 → -24 hours (1 day before Day 7)
-\item Day 7 → 0 hours (first dose day)
+\item Day -1 -> -168 hours (7 days before Day 7, accounting for no Day 0)
+\item Day 1 -> -144 hours (6 days before Day 7)
+\item Day 6 -> -24 hours (1 day before Day 7)
+\item Day 7 -> 0 hours (first dose day)
 }
 
 \strong{Common Use Cases:}
