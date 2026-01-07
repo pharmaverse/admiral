@@ -5,6 +5,10 @@
 - New vignette "Explore ADaM Templates" added under the "Get Started" section to allow users to peruse the `{admiral}`
 ADaM templates directly from the documentation website. (#2935)
 
+- Added experimental function `derive_var_nfrlt()` to derive `NFRLT` from timepoint and visit (e.g. `VISITDY` and `PCTPT`) (#2929).
+
+- Added experimental function `convert_xxtpt_to_hours()` to parse timepoint values (e.g. `PCTPT`, `EGTPT`, `VSTPT`) into hours (#2916).
+
 - New experimental ADAB template script available `ad_adab.R` which creates Anti-drug 
 Antibody Analysis Dataset (#2805). 
 
@@ -82,6 +86,7 @@ and receive answers from an LLM. It is trained on the documentation of both pack
 - For `derive_vars_dt()`, clarify `highest_imputation` definitions and expand date examples. (#2841)
 - The documentation was enhanced: (#2585)
     - For `derive_locf_records()`, each example now has a title (which is also shown in the TOC) and a description, improving readability. (#2889)
+    - For `derive_vars_cat()`, each example now has a title (which is also shown in the TOC) and a description, improving readability. (#2701)
 
 ## Various
 
