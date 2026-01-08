@@ -5,6 +5,7 @@
 - Added experimental function `derive_var_nfrlt()` to derive `NFRLT` from timepoint and visit (e.g. `VISITDY` and `PCTPT`) (#2929).
 
 - Added experimental function `convert_xxtpt_to_hours()` to parse timepoint values (e.g. `PCTPT`, `EGTPT`, `VSTPT`) into hours (#2916).
+
 - New experimental ADAB template script available `ad_adab.R` which creates Anti-drug 
 Antibody Analysis Dataset (#2805). 
 
@@ -71,15 +72,23 @@ to work with a deprecation message until the beginning of 2027. (#1858)
 
 - The lab grading vignette has been updated with examples for NCI-CTCAE version 6.0 criteria, including 
 usage of the new `low_indicator` and `high_indicator` arguments. (#1858)
+
 - The "Ask AI" widget was added to the bottom right of each page. It enables users to ask questions about `{admiral}` and `{admiraldev}` 
 and receive answers from an LLM. It is trained on the documentation of both packages and provided by 
 [kapa.ai](https://docs.kapa.ai/kapa-for-open-source). (#2887)
+
 - The BDS Findings vignette was updated to move derivation of `ASEQ` after any new rows. (#2780)
+
 - `ADLBHY` template was updated to keep `PARAM` in final dataset. (#2804)
+
 - A link to the [{admiral} ecosystem](https://pharmaverse.org/e2eclinical/adam/) page was added to the README sidebar and main text. (#2881)
+
 - The ADSL template and vignette were updated to add derivation of analysis age (`AAGE`/`AAGEU`) using `derive_vars_aage()`. This includes deriving birth date (`BRTHDT`) from birth date character variable (`BRTHDTC`) using `derive_vars_dt()`. (#2584)
+
 - Standardized variable notation across documentation to use `--` for SDTM variables (e.g., `--DTC`) and `*` for ADaM variables (e.g., `*DTM`, `*DT`). (#2757)
+
 - For `derive_vars_dt()`, clarify `highest_imputation` definitions and expand date examples. (#2841)
+
 - The documentation was enhanced: (#2585)
     - For `derive_locf_records()`, each example now has a title (which is also shown in the TOC) and a description, improving readability. (#2889)
     - For `derive_vars_cat()`, each example now has a title (which is also shown in the TOC) and a description, improving readability. (#2701)
