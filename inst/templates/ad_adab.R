@@ -243,16 +243,8 @@ is_aval <- is_basetype %>%
       TRUE ~ NA_real_
     ),
     AVALC = case_when(
-      # NABSTAT gets ISSTRESC, Standard ADA is special rules when non NEGATIVE results
+      # NABSTAT gets ISSTRESC, Standard ADA is set to NA as AVAL are numeric original results
       ADATYPE == "ADA_NAB" ~ ISSTRESC,
-      toupper(RESULTC) == "POSITIVE" & ADATYPE == "ADA_BAB" & !is.na(ISSTRESN) ~
-        as.character(ISSTRESN),
-      toupper(RESULTC) == "POSITIVE" & ADATYPE == "ADA_BAB" & is.na(ISSTRESN) &
-        (str_detect(ISSTRESC, "<") | str_detect(toupper(ISSTRESC), "NEGATIVE TITER")) &
-        !is.na(MRT) ~ paste("<", as.character(MRT), sep = ""),
-      # If positive with no numeric ISSTRESN set to N.C.
-      toupper(RESULTC) == "POSITIVE" & ADATYPE == "ADA_BAB" ~ "N.C.",
-      toupper(RESULTC) == "NEGATIVE" & ADATYPE == "ADA_BAB" ~ NA_character_,
       TRUE ~ NA_character_
     ),
     AVALU = case_when(

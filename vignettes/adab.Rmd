@@ -405,10 +405,9 @@ be sponsor specific as applicable, starter values are supplied to demonstrate). 
 as the numeric version of `RESULTC`. `RESULTN` and `RESULTC` are precursors to `AVAL` and `AVALC` and 
 will serve as interim variables to facilitate progression of the program and its derivations.
 
-When `IS.ISSTRESC` is "POSITIVE", `IS.ISSTRESN` is commonly populated with values >0. 
+When `IS.ISSTRESC` is "POSITIVE", `IS.ISSTRESN` is commonly populated with values > 0. 
 However, if `ISSTRESC` is "POSITIVE" with a missing `IS.ISSTRESN`, this template provides
-a method to assign `AVAL` using the assigned MRT value, sets `AVALC` to "N.C." (Not Calculable)
-and documents the operation by setting `DTYPE = "MRT"`.  
+a method to assign `AVAL` using the assigned MRT value and documents the operation by setting `DTYPE = "MRT"`.  
 
 If your `IS` dataset has additional sponsor specific tests kept and suitable for this template, 
 adjust or expand variable assignments in this step accordingly.
@@ -451,16 +450,8 @@ is_aval <- is_basetype %>%
       TRUE ~ NA_real_
     ),
     AVALC = case_when(
-      # NABSTAT gets ISSTRESC, Standard ADA is special rules when non NEGATIVE results
+      # NABSTAT gets ISSTRESC, Standard ADA is set to NA as AVAL are numeric original results
       ADATYPE == "ADA_NAB" ~ ISSTRESC,
-      toupper(RESULTC) == "POSITIVE" & ADATYPE == "ADA_BAB" & !is.na(ISSTRESN) ~
-        as.character(ISSTRESN),
-      toupper(RESULTC) == "POSITIVE" & ADATYPE == "ADA_BAB" & is.na(ISSTRESN) &
-        (str_detect(ISSTRESC, "<") | str_detect(toupper(ISSTRESC), "NEGATIVE TITER")) &
-        !is.na(MRT) ~ paste("<", as.character(MRT), sep = ""),
-      # If positive with no numeric ISSTRESN set to N.C.
-      toupper(RESULTC) == "POSITIVE" & ADATYPE == "ADA_BAB" ~ "N.C.",
-      toupper(RESULTC) == "NEGATIVE" & ADATYPE == "ADA_BAB" ~ NA_character_,
       TRUE ~ NA_character_
     ),
     AVALU = case_when(
