@@ -1165,8 +1165,8 @@ adab_cohort <- adab_adsl %>%
     by_vars = exprs(STUDYID, USUBJID)
   )
 
-# Compute ADAFL
-# Other method could be ADSL.SAFFL, ADAB.ADPBLPFL by ISTESTCD, etc.
+# Compute optional ADAFL
+# Method could be ADSL.SAFFL, ADAB.ADPBLPFL by ISTESTCD, etc.
 adab_adafl <- adab_cohort %>%
   derive_vars_merged(
     dataset_add = adsl,
