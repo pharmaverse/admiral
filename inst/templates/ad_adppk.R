@@ -67,8 +67,14 @@ pc_dates <- pc %>%
   # Derive event ID and nominal relative time from first dose (NFRLT)
   mutate(
     EVID = 0,
-    DRUG = PCTEST,
-    NFRLT = if_else(PCTPTNUM < 0, 0, PCTPTNUM), .after = USUBJID
+    DRUG = PCTEST
+  ) %>%
+  derive_var_nfrlt(
+    new_var = NFRLT,
+    tpt_var = PCTPT,
+    visit_day = VISITDY,
+    treatment_duration = 0,
+    range_method = "midpoint"
   )
 
 # ---- Get dosing information ----
@@ -97,11 +103,11 @@ ex_dates <- ex %>%
   ) %>%
   # Derive event ID and nominal relative time from first dose (NFRLT)
   mutate(
-    EVID = 1,
-    NFRLT = case_when(
-      VISITDY == 1 ~ 0,
-      TRUE ~ 24 * VISITDY
-    )
+    EVID = 1
+  ) %>%
+  derive_var_nfrlt(
+    new_var = NFRLT,
+    visit_day = VISITDY
   ) %>%
   # Set missing end dates to start date
   mutate(AENDTM = case_when(
