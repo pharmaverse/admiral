@@ -38,6 +38,8 @@ home:
   links:
   - text: 🌍 {admiral} ecosystem 🌍
     href: https://pharmaverse.org/e2eclinical/adam/
+  - text: 🧭 ADaM templates 🧭
+    href: articles/templates.html
 
 authors:
   before: "We define *authors* as those who are actively maintaining the code base, and *contributors* as those who made a significant contribution in the past. For all acknowledgements, see the eponymous section in the [Home Page](https://pharmaverse.github.io/admiral/cran-release/)."
@@ -187,6 +189,8 @@ navbar:
         href: articles/admiral.html
       - text: Cheatsheet
         href: https://github.com/pharmaverse/admiral/blob/main/inst/cheatsheet/admiral_cheatsheet.pdf
+      - text: Explore ADaM Templates 🧭
+        href: articles/templates.html
       - text: Presentation Archive
         href: https://pharmaverse.github.io/admiraldiscovery/articles/presentation_archive.html
     reference:
