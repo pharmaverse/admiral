@@ -56,7 +56,7 @@ __NB:__ We strive for a regular 6 month release schedule for [{admiraldev}](http
 |                  |                                                                          | [{admiralneuro}](https://pharmaverse.github.io/admiralneuro/)          |
 |                  |                                                                          | [{pharmaverseadam}](https://pharmaverse.github.io/pharmaverseadam/)    |
 |                  |                                                                          |                                                                        | 
-| Q4 2026/Q1 2027  | Late December 2026/Early January 2027                                    |                                                                        |
+| Q4 2026/Q1 2027  | Late December 2026/Early January 2027                                    |  Mid-January 2027                                                                      |
 |                  | [{pharmaversesdtm}](https://pharmaverse.github.io/pharmaversesdtm/)      | [{admiralonco}](https://pharmaverse.github.io/admiralonco/)            |
 |                  | [{admiraldev}](https://pharmaverse.github.io/admiraldev/)                | [{admiralophtha}](https://pharmaverse.github.io/admiralophtha/)        |
 |                  | [{admiral}](https://pharmaverse.github.io/admiral/)                      | [{admiralvaccine}](https://pharmaverse.github.io/admiralvaccine/)      |
