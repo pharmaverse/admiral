@@ -18,6 +18,12 @@
 #'
 #' @permitted Unquoted variable name
 #'
+#' @param out_unit Unit of time for the output variable. Options are "hours"
+#'   (default), "days", "weeks", or "minutes". The internal calculation is
+#'   performed in hours, then converted to the specified unit.
+#'
+#' @permitted Character scalar ("hours", "days", "weeks", or "minutes")
+#'
 #' @param tpt_var Timepoint variable containing descriptions like "Pre-dose",
 #'   "1H Post-dose", etc. (unquoted). If not provided or if the variable doesn't
 #'   exist in the dataset, only the visit day offset is calculated (timepoint
@@ -63,13 +69,18 @@
 #' @details
 #' The nominal relative time is calculated as:
 #'
-#' `NFRLT = day_offset * 24 + timepoint_hours`
+#' `NFRLT = (day_offset * 24 + timepoint_hours) * conversion_factor`
 #'
 #' Where:
 #' * `day_offset` is calculated from `visit_day` and `first_dose_day`, accounting
 #'   for the absence of Day 0 in clinical trial convention
 #' * `timepoint_hours` is derived from the timepoint description using
 #'   `convert_xxtpt_to_hours()`, or 0 if `tpt_var` is not provided
+#' * `conversion_factor` is:
+#'   - 1 for "hours" (default)
+#'   - 1/24 for "days"
+#'   - 1/168 for "weeks" (1/24/7)
+#'   - 60 for "minutes"
 #'
 #' **Handling "No Day 0":**
 #'
@@ -78,17 +89,20 @@
 #' for this by adjusting the day offset when `visit_day` is negative and
 #' `first_dose_day` is positive.
 #'
-#' For example, with `first_dose_day = 1`:
-#' * Day -1 -> -24 hours (1 day before Day 1, not 2 days)
-#' * Day -7 -> -168 hours (7 days before Day 1)
-#' * Day 1 -> 0 hours (first dose day)
-#' * Day 8 -> 168 hours (7 days after Day 1)
+#' For example, with `first_dose_day = 1` and different output units:
+#' * Day -1, `out_unit = "hours"` -> -24 hours
+#' * Day -1, `out_unit = "days"` -> -1 day
+#' * Day -1, `out_unit = "weeks"` -> -0.1429 weeks
+#' * Day -1, `out_unit = "minutes"` -> -1440 minutes
+#' * Day -7 -> -168 hours, -7 days, -1 week, or -10080 minutes
+#' * Day 1 -> 0 (in any unit, first dose day)
+#' * Day 8 -> 168 hours, 7 days, 1 week, or 10080 minutes
 #'
 #' With `first_dose_day = 7`:
-#' * Day -1 -> -168 hours (7 days before Day 7, accounting for no Day 0)
-#' * Day 1 -> -144 hours (6 days before Day 7)
-#' * Day 6 -> -24 hours (1 day before Day 7)
-#' * Day 7 -> 0 hours (first dose day)
+#' * Day -1 -> -168 hours, -7 days, -1 week, or -10080 minutes
+#' * Day 1 -> -144 hours, -6 days, -0.857 weeks, or -8640 minutes
+#' * Day 6 -> -24 hours, -1 day, -0.143 weeks, or -1440 minutes
+#' * Day 7 -> 0 (in any unit, first dose day)
 #'
 #' **Common Use Cases:**
 #'
@@ -110,6 +124,12 @@
 #'   unscheduled or early discontinuation visits
 #' * **Variable treatment durations**: Use a variable name (e.g., `EXDUR`) when
 #'   different subjects or visits have different treatment durations
+#' * **Hours output**: Use `out_unit = "hours"` (default) for variables like `NFRLT`
+#' * **Days output**: Use `out_unit = "days"` for variables like `NFRLTDY`
+#' * **Weeks output**: Use `out_unit = "weeks"` for long-term studies with
+#'   weekly dosing
+#' * **Minutes output**: Use `out_unit = "minutes"` for very short-term PK studies
+#'   or when minute precision is needed
 #'
 #' **Important Notes:**
 #'
@@ -131,6 +151,9 @@
 #'   is populated but should not be used for the NFRLT calculation
 #' * If `tpt_var` is not provided or doesn't exist in the dataset, timepoint
 #'   contribution is assumed to be 0 hours
+#' * When using non-hour units, timepoint contributions are still calculated in
+#'   hours first (e.g., "2H Post-dose" = 2 hours), then the entire result is
+#'   converted to the specified unit
 #'
 #' **Setting Special Values:**
 #'
@@ -180,6 +203,29 @@
 #'   visit_day = VISITDY
 #' )
 #'
+#' @caption Single dose study with different output units
+#' @info Deriving NFRLT in different time units
+#' @code
+#' adpc %>%
+#'   derive_var_nfrlt(
+#'     new_var = NFRLT,
+#'     out_unit = "hours",
+#'     tpt_var = PCTPT,
+#'     visit_day = VISITDY
+#'   ) %>%
+#'   derive_var_nfrlt(
+#'     new_var = NFRLTDY,
+#'     out_unit = "days",
+#'     tpt_var = PCTPT,
+#'     visit_day = VISITDY
+#'   ) %>%
+#'   derive_var_nfrlt(
+#'     new_var = NFRLTMIN,
+#'     out_unit = "minutes",
+#'     tpt_var = PCTPT,
+#'     visit_day = VISITDY
+#'   )
+#'
 #' @caption Study with screening visits
 #' @info Handling negative visit days (no Day 0 in clinical trials)
 #' @code
@@ -215,6 +261,62 @@
 #' derive_var_nfrlt(
 #'   adpc_md,
 #'   new_var = NFRLT,
+#'   tpt_var = PCTPT,
+#'   visit_day = VISITDY
+#' )
+#'
+#' @caption Multiple dose study with days output
+#' @info Deriving both NFRLT (hours) and NFRLTDY (days)
+#' @code
+#' adpc_md %>%
+#'   derive_var_nfrlt(
+#'     new_var = NFRLT,
+#'     tpt_var = PCTPT,
+#'     visit_day = VISITDY
+#'   ) %>%
+#'   derive_var_nfrlt(
+#'     new_var = NFRLTDY,
+#'     out_unit = "days",
+#'     tpt_var = PCTPT,
+#'     visit_day = VISITDY
+#'   )
+#'
+#' @caption Weekly dosing study
+#' @info Long-term study with weekly dosing, using weeks output
+#' @code
+#' adpc_weekly <- tribble(
+#'   ~USUBJID, ~VISITDY, ~PCTPT,
+#'   "001",    1,        "Pre-dose",
+#'   "001",    8,        "Pre-dose",
+#'   "001",    15,       "Pre-dose",
+#'   "001",    22,       "Pre-dose",
+#'   "001",    29,       "Pre-dose"
+#' )
+#'
+#' derive_var_nfrlt(
+#'   adpc_weekly,
+#'   new_var = NFRLTWK,
+#'   out_unit = "weeks",
+#'   tpt_var = PCTPT,
+#'   visit_day = VISITDY
+#' )
+#'
+#' @caption Short-term PK study with minutes
+#' @info Very short timepoints requiring minute precision
+#' @code
+#' adpc_short <- tribble(
+#'   ~USUBJID, ~VISITDY, ~PCTPT,
+#'   "001",    1,        "Pre-dose",
+#'   "001",    1,        "5 MIN POST",
+#'   "001",    1,        "15 MIN POST",
+#'   "001",    1,        "30 MIN POST",
+#'   "001",    1,        "1H POST"
+#' )
+#'
+#' derive_var_nfrlt(
+#'   adpc_short,
+#'   new_var = NFRLTMIN,
+#'   out_unit = "minutes",
 #'   tpt_var = PCTPT,
 #'   visit_day = VISITDY
 #' )
@@ -294,6 +396,25 @@
 #'   new_var = NFRLT,
 #'   visit_day = VISITDY
 #' )
+#'
+#' @caption Exposure records with different output units
+#' @info Deriving NFRLT in hours, days, and weeks for exposure records
+#' @code
+#' ex %>%
+#'   derive_var_nfrlt(
+#'     new_var = NFRLT,
+#'     visit_day = VISITDY
+#'   ) %>%
+#'   derive_var_nfrlt(
+#'     new_var = NFRLTDY,
+#'     out_unit = "days",
+#'     visit_day = VISITDY
+#'   ) %>%
+#'   derive_var_nfrlt(
+#'     new_var = NFRLTWK,
+#'     out_unit = "weeks",
+#'     visit_day = VISITDY
+#'   )
 #'
 #' @caption Unscheduled visits
 #' @info Setting NFRLT to NA for unscheduled visits
@@ -407,6 +528,7 @@
 #' )
 derive_var_nfrlt <- function(dataset,
                              new_var = NFRLT,
+                             out_unit = "hours",
                              tpt_var = NULL,
                              visit_day,
                              first_dose_day = 1,
@@ -417,6 +539,9 @@ derive_var_nfrlt <- function(dataset,
   tpt_var <- assert_symbol(enexpr(tpt_var), optional = TRUE)
   visit_day <- assert_symbol(enexpr(visit_day))
   set_values_to_na <- assert_filter_cond(enexpr(set_values_to_na), optional = TRUE)
+
+  # Validate out_unit
+  assert_character_scalar(out_unit, values = c("hours", "days", "weeks", "minutes"))
 
   # Check if tpt_var exists in dataset
   has_tpt_var <- !is.null(tpt_var) && as_name(tpt_var) %in% names(dataset)
@@ -471,6 +596,14 @@ derive_var_nfrlt <- function(dataset,
     tpt_hours <- rep(0, nrow(dataset))
   }
 
+  # Determine conversion factor for unit
+  conversion_factor <- switch(out_unit,
+    hours = 1,
+    days = 1 / 24,
+    weeks = 1 / 168,
+    minutes = 60
+  )
+
   # Calculate NFRLT
   # Handle "no Day 0" issue: when both visit_day and first_dose_day are on
   # opposite sides of 0, add 1 to account for the missing day
@@ -484,7 +617,7 @@ derive_var_nfrlt <- function(dataset,
         day_diff + 1,
         day_diff
       ),
-      !!new_var := day_diff_adjusted * 24 + tpt_hours
+      !!new_var := (day_diff_adjusted * 24 + tpt_hours) * conversion_factor
     ) %>%
     select(-day_diff, -day_diff_adjusted)
 

@@ -87,6 +87,7 @@ is_dates <- is %>%
   # Units for this ADAB sample will be Days, divide result by 24
   derive_var_nfrlt(
     new_var = NFRLT,
+    out_unit = "days",
     tpt_var = ISTPT,
     visit_day = VISITDY,
     treatment_duration = 0,
@@ -94,7 +95,6 @@ is_dates <- is %>%
   ) %>%
   mutate(
     NFRLT = case_when(
-      !is.na(NFRLT) ~ NFRLT / 24,
       str_detect(toupper(VISIT), "TREATMENT DISC") ~ 99997,
       str_detect(toupper(VISIT), "UNSCHED") ~ 99999,
       TRUE ~ NA_real_
@@ -145,11 +145,9 @@ ex_dates <- ex %>%
   # Units for this ADAB sample will be Days, divide result by 24
   derive_var_nfrlt(
     new_var = NFRLT,
+    out_unit = "days",
     visit_day = VISITDY,
     treatment_duration = 0
-  ) %>%
-  mutate(
-    NFRLT = if_else(!is.na(NFRLT), NFRLT / 24, NA_real_)
   ) %>%
   # Add analysis datetime variables and set missing end date to start date
   # Impute missing time to 00:00:00 or as desired.

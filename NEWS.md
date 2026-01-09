@@ -32,6 +32,9 @@ used in `set_values_to` which results in multiple records per by group. (#2872)
 - `derive_summary_records()` updated to allow constants to be provided under the 
 `constant_values` argument, which will be present in both summary and missing rows (#2668)
 
+- Updated new experimental function `derive_var_nfrlt()` to add `out_unit` parameter (#2942).
+
+
 ## Breaking Changes
 
 - In `derive_var_atoxgr_dir()`, the `abnormal_indicator` argument is deprecated and replaced with `low_indicator` 

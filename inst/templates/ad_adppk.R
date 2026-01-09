@@ -71,6 +71,7 @@ pc_dates <- pc %>%
   ) %>%
   derive_var_nfrlt(
     new_var = NFRLT,
+    out_unit = "hours",
     tpt_var = PCTPT,
     visit_day = VISITDY,
     treatment_duration = 0,
@@ -107,6 +108,7 @@ ex_dates <- ex %>%
   ) %>%
   derive_var_nfrlt(
     new_var = NFRLT,
+    out_unit = "hours",
     visit_day = VISITDY
   ) %>%
   # Set missing end dates to start date

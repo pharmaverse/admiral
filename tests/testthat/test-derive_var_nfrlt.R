@@ -920,3 +920,114 @@ test_that("derive_var_nfrlt Test 37: first_dose_day = 8 with mixed days", {
     c(-504, -336, -192, -168, -24, 0, 168)
   )
 })
+
+## Test 38: different output units ----
+test_that("derive_var_nfrlt: different output units work correctly", {
+  adpc <- tribble(
+    ~USUBJID, ~VISITDY, ~PCTPT,
+    "001",    1,        "Pre-dose",
+    "001",    1,        "12H Post-dose",
+    "001",    8,        "Pre-dose"
+  )
+
+  # Hours
+  result_hours <- derive_var_nfrlt(
+    adpc,
+    new_var = NFRLT,
+    out_unit = "hours",
+    tpt_var = PCTPT,
+    visit_day = VISITDY
+  )
+  expect_equal(result_hours$NFRLT, c(0, 12, 168))
+
+  # Days
+  result_days <- derive_var_nfrlt(
+    adpc,
+    new_var = NFRLTDY,
+    out_unit = "days",
+    tpt_var = PCTPT,
+    visit_day = VISITDY
+  )
+  expect_equal(result_days$NFRLTDY, c(0, 0.5, 7))
+
+  # Weeks
+  result_weeks <- derive_var_nfrlt(
+    adpc,
+    new_var = NFRLTWK,
+    out_unit = "weeks",
+    tpt_var = PCTPT,
+    visit_day = VISITDY
+  )
+  expect_equal(result_weeks$NFRLTWK, c(0, 12/168, 1))
+
+  # Minutes
+  result_min <- derive_var_nfrlt(
+    adpc,
+    new_var = NFRLTMIN,
+    out_unit = "minutes",
+    tpt_var = PCTPT,
+    visit_day = VISITDY
+  )
+  expect_equal(result_min$NFRLTMIN, c(0, 720, 10080))
+})
+
+## Test 39: invalid out_unit ----
+test_that("derive_var_nfrlt: invalid out_unit throws error", {
+  adpc <- tribble(
+    ~USUBJID, ~VISITDY, ~PCTPT,
+    "001",    1,        "Pre-dose"
+  )
+
+  expect_error(
+    derive_var_nfrlt(
+      adpc,
+      new_var = NFRLT,
+      out_unit = "seconds",
+      tpt_var = PCTPT,
+      visit_day = VISITDY
+    ),
+    class = "assert_character_scalar"
+  )
+})
+
+## Test 40: weeks output with weekly dosing ----
+test_that("derive_var_nfrlt: weeks output for weekly dosing study", {
+  adpc_weekly <- tribble(
+    ~USUBJID, ~VISITDY, ~PCTPT,
+    "001",    1,        "Pre-dose",
+    "001",    8,        "Pre-dose",
+    "001",    15,       "Pre-dose",
+    "001",    22,       "Pre-dose"
+  )
+
+  result <- derive_var_nfrlt(
+    adpc_weekly,
+    new_var = NFRLTWK,
+    out_unit = "weeks",
+    tpt_var = PCTPT,
+    visit_day = VISITDY
+  )
+
+  expect_equal(result$NFRLTWK, c(0, 1, 2, 3))
+})
+
+## Test 41: minutes output for short-term PK ----
+test_that("derive_var_nfrlt: minutes output for short-term PK study", {
+  adpc_short <- tribble(
+    ~USUBJID, ~VISITDY, ~PCTPT,
+    "001",    1,        "Pre-dose",
+    "001",    1,        "5 MIN POST",
+    "001",    1,        "15 MIN POST",
+    "001",    1,        "30 MIN POST"
+  )
+
+  result <- derive_var_nfrlt(
+    adpc_short,
+    new_var = NFRLTMIN,
+    out_unit = "minutes",
+    tpt_var = PCTPT,
+    visit_day = VISITDY
+  )
+
+  expect_equal(result$NFRLTMIN, c(0, 5, 15, 30))
+})
