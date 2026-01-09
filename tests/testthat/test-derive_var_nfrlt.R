@@ -958,7 +958,7 @@ test_that("derive_var_nfrlt: different output units work correctly", {
     tpt_var = PCTPT,
     visit_day = VISITDY
   )
-  expect_equal(result_weeks$NFRLTWK, c(0, 12/168, 1))
+  expect_equal(result_weeks$NFRLTWK, c(0, 12 / 168, 1))
 
   # Minutes
   result_min <- derive_var_nfrlt(
