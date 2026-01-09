@@ -1226,23 +1226,33 @@ test_that("derive_var_nfrlt Test 48: out_unit is case-insensitive", {
 
   # Should all work (case-insensitive validation)
   expect_no_error(
-    derive_var_nfrlt(adpc, new_var = NFRLT, out_unit = "HOURS",
-                     tpt_var = PCTPT, visit_day = VISITDY)
+    derive_var_nfrlt(adpc,
+      new_var = NFRLT, out_unit = "HOURS",
+      tpt_var = PCTPT, visit_day = VISITDY
+    )
   )
   expect_no_error(
-    derive_var_nfrlt(adpc, new_var = NFRLT, out_unit = "Hours",
-                     tpt_var = PCTPT, visit_day = VISITDY)
+    derive_var_nfrlt(adpc,
+      new_var = NFRLT, out_unit = "Hours",
+      tpt_var = PCTPT, visit_day = VISITDY
+    )
   )
   expect_no_error(
-    derive_var_nfrlt(adpc, new_var = NFRLT, out_unit = "DAYS",
-                     tpt_var = PCTPT, visit_day = VISITDY)
+    derive_var_nfrlt(adpc,
+      new_var = NFRLT, out_unit = "DAYS",
+      tpt_var = PCTPT, visit_day = VISITDY
+    )
   )
   expect_no_error(
-    derive_var_nfrlt(adpc, new_var = NFRLT, out_unit = "Weeks",
-                     tpt_var = PCTPT, visit_day = VISITDY)
+    derive_var_nfrlt(adpc,
+      new_var = NFRLT, out_unit = "Weeks",
+      tpt_var = PCTPT, visit_day = VISITDY
+    )
   )
   expect_no_error(
-    derive_var_nfrlt(adpc, new_var = NFRLT, out_unit = "MINUTES",
-                     tpt_var = PCTPT, visit_day = VISITDY)
+    derive_var_nfrlt(adpc,
+      new_var = NFRLT, out_unit = "MINUTES",
+      tpt_var = PCTPT, visit_day = VISITDY
+    )
   )
 })
