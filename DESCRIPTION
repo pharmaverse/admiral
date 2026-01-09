@@ -19,8 +19,6 @@ Authors@R: c(
     person("Lina", "Patil", role = "aut"),
     person("Jim", "Rothstein", role = "aut",
            comment = c(ORCID = "0009-0009-8659-6071")),
-    person("Stefan", "Thoma", role = "aut",
-           comment = c(ORCID = "0000-0002-5553-9252")),
     person("F. Hoffmann-La Roche AG", role = c("cph", "fnd")),
     person("GlaxoSmithKline LLC", role = c("cph", "fnd"))
   )
@@ -39,7 +37,7 @@ BugReports: https://github.com/pharmaverse/admiral/issues
 Depends:
     R (>= 4.1)
 Imports:
-    admiraldev (>= 1.4.0),
+    admiraldev (>= 1.3.0),
     cli (>= 3.6.2),
     dplyr (>= 1.1.1),
     hms (>= 0.5.3),
