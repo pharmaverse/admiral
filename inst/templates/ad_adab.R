@@ -79,15 +79,24 @@ is_dates <- is %>%
     AVISIT = VISIT,
     AVISITN = VISITNUM,
     # Assign FRLTU (ex: DAYS or HOURS)
-    FRLTU = "DAYS",
-    # Assign NFRLT
-    #   This example maps any discontinuation visits as 77777 and unscheduled as 99999
-    #   Units for this ADAB sample will be Days. If Hours, add NFRLT x 24.
+    FRLTU = "DAYS"
+  ) %>%
+  # Assign nominal time to NFRLT
+  # Special visits can be set to NA then can add more code to assign custom values
+  #   (i.e. UNSCHEDULED to 99999, etc.)
+  # Units for this ADAB sample will be Days, divide result by 24
+  derive_var_nfrlt(
+    new_var = NFRLT,
+    tpt_var = ISTPT,
+    visit_day = VISITDY,
+    treatment_duration = 0,
+    set_values_to_na = str_detect(toupper(VISIT), "UNSCHED") | str_detect(toupper(VISIT), "TREATMENT DISC")
+  ) %>%
+  mutate(
     NFRLT = case_when(
-      str_detect(toupper(VISIT), "EARLY DISC") ~ 77777,
-      str_detect(toupper(VISIT), "TREATMENT DISC") ~ 77777,
-      str_detect(toupper(VISIT), "UNSCHEDULED") ~ 99999,
-      !is.na(VISITDY) ~ (VISITDY - 1),
+      !is.na(NFRLT) ~ NFRLT / 24,
+      str_detect(toupper(VISIT), "TREATMENT DISC") ~ 99997,
+      str_detect(toupper(VISIT), "UNSCHED") ~ 99999,
       TRUE ~ NA_real_
     )
   ) %>%
@@ -130,9 +139,17 @@ ex_dates <- ex %>%
       str_detect(toupper(EXTRT), "PLACEBO") ~ "XANOMELINE",
       str_detect(toupper(EXTRT), "OTHER_DRUG") ~ "OTHER_DRUG",
       TRUE ~ NA_character_
-    ),
-    # Compute Nominal Time
-    NFRLT = VISITDY - 1
+    )
+  ) %>%
+  # Assign nominal time to NFRLT
+  # Units for this ADAB sample will be Days, divide result by 24
+  derive_var_nfrlt(
+    new_var = NFRLT,
+    visit_day = VISITDY,
+    treatment_duration = 0
+  ) %>%
+  mutate(
+    NFRLT = if_else(!is.na(NFRLT), NFRLT / 24, NA_real_)
   ) %>%
   # Add analysis datetime variables and set missing end date to start date
   # Impute missing time to 00:00:00 or as desired.
@@ -226,16 +243,8 @@ is_aval <- is_basetype %>%
       TRUE ~ NA_real_
     ),
     AVALC = case_when(
-      # NABSTAT gets ISSTRESC, Standard ADA is special rules when non NEGATIVE results
+      # NABSTAT gets ISSTRESC, Standard ADA is set to NA as AVAL are numeric original results
       ADATYPE == "ADA_NAB" ~ ISSTRESC,
-      toupper(RESULTC) == "POSITIVE" & ADATYPE == "ADA_BAB" & !is.na(ISSTRESN) ~
-        as.character(ISSTRESN),
-      toupper(RESULTC) == "POSITIVE" & ADATYPE == "ADA_BAB" & is.na(ISSTRESN) &
-        (str_detect(ISSTRESC, "<") | str_detect(toupper(ISSTRESC), "NEGATIVE TITER")) &
-        !is.na(MRT) ~ paste("<", as.character(MRT), sep = ""),
-      # If positive with no numeric ISSTRESN set to N.C.
-      toupper(RESULTC) == "POSITIVE" & ADATYPE == "ADA_BAB" ~ "N.C.",
-      toupper(RESULTC) == "NEGATIVE" & ADATYPE == "ADA_BAB" ~ NA_character_,
       TRUE ~ NA_character_
     ),
     AVALU = case_when(
@@ -1148,8 +1157,8 @@ adab_cohort <- adab_adsl %>%
     by_vars = exprs(STUDYID, USUBJID)
   )
 
-# Compute ADAFL
-# Other method could be ADSL.SAFFL, ADAB.ADPBLPFL by ISTESTCD, etc.
+# Compute optional ADAFL
+# Method could be ADSL.SAFFL, ADAB.ADPBLPFL by ISTESTCD, etc.
 adab_adafl <- adab_cohort %>%
   derive_vars_merged(
     dataset_add = adsl,
