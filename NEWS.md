@@ -79,6 +79,9 @@ to work with a deprecation message until the beginning of 2027. (#1858)
     
 ## Documentation
 
+- New experimental vignette "Creating an ADAB ADaM", which describes how to create
+an anti-drug antibody analysis dataset. (#2873)
+
 - The lab grading vignette has been updated with examples for NCI-CTCAE version 6.0 criteria, including 
 usage of the new `low_indicator` and `high_indicator` arguments. (#1858)
 
