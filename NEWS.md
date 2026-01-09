@@ -1,13 +1,18 @@
-# admiral (development version)
+# admiral 1.4.0
 
 ## New Features
 
-- Added experimental function `derive_var_nfrlt()` to derive `NFRLT` from timepoint and visit (e.g. `VISITDY` and `PCTPT`) (#2929).
+- Added experimental function `derive_var_nfrlt()` to derive `NFRLT` from timepoint
+and visit (e.g. `VISITDY` and `PCTPT`). (#2929)
 
-- Added experimental function `convert_xxtpt_to_hours()` to parse timepoint values (e.g. `PCTPT`, `EGTPT`, `VSTPT`) into hours (#2916).
+- Updated PK programming vignette to use new experimental functions for deriving
+`NFRLT`. (#2927)
 
-- New experimental ADAB template script available `ad_adab.R` which creates Anti-drug 
-Antibody Analysis Dataset (#2805). 
+- Added experimental function `convert_xxtpt_to_hours()` to parse timepoint values
+(e.g. `PCTPT`, `EGTPT`, `VSTPT`) into hours. (#2916)
+
+- New experimental `ADAB` template script available `ad_adab.R` which creates Anti-drug 
+Antibody Analysis Dataset. (#2805)
 
 - Lab grading metadata for NCI-CTCAE version 6.0 is now available for both SI and US (Conventional) units 
 via `atoxgr_criteria_ctcv6` and `atoxgr_criteria_ctcv6_uscv`. This includes grading criteria for Creatinine 
@@ -28,8 +33,8 @@ is specified. (#2875)
 - `derive_summary_records()` now issues an error if a non summary function is
 used in `set_values_to` which results in multiple records per by group. (#2872)
 
-- `derive_summary_records()` updated to allow constants to be provided under the 
-`constant_values` argument, which will be present in both summary and missing rows (#2668)
+- `derive_summary_records()` was updated to allow constants to be provided under the 
+`constant_values` argument, which will be present in both summary and missing rows. (#2668)
 
 ## Breaking Changes
 
@@ -50,25 +55,32 @@ to work with a deprecation message until the beginning of 2027. (#1858)
     
   - `derive_var_atoxgr_dir(abnormal_indicator = )` is deprecated and replaced by the new `low_indicator` and 
   `high_indicator` arguments for enhanced flexibility in lab grading. (#1858)
-  - `derive_var_merged_summary()` is deprecated and will be replaced by `derive_vars_merged_summary()` (#2874)
+  - `derive_var_merged_summary()` is deprecated and will be replaced by `derive_vars_merged_summary()`. (#2874)
   
   **Phase 2 (warning)**
     
   - `call_user_fun()` is deprecated and will have no replacement. (#2678)
-  - `derive_param_extreme_record()` is deprecated and replaced by `derive_extreme_event()`
-  - `derive_var_dthcaus()` is deprecated and replaced by `derive_vars_extreme_event()`
-  - `date_source()` is deprecated and replaced by `event()`
-  - `dthcaus_source()` is deprecated and replaced by `event()`
+  - `derive_param_extreme_record()` is deprecated and replaced by `derive_extreme_event()`.
+  - `derive_var_dthcaus()` is deprecated and replaced by `derive_vars_extreme_event()`.
+  - `date_source()` is deprecated and replaced by `event()`.
+  - `dthcaus_source()` is deprecated and replaced by `event()`.
   - `derive_var_extreme_dt()` and `derive_var_extreme_dtm()` are deprecated and replaced by     
-  `derive_vars_extreme_event()`
+  `derive_vars_extreme_event()`.
   - `get_summary_records()` is deprecated. Please use `derive_summary_records()` with the `dataset_add` 
   argument and without the `dataset` argument.
 
   **Phase 3 (error)**
+  
+  No functions or arguments in this Phase
 
-    **Phase 4 (removed)**
+  **Phase 4 (removed)**
+    
+  No functions or arguments in this Phase
     
 ## Documentation
+
+- New experimental vignette "Creating an ADAB ADaM", which describes how to create
+an anti-drug antibody analysis dataset. (#2873)
 
 - The lab grading vignette has been updated with examples for NCI-CTCAE version 6.0 criteria, including 
 usage of the new `low_indicator` and `high_indicator` arguments. (#1858)
@@ -213,7 +225,7 @@ records. (#2683)
 
 - The following function arguments are entering the next phase of the [deprecation process](https://pharmaverse.github.io/admiraldev/articles/programming_strategy.html#deprecation): (#2487) (#2595)
 
-    **Phase 1 (message)**
+  **Phase 1 (message)**
 	
 	- `call_user_fun()` is deprecated and will have no replacement. (#2678)
 	- `derive_param_extreme_record()` is deprecated and replaced by `derive_extreme_event()`
@@ -225,17 +237,17 @@ records. (#2683)
   - `get_summary_records()` is deprecated. Please use `derive_summary_records()` with the `dataset_add` 
   argument and without the `dataset` argument.
   
-    **Phase 2 (warning)**
+  **Phase 2 (warning)**
     
-    No functions or arguments in this Phase
+  No functions or arguments in this Phase
 
-    **Phase 3 (error)**
+  **Phase 3 (error)**
     
-    No functions or arguments in this Phase
+  No functions or arguments in this Phase
 
-    **Phase 4 (removed)**
+  **Phase 4 (removed)**
     
-    No functions or arguments in this Phase
+  No functions or arguments in this Phase
 
 ## Documentation
 
