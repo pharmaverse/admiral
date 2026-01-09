@@ -72,6 +72,7 @@ pc_dates <- pc %>%
   ) %>%
   derive_var_nfrlt(
     new_var = NFRLT,
+    new_var_unit = FRLTU,
     out_unit = "hours",
     tpt_var = PCTPT,
     visit_day = VISITDY,
@@ -109,6 +110,7 @@ ex_dates <- ex %>%
   ) %>%
   derive_var_nfrlt(
     new_var = NFRLT,
+    new_var_unit = FRLTU,
     out_unit = "hours",
     visit_day = VISITDY
   ) %>%
@@ -276,6 +278,7 @@ adpc_arrlt <- bind_rows(adpc_nom_next, ex_exp) %>%
   # Derive Actual Relative Time from Reference Dose (ARRLT)
   derive_vars_duration(
     new_var = ARRLT,
+    new_var_unit = RRLTU,
     start_date = ADTM_prev,
     end_date = ADTM,
     out_unit = "hours",
@@ -365,8 +368,6 @@ adpc_aval <- adpc_nrrlt %>%
   ) %>%
   # Derive relative time units
   mutate(
-    FRLTU = "h",
-    RRLTU = "h",
     # Derive PARAMCD
     PARAMCD = coalesce(PCTESTCD, "DOSE"),
     ALLOQ = PCLLOQ,

@@ -1031,3 +1031,59 @@ test_that("derive_var_nfrlt: minutes output for short-term PK study", {
 
   expect_equal(result$NFRLTMIN, c(0, 5, 15, 30))
 })
+
+## Test 42: unit variable creation ----
+test_that("derive_var_nfrlt: unit variable is created correctly", {
+  adpc <- tribble(
+    ~USUBJID, ~VISITDY, ~PCTPT,
+    "001",    1,        "Pre-dose",
+    "001",    1,        "12H Post-dose",
+    "001",    8,        "Pre-dose"
+  )
+
+  # Hours with unit variable
+  result_hours <- derive_var_nfrlt(
+    adpc,
+    new_var = NFRLT,
+    new_var_unit = FRLTU,
+    out_unit = "hours",
+    tpt_var = PCTPT,
+    visit_day = VISITDY
+  )
+  expect_equal(result_hours$NFRLT, c(0, 12, 168))
+  expect_equal(result_hours$FRLTU, c("hours", "hours", "hours"))
+
+  # Days with unit variable
+  result_days <- derive_var_nfrlt(
+    adpc,
+    new_var = NFRLTDY,
+    new_var_unit = FRLTDYU,
+    out_unit = "days",
+    tpt_var = PCTPT,
+    visit_day = VISITDY
+  )
+  expect_equal(result_days$NFRLTDY, c(0, 0.5, 7))
+  expect_equal(result_days$FRLTDYU, c("days", "days", "days"))
+
+  # Weeks with unit variable
+  result_weeks <- derive_var_nfrlt(
+    adpc,
+    new_var = NFRLTWK,
+    new_var_unit = FRLTU,
+    out_unit = "weeks",
+    tpt_var = PCTPT,
+    visit_day = VISITDY
+  )
+  expect_equal(result_weeks$FRLTU, c("weeks", "weeks", "weeks"))
+
+  # Minutes with unit variable
+  result_min <- derive_var_nfrlt(
+    adpc,
+    new_var = NFRLTMIN,
+    new_var_unit = FRLTU,
+    out_unit = "minutes",
+    tpt_var = PCTPT,
+    visit_day = VISITDY
+  )
+  expect_equal(result_min$FRLTU, c("minutes", "minutes", "minutes"))
+})
