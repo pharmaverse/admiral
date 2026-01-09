@@ -1087,3 +1087,162 @@ test_that("derive_var_nfrlt: unit variable is created correctly", {
   )
   expect_equal(result_min$FRLTU, c("minutes", "minutes", "minutes"))
 })
+
+## Test 43: unit variable with NA values ----
+test_that("derive_var_nfrlt Test 43: unit variable handles NA correctly", {
+  adpc <- tribble(
+    ~USUBJID, ~VISITDY, ~PCTPT,
+    "001",    1,        "Pre-dose",
+    "001",    NA_real_, "Pre-dose"
+  )
+
+  result <- derive_var_nfrlt(
+    adpc,
+    new_var = NFRLT,
+    new_var_unit = FRLTU,
+    tpt_var = PCTPT,
+    visit_day = VISITDY
+  )
+
+  expect_equal(result$NFRLT, c(0, NA_real_))
+  expect_equal(result$FRLTU, c("hours", NA_character_))
+})
+
+## Test 44: unit variable with set_values_to_na ----
+test_that("derive_var_nfrlt Test 44: unit variable respects set_values_to_na", {
+  adpc <- tribble(
+    ~USUBJID, ~VISITDY, ~VISIT,        ~PCTPT,
+    "001",    1,        "VISIT 1",     "Pre-dose",
+    "001",    NA_real_, "UNSCHEDULED", "Pre-dose"
+  )
+
+  result <- derive_var_nfrlt(
+    adpc,
+    new_var = NFRLT,
+    new_var_unit = FRLTU,
+    tpt_var = PCTPT,
+    visit_day = VISITDY,
+    set_values_to_na = VISIT == "UNSCHEDULED"
+  )
+
+  expect_equal(result$NFRLT, c(0, NA_real_))
+  expect_equal(result$FRLTU, c("hours", NA_character_))
+})
+
+## Test 45: no unit variable when not requested ----
+test_that("derive_var_nfrlt Test 45: no unit variable created when not requested", {
+  adpc <- tribble(
+    ~USUBJID, ~VISITDY, ~PCTPT,
+    "001",    1,        "Pre-dose"
+  )
+
+  result <- derive_var_nfrlt(
+    adpc,
+    new_var = NFRLT,
+    tpt_var = PCTPT,
+    visit_day = VISITDY
+  )
+
+  expect_false("FRLTU" %in% names(result))
+})
+
+## Test 46: unit variable preserves case ----
+test_that("derive_var_nfrlt Test 46: unit variable preserves user's case", {
+  adpc <- tribble(
+    ~USUBJID, ~VISITDY, ~PCTPT,
+    "001",    1,        "Pre-dose"
+  )
+
+  # Lowercase
+  result_lower <- derive_var_nfrlt(
+    adpc,
+    new_var = NFRLT,
+    new_var_unit = FRLTU,
+    out_unit = "hours",
+    tpt_var = PCTPT,
+    visit_day = VISITDY
+  )
+  expect_equal(result_lower$FRLTU, "hours")
+
+  # Uppercase
+  result_upper <- derive_var_nfrlt(
+    adpc,
+    new_var = NFRLT,
+    new_var_unit = FRLTU,
+    out_unit = "HOURS",
+    tpt_var = PCTPT,
+    visit_day = VISITDY
+  )
+  expect_equal(result_upper$FRLTU, "HOURS")
+
+  # Mixed case
+  result_mixed <- derive_var_nfrlt(
+    adpc,
+    new_var = NFRLT,
+    new_var_unit = FRLTU,
+    out_unit = "Hours",
+    tpt_var = PCTPT,
+    visit_day = VISITDY
+  )
+  expect_equal(result_mixed$FRLTU, "Hours")
+})
+
+## Test 47: deriving multiple time variables ----
+test_that("derive_var_nfrlt Test 47: deriving multiple time variables", {
+  adpc <- tribble(
+    ~USUBJID, ~VISITDY, ~PCTPT,
+    "001",    1,        "Pre-dose",
+    "001",    1,        "12H Post-dose",
+    "001",    8,        "Pre-dose"
+  )
+
+  result <- adpc %>%
+    derive_var_nfrlt(
+      new_var = NFRLT,
+      new_var_unit = FRLTU,
+      tpt_var = PCTPT,
+      visit_day = VISITDY
+    ) %>%
+    derive_var_nfrlt(
+      new_var = NFRLTDY,
+      new_var_unit = FRLTDYU,
+      out_unit = "days",
+      tpt_var = PCTPT,
+      visit_day = VISITDY
+    )
+
+  expect_equal(result$NFRLT, c(0, 12, 168))
+  expect_equal(result$FRLTU, c("hours", "hours", "hours"))
+  expect_equal(result$NFRLTDY, c(0, 0.5, 7))
+  expect_equal(result$FRLTDYU, c("days", "days", "days"))
+})
+
+## Test 48: case-insensitive out_unit validation ----
+test_that("derive_var_nfrlt Test 48: out_unit is case-insensitive", {
+  adpc <- tribble(
+    ~USUBJID, ~VISITDY, ~PCTPT,
+    "001",    1,        "Pre-dose"
+  )
+
+  # Should all work (case-insensitive validation)
+  expect_no_error(
+    derive_var_nfrlt(adpc, new_var = NFRLT, out_unit = "HOURS",
+                     tpt_var = PCTPT, visit_day = VISITDY)
+  )
+  expect_no_error(
+    derive_var_nfrlt(adpc, new_var = NFRLT, out_unit = "Hours",
+                     tpt_var = PCTPT, visit_day = VISITDY)
+  )
+  expect_no_error(
+    derive_var_nfrlt(adpc, new_var = NFRLT, out_unit = "DAYS",
+                     tpt_var = PCTPT, visit_day = VISITDY)
+  )
+  expect_no_error(
+    derive_var_nfrlt(adpc, new_var = NFRLT, out_unit = "Weeks",
+                     tpt_var = PCTPT, visit_day = VISITDY)
+  )
+  expect_no_error(
+    derive_var_nfrlt(adpc, new_var = NFRLT, out_unit = "MINUTES",
+                     tpt_var = PCTPT, visit_day = VISITDY)
+  )
+})
