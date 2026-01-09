@@ -77,16 +77,14 @@ is_dates <- is %>%
     ),
     # Set AVISIT and AVISITN based on VISIT and VISITNUM
     AVISIT = VISIT,
-    AVISITN = VISITNUM,
-    # Assign FRLTU (ex: DAYS or HOURS)
-    FRLTU = "DAYS"
+    AVISITN = VISITNUM
   ) %>%
-  # Assign nominal time to NFRLT
+  # Assign nominal time to NFRLT as days
   # Special visits can be set to NA then can add more code to assign custom values
   #   (i.e. UNSCHEDULED to 99999, etc.)
-  # Units for this ADAB sample will be Days, divide result by 24
   derive_var_nfrlt(
     new_var = NFRLT,
+    new_var_unit = FRLTU,
     out_unit = "days",
     tpt_var = ISTPT,
     visit_day = VISITDY,
@@ -97,7 +95,7 @@ is_dates <- is %>%
     NFRLT = case_when(
       str_detect(toupper(VISIT), "TREATMENT DISC") ~ 99997,
       str_detect(toupper(VISIT), "UNSCHED") ~ 99999,
-      TRUE ~ NA_real_
+      TRUE ~ NFRLT
     )
   ) %>%
   # Join ADSL with is (need TRTSDT for ADY derivation)
@@ -141,10 +139,10 @@ ex_dates <- ex %>%
       TRUE ~ NA_character_
     )
   ) %>%
-  # Assign nominal time to NFRLT
-  # Units for this ADAB sample will be Days, divide result by 24
+  # Assign nominal time to NFRLT as days
   derive_var_nfrlt(
     new_var = NFRLT,
+    new_var_unit = FRLTU,
     out_unit = "days",
     visit_day = VISITDY,
     treatment_duration = 0
@@ -712,8 +710,8 @@ adab_result <- core_aab %>%
     ),
     AVALU = NA_character_
   ) %>%
-  # DTYPE is only kept on the parent ISTESTCD param, recompute CHG and BASE for RESULTy
-  select(-BASE, -CHG, -DTYPE)
+  # DTYPE is only kept on the primary ISTESTCD parameter, drop then recompute final BASE and CHG
+  select(-DTYPE, -BASE, -CHG)
 
 # Derive BASE and Calculate Change from Baseline on BAB RESULT records
 adab_result <- adab_result %>%
@@ -742,8 +740,8 @@ adab_nabres <- core_aab %>%
     ),
     AVALU = NA_character_
   ) %>%
-  # These two flags, BASE and CHG are only kept on the primary ADA test
-  select(-BASE, -CHG, -ADABLPFL, -ADPBLPFL)
+  # These two flags are only kept on the primary ADA test, drop then recompute final BASE and CHG
+  select(-ADABLPFL, -ADPBLPFL, -BASE, -CHG)
 
 # Derive BASE and Calculate Change from Baseline on NAB RESULT records
 adab_nabres <- adab_nabres %>%
