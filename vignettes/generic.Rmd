@@ -587,8 +587,8 @@ derive_param_computed(
 ```
 
 For common computations like BMI `{admiral}` offers [computation
-functions](../reference/#computation-functions-for-vectors). In the previous
-example `compute_bmi()` could be used instead of the formula for BMI:
+functions](https://pharmaverse.github.io/admiral/cran-release/reference/#computation-functions-for-vectors). 
+In the previous example `compute_bmi()` could be used instead of the formula for BMI:
 ```{r}
 derive_param_computed(
   advs,
