@@ -79,13 +79,13 @@ is_dates <- is %>%
     AVISIT = VISIT,
     AVISITN = VISITNUM
   ) %>%
-  # Assign nominal time to NFRLT as days
+  # Assign nominal time to NFRLT in DAYS
   # Special visits can be set to NA then can add more code to assign custom values
   #   (i.e. UNSCHEDULED to 99999, etc.)
   derive_var_nfrlt(
     new_var = NFRLT,
     new_var_unit = FRLTU,
-    out_unit = "days",
+    out_unit = "DAYS",
     tpt_var = ISTPT,
     visit_day = VISITDY,
     treatment_duration = 0,
@@ -139,11 +139,11 @@ ex_dates <- ex %>%
       TRUE ~ NA_character_
     )
   ) %>%
-  # Assign nominal time to NFRLT as days
+  # Assign nominal time to NFRLT in DAYS
   derive_var_nfrlt(
     new_var = NFRLT,
     new_var_unit = FRLTU,
-    out_unit = "days",
+    out_unit = "DAYS",
     visit_day = VISITDY,
     treatment_duration = 0
   ) %>%
@@ -185,7 +185,7 @@ is_afrlt <- is_dates %>%
     new_var = AFRLT,
     start_date = FANLDTM,
     end_date = ADTM,
-    out_unit = "days",
+    out_unit = "DAYS",
     floor_in = FALSE,
     add_one = FALSE
   )
