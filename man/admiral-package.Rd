@@ -40,7 +40,6 @@ Authors:
   \item Gordon Miller
   \item Lina Patil
   \item Jim Rothstein (\href{https://orcid.org/0009-0009-8659-6071}{ORCID})
-  \item Stefan Thoma (\href{https://orcid.org/0000-0002-5553-9252}{ORCID})
 }
 
 Other contributors:
