@@ -71,6 +71,7 @@ pc_dates <- pc %>%
   ) %>%
   derive_var_nfrlt(
     new_var = NFRLT,
+    out_unit = "HOURS",
     tpt_var = PCTPT,
     visit_day = VISITDY,
     treatment_duration = 0,
@@ -107,6 +108,7 @@ ex_dates <- ex %>%
   ) %>%
   derive_var_nfrlt(
     new_var = NFRLT,
+    out_unit = "HOURS",
     visit_day = VISITDY
   ) %>%
   # Set missing end dates to start date
@@ -230,7 +232,7 @@ adppk_aprlt <- bind_rows(adppk_nom_prev, ex_exp) %>%
     new_var = AFRLT,
     start_date = FANLDTM,
     end_date = ADTM,
-    out_unit = "hours",
+    out_unit = "HOURS",
     floor_in = FALSE,
     add_one = FALSE
   ) %>%
@@ -239,7 +241,7 @@ adppk_aprlt <- bind_rows(adppk_nom_prev, ex_exp) %>%
     new_var = APRLT,
     start_date = ADTM_prev,
     end_date = ADTM,
-    out_unit = "hours",
+    out_unit = "HOURS",
     floor_in = FALSE,
     add_one = FALSE
   ) %>%
