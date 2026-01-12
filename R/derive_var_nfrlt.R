@@ -26,13 +26,17 @@
 #'
 #' @permitted Unquoted variable name (optional)
 #'
-#' @param out_unit Unit of time for the output variable. Options are "hours"
-#'   (default), "days", "weeks", or "minutes" (case-insensitive). The internal
-#'   calculation is performed in hours, then converted to the specified unit.
-#'   If `new_var_unit` is specified, it will contain the value as provided
-#'   (e.g., "hours", "HOURS", "Hours" will all be preserved as given).
+#' @param out_unit Unit of time for the output variable. Options are:
+#'   * Days: "day", "days", "d"
+#'   * Hours: "hour", "hours", "hr", "hrs", "h" (default: "hours")
+#'   * Minutes: "minute", "minutes", "min", "mins"
+#'   * Weeks: "week", "weeks", "wk", "wks", "w"
 #'
-#' @permitted Character scalar ("hours", "days", "weeks", or "minutes")
+#'   Case-insensitive. The internal calculation is performed in hours, then
+#'   converted to the specified unit. If `new_var_unit` is specified, it will
+#'   contain the value exactly as provided by the user.
+#'
+#' @permitted Character scalar (see options above)
 #'
 #' @param tpt_var Timepoint variable containing descriptions like "Pre-dose",
 #'   "1H Post-dose", etc. (unquoted). If not provided or if the variable
@@ -630,9 +634,17 @@ derive_var_nfrlt <- function(dataset,
   # Store original out_unit before validation (for unit variable)
   original_out_unit <- out_unit
 
-  # Validate out_unit (case-insensitive)
-  out_unit_lower <- tolower(out_unit)
-  assert_character_scalar(out_unit_lower, values = c("hours", "days", "weeks", "minutes"))
+  # Validate out_unit (case-insensitive, returns lowercase)
+  out_unit_lower <- assert_character_scalar(
+    out_unit,
+    values = c(
+      c("day", "days", "d"),
+      c("hour", "hours", "hr", "hrs", "h"),
+      c("minute", "minutes", "min", "mins"),
+      c("week", "weeks", "wk", "wks", "w")
+    ),
+    case_sensitive = FALSE
+  )
 
   # Check if tpt_var exists in dataset
   has_tpt_var <- !is.null(tpt_var) && as_name(tpt_var) %in% names(dataset)
@@ -687,12 +699,25 @@ derive_var_nfrlt <- function(dataset,
     tpt_hours <- rep(0, nrow(dataset))
   }
 
-  # Determine conversion factor for unit (using lowercase for comparison)
+  # Determine conversion factor for unit (using lowercase normalized value)
   conversion_factor <- switch(out_unit_lower,
-    hours = 1,
+    day = 1 / 24,
     days = 1 / 24,
+    d = 1 / 24,
+    hour = 1,
+    hours = 1,
+    hr = 1,
+    hrs = 1,
+    h = 1,
+    minute = 60,
+    minutes = 60,
+    min = 60,
+    mins = 60,
+    week = 1 / 168,
     weeks = 1 / 168,
-    minutes = 60
+    wk = 1 / 168,
+    wks = 1 / 168,
+    w = 1 / 168
   )
 
   # Calculate NFRLT

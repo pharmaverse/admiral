@@ -1256,3 +1256,142 @@ test_that("derive_var_nfrlt Test 48: out_unit is case-insensitive", {
     )
   )
 })
+
+## Test 49: accepts all unit variations ----
+test_that("derive_var_nfrlt Test 49: accepts all unit variations", {
+  adpc <- tribble(
+    ~USUBJID, ~VISITDY, ~PCTPT,
+    "001",    1,        "Pre-dose",
+    "001",    1,        "12H Post-dose"
+  )
+
+  # Days variations
+  expect_no_error(derive_var_nfrlt(adpc,
+    new_var = NFRLT, out_unit = "day",
+    tpt_var = PCTPT, visit_day = VISITDY
+  ))
+  expect_no_error(derive_var_nfrlt(adpc,
+    new_var = NFRLT, out_unit = "days",
+    tpt_var = PCTPT, visit_day = VISITDY
+  ))
+  expect_no_error(derive_var_nfrlt(adpc,
+    new_var = NFRLT, out_unit = "d",
+    tpt_var = PCTPT, visit_day = VISITDY
+  ))
+
+  # Hours variations
+  expect_no_error(derive_var_nfrlt(adpc,
+    new_var = NFRLT, out_unit = "hour",
+    tpt_var = PCTPT, visit_day = VISITDY
+  ))
+  expect_no_error(derive_var_nfrlt(adpc,
+    new_var = NFRLT, out_unit = "hours",
+    tpt_var = PCTPT, visit_day = VISITDY
+  ))
+  expect_no_error(derive_var_nfrlt(adpc,
+    new_var = NFRLT, out_unit = "hr",
+    tpt_var = PCTPT, visit_day = VISITDY
+  ))
+  expect_no_error(derive_var_nfrlt(adpc,
+    new_var = NFRLT, out_unit = "hrs",
+    tpt_var = PCTPT, visit_day = VISITDY
+  ))
+  expect_no_error(derive_var_nfrlt(adpc,
+    new_var = NFRLT, out_unit = "h",
+    tpt_var = PCTPT, visit_day = VISITDY
+  ))
+
+  # Minutes variations
+  expect_no_error(derive_var_nfrlt(adpc,
+    new_var = NFRLT, out_unit = "minute",
+    tpt_var = PCTPT, visit_day = VISITDY
+  ))
+  expect_no_error(derive_var_nfrlt(adpc,
+    new_var = NFRLT, out_unit = "minutes",
+    tpt_var = PCTPT, visit_day = VISITDY
+  ))
+  expect_no_error(derive_var_nfrlt(adpc,
+    new_var = NFRLT, out_unit = "min",
+    tpt_var = PCTPT, visit_day = VISITDY
+  ))
+  expect_no_error(derive_var_nfrlt(adpc,
+    new_var = NFRLT, out_unit = "mins",
+    tpt_var = PCTPT, visit_day = VISITDY
+  ))
+
+  # Weeks variations
+  expect_no_error(derive_var_nfrlt(adpc,
+    new_var = NFRLT, out_unit = "week",
+    tpt_var = PCTPT, visit_day = VISITDY
+  ))
+  expect_no_error(derive_var_nfrlt(adpc,
+    new_var = NFRLT, out_unit = "weeks",
+    tpt_var = PCTPT, visit_day = VISITDY
+  ))
+  expect_no_error(derive_var_nfrlt(adpc,
+    new_var = NFRLT, out_unit = "wk",
+    tpt_var = PCTPT, visit_day = VISITDY
+  ))
+  expect_no_error(derive_var_nfrlt(adpc,
+    new_var = NFRLT, out_unit = "wks",
+    tpt_var = PCTPT, visit_day = VISITDY
+  ))
+  expect_no_error(derive_var_nfrlt(adpc,
+    new_var = NFRLT, out_unit = "w",
+    tpt_var = PCTPT, visit_day = VISITDY
+  ))
+
+  # Case insensitive
+  expect_no_error(derive_var_nfrlt(adpc,
+    new_var = NFRLT, out_unit = "HOURS",
+    tpt_var = PCTPT, visit_day = VISITDY
+  ))
+  expect_no_error(derive_var_nfrlt(adpc,
+    new_var = NFRLT, out_unit = "Days",
+    tpt_var = PCTPT, visit_day = VISITDY
+  ))
+})
+
+## Test 50: unit variations produce correct results ----
+test_that("derive_var_nfrlt Test 50: unit variations produce correct results", {
+  adpc <- tribble(
+    ~USUBJID, ~VISITDY, ~PCTPT,
+    "001",    8,        "Pre-dose"
+  )
+
+  # All day variations should give same result
+  result_day <- derive_var_nfrlt(adpc,
+    new_var = NFRLT, out_unit = "day",
+    tpt_var = PCTPT, visit_day = VISITDY
+  )
+  result_days <- derive_var_nfrlt(adpc,
+    new_var = NFRLT, out_unit = "days",
+    tpt_var = PCTPT, visit_day = VISITDY
+  )
+  result_d <- derive_var_nfrlt(adpc,
+    new_var = NFRLT, out_unit = "d",
+    tpt_var = PCTPT, visit_day = VISITDY
+  )
+
+  expect_equal(result_day$NFRLT, 7)
+  expect_equal(result_days$NFRLT, 7)
+  expect_equal(result_d$NFRLT, 7)
+
+  # All hour variations should give same result
+  result_hour <- derive_var_nfrlt(adpc,
+    new_var = NFRLT, out_unit = "hour",
+    tpt_var = PCTPT, visit_day = VISITDY
+  )
+  result_hr <- derive_var_nfrlt(adpc,
+    new_var = NFRLT, out_unit = "hr",
+    tpt_var = PCTPT, visit_day = VISITDY
+  )
+  result_h <- derive_var_nfrlt(adpc,
+    new_var = NFRLT, out_unit = "h",
+    tpt_var = PCTPT, visit_day = VISITDY
+  )
+
+  expect_equal(result_hour$NFRLT, 168)
+  expect_equal(result_hr$NFRLT, 168)
+  expect_equal(result_h$NFRLT, 168)
+})

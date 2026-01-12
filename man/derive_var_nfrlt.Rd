@@ -45,14 +45,20 @@ Time Unit). If not specified, no unit variable is created.
 \item{Default value}{\code{NULL}}
 }}
 
-\item{out_unit}{Unit of time for the output variable. Options are "hours"
-(default), "days", "weeks", or "minutes" (case-insensitive). The internal
-calculation is performed in hours, then converted to the specified unit.
-If \code{new_var_unit} is specified, it will contain the value as provided
-(e.g., "hours", "HOURS", "Hours" will all be preserved as given).
+\item{out_unit}{Unit of time for the output variable. Options are:
+\itemize{
+\item Days: "day", "days", "d"
+\item Hours: "hour", "hours", "hr", "hrs", "h" (default: "hours")
+\item Minutes: "minute", "minutes", "min", "mins"
+\item Weeks: "week", "weeks", "wk", "wks", "w"
+}
+
+Case-insensitive. The internal calculation is performed in hours, then
+converted to the specified unit. If \code{new_var_unit} is specified, it will
+contain the value exactly as provided by the user.
 
 \describe{
-\item{Permitted values}{Character scalar ("hours", "days", "weeks", or "minutes")}
+\item{Permitted values}{Character scalar (see options above)}
 \item{Default value}{\code{"hours"}}
 }}
 
