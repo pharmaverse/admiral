@@ -256,7 +256,7 @@
 #'   derive_var_nfrlt(
 #'     new_var = NFRLT,
 #'     new_var_unit = FRLTU,
-#'     out_unit = "hours",
+#'     out_unit = "HOURS",
 #'     tpt_var = PCTPT,
 #'     visit_day = VISITDY
 #'   ) %>%
@@ -611,14 +611,14 @@
 #'   adpc,
 #'   new_var = NFRLT,
 #'   new_var_unit = FRLTU,
-#'   out_unit = "hours",
+#'   out_unit = "HOURS",
 #'   tpt_var = PCTPT,
 #'   visit_day = VISITDY
 #' )
 derive_var_nfrlt <- function(dataset,
                              new_var = NFRLT,
                              new_var_unit = NULL,
-                             out_unit = "hours",
+                             out_unit = "HOURS",
                              tpt_var = NULL,
                              visit_day,
                              first_dose_day = 1,
