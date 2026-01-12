@@ -79,7 +79,7 @@ json_file_path_daids_uscv <- file.path(json_file_path, "DAIDS_uscv.json")
 
 ## Read in JSON files and create metadata for each criteria
 
-atoxgr_criteria_ctcv4 <- atoxgr_json_to_dataframe(json_file = json_file_path_v4)
+atoxgr_criteria_ctcv4 <- atoxgr_json_to_dataframe(json_file = json_file_path_v4a)
 atoxgr_criteria_ctcv4_uscv <- atoxgr_json_to_dataframe(json_file = json_file_path_v4_uscv)
 atoxgr_criteria_ctcv5 <- atoxgr_json_to_dataframe(json_file = json_file_path_v5)
 atoxgr_criteria_ctcv5_uscv <- atoxgr_json_to_dataframe(json_file = json_file_path_v5_uscv)
@@ -90,11 +90,11 @@ atoxgr_criteria_daids_uscv <- atoxgr_json_to_dataframe(json_file = json_file_pat
 
 ## Save metadata for each criteria
 
-save(atoxgr_criteria_ctcv4, file = file.path(save_file_path, "atoxgr_criteria_ctcv4.rda"))
-save(atoxgr_criteria_ctcv4_uscv, file = file.path(save_file_path, "atoxgr_criteria_ctcv4_uscv.rda"))
-save(atoxgr_criteria_ctcv5, file = file.path(save_file_path, "atoxgr_criteria_ctcv5.rda"))
-save(atoxgr_criteria_ctcv5_uscv, file = file.path(save_file_path, "atoxgr_criteria_ctcv5_uscv.rda"))
-save(atoxgr_criteria_ctcv6, file = file.path(save_file_path, "atoxgr_criteria_ctcv6.rda"))
-save(atoxgr_criteria_ctcv6_uscv, file = file.path(save_file_path, "atoxgr_criteria_ctcv6_uscv.rda"))
-save(atoxgr_criteria_daids, file = file.path(save_file_path, "atoxgr_criteria_daids.rda"))
-save(atoxgr_criteria_daids_uscv, file = file.path(save_file_path, "atoxgr_criteria_daids_uscv.rda"))
+save(atoxgr_criteria_ctcv4, file = file.path(save_file_path, "atoxgr_criteria_ctcv4.rda"), compress = "bzip2")
+save(atoxgr_criteria_ctcv4_uscv, file = file.path(save_file_path, "atoxgr_criteria_ctcv4_uscv.rda"), compress = "bzip2")
+save(atoxgr_criteria_ctcv5, file = file.path(save_file_path, "atoxgr_criteria_ctcv5.rda"), compress = "bzip2")
+save(atoxgr_criteria_ctcv5_uscv, file = file.path(save_file_path, "atoxgr_criteria_ctcv5_uscv.rda"), compress = "bzip2")
+save(atoxgr_criteria_ctcv6, file = file.path(save_file_path, "atoxgr_criteria_ctcv6.rda"), compress = "bzip2")
+save(atoxgr_criteria_ctcv6_uscv, file = file.path(save_file_path, "atoxgr_criteria_ctcv6_uscv.rda"), compress = "bzip2")
+save(atoxgr_criteria_daids, file = file.path(save_file_path, "atoxgr_criteria_daids.rda"), compress = "bzip2")
+save(atoxgr_criteria_daids_uscv, file = file.path(save_file_path, "atoxgr_criteria_daids_uscv.rda"), compress = "bzip2")

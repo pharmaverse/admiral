@@ -110,6 +110,9 @@ and receive answers from an LLM. It is trained on the documentation of both pack
 <details>
 <summary>Developer Notes</summary>
 - Updated the `{lintr}` preferences to use the shared `{admiraldev}` configurations. (#2863) and (#2913)
+- To reduce the size of the package: (#2944)
+    - The compression method in `data-raw/adlb_grading/atoxgr_sources.R` was updated to `"bzip2"` everywhere.
+    - The `admiral_adlb` dataset was updated so that it only contains the `"AST"`, `"ALT"` and `"BILI"` parameters.
 </details>
 
 # admiral 1.3.1
