@@ -1105,7 +1105,7 @@ test_that("derive_var_nfrlt Test 43: unit variable handles NA correctly", {
   )
 
   expect_equal(result$NFRLT, c(0, NA_real_))
-  expect_equal(result$FRLTU, c("hours", NA_character_))
+  expect_equal(result$FRLTU, c("HOURS", NA_character_))
 })
 
 ## Test 44: unit variable with set_values_to_na ----
@@ -1126,7 +1126,7 @@ test_that("derive_var_nfrlt Test 44: unit variable respects set_values_to_na", {
   )
 
   expect_equal(result$NFRLT, c(0, NA_real_))
-  expect_equal(result$FRLTU, c("hours", NA_character_))
+  expect_equal(result$FRLTU, c("HOURS", NA_character_))
 })
 
 ## Test 45: no unit variable when not requested ----
@@ -1206,15 +1206,15 @@ test_that("derive_var_nfrlt Test 47: deriving multiple time variables", {
     derive_var_nfrlt(
       new_var = NFRLTDY,
       new_var_unit = FRLTDYU,
-      out_unit = "days",
+      out_unit = "DAYS",
       tpt_var = PCTPT,
       visit_day = VISITDY
     )
 
   expect_equal(result$NFRLT, c(0, 12, 168))
-  expect_equal(result$FRLTU, c("hours", "hours", "hours"))
+  expect_equal(result$FRLTU, c("HOURS", "HOURS", "HOURS"))
   expect_equal(result$NFRLTDY, c(0, 0.5, 7))
-  expect_equal(result$FRLTDYU, c("days", "days", "days"))
+  expect_equal(result$FRLTDYU, c("DAYS", "DAYS", "DAYS"))
 })
 
 ## Test 48: case-insensitive out_unit validation ----
