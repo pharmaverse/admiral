@@ -37,7 +37,7 @@ BugReports: https://github.com/pharmaverse/admiral/issues
 Depends:
     R (>= 4.1)
 Imports:
-    admiraldev (>= 1.3.0),
+    admiraldev (>= 1.4.0),
     cli (>= 3.6.2),
     dplyr (>= 1.1.1),
     hms (>= 0.5.3),
