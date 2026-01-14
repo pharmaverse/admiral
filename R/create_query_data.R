@@ -610,14 +610,6 @@ query <- function(prefix,
 #'
 #' @return The original object.
 #' @keywords internal
-#' Validate an object is indeed a `query` object
-#'
-#' @param obj An object to be validated.
-#'
-#' @seealso [query()]
-#'
-#' @return The original object.
-#' @keywords internal
 validate_query <- function(obj) {
   assert_s3_class(obj, "query")
   values <- unclass(obj)
