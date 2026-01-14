@@ -178,11 +178,11 @@ reference:
 
 - title: Experimental
   desc: |
-    Experimental functions will be given two release before we remove the badge.
-    No deprecation messages will be given to the user if breaking changes are
-    implemented within the two releases cycle. However, `{admiral}` will document the
-    breaking change in the `News.md`. Once the two release cycles is reached, `{admiral}`
-    will remove the experimental badge and we will proceed with the normal deprecation
+    Experimental functions will have the "experimental" badge removed onced the
+    dev team feels the function is stable. No deprecation messages will be given
+    to the user if breaking changes are implemented before removing the experimental
+    badge. However, `{admiral}` will document the breaking change in the "Changelog".
+    Once the "experimental" badge is removed we will proceed with the normal deprecation
     cycle if needed.
 
     This experimental time period allows for us to test out the function and receive
