@@ -15,11 +15,22 @@ validate_query(obj)
 }
 \value{
 The original object.
+
+The original object.
 }
 \description{
 Validate an object is indeed a \code{query} object
 }
 \seealso{
 \code{\link[=query]{query()}}
+
+\code{\link[=query]{query()}}
 }
+\keyword{Validate}
+\keyword{`query`}
+\keyword{a}
+\keyword{an}
+\keyword{indeed}
 \keyword{internal}
+\keyword{is}
+\keyword{object}
