@@ -636,13 +636,13 @@ validate_query <- function(obj) {
 
   scope <- values$scope
   assert_character_scalar(scope,
-                          values = c("BROAD", "NARROW", NA_character_),
-                          optional = TRUE
+    values = c("BROAD", "NARROW", NA_character_),
+    optional = TRUE
   )
 
   add_scope_num <- values$add_scope_num
   assert_logical_scalar(add_scope_num,
-                        optional = TRUE
+    optional = TRUE
   )
 
   if (inherits(values$definition, "basket_select")) {
@@ -672,7 +672,7 @@ validate_query <- function(obj) {
     } else {
       is_valid <-
         map_lgl(values$definition, is.data.frame) |
-        map_lgl(values$definition, inherits, "basket_select")
+          map_lgl(values$definition, inherits, "basket_select")
       if (!all(is_valid)) {
         info_msg <- paste(
           sprintf(
