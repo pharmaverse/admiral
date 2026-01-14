@@ -14,7 +14,8 @@ check_cond <- ex %>%
   ungroup() %>%
   distinct(check1, check2)
 
-if (any(c(check_cond$check1 == 1 && check_cond$check2 == 1))) {
+# Abort if any check1 is not 1, OR any check2 is not 1
+if (any(check_cond$check1 != 1) || any(check_cond$check2 != 1)) {
   cli_abort(
     paste(
       "There are multiple start or end dates of exposure for a subject",
@@ -22,7 +23,6 @@ if (any(c(check_cond$check1 == 1 && check_cond$check2 == 1))) {
     )
   )
 }
-
 dates <- ex %>%
   filter(EXDOSE %in% c(0, 54)) %>%
   mutate(EXSTDTC = as.Date(EXSTDTC), EXENDTC = as.Date(EXENDTC)) %>%
@@ -56,7 +56,8 @@ ex_single <- dates %>%
     EXENDTC = as.character(EXENDTC),
     EXSTDTC = as.character(EXSTDTC),
     EXDOSFRQ = "ONCE"
-  )
+  ) %>%
+  select(-EXROUTE, VISITDY)
 
 attr(ex_single$EXSEQ, "label") <- attr(ex$EXSEQ, "label")
 attr(ex_single$EXSTDTC, "label") <- attr(ex$EXSTDTC, "label")
