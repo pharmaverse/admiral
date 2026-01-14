@@ -610,6 +610,14 @@ query <- function(prefix,
 #'
 #' @return The original object.
 #' @keywords internal
+#' Validate an object is indeed a `query` object
+#'
+#' @param obj An object to be validated.
+#'
+#' @seealso [query()]
+#'
+#' @return The original object.
+#' @keywords internal
 validate_query <- function(obj) {
   assert_s3_class(obj, "query")
   values <- unclass(obj)
@@ -628,13 +636,13 @@ validate_query <- function(obj) {
 
   scope <- values$scope
   assert_character_scalar(scope,
-    values = c("BROAD", "NARROW", NA_character_),
-    optional = TRUE
+                          values = c("BROAD", "NARROW", NA_character_),
+                          optional = TRUE
   )
 
   add_scope_num <- values$add_scope_num
   assert_logical_scalar(add_scope_num,
-    optional = TRUE
+                        optional = TRUE
   )
 
   if (inherits(values$definition, "basket_select")) {
@@ -664,13 +672,13 @@ validate_query <- function(obj) {
     } else {
       is_valid <-
         map_lgl(values$definition, is.data.frame) |
-          map_lgl(values$definition, inherits, "basket_select")
+        map_lgl(values$definition, inherits, "basket_select")
       if (!all(is_valid)) {
         info_msg <- paste(
           sprintf(
             "\u2716 Element %s is %s",
             which(!is_valid),
-            map_chr(values$definition[!is_valid], what_is_it)
+            map_chr(values$definition[!is_valid], function(x) cli::format_inline("{.obj_type_friendly {x}}")) # Replaced what_is_it() here
           ),
           collapse = "\n"
         )
