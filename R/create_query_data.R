@@ -678,8 +678,10 @@ validate_query <- function(obj) {
           sprintf(
             "\u2716 Element %s is %s",
             which(!is_valid),
-            map_chr(values$definition[!is_valid],
-                    function(x) cli::format_inline("{.obj_type_friendly {x}}"))
+            map_chr(
+              values$definition[!is_valid],
+              function(x) cli::format_inline("{.obj_type_friendly {x}}")
+            )
           ),
           collapse = "\n"
         )

@@ -91,33 +91,41 @@ atoxgr_criteria_daids_uscv <- atoxgr_json_to_dataframe(json_file = json_file_pat
 ## Save metadata for each criteria
 
 save(atoxgr_criteria_ctcv4,
-     file = file.path(save_file_path, "atoxgr_criteria_ctcv4.rda"),
-     compress = "bzip2")
+  file = file.path(save_file_path, "atoxgr_criteria_ctcv4.rda"),
+  compress = "bzip2"
+)
 
 save(atoxgr_criteria_ctcv4_uscv,
-     file = file.path(save_file_path, "atoxgr_criteria_ctcv4_uscv.rda"),
-     compress = "bzip2")
+  file = file.path(save_file_path, "atoxgr_criteria_ctcv4_uscv.rda"),
+  compress = "bzip2"
+)
 
 save(atoxgr_criteria_ctcv5,
-     file = file.path(save_file_path, "atoxgr_criteria_ctcv5.rda"),
-     compress = "bzip2")
+  file = file.path(save_file_path, "atoxgr_criteria_ctcv5.rda"),
+  compress = "bzip2"
+)
 
 save(atoxgr_criteria_ctcv5_uscv,
-     file = file.path(save_file_path, "atoxgr_criteria_ctcv5_uscv.rda"),
-     compress = "bzip2")
+  file = file.path(save_file_path, "atoxgr_criteria_ctcv5_uscv.rda"),
+  compress = "bzip2"
+)
 
 save(atoxgr_criteria_ctcv6,
-     file = file.path(save_file_path, "atoxgr_criteria_ctcv6.rda"),
-     compress = "bzip2")
+  file = file.path(save_file_path, "atoxgr_criteria_ctcv6.rda"),
+  compress = "bzip2"
+)
 
 save(atoxgr_criteria_ctcv6_uscv,
-     file = file.path(save_file_path, "atoxgr_criteria_ctcv6_uscv.rda"),
-     compress = "bzip2")
+  file = file.path(save_file_path, "atoxgr_criteria_ctcv6_uscv.rda"),
+  compress = "bzip2"
+)
 
 save(atoxgr_criteria_daids,
-     file = file.path(save_file_path, "atoxgr_criteria_daids.rda"),
-     compress = "bzip2")
+  file = file.path(save_file_path, "atoxgr_criteria_daids.rda"),
+  compress = "bzip2"
+)
 
 save(atoxgr_criteria_daids_uscv,
-     file = file.path(save_file_path, "atoxgr_criteria_daids_uscv.rda"),
-     compress = "bzip2")
+  file = file.path(save_file_path, "atoxgr_criteria_daids_uscv.rda"),
+  compress = "bzip2"
+)
