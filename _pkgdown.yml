@@ -187,6 +187,8 @@ reference:
 
     This experimental time period allows for us to test out the function and receive
     feedback but doesn’t burden us with a deprecation cycle.
+  contents:
+  - has_keyword("experimental")
 
 navbar:
   structure:
