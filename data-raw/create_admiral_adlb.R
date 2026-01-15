@@ -22,7 +22,7 @@ usubjids <-
     "01-708-1286"
   )
 
-admiral_adlb <- filter(adlb, USUBJID %in% usubjids)
+admiral_adlb <- filter(adlb, USUBJID %in% usubjids, PARAMCD %in% c("AST", "ALT", "BILI"))
 
 # Get previous dataset for comparison
 adlb_old <- admiral::admiral_adlb

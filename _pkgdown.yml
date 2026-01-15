@@ -21,6 +21,7 @@ template:
       data-consent-screen-accept-button-text="Allow tracking"
       data-consent-screen-reject-button-text="No, thanks"
       data-modal-example-questions="Tell me a little about the {admiral} package., What are some important {admiral} functions and what do they do?"
+      data-modal-search-placeholder="Ask me a question about {admiral} or the {admiral} ecosystem..."
       data-modal-z-index="9999"
       ></script>
 search:
@@ -176,6 +177,20 @@ reference:
     Below, you can find a list of functions in the process of being deprecated:
   contents:
   - has_keyword("deprecated")
+
+- title: Experimental
+  desc: |
+    Experimental functions will have the "experimental" badge removed onced the
+    dev team feels the function is stable. No deprecation messages will be given
+    to the user if breaking changes are implemented before removing the experimental
+    badge. However, `{admiral}` will document the breaking change in the "Changelog".
+    Once the "experimental" badge is removed we will proceed with the normal deprecation
+    cycle if needed.
+
+    This experimental time period allows for us to test out the function and receive
+    feedback but doesn’t burden us with a deprecation cycle.
+  contents:
+  - has_keyword("experimental")
 
 navbar:
   structure:

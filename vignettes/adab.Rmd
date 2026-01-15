@@ -196,16 +196,15 @@ is_dates <- is %>%
     ),
     # Set AVISIT and AVISITN based on VISIT and VISITNUM
     AVISIT = VISIT,
-    AVISITN = VISITNUM,
-    # Assign FRLTU (ex: DAYS or HOURS)
-    FRLTU = "DAYS"
+    AVISITN = VISITNUM
   ) %>%
-  # Assign nominal time to NFRLT
+  # Assign nominal time to NFRLT in DAYS
   # Special visits can be set to NA then can add more code to assign custom values
   #   (i.e. UNSCHEDULED to 99999, etc.)
-  # Units for this ADAB sample will be Days, divide result by 24
   derive_var_nfrlt(
     new_var = NFRLT,
+    new_var_unit = FRLTU,
+    out_unit = "DAYS",
     tpt_var = ISTPT,
     visit_day = VISITDY,
     treatment_duration = 0,
@@ -213,10 +212,9 @@ is_dates <- is %>%
   ) %>%
   mutate(
     NFRLT = case_when(
-      !is.na(NFRLT) ~ NFRLT / 24,
       str_detect(toupper(VISIT), "TREATMENT DISC") ~ 99997,
       str_detect(toupper(VISIT), "UNSCHED") ~ 99999,
-      TRUE ~ NA_real_
+      TRUE ~ NFRLT
     )
   ) %>%
   # Join ADSL with is (need TRTSDT for ADY derivation)
@@ -254,7 +252,8 @@ dataset_vignette(
 
 At this step, we stage the `EX` data. Filter the data as desired to match 
 the `IS` analyte(s). As with the `IS` dataset staging, `DRUG` is also assigned as a common merge variable.
-`NFRLT` is assigned to the `EX` data from `EX.VISITDY` using `derive_var_nfrlt()`.
+`NFRLT` is assigned to the `EX` data from `EX.VISITDY` using `derive_var_nfrlt()`. Note that `NFRLT` is not 
+needed for this template but added for optional usage or data reviews.
 
 Assign `ASTDTM` using `EX.EXSTDTC`. As previously described with `IS.ISDTC`, if `EX.EXSTDTC` is missing 
 the time part, "00:00" is used for the imputation. Individual companies and studies may have custom imputation
@@ -285,15 +284,13 @@ ex_dates <- ex %>%
       TRUE ~ NA_character_
     )
   ) %>%
-  # Assign nominal time to NFRLT
-  # Units for this ADAB sample will be Days, divide result by 24
+  # Assign nominal time to NFRLT in DAYS
   derive_var_nfrlt(
     new_var = NFRLT,
+    new_var_unit = FRLTU,
+    out_unit = "DAYS",
     visit_day = VISITDY,
     treatment_duration = 0
-  ) %>%
-  mutate(
-    NFRLT = if_else(!is.na(NFRLT), NFRLT / 24, NA_real_)
   ) %>%
   # Add analysis datetime variables and set missing end date to start date
   # Impute missing time to 00:00:00 or as desired.
@@ -348,7 +345,7 @@ is_afrlt <- is_dates %>%
     new_var = AFRLT,
     start_date = FANLDTM,
     end_date = ADTM,
-    out_unit = "days",
+    out_unit = "DAYS",
     floor_in = FALSE,
     add_one = FALSE
   )
@@ -1054,8 +1051,8 @@ adab_result <- core_aab %>%
     ),
     AVALU = NA_character_
   ) %>%
-  # DTYPE is only kept on the parent ISTESTCD param, recompute CHG and BASE for RESULTy
-  select(-BASE, -CHG, -DTYPE)
+  # DTYPE is only kept on the primary ISTESTCD parameter, drop then recompute final BASE and CHG
+  select(-DTYPE, -BASE, -CHG)
 
 # Derive BASE and Calculate Change from Baseline on BAB RESULT records
 adab_result <- adab_result %>%
@@ -1084,8 +1081,8 @@ adab_nabres <- core_aab %>%
     ),
     AVALU = NA_character_
   ) %>%
-  # These two flags, BASE and CHG are only kept on the primary ADA test
-  select(-BASE, -CHG, -ADABLPFL, -ADPBLPFL)
+  # These two flags are only kept on the primary ADA test, drop then recompute final BASE and CHG
+  select(-ADABLPFL, -ADPBLPFL, -BASE, -CHG)
 
 # Derive BASE and Calculate Change from Baseline on NAB RESULT records
 adab_nabres <- adab_nabres %>%

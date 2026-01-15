@@ -61,11 +61,12 @@ knitr::opts_chunk$set(
 * Complex functions potentially have a vignette on the `{admiral}` homepage to provide more details. 
 * `{admiral}` does not provide a link to an explicit specification in the define.xml.
 
-##### Where a user can quickly find some **references or advice** to use a function?
+##### Where can a user quickly find some **references or advice** to use a function?
 
 * For more detailed description, please refer to the [Reference section](https://pharmaverse.github.io/admiral/reference/index.html). 
 * [admiraldiscovery](https://pharmaverse.github.io/admiraldiscovery/articles/reactable.html) provides
 a way to look up common ADaM variables with recommended `{admiral}` functions to complete the derivation.
+* Check out the [admiral Cheat Sheet](https://github.com/pharmaverse/admiral/blob/main/inst/cheatsheet/admiral_cheatsheet.pdf) as well!
 
 ##### Would `{admiral}` **create a whole** ADaM  dataset?
 
