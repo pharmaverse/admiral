@@ -1,0 +1,27 @@
+pandoc: 3.1.11
+pkgdown: 2.1.3
+pkgdown_sha: ~
+articles:
+  adab: adab.html
+  admiral: admiral.html
+  adsl: adsl.html
+  bds_exposure: bds_exposure.html
+  bds_finding: bds_finding.html
+  bds_tte: bds_tte.html
+  concepts_conventions: concepts_conventions.html
+  faq: faq.html
+  generic: generic.html
+  higher_order: higher_order.html
+  hys_law: hys_law.html
+  imputation: imputation.html
+  lab_grading: lab_grading.html
+  occds: occds.html
+  pk_adnca: pk_adnca.html
+  queries_dataset: queries_dataset.html
+  questionnaires: questionnaires.html
+  articles/templates: templates.html
+  visits_periods: visits_periods.html
+last_built: 2026-01-15T13:02Z
+urls:
+  reference: https:/pharmaverse.github.io/admiral/v1.4.0/reference
+  article: https:/pharmaverse.github.io/admiral/v1.4.0/articles
