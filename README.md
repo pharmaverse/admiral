@@ -155,7 +155,7 @@ All `{admiral}` functions have a clear purpose.
 All `{admiral}` functions are easily findable.
 
 * In a growing code base, across a family of packages, we make every effort to make our functions easily findable.
-* We use consistent naming conventions across all our functions, and provide vignettes and ADaM templates that help users to get started and build familiarity. Each `{admiral}` family package website is searchable.
+* We use consistent naming conventions across all our functions, and provide vignettes and [ADaM templates](articles/templates.html) that help users to get started and build familiarity. Each `{admiral}` family package website is searchable.
 * We avoid repetitive functions that will do similar tasks (as explained above with study day example).
 * Each package extension is kept focused on the specific scope, e.g. features that are relevant across multiple extension packages will be moved to the core `{admiral}` package.
 

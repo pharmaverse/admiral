@@ -1,0 +1,55 @@
+---
+title: "Explore the admiral ADaM Templates"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Explore the admiral ADaM Templates}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+# Introduction {#intro}
+
+This page is a catalog of the ADaM templates available through `{admiral}`. These are lifted from our GitHub repository. The intention is for this to be a reference for users, should they wish to peruse the code of a specific template without visiting the `{admiral}` repository.
+
+As a reminder, you can create a starter script from a template using `admiral::use_ad_template()`, e.g.,
+
+```{r eval=FALSE}
+use_ad_template(
+  adam_name = "adsl",
+  save_path = "./ad_adsl.R",
+  package = "admiral"
+)
+```
+
+# ADaM templates {#templates}
+
+```{r, results='asis', echo=FALSE}
+template_files <- list.files(
+  here::here("inst", "templates"),
+  pattern = "\\.R$",
+  full.names = TRUE
+)
+
+for (file_path in template_files) {
+  file_name <- basename(file_path)
+  code_content <- readLines(file_path, warn = FALSE)
+
+  # Escape characters like < and > in the code to prevent them from breaking vignette
+  escaped_code <- htmltools::htmlEscape(paste(code_content, collapse = "\n"))
+
+  # Construct collapsible block
+  cat(paste0(
+    "<details style='margin-bottom: 10px; border: 1px solid #ccc; border-radius: 5px; padding: 5px;'>\n",
+    "  <summary style='cursor: pointer; font-weight: bold;'>", file_name, "</summary>\n",
+    "  <pre style='max-height: 90vh'><code>", escaped_code, "</code></pre>\n",
+    "</details>\n\n"
+  ))
+}
+```
