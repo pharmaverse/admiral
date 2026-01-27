@@ -14,7 +14,9 @@ git fetch origin gh-pages
 git checkout gh-pages
 
 # Verify the commit exists
-if git log --oneline -1 | grep -q "Update 404.html to reference version 1.4.0"; then
+EXPECTED_COMMIT="c7da75613"
+CURRENT_COMMIT=$(git rev-parse --short HEAD)
+if [[ "$CURRENT_COMMIT" == "$EXPECTED_COMMIT"* ]] || git log --oneline -5 | grep -q "$EXPECTED_COMMIT"; then
     echo "✓ Found the 404.html update commit"
     echo "Commit: $(git log --oneline -1)"
     
