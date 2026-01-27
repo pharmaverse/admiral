@@ -1,4 +1,4 @@
-# 404 Page Update - Completed
+# 404 Page Update - Ready for Push
 
 ## Summary
 A new branch `copilot/gh-pages-404-update` has been created from `gh-pages` with the 404.html update from version 1.2.0 to 1.4.0.
