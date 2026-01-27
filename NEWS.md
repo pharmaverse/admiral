@@ -1,3 +1,9 @@
+# admiral (development version)
+
+## Documentation
+
+- New Estimands vignette added, describing possible implementations of estimands with `{admiral}` code. (#2954)
+
 # admiral 1.4.0
 
 ## New Features
