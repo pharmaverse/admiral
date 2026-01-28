@@ -1,3 +1,16 @@
+# admiral (development version)
+
+## Updates of Existing Functions
+
+- Grading metadata amended to ensure the criteria is exactly the same across `SI` and `CV` units
+when the `UNIT_CHECK` is identical or missing for a particular `TERM`. This allows grading metadata
+to be combined across `SI` and `CV` units. Also, comment added about `"Creatinine Clearance"` and lab
+values less than 10. (#2958).
+
+## Documentation
+
+`Lab Grading` Vignette updated to add more clarity for `"Creatinine Increased"` and baseline visits. (#2958)
+
 # admiral 1.4.0
 
 ## New Features

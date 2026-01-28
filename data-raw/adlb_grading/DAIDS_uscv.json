@@ -395,7 +395,7 @@
     "GRADE_2": "1.5 to < 3.0 x ULN",
     "GRADE_3": "3.0 to < 5.0 x ULN",
     "GRADE_4": ">=5.0 x ULN",
-    "GRADE_NA_CODE": "is.na(AVAL) | is.na(ANRHI) ~ NA_character_,",
+    "GRADE_NA_CODE": "is.na(AVAL) | is.na(ANRHI) ~ NA_character_",
     "GRADE_4_CODE": "signif(AVAL, signif_dig) >=  signif(5*ANRHI, signif_dig) ~ \"4\"",
     "GRADE_3_CODE": "signif(AVAL, signif_dig) >=  signif(3*ANRHI, signif_dig) ~ \"3\"",
     "GRADE_2_CODE": "signif(AVAL, signif_dig) >= signif(1.5*ANRHI, signif_dig) ~ \"2\"",
