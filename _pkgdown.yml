@@ -3,9 +3,13 @@ url: https://pharmaverse.github.io/admiral
 template:
   math-rendering: mathjax
   bootstrap: 5
-  params:
-    bootswatch: flatly
+  light-switch: true
+  bslib:
+    preset: "flatly"
+    primary: "#2c3e50"
+    navbar-bg: "#2c3e50"
   includes:
+    css: pkgdown/extra.css
     in_header: |
       <script
       async
@@ -195,7 +199,7 @@ reference:
 navbar:
   structure:
     left: [getstarted, reference, articles, admiraldiscovery, news, versions]
-    right: [search, slack, history, newissue, github]
+    right: [search, slack, history, newissue, github, lightswitch]
   components:
     getstarted:
       text: Get Started
