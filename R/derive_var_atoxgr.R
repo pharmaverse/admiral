@@ -245,6 +245,17 @@ derive_var_atoxgr_dir <- function(dataset,
     meta_this_term <- atoxgr_dir %>%
       filter(TERM_UPPER == list_of_terms$TERM_UPPER[i])
 
+    # check for different criteria within same FILTER and UNIT in grading metadata for a TERM
+    signal_duplicate_records(
+      dataset = meta_this_term,
+      by_vars = exprs(TERM, UNIT_CHECK, FILTER),
+      msg = paste(
+        "Check duplicates: ", list_of_terms$TERM_UPPER[i],
+        "grading metadata dataset contains duplicate records with respect to",
+        "{.var {replace_values_by_names(by_vars)}}"
+      )
+    )
+
     grade_this_term <- to_be_graded %>%
       filter(!!tox_description_var == list_of_terms$TERM[i])
 

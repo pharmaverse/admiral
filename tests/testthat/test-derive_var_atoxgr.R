@@ -11083,3 +11083,35 @@ test_that("derive_var_atoxgr_dir Test 132: CTCAEv6 Creatinine incr. low_indicato
     class = "assert_character_vector"
   )
 })
+
+## Test 133: ERROR when CRITERIA different within same TERM and UNIT ----
+test_that("derive_var_atoxgr_dir Test 133: ERROR when CRITERIA different within same TERM and UNIT", {
+  atoxgr_criteria_ctcv6 <- bind_rows(
+    admiral::atoxgr_criteria_ctcv6,
+    admiral::atoxgr_criteria_ctcv6 %>%
+      filter(TERM == "Creatinine increased") %>%
+      mutate(GRADE_CRITERIA_CODE = paste0(GRADE_CRITERIA_CODE, ","))
+  )
+
+  expected_creatn <- tibble::tribble(
+    ~ATOXDSCH,               ~AVAL,  ~BASE, ~ANRHI, ~AVALU,         ~BNRIND,        ~ATOXGRH,
+    "Creatinine increased",  241,    40,    40,     NA_character_,  "NORMAL",       "4",
+  )
+
+  input_creatn <- expected_creatn %>%
+    select(-ATOXGRH)
+
+  expect_error(
+    actual_creatn <- derive_var_atoxgr_dir(
+      input_creatn,
+      new_var = ATOXGRH,
+      meta_criteria = atoxgr_criteria_ctcv6,
+      tox_description_var = ATOXDSCH,
+      criteria_direction = "H",
+      high_indicator = "HIGH",
+      low_indicator = "LOW",
+      get_unit_expr = AVALU
+    ),
+    NULL
+  )
+})
