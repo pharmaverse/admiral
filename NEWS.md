@@ -1,3 +1,7 @@
+# admiral (development version)
+
+- Fix typo in `compute_bsa()` in `ADPPK` template and vignette. (#2963)
+
 # admiral 1.4.0
 
 ## New Features
