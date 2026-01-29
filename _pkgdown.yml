@@ -251,6 +251,8 @@ navbar:
         href: articles/queries_dataset.html
       - text: Lab Grading
         href: articles/lab_grading.html
+      - text: Estimands
+        href: articles/estimands.html
       - text: -------
       - text: FAQ
         href: articles/faq.html

@@ -101,7 +101,9 @@ EOT
 EPI
 Ehmann
 Enki
+Estimand
 Evaluable
+Evt
 FACM
 FCVD
 FRLTU
@@ -146,6 +148,7 @@ Hypophosphatemia
 IG
 INR
 Iain
+Intercurrent
 JSON
 Jaxon
 Jordanna
@@ -341,6 +344,8 @@ durations
 eGFR
 eg
 egfr
+estimand
+estimands
 evaluable
 exprs
 fil
@@ -350,6 +355,7 @@ framingham
 funder
 glomerular
 groupwise
+intercurrent
 json
 kapa
 lubridate
