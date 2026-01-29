@@ -46,16 +46,32 @@ made some tweaks to test data to make the examples more interesting.
 library(admiral)
 library(dplyr)
 library(pharmaversesdtm)
-library(pharmaverseadam)
 library(lubridate)
 library(stringr)
 
-data("adsl")
 data("ds")
 data("cm")
-data("advs")
+data("vs")
+data("admiral_adsl")
+
 ds <- convert_blanks_to_na(ds)
 cm <- convert_blanks_to_na(cm)
+vs <- convert_blanks_to_na(vs)
+adsl <- admiral_adsl
+
+# Simple ADVS for the imputation example
+
+advs <- vs %>% 
+  mutate(
+    PARAMCD = VSTESTCD,
+    PARAM = paste0(VSTEST, " (", VSSTRESU, ")"), 
+    AVISIT = VISIT,
+    AVISITN = VISITNUM,
+    ADT = convert_dtc_to_dt(VSDTC),
+    AVAL = VSSTRESN,
+    AVALU = VSSTRESU,
+    DTYPE = NA_character_
+  )
 ```
 
 ```{r echo=FALSE}
