@@ -28,6 +28,22 @@ template:
       data-modal-search-placeholder="Ask me a question about {admiral} or the {admiral} ecosystem..."
       data-modal-z-index="9999"
       ></script>
+
+      <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        // Select all navbar links that have an aria-label
+        var navLinks = document.querySelectorAll('.navbar-nav .nav-link[aria-label]');
+
+        navLinks.forEach(function (link) {
+          // Initialize Bootstrap 5 Tooltip
+          link.setAttribute('title', link.getAttribute('aria-label'));
+          new bootstrap.Tooltip(link, {
+            placement: 'bottom', // Tooltip appears below the icon
+            trigger: 'hover'
+          });
+        });
+      });
+      </script>
 search:
   exclude: ['news/index.html']
 repo:
@@ -264,8 +280,8 @@ navbar:
     slack:
       icon: fa-slack
       href: https://pharmaverse.slack.com/
-      aria-label: Slack
+      aria-label: Join the pharmaverse Slack!
     newissue:
       icon: fa-bug
       href: https://github.com/pharmaverse/admiral/issues/new/choose
-      aria-label: New Issue
+      aria-label: Report an issue
