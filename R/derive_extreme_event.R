@@ -615,7 +615,8 @@ derive_extreme_event <- function(dataset = NULL,
                 "Check duplicates: ", event$dataset_name,
                 "dataset contains duplicate records with respect to",
                 "{.var {replace_values_by_names(by_vars)}}"
-              )
+              ),
+              cnd_type = check_type
             )
           }
 
