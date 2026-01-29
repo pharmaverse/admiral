@@ -5,7 +5,8 @@
 - Grading metadata amended to ensure the criteria is exactly the same across `SI` and `CV` units
 when the `UNIT_CHECK` is identical or missing for a particular `TERM`. This allows grading metadata
 to be combined across `SI` and `CV` units. Also, comment added about `"Creatinine Clearance"` and lab
-values less than 10. (#2958).
+values less than 10 for `NCICTCAEv6`. `DAIDs` grading metadata updated to use `ADLB.ADT` instead of 
+`ADLB.LBDT` (#2958).
 
 ## Documentation
 
