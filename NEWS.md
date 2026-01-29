@@ -1,3 +1,9 @@
+# admiral (development version)
+
+## Documentation
+
+A night mode option has been added to the `{admiral}` website. This can be be toggled using the sun/moon icon in the top right corner of the website. (#2959)
+
 # admiral 1.4.0
 
 ## New Features
