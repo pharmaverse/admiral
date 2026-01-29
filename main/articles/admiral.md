@@ -1,0 +1,343 @@
+# Get Started
+
+## Main Idea
+
+The main idea of [admiral](https://pharmaverse.github.io/admiral/) is
+that an ADaM dataset is built by a sequence of derivations. Each
+derivation adds one or more variables or records to the processed
+dataset. This modular approach makes it easy to adjust code by adding,
+removing, or modifying derivations. Each derivation is a function call.
+
+In this vignette we will explore some of the different type of
+derivation functions offered by
+[admiral](https://pharmaverse.github.io/admiral/), as well as the
+argument conventions they follow and how best to start an
+[admiral](https://pharmaverse.github.io/admiral/) script.
+
+## Setup
+
+To help with the examples showcased, we will load some packages and set
+up some example data to manipulate later. The
+[dplyr](https://dplyr.tidyverse.org),
+[lubridate](https://lubridate.tidyverse.org) and
+[stringr](https://stringr.tidyverse.org) packages are
+[tidyverse](https://tidyverse.tidyverse.org) packages and are used
+heavily throughout this vignette. The
+[admiral](https://pharmaverse.github.io/admiral/) package also leverages
+the [pharmaversesdtm](https://pharmaverse.github.io/pharmaversesdtm/)
+package for example SDTM datasets which are from the CDISC Pilot Study.
+
+``` r
+# Uncomment line below if you need to install these packages
+# install.packages(c("dplyr", "lubridate", "stringr", "tibble", "pharmaversesdtm", "admiral"))
+
+library(dplyr, warn.conflicts = FALSE)
+library(lubridate)
+library(stringr)
+library(tibble)
+library(pharmaversesdtm)
+library(admiral)
+
+# Read in SDTM datasets
+dm <- pharmaversesdtm::dm
+ds <- pharmaversesdtm::ds
+ex <- pharmaversesdtm::ex
+vs <- pharmaversesdtm::vs
+admiral_adsl <- admiral::admiral_adsl
+```
+
+The `adsl` and `advs` objects will now be prepared to showcase [addition
+of variables](#addvars) and [addition of records](#addrecs) later.
+
+``` r
+ex_ext <- ex %>%
+  derive_vars_dtm(
+    dtc = EXSTDTC,
+    new_vars_prefix = "EXST"
+  )
+
+vs <- vs %>%
+  filter(
+    USUBJID %in% c(
+      "01-701-1015", "01-701-1023", "01-703-1086",
+      "01-703-1096", "01-707-1037", "01-716-1024"
+    ) &
+      VSTESTCD %in% c("SYSBP", "DIABP") &
+      VSPOS == "SUPINE"
+  )
+
+adsl <- admiral_adsl %>%
+  select(-TRTSDTM, -TRTSTMF)
+
+advs <- vs %>%
+  mutate(
+    PARAM = VSTEST, PARAMCD = VSTESTCD, AVAL = VSSTRESN, AVALU = VSORRESU,
+    AVISIT = VISIT, AVISITN = VISITNUM
+  )
+```
+
+**Note:** In the example above, we are reading in dummy R data from
+[pharmaversesdtm](https://pharmaverse.github.io/pharmaversesdtm/).
+However, if you are using SAS datasets as a starting point, be sure to
+consult the section [Handling of Missing
+Values](https:/pharmaverse.github.io/admiral/main/articles/concepts_conventions.html#missing)
+in the [Programming Concepts and
+Conventions](https:/pharmaverse.github.io/admiral/main/articles/concepts_conventions.md)
+User Guide to learn how and why you should use the function
+[`convert_blanks_to_na()`](https:/pharmaverse.github.io/admiral/main/reference/convert_blanks_to_na.md)
+during this process.
+
+## Derivation Functions
+
+The most important functions in
+[admiral](https://pharmaverse.github.io/admiral/) are the
+[derivations](https:/pharmaverse.github.io/admiral/main/reference/index.html#derivations-for-adding-variables).
+Derivations add variables or observations/records to the input dataset.
+Existing variables and observations of the input dataset are not
+changed. Derivation functions start with `derive_`. The first argument
+of these functions expects the input dataset. This allows us to string
+together derivations using the `%>%` operator.
+
+Functions which derive a dedicated variable start with `derive_var_`
+followed by the variable name, e.g.,
+[`derive_var_trtdurd()`](https:/pharmaverse.github.io/admiral/main/reference/derive_var_trtdurd.md)
+derives the `TRTDURD` variable.
+
+Functions which can derive multiple variables start with `derive_vars_`
+followed by the variable name, e.g.,
+[`derive_vars_dtm()`](https:/pharmaverse.github.io/admiral/main/reference/derive_vars_dtm.md)
+can derive both the `TRTSDTM` and `TRTSTMF` variables.
+
+Functions which derive a dedicated parameter start with `derive_param_`
+followed by the parameter name, e.g.,
+[`derive_param_bmi()`](https:/pharmaverse.github.io/admiral/main/reference/derive_param_bmi.md)
+derives the `BMI` parameter.
+
+### Example: Adding Variables
+
+Below we can see an example call to one of the most common derivation
+functions,
+[`derive_vars_merged()`](https:/pharmaverse.github.io/admiral/main/reference/derive_vars_merged.md).
+This function adds variable(s) to the input dataset based on the
+contents of another dataset. In this example, we add the treatment start
+datetime and corresponding imputation flag (`EXSTTMF`) to `adsl` by
+identifying the first record in `ex` with a non-missing Exposure Start
+Datetime (`EXSTDTM`) when sorting by `EXSTDM` and `EXSEQ`.
+
+``` r
+adsl <- adsl %>%
+  derive_vars_merged(
+    dataset_add = ex_ext,
+    filter_add = !is.na(EXSTDTM),
+    new_vars = exprs(TRTSDTM = EXSTDTM, TRTSTMF = EXSTTMF),
+    order = exprs(EXSTDTM, EXSEQ),
+    mode = "first",
+    by_vars = exprs(STUDYID, USUBJID)
+  )
+```
+
+### Example: Adding Records
+
+Another common derivation function is
+[`derive_param_computed()`](https:/pharmaverse.github.io/admiral/main/reference/derive_param_computed.md).
+This function adds a derived parameter to an input dataset. In the
+example below, we use it to derive the Mean Arterial Pressure (MAP) from
+the Systolic and Diastolic values of the blood pressure. The parameters
+that are needed for the derivation are specified in the `parameters`
+argument, and within `set_values_to` we set all the variable values for
+the new derived record.
+
+``` r
+advs <- advs %>%
+  derive_param_computed(
+    by_vars = exprs(USUBJID, AVISIT, AVISITN),
+    parameters = c("SYSBP", "DIABP"),
+    set_values_to = exprs(
+      AVAL = (AVAL.SYSBP + 2 * AVAL.DIABP) / 3,
+      PARAMCD = "MAP",
+      PARAM = "Mean Arterial Pressure (mmHg)",
+      AVALU = "mmHg"
+    )
+  )
+```
+
+**Note:** For the users’ convenience,
+[admiral](https://pharmaverse.github.io/admiral/) actually provides
+[`derive_param_map()`](https:/pharmaverse.github.io/admiral/main/reference/derive_param_map.md)
+(wrapper of
+[`derive_param_computed()`](https:/pharmaverse.github.io/admiral/main/reference/derive_param_computed.md))
+to derive MAP. The above example serves for illustrative purposes only.
+
+## Other Types of Functions
+
+Along with the derivation functions,
+[admiral](https://pharmaverse.github.io/admiral/) provides a large
+arsenal of functions to help you with your ADaM derivations. Here are
+some of the other categories.
+
+### Higher Order Functions
+
+[Higher order
+functions](https:/pharmaverse.github.io/admiral/main/reference/index.html#higher-order)
+are [admiral](https://pharmaverse.github.io/admiral/) functions that
+take other functions as input. They enhance the existing portfolio of
+derivation functions by allowing greater customization of the latter’s
+behavior. This is done by allowing a derivation function to be:
+
+- [`call_derivation()`](https:/pharmaverse.github.io/admiral/main/reference/call_derivation.md) -
+  Called multiple times, while varying some of the input arguments.
+- [`restrict_derivation()`](https:/pharmaverse.github.io/admiral/main/reference/restrict_derivation.md) -
+  Executed on a subset of the input dataset.
+- [`slice_derivation()`](https:/pharmaverse.github.io/admiral/main/reference/slice_derivation.md) -
+  Executed differently on subsets of the input dataset.
+
+Higher order functions are a relatively advanced topic within
+[admiral](https://pharmaverse.github.io/admiral/); you can can read all
+about them in the dedicated vignette about [Higher Order
+Functions](https:/pharmaverse.github.io/admiral/main/reference/index.html#higher_order).
+
+### Computation Functions
+
+[Computations](https:/pharmaverse.github.io/admiral/main/reference/index.html#computation-functions-for-vectors)
+expect vectors as input and return a vector. Usually these computation
+functions can not be used with `%>%`. These functions can be used in
+expressions like
+[`convert_dtc_to_dt()`](https:/pharmaverse.github.io/admiral/main/reference/convert_dtc_to_dt.md)
+in the derivation of the Final Lab Visit Date (`FINLABDT`) in the
+example below:
+
+``` r
+# Add the date of the final lab visit to ADSL
+adsl <- dm %>%
+  derive_vars_merged(
+    dataset_add = ds,
+    by_vars = exprs(USUBJID),
+    new_vars = exprs(FINLABDT = convert_dtc_to_dt(DSSTDTC)),
+    filter_add = DSDECOD == "FINAL LAB VISIT"
+  )
+```
+
+Computations can also be used inside a
+[`mutate()`](https://dplyr.tidyverse.org/reference/mutate.html)
+statement (or similar), so they can be leveraged when your variable
+derivations do not require calls to specific
+[admiral](https://pharmaverse.github.io/admiral/) functions:
+
+``` r
+adsl <- adsl %>%
+  mutate(RFSTDT = convert_dtc_to_dt(RFSTDTC))
+```
+
+### Filter Functions
+
+[Filter
+functions](https:/pharmaverse.github.io/admiral/main/reference/index.html#utilities-for-filtering-observations)
+are [admiral](https://pharmaverse.github.io/admiral/) utilities that
+filter the input dataset in different manners, for instance returning
+records that fit/don’t fit a certain condition or that are the
+first/last observation in a by group. These functions form an important
+internal backbone to some of the
+[admiral](https://pharmaverse.github.io/admiral/) functions, but can
+also be used on their own to explore or manipulate a dataset. For
+instance, in the example below we use
+[`filter_extreme()`](https:/pharmaverse.github.io/admiral/main/reference/filter_extreme.md)
+to extract the most recent MAP records in `advs`:
+
+``` r
+advs_lastmap <- advs %>%
+  filter(PARAMCD == "MAP") %>%
+  filter_extreme(
+    by_vars = exprs(USUBJID),
+    order = exprs(AVISITN, PARAMCD),
+    mode = "last"
+  )
+```
+
+## Argument Conventions
+
+Within the [admiral](https://pharmaverse.github.io/admiral/) package,
+any arguments which expect variable names or expressions of variable
+names, symbols or expressions must be specified rather than strings.
+
+- For arguments which expect a single variable name, the name can be
+  specified without quotes and quotation, e.g. `new_var = TEMPBL`
+
+- For arguments which expect one or more variable names, a list of
+  symbols is expected, e.g. `by_vars = exprs(PARAMCD, AVISIT)`
+
+- For arguments which expect a single expression, the expression needs
+  to be passed “as is”, e.g. `filter = PARAMCD == "TEMP"`
+
+- For arguments which expect one or more expressions, a list of
+  expressions is expected, e.g. `order = exprs(AVISIT, desc(AESEV))`
+
+If you are new to expressions, consider reading the [Expressions in
+Scripts](https:/pharmaverse.github.io/admiral/main/articles/concepts_conventions.html#exprs)
+section of our [Concepts and
+Conventions](https:/pharmaverse.github.io/admiral/main/articles/concepts_conventions.md)
+User Guide to learn more.
+
+## Starting a Script
+
+For the ADaM data structures, an overview of the flow and example
+function calls for the most common steps are provided by the following
+vignettes:
+
+- [Creating
+  ADSL](https:/pharmaverse.github.io/admiral/main/articles/adsl.md)
+- [Creating an OCCDS
+  ADaM](https:/pharmaverse.github.io/admiral/main/articles/occds.md)
+- [Creating a BDS Findings
+  ADaM](https:/pharmaverse.github.io/admiral/main/articles/bds_finding.md)
+
+[admiral](https://pharmaverse.github.io/admiral/) also provides template
+R scripts as a starting point. They can be created by calling
+[`use_ad_template()`](https:/pharmaverse.github.io/admiral/main/reference/use_ad_template.md),
+e.g.,
+
+``` r
+use_ad_template(
+  adam_name = "adsl",
+  save_path = "./ad_adsl.R"
+)
+```
+
+A list of all available templates can be obtained by
+[`list_all_templates()`](https:/pharmaverse.github.io/admiral/main/reference/list_all_templates.md):
+
+``` r
+library(admiral)
+list_all_templates()
+#> Existing ADaM templates in package 'admiral':
+#> • ADAB
+#> • ADAE
+#> • ADCM
+#> • ADEG
+#> • ADEX
+#> • ADLB
+#> • ADLBHY
+#> • ADMH
+#> • ADPC
+#> • ADPP
+#> • ADPPK
+#> • ADSL
+#> • ADVS
+```
+
+## Support
+
+Support is provided via the [admiral Slack
+channel](https://pharmaverse.slack.com/). Additionally, please feel free
+to raise issues in our [GitHub
+repository](https://github.com/pharmaverse/admiral/issues).
+
+## See also
+
+- [Template
+  scripts](https://github.com/pharmaverse/admiral/tree/main/inst/templates)
+
+- [Programming Concepts and
+  Conventions](https:/pharmaverse.github.io/admiral/main/articles/concepts_conventions.md)
+
+- [Programming
+  Strategy](https://pharmaverse.github.io/admiraldev/articles/programming_strategy.html)

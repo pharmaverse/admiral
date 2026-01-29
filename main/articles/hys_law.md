@@ -1,0 +1,225 @@
+# Hy's Law Implementation
+
+## Introduction
+
+During the drug development process, clinical trials are often required
+to assess for the potential that the experimental drug can cause severe
+liver injury, known as a drug induced liver injury (DILI) [Drug-Induced
+Liver Injury: Premarketing Clinical
+Evaluation](https://www.fda.gov/media/116737/download). There are
+multiple criteria that need to be evaluated to determine and classify a
+DILI “Event”. Hy’s Law, a common rule of thumb for a DILI Event , is
+usually comprised of three parts:
+
+- Elevated alanine aminotransferase (ALT) or aspartate aminotransferase
+  (AST) by 3-times or greater of the upper limit of normal.
+- Elevated serum total bilirubin (BILI) by 2-times or greater within a
+  window of time, ~14 days after the elevated ALT/AST event.
+- No other reason to explain these increased lab values like preexisting
+  liver disease.
+
+### Required Packages
+
+The examples of this vignette require the following packages.
+
+``` r
+library(admiral)
+library(dplyr, warn.conflicts = FALSE)
+```
+
+## Programming Workflow
+
+- [Read in Data](#readdata)
+- [Flagging Elevated Values (`CRITy`, `CRITyFL`)](#columns)
+- [Subsetting by `LBTESTCD` and Joining by Potential Events](#joins)
+- [How to Create New Parameters and Rows](#newparams)
+- [Conclusion](#conclusion)
+
+### Read in Data
+
+We assume that an `ADLB` dataset is available [¹](#fn1).
+
+First we read in the `ADLB` parameters required for the Hy’s Law
+parameters:
+
+``` r
+adlb <- admiral::admiral_adlb %>%
+  filter(PARAMCD %in% c("AST", "ALT", "BILI") & is.na(DTYPE))
+```
+
+### Flagging Elevated Values (`CRITy`, `CRITyFL`)
+
+A standard convention of `ADLBHY` datasets, are various `CRITy` and
+`CRITyFL` columns to describe the conditions necessary to reach that
+particular criterion of Hy’s Law and the actual flag itself to indicate
+whether or not the condition was reached.
+
+Using [`mutate()`](https://dplyr.tidyverse.org/reference/mutate.html),
+[`call_derivation()`](https:/pharmaverse.github.io/admiral/main/reference/call_derivation.md)
+and
+[`derive_var_merged_exist_flag()`](https:/pharmaverse.github.io/admiral/main/reference/derive_var_merged_exist_flag.md),
+we can create these columns that indicate the the 3-fold or greater than
+upper limit of normal of ALT/AST and the 2-fold or greater than upper
+limit of normal of BILI.
+
+To increase visibility and for simplicity, we will retain only columns
+that are relevant to a Hy’s Law analysis for now.
+
+``` r
+adlb_annotated <- adlb %>%
+  slice_derivation(
+    derive_vars_crit_flag,
+    args = params(
+      values_yn = TRUE
+    ),
+    derivation_slice(
+      filter = PARAMCD %in% c("AST", "ALT"),
+      args = params(
+        condition = AVAL / ANRHI >= 3,
+        description = paste(PARAMCD, ">=3xULN")
+      )
+    ),
+    derivation_slice(
+      filter = PARAMCD == "BILI",
+      args = params(
+        condition = AVAL / ANRHI >= 2,
+        description = "BILI >= 2xULN"
+      )
+    )
+  ) %>%
+  select(STUDYID, USUBJID, TRT01A, PARAMCD, LBSEQ, ADT, AVISIT, ADY, AVAL, ANRHI, CRIT1, CRIT1FL)
+```
+
+### Subsetting by `LBTESTCD` and Joining by Potential Events
+
+If an elevated ALT/AST event reaches the threshold for Hy’s Law, we need
+to search for any elevated BILI events within a certain time-window,
+usually up to 14 days after the elevated ALT/AST event (this window may
+vary by organization). By,
+
+1.  Splitting our dataset into its ALT/AST and BILI subsets,
+    respectively, and
+2.  Joining these two datasets using
+    [`derive_vars_joined()`](https:/pharmaverse.github.io/admiral/main/reference/derive_vars_joined.md)
+    while using the `filter_join` argument to only join together the
+    relevant flagged BILI records that have a corresponding flagged
+    ALT/AST record (prior up to 14 days but may vary for
+    trial/organization) that would indicate a potential Hy’s Law event,
+
+the resulting dataset is helpful for deriving additional parameters. The
+dataset may also prove useful for a listing where you have to display
+the two lab-records in one row to showcase the potential event.
+
+``` r
+altast_records <- adlb_annotated %>%
+  filter(PARAMCD %in% c("AST", "ALT"))
+
+bili_records <- adlb_annotated %>%
+  filter(PARAMCD %in% c("BILI"))
+
+hylaw_records <- derive_vars_joined(
+  dataset = altast_records,
+  dataset_add = bili_records,
+  by_vars = exprs(STUDYID, USUBJID),
+  order = exprs(ADY),
+  join_type = "all",
+  filter_join = 0 <= ADT.join - ADT & ADT.join - ADT <= 14 & CRIT1FL == "Y" & CRIT1FL.join == "Y",
+  new_vars = exprs(BILI_DT = ADT, BILI_CRITFL = CRIT1FL),
+  mode = "first"
+)
+```
+
+### How to Create New Parameters and Rows
+
+Using
+[`derive_param_exist_flag()`](https:/pharmaverse.github.io/admiral/main/reference/derive_param_exist_flag.md)
+you can create a variety of parameters for your final dataset with
+`AVAL = 1/0` for your specific Hy’s Law analysis. Below is an example of
+how to indicate a potential Hy’s Law event, with `PARAMCD` set as
+`"HYSLAW"` and `PARAM` set to `"ALT/AST >= 3xULN and BILI >= 2xULN"` for
+**each patient** using the flags from the prior dataset. This method
+allows for flexibility as well, if parameters for each visit was
+desired, you would add `AVISIT` and `ADT` to the
+[`select()`](https://dplyr.tidyverse.org/reference/select.html) and
+`by_vars` lines as denoted from the following code.
+
+Additional modifications can be made such as:
+
+- Parameter to indicate worsening of condition
+- Any sort of baseline/post-baseline based analysis
+- Flags for other lab values like ALP if modified in above too
+
+``` r
+hylaw_records_pts_visits <- hylaw_records %>%
+  select(STUDYID, USUBJID, TRT01A) %>% # add AVISIT, ADT for by visit
+  distinct()
+
+hylaw_records_fls <- hylaw_records %>%
+  select(STUDYID, USUBJID, TRT01A, CRIT1FL, BILI_CRITFL) %>% # add AVISIT, ADT for by visit
+  distinct()
+
+hylaw_params <- derive_param_exist_flag(
+  dataset_ref = hylaw_records_pts_visits,
+  dataset_add = hylaw_records_fls,
+  condition = CRIT1FL == "Y" & BILI_CRITFL == "Y",
+  false_value = "N",
+  missing_value = "N",
+  by_vars = exprs(STUDYID, USUBJID, TRT01A), # add AVISIT, ADT for by visit
+  set_values_to = exprs(
+    PARAMCD = "HYSLAW",
+    PARAM = "ALT/AST >= 3xULN and BILI >= 2xULN",
+    AVAL = yn_to_numeric(AVALC)
+  )
+)
+```
+
+The last step would be binding these rows back to whatever previous
+dataset is appropriate based on your data specifications, in this case,
+it would be best suited to bind back to our `adlb_annotated` object.
+
+### Conclusion
+
+``` r
+adlbhy <- adlb_annotated %>%
+  bind_rows(hylaw_params)
+```
+
+Here we demonstrated what is the base-case that may be asked of as a
+trial programmer. The reality is that Hy’s Law and assessing potential
+DILI events can get rather complex quite quickly. Differences in
+assessment across organizations and specific trials might require
+modifications, which may include:
+
+- additional `CRITy` and `CRITyFL` columns for different cutoffs like
+  5xULN, 10xULN, 20xULN
+- checking for elevated values of additional labs like alkaline
+  phosphatase (ALP)
+- appearance of certain adverse events associated with some of these
+  elevated lab-values
+- different criteria cutoffs that depend on baseline values or
+  characteristics
+- other parameters such as worsening of condition
+
+We hope by demonstrating the flexibility of `admiral` functions and
+using a general workflow to create the necessary parameters for an
+`ADLBHY`, that creating this final dataset becomes simplified and easily
+scalable. Ideally, this is ready for your organization’s standard macros
+or previous code for TLFs and outputs as well. This is our first attempt
+at breaking down and summarizing this topic. We welcome feedback and
+ideas to improve this guide!
+
+## Example Script
+
+| ADaM     | Sourcing Command            |
+|----------|-----------------------------|
+| `ADLBHY` | `use_ad_template("ADLBHY")` |
+
+------------------------------------------------------------------------
+
+1.  In the walk through below we will use the `ADLB` dataset created
+    from the call `use_ad_template("adlb")`. Due to the size of the
+    dataset, we only included the following `USUBJID`s:
+
+    - `01-701-1015`, `01-701-1023`, `01-701-1028`, `01-701-1033`,
+      `01-701-1034`, `01-701-1047`, `01-701-1097`, `01-705-1186`,
+      `01-705-1292`, `01-705-1310`, `01-708-1286`.
