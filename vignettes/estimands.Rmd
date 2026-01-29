@@ -60,7 +60,6 @@ vs <- convert_blanks_to_na(vs)
 adsl <- admiral_adsl
 
 # Simple ADVS for the imputation example
-
 advs <- vs %>% 
   mutate(
     PARAMCD = VSTESTCD,
