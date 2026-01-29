@@ -11084,8 +11084,8 @@ test_that("derive_var_atoxgr_dir Test 132: CTCAEv6 Creatinine incr. low_indicato
   )
 })
 
-## Test 133: ERROR when CRITERIA different within same TERM and UNIT ----
-test_that("derive_var_atoxgr_dir Test 133: ERROR when CRITERIA different within same TERM and UNIT", {
+## Test 133: ERROR when CRITERIA different with same TERM and UNIT ----
+test_that("derive_var_atoxgr_dir Test 133: ERROR when CRITERIA different with same TERM and UNIT", {
   atoxgr_criteria_ctcv6 <- bind_rows(
     admiral::atoxgr_criteria_ctcv6,
     admiral::atoxgr_criteria_ctcv6 %>%
