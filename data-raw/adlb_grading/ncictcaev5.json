@@ -181,7 +181,7 @@
     "GRADE_4_CODE": "!is.na(ANRHI) & signif(AVAL, signif_dig) > signif(6*ANRHI, signif_dig) ~ \"4\"",
     "GRADE_3_CODE": "!is.na(ANRHI) & signif(AVAL, signif_dig) > signif(3*ANRHI, signif_dig) ~ \"3\",  !is.na(BASE) & signif(AVAL, signif_dig) > signif(3*BASE, signif_dig) ~ \"3\"",
     "GRADE_2_CODE": "!is.na(ANRHI) & signif(AVAL, signif_dig) > signif(1.5*ANRHI, signif_dig) ~ \"2\",  !is.na(BASE) & signif(AVAL, signif_dig) > signif(1.5*BASE, signif_dig) ~ \"2\"",
-    "GRADE_1_CODE": "is.na(ANRHI) ~ NA_character_,  signif(AVAL, signif_dig) > signif(ANRHI, signif_dig) ~ \"1\"",
+    "GRADE_1_CODE": "is.na(ANRHI) ~ NA_character_, signif(AVAL, signif_dig) > signif(ANRHI, signif_dig) ~ \"1\"",
     "VAR_CHECK": "AVAL, ANRHI, BASE",
     "DIRECTION": "H"
   },

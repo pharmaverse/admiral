@@ -229,7 +229,8 @@
     "GRADE_2_CODE": "signif(AVAL, signif_dig) <= 49 & signif(AVAL, signif_dig) > 25 ~ \"2\"",
     "UNIT_CHECK": "mL/min",
     "VAR_CHECK": "AVAL",
-    "DIRECTION": "L"
+    "DIRECTION": "L",
+    "COMMENT": "Set grade to missing if AVAL < 10. Report Grade 4 as Renal and urinary disorders: Acute kidney injury or Chronic kidney disease"
   },
   {
     "SOC": "Investigations",
