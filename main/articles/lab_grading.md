@@ -720,7 +720,9 @@ low abnormal Baseline Value. Note: you can pass in multiple values,
 
 Excluding “Creatinine increased”, for the other 4 terms, this means if
 `BNRIND` is abnormal then the grade is always one for the baseline
-observation. Additionally, for “Alkaline phosphatase increased” the
+observation. For “Creatinine increased” if `BNRIND` is abnormal then the
+grade could be zero, one or four, as grade 1 and 4 are independent of
+`BNRIND`. Additionally, for “Alkaline phosphatase increased” the
 baseline grade is always zero, as the value has to be above the baseline
 value to have a grade greater than zero. This is the conservative
 approach, some companies may not want the baseline observation graded at

@@ -240,7 +240,7 @@ easily findable.
   effort to make our functions easily findable.
 - We use consistent naming conventions across all our functions, and
   provide vignettes and [ADaM
-  templates](https:/pharmaverse.github.io/admiral/main/articles/templates.md)
+  templates](https://pharmaverse.github.io/admiral/cran-release/articles/templates.html)
   that help users to get started and build familiarity. Each
   [admiral](https://pharmaverse.github.io/admiral/) family package
   website is searchable.

@@ -63,10 +63,11 @@ from metadata. The dataset contains the following columns:
 
 Note: Variables `SOC`, `TERM`, `SUBGROUP`, `Grade 1`,
 `Grade 2`,`Grade 3`,`Grade 4`,`Grade 5`, `Definition` are from the
-source document on DAIDS website defining the grading criteria.
-\[Division of AIDS (DAIDS) Table for Grading the Severity of Adult and
-Pediatric Adverse Events From these variables only 'TERM' is used in the
-`{admiral}` code, the rest are for information and traceability only.
+source document on DAIDS website defining the grading criteria,
+(Division of AIDS (DAIDS) Table for Grading the Severity of Adult and
+Pediatric Adverse Events). From these variables only 'TERM' is used in
+the `{admiral}` code, the rest are for information and traceability
+only.
 
 ## See also
 
