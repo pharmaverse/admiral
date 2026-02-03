@@ -1,4 +1,4 @@
-# admiral (development version)
+# admiral 1.4.1
 
 ## Updates of Existing Functions
 
@@ -10,7 +10,7 @@ values less than 10 for `NCICTCAEv6`. `DAIDs` grading metadata updated to use `A
 
 ## Documentation
 
-`Lab Grading` vignette updated to add more clarity for `"Creatinine Increased"` and baseline visits. (#2958)
+- `Lab Grading` vignette updated to add more clarity for `"Creatinine Increased"` and baseline visits. (#2958)
 
 - Fix typo in `compute_bsa()` in `ADPPK` template and vignette. (#2963)
 
