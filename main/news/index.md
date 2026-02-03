@@ -2,6 +2,10 @@
 
 ## admiral (development version)
 
+## admiral 1.4.1
+
+CRAN release: 2026-02-03
+
 ### Updates of Existing Functions
 
 - Grading metadata amended to ensure the criteria is exactly the same
@@ -15,9 +19,9 @@
 
 ### Documentation
 
-`Lab Grading` vignette updated to add more clarity for
-`"Creatinine Increased"` and baseline visits.
-([\#2958](https://github.com/pharmaverse/admiral/issues/2958))
+- `Lab Grading` vignette updated to add more clarity for
+  `"Creatinine Increased"` and baseline visits.
+  ([\#2958](https://github.com/pharmaverse/admiral/issues/2958))
 
 - Fix typo in
   [`compute_bsa()`](https:/pharmaverse.github.io/admiral/main/reference/compute_bsa.md)
