@@ -40,7 +40,7 @@ Note: This is a wrapper function for the function convert_dtc_to_dtm().">
 
     <a class="navbar-brand me-2" href="../index.html">admiral</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.4.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.4.1.9000</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -94,6 +94,7 @@ Note: This is a wrapper function for the function convert_dtc_to_dtm().">
     <div class="dropdown-menu" aria-labelledby="dropdown-versions">
     <a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/main">main</a>
 <a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/cran-release">cran-release</a>
+<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v1.4.1">v1.4.1</a>
 <a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v1.4.0">v1.4.0</a>
 <a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v1.3.1">v1.3.1</a>
 <a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v1.3.0">v1.3.0</a>
@@ -355,15 +356,15 @@ preserve minute when hour is missing.</p>
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a>
 </h2>
     <div class="dont-index"><p>Date/Time Computation Functions that returns a vector:
-<code><a href="compute_age_years.html">compute_age_years</a>()</code>,
-<code><a href="compute_dtf.html">compute_dtf</a>()</code>,
-<code><a href="compute_duration.html">compute_duration</a>()</code>,
-<code><a href="compute_tmf.html">compute_tmf</a>()</code>,
-<code><a href="convert_dtc_to_dt.html">convert_dtc_to_dt</a>()</code>,
-<code><a href="convert_dtc_to_dtm.html">convert_dtc_to_dtm</a>()</code>,
-<code><a href="convert_xxtpt_to_hours.html">convert_xxtpt_to_hours</a>()</code>,
-<code><a href="impute_dtc_dt.html">impute_dtc_dt</a>()</code>,
-<code><a href="impute_dtc_dtm.html">impute_dtc_dtm</a>()</code></p></div>
+<code><a href="compute_age_years.html">compute_age_years()</a></code>,
+<code><a href="compute_dtf.html">compute_dtf()</a></code>,
+<code><a href="compute_duration.html">compute_duration()</a></code>,
+<code><a href="compute_tmf.html">compute_tmf()</a></code>,
+<code><a href="convert_dtc_to_dt.html">convert_dtc_to_dt()</a></code>,
+<code><a href="convert_dtc_to_dtm.html">convert_dtc_to_dtm()</a></code>,
+<code><a href="convert_xxtpt_to_hours.html">convert_xxtpt_to_hours()</a></code>,
+<code><a href="impute_dtc_dt.html">impute_dtc_dt()</a></code>,
+<code><a href="impute_dtc_dtm.html">impute_dtc_dtm()</a></code></p></div>
     </div>
 
     <div class="section level2">
@@ -372,7 +373,7 @@ preserve minute when hour is missing.</p>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu">convert_date_to_dtm</span><span class="op">(</span><span class="st">"2019-07-18T15:25:00"</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "2019-07-18 15:25:00 UTC"</span>
 <span class="r-in"><span><span class="fu">convert_date_to_dtm</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Sys.time.html" class="external-link">Sys.time</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "2026-01-15 10:13:29 UTC"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "2026-02-03 10:32:48 UTC"</span>
 <span class="r-in"><span><span class="fu">convert_date_to_dtm</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/as.Date.html" class="external-link">as.Date</a></span><span class="op">(</span><span class="st">"2019-07-18"</span><span class="op">)</span>, time_imputation <span class="op">=</span> <span class="st">"23:59:59"</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "2019-07-18 23:59:59 UTC"</span>
 <span class="r-in"><span><span class="fu">convert_date_to_dtm</span><span class="op">(</span><span class="st">"2019-07-18"</span>, time_imputation <span class="op">=</span> <span class="st">"23:59:59"</span><span class="op">)</span></span></span>
@@ -391,7 +392,7 @@ preserve minute when hour is missing.</p>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
 </div>
 
     </footer>

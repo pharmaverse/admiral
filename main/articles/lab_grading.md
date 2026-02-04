@@ -1,0 +1,947 @@
+# Lab Grading
+
+## Introduction
+
+Within the ADLB ADaM data set there is a concept of lab grading, where
+there is a set of criteria for particular lab tests that grade the
+severity or abnormality of a lab value. The grades are from 0 to 4,
+where grade 0 can be viewed generally as a “NORMAL” value. The higher
+the grade the more severe or more abnormal the lab value is. There are
+several sets of lab grading criteria, currently
+[admiral](https://pharmaverse.github.io/admiral/) has implemented
+NCI-CTCAEv4, NCI-CTCAEv5, NCI-CTCAEv6 and DAIDS grading criteria. In
+future releases [admiral](https://pharmaverse.github.io/admiral/) may
+look to implement further grading criteria.
+
+The NCI-CTCAEv4 criteria can be found under the heading [**CTCAE and
+CTEP
+Codes**](https://dctd.cancer.gov/research/ctep-trials/trial-development#ctcae-and-ctep-codes)
+
+The NCI-CTCAEv5 and NCI-CTCAEv6 criteria can be found under the heading
+[**CTEP
+CTCAE**](https://dctd.cancer.gov/research/ctep-trials/for-sites/adverse-events#ctep-ctcae)
+
+The DAIDS grading criteria can be found here:
+<https://rsc.niaid.nih.gov/clinical-research-sites/daids-adverse-event-grading-tables>
+.
+
+The DAIDS criteria can be found under the heading [**DAIDS Table for
+Grading the Severity of Adult and Pediatric Adverse Events Corrected
+Version
+2.1**](https://rsc.niaid.nih.gov/sites/default/files/daidsgradingcorrectedv21.pdf)
+
+## Grading metadata
+
+[admiral](https://pharmaverse.github.io/admiral/) will store two sets of
+metadata data set for each set of grading criteria in the data folder of
+[admiral](https://pharmaverse.github.io/admiral/), one for SI units, and
+one for US (conventional) units. These are as follows:
+
+NCI-CTCAEv4
+
+- `atoxgr_criteria_ctcv4` for SI units.
+- `atoxgr_criteria_ctcv4_uscv` for US (conventional) units.
+
+NCI-CTCAEv5
+
+- `atoxgr_criteria_ctcv5` for SI units.
+- `atoxgr_criteria_ctcv5_uscv` for US (conventional) units.
+
+NCI-CTCAEv6
+
+- `atoxgr_criteria_ctcv6` for SI units.
+- `atoxgr_criteria_ctcv6_uscv` for US (conventional) units.
+
+DAIDS
+
+- `atoxgr_criteria_daids` for SI units.
+- `atoxgr_criteria_daids_uscv` for US (conventional) units.
+
+Each metadata data set has required variables and optional variables,
+the optional variables are purely for transparency, and will contain
+detailed information about the grading criteria. The required variables
+are those used by[admiral](https://pharmaverse.github.io/admiral/) to
+create the grade.
+
+### Structure of metadata set
+
+Each metadata data set has the following structure for the required
+variables:
+
+| Variable                | Scope                                                                                                                  | Type      | Example Value                                                          |
+|-------------------------|------------------------------------------------------------------------------------------------------------------------|-----------|------------------------------------------------------------------------|
+| **TERM**                | Term describing the criteria applied to a particular lab test.                                                         | Character | “Anemia”                                                               |
+| **DIRECTION**           | The direction of the abnormality of a particular lab test value                                                        | Character | “L” or “H”.                                                            |
+| **UNIT_CHECK**          | Unit of lab test, to check against input data if criteria is based on absolute values.                                 | Character | “mmol/L”                                                               |
+| **VAR_CHECK**           | Comma separated list of variables used in criteria, to check input data that variables exist.                          | Character | “AVAL, ANRLO”                                                          |
+| **FILTER**              | Only required for DAIDS grading. Variable to hold code that filters the lab data based on contents of column SUBGROUP. | Character | R code that is valid within a `filter` function call.                  |
+| **GRADE_CRITERIA_CODE** | Variable to hold code that creates grade based on defined criteria.                                                    | Character | R code that is a valid case statement within a `mutate` function call. |
+
+The metadata data set has the following structure for the optional
+variables:
+
+| Variable       | Scope                                                                                                                                                             | Type      | Example Value                                                                                                                                         |
+|----------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------|-----------|-------------------------------------------------------------------------------------------------------------------------------------------------------|
+| **SOC**        | System Organ Class the lab test belongs to.                                                                                                                       | Character | “Investigations”                                                                                                                                      |
+| **SUBGROUP**   | Only required for DAIDS grading. Description of subgroup of lab data.                                                                                             | Character | “\> 15 years of age”.                                                                                                                                 |
+| **GRADE_1**    | Grade 1 criteria for lab test, normally straight from source document.                                                                                            | Character | “\>ULN - 3.0 x ULN”.                                                                                                                                  |
+| **GRADE_2**    | Grade 2 criteria for lab test, normally straight from source document.                                                                                            | Character | “\>3.0 - 5.0 x ULN”.                                                                                                                                  |
+| **GRADE_3**    | Grade 3 criteria for lab test, normally straight from source document.                                                                                            | Character | “\>5.0 - 20.0 x ULN”.                                                                                                                                 |
+| **GRADE_4**    | Grade 4 criteria for lab test, normally straight from source document.                                                                                            | Character | “\>20.0 x ULN”.                                                                                                                                       |
+| **DEFINITION** | Definition of abnormality, normally from source document.                                                                                                         | Character | “A finding based on laboratory test results that indicate an increase in the level of alanine aminotransferase (ALT or SGPT) in the blood specimen.”. |
+| **COMMENT**    | Description of any decisions made by [admiral](https://pharmaverse.github.io/admiral/) to implement grading criteria, where grading criteria alone was ambiguous. | Character | “Take worst case and assume on anticoagulation”.                                                                                                      |
+
+## Handling floating points when comparing numeric values
+
+When comparing numeric values, for example `AVAL > 1.1*ANRHI`,
+unexpected results can occur due to floating point issues. To solve this
+issue {admiral} used the [`signif()`](https://rdrr.io/r/base/Round.html)
+function on both side of the equation, the number of significant digits
+used to compare is passed into the function
+[`derive_var_atoxgr_dir()`](https:/pharmaverse.github.io/admiral/main/reference/derive_var_atoxgr_dir.md)
+via the argument `signif_dig`. Please see documentation of the function
+for more details and the blog post [How admiral handles floating
+points](https://pharmaverse.github.io/blog/posts/2023-10-30_floating_point/floating_point.html)
+for more context.
+
+## Creating the Lab Grade
+
+### Mapping `ADLB` to the `TERM` variable in the `{admiral}` metadata data set
+
+``` r
+library(admiral)
+library(pharmaversesdtm)
+library(dplyr, warn.conflicts = FALSE)
+library(stringr)
+library(tibble)
+
+lb <- pharmaversesdtm::lb
+adsl <- admiral::admiral_adsl
+
+lb <- convert_blanks_to_na(lb)
+```
+
+  
+Each company needs to map their lab test to a term that describes the
+criteria being applied. The list of terms defined in the
+[admiral](https://pharmaverse.github.io/admiral/) metadata to implement
+NCI-CTCAEv4 is below:  
+
+  
+
+  
+Likewise, the list of terms defined in the
+[admiral](https://pharmaverse.github.io/admiral/) metadata to implement
+NCI-CTCAEv5 is below: (Terms identical to NCI-CTCAEv4, except
+`Hyperglycemia`, `Hyperglycemia (Fasting)` and `Hypophosphatemia`) which
+are not present in NCI-CTCAEv5.  
+
+  
+
+  
+Similarly, the list of terms defined in the
+[admiral](https://pharmaverse.github.io/admiral/) metadata to implement
+NCI-CTCAEv6 is below:  
+
+  
+
+  
+Finally, the list of terms defined in the
+[admiral](https://pharmaverse.github.io/admiral/) metadata to implement
+DAIDS is below:  
+
+  
+Using CDISC data these lab tests can be mapped to the correct terms,
+firstly create `PARAMCD`, `PARAM`, `AVAL`, `ANRLO` and `ANRHI`, also
+some lab grading criteria require `BASE` and `PCHG`, so these would also
+need to be created before running
+[`derive_var_atoxgr_dir()`](https:/pharmaverse.github.io/admiral/main/reference/derive_var_atoxgr_dir.md)
+function.  
+
+``` r
+# Look-up tables ----
+
+# Assign PARAMCD, PARAM, and PARAMN
+param_lookup <- tibble::tribble(
+  ~LBTESTCD, ~PARAMCD,  ~PARAM,                                             ~PARAMN,
+  "ALB",     "ALB",     "Albumin (g/L)",                                    1,
+  "ALP",     "ALKPH",   "Alkaline Phosphatase (U/L)",                       2,
+  "ALT",     "ALT",     "Alanine Aminotransferase (U/L)",                   3,
+  "ANISO",   "ANISO",   "Anisocytes",                                       4,
+  "AST",     "AST",     "Aspartate Aminotransferase (U/L)",                 5,
+  "BASO",    "BASO",    "Basophils (10^9/L)",                               6,
+  "BASOLE",  "BASOLE",  "Basophils/Leukocytes (FRACTION)",                  7,
+  "BILI",    "BILI",    "Bilirubin (umol/L)",                               8,
+  "BUN",     "BUN",     "Blood Urea Nitrogen (mmol/L)",                     9,
+  "CA",      "CA",      "Calcium (mmol/L)",                                 10,
+  "CHOL",    "CHOLES",  "Cholesterol (mmol/L)",                             11,
+  "CK",      "CK",      "Creatinine Kinase (U/L)",                          12,
+  "CL",      "CL",      "Chloride (mmol/L)",                                13,
+  "COLOR",   "COLOR",   "Color",                                            14,
+  "CREAT",   "CREAT",   "Creatinine (umol/L)",                              15,
+  "EOS",     "EOS",     "Eosinophils (10^9/L)",                             16,
+  "EOSLE",   "EOSLE",   "Eosinophils/Leukocytes (FRACTION)",                17,
+  "GGT",     "GGT",     "Gamma Glutamyl Transferase (U/L)",                 18,
+  "GLUC",    "GLUC",    "Glucose (mmol/L)",                                 19,
+  "HBA1C",   "HBA1C",   "Hemoglobin A1C (1)",                               20,
+  "HCT",     "HCT",     "Hematocrit (1)",                                   21,
+  "HGB",     "HGB",     "Hemoglobin (mmol/L)",                              22,
+  "K",       "POTAS",   "Potassium (mmol/L)",                               23,
+  "KETONES", "KETON",   "Ketones",                                          24,
+  "LYM",     "LYMPH",   "Lymphocytes (10^9/L)",                             25,
+  "LYMLE",   "LYMPHLE", "Lymphocytes/Leukocytes (FRACTION)",                26,
+  "MACROCY", "MACROC",  "Macrocytes",                                       27,
+  "MCH",     "MCH",     "Ery. Mean Corpuscular Hemoglobin (fmol(Fe))",      28,
+  "MCHC",    "MCHC",    "Ery. Mean Corpuscular HGB Concentration (mmol/L)", 29,
+  "MCV",     "MCV",     "Ery. Mean Corpuscular Volume (f/L)",               30,
+  "MICROCY", "MICROC",  "Microcytes",                                       31,
+  "MONO",    "MONO",    "Monocytes (10^9/L)",                               32,
+  "MONOLE",  "MONOLE",  "Monocytes/Leukocytes (FRACTION)",                  33,
+  "PH",      "PH",      "pH",                                               34,
+  "PHOS",    "PHOS",    "Phosphate (mmol/L)",                               35,
+  "PLAT",    "PLAT",    "Platelet (10^9/L)",                                36,
+  "POIKILO", "POIKIL",  "Poikilocytes",                                     37,
+  "POLYCHR", "POLYCH",  "Polychromasia",                                    38,
+  "PROT",    "PROT",    "Protein (g/L)",                                    39,
+  "RBC",     "RBC",     "Erythrocytes (TI/L)",                              40,
+  "SODIUM",  "SODIUM",  "Sodium (mmol/L)",                                  41,
+  "SPGRAV",  "SPGRAV",  "Specific Gravity",                                 42,
+  "TSH",     "TSH",     "Thyrotropin (mU/L)",                               43,
+  "URATE",   "URATE",   "Urate (umol/L)",                                   44,
+  "UROBIL",  "UROBIL",  "Urobilinogen",                                     45,
+  "VITB12",  "VITB12",  "Vitamin B12 (pmol/L)",                             46,
+  "WBC",     "WBC",     "Leukocytes (10^9/L)",                              47
+)
+
+adlb <- lb %>%
+  ## Add PARAMCD PARAM and PARAMN - from LOOK-UP table
+  derive_vars_merged_lookup(
+    dataset_add = param_lookup,
+    new_vars = exprs(PARAMCD, PARAM, PARAMN),
+    by_vars = exprs(LBTESTCD)
+  ) %>%
+  ## Calculate PARCAT1 AVAL AVALC ANRLO ANRHI
+  ## Dummy the values for BASE
+  mutate(
+    PARCAT1 = LBCAT,
+    AVAL = LBSTRESN,
+    AVALC = ifelse(
+      is.na(LBSTRESN) | as.character(LBSTRESN) != LBSTRESC,
+      LBSTRESC,
+      NA
+    ),
+    ANRLO = LBSTNRLO,
+    ANRHI = LBSTNRHI,
+    BASE = AVAL - 10
+  )
+#> All `LBTESTCD` are mapped.
+```
+
+Another look-up table is used to add on `ATOXDSCL` and `ATOXDSCH` using
+`PARAMCD`. `ATOXDSCL` holds the terms for grading low lab values, and
+`ATOXDSCH` holds the terms for grading high lab values. The names of
+these variables can be user-defined. `ATOXDSCL` and `ATOXDSCH` are the
+link from ADLB data to the
+[admiral](https://pharmaverse.github.io/admiral/) metadata that holds
+the grading criteria.
+
+``` r
+# Assign ATOXDSCL and ATOXDSCH to hold lab grading terms
+# ATOXDSCL and ATOXDSCH hold terms defined by NCI-CTCAEv4.
+grade_lookup <- tibble::tribble(
+  ~PARAMCD, ~ATOXDSCL,                    ~ATOXDSCH,
+  "ALB",    "Hypoalbuminemia",            NA_character_,
+  "ALKPH",  NA_character_,                "Alkaline phosphatase increased",
+  "ALT",    NA_character_,                "Alanine aminotransferase increased",
+  "AST",    NA_character_,                "Aspartate aminotransferase increased",
+  "BILI",   NA_character_,                "Blood bilirubin increased",
+  "CA",     "Hypocalcemia",               "Hypercalcemia",
+  "CHOLES", NA_character_,                "Cholesterol high",
+  "CK",     NA_character_,                "CPK increased",
+  "CREAT",  NA_character_,                "Creatinine increased",
+  "GGT",    NA_character_,                "GGT increased",
+  "GLUC",   "Hypoglycemia",               "Hyperglycemia",
+  "HGB",    "Anemia",                     "Hemoglobin increased",
+  "POTAS",  "Hypokalemia",                "Hyperkalemia",
+  "LYMPH",  "CD4 lymphocytes decreased",  NA_character_,
+  "PHOS",   "Hypophosphatemia",           NA_character_,
+  "PLAT",   "Platelet count decreased",   NA_character_,
+  "SODIUM", "Hyponatremia",               "Hypernatremia",
+  "WBC",    "White blood cell decreased", "Leukocytosis",
+)
+
+adlb <- adlb %>%
+  derive_vars_merged(
+    dataset_add = grade_lookup,
+    by_vars = exprs(PARAMCD),
+  )
+```
+
+It is now straightforward to create the grade, for low lab values the
+grade will be held in `ATOXGRL` and for high lab values the grade will
+be held in `ATOXGRH`.
+
+Note: for NCICTCAEv5 grading, you would update `meta_criteria` parameter
+to `atoxgr_criteria_ctcv5` and for DAIDS grading you would update
+`meta_criteria` parameter to `atoxgr_criteria_daids`
+
+``` r
+adlb <- adlb %>%
+  derive_var_atoxgr_dir(
+    new_var = ATOXGRL,
+    tox_description_var = ATOXDSCL,
+    meta_criteria = atoxgr_criteria_ctcv4,
+    criteria_direction = "L",
+    get_unit_expr = extract_unit(PARAM)
+  ) %>%
+  derive_var_atoxgr_dir(
+    new_var = ATOXGRH,
+    tox_description_var = ATOXDSCH,
+    meta_criteria = atoxgr_criteria_ctcv4,
+    criteria_direction = "H",
+    get_unit_expr = extract_unit(PARAM)
+  )
+```
+
+Note: [admiral](https://pharmaverse.github.io/admiral/) does not grade
+‘Anemia’ or ‘Hemoglobin Increased’ because the metadata is based on the
+SI unit of ‘g/L’, however the CDISC data has SI unit of ‘mmol/L’. Please
+see `UNIT_CHECK` variable in
+[admiral](https://pharmaverse.github.io/admiral/) metadata
+[`atoxgr_criteria_ctcv4()`](https:/pharmaverse.github.io/admiral/main/reference/atoxgr_criteria_ctcv4.md)
+or
+[`atoxgr_criteria_ctcv5()`](https:/pharmaverse.github.io/admiral/main/reference/atoxgr_criteria_ctcv5.md)
+or
+[`atoxgr_criteria_daids()`](https:/pharmaverse.github.io/admiral/main/reference/atoxgr_criteria_daids.md),
+the metadata is in the data folder of
+[admiral](https://pharmaverse.github.io/admiral/).  
+
+  
+
+[admiral](https://pharmaverse.github.io/admiral/) also gives the option
+to combine `ATOXGRL` and `ATOXGRH` into one variable, namely `ATOXGR`.
+Grades held in `ATOXGRL` will be given a negative value in `ATOXGR` to
+distinguish between low and high values.
+
+``` r
+adlb <- adlb %>%
+  derive_var_atoxgr()
+```
+
+  
+
+## NCI-CTCAEV4 implementation
+
+### Terms graded
+
+Grading is implemented for those lab tests where a lab value is included
+in the grading definition,
+[admiral](https://pharmaverse.github.io/admiral/) does NOT try to read
+any other data to determine the grade, and only the `ADLB` dataset is
+used. The following CTCAE v4.0 SOC values were identified for grading,
+these are “Investigations”, “Metabolism and nutrition disorders” and
+“Blood and lymphatic system disorders”.
+
+From these SOC values the following terms criteria is implemented in
+[admiral](https://pharmaverse.github.io/admiral/)
+
+From SOC = “Investigations” there are 21 CTCAE v4.0 Terms:
+
+- Activated partial thromboplastin time prolonged
+- Alanine aminotransferase increased
+- Alkaline phosphatase increased
+- Aspartate aminotransferase increased
+- Blood bilirubin increased
+- CD4 lymphocytes decreased
+- Cholesterol high
+- CPK increased
+- Creatinine increased
+- Fibrinogen decreased
+- GGT increased
+- Haptoglobin decreased
+- Hemoglobin increased
+- INR increased
+- Lipase increased
+- Lymphocyte count decreased
+- Lymphocyte count increased
+- Neutrophil count decreased
+- Platelet count decreased
+- Serum amylase increased
+- White blood cell decreased
+
+From the SOC = “Metabolism and nutrition disorders” there are 16 CTCAE
+v4.0 Terms:
+
+- Acidosis
+- Alkalosis
+- Hypercalcemia
+- Hyperglycemia
+- Hyperkalemia
+- Hypermagnesemia
+- Hypernatremia
+- Hypertriglyceridemia
+- Hyperuricemia
+- Hypoalbuminemia
+- Hypocalcemia
+- Hypoglycemia
+- Hypokalemia
+- Hypomagnesemia
+- Hyponatremia
+- Hypophosphatemia
+
+From the SOC = “Blood and lymphatic system disorders” there are 2 CTCAE
+v4.0 Terms:
+
+- Anemia
+- Leukocytosis
+
+### Updates made to TERM
+
+For terms “Hypocalcemia” and “Hypercalcemia” the criteria is provided
+for Calcium and Ionized Calcium, therefore
+[admiral](https://pharmaverse.github.io/admiral/) created a row for each
+in the metadata, this is noted in the COMMENT variable of the
+metadata:  
+
+  
+
+Similarly, there is criteria applicable to Fasting Glucose as well as
+non-Fasting Glucose for “Hyperglycemia” so again this was split into 2
+rows, and noted in the COMMENT variable. Note “Hypoglycemia” does not
+require to be split into 2 rows:
+
+  
+
+  
+
+### Assumptions made when grading
+
+For term “INR Increased” there is the following criteria:
+
+  
+
+  
+
+[admiral](https://pharmaverse.github.io/admiral/) assumed worst case and
+used both parts of the criteria for grading, so comparing lab value
+against ULN and also BASE. The decision made was put in the `COMMENT`
+field.
+
+  
+
+  
+
+For TERM “Hyperuricemia”, the criteria for Grade 1 and Grade 3 is the
+same with respect to the lab value, so worse case is assumed as grade 3.
+The decision made was put in the `COMMENT` field.
+
+  
+
+  
+
+A similar approach was taken for TERM “Hypokalemia” where Grade 1 and
+Grade 2 criteria is the same with respect to the lab value, so worse
+case is assumed as grade 2. The decision made was put in the `COMMENT`
+field.
+
+  
+
+  
+Here is a complete list of all assumptions in the metadata for
+NCI-CTCAE-v4  
+
+  
+
+## NCI-CTCAEV5 implementation
+
+### Terms graded
+
+Grading is implemented for those lab tests where a lab value is included
+in the grading definition,
+[admiral](https://pharmaverse.github.io/admiral/) does NOT try to read
+any other data to determine the grade, and only the `ADLB` dataset is
+used. The following CTCAE v5.0 SOC values were identified for grading,
+these are “Investigations”, “Metabolism and nutrition disorders” and
+“Blood and lymphatic system disorders”.
+
+From these SOC values the following terms criteria is implemented in
+[admiral](https://pharmaverse.github.io/admiral/)
+
+From SOC = “Investigations” there are 21 CTCAE v5.0 Terms:
+
+- Activated partial thromboplastin time prolonged
+- Alanine aminotransferase increased
+- Alkaline phosphatase increased
+- Aspartate aminotransferase increased
+- Blood bilirubin increased
+- CD4 lymphocytes decreased
+- Cholesterol high
+- CPK increased
+- Creatinine increased
+- Fibrinogen decreased
+- GGT increased
+- Haptoglobin decreased
+- Hemoglobin increased
+- INR increased
+- Lipase increased
+- Lymphocyte count decreased
+- Lymphocyte count increased
+- Neutrophil count decreased
+- Platelet count decreased
+- Serum amylase increased
+- White blood cell decreased
+
+Note: These are the same terms identified for NCI-CTCAEv4.
+
+From the SOC = “Metabolism and nutrition disorders” there are 14 CTCAE
+v5.0 Terms:
+
+- Acidosis
+- Alkalosis
+- Hypercalcemia
+- Hyperkalemia
+- Hypermagnesemia
+- Hypernatremia
+- Hypertriglyceridemia
+- Hyperuricemia
+- Hypoalbuminemia
+- Hypocalcemia
+- Hypoglycemia
+- Hypokalemia
+- Hypomagnesemia
+- Hyponatremia
+
+Note: These are the same terms identified for NCI-CTCAEv4, except
+“Hypophosphatemia” and “Hyperglycemia” which are not gradable by
+quantitative lab values in NCICTCAEv5 grading criteria.
+
+From the SOC = “Blood and lymphatic system disorders” there are 2 CTCAE
+v5.0 Terms:
+
+- Anemia
+- Leukocytosis
+
+Note: These are the same terms identified for NCI-CTCAEv4.
+
+### Updates made to TERM
+
+For terms “Hypocalcemia” and “Hypercalcemia” the criteria is provided
+for Calcium and Ionized Calcium, therefore
+[admiral](https://pharmaverse.github.io/admiral/) created a row for each
+in the metadata, this is noted in the COMMENT variable of the
+metadata:  
+
+  
+
+### Criteria dependent on the Baseline Value
+
+For terms “Alanine aminotransferase increased”, “Alkaline phosphatase
+increased”, “Aspartate aminotransferase increased”, “Blood bilirubin
+increased” and “GGT increased” the criteria is dependent on the Baseline
+Value being normal or abnormal. We use the variable `BNRIND` to
+determine this, and users can pass in the value(s) of `BNRIND` that
+indicate the baseline is abnormal via the arguments `high_indicator` and
+`low_indicator` in the function
+[`derive_var_atoxgr_dir()`](https:/pharmaverse.github.io/admiral/main/reference/derive_var_atoxgr_dir.md).
+For example, setting `high_indicator = "HIGH"` would mean any
+observations with `BNRIND = "HIGH"` would be deemed to have a high
+abnormal Baseline Value. Likewise, setting `low_indicator = "LOW"` would
+mean any observations with `BNRIND = "LOW"` would be deemed to have a
+low abnormal Baseline Value. Note: you can pass in multiple values,
+`high_indicator = c("H", "HIGH")`
+
+For these 5 terms, this means if `BNRIND` is abnormal then the grade is
+always zero for the baseline observation. This is the conservative
+approach, to ensure you don’t see big changes in grade for a patient
+after they take treatment. Some companies may not want the baseline
+observation graded at all, so would post-process, if necessary.
+
+### Assumptions made when grading
+
+For term “INR Increased” there is the following criteria:
+
+  
+
+  
+
+[admiral](https://pharmaverse.github.io/admiral/) assumed worst case and
+used both parts of the criteria for grading, so comparing lab value
+against ULN and also BASE. The decision made was put in the `COMMENT`
+field.
+
+  
+
+  
+Similarly, for terms “Lipase Increased” and “Serum amylase increased”
+there is the following criteria:
+
+  
+
+  
+
+[admiral](https://pharmaverse.github.io/admiral/) assumed worst case and
+implemented highest grade possible. The decision made was put in the
+`COMMENT` field.
+
+  
+
+  
+
+For TERM “Hyperuricemia”, the criteria for Grade 1 and Grade 3 is the
+same with respect to the lab value, so worse case is assumed as grade 3.
+The decision made was put in the `COMMENT` field.
+
+  
+
+  
+
+A similar approach was taken for TERM “Hypokalemia” and “Hyponatremia”.
+For “Hypokalemia”, where Grade 1 and Grade 2 criteria is the same with
+respect to the lab value, then worse case is assumed as grade 2. For
+“Hyponatremia”, where Grade 2 and Grade 3 criteria is the same with
+respect to the lab value, then worse case is assumed as grade 3. The
+decision made was put in the `COMMENT` field.
+
+  
+
+  
+
+Here is a complete list of all assumptions in the metadata for
+NCI-CTCAE-v5  
+
+  
+
+## NCI-CTCAEV6 implementation
+
+### Terms graded
+
+Grading is implemented for those lab tests where a lab value is included
+in the grading definition,
+[admiral](https://pharmaverse.github.io/admiral/) does NOT try to read
+any other data to determine the grade, and only the `ADLB` dataset is
+used. The following CTCAE v6.0 SOC values were identified for grading,
+these are “Investigations”, “Metabolism and nutrition disorders” and
+“Blood and lymphatic system disorders”.
+
+From these SOC values the following terms criteria is implemented in
+[admiral](https://pharmaverse.github.io/admiral/)
+
+From SOC = “Investigations” there are 22 CTCAE v6.0 Terms:
+
+- Activated partial thromboplastin time prolonged
+- Alanine aminotransferase increased
+- Alkaline phosphatase increased
+- Aspartate aminotransferase increased
+- Blood bilirubin increased
+- Blood lactate dehydrogenase increased
+- CD4 lymphocytes decreased
+- Cholesterol high
+- Creatinine clearance decreased
+- Creatinine increased
+- Fibrinogen decreased
+- GGT increased
+- Haptoglobin decreased
+- HDL decreased
+- Hemoglobin increased
+- INR increased
+- LDL increased
+- Lipase increased
+- Lymphocyte count increased
+- Neutrophil count decreased
+- Serum amylase increased
+- White blood cell decreased
+
+Note: These are 4 new terms added and 3 removed from the terms
+identified for NCI-CTCAEv5. “Blood lactate dehydrogenase increased”,
+“Creatinine clearance decreased”, “HDL decreased” and “LDL increased”
+have been added, and “CPK increased” and “Lymphocyte count decreased”
+have been removed, and “Platelet count decreased” has been moved to
+“Thrombocytopenia” under SOC “Blood and lymphatic system disorders”.
+
+From the SOC = “Metabolism and nutrition disorders” there are 15 CTCAE
+v6.0 Terms:
+
+- Acidosis
+- Alkalosis
+- Hypercalcemia
+- Hyperglycemia
+- Hyperkalemia
+- Hypermagnesemia
+- Hypernatremia
+- Hypertriglyceridemia
+- Hyperuricemia
+- Hypoalbuminemia
+- Hypocalcemia
+- Hypoglycemia
+- Hypokalemia
+- Hypomagnesemia
+- Hyponatremia
+
+Note: These are the same terms identified for NCI-CTCAEv5, except
+“Hyperglycemia” which has been added to NCICTCAEv6 grading criteria.
+
+From the SOC = “Blood and lymphatic system disorders” there are 3 CTCAE
+v6.0 Terms:
+
+- Anemia
+- Leukocytosis
+- Thrombocytopenia
+
+Note: These are the same terms identified for NCI-CTCAEv5, except
+“Thrombocytopenia” which as mentioned above has moved from “Platelet
+count decreased” under SOC “Investigations”.
+
+### Updates made to TERM
+
+For terms “Hypocalcemia” and “Hypercalcemia” the criteria is provided
+for Calcium and Ionized Calcium, therefore
+[admiral](https://pharmaverse.github.io/admiral/) created a row for each
+in the metadata, this is noted in the COMMENT variable of the
+metadata:  
+
+  
+
+### Criteria dependent on the Baseline Value
+
+For terms “Alanine aminotransferase increased”, “Aspartate
+aminotransferase increased”, “Blood bilirubin increased”, “Creatinine
+increased” and “GGT increased” the criteria is dependent on the Baseline
+Value being normal or abnormal. We use the variable `BNRIND` to
+determine this, and users can pass in the value(s) of `BNRIND` that
+indicate the baseline is abnormal via the arguments `high_indicator` and
+`low_indicator` in the function
+[`derive_var_atoxgr_dir()`](https:/pharmaverse.github.io/admiral/main/reference/derive_var_atoxgr_dir.md).
+For example, setting `high_indicator = "HIGH"` would mean any
+observations with `BNRIND = "HIGH"` would be deemed to have a high
+abnormal Baseline Value. Likewise, setting `low_indicator = "LOW"` would
+mean any observations with `BNRIND = "LOW"` would be deemed to have a
+low abnormal Baseline Value. Note: you can pass in multiple values,
+`abnormal_indicator = c("H", "HIGH")`
+
+Excluding “Creatinine increased”, for the other 4 terms, this means if
+`BNRIND` is abnormal then the grade is always one for the baseline
+observation. For “Creatinine increased” if `BNRIND` is abnormal then the
+grade could be zero, one or four, as grade 1 and 4 are independent of
+`BNRIND`. Additionally, for “Alkaline phosphatase increased” the
+baseline grade is always zero, as the value has to be above the baseline
+value to have a grade greater than zero. This is the conservative
+approach, some companies may not want the baseline observation graded at
+all, so would post-process, if necessary.
+
+### Assumptions made when grading
+
+For term “INR Increased” there is the following criteria:
+
+  
+
+  
+
+[admiral](https://pharmaverse.github.io/admiral/) assumed worst case and
+used both parts of the criteria for grading, so comparing lab value
+against ULN and also BASE. The decision made was put in the `COMMENT`
+field.
+
+  
+
+  
+Similarly, for terms “Lipase Increased” and “Serum amylase increased”
+there is the following criteria:
+
+  
+
+  
+
+[admiral](https://pharmaverse.github.io/admiral/) assumed worst case and
+implemented highest grade possible. The decision made was put in the
+`COMMENT` field.
+
+  
+
+  
+
+For TERM “Hyperuricemia”, the criteria for Grade 1 and Grade 3 is the
+same with respect to the lab value, so worse case is assumed as grade 3.
+The decision made was put in the `COMMENT` field.
+
+  
+
+  
+
+A similar approach was taken for TERM “Hypokalemia” and “Hyponatremia”.
+For “Hypokalemia”, where Grade 1 and Grade 2 criteria is the same with
+respect to the lab value, then worse case is assumed as grade 2. For
+“Hyponatremia”, where Grade 2 and Grade 3 criteria is the same with
+respect to the lab value, then worse case is assumed as grade 3. The
+decision made was put in the `COMMENT` field.
+
+  
+
+  
+
+Here is a complete list of all assumptions in the metadata for
+NCI-CTCAE-v6  
+
+  
+
+## DAIDS implementation
+
+### Terms graded
+
+Grading is implemented for those lab tests where a lab value is included
+in the grading definition,
+[admiral](https://pharmaverse.github.io/admiral/) does NOT try to read
+any other data to determine the grade, and only the `ADLB` dataset is
+used. The following DAIDS SOC values were identified for grading, these
+are “Chemistries” and “Hematology”.
+
+From these SOC values the following terms criteria is implemented in
+[admiral](https://pharmaverse.github.io/admiral/)
+
+From SOC = “Chemistries” there are 31 DAIDS Terms:
+
+- Acidosis
+- Albumin, Low
+- Alkaline Phosphatase, High
+- Alkalosis
+- ALT, High
+- Amylase, High
+- AST, High
+- Bicarbonate, Low
+- Direct Bilirubin, High
+- Total Bilirubin, High
+- Calcium, High
+- Calcium (Ionized), High
+- Calcium, Low
+- Calcium (Ionized), Low
+- Creatine Kinase, High
+- Creatinine, High
+- Glucose Fasting, High
+- Glucose Nonfasting, High
+- Glucose, Low
+- Lactate, High
+- Lipase, High
+- Cholesterol, Fasting, High
+- LDL, Fasting, High
+- Triglycerides, Fasting, High
+- Magnesium, Low
+- Phosphate, Low
+- Potassium, High
+- Potassium, Low
+- Sodium, High
+- Sodium, Low
+- Uric Acid, High
+
+Note: {admiral} does not grade for TERM = “Total Bilirubin, High” when
+AGE \<= 28 days, these criteria are in Appendix of [**DAIDS Table for
+Grading the Severity of Adult and Pediatric Adverse Events Corrected
+Version
+2.1**](https://rsc.niaid.nih.gov/sites/default/files/daidsgradingcorrectedv21.pdf).
+
+From the SOC = “Hematology” there are 11 DAIDS Terms:
+
+- Absolute CD4+ Count, Low
+- Absolute Lymphocyte Count, Low
+- Absolute Neutrophil Count (ANC), Low
+- Fibrinogen Decreased
+- Hemoglobin, Low
+- INR, High
+- Methemoglobin
+- PTT, High
+- Platelets, Decreased
+- PT, High
+- WBC, Decreased
+
+### Terms with age or sex dependent grading criteria
+
+Some terms defined in DAIDS have age or sex dependent grading criteria,
+{admiral} handles this in variable `FILTER` in the metadata. We use
+{admiral} function `compute_duration` to calculate age, see TERM =
+“Cholesterol, Fasting, High”:  
+
+  
+
+Note: All possible values must be covered for each TERM defined, for
+TERM = “Absolute Lymphocyte Count, Low” and “Absolute CD4+ Count, Low”
+there is only grading criteria defined for age \> 5 years. Therefore, we
+add another row with age \<= 5 years and set grade to missing.
+Similarly, for TERM = “LDL, Fasting, High” there is only grading
+criteria defined for age \> 2 years. Therefore, we add another row with
+age \<= 2 years and set grade to missing.
+
+### Assumptions made when grading
+
+For terms “INR, High”, “PT, High” and “PTT, High”, the criteria is based
+on subjects “not on anticoagulation therapy”, this is captured in
+COMMENT field.
+
+  
+
+  
+
+Similarly, for terms “Absolute CD4+ Count, Low” and “Absolute Lymphocyte
+Count, Low”, the criteria is based on subjects “not HIV infected”, this
+is captured in COMMENT field.
+
+  
+
+  
+
+For term “Acidosis”, “Alkalosis” and “Direct Bilirubin, High (\> 28 days
+of age)”, {admiral} grades as high as possible, so assumes worst case
+and subject has “life-threatening consequences”. This is captured in
+COMMENT field.
+
+  
+
+  
+Similarly, for term “Lactate, High”, {admiral} only grade 1 and 2, and
+there is the following criteria:
+
+  
+
+  
+
+[admiral](https://pharmaverse.github.io/admiral/) assumed worst case and
+assume “without acidosis”. The decision made was put in the `COMMENT`
+field.
+
+  
+
+  
+
+For TERM “Direct Bilirubin, High (\<= 28 days of age)” and “Uric Acid,
+High” the criteria is not given in SI unit. The conversion to SI unit is
+in the comment field.
+
+  
+
+  
+Here is a complete list of all assumptions in the metadata for DAIDs  
+
+  
+
+## US (Conventional) unit implementation
+
+The metadata for the US (Conventional) units is the same as the metadata
+for SI units except when checking for units, when the criteria is based
+on numeric values. The `UNIT_CHECK` variable will then contain the US
+(Conventional) unit, and if the unit is not a synonym for the SI unit
+then the grading criteria is updated accordingly. There were some lab
+tests where it made sense to have 2 sets of US (Conventional) units,
+these were lab tests related to `"WBC"`, `"Lymphocytes"`,
+`"Neutrophils"` and `"Platelets"`. We have the US unit `"10^3/uL"` which
+is a synonym of the SI unit `"10^9/L"`, and also the US unit `"10^3/ml"`
+which is a synonym for `"/mm3"` which is included in the grading
+criteria documentation. If companies have lab tests that have units that
+don’t exactly match what is in the `UNIT_CHECK` variable, but the unit
+is a one-to-one mapping, then the `UNIT_CHECK` variable can be updated
+with company-specific code to reflect this.
+
+## Conclusion
+
+With NCI-CTCAEv4, NCI-CTCAEv5, NCI-CTCAEv6 and DAIDS grading now
+implemented, {admiral} may look to implement other industry standard
+grading criteria. Providing tools for users to easily interact with the
+metadata to update criteria, based on their companies needs will also be
+looked at. Ideally, users should be able to create their own metadata
+for company specific grading schemes.
