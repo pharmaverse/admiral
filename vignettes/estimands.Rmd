@@ -36,8 +36,6 @@ effort to help teams understand the basics, i.e.:
 - Where to store your estimand
 - How to use your estimand in endpoint programming. 
 
-Further examples can be be found on the [Pharmaverse Examples](https://pharmaverse.github.io/examples/) site.
-
 The examples in this vignette require the following packages and datasets, but note
 that for the purpose of the example data extracts shown in this article we have
 made some tweaks to test data to make the examples more interesting.
@@ -49,10 +47,10 @@ library(pharmaversesdtm)
 library(lubridate)
 library(stringr)
 
-data("ds")
-data("cm")
-data("vs")
-data("admiral_adsl")
+ds <- pharmaversesdtm::ds
+cm <- pharmaversesdtm::cm
+vs <- pharmaversesdtm::vs
+admiral_adsl <- admiral::admiral_adsl
 
 ds <- convert_blanks_to_na(ds)
 cm <- convert_blanks_to_na(cm)
@@ -113,7 +111,7 @@ two events:
 When all intercurrent events are considered to have a permanent impact (i.e. they only occur once per patient),
 you can add the following variables to `ADSL`:
 
-  - `AIEyDTM` - Intercurrent Event y Datetime
+- `AIEyDTM` - Intercurrent Event y Datetime
 - `AIEyDT` - Intercurrent Event y Date
 - `AIEyTM` - Intercurrent Event y Time
 - `AIEyDTF` - Intercurrent Evt y Date Imputation Flag _(not relevant in the below example,
@@ -393,5 +391,4 @@ dataset_vignette(
 
 There are even more complex implementation options for estimands as detailed in the
 implementation guidelines, but we hope that the examples above help offer a starting point
-for how estimand analyses could be achieved using `{admiral}`. Further examples can be be 
-found on the [Pharmaverse Examples](https://pharmaverse.github.io/examples/) site.
+for how estimand analyses could be achieved using `{admiral}`.
