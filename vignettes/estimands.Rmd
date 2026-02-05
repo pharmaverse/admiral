@@ -289,7 +289,7 @@ ice1_censor <- censor_source(
 )
 
 # censor object for last known alive date - where no ICE 1
-lastalive_censor <- censor_source(
+last_alive_noice1_censor <- censor_source(
   dataset_name = "adsl",
   filter = is.na(AIE1DT),
   date = LSTALVDT
@@ -300,7 +300,7 @@ adtte <- derive_param_tte(
   dataset_adsl = adsl,
   start_date = RANDDT,
   event_conditions = list(ice1_event),
-  censor_conditions = list(ice1_censor, lastalive_censor),
+  censor_conditions = list(ice1_censor, last_alive_noice1_censor),
   source_datasets = list(adsl = adsl),
   set_values_to = exprs(
     PARAMCD = "ICE1",
