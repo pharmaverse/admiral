@@ -26,7 +26,6 @@ of the navigation bar. Tooltips have also been set up for each of the icons on t
 <details>
 <summary>Developer Notes</summary>
 </details>
->>>>>>> main
 
 # admiral 1.4.1
 
