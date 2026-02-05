@@ -1,12 +1,12 @@
 Type: Package
 Package: admiral
 Title: ADaM in R Asset Library
-Version: 1.4.0.9000
+Version: 1.4.1.9001
 Authors@R: c(
     person("Ben", "Straub", , "ben.x.straub@gsk.com", role = c("aut", "cre")),
     person("Stefan", "Bundfuss", role = "aut",
            comment = c(ORCID = "0009-0005-0027-1198")),
-    person("Matt", "Bearham", role = "aut"),       
+    person("Matt", "Bearham", role = "aut"),
     person("Arianna", "Cascone", role = "aut",
            comment = c(ORCID = "0000-0001-5948-2831")),
     person("Kristin", "Dahnert", role = "aut"),
@@ -52,6 +52,7 @@ Imports:
 Suggests:
     diffdf,
     DT,
+    here,
     htmltools,
     knitr,
     methods,
@@ -61,8 +62,7 @@ Suggests:
     rmarkdown,
     testthat (>= 3.0.0),
     tibble,
-    withr,
-    here
+    withr
 VignetteBuilder:
     knitr
 Config/Needs/website: gert, rmarkdown
