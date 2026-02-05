@@ -1,9 +1,32 @@
 # admiral (development version)
 
+## New Features
+
+## Updates of Existing Functions
+
+## Breaking Changes
+
+- The following function arguments are entering the next phase of the [deprecation process](https://pharmaverse.github.io/admiraldev/articles/programming_strategy.html#deprecation): 
+
+  **Phase 1 (message)**
+    
+  **Phase 2 (warning)**
+    
+  **Phase 3 (error)**
+  
+  **Phase 4 (removed)**
+
 ## Documentation
 
-A night mode option has been added to the `{admiral}` website. This can be be toggled using the sun/moon icon in the top right corner 
-of the website. Tooltips have also been set up for each of the icons on the website navigation bar. (#2959)
+- A night mode option has been added to the `{admiral}` website. This can be be toggled using the sun/moon icon in the top right corner 
+of the navigation bar. Tooltips have also been set up for each of the icons on the navigation bar. (#2959)
+
+## Various
+
+<details>
+<summary>Developer Notes</summary>
+</details>
+>>>>>>> main
 
 # admiral 1.4.1
 
