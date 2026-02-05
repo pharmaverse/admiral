@@ -3,7 +3,7 @@
 ## Documentation
 
 A night mode option has been added to the `{admiral}` website. This can be be toggled using the sun/moon icon in the top right corner 
-of the website. Toolips have also been set up for each of the icons on the website navigation bar. (#2959)
+of the website. Tooltips have also been set up for each of the icons on the website navigation bar. (#2959)
 
 # admiral 1.4.1
 
