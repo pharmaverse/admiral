@@ -174,7 +174,7 @@ In contrast to most other ADaM datasets, some sponsors' standards for `ADICE` di
 that it should not contain any `ADSL` variables, so this ADaM could be created before 
 `ADSL` direct from SDTM datasets, provided no protocol-specific estimand rules
 depend on `ADSL` or other ADaM datasets. If this is not the case, then an alternative
-strategy could be to create a `pre-ADSL` dataset first, then any relevant ADaMs and`ADICE`,
+strategy could be to create a `pre-ADSL` dataset first, then any relevant ADaMs and `ADICE`,
 and then a final `ADSL` dataset.
 
 In this example we will create the following subset of possible `ADICE` variables, 
@@ -194,7 +194,7 @@ records for intercurrent event 2 defined above.
 adice <- cm %>%
   # filter condition for intercurrent event 2
   filter(CMDECOD == "HYDROCORTISONE") %>%
-  # set parameter information (PARAM/PARAMCD/AVAL)
+  # set record information (ATERM/ADECOD1/ASTDT/AENDT)
   mutate(
     ATERM = CMDECOD,
     ADECOD1 = "Rescue Medication"
@@ -212,7 +212,7 @@ adice <- cm %>%
   select(STUDYID, USUBJID, ATERM, ADECOD1, ASTDT, AENDT)
 ```
 
-Here is an extract of how these parameters would look in `ADICE`:
+Here is an extract of how these records would look in `ADICE`:
 
 ```{r, eval=TRUE, echo=FALSE}
 dataset_vignette(
