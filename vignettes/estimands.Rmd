@@ -58,10 +58,10 @@ vs <- convert_blanks_to_na(vs)
 adsl <- admiral_adsl
 
 # Simple ADVS for the imputation example
-advs <- vs %>% 
+advs <- vs %>%
   mutate(
     PARAMCD = VSTESTCD,
-    PARAM = paste0(VSTEST, " (", VSSTRESU, ")"), 
+    PARAM = paste0(VSTEST, " (", VSSTRESU, ")"),
     AVISIT = VISIT,
     AVISITN = VISITNUM,
     ADT = convert_dtc_to_dt(VSDTC),
