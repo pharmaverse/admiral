@@ -261,7 +261,7 @@
     "GRADE_5": "-",
     "Definition": "A finding based on laboratory test results that indicate an increase in the ratio of the patient's prothrombin time to a control sample in the blood.",
     "GRADE_NA_CODE": "is.na(AVAL) ~ NA_character_",
-    "GRADE_3_CODE": "!is.na(ANRHI) & signif(AVAL, signif_dig) >  signif(2.5*ANRHI, signif_dig) ~ \"3\", !is.na(BASE) & signif(AVAL, signif_dig) > signif(2.5*BASE, signif_dig) ~ \"3\"",
+    "GRADE_3_CODE": "!is.na(ANRHI) & signif(AVAL, signif_dig) > signif(2.5*ANRHI, signif_dig) ~ \"3\", !is.na(BASE) & signif(AVAL, signif_dig) > signif(2.5*BASE, signif_dig) ~ \"3\"",
     "GRADE_2_CODE": "!is.na(ANRHI) & signif(AVAL, signif_dig) > signif(1.5*ANRHI, signif_dig) ~ \"2\", !is.na(BASE) & signif(AVAL, signif_dig) > signif(1.5*BASE, signif_dig) ~ \"2\"",
     "GRADE_1_CODE": "!is.na(ANRHI) & signif(AVAL, signif_dig) > signif(ANRHI, signif_dig) ~ \"1\", !is.na(BASE) & signif(AVAL, signif_dig) > signif(BASE, signif_dig) ~ \"1\", is.na(ANRHI) | is.na(BASE) ~ NA_character_",
     "VAR_CHECK": "AVAL, ANRHI",

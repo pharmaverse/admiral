@@ -6987,7 +6987,7 @@ expected_dbiligt28d_daids_si <- tibble::tribble(
 ) %>%
   mutate(
     BRTHDT = lubridate::ymd("2023-01-01"),
-    LBDT = lubridate::ymd("2023-01-30")
+    ADT = lubridate::ymd("2023-01-30")
   )
 
 ## CV unit
@@ -7033,7 +7033,7 @@ expected_dbilile28d_daids_si <- tibble::tribble(
 ) %>%
   mutate(
     BRTHDT = lubridate::ymd("2023-01-01"),
-    LBDT = lubridate::ymd("2023-01-29")
+    ADT = lubridate::ymd("2023-01-29")
   )
 
 ## CV unit
@@ -7065,17 +7065,17 @@ expected_dbilile28d_daids_cv <- tibble::tribble(
 ) %>%
   mutate(
     BRTHDT = lubridate::ymd("2023-01-01"),
-    LBDT = lubridate::ymd("2023-01-29")
+    ADT = lubridate::ymd("2023-01-29")
   )
 
 
-### add subjects with missing LBDT or BRTHDT
+### add subjects with missing ADT or BRTHDT
 
 ## SI unit
 expected_dbilinoage_daids_si <- expected_dbilile28d_daids_si %>%
   filter(TESTNUM %in% c(18, 19)) %>%
   mutate(
-    LBDT = if_else(TESTNUM == 18, NA, LBDT),
+    ADT = if_else(TESTNUM == 18, NA, ADT),
     BRTHDT = if_else(TESTNUM == 19, NA, BRTHDT),
     ATOXGRH = NA_character_,
     TESTNUM = if_else(TESTNUM == 18, 29, 30)
@@ -7085,7 +7085,7 @@ expected_dbilinoage_daids_si <- expected_dbilile28d_daids_si %>%
 expected_dbilinoage_daids_cv <- expected_dbilile28d_daids_cv %>%
   filter(TESTNUM %in% c(48, 49)) %>%
   mutate(
-    LBDT = if_else(TESTNUM == 48, NA, LBDT),
+    ADT = if_else(TESTNUM == 48, NA, ADT),
     BRTHDT = if_else(TESTNUM == 49, NA, BRTHDT),
     ATOXGRH = NA_character_,
     TESTNUM = if_else(TESTNUM == 48, 59, 60)
@@ -7178,13 +7178,13 @@ expected_tbiligt28d_daids <- tibble::tribble(
 ) %>%
   mutate(
     BRTHDT = lubridate::ymd("2023-01-01"),
-    LBDT = lubridate::ymd("2023-01-30")
+    ADT = lubridate::ymd("2023-01-30")
   )
 
 ### make Age <= 28 all results NA for ATOXGRH
 expected_tbilile28d_daids <- expected_tbiligt28d_daids %>%
   mutate(
-    LBDT = lubridate::ymd("2023-01-29"),
+    ADT = lubridate::ymd("2023-01-29"),
     ATOXGRH = NA_character_,
     TESTNUM = TESTNUM + 13
   )
@@ -7193,7 +7193,7 @@ expected_tbilile28d_daids <- expected_tbiligt28d_daids %>%
 expected_tbilinoage_daids <- expected_tbiligt28d_daids %>%
   filter(TESTNUM %in% c(10, 11)) %>%
   mutate(
-    LBDT = if_else(TESTNUM == 10, NA, LBDT),
+    ADT = if_else(TESTNUM == 10, NA, ADT),
     BRTHDT = if_else(TESTNUM == 11, NA, BRTHDT),
     ATOXGRH = NA_character_,
     TESTNUM = if_else(TESTNUM == 10, 27, 28)
@@ -7264,7 +7264,7 @@ expected_calcige7d_daids_si <- tibble::tribble(
 ) %>%
   mutate(
     BRTHDT = lubridate::ymd("2023-01-01"),
-    LBDT = lubridate::ymd("2023-01-08")
+    ADT = lubridate::ymd("2023-01-08")
   )
 
 expected_calcige7d_daids_cv <- tibble::tribble(
@@ -7287,7 +7287,7 @@ expected_calcige7d_daids_cv <- tibble::tribble(
 ) %>%
   mutate(
     BRTHDT = lubridate::ymd("2023-01-01"),
-    LBDT = lubridate::ymd("2023-01-08")
+    ADT = lubridate::ymd("2023-01-08")
   )
 
 ### < 7 days of age
@@ -7323,7 +7323,7 @@ expected_calcilt7d_daids_si <- tibble::tribble(
 ) %>%
   mutate(
     BRTHDT = lubridate::ymd("2023-01-01"),
-    LBDT = lubridate::ymd("2023-01-07")
+    ADT = lubridate::ymd("2023-01-07")
   )
 
 expected_calcilt7d_daids_cv <- tibble::tribble(
@@ -7346,14 +7346,14 @@ expected_calcilt7d_daids_cv <- tibble::tribble(
 ) %>%
   mutate(
     BRTHDT = lubridate::ymd("2023-01-01"),
-    LBDT = lubridate::ymd("2023-01-07")
+    ADT = lubridate::ymd("2023-01-07")
   )
 
 ## create data with age missing for SI unit
 expected_calcinoage_daids_si <- expected_calcige7d_daids_si %>%
   filter(TESTNUM %in% c(9, 10)) %>%
   mutate(
-    LBDT = if_else(TESTNUM == 9, NA, LBDT),
+    ADT = if_else(TESTNUM == 9, NA, ADT),
     BRTHDT = if_else(TESTNUM == 10, NA, BRTHDT),
     ATOXGRH = NA_character_,
     TESTNUM = if_else(TESTNUM == 9, 25, 26)
@@ -7363,7 +7363,7 @@ expected_calcinoage_daids_si <- expected_calcige7d_daids_si %>%
 expected_calcinoage_daids_cv <- expected_calcige7d_daids_cv %>%
   filter(TESTNUM %in% c(9, 10)) %>%
   mutate(
-    LBDT = if_else(TESTNUM == 9, NA, LBDT),
+    ADT = if_else(TESTNUM == 9, NA, ADT),
     BRTHDT = if_else(TESTNUM == 10, NA, BRTHDT),
     ATOXGRH = NA_character_,
     TESTNUM = if_else(TESTNUM == 9, 25, 26)
@@ -7553,7 +7553,7 @@ expected_calcdge7d_daids_si <- tibble::tribble(
 ) %>%
   mutate(
     BRTHDT = lubridate::ymd("2023-01-01"),
-    LBDT = lubridate::ymd("2023-01-08")
+    ADT = lubridate::ymd("2023-01-08")
   )
 
 expected_calcdge7d_daids_cv <- tibble::tribble(
@@ -7576,7 +7576,7 @@ expected_calcdge7d_daids_cv <- tibble::tribble(
 ) %>%
   mutate(
     BRTHDT = lubridate::ymd("2023-01-01"),
-    LBDT = lubridate::ymd("2023-01-08")
+    ADT = lubridate::ymd("2023-01-08")
   )
 
 ### < 7 days of age
@@ -7613,7 +7613,7 @@ expected_calcdlt7d_daids_si <- tibble::tribble(
 ) %>%
   mutate(
     BRTHDT = lubridate::ymd("2023-01-01"),
-    LBDT = lubridate::ymd("2023-01-07")
+    ADT = lubridate::ymd("2023-01-07")
   )
 ### CV unit
 expected_calcdlt7d_daids_cv <- tibble::tribble(
@@ -7636,14 +7636,14 @@ expected_calcdlt7d_daids_cv <- tibble::tribble(
 ) %>%
   mutate(
     BRTHDT = lubridate::ymd("2023-01-01"),
-    LBDT = lubridate::ymd("2023-01-07")
+    ADT = lubridate::ymd("2023-01-07")
   )
 
 ## create SI records with age missing
 expected_calcdnoage_daids_si <- expected_calcdge7d_daids_si %>%
   filter(TESTNUM %in% c(9, 10)) %>%
   mutate(
-    LBDT = if_else(TESTNUM == 9, NA, LBDT),
+    ADT = if_else(TESTNUM == 9, NA, ADT),
     BRTHDT = if_else(TESTNUM == 10, NA, BRTHDT),
     ATOXGRL = NA_character_,
     TESTNUM = if_else(TESTNUM == 9, 25, 26)
@@ -7653,7 +7653,7 @@ expected_calcdnoage_daids_si <- expected_calcdge7d_daids_si %>%
 expected_calcdnoage_daids_cv <- expected_calcdge7d_daids_cv %>%
   filter(TESTNUM %in% c(9, 10)) %>%
   mutate(
-    LBDT = if_else(TESTNUM == 9, NA, LBDT),
+    ADT = if_else(TESTNUM == 9, NA, ADT),
     BRTHDT = if_else(TESTNUM == 10, NA, BRTHDT),
     ATOXGRL = NA_character_,
     TESTNUM = if_else(TESTNUM == 9, 25, 26)
@@ -8126,7 +8126,7 @@ expected_glucdge1m_daids_si <- tibble::tribble(
 ) %>%
   mutate(
     BRTHDT = lubridate::ymd("2022-11-30"),
-    LBDT = lubridate::ymd("2022-12-30"),
+    ADT = lubridate::ymd("2022-12-30"),
   )
 
 ### CV unit
@@ -8149,7 +8149,7 @@ expected_glucdge1m_daids_cv <- tibble::tribble(
 ) %>%
   mutate(
     BRTHDT = lubridate::ymd("2022-11-30"),
-    LBDT = lubridate::ymd("2022-12-30"),
+    ADT = lubridate::ymd("2022-12-30"),
   )
 
 ### < 1 month of age
@@ -8185,7 +8185,7 @@ expected_glucdlt1m_daids_si <- tibble::tribble(
 ) %>%
   mutate(
     BRTHDT = lubridate::ymd("2022-11-30"),
-    LBDT = lubridate::ymd("2022-12-29"),
+    ADT = lubridate::ymd("2022-12-29"),
   )
 
 expected_glucdlt1m_daids_cv <- tibble::tribble(
@@ -8207,7 +8207,7 @@ expected_glucdlt1m_daids_cv <- tibble::tribble(
 ) %>%
   mutate(
     BRTHDT = lubridate::ymd("2022-11-30"),
-    LBDT = lubridate::ymd("2022-12-29"),
+    ADT = lubridate::ymd("2022-12-29"),
   )
 
 ## create SI records with age missing
@@ -8215,7 +8215,7 @@ expected_glucdnoage_daids_si <- expected_glucdge1m_daids_si %>%
   filter(TESTNUM %in% c(9, 10)) %>%
   mutate(
     ATOXGRL = NA_character_,
-    LBDT = if_else(TESTNUM == 9, NA, LBDT),
+    ADT = if_else(TESTNUM == 9, NA, ADT),
     BRTHDT = if_else(TESTNUM == 10, NA, BRTHDT),
     TESTNUM = if_else(TESTNUM == 9, 25, 26)
   )
@@ -8224,7 +8224,7 @@ expected_glucdnoage_daids_cv <- expected_glucdge1m_daids_cv %>%
   filter(TESTNUM %in% c(9, 10)) %>%
   mutate(
     ATOXGRL = NA_character_,
-    LBDT = if_else(TESTNUM == 9, NA, LBDT),
+    ADT = if_else(TESTNUM == 9, NA, ADT),
     BRTHDT = if_else(TESTNUM == 10, NA, BRTHDT),
     TESTNUM = if_else(TESTNUM == 9, 25, 26)
   )
@@ -8408,7 +8408,7 @@ expected_cholfige18y_daids_si <- tibble::tribble(
 ) %>%
   mutate(
     BRTHDT = lubridate::ymd("2005-01-08"),
-    LBDT = lubridate::ymd("2023-01-08")
+    ADT = lubridate::ymd("2023-01-08")
   )
 
 ### CV data
@@ -8429,7 +8429,7 @@ expected_cholfige18y_daids_cv <- tibble::tribble(
 ) %>%
   mutate(
     BRTHDT = lubridate::ymd("2005-01-08"),
-    LBDT = lubridate::ymd("2023-01-08")
+    ADT = lubridate::ymd("2023-01-08")
   )
 
 ### < 18 years of age
@@ -8460,7 +8460,7 @@ expected_cholfilt18y_daids_si <- tibble::tribble(
 ) %>%
   mutate(
     BRTHDT = lubridate::ymd("2005-01-08"),
-    LBDT = lubridate::ymd("2023-01-07")
+    ADT = lubridate::ymd("2023-01-07")
   )
 
 expected_cholfilt18y_daids_cv <- tibble::tribble(
@@ -8480,14 +8480,14 @@ expected_cholfilt18y_daids_cv <- tibble::tribble(
 ) %>%
   mutate(
     BRTHDT = lubridate::ymd("2005-01-08"),
-    LBDT = lubridate::ymd("2023-01-07")
+    ADT = lubridate::ymd("2023-01-07")
   )
 
 ## create SI records with age missing
 expected_cholfinoage_daids_si <- expected_cholfige18y_daids_si %>%
   filter(TESTNUM %in% c(9, 10)) %>%
   mutate(
-    LBDT = if_else(TESTNUM == 9, NA, LBDT),
+    ADT = if_else(TESTNUM == 9, NA, ADT),
     BRTHDT = if_else(TESTNUM == 10, NA, BRTHDT),
     ATOXGRH = NA_character_,
     TESTNUM = if_else(TESTNUM == 9, 25, 26)
@@ -8497,7 +8497,7 @@ expected_cholfinoage_daids_si <- expected_cholfige18y_daids_si %>%
 expected_cholfinoage_daids_cv <- expected_cholfige18y_daids_cv %>%
   filter(TESTNUM %in% c(9, 10)) %>%
   mutate(
-    LBDT = if_else(TESTNUM == 9, NA, LBDT),
+    ADT = if_else(TESTNUM == 9, NA, ADT),
     BRTHDT = if_else(TESTNUM == 10, NA, BRTHDT),
     ATOXGRH = NA_character_,
     TESTNUM = if_else(TESTNUM == 9, 25, 26)
@@ -8590,7 +8590,7 @@ expected_ldlfige18y_daids_si <- tibble::tribble(
 ) %>%
   mutate(
     BRTHDT = lubridate::ymd("2005-01-08"),
-    LBDT = lubridate::ymd("2023-01-08")
+    ADT = lubridate::ymd("2023-01-08")
   )
 
 expected_ldlfige18y_daids_cv <- tibble::tribble(
@@ -8610,7 +8610,7 @@ expected_ldlfige18y_daids_cv <- tibble::tribble(
 ) %>%
   mutate(
     BRTHDT = lubridate::ymd("2005-01-08"),
-    LBDT = lubridate::ymd("2023-01-08")
+    ADT = lubridate::ymd("2023-01-08")
   )
 
 ## SI unit is mmol/L
@@ -8642,7 +8642,7 @@ expected_ldlfilt18y_daids_si <- tibble::tribble(
 ) %>%
   mutate(
     BRTHDT = lubridate::ymd("2020-01-07"),
-    LBDT = lubridate::ymd("2023-01-07")
+    ADT = lubridate::ymd("2023-01-07")
   )
 ## CV data
 expected_ldlfilt18y_daids_cv <- tibble::tribble(
@@ -8662,14 +8662,14 @@ expected_ldlfilt18y_daids_cv <- tibble::tribble(
 ) %>%
   mutate(
     BRTHDT = lubridate::ymd("2020-01-07"),
-    LBDT = lubridate::ymd("2023-01-07")
+    ADT = lubridate::ymd("2023-01-07")
   )
 
 ## create SI records with age mssing
 expected_ldlfinoage_daids_si <- expected_ldlfige18y_daids_si %>%
   filter(TESTNUM %in% c(7, 8)) %>%
   mutate(
-    LBDT = if_else(TESTNUM == 7, NA, LBDT),
+    ADT = if_else(TESTNUM == 7, NA, ADT),
     BRTHDT = if_else(TESTNUM == 8, NA, BRTHDT),
     ATOXGRH = NA_character_,
     TESTNUM = if_else(TESTNUM == 7, 25, 26)
@@ -8679,7 +8679,7 @@ expected_ldlfinoage_daids_si <- expected_ldlfige18y_daids_si %>%
 expected_ldlfinoage_daids_cv <- expected_ldlfige18y_daids_cv %>%
   filter(TESTNUM %in% c(7, 8)) %>%
   mutate(
-    LBDT = if_else(TESTNUM == 7, NA, LBDT),
+    ADT = if_else(TESTNUM == 7, NA, ADT),
     BRTHDT = if_else(TESTNUM == 8, NA, BRTHDT),
     ATOXGRH = NA_character_,
     TESTNUM = if_else(TESTNUM == 7, 25, 26)
@@ -8977,7 +8977,7 @@ expected_phosd_daids_gt14y_si <- tibble::tribble(
   mutate(
     ATOXDSCL = "Phosphate, Low",
     BRTHDT = lubridate::ymd("2008-07-01"),
-    LBDT = lubridate::ymd("2023-07-01")
+    ADT = lubridate::ymd("2023-07-01")
   )
 
 expected_phosd_daids_gt14y_cv <- tibble::tribble(
@@ -9009,7 +9009,7 @@ expected_phosd_daids_gt14y_cv <- tibble::tribble(
   mutate(
     ATOXDSCL = "Phosphate, Low",
     BRTHDT = lubridate::ymd("2008-07-01"),
-    LBDT = lubridate::ymd("2023-07-01")
+    ADT = lubridate::ymd("2023-07-01")
   )
 
 ### 1 to 14 years of age
@@ -9043,7 +9043,7 @@ expected_phosd_daids_le14y_si <- tibble::tribble(
   mutate(
     ATOXDSCL = "Phosphate, Low",
     BRTHDT = lubridate::ymd("2022-07-01"),
-    LBDT = lubridate::ymd("2023-07-01")
+    ADT = lubridate::ymd("2023-07-01")
   )
 
 expected_phosd_daids_le14y_cv <- tibble::tribble(
@@ -9063,7 +9063,7 @@ expected_phosd_daids_le14y_cv <- tibble::tribble(
   mutate(
     ATOXDSCL = "Phosphate, Low",
     BRTHDT = lubridate::ymd("2022-07-01"),
-    LBDT = lubridate::ymd("2023-07-01")
+    ADT = lubridate::ymd("2023-07-01")
   )
 
 ### < 1 year of age
@@ -9097,7 +9097,7 @@ expected_phosd_daids_lt1y_si <- tibble::tribble(
   mutate(
     ATOXDSCL = "Phosphate, Low",
     BRTHDT = lubridate::ymd("2023-07-01"),
-    LBDT = lubridate::ymd("2023-07-02")
+    ADT = lubridate::ymd("2023-07-02")
   )
 
 expected_phosd_daids_lt1y_cv <- tibble::tribble(
@@ -9117,7 +9117,7 @@ expected_phosd_daids_lt1y_cv <- tibble::tribble(
   mutate(
     ATOXDSCL = "Phosphate, Low",
     BRTHDT = lubridate::ymd("2023-07-01"),
-    LBDT = lubridate::ymd("2023-07-02")
+    ADT = lubridate::ymd("2023-07-02")
   )
 
 
@@ -9125,7 +9125,7 @@ expected_phosd_daids_lt1y_cv <- tibble::tribble(
 expected_phosd_daids_noage_si <- expected_phosd_daids_gt14y_si %>%
   filter(TESTNUM %in% c(8, 9)) %>%
   mutate(
-    LBDT = if_else(TESTNUM == 8, NA, LBDT),
+    ADT = if_else(TESTNUM == 8, NA, ADT),
     BRTHDT = if_else(TESTNUM == 9, NA, BRTHDT),
     ATOXGRL = NA,
     TESTNUM = if_else(TESTNUM == 8, 42, 43)
@@ -9134,7 +9134,7 @@ expected_phosd_daids_noage_si <- expected_phosd_daids_gt14y_si %>%
 expected_phosd_daids_noage_cv <- expected_phosd_daids_gt14y_cv %>%
   filter(TESTNUM %in% c(8, 9)) %>%
   mutate(
-    LBDT = if_else(TESTNUM == 8, NA, LBDT),
+    ADT = if_else(TESTNUM == 8, NA, ADT),
     BRTHDT = if_else(TESTNUM == 9, NA, BRTHDT),
     ATOXGRL = NA,
     TESTNUM = if_else(TESTNUM == 8, 42, 43)
@@ -9578,22 +9578,22 @@ expected_cd4d_daids_gt5y <- tibble::tribble(
   mutate(
     ATOXDSCL = "Absolute CD4+ Count, Low",
     BRTHDT = lubridate::ymd("2023-07-01"),
-    LBDT = lubridate::ymd("2029-07-01")
+    ADT = lubridate::ymd("2029-07-01")
   )
 
 # no criteria for age <= 5 years set grade to missing
 expected_cd4d_daids_le5y <- expected_cd4d_daids_gt5y %>%
   mutate(
-    LBDT = lubridate::ymd("2028-07-01"),
+    ADT = lubridate::ymd("2028-07-01"),
     ATOXGRL = NA_character_,
     TESTNUM = TESTNUM + 11
   )
 
-# add missing LBDT and BRTHDT
+# add missing ADT and BRTHDT
 expected_cd4d_daids_noage <- expected_cd4d_daids_gt5y %>%
   filter(TESTNUM %in% c(5, 6)) %>%
   mutate(
-    LBDT = if_else(TESTNUM == 5, NA, LBDT),
+    ADT = if_else(TESTNUM == 5, NA, ADT),
     BRTHDT = if_else(TESTNUM == 6, NA, BRTHDT),
     ATOXGRL = NA_character_,
     TESTNUM = if_else(TESTNUM == 5, 23, 24)
@@ -9684,22 +9684,22 @@ expected_lymphd_daids_gt5y <- tibble::tribble(
   mutate(
     ATOXDSCL = "Absolute Lymphocyte Count, Low",
     BRTHDT = lubridate::ymd("2023-07-01"),
-    LBDT = lubridate::ymd("2029-07-01")
+    ADT = lubridate::ymd("2029-07-01")
   )
 
 # no criteria for age <= 5 years set grade to missing
 expected_lymphd_daids_le5y <- expected_lymphd_daids_gt5y %>%
   mutate(
-    LBDT = lubridate::ymd("2028-07-01"),
+    ADT = lubridate::ymd("2028-07-01"),
     ATOXGRL = NA_character_,
     TESTNUM = TESTNUM + 12
   )
 
-# add missing LBDT and BRTHDT
+# add missing ADT and BRTHDT
 expected_lymphd_daids_noage <- expected_lymphd_daids_gt5y %>%
   filter(TESTNUM %in% c(5, 6)) %>%
   mutate(
-    LBDT = if_else(TESTNUM == 5, NA, LBDT),
+    ADT = if_else(TESTNUM == 5, NA, ADT),
     BRTHDT = if_else(TESTNUM == 6, NA, BRTHDT),
     ATOXGRL = NA_character_,
     TESTNUM = if_else(TESTNUM == 5, 25, 26)
@@ -9815,7 +9815,7 @@ expected_ancd_daids_gt7d <- tibble::tribble(
   mutate(
     ATOXDSCL = "Absolute Neutrophil Count (ANC), Low",
     BRTHDT = lubridate::ymd("2023-07-01"),
-    LBDT = lubridate::ymd("2023-07-09")
+    ADT = lubridate::ymd("2023-07-09")
   )
 
 ### 2 to 7 days of age
@@ -9845,7 +9845,7 @@ expected_ancd_daids_ge2d <- tibble::tribble(
   mutate(
     ATOXDSCL = "Absolute Neutrophil Count (ANC), Low",
     BRTHDT = lubridate::ymd("2023-07-01"),
-    LBDT = lubridate::ymd("2023-07-03")
+    ADT = lubridate::ymd("2023-07-03")
   )
 
 ### <= 1 day of age
@@ -9875,7 +9875,7 @@ expected_ancd_daids_le1d <- tibble::tribble(
   mutate(
     ATOXDSCL = "Absolute Neutrophil Count (ANC), Low",
     BRTHDT = lubridate::ymd("2023-07-01"),
-    LBDT = lubridate::ymd("2023-07-02")
+    ADT = lubridate::ymd("2023-07-02")
   )
 
 expected_ancd_daids <- expected_ancd_daids_gt7d %>%
@@ -9888,7 +9888,7 @@ expected_ancd_daids <- expected_ancd_daids_gt7d %>%
 expected_ancd_daids_noage <- expected_ancd_daids %>%
   filter(TESTNUM %in% c(20, 31)) %>%
   mutate(
-    LBDT = if_else(TESTNUM == 20, NA, LBDT),
+    ADT = if_else(TESTNUM == 20, NA, ADT),
     BRTHDT = if_else(TESTNUM == 31, NA, BRTHDT),
     ATOXGRL = NA,
     TESTNUM = case_when(
@@ -10092,7 +10092,7 @@ expected_hgbd_daids_ge13ym <- tibble::tribble(
 ) %>%
   mutate(
     BRTHDT = lubridate::ymd("2010-07-01"),
-    LBDT = lubridate::ymd("2023-07-01")
+    ADT = lubridate::ymd("2023-07-01")
   )
 
 ### >= 13 years of age (female only)
@@ -10119,7 +10119,7 @@ expected_hgbd_daids_ge13yf <- tibble::tribble(
 ) %>%
   mutate(
     BRTHDT = lubridate::ymd("2010-07-01"),
-    LBDT = lubridate::ymd("2023-07-01")
+    ADT = lubridate::ymd("2023-07-01")
   )
 
 
@@ -10146,7 +10146,7 @@ expected_hgbd_daids_lt13y <- tibble::tribble(
 ) %>%
   mutate(
     BRTHDT = lubridate::ymd("2010-07-01"),
-    LBDT = lubridate::ymd("2023-06-30")
+    ADT = lubridate::ymd("2023-06-30")
   )
 
 ### 36 to <= 56 days of age (male and female)
@@ -10172,7 +10172,7 @@ expected_hgbd_daids_le56d <- tibble::tribble(
 ) %>%
   mutate(
     BRTHDT = lubridate::ymd("2023-07-01"),
-    LBDT = lubridate::ymd("2023-08-26")
+    ADT = lubridate::ymd("2023-08-26")
   )
 
 
@@ -10199,7 +10199,7 @@ expected_hgbd_daids_le35d <- tibble::tribble(
 ) %>%
   mutate(
     BRTHDT = lubridate::ymd("2023-07-01"),
-    LBDT = lubridate::ymd("2023-08-05")
+    ADT = lubridate::ymd("2023-08-05")
   )
 
 
@@ -10226,7 +10226,7 @@ expected_hgbd_daids_le21d <- tibble::tribble(
 ) %>%
   mutate(
     BRTHDT = lubridate::ymd("2023-07-01"),
-    LBDT = lubridate::ymd("2023-07-22")
+    ADT = lubridate::ymd("2023-07-22")
   )
 
 ### <= 7 days of age (male and female)
@@ -10252,7 +10252,7 @@ expected_hgbd_daids_le7d <- tibble::tribble(
 ) %>%
   mutate(
     BRTHDT = lubridate::ymd("2023-07-01"),
-    LBDT = lubridate::ymd("2023-07-08")
+    ADT = lubridate::ymd("2023-07-08")
   )
 
 expected_hgbd_daids <- expected_hgbd_daids_ge13ym %>%
@@ -10269,7 +10269,7 @@ expected_hgbd_daids <- expected_hgbd_daids_ge13ym %>%
 expected_hgbd_daids_noage <- expected_hgbd_daids %>%
   filter(TESTNUM %in% c(5, 17, 29)) %>%
   mutate(
-    LBDT = NA,
+    ADT = NA,
     ATOXGRL = NA,
     TESTNUM = case_when(
       TESTNUM == 5 ~ 80,
@@ -10661,7 +10661,7 @@ expected_wbcd_daids_gt7d <- tibble::tribble(
 ) %>%
   mutate(
     BRTHDT = lubridate::ymd("2023-07-01"),
-    LBDT = lubridate::ymd("2023-07-09")
+    ADT = lubridate::ymd("2023-07-09")
   )
 
 ### White blood cell decreased (<= 7 days of age)
@@ -10688,14 +10688,14 @@ expected_wbcd_daids_le7d <- tibble::tribble(
 ) %>%
   mutate(
     BRTHDT = lubridate::ymd("2023-07-01"),
-    LBDT = lubridate::ymd("2023-07-08")
+    ADT = lubridate::ymd("2023-07-08")
   )
 
 expected_wbcd_daids_noage <- expected_wbcd_daids_gt7d %>%
   filter(TESTNUM %in% c(10, 11)) %>%
   mutate(
     BRTHDT = if_else(TESTNUM == 10, NA, BRTHDT),
-    LBDT = if_else(TESTNUM == 11, NA, LBDT),
+    ADT = if_else(TESTNUM == 11, NA, ADT),
     ATOXGRL = NA_character_,
     TESTNUM = TESTNUM + 11
   )
@@ -11081,5 +11081,37 @@ test_that("derive_var_atoxgr_dir Test 132: CTCAEv6 Creatinine incr. low_indicato
       get_unit_expr = AVALU
     ),
     class = "assert_character_vector"
+  )
+})
+
+## Test 133: ERROR when CRITERIA different with same TERM and UNIT ----
+test_that("derive_var_atoxgr_dir Test 133: ERROR when CRITERIA different with same TERM and UNIT", {
+  atoxgr_criteria_ctcv6 <- bind_rows(
+    admiral::atoxgr_criteria_ctcv6,
+    admiral::atoxgr_criteria_ctcv6 %>%
+      filter(TERM == "Creatinine increased") %>%
+      mutate(GRADE_CRITERIA_CODE = paste0(GRADE_CRITERIA_CODE, ","))
+  )
+
+  expected_creatn <- tibble::tribble(
+    ~ATOXDSCH,               ~AVAL,  ~BASE, ~ANRHI, ~AVALU,         ~BNRIND,        ~ATOXGRH,
+    "Creatinine increased",  241,    40,    40,     NA_character_,  "NORMAL",       "4",
+  )
+
+  input_creatn <- expected_creatn %>%
+    select(-ATOXGRH)
+
+  expect_error(
+    actual_creatn <- derive_var_atoxgr_dir(
+      input_creatn,
+      new_var = ATOXGRH,
+      meta_criteria = atoxgr_criteria_ctcv6,
+      tox_description_var = ATOXDSCH,
+      criteria_direction = "H",
+      high_indicator = "HIGH",
+      low_indicator = "LOW",
+      get_unit_expr = AVALU
+    ),
+    NULL
   )
 })

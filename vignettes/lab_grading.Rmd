@@ -810,7 +810,8 @@ observations with `BNRIND = "LOW"` would be deemed to have a low abnormal Baseli
 Note: you can pass in multiple values, `abnormal_indicator = c("H", "HIGH")`
 
 Excluding "Creatinine increased", for the other 4 terms, this means if `BNRIND` is abnormal then the grade is always one for the
-baseline observation. Additionally, for "Alkaline phosphatase increased" the baseline grade is always zero, as the value has to
+baseline observation. For "Creatinine increased" if `BNRIND` is abnormal then the grade could be zero, one or four, as grade 1 and 4
+are independent of `BNRIND`. Additionally, for "Alkaline phosphatase increased" the baseline grade is always zero, as the value has to
 be above the baseline value to have a grade greater than zero.
 This is the conservative approach, some companies may not want the baseline observation graded at all, so would post-process,
 if necessary.

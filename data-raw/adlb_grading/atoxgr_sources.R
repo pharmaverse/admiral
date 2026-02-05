@@ -47,6 +47,21 @@ atoxgr_json_to_dataframe <- function(dataset, json_file) {
     )
 }
 
+# function checks for unwanted duplicates in the metadata
+atoxgr_check <- function(data, by_vars) {
+  check <- data %>%
+    select(
+      !!!by_vars, VAR_CHECK, DIRECTION, GRADE_CRITERIA_CODE
+    ) %>%
+    distinct()
+
+  signal_duplicate_records(
+    dataset = check,
+    by_vars = exprs(!!!by_vars)
+  )
+}
+
+
 # hold core directory path in an object
 json_file_path <- "data-raw/adlb_grading"
 save_file_path <- "data"
@@ -54,7 +69,7 @@ save_file_path <- "data"
 # Point to JSON files for each criteria
 
 ## NCICTCAEv4 for SI units
-json_file_path_v4a <- file.path(json_file_path, "ncictcaev4.json")
+json_file_path_v4 <- file.path(json_file_path, "ncictcaev4.json")
 
 ## NCICTCAEv4 for CV units
 json_file_path_v4_uscv <- file.path(json_file_path, "ncictcaev4_uscv.json")
@@ -77,16 +92,68 @@ json_file_path_daids <- file.path(json_file_path, "DAIDS.json")
 ## DAIDs for CV units
 json_file_path_daids_uscv <- file.path(json_file_path, "DAIDS_uscv.json")
 
-## Read in JSON files and create metadata for each criteria
+## Read in JSON files and create metadata for each criteria and run check
 
-atoxgr_criteria_ctcv4 <- atoxgr_json_to_dataframe(json_file = json_file_path_v4a)
+### NCICTCAEv4 SI data
+atoxgr_criteria_ctcv4 <- atoxgr_json_to_dataframe(json_file = json_file_path_v4)
+atoxgr_check(atoxgr_criteria_ctcv4, by_vars = exprs(TERM, UNIT_CHECK))
+
+### NCICTCAEv4 CV data
 atoxgr_criteria_ctcv4_uscv <- atoxgr_json_to_dataframe(json_file = json_file_path_v4_uscv)
+atoxgr_check(atoxgr_criteria_ctcv4, by_vars = exprs(TERM, UNIT_CHECK))
+
+# check NCICTCAEv4 SI and CV data combined
+combined_ctcv4 <- bind_rows(
+  atoxgr_criteria_ctcv4,
+  atoxgr_criteria_ctcv4_uscv
+)
+atoxgr_check(combined_ctcv4, by_vars = exprs(TERM, UNIT_CHECK))
+
+### NCICTCAEv5 SI data
 atoxgr_criteria_ctcv5 <- atoxgr_json_to_dataframe(json_file = json_file_path_v5)
+atoxgr_check(atoxgr_criteria_ctcv5, by_vars = exprs(TERM, UNIT_CHECK))
+
+### NCICTCAEv5 CV data
 atoxgr_criteria_ctcv5_uscv <- atoxgr_json_to_dataframe(json_file = json_file_path_v5_uscv)
+atoxgr_check(atoxgr_criteria_ctcv5_uscv, by_vars = exprs(TERM, UNIT_CHECK))
+
+# check NCICTCAEv5 SI and CV data combined
+combined_ctcv5 <- bind_rows(
+  atoxgr_criteria_ctcv5,
+  atoxgr_criteria_ctcv5_uscv
+)
+atoxgr_check(combined_ctcv5, by_vars = exprs(TERM, UNIT_CHECK))
+
+### NCICTCAEv6 SI data
 atoxgr_criteria_ctcv6 <- atoxgr_json_to_dataframe(json_file = json_file_path_v6)
+atoxgr_check(atoxgr_criteria_ctcv6, by_vars = exprs(TERM, UNIT_CHECK))
+
+### NCICTCAEv6 CV data
 atoxgr_criteria_ctcv6_uscv <- atoxgr_json_to_dataframe(json_file = json_file_path_v6_uscv)
+atoxgr_check(atoxgr_criteria_ctcv6_uscv, by_vars = exprs(TERM, UNIT_CHECK))
+
+# check NCICTCAEv6 SI and CV data combined
+combined_ctcv6 <- bind_rows(
+  atoxgr_criteria_ctcv6,
+  atoxgr_criteria_ctcv6_uscv
+)
+atoxgr_check(combined_ctcv6, by_vars = exprs(TERM, UNIT_CHECK))
+
+### DAIDs SI data
 atoxgr_criteria_daids <- atoxgr_json_to_dataframe(json_file = json_file_path_daids)
+atoxgr_check(atoxgr_criteria_daids, by_vars = exprs(TERM, FILTER, UNIT_CHECK))
+
+### DAIDs CV data
 atoxgr_criteria_daids_uscv <- atoxgr_json_to_dataframe(json_file = json_file_path_daids_uscv)
+atoxgr_check(atoxgr_criteria_daids_uscv, by_vars = exprs(TERM, FILTER, UNIT_CHECK))
+
+# check DAIDs SI and CV data combined
+combined_daids <- bind_rows(
+  atoxgr_criteria_daids,
+  atoxgr_criteria_daids_uscv
+)
+atoxgr_check(combined_daids, by_vars = exprs(TERM, FILTER, UNIT_CHECK))
+
 
 ## Save metadata for each criteria
 

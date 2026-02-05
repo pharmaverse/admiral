@@ -41,8 +41,8 @@ value. 'L' is for LOW values, 'H' is for HIGH values. Note: the variable is case
 }
 
 Note: Variables \code{SOC}, \code{TERM}, \code{SUBGROUP}, \verb{Grade 1}, \verb{Grade 2},\verb{Grade 3},\verb{Grade 4},\verb{Grade 5}, \code{Definition}
-are from the source document on DAIDS website defining the grading criteria.
-[Division of AIDS (DAIDS) Table for Grading the Severity of Adult and Pediatric Adverse Events
+are from the source document on DAIDS website defining the grading criteria, (Division of AIDS (DAIDS) Table
+for Grading the Severity of Adult and Pediatric Adverse Events).
 From these variables only 'TERM' is used in the \code{{admiral}} code, the rest are for information and
 traceability only.
 }
