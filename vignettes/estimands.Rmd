@@ -201,7 +201,7 @@ of the intercurrent event, e.g. `"Rescue Medication"` for Intercurrent Event 2
 - `ASTDT` - Analysis Start Date
 - `AENDT` - Analysis End Date
 
-This time for the example code, we will show how to create the required parameter
+This time for the example code, we will show how to create the required
 records for Intercurrent Event 2 defined above.
 
 ```{r}
