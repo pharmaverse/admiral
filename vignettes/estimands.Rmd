@@ -172,7 +172,7 @@ event.
 
 In contrast to most other ADaM datasets, some sponsors' standards for `ADICE` dictate 
 that it should not contain any `ADSL` variables, so this ADaM could be created before 
-`ADSL` direct from SDTM datasets, provided no protocol-specific estimand rules
+`ADSL` directly from SDTM datasets, provided no protocol-specific estimand rules
 depend on `ADSL` or other ADaM datasets. If this is not the case, then an alternative
 strategy could be to create a `pre-ADSL` dataset first, then any relevant ADaMs and `ADICE`,
 and then a final `ADSL` dataset.
