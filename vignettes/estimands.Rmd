@@ -36,6 +36,20 @@ effort to help teams understand the basics, i.e.:
 - Where to store your estimand
 - How to use your estimand in endpoint programming. 
 
+# Article Flow
+
+* [Data Setup](#data_setup)
+* [Intercurrent Events](#intercurrent_events)
+  * [Intercurrent Events Using `ADSL`](#intercurrent_events_adsl)
+  * [Intercurrent Events Using `ADICE`](#intercurrent_events_adice)
+* [Principal Stratum Flags](#principal_stratum_flags)
+* [Analysis Based on Intercurrent Events](#analysis_based_on_intercurrent_events)
+  * [A Simple Time-To-Event Example](#a_simple_time_to_event_example)
+  * [A More Complex Example Involving Imputation](#a_more_complex_example_involving_imputation)
+  * [Further Examples](#further_examples)
+
+# Data Setup {#data_setup}
+
 The examples in this vignette require the following packages and datasets, but note
 that for the purpose of the example data extracts shown in this article we have
 made some tweaks to test data to make the examples more interesting.
@@ -95,7 +109,7 @@ advs <- filter(advs, USUBJID %in% c("01-701-1015", "01-701-1023", "01-701-1028",
   VSTESTCD %in% c("HEIGHT", "WEIGHT"))
 ```
 
-# Intercurrent Events
+# Intercurrent Events {#intercurrent_events}
 
 The first step of implementing estimands is to understand your study intercurrent
 events. For the purpose of the examples in this article we will use the following
@@ -106,7 +120,7 @@ two events:
   1. Rescue Medication - defined here as any patient having a `CM` record where
      `CM.CMDECOD is "HYDROCORTISONE"`.
 
-## Intercurrent Events Using `ADSL`
+## Intercurrent Events Using `ADSL` {#intercurrent_events_adsl}
 
 When all intercurrent events are considered to have a permanent impact (i.e. they only occur once per patient),
 you can add the following variables to `ADSL`:
@@ -121,7 +135,7 @@ you can add the following variables to `ADSL`:
 - `AIEy` - Description of Intercurrent Event y
 
 Here is example code using `{admiral}` functions of how you could add these
-variables for intercurrent event 1 defined above.
+variables for Intercurrent Event 1 defined above.
 
 ```{r}
 # convert DS DTC date to DT - with no partial date imputation applied but
@@ -133,18 +147,18 @@ ds_ext <- ds %>%
   )
 
 adsl <- adsl %>%
-  # intercurrent event 1 datetime (AIE1DTM), time imputation flag (AIE1TMF), description (AIE1)
+  # Intercurrent Event 1 datetime (AIE1DTM), time imputation flag (AIE1TMF), description (AIE1)
   derive_vars_merged(
     dataset_add = ds_ext,
     filter_add = DSCAT == "DISPOSITION EVENT" & DSDECOD != "COMPLETED" & !is.na(DSSTDTM),
     by_vars = exprs(STUDYID, USUBJID),
     new_vars = exprs(AIE1DTM = DSSTDTM, AIE1TMF = DSSTTMF, AIE1 = "TREATMENT DISCONTINUATION")
   ) %>%
-  # intercurrent event 1 date (AIE1DT)
+  # Intercurrent Event 1 date (AIE1DT)
   derive_vars_dtm_to_dt(source_vars = exprs(AIE1DTM)) %>%
-  # intercurrent event 1 time (AIE1TM)
+  # Intercurrent Event 1 time (AIE1TM)
   derive_vars_dtm_to_tm(source_vars = exprs(AIE1DTM)) %>%
-  # intercurrent event 1 relative day (AIE1DY)
+  # Intercurrent Event 1 relative day (AIE1DY)
   derive_vars_dy(
     reference_date = TRTSDT,
     source_vars = exprs(AIE1DT)
@@ -161,9 +175,9 @@ dataset_vignette(
 ```
 
 You could then repeat similar function calls to achieve the equivalent `ADSL`
-variables for intercurrent event 2.
+variables for Intercurrent Event 2.
 
-## Intercurrent Events Using `ADICE`
+## Intercurrent Events Using `ADICE` {#intercurrent_events_adice}
 
 When any intercurrent event is considered to have only a temporary effect (i.e.
 it could occur multiple times per patient) then a new OCCDS ADaM (`ADICE`) dataset
@@ -181,18 +195,18 @@ In this example we will create the following subset of possible `ADICE` variable
 directly from SDTM:
 
 - `ATERM` - Analysis Term, populated with the intercurrent event term, e.g.
-`"HYDROCORTISONE"` for intercurrent event 2
+`"HYDROCORTISONE"` for Intercurrent Event 2
 - `ADECOD1` - Analysis Dictionary-Derived Term 1, populated with a coded description
-of the intercurrent event, e.g. `"Rescue Medication"` for intercurrent event 2
+of the intercurrent event, e.g. `"Rescue Medication"` for Intercurrent Event 2
 - `ASTDT` - Analysis Start Date
 - `AENDT` - Analysis End Date
 
 This time for the example code, we will show how to create the required parameter
-records for intercurrent event 2 defined above.
+records for Intercurrent Event 2 defined above.
 
 ```{r}
 adice <- cm %>%
-  # filter condition for intercurrent event 2
+  # filter condition for Intercurrent Event 2
   filter(CMDECOD == "HYDROCORTISONE") %>%
   # set record information (ATERM/ADECOD1/ASTDT/AENDT)
   mutate(
@@ -225,7 +239,7 @@ Note that the PHUSE implementation guidelines include further variables that cou
 be included here such as categorization through `ACAT1` or planned/actual handling
 strategies through `ESTxxSTP/A`. 
 
-# Principal Stratum Flags
+# Principal Stratum Flags {#principal_stratum_flags}
 
 An estimand that uses a principal stratum strategy focuses on the treatment effect
 within a specific principal stratum. So in such a case, in `ADSL` you could add
@@ -234,7 +248,7 @@ stratum according to a certain estimand.
 
 In the case where your estimands are defined in `ADSL` variables then this would
 be a simple if/else condition, but when using `ADICE` you could use the following
-example to derive `PS2FL` according to intercurrent event 2. Note that you would
+example to derive `PS2FL` according to Intercurrent Event 2. Note that you would
 need to be careful of circular dependency in the case when `ADICE` itself depends
 on `ADSL` or other ADaM datasets, so likely then the below would be in the final
 `ADSL` ran after the `pre-ADSL` and the other ADaMs.
@@ -260,18 +274,18 @@ dataset_vignette(
 )
 ```
 
-# Analysis Based on Intercurrent Events
+# Analysis Based on Intercurrent Events {#analysis_based_on_intercurrent_events}
 
 The downstream usage of the intercurrent events to impact endpoint derivations is
 always going to be protocol-specific and depends on which type of strategy is
 chosen for each. To help you visualize, we offer some examples below.
 
-## A Simple Time-To-Event Example
+## A Simple Time-To-Event Example {#a_simple_time_to_event_example}
 
 Here is an example of a generic time-to-event endpoint, where the event date is
 stored in `ADSL.EVENTDT`.
 The estimand strategy was only events up until (and including the day of) the occurrence
-of intercurrent event 1 are of interest and otherwise censor at the intercurrent event 1 date.
+of Intercurrent Event 1 are of interest and otherwise censor at the Intercurrent Event 1 date.
 Then finally, if no event or intercurrent event censor at last known alive date.
 
 ```{r}
@@ -295,7 +309,7 @@ last_alive_noice1_censor <- censor_source(
   date = LSTALVDT
 )
 
-# derive time to event parameter for intercurrent event 1
+# derive time to event parameter for Intercurrent Event 1
 adtte <- derive_param_tte(
   dataset_adsl = adsl,
   start_date = RANDDT,
@@ -327,11 +341,11 @@ dataset_vignette(
 )
 ```
 
-## A More Complex Example Involving Imputation
+## A More Complex Example Involving Imputation {#a_more_complex_example_involving_imputation}
 
 Here is an example where we need to calculate body mass index (BMI) but we need
 to replace analysis values after or during an intercurrent event by the 95%
-percentile of all patients. This time we'll use the intercurrent event 2
+percentile of all patients. This time we'll use the Intercurrent Event 2
 example from above that used `ADICE`:
 
 ```{r}
@@ -387,7 +401,7 @@ dataset_vignette(
 )
 ```
 
-## Further Examples
+## Further Examples {#further_examples}
 
 There are even more complex implementation options for estimands as detailed in the
 implementation guidelines, but we hope that the examples above help offer a starting point
