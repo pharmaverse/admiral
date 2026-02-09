@@ -22,6 +22,13 @@
 
 ### Documentation
 
+- A night mode option has been added to the
+  [admiral](https://pharmaverse.github.io/admiral/) website. This can be
+  be toggled using the sun/moon icon in the top right corner of the
+  navigation bar. Tooltips have also been set up for each of the icons
+  on the navigation bar.
+  ([\#2959](https://github.com/pharmaverse/admiral/issues/2959))
+
 ### Various
 
 Developer Notes
