@@ -22,6 +22,10 @@
 
 ### Documentation
 
+- New Estimands vignette added, describing possible implementations of
+  estimands with [admiral](https://pharmaverse.github.io/admiral/) code.
+  ([\#2954](https://github.com/pharmaverse/admiral/issues/2954))
+
 - A night mode option has been added to the
   [admiral](https://pharmaverse.github.io/admiral/) website. This can be
   be toggled using the sun/moon icon in the top right corner of the

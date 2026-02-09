@@ -46,13 +46,13 @@ Source:
 
 Straub B, Bundfuss S, Bearham M, Cascone A, Dahnert K, Dickinson J,
 Farrugia R, Gautier F, Mancini E, Miller G, Patil L, Rothstein J (2026).
-*admiral: ADaM in R Asset Library*. R package version 1.4.1.9002,
+*admiral: ADaM in R Asset Library*. R package version 1.4.1.9003,
 <https://pharmaverse.github.io/admiral/>.
 
     @Manual{,
       title = {admiral: ADaM in R Asset Library},
       author = {Ben Straub and Stefan Bundfuss and Matt Bearham and Arianna Cascone and Kristin Dahnert and Jeffrey Dickinson and Ross Farrugia and Fanny Gautier and Edoardo Mancini and Gordon Miller and Lina Patil and Jim Rothstein},
       year = {2026},
-      note = {R package version 1.4.1.9002},
+      note = {R package version 1.4.1.9003},
       url = {https://pharmaverse.github.io/admiral/},
     }

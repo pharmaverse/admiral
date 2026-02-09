@@ -16,6 +16,7 @@
   ADaM](https:/pharmaverse.github.io/admiral/main/articles/bds_tte.md):
 - [Programming Concepts and
   Conventions](https:/pharmaverse.github.io/admiral/main/articles/concepts_conventions.md):
+- [Estimands](https:/pharmaverse.github.io/admiral/main/articles/estimands.md):
 - [FAQ](https:/pharmaverse.github.io/admiral/main/articles/faq.md):
 - [Generic
   Derivations](https:/pharmaverse.github.io/admiral/main/articles/generic.md):
