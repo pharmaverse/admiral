@@ -20,6 +20,9 @@
 
 - New Estimands vignette added, describing possible implementations of estimands with `{admiral}` code. (#2954)
 
+- A night mode option has been added to the `{admiral}` website. This can be be toggled using the sun/moon icon in the top right corner 
+of the navigation bar. Tooltips have also been set up for each of the icons on the navigation bar. (#2959)
+
 ## Various
 
 <details>
