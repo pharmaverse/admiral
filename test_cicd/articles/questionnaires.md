@@ -1,0 +1,535 @@
+# Creating Questionnaire ADaMs
+
+## Introduction
+
+This article describes creating questionnaire ADaMs. Although
+questionnaire data is collected in a single SDTM dataset (`QS`), usually
+it does not make sense to create a single `ADQS` dataset for all
+questionnaire analyses. For example, a univariate analysis of scores by
+visit requires different variables than a time-to-event analysis.
+Therefore this vignette does not provide a programming workflow for a
+complete dataset, but provides examples for deriving common types of
+questionnaire parameters.
+
+At the moment, [admiral](https://pharmaverse.github.io/admiral/) does
+not provide functions or metadata for specific questionnaires nor
+functionality for handling the vast amount of questionnaires and related
+parameters, e.g. a metadata structure for storing parameter definitions
+and functions for reading such metadata. We plan to provide it in future
+releases.
+
+**Note**: *All examples assume CDISC SDTM and/or ADaM format as input
+unless otherwise specified.*
+
+### Required Packages
+
+The examples of this vignette require the following packages.
+
+``` r
+library(dplyr)
+library(tidyr)
+library(tibble)
+library(admiral)
+```
+
+### Example Data
+
+In this vignette we use the example data from the CDISC ADaM Supplements
+([Generalized Anxiety Disorder 7-Item Version 2
+(GAD-7)](https://www.cdisc.org/standards/foundational/qrs/generalized-anxiety-disorder-7-item-version-2-0),
+[Geriatric Depression Scale Short Form
+(GDS-SF)](https://www.cdisc.org/standards/foundational/qrs/geriatric-depression-scale-short-form-0))[¹](#fn1):
+
+``` r
+qs <- admiral::example_qs
+```
+
+``` r
+adsl <- tribble(
+  ~STUDYID, ~USUBJID, ~SITEID, ~ITTFL, ~TRTSDT,                      ~DTHCAUS,
+  "STUDYX",  "P0001",     13L,    "Y", lubridate::ymd("2012-11-16"), NA_character_,
+  "STUDYX",  "P0002",     11L,    "Y", lubridate::ymd("2012-11-16"), "PROGRESSIVE DISEASE"
+)
+```
+
+## Original Items
+
+The original items, i.e. the answers to the questionnaire questions, can
+be handled in the same way as in a [BDS finding
+ADaM](https:/pharmaverse.github.io/admiral/test_cicd/articles/bds_finding.md).
+For example:
+
+``` r
+adqs <- qs %>%
+  # Add ADSL variables
+  derive_vars_merged(
+    dataset_add = adsl,
+    new_vars = exprs(TRTSDT, DTHCAUS),
+    by_vars = exprs(STUDYID, USUBJID)
+  ) %>%
+  # Add analysis parameter variables
+  mutate(
+    PARAMCD = QSTESTCD,
+    PARAM = QSTEST,
+    PARCAT1 = QSCAT,
+    AVALC = QSORRES,
+    AVAL = QSSTRESN
+  ) %>%
+  # Add timing variables
+  derive_vars_dt(new_vars_prefix = "A", dtc = QSDTC) %>%
+  derive_vars_dy(reference_date = TRTSDT, source_vars = exprs(ADT)) %>%
+  mutate(
+    AVISIT = if_else(ADT <= TRTSDT, "BASELINE", VISIT),
+    AVISITN = if_else(ADT <= TRTSDT, 0, VISITNUM)
+  )
+```
+
+We handle unscheduled visits as normal visits. For deriving visits based
+on time-windows, see [Visit and Period
+Variables](https:/pharmaverse.github.io/admiral/test_cicd/articles/visits_periods.html#visits).
+And for flagging values to be used for analysis, see
+[`derive_var_extreme_flag()`](https:/pharmaverse.github.io/admiral/test_cicd/reference/derive_var_extreme_flag.md).
+
+## Transformed Items
+
+Please note that in the example data, the numeric values of the answers
+are mapped in SDTM (`QSSTRESN`) such that they can be used for deriving
+scores. Depending on the question, `QSORRES == "YES"` is mapped to
+`QSSTRESN = 0` or `QSSTRESN = 1`. If the `QSSTRESN` values are not ready
+to be used for deriving scores and require transformation, it is
+recommended that `QSSTRESN` is kept in the ADaM dataset for
+traceability, and the transformed value is stored in `AVAL`, since
+that’s what will be used for the score calculation.
+
+It may also be necessary to transform the range of the numeric values of
+the original items. For example if a scale should be derived as the
+average but the range of the contributing items varies. In this case the
+values could be linearly transformed to a unified range like `[0, 100]`.
+The computation function
+[`transform_range()`](https:/pharmaverse.github.io/admiral/test_cicd/reference/transform_range.md)
+can be used for the transformation.
+
+## Scales and Scores
+
+Scales and Scores are often derived as the sum or the average across a
+subset of the items. For the GAD-7 questionnaire, the total score is
+derived as the sum. The
+[`derive_summary_records()`](https:/pharmaverse.github.io/admiral/test_cicd/reference/derive_summary_records.md)
+function with [`sum()`](https://rdrr.io/r/base/sum.html) can be used to
+derive it as a new parameter. For selecting the parameters to be
+summarized, regular expressions like in the example below may be
+helpful. In the example we derive a separate ADaM dataset for each
+questionnaire. Depending on the analysis needs, it is also possible that
+an ADaM contains more than one questionnaire or all questionnaires.
+
+``` r
+adgad7 <- adqs %>%
+  # Select records to keep in the GAD-7 ADaM
+  filter(PARCAT1 == "GAD-7 V2") %>%
+  derive_summary_records(
+    dataset = .,
+    dataset_add = .,
+    by_vars = exprs(STUDYID, USUBJID, AVISIT, ADT, ADY, TRTSDT, DTHCAUS),
+    # Select records contributing to total score
+    filter_add = str_detect(PARAMCD, "GAD020[1-7]"),
+    set_values_to = exprs(
+      AVAL = sum(AVAL, na.rm = TRUE),
+      PARAMCD = "GAD02TS",
+      PARAM = "GAD02-Total Score - Analysis"
+    )
+  )
+```
+
+For the GDS-SF questionnaire, the total score is defined as the average
+of the item values transformed to the range \[0, 15\] and rounded up to
+the next integer. If more than five items are missing, the total score
+is considered as missing. This parameter can be derived by
+[`compute_scale()`](https:/pharmaverse.github.io/admiral/test_cicd/reference/compute_scale.md)
+and
+[`derive_summary_records()`](https:/pharmaverse.github.io/admiral/test_cicd/reference/derive_summary_records.md):
+
+``` r
+adgdssf <- adqs %>%
+  # Select records to keep in the GDS-SF ADaM
+  filter(PARCAT1 == "GDS SHORT FORM") %>%
+  derive_summary_records(
+    dataset = .,
+    dataset_add = .,
+    by_vars = exprs(STUDYID, USUBJID, AVISIT, ADT, ADY, TRTSDT, DTHCAUS),
+    # Select records contributing to total score
+    filter_add = str_detect(PARAMCD, "GDS02[01][0-9]"),
+    set_values_to = exprs(
+      AVAL = compute_scale(
+        AVAL,
+        source_range = c(0, 1),
+        target_range = c(0, 15),
+        min_n = 10
+      ) %>%
+        ceiling(),
+      PARAMCD = "GDS02TS",
+      PARAM = "GDS02- Total Score - Analysis"
+    )
+  )
+```
+
+After deriving the scores by visit, the baseline and change from
+baseline variables can be derived:
+
+``` r
+adgdssf <- adgdssf %>%
+  # Flag baseline records (last before treatement start)
+  restrict_derivation(
+    derivation = derive_var_extreme_flag,
+    args = params(
+      by_vars = exprs(STUDYID, USUBJID, PARAMCD),
+      order = exprs(ADT),
+      new_var = ABLFL,
+      mode = "last"
+    ),
+    filter = !is.na(AVAL) & ADT <= TRTSDT
+  ) %>%
+  # Derive baseline and change from baseline variables
+  derive_var_base(
+    by_vars = exprs(STUDYID, USUBJID, PARAMCD),
+    source_var = AVAL,
+    new_var = BASE
+  ) %>%
+  # Calculate CHG for post-baseline records
+  # The decision on how to populate pre-baseline and baseline values of CHG is left to producer choice
+  restrict_derivation(
+    derivation = derive_var_chg,
+    filter = AVISITN > 0
+  ) %>%
+  # Calculate PCHG for post-baseline records
+  # The decision on how to populate pre-baseline and baseline values of PCHG is left to producer choice
+  restrict_derivation(
+    derivation = derive_var_pchg,
+    filter = AVISITN > 0
+  ) %>%
+  # Derive sequence number
+  derive_var_obs_number(
+    by_vars = exprs(STUDYID, USUBJID),
+    order = exprs(PARAMCD, ADT),
+    check_type = "error"
+  )
+```
+
+## Time to Deterioration/Improvement
+
+As time to event parameters require specific variables like `CNSR`,
+`STARTDT`, and `EVNTDESC`, it makes sense to create a separate time to
+event dataset for them. However, it might be useful to create flags or
+categorization variables in `ADQS`. For example:
+
+``` r
+# Create AVALCATy lookup table
+avalcat_lookup <- exprs(
+  ~PARAMCD, ~condition, ~AVALCAT1, ~AVALCAT1N,
+  "GDS02TS", AVAL <= 5, "Normal", 0L,
+  "GDS02TS", AVAL <= 10 & AVAL > 5, "Possible Depression", 1L,
+  "GDS02TS", AVAL > 10, "Likely Depression", 2L
+)
+# Create CHGCAT1 lookup table
+chgcat_lookup <- exprs(
+  ~condition, ~CHGCAT1,
+  AVALCAT1N > BASECA1N, "WORSENED",
+  AVALCAT1N == BASECA1N, "NO CHANGE",
+  AVALCAT1N < BASECA1N, "IMPROVED"
+)
+
+adgdssf <- adgdssf %>%
+  derive_vars_cat(
+    definition = avalcat_lookup,
+    by_vars = exprs(PARAMCD)
+  ) %>%
+  derive_var_base(
+    by_vars = exprs(STUDYID, USUBJID, PARAMCD),
+    source_var = AVALCAT1,
+    new_var = BASECAT1
+  ) %>%
+  derive_var_base(
+    by_vars = exprs(STUDYID, USUBJID, PARAMCD),
+    source_var = AVALCAT1N,
+    new_var = BASECA1N
+  ) %>%
+  derive_vars_cat(
+    definition = chgcat_lookup
+  )
+```
+
+Then a time to deterioration parameter can be derived by:
+
+``` r
+# Define event
+deterioration_event <- event_source(
+  dataset_name = "adqs",
+  filter = PARAMCD == "GDS02TS" & CHGCAT1 == "WORSENED",
+  date = ADT,
+  set_values_to = exprs(
+    EVNTDESC = "DEPRESSION WORSENED",
+    SRCDOM = "ADQS",
+    SRCVAR = "ADT",
+    SRCSEQ = ASEQ
+  )
+)
+
+# Define censoring at last assessment
+last_valid_assessment <- censor_source(
+  dataset_name = "adqs",
+  filter = PARAMCD == "GDS02TS" & !is.na(CHGCAT1),
+  date = ADT,
+  set_values_to = exprs(
+    EVNTDESC = "LAST ASSESSMENT",
+    SRCDOM = "ADQS",
+    SRCVAR = "ADT",
+    SRCSEQ = ASEQ
+  )
+)
+
+# Define censoring at treatment start (for subjects without assessment)
+start <- censor_source(
+  dataset_name = "adsl",
+  date = TRTSDT,
+  set_values_to = exprs(
+    EVNTDESC = "TREATMENT START",
+    SRCDOM = "ADSL",
+    SRCVAR = "TRTSDT"
+  )
+)
+
+adgdstte <- derive_param_tte(
+  dataset_adsl = adsl,
+  source_datasets = list(adsl = adsl, adqs = adgdssf),
+  start_date = TRTSDT,
+  event_conditions = list(deterioration_event),
+  censor_conditions = list(last_valid_assessment, start),
+  set_values_to = exprs(
+    PARAMCD = "TTDEPR",
+    PARAM = "Time to depression"
+  )
+) %>%
+  derive_vars_duration(
+    new_var = AVAL,
+    start_date = STARTDT,
+    end_date = ADT
+  )
+```
+
+## Time to Confirmed/Definitive Deterioration/Improvement
+
+The derivation of confirmed/definitive deterioration/improvement
+parameters is very similar to the unconfirmed deterioration parameters
+except that the event is not based on `CHGCATy`, but on a confirmation
+flag variable. This confirmation flag can be derived by
+[`derive_var_joined_exist_flag()`](https:/pharmaverse.github.io/admiral/test_cicd/reference/derive_var_joined_exist_flag.md).
+For example, flagging deteriorations, which are confirmed by a second
+assessment at least seven days later:
+
+``` r
+adgdssf <- adgdssf %>%
+  derive_var_joined_exist_flag(
+    dataset_add = adgdssf,
+    by_vars = exprs(USUBJID, PARAMCD),
+    order = exprs(ADT),
+    new_var = CDETFL,
+    join_vars = exprs(CHGCAT1, ADY),
+    join_type = "after",
+    filter_join = CHGCAT1 == "WORSENED" &
+      CHGCAT1.join == "WORSENED" &
+      ADY.join >= ADY + 7
+  )
+```
+
+For flagging deteriorations at two consecutive assessments or
+considering death due to progression at the last assessment as
+confirmation, the `tmp_obs_nr_var` argument is helpful:
+
+``` r
+# Flagging deterioration at two consecutive assessments
+adgdssf <- adgdssf %>%
+  derive_var_joined_exist_flag(
+    dataset_add = adgdssf,
+    by_vars = exprs(USUBJID, PARAMCD),
+    order = exprs(ADT),
+    new_var = CONDETFL,
+    join_vars = exprs(CHGCAT1),
+    join_type = "after",
+    tmp_obs_nr_var = tmp_obs_nr,
+    filter_join = CHGCAT1 == "WORSENED" &
+      CHGCAT1.join == "WORSENED" &
+      tmp_obs_nr.join == tmp_obs_nr + 1
+  ) %>%
+  # Flagging deterioration confirmed by
+  # - a second deterioration at least 7 days later or
+  # - deterioration at the last assessment and death due to progression
+  derive_var_joined_exist_flag(
+    .,
+    dataset_add = .,
+    by_vars = exprs(USUBJID, PARAMCD),
+    order = exprs(ADT),
+    new_var = CDTDTHFL,
+    join_vars = exprs(CHGCAT1, ADY),
+    join_type = "all",
+    tmp_obs_nr_var = tmp_obs_nr,
+    filter_join = CHGCAT1 == "WORSENED" & (
+      CHGCAT1.join == "WORSENED" & ADY.join >= ADY + 7 |
+        tmp_obs_nr == max(tmp_obs_nr.join) & DTHCAUS == "PROGRESSIVE DISEASE")
+  )
+```
+
+For definitive deterioration (deterioration at all following
+assessments), parameter summary functions like
+[`all()`](https://rdrr.io/r/base/all.html) can be used in the filter
+condition:
+
+``` r
+adgdssf <- adgdssf %>%
+  derive_var_joined_exist_flag(
+    dataset_add = adgdssf,
+    by_vars = exprs(USUBJID, PARAMCD),
+    order = exprs(ADT),
+    new_var = DEFDETFL,
+    join_vars = exprs(CHGCAT1),
+    join_type = "after",
+    filter_join = CHGCAT1 == "WORSENED" & all(CHGCAT1.join == "WORSENED")
+  )
+```
+
+The time-to-event parameter can be derived in the same way as for the
+unconfirmed parameters (see [Time to
+Deterioration/Improvement](#timetodeterioration)).
+
+## Worst/Best Answer
+
+This class of parameters can be used when the worst answer of a set of
+yes/no answers should be selected. For example, if yes/no answers for
+“No sleep”, “Waking up more than three times”, “More than 30 minutes to
+fall asleep” are collected, a parameter for the worst sleeping problems
+could be derived. In the example, “no sleeping problems” is assumed if
+all questions were answered with “no”.
+
+``` r
+adsp <- adqs %>%
+  filter(PARCAT1 == "SLEEPING PROBLEMS") %>%
+  derive_extreme_event(
+    by_vars = exprs(USUBJID, AVISIT),
+    tmp_event_nr_var = event_nr,
+    order = exprs(event_nr, ADY, QSSEQ),
+    mode = "first",
+    events = list(
+      event(
+        condition = PARAMCD == "SP0101" & AVALC == "YES",
+        set_values_to = exprs(
+          AVALC = "No sleep",
+          AVAL = 1
+        )
+      ),
+      event(
+        condition = PARAMCD == "SP0102" & AVALC == "YES",
+        set_values_to = exprs(
+          AVALC = "Waking up more than three times",
+          AVAL = 2
+        )
+      ),
+      event(
+        condition = PARAMCD == "SP0103" & AVALC == "YES",
+        set_values_to = exprs(
+          AVALC = "More than 30 mins to fall asleep",
+          AVAL = 3
+        )
+      ),
+      event(
+        condition = all(AVALC == "NO"),
+        set_values_to = exprs(
+          AVALC = "No sleeping problems",
+          AVAL = 4
+        )
+      ),
+      event(
+        condition = TRUE,
+        set_values_to = exprs(
+          AVALC = "Missing",
+          AVAL = 99
+        )
+      )
+    ),
+    set_values_to = exprs(
+      PARAMCD = "SP01WSP",
+      PARAM = "Worst Sleeping Problems"
+    )
+  )
+```
+
+## Completion
+
+Parameters for completion, like “at least 90% of the questions were
+answered”, can be derived by
+[`derive_summary_records()`](https:/pharmaverse.github.io/admiral/test_cicd/reference/derive_summary_records.md).
+
+``` r
+adgdssf <- adgdssf %>%
+  derive_summary_records(
+    dataset_add = adgdssf,
+    filter_add = str_detect(PARAMCD, "GDS02[01][0-9]"),
+    by_vars = exprs(USUBJID, AVISIT),
+    set_values_to = exprs(
+      AVAL = sum(!is.na(AVAL)) / 15 >= 0.9,
+      PARAMCD = "COMPL90P",
+      PARAM = "Completed at least 90% of questions?",
+      AVALC = if_else(AVAL == 1, "YES", "NO")
+    )
+  )
+```
+
+Please note that the denominator may depend on the answers of some of
+the questions. For example, a given questionnaire might direct someone
+to go from question \#4 directly to question \#8 based on their response
+to question \#4, because questions \#5, \#6 and \#7 would not apply in
+that case.
+
+If missed visits need to be taken into account, the expected records can
+be added to the input dataset by calling
+[`derive_expected_records()`](https:/pharmaverse.github.io/admiral/test_cicd/reference/derive_expected_records.md):
+
+``` r
+# Create dataset with expected visits and parameters (GDS0201 - GDS0215)
+parm_visit_ref <- crossing(
+  tribble(
+    ~AVISIT,    ~AVISITN,
+    "BASELINE",        0,
+    "VISIT 2",         2,
+    "VISIT 3",         3,
+    "VISIT 4",         4,
+    "VISIT 5",         5
+  ),
+  tibble(PARAMCD = sprintf("GDS02%02d", seq(1, 15)))
+)
+
+adgdssf <- adgdssf %>%
+  derive_expected_records(
+    dataset_ref = parm_visit_ref,
+    by_vars = exprs(USUBJID),
+    set_values_to = exprs(
+      filled_in = 1
+    )
+  ) %>%
+  derive_summary_records(
+    dataset = .,
+    dataset_add = .,
+    filter_add = str_detect(PARAMCD, "GDS02[01][0-9]"),
+    by_vars = exprs(USUBJID, AVISIT),
+    set_values_to = exprs(
+      AVAL = all(!is.na(AVAL)),
+      PARAMCD = "COMPLALL",
+      PARAM = "Completed all questions?",
+      AVALC = if_else(AVAL == 1, "YES", "NO")
+    )
+  ) %>%
+  filter(is.na(filled_in)) %>%
+  select(-filled_in)
+```
+
+------------------------------------------------------------------------
+
+1.  The example `QS` data (`example_qs`) is included in the admiral
+    package.

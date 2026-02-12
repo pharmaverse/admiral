@@ -1,0 +1,398 @@
+# Programming Concepts and Conventions
+
+## Introduction
+
+This vignette aims to discuss some of the common programming concepts
+and conventions that have been adopted within the
+[admiral](https://pharmaverse.github.io/admiral/) family of packages. It
+is intended to be a user-facing version of the [Programming
+Strategy](https://pharmaverse.github.io/admiraldev/articles/programming_strategy.html)
+vignette, but users can also read the latter after becoming more
+familiar with the package to expand further on any topics of interest.
+For some of common [admiral](https://pharmaverse.github.io/admiral/)
+FAQ, visit the corresponding FAQ page provided in the same drop down
+menu as this vignette.
+
+## Input and Output
+
+It is expected that the input dataset is not grouped. Otherwise an error
+is issued.
+
+The output dataset is ungrouped. The observations are not ordered in a
+dedicated way. In particular, the order of the observations of the input
+dataset may not be preserved.
+
+## `{admiral}` Functions and Options
+
+As a general principle, the behavior of the
+[admiral](https://pharmaverse.github.io/admiral/) functions is only
+determined by their input, not by any global object, i.e. all inputs
+like datasets, variable names, options, etc. must be provided to the
+function by arguments. Correspondingly, in general functions do not have
+any side-effects like creating or modifying global objects, printing,
+writing files, etc.
+
+An exception to the above principle is found in our approach to package
+options (see
+[`get_admiral_option()`](https:/pharmaverse.github.io/admiral/test_cicd/reference/get_admiral_option.md)
+and
+[`set_admiral_options()`](https:/pharmaverse.github.io/admiral/test_cicd/reference/set_admiral_options.md)),
+which allow for user-defined defaults on commonly used function
+arguments. For instance, the option `subject_keys` is currently
+pre-defined as `exprs(STUDYID, USUBJID)`, but can be modified using
+`set_admiral_options(subject_keys = exprs(...))` at the top of a script.
+
+For a full discussion on admiral Inputs, Outputs and Options, see [this
+section](https://pharmaverse.github.io/admiraldev/articles/programming_strategy.html#input-output-and-side-effects)
+on our developer-facing Programming Strategy.
+
+## Handling of Missing Values
+
+When using the [haven](https://haven.tidyverse.org) package to read SAS
+datasets into R, SAS-style character missing values, i.e. `""`, are
+*not* converted into proper R `NA` values. Rather they are kept as is.
+This is problematic for any downstream data processing as R handles `""`
+just as any other string. Thus, before any data manipulation is being
+performed SAS blanks should be converted to R `NA`s using
+[admiral](https://pharmaverse.github.io/admiral/)’s
+[`convert_blanks_to_na()`](https:/pharmaverse.github.io/admiral/test_cicd/reference/convert_blanks_to_na.md)
+function, e.g.
+
+``` r
+dm <- haven::read_sas("dm.sas7bdat") %>% 
+  convert_blanks_to_na()
+```
+
+Note that any logical operator being applied to an `NA` value *always*
+returns `NA` rather than `TRUE` or `FALSE`.
+
+``` r
+visits <- c("Baseline", NA, "Screening", "Week 1 Day 7")
+visits != "Baseline"
+#> [1] FALSE    NA  TRUE  TRUE
+```
+
+The only exception is [`is.na()`](https://rdrr.io/r/base/NA.html) which
+returns `TRUE` if the input is `NA`.
+
+``` r
+is.na(visits)
+#> [1] FALSE  TRUE FALSE FALSE
+```
+
+Thus, to filter all visits which are not `"Baseline"` the following
+condition would need to be used.
+
+``` r
+visits != "Baseline" | is.na(visits)
+#> [1] FALSE  TRUE  TRUE  TRUE
+```
+
+Also note that most aggregation functions, like
+[`mean()`](https://rdrr.io/r/base/mean.html) or
+[`max()`](https://rdrr.io/r/base/Extremes.html), also return `NA` if any
+element of the input vector is missing.
+
+``` r
+mean(c(1, NA, 2))
+#> [1] NA
+```
+
+To avoid this behavior one has to explicitly set `na.rm = TRUE`.
+
+``` r
+mean(c(1, NA, 2), na.rm = TRUE)
+#> [1] 1.5
+```
+
+This is very important to keep in mind when using
+[admiral](https://pharmaverse.github.io/admiral/)’s aggregation
+functions such as
+[`derive_summary_records()`](https:/pharmaverse.github.io/admiral/test_cicd/reference/derive_summary_records.md).
+
+For handling of `NA`s in sorting variables see [Sort
+Order](https:/pharmaverse.github.io/admiral/test_cicd/articles/generic.html#sort_order).
+
+## Expressions in Scripts
+
+### Quoting and Unquoting: Introducing `expr()`, `exprs()`, `!!` and `!!!`
+
+#### `expr()` and `exprs()`
+
+[`expr()`](https://rlang.r-lib.org/reference/expr.html) is a function
+from the [rlang](https://rlang.r-lib.org) package, which is used to
+create an **expression**. The expression is not evaluated - rather, it
+is passed on to the derivation function which evaluates it in its own
+environment.
+[`exprs()`](https:/pharmaverse.github.io/admiral/test_cicd/reference/reexport-exprs.md)
+is the plural version of
+[`expr()`](https://rlang.r-lib.org/reference/expr.html), so it accepts
+multiple comma-separated items and returns a list of expressions.
+
+``` r
+library(rlang)
+
+adae <- data.frame(USUBJID = "XXX-1", AEDECOD = "HEADACHE")
+
+# Return the adae object
+adae
+#>   USUBJID  AEDECOD
+#> 1   XXX-1 HEADACHE
+
+# Return an expression
+expr(adae)
+#> adae
+```
+
+When used within the contest of an
+[admiral](https://pharmaverse.github.io/admiral/) derivation function,
+[`expr()`](https://rlang.r-lib.org/reference/expr.html) and
+[`exprs()`](https:/pharmaverse.github.io/admiral/test_cicd/reference/reexport-exprs.md)
+allow the function to evaluate the expressions in the context of the
+input dataset. As an example,
+[`expr()`](https://rlang.r-lib.org/reference/expr.html) and
+[`exprs()`](https:/pharmaverse.github.io/admiral/test_cicd/reference/reexport-exprs.md)
+allow users to pass variable names of datasets to the function without
+wrapping them in quotation marks.
+
+The expressions framework is powerful because users are able to
+intuitively “inject code” into `admiral` functions (through the function
+parameters) using very similar syntax as if they were writing open code,
+with the exception possibly being an outer
+[`exprs()`](https:/pharmaverse.github.io/admiral/test_cicd/reference/reexport-exprs.md)
+wrapper. For instance, in the
+[`derive_vars_merged()`](https:/pharmaverse.github.io/admiral/test_cicd/reference/derive_vars_merged.md)
+call below, the user is merging `adsl` with `ex` and is able to filter
+`ex` prior to the merge using an expression passed to the `filter_add`
+parameter. Because `filter_add` accepts expressions, the user has full
+power to filter their dataset as they please. In the same vein, the user
+is able to create any new variables they wish after the merge using the
+`new_vars` argument, to which they pass a list of expressions containing
+“standard” R code.
+
+``` r
+derive_vars_merged(
+  adsl,
+  dataset_add = ex,
+  filter_add = !is.na(EXENDTM),
+  by_vars = exprs(STUDYID, USUBJID),
+  new_vars = exprs(
+    TRTEDTM = EXENDTM,
+    TRTETMF = EXENTMF,
+    COMPTRT = if_else(!is.na(EXENDTM), "Y", "N")
+  ),
+  order = exprs(EXENDTM),
+  mode = "last"
+)
+```
+
+#### Bang-Bang (`!!`) and Bang-Bang-Bang (`!!!`)
+
+Sometimes you may want to construct an expression using other,
+pre-existing expressions. However, it’s not immediately clear how to
+achieve this because expressions inherently pause evaluation of your
+code before it’s executed:
+
+``` r
+a <- expr(2)
+b <- expr(3)
+
+expr(a + b)
+#> a + b
+# NOT 2 + 3
+```
+
+This is where `!!` (bang-bang) comes in: provided again by the
+[rlang](https://rlang.r-lib.org) package, it allows you to inject the
+contents of an expression into another expression, meaning that by using
+`!!` you can modify the code inside an expression before R evaluates it.
+By using `!!` you are **unquoting** an expression, i.e. evaluating it
+before you pass it onwards.
+
+``` r
+expr(!!a + !!b)
+#> 2 + 3
+```
+
+You can see an example of where `!!` comes in handy within
+[admiral](https://pharmaverse.github.io/admiral/) code in [Common
+Pitfall 1](#pitfall1), where the contents of an expression is unquoted
+so that it can be passed to
+[`derive_vars_merged()`](https:/pharmaverse.github.io/admiral/test_cicd/reference/derive_vars_merged.md).
+
+`!!!` (bang-bang-bang) is the plural version of `!!` and can be used to
+unquote a list of expressions:
+
+``` r
+exprs(!!!list(a, b))
+#> [[1]]
+#> [1] 2
+#> 
+#> [[2]]
+#> [1] 3
+```
+
+Within [admiral](https://pharmaverse.github.io/admiral/), this operator
+can be useful if we need to unquote a list of variables (stored as
+expressions) to use them inside of an
+[admiral](https://pharmaverse.github.io/admiral/) or even
+[dplyr](https://dplyr.tidyverse.org) call. One example is the
+[admiral](https://pharmaverse.github.io/admiral/) subject keys:
+
+``` r
+get_admiral_option("subject_keys")
+#> [[1]]
+#> STUDYID
+#> 
+#> [[2]]
+#> USUBJID
+```
+
+If we want to use the subject keys stored within this
+[admiral](https://pharmaverse.github.io/admiral/) option to subset a
+dataset, we need to use `!!!` to unquote this list. Let’s construct a
+dummy example to illustrate the point:
+
+``` r
+adcm <- data.frame(STUDYID = "XXX", USUBJID = "XXX-1", CMTRT = "ASPIRIN")
+adcm
+#>   STUDYID USUBJID   CMTRT
+#> 1     XXX   XXX-1 ASPIRIN
+
+# This doesn't work as we are not unquoting the subject keys
+adcm %>% select(get_admiral_option("subject_keys"))
+#> Error in `select()`:
+#> ! Can't select columns with `get_admiral_option("subject_keys")`.
+#> ✖ `get_admiral_option("subject_keys")` must be numeric or character, not a list.
+
+# This works because we are unquoting the subject keys
+adcm %>% select(!!!get_admiral_option("subject_keys"))
+#>   STUDYID USUBJID
+#> 1     XXX   XXX-1
+```
+
+You can see another example of `!!!` in action in [this
+line](https://github.com/pharmaverse/admiral/blob/c5dd8fb196c2cd3f27a6b02ec88fa1abd6b24d60/inst/templates/ad_adex.R#L162)
+of the [admiral](https://pharmaverse.github.io/admiral/) `ADEX` template
+script, where it is used to dynamically control the by variables passed
+to an [admiral](https://pharmaverse.github.io/admiral/) function.
+
+#### Summary
+
+In summary, although the expressions framework may seem slightly clunky
+and mysterious to begin with, it allows for such power and flexibility
+that it forms a key part of the
+[admiral](https://pharmaverse.github.io/admiral/) package. For a
+comprehensive treatment of expressions, see [Chapter
+18](https://adv-r.hadley.nz/expressions.html) and [Chapter
+19](https://adv-r.hadley.nz/quasiquotation.html) of the Advanced R
+textbook. Chapter 19 specifically covers in much more detail the concept
+of unquoting.
+
+### Common pitfalls
+
+Expressions are very powerful, but this can also lead to
+misunderstandings about their functionality. Let’s set up some dummy
+data to explore common issues that new (or experienced!) programmers may
+encounter when dealing with expressions.
+
+``` r
+library(dplyr, warn.conflicts = FALSE)
+library(admiral)
+
+vs <- tribble(
+  ~USUBJID, ~VSTESTCD, ~VISIT, ~VSSTRESN, ~VSSTRESU, ~VSDTC,
+  "01-1301", "WEIGHT", "SCREENING", 82.1, "kg", "2013-08-29",
+  "01-1301", "WEIGHT", "WEEK 2", 81.19, "kg", "2013-09-15",
+  "01-1301", "WEIGHT", "WEEK 4", 82.56, "kg", "2013-09-24",
+  "01-1302", "BMI", "SCREENING", 20.1, "kg/m2", "2013-08-29",
+  "01-1302", "BMI", "WEEK 2", 20.2, "kg/m2", "2013-09-15",
+  "01-1302", "BMI", "WEEK 4", 19.9, "kg/m2", "2013-09-24"
+)
+
+dm <- tribble(
+  ~USUBJID, ~AGE,
+  "01-1301", 18
+)
+```
+
+#### 1. Mistakenly passing something that isn’t an expression to an argument
+
+When writing more complex
+[admiral](https://pharmaverse.github.io/admiral/) code it can be easy to
+mistakenly pass the wrong input to an argument that expects an
+expression. For example, the code below fails because `my_expression` is
+not an expression - it is the name of an object in the global
+environment containing an expression.
+
+``` r
+my_expression <- expr(VSTESTCD == "WEIGHT" & VISIT == "SCREENING")
+
+derive_vars_merged(
+  dm,
+  dataset_add = select(vs, USUBJID, VSTESTCD, VISIT),
+  by_vars = exprs(USUBJID),
+  filter_add = my_expression
+)
+#> Error in `derive_vars_merged()`:
+#> ! Argument `filter_add` must be a filter condition, but is a symbol
+```
+
+To fix this code, we need to [unquote](#unquoting) `my_expression` so
+that the expression that it is holding is passed correctly to
+[`derive_vars_merged()`](https:/pharmaverse.github.io/admiral/test_cicd/reference/derive_vars_merged.md):
+
+``` r
+derive_vars_merged(
+  dm,
+  dataset_add = select(vs, USUBJID, VSTESTCD, VISIT),
+  by_vars = exprs(USUBJID),
+  filter_add = !!my_expression
+)
+#> # A tibble: 1 × 4
+#>   USUBJID   AGE VSTESTCD VISIT    
+#>   <chr>   <dbl> <chr>    <chr>    
+#> 1 01-1301    18 WEIGHT   SCREENING
+```
+
+#### 2. Forgetting that expressions must be evaluable in the dataset
+
+In a similar vein to above, even if an actual expression *is* passed as
+an argument, you must make sure that it can be evaluated within the
+dataset of interest. This may seem trivial, but it is a common pitfall
+because expressions delay evaluation of code and so can delay the
+identification of issues. For instance, consider this example:
+
+``` r
+filter_vs_and_merge <- function(my_expression) {
+  derive_vars_merged(
+    dm,
+    dataset_add = select(vs, USUBJID, VSTESTCD, VISIT),
+    by_vars = exprs(USUBJID),
+    filter_add = !!my_expression
+  )
+}
+
+# This works
+filter_vs_and_merge(expr(VSTESTCD == "WEIGHT" & VISIT == "SCREENING"))
+#> # A tibble: 1 × 4
+#>   USUBJID   AGE VSTESTCD VISIT    
+#>   <chr>   <dbl> <chr>    <chr>    
+#> 1 01-1301    18 WEIGHT   SCREENING
+
+# This fails
+filter_vs_and_merge(expr(VSTESTCD == "WEIGHT" & VISIT == "SCREENING" & VSTPT == "PREDOSE"))
+#> Error in `filter()`:
+#> ℹ In argument: `VSTESTCD == "WEIGHT" & VISIT == "SCREENING" & VSTPT ==
+#>   "PREDOSE"`.
+#> Caused by error:
+#> ! object 'VSTPT' not found
+```
+
+The second call fails because hidden within the expression is a mention
+of `VSTPT`, which was dropped from `vs` in `filter_vs_and_merge()`.
+
+## See also
+
+- [Programming
+  Strategy](https://pharmaverse.github.io/admiraldev/articles/programming_strategy.html)
