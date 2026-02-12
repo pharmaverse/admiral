@@ -74,7 +74,7 @@ jobs:
     if: github.event_name == 'pull_request'
   docs:
     name: Documentation
-    uses: pharmaverse/admiralci/.github/workflows/pkgdown.yml@main
+    uses: pharmaverse/admiralci/.github/workflows/pkgdown.yml@220_update_pkgdown
     if: github.event_name == 'push' || startsWith(github.ref, 'refs/tags/v')
     needs: get_r_version
     with:
@@ -98,11 +98,11 @@ jobs:
       r-version: "${{ needs.get_r_version.outputs.r-version }}"
   links:
     name: Links
-    uses: pharmaverse/admiralci/.github/workflows/links.yml@60_set_output
+    uses: pharmaverse/admiralci/.github/workflows/links.yml@main
     if: github.event_name == 'pull_request'
   coverage:
     name: Code Coverage
-    uses: pharmaverse/admiralci/.github/workflows/code-coverage.yml@216_no_cov_badge
+    uses: pharmaverse/admiralci/.github/workflows/code-coverage.yml@main
     if: >
       github.event_name != 'release'
     needs: get_r_version
