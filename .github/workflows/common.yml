@@ -75,7 +75,10 @@ jobs:
   docs:
     name: Documentation
     uses: pharmaverse/admiralci/.github/workflows/pkgdown.yml@220_update_pkgdown
-    if: github.event_name == 'push' || startsWith(github.ref, 'refs/tags/v')
+    if: >
+      github.event_name == 'push' ||
+      startsWith(github.ref, 'refs/tags/v') ||
+      (github.event_name == 'pull_request' && contains(github.event.pull_request.title, '[create doc]'))
     needs: get_r_version
     with:
       r-version: "release"
