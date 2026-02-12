@@ -55,6 +55,8 @@ repo:
 news:
   cran_dates: true
 
+llm-docs: false
+
 home:
   links:
   - text: 🌍 {admiral} ecosystem 🌍
