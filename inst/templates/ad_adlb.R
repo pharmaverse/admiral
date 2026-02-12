@@ -277,8 +277,9 @@ adlb <- adlb %>%
     dataset_add = grade_lookup,
     by_vars = exprs(PARAMCD)
   ) %>%
+  # if implementing NCI-CTCAEv5 or NCI-CTCAEv6 then arguments `high_indicator` and `low_indicator`
+  # should be assigned in all calls to function `derive_var_atoxgr_dir` below
   # Derive toxicity grade for low values ATOXGRL
-
   derive_var_atoxgr_dir(
     meta_criteria = grade_crit,
     new_var = ATOXGRL,
@@ -286,7 +287,7 @@ adlb <- adlb %>%
     criteria_direction = "L",
     get_unit_expr = extract_unit(PARAM)
   ) %>%
-  # Derive toxicity grade for low values ATOXGRH
+  # Derive toxicity grade for high values ATOXGRH
   # default metadata atoxgr_criteria_ctcv4 used
   derive_var_atoxgr_dir(
     meta_criteria = grade_crit,

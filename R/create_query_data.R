@@ -670,7 +670,10 @@ validate_query <- function(obj) {
           sprintf(
             "\u2716 Element %s is %s",
             which(!is_valid),
-            map_chr(values$definition[!is_valid], what_is_it)
+            map_chr(
+              values$definition[!is_valid],
+              function(x) cli::format_inline("{.obj_type_friendly {x}}")
+            )
           ),
           collapse = "\n"
         )
@@ -915,7 +918,7 @@ format.basket_select <- function(x, ...) {
 
   formvar <- list()
 
-  for (i in seq_len(length(all_arg_names))) {
+  for (i in seq_along(all_arg_names)) {
     is_numeric_class <- map_lgl(x[i], inherits, "numeric") | map_chr(x[i], typeof) == "numeric"
 
     if (is.character(x[[i]]) && length(x[[i]]) <= 1 && !is.na(x[[i]])) {

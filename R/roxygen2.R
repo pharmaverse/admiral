@@ -14,7 +14,7 @@ roxygen_param_dataset <- function(expected_vars = NULL) {
       " are expected to be in the dataset."
     )
   }
-  return(dataset_text)
+  dataset_text
 }
 
 
@@ -32,7 +32,7 @@ roxygen_param_by_vars <- function(rename = FALSE) {
     )
   }
 
-  return(by_vars_text)
+  by_vars_text
 }
 
 roxygen_order_na_handling <- function() {

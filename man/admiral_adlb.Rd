@@ -5,7 +5,7 @@
 \alias{admiral_adlb}
 \title{Lab Analysis Dataset}
 \format{
-An object of class \code{tbl_df} (inherits from \code{tbl}, \code{data.frame}) with 3779 rows and 111 columns.
+An object of class \code{tbl_df} (inherits from \code{tbl}, \code{data.frame}) with 330 rows and 115 columns.
 }
 \source{
 Derived from the \code{adlb} template, then further filtered

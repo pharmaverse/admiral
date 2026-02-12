@@ -3,9 +3,13 @@ url: https://pharmaverse.github.io/admiral
 template:
   math-rendering: mathjax
   bootstrap: 5
-  params:
-    bootswatch: flatly
+  light-switch: true
+  bslib:
+    preset: "flatly"
+    primary: "#2c3e50"
+    navbar-bg: "#2c3e50"
   includes:
+    css: pkgdown/extra.css
     in_header: |
       <script
       async
@@ -21,8 +25,25 @@ template:
       data-consent-screen-accept-button-text="Allow tracking"
       data-consent-screen-reject-button-text="No, thanks"
       data-modal-example-questions="Tell me a little about the {admiral} package., What are some important {admiral} functions and what do they do?"
+      data-modal-search-placeholder="Ask me a question about {admiral} or the {admiral} ecosystem..."
       data-modal-z-index="9999"
       ></script>
+
+      <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        // Select all navbar links that have an aria-label
+        var navLinks = document.querySelectorAll('.navbar-nav .nav-link[aria-label]');
+
+        navLinks.forEach(function (link) {
+          // Initialize Bootstrap 5 Tooltip
+          link.setAttribute('title', link.getAttribute('aria-label'));
+          new bootstrap.Tooltip(link, {
+            placement: 'bottom', // Tooltip appears below the icon
+            trigger: 'hover'
+          });
+        });
+      });
+      </script>
 search:
   exclude: ['news/index.html']
 repo:
@@ -38,6 +59,8 @@ home:
   links:
   - text: 🌍 {admiral} ecosystem 🌍
     href: https://pharmaverse.org/e2eclinical/adam/
+  - text: 🧭 ADaM templates 🧭
+    href: articles/templates.html
 
 authors:
   before: "We define *authors* as those who are actively maintaining the code base, and *contributors* as those who made a significant contribution in the past. For all acknowledgements, see the eponymous section in the [Home Page](https://pharmaverse.github.io/admiral/cran-release/)."
@@ -175,10 +198,24 @@ reference:
   contents:
   - has_keyword("deprecated")
 
+- title: Experimental
+  desc: |
+    Experimental functions will have the "experimental" badge removed onced the
+    dev team feels the function is stable. No deprecation messages will be given
+    to the user if breaking changes are implemented before removing the experimental
+    badge. However, `{admiral}` will document the breaking change in the "Changelog".
+    Once the "experimental" badge is removed we will proceed with the normal deprecation
+    cycle if needed.
+
+    This experimental time period allows for us to test out the function and receive
+    feedback but doesn’t burden us with a deprecation cycle.
+  contents:
+  - has_keyword("experimental")
+
 navbar:
   structure:
     left: [getstarted, reference, articles, admiraldiscovery, news, versions]
-    right: [search, slack, history, newissue, github]
+    right: [search, slack, history, newissue, github, lightswitch]
   components:
     getstarted:
       text: Get Started
@@ -187,6 +224,8 @@ navbar:
         href: articles/admiral.html
       - text: Cheatsheet
         href: https://github.com/pharmaverse/admiral/blob/main/inst/cheatsheet/admiral_cheatsheet.pdf
+      - text: Explore ADaM Templates 🧭
+        href: articles/templates.html
       - text: Presentation Archive
         href: https://pharmaverse.github.io/admiraldiscovery/articles/presentation_archive.html
     reference:
@@ -218,6 +257,8 @@ navbar:
         href: articles/questionnaires.html
       - text: Creating a PK NCA or Population PK ADaM
         href: articles/pk_adnca.html
+      - text: Creating an Antidrug Antibody ADaM
+        href: articles/adab.html
       - text: Hy's Law Implementation
         href: articles/hys_law.html
       - text: -------
@@ -230,6 +271,8 @@ navbar:
         href: articles/queries_dataset.html
       - text: Lab Grading
         href: articles/lab_grading.html
+      - text: Estimands
+        href: articles/estimands.html
       - text: -------
       - text: FAQ
         href: articles/faq.html
@@ -239,8 +282,8 @@ navbar:
     slack:
       icon: fa-slack
       href: https://pharmaverse.slack.com/
-      aria-label: Slack
+      aria-label: Join the pharmaverse Slack!
     newissue:
       icon: fa-bug
       href: https://github.com/pharmaverse/admiral/issues/new/choose
-      aria-label: New Issue
+      aria-label: Report an issue

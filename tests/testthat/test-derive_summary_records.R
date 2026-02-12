@@ -107,7 +107,7 @@ test_that("derive_summary_records Test 3: Errors", {
 })
 
 ## Test 4: make sure dataset_add works ----
-test_that("derive_summary_records Test 5: make sure dataset_add works", {
+test_that("derive_summary_records Test 4: make sure dataset_add works", {
   input <- tibble::tribble(
     ~subj, ~visit,       ~val, ~seq,
     "1",        1,         10,    1,
@@ -145,8 +145,8 @@ test_that("derive_summary_records Test 5: make sure dataset_add works", {
   )
 })
 
-## Test 5: test missing values ----
-test_that("derive_summary_records Test 6: test missing values with dataset_ref", {
+## Test 5: test missing values with dataset_ref ----
+test_that("derive_summary_records Test 5: test missing values with dataset_ref", {
   input <- tibble::tribble(
     ~subj, ~visit,       ~val, ~seq,
     "1",        1,         10,    1,
@@ -191,5 +191,122 @@ test_that("derive_summary_records Test 6: test missing values with dataset_ref",
     base = expected_output,
     compare = actual_output,
     keys = c("subj", "visit", "seq", "type")
+  )
+})
+
+## Test 6: test using constant_values ----
+test_that("derive_summary_records Test 7: test using constant_values", {
+  input <- tibble::tribble(
+    ~subj, ~visit,       ~aval, ~seq,      ~param,
+    "1",        1,          10,    1,     "VALUE",
+    "1",        1,          14,    2,     "VALUE",
+    "1",        1,           9,    3,     "VALUE",
+    "1",        2,          11,    4,     "VALUE",
+    "2",        2,          14,    1,     "VALUE"
+  )
+
+  expected_output <- bind_rows(
+    input,
+    tibble::tribble(
+      ~subj, ~visit,       ~aval,         ~type,      ~param,
+      "1",        1,          11,     "AVERAGE",    "RESULT",
+      "1",        2,          11,     "AVERAGE",    "RESULT",
+      "2",        2,          14,     "AVERAGE",    "RESULT"
+    )
+  )
+
+  actual_output <- input %>%
+    derive_summary_records(
+      dataset_add = input,
+      by_vars = exprs(subj, visit),
+      constant_values = exprs(
+        param = "RESULT"
+      ),
+      set_values_to = exprs(
+        aval = mean(aval, na.rm = TRUE),
+        type = "AVERAGE"
+      )
+    )
+
+  expect_dfs_equal(
+    base = expected_output,
+    compare = actual_output,
+    keys = c("subj", "visit", "seq", "type", "param")
+  )
+})
+
+## Test 7: test missing values with constant values ----
+test_that("derive_summary_records Test 8: test missing values using constant_values", {
+  input <- tibble::tribble(
+    ~subj, ~visit,       ~aval, ~seq,      ~param,
+    "1",        1,          10,    1,     "VALUE",
+    "1",        1,          14,    2,     "VALUE",
+    "1",        1,           9,    3,     "VALUE",
+    "1",        2,          11,    4,     "VALUE",
+    "2",        2,    NA_real_,    1,     "VALUE"
+  )
+
+  input_ref <- tibble::tribble(
+    ~subj, ~visit,
+    "1", 1,
+    "1", 2,
+    "2", 1,
+    "2", 2,
+  )
+
+  expected_output <- bind_rows(
+    input,
+    tibble::tribble(
+      ~subj, ~visit,       ~aval,         ~type,      ~param,
+      "1",        1,          11,     "AVERAGE",    "RESULT",
+      "1",        2,          11,     "AVERAGE",    "RESULT",
+      "2",        1,      999999,     "MISSING",    "RESULT",
+      "2",        2,    NA_real_,     "AVERAGE",    "RESULT"
+    )
+  )
+
+  actual_output <- input %>%
+    derive_summary_records(
+      dataset_add = input,
+      dataset_ref = input_ref,
+      by_vars = exprs(subj, visit),
+      constant_values = exprs(
+        param = "RESULT"
+      ),
+      set_values_to = exprs(
+        aval = mean(aval, na.rm = TRUE),
+        type = "AVERAGE"
+      ),
+      missing_values = exprs(aval = 999999, type = "MISSING")
+    )
+
+  expect_dfs_equal(
+    base = expected_output,
+    compare = actual_output,
+    keys = c("subj", "visit", "seq", "type")
+  )
+})
+
+
+## Test 6: error if no summary function ----
+test_that("derive_summary_records Test 6: error if no summary function", {
+  adbds <- tibble::tribble(
+    ~AVISIT,  ~ASEQ, ~AVAL,
+    "WEEK 1",     1,    10,
+    "WEEK 1",     2,    NA,
+    "WEEK 2",     3,    NA,
+    "WEEK 3",     4,    42,
+    "WEEK 4",     5,    12,
+    "WEEK 4",     6,    12,
+    "WEEK 4",     7,    15
+  )
+
+  expect_snapshot(
+    derive_summary_records(
+      dataset_add = adbds,
+      by_vars = exprs(AVISIT),
+      set_values_to = exprs(MEANVIS = AVAL / 2)
+    ),
+    error = TRUE
   )
 })

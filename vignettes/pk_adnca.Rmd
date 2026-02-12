@@ -154,10 +154,11 @@ In this segment we will use `derive_vars_merged()` to join the `ADSL`
 variables and the following `{admiral}` functions to derive analysis
 dates, times and days: `derive_vars_dtm()`, `derive_vars_dtm_to_dt()`,
 `derive_vars_dtm_to_tm()`, `derive_vars_dy()`. We will also create
-`NFRLT` for `PC` data based on `PCTPTNUM`. We will create an event ID
-(`EVID`) of 0 for concentration records and 1 for dosing records. This
-is a traditional variable that will provide a handy tool to identify
-records but will be dropped from the final dataset in this example.
+`NFRLT` for `PC` data based on `VISTDY` and `PCTPT` using
+`derive_var_nfrlt()`. We will create an event ID (`EVID`) of 0 for
+concentration records and 1 for dosing records. This is a traditional
+variable that will provide a handy tool to identify records but will be
+dropped from the final dataset in this example.
 
 ```{r eval=TRUE}
 adsl_vars <- exprs(TRTSDT, TRTSDTM, TRT01P, TRT01A)
@@ -184,8 +185,16 @@ pc_dates <- pc %>%
   # Derive event ID and nominal relative time from first dose (NFRLT)
   mutate(
     EVID = 0,
-    DRUG = PCTEST,
-    NFRLT = if_else(PCTPTNUM < 0, 0, PCTPTNUM), .after = USUBJID
+    DRUG = PCTEST
+  ) %>%
+  derive_var_nfrlt(
+    new_var = NFRLT,
+    new_var_unit = FRLTU,
+    out_unit = "HOURS",
+    tpt_var = PCTPT,
+    visit_day = VISITDY,
+    treatment_duration = 0,
+    range_method = "midpoint"
   )
 ```
 
@@ -232,11 +241,13 @@ ex_dates <- ex %>%
   ) %>%
   # Derive event ID and nominal relative time from first dose (NFRLT)
   mutate(
-    EVID = 1,
-    NFRLT = case_when(
-      VISITDY == 1 ~ 0,
-      TRUE ~ 24 * VISITDY
-    )
+    EVID = 1
+  ) %>%
+  derive_var_nfrlt(
+    new_var = NFRLT,
+    new_var_unit = FRLTU,
+    out_unit = "HOURS",
+    visit_day = VISITDY
   ) %>%
   # Set missing end dates to start date
   mutate(AENDTM = case_when(
@@ -529,16 +540,17 @@ adpc_arrlt <- bind_rows(adpc_nom_next, ex_exp) %>%
     new_var = AFRLT,
     start_date = FANLDTM,
     end_date = ADTM,
-    out_unit = "hours",
+    out_unit = "HOURS",
     floor_in = FALSE,
     add_one = FALSE
   ) %>%
   # Derive Actual Relative Time from Reference Dose (ARRLT)
   derive_vars_duration(
     new_var = ARRLT,
+    new_var_unit = RRLTU,
     start_date = ADTM_prev,
     end_date = ADTM,
-    out_unit = "hours",
+    out_unit = "HOURS",
     floor_in = FALSE,
     add_one = FALSE
   ) %>%
@@ -673,8 +685,6 @@ adpc_aval <- adpc_nrrlt %>%
   ) %>%
   # Derive relative time units
   mutate(
-    FRLTU = "h",
-    RRLTU = "h",
     # Derive PARAMCD
     PARAMCD = coalesce(PCTESTCD, "DOSE"),
     ALLOQ = PCLLOQ,
@@ -881,7 +891,7 @@ adpc_aseq <- adpc_chg %>%
   select(
     -DOMAIN, -PCSEQ, -starts_with("orig"), -starts_with("min"),
     -starts_with("max"), -starts_with("EX"), -ends_with("next"),
-    -ends_with("prev"), -DRUG, -EVID, -AXRLT, -NXRLT, -VISITDY
+    -ends_with("prev"), -DRUG, -EVID, -AXRLT, -NXRLT
   ) %>%
   # Derive PARAM and PARAMN
   derive_vars_merged(
@@ -1125,7 +1135,7 @@ adppk_aprlt <- bind_rows(adppk_nom_prev, ex_exp) %>%
     new_var = AFRLT,
     start_date = FANLDTM,
     end_date = ADTM,
-    out_unit = "hours",
+    out_unit = "HOURS",
     floor_in = FALSE,
     add_one = FALSE
   ) %>%
@@ -1134,7 +1144,7 @@ adppk_aprlt <- bind_rows(adppk_nom_prev, ex_exp) %>%
     new_var = APRLT,
     start_date = ADTM_prev,
     end_date = ADTM,
-    out_unit = "hours",
+    out_unit = "HOURS",
     floor_in = FALSE,
     add_one = FALSE
   ) %>%
@@ -1296,7 +1306,7 @@ CDISC demographic variables including `STUDYIDN`, `USUBJIDN`, `SEXN`,
 `RACEN`, and `ETHNICN`.
 
 ```{r eval=TRUE, echo=TRUE}
-#---- Derive Covariates ----
+# ---- Derive Covariates ----
 # Include numeric values for STUDYIDN, USUBJIDN, SEXN, RACEN etc.
 
 covar <- adsl %>%
@@ -1379,7 +1389,7 @@ calculate creatinine clearance `CRCLBL` and estimated glomerular
 filtration rate (eGFR) `EGFRBL` using `compute_egfr()` function.
 
 ```{r eval=TRUE, echo=TRUE}
-#---- Derive additional baselines from VS and LB ----
+# ---- Derive additional baselines from VS and LB ----
 
 labsbl <- lb %>%
   filter(LBBLFL == "Y" & LBTESTCD %in% c("CREAT", "ALT", "AST", "BILI")) %>%
@@ -1409,7 +1419,7 @@ covar_vslb <- covar %>%
     BMIBL = compute_bmi(height = HTBL, weight = WTBL),
     BSABL = compute_bsa(
       height = HTBL,
-      weight = HTBL,
+      weight = WTBL,
       method = "Mosteller"
     ),
     # Derive CRCLBL and EGFRBL using new function
@@ -1461,8 +1471,10 @@ dataset_vignette(
 
 # Add Labels and Attributes {#attributes}
 
-Adding labels and attributes for SAS transport files is supported by the
-following packages:
+Note that attributes may not be preserved in some cases after processing
+with `{admiral}`. The recommended approach is to apply variable labels
+and other metadata as a final step in your data derivation process using
+packages like:
 
 -   [metacore](https://atorus-research.github.io/metacore/): establish a
     common foundation for the use of metadata within an R session.
@@ -1478,12 +1490,11 @@ following packages:
     [transport v5
     file(xpt)](https://documentation.sas.com/doc/en/pgmsascdc/9.4_3.5/movefile/n1xbwdre0giahfn11c99yjkpi2yb.htm).
 
-NOTE: All these packages are in the experimental phase, but the vision
-is to have them associated with an End to End pipeline under the
-umbrella of the [pharmaverse](https://github.com/pharmaverse). An
-example of applying metadata and perform associated checks can be found
-at the [pharmaverse E2E
-example](https://pharmaverse.github.io/examples/adam/adsl).
+NOTE: Together with `{admiral}` these packages comprise an End to End
+pipeline under the umbrella of the
+[pharmaverse](https://github.com/pharmaverse). An example of applying
+metadata and perform associated checks can be found at the [pharmaverse
+E2E example](https://pharmaverse.github.io/examples/adam/adsl).
 
 # Example Scripts {#example}
 

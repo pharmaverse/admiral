@@ -25,7 +25,7 @@ A date or character date is expected in a format like \code{yyyy-mm-ddThh:mm:ss}
 
 \item{highest_imputation}{Highest imputation level
 
-The \code{highest_imputation} argument controls which components of the DTC
+The \code{highest_imputation} argument controls which components of the \code{--DTC}
 value are imputed if they are missing. All components up to the specified
 level are imputed.
 
@@ -180,6 +180,7 @@ Date/Time Computation Functions that returns a vector:
 \code{\link{compute_tmf}()},
 \code{\link{convert_dtc_to_dt}()},
 \code{\link{convert_dtc_to_dtm}()},
+\code{\link{convert_xxtpt_to_hours}()},
 \code{\link{impute_dtc_dt}()},
 \code{\link{impute_dtc_dtm}()}
 }
