@@ -122,7 +122,6 @@ jobs:
     needs: get_r_version
     with:
       r-version: "${{ needs.get_r_version.outputs.r-version }}"
-      install-package: true
   templates:
     name: Check Templates
     uses: pharmaverse/admiralci/.github/workflows/check-templates.yml@main
