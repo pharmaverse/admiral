@@ -59,12 +59,12 @@ derive_vars_duration(
   A date or date-time object is expected.
 
   Refer to
-  [`derive_vars_dt()`](https:/pharmaverse.github.io/admiral/test_cicd/reference/derive_vars_dt.md)
+  [`derive_vars_dt()`](https:/pharmaverse.github.io/admiral/test_cicd/test_cicd/reference/derive_vars_dt.md)
   to impute and derive a date from a date character vector to a date
   object.
 
   Refer to
-  [`convert_dtc_to_dt()`](https:/pharmaverse.github.io/admiral/test_cicd/reference/convert_dtc_to_dt.md)
+  [`convert_dtc_to_dt()`](https:/pharmaverse.github.io/admiral/test_cicd/test_cicd/reference/convert_dtc_to_dt.md)
   to obtain a vector of imputed dates.
 
   Default value
@@ -78,12 +78,12 @@ derive_vars_duration(
   A date or date-time object is expected.
 
   Refer to
-  [`derive_vars_dt()`](https:/pharmaverse.github.io/admiral/test_cicd/reference/derive_vars_dt.md)
+  [`derive_vars_dt()`](https:/pharmaverse.github.io/admiral/test_cicd/test_cicd/reference/derive_vars_dt.md)
   to impute and derive a date from a date character vector to a date
   object.
 
   Refer to
-  [`convert_dtc_to_dt()`](https:/pharmaverse.github.io/admiral/test_cicd/reference/convert_dtc_to_dt.md)
+  [`convert_dtc_to_dt()`](https:/pharmaverse.github.io/admiral/test_cicd/test_cicd/reference/convert_dtc_to_dt.md)
   to obtain a vector of imputed dates.
 
   Default value
@@ -231,16 +231,16 @@ page](https://lubridate.tidyverse.org/reference/timespan.html).
 
 ## See also
 
-[`compute_duration()`](https:/pharmaverse.github.io/admiral/test_cicd/reference/compute_duration.md)
+[`compute_duration()`](https:/pharmaverse.github.io/admiral/test_cicd/test_cicd/reference/compute_duration.md)
 
 Date/Time Derivation Functions that returns variable appended to
 dataset:
-[`derive_var_trtdurd()`](https:/pharmaverse.github.io/admiral/test_cicd/reference/derive_var_trtdurd.md),
-[`derive_vars_dt()`](https:/pharmaverse.github.io/admiral/test_cicd/reference/derive_vars_dt.md),
-[`derive_vars_dtm()`](https:/pharmaverse.github.io/admiral/test_cicd/reference/derive_vars_dtm.md),
-[`derive_vars_dtm_to_dt()`](https:/pharmaverse.github.io/admiral/test_cicd/reference/derive_vars_dtm_to_dt.md),
-[`derive_vars_dtm_to_tm()`](https:/pharmaverse.github.io/admiral/test_cicd/reference/derive_vars_dtm_to_tm.md),
-[`derive_vars_dy()`](https:/pharmaverse.github.io/admiral/test_cicd/reference/derive_vars_dy.md)
+[`derive_var_trtdurd()`](https:/pharmaverse.github.io/admiral/test_cicd/test_cicd/reference/derive_var_trtdurd.md),
+[`derive_vars_dt()`](https:/pharmaverse.github.io/admiral/test_cicd/test_cicd/reference/derive_vars_dt.md),
+[`derive_vars_dtm()`](https:/pharmaverse.github.io/admiral/test_cicd/test_cicd/reference/derive_vars_dtm.md),
+[`derive_vars_dtm_to_dt()`](https:/pharmaverse.github.io/admiral/test_cicd/test_cicd/reference/derive_vars_dtm_to_dt.md),
+[`derive_vars_dtm_to_tm()`](https:/pharmaverse.github.io/admiral/test_cicd/test_cicd/reference/derive_vars_dtm_to_tm.md),
+[`derive_vars_dy()`](https:/pharmaverse.github.io/admiral/test_cicd/test_cicd/reference/derive_vars_dy.md)
 
 ## Examples
 

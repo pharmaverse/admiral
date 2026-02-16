@@ -15,6 +15,6 @@ A `data.frame` or `NULL`
 ## See also
 
 Utilities used within Derivation functions:
-[`extract_unit()`](https:/pharmaverse.github.io/admiral/test_cicd/reference/extract_unit.md),
-[`get_flagged_records()`](https:/pharmaverse.github.io/admiral/test_cicd/reference/get_flagged_records.md),
-[`get_vars_query()`](https:/pharmaverse.github.io/admiral/test_cicd/reference/get_vars_query.md)
+[`extract_unit()`](https:/pharmaverse.github.io/admiral/test_cicd/test_cicd/reference/extract_unit.md),
+[`get_flagged_records()`](https:/pharmaverse.github.io/admiral/test_cicd/test_cicd/reference/get_flagged_records.md),
+[`get_vars_query()`](https:/pharmaverse.github.io/admiral/test_cicd/test_cicd/reference/get_vars_query.md)

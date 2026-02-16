@@ -1,9 +1,9 @@
 # Get Imputation Targets
 
 Determines the imputation targets for date (see
-[`get_imputation_target_date()`](https:/pharmaverse.github.io/admiral/test_cicd/reference/get_imputation_target_date.md)
+[`get_imputation_target_date()`](https:/pharmaverse.github.io/admiral/test_cicd/test_cicd/reference/get_imputation_target_date.md)
 and time (see
-[`get_imputation_target_time()`](https:/pharmaverse.github.io/admiral/test_cicd/reference/get_imputation_target_time.md))
+[`get_imputation_target_time()`](https:/pharmaverse.github.io/admiral/test_cicd/test_cicd/reference/get_imputation_target_time.md))
 components.
 
 ## Usage

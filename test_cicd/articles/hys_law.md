@@ -55,9 +55,9 @@ particular criterion of Hy’s Law and the actual flag itself to indicate
 whether or not the condition was reached.
 
 Using [`mutate()`](https://dplyr.tidyverse.org/reference/mutate.html),
-[`call_derivation()`](https:/pharmaverse.github.io/admiral/test_cicd/reference/call_derivation.md)
+[`call_derivation()`](https:/pharmaverse.github.io/admiral/test_cicd/test_cicd/reference/call_derivation.md)
 and
-[`derive_var_merged_exist_flag()`](https:/pharmaverse.github.io/admiral/test_cicd/reference/derive_var_merged_exist_flag.md),
+[`derive_var_merged_exist_flag()`](https:/pharmaverse.github.io/admiral/test_cicd/test_cicd/reference/derive_var_merged_exist_flag.md),
 we can create these columns that indicate the the 3-fold or greater than
 upper limit of normal of ALT/AST and the 2-fold or greater than upper
 limit of normal of BILI.
@@ -100,7 +100,7 @@ vary by organization). By,
 1.  Splitting our dataset into its ALT/AST and BILI subsets,
     respectively, and
 2.  Joining these two datasets using
-    [`derive_vars_joined()`](https:/pharmaverse.github.io/admiral/test_cicd/reference/derive_vars_joined.md)
+    [`derive_vars_joined()`](https:/pharmaverse.github.io/admiral/test_cicd/test_cicd/reference/derive_vars_joined.md)
     while using the `filter_join` argument to only join together the
     relevant flagged BILI records that have a corresponding flagged
     ALT/AST record (prior up to 14 days but may vary for
@@ -132,7 +132,7 @@ hylaw_records <- derive_vars_joined(
 ### How to Create New Parameters and Rows
 
 Using
-[`derive_param_exist_flag()`](https:/pharmaverse.github.io/admiral/test_cicd/reference/derive_param_exist_flag.md)
+[`derive_param_exist_flag()`](https:/pharmaverse.github.io/admiral/test_cicd/test_cicd/reference/derive_param_exist_flag.md)
 you can create a variety of parameters for your final dataset with
 `AVAL = 1/0` for your specific Hy’s Law analysis. Below is an example of
 how to indicate a potential Hy’s Law event, with `PARAMCD` set as

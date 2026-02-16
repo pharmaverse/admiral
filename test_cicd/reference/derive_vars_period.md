@@ -72,7 +72,7 @@ derive_vars_period(
   Variables to uniquely identify a subject
 
   A list of expressions where the expressions are symbols as returned by
-  [`exprs()`](https:/pharmaverse.github.io/admiral/test_cicd/reference/reexport-exprs.md)
+  [`exprs()`](https:/pharmaverse.github.io/admiral/test_cicd/test_cicd/reference/reexport-exprs.md)
   is expected.
 
   Default value
@@ -93,12 +93,12 @@ value of `new_vars`.
 
 ## See also
 
-[`create_period_dataset()`](https:/pharmaverse.github.io/admiral/test_cicd/reference/create_period_dataset.md)
+[`create_period_dataset()`](https:/pharmaverse.github.io/admiral/test_cicd/test_cicd/reference/create_period_dataset.md)
 
 ADSL Functions that returns variable appended to dataset:
-[`derive_var_age_years()`](https:/pharmaverse.github.io/admiral/test_cicd/reference/derive_var_age_years.md),
-[`derive_vars_aage()`](https:/pharmaverse.github.io/admiral/test_cicd/reference/derive_vars_aage.md),
-[`derive_vars_extreme_event()`](https:/pharmaverse.github.io/admiral/test_cicd/reference/derive_vars_extreme_event.md)
+[`derive_var_age_years()`](https:/pharmaverse.github.io/admiral/test_cicd/test_cicd/reference/derive_var_age_years.md),
+[`derive_vars_aage()`](https:/pharmaverse.github.io/admiral/test_cicd/test_cicd/reference/derive_vars_aage.md),
+[`derive_vars_extreme_event()`](https:/pharmaverse.github.io/admiral/test_cicd/test_cicd/reference/derive_vars_extreme_event.md)
 
 ## Examples
 
@@ -129,11 +129,7 @@ derive_vars_period(
   new_vars = exprs(APxxSDT = APERSDT, APxxEDT = APEREDT)
 ) %>%
   select(STUDYID, USUBJID, AP01SDT, AP01EDT, AP02SDT, AP02EDT)
-#> # A tibble: 2 × 6
-#>   STUDYID USUBJID AP01SDT    AP01EDT    AP02SDT    AP02EDT   
-#>   <chr>   <chr>   <date>     <date>     <date>     <date>    
-#> 1 xyz     1       2021-01-04 2021-02-06 2021-02-07 2021-03-07
-#> 2 xyz     2       2021-02-02 2021-03-02 2021-03-03 2021-04-01
+#> Error in derive_vars_period(adsl, dataset_ref = period_ref, new_vars = exprs(APxxSDT = APERSDT,     APxxEDT = APEREDT)): Required variable `USUBJID2` is missing in `dataset`
 
 # Add phase variables to ADSL
 phase_ref <- tribble(
@@ -154,11 +150,7 @@ derive_vars_period(
   new_vars = exprs(PHwSDT = PHSDT, PHwEDT = PHEDT, APHASEw = APHASE)
 ) %>%
   select(STUDYID, USUBJID, PH1SDT, PH1EDT, PH2SDT, PH2EDT, APHASE1, APHASE2)
-#> # A tibble: 2 × 8
-#>   STUDYID USUBJID PH1SDT     PH1EDT     PH2SDT     PH2EDT     APHASE1   APHASE2
-#>   <chr>   <chr>   <date>     <date>     <date>     <date>     <chr>     <chr>  
-#> 1 xyz     1       2021-01-04 2021-02-06 2021-02-07 2021-03-07 TREATMENT FUP    
-#> 2 xyz     2       2021-02-02 2021-03-02 NA         NA         TREATMENT NA     
+#> Error in derive_vars_period(adsl, dataset_ref = phase_ref, new_vars = exprs(PHwSDT = PHSDT,     PHwEDT = PHEDT, APHASEw = APHASE)): Required variable `USUBJID2` is missing in `dataset`
 
 # Add subperiod variables to ADSL
 subperiod_ref <- tribble(
@@ -182,10 +174,5 @@ derive_vars_period(
   new_vars = exprs(PxxSwSDT = ASPRSDT, PxxSwEDT = ASPREDT)
 ) %>%
   select(STUDYID, USUBJID, P01S1SDT, P01S1EDT, P01S2SDT, P01S2EDT, P02S1SDT, P02S1EDT)
-#> # A tibble: 2 × 8
-#>   STUDYID USUBJID P01S1SDT   P01S1EDT   P01S2SDT   P01S2EDT   P02S1SDT  
-#>   <chr>   <chr>   <date>     <date>     <date>     <date>     <date>    
-#> 1 xyz     1       2021-01-04 2021-01-19 2021-01-20 2021-02-06 2021-02-07
-#> 2 xyz     2       2021-02-02 2021-03-02 NA         NA         2021-03-03
-#> # ℹ 1 more variable: P02S1EDT <date>
+#> Error in derive_vars_period(adsl, dataset_ref = subperiod_ref, new_vars = exprs(PxxSwSDT = ASPRSDT,     PxxSwEDT = ASPREDT)): Required variable `USUBJID2` is missing in `dataset`
 ```

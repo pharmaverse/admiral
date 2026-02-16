@@ -27,7 +27,7 @@ restrict_derivation(dataset, derivation, args = NULL, filter)
   argument of a derivation must expect a dataset and the derivation must
   return a dataset. All expected arguments for the derivation function
   must be provided through the
-  [`params()`](https:/pharmaverse.github.io/admiral/test_cicd/reference/params.md)
+  [`params()`](https:/pharmaverse.github.io/admiral/test_cicd/test_cicd/reference/params.md)
   objects passed to the `args` argument.
 
   Default value
@@ -39,7 +39,7 @@ restrict_derivation(dataset, derivation, args = NULL, filter)
   Arguments of the derivation
 
   A
-  [`params()`](https:/pharmaverse.github.io/admiral/test_cicd/reference/params.md)
+  [`params()`](https:/pharmaverse.github.io/admiral/test_cicd/test_cicd/reference/params.md)
   object is expected.
 
   Default value
@@ -65,14 +65,14 @@ it must take a dataset as its first argument and return a dataset.
 
 ## See also
 
-[`params()`](https:/pharmaverse.github.io/admiral/test_cicd/reference/params.md)
-[`slice_derivation()`](https:/pharmaverse.github.io/admiral/test_cicd/reference/slice_derivation.md)
-[`call_derivation()`](https:/pharmaverse.github.io/admiral/test_cicd/reference/call_derivation.md)
+[`params()`](https:/pharmaverse.github.io/admiral/test_cicd/test_cicd/reference/params.md)
+[`slice_derivation()`](https:/pharmaverse.github.io/admiral/test_cicd/test_cicd/reference/slice_derivation.md)
+[`call_derivation()`](https:/pharmaverse.github.io/admiral/test_cicd/test_cicd/reference/call_derivation.md)
 
 Higher Order Functions:
-[`call_derivation()`](https:/pharmaverse.github.io/admiral/test_cicd/reference/call_derivation.md),
-[`derivation_slice()`](https:/pharmaverse.github.io/admiral/test_cicd/reference/derivation_slice.md),
-[`slice_derivation()`](https:/pharmaverse.github.io/admiral/test_cicd/reference/slice_derivation.md)
+[`call_derivation()`](https:/pharmaverse.github.io/admiral/test_cicd/test_cicd/reference/call_derivation.md),
+[`derivation_slice()`](https:/pharmaverse.github.io/admiral/test_cicd/test_cicd/reference/derivation_slice.md),
+[`slice_derivation()`](https:/pharmaverse.github.io/admiral/test_cicd/test_cicd/reference/slice_derivation.md)
 
 ## Examples
 

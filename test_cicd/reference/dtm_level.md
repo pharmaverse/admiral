@@ -35,12 +35,12 @@ compared.
 ## See also
 
 Utilities used for date imputation:
-[`dt_level()`](https:/pharmaverse.github.io/admiral/test_cicd/reference/dt_level.md),
-[`get_imputation_target_date()`](https:/pharmaverse.github.io/admiral/test_cicd/reference/get_imputation_target_date.md),
-[`get_imputation_target_time()`](https:/pharmaverse.github.io/admiral/test_cicd/reference/get_imputation_target_time.md),
-[`get_partialdatetime()`](https:/pharmaverse.github.io/admiral/test_cicd/reference/get_partialdatetime.md),
-[`restrict_imputed_dtc_dt()`](https:/pharmaverse.github.io/admiral/test_cicd/reference/restrict_imputed_dtc_dt.md),
-[`restrict_imputed_dtc_dtm()`](https:/pharmaverse.github.io/admiral/test_cicd/reference/restrict_imputed_dtc_dtm.md)
+[`dt_level()`](https:/pharmaverse.github.io/admiral/test_cicd/test_cicd/reference/dt_level.md),
+[`get_imputation_target_date()`](https:/pharmaverse.github.io/admiral/test_cicd/test_cicd/reference/get_imputation_target_date.md),
+[`get_imputation_target_time()`](https:/pharmaverse.github.io/admiral/test_cicd/test_cicd/reference/get_imputation_target_time.md),
+[`get_partialdatetime()`](https:/pharmaverse.github.io/admiral/test_cicd/test_cicd/reference/get_partialdatetime.md),
+[`restrict_imputed_dtc_dt()`](https:/pharmaverse.github.io/admiral/test_cicd/test_cicd/reference/restrict_imputed_dtc_dt.md),
+[`restrict_imputed_dtc_dtm()`](https:/pharmaverse.github.io/admiral/test_cicd/test_cicd/reference/restrict_imputed_dtc_dtm.md)
 
 ## Examples
 

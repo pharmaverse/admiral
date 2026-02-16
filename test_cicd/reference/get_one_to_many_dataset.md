@@ -28,8 +28,8 @@ can no longer be accessed (unless it has been saved in a variable).
 ## See also
 
 Utilities for Dataset Checking:
-[`get_duplicates_dataset()`](https:/pharmaverse.github.io/admiral/test_cicd/reference/get_duplicates_dataset.md),
-[`get_many_to_one_dataset()`](https:/pharmaverse.github.io/admiral/test_cicd/reference/get_many_to_one_dataset.md)
+[`get_duplicates_dataset()`](https:/pharmaverse.github.io/admiral/test_cicd/test_cicd/reference/get_duplicates_dataset.md),
+[`get_many_to_one_dataset()`](https:/pharmaverse.github.io/admiral/test_cicd/test_cicd/reference/get_many_to_one_dataset.md)
 
 ## Examples
 

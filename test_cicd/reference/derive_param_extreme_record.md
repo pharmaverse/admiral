@@ -2,7 +2,7 @@
 
 **\[deprecated\]** The `derive_param_extreme_record()` function has been
 deprecated in favor of
-[`derive_extreme_event()`](https:/pharmaverse.github.io/admiral/test_cicd/reference/derive_extreme_event.md).
+[`derive_extreme_event()`](https:/pharmaverse.github.io/admiral/test_cicd/test_cicd/reference/derive_extreme_event.md).
 
 Generates parameter based on the first or last observation from multiple
 source datasets, based on user-defined filter, order and by group
@@ -37,7 +37,7 @@ derive_param_extreme_record(
   Sources
 
   A list of
-  [`records_source()`](https:/pharmaverse.github.io/admiral/test_cicd/reference/records_source.md)
+  [`records_source()`](https:/pharmaverse.github.io/admiral/test_cicd/test_cicd/reference/records_source.md)
   objects is expected.
 
   Default value
@@ -49,7 +49,7 @@ derive_param_extreme_record(
   Source datasets
 
   A named list of datasets is expected. The `dataset_name` field of
-  [`records_source()`](https:/pharmaverse.github.io/admiral/test_cicd/reference/records_source.md)
+  [`records_source()`](https:/pharmaverse.github.io/admiral/test_cicd/test_cicd/reference/records_source.md)
   refers to the dataset provided in the list. The variables specified by
   the `order` and the `by_vars` arguments are expected after applying
   `new_vars`.
@@ -86,7 +86,7 @@ derive_param_extreme_record(
   Permitted values
 
   :   list of expressions created by
-      [`exprs()`](https:/pharmaverse.github.io/admiral/test_cicd/reference/reexport-exprs.md),
+      [`exprs()`](https:/pharmaverse.github.io/admiral/test_cicd/test_cicd/reference/reexport-exprs.md),
       e.g., `exprs(ADT, desc(AVAL))`
 
   Default value
@@ -150,14 +150,14 @@ The following steps are performed to create the output dataset:
 ## See also
 
 Other deprecated:
-[`call_user_fun()`](https:/pharmaverse.github.io/admiral/test_cicd/reference/call_user_fun.md),
-[`date_source()`](https:/pharmaverse.github.io/admiral/test_cicd/reference/date_source.md),
-[`derive_var_dthcaus()`](https:/pharmaverse.github.io/admiral/test_cicd/reference/derive_var_dthcaus.md),
-[`derive_var_extreme_dt()`](https:/pharmaverse.github.io/admiral/test_cicd/reference/derive_var_extreme_dt.md),
-[`derive_var_extreme_dtm()`](https:/pharmaverse.github.io/admiral/test_cicd/reference/derive_var_extreme_dtm.md),
-[`derive_var_merged_summary()`](https:/pharmaverse.github.io/admiral/test_cicd/reference/derive_var_merged_summary.md),
-[`dthcaus_source()`](https:/pharmaverse.github.io/admiral/test_cicd/reference/dthcaus_source.md),
-[`get_summary_records()`](https:/pharmaverse.github.io/admiral/test_cicd/reference/get_summary_records.md)
+[`call_user_fun()`](https:/pharmaverse.github.io/admiral/test_cicd/test_cicd/reference/call_user_fun.md),
+[`date_source()`](https:/pharmaverse.github.io/admiral/test_cicd/test_cicd/reference/date_source.md),
+[`derive_var_dthcaus()`](https:/pharmaverse.github.io/admiral/test_cicd/test_cicd/reference/derive_var_dthcaus.md),
+[`derive_var_extreme_dt()`](https:/pharmaverse.github.io/admiral/test_cicd/test_cicd/reference/derive_var_extreme_dt.md),
+[`derive_var_extreme_dtm()`](https:/pharmaverse.github.io/admiral/test_cicd/test_cicd/reference/derive_var_extreme_dtm.md),
+[`derive_var_merged_summary()`](https:/pharmaverse.github.io/admiral/test_cicd/test_cicd/reference/derive_var_merged_summary.md),
+[`dthcaus_source()`](https:/pharmaverse.github.io/admiral/test_cicd/test_cicd/reference/dthcaus_source.md),
+[`get_summary_records()`](https:/pharmaverse.github.io/admiral/test_cicd/test_cicd/reference/get_summary_records.md)
 
 ## Examples
 
@@ -209,11 +209,6 @@ derive_param_extreme_record(
     PARAM = "First Anti-Cancer Therapy"
   )
 )
-#> Warning: `derive_param_extreme_record()` was deprecated in admiral 1.2.0.
-#> ℹ Please use `derive_extreme_event()` instead.
-#> ✖ This message will turn into an error at the beginning of 2027.
-#> ℹ See admiral's deprecation guidance:
-#>   https://pharmaverse.github.io/admiraldev/dev/articles/programming_strategy.html#deprecation
 #> # A tibble: 6 × 6
 #>   USUBJID PARAMCD  PARAM                     RSSTDTC    ADT        AVALC
 #>   <chr>   <chr>    <chr>                     <chr>      <date>     <chr>

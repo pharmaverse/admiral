@@ -159,7 +159,7 @@ derive_param_exist_flag(
   Variables to set
 
   A named list returned by
-  [`exprs()`](https:/pharmaverse.github.io/admiral/test_cicd/reference/reexport-exprs.md)
+  [`exprs()`](https:/pharmaverse.github.io/admiral/test_cicd/test_cicd/reference/reexport-exprs.md)
   defining the variables to be set for the new parameter, e.g.
   `exprs(PARAMCD = "MDIS", PARAM = "Measurable Disease at Baseline")` is
   expected. The values must be symbols, character strings, numeric
@@ -202,22 +202,22 @@ populated for the new parameter).
 ## See also
 
 BDS-Findings Functions for adding Parameters/Records:
-[`default_qtc_paramcd()`](https:/pharmaverse.github.io/admiral/test_cicd/reference/default_qtc_paramcd.md),
-[`derive_expected_records()`](https:/pharmaverse.github.io/admiral/test_cicd/reference/derive_expected_records.md),
-[`derive_extreme_event()`](https:/pharmaverse.github.io/admiral/test_cicd/reference/derive_extreme_event.md),
-[`derive_extreme_records()`](https:/pharmaverse.github.io/admiral/test_cicd/reference/derive_extreme_records.md),
-[`derive_locf_records()`](https:/pharmaverse.github.io/admiral/test_cicd/reference/derive_locf_records.md),
-[`derive_param_bmi()`](https:/pharmaverse.github.io/admiral/test_cicd/reference/derive_param_bmi.md),
-[`derive_param_bsa()`](https:/pharmaverse.github.io/admiral/test_cicd/reference/derive_param_bsa.md),
-[`derive_param_computed()`](https:/pharmaverse.github.io/admiral/test_cicd/reference/derive_param_computed.md),
-[`derive_param_doseint()`](https:/pharmaverse.github.io/admiral/test_cicd/reference/derive_param_doseint.md),
-[`derive_param_exposure()`](https:/pharmaverse.github.io/admiral/test_cicd/reference/derive_param_exposure.md),
-[`derive_param_framingham()`](https:/pharmaverse.github.io/admiral/test_cicd/reference/derive_param_framingham.md),
-[`derive_param_map()`](https:/pharmaverse.github.io/admiral/test_cicd/reference/derive_param_map.md),
-[`derive_param_qtc()`](https:/pharmaverse.github.io/admiral/test_cicd/reference/derive_param_qtc.md),
-[`derive_param_rr()`](https:/pharmaverse.github.io/admiral/test_cicd/reference/derive_param_rr.md),
-[`derive_param_wbc_abs()`](https:/pharmaverse.github.io/admiral/test_cicd/reference/derive_param_wbc_abs.md),
-[`derive_summary_records()`](https:/pharmaverse.github.io/admiral/test_cicd/reference/derive_summary_records.md)
+[`default_qtc_paramcd()`](https:/pharmaverse.github.io/admiral/test_cicd/test_cicd/reference/default_qtc_paramcd.md),
+[`derive_expected_records()`](https:/pharmaverse.github.io/admiral/test_cicd/test_cicd/reference/derive_expected_records.md),
+[`derive_extreme_event()`](https:/pharmaverse.github.io/admiral/test_cicd/test_cicd/reference/derive_extreme_event.md),
+[`derive_extreme_records()`](https:/pharmaverse.github.io/admiral/test_cicd/test_cicd/reference/derive_extreme_records.md),
+[`derive_locf_records()`](https:/pharmaverse.github.io/admiral/test_cicd/test_cicd/reference/derive_locf_records.md),
+[`derive_param_bmi()`](https:/pharmaverse.github.io/admiral/test_cicd/test_cicd/reference/derive_param_bmi.md),
+[`derive_param_bsa()`](https:/pharmaverse.github.io/admiral/test_cicd/test_cicd/reference/derive_param_bsa.md),
+[`derive_param_computed()`](https:/pharmaverse.github.io/admiral/test_cicd/test_cicd/reference/derive_param_computed.md),
+[`derive_param_doseint()`](https:/pharmaverse.github.io/admiral/test_cicd/test_cicd/reference/derive_param_doseint.md),
+[`derive_param_exposure()`](https:/pharmaverse.github.io/admiral/test_cicd/test_cicd/reference/derive_param_exposure.md),
+[`derive_param_framingham()`](https:/pharmaverse.github.io/admiral/test_cicd/test_cicd/reference/derive_param_framingham.md),
+[`derive_param_map()`](https:/pharmaverse.github.io/admiral/test_cicd/test_cicd/reference/derive_param_map.md),
+[`derive_param_qtc()`](https:/pharmaverse.github.io/admiral/test_cicd/test_cicd/reference/derive_param_qtc.md),
+[`derive_param_rr()`](https:/pharmaverse.github.io/admiral/test_cicd/test_cicd/reference/derive_param_rr.md),
+[`derive_param_wbc_abs()`](https:/pharmaverse.github.io/admiral/test_cicd/test_cicd/reference/derive_param_wbc_abs.md),
+[`derive_summary_records()`](https:/pharmaverse.github.io/admiral/test_cicd/test_cicd/reference/derive_summary_records.md)
 
 ## Examples
 
@@ -262,10 +262,5 @@ derive_param_exist_flag(
     PARAM = "Measurable Disease at Baseline"
   )
 )
-#> # A tibble: 3 × 6
-#>   STUDYID USUBJID AVALC  AVAL PARAMCD PARAM                         
-#>   <chr>   <chr>   <chr> <dbl> <chr>   <chr>                         
-#> 1 XX1234  1       Y         1 MDIS    Measurable Disease at Baseline
-#> 2 XX1234  2       N         0 MDIS    Measurable Disease at Baseline
-#> 3 XX1234  3       N         0 MDIS    Measurable Disease at Baseline
+#> Error in derive_param_exist_flag(dataset_ref = adsl, dataset_add = tu,     filter_add = TUTESTCD == "TUMIDENT" & VISIT == "SCREENING",     condition = TUSTRESC == "TARGET", false_value = "N", missing_value = "N",     set_values_to = exprs(AVAL = yn_to_numeric(AVALC), PARAMCD = "MDIS",         PARAM = "Measurable Disease at Baseline")): Required variable `USUBJID2` is missing in `dataset_ref`
 ```

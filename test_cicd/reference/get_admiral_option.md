@@ -17,7 +17,7 @@ get_admiral_option(option)
 
   As of now, support only available for "subject_keys", "signif_digits",
   and "save_memory". See
-  [`set_admiral_options()`](https:/pharmaverse.github.io/admiral/test_cicd/reference/set_admiral_options.md)
+  [`set_admiral_options()`](https:/pharmaverse.github.io/admiral/test_cicd/test_cicd/reference/set_admiral_options.md)
   for a description of the options.
 
   Default value
@@ -35,16 +35,16 @@ repeated multiple times in a script, such as `subject_keys`.
 
 ## See also
 
-[`set_admiral_options()`](https:/pharmaverse.github.io/admiral/test_cicd/reference/set_admiral_options.md),
-[`derive_param_exist_flag()`](https:/pharmaverse.github.io/admiral/test_cicd/reference/derive_param_exist_flag.md),
-[`derive_param_tte()`](https:/pharmaverse.github.io/admiral/test_cicd/reference/derive_param_tte.md)
-[`derive_var_dthcaus()`](https:/pharmaverse.github.io/admiral/test_cicd/reference/derive_var_dthcaus.md),
-[`derive_var_extreme_dtm()`](https:/pharmaverse.github.io/admiral/test_cicd/reference/derive_var_extreme_dtm.md),
-[`derive_vars_period()`](https:/pharmaverse.github.io/admiral/test_cicd/reference/derive_vars_period.md),
-[`create_period_dataset()`](https:/pharmaverse.github.io/admiral/test_cicd/reference/create_period_dataset.md)
+[`set_admiral_options()`](https:/pharmaverse.github.io/admiral/test_cicd/test_cicd/reference/set_admiral_options.md),
+[`derive_param_exist_flag()`](https:/pharmaverse.github.io/admiral/test_cicd/test_cicd/reference/derive_param_exist_flag.md),
+[`derive_param_tte()`](https:/pharmaverse.github.io/admiral/test_cicd/test_cicd/reference/derive_param_tte.md)
+[`derive_var_dthcaus()`](https:/pharmaverse.github.io/admiral/test_cicd/test_cicd/reference/derive_var_dthcaus.md),
+[`derive_var_extreme_dtm()`](https:/pharmaverse.github.io/admiral/test_cicd/test_cicd/reference/derive_var_extreme_dtm.md),
+[`derive_vars_period()`](https:/pharmaverse.github.io/admiral/test_cicd/test_cicd/reference/derive_vars_period.md),
+[`create_period_dataset()`](https:/pharmaverse.github.io/admiral/test_cicd/test_cicd/reference/create_period_dataset.md)
 
 Other admiral_options:
-[`set_admiral_options()`](https:/pharmaverse.github.io/admiral/test_cicd/reference/set_admiral_options.md)
+[`set_admiral_options()`](https:/pharmaverse.github.io/admiral/test_cicd/test_cicd/reference/set_admiral_options.md)
 
 ## Examples
 
@@ -74,15 +74,5 @@ derive_vars_merged(
   dataset_add = select(dm, -DOMAIN),
   by_vars = get_admiral_option("subject_keys")
 )
-#> # A tibble: 8 × 9
-#>   STUDYID DOMAIN USUBJID VSTESTCD VISIT    VSTPT    VSSTRESN   AGE AGEU 
-#>   <chr>   <chr>  <chr>   <chr>    <chr>    <chr>       <dbl> <dbl> <chr>
-#> 1 PILOT01 VS     01-1302 DIABP    BASELINE LYING          76    61 YEARS
-#> 2 PILOT01 VS     01-1302 DIABP    BASELINE STANDING       87    61 YEARS
-#> 3 PILOT01 VS     01-1302 DIABP    WEEK 2   LYING          71    61 YEARS
-#> 4 PILOT01 VS     01-1302 DIABP    WEEK 2   STANDING       79    61 YEARS
-#> 5 PILOT01 VS     17-1344 DIABP    BASELINE LYING          88    64 YEARS
-#> 6 PILOT01 VS     17-1344 DIABP    BASELINE STANDING       86    64 YEARS
-#> 7 PILOT01 VS     17-1344 DIABP    WEEK 2   LYING          84    64 YEARS
-#> 8 PILOT01 VS     17-1344 DIABP    WEEK 2   STANDING       82    64 YEARS
+#> Error in derive_vars_merged(vs, dataset_add = select(dm, -DOMAIN), by_vars = get_admiral_option("subject_keys")): Required variable `USUBJID2` is missing in `dataset`
 ```

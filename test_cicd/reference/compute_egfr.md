@@ -142,16 +142,16 @@ units = mL/min/1.73 m2
 ## See also
 
 BDS-Findings Functions that returns a vector:
-[`compute_bmi()`](https:/pharmaverse.github.io/admiral/test_cicd/reference/compute_bmi.md),
-[`compute_bsa()`](https:/pharmaverse.github.io/admiral/test_cicd/reference/compute_bsa.md),
-[`compute_framingham()`](https:/pharmaverse.github.io/admiral/test_cicd/reference/compute_framingham.md),
-[`compute_map()`](https:/pharmaverse.github.io/admiral/test_cicd/reference/compute_map.md),
-[`compute_qtc()`](https:/pharmaverse.github.io/admiral/test_cicd/reference/compute_qtc.md),
-[`compute_qual_imputation()`](https:/pharmaverse.github.io/admiral/test_cicd/reference/compute_qual_imputation.md),
-[`compute_qual_imputation_dec()`](https:/pharmaverse.github.io/admiral/test_cicd/reference/compute_qual_imputation_dec.md),
-[`compute_rr()`](https:/pharmaverse.github.io/admiral/test_cicd/reference/compute_rr.md),
-[`compute_scale()`](https:/pharmaverse.github.io/admiral/test_cicd/reference/compute_scale.md),
-[`transform_range()`](https:/pharmaverse.github.io/admiral/test_cicd/reference/transform_range.md)
+[`compute_bmi()`](https:/pharmaverse.github.io/admiral/test_cicd/test_cicd/reference/compute_bmi.md),
+[`compute_bsa()`](https:/pharmaverse.github.io/admiral/test_cicd/test_cicd/reference/compute_bsa.md),
+[`compute_framingham()`](https:/pharmaverse.github.io/admiral/test_cicd/test_cicd/reference/compute_framingham.md),
+[`compute_map()`](https:/pharmaverse.github.io/admiral/test_cicd/test_cicd/reference/compute_map.md),
+[`compute_qtc()`](https:/pharmaverse.github.io/admiral/test_cicd/test_cicd/reference/compute_qtc.md),
+[`compute_qual_imputation()`](https:/pharmaverse.github.io/admiral/test_cicd/test_cicd/reference/compute_qual_imputation.md),
+[`compute_qual_imputation_dec()`](https:/pharmaverse.github.io/admiral/test_cicd/test_cicd/reference/compute_qual_imputation_dec.md),
+[`compute_rr()`](https:/pharmaverse.github.io/admiral/test_cicd/test_cicd/reference/compute_rr.md),
+[`compute_scale()`](https:/pharmaverse.github.io/admiral/test_cicd/test_cicd/reference/compute_scale.md),
+[`transform_range()`](https:/pharmaverse.github.io/admiral/test_cicd/test_cicd/reference/transform_range.md)
 
 ## Examples
 

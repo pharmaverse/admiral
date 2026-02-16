@@ -75,7 +75,7 @@ derive_vars_joined(
   Permitted values
 
   :   list of variables created by
-      [`exprs()`](https:/pharmaverse.github.io/admiral/test_cicd/reference/reexport-exprs.md),
+      [`exprs()`](https:/pharmaverse.github.io/admiral/test_cicd/test_cicd/reference/reexport-exprs.md),
       e.g., `exprs(USUBJID, VISIT)`
 
   Default value
@@ -102,12 +102,12 @@ derive_vars_joined(
 
   For handling of `NA`s in sorting variables see the "Sort Order"
   section in
-  [`vignette("generic")`](https:/pharmaverse.github.io/admiral/test_cicd/articles/generic.md).
+  [`vignette("generic")`](https:/pharmaverse.github.io/admiral/test_cicd/test_cicd/articles/generic.md).
 
   Permitted values
 
   :   list of variables created by
-      [`exprs()`](https:/pharmaverse.github.io/admiral/test_cicd/reference/reexport-exprs.md),
+      [`exprs()`](https:/pharmaverse.github.io/admiral/test_cicd/test_cicd/reference/reexport-exprs.md),
       e.g., `exprs(USUBJID, VISIT)`
 
   Default value
@@ -143,7 +143,7 @@ derive_vars_joined(
   Permitted values
 
   :   list of variables created by
-      [`exprs()`](https:/pharmaverse.github.io/admiral/test_cicd/reference/reexport-exprs.md),
+      [`exprs()`](https:/pharmaverse.github.io/admiral/test_cicd/test_cicd/reference/reexport-exprs.md),
       e.g., `exprs(USUBJID, VISIT)`
 
   Default value
@@ -197,7 +197,7 @@ derive_vars_joined(
   Permitted values
 
   :   list of variables created by
-      [`exprs()`](https:/pharmaverse.github.io/admiral/test_cicd/reference/reexport-exprs.md),
+      [`exprs()`](https:/pharmaverse.github.io/admiral/test_cicd/test_cicd/reference/reexport-exprs.md),
       e.g., `exprs(USUBJID, VISIT)`
 
   Default value
@@ -403,7 +403,7 @@ derive_vars_joined(
   Permitted values
 
   :   list of named expressions created by a formula using
-      [`exprs()`](https:/pharmaverse.github.io/admiral/test_cicd/reference/reexport-exprs.md),
+      [`exprs()`](https:/pharmaverse.github.io/admiral/test_cicd/test_cicd/reference/reexport-exprs.md),
       e.g., `exprs(AVALC = VSSTRESC, AVAL = yn_to_numeric(AVALC))`
 
   Default value
@@ -484,43 +484,43 @@ additional dataset (`dataset_add`).
 **Note:** This function creates temporary datasets which may be much
 bigger than the input datasets. If this causes memory issues, please try
 setting the admiral option `save_memory` to `TRUE` (see
-[`set_admiral_options()`](https:/pharmaverse.github.io/admiral/test_cicd/reference/set_admiral_options.md)).
+[`set_admiral_options()`](https:/pharmaverse.github.io/admiral/test_cicd/test_cicd/reference/set_admiral_options.md)).
 This reduces the memory consumption but increases the run-time.
 
 ## See also
 
-[`derive_var_joined_exist_flag()`](https:/pharmaverse.github.io/admiral/test_cicd/reference/derive_var_joined_exist_flag.md),
-[`filter_joined()`](https:/pharmaverse.github.io/admiral/test_cicd/reference/filter_joined.md)
+[`derive_var_joined_exist_flag()`](https:/pharmaverse.github.io/admiral/test_cicd/test_cicd/reference/derive_var_joined_exist_flag.md),
+[`filter_joined()`](https:/pharmaverse.github.io/admiral/test_cicd/test_cicd/reference/filter_joined.md)
 
 General Derivation Functions for all ADaMs that returns variable
 appended to dataset:
-[`derive_var_extreme_flag()`](https:/pharmaverse.github.io/admiral/test_cicd/reference/derive_var_extreme_flag.md),
-[`derive_var_joined_exist_flag()`](https:/pharmaverse.github.io/admiral/test_cicd/reference/derive_var_joined_exist_flag.md),
-[`derive_var_merged_ef_msrc()`](https:/pharmaverse.github.io/admiral/test_cicd/reference/derive_var_merged_ef_msrc.md),
-[`derive_var_merged_exist_flag()`](https:/pharmaverse.github.io/admiral/test_cicd/reference/derive_var_merged_exist_flag.md),
-[`derive_var_obs_number()`](https:/pharmaverse.github.io/admiral/test_cicd/reference/derive_var_obs_number.md),
-[`derive_var_relative_flag()`](https:/pharmaverse.github.io/admiral/test_cicd/reference/derive_var_relative_flag.md),
-[`derive_vars_cat()`](https:/pharmaverse.github.io/admiral/test_cicd/reference/derive_vars_cat.md),
-[`derive_vars_computed()`](https:/pharmaverse.github.io/admiral/test_cicd/reference/derive_vars_computed.md),
-[`derive_vars_joined_summary()`](https:/pharmaverse.github.io/admiral/test_cicd/reference/derive_vars_joined_summary.md),
-[`derive_vars_merged()`](https:/pharmaverse.github.io/admiral/test_cicd/reference/derive_vars_merged.md),
-[`derive_vars_merged_lookup()`](https:/pharmaverse.github.io/admiral/test_cicd/reference/derive_vars_merged_lookup.md),
-[`derive_vars_merged_summary()`](https:/pharmaverse.github.io/admiral/test_cicd/reference/derive_vars_merged_summary.md),
-[`derive_vars_transposed()`](https:/pharmaverse.github.io/admiral/test_cicd/reference/derive_vars_transposed.md)
+[`derive_var_extreme_flag()`](https:/pharmaverse.github.io/admiral/test_cicd/test_cicd/reference/derive_var_extreme_flag.md),
+[`derive_var_joined_exist_flag()`](https:/pharmaverse.github.io/admiral/test_cicd/test_cicd/reference/derive_var_joined_exist_flag.md),
+[`derive_var_merged_ef_msrc()`](https:/pharmaverse.github.io/admiral/test_cicd/test_cicd/reference/derive_var_merged_ef_msrc.md),
+[`derive_var_merged_exist_flag()`](https:/pharmaverse.github.io/admiral/test_cicd/test_cicd/reference/derive_var_merged_exist_flag.md),
+[`derive_var_obs_number()`](https:/pharmaverse.github.io/admiral/test_cicd/test_cicd/reference/derive_var_obs_number.md),
+[`derive_var_relative_flag()`](https:/pharmaverse.github.io/admiral/test_cicd/test_cicd/reference/derive_var_relative_flag.md),
+[`derive_vars_cat()`](https:/pharmaverse.github.io/admiral/test_cicd/test_cicd/reference/derive_vars_cat.md),
+[`derive_vars_computed()`](https:/pharmaverse.github.io/admiral/test_cicd/test_cicd/reference/derive_vars_computed.md),
+[`derive_vars_joined_summary()`](https:/pharmaverse.github.io/admiral/test_cicd/test_cicd/reference/derive_vars_joined_summary.md),
+[`derive_vars_merged()`](https:/pharmaverse.github.io/admiral/test_cicd/test_cicd/reference/derive_vars_merged.md),
+[`derive_vars_merged_lookup()`](https:/pharmaverse.github.io/admiral/test_cicd/test_cicd/reference/derive_vars_merged_lookup.md),
+[`derive_vars_merged_summary()`](https:/pharmaverse.github.io/admiral/test_cicd/test_cicd/reference/derive_vars_merged_summary.md),
+[`derive_vars_transposed()`](https:/pharmaverse.github.io/admiral/test_cicd/test_cicd/reference/derive_vars_transposed.md)
 
 ## Examples
 
-### Note on usage versus [`derive_vars_merged()`](https:/pharmaverse.github.io/admiral/test_cicd/reference/derive_vars_merged.md)
+### Note on usage versus [`derive_vars_merged()`](https:/pharmaverse.github.io/admiral/test_cicd/test_cicd/reference/derive_vars_merged.md)
 
 The question between using
-[`derive_vars_merged()`](https:/pharmaverse.github.io/admiral/test_cicd/reference/derive_vars_merged.md)
+[`derive_vars_merged()`](https:/pharmaverse.github.io/admiral/test_cicd/test_cicd/reference/derive_vars_merged.md)
 or the more powerful `derive_vars_joined()` comes down to how you need
 to select the observations to be merged.
 
 - If the observations from `dataset_add` to merge can be selected by a
   condition (`filter_add`) using *only* variables from `dataset_add`,
   then always use
-  [`derive_vars_merged()`](https:/pharmaverse.github.io/admiral/test_cicd/reference/derive_vars_merged.md)
+  [`derive_vars_merged()`](https:/pharmaverse.github.io/admiral/test_cicd/test_cicd/reference/derive_vars_merged.md)
   as it requires less resources (time and memory). A common example of
   this would be a randomization date in `ADSL`, where you are simply
   merging on a date from `DS` according to a certain `DSDECOD` condition
@@ -743,7 +743,7 @@ the last dose.
   the joined values using variables from both `dataset` and
   `dataset_add`. For example, in the below case we want to calculate the
   number of days between the AE and the last dose using
-  [`compute_duration()`](https:/pharmaverse.github.io/admiral/test_cicd/reference/compute_duration.md).
+  [`compute_duration()`](https:/pharmaverse.github.io/admiral/test_cicd/test_cicd/reference/compute_duration.md).
   This function includes the plus 1 day as default.
 
 - Also note how in this example `EXSDT` is created via the `order`
@@ -1088,9 +1088,9 @@ to identify within which period each AE occurred.
 ### Further examples
 
 Further example usages of this function can be found in the
-[`vignette("generic")`](https:/pharmaverse.github.io/admiral/test_cicd/articles/generic.md).
+[`vignette("generic")`](https:/pharmaverse.github.io/admiral/test_cicd/test_cicd/articles/generic.md).
 
 Equivalent examples for using the `exist_flag`, `true_value`,
 `false_value`, `missing_values` and `check_type` arguments can be found
 in
-[`derive_vars_merged()`](https:/pharmaverse.github.io/admiral/test_cicd/reference/derive_vars_merged.md).
+[`derive_vars_merged()`](https:/pharmaverse.github.io/admiral/test_cicd/test_cicd/reference/derive_vars_merged.md).

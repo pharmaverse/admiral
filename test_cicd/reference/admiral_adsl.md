@@ -21,8 +21,8 @@ Derived from the `dm` and `ds` datasets using `{admiral}`
 ## See also
 
 Other datasets:
-[`admiral_adlb`](https:/pharmaverse.github.io/admiral/test_cicd/reference/admiral_adlb.md),
-[`ex_single`](https:/pharmaverse.github.io/admiral/test_cicd/reference/ex_single.md),
-[`example_qs`](https:/pharmaverse.github.io/admiral/test_cicd/reference/example_qs.md),
-[`queries`](https:/pharmaverse.github.io/admiral/test_cicd/reference/queries.md),
-[`queries_mh`](https:/pharmaverse.github.io/admiral/test_cicd/reference/queries_mh.md)
+[`admiral_adlb`](https:/pharmaverse.github.io/admiral/test_cicd/test_cicd/reference/admiral_adlb.md),
+[`ex_single`](https:/pharmaverse.github.io/admiral/test_cicd/test_cicd/reference/ex_single.md),
+[`example_qs`](https:/pharmaverse.github.io/admiral/test_cicd/test_cicd/reference/example_qs.md),
+[`queries`](https:/pharmaverse.github.io/admiral/test_cicd/test_cicd/reference/queries.md),
+[`queries_mh`](https:/pharmaverse.github.io/admiral/test_cicd/test_cicd/reference/queries_mh.md)

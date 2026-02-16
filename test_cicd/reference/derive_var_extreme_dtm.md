@@ -3,7 +3,7 @@
 **\[deprecated\]**
 
 The `derive_var_extreme_dtm()` function has been deprecated in favor of
-[`derive_vars_extreme_event()`](https:/pharmaverse.github.io/admiral/test_cicd/reference/derive_vars_extreme_event.md).
+[`derive_vars_extreme_event()`](https:/pharmaverse.github.io/admiral/test_cicd/test_cicd/reference/derive_vars_extreme_event.md).
 
 Add the first or last datetime from multiple sources to the dataset,
 e.g., the last known alive datetime (`LSTALVDTM`).
@@ -45,7 +45,7 @@ derive_var_extreme_dtm(
 - ...:
 
   Source(s) of dates. One or more
-  [`date_source()`](https:/pharmaverse.github.io/admiral/test_cicd/reference/date_source.md)
+  [`date_source()`](https:/pharmaverse.github.io/admiral/test_cicd/test_cicd/reference/date_source.md)
   objects are expected.
 
   Default value
@@ -82,7 +82,7 @@ derive_var_extreme_dtm(
   Variables to uniquely identify a subject
 
   A list of expressions where the expressions are symbols as returned by
-  [`exprs()`](https:/pharmaverse.github.io/admiral/test_cicd/reference/reexport-exprs.md)
+  [`exprs()`](https:/pharmaverse.github.io/admiral/test_cicd/test_cicd/reference/reexport-exprs.md)
   is expected.
 
   Default value
@@ -117,19 +117,19 @@ The following steps are performed to create the output dataset:
 
 ## See also
 
-[`date_source()`](https:/pharmaverse.github.io/admiral/test_cicd/reference/date_source.md),
-[`derive_var_extreme_dt()`](https:/pharmaverse.github.io/admiral/test_cicd/reference/derive_var_extreme_dt.md),
-[`derive_vars_merged()`](https:/pharmaverse.github.io/admiral/test_cicd/reference/derive_vars_merged.md)
+[`date_source()`](https:/pharmaverse.github.io/admiral/test_cicd/test_cicd/reference/date_source.md),
+[`derive_var_extreme_dt()`](https:/pharmaverse.github.io/admiral/test_cicd/test_cicd/reference/derive_var_extreme_dt.md),
+[`derive_vars_merged()`](https:/pharmaverse.github.io/admiral/test_cicd/test_cicd/reference/derive_vars_merged.md)
 
 Other deprecated:
-[`call_user_fun()`](https:/pharmaverse.github.io/admiral/test_cicd/reference/call_user_fun.md),
-[`date_source()`](https:/pharmaverse.github.io/admiral/test_cicd/reference/date_source.md),
-[`derive_param_extreme_record()`](https:/pharmaverse.github.io/admiral/test_cicd/reference/derive_param_extreme_record.md),
-[`derive_var_dthcaus()`](https:/pharmaverse.github.io/admiral/test_cicd/reference/derive_var_dthcaus.md),
-[`derive_var_extreme_dt()`](https:/pharmaverse.github.io/admiral/test_cicd/reference/derive_var_extreme_dt.md),
-[`derive_var_merged_summary()`](https:/pharmaverse.github.io/admiral/test_cicd/reference/derive_var_merged_summary.md),
-[`dthcaus_source()`](https:/pharmaverse.github.io/admiral/test_cicd/reference/dthcaus_source.md),
-[`get_summary_records()`](https:/pharmaverse.github.io/admiral/test_cicd/reference/get_summary_records.md)
+[`call_user_fun()`](https:/pharmaverse.github.io/admiral/test_cicd/test_cicd/reference/call_user_fun.md),
+[`date_source()`](https:/pharmaverse.github.io/admiral/test_cicd/test_cicd/reference/date_source.md),
+[`derive_param_extreme_record()`](https:/pharmaverse.github.io/admiral/test_cicd/test_cicd/reference/derive_param_extreme_record.md),
+[`derive_var_dthcaus()`](https:/pharmaverse.github.io/admiral/test_cicd/test_cicd/reference/derive_var_dthcaus.md),
+[`derive_var_extreme_dt()`](https:/pharmaverse.github.io/admiral/test_cicd/test_cicd/reference/derive_var_extreme_dt.md),
+[`derive_var_merged_summary()`](https:/pharmaverse.github.io/admiral/test_cicd/test_cicd/reference/derive_var_merged_summary.md),
+[`dthcaus_source()`](https:/pharmaverse.github.io/admiral/test_cicd/test_cicd/reference/dthcaus_source.md),
+[`get_summary_records()`](https:/pharmaverse.github.io/admiral/test_cicd/test_cicd/reference/get_summary_records.md)
 
 ## Examples
 
@@ -247,14 +247,7 @@ dm %>%
     mode = "last"
   ) %>%
   select(USUBJID, LSTALVDTM)
-#> # A tibble: 5 × 2
-#>   USUBJID LSTALVDTM          
-#>   <chr>   <dttm>             
-#> 1 01-1130 2014-08-16 23:59:59
-#> 2 01-1133 2013-04-29 10:13:00
-#> 3 01-1211 2013-01-14 00:00:00
-#> 4 09-1081 2014-05-10 11:15:00
-#> 5 09-1088 2014-10-09 23:59:59
+#> Error in derive_var_extreme_dtm(., new_var = LSTALVDTM, ae_start, ae_end,     lb_date, adsl_date, source_datasets = list(adsl = adsl, ae = ae_ext,         lb = lb_ext), mode = "last"): Required variable `USUBJID2` is missing in `dataset`
 
 # derive last alive datetime and traceability variables
 ae_start <- date_source(
@@ -308,12 +301,5 @@ dm %>%
     mode = "last"
   ) %>%
   select(USUBJID, LSTALVDTM, LALVDOM, LALVSEQ, LALVVAR)
-#> # A tibble: 5 × 5
-#>   USUBJID LSTALVDTM           LALVDOM LALVSEQ LALVVAR
-#>   <chr>   <dttm>              <chr>     <dbl> <chr>  
-#> 1 01-1130 2014-08-16 23:59:59 ADSL         NA TRTEDTM
-#> 2 01-1133 2013-04-29 10:13:00 LB          304 LBDTC  
-#> 3 01-1211 2013-01-14 00:00:00 AE            9 AEENDTC
-#> 4 09-1081 2014-05-10 11:15:00 LB          219 LBDTC  
-#> 5 09-1088 2014-10-09 23:59:59 ADSL         NA TRTEDTM
+#> Error in derive_var_extreme_dtm(., new_var = LSTALVDTM, ae_start, ae_end,     lb_date, adsl_date, source_datasets = list(adsl = adsl, ae = ae_ext,         lb = lb_ext), mode = "last"): Required variable `USUBJID2` is missing in `dataset`
 ```

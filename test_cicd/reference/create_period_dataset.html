@@ -13,7 +13,7 @@ in OCCDS and BDS datasets."><meta property="og:description" content="The functio
 from the ADSL dataset. The reference dataset can be used to derive
 subperiod, period, or phase variables like ASPER, ASPRSDT, ASPREDT,
 APERIOD, APERSDT, APEREDT, TRTA, APHASEN, PHSDTM, PHEDTM, ...
-in OCCDS and BDS datasets."><meta property="og:image" content="https:/pharmaverse.github.io/admiral/test_cicd/logo.png"><script async src="https://widget.kapa.ai/kapa-widget.bundle.js" data-website-id="2c7249cc-f1dc-4a63-8674-6ecbcb34d95c" data-project-name="admiral" data-project-color="#2c3e50" data-project-logo="https://pharmaverse.github.io/admiral/cran-release/logo.png" data-consent-required="true" data-user-analytics-cookie-enabled="true" data-consent-screen-title="Help us improve our AI assistant" data-consent-screen-disclaimer="By clicking 'Allow tracking', you consent to anonymous user tracking which helps us improve our service. We don't collect any personally identifiable information." data-consent-screen-accept-button-text="Allow tracking" data-consent-screen-reject-button-text="No, thanks" data-modal-example-questions="Tell me a little about the {admiral} package., What are some important {admiral} functions and what do they do?" data-modal-search-placeholder="Ask me a question about {admiral} or the {admiral} ecosystem..." data-modal-z-index="9999"></script><script>
+in OCCDS and BDS datasets."><meta property="og:image" content="https:/pharmaverse.github.io/admiral/test_cicd/test_cicd/logo.png"><script async src="https://widget.kapa.ai/kapa-widget.bundle.js" data-website-id="2c7249cc-f1dc-4a63-8674-6ecbcb34d95c" data-project-name="admiral" data-project-color="#2c3e50" data-project-logo="https://pharmaverse.github.io/admiral/cran-release/logo.png" data-consent-required="true" data-user-analytics-cookie-enabled="true" data-consent-screen-title="Help us improve our AI assistant" data-consent-screen-disclaimer="By clicking 'Allow tracking', you consent to anonymous user tracking which helps us improve our service. We don't collect any personally identifiable information." data-consent-screen-accept-button-text="Allow tracking" data-consent-screen-reject-button-text="No, thanks" data-modal-example-questions="Tell me a little about the {admiral} package., What are some important {admiral} functions and what do they do?" data-modal-search-placeholder="Ask me a question about {admiral} or the {admiral} ecosystem..." data-modal-z-index="9999"></script><script>
 document.addEventListener("DOMContentLoaded", function () {
   // Select all navbar links that have an aria-label
   var navLinks = document.querySelectorAll('.navbar-nav .nav-link[aria-label]');
@@ -214,13 +214,7 @@ side).</p>
 <span class="r-in"><span>  <span class="va">adsl</span>,</span></span>
 <span class="r-in"><span>  new_vars <span class="op">=</span> <span class="fu"><a href="reexport-exprs.html">exprs</a></span><span class="op">(</span>APERSDT <span class="op">=</span> <span class="va">APxxSDT</span>, APEREDT <span class="op">=</span> <span class="va">APxxEDT</span>, TRTA <span class="op">=</span> <span class="va">TRTxxA</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 4 × 6</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   STUDYID USUBJID APERIOD APERSDT    APEREDT    TRTA </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> xyz     1             1 2021-01-04 2021-02-06 A    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">2</span> xyz     1             2 2021-02-07 2021-03-07 B    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">3</span> xyz     2             1 2021-02-02 2021-03-02 B    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">4</span> xyz     2             2 2021-03-03 2021-04-01 A    </span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in create_period_dataset(adsl, new_vars = exprs(APERSDT = APxxSDT,     APEREDT = APxxEDT, TRTA = TRTxxA)):</span> Required variable `USUBJID2` is missing in `dataset`</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Create reference dataset for phases</span></span></span>
 <span class="r-in"><span><span class="va">adsl</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://tibble.tidyverse.org/reference/tribble.html" class="external-link">tribble</a></span><span class="op">(</span></span></span>
@@ -239,12 +233,7 @@ side).</p>
 <span class="r-in"><span>  <span class="va">adsl</span>,</span></span>
 <span class="r-in"><span>  new_vars <span class="op">=</span> <span class="fu"><a href="reexport-exprs.html">exprs</a></span><span class="op">(</span>PHSDT <span class="op">=</span> <span class="va">PHwSDT</span>, PHEDT <span class="op">=</span> <span class="va">PHwEDT</span>, APHASE <span class="op">=</span> <span class="va">APHASEw</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 3 × 6</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   STUDYID USUBJID APHASEN PHSDT      PHEDT      APHASE   </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> xyz     1             1 2021-01-04 2021-02-06 TREATMENT</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">2</span> xyz     1             2 2021-02-07 2021-03-07 FUP      </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">3</span> xyz     2             1 2021-02-02 2021-03-02 TREATMENT</span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in create_period_dataset(adsl, new_vars = exprs(PHSDT = PHwSDT,     PHEDT = PHwEDT, APHASE = APHASEw)):</span> Required variable `USUBJID2` is missing in `dataset`</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Create reference datasets for subperiods</span></span></span>
 <span class="r-in"><span><span class="va">adsl</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://tibble.tidyverse.org/reference/tribble.html" class="external-link">tribble</a></span><span class="op">(</span></span></span>
@@ -263,14 +252,7 @@ side).</p>
 <span class="r-in"><span>  <span class="va">adsl</span>,</span></span>
 <span class="r-in"><span>  new_vars <span class="op">=</span> <span class="fu"><a href="reexport-exprs.html">exprs</a></span><span class="op">(</span>ASPRSDT <span class="op">=</span> <span class="va">PxxSwSDT</span>, ASPREDT <span class="op">=</span> <span class="va">PxxSwEDT</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 5 × 6</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   STUDYID USUBJID APERIOD ASPER ASPRSDT    ASPREDT   </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> xyz     1             1     1 2021-01-04 2021-01-19</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">2</span> xyz     1             1     2 2021-01-20 2021-02-06</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">3</span> xyz     1             2     1 2021-02-07 2021-03-07</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">4</span> xyz     2             1     1 2021-02-02 2021-03-02</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">5</span> xyz     2             2     1 2021-03-03 2021-04-01</span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in create_period_dataset(adsl, new_vars = exprs(ASPRSDT = PxxSwSDT,     ASPREDT = PxxSwEDT)):</span> Required variable `USUBJID2` is missing in `dataset`</span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>

@@ -4,7 +4,7 @@ Convert a date (datetime, date, or date character) into a Date vector
 (usually `'--DTM'`).
 
 **Note:** This is a wrapper function for the function
-[`convert_dtc_to_dtm()`](https:/pharmaverse.github.io/admiral/test_cicd/reference/convert_dtc_to_dtm.md).
+[`convert_dtc_to_dtm()`](https:/pharmaverse.github.io/admiral/test_cicd/test_cicd/reference/convert_dtc_to_dtm.md).
 
 ## Usage
 
@@ -210,15 +210,15 @@ Usually this computation function can not be used with `%>%`.
 ## See also
 
 Date/Time Computation Functions that returns a vector:
-[`compute_age_years()`](https:/pharmaverse.github.io/admiral/test_cicd/reference/compute_age_years.md),
-[`compute_dtf()`](https:/pharmaverse.github.io/admiral/test_cicd/reference/compute_dtf.md),
-[`compute_duration()`](https:/pharmaverse.github.io/admiral/test_cicd/reference/compute_duration.md),
-[`compute_tmf()`](https:/pharmaverse.github.io/admiral/test_cicd/reference/compute_tmf.md),
-[`convert_dtc_to_dt()`](https:/pharmaverse.github.io/admiral/test_cicd/reference/convert_dtc_to_dt.md),
-[`convert_dtc_to_dtm()`](https:/pharmaverse.github.io/admiral/test_cicd/reference/convert_dtc_to_dtm.md),
-[`convert_xxtpt_to_hours()`](https:/pharmaverse.github.io/admiral/test_cicd/reference/convert_xxtpt_to_hours.md),
-[`impute_dtc_dt()`](https:/pharmaverse.github.io/admiral/test_cicd/reference/impute_dtc_dt.md),
-[`impute_dtc_dtm()`](https:/pharmaverse.github.io/admiral/test_cicd/reference/impute_dtc_dtm.md)
+[`compute_age_years()`](https:/pharmaverse.github.io/admiral/test_cicd/test_cicd/reference/compute_age_years.md),
+[`compute_dtf()`](https:/pharmaverse.github.io/admiral/test_cicd/test_cicd/reference/compute_dtf.md),
+[`compute_duration()`](https:/pharmaverse.github.io/admiral/test_cicd/test_cicd/reference/compute_duration.md),
+[`compute_tmf()`](https:/pharmaverse.github.io/admiral/test_cicd/test_cicd/reference/compute_tmf.md),
+[`convert_dtc_to_dt()`](https:/pharmaverse.github.io/admiral/test_cicd/test_cicd/reference/convert_dtc_to_dt.md),
+[`convert_dtc_to_dtm()`](https:/pharmaverse.github.io/admiral/test_cicd/test_cicd/reference/convert_dtc_to_dtm.md),
+[`convert_xxtpt_to_hours()`](https:/pharmaverse.github.io/admiral/test_cicd/test_cicd/reference/convert_xxtpt_to_hours.md),
+[`impute_dtc_dt()`](https:/pharmaverse.github.io/admiral/test_cicd/test_cicd/reference/impute_dtc_dt.md),
+[`impute_dtc_dtm()`](https:/pharmaverse.github.io/admiral/test_cicd/test_cicd/reference/impute_dtc_dtm.md)
 
 ## Examples
 
@@ -226,7 +226,7 @@ Date/Time Computation Functions that returns a vector:
 convert_date_to_dtm("2019-07-18T15:25:00")
 #> [1] "2019-07-18 15:25:00 UTC"
 convert_date_to_dtm(Sys.time())
-#> [1] "2026-02-16 17:36:49 UTC"
+#> [1] "2026-02-16 17:59:57 UTC"
 convert_date_to_dtm(as.Date("2019-07-18"), time_imputation = "23:59:59")
 #> [1] "2019-07-18 23:59:59 UTC"
 convert_date_to_dtm("2019-07-18", time_imputation = "23:59:59")

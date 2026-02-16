@@ -26,8 +26,8 @@ otherwise
 ## See also
 
 Utilities for Formatting Observations:
-[`convert_blanks_to_na()`](https:/pharmaverse.github.io/admiral/test_cicd/reference/convert_blanks_to_na.md),
-[`convert_na_to_blanks()`](https:/pharmaverse.github.io/admiral/test_cicd/reference/convert_na_to_blanks.md)
+[`convert_blanks_to_na()`](https:/pharmaverse.github.io/admiral/test_cicd/test_cicd/reference/convert_blanks_to_na.md),
+[`convert_na_to_blanks()`](https:/pharmaverse.github.io/admiral/test_cicd/test_cicd/reference/convert_na_to_blanks.md)
 
 ## Examples
 

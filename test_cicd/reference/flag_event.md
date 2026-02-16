@@ -1,7 +1,7 @@
 # Create a `flag_event` Object
 
 The `flag_event` object is used to define events as input for the
-[`derive_var_merged_ef_msrc()`](https:/pharmaverse.github.io/admiral/test_cicd/reference/derive_var_merged_ef_msrc.md)
+[`derive_var_merged_ef_msrc()`](https:/pharmaverse.github.io/admiral/test_cicd/test_cicd/reference/derive_var_merged_ef_msrc.md)
 function.
 
 ## Usage
@@ -16,7 +16,7 @@ flag_event(dataset_name, condition = NULL, by_vars = NULL)
 
   Dataset name of the dataset to be used as input for the event. The
   name refers to the dataset specified for `source_datasets` in
-  [`derive_var_merged_ef_msrc()`](https:/pharmaverse.github.io/admiral/test_cicd/reference/derive_var_merged_ef_msrc.md).
+  [`derive_var_merged_ef_msrc()`](https:/pharmaverse.github.io/admiral/test_cicd/test_cicd/reference/derive_var_merged_ef_msrc.md).
 
   Permitted values
 
@@ -52,12 +52,12 @@ flag_event(dataset_name, condition = NULL, by_vars = NULL)
   renamed after the evaluation. If the `by_vars` element is not
   specified, the observations are grouped by the variables specified for
   the `by_vars` argument of
-  [`derive_var_merged_ef_msrc()`](https:/pharmaverse.github.io/admiral/test_cicd/reference/derive_var_merged_ef_msrc.md).
+  [`derive_var_merged_ef_msrc()`](https:/pharmaverse.github.io/admiral/test_cicd/test_cicd/reference/derive_var_merged_ef_msrc.md).
 
   Permitted values
 
   :   list of variables created by
-      [`exprs()`](https:/pharmaverse.github.io/admiral/test_cicd/reference/reexport-exprs.md),
+      [`exprs()`](https:/pharmaverse.github.io/admiral/test_cicd/test_cicd/reference/reexport-exprs.md),
       e.g., `exprs(USUBJID, VISIT)`
 
   Default value
@@ -66,15 +66,15 @@ flag_event(dataset_name, condition = NULL, by_vars = NULL)
 
 ## See also
 
-[`derive_var_merged_ef_msrc()`](https:/pharmaverse.github.io/admiral/test_cicd/reference/derive_var_merged_ef_msrc.md)
+[`derive_var_merged_ef_msrc()`](https:/pharmaverse.github.io/admiral/test_cicd/test_cicd/reference/derive_var_merged_ef_msrc.md)
 
 Source Objects:
-[`basket_select()`](https:/pharmaverse.github.io/admiral/test_cicd/reference/basket_select.md),
-[`censor_source()`](https:/pharmaverse.github.io/admiral/test_cicd/reference/censor_source.md),
-[`death_event`](https:/pharmaverse.github.io/admiral/test_cicd/reference/tte_source_objects.md),
-[`event()`](https:/pharmaverse.github.io/admiral/test_cicd/reference/event.md),
-[`event_joined()`](https:/pharmaverse.github.io/admiral/test_cicd/reference/event_joined.md),
-[`event_source()`](https:/pharmaverse.github.io/admiral/test_cicd/reference/event_source.md),
-[`query()`](https:/pharmaverse.github.io/admiral/test_cicd/reference/query.md),
-[`records_source()`](https:/pharmaverse.github.io/admiral/test_cicd/reference/records_source.md),
-[`tte_source()`](https:/pharmaverse.github.io/admiral/test_cicd/reference/tte_source.md)
+[`basket_select()`](https:/pharmaverse.github.io/admiral/test_cicd/test_cicd/reference/basket_select.md),
+[`censor_source()`](https:/pharmaverse.github.io/admiral/test_cicd/test_cicd/reference/censor_source.md),
+[`death_event`](https:/pharmaverse.github.io/admiral/test_cicd/test_cicd/reference/tte_source_objects.md),
+[`event()`](https:/pharmaverse.github.io/admiral/test_cicd/test_cicd/reference/event.md),
+[`event_joined()`](https:/pharmaverse.github.io/admiral/test_cicd/test_cicd/reference/event_joined.md),
+[`event_source()`](https:/pharmaverse.github.io/admiral/test_cicd/test_cicd/reference/event_source.md),
+[`query()`](https:/pharmaverse.github.io/admiral/test_cicd/test_cicd/reference/query.md),
+[`records_source()`](https:/pharmaverse.github.io/admiral/test_cicd/test_cicd/reference/records_source.md),
+[`tte_source()`](https:/pharmaverse.github.io/admiral/test_cicd/test_cicd/reference/tte_source.md)

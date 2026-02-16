@@ -59,7 +59,7 @@ create_period_dataset(
   Variables to uniquely identify a subject
 
   A list of expressions where the expressions are symbols as returned by
-  [`exprs()`](https:/pharmaverse.github.io/admiral/test_cicd/reference/reexport-exprs.md)
+  [`exprs()`](https:/pharmaverse.github.io/admiral/test_cicd/test_cicd/reference/reexport-exprs.md)
   is expected.
 
   Default value
@@ -86,12 +86,12 @@ side).
 
 ## See also
 
-[`derive_vars_period()`](https:/pharmaverse.github.io/admiral/test_cicd/reference/derive_vars_period.md)
+[`derive_vars_period()`](https:/pharmaverse.github.io/admiral/test_cicd/test_cicd/reference/derive_vars_period.md)
 
 Creating auxiliary datasets:
-[`consolidate_metadata()`](https:/pharmaverse.github.io/admiral/test_cicd/reference/consolidate_metadata.md),
-[`create_query_data()`](https:/pharmaverse.github.io/admiral/test_cicd/reference/create_query_data.md),
-[`create_single_dose_dataset()`](https:/pharmaverse.github.io/admiral/test_cicd/reference/create_single_dose_dataset.md)
+[`consolidate_metadata()`](https:/pharmaverse.github.io/admiral/test_cicd/test_cicd/reference/consolidate_metadata.md),
+[`create_query_data()`](https:/pharmaverse.github.io/admiral/test_cicd/test_cicd/reference/create_query_data.md),
+[`create_single_dose_dataset()`](https:/pharmaverse.github.io/admiral/test_cicd/test_cicd/reference/create_single_dose_dataset.md)
 
 ## Examples
 
@@ -117,13 +117,7 @@ create_period_dataset(
   adsl,
   new_vars = exprs(APERSDT = APxxSDT, APEREDT = APxxEDT, TRTA = TRTxxA)
 )
-#> # A tibble: 4 × 6
-#>   STUDYID USUBJID APERIOD APERSDT    APEREDT    TRTA 
-#>   <chr>   <chr>     <int> <date>     <date>     <chr>
-#> 1 xyz     1             1 2021-01-04 2021-02-06 A    
-#> 2 xyz     1             2 2021-02-07 2021-03-07 B    
-#> 3 xyz     2             1 2021-02-02 2021-03-02 B    
-#> 4 xyz     2             2 2021-03-03 2021-04-01 A    
+#> Error in create_period_dataset(adsl, new_vars = exprs(APERSDT = APxxSDT,     APEREDT = APxxEDT, TRTA = TRTxxA)): Required variable `USUBJID2` is missing in `dataset`
 
 # Create reference dataset for phases
 adsl <- tribble(
@@ -142,12 +136,7 @@ create_period_dataset(
   adsl,
   new_vars = exprs(PHSDT = PHwSDT, PHEDT = PHwEDT, APHASE = APHASEw)
 )
-#> # A tibble: 3 × 6
-#>   STUDYID USUBJID APHASEN PHSDT      PHEDT      APHASE   
-#>   <chr>   <chr>     <int> <date>     <date>     <chr>    
-#> 1 xyz     1             1 2021-01-04 2021-02-06 TREATMENT
-#> 2 xyz     1             2 2021-02-07 2021-03-07 FUP      
-#> 3 xyz     2             1 2021-02-02 2021-03-02 TREATMENT
+#> Error in create_period_dataset(adsl, new_vars = exprs(PHSDT = PHwSDT,     PHEDT = PHwEDT, APHASE = APHASEw)): Required variable `USUBJID2` is missing in `dataset`
 
 # Create reference datasets for subperiods
 adsl <- tribble(
@@ -166,12 +155,5 @@ create_period_dataset(
   adsl,
   new_vars = exprs(ASPRSDT = PxxSwSDT, ASPREDT = PxxSwEDT)
 )
-#> # A tibble: 5 × 6
-#>   STUDYID USUBJID APERIOD ASPER ASPRSDT    ASPREDT   
-#>   <chr>   <chr>     <int> <int> <date>     <date>    
-#> 1 xyz     1             1     1 2021-01-04 2021-01-19
-#> 2 xyz     1             1     2 2021-01-20 2021-02-06
-#> 3 xyz     1             2     1 2021-02-07 2021-03-07
-#> 4 xyz     2             1     1 2021-02-02 2021-03-02
-#> 5 xyz     2             2     1 2021-03-03 2021-04-01
+#> Error in create_period_dataset(adsl, new_vars = exprs(ASPRSDT = PxxSwSDT,     ASPREDT = PxxSwEDT)): Required variable `USUBJID2` is missing in `dataset`
 ```

@@ -45,7 +45,7 @@ derive_var_merged_ef_msrc(
   Permitted values
 
   :   list of variables created by
-      [`exprs()`](https:/pharmaverse.github.io/admiral/test_cicd/reference/reexport-exprs.md),
+      [`exprs()`](https:/pharmaverse.github.io/admiral/test_cicd/test_cicd/reference/reexport-exprs.md),
       e.g., `exprs(USUBJID, VISIT)`
 
   Default value
@@ -57,7 +57,7 @@ derive_var_merged_ef_msrc(
   Flag events
 
   A list of
-  [`flag_event()`](https:/pharmaverse.github.io/admiral/test_cicd/reference/flag_event.md)
+  [`flag_event()`](https:/pharmaverse.github.io/admiral/test_cicd/test_cicd/reference/flag_event.md)
   objects is expected. For each event the condition (`condition` field)
   is evaluated in the source dataset referenced by the `dataset_name`
   field. If it evaluates to `TRUE` at least once, the new variable is
@@ -66,7 +66,7 @@ derive_var_merged_ef_msrc(
   Permitted values
 
   :   a list of
-      [`flag_event()`](https:/pharmaverse.github.io/admiral/test_cicd/reference/flag_event.md)
+      [`flag_event()`](https:/pharmaverse.github.io/admiral/test_cicd/test_cicd/reference/flag_event.md)
       objects
 
   Default value
@@ -78,7 +78,7 @@ derive_var_merged_ef_msrc(
   Source datasets
 
   A named list of datasets is expected. The `dataset_name` field of
-  [`flag_event()`](https:/pharmaverse.github.io/admiral/test_cicd/reference/flag_event.md)
+  [`flag_event()`](https:/pharmaverse.github.io/admiral/test_cicd/test_cicd/reference/flag_event.md)
   refers to the dataset provided in the list.
 
   Permitted values
@@ -167,7 +167,7 @@ dataset and additionally the variable specified for `new_var`.
 ## Details
 
 1.  For each
-    [`flag_event()`](https:/pharmaverse.github.io/admiral/test_cicd/reference/flag_event.md)
+    [`flag_event()`](https:/pharmaverse.github.io/admiral/test_cicd/test_cicd/reference/flag_event.md)
     object specified for `flag_events`: The condition (`condition`) is
     evaluated in the dataset referenced by `dataset_name`. If the
     `by_vars` field is specified the dataset is grouped by the specified
@@ -187,23 +187,23 @@ dataset and additionally the variable specified for `new_var`.
 
 ## See also
 
-[`flag_event()`](https:/pharmaverse.github.io/admiral/test_cicd/reference/flag_event.md)
+[`flag_event()`](https:/pharmaverse.github.io/admiral/test_cicd/test_cicd/reference/flag_event.md)
 
 General Derivation Functions for all ADaMs that returns variable
 appended to dataset:
-[`derive_var_extreme_flag()`](https:/pharmaverse.github.io/admiral/test_cicd/reference/derive_var_extreme_flag.md),
-[`derive_var_joined_exist_flag()`](https:/pharmaverse.github.io/admiral/test_cicd/reference/derive_var_joined_exist_flag.md),
-[`derive_var_merged_exist_flag()`](https:/pharmaverse.github.io/admiral/test_cicd/reference/derive_var_merged_exist_flag.md),
-[`derive_var_obs_number()`](https:/pharmaverse.github.io/admiral/test_cicd/reference/derive_var_obs_number.md),
-[`derive_var_relative_flag()`](https:/pharmaverse.github.io/admiral/test_cicd/reference/derive_var_relative_flag.md),
-[`derive_vars_cat()`](https:/pharmaverse.github.io/admiral/test_cicd/reference/derive_vars_cat.md),
-[`derive_vars_computed()`](https:/pharmaverse.github.io/admiral/test_cicd/reference/derive_vars_computed.md),
-[`derive_vars_joined()`](https:/pharmaverse.github.io/admiral/test_cicd/reference/derive_vars_joined.md),
-[`derive_vars_joined_summary()`](https:/pharmaverse.github.io/admiral/test_cicd/reference/derive_vars_joined_summary.md),
-[`derive_vars_merged()`](https:/pharmaverse.github.io/admiral/test_cicd/reference/derive_vars_merged.md),
-[`derive_vars_merged_lookup()`](https:/pharmaverse.github.io/admiral/test_cicd/reference/derive_vars_merged_lookup.md),
-[`derive_vars_merged_summary()`](https:/pharmaverse.github.io/admiral/test_cicd/reference/derive_vars_merged_summary.md),
-[`derive_vars_transposed()`](https:/pharmaverse.github.io/admiral/test_cicd/reference/derive_vars_transposed.md)
+[`derive_var_extreme_flag()`](https:/pharmaverse.github.io/admiral/test_cicd/test_cicd/reference/derive_var_extreme_flag.md),
+[`derive_var_joined_exist_flag()`](https:/pharmaverse.github.io/admiral/test_cicd/test_cicd/reference/derive_var_joined_exist_flag.md),
+[`derive_var_merged_exist_flag()`](https:/pharmaverse.github.io/admiral/test_cicd/test_cicd/reference/derive_var_merged_exist_flag.md),
+[`derive_var_obs_number()`](https:/pharmaverse.github.io/admiral/test_cicd/test_cicd/reference/derive_var_obs_number.md),
+[`derive_var_relative_flag()`](https:/pharmaverse.github.io/admiral/test_cicd/test_cicd/reference/derive_var_relative_flag.md),
+[`derive_vars_cat()`](https:/pharmaverse.github.io/admiral/test_cicd/test_cicd/reference/derive_vars_cat.md),
+[`derive_vars_computed()`](https:/pharmaverse.github.io/admiral/test_cicd/test_cicd/reference/derive_vars_computed.md),
+[`derive_vars_joined()`](https:/pharmaverse.github.io/admiral/test_cicd/test_cicd/reference/derive_vars_joined.md),
+[`derive_vars_joined_summary()`](https:/pharmaverse.github.io/admiral/test_cicd/test_cicd/reference/derive_vars_joined_summary.md),
+[`derive_vars_merged()`](https:/pharmaverse.github.io/admiral/test_cicd/test_cicd/reference/derive_vars_merged.md),
+[`derive_vars_merged_lookup()`](https:/pharmaverse.github.io/admiral/test_cicd/test_cicd/reference/derive_vars_merged_lookup.md),
+[`derive_vars_merged_summary()`](https:/pharmaverse.github.io/admiral/test_cicd/test_cicd/reference/derive_vars_merged_summary.md),
+[`derive_vars_transposed()`](https:/pharmaverse.github.io/admiral/test_cicd/test_cicd/reference/derive_vars_transposed.md)
 
 ## Examples
 

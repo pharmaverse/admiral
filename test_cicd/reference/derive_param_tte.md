@@ -56,7 +56,7 @@ derive_param_tte(
   Source datasets
 
   A named list of datasets is expected. The `dataset_name` field of
-  [`tte_source()`](https:/pharmaverse.github.io/admiral/test_cicd/reference/tte_source.md)
+  [`tte_source()`](https:/pharmaverse.github.io/admiral/test_cicd/test_cicd/reference/tte_source.md)
   refers to the dataset provided in the list.
 
   Permitted values
@@ -83,7 +83,7 @@ derive_param_tte(
   Permitted values
 
   :   list of variables created by
-      [`exprs()`](https:/pharmaverse.github.io/admiral/test_cicd/reference/reexport-exprs.md),
+      [`exprs()`](https:/pharmaverse.github.io/admiral/test_cicd/test_cicd/reference/reexport-exprs.md),
       e.g., `exprs(USUBJID, VISIT)`
 
   Default value
@@ -113,7 +113,7 @@ derive_param_tte(
   Sources and conditions defining events
 
   A list of
-  [`event_source()`](https:/pharmaverse.github.io/admiral/test_cicd/reference/event_source.md)
+  [`event_source()`](https:/pharmaverse.github.io/admiral/test_cicd/test_cicd/reference/event_source.md)
   objects is expected.
 
   Permitted values
@@ -129,7 +129,7 @@ derive_param_tte(
   Sources and conditions defining censorings
 
   A list of
-  [`censor_source()`](https:/pharmaverse.github.io/admiral/test_cicd/reference/censor_source.md)
+  [`censor_source()`](https:/pharmaverse.github.io/admiral/test_cicd/test_cicd/reference/censor_source.md)
   objects is expected.
 
   Permitted values
@@ -160,7 +160,7 @@ derive_param_tte(
   Variables to set
 
   A named list returned by
-  [`exprs()`](https:/pharmaverse.github.io/admiral/test_cicd/reference/reexport-exprs.md)
+  [`exprs()`](https:/pharmaverse.github.io/admiral/test_cicd/test_cicd/reference/reexport-exprs.md)
   defining the variables to be set for the new parameter, e.g.
   `exprs(PARAMCD = "OS", PARAM = "Overall Survival")` is expected. The
   values must be symbols, character strings, numeric values,
@@ -169,7 +169,7 @@ derive_param_tte(
   Permitted values
 
   :   list of named expressions created by a formula using
-      [`exprs()`](https:/pharmaverse.github.io/admiral/test_cicd/reference/reexport-exprs.md),
+      [`exprs()`](https:/pharmaverse.github.io/admiral/test_cicd/test_cicd/reference/reexport-exprs.md),
       e.g., `exprs(AVALC = VSSTRESC, AVAL = yn_to_numeric(AVALC))`
 
   Default value
@@ -181,13 +181,13 @@ derive_param_tte(
   Variables to uniquely identify a subject
 
   A list of symbols created using
-  [`exprs()`](https:/pharmaverse.github.io/admiral/test_cicd/reference/reexport-exprs.md)
+  [`exprs()`](https:/pharmaverse.github.io/admiral/test_cicd/test_cicd/reference/reexport-exprs.md)
   is expected.
 
   Permitted values
 
   :   list of variables created by
-      [`exprs()`](https:/pharmaverse.github.io/admiral/test_cicd/reference/reexport-exprs.md),
+      [`exprs()`](https:/pharmaverse.github.io/admiral/test_cicd/test_cicd/reference/reexport-exprs.md),
       e.g., `exprs(USUBJID, VISIT)`
 
   Default value
@@ -202,9 +202,9 @@ derive_param_tte(
   message is issued if the observations of the source datasets are not
   unique with respect to the by variables and the date and order
   specified in the
-  [`event_source()`](https:/pharmaverse.github.io/admiral/test_cicd/reference/event_source.md)
+  [`event_source()`](https:/pharmaverse.github.io/admiral/test_cicd/test_cicd/reference/event_source.md)
   and
-  [`censor_source()`](https:/pharmaverse.github.io/admiral/test_cicd/reference/censor_source.md)
+  [`censor_source()`](https:/pharmaverse.github.io/admiral/test_cicd/test_cicd/reference/censor_source.md)
   objects.
 
   Permitted values
@@ -289,8 +289,8 @@ Finally:
 
 ## See also
 
-[`event_source()`](https:/pharmaverse.github.io/admiral/test_cicd/reference/event_source.md),
-[`censor_source()`](https:/pharmaverse.github.io/admiral/test_cicd/reference/censor_source.md)
+[`event_source()`](https:/pharmaverse.github.io/admiral/test_cicd/test_cicd/reference/event_source.md),
+[`censor_source()`](https:/pharmaverse.github.io/admiral/test_cicd/test_cicd/reference/censor_source.md)
 
 ## Examples
 
@@ -300,11 +300,11 @@ For each subject the time to first adverse event should be created as a
 parameter.
 
 - The event source object is created using
-  [`event_source()`](https:/pharmaverse.github.io/admiral/test_cicd/reference/event_source.md)
+  [`event_source()`](https:/pharmaverse.github.io/admiral/test_cicd/test_cicd/reference/event_source.md)
   and the date is set to adverse event start date.
 
 - The censor source object is created using
-  [`censor_source()`](https:/pharmaverse.github.io/admiral/test_cicd/reference/censor_source.md)
+  [`censor_source()`](https:/pharmaverse.github.io/admiral/test_cicd/test_cicd/reference/censor_source.md)
   and the date is set to end of study date.
 
 - The event and censor source objects are then passed to
@@ -440,7 +440,7 @@ for `"Cough"`, it was then passed to the function using the
 
 For investigating the issue, the dataset of the duplicate source records
 can be obtained by calling
-[`get_duplicates_dataset()`](https:/pharmaverse.github.io/admiral/test_cicd/reference/get_duplicates_dataset.md):
+[`get_duplicates_dataset()`](https:/pharmaverse.github.io/admiral/test_cicd/test_cicd/reference/get_duplicates_dataset.md):
 
     get_duplicates_dataset()
     #> Duplicate records with respect to `STUDYID`, `USUBJID`, `AEDECOD`, and `ASTDT`.
@@ -454,11 +454,11 @@ Common options to solve the issue:
 
 - Restricting the source records by specifying/updating the `filter`
   argument in the
-  [`event_source()`](https:/pharmaverse.github.io/admiral/test_cicd/reference/event_source.md)/[`censor_source()`](https:/pharmaverse.github.io/admiral/test_cicd/reference/censor_source.md)
+  [`event_source()`](https:/pharmaverse.github.io/admiral/test_cicd/test_cicd/reference/event_source.md)/[`censor_source()`](https:/pharmaverse.github.io/admiral/test_cicd/test_cicd/reference/censor_source.md)
   calls.
 
 - Specifying additional variables for `order` in the
-  [`event_source()`](https:/pharmaverse.github.io/admiral/test_cicd/reference/event_source.md)/[`censor_source()`](https:/pharmaverse.github.io/admiral/test_cicd/reference/censor_source.md)
+  [`event_source()`](https:/pharmaverse.github.io/admiral/test_cicd/test_cicd/reference/event_source.md)/[`censor_source()`](https:/pharmaverse.github.io/admiral/test_cicd/test_cicd/reference/censor_source.md)
   calls.
 
 - Setting `check_type = "none"` in the `derive_param_tte()` call to
@@ -597,7 +597,7 @@ censor date.
 ### Using different censor values (`censor`) and censoring at earliest occurring censor condition
 
 Within
-[`censor_source()`](https:/pharmaverse.github.io/admiral/test_cicd/reference/censor_source.md)
+[`censor_source()`](https:/pharmaverse.github.io/admiral/test_cicd/test_cicd/reference/censor_source.md)
 the value used to denote a censor can be changed from the default of
 `1`.
 
@@ -820,4 +820,4 @@ responders.
 ### Further examples
 
 Further example usages of this function can be found in the
-[`vignette("bds_tte")`](https:/pharmaverse.github.io/admiral/test_cicd/articles/bds_tte.md).
+[`vignette("bds_tte")`](https:/pharmaverse.github.io/admiral/test_cicd/test_cicd/articles/bds_tte.md).

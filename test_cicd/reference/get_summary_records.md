@@ -2,7 +2,7 @@
 
 **\[deprecated\]** The `get_summary_records()` has been deprecated in
 favor of
-[`derive_summary_records()`](https:/pharmaverse.github.io/admiral/test_cicd/reference/derive_summary_records.md)
+[`derive_summary_records()`](https:/pharmaverse.github.io/admiral/test_cicd/test_cicd/reference/derive_summary_records.md)
 (call it with the `dataset_add` argument and without the `dataset`
 argument).
 
@@ -96,23 +96,23 @@ A data frame of derived records.
 This function only creates derived observations and does not append them
 to the original dataset observations. If you would like to this instead,
 see the
-[`derive_summary_records()`](https:/pharmaverse.github.io/admiral/test_cicd/reference/derive_summary_records.md)
+[`derive_summary_records()`](https:/pharmaverse.github.io/admiral/test_cicd/test_cicd/reference/derive_summary_records.md)
 function.
 
 ## See also
 
-[`derive_summary_records()`](https:/pharmaverse.github.io/admiral/test_cicd/reference/derive_summary_records.md),
-[`derive_vars_merged_summary()`](https:/pharmaverse.github.io/admiral/test_cicd/reference/derive_vars_merged_summary.md)
+[`derive_summary_records()`](https:/pharmaverse.github.io/admiral/test_cicd/test_cicd/reference/derive_summary_records.md),
+[`derive_vars_merged_summary()`](https:/pharmaverse.github.io/admiral/test_cicd/test_cicd/reference/derive_vars_merged_summary.md)
 
 Other deprecated:
-[`call_user_fun()`](https:/pharmaverse.github.io/admiral/test_cicd/reference/call_user_fun.md),
-[`date_source()`](https:/pharmaverse.github.io/admiral/test_cicd/reference/date_source.md),
-[`derive_param_extreme_record()`](https:/pharmaverse.github.io/admiral/test_cicd/reference/derive_param_extreme_record.md),
-[`derive_var_dthcaus()`](https:/pharmaverse.github.io/admiral/test_cicd/reference/derive_var_dthcaus.md),
-[`derive_var_extreme_dt()`](https:/pharmaverse.github.io/admiral/test_cicd/reference/derive_var_extreme_dt.md),
-[`derive_var_extreme_dtm()`](https:/pharmaverse.github.io/admiral/test_cicd/reference/derive_var_extreme_dtm.md),
-[`derive_var_merged_summary()`](https:/pharmaverse.github.io/admiral/test_cicd/reference/derive_var_merged_summary.md),
-[`dthcaus_source()`](https:/pharmaverse.github.io/admiral/test_cicd/reference/dthcaus_source.md)
+[`call_user_fun()`](https:/pharmaverse.github.io/admiral/test_cicd/test_cicd/reference/call_user_fun.md),
+[`date_source()`](https:/pharmaverse.github.io/admiral/test_cicd/test_cicd/reference/date_source.md),
+[`derive_param_extreme_record()`](https:/pharmaverse.github.io/admiral/test_cicd/test_cicd/reference/derive_param_extreme_record.md),
+[`derive_var_dthcaus()`](https:/pharmaverse.github.io/admiral/test_cicd/test_cicd/reference/derive_var_dthcaus.md),
+[`derive_var_extreme_dt()`](https:/pharmaverse.github.io/admiral/test_cicd/test_cicd/reference/derive_var_extreme_dt.md),
+[`derive_var_extreme_dtm()`](https:/pharmaverse.github.io/admiral/test_cicd/test_cicd/reference/derive_var_extreme_dtm.md),
+[`derive_var_merged_summary()`](https:/pharmaverse.github.io/admiral/test_cicd/test_cicd/reference/derive_var_merged_summary.md),
+[`dthcaus_source()`](https:/pharmaverse.github.io/admiral/test_cicd/test_cicd/reference/dthcaus_source.md)
 
 ## Examples
 
@@ -150,11 +150,6 @@ get_summary_records(
     DTYPE = "AVERAGE"
   )
 )
-#> Warning: `get_summary_records()` was deprecated in admiral 1.2.0.
-#> ℹ Please use `derive_summary_records()` instead.
-#> ✖ This message will turn into an error at the beginning of 2027.
-#> ℹ See admiral's deprecation guidance:
-#>   https://pharmaverse.github.io/admiraldev/dev/articles/programming_strategy.html#deprecation
 #> # A tibble: 6 × 5
 #>   USUBJID  PARAM            AVISIT    AVAL DTYPE  
 #>   <chr>    <chr>            <chr>    <dbl> <chr>  

@@ -4,7 +4,7 @@ Add Anatomical Therapeutic Chemical class variables from `FACM` to
 `ADCM`.
 
 **Note:** This is a wrapper function for the more generic
-[`derive_vars_transposed()`](https:/pharmaverse.github.io/admiral/test_cicd/reference/derive_vars_transposed.md).
+[`derive_vars_transposed()`](https:/pharmaverse.github.io/admiral/test_cicd/test_cicd/reference/derive_vars_transposed.md).
 
 ## Usage
 
@@ -79,11 +79,11 @@ The input dataset with ATC variables added
 
 ## See also
 
-[`derive_vars_transposed()`](https:/pharmaverse.github.io/admiral/test_cicd/reference/derive_vars_transposed.md)
+[`derive_vars_transposed()`](https:/pharmaverse.github.io/admiral/test_cicd/test_cicd/reference/derive_vars_transposed.md)
 
 OCCDS Functions:
-[`derive_var_trtemfl()`](https:/pharmaverse.github.io/admiral/test_cicd/reference/derive_var_trtemfl.md),
-[`derive_vars_query()`](https:/pharmaverse.github.io/admiral/test_cicd/reference/derive_vars_query.md)
+[`derive_var_trtemfl()`](https:/pharmaverse.github.io/admiral/test_cicd/test_cicd/reference/derive_var_trtemfl.md),
+[`derive_vars_query()`](https:/pharmaverse.github.io/admiral/test_cicd/test_cicd/reference/derive_vars_query.md)
 
 ## Examples
 
@@ -121,12 +121,5 @@ facm <- tribble(
 )
 
 derive_vars_atc(cm, facm, id_vars = exprs(FAGRPID))
-#> # A tibble: 5 × 9
-#>   STUDYID USUBJID      CMGRPID CMREFID CMDECOD       ATC1CD ATC2CD ATC3CD ATC4CD
-#>   <chr>   <chr>        <chr>   <chr>   <chr>         <chr>  <chr>  <chr>  <chr> 
-#> 1 STUDY01 BP40257-1001 14      1192056 PARACETAMOL   N      N02    N02B   N02BE 
-#> 2 STUDY01 BP40257-1001 18      2007001 SOLUMEDROL    D      D10    D10A   D10AA 
-#> 3 STUDY01 BP40257-1001 18      2007001 SOLUMEDROL    D      D07    D07A   D07AA 
-#> 4 STUDY01 BP40257-1001 18      2007001 SOLUMEDROL    H      H02    H02A   H02AB 
-#> 5 STUDY01 BP40257-1002 19      2791596 SPIRONOLACTO… C      C03    C03D   C03DA 
+#> Error in derive_vars_atc(cm, facm, id_vars = exprs(FAGRPID)): Required variable `USUBJID2` is missing in `dataset`
 ```

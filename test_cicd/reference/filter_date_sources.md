@@ -24,7 +24,7 @@ filter_date_sources(
   Sources
 
   A list of
-  [`tte_source()`](https:/pharmaverse.github.io/admiral/test_cicd/reference/tte_source.md)
+  [`tte_source()`](https:/pharmaverse.github.io/admiral/test_cicd/test_cicd/reference/tte_source.md)
   objects is expected.
 
   Default value
@@ -36,7 +36,7 @@ filter_date_sources(
   Source datasets
 
   A named list of datasets is expected. The `dataset_name` field of
-  [`tte_source()`](https:/pharmaverse.github.io/admiral/test_cicd/reference/tte_source.md)
+  [`tte_source()`](https:/pharmaverse.github.io/admiral/test_cicd/test_cicd/reference/tte_source.md)
   refers to the dataset provided in the list.
 
   Default value
@@ -70,7 +70,7 @@ filter_date_sources(
   Variables to uniquely identify a subject
 
   A list of symbols created using
-  [`exprs()`](https:/pharmaverse.github.io/admiral/test_cicd/reference/reexport-exprs.md)
+  [`exprs()`](https:/pharmaverse.github.io/admiral/test_cicd/test_cicd/reference/reexport-exprs.md)
   is expected.
 
   Default value
@@ -101,7 +101,7 @@ filter_date_sources(
   message is issued if the observations of the source datasets are not
   unique with respect to the by variables and the date and order
   specified in the
-  [`tte_source()`](https:/pharmaverse.github.io/admiral/test_cicd/reference/tte_source.md)
+  [`tte_source()`](https:/pharmaverse.github.io/admiral/test_cicd/test_cicd/reference/tte_source.md)
   objects.
 
   Permitted values
@@ -184,9 +184,5 @@ admiral:::filter_date_sources(
   mode = "first",
   check_type = "none"
 )
-#> # A tibble: 2 × 9
-#>   USUBJID AEDECOD STUDYID EVNTDESC SRCDOM SRCVAR  SRCSEQ  CNSR ADT       
-#>   <chr>   <chr>   <chr>   <chr>    <chr>  <chr>    <dbl> <int> <date>    
-#> 1 01      Cough   AB42    AE       AE     AESTDTC      2     0 2021-03-04
-#> 2 01      Flu     AB42    AE       AE     AESTDTC      3     0 2021-01-01
+#> Error in filter_extreme(., order = expr_c(exprs(!!source_date_var), sources[[i]]$order),     by_vars = expr_c(subject_keys, by_vars), mode = mode, check_type = check_type): Required variable `USUBJID2` is missing in `dataset`
 ```

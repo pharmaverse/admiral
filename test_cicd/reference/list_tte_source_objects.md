@@ -26,7 +26,7 @@ A `data.frame` where each row corresponds to one `tte_source` object or
 ## See also
 
 Other Advanced Functions:
-[`params()`](https:/pharmaverse.github.io/admiral/test_cicd/reference/params.md)
+[`params()`](https:/pharmaverse.github.io/admiral/test_cicd/test_cicd/reference/params.md)
 
 ## Examples
 

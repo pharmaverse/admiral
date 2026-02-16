@@ -2,10 +2,10 @@
 
 The function checks if all requirements to access the database are
 fulfilled (version and access function are available, see
-[`assert_db_requirements()`](https:/pharmaverse.github.io/admiral/test_cicd/reference/assert_db_requirements.md)),
+[`assert_db_requirements()`](https:/pharmaverse.github.io/admiral/test_cicd/test_cicd/reference/assert_db_requirements.md)),
 reads the terms from the database, and checks if the dataset with the
 terms is in the expected format (see
-[`assert_terms()`](https:/pharmaverse.github.io/admiral/test_cicd/reference/assert_terms.md)).
+[`assert_terms()`](https:/pharmaverse.github.io/admiral/test_cicd/test_cicd/reference/assert_terms.md)).
 
 ## Usage
 
@@ -64,7 +64,7 @@ get_terms_from_db(
   Queries
 
   List of all queries passed to
-  [`create_query_data()`](https:/pharmaverse.github.io/admiral/test_cicd/reference/create_query_data.md).
+  [`create_query_data()`](https:/pharmaverse.github.io/admiral/test_cicd/test_cicd/reference/create_query_data.md).
   It is used for error messages.
 
   Default value

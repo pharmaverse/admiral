@@ -24,4 +24,4 @@ The original object.
 
 ## See also
 
-[`query()`](https:/pharmaverse.github.io/admiral/test_cicd/reference/query.md)
+[`query()`](https:/pharmaverse.github.io/admiral/test_cicd/test_cicd/reference/query.md)

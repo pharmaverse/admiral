@@ -2,13 +2,13 @@
 
 **\[deprecated\]** The `derive_var_extreme_dt()` function has been
 deprecated in favor of
-[`derive_vars_extreme_event()`](https:/pharmaverse.github.io/admiral/test_cicd/reference/derive_vars_extreme_event.md).
+[`derive_vars_extreme_event()`](https:/pharmaverse.github.io/admiral/test_cicd/test_cicd/reference/derive_vars_extreme_event.md).
 
 Add the first or last date from multiple sources to the dataset, e.g.,
 the last known alive date (`LSTALVDT`).
 
 **Note:** This is a wrapper function for the function
-[`derive_var_extreme_dtm()`](https:/pharmaverse.github.io/admiral/test_cicd/reference/derive_var_extreme_dtm.md).
+[`derive_var_extreme_dtm()`](https:/pharmaverse.github.io/admiral/test_cicd/test_cicd/reference/derive_var_extreme_dtm.md).
 
 ## Usage
 
@@ -47,7 +47,7 @@ derive_var_extreme_dt(
 - ...:
 
   Source(s) of dates. One or more
-  [`date_source()`](https:/pharmaverse.github.io/admiral/test_cicd/reference/date_source.md)
+  [`date_source()`](https:/pharmaverse.github.io/admiral/test_cicd/test_cicd/reference/date_source.md)
   objects are expected.
 
   Default value
@@ -84,7 +84,7 @@ derive_var_extreme_dt(
   Variables to uniquely identify a subject
 
   A list of expressions where the expressions are symbols as returned by
-  [`exprs()`](https:/pharmaverse.github.io/admiral/test_cicd/reference/reexport-exprs.md)
+  [`exprs()`](https:/pharmaverse.github.io/admiral/test_cicd/test_cicd/reference/reexport-exprs.md)
   is expected.
 
   Default value
@@ -120,19 +120,19 @@ The following steps are performed to create the output dataset:
 
 ## See also
 
-[`date_source()`](https:/pharmaverse.github.io/admiral/test_cicd/reference/date_source.md),
-[`derive_var_extreme_dtm()`](https:/pharmaverse.github.io/admiral/test_cicd/reference/derive_var_extreme_dtm.md),
-[`derive_vars_merged()`](https:/pharmaverse.github.io/admiral/test_cicd/reference/derive_vars_merged.md)
+[`date_source()`](https:/pharmaverse.github.io/admiral/test_cicd/test_cicd/reference/date_source.md),
+[`derive_var_extreme_dtm()`](https:/pharmaverse.github.io/admiral/test_cicd/test_cicd/reference/derive_var_extreme_dtm.md),
+[`derive_vars_merged()`](https:/pharmaverse.github.io/admiral/test_cicd/test_cicd/reference/derive_vars_merged.md)
 
 Other deprecated:
-[`call_user_fun()`](https:/pharmaverse.github.io/admiral/test_cicd/reference/call_user_fun.md),
-[`date_source()`](https:/pharmaverse.github.io/admiral/test_cicd/reference/date_source.md),
-[`derive_param_extreme_record()`](https:/pharmaverse.github.io/admiral/test_cicd/reference/derive_param_extreme_record.md),
-[`derive_var_dthcaus()`](https:/pharmaverse.github.io/admiral/test_cicd/reference/derive_var_dthcaus.md),
-[`derive_var_extreme_dtm()`](https:/pharmaverse.github.io/admiral/test_cicd/reference/derive_var_extreme_dtm.md),
-[`derive_var_merged_summary()`](https:/pharmaverse.github.io/admiral/test_cicd/reference/derive_var_merged_summary.md),
-[`dthcaus_source()`](https:/pharmaverse.github.io/admiral/test_cicd/reference/dthcaus_source.md),
-[`get_summary_records()`](https:/pharmaverse.github.io/admiral/test_cicd/reference/get_summary_records.md)
+[`call_user_fun()`](https:/pharmaverse.github.io/admiral/test_cicd/test_cicd/reference/call_user_fun.md),
+[`date_source()`](https:/pharmaverse.github.io/admiral/test_cicd/test_cicd/reference/date_source.md),
+[`derive_param_extreme_record()`](https:/pharmaverse.github.io/admiral/test_cicd/test_cicd/reference/derive_param_extreme_record.md),
+[`derive_var_dthcaus()`](https:/pharmaverse.github.io/admiral/test_cicd/test_cicd/reference/derive_var_dthcaus.md),
+[`derive_var_extreme_dtm()`](https:/pharmaverse.github.io/admiral/test_cicd/test_cicd/reference/derive_var_extreme_dtm.md),
+[`derive_var_merged_summary()`](https:/pharmaverse.github.io/admiral/test_cicd/test_cicd/reference/derive_var_merged_summary.md),
+[`dthcaus_source()`](https:/pharmaverse.github.io/admiral/test_cicd/test_cicd/reference/dthcaus_source.md),
+[`get_summary_records()`](https:/pharmaverse.github.io/admiral/test_cicd/test_cicd/reference/get_summary_records.md)
 
 ## Examples
 
@@ -249,26 +249,7 @@ dm %>%
     mode = "last"
   ) %>%
   select(USUBJID, LSTALVDT)
-#> Warning: `derive_var_extreme_dt()` was deprecated in admiral 1.2.0.
-#> ℹ Please use `derive_vars_extreme_event()` instead.
-#> ✖ This message will turn into an error at the beginning of 2027.
-#> ℹ See admiral's deprecation guidance:
-#>   https://pharmaverse.github.io/admiraldev/dev/articles/programming_strategy.html#deprecation
-#> Warning: `derive_var_extreme_dtm()` was deprecated in admiral 1.2.0.
-#> ℹ Please use `derive_vars_extreme_event()` instead.
-#> ✖ This message will turn into an error at the beginning of 2027.
-#> ℹ See admiral's deprecation guidance:
-#>   https://pharmaverse.github.io/admiraldev/dev/articles/programming_strategy.html#deprecation
-#> ℹ The deprecated feature was likely used in the admiral package.
-#>   Please report the issue at <https://github.com/pharmaverse/admiral/issues>.
-#> # A tibble: 5 × 2
-#>   USUBJID LSTALVDT  
-#>   <chr>   <date>    
-#> 1 01-1130 2014-08-16
-#> 2 01-1133 2013-04-29
-#> 3 01-1211 2013-01-14
-#> 4 09-1081 2014-05-10
-#> 5 09-1088 2014-10-09
+#> Error in derive_var_extreme_dtm(dataset, new_var = !!new_var, !!!sources,     source_datasets = source_datasets, mode = mode, subject_keys = subject_keys): Required variable `USUBJID2` is missing in `dataset`
 
 # derive last alive date and traceability variables
 ae_start <- date_source(
@@ -323,12 +304,5 @@ dm %>%
     mode = "last"
   ) %>%
   select(USUBJID, LSTALVDT, LALVDOM, LALVSEQ, LALVVAR)
-#> # A tibble: 5 × 5
-#>   USUBJID LSTALVDT   LALVDOM LALVSEQ LALVVAR
-#>   <chr>   <date>     <chr>     <dbl> <chr>  
-#> 1 01-1130 2014-08-16 ADSL         NA TRTEDT 
-#> 2 01-1133 2013-04-29 LB          304 LBDTC  
-#> 3 01-1211 2013-01-14 AE            9 AEENDTC
-#> 4 09-1081 2014-05-10 LB          219 LBDTC  
-#> 5 09-1088 2014-10-09 ADSL         NA TRTEDT 
+#> Error in derive_var_extreme_dtm(dataset, new_var = !!new_var, !!!sources,     source_datasets = source_datasets, mode = mode, subject_keys = subject_keys): Required variable `USUBJID2` is missing in `dataset`
 ```

@@ -76,7 +76,7 @@ filter_joined(
   Permitted values
 
   :   list of variables created by
-      [`exprs()`](https:/pharmaverse.github.io/admiral/test_cicd/reference/reexport-exprs.md),
+      [`exprs()`](https:/pharmaverse.github.io/admiral/test_cicd/test_cicd/reference/reexport-exprs.md),
       e.g., `exprs(USUBJID, VISIT)`
 
   Default value
@@ -100,7 +100,7 @@ filter_joined(
   Permitted values
 
   :   list of variables created by
-      [`exprs()`](https:/pharmaverse.github.io/admiral/test_cicd/reference/reexport-exprs.md),
+      [`exprs()`](https:/pharmaverse.github.io/admiral/test_cicd/test_cicd/reference/reexport-exprs.md),
       e.g., `exprs(USUBJID, VISIT)`
 
   Default value
@@ -188,12 +188,12 @@ filter_joined(
 
   For handling of `NA`s in sorting variables see the "Sort Order"
   section in
-  [`vignette("generic")`](https:/pharmaverse.github.io/admiral/test_cicd/articles/generic.md).
+  [`vignette("generic")`](https:/pharmaverse.github.io/admiral/test_cicd/test_cicd/articles/generic.md).
 
   Permitted values
 
   :   list of expressions created by
-      [`exprs()`](https:/pharmaverse.github.io/admiral/test_cicd/reference/reexport-exprs.md),
+      [`exprs()`](https:/pharmaverse.github.io/admiral/test_cicd/test_cicd/reference/reexport-exprs.md),
       e.g., `exprs(ADT, desc(AVAL))` or `NULL`
 
   Default value
@@ -377,23 +377,23 @@ variables are dropped.
 **Note:** This function creates temporary datasets which may be much
 bigger than the input datasets. If this causes memory issues, please try
 setting the admiral option `save_memory` to `TRUE` (see
-[`set_admiral_options()`](https:/pharmaverse.github.io/admiral/test_cicd/reference/set_admiral_options.md)).
+[`set_admiral_options()`](https:/pharmaverse.github.io/admiral/test_cicd/test_cicd/reference/set_admiral_options.md)).
 This reduces the memory consumption but increases the run-time.
 
 ## See also
 
-[`count_vals()`](https:/pharmaverse.github.io/admiral/test_cicd/reference/count_vals.md),
-[`min_cond()`](https:/pharmaverse.github.io/admiral/test_cicd/reference/min_cond.md),
-[`max_cond()`](https:/pharmaverse.github.io/admiral/test_cicd/reference/max_cond.md)
+[`count_vals()`](https:/pharmaverse.github.io/admiral/test_cicd/test_cicd/reference/count_vals.md),
+[`min_cond()`](https:/pharmaverse.github.io/admiral/test_cicd/test_cicd/reference/min_cond.md),
+[`max_cond()`](https:/pharmaverse.github.io/admiral/test_cicd/test_cicd/reference/max_cond.md)
 
 Utilities for Filtering Observations:
-[`count_vals()`](https:/pharmaverse.github.io/admiral/test_cicd/reference/count_vals.md),
-[`filter_exist()`](https:/pharmaverse.github.io/admiral/test_cicd/reference/filter_exist.md),
-[`filter_extreme()`](https:/pharmaverse.github.io/admiral/test_cicd/reference/filter_extreme.md),
-[`filter_not_exist()`](https:/pharmaverse.github.io/admiral/test_cicd/reference/filter_not_exist.md),
-[`filter_relative()`](https:/pharmaverse.github.io/admiral/test_cicd/reference/filter_relative.md),
-[`max_cond()`](https:/pharmaverse.github.io/admiral/test_cicd/reference/max_cond.md),
-[`min_cond()`](https:/pharmaverse.github.io/admiral/test_cicd/reference/min_cond.md)
+[`count_vals()`](https:/pharmaverse.github.io/admiral/test_cicd/test_cicd/reference/count_vals.md),
+[`filter_exist()`](https:/pharmaverse.github.io/admiral/test_cicd/test_cicd/reference/filter_exist.md),
+[`filter_extreme()`](https:/pharmaverse.github.io/admiral/test_cicd/test_cicd/reference/filter_extreme.md),
+[`filter_not_exist()`](https:/pharmaverse.github.io/admiral/test_cicd/test_cicd/reference/filter_not_exist.md),
+[`filter_relative()`](https:/pharmaverse.github.io/admiral/test_cicd/test_cicd/reference/filter_relative.md),
+[`max_cond()`](https:/pharmaverse.github.io/admiral/test_cicd/test_cicd/reference/max_cond.md),
+[`min_cond()`](https:/pharmaverse.github.io/admiral/test_cicd/test_cicd/reference/min_cond.md)
 
 ## Examples
 
@@ -548,7 +548,7 @@ records with
 should be selected. The other records to be considered are restricted to
 those up to the first occurrence of `"CR"` by specifying the
 `first_cond_upper` argument. The
-[`count_vals()`](https:/pharmaverse.github.io/admiral/test_cicd/reference/count_vals.md)
+[`count_vals()`](https:/pharmaverse.github.io/admiral/test_cicd/test_cicd/reference/count_vals.md)
 function is used to count the `"NE"`s for the last condition.
 
     data <- tribble(
@@ -585,7 +585,7 @@ function is used to count the `"NE"`s for the last condition.
     #>   <chr>     <dbl> <chr>
     #> 1 1             2 CR   
 
-### Considering order of values ([`min_cond()`](https:/pharmaverse.github.io/admiral/test_cicd/reference/min_cond.md), [`max_cond()`](https:/pharmaverse.github.io/admiral/test_cicd/reference/max_cond.md))
+### Considering order of values ([`min_cond()`](https:/pharmaverse.github.io/admiral/test_cicd/test_cicd/reference/min_cond.md), [`max_cond()`](https:/pharmaverse.github.io/admiral/test_cicd/test_cicd/reference/max_cond.md))
 
 In this example from deriving confirmed response in oncology, records
 with
@@ -602,14 +602,14 @@ with
 - `"CR"` is not followed by `"PR"`
 
 should be selected. The last condition is realized by using
-[`min_cond()`](https:/pharmaverse.github.io/admiral/test_cicd/reference/min_cond.md)
+[`min_cond()`](https:/pharmaverse.github.io/admiral/test_cicd/test_cicd/reference/min_cond.md)
 and
-[`max_cond()`](https:/pharmaverse.github.io/admiral/test_cicd/reference/max_cond.md),
+[`max_cond()`](https:/pharmaverse.github.io/admiral/test_cicd/test_cicd/reference/max_cond.md),
 ensuring that the first occurrence of `"CR"` is after the last
 occurrence of `"PR"`. The second call to
-[`count_vals()`](https:/pharmaverse.github.io/admiral/test_cicd/reference/count_vals.md)
+[`count_vals()`](https:/pharmaverse.github.io/admiral/test_cicd/test_cicd/reference/count_vals.md)
 in the condition is required to cover the case of no `"CR"`s (the
-[`min_cond()`](https:/pharmaverse.github.io/admiral/test_cicd/reference/min_cond.md)
+[`min_cond()`](https:/pharmaverse.github.io/admiral/test_cicd/test_cicd/reference/min_cond.md)
 call returns `NA` then).
 
     data <- tribble(

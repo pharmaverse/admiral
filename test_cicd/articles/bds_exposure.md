@@ -108,7 +108,7 @@ count(adex, EXADJ)
 ### Derive/Impute Numeric Date/Time and Analysis Day (`ADT`, `ADTM`, `ADY`, `ADTF`, `ATMF`)
 
 The function
-[`derive_vars_dt()`](https:/pharmaverse.github.io/admiral/test_cicd/reference/derive_vars_dt.md)
+[`derive_vars_dt()`](https:/pharmaverse.github.io/admiral/test_cicd/test_cicd/reference/derive_vars_dt.md)
 can be used to derive `ADT`. This function allows the user to impute the
 date as well.
 
@@ -121,7 +121,7 @@ adex <- derive_vars_dt(adex, new_vars_prefix = "AEN", dtc = EXENDTC)
 
 The next examples demonstrates the datetime imputation features
 available in the
-[`derive_vars_dtm()`](https:/pharmaverse.github.io/admiral/test_cicd/reference/derive_vars_dtm.md)
+[`derive_vars_dtm()`](https:/pharmaverse.github.io/admiral/test_cicd/test_cicd/reference/derive_vars_dtm.md)
 function, where the time is imputed as “00:00:00”:
 
 ``` r
@@ -145,7 +145,7 @@ The example above imputes the start date to the first first day of the
 month and imputes the end date to the last day of the month.
 
 Please see the [Date and Time
-Imputation](https:/pharmaverse.github.io/admiral/test_cicd/articles/imputation.Rmd)
+Imputation](https:/pharmaverse.github.io/admiral/test_cicd/test_cicd/articles/imputation.Rmd)
 for additional examples on calculating and imputing analysis dates.
 
 Next, the analysis study days can be derived:
@@ -161,7 +161,7 @@ adex <-
 ### Compute duration for a record
 
 To compute the duration of treatment or exposure for a record, the
-[`derive_vars_duration()`](https:/pharmaverse.github.io/admiral/test_cicd/reference/derive_vars_duration.md)
+[`derive_vars_duration()`](https:/pharmaverse.github.io/admiral/test_cicd/test_cicd/reference/derive_vars_duration.md)
 function can be used.
 
 ``` r
@@ -187,7 +187,7 @@ adex <- adex %>%
 ```
 
 Please refer to the
-[`derive_vars_duration()`](https:/pharmaverse.github.io/admiral/test_cicd/reference/derive_vars_duration.md)
+[`derive_vars_duration()`](https:/pharmaverse.github.io/admiral/test_cicd/test_cicd/reference/derive_vars_duration.md)
 documentation for detailed information on the input parameters.
 
 It may be necessary to calculate additional intermediate values. For
@@ -209,7 +209,7 @@ record. This is another approach to deriving a total dose parameter when
 `EXDOSFRQ != ONCE`.
 
 The function
-[`create_single_dose_dataset()`](https:/pharmaverse.github.io/admiral/test_cicd/reference/create_single_dose_dataset.md)
+[`create_single_dose_dataset()`](https:/pharmaverse.github.io/admiral/test_cicd/test_cicd/reference/create_single_dose_dataset.md)
 can be used to expand a record containing a start date, an end date, and
 a dosing frequency to a corresponding set of records each representing
 one dose (i.e. `EXDOSFRQ == "ONCE"`).
@@ -291,7 +291,7 @@ count(adex, PARAMCD)
 
 Exposure is commonly analyzed by a timing interval (e.g. `APHASE`,
 `APERIOD`, `AVISIT`, etc.). For these types of calculations, the
-[`derive_param_exposure()`](https:/pharmaverse.github.io/admiral/test_cicd/reference/derive_param_exposure.md)
+[`derive_param_exposure()`](https:/pharmaverse.github.io/admiral/test_cicd/test_cicd/reference/derive_param_exposure.md)
 function may be used. In addition to creating a summarized `AVAL`, the
 function will also compute minimum and maximum dates for the record.
 
@@ -320,7 +320,7 @@ Note that, in addition to `PARAMCD`, `PARCAT1`, `AVAL`, `ASTDT` and
 be populated in the new records.
 
 Multiple parameters (records) may be created at one time using the
-[`call_derivation()`](https:/pharmaverse.github.io/admiral/test_cicd/reference/call_derivation.md)
+[`call_derivation()`](https:/pharmaverse.github.io/admiral/test_cicd/test_cicd/reference/call_derivation.md)
 function:
 
 ``` r
@@ -390,7 +390,7 @@ count(adex, PARAMCD, PARCAT1)
 ```
 
 Dose intensity can be calculated using the function
-[`derive_param_doseint()`](https:/pharmaverse.github.io/admiral/test_cicd/reference/derive_param_doseint.md).
+[`derive_param_doseint()`](https:/pharmaverse.github.io/admiral/test_cicd/test_cicd/reference/derive_param_doseint.md).
 The planned dose and administered dose are passed into the function and
 a new record is created with the dose intensity calculation. Again, only
 those variables specified in the `by_vars` argument will be populated in
@@ -410,7 +410,7 @@ The default calculation for dose intensity is: Administered Doses /
 Planned Doses \* 100.
 
 Please see the
-[`derive_param_doseint()`](https:/pharmaverse.github.io/admiral/test_cicd/reference/derive_param_doseint.md)
+[`derive_param_doseint()`](https:/pharmaverse.github.io/admiral/test_cicd/test_cicd/reference/derive_param_doseint.md)
 documentation to see how planned doses of 0 or `NA` are handled.
 
 ### Assign `PARAMCD`, `PARAMN`, etc. from Reference tables
@@ -465,7 +465,7 @@ needed for the join depending on your lookup/metadata table.
 ### Derive Categorization Variables (`AVALCATy`)
 
 We can use the
-[`derive_vars_cat()`](https:/pharmaverse.github.io/admiral/test_cicd/reference/derive_vars_cat.md)
+[`derive_vars_cat()`](https:/pharmaverse.github.io/admiral/test_cicd/test_cicd/reference/derive_vars_cat.md)
 function to derive the categorization variables.
 
 ``` r
@@ -490,7 +490,7 @@ adex <- adex %>%
 ### Assign `ASEQ`
 
 The [admiral](https://pharmaverse.github.io/admiral/) function
-[`derive_var_obs_number()`](https:/pharmaverse.github.io/admiral/test_cicd/reference/derive_var_obs_number.md)
+[`derive_var_obs_number()`](https:/pharmaverse.github.io/admiral/test_cicd/test_cicd/reference/derive_var_obs_number.md)
 can be used to derive `ASEQ`. An example call is:
 
 ``` r

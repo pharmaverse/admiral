@@ -2,7 +2,7 @@
 
 **\[deprecated\]** The `derive_var_dthcaus()` function has been
 deprecated in favor of
-[`derive_vars_extreme_event()`](https:/pharmaverse.github.io/admiral/test_cicd/reference/derive_vars_extreme_event.md).
+[`derive_vars_extreme_event()`](https:/pharmaverse.github.io/admiral/test_cicd/test_cicd/reference/derive_vars_extreme_event.md).
 
 Derive death cause (`DTHCAUS`) and add traceability variables if
 required.
@@ -34,7 +34,7 @@ derive_var_dthcaus(
 - ...:
 
   Objects of class "dthcaus_source" created by
-  [`dthcaus_source()`](https:/pharmaverse.github.io/admiral/test_cicd/reference/dthcaus_source.md).
+  [`dthcaus_source()`](https:/pharmaverse.github.io/admiral/test_cicd/test_cicd/reference/dthcaus_source.md).
 
   Default value
 
@@ -54,7 +54,7 @@ derive_var_dthcaus(
   Variables to uniquely identify a subject
 
   A list of expressions where the expressions are symbols as returned by
-  [`exprs()`](https:/pharmaverse.github.io/admiral/test_cicd/reference/reexport-exprs.md)
+  [`exprs()`](https:/pharmaverse.github.io/admiral/test_cicd/test_cicd/reference/reexport-exprs.md)
   is expected.
 
   Default value
@@ -75,17 +75,17 @@ user should provide the inputs in the preferred order.
 
 ## See also
 
-[`dthcaus_source()`](https:/pharmaverse.github.io/admiral/test_cicd/reference/dthcaus_source.md)
+[`dthcaus_source()`](https:/pharmaverse.github.io/admiral/test_cicd/test_cicd/reference/dthcaus_source.md)
 
 Other deprecated:
-[`call_user_fun()`](https:/pharmaverse.github.io/admiral/test_cicd/reference/call_user_fun.md),
-[`date_source()`](https:/pharmaverse.github.io/admiral/test_cicd/reference/date_source.md),
-[`derive_param_extreme_record()`](https:/pharmaverse.github.io/admiral/test_cicd/reference/derive_param_extreme_record.md),
-[`derive_var_extreme_dt()`](https:/pharmaverse.github.io/admiral/test_cicd/reference/derive_var_extreme_dt.md),
-[`derive_var_extreme_dtm()`](https:/pharmaverse.github.io/admiral/test_cicd/reference/derive_var_extreme_dtm.md),
-[`derive_var_merged_summary()`](https:/pharmaverse.github.io/admiral/test_cicd/reference/derive_var_merged_summary.md),
-[`dthcaus_source()`](https:/pharmaverse.github.io/admiral/test_cicd/reference/dthcaus_source.md),
-[`get_summary_records()`](https:/pharmaverse.github.io/admiral/test_cicd/reference/get_summary_records.md)
+[`call_user_fun()`](https:/pharmaverse.github.io/admiral/test_cicd/test_cicd/reference/call_user_fun.md),
+[`date_source()`](https:/pharmaverse.github.io/admiral/test_cicd/test_cicd/reference/date_source.md),
+[`derive_param_extreme_record()`](https:/pharmaverse.github.io/admiral/test_cicd/test_cicd/reference/derive_param_extreme_record.md),
+[`derive_var_extreme_dt()`](https:/pharmaverse.github.io/admiral/test_cicd/test_cicd/reference/derive_var_extreme_dt.md),
+[`derive_var_extreme_dtm()`](https:/pharmaverse.github.io/admiral/test_cicd/test_cicd/reference/derive_var_extreme_dtm.md),
+[`derive_var_merged_summary()`](https:/pharmaverse.github.io/admiral/test_cicd/test_cicd/reference/derive_var_merged_summary.md),
+[`dthcaus_source()`](https:/pharmaverse.github.io/admiral/test_cicd/test_cicd/reference/dthcaus_source.md),
+[`get_summary_records()`](https:/pharmaverse.github.io/admiral/test_cicd/test_cicd/reference/get_summary_records.md)
 
 ## Examples
 
@@ -120,11 +120,6 @@ src_ae <- dthcaus_source(
   mode = "first",
   dthcaus = AEDECOD
 )
-#> Warning: `dthcaus_source()` was deprecated in admiral 1.2.0.
-#> ℹ Please use `event()` instead.
-#> ✖ This message will turn into an error at the beginning of 2027.
-#> ℹ See admiral's deprecation guidance:
-#>   https://pharmaverse.github.io/admiraldev/dev/articles/programming_strategy.html#deprecation
 
 src_ds <- dthcaus_source(
   dataset_name = "ds",
@@ -135,17 +130,7 @@ src_ds <- dthcaus_source(
 )
 
 derive_var_dthcaus(adsl, src_ae, src_ds, source_datasets = list(ae = ae, ds = ds))
-#> Warning: `derive_var_dthcaus()` was deprecated in admiral 1.2.0.
-#> ℹ Please use `derive_vars_extreme_event()` instead.
-#> ✖ This message will turn into an error at the beginning of 2027.
-#> ℹ See admiral's deprecation guidance:
-#>   https://pharmaverse.github.io/admiraldev/dev/articles/programming_strategy.html#deprecation
-#> # A tibble: 3 × 3
-#>   STUDYID USUBJID DTHCAUS                            
-#>   <chr>   <chr>   <chr>                              
-#> 1 STUDY01 PAT01   SUDDEN DEATH                       
-#> 2 STUDY01 PAT02   DEATH DUE TO PROGRESSION OF DISEASE
-#> 3 STUDY01 PAT03   NA                                 
+#> Error in derive_var_dthcaus(adsl, src_ae, src_ds, source_datasets = list(ae = ae,     ds = ds)): Required variable `USUBJID2` is missing in `dataset`
 
 # Derive `DTHCAUS` and add traceability variables - for on-study deaths only
 src_ae <- dthcaus_source(
@@ -167,12 +152,7 @@ src_ds <- dthcaus_source(
 )
 
 derive_var_dthcaus(adsl, src_ae, src_ds, source_datasets = list(ae = ae, ds = ds))
-#> # A tibble: 3 × 5
-#>   STUDYID USUBJID DTHCAUS                             DTHDOM DTHSEQ
-#>   <chr>   <chr>   <chr>                               <chr>   <dbl>
-#> 1 STUDY01 PAT01   SUDDEN DEATH                        AE         12
-#> 2 STUDY01 PAT02   DEATH DUE TO PROGRESSION OF DISEASE DS          3
-#> 3 STUDY01 PAT03   NA                                  NA         NA
+#> Error in derive_var_dthcaus(adsl, src_ae, src_ds, source_datasets = list(ae = ae,     ds = ds)): Required variable `USUBJID2` is missing in `dataset`
 
 # Derive `DTHCAUS` as above - now including post-study deaths with different `DTHCAUS` value
 src_ae <- dthcaus_source(
@@ -212,10 +192,5 @@ derive_var_dthcaus(
   src_ae, src_ds, src_ds_post,
   source_datasets = list(ae = ae, ds = ds)
 )
-#> # A tibble: 3 × 5
-#>   STUDYID USUBJID DTHCAUS                             DTHDOM DTHSEQ
-#>   <chr>   <chr>   <chr>                               <chr>   <dbl>
-#> 1 STUDY01 PAT01   SUDDEN DEATH                        AE         12
-#> 2 STUDY01 PAT02   DEATH DUE TO PROGRESSION OF DISEASE DS          3
-#> 3 STUDY01 PAT03   POST STUDY: UNKNOWN CAUSE           DS          1
+#> Error in derive_var_dthcaus(adsl, src_ae, src_ds, src_ds_post, source_datasets = list(ae = ae,     ds = ds)): Required variable `USUBJID2` is missing in `dataset`
 ```

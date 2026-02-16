@@ -57,7 +57,7 @@ create_single_dose_dataset(
   A date object is expected. This object cannot contain `NA` values.
 
   Refer to
-  [`derive_vars_dt()`](https:/pharmaverse.github.io/admiral/test_cicd/reference/derive_vars_dt.md)
+  [`derive_vars_dt()`](https:/pharmaverse.github.io/admiral/test_cicd/test_cicd/reference/derive_vars_dt.md)
   to impute and derive a date from a date character vector to a date
   object.
 
@@ -73,7 +73,7 @@ create_single_dose_dataset(
   values.
 
   Refer to
-  [`derive_vars_dtm()`](https:/pharmaverse.github.io/admiral/test_cicd/reference/derive_vars_dtm.md)
+  [`derive_vars_dtm()`](https:/pharmaverse.github.io/admiral/test_cicd/test_cicd/reference/derive_vars_dtm.md)
   to impute and derive a date-time from a date character vector to a
   date object.
 
@@ -92,7 +92,7 @@ create_single_dose_dataset(
   `NA` values.
 
   Refer to
-  [`derive_vars_dt()`](https:/pharmaverse.github.io/admiral/test_cicd/reference/derive_vars_dt.md)
+  [`derive_vars_dt()`](https:/pharmaverse.github.io/admiral/test_cicd/test_cicd/reference/derive_vars_dt.md)
   to impute and derive a date from a date character vector to a date
   object.
 
@@ -108,7 +108,7 @@ create_single_dose_dataset(
   values.
 
   Refer to
-  [`derive_vars_dtm()`](https:/pharmaverse.github.io/admiral/test_cicd/reference/derive_vars_dtm.md)
+  [`derive_vars_dtm()`](https:/pharmaverse.github.io/admiral/test_cicd/test_cicd/reference/derive_vars_dtm.md)
   to impute and derive a date-time from a date character vector to a
   date object.
 
@@ -128,7 +128,7 @@ create_single_dose_dataset(
   table other than the default is used, it must have columns
   `DOSE_WINDOW`, `DOSE_COUNT`, and `CONVERSION_FACTOR`. The default
   table `dose_freq_lookup` is described in detail
-  [here](https:/pharmaverse.github.io/admiral/test_cicd/reference/dose_freq_lookup.md).
+  [here](https:/pharmaverse.github.io/admiral/test_cicd/test_cicd/reference/dose_freq_lookup.md).
 
   Permitted Values for `DOSE_WINDOW`: `"MINUTE"`, `"HOUR"`, `"DAY"`,
   `"WEEK"`, `"MONTH"`, `"YEAR"`
@@ -194,9 +194,9 @@ dataset unchanged.
 ## See also
 
 Creating auxiliary datasets:
-[`consolidate_metadata()`](https:/pharmaverse.github.io/admiral/test_cicd/reference/consolidate_metadata.md),
-[`create_period_dataset()`](https:/pharmaverse.github.io/admiral/test_cicd/reference/create_period_dataset.md),
-[`create_query_data()`](https:/pharmaverse.github.io/admiral/test_cicd/reference/create_query_data.md)
+[`consolidate_metadata()`](https:/pharmaverse.github.io/admiral/test_cicd/test_cicd/reference/consolidate_metadata.md),
+[`create_period_dataset()`](https:/pharmaverse.github.io/admiral/test_cicd/test_cicd/reference/create_period_dataset.md),
+[`create_query_data()`](https:/pharmaverse.github.io/admiral/test_cicd/test_cicd/reference/create_query_data.md)
 
 ## Examples
 
@@ -219,18 +219,7 @@ data <- tribble(
 )
 
 create_single_dose_dataset(data)
-#> # A tibble: 9 × 5
-#>   STUDYID USUBJID EXDOSFRQ ASTDT      AENDT     
-#>   <chr>   <chr>   <chr>    <date>     <date>    
-#> 1 STUDY01 P01     ONCE     2021-01-01 2021-01-01
-#> 2 STUDY01 P01     ONCE     2021-01-03 2021-01-03
-#> 3 STUDY01 P01     ONCE     2021-01-05 2021-01-05
-#> 4 STUDY01 P01     ONCE     2021-01-07 2021-01-07
-#> 5 STUDY01 P01     ONCE     2021-01-08 2021-01-08
-#> 6 STUDY01 P01     ONCE     2021-01-11 2021-01-11
-#> 7 STUDY01 P01     ONCE     2021-01-14 2021-01-14
-#> 8 STUDY01 P01     ONCE     2021-01-15 2021-01-15
-#> 9 STUDY01 P01     ONCE     2021-01-29 2021-01-29
+#> Error in create_single_dose_dataset(data): Required variable `USUBJID2` is missing in `dataset`
 
 # Example with custom lookup
 
@@ -254,16 +243,7 @@ create_single_dose_dataset(data,
   start_datetime = ASTDTM,
   end_datetime = AENDTM
 )
-#> # A tibble: 6 × 7
-#>   STUDYID USUBJID EXDOSFRQ ASTDT      ASTDTM              AENDT     
-#>   <chr>   <chr>   <chr>    <date>     <dttm>              <date>    
-#> 1 STUDY01 P01     ONCE     2021-01-01 2021-01-01 06:00:00 2021-01-01
-#> 2 STUDY01 P01     ONCE     2021-01-01 2021-01-01 06:30:00 2021-01-01
-#> 3 STUDY01 P01     ONCE     2021-01-01 2021-01-01 07:00:00 2021-01-01
-#> 4 STUDY02 P02     ONCE     2021-01-01 2021-01-01 06:00:00 2021-01-01
-#> 5 STUDY02 P02     ONCE     2021-01-01 2021-01-01 07:30:00 2021-01-01
-#> 6 STUDY02 P02     ONCE     2021-01-01 2021-01-01 09:00:00 2021-01-01
-#> # ℹ 1 more variable: AENDTM <dttm>
+#> Error in create_single_dose_dataset(data, lookup_table = custom_lookup,     lookup_column = Value, start_datetime = ASTDTM, end_datetime = AENDTM): Required variable `USUBJID2` is missing in `dataset`
 # Example with nominal time
 
 data <- tribble(
@@ -387,6 +367,7 @@ ex_mod <- ex %>%
     STUDYID, USUBJID, EXTRT, EXDOSE, EXDOSFRQ, DCUTDT, DTHDT, EXSTDT,
     EXSTDTM, EXENDT, EXENDTM, EXSTDTC, EXENDTC
   )
+#> Error in derive_vars_merged(., adsl_death, by_vars = get_admiral_option("subject_keys")): Required variable `USUBJID2` is missing in `dataset`
 
 create_single_dose_dataset(
   ex_mod,
@@ -399,20 +380,5 @@ create_single_dose_dataset(
     DCUTDT, EXSTDT, EXSTDTM, EXENDT, EXENDTM, EXSTDTC, EXENDTC
   )
 )
-#> # A tibble: 553 × 12
-#>    STUDYID USUBJID EXTRT EXDOSE EXDOSFRQ DCUTDT     EXSTDT    
-#>    <chr>   <chr>   <chr>  <dbl> <chr>    <date>     <date>    
-#>  1 01      1015    PLAC       0 ONCE     2015-03-06 2014-01-02
-#>  2 01      1015    PLAC       0 ONCE     2015-03-06 2014-01-03
-#>  3 01      1015    PLAC       0 ONCE     2015-03-06 2014-01-04
-#>  4 01      1015    PLAC       0 ONCE     2015-03-06 2014-01-05
-#>  5 01      1015    PLAC       0 ONCE     2015-03-06 2014-01-06
-#>  6 01      1015    PLAC       0 ONCE     2015-03-06 2014-01-07
-#>  7 01      1015    PLAC       0 ONCE     2015-03-06 2014-01-08
-#>  8 01      1015    PLAC       0 ONCE     2015-03-06 2014-01-09
-#>  9 01      1015    PLAC       0 ONCE     2015-03-06 2014-01-10
-#> 10 01      1015    PLAC       0 ONCE     2015-03-06 2014-01-11
-#> # ℹ 543 more rows
-#> # ℹ 5 more variables: EXSTDTM <dttm>, EXENDT <date>, EXENDTM <dttm>,
-#> #   EXSTDTC <chr>, EXENDTC <chr>
+#> Error: object 'ex_mod' not found
 ```

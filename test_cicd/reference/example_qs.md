@@ -25,8 +25,8 @@ Created by
 ## See also
 
 Other datasets:
-[`admiral_adlb`](https:/pharmaverse.github.io/admiral/test_cicd/reference/admiral_adlb.md),
-[`admiral_adsl`](https:/pharmaverse.github.io/admiral/test_cicd/reference/admiral_adsl.md),
-[`ex_single`](https:/pharmaverse.github.io/admiral/test_cicd/reference/ex_single.md),
-[`queries`](https:/pharmaverse.github.io/admiral/test_cicd/reference/queries.md),
-[`queries_mh`](https:/pharmaverse.github.io/admiral/test_cicd/reference/queries_mh.md)
+[`admiral_adlb`](https:/pharmaverse.github.io/admiral/test_cicd/test_cicd/reference/admiral_adlb.md),
+[`admiral_adsl`](https:/pharmaverse.github.io/admiral/test_cicd/test_cicd/reference/admiral_adsl.md),
+[`ex_single`](https:/pharmaverse.github.io/admiral/test_cicd/test_cicd/reference/ex_single.md),
+[`queries`](https:/pharmaverse.github.io/admiral/test_cicd/test_cicd/reference/queries.md),
+[`queries_mh`](https:/pharmaverse.github.io/admiral/test_cicd/test_cicd/reference/queries_mh.md)
