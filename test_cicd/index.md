@@ -64,26 +64,26 @@ Phases:
 releases are on a content-basis and as such may be more infrequent than
 the below schedule shows, or there may even be ad-hoc releases.
 
-| Release Schedule | Phase 1- Date and Packages                                          | Phase 2- Date and Packages                                            |
-|------------------|---------------------------------------------------------------------|-----------------------------------------------------------------------|
-|                  |                                                                     |                                                                       |
-| Q2 2026          | Mid-June 2026                                                       | End of June 2026                                                      |
-|                  | [{pharmaversesdtm}](https://pharmaverse.github.io/pharmaversesdtm/) | [{admiralonco}](https://pharmaverse.github.io/admiralonco/)           |
-|                  | [{admiraldev}](https://pharmaverse.github.io/admiraldev/)           | [{admiralophtha}](https://pharmaverse.github.io/admiralophtha/)       |
-|                  | [{admiral}](https://pharmaverse.github.io/admiral/)                 | [{admiralvaccine}](https://pharmaverse.github.io/admiralvaccine/)     |
-|                  |                                                                     | [{admiralpeds}](https://pharmaverse.github.io/admiralpeds/)           |
-|                  |                                                                     | [{admiralmetabolic}](https://pharmaverse.github.io/admiralmetabolic/) |
-|                  |                                                                     | [{admiralneuro}](https://pharmaverse.github.io/admiralneuro/)         |
-|                  |                                                                     | [{pharmaverseadam}](https://pharmaverse.github.io/pharmaverseadam/)   |
-|                  |                                                                     |                                                                       |
-| Q4 2026/Q1 2027  | Late December 2026/Early January 2027                               | Mid-January 2027                                                      |
-|                  | [{pharmaversesdtm}](https://pharmaverse.github.io/pharmaversesdtm/) | [{admiralonco}](https://pharmaverse.github.io/admiralonco/)           |
-|                  | [{admiraldev}](https://pharmaverse.github.io/admiraldev/)           | [{admiralophtha}](https://pharmaverse.github.io/admiralophtha/)       |
-|                  | [{admiral}](https://pharmaverse.github.io/admiral/)                 | [{admiralvaccine}](https://pharmaverse.github.io/admiralvaccine/)     |
-|                  |                                                                     | [{admiralpeds}](https://pharmaverse.github.io/admiralpeds/)           |
-|                  |                                                                     | [{admiralmetabolic}](https://pharmaverse.github.io/admiralmetabolic/) |
-|                  |                                                                     | [{admiralneuro}](https://pharmaverse.github.io/admiralneuro/)         |
-|                  |                                                                     | [{pharmaverseadam}](https://pharmaverse.github.io/pharmaverseadam/)   |
+| Release Schedule | Phase 1- Date and Packages | Phase 2- Date and Packages |
+|----|----|----|
+|  |  |  |
+| Q2 2026 | Mid-June 2026 | End of June 2026 |
+|  | [{pharmaversesdtm}](https://pharmaverse.github.io/pharmaversesdtm/) | [{admiralonco}](https://pharmaverse.github.io/admiralonco/) |
+|  | [{admiraldev}](https://pharmaverse.github.io/admiraldev/) | [{admiralophtha}](https://pharmaverse.github.io/admiralophtha/) |
+|  | [{admiral}](https://pharmaverse.github.io/admiral/) | [{admiralvaccine}](https://pharmaverse.github.io/admiralvaccine/) |
+|  |  | [{admiralpeds}](https://pharmaverse.github.io/admiralpeds/) |
+|  |  | [{admiralmetabolic}](https://pharmaverse.github.io/admiralmetabolic/) |
+|  |  | [{admiralneuro}](https://pharmaverse.github.io/admiralneuro/) |
+|  |  | [{pharmaverseadam}](https://pharmaverse.github.io/pharmaverseadam/) |
+|  |  |  |
+| Q4 2026/Q1 2027 | Late December 2026/Early January 2027 | Mid-January 2027 |
+|  | [{pharmaversesdtm}](https://pharmaverse.github.io/pharmaversesdtm/) | [{admiralonco}](https://pharmaverse.github.io/admiralonco/) |
+|  | [{admiraldev}](https://pharmaverse.github.io/admiraldev/) | [{admiralophtha}](https://pharmaverse.github.io/admiralophtha/) |
+|  | [{admiral}](https://pharmaverse.github.io/admiral/) | [{admiralvaccine}](https://pharmaverse.github.io/admiralvaccine/) |
+|  |  | [{admiralpeds}](https://pharmaverse.github.io/admiralpeds/) |
+|  |  | [{admiralmetabolic}](https://pharmaverse.github.io/admiralmetabolic/) |
+|  |  | [{admiralneuro}](https://pharmaverse.github.io/admiralneuro/) |
+|  |  | [{pharmaverseadam}](https://pharmaverse.github.io/pharmaverseadam/) |
 
 ## Main Goal
 
@@ -136,7 +136,8 @@ There are three types of packages in the
   particular TA
   (e.g. [`{admiralonco}`](https://pharmaverse.github.io/admiralonco/)).
 - Company package extensions—specific needs and plug-ins for the
-  company, such as access to metadata (e.g. `{admiralroche}` or
+  company, such as access to metadata
+  (e.g. [admiralroche](https://docs.roche.com/#/admiralroche/latest) or
   `{admiralgsk}`).
 
 ## Related Packages

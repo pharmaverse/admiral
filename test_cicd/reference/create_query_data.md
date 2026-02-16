@@ -183,6 +183,11 @@ Creating auxiliary datasets:
 library(tibble)
 library(dplyr, warn.conflicts = FALSE)
 library(pharmaversesdtm)
+#> 
+#> Attaching package: ‘pharmaversesdtm’
+#> The following objects are masked _by_ ‘.GlobalEnv’:
+#> 
+#>     ae, vs
 library(admiral)
 
 # creating a query dataset for a customized query

@@ -105,8 +105,9 @@ you the simplest experience of helping to grow and enhance our codebase.
         guidance](https://pharmaverse.github.io/admiraldev/articles/programming_strategy.html#deprecation)?
     4.  Did you update the
         \[documentation\]<https://pharmaverse.github.io/admiraldev/articles/programming_strategy.html#function-header-documentation>)?
-        If so, remember to run `devtools::document()` and include the
-        updated `NAMESPACE` and `.Rd` files in `man/`.
+        If so, remember to run
+        [`devtools::document()`](https://devtools.r-lib.org/reference/document.html)
+        and include the updated `NAMESPACE` and `.Rd` files in `man/`.
     5.  Does your code update have any impact on the [ADaM
         template](https://pharmaverse.github.io/admiral/cran-release/articles/admiral.html#starting-a-script)
         R scripts stored in `inst/templates`?

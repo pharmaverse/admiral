@@ -82,4 +82,5 @@ Utilities used for examples and template scripts:
 if (interactive()) {
   use_ad_template("adsl")
 }
+#> ✔ File ./adsl.R has been created successfully
 ```

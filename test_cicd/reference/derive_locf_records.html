@@ -274,7 +274,7 @@ previous observation in the input dataset (when sorted by <code>order</code>) an
 <p>Imputed records should be added for missing timepoints and for missing
 <code>analysis_var</code> (from <code>dataset_ref</code>), while retaining all original records.</p><ul><li><p>The reference dataset for the imputed records is specified by the <code>dataset_add</code>
 argument. It should contain all expected combinations of variables. In this case,
-<code>advs_expected_obsv</code> is created by <code>crossing()</code> datasets <code>paramcd</code> and <code>avisit</code>, which
+<code>advs_expected_obsv</code> is created by <code><a href="https://tidyr.tidyverse.org/reference/expand.html" class="external-link">crossing()</a></code> datasets <code>paramcd</code> and <code>avisit</code>, which
 includes all combinations of PARAMCD, AVISITN, and AVISIT.</p></li>
 <li><p>The groups for which new records are added are specified by the <code>by_vars</code>
 argument. Here, one record should be added for each <em>subject</em> and <em>parameter</em>.

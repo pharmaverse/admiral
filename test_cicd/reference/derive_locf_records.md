@@ -190,8 +190,9 @@ records.
 - The reference dataset for the imputed records is specified by the
   `dataset_add` argument. It should contain all expected combinations of
   variables. In this case, `advs_expected_obsv` is created by
-  `crossing()` datasets `paramcd` and `avisit`, which includes all
-  combinations of PARAMCD, AVISITN, and AVISIT.
+  [`crossing()`](https://tidyr.tidyverse.org/reference/expand.html)
+  datasets `paramcd` and `avisit`, which includes all combinations of
+  PARAMCD, AVISITN, and AVISIT.
 
 - The groups for which new records are added are specified by the
   `by_vars` argument. Here, one record should be added for each

@@ -68,28 +68,28 @@ create the grade.
 Each metadata data set has the following structure for the required
 variables:
 
-| Variable                | Scope                                                                                                                  | Type      | Example Value                                                          |
-|-------------------------|------------------------------------------------------------------------------------------------------------------------|-----------|------------------------------------------------------------------------|
-| **TERM**                | Term describing the criteria applied to a particular lab test.                                                         | Character | “Anemia”                                                               |
-| **DIRECTION**           | The direction of the abnormality of a particular lab test value                                                        | Character | “L” or “H”.                                                            |
-| **UNIT_CHECK**          | Unit of lab test, to check against input data if criteria is based on absolute values.                                 | Character | “mmol/L”                                                               |
-| **VAR_CHECK**           | Comma separated list of variables used in criteria, to check input data that variables exist.                          | Character | “AVAL, ANRLO”                                                          |
-| **FILTER**              | Only required for DAIDS grading. Variable to hold code that filters the lab data based on contents of column SUBGROUP. | Character | R code that is valid within a `filter` function call.                  |
-| **GRADE_CRITERIA_CODE** | Variable to hold code that creates grade based on defined criteria.                                                    | Character | R code that is a valid case statement within a `mutate` function call. |
+| Variable | Scope | Type | Example Value |
+|----|----|----|----|
+| **TERM** | Term describing the criteria applied to a particular lab test. | Character | “Anemia” |
+| **DIRECTION** | The direction of the abnormality of a particular lab test value | Character | “L” or “H”. |
+| **UNIT_CHECK** | Unit of lab test, to check against input data if criteria is based on absolute values. | Character | “mmol/L” |
+| **VAR_CHECK** | Comma separated list of variables used in criteria, to check input data that variables exist. | Character | “AVAL, ANRLO” |
+| **FILTER** | Only required for DAIDS grading. Variable to hold code that filters the lab data based on contents of column SUBGROUP. | Character | R code that is valid within a `filter` function call. |
+| **GRADE_CRITERIA_CODE** | Variable to hold code that creates grade based on defined criteria. | Character | R code that is a valid case statement within a `mutate` function call. |
 
 The metadata data set has the following structure for the optional
 variables:
 
-| Variable       | Scope                                                                                                                                                             | Type      | Example Value                                                                                                                                         |
-|----------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------|-----------|-------------------------------------------------------------------------------------------------------------------------------------------------------|
-| **SOC**        | System Organ Class the lab test belongs to.                                                                                                                       | Character | “Investigations”                                                                                                                                      |
-| **SUBGROUP**   | Only required for DAIDS grading. Description of subgroup of lab data.                                                                                             | Character | “\> 15 years of age”.                                                                                                                                 |
-| **GRADE_1**    | Grade 1 criteria for lab test, normally straight from source document.                                                                                            | Character | “\>ULN - 3.0 x ULN”.                                                                                                                                  |
-| **GRADE_2**    | Grade 2 criteria for lab test, normally straight from source document.                                                                                            | Character | “\>3.0 - 5.0 x ULN”.                                                                                                                                  |
-| **GRADE_3**    | Grade 3 criteria for lab test, normally straight from source document.                                                                                            | Character | “\>5.0 - 20.0 x ULN”.                                                                                                                                 |
-| **GRADE_4**    | Grade 4 criteria for lab test, normally straight from source document.                                                                                            | Character | “\>20.0 x ULN”.                                                                                                                                       |
-| **DEFINITION** | Definition of abnormality, normally from source document.                                                                                                         | Character | “A finding based on laboratory test results that indicate an increase in the level of alanine aminotransferase (ALT or SGPT) in the blood specimen.”. |
-| **COMMENT**    | Description of any decisions made by [admiral](https://pharmaverse.github.io/admiral/) to implement grading criteria, where grading criteria alone was ambiguous. | Character | “Take worst case and assume on anticoagulation”.                                                                                                      |
+| Variable | Scope | Type | Example Value |
+|----|----|----|----|
+| **SOC** | System Organ Class the lab test belongs to. | Character | “Investigations” |
+| **SUBGROUP** | Only required for DAIDS grading. Description of subgroup of lab data. | Character | “\> 15 years of age”. |
+| **GRADE_1** | Grade 1 criteria for lab test, normally straight from source document. | Character | “\>ULN - 3.0 x ULN”. |
+| **GRADE_2** | Grade 2 criteria for lab test, normally straight from source document. | Character | “\>3.0 - 5.0 x ULN”. |
+| **GRADE_3** | Grade 3 criteria for lab test, normally straight from source document. | Character | “\>5.0 - 20.0 x ULN”. |
+| **GRADE_4** | Grade 4 criteria for lab test, normally straight from source document. | Character | “\>20.0 x ULN”. |
+| **DEFINITION** | Definition of abnormality, normally from source document. | Character | “A finding based on laboratory test results that indicate an increase in the level of alanine aminotransferase (ALT or SGPT) in the blood specimen.”. |
+| **COMMENT** | Description of any decisions made by [admiral](https://pharmaverse.github.io/admiral/) to implement grading criteria, where grading criteria alone was ambiguous. | Character | “Take worst case and assume on anticoagulation”. |
 
 ## Handling floating points when comparing numeric values
 

@@ -188,7 +188,7 @@ data manipulation is being performed SAS blanks should be converted to R
 <code>NA</code>s using <a href="https://pharmaverse.github.io/admiral/" class="external-link">admiral</a>’s
 <code><a href="../reference/convert_blanks_to_na.html">convert_blanks_to_na()</a></code> function, e.g.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">dm</span> <span class="op">&lt;-</span> <span class="fu">haven</span><span class="fu">::</span><span class="fu">read_sas</span><span class="op">(</span><span class="st">"dm.sas7bdat"</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
+<code class="sourceCode R"><span><span class="va">dm</span> <span class="op">&lt;-</span> <span class="fu">haven</span><span class="fu">::</span><span class="fu"><a href="https://haven.tidyverse.org/reference/read_sas.html" class="external-link">read_sas</a></span><span class="op">(</span><span class="st">"dm.sas7bdat"</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
 <span>  <span class="fu"><a href="../reference/convert_blanks_to_na.html">convert_blanks_to_na</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <p>Note that any logical operator being applied to an <code>NA</code>
 value <em>always</em> returns <code>NA</code> rather than

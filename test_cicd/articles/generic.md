@@ -54,7 +54,7 @@ specify the source datasets is the same across all generic functions.
 
 For functions expecting a single source dataset the data is provided by
 the `dataset_add` argument. This is a mandatory argument. The data
-provided by the `dataset` argument is not used[¹](#fn1).
+provided by the `dataset` argument is not used[^1].
 
 If the `dataset_add` argument is not provided, the data from `dataset`
 is used
@@ -720,7 +720,5 @@ derive_param_computed(
 #> 12 2       MONTH 6  BMI      19.6 kg/m^2
 ```
 
-------------------------------------------------------------------------
-
-1.  [`derive_param_computed()`](https:/pharmaverse.github.io/admiral/test_cicd/reference/derive_param_computed.md)
+[^1]: [`derive_param_computed()`](https:/pharmaverse.github.io/admiral/test_cicd/reference/derive_param_computed.md)
     is an exception. It uses the data from both arguments.
