@@ -54,6 +54,7 @@ A named list of expressions is expected:
 \item RHS refers to the values to set to the variable. This can be a string, a
 symbol, a numeric value, an expression or NA. If summary functions are
 used, the values are summarized by the variables specified for \code{by_vars}.
+Any expression on the RHS must result in a single value per by group.
 }
 
 For example:

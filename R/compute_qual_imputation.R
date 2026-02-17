@@ -21,14 +21,16 @@
 #'
 #' @examples
 #' compute_qual_imputation_dec("<40.1")
+#' compute_qual_imputation_dec(c("0.35", "1"))
 compute_qual_imputation_dec <- function(character_value_decimal) {
-  decimal <- ifelse(str_detect(character_value_decimal, "\\."),
-    1 / (10^(str_length(str_trim(character_value_decimal)) - # nolint
-      str_locate(str_trim(character_value_decimal), "\\."))),
-    1 / (10^0)
+  x <- str_trim(character_value_decimal)
+
+  decimal <- case_when(
+    str_detect(x, "\\.") ~ 1 / (10^(str_length(x) - str_locate(x, "\\.")[, 1])),
+    TRUE ~ 1
   )
 
-  decimal
+  unname(decimal)
 }
 
 #' Function to Impute Values When Qualifier Exists in Character Result
@@ -60,11 +62,19 @@ compute_qual_imputation_dec <- function(character_value_decimal) {
 #'
 #' @examples
 #' compute_qual_imputation("<40")
+#' compute_qual_imputation(c("3", ">30.2"))
 compute_qual_imputation <- function(character_value, imputation_type = 1, factor = 0) {
-  numeric_value <- ifelse(grepl("[A-z]", character_value),
-    NA_real_,
-    as.numeric(gsub("=|>|<", "", character_value))
-  )
+  clean_value <- character_value
+
+  # Identify strings with letters and set to NA immediately to avoid warning with
+  # as.numeric() later down
+  has_letters <- str_detect(clean_value, "[A-Za-z]")
+  clean_value[has_letters] <- NA_character_
+
+  # Remove symbols from the remaining valid strings
+  clean_value <- gsub("=|>|<", "", clean_value)
+
+  numeric_value <- as.numeric(clean_value)
 
   if (imputation_type == 1) {
     numeric_value <-

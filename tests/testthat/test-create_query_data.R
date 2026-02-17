@@ -351,7 +351,7 @@ test_that("create_query_data Test 8: error if no `get_terms_fun` provided", {
 ## Test 9: catching error from user function (get_terms_fun) ----
 test_that("create_query_data Test 9: catching error from user function (get_terms_fun)", {
   faulty_fun <- function(version, basket_select, keep_id, temp_env) {
-    stop("Intentional error for testing")
+    cli_abort("Intentional error for testing")
   }
 
   pregsmq <- query(

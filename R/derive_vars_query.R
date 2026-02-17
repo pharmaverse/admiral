@@ -121,15 +121,9 @@ get_vars_query <- function(dataset, dataset_queries) {
     group_by(PREFIX) %>%
     mutate(
       NAM = paste0(PREFIX, "NAM"),
-      CD = ifelse(!all(is.na(GRPID)),
-        paste0(PREFIX, "CD"), NA_character_
-      ),
-      SC = ifelse(!all(is.na(SCOPE)),
-        paste0(PREFIX, "SC"), NA_character_
-      ),
-      SCN = ifelse(!all(is.na(SCOPEN)),
-        paste0(PREFIX, "SCN"), NA_character_
-      )
+      CD = ifelse(!all(is.na(GRPID)), paste0(PREFIX, "CD"), NA_character_), # nolint
+      SC = ifelse(!all(is.na(SCOPE)), paste0(PREFIX, "SC"), NA_character_), # nolint
+      SCN = ifelse(!all(is.na(SCOPEN)), paste0(PREFIX, "SCN"), NA_character_) # nolint
     ) %>%
     ungroup() %>%
     select(NAM, CD, SC, SCN) %>%
@@ -169,11 +163,9 @@ get_vars_query <- function(dataset, dataset_queries) {
     # numeric -> TERMNUM, character -> TERMCHAR, otherwise -> error
     mutate(
       tmp_col_type = vapply(dataset[SRCVAR], typeof, character(1)),
-      TERM_NAME_ID = ifelse(
-        tmp_col_type == "character",
-        toupper(TERMCHAR),
-        as.character(TERMNUM)
-      )
+      # ifelse() used as if_else() would evaluate both the TRUE and FALSE
+      # conditions even if one not used
+      TERM_NAME_ID = ifelse(tmp_col_type %in% "character", toupper(TERMCHAR), as.character(TERMNUM)) # nolint
     )
 
   # prepare input dataset for joining
@@ -295,7 +287,12 @@ derive_vars_query <- function(dataset, dataset_queries) {
       joined <- get_vars_query(dataset, dataset_queries)
     },
     error = function(e) {
-      stop("Error in derive_vars_query call of get_vars_query: ", e)
+      cli::cli_abort(
+        message = c(
+          "Error in {.fn derive_vars_query} during the call to {.fn get_vars_query}."
+        ),
+        parent = e
+      )
     }
   )
   # join queries to input dataset, remove temp col(s)
@@ -339,7 +336,7 @@ assert_valid_queries <- function(queries, queries_name) {
   )
 
   # check illegal prefix category
-  is_good_prefix <- grepl("^[a-zA-Z]{2,3}", queries$PREFIX)
+  is_good_prefix <- str_detect(queries$PREFIX, "^[a-zA-Z]{2,3}")
   if (!all(is_good_prefix)) {
     cli_abort(
       paste0(
@@ -404,9 +401,7 @@ assert_valid_queries <- function(queries, queries_name) {
     group_by(PREFIX) %>%
     summarise(
       n_qnam = length(unique(GRPNAME)),
-      n_qid = ifelse("GRPID" %in% names(queries),
-        length(unique(GRPID)), 0
-      )
+      n_qid = if ("GRPID" %in% names(queries)) length(unique(GRPID)) else 0
     ) %>%
     ungroup()
 

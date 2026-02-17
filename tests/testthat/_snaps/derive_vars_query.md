@@ -3,8 +3,9 @@
     Code
       derive_vars_query(mutate(my_ae, AELLTCD = as.logical(AELLTCD)), query)
     Condition
-      Error in `value[[3L]]()`:
-      ! Error in derive_vars_query call of get_vars_query: Error in `get_vars_query()`:
+      Error in `derive_vars_query()`:
+      ! Error in `derive_vars_query()` during the call to `get_vars_query()`.
+      Caused by error in `get_vars_query()`:
       ! The source variables (values of `SRCVAR`) must be numeric or character.
       i AELLTCD is of type logical
 
@@ -13,8 +14,9 @@
     Code
       derive_vars_query(my_ae, query)
     Condition
-      Error in `value[[3L]]()`:
-      ! Error in derive_vars_query call of get_vars_query: Error in `get_vars_query()`:
+      Error in `derive_vars_query()`:
+      ! Error in `derive_vars_query()` during the call to `get_vars_query()`.
+      Caused by error in `get_vars_query()`:
       ! Either `TERMCHAR` or `TERMNUM` need to be specified in `dataset_queries`. They both cannot be NA or empty.
 
 # derive_vars_query Test 9: Error if requested variables already exist
@@ -22,8 +24,9 @@
     Code
       derive_vars_query(adae, queries)
     Condition
-      Error in `value[[3L]]()`:
-      ! Error in derive_vars_query call of get_vars_query: Error in `get_vars_query()`:
+      Error in `derive_vars_query()`:
+      ! Error in `derive_vars_query()` during the call to `get_vars_query()`.
+      Caused by error in `get_vars_query()`:
       ! The following variables requested by `dataset_queries` already exist in `dataset`: `SMQ03NAM`, `SMQ03CD`, `SMQ03SC`, and `SMQ03SCN`
 
 # assert_valid_queries Test 11: assert_valid_queries checks

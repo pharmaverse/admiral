@@ -11,8 +11,8 @@
       i See admiral's deprecation guidance: https://pharmaverse.github.io/admiraldev/dev/articles/programming_strategy.html#deprecation
     Code
       src_ds <- dthcaus_source(dataset_name = "ds", filter = DSDECOD == "DEATH" &
-        grepl("DEATH DUE TO", DSTERM), date = convert_dtc_to_dt(DSSTDTC), mode = "first",
-      dthcaus = str_to_upper(DSTERM))
+        str_detect(DSTERM, "DEATH DUE TO", ), date = convert_dtc_to_dt(DSSTDTC),
+      mode = "first", dthcaus = str_to_upper(DSTERM))
     Condition
       Warning:
       `dthcaus_source()` was deprecated in admiral 1.2.0.

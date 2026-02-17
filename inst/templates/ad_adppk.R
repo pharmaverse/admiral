@@ -67,8 +67,15 @@ pc_dates <- pc %>%
   # Derive event ID and nominal relative time from first dose (NFRLT)
   mutate(
     EVID = 0,
-    DRUG = PCTEST,
-    NFRLT = if_else(PCTPTNUM < 0, 0, PCTPTNUM), .after = USUBJID
+    DRUG = PCTEST
+  ) %>%
+  derive_var_nfrlt(
+    new_var = NFRLT,
+    out_unit = "HOURS",
+    tpt_var = PCTPT,
+    visit_day = VISITDY,
+    treatment_duration = 0,
+    range_method = "midpoint"
   )
 
 # ---- Get dosing information ----
@@ -97,11 +104,12 @@ ex_dates <- ex %>%
   ) %>%
   # Derive event ID and nominal relative time from first dose (NFRLT)
   mutate(
-    EVID = 1,
-    NFRLT = case_when(
-      VISITDY == 1 ~ 0,
-      TRUE ~ 24 * VISITDY
-    )
+    EVID = 1
+  ) %>%
+  derive_var_nfrlt(
+    new_var = NFRLT,
+    out_unit = "HOURS",
+    visit_day = VISITDY
   ) %>%
   # Set missing end dates to start date
   mutate(AENDTM = case_when(
@@ -224,7 +232,7 @@ adppk_aprlt <- bind_rows(adppk_nom_prev, ex_exp) %>%
     new_var = AFRLT,
     start_date = FANLDTM,
     end_date = ADTM,
-    out_unit = "hours",
+    out_unit = "HOURS",
     floor_in = FALSE,
     add_one = FALSE
   ) %>%
@@ -233,7 +241,7 @@ adppk_aprlt <- bind_rows(adppk_nom_prev, ex_exp) %>%
     new_var = APRLT,
     start_date = ADTM_prev,
     end_date = ADTM,
-    out_unit = "hours",
+    out_unit = "HOURS",
     floor_in = FALSE,
     add_one = FALSE
   ) %>%
@@ -434,7 +442,7 @@ covar_vslb <- covar %>%
     BMIBL = compute_bmi(height = HTBL, weight = WTBL),
     BSABL = compute_bsa(
       height = HTBL,
-      weight = HTBL,
+      weight = WTBL,
       method = "Mosteller"
     ),
     CRCLBL = compute_egfr(
