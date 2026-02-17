@@ -28,7 +28,7 @@
 
 .dropdown-menu {
   /* Set a larger fixed height (default is usually around 50vh or 300px) */
-  max-height: 50vh !important;
+  max-height: 100vh !important;
 
   /* Smooth scrolling if it does eventually need to scroll */
   overflow-y: auto !important;
