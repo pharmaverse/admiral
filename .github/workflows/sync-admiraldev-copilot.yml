@@ -1,0 +1,86 @@
+name: Sync admiraldev Documentation for GitHub Copilot
+
+on:
+  # Run monthly to keep content fresh
+  schedule:
+    - cron: '0 8 1 * *'  # 1st of every month at 8 AM UTC
+  
+  # Allow manual triggering
+  workflow_dispatch:
+  
+  # Run when admiraldev documentation changes (optional)
+  # repository_dispatch:
+  #   types: [admiraldev-updated]
+
+jobs:
+  sync-admiraldev-docs:
+    runs-on: ubuntu-latest
+    
+    permissions:
+      contents: write  # Needed to commit the updated file
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        
+      - name: Setup R
+        uses: r-lib/actions/setup-r@v2
+        with:
+          r-version: 'release'
+          
+      - name: Install R dependencies
+        run: |
+          R -e "install.packages('glue')"
+          
+      - name: Run admiraldev sync script
+        run: |
+          Rscript .github/scripts/sync_admiraldev_copilot.R
+          
+      - name: Check if copilot-instructions.md changed
+        id: check_changes
+        run: |
+          if git diff --quiet HEAD -- .github/copilot-instructions.md; then
+            echo "changed=false" >> $GITHUB_OUTPUT
+            echo "No changes detected in copilot-instructions.md"
+          else
+            echo "changed=true" >> $GITHUB_OUTPUT
+            echo "Changes detected in copilot-instructions.md"
+          fi
+          
+      - name: Commit updated documentation
+        if: steps.check_changes.outputs.changed == 'true'
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add .github/copilot-instructions.md
+          git commit -m "chore: update GitHub Copilot instructions from admiraldev
+
+          - Synced latest admiraldev programming strategy
+          - Updated unit testing guidance
+          - Auto-generated on $(date -u +'%Y-%m-%d %H:%M:%S UTC')
+          
+          [skip ci]"
+          
+      - name: Push changes
+        if: steps.check_changes.outputs.changed == 'true'
+        uses: ad-m/github-push-action@master
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          branch: ${{ github.ref }}
+          
+      - name: Create summary
+        run: |
+          echo "## 📋 Admiraldev Sync Summary" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          if [[ "${{ steps.check_changes.outputs.changed }}" == "true" ]]; then
+            echo "✅ **Changes detected and committed**" >> $GITHUB_STEP_SUMMARY
+            echo "- Updated \`.github/copilot-instructions.md\`" >> $GITHUB_STEP_SUMMARY
+            echo "- GitHub Copilot now has latest admiral guidelines" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "ℹ️ **No changes detected**" >> $GITHUB_STEP_SUMMARY
+            echo "- Copilot instructions are already up to date" >> $GITHUB_STEP_SUMMARY
+          fi
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Next scheduled run:** First day of next month" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Manual trigger:** Go to Actions → Sync admiraldev Documentation → Run workflow" >> $GITHUB_STEP_SUMMARY
