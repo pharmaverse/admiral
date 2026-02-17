@@ -27,6 +27,9 @@ of the navigation bar. Tooltips have also been set up for each of the icons on t
 
 <details>
 <summary>Developer Notes</summary>
+
+- Updated the maximum height of the drop-down menus in the website navigation bar to ensure all items are visible without scrolling. (#2974)
+
 </details>
 
 # admiral 1.4.1
