@@ -18,6 +18,7 @@ on:
   # 'pull_request' events are triggered when PRs are
   # created against one of these target branches.
   pull_request:
+    types: [opened, synchronize, reopened, closed]
     branches:
       - main
   # 'release' events are triggered when...
