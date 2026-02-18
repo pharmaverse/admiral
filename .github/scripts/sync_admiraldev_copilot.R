@@ -24,40 +24,115 @@ dir.create(dirname(copilot_instructions), recursive = TRUE, showWarnings = FALSE
 dir.create(dirname(agent_md_tests), recursive = TRUE, showWarnings = FALSE)
 
 cat("Creating AI assistant context files for admiral development...\n")
+cat(glue("GitHub raw base URL: {github_raw_base}\n"))
 
-# Download admiraldev content (with fallbacks)
+# Test if we can reach the URLs
+cat("Testing network connectivity...\n")
+test_url <- file.path(github_raw_base, "programming_strategy.Rmd")
+cat(glue("Testing URL: {test_url}\n"))
+
+# Download admiraldev content (with multiple methods and better error handling)
 download_admiraldev_content <- function() {
   programming_strategy <- NULL
   unit_test_guidance <- NULL
-
+  
+  # Test basic connectivity first
+  cat("Testing network connectivity to GitHub...\n")
+  can_connect <- FALSE
+  tryCatch({
+    # Simple connectivity test
+    con <- url("https://github.com", open = "rt")
+    close(con)
+    can_connect <- TRUE
+    cat("✓ GitHub connectivity confirmed\n")
+  }, error = function(e) {
+    cat("⚠ GitHub connectivity issue\n")
+  })
+  
+  if (!can_connect) {
+    cat("Network connectivity issues - using fallback content\n")
+    return(list(programming_strategy = NULL, unit_test_guidance = NULL))
+  }
+  
+  # Function to try multiple download methods with timeouts
+  try_download <- function(url, description) {
+    content <- NULL
+    
+    # Method 1: readLines with timeout
+    tryCatch({
+      con <- url(url, open = "rt")
+      on.exit(try(close(con), silent = TRUE))
+      content <- readLines(con, warn = FALSE, timeout = 30)
+      close(con)
+      on.exit()  # Cancel the on.exit
+      
+      if (length(content) > 10) {  # Basic sanity check
+        cat(glue("✓ Downloaded {description} (readLines, {length(content)} lines)\n"))
+        return(content)
+      }
+    }, error = function(e) {
+      cat(glue("⚠ Method 1 failed for {description}: {substr(e$message, 1, 50)}...\n"))
+    })
+    
+    # Method 2: download.file with timeout
+    tryCatch({
+      temp_file <- tempfile(fileext = ".Rmd")
+      result <- download.file(url, temp_file, quiet = TRUE, method = "auto", timeout = 30)
+      
+      if (result == 0 && file.exists(temp_file) && file.size(temp_file) > 100) {
+        content <- readLines(temp_file, warn = FALSE)
+        unlink(temp_file)
+        if (length(content) > 10) {
+          cat(glue("✓ Downloaded {description} (download.file, {length(content)} lines)\n"))
+          return(content)
+        }
+      }
+      unlink(temp_file)
+    }, error = function(e) {
+      cat(glue("⚠ Method 2 failed for {description}: {substr(e$message, 1, 50)}...\n"))
+    })
+    
+    # Method 3: curl with timeout if available
+    if (Sys.which("curl") != "") {
+      tryCatch({
+        temp_file <- tempfile(fileext = ".Rmd")
+        result <- system2("curl", c("-s", "-L", "--connect-timeout", "10", "--max-time", "30", "-o", temp_file, url), 
+                         stdout = FALSE, stderr = FALSE)
+        
+        if (result == 0 && file.exists(temp_file) && file.size(temp_file) > 100) {
+          content <- readLines(temp_file, warn = FALSE)
+          unlink(temp_file)
+          if (length(content) > 10) {
+            cat(glue("✓ Downloaded {description} (curl, {length(content)} lines)\n"))
+            return(content)
+          }
+        }
+        unlink(temp_file)
+      }, error = function(e) {
+        cat(glue("⚠ Method 3 (curl) failed for {description}: {substr(e$message, 1, 50)}...\n"))
+      })
+    }
+    
+    cat(glue("✗ All download methods failed for {description}\n"))
+    return(NULL)
+  }
+  
   # Try to download programming strategy
-  tryCatch(
-    {
-      programming_strategy <<- readLines(
-        file.path(github_raw_base, "programming_strategy.Rmd"),
-        warn = FALSE
-      )
-      cat("✓ Downloaded programming_strategy.Rmd\n")
-    },
-    error = function(e) {
-      cat("⚠ Could not download programming_strategy.Rmd\n")
-    }
+  programming_strategy <- try_download(
+    file.path(github_raw_base, "programming_strategy.Rmd"),
+    "programming_strategy.Rmd"
   )
-
-  # Try to download unit test guidance
-  tryCatch(
-    {
-      unit_test_guidance <<- readLines(
-        file.path(github_raw_base, "unit_test_guidance.Rmd"),
-        warn = FALSE
-      )
-      cat("✓ Downloaded unit_test_guidance.Rmd\n")
-    },
-    error = function(e) {
-      cat("⚠ Could not download unit_test_guidance.Rmd\n")
-    }
+  
+  # Try to download unit test guidance  
+  unit_test_guidance <- try_download(
+    file.path(github_raw_base, "unit_test_guidance.Rmd"),
+    "unit_test_guidance.Rmd"
   )
-
+  
+  # Summary
+  downloaded_count <- sum(!is.null(programming_strategy), !is.null(unit_test_guidance))
+  cat(glue("Successfully downloaded {downloaded_count}/2 admiraldev vignettes\n"))
+  
   list(
     programming_strategy = programming_strategy,
     unit_test_guidance = unit_test_guidance
@@ -66,13 +141,14 @@ download_admiraldev_content <- function() {
 
 # Create root AGENT.md with actual admiraldev content
 create_root_agent_md <- function(admiraldev_content) {
+  
   # Create the file content as separate parts to avoid glue complexity
   header_lines <- c(
     "# Admiral Development Guidelines for AI Assistants",
     "",
     "This file provides context for AI coding assistants (GitHub Copilot, Gemini, Claude, etc.) about admiral ecosystem standards and best practices.",
     "",
-    paste("**Auto-generated:**", format(Sys.time(), "%Y-%m-%d %H:%M:%S")),
+    paste("**Auto-generated:**", format(Sys.time(), '%Y-%m-%d %H:%M:%S')),
     "**Source:** admiraldev package vignettes",
     "**Update script:** `source('.github/scripts/sync_admiraldev_copilot.R')`",
     "",
@@ -80,14 +156,14 @@ create_root_agent_md <- function(admiraldev_content) {
     "",
     "Help AI assistants provide admiral-compliant code suggestions:",
     "- ✅ Consistent function naming and patterns",
-    "- ✅ Proper argument handling and validation",
+    "- ✅ Proper argument handling and validation", 
     "- ✅ CDISC/ADaM context and conventions",
     "- ✅ Testing and documentation standards",
     "",
     "---",
     ""
   )
-
+  
   # Programming strategy content
   programming_lines <- c()
   if (!is.null(admiraldev_content$programming_strategy)) {
@@ -121,7 +197,7 @@ create_root_agent_md <- function(admiraldev_content) {
       "Function names should start with a verb and use snake_case:",
       "",
       "- `derive_*` - Add rows/columns to datasets",
-      "- `derive_var_*` - Add single variable",
+      "- `derive_var_*` - Add single variable", 
       "- `derive_vars_*` - Add multiple variables",
       "- `compute_*` - Vector operations, return vectors",
       "- `assert_*` / `warn_*` - Input validation",
@@ -131,7 +207,7 @@ create_root_agent_md <- function(admiraldev_content) {
       ""
     )
   }
-
+  
   # Footer content
   footer_lines <- c(
     "## Testing Guidelines",
@@ -148,7 +224,7 @@ create_root_agent_md <- function(admiraldev_content) {
     "",
     "*This file helps AI assistants understand admiral patterns for better code suggestions.*"
   )
-
+  
   # Combine all content
   all_lines <- c(header_lines, programming_lines, footer_lines)
   writeLines(all_lines, agent_md_root)
@@ -157,19 +233,20 @@ create_root_agent_md <- function(admiraldev_content) {
 
 # Create tests/testthat/AGENT.md with actual admiraldev content
 create_tests_agent_md <- function(admiraldev_content) {
+  
   # Create header
   header_lines <- c(
     "# Admiral Unit Testing Guidelines for AI Assistants",
     "",
     "Context for AI assistants when working with admiral unit tests in `tests/testthat/`.",
     "",
-    paste("**Auto-generated:**", format(Sys.time(), "%Y-%m-%d %H:%M:%S")),
+    paste("**Auto-generated:**", format(Sys.time(), '%Y-%m-%d %H:%M:%S')),
     "**Source:** admiraldev unit testing guidance vignette",
     "",
     "---",
     ""
   )
-
+  
   # Testing content
   testing_lines <- c()
   if (!is.null(admiraldev_content$unit_test_guidance)) {
@@ -201,7 +278,7 @@ create_tests_agent_md <- function(admiraldev_content) {
       "### Admiral Test Requirements",
       "",
       "1. **Happy path** - basic functionality works",
-      "2. **Error conditions** - invalid inputs fail appropriately",
+      "2. **Error conditions** - invalid inputs fail appropriately", 
       "3. **Edge cases** - empty data, boundary conditions",
       "4. **Argument validation** - all parameters properly validated",
       "5. **Output structure** - correct columns, types, ungrouped",
@@ -217,12 +294,12 @@ create_tests_agent_md <- function(admiraldev_content) {
       ""
     )
   }
-
+  
   # Footer
   footer_lines <- c(
     "*For complete guidance: https://pharmaverse.github.io/admiraldev/articles/unit_test_guidance.html*"
   )
-
+  
   # Combine all content
   all_lines <- c(header_lines, testing_lines, footer_lines)
   writeLines(all_lines, agent_md_tests)
@@ -231,11 +308,12 @@ create_tests_agent_md <- function(admiraldev_content) {
 
 # Create optimized .github/copilot-instructions.md for GitHub Copilot
 create_copilot_instructions <- function(admiraldev_content) {
+  
   # Simple static content optimized for Copilot
   content_lines <- c(
     "# GitHub Copilot Instructions - admiral Development",
     "",
-    paste("**Auto-generated:**", format(Sys.time(), "%Y-%m-%d %H:%M:%S")),
+    paste("**Auto-generated:**", format(Sys.time(), '%Y-%m-%d %H:%M:%S')),
     "**Optimized for:** GitHub Copilot code completion",
     "**Complete guidelines:** See `AGENT.md` files for full context",
     "",
@@ -254,7 +332,7 @@ create_copilot_instructions <- function(admiraldev_content) {
     "Standard admiral function signature:",
     "- `dataset` - Always first argument",
     "- `by_vars = exprs(...)` - Grouping variables",
-    "- `order = exprs(...)` - Sorting expressions",
+    "- `order = exprs(...)` - Sorting expressions", 
     "- `new_var = VAR` - New variable (symbol)",
     "- `filter = PARAM == \"VALUE\"` - Filtering expression",
     "",
@@ -274,7 +352,7 @@ create_copilot_instructions <- function(admiraldev_content) {
     "",
     "*This file is optimized for GitHub Copilot code completion. For complete admiral development guidelines, see `AGENT.md` and `tests/testthat/AGENT.md`.*"
   )
-
+  
   writeLines(content_lines, copilot_instructions)
   cat(glue("✓ Created: {copilot_instructions}\n"))
 }
@@ -284,12 +362,12 @@ admiraldev_content <- download_admiraldev_content()
 
 cat("\nCreating AI assistant context files:\n")
 create_root_agent_md(admiraldev_content)
-create_tests_agent_md(admiraldev_content)
+create_tests_agent_md(admiraldev_content) 
 create_copilot_instructions(admiraldev_content)
 
 cat(glue("\n🎉 Success! Created AI assistant context files:
 📄 {agent_md_root} (universal AI assistants)
-📄 {agent_md_tests} (testing context)
+📄 {agent_md_tests} (testing context)  
 📄 {copilot_instructions} (Copilot legacy)
 
 These files will help AI assistants provide better admiral-compliant suggestions.
