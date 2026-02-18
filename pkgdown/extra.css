@@ -26,10 +26,13 @@
   color: #d0d0d0 !important; /* Light gray */
 }
 
+/* Customise height of navbar drop-down menu */
 .dropdown-menu {
-  /* Set a larger fixed height (default is usually around 50vh or 300px) */
-  max-height: 100vh !important;
+  /* 100dvh = full dynamic screen height
+     56px = approx height of navbar
+     20px = safety buffer */
+  max-height: calc(100dvh - 76px) !important;
 
-  /* Smooth scrolling if it does eventually need to scroll */
+  /* Activate scrollbar if window is too small */
   overflow-y: auto !important;
 }
