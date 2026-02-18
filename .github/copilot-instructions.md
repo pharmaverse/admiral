@@ -1,6 +1,6 @@
 # GitHub Copilot Instructions - admiral Development
 
-**Auto-generated:** 2026-02-18 16:24:26
+**Auto-generated:** 2026-02-18 16:44:44
 **Source:** admiraldev package vignettes
 
 This file provides GitHub Copilot with context about admiral programming
