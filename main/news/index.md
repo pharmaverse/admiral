@@ -37,6 +37,10 @@
 
 Developer Notes
 
+- Increased the maximum height of the drop-down menus in the website
+  navigation bar to ensure all items are visible without scrolling.
+  ([\#2974](https://github.com/pharmaverse/admiral/issues/2974))
+
 ## admiral 1.4.1
 
 CRAN release: 2026-02-03
@@ -3093,7 +3097,7 @@ CRAN release: 2022-05-31
   too specific for admiral. Derivations like this can be implemented
   calling
   [`mutate()`](https://dplyr.tidyverse.org/reference/mutate.html) and
-  [`case_when()`](https://dplyr.tidyverse.org/reference/case_when.html).
+  [`case_when()`](https://dplyr.tidyverse.org/reference/case-and-replace-when.html).
 
 ### Documentation
 

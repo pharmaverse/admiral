@@ -205,7 +205,7 @@ derive_vars_merged_summary(
 )
 #> Warning: There was 1 warning in `reframe()`.
 #> ℹ In argument: `MAXVIS = max(AVAL, na.rm = TRUE)`.
-#> ℹ In group 2: `USUBJID = "1"` `AVISIT = "WEEK 2"`.
+#> ℹ In group 2: `USUBJID = "1"`, `AVISIT = "WEEK 2"`.
 #> Caused by warning in `max()`:
 #> ! no non-missing arguments to max; returning -Inf
 #> # A tibble: 9 × 6
