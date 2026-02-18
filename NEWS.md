@@ -30,8 +30,8 @@ of the navigation bar. Tooltips have also been set up for each of the icons on t
 
 - Increased the maximum height of the drop-down menus in the website navigation bar to ensure all items are visible without scrolling. (#2974)
 
-- Creating the website for PRs was enabled. Add "[create website]" to the PR
-title to trigger website creation. (#2984)
+- Creating the website for pull requests was enabled. Add "[create website]" to
+the pull request title to trigger website creation. (#2984)
 </details>
 
 # admiral 1.4.1
