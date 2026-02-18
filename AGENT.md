@@ -2,7 +2,7 @@
 
 This file provides context for AI coding assistants (GitHub Copilot, Gemini, Claude, etc.) about admiral ecosystem standards and best practices.
 
-**Auto-generated:** 2026-02-18 18:57:31
+**Auto-generated:** 2026-02-18 19:48:42
 **Source:** admiraldev package vignettes
 **Update script:** `source('.github/scripts/sync_admiraldev_copilot.R')`
 

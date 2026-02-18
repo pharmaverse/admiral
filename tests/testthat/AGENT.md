@@ -2,7 +2,7 @@
 
 Context for AI assistants when working with admiral unit tests in `tests/testthat/`.
 
-**Auto-generated:** 2026-02-18 18:57:31
+**Auto-generated:** 2026-02-18 19:48:42
 **Source:** admiraldev unit testing guidance vignette
 
 ---
