@@ -605,6 +605,7 @@ derive_param_tte <- function(dataset = NULL,
                              start_date = TRTSDT,
                              event_conditions,
                              censor_conditions,
+                             censor_mode = "last",
                              create_datetime = FALSE,
                              set_values_to,
                              subject_keys = get_admiral_option("subject_keys"),
@@ -614,6 +615,10 @@ derive_param_tte <- function(dataset = NULL,
     check_type,
     values = c("warning", "message", "error", "none"),
     case_sensitive = FALSE
+  )
+  censor_mode <- assert_character_scalar(
+    censor_mode,
+    values = c("first", "last")
   )
   assert_data_frame(dataset, optional = TRUE)
   assert_vars(by_vars, optional = TRUE)
@@ -685,7 +690,7 @@ derive_param_tte <- function(dataset = NULL,
     by_vars = by_vars,
     create_datetime = create_datetime,
     subject_keys = subject_keys,
-    mode = "last",
+    mode = censor_mode,
     check_type = check_type
   ) %>%
     mutate(!!tmp_event := 0L)
@@ -724,12 +729,18 @@ derive_param_tte <- function(dataset = NULL,
   adsl <- dataset_adsl %>%
     select(!!!adsl_vars)
 
+  if(censor_mode == "last"){
+    order_expr <- exprs(!!tmp_event)
+  }else{
+    order_expr <- exprs(!!date_var, desc(!!tmp_event))
+  }
+
   # create observations for new parameter #
   new_param <- filter_extreme(
     bind_rows(event_data, censor_data),
     by_vars = expr_c(subject_keys, by_vars),
-    order = exprs(!!tmp_event),
-    mode = "last",
+    order = order_expr,
+    mode = censor_mode,
     check_type = "none"
   ) %>%
     inner_join(
