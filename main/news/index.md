@@ -41,6 +41,10 @@ Developer Notes
   navigation bar to ensure all items are visible without scrolling.
   ([\#2974](https://github.com/pharmaverse/admiral/issues/2974))
 
+- Creating the website for pull requests was enabled. Add “\[create
+  website\]” to the pull request title to trigger website creation.
+  ([\#2984](https://github.com/pharmaverse/admiral/issues/2984))
+
 ## admiral 1.4.1
 
 CRAN release: 2026-02-03
