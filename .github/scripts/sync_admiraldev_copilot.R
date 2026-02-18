@@ -2,7 +2,7 @@
 
 #' Sync admiraldev Documentation for GitHub Copilot (v1.0)
 #'
-#' Minimal implementation for admiral 1.4.0: downloads key admiraldev vignettes 
+#' Minimal implementation for admiral 1.4.0: downloads key admiraldev vignettes
 #' and creates Copilot instructions with essential admiral programming context.
 #'
 #' Handles SSL/network issues gracefully with fallback content.
@@ -32,7 +32,7 @@ vignettes <- list(
     description = "Core programming principles and strategies for admiral packages"
   ),
   list(
-    file = "unit_test_guidance.Rmd", 
+    file = "unit_test_guidance.Rmd",
     title = "Unit Test Guidance",
     description = "Best practices for writing unit tests in admiral packages"
   )
@@ -41,54 +41,63 @@ vignettes <- list(
 # Improved download function with better error handling
 process_vignette <- function(vignette_info) {
   url <- file.path(github_raw_base, vignette_info$file)
-  
+
   cat(glue("• {vignette_info$title}..."))
-  
+
   # Try multiple download methods
   content <- NULL
-  
+
   # Method 1: readLines (simplest)
-  tryCatch({
-    content <- readLines(url, warn = FALSE)
-    cat(" ✓ (readLines)\n")
-  }, error = function(e) {
-    # Method 2: download.file + readLines (sometimes works better with SSL)
-    tryCatch({
-      temp_file <- tempfile(fileext = ".Rmd")
-      download.file(url, temp_file, quiet = TRUE, method = "auto")
-      content <<- readLines(temp_file, warn = FALSE)
-      unlink(temp_file)
-      cat(" ✓ (download.file)\n")
-    }, error = function(e2) {
-      # Method 3: curl if available
-      if (Sys.which("curl") != "") {
-        tryCatch({
+  tryCatch(
+    {
+      content <- readLines(url, warn = FALSE)
+      cat(" ✓ (readLines)\n")
+    },
+    error = function(e) {
+      # Method 2: download.file + readLines (sometimes works better with SSL)
+      tryCatch(
+        {
           temp_file <- tempfile(fileext = ".Rmd")
-          system2("curl", c("-s", "-o", temp_file, url), stdout = FALSE, stderr = FALSE)
-          if (file.exists(temp_file) && file.size(temp_file) > 0) {
-            content <<- readLines(temp_file, warn = FALSE)
-            unlink(temp_file)
-            cat(" ✓ (curl)\n")
+          download.file(url, temp_file, quiet = TRUE, method = "auto")
+          content <<- readLines(temp_file, warn = FALSE)
+          unlink(temp_file)
+          cat(" ✓ (download.file)\n")
+        },
+        error = function(e2) {
+          # Method 3: curl if available
+          if (Sys.which("curl") != "") {
+            tryCatch(
+              {
+                temp_file <- tempfile(fileext = ".Rmd")
+                system2("curl", c("-s", "-o", temp_file, url), stdout = FALSE, stderr = FALSE)
+                if (file.exists(temp_file) && file.size(temp_file) > 0) {
+                  content <<- readLines(temp_file, warn = FALSE)
+                  unlink(temp_file)
+                  cat(" ✓ (curl)\n")
+                } else {
+                  stop("curl failed")
+                }
+              },
+              error = function(e3) {
+                cat(" ✗ (SSL/network error)\n")
+                warning(glue("Failed to download {vignette_info$file}: {e$message}"), call. = FALSE)
+              }
+            )
           } else {
-            stop("curl failed")
+            cat(" ✗ (SSL/network error)\n")
+            warning(glue("Failed to download {vignette_info$file}: {e$message}"), call. = FALSE)
           }
-        }, error = function(e3) {
-          cat(" ✗ (SSL/network error)\n")
-          warning(glue("Failed to download {vignette_info$file}: {e$message}"), call. = FALSE)
-        })
-      } else {
-        cat(" ✗ (SSL/network error)\n")
-        warning(glue("Failed to download {vignette_info$file}: {e$message}"), call. = FALSE)
-      }
-    })
-  })
-  
+        }
+      )
+    }
+  )
+
   if (!is.null(content) && length(content) > 0) {
     return(glue("
 # {vignette_info$title}
 
-**Description:** {vignette_info$description}  
-**Source:** admiraldev vignette `{vignette_info$file}`  
+**Description:** {vignette_info$description}
+**Source:** admiraldev vignette `{vignette_info$file}`
 **URL:** {url}
 
 ---
@@ -109,8 +118,8 @@ create_fallback_content <- function(vignette_info) {
     return(glue("
 # {vignette_info$title}
 
-**Description:** {vignette_info$description}  
-**Source:** admiraldev vignette `{vignette_info$file}` (fallback content)  
+**Description:** {vignette_info$description}
+**Source:** admiraldev vignette `{vignette_info$file}` (fallback content)
 **Note:** Could not download from GitHub. Using essential guidelines.
 
 ---
@@ -122,8 +131,8 @@ create_fallback_content <- function(vignette_info) {
     return(glue("
 # {vignette_info$title}
 
-**Description:** {vignette_info$description}  
-**Source:** admiraldev vignette `{vignette_info$file}` (fallback content)  
+**Description:** {vignette_info$description}
+**Source:** admiraldev vignette `{vignette_info$file}` (fallback content)
 **Note:** Could not download from GitHub. Using essential guidelines.
 
 ---
@@ -136,7 +145,7 @@ create_fallback_content <- function(vignette_info) {
     return(glue("
 # {vignette_info$title}
 
-**Description:** {vignette_info$description}  
+**Description:** {vignette_info$description}
 **Source:** admiraldev vignette `{vignette_info$file}` (fallback - could not download)
 
 Please see: https://pharmaverse.github.io/admiraldev/articles/{gsub('\\.Rmd$', '.html', vignette_info$file)}
@@ -149,11 +158,11 @@ Please see: https://pharmaverse.github.io/admiraldev/articles/{gsub('\\.Rmd$', '
 # Create header
 header <- glue("# GitHub Copilot Instructions - admiral Development
 
-**Auto-generated:** {format(Sys.time(), '%Y-%m-%d %H:%M:%S')}  
+**Auto-generated:** {format(Sys.time(), '%Y-%m-%d %H:%M:%S')}
 **Source:** admiraldev package vignettes
 
-This file provides GitHub Copilot with context about admiral programming 
-standards and best practices. Copilot automatically uses these guidelines 
+This file provides GitHub Copilot with context about admiral programming
+standards and best practices. Copilot automatically uses these guidelines
 when providing code suggestions in this repository.
 
 ⚠️ **DO NOT EDIT MANUALLY** - Run `source('.github/scripts/sync_admiraldev_copilot.R')` to update
@@ -162,7 +171,7 @@ when providing code suggestions in this repository.
 
 Ensure code follows admiral ecosystem standards:
 - Consistent programming patterns across admiral functions
-- Proper function design and documentation  
+- Proper function design and documentation
 - Comprehensive unit tests with good coverage
 - Maintainable and readable code
 
@@ -199,7 +208,7 @@ source('.github/scripts/sync_admiraldev_copilot.R')
 
 If you see SSL or connection errors:
 1. Try running from a different network
-2. Use corporate VPN if available  
+2. Use corporate VPN if available
 3. The script includes fallback content for essential guidelines
 4. Manual alternative: Copy content from https://pharmaverse.github.io/admiraldev/
 
@@ -209,7 +218,7 @@ GitHub Copilot automatically reads files in `.github/` directories and uses them
 as context when providing code suggestions. By keeping admiraldev guidelines here:
 
 1. **Copilot suggests code** that follows admiral conventions
-2. **Function names and patterns** match admiral ecosystem standards  
+2. **Function names and patterns** match admiral ecosystem standards
 3. **Documentation style** aligns with admiral expectations
 4. **Test structures** follow unit test guidance
 
@@ -218,7 +227,7 @@ is enough for Copilot to use it.
 
 ---
 
-**Content Status:** Successfully processed {processed_count}/{length(vignettes)} vignettes  
+**Content Status:** Successfully processed {processed_count}/{length(vignettes)} vignettes
 *Generated from admiraldev vignettes to provide GitHub Copilot with admiral context.*
 ")
 
@@ -238,4 +247,3 @@ if (processed_count == length(vignettes)) {
 }
 
 cat("\nGitHub Copilot will now use admiral guidelines automatically!\n")
-
