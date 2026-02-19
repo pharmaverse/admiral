@@ -4,7 +4,7 @@ This outlines how to propose a change to the admiral package. For more detailed 
 
 Please note that we try to align to best practices used in other R packages' development processes - so veteran developers should be familiar with our processes. However, we do deviate slightly from some best practices and we advise all new contributors to review our package documentation accordingly.
 
-# Basics of Contribution
+## Basics of Contribution
  🦋 For each new contribution, the user creates an issue on the issue tab on [GitHub](https://github.com/pharmaverse/admiral/issues) to put it in our backlog. The issues can range from bug identification and/or fixes, enhancements to functions, documentation, tests or new features.   
 
  🦋 We advise you to contact us when an [issue](https://github.com/pharmaverse/admiral/issues) is created via [Slack](https://app.slack.com/client/T028PB489D3/C02M8KN8269) (If you don't have access, use this [link](https://join.slack.com/t/pharmaverse/shared_invite/zt-yv5atkr4-Np2ytJ6W_QKz_4Olo7Jo9A) to join).  We can discuss details or align expectations if you are not familiar with the `{admiral}` philosophy and programming strategy. The team will try to review the issues within the next backlog meeting and give some initial feedback. Since we are not a 100% fully resourced software development team it might be that some issues will take longer to respond to depending on the amount of overall issues. 
@@ -15,16 +15,16 @@ Please note that we try to align to best practices used in other R packages' dev
  
  🦋 Issues are meant to be taken on by users from the Pharma programming community and not exclusively by the `{admiral}` team from GSK and Roche.
 
-# Contribution Model
+## Contribution Model
 
-## Type 1: Contribution without Code 
+### Type 1: Contribution without Code 
 
   🦋  User creates an issue and ideally contacts an `{admiral}` team member via [Slack](https://app.slack.com/client/T028PB489D3/C02M8KN8269).
   
   🦋  The `{admiral}` core development team will contact the issue creator as soon as possible to discuss further details.
  
 
-## Type 2: Contribution with Code
+### Type 2: Contribution with Code
 
   🦋  First, the user creates an issue or comments on an existing issue to notify that they’d like to contribute code.
   
@@ -32,7 +32,7 @@ Please note that we try to align to best practices used in other R packages' dev
   
   🦋  We advise to contact an `{admiral}` core development team directly via [Slack](https://app.slack.com/client/T028PB489D3/C02M8KN8269) before submitting code for complex functionality.
 
-## Detailed Development Process
+### Detailed Development Process
 
 If you decide to contribute with code and you're ready to make your first code contribution, this detailed development process step-by-step guide will help tie all the other detailed vignettes together to give you the simplest experience of helping to grow and enhance our codebase.
 
@@ -96,7 +96,7 @@ for support via the [Slack
 channel](https://pharmaverse.slack.com/).
  ***Welcome to our `{admiral}` community!***
  
-# Acknowledgements for Contributions
+## Acknowledgements for Contributions
  
 The `{admiral}` team has several ways to acknowledge individuals who have contributed to `{admiral}` or related packages:
 
