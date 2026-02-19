@@ -33,6 +33,13 @@
   on the navigation bar.
   ([\#2959](https://github.com/pharmaverse/admiral/issues/2959))
 
+- The [contributions
+  guidelines](https://pharmaverse.github.io/admiral/cran-release/CONTRIBUTING.html)
+  for the [admiral](https://pharmaverse.github.io/admiral/) ecosystem of
+  packages were updated to specify the level of contributions required
+  for authorship/acknowledgments.
+  ([\#2979](https://github.com/pharmaverse/admiral/issues/2979))
+
 ### Various
 
 Developer Notes
