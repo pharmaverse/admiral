@@ -105,7 +105,7 @@ The `{admiral}` team has several ways to acknowledge individuals who have contri
   or maintenance of the product, even if at low FTE. This work could include: code development, PR review, consulting activities, etc. As authors are
   the most visible names associated with the package, they should be able to offer some type of support if contacted by a user.
   
-  🦋 **Acknowledgement (i.e. individual is listed in the [README Acknowledgments](https://pharmaverse.github.io/admiral/cran-release/#acknowledgments))**: This
+  🦋 **Acknowledgement (i.e. individual listed in the [README Acknowledgments](https://pharmaverse.github.io/admiral/cran-release/#acknowledgments))**: This
   is for users who have made a contribution to the package that does not yet meet the level for authorship as described above. Individuals who were previously 
   authors but have moved away from the package will also be moved to the Acknowledgements section.
 
