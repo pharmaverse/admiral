@@ -23,6 +23,9 @@
 - A night mode option has been added to the `{admiral}` website. This can be be toggled using the sun/moon icon in the top right corner 
 of the navigation bar. Tooltips have also been set up for each of the icons on the navigation bar. (#2959)
 
+- The [contributions guidelines](https://pharmaverse.github.io/admiral/cran-release/CONTRIBUTING.html) for the `{admiral}` ecosystem 
+of packages were updated to specify the level of contributions required for authorship/acknowledgments. (#2979)
+
 ## Various
 
 <details>

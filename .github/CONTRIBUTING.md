@@ -1,9 +1,8 @@
 # Contribution to {admiral} 
 
-This outlines how to propose a change to the admiral package. For more detailed info about contributing to {admiral}, and other [pharmaverse packages](https://pharmaverse.org/), please see the [Contribution Guide](https://pharmaverse.github.io/admiral/cran-release/CONTRIBUTING.html) as well as other Developer Guides in the Articles section of the [{admiraldev} website](https://pharmaverse.github.io/admiraldev/).
+This outlines how to propose a change to the admiral package. For more detailed info about contributing to `{admiral}`, and other [pharmaverse packages](https://pharmaverse.org/), please see the [Contribution Guide](https://pharmaverse.github.io/admiral/cran-release/CONTRIBUTING.html) as well as other Developer Guides in the Articles section of the [{admiraldev} website](https://pharmaverse.github.io/admiraldev/).
 
 Please note that we try to align to best practices used in other R packages' development processes - so veteran developers should be familiar with our processes. However, we do deviate slightly from some best practices and we advise all new contributors to review our package documentation accordingly.
-
 
 # Basics of Contribution
  🦋 For each new contribution, the user creates an issue on the issue tab on [GitHub](https://github.com/pharmaverse/admiral/issues) to put it in our backlog. The issues can range from bug identification and/or fixes, enhancements to functions, documentation, tests or new features.   
@@ -96,3 +95,28 @@ reviews are for. Also if ever you get stuck don't hesitate to reach out
 for support via the [Slack
 channel](https://pharmaverse.slack.com/).
  ***Welcome to our `{admiral}` community!***
+ 
+# Acknowledgements for contributions
+ 
+The `{admiral}` team has several ways to acknowledge individuals who have contributed to `{admiral}` or related packages:
+
+  🦋 **Author (i.e. individual listed on [DESCRIPTION](https://github.com/pharmaverse/admiral/blob/main/DESCRIPTION) file as author)**: This is for 
+  individuals who are currently part of the development team for the package and are making sustained contributions over time to aid in the development
+  or maintenance of the product, even if at low FTE. This work could include: code development, PR review, consulting activities, etc. As authors are
+  the most visible names associated with the package, they should be able to offer some type of support if contacted by a user.
+  
+  🦋 **Acknowledgement (i.e. individual is listed in the [README Acknowledgments](https://pharmaverse.github.io/admiral/cran-release/#acknowledgments))**: This
+  is for users who have made a contribution to the package that does not yet meet the level for authorship as described above. Individuals who were previously 
+  authors but have moved away from the package will also be moved to the Acknowledgements section.
+
+Companies will be listed on the license file as long as either of the following apply:
+
+  🦋 They employ the maintainer;
+  
+  🦋 They employ two or more authors in the development team.
+  
+These guidelines should be used both for `{admiral}` and any related packages such as `{admiraldev}`, therapeutic area extension packages and data packages.
+
+__Note: The package maintainer is the final decision-maker as to how contributions are acknowledged, and reserves their discretion to make this choice; there
+may be occasions where the guidelines listed above need to be flexed due to the context of the work. For instance, if package is inactive or very 
+stable, the level of contributions for authorship of acknowledgements may be lower.__
