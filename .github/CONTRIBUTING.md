@@ -96,7 +96,7 @@ for support via the [Slack
 channel](https://pharmaverse.slack.com/).
  ***Welcome to our `{admiral}` community!***
  
-# Acknowledgements for contributions
+# Acknowledgements for Contributions
  
 The `{admiral}` team has several ways to acknowledge individuals who have contributed to `{admiral}` or related packages:
 
