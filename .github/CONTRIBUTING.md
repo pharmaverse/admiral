@@ -119,4 +119,4 @@ These guidelines should be used both for `{admiral}` and any related packages su
 
 __Note: The package maintainer is the final decision-maker as to how contributions are acknowledged, and reserves their discretion to make this choice; there
 may be occasions where the guidelines listed above need to be flexed due to the context of the work. For instance, if package is inactive or very 
-stable, the level of contributions for authorship of acknowledgements may be lower.__
+stable, the level of contributions for authorship or acknowledgements may be lower.__
