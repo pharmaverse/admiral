@@ -1,6 +1,6 @@
 # GitHub Copilot Instructions - admiral Development
 
-**Auto-generated:** 2026-02-18 20:11:28
+**Auto-generated:** 2026-02-23 19:17:54
 **Optimized for:** GitHub Copilot code completion
 **Complete guidelines:** See `AGENT.md` files for full context
 
