@@ -196,4 +196,4 @@ contributions are acknowledged, and reserves their discretion to make
 this choice; there may be occasions where the guidelines listed above
 need to be flexed due to the context of the work. For instance, if
 package is inactive or very stable, the level of contributions for
-authorship of acknowledgements may be lower.**
+authorship or acknowledgements may be lower.**
