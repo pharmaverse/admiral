@@ -10,8 +10,10 @@ derive_param_tte(
   source_datasets,
   by_vars = NULL,
   start_date = TRTSDT,
+  end_dates = NULL,
   event_conditions,
-  censor_conditions,
+  censor_conditions = NULL,
+  event_type = "negative",
   create_datetime = FALSE,
   set_values_to,
   subject_keys = get_admiral_option("subject_keys"),
@@ -77,6 +79,19 @@ the origin date.
 \item{Default value}{\code{TRTSDT}}
 }}
 
+\item{end_dates}{Time to event end date(s)
+
+A list of \code{censor_source()} objects is expected. Each date restrict the
+observation period for time-to-event analysis. For each subject the
+earliest date across all \code{end_dates} is used as the end date for that
+subject. The records defined by \code{event_conditions} and \code{censor_conditions}
+are restricted to dates before or equal to the selected end date.
+
+\describe{
+\item{Permitted values}{a list of source objects, e.g., \code{list(pd, death)}}
+\item{Default value}{\code{NULL}}
+}}
+
 \item{event_conditions}{Sources and conditions defining events
 
 A list of \code{event_source()} objects is expected.
@@ -92,7 +107,20 @@ A list of \code{censor_source()} objects is expected.
 
 \describe{
 \item{Permitted values}{a list of source objects, e.g., \code{list(pd, death)}}
-\item{Default value}{none}
+\item{Default value}{\code{NULL}}
+}}
+
+\item{event_type}{Type of event
+
+For events that are considered unfavorable, e.g., adverse events,
+progression, worsening, ..., the value should be \code{"negative"} and for
+events that are considered favorable, e.g., response to treatment,
+improvement, ..., the value should be \code{"positive"}. This affect the
+censoring.
+
+\describe{
+\item{Permitted values}{\code{"negative"}, \code{"positive"}}
+\item{Default value}{\code{"negative"}}
 }}
 
 \item{create_datetime}{Create datetime variables?
@@ -349,16 +377,16 @@ derive_param_tte(
 #> 3 02      AB42    END OF STUDY ADSL   EOSDT      NA     1 2021-02-03 2021-01-16
 #> 4 02      AB42    END OF STUDY ADSL   EOSDT      NA     1 2021-02-03 2021-01-16
 #> # i 2 more variables: PARAMCD <chr>, PARAM <chr>
-#> Warning: Dataset "adae" contains duplicate records with respect to `STUDYID`, `USUBJID`,
+#> G2;H2;Warningh: Dataset "adae" contains duplicate records with respect to `STUDYID`, `USUBJID`,
 #> `AEDECOD`, and `ASTDT`
-#> i Run `admiral::get_duplicates_dataset()` to access the duplicate records}\if{html}{\out{</div>}}
+#> i Run `admiral::get_duplicates_dataset()` to access the duplicate recordsg}\if{html}{\out{</div>}}
 
 For investigating the issue, the dataset of the duplicate source records
 can be obtained by calling \code{get_duplicates_dataset()}:
 
 \if{html}{\out{<div class="sourceCode r">}}\preformatted{get_duplicates_dataset()
-#> Duplicate records with respect to `STUDYID`, `USUBJID`, `AEDECOD`, and `ASTDT`.
-#> # A tibble: 2 × 6
+#> G3;Duplicate records with respect to `STUDYID`, `USUBJID`, `AEDECOD`, and `ASTDT`.
+#> g# A tibble: 2 × 6
 #>   STUDYID USUBJID AEDECOD ASTDT      AESEQ AESER
 #> * <chr>   <chr>   <chr>   <date>     <dbl> <chr>
 #> 1 AB42    01      Cough   2021-03-04     2 N    
@@ -720,6 +748,61 @@ derive_param_tte(
 #>   <chr>   <date>     <chr>   <chr>                <date>     <int>  <dbl>
 #> 1 01      2021-03-04 DURRSP  Duration of Response 2021-05-05     0      3
 #> 2 04      2021-04-14 DURRSP  Duration of Response 2021-05-15     1      3}\if{html}{\out{</div>}}}
+\subsection{End of the observation period (\code{end_dates})}{
+
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{
+adsl <- tribble(
+  ~USUBJID, ~TRTSDT,           ~EOSDT,            ~NEWDRGDT,
+  "01",     ymd("2020-12-06"), ymd("2021-03-06"), NA,
+  "02",     ymd("2021-01-16"), ymd("2021-04-03"), ymd("2021-03-21")
+) \%>\%
+  mutate(STUDYID = "AB42")
+
+adqs <- tribble(
+ ~USUBJID, ~ADT,              ~CHG,
+ "01",     ymd("2021-01-03"),    5,
+ "01",     ymd("2021-02-03"),   -2,
+ "01",     ymd("2021-03-07"),   10,
+ "02",     ymd("2021-01-03"),    4,
+ "02",     ymd("2021-02-03"),   -1,
+ "02",     ymd("2021-04-01"),  -12
+) \%>\%
+  mutate(STUDYID = "AB42")
+
+derive_param_tte(
+  dataset_adsl = adsl,
+  source_datasets = list(adsl = adsl, adqs = adqs),
+  start_date = TRTSDT,
+  end_dates = list(
+    censor_source(
+      dataset_name = "adsl",
+      date = EOSDT
+    ),
+    censor_source(
+      dataset_name = "adsl",
+      date = NEWDRGDT
+    )
+  ),
+  event_conditions = list(event_source(
+    dataset_name = "adqs",
+    date = ADT,
+    filter = CHG <= -10
+  )),
+  censor_conditions = list(censor_source(
+    dataset_name = "adqs",
+    date = ADT,
+    filter = !is.na(CHG)
+  )),
+  set_values_to = exprs(
+    PARAMCD = "TTWORSE",
+    PARAM = "Time to Worsening of at least 10 points"
+  )
+)
+#> # A tibble: 2 × 7
+#>   USUBJID ADT        STUDYID  CNSR STARTDT    PARAMCD PARAM                     
+#>   <chr>   <date>     <chr>   <int> <date>     <chr>   <chr>                     
+#> 1 01      2021-02-03 AB42        1 2020-12-06 TTWORSE Time to Worsening of at l…
+#> 2 02      2021-02-03 AB42        1 2021-01-16 TTWORSE Time to Worsening of at l…}\if{html}{\out{</div>}}}
 \subsection{Further examples}{
 
 Further example usages of this function can be found in the

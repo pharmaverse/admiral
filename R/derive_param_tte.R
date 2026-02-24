@@ -47,6 +47,16 @@
 #'
 #' @permitted [date]
 #'
+#' @param end_dates Time to event end date(s)
+#'
+#'   A list of `censor_source()` objects is expected. Each date restrict the
+#'   observation period for time-to-event analysis. For each subject the
+#'   earliest date across all `end_dates` is used as the end date for that
+#'   subject. The records defined by `event_conditions` and `censor_conditions`
+#'   are restricted to dates before or equal to the selected end date.
+#'
+#' @permitted [source_list]
+#'
 #' @param event_conditions Sources and conditions defining events
 #'
 #'   A list of `event_source()` objects is expected.
@@ -58,6 +68,16 @@
 #'   A list of `censor_source()` objects is expected.
 #'
 #' @permitted [source_list]
+#'
+#' @param event_type Type of event
+#'
+#'   For events that are considered unfavorable, e.g., adverse events,
+#'   progression, worsening, ..., the value should be `"negative"` and for
+#'   events that are considered favorable, e.g., response to treatment,
+#'   improvement, ..., the value should be `"positive"`. This affect the
+#'   censoring.
+#'
+#' @permitted `"negative"`, `"positive"`
 #'
 #' @param create_datetime Create datetime variables?
 #'
@@ -595,6 +615,58 @@
 #' ) %>%
 #'   select(USUBJID, STARTDT, PARAMCD, PARAM, ADT, CNSR, SRCSEQ)
 #'
+#' @caption End of the observation period (`end_dates`)
+#'
+#' @code
+#'
+#' adsl <- tribble(
+#'   ~USUBJID, ~TRTSDT,           ~EOSDT,            ~NEWDRGDT,
+#'   "01",     ymd("2020-12-06"), ymd("2021-03-06"), NA,
+#'   "02",     ymd("2021-01-16"), ymd("2021-04-03"), ymd("2021-03-21")
+#' ) %>%
+#'   mutate(STUDYID = "AB42")
+#'
+#' adqs <- tribble(
+#'  ~USUBJID, ~ADT,              ~CHG,
+#'  "01",     ymd("2021-01-03"),    5,
+#'  "01",     ymd("2021-02-03"),   -2,
+#'  "01",     ymd("2021-03-07"),   10,
+#'  "02",     ymd("2021-01-03"),    4,
+#'  "02",     ymd("2021-02-03"),   -1,
+#'  "02",     ymd("2021-04-01"),  -12
+#' ) %>%
+#'   mutate(STUDYID = "AB42")
+#'
+#' derive_param_tte(
+#'   dataset_adsl = adsl,
+#'   source_datasets = list(adsl = adsl, adqs = adqs),
+#'   start_date = TRTSDT,
+#'   end_dates = list(
+#'     censor_source(
+#'       dataset_name = "adsl",
+#'       date = EOSDT
+#'     ),
+#'     censor_source(
+#'       dataset_name = "adsl",
+#'       date = NEWDRGDT
+#'     )
+#'   ),
+#'   event_conditions = list(event_source(
+#'     dataset_name = "adqs",
+#'     date = ADT,
+#'     filter = CHG <= -10
+#'   )),
+#'   censor_conditions = list(censor_source(
+#'     dataset_name = "adqs",
+#'     date = ADT,
+#'     filter = !is.na(CHG)
+#'   )),
+#'   set_values_to = exprs(
+#'     PARAMCD = "TTWORSE",
+#'     PARAM = "Time to Worsening of at least 10 points"
+#'   )
+#' )
+#'
 #' @caption Further examples
 #' @info Further example usages of this function can be found in the
 #'   `vignette("bds_tte")`.
@@ -603,13 +675,15 @@ derive_param_tte <- function(dataset = NULL,
                              source_datasets,
                              by_vars = NULL,
                              start_date = TRTSDT,
+                             end_dates = NULL,
                              event_conditions,
-                             censor_conditions,
+                             censor_conditions = NULL,
+                             event_type = "negative",
                              create_datetime = FALSE,
                              set_values_to,
                              subject_keys = get_admiral_option("subject_keys"),
                              check_type = "warning") {
-  # checking and quoting #
+  # checking and quoting ----
   check_type <- assert_character_scalar(
     check_type,
     values = c("warning", "message", "error", "none"),
@@ -619,6 +693,7 @@ derive_param_tte <- function(dataset = NULL,
   assert_vars(by_vars, optional = TRUE)
   start_date <- assert_symbol(enexpr(start_date))
   assert_data_frame(dataset_adsl, required_vars = exprs(!!start_date))
+  assert_list_of(end_dates, "censor_source")
   assert_vars(subject_keys)
   assert_list_of(event_conditions, "event_source")
   assert_list_of(censor_conditions, "censor_source")
@@ -656,6 +731,11 @@ derive_param_tte <- function(dataset = NULL,
       )
     )
   )
+  event_type <- assert_character_scalar(
+    event_type,
+    values = c("negative", "positive"),
+    case_sensitive = FALSE
+  )
   assert_logical_scalar(create_datetime)
   assert_varval_list(set_values_to, optional = TRUE)
   if (!is.null(by_vars)) {
@@ -666,7 +746,31 @@ derive_param_tte <- function(dataset = NULL,
   }
   tmp_event <- get_new_tmp_var(dataset)
 
-  # determine events #
+  # select source records ----
+  if (!is.null(end_dates)) {
+    # determine end of observation period
+    end_date_data <- filter_date_sources(
+      sources = end_dates,
+      source_datasets = source_datasets,
+      by_vars = by_vars,
+      create_datetime = create_datetime,
+      subject_keys = subject_keys,
+      mode = "first",
+      check_type = check_type
+    ) %>%
+      select(-CNSR)
+
+    end_date_var <- get_new_tmp_var(end_date_data, prefix = "tmp_end_date")
+
+    end_date_data <- end_date_data %>%
+      rename(!!end_date_var := ADT)
+  } else {
+    end_date_data <- NULL
+    end_date_var <- NULL
+  }
+
+
+  # determine events
   event_data <- filter_date_sources(
     sources = event_conditions,
     source_datasets = source_datasets,
@@ -674,11 +778,13 @@ derive_param_tte <- function(dataset = NULL,
     create_datetime = create_datetime,
     subject_keys = subject_keys,
     mode = "first",
+    end_date_data = end_date_data,
+    end_date_var = end_date_var,
     check_type = check_type
   ) %>%
     mutate(!!tmp_event := 1L)
 
-  # determine censoring observations #
+  # determine censoring observations
   censor_data <- filter_date_sources(
     sources = censor_conditions,
     source_datasets = source_datasets,
@@ -686,11 +792,13 @@ derive_param_tte <- function(dataset = NULL,
     create_datetime = create_datetime,
     subject_keys = subject_keys,
     mode = "last",
+    end_date_data = end_date_data,
+    end_date_var = end_date_var,
     check_type = check_type
   ) %>%
     mutate(!!tmp_event := 0L)
 
-  # determine variable to add from ADSL #
+  # determine variable to add from ADSL ----
   if (create_datetime) {
     date_var <- sym("ADTM")
     start_var <- sym("STARTDTM")
@@ -724,7 +832,7 @@ derive_param_tte <- function(dataset = NULL,
   adsl <- dataset_adsl %>%
     select(!!!adsl_vars)
 
-  # create observations for new parameter #
+  # create observations for new parameter ----
   new_param <- filter_extreme(
     bind_rows(event_data, censor_data),
     by_vars = expr_c(subject_keys, by_vars),
@@ -745,7 +853,7 @@ derive_param_tte <- function(dataset = NULL,
       assert_one_to_one(new_param, exprs(PARAMCD), by_vars)
     }
 
-    # -vars2chr(by_vars) does not work for 3.5 #
+    # -vars2chr(by_vars) does not work for 3.5
     new_param <- select(new_param, !!!negate_vars(by_vars))
   }
 
@@ -757,7 +865,7 @@ derive_param_tte <- function(dataset = NULL,
     }
   }
 
-  # add new parameter to input dataset #
+  # add new parameter to input dataset
   bind_rows(dataset, new_param)
 }
 
@@ -882,6 +990,8 @@ filter_date_sources <- function(sources,
                                 create_datetime = FALSE,
                                 subject_keys,
                                 mode,
+                                end_date_data = NULL,
+                                end_date_var = NULL,
                                 check_type = "none") {
   assert_list_of(sources, "tte_source")
   assert_list_of(source_datasets, "data.frame")
@@ -892,7 +1002,8 @@ filter_date_sources <- function(sources,
     values = c("first", "last"),
     case_sensitive = FALSE
   )
-
+  assert_data_frame(end_date_data, optional = TRUE)
+  assert_symbol(end_date_var, optional = TRUE)
   if (create_datetime) {
     date_var <- sym("ADTM")
   } else {
@@ -918,6 +1029,17 @@ filter_date_sources <- function(sources,
       dataset_name = sources[[i]]$dataset_name
     )
     # wrap filter_extreme in tryCatch to catch duplicate records and create a message
+    if (!is.null(end_date_data)) {
+      source_dataset <- derive_vars_merged(
+        source_dataset,
+        dataset_add = end_date_data,
+        by_vars = expr_c(subject_keys, by_vars)
+      ) %>%
+        filter_out(!!source_date_var > !!end_date_var)
+      keep_end_date_vars <- setdiff(syms(colnames(end_date_data)), c(subject_keys, by_vars))
+    } else {
+      keep_end_date_vars <- NULL
+    }
     data[[i]] <- rlang::try_fetch(
       {
         source_dataset %>%
@@ -958,6 +1080,7 @@ filter_date_sources <- function(sources,
       !!!sources[[i]]$set_values_to,
       CNSR = sources[[i]]$censor,
       !!!date_derv,
+      !!!keep_end_date_vars,
       tmp_source_nr = i,
       .keep = "none"
     )
