@@ -282,7 +282,7 @@ derive_extreme_records(
     AVISITN = 99
   )
 )
-#> # A tibble: 8 × 3
+#> # A tibble: 8 x 3
 #>   USUBJID AVISITN  AVAL
 #>   <chr>     <dbl> <dbl>
 #> 1 1             1   113
@@ -310,7 +310,7 @@ last visit record:
     AVISITN = 99
   )
 )
-#> # A tibble: 7 × 3
+#> # A tibble: 7 x 3
 #>   USUBJID AVISITN  AVAL
 #>   <chr>     <dbl> <dbl>
 #> 1 1             1   113
@@ -343,7 +343,7 @@ that new records are added also for subject without a valid analysis value:
     AVISITN = 99
   )
 )
-#> # A tibble: 8 × 3
+#> # A tibble: 8 x 3
 #>   USUBJID AVISITN  AVAL
 #>   <chr>     <dbl> <dbl>
 #> 1 1             1   113
@@ -381,7 +381,7 @@ derive_extreme_records(
     AVISIT = "MINIMUM"
   )
 )
-#> # A tibble: 2 × 3
+#> # A tibble: 2 x 3
 #>   USUBJID AVISIT   AVAL
 #>   <chr>   <chr>   <dbl>
 #> 1 1       MINIMUM   101
@@ -411,20 +411,20 @@ derive_extreme_records(
     AVISIT = "MINIMUM"
   )
 )
-#> # A tibble: 2 × 3
+#> # A tibble: 2 x 3
 #>   USUBJID AVISIT   AVAL
 #>   <chr>   <chr>   <dbl>
 #> 1 1       MINIMUM   123
 #> 2 2       MINIMUM    93
-#> G2;H2;Warningh: Dataset contains duplicate records with respect to `USUBJID` and `AVAL`
-#> i Run `admiral::get_duplicates_dataset()` to access the duplicate recordsg}\if{html}{\out{</div>}}
+#> Warning: Dataset contains duplicate records with respect to `USUBJID` and `AVAL`
+#> i Run ]8;;x-r-run:admiral::get_duplicates_dataset()admiral::get_duplicates_dataset()]8;; to access the duplicate records}\if{html}{\out{</div>}}
 
 For investigating the issue, the dataset of the duplicate source records
 can be obtained by calling \code{get_duplicates_dataset()}:
 
 \if{html}{\out{<div class="sourceCode r">}}\preformatted{get_duplicates_dataset()
-#> G3;Duplicate records with respect to `USUBJID` and `AVAL`.
-#> g# A tibble: 2 × 3
+#> Duplicate records with respect to `USUBJID` and `AVAL`.
+#> # A tibble: 2 x 3
 #>   USUBJID  AVAL AVISIT
 #> * <chr>   <dbl> <chr> 
 #> 1 1         123 WEEK 1
@@ -452,7 +452,7 @@ is used:
     AVISIT = "MINIMUM"
   )
 )
-#> # A tibble: 2 × 3
+#> # A tibble: 2 x 3
 #>   USUBJID AVISIT   AVAL
 #>   <chr>   <chr>   <dbl>
 #> 1 1       MINIMUM   123
@@ -488,7 +488,7 @@ derive_extreme_records(
     ADT = DTHDT
   )
 )
-#> # A tibble: 3 × 5
+#> # A tibble: 3 x 5
 #>   USUBJID PARAMCD ADT        DTHDT      AVALC
 #>   <chr>   <chr>   <date>     <date>     <chr>
 #> 1 1       DEATH   2022-05-13 2022-05-13 Y    
@@ -530,7 +530,7 @@ derive_extreme_records(
     DTYPE = "LOV"
   )
 )
-#> # A tibble: 16 × 8
+#> # A tibble: 16 x 8
 #>    STUDYID USUBJID AVISIT   AVISITN PARAMCD  AVAL LBSEQ DTYPE
 #>    <chr>   <chr>   <chr>      <dbl> <chr>   <dbl> <dbl> <chr>
 #>  1 XYZ     1       BASELINE       1 ABC       120     1 <NA> 
@@ -570,7 +570,7 @@ respect to \code{AVISIT} and \code{LBSEQ} should be selected. For the new record
     DTYPE = "MINIMUM"
   )
 )
-#> # A tibble: 16 × 8
+#> # A tibble: 16 x 8
 #>    STUDYID USUBJID AVISIT   AVISITN PARAMCD  AVAL LBSEQ DTYPE  
 #>    <chr>   <chr>   <chr>      <dbl> <chr>   <dbl> <dbl> <chr>  
 #>  1 XYZ     1       BASELINE       1 ABC       120     1 <NA>   
@@ -610,7 +610,7 @@ respect to \code{AVISIT} and \code{LBSEQ} should be selected. For the new record
     DTYPE = "MAXIMUM"
   )
 )
-#> # A tibble: 16 × 8
+#> # A tibble: 16 x 8
 #>    STUDYID USUBJID AVISIT   AVISITN PARAMCD  AVAL LBSEQ DTYPE  
 #>    <chr>   <chr>   <chr>      <dbl> <chr>   <dbl> <dbl> <chr>  
 #>  1 XYZ     1       BASELINE       1 ABC       120     1 <NA>   
@@ -657,7 +657,7 @@ for \code{PARAMCD = "DEF"}.
     DTYPE = "WOC"
   )
 )
-#> # A tibble: 16 × 8
+#> # A tibble: 16 x 8
 #>    STUDYID USUBJID AVISIT    AVISITN PARAMCD  AVAL LBSEQ DTYPE
 #>    <chr>   <chr>   <chr>       <dbl> <chr>   <dbl> <dbl> <chr>
 #>  1 XYZ     1       BASELINE        1 ABC       120     1 <NA> 
@@ -726,7 +726,7 @@ derive_extreme_records(
     AVAL = yn_to_numeric(AVALC),
   )
 )
-#> # A tibble: 9 × 8
+#> # A tibble: 9 x 8
 #>   STUDYID USUBJID RSDTC      ADT        PARAMCD PARAM               AVALC  AVAL
 #>   <chr>   <chr>   <chr>      <date>     <chr>   <chr>               <chr> <dbl>
 #> 1 XX1234  1       2020-01-02 2020-01-02 OVR     Overall Response    PR        2
@@ -761,7 +761,7 @@ created which indicates whether the subject died (set \code{AVALC = "Y"}, \code{
     ADT = DTHDT
   )
 )
-#> # A tibble: 3 × 6
+#> # A tibble: 3 x 6
 #>   STUDYID USUBJID PARAMCD PARAM ADT        AVALC
 #>   <chr>   <chr>   <chr>   <chr> <date>     <chr>
 #> 1 XX1234  1       DEATH   Death 2022-05-13 Y    
