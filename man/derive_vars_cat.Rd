@@ -156,7 +156,7 @@ derive_vars_cat(
   dataset = advs,
   definition = definition
 )
-#> # A tibble: 8 x 6
+#> # A tibble: 8 × 6
 #>   USUBJID     VSTEST  AVAL AVALCAT1 AVALCA1N NEWCOL
 #>   <chr>       <chr>  <dbl> <chr>       <dbl> <chr> 
 #> 1 01-701-1015 Height 147.  <=160 cm        2 extra2
@@ -187,7 +187,7 @@ derive_vars_cat(
   definition = definition2,
   by_vars = exprs(VSTEST)
 )
-#> # A tibble: 8 x 5
+#> # A tibble: 8 × 5
 #>   USUBJID     VSTEST  AVAL AVALCAT1 AVALCA1N
 #>   <chr>       <chr>  <dbl> <chr>       <dbl>
 #> 1 01-701-1015 Height 147.  <=160 cm        2
@@ -217,7 +217,7 @@ derive_vars_cat(
   definition = definition3,
   by_vars = exprs(VSTEST)
 )
-#> # A tibble: 8 x 5
+#> # A tibble: 8 × 5
 #>   USUBJID     VSTEST  AVAL AVALCAT1 AVALCA1N
 #>   <chr>       <chr>  <dbl> <chr>       <dbl>
 #> 1 01-701-1015 Height 147.  <=160 cm        3
@@ -256,7 +256,7 @@ adlb \%>\%
     definition = definition_mcrit,
     by_vars = exprs(PARAM)
   )
-#> # A tibble: 5 x 7
+#> # A tibble: 5 × 7
 #>   USUBJID     PARAM  AVAL AVALU ANRHI MCRIT1ML   MCRIT1MN
 #>   <chr>       <chr> <dbl> <chr> <dbl> <chr>         <dbl>
 #> 1 01-701-1015 ALT     150 U/L      40 >3*ANRHI          3
@@ -284,7 +284,7 @@ derive_vars_cat(
   definition = definition4,
   by_vars = exprs(VSTEST)
 )
-#> # A tibble: 8 x 5
+#> # A tibble: 8 × 5
 #>   USUBJID     VSTEST  AVAL AVALCAT1 AVALCA1N
 #>   <chr>       <chr>  <dbl> <chr>       <dbl>
 #> 1 01-701-1015 Height 147.  <=160 cm        2
@@ -315,7 +315,7 @@ derive_vars_cat(
   definition = definition5,
   by_vars = exprs(VSTEST)
 )
-#> # A tibble: 8 x 8
+#> # A tibble: 8 × 8
 #>   USUBJID     VSTEST  AVAL AVALCAT1 AVALCA1N AVALCAT2 AVALCA2N AVALCAT3
 #>   <chr>       <chr>  <dbl> <chr>       <dbl> <chr>       <dbl> <chr>   
 #> 1 01-701-1015 Height 147.  <=160 cm        2 Short           2 Group B 

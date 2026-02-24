@@ -81,11 +81,17 @@ the origin date.
 
 \item{end_dates}{Time to event end date(s)
 
-A list of \code{censor_source()} objects is expected. Each date restrict the
+A list of \code{censor_source()} objects is expected. Each date restricts the
 observation period for time-to-event analysis. For each subject the
 earliest date across all \code{end_dates} is used as the end date for that
 subject. The records defined by \code{event_conditions} and \code{censor_conditions}
 are restricted to dates before or equal to the selected end date.
+
+This argument should be specified if there is more than one reason for
+stopping the observation of a subject, e.g., end of study, death, or start
+of new drug. If there is only one reason for stopping the observation, it
+is sufficient to just include this as a censoring condition in
+\code{censor_conditions}.
 
 \describe{
 \item{Permitted values}{a list of source objects, e.g., \code{list(pd, death)}}
@@ -103,7 +109,16 @@ A list of \code{event_source()} objects is expected.
 
 \item{censor_conditions}{Sources and conditions defining censorings
 
-A list of \code{censor_source()} objects is expected.
+A list of \code{censor_source()} objects is expected. Each records defined by
+the \code{censor_conditions} should be a possible censoring time, i.e., at this
+time there should be known that the event of interest has not yet occurred.
+Assessment were it is not known whether the event of interest has occurred
+or not should not be included as censoring times, e.g., when an assessment
+was not evaluable.
+
+It is acceptable to include records with event as long as these are also
+included in \code{event_conditions} because event take precedence over
+censorings.
 
 \describe{
 \item{Permitted values}{a list of source objects, e.g., \code{list(pd, death)}}
@@ -314,7 +329,7 @@ derive_param_tte(
   )
 ) \%>\%
   select(USUBJID, STARTDT, PARAMCD, PARAM, ADT, CNSR, SRCSEQ)
-#> # A tibble: 2 x 7
+#> # A tibble: 2 × 7
 #>   USUBJID STARTDT    PARAMCD PARAM                       ADT         CNSR SRCSEQ
 #>   <chr>   <date>     <chr>   <chr>                       <date>     <int>  <dbl>
 #> 1 01      2020-12-06 TTAE    Time to First Adverse Event 2021-01-03     0      1
@@ -337,13 +352,13 @@ term (\code{AEDECOD}) should be created as parameters.
   )
 ) \%>\%
   select(USUBJID, STARTDT, PARAMCD, PARAM, ADT, CNSR, SRCSEQ)
-#> # A tibble: 4 x 7
+#> # A tibble: 4 × 7
 #>   USUBJID STARTDT    PARAMCD PARAM                       ADT         CNSR SRCSEQ
 #>   <chr>   <date>     <chr>   <chr>                       <date>     <int>  <dbl>
-#> 1 01      2020-12-06 TTAE1   Time to First Cough Advers~ 2021-03-04     0      2
-#> 2 01      2020-12-06 TTAE2   Time to First Flu Adverse ~ 2021-01-03     0      1
-#> 3 02      2021-01-16 TTAE1   Time to First Cough Advers~ 2021-02-03     1     NA
-#> 4 02      2021-01-16 TTAE2   Time to First Flu Adverse ~ 2021-02-03     1     NA}\if{html}{\out{</div>}}}
+#> 1 01      2020-12-06 TTAE1   Time to First Cough Advers… 2021-03-04     0      2
+#> 2 01      2020-12-06 TTAE2   Time to First Flu Adverse … 2021-01-03     0      1
+#> 3 02      2021-01-16 TTAE1   Time to First Cough Advers… 2021-02-03     1     NA
+#> 4 02      2021-01-16 TTAE2   Time to First Flu Adverse … 2021-02-03     1     NA}\if{html}{\out{</div>}}}
 \subsection{Handling duplicates (\code{check_type})}{
 
 The source records are checked regarding duplicates with respect to the
@@ -373,7 +388,7 @@ derive_param_tte(
     PARAM = paste("Time to First", AEDECOD, "Adverse Event")
   )
 )
-#> # A tibble: 4 x 11
+#> # A tibble: 4 × 11
 #>   USUBJID STUDYID EVNTDESC     SRCDOM SRCVAR SRCSEQ  CNSR ADT        STARTDT   
 #>   <chr>   <chr>   <chr>        <chr>  <chr>   <dbl> <int> <date>     <date>    
 #> 1 01      AB42    AE           ADAE   ASTDT       2     0 2021-03-04 2020-12-06
@@ -381,16 +396,16 @@ derive_param_tte(
 #> 3 02      AB42    END OF STUDY ADSL   EOSDT      NA     1 2021-02-03 2021-01-16
 #> 4 02      AB42    END OF STUDY ADSL   EOSDT      NA     1 2021-02-03 2021-01-16
 #> # i 2 more variables: PARAMCD <chr>, PARAM <chr>
-#> Warning: Dataset "adae" contains duplicate records with respect to `STUDYID`, `USUBJID`,
+#> G2;H2;Warningh: Dataset "adae" contains duplicate records with respect to `STUDYID`, `USUBJID`,
 #> `AEDECOD`, and `ASTDT`
-#> i Run ]8;;x-r-run:admiral::get_duplicates_dataset()admiral::get_duplicates_dataset()]8;; to access the duplicate records}\if{html}{\out{</div>}}
+#> i Run `admiral::get_duplicates_dataset()` to access the duplicate recordsg}\if{html}{\out{</div>}}
 
 For investigating the issue, the dataset of the duplicate source records
 can be obtained by calling \code{get_duplicates_dataset()}:
 
 \if{html}{\out{<div class="sourceCode r">}}\preformatted{get_duplicates_dataset()
-#> Duplicate records with respect to `STUDYID`, `USUBJID`, `AEDECOD`, and `ASTDT`.
-#> # A tibble: 2 x 6
+#> G3;Duplicate records with respect to `STUDYID`, `USUBJID`, `AEDECOD`, and `ASTDT`.
+#> g# A tibble: 2 × 6
 #>   STUDYID USUBJID AEDECOD ASTDT      AESEQ AESER
 #> * <chr>   <chr>   <chr>   <date>     <dbl> <chr>
 #> 1 AB42    01      Cough   2021-03-04     2 N    
@@ -436,13 +451,13 @@ function call itself.
   )
 ) \%>\%
   select(USUBJID, STARTDT, PARAMCD, PARAM, ADT, CNSR, SRCSEQ)
-#> # A tibble: 4 x 7
+#> # A tibble: 4 × 7
 #>   USUBJID STARTDT    PARAMCD PARAM                       ADT         CNSR SRCSEQ
 #>   <chr>   <date>     <chr>   <chr>                       <date>     <int>  <dbl>
-#> 1 01      2020-12-06 TTAE1   Time to First Cough Advers~ 2021-03-04     0      2
-#> 2 01      2020-12-06 TTAE2   Time to First Flu Adverse ~ 2021-01-03     0      1
-#> 3 02      2021-01-16 TTAE1   Time to First Cough Advers~ 2021-02-03     1     NA
-#> 4 02      2021-01-16 TTAE2   Time to First Flu Adverse ~ 2021-02-03     1     NA}\if{html}{\out{</div>}}}
+#> 1 01      2020-12-06 TTAE1   Time to First Cough Advers… 2021-03-04     0      2
+#> 2 01      2020-12-06 TTAE2   Time to First Flu Adverse … 2021-01-03     0      1
+#> 3 02      2021-01-16 TTAE1   Time to First Cough Advers… 2021-02-03     1     NA
+#> 4 02      2021-01-16 TTAE2   Time to First Flu Adverse … 2021-02-03     1     NA}\if{html}{\out{</div>}}}
 \subsection{Filtering source records (\code{filter})}{
 
 The first option from above could have been achieved using \code{filter}, for
@@ -471,13 +486,13 @@ example here only using serious adverse events.
   )
 ) \%>\%
   select(USUBJID, STARTDT, PARAMCD, PARAM, ADT, CNSR, SRCSEQ)
-#> # A tibble: 4 x 7
+#> # A tibble: 4 × 7
 #>   USUBJID STARTDT    PARAMCD PARAM                       ADT         CNSR SRCSEQ
 #>   <chr>   <date>     <chr>   <chr>                       <date>     <int>  <dbl>
-#> 1 01      2020-12-06 TTSAE1  Time to First Serious Coug~ 2021-03-04     0      3
-#> 2 01      2020-12-06 TTSAE2  Time to First Serious Flu ~ 2021-01-03     0      1
-#> 3 02      2021-01-16 TTSAE1  Time to First Serious Coug~ 2021-02-03     1     NA
-#> 4 02      2021-01-16 TTSAE2  Time to First Serious Flu ~ 2021-02-03     1     NA}\if{html}{\out{</div>}}}
+#> 1 01      2020-12-06 TTSAE1  Time to First Serious Coug… 2021-03-04     0      3
+#> 2 01      2020-12-06 TTSAE2  Time to First Serious Flu … 2021-01-03     0      1
+#> 3 02      2021-01-16 TTSAE1  Time to First Serious Coug… 2021-02-03     1     NA
+#> 4 02      2021-01-16 TTSAE2  Time to First Serious Flu … 2021-02-03     1     NA}\if{html}{\out{</div>}}}
 \subsection{Using multiple event/censor conditions (\code{event_conditions}
 /\code{censor_conditions})}{
 
@@ -527,11 +542,11 @@ derive_param_tte(
   )
 ) \%>\%
   select(USUBJID, STARTDT, PARAMCD, PARAM, ADT, CNSR, SRCSEQ)
-#> # A tibble: 2 x 7
+#> # A tibble: 2 × 7
 #>   USUBJID STARTDT    PARAMCD PARAM                       ADT         CNSR SRCSEQ
 #>   <chr>   <date>     <chr>   <chr>                       <date>     <int>  <dbl>
-#> 1 01      2020-12-06 TTAELB  Time to First Adverse Even~ 2020-12-22     0     NA
-#> 2 02      2021-01-16 TTAELB  Time to First Adverse Even~ 2021-02-03     1     NA}\if{html}{\out{</div>}}
+#> 1 01      2020-12-06 TTAELB  Time to First Adverse Even… 2020-12-22     0     NA
+#> 2 02      2021-01-16 TTAELB  Time to First Adverse Even… 2021-02-03     1     NA}\if{html}{\out{</div>}}
 
 Note above how the earliest event date is always taken and the latest
 censor date.}
@@ -566,13 +581,13 @@ derive_param_tte(
   )
 ) \%>\%
   select(USUBJID, STARTDT, PARAMCD, PARAM, ADT, CNSR, SRCSEQ)
-#> # A tibble: 4 x 7
+#> # A tibble: 4 × 7
 #>   USUBJID STARTDT    PARAMCD PARAM                       ADT         CNSR SRCSEQ
 #>   <chr>   <date>     <chr>   <chr>                       <date>     <int>  <dbl>
-#> 1 01      2020-12-06 TTAE1   Time to First Cough Advers~ 2021-03-04     0      2
-#> 2 01      2020-12-06 TTAE2   Time to First Flu Adverse ~ 2021-01-03     0      1
-#> 3 02      2021-01-16 TTAE1   Time to First Cough Advers~ 2021-02-03     1     NA
-#> 4 02      2021-01-16 TTAE2   Time to First Flu Adverse ~ 2021-02-03     1     NA}\if{html}{\out{</div>}}
+#> 1 01      2020-12-06 TTAE1   Time to First Cough Advers… 2021-03-04     0      2
+#> 2 01      2020-12-06 TTAE2   Time to First Flu Adverse … 2021-01-03     0      1
+#> 3 02      2021-01-16 TTAE1   Time to First Cough Advers… 2021-02-03     1     NA
+#> 4 02      2021-01-16 TTAE2   Time to First Flu Adverse … 2021-02-03     1     NA}\if{html}{\out{</div>}}
 
 In this case the results are still the same, because as explained in
 the above example the latest censor condition is always taken for those
@@ -606,13 +621,13 @@ derive_param_tte(
   )
 ) \%>\%
   select(USUBJID, STARTDT, PARAMCD, PARAM, ADT, CNSR, SRCSEQ)
-#> # A tibble: 4 x 7
+#> # A tibble: 4 × 7
 #>   USUBJID STARTDT    PARAMCD PARAM                       ADT         CNSR SRCSEQ
 #>   <chr>   <date>     <chr>   <chr>                       <date>     <int>  <dbl>
-#> 1 01      2020-12-06 TTAE1   Time to First Cough Advers~ 2021-03-04     0      2
-#> 2 01      2020-12-06 TTAE2   Time to First Flu Adverse ~ 2021-01-03     0      1
-#> 3 02      2021-01-16 TTAE1   Time to First Cough Advers~ 2021-01-16     2     NA
-#> 4 02      2021-01-16 TTAE2   Time to First Flu Adverse ~ 2021-01-16     2     NA}\if{html}{\out{</div>}}}
+#> 1 01      2020-12-06 TTAE1   Time to First Cough Advers… 2021-03-04     0      2
+#> 2 01      2020-12-06 TTAE2   Time to First Flu Adverse … 2021-01-03     0      1
+#> 3 02      2021-01-16 TTAE1   Time to First Cough Advers… 2021-01-16     2     NA
+#> 4 02      2021-01-16 TTAE2   Time to First Flu Adverse … 2021-01-16     2     NA}\if{html}{\out{</div>}}}
 \subsection{Overall survival time to event parameter}{
 
 In oncology trials, this is commonly derived as time from randomization
@@ -667,7 +682,7 @@ derive_param_tte(
   )
 ) \%>\%
   select(USUBJID, STARTDTM, PARAMCD, PARAM, ADTM, CNSR)
-#> # A tibble: 2 x 6
+#> # A tibble: 2 × 6
 #>   USUBJID STARTDTM            PARAMCD PARAM            ADTM                 CNSR
 #>   <chr>   <dttm>              <chr>   <chr>            <dttm>              <int>
 #> 1 01      2020-10-03 00:00:00 OS      Overall Survival 2022-12-15 23:59:59     1
@@ -747,66 +762,99 @@ derive_param_tte(
   )
 ) \%>\%
   select(USUBJID, STARTDT, PARAMCD, PARAM, ADT, CNSR, SRCSEQ)
-#> # A tibble: 2 x 7
+#> # A tibble: 2 × 7
 #>   USUBJID STARTDT    PARAMCD PARAM                ADT         CNSR SRCSEQ
 #>   <chr>   <date>     <chr>   <chr>                <date>     <int>  <dbl>
 #> 1 01      2021-03-04 DURRSP  Duration of Response 2021-05-05     0      3
 #> 2 04      2021-04-14 DURRSP  Duration of Response 2021-05-15     1      3}\if{html}{\out{</div>}}}
 \subsection{End of the observation period (\code{end_dates})}{
 
-\if{html}{\out{<div class="sourceCode r">}}\preformatted{
-adsl <- tribble(
+The \code{end_dates} argument can be used to specify the end of the
+observation period if there is more than one date which restricts the
+observation period, e.g., end of study date and new drug date. The earliest
+date is used as the end of the observation period and events/censorings
+occurring after this date are not considered.
+
+In the example two \code{censor_source()} objects are defined, \code{eos} and \code{newdrg},
+for end of study date and new drug date, respectively, and then passed to the
+\code{end_dates} argument.
+
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{adsl <- tribble(
   ~USUBJID, ~TRTSDT,           ~EOSDT,            ~NEWDRGDT,
   "01",     ymd("2020-12-06"), ymd("2021-03-06"), NA,
-  "02",     ymd("2021-01-16"), ymd("2021-04-03"), ymd("2021-03-21")
+  "02",     ymd("2021-01-16"), ymd("2021-04-03"), ymd("2021-03-21"),
+  "03",     ymd("2021-02-01"), NA,                NA
 ) \%>\%
   mutate(STUDYID = "AB42")
 
 adqs <- tribble(
- ~USUBJID, ~ADT,              ~CHG,
- "01",     ymd("2021-01-03"),    5,
- "01",     ymd("2021-02-03"),   -2,
- "01",     ymd("2021-03-07"),   10,
- "02",     ymd("2021-01-03"),    4,
- "02",     ymd("2021-02-03"),   -1,
- "02",     ymd("2021-04-01"),  -12
+  ~USUBJID, ~ADT,              ~CHG,
+  "01",     ymd("2021-01-03"),    5,
+  "01",     ymd("2021-02-03"),   -2,
+  "01",     ymd("2021-03-01"),   NA,
+  "01",     ymd("2021-03-07"),   10,
+  "02",     ymd("2021-01-03"),    4,
+  "02",     ymd("2021-02-03"),   -1,
+  "02",     ymd("2021-04-01"),  -12,
+  "03",     ymd("2021-02-15"),    3,
+  "03",     ymd("2021-03-15"),  -15
 ) \%>\%
   mutate(STUDYID = "AB42")
+
+eos <- censor_source(
+  dataset_name = "adsl",
+  date = EOSDT,
+  set_values_to = exprs(
+    EVNTDESC = "END OF STUDY"
+  )
+)
+
+newdrg <- censor_source(
+  dataset_name = "adsl",
+  date = NEWDRGDT,
+  set_values_to = exprs(
+    EVNTDESC = "NEW DRUG"
+  )
+)
+
+worsening <- event_source(
+  dataset_name = "adqs",
+  date = ADT,
+  filter = CHG <= -10,
+  set_values_to = exprs(
+    EVNTDESC = "WORSENING",
+    SRCDOM = "ADQS",
+    SRCVAR = "ADT"
+  )
+)
+
+no_worsening <- censor_source(
+  dataset_name = "adqs",
+  date = ADT,
+  filter = !is.na(CHG),
+  set_values_to = exprs(
+    CNSDTDSC = "LAST ASSESSMENT",
+    SRCDOM = "ADQS",
+    SRCVAR = "ADT"
+  )
+)
 
 derive_param_tte(
   dataset_adsl = adsl,
   source_datasets = list(adsl = adsl, adqs = adqs),
   start_date = TRTSDT,
-  end_dates = list(
-    censor_source(
-      dataset_name = "adsl",
-      date = EOSDT
-    ),
-    censor_source(
-      dataset_name = "adsl",
-      date = NEWDRGDT
-    )
-  ),
-  event_conditions = list(event_source(
-    dataset_name = "adqs",
-    date = ADT,
-    filter = CHG <= -10
-  )),
-  censor_conditions = list(censor_source(
-    dataset_name = "adqs",
-    date = ADT,
-    filter = !is.na(CHG)
-  )),
-  set_values_to = exprs(
-    PARAMCD = "TTWORSE",
-    PARAM = "Time to Worsening of at least 10 points"
-  )
-)
-#> # A tibble: 2 x 7
-#>   USUBJID ADT        STUDYID  CNSR STARTDT    PARAMCD PARAM                     
-#>   <chr>   <date>     <chr>   <int> <date>     <chr>   <chr>                     
-#> 1 01      2021-02-03 AB42        1 2020-12-06 TTWORSE Time to Worsening of at l~
-#> 2 02      2021-02-03 AB42        1 2021-01-16 TTWORSE Time to Worsening of at l~}\if{html}{\out{</div>}}}
+  end_dates = list(eos, newdrg),
+  event_conditions = list(worsening),
+  censor_conditions = list(no_worsening),
+  set_values_to = exprs(PARAMCD = "TTWORSE")
+) \%>\%
+select(-STUDYID)
+#> # A tibble: 3 × 9
+#>   USUBJID ADT        EVNTDESC    SRCDOM SRCVAR  CNSR CNSDTDSC STARTDT    PARAMCD
+#>   <chr>   <date>     <chr>       <chr>  <chr>  <int> <chr>    <date>     <chr>  
+#> 1 01      2021-02-03 END OF STU… ADQS   ADT        1 LAST AS… 2020-12-06 TTWORSE
+#> 2 02      2021-02-03 NEW DRUG    ADQS   ADT        1 LAST AS… 2021-01-16 TTWORSE
+#> 3 03      2021-03-15 WORSENING   ADQS   ADT        0 <NA>     2021-02-01 TTWORSE}\if{html}{\out{</div>}}}
 \subsection{Further examples}{
 
 Further example usages of this function can be found in the

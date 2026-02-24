@@ -49,11 +49,17 @@
 #'
 #' @param end_dates Time to event end date(s)
 #'
-#'   A list of `censor_source()` objects is expected. Each date restrict the
+#'   A list of `censor_source()` objects is expected. Each date restricts the
 #'   observation period for time-to-event analysis. For each subject the
 #'   earliest date across all `end_dates` is used as the end date for that
 #'   subject. The records defined by `event_conditions` and `censor_conditions`
 #'   are restricted to dates before or equal to the selected end date.
+#'
+#'   This argument should be specified if there is more than one reason for
+#'   stopping the observation of a subject, e.g., end of study, death, or start
+#'   of new drug. If there is only one reason for stopping the observation, it
+#'   is sufficient to just include this as a censoring condition in
+#'   `censor_conditions`.
 #'
 #' @permitted [source_list]
 #'
@@ -65,7 +71,16 @@
 #'
 #' @param censor_conditions Sources and conditions defining censorings
 #'
-#'   A list of `censor_source()` objects is expected.
+#'   A list of `censor_source()` objects is expected. Each records defined by
+#'   the `censor_conditions` should be a possible censoring time, i.e., at this
+#'   time there should be known that the event of interest has not yet occurred.
+#'   Assessment were it is not known whether the event of interest has occurred
+#'   or not should not be included as censoring times, e.g., when an assessment
+#'   was not evaluable.
+#'
+#'   It is acceptable to include records with event as long as these are also
+#'   included in `event_conditions` because event take precedence over
+#'   censorings.
 #'
 #' @permitted [source_list]
 #'
@@ -621,55 +636,87 @@
 #'
 #' @caption End of the observation period (`end_dates`)
 #'
-#' @code
+#' @info The `end_dates` argument can be used to specify the end of the
+#'   observation period if there is more than one date which restricts the
+#'   observation period, e.g., end of study date and new drug date. The earliest
+#'   date is used as the end of the observation period and events/censorings
+#'   occurring after this date are not considered.
 #'
+#' In the example two `censor_source()` objects are defined, `eos` and `newdrg`,
+#' for end of study date and new drug date, respectively, and then passed to the
+#' `end_dates` argument.
+#'
+#' @code
 #' adsl <- tribble(
 #'   ~USUBJID, ~TRTSDT,           ~EOSDT,            ~NEWDRGDT,
 #'   "01",     ymd("2020-12-06"), ymd("2021-03-06"), NA,
-#'   "02",     ymd("2021-01-16"), ymd("2021-04-03"), ymd("2021-03-21")
+#'   "02",     ymd("2021-01-16"), ymd("2021-04-03"), ymd("2021-03-21"),
+#'   "03",     ymd("2021-02-01"), NA,                NA
 #' ) %>%
 #'   mutate(STUDYID = "AB42")
 #'
 #' adqs <- tribble(
-#'  ~USUBJID, ~ADT,              ~CHG,
-#'  "01",     ymd("2021-01-03"),    5,
-#'  "01",     ymd("2021-02-03"),   -2,
-#'  "01",     ymd("2021-03-07"),   10,
-#'  "02",     ymd("2021-01-03"),    4,
-#'  "02",     ymd("2021-02-03"),   -1,
-#'  "02",     ymd("2021-04-01"),  -12
+#'   ~USUBJID, ~ADT,              ~CHG,
+#'   "01",     ymd("2021-01-03"),    5,
+#'   "01",     ymd("2021-02-03"),   -2,
+#'   "01",     ymd("2021-03-01"),   NA,
+#'   "01",     ymd("2021-03-07"),   10,
+#'   "02",     ymd("2021-01-03"),    4,
+#'   "02",     ymd("2021-02-03"),   -1,
+#'   "02",     ymd("2021-04-01"),  -12,
+#'   "03",     ymd("2021-02-15"),    3,
+#'   "03",     ymd("2021-03-15"),  -15
 #' ) %>%
 #'   mutate(STUDYID = "AB42")
+#'
+#' eos <- censor_source(
+#'   dataset_name = "adsl",
+#'   date = EOSDT,
+#'   set_values_to = exprs(
+#'     EVNTDESC = "END OF STUDY"
+#'   )
+#' )
+#'
+#' newdrg <- censor_source(
+#'   dataset_name = "adsl",
+#'   date = NEWDRGDT,
+#'   set_values_to = exprs(
+#'     EVNTDESC = "NEW DRUG"
+#'   )
+#' )
+#'
+#' worsening <- event_source(
+#'   dataset_name = "adqs",
+#'   date = ADT,
+#'   filter = CHG <= -10,
+#'   set_values_to = exprs(
+#'     EVNTDESC = "WORSENING",
+#'     SRCDOM = "ADQS",
+#'     SRCVAR = "ADT"
+#'   )
+#' )
+#'
+#' no_worsening <- censor_source(
+#'   dataset_name = "adqs",
+#'   date = ADT,
+#'   filter = !is.na(CHG),
+#'   set_values_to = exprs(
+#'     CNSDTDSC = "LAST ASSESSMENT",
+#'     SRCDOM = "ADQS",
+#'     SRCVAR = "ADT"
+#'   )
+#' )
 #'
 #' derive_param_tte(
 #'   dataset_adsl = adsl,
 #'   source_datasets = list(adsl = adsl, adqs = adqs),
 #'   start_date = TRTSDT,
-#'   end_dates = list(
-#'     censor_source(
-#'       dataset_name = "adsl",
-#'       date = EOSDT
-#'     ),
-#'     censor_source(
-#'       dataset_name = "adsl",
-#'       date = NEWDRGDT
-#'     )
-#'   ),
-#'   event_conditions = list(event_source(
-#'     dataset_name = "adqs",
-#'     date = ADT,
-#'     filter = CHG <= -10
-#'   )),
-#'   censor_conditions = list(censor_source(
-#'     dataset_name = "adqs",
-#'     date = ADT,
-#'     filter = !is.na(CHG)
-#'   )),
-#'   set_values_to = exprs(
-#'     PARAMCD = "TTWORSE",
-#'     PARAM = "Time to Worsening of at least 10 points"
-#'   )
-#' )
+#'   end_dates = list(eos, newdrg),
+#'   event_conditions = list(worsening),
+#'   censor_conditions = list(no_worsening),
+#'   set_values_to = exprs(PARAMCD = "TTWORSE")
+#' ) %>%
+#' select(-STUDYID)
 #'
 #' @caption Further examples
 #' @info Further example usages of this function can be found in the
