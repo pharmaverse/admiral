@@ -74,8 +74,12 @@
 #'   For events that are considered unfavorable, e.g., adverse events,
 #'   progression, worsening, ..., the value should be `"negative"` and for
 #'   events that are considered favorable, e.g., response to treatment,
-#'   improvement, ..., the value should be `"positive"`. This affect the
-#'   censoring.
+#'   improvement, ..., the value should be `"positive"`.
+#'
+#'   If `event_type` is specified as `"positive"`, the objects specified for
+#'   `end_dates` are added to the censoring conditions (`censor_conditions`).
+#'   I.e., if a subject is censored, it is censored at the earliest date
+#'   provided by `end_dates`.
 #'
 #' @permitted `"negative"`, `"positive"`
 #'
@@ -764,11 +768,14 @@ derive_param_tte <- function(dataset = NULL,
 
     end_date_data <- end_date_data %>%
       rename(!!end_date_var := ADT)
+
+    if (event_type == "positive" || is.null(censor_conditions)) {
+      censor_conditions <- c(censor_conditions, end_dates)
+    }
   } else {
     end_date_data <- NULL
     end_date_var <- NULL
   }
-
 
   # determine events
   event_data <- filter_date_sources(
@@ -1028,7 +1035,7 @@ filter_date_sources <- function(sources,
       var = !!source_date_var,
       dataset_name = sources[[i]]$dataset_name
     )
-    # wrap filter_extreme in tryCatch to catch duplicate records and create a message
+
     if (!is.null(end_date_data)) {
       source_dataset <- derive_vars_merged(
         source_dataset,
@@ -1040,6 +1047,7 @@ filter_date_sources <- function(sources,
     } else {
       keep_end_date_vars <- NULL
     }
+    # wrap filter_extreme in tryCatch to catch duplicate records and create a message
     data[[i]] <- rlang::try_fetch(
       {
         source_dataset %>%
