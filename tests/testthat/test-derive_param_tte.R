@@ -1126,16 +1126,16 @@ test_that("derive_param_tte Test 17: end dates", {
   )
 
   adqs <- tribble(
-   ~USUBJID, ~ADT,              ~CHG,
-   "01",     ymd("2021-01-03"),    5,
-   "01",     ymd("2021-02-03"),   -2,
-   "01",     ymd("2021-03-01"),   NA,
-   "01",     ymd("2021-03-07"),   10,
-   "02",     ymd("2021-01-03"),    4,
-   "02",     ymd("2021-02-03"),   -1,
-   "02",     ymd("2021-04-01"),  -12,
-   "03",     ymd("2021-02-15"),    3,
-   "03",     ymd("2021-03-15"),  -15
+    ~USUBJID, ~ADT,              ~CHG,
+    "01",     ymd("2021-01-03"),    5,
+    "01",     ymd("2021-02-03"),   -2,
+    "01",     ymd("2021-03-01"),   NA,
+    "01",     ymd("2021-03-07"),   10,
+    "02",     ymd("2021-01-03"),    4,
+    "02",     ymd("2021-02-03"),   -1,
+    "02",     ymd("2021-04-01"),  -12,
+    "03",     ymd("2021-02-15"),    3,
+    "03",     ymd("2021-03-15"),  -15
   )
 
   actual <- derive_param_tte(
@@ -1188,13 +1188,13 @@ test_that("derive_param_tte Test 17: end dates", {
     "02",     "2021-02-03",    1L, "NEW DRUG",     "LAST ASSESSMENT", "2021-01-16",
     "03",     "2021-03-15",    0L, "WORSENING",    NA,                "2021-02-01"
   ) %>%
-  mutate(
-    SRCDOM = "ADQS",
-    SRCVAR = "ADT",
-    PARAMCD = "TTWORSE",
-    ADT = ymd(ADT),
-    STARTDT = ymd(STARTDT)
-  )
+    mutate(
+      SRCDOM = "ADQS",
+      SRCVAR = "ADT",
+      PARAMCD = "TTWORSE",
+      ADT = ymd(ADT),
+      STARTDT = ymd(STARTDT)
+    )
 
   expect_dfs_equal(
     base = expected,
