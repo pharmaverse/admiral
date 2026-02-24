@@ -116,11 +116,17 @@ derive_param_tte(
 
   A list of
   [`censor_source()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/censor_source.md)
-  objects is expected. Each date restrict the observation period for
+  objects is expected. Each date restricts the observation period for
   time-to-event analysis. For each subject the earliest date across all
   `end_dates` is used as the end date for that subject. The records
   defined by `event_conditions` and `censor_conditions` are restricted
   to dates before or equal to the selected end date.
+
+  This argument should be specified if there is more than one reason for
+  stopping the observation of a subject, e.g., end of study, death, or
+  start of new drug. If there is only one reason for stopping the
+  observation, it is sufficient to just include this as a censoring
+  condition in `censor_conditions`.
 
   Permitted values
 
@@ -152,7 +158,16 @@ derive_param_tte(
 
   A list of
   [`censor_source()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/censor_source.md)
-  objects is expected.
+  objects is expected. Each records defined by the `censor_conditions`
+  should be a possible censoring time, i.e., at this time there should
+  be known that the event of interest has not yet occurred. Assessment
+  were it is not known whether the event of interest has occurred or not
+  should not be included as censoring times, e.g., when an assessment
+  was not evaluable.
+
+  It is acceptable to include records with event as long as these are
+  also included in `event_conditions` because event take precedence over
+  censorings.
 
   Permitted values
 
@@ -409,7 +424,7 @@ parameter.
       )
     ) %>%
       select(USUBJID, STARTDT, PARAMCD, PARAM, ADT, CNSR, SRCSEQ)
-    #> # A tibble: 2 x 7
+    #> # A tibble: 2 × 7
     #>   USUBJID STARTDT    PARAMCD PARAM                       ADT         CNSR SRCSEQ
     #>   <chr>   <date>     <chr>   <chr>                       <date>     <int>  <dbl>
     #> 1 01      2020-12-06 TTAE    Time to First Adverse Event 2021-01-03     0      1
@@ -433,13 +448,13 @@ preferred term (`AEDECOD`) should be created as parameters.
       )
     ) %>%
       select(USUBJID, STARTDT, PARAMCD, PARAM, ADT, CNSR, SRCSEQ)
-    #> # A tibble: 4 x 7
+    #> # A tibble: 4 × 7
     #>   USUBJID STARTDT    PARAMCD PARAM                       ADT         CNSR SRCSEQ
     #>   <chr>   <date>     <chr>   <chr>                       <date>     <int>  <dbl>
-    #> 1 01      2020-12-06 TTAE1   Time to First Cough Advers~ 2021-03-04     0      2
-    #> 2 01      2020-12-06 TTAE2   Time to First Flu Adverse ~ 2021-01-03     0      1
-    #> 3 02      2021-01-16 TTAE1   Time to First Cough Advers~ 2021-02-03     1     NA
-    #> 4 02      2021-01-16 TTAE2   Time to First Flu Adverse ~ 2021-02-03     1     NA
+    #> 1 01      2020-12-06 TTAE1   Time to First Cough Advers… 2021-03-04     0      2
+    #> 2 01      2020-12-06 TTAE2   Time to First Flu Adverse … 2021-01-03     0      1
+    #> 3 02      2021-01-16 TTAE1   Time to First Cough Advers… 2021-02-03     1     NA
+    #> 4 02      2021-01-16 TTAE2   Time to First Flu Adverse … 2021-02-03     1     NA
 
 ### Handling duplicates (`check_type`)
 
@@ -470,7 +485,7 @@ for `"Cough"`, it was then passed to the function using the
         PARAM = paste("Time to First", AEDECOD, "Adverse Event")
       )
     )
-    #> # A tibble: 4 x 11
+    #> # A tibble: 4 × 11
     #>   USUBJID STUDYID EVNTDESC     SRCDOM SRCVAR SRCSEQ  CNSR ADT        STARTDT
     #>   <chr>   <chr>   <chr>        <chr>  <chr>   <dbl> <int> <date>     <date>
     #> 1 01      AB42    AE           ADAE   ASTDT       2     0 2021-03-04 2020-12-06
@@ -478,17 +493,17 @@ for `"Cough"`, it was then passed to the function using the
     #> 3 02      AB42    END OF STUDY ADSL   EOSDT      NA     1 2021-02-03 2021-01-16
     #> 4 02      AB42    END OF STUDY ADSL   EOSDT      NA     1 2021-02-03 2021-01-16
     #> # i 2 more variables: PARAMCD <chr>, PARAM <chr>
-    #> Warning: Dataset "adae" contains duplicate records with respect to `STUDYID`, `USUBJID`,
+    #> G2;H2;Warningh: Dataset "adae" contains duplicate records with respect to `STUDYID`, `USUBJID`,
     #> `AEDECOD`, and `ASTDT`
-    #> i Run ]8;;x-r-run:admiral::get_duplicates_dataset()admiral::get_duplicates_dataset()]8;; to access the duplicate records
+    #> i Run `admiral::get_duplicates_dataset()` to access the duplicate recordsg
 
 For investigating the issue, the dataset of the duplicate source records
 can be obtained by calling
 [`get_duplicates_dataset()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/get_duplicates_dataset.md):
 
     get_duplicates_dataset()
-    #> Duplicate records with respect to `STUDYID`, `USUBJID`, `AEDECOD`, and `ASTDT`.
-    #> # A tibble: 2 x 6
+    #> G3;Duplicate records with respect to `STUDYID`, `USUBJID`, `AEDECOD`, and `ASTDT`.
+    #> g# A tibble: 2 × 6
     #>   STUDYID USUBJID AEDECOD ASTDT      AESEQ AESER
     #> * <chr>   <chr>   <chr>   <date>     <dbl> <chr>
     #> 1 AB42    01      Cough   2021-03-04     2 N
@@ -537,13 +552,13 @@ from within the `derive_param_tte()` function call itself.
       )
     ) %>%
       select(USUBJID, STARTDT, PARAMCD, PARAM, ADT, CNSR, SRCSEQ)
-    #> # A tibble: 4 x 7
+    #> # A tibble: 4 × 7
     #>   USUBJID STARTDT    PARAMCD PARAM                       ADT         CNSR SRCSEQ
     #>   <chr>   <date>     <chr>   <chr>                       <date>     <int>  <dbl>
-    #> 1 01      2020-12-06 TTAE1   Time to First Cough Advers~ 2021-03-04     0      2
-    #> 2 01      2020-12-06 TTAE2   Time to First Flu Adverse ~ 2021-01-03     0      1
-    #> 3 02      2021-01-16 TTAE1   Time to First Cough Advers~ 2021-02-03     1     NA
-    #> 4 02      2021-01-16 TTAE2   Time to First Flu Adverse ~ 2021-02-03     1     NA
+    #> 1 01      2020-12-06 TTAE1   Time to First Cough Advers… 2021-03-04     0      2
+    #> 2 01      2020-12-06 TTAE2   Time to First Flu Adverse … 2021-01-03     0      1
+    #> 3 02      2021-01-16 TTAE1   Time to First Cough Advers… 2021-02-03     1     NA
+    #> 4 02      2021-01-16 TTAE2   Time to First Flu Adverse … 2021-02-03     1     NA
 
 ### Filtering source records (`filter`)
 
@@ -573,13 +588,13 @@ example here only using serious adverse events.
       )
     ) %>%
       select(USUBJID, STARTDT, PARAMCD, PARAM, ADT, CNSR, SRCSEQ)
-    #> # A tibble: 4 x 7
+    #> # A tibble: 4 × 7
     #>   USUBJID STARTDT    PARAMCD PARAM                       ADT         CNSR SRCSEQ
     #>   <chr>   <date>     <chr>   <chr>                       <date>     <int>  <dbl>
-    #> 1 01      2020-12-06 TTSAE1  Time to First Serious Coug~ 2021-03-04     0      3
-    #> 2 01      2020-12-06 TTSAE2  Time to First Serious Flu ~ 2021-01-03     0      1
-    #> 3 02      2021-01-16 TTSAE1  Time to First Serious Coug~ 2021-02-03     1     NA
-    #> 4 02      2021-01-16 TTSAE2  Time to First Serious Flu ~ 2021-02-03     1     NA
+    #> 1 01      2020-12-06 TTSAE1  Time to First Serious Coug… 2021-03-04     0      3
+    #> 2 01      2020-12-06 TTSAE2  Time to First Serious Flu … 2021-01-03     0      1
+    #> 3 02      2021-01-16 TTSAE1  Time to First Serious Coug… 2021-02-03     1     NA
+    #> 4 02      2021-01-16 TTSAE2  Time to First Serious Flu … 2021-02-03     1     NA
 
 ### Using multiple event/censor conditions (`event_conditions` /`censor_conditions`)
 
@@ -629,11 +644,11 @@ end of study date was ever missing.
       )
     ) %>%
       select(USUBJID, STARTDT, PARAMCD, PARAM, ADT, CNSR, SRCSEQ)
-    #> # A tibble: 2 x 7
+    #> # A tibble: 2 × 7
     #>   USUBJID STARTDT    PARAMCD PARAM                       ADT         CNSR SRCSEQ
     #>   <chr>   <date>     <chr>   <chr>                       <date>     <int>  <dbl>
-    #> 1 01      2020-12-06 TTAELB  Time to First Adverse Even~ 2020-12-22     0     NA
-    #> 2 02      2021-01-16 TTAELB  Time to First Adverse Even~ 2021-02-03     1     NA
+    #> 1 01      2020-12-06 TTAELB  Time to First Adverse Even… 2020-12-22     0     NA
+    #> 2 02      2021-01-16 TTAELB  Time to First Adverse Even… 2021-02-03     1     NA
 
 Note above how the earliest event date is always taken and the latest
 censor date.
@@ -671,13 +686,13 @@ of `2`.
       )
     ) %>%
       select(USUBJID, STARTDT, PARAMCD, PARAM, ADT, CNSR, SRCSEQ)
-    #> # A tibble: 4 x 7
+    #> # A tibble: 4 × 7
     #>   USUBJID STARTDT    PARAMCD PARAM                       ADT         CNSR SRCSEQ
     #>   <chr>   <date>     <chr>   <chr>                       <date>     <int>  <dbl>
-    #> 1 01      2020-12-06 TTAE1   Time to First Cough Advers~ 2021-03-04     0      2
-    #> 2 01      2020-12-06 TTAE2   Time to First Flu Adverse ~ 2021-01-03     0      1
-    #> 3 02      2021-01-16 TTAE1   Time to First Cough Advers~ 2021-02-03     1     NA
-    #> 4 02      2021-01-16 TTAE2   Time to First Flu Adverse ~ 2021-02-03     1     NA
+    #> 1 01      2020-12-06 TTAE1   Time to First Cough Advers… 2021-03-04     0      2
+    #> 2 01      2020-12-06 TTAE2   Time to First Flu Adverse … 2021-01-03     0      1
+    #> 3 02      2021-01-16 TTAE1   Time to First Cough Advers… 2021-02-03     1     NA
+    #> 4 02      2021-01-16 TTAE2   Time to First Flu Adverse … 2021-02-03     1     NA
 
 In this case the results are still the same, because as explained in the
 above example the latest censor condition is always taken for those
@@ -711,13 +726,13 @@ time for a new end of study censor source object.
       )
     ) %>%
       select(USUBJID, STARTDT, PARAMCD, PARAM, ADT, CNSR, SRCSEQ)
-    #> # A tibble: 4 x 7
+    #> # A tibble: 4 × 7
     #>   USUBJID STARTDT    PARAMCD PARAM                       ADT         CNSR SRCSEQ
     #>   <chr>   <date>     <chr>   <chr>                       <date>     <int>  <dbl>
-    #> 1 01      2020-12-06 TTAE1   Time to First Cough Advers~ 2021-03-04     0      2
-    #> 2 01      2020-12-06 TTAE2   Time to First Flu Adverse ~ 2021-01-03     0      1
-    #> 3 02      2021-01-16 TTAE1   Time to First Cough Advers~ 2021-01-16     2     NA
-    #> 4 02      2021-01-16 TTAE2   Time to First Flu Adverse ~ 2021-01-16     2     NA
+    #> 1 01      2020-12-06 TTAE1   Time to First Cough Advers… 2021-03-04     0      2
+    #> 2 01      2020-12-06 TTAE2   Time to First Flu Adverse … 2021-01-03     0      1
+    #> 3 02      2021-01-16 TTAE1   Time to First Cough Advers… 2021-01-16     2     NA
+    #> 4 02      2021-01-16 TTAE2   Time to First Flu Adverse … 2021-01-16     2     NA
 
 ### Overall survival time to event parameter
 
@@ -773,7 +788,7 @@ date they are known to be alive.
       )
     ) %>%
       select(USUBJID, STARTDTM, PARAMCD, PARAM, ADTM, CNSR)
-    #> # A tibble: 2 x 6
+    #> # A tibble: 2 × 6
     #>   USUBJID STARTDTM            PARAMCD PARAM            ADTM                 CNSR
     #>   <chr>   <dttm>              <chr>   <chr>            <dttm>              <int>
     #> 1 01      2020-10-03 00:00:00 OS      Overall Survival 2022-12-15 23:59:59     1
@@ -855,7 +870,7 @@ responders.
       )
     ) %>%
       select(USUBJID, STARTDT, PARAMCD, PARAM, ADT, CNSR, SRCSEQ)
-    #> # A tibble: 2 x 7
+    #> # A tibble: 2 × 7
     #>   USUBJID STARTDT    PARAMCD PARAM                ADT         CNSR SRCSEQ
     #>   <chr>   <date>     <chr>   <chr>                <date>     <int>  <dbl>
     #> 1 01      2021-03-04 DURRSP  Duration of Response 2021-05-05     0      3
@@ -863,58 +878,93 @@ responders.
 
 ### End of the observation period (`end_dates`)
 
+The `end_dates` argument can be used to specify the end of the
+observation period if there is more than one date which restricts the
+observation period, e.g., end of study date and new drug date. The
+earliest date is used as the end of the observation period and
+events/censorings occurring after this date are not considered.
+
+In the example two
+[`censor_source()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/censor_source.md)
+objects are defined, `eos` and `newdrg`, for end of study date and new
+drug date, respectively, and then passed to the `end_dates` argument.
+
     adsl <- tribble(
       ~USUBJID, ~TRTSDT,           ~EOSDT,            ~NEWDRGDT,
       "01",     ymd("2020-12-06"), ymd("2021-03-06"), NA,
-      "02",     ymd("2021-01-16"), ymd("2021-04-03"), ymd("2021-03-21")
+      "02",     ymd("2021-01-16"), ymd("2021-04-03"), ymd("2021-03-21"),
+      "03",     ymd("2021-02-01"), NA,                NA
     ) %>%
       mutate(STUDYID = "AB42")
 
     adqs <- tribble(
-     ~USUBJID, ~ADT,              ~CHG,
-     "01",     ymd("2021-01-03"),    5,
-     "01",     ymd("2021-02-03"),   -2,
-     "01",     ymd("2021-03-07"),   10,
-     "02",     ymd("2021-01-03"),    4,
-     "02",     ymd("2021-02-03"),   -1,
-     "02",     ymd("2021-04-01"),  -12
+      ~USUBJID, ~ADT,              ~CHG,
+      "01",     ymd("2021-01-03"),    5,
+      "01",     ymd("2021-02-03"),   -2,
+      "01",     ymd("2021-03-01"),   NA,
+      "01",     ymd("2021-03-07"),   10,
+      "02",     ymd("2021-01-03"),    4,
+      "02",     ymd("2021-02-03"),   -1,
+      "02",     ymd("2021-04-01"),  -12,
+      "03",     ymd("2021-02-15"),    3,
+      "03",     ymd("2021-03-15"),  -15
     ) %>%
       mutate(STUDYID = "AB42")
+
+    eos <- censor_source(
+      dataset_name = "adsl",
+      date = EOSDT,
+      set_values_to = exprs(
+        EVNTDESC = "END OF STUDY"
+      )
+    )
+
+    newdrg <- censor_source(
+      dataset_name = "adsl",
+      date = NEWDRGDT,
+      set_values_to = exprs(
+        EVNTDESC = "NEW DRUG"
+      )
+    )
+
+    worsening <- event_source(
+      dataset_name = "adqs",
+      date = ADT,
+      filter = CHG <= -10,
+      set_values_to = exprs(
+        EVNTDESC = "WORSENING",
+        SRCDOM = "ADQS",
+        SRCVAR = "ADT"
+      )
+    )
+
+    no_worsening <- censor_source(
+      dataset_name = "adqs",
+      date = ADT,
+      filter = !is.na(CHG),
+      set_values_to = exprs(
+        CNSDTDSC = "LAST ASSESSMENT",
+        SRCDOM = "ADQS",
+        SRCVAR = "ADT"
+      )
+    )
 
     derive_param_tte(
       dataset_adsl = adsl,
       source_datasets = list(adsl = adsl, adqs = adqs),
       start_date = TRTSDT,
-      end_dates = list(
-        censor_source(
-          dataset_name = "adsl",
-          date = EOSDT
-        ),
-        censor_source(
-          dataset_name = "adsl",
-          date = NEWDRGDT
-        )
-      ),
-      event_conditions = list(event_source(
-        dataset_name = "adqs",
-        date = ADT,
-        filter = CHG <= -10
-      )),
-      censor_conditions = list(censor_source(
-        dataset_name = "adqs",
-        date = ADT,
-        filter = !is.na(CHG)
-      )),
-      set_values_to = exprs(
-        PARAMCD = "TTWORSE",
-        PARAM = "Time to Worsening of at least 10 points"
-      )
-    )
-    #> # A tibble: 2 x 7
-    #>   USUBJID ADT        STUDYID  CNSR STARTDT    PARAMCD PARAM
-    #>   <chr>   <date>     <chr>   <int> <date>     <chr>   <chr>
-    #> 1 01      2021-02-03 AB42        1 2020-12-06 TTWORSE Time to Worsening of at l~
-    #> 2 02      2021-02-03 AB42        1 2021-01-16 TTWORSE Time to Worsening of at l~
+      end_dates = list(eos, newdrg),
+      event_conditions = list(worsening),
+      censor_conditions = list(no_worsening),
+      set_values_to = exprs(PARAMCD = "TTWORSE")
+    ) %>%
+    select(-STUDYID)
+    #> # A tibble: 3 × 9
+    #>   USUBJID ADT        EVNTDESC    SRCDOM SRCVAR  CNSR CNSDTDSC STARTDT    PARAMCD
+    #>   <chr>   <date>     <chr>       <chr>  <chr>  <int> <chr>    <date>     <chr>
+    #> 1 01      2021-02-03 END OF STU… ADQS   ADT        1 LAST AS… 2020-12-06 TTWORSE
+    #> 2 02      2021-02-03 NEW DRUG    ADQS   ADT        1 LAST AS… 2021-01-16 TTWORSE
+    #> 3 03      2021-03-15 WORSENING   ADQS   ADT        0 <NA>     2021-02-01 TTWORSE
 
 ### Further examples
 

@@ -345,7 +345,7 @@ flag (`ASTTMF`).
       new_vars_prefix = "AST",
       dtc = MHSTDTC
     )
-    #> # A tibble: 6 x 3
+    #> # A tibble: 6 × 3
     #>   MHSTDTC            ASTDTM              ASTTMF
     #>   <chr>              <dttm>              <chr>
     #> 1 "2019-07-18T15:25" 2019-07-18 15:25:00 <NA>
@@ -374,7 +374,7 @@ Set `ignore_seconds_flag = FALSE` to have the `"S"` flag for `ASTTMF`.
      time_imputation = "last",
      highest_imputation = "M"
     )
-    #> # A tibble: 6 x 4
+    #> # A tibble: 6 × 4
     #>   MHSTDTC            ASTDTM              ASTDTF ASTTMF
     #>   <chr>              <dttm>              <chr>  <chr>
     #> 1 "2019-07-18T15:25" 2019-07-18 15:25:59 <NA>   <NA>
@@ -398,7 +398,7 @@ selected if the imputed variable is not part of the final ADaM dataset.
       dtc = MHSTDTC,
       flag_imputation = "none"
     )
-    #> # A tibble: 6 x 2
+    #> # A tibble: 6 × 2
     #>   MHSTDTC            ASTDTM
     #>   <chr>              <dttm>
     #> 1 "2019-07-18T15:25" 2019-07-18 15:25:00
@@ -434,7 +434,7 @@ to be imputed from `max_dates = exprs(DTHDT, DCUTDT)`.
       time_imputation = "last",
       max_dates = exprs(DTHDT, DCUTDT)
     )
-    #> # A tibble: 4 x 6
+    #> # A tibble: 4 × 6
     #>   AEENDTC      DTHDT      DCUTDT     AENDTM              AENDTF AENTMF
     #>   <chr>        <date>     <date>     <dttm>              <chr>  <chr>
     #> 1 "2020-12"    2020-12-26 2020-12-24 2020-12-24 23:59:59 D      H
@@ -468,7 +468,7 @@ then it is not necessary to set (`*TMF`) to `"S"`.
       highest_imputation = "M",
       ignore_seconds_flag = FALSE
     )
-    #> # A tibble: 6 x 4
+    #> # A tibble: 6 × 4
     #>   MHSTDTC            ASTDTM              ASTDTF ASTTMF
     #>   <chr>              <dttm>              <chr>  <chr>
     #> 1 "2019-07-18T15:25" 2019-07-18 15:25:00 <NA>   S
@@ -507,7 +507,7 @@ partial dates. For example, `"2019---18T15:-:05"`, will be displayed as
       preserve = TRUE,
       ignore_seconds_flag = FALSE
     )
-    #> # A tibble: 7 x 4
+    #> # A tibble: 7 × 4
     #>   MHSTDTC             ASTDTM              ASTDTF ASTTMF
     #>   <chr>               <dttm>              <chr>  <chr>
     #> 1 "2019-07-18T15:25"  2019-07-18 15:25:59 <NA>   S

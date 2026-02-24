@@ -278,7 +278,7 @@ done for partial dates.
       new_vars_prefix = "AST",
       dtc = MHSTDTC
     )
-    #> # A tibble: 7 x 2
+    #> # A tibble: 7 × 2
     #>   MHSTDTC               ASTDT
     #>   <chr>                 <date>
     #> 1 "2019-07-18T15:25:40" 2019-07-18
@@ -306,7 +306,7 @@ done on the date.
       highest_imputation = "M",
       date_imputation = "first"
     )
-    #> # A tibble: 7 x 3
+    #> # A tibble: 7 × 3
     #>   MHSTDTC               ASTDT      ASTDTF
     #>   <chr>                 <date>     <chr>
     #> 1 "2019-07-18T15:25:40" 2019-07-18 <NA>
@@ -340,7 +340,7 @@ i.e. `date_imputation = "last"`.
       highest_imputation = "M",
       date_imputation = "last"
     )
-    #> # A tibble: 7 x 3
+    #> # A tibble: 7 × 3
     #>   QSDTC                 ADT        ADTF
     #>   <chr>                 <date>     <chr>
     #> 1 "2019-07-18T15:25:40" 2019-07-18 <NA>
@@ -379,7 +379,7 @@ final ADaM dataset.
       date_imputation = "mid",
       flag_imputation = "none"
     )
-    #> # A tibble: 7 x 2
+    #> # A tibble: 7 × 2
     #>   EXSTDTC               TRTSDT
     #>   <chr>                 <date>
     #> 1 "2019-07-18T15:25:40" 2019-07-18
@@ -403,7 +403,7 @@ the imputation of the record with `"2019-02"`.
       highest_imputation = "M",
       date_imputation = "04-06"
       )
-    #> # A tibble: 7 x 3
+    #> # A tibble: 7 × 3
     #>   MHSTDTC               ASTDT      ASTDTF
     #>   <chr>                 <date>     <chr>
     #> 1 "2019-07-18T15:25:40" 2019-07-18 <NA>
@@ -447,7 +447,7 @@ lower boundary for imputation via the `min_dates` argument. This means:
       date_imputation = "first",
       min_dates = exprs(TRTSDTM)
       )
-    #> # A tibble: 5 x 5
+    #> # A tibble: 5 × 5
     #>    case AESTDTC TRTSDTM             ASTDT      ASTDTF
     #>   <dbl> <chr>   <dttm>              <date>     <chr>
     #> 1     1 2020-12 2020-12-06 12:12:12 2020-12-06 D
@@ -489,7 +489,7 @@ upper boundary for imputation via the `max_dates` argument. This means:
       date_imputation = "last",
       max_dates = exprs(TRTEDTM)
     )
-    #> # A tibble: 5 x 6
+    #> # A tibble: 5 × 6
     #>    case AESTDTC TRTSDTM             TRTEDTM             ASTDT      ASTDTF
     #>   <dbl> <chr>   <dttm>              <dttm>              <date>     <chr>
     #> 1     1 2020-12 2020-01-01 12:12:12 2020-12-20 23:59:59 2020-12-20 D
@@ -513,7 +513,7 @@ partial dates. For example, `"2019---07"`, will be displayed as
       date_imputation = "mid",
       preserve = TRUE
     )
-    #> # A tibble: 7 x 3
+    #> # A tibble: 7 × 3
     #>   MHSTDTC               ASTDT      ASTDTF
     #>   <chr>                 <date>     <chr>
     #> 1 "2019-07-18T15:25:40" 2019-07-18 <NA>

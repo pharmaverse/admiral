@@ -580,7 +580,7 @@ scheduled set of time windows.
       filter_join = AWLO <= ADY & ADY <= AWHI
     ) %>%
       select(USUBJID, ADY, AWLO, AWHI, AVISIT)
-    #> # A tibble: 9 x 5
+    #> # A tibble: 9 × 5
     #>   USUBJID   ADY  AWLO  AWHI AVISIT
     #>   <chr>   <dbl> <dbl> <dbl> <chr>
     #> 1 1         -33    NA    NA <NA>
@@ -632,7 +632,7 @@ occurring before) by subject.
       check_type = "none"
     ) %>%
       select(USUBJID, ADY, AVAL, NADIR)
-    #> # A tibble: 9 x 4
+    #> # A tibble: 9 × 4
     #>   USUBJID   ADY  AVAL NADIR
     #>   <chr>   <dbl> <dbl> <dbl>
     #> 1 1         -33    11    NA
@@ -668,7 +668,7 @@ nadir.
       check_type = "none"
     ) %>%
       select(USUBJID, ADY, AVAL, NADIR)
-    #> # A tibble: 9 x 4
+    #> # A tibble: 9 × 4
     #>   USUBJID   ADY  AVAL NADIR
     #>   <chr>   <dbl> <dbl> <dbl>
     #> 1 1         -33    11    NA
@@ -726,7 +726,7 @@ value.
       mode = "last"
     ) %>%
       select(USUBJID, ASTDY, HGB_MAX, HGB_DY)
-    #> # A tibble: 3 x 4
+    #> # A tibble: 3 × 4
     #>   USUBJID ASTDY HGB_MAX HGB_DY
     #>   <chr>   <dbl>   <dbl>  <dbl>
     #> 1 1           3     8.5      1
@@ -791,7 +791,7 @@ the last dose.
       mode = "last"
     ) %>%
       select(USUBJID, ASTDT, LDRELD)
-    #> # A tibble: 3 x 3
+    #> # A tibble: 3 × 3
     #>   USUBJID ASTDT      LDRELD
     #>   <chr>   <date>      <dbl>
     #> 1 1       2020-02-02     14
@@ -844,7 +844,7 @@ day that occurs before the `"0"`.
       filter_join = AVAL == "0" & AVAL.join == "++"
     ) %>%
       select(USUBJID, ADY, AVAL, PREVPLDY)
-    #> # A tibble: 13 x 4
+    #> # A tibble: 13 × 4
     #>    USUBJID   ADY AVAL  PREVPLDY
     #>    <chr>   <dbl> <chr>    <dbl>
     #>  1 1           1 ++          NA
@@ -895,7 +895,7 @@ In the same example as above, now additionally check that in between the
       filter_join = AVAL == "0" & all(AVAL.join %in% c("+", "++"))
     ) %>%
       select(USUBJID, ADY, AVAL, PREVPLDY)
-    #> # A tibble: 13 x 4
+    #> # A tibble: 13 × 4
     #>    USUBJID   ADY AVAL  PREVPLDY
     #>    <chr>   <dbl> <chr>    <dbl>
     #>  1 1           1 ++          NA
@@ -934,7 +934,7 @@ where all results in between are either `"+"` or `"++"`.
       filter_join = AVAL == "0" & all(AVAL.join %in% c("+", "++"))
     ) %>%
       select(USUBJID, ADY, AVAL, NEXTPLDY)
-    #> # A tibble: 13 x 4
+    #> # A tibble: 13 × 4
     #>    USUBJID   ADY AVAL  NEXTPLDY
     #>    <chr>   <dbl> <chr>    <dbl>
     #>  1 1           1 ++          NA
@@ -970,7 +970,7 @@ Add the value from the next occurring record as a new variable.
       join_type = "after"
     ) %>%
       select(USUBJID, ADY, AVAL, NEXTVAL)
-    #> # A tibble: 13 x 4
+    #> # A tibble: 13 × 4
     #>    USUBJID   ADY AVAL  NEXTVAL
     #>    <chr>   <dbl> <chr> <chr>
     #>  1 1           1 ++    -
@@ -1008,7 +1008,7 @@ Find the last occurring value on any of the next 3 unique visit days.
       filter_join = tmp_obs_nr + 3 >= tmp_obs_nr.join
     ) %>%
       select(USUBJID, ADY, AVAL, NEXTVAL)
-    #> # A tibble: 13 x 4
+    #> # A tibble: 13 × 4
     #>    USUBJID   ADY AVAL  NEXTVAL
     #>    <chr>   <dbl> <chr> <chr>
     #>  1 1           1 ++    +
@@ -1044,7 +1044,7 @@ to identify within which period each AE occurred.
     )
 
     period_ref
-    #> # A tibble: 4 x 5
+    #> # A tibble: 4 × 5
     #>   STUDYID USUBJID APERIOD APERSDT    APEREDT
     #>   <chr>   <chr>     <int> <date>     <date>
     #> 1 AB42    1             1 2021-01-04 2021-02-06
@@ -1075,7 +1075,7 @@ to identify within which period each AE occurred.
       filter_join = APERSDT <= ASTDT & ASTDT <= APEREDT
     ) %>%
       select(USUBJID, ASTDT, APERSDT, APEREDT, APERIOD)
-    #> # A tibble: 6 x 5
+    #> # A tibble: 6 × 5
     #>   USUBJID ASTDT      APERSDT    APEREDT    APERIOD
     #>   <chr>   <date>     <date>     <date>       <int>
     #> 1 1       2021-01-01 NA         NA              NA

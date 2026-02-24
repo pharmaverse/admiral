@@ -334,7 +334,7 @@ blood pressure (DIABP).
       )
     ) %>%
     select(-PARAM)
-    #> # A tibble: 11 x 7
+    #> # A tibble: 11 × 7
     #>    USUBJID     PARAMCD  AVAL VISIT    AVALU ADT        ADTF
     #>    <chr>       <chr>   <dbl> <chr>    <chr> <date>     <chr>
     #>  1 01-701-1015 DIABP    51   BASELINE mmHg  2024-01-10 <NA>
@@ -374,7 +374,7 @@ values of a variable used in the computation are missing.
       keep_nas = TRUE
     )%>%
     select(-PARAM)
-    #> # A tibble: 12 x 7
+    #> # A tibble: 12 × 7
     #>    USUBJID     PARAMCD  AVAL VISIT    AVALU ADT        ADTF
     #>    <chr>       <chr>   <dbl> <chr>    <chr> <date>     <chr>
     #>  1 01-701-1015 DIABP    51   BASELINE mmHg  2024-01-10 <NA>
@@ -425,20 +425,20 @@ keeping `NA` values of `ADTF`.
       ),
       keep_nas = exprs(ADTF)
     )
-    #> # A tibble: 11 x 8
+    #> # A tibble: 11 × 8
     #>    USUBJID     PARAMCD PARAM                   AVAL VISIT AVALU ADT        ADTF
     #>    <chr>       <chr>   <chr>                  <dbl> <chr> <chr> <date>     <chr>
-    #>  1 01-701-1015 DIABP   Diastolic Blood Press~  51   BASE~ mmHg  2024-01-10 <NA>
-    #>  2 01-701-1015 DIABP   Diastolic Blood Press~  50   WEEK~ mmHg  2024-01-24 <NA>
-    #>  3 01-701-1015 SYSBP   Systolic Blood Pressu~ 121   BASE~ mmHg  2024-01-10 <NA>
-    #>  4 01-701-1015 SYSBP   Systolic Blood Pressu~ 121   WEEK~ mmHg  2024-01-24 <NA>
-    #>  5 01-701-1028 DIABP   Diastolic Blood Press~  79   BASE~ mmHg  2024-01-10 <NA>
-    #>  6 01-701-1028 DIABP   Diastolic Blood Press~  80   WEEK~ mmHg  2024-01-24 <NA>
-    #>  7 01-701-1028 SYSBP   Systolic Blood Pressu~ 130   BASE~ mmHg  2024-01-10 <NA>
-    #>  8 01-701-1028 SYSBP   Systolic Blood Pressu~  NA   WEEK~ mmHg  2024-01-24 <NA>
-    #>  9 01-701-1015 MAP     Mean Arterial Pressur~  74.3 BASE~ mmHg  2024-01-10 <NA>
-    #> 10 01-701-1015 MAP     Mean Arterial Pressur~  73.7 WEEK~ mmHg  2024-01-24 <NA>
-    #> 11 01-701-1028 MAP     Mean Arterial Pressur~  96   BASE~ mmHg  2024-01-10 <NA> 
+    #>  1 01-701-1015 DIABP   Diastolic Blood Press…  51   BASE… mmHg  2024-01-10 <NA>
+    #>  2 01-701-1015 DIABP   Diastolic Blood Press…  50   WEEK… mmHg  2024-01-24 <NA>
+    #>  3 01-701-1015 SYSBP   Systolic Blood Pressu… 121   BASE… mmHg  2024-01-10 <NA>
+    #>  4 01-701-1015 SYSBP   Systolic Blood Pressu… 121   WEEK… mmHg  2024-01-24 <NA>
+    #>  5 01-701-1028 DIABP   Diastolic Blood Press…  79   BASE… mmHg  2024-01-10 <NA>
+    #>  6 01-701-1028 DIABP   Diastolic Blood Press…  80   WEEK… mmHg  2024-01-24 <NA>
+    #>  7 01-701-1028 SYSBP   Systolic Blood Pressu… 130   BASE… mmHg  2024-01-10 <NA>
+    #>  8 01-701-1028 SYSBP   Systolic Blood Pressu…  NA   WEEK… mmHg  2024-01-24 <NA>
+    #>  9 01-701-1015 MAP     Mean Arterial Pressur…  74.3 BASE… mmHg  2024-01-10 <NA>
+    #> 10 01-701-1015 MAP     Mean Arterial Pressur…  73.7 WEEK… mmHg  2024-01-24 <NA>
+    #> 11 01-701-1028 MAP     Mean Arterial Pressur…  96   BASE… mmHg  2024-01-10 <NA> 
 
 ### Example 2 - Derivations using parameters measured only once (`constant_parameters` and `constant_by_vars`)
 
@@ -483,7 +483,7 @@ Derive BMI where `HEIGHT` is measured only once.
       constant_parameters = c("HEIGHT"),
       constant_by_vars = exprs(USUBJID)
     )
-    #> # A tibble: 14 x 6
+    #> # A tibble: 14 × 6
     #>    USUBJID     PARAMCD PARAM                     AVAL AVALU  VISIT
     #>    <chr>       <chr>   <chr>                    <dbl> <chr>  <chr>
     #>  1 01-701-1015 HEIGHT  Height (cm)              147   cm     SCREENING
@@ -553,7 +553,7 @@ Use data from an additional dataset and other variables than `AVAL`.
         PARAMCD = "CHSF13"
       )
     )
-    #> # A tibble: 6 x 6
+    #> # A tibble: 6 × 6
     #>   USUBJID AVISIT PARAMCD QSSTRESN  AVAL QSORRES
     #>   <chr>   <chr>  <chr>      <dbl> <dbl> <chr>
     #> 1 1       WEEK 2 CHSF12         1     6 <NA>
@@ -597,9 +597,9 @@ Specify more than one variable-value pair via `set_values_to`.
       ),
       keep_nas = TRUE
     )
-    #> # A tibble: 3 x 6
+    #> # A tibble: 3 × 6
     #>   USUBJID AVALC ADTM       ADTF  PARAMCD PARAM
     #>   <chr>   <chr> <date>     <chr> <chr>   <chr>
-    #> 1 1       Y     2021-06-30 D     TB2AK2  TBILI > 2 times ULN and ALKPH <= 2 tim~
-    #> 2 2       N     2021-12-31 M     TB2AK2  TBILI > 2 times ULN and ALKPH <= 2 tim~
-    #> 3 3       N     2021-04-04 <NA>  TB2AK2  TBILI > 2 times ULN and ALKPH <= 2 tim~
+    #> 1 1       Y     2021-06-30 D     TB2AK2  TBILI > 2 times ULN and ALKPH <= 2 tim…
+    #> 2 2       N     2021-12-31 M     TB2AK2  TBILI > 2 times ULN and ALKPH <= 2 tim…
+    #> 3 3       N     2021-04-04 <NA>  TB2AK2  TBILI > 2 times ULN and ALKPH <= 2 tim…

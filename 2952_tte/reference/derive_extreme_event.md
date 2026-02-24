@@ -409,7 +409,7 @@ observation occurring at the latest day.
       keep_source_vars = exprs(everything())
     ) %>%
     select(-STUDYID)
-    #> # A tibble: 9 x 6
+    #> # A tibble: 9 × 6
     #>   USUBJID PARAMCD    AVALC                   ADY  AVAL PARAM
     #>   <chr>   <chr>      <chr>                 <dbl> <dbl> <chr>
     #> 1 1       NO SLEEP   N                         1    NA <NA>
@@ -493,7 +493,7 @@ sleep on consecutive days.
       keep_source_vars = exprs(everything())
     ) %>%
     select(-STUDYID)
-    #> # A tibble: 9 x 6
+    #> # A tibble: 9 × 6
     #>   USUBJID PARAMCD    AVALC                          ADY  AVAL PARAM
     #>   <chr>   <chr>      <chr>                        <dbl> <dbl> <chr>
     #> 1 4       WAKE UP    N                                1    NA <NA>
@@ -503,8 +503,8 @@ sleep on consecutive days.
     #> 5 5       NO SLEEP   Y                                2    NA <NA>
     #> 6 5       WAKE UP 3X Y                                3    NA <NA>
     #> 7 5       NO SLEEP   Y                                4    NA <NA>
-    #> 8 4       WSP        No sleep two nights in a row     3     0 Worst Sleeping Pr~
-    #> 9 5       WSP        No sleep                         4     1 Worst Sleeping Pr~
+    #> 8 4       WSP        No sleep two nights in a row     3     0 Worst Sleeping Pr…
+    #> 9 5       WSP        No sleep                         4     1 Worst Sleeping Pr…
 
 ### Specifying different arguments across [`event()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/event.md) objects
 
@@ -574,7 +574,7 @@ vary our usage of the `mode` argument dependent on the
       )
     ) %>%
       select(-STUDYID)
-    #> # A tibble: 8 x 7
+    #> # A tibble: 8 × 7
     #>   USUBJID AVISITN CRIT1             CRIT1FL PARAMCD PARAM             AVALC
     #>   <chr>     <dbl> <chr>             <chr>   <chr>   <chr>             <chr>
     #> 1 1             1 ALT > 2 times ULN N       ALT     ALT (U/L)         <NA>
@@ -766,17 +766,17 @@ object to describe what condition is being checked.
     ) %>%
       filter(PARAMCD == "CBOR") %>%
       select(-STUDYID, -ADTC)
-    #> # A tibble: 8 x 6
+    #> # A tibble: 8 × 6
     #>   USUBJID AVALC   ADT        PARAMCD PARAM                            TRTSDT
     #>   <chr>   <chr>   <date>     <chr>   <chr>                            <date>
-    #> 1 1       CR      2020-02-01 CBOR    Best Confirmed Overall Response~ 2020-01-01
-    #> 2 2       SD      2020-02-01 CBOR    Best Confirmed Overall Response~ 2019-12-12
-    #> 3 3       MISSING NA         CBOR    Best Confirmed Overall Response~ 2019-11-11
-    #> 4 4       SD      2020-05-01 CBOR    Best Confirmed Overall Response~ 2019-12-30
-    #> 5 5       NE      2020-01-01 CBOR    Best Confirmed Overall Response~ 2020-01-01
-    #> 6 6       PR      2020-02-06 CBOR    Best Confirmed Overall Response~ 2020-02-02
-    #> 7 7       NE      2020-02-06 CBOR    Best Confirmed Overall Response~ 2020-02-02
-    #> 8 8       PD      2020-02-16 CBOR    Best Confirmed Overall Response~ 2020-02-01
+    #> 1 1       CR      2020-02-01 CBOR    Best Confirmed Overall Response… 2020-01-01
+    #> 2 2       SD      2020-02-01 CBOR    Best Confirmed Overall Response… 2019-12-12
+    #> 3 3       MISSING NA         CBOR    Best Confirmed Overall Response… 2019-11-11
+    #> 4 4       SD      2020-05-01 CBOR    Best Confirmed Overall Response… 2019-12-30
+    #> 5 5       NE      2020-01-01 CBOR    Best Confirmed Overall Response… 2020-01-01
+    #> 6 6       PR      2020-02-06 CBOR    Best Confirmed Overall Response… 2020-02-02
+    #> 7 7       NE      2020-02-06 CBOR    Best Confirmed Overall Response… 2020-02-02
+    #> 8 8       PD      2020-02-16 CBOR    Best Confirmed Overall Response… 2020-02-01
 
 ### Further examples
 

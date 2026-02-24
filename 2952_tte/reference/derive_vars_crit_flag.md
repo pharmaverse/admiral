@@ -187,7 +187,7 @@ to derive a criterion flag/variable pair in a BDS dataset.
       condition = AVAL > 50,
       description = "Absolute value > 50"
     )
-    #> # A tibble: 5 x 4
+    #> # A tibble: 5 × 4
     #>   PARAMCD  AVAL CRIT1FL CRIT1
     #>   <chr>   <dbl> <chr>   <chr>
     #> 1 AST        42 <NA>    <NA>
@@ -207,7 +207,7 @@ for multiple parameters.
       condition = AVAL > 50,
       description = paste(PARAMCD, "> 50"),
     )
-    #> # A tibble: 5 x 4
+    #> # A tibble: 5 × 4
     #>   PARAMCD  AVAL CRIT1FL CRIT1
     #>   <chr>   <dbl> <chr>   <chr>
     #> 1 AST        42 <NA>    <NA>
@@ -237,7 +237,7 @@ where it is not evaluable at all.
       description = paste(PARAMCD, "> 50"),
       values_yn = TRUE
     )
-    #> # A tibble: 5 x 4
+    #> # A tibble: 5 × 4
     #>   PARAMCD  AVAL CRIT1FL CRIT1
     #>   <chr>   <dbl> <chr>   <chr>
     #> 1 AST        42 N       AST > 50
@@ -257,7 +257,7 @@ the condition is not evaluable.
       description = paste(PARAMCD, "> 50"),
       values_yn = TRUE
     )
-    #> # A tibble: 5 x 4
+    #> # A tibble: 5 × 4
     #>   PARAMCD  AVAL CRIT1FL CRIT1
     #>   <chr>   <dbl> <chr>   <chr>
     #> 1 AST        42 N       AST > 50
@@ -284,7 +284,7 @@ flag `CRITyFN` by setting `create_numeric_flag` to `TRUE`.
       crit_nr = 2,
       create_numeric_flag = TRUE
     )
-    #> # A tibble: 5 x 5
+    #> # A tibble: 5 × 5
     #>   PARAMCD  AVAL CRIT2FL CRIT2    CRIT2FN
     #>   <chr>   <dbl> <chr>   <chr>      <int>
     #> 1 AST        42 N       AST > 50       0

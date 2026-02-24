@@ -371,7 +371,7 @@ For each subject the last record should be added as a new visit.
         AVISITN = 99
       )
     )
-    #> # A tibble: 8 x 3
+    #> # A tibble: 8 × 3
     #>   USUBJID AVISITN  AVAL
     #>   <chr>     <dbl> <dbl>
     #> 1 1             1   113
@@ -400,7 +400,7 @@ last visit record:
         AVISITN = 99
       )
     )
-    #> # A tibble: 7 x 3
+    #> # A tibble: 7 × 3
     #>   USUBJID AVISITN  AVAL
     #>   <chr>     <dbl> <dbl>
     #> 1 1             1   113
@@ -435,7 +435,7 @@ valid analysis value:
         AVISITN = 99
       )
     )
-    #> # A tibble: 8 x 3
+    #> # A tibble: 8 × 3
     #>   USUBJID AVISITN  AVAL
     #>   <chr>     <dbl> <dbl>
     #> 1 1             1   113
@@ -474,7 +474,7 @@ be specified by the `keep_source_vars` argument. Variables specified by
         AVISIT = "MINIMUM"
       )
     )
-    #> # A tibble: 2 x 3
+    #> # A tibble: 2 × 3
     #>   USUBJID AVISIT   AVAL
     #>   <chr>   <chr>   <dbl>
     #> 1 1       MINIMUM   101
@@ -505,21 +505,21 @@ are found.
         AVISIT = "MINIMUM"
       )
     )
-    #> # A tibble: 2 x 3
+    #> # A tibble: 2 × 3
     #>   USUBJID AVISIT   AVAL
     #>   <chr>   <chr>   <dbl>
     #> 1 1       MINIMUM   123
     #> 2 2       MINIMUM    93
-    #> Warning: Dataset contains duplicate records with respect to `USUBJID` and `AVAL`
-    #> i Run ]8;;x-r-run:admiral::get_duplicates_dataset()admiral::get_duplicates_dataset()]8;; to access the duplicate records
+    #> G2;H2;Warningh: Dataset contains duplicate records with respect to `USUBJID` and `AVAL`
+    #> i Run `admiral::get_duplicates_dataset()` to access the duplicate recordsg
 
 For investigating the issue, the dataset of the duplicate source records
 can be obtained by calling
 [`get_duplicates_dataset()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/get_duplicates_dataset.md):
 
     get_duplicates_dataset()
-    #> Duplicate records with respect to `USUBJID` and `AVAL`.
-    #> # A tibble: 2 x 3
+    #> G3;Duplicate records with respect to `USUBJID` and `AVAL`.
+    #> g# A tibble: 2 × 3
     #>   USUBJID  AVAL AVISIT
     #> * <chr>   <dbl> <chr>
     #> 1 1         123 WEEK 1
@@ -549,7 +549,7 @@ third option is used:
         AVISIT = "MINIMUM"
       )
     )
-    #> # A tibble: 2 x 3
+    #> # A tibble: 2 × 3
     #>   USUBJID AVISIT   AVAL
     #>   <chr>   <chr>   <dbl>
     #> 1 1       MINIMUM   123
@@ -585,7 +585,7 @@ records originate from `dataset_add`, i.e., `exist_flag` would be set to
         ADT = DTHDT
       )
     )
-    #> # A tibble: 3 x 5
+    #> # A tibble: 3 × 5
     #>   USUBJID PARAMCD ADT        DTHDT      AVALC
     #>   <chr>   <chr>   <date>     <date>     <chr>
     #> 1 1       DEATH   2022-05-13 2022-05-13 Y
@@ -629,7 +629,7 @@ to the input dataset. For the new records set `AVISIT = "PBL LAST"`,
         DTYPE = "LOV"
       )
     )
-    #> # A tibble: 16 x 8
+    #> # A tibble: 16 × 8
     #>    STUDYID USUBJID AVISIT   AVISITN PARAMCD  AVAL LBSEQ DTYPE
     #>    <chr>   <chr>   <chr>      <dbl> <chr>   <dbl> <dbl> <chr>
     #>  1 XYZ     1       BASELINE       1 ABC       120     1 <NA>
@@ -670,7 +670,7 @@ set `AVISIT = "PBL MIN"`, `AVISITN = 97`, and `DTYPE = "MINIMUM"`.
         DTYPE = "MINIMUM"
       )
     )
-    #> # A tibble: 16 x 8
+    #> # A tibble: 16 × 8
     #>    STUDYID USUBJID AVISIT   AVISITN PARAMCD  AVAL LBSEQ DTYPE
     #>    <chr>   <chr>   <chr>      <dbl> <chr>   <dbl> <dbl> <chr>
     #>  1 XYZ     1       BASELINE       1 ABC       120     1 <NA>
@@ -711,7 +711,7 @@ set `AVISIT = "PBL MAX"`, `AVISITN = 98`, and `DTYPE = "MAXIMUM"`.
         DTYPE = "MAXIMUM"
       )
     )
-    #> # A tibble: 16 x 8
+    #> # A tibble: 16 × 8
     #>    STUDYID USUBJID AVISIT   AVISITN PARAMCD  AVAL LBSEQ DTYPE
     #>    <chr>   <chr>   <chr>      <dbl> <chr>   <dbl> <dbl> <chr>
     #>  1 XYZ     1       BASELINE       1 ABC       120     1 <NA>
@@ -760,7 +760,7 @@ minimum for `PARAMCD = "DEF"`.
         DTYPE = "WOC"
       )
     )
-    #> # A tibble: 16 x 8
+    #> # A tibble: 16 × 8
     #>    STUDYID USUBJID AVISIT    AVISITN PARAMCD  AVAL LBSEQ DTYPE
     #>    <chr>   <chr>   <chr>       <dbl> <chr>   <dbl> <dbl> <chr>
     #>  1 XYZ     1       BASELINE        1 ABC       120     1 <NA>
@@ -832,7 +832,7 @@ occurred (set `AVALC = "Y"`, `AVAL = 1`) or not (set `AVALC = "N"`,
         AVAL = yn_to_numeric(AVALC),
       )
     )
-    #> # A tibble: 9 x 8
+    #> # A tibble: 9 × 8
     #>   STUDYID USUBJID RSDTC      ADT        PARAMCD PARAM               AVALC  AVAL
     #>   <chr>   <chr>   <chr>      <date>     <chr>   <chr>               <chr> <dbl>
     #> 1 XX1234  1       2020-01-02 2020-01-02 OVR     Overall Response    PR        2
@@ -869,7 +869,7 @@ or not (set `AVALC = "N"`, `AVAL = 0`). For the new parameter set
         ADT = DTHDT
       )
     )
-    #> # A tibble: 3 x 6
+    #> # A tibble: 3 × 6
     #>   STUDYID USUBJID PARAMCD PARAM ADT        AVALC
     #>   <chr>   <chr>   <chr>   <chr> <date>     <chr>
     #> 1 XX1234  1       DEATH   Death 2022-05-13 Y

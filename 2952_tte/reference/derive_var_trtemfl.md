@@ -322,7 +322,7 @@ Derive `TRTEMFL` without considering treatment end and worsening
       end_date = AENDT,
       trt_start_date = TRTSDT
     ) %>% select(USUBJID, TRTSDT, ASTDT, AENDT, TRTEMFL)
-    #> # A tibble: 16 x 5
+    #> # A tibble: 16 × 5
     #>    USUBJID TRTSDT     ASTDT      AENDT      TRTEMFL
     #>    <chr>   <date>     <date>     <date>     <chr>
     #>  1 1       2022-01-01 2021-12-13 2021-12-15 <NA>
@@ -361,7 +361,7 @@ Derive `TRTEMFL` taking a treatment end window into account
       trt_end_date = TRTEDT,
       end_window = 10
     ) %>% select(USUBJID, TRTSDT, TRTEDT, ASTDT, AENDT, TRTEMFL)
-    #> # A tibble: 16 x 6
+    #> # A tibble: 16 × 6
     #>    USUBJID TRTSDT     TRTEDT     ASTDT      AENDT      TRTEMFL
     #>    <chr>   <date>     <date>     <date>     <date>     <chr>
     #>  1 1       2022-01-01 2022-04-30 2021-12-13 2021-12-15 <NA>
@@ -406,7 +406,7 @@ start into account
       initial_intensity = AEITOXGR,
       intensity = AETOXGR
     ) %>% select(USUBJID, TRTSDT, ASTDT, AENDT, AEITOXGR, AETOXGR, TRTEM2FL)
-    #> # A tibble: 16 x 7
+    #> # A tibble: 16 × 7
     #>    USUBJID TRTSDT     ASTDT      AENDT      AEITOXGR AETOXGR TRTEM2FL
     #>    <chr>   <date>     <date>     <date>     <chr>    <chr>   <chr>
     #>  1 1       2022-01-01 2021-12-13 2021-12-15 1        1       <NA>
@@ -469,7 +469,7 @@ grouping variable
       intensity = AETOXGR,
       group_var = AEGRPID
     ) %>% select(USUBJID, TRTSDT, ASTDT, AENDT, AETOXGR, AEGRPID, TRTEMFL)
-    #> # A tibble: 7 x 7
+    #> # A tibble: 7 × 7
     #>   USUBJID TRTSDT     ASTDT      AENDT      AETOXGR AEGRPID TRTEMFL
     #>   <chr>   <date>     <date>     <date>     <chr>   <chr>   <chr>
     #> 1 1       2022-01-01 2021-12-31 2022-01-01 3       1       <NA>
@@ -539,7 +539,7 @@ Paper](https://phuse.s3.eu-central-1.amazonaws.com/Deliverables/Safety+Analytics
       subject_keys = exprs(USUBJID)
     ) %>%
       select(USUBJID, TRTSDTM, TRTEDTM, ASTDTM, AENDTM, AEITOXGR, AETOXGR, TRTEMFL)
-    #> # A tibble: 19 x 8
+    #> # A tibble: 19 × 8
     #>    USUBJID TRTSDTM    TRTEDTM    ASTDTM     AENDTM     AEITOXGR AETOXGR TRTEMFL
     #>    <chr>   <date>     <date>     <date>     <date>     <chr>    <chr>   <chr>
     #>  1 1       2021-01-01 2021-12-31 2020-12-20 2020-12-21 2        2       <NA>

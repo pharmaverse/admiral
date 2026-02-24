@@ -483,7 +483,7 @@ before *and* after the current record should be considered,
       join_type = "all",
       filter_join = ADURN > 30 & ACOVFL.join == "Y" & ADY.join <= ADY + 7
     )
-    #> # A tibble: 10 x 5
+    #> # A tibble: 10 × 5
     #>    USUBJID   ADY ACOVFL ADURN ALCOVFL
     #>    <chr>   <dbl> <chr>  <dbl> <chr>
     #>  1 1          10 N          1 <NA>
@@ -533,7 +533,7 @@ Please note that a numeric flag is created here by specifying the
       true_value = 1,
       false_value = 0
     )
-    #> # A tibble: 9 x 4
+    #> # A tibble: 9 × 4
     #>   USUBJID AVISITN AVALC CONFFLN
     #>   <chr>     <dbl> <chr>   <dbl>
     #> 1 1             1 Y           1
@@ -581,7 +581,7 @@ up to the `"0"` (excluding the `"0"`) are `"+"` or `"++"` the
       first_cond_lower = val.join == "++",
       filter_join = val == "0" & all(val.join %in% c("+", "++"))
     )
-    #> # A tibble: 12 x 4
+    #> # A tibble: 12 × 4
     #>    subj    day val   flag
     #>    <chr> <dbl> <chr> <chr>
     #>  1 1         1 ++    <NA>
@@ -612,7 +612,7 @@ to the first `"++"` after the `"0"` are `"+"` or `"++"` the
       first_cond_upper = val.join == "++",
       filter_join = val == "0" & all(val.join %in% c("+", "++"))
     )
-    #> # A tibble: 12 x 4
+    #> # A tibble: 12 × 4
     #>    subj    day val   flag
     #>    <chr> <dbl> <chr> <chr>
     #>  1 1         1 ++    <NA>
@@ -677,7 +677,7 @@ function is used to count the `"NE"`s for the last condition.
       filter_join = AVALC == "CR" & all(AVALC.join %in% c("CR", "NE")) &
         count_vals(var = AVALC.join, val = "NE") <= 1
     )
-    #> # A tibble: 14 x 4
+    #> # A tibble: 14 × 4
     #>    USUBJID AVISITN AVALC CONFFL
     #>    <chr>     <dbl> <chr> <chr>
     #>  1 1             1 PR    <NA>
@@ -758,7 +758,7 @@ call returns `NA` then).
             count_vals(var = AVALC.join, val = "CR") == 0
         )
     )
-    #> # A tibble: 14 x 4
+    #> # A tibble: 14 × 4
     #>    USUBJID   ADY AVALC CONFFL
     #>    <chr>   <dbl> <chr> <chr>
     #>  1 1           6 PR    <NA>
@@ -810,7 +810,7 @@ specified for `join_vars`.
       filter_join = CRIT1FL == "Y" & CRIT1FL.join == "Y" &
         (tmp_obs_nr + 1 == tmp_obs_nr.join | tmp_obs_nr == max(tmp_obs_nr.join))
     )
-    #> # A tibble: 10 x 4
+    #> # A tibble: 10 × 4
     #>    USUBJID AVISITN CRIT1FL CONFFL
     #>    <chr>     <dbl> <chr>   <chr>
     #>  1 1             1 Y       <NA>
@@ -852,7 +852,7 @@ specified for `join_vars`.
         & EXDOSE < EXDOSE.join # Dose is lower than previous
       )
     )
-    #> # A tibble: 7 x 4
+    #> # A tibble: 7 × 4
     #>   USUBJID EXSTDTM          EXDOSE DOSREDFL
     #>   <chr>   <chr>             <dbl> <chr>
     #> 1 1       2024-01-01T08:00      2 <NA>
@@ -890,7 +890,7 @@ used here, as otherwise the last record wouldn't be flagged.
       join_type = "all",
       filter_join = all(CHGCAT1.join == "Worsened" | ADY > ADY.join)
     )
-    #> # A tibble: 7 x 5
+    #> # A tibble: 7 × 5
     #>   USUBJID PARAMCD   ADY CHGCAT1  DDETERFL
     #>   <chr>   <chr>   <dbl> <chr>    <chr>
     #> 1 1       QS1        10 Improved <NA>
@@ -929,7 +929,7 @@ confirmed at a subsequent visit.
       order = exprs(AVISITN),
       filter_join = AVALC == "Y" & AVALC.join == "Y"
     )
-    #> # A tibble: 7 x 5
+    #> # A tibble: 7 × 5
     #>   USUBJID AVISITN   ADY AVALC CONFFL
     #>   <chr>     <dbl> <dbl> <chr> <chr>
     #> 1 1             1     1 Y     Y
@@ -939,12 +939,12 @@ confirmed at a subsequent visit.
     #> 5 2             1     1 Y     Y
     #> 6 2             2     8 Y     <NA>
     #> 7 2             2    10 Y     <NA>
-    #> Warning: Dataset `dataset` contains duplicate records with respect to `USUBJID` and
+    #> G2;H2;Warningh: Dataset `dataset` contains duplicate records with respect to `USUBJID` and
     #> `AVISITN`
-    #> i Run ]8;;x-r-run:admiral::get_duplicates_dataset()admiral::get_duplicates_dataset()]8;; to access the duplicate records
-    #> Warning: Dataset `dataset_add` contains duplicate records with respect to `USUBJID` and
+    #> i Run `admiral::get_duplicates_dataset()` to access the duplicate recordsg
+    #> G2;H2;Warningh: Dataset `dataset_add` contains duplicate records with respect to `USUBJID` and
     #> `AVISITN`
-    #> i Run ]8;;x-r-run:admiral::get_duplicates_dataset()admiral::get_duplicates_dataset()]8;; to access the duplicate records
+    #> i Run `admiral::get_duplicates_dataset()` to access the duplicate recordsg
 
 The records for `USUBJID == "2"` are not unique with respect to
 `USUBJID` and `AVISITN`. Thus a warning is issued. The duplicates can be
@@ -952,8 +952,8 @@ accessed by calling
 [`get_duplicates_dataset()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/get_duplicates_dataset.md):
 
     get_duplicates_dataset()
-    #> Duplicate records with respect to `USUBJID` and `AVISITN`.
-    #> # A tibble: 2 x 4
+    #> G3;Duplicate records with respect to `USUBJID` and `AVISITN`.
+    #> g# A tibble: 2 × 4
     #>   USUBJID AVISITN   ADY AVALC
     #> * <chr>     <dbl> <dbl> <chr>
     #> 1 2             2     8 Y
@@ -975,7 +975,7 @@ flagged. Thus the warning can be suppressed by specifying
       filter_join = AVALC == "Y" & AVALC.join == "Y",
       check_type = "none"
     )
-    #> # A tibble: 7 x 5
+    #> # A tibble: 7 × 5
     #>   USUBJID AVISITN   ADY AVALC CONFFL
     #>   <chr>     <dbl> <dbl> <chr> <chr>
     #> 1 1             1     1 Y     Y

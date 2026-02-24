@@ -432,7 +432,7 @@ should be considered, `join_type = "all"` is specified.
       join_type = "all",
       filter_join = ADURN > 30 & ACOVFL.join == "Y" & ADY.join <= ADY + 7
     )
-    #> # A tibble: 2 x 4
+    #> # A tibble: 2 × 4
     #>   USUBJID   ADY ACOVFL ADURN
     #>   <chr>   <dbl> <chr>  <dbl>
     #> 1 1          21 N         50
@@ -469,7 +469,7 @@ current record.
       order = exprs(AVISITN),
       filter_join = AVALC == "Y" & AVALC.join == "Y"
     )
-    #> # A tibble: 1 x 3
+    #> # A tibble: 1 × 3
     #>   USUBJID AVISITN AVALC
     #>   <chr>     <dbl> <chr>
     #> 1 1             1 Y    
@@ -508,7 +508,7 @@ up to the `"0"` (excluding the `"0"`) are `"+"` or `"++"` the
       first_cond_lower = val.join == "++",
       filter_join = val == "0" & all(val.join %in% c("+", "++"))
     )
-    #> # A tibble: 1 x 3
+    #> # A tibble: 1 × 3
     #>   subj    day val
     #>   <chr> <dbl> <chr>
     #> 1 2         4 0    
@@ -527,7 +527,7 @@ up to the first `"++"` after the `"0"` are `"+"` or `"++"` the
       first_cond_upper = val.join == "++",
       filter_join = val == "0" & all(val.join %in% c("+", "++"))
     )
-    #> # A tibble: 1 x 3
+    #> # A tibble: 1 × 3
     #>   subj    day val
     #>   <chr> <dbl> <chr>
     #> 1 1         3 0    
@@ -580,7 +580,7 @@ function is used to count the `"NE"`s for the last condition.
       filter_join = AVALC == "CR" & all(AVALC.join %in% c("CR", "NE")) &
         count_vals(var = AVALC.join, val = "NE") <= 1
     )
-    #> # A tibble: 1 x 3
+    #> # A tibble: 1 × 3
     #>   USUBJID AVISITN AVALC
     #>   <chr>     <dbl> <chr>
     #> 1 1             2 CR   
@@ -647,7 +647,7 @@ call returns `NA` then).
             count_vals(var = AVALC.join, val = "CR") == 0
         )
     )
-    #> # A tibble: 1 x 3
+    #> # A tibble: 1 × 3
     #>   USUBJID   ADY AVALC
     #>   <chr>   <dbl> <chr>
     #> 1 4          32 PR   
@@ -685,7 +685,7 @@ specified for `join_vars`.
       filter_join = CRIT1FL == "Y" & CRIT1FL.join == "Y" &
         (tmp_obs_nr + 1 == tmp_obs_nr.join | tmp_obs_nr == max(tmp_obs_nr.join))
     )
-    #> # A tibble: 2 x 3
+    #> # A tibble: 2 × 3
     #>   USUBJID AVISITN CRIT1FL
     #>   <chr>     <dbl> <chr>
     #> 1 2             1 Y

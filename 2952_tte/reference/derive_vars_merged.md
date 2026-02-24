@@ -408,7 +408,7 @@ Merge all demographic variables onto a vital signs dataset.
       by_vars = exprs(STUDYID, USUBJID)
     ) %>%
       select(USUBJID, VSTESTCD, VISIT, VSSTRESN, AGE, AGEU)
-    #> # A tibble: 6 x 6
+    #> # A tibble: 6 × 6
     #>   USUBJID VSTESTCD VISIT     VSSTRESN   AGE AGEU
     #>   <chr>   <chr>    <chr>        <dbl> <dbl> <chr>
     #> 1 01      HEIGHT   SCREENING    178      61 YEARS
@@ -445,7 +445,7 @@ dataset.
       filter_add = VSTESTCD == "WEIGHT"
     ) %>%
       select(USUBJID, AGE, AGEU, LSTWT)
-    #> # A tibble: 3 x 4
+    #> # A tibble: 3 × 4
     #>   USUBJID   AGE AGEU  LSTWT
     #>   <chr>   <dbl> <chr> <dbl>
     #> 1 01         61 YEARS  82.6
@@ -476,29 +476,29 @@ dataset containing a duplicate last weight assessment date.
       filter_add = VSTESTCD == "WEIGHT"
     ) %>%
       select(USUBJID, AGE, AGEU, LSTWT)
-    #> # A tibble: 3 x 4
+    #> # A tibble: 3 × 4
     #>   USUBJID   AGE AGEU  LSTWT
     #>   <chr>   <dbl> <chr> <dbl>
     #> 1 01         61 YEARS  82.6
     #> 2 02         64 YEARS  NA
     #> 3 03         85 YEARS  NA
-    #> Warning: Dataset contains duplicate records with respect to `STUDYID`, `USUBJID`, and
+    #> G2;H2;Warningh: Dataset contains duplicate records with respect to `STUDYID`, `USUBJID`, and
     #> `convert_dtc_to_dtm(VSDTC)`
-    #> i Run ]8;;x-r-run:admiral::get_duplicates_dataset()admiral::get_duplicates_dataset()]8;; to access the duplicate records
+    #> i Run `admiral::get_duplicates_dataset()` to access the duplicate recordsg
 
 For investigating the issue, the dataset of the duplicate source records
 can be obtained by calling
 [`get_duplicates_dataset()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/get_duplicates_dataset.md):
 
     get_duplicates_dataset()
-    #> Duplicate records with respect to `STUDYID`, `USUBJID`, and
+    #> G3;Duplicate records with respect to `STUDYID`, `USUBJID`, and
     #> `convert_dtc_to_dtm(VSDTC)`.
-    #> # A tibble: 2 x 9
-    #>   STUDYID USUBJID convert_dtc_to_dtm(VSDT~1 DOMAIN VSTESTCD VISIT VSSTRESN VSDTC
+    #> g# A tibble: 2 × 9
+    #>   STUDYID USUBJID convert_dtc_to_dtm(VSDT…¹ DOMAIN VSTESTCD VISIT VSSTRESN VSDTC
     #> * <chr>   <chr>   <dttm>                    <chr>  <chr>    <chr>    <dbl> <chr>
-    #> 1 AB42    01      2013-09-24 00:00:00       VS     WEIGHT   WEEK~     81.1 2013~
-    #> 2 AB42    01      2013-09-24 00:00:00       VS     WEIGHT   WEEK~     82.6 2013~
-    #> # i abbreviated name: 1: `convert_dtc_to_dtm(VSDTC)`
+    #> 1 AB42    01      2013-09-24 00:00:00       VS     WEIGHT   WEEK…     81.1 2013…
+    #> 2 AB42    01      2013-09-24 00:00:00       VS     WEIGHT   WEEK…     82.6 2013…
+    #> # i abbreviated name: ¹`convert_dtc_to_dtm(VSDTC)`
     #> # i 1 more variable: LSTWT <dbl>
 
 Common options to solve the issue:
@@ -542,7 +542,7 @@ which visit it occurred at to the demographics dataset.
       missing_values = exprs(LSTWTCAT = "MISSING")
     ) %>%
       select(USUBJID, AGE, AGEU, LSTWTCAT)
-    #> # A tibble: 3 x 4
+    #> # A tibble: 3 × 4
     #>   USUBJID   AGE AGEU  LSTWTCAT
     #>   <chr>   <dbl> <chr> <chr>
     #> 1 01         61 YEARS POST-BASELINE
@@ -574,7 +574,7 @@ variable to show whether a selected record was merged.
       false_value = "MISSING"
     ) %>%
       select(USUBJID, AGE, AGEU, LSTWTCAT, WTCHECK)
-    #> # A tibble: 3 x 5
+    #> # A tibble: 3 × 5
     #>   USUBJID   AGE AGEU  LSTWTCAT      WTCHECK
     #>   <chr>   <dbl> <chr> <chr>         <chr>
     #> 1 01         61 YEARS POST-BASELINE Y
@@ -616,7 +616,7 @@ Derive treatment start datetime and associated imputation flags.
       mode = "first"
     ) %>%
       select(USUBJID, TRTSDTM, TRTSDTF, TRTSTMF)
-    #> # A tibble: 3 x 4
+    #> # A tibble: 3 × 4
     #>   USUBJID TRTSDTM             TRTSDTF TRTSTMF
     #>   <chr>   <dttm>              <chr>   <chr>
     #> 1 01      2013-08-29 00:00:00 <NA>    H

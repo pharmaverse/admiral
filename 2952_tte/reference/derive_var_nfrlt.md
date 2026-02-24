@@ -410,7 +410,7 @@ Day 1 only with oral medication
       tpt_var = PCTPT,
       visit_day = VISITDY
     )
-    #> # A tibble: 5 x 4
+    #> # A tibble: 5 × 4
     #>   USUBJID VISITDY PCTPT         NFRLT
     #>   <chr>     <dbl> <chr>         <dbl>
     #> 1 001           1 Pre-dose          0
@@ -430,7 +430,7 @@ Creating NFRLT with FRLTU unit variable
       tpt_var = PCTPT,
       visit_day = VISITDY
     )
-    #> # A tibble: 5 x 5
+    #> # A tibble: 5 × 5
     #>   USUBJID VISITDY PCTPT         NFRLT FRLTU
     #>   <chr>     <dbl> <chr>         <dbl> <chr>
     #> 1 001           1 Pre-dose          0 HOURS
@@ -458,7 +458,7 @@ Deriving NFRLT in different time units with unit variables
         tpt_var = PCTPT,
         visit_day = VISITDY
       )
-    #> # A tibble: 5 x 7
+    #> # A tibble: 5 × 7
     #>   USUBJID VISITDY PCTPT         NFRLT FRLTU NFRLTDY FRLTDYU
     #>   <chr>     <dbl> <chr>         <dbl> <chr>   <dbl> <chr>
     #> 1 001           1 Pre-dose          0 HOURS  0      days
@@ -487,7 +487,7 @@ Handling negative visit days (no Day 0 in clinical trials)
       tpt_var = PCTPT,
       visit_day = VISITDY
     )
-    #> # A tibble: 5 x 5
+    #> # A tibble: 5 × 5
     #>   USUBJID VISITDY PCTPT        NFRLT FRLTU
     #>   <chr>     <dbl> <chr>        <dbl> <chr>
     #> 1 001         -14 Screening     -336 HOURS
@@ -517,7 +517,7 @@ Dosing on Days 1, 8, and 15
       tpt_var = PCTPT,
       visit_day = VISITDY
     )
-    #> # A tibble: 6 x 5
+    #> # A tibble: 6 × 5
     #>   USUBJID VISITDY PCTPT        NFRLT FRLTU
     #>   <chr>     <dbl> <chr>        <dbl> <chr>
     #> 1 001           1 Pre-dose         0 HOURS
@@ -545,7 +545,7 @@ Deriving both NFRLT (hours) and NFRLTDY (days) with unit variables
         tpt_var = PCTPT,
         visit_day = VISITDY
       )
-    #> # A tibble: 6 x 7
+    #> # A tibble: 6 × 7
     #>   USUBJID VISITDY PCTPT        NFRLT FRLTU NFRLTDY FRLTDYU
     #>   <chr>     <dbl> <chr>        <dbl> <chr>   <dbl> <chr>
     #> 1 001           1 Pre-dose         0 HOURS  0      days
@@ -576,7 +576,7 @@ Long-term study with weekly dosing, using weeks output
       tpt_var = PCTPT,
       visit_day = VISITDY
     )
-    #> # A tibble: 5 x 5
+    #> # A tibble: 5 × 5
     #>   USUBJID VISITDY PCTPT    NFRLTWK FRLTU
     #>   <chr>     <dbl> <chr>      <dbl> <chr>
     #> 1 001           1 Pre-dose       0 weeks
@@ -606,7 +606,7 @@ Very short timepoints requiring minute precision
       tpt_var = PCTPT,
       visit_day = VISITDY
     )
-    #> # A tibble: 5 x 5
+    #> # A tibble: 5 × 5
     #>   USUBJID VISITDY PCTPT       NFRLTMIN FRLTU
     #>   <chr>     <dbl> <chr>          <dbl> <chr>
     #> 1 001           1 Pre-dose           0 minutes
@@ -636,7 +636,7 @@ First dose on Day 7 instead of Day 1
       visit_day = VISITDY,
       first_dose_day = 7
     )
-    #> # A tibble: 5 x 5
+    #> # A tibble: 5 × 5
     #>   USUBJID VISITDY PCTPT    NFRLT FRLTU
     #>   <chr>     <dbl> <chr>    <dbl> <chr>
     #> 1 001          -1 Pre-dose  -168 HOURS
@@ -665,7 +665,7 @@ First dose on Day 7 instead of Day 1
       visit_day = VISITDY,
       treatment_duration = 2
     )
-    #> # A tibble: 4 x 5
+    #> # A tibble: 4 × 5
     #>   USUBJID VISITDY PCTPT         NFRLT FRLTU
     #>   <chr>     <dbl> <chr>         <dbl> <chr>
     #> 1 001           1 Pre-dose       0    HOURS
@@ -695,7 +695,7 @@ Different treatment durations per subject using a variable
       visit_day = VISITDY,
       treatment_duration = EXDUR
     )
-    #> # A tibble: 6 x 6
+    #> # A tibble: 6 × 6
     #>   USUBJID VISITDY PCTPT       EXDUR NFRLT FRLTU
     #>   <chr>     <dbl> <chr>       <dbl> <dbl> <chr>
     #> 1 001           1 Pre-dose        1     0 HOURS
@@ -722,7 +722,7 @@ Deriving NFRLT based only on visit day
       new_var_unit = FRLTU,
       visit_day = VISITDY
     )
-    #> # A tibble: 3 x 4
+    #> # A tibble: 3 × 4
     #>   USUBJID VISITDY NFRLT FRLTU
     #>   <chr>     <dbl> <dbl> <chr>
     #> 1 001           1     0 HOURS
@@ -751,7 +751,7 @@ Deriving NFRLT in hours, days, and weeks for exposure records
         out_unit = "weeks",
         visit_day = VISITDY
       )
-    #> # A tibble: 3 x 8
+    #> # A tibble: 3 × 8
     #>   USUBJID VISITDY NFRLT FRLTU NFRLTDY FRLTDYU NFRLTWK FRLTWKU
     #>   <chr>     <dbl> <dbl> <chr>   <dbl> <chr>     <dbl> <chr>
     #> 1 001           1     0 HOURS       0 days          0 weeks
@@ -778,7 +778,7 @@ Setting NFRLT to NA for unscheduled visits
       visit_day = VISITDY,
       set_values_to_na = VISIT == "UNSCHEDULED"
     )
-    #> # A tibble: 4 x 6
+    #> # A tibble: 4 × 6
     #>   USUBJID VISITDY VISIT       PCTPT        NFRLT FRLTU
     #>   <chr>     <dbl> <chr>       <chr>        <dbl> <chr>
     #> 1 001           1 VISIT 1     Pre-dose         0 HOURS
@@ -805,7 +805,7 @@ Handling study drug early discontinuation
       visit_day = VISITDY,
       set_values_to_na = VISIT == "STUDY DRUG EARLY DISCONTINUATION"
     )
-    #> # A tibble: 3 x 6
+    #> # A tibble: 3 × 6
     #>   USUBJID VISITDY VISIT                            PCTPT        NFRLT FRLTU
     #>   <chr>     <dbl> <chr>                            <chr>        <dbl> <chr>
     #> 1 001           1 VISIT 1                          Pre-dose         0 HOURS
@@ -834,7 +834,7 @@ Excluding multiple visit types
         "STUDY DRUG EARLY DISCONTINUATION"
       )
     )
-    #> # A tibble: 3 x 6
+    #> # A tibble: 3 × 6
     #>   USUBJID VISITDY VISIT                            PCTPT    NFRLT FRLTU
     #>   <chr>     <dbl> <chr>                            <chr>    <dbl> <chr>
     #> 1 001           1 VISIT 1                          Pre-dose     0 HOURS
@@ -865,7 +865,7 @@ Using mutate to set NFRLT to 99999 for unscheduled visits
         NFRLT = if_else(is.na(NFRLT) & VISIT == "UNSCHEDULED", 99999, NFRLT),
         FRLTU = if_else(is.na(FRLTU) & VISIT == "UNSCHEDULED", "", FRLTU)
       )
-    #> # A tibble: 4 x 6
+    #> # A tibble: 4 × 6
     #>   USUBJID VISITDY VISIT       PCTPT        NFRLT FRLTU
     #>   <chr>     <dbl> <chr>       <chr>        <dbl> <chr>
     #> 1 001           1 VISIT 1     Pre-dose         0 "HOURS"
@@ -891,7 +891,7 @@ Using end of range instead of midpoint
       visit_day = VISITDY,
       range_method = "end"
     )
-    #> # A tibble: 2 x 5
+    #> # A tibble: 2 × 5
     #>   USUBJID VISITDY PCTPT          NFRLT FRLTU
     #>   <chr>     <dbl> <chr>          <dbl> <chr>
     #> 1 001           1 Pre-dose           0 HOURS
@@ -915,7 +915,7 @@ Using "Before" and "After" terminology
       tpt_var = PCTPT,
       visit_day = VISITDY
     )
-    #> # A tibble: 3 x 5
+    #> # A tibble: 3 × 5
     #>   USUBJID VISITDY PCTPT    NFRLT FRLTU
     #>   <chr>     <dbl> <chr>    <dbl> <chr>
     #> 1 001           1 Before       0 HOURS
@@ -934,7 +934,7 @@ Using RRLTU for reference relative time instead of first dose
       visit_day = VISITDY,
       first_dose_day = 8
     )
-    #> # A tibble: 5 x 5
+    #> # A tibble: 5 × 5
     #>   USUBJID VISITDY PCTPT         NRRLT RRLTU
     #>   <chr>     <dbl> <chr>         <dbl> <chr>
     #> 1 001           1 Pre-dose       -168 HOURS
@@ -955,7 +955,7 @@ Unit variable preserves the case provided in out_unit
       tpt_var = PCTPT,
       visit_day = VISITDY
     )
-    #> # A tibble: 5 x 5
+    #> # A tibble: 5 × 5
     #>   USUBJID VISITDY PCTPT         NFRLT FRLTU
     #>   <chr>     <dbl> <chr>         <dbl> <chr>
     #> 1 001           1 Pre-dose          0 HOURS
