@@ -6,6 +6,18 @@
 
 ### Updates of Existing Functions
 
+- The `end_dates` argument for specifying dates which restrict the
+  observation period and the `event_type` argument for specifying if the
+  event is negative (progression, death, worsening, …) were added to
+  [`derive_param_tte()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/derive_param_tte.md).
+  The `consider_end_dates` field was added to the
+  [`event_source()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/event_source.md),
+  [`censor_source()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/censor_source.md),
+  and
+  [`tte_source()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/tte_source.md)
+  objects.
+  ([\#2952](https://github.com/pharmaverse/admiral/issues/2952))
+
 ### Breaking Changes
 
 - The following function arguments are entering the next phase of the

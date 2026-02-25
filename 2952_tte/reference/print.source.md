@@ -53,4 +53,5 @@ print(death_event)
 #>   SRCDOM: "ADSL"
 #>   SRCVAR: "DTHDT"
 #> order: NULL
+#> consider_end_dates: TRUE
 ```

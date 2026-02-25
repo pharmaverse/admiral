@@ -136,4 +136,5 @@ event_source(
 #>   SRCDOM: "ADSL"
 #>   SRCVAR: "DTHDT"
 #> order: NULL
+#> consider_end_dates: TRUE
 ```

@@ -78,6 +78,7 @@ for (obj in list_tte_source_objects()$object) {
 #>   SRCVAR: "ASTDT"
 #>   SRCSEQ: AESEQ
 #> order: NULL
+#> consider_end_dates: TRUE
 #> 
 #> ae_wd_event 
 #> <event_source> object
@@ -91,6 +92,7 @@ for (obj in list_tte_source_objects()$object) {
 #>   SRCVAR: "ASTDT"
 #>   SRCSEQ: AESEQ
 #> order: NULL
+#> consider_end_dates: TRUE
 #> 
 #> ae_gr35_event 
 #> <event_source> object
@@ -104,6 +106,7 @@ for (obj in list_tte_source_objects()$object) {
 #>   SRCVAR: "ASTDT"
 #>   SRCSEQ: AESEQ
 #> order: NULL
+#> consider_end_dates: TRUE
 #> 
 #> lastalive_censor 
 #> <censor_source> object
@@ -116,6 +119,7 @@ for (obj in list_tte_source_objects()$object) {
 #>   SRCDOM: "ADSL"
 #>   SRCVAR: "LSTALVDT"
 #> order: NULL
+#> consider_end_dates: TRUE
 #> 
 #> ae_gr1_event 
 #> <event_source> object
@@ -129,6 +133,7 @@ for (obj in list_tte_source_objects()$object) {
 #>   SRCVAR: "ASTDT"
 #>   SRCSEQ: AESEQ
 #> order: NULL
+#> consider_end_dates: TRUE
 #> 
 #> ae_ser_event 
 #> <event_source> object
@@ -142,6 +147,7 @@ for (obj in list_tte_source_objects()$object) {
 #>   SRCVAR: "ASTDT"
 #>   SRCSEQ: AESEQ
 #> order: NULL
+#> consider_end_dates: TRUE
 #> 
 #> ae_gr2_event 
 #> <event_source> object
@@ -155,6 +161,7 @@ for (obj in list_tte_source_objects()$object) {
 #>   SRCVAR: "ASTDT"
 #>   SRCSEQ: AESEQ
 #> order: NULL
+#> consider_end_dates: TRUE
 #> 
 #> ae_event 
 #> <event_source> object
@@ -168,6 +175,7 @@ for (obj in list_tte_source_objects()$object) {
 #>   SRCVAR: "ASTDT"
 #>   SRCSEQ: AESEQ
 #> order: NULL
+#> consider_end_dates: TRUE
 #> 
 #> ae_gr4_event 
 #> <event_source> object
@@ -181,6 +189,7 @@ for (obj in list_tte_source_objects()$object) {
 #>   SRCVAR: "ASTDT"
 #>   SRCSEQ: AESEQ
 #> order: NULL
+#> consider_end_dates: TRUE
 #> 
 #> ae_gr5_event 
 #> <event_source> object
@@ -194,6 +203,7 @@ for (obj in list_tte_source_objects()$object) {
 #>   SRCVAR: "ASTDT"
 #>   SRCSEQ: AESEQ
 #> order: NULL
+#> consider_end_dates: TRUE
 #> 
 #> ae_sev_event 
 #> <event_source> object
@@ -207,6 +217,7 @@ for (obj in list_tte_source_objects()$object) {
 #>   SRCVAR: "ASTDT"
 #>   SRCSEQ: AESEQ
 #> order: NULL
+#> consider_end_dates: TRUE
 #> 
 #> death_event 
 #> <event_source> object
@@ -219,5 +230,6 @@ for (obj in list_tte_source_objects()$object) {
 #>   SRCDOM: "ADSL"
 #>   SRCVAR: "DTHDT"
 #> order: NULL
+#> consider_end_dates: TRUE
 #> 
 ```

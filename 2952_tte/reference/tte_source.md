@@ -12,7 +12,8 @@ tte_source(
   date,
   censor = 0,
   set_values_to = NULL,
-  order = order
+  order = order,
+  consider_end_dates = TRUE
 )
 ```
 
@@ -98,6 +99,22 @@ tte_source(
   Default value
 
   :   `order`
+
+- consider_end_dates:
+
+  Should end dates be considered?
+
+  If end dates are considered, the records which are after the end date
+  are ignored and the censor value specified for the end date takes
+  precedence.
+
+  Permitted values
+
+  :   `TRUE`, `FALSE`
+
+  Default value
+
+  :   `TRUE`
 
 ## Value
 

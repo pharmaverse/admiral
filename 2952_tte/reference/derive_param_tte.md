@@ -893,7 +893,8 @@ drug date, respectively, and then passed to the `end_dates` argument.
       ~USUBJID, ~TRTSDT,           ~EOSDT,            ~NEWDRGDT,
       "01",     ymd("2020-12-06"), ymd("2021-03-06"), NA,
       "02",     ymd("2021-01-16"), ymd("2021-04-03"), ymd("2021-03-21"),
-      "03",     ymd("2021-02-01"), NA,                NA
+      "03",     ymd("2021-02-01"), NA,                NA,
+      "04",     ymd("2021-03-10"), NA,                NA
     ) %>%
       mutate(STUDYID = "AB42")
 
@@ -922,6 +923,7 @@ drug date, respectively, and then passed to the `end_dates` argument.
     newdrg <- censor_source(
       dataset_name = "adsl",
       date = NEWDRGDT,
+      censor = 2,
       set_values_to = exprs(
         EVNTDESC = "NEW DRUG"
       )
@@ -949,22 +951,140 @@ drug date, respectively, and then passed to the `end_dates` argument.
       )
     )
 
+    no_assessment <- censor_source(
+      dataset_name = "adsl",
+      date = TRTSDT,
+      censor = 3,
+      consider_end_dates = FALSE,
+      set_values_to = exprs(
+        EVNTDESC = "NO ASSESSMENTS",
+        CNSDTDSC = "TREATMENT START",
+        SRCDOM = "ADSL",
+        SRCVAR = "TRTSDT"
+      )
+    )
+
     derive_param_tte(
       dataset_adsl = adsl,
       source_datasets = list(adsl = adsl, adqs = adqs),
       start_date = TRTSDT,
       end_dates = list(eos, newdrg),
       event_conditions = list(worsening),
-      censor_conditions = list(no_worsening),
+      censor_conditions = list(no_worsening, no_assessment),
       set_values_to = exprs(PARAMCD = "TTWORSE")
     ) %>%
-    select(-STUDYID)
-    #> # A tibble: 3 × 9
-    #>   USUBJID ADT        EVNTDESC    SRCDOM SRCVAR  CNSR CNSDTDSC STARTDT    PARAMCD
-    #>   <chr>   <date>     <chr>       <chr>  <chr>  <int> <chr>    <date>     <chr>
-    #> 1 01      2021-02-03 END OF STU… ADQS   ADT        1 LAST AS… 2020-12-06 TTWORSE
-    #> 2 02      2021-02-03 NEW DRUG    ADQS   ADT        1 LAST AS… 2021-01-16 TTWORSE
-    #> 3 03      2021-03-15 WORSENING   ADQS   ADT        0 <NA>     2021-02-01 TTWORSE
+    select(-STUDYID, -PARAMCD)
+    #> # A tibble: 4 × 8
+    #>   USUBJID ADT        EVNTDESC        CNSR SRCDOM SRCVAR CNSDTDSC      STARTDT
+    #>   <chr>   <date>     <chr>          <int> <chr>  <chr>  <chr>         <date>
+    #> 1 01      2021-02-03 END OF STUDY       1 ADQS   ADT    LAST ASSESSM… 2020-12-06
+    #> 2 02      2021-02-03 NEW DRUG           2 ADQS   ADT    LAST ASSESSM… 2021-01-16
+    #> 3 03      2021-03-15 WORSENING          0 ADQS   ADT    <NA>          2021-02-01
+    #> 4 04      2021-03-10 NO ASSESSMENTS     3 ADSL   TRTSDT TREATMENT ST… 2021-03-10
+
+Please note that `CNSR` is set to different values depending on the
+censoring reason:
+
+- `1` for end of study (`eos`)
+
+- `2` for start of a new drug (`newdrg`)
+
+- `3` for no `ADQS` assessments (`no_assessments`),
+  `consider_end_dates = FALSE` is specified for this censoring to avoid
+  that the censoring value from the end date (`eos` and `newdrg`) is
+  used.
+
+Also note that subject `03` has no event because the assessment with
+`CHG = -12` was excluded as it is after the start of a new drug.
+
+### Positive event (`event_type`)
+
+If positive events like response or improvement are analyzed,
+`event_type = "positive"` should be used. Then subjects without event
+are censored at the end of the observations period (defined by
+`end_dates`) instead of the last assessment. For positive events this is
+the more conservative approach.
+
+    adsl <- tribble(
+      ~USUBJID, ~TRTSDT,           ~EOSDT,            ~NEWDRGDT,
+      "01",     ymd("2020-12-06"), ymd("2021-03-06"), NA,
+      "02",     ymd("2021-01-16"), ymd("2021-04-03"), ymd("2021-03-21"),
+      "03",     ymd("2021-02-01"), NA,                NA
+    ) %>%
+      mutate(STUDYID = "AB42")
+
+    adqs <- tribble(
+      ~USUBJID, ~ADT,              ~CHG,
+      "01",     ymd("2021-01-03"),    5,
+      "01",     ymd("2021-02-03"),   -2,
+      "01",     ymd("2021-03-01"),   NA,
+      "01",     ymd("2021-03-07"),   10,
+      "02",     ymd("2021-01-03"),    4,
+      "02",     ymd("2021-02-03"),   -1,
+      "02",     ymd("2021-04-01"),  -12,
+      "03",     ymd("2021-02-15"),    3,
+      "03",     ymd("2021-03-15"),   15
+    ) %>%
+      mutate(STUDYID = "AB42")
+
+    eos <- censor_source(
+      dataset_name = "adsl",
+      date = EOSDT,
+      set_values_to = exprs(
+        EVNTDESC = "END OF STUDY",
+        SRCDOM = "ADSL",
+        SRCVAR = "EOSDT"
+      )
+    )
+
+    newdrg <- censor_source(
+      dataset_name = "adsl",
+      date = NEWDRGDT,
+      set_values_to = exprs(
+        EVNTDESC = "NEW DRUG",
+        SRCDOM = "ADSL",
+        SRCVAR = "NEWDRGDT"
+      )
+    )
+
+    improvement <- event_source(
+      dataset_name = "adqs",
+      date = ADT,
+      filter = CHG >= 10,
+      set_values_to = exprs(
+        EVNTDESC = "IMPROVEMENT",
+        SRCDOM = "ADQS",
+        SRCVAR = "ADT"
+      )
+    )
+
+    no_improvement <- censor_source(
+      dataset_name = "adqs",
+      date = ADT,
+      filter = !is.na(CHG),
+      set_values_to = exprs(
+        SRCDOM = "ADQS",
+        SRCVAR = "ADT"
+      )
+    )
+
+    derive_param_tte(
+      dataset_adsl = adsl,
+      source_datasets = list(adsl = adsl, adqs = adqs),
+      start_date = TRTSDT,
+      end_dates = list(eos, newdrg),
+      event_conditions = list(improvement),
+      censor_conditions = list(no_improvement),
+      event_type = "positive",
+      set_values_to = exprs(PARAMCD = "TTIMPROV")
+    ) %>%
+      select(-STUDYID)
+    #> # A tibble: 3 × 8
+    #>   USUBJID ADT        EVNTDESC     SRCDOM SRCVAR    CNSR STARTDT    PARAMCD
+    #>   <chr>   <date>     <chr>        <chr>  <chr>    <int> <date>     <chr>
+    #> 1 01      2021-03-06 END OF STUDY ADSL   EOSDT        1 2020-12-06 TTIMPROV
+    #> 2 02      2021-03-21 NEW DRUG     ADSL   NEWDRGDT     1 2021-01-16 TTIMPROV
+    #> 3 03      2021-03-15 IMPROVEMENT  ADQS   ADT          0 2021-02-01 TTIMPROV
 
 ### Further examples
 

@@ -16,7 +16,8 @@ censor_source(
   date,
   censor = 1,
   set_values_to = NULL,
-  order = NULL
+  order = NULL,
+  consider_end_dates = TRUE
 )
 ```
 
@@ -103,6 +104,22 @@ censor_source(
 
   :   `order`
 
+- consider_end_dates:
+
+  Should end dates be considered?
+
+  If end dates are considered, the records which are after the end date
+  are ignored and the censor value specified for the end date takes
+  precedence.
+
+  Permitted values
+
+  :   `TRUE`, `FALSE`
+
+  Default value
+
+  :   `TRUE`
+
 ## Value
 
 An object of class `censor_source`, inheriting from class `tte_source`
@@ -147,4 +164,5 @@ censor_source(
 #>   SRCDOM: "ADSL"
 #>   SRCVAR: "LSTALVDT"
 #> order: NULL
+#> consider_end_dates: TRUE
 ```
