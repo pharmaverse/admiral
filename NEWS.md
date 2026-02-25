@@ -4,6 +4,12 @@
 
 ## Updates of Existing Functions
 
+- The `end_dates` argument for specifying dates which restrict the observation
+period and the `event_type` argument for specifying if the event is negative
+(progression, death, worsening, ...) were added to `derive_param_tte()`. The
+`consider_end_dates` field was added to the `event_source()`, `censor_source()`,
+and `tte_source()` objects. (#2952)
+
 ## Breaking Changes
 
 - The following function arguments are entering the next phase of the [deprecation process](https://pharmaverse.github.io/admiraldev/articles/programming_strategy.html#deprecation): 

@@ -1122,7 +1122,8 @@ test_that("derive_param_tte Test 17: end dates", {
     ~USUBJID, ~TRTSDT,           ~EOSDT,            ~NEWDRGDT,
     "01",     ymd("2020-12-06"), ymd("2021-03-06"), NA,
     "02",     ymd("2021-01-16"), ymd("2021-04-03"), ymd("2021-03-21"),
-    "03",     ymd("2021-02-01"), NA,                NA
+    "03",     ymd("2021-02-01"), NA,                NA,
+    "04",     ymd("2021-03-10"), ymd("2021-03-28"), NA
   )
 
   adqs <- tribble(
@@ -1153,6 +1154,7 @@ test_that("derive_param_tte Test 17: end dates", {
       censor_source(
         dataset_name = "adsl",
         date = NEWDRGDT,
+        censor = 2,
         set_values_to = exprs(
           EVNTDESC = "NEW DRUG"
         )
@@ -1177,20 +1179,33 @@ test_that("derive_param_tte Test 17: end dates", {
         SRCDOM = "ADQS",
         SRCVAR = "ADT"
       )
+    ),
+    censor_source(
+      dataset_name = "adsl",
+      date = TRTSDT,
+      censor = 3,
+      set_values_to = exprs(
+        EVNTDESC = "NO ASSESSMENTS",
+        CNSDTDSC = "TREATMENT START",
+        SRCDOM = "ADSL",
+        SRCVAR = "TRTSDT"
+      ),
+      consider_end_dates = FALSE
     )),
     set_values_to = exprs(PARAMCD = "TTWORSE"),
     subject_keys = exprs(USUBJID)
   )
 
   expected <- tribble(
-    ~USUBJID, ~ADT,         ~CNSR, ~EVNTDESC,      ~CNSDTDSC,         ~STARTDT,
-    "01",     "2021-02-03",    1L, "END OF STUDY", "LAST ASSESSMENT", "2020-12-06",
-    "02",     "2021-02-03",    1L, "NEW DRUG",     "LAST ASSESSMENT", "2021-01-16",
-    "03",     "2021-03-15",    0L, "WORSENING",    NA,                "2021-02-01"
+    ~USUBJID, ~ADT,         ~CNSR, ~EVNTDESC,        ~CNSDTDSC,         ~STARTDT,
+    "01",     "2021-02-03",    1L, "END OF STUDY",   "LAST ASSESSMENT", "2020-12-06",
+    "02",     "2021-02-03",    2L, "NEW DRUG",       "LAST ASSESSMENT", "2021-01-16",
+    "03",     "2021-03-15",    0L, "WORSENING",      NA,                "2021-02-01",
+    "04",     "2021-03-10",    3L, "NO ASSESSMENTS", "TREATMENT START", "2021-03-10"
   ) %>%
     mutate(
-      SRCDOM = "ADQS",
-      SRCVAR = "ADT",
+      SRCDOM = if_else(USUBJID == "04", "ADSL", "ADQS"),
+      SRCVAR = if_else(USUBJID == "04", "TRTSDT", "ADT"),
       PARAMCD = "TTWORSE",
       ADT = ymd(ADT),
       STARTDT = ymd(STARTDT)
