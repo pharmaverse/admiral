@@ -1170,28 +1170,30 @@ test_that("derive_param_tte Test 17: end dates", {
         SRCVAR = "ADT"
       )
     )),
-    censor_conditions = list(censor_source(
-      dataset_name = "adqs",
-      date = ADT,
-      filter = !is.na(CHG),
-      set_values_to = exprs(
-        CNSDTDSC = "LAST ASSESSMENT",
-        SRCDOM = "ADQS",
-        SRCVAR = "ADT"
+    censor_conditions = list(
+      censor_source(
+        dataset_name = "adqs",
+        date = ADT,
+        filter = !is.na(CHG),
+        set_values_to = exprs(
+          CNSDTDSC = "LAST ASSESSMENT",
+          SRCDOM = "ADQS",
+          SRCVAR = "ADT"
+        )
+      ),
+      censor_source(
+        dataset_name = "adsl",
+        date = TRTSDT,
+        censor = 3,
+        set_values_to = exprs(
+          EVNTDESC = "NO ASSESSMENTS",
+          CNSDTDSC = "TREATMENT START",
+          SRCDOM = "ADSL",
+          SRCVAR = "TRTSDT"
+        ),
+        consider_end_dates = FALSE
       )
     ),
-    censor_source(
-      dataset_name = "adsl",
-      date = TRTSDT,
-      censor = 3,
-      set_values_to = exprs(
-        EVNTDESC = "NO ASSESSMENTS",
-        CNSDTDSC = "TREATMENT START",
-        SRCDOM = "ADSL",
-        SRCVAR = "TRTSDT"
-      ),
-      consider_end_dates = FALSE
-    )),
     set_values_to = exprs(PARAMCD = "TTWORSE"),
     subject_keys = exprs(USUBJID)
   )
