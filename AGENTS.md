@@ -950,7 +950,7 @@ These functions are implemented in `roxygen2.R` and the naming convention for ea
 
 ## Testing Guidelines
 
-For admiral unit testing guidelines, see `tests/testthat/AGENT.md`
+For admiral unit testing guidelines, see `tests/testthat/AGENTS.md`
 
 ## Full Documentation
 

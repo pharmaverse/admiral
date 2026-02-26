@@ -26,6 +26,7 @@
 ^admiral.*\.tar\.gz$
 ^admiral.*\.tgz$
 ^\.lycheeignore$
+^AGENTS\.md$
 ^staged_dependencies.yaml$
 ^inst/dev_dependencies.R$
 ^vignettes/articles$

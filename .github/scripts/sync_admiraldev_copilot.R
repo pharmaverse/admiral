@@ -3,8 +3,8 @@
 #' Sync admiraldev Documentation for AI Assistants (v2.1 - Simplified)
 #'
 #' Creates AI assistant context files for admiral development:
-#' - Root AGENT.md (universal AI assistant context)
-#' - tests/testthat/AGENT.md (testing-specific context)
+#' - Root AGENTS.md (universal AI assistant context)
+#' - tests/testthat/AGENTS.md (testing-specific context)
 #' - .github/copilot-instructions.md (GitHub Copilot specific, legacy)
 
 # Load required packages
@@ -14,8 +14,8 @@ suppressPackageStartupMessages({
 
 # Configuration
 project_root <- if (file.exists(".git")) "." else ".."
-agent_md_root <- file.path(project_root, "AGENT.md")
-agent_md_tests <- file.path(project_root, "tests", "testthat", "AGENT.md")
+agent_md_root <- file.path(project_root, "AGENTS.md")
+agent_md_tests <- file.path(project_root, "tests", "testthat", "AGENTS.md")
 copilot_instructions <- file.path(project_root, ".github", "copilot-instructions.md")
 github_raw_base <- "https://raw.githubusercontent.com/pharmaverse/admiraldev/main/vignettes"
 
@@ -152,7 +152,7 @@ download_admiraldev_content <- function() {
   )
 }
 
-# Create root AGENT.md with actual admiraldev content
+# Create root AGENTS.md with actual admiraldev content
 create_root_agent_md <- function(admiraldev_content) {
   # Create the file content as separate parts to avoid glue complexity
   header_lines <- c(
@@ -224,7 +224,7 @@ create_root_agent_md <- function(admiraldev_content) {
   footer_lines <- c(
     "## Testing Guidelines",
     "",
-    "For admiral unit testing guidelines, see `tests/testthat/AGENT.md`",
+    "For admiral unit testing guidelines, see `tests/testthat/AGENTS.md`",
     "",
     "## Full Documentation",
     "",
@@ -243,7 +243,7 @@ create_root_agent_md <- function(admiraldev_content) {
   cat(glue("✓ Created: {agent_md_root}\n"))
 }
 
-# Create tests/testthat/AGENT.md with actual admiraldev content
+# Create tests/testthat/AGENTS.md with actual admiraldev content
 create_tests_agent_md <- function(admiraldev_content) {
   # Create header
   header_lines <- c(
@@ -325,7 +325,7 @@ create_copilot_instructions <- function(admiraldev_content) {
     "",
     paste("**Auto-generated:**", format(Sys.time(), "%Y-%m-%d %H:%M:%S")),
     "**Optimized for:** GitHub Copilot code completion",
-    "**Complete guidelines:** See `AGENT.md` files for full context",
+    "**Complete guidelines:** See `AGENTS.md` files for full context",
     "",
     "⚠️ **DO NOT EDIT MANUALLY** - Run `source('.github/scripts/sync_admiraldev_copilot.R')` to update",
     "",
@@ -360,7 +360,7 @@ create_copilot_instructions <- function(admiraldev_content) {
     "",
     "---",
     "",
-    "*This file is optimized for GitHub Copilot code completion. For complete admiral development guidelines, see `AGENT.md` and `tests/testthat/AGENT.md`.*"
+    "*This file is optimized for GitHub Copilot code completion. For complete admiral development guidelines, see `AGENTS.md` and `tests/testthat/AGENTS.md`.*"
   )
 
   writeLines(content_lines, copilot_instructions)

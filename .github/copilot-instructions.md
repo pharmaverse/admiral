@@ -2,7 +2,7 @@
 
 **Auto-generated:** 2026-02-23 19:17:54
 **Optimized for:** GitHub Copilot code completion
-**Complete guidelines:** See `AGENT.md` files for full context
+**Complete guidelines:** See `AGENTS.md` files for full context
 
 ⚠️ **DO NOT EDIT MANUALLY** - Run `source('.github/scripts/sync_admiraldev_copilot.R')` to update
 
@@ -37,4 +37,4 @@ Standard admiral function signature:
 
 ---
 
-*This file is optimized for GitHub Copilot code completion. For complete admiral development guidelines, see `AGENT.md` and `tests/testthat/AGENT.md`.*
+*This file is optimized for GitHub Copilot code completion. For complete admiral development guidelines, see `AGENTS.md` and `tests/testthat/AGENTS.md`.*
