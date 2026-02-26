@@ -1,8 +1,6 @@
 name: Sync AI Assistant Context from admiraldev
 
 on:
-  push:
-    branches: 2920-add-copilot-instructions
   # Run monthly to keep content fresh (only on main branch)
   schedule:
     - cron: '0 8 1 * *'  # 1st of every month at 8 AM UTC
@@ -10,13 +8,8 @@ on:
   # Allow manual triggering from any branch
   workflow_dispatch:
     inputs:
-      create_pr:
-        description: 'Create Pull Request instead of direct commit'
-        required: false
-        default: false
-        type: boolean
       target_branch:
-        description: 'Target branch for PR (only used if create_pr is true)'
+        description: 'Base branch for the Pull Request'
         required: false
         default: 'main'
         type: string
@@ -50,14 +43,14 @@ jobs:
         id: check_changes
         run: |
           # Check all AI assistant context files
-          if git diff --quiet HEAD -- AGENT.md tests/testthat/AGENT.md .github/copilot-instructions.md; then
+          if git diff --quiet HEAD -- AGENTS.md tests/testthat/AGENTS.md .github/copilot-instructions.md; then
             echo "changed=false" >> $GITHUB_OUTPUT
             echo "No changes detected in AI assistant files"
           else
             echo "changed=true" >> $GITHUB_OUTPUT
             echo "Changes detected in AI assistant files"
             echo "Files changed:"
-            git diff --name-only HEAD -- AGENT.md tests/testthat/AGENT.md .github/copilot-instructions.md | sed 's/^/  - /'
+            git diff --name-only HEAD -- AGENTS.md tests/testthat/AGENTS.md .github/copilot-instructions.md | sed 's/^/  - /'
           fi
           
       - name: Get current branch and timestamp
@@ -68,7 +61,7 @@ jobs:
           echo "date_readable=$(date -u +'%Y-%m-%d %H:%M:%S UTC')" >> $GITHUB_OUTPUT
           
       - name: Create Pull Request
-        if: steps.check_changes.outputs.changed == 'true' && github.event.inputs.create_pr == 'true'
+        if: steps.check_changes.outputs.changed == 'true'
         uses: peter-evans/create-pull-request@v5
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
@@ -76,8 +69,8 @@ jobs:
             chore: update AI assistant context from admiraldev
             
             - Synced latest admiraldev programming strategy
-            - Updated unit testing guidance  
-            - Refreshed AGENT.md files for universal AI support
+            - Updated unit testing guidance
+            - Refreshed AGENTS.md files for universal AI support
             - Auto-generated on ${{ steps.branch_info.outputs.date_readable }}
           title: "chore: update AI assistant context (${{ steps.branch_info.outputs.timestamp }})"
           body: |
@@ -89,11 +82,11 @@ jobs:
             - ✅ Downloaded latest admiraldev programming strategy
             - ✅ Updated unit testing guidance
             - ✅ Refreshed function naming conventions
-            - ✅ Created/updated AGENT.md files for universal AI support
+            - ✅ Created/updated AGENTS.md files for universal AI support
             
             ### Generated Files
-            - **`AGENT.md`** - Universal AI assistant context (root level)
-            - **`tests/testthat/AGENT.md`** - Testing-specific guidelines
+            - **`AGENTS.md`** - Universal AI assistant context (root level)
+            - **`tests/testthat/AGENTS.md`** - Testing-specific guidelines
             - **`.github/copilot-instructions.md`** - GitHub Copilot (legacy)
             
             **Source:** admiraldev vignettes from main branch  
@@ -110,48 +103,22 @@ jobs:
           base: ${{ github.event.inputs.target_branch || 'main' }}
           delete-branch: true
           
-      - name: Direct commit (non-PR mode)
-        if: steps.check_changes.outputs.changed == 'true' && github.event.inputs.create_pr != 'true'
-        run: |
-          git config --local user.email "action@github.com"
-          git config --local user.name "GitHub Action"
-          git add AGENT.md tests/testthat/AGENT.md .github/copilot-instructions.md
-          git commit -m "chore: update AI assistant context from admiraldev
 
-          - Synced latest admiraldev programming strategy
-          - Updated unit testing guidance
-          - Refreshed AGENT.md files for universal AI support
-          - Auto-generated on ${{ steps.branch_info.outputs.date_readable }}
-          
-          [skip ci]"
-          
-      - name: Push changes (non-PR mode)
-        if: steps.check_changes.outputs.changed == 'true' && github.event.inputs.create_pr != 'true'
-        uses: ad-m/github-push-action@master
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          branch: ${{ github.ref }}
-          
       - name: Create summary
         run: |
           echo "## 📋 AI Assistant Context Sync Summary" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "**Branch:** ${{ steps.branch_info.outputs.branch }}" >> $GITHUB_STEP_SUMMARY
-          echo "**Mode:** ${{ github.event.inputs.create_pr == 'true' && 'Pull Request' || 'Direct Commit' }}" >> $GITHUB_STEP_SUMMARY
+          echo "**Mode:** Pull Request" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
           if [[ "${{ steps.check_changes.outputs.changed }}" == "true" ]]; then
-            if [[ "${{ github.event.inputs.create_pr }}" == "true" ]]; then
-              echo "✅ **Pull Request created**" >> $GITHUB_STEP_SUMMARY
-              echo "- Branch: \`update-ai-assistant-context-${{ steps.branch_info.outputs.timestamp }}\`" >> $GITHUB_STEP_SUMMARY
-              echo "- Target: \`${{ github.event.inputs.target_branch || 'main' }}\`" >> $GITHUB_STEP_SUMMARY
-            else
-              echo "✅ **Changes committed directly**" >> $GITHUB_STEP_SUMMARY
-              echo "- Updated AI assistant context files" >> $GITHUB_STEP_SUMMARY
-            fi
+            echo "✅ **Pull Request created**" >> $GITHUB_STEP_SUMMARY
+            echo "- Branch: \`update-ai-assistant-context-${{ steps.branch_info.outputs.timestamp }}\`" >> $GITHUB_STEP_SUMMARY
+            echo "- Target: \`${{ github.event.inputs.target_branch || 'main' }}\`" >> $GITHUB_STEP_SUMMARY
             echo "" >> $GITHUB_STEP_SUMMARY
             echo "**Files managed:**" >> $GITHUB_STEP_SUMMARY
-            echo "- 📄 \`AGENT.md\` (universal AI assistants)" >> $GITHUB_STEP_SUMMARY
-            echo "- 📄 \`tests/testthat/AGENT.md\` (testing context)" >> $GITHUB_STEP_SUMMARY
+            echo "- 📄 \`AGENTS.md\` (universal AI assistants)" >> $GITHUB_STEP_SUMMARY
+            echo "- 📄 \`tests/testthat/AGENTS.md\` (testing context)" >> $GITHUB_STEP_SUMMARY
             echo "- 📄 \`.github/copilot-instructions.md\` (Copilot legacy)" >> $GITHUB_STEP_SUMMARY
             echo "" >> $GITHUB_STEP_SUMMARY
             echo "**AI assistants supported:** GitHub Copilot, Gemini, Claude, and others" >> $GITHUB_STEP_SUMMARY
