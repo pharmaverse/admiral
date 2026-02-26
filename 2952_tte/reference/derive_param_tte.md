@@ -915,6 +915,7 @@ drug date, respectively, and then passed to the `end_dates` argument.
     eos <- censor_source(
       dataset_name = "adsl",
       date = EOSDT,
+      censor = 1,
       set_values_to = exprs(
         EVNTDESC = "END OF STUDY"
       )
