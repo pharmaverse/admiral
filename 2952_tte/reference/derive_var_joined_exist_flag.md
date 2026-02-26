@@ -939,12 +939,12 @@ confirmed at a subsequent visit.
     #> 5 2             1     1 Y     Y
     #> 6 2             2     8 Y     <NA>
     #> 7 2             2    10 Y     <NA>
-    #> G2;H2;Warningh: Dataset `dataset` contains duplicate records with respect to `USUBJID` and
+    #> Warning: Dataset `dataset` contains duplicate records with respect to `USUBJID` and
     #> `AVISITN`
-    #> i Run `admiral::get_duplicates_dataset()` to access the duplicate recordsg
-    #> G2;H2;Warningh: Dataset `dataset_add` contains duplicate records with respect to `USUBJID` and
+    #> i Run `admiral::get_duplicates_dataset()` to access the duplicate records
+    #> Warning: Dataset `dataset_add` contains duplicate records with respect to `USUBJID` and
     #> `AVISITN`
-    #> i Run `admiral::get_duplicates_dataset()` to access the duplicate recordsg
+    #> i Run `admiral::get_duplicates_dataset()` to access the duplicate records
 
 The records for `USUBJID == "2"` are not unique with respect to
 `USUBJID` and `AVISITN`. Thus a warning is issued. The duplicates can be

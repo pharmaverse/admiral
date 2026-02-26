@@ -482,9 +482,9 @@ dataset containing a duplicate last weight assessment date.
     #> 1 01         61 YEARS  82.6
     #> 2 02         64 YEARS  NA
     #> 3 03         85 YEARS  NA
-    #> G2;H2;Warningh: Dataset contains duplicate records with respect to `STUDYID`, `USUBJID`, and
+    #> Warning: Dataset contains duplicate records with respect to `STUDYID`, `USUBJID`, and
     #> `convert_dtc_to_dtm(VSDTC)`
-    #> i Run `admiral::get_duplicates_dataset()` to access the duplicate recordsg
+    #> i Run `admiral::get_duplicates_dataset()` to access the duplicate records
 
 For investigating the issue, the dataset of the duplicate source records
 can be obtained by calling

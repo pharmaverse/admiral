@@ -493,9 +493,9 @@ for `"Cough"`, it was then passed to the function using the
     #> 3 02      AB42    END OF STUDY ADSL   EOSDT      NA     1 2021-02-03 2021-01-16
     #> 4 02      AB42    END OF STUDY ADSL   EOSDT      NA     1 2021-02-03 2021-01-16
     #> # i 2 more variables: PARAMCD <chr>, PARAM <chr>
-    #> G2;H2;Warningh: Dataset "adae" contains duplicate records with respect to `STUDYID`, `USUBJID`,
+    #> Warning: Dataset "adae" contains duplicate records with respect to `STUDYID`, `USUBJID`,
     #> `AEDECOD`, and `ASTDT`
-    #> i Run `admiral::get_duplicates_dataset()` to access the duplicate recordsg
+    #> i Run `admiral::get_duplicates_dataset()` to access the duplicate records
 
 For investigating the issue, the dataset of the duplicate source records
 can be obtained by calling
