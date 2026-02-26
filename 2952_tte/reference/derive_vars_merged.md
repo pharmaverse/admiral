@@ -491,9 +491,9 @@ can be obtained by calling
 [`get_duplicates_dataset()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/get_duplicates_dataset.md):
 
     get_duplicates_dataset()
-    #> G3;Duplicate records with respect to `STUDYID`, `USUBJID`, and
+    #> Duplicate records with respect to `STUDYID`, `USUBJID`, and
     #> `convert_dtc_to_dtm(VSDTC)`.
-    #> g# A tibble: 2 × 9
+    #> # A tibble: 2 × 9
     #>   STUDYID USUBJID convert_dtc_to_dtm(VSDT…¹ DOMAIN VSTESTCD VISIT VSSTRESN VSDTC
     #> * <chr>   <chr>   <dttm>                    <chr>  <chr>    <chr>    <dbl> <chr>
     #> 1 AB42    01      2013-09-24 00:00:00       VS     WEIGHT   WEEK…     81.1 2013…
