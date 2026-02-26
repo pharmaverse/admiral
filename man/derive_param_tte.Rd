@@ -404,8 +404,8 @@ For investigating the issue, the dataset of the duplicate source records
 can be obtained by calling \code{get_duplicates_dataset()}:
 
 \if{html}{\out{<div class="sourceCode r">}}\preformatted{get_duplicates_dataset()
-#> G3;Duplicate records with respect to `STUDYID`, `USUBJID`, `AEDECOD`, and `ASTDT`.
-#> g# A tibble: 2 × 6
+#> Duplicate records with respect to `STUDYID`, `USUBJID`, `AEDECOD`, and `ASTDT`.
+#> # A tibble: 2 × 6
 #>   STUDYID USUBJID AEDECOD ASTDT      AESEQ AESER
 #> * <chr>   <chr>   <chr>   <date>     <dbl> <chr>
 #> 1 AB42    01      Cough   2021-03-04     2 N    
