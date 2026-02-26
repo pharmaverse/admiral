@@ -87,9 +87,9 @@
 #' @param event_type Type of event
 #'
 #'   For events that are considered unfavorable, e.g., adverse events,
-#'   progression, worsening, ..., the value should be `"negative"` and for
+#'   progression, worsening, etc., the value should be `"negative"` and for
 #'   events that are considered favorable, e.g., response to treatment,
-#'   improvement, ..., the value should be `"positive"`.
+#'   improvement, etc., the value should be `"positive"`.
 #'
 #'   If `event_type` is specified as `"positive"`, the objects specified for
 #'   `end_dates` are added to the censoring conditions (`censor_conditions`).
@@ -748,8 +748,8 @@
 #' @caption Positive event (`event_type`)
 #'
 #' @info If positive events like response or improvement are analyzed,
-#'   `event_type = "positive"` should be used. Then subjects without event are
-#'   censored at the end of the observations period (defined by `end_dates`)
+#'   `event_type = "positive"` should be used. Subjects without events are
+#'   censored at the end of the observation period (defined by `end_dates`)
 #'   instead of the last assessment. For positive events this is the more
 #'   conservative approach.
 #'

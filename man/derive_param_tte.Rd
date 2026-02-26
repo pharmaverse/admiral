@@ -128,9 +128,9 @@ censorings.
 \item{event_type}{Type of event
 
 For events that are considered unfavorable, e.g., adverse events,
-progression, worsening, ..., the value should be \code{"negative"} and for
+progression, worsening, etc., the value should be \code{"negative"} and for
 events that are considered favorable, e.g., response to treatment,
-improvement, ..., the value should be \code{"positive"}.
+improvement, etc., the value should be \code{"positive"}.
 
 If \code{event_type} is specified as \code{"positive"}, the objects specified for
 \code{end_dates} are added to the censoring conditions (\code{censor_conditions}).
@@ -886,8 +886,8 @@ Also note that subject \code{03} has no event because the assessment with \code{
 \subsection{Positive event (\code{event_type})}{
 
 If positive events like response or improvement are analyzed,
-\code{event_type = "positive"} should be used. Then subjects without event are
-censored at the end of the observations period (defined by \code{end_dates})
+\code{event_type = "positive"} should be used. Subjects without events are
+censored at the end of the observation period (defined by \code{end_dates})
 instead of the last assessment. For positive events this is the more
 conservative approach.
 
