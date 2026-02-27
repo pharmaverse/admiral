@@ -653,7 +653,7 @@ be deprecated, there will be a message issued when using the function or argumen
 using `deprecate_inform()`. This message will appear to the user for at least
 _one year_. Templates, vignettes and any internal calls should be updated to use the new recommended function/argument.   
 
-- **Phase 2:** After at least _one year_ and in the closet next release, a warning will be 
+- **Phase 2:** After at least _one year_ and in the closest next release, a warning will be 
 issued when using the function or argument using `deprecate_warn()`. This warning 
 message will appear for at least _one year_.   
 
