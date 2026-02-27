@@ -365,7 +365,7 @@ These custom assertion functions should either return an error in case of an inv
 
 For the most common types of input arguments like a single variable, a list of
 variables, a dataset, ... functions for checking are available (see
-[assertions](../reference/index.html#section-assertions)).
+[assertions](https://pharmaverse.github.io/admiral/reference/index.html#section-assertions)).
 
 Arguments which expect keywords should handle them in a case-insensitive manner,
 e.g., both `date_imputation = "FIRST"` and `date_imputation = "first"` should be
@@ -387,7 +387,7 @@ down for more details.
 
 In addition to the standard roxygen2 tags, the `@family` and `@keywords` tags are also used. 
 
-The family/keywords are used to categorize the function, which is used both on our website and the internal package help pages. Please see section [Categorization of functions](programming_strategy.html#categorization-of-functions).
+The family/keywords are used to categorize the function, which is used both on our website and the internal package help pages. Please see section [Categorization of functions](https://pharmaverse.github.io/admiraldev/articles/programming_strategy.html#categorization-of-functions).
 
 An example is given below:
 
@@ -486,13 +486,13 @@ this function). Make sure to align columns as this ensures quick code
 readability. If other functions are called in the example, please specify
 `library(pkg_name)` then refer to the respective function `fun()` as opposed to
 the preferred `pkg_name::fun()` notation as specified in [Unit Test
-Guidance](unit_test_guidance.html#set-up-the-test-script).
+Guidance](https://pharmaverse.github.io/admiraldev/articles/unit_test_guidance.html#set-up-the-test-script).
 
     The `@examples` tag should be used for simple functions which require only a
     few examples and no explanation. For more complex functions, the (custom) 
     `@caption`, `@info`, and `@code` tags should be used. Please see the separate 
     vignette on 
-    [Writing Custom Examples](writing_custom_examples.html)
+    [Writing Custom Examples](https://pharmaverse.github.io/admiraldev/articles/writing_custom_examples.html)
     for detailed guidance on how these are constructed, and [`derive_extreme_records.R` in             admiral](https://github.com/pharmaverse/admiral/blob/main/R/derive_extreme_records.R) 
     for an example of this in action.
 
@@ -641,7 +641,7 @@ Functions should only perform the derivation logic and not add any kind of metad
 # Unit Testing
 
 A function requires a set of unit tests to verify it produces the expected result.
-See [Writing Unit Tests in {admiral}](unit_test_guidance.html#writing-unit-tests-in-admiral) for details.
+See [Writing Unit Tests in {admiral}](https://pharmaverse.github.io/admiraldev/articles/unit_test_guidance.html#writing-unit-tests-in-admiral) for details.
 
 # Deprecation
 
@@ -845,7 +845,7 @@ it is defined in `examples.R`, the unit tests are in
 `tests/testthat/test-examples.R`.
 
 The unit-test should follow the corresponding format, per the [unit test
-guidance](unit_test_guidance.html#writing-unit-tests-in-admiral).
+guidance](https://pharmaverse.github.io/admiraldev/articles/unit_test_guidance.html#writing-unit-tests-in-admiral).
 
 ### For Deprecated Functions that Issue a Message (Phase 1)
 

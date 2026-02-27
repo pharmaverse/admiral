@@ -152,6 +152,27 @@ download_admiraldev_content <- function() {
   )
 }
 
+# Fix relative links in downloaded vignette content to use full admiraldev URLs
+fix_relative_links <- function(lines) {
+  if (is.null(lines)) return(lines)
+  admiraldev_articles <- "https://pharmaverse.github.io/admiraldev/articles"
+  admiral_reference  <- "https://pharmaverse.github.io/admiral/reference"
+
+  # Replace relative links to admiraldev articles (e.g. programming_strategy.html#anchor)
+  lines <- gsub(
+    "\\(([a-z_]+\\.html)(#[^)]*)?\\)",
+    paste0("(", admiraldev_articles, "/\\1\\2)"),
+    lines
+  )
+  # Replace ../reference/index.html links
+  lines <- gsub(
+    "\\(\\.\\./(reference/[^)]+)\\)",
+    paste0("(", "https://pharmaverse.github.io/admiral/", "\\1)"),
+    lines
+  )
+  lines
+}
+
 # Create root AGENTS.md with actual admiraldev content
 create_root_agent_md <- function(admiraldev_content) {
   # Create the file content as separate parts to avoid glue complexity
@@ -184,7 +205,7 @@ create_root_agent_md <- function(admiraldev_content) {
       "",
       "**Source:** admiraldev programming_strategy.Rmd vignette",
       "",
-      admiraldev_content$programming_strategy,
+      fix_relative_links(admiraldev_content$programming_strategy),
       "",
       "---",
       ""
@@ -266,7 +287,7 @@ create_tests_agent_md <- function(admiraldev_content) {
       "",
       "**Source:** admiraldev unit_test_guidance.Rmd vignette",
       "",
-      admiraldev_content$unit_test_guidance,
+      fix_relative_links(admiraldev_content$unit_test_guidance),
       "",
       "---",
       ""
