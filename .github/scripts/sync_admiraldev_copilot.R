@@ -154,9 +154,11 @@ download_admiraldev_content <- function() {
 
 # Fix relative links in downloaded vignette content to use full admiraldev URLs
 fix_relative_links <- function(lines) {
-  if (is.null(lines)) return(lines)
+  if (is.null(lines)) {
+    return(lines)
+  }
   admiraldev_articles <- "https://pharmaverse.github.io/admiraldev/articles"
-  admiral_reference  <- "https://pharmaverse.github.io/admiral/reference"
+  admiral_reference <- "https://pharmaverse.github.io/admiral/reference"
 
   # Replace relative links to admiraldev articles (e.g. programming_strategy.html#anchor)
   lines <- gsub(
