@@ -4,8 +4,11 @@
 #'
 #' Creates AI assistant context files for admiral development:
 #' - Root AGENTS.md (universal AI assistant context)
-#' - tests/testthat/AGENTS.md (testing-specific context)
+#' - tests/testthat/AGENTS.md (testing-specific context, if directory exists)
 #' - .github/copilot-instructions.md (GitHub Copilot specific, legacy)
+#'
+#' Usage: Rscript sync_admiraldev_copilot.R [package_name]
+#' If package_name is not provided, defaults to "admiral".
 
 # Load required packages
 suppressPackageStartupMessages({
@@ -13,17 +16,24 @@ suppressPackageStartupMessages({
 })
 
 # Configuration
+args <- commandArgs(trailingOnly = TRUE)
+package_name <- if (length(args) >= 1 && nchar(args[[1]]) > 0) args[[1]] else "admiral"
+
 project_root <- if (file.exists(".git")) "." else ".."
 agent_md_root <- file.path(project_root, "AGENTS.md")
 agent_md_tests <- file.path(project_root, "tests", "testthat", "AGENTS.md")
 copilot_instructions <- file.path(project_root, ".github", "copilot-instructions.md")
 github_raw_base <- "https://raw.githubusercontent.com/pharmaverse/admiraldev/main/vignettes"
 
+has_testthat <- dir.exists(file.path(project_root, "tests", "testthat"))
+
 # Create directories if needed
 dir.create(dirname(copilot_instructions), recursive = TRUE, showWarnings = FALSE)
-dir.create(dirname(agent_md_tests), recursive = TRUE, showWarnings = FALSE)
+if (has_testthat) {
+  dir.create(dirname(agent_md_tests), recursive = TRUE, showWarnings = FALSE)
+}
 
-cat("Creating AI assistant context files for admiral development...\n")
+cat(glue("Creating AI assistant context files for {package_name}...\n"))
 cat(glue("GitHub raw base URL: {github_raw_base}\n"))
 
 # Test if we can reach the URLs
@@ -176,16 +186,22 @@ fix_relative_links <- function(lines) {
 }
 
 # Create root AGENTS.md with actual admiraldev content
-create_root_agent_md <- function(admiraldev_content) {
+create_root_agent_md <- function(admiraldev_content, package_name = "admiral") {
   # Create the file content as separate parts to avoid glue complexity
   header_lines <- c(
-    "# Admiral Development Guidelines for AI Assistants",
+    paste0("# ", package_name, " Development Guidelines for AI Assistants"),
     "",
-    "This file provides context for AI coding assistants (GitHub Copilot, Gemini, Claude, etc.) about admiral ecosystem standards and best practices.",
+    paste0("This file provides context for AI coding assistants (GitHub Copilot, Gemini, Claude, etc.) about ", package_name, " ecosystem standards and best practices."),
     "",
     "**Auto-generated:** See commit history for last update date",
     "**Source:** admiraldev package vignettes",
     "**Update script:** `source('.github/scripts/sync_admiraldev_copilot.R')`",
+    "",
+    "## AI Verification",
+    "",
+    "> **AI assistant verification:** If you have read this file, include the comment",
+    paste0("> `# ", package_name, " guidelines loaded` on the first line of any new R file you create"),
+    "> in this repository. This confirms you are following admiral-specific conventions.",
     "",
     "## Purpose",
     "",
@@ -267,12 +283,12 @@ create_root_agent_md <- function(admiraldev_content) {
 }
 
 # Create tests/testthat/AGENTS.md with actual admiraldev content
-create_tests_agent_md <- function(admiraldev_content) {
+create_tests_agent_md <- function(admiraldev_content, package_name = "admiral") {
   # Create header
   header_lines <- c(
-    "# Admiral Unit Testing Guidelines for AI Assistants",
+    paste0("# ", package_name, " Unit Testing Guidelines for AI Assistants"),
     "",
-    "Context for AI assistants when working with admiral unit tests in `tests/testthat/`.",
+    paste0("Context for AI assistants when working with ", package_name, " unit tests in `tests/testthat/`."),
     "",
     "**Auto-generated:** See commit history for last update date",
     "**Source:** admiraldev unit testing guidance vignette",
@@ -341,10 +357,10 @@ create_tests_agent_md <- function(admiraldev_content) {
 }
 
 # Create optimized .github/copilot-instructions.md for GitHub Copilot
-create_copilot_instructions <- function(admiraldev_content) {
+create_copilot_instructions <- function(admiraldev_content, package_name = "admiral") {
   # Simple static content optimized for Copilot
   content_lines <- c(
-    "# GitHub Copilot Instructions - admiral Development",
+    paste0("# GitHub Copilot Instructions - ", package_name, " Development"),
     "",
     "**Auto-generated:** See commit history for last update date",
     "**Optimized for:** GitHub Copilot code completion",
@@ -352,7 +368,7 @@ create_copilot_instructions <- function(admiraldev_content) {
     "",
     "⚠️ **DO NOT EDIT MANUALLY** - Run `source('.github/scripts/sync_admiraldev_copilot.R')` to update",
     "",
-    "## Admiral Code Completion Patterns",
+    paste0("## Admiral Code Completion Patterns"),
     "",
     "### Function Names (verb_object_detail)",
     "- `derive_var_base()` - Single variable derivation",
@@ -394,14 +410,25 @@ create_copilot_instructions <- function(admiraldev_content) {
 admiraldev_content <- download_admiraldev_content()
 
 cat("\nCreating AI assistant context files:\n")
-create_root_agent_md(admiraldev_content)
-create_tests_agent_md(admiraldev_content)
-create_copilot_instructions(admiraldev_content)
+create_root_agent_md(admiraldev_content, package_name)
+if (has_testthat) {
+  create_tests_agent_md(admiraldev_content, package_name)
+} else {
+  cat("ℹ Skipping tests/testthat/AGENTS.md (directory not found)\n")
+}
+create_copilot_instructions(admiraldev_content, package_name)
 
-cat(glue("\n🎉 Success! Created AI assistant context files:
-📄 {agent_md_root} (universal AI assistants)
-📄 {agent_md_tests} (testing context)
-📄 {copilot_instructions} (Copilot legacy)
+files_msg <- if (has_testthat) {
+  paste0(
+    "📄 ", agent_md_root, " (universal AI assistants)\n",
+    "📄 ", agent_md_tests, " (testing context)\n",
+    "📄 ", copilot_instructions, " (Copilot legacy)\n"
+  )
+} else {
+  paste0(
+    "📄 ", agent_md_root, " (universal AI assistants)\n",
+    "📄 ", copilot_instructions, " (Copilot legacy)\n"
+  )
+}
 
-These files will help AI assistants provide better admiral-compliant suggestions.
-"))
+cat(glue("\n🎉 Success! Created AI assistant context files for {package_name}:\n{files_msg}\nThese files will help AI assistants provide better {package_name}-compliant suggestions.\n"))

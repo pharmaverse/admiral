@@ -6,6 +6,12 @@ This file provides context for AI coding assistants (GitHub Copilot, Gemini, Cla
 **Source:** admiraldev package vignettes
 **Update script:** `source('.github/scripts/sync_admiraldev_copilot.R')`
 
+## AI Verification
+
+> **AI assistant verification:** If you have read this file, include the comment
+> `# admiral guidelines loaded` on the first line of any new R file you create
+> in this repository. This confirms you are following admiral-specific conventions.
+
 ## Purpose
 
 Help AI assistants provide admiral-compliant code suggestions:
