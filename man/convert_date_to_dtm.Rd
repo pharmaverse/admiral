@@ -158,7 +158,7 @@ A datetime object
 }
 \description{
 Convert a date (datetime, date, or date character) into a Date
-vector (usually \code{'--DTM'}).
+vector (usually \code{*DTM}).
 
 \strong{Note:} This is a wrapper function for the function \code{convert_dtc_to_dtm()}.
 }

@@ -7,7 +7,7 @@
 get_partialdatetime(dtc, create_datetime)
 }
 \arguments{
-\item{dtc}{The \code{'--DTC'} date to parse
+\item{dtc}{The \code{--DTC} date to parse
 
 A character date is expected in a format like \code{yyyy-mm-dd} or
 \code{yyyy-mm-ddThh:mm:ss}. Trailing components can be omitted and \code{-} is a

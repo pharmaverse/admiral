@@ -11,12 +11,12 @@
 #'
 #' @details
 #' The names of the newly added variables are automatically set by replacing the
-#' `--DTM` suffix of the `source_vars` with `--TM`. The `--TM` variables are created
+#' `*DTM` suffix of the `source_vars` with `*TM`. The `*TM` variables are created
 #' using the `{hms}` package.
 #'
 #' @return
 #' A data frame containing the input dataset with the corresponding time
-#' (`--TM`) variable(s) of all datetime variables (`--DTM`) specified in
+#' (`*TM`) variable(s) of all datetime variables (`*DTM`) specified in
 #' `source_vars` with the correct name.
 #'
 #' @family der_date_time
@@ -55,7 +55,7 @@ derive_vars_dtm_to_tm <- function(dataset, source_vars) {
   assert_vars(source_vars)
   assert_data_frame(dataset, required_vars = source_vars)
 
-  # Warn if `--TM` variables already exist
+  # Warn if `*TM` variables already exist
   dtm_vars <- expr_c(source_vars)
   dtm_vars2 <- vars2chr(dtm_vars)
   n_vars <- length(dtm_vars)
