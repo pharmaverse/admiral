@@ -930,6 +930,7 @@ drug date, respectively, and then passed to the `end_dates` argument.
       )
     )
 
+    # Note to user: The source function has changed.
     worsening <- event_source(
       dataset_name = "adqs",
       date = ADT,
