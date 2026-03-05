@@ -1,9 +1,14 @@
 name: Create AGENTS.md
 
 on:
+  push:
+    branches:
+      - 2920-add-copilot-instructions
+    paths:
+      - '.github/workflows/create-agents-md.yml'
   workflow_dispatch:
   schedule:
-    - cron: '0 8 1 * *' # 1st of every month at 08:00 UTC
+    - cron: '0 8 1 * *'
 
 jobs:
   create-agents-md:
