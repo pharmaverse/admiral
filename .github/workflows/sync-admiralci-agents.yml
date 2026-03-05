@@ -5,7 +5,7 @@ on:
     branches:
       - 2920-add-copilot-instructions
     paths:
-      - '.github/workflows/create-agents-md.yml'
+      - '.github/workflows/sync-admiralci-agents.yml'
   workflow_dispatch:
   schedule:
     - cron: '0 8 1 * *'
