@@ -1,0 +1,9 @@
+jobs:
+  create-agents-md:
+    uses: pharmaverse/admiralci/.github/workflows/create-agents-md.yml@231-add-workflow-to-create-ai-agentmd-files
+    with:
+      package_name: admiral
+      target_branch: 2920-add-copilot-instructions
+    permissions:
+      contents: write
+      pull-requests: write
