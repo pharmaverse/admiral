@@ -688,6 +688,7 @@
 #'   )
 #' )
 #'
+#' # Note to user: The source function has changed.
 #' worsening <- event_source(
 #'   dataset_name = "adqs",
 #'   date = ADT,
