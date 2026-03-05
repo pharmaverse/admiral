@@ -1,9 +1,16 @@
+name: Create AGENTS.md
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '0 8 1 * *' # 1st of every month at 08:00 UTC
+
 jobs:
   create-agents-md:
+    permissions:
+      contents: write
+      pull-requests: write
     uses: pharmaverse/admiralci/.github/workflows/create-agents-md.yml@231-add-workflow-to-create-ai-agentmd-files
     with:
       package_name: admiral
       target_branch: 2920-add-copilot-instructions
-    permissions:
-      contents: write
-      pull-requests: write
