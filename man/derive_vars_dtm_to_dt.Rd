@@ -23,8 +23,8 @@ which dates are to be extracted
 }}
 }
 \value{
-A data frame containing the input dataset with the corresponding date (\code{*DT})
-variable(s) of all datetime variables (\code{*DTM}) specified in \code{source_vars.}
+A data frame containing the input dataset with the corresponding date (\verb{*DT})
+variable(s) of all datetime variables (\verb{*DTM}) specified in \code{source_vars.}
 }
 \description{
 This function creates date(s) as output from datetime variable(s)
