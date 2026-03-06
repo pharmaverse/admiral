@@ -19,3 +19,4 @@ jobs:
     with:
       package_name: admiral
       target_branch: 2920-add-copilot-instructions
+      admiralci_ref: 231-add-workflow-to-create-ai-agentmd-files      
