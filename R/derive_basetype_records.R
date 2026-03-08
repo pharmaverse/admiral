@@ -37,12 +37,17 @@
 #'
 #' @export
 #'
-#' @examples
+#' @examplesx
+#'
+#' @caption Derive `BASETYPE` based on epoch (`basetypes`)
+#' @info The `basetypes` argument is a named list of expressions where each name
+#' becomes a value of `BASETYPE` and each expression defines which records
+#' receive that value. A record can match multiple expressions and will be
+#' duplicated once for each matching `BASETYPE`.
+#' @code
 #' library(tibble)
 #' library(dplyr, warn.conflicts = FALSE)
 #'
-#' # Derive BASETYPE where records are duplicated across different baseline types
-#' # based on the epoch they belong to
 #' bds <- tribble(
 #'   ~USUBJID, ~EPOCH,         ~PARAMCD,  ~ASEQ, ~AVAL,
 #'   "P01",    "RUN-IN",       "PARAM01",     1,  10.0,
@@ -58,7 +63,7 @@
 #'   "P02",    "OPEN-LABEL",   "PARAM01",     5,  10.8
 #' )
 #'
-#' bds_with_basetype <- derive_basetype_records(
+#' derive_basetype_records(
 #'   dataset = bds,
 #'   basetypes = exprs(
 #'     "RUN-IN" = EPOCH %in% c("RUN-IN", "STABILIZATION", "DOUBLE-BLIND", "OPEN-LABEL"),
@@ -67,13 +72,12 @@
 #'   )
 #' )
 #'
-#' # Below print statement will print all 23 records in the data frame
-#' print(bds_with_basetype, n = Inf)
-#'
-#' count(bds_with_basetype, BASETYPE, name = "Number of Records")
-#'
-#' # Records that do not match any condition in basetypes are retained with
-#' # BASETYPE set to NA (e.g., SCREENING records below)
+#' @caption Records not matching any condition are retained with `BASETYPE = NA`
+#' @info Records that do not match any condition in `basetypes` are kept in the
+#' output dataset with `BASETYPE` set to `NA`. In this example, `SCREENING`
+#' records do not match any of the `basetypes` conditions and are therefore
+#' retained with `BASETYPE = NA`.
+#' @code
 #' bds <- tribble(
 #'   ~USUBJID, ~EPOCH,         ~PARAMCD,  ~ASEQ, ~AVAL,
 #'   "P01",    "SCREENING",    "PARAM01",     1,  10.2,
@@ -86,7 +90,7 @@
 #'   "P02",    "DOUBLE-BLIND", "PARAM01",     3,  10.2
 #' )
 #'
-#' bds_with_basetype <- derive_basetype_records(
+#' derive_basetype_records(
 #'   dataset = bds,
 #'   basetypes = exprs(
 #'     "RUN-IN" = EPOCH %in% c("RUN-IN", "DOUBLE-BLIND"),
@@ -94,12 +98,12 @@
 #'   )
 #' )
 #'
-#' print(bds_with_basetype, n = Inf)
-#'
-#' count(bds_with_basetype, BASETYPE, name = "Number of Records")
-#'
-#' # An example where all parameter records need to be included for 2 different
-#' # baseline type derivations (such as LAST and WORST)
+#' @caption Include all records for multiple baseline type derivations (`basetypes = TRUE`)
+#' @info When all parameter records need to be included for multiple baseline
+#' type derivations (such as `"LAST"` and `"WORST"`), set each expression in
+#' `basetypes` to `TRUE`. This duplicates every record once for each named
+#' baseline type.
+#' @code
 #' bds <- tribble(
 #'   ~USUBJID, ~EPOCH,         ~PARAMCD,  ~ASEQ, ~AVAL,
 #'   "P01",    "RUN-IN",       "PARAM01",     1,  10.0,
@@ -108,17 +112,13 @@
 #'   "P01",    "DOUBLE-BLIND", "PARAM01",     4,  10.1
 #' )
 #'
-#' bds_with_basetype <- derive_basetype_records(
+#' derive_basetype_records(
 #'   dataset = bds,
 #'   basetypes = exprs(
 #'     "LAST" = TRUE,
 #'     "WORST" = TRUE
 #'   )
 #' )
-#'
-#' print(bds_with_basetype, n = Inf)
-#'
-#' count(bds_with_basetype, BASETYPE, name = "Number of Records")
 derive_basetype_records <- function(dataset, basetypes) {
   assert_data_frame(dataset)
   assert_expr_list(basetypes, named = TRUE)
