@@ -41,6 +41,8 @@
 #' library(tibble)
 #' library(dplyr, warn.conflicts = FALSE)
 #'
+#' # Derive BASETYPE where records are duplicated across different baseline types
+#' # based on the epoch they belong to
 #' bds <- tribble(
 #'   ~USUBJID, ~EPOCH,         ~PARAMCD,  ~ASEQ, ~AVAL,
 #'   "P01",    "RUN-IN",       "PARAM01",     1,  10.0,
@@ -65,9 +67,33 @@
 #'   )
 #' )
 #'
-#'
 #' # Below print statement will print all 23 records in the data frame
-#' # bds_with_basetype
+#' print(bds_with_basetype, n = Inf)
+#'
+#' count(bds_with_basetype, BASETYPE, name = "Number of Records")
+#'
+#' # Records that do not match any condition in basetypes are retained with
+#' # BASETYPE set to NA (e.g., SCREENING records below)
+#' bds <- tribble(
+#'   ~USUBJID, ~EPOCH,         ~PARAMCD,  ~ASEQ, ~AVAL,
+#'   "P01",    "SCREENING",    "PARAM01",     1,  10.2,
+#'   "P01",    "RUN-IN",       "PARAM01",     2,  10.0,
+#'   "P01",    "RUN-IN",       "PARAM01",     3,   9.8,
+#'   "P01",    "DOUBLE-BLIND", "PARAM01",     4,   9.2,
+#'   "P01",    "DOUBLE-BLIND", "PARAM01",     5,  10.1,
+#'   "P02",    "SCREENING",    "PARAM01",     1,  12.2,
+#'   "P02",    "RUN-IN",       "PARAM01",     2,  12.1,
+#'   "P02",    "DOUBLE-BLIND", "PARAM01",     3,  10.2
+#' )
+#'
+#' bds_with_basetype <- derive_basetype_records(
+#'   dataset = bds,
+#'   basetypes = exprs(
+#'     "RUN-IN" = EPOCH %in% c("RUN-IN", "DOUBLE-BLIND"),
+#'     "DOUBLE-BLIND" = EPOCH == "DOUBLE-BLIND"
+#'   )
+#' )
+#'
 #' print(bds_with_basetype, n = Inf)
 #'
 #' count(bds_with_basetype, BASETYPE, name = "Number of Records")

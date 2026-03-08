@@ -26,6 +26,9 @@ of the navigation bar. Tooltips have also been set up for each of the icons on t
 - The [contributions guidelines](https://pharmaverse.github.io/admiral/cran-release/CONTRIBUTING.html) for the `{admiral}` ecosystem 
 of packages were updated to specify the level of contributions required for authorship/acknowledgments. (#2979)
 
+- The examples for `derive_basetype_records()` were enhanced to include a case where records that do not match any
+  condition in `basetypes` are retained with `BASETYPE` set to `NA`. (#2904)
+
 ## Various
 
 <details>
