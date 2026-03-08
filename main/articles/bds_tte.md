@@ -96,7 +96,7 @@ class respectively. It defines
 - the value of the `CNSR` variable (`censor` parameter), and
 - which variable provides the date (`date` parameter).
 
-The date can be provided as date (`--DT` variable) or datetime (`--DTM`
+The date can be provided as date (`*DT` variable) or datetime (`*DTM`
 variable).
 
 CDISC strongly recommends `CNSR = 0` for events and positive integers
@@ -229,7 +229,7 @@ Therefore the `start` censoring is defined below to achieve that
 subjects without data in `adrs` are censored at the start date.
 
 The ADaM IG requires that a computed date must be accompanied by
-imputation flags. Thus, if the function detects a `--DTF` and/or `--TMF`
+imputation flags. Thus, if the function detects a `*DTF` and/or `*TMF`
 variable corresponding to `start_date` then `STARTDTF` and `STARTTMF`
 are set automatically to the values of these variables. If a date
 variable from one of the event or censoring source datasets is imputed,

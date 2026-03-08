@@ -1,7 +1,7 @@
 # Convert a Date into a Datetime Object
 
 Convert a date (datetime, date, or date character) into a Date vector
-(usually `'--DTM'`).
+(usually `*DTM`).
 
 **Note:** This is a wrapper function for the function
 [`convert_dtc_to_dtm()`](https:/pharmaverse.github.io/admiral/main/reference/convert_dtc_to_dtm.md).
@@ -226,7 +226,7 @@ Date/Time Computation Functions that returns a vector:
 convert_date_to_dtm("2019-07-18T15:25:00")
 #> [1] "2019-07-18 15:25:00 UTC"
 convert_date_to_dtm(Sys.time())
-#> [1] "2026-02-23 08:31:44 UTC"
+#> [1] "2026-03-08 16:39:14 UTC"
 convert_date_to_dtm(as.Date("2019-07-18"), time_imputation = "23:59:59")
 #> [1] "2019-07-18 23:59:59 UTC"
 convert_date_to_dtm("2019-07-18", time_imputation = "23:59:59")

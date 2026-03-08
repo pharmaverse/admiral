@@ -35,14 +35,14 @@ derive_vars_dtm_to_tm(dataset, source_vars)
 ## Value
 
 A data frame containing the input dataset with the corresponding time
-(`--TM`) variable(s) of all datetime variables (`--DTM`) specified in
+(`*TM`) variable(s) of all datetime variables (`*DTM`) specified in
 `source_vars` with the correct name.
 
 ## Details
 
 The names of the newly added variables are automatically set by
-replacing the `--DTM` suffix of the `source_vars` with `--TM`. The
-`--TM` variables are created using the `{hms}` package.
+replacing the `*DTM` suffix of the `source_vars` with `*TM`. The `*TM`
+variables are created using the `{hms}` package.
 
 ## See also
 

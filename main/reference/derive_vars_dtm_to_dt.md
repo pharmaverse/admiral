@@ -34,7 +34,7 @@ derive_vars_dtm_to_dt(dataset, source_vars)
 ## Value
 
 A data frame containing the input dataset with the corresponding date
-(`--DT`) variable(s) of all datetime variables (`--DTM`) specified in
+(`*DT`) variable(s) of all datetime variables (`*DTM`) specified in
 `source_vars.`
 
 ## See also
