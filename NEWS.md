@@ -30,6 +30,10 @@ of packages were updated to specify the level of contributions required for auth
 
 - Added IDs to each template script in the "Explore ADaM Templates" vignette, enabling links to them from across the website. (#3006)
 
+## Bug Fixes
+
+- Fixed poorly formatted warning messages in `derive_param_computed()` and `get_hori_data()`: corrected typo ("fullfiling" to "fulfilling"), fixed broken `{cli}` formatting markup, and improved bullet separation for the "No new observations were added" info message. (#2969)
+
 ## Various
 
 <details>
