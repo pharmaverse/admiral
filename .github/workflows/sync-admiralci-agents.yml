@@ -8,15 +8,15 @@ on:
       - '.github/workflows/sync-admiralci-agents.yml'
   workflow_dispatch:
   schedule:
-    - cron: '0 8 6 * *'
+    - cron: '0 8 15 * *'
 
 jobs:
   create-agents-md:
     permissions:
       contents: write
       pull-requests: write
-    uses: pharmaverse/admiralci/.github/workflows/create-agents-md.yml@231-add-workflow-to-create-ai-agentmd-files
+    uses: pharmaverse/admiralci/.github/workflows/create-agents-md.yml
     with:
       package_name: admiral
-      target_branch: 2920-add-copilot-instructions
-      admiralci_ref: 231-add-workflow-to-create-ai-agentmd-files      
+      target_branch: main
+      admiralci_ref: main     
