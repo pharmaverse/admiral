@@ -12,7 +12,7 @@ get_partialdatetime(dtc, create_datetime)
 
 - dtc:
 
-  The `'--DTC'` date to parse
+  The `--DTC` date to parse
 
   A character date is expected in a format like `yyyy-mm-dd` or
   `yyyy-mm-ddThh:mm:ss`. Trailing components can be omitted and `-` is a
