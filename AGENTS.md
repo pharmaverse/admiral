@@ -98,7 +98,7 @@ This should not be done for every simple programming step where tidyverse can be
 computational functions or data checks. However, also consider not to nest too many functions.
 
 * _**Checks**_ - Whenever a function fails, a meaningful error message must be provided with a clear
-reference to the input which caused the failure. A users should not have to dig into detailed
+reference to the input which caused the failure. A user should not have to dig into detailed
 code if they only want to apply a function.  A meaningful error message supports usability.
 
 * _**Flexibility**_ - Functions should be as flexible as possible as long as it does not reduce the usability.
@@ -267,7 +267,7 @@ agreed-upon preferences and conventions such as avoiding the use of `stop()` and
 `warning()` in favor of `cli::abort()` and `cli::warn()`.
 The `admiral_linters()` function is stored under `inst/lintr/linters.R` in `{admiraldev}` 
 (so as not to expose it to users) and can be loaded within the `.lintr.R` configuration 
-file with `source(system.file("lintr/linters.R", package = "admiraldev")`. An example
+file with `source(system.file("lintr/linters.R", package = "admiraldev"))`. An example
 `.lintr.R` configuration file is shown below:
 
 ```{R, eval = F}
@@ -518,7 +518,7 @@ order of the argument description in the rendered documentation but makes it
 easier to maintain the headers.
 
 Variable names, expressions, functions, and any other code must be enclosed
-which backticks. This will render it as code.
+in backticks. This will render it as code.
 
 For functions which derive a specific CDISC variable, the title must state the 
 label of the variable without the variable name. The variable should be stated 
@@ -537,7 +537,7 @@ To reiterate, each function must use the **same keyword and family**. Also, plea
 ### `@keywords`
 
 The keywords allows for the reference page to be easily organized when using certain 
-`pgkdown` functions. For example, using the function `has_keyword(der_bds_gen)` in the `_pkgdown.yml` file while building
+`pkgdown` functions. For example, using the function `has_keyword(der_bds_gen)` in the `_pkgdown.yml` file while building
 the website will collect all the BDS General Derivation functions and display them in alphabetical order on the Reference Page in a section called
 BDS-Specific.
 
@@ -577,7 +577,7 @@ add an issue in GitHub for discussion.
 | `utils_examples`                                                                  | Utilities used for examples and template scripts                                                                         |
 | `source_specifications` 	                                                        | Source Objects                                                                                                             |	
 | `other_advanced` 	                                                                | Other Advanced Functions                                                                                                   |	
-| `high_order_function`                                                             |	Higher Order Functions                                                                                                   |	                                                                     |	
+| `high_order_function`                                                             | Higher Order Functions                                                                                                   |
 | `internal`                                                                        | Internal functions only available to admiral developers                                                                  |
 |                                                                                   |                                                                                                                         |
 | `assertion`*                                                                       | Asserts a certain type and gives warning, error to user        |
@@ -596,6 +596,23 @@ Missing values (`NA`s) need to be explicitly shown.
 Regarding character vectors converted from SAS files: SAS treats missing character values as blank. 
 Those are imported into R as empty strings (`""`) although in nature they are missing values (`NA`). 
 All empty strings that originate like this need to be converted to proper R missing values `NA`.
+
+# Repository Structure
+
+The table below describes the key directories and files in the repository. Understanding this layout helps contributors know where to find and where to place code.
+
+| Directory or File | Purpose |
+| :-- | :---- |
+| `R/` | R source files containing package functions. File names reflect their contents (see [File Structuring](#file-structuring) below). |
+| `man/` | Auto-generated Rd documentation files. **Do not edit manually.** Run `devtools::document()` to regenerate. |
+| `tests/testthat/` | Unit test scripts. Each file follows the naming convention `test-<source_file>.R`. |
+| `vignettes/` | Developer-facing guidance vignettes (and any user-facing articles). |
+| `inst/lintr/` | Linting helpers/configuration used by `.lintr.R` (e.g., sourced via `system.file(...)`). |
+| `inst/templates/` | ADaM R script templates made available to users. |
+| `NAMESPACE` | Auto-generated export/import declarations. **Do not edit manually.** Run `devtools::document()`. |
+| `NEWS.md` | Package changelog. Updated with every user-facing change per PR. |
+| `DESCRIPTION` | Package metadata and dependency declarations (`Imports`, `Suggests`). |
+| `_pkgdown.yml` | Configuration for the package website built by `{pkgdown}`. |
 
 # File Structuring
 
@@ -626,7 +643,7 @@ By using the `@importFrom` tag, it is easier to track all of our dependencies in
 
 Some of these functions become critically important while using admiral and
 should be included as an export. This applies to functions which are frequently
-called within `{admiral }`function calls like `rlang::exprs()`, `dplyr::desc()`
+called within `{admiral}` function calls like `rlang::exprs()`, `dplyr::desc()`
 or the pipe operator `dplyr::%>%`. To export these functions, the following R
 code should be included in the `R/reexports.R` file using the format:
 
@@ -655,7 +672,7 @@ be deprecated, there will be a message issued when using the function or argumen
 using `deprecate_inform()`. This message will appear to the user for at least
 _one year_. Templates, vignettes and any internal calls should be updated to use the new recommended function/argument.   
 
-- **Phase 2:** After at least _one year_ and in the closet next release, a warning will be 
+- **Phase 2:** After at least _one year_ and in the closest next release, a warning will be 
 issued when using the function or argument using `deprecate_warn()`. This warning 
 message will appear for at least _one year_.   
 
@@ -948,6 +965,74 @@ These functions are implemented in `roxygen2.R` and the naming convention for ea
 * The choice of R Version and Package versions are not set in stone.  However, a common development environment is important to establish when working across multiple companies and multiple developers. We currently recommend developers work with the latest R version and latest available packages. However, this will deviate over time as developers come and go from `{admiral}`. We actually see this as a positive, i.e. the deviations between developers, as this introduces a bit of random stress testing to our code base. 
 * GitHub allows us through the Actions/Workflows to test `{admiral}` under several versions of R as well as several versions of dependent R packages needed for `{admiral}`. Currently we test `{admiral}` against the two latest R Versions and the closest snapshots of packages to those R versions.  You can view this workflow and others on our [admiralci GitHub Repository](https://github.com/pharmaverse/admiralci).
 
+# Development Commands
+
+The following R commands cover the most common development tasks. All commands should be run with the package project open (i.e., from the package root directory).
+
+## Install Package Dependencies
+
+```r
+devtools::install_deps(dependencies = TRUE)
+```
+
+Installs all packages declared in `DESCRIPTION` (both `Imports` and `Suggests`).
+
+## Load the Package
+
+```r
+devtools::load_all()
+```
+
+Simulates installing and loading the package. Use this frequently during development to ensure your changes are available in the R session.
+
+## Generate Documentation
+
+```r
+devtools::document()
+```
+
+Runs `{roxygen2}` to rebuild all `man/*.Rd` files and regenerate `NAMESPACE`. Must be run after any change to roxygen headers.
+
+## Run All Unit Tests
+
+```r
+devtools::test()
+```
+
+Runs the full `{testthat}` test suite. All tests must pass before opening a pull request.
+
+## Run Tests for a Single File
+
+```r
+devtools::test_file("tests/testthat/test-<file>.R")
+```
+
+Useful for rapid iteration while developing or fixing a specific function.
+
+## Check Code Style (Linting)
+
+```r
+lintr::lint_package()
+```
+
+Applies the linting rules defined in `.lintr.R` (which uses `admiral_linters()` from `{admiraldev}`). The CI workflow will fail if linting errors are present.
+
+## Auto-Format Code (Styler)
+
+```r
+styler::style_pkg()
+```
+
+Reformats source files to comply with the [tidyverse style guide](https://style.tidyverse.org/). Run this before committing to avoid whitespace-related lintr failures.
+
+## Run R CMD Check
+
+```r
+devtools::check()
+```
+
+Runs the full `R CMD check` suite locally. The PR CI will fail if check produces any errors, warnings, or notes. See the [R CMD Issues](https://pharmaverse.github.io/admiraldev/articles/rcmd_issues.html) vignette for guidance on resolving common failures.
+
 ---
 
 # Guidance for git and GitHub Usage
@@ -981,7 +1066,7 @@ This article will give you an overview of how the `{admiral}` project is utilizi
 # Branches
 
 -	The `main` branch contains the latest development version of the package. You can find the released versions [here](https://GitHub.com/pharmaverse/admiral/releases) 
-- The `gh-pages` branches contains the code used to render R package websites - you are looking at right now!
+- The `gh-pages` branch contains the code used to render R package websites - you are looking at it right now!
 - The `patch` branch is reserved for special hot fixes to address bugs and should rarely be used. More info in [Hot Fix Release](https://pharmaverse.github.io/admiraldev/articles/release_strategy.html#hot-fix-release)
 - The `main`, `gh-pages`, `patch` branches are under protection. If you try and push changes to these branches you will get an error unless you are an administrator. 
 
@@ -997,7 +1082,7 @@ Each feature branch must be related to an issue. We encourage new developers to 
 
 ### Naming Branches
 
-The name of the branch must be prefixed with the issue number, followed by a short but meaningful description. As an example, given an issue #94 "Program function to derive `LSTALVDT`", the branch name would be `94_derive_var_lstalvdt`.
+The name of the branch must be prefixed with the issue number, followed by a short but meaningful description. As an example, given an issue #94 "Program function to derive `LSTALVDT`", the branch name would be `94-derive-var-lstalvdt`.
 
 ### Create a New Feature Branch from the Terminal (from `main`)
 
@@ -1021,7 +1106,7 @@ knitr::include_graphics("github_feature_branch.png", dpi = 144)
 
 ### Commits from the Terminal in RStudio
 
-To start the commit process, you will need to tell `git` to move your changes to the staging area.  Use `git add <your_file>` to move all changes of `<your_file>` in the staging area to wait for the next commit. You can use `git add .` to move all files you have worked on to the staging area.  Next you can commit, which takes a snapshot of your staged changes.  When committing, prefix the message with the issue number and add a meaningful message `git commit –m '#94 last alive date implementation'`. 
+To start the commit process, you will need to tell `git` to move your changes to the staging area.  Use `git add <your_file>` to move all changes of `<your_file>` in the staging area to wait for the next commit. You can use `git add .` to move all files you have worked on to the staging area.  Next you can commit, which takes a snapshot of your staged changes.  When committing, prefix the message with the issue number and add a meaningful message `git commit -m '#94 last alive date implementation'`. 
 
 Lastly, you should push your changes up to GitHub using `git push origin <branch name>`
 
@@ -1043,24 +1128,24 @@ Below are styles of commit messaging permitted:
 
 * `feat: #94 skeleton of function developed`
 * `chore: #94 styler and lintr update`
-* `docs: #94 parameters and details sections compelted`
+* `docs: #94 parameters and details sections completed`
 
 ### Style 2:
 
 * `#94 skeleton of function developed`
 * `#94 styler and lintr update`
-* `#94 parameters and details sections compelted`
+* `#94 parameters and details sections completed`
 
 ### Style 3:
 
 * `skeleton of function developed (#94)`
 * `styler and lintr update (#94)`
-* `parameters and details sections compelted (#94)`
+* `parameters and details sections completed (#94)`
 
 
 ## Pull request
 
-We recommend a thorough read through of the articles, [Pull Request Review Guidance](https://pharmaverse.github.io/admiraldev/articles/pr_review_guidance.html) and the [Programming Strategy](https://pharmaverse.github.io/admiraldev/articles/programming_strategy.html) for in-depth discussions on a doing a proper Pull Request.Pull Request authors will benefit from shorter review times by closely following the guidance provided in those two articles. Below we discuss some simple `git` commands in the terminal and on GitHub for doing a Pull Request. We recommend doing the Pull Request in GitHub only and not through the terminal.  
+We recommend a thorough read through of the articles, [Pull Request Review Guidance](https://pharmaverse.github.io/admiraldev/articles/pr_review_guidance.html) and the [Programming Strategy](https://pharmaverse.github.io/admiraldev/articles/programming_strategy.html) for in-depth discussions on doing a proper Pull Request. Pull Request authors will benefit from shorter review times by closely following the guidance provided in those two articles. Below we discuss some simple `git` commands in the terminal and on GitHub for doing a Pull Request. We recommend doing the Pull Request in GitHub only and not through the terminal.  
 
 Once all changes are committed, push the updated branch to GitHub:  
 `git push -u origin <branch_name>`  
@@ -1073,7 +1158,7 @@ knitr::include_graphics("github_create_pr.png", dpi = 144)
 ```
 
 The issue must be linked to the pull request in the "Development" field of the
-Pull Request. In most cases, this will linkage will automatically close the issue and move to the Done column on our project board.
+Pull Request. In most cases, this linkage will automatically close the issue and move to the Done column on our project board.
 
 ```{r, echo = FALSE}
 knitr::include_graphics("github_linked_issues_dark.png", dpi = 144)
@@ -1094,7 +1179,7 @@ before the Pull Request is merged
 Once the review is completed, the reviewer will merge the Pull Request and the
 feature branch will automatically be deleted.
 
-After merging the Pull Request please check that corresponding has been moved to the done column on the Project Board. Also, please make sure that the issue has closed.
+After merging the Pull Request please check that the corresponding issue has been moved to the done column on the Project Board. Also, please make sure that the issue has closed.
 
 
 ```{r, echo = FALSE}
@@ -1124,7 +1209,7 @@ git push
 
 ### Solving Merge Conflicts in GitHub
 
-For simple merge conflicts, developers can make use of the GitHub interface to solve them. GitHub will show the number of conflicts between the two branches. In the below image, GitHub has found 3 conflicts, but we only display the first one.  Just like in the terminal, GitHub will make use of the `<<<<<<<`, `=======`, and `>>>>>>>` to highlight the conflicting sections.  You will need to make the decision on whether to keep the code from the base or the feature branch.  Once you have decided, go into the code and remove the section you no longer wish to keep.  Be sure to remove the `<<<<<<<`, `=======`, and `>>>>>>>` as well!  Once you work through the conflicts you will mark as **Resolved and Commit your changes**.  It is recommended to pull your branch back down to RStudio to make sure no untoward effects have happen to your branch. 
+For simple merge conflicts, developers can make use of the GitHub interface to solve them. GitHub will show the number of conflicts between the two branches. In the below image, GitHub has found 3 conflicts, but we only display the first one.  Just like in the terminal, GitHub will make use of the `<<<<<<<`, `=======`, and `>>>>>>>` to highlight the conflicting sections.  You will need to make the decision on whether to keep the code from the base or the feature branch.  Once you have decided, go into the code and remove the section you no longer wish to keep.  Be sure to remove the `<<<<<<<`, `=======`, and `>>>>>>>` as well!  Once you work through the conflicts you will mark as **Resolved and Commit your changes**.  It is recommended to pull your branch back down to RStudio to make sure no untoward effects have happened to your branch. 
 
 ```{r, echo = FALSE}
 knitr::include_graphics("github_conflicts.png", dpi = 144)
@@ -1137,7 +1222,7 @@ knitr::include_graphics("github_conflicts.png", dpi = 144)
 -	The stashing commands are useful when one wants to go back to clean directory 
 -	`git stash` - stash (store) current changes and restore a clean directory  
 -	`git stash pop` - put back (restore) stashed changes  
-- `git revert` is also helpful but why?
+- `git revert` is also helpful for undoing committed changes without rewriting history
 
 **Using code from unmerged branches**  
 
