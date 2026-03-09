@@ -2,6 +2,8 @@
 
 ## New Features
 
+Add instructions for AI coding agents: Workflow from `{admiralci}` copies information from `{admiraldev}` to `AGENTS.md` instruction files. (#2920)
+
 ## Updates of Existing Functions
 
 ## Breaking Changes
