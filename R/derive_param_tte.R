@@ -1140,6 +1140,7 @@ filter_date_sources <- function(sources,
         dataset_add = end_date_data,
         by_vars = expr_c(subject_keys, by_vars)
       ) %>%
+        # use filter_out() in admiral 1.6
         filter(
           !(!!source_date_var > !!end_date_var) | is.na(!!source_date_var) |
             is.na(!!end_date_var)
