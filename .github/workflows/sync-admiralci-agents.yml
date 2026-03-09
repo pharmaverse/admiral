@@ -1,11 +1,6 @@
 name: Create the AGENTS.md
 
 on:
-  push:
-    branches:
-      - 2920-add-copilot-instructions
-    paths:
-      - '.github/workflows/sync-admiralci-agents.yml'
   workflow_dispatch:
   schedule:
     - cron: '0 8 15 * *'
@@ -19,4 +14,4 @@ jobs:
     with:
       package_name: admiral
       target_branch: main
-      admiralci_ref: main     
+      admiralci_ref: main
