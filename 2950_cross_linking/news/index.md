@@ -52,6 +52,10 @@ Developer Notes
   website\]” to the pull request title to trigger website creation.
   ([\#2984](https://github.com/pharmaverse/admiral/issues/2984))
 
+- `_pkdown.yml` was updated to add metadata for linking across packages
+  (`inst/pkgdown.yml`).
+  ([\#2950](https://github.com/pharmaverse/admiral/issues/2950))
+
 ## admiral 1.4.1
 
 CRAN release: 2026-02-03
