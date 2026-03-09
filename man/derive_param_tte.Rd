@@ -550,145 +550,6 @@ derive_param_tte(
 
 Note above how the earliest event date is always taken and the latest
 censor date.}
-\subsection{Overall survival time to event parameter}{
-
-In oncology trials, this is commonly derived as time from randomization
-date to death. For those without event, they are censored at the last date
-they are known to be alive.
-\itemize{
-\item The start date is set using \code{start_date} argument, now that we need to use
-different to the default.
-\item In this example, datetime was needed, which can be achieved by setting
-\code{create_datetime} argument to \code{TRUE}.
-}
-
-\if{html}{\out{<div class="sourceCode r">}}\preformatted{adsl <- tribble(
-  ~USUBJID, ~RANDDTM,                       ~LSALVDTM,                      ~DTHDTM,                        ~DTHFL,
-  "01",     ymd_hms("2020-10-03 00:00:00"), ymd_hms("2022-12-15 23:59:59"), NA,                             NA,
-  "02",     ymd_hms("2021-01-23 00:00:00"), ymd_hms("2021-02-03 19:45:59"), ymd_hms("2021-02-03 19:45:59"), "Y"
-) \%>\%
-  mutate(STUDYID = "AB42")
-
-# derive overall survival parameter
-death <- event_source(
-  dataset_name = "adsl",
-  filter = DTHFL == "Y",
-  date = DTHDTM,
-  set_values_to = exprs(
-    EVNTDESC = "DEATH",
-    SRCDOM = "ADSL",
-    SRCVAR = "DTHDTM"
-  )
-)
-
-last_alive <- censor_source(
-  dataset_name = "adsl",
-  date = LSALVDTM,
-  set_values_to = exprs(
-    EVNTDESC = "LAST DATE KNOWN ALIVE",
-    SRCDOM = "ADSL",
-    SRCVAR = "LSALVDTM"
-  )
-)
-
-derive_param_tte(
-  dataset_adsl = adsl,
-  start_date = RANDDTM,
-  event_conditions = list(death),
-  censor_conditions = list(last_alive),
-  create_datetime = TRUE,
-  source_datasets = list(adsl = adsl),
-  set_values_to = exprs(
-    PARAMCD = "OS",
-    PARAM = "Overall Survival"
-  )
-) \%>\%
-  select(USUBJID, STARTDTM, PARAMCD, PARAM, ADTM, CNSR)
-#> # A tibble: 2 × 6
-#>   USUBJID STARTDTM            PARAMCD PARAM            ADTM                 CNSR
-#>   <chr>   <dttm>              <chr>   <chr>            <dttm>              <int>
-#> 1 01      2020-10-03 00:00:00 OS      Overall Survival 2022-12-15 23:59:59     1
-#> 2 02      2021-01-23 00:00:00 OS      Overall Survival 2021-02-03 19:45:59     0}\if{html}{\out{</div>}}}
-\subsection{Duration of response time to event parameter}{
-
-In oncology trials, this is commonly derived as time from response until
-progression or death, or if neither have occurred then censor at last tumor
-assessment visit date. It is only relevant for subjects with a response.
-Note how only observations for subjects in \code{dataset_adsl} have the new
-parameter created, so see below how this is filtered only on responders.
-
-\if{html}{\out{<div class="sourceCode r">}}\preformatted{adsl_resp <- tribble(
-  ~USUBJID, ~DTHFL, ~DTHDT,            ~RSPDT,
-  "01",     "Y",    ymd("2021-06-12"), ymd("2021-03-04"),
-  "02",     "N",    NA,                NA,
-  "03",     "Y",    ymd("2021-08-21"), NA,
-  "04",     "N",    NA,                ymd("2021-04-14")
-) \%>\%
-  mutate(STUDYID = "AB42")
-
-adrs <- tribble(
-  ~USUBJID, ~AVALC, ~ADT,              ~ASEQ,
-  "01",     "SD",   ymd("2021-01-03"), 1,
-  "01",     "PR",   ymd("2021-03-04"), 2,
-  "01",     "PD",   ymd("2021-05-05"), 3,
-  "02",     "PD",   ymd("2021-02-03"), 1,
-  "04",     "SD",   ymd("2021-02-13"), 1,
-  "04",     "PR",   ymd("2021-04-14"), 2,
-  "04",     "CR",   ymd("2021-05-15"), 3
-) \%>\%
-  mutate(STUDYID = "AB42", PARAMCD = "OVR")
-
-pd <- event_source(
-  dataset_name = "adrs",
-  filter = AVALC == "PD",
-  date = ADT,
-  set_values_to = exprs(
-    EVENTDESC = "PD",
-    SRCDOM = "ADRS",
-    SRCVAR = "ADTM",
-    SRCSEQ = ASEQ
-  )
-)
-
-death <- event_source(
-  dataset_name = "adsl",
-  filter = DTHFL == "Y",
-  date = DTHDT,
-  set_values_to = exprs(
-    EVENTDESC = "DEATH",
-    SRCDOM = "ADSL",
-    SRCVAR = "DTHDT"
-  )
-)
-
-last_visit <- censor_source(
-  dataset_name = "adrs",
-  date = ADT,
-  set_values_to = exprs(
-    EVENTDESC = "LAST TUMOR ASSESSMENT",
-    SRCDOM = "ADRS",
-    SRCVAR = "ADTM",
-    SRCSEQ = ASEQ
-  )
-)
-
-derive_param_tte(
-  dataset_adsl = filter(adsl_resp, !is.na(RSPDT)),
-  start_date = RSPDT,
-  event_conditions = list(pd, death),
-  censor_conditions = list(last_visit),
-  source_datasets = list(adsl = adsl_resp, adrs = adrs),
-  set_values_to = exprs(
-    PARAMCD = "DURRSP",
-    PARAM = "Duration of Response"
-  )
-) \%>\%
-  select(USUBJID, STARTDT, PARAMCD, PARAM, ADT, CNSR, SRCSEQ)
-#> # A tibble: 2 × 7
-#>   USUBJID STARTDT    PARAMCD PARAM                ADT         CNSR SRCSEQ
-#>   <chr>   <date>     <chr>   <chr>                <date>     <int>  <dbl>
-#> 1 01      2021-03-04 DURRSP  Duration of Response 2021-05-05     0      3
-#> 2 04      2021-04-14 DURRSP  Duration of Response 2021-05-15     1      3}\if{html}{\out{</div>}}}
 \subsection{End of the observation period (\code{end_dates})}{
 
 The \code{end_dates} argument can be used to specify the end of the
@@ -895,6 +756,145 @@ derive_param_tte(
 #> 1 01      2021-03-06 END OF STUDY ADSL   EOSDT        1 2020-12-06 TTIMPROV
 #> 2 02      2021-03-21 NEW DRUG     ADSL   NEWDRGDT     1 2021-01-16 TTIMPROV
 #> 3 03      2021-03-15 IMPROVEMENT  ADQS   ADT          0 2021-02-01 TTIMPROV}\if{html}{\out{</div>}}}
+\subsection{Overall survival time to event parameter}{
+
+In oncology trials, this is commonly derived as time from randomization
+date to death. For those without event, they are censored at the last date
+they are known to be alive.
+\itemize{
+\item The start date is set using \code{start_date} argument, now that we need to use
+different to the default.
+\item In this example, datetime was needed, which can be achieved by setting
+\code{create_datetime} argument to \code{TRUE}.
+}
+
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{adsl <- tribble(
+  ~USUBJID, ~RANDDTM,                       ~LSALVDTM,                      ~DTHDTM,                        ~DTHFL,
+  "01",     ymd_hms("2020-10-03 00:00:00"), ymd_hms("2022-12-15 23:59:59"), NA,                             NA,
+  "02",     ymd_hms("2021-01-23 00:00:00"), ymd_hms("2021-02-03 19:45:59"), ymd_hms("2021-02-03 19:45:59"), "Y"
+) \%>\%
+  mutate(STUDYID = "AB42")
+
+# derive overall survival parameter
+death <- event_source(
+  dataset_name = "adsl",
+  filter = DTHFL == "Y",
+  date = DTHDTM,
+  set_values_to = exprs(
+    EVNTDESC = "DEATH",
+    SRCDOM = "ADSL",
+    SRCVAR = "DTHDTM"
+  )
+)
+
+last_alive <- censor_source(
+  dataset_name = "adsl",
+  date = LSALVDTM,
+  set_values_to = exprs(
+    EVNTDESC = "LAST DATE KNOWN ALIVE",
+    SRCDOM = "ADSL",
+    SRCVAR = "LSALVDTM"
+  )
+)
+
+derive_param_tte(
+  dataset_adsl = adsl,
+  start_date = RANDDTM,
+  event_conditions = list(death),
+  censor_conditions = list(last_alive),
+  create_datetime = TRUE,
+  source_datasets = list(adsl = adsl),
+  set_values_to = exprs(
+    PARAMCD = "OS",
+    PARAM = "Overall Survival"
+  )
+) \%>\%
+  select(USUBJID, STARTDTM, PARAMCD, PARAM, ADTM, CNSR)
+#> # A tibble: 2 × 6
+#>   USUBJID STARTDTM            PARAMCD PARAM            ADTM                 CNSR
+#>   <chr>   <dttm>              <chr>   <chr>            <dttm>              <int>
+#> 1 01      2020-10-03 00:00:00 OS      Overall Survival 2022-12-15 23:59:59     1
+#> 2 02      2021-01-23 00:00:00 OS      Overall Survival 2021-02-03 19:45:59     0}\if{html}{\out{</div>}}}
+\subsection{Duration of response time to event parameter}{
+
+In oncology trials, this is commonly derived as time from response until
+progression or death, or if neither have occurred then censor at last tumor
+assessment visit date. It is only relevant for subjects with a response.
+Note how only observations for subjects in \code{dataset_adsl} have the new
+parameter created, so see below how this is filtered only on responders.
+
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{adsl_resp <- tribble(
+  ~USUBJID, ~DTHFL, ~DTHDT,            ~RSPDT,
+  "01",     "Y",    ymd("2021-06-12"), ymd("2021-03-04"),
+  "02",     "N",    NA,                NA,
+  "03",     "Y",    ymd("2021-08-21"), NA,
+  "04",     "N",    NA,                ymd("2021-04-14")
+) \%>\%
+  mutate(STUDYID = "AB42")
+
+adrs <- tribble(
+  ~USUBJID, ~AVALC, ~ADT,              ~ASEQ,
+  "01",     "SD",   ymd("2021-01-03"), 1,
+  "01",     "PR",   ymd("2021-03-04"), 2,
+  "01",     "PD",   ymd("2021-05-05"), 3,
+  "02",     "PD",   ymd("2021-02-03"), 1,
+  "04",     "SD",   ymd("2021-02-13"), 1,
+  "04",     "PR",   ymd("2021-04-14"), 2,
+  "04",     "CR",   ymd("2021-05-15"), 3
+) \%>\%
+  mutate(STUDYID = "AB42", PARAMCD = "OVR")
+
+pd <- event_source(
+  dataset_name = "adrs",
+  filter = AVALC == "PD",
+  date = ADT,
+  set_values_to = exprs(
+    EVENTDESC = "PD",
+    SRCDOM = "ADRS",
+    SRCVAR = "ADTM",
+    SRCSEQ = ASEQ
+  )
+)
+
+death <- event_source(
+  dataset_name = "adsl",
+  filter = DTHFL == "Y",
+  date = DTHDT,
+  set_values_to = exprs(
+    EVENTDESC = "DEATH",
+    SRCDOM = "ADSL",
+    SRCVAR = "DTHDT"
+  )
+)
+
+last_visit <- censor_source(
+  dataset_name = "adrs",
+  date = ADT,
+  set_values_to = exprs(
+    EVENTDESC = "LAST TUMOR ASSESSMENT",
+    SRCDOM = "ADRS",
+    SRCVAR = "ADTM",
+    SRCSEQ = ASEQ
+  )
+)
+
+derive_param_tte(
+  dataset_adsl = filter(adsl_resp, !is.na(RSPDT)),
+  start_date = RSPDT,
+  event_conditions = list(pd, death),
+  censor_conditions = list(last_visit),
+  source_datasets = list(adsl = adsl_resp, adrs = adrs),
+  set_values_to = exprs(
+    PARAMCD = "DURRSP",
+    PARAM = "Duration of Response"
+  )
+) \%>\%
+  select(USUBJID, STARTDT, PARAMCD, PARAM, ADT, CNSR, SRCSEQ)
+#> # A tibble: 2 × 7
+#>   USUBJID STARTDT    PARAMCD PARAM                ADT         CNSR SRCSEQ
+#>   <chr>   <date>     <chr>   <chr>                <date>     <int>  <dbl>
+#> 1 01      2021-03-04 DURRSP  Duration of Response 2021-05-05     0      3
+#> 2 04      2021-04-14 DURRSP  Duration of Response 2021-05-15     1      3}\if{html}{\out{</div>}}}
 \subsection{Further examples}{
 
 Further example usages of this function can be found in the
