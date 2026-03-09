@@ -56,10 +56,10 @@
 #'   are restricted to dates before or equal to the selected end date.
 #'
 #'   This argument should be specified if there is more than one reason for
-#'   stopping the observation of a subject, e.g., end of study, death, or start
-#'   of new drug. If there is only one reason for stopping the observation, it
-#'   is sufficient to just include this as a censoring condition in
-#'   `censor_conditions`.
+#'   stopping the observation of a subject, e.g., end of study, death, or
+#'   intercurrent events like start of new drug. If there is only one reason for
+#'   stopping the observation, it is sufficient to just include this as a
+#'   censoring condition in `censor_conditions`.
 #'
 #' @permitted [source_list]
 #'
@@ -440,70 +440,6 @@
 #' @info Note above how the earliest event date is always taken and the latest
 #'   censor date.
 #'
-#' @caption Using different censor values (`censor`) and censoring at earliest
-#'   occurring censor condition
-#' @info Within `censor_source()` the value used to denote a censor can be
-#'   changed from the default of `1`.
-#'
-#' In this example an extra censor is used for new drug date with the value of `2`.
-#' @code
-#' newdrug <- censor_source(
-#'   dataset_name = "adsl",
-#'   date = NEWDRGDT,
-#'   censor = 2,
-#'   set_values_to = exprs(
-#'     EVNTDESC = "NEW DRUG RECEIVED",
-#'     SRCDOM = "ADSL",
-#'     SRCVAR = "NEWDRGDT"
-#'   )
-#' )
-#'
-#' derive_param_tte(
-#'   dataset_adsl = adsl,
-#'   by_vars = exprs(AEDECOD),
-#'   event_conditions = list(ttae),
-#'   censor_conditions = list(eos, newdrug),
-#'   source_datasets = list(adsl = adsl, adae = adae),
-#'   set_values_to = exprs(
-#'     PARAMCD = paste0("TTAE", as.numeric(as.factor(AEDECOD))),
-#'     PARAM = paste("Time to First", AEDECOD, "Adverse Event")
-#'   )
-#' ) %>%
-#'   select(USUBJID, STARTDT, PARAMCD, PARAM, ADT, CNSR, SRCSEQ)
-#'
-#' @info In this case the results are still the same, because as explained in
-#'   the above example the latest censor condition is always taken for those
-#'   without an event. For the second subject this is still the end of study
-#'   date.
-#'
-#' So, if we wanted to instead censor here at the new drug date if subject
-#' has one, then we would need to again use the `filter` argument, but this
-#' time for a new end of study censor source object.
-#' @code
-#' eos_nonewdrug <- censor_source(
-#'   dataset_name = "adsl",
-#'   filter = is.na(NEWDRGDT),
-#'   date = EOSDT,
-#'   set_values_to = exprs(
-#'     EVNTDESC = "END OF STUDY",
-#'     SRCDOM = "ADSL",
-#'     SRCVAR = "EOSDT"
-#'   )
-#' )
-#'
-#' derive_param_tte(
-#'   dataset_adsl = adsl,
-#'   by_vars = exprs(AEDECOD),
-#'   event_conditions = list(ttae),
-#'   censor_conditions = list(eos_nonewdrug, newdrug),
-#'   source_datasets = list(adsl = adsl, adae = adae),
-#'   set_values_to = exprs(
-#'     PARAMCD = paste0("TTAE", as.numeric(as.factor(AEDECOD))),
-#'     PARAM = paste("Time to First", AEDECOD, "Adverse Event")
-#'   )
-#' ) %>%
-#'   select(USUBJID, STARTDT, PARAMCD, PARAM, ADT, CNSR, SRCSEQ)
-#'
 #' @caption Overall survival time to event parameter
 #' @info In oncology trials, this is commonly derived as time from randomization
 #'   date to death. For those without event, they are censored at the last date
@@ -638,9 +574,9 @@
 #'
 #' @info The `end_dates` argument can be used to specify the end of the
 #'   observation period if there is more than one date which restricts the
-#'   observation period, e.g., end of study date and new drug date. The earliest
-#'   date is used as the end of the observation period and events/censorings
-#'   occurring after this date are not considered.
+#'   observation period, e.g., end of study date and intercurrent events like
+#'   new drug date. The earliest date is used as the end of the observation
+#'   period and events/censorings occurring after this date are not considered.
 #'
 #' In the example two `censor_source()` objects are defined, `eos` and `newdrg`,
 #' for end of study date and new drug date, respectively, and then passed to the
@@ -1205,7 +1141,10 @@ filter_date_sources <- function(sources,
         dataset_add = end_date_data,
         by_vars = expr_c(subject_keys, by_vars)
       ) %>%
-        filter_out(!!source_date_var > !!end_date_var)
+        filter(
+          !(!!source_date_var > !!end_date_var) | is.na(!!source_date_var) |
+            is.na(!!end_date_var)
+        )
       keep_end_date_vars <- setdiff(syms(colnames(end_date_data)), c(subject_keys, by_vars))
     } else {
       keep_end_date_vars <- NULL

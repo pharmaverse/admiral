@@ -88,10 +88,10 @@ subject. The records defined by \code{event_conditions} and \code{censor_conditi
 are restricted to dates before or equal to the selected end date.
 
 This argument should be specified if there is more than one reason for
-stopping the observation of a subject, e.g., end of study, death, or start
-of new drug. If there is only one reason for stopping the observation, it
-is sufficient to just include this as a censoring condition in
-\code{censor_conditions}.
+stopping the observation of a subject, e.g., end of study, death, or
+intercurrent events like start of new drug. If there is only one reason for
+stopping the observation, it is sufficient to just include this as a
+censoring condition in \code{censor_conditions}.
 
 \describe{
 \item{Permitted values}{a list of source objects, e.g., \code{list(pd, death)}}
@@ -550,84 +550,6 @@ derive_param_tte(
 
 Note above how the earliest event date is always taken and the latest
 censor date.}
-\subsection{Using different censor values (\code{censor}) and censoring at earliest
-occurring censor condition}{
-
-Within \code{censor_source()} the value used to denote a censor can be
-changed from the default of \code{1}.
-
-In this example an extra censor is used for new drug date with the value of \code{2}.
-
-\if{html}{\out{<div class="sourceCode r">}}\preformatted{newdrug <- censor_source(
-  dataset_name = "adsl",
-  date = NEWDRGDT,
-  censor = 2,
-  set_values_to = exprs(
-    EVNTDESC = "NEW DRUG RECEIVED",
-    SRCDOM = "ADSL",
-    SRCVAR = "NEWDRGDT"
-  )
-)
-
-derive_param_tte(
-  dataset_adsl = adsl,
-  by_vars = exprs(AEDECOD),
-  event_conditions = list(ttae),
-  censor_conditions = list(eos, newdrug),
-  source_datasets = list(adsl = adsl, adae = adae),
-  set_values_to = exprs(
-    PARAMCD = paste0("TTAE", as.numeric(as.factor(AEDECOD))),
-    PARAM = paste("Time to First", AEDECOD, "Adverse Event")
-  )
-) \%>\%
-  select(USUBJID, STARTDT, PARAMCD, PARAM, ADT, CNSR, SRCSEQ)
-#> # A tibble: 4 × 7
-#>   USUBJID STARTDT    PARAMCD PARAM                       ADT         CNSR SRCSEQ
-#>   <chr>   <date>     <chr>   <chr>                       <date>     <int>  <dbl>
-#> 1 01      2020-12-06 TTAE1   Time to First Cough Advers… 2021-03-04     0      2
-#> 2 01      2020-12-06 TTAE2   Time to First Flu Adverse … 2021-01-03     0      1
-#> 3 02      2021-01-16 TTAE1   Time to First Cough Advers… 2021-02-03     1     NA
-#> 4 02      2021-01-16 TTAE2   Time to First Flu Adverse … 2021-02-03     1     NA}\if{html}{\out{</div>}}
-
-In this case the results are still the same, because as explained in
-the above example the latest censor condition is always taken for those
-without an event. For the second subject this is still the end of study
-date.
-
-So, if we wanted to instead censor here at the new drug date if subject
-has one, then we would need to again use the \code{filter} argument, but this
-time for a new end of study censor source object.
-
-\if{html}{\out{<div class="sourceCode r">}}\preformatted{eos_nonewdrug <- censor_source(
-  dataset_name = "adsl",
-  filter = is.na(NEWDRGDT),
-  date = EOSDT,
-  set_values_to = exprs(
-    EVNTDESC = "END OF STUDY",
-    SRCDOM = "ADSL",
-    SRCVAR = "EOSDT"
-  )
-)
-
-derive_param_tte(
-  dataset_adsl = adsl,
-  by_vars = exprs(AEDECOD),
-  event_conditions = list(ttae),
-  censor_conditions = list(eos_nonewdrug, newdrug),
-  source_datasets = list(adsl = adsl, adae = adae),
-  set_values_to = exprs(
-    PARAMCD = paste0("TTAE", as.numeric(as.factor(AEDECOD))),
-    PARAM = paste("Time to First", AEDECOD, "Adverse Event")
-  )
-) \%>\%
-  select(USUBJID, STARTDT, PARAMCD, PARAM, ADT, CNSR, SRCSEQ)
-#> # A tibble: 4 × 7
-#>   USUBJID STARTDT    PARAMCD PARAM                       ADT         CNSR SRCSEQ
-#>   <chr>   <date>     <chr>   <chr>                       <date>     <int>  <dbl>
-#> 1 01      2020-12-06 TTAE1   Time to First Cough Advers… 2021-03-04     0      2
-#> 2 01      2020-12-06 TTAE2   Time to First Flu Adverse … 2021-01-03     0      1
-#> 3 02      2021-01-16 TTAE1   Time to First Cough Advers… 2021-01-16     2     NA
-#> 4 02      2021-01-16 TTAE2   Time to First Flu Adverse … 2021-01-16     2     NA}\if{html}{\out{</div>}}}
 \subsection{Overall survival time to event parameter}{
 
 In oncology trials, this is commonly derived as time from randomization
@@ -771,9 +693,9 @@ derive_param_tte(
 
 The \code{end_dates} argument can be used to specify the end of the
 observation period if there is more than one date which restricts the
-observation period, e.g., end of study date and new drug date. The earliest
-date is used as the end of the observation period and events/censorings
-occurring after this date are not considered.
+observation period, e.g., end of study date and intercurrent events like
+new drug date. The earliest date is used as the end of the observation
+period and events/censorings occurring after this date are not considered.
 
 In the example two \code{censor_source()} objects are defined, \code{eos} and \code{newdrg},
 for end of study date and new drug date, respectively, and then passed to the
