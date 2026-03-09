@@ -32,7 +32,7 @@ of packages were updated to specify the level of contributions required for auth
 
 ## Bug Fixes
 
-- Fixed poorly formatted warning messages in `derive_param_computed()` and `get_hori_data()`: corrected typo ("fulfilling"), fixed broken `{cli}` formatting markup, and improved bullet separation for the "No new observations were added" info message. (#2969)
+- Fixed poorly formatted warning messages in `derive_param_computed()` and `derive_vars_computed()`. (#2969)
 
 ## Various
 

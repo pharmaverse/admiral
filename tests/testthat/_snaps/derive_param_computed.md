@@ -7,7 +7,7 @@
         AVALU = "mmHg"))
     Condition
       Warning:
-      The input dataset does not contain any observations fulfilling the filter condition (`` `VISIT == "WEEK 24"` ``) for the parameter codes (`PARAMCD`): SYSBP and DIABP.
+      The input dataset does not contain any observations fulfilling the filter condition (`VISIT == "WEEK 24"`) for the parameter codes (`PARAMCD`): SYSBP and DIABP.
       i No new observations were added.
 
 # derive_param_computed Test 4: no new observations are added if a parameter is missing
@@ -19,7 +19,7 @@
         AVALU = "mmHg"))
     Condition
       Warning:
-      The input dataset does not contain any observations fulfilling the filter condition (`` `PARAMCD == "DIABP"` ``) for the parameter codes (`PARAMCD`): SYSBP.
+      The input dataset does not contain any observations fulfilling the filter condition (`PARAMCD == "DIABP"`) for the parameter codes (`PARAMCD`): SYSBP.
       i No new observations were added.
 
 # derive_param_computed Test 8: no new observations if a constant parameter is missing
@@ -31,7 +31,7 @@
       PARAMCD = "BMI", PARAM = "Body Mass Index (kg/m2)", AVALU = "kg/m2"))
     Condition
       Warning:
-      The input dataset does not contain any observations fulfilling the filter condition (`NULL`) for the parameter codes (`PARAMCD`): HEIGHT.
+      The input dataset does not contain any observations for the parameter codes (`PARAMCD`): HEIGHT.
       i No new observations were added.
 
 # derive_param_computed Test 11: error if keep_nas is invalid

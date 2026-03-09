@@ -7,7 +7,7 @@
         weight = AVAL.WEIGHT)), filter_add = ABLFL == "")
     Condition
       Warning:
-      The input dataset does not contain any observations fulfilling the filter condition (`NULL`) for the parameter codes (`PARAMCD`): WEIGHT.
+      The input dataset does not contain any observations fulfilling the filter condition (`ABLFL == ""`) for the parameter codes (`PARAMCD`): WEIGHT.
       i No new observations were added.
 
 # derive_vars_computed Test 3: no new variables are added if a parameter is missing
@@ -19,6 +19,6 @@
         height = AVAL.HEIGHT, weight = AVAL.WEIGHT)), filter_add = ABLFL == "Y")
     Condition
       Warning:
-      The input dataset does not contain any observations fulfilling the filter condition (`NULL`) for the parameter codes (`PARAMCD`): HEIGHT.
+      The input dataset does not contain any observations fulfilling the filter condition (`ABLFL == "Y"`) for the parameter codes (`PARAMCD`): HEIGHT.
       i No new observations were added.
 
