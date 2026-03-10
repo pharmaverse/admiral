@@ -37,6 +37,9 @@ of packages were updated to specify the level of contributions required for auth
 
 - Creating the website for pull requests was enabled. Add "[create website]" to
 the pull request title to trigger website creation. (#2984)
+
+- `_pkdown.yml` was updated to add metadata for linking across packages
+(`inst/pkgdown.yml`). (#2950)
 </details>
 
 # admiral 1.4.1
