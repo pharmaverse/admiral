@@ -641,61 +641,35 @@ get_hori_data <- function(dataset,
     bind_rows(new_data) %>%
     filter(PARAMCD %in% param_values)
 
+  filter_msg <- if (is.null(filter)) {
+    "The input dataset does not contain any observations for the parameter codes ({.code PARAMCD}): "
+  } else {
+    paste0(
+      "The input dataset does not contain any observations fulfilling the filter condition (",
+      "{.code {rlang::expr_text(filter)}}",
+      ") for the parameter codes ({.code PARAMCD}): "
+    )
+  }
+
   if (nrow(data_parameters) == 0L) {
-    if (is.null(filter)) {
-      cli_warn(
-        c(
-          paste0(
-            "The input dataset does not contain any observations for ",
-            "the parameter codes ({.code PARAMCD}): ",
-            "{.val {param_values}}."
-          ),
-          i = "No new observations were added."
-        )
+    cli_warn(
+      c(
+        paste0(filter_msg, "{.val {param_values}}."),
+        i = "No new observations were added."
       )
-    } else {
-      cli_warn(
-        c(
-          paste0(
-            "The input dataset does not contain any observations fulfilling the filter condition (",
-            "{.code {rlang::expr_text(filter)}}",
-            ") for the parameter codes ({.code PARAMCD}): ",
-            "{.val {param_values}}."
-          ),
-          i = "No new observations were added."
-        )
-      )
-    }
+    )
     return(list(hori_data = NULL))
   }
 
   params_available <- unique(data_parameters$PARAMCD)
   params_missing <- setdiff(param_values, params_available)
   if (length(params_missing) > 0) {
-    if (is.null(filter)) {
-      cli_warn(
-        c(
-          paste0(
-            "The input dataset does not contain any observations for ",
-            "the parameter codes ({.code PARAMCD}): ",
-            "{.val {params_missing}}."
-          ),
-          i = "No new observations were added."
-        )
+    cli_warn(
+      c(
+        paste0(filter_msg, "{.val {params_missing}}."),
+        i = "No new observations were added."
       )
-    } else {
-      cli_warn(
-        c(
-          paste0(
-            "The input dataset does not contain any observations fulfilling the filter condition (",
-            "{.code {rlang::expr_text(filter)}}",
-            ") for the parameter codes ({.code PARAMCD}): ",
-            "{.val {params_missing}}."
-          ),
-          i = "No new observations were added."
-        )
-      )
-    }
+    )
     return(list(hori_data = NULL))
   }
 
