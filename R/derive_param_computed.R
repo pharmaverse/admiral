@@ -642,7 +642,10 @@ get_hori_data <- function(dataset,
     filter(PARAMCD %in% param_values)
 
   filter_msg <- if (is.null(filter)) {
-    "The input dataset does not contain any observations for the parameter codes ({.code PARAMCD}): "
+    paste0(
+      "The input dataset does not contain any observations for the ",
+      "parameter codes ({.code PARAMCD}): "
+    )
   } else {
     paste0(
       "The input dataset does not contain any observations fulfilling the filter condition (",
