@@ -125,7 +125,7 @@ reference dose and time from first dose.
 Common variables as such `AVISIT`, `AVISITN`, `FRLTU` are assigned.
 
 Compute `NFRLT` using
-[`derive_var_nfrlt()`](https:/pharmaverse.github.io/admiral/main/reference/derive_var_nfrlt.md)
+[`derive_var_nfrlt()`](https:/pharmaverse.github.io/admiral/cran-release/main/reference/derive_var_nfrlt.md)
 to add nominal time from first dose. A common source is `IS.VISITDY`.
 `IS.VISIT` information can also be parsed for timing values or to assign
 values for special visits (i.e. “Treatment Discontinuation”,
@@ -133,7 +133,7 @@ values for special visits (i.e. “Treatment Discontinuation”,
 from `IS.VISIT`.
 
 We use
-[`derive_vars_merged()`](https:/pharmaverse.github.io/admiral/main/reference/derive_vars_merged.md)
+[`derive_vars_merged()`](https:/pharmaverse.github.io/admiral/cran-release/main/reference/derive_vars_merged.md)
 to merge `ADSL.TRTSDT` and compute `ADY`. `ADY` is assumed to be based
 on the `ADSL.TRTSDT` while `ADAB.AFRLT` is based on the matching
 `EX.EXTRT` for the corresponding `IS` analytes.
@@ -141,7 +141,7 @@ on the `ADSL.TRTSDT` while `ADAB.AFRLT` is based on the matching
 If `IS.ISDTC` is missing the time part, “00:00” is used for the
 imputation. Individual companies and studies may have custom imputation
 methods. If this is the case, the function
-[`derive_vars_dtm()`](https:/pharmaverse.github.io/admiral/main/reference/derive_vars_dtm.md)
+[`derive_vars_dtm()`](https:/pharmaverse.github.io/admiral/cran-release/main/reference/derive_vars_dtm.md)
 would be either replaced or post-processed to get the desired imputed
 time part. For example, a method might be to use the time part from
 `EX.EXSTDTC` (matched by the `IS` and `EX` date parts), then the
@@ -237,7 +237,7 @@ At this step, we stage the `EX` data. Filter the data as desired to
 match the `IS` analyte(s). As with the `IS` dataset staging, `DRUG` is
 also assigned as a common merge variable. `NFRLT` is assigned to the
 `EX` data from `EX.VISITDY` using
-[`derive_var_nfrlt()`](https:/pharmaverse.github.io/admiral/main/reference/derive_var_nfrlt.md).
+[`derive_var_nfrlt()`](https:/pharmaverse.github.io/admiral/cran-release/main/reference/derive_var_nfrlt.md).
 Note that `NFRLT` is not needed for this template but added for optional
 usage or data reviews.
 
@@ -245,14 +245,14 @@ Assign `ASTDTM` using `EX.EXSTDTC`. As previously described with
 `IS.ISDTC`, if `EX.EXSTDTC` is missing the time part, “00:00” is used
 for the imputation. Individual companies and studies may have custom
 imputation methods. If this is the case, the function
-[`derive_vars_dtm()`](https:/pharmaverse.github.io/admiral/main/reference/derive_vars_dtm.md)
+[`derive_vars_dtm()`](https:/pharmaverse.github.io/admiral/cran-release/main/reference/derive_vars_dtm.md)
 would be either replaced or post-processed to get the desired imputed
 time part. For example a method might be to use the time part from
 `IS.ISDTC` (matched by the `IS` and `EX` date parts), then the `EX`
 missing time is adjusted for pre-dose sampling planned time. User would
 add custom code for this. `AENDTM` from `EX.EXENDTC` is also computed in
 case needed. Both dates then create date part variables using
-[`derive_vars_dtm_to_dt()`](https:/pharmaverse.github.io/admiral/main/reference/derive_vars_dtm_to_dt.md)
+[`derive_vars_dtm_to_dt()`](https:/pharmaverse.github.io/admiral/cran-release/main/reference/derive_vars_dtm_to_dt.md)
 
 ``` r
 # ---- Get dosing information ----
@@ -305,7 +305,7 @@ ex_dates <- ex %>%
 ```
 
 At this step, we use
-[`derive_vars_merged()`](https:/pharmaverse.github.io/admiral/main/reference/derive_vars_merged.md)
+[`derive_vars_merged()`](https:/pharmaverse.github.io/admiral/cran-release/main/reference/derive_vars_merged.md)
 to join our prepared `EX` data into the prepared `IS` data to compute
 `FANLDTM`, `AFRLT` and keep `FANLTMF` from `ASTTMF` in case the first
 dose timepart was imputed.

@@ -71,12 +71,12 @@ Pediatric Adverse Events From these variables only 'TERM' is used in the
 ## See also
 
 Other metadata:
-[`atoxgr_criteria_ctcv4`](https:/pharmaverse.github.io/admiral/main/reference/atoxgr_criteria_ctcv4.md),
-[`atoxgr_criteria_ctcv4_uscv`](https:/pharmaverse.github.io/admiral/main/reference/atoxgr_criteria_ctcv4_uscv.md),
-[`atoxgr_criteria_ctcv5`](https:/pharmaverse.github.io/admiral/main/reference/atoxgr_criteria_ctcv5.md),
-[`atoxgr_criteria_ctcv5_uscv`](https:/pharmaverse.github.io/admiral/main/reference/atoxgr_criteria_ctcv5_uscv.md),
-[`atoxgr_criteria_ctcv6`](https:/pharmaverse.github.io/admiral/main/reference/atoxgr_criteria_ctcv6.md),
-[`atoxgr_criteria_ctcv6_uscv`](https:/pharmaverse.github.io/admiral/main/reference/atoxgr_criteria_ctcv6_uscv.md),
-[`atoxgr_criteria_daids`](https:/pharmaverse.github.io/admiral/main/reference/atoxgr_criteria_daids.md),
-[`country_code_lookup`](https:/pharmaverse.github.io/admiral/main/reference/country_code_lookup.md),
-[`dose_freq_lookup`](https:/pharmaverse.github.io/admiral/main/reference/dose_freq_lookup.md)
+[`atoxgr_criteria_ctcv4`](https:/pharmaverse.github.io/admiral/cran-release/main/reference/atoxgr_criteria_ctcv4.md),
+[`atoxgr_criteria_ctcv4_uscv`](https:/pharmaverse.github.io/admiral/cran-release/main/reference/atoxgr_criteria_ctcv4_uscv.md),
+[`atoxgr_criteria_ctcv5`](https:/pharmaverse.github.io/admiral/cran-release/main/reference/atoxgr_criteria_ctcv5.md),
+[`atoxgr_criteria_ctcv5_uscv`](https:/pharmaverse.github.io/admiral/cran-release/main/reference/atoxgr_criteria_ctcv5_uscv.md),
+[`atoxgr_criteria_ctcv6`](https:/pharmaverse.github.io/admiral/cran-release/main/reference/atoxgr_criteria_ctcv6.md),
+[`atoxgr_criteria_ctcv6_uscv`](https:/pharmaverse.github.io/admiral/cran-release/main/reference/atoxgr_criteria_ctcv6_uscv.md),
+[`atoxgr_criteria_daids`](https:/pharmaverse.github.io/admiral/cran-release/main/reference/atoxgr_criteria_daids.md),
+[`country_code_lookup`](https:/pharmaverse.github.io/admiral/cran-release/main/reference/country_code_lookup.md),
+[`dose_freq_lookup`](https:/pharmaverse.github.io/admiral/cran-release/main/reference/dose_freq_lookup.md)

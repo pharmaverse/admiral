@@ -76,7 +76,7 @@ adsl <- dm %>%
 ### Derive Period, Subperiod, and Phase Variables (e.g. `APxxSDT`, `APxxEDT`, …)
 
 See the [“Visit and Period Variables”
-vignette](https:/pharmaverse.github.io/admiral/main/articles/visits_periods.html#periods_adsl)
+vignette](https:/pharmaverse.github.io/admiral/cran-release/main/articles/visits_periods.html#periods_adsl)
 for more information.
 
 If the variables are not derived based on a period reference dataset,
@@ -95,17 +95,17 @@ adsl <- dm %>%
 ```
 
 For studies with periods see the [“Visit and Period Variables”
-vignette](https:/pharmaverse.github.io/admiral/main/articles/visits_periods.html#treatment_adsl).
+vignette](https:/pharmaverse.github.io/admiral/cran-release/main/articles/visits_periods.html#treatment_adsl).
 
 ### Derive/Impute Numeric Treatment Date/Time and Duration (`TRTSDTM`, `TRTEDTM`, `TRTDURD`)
 
 The function
-[`derive_vars_merged()`](https:/pharmaverse.github.io/admiral/main/reference/derive_vars_merged.md)
+[`derive_vars_merged()`](https:/pharmaverse.github.io/admiral/cran-release/main/reference/derive_vars_merged.md)
 can be used to derive the treatment start and end date/times using the
 `ex` domain. A pre-processing step for `ex` is required to convert the
 variable `EXSTDTC` and `EXSTDTC` to datetime variables and impute
 missing date or time components. Conversion and imputation is done by
-[`derive_vars_dtm()`](https:/pharmaverse.github.io/admiral/main/reference/derive_vars_dtm.md).
+[`derive_vars_dtm()`](https:/pharmaverse.github.io/admiral/cran-release/main/reference/derive_vars_dtm.md).
 
 Example calls:
 
@@ -153,7 +153,7 @@ Missing time parts are imputed as first or last for start and end date
 respectively.
 
 The datetime variables returned can be converted to dates using the
-[`derive_vars_dtm_to_dt()`](https:/pharmaverse.github.io/admiral/main/reference/derive_vars_dtm_to_dt.md)
+[`derive_vars_dtm_to_dt()`](https:/pharmaverse.github.io/admiral/cran-release/main/reference/derive_vars_dtm_to_dt.md)
 function.
 
 ``` r
@@ -162,7 +162,7 @@ adsl <- adsl %>%
 ```
 
 Now, that `TRTSDT` and `TRTEDT` are derived, the function
-[`derive_var_trtdurd()`](https:/pharmaverse.github.io/admiral/main/reference/derive_var_trtdurd.md)
+[`derive_var_trtdurd()`](https:/pharmaverse.github.io/admiral/cran-release/main/reference/derive_var_trtdurd.md)
 can be used to calculate the Treatment duration (`TRTDURD`).
 
 ``` r
@@ -175,13 +175,13 @@ adsl <- adsl %>%
 #### Disposition Dates (e.g. `EOSDT`)
 
 The functions
-[`derive_vars_dt()`](https:/pharmaverse.github.io/admiral/main/reference/derive_vars_dt.md)
+[`derive_vars_dt()`](https:/pharmaverse.github.io/admiral/cran-release/main/reference/derive_vars_dt.md)
 and
-[`derive_vars_merged()`](https:/pharmaverse.github.io/admiral/main/reference/derive_vars_merged.md)
+[`derive_vars_merged()`](https:/pharmaverse.github.io/admiral/cran-release/main/reference/derive_vars_merged.md)
 can be used to derive a disposition date. First the character
 disposition date (`DS.DSSTDTC`) is converted to a numeric date
 (`DSSTDT`) calling
-[`derive_vars_dt()`](https:/pharmaverse.github.io/admiral/main/reference/derive_vars_dt.md).
+[`derive_vars_dt()`](https:/pharmaverse.github.io/admiral/cran-release/main/reference/derive_vars_dt.md).
 The `DS` dataset is extended by the `DSSTDT` variable because the date
 is required by other derivations, e.g., `RANDDT` as well. Then the
 relevant disposition date is selected by adjusting the `filter_add`
@@ -212,7 +212,7 @@ The `ds_ext` dataset:
 The `adsl` dataset:
 
 The
-[`derive_vars_dt()`](https:/pharmaverse.github.io/admiral/main/reference/derive_vars_dt.md)
+[`derive_vars_dt()`](https:/pharmaverse.github.io/admiral/cran-release/main/reference/derive_vars_dt.md)
 function allows to impute partial dates as well. If imputation is needed
 and missing days are to be imputed to the first of the month and missing
 months to the first month of the year, set `highest_imputation = "M"`.
@@ -220,7 +220,7 @@ months to the first month of the year, set `highest_imputation = "M"`.
 #### Disposition Status (e.g. `EOSSTT`)
 
 The function
-[`derive_vars_merged()`](https:/pharmaverse.github.io/admiral/main/reference/derive_vars_merged.md)
+[`derive_vars_merged()`](https:/pharmaverse.github.io/admiral/cran-release/main/reference/derive_vars_merged.md)
 can be used to derive the End of Study status (`EOSSTT`) based on
 `DSCAT` and `DSDECOD` from `DS`. The relevant observations are selected
 by adjusting the `filter_add` argument. A function mapping `DSDECOD`
@@ -271,7 +271,7 @@ The main reason for discontinuation is usually stored in `DSDECOD` while
 (e.g., description of `"OTHER"`).
 
 The function
-[`derive_vars_merged()`](https:/pharmaverse.github.io/admiral/main/reference/derive_vars_merged.md)
+[`derive_vars_merged()`](https:/pharmaverse.github.io/admiral/cran-release/main/reference/derive_vars_merged.md)
 can be used to derive a disposition reason (along with the details, if
 required) at a specific timepoint. The relevant observations are
 selected by adjusting the `filter_add` argument.
@@ -326,7 +326,7 @@ adsl <- adsl %>%
 #### Randomization Date (`RANDDT`)
 
 The function
-[`derive_vars_merged()`](https:/pharmaverse.github.io/admiral/main/reference/derive_vars_merged.md)
+[`derive_vars_merged()`](https:/pharmaverse.github.io/admiral/cran-release/main/reference/derive_vars_merged.md)
 can be used to derive randomization date variable. To map Randomization
 Date (`RANDDT`), the call would be:
 
@@ -346,14 +346,14 @@ added.
 ### Derive Birth Date and Analysis Age (`BRTHDT`, `AAGE`, `AAGEU`)
 
 The function
-[`derive_vars_aage()`](https:/pharmaverse.github.io/admiral/main/reference/derive_vars_aage.md)
+[`derive_vars_aage()`](https:/pharmaverse.github.io/admiral/cran-release/main/reference/derive_vars_aage.md)
 can be used to derive analysis age (`AAGE`) and analysis age unit
 (`AAGEU`). The function derives the age based on the birth date
 (`BRTHDT`) and a reference date, which is typically the randomization
 date (`RANDDT`).
 
 Note that `BRTHDT` must be derived first from `BRTHDTC` using
-[`derive_vars_dt()`](https:/pharmaverse.github.io/admiral/main/reference/derive_vars_dt.md).
+[`derive_vars_dt()`](https:/pharmaverse.github.io/admiral/cran-release/main/reference/derive_vars_dt.md).
 
 ``` r
 # Derive birth date from BRTHDTC
@@ -366,12 +366,12 @@ adsl <- adsl %>%
 
 Typically, dates of birth are collected only as years. However, this
 data has complete birth dates. The function
-[`derive_vars_dt()`](https:/pharmaverse.github.io/admiral/main/reference/derive_vars_dt.md)
+[`derive_vars_dt()`](https:/pharmaverse.github.io/admiral/cran-release/main/reference/derive_vars_dt.md)
 has the flexibility to do imputation on partial dates. Please see the
-[`derive_vars_dt()`](https:/pharmaverse.github.io/admiral/main/reference/derive_vars_dt.md)
+[`derive_vars_dt()`](https:/pharmaverse.github.io/admiral/cran-release/main/reference/derive_vars_dt.md)
 documentation and examples for more details or check out the [Date and
 Time
-Imputation](https:/pharmaverse.github.io/admiral/main/articles/imputation.md)
+Imputation](https:/pharmaverse.github.io/admiral/cran-release/main/articles/imputation.md)
 vignette.
 
 Now that we have `BRTHDT`, we can use `derive_var_aage()` to derive
@@ -393,14 +393,14 @@ default, the age is calculated in years.
 #### Death Date (`DTHDT`)
 
 The function
-[`derive_vars_dt()`](https:/pharmaverse.github.io/admiral/main/reference/derive_vars_dt.md)
+[`derive_vars_dt()`](https:/pharmaverse.github.io/admiral/cran-release/main/reference/derive_vars_dt.md)
 can be used to derive `DTHDT`. This function allows the user to impute
 the date as well. If you have partial dates and are in need of
 imputation then please see the
-[`derive_vars_dt()`](https:/pharmaverse.github.io/admiral/main/reference/derive_vars_dt.md)
+[`derive_vars_dt()`](https:/pharmaverse.github.io/admiral/cran-release/main/reference/derive_vars_dt.md)
 documentation and examples for more details or check out the [Date and
 Time
-Imputation](https:/pharmaverse.github.io/admiral/main/articles/imputation.md)
+Imputation](https:/pharmaverse.github.io/admiral/cran-release/main/articles/imputation.md)
 vignette.
 
 ``` r
@@ -414,7 +414,7 @@ adsl <- adsl %>%
 #### Cause of Death (`DTHCAUS`)
 
 The cause of death `DTHCAUS` can be derived using the function
-[`derive_vars_extreme_event()`](https:/pharmaverse.github.io/admiral/main/reference/derive_vars_extreme_event.md).
+[`derive_vars_extreme_event()`](https:/pharmaverse.github.io/admiral/cran-release/main/reference/derive_vars_extreme_event.md).
 
 Since the cause of death could be collected/mapped in different domains
 (e.g. `DS`, `AE`, `DD`), it is important the user specifies the right
@@ -425,13 +425,13 @@ AE is Fatal, the cause of death would be set to the preferred term
 (`AEDECOD`) of that Fatal AE, while if the date of death is collected in
 the `DS` form, the cause of death would be set to the disposition term
 (`DSTERM`). To achieve this, the
-[`event()`](https:/pharmaverse.github.io/admiral/main/reference/event.md)
+[`event()`](https:/pharmaverse.github.io/admiral/cran-release/main/reference/event.md)
 objects within
-[`derive_vars_extreme_event()`](https:/pharmaverse.github.io/admiral/main/reference/derive_vars_extreme_event.md)
+[`derive_vars_extreme_event()`](https:/pharmaverse.github.io/admiral/cran-release/main/reference/derive_vars_extreme_event.md)
 must be specified and defined such that they fit the study requirement.
 
 An example call to
-[`derive_vars_extreme_event()`](https:/pharmaverse.github.io/admiral/main/reference/derive_vars_extreme_event.md)
+[`derive_vars_extreme_event()`](https:/pharmaverse.github.io/admiral/cran-release/main/reference/derive_vars_extreme_event.md)
 would be:
 
 ``` r
@@ -462,9 +462,9 @@ The function also offers the option to add some traceability variables
 (e.g. `DTHDOM` would store the domain where the date of death is
 collected, and `DTHSEQ` would store the `xxSEQ` value of that domain).
 The traceability variables should be added to the
-[`event()`](https:/pharmaverse.github.io/admiral/main/reference/event.md)
+[`event()`](https:/pharmaverse.github.io/admiral/cran-release/main/reference/event.md)
 calls and included in the `new_vars` parameter of
-[`derive_vars_extreme_event()`](https:/pharmaverse.github.io/admiral/main/reference/derive_vars_extreme_event.md).
+[`derive_vars_extreme_event()`](https:/pharmaverse.github.io/admiral/cran-release/main/reference/derive_vars_extreme_event.md).
 
 ``` r
 adsl <- adsl %>%
@@ -508,7 +508,7 @@ adsl <- adsl %>%
 #### Duration Relative to Death
 
 The function
-[`derive_vars_duration()`](https:/pharmaverse.github.io/admiral/main/reference/derive_vars_duration.md)
+[`derive_vars_duration()`](https:/pharmaverse.github.io/admiral/cran-release/main/reference/derive_vars_duration.md)
 can be used to derive duration relative to death like the Relative Day
 of Death (`DTHADY`) or the numbers of days from last dose to death
 (`LDDTHELD`).
@@ -542,7 +542,7 @@ adsl <- adsl %>%
 
 Similarly as for the cause of death (`DTHCAUS`), the last known alive
 date (`LSTALVDT`) can be derived from multiples sources using
-[`derive_vars_extreme_event()`](https:/pharmaverse.github.io/admiral/main/reference/derive_vars_extreme_event.md).
+[`derive_vars_extreme_event()`](https:/pharmaverse.github.io/admiral/cran-release/main/reference/derive_vars_extreme_event.md).
 
 An example could be (`--DTC` dates are converted to numeric dates
 imputing missing day and month to the first):
@@ -595,7 +595,7 @@ adsl <- adsl %>%
 
 Traceability variables can be added by specifying the variables in the
 `set_values_to` parameter of the
-[`event()`](https:/pharmaverse.github.io/admiral/main/reference/event.md)
+[`event()`](https:/pharmaverse.github.io/admiral/cran-release/main/reference/event.md)
 function.
 
 ``` r
@@ -658,7 +658,7 @@ adsl <- adsl %>%
 Numeric and categorical variables (`AGE`, `RACE`, `COUNTRY`, etc.) may
 need to be grouped to perform the required analysis.
 [admiral](https://pharmaverse.github.io/admiral/) provides the
-[`derive_vars_cat()`](https:/pharmaverse.github.io/admiral/main/reference/derive_vars_cat.md)
+[`derive_vars_cat()`](https:/pharmaverse.github.io/admiral/cran-release/main/reference/derive_vars_cat.md)
 function to create such groups. This function is especially useful if
 more than one variable needs to be created for each condition, e.g.,
 `AGEGR1` and `AGEGR1N`.
@@ -749,15 +749,15 @@ The users can add specific code to cover their need for the analysis.
 
 The following functions are helpful for many ADSL derivations:
 
-- [`derive_vars_merged()`](https:/pharmaverse.github.io/admiral/main/reference/derive_vars_merged.md) -
+- [`derive_vars_merged()`](https:/pharmaverse.github.io/admiral/cran-release/main/reference/derive_vars_merged.md) -
   Merge Variables from a Dataset to the Input Dataset
-- [`derive_var_merged_exist_flag()`](https:/pharmaverse.github.io/admiral/main/reference/derive_var_merged_exist_flag.md) -
+- [`derive_var_merged_exist_flag()`](https:/pharmaverse.github.io/admiral/cran-release/main/reference/derive_var_merged_exist_flag.md) -
   Merge an Existence Flag
-- [`derive_vars_merged_summary()`](https:/pharmaverse.github.io/admiral/main/reference/derive_vars_merged_summary.md) -
+- [`derive_vars_merged_summary()`](https:/pharmaverse.github.io/admiral/cran-release/main/reference/derive_vars_merged_summary.md) -
   Merge Summary Variables
 
 See also [Generic
-Functions](https:/pharmaverse.github.io/admiral/main/articles/generic.md).
+Functions](https:/pharmaverse.github.io/admiral/cran-release/main/articles/generic.md).
 
 ### Add Labels and Attributes
 

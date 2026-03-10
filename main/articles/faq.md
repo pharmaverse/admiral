@@ -59,7 +59,7 @@
 
 - Functions are usually parameter driven:
   - e.g. the
-    [`derive_vars_aage()`](https:/pharmaverse.github.io/admiral/main/reference/derive_vars_aage.md)
+    [`derive_vars_aage()`](https:/pharmaverse.github.io/admiral/cran-release/main/reference/derive_vars_aage.md)
     has a parameterized start and end-date and a unit.
   - Depending on the parameters results may vary as does the
     specification.
@@ -228,9 +228,9 @@
   preserve attributes.
 - For [admiral](https://pharmaverse.github.io/admiral/) functions which
   preserve attributes like
-  [`convert_blanks_to_na()`](https:/pharmaverse.github.io/admiral/main/reference/convert_blanks_to_na.md)
+  [`convert_blanks_to_na()`](https:/pharmaverse.github.io/admiral/cran-release/main/reference/convert_blanks_to_na.md)
   and
-  [`convert_na_to_blanks()`](https:/pharmaverse.github.io/admiral/main/reference/convert_na_to_blanks.md)
+  [`convert_na_to_blanks()`](https:/pharmaverse.github.io/admiral/cran-release/main/reference/convert_na_to_blanks.md)
   this is explicitly mentioned in the documentation.
 - The recommended approach is to apply variable labels and other
   metadata as a final step in your data derivation process using

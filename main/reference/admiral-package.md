@@ -19,9 +19,9 @@ Useful links:
 - Report bugs at <https://github.com/pharmaverse/admiral/issues>
 
 Other internal:
-[`extract_duplicate_records()`](https:/pharmaverse.github.io/admiral/main/reference/extract_duplicate_records.md),
-[`format.basket_select()`](https:/pharmaverse.github.io/admiral/main/reference/format.basket_select.md),
-[`signal_duplicate_records()`](https:/pharmaverse.github.io/admiral/main/reference/signal_duplicate_records.md)
+[`extract_duplicate_records()`](https:/pharmaverse.github.io/admiral/cran-release/main/reference/extract_duplicate_records.md),
+[`format.basket_select()`](https:/pharmaverse.github.io/admiral/cran-release/main/reference/format.basket_select.md),
+[`signal_duplicate_records()`](https:/pharmaverse.github.io/admiral/cran-release/main/reference/signal_duplicate_records.md)
 
 ## Author
 

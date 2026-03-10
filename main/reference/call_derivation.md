@@ -28,7 +28,7 @@ call_derivation(dataset = NULL, derivation, variable_params, ...)
   argument of a derivation must expect a dataset and the derivation must
   return a dataset. All expected arguments for the derivation function
   must be provided through the
-  [`params()`](https:/pharmaverse.github.io/admiral/main/reference/params.md)
+  [`params()`](https:/pharmaverse.github.io/admiral/cran-release/main/reference/params.md)
   objects passed to the `variable_params` and `...` arguments.
 
   Default value
@@ -39,7 +39,7 @@ call_derivation(dataset = NULL, derivation, variable_params, ...)
 
   A `list` of function arguments that are different across iterations.
   Each set of function arguments must be created using
-  [`params()`](https:/pharmaverse.github.io/admiral/main/reference/params.md).
+  [`params()`](https:/pharmaverse.github.io/admiral/cran-release/main/reference/params.md).
 
   Default value
 
@@ -72,14 +72,14 @@ which `derivation` has been used.
 
 ## See also
 
-[`params()`](https:/pharmaverse.github.io/admiral/main/reference/params.md)
-[`restrict_derivation()`](https:/pharmaverse.github.io/admiral/main/reference/restrict_derivation.md)
+[`params()`](https:/pharmaverse.github.io/admiral/cran-release/main/reference/params.md)
+[`restrict_derivation()`](https:/pharmaverse.github.io/admiral/cran-release/main/reference/restrict_derivation.md)
 `call_derivation()`
 
 Higher Order Functions:
-[`derivation_slice()`](https:/pharmaverse.github.io/admiral/main/reference/derivation_slice.md),
-[`restrict_derivation()`](https:/pharmaverse.github.io/admiral/main/reference/restrict_derivation.md),
-[`slice_derivation()`](https:/pharmaverse.github.io/admiral/main/reference/slice_derivation.md)
+[`derivation_slice()`](https:/pharmaverse.github.io/admiral/cran-release/main/reference/derivation_slice.md),
+[`restrict_derivation()`](https:/pharmaverse.github.io/admiral/cran-release/main/reference/restrict_derivation.md),
+[`slice_derivation()`](https:/pharmaverse.github.io/admiral/cran-release/main/reference/slice_derivation.md)
 
 ## Examples
 

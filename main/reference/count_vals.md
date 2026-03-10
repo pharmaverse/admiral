@@ -29,13 +29,13 @@ count_vals(var, val)
 ## See also
 
 Utilities for Filtering Observations:
-[`filter_exist()`](https:/pharmaverse.github.io/admiral/main/reference/filter_exist.md),
-[`filter_extreme()`](https:/pharmaverse.github.io/admiral/main/reference/filter_extreme.md),
-[`filter_joined()`](https:/pharmaverse.github.io/admiral/main/reference/filter_joined.md),
-[`filter_not_exist()`](https:/pharmaverse.github.io/admiral/main/reference/filter_not_exist.md),
-[`filter_relative()`](https:/pharmaverse.github.io/admiral/main/reference/filter_relative.md),
-[`max_cond()`](https:/pharmaverse.github.io/admiral/main/reference/max_cond.md),
-[`min_cond()`](https:/pharmaverse.github.io/admiral/main/reference/min_cond.md)
+[`filter_exist()`](https:/pharmaverse.github.io/admiral/cran-release/main/reference/filter_exist.md),
+[`filter_extreme()`](https:/pharmaverse.github.io/admiral/cran-release/main/reference/filter_extreme.md),
+[`filter_joined()`](https:/pharmaverse.github.io/admiral/cran-release/main/reference/filter_joined.md),
+[`filter_not_exist()`](https:/pharmaverse.github.io/admiral/cran-release/main/reference/filter_not_exist.md),
+[`filter_relative()`](https:/pharmaverse.github.io/admiral/cran-release/main/reference/filter_relative.md),
+[`max_cond()`](https:/pharmaverse.github.io/admiral/cran-release/main/reference/max_cond.md),
+[`min_cond()`](https:/pharmaverse.github.io/admiral/cran-release/main/reference/min_cond.md)
 
 ## Examples
 

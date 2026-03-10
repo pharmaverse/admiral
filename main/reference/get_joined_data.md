@@ -67,7 +67,7 @@ get_joined_data(
   Permitted values
 
   :   list of variables created by
-      [`exprs()`](https:/pharmaverse.github.io/admiral/main/reference/reexport-exprs.md),
+      [`exprs()`](https:/pharmaverse.github.io/admiral/cran-release/main/reference/reexport-exprs.md),
       e.g., `exprs(USUBJID, VISIT)`
 
   Default value
@@ -96,7 +96,7 @@ get_joined_data(
   Permitted values
 
   :   list of variables created by
-      [`exprs()`](https:/pharmaverse.github.io/admiral/main/reference/reexport-exprs.md),
+      [`exprs()`](https:/pharmaverse.github.io/admiral/cran-release/main/reference/reexport-exprs.md),
       e.g., `exprs(USUBJID, VISIT)`
 
   Default value
@@ -195,12 +195,12 @@ get_joined_data(
 
   For handling of `NA`s in sorting variables see the "Sort Order"
   section in
-  [`vignette("generic")`](https:/pharmaverse.github.io/admiral/main/articles/generic.md).
+  [`vignette("generic")`](https:/pharmaverse.github.io/admiral/cran-release/main/articles/generic.md).
 
   Permitted values
 
   :   list of variables created by
-      [`exprs()`](https:/pharmaverse.github.io/admiral/main/reference/reexport-exprs.md),
+      [`exprs()`](https:/pharmaverse.github.io/admiral/cran-release/main/reference/reexport-exprs.md),
       e.g., `exprs(USUBJID, VISIT)`
 
   Default value

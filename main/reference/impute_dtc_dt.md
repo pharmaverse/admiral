@@ -176,15 +176,15 @@ Usually this computation function can not be used with `%>%`.
 ## See also
 
 Date/Time Computation Functions that returns a vector:
-[`compute_age_years()`](https:/pharmaverse.github.io/admiral/main/reference/compute_age_years.md),
-[`compute_dtf()`](https:/pharmaverse.github.io/admiral/main/reference/compute_dtf.md),
-[`compute_duration()`](https:/pharmaverse.github.io/admiral/main/reference/compute_duration.md),
-[`compute_tmf()`](https:/pharmaverse.github.io/admiral/main/reference/compute_tmf.md),
-[`convert_date_to_dtm()`](https:/pharmaverse.github.io/admiral/main/reference/convert_date_to_dtm.md),
-[`convert_dtc_to_dt()`](https:/pharmaverse.github.io/admiral/main/reference/convert_dtc_to_dt.md),
-[`convert_dtc_to_dtm()`](https:/pharmaverse.github.io/admiral/main/reference/convert_dtc_to_dtm.md),
-[`convert_xxtpt_to_hours()`](https:/pharmaverse.github.io/admiral/main/reference/convert_xxtpt_to_hours.md),
-[`impute_dtc_dtm()`](https:/pharmaverse.github.io/admiral/main/reference/impute_dtc_dtm.md)
+[`compute_age_years()`](https:/pharmaverse.github.io/admiral/cran-release/main/reference/compute_age_years.md),
+[`compute_dtf()`](https:/pharmaverse.github.io/admiral/cran-release/main/reference/compute_dtf.md),
+[`compute_duration()`](https:/pharmaverse.github.io/admiral/cran-release/main/reference/compute_duration.md),
+[`compute_tmf()`](https:/pharmaverse.github.io/admiral/cran-release/main/reference/compute_tmf.md),
+[`convert_date_to_dtm()`](https:/pharmaverse.github.io/admiral/cran-release/main/reference/convert_date_to_dtm.md),
+[`convert_dtc_to_dt()`](https:/pharmaverse.github.io/admiral/cran-release/main/reference/convert_dtc_to_dt.md),
+[`convert_dtc_to_dtm()`](https:/pharmaverse.github.io/admiral/cran-release/main/reference/convert_dtc_to_dtm.md),
+[`convert_xxtpt_to_hours()`](https:/pharmaverse.github.io/admiral/cran-release/main/reference/convert_xxtpt_to_hours.md),
+[`impute_dtc_dtm()`](https:/pharmaverse.github.io/admiral/cran-release/main/reference/impute_dtc_dtm.md)
 
 ## Examples
 

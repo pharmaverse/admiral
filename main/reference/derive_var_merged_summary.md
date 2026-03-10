@@ -2,7 +2,7 @@
 
 **\[deprecated\]** The `derive_var_merged_summary()` function has been
 deprecated in favor of
-[`derive_vars_merged_summary()`](https:/pharmaverse.github.io/admiral/main/reference/derive_vars_merged_summary.md).
+[`derive_vars_merged_summary()`](https:/pharmaverse.github.io/admiral/cran-release/main/reference/derive_vars_merged_summary.md).
 
 ## Usage
 
@@ -60,7 +60,7 @@ derive_var_merged_summary(
   Permitted values
 
   :   list of variables created by
-      [`exprs()`](https:/pharmaverse.github.io/admiral/main/reference/reexport-exprs.md),
+      [`exprs()`](https:/pharmaverse.github.io/admiral/cran-release/main/reference/reexport-exprs.md),
       e.g., `exprs(USUBJID, VISIT)`
 
   Default value
@@ -93,7 +93,7 @@ derive_var_merged_summary(
   Permitted values
 
   :   list of variables created by
-      [`exprs()`](https:/pharmaverse.github.io/admiral/main/reference/reexport-exprs.md),
+      [`exprs()`](https:/pharmaverse.github.io/admiral/cran-release/main/reference/reexport-exprs.md),
       e.g., `exprs(USUBJID, VISIT)`
 
   Default value
@@ -129,7 +129,7 @@ derive_var_merged_summary(
   Permitted values
 
   :   list of named expressions created by a formula using
-      [`exprs()`](https:/pharmaverse.github.io/admiral/main/reference/reexport-exprs.md),
+      [`exprs()`](https:/pharmaverse.github.io/admiral/cran-release/main/reference/reexport-exprs.md),
       e.g., `exprs(AVALC = VSSTRESC, AVAL = yn_to_numeric(AVALC))`
 
   Default value
@@ -159,15 +159,15 @@ dataset and additionally the variables specified for `new_vars`.
 
 ## See also
 
-[`derive_summary_records()`](https:/pharmaverse.github.io/admiral/main/reference/derive_summary_records.md),
-[`get_summary_records()`](https:/pharmaverse.github.io/admiral/main/reference/get_summary_records.md)
+[`derive_summary_records()`](https:/pharmaverse.github.io/admiral/cran-release/main/reference/derive_summary_records.md),
+[`get_summary_records()`](https:/pharmaverse.github.io/admiral/cran-release/main/reference/get_summary_records.md)
 
 Other deprecated:
-[`call_user_fun()`](https:/pharmaverse.github.io/admiral/main/reference/call_user_fun.md),
-[`date_source()`](https:/pharmaverse.github.io/admiral/main/reference/date_source.md),
-[`derive_param_extreme_record()`](https:/pharmaverse.github.io/admiral/main/reference/derive_param_extreme_record.md),
-[`derive_var_dthcaus()`](https:/pharmaverse.github.io/admiral/main/reference/derive_var_dthcaus.md),
-[`derive_var_extreme_dt()`](https:/pharmaverse.github.io/admiral/main/reference/derive_var_extreme_dt.md),
-[`derive_var_extreme_dtm()`](https:/pharmaverse.github.io/admiral/main/reference/derive_var_extreme_dtm.md),
-[`dthcaus_source()`](https:/pharmaverse.github.io/admiral/main/reference/dthcaus_source.md),
-[`get_summary_records()`](https:/pharmaverse.github.io/admiral/main/reference/get_summary_records.md)
+[`call_user_fun()`](https:/pharmaverse.github.io/admiral/cran-release/main/reference/call_user_fun.md),
+[`date_source()`](https:/pharmaverse.github.io/admiral/cran-release/main/reference/date_source.md),
+[`derive_param_extreme_record()`](https:/pharmaverse.github.io/admiral/cran-release/main/reference/derive_param_extreme_record.md),
+[`derive_var_dthcaus()`](https:/pharmaverse.github.io/admiral/cran-release/main/reference/derive_var_dthcaus.md),
+[`derive_var_extreme_dt()`](https:/pharmaverse.github.io/admiral/cran-release/main/reference/derive_var_extreme_dt.md),
+[`derive_var_extreme_dtm()`](https:/pharmaverse.github.io/admiral/cran-release/main/reference/derive_var_extreme_dtm.md),
+[`dthcaus_source()`](https:/pharmaverse.github.io/admiral/cran-release/main/reference/dthcaus_source.md),
+[`get_summary_records()`](https:/pharmaverse.github.io/admiral/cran-release/main/reference/get_summary_records.md)

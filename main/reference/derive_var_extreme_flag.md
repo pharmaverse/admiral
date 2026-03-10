@@ -43,7 +43,7 @@ derive_var_extreme_flag(
   Permitted values
 
   :   list of variables created by
-      [`exprs()`](https:/pharmaverse.github.io/admiral/main/reference/reexport-exprs.md),
+      [`exprs()`](https:/pharmaverse.github.io/admiral/cran-release/main/reference/reexport-exprs.md),
       e.g., `exprs(USUBJID, VISIT)`
 
   Default value
@@ -59,12 +59,12 @@ derive_var_extreme_flag(
 
   For handling of `NA`s in sorting variables see the "Sort Order"
   section in
-  [`vignette("generic")`](https:/pharmaverse.github.io/admiral/main/articles/generic.md).
+  [`vignette("generic")`](https:/pharmaverse.github.io/admiral/cran-release/main/articles/generic.md).
 
   Permitted values
 
   :   list of variables created by
-      [`exprs()`](https:/pharmaverse.github.io/admiral/main/reference/reexport-exprs.md),
+      [`exprs()`](https:/pharmaverse.github.io/admiral/cran-release/main/reference/reexport-exprs.md),
       e.g., `exprs(USUBJID, VISIT)`
 
   Default value
@@ -184,19 +184,19 @@ dataset.
 
 General Derivation Functions for all ADaMs that returns variable
 appended to dataset:
-[`derive_var_joined_exist_flag()`](https:/pharmaverse.github.io/admiral/main/reference/derive_var_joined_exist_flag.md),
-[`derive_var_merged_ef_msrc()`](https:/pharmaverse.github.io/admiral/main/reference/derive_var_merged_ef_msrc.md),
-[`derive_var_merged_exist_flag()`](https:/pharmaverse.github.io/admiral/main/reference/derive_var_merged_exist_flag.md),
-[`derive_var_obs_number()`](https:/pharmaverse.github.io/admiral/main/reference/derive_var_obs_number.md),
-[`derive_var_relative_flag()`](https:/pharmaverse.github.io/admiral/main/reference/derive_var_relative_flag.md),
-[`derive_vars_cat()`](https:/pharmaverse.github.io/admiral/main/reference/derive_vars_cat.md),
-[`derive_vars_computed()`](https:/pharmaverse.github.io/admiral/main/reference/derive_vars_computed.md),
-[`derive_vars_joined()`](https:/pharmaverse.github.io/admiral/main/reference/derive_vars_joined.md),
-[`derive_vars_joined_summary()`](https:/pharmaverse.github.io/admiral/main/reference/derive_vars_joined_summary.md),
-[`derive_vars_merged()`](https:/pharmaverse.github.io/admiral/main/reference/derive_vars_merged.md),
-[`derive_vars_merged_lookup()`](https:/pharmaverse.github.io/admiral/main/reference/derive_vars_merged_lookup.md),
-[`derive_vars_merged_summary()`](https:/pharmaverse.github.io/admiral/main/reference/derive_vars_merged_summary.md),
-[`derive_vars_transposed()`](https:/pharmaverse.github.io/admiral/main/reference/derive_vars_transposed.md)
+[`derive_var_joined_exist_flag()`](https:/pharmaverse.github.io/admiral/cran-release/main/reference/derive_var_joined_exist_flag.md),
+[`derive_var_merged_ef_msrc()`](https:/pharmaverse.github.io/admiral/cran-release/main/reference/derive_var_merged_ef_msrc.md),
+[`derive_var_merged_exist_flag()`](https:/pharmaverse.github.io/admiral/cran-release/main/reference/derive_var_merged_exist_flag.md),
+[`derive_var_obs_number()`](https:/pharmaverse.github.io/admiral/cran-release/main/reference/derive_var_obs_number.md),
+[`derive_var_relative_flag()`](https:/pharmaverse.github.io/admiral/cran-release/main/reference/derive_var_relative_flag.md),
+[`derive_vars_cat()`](https:/pharmaverse.github.io/admiral/cran-release/main/reference/derive_vars_cat.md),
+[`derive_vars_computed()`](https:/pharmaverse.github.io/admiral/cran-release/main/reference/derive_vars_computed.md),
+[`derive_vars_joined()`](https:/pharmaverse.github.io/admiral/cran-release/main/reference/derive_vars_joined.md),
+[`derive_vars_joined_summary()`](https:/pharmaverse.github.io/admiral/cran-release/main/reference/derive_vars_joined_summary.md),
+[`derive_vars_merged()`](https:/pharmaverse.github.io/admiral/cran-release/main/reference/derive_vars_merged.md),
+[`derive_vars_merged_lookup()`](https:/pharmaverse.github.io/admiral/cran-release/main/reference/derive_vars_merged_lookup.md),
+[`derive_vars_merged_summary()`](https:/pharmaverse.github.io/admiral/cran-release/main/reference/derive_vars_merged_summary.md),
+[`derive_vars_transposed()`](https:/pharmaverse.github.io/admiral/cran-release/main/reference/derive_vars_transposed.md)
 
 ## Examples
 
@@ -281,7 +281,7 @@ of the new variable is passed through the `new_var = LASTFL` call.
 Note here that a similar `FIRSTFL` variable could instead be derived
 simply by switching to `mode = "first"`. Alternatively, we could make
 use of
-[`desc()`](https:/pharmaverse.github.io/admiral/main/reference/reexport-desc.md)
+[`desc()`](https:/pharmaverse.github.io/admiral/cran-release/main/reference/reexport-desc.md)
 within the sorting specified by `order`:
 
     advs %>%
@@ -433,9 +433,9 @@ flagged.
 flag `ABLFL`, so the following section contains various examples of this
 in action for the `ADVS` dataset. Note that for these derivations it is
 often convenient to leverage higher order functions such as
-[`restrict_derivation()`](https:/pharmaverse.github.io/admiral/main/reference/restrict_derivation.md)
+[`restrict_derivation()`](https:/pharmaverse.github.io/admiral/cran-release/main/reference/restrict_derivation.md)
 and
-[`slice_derivation()`](https:/pharmaverse.github.io/admiral/main/reference/slice_derivation.md).
+[`slice_derivation()`](https:/pharmaverse.github.io/admiral/cran-release/main/reference/slice_derivation.md).
 Please read the [Higher Order
 Functions](https://pharmaverse.github.io/admiral/articles/higher_order.html)
 vignette, as well as their specific reference pages, to learn more.
@@ -443,7 +443,7 @@ vignette, as well as their specific reference pages, to learn more.
 To set the baseline flag for the last observation among those where
 `AVISIT = "BASELINE"`, we can use a similar call to the examples above
 but wrapping inside of
-[`restrict_derivation()`](https:/pharmaverse.github.io/admiral/main/reference/restrict_derivation.md)
+[`restrict_derivation()`](https:/pharmaverse.github.io/admiral/cran-release/main/reference/restrict_derivation.md)
 and making use of the `filter` argument.
 
     restrict_derivation(
@@ -481,7 +481,7 @@ Alternatively, to set baseline as the lowest observation among those
 where `AVISIT = "BASELINE"` (selecting the latest if there are multiple)
 we can modify the `order` argument, ensuring to sort by descending
 `AVAL` before `ADT`. Note here the synergy between
-[`desc()`](https:/pharmaverse.github.io/admiral/main/reference/reexport-desc.md)
+[`desc()`](https:/pharmaverse.github.io/admiral/cran-release/main/reference/reexport-desc.md)
 and `mode`, because `mode = "last"` applies to both the ordering
 variables `AVAL` and `ADT` and so we need to reverse only the ordering
 of the former to ensure that the lowest value is selected but also that
@@ -521,9 +521,9 @@ the latest one among multiple is preferred. This is relevant for subject
 
 In practice, baseline-setting may vary on a parameter by parameter
 basis, in which case
-[`slice_derivation()`](https:/pharmaverse.github.io/admiral/main/reference/slice_derivation.md)
+[`slice_derivation()`](https:/pharmaverse.github.io/admiral/cran-release/main/reference/slice_derivation.md)
 could be used in place of
-[`restrict_derivation()`](https:/pharmaverse.github.io/admiral/main/reference/restrict_derivation.md).
+[`restrict_derivation()`](https:/pharmaverse.github.io/admiral/cran-release/main/reference/restrict_derivation.md).
 In the example below, we set the baseline flag as follows: for
 temperature records, as the lowest value recorded at a baseline visit;
 for weight records, as the highest value recorded at a baseline visit.

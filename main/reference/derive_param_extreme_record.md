@@ -2,7 +2,7 @@
 
 **\[deprecated\]** The `derive_param_extreme_record()` function has been
 deprecated in favor of
-[`derive_extreme_event()`](https:/pharmaverse.github.io/admiral/main/reference/derive_extreme_event.md).
+[`derive_extreme_event()`](https:/pharmaverse.github.io/admiral/cran-release/main/reference/derive_extreme_event.md).
 
 Generates parameter based on the first or last observation from multiple
 source datasets, based on user-defined filter, order and by group
@@ -37,7 +37,7 @@ derive_param_extreme_record(
   Sources
 
   A list of
-  [`records_source()`](https:/pharmaverse.github.io/admiral/main/reference/records_source.md)
+  [`records_source()`](https:/pharmaverse.github.io/admiral/cran-release/main/reference/records_source.md)
   objects is expected.
 
   Default value
@@ -49,7 +49,7 @@ derive_param_extreme_record(
   Source datasets
 
   A named list of datasets is expected. The `dataset_name` field of
-  [`records_source()`](https:/pharmaverse.github.io/admiral/main/reference/records_source.md)
+  [`records_source()`](https:/pharmaverse.github.io/admiral/cran-release/main/reference/records_source.md)
   refers to the dataset provided in the list. The variables specified by
   the `order` and the `by_vars` arguments are expected after applying
   `new_vars`.
@@ -86,7 +86,7 @@ derive_param_extreme_record(
   Permitted values
 
   :   list of expressions created by
-      [`exprs()`](https:/pharmaverse.github.io/admiral/main/reference/reexport-exprs.md),
+      [`exprs()`](https:/pharmaverse.github.io/admiral/cran-release/main/reference/reexport-exprs.md),
       e.g., `exprs(ADT, desc(AVAL))`
 
   Default value
@@ -150,14 +150,14 @@ The following steps are performed to create the output dataset:
 ## See also
 
 Other deprecated:
-[`call_user_fun()`](https:/pharmaverse.github.io/admiral/main/reference/call_user_fun.md),
-[`date_source()`](https:/pharmaverse.github.io/admiral/main/reference/date_source.md),
-[`derive_var_dthcaus()`](https:/pharmaverse.github.io/admiral/main/reference/derive_var_dthcaus.md),
-[`derive_var_extreme_dt()`](https:/pharmaverse.github.io/admiral/main/reference/derive_var_extreme_dt.md),
-[`derive_var_extreme_dtm()`](https:/pharmaverse.github.io/admiral/main/reference/derive_var_extreme_dtm.md),
-[`derive_var_merged_summary()`](https:/pharmaverse.github.io/admiral/main/reference/derive_var_merged_summary.md),
-[`dthcaus_source()`](https:/pharmaverse.github.io/admiral/main/reference/dthcaus_source.md),
-[`get_summary_records()`](https:/pharmaverse.github.io/admiral/main/reference/get_summary_records.md)
+[`call_user_fun()`](https:/pharmaverse.github.io/admiral/cran-release/main/reference/call_user_fun.md),
+[`date_source()`](https:/pharmaverse.github.io/admiral/cran-release/main/reference/date_source.md),
+[`derive_var_dthcaus()`](https:/pharmaverse.github.io/admiral/cran-release/main/reference/derive_var_dthcaus.md),
+[`derive_var_extreme_dt()`](https:/pharmaverse.github.io/admiral/cran-release/main/reference/derive_var_extreme_dt.md),
+[`derive_var_extreme_dtm()`](https:/pharmaverse.github.io/admiral/cran-release/main/reference/derive_var_extreme_dtm.md),
+[`derive_var_merged_summary()`](https:/pharmaverse.github.io/admiral/cran-release/main/reference/derive_var_merged_summary.md),
+[`dthcaus_source()`](https:/pharmaverse.github.io/admiral/cran-release/main/reference/dthcaus_source.md),
+[`get_summary_records()`](https:/pharmaverse.github.io/admiral/cran-release/main/reference/get_summary_records.md)
 
 ## Examples
 

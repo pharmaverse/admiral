@@ -57,7 +57,7 @@ create_single_dose_dataset(
   A date object is expected. This object cannot contain `NA` values.
 
   Refer to
-  [`derive_vars_dt()`](https:/pharmaverse.github.io/admiral/main/reference/derive_vars_dt.md)
+  [`derive_vars_dt()`](https:/pharmaverse.github.io/admiral/cran-release/main/reference/derive_vars_dt.md)
   to impute and derive a date from a date character vector to a date
   object.
 
@@ -73,7 +73,7 @@ create_single_dose_dataset(
   values.
 
   Refer to
-  [`derive_vars_dtm()`](https:/pharmaverse.github.io/admiral/main/reference/derive_vars_dtm.md)
+  [`derive_vars_dtm()`](https:/pharmaverse.github.io/admiral/cran-release/main/reference/derive_vars_dtm.md)
   to impute and derive a date-time from a date character vector to a
   date object.
 
@@ -92,7 +92,7 @@ create_single_dose_dataset(
   `NA` values.
 
   Refer to
-  [`derive_vars_dt()`](https:/pharmaverse.github.io/admiral/main/reference/derive_vars_dt.md)
+  [`derive_vars_dt()`](https:/pharmaverse.github.io/admiral/cran-release/main/reference/derive_vars_dt.md)
   to impute and derive a date from a date character vector to a date
   object.
 
@@ -108,7 +108,7 @@ create_single_dose_dataset(
   values.
 
   Refer to
-  [`derive_vars_dtm()`](https:/pharmaverse.github.io/admiral/main/reference/derive_vars_dtm.md)
+  [`derive_vars_dtm()`](https:/pharmaverse.github.io/admiral/cran-release/main/reference/derive_vars_dtm.md)
   to impute and derive a date-time from a date character vector to a
   date object.
 
@@ -128,7 +128,7 @@ create_single_dose_dataset(
   table other than the default is used, it must have columns
   `DOSE_WINDOW`, `DOSE_COUNT`, and `CONVERSION_FACTOR`. The default
   table `dose_freq_lookup` is described in detail
-  [here](https:/pharmaverse.github.io/admiral/main/reference/dose_freq_lookup.md).
+  [here](https:/pharmaverse.github.io/admiral/cran-release/main/reference/dose_freq_lookup.md).
 
   Permitted Values for `DOSE_WINDOW`: `"MINUTE"`, `"HOUR"`, `"DAY"`,
   `"WEEK"`, `"MONTH"`, `"YEAR"`
@@ -194,9 +194,9 @@ dataset unchanged.
 ## See also
 
 Creating auxiliary datasets:
-[`consolidate_metadata()`](https:/pharmaverse.github.io/admiral/main/reference/consolidate_metadata.md),
-[`create_period_dataset()`](https:/pharmaverse.github.io/admiral/main/reference/create_period_dataset.md),
-[`create_query_data()`](https:/pharmaverse.github.io/admiral/main/reference/create_query_data.md)
+[`consolidate_metadata()`](https:/pharmaverse.github.io/admiral/cran-release/main/reference/consolidate_metadata.md),
+[`create_period_dataset()`](https:/pharmaverse.github.io/admiral/cran-release/main/reference/create_period_dataset.md),
+[`create_query_data()`](https:/pharmaverse.github.io/admiral/cran-release/main/reference/create_query_data.md)
 
 ## Examples
 

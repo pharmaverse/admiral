@@ -35,7 +35,7 @@ extract_duplicate_records(dataset, by_vars = NULL)
   Permitted values
 
   :   list of variables created by
-      [`exprs()`](https:/pharmaverse.github.io/admiral/main/reference/reexport-exprs.md),
+      [`exprs()`](https:/pharmaverse.github.io/admiral/cran-release/main/reference/reexport-exprs.md),
       e.g., `exprs(USUBJID, VISIT)`
 
   Default value
@@ -49,9 +49,9 @@ A `data.frame` of duplicate records within `dataset`
 ## See also
 
 Other internal:
-[`admiral-package`](https:/pharmaverse.github.io/admiral/main/reference/admiral-package.md),
-[`format.basket_select()`](https:/pharmaverse.github.io/admiral/main/reference/format.basket_select.md),
-[`signal_duplicate_records()`](https:/pharmaverse.github.io/admiral/main/reference/signal_duplicate_records.md)
+[`admiral-package`](https:/pharmaverse.github.io/admiral/cran-release/main/reference/admiral-package.md),
+[`format.basket_select()`](https:/pharmaverse.github.io/admiral/cran-release/main/reference/format.basket_select.md),
+[`signal_duplicate_records()`](https:/pharmaverse.github.io/admiral/cran-release/main/reference/signal_duplicate_records.md)
 
 ## Examples
 
