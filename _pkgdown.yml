@@ -1,4 +1,4 @@
-url: https://pharmaverse.github.io/admiral
+url: https://pharmaverse.github.io/admiral/cran-release
 
 template:
   math-rendering: mathjax
@@ -54,6 +54,9 @@ repo:
     user: https://github.com/
 news:
   cran_dates: true
+
+deploy:
+  install_metadata: true
 
 home:
   links:
