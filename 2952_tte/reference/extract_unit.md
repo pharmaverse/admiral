@@ -25,9 +25,9 @@ A string
 ## See also
 
 Utilities used within Derivation functions:
-[`get_flagged_records()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/get_flagged_records.md),
-[`get_not_mapped()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/get_not_mapped.md),
-[`get_vars_query()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/get_vars_query.md)
+[`get_flagged_records()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/get_flagged_records.md),
+[`get_not_mapped()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/get_not_mapped.md),
+[`get_vars_query()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/get_vars_query.md)
 
 ## Examples
 

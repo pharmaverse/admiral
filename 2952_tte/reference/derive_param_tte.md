@@ -58,7 +58,7 @@ derive_param_tte(
   Source datasets
 
   A named list of datasets is expected. The `dataset_name` field of
-  [`tte_source()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/tte_source.md)
+  [`tte_source()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/tte_source.md)
   refers to the dataset provided in the list.
 
   Permitted values
@@ -85,7 +85,7 @@ derive_param_tte(
   Permitted values
 
   :   list of variables created by
-      [`exprs()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/reexport-exprs.md),
+      [`exprs()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/reexport-exprs.md),
       e.g., `exprs(USUBJID, VISIT)`
 
   Default value
@@ -115,7 +115,7 @@ derive_param_tte(
   Time to event end date(s)
 
   A list of
-  [`censor_source()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/censor_source.md)
+  [`censor_source()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/censor_source.md)
   objects is expected. Each date restricts the observation period for
   time-to-event analysis. For each subject the earliest date across all
   `end_dates` is used as the end date for that subject. The records
@@ -141,7 +141,7 @@ derive_param_tte(
   Sources and conditions defining events
 
   A list of
-  [`event_source()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/event_source.md)
+  [`event_source()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/event_source.md)
   objects is expected.
 
   Permitted values
@@ -157,7 +157,7 @@ derive_param_tte(
   Sources and conditions defining censorings
 
   A list of
-  [`censor_source()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/censor_source.md)
+  [`censor_source()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/censor_source.md)
   objects is expected. Each records defined by the `censor_conditions`
   should be a possible censoring time, i.e., at this time there should
   be known that the event of interest has not yet occurred. Assessment
@@ -219,7 +219,7 @@ derive_param_tte(
   Variables to set
 
   A named list returned by
-  [`exprs()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/reexport-exprs.md)
+  [`exprs()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/reexport-exprs.md)
   defining the variables to be set for the new parameter, e.g.
   `exprs(PARAMCD = "OS", PARAM = "Overall Survival")` is expected. The
   values must be symbols, character strings, numeric values,
@@ -228,7 +228,7 @@ derive_param_tte(
   Permitted values
 
   :   list of named expressions created by a formula using
-      [`exprs()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/reexport-exprs.md),
+      [`exprs()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/reexport-exprs.md),
       e.g., `exprs(AVALC = VSSTRESC, AVAL = yn_to_numeric(AVALC))`
 
   Default value
@@ -240,13 +240,13 @@ derive_param_tte(
   Variables to uniquely identify a subject
 
   A list of symbols created using
-  [`exprs()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/reexport-exprs.md)
+  [`exprs()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/reexport-exprs.md)
   is expected.
 
   Permitted values
 
   :   list of variables created by
-      [`exprs()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/reexport-exprs.md),
+      [`exprs()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/reexport-exprs.md),
       e.g., `exprs(USUBJID, VISIT)`
 
   Default value
@@ -261,9 +261,9 @@ derive_param_tte(
   message is issued if the observations of the source datasets are not
   unique with respect to the by variables and the date and order
   specified in the
-  [`event_source()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/event_source.md)
+  [`event_source()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/event_source.md)
   and
-  [`censor_source()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/censor_source.md)
+  [`censor_source()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/censor_source.md)
   objects.
 
   Permitted values
@@ -348,8 +348,8 @@ Finally:
 
 ## See also
 
-[`event_source()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/event_source.md),
-[`censor_source()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/censor_source.md)
+[`event_source()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/event_source.md),
+[`censor_source()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/censor_source.md)
 
 ## Examples
 
@@ -359,11 +359,11 @@ For each subject the time to first adverse event should be created as a
 parameter.
 
 - The event source object is created using
-  [`event_source()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/event_source.md)
+  [`event_source()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/event_source.md)
   and the date is set to adverse event start date.
 
 - The censor source object is created using
-  [`censor_source()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/censor_source.md)
+  [`censor_source()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/censor_source.md)
   and the date is set to end of study date.
 
 - The event and censor source objects are then passed to
@@ -499,7 +499,7 @@ for `"Cough"`, it was then passed to the function using the
 
 For investigating the issue, the dataset of the duplicate source records
 can be obtained by calling
-[`get_duplicates_dataset()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/get_duplicates_dataset.md):
+[`get_duplicates_dataset()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/get_duplicates_dataset.md):
 
     get_duplicates_dataset()
     #> Duplicate records with respect to `STUDYID`, `USUBJID`, `AEDECOD`, and `ASTDT`.
@@ -513,11 +513,11 @@ Common options to solve the issue:
 
 - Restricting the source records by specifying/updating the `filter`
   argument in the
-  [`event_source()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/event_source.md)/[`censor_source()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/censor_source.md)
+  [`event_source()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/event_source.md)/[`censor_source()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/censor_source.md)
   calls.
 
 - Specifying additional variables for `order` in the
-  [`event_source()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/event_source.md)/[`censor_source()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/censor_source.md)
+  [`event_source()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/event_source.md)/[`censor_source()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/censor_source.md)
   calls.
 
 - Setting `check_type = "none"` in the `derive_param_tte()` call to
@@ -663,7 +663,7 @@ period and events/censorings occurring after this date are not
 considered.
 
 In the example two
-[`censor_source()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/censor_source.md)
+[`censor_source()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/censor_source.md)
 objects are defined, `eos` and `newdrg`, for end of study date and new
 drug date, respectively, and then passed to the `end_dates` argument.
 
@@ -1011,4 +1011,4 @@ responders.
 ### Further examples
 
 Further example usages of this function can be found in the
-[`vignette("bds_tte")`](https:/pharmaverse.github.io/admiral/2952_tte/articles/bds_tte.md).
+[`vignette("bds_tte")`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/articles/bds_tte.md).

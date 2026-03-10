@@ -1,7 +1,7 @@
 # Returns a Character Representation of a `basket_select()` Object
 
 The function returns a character representation of a
-[`basket_select()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/basket_select.md)
+[`basket_select()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/basket_select.md)
 object. It can be used for error messages for example.
 
 ## Usage
@@ -16,7 +16,7 @@ format(x, ...)
 - x:
 
   A
-  [`basket_select()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/basket_select.md)
+  [`basket_select()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/basket_select.md)
   object
 
   Default value
@@ -34,17 +34,17 @@ format(x, ...)
 ## Value
 
 A character representation of the
-[`basket_select()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/basket_select.md)
+[`basket_select()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/basket_select.md)
 object
 
 ## See also
 
-[`basket_select()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/basket_select.md)
+[`basket_select()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/basket_select.md)
 
 Other internal:
-[`admiral-package`](https:/pharmaverse.github.io/admiral/2952_tte/reference/admiral-package.md),
-[`extract_duplicate_records()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/extract_duplicate_records.md),
-[`signal_duplicate_records()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/signal_duplicate_records.md)
+[`admiral-package`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/admiral-package.md),
+[`extract_duplicate_records()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/extract_duplicate_records.md),
+[`signal_duplicate_records()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/signal_duplicate_records.md)
 
 ## Examples
 

@@ -124,17 +124,17 @@ In this case we will keep `TRTSDT`/`TRTSDTM` for day derivation and
 `TRT01P`/`TRT01A` for planned and actual treatments.
 
 In this segment we will use
-[`derive_vars_merged()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/derive_vars_merged.md)
+[`derive_vars_merged()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/derive_vars_merged.md)
 to join the `ADSL` variables and the following
 [admiral](https://pharmaverse.github.io/admiral/) functions to derive
 analysis dates, times and days:
-[`derive_vars_dtm()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/derive_vars_dtm.md),
-[`derive_vars_dtm_to_dt()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/derive_vars_dtm_to_dt.md),
-[`derive_vars_dtm_to_tm()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/derive_vars_dtm_to_tm.md),
-[`derive_vars_dy()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/derive_vars_dy.md).
+[`derive_vars_dtm()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/derive_vars_dtm.md),
+[`derive_vars_dtm_to_dt()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/derive_vars_dtm_to_dt.md),
+[`derive_vars_dtm_to_tm()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/derive_vars_dtm_to_tm.md),
+[`derive_vars_dy()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/derive_vars_dy.md).
 We will also create `NFRLT` for `PC` data based on `VISTDY` and `PCTPT`
 using
-[`derive_var_nfrlt()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/derive_var_nfrlt.md).
+[`derive_var_nfrlt()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/derive_var_nfrlt.md).
 We will create an event ID (`EVID`) of 0 for concentration records and 1
 for dosing records. This is a traditional variable that will provide a
 handy tool to identify records but will be dropped from the final
@@ -181,10 +181,10 @@ pc_dates <- pc %>%
 Next we will also join `ADSL` data with `EX` and derive dates/times.
 This section uses the [admiral](https://pharmaverse.github.io/admiral/)
 functions
-[`derive_vars_merged()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/derive_vars_merged.md),
-[`derive_vars_dtm()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/derive_vars_dtm.md),
+[`derive_vars_merged()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/derive_vars_merged.md),
+[`derive_vars_dtm()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/derive_vars_dtm.md),
 and
-[`derive_vars_dtm_to_dt()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/derive_vars_dtm_to_dt.md).
+[`derive_vars_dtm_to_dt()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/derive_vars_dtm_to_dt.md).
 Time is imputed to 00:00:00 here for reasons specific to the sample
 data. Other imputation times may be used based on study details. Here we
 create `NFRLT` for `EX` data based on `VISITDY` using
@@ -238,18 +238,18 @@ ex_dates <- ex %>%
 ### Expand Dosing Records
 
 The function
-[`create_single_dose_dataset()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/create_single_dose_dataset.md)
+[`create_single_dose_dataset()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/create_single_dose_dataset.md)
 can be used to expand dosing records between the start date and end
 date. The nominal time will also be expanded based on the values of
 `EXDOSFRQ`, for example “QD” will result in nominal time being
 incremented by 24 hours and “BID” will result in nominal time being
 incremented by 12 hours. This is a new feature of
-[`create_single_dose_dataset()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/create_single_dose_dataset.md).
+[`create_single_dose_dataset()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/create_single_dose_dataset.md).
 
 Dates and times will be derived after expansion using
-[`derive_vars_dtm_to_dt()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/derive_vars_dtm_to_dt.md)
+[`derive_vars_dtm_to_dt()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/derive_vars_dtm_to_dt.md)
 and
-[`derive_vars_dtm_to_tm()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/derive_vars_dtm_to_tm.md).
+[`derive_vars_dtm_to_tm()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/derive_vars_dtm_to_tm.md).
 
 For this example study we will define analysis visit (`AVISIT)` based on
 the nominal day value from `NFRLT` and give it the format, “Day 1”, “Day
@@ -299,7 +299,7 @@ ex_exp <- ex_dates %>%
 
 In this section we will find the first dose for each subject and drug,
 using
-[`derive_vars_merged()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/derive_vars_merged.md).
+[`derive_vars_merged()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/derive_vars_merged.md).
 We also create an analysis visit (`AVISIT`) based on `NFRLT`. The first
 dose datetime for an analyte `FANLDTM` is calculated as the minimum
 `ADTM` from the dosing records by subject and drug.
@@ -330,7 +330,7 @@ adpc_first_dose <- pc_dates %>%
 ### Find Reference Dose Dates Corresponding to PK Records
 
 Use
-[`derive_vars_joined()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/derive_vars_joined.md)
+[`derive_vars_joined()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/derive_vars_joined.md)
 to find the previous dose data. This will join the expanded `EX` data
 with the `ADPC` based on the analysis date `ADTM`. Note the
 `filter_join` parameter. In addition to the date of the previous dose
@@ -359,7 +359,7 @@ adpc_prev <- adpc_first_dose %>%
 ```
 
 Similarly, find next dose information using
-[`derive_vars_joined()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/derive_vars_joined.md)
+[`derive_vars_joined()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/derive_vars_joined.md)
 with the `filter_join` parameter as `ADTM <= ADTM.join`. Here we keep
 the next dose analysis date `ADTM_next`, the next actual dose
 `EXDOSE_next`, and the next analysis visit `AVISIT_next`.
@@ -435,7 +435,7 @@ records. We will keep both here. Sometimes you will see `ADPC` with only
 the concentration records. If this is desired, the dosing records can be
 dropped before saving the final dataset. We will use the
 [admiral](https://pharmaverse.github.io/admiral/) function
-[`derive_vars_duration()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/derive_vars_duration.md)
+[`derive_vars_duration()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/derive_vars_duration.md)
 to calculate the actual relative time from first dose (`AFRLT`) and the
 actual relative time from most recent dose (`ARRLT`). Note that we use
 the parameter `add_one = FALSE` here. We will also create a variable
@@ -730,13 +730,13 @@ adpc_dtype <- bind_rows(adpc_lloq, dtype) %>%
 ### Calculate Change from Baseline and Assign `ASEQ`
 
 The [admiral](https://pharmaverse.github.io/admiral/) function
-[`derive_var_base()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/derive_var_base.md)
+[`derive_var_base()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/derive_var_base.md)
 is used to derive `BASE` and the function
-[`derive_var_chg()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/derive_var_chg.md)
+[`derive_var_chg()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/derive_var_chg.md)
 is used to derive change from baseline `CHG`.
 
 We also now derive `ASEQ` using
-[`derive_var_obs_number()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/derive_var_obs_number.md)
+[`derive_var_obs_number()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/derive_var_obs_number.md)
 and we drop intermediate variables such as those ending with “\_prev”
 and “\_next”.
 
@@ -788,7 +788,7 @@ adpc_aseq <- adpc_chg %>%
 
 Here we derive additional baseline values from `VS` for baseline height
 `HTBL` and weight `WTBL` and compute the body mass index (BMI) with
-[`compute_bmi()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/compute_bmi.md).
+[`compute_bmi()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/compute_bmi.md).
 These values could also be obtained from `ADVS` if available. Baseline
 lab values could also be derived from `LB` or `ADLB` in a similar
 manner.
@@ -892,7 +892,7 @@ steps above ([Read in Data](#readdata)).
 
 We will pick this up at the stage where we find the first dose for the
 concentration records. We will use
-[`derive_vars_merged()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/derive_vars_merged.md)
+[`derive_vars_merged()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/derive_vars_merged.md)
 as we did for `ADPC`.
 
 ``` r
@@ -922,7 +922,7 @@ adppk_first_dose <- pc_dates %>%
 
 For `ADPPK` we will find the previous dose with respect to actual time
 and nominal time. We will use
-[`derive_vars_joined()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/derive_vars_joined.md)
+[`derive_vars_joined()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/derive_vars_joined.md)
 as we did for `ADPC`, but note that we will not need to find the next
 dose as for `ADPC`.
 
@@ -969,7 +969,7 @@ As we did for `ADPC` we will now combine `PC` and `EX` records. We will
 derive the relative time variables `AFRLT` (Actual Relative Time from
 First Dose), `APRLT` (Actual Relative Time from Previous Dose), and
 `NPRLT` (Nominal Relative Time from Previous Dose). Use
-[`derive_vars_duration()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/derive_vars_duration.md)
+[`derive_vars_duration()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/derive_vars_duration.md)
 to derive `AFRLT` and `APRLT`. Note we defined `EVID` above with values
 of 0 for observation records and 1 for dosing records.
 
@@ -1098,7 +1098,7 @@ adppk_aval <- adppk_aprlt %>%
 ### Add `ASEQ` and Remove Temporary Variables
 
 We derive `ASEQ` using
-[`derive_var_obs_number()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/derive_var_obs_number.md).
+[`derive_var_obs_number()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/derive_var_obs_number.md).
 We add a `PROJID` based on drug and include the numeric version
 `PROJIDN`, and we drop and we drop intermediate variables such as those
 ending with “\_prev”.
@@ -1208,12 +1208,12 @@ We will add additional covariates for baseline height `HTBL` and weight
 `WTBL` from `VS` and select baseline lab values `CREATBL`, `ALTBL`,
 `ASTBL` and `TBILBL` from `LB`. We will calculate BMI and BSA from
 height and weight using
-[`compute_bmi()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/compute_bmi.md)
+[`compute_bmi()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/compute_bmi.md)
 and
-[`compute_bsa()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/compute_bsa.md).
+[`compute_bsa()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/compute_bsa.md).
 And we will calculate creatinine clearance `CRCLBL` and estimated
 glomerular filtration rate (eGFR) `EGFRBL` using
-[`compute_egfr()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/compute_egfr.md)
+[`compute_egfr()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/compute_egfr.md)
 function.
 
 ``` r

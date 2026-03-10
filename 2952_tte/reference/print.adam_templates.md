@@ -33,12 +33,12 @@ No return value, called for side effects
 
 ## See also
 
-[`list_all_templates()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/list_all_templates.md)
+[`list_all_templates()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/list_all_templates.md)
 
 Utilities for printing:
-[`print.duplicates()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/print.duplicates.md),
-[`print.source()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/print.source.md),
-[`print_named_list()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/print_named_list.md)
+[`print.duplicates()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/print.duplicates.md),
+[`print.source()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/print.source.md),
+[`print_named_list()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/print_named_list.md)
 
 ## Examples
 

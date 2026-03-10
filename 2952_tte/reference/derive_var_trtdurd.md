@@ -3,7 +3,7 @@
 Derives total treatment duration (days) (`TRTDURD`).
 
 **Note:** This is a wrapper function for the more generic
-[`derive_vars_duration()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/derive_vars_duration.md).
+[`derive_vars_duration()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/derive_vars_duration.md).
 
 ## Usage
 
@@ -31,7 +31,7 @@ derive_var_trtdurd(dataset, start_date = TRTSDT, end_date = TRTEDT)
   A date or date-time object is expected.
 
   Refer to
-  [`derive_vars_dt()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/derive_vars_dt.md)
+  [`derive_vars_dt()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/derive_vars_dt.md)
   to impute and derive a date from a date character vector to a date
   object.
 
@@ -46,7 +46,7 @@ derive_var_trtdurd(dataset, start_date = TRTSDT, end_date = TRTEDT)
   A date or date-time object is expected.
 
   Refer to
-  [`derive_vars_dt()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/derive_vars_dt.md)
+  [`derive_vars_dt()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/derive_vars_dt.md)
   to impute and derive a date from a date character vector to a date
   object.
 
@@ -65,16 +65,16 @@ to end date plus one.
 
 ## See also
 
-[`derive_vars_duration()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/derive_vars_duration.md)
+[`derive_vars_duration()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/derive_vars_duration.md)
 
 Date/Time Derivation Functions that returns variable appended to
 dataset:
-[`derive_vars_dt()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/derive_vars_dt.md),
-[`derive_vars_dtm()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/derive_vars_dtm.md),
-[`derive_vars_dtm_to_dt()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/derive_vars_dtm_to_dt.md),
-[`derive_vars_dtm_to_tm()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/derive_vars_dtm_to_tm.md),
-[`derive_vars_duration()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/derive_vars_duration.md),
-[`derive_vars_dy()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/derive_vars_dy.md)
+[`derive_vars_dt()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/derive_vars_dt.md),
+[`derive_vars_dtm()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/derive_vars_dtm.md),
+[`derive_vars_dtm_to_dt()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/derive_vars_dtm_to_dt.md),
+[`derive_vars_dtm_to_tm()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/derive_vars_dtm_to_tm.md),
+[`derive_vars_duration()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/derive_vars_duration.md),
+[`derive_vars_dy()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/derive_vars_dy.md)
 
 ## Examples
 

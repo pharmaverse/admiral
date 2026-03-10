@@ -45,7 +45,7 @@ derive_vars_extreme_event(
   Permitted values
 
   :   list of variables created by
-      [`exprs()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/reexport-exprs.md),
+      [`exprs()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/reexport-exprs.md),
       e.g., `exprs(USUBJID, VISIT)`
 
   Default value
@@ -57,9 +57,9 @@ derive_vars_extreme_event(
   Conditions and new values defining events
 
   A list of
-  [`event()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/event.md)
+  [`event()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/event.md)
   or
-  [`event_joined()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/event_joined.md)
+  [`event_joined()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/event_joined.md)
   objects is expected. Only observations listed in the `events` are
   considered for deriving extreme event. If multiple records meet the
   filter `condition`, take the first record sorted by `order`. The data
@@ -68,9 +68,9 @@ derive_vars_extreme_event(
   [`any()`](https://rdrr.io/r/base/any.html) can be used in `condition`.
 
   For
-  [`event_joined()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/event_joined.md)
+  [`event_joined()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/event_joined.md)
   events the observations are selected by calling
-  [`filter_joined()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/filter_joined.md).
+  [`filter_joined()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/filter_joined.md).
   The `condition` field is passed to the `filter_join` argument.
 
   Default value
@@ -103,12 +103,12 @@ derive_vars_extreme_event(
 
   For handling of `NA`s in sorting variables see the "Sort Order"
   section in
-  [`vignette("generic")`](https:/pharmaverse.github.io/admiral/2952_tte/articles/generic.md).
+  [`vignette("generic")`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/articles/generic.md).
 
   Permitted values
 
   :   list of expressions created by
-      [`exprs()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/reexport-exprs.md),
+      [`exprs()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/reexport-exprs.md),
       e.g., `exprs(ADT, desc(AVAL))`
 
   Default value
@@ -136,9 +136,9 @@ derive_vars_extreme_event(
   Source datasets
 
   A named list of datasets is expected. The `dataset_name` field of
-  [`event()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/event.md)
+  [`event()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/event.md)
   and
-  [`event_joined()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/event_joined.md)
+  [`event_joined()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/event_joined.md)
   refers to the dataset provided in the list.
 
   Default value
@@ -187,7 +187,7 @@ added as new variables.
         (`mode`) observation per by group (`by_vars`) is selected.
 
         If the event is of class `event_joined`,
-        [`filter_joined()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/filter_joined.md)
+        [`filter_joined()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/filter_joined.md)
         is called to select the observations.
 
     2.  The variables specified by the `set_values_to` field of the
@@ -210,14 +210,14 @@ added as new variables.
 
 ## See also
 
-[`event()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/event.md),
-[`event_joined()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/event_joined.md),
-[`derive_extreme_event()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/derive_extreme_event.md)
+[`event()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/event.md),
+[`event_joined()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/event_joined.md),
+[`derive_extreme_event()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/derive_extreme_event.md)
 
 ADSL Functions that returns variable appended to dataset:
-[`derive_var_age_years()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/derive_var_age_years.md),
-[`derive_vars_aage()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/derive_vars_aage.md),
-[`derive_vars_period()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/derive_vars_period.md)
+[`derive_var_age_years()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/derive_var_age_years.md),
+[`derive_vars_aage()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/derive_vars_aage.md),
+[`derive_vars_period()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/derive_vars_period.md)
 
 ## Examples
 

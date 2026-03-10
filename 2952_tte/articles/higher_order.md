@@ -13,12 +13,12 @@ arguments, or the user needing many separate steps.
 
 The functions covered here are:
 
-- [`call_derivation()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/call_derivation.md):
+- [`call_derivation()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/call_derivation.md):
   Call a single derivation multiple times with some arguments being
   fixed across iterations and others varying
-- [`restrict_derivation()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/restrict_derivation.md):
+- [`restrict_derivation()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/restrict_derivation.md):
   Execute a single derivation on a subset of the input dataset
-- [`slice_derivation()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/slice_derivation.md):
+- [`slice_derivation()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/slice_derivation.md):
   The input dataset is split into slices (subsets) and for each slice a
   single derivation is called separately. Some or all arguments of the
   derivation may vary depending on the slice.
@@ -79,7 +79,7 @@ As an example, imagine the case where all the parameters in a BDS ADaM
 required both a highest value flag and a lowest value flag.
 
 Here is an example of how to achieve this **without** using
-[`call_derivation()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/call_derivation.md):
+[`call_derivation()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/call_derivation.md):
 
 ``` r
 vs_without <- vs %>%
@@ -98,9 +98,9 @@ vs_without <- vs %>%
 ```
 
 Here is an example of how to achieve the same **with** using
-[`call_derivation()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/call_derivation.md),
+[`call_derivation()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/call_derivation.md),
 where any different arguments are passed using
-[`params()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/params.md):
+[`params()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/params.md):
 
 ``` r
 vs_with <- vs %>%
@@ -126,7 +126,7 @@ with examples where more than two variable derivations had similar
 needs, such as the below case where multiple time to AE parameters are
 derived in one call. Note that this example relies on pre-defined
 `tte_source` objects, as explained at [Creating a BDS Time-to-Event
-ADaM](https:/pharmaverse.github.io/admiral/2952_tte/articles/bds_tte.md).
+ADaM](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/articles/bds_tte.md).
 
 ``` r
 adaette <- call_derivation(
@@ -159,7 +159,7 @@ adaette <- call_derivation(
 ```
 
 Developing your ADaM scripts this way using
-[`call_derivation()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/call_derivation.md)
+[`call_derivation()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/call_derivation.md)
 could give the following benefits:
 
 - code becomes more efficient and readable
@@ -170,7 +170,7 @@ could give the following benefits:
 
 The idea behind this function is that sometimes you want to apply a
 derivation only for certain records from the input dataset. Introducing
-[`restrict_derivation()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/restrict_derivation.md)
+[`restrict_derivation()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/restrict_derivation.md)
 therefore gives the users the ability to achieve this across any
 function, without each function needing to have such an argument to
 allow for this.
@@ -180,9 +180,9 @@ the highest severity for each patient, but you only wanted to do this
 for records occurring on or after study day 1.
 
 Here is how you could achieve this using
-[`restrict_derivation()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/restrict_derivation.md),
+[`restrict_derivation()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/restrict_derivation.md),
 where the function arguments are passed using
-[`params()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/params.md)
+[`params()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/params.md)
 and the restriction criteria is given using `filter`:
 
 ``` r
@@ -206,9 +206,9 @@ This function in a way combines the features of the above two. It allows
 a single derivation to be applied with different arguments for different
 slices (subsets) of records from the input dataset. You could do this
 with separate
-[`restrict_derivation()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/restrict_derivation.md)
+[`restrict_derivation()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/restrict_derivation.md)
 calls for each different set of records, but
-[`slice_derivation()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/slice_derivation.md)
+[`slice_derivation()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/slice_derivation.md)
 allows to achieve this in one call.
 
 An example would be if you wanted to achieve the same derivation as
@@ -216,9 +216,9 @@ above for records occurring on or after study day 1, but for
 pre-treatment AEs you wanted to flag only the last occurring AE.
 
 Here is how you could achieve this using
-[`slice_derivation()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/slice_derivation.md),
+[`slice_derivation()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/slice_derivation.md),
 where the function arguments are passed using
-[`params()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/params.md)
+[`params()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/params.md)
 and via the different slices controlled by `filter`:
 
 ``` r
@@ -285,19 +285,19 @@ remaining (i.e. not severe or moderate) records only.
 
 It is also possible to use two or more of the higher order functions in
 combination. The most likely use case is employing
-[`call_derivation()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/call_derivation.md)
+[`call_derivation()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/call_derivation.md)
 to repeat similar derivations multiple times, but within a call to
-[`restrict_derivation()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/restrict_derivation.md)
+[`restrict_derivation()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/restrict_derivation.md)
 to execute the derivations on a subset of the input dataset.
 
 For instance, let’s pick up VS from the
-[`call_derivation()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/call_derivation.md)
+[`call_derivation()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/call_derivation.md)
 example and suppose that we wish to derive the highest value and lowest
 value flags for just the temperature parameter. We can do this by
 ensuring that the derivation passed to
-[`restrict_derivation()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/restrict_derivation.md)
+[`restrict_derivation()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/restrict_derivation.md)
 is
-[`call_derivation()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/call_derivation.md),
+[`call_derivation()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/call_derivation.md),
 and that the arguments for the latter are all passed through `args`.
 
 ``` r

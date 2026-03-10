@@ -27,12 +27,12 @@ compute_duration(
   A date or date-time object is expected.
 
   Refer to
-  [`derive_vars_dt()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/derive_vars_dt.md)
+  [`derive_vars_dt()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/derive_vars_dt.md)
   to impute and derive a date from a date character vector to a date
   object.
 
   Refer to
-  [`convert_dtc_to_dt()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/convert_dtc_to_dt.md)
+  [`convert_dtc_to_dt()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/convert_dtc_to_dt.md)
   to obtain a vector of imputed dates.
 
   Default value
@@ -46,12 +46,12 @@ compute_duration(
   A date or date-time object is expected.
 
   Refer to
-  [`derive_vars_dt()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/derive_vars_dt.md)
+  [`derive_vars_dt()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/derive_vars_dt.md)
   to impute and derive a date from a date character vector to a date
   object.
 
   Refer to
-  [`convert_dtc_to_dt()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/convert_dtc_to_dt.md)
+  [`convert_dtc_to_dt()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/convert_dtc_to_dt.md)
   to obtain a vector of imputed dates.
 
   Default value
@@ -200,18 +200,18 @@ page](https://lubridate.tidyverse.org/reference/timespan.html).
 
 ## See also
 
-[`derive_vars_duration()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/derive_vars_duration.md)
+[`derive_vars_duration()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/derive_vars_duration.md)
 
 Date/Time Computation Functions that returns a vector:
-[`compute_age_years()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/compute_age_years.md),
-[`compute_dtf()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/compute_dtf.md),
-[`compute_tmf()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/compute_tmf.md),
-[`convert_date_to_dtm()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/convert_date_to_dtm.md),
-[`convert_dtc_to_dt()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/convert_dtc_to_dt.md),
-[`convert_dtc_to_dtm()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/convert_dtc_to_dtm.md),
-[`convert_xxtpt_to_hours()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/convert_xxtpt_to_hours.md),
-[`impute_dtc_dt()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/impute_dtc_dt.md),
-[`impute_dtc_dtm()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/impute_dtc_dtm.md)
+[`compute_age_years()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/compute_age_years.md),
+[`compute_dtf()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/compute_dtf.md),
+[`compute_tmf()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/compute_tmf.md),
+[`convert_date_to_dtm()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/convert_date_to_dtm.md),
+[`convert_dtc_to_dt()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/convert_dtc_to_dt.md),
+[`convert_dtc_to_dtm()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/convert_dtc_to_dtm.md),
+[`convert_xxtpt_to_hours()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/convert_xxtpt_to_hours.md),
+[`impute_dtc_dt()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/impute_dtc_dt.md),
+[`impute_dtc_dtm()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/impute_dtc_dtm.md)
 
 ## Examples
 

@@ -59,7 +59,7 @@ create_period_dataset(
   Variables to uniquely identify a subject
 
   A list of expressions where the expressions are symbols as returned by
-  [`exprs()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/reexport-exprs.md)
+  [`exprs()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/reexport-exprs.md)
   is expected.
 
   Default value
@@ -86,12 +86,12 @@ side).
 
 ## See also
 
-[`derive_vars_period()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/derive_vars_period.md)
+[`derive_vars_period()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/derive_vars_period.md)
 
 Creating auxiliary datasets:
-[`consolidate_metadata()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/consolidate_metadata.md),
-[`create_query_data()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/create_query_data.md),
-[`create_single_dose_dataset()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/create_single_dose_dataset.md)
+[`consolidate_metadata()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/consolidate_metadata.md),
+[`create_query_data()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/create_query_data.md),
+[`create_single_dose_dataset()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/create_single_dose_dataset.md)
 
 ## Examples
 

@@ -35,12 +35,12 @@ compared.
 ## See also
 
 Utilities used for date imputation:
-[`dtm_level()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/dtm_level.md),
-[`get_imputation_target_date()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/get_imputation_target_date.md),
-[`get_imputation_target_time()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/get_imputation_target_time.md),
-[`get_partialdatetime()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/get_partialdatetime.md),
-[`restrict_imputed_dtc_dt()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/restrict_imputed_dtc_dt.md),
-[`restrict_imputed_dtc_dtm()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/restrict_imputed_dtc_dtm.md)
+[`dtm_level()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/dtm_level.md),
+[`get_imputation_target_date()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/get_imputation_target_date.md),
+[`get_imputation_target_time()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/get_imputation_target_time.md),
+[`get_partialdatetime()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/get_partialdatetime.md),
+[`restrict_imputed_dtc_dt()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/restrict_imputed_dtc_dt.md),
+[`restrict_imputed_dtc_dtm()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/restrict_imputed_dtc_dtm.md)
 
 ## Examples
 

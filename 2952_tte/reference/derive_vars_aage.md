@@ -3,7 +3,7 @@
 Derives analysis age (`AAGE`) and analysis age unit (`AAGEU`).
 
 **Note:** This is a wrapper function for the more generic
-[`derive_vars_duration()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/derive_vars_duration.md).
+[`derive_vars_duration()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/derive_vars_duration.md).
 
 ## Usage
 
@@ -37,7 +37,7 @@ derive_vars_aage(
   A date or date-time object is expected.
 
   Refer to
-  [`derive_vars_dt()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/derive_vars_dt.md)
+  [`derive_vars_dt()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/derive_vars_dt.md)
   to impute and derive a date from a date character vector to a date
   object.
 
@@ -52,7 +52,7 @@ derive_vars_aage(
   A date or date-time object is expected.
 
   Refer to
-  [`derive_vars_dt()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/derive_vars_dt.md)
+  [`derive_vars_dt()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/derive_vars_dt.md)
   to impute and derive a date from a date character vector to a date
   object.
 
@@ -134,12 +134,12 @@ page](https://lubridate.tidyverse.org/reference/timespan.html).
 
 ## See also
 
-[`derive_vars_duration()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/derive_vars_duration.md)
+[`derive_vars_duration()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/derive_vars_duration.md)
 
 ADSL Functions that returns variable appended to dataset:
-[`derive_var_age_years()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/derive_var_age_years.md),
-[`derive_vars_extreme_event()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/derive_vars_extreme_event.md),
-[`derive_vars_period()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/derive_vars_period.md)
+[`derive_var_age_years()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/derive_var_age_years.md),
+[`derive_vars_extreme_event()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/derive_vars_extreme_event.md),
+[`derive_vars_period()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/derive_vars_period.md)
 
 ## Examples
 

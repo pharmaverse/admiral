@@ -68,13 +68,13 @@ No return values, called for side effects
 
 Running without any arguments such as `use_ad_template()` auto-generates
 `adsl.R` in the current path. Use
-[`list_all_templates()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/list_all_templates.md)
+[`list_all_templates()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/list_all_templates.md)
 to discover which templates are available.
 
 ## See also
 
 Utilities used for examples and template scripts:
-[`list_all_templates()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/list_all_templates.md)
+[`list_all_templates()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/list_all_templates.md)
 
 ## Examples
 

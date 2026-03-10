@@ -1,9 +1,9 @@
 # Get Highest Imputation Level
 
 Returns the
-[`dt_level()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/dt_level.md)
+[`dt_level()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/dt_level.md)
 or
-[`dtm_level()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/dtm_level.md)
+[`dtm_level()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/dtm_level.md)
 representation of the `highest_imputation` character value. The level
 object allows comparisons of levels.
 
@@ -34,9 +34,9 @@ get_highest_imputation_level(highest_imputation, create_datetime)
 ## Value
 
 A
-[`dt_level()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/dt_level.md)
+[`dt_level()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/dt_level.md)
 or
-[`dtm_level()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/dtm_level.md)
+[`dtm_level()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/dtm_level.md)
 object representing the highest imputation level.
 
 ## Examples

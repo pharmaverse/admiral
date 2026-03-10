@@ -28,14 +28,14 @@ The return value of the function call
 ## See also
 
 Other deprecated:
-[`date_source()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/date_source.md),
-[`derive_param_extreme_record()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/derive_param_extreme_record.md),
-[`derive_var_dthcaus()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/derive_var_dthcaus.md),
-[`derive_var_extreme_dt()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/derive_var_extreme_dt.md),
-[`derive_var_extreme_dtm()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/derive_var_extreme_dtm.md),
-[`derive_var_merged_summary()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/derive_var_merged_summary.md),
-[`dthcaus_source()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/dthcaus_source.md),
-[`get_summary_records()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/get_summary_records.md)
+[`date_source()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/date_source.md),
+[`derive_param_extreme_record()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/derive_param_extreme_record.md),
+[`derive_var_dthcaus()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/derive_var_dthcaus.md),
+[`derive_var_extreme_dt()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/derive_var_extreme_dt.md),
+[`derive_var_extreme_dtm()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/derive_var_extreme_dtm.md),
+[`derive_var_merged_summary()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/derive_var_merged_summary.md),
+[`dthcaus_source()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/dthcaus_source.md),
+[`get_summary_records()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/get_summary_records.md)
 
 ## Examples
 

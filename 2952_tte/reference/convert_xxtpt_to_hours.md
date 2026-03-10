@@ -208,15 +208,15 @@ lengths).
 ## See also
 
 Date/Time Computation Functions that returns a vector:
-[`compute_age_years()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/compute_age_years.md),
-[`compute_dtf()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/compute_dtf.md),
-[`compute_duration()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/compute_duration.md),
-[`compute_tmf()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/compute_tmf.md),
-[`convert_date_to_dtm()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/convert_date_to_dtm.md),
-[`convert_dtc_to_dt()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/convert_dtc_to_dt.md),
-[`convert_dtc_to_dtm()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/convert_dtc_to_dtm.md),
-[`impute_dtc_dt()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/impute_dtc_dt.md),
-[`impute_dtc_dtm()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/impute_dtc_dtm.md)
+[`compute_age_years()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/compute_age_years.md),
+[`compute_dtf()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/compute_dtf.md),
+[`compute_duration()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/compute_duration.md),
+[`compute_tmf()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/compute_tmf.md),
+[`convert_date_to_dtm()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/convert_date_to_dtm.md),
+[`convert_dtc_to_dt()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/convert_dtc_to_dt.md),
+[`convert_dtc_to_dtm()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/convert_dtc_to_dtm.md),
+[`impute_dtc_dt()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/impute_dtc_dt.md),
+[`impute_dtc_dtm()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/impute_dtc_dtm.md)
 
 ## Examples
 

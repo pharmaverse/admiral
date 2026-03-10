@@ -200,7 +200,7 @@ derive_var_trtemfl(
   Permitted values
 
   :   list of variables created by
-      [`exprs()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/reexport-exprs.md),
+      [`exprs()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/reexport-exprs.md),
       e.g., `exprs(USUBJID, VISIT)`
 
   Default value
@@ -258,8 +258,8 @@ See the final example in the examples section below.
 ## See also
 
 OCCDS Functions:
-[`derive_vars_atc()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/derive_vars_atc.md),
-[`derive_vars_query()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/derive_vars_query.md)
+[`derive_vars_atc()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/derive_vars_atc.md),
+[`derive_vars_query()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/derive_vars_query.md)
 
 ## Examples
 

@@ -2,7 +2,7 @@
 
 **\[deprecated\]** The `derive_var_dthcaus()` function has been
 deprecated in favor of
-[`derive_vars_extreme_event()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/derive_vars_extreme_event.md).
+[`derive_vars_extreme_event()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/derive_vars_extreme_event.md).
 
 Derive death cause (`DTHCAUS`) and add traceability variables if
 required.
@@ -34,7 +34,7 @@ derive_var_dthcaus(
 - ...:
 
   Objects of class "dthcaus_source" created by
-  [`dthcaus_source()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/dthcaus_source.md).
+  [`dthcaus_source()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/dthcaus_source.md).
 
   Default value
 
@@ -54,7 +54,7 @@ derive_var_dthcaus(
   Variables to uniquely identify a subject
 
   A list of expressions where the expressions are symbols as returned by
-  [`exprs()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/reexport-exprs.md)
+  [`exprs()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/reexport-exprs.md)
   is expected.
 
   Default value
@@ -75,17 +75,17 @@ user should provide the inputs in the preferred order.
 
 ## See also
 
-[`dthcaus_source()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/dthcaus_source.md)
+[`dthcaus_source()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/dthcaus_source.md)
 
 Other deprecated:
-[`call_user_fun()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/call_user_fun.md),
-[`date_source()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/date_source.md),
-[`derive_param_extreme_record()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/derive_param_extreme_record.md),
-[`derive_var_extreme_dt()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/derive_var_extreme_dt.md),
-[`derive_var_extreme_dtm()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/derive_var_extreme_dtm.md),
-[`derive_var_merged_summary()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/derive_var_merged_summary.md),
-[`dthcaus_source()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/dthcaus_source.md),
-[`get_summary_records()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/get_summary_records.md)
+[`call_user_fun()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/call_user_fun.md),
+[`date_source()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/date_source.md),
+[`derive_param_extreme_record()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/derive_param_extreme_record.md),
+[`derive_var_extreme_dt()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/derive_var_extreme_dt.md),
+[`derive_var_extreme_dtm()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/derive_var_extreme_dtm.md),
+[`derive_var_merged_summary()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/derive_var_merged_summary.md),
+[`dthcaus_source()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/dthcaus_source.md),
+[`get_summary_records()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/get_summary_records.md)
 
 ## Examples
 
