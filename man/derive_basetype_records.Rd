@@ -48,8 +48,31 @@ the provided expression and the \code{BASETYPE} variable is set to the name of t
 expression. Then, all subsets are stacked. Records which do not match any
 condition are kept and \code{BASETYPE} is set to \code{NA}.
 }
-\examples{
-library(tibble)
+\seealso{
+BDS-Findings Functions that returns variable appended to dataset:
+\code{\link{derive_var_analysis_ratio}()},
+\code{\link{derive_var_anrind}()},
+\code{\link{derive_var_atoxgr}()},
+\code{\link{derive_var_atoxgr_dir}()},
+\code{\link{derive_var_base}()},
+\code{\link{derive_var_chg}()},
+\code{\link{derive_var_nfrlt}()},
+\code{\link{derive_var_ontrtfl}()},
+\code{\link{derive_var_pchg}()},
+\code{\link{derive_var_shift}()},
+\code{\link{derive_vars_crit_flag}()}
+}
+\concept{der_bds_findings}
+\keyword{der_bds_findings}
+\section{Examples}{
+\subsection{Derive \code{BASETYPE} based on epoch (\code{basetypes})}{
+
+The \code{basetypes} argument is a named list of expressions where each name
+becomes a value of \code{BASETYPE} and each expression defines which records
+receive that value. A record can match multiple expressions and will be
+duplicated once for each matching \code{BASETYPE}.
+
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{library(tibble)
 library(dplyr, warn.conflicts = FALSE)
 
 bds <- tribble(
@@ -67,7 +90,7 @@ bds <- tribble(
   "P02",    "OPEN-LABEL",   "PARAM01",     5,  10.8
 )
 
-bds_with_basetype <- derive_basetype_records(
+derive_basetype_records(
   dataset = bds,
   basetypes = exprs(
     "RUN-IN" = EPOCH \%in\% c("RUN-IN", "STABILIZATION", "DOUBLE-BLIND", "OPEN-LABEL"),
@@ -75,17 +98,68 @@ bds_with_basetype <- derive_basetype_records(
     "OPEN-LABEL" = EPOCH == "OPEN-LABEL"
   )
 )
+#> # A tibble: 23 × 6
+#>    USUBJID EPOCH        PARAMCD  ASEQ  AVAL BASETYPE
+#>    <chr>   <chr>        <chr>   <dbl> <dbl> <chr>   
+#>  1 P01     RUN-IN       PARAM01     1  10   RUN-IN  
+#>  2 P01     RUN-IN       PARAM01     2   9.8 RUN-IN  
+#>  3 P01     DOUBLE-BLIND PARAM01     3   9.2 RUN-IN  
+#>  4 P01     DOUBLE-BLIND PARAM01     4  10.1 RUN-IN  
+#>  5 P01     OPEN-LABEL   PARAM01     5  10.4 RUN-IN  
+#>  6 P01     OPEN-LABEL   PARAM01     6   9.9 RUN-IN  
+#>  7 P02     RUN-IN       PARAM01     1  12.1 RUN-IN  
+#>  8 P02     DOUBLE-BLIND PARAM01     2  10.2 RUN-IN  
+#>  9 P02     DOUBLE-BLIND PARAM01     3  10.8 RUN-IN  
+#> 10 P02     OPEN-LABEL   PARAM01     4  11.4 RUN-IN  
+#> # i 13 more rows}\if{html}{\out{</div>}}}
+\subsection{Records not matching any condition are retained with \code{BASETYPE = NA}}{
 
+Records that do not match any condition in \code{basetypes} are kept in the
+output dataset with \code{BASETYPE} set to \code{NA}. In this example, \code{SCREENING}
+records do not match any of the \code{basetypes} conditions and are therefore
+retained with \code{BASETYPE = NA}.
 
-# Below print statement will print all 23 records in the data frame
-# bds_with_basetype
-print(bds_with_basetype, n = Inf)
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{bds <- tribble(
+  ~USUBJID, ~EPOCH,         ~PARAMCD,  ~ASEQ, ~AVAL,
+  "P01",    "SCREENING",    "PARAM01",     1,  10.2,
+  "P01",    "RUN-IN",       "PARAM01",     2,  10.0,
+  "P01",    "RUN-IN",       "PARAM01",     3,   9.8,
+  "P01",    "DOUBLE-BLIND", "PARAM01",     4,   9.2,
+  "P01",    "DOUBLE-BLIND", "PARAM01",     5,  10.1,
+  "P02",    "SCREENING",    "PARAM01",     1,  12.2,
+  "P02",    "RUN-IN",       "PARAM01",     2,  12.1,
+  "P02",    "DOUBLE-BLIND", "PARAM01",     3,  10.2
+)
 
-count(bds_with_basetype, BASETYPE, name = "Number of Records")
+derive_basetype_records(
+  dataset = bds,
+  basetypes = exprs(
+    "RUN-IN" = EPOCH \%in\% c("RUN-IN", "DOUBLE-BLIND"),
+    "DOUBLE-BLIND" = EPOCH == "DOUBLE-BLIND"
+  )
+)
+#> # A tibble: 11 × 6
+#>    USUBJID EPOCH        PARAMCD  ASEQ  AVAL BASETYPE    
+#>    <chr>   <chr>        <chr>   <dbl> <dbl> <chr>       
+#>  1 P01     SCREENING    PARAM01     1  10.2 <NA>        
+#>  2 P02     SCREENING    PARAM01     1  12.2 <NA>        
+#>  3 P01     RUN-IN       PARAM01     2  10   RUN-IN      
+#>  4 P01     RUN-IN       PARAM01     3   9.8 RUN-IN      
+#>  5 P01     DOUBLE-BLIND PARAM01     4   9.2 RUN-IN      
+#>  6 P01     DOUBLE-BLIND PARAM01     5  10.1 RUN-IN      
+#>  7 P02     RUN-IN       PARAM01     2  12.1 RUN-IN      
+#>  8 P02     DOUBLE-BLIND PARAM01     3  10.2 RUN-IN      
+#>  9 P01     DOUBLE-BLIND PARAM01     4   9.2 DOUBLE-BLIND
+#> 10 P01     DOUBLE-BLIND PARAM01     5  10.1 DOUBLE-BLIND
+#> 11 P02     DOUBLE-BLIND PARAM01     3  10.2 DOUBLE-BLIND}\if{html}{\out{</div>}}}
+\subsection{Include all records for multiple baseline type derivations (\code{basetypes = TRUE})}{
 
-# An example where all parameter records need to be included for 2 different
-# baseline type derivations (such as LAST and WORST)
-bds <- tribble(
+When all parameter records need to be included for multiple baseline
+type derivations (such as \code{"LAST"} and \code{"WORST"}), set each expression in
+\code{basetypes} to \code{TRUE}. This duplicates every record once for each named
+baseline type.
+
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{bds <- tribble(
   ~USUBJID, ~EPOCH,         ~PARAMCD,  ~ASEQ, ~AVAL,
   "P01",    "RUN-IN",       "PARAM01",     1,  10.0,
   "P01",    "RUN-IN",       "PARAM01",     2,   9.8,
@@ -93,31 +167,22 @@ bds <- tribble(
   "P01",    "DOUBLE-BLIND", "PARAM01",     4,  10.1
 )
 
-bds_with_basetype <- derive_basetype_records(
+derive_basetype_records(
   dataset = bds,
   basetypes = exprs(
     "LAST" = TRUE,
     "WORST" = TRUE
   )
 )
+#> # A tibble: 8 × 6
+#>   USUBJID EPOCH        PARAMCD  ASEQ  AVAL BASETYPE
+#>   <chr>   <chr>        <chr>   <dbl> <dbl> <chr>   
+#> 1 P01     RUN-IN       PARAM01     1  10   LAST    
+#> 2 P01     RUN-IN       PARAM01     2   9.8 LAST    
+#> 3 P01     DOUBLE-BLIND PARAM01     3   9.2 LAST    
+#> 4 P01     DOUBLE-BLIND PARAM01     4  10.1 LAST    
+#> 5 P01     RUN-IN       PARAM01     1  10   WORST   
+#> 6 P01     RUN-IN       PARAM01     2   9.8 WORST   
+#> 7 P01     DOUBLE-BLIND PARAM01     3   9.2 WORST   
+#> 8 P01     DOUBLE-BLIND PARAM01     4  10.1 WORST   }\if{html}{\out{</div>}}}}
 
-print(bds_with_basetype, n = Inf)
-
-count(bds_with_basetype, BASETYPE, name = "Number of Records")
-}
-\seealso{
-BDS-Findings Functions that returns variable appended to dataset:
-\code{\link{derive_var_analysis_ratio}()},
-\code{\link{derive_var_anrind}()},
-\code{\link{derive_var_atoxgr}()},
-\code{\link{derive_var_atoxgr_dir}()},
-\code{\link{derive_var_base}()},
-\code{\link{derive_var_chg}()},
-\code{\link{derive_var_nfrlt}()},
-\code{\link{derive_var_ontrtfl}()},
-\code{\link{derive_var_pchg}()},
-\code{\link{derive_var_shift}()},
-\code{\link{derive_vars_crit_flag}()}
-}
-\concept{der_bds_findings}
-\keyword{der_bds_findings}
