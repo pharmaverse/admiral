@@ -40,6 +40,12 @@
   for authorship/acknowledgments.
   ([\#2979](https://github.com/pharmaverse/admiral/issues/2979))
 
+- Additional information about timing variable conventions has been
+  added to the
+  [`derive_vars_dy()`](https:/pharmaverse.github.io/admiral/cran-release/main/reference/derive_vars_dy.md)
+  function documentation.
+  ([\#2995](https://github.com/pharmaverse/admiral/issues/2995))
+
 ### Various
 
 Developer Notes
