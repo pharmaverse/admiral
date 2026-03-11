@@ -10,7 +10,7 @@ jobs:
     permissions:
       contents: write
       pull-requests: write
-    uses: pharmaverse/admiralci/.github/workflows/create-agents-md.yml
+    uses: pharmaverse/admiralci/.github/workflows/create-agents-md.yml@main
     with:
       package_name: admiral
       target_branch: main
