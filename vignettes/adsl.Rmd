@@ -835,4 +835,4 @@ and perform associated checks can be found at the [pharmaverse E2E example](http
 
 ADaM | Sourcing Command
 ---- | --------------
-ADSL | `use_ad_template("ADSL")`
+[`ADSL`](templates.html#adsl) | `use_ad_template("ADSL")`
