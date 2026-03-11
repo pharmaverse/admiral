@@ -4,6 +4,8 @@
 
 ## Updates of Existing Functions
 
+- Fixed poorly formatted warning messages in `derive_param_computed()` and `derive_vars_computed()`. (#2969)
+
 ## Breaking Changes
 
 - The following function arguments are entering the next phase of the [deprecation process](https://pharmaverse.github.io/admiraldev/articles/programming_strategy.html#deprecation): 
@@ -29,10 +31,6 @@ of packages were updated to specify the level of contributions required for auth
 - Additional information about timing variable conventions has been added to the `derive_vars_dy()` function documentation. (#2995)
 
 - Added IDs to each template script in the "Explore ADaM Templates" vignette, enabling links to them from across the website. (#3006)
-
-## Bug Fixes
-
-- Fixed poorly formatted warning messages in `derive_param_computed()` and `derive_vars_computed()`. (#2969)
 
 ## Various
 
