@@ -46,9 +46,9 @@ test_that("derive_vars_computed Test 1: new variable is derived correctly", {
   )
 })
 
-## Test 4: no new variables added if filtered dataset is empty (non-existent value) ----
+## Test 2: no new variables added if filtered dataset is empty (non-existent value) ----
 test_that(
-  "derive_vars_computed Test 4: no new variables added if filtered dataset is empty (non-existent value)", # nolint
+  "derive_vars_computed Test 2: no new variables added if filtered dataset is empty (non-existent value)", # nolint
   {
     adsl <- tribble(
       ~STUDYID,   ~USUBJID, ~AGE,   ~AGEU,

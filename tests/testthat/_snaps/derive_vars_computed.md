@@ -1,4 +1,4 @@
-# derive_vars_computed Test 4: no new variables added if filtered dataset is empty (non-existent value)
+# derive_vars_computed Test 2: no new variables added if filtered dataset is empty (non-existent value)
 
     Code
       result <- derive_vars_computed(dataset = adsl, dataset_add = advs, by_vars = exprs(
