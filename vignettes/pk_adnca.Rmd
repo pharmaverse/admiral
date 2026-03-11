@@ -1498,7 +1498,7 @@ E2E example](https://pharmaverse.github.io/examples/adam/adsl).
 
 # Example Scripts {#example}
 
-| ADaM                            | Sourcing Command           |
-|---------------------------------|----------------------------|
-| [`ADPC`](templates.html#adpc)   | `use_ad_template("ADPC")`  |
-| [`ADPPK`](templates.html#adppk) | `use_ad_template("ADPPK")` |
+ADaM | Sourcing Command
+---- | --------------
+| [`ADPC`](templates.html#adpc)   | `use_ad_template("ADPC")`
+| [`ADPPK`](templates.html#adppk) | `use_ad_template("ADPPK")`

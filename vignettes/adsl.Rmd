@@ -833,6 +833,6 @@ and perform associated checks can be found at the [pharmaverse E2E example](http
 
 # Example Script 
 
-ADaM                          | Sourcing Command
------------------------------ | --------------
+ADaM | Sourcing Command
+---- | --------------
 [`ADSL`](templates.html#adsl) | `use_ad_template("ADSL")`
