@@ -26,6 +26,10 @@ of the navigation bar. Tooltips have also been set up for each of the icons on t
 - The [contributions guidelines](https://pharmaverse.github.io/admiral/cran-release/CONTRIBUTING.html) for the `{admiral}` ecosystem 
 of packages were updated to specify the level of contributions required for authorship/acknowledgments. (#2979)
 
+- Additional information about timing variable conventions has been added to the `derive_vars_dy()` function documentation. (#2995)
+
+- Added IDs to each template script in the "Explore ADaM Templates" vignette, enabling links to them from across the website. (#3006)
+
 ## Various
 
 <details>
@@ -35,6 +39,9 @@ of packages were updated to specify the level of contributions required for auth
 
 - Creating the website for pull requests was enabled. Add "[create website]" to
 the pull request title to trigger website creation. (#2984)
+
+- `_pkdown.yml` was updated to add metadata for linking across packages
+(`inst/pkgdown.yml`). (#2950)
 </details>
 
 # admiral 1.4.1

@@ -595,5 +595,5 @@ and perform associated checks can be found at the [pharmaverse E2E example](http
 
 ADaM | Sourcing Command
 ---- | --------------
-ADAE | `use_ad_template("ADAE")`
-ADCM | `use_ad_template("ADCM")`
+[`ADAE`](templates.html#adae) | `use_ad_template("ADAE")`
+[`ADCM`](templates.html#adcm) | `use_ad_template("ADCM")`
