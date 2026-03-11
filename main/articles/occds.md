@@ -539,7 +539,7 @@ E2E example](https://pharmaverse.github.io/examples/adam/adsl).
 
 ## Example Scripts
 
-| ADaM | Sourcing Command          |
-|------|---------------------------|
-| ADAE | `use_ad_template("ADAE")` |
-| ADCM | `use_ad_template("ADCM")` |
+| ADaM                                                                                          | Sourcing Command          |
+|-----------------------------------------------------------------------------------------------|---------------------------|
+| [`ADAE`](https:/pharmaverse.github.io/admiral/cran-release/main/articles/templates.html#adae) | `use_ad_template("ADAE")` |
+| [`ADCM`](https:/pharmaverse.github.io/admiral/cran-release/main/articles/templates.html#adcm) | `use_ad_template("ADCM")` |

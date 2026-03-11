@@ -943,8 +943,8 @@ E2E example](https://pharmaverse.github.io/examples/adam/adsl).
 
 ## Example Scripts
 
-| ADaM | Sourcing Command          |
-|------|---------------------------|
-| ADEG | `use_ad_template("ADEG")` |
-| ADVS | `use_ad_template("ADVS")` |
-| ADLB | `use_ad_template("ADLB")` |
+| ADaM                                                                                          | Sourcing Command          |
+|-----------------------------------------------------------------------------------------------|---------------------------|
+| [`ADEG`](https:/pharmaverse.github.io/admiral/cran-release/main/articles/templates.html#adeg) | `use_ad_template("ADEG")` |
+| [`ADVS`](https:/pharmaverse.github.io/admiral/cran-release/main/articles/templates.html#advs) | `use_ad_template("ADVS")` |
+| [`ADLB`](https:/pharmaverse.github.io/admiral/cran-release/main/articles/templates.html#adlb) | `use_ad_template("ADLB")` |

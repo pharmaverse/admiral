@@ -46,6 +46,10 @@
   function documentation.
   ([\#2995](https://github.com/pharmaverse/admiral/issues/2995))
 
+- Added IDs to each template script in the “Explore ADaM Templates”
+  vignette, enabling links to them from across the website.
+  ([\#3006](https://github.com/pharmaverse/admiral/issues/3006))
+
 ### Various
 
 Developer Notes
