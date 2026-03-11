@@ -28,6 +28,8 @@ of packages were updated to specify the level of contributions required for auth
 
 - Additional information about timing variable conventions has been added to the `derive_vars_dy()` function documentation. (#2995)
 
+- Added IDs to each template script in the "Explore ADaM Templates" vignette, enabling links to them from across the website. (#3006)
+
 ## Various
 
 <details>

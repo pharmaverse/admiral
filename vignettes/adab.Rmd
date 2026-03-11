@@ -1680,4 +1680,4 @@ example](https://pharmaverse.github.io/examples/adam/adsl).
 
 ADaM | Sourcing Command
 ---- | --------------
-ADAB | `use_ad_template("ADAB")`
+[`ADAB`](templates.html#adab) | `use_ad_template("ADAB")`
