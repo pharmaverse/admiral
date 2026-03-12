@@ -6,6 +6,10 @@
 
 - Fixed poorly formatted warning messages in `derive_param_computed()` and `derive_vars_computed()`. (#2969)
 
+- `use_ad_template()` was updated to remove the `open` argument, meaning the generated template will never automatically open
+in a new window, and will instead just be accessible by clicking the link outputted in the console or going to the path
+specified under `save_path`. This is because this functionality did not work as expected outside of RStudio. (#2989)
+
 ## Breaking Changes
 
 - The following function arguments are entering the next phase of the [deprecation process](https://pharmaverse.github.io/admiraldev/articles/programming_strategy.html#deprecation): 
@@ -36,6 +40,8 @@ of packages were updated to specify the level of contributions required for auth
 
 <details>
 <summary>Developer Notes</summary>
+
+- Add instructions for AI coding agents: Workflow from `{admiralci}` copies information from `{admiraldev}` to `AGENTS.md` instruction files. (#2920)
 
 - Increased the maximum height of the drop-down menus in the website navigation bar to ensure all items are visible without scrolling. (#2974)
 
