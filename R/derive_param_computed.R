@@ -641,15 +641,25 @@ get_hori_data <- function(dataset,
     bind_rows(new_data) %>%
     filter(PARAMCD %in% param_values)
 
+  filter_msg <- if (is.null(filter)) {
+    paste0(
+      "The input dataset does not contain any observations for the ",
+      "parameter codes ({.code PARAMCD}): "
+    )
+  } else {
+    paste0(
+      "The input dataset does not contain any observations fulfilling the filter condition (",
+      "{.code {rlang::expr_text(filter)}}",
+      ") for the parameter codes ({.code PARAMCD}): "
+    )
+  }
+
   if (nrow(data_parameters) == 0L) {
     cli_warn(
-      c(paste0(
-        "The input dataset does not contain any observations fullfiling the filter condition (",
-        "{.code {expr_label(filter)}}}",
-        ") for the parameter codes (PARAMCD) ",
-        "{.val {param_values}}",
+      c(
+        paste0(filter_msg, "{.val {param_values}}."),
         i = "No new observations were added."
-      ))
+      )
     )
     return(list(hori_data = NULL))
   }
@@ -658,11 +668,8 @@ get_hori_data <- function(dataset,
   params_missing <- setdiff(param_values, params_available)
   if (length(params_missing) > 0) {
     cli_warn(
-      paste0(
-        "The input dataset does not contain any observations fullfiling the filter condition (",
-        "{.code {expr_label(filter)}}",
-        ") for the parameter codes (PARAMCD) ",
-        "{.val {params_missing}}",
+      c(
+        paste0(filter_msg, "{.val {params_missing}}."),
         i = "No new observations were added."
       )
     )

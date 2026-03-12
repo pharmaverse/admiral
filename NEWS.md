@@ -4,6 +4,8 @@
 
 ## Updates of Existing Functions
 
+- Fixed poorly formatted warning messages in `derive_param_computed()` and `derive_vars_computed()`. (#2969)
+
 - `use_ad_template()` was updated to remove the `open` argument, meaning the generated template will never automatically open
 in a new window, and will instead just be accessible by clicking the link outputted in the console or going to the path
 specified under `save_path`. This is because this functionality did not work as expected outside of RStudio. (#2989)
