@@ -1,0 +1,17 @@
+name: Create the AGENTS.md
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '0 8 15 * *'
+
+jobs:
+  create-agents-md:
+    permissions:
+      contents: write
+      pull-requests: write
+    uses: pharmaverse/admiralci/.github/workflows/create-agents-md.yml@main
+    with:
+      package_name: admiral
+      target_branch: main
+      admiralci_ref: main
