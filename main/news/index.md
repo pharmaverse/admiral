@@ -6,6 +6,12 @@
 
 ### Updates of Existing Functions
 
+- Fixed poorly formatted warning messages in
+  [`derive_param_computed()`](https:/pharmaverse.github.io/admiral/cran-release/main/reference/derive_param_computed.md)
+  and
+  [`derive_vars_computed()`](https:/pharmaverse.github.io/admiral/cran-release/main/reference/derive_vars_computed.md).
+  ([\#2969](https://github.com/pharmaverse/admiral/issues/2969))
+
 - [`use_ad_template()`](https:/pharmaverse.github.io/admiral/cran-release/main/reference/use_ad_template.md)
   was updated to remove the `open` argument, meaning the generated
   template will never automatically open in a new window, and will
