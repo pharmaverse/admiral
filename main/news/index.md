@@ -6,6 +6,15 @@
 
 ### Updates of Existing Functions
 
+- [`use_ad_template()`](https:/pharmaverse.github.io/admiral/cran-release/main/reference/use_ad_template.md)
+  was updated to remove the `open` argument, meaning the generated
+  template will never automatically open in a new window, and will
+  instead just be accessible by clicking the link outputted in the
+  console or going to the path specified under `save_path`. This is
+  because this functionality did not work as expected outside of
+  RStudio.
+  ([\#2989](https://github.com/pharmaverse/admiral/issues/2989))
+
 ### Breaking Changes
 
 - The following function arguments are entering the next phase of the
