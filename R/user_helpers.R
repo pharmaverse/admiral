@@ -7,7 +7,6 @@
 #' @param save_path Path to save the script.
 #' @param package The R package in which to look for templates. By default `"admiral"`.
 #' @param overwrite Whether to overwrite an existing file named `save_path`.
-#' @param open Whether to open the script right away.
 #'
 #' @return No return values, called for side effects
 #'
@@ -26,13 +25,11 @@
 use_ad_template <- function(adam_name = "adsl",
                             save_path = paste0("./", adam_name, ".R"),
                             package = "admiral",
-                            overwrite = FALSE,
-                            open = interactive()) {
+                            overwrite = FALSE) {
   assert_character_scalar(adam_name)
   assert_character_scalar(save_path)
   assert_character_scalar(package)
   assert_logical_scalar(overwrite)
-  assert_logical_scalar(open)
 
   if (!toupper(adam_name) %in% list_all_templates(package)) {
     cli_abort(c(
@@ -58,10 +55,6 @@ use_ad_template <- function(adam_name = "adsl",
 
   if (file.copy(template_file, save_path, overwrite = TRUE)) {
     cli_inform(c(v = "File {.file {save_path}} has been created successfully"))
-  }
-
-  if (open) {
-    file.edit(save_path) # nocov
   }
 
   invisible(TRUE)

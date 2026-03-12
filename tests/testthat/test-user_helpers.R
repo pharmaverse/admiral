@@ -24,7 +24,7 @@ test_that("list_all_templates Test 2: Error Message is returned if package is no
 test_that("use_ad_template Test 3: package templates can be used", {
   dir <- tempdir()
   suppressMessages(file <- file.path(dir, "advs.R"))
-  suppressMessages(use_ad_template("advs", save_path = file, open = FALSE))
+  suppressMessages(use_ad_template("advs", save_path = file))
 
   expect_true(file.exists(file))
   expect_identical(
@@ -39,7 +39,7 @@ test_that("use_ad_template Test 4: Error Message is returned if no ADaM template
   dir <- tempdir()
   suppressMessages(file <- file.path(dir, "adxx.R"))
   expect_snapshot(
-    suppressMessages(use_ad_template("adxx", save_path = file, open = FALSE)),
+    suppressMessages(use_ad_template("adxx", save_path = file)),
     error = TRUE
   )
 })
@@ -48,10 +48,10 @@ test_that("use_ad_template Test 4: Error Message is returned if no ADaM template
 test_that("use_ad_template Test 5: error if ADaM template file already exists", {
   dir <- tempdir()
   suppressMessages(file <- file.path(dir, "adsl.R"))
-  suppressMessages(use_ad_template("adsl", save_path = file, open = FALSE))
+  suppressMessages(use_ad_template("adsl", save_path = file))
 
   expect_error(
-    suppressMessages(use_ad_template("adsl", save_path = file, open = FALSE)),
+    suppressMessages(use_ad_template("adsl", save_path = file)),
     regexp = paste("A file named '.*' already exists.",
       "i Set `overwrite = TRUE` to force overwriting it.",
       sep = "\n"
