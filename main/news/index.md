@@ -63,6 +63,12 @@
 
 Developer Notes
 
+- Add instructions for AI coding agents: Workflow from `{admiralci}`
+  copies information from
+  [admiraldev](https://pharmaverse.github.io/admiraldev/) to `AGENTS.md`
+  instruction files.
+  ([\#2920](https://github.com/pharmaverse/admiral/issues/2920))
+
 - Increased the maximum height of the drop-down menus in the website
   navigation bar to ensure all items are visible without scrolling.
   ([\#2974](https://github.com/pharmaverse/admiral/issues/2974))
