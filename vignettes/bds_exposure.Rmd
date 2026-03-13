@@ -633,4 +633,4 @@ pipeline under the umbrella of the [pharmaverse E2E example](https://pharmaverse
 
 ADaM | Sourcing Command
 ---- | --------------
-ADEX | `use_ad_template("ADEX")`
+[`ADEX`](templates.html#adex) | `use_ad_template("ADEX")`

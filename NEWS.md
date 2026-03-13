@@ -10,6 +10,12 @@ period and the `event_type` argument for specifying if the event is negative
 `consider_end_dates` field was added to the `event_source()`, `censor_source()`,
 and `tte_source()` objects. (#2952)
 
+- Fixed poorly formatted warning messages in `derive_param_computed()` and `derive_vars_computed()`. (#2969)
+
+- `use_ad_template()` was updated to remove the `open` argument, meaning the generated template will never automatically open
+in a new window, and will instead just be accessible by clicking the link outputted in the console or going to the path
+specified under `save_path`. This is because this functionality did not work as expected outside of RStudio. (#2989)
+
 ## Breaking Changes
 
 - The following function arguments are entering the next phase of the [deprecation process](https://pharmaverse.github.io/admiraldev/articles/programming_strategy.html#deprecation): 
@@ -32,10 +38,16 @@ of the navigation bar. Tooltips have also been set up for each of the icons on t
 - The [contributions guidelines](https://pharmaverse.github.io/admiral/cran-release/CONTRIBUTING.html) for the `{admiral}` ecosystem 
 of packages were updated to specify the level of contributions required for authorship/acknowledgments. (#2979)
 
+- Additional information about timing variable conventions has been added to the `derive_vars_dy()` function documentation. (#2995)
+
+- Added IDs to each template script in the "Explore ADaM Templates" vignette, enabling links to them from across the website. (#3006)
+
 ## Various
 
 <details>
 <summary>Developer Notes</summary>
+
+- Add instructions for AI coding agents: Workflow from `{admiralci}` copies information from `{admiraldev}` to `AGENTS.md` instruction files. (#2920)
 
 - Increased the maximum height of the drop-down menus in the website navigation bar to ensure all items are visible without scrolling. (#2974)
 

@@ -9,7 +9,7 @@
 # use_ad_template Test 4: Error Message is returned if no ADaM template is available
 
     Code
-      suppressMessages(use_ad_template("adxx", save_path = file, open = FALSE))
+      suppressMessages(use_ad_template("adxx", save_path = file))
     Condition
       Error in `use_ad_template()`:
       ! No template for ADXX available in package admiral.
