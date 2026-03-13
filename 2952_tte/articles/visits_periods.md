@@ -33,7 +33,8 @@ The most common ways of deriving `AVISIT` and `AVISITN` are:
 
 The former can be achieved simply by calling
 [`mutate()`](https://dplyr.tidyverse.org/reference/mutate.html), like in
-the vignettes and the template scripts.
+the vignettes and the [template
+scripts](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/articles/templates.md).
 
 For the latter a (study-specific) reference dataset needs to be created
 which provides for each visit the start and end day (`AWLO` and `AWHI`)

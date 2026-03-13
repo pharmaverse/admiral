@@ -18,6 +18,21 @@
   objects.
   ([\#2952](https://github.com/pharmaverse/admiral/issues/2952))
 
+- Fixed poorly formatted warning messages in
+  [`derive_param_computed()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/derive_param_computed.md)
+  and
+  [`derive_vars_computed()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/derive_vars_computed.md).
+  ([\#2969](https://github.com/pharmaverse/admiral/issues/2969))
+
+- [`use_ad_template()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/use_ad_template.md)
+  was updated to remove the `open` argument, meaning the generated
+  template will never automatically open in a new window, and will
+  instead just be accessible by clicking the link outputted in the
+  console or going to the path specified under `save_path`. This is
+  because this functionality did not work as expected outside of
+  RStudio.
+  ([\#2989](https://github.com/pharmaverse/admiral/issues/2989))
+
 ### Breaking Changes
 
 - The following function arguments are entering the next phase of the
@@ -52,9 +67,25 @@
   for authorship/acknowledgments.
   ([\#2979](https://github.com/pharmaverse/admiral/issues/2979))
 
+- Additional information about timing variable conventions has been
+  added to the
+  [`derive_vars_dy()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/derive_vars_dy.md)
+  function documentation.
+  ([\#2995](https://github.com/pharmaverse/admiral/issues/2995))
+
+- Added IDs to each template script in the “Explore ADaM Templates”
+  vignette, enabling links to them from across the website.
+  ([\#3006](https://github.com/pharmaverse/admiral/issues/3006))
+
 ### Various
 
 Developer Notes
+
+- Add instructions for AI coding agents: Workflow from `{admiralci}`
+  copies information from
+  [admiraldev](https://pharmaverse.github.io/admiraldev/) to `AGENTS.md`
+  instruction files.
+  ([\#2920](https://github.com/pharmaverse/admiral/issues/2920))
 
 - Increased the maximum height of the drop-down menus in the website
   navigation bar to ensure all items are visible without scrolling.

@@ -1616,6 +1616,6 @@ E2E example](https://pharmaverse.github.io/examples/adam/adsl).
 
 ## Example Script
 
-| ADaM | Sourcing Command          |
-|------|---------------------------|
-| ADAB | `use_ad_template("ADAB")` |
+| ADaM                                                                                              | Sourcing Command          |
+|---------------------------------------------------------------------------------------------------|---------------------------|
+| [`ADAB`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/articles/templates.html#adab) | `use_ad_template("ADAB")` |

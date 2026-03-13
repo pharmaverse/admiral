@@ -9,8 +9,7 @@ use_ad_template(
   adam_name = "adsl",
   save_path = paste0("./", adam_name, ".R"),
   package = "admiral",
-  overwrite = FALSE,
-  open = interactive()
+  overwrite = FALSE
 )
 ```
 
@@ -51,14 +50,6 @@ use_ad_template(
   Default value
 
   :   `FALSE`
-
-- open:
-
-  Whether to open the script right away.
-
-  Default value
-
-  :   [`interactive()`](https://rdrr.io/r/base/interactive.html)
 
 ## Value
 

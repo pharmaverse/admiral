@@ -210,9 +210,9 @@ ideas to improve this guide!
 
 ## Example Script
 
-| ADaM     | Sourcing Command            |
-|----------|-----------------------------|
-| `ADLBHY` | `use_ad_template("ADLBHY")` |
+| ADaM                                                                                                  | Sourcing Command            |
+|-------------------------------------------------------------------------------------------------------|-----------------------------|
+| [`ADLBHY`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/articles/templates.html#adlbhy) | `use_ad_template("ADLBHY")` |
 
 ------------------------------------------------------------------------
 
