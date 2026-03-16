@@ -36,6 +36,8 @@ of packages were updated to specify the level of contributions required for auth
 
 - Added IDs to each template script in the "Explore ADaM Templates" vignette, enabling links to them from across the website. (#3006)
 
+- Added a new custom [404 page](https://pharmaverse.github.io/admiral/404.html) with a butterfly quiz for lost users. (#2982)
+
 ## Various
 
 <details>
