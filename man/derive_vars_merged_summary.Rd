@@ -112,10 +112,34 @@ are set to \code{NA}. Observations in the additional dataset which have no
 matching observation in the input dataset are ignored.
 }
 }
-\examples{
-library(tibble)
+\seealso{
+\code{\link[=derive_summary_records]{derive_summary_records()}}, \code{\link[=get_summary_records]{get_summary_records()}}
 
-# Add a variable for the mean of AVAL within each visit
+General Derivation Functions for all ADaMs that returns variable appended to dataset:
+\code{\link{derive_var_extreme_flag}()},
+\code{\link{derive_var_joined_exist_flag}()},
+\code{\link{derive_var_merged_ef_msrc}()},
+\code{\link{derive_var_merged_exist_flag}()},
+\code{\link{derive_var_obs_number}()},
+\code{\link{derive_var_relative_flag}()},
+\code{\link{derive_vars_cat}()},
+\code{\link{derive_vars_computed}()},
+\code{\link{derive_vars_joined}()},
+\code{\link{derive_vars_joined_summary}()},
+\code{\link{derive_vars_merged}()},
+\code{\link{derive_vars_merged_lookup}()},
+\code{\link{derive_vars_transposed}()}
+}
+\concept{der_gen}
+\keyword{der_gen}
+\section{Examples}{
+\subsection{Data setup}{
+
+The following examples use the BDS dataset below as a basis.
+
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{library(tibble)
+library(dplyr, warn.conflicts = FALSE)
+
 adbds <- tribble(
   ~USUBJID,  ~AVISIT,  ~ASEQ, ~AVAL,
   "1",      "WEEK 1",      1,    10,
@@ -127,27 +151,154 @@ adbds <- tribble(
   "1",      "WEEK 4",      7,    15,
   "2",      "WEEK 1",      1,    21,
   "2",      "WEEK 4",      2,    22
-)
+)}\if{html}{\out{</div>}}}
+\subsection{Summarize one or more variables using summary functions (\code{new_vars})}{
 
-derive_vars_merged_summary(
+The \code{new_vars} argument specifies a named list of expressions where the
+right-hand side uses summary functions (e.g. \code{mean()}, \code{max()}, \code{sum()}) to
+aggregate values from \code{dataset_add} within each by group. Multiple summary
+variables can be added in a single call.
+
+In the example below, the mean of \code{AVAL} within each subject and visit is
+derived and merged back onto the input dataset:
+
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{derive_vars_merged_summary(
   adbds,
   dataset_add = adbds,
   by_vars = exprs(USUBJID, AVISIT),
-  new_vars = exprs(
-    MEANVIS = mean(AVAL, na.rm = TRUE),
-    MAXVIS = max(AVAL, na.rm = TRUE)
-  )
+  new_vars = exprs(MEANVIS = mean(AVAL, na.rm = TRUE))
 )
+#> # A tibble: 9 × 5
+#>   USUBJID AVISIT  ASEQ  AVAL MEANVIS
+#>   <chr>   <chr>  <dbl> <dbl>   <dbl>
+#> 1 1       WEEK 1     1    10      10
+#> 2 1       WEEK 1     2    NA      10
+#> 3 1       WEEK 2     3    NA     NaN
+#> 4 1       WEEK 3     4    42      42
+#> 5 1       WEEK 4     5    12      13
+#> 6 1       WEEK 4     6    12      13
+#> 7 1       WEEK 4     7    15      13
+#> 8 2       WEEK 1     1    21      21
+#> 9 2       WEEK 4     2    22      22}\if{html}{\out{</div>}}
 
-# Add a variable listing the lesion ids at baseline
-adsl <- tribble(
+Note that for records in \code{dataset} that have no matching by group in
+\code{dataset_add}, the new variables are set to \code{NA}. In the example above,
+subject \code{"1"} at \code{"WEEK 2"} has only missing \code{AVAL} values, so \code{MEANVIS}
+is \code{NaN} (the result of \code{mean(NA, na.rm = TRUE)}). If \code{dataset_add} were a
+separate dataset that does not contain certain by group combinations,
+those non-matching records in \code{dataset} would receive \code{NA} for the new
+variables.}
+\subsection{Restricting source records (\code{filter_add})}{
+
+The \code{filter_add} argument restricts the records in \code{dataset_add} that
+are used for the summarization. Only records satisfying the filter condition
+contribute to the summary values. This can be useful, for example, to
+compute a summary statistic based only on records before or after a certain
+time point.
+
+In the following example, the mean of \code{AVAL} is computed only for records
+with a positive study day (\code{ADY > 0}), and the result is merged onto the
+\code{ADSL}-like dataset. Subject \code{"2"} has no records with \code{ADY > 0}, so
+\code{MEANPBL} is \code{NA} for that subject.
+
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{adsl <- tribble(
   ~USUBJID,
   "1",
   "2",
   "3"
 )
 
-adtr <- tribble(
+adbds2 <- tribble(
+  ~USUBJID, ~ADY, ~AVAL,
+  "1",        -3,    10,
+  "1",         2,    12,
+  "1",         8,    15,
+  "3",         4,    42
+)
+
+derive_vars_merged_summary(
+  adsl,
+  dataset_add = adbds2,
+  by_vars = exprs(USUBJID),
+  new_vars = exprs(MEANPBL = mean(AVAL, na.rm = TRUE)),
+  filter_add = ADY > 0
+)
+#> # A tibble: 3 × 2
+#>   USUBJID MEANPBL
+#>   <chr>     <dbl>
+#> 1 1          13.5
+#> 2 2          NA  
+#> 3 3          42  }\if{html}{\out{</div>}}}
+\subsection{Handling non-matching observations (\code{missing_values})}{
+
+By default, records in \code{dataset} with no matching by group in
+\code{dataset_add} receive \code{NA} for the new variables. The \code{missing_values}
+argument allows you to specify a different value for these non-matching
+records.
+
+In the example below, subject \code{"2"} has no records satisfying
+\code{ADY > 0} in \code{adbds2}, so \code{MEANPBL} would normally be \code{NA}. By specifying
+\code{missing_values = exprs(MEANPBL = -1)}, the value \code{-1} is assigned instead
+to indicate that no valid post-baseline record was found:
+
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{derive_vars_merged_summary(
+  adsl,
+  dataset_add = adbds2,
+  by_vars = exprs(USUBJID),
+  new_vars = exprs(MEANPBL = mean(AVAL, na.rm = TRUE)),
+  filter_add = ADY > 0,
+  missing_values = exprs(MEANPBL = -1)
+)
+#> # A tibble: 3 × 2
+#>   USUBJID MEANPBL
+#>   <chr>     <dbl>
+#> 1 1          13.5
+#> 2 2          -1  
+#> 3 3          42  }\if{html}{\out{</div>}}}
+\subsection{Renaming by variables (\code{by_vars})}{
+
+The \code{by_vars} argument supports renaming, using the syntax
+\verb{exprs(<left_name> = <right_name>)}, where \verb{<left_name>} is the variable
+name in \code{dataset} and \verb{<right_name>} is the corresponding variable in
+\code{dataset_add}. This is useful when the grouping variable has different names
+in the two datasets.
+
+In the example below the input dataset uses \code{AVISIT} while the additional
+dataset uses \code{VISIT} for the same concept. The \code{by_vars} argument maps them
+together so the merge can proceed correctly:
+
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{adbds_renamed <- adbds \%>\% rename(VISIT = AVISIT)
+
+derive_vars_merged_summary(
+  adbds,
+  dataset_add = adbds_renamed,
+  by_vars = exprs(AVISIT = VISIT),
+  new_vars = exprs(MEANVIS = mean(AVAL, na.rm = TRUE))
+)
+#> # A tibble: 9 × 5
+#>   USUBJID AVISIT  ASEQ  AVAL MEANVIS
+#>   <chr>   <chr>  <dbl> <dbl>   <dbl>
+#> 1 1       WEEK 1     1    10    15.5 
+#> 2 1       WEEK 1     2    NA    15.5 
+#> 3 1       WEEK 2     3    NA   NaN   
+#> 4 1       WEEK 3     4    42    42   
+#> 5 1       WEEK 4     5    12    15.2 
+#> 6 1       WEEK 4     6    12    15.2 
+#> 7 1       WEEK 4     7    15    15.2 
+#> 8 2       WEEK 1     1    21    15.5 
+#> 9 2       WEEK 4     2    22    15.2 }\if{html}{\out{</div>}}}
+\subsection{String aggregation}{
+
+Summary expressions are not restricted to numeric aggregations. Any
+expression that reduces a group to a single value is permitted. For example,
+\code{paste(..., collapse = ", ")} can be used to concatenate character values
+within a by group into a single string.
+
+In the example below, the lesion identifiers observed at baseline for each
+subject are collected into a single comma-separated string and merged onto
+the \code{ADSL} dataset:
+
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{adtr <- tribble(
   ~USUBJID,     ~AVISIT, ~LESIONID,
   "1",       "BASELINE",  "INV-T1",
   "1",       "BASELINE",  "INV-T2",
@@ -170,25 +321,9 @@ derive_vars_merged_summary(
   filter_add = AVISIT == "BASELINE",
   new_vars = exprs(LESIONSBL = paste(LESIONID, collapse = ", "))
 )
-
-}
-\seealso{
-\code{\link[=derive_summary_records]{derive_summary_records()}}, \code{\link[=get_summary_records]{get_summary_records()}}
-
-General Derivation Functions for all ADaMs that returns variable appended to dataset:
-\code{\link{derive_var_extreme_flag}()},
-\code{\link{derive_var_joined_exist_flag}()},
-\code{\link{derive_var_merged_ef_msrc}()},
-\code{\link{derive_var_merged_exist_flag}()},
-\code{\link{derive_var_obs_number}()},
-\code{\link{derive_var_relative_flag}()},
-\code{\link{derive_vars_cat}()},
-\code{\link{derive_vars_computed}()},
-\code{\link{derive_vars_joined}()},
-\code{\link{derive_vars_joined_summary}()},
-\code{\link{derive_vars_merged}()},
-\code{\link{derive_vars_merged_lookup}()},
-\code{\link{derive_vars_transposed}()}
-}
-\concept{der_gen}
-\keyword{der_gen}
+#> # A tibble: 3 × 2
+#>   USUBJID LESIONSBL                     
+#>   <chr>   <chr>                         
+#> 1 1       INV-T1, INV-T2, INV-T3, INV-T4
+#> 2 2       INV-T1, INV-T2, INV-T3        
+#> 3 3       <NA>                          }\if{html}{\out{</div>}}}}
