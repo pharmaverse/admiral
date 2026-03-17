@@ -278,15 +278,15 @@ derive_vars_merged_summary(
 #> # A tibble: 9 × 5
 #>   USUBJID AVISIT  ASEQ  AVAL MEANVIS
 #>   <chr>   <chr>  <dbl> <dbl>   <dbl>
-#> 1 1       WEEK 1     1    10    15.5 
-#> 2 1       WEEK 1     2    NA    15.5 
-#> 3 1       WEEK 2     3    NA   NaN   
-#> 4 1       WEEK 3     4    42    42   
-#> 5 1       WEEK 4     5    12    15.2 
-#> 6 1       WEEK 4     6    12    15.2 
-#> 7 1       WEEK 4     7    15    15.2 
-#> 8 2       WEEK 1     1    21    15.5 
-#> 9 2       WEEK 4     2    22    15.2 }\if{html}{\out{</div>}}}
+#> 1 1       WEEK 1     1    10    15.5
+#> 2 1       WEEK 1     2    NA    15.5
+#> 3 1       WEEK 2     3    NA   NaN  
+#> 4 1       WEEK 3     4    42    42  
+#> 5 1       WEEK 4     5    12    15.2
+#> 6 1       WEEK 4     6    12    15.2
+#> 7 1       WEEK 4     7    15    15.2
+#> 8 2       WEEK 1     1    21    15.5
+#> 9 2       WEEK 4     2    22    15.2}\if{html}{\out{</div>}}}
 \subsection{String aggregation}{
 
 Summary expressions are not restricted to numeric aggregations. Any
@@ -327,3 +327,4 @@ derive_vars_merged_summary(
 #> 1 1       INV-T1, INV-T2, INV-T3, INV-T4
 #> 2 2       INV-T1, INV-T2, INV-T3        
 #> 3 3       <NA>                          }\if{html}{\out{</div>}}}}
+
