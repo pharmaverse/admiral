@@ -36,6 +36,8 @@ of packages were updated to specify the level of contributions required for auth
 
 - Added IDs to each template script in the "Explore ADaM Templates" vignette, enabling links to them from across the website. (#3006)
 
+- The documentation for `derive_vars_merged_summary()` was enhanced with structured examples using custom roclets, covering the `new_vars`, `filter_add`, `missing_values`, `by_vars` renaming, and string aggregation use cases. (#2775)
+
 ## Various
 
 <details>
