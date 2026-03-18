@@ -38,5 +38,7 @@
   ADaMs](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/articles/questionnaires.md):
 - [Explore the admiral ADaM
   Templates](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/articles/templates.md):
+- [Time-to-Event
+  Analyses](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/articles/tte_analyses.md):
 - [Visit and Period
   Variables](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/articles/visits_periods.md):
