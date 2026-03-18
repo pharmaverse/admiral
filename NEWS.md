@@ -24,6 +24,8 @@ specified under `save_path`. This is because this functionality did not work as 
 
 ## Documentation
 
+- Updated the ADPPK programming workflow in the `pk_adnca` vignette and `ad_adppk` template to correctly derive `UDTC` using `coalesce(PCDTC, EXSTDTC)` (the source domain DTC variable) instead of `format_ISO8601(ADTM)`. (#2536)
+
 - New Estimands vignette added, describing possible implementations of estimands with `{admiral}` code. (#2954)
 
 - A night mode option has been added to the `{admiral}` website. This can be be toggled using the sun/moon icon in the top right corner 
