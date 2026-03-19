@@ -1135,10 +1135,17 @@ filter_date_sources <- function(sources,
     )
 
     if (!is.null(end_date_data) && sources[[i]]$consider_end_dates) {
+      if (mode == "first") {
+        # for events only the end date variable should be added but not CNSR
+        new_vars = exprs(!!end_date_var)
+      } else {
+        new_vars = NULL
+      }
       source_dataset <- derive_vars_merged(
         source_dataset,
         dataset_add = end_date_data,
-        by_vars = expr_c(subject_keys, by_vars)
+        by_vars = expr_c(subject_keys, by_vars),
+        new_vars = new_vars
       ) %>%
         # use filter_out() in admiral 1.6
         filter(
