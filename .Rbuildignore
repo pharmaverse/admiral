@@ -19,7 +19,7 @@
 ^vignettes/faq\.Rmd$
 ^vignettes/writing_vignettes\.Rmd$
 ^vignettes/unit_test_guidance\.Rmd$
-^vignettes/.+png$
+
 ^LICENSE\.md$
 ^\.github$
 ^admiral\.Rcheck$
