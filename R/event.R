@@ -177,6 +177,15 @@ event <- function(dataset_name = NULL,
 #'
 #' @permitted an unquoted condition
 #'
+#' @param filter_add Filter for additional dataset (`dataset_add`)
+#'
+#'   Only observations of the additional dataset fulfilling the specified
+#'   condition are used for joining. For example, if the confirmation must come
+#'   from a specific parameter, `filter_add = PARAMCD == "PARAM"` could be
+#'   specified.
+#'
+#' @permitted an unquoted condition
+#'
 #' @param order If specified, the specified variables or expressions are used to
 #'   select the first observation.
 #'
@@ -337,6 +346,7 @@ event_joined <- function(dataset_name = NULL,
                          join_type,
                          first_cond_lower = NULL,
                          first_cond_upper = NULL,
+                         filter_add = NULL,
                          set_values_to = NULL,
                          keep_source_vars = NULL,
                          description = NULL) {
@@ -355,6 +365,7 @@ event_joined <- function(dataset_name = NULL,
     ),
     first_cond_lower = assert_filter_cond(enexpr(first_cond_lower), optional = TRUE),
     first_cond_upper = first_cond_upper,
+    filter_add = assert_filter_cond(enexpr(filter_add), optional = TRUE),
     set_values_to = assert_expr_list(
       set_values_to,
       named = TRUE,

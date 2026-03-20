@@ -766,3 +766,60 @@ test_that("derive_extreme_event Test 12: test for duplicates: with error", {
     NULL
   )
 })
+
+## Test 11: event_joined() filter_add is handled correctly ----
+# filter_add restricts which records from the joined dataset are used.
+# Subject "4" has PR at visit 1 but only PR (not CR) follows it;
+# with filter_add = AVALC == "CR", no CR exists after visit 1 for subject "4",
+# so it should NOT be selected. Without filter_add, subject "4" would be selected
+# because PR at visit 5 satisfies condition = AVALC == "PR" & AVALC.join %in% c("CR", "PR").
+test_that("derive_extreme_event Test 11: event_joined() filter_add is handled correctly", {
+  data <- tibble::tribble(
+    ~USUBJID, ~AVISITN, ~AVALC,
+    "1",      1,        "PR",
+    "1",      2,        "CR",
+    "1",      3,        "CR",
+    "1",      4,        "SD",
+    "2",      1,        "SD",
+    "2",      2,        "PR",
+    "2",      3,        "PD",
+    "3",      1,        "SD",
+    "4",      1,        "PR",
+    "4",      2,        "SD",
+    "4",      3,        "SD",
+    "4",      4,        "PR"
+  )
+
+  actual <- derive_extreme_event(
+    data,
+    by_vars = exprs(USUBJID),
+    order = exprs(AVISITN),
+    mode = "first",
+    events = list(
+      event_joined(
+        join_vars = exprs(AVALC),
+        join_type = "after",
+        order = exprs(AVISITN),
+        filter_add = AVALC == "CR",
+        condition = AVALC == "PR" & AVALC.join %in% c("CR", "PR"),
+        set_values_to = exprs(CONFFL = "Y")
+      )
+    ),
+    set_values_to = exprs(PARAMCD = "CONFPR")
+  )
+
+  expected <- bind_rows(
+    data,
+    tibble::tribble(
+      ~USUBJID, ~AVISITN, ~AVALC, ~CONFFL,
+      "1",      1,        "PR",   "Y"
+    ) %>%
+      mutate(PARAMCD = "CONFPR")
+  )
+
+  expect_dfs_equal(
+    base = expected,
+    compare = actual,
+    keys = c("USUBJID", "PARAMCD", "AVISITN")
+  )
+})

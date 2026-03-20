@@ -652,6 +652,7 @@ derive_extreme_event <- function(dataset = NULL,
           first_cond_lower = !!event$first_cond_lower,
           first_cond_upper = !!event$first_cond_upper,
           order = event_order,
+          filter_add = !!event$filter_add,
           check_type = "none",
           filter_join = !!event$condition
         )

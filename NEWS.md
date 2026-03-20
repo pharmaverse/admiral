@@ -7,6 +7,11 @@
 - The `filter_add` argument in `derive_var_joined_exist_flag()` is no longer
 ignored. (#3018)
 
+- The `filter_add` argument has been added to `event_joined()`, allowing users
+to restrict which records from the joined dataset are considered when using
+`event_joined()` in `derive_extreme_event()` and `derive_vars_extreme_event()`.
+Previously this argument was not available for `event_joined()`.
+
 - Fixed poorly formatted warning messages in `derive_param_computed()` and `derive_vars_computed()`. (#2969)
 
 - `use_ad_template()` was updated to remove the `open` argument, meaning the generated template will never automatically open
