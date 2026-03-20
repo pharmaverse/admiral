@@ -173,6 +173,48 @@ parameter can be used in the
 [`derive_param_tte()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/derive_param_tte.md)
 function to select the event records.
 
+``` r
+adqs <- adqs %>% 
+  derive_var_joined_exist_flag(
+  dataset_add = adqs,
+  filter_add = ANL01FL == "Y",
+  by_vars = exprs(USUBJID),
+  new_var = CONFFL,
+  tmp_obs_nr_var = tmp_obs_nr,
+  join_vars = exprs(CHGCAT1),
+  join_type = "after",
+  order = exprs(AVISITN),
+  filter_join = CHGCAT1 %in% c("IMPROVED", "WORSENED") & CHGCAT1 == CHGCAT1.join &
+    tmp_obs_nr + 1 == tmp_obs_nr.join
+)
+```
+
+`adqs` dataset
+
+``` r
+confirmed_worsening <- event_source(
+  dataset_name = "adqs",
+  filter = CHGCAT1 == "WORSENED" & CONFFL == "Y",
+  date = ADT
+)
+
+adtte <- derive_param_tte(
+  dataset_adsl = adsl,
+  source_datasets = list(adsl = adsl, adqs = adqs),
+  end_dates = list(trt_end),
+  event_conditions = list(confirmed_worsening),
+  censor_conditions = list(valid_assessment),
+  set_values_to = exprs(
+    PARAMCD = "TTWORS",
+    PARAM = "Time to worsening"
+  )
+)
+```
+
+`adtte` dataset
+
+![](tte_analyses_files/figure-html/unnamed-chunk-17-1.png)
+
 Another option is to use
 [`derive_extreme_event()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/derive_extreme_event.md)
 with
