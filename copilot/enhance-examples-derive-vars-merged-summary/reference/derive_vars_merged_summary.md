@@ -202,13 +202,13 @@ The following examples use the BDS dataset below as a basis.
 The `new_vars` argument specifies a named list of expressions where the
 right-hand side uses summary functions (e.g.
 [`mean()`](https://rdrr.io/r/base/mean.html),
-[`max()`](https://rdrr.io/r/base/Extremes.html),
-[`sum()`](https://rdrr.io/r/base/sum.html)) to aggregate values from
-`dataset_add` within each by group. Multiple summary variables can be
-added in a single call.
+[`sum()`](https://rdrr.io/r/base/sum.html),
+[`max()`](https://rdrr.io/r/base/Extremes.html)) to aggregate values
+from `dataset_add` within each by group. Multiple summary variables can
+be added in a single call.
 
-In the example below, the mean and maximum of `AVAL` within each subject
-and visit are derived and merged back onto the input dataset:
+In the example below, the mean and sum of `AVAL` within each subject and
+visit are derived and merged back onto the input dataset:
 
     derive_vars_merged_summary(
       adbds,
@@ -216,30 +216,25 @@ and visit are derived and merged back onto the input dataset:
       by_vars = exprs(USUBJID, AVISIT),
       new_vars = exprs(
         MEANVIS = mean(AVAL, na.rm = TRUE),
-        MAXVIS = max(AVAL, na.rm = TRUE)
+        SUMVIS = sum(AVAL, na.rm = TRUE)
       )
     )
     #> # A tibble: 9 × 6
-    #>   USUBJID AVISIT  ASEQ  AVAL MEANVIS MAXVIS
+    #>   USUBJID AVISIT  ASEQ  AVAL MEANVIS SUMVIS
     #>   <chr>   <chr>  <dbl> <dbl>   <dbl>  <dbl>
     #> 1 1       WEEK 1     1    10      10     10
     #> 2 1       WEEK 1     2    NA      10     10
-    #> 3 1       WEEK 2     3    NA     NaN   -Inf
+    #> 3 1       WEEK 2     3    NA     NaN      0
     #> 4 1       WEEK 3     4    42      42     42
-    #> 5 1       WEEK 4     5    12      13     15
-    #> 6 1       WEEK 4     6    12      13     15
-    #> 7 1       WEEK 4     7    15      13     15
+    #> 5 1       WEEK 4     5    12      13     39
+    #> 6 1       WEEK 4     6    12      13     39
+    #> 7 1       WEEK 4     7    15      13     39
     #> 8 2       WEEK 1     1    21      21     21
     #> 9 2       WEEK 4     2    22      22     22
-    #> Warning: There was 1 warning in `reframe()`.
-    #> i In argument: `MAXVIS = max(AVAL, na.rm = TRUE)`.
-    #> i In group 2: `USUBJID = "1"` `AVISIT = "WEEK 2"`.
-    #> Caused by warning in `max()`:
-    #> ! no non-missing arguments to max; returning -Inf
 
 In the example above, subject `"1"` at `"WEEK 2"` has only missing
 `AVAL` values, so `MEANVIS` is `NaN` (the result of
-`mean(NA, na.rm = TRUE)`).
+`mean(NA, na.rm = TRUE)`) and `SUMVIS` is `0`.
 
 ### Restricting source records (`filter_add`)
 
