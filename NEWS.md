@@ -36,6 +36,12 @@ of packages were updated to specify the level of contributions required for auth
 
 - Added IDs to each template script in the "Explore ADaM Templates" vignette, enabling links to them from across the website. (#3006)
 
+- The helper functions `roxygen_param_dataset()`, `roxygen_param_by_vars()`,
+  `roxygen_order_na_handling()`, and `roxygen_save_memory()` have been moved
+  from `{admiral}` to `{admiraldev}`. They are now exported from `{admiraldev}`
+  and remain accessible in `{admiral}` via the existing `@import admiraldev`
+  dependency. (#TODO)
+
 ## Various
 
 <details>
