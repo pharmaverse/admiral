@@ -159,35 +159,39 @@ right-hand side uses summary functions (e.g. \code{mean()}, \code{max()}, \code{
 aggregate values from \code{dataset_add} within each by group. Multiple summary
 variables can be added in a single call.
 
-In the example below, the mean of \code{AVAL} within each subject and visit is
-derived and merged back onto the input dataset:
+In the example below, the mean and maximum of \code{AVAL} within each subject
+and visit are derived and merged back onto the input dataset:
 
 \if{html}{\out{<div class="sourceCode r">}}\preformatted{derive_vars_merged_summary(
   adbds,
   dataset_add = adbds,
   by_vars = exprs(USUBJID, AVISIT),
-  new_vars = exprs(MEANVIS = mean(AVAL, na.rm = TRUE))
+  new_vars = exprs(
+    MEANVIS = mean(AVAL, na.rm = TRUE),
+    MAXVIS = max(AVAL, na.rm = TRUE)
+  )
 )
-#> # A tibble: 9 × 5
-#>   USUBJID AVISIT  ASEQ  AVAL MEANVIS
-#>   <chr>   <chr>  <dbl> <dbl>   <dbl>
-#> 1 1       WEEK 1     1    10      10
-#> 2 1       WEEK 1     2    NA      10
-#> 3 1       WEEK 2     3    NA     NaN
-#> 4 1       WEEK 3     4    42      42
-#> 5 1       WEEK 4     5    12      13
-#> 6 1       WEEK 4     6    12      13
-#> 7 1       WEEK 4     7    15      13
-#> 8 2       WEEK 1     1    21      21
-#> 9 2       WEEK 4     2    22      22}\if{html}{\out{</div>}}
+#> # A tibble: 9 × 6
+#>   USUBJID AVISIT  ASEQ  AVAL MEANVIS MAXVIS
+#>   <chr>   <chr>  <dbl> <dbl>   <dbl>  <dbl>
+#> 1 1       WEEK 1     1    10      10     10
+#> 2 1       WEEK 1     2    NA      10     10
+#> 3 1       WEEK 2     3    NA     NaN   -Inf
+#> 4 1       WEEK 3     4    42      42     42
+#> 5 1       WEEK 4     5    12      13     15
+#> 6 1       WEEK 4     6    12      13     15
+#> 7 1       WEEK 4     7    15      13     15
+#> 8 2       WEEK 1     1    21      21     21
+#> 9 2       WEEK 4     2    22      22     22
+#> Warning: There was 1 warning in `reframe()`.
+#> i In argument: `MAXVIS = max(AVAL, na.rm = TRUE)`.
+#> i In group 2: `USUBJID = "1"` `AVISIT = "WEEK 2"`.
+#> Caused by warning in `max()`:
+#> ! no non-missing arguments to max; returning -Inf}\if{html}{\out{</div>}}
 
-Note that for records in \code{dataset} that have no matching by group in
-\code{dataset_add}, the new variables are set to \code{NA}. In the example above,
-subject \code{"1"} at \code{"WEEK 2"} has only missing \code{AVAL} values, so \code{MEANVIS}
-is \code{NaN} (the result of \code{mean(NA, na.rm = TRUE)}). If \code{dataset_add} were a
-separate dataset that does not contain certain by group combinations,
-those non-matching records in \code{dataset} would receive \code{NA} for the new
-variables.}
+In the example above, subject \code{"1"} at \code{"WEEK 2"} has only missing
+\code{AVAL} values, so \code{MEANVIS} is \code{NaN} (the result of
+\code{mean(NA, na.rm = TRUE)}).}
 \subsection{Restricting source records (\code{filter_add})}{
 
 The \code{filter_add} argument restricts the records in \code{dataset_add} that
@@ -236,25 +240,54 @@ By default, records in \code{dataset} with no matching by group in
 argument allows you to specify a different value for these non-matching
 records.
 
-In the example below, subject \code{"2"} has no records satisfying
-\code{ADY > 0} in \code{adbds2}, so \code{MEANPBL} would normally be \code{NA}. By specifying
-\code{missing_values = exprs(MEANPBL = -1)}, the value \code{-1} is assigned instead
-to indicate that no valid post-baseline record was found:
+A common use-case is \strong{population median imputation}: subjects without a
+baseline measurement are assigned the median baseline value observed across
+the rest of the population. In the example below, \code{adlb_bl} contains one
+baseline record per subject for subjects 1–10, except subjects \code{"5"} and
+\code{"8"} who have no baseline record. Without \code{missing_values} those two
+subjects would receive \code{NA}; supplying the pre-computed population median
+imputes that value instead:
 
-\if{html}{\out{<div class="sourceCode r">}}\preformatted{derive_vars_merged_summary(
-  adsl,
-  dataset_add = adbds2,
-  by_vars = exprs(USUBJID),
-  new_vars = exprs(MEANPBL = mean(AVAL, na.rm = TRUE)),
-  filter_add = ADY > 0,
-  missing_values = exprs(MEANPBL = -1)
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{adsl2 <- tribble(
+  ~USUBJID,
+  "1", "2", "3", "4", "5", "6", "7", "8", "9", "10"
 )
-#> # A tibble: 3 × 2
-#>   USUBJID MEANPBL
-#>   <chr>     <dbl>
-#> 1 1          13.5
-#> 2 2          -1  
-#> 3 3          42  }\if{html}{\out{</div>}}}
+
+adlb_bl <- tribble(
+  ~USUBJID, ~ABLFL, ~AVAL,
+  "1",      "Y",       10,
+  "2",      "Y",       15,
+  "3",      "Y",       20,
+  "4",      "Y",       28,
+  "6",      "Y",       35,
+  "7",      "Y",       42,
+  "9",      "Y",       50,
+  "10",     "Y",       60
+)
+
+pop_median <- median(adlb_bl$AVAL, na.rm = TRUE)
+
+derive_vars_merged_summary(
+  adsl2,
+  dataset_add = adlb_bl,
+  by_vars = exprs(USUBJID),
+  new_vars = exprs(BASE = mean(AVAL, na.rm = TRUE)),
+  filter_add = ABLFL == "Y",
+  missing_values = exprs(BASE = !!pop_median)
+)
+#> # A tibble: 10 × 2
+#>    USUBJID  BASE
+#>    <chr>   <dbl>
+#>  1 1        10  
+#>  2 2        15  
+#>  3 3        20  
+#>  4 4        28  
+#>  5 5        31.5
+#>  6 6        35  
+#>  7 7        42  
+#>  8 8        31.5
+#>  9 9        50  
+#> 10 10       60  }\if{html}{\out{</div>}}}
 \subsection{Renaming by variables (\code{by_vars})}{
 
 The \code{by_vars} argument supports renaming, using the syntax
@@ -272,21 +305,21 @@ together so the merge can proceed correctly:
 derive_vars_merged_summary(
   adbds,
   dataset_add = adbds_renamed,
-  by_vars = exprs(AVISIT = VISIT),
+  by_vars = exprs(USUBJID, AVISIT = VISIT),
   new_vars = exprs(MEANVIS = mean(AVAL, na.rm = TRUE))
 )
 #> # A tibble: 9 × 5
 #>   USUBJID AVISIT  ASEQ  AVAL MEANVIS
 #>   <chr>   <chr>  <dbl> <dbl>   <dbl>
-#> 1 1       WEEK 1     1    10    15.5
-#> 2 1       WEEK 1     2    NA    15.5
-#> 3 1       WEEK 2     3    NA   NaN  
-#> 4 1       WEEK 3     4    42    42  
-#> 5 1       WEEK 4     5    12    15.2
-#> 6 1       WEEK 4     6    12    15.2
-#> 7 1       WEEK 4     7    15    15.2
-#> 8 2       WEEK 1     1    21    15.5
-#> 9 2       WEEK 4     2    22    15.2}\if{html}{\out{</div>}}}
+#> 1 1       WEEK 1     1    10      10
+#> 2 1       WEEK 1     2    NA      10
+#> 3 1       WEEK 2     3    NA     NaN
+#> 4 1       WEEK 3     4    42      42
+#> 5 1       WEEK 4     5    12      13
+#> 6 1       WEEK 4     6    12      13
+#> 7 1       WEEK 4     7    15      13
+#> 8 2       WEEK 1     1    21      21
+#> 9 2       WEEK 4     2    22      22}\if{html}{\out{</div>}}}
 \subsection{String aggregation}{
 
 Summary expressions are not restricted to numeric aggregations. Any

@@ -965,24 +965,23 @@ get_not_mapped <- function() {
 #' aggregate values from `dataset_add` within each by group. Multiple summary
 #' variables can be added in a single call.
 #'
-#' In the example below, the mean of `AVAL` within each subject and visit is
-#' derived and merged back onto the input dataset:
+#' In the example below, the mean and maximum of `AVAL` within each subject
+#' and visit are derived and merged back onto the input dataset:
 #'
-#' @code
+#' @code [expected_cnds = "warning"]
 #' derive_vars_merged_summary(
 #'   adbds,
 #'   dataset_add = adbds,
 #'   by_vars = exprs(USUBJID, AVISIT),
-#'   new_vars = exprs(MEANVIS = mean(AVAL, na.rm = TRUE))
+#'   new_vars = exprs(
+#'     MEANVIS = mean(AVAL, na.rm = TRUE),
+#'     MAXVIS = max(AVAL, na.rm = TRUE)
+#'   )
 #' )
 #'
-#' @info Note that for records in `dataset` that have no matching by group in
-#' `dataset_add`, the new variables are set to `NA`. In the example above,
-#' subject `"1"` at `"WEEK 2"` has only missing `AVAL` values, so `MEANVIS`
-#' is `NaN` (the result of `mean(NA, na.rm = TRUE)`). If `dataset_add` were a
-#' separate dataset that does not contain certain by group combinations,
-#' those non-matching records in `dataset` would receive `NA` for the new
-#' variables.
+#' @info In the example above, subject `"1"` at `"WEEK 2"` has only missing
+#' `AVAL` values, so `MEANVIS` is `NaN` (the result of
+#' `mean(NA, na.rm = TRUE)`).
 #'
 #' @caption Restricting source records (`filter_add`)
 #'
@@ -1028,19 +1027,41 @@ get_not_mapped <- function() {
 #' argument allows you to specify a different value for these non-matching
 #' records.
 #'
-#' In the example below, subject `"2"` has no records satisfying
-#' `ADY > 0` in `adbds2`, so `MEANPBL` would normally be `NA`. By specifying
-#' `missing_values = exprs(MEANPBL = -1)`, the value `-1` is assigned instead
-#' to indicate that no valid post-baseline record was found:
+#' A common use-case is **population median imputation**: subjects without a
+#' baseline measurement are assigned the median baseline value observed across
+#' the rest of the population. In the example below, `adlb_bl` contains one
+#' baseline record per subject for subjects 1–10, except subjects `"5"` and
+#' `"8"` who have no baseline record. Without `missing_values` those two
+#' subjects would receive `NA`; supplying the pre-computed population median
+#' imputes that value instead:
 #'
 #' @code
+#' adsl2 <- tribble(
+#'   ~USUBJID,
+#'   "1", "2", "3", "4", "5", "6", "7", "8", "9", "10"
+#' )
+#'
+#' adlb_bl <- tribble(
+#'   ~USUBJID, ~ABLFL, ~AVAL,
+#'   "1",      "Y",       10,
+#'   "2",      "Y",       15,
+#'   "3",      "Y",       20,
+#'   "4",      "Y",       28,
+#'   "6",      "Y",       35,
+#'   "7",      "Y",       42,
+#'   "9",      "Y",       50,
+#'   "10",     "Y",       60
+#' )
+#'
+#' pop_median <- median(adlb_bl$AVAL, na.rm = TRUE)
+#'
 #' derive_vars_merged_summary(
-#'   adsl,
-#'   dataset_add = adbds2,
+#'   adsl2,
+#'   dataset_add = adlb_bl,
 #'   by_vars = exprs(USUBJID),
-#'   new_vars = exprs(MEANPBL = mean(AVAL, na.rm = TRUE)),
-#'   filter_add = ADY > 0,
-#'   missing_values = exprs(MEANPBL = -1)
+#'   new_vars = exprs(BASE = mean(AVAL, na.rm = TRUE)),
+#'   filter_add = ABLFL == "Y",
+#'   missing_values = exprs(BASE = !!pop_median)
 #' )
 #'
 #' @caption Renaming by variables (`by_vars`)
@@ -1110,14 +1131,7 @@ derive_vars_merged_summary <- function(dataset,
   assert_vars(by_vars)
   by_vars_left <- replace_values_by_names(by_vars)
   by_vars_right <- chr2vars(paste(vars2chr(by_vars)))
-  # once new_var is removed new_vars should be mandatory
-new_vars,
-filter_add = NULL,
-missing_values = NULL) {
-assert_vars(by_vars)
-by_vars_left <- replace_values_by_names(by_vars)
-by_vars_right <- chr2vars(paste(vars2chr(by_vars)))
-assert_expr_list(new_vars, named = TRUE)
+  assert_expr_list(new_vars, named = TRUE)
   filter_add <-
     assert_filter_cond(enexpr(filter_add), optional = TRUE)
   assert_data_frame(
