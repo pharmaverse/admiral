@@ -53,7 +53,7 @@ observation period.
 
 ![](img/tte_continuous.png)
 
-### Discrete Assesments, Negative Event
+### Discrete Assessments, Negative Event
 
 Many events require dedicated assessments to determine whether the event
 occurred or not, e.g., lab assessments, tumor assessments,
@@ -71,6 +71,55 @@ known that the event didn’t occur.
 
 ![](img/tte_discrete_negative.png)
 
+For the examples, we will use the following questionnaire ADaM dataset.
+The variable `CHGCAT1` indicates whether the subject worsened, improved,
+or was unchanged compared to baseline. For some records it is unknown
+whether the subject worsened or not.
+
+`adqs` dataset
+
+![](tte_analyses_files/figure-html/unnamed-chunk-5-1.png)
+
+A “time to worsening” parameter is derived by using
+[`derive_param_tte()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/derive_param_tte.md).
+By default a negative event is assumed, thus the `event_type` argument
+doesn’t need to be specified.
+
+``` r
+trt_end <- censor_source(
+  dataset_name = "adsl",
+  date = TRTEDT
+)
+
+worsening <- event_source(
+  dataset_name = "adqs",
+  filter = CHGCAT1 == "WORSENED",
+  date = ADT
+)
+
+valid_assessment <- censor_source(
+  dataset_name = "adqs",
+  filter = !is.na(CHGCAT1),
+  date = ADT
+)
+
+adtte <- derive_param_tte(
+  dataset_adsl = adsl,
+  source_datasets = list(adsl = adsl, adqs = adqs),
+  end_dates = list(trt_end),
+  event_conditions = list(worsening),
+  censor_conditions = list(valid_assessment),
+  set_values_to = exprs(
+    PARAMCD = "TTWORS",
+    PARAM = "Time to worsening"
+  )
+)
+```
+
+`adtte` dataset
+
+![](tte_analyses_files/figure-html/unnamed-chunk-8-1.png)
+
 ### Discrete Assessments, Positive Event
 
 For positive events like improvement, response, …, the most conservative
@@ -79,6 +128,35 @@ period, even if it is not known whether the event occurred or not at
 this time point.
 
 ![](img/tte_discrete_positive.png)
+
+For positive events, the `event_type` argument of the
+[`derive_param_tte()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/derive_param_tte.md)
+function can be set to `"positive"`.
+
+``` r
+improvement <- event_source(
+  dataset_name = "adqs",
+  filter = CHGCAT1 == "IMPROVED",
+  date = ADT
+)
+
+adtte <- derive_param_tte(
+  dataset_adsl = adsl,
+  source_datasets = list(adsl = adsl, adqs = adqs),
+  end_dates = list(trt_end),
+  event_type = "positive",
+  event_conditions = list(improvement),
+  censor_conditions = list(valid_assessment),
+  set_values_to = exprs(
+    PARAMCD = "TTIMPR",
+    PARAM = "Time to improvement"
+  )
+)
+```
+
+`adtte` dataset
+
+![](tte_analyses_files/figure-html/unnamed-chunk-12-1.png)
 
 ## Events Considering more than one Assessment
 
@@ -106,8 +184,8 @@ disadvantage that the results are harder to review and trace back.
 ## Combined Events
 
 Some events are defined by a combination of more than one event, e.g.,
-for progression free survival (PFS) the event is defined as progression
-*or* death. For these events which are combined by “or” separate
+for progression free survival the event is defined as progression *or*
+death. For these events which are combined by “or” separate
 [`event_source()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/event_source.md)
 objects can be created for each event and then specified for the
 `event_conditions` argument of
@@ -122,7 +200,7 @@ function to select the event records.
 
 ## Differentiate Censoring
 
-TODO: Setting EVNTDESC for censoring is sometimes tricky. For example if
-you are deriving time to CHG \>= 10 and want to distinguish subjects
+TODO: Setting `EVNTDESC` for censoring is sometimes tricky. For example
+if you are deriving time to `CHG >= 10` and want to distinguish subjects
 censored because they don’t have a baseline value and subject censored
 because they don’t have post-baseline values.
