@@ -155,11 +155,11 @@ adbds <- tribble(
 \subsection{Summarize one or more variables using summary functions (\code{new_vars})}{
 
 The \code{new_vars} argument specifies a named list of expressions where the
-right-hand side uses summary functions (e.g. \code{mean()}, \code{max()}, \code{sum()}) to
+right-hand side uses summary functions (e.g. \code{mean()}, \code{sum()}, \code{max()}) to
 aggregate values from \code{dataset_add} within each by group. Multiple summary
 variables can be added in a single call.
 
-In the example below, the mean and maximum of \code{AVAL} within each subject
+In the example below, the mean and sum of \code{AVAL} within each subject
 and visit are derived and merged back onto the input dataset:
 
 \if{html}{\out{<div class="sourceCode r">}}\preformatted{derive_vars_merged_summary(
@@ -168,30 +168,25 @@ and visit are derived and merged back onto the input dataset:
   by_vars = exprs(USUBJID, AVISIT),
   new_vars = exprs(
     MEANVIS = mean(AVAL, na.rm = TRUE),
-    MAXVIS = max(AVAL, na.rm = TRUE)
+    SUMVIS = sum(AVAL, na.rm = TRUE)
   )
 )
 #> # A tibble: 9 × 6
-#>   USUBJID AVISIT  ASEQ  AVAL MEANVIS MAXVIS
+#>   USUBJID AVISIT  ASEQ  AVAL MEANVIS SUMVIS
 #>   <chr>   <chr>  <dbl> <dbl>   <dbl>  <dbl>
 #> 1 1       WEEK 1     1    10      10     10
 #> 2 1       WEEK 1     2    NA      10     10
-#> 3 1       WEEK 2     3    NA     NaN   -Inf
+#> 3 1       WEEK 2     3    NA     NaN      0
 #> 4 1       WEEK 3     4    42      42     42
-#> 5 1       WEEK 4     5    12      13     15
-#> 6 1       WEEK 4     6    12      13     15
-#> 7 1       WEEK 4     7    15      13     15
+#> 5 1       WEEK 4     5    12      13     39
+#> 6 1       WEEK 4     6    12      13     39
+#> 7 1       WEEK 4     7    15      13     39
 #> 8 2       WEEK 1     1    21      21     21
-#> 9 2       WEEK 4     2    22      22     22
-#> Warning: There was 1 warning in `reframe()`.
-#> i In argument: `MAXVIS = max(AVAL, na.rm = TRUE)`.
-#> i In group 2: `USUBJID = "1"` `AVISIT = "WEEK 2"`.
-#> Caused by warning in `max()`:
-#> ! no non-missing arguments to max; returning -Inf}\if{html}{\out{</div>}}
+#> 9 2       WEEK 4     2    22      22     22}\if{html}{\out{</div>}}
 
 In the example above, subject \code{"1"} at \code{"WEEK 2"} has only missing
 \code{AVAL} values, so \code{MEANVIS} is \code{NaN} (the result of
-\code{mean(NA, na.rm = TRUE)}).}
+\code{mean(NA, na.rm = TRUE)}) and \code{SUMVIS} is \code{0}.}
 \subsection{Restricting source records (\code{filter_add})}{
 
 The \code{filter_add} argument restricts the records in \code{dataset_add} that

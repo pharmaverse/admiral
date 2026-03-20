@@ -961,27 +961,27 @@ get_not_mapped <- function() {
 #' @caption Summarize one or more variables using summary functions (`new_vars`)
 #'
 #' @info The `new_vars` argument specifies a named list of expressions where the
-#' right-hand side uses summary functions (e.g. `mean()`, `max()`, `sum()`) to
+#' right-hand side uses summary functions (e.g. `mean()`, `sum()`, `max()`) to
 #' aggregate values from `dataset_add` within each by group. Multiple summary
 #' variables can be added in a single call.
 #'
-#' In the example below, the mean and maximum of `AVAL` within each subject
+#' In the example below, the mean and sum of `AVAL` within each subject
 #' and visit are derived and merged back onto the input dataset:
 #'
-#' @code [expected_cnds = "warning"]
+#' @code
 #' derive_vars_merged_summary(
 #'   adbds,
 #'   dataset_add = adbds,
 #'   by_vars = exprs(USUBJID, AVISIT),
 #'   new_vars = exprs(
 #'     MEANVIS = mean(AVAL, na.rm = TRUE),
-#'     MAXVIS = max(AVAL, na.rm = TRUE)
+#'     SUMVIS = sum(AVAL, na.rm = TRUE)
 #'   )
 #' )
 #'
 #' @info In the example above, subject `"1"` at `"WEEK 2"` has only missing
 #' `AVAL` values, so `MEANVIS` is `NaN` (the result of
-#' `mean(NA, na.rm = TRUE)`).
+#' `mean(NA, na.rm = TRUE)`) and `SUMVIS` is `0`.
 #'
 #' @caption Restricting source records (`filter_add`)
 #'
