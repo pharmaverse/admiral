@@ -1061,7 +1061,7 @@ get_not_mapped <- function() {
 #' derive_vars_merged_summary(
 #'   adbds,
 #'   dataset_add = adbds_renamed,
-#'   by_vars = exprs(AVISIT = VISIT),
+#'   by_vars = exprs(USUBJID, AVISIT = VISIT),
 #'   new_vars = exprs(MEANVIS = mean(AVAL, na.rm = TRUE))
 #' )
 #'
