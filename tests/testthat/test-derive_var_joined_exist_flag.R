@@ -325,7 +325,8 @@ test_that("derive_var_joined_exist_flag Test 7: no warning if multiple records m
   )
 })
 
-test_that("filter_add is considered", {
+## Test 8: filter_add is considered ----
+test_that("derive_var_joined_exist_flag Test 8: filter_add is considered", {
   expected <- tibble::tribble(
     ~USUBJID, ~ADY, ~CRIT1FL, ~ANL01FL,      ~CONFFL,
     "1",        10, "N",      "Y",           NA_character_,
