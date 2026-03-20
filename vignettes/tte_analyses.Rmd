@@ -25,7 +25,8 @@ adsl <- tribble(
   ~USUBJID, ~TRTSDT,           ~TRTEDT,
   "001",    ymd("2020-01-01"), ymd("2020-03-23"),
   "002",    ymd("2020-01-02"), ymd("2020-03-03"),
-  "003",    ymd("2020-01-03"), ymd("2020-02-22")
+  "003",    ymd("2020-01-03"), ymd("2020-02-22"),
+  "004",    ymd("2020-01-04"), ymd("2020-04-18")
 ) %>% 
   mutate(
     STUDYID = "XY1234"
@@ -42,7 +43,12 @@ adqs <- tribble(
   "002",    "WEEK 8",      67,
   "003",    "BASELINE",    66,
   "003",    "WEEK 4",      NA,
-  "003",    "WEEK 8",      83
+  "003",    "WEEK 8",      83,
+  "004",    "BASELINE",    72,
+  "004",    "WEEK 4",      85,
+  "004",    "WEEK 8",      83,
+  "004",    "WEEK 12",     62,
+  "004",    "WEEK 16",     60
 ) %>% 
   mutate(
     STUDYID = "XY1234",
@@ -51,6 +57,7 @@ adqs <- tribble(
       AVISIT == "WEEK 4" ~ 4,
       AVISIT == "WEEK 8" ~ 8,
       AVISIT == "WEEK 12" ~ 12,
+      AVISIT == "WEEK 16" ~ 16,
       TRUE ~ NA_real_
     ),
     ABLFL = if_else(AVISIT == "BASELINE", "Y", NA_character_)
@@ -336,6 +343,60 @@ whether an event occurred or not. Thus the confirmation information needs to be
 derived in the input dataset, e.g., by deriving a variable or a parameter which
 indicates whether the event is confirmed or not. Then this variable or parameter
 can be used in the `derive_param_tte()` function to select the event records.
+
+```{r}
+adqs <- adqs %>% 
+  derive_var_joined_exist_flag(
+  dataset_add = adqs,
+  filter_add = ANL01FL == "Y",
+  by_vars = exprs(USUBJID),
+  new_var = CONFFL,
+  tmp_obs_nr_var = tmp_obs_nr,
+  join_vars = exprs(CHGCAT1),
+  join_type = "after",
+  order = exprs(AVISITN),
+  filter_join = CHGCAT1 %in% c("IMPROVED", "WORSENED") & CHGCAT1 == CHGCAT1.join &
+    tmp_obs_nr + 1 == tmp_obs_nr.join
+)
+```
+
+<details>
+<summary>`adqs` dataset</summary>
+```{r, echo=FALSE}
+dataset_vignette(adqs)
+```
+</details>
+
+```{r}
+confirmed_worsening <- event_source(
+  dataset_name = "adqs",
+  filter = CHGCAT1 == "WORSENED" & CONFFL == "Y",
+  date = ADT
+)
+
+adtte <- derive_param_tte(
+  dataset_adsl = adsl,
+  source_datasets = list(adsl = adsl, adqs = adqs),
+  end_dates = list(trt_end),
+  event_conditions = list(confirmed_worsening),
+  censor_conditions = list(valid_assessment),
+  set_values_to = exprs(
+    PARAMCD = "TTWORS",
+    PARAM = "Time to worsening"
+  )
+)
+```
+
+<details>
+<summary>`adtte` dataset</summary>
+```{r, echo=FALSE}
+dataset_vignette(adtte)
+```
+</details>
+
+```{r, echo=FALSE}
+plot_data(adqs, dataset_tte = adtte)
+```
 
 Another option is to use `derive_extreme_event()` with `event_joined()` objects
 to derive the time-to-event parameter. This has the advantage that the input
