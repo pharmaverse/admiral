@@ -1131,7 +1131,8 @@ derive_vars_merged_summary <- function(dataset,
   assert_vars(by_vars)
   by_vars_left <- replace_values_by_names(by_vars)
   by_vars_right <- chr2vars(paste(vars2chr(by_vars)))
-  assert_expr_list(new_vars, named = TRUE)
+  # once new_var is removed new_vars should be mandatory
+  assert_expr_list(new_vars, named = TRUE, optional = TRUE)
   filter_add <-
     assert_filter_cond(enexpr(filter_add), optional = TRUE)
   assert_data_frame(
