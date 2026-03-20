@@ -4,6 +4,9 @@
 
 ## Updates of Existing Functions
 
+- The `filter_add` argument in `derive_var_joined_exist_flag()` is no longer
+ignored. (#3018)
+
 - Fixed poorly formatted warning messages in `derive_param_computed()` and `derive_vars_computed()`. (#2969)
 
 - `use_ad_template()` was updated to remove the `open` argument, meaning the generated template will never automatically open
