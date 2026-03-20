@@ -650,12 +650,12 @@ derive_param_tte(
 ) \%>\%
 select(-STUDYID, -PARAMCD)
 #> # A tibble: 4 × 8
-#>   USUBJID ADT        EVNTDESC        CNSR SRCDOM SRCVAR CNSDTDSC      STARTDT   
-#>   <chr>   <date>     <chr>          <int> <chr>  <chr>  <chr>         <date>    
-#> 1 01      2021-02-03 END OF STUDY       1 ADQS   ADT    LAST ASSESSM… 2020-12-06
-#> 2 02      2021-02-03 NEW DRUG           2 ADQS   ADT    LAST ASSESSM… 2021-01-16
-#> 3 03      2021-03-15 WORSENING          0 ADQS   ADT    <NA>          2021-02-01
-#> 4 04      2021-03-10 NO ASSESSMENTS     3 ADSL   TRTSDT TREATMENT ST… 2021-03-10}\if{html}{\out{</div>}}
+#>   USUBJID ADT        EVNTDESC       SRCDOM SRCVAR  CNSR CNSDTDSC      STARTDT   
+#>   <chr>   <date>     <chr>          <chr>  <chr>  <int> <chr>         <date>    
+#> 1 01      2021-02-03 END OF STUDY   ADQS   ADT        1 LAST ASSESSM… 2020-12-06
+#> 2 02      2021-02-03 NEW DRUG       ADQS   ADT        2 LAST ASSESSM… 2021-01-16
+#> 3 03      2021-03-15 WORSENING      ADQS   ADT        0 <NA>          2021-02-01
+#> 4 04      2021-03-10 NO ASSESSMENTS ADSL   TRTSDT     3 TREATMENT ST… 2021-03-10}\if{html}{\out{</div>}}
 
 Please note that \code{CNSR} is set to different values depending on the
 censoring reason:
