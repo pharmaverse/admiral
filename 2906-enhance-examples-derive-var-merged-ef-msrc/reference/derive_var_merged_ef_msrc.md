@@ -284,7 +284,7 @@ Subject `"4"` has no records in either source, so `CANCTRFL` is `NA`.
 ### Controlling flag values (`true_value`, `false_value`, `missing_value`)
 
 By default `true_value = "Y"`, `false_value = NA_character_`, and
-`missing_value = NA_character_`. All three can be customised to any
+`missing_value = NA_character_`. All three can be customized to any
 character scalar of the same type.
 
 - `true_value`: assigned when the condition is `TRUE` in at least one

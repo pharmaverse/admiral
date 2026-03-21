@@ -40,7 +40,7 @@
 - The documentation for
   [`derive_var_merged_ef_msrc()`](https:/pharmaverse.github.io/admiral/cran-release/2906-enhance-examples-derive-var-merged-ef-msrc/reference/derive_var_merged_ef_msrc.md)
   was enhanced with structured examples covering `flag_events` with
-  multiple sources, customising
+  multiple sources, customizing
   `true_value`/`false_value`/`missing_value`, and per-source `by_vars`
   renaming.
   ([\#2906](https://github.com/pharmaverse/admiral/issues/2906))
