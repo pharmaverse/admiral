@@ -133,10 +133,36 @@ all observations the condition evaluates to \code{FALSE} or \code{NA}. Otherwise
 is set to the missing value (\code{missing_value}).
 }
 }
-\examples{
-library(dplyr)
+\seealso{
+\code{\link[=flag_event]{flag_event()}}
 
-# Derive a flag indicating anti-cancer treatment based on CM and PR
+General Derivation Functions for all ADaMs that returns variable appended to dataset:
+\code{\link{derive_var_extreme_flag}()},
+\code{\link{derive_var_joined_exist_flag}()},
+\code{\link{derive_var_merged_exist_flag}()},
+\code{\link{derive_var_obs_number}()},
+\code{\link{derive_var_relative_flag}()},
+\code{\link{derive_vars_cat}()},
+\code{\link{derive_vars_computed}()},
+\code{\link{derive_vars_joined}()},
+\code{\link{derive_vars_joined_summary}()},
+\code{\link{derive_vars_merged}()},
+\code{\link{derive_vars_merged_lookup}()},
+\code{\link{derive_vars_merged_summary}()},
+\code{\link{derive_vars_transposed}()}
+}
+\concept{der_gen}
+\keyword{der_gen}
+\section{Examples}{
+\subsection{Data setup}{
+
+The following examples use the datasets below. \code{adsl} is the subject-
+level dataset onto which the flag is merged. \code{cm} contains concomitant
+medication records and \code{pr} contains procedure records — both are used as
+sources in the examples.
+
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{library(dplyr)
+
 adsl <- tribble(
   ~USUBJID,
   "1",
@@ -153,14 +179,30 @@ cm <- tribble(
   "3",      "ANTI-CANCER",      1
 )
 
-# Assuming all records in PR indicate cancer treatment
-pr <- tibble::tribble(
+# All records in PR are assumed to indicate cancer treatment
+pr <- tribble(
   ~USUBJID, ~PRSEQ,
   "2",      1,
   "3",      1
-)
+)}\if{html}{\out{</div>}}}
+\subsection{Flagging from multiple sources (\code{flag_events})}{
 
-derive_var_merged_ef_msrc(
+The \code{flag_events} argument takes a list of \code{flag_event()} objects, each
+pointing to a named source dataset and an optional \code{condition}. For a given
+by group, the new variable is set to \code{true_value} if the condition evaluates
+to \code{TRUE} at least once in \strong{any} of the sources.
+
+In the example below, an anti-cancer treatment flag \code{CANCTRFL} is derived
+from two sources:
+\itemize{
+\item \code{cm}: flagged when \code{CMCAT == "ANTI-CANCER"}
+\item \code{pr}: all records qualify (no \code{condition} specified), so any subject with
+a procedure record is flagged
+}
+
+Subject \code{"4"} has no records in either source, so \code{CANCTRFL} is \code{NA}.
+
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{derive_var_merged_ef_msrc(
   adsl,
   by_vars = exprs(USUBJID),
   flag_events = list(
@@ -175,10 +217,71 @@ derive_var_merged_ef_msrc(
   source_datasets = list(cm = cm, pr = pr),
   new_var = CANCTRFL
 )
+#> # A tibble: 4 × 2
+#>   USUBJID CANCTRFL
+#>   <chr>   <chr>   
+#> 1 1       Y       
+#> 2 2       Y       
+#> 3 3       Y       
+#> 4 4       <NA>    }\if{html}{\out{</div>}}}
+\subsection{Controlling flag values (\code{true_value}, \code{false_value}, \code{missing_value})}{
 
-# Using different by variables depending on the source
-# Add a dose adjustment flag to ADEX based on ADEX, EC, and FA
-adex <- tribble(
+By default \code{true_value = "Y"}, \code{false_value = NA_character_}, and
+\code{missing_value = NA_character_}. All three can be customised to any character
+scalar of the same type.
+\itemize{
+\item \code{true_value}: assigned when the condition is \code{TRUE} in at least one source
+\item \code{false_value}: assigned when a subject has records in a source but the
+condition is never \code{TRUE}
+\item \code{missing_value}: assigned when a subject has \strong{no} records in any source
+}
+
+In the example below, subjects with no anti-cancer records but present in a
+source receive \code{"N"}, and subject \code{"4"} (absent from all sources) also
+receives \code{"N"} via \code{missing_value}:
+
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{derive_var_merged_ef_msrc(
+  adsl,
+  by_vars = exprs(USUBJID),
+  flag_events = list(
+    flag_event(
+      dataset_name = "cm",
+      condition = CMCAT == "ANTI-CANCER"
+    ),
+    flag_event(
+      dataset_name = "pr"
+    )
+  ),
+  source_datasets = list(cm = cm, pr = pr),
+  new_var = CANCTRFL,
+  true_value = "Y",
+  false_value = "N",
+  missing_value = "N"
+)
+#> # A tibble: 4 × 2
+#>   USUBJID CANCTRFL
+#>   <chr>   <chr>   
+#> 1 1       Y       
+#> 2 2       Y       
+#> 3 3       Y       
+#> 4 4       N       }\if{html}{\out{</div>}}}
+\subsection{Per-source \code{by_vars} renaming}{
+
+When the grouping variable has a different name in a source dataset,
+the \code{by_vars} argument of \code{flag_event()} can be used to rename it using the
+\verb{exprs(<target> = <source>)} syntax. This allows each source to use its own
+link variable while still merging correctly onto the input dataset.
+
+In the example below, a dose adjustment flag \code{DOSADJFL} is derived for each
+exposure record in \code{adex}. The flag is set to \code{"Y"} if a dose adjustment is
+recorded in any of three sources:
+\itemize{
+\item \code{ex}: directly via \code{EXADJ}
+\item \code{ec}: linked via \code{ECLNKID} (renamed to \code{EXLNKID} for the merge)
+\item \code{fa}: linked via \code{FALNKID} (renamed to \code{EXLNKID} for the merge)
+}
+
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{adex <- tribble(
   ~USUBJID, ~EXLNKID, ~EXADJ,
   "1",      "1",      "AE",
   "1",      "2",      NA_character_,
@@ -220,24 +323,12 @@ derive_var_merged_ef_msrc(
   source_datasets = list(ex = adex, ec = ec, fa = fa),
   new_var = DOSADJFL
 )
-}
-\seealso{
-\code{\link[=flag_event]{flag_event()}}
+#> # A tibble: 5 × 4
+#>   USUBJID EXLNKID EXADJ DOSADJFL
+#>   <chr>   <chr>   <chr> <chr>   
+#> 1 1       1       AE    Y       
+#> 2 1       2       <NA>  <NA>    
+#> 3 1       3       <NA>  Y       
+#> 4 2       1       <NA>  <NA>    
+#> 5 3       1       <NA>  Y       }\if{html}{\out{</div>}}}}
 
-General Derivation Functions for all ADaMs that returns variable appended to dataset:
-\code{\link{derive_var_extreme_flag}()},
-\code{\link{derive_var_joined_exist_flag}()},
-\code{\link{derive_var_merged_exist_flag}()},
-\code{\link{derive_var_obs_number}()},
-\code{\link{derive_var_relative_flag}()},
-\code{\link{derive_vars_cat}()},
-\code{\link{derive_vars_computed}()},
-\code{\link{derive_vars_joined}()},
-\code{\link{derive_vars_joined_summary}()},
-\code{\link{derive_vars_merged}()},
-\code{\link{derive_vars_merged_lookup}()},
-\code{\link{derive_vars_merged_summary}()},
-\code{\link{derive_vars_transposed}()}
-}
-\concept{der_gen}
-\keyword{der_gen}

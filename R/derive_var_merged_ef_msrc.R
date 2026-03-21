@@ -90,10 +90,18 @@
 #'
 #' @export
 #'
-#' @examples
+#' @examplesx
+#'
+#' @caption Data setup
+#'
+#' @info The following examples use the datasets below. `adsl` is the subject-
+#' level dataset onto which the flag is merged. `cm` contains concomitant
+#' medication records and `pr` contains procedure records — both are used as
+#' sources in the examples.
+#'
+#' @code
 #' library(dplyr)
 #'
-#' # Derive a flag indicating anti-cancer treatment based on CM and PR
 #' adsl <- tribble(
 #'   ~USUBJID,
 #'   "1",
@@ -110,13 +118,30 @@
 #'   "3",      "ANTI-CANCER",      1
 #' )
 #'
-#' # Assuming all records in PR indicate cancer treatment
-#' pr <- tibble::tribble(
+#' # All records in PR are assumed to indicate cancer treatment
+#' pr <- tribble(
 #'   ~USUBJID, ~PRSEQ,
 #'   "2",      1,
 #'   "3",      1
 #' )
 #'
+#' @caption Flagging from multiple sources (`flag_events`)
+#'
+#' @info The `flag_events` argument takes a list of `flag_event()` objects, each
+#' pointing to a named source dataset and an optional `condition`. For a given
+#' by group, the new variable is set to `true_value` if the condition evaluates
+#' to `TRUE` at least once in **any** of the sources.
+#'
+#' In the example below, an anti-cancer treatment flag `CANCTRFL` is derived
+#' from two sources:
+#'
+#' - `cm`: flagged when `CMCAT == "ANTI-CANCER"`
+#' - `pr`: all records qualify (no `condition` specified), so any subject with
+#'   a procedure record is flagged
+#'
+#' Subject `"4"` has no records in either source, so `CANCTRFL` is `NA`.
+#'
+#' @code
 #' derive_var_merged_ef_msrc(
 #'   adsl,
 #'   by_vars = exprs(USUBJID),
@@ -133,8 +158,57 @@
 #'   new_var = CANCTRFL
 #' )
 #'
-#' # Using different by variables depending on the source
-#' # Add a dose adjustment flag to ADEX based on ADEX, EC, and FA
+#' @caption Controlling flag values (`true_value`, `false_value`, `missing_value`)
+#'
+#' @info By default `true_value = "Y"`, `false_value = NA_character_`, and
+#' `missing_value = NA_character_`. All three can be customised to any character
+#' scalar of the same type.
+#'
+#' - `true_value`: assigned when the condition is `TRUE` in at least one source
+#' - `false_value`: assigned when a subject has records in a source but the
+#'   condition is never `TRUE`
+#' - `missing_value`: assigned when a subject has **no** records in any source
+#'
+#' In the example below, subjects with no anti-cancer records but present in a
+#' source receive `"N"`, and subject `"4"` (absent from all sources) also
+#' receives `"N"` via `missing_value`:
+#'
+#' @code
+#' derive_var_merged_ef_msrc(
+#'   adsl,
+#'   by_vars = exprs(USUBJID),
+#'   flag_events = list(
+#'     flag_event(
+#'       dataset_name = "cm",
+#'       condition = CMCAT == "ANTI-CANCER"
+#'     ),
+#'     flag_event(
+#'       dataset_name = "pr"
+#'     )
+#'   ),
+#'   source_datasets = list(cm = cm, pr = pr),
+#'   new_var = CANCTRFL,
+#'   true_value = "Y",
+#'   false_value = "N",
+#'   missing_value = "N"
+#' )
+#'
+#' @caption Per-source `by_vars` renaming
+#'
+#' @info When the grouping variable has a different name in a source dataset,
+#' the `by_vars` argument of `flag_event()` can be used to rename it using the
+#' `exprs(<target> = <source>)` syntax. This allows each source to use its own
+#' link variable while still merging correctly onto the input dataset.
+#'
+#' In the example below, a dose adjustment flag `DOSADJFL` is derived for each
+#' exposure record in `adex`. The flag is set to `"Y"` if a dose adjustment is
+#' recorded in any of three sources:
+#'
+#' - `ex`: directly via `EXADJ`
+#' - `ec`: linked via `ECLNKID` (renamed to `EXLNKID` for the merge)
+#' - `fa`: linked via `FALNKID` (renamed to `EXLNKID` for the merge)
+#'
+#' @code
 #' adex <- tribble(
 #'   ~USUBJID, ~EXLNKID, ~EXADJ,
 #'   "1",      "1",      "AE",

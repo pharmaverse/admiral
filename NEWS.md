@@ -24,6 +24,8 @@ specified under `save_path`. This is because this functionality did not work as 
 
 ## Documentation
 
+- The documentation for `derive_var_merged_ef_msrc()` was enhanced with structured examples covering `flag_events` with multiple sources, customising `true_value`/`false_value`/`missing_value`, and per-source `by_vars` renaming. (#2906)
+
 - Fix `UDTC` derivation in `ADPPK` to use source domain `DTC` variables. (#3011)
 
 - New Estimands vignette added, describing possible implementations of estimands with `{admiral}` code. (#2954)
