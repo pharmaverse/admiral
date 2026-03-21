@@ -227,7 +227,7 @@ Subject \code{"4"} has no records in either source, so \code{CANCTRFL} is \code{
 \subsection{Controlling flag values (\code{true_value}, \code{false_value}, \code{missing_value})}{
 
 By default \code{true_value = "Y"}, \code{false_value = NA_character_}, and
-\code{missing_value = NA_character_}. All three can be customised to any character
+\code{missing_value = NA_character_}. All three can be customized to any character
 scalar of the same type.
 \itemize{
 \item \code{true_value}: assigned when the condition is \code{TRUE} in at least one source
