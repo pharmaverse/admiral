@@ -173,23 +173,35 @@ parameter can be used in the
 [`derive_param_tte()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/derive_param_tte.md)
 function to select the event records.
 
+### Adding a Confirmation Flag to the Source Dataset
+
+To derive a variable (`CONFFL`) which indicates whether the worsening or
+improvement is confirmed or not, the
+[`derive_var_joined_exist_flag()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/derive_var_joined_exist_flag.md)
+function can be used. Here an assessment is considered as confirmed if
+it doesn’t change at the next visit. Only assessments within the
+treatment period (`ANL01FL == "Y"`) are considered for the confirmation.
+
 ``` r
-adqs <- adqs %>% 
+adqs_ext <- adqs %>%
   derive_var_joined_exist_flag(
-  dataset_add = adqs,
-  filter_add = ANL01FL == "Y",
-  by_vars = exprs(USUBJID),
-  new_var = CONFFL,
-  tmp_obs_nr_var = tmp_obs_nr,
-  join_vars = exprs(CHGCAT1),
-  join_type = "after",
-  order = exprs(AVISITN),
-  filter_join = CHGCAT1 %in% c("IMPROVED", "WORSENED") & CHGCAT1 == CHGCAT1.join &
-    tmp_obs_nr + 1 == tmp_obs_nr.join
-)
+    dataset_add = adqs,
+    filter_add = ANL01FL == "Y",
+    by_vars = exprs(USUBJID),
+    new_var = CONFFL,
+    tmp_obs_nr_var = tmp_obs_nr,
+    join_vars = exprs(CHGCAT1),
+    join_type = "after",
+    order = exprs(AVISITN),
+    filter_join = CHGCAT1 %in% c("IMPROVED", "WORSENED") & CHGCAT1 == CHGCAT1.join &
+      tmp_obs_nr + 1 == tmp_obs_nr.join
+  )
 ```
 
-`adqs` dataset
+`adqs_ext` dataset
+
+The new variable `CONFFL` is then used in the definition of the event
+for confirmed worsening.
 
 ``` r
 confirmed_worsening <- event_source(
@@ -200,13 +212,13 @@ confirmed_worsening <- event_source(
 
 adtte <- derive_param_tte(
   dataset_adsl = adsl,
-  source_datasets = list(adsl = adsl, adqs = adqs),
+  source_datasets = list(adsl = adsl, adqs = adqs_ext),
   end_dates = list(trt_end),
   event_conditions = list(confirmed_worsening),
   censor_conditions = list(valid_assessment),
   set_values_to = exprs(
-    PARAMCD = "TTWORS",
-    PARAM = "Time to worsening"
+    PARAMCD = "TTCWORS",
+    PARAM = "Time to confirmed worsening"
   )
 )
 ```
@@ -215,13 +227,64 @@ adtte <- derive_param_tte(
 
 ![](tte_analyses_files/figure-html/unnamed-chunk-17-1.png)
 
+### Adding a Confirmation Parameters to the Source Dataset
+
+TODO: add example for time to confirmed worsening using a confirmed
+worsening parameter.
+
+### Using `derive_extreme_event()` to Derive Confirmation and Time-to-Event in One Step
+
 Another option is to use
 [`derive_extreme_event()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/derive_extreme_event.md)
 with
 [`event_joined()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/event_joined.md)
 objects to derive the time-to-event parameter. This has the advantage
 that the input dataset doesn’t need to be modified but it has the
-disadvantage that the results are harder to review and trace back.
+disadvantage that the results are harder to review and trace back. E.g.,
+in the example below, the assessments which are considered confirmed are
+derived within the
+[`derive_extreme_event()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/derive_extreme_event.md)
+function, i.e., they are not accessible for reviewers or for debugging.
+
+``` r
+adtte <- derive_extreme_event(
+  by_vars = exprs(USUBJID),
+  source_datasets = list(adqs = filter(adqs, ANL01FL == "Y")),
+  tmp_event_nr_var = tmp_event_nr,
+  order = exprs(tmp_event_nr, ADT),
+  mode = "first",
+  events = list(
+    event_joined(
+      description = "Confirmed worsening event",
+      dataset_name = "adqs",
+      order = exprs(AVISITN),
+      join_vars = exprs(CHGCAT1),
+      join_type = "after",
+      condition = CHGCAT1 == "WORSENED" & CHGCAT1.join == "WORSENED",
+      keep_source_vars = exprs(ADT, TRTSDT, TRTEDT, STUDYID),
+      set_values_to = exprs(CNSR = 0)
+    ),
+    event(
+      description = "Censoring at last valid assessment",
+      dataset_name = "adqs",
+      condition = !is.na(CHGCAT1),
+      keep_source_vars = exprs(ADT, TRTSDT, TRTEDT, STUDYID),
+      order = exprs(ADT),
+      mode = "last",
+      set_values_to = exprs(CNSR = 1)
+    )
+  ),
+  set_values_to = exprs(
+    PARAMCD = "TTCWORS",
+    PARAM = "Time to confirmed worsening",
+    STARTDT = TRTSDT
+  )
+)
+```
+
+`adtte` dataset
+
+![](tte_analyses_files/figure-html/unnamed-chunk-20-1.png)
 
 ## Combined Events
 

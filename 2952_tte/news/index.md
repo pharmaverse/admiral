@@ -18,6 +18,11 @@
   objects.
   ([\#2952](https://github.com/pharmaverse/admiral/issues/2952))
 
+- The `filter_add` argument in
+  [`derive_var_joined_exist_flag()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/derive_var_joined_exist_flag.md)
+  is no longer erroneously ignored.
+  ([\#3018](https://github.com/pharmaverse/admiral/issues/3018))
+
 - Fixed poorly formatted warning messages in
   [`derive_param_computed()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/derive_param_computed.md)
   and
@@ -48,6 +53,9 @@
   **Phase 4 (removed)**
 
 ### Documentation
+
+- Fix `UDTC` derivation in `ADPPK` to use source domain `DTC` variables.
+  ([\#3011](https://github.com/pharmaverse/admiral/issues/3011))
 
 - New Estimands vignette added, describing possible implementations of
   estimands with [admiral](https://pharmaverse.github.io/admiral/) code.
