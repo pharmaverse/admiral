@@ -10,6 +10,9 @@ period and the `event_type` argument for specifying if the event is negative
 `consider_end_dates` field was added to the `event_source()`, `censor_source()`,
 and `tte_source()` objects. (#2952)
 
+- The `filter_add` argument in `derive_var_joined_exist_flag()` is no longer
+erroneously ignored. (#3018)
+
 - Fixed poorly formatted warning messages in `derive_param_computed()` and `derive_vars_computed()`. (#2969)
 
 - `use_ad_template()` was updated to remove the `open` argument, meaning the generated template will never automatically open
@@ -29,6 +32,8 @@ specified under `save_path`. This is because this functionality did not work as 
   **Phase 4 (removed)**
 
 ## Documentation
+
+- Fix `UDTC` derivation in `ADPPK` to use source domain `DTC` variables. (#3011)
 
 - New Estimands vignette added, describing possible implementations of estimands with `{admiral}` code. (#2954)
 
