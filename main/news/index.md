@@ -6,6 +6,11 @@
 
 ### Updates of Existing Functions
 
+- The `filter_add` argument in
+  [`derive_var_joined_exist_flag()`](https:/pharmaverse.github.io/admiral/cran-release/main/reference/derive_var_joined_exist_flag.md)
+  is no longer erroneously ignored.
+  ([\#3018](https://github.com/pharmaverse/admiral/issues/3018))
+
 - Fixed poorly formatted warning messages in
   [`derive_param_computed()`](https:/pharmaverse.github.io/admiral/cran-release/main/reference/derive_param_computed.md)
   and
