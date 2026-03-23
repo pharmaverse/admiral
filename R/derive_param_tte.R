@@ -1137,9 +1137,9 @@ filter_date_sources <- function(sources,
     if (!is.null(end_date_data) && sources[[i]]$consider_end_dates) {
       if (mode == "first") {
         # for events only the end date variable should be added but not CNSR
-        new_vars = exprs(!!end_date_var)
+        new_vars <- exprs(!!end_date_var)
       } else {
-        new_vars = NULL
+        new_vars <- NULL
       }
       source_dataset <- derive_vars_merged(
         source_dataset,

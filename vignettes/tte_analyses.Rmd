@@ -20,6 +20,7 @@ library(tibble)
 library(lubridate)
 library(dplyr)
 library(ggplot2)
+library(ggnewscale)
 # create some test data
 adsl <- tribble(
   ~USUBJID, ~TRTSDT,           ~TRTEDT,
@@ -27,7 +28,7 @@ adsl <- tribble(
   "002",    ymd("2020-01-02"), ymd("2020-03-03"),
   "003",    ymd("2020-01-03"), ymd("2020-02-22"),
   "004",    ymd("2020-01-04"), ymd("2020-04-18")
-) %>% 
+) %>%
   mutate(
     STUDYID = "XY1234"
   )
@@ -49,7 +50,7 @@ adqs <- tribble(
   "004",    "WEEK 8",      83,
   "004",    "WEEK 12",     62,
   "004",    "WEEK 16",     60
-) %>% 
+) %>%
   mutate(
     STUDYID = "XY1234",
     AVISITN = case_when(
@@ -61,9 +62,9 @@ adqs <- tribble(
       TRUE ~ NA_real_
     ),
     ABLFL = if_else(AVISIT == "BASELINE", "Y", NA_character_)
-  ) %>% 
-  derive_var_base(by_vars = exprs(USUBJID)) %>% 
-  derive_var_chg() %>% 
+  ) %>%
+  derive_var_base(by_vars = exprs(USUBJID)) %>%
+  derive_var_chg() %>%
   mutate(
     CHGCAT1 = case_when(
       CHG <= -10 ~ "WORSENED",
@@ -71,56 +72,87 @@ adqs <- tribble(
       CHG >= 10 ~ "IMPROVED",
       TRUE ~ NA_character_
     )
-  ) %>% 
+  ) %>%
   derive_vars_merged(
     dataset_add = adsl,
     by_vars = exprs(USUBJID, STUDYID)
-  ) %>% 
+  ) %>%
   mutate(
     ADT = TRTSDT + AVISITN * 7,
     ANL01FL = if_else(ADT <= TRTEDT, "Y", NA_character_)
-  ) %>% 
+  ) %>%
   derive_vars_dy(reference_date = TRTSDT, source_vars = exprs(ADT, TRTSDT, TRTEDT))
-
 ```
 
 ```{r, echo=FALSE}
 plot_data <- function(dataset, dataset_tte = NULL) {
-  final_plot <- ggplot(
-    dataset,
-    mapping = aes(
-      x = ADY,
-      y = USUBJID,
-      color = CHGCAT1,
-      shape = CHGCAT1,
-      fill = CHGCAT1
+  final_plot <- ggplot(dataset) +
+    theme_classic() +
+    theme(
+      axis.line.y = element_blank()
+    ) +
+    labs(
+      y = "Subject",
+      x = "Time"
+    ) +
+    geom_rect(
+      aes(
+        y = USUBJID,
+        height = 0.5,
+        xmin = TRTSDY,
+        xmax = TRTEDY,
+        fill = "Observation Period",
+        color = "Observation Period"
+      ),
+      alpha = 0.5, inherit.aes = FALSE
+    ) +
+    scale_fill_manual(
+      name = NULL,
+      values = c("Observation Period" = "lightyellow")
+    ) +
+    scale_color_manual(
+      name = NULL,
+      values = c("Observation Period" = "yellow")
+    ) +
+    guides(
+      fill = guide_legend(order = 2),
+      color = guide_legend(order = 2)
+    ) +
+    new_scale_color() +
+    new_scale_fill() +
+    geom_point(
+      aes(
+        x = ADY,
+        y = USUBJID,
+        color = CHGCAT1,
+        shape = CHGCAT1,
+        fill = CHGCAT1
+      ),
+      size = 3
+    ) +
+    scale_shape_manual(
+      name = "Change from baseline",
+      values = c("IMPROVED" = 24, "UNCHANGED" = 21, "WORSENED" = 25), na.value = 13
+    ) +
+    scale_color_manual(
+      name = "Change from baseline",
+      values = c("IMPROVED" = "darkgreen", "UNCHANGED" = "blue", "WORSENED" = "red"), na.value = "grey"
+    ) +
+    scale_fill_manual(
+      name = "Change from baseline",
+      values = c("IMPROVED" = "darkgreen", "UNCHANGED" = "blue", "WORSENED" = "red")
+    ) +
+    scale_x_continuous(
+      breaks = seq(1, 120, by = 28),
+      labels = c("Baseline", "Week 4", "Week 8", "Week 12", "Week 16")
+    ) +
+    scale_y_discrete(limits = rev(levels(as.factor(dataset$USUBJID)))) +
+    guides(
+      fill = guide_legend(order = 1),
+      color = guide_legend(order = 1),
+      shape = guide_legend(order = 1)
     )
-  ) +
-  theme_classic() +
-  theme(
-    axis.line.y = element_blank()
-  ) +
-  labs(
-    y = "Subject",
-    x = "Time",
-    color = "Change from baseline",
-    shape = "Change from baseline",
-    fill = "Change from baseline"
-  ) +
-  scale_shape_manual(values = c("IMPROVED" = 24, "UNCHANGED" = 21, "WORSENED" = 25), na.value = 13) +
-  scale_color_manual(values = c("IMPROVED" = "darkgreen", "UNCHANGED" = "blue", "WORSENED" = "red"), na.value = "grey") +
-  scale_fill_manual(values = c("IMPROVED" = "darkgreen", "UNCHANGED" = "blue", "WORSENED" = "red")) +
-  scale_x_continuous(
-    breaks = seq(1, 100, by = 28),
-    labels = c("Baseline", "Week 4", "Week 8", "Week 12")
-  ) +
-  scale_y_discrete(limits = rev(levels(as.factor(dataset$USUBJID)))) +
-  geom_rect(
-    aes(y = USUBJID, height = 0.5, xmin = TRTSDY, xmax = TRTEDY),
-    color = "yellow", fill = "lightyellow", alpha = 0.5, inherit.aes = FALSE
-  ) +
-  geom_point(size = 3)
-  
+
   if (!is.null(dataset_tte)) {
     dataset_tte <- dataset_tte %>% derive_vars_dy(
       reference_date = STARTDT,
@@ -151,7 +183,7 @@ plot_data <- function(dataset, dataset_tte = NULL) {
         inherit.aes = FALSE
       )
   }
-  
+
   final_plot
 }
 ```
@@ -232,7 +264,10 @@ subject worsened or not.
 <details>
 <summary>`adqs` dataset</summary>
 ```{r, echo=FALSE}
-dataset_vignette(adqs)
+dataset_vignette(
+  adqs,
+  display_vars = exprs(USUBJID, AVISIT, AVAL, CHG, CHGCAT1, ADT, ANL01FL)
+)
 ```
 </details>
 
@@ -344,29 +379,42 @@ derived in the input dataset, e.g., by deriving a variable or a parameter which
 indicates whether the event is confirmed or not. Then this variable or parameter
 can be used in the `derive_param_tte()` function to select the event records.
 
+## Adding a Confirmation Flag to the Source Dataset
+
+To derive a variable (`CONFFL`) which indicates whether the worsening or
+improvement is confirmed or not, the `derive_var_joined_exist_flag()` function
+can be used. Here an assessment is considered as confirmed if it doesn't change
+at the next visit. Only assessments within the treatment period (`ANL01FL ==
+"Y"`) are considered for the confirmation.
+
 ```{r}
-adqs <- adqs %>% 
+adqs_ext <- adqs %>%
   derive_var_joined_exist_flag(
-  dataset_add = adqs,
-  filter_add = ANL01FL == "Y",
-  by_vars = exprs(USUBJID),
-  new_var = CONFFL,
-  tmp_obs_nr_var = tmp_obs_nr,
-  join_vars = exprs(CHGCAT1),
-  join_type = "after",
-  order = exprs(AVISITN),
-  filter_join = CHGCAT1 %in% c("IMPROVED", "WORSENED") & CHGCAT1 == CHGCAT1.join &
-    tmp_obs_nr + 1 == tmp_obs_nr.join
-)
+    dataset_add = adqs,
+    filter_add = ANL01FL == "Y",
+    by_vars = exprs(USUBJID),
+    new_var = CONFFL,
+    tmp_obs_nr_var = tmp_obs_nr,
+    join_vars = exprs(CHGCAT1),
+    join_type = "after",
+    order = exprs(AVISITN),
+    filter_join = CHGCAT1 %in% c("IMPROVED", "WORSENED") & CHGCAT1 == CHGCAT1.join &
+      tmp_obs_nr + 1 == tmp_obs_nr.join
+  )
 ```
 
-<details>
-<summary>`adqs` dataset</summary>
+<details open>
+<summary>`adqs_ext` dataset</summary>
 ```{r, echo=FALSE}
-dataset_vignette(adqs)
+dataset_vignette(
+  adqs_ext,
+  display_vars = exprs(USUBJID, AVISIT, CHGCAT1, ANL01FL, CONFFL)
+)
 ```
 </details>
 
+The new variable `CONFFL` is then used in the definition of the event for
+confirmed worsening.
 ```{r}
 confirmed_worsening <- event_source(
   dataset_name = "adqs",
@@ -376,13 +424,13 @@ confirmed_worsening <- event_source(
 
 adtte <- derive_param_tte(
   dataset_adsl = adsl,
-  source_datasets = list(adsl = adsl, adqs = adqs),
+  source_datasets = list(adsl = adsl, adqs = adqs_ext),
   end_dates = list(trt_end),
   event_conditions = list(confirmed_worsening),
   censor_conditions = list(valid_assessment),
   set_values_to = exprs(
-    PARAMCD = "TTWORS",
-    PARAM = "Time to worsening"
+    PARAMCD = "TTCWORS",
+    PARAM = "Time to confirmed worsening"
   )
 )
 ```
@@ -398,10 +446,66 @@ dataset_vignette(adtte)
 plot_data(adqs, dataset_tte = adtte)
 ```
 
+## Adding a Confirmation Parameters to the Source Dataset
+
+TODO: add example for time to confirmed worsening using a confirmed worsening parameter.
+
+## Using `derive_extreme_event()` to Derive Confirmation and Time-to-Event in One Step
+
 Another option is to use `derive_extreme_event()` with `event_joined()` objects
 to derive the time-to-event parameter. This has the advantage that the input
 dataset doesn't need to be modified but it has the disadvantage that the results
-are harder to review and trace back.
+are harder to review and trace back. E.g., in the example below, the assessments
+which are considered confirmed are derived within the `derive_extreme_event()`
+function, i.e., they are not accessible for reviewers or for debugging.
+
+```{r}
+adtte <- derive_extreme_event(
+  by_vars = exprs(USUBJID),
+  source_datasets = list(adqs = filter(adqs, ANL01FL == "Y")),
+  tmp_event_nr_var = tmp_event_nr,
+  order = exprs(tmp_event_nr, ADT),
+  mode = "first",
+  events = list(
+    event_joined(
+      description = "Confirmed worsening event",
+      dataset_name = "adqs",
+      order = exprs(AVISITN),
+      join_vars = exprs(CHGCAT1),
+      join_type = "after",
+      condition = CHGCAT1 == "WORSENED" & CHGCAT1.join == "WORSENED",
+      keep_source_vars = exprs(ADT, TRTSDT, TRTEDT, STUDYID),
+      set_values_to = exprs(CNSR = 0)
+    ),
+    event(
+      description = "Censoring at last valid assessment",
+      dataset_name = "adqs",
+      condition = !is.na(CHGCAT1),
+      keep_source_vars = exprs(ADT, TRTSDT, TRTEDT, STUDYID),
+      order = exprs(ADT),
+      mode = "last",
+      set_values_to = exprs(CNSR = 1)
+    )
+  ),
+  set_values_to = exprs(
+    PARAMCD = "TTCWORS",
+    PARAM = "Time to confirmed worsening",
+    STARTDT = TRTSDT
+  )
+)
+```
+
+<details>
+<summary>`adtte` dataset</summary>
+```{r, echo=FALSE}
+dataset_vignette(adtte)
+```
+</details>
+
+```{r, echo=FALSE}
+plot_data(adqs, dataset_tte = adtte)
+```
+
 
 # Combined Events
 
