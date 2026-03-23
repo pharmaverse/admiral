@@ -4,7 +4,7 @@
 
 ## Updates of Existing Functions
 
-- The `filter_add` argument in `derive_var_joined_exist_flag()` is no longer
+- The `filter_add` argument in `derive_var_joined_exist_flag()` is no longer erroneously
 ignored. (#3018)
 
 - Fixed poorly formatted warning messages in `derive_param_computed()` and `derive_vars_computed()`. (#2969)
