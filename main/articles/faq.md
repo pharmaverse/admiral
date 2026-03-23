@@ -1,6 +1,6 @@
 # FAQ
 
-##### **What is admiral**?
+##### **What is `{admiral}`**?
 
 - Think of [admiral](https://pharmaverse.github.io/admiral/) as a
   toolbox of modular blocks (R functions) to create analysis
@@ -12,7 +12,16 @@
   that are based on [admiral](https://pharmaverse.github.io/admiral/)
   modular functions and user created modular functions.
 
-##### **Why** did we decide to start **admiral**?
+##### **Why is the `{admiral}` logo a red butterfly?**?
+
+- The logo is inspired from the [Red
+  Admiral](https://en.wikipedia.org/wiki/Vanessa_atalanta), also known
+  as *Vanessa atalanta*, which is a species of butterfly. However, our
+  [extension packages](https://pharmaverse.org/e2eclinical/adam/) have
+  branched out from this and have differently colored butterflies in
+  their logos.
+
+##### **Why** did we decide to start **`{admiral}`**?
 
 - Data analysis challenges in clinical trials vary depending on
   scientific goals, therapeutic areas, indications, data sources and

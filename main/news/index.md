@@ -73,6 +73,11 @@
   vignette, enabling links to them from across the website.
   ([\#3006](https://github.com/pharmaverse/admiral/issues/3006))
 
+- Added a new custom [404
+  page](https://pharmaverse.github.io/admiral/404.html) with a butterfly
+  quiz for lost users.
+  ([\#2982](https://github.com/pharmaverse/admiral/issues/2982))
+
 ### Various
 
 Developer Notes
