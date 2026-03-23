@@ -324,3 +324,36 @@ test_that("derive_var_joined_exist_flag Test 7: no warning if multiple records m
     keys = c("USUBJID", "AEGRPID")
   )
 })
+
+## Test 8: filter_add is considered ----
+test_that("derive_var_joined_exist_flag Test 8: filter_add is considered", {
+  expected <- tibble::tribble(
+    ~USUBJID, ~ADY, ~CRIT1FL, ~ANL01FL,      ~CONFFL,
+    "1",        10, "N",      "Y",           NA_character_,
+    "1",        21, "Y",      "Y",           NA_character_,
+    "1",        23, "Y",      NA_character_, NA_character_,
+    "2",         2, "Y",      "Y",           "Y",
+    "2",        11, "Y",      "Y",           NA_character_,
+    "2",        23, "N",      "Y",           NA_character_
+  )
+
+  input <- select(expected, -CONFFL)
+
+  actual <- derive_var_joined_exist_flag(
+    dataset = input,
+    dataset_add = input,
+    by_vars = exprs(USUBJID),
+    new_var = CONFFL,
+    join_type = "after",
+    join_vars = exprs(CRIT1FL),
+    order = exprs(ADY),
+    filter_join = CRIT1FL == "Y" & CRIT1FL.join == "Y",
+    filter_add = ANL01FL == "Y"
+  )
+
+  expect_dfs_equal(
+    expected,
+    actual,
+    keys = c("USUBJID", "ADY")
+  )
+})
