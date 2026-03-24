@@ -5,7 +5,7 @@ exists at least one observation in another dataset fulfilling a certain
 condition.
 
 **Note:** This is a wrapper function for the more generic
-[`derive_vars_merged()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/derive_vars_merged.md).
+[`derive_vars_merged()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/derive_vars_merged.md).
 
 ## Usage
 
@@ -61,7 +61,7 @@ derive_var_merged_exist_flag(
   Permitted values
 
   :   list of variables created by
-      [`exprs()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/reexport-exprs.md),
+      [`exprs()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/reexport-exprs.md),
       e.g., `exprs(USUBJID, VISIT)`
 
   Default value
@@ -180,19 +180,19 @@ from the additional dataset (`dataset_add`).
 
 General Derivation Functions for all ADaMs that returns variable
 appended to dataset:
-[`derive_var_extreme_flag()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/derive_var_extreme_flag.md),
-[`derive_var_joined_exist_flag()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/derive_var_joined_exist_flag.md),
-[`derive_var_merged_ef_msrc()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/derive_var_merged_ef_msrc.md),
-[`derive_var_obs_number()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/derive_var_obs_number.md),
-[`derive_var_relative_flag()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/derive_var_relative_flag.md),
-[`derive_vars_cat()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/derive_vars_cat.md),
-[`derive_vars_computed()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/derive_vars_computed.md),
-[`derive_vars_joined()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/derive_vars_joined.md),
-[`derive_vars_joined_summary()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/derive_vars_joined_summary.md),
-[`derive_vars_merged()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/derive_vars_merged.md),
-[`derive_vars_merged_lookup()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/derive_vars_merged_lookup.md),
-[`derive_vars_merged_summary()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/derive_vars_merged_summary.md),
-[`derive_vars_transposed()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/derive_vars_transposed.md)
+[`derive_var_extreme_flag()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/derive_var_extreme_flag.md),
+[`derive_var_joined_exist_flag()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/derive_var_joined_exist_flag.md),
+[`derive_var_merged_ef_msrc()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/derive_var_merged_ef_msrc.md),
+[`derive_var_obs_number()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/derive_var_obs_number.md),
+[`derive_var_relative_flag()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/derive_var_relative_flag.md),
+[`derive_vars_cat()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/derive_vars_cat.md),
+[`derive_vars_computed()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/derive_vars_computed.md),
+[`derive_vars_joined()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/derive_vars_joined.md),
+[`derive_vars_joined_summary()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/derive_vars_joined_summary.md),
+[`derive_vars_merged()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/derive_vars_merged.md),
+[`derive_vars_merged_lookup()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/derive_vars_merged_lookup.md),
+[`derive_vars_merged_summary()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/derive_vars_merged_summary.md),
+[`derive_vars_transposed()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/derive_vars_transposed.md)
 
 ## Examples
 

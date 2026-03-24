@@ -72,12 +72,12 @@ assume an equal number of days in each year (365.25).
 
 ## See also
 
-[`derive_vars_duration()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/derive_vars_duration.md)
+[`derive_vars_duration()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/derive_vars_duration.md)
 
 ADSL Functions that returns variable appended to dataset:
-[`derive_vars_aage()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/derive_vars_aage.md),
-[`derive_vars_extreme_event()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/derive_vars_extreme_event.md),
-[`derive_vars_period()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/derive_vars_period.md)
+[`derive_vars_aage()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/derive_vars_aage.md),
+[`derive_vars_extreme_event()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/derive_vars_extreme_event.md),
+[`derive_vars_period()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/derive_vars_period.md)
 
 ## Examples
 

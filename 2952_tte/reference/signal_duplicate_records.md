@@ -37,7 +37,7 @@ signal_duplicate_records(
   Permitted values
 
   :   list of variables created by
-      [`exprs()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/reexport-exprs.md),
+      [`exprs()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/reexport-exprs.md),
       e.g., `exprs(USUBJID, VISIT)`
 
   Default value
@@ -82,9 +82,9 @@ No return value, called for side effects
 ## See also
 
 Other internal:
-[`admiral-package`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/admiral-package.md),
-[`extract_duplicate_records()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/extract_duplicate_records.md),
-[`format.basket_select()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/format.basket_select.md)
+[`admiral-package`](https:/pharmaverse.github.io/admiral/2952_tte/reference/admiral-package.md),
+[`extract_duplicate_records()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/extract_duplicate_records.md),
+[`format.basket_select()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/format.basket_select.md)
 
 ## Examples
 

@@ -15,7 +15,7 @@ the creation of a time-to-event ADaM dataset can be more or less
 complex. In this vignette, we will discuss different scenarios and how
 to derive the essential variables `CNSR` and `ADT`. For a complete
 programming workflow see the [Creating a BDS Time-to-Event
-ADaM](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/articles/bds_tte.md)
+ADaM](https:/pharmaverse.github.io/admiral/2952_tte/articles/bds_tte.md)
 vignette.
 
 ## Observation Period
@@ -32,7 +32,7 @@ observation period. This can be done by deriving `ANLzzFL` variables in
 the input datasets and then filtering the records based on these flags.
 
 Another option is to use the `end_dates` argument of the
-[`derive_param_tte()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/derive_param_tte.md)
+[`derive_param_tte()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/derive_param_tte.md)
 function to specify the dates which restrict the observation period. The
 input records are then automatically restricted to records before the
 specified end dates.
@@ -76,12 +76,12 @@ The variable `CHGCAT1` indicates whether the subject worsened, improved,
 or was unchanged compared to baseline. For some records it is unknown
 whether the subject worsened or not.
 
-`adqs` dataset
+`adqs_a` dataset
 
 ![](tte_analyses_files/figure-html/unnamed-chunk-5-1.png)
 
 A “time to worsening” parameter is derived by using
-[`derive_param_tte()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/derive_param_tte.md).
+[`derive_param_tte()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/derive_param_tte.md).
 By default a negative event is assumed, thus the `event_type` argument
 doesn’t need to be specified.
 
@@ -100,12 +100,13 @@ worsening <- event_source(
 valid_assessment <- censor_source(
   dataset_name = "adqs",
   filter = !is.na(CHGCAT1),
-  date = ADT
+  date = ADT,
+  order = exprs(PARAMCD)
 )
 
 adtte <- derive_param_tte(
   dataset_adsl = adsl,
-  source_datasets = list(adsl = adsl, adqs = adqs),
+  source_datasets = list(adsl = adsl, adqs = adqs_a),
   end_dates = list(trt_end),
   event_conditions = list(worsening),
   censor_conditions = list(valid_assessment),
@@ -130,7 +131,7 @@ this time point.
 ![](img/tte_discrete_positive.png)
 
 For positive events, the `event_type` argument of the
-[`derive_param_tte()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/derive_param_tte.md)
+[`derive_param_tte()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/derive_param_tte.md)
 function can be set to `"positive"`.
 
 ``` r
@@ -142,7 +143,7 @@ improvement <- event_source(
 
 adtte <- derive_param_tte(
   dataset_adsl = adsl,
-  source_datasets = list(adsl = adsl, adqs = adqs),
+  source_datasets = list(adsl = adsl, adqs = adqs_a),
   end_dates = list(trt_end),
   event_type = "positive",
   event_conditions = list(improvement),
@@ -164,28 +165,28 @@ For some events it is necessary to consider more than one assessment.
 For example, improvement or worsening could require a confirmation at a
 subsequent assessment.
 
-[`derive_param_tte()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/derive_param_tte.md)
+[`derive_param_tte()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/derive_param_tte.md)
 doesn’t allow to consider subsequent records to decide whether an event
 occurred or not. Thus the confirmation information needs to be derived
 in the input dataset, e.g., by deriving a variable or a parameter which
 indicates whether the event is confirmed or not. Then this variable or
 parameter can be used in the
-[`derive_param_tte()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/derive_param_tte.md)
+[`derive_param_tte()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/derive_param_tte.md)
 function to select the event records.
 
 ### Adding a Confirmation Flag to the Source Dataset
 
 To derive a variable (`CONFFL`) which indicates whether the worsening or
 improvement is confirmed or not, the
-[`derive_var_joined_exist_flag()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/derive_var_joined_exist_flag.md)
+[`derive_var_joined_exist_flag()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/derive_var_joined_exist_flag.md)
 function can be used. Here an assessment is considered as confirmed if
 it doesn’t change at the next visit. Only assessments within the
 treatment period (`ANL01FL == "Y"`) are considered for the confirmation.
 
 ``` r
-adqs_ext <- adqs %>%
+adqs_ext <- adqs_a %>%
   derive_var_joined_exist_flag(
-    dataset_add = adqs,
+    dataset_add = adqs_a,
     filter_add = ANL01FL == "Y",
     by_vars = exprs(USUBJID),
     new_var = CONFFL,
@@ -235,21 +236,21 @@ worsening parameter.
 ### Using `derive_extreme_event()` to Derive Confirmation and Time-to-Event in One Step
 
 Another option is to use
-[`derive_extreme_event()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/derive_extreme_event.md)
+[`derive_extreme_event()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/derive_extreme_event.md)
 with
-[`event_joined()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/event_joined.md)
+[`event_joined()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/event_joined.md)
 objects to derive the time-to-event parameter. This has the advantage
 that the input dataset doesn’t need to be modified but it has the
 disadvantage that the results are harder to review and trace back. E.g.,
 in the example below, the assessments which are considered confirmed are
 derived within the
-[`derive_extreme_event()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/derive_extreme_event.md)
+[`derive_extreme_event()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/derive_extreme_event.md)
 function, i.e., they are not accessible for reviewers or for debugging.
 
 ``` r
 adtte <- derive_extreme_event(
   by_vars = exprs(USUBJID),
-  source_datasets = list(adqs = filter(adqs, ANL01FL == "Y")),
+  source_datasets = list(adqs = filter(adqs_a, ANL01FL == "Y")),
   tmp_event_nr_var = tmp_event_nr,
   order = exprs(tmp_event_nr, ADT),
   mode = "first",
@@ -291,17 +292,115 @@ adtte <- derive_extreme_event(
 Some events are defined by a combination of more than one event, e.g.,
 for progression free survival the event is defined as progression *or*
 death. For these events which are combined by “or” separate
-[`event_source()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/event_source.md)
+[`event_source()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/event_source.md)
 objects can be created for each event and then specified for the
 `event_conditions` argument of
-[`derive_param_tte()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/derive_param_tte.md).
+[`derive_param_tte()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/derive_param_tte.md).
+For events which are combined by “and” or more complex combinations, a
+variable or parameter indicating whether the combined event occurred or
+not needs to be derived in the input dataset.
 
-If events are combined by “and”, e.g., scale 1 improved *and* scale 2
+### Events Combined by “or”
+
+Assume we want to derive a time to improvement parameter which requires
+improvement in score A or score B.
+
+`adqs_all` dataset
+
+![](tte_analyses_files/figure-html/unnamed-chunk-22-1.png)
+
+We define the events for improvement in score A and score B separately
+and then specify both events for the `event_conditions` argument of
+[`derive_param_tte()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/derive_param_tte.md).
+
+``` r
+improvement_a <- event_source(
+  dataset_name = "adqs",
+  filter = CHGCAT1 == "IMPROVED" & PARAMCD == "A",
+  date = ADT
+)
+
+improvement_b <- event_source(
+  dataset_name = "adqs",
+  filter = CHGCAT1 == "IMPROVED" & PARAMCD == "B",
+  date = ADT
+)
+
+adtte <- derive_param_tte(
+  dataset_adsl = adsl,
+  source_datasets = list(adsl = adsl, adqs = adqs_all),
+  end_dates = list(trt_end),
+  event_type = "positive",
+  event_conditions = list(improvement_a, improvement_b),
+  censor_conditions = list(valid_assessment),
+  set_values_to = exprs(
+    PARAMCD = "TTIMPR",
+    PARAM = "Time to improvement"
+  )
+)
+```
+
+`adtte` dataset
+
+![](tte_analyses_files/figure-html/unnamed-chunk-25-1.png)
+
+### Events Combined by “and”
+
+If events are combined by “and”, e.g., score 1 improved *and* score 2
 didn’t worsen, a variable or parameter needs to be derived in the input
-dataset which indicates whether the combined event occurred or not. Then
-this variable or parameter can be used in the
-[`derive_param_tte()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/derive_param_tte.md)
+dataset which indicates whether the combined event occurred or not. To
+derive a new parameter the
+[`derive_param_computed()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/derive_param_computed.md)
+function can be used (use `derive_var_computed()` for deriving a new
+variable):
+
+``` r
+adqs_all_ext <- adqs_all %>%
+  derive_param_computed(
+    by_vars = exprs(STUDYID, USUBJID, AVISIT, AVISITN, ADT, ADY, TRTSDT, TRTEDT),
+    parameters = c("A", "B"),
+    set_values_to = exprs(
+      AVALC = if_else(
+        CHGCAT1.A == "IMPROVED" & CHGCAT1.B %in% c("IMPROVED", "UNCHANGED"),
+        "Y",
+        NA_character_
+      ),
+      PARAMCD = "IMPROVE",
+      PARAM = "Improvement in score A and stable score B"
+    )
+  )
+```
+
+`adqs_all_ext` dataset
+
+Now the new parameter can be used in the
+[`derive_param_tte()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/derive_param_tte.md)
 function to select the event records.
+
+``` r
+improvement_ab <- event_source(
+  dataset_name = "adqs",
+  filter = AVALC == "Y" & PARAMCD == "IMPROVE",
+  date = ADT
+)
+
+adtte <- derive_param_tte(
+  dataset_adsl = adsl,
+  source_datasets = list(adsl = adsl, adqs = adqs_all_ext),
+  end_dates = list(trt_end),
+  event_type = "positive",
+  event_conditions = list(improvement_ab),
+  censor_conditions = list(valid_assessment),
+  set_values_to = exprs(
+    PARAMCD = "TTIMPRAB",
+    PARAM = "Time to improvement in score A and stable score B"
+  )
+)
+```
+
+`adtte` dataset
+
+![](tte_analyses_files/figure-html/unnamed-chunk-30-1.png)
 
 ## Differentiate Censoring
 

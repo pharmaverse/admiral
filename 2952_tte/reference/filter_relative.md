@@ -51,12 +51,12 @@ filter_relative(
 
   For handling of `NA`s in sorting variables see the "Sort Order"
   section in
-  [`vignette("generic")`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/articles/generic.md).
+  [`vignette("generic")`](https:/pharmaverse.github.io/admiral/2952_tte/articles/generic.md).
 
   Permitted values
 
   :   list of expressions created by
-      [`exprs()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/reexport-exprs.md),
+      [`exprs()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/reexport-exprs.md),
       e.g., `exprs(ADT, desc(AVAL))`
 
   Default value
@@ -162,13 +162,13 @@ parameter and `mode` parameter) is included in the output dataset.
 ## See also
 
 Utilities for Filtering Observations:
-[`count_vals()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/count_vals.md),
-[`filter_exist()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/filter_exist.md),
-[`filter_extreme()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/filter_extreme.md),
-[`filter_joined()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/filter_joined.md),
-[`filter_not_exist()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/filter_not_exist.md),
-[`max_cond()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/max_cond.md),
-[`min_cond()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/min_cond.md)
+[`count_vals()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/count_vals.md),
+[`filter_exist()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/filter_exist.md),
+[`filter_extreme()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/filter_extreme.md),
+[`filter_joined()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/filter_joined.md),
+[`filter_not_exist()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/filter_not_exist.md),
+[`max_cond()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/max_cond.md),
+[`min_cond()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/min_cond.md)
 
 ## Examples
 
