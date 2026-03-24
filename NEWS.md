@@ -4,8 +4,12 @@
 
 ## Updates of Existing Functions
 
-- The `filter_add` argument in `derive_var_joined_exist_flag()` is no longer erroneously
-ignored. (#3018)
+- The `by_vars` and the `tmp_obs_nr_var` arguments were added to
+  `event_joined()`. This allows to derive parameters requiring confirmation _by
+  visit_ using `derive_extreme_event()`. (#3022)
+
+- The `filter_add` argument in `derive_var_joined_exist_flag()` is no longer
+erroneously ignored. (#3018)
 
 - Fixed poorly formatted warning messages in `derive_param_computed()` and `derive_vars_computed()`. (#2969)
 

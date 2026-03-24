@@ -601,6 +601,65 @@ test_that("derive_extreme_event Test 7: mode and condition used in event()", {
   )
 })
 
+test_that("by_vars in event_joined()", {
+  adbds <- tribble(
+    ~USUBJID, ~AVISITN,  ~AVALC,
+    "1",             1,  "Y",
+    "1",             2,  "N",
+    "1",             3,  "Y",
+    "1",             4,  "Y",
+    "1",             5,  "Y"
+  ) %>%
+    mutate(PARAMCD = "RESP")
+
+  expected <- bind_rows(
+    adbds,
+    adbds %>%
+      mutate(
+        PARAMCD = "CONFRESP",
+        AVALC = if_else(AVALC == "Y" & lead(AVALC) == "Y", "Y", "N", "N")
+      )
+  )
+
+  actual <- derive_extreme_event(
+    adbds,
+    by_vars = exprs(USUBJID, AVISITN),
+    source_datasets = list(adbds = adbds),
+    tmp_event_nr_var = event_nr,
+    order = exprs(event_nr),
+    mode = "first",
+    events = list(
+      event_joined(
+        dataset_name = "adbds",
+        by_vars = exprs(USUBJID),
+        order = exprs(AVISITN),
+        join_vars = exprs(AVALC),
+        join_type = "after",
+        tmp_obs_nr_var = tmp_obs_nr,
+        condition = AVALC == "Y" & AVALC.join == "Y" & tmp_obs_nr.join == tmp_obs_nr + 1,
+        set_values_to = exprs(
+          AVALC = "Y"
+        )
+      ),
+      event(
+        dataset_name = "adbds",
+        set_values_to = exprs(
+          AVALC = "N"
+        )
+      )
+    ),
+    set_values_to = exprs(
+      PARAMCD = "CONFRESP"
+    )
+  )
+
+  expect_dfs_equal(
+    base = expected,
+    compare = actual,
+    keys = c("USUBJID", "AVISITN", "PARAMCD")
+  )
+})
+
 ## Test 8: error if source dataset not available ----
 test_that("derive_extreme_event Test 8: error if source dataset not available", {
   adhy <- tibble::tribble(

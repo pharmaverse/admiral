@@ -381,7 +381,7 @@ derive_var_joined_exist_flag(
   join_type = "all",
   filter_join = ADURN > 30 & ACOVFL.join == "Y" & ADY.join <= ADY + 7
 )
-#> # A tibble: 10 × 5
+#> # A tibble: 10 x 5
 #>    USUBJID   ADY ACOVFL ADURN ALCOVFL
 #>    <chr>   <dbl> <chr>  <dbl> <chr>  
 #>  1 1          10 N          1 <NA>   
@@ -430,7 +430,7 @@ derive_var_joined_exist_flag(
   true_value = 1,
   false_value = 0
 )
-#> # A tibble: 9 × 4
+#> # A tibble: 9 x 4
 #>   USUBJID AVISITN AVALC CONFFLN
 #>   <chr>     <dbl> <chr>   <dbl>
 #> 1 1             1 Y           1
@@ -477,7 +477,7 @@ up to the \code{"0"} (excluding the \code{"0"}) are \code{"+"} or \code{"++"} th
   first_cond_lower = val.join == "++",
   filter_join = val == "0" & all(val.join \%in\% c("+", "++"))
 )
-#> # A tibble: 12 × 4
+#> # A tibble: 12 x 4
 #>    subj    day val   flag 
 #>    <chr> <dbl> <chr> <chr>
 #>  1 1         1 ++    <NA> 
@@ -508,7 +508,7 @@ to the first \code{"++"} after the \code{"0"} are \code{"+"} or \code{"++"} the
   first_cond_upper = val.join == "++",
   filter_join = val == "0" & all(val.join \%in\% c("+", "++"))
 )
-#> # A tibble: 12 × 4
+#> # A tibble: 12 x 4
 #>    subj    day val   flag 
 #>    <chr> <dbl> <chr> <chr>
 #>  1 1         1 ++    <NA> 
@@ -569,7 +569,7 @@ derive_var_joined_exist_flag(
   filter_join = AVALC == "CR" & all(AVALC.join \%in\% c("CR", "NE")) &
     count_vals(var = AVALC.join, val = "NE") <= 1
 )
-#> # A tibble: 14 × 4
+#> # A tibble: 14 x 4
 #>    USUBJID AVISITN AVALC CONFFL
 #>    <chr>     <dbl> <chr> <chr> 
 #>  1 1             1 PR    <NA>  
@@ -641,7 +641,7 @@ derive_var_joined_exist_flag(
         count_vals(var = AVALC.join, val = "CR") == 0
     )
 )
-#> # A tibble: 14 × 4
+#> # A tibble: 14 x 4
 #>    USUBJID   ADY AVALC CONFFL
 #>    <chr>   <dbl> <chr> <chr> 
 #>  1 1           6 PR    <NA>  
@@ -692,7 +692,7 @@ derive_var_joined_exist_flag(
   filter_join = CRIT1FL == "Y" & CRIT1FL.join == "Y" &
     (tmp_obs_nr + 1 == tmp_obs_nr.join | tmp_obs_nr == max(tmp_obs_nr.join))
 )
-#> # A tibble: 10 × 4
+#> # A tibble: 10 x 4
 #>    USUBJID AVISITN CRIT1FL CONFFL
 #>    <chr>     <dbl> <chr>   <chr> 
 #>  1 1             1 Y       <NA>  
@@ -734,7 +734,7 @@ derive_var_joined_exist_flag(
     & EXDOSE < EXDOSE.join # Dose is lower than previous
   )
 )
-#> # A tibble: 7 × 4
+#> # A tibble: 7 x 4
 #>   USUBJID EXSTDTM          EXDOSE DOSREDFL
 #>   <chr>   <chr>             <dbl> <chr>   
 #> 1 1       2024-01-01T08:00      2 <NA>    
@@ -771,7 +771,7 @@ derive_var_joined_exist_flag(
   join_type = "all",
   filter_join = all(CHGCAT1.join == "Worsened" | ADY > ADY.join)
 )
-#> # A tibble: 7 × 5
+#> # A tibble: 7 x 5
 #>   USUBJID PARAMCD   ADY CHGCAT1  DDETERFL
 #>   <chr>   <chr>   <dbl> <chr>    <chr>   
 #> 1 1       QS1        10 Improved <NA>    
@@ -809,7 +809,7 @@ derive_var_joined_exist_flag(
   order = exprs(AVISITN),
   filter_join = AVALC == "Y" & AVALC.join == "Y"
 )
-#> # A tibble: 7 × 5
+#> # A tibble: 7 x 5
 #>   USUBJID AVISITN   ADY AVALC CONFFL
 #>   <chr>     <dbl> <dbl> <chr> <chr> 
 #> 1 1             1     1 Y     Y     
@@ -821,10 +821,10 @@ derive_var_joined_exist_flag(
 #> 7 2             2    10 Y     <NA>  
 #> Warning: Dataset `dataset` contains duplicate records with respect to `USUBJID` and
 #> `AVISITN`
-#> i Run `admiral::get_duplicates_dataset()` to access the duplicate records
+#> i Run ]8;;x-r-run:admiral::get_duplicates_dataset()admiral::get_duplicates_dataset()]8;; to access the duplicate records
 #> Warning: Dataset `dataset_add` contains duplicate records with respect to `USUBJID` and
 #> `AVISITN`
-#> i Run `admiral::get_duplicates_dataset()` to access the duplicate records}\if{html}{\out{</div>}}
+#> i Run ]8;;x-r-run:admiral::get_duplicates_dataset()admiral::get_duplicates_dataset()]8;; to access the duplicate records}\if{html}{\out{</div>}}
 
 The records for \code{USUBJID == "2"} are not unique with respect to
 \code{USUBJID} and \code{AVISITN}. Thus a warning is issued. The duplicates can be
@@ -832,7 +832,7 @@ accessed by calling \code{get_duplicates_dataset()}:
 
 \if{html}{\out{<div class="sourceCode r">}}\preformatted{get_duplicates_dataset()
 #> Duplicate records with respect to `USUBJID` and `AVISITN`.
-#> # A tibble: 2 × 4
+#> # A tibble: 2 x 4
 #>   USUBJID AVISITN   ADY AVALC
 #> * <chr>     <dbl> <dbl> <chr>
 #> 1 2             2     8 Y    
@@ -853,7 +853,7 @@ flagged. Thus the warning can be suppressed by specifying \code{check_type = "no
   filter_join = AVALC == "Y" & AVALC.join == "Y",
   check_type = "none"
 )
-#> # A tibble: 7 × 5
+#> # A tibble: 7 x 5
 #>   USUBJID AVISITN   ADY AVALC CONFFL
 #>   <chr>     <dbl> <dbl> <chr> <chr> 
 #> 1 1             1     1 Y     Y     

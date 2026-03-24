@@ -308,7 +308,7 @@ derive_extreme_event(
   keep_source_vars = exprs(everything())
 ) \%>\%
 select(-STUDYID)
-#> # A tibble: 9 × 6
+#> # A tibble: 9 x 6
 #>   USUBJID PARAMCD    AVALC                   ADY  AVAL PARAM                 
 #>   <chr>   <chr>      <chr>                 <dbl> <dbl> <chr>                 
 #> 1 1       NO SLEEP   N                         1    NA <NA>                  
@@ -391,7 +391,7 @@ derive_extreme_event(
   keep_source_vars = exprs(everything())
 ) \%>\%
 select(-STUDYID)
-#> # A tibble: 9 × 6
+#> # A tibble: 9 x 6
 #>   USUBJID PARAMCD    AVALC                          ADY  AVAL PARAM             
 #>   <chr>   <chr>      <chr>                        <dbl> <dbl> <chr>             
 #> 1 4       WAKE UP    N                                1    NA <NA>              
@@ -401,8 +401,83 @@ select(-STUDYID)
 #> 5 5       NO SLEEP   Y                                2    NA <NA>              
 #> 6 5       WAKE UP 3X Y                                3    NA <NA>              
 #> 7 5       NO SLEEP   Y                                4    NA <NA>              
-#> 8 4       WSP        No sleep two nights in a row     3     0 Worst Sleeping Pr…
-#> 9 5       WSP        No sleep                         4     1 Worst Sleeping Pr…}\if{html}{\out{</div>}}}
+#> 8 4       WSP        No sleep two nights in a row     3     0 Worst Sleeping Pr~
+#> 9 5       WSP        No sleep                         4     1 Worst Sleeping Pr~}\if{html}{\out{</div>}}}
+\subsection{Events across records by record}{
+
+In the previous example, the new parameter was derived for each
+subject, i.e., all records of a subject were summarized. However, there are
+cases where we may want to derive a new parameter by record, but where the
+condition for deriving the parameter for a given record may involve
+comparison with other records.
+
+For example, we want to derive a new parameter for each visit indicating
+response at this visit and the next one. For this we need to specify the
+\code{by_vars} argument in \code{event_joined()} which overwrites the value specified
+in the \code{derive_extreme_events()} call. There \code{by_vars = exprs(USUBJID, AVISITN)} is used because we want to add a new records for each subject and
+visit. In \code{event_joined()}, \code{by_vars = exprs(USUBJID)} is used because we
+want to join the records by subject only.
+
+The \code{tmp_obs_nr_var} argument is specified to create a variable which numbers
+the records within each subject. This variable is then used in the
+\code{condition} argument to ensure that the current record is compared with the
+next one. This ensures that missing visit like for subject 2 are handled
+correctly.
+
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{adbds <- tribble(
+  ~USUBJID, ~AVISITN,  ~AVALC,
+  "1",             1,  "Y",
+  "1",             2,  "N",
+  "1",             3,  "Y",
+  "1",             4,  "Y",
+  "1",             5,  "Y",
+  "2",             1,  "Y",
+  "2",             3,  "Y",
+) \%>\%
+  mutate(PARAMCD = "RESP")
+
+derive_extreme_event(
+  adbds,
+  by_vars = exprs(USUBJID, AVISITN),
+  source_datasets = list(adbds = adbds),
+  tmp_event_nr_var = event_nr,
+  order = exprs(event_nr),
+  mode = "first",
+  events = list(
+    event_joined(
+      dataset_name = "adbds",
+      by_vars = exprs(USUBJID),
+      order = exprs(AVISITN),
+      join_vars = exprs(AVALC),
+      join_type = "after",
+      tmp_obs_nr_var = obs_nr,
+      condition = AVALC == "Y" & AVALC.join == "Y" & obs_nr.join == obs_nr + 1,
+      set_values_to = exprs(AVALC = "Y")
+    ),
+    event(
+      dataset_name = "adbds",
+      set_values_to = exprs(AVALC = "N")
+    )
+  ),
+  set_values_to = exprs(PARAMCD = "CONFRESP")
+)
+#> # A tibble: 14 x 4
+#>    USUBJID AVISITN AVALC PARAMCD 
+#>    <chr>     <dbl> <chr> <chr>   
+#>  1 1             1 Y     RESP    
+#>  2 1             2 N     RESP    
+#>  3 1             3 Y     RESP    
+#>  4 1             4 Y     RESP    
+#>  5 1             5 Y     RESP    
+#>  6 2             1 Y     RESP    
+#>  7 2             3 Y     RESP    
+#>  8 1             1 N     CONFRESP
+#>  9 1             2 N     CONFRESP
+#> 10 1             3 Y     CONFRESP
+#> 11 1             4 Y     CONFRESP
+#> 12 1             5 N     CONFRESP
+#> 13 2             1 Y     CONFRESP
+#> 14 2             3 N     CONFRESP}\if{html}{\out{</div>}}}
 \subsection{Specifying different arguments across \code{event()} objects}{
 
 Here we consider a Hy's Law use case. We are interested in
@@ -413,7 +488,7 @@ time this occurs, and if not, we wish to retain the last record.
 As such, for this case now we need to vary our usage of the
 \code{mode} argument dependent on the \code{event()}.
 \itemize{
-\item In first \code{event()}, since we simply seek the first time that
+\item In the first \code{event()}, since we simply seek the first time that
 \code{CRIT1FL} is \code{"Y"}, it's enough to specify the \code{condition},
 because we inherit \code{order} and \code{mode} from the main
 \code{derive_extreme_event()} call here which will automatically
@@ -466,7 +541,7 @@ derive_extreme_event(
   )
 ) \%>\%
   select(-STUDYID)
-#> # A tibble: 8 × 7
+#> # A tibble: 8 x 7
 #>   USUBJID AVISITN CRIT1             CRIT1FL PARAMCD PARAM             AVALC
 #>   <chr>     <dbl> <chr>             <chr>   <chr>   <chr>             <chr>
 #> 1 1             1 ALT > 2 times ULN N       ALT     ALT (U/L)         <NA> 
@@ -649,17 +724,17 @@ with \code{source_datasets = list(adsl = adsl)}.
 ) \%>\%
   filter(PARAMCD == "CBOR") \%>\%
   select(-STUDYID, -ADTC)
-#> # A tibble: 8 × 6
+#> # A tibble: 8 x 6
 #>   USUBJID AVALC   ADT        PARAMCD PARAM                            TRTSDT    
 #>   <chr>   <chr>   <date>     <chr>   <chr>                            <date>    
-#> 1 1       CR      2020-02-01 CBOR    Best Confirmed Overall Response… 2020-01-01
-#> 2 2       SD      2020-02-01 CBOR    Best Confirmed Overall Response… 2019-12-12
-#> 3 3       MISSING NA         CBOR    Best Confirmed Overall Response… 2019-11-11
-#> 4 4       SD      2020-05-01 CBOR    Best Confirmed Overall Response… 2019-12-30
-#> 5 5       NE      2020-01-01 CBOR    Best Confirmed Overall Response… 2020-01-01
-#> 6 6       PR      2020-02-06 CBOR    Best Confirmed Overall Response… 2020-02-02
-#> 7 7       NE      2020-02-06 CBOR    Best Confirmed Overall Response… 2020-02-02
-#> 8 8       PD      2020-02-16 CBOR    Best Confirmed Overall Response… 2020-02-01}\if{html}{\out{</div>}}}
+#> 1 1       CR      2020-02-01 CBOR    Best Confirmed Overall Response~ 2020-01-01
+#> 2 2       SD      2020-02-01 CBOR    Best Confirmed Overall Response~ 2019-12-12
+#> 3 3       MISSING NA         CBOR    Best Confirmed Overall Response~ 2019-11-11
+#> 4 4       SD      2020-05-01 CBOR    Best Confirmed Overall Response~ 2019-12-30
+#> 5 5       NE      2020-01-01 CBOR    Best Confirmed Overall Response~ 2020-01-01
+#> 6 6       PR      2020-02-06 CBOR    Best Confirmed Overall Response~ 2020-02-02
+#> 7 7       NE      2020-02-06 CBOR    Best Confirmed Overall Response~ 2020-02-02
+#> 8 8       PD      2020-02-16 CBOR    Best Confirmed Overall Response~ 2020-02-01}\if{html}{\out{</div>}}}
 \subsection{Further examples}{
 
 Equivalent examples for using the\code{check_type} argument can be found in

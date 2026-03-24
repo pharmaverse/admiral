@@ -309,7 +309,7 @@ derive_vars_merged(
   by_vars = exprs(STUDYID, USUBJID)
 ) \%>\%
   select(USUBJID, VSTESTCD, VISIT, VSSTRESN, AGE, AGEU)
-#> # A tibble: 6 × 6
+#> # A tibble: 6 x 6
 #>   USUBJID VSTESTCD VISIT     VSSTRESN   AGE AGEU 
 #>   <chr>   <chr>    <chr>        <dbl> <dbl> <chr>
 #> 1 01      HEIGHT   SCREENING    178      61 YEARS
@@ -341,7 +341,7 @@ to weight assessments.
   filter_add = VSTESTCD == "WEIGHT"
 ) \%>\%
   select(USUBJID, AGE, AGEU, LSTWT)
-#> # A tibble: 3 × 4
+#> # A tibble: 3 x 4
 #>   USUBJID   AGE AGEU  LSTWT
 #>   <chr>   <dbl> <chr> <dbl>
 #> 1 01         61 YEARS  82.6
@@ -372,7 +372,7 @@ derive_vars_merged(
   filter_add = VSTESTCD == "WEIGHT"
 ) \%>\%
   select(USUBJID, AGE, AGEU, LSTWT)
-#> # A tibble: 3 × 4
+#> # A tibble: 3 x 4
 #>   USUBJID   AGE AGEU  LSTWT
 #>   <chr>   <dbl> <chr> <dbl>
 #> 1 01         61 YEARS  82.6
@@ -380,7 +380,7 @@ derive_vars_merged(
 #> 3 03         85 YEARS  NA  
 #> Warning: Dataset contains duplicate records with respect to `STUDYID`, `USUBJID`, and
 #> `convert_dtc_to_dtm(VSDTC)`
-#> i Run `admiral::get_duplicates_dataset()` to access the duplicate records}\if{html}{\out{</div>}}
+#> i Run ]8;;x-r-run:admiral::get_duplicates_dataset()admiral::get_duplicates_dataset()]8;; to access the duplicate records}\if{html}{\out{</div>}}
 
 For investigating the issue, the dataset of the duplicate source records
 can be obtained by calling \code{get_duplicates_dataset()}:
@@ -388,12 +388,12 @@ can be obtained by calling \code{get_duplicates_dataset()}:
 \if{html}{\out{<div class="sourceCode r">}}\preformatted{get_duplicates_dataset()
 #> Duplicate records with respect to `STUDYID`, `USUBJID`, and
 #> `convert_dtc_to_dtm(VSDTC)`.
-#> # A tibble: 2 × 9
-#>   STUDYID USUBJID convert_dtc_to_dtm(VSDT…¹ DOMAIN VSTESTCD VISIT VSSTRESN VSDTC
+#> # A tibble: 2 x 9
+#>   STUDYID USUBJID convert_dtc_to_dtm(VSDT~1 DOMAIN VSTESTCD VISIT VSSTRESN VSDTC
 #> * <chr>   <chr>   <dttm>                    <chr>  <chr>    <chr>    <dbl> <chr>
-#> 1 AB42    01      2013-09-24 00:00:00       VS     WEIGHT   WEEK…     81.1 2013…
-#> 2 AB42    01      2013-09-24 00:00:00       VS     WEIGHT   WEEK…     82.6 2013…
-#> # i abbreviated name: ¹`convert_dtc_to_dtm(VSDTC)`
+#> 1 AB42    01      2013-09-24 00:00:00       VS     WEIGHT   WEEK~     81.1 2013~
+#> 2 AB42    01      2013-09-24 00:00:00       VS     WEIGHT   WEEK~     82.6 2013~
+#> # i abbreviated name: 1: `convert_dtc_to_dtm(VSDTC)`
 #> # i 1 more variable: LSTWT <dbl>}\if{html}{\out{</div>}}
 
 Common options to solve the issue:
@@ -432,7 +432,7 @@ no matching observations - see subject \code{"03"} in the below example.
   missing_values = exprs(LSTWTCAT = "MISSING")
 ) \%>\%
   select(USUBJID, AGE, AGEU, LSTWTCAT)
-#> # A tibble: 3 × 4
+#> # A tibble: 3 x 4
 #>   USUBJID   AGE AGEU  LSTWTCAT     
 #>   <chr>   <dbl> <chr> <chr>        
 #> 1 01         61 YEARS POST-BASELINE
@@ -463,7 +463,7 @@ variable to show whether a selected record was merged.
   false_value = "MISSING"
 ) \%>\%
   select(USUBJID, AGE, AGEU, LSTWTCAT, WTCHECK)
-#> # A tibble: 3 × 5
+#> # A tibble: 3 x 5
 #>   USUBJID   AGE AGEU  LSTWTCAT      WTCHECK
 #>   <chr>   <dbl> <chr> <chr>         <chr>  
 #> 1 01         61 YEARS POST-BASELINE Y      
@@ -504,7 +504,7 @@ derive_vars_merged(
   mode = "first"
 ) \%>\%
   select(USUBJID, TRTSDTM, TRTSDTF, TRTSTMF)
-#> # A tibble: 3 × 4
+#> # A tibble: 3 x 4
 #>   USUBJID TRTSDTM             TRTSDTF TRTSTMF
 #>   <chr>   <dttm>              <chr>   <chr>  
 #> 1 01      2013-08-29 00:00:00 <NA>    H      
