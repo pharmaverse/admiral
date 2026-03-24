@@ -34,9 +34,9 @@ writing files, etc.
 
 An exception to the above principle is found in our approach to package
 options (see
-[`get_admiral_option()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/get_admiral_option.md)
+[`get_admiral_option()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/get_admiral_option.md)
 and
-[`set_admiral_options()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/set_admiral_options.md)),
+[`set_admiral_options()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/set_admiral_options.md)),
 which allow for user-defined defaults on commonly used function
 arguments. For instance, the option `subject_keys` is currently
 pre-defined as `exprs(STUDYID, USUBJID)`, but can be modified using
@@ -55,7 +55,7 @@ This is problematic for any downstream data processing as R handles `""`
 just as any other string. Thus, before any data manipulation is being
 performed SAS blanks should be converted to R `NA`s using
 [admiral](https://pharmaverse.github.io/admiral/)’s
-[`convert_blanks_to_na()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/convert_blanks_to_na.md)
+[`convert_blanks_to_na()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/convert_blanks_to_na.md)
 function, e.g.
 
 ``` r
@@ -108,10 +108,10 @@ mean(c(1, NA, 2), na.rm = TRUE)
 This is very important to keep in mind when using
 [admiral](https://pharmaverse.github.io/admiral/)’s aggregation
 functions such as
-[`derive_summary_records()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/derive_summary_records.md).
+[`derive_summary_records()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/derive_summary_records.md).
 
 For handling of `NA`s in sorting variables see [Sort
-Order](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/articles/generic.html#sort_order).
+Order](https:/pharmaverse.github.io/admiral/2952_tte/articles/generic.html#sort_order).
 
 ## Expressions in Scripts
 
@@ -124,7 +124,7 @@ from the [rlang](https://rlang.r-lib.org) package, which is used to
 create an **expression**. The expression is not evaluated - rather, it
 is passed on to the derivation function which evaluates it in its own
 environment.
-[`exprs()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/reexport-exprs.md)
+[`exprs()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/reexport-exprs.md)
 is the plural version of
 [`expr()`](https://rlang.r-lib.org/reference/expr.html), so it accepts
 multiple comma-separated items and returns a list of expressions.
@@ -147,11 +147,11 @@ expr(adae)
 When used within the contest of an
 [admiral](https://pharmaverse.github.io/admiral/) derivation function,
 [`expr()`](https://rlang.r-lib.org/reference/expr.html) and
-[`exprs()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/reexport-exprs.md)
+[`exprs()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/reexport-exprs.md)
 allow the function to evaluate the expressions in the context of the
 input dataset. As an example,
 [`expr()`](https://rlang.r-lib.org/reference/expr.html) and
-[`exprs()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/reexport-exprs.md)
+[`exprs()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/reexport-exprs.md)
 allow users to pass variable names of datasets to the function without
 wrapping them in quotation marks.
 
@@ -159,9 +159,9 @@ The expressions framework is powerful because users are able to
 intuitively “inject code” into `admiral` functions (through the function
 parameters) using very similar syntax as if they were writing open code,
 with the exception possibly being an outer
-[`exprs()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/reexport-exprs.md)
+[`exprs()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/reexport-exprs.md)
 wrapper. For instance, in the
-[`derive_vars_merged()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/derive_vars_merged.md)
+[`derive_vars_merged()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/derive_vars_merged.md)
 call below, the user is merging `adsl` with `ex` and is able to filter
 `ex` prior to the merge using an expression passed to the `filter_add`
 parameter. Because `filter_add` accepts expressions, the user has full
@@ -218,7 +218,7 @@ You can see an example of where `!!` comes in handy within
 [admiral](https://pharmaverse.github.io/admiral/) code in [Common
 Pitfall 1](#pitfall1), where the contents of an expression is unquoted
 so that it can be passed to
-[`derive_vars_merged()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/derive_vars_merged.md).
+[`derive_vars_merged()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/derive_vars_merged.md).
 
 `!!!` (bang-bang-bang) is the plural version of `!!` and can be used to
 unquote a list of expressions:
@@ -340,7 +340,7 @@ derive_vars_merged(
 
 To fix this code, we need to [unquote](#unquoting) `my_expression` so
 that the expression that it is holding is passed correctly to
-[`derive_vars_merged()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/derive_vars_merged.md):
+[`derive_vars_merged()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/derive_vars_merged.md):
 
 ``` r
 derive_vars_merged(

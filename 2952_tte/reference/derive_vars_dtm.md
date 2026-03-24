@@ -307,16 +307,16 @@ be overwritten.
 
 ## See also
 
-[`vignette("imputation")`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/articles/imputation.md)
+[`vignette("imputation")`](https:/pharmaverse.github.io/admiral/2952_tte/articles/imputation.md)
 
 Date/Time Derivation Functions that returns variable appended to
 dataset:
-[`derive_var_trtdurd()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/derive_var_trtdurd.md),
-[`derive_vars_dt()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/derive_vars_dt.md),
-[`derive_vars_dtm_to_dt()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/derive_vars_dtm_to_dt.md),
-[`derive_vars_dtm_to_tm()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/derive_vars_dtm_to_tm.md),
-[`derive_vars_duration()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/derive_vars_duration.md),
-[`derive_vars_dy()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/derive_vars_dy.md)
+[`derive_var_trtdurd()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/derive_var_trtdurd.md),
+[`derive_vars_dt()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/derive_vars_dt.md),
+[`derive_vars_dtm_to_dt()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/derive_vars_dtm_to_dt.md),
+[`derive_vars_dtm_to_tm()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/derive_vars_dtm_to_tm.md),
+[`derive_vars_duration()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/derive_vars_duration.md),
+[`derive_vars_dy()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/derive_vars_dy.md)
 
 ## Examples
 
@@ -521,4 +521,4 @@ partial dates. For example, `"2019---18T15:-:05"`, will be displayed as
 ### Further examples
 
 Further example usages of this function can be found in the
-[`vignette("imputation")`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/articles/imputation.md).
+[`vignette("imputation")`](https:/pharmaverse.github.io/admiral/2952_tte/articles/imputation.md).

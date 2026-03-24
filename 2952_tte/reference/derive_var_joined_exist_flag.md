@@ -67,7 +67,7 @@ derive_var_joined_exist_flag(
   Permitted values
 
   :   list of variables created by
-      [`exprs()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/reexport-exprs.md),
+      [`exprs()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/reexport-exprs.md),
       e.g., `exprs(USUBJID, VISIT)`
 
   Default value
@@ -84,12 +84,12 @@ derive_var_joined_exist_flag(
 
   For handling of `NA`s in sorting variables see the "Sort Order"
   section in
-  [`vignette("generic")`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/articles/generic.md).
+  [`vignette("generic")`](https:/pharmaverse.github.io/admiral/2952_tte/articles/generic.md).
 
   Permitted values
 
   :   list of variables created by
-      [`exprs()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/reexport-exprs.md),
+      [`exprs()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/reexport-exprs.md),
       e.g., `exprs(USUBJID, VISIT)`
 
   Default value
@@ -151,7 +151,7 @@ derive_var_joined_exist_flag(
   Permitted values
 
   :   list of variables created by
-      [`exprs()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/reexport-exprs.md),
+      [`exprs()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/reexport-exprs.md),
       e.g., `exprs(USUBJID, VISIT)`
 
   Default value
@@ -421,29 +421,29 @@ previous step. For the other observations it is set to `false_value`.
 **Note:** This function creates temporary datasets which may be much
 bigger than the input datasets. If this causes memory issues, please try
 setting the admiral option `save_memory` to `TRUE` (see
-[`set_admiral_options()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/set_admiral_options.md)).
+[`set_admiral_options()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/set_admiral_options.md)).
 This reduces the memory consumption but increases the run-time.
 
 ## See also
 
-[`filter_joined()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/filter_joined.md),
-[`derive_vars_joined()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/derive_vars_joined.md)
+[`filter_joined()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/filter_joined.md),
+[`derive_vars_joined()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/derive_vars_joined.md)
 
 General Derivation Functions for all ADaMs that returns variable
 appended to dataset:
-[`derive_var_extreme_flag()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/derive_var_extreme_flag.md),
-[`derive_var_merged_ef_msrc()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/derive_var_merged_ef_msrc.md),
-[`derive_var_merged_exist_flag()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/derive_var_merged_exist_flag.md),
-[`derive_var_obs_number()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/derive_var_obs_number.md),
-[`derive_var_relative_flag()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/derive_var_relative_flag.md),
-[`derive_vars_cat()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/derive_vars_cat.md),
-[`derive_vars_computed()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/derive_vars_computed.md),
-[`derive_vars_joined()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/derive_vars_joined.md),
-[`derive_vars_joined_summary()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/derive_vars_joined_summary.md),
-[`derive_vars_merged()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/derive_vars_merged.md),
-[`derive_vars_merged_lookup()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/derive_vars_merged_lookup.md),
-[`derive_vars_merged_summary()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/derive_vars_merged_summary.md),
-[`derive_vars_transposed()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/derive_vars_transposed.md)
+[`derive_var_extreme_flag()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/derive_var_extreme_flag.md),
+[`derive_var_merged_ef_msrc()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/derive_var_merged_ef_msrc.md),
+[`derive_var_merged_exist_flag()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/derive_var_merged_exist_flag.md),
+[`derive_var_obs_number()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/derive_var_obs_number.md),
+[`derive_var_relative_flag()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/derive_var_relative_flag.md),
+[`derive_vars_cat()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/derive_vars_cat.md),
+[`derive_vars_computed()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/derive_vars_computed.md),
+[`derive_vars_joined()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/derive_vars_joined.md),
+[`derive_vars_joined_summary()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/derive_vars_joined_summary.md),
+[`derive_vars_merged()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/derive_vars_merged.md),
+[`derive_vars_merged_lookup()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/derive_vars_merged_lookup.md),
+[`derive_vars_merged_summary()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/derive_vars_merged_summary.md),
+[`derive_vars_transposed()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/derive_vars_transposed.md)
 
 ## Examples
 
@@ -644,7 +644,7 @@ records with
 should be flagged. The other records to be considered are restricted to
 those up to the first occurrence of `"CR"` by specifying the
 `first_cond_upper` argument. The
-[`count_vals()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/count_vals.md)
+[`count_vals()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/count_vals.md)
 function is used to count the `"NE"`s for the last condition.
 
     data <- tribble(
@@ -695,7 +695,7 @@ function is used to count the `"NE"`s for the last condition.
     #> 13 4             4 CR    <NA>
     #> 14 4             5 PR    <NA>  
 
-### Considering order of values ([`min_cond()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/min_cond.md), [`max_cond()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/max_cond.md))
+### Considering order of values ([`min_cond()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/min_cond.md), [`max_cond()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/max_cond.md))
 
 In this example from deriving confirmed response in oncology, records
 with
@@ -712,14 +712,14 @@ with
 - `"CR"` is not followed by `"PR"`
 
 should be flagged. The last condition is realized by using
-[`min_cond()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/min_cond.md)
+[`min_cond()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/min_cond.md)
 and
-[`max_cond()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/max_cond.md),
+[`max_cond()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/max_cond.md),
 ensuring that the first occurrence of `"CR"` is after the last
 occurrence of `"PR"`. The second call to
-[`count_vals()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/count_vals.md)
+[`count_vals()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/count_vals.md)
 in the condition is required to cover the case of no `"CR"`s (the
-[`min_cond()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/min_cond.md)
+[`min_cond()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/min_cond.md)
 call returns `NA` then).
 
     data <- tribble(
@@ -949,7 +949,7 @@ confirmed at a subsequent visit.
 The records for `USUBJID == "2"` are not unique with respect to
 `USUBJID` and `AVISITN`. Thus a warning is issued. The duplicates can be
 accessed by calling
-[`get_duplicates_dataset()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/get_duplicates_dataset.md):
+[`get_duplicates_dataset()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/get_duplicates_dataset.md):
 
     get_duplicates_dataset()
     #> Duplicate records with respect to `USUBJID` and `AVISITN`.

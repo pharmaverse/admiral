@@ -3,7 +3,7 @@
 These pre-defined dose frequencies are sourced from
 [CDISC](https://evs.nci.nih.gov/ftp1/CDISC/SDTM/SDTM%20Terminology.pdf).
 The number of rows to generate using
-[`create_single_dose_dataset()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/create_single_dose_dataset.md)
+[`create_single_dose_dataset()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/create_single_dose_dataset.md)
 arguments `start_date` and `end_date` is derived from `DOSE_COUNT`,
 `DOSE_WINDOW`, and `CONVERSION_FACTOR` with appropriate functions from
 `lubridate`.
@@ -46,15 +46,15 @@ To see the entire table in the console, run `print(dose_freq_lookup)`.
 
 ## See also
 
-[`create_single_dose_dataset()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/create_single_dose_dataset.md)
+[`create_single_dose_dataset()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/create_single_dose_dataset.md)
 
 Other metadata:
-[`atoxgr_criteria_ctcv4`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/atoxgr_criteria_ctcv4.md),
-[`atoxgr_criteria_ctcv4_uscv`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/atoxgr_criteria_ctcv4_uscv.md),
-[`atoxgr_criteria_ctcv5`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/atoxgr_criteria_ctcv5.md),
-[`atoxgr_criteria_ctcv5_uscv`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/atoxgr_criteria_ctcv5_uscv.md),
-[`atoxgr_criteria_ctcv6`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/atoxgr_criteria_ctcv6.md),
-[`atoxgr_criteria_ctcv6_uscv`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/atoxgr_criteria_ctcv6_uscv.md),
-[`atoxgr_criteria_daids`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/atoxgr_criteria_daids.md),
-[`atoxgr_criteria_daids_uscv`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/atoxgr_criteria_daids_uscv.md),
-[`country_code_lookup`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/country_code_lookup.md)
+[`atoxgr_criteria_ctcv4`](https:/pharmaverse.github.io/admiral/2952_tte/reference/atoxgr_criteria_ctcv4.md),
+[`atoxgr_criteria_ctcv4_uscv`](https:/pharmaverse.github.io/admiral/2952_tte/reference/atoxgr_criteria_ctcv4_uscv.md),
+[`atoxgr_criteria_ctcv5`](https:/pharmaverse.github.io/admiral/2952_tte/reference/atoxgr_criteria_ctcv5.md),
+[`atoxgr_criteria_ctcv5_uscv`](https:/pharmaverse.github.io/admiral/2952_tte/reference/atoxgr_criteria_ctcv5_uscv.md),
+[`atoxgr_criteria_ctcv6`](https:/pharmaverse.github.io/admiral/2952_tte/reference/atoxgr_criteria_ctcv6.md),
+[`atoxgr_criteria_ctcv6_uscv`](https:/pharmaverse.github.io/admiral/2952_tte/reference/atoxgr_criteria_ctcv6_uscv.md),
+[`atoxgr_criteria_daids`](https:/pharmaverse.github.io/admiral/2952_tte/reference/atoxgr_criteria_daids.md),
+[`atoxgr_criteria_daids_uscv`](https:/pharmaverse.github.io/admiral/2952_tte/reference/atoxgr_criteria_daids_uscv.md),
+[`country_code_lookup`](https:/pharmaverse.github.io/admiral/2952_tte/reference/country_code_lookup.md)

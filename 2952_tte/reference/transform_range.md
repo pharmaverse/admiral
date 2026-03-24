@@ -96,16 +96,16 @@ outside the source range are set to `NA`.
 ## See also
 
 BDS-Findings Functions that returns a vector:
-[`compute_bmi()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/compute_bmi.md),
-[`compute_bsa()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/compute_bsa.md),
-[`compute_egfr()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/compute_egfr.md),
-[`compute_framingham()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/compute_framingham.md),
-[`compute_map()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/compute_map.md),
-[`compute_qtc()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/compute_qtc.md),
-[`compute_qual_imputation()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/compute_qual_imputation.md),
-[`compute_qual_imputation_dec()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/compute_qual_imputation_dec.md),
-[`compute_rr()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/compute_rr.md),
-[`compute_scale()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/compute_scale.md)
+[`compute_bmi()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/compute_bmi.md),
+[`compute_bsa()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/compute_bsa.md),
+[`compute_egfr()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/compute_egfr.md),
+[`compute_framingham()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/compute_framingham.md),
+[`compute_map()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/compute_map.md),
+[`compute_qtc()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/compute_qtc.md),
+[`compute_qual_imputation()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/compute_qual_imputation.md),
+[`compute_qual_imputation_dec()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/compute_qual_imputation_dec.md),
+[`compute_rr()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/compute_rr.md),
+[`compute_scale()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/compute_scale.md)
 
 ## Examples
 

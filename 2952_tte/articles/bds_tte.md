@@ -76,7 +76,7 @@ adae <- ae %>%
 
 To derive the parameter dependent variables like `CNSR`, `ADT`,
 `STARTDT`, `EVNTDESC`, `SRCDOM`, `PARAMCD`, … the
-[`derive_param_tte()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/derive_param_tte.md)
+[`derive_param_tte()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/derive_param_tte.md)
 function can be used. It adds one parameter to the input dataset with
 one observation per subject. Usually it is called several times.
 
@@ -86,9 +86,9 @@ If no event occurred, the analysis date is set to the latest censoring
 date.
 
 The events and censorings are defined by the
-[`event_source()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/event_source.md)
+[`event_source()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/event_source.md)
 and the
-[`censor_source()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/censor_source.md)
+[`censor_source()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/censor_source.md)
 class respectively. It defines
 
 - which observations (`filter` parameter) of a source dataset
@@ -103,13 +103,13 @@ CDISC strongly recommends `CNSR = 0` for events and positive integers
 for censorings. [admiral](https://pharmaverse.github.io/admiral/)
 enforces this recommendation. Therefore the `censor` parameter is
 available for
-[`censor_source()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/censor_source.md)
+[`censor_source()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/censor_source.md)
 only. It is defaulted to `1`.
 
 The `dataset_name` parameter expects a character value which is used as
 an identifier. The actual data which is used for the derivation of the
 parameter is provided via the `source_datasets` parameter of
-[`derive_param_tte()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/derive_param_tte.md).
+[`derive_param_tte()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/derive_param_tte.md).
 It expects a named list of datasets. The names correspond to the
 identifiers specified for the `dataset_name` parameter. This allows to
 define events and censoring independent of the data.
@@ -122,7 +122,7 @@ cover the most common use cases.
 [TABLE]
 
 These pre-defined objects can be passed directly to
-[`derive_param_tte()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/derive_param_tte.md)
+[`derive_param_tte()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/derive_param_tte.md)
 to create a new time-to-event parameter.
 
 ``` r
@@ -162,7 +162,7 @@ lstalv <- censor_source(
 ```
 
 The definitions can be passed to
-[`derive_param_tte()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/derive_param_tte.md)
+[`derive_param_tte()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/derive_param_tte.md)
 to create a new time-to-event parameter.
 
 ``` r
@@ -235,9 +235,9 @@ are set automatically to the values of these variables. If a date
 variable from one of the event or censoring source datasets is imputed,
 the imputation flag can be specified for the `set_values_to` parameter
 in
-[`event_source()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/event_source.md)
+[`event_source()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/event_source.md)
 or
-[`censor_source()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/censor_source.md)
+[`censor_source()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/censor_source.md)
 (see definition of the `start` censoring below).
 
 As the CDISC pilot does not contain a `RS` dataset, the following
@@ -253,7 +253,7 @@ An event for progression free survival occurs if
 - the subject dies.
 
 Therefore two
-[`event_source()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/event_source.md)
+[`event_source()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/event_source.md)
 objects are defined:
 
 - `pd` for progression of disease and
@@ -261,7 +261,7 @@ objects are defined:
 
 Some subjects may experience both events. In this case the first one is
 selected by
-[`derive_param_tte()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/derive_param_tte.md).
+[`derive_param_tte()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/derive_param_tte.md).
 
 ``` r
 # progressive disease event #
@@ -295,7 +295,7 @@ For the censoring the `lastvisit` object is defined as *all* tumor
 assessments. Please note that it is not necessary to select the last one
 or exclude assessments which resulted in progression of disease. This is
 handled within
-[`derive_param_tte()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/derive_param_tte.md).
+[`derive_param_tte()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/derive_param_tte.md).
 
 ``` r
 # last tumor assessment censoring (CNSR = 1 by default) #
@@ -315,9 +315,9 @@ Patients without tumor assessment should be censored at the start date.
 Therefore the `start` object is defined with the treatment start date as
 censoring date. It is not necessary to exclude patient with tumor
 assessment in the definition of `start` because
-[`derive_param_tte()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/derive_param_tte.md)
+[`derive_param_tte()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/derive_param_tte.md)
 selects the last date across all
-[`censor_source()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/censor_source.md)
+[`censor_source()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/censor_source.md)
 objects as censoring date.
 
 ``` r
@@ -348,7 +348,7 @@ adtte <- derive_param_tte(
 #### Deriving a Series of Time-to-Event Parameters
 
 If several similar time-to-event parameters need to be derived the
-[`call_derivation()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/call_derivation.md)
+[`call_derivation()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/call_derivation.md)
 function is useful.
 
 In the following example parameters for time to first AE, time to first
@@ -500,7 +500,7 @@ adtte <- derive_param_tte(
 ### Derive Analysis Value (`AVAL`)
 
 The analysis value (`AVAL`) can be derived by calling
-[`derive_vars_duration()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/derive_vars_duration.md).
+[`derive_vars_duration()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/derive_vars_duration.md).
 
 This example derives the time to event in days. Other units can be
 requested by the specifying the `out_unit` parameter.
@@ -517,7 +517,7 @@ adtte <- derive_vars_duration(
 ### Derive Analysis Sequence Number (`ASEQ`)
 
 The [admiral](https://pharmaverse.github.io/admiral/) function
-[`derive_var_obs_number()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/derive_var_obs_number.md)
+[`derive_var_obs_number()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/derive_var_obs_number.md)
 can be used to derive `ASEQ`:
 
 ``` r
@@ -533,7 +533,7 @@ adtte <- derive_var_obs_number(
 
 Variables from ADSL which are required for time-to-event analyses, e.g.,
 treatment variables or covariates can be added using
-[`derive_vars_merged()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/derive_vars_merged.md).
+[`derive_vars_merged()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/derive_vars_merged.md).
 
 ``` r
 adtte <- derive_vars_merged(

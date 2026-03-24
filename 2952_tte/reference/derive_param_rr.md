@@ -4,7 +4,7 @@ Adds a record for derived RR based on heart rate for each by group
 (e.g., subject and visit) where the source parameters are available.
 
 **Note:** This is a wrapper function for the more generic
-[`derive_param_computed()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/derive_param_computed.md).
+[`derive_param_computed()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/derive_param_computed.md).
 
 The analysis value of the new parameter is derived as
 \$\$\frac{60000}{HR}\$\$
@@ -50,7 +50,7 @@ derive_param_rr(
   Permitted values
 
   :   list of variables created by
-      [`exprs()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/reexport-exprs.md),
+      [`exprs()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/reexport-exprs.md),
       e.g., `exprs(USUBJID, VISIT)`
 
   Default value
@@ -127,25 +127,25 @@ only be populated in the new parameter rows if it is specified in
 
 ## See also
 
-[`compute_rr()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/compute_rr.md)
+[`compute_rr()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/compute_rr.md)
 
 BDS-Findings Functions for adding Parameters/Records:
-[`default_qtc_paramcd()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/default_qtc_paramcd.md),
-[`derive_expected_records()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/derive_expected_records.md),
-[`derive_extreme_event()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/derive_extreme_event.md),
-[`derive_extreme_records()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/derive_extreme_records.md),
-[`derive_locf_records()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/derive_locf_records.md),
-[`derive_param_bmi()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/derive_param_bmi.md),
-[`derive_param_bsa()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/derive_param_bsa.md),
-[`derive_param_computed()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/derive_param_computed.md),
-[`derive_param_doseint()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/derive_param_doseint.md),
-[`derive_param_exist_flag()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/derive_param_exist_flag.md),
-[`derive_param_exposure()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/derive_param_exposure.md),
-[`derive_param_framingham()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/derive_param_framingham.md),
-[`derive_param_map()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/derive_param_map.md),
-[`derive_param_qtc()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/derive_param_qtc.md),
-[`derive_param_wbc_abs()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/derive_param_wbc_abs.md),
-[`derive_summary_records()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/derive_summary_records.md)
+[`default_qtc_paramcd()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/default_qtc_paramcd.md),
+[`derive_expected_records()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/derive_expected_records.md),
+[`derive_extreme_event()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/derive_extreme_event.md),
+[`derive_extreme_records()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/derive_extreme_records.md),
+[`derive_locf_records()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/derive_locf_records.md),
+[`derive_param_bmi()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/derive_param_bmi.md),
+[`derive_param_bsa()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/derive_param_bsa.md),
+[`derive_param_computed()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/derive_param_computed.md),
+[`derive_param_doseint()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/derive_param_doseint.md),
+[`derive_param_exist_flag()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/derive_param_exist_flag.md),
+[`derive_param_exposure()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/derive_param_exposure.md),
+[`derive_param_framingham()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/derive_param_framingham.md),
+[`derive_param_map()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/derive_param_map.md),
+[`derive_param_qtc()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/derive_param_qtc.md),
+[`derive_param_wbc_abs()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/derive_param_wbc_abs.md),
+[`derive_summary_records()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/derive_summary_records.md)
 
 ## Examples
 

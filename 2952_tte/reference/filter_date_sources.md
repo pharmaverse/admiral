@@ -26,7 +26,7 @@ filter_date_sources(
   Sources
 
   A list of
-  [`tte_source()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/tte_source.md)
+  [`tte_source()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/tte_source.md)
   objects is expected.
 
   Default value
@@ -38,7 +38,7 @@ filter_date_sources(
   Source datasets
 
   A named list of datasets is expected. The `dataset_name` field of
-  [`tte_source()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/tte_source.md)
+  [`tte_source()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/tte_source.md)
   refers to the dataset provided in the list.
 
   Default value
@@ -72,7 +72,7 @@ filter_date_sources(
   Variables to uniquely identify a subject
 
   A list of symbols created using
-  [`exprs()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/reexport-exprs.md)
+  [`exprs()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/reexport-exprs.md)
   is expected.
 
   Default value
@@ -103,7 +103,7 @@ filter_date_sources(
   message is issued if the observations of the source datasets are not
   unique with respect to the by variables and the date and order
   specified in the
-  [`tte_source()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/tte_source.md)
+  [`tte_source()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/tte_source.md)
   objects.
 
   Permitted values

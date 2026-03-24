@@ -80,18 +80,18 @@ advs <- vs %>%
 [pharmaversesdtm](https://pharmaverse.github.io/pharmaversesdtm/).
 However, if you are using SAS datasets as a starting point, be sure to
 consult the section [Handling of Missing
-Values](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/articles/concepts_conventions.html#missing)
+Values](https:/pharmaverse.github.io/admiral/2952_tte/articles/concepts_conventions.html#missing)
 in the [Programming Concepts and
-Conventions](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/articles/concepts_conventions.md)
+Conventions](https:/pharmaverse.github.io/admiral/2952_tte/articles/concepts_conventions.md)
 User Guide to learn how and why you should use the function
-[`convert_blanks_to_na()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/convert_blanks_to_na.md)
+[`convert_blanks_to_na()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/convert_blanks_to_na.md)
 during this process.
 
 ## Derivation Functions
 
 The most important functions in
 [admiral](https://pharmaverse.github.io/admiral/) are the
-[derivations](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/index.html#derivations-for-adding-variables).
+[derivations](https:/pharmaverse.github.io/admiral/2952_tte/reference/index.html#derivations-for-adding-variables).
 Derivations add variables or observations/records to the input dataset.
 Existing variables and observations of the input dataset are not
 changed. Derivation functions start with `derive_`. The first argument
@@ -100,24 +100,24 @@ together derivations using the `%>%` operator.
 
 Functions which derive a dedicated variable start with `derive_var_`
 followed by the variable name, e.g.,
-[`derive_var_trtdurd()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/derive_var_trtdurd.md)
+[`derive_var_trtdurd()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/derive_var_trtdurd.md)
 derives the `TRTDURD` variable.
 
 Functions which can derive multiple variables start with `derive_vars_`
 followed by the variable name, e.g.,
-[`derive_vars_dtm()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/derive_vars_dtm.md)
+[`derive_vars_dtm()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/derive_vars_dtm.md)
 can derive both the `TRTSDTM` and `TRTSTMF` variables.
 
 Functions which derive a dedicated parameter start with `derive_param_`
 followed by the parameter name, e.g.,
-[`derive_param_bmi()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/derive_param_bmi.md)
+[`derive_param_bmi()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/derive_param_bmi.md)
 derives the `BMI` parameter.
 
 ### Example: Adding Variables
 
 Below we can see an example call to one of the most common derivation
 functions,
-[`derive_vars_merged()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/derive_vars_merged.md).
+[`derive_vars_merged()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/derive_vars_merged.md).
 This function adds variable(s) to the input dataset based on the
 contents of another dataset. In this example, we add the treatment start
 datetime and corresponding imputation flag (`EXSTTMF`) to `adsl` by
@@ -139,7 +139,7 @@ adsl <- adsl %>%
 ### Example: Adding Records
 
 Another common derivation function is
-[`derive_param_computed()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/derive_param_computed.md).
+[`derive_param_computed()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/derive_param_computed.md).
 This function adds a derived parameter to an input dataset. In the
 example below, we use it to derive the Mean Arterial Pressure (MAP) from
 the Systolic and Diastolic values of the blood pressure. The parameters
@@ -163,9 +163,9 @@ advs <- advs %>%
 
 **Note:** For the users’ convenience,
 [admiral](https://pharmaverse.github.io/admiral/) actually provides
-[`derive_param_map()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/derive_param_map.md)
+[`derive_param_map()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/derive_param_map.md)
 (wrapper of
-[`derive_param_computed()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/derive_param_computed.md))
+[`derive_param_computed()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/derive_param_computed.md))
 to derive MAP. The above example serves for illustrative purposes only.
 
 ## Other Types of Functions
@@ -178,31 +178,31 @@ some of the other categories.
 ### Higher Order Functions
 
 [Higher order
-functions](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/index.html#higher-order)
+functions](https:/pharmaverse.github.io/admiral/2952_tte/reference/index.html#higher-order)
 are [admiral](https://pharmaverse.github.io/admiral/) functions that
 take other functions as input. They enhance the existing portfolio of
 derivation functions by allowing greater customization of the latter’s
 behavior. This is done by allowing a derivation function to be:
 
-- [`call_derivation()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/call_derivation.md) -
+- [`call_derivation()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/call_derivation.md) -
   Called multiple times, while varying some of the input arguments.
-- [`restrict_derivation()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/restrict_derivation.md) -
+- [`restrict_derivation()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/restrict_derivation.md) -
   Executed on a subset of the input dataset.
-- [`slice_derivation()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/slice_derivation.md) -
+- [`slice_derivation()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/slice_derivation.md) -
   Executed differently on subsets of the input dataset.
 
 Higher order functions are a relatively advanced topic within
 [admiral](https://pharmaverse.github.io/admiral/); you can can read all
 about them in the dedicated vignette about [Higher Order
-Functions](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/index.html#higher_order).
+Functions](https:/pharmaverse.github.io/admiral/2952_tte/reference/index.html#higher_order).
 
 ### Computation Functions
 
-[Computations](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/index.html#computation-functions-for-vectors)
+[Computations](https:/pharmaverse.github.io/admiral/2952_tte/reference/index.html#computation-functions-for-vectors)
 expect vectors as input and return a vector. Usually these computation
 functions can not be used with `%>%`. These functions can be used in
 expressions like
-[`convert_dtc_to_dt()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/convert_dtc_to_dt.md)
+[`convert_dtc_to_dt()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/convert_dtc_to_dt.md)
 in the derivation of the Final Lab Visit Date (`FINLABDT`) in the
 example below:
 
@@ -231,7 +231,7 @@ adsl <- adsl %>%
 ### Filter Functions
 
 [Filter
-functions](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/index.html#utilities-for-filtering-observations)
+functions](https:/pharmaverse.github.io/admiral/2952_tte/reference/index.html#utilities-for-filtering-observations)
 are [admiral](https://pharmaverse.github.io/admiral/) utilities that
 filter the input dataset in different manners, for instance returning
 records that fit/don’t fit a certain condition or that are the
@@ -240,7 +240,7 @@ internal backbone to some of the
 [admiral](https://pharmaverse.github.io/admiral/) functions, but can
 also be used on their own to explore or manipulate a dataset. For
 instance, in the example below we use
-[`filter_extreme()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/filter_extreme.md)
+[`filter_extreme()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/filter_extreme.md)
 to extract the most recent MAP records in `advs`:
 
 ``` r
@@ -272,9 +272,9 @@ names, symbols or expressions must be specified rather than strings.
   expressions is expected, e.g. `order = exprs(AVISIT, desc(AESEV))`
 
 If you are new to expressions, consider reading the [Expressions in
-Scripts](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/articles/concepts_conventions.html#exprs)
+Scripts](https:/pharmaverse.github.io/admiral/2952_tte/articles/concepts_conventions.html#exprs)
 section of our [Concepts and
-Conventions](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/articles/concepts_conventions.md)
+Conventions](https:/pharmaverse.github.io/admiral/2952_tte/articles/concepts_conventions.md)
 User Guide to learn more.
 
 ## Starting a Script
@@ -284,15 +284,15 @@ function calls for the most common steps are provided by the following
 vignettes:
 
 - [Creating
-  ADSL](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/articles/adsl.md)
+  ADSL](https:/pharmaverse.github.io/admiral/2952_tte/articles/adsl.md)
 - [Creating an OCCDS
-  ADaM](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/articles/occds.md)
+  ADaM](https:/pharmaverse.github.io/admiral/2952_tte/articles/occds.md)
 - [Creating a BDS Findings
-  ADaM](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/articles/bds_finding.md)
+  ADaM](https:/pharmaverse.github.io/admiral/2952_tte/articles/bds_finding.md)
 
 [admiral](https://pharmaverse.github.io/admiral/) also provides template
 R scripts as a starting point. They can be created by calling
-[`use_ad_template()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/use_ad_template.md),
+[`use_ad_template()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/use_ad_template.md),
 e.g.,
 
 ``` r
@@ -303,7 +303,7 @@ use_ad_template(
 ```
 
 A list of all available templates can be obtained by
-[`list_all_templates()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/list_all_templates.md):
+[`list_all_templates()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/list_all_templates.md):
 
 ``` r
 library(admiral)
@@ -337,7 +337,7 @@ repository](https://github.com/pharmaverse/admiral/issues).
   scripts](https://github.com/pharmaverse/admiral/tree/main/inst/templates)
 
 - [Programming Concepts and
-  Conventions](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/articles/concepts_conventions.md)
+  Conventions](https:/pharmaverse.github.io/admiral/2952_tte/articles/concepts_conventions.md)
 
 - [Programming
   Strategy](https://pharmaverse.github.io/admiraldev/articles/programming_strategy.html)

@@ -82,7 +82,7 @@ advs <- derive_vars_merged(
 ### Derive/Impute Numeric Date/Time and Analysis Day (`ADT`, `ADTM`, `ADY`, `ADTF`, `ATMF`)
 
 The function
-[`derive_vars_dt()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/derive_vars_dt.md)
+[`derive_vars_dt()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/derive_vars_dt.md)
 can be used to derive `ADT`. This function allows the user to impute the
 date as well.
 
@@ -105,7 +105,7 @@ advs <- derive_vars_dt(
 ```
 
 Similarly, `ADTM` may be created using the function
-[`derive_vars_dtm()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/derive_vars_dtm.md).
+[`derive_vars_dtm()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/derive_vars_dtm.md).
 Imputation may be done on both the date and time components of `ADTM`.
 
 ``` r
@@ -120,17 +120,17 @@ advs <- derive_vars_dtm(
 ```
 
 By default, the variable `ADTF` for
-[`derive_vars_dt()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/derive_vars_dt.md)
+[`derive_vars_dt()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/derive_vars_dt.md)
 or `ADTF` and `ATMF` for
-[`derive_vars_dtm()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/derive_vars_dtm.md)
+[`derive_vars_dtm()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/derive_vars_dtm.md)
 will be created and populated with the controlled terminology outlined
 in the ADaM IG for date imputations.
 
 See also [Date and Time
-Imputation](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/articles/imputation.md).
+Imputation](https:/pharmaverse.github.io/admiral/2952_tte/articles/imputation.md).
 
 Once `ADT` is derived, the function
-[`derive_vars_dy()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/derive_vars_dy.md)
+[`derive_vars_dy()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/derive_vars_dy.md)
 can be used to derive `ADY`. This example assumes both `ADT` and
 `TRTSDT` exist on the data frame.
 
@@ -182,7 +182,7 @@ for `PARAMCD`.
 
 If more than one lookup table, e.g., company parameter mappings and
 project parameter mappings, are available,
-[`consolidate_metadata()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/consolidate_metadata.md)
+[`consolidate_metadata()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/consolidate_metadata.md)
 can be used to consolidate these into a single lookup table.
 
 Additionally note that each parameter is mapped to only one `PARCAT1`
@@ -278,7 +278,7 @@ adeg <- derive_param_qtc(
 ```
 
 Similarly, for `ADLB`, the function
-[`derive_param_wbc_abs()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/derive_param_wbc_abs.md)
+[`derive_param_wbc_abs()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/derive_param_wbc_abs.md)
 can be used to create new parameter for lab differentials converted to
 absolute values. See example below:
 
@@ -374,13 +374,13 @@ count(advs, VSTPTNUM, VSTPT, ATPTN, ATPT)
 
 For assigning visits based on time windows and deriving periods,
 subperiods, and phase variables see the [“Visit and Period Variables”
-vignette](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/articles/visits_periods.md).
+vignette](https:/pharmaverse.github.io/admiral/2952_tte/articles/visits_periods.md).
 
 ### Timing Flag Variables (e.g. `ONTRTFL`)
 
 In some analyses, it may be necessary to flag an observation as
 on-treatment. The admiral function
-[`derive_var_ontrtfl()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/derive_var_ontrtfl.md)
+[`derive_var_ontrtfl()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/derive_var_ontrtfl.md)
 can be used.
 
 For example, if on-treatment is defined as any observation between
@@ -450,7 +450,7 @@ advs <- derive_var_ontrtfl(
 ### Assign Reference Range Indicator (`ANRIND`)
 
 The admiral function
-[`derive_var_anrind()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/derive_var_anrind.md)
+[`derive_var_anrind()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/derive_var_anrind.md)
 may be used to derive the reference range indicator `ANRIND`.
 
 This function requires the reference range boundaries to exist on the
@@ -466,7 +466,7 @@ advs <- derive_var_anrind(advs)
 ### Derive Baseline (`BASETYPE`, `ABLFL`, `BASE`, `BNRIND`)
 
 The `BASETYPE` should be derived using the function
-[`derive_basetype_records()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/derive_basetype_records.md).
+[`derive_basetype_records()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/derive_basetype_records.md).
 The parameter `basetypes` of this function requires a named list of
 expression detailing how the `BASETYPE` should be assigned. Note, if a
 record falls into multiple expressions within the basetypes expression,
@@ -499,7 +499,7 @@ contains multiple values for `BASETYPE`.
 
 Next, the analysis baseline flag `ABLFL` can be derived using the
 [admiral](https://pharmaverse.github.io/admiral/) function
-[`derive_var_extreme_flag()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/derive_var_extreme_flag.md).
+[`derive_var_extreme_flag()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/derive_var_extreme_flag.md).
 For example, if baseline is defined as the last non-missing `AVAL` prior
 or on `TRTSDT`, the function call for `ABLFL` would be:
 
@@ -518,12 +518,12 @@ advs <- restrict_derivation(
 ```
 
 Note: Additional examples of the
-[`derive_var_extreme_flag()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/derive_var_extreme_flag.md)
+[`derive_var_extreme_flag()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/derive_var_extreme_flag.md)
 function can be found [above.](#analysisrec)
 
 Lastly, the `BASE`, and `BNRIND` columns can be derived using the
 [admiral](https://pharmaverse.github.io/admiral/) function
-[`derive_var_base()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/derive_var_base.md).
+[`derive_var_base()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/derive_var_base.md).
 Example calls are:
 
 ``` r
@@ -546,9 +546,9 @@ advs <- derive_var_base(
 
 Change and percent change from baseline can be derived using the
 [admiral](https://pharmaverse.github.io/admiral/) functions
-[`derive_var_chg()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/derive_var_chg.md)
+[`derive_var_chg()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/derive_var_chg.md)
 and
-[`derive_var_pchg()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/derive_var_pchg.md).
+[`derive_var_pchg()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/derive_var_pchg.md).
 These functions expect `AVAL` and `BASE` to exist in the data frame. The
 `CHG` is simply `AVAL - BASE` and the `PCHG` is
 `(AVAL - BASE) / absolute value (BASE) * 100`. Examples calls are:
@@ -561,14 +561,14 @@ advs <- derive_var_pchg(advs)
 
 If the variables should not be derived for all records, e.g., for
 post-baseline records only,
-[`restrict_derivation()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/restrict_derivation.md)
+[`restrict_derivation()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/restrict_derivation.md)
 can be used.
 
 ### Derive Shift (e.g. `SHIFT1`)
 
 Shift variables can be derived using the
 [admiral](https://pharmaverse.github.io/admiral/) function
-[`derive_var_shift()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/derive_var_shift.md).
+[`derive_var_shift()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/derive_var_shift.md).
 This function derives a character shift variable concatenating shift in
 values based on a user-defined pairing, e.g., shift from baseline
 reference range `BNRIND` to analysis reference range `ANRIND`. Examples
@@ -584,14 +584,14 @@ advs <- derive_var_shift(advs,
 
 If the variables should not be derived for all records, e.g., for
 post-baseline records only,
-[`restrict_derivation()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/restrict_derivation.md)
+[`restrict_derivation()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/restrict_derivation.md)
 can be used.
 
 ### Derive Analysis Ratio (`R2BASE`)
 
 Analysis ratio variables can be derived using the
 [admiral](https://pharmaverse.github.io/admiral/) function
-[`derive_var_analysis_ratio()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/derive_var_analysis_ratio.md).
+[`derive_var_analysis_ratio()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/derive_var_analysis_ratio.md).
 This function derives a ratio variable based on user-specified pair. For
 example, Ratio to Baseline is calculated by `AVAL / BASE` and the
 function appends a new variable `R2BASE` to the dataset. This function
@@ -612,7 +612,7 @@ advs <- derive_var_analysis_ratio(advs,
 
 If the variables should not be derived for all records, e.g., for
 post-baseline records only,
-[`restrict_derivation()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/restrict_derivation.md)
+[`restrict_derivation()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/restrict_derivation.md)
 can be used.
 
 ### Derive Analysis Flags (e.g. `ANL01FL`)
@@ -626,7 +626,7 @@ choose the appropriate record for analysis.
 
 This flag may be derived using the
 [admiral](https://pharmaverse.github.io/admiral/) function
-[`derive_var_extreme_flag()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/derive_var_extreme_flag.md).
+[`derive_var_extreme_flag()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/derive_var_extreme_flag.md).
 For this example, we will assume we would like to choose the latest and
 highest value by `USUBJID`, `PARAMCD`, `AVISIT`, and `ATPT`.
 
@@ -691,12 +691,12 @@ count(advs, TRTP, TRTA, TRT01P, TRT01A)
 ```
 
 For studies with periods see the [“Visit and Period Variables”
-vignette](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/articles/visits_periods.html#treatment_bds).
+vignette](https:/pharmaverse.github.io/admiral/2952_tte/articles/visits_periods.html#treatment_bds).
 
 ### Derive Categorization Variables (`AVALCATy`)
 
 We can use the
-[`derive_vars_cat()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/derive_vars_cat.md)
+[`derive_vars_cat()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/derive_vars_cat.md)
 function to derive the categorization variables.
 
 ``` r
@@ -716,21 +716,21 @@ advs <- advs %>%
 
 For deriving criterion variables (`CRITy`, `CRITyFL`, `CRITyFN`)
 [admiral](https://pharmaverse.github.io/admiral/) provides
-[`derive_vars_crit_flag()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/derive_vars_crit_flag.md).
+[`derive_vars_crit_flag()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/derive_vars_crit_flag.md).
 It ensures that they are derived in an ADaM-compliant way (see
 documentation of the function for details).
 
 In most cases the criterion depends on the parameter. The higher order
 functions
-[`restrict_derivation()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/restrict_derivation.md)
+[`restrict_derivation()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/restrict_derivation.md)
 and
-[`slice_derivation()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/slice_derivation.md)
+[`slice_derivation()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/slice_derivation.md)
 are useful in this case. In the following example the criterion flags
 for systolic and diastolic blood pressure from the ADaM IG are derived.
 
 The first criterion is based on `AVAL` and is derived for systolic and
 diastolic blood pressure.
-[`slice_derivation()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/slice_derivation.md)
+[`slice_derivation()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/slice_derivation.md)
 us used to specify the condition and description of the criterion
 depending on the parameter.
 
@@ -761,7 +761,7 @@ advs <- advs %>%
 
 The second criterion is based on `AVAL` and `CHG` and is derived for
 systolic blood pressure only. Thus
-[`restrict_derivation()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/restrict_derivation.md)
+[`restrict_derivation()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/restrict_derivation.md)
 is used.
 
 ``` r
@@ -791,7 +791,7 @@ with the new records.
 
 To add a new record based on the selection of a certain criterion
 (e.g. minimum, maximum)
-[`derive_extreme_records()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/derive_extreme_records.md)
+[`derive_extreme_records()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/derive_extreme_records.md)
 can be used. The new records include all variables of the selected
 records.
 
@@ -843,7 +843,7 @@ advs_ex1 <- advs %>%
 #### Example 2 (Deriving a Summary Record)
 
 For adding new records based on aggregating records
-[`derive_summary_records()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/derive_summary_records.md)
+[`derive_summary_records()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/derive_summary_records.md)
 can be used. For the new records only the variables specified by
 `by_vars` and `set_values_to` are populated.
 
@@ -866,7 +866,7 @@ advs_ex2 <- derive_summary_records(
 #### Example 3 (Deriving a New `PARAMCD`)
 
 Use function
-[`derive_param_computed()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/derive_param_computed.md)
+[`derive_param_computed()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/derive_param_computed.md)
 to create a new `PARAMCD`. Note that only variables specified in the
 `by_vars` argument will be populated in the newly created records.
 
@@ -889,7 +889,7 @@ advs_ex3 <- derive_param_computed(
 ### Assign `ASEQ`
 
 The [admiral](https://pharmaverse.github.io/admiral/) function
-[`derive_var_obs_number()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/derive_var_obs_number.md)
+[`derive_var_obs_number()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/derive_var_obs_number.md)
 can be used to derive `ASEQ`. An example call is:
 
 ``` r
@@ -943,8 +943,8 @@ E2E example](https://pharmaverse.github.io/examples/adam/adsl).
 
 ## Example Scripts
 
-| ADaM                                                                                              | Sourcing Command          |
-|---------------------------------------------------------------------------------------------------|---------------------------|
-| [`ADEG`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/articles/templates.html#adeg) | `use_ad_template("ADEG")` |
-| [`ADVS`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/articles/templates.html#advs) | `use_ad_template("ADVS")` |
-| [`ADLB`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/articles/templates.html#adlb) | `use_ad_template("ADLB")` |
+| ADaM                                                                                 | Sourcing Command          |
+|--------------------------------------------------------------------------------------|---------------------------|
+| [`ADEG`](https:/pharmaverse.github.io/admiral/2952_tte/articles/templates.html#adeg) | `use_ad_template("ADEG")` |
+| [`ADVS`](https:/pharmaverse.github.io/admiral/2952_tte/articles/templates.html#advs) | `use_ad_template("ADVS")` |
+| [`ADLB`](https:/pharmaverse.github.io/admiral/2952_tte/articles/templates.html#adlb) | `use_ad_template("ADLB")` |

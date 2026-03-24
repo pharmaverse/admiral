@@ -1,7 +1,7 @@
 # Create a Set of Parameters
 
 Create a set of variable parameters/function arguments to be used in
-[`call_derivation()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/call_derivation.md).
+[`call_derivation()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/call_derivation.md).
 
 ## Usage
 
@@ -25,10 +25,10 @@ An object of class `params`
 
 ## See also
 
-[`call_derivation()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/call_derivation.md)
+[`call_derivation()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/call_derivation.md)
 
 Other Advanced Functions:
-[`list_tte_source_objects()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/list_tte_source_objects.md)
+[`list_tte_source_objects()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/list_tte_source_objects.md)
 
 ## Examples
 

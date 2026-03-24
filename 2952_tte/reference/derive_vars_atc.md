@@ -4,7 +4,7 @@ Add Anatomical Therapeutic Chemical class variables from `FACM` to
 `ADCM`.
 
 **Note:** This is a wrapper function for the more generic
-[`derive_vars_transposed()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/derive_vars_transposed.md).
+[`derive_vars_transposed()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/derive_vars_transposed.md).
 
 ## Usage
 
@@ -79,11 +79,11 @@ The input dataset with ATC variables added
 
 ## See also
 
-[`derive_vars_transposed()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/derive_vars_transposed.md)
+[`derive_vars_transposed()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/derive_vars_transposed.md)
 
 OCCDS Functions:
-[`derive_var_trtemfl()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/derive_var_trtemfl.md),
-[`derive_vars_query()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/derive_vars_query.md)
+[`derive_var_trtemfl()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/derive_var_trtemfl.md),
+[`derive_vars_query()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/derive_vars_query.md)
 
 ## Examples
 

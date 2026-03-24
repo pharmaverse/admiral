@@ -2,7 +2,7 @@
 
 **\[deprecated\]** The `get_summary_records()` has been deprecated in
 favor of
-[`derive_summary_records()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/derive_summary_records.md)
+[`derive_summary_records()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/derive_summary_records.md)
 (call it with the `dataset_add` argument and without the `dataset`
 argument).
 
@@ -96,23 +96,23 @@ A data frame of derived records.
 This function only creates derived observations and does not append them
 to the original dataset observations. If you would like to this instead,
 see the
-[`derive_summary_records()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/derive_summary_records.md)
+[`derive_summary_records()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/derive_summary_records.md)
 function.
 
 ## See also
 
-[`derive_summary_records()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/derive_summary_records.md),
-[`derive_vars_merged_summary()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/derive_vars_merged_summary.md)
+[`derive_summary_records()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/derive_summary_records.md),
+[`derive_vars_merged_summary()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/derive_vars_merged_summary.md)
 
 Other deprecated:
-[`call_user_fun()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/call_user_fun.md),
-[`date_source()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/date_source.md),
-[`derive_param_extreme_record()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/derive_param_extreme_record.md),
-[`derive_var_dthcaus()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/derive_var_dthcaus.md),
-[`derive_var_extreme_dt()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/derive_var_extreme_dt.md),
-[`derive_var_extreme_dtm()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/derive_var_extreme_dtm.md),
-[`derive_var_merged_summary()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/derive_var_merged_summary.md),
-[`dthcaus_source()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/dthcaus_source.md)
+[`call_user_fun()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/call_user_fun.md),
+[`date_source()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/date_source.md),
+[`derive_param_extreme_record()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/derive_param_extreme_record.md),
+[`derive_var_dthcaus()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/derive_var_dthcaus.md),
+[`derive_var_extreme_dt()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/derive_var_extreme_dt.md),
+[`derive_var_extreme_dtm()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/derive_var_extreme_dtm.md),
+[`derive_var_merged_summary()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/derive_var_merged_summary.md),
+[`dthcaus_source()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/dthcaus_source.md)
 
 ## Examples
 

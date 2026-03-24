@@ -29,9 +29,9 @@ slice_derivation(dataset, derivation, ..., args = NULL)
   argument of a derivation must expect a dataset and the derivation must
   return a dataset. All expected arguments for the derivation function
   must be provided through the
-  [`params()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/params.md)
+  [`params()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/params.md)
   object passed to the `args` argument or be provided in *every*
-  [`derivation_slice()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/derivation_slice.md).
+  [`derivation_slice()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/derivation_slice.md).
 
   Default value
 
@@ -40,16 +40,16 @@ slice_derivation(dataset, derivation, ..., args = NULL)
 - ...:
 
   A
-  [`derivation_slice()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/derivation_slice.md)
+  [`derivation_slice()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/derivation_slice.md)
   object is expected
 
   Each slice defines a subset of the input dataset and some of the
   parameters for the derivation. The derivation is called on the subset
   with the parameters specified by the `args` parameter and the `args`
   field of the
-  [`derivation_slice()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/derivation_slice.md)
+  [`derivation_slice()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/derivation_slice.md)
   object. If a parameter is specified for both, the value in
-  [`derivation_slice()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/derivation_slice.md)
+  [`derivation_slice()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/derivation_slice.md)
   overwrites the one in `args`.
 
   Default value
@@ -61,7 +61,7 @@ slice_derivation(dataset, derivation, ..., args = NULL)
   Arguments of the derivation
 
   A
-  [`params()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/params.md)
+  [`params()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/params.md)
   object is expected.
 
   Default value
@@ -76,12 +76,12 @@ The input dataset with the variables derived by the derivation added
 
 For each slice the derivation is called on the subset defined by the
 `filter` field of the
-[`derivation_slice()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/derivation_slice.md)
+[`derivation_slice()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/derivation_slice.md)
 object and with the parameters specified by the `args` parameter and the
 `args` field of the
-[`derivation_slice()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/derivation_slice.md)
+[`derivation_slice()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/derivation_slice.md)
 object. If a parameter is specified for both, the value in
-[`derivation_slice()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/derivation_slice.md)
+[`derivation_slice()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/derivation_slice.md)
 overwrites the one in `args`.
 
 - Observations that match with more than one slice are only considered
@@ -100,14 +100,14 @@ it must take a dataset as its first argument and return a dataset.
 
 ## See also
 
-[`params()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/params.md)
-[`restrict_derivation()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/restrict_derivation.md)
-[`call_derivation()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/call_derivation.md)
+[`params()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/params.md)
+[`restrict_derivation()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/restrict_derivation.md)
+[`call_derivation()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/call_derivation.md)
 
 Higher Order Functions:
-[`call_derivation()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/call_derivation.md),
-[`derivation_slice()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/derivation_slice.md),
-[`restrict_derivation()`](https:/pharmaverse.github.io/admiral/cran-release/2952_tte/reference/restrict_derivation.md)
+[`call_derivation()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/call_derivation.md),
+[`derivation_slice()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/derivation_slice.md),
+[`restrict_derivation()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/restrict_derivation.md)
 
 ## Examples
 
