@@ -107,7 +107,8 @@
 #'   "1",
 #'   "2",
 #'   "3",
-#'   "4"
+#'   "4",
+#'   "5"
 #' )
 #'
 #' cm <- tribble(
@@ -115,7 +116,8 @@
 #'   "1",      "ANTI-CANCER",      1,
 #'   "1",      "GENERAL",          2,
 #'   "2",      "GENERAL",          1,
-#'   "3",      "ANTI-CANCER",      1
+#'   "3",      "ANTI-CANCER",      1,
+#'   "5",      "GENERAL",          1
 #' )
 #'
 #' # All records in PR are assumed to indicate cancer treatment
@@ -140,6 +142,8 @@
 #'   a procedure record is flagged
 #'
 #' Subject `"4"` has no records in either source, so `CANCTRFL` is `NA`.
+#' Subject `"5"` has a `cm` record but it does not meet the anti-cancer
+#' condition, so `CANCTRFL` is also `NA` (via the default `false_value`).
 #'
 #' @code
 #' derive_var_merged_ef_msrc(
@@ -161,17 +165,18 @@
 #' @caption Controlling flag values (`true_value`, `false_value`, `missing_value`)
 #'
 #' @info By default `true_value = "Y"`, `false_value = NA_character_`, and
-#' `missing_value = NA_character_`. All three can be customized to any character
-#' scalar of the same type.
+#' `missing_value = NA_character_`, but all three can be customized. In this
+#' example `false_value = "N"` and `missing_value` keeps its default
+#' (`NA_character_`).
 #'
 #' - `true_value`: assigned when the condition is `TRUE` in at least one source
 #' - `false_value`: assigned when a subject has records in a source but the
 #'   condition is never `TRUE`
 #' - `missing_value`: assigned when a subject has **no** records in any source
 #'
-#' In the example below, subjects with no anti-cancer records but present in a
-#' source receive `"N"`, and subject `"4"` (absent from all sources) also
-#' receives `"N"` via `missing_value`:
+#' In the example below, subject `"5"`, who has no anti-cancer records but is
+#' present in a source, receives `"N"` via `false_value`, and subject `"4"`
+#' (absent from all sources) receives `NA_character_` via `missing_value`:
 #'
 #' @code
 #' derive_var_merged_ef_msrc(
@@ -190,7 +195,7 @@
 #'   new_var = CANCTRFL,
 #'   true_value = "Y",
 #'   false_value = "N",
-#'   missing_value = "N"
+#'   missing_value = NA_character_
 #' )
 #'
 #' @caption Per-source `by_vars` renaming

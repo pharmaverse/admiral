@@ -168,7 +168,8 @@ adsl <- tribble(
   "1",
   "2",
   "3",
-  "4"
+  "4",
+  "5"
 )
 
 cm <- tribble(
@@ -176,7 +177,8 @@ cm <- tribble(
   "1",      "ANTI-CANCER",      1,
   "1",      "GENERAL",          2,
   "2",      "GENERAL",          1,
-  "3",      "ANTI-CANCER",      1
+  "3",      "ANTI-CANCER",      1,
+  "5",      "GENERAL",          1
 )
 
 # All records in PR are assumed to indicate cancer treatment
@@ -201,6 +203,8 @@ a procedure record is flagged
 }
 
 Subject \code{"4"} has no records in either source, so \code{CANCTRFL} is \code{NA}.
+Subject \code{"5"} has a \code{cm} record but it does not meet the anti-cancer
+condition, so \code{CANCTRFL} is also \code{NA} (via the default \code{false_value}).
 
 \if{html}{\out{<div class="sourceCode r">}}\preformatted{derive_var_merged_ef_msrc(
   adsl,
@@ -217,18 +221,20 @@ Subject \code{"4"} has no records in either source, so \code{CANCTRFL} is \code{
   source_datasets = list(cm = cm, pr = pr),
   new_var = CANCTRFL
 )
-#> # A tibble: 4 × 2
+#> # A tibble: 5 × 2
 #>   USUBJID CANCTRFL
 #>   <chr>   <chr>   
 #> 1 1       Y       
 #> 2 2       Y       
 #> 3 3       Y       
-#> 4 4       <NA>    }\if{html}{\out{</div>}}}
+#> 4 4       <NA>    
+#> 5 5       <NA>    }\if{html}{\out{</div>}}}
 \subsection{Controlling flag values (\code{true_value}, \code{false_value}, \code{missing_value})}{
 
 By default \code{true_value = "Y"}, \code{false_value = NA_character_}, and
-\code{missing_value = NA_character_}. All three can be customized to any character
-scalar of the same type.
+\code{missing_value = NA_character_}, but all three can be customized. In this
+example \code{false_value = "N"} and \code{missing_value} keeps its default
+(\code{NA_character_}).
 \itemize{
 \item \code{true_value}: assigned when the condition is \code{TRUE} in at least one source
 \item \code{false_value}: assigned when a subject has records in a source but the
@@ -236,9 +242,9 @@ condition is never \code{TRUE}
 \item \code{missing_value}: assigned when a subject has \strong{no} records in any source
 }
 
-In the example below, subjects with no anti-cancer records but present in a
-source receive \code{"N"}, and subject \code{"4"} (absent from all sources) also
-receives \code{"N"} via \code{missing_value}:
+In the example below, subject \code{"5"}, who has no anti-cancer records but is
+present in a source, receives \code{"N"} via \code{false_value}, and subject \code{"4"}
+(absent from all sources) receives \code{NA_character_} via \code{missing_value}:
 
 \if{html}{\out{<div class="sourceCode r">}}\preformatted{derive_var_merged_ef_msrc(
   adsl,
@@ -256,15 +262,16 @@ receives \code{"N"} via \code{missing_value}:
   new_var = CANCTRFL,
   true_value = "Y",
   false_value = "N",
-  missing_value = "N"
+  missing_value = NA_character_
 )
-#> # A tibble: 4 × 2
+#> # A tibble: 5 × 2
 #>   USUBJID CANCTRFL
 #>   <chr>   <chr>   
 #> 1 1       Y       
 #> 2 2       Y       
 #> 3 3       Y       
-#> 4 4       N       }\if{html}{\out{</div>}}}
+#> 4 4       <NA>    
+#> 5 5       N       }\if{html}{\out{</div>}}}
 \subsection{Per-source \code{by_vars} renaming}{
 
 When the grouping variable has a different name in a source dataset,
