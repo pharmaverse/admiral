@@ -2,12 +2,12 @@
 
 Create a table for the input dataset which binds the necessary rows for
 a
-[`derive_vars_query()`](https:/pharmaverse.github.io/admiral/cran-release/2906-enhance-examples-derive-var-merged-ef-msrc/reference/derive_vars_query.md)
+[`derive_vars_query()`](https:/pharmaverse.github.io/admiral/2906-enhance-examples-derive-var-merged-ef-msrc/reference/derive_vars_query.md)
 call with the relevant `SRCVAR`, `TERM_NAME_ID` and a temporary index if
 it is necessary
 
 **Note:** This function is the first step performed in
-[`derive_vars_query()`](https:/pharmaverse.github.io/admiral/cran-release/2906-enhance-examples-derive-var-merged-ef-msrc/reference/derive_vars_query.md)
+[`derive_vars_query()`](https:/pharmaverse.github.io/admiral/2906-enhance-examples-derive-var-merged-ef-msrc/reference/derive_vars_query.md)
 requested by some users to be present independently from it.
 
 ## Usage
@@ -32,7 +32,7 @@ get_vars_query(dataset, dataset_queries)
   `TERMCHAR` and/or `TERMNUM`, and optional columns `GRPID`, `SCOPE`,
   `SCOPEN`.
 
-  [`create_query_data()`](https:/pharmaverse.github.io/admiral/cran-release/2906-enhance-examples-derive-var-merged-ef-msrc/reference/create_query_data.md)
+  [`create_query_data()`](https:/pharmaverse.github.io/admiral/2906-enhance-examples-derive-var-merged-ef-msrc/reference/create_query_data.md)
   can be used to create the dataset.
 
   Default value
@@ -51,10 +51,10 @@ This function can be used to derive CDISC variables such as `SMQzzNAM`,
 `SMQzzCD`, `SMQzzSC`, `SMQzzSCN`, and `CQzzNAM` in ADAE and ADMH, and
 variables such as `SDGzzNAM`, `SDGzzCD`, and `SDGzzSC` in ADCM. An
 example usage of this function can be found in the
-[`vignette("occds")`](https:/pharmaverse.github.io/admiral/cran-release/2906-enhance-examples-derive-var-merged-ef-msrc/articles/occds.md).
+[`vignette("occds")`](https:/pharmaverse.github.io/admiral/2906-enhance-examples-derive-var-merged-ef-msrc/articles/occds.md).
 
 A query dataset is expected as an input to this function. See the
-[`vignette("queries_dataset")`](https:/pharmaverse.github.io/admiral/cran-release/2906-enhance-examples-derive-var-merged-ef-msrc/articles/queries_dataset.md)
+[`vignette("queries_dataset")`](https:/pharmaverse.github.io/admiral/2906-enhance-examples-derive-var-merged-ef-msrc/articles/queries_dataset.md)
 for descriptions, or call `data("queries")` for an example of a query
 dataset.
 
@@ -75,12 +75,12 @@ and `SCOPEN` respectively, whenever not missing.
 
 ## See also
 
-[`create_query_data()`](https:/pharmaverse.github.io/admiral/cran-release/2906-enhance-examples-derive-var-merged-ef-msrc/reference/create_query_data.md)
+[`create_query_data()`](https:/pharmaverse.github.io/admiral/2906-enhance-examples-derive-var-merged-ef-msrc/reference/create_query_data.md)
 
 Utilities used within Derivation functions:
-[`extract_unit()`](https:/pharmaverse.github.io/admiral/cran-release/2906-enhance-examples-derive-var-merged-ef-msrc/reference/extract_unit.md),
-[`get_flagged_records()`](https:/pharmaverse.github.io/admiral/cran-release/2906-enhance-examples-derive-var-merged-ef-msrc/reference/get_flagged_records.md),
-[`get_not_mapped()`](https:/pharmaverse.github.io/admiral/cran-release/2906-enhance-examples-derive-var-merged-ef-msrc/reference/get_not_mapped.md)
+[`extract_unit()`](https:/pharmaverse.github.io/admiral/2906-enhance-examples-derive-var-merged-ef-msrc/reference/extract_unit.md),
+[`get_flagged_records()`](https:/pharmaverse.github.io/admiral/2906-enhance-examples-derive-var-merged-ef-msrc/reference/get_flagged_records.md),
+[`get_not_mapped()`](https:/pharmaverse.github.io/admiral/2906-enhance-examples-derive-var-merged-ef-msrc/reference/get_not_mapped.md)
 
 ## Examples
 

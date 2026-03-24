@@ -1,7 +1,7 @@
 # Pre-Defined Time-to-Event Source Objects
 
 These pre-defined `tte_source` objects can be used as input to
-[`derive_param_tte()`](https:/pharmaverse.github.io/admiral/cran-release/2906-enhance-examples-derive-var-merged-ef-msrc/reference/derive_param_tte.md).
+[`derive_param_tte()`](https:/pharmaverse.github.io/admiral/2906-enhance-examples-derive-var-merged-ef-msrc/reference/derive_param_tte.md).
 
 ## Usage
 
@@ -36,25 +36,25 @@ ae_wd_event
 To see the definition of the various objects simply print the object in
 the R console, e.g. `print(death_event)`. For details of how to use
 these objects please refer to
-[`derive_param_tte()`](https:/pharmaverse.github.io/admiral/cran-release/2906-enhance-examples-derive-var-merged-ef-msrc/reference/derive_param_tte.md).
+[`derive_param_tte()`](https:/pharmaverse.github.io/admiral/2906-enhance-examples-derive-var-merged-ef-msrc/reference/derive_param_tte.md).
 
 ## See also
 
-[`derive_param_tte()`](https:/pharmaverse.github.io/admiral/cran-release/2906-enhance-examples-derive-var-merged-ef-msrc/reference/derive_param_tte.md),
-[`tte_source()`](https:/pharmaverse.github.io/admiral/cran-release/2906-enhance-examples-derive-var-merged-ef-msrc/reference/tte_source.md),
-[`event_source()`](https:/pharmaverse.github.io/admiral/cran-release/2906-enhance-examples-derive-var-merged-ef-msrc/reference/event_source.md),
-[`censor_source()`](https:/pharmaverse.github.io/admiral/cran-release/2906-enhance-examples-derive-var-merged-ef-msrc/reference/censor_source.md)
+[`derive_param_tte()`](https:/pharmaverse.github.io/admiral/2906-enhance-examples-derive-var-merged-ef-msrc/reference/derive_param_tte.md),
+[`tte_source()`](https:/pharmaverse.github.io/admiral/2906-enhance-examples-derive-var-merged-ef-msrc/reference/tte_source.md),
+[`event_source()`](https:/pharmaverse.github.io/admiral/2906-enhance-examples-derive-var-merged-ef-msrc/reference/event_source.md),
+[`censor_source()`](https:/pharmaverse.github.io/admiral/2906-enhance-examples-derive-var-merged-ef-msrc/reference/censor_source.md)
 
 Source Objects:
-[`basket_select()`](https:/pharmaverse.github.io/admiral/cran-release/2906-enhance-examples-derive-var-merged-ef-msrc/reference/basket_select.md),
-[`censor_source()`](https:/pharmaverse.github.io/admiral/cran-release/2906-enhance-examples-derive-var-merged-ef-msrc/reference/censor_source.md),
-[`event()`](https:/pharmaverse.github.io/admiral/cran-release/2906-enhance-examples-derive-var-merged-ef-msrc/reference/event.md),
-[`event_joined()`](https:/pharmaverse.github.io/admiral/cran-release/2906-enhance-examples-derive-var-merged-ef-msrc/reference/event_joined.md),
-[`event_source()`](https:/pharmaverse.github.io/admiral/cran-release/2906-enhance-examples-derive-var-merged-ef-msrc/reference/event_source.md),
-[`flag_event()`](https:/pharmaverse.github.io/admiral/cran-release/2906-enhance-examples-derive-var-merged-ef-msrc/reference/flag_event.md),
-[`query()`](https:/pharmaverse.github.io/admiral/cran-release/2906-enhance-examples-derive-var-merged-ef-msrc/reference/query.md),
-[`records_source()`](https:/pharmaverse.github.io/admiral/cran-release/2906-enhance-examples-derive-var-merged-ef-msrc/reference/records_source.md),
-[`tte_source()`](https:/pharmaverse.github.io/admiral/cran-release/2906-enhance-examples-derive-var-merged-ef-msrc/reference/tte_source.md)
+[`basket_select()`](https:/pharmaverse.github.io/admiral/2906-enhance-examples-derive-var-merged-ef-msrc/reference/basket_select.md),
+[`censor_source()`](https:/pharmaverse.github.io/admiral/2906-enhance-examples-derive-var-merged-ef-msrc/reference/censor_source.md),
+[`event()`](https:/pharmaverse.github.io/admiral/2906-enhance-examples-derive-var-merged-ef-msrc/reference/event.md),
+[`event_joined()`](https:/pharmaverse.github.io/admiral/2906-enhance-examples-derive-var-merged-ef-msrc/reference/event_joined.md),
+[`event_source()`](https:/pharmaverse.github.io/admiral/2906-enhance-examples-derive-var-merged-ef-msrc/reference/event_source.md),
+[`flag_event()`](https:/pharmaverse.github.io/admiral/2906-enhance-examples-derive-var-merged-ef-msrc/reference/flag_event.md),
+[`query()`](https:/pharmaverse.github.io/admiral/2906-enhance-examples-derive-var-merged-ef-msrc/reference/query.md),
+[`records_source()`](https:/pharmaverse.github.io/admiral/2906-enhance-examples-derive-var-merged-ef-msrc/reference/records_source.md),
+[`tte_source()`](https:/pharmaverse.github.io/admiral/2906-enhance-examples-derive-var-merged-ef-msrc/reference/tte_source.md)
 
 ## Examples
 

@@ -1,9 +1,9 @@
 # Get Imputation Targets
 
 Determines the imputation targets for date (see
-[`get_imputation_target_date()`](https:/pharmaverse.github.io/admiral/cran-release/2906-enhance-examples-derive-var-merged-ef-msrc/reference/get_imputation_target_date.md)
+[`get_imputation_target_date()`](https:/pharmaverse.github.io/admiral/2906-enhance-examples-derive-var-merged-ef-msrc/reference/get_imputation_target_date.md)
 and time (see
-[`get_imputation_target_time()`](https:/pharmaverse.github.io/admiral/cran-release/2906-enhance-examples-derive-var-merged-ef-msrc/reference/get_imputation_target_time.md))
+[`get_imputation_target_time()`](https:/pharmaverse.github.io/admiral/2906-enhance-examples-derive-var-merged-ef-msrc/reference/get_imputation_target_time.md))
 components.
 
 ## Usage

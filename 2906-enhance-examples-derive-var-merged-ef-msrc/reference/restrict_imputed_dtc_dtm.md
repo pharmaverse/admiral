@@ -112,13 +112,13 @@ restrict_imputed_dtc_dtm(dtc, imputed_dtc, min_dates, max_dates)
 
 ## See also
 
-[`impute_dtc_dtm()`](https:/pharmaverse.github.io/admiral/cran-release/2906-enhance-examples-derive-var-merged-ef-msrc/reference/impute_dtc_dtm.md),
-[`impute_dtc_dt()`](https:/pharmaverse.github.io/admiral/cran-release/2906-enhance-examples-derive-var-merged-ef-msrc/reference/impute_dtc_dt.md)
+[`impute_dtc_dtm()`](https:/pharmaverse.github.io/admiral/2906-enhance-examples-derive-var-merged-ef-msrc/reference/impute_dtc_dtm.md),
+[`impute_dtc_dt()`](https:/pharmaverse.github.io/admiral/2906-enhance-examples-derive-var-merged-ef-msrc/reference/impute_dtc_dt.md)
 
 Utilities used for date imputation:
-[`dt_level()`](https:/pharmaverse.github.io/admiral/cran-release/2906-enhance-examples-derive-var-merged-ef-msrc/reference/dt_level.md),
-[`dtm_level()`](https:/pharmaverse.github.io/admiral/cran-release/2906-enhance-examples-derive-var-merged-ef-msrc/reference/dtm_level.md),
-[`get_imputation_target_date()`](https:/pharmaverse.github.io/admiral/cran-release/2906-enhance-examples-derive-var-merged-ef-msrc/reference/get_imputation_target_date.md),
-[`get_imputation_target_time()`](https:/pharmaverse.github.io/admiral/cran-release/2906-enhance-examples-derive-var-merged-ef-msrc/reference/get_imputation_target_time.md),
-[`get_partialdatetime()`](https:/pharmaverse.github.io/admiral/cran-release/2906-enhance-examples-derive-var-merged-ef-msrc/reference/get_partialdatetime.md),
-[`restrict_imputed_dtc_dt()`](https:/pharmaverse.github.io/admiral/cran-release/2906-enhance-examples-derive-var-merged-ef-msrc/reference/restrict_imputed_dtc_dt.md)
+[`dt_level()`](https:/pharmaverse.github.io/admiral/2906-enhance-examples-derive-var-merged-ef-msrc/reference/dt_level.md),
+[`dtm_level()`](https:/pharmaverse.github.io/admiral/2906-enhance-examples-derive-var-merged-ef-msrc/reference/dtm_level.md),
+[`get_imputation_target_date()`](https:/pharmaverse.github.io/admiral/2906-enhance-examples-derive-var-merged-ef-msrc/reference/get_imputation_target_date.md),
+[`get_imputation_target_time()`](https:/pharmaverse.github.io/admiral/2906-enhance-examples-derive-var-merged-ef-msrc/reference/get_imputation_target_time.md),
+[`get_partialdatetime()`](https:/pharmaverse.github.io/admiral/2906-enhance-examples-derive-var-merged-ef-msrc/reference/get_partialdatetime.md),
+[`restrict_imputed_dtc_dt()`](https:/pharmaverse.github.io/admiral/2906-enhance-examples-derive-var-merged-ef-msrc/reference/restrict_imputed_dtc_dt.md)

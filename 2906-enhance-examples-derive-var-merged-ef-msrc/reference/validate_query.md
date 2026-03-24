@@ -24,4 +24,4 @@ The original object.
 
 ## See also
 
-[`query()`](https:/pharmaverse.github.io/admiral/cran-release/2906-enhance-examples-derive-var-merged-ef-msrc/reference/query.md)
+[`query()`](https:/pharmaverse.github.io/admiral/2906-enhance-examples-derive-var-merged-ef-msrc/reference/query.md)

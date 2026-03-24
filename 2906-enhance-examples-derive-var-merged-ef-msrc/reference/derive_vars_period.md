@@ -72,7 +72,7 @@ derive_vars_period(
   Variables to uniquely identify a subject
 
   A list of expressions where the expressions are symbols as returned by
-  [`exprs()`](https:/pharmaverse.github.io/admiral/cran-release/2906-enhance-examples-derive-var-merged-ef-msrc/reference/reexport-exprs.md)
+  [`exprs()`](https:/pharmaverse.github.io/admiral/2906-enhance-examples-derive-var-merged-ef-msrc/reference/reexport-exprs.md)
   is expected.
 
   Default value
@@ -93,12 +93,12 @@ value of `new_vars`.
 
 ## See also
 
-[`create_period_dataset()`](https:/pharmaverse.github.io/admiral/cran-release/2906-enhance-examples-derive-var-merged-ef-msrc/reference/create_period_dataset.md)
+[`create_period_dataset()`](https:/pharmaverse.github.io/admiral/2906-enhance-examples-derive-var-merged-ef-msrc/reference/create_period_dataset.md)
 
 ADSL Functions that returns variable appended to dataset:
-[`derive_var_age_years()`](https:/pharmaverse.github.io/admiral/cran-release/2906-enhance-examples-derive-var-merged-ef-msrc/reference/derive_var_age_years.md),
-[`derive_vars_aage()`](https:/pharmaverse.github.io/admiral/cran-release/2906-enhance-examples-derive-var-merged-ef-msrc/reference/derive_vars_aage.md),
-[`derive_vars_extreme_event()`](https:/pharmaverse.github.io/admiral/cran-release/2906-enhance-examples-derive-var-merged-ef-msrc/reference/derive_vars_extreme_event.md)
+[`derive_var_age_years()`](https:/pharmaverse.github.io/admiral/2906-enhance-examples-derive-var-merged-ef-msrc/reference/derive_var_age_years.md),
+[`derive_vars_aage()`](https:/pharmaverse.github.io/admiral/2906-enhance-examples-derive-var-merged-ef-msrc/reference/derive_vars_aage.md),
+[`derive_vars_extreme_event()`](https:/pharmaverse.github.io/admiral/2906-enhance-examples-derive-var-merged-ef-msrc/reference/derive_vars_extreme_event.md)
 
 ## Examples
 

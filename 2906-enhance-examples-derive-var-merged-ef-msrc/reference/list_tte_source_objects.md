@@ -26,7 +26,7 @@ A `data.frame` where each row corresponds to one `tte_source` object or
 ## See also
 
 Other Advanced Functions:
-[`params()`](https:/pharmaverse.github.io/admiral/cran-release/2906-enhance-examples-derive-var-merged-ef-msrc/reference/params.md)
+[`params()`](https:/pharmaverse.github.io/admiral/2906-enhance-examples-derive-var-merged-ef-msrc/reference/params.md)
 
 ## Examples
 

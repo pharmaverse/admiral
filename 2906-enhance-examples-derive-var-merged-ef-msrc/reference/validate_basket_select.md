@@ -24,4 +24,4 @@ The original object.
 
 ## See also
 
-[`basket_select()`](https:/pharmaverse.github.io/admiral/cran-release/2906-enhance-examples-derive-var-merged-ef-msrc/reference/basket_select.md)
+[`basket_select()`](https:/pharmaverse.github.io/admiral/2906-enhance-examples-derive-var-merged-ef-msrc/reference/basket_select.md)

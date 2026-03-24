@@ -6,7 +6,7 @@ certain condition.
 
 **Note:** This is a helper function for
 `derive_vars_merged_exist_flag()` which inputs this result into
-[`derive_vars_merged()`](https:/pharmaverse.github.io/admiral/cran-release/2906-enhance-examples-derive-var-merged-ef-msrc/reference/derive_vars_merged.md).
+[`derive_vars_merged()`](https:/pharmaverse.github.io/admiral/2906-enhance-examples-derive-var-merged-ef-msrc/reference/derive_vars_merged.md).
 
 ## Usage
 
@@ -71,9 +71,9 @@ flag for the condition.
 ## See also
 
 Utilities used within Derivation functions:
-[`extract_unit()`](https:/pharmaverse.github.io/admiral/cran-release/2906-enhance-examples-derive-var-merged-ef-msrc/reference/extract_unit.md),
-[`get_not_mapped()`](https:/pharmaverse.github.io/admiral/cran-release/2906-enhance-examples-derive-var-merged-ef-msrc/reference/get_not_mapped.md),
-[`get_vars_query()`](https:/pharmaverse.github.io/admiral/cran-release/2906-enhance-examples-derive-var-merged-ef-msrc/reference/get_vars_query.md)
+[`extract_unit()`](https:/pharmaverse.github.io/admiral/2906-enhance-examples-derive-var-merged-ef-msrc/reference/extract_unit.md),
+[`get_not_mapped()`](https:/pharmaverse.github.io/admiral/2906-enhance-examples-derive-var-merged-ef-msrc/reference/get_not_mapped.md),
+[`get_vars_query()`](https:/pharmaverse.github.io/admiral/2906-enhance-examples-derive-var-merged-ef-msrc/reference/get_vars_query.md)
 
 ## Examples
 

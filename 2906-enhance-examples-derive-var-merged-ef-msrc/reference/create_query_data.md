@@ -2,9 +2,9 @@
 
 Creates a queries dataset as input dataset to the `dataset_queries`
 argument in the
-[`derive_vars_query()`](https:/pharmaverse.github.io/admiral/cran-release/2906-enhance-examples-derive-var-merged-ef-msrc/reference/derive_vars_query.md)
+[`derive_vars_query()`](https:/pharmaverse.github.io/admiral/2906-enhance-examples-derive-var-merged-ef-msrc/reference/derive_vars_query.md)
 function as defined in the
-[`vignette("queries_dataset")`](https:/pharmaverse.github.io/admiral/cran-release/2906-enhance-examples-derive-var-merged-ef-msrc/articles/queries_dataset.md).
+[`vignette("queries_dataset")`](https:/pharmaverse.github.io/admiral/2906-enhance-examples-derive-var-merged-ef-msrc/articles/queries_dataset.md).
 
 ## Usage
 
@@ -19,7 +19,7 @@ create_query_data(queries, version = NULL, get_terms_fun = NULL)
   List of queries
 
   A list of
-  [`query()`](https:/pharmaverse.github.io/admiral/cran-release/2906-enhance-examples-derive-var-merged-ef-msrc/reference/query.md)
+  [`query()`](https:/pharmaverse.github.io/admiral/2906-enhance-examples-derive-var-merged-ef-msrc/reference/query.md)
   objects is expected.
 
   Default value
@@ -48,9 +48,9 @@ create_query_data(queries, version = NULL, get_terms_fun = NULL)
 
   For each query specified for the `queries` parameter referring to a
   basket (i.e., those where the `definition` field is set to a
-  [`basket_select()`](https:/pharmaverse.github.io/admiral/cran-release/2906-enhance-examples-derive-var-merged-ef-msrc/reference/basket_select.md)
+  [`basket_select()`](https:/pharmaverse.github.io/admiral/2906-enhance-examples-derive-var-merged-ef-msrc/reference/basket_select.md)
   object or a list which contains at least one
-  [`basket_select()`](https:/pharmaverse.github.io/admiral/cran-release/2906-enhance-examples-derive-var-merged-ef-msrc/reference/basket_select.md)
+  [`basket_select()`](https:/pharmaverse.github.io/admiral/2906-enhance-examples-derive-var-merged-ef-msrc/reference/basket_select.md)
   object) the specified function is called to retrieve the terms
   defining the query. This function is not provided by admiral as it is
   company specific, i.e., it has to be implemented at company level.
@@ -73,7 +73,7 @@ create_query_data(queries, version = NULL, get_terms_fun = NULL)
   The function must provide the following parameters
 
   - `basket_select`: A
-    [`basket_select()`](https:/pharmaverse.github.io/admiral/cran-release/2906-enhance-examples-derive-var-merged-ef-msrc/reference/basket_select.md)
+    [`basket_select()`](https:/pharmaverse.github.io/admiral/2906-enhance-examples-derive-var-merged-ef-msrc/reference/basket_select.md)
     object.
 
   - `version`: The dictionary version. The value specified for the
@@ -100,38 +100,38 @@ create_query_data(queries, version = NULL, get_terms_fun = NULL)
 
 A dataset to be used as input dataset to the `dataset_queries` argument
 in
-[`derive_vars_query()`](https:/pharmaverse.github.io/admiral/cran-release/2906-enhance-examples-derive-var-merged-ef-msrc/reference/derive_vars_query.md)
+[`derive_vars_query()`](https:/pharmaverse.github.io/admiral/2906-enhance-examples-derive-var-merged-ef-msrc/reference/derive_vars_query.md)
 
 ## Details
 
 For each
-[`query()`](https:/pharmaverse.github.io/admiral/cran-release/2906-enhance-examples-derive-var-merged-ef-msrc/reference/query.md)
+[`query()`](https:/pharmaverse.github.io/admiral/2906-enhance-examples-derive-var-merged-ef-msrc/reference/query.md)
 object listed in the `queries` argument, the terms belonging to the
 query (`SRCVAR`, `TERMCHAR`, `TERMNUM`) are determined with respect to
 the `definition` field of the query: if the definition field of the
-[`query()`](https:/pharmaverse.github.io/admiral/cran-release/2906-enhance-examples-derive-var-merged-ef-msrc/reference/query.md)
+[`query()`](https:/pharmaverse.github.io/admiral/2906-enhance-examples-derive-var-merged-ef-msrc/reference/query.md)
 object is
 
 - a
-  [`basket_select()`](https:/pharmaverse.github.io/admiral/cran-release/2906-enhance-examples-derive-var-merged-ef-msrc/reference/basket_select.md)
+  [`basket_select()`](https:/pharmaverse.github.io/admiral/2906-enhance-examples-derive-var-merged-ef-msrc/reference/basket_select.md)
   object, the terms are read from the basket database by calling the
   function specified for the `get_terms_fun` parameter.
 
 - a data frame, the terms stored in the data frame are used.
 
 - a list of data frames and
-  [`basket_select()`](https:/pharmaverse.github.io/admiral/cran-release/2906-enhance-examples-derive-var-merged-ef-msrc/reference/basket_select.md)
+  [`basket_select()`](https:/pharmaverse.github.io/admiral/2906-enhance-examples-derive-var-merged-ef-msrc/reference/basket_select.md)
   objects, all terms from the data frames and all terms read from the
   basket database referenced by the
-  [`basket_select()`](https:/pharmaverse.github.io/admiral/cran-release/2906-enhance-examples-derive-var-merged-ef-msrc/reference/basket_select.md)
+  [`basket_select()`](https:/pharmaverse.github.io/admiral/2906-enhance-examples-derive-var-merged-ef-msrc/reference/basket_select.md)
   objects are collated.
 
 The following variables (as described in
-[`vignette("queries_dataset")`](https:/pharmaverse.github.io/admiral/cran-release/2906-enhance-examples-derive-var-merged-ef-msrc/articles/queries_dataset.md)
+[`vignette("queries_dataset")`](https:/pharmaverse.github.io/admiral/2906-enhance-examples-derive-var-merged-ef-msrc/articles/queries_dataset.md)
 are created:
 
 - `PREFIX`: Prefix of the variables to be created by
-  [`derive_vars_query()`](https:/pharmaverse.github.io/admiral/cran-release/2906-enhance-examples-derive-var-merged-ef-msrc/reference/derive_vars_query.md)
+  [`derive_vars_query()`](https:/pharmaverse.github.io/admiral/2906-enhance-examples-derive-var-merged-ef-msrc/reference/derive_vars_query.md)
   as specified by the `prefix` element.
 
 - `GRPNAME`: Name of the query as specified by the `name` element.
@@ -142,12 +142,12 @@ are created:
   created.
 
 - `SCOPE`: scope of the query as specified by the `scope` element of the
-  [`basket_select()`](https:/pharmaverse.github.io/admiral/cran-release/2906-enhance-examples-derive-var-merged-ef-msrc/reference/basket_select.md)
+  [`basket_select()`](https:/pharmaverse.github.io/admiral/2906-enhance-examples-derive-var-merged-ef-msrc/reference/basket_select.md)
   object. For queries not defined by a
-  [`basket_select()`](https:/pharmaverse.github.io/admiral/cran-release/2906-enhance-examples-derive-var-merged-ef-msrc/reference/basket_select.md)
+  [`basket_select()`](https:/pharmaverse.github.io/admiral/2906-enhance-examples-derive-var-merged-ef-msrc/reference/basket_select.md)
   object, the variable is set to `NA`. If none of the queries is defined
   by a
-  [`basket_select()`](https:/pharmaverse.github.io/admiral/cran-release/2906-enhance-examples-derive-var-merged-ef-msrc/reference/basket_select.md)
+  [`basket_select()`](https:/pharmaverse.github.io/admiral/2906-enhance-examples-derive-var-merged-ef-msrc/reference/basket_select.md)
   object, the variable is not created.
 
 - `SCOPEN`: numeric scope of the query. It is set to `1` if the scope is
@@ -167,15 +167,15 @@ are created:
 
 ## See also
 
-[`derive_vars_query()`](https:/pharmaverse.github.io/admiral/cran-release/2906-enhance-examples-derive-var-merged-ef-msrc/reference/derive_vars_query.md),
-[`query()`](https:/pharmaverse.github.io/admiral/cran-release/2906-enhance-examples-derive-var-merged-ef-msrc/reference/query.md),
-[`basket_select()`](https:/pharmaverse.github.io/admiral/cran-release/2906-enhance-examples-derive-var-merged-ef-msrc/reference/basket_select.md),
-[`vignette("queries_dataset")`](https:/pharmaverse.github.io/admiral/cran-release/2906-enhance-examples-derive-var-merged-ef-msrc/articles/queries_dataset.md)
+[`derive_vars_query()`](https:/pharmaverse.github.io/admiral/2906-enhance-examples-derive-var-merged-ef-msrc/reference/derive_vars_query.md),
+[`query()`](https:/pharmaverse.github.io/admiral/2906-enhance-examples-derive-var-merged-ef-msrc/reference/query.md),
+[`basket_select()`](https:/pharmaverse.github.io/admiral/2906-enhance-examples-derive-var-merged-ef-msrc/reference/basket_select.md),
+[`vignette("queries_dataset")`](https:/pharmaverse.github.io/admiral/2906-enhance-examples-derive-var-merged-ef-msrc/articles/queries_dataset.md)
 
 Creating auxiliary datasets:
-[`consolidate_metadata()`](https:/pharmaverse.github.io/admiral/cran-release/2906-enhance-examples-derive-var-merged-ef-msrc/reference/consolidate_metadata.md),
-[`create_period_dataset()`](https:/pharmaverse.github.io/admiral/cran-release/2906-enhance-examples-derive-var-merged-ef-msrc/reference/create_period_dataset.md),
-[`create_single_dose_dataset()`](https:/pharmaverse.github.io/admiral/cran-release/2906-enhance-examples-derive-var-merged-ef-msrc/reference/create_single_dose_dataset.md)
+[`consolidate_metadata()`](https:/pharmaverse.github.io/admiral/2906-enhance-examples-derive-var-merged-ef-msrc/reference/consolidate_metadata.md),
+[`create_period_dataset()`](https:/pharmaverse.github.io/admiral/2906-enhance-examples-derive-var-merged-ef-msrc/reference/create_period_dataset.md),
+[`create_single_dose_dataset()`](https:/pharmaverse.github.io/admiral/2906-enhance-examples-derive-var-merged-ef-msrc/reference/create_single_dose_dataset.md)
 
 ## Examples
 

@@ -45,7 +45,7 @@ derive_var_merged_ef_msrc(
   Permitted values
 
   :   list of variables created by
-      [`exprs()`](https:/pharmaverse.github.io/admiral/cran-release/2906-enhance-examples-derive-var-merged-ef-msrc/reference/reexport-exprs.md),
+      [`exprs()`](https:/pharmaverse.github.io/admiral/2906-enhance-examples-derive-var-merged-ef-msrc/reference/reexport-exprs.md),
       e.g., `exprs(USUBJID, VISIT)`
 
   Default value
@@ -57,7 +57,7 @@ derive_var_merged_ef_msrc(
   Flag events
 
   A list of
-  [`flag_event()`](https:/pharmaverse.github.io/admiral/cran-release/2906-enhance-examples-derive-var-merged-ef-msrc/reference/flag_event.md)
+  [`flag_event()`](https:/pharmaverse.github.io/admiral/2906-enhance-examples-derive-var-merged-ef-msrc/reference/flag_event.md)
   objects is expected. For each event the condition (`condition` field)
   is evaluated in the source dataset referenced by the `dataset_name`
   field. If it evaluates to `TRUE` at least once, the new variable is
@@ -66,7 +66,7 @@ derive_var_merged_ef_msrc(
   Permitted values
 
   :   a list of
-      [`flag_event()`](https:/pharmaverse.github.io/admiral/cran-release/2906-enhance-examples-derive-var-merged-ef-msrc/reference/flag_event.md)
+      [`flag_event()`](https:/pharmaverse.github.io/admiral/2906-enhance-examples-derive-var-merged-ef-msrc/reference/flag_event.md)
       objects
 
   Default value
@@ -78,7 +78,7 @@ derive_var_merged_ef_msrc(
   Source datasets
 
   A named list of datasets is expected. The `dataset_name` field of
-  [`flag_event()`](https:/pharmaverse.github.io/admiral/cran-release/2906-enhance-examples-derive-var-merged-ef-msrc/reference/flag_event.md)
+  [`flag_event()`](https:/pharmaverse.github.io/admiral/2906-enhance-examples-derive-var-merged-ef-msrc/reference/flag_event.md)
   refers to the dataset provided in the list.
 
   Permitted values
@@ -167,7 +167,7 @@ dataset and additionally the variable specified for `new_var`.
 ## Details
 
 1.  For each
-    [`flag_event()`](https:/pharmaverse.github.io/admiral/cran-release/2906-enhance-examples-derive-var-merged-ef-msrc/reference/flag_event.md)
+    [`flag_event()`](https:/pharmaverse.github.io/admiral/2906-enhance-examples-derive-var-merged-ef-msrc/reference/flag_event.md)
     object specified for `flag_events`: The condition (`condition`) is
     evaluated in the dataset referenced by `dataset_name`. If the
     `by_vars` field is specified the dataset is grouped by the specified
@@ -187,23 +187,23 @@ dataset and additionally the variable specified for `new_var`.
 
 ## See also
 
-[`flag_event()`](https:/pharmaverse.github.io/admiral/cran-release/2906-enhance-examples-derive-var-merged-ef-msrc/reference/flag_event.md)
+[`flag_event()`](https:/pharmaverse.github.io/admiral/2906-enhance-examples-derive-var-merged-ef-msrc/reference/flag_event.md)
 
 General Derivation Functions for all ADaMs that returns variable
 appended to dataset:
-[`derive_var_extreme_flag()`](https:/pharmaverse.github.io/admiral/cran-release/2906-enhance-examples-derive-var-merged-ef-msrc/reference/derive_var_extreme_flag.md),
-[`derive_var_joined_exist_flag()`](https:/pharmaverse.github.io/admiral/cran-release/2906-enhance-examples-derive-var-merged-ef-msrc/reference/derive_var_joined_exist_flag.md),
-[`derive_var_merged_exist_flag()`](https:/pharmaverse.github.io/admiral/cran-release/2906-enhance-examples-derive-var-merged-ef-msrc/reference/derive_var_merged_exist_flag.md),
-[`derive_var_obs_number()`](https:/pharmaverse.github.io/admiral/cran-release/2906-enhance-examples-derive-var-merged-ef-msrc/reference/derive_var_obs_number.md),
-[`derive_var_relative_flag()`](https:/pharmaverse.github.io/admiral/cran-release/2906-enhance-examples-derive-var-merged-ef-msrc/reference/derive_var_relative_flag.md),
-[`derive_vars_cat()`](https:/pharmaverse.github.io/admiral/cran-release/2906-enhance-examples-derive-var-merged-ef-msrc/reference/derive_vars_cat.md),
-[`derive_vars_computed()`](https:/pharmaverse.github.io/admiral/cran-release/2906-enhance-examples-derive-var-merged-ef-msrc/reference/derive_vars_computed.md),
-[`derive_vars_joined()`](https:/pharmaverse.github.io/admiral/cran-release/2906-enhance-examples-derive-var-merged-ef-msrc/reference/derive_vars_joined.md),
-[`derive_vars_joined_summary()`](https:/pharmaverse.github.io/admiral/cran-release/2906-enhance-examples-derive-var-merged-ef-msrc/reference/derive_vars_joined_summary.md),
-[`derive_vars_merged()`](https:/pharmaverse.github.io/admiral/cran-release/2906-enhance-examples-derive-var-merged-ef-msrc/reference/derive_vars_merged.md),
-[`derive_vars_merged_lookup()`](https:/pharmaverse.github.io/admiral/cran-release/2906-enhance-examples-derive-var-merged-ef-msrc/reference/derive_vars_merged_lookup.md),
-[`derive_vars_merged_summary()`](https:/pharmaverse.github.io/admiral/cran-release/2906-enhance-examples-derive-var-merged-ef-msrc/reference/derive_vars_merged_summary.md),
-[`derive_vars_transposed()`](https:/pharmaverse.github.io/admiral/cran-release/2906-enhance-examples-derive-var-merged-ef-msrc/reference/derive_vars_transposed.md)
+[`derive_var_extreme_flag()`](https:/pharmaverse.github.io/admiral/2906-enhance-examples-derive-var-merged-ef-msrc/reference/derive_var_extreme_flag.md),
+[`derive_var_joined_exist_flag()`](https:/pharmaverse.github.io/admiral/2906-enhance-examples-derive-var-merged-ef-msrc/reference/derive_var_joined_exist_flag.md),
+[`derive_var_merged_exist_flag()`](https:/pharmaverse.github.io/admiral/2906-enhance-examples-derive-var-merged-ef-msrc/reference/derive_var_merged_exist_flag.md),
+[`derive_var_obs_number()`](https:/pharmaverse.github.io/admiral/2906-enhance-examples-derive-var-merged-ef-msrc/reference/derive_var_obs_number.md),
+[`derive_var_relative_flag()`](https:/pharmaverse.github.io/admiral/2906-enhance-examples-derive-var-merged-ef-msrc/reference/derive_var_relative_flag.md),
+[`derive_vars_cat()`](https:/pharmaverse.github.io/admiral/2906-enhance-examples-derive-var-merged-ef-msrc/reference/derive_vars_cat.md),
+[`derive_vars_computed()`](https:/pharmaverse.github.io/admiral/2906-enhance-examples-derive-var-merged-ef-msrc/reference/derive_vars_computed.md),
+[`derive_vars_joined()`](https:/pharmaverse.github.io/admiral/2906-enhance-examples-derive-var-merged-ef-msrc/reference/derive_vars_joined.md),
+[`derive_vars_joined_summary()`](https:/pharmaverse.github.io/admiral/2906-enhance-examples-derive-var-merged-ef-msrc/reference/derive_vars_joined_summary.md),
+[`derive_vars_merged()`](https:/pharmaverse.github.io/admiral/2906-enhance-examples-derive-var-merged-ef-msrc/reference/derive_vars_merged.md),
+[`derive_vars_merged_lookup()`](https:/pharmaverse.github.io/admiral/2906-enhance-examples-derive-var-merged-ef-msrc/reference/derive_vars_merged_lookup.md),
+[`derive_vars_merged_summary()`](https:/pharmaverse.github.io/admiral/2906-enhance-examples-derive-var-merged-ef-msrc/reference/derive_vars_merged_summary.md),
+[`derive_vars_transposed()`](https:/pharmaverse.github.io/admiral/2906-enhance-examples-derive-var-merged-ef-msrc/reference/derive_vars_transposed.md)
 
 ## Examples
 
@@ -221,7 +221,8 @@ as sources in the examples.
       "1",
       "2",
       "3",
-      "4"
+      "4",
+      "5"
     )
 
     cm <- tribble(
@@ -229,7 +230,8 @@ as sources in the examples.
       "1",      "ANTI-CANCER",      1,
       "1",      "GENERAL",          2,
       "2",      "GENERAL",          1,
-      "3",      "ANTI-CANCER",      1
+      "3",      "ANTI-CANCER",      1,
+      "5",      "GENERAL",          1
     )
 
     # All records in PR are assumed to indicate cancer treatment
@@ -242,7 +244,7 @@ as sources in the examples.
 ### Flagging from multiple sources (`flag_events`)
 
 The `flag_events` argument takes a list of
-[`flag_event()`](https:/pharmaverse.github.io/admiral/cran-release/2906-enhance-examples-derive-var-merged-ef-msrc/reference/flag_event.md)
+[`flag_event()`](https:/pharmaverse.github.io/admiral/2906-enhance-examples-derive-var-merged-ef-msrc/reference/flag_event.md)
 objects, each pointing to a named source dataset and an optional
 `condition`. For a given by group, the new variable is set to
 `true_value` if the condition evaluates to `TRUE` at least once in
@@ -257,6 +259,8 @@ derived from two sources:
   with a procedure record is flagged
 
 Subject `"4"` has no records in either source, so `CANCTRFL` is `NA`.
+Subject `"5"` has a `cm` record but it does not meet the anti-cancer
+condition, so `CANCTRFL` is also `NA` (via the default `false_value`).
 
     derive_var_merged_ef_msrc(
       adsl,
@@ -273,19 +277,21 @@ Subject `"4"` has no records in either source, so `CANCTRFL` is `NA`.
       source_datasets = list(cm = cm, pr = pr),
       new_var = CANCTRFL
     )
-    #> # A tibble: 4 × 2
+    #> # A tibble: 5 × 2
     #>   USUBJID CANCTRFL
     #>   <chr>   <chr>
     #> 1 1       Y
     #> 2 2       Y
     #> 3 3       Y
-    #> 4 4       <NA>    
+    #> 4 4       <NA>
+    #> 5 5       <NA>    
 
 ### Controlling flag values (`true_value`, `false_value`, `missing_value`)
 
 By default `true_value = "Y"`, `false_value = NA_character_`, and
-`missing_value = NA_character_`. All three can be customized to any
-character scalar of the same type.
+`missing_value = NA_character_`, but all three can be customized. In
+this example `false_value = "N"` and `missing_value` keeps its default
+(`NA_character_`).
 
 - `true_value`: assigned when the condition is `TRUE` in at least one
   source
@@ -296,9 +302,10 @@ character scalar of the same type.
 - `missing_value`: assigned when a subject has **no** records in any
   source
 
-In the example below, subjects with no anti-cancer records but present
-in a source receive `"N"`, and subject `"4"` (absent from all sources)
-also receives `"N"` via `missing_value`:
+In the example below, subject `"5"`, who has no anti-cancer records but
+is present in a source, receives `"N"` via `false_value`, and subject
+`"4"` (absent from all sources) receives `NA_character_` via
+`missing_value`:
 
     derive_var_merged_ef_msrc(
       adsl,
@@ -316,21 +323,22 @@ also receives `"N"` via `missing_value`:
       new_var = CANCTRFL,
       true_value = "Y",
       false_value = "N",
-      missing_value = "N"
+      missing_value = NA_character_
     )
-    #> # A tibble: 4 × 2
+    #> # A tibble: 5 × 2
     #>   USUBJID CANCTRFL
     #>   <chr>   <chr>
     #> 1 1       Y
     #> 2 2       Y
     #> 3 3       Y
-    #> 4 4       N       
+    #> 4 4       <NA>
+    #> 5 5       N       
 
 ### Per-source `by_vars` renaming
 
 When the grouping variable has a different name in a source dataset, the
 `by_vars` argument of
-[`flag_event()`](https:/pharmaverse.github.io/admiral/cran-release/2906-enhance-examples-derive-var-merged-ef-msrc/reference/flag_event.md)
+[`flag_event()`](https:/pharmaverse.github.io/admiral/2906-enhance-examples-derive-var-merged-ef-msrc/reference/flag_event.md)
 can be used to rename it using the `exprs(<target> = <source>)` syntax.
 This allows each source to use its own link variable while still merging
 correctly onto the input dataset.

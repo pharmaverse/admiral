@@ -46,8 +46,8 @@ preserved.
 ## See also
 
 Utilities for Formatting Observations:
-[`convert_blanks_to_na()`](https:/pharmaverse.github.io/admiral/cran-release/2906-enhance-examples-derive-var-merged-ef-msrc/reference/convert_blanks_to_na.md),
-[`yn_to_numeric()`](https:/pharmaverse.github.io/admiral/cran-release/2906-enhance-examples-derive-var-merged-ef-msrc/reference/yn_to_numeric.md)
+[`convert_blanks_to_na()`](https:/pharmaverse.github.io/admiral/2906-enhance-examples-derive-var-merged-ef-msrc/reference/convert_blanks_to_na.md),
+[`yn_to_numeric()`](https:/pharmaverse.github.io/admiral/2906-enhance-examples-derive-var-merged-ef-msrc/reference/yn_to_numeric.md)
 
 ## Examples
 

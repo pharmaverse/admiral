@@ -10,9 +10,9 @@ examples to explore the imputation rules. These **vector-based**
 functions form the backbone of
 [admiral](https://pharmaverse.github.io/admiral/)’s more powerful
 functions
-[`derive_vars_dt()`](https:/pharmaverse.github.io/admiral/cran-release/2906-enhance-examples-derive-var-merged-ef-msrc/reference/derive_vars_dt.md)
+[`derive_vars_dt()`](https:/pharmaverse.github.io/admiral/2906-enhance-examples-derive-var-merged-ef-msrc/reference/derive_vars_dt.md)
 and
-[`derive_vars_dtm()`](https:/pharmaverse.github.io/admiral/cran-release/2906-enhance-examples-derive-var-merged-ef-msrc/reference/derive_vars_dtm.md)
+[`derive_vars_dtm()`](https:/pharmaverse.github.io/admiral/2906-enhance-examples-derive-var-merged-ef-msrc/reference/derive_vars_dtm.md)
 for building ADaM dataset. The final section moves into more detailed
 examples that a user might face while working on ADaMs in need of `*DT`
 and `*DTM` variables.
@@ -45,9 +45,9 @@ imputation rules.
 
 In [admiral](https://pharmaverse.github.io/admiral/) users will
 primarily use two functions
-[`derive_vars_dt()`](https:/pharmaverse.github.io/admiral/cran-release/2906-enhance-examples-derive-var-merged-ef-msrc/reference/derive_vars_dt.md)
+[`derive_vars_dt()`](https:/pharmaverse.github.io/admiral/2906-enhance-examples-derive-var-merged-ef-msrc/reference/derive_vars_dt.md)
 and
-[`derive_vars_dtm()`](https:/pharmaverse.github.io/admiral/cran-release/2906-enhance-examples-derive-var-merged-ef-msrc/reference/derive_vars_dtm.md)
+[`derive_vars_dtm()`](https:/pharmaverse.github.io/admiral/2906-enhance-examples-derive-var-merged-ef-msrc/reference/derive_vars_dtm.md)
 for date and datetime imputations respectively. In all other functions
 where dates can be passed as an argument, we expect full dates or
 datetimes (unless otherwise specified), so if any possibility of
@@ -62,12 +62,12 @@ this rule allows a user to control which components of the `--DTC` value
 are imputed if they are missing.
 
 The default imputation for `_dtm()` functions,
-e.g. [`impute_dtc_dtm()`](https:/pharmaverse.github.io/admiral/cran-release/2906-enhance-examples-derive-var-merged-ef-msrc/reference/impute_dtc_dtm.md),
-[`derive_vars_dtm()`](https:/pharmaverse.github.io/admiral/cran-release/2906-enhance-examples-derive-var-merged-ef-msrc/reference/derive_vars_dtm.md),
+e.g. [`impute_dtc_dtm()`](https:/pharmaverse.github.io/admiral/2906-enhance-examples-derive-var-merged-ef-msrc/reference/impute_dtc_dtm.md),
+[`derive_vars_dtm()`](https:/pharmaverse.github.io/admiral/2906-enhance-examples-derive-var-merged-ef-msrc/reference/derive_vars_dtm.md),
 is “h” (hours). A user can specify that that no imputation is to be done
 by setting `highest_imputation = n`. However, for for `_dt()` functions,
-e.g. [`impute_dtc_dt()`](https:/pharmaverse.github.io/admiral/cran-release/2906-enhance-examples-derive-var-merged-ef-msrc/reference/impute_dtc_dt.md),
-[`derive_vars_dt()`](https:/pharmaverse.github.io/admiral/cran-release/2906-enhance-examples-derive-var-merged-ef-msrc/reference/derive_vars_dt.md)
+e.g. [`impute_dtc_dt()`](https:/pharmaverse.github.io/admiral/2906-enhance-examples-derive-var-merged-ef-msrc/reference/impute_dtc_dt.md),
+[`derive_vars_dt()`](https:/pharmaverse.github.io/admiral/2906-enhance-examples-derive-var-merged-ef-msrc/reference/derive_vars_dt.md)
 the default imputation is already set as `highest_imputation = "n"`.
 
 Care must be taken when deciding on level of imputation. If a component
@@ -82,7 +82,7 @@ the examples below.
 ### Imputation on a Vector
 
 In our first example, we will make use of
-[`impute_dtc_dtm()`](https:/pharmaverse.github.io/admiral/cran-release/2906-enhance-examples-derive-var-merged-ef-msrc/reference/impute_dtc_dtm.md)
+[`impute_dtc_dtm()`](https:/pharmaverse.github.io/admiral/2906-enhance-examples-derive-var-merged-ef-msrc/reference/impute_dtc_dtm.md)
 on `2019-10` setting `highest_imputation = "M"`. The argument
 `date_imputation` and `time_imputation` are given expressed inputs of
 the imputation we would like to see done.
@@ -312,29 +312,29 @@ only hours and minutes are ever collected, and seconds are imputed in
 [admiral](https://pharmaverse.github.io/admiral/) provides the following
 functions for imputation:
 
-- [`derive_vars_dt()`](https:/pharmaverse.github.io/admiral/cran-release/2906-enhance-examples-derive-var-merged-ef-msrc/reference/derive_vars_dt.md):
+- [`derive_vars_dt()`](https:/pharmaverse.github.io/admiral/2906-enhance-examples-derive-var-merged-ef-msrc/reference/derive_vars_dt.md):
   Adds a date variable and a date imputation flag variable (optional)
   based on a –DTC variable and imputation rules.
-- [`derive_vars_dtm()`](https:/pharmaverse.github.io/admiral/cran-release/2906-enhance-examples-derive-var-merged-ef-msrc/reference/derive_vars_dtm.md):
+- [`derive_vars_dtm()`](https:/pharmaverse.github.io/admiral/2906-enhance-examples-derive-var-merged-ef-msrc/reference/derive_vars_dtm.md):
   Adds a datetime variable, a date imputation flag variable, and a time
   imputation flag variable (both optional) based on a –DTC variable and
   imputation rules.
-- [`impute_dtc_dtm()`](https:/pharmaverse.github.io/admiral/cran-release/2906-enhance-examples-derive-var-merged-ef-msrc/reference/impute_dtc_dtm.md):
+- [`impute_dtc_dtm()`](https:/pharmaverse.github.io/admiral/2906-enhance-examples-derive-var-merged-ef-msrc/reference/impute_dtc_dtm.md):
   Returns a complete ISO 8601 datetime or `NA` based on a partial ISO
   8601 datetime and imputation rules.
-- [`impute_dtc_dt()`](https:/pharmaverse.github.io/admiral/cran-release/2906-enhance-examples-derive-var-merged-ef-msrc/reference/impute_dtc_dt.md):
+- [`impute_dtc_dt()`](https:/pharmaverse.github.io/admiral/2906-enhance-examples-derive-var-merged-ef-msrc/reference/impute_dtc_dt.md):
   Returns a complete ISO 8601 date (without time) or `NA` based on a
   partial ISO 8601 date(time) and imputation rules.
-- [`convert_dtc_to_dt()`](https:/pharmaverse.github.io/admiral/cran-release/2906-enhance-examples-derive-var-merged-ef-msrc/reference/convert_dtc_to_dt.md):
+- [`convert_dtc_to_dt()`](https:/pharmaverse.github.io/admiral/2906-enhance-examples-derive-var-merged-ef-msrc/reference/convert_dtc_to_dt.md):
   Returns a date if the input ISO 8601 date is complete. Otherwise, `NA`
   is returned.
-- [`convert_dtc_to_dtm()`](https:/pharmaverse.github.io/admiral/cran-release/2906-enhance-examples-derive-var-merged-ef-msrc/reference/convert_dtc_to_dtm.md):
+- [`convert_dtc_to_dtm()`](https:/pharmaverse.github.io/admiral/2906-enhance-examples-derive-var-merged-ef-msrc/reference/convert_dtc_to_dtm.md):
   Returns a datetime if the input ISO 8601 date is complete (with
   missing time replaced by `"00:00:00"` as default). Otherwise, NA is
   returned.
-- [`compute_dtf()`](https:/pharmaverse.github.io/admiral/cran-release/2906-enhance-examples-derive-var-merged-ef-msrc/reference/compute_dtf.md):
+- [`compute_dtf()`](https:/pharmaverse.github.io/admiral/2906-enhance-examples-derive-var-merged-ef-msrc/reference/compute_dtf.md):
   Returns the date imputation flag.
-- [`compute_tmf()`](https:/pharmaverse.github.io/admiral/cran-release/2906-enhance-examples-derive-var-merged-ef-msrc/reference/compute_tmf.md):
+- [`compute_tmf()`](https:/pharmaverse.github.io/admiral/2906-enhance-examples-derive-var-merged-ef-msrc/reference/compute_tmf.md):
   Returns the time imputation flag.
 
 ## Examples
@@ -342,11 +342,11 @@ functions for imputation:
 ### Create an Imputed Datetime and Date Variable and Imputation Flag Variables
 
 The
-[`derive_vars_dtm()`](https:/pharmaverse.github.io/admiral/cran-release/2906-enhance-examples-derive-var-merged-ef-msrc/reference/derive_vars_dtm.md)
+[`derive_vars_dtm()`](https:/pharmaverse.github.io/admiral/2906-enhance-examples-derive-var-merged-ef-msrc/reference/derive_vars_dtm.md)
 function derives an imputed datetime variable and the corresponding date
 and time imputation flags. The imputed date variable can be derived by
 using the
-[`derive_vars_dtm_to_dt()`](https:/pharmaverse.github.io/admiral/cran-release/2906-enhance-examples-derive-var-merged-ef-msrc/reference/derive_vars_dtm_to_dt.md)
+[`derive_vars_dtm_to_dt()`](https:/pharmaverse.github.io/admiral/2906-enhance-examples-derive-var-merged-ef-msrc/reference/derive_vars_dtm_to_dt.md)
 function. It is not necessary and advisable to perform the imputation
 for the date variable if it was already done for the datetime variable.
 CDISC considers the datetime and the date variable as two
@@ -376,7 +376,7 @@ ae <- tribble(
 
 If an imputed date variable without a corresponding datetime variable is
 required, it can be derived by the
-[`derive_vars_dt()`](https:/pharmaverse.github.io/admiral/cran-release/2906-enhance-examples-derive-var-merged-ef-msrc/reference/derive_vars_dt.md)
+[`derive_vars_dt()`](https:/pharmaverse.github.io/admiral/2906-enhance-examples-derive-var-merged-ef-msrc/reference/derive_vars_dt.md)
 function.
 
 ``` r
@@ -484,7 +484,7 @@ ae <- tribble(
 ### Imputation Without Creating a New Variable
 
 If imputation is required without creating a new variable the
-[`convert_dtc_to_dt()`](https:/pharmaverse.github.io/admiral/cran-release/2906-enhance-examples-derive-var-merged-ef-msrc/reference/convert_dtc_to_dt.md)
+[`convert_dtc_to_dt()`](https:/pharmaverse.github.io/admiral/2906-enhance-examples-derive-var-merged-ef-msrc/reference/convert_dtc_to_dt.md)
 function can be called to obtain a vector of imputed dates. It can be
 used for example in conditions:
 
@@ -509,7 +509,7 @@ mh <- tribble(
 
 Using different imputation rules depending on the observation can be
 done by using
-[`slice_derivation()`](https:/pharmaverse.github.io/admiral/cran-release/2906-enhance-examples-derive-var-merged-ef-msrc/reference/slice_derivation.md).
+[`slice_derivation()`](https:/pharmaverse.github.io/admiral/2906-enhance-examples-derive-var-merged-ef-msrc/reference/slice_derivation.md).
 
 ``` r
 vs <- tribble(

@@ -28,8 +28,8 @@ can no longer be accessed (unless it has been saved in a variable).
 ## See also
 
 Utilities for Dataset Checking:
-[`get_duplicates_dataset()`](https:/pharmaverse.github.io/admiral/cran-release/2906-enhance-examples-derive-var-merged-ef-msrc/reference/get_duplicates_dataset.md),
-[`get_one_to_many_dataset()`](https:/pharmaverse.github.io/admiral/cran-release/2906-enhance-examples-derive-var-merged-ef-msrc/reference/get_one_to_many_dataset.md)
+[`get_duplicates_dataset()`](https:/pharmaverse.github.io/admiral/2906-enhance-examples-derive-var-merged-ef-msrc/reference/get_duplicates_dataset.md),
+[`get_one_to_many_dataset()`](https:/pharmaverse.github.io/admiral/2906-enhance-examples-derive-var-merged-ef-msrc/reference/get_one_to_many_dataset.md)
 
 ## Examples
 

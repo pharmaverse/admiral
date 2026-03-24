@@ -72,12 +72,12 @@ adae <- derive_vars_merged(
 
 This part derives `ASTDTM`, `ASTDT`, `ASTDY`, `AENDTM`, `AENDT`, and
 `AENDY`. The function
-[`derive_vars_dtm()`](https:/pharmaverse.github.io/admiral/cran-release/2906-enhance-examples-derive-var-merged-ef-msrc/reference/derive_vars_dtm.md)
+[`derive_vars_dtm()`](https:/pharmaverse.github.io/admiral/2906-enhance-examples-derive-var-merged-ef-msrc/reference/derive_vars_dtm.md)
 can be used to derive `ASTDTM` and `AENDTM` where `ASTDTM` could be
 company-specific. `ASTDT` and `AENDT` can be derived from `ASTDTM` and
 `AENDTM`, respectively, using function
-[`derive_vars_dtm_to_dt()`](https:/pharmaverse.github.io/admiral/cran-release/2906-enhance-examples-derive-var-merged-ef-msrc/reference/derive_vars_dtm_to_dt.md).
-[`derive_vars_dy()`](https:/pharmaverse.github.io/admiral/cran-release/2906-enhance-examples-derive-var-merged-ef-msrc/reference/derive_vars_dy.md)
+[`derive_vars_dtm_to_dt()`](https:/pharmaverse.github.io/admiral/2906-enhance-examples-derive-var-merged-ef-msrc/reference/derive_vars_dtm_to_dt.md).
+[`derive_vars_dy()`](https:/pharmaverse.github.io/admiral/2906-enhance-examples-derive-var-merged-ef-msrc/reference/derive_vars_dy.md)
 can be used to create `ASTDY` and `AENDY`.
 
 ``` r
@@ -104,12 +104,12 @@ adae <- adae %>%
 ```
 
 See also [Date and Time
-Imputation](https:/pharmaverse.github.io/admiral/cran-release/2906-enhance-examples-derive-var-merged-ef-msrc/articles/imputation.md).
+Imputation](https:/pharmaverse.github.io/admiral/2906-enhance-examples-derive-var-merged-ef-msrc/articles/imputation.md).
 
 ### Derive Durations
 
 The function
-[`derive_vars_duration()`](https:/pharmaverse.github.io/admiral/cran-release/2906-enhance-examples-derive-var-merged-ef-msrc/reference/derive_vars_duration.md)
+[`derive_vars_duration()`](https:/pharmaverse.github.io/admiral/2906-enhance-examples-derive-var-merged-ef-msrc/reference/derive_vars_duration.md)
 can be used to create the variables `ADURN` and `ADURU`.
 
 ``` r
@@ -125,7 +125,7 @@ adae <- adae %>%
 ### Derive ATC variables
 
 The function
-[`derive_vars_atc()`](https:/pharmaverse.github.io/admiral/cran-release/2906-enhance-examples-derive-var-merged-ef-msrc/reference/derive_vars_atc.md)
+[`derive_vars_atc()`](https:/pharmaverse.github.io/admiral/2906-enhance-examples-derive-var-merged-ef-msrc/reference/derive_vars_atc.md)
 can be used to derive ATC Class Variables.
 
 It helps to add Anatomical Therapeutic Chemical class variables from
@@ -196,12 +196,12 @@ count(adae, TRTP, TRTA, TRT01P, TRT01A)
 ```
 
 For studies with periods see the [“Visit and Period Variables”
-vignette](https:/pharmaverse.github.io/admiral/cran-release/2906-enhance-examples-derive-var-merged-ef-msrc/articles/visits_periods.html#treatment_bds).
+vignette](https:/pharmaverse.github.io/admiral/2906-enhance-examples-derive-var-merged-ef-msrc/articles/visits_periods.html#treatment_bds).
 
 ### Derive Date/Date-time of Last Dose
 
 The function
-[`derive_vars_joined()`](https:/pharmaverse.github.io/admiral/cran-release/2906-enhance-examples-derive-var-merged-ef-msrc/reference/derive_vars_joined.md)
+[`derive_vars_joined()`](https:/pharmaverse.github.io/admiral/2906-enhance-examples-derive-var-merged-ef-msrc/reference/derive_vars_joined.md)
 can be used to derive the last dose date before the start of the event.
 
 ``` r
@@ -231,7 +231,7 @@ adae <- derive_vars_joined(
 In a similar manner, you could derive the treatment dose and unit at the
 time of the event. Please note that it is assumed that the dosing
 intervals do not overlap. If this case occurs, the
-[`derive_vars_joined()`](https:/pharmaverse.github.io/admiral/cran-release/2906-enhance-examples-derive-var-merged-ef-msrc/reference/derive_vars_joined.md)
+[`derive_vars_joined()`](https:/pharmaverse.github.io/admiral/2906-enhance-examples-derive-var-merged-ef-msrc/reference/derive_vars_joined.md)
 call below will throw an error as handling this case is study-specific.
 
 ``` r
@@ -272,7 +272,7 @@ adae <- adae %>%
 ### Derive Treatment Emergent Flag
 
 To derive the treatment emergent flag `TRTEMFL`, one can call
-[`derive_var_trtemfl()`](https:/pharmaverse.github.io/admiral/cran-release/2906-enhance-examples-derive-var-merged-ef-msrc/reference/derive_var_trtemfl.md).
+[`derive_var_trtemfl()`](https:/pharmaverse.github.io/admiral/2906-enhance-examples-derive-var-merged-ef-msrc/reference/derive_var_trtemfl.md).
 In the example below, we use 30 days in the flag derivation.
 
 ``` r
@@ -286,7 +286,7 @@ adae <- adae %>%
 
 To derive on-treatment flag (`ONTRTFL`) in an ADaM dataset with a single
 occurrence date, we use
-[`derive_var_ontrtfl()`](https:/pharmaverse.github.io/admiral/cran-release/2906-enhance-examples-derive-var-merged-ef-msrc/reference/derive_var_ontrtfl.md).
+[`derive_var_ontrtfl()`](https:/pharmaverse.github.io/admiral/2906-enhance-examples-derive-var-merged-ef-msrc/reference/derive_var_ontrtfl.md).
 
 The expected result is the input dataset with an additional column named
 `ONTRTFL` with a value of `"Y"` or `NA`.
@@ -365,7 +365,7 @@ derive_var_ontrtfl(
 ### Derive Occurrence Flags
 
 The function
-[`derive_var_extreme_flag()`](https:/pharmaverse.github.io/admiral/cran-release/2906-enhance-examples-derive-var-merged-ef-msrc/reference/derive_var_extreme_flag.md)
+[`derive_var_extreme_flag()`](https:/pharmaverse.github.io/admiral/2906-enhance-examples-derive-var-merged-ef-msrc/reference/derive_var_extreme_flag.md)
 can help derive variables such as `AOCCIFL`, `AOCCPIFL`, `AOCCSIFL`, and
 `AOCCzzFL`.
 
@@ -415,12 +415,12 @@ adae <- adae %>%
 
 For deriving query variables `SMQzzNAM`, `SMQzzCD`, `SMQzzSC`,
 `SMQzzSCN`, or `CQzzNAM` the
-[`derive_vars_query()`](https:/pharmaverse.github.io/admiral/cran-release/2906-enhance-examples-derive-var-merged-ef-msrc/reference/derive_vars_query.md)
+[`derive_vars_query()`](https:/pharmaverse.github.io/admiral/2906-enhance-examples-derive-var-merged-ef-msrc/reference/derive_vars_query.md)
 function can be used. As input it expects a queries dataset, which
 provides the definition of the queries. See [Queries dataset
-documentation](https:/pharmaverse.github.io/admiral/cran-release/2906-enhance-examples-derive-var-merged-ef-msrc/articles/queries_dataset.md)
+documentation](https:/pharmaverse.github.io/admiral/2906-enhance-examples-derive-var-merged-ef-msrc/articles/queries_dataset.md)
 for a detailed description of the queries dataset. The
-[`create_query_data()`](https:/pharmaverse.github.io/admiral/cran-release/2906-enhance-examples-derive-var-merged-ef-msrc/reference/create_query_data.md)
+[`create_query_data()`](https:/pharmaverse.github.io/admiral/2906-enhance-examples-derive-var-merged-ef-msrc/reference/create_query_data.md)
 function can be used to create queries datasets.
 
 The following example shows how to derive query variables for
@@ -447,7 +447,7 @@ adae_query <- derive_vars_query(dataset = adae1, dataset_queries = queries)
 ```
 
 Similarly to SMQ, the
-[`derive_vars_query()`](https:/pharmaverse.github.io/admiral/cran-release/2906-enhance-examples-derive-var-merged-ef-msrc/reference/derive_vars_query.md)
+[`derive_vars_query()`](https:/pharmaverse.github.io/admiral/2906-enhance-examples-derive-var-merged-ef-msrc/reference/derive_vars_query.md)
 function can be used to derive Standardized Drug Groupings (SDG).
 
 ``` r
@@ -484,7 +484,7 @@ adae <- adae %>%
 ### Derive Analysis Sequence Number
 
 The function
-[`derive_var_obs_number()`](https:/pharmaverse.github.io/admiral/cran-release/2906-enhance-examples-derive-var-merged-ef-msrc/reference/derive_var_obs_number.md)
+[`derive_var_obs_number()`](https:/pharmaverse.github.io/admiral/2906-enhance-examples-derive-var-merged-ef-msrc/reference/derive_var_obs_number.md)
 can be used for deriving `ASEQ` variable to ensure the uniqueness of
 subject records within the dataset.
 
@@ -539,7 +539,7 @@ E2E example](https://pharmaverse.github.io/examples/adam/adsl).
 
 ## Example Scripts
 
-| ADaM                                                                                                                                     | Sourcing Command          |
-|------------------------------------------------------------------------------------------------------------------------------------------|---------------------------|
-| [`ADAE`](https:/pharmaverse.github.io/admiral/cran-release/2906-enhance-examples-derive-var-merged-ef-msrc/articles/templates.html#adae) | `use_ad_template("ADAE")` |
-| [`ADCM`](https:/pharmaverse.github.io/admiral/cran-release/2906-enhance-examples-derive-var-merged-ef-msrc/articles/templates.html#adcm) | `use_ad_template("ADCM")` |
+| ADaM                                                                                                                        | Sourcing Command          |
+|-----------------------------------------------------------------------------------------------------------------------------|---------------------------|
+| [`ADAE`](https:/pharmaverse.github.io/admiral/2906-enhance-examples-derive-var-merged-ef-msrc/articles/templates.html#adae) | `use_ad_template("ADAE")` |
+| [`ADCM`](https:/pharmaverse.github.io/admiral/2906-enhance-examples-derive-var-merged-ef-msrc/articles/templates.html#adcm) | `use_ad_template("ADCM")` |
