@@ -98,7 +98,7 @@ unexpected results can occur due to floating point issues. To solve this
 issue {admiral} used the [`signif()`](https://rdrr.io/r/base/Round.html)
 function on both side of the equation, the number of significant digits
 used to compare is passed into the function
-[`derive_var_atoxgr_dir()`](https:/pharmaverse.github.io/admiral/cran-release/main/reference/derive_var_atoxgr_dir.md)
+[`derive_var_atoxgr_dir()`](https:/pharmaverse.github.io/admiral/main/reference/derive_var_atoxgr_dir.md)
 via the argument `signif_dig`. Please see documentation of the function
 for more details and the blog post [How admiral handles floating
 points](https://pharmaverse.github.io/blog/posts/2023-10-30_floating_point/floating_point.html)
@@ -155,7 +155,7 @@ Using CDISC data these lab tests can be mapped to the correct terms,
 firstly create `PARAMCD`, `PARAM`, `AVAL`, `ANRLO` and `ANRHI`, also
 some lab grading criteria require `BASE` and `PCHG`, so these would also
 need to be created before running
-[`derive_var_atoxgr_dir()`](https:/pharmaverse.github.io/admiral/cran-release/main/reference/derive_var_atoxgr_dir.md)
+[`derive_var_atoxgr_dir()`](https:/pharmaverse.github.io/admiral/main/reference/derive_var_atoxgr_dir.md)
 function.  
 
 ``` r
@@ -308,11 +308,11 @@ Note: [admiral](https://pharmaverse.github.io/admiral/) does not grade
 SI unit of ‘g/L’, however the CDISC data has SI unit of ‘mmol/L’. Please
 see `UNIT_CHECK` variable in
 [admiral](https://pharmaverse.github.io/admiral/) metadata
-[`atoxgr_criteria_ctcv4()`](https:/pharmaverse.github.io/admiral/cran-release/main/reference/atoxgr_criteria_ctcv4.md)
+[`atoxgr_criteria_ctcv4()`](https:/pharmaverse.github.io/admiral/main/reference/atoxgr_criteria_ctcv4.md)
 or
-[`atoxgr_criteria_ctcv5()`](https:/pharmaverse.github.io/admiral/cran-release/main/reference/atoxgr_criteria_ctcv5.md)
+[`atoxgr_criteria_ctcv5()`](https:/pharmaverse.github.io/admiral/main/reference/atoxgr_criteria_ctcv5.md)
 or
-[`atoxgr_criteria_daids()`](https:/pharmaverse.github.io/admiral/cran-release/main/reference/atoxgr_criteria_daids.md),
+[`atoxgr_criteria_daids()`](https:/pharmaverse.github.io/admiral/main/reference/atoxgr_criteria_daids.md),
 the metadata is in the data folder of
 [admiral](https://pharmaverse.github.io/admiral/).  
 
@@ -542,7 +542,7 @@ Value being normal or abnormal. We use the variable `BNRIND` to
 determine this, and users can pass in the value(s) of `BNRIND` that
 indicate the baseline is abnormal via the arguments `high_indicator` and
 `low_indicator` in the function
-[`derive_var_atoxgr_dir()`](https:/pharmaverse.github.io/admiral/cran-release/main/reference/derive_var_atoxgr_dir.md).
+[`derive_var_atoxgr_dir()`](https:/pharmaverse.github.io/admiral/main/reference/derive_var_atoxgr_dir.md).
 For example, setting `high_indicator = "HIGH"` would mean any
 observations with `BNRIND = "HIGH"` would be deemed to have a high
 abnormal Baseline Value. Likewise, setting `low_indicator = "LOW"` would
@@ -710,7 +710,7 @@ Value being normal or abnormal. We use the variable `BNRIND` to
 determine this, and users can pass in the value(s) of `BNRIND` that
 indicate the baseline is abnormal via the arguments `high_indicator` and
 `low_indicator` in the function
-[`derive_var_atoxgr_dir()`](https:/pharmaverse.github.io/admiral/cran-release/main/reference/derive_var_atoxgr_dir.md).
+[`derive_var_atoxgr_dir()`](https:/pharmaverse.github.io/admiral/main/reference/derive_var_atoxgr_dir.md).
 For example, setting `high_indicator = "HIGH"` would mean any
 observations with `BNRIND = "HIGH"` would be deemed to have a high
 abnormal Baseline Value. Likewise, setting `low_indicator = "LOW"` would

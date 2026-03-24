@@ -1,9 +1,9 @@
 # Create a `event` Object
 
 The `event` object is used to define events as input for the
-[`derive_extreme_event()`](https:/pharmaverse.github.io/admiral/cran-release/main/reference/derive_extreme_event.md)
+[`derive_extreme_event()`](https:/pharmaverse.github.io/admiral/main/reference/derive_extreme_event.md)
 and
-[`derive_vars_extreme_event()`](https:/pharmaverse.github.io/admiral/cran-release/main/reference/derive_vars_extreme_event.md)
+[`derive_vars_extreme_event()`](https:/pharmaverse.github.io/admiral/main/reference/derive_vars_extreme_event.md)
 functions.
 
 ## Usage
@@ -26,9 +26,9 @@ event(
 
   Dataset name of the dataset to be used as input for the event. The
   name refers to the dataset specified for `source_datasets` in
-  [`derive_extreme_event()`](https:/pharmaverse.github.io/admiral/cran-release/main/reference/derive_extreme_event.md).
+  [`derive_extreme_event()`](https:/pharmaverse.github.io/admiral/main/reference/derive_extreme_event.md).
   If the argument is not specified, the input dataset (`dataset`) of
-  [`derive_extreme_event()`](https:/pharmaverse.github.io/admiral/cran-release/main/reference/derive_extreme_event.md)
+  [`derive_extreme_event()`](https:/pharmaverse.github.io/admiral/main/reference/derive_extreme_event.md)
   is used.
 
   Permitted values
@@ -74,12 +74,12 @@ event(
 
   For handling of `NA`s in sorting variables see the "Sort Order"
   section in
-  [`vignette("generic")`](https:/pharmaverse.github.io/admiral/cran-release/main/articles/generic.md).
+  [`vignette("generic")`](https:/pharmaverse.github.io/admiral/main/articles/generic.md).
 
   Permitted values
 
   :   list of expressions created by
-      [`exprs()`](https:/pharmaverse.github.io/admiral/cran-release/main/reference/reexport-exprs.md),
+      [`exprs()`](https:/pharmaverse.github.io/admiral/main/reference/reexport-exprs.md),
       e.g., `exprs(ADT, desc(AVAL))` or `NULL`
 
   Default value
@@ -89,7 +89,7 @@ event(
 - set_values_to:
 
   A named list returned by
-  [`exprs()`](https:/pharmaverse.github.io/admiral/cran-release/main/reference/reexport-exprs.md)
+  [`exprs()`](https:/pharmaverse.github.io/admiral/main/reference/reexport-exprs.md)
   defining the variables to be set for the event, e.g.
   `exprs(PARAMCD = "WSP", PARAM = "Worst Sleeping Problems")`. The
   values can be a symbol, a character string, a numeric value, `NA` or
@@ -98,7 +98,7 @@ event(
   Permitted values
 
   :   a named list of expressions, e.g., created by
-      [`exprs()`](https:/pharmaverse.github.io/admiral/cran-release/main/reference/reexport-exprs.md)
+      [`exprs()`](https:/pharmaverse.github.io/admiral/main/reference/reexport-exprs.md)
 
   Default value
 
@@ -110,7 +110,7 @@ event(
 
   The specified variables are kept for the selected observations. The
   variables specified for `by_vars` (of
-  [`derive_extreme_event()`](https:/pharmaverse.github.io/admiral/cran-release/main/reference/derive_extreme_event.md))
+  [`derive_extreme_event()`](https:/pharmaverse.github.io/admiral/main/reference/derive_extreme_event.md))
   and created by `set_values_to` are always kept.
 
   Permitted values
@@ -144,17 +144,17 @@ An object of class `event`
 
 ## See also
 
-[`derive_extreme_event()`](https:/pharmaverse.github.io/admiral/cran-release/main/reference/derive_extreme_event.md),
-[`derive_vars_extreme_event()`](https:/pharmaverse.github.io/admiral/cran-release/main/reference/derive_vars_extreme_event.md),
-[`event_joined()`](https:/pharmaverse.github.io/admiral/cran-release/main/reference/event_joined.md)
+[`derive_extreme_event()`](https:/pharmaverse.github.io/admiral/main/reference/derive_extreme_event.md),
+[`derive_vars_extreme_event()`](https:/pharmaverse.github.io/admiral/main/reference/derive_vars_extreme_event.md),
+[`event_joined()`](https:/pharmaverse.github.io/admiral/main/reference/event_joined.md)
 
 Source Objects:
-[`basket_select()`](https:/pharmaverse.github.io/admiral/cran-release/main/reference/basket_select.md),
-[`censor_source()`](https:/pharmaverse.github.io/admiral/cran-release/main/reference/censor_source.md),
-[`death_event`](https:/pharmaverse.github.io/admiral/cran-release/main/reference/tte_source_objects.md),
-[`event_joined()`](https:/pharmaverse.github.io/admiral/cran-release/main/reference/event_joined.md),
-[`event_source()`](https:/pharmaverse.github.io/admiral/cran-release/main/reference/event_source.md),
-[`flag_event()`](https:/pharmaverse.github.io/admiral/cran-release/main/reference/flag_event.md),
-[`query()`](https:/pharmaverse.github.io/admiral/cran-release/main/reference/query.md),
-[`records_source()`](https:/pharmaverse.github.io/admiral/cran-release/main/reference/records_source.md),
-[`tte_source()`](https:/pharmaverse.github.io/admiral/cran-release/main/reference/tte_source.md)
+[`basket_select()`](https:/pharmaverse.github.io/admiral/main/reference/basket_select.md),
+[`censor_source()`](https:/pharmaverse.github.io/admiral/main/reference/censor_source.md),
+[`death_event`](https:/pharmaverse.github.io/admiral/main/reference/tte_source_objects.md),
+[`event_joined()`](https:/pharmaverse.github.io/admiral/main/reference/event_joined.md),
+[`event_source()`](https:/pharmaverse.github.io/admiral/main/reference/event_source.md),
+[`flag_event()`](https:/pharmaverse.github.io/admiral/main/reference/flag_event.md),
+[`query()`](https:/pharmaverse.github.io/admiral/main/reference/query.md),
+[`records_source()`](https:/pharmaverse.github.io/admiral/main/reference/records_source.md),
+[`tte_source()`](https:/pharmaverse.github.io/admiral/main/reference/tte_source.md)

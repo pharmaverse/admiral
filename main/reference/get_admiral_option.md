@@ -17,7 +17,7 @@ get_admiral_option(option)
 
   As of now, support only available for "subject_keys", "signif_digits",
   and "save_memory". See
-  [`set_admiral_options()`](https:/pharmaverse.github.io/admiral/cran-release/main/reference/set_admiral_options.md)
+  [`set_admiral_options()`](https:/pharmaverse.github.io/admiral/main/reference/set_admiral_options.md)
   for a description of the options.
 
   Default value
@@ -35,16 +35,16 @@ repeated multiple times in a script, such as `subject_keys`.
 
 ## See also
 
-[`set_admiral_options()`](https:/pharmaverse.github.io/admiral/cran-release/main/reference/set_admiral_options.md),
-[`derive_param_exist_flag()`](https:/pharmaverse.github.io/admiral/cran-release/main/reference/derive_param_exist_flag.md),
-[`derive_param_tte()`](https:/pharmaverse.github.io/admiral/cran-release/main/reference/derive_param_tte.md)
-[`derive_var_dthcaus()`](https:/pharmaverse.github.io/admiral/cran-release/main/reference/derive_var_dthcaus.md),
-[`derive_var_extreme_dtm()`](https:/pharmaverse.github.io/admiral/cran-release/main/reference/derive_var_extreme_dtm.md),
-[`derive_vars_period()`](https:/pharmaverse.github.io/admiral/cran-release/main/reference/derive_vars_period.md),
-[`create_period_dataset()`](https:/pharmaverse.github.io/admiral/cran-release/main/reference/create_period_dataset.md)
+[`set_admiral_options()`](https:/pharmaverse.github.io/admiral/main/reference/set_admiral_options.md),
+[`derive_param_exist_flag()`](https:/pharmaverse.github.io/admiral/main/reference/derive_param_exist_flag.md),
+[`derive_param_tte()`](https:/pharmaverse.github.io/admiral/main/reference/derive_param_tte.md)
+[`derive_var_dthcaus()`](https:/pharmaverse.github.io/admiral/main/reference/derive_var_dthcaus.md),
+[`derive_var_extreme_dtm()`](https:/pharmaverse.github.io/admiral/main/reference/derive_var_extreme_dtm.md),
+[`derive_vars_period()`](https:/pharmaverse.github.io/admiral/main/reference/derive_vars_period.md),
+[`create_period_dataset()`](https:/pharmaverse.github.io/admiral/main/reference/create_period_dataset.md)
 
 Other admiral_options:
-[`set_admiral_options()`](https:/pharmaverse.github.io/admiral/cran-release/main/reference/set_admiral_options.md)
+[`set_admiral_options()`](https:/pharmaverse.github.io/admiral/main/reference/set_admiral_options.md)
 
 ## Examples
 

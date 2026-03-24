@@ -44,16 +44,16 @@ available.
 
 ## See also
 
-[`impute_dtc_dtm()`](https:/pharmaverse.github.io/admiral/cran-release/main/reference/impute_dtc_dtm.md),
-[`impute_dtc_dt()`](https:/pharmaverse.github.io/admiral/cran-release/main/reference/impute_dtc_dt.md)
+[`impute_dtc_dtm()`](https:/pharmaverse.github.io/admiral/main/reference/impute_dtc_dtm.md),
+[`impute_dtc_dt()`](https:/pharmaverse.github.io/admiral/main/reference/impute_dtc_dt.md)
 
 Utilities used for date imputation:
-[`dt_level()`](https:/pharmaverse.github.io/admiral/cran-release/main/reference/dt_level.md),
-[`dtm_level()`](https:/pharmaverse.github.io/admiral/cran-release/main/reference/dtm_level.md),
-[`get_imputation_target_date()`](https:/pharmaverse.github.io/admiral/cran-release/main/reference/get_imputation_target_date.md),
-[`get_imputation_target_time()`](https:/pharmaverse.github.io/admiral/cran-release/main/reference/get_imputation_target_time.md),
-[`restrict_imputed_dtc_dt()`](https:/pharmaverse.github.io/admiral/cran-release/main/reference/restrict_imputed_dtc_dt.md),
-[`restrict_imputed_dtc_dtm()`](https:/pharmaverse.github.io/admiral/cran-release/main/reference/restrict_imputed_dtc_dtm.md)
+[`dt_level()`](https:/pharmaverse.github.io/admiral/main/reference/dt_level.md),
+[`dtm_level()`](https:/pharmaverse.github.io/admiral/main/reference/dtm_level.md),
+[`get_imputation_target_date()`](https:/pharmaverse.github.io/admiral/main/reference/get_imputation_target_date.md),
+[`get_imputation_target_time()`](https:/pharmaverse.github.io/admiral/main/reference/get_imputation_target_time.md),
+[`restrict_imputed_dtc_dt()`](https:/pharmaverse.github.io/admiral/main/reference/restrict_imputed_dtc_dt.md),
+[`restrict_imputed_dtc_dtm()`](https:/pharmaverse.github.io/admiral/main/reference/restrict_imputed_dtc_dtm.md)
 
 ## Examples
 

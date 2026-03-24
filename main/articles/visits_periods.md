@@ -34,7 +34,7 @@ The most common ways of deriving `AVISIT` and `AVISITN` are:
 The former can be achieved simply by calling
 [`mutate()`](https://dplyr.tidyverse.org/reference/mutate.html), like in
 the vignettes and the [template
-scripts](https:/pharmaverse.github.io/admiral/cran-release/main/articles/templates.md).
+scripts](https:/pharmaverse.github.io/admiral/main/articles/templates.md).
 
 For the latter a (study-specific) reference dataset needs to be created
 which provides for each visit the start and end day (`AWLO` and `AWHI`)
@@ -54,7 +54,7 @@ windows <- tribble(
 
 Then the visits can be assigned based on the analysis day (`ADY`) by
 calling
-[`derive_vars_joined()`](https:/pharmaverse.github.io/admiral/cran-release/main/reference/derive_vars_joined.md):
+[`derive_vars_joined()`](https:/pharmaverse.github.io/admiral/main/reference/derive_vars_joined.md):
 
 ``` r
 adbds <- tribble(
@@ -99,9 +99,9 @@ code will always be required. There are two options:
 
 - Study specific code is used to first derive the variables `PxxSwSDT`
   and `PxxSwEDT` in ADSL. Then
-  [`create_period_dataset()`](https:/pharmaverse.github.io/admiral/cran-release/main/reference/create_period_dataset.md)
+  [`create_period_dataset()`](https:/pharmaverse.github.io/admiral/main/reference/create_period_dataset.md)
   and
-  [`derive_vars_joined()`](https:/pharmaverse.github.io/admiral/cran-release/main/reference/derive_vars_joined.md)
+  [`derive_vars_joined()`](https:/pharmaverse.github.io/admiral/main/reference/derive_vars_joined.md)
   can be used to derive period/subperiod variables like `ASPER` or
   `ASPRSDT` in BDS and OCCDS datasets. See an example dataset
   [here](#adsl_example).
@@ -109,9 +109,9 @@ code will always be required. There are two options:
 - Study specific code is used to derive a dataset with one observation
   per patient, period, and subperiod (see [period reference
   dataset](#reference)). Then
-  [`derive_vars_period()`](https:/pharmaverse.github.io/admiral/cran-release/main/reference/derive_vars_period.md)
+  [`derive_vars_period()`](https:/pharmaverse.github.io/admiral/main/reference/derive_vars_period.md)
   can be used to derive `PxxSwSDT` and `PxxSwEDT` in ADSL and
-  [`derive_vars_joined()`](https:/pharmaverse.github.io/admiral/cran-release/main/reference/derive_vars_joined.md)
+  [`derive_vars_joined()`](https:/pharmaverse.github.io/admiral/main/reference/derive_vars_joined.md)
   can be used to derive period/subperiod variables like `ASPER` or
   `ASPRSDT` in BDS and OCCDS datasets.
 
@@ -236,7 +236,7 @@ period_ref <- period_ref %>%
 If the treatment start and end dates are already included in ADSL, we
 can derive the phase variables directly in ADSL and create a phase
 reference dataset by employing
-[`create_period_dataset()`](https:/pharmaverse.github.io/admiral/cran-release/main/reference/create_period_dataset.md).
+[`create_period_dataset()`](https:/pharmaverse.github.io/admiral/main/reference/create_period_dataset.md).
 Here is an example command to achieve this goal:
 
 ``` r
@@ -261,7 +261,7 @@ phase_ref <- create_period_dataset(
 If a period/phase reference dataset is available, the ADSL variables for
 periods, subperiods, or phases can be created from this dataset by
 calling
-[`derive_vars_period()`](https:/pharmaverse.github.io/admiral/cran-release/main/reference/derive_vars_period.md).
+[`derive_vars_period()`](https:/pharmaverse.github.io/admiral/main/reference/derive_vars_period.md).
 
 For example the period reference dataset from the previous section can
 be used to add the period variables (`APxxSDT`, `APxxEDT`) to ADSL:
@@ -278,7 +278,7 @@ adsl2 <- derive_vars_period(
 
 If a period/phase reference dataset is available, BDS and OCCDS
 variables for periods, subperiods, or phases can be created by calling
-[`derive_vars_joined()`](https:/pharmaverse.github.io/admiral/cran-release/main/reference/derive_vars_joined.md).
+[`derive_vars_joined()`](https:/pharmaverse.github.io/admiral/main/reference/derive_vars_joined.md).
 
 For example the variables `APHASEN`, `PHSDT`, `PHEDT`, `APHASE` can be
 derived from the phase reference dataset defined above.
@@ -318,7 +318,7 @@ way (and same step) as the period, subperiod, and phase variables.
 
 If the treatment information is included in the period/phase reference
 dataset, the treatment ADSL variables can be created by calling
-[`derive_vars_period()`](https:/pharmaverse.github.io/admiral/cran-release/main/reference/derive_vars_period.md).
+[`derive_vars_period()`](https:/pharmaverse.github.io/admiral/main/reference/derive_vars_period.md).
 This is showcased below using the period reference dataset from previous
 sections.
 
@@ -338,7 +338,7 @@ adsl <- derive_vars_period(
 
 If a period/phase reference dataset is available, BDS and OCCDS
 variables for treatment can be created by calling
-[`derive_vars_joined()`](https:/pharmaverse.github.io/admiral/cran-release/main/reference/derive_vars_joined.md).
+[`derive_vars_joined()`](https:/pharmaverse.github.io/admiral/main/reference/derive_vars_joined.md).
 
 For example the variables `APERIOD` and `TRTA` can be derived from the
 period reference dataset defined above.
@@ -369,11 +369,11 @@ adae2 <- adae %>%
 If no period/phase reference dataset is available but period/phase
 variables are in ADSL, then the former can again be created from ADSL by
 calling
-[`create_period_dataset()`](https:/pharmaverse.github.io/admiral/cran-release/main/reference/create_period_dataset.md),
+[`create_period_dataset()`](https:/pharmaverse.github.io/admiral/main/reference/create_period_dataset.md),
 as was showcased [here](#from_adsl).
 
 This time, when calling
-[`create_period_dataset()`](https:/pharmaverse.github.io/admiral/cran-release/main/reference/create_period_dataset.md)
+[`create_period_dataset()`](https:/pharmaverse.github.io/admiral/main/reference/create_period_dataset.md)
 we just need to make sure we include `TRTA = TRTxxA` as part of the
 `new_vars` argument to create the treatment variables as well.
 

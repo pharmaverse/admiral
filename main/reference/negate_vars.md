@@ -13,7 +13,7 @@ negate_vars(vars = NULL)
 - vars:
 
   List of variables created by
-  [`exprs()`](https:/pharmaverse.github.io/admiral/cran-release/main/reference/reexport-exprs.md)
+  [`exprs()`](https:/pharmaverse.github.io/admiral/main/reference/reexport-exprs.md)
 
   Default value
 
@@ -31,7 +31,7 @@ e.g., `select(!!!negate_vars(by_vars))` removes all by variables.
 ## See also
 
 Utilities for working with quosures/list of expressions:
-[`chr2vars()`](https:/pharmaverse.github.io/admiral/cran-release/main/reference/chr2vars.md)
+[`chr2vars()`](https:/pharmaverse.github.io/admiral/main/reference/chr2vars.md)
 
 ## Examples
 

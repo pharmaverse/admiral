@@ -26,9 +26,9 @@ set_admiral_options(subject_keys, signif_digits, save_memory)
   Holds number of significant digits when comparing to numeric
   variables, defaults to `15`. This option is used as default value for
   the `signif_dig` argument in admiral functions
-  [`derive_var_atoxgr_dir()`](https:/pharmaverse.github.io/admiral/cran-release/main/reference/derive_var_atoxgr_dir.md)
+  [`derive_var_atoxgr_dir()`](https:/pharmaverse.github.io/admiral/main/reference/derive_var_atoxgr_dir.md)
   and
-  [`derive_var_anrind()`](https:/pharmaverse.github.io/admiral/cran-release/main/reference/derive_var_anrind.md).
+  [`derive_var_anrind()`](https:/pharmaverse.github.io/admiral/main/reference/derive_var_anrind.md).
 
   Default value
 
@@ -37,11 +37,11 @@ set_admiral_options(subject_keys, signif_digits, save_memory)
 - save_memory:
 
   If set to `TRUE`, an alternative algorithm is used in the functions
-  [`derive_vars_joined()`](https:/pharmaverse.github.io/admiral/cran-release/main/reference/derive_vars_joined.md),
-  [`derive_var_joined_exist_flag()`](https:/pharmaverse.github.io/admiral/cran-release/main/reference/derive_var_joined_exist_flag.md),
-  [`derive_extreme_event()`](https:/pharmaverse.github.io/admiral/cran-release/main/reference/derive_extreme_event.md),
+  [`derive_vars_joined()`](https:/pharmaverse.github.io/admiral/main/reference/derive_vars_joined.md),
+  [`derive_var_joined_exist_flag()`](https:/pharmaverse.github.io/admiral/main/reference/derive_var_joined_exist_flag.md),
+  [`derive_extreme_event()`](https:/pharmaverse.github.io/admiral/main/reference/derive_extreme_event.md),
   and
-  [`filter_joined()`](https:/pharmaverse.github.io/admiral/cran-release/main/reference/filter_joined.md)
+  [`filter_joined()`](https:/pharmaverse.github.io/admiral/main/reference/filter_joined.md)
   which requires less memory but more run-time.
 
   Default value
@@ -56,23 +56,23 @@ No return value, called for side effects.
 
 Modify an admiral option, e.g `subject_keys`, such that it automatically
 affects downstream function inputs where
-[`get_admiral_option()`](https:/pharmaverse.github.io/admiral/cran-release/main/reference/get_admiral_option.md)
+[`get_admiral_option()`](https:/pharmaverse.github.io/admiral/main/reference/get_admiral_option.md)
 is called such as
-[`derive_param_exist_flag()`](https:/pharmaverse.github.io/admiral/cran-release/main/reference/derive_param_exist_flag.md).
+[`derive_param_exist_flag()`](https:/pharmaverse.github.io/admiral/main/reference/derive_param_exist_flag.md).
 
 ## See also
 
-[`get_admiral_option()`](https:/pharmaverse.github.io/admiral/cran-release/main/reference/get_admiral_option.md),
-[`derive_param_exist_flag()`](https:/pharmaverse.github.io/admiral/cran-release/main/reference/derive_param_exist_flag.md),[`derive_param_tte()`](https:/pharmaverse.github.io/admiral/cran-release/main/reference/derive_param_tte.md),
-[`derive_var_dthcaus()`](https:/pharmaverse.github.io/admiral/cran-release/main/reference/derive_var_dthcaus.md),
-[`derive_var_extreme_dtm()`](https:/pharmaverse.github.io/admiral/cran-release/main/reference/derive_var_extreme_dtm.md),
-[`derive_vars_period()`](https:/pharmaverse.github.io/admiral/cran-release/main/reference/derive_vars_period.md),
-[`create_period_dataset()`](https:/pharmaverse.github.io/admiral/cran-release/main/reference/create_period_dataset.md),
-[`derive_var_atoxgr_dir()`](https:/pharmaverse.github.io/admiral/cran-release/main/reference/derive_var_atoxgr_dir.md),
-[`derive_var_anrind()`](https:/pharmaverse.github.io/admiral/cran-release/main/reference/derive_var_anrind.md)
+[`get_admiral_option()`](https:/pharmaverse.github.io/admiral/main/reference/get_admiral_option.md),
+[`derive_param_exist_flag()`](https:/pharmaverse.github.io/admiral/main/reference/derive_param_exist_flag.md),[`derive_param_tte()`](https:/pharmaverse.github.io/admiral/main/reference/derive_param_tte.md),
+[`derive_var_dthcaus()`](https:/pharmaverse.github.io/admiral/main/reference/derive_var_dthcaus.md),
+[`derive_var_extreme_dtm()`](https:/pharmaverse.github.io/admiral/main/reference/derive_var_extreme_dtm.md),
+[`derive_vars_period()`](https:/pharmaverse.github.io/admiral/main/reference/derive_vars_period.md),
+[`create_period_dataset()`](https:/pharmaverse.github.io/admiral/main/reference/create_period_dataset.md),
+[`derive_var_atoxgr_dir()`](https:/pharmaverse.github.io/admiral/main/reference/derive_var_atoxgr_dir.md),
+[`derive_var_anrind()`](https:/pharmaverse.github.io/admiral/main/reference/derive_var_anrind.md)
 
 Other admiral_options:
-[`get_admiral_option()`](https:/pharmaverse.github.io/admiral/cran-release/main/reference/get_admiral_option.md)
+[`get_admiral_option()`](https:/pharmaverse.github.io/admiral/main/reference/get_admiral_option.md)
 
 ## Examples
 

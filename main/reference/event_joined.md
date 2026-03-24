@@ -1,16 +1,16 @@
 # Create a `event_joined` Object
 
 The `event_joined` object is used to define events as input for the
-[`derive_extreme_event()`](https:/pharmaverse.github.io/admiral/cran-release/main/reference/derive_extreme_event.md)
+[`derive_extreme_event()`](https:/pharmaverse.github.io/admiral/main/reference/derive_extreme_event.md)
 and
-[`derive_vars_extreme_event()`](https:/pharmaverse.github.io/admiral/cran-release/main/reference/derive_vars_extreme_event.md)
+[`derive_vars_extreme_event()`](https:/pharmaverse.github.io/admiral/main/reference/derive_vars_extreme_event.md)
 functions. This object should be used if the event does not depend on a
 single observation of the source dataset but on multiple observations.
 For example, if the event needs to be confirmed by a second observation
 of the source dataset.
 
 The events are selected by calling
-[`filter_joined()`](https:/pharmaverse.github.io/admiral/cran-release/main/reference/filter_joined.md).
+[`filter_joined()`](https:/pharmaverse.github.io/admiral/main/reference/filter_joined.md).
 See its documentation for more details.
 
 ## Usage
@@ -36,9 +36,9 @@ event_joined(
 
   Dataset name of the dataset to be used as input for the event. The
   name refers to the dataset specified for `source_datasets` in
-  [`derive_extreme_event()`](https:/pharmaverse.github.io/admiral/cran-release/main/reference/derive_extreme_event.md).
+  [`derive_extreme_event()`](https:/pharmaverse.github.io/admiral/main/reference/derive_extreme_event.md).
   If the argument is not specified, the input dataset (`dataset`) of
-  [`derive_extreme_event()`](https:/pharmaverse.github.io/admiral/cran-release/main/reference/derive_extreme_event.md)
+  [`derive_extreme_event()`](https:/pharmaverse.github.io/admiral/main/reference/derive_extreme_event.md)
   is used.
 
   Permitted values
@@ -82,12 +82,12 @@ event_joined(
 
   For handling of `NA`s in sorting variables see the "Sort Order"
   section in
-  [`vignette("generic")`](https:/pharmaverse.github.io/admiral/cran-release/main/articles/generic.md).
+  [`vignette("generic")`](https:/pharmaverse.github.io/admiral/main/articles/generic.md).
 
   Permitted values
 
   :   list of expressions created by
-      [`exprs()`](https:/pharmaverse.github.io/admiral/cran-release/main/reference/reexport-exprs.md),
+      [`exprs()`](https:/pharmaverse.github.io/admiral/main/reference/reexport-exprs.md),
       e.g., `exprs(ADT, desc(AVAL))` or `NULL`
 
   Default value
@@ -111,7 +111,7 @@ event_joined(
   Permitted values
 
   :   a named list of expressions, e.g., created by
-      [`exprs()`](https:/pharmaverse.github.io/admiral/cran-release/main/reference/reexport-exprs.md)
+      [`exprs()`](https:/pharmaverse.github.io/admiral/main/reference/reexport-exprs.md)
 
   Default value
 
@@ -182,7 +182,7 @@ event_joined(
 - set_values_to:
 
   A named list returned by
-  [`exprs()`](https:/pharmaverse.github.io/admiral/cran-release/main/reference/reexport-exprs.md)
+  [`exprs()`](https:/pharmaverse.github.io/admiral/main/reference/reexport-exprs.md)
   defining the variables to be set for the event, e.g.
   `exprs(PARAMCD = "WSP", PARAM = "Worst Sleeping Problems")`. The
   values can be a symbol, a character string, a numeric value, `NA` or
@@ -191,7 +191,7 @@ event_joined(
   Permitted values
 
   :   a named list of expressions, e.g., created by
-      [`exprs()`](https:/pharmaverse.github.io/admiral/cran-release/main/reference/reexport-exprs.md)
+      [`exprs()`](https:/pharmaverse.github.io/admiral/main/reference/reexport-exprs.md)
 
   Default value
 
@@ -203,7 +203,7 @@ event_joined(
 
   The specified variables are kept for the selected observations. The
   variables specified for `by_vars` (of
-  [`derive_extreme_event()`](https:/pharmaverse.github.io/admiral/cran-release/main/reference/derive_extreme_event.md))
+  [`derive_extreme_event()`](https:/pharmaverse.github.io/admiral/main/reference/derive_extreme_event.md))
   and created by `set_values_to` are always kept.
 
   Permitted values
@@ -237,20 +237,20 @@ An object of class `event_joined`
 
 ## See also
 
-[`derive_extreme_event()`](https:/pharmaverse.github.io/admiral/cran-release/main/reference/derive_extreme_event.md),
-[`derive_vars_extreme_event()`](https:/pharmaverse.github.io/admiral/cran-release/main/reference/derive_vars_extreme_event.md),
-[`event()`](https:/pharmaverse.github.io/admiral/cran-release/main/reference/event.md)
+[`derive_extreme_event()`](https:/pharmaverse.github.io/admiral/main/reference/derive_extreme_event.md),
+[`derive_vars_extreme_event()`](https:/pharmaverse.github.io/admiral/main/reference/derive_vars_extreme_event.md),
+[`event()`](https:/pharmaverse.github.io/admiral/main/reference/event.md)
 
 Source Objects:
-[`basket_select()`](https:/pharmaverse.github.io/admiral/cran-release/main/reference/basket_select.md),
-[`censor_source()`](https:/pharmaverse.github.io/admiral/cran-release/main/reference/censor_source.md),
-[`death_event`](https:/pharmaverse.github.io/admiral/cran-release/main/reference/tte_source_objects.md),
-[`event()`](https:/pharmaverse.github.io/admiral/cran-release/main/reference/event.md),
-[`event_source()`](https:/pharmaverse.github.io/admiral/cran-release/main/reference/event_source.md),
-[`flag_event()`](https:/pharmaverse.github.io/admiral/cran-release/main/reference/flag_event.md),
-[`query()`](https:/pharmaverse.github.io/admiral/cran-release/main/reference/query.md),
-[`records_source()`](https:/pharmaverse.github.io/admiral/cran-release/main/reference/records_source.md),
-[`tte_source()`](https:/pharmaverse.github.io/admiral/cran-release/main/reference/tte_source.md)
+[`basket_select()`](https:/pharmaverse.github.io/admiral/main/reference/basket_select.md),
+[`censor_source()`](https:/pharmaverse.github.io/admiral/main/reference/censor_source.md),
+[`death_event`](https:/pharmaverse.github.io/admiral/main/reference/tte_source_objects.md),
+[`event()`](https:/pharmaverse.github.io/admiral/main/reference/event.md),
+[`event_source()`](https:/pharmaverse.github.io/admiral/main/reference/event_source.md),
+[`flag_event()`](https:/pharmaverse.github.io/admiral/main/reference/flag_event.md),
+[`query()`](https:/pharmaverse.github.io/admiral/main/reference/query.md),
+[`records_source()`](https:/pharmaverse.github.io/admiral/main/reference/records_source.md),
+[`tte_source()`](https:/pharmaverse.github.io/admiral/main/reference/tte_source.md)
 
 ## Examples
 
