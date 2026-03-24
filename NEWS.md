@@ -4,6 +4,9 @@
 
 ## Updates of Existing Functions
 
+- The `filter_add` argument in `derive_var_joined_exist_flag()` is no longer erroneously
+ignored. (#3018)
+
 - Fixed poorly formatted warning messages in `derive_param_computed()` and `derive_vars_computed()`. (#2969)
 
 - `use_ad_template()` was updated to remove the `open` argument, meaning the generated template will never automatically open
@@ -39,6 +42,8 @@ of packages were updated to specify the level of contributions required for auth
 - Additional information about timing variable conventions has been added to the `derive_vars_dy()` function documentation. (#2995)
 
 - Added IDs to each template script in the "Explore ADaM Templates" vignette, enabling links to them from across the website. (#3006)
+
+- Added a new custom [404 page](https://pharmaverse.github.io/admiral/404.html) with a butterfly quiz for lost users. (#2982)
 
 ## Various
 
