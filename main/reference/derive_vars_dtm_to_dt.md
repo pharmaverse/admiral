@@ -24,7 +24,7 @@ derive_vars_dtm_to_dt(dataset, source_vars)
 - source_vars:
 
   A list of datetime variables created using
-  [`exprs()`](https:/pharmaverse.github.io/admiral/cran-release/main/reference/reexport-exprs.md)
+  [`exprs()`](https:/pharmaverse.github.io/admiral/main/reference/reexport-exprs.md)
   from which dates are to be extracted
 
   Default value
@@ -41,12 +41,12 @@ A data frame containing the input dataset with the corresponding date
 
 Date/Time Derivation Functions that returns variable appended to
 dataset:
-[`derive_var_trtdurd()`](https:/pharmaverse.github.io/admiral/cran-release/main/reference/derive_var_trtdurd.md),
-[`derive_vars_dt()`](https:/pharmaverse.github.io/admiral/cran-release/main/reference/derive_vars_dt.md),
-[`derive_vars_dtm()`](https:/pharmaverse.github.io/admiral/cran-release/main/reference/derive_vars_dtm.md),
-[`derive_vars_dtm_to_tm()`](https:/pharmaverse.github.io/admiral/cran-release/main/reference/derive_vars_dtm_to_tm.md),
-[`derive_vars_duration()`](https:/pharmaverse.github.io/admiral/cran-release/main/reference/derive_vars_duration.md),
-[`derive_vars_dy()`](https:/pharmaverse.github.io/admiral/cran-release/main/reference/derive_vars_dy.md)
+[`derive_var_trtdurd()`](https:/pharmaverse.github.io/admiral/main/reference/derive_var_trtdurd.md),
+[`derive_vars_dt()`](https:/pharmaverse.github.io/admiral/main/reference/derive_vars_dt.md),
+[`derive_vars_dtm()`](https:/pharmaverse.github.io/admiral/main/reference/derive_vars_dtm.md),
+[`derive_vars_dtm_to_tm()`](https:/pharmaverse.github.io/admiral/main/reference/derive_vars_dtm_to_tm.md),
+[`derive_vars_duration()`](https:/pharmaverse.github.io/admiral/main/reference/derive_vars_duration.md),
+[`derive_vars_dy()`](https:/pharmaverse.github.io/admiral/main/reference/derive_vars_dy.md)
 
 ## Examples
 

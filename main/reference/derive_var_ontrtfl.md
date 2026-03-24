@@ -48,7 +48,7 @@ derive_var_ontrtfl(
   Required; A date or date-time object column is expected.
 
   Refer to
-  [`derive_vars_dt()`](https:/pharmaverse.github.io/admiral/cran-release/main/reference/derive_vars_dt.md)
+  [`derive_vars_dt()`](https:/pharmaverse.github.io/admiral/main/reference/derive_vars_dt.md)
   to impute and derive a date from a date character vector to a date
   object.
 
@@ -62,7 +62,7 @@ derive_var_ontrtfl(
   object column is expected.
 
   Refer to
-  [`derive_vars_dt()`](https:/pharmaverse.github.io/admiral/cran-release/main/reference/derive_vars_dt.md)
+  [`derive_vars_dt()`](https:/pharmaverse.github.io/admiral/main/reference/derive_vars_dt.md)
   to impute and derive a date from a date character vector to a date
   object.
 
@@ -80,7 +80,7 @@ derive_var_ontrtfl(
   date-time object column is expected.
 
   Refer to
-  [`derive_vars_dt()`](https:/pharmaverse.github.io/admiral/cran-release/main/reference/derive_vars_dt.md)
+  [`derive_vars_dt()`](https:/pharmaverse.github.io/admiral/main/reference/derive_vars_dt.md)
   to impute and derive a date from a date character vector to a date
   object.
 
@@ -94,7 +94,7 @@ derive_var_ontrtfl(
   column is expected.
 
   Refer to
-  [`derive_vars_dt()`](https:/pharmaverse.github.io/admiral/cran-release/main/reference/derive_vars_dt.md)
+  [`derive_vars_dt()`](https:/pharmaverse.github.io/admiral/main/reference/derive_vars_dt.md)
   to impute and derive a date from a date character vector to a date
   object.
 
@@ -192,17 +192,17 @@ function.
 ## See also
 
 BDS-Findings Functions that returns variable appended to dataset:
-[`derive_basetype_records()`](https:/pharmaverse.github.io/admiral/cran-release/main/reference/derive_basetype_records.md),
-[`derive_var_analysis_ratio()`](https:/pharmaverse.github.io/admiral/cran-release/main/reference/derive_var_analysis_ratio.md),
-[`derive_var_anrind()`](https:/pharmaverse.github.io/admiral/cran-release/main/reference/derive_var_anrind.md),
-[`derive_var_atoxgr()`](https:/pharmaverse.github.io/admiral/cran-release/main/reference/derive_var_atoxgr.md),
-[`derive_var_atoxgr_dir()`](https:/pharmaverse.github.io/admiral/cran-release/main/reference/derive_var_atoxgr_dir.md),
-[`derive_var_base()`](https:/pharmaverse.github.io/admiral/cran-release/main/reference/derive_var_base.md),
-[`derive_var_chg()`](https:/pharmaverse.github.io/admiral/cran-release/main/reference/derive_var_chg.md),
-[`derive_var_nfrlt()`](https:/pharmaverse.github.io/admiral/cran-release/main/reference/derive_var_nfrlt.md),
-[`derive_var_pchg()`](https:/pharmaverse.github.io/admiral/cran-release/main/reference/derive_var_pchg.md),
-[`derive_var_shift()`](https:/pharmaverse.github.io/admiral/cran-release/main/reference/derive_var_shift.md),
-[`derive_vars_crit_flag()`](https:/pharmaverse.github.io/admiral/cran-release/main/reference/derive_vars_crit_flag.md)
+[`derive_basetype_records()`](https:/pharmaverse.github.io/admiral/main/reference/derive_basetype_records.md),
+[`derive_var_analysis_ratio()`](https:/pharmaverse.github.io/admiral/main/reference/derive_var_analysis_ratio.md),
+[`derive_var_anrind()`](https:/pharmaverse.github.io/admiral/main/reference/derive_var_anrind.md),
+[`derive_var_atoxgr()`](https:/pharmaverse.github.io/admiral/main/reference/derive_var_atoxgr.md),
+[`derive_var_atoxgr_dir()`](https:/pharmaverse.github.io/admiral/main/reference/derive_var_atoxgr_dir.md),
+[`derive_var_base()`](https:/pharmaverse.github.io/admiral/main/reference/derive_var_base.md),
+[`derive_var_chg()`](https:/pharmaverse.github.io/admiral/main/reference/derive_var_chg.md),
+[`derive_var_nfrlt()`](https:/pharmaverse.github.io/admiral/main/reference/derive_var_nfrlt.md),
+[`derive_var_pchg()`](https:/pharmaverse.github.io/admiral/main/reference/derive_var_pchg.md),
+[`derive_var_shift()`](https:/pharmaverse.github.io/admiral/main/reference/derive_var_shift.md),
+[`derive_vars_crit_flag()`](https:/pharmaverse.github.io/admiral/main/reference/derive_vars_crit_flag.md)
 
 ## Examples
 

@@ -35,9 +35,9 @@ No return value, called for side effects
 ## See also
 
 Utilities for printing:
-[`print.adam_templates()`](https:/pharmaverse.github.io/admiral/cran-release/main/reference/print.adam_templates.md),
-[`print.duplicates()`](https:/pharmaverse.github.io/admiral/cran-release/main/reference/print.duplicates.md),
-[`print_named_list()`](https:/pharmaverse.github.io/admiral/cran-release/main/reference/print_named_list.md)
+[`print.adam_templates()`](https:/pharmaverse.github.io/admiral/main/reference/print.adam_templates.md),
+[`print.duplicates()`](https:/pharmaverse.github.io/admiral/main/reference/print.duplicates.md),
+[`print_named_list()`](https:/pharmaverse.github.io/admiral/main/reference/print_named_list.md)
 
 ## Examples
 

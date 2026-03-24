@@ -3,7 +3,7 @@
 This functions adjusts the day of the imputed date to the last day the
 month if the day was imputed. It should be called if
 `date_imputation = "last"` was used for the date imputation as
-[`get_imputation_target_date()`](https:/pharmaverse.github.io/admiral/cran-release/main/reference/get_imputation_target_date.md)
+[`get_imputation_target_date()`](https:/pharmaverse.github.io/admiral/main/reference/get_imputation_target_date.md)
 imputes the last day as `"28"`.
 
 ## Usage

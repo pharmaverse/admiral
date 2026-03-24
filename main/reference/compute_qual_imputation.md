@@ -47,16 +47,16 @@ The imputed value
 ## See also
 
 BDS-Findings Functions that returns a vector:
-[`compute_bmi()`](https:/pharmaverse.github.io/admiral/cran-release/main/reference/compute_bmi.md),
-[`compute_bsa()`](https:/pharmaverse.github.io/admiral/cran-release/main/reference/compute_bsa.md),
-[`compute_egfr()`](https:/pharmaverse.github.io/admiral/cran-release/main/reference/compute_egfr.md),
-[`compute_framingham()`](https:/pharmaverse.github.io/admiral/cran-release/main/reference/compute_framingham.md),
-[`compute_map()`](https:/pharmaverse.github.io/admiral/cran-release/main/reference/compute_map.md),
-[`compute_qtc()`](https:/pharmaverse.github.io/admiral/cran-release/main/reference/compute_qtc.md),
-[`compute_qual_imputation_dec()`](https:/pharmaverse.github.io/admiral/cran-release/main/reference/compute_qual_imputation_dec.md),
-[`compute_rr()`](https:/pharmaverse.github.io/admiral/cran-release/main/reference/compute_rr.md),
-[`compute_scale()`](https:/pharmaverse.github.io/admiral/cran-release/main/reference/compute_scale.md),
-[`transform_range()`](https:/pharmaverse.github.io/admiral/cran-release/main/reference/transform_range.md)
+[`compute_bmi()`](https:/pharmaverse.github.io/admiral/main/reference/compute_bmi.md),
+[`compute_bsa()`](https:/pharmaverse.github.io/admiral/main/reference/compute_bsa.md),
+[`compute_egfr()`](https:/pharmaverse.github.io/admiral/main/reference/compute_egfr.md),
+[`compute_framingham()`](https:/pharmaverse.github.io/admiral/main/reference/compute_framingham.md),
+[`compute_map()`](https:/pharmaverse.github.io/admiral/main/reference/compute_map.md),
+[`compute_qtc()`](https:/pharmaverse.github.io/admiral/main/reference/compute_qtc.md),
+[`compute_qual_imputation_dec()`](https:/pharmaverse.github.io/admiral/main/reference/compute_qual_imputation_dec.md),
+[`compute_rr()`](https:/pharmaverse.github.io/admiral/main/reference/compute_rr.md),
+[`compute_scale()`](https:/pharmaverse.github.io/admiral/main/reference/compute_scale.md),
+[`transform_range()`](https:/pharmaverse.github.io/admiral/main/reference/transform_range.md)
 
 ## Examples
 

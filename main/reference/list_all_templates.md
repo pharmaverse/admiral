@@ -25,7 +25,7 @@ A `character` vector of all available templates
 ## See also
 
 Utilities used for examples and template scripts:
-[`use_ad_template()`](https:/pharmaverse.github.io/admiral/cran-release/main/reference/use_ad_template.md)
+[`use_ad_template()`](https:/pharmaverse.github.io/admiral/main/reference/use_ad_template.md)
 
 ## Examples
 

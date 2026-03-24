@@ -58,7 +58,7 @@ provided by the `dataset` argument is not used[¹](#fn1).
 
 If the `dataset_add` argument is not provided, the data from `dataset`
 is used
-([`derive_var_extreme_flag()`](https:/pharmaverse.github.io/admiral/cran-release/main/reference/derive_var_extreme_flag.md)).
+([`derive_var_extreme_flag()`](https:/pharmaverse.github.io/admiral/main/reference/derive_var_extreme_flag.md)).
 
 ### Multiple Source Datasets
 
@@ -68,7 +68,7 @@ the `source_datasets` argument. The datasets are referred to by the
 
 For example, consider the derivation of a response parameter. The three
 possible responses are defined by
-[`event()`](https:/pharmaverse.github.io/admiral/cran-release/main/reference/event.md)
+[`event()`](https:/pharmaverse.github.io/admiral/main/reference/event.md)
 objects. These objects define the events but do not include any data.
 Instead the `dataset_name` field is set to a (character) id. This id is
 used in the `source_datasets` argument of the derivation function to
@@ -117,7 +117,7 @@ reporter by just changing `source_dataset`:
     )
 
 For some source objects the `dataset_name` element is optional, e.g.,
-[`event()`](https:/pharmaverse.github.io/admiral/cran-release/main/reference/event.md).
+[`event()`](https:/pharmaverse.github.io/admiral/main/reference/event.md).
 If it is not specified, the input dataset (`dataset`) is used.
 
 ## Methods
@@ -219,10 +219,10 @@ derive_vars_merged(
 It is also possible to select the record based on records of the input
 *and* the source dataset. For this type of selection
 [admiral](https://pharmaverse.github.io/admiral/) provides the functions
-[`derive_vars_joined()`](https:/pharmaverse.github.io/admiral/cran-release/main/reference/derive_vars_joined.md),
-[`derive_var_joined_exist_flag()`](https:/pharmaverse.github.io/admiral/cran-release/main/reference/derive_var_joined_exist_flag.md),
+[`derive_vars_joined()`](https:/pharmaverse.github.io/admiral/main/reference/derive_vars_joined.md),
+[`derive_var_joined_exist_flag()`](https:/pharmaverse.github.io/admiral/main/reference/derive_var_joined_exist_flag.md),
 and
-[`derive_extreme_event()`](https:/pharmaverse.github.io/admiral/cran-release/main/reference/derive_extreme_event.md).
+[`derive_extreme_event()`](https:/pharmaverse.github.io/admiral/main/reference/derive_extreme_event.md).
 They provide the `filter_join` argument which accepts conditions with
 variables from both the input dataset (`dataset`) and the additional
 dataset (`dataset_add`). As an example consider deriving the day and
@@ -398,13 +398,13 @@ only the results up to the confirmation records and ignores subsequent
 results.
 
 **Note:** In principle, we actually could achieve every result from
-[`derive_vars_merged()`](https:/pharmaverse.github.io/admiral/cran-release/main/reference/derive_vars_merged.md)
+[`derive_vars_merged()`](https:/pharmaverse.github.io/admiral/main/reference/derive_vars_merged.md)
 and
-[`derive_var_merged_exist_flag()`](https:/pharmaverse.github.io/admiral/cran-release/main/reference/derive_var_merged_exist_flag.md)
+[`derive_var_merged_exist_flag()`](https:/pharmaverse.github.io/admiral/main/reference/derive_var_merged_exist_flag.md)
 by using
-[`derive_vars_joined()`](https:/pharmaverse.github.io/admiral/cran-release/main/reference/derive_vars_joined.md)
+[`derive_vars_joined()`](https:/pharmaverse.github.io/admiral/main/reference/derive_vars_joined.md)
 or
-[`derive_var_joined_exist_flag()`](https:/pharmaverse.github.io/admiral/cran-release/main/reference/derive_var_joined_exist_flag.md)
+[`derive_var_joined_exist_flag()`](https:/pharmaverse.github.io/admiral/main/reference/derive_var_joined_exist_flag.md)
 respectively. However, the “joined” functions require much more
 resources (time and memory), hence it is recommended to use them only if
 it is really required, i.e., the condition for selecting records depends
@@ -416,7 +416,7 @@ The [admiral](https://pharmaverse.github.io/admiral/) functions use
 [`dplyr::arrange()`](https://dplyr.tidyverse.org/reference/arrange.html)
 for sorting, i.e., `NA`s are always sorted to the end (regardless
 whether
-[`desc()`](https:/pharmaverse.github.io/admiral/cran-release/main/reference/reexport-desc.md)
+[`desc()`](https:/pharmaverse.github.io/admiral/main/reference/reexport-desc.md)
 is used or not).
 
 Consider for example the following derivation of a last visit flag. The
@@ -495,8 +495,8 @@ How the (new) variables are set depends on whether variables, a flag, or
 records are added by the derivation.
 
 - If only a flag needs to be added, the flag functions
-  ([`derive_var_merged_exist_flag()`](https:/pharmaverse.github.io/admiral/cran-release/main/reference/derive_var_merged_exist_flag.md),
-  [`derive_var_joined_exist_flag()`](https:/pharmaverse.github.io/admiral/cran-release/main/reference/derive_var_joined_exist_flag.md))
+  ([`derive_var_merged_exist_flag()`](https:/pharmaverse.github.io/admiral/main/reference/derive_var_merged_exist_flag.md),
+  [`derive_var_joined_exist_flag()`](https:/pharmaverse.github.io/admiral/main/reference/derive_var_joined_exist_flag.md))
   can be used. The name of the new variable is specified by the
   `new_var` argument and the values of the flag by `true_value` and
   `false_value`.
@@ -511,10 +511,10 @@ records are added by the derivation.
 
 If the new values should be derived by summarizing values, e.g., sum,
 average, concatenation, …, the functions
-[`derive_summary_records()`](https:/pharmaverse.github.io/admiral/cran-release/main/reference/derive_summary_records.md),
-[`derive_vars_merged_summary()`](https:/pharmaverse.github.io/admiral/cran-release/main/reference/derive_vars_merged_summary.md),
+[`derive_summary_records()`](https:/pharmaverse.github.io/admiral/main/reference/derive_summary_records.md),
+[`derive_vars_merged_summary()`](https:/pharmaverse.github.io/admiral/main/reference/derive_vars_merged_summary.md),
 or
-[`derive_vars_joined_summary()`](https:/pharmaverse.github.io/admiral/cran-release/main/reference/derive_vars_joined_summary.md)
+[`derive_vars_joined_summary()`](https:/pharmaverse.github.io/admiral/main/reference/derive_vars_joined_summary.md)
 can be used. For example, adding an average dose parameter to `ADEX` can
 be done by the following:
 
@@ -591,7 +591,7 @@ observations the value of the new variable can be defined by the
 
 If the selection of records to summarize depends on the records of both
 the input dataset and the additional dataset, the
-[`derive_vars_joined_summary()`](https:/pharmaverse.github.io/admiral/cran-release/main/reference/derive_vars_joined_summary.md)
+[`derive_vars_joined_summary()`](https:/pharmaverse.github.io/admiral/main/reference/derive_vars_joined_summary.md)
 function can be used. For example, the following adds the cumulative
 dose up to the event as a variable (`CUMDOSA`) to the input dataset:
 
@@ -639,7 +639,7 @@ derive_vars_joined_summary(
 
 If the new values should be computed from different parameters of the
 source dataset,
-[`derive_param_computed()`](https:/pharmaverse.github.io/admiral/cran-release/main/reference/derive_param_computed.md)
+[`derive_param_computed()`](https:/pharmaverse.github.io/admiral/main/reference/derive_param_computed.md)
 can be used. The computed value can be specified by the `set_values_to`
 argument. The values of the source variable for a parameter can be
 referred to by temporary variables of the form
@@ -689,7 +689,7 @@ For common computations like BMI
 [admiral](https://pharmaverse.github.io/admiral/) offers [computation
 functions](https://pharmaverse.github.io/admiral/cran-release/reference/#computation-functions-for-vectors).
 In the previous example
-[`compute_bmi()`](https:/pharmaverse.github.io/admiral/cran-release/main/reference/compute_bmi.md)
+[`compute_bmi()`](https:/pharmaverse.github.io/admiral/main/reference/compute_bmi.md)
 could be used instead of the formula for BMI:
 
 ``` r
@@ -722,5 +722,5 @@ derive_param_computed(
 
 ------------------------------------------------------------------------
 
-1.  [`derive_param_computed()`](https:/pharmaverse.github.io/admiral/cran-release/main/reference/derive_param_computed.md)
+1.  [`derive_param_computed()`](https:/pharmaverse.github.io/admiral/main/reference/derive_param_computed.md)
     is an exception. It uses the data from both arguments.

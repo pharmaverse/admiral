@@ -51,12 +51,12 @@ filter_relative(
 
   For handling of `NA`s in sorting variables see the "Sort Order"
   section in
-  [`vignette("generic")`](https:/pharmaverse.github.io/admiral/cran-release/main/articles/generic.md).
+  [`vignette("generic")`](https:/pharmaverse.github.io/admiral/main/articles/generic.md).
 
   Permitted values
 
   :   list of expressions created by
-      [`exprs()`](https:/pharmaverse.github.io/admiral/cran-release/main/reference/reexport-exprs.md),
+      [`exprs()`](https:/pharmaverse.github.io/admiral/main/reference/reexport-exprs.md),
       e.g., `exprs(ADT, desc(AVAL))`
 
   Default value
@@ -162,13 +162,13 @@ parameter and `mode` parameter) is included in the output dataset.
 ## See also
 
 Utilities for Filtering Observations:
-[`count_vals()`](https:/pharmaverse.github.io/admiral/cran-release/main/reference/count_vals.md),
-[`filter_exist()`](https:/pharmaverse.github.io/admiral/cran-release/main/reference/filter_exist.md),
-[`filter_extreme()`](https:/pharmaverse.github.io/admiral/cran-release/main/reference/filter_extreme.md),
-[`filter_joined()`](https:/pharmaverse.github.io/admiral/cran-release/main/reference/filter_joined.md),
-[`filter_not_exist()`](https:/pharmaverse.github.io/admiral/cran-release/main/reference/filter_not_exist.md),
-[`max_cond()`](https:/pharmaverse.github.io/admiral/cran-release/main/reference/max_cond.md),
-[`min_cond()`](https:/pharmaverse.github.io/admiral/cran-release/main/reference/min_cond.md)
+[`count_vals()`](https:/pharmaverse.github.io/admiral/main/reference/count_vals.md),
+[`filter_exist()`](https:/pharmaverse.github.io/admiral/main/reference/filter_exist.md),
+[`filter_extreme()`](https:/pharmaverse.github.io/admiral/main/reference/filter_extreme.md),
+[`filter_joined()`](https:/pharmaverse.github.io/admiral/main/reference/filter_joined.md),
+[`filter_not_exist()`](https:/pharmaverse.github.io/admiral/main/reference/filter_not_exist.md),
+[`max_cond()`](https:/pharmaverse.github.io/admiral/main/reference/max_cond.md),
+[`min_cond()`](https:/pharmaverse.github.io/admiral/main/reference/min_cond.md)
 
 ## Examples
 

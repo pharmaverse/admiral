@@ -8,25 +8,25 @@ medications by a specific medical concept such as a Standard MedDRA
 Queries (SMQs) or WHO-Drug Standardized Drug Groupings (SDGs).
 
 To help with the derivation of these variables, the {admiral} function
-[`derive_vars_query()`](https:/pharmaverse.github.io/admiral/cran-release/main/reference/derive_vars_query.md)
+[`derive_vars_query()`](https:/pharmaverse.github.io/admiral/main/reference/derive_vars_query.md)
 can be used. This function takes as input the dataset (`dataset`) where
 the grouping must occur (e.g `ADAE`) and a dataset containing the
 required information to perform the derivation of the grouping variables
 (`dataset_queries`).
 
 The dataset passed to the `dataset_queries` argument of the
-[`derive_vars_query()`](https:/pharmaverse.github.io/admiral/cran-release/main/reference/derive_vars_query.md)
+[`derive_vars_query()`](https:/pharmaverse.github.io/admiral/main/reference/derive_vars_query.md)
 function can be created by the
-[`create_query_data()`](https:/pharmaverse.github.io/admiral/cran-release/main/reference/create_query_data.md)
+[`create_query_data()`](https:/pharmaverse.github.io/admiral/main/reference/create_query_data.md)
 function. For SMQs and SDGs company-specific functions for accessing the
 SMQ and SDG database need to be passed to the
-[`create_query_data()`](https:/pharmaverse.github.io/admiral/cran-release/main/reference/create_query_data.md)
+[`create_query_data()`](https:/pharmaverse.github.io/admiral/main/reference/create_query_data.md)
 function (see the description of the `get_terms_fun` argument for
 details).
 
 This vignette describes the expected structure and content of the
 dataset passed to the `dataset_queries` argument in the
-[`derive_vars_query()`](https:/pharmaverse.github.io/admiral/cran-release/main/reference/derive_vars_query.md)
+[`derive_vars_query()`](https:/pharmaverse.github.io/admiral/main/reference/derive_vars_query.md)
 function.
 
 ## Structure of the Query Dataset
@@ -53,7 +53,7 @@ contains both character and numeric variables, then both `TERMCHAR` and
 `TERMNUM` are required. Other variables are optional.
 
 The `VERSION` variable is not used by
-[`derive_vars_query()`](https:/pharmaverse.github.io/admiral/cran-release/main/reference/derive_vars_query.md)
+[`derive_vars_query()`](https:/pharmaverse.github.io/admiral/main/reference/derive_vars_query.md)
 but can be used to check if the dictionary version of the queries
 dataset and the analysis dataset are in line.
 
@@ -80,7 +80,7 @@ variables will allow the creation of the grouping variable.
     `AELLTCD`).
 
   - The function
-    [`derive_vars_query()`](https:/pharmaverse.github.io/admiral/cran-release/main/reference/derive_vars_query.md)
+    [`derive_vars_query()`](https:/pharmaverse.github.io/admiral/main/reference/derive_vars_query.md)
     will check that each value given in `SRCVAR` has a corresponding
     variable in the input `dataset` and issue an error otherwise.
 
