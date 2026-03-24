@@ -617,7 +617,7 @@ test_that("by_vars in event_joined()", {
     adbds %>%
       mutate(
         PARAMCD = "CONFRESP",
-        AVALC = if_else(AVALC == "Y" & lead(AVALC) == "Y", "Y", "N", "N")
+        AVALC = if_else(AVALC == "Y" & dplyr::lead(AVALC) == "Y", "Y", "N", "N")
       )
   )
 
