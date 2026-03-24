@@ -46,7 +46,7 @@
 #'   & AVISITN < AVISITN.join` could be specified.
 #'
 #'   The `*.join` variables are not included in the output dataset.
-#' 
+#'
 #'   The variable specified for `tmp_obs_nr_var` must not be included in
 #'   `join_vars`. It is added automatically to the joined dataset with the
 #'   suffix `.join`.

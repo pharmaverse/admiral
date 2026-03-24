@@ -128,13 +128,13 @@ event <- function(dataset_name = NULL,
 #' @permitted an unquoted condition
 #'
 #' @param by_vars By variables
-#' 
+#'
 #' The specified variables are used to join the dataset with itself. If the
 #' argument is not specified (or set to `NULL`), the by variables specified for
 #' `derive_extreme_event()` are used.
-#' 
+#'
 #' @permitted [var_list]
-#' 
+#'
 #' @param tmp_obs_nr_var Temporary observation number
 #'
 #'   The specified variable is added to the source dataset (`dataset_name`). It

@@ -293,13 +293,13 @@
 #' select(-STUDYID)
 #'
 #' @caption Events across records by record
-#' 
+#'
 #' @info In the previous example, the new parameter was derived for each
 #' subject, i.e., all records of a subject were summarized. However, there are
 #' cases where we may want to derive a new parameter by record, but where the
 #' condition for deriving the parameter for a given record may involve
 #' comparison with other records.
-#' 
+#'
 #' For example, we want to derive a new parameter for each visit indicating
 #' response at this visit and the next one. For this we need to specify the
 #' `by_vars` argument in `event_joined()` which overwrites the value specified
@@ -307,13 +307,13 @@
 #' AVISITN)` is used because we want to add a new records for each subject and
 #' visit. In `event_joined()`, `by_vars = exprs(USUBJID)` is used because we
 #' want to join the records by subject only.
-#' 
+#'
 #' The `tmp_obs_nr_var` argument is specified to create a variable which numbers
 #' the records within each subject. This variable is then used in the
 #' `condition` argument to ensure that the current record is compared with the
 #' next one. This ensures that missing visit like for subject 2 are handled
 #' correctly.
-#' 
+#'
 #' @code
 #' adbds <- tribble(
 #'   ~USUBJID, ~AVISITN,  ~AVALC,
@@ -326,7 +326,7 @@
 #'   "2",             3,  "Y",
 #' ) %>%
 #'   mutate(PARAMCD = "RESP")
-#' 
+#'
 #' derive_extreme_event(
 #'   adbds,
 #'   by_vars = exprs(USUBJID, AVISITN),
@@ -352,7 +352,7 @@
 #'   ),
 #'   set_values_to = exprs(PARAMCD = "CONFRESP")
 #' )
-#' 
+#'
 #' @caption Specifying different arguments across `event()` objects
 #' @info Here we consider a Hy's Law use case. We are interested in
 #'   knowing whether a subject's Alkaline Phosphatase has ever been

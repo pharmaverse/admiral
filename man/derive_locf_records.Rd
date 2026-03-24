@@ -211,7 +211,7 @@ derive_locf_records(
   keep_vars = exprs(PARAMN)
 ) |>
   arrange(USUBJID, PARAMCD, AVISIT)
-#> # A tibble: 14 x 9
+#> # A tibble: 14 × 9
 #>    STUDYID USUBJID     VSSEQ PARAMCD PARAMN  AVAL AVISITN AVISIT   DTYPE
 #>    <chr>   <chr>       <dbl> <chr>    <dbl> <dbl>   <dbl> <chr>    <chr>
 #>  1 CDISC01 01-701-1015     2 DIABP        2    79       0 BASELINE <NA> 
@@ -243,7 +243,7 @@ are updated using values from the last record after the dataset is sorted by
   order = exprs(AVISITN, AVISIT),
 ) |>
   arrange(USUBJID, PARAMCD, AVISIT)
-#> # A tibble: 12 x 9
+#> # A tibble: 12 × 9
 #>    STUDYID USUBJID     VSSEQ PARAMCD PARAMN  AVAL AVISITN AVISIT   DTYPE
 #>    <chr>   <chr>       <dbl> <chr>    <dbl> <dbl>   <dbl> <chr>    <chr>
 #>  1 CDISC01 01-701-1015     2 DIABP        2    79       0 BASELINE <NA> 
@@ -274,7 +274,7 @@ for missing timepoints (from \code{dataset_ref}).
   order = exprs(AVISITN, AVISIT),
 ) |>
   arrange(USUBJID, PARAMCD, AVISIT)
-#> # A tibble: 14 x 9
+#> # A tibble: 14 × 9
 #>    STUDYID USUBJID     VSSEQ PARAMCD PARAMN  AVAL AVISITN AVISIT   DTYPE
 #>    <chr>   <chr>       <dbl> <chr>    <dbl> <dbl>   <dbl> <chr>    <chr>
 #>  1 CDISC01 01-701-1015     2 DIABP        2    79       0 BASELINE <NA> 
