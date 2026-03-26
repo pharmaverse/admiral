@@ -51,7 +51,7 @@ event is recorded. In this case, the event time is the time of the first
 occurrence of the event and the censoring time is the end of the
 observation period.
 
-![](img/tte_continuous.png)
+![](tte_analyses_files/figure-html/unnamed-chunk-3-1.png)
 
 ### Discrete Assessments, Negative Event
 
@@ -67,9 +67,9 @@ depends on the type of the event. If the event is a negative event like
 death, worsening, adverse event, …, the most conservative approach is to
 ignore time points where it is not known if the event occurred. I.e.,
 the censoring time is set to the time of the last assessment where it is
-known that the event didn’t occur.
+known that the event didn’t occur [¹](#fn1).
 
-![](img/tte_discrete_negative.png)
+![](tte_analyses_files/figure-html/unnamed-chunk-4-1.png)
 
 For the examples, we will use the following questionnaire ADaM dataset.
 The variable `CHGCAT1` indicates whether the subject worsened, improved,
@@ -78,7 +78,7 @@ whether the subject worsened or not.
 
 `adqs_a` dataset
 
-![](tte_analyses_files/figure-html/unnamed-chunk-5-1.png)
+![](tte_analyses_files/figure-html/unnamed-chunk-6-1.png)
 
 A “time to worsening” parameter is derived by using
 [`derive_param_tte()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/derive_param_tte.md).
@@ -119,7 +119,7 @@ adtte <- derive_param_tte(
 
 `adtte` dataset
 
-![](tte_analyses_files/figure-html/unnamed-chunk-8-1.png)
+![](tte_analyses_files/figure-html/unnamed-chunk-9-1.png)
 
 ### Discrete Assessments, Positive Event
 
@@ -128,7 +128,7 @@ approach is to set the censoring time to the end of the observation
 period, even if it is not known whether the event occurred or not at
 this time point.
 
-![](img/tte_discrete_positive.png)
+![](tte_analyses_files/figure-html/unnamed-chunk-10-1.png)
 
 For positive events, the `event_type` argument of the
 [`derive_param_tte()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/derive_param_tte.md)
@@ -157,7 +157,7 @@ adtte <- derive_param_tte(
 
 `adtte` dataset
 
-![](tte_analyses_files/figure-html/unnamed-chunk-12-1.png)
+![](tte_analyses_files/figure-html/unnamed-chunk-13-1.png)
 
 ## Events Considering more than one Assessment
 
@@ -226,9 +226,13 @@ adtte <- derive_param_tte(
 
 `adtte` dataset
 
-![](tte_analyses_files/figure-html/unnamed-chunk-17-1.png)
+![](tte_analyses_files/figure-html/unnamed-chunk-18-1.png)
 
 ### Adding a Confirmation Parameters to the Source Dataset
+
+For adding a new parameter instead of a new variable the
+[`derive_extreme_event()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/derive_extreme_event.md)
+function can be used.
 
 TODO: add example for time to confirmed worsening using a confirmed
 worsening parameter.
@@ -285,7 +289,7 @@ adtte <- derive_extreme_event(
 
 `adtte` dataset
 
-![](tte_analyses_files/figure-html/unnamed-chunk-20-1.png)
+![](tte_analyses_files/figure-html/unnamed-chunk-21-1.png)
 
 ## Combined Events
 
@@ -307,7 +311,7 @@ improvement in score A or score B.
 
 `adqs_all` dataset
 
-![](tte_analyses_files/figure-html/unnamed-chunk-22-1.png)
+![](tte_analyses_files/figure-html/unnamed-chunk-23-1.png)
 
 We define the events for improvement in score A and score B separately
 and then specify both events for the `event_conditions` argument of
@@ -342,11 +346,11 @@ adtte <- derive_param_tte(
 
 `adtte` dataset
 
-![](tte_analyses_files/figure-html/unnamed-chunk-25-1.png)
+![](tte_analyses_files/figure-html/unnamed-chunk-26-1.png)
 
 ### Events Combined by “and”
 
-If events are combined by “and”, e.g., score 1 improved *and* score 2
+If events are combined by “and”, e.g., score A improved *and* score B
 didn’t worsen, a variable or parameter needs to be derived in the input
 dataset which indicates whether the combined event occurred or not. To
 derive a new parameter the
@@ -400,11 +404,10 @@ adtte <- derive_param_tte(
 
 `adtte` dataset
 
-![](tte_analyses_files/figure-html/unnamed-chunk-30-1.png)
+![](tte_analyses_files/figure-html/unnamed-chunk-31-1.png)
 
-## Differentiate Censoring
+------------------------------------------------------------------------
 
-TODO: Setting `EVNTDESC` for censoring is sometimes tricky. For example
-if you are deriving time to `CHG >= 10` and want to distinguish subjects
-censored because they don’t have a baseline value and subject censored
-because they don’t have post-baseline values.
+1.  see for example [Clinical Trial Endpoints for the Approval of
+    Non-Small Cell Lung Cancer Drugs and Biologics Guidance for
+    Industry](https://www.fda.gov/media/116860/download)

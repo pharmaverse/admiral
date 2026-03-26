@@ -119,7 +119,7 @@ define events and censoring independent of the data.
 The table below shows all pre-defined `tte_source` objects which should
 cover the most common use cases.
 
-[TABLE]
+`tte_source` objects
 
 These pre-defined objects can be passed directly to
 [`derive_param_tte()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/derive_param_tte.md)
@@ -435,67 +435,17 @@ adaette <- call_derivation(
 )
 ```
 
-#### Deriving Time-to-Event Parameters Using By Groups
-
 If time-to-event parameters need to be derived for each by group of a
-source dataset, the `by_vars` parameter can be specified. Then a
-time-to-event parameter is derived for each by group.
+source dataset, the `by_vars` parameter can be specified. See the
+[`derive_param_tte()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/derive_param_tte.md)
+documentation for an example.
 
-Please note that CDISC requires separate parameters (`PARAMCD`, `PARAM`)
-for the by groups. Therefore the variables specified for the `by_vars`
-parameter are not included in the output dataset. The `PARAMCD` variable
-should be specified for the `set_value_to` parameter using an expression
-on the right hand side which results in a unique value for each by
-group. If the values of the by variables should be included in the
-output dataset, they can be stored in `PARCATn` variables.
+#### Further Scenarios
 
-In the following example a time-to-event parameter for each preferred
-term in the AE dataset is derived.
-
-    View(adsl)
-
-    View(ae)
-
-``` r
-# define time to first adverse event event #
-ttae <- event_source(
-  dataset_name = "ae",
-  date = AESTDT,
-  set_values_to = exprs(
-    EVNTDESC = "AE",
-    SRCDOM = "AE",
-    SRCVAR = "AESTDTC",
-    SRCSEQ = AESEQ
-  )
-)
-
-# define censoring at end of study #
-eos <- censor_source(
-  dataset_name = "adsl",
-  date = EOSDT,
-  set_values_to = exprs(
-    EVNTDESC = "END OF STUDY",
-    SRCDOM = "ADSL",
-    SRCVAR = "EOSDT"
-  )
-)
-
-# derive time-to-event parameter #
-adtte <- derive_param_tte(
-  dataset_adsl = adsl,
-  by_vars = exprs(AEDECOD),
-  start_date = TRTSDT,
-  event_conditions = list(ttae),
-  censor_conditions = list(eos),
-  source_datasets = list(adsl = adsl, ae = ae),
-  set_values_to = exprs(
-    PARAMCD = paste0("TTAE", as.numeric(as.factor(AEDECOD))),
-    PARAM = paste("Time to First", AEDECOD, "Adverse Event"),
-    PARCAT1 = "TTAE",
-    PARCAT2 = AEDECOD
-  )
-)
-```
+For further scenarios on how to derive data for time-to-event analyses,
+see the [Time-to-Event
+Analyses](https:/pharmaverse.github.io/admiral/2952_tte/articles/tte_analyses.md)
+vignette.
 
 ### Derive Analysis Value (`AVAL`)
 

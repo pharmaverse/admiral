@@ -54,6 +54,10 @@
 
 ### Documentation
 
+- New vignette “Time-to-Event Analyses” added to provide guidance for
+  different scenarios.
+  ([\#2900](https://github.com/pharmaverse/admiral/issues/2900))
+
 - Fix `UDTC` derivation in `ADPPK` to use source domain `DTC` variables.
   ([\#3011](https://github.com/pharmaverse/admiral/issues/3011))
 
