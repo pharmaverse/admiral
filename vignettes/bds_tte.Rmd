@@ -142,7 +142,7 @@ reactable(
     },
     cell = function(value) {
       tags$code(value)
-      }
+    }
   ),
   columns = list(
     object = colDef(
@@ -161,14 +161,13 @@ reactable(
       cell = function(value) {
         items <- stringr::str_split_1(as.character(value), "<br>")
         tagList(lapply(items, function(item) div(item)))
-       }
+      }
     )
   ),
   filterable = TRUE,
   resizable = TRUE,
   defaultPageSize = 20
 )
-
 ```
 </details>
 

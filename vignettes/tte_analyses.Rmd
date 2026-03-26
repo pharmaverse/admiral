@@ -78,7 +78,7 @@ adqs_all <- bind_rows(
       PARAMCD = "B",
       PARAM = "Score B"
     )
-) %>% 
+) %>%
   mutate(
     STUDYID = "XY1234",
     AVISITN = case_when(
@@ -109,10 +109,10 @@ adqs_all <- bind_rows(
     ADT = TRTSDT + AVISITN * 7,
     ANL01FL = if_else(ADT <= TRTEDT, "Y", NA_character_)
   ) %>%
-  derive_vars_dy(reference_date = TRTSDT, source_vars = exprs(ADT, TRTSDT, TRTEDT)) %>% 
+  derive_vars_dy(reference_date = TRTSDT, source_vars = exprs(ADT, TRTSDT, TRTEDT)) %>%
   arrange(USUBJID, PARAMCD, AVISITN)
 
-  adqs_a <- filter(adqs_all, PARAMCD == "A")
+adqs_a <- filter(adqs_all, PARAMCD == "A")
 ```
 
 ```{r, echo=FALSE}
@@ -120,45 +120,45 @@ plot_scenario <- function(assessment_type, event_type) {
   if (assessment_type == "continuous") {
     dataset <- tribble(
       ~subject, ~day, ~event,  ~end_day,
-      "1"     ,   13, "Event",       38, 
-      "1"     ,   32, "Event",       38,
-      "1"     ,   41, "Event",       38,
-      "2"     ,   38, "Event",       32
+      "1",        13, "Event",       38,
+      "1",        32, "Event",       38,
+      "1",        41, "Event",       38,
+      "2",        38, "Event",       32
     )
-    
+
     dataset_tte <- tribble(
       ~subject, ~day, ~censor,
-      "1"     ,   13,     0,
-      "2"     ,   32,     1
+      "1",        13,       0,
+      "2",        32,       1
     )
   } else {
     dataset <- tribble(
       ~subject, ~day, ~event,     ~end_day,
-      "1"     ,   15, "No event",       60, 
-      "1"     ,   29, "No event",       60,
-      "1"     ,   43, "Event",          60,
-      "1"     ,   57, "Event",          60,
-      "2"     ,   15, "No event",       50, 
-      "2"     ,   29, "No event",       50,
-      "2"     ,   43, "Unknown",        50,
-      "2"     ,   57, "Event",          50
+      "1",        15, "No event",       60,
+      "1",        29, "No event",       60,
+      "1",        43, "Event",          60,
+      "1",        57, "Event",          60,
+      "2",        15, "No event",       50,
+      "2",        29, "No event",       50,
+      "2",        43, "Unknown",        50,
+      "2",        57, "Event",          50
     )
-    
+
     if (event_type == "negative") {
       dataset_tte <- tribble(
         ~subject, ~day, ~censor,
-        "1", 43, 0,
-        "2", 29, 1
+        "1",        43,       0,
+        "2",        29,       1
       )
     } else {
       dataset_tte <- tribble(
         ~subject, ~day, ~censor,
-        "1", 43, 0,
-        "2", 50, 1
+        "1",        43,       0,
+        "2",        50,       1
       )
     }
   }
-  
+
   dataset <- mutate(dataset, subject = paste("Subject", subject))
   dataset_tte <- mutate(dataset_tte, subject = paste("Subject", subject))
   final_plot <- ggplot(dataset) +
@@ -236,112 +236,111 @@ plot_scenario <- function(assessment_type, event_type) {
       shape = guide_legend(order = 1)
     ) +
     coord_cartesian(clip = "off") +
-      geom_segment(
-        data = dataset_tte,
-        aes(
-          x = day,
-          xend = day,
-          y = as.numeric(as.factor(rev(levels(as.factor(subject))))) + 0.3,
-          yend = as.numeric(as.factor(rev(levels(as.factor(subject))))) + 0.13
-        ),
-        inherit.aes = FALSE,
-        arrow = arrow(type = "closed", length = unit(0.1, "inches"))
-      ) +
-      geom_text(
-        data = dataset_tte,
-        aes(
-          x = day,
-          y = subject,
-          label = if_else(censor == 0, "Event time", "Censoring time")
-        ),
-        hjust = "center",
-        nudge_y = 0.35,
-        inherit.aes = FALSE
-      )
+    geom_segment(
+      data = dataset_tte,
+      aes(
+        x = day,
+        xend = day,
+        y = as.numeric(as.factor(rev(levels(as.factor(subject))))) + 0.3,
+        yend = as.numeric(as.factor(rev(levels(as.factor(subject))))) + 0.13
+      ),
+      inherit.aes = FALSE,
+      arrow = arrow(type = "closed", length = unit(0.1, "inches"))
+    ) +
+    geom_text(
+      data = dataset_tte,
+      aes(
+        x = day,
+        y = subject,
+        label = if_else(censor == 0, "Event time", "Censoring time")
+      ),
+      hjust = "center",
+      nudge_y = 0.35,
+      inherit.aes = FALSE
+    )
   final_plot
 }
 ```
 
 ```{r, echo=FALSE}
 plot_data <- function(dataset, dataset_tte = NULL) {
-  
   if (length(unique(dataset$PARAMCD)) == 1) {
-  final_plot <- ggplot(dataset) +
-    theme_classic() +
-    theme(
-      axis.line.y = element_blank(),
-      axis.ticks.y = element_blank(),
-      legend.background = element_rect(fill = "whitesmoke")
-    ) +
-    labs(
-      y = "Subject",
-      x = "Time"
-    ) +
-    geom_rect(
-      aes(
-        y = USUBJID,
-        height = 0.5,
-        xmin = TRTSDY,
-        xmax = TRTEDY,
-        fill = "Observation Period",
-        color = "Observation Period"
-      ),
-      alpha = 0.5, inherit.aes = FALSE
-    ) +
-    scale_fill_manual(
-      name = NULL,
-      values = c("Observation Period" = "lightyellow")
-    ) +
-    scale_color_manual(
-      name = NULL,
-      values = c("Observation Period" = "yellow")
-    ) +
-    guides(
-      fill = guide_legend(order = 2),
-      color = guide_legend(order = 2)
-    ) +
-    new_scale_color() +
-    new_scale_fill() +
-    geom_point(
-      aes(
-        x = ADY,
-        y = USUBJID,
-        color = CHGCAT1,
-        shape = CHGCAT1,
-        fill = CHGCAT1
-      ),
-      size = 3
-    ) +
-    scale_shape_manual(
-      name = "Change from baseline",
-      values = c("IMPROVED" = 24, "UNCHANGED" = 21, "WORSENED" = 25), na.value = 13
-    ) +
-    scale_color_manual(
-      name = "Change from baseline",
-      values = c("IMPROVED" = "darkgreen", "UNCHANGED" = "blue", "WORSENED" = "red"), na.value = "grey"
-    ) +
-    scale_fill_manual(
-      name = "Change from baseline",
-      values = c("IMPROVED" = "darkgreen", "UNCHANGED" = "blue", "WORSENED" = "red")
-    ) +
-    scale_x_continuous(
-      breaks = seq(1, 120, by = 28),
-      labels = c("Baseline", "Week 4", "Week 8", "Week 12", "Week 16")
-    ) +
-    scale_y_discrete(limits = rev(levels(as.factor(dataset$USUBJID)))) +
-    guides(
-      fill = guide_legend(order = 1),
-      color = guide_legend(order = 1),
-      shape = guide_legend(order = 1)
-    )
+    final_plot <- ggplot(dataset) +
+      theme_classic() +
+      theme(
+        axis.line.y = element_blank(),
+        axis.ticks.y = element_blank(),
+        legend.background = element_rect(fill = "whitesmoke")
+      ) +
+      labs(
+        y = "Subject",
+        x = "Time"
+      ) +
+      geom_rect(
+        aes(
+          y = USUBJID,
+          height = 0.5,
+          xmin = TRTSDY,
+          xmax = TRTEDY,
+          fill = "Observation Period",
+          color = "Observation Period"
+        ),
+        alpha = 0.5, inherit.aes = FALSE
+      ) +
+      scale_fill_manual(
+        name = NULL,
+        values = c("Observation Period" = "lightyellow")
+      ) +
+      scale_color_manual(
+        name = NULL,
+        values = c("Observation Period" = "yellow")
+      ) +
+      guides(
+        fill = guide_legend(order = 2),
+        color = guide_legend(order = 2)
+      ) +
+      new_scale_color() +
+      new_scale_fill() +
+      geom_point(
+        aes(
+          x = ADY,
+          y = USUBJID,
+          color = CHGCAT1,
+          shape = CHGCAT1,
+          fill = CHGCAT1
+        ),
+        size = 3
+      ) +
+      scale_shape_manual(
+        name = "Change from baseline",
+        values = c("IMPROVED" = 24, "UNCHANGED" = 21, "WORSENED" = 25), na.value = 13
+      ) +
+      scale_color_manual(
+        name = "Change from baseline",
+        values = c("IMPROVED" = "darkgreen", "UNCHANGED" = "blue", "WORSENED" = "red"), na.value = "grey"
+      ) +
+      scale_fill_manual(
+        name = "Change from baseline",
+        values = c("IMPROVED" = "darkgreen", "UNCHANGED" = "blue", "WORSENED" = "red")
+      ) +
+      scale_x_continuous(
+        breaks = seq(1, 120, by = 28),
+        labels = c("Baseline", "Week 4", "Week 8", "Week 12", "Week 16")
+      ) +
+      scale_y_discrete(limits = rev(levels(as.factor(dataset$USUBJID)))) +
+      guides(
+        fill = guide_legend(order = 1),
+        color = guide_legend(order = 1),
+        shape = guide_legend(order = 1)
+      )
   } else {
     final_plot <- ggplot(dataset) +
       theme_classic() +
       theme(
         strip.background = element_blank(),
         axis.line.y = element_blank(),
-      axis.ticks.y = element_blank(),
-      legend.background = element_rect(fill = "whitesmoke")
+        axis.ticks.y = element_blank(),
+        legend.background = element_rect(fill = "whitesmoke")
       ) +
       labs(
         y = NULL,
@@ -372,47 +371,47 @@ plot_data <- function(dataset, dataset_tte = NULL) {
       ) +
       new_scale_color() +
       new_scale_fill() +
-    geom_point(
-      aes(
-        x = ADY,
-        y = PARAM,
-        color = CHGCAT1,
-        shape = CHGCAT1,
-        fill = CHGCAT1
-      ),
-      size = 3
-    ) +
-    scale_shape_manual(
-      name = "Change from baseline",
-      values = c("IMPROVED" = 24, "UNCHANGED" = 21, "WORSENED" = 25), na.value = 13
-    ) +
-    scale_color_manual(
-      name = "Change from baseline",
-      values = c("IMPROVED" = "darkgreen", "UNCHANGED" = "blue", "WORSENED" = "red"), na.value = "grey"
-    ) +
-    scale_fill_manual(
-      name = "Change from baseline",
-      values = c("IMPROVED" = "darkgreen", "UNCHANGED" = "blue", "WORSENED" = "red")
-    ) +
-    scale_x_continuous(
-      breaks = seq(1, 120, by = 28),
-      labels = c("Baseline", "Week 4", "Week 8", "Week 12", "Week 16")
-    ) +
-    scale_y_discrete(limits = rev(levels(as.factor(dataset$PARAM)))) +
-    guides(
-      fill = guide_legend(order = 1),
-      color = guide_legend(order = 1),
-      shape = guide_legend(order = 1)
-    ) +
-    facet_wrap(vars(paste("Subject", USUBJID)), ncol = 1)
+      geom_point(
+        aes(
+          x = ADY,
+          y = PARAM,
+          color = CHGCAT1,
+          shape = CHGCAT1,
+          fill = CHGCAT1
+        ),
+        size = 3
+      ) +
+      scale_shape_manual(
+        name = "Change from baseline",
+        values = c("IMPROVED" = 24, "UNCHANGED" = 21, "WORSENED" = 25), na.value = 13
+      ) +
+      scale_color_manual(
+        name = "Change from baseline",
+        values = c("IMPROVED" = "darkgreen", "UNCHANGED" = "blue", "WORSENED" = "red"), na.value = "grey"
+      ) +
+      scale_fill_manual(
+        name = "Change from baseline",
+        values = c("IMPROVED" = "darkgreen", "UNCHANGED" = "blue", "WORSENED" = "red")
+      ) +
+      scale_x_continuous(
+        breaks = seq(1, 120, by = 28),
+        labels = c("Baseline", "Week 4", "Week 8", "Week 12", "Week 16")
+      ) +
+      scale_y_discrete(limits = rev(levels(as.factor(dataset$PARAM)))) +
+      guides(
+        fill = guide_legend(order = 1),
+        color = guide_legend(order = 1),
+        shape = guide_legend(order = 1)
+      ) +
+      facet_wrap(vars(paste("Subject", USUBJID)), ncol = 1)
   }
-  
+
   if (!is.null(dataset_tte)) {
     dataset_tte <- dataset_tte %>% derive_vars_dy(
       reference_date = STARTDT,
       source_vars = exprs(ADT)
     )
-    
+
     if (length(unique(dataset$PARAMCD)) == 1) {
       final_plot <- final_plot +
         coord_cartesian(clip = "off") +
