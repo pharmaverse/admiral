@@ -26,8 +26,8 @@ adsl <- tribble(
   ~USUBJID, ~TRTSDT,           ~TRTEDT,
   "001",    ymd("2020-01-01"), ymd("2020-03-23"),
   "002",    ymd("2020-01-02"), ymd("2020-03-03"),
-  "003",    ymd("2020-01-03"), ymd("2020-02-22"),
-  "004",    ymd("2020-01-04"), ymd("2020-04-18")
+  "003",    ymd("2020-01-04"), ymd("2020-04-18"),
+  "004",    ymd("2020-01-03"), ymd("2020-02-22")
 ) %>%
   mutate(
     STUDYID = "XY1234"
@@ -43,14 +43,14 @@ adqs_all <- bind_rows(
     "002",    "BASELINE",    87,
     "002",    "WEEK 4",      65,
     "002",    "WEEK 8",      67,
-    "003",    "BASELINE",    66,
-    "003",    "WEEK 4",      NA,
+    "003",    "BASELINE",    72,
+    "003",    "WEEK 4",      85,
     "003",    "WEEK 8",      83,
-    "004",    "BASELINE",    72,
-    "004",    "WEEK 4",      85,
-    "004",    "WEEK 8",      83,
-    "004",    "WEEK 12",     62,
-    "004",    "WEEK 16",     60
+    "003",    "WEEK 12",     62,
+    "003",    "WEEK 16",     60,
+    "004",    "BASELINE",    66,
+    "004",    "WEEK 4",      NA,
+    "004",    "WEEK 8",      83
   ) %>%
     mutate(
       PARAMCD = "A",
@@ -65,14 +65,14 @@ adqs_all <- bind_rows(
     "002",    "BASELINE",    68,
     "002",    "WEEK 4",      57,
     "002",    "WEEK 8",      81,
-    "003",    "BASELINE",    66,
-    "003",    "WEEK 4",      77,
-    "003",    "WEEK 8",      79,
-    "004",    "BASELINE",    72,
-    "004",    "WEEK 4",      60,
-    "004",    "WEEK 8",      83,
-    "004",    "WEEK 12",     82,
-    "004",    "WEEK 16",     79
+    "003",    "BASELINE",    72,
+    "003",    "WEEK 4",      60,
+    "003",    "WEEK 8",      83,
+    "003",    "WEEK 12",     82,
+    "003",    "WEEK 16",     79,
+    "004",    "BASELINE",    66,
+    "004",    "WEEK 4",      77,
+    "004",    "WEEK 8",      79
   ) %>%
     mutate(
       PARAMCD = "B",
@@ -116,13 +116,162 @@ adqs_all <- bind_rows(
 ```
 
 ```{r, echo=FALSE}
+plot_scenario <- function(assessment_type, event_type) {
+  if (assessment_type == "continuous") {
+    dataset <- tribble(
+      ~subject, ~day, ~event,  ~end_day,
+      "1"     ,   13, "Event",       38, 
+      "1"     ,   32, "Event",       38,
+      "1"     ,   41, "Event",       38,
+      "2"     ,   38, "Event",       32
+    )
+    
+    dataset_tte <- tribble(
+      ~subject, ~day, ~censor,
+      "1"     ,   13,     0,
+      "2"     ,   32,     1
+    )
+  } else {
+    dataset <- tribble(
+      ~subject, ~day, ~event,     ~end_day,
+      "1"     ,   15, "No event",       60, 
+      "1"     ,   29, "No event",       60,
+      "1"     ,   43, "Event",          60,
+      "1"     ,   57, "Event",          60,
+      "2"     ,   15, "No event",       50, 
+      "2"     ,   29, "No event",       50,
+      "2"     ,   43, "Unknown",        50,
+      "2"     ,   57, "Event",          50
+    )
+    
+    if (event_type == "negative") {
+      dataset_tte <- tribble(
+        ~subject, ~day, ~censor,
+        "1", 43, 0,
+        "2", 29, 1
+      )
+    } else {
+      dataset_tte <- tribble(
+        ~subject, ~day, ~censor,
+        "1", 43, 0,
+        "2", 50, 1
+      )
+    }
+  }
+  
+  dataset <- mutate(dataset, subject = paste("Subject", subject))
+  dataset_tte <- mutate(dataset_tte, subject = paste("Subject", subject))
+  final_plot <- ggplot(dataset) +
+    theme_classic() +
+    theme(
+      axis.line.y = element_blank(),
+      axis.ticks.y = element_blank(),
+      legend.background = element_rect(fill = "whitesmoke")
+    ) +
+    labs(
+      y = NULL,
+      x = "Time"
+    ) +
+    geom_rect(
+      aes(
+        y = subject,
+        height = 0.2,
+        xmin = 1,
+        xmax = end_day,
+        fill = "Observation Period",
+        color = "Observation Period"
+      ),
+      alpha = 0.5, inherit.aes = FALSE
+    ) +
+    scale_fill_manual(
+      name = NULL,
+      values = c("Observation Period" = "lightyellow")
+    ) +
+    scale_color_manual(
+      name = NULL,
+      values = c("Observation Period" = "yellow")
+    ) +
+    guides(
+      fill = guide_legend(order = 2),
+      color = guide_legend(order = 2)
+    ) +
+    new_scale_color() +
+    new_scale_fill() +
+    geom_point(
+      aes(
+        x = day,
+        y = subject,
+        color = event,
+        shape = event,
+        fill = event
+      ),
+      size = 3
+    ) +
+    scale_shape_manual(
+      name = NULL,
+      values = c("No event" = 1, "Unknown" = 63, "Event" = 4)
+    ) +
+    scale_color_manual(
+      name = NULL,
+      values = c("No event" = "darkgreen", "Unknown" = "blue", "Event" = "red")
+    ) +
+    scale_fill_manual(
+      name = NULL,
+      values = c("No event" = "darkgreen", "Unknown" = "blue", "Event" = "red")
+    )
+  if (assessment_type == "discrete") {
+    final_plot <- final_plot +
+      scale_x_continuous(
+        breaks = seq(15, 60, by = 14),
+        labels = c("Visit 1", "Visit 2", "Visit 3", "Visit 4")
+      )
+  }
+  final_plot <- final_plot +
+    scale_y_discrete(
+      limits = rev(levels(as.factor(dataset$subject)))
+    ) +
+    guides(
+      fill = guide_legend(order = 1),
+      color = guide_legend(order = 1),
+      shape = guide_legend(order = 1)
+    ) +
+    coord_cartesian(clip = "off") +
+      geom_segment(
+        data = dataset_tte,
+        aes(
+          x = day,
+          xend = day,
+          y = as.numeric(as.factor(rev(levels(as.factor(subject))))) + 0.3,
+          yend = as.numeric(as.factor(rev(levels(as.factor(subject))))) + 0.13
+        ),
+        inherit.aes = FALSE,
+        arrow = arrow(type = "closed", length = unit(0.1, "inches"))
+      ) +
+      geom_text(
+        data = dataset_tte,
+        aes(
+          x = day,
+          y = subject,
+          label = if_else(censor == 0, "Event time", "Censoring time")
+        ),
+        hjust = "center",
+        nudge_y = 0.35,
+        inherit.aes = FALSE
+      )
+  final_plot
+}
+```
+
+```{r, echo=FALSE}
 plot_data <- function(dataset, dataset_tte = NULL) {
   
   if (length(unique(dataset$PARAMCD)) == 1) {
   final_plot <- ggplot(dataset) +
     theme_classic() +
     theme(
-      axis.line.y = element_blank()
+      axis.line.y = element_blank(),
+      axis.ticks.y = element_blank(),
+      legend.background = element_rect(fill = "whitesmoke")
     ) +
     labs(
       y = "Subject",
@@ -190,7 +339,9 @@ plot_data <- function(dataset, dataset_tte = NULL) {
       theme_classic() +
       theme(
         strip.background = element_blank(),
-        axis.line.y = element_blank()
+        axis.line.y = element_blank(),
+      axis.ticks.y = element_blank(),
+      legend.background = element_rect(fill = "whitesmoke")
       ) +
       labs(
         y = NULL,
@@ -363,8 +514,8 @@ assumed that the event didn't occur if no event is recorded. In this case, the
 event time is the time of the first occurrence of the event and the censoring
 time is the end of the observation period.
 
-```{r out.width = '70%', echo = FALSE}
-knitr::include_graphics("img/tte_continuous.png")
+```{r, echo = FALSE}
+plot_scenario(assessment_type = "continuous", event_type = "negative")
 ```
 
 
@@ -381,10 +532,14 @@ on the type of the event. If the event is a negative event like death,
 worsening, adverse event, ..., the most conservative approach is to ignore time
 points where it is not known if the event occurred. I.e., the censoring time is
 set to the time of the last assessment where it is known that the event didn't
-occur.
+occur [^1].
 
-```{r out.width = '70%', echo = FALSE}
-knitr::include_graphics("img/tte_discrete_negative.png")
+[^1]: see for example [Clinical Trial Endpoints for the Approval of Non-Small
+Cell Lung Cancer Drugs and Biologics Guidance for
+Industry](https://www.fda.gov/media/116860/download)
+
+```{r echo = FALSE}
+plot_scenario(assessment_type = "discrete", event_type = "negative")
 ```
 
 For the examples, we will use the following questionnaire ADaM dataset. The
@@ -459,8 +614,8 @@ For positive events like improvement, response, ..., the most conservative
 approach is to set the censoring time to the end of the observation period, even
 if it is not known whether the event occurred or not at this time point.
 
-```{r out.width = '70%', echo = FALSE}
-knitr::include_graphics("img/tte_discrete_positive.png")
+```{r, echo = FALSE}
+plot_scenario(assessment_type = "discrete", event_type = "positive")
 ```
 
 For positive events, the `event_type` argument of the `derive_param_tte()`
@@ -578,6 +733,9 @@ plot_data(adqs_ext, dataset_tte = adtte)
 ```
 
 ## Adding a Confirmation Parameters to the Source Dataset
+
+For adding a new parameter instead of a new variable the
+`derive_extreme_event()` function can be used.
 
 TODO: add example for time to confirmed worsening using a confirmed worsening parameter.
 
@@ -709,7 +867,7 @@ plot_data(adqs_all, dataset_tte = adtte)
 
 ## Events Combined by "and"
 
-If events are combined by "and", e.g., score 1 improved _and_ score 2 didn't
+If events are combined by "and", e.g., score A improved _and_ score B didn't
 worsen, a variable or parameter needs to be derived in the input dataset which
 indicates whether the combined event occurred or not. To derive a new parameter
 the `derive_param_computed()` function can be used (use `derive_var_computed()`
@@ -771,10 +929,3 @@ dataset_vignette(adtte)
 ```{r, echo=FALSE}
 plot_data(adqs_all, dataset_tte = adtte)
 ```
-
-# Differentiate Censoring
-
-TODO: Setting `EVNTDESC` for censoring is sometimes tricky. For example if you
-are deriving time to `CHG >= 10` and want to distinguish subjects censored
-because they don't have a baseline value and subject censored because they don't
-have post-baseline values.

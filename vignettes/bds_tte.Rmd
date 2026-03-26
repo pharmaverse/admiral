@@ -128,9 +128,49 @@ independent of the data.
 
 The table below shows all pre-defined `tte_source` objects which should cover the most common use cases.
 
+<details>
+<summary>`tte_source` objects</summary>
 ```{r echo=FALSE}
-knitr::kable(admiral:::list_tte_source_objects())
+# knitr::kable(admiral:::list_tte_source_objects())
+library(reactable)
+library(htmltools)
+reactable(
+  admiral:::list_tte_source_objects(),
+  defaultColDef = colDef(
+    header = function(value) {
+      tags$code(value)
+    },
+    cell = function(value) {
+      tags$code(value)
+      }
+  ),
+  columns = list(
+    object = colDef(
+      header = function(value) "Object Name"
+    ),
+    dataset_name = colDef(
+      width = 130
+    ),
+    date = colDef(
+      width = 100
+    ),
+    censor = colDef(
+      width = 80
+    ),
+    set_values_to = colDef(
+      cell = function(value) {
+        items <- stringr::str_split_1(as.character(value), "<br>")
+        tagList(lapply(items, function(item) div(item)))
+       }
+    )
+  ),
+  filterable = TRUE,
+  resizable = TRUE,
+  defaultPageSize = 20
+)
+
 ```
+</details>
 
 These pre-defined objects can be passed directly to `derive_param_tte()` to create a new time-to-event parameter.
 
@@ -514,106 +554,14 @@ adaette %>%
   dataset_vignette(display_vars = exprs(USUBJID, PARAMCD, STARTDT, ADT, CNSR, EVNTDESC, SRCDOM, SRCVAR, SRCSEQ))
 ```
 
-### Deriving Time-to-Event Parameters Using By Groups
-
 If time-to-event parameters need to be derived for each by group of a source
-dataset, the `by_vars` parameter can be specified. Then a time-to-event
-parameter is derived for each by group.
+dataset, the `by_vars` parameter can be specified. See the `derive_param_tte()`
+documentation for an example.
 
-Please note that CDISC requires separate parameters (`PARAMCD`, `PARAM`) for the
-by groups. Therefore the variables specified for the `by_vars` parameter are not
-included in the output dataset. The `PARAMCD` variable should be specified for
-the `set_value_to` parameter using an expression on the right hand side which
-results in a unique value for each by group. If the values of the by variables
-should be included in the output dataset, they can be stored in `PARCATn`
-variables.
+### Further Scenarios
 
-In the following example a time-to-event parameter for each preferred term in
-the AE dataset is derived.
-
-```
-View(adsl)
-```
-```{r, echo=FALSE}
-adsl <- tibble::tribble(
-  ~USUBJID, ~TRTSDT,           ~EOSDT,
-  "01",     ymd("2020-12-06"), ymd("2021-03-06"),
-  "02",     ymd("2021-01-16"), ymd("2021-02-03")
-) %>%
-  mutate(STUDYID = "AB42")
-
-dataset_vignette(adsl)
-```
-
-```
-View(ae)
-```
-```{r, echo=FALSE}
-ae <- tibble::tribble(
-  ~USUBJID, ~AESTDTC,           ~AESEQ, ~AEDECOD,
-  "01",     "2021-01-03T10:56", 1,      "Flu",
-  "01",     "2021-03-04",       2,      "Cough",
-  "01",     "2021",             3,      "Flu"
-) %>%
-  mutate(
-    STUDYID = "AB42",
-    AESTDT = convert_dtc_to_dt(dtc = AESTDTC, highest_imputation = "M")
-  )
-
-dataset_vignette(ae)
-```
-
-```{r}
-# define time to first adverse event event #
-ttae <- event_source(
-  dataset_name = "ae",
-  date = AESTDT,
-  set_values_to = exprs(
-    EVNTDESC = "AE",
-    SRCDOM = "AE",
-    SRCVAR = "AESTDTC",
-    SRCSEQ = AESEQ
-  )
-)
-
-# define censoring at end of study #
-eos <- censor_source(
-  dataset_name = "adsl",
-  date = EOSDT,
-  set_values_to = exprs(
-    EVNTDESC = "END OF STUDY",
-    SRCDOM = "ADSL",
-    SRCVAR = "EOSDT"
-  )
-)
-
-# derive time-to-event parameter #
-adtte <- derive_param_tte(
-  dataset_adsl = adsl,
-  by_vars = exprs(AEDECOD),
-  start_date = TRTSDT,
-  event_conditions = list(ttae),
-  censor_conditions = list(eos),
-  source_datasets = list(adsl = adsl, ae = ae),
-  set_values_to = exprs(
-    PARAMCD = paste0("TTAE", as.numeric(as.factor(AEDECOD))),
-    PARAM = paste("Time to First", AEDECOD, "Adverse Event"),
-    PARCAT1 = "TTAE",
-    PARCAT2 = AEDECOD
-  )
-)
-```
-
-```{r, echo=FALSE}
-dataset_vignette(
-  adtte %>%
-    select(
-      USUBJID, STARTDT, PARAMCD, PARAM, PARCAT1, PARCAT2, ADT, CNSR,
-      EVNTDESC, SRCDOM, SRCVAR, SRCSEQ
-    ),
-  display_vars = exprs(USUBJID, STARTDT, PARAMCD, PARAM, ADT, CNSR, SRCSEQ)
-)
-```
+For further scenarios on how to derive data for time-to-event analyses, see the
+[Time-to-Event Analyses](tte_analyses.html) vignette.
 
 ## Derive Analysis Value (`AVAL`) {#aval}
 

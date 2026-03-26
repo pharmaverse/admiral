@@ -33,6 +33,9 @@ specified under `save_path`. This is because this functionality did not work as 
 
 ## Documentation
 
+- New vignette "Time-to-Event Analyses" added to provide guidance for different
+scenarios. (#2900)
+
 - Fix `UDTC` derivation in `ADPPK` to use source domain `DTC` variables. (#3011)
 
 - New Estimands vignette added, describing possible implementations of estimands with `{admiral}` code. (#2954)
