@@ -45,6 +45,12 @@
 - Fix `UDTC` derivation in `ADPPK` to use source domain `DTC` variables.
   ([\#3011](https://github.com/pharmaverse/admiral/issues/3011))
 
+- Fixed example in
+  [`derive_var_nfrlt()`](https:/pharmaverse.github.io/admiral/main/reference/derive_var_nfrlt.md)
+  to use `NA_character_` instead of `""` for missing unit values,
+  consistent with the admiral programming strategy.
+  ([\#3027](https://github.com/pharmaverse/admiral/issues/3027))
+
 - New Estimands vignette added, describing possible implementations of
   estimands with [admiral](https://pharmaverse.github.io/admiral/) code.
   ([\#2954](https://github.com/pharmaverse/admiral/issues/2954))
