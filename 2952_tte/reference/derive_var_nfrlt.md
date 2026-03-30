@@ -863,15 +863,15 @@ Using mutate to set NFRLT to 99999 for unscheduled visits
       ) %>%
       mutate(
         NFRLT = if_else(is.na(NFRLT) & VISIT == "UNSCHEDULED", 99999, NFRLT),
-        FRLTU = if_else(is.na(FRLTU) & VISIT == "UNSCHEDULED", "", FRLTU)
+        FRLTU = if_else(is.na(FRLTU) & VISIT == "UNSCHEDULED", NA_character_, FRLTU)
       )
     #> # A tibble: 4 × 6
     #>   USUBJID VISITDY VISIT       PCTPT        NFRLT FRLTU
     #>   <chr>     <dbl> <chr>       <chr>        <dbl> <chr>
-    #> 1 001           1 VISIT 1     Pre-dose         0 "HOURS"
-    #> 2 001           1 VISIT 1     2H Post-dose     2 "HOURS"
-    #> 3 001          NA UNSCHEDULED Pre-dose     99999 ""
-    #> 4 001          NA UNSCHEDULED 2H Post-dose 99999 ""     
+    #> 1 001           1 VISIT 1     Pre-dose         0 HOURS
+    #> 2 001           1 VISIT 1     2H Post-dose     2 HOURS
+    #> 3 001          NA UNSCHEDULED Pre-dose     99999 <NA>
+    #> 4 001          NA UNSCHEDULED 2H Post-dose 99999 <NA> 
 
 ### Custom range method
 
