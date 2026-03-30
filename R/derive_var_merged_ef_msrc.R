@@ -164,77 +164,52 @@
 #'
 #' @caption Controlling flag values (`true_value`, `false_value`, `missing_value`)
 #'
-#' @info By default `true_value = "Y"`, `false_value = "N"`, and
-#' `missing_value = NA_character_`.
+#' @info By default `true_value = "Y"`, `false_value = NA_character_`, and
+#' `missing_value = NA_character_`. Setting them explicitly lets you distinguish
+#' three subject-level states:
 #'
-#' - `true_value`: assigned when the condition is `TRUE` in at least one source
-#' - `false_value`: assigned when a subject has records in a source but the
-#'   condition is never `TRUE`
-#' - `missing_value`: assigned when a subject has **no** records in any source
+#' - `true_value`: subject has at least one qualifying record in any source
+#' - `false_value`: subject appears in at least one source, but no record meets
+#'   the condition
+#' - `missing_value`: subject has **no** records in any source
 #'
-#' In the example below, subject 5, who has no anti-cancer records but is present in a
-#' source receives `"N"` via `false_value`, and subject `"4"` (absent from all sources) receives
-#' `NA_character_` via `missing_value`:
+#' In the example below, `ADSL` is used as the input dataset and the dose
+#' adjustment sources from the previous example are summarised to subject level.
+#' This reveals all three cases in the output:
+#'
+#' - Subjects `"1"` and `"3"`: dose adjustment found → `"Y"` via `true_value`
+#' - Subject `"2"`: present in `adex` but no adjustment found → `"N"` via
+#'   `false_value`
+#' - Subject `"4"`: absent from all sources → `NA` via `missing_value`
 #'
 #' @code
-#' derive_var_merged_ef_msrc(
-#'   adsl,
-#'   by_vars = exprs(USUBJID),
-#'   flag_events = list(
-#'     flag_event(
-#'       dataset_name = "cm",
-#'       condition = CMCAT == "ANTI-CANCER"
-#'     ),
-#'     flag_event(
-#'       dataset_name = "pr"
-#'     )
-#'   ),
-#'   source_datasets = list(cm = cm, pr = pr),
-#'   new_var = CANCTRFL,
-#'   true_value = "Y",
-#'   false_value = "N",
-#'   missing_value = NA_character_
+#' adsl_ex <- tribble(
+#'   ~USUBJID,
+#'   "1",
+#'   "2",
+#'   "3",
+#'   "4"
 #' )
 #'
-#' @caption Per-source `by_vars` renaming
-#'
-#' @info When the grouping variable has a different name in a source dataset,
-#' the `by_vars` argument of `flag_event()` can be used to rename it using the
-#' `exprs(<target> = <source>)` syntax. This allows each source to use its own
-#' link variable while still merging correctly onto the input dataset.
-#'
-#' In the example below, a dose adjustment flag `DOSADJFL` is derived for each
-#' exposure record in `adex`. The flag is set to `"Y"` if a dose adjustment is
-#' recorded in any of three sources:
-#'
-#' - `ex`: directly via `EXADJ`
-#' - `ec`: linked via `ECLNKID` (renamed to `EXLNKID` for the merge)
-#' - `fa`: linked via `FALNKID` (renamed to `EXLNKID` for the merge)
-#'
-#' @code
 #' adex <- tribble(
-#'   ~USUBJID, ~EXLNKID, ~EXADJ,
-#'   "1",      "1",      "AE",
-#'   "1",      "2",      NA_character_,
-#'   "1",      "3",      NA_character_,
-#'   "2",      "1",      NA_character_,
-#'   "3",      "1",      NA_character_
+#'   ~USUBJID, ~EXADJ,
+#'   "1",      "DOSE REDUCED",
+#'   "2",      NA_character_
 #' )
 #'
 #' ec <- tribble(
-#'   ~USUBJID, ~ECLNKID, ~ECADJ,
-#'   "1",      "3",      "AE",
-#'   "3",      "1",      NA_character_
+#'   ~USUBJID, ~ECADJ,
+#'   "3",      "DOSE REDUCED"
 #' )
 #'
 #' fa <- tribble(
-#'   ~USUBJID, ~FALNKID, ~FATESTCD, ~FAOBJ,            ~FASTRESC,
-#'   "3",      "1",      "OCCUR",   "DOSE ADJUSTMENT", "Y"
+#'   ~USUBJID, ~FATESTCD, ~FAOBJ,            ~FASTRESC,
+#'   "1",      "OCCUR",   "DOSE ADJUSTMENT", "Y"
 #' )
 #'
 #' derive_var_merged_ef_msrc(
-#'   adex,
-#'   by_vars = exprs(USUBJID, EXLNKID),
+#'   adsl_ex,
+#'   by_vars = exprs(USUBJID),
 #'   flag_events = list(
 #'     flag_event(
 #'       dataset_name = "ex",
@@ -242,17 +217,18 @@
 #'     ),
 #'     flag_event(
 #'       dataset_name = "ec",
-#'       condition = !is.na(ECADJ),
-#'       by_vars = exprs(USUBJID, EXLNKID = ECLNKID)
+#'       condition = !is.na(ECADJ)
 #'     ),
 #'     flag_event(
 #'       dataset_name = "fa",
-#'       condition = FATESTCD == "OCCUR" & FAOBJ == "DOSE ADJUSTMENT" & FASTRESC == "Y",
-#'       by_vars = exprs(USUBJID, EXLNKID = FALNKID)
+#'       condition = FATESTCD == "OCCUR" & FAOBJ == "DOSE ADJUSTMENT" & FASTRESC == "Y"
 #'     )
 #'   ),
 #'   source_datasets = list(ex = adex, ec = ec, fa = fa),
-#'   new_var = DOSADJFL
+#'   new_var = DOSADJFL,
+#'   true_value = "Y",
+#'   false_value = "N",
+#'   missing_value = NA_character_
 #' )
 derive_var_merged_ef_msrc <- function(dataset,
                                       by_vars,

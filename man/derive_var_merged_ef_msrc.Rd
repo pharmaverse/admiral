@@ -231,84 +231,53 @@ condition, so \code{CANCTRFL} is also \code{NA} (via the default \code{false_val
 #> 5 5       <NA>    }\if{html}{\out{</div>}}}
 \subsection{Controlling flag values (\code{true_value}, \code{false_value}, \code{missing_value})}{
 
-By default \code{true_value = "Y"}, \code{false_value = "N"}, and
-\code{missing_value = NA_character_}.
+By default \code{true_value = "Y"}, \code{false_value = NA_character_}, and
+\code{missing_value = NA_character_}. Setting them explicitly lets you distinguish
+three subject-level states:
 \itemize{
-\item \code{true_value}: assigned when the condition is \code{TRUE} in at least one source
-\item \code{false_value}: assigned when a subject has records in a source but the
-condition is never \code{TRUE}
-\item \code{missing_value}: assigned when a subject has \strong{no} records in any source
+\item \code{true_value}: subject has at least one qualifying record in any source
+\item \code{false_value}: subject appears in at least one source, but no record meets
+the condition
+\item \code{missing_value}: subject has \strong{no} records in any source
 }
 
-In the example below, subject 5, who has no anti-cancer records but is present in a
-source receives \code{"N"} via \code{false_value}, and subject \code{"4"} (absent from all sources) receives
-\code{NA_character_} via \code{missing_value}:
+In the example below, \code{ADSL} is used as the input dataset and the dose
+adjustment sources from the previous example are summarised to subject level.
+This reveals all three cases in the output:
+\itemize{
+\item Subjects \code{"1"} and \code{"3"}: dose adjustment found → \code{"Y"} via \code{true_value}
+\item Subject \code{"2"}: present in \code{adex} but no adjustment found → \code{"N"} via
+\code{false_value}
+\item Subject \code{"4"}: absent from all sources → \code{NA} via \code{missing_value}
+}
 
-\if{html}{\out{<div class="sourceCode r">}}\preformatted{derive_var_merged_ef_msrc(
-  adsl,
-  by_vars = exprs(USUBJID),
-  flag_events = list(
-    flag_event(
-      dataset_name = "cm",
-      condition = CMCAT == "ANTI-CANCER"
-    ),
-    flag_event(
-      dataset_name = "pr"
-    )
-  ),
-  source_datasets = list(cm = cm, pr = pr),
-  new_var = CANCTRFL,
-  true_value = "Y",
-  false_value = "N",
-  missing_value = NA_character_
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{adsl_ex <- tribble(
+  ~USUBJID,
+  "1",
+  "2",
+  "3",
+  "4"
 )
-#> # A tibble: 5 × 2
-#>   USUBJID CANCTRFL
-#>   <chr>   <chr>   
-#> 1 1       Y       
-#> 2 2       Y       
-#> 3 3       Y       
-#> 4 4       <NA>    
-#> 5 5       N       }\if{html}{\out{</div>}}}
-\subsection{Per-source \code{by_vars} renaming}{
 
-When the grouping variable has a different name in a source dataset,
-the \code{by_vars} argument of \code{flag_event()} can be used to rename it using the
-\verb{exprs(<target> = <source>)} syntax. This allows each source to use its own
-link variable while still merging correctly onto the input dataset.
-
-In the example below, a dose adjustment flag \code{DOSADJFL} is derived for each
-exposure record in \code{adex}. The flag is set to \code{"Y"} if a dose adjustment is
-recorded in any of three sources:
-\itemize{
-\item \code{ex}: directly via \code{EXADJ}
-\item \code{ec}: linked via \code{ECLNKID} (renamed to \code{EXLNKID} for the merge)
-\item \code{fa}: linked via \code{FALNKID} (renamed to \code{EXLNKID} for the merge)
-}
-
-\if{html}{\out{<div class="sourceCode r">}}\preformatted{adex <- tribble(
-  ~USUBJID, ~EXLNKID, ~EXADJ,
-  "1",      "1",      "AE",
-  "1",      "2",      NA_character_,
-  "1",      "3",      NA_character_,
-  "2",      "1",      NA_character_,
-  "3",      "1",      NA_character_
+adex <- tribble(
+  ~USUBJID, ~EXADJ,
+  "1",      "DOSE REDUCED",
+  "2",      NA_character_
 )
 
 ec <- tribble(
-  ~USUBJID, ~ECLNKID, ~ECADJ,
-  "1",      "3",      "AE",
-  "3",      "1",      NA_character_
+  ~USUBJID, ~ECADJ,
+  "3",      "DOSE REDUCED"
 )
 
 fa <- tribble(
-  ~USUBJID, ~FALNKID, ~FATESTCD, ~FAOBJ,            ~FASTRESC,
-  "3",      "1",      "OCCUR",   "DOSE ADJUSTMENT", "Y"
+  ~USUBJID, ~FATESTCD, ~FAOBJ,            ~FASTRESC,
+  "1",      "OCCUR",   "DOSE ADJUSTMENT", "Y"
 )
 
 derive_var_merged_ef_msrc(
-  adex,
-  by_vars = exprs(USUBJID, EXLNKID),
+  adsl_ex,
+  by_vars = exprs(USUBJID),
   flag_events = list(
     flag_event(
       dataset_name = "ex",
@@ -316,24 +285,24 @@ derive_var_merged_ef_msrc(
     ),
     flag_event(
       dataset_name = "ec",
-      condition = !is.na(ECADJ),
-      by_vars = exprs(USUBJID, EXLNKID = ECLNKID)
+      condition = !is.na(ECADJ)
     ),
     flag_event(
       dataset_name = "fa",
-      condition = FATESTCD == "OCCUR" & FAOBJ == "DOSE ADJUSTMENT" & FASTRESC == "Y",
-      by_vars = exprs(USUBJID, EXLNKID = FALNKID)
+      condition = FATESTCD == "OCCUR" & FAOBJ == "DOSE ADJUSTMENT" & FASTRESC == "Y"
     )
   ),
   source_datasets = list(ex = adex, ec = ec, fa = fa),
-  new_var = DOSADJFL
+  new_var = DOSADJFL,
+  true_value = "Y",
+  false_value = "N",
+  missing_value = NA_character_
 )
-#> # A tibble: 5 × 4
-#>   USUBJID EXLNKID EXADJ DOSADJFL
-#>   <chr>   <chr>   <chr> <chr>   
-#> 1 1       1       AE    Y       
-#> 2 1       2       <NA>  <NA>    
-#> 3 1       3       <NA>  Y       
-#> 4 2       1       <NA>  <NA>    
-#> 5 3       1       <NA>  Y       }\if{html}{\out{</div>}}}}
+#> # A tibble: 4 × 2
+#>   USUBJID DOSADJFL
+#>   <chr>   <chr>   
+#> 1 1       Y       
+#> 2 2       N       
+#> 3 3       Y       
+#> 4 4       <NA>    }\if{html}{\out{</div>}}}}
 
