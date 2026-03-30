@@ -231,10 +231,8 @@ condition, so \code{CANCTRFL} is also \code{NA} (via the default \code{false_val
 #> 5 5       <NA>    }\if{html}{\out{</div>}}}
 \subsection{Controlling flag values (\code{true_value}, \code{false_value}, \code{missing_value})}{
 
-By default \code{true_value = "Y"}, \code{false_value = NA_character_}, and
-\code{missing_value = NA_character_}, but all three can be customized. In this
-example \code{false_value = "N"} and \code{missing_value} keeps its default
-(\code{NA_character_}).
+By default \code{true_value = "Y"}, \code{false_value = "N"}, and
+\code{missing_value = NA_character_}.
 \itemize{
 \item \code{true_value}: assigned when the condition is \code{TRUE} in at least one source
 \item \code{false_value}: assigned when a subject has records in a source but the
@@ -242,9 +240,9 @@ condition is never \code{TRUE}
 \item \code{missing_value}: assigned when a subject has \strong{no} records in any source
 }
 
-In the example below, subject \code{"5"}, who has no anti-cancer records but is
-present in a source, receives \code{"N"} via \code{false_value}, and subject \code{"4"}
-(absent from all sources) receives \code{NA_character_} via \code{missing_value}:
+In the example below, subject 5, who has no anti-cancer records but is present in a
+source receives \code{"N"} via \code{false_value}, and subject \code{"4"} (absent from all sources) receives
+\code{NA_character_} via \code{missing_value}:
 
 \if{html}{\out{<div class="sourceCode r">}}\preformatted{derive_var_merged_ef_msrc(
   adsl,
