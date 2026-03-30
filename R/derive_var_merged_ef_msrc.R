@@ -164,19 +164,17 @@
 #'
 #' @caption Controlling flag values (`true_value`, `false_value`, `missing_value`)
 #'
-#' @info By default `true_value = "Y"`, `false_value = NA_character_`, and
-#' `missing_value = NA_character_`, but all three can be customized. In this
-#' example `false_value = "N"` and `missing_value` keeps its default
-#' (`NA_character_`).
+#' @info By default `true_value = "Y"`, `false_value = "N"`, and
+#' `missing_value = NA_character_`.
 #'
 #' - `true_value`: assigned when the condition is `TRUE` in at least one source
 #' - `false_value`: assigned when a subject has records in a source but the
 #'   condition is never `TRUE`
 #' - `missing_value`: assigned when a subject has **no** records in any source
 #'
-#' In the example below, subject `"5"`, who has no anti-cancer records but is
-#' present in a source, receives `"N"` via `false_value`, and subject `"4"`
-#' (absent from all sources) receives `NA_character_` via `missing_value`:
+#' In the example below, subject 5, who has no anti-cancer records but is present in a
+#' source receives `"N"` via `false_value`, and subject `"4"` (absent from all sources) receives
+#' `NA_character_` via `missing_value`:
 #'
 #' @code
 #' derive_var_merged_ef_msrc(
