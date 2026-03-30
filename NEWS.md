@@ -38,6 +38,8 @@ scenarios. (#2900)
 
 - Fix `UDTC` derivation in `ADPPK` to use source domain `DTC` variables. (#3011)
 
+- Fixed example in `derive_var_nfrlt()` to use `NA_character_` instead of `""` for missing unit values, consistent with the admiral programming strategy. (#3027)
+
 - New Estimands vignette added, describing possible implementations of estimands with `{admiral}` code. (#2954)
 
 - A night mode option has been added to the `{admiral}` website. This can be be toggled using the sun/moon icon in the top right corner 
