@@ -242,7 +242,7 @@ the condition
 }
 
 In the example below, \code{ADSL} is used as the input dataset and the dose
-adjustment sources from the previous example are summarised to subject level.
+adjustment sources from the previous example are summarized to subject level.
 This reveals all three cases in the output:
 \itemize{
 \item Subjects \code{"1"} and \code{"3"}: dose adjustment found → \code{"Y"} via \code{true_value}
@@ -304,5 +304,71 @@ derive_var_merged_ef_msrc(
 #> 1 1       Y       
 #> 2 2       N       
 #> 3 3       Y       
-#> 4 4       <NA>    }\if{html}{\out{</div>}}}}
+#> 4 4       <NA>    }\if{html}{\out{</div>}}}
+\subsection{Per-source \code{by_vars} renaming}{
+
+When the grouping variable has a different name in a source dataset,
+the \code{by_vars} argument of \code{flag_event()} can be used to rename it using the
+\verb{exprs(<target> = <source>)} syntax. This allows each source to use its own
+link variable while still merging correctly onto the input dataset.
+
+In the example below, a dose adjustment flag \code{DOSADJFL} is derived for each
+exposure record in \code{adex}. The flag is set to \code{"Y"} if a dose adjustment is
+recorded in any of three sources:
+\itemize{
+\item \code{ex}: directly via \code{EXADJ}
+\item \code{ec}: linked via \code{ECLNKID} (renamed to \code{EXLNKID} for the merge)
+\item \code{fa}: linked via \code{FALNKID} (renamed to \code{EXLNKID} for the merge)
+}
+
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{adex <- tribble(
+  ~USUBJID, ~EXLNKID, ~EXADJ,
+  "1",      "1",      "AE",
+  "1",      "2",      NA_character_,
+  "1",      "3",      NA_character_,
+  "2",      "1",      NA_character_,
+  "3",      "1",      NA_character_
+)
+
+ec <- tribble(
+  ~USUBJID, ~ECLNKID, ~ECADJ,
+  "1",      "3",      "AE",
+  "3",      "1",      NA_character_
+)
+
+fa <- tribble(
+  ~USUBJID, ~FALNKID, ~FATESTCD, ~FAOBJ,            ~FASTRESC,
+  "3",      "1",      "OCCUR",   "DOSE ADJUSTMENT", "Y"
+)
+
+derive_var_merged_ef_msrc(
+  adex,
+  by_vars = exprs(USUBJID, EXLNKID),
+  flag_events = list(
+    flag_event(
+      dataset_name = "ex",
+      condition = !is.na(EXADJ)
+    ),
+    flag_event(
+      dataset_name = "ec",
+      condition = !is.na(ECADJ),
+      by_vars = exprs(USUBJID, EXLNKID = ECLNKID)
+    ),
+    flag_event(
+      dataset_name = "fa",
+      condition = FATESTCD == "OCCUR" & FAOBJ == "DOSE ADJUSTMENT" & FASTRESC == "Y",
+      by_vars = exprs(USUBJID, EXLNKID = FALNKID)
+    )
+  ),
+  source_datasets = list(ex = adex, ec = ec, fa = fa),
+  new_var = DOSADJFL
+)
+#> # A tibble: 5 × 4
+#>   USUBJID EXLNKID EXADJ DOSADJFL
+#>   <chr>   <chr>   <chr> <chr>   
+#> 1 1       1       AE    Y       
+#> 2 1       2       <NA>  <NA>    
+#> 3 1       3       <NA>  Y       
+#> 4 2       1       <NA>  <NA>    
+#> 5 3       1       <NA>  Y       }\if{html}{\out{</div>}}}}
 
