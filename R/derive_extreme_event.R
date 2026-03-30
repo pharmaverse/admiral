@@ -292,6 +292,67 @@
 #' ) %>%
 #' select(-STUDYID)
 #'
+#' @caption Events across records by record
+#'
+#' @info In the previous example, the new parameter was derived for each
+#' subject, i.e., all records of a subject were summarized. However, there are
+#' cases where we may want to derive a new parameter by record, but where the
+#' condition for deriving the parameter for a given record may involve
+#' comparison with other records.
+#'
+#' For example, we want to derive a new parameter for each visit indicating
+#' response at this visit and the next one. For this we need to specify the
+#' `by_vars` argument in `event_joined()` which overwrites the value specified
+#' in the `derive_extreme_events()` call. There `by_vars = exprs(USUBJID,
+#' AVISITN)` is used because we want to add a new records for each subject and
+#' visit. In `event_joined()`, `by_vars = exprs(USUBJID)` is used because we
+#' want to join the records by subject only.
+#'
+#' The `tmp_obs_nr_var` argument is specified to create a variable which numbers
+#' the records within each subject. This variable is then used in the
+#' `condition` argument to ensure that the current record is compared with the
+#' next one. This ensures that missing visit like for subject 2 are handled
+#' correctly.
+#'
+#' @code
+#' adbds <- tribble(
+#'   ~USUBJID, ~AVISITN,  ~AVALC,
+#'   "1",             1,  "Y",
+#'   "1",             2,  "N",
+#'   "1",             3,  "Y",
+#'   "1",             4,  "Y",
+#'   "1",             5,  "Y",
+#'   "2",             1,  "Y",
+#'   "2",             3,  "Y",
+#' ) %>%
+#'   mutate(PARAMCD = "RESP")
+#'
+#' derive_extreme_event(
+#'   adbds,
+#'   by_vars = exprs(USUBJID, AVISITN),
+#'   source_datasets = list(adbds = adbds),
+#'   tmp_event_nr_var = event_nr,
+#'   order = exprs(event_nr),
+#'   mode = "first",
+#'   events = list(
+#'     event_joined(
+#'       dataset_name = "adbds",
+#'       by_vars = exprs(USUBJID),
+#'       order = exprs(AVISITN),
+#'       join_vars = exprs(AVALC),
+#'       join_type = "after",
+#'       tmp_obs_nr_var = obs_nr,
+#'       condition = AVALC == "Y" & AVALC.join == "Y" & obs_nr.join == obs_nr + 1,
+#'       set_values_to = exprs(AVALC = "Y")
+#'     ),
+#'     event(
+#'       dataset_name = "adbds",
+#'       set_values_to = exprs(AVALC = "N")
+#'     )
+#'   ),
+#'   set_values_to = exprs(PARAMCD = "CONFRESP")
+#' )
+#'
 #' @caption Specifying different arguments across `event()` objects
 #' @info Here we consider a Hy's Law use case. We are interested in
 #'   knowing whether a subject's Alkaline Phosphatase has ever been
@@ -301,7 +362,7 @@
 #'   As such, for this case now we need to vary our usage of the
 #'   `mode` argument dependent on the `event()`.
 #'
-#'  - In first `event()`, since we simply seek the first time that
+#'  - In the first `event()`, since we simply seek the first time that
 #'    `CRIT1FL` is `"Y"`, it's enough to specify the `condition`,
 #'    because we inherit `order` and `mode` from the main
 #'    `derive_extreme_event()` call here which will automatically
@@ -643,15 +704,22 @@ derive_extreme_event <- function(dataset = NULL,
           )
         }
 
+        if (is.null(event$by_vars)) {
+          event_by_vars <- by_vars
+        } else {
+          event_by_vars <- event$by_vars
+        }
+
         data_events <- filter_joined(
           data_source,
           dataset_add = data_source,
-          by_vars = by_vars,
+          by_vars = event_by_vars,
           join_vars = event$join_vars,
           join_type = event$join_type,
           first_cond_lower = !!event$first_cond_lower,
           first_cond_upper = !!event$first_cond_upper,
           order = event_order,
+          tmp_obs_nr_var = !!event$tmp_obs_nr_var,
           check_type = "none",
           filter_join = !!event$condition
         )

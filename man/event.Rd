@@ -2,7 +2,7 @@
 % Please edit documentation in R/event.R
 \name{event}
 \alias{event}
-\title{Create a \code{event} Object}
+\title{Create an \code{event} Object}
 \usage{
 event(
   dataset_name = NULL,

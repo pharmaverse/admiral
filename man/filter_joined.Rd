@@ -53,9 +53,13 @@ dataset with itself.
 
 The variables needed from the other observations should be specified for
 this parameter. The specified variables are added to the joined dataset
-with suffix ".join". For example to select all observations with \code{AVALC == "Y"} and \code{AVALC == "Y"} for at least one subsequent visit \code{join_vars = exprs(AVALC, AVISITN)} and \code{filter_join = AVALC == "Y" & AVALC.join == "Y" & AVISITN < AVISITN.join} could be specified.
+with suffix \code{.join}. For example to select all observations with \code{AVALC == "Y"} and \code{AVALC == "Y"} for at least one subsequent visit \code{join_vars = exprs(AVALC, AVISITN)} and \code{filter_join = AVALC == "Y" & AVALC.join == "Y" & AVISITN < AVISITN.join} could be specified.
 
 The \verb{*.join} variables are not included in the output dataset.
+
+The variable specified for \code{tmp_obs_nr_var} must not be included in
+\code{join_vars}. It is added automatically to the joined dataset with the
+suffix \code{.join}.
 
 \describe{
 \item{Permitted values}{list of variables created by \code{exprs()}, e.g., \code{exprs(USUBJID, VISIT)}}
