@@ -47,6 +47,22 @@
 #'
 #' @permitted [date]
 #'
+#' @param end_dates Time to event end date(s)
+#'
+#'   A list of `censor_source()` objects is expected. Each date restricts the
+#'   observation period for time-to-event analysis. For each subject the
+#'   earliest date across all `end_dates` is used as the end date for that
+#'   subject. The records defined by `event_conditions` and `censor_conditions`
+#'   are restricted to dates before or equal to the selected end date.
+#'
+#'   This argument should be specified if there is more than one reason for
+#'   stopping the observation of a subject, e.g., end of study, death, or
+#'   intercurrent events like start of new drug. If there is only one reason for
+#'   stopping the observation, it is sufficient to just include this as a
+#'   censoring condition in `censor_conditions`.
+#'
+#' @permitted [source_list]
+#'
 #' @param event_conditions Sources and conditions defining events
 #'
 #'   A list of `event_source()` objects is expected.
@@ -55,9 +71,32 @@
 #'
 #' @param censor_conditions Sources and conditions defining censorings
 #'
-#'   A list of `censor_source()` objects is expected.
+#'   A list of `censor_source()` objects is expected. Each records defined by
+#'   the `censor_conditions` should be a possible censoring time, i.e., at this
+#'   time there should be known that the event of interest has not yet occurred.
+#'   Assessment were it is not known whether the event of interest has occurred
+#'   or not should not be included as censoring times, e.g., when an assessment
+#'   was not evaluable.
+#'
+#'   It is acceptable to include records with event as long as these are also
+#'   included in `event_conditions` because event take precedence over
+#'   censorings.
 #'
 #' @permitted [source_list]
+#'
+#' @param event_type Type of event
+#'
+#'   For events that are considered unfavorable, e.g., adverse events,
+#'   progression, worsening, etc., the value should be `"negative"` and for
+#'   events that are considered favorable, e.g., response to treatment,
+#'   improvement, etc., the value should be `"positive"`.
+#'
+#'   If `event_type` is specified as `"positive"`, the objects specified for
+#'   `end_dates` are added to the censoring conditions (`censor_conditions`).
+#'   I.e., if a subject is censored, it is censored at the earliest date
+#'   provided by `end_dates`.
+#'
+#' @permitted `"negative"`, `"positive"`
 #'
 #' @param create_datetime Create datetime variables?
 #'
@@ -83,10 +122,10 @@
 #'
 #' @param check_type Check uniqueness
 #'
-#'   If `"warning"`, `"message"`, or `"error"` is specified, the specified message is issued
-#'   if the observations of the source datasets are not unique with respect to the
-#'   by variables and the date and order specified in the `event_source()` and
-#'   `censor_source()` objects.
+#'   If `"warning"`, `"message"`, or `"error"` is specified, the specified
+#'   message is issued if the observations of the source datasets are not unique
+#'   with respect to the by variables and the date and order specified in the
+#'   `event_source()` and `censor_source()` objects.
 #'
 #' @permitted [msg_type]
 #'
@@ -234,6 +273,15 @@
 #' @info By variables can be added using the `by_vars` argument, e.g., now for
 #'   each subject the time to first occurrence of each adverse event preferred
 #'   term (`AEDECOD`) should be created as parameters.
+#'
+#' Please note that CDISC requires separate parameters (`PARAMCD`, `PARAM`) for
+#' the by groups. Therefore the variables specified for the `by_vars` parameter
+#' are not included in the output dataset. The `PARAMCD` variable should be
+#' specified for the `set_value_to` parameter using an expression on the right
+#' hand side which results in a unique value for each by group. If the values of
+#' the by variables should be included in the output dataset, they can be stored
+#' in `PARCATy` variables.
+#'
 #' @code
 #' derive_param_tte(
 #'   dataset_adsl = adsl,
@@ -401,69 +449,342 @@
 #' @info Note above how the earliest event date is always taken and the latest
 #'   censor date.
 #'
-#' @caption Using different censor values (`censor`) and censoring at earliest
-#'   occurring censor condition
-#' @info Within `censor_source()` the value used to denote a censor can be
-#'   changed from the default of `1`.
+#' @caption End of the observation period (`end_dates`)
 #'
-#' In this example an extra censor is used for new drug date with the value of `2`.
+#' @info The `end_dates` argument can be used to specify the end of the
+#'   observation period if there is more than one date which restricts the
+#'   observation period, e.g., end of study date and intercurrent events like
+#'   new drug date. The earliest date is used as the end of the observation
+#'   period and events/censorings occurring after this date are not considered.
+#'
+#' In the example two `censor_source()` objects are defined, `eos` and `newdrg`,
+#' for end of study date and new drug date, respectively, and then passed to the
+#' `end_dates` argument.
+#'
 #' @code
-#' newdrug <- censor_source(
+#' adsl <- tribble(
+#'   ~USUBJID, ~TRTSDT,           ~EOSDT,            ~NEWDRGDT,
+#'   "01",     ymd("2020-12-06"), ymd("2021-03-06"), NA,
+#'   "02",     ymd("2021-01-16"), ymd("2021-04-03"), ymd("2021-03-21"),
+#'   "03",     ymd("2021-02-01"), NA,                NA,
+#'   "04",     ymd("2021-03-10"), NA,                NA
+#' ) %>%
+#'   mutate(STUDYID = "AB42")
+#'
+#' adqs <- tribble(
+#'   ~USUBJID, ~ADT,              ~CHG,
+#'   "01",     ymd("2021-01-03"),    5,
+#'   "01",     ymd("2021-02-03"),   -2,
+#'   "01",     ymd("2021-03-01"),   NA,
+#'   "01",     ymd("2021-03-07"),   10,
+#'   "02",     ymd("2021-01-03"),    4,
+#'   "02",     ymd("2021-02-03"),   -1,
+#'   "02",     ymd("2021-04-01"),  -12,
+#'   "03",     ymd("2021-02-15"),    3,
+#'   "03",     ymd("2021-03-15"),  -15
+#' ) %>%
+#'   mutate(STUDYID = "AB42")
+#'
+#' eos <- censor_source(
+#'   dataset_name = "adsl",
+#'   date = EOSDT
+#' )
+#'
+#' newdrg <- censor_source(
+#'   dataset_name = "adsl",
+#'   date = NEWDRGDT
+#' )
+#'
+#' # Note to user: The source function has changed.
+#' worsening <- event_source(
+#'   dataset_name = "adqs",
+#'   date = ADT,
+#'   filter = CHG <= -10
+#' )
+#'
+#' valid_assessment <- censor_source(
+#'   dataset_name = "adqs",
+#'   date = ADT,
+#'   filter = !is.na(CHG)
+#' )
+#'
+#' no_assessment <- censor_source(
+#'   dataset_name = "adsl",
+#'   date = TRTSDT
+#' )
+#'
+#' derive_param_tte(
+#'   dataset_adsl = adsl,
+#'   source_datasets = list(adsl = adsl, adqs = adqs),
+#'   start_date = TRTSDT,
+#'   end_dates = list(eos, newdrg),
+#'   event_conditions = list(worsening),
+#'   censor_conditions = list(valid_assessment, no_assessment),
+#'   set_values_to = exprs(PARAMCD = "TTWORSE")
+#' ) %>%
+#'   select(-STUDYID, -PARAMCD) %>%
+#'   derive_vars_merged(
+#'     dataset_add = adsl,
+#'     by_vars = exprs(USUBJID),
+#'     new_vars = exprs(EOSDT, NEWDRGDT)
+#'   )
+#'
+#' @info Please note that
+#' - subject `02` has no event because the assessment with `CHG = -12` was
+#'   excluded as it is after the start of a new drug.
+#' - subject `01` and `02` are censored at the last valid assessment before the
+#'   end of the observation period.
+#'
+#' @caption Positive event (`event_type`)
+#'
+#' @info If positive events like response or improvement are analyzed,
+#'   `event_type = "positive"` should be used. Subjects without events are
+#'   censored at the end of the observation period (defined by `end_dates`)
+#'   instead of the last assessment. For positive events this is the more
+#'   conservative approach.
+#'
+#' @code
+#' adsl <- tribble(
+#'   ~USUBJID, ~TRTSDT,           ~EOSDT,            ~NEWDRGDT,
+#'   "01",     ymd("2020-12-06"), ymd("2021-03-06"), NA,
+#'   "02",     ymd("2021-01-16"), ymd("2021-04-03"), ymd("2021-03-21"),
+#'   "03",     ymd("2021-02-01"), NA,                NA
+#' ) %>%
+#'   mutate(STUDYID = "AB42")
+#'
+#' adqs <- tribble(
+#'   ~USUBJID, ~ADT,              ~CHG,
+#'   "01",     ymd("2021-01-03"),    5,
+#'   "01",     ymd("2021-02-03"),   -2,
+#'   "01",     ymd("2021-03-01"),   NA,
+#'   "01",     ymd("2021-03-07"),   10,
+#'   "02",     ymd("2021-01-03"),    4,
+#'   "02",     ymd("2021-02-03"),   -1,
+#'   "02",     ymd("2021-04-01"),  -12,
+#'   "03",     ymd("2021-02-15"),    3,
+#'   "03",     ymd("2021-03-15"),   15
+#' ) %>%
+#'   mutate(STUDYID = "AB42")
+#'
+#' eos <- censor_source(
+#'   dataset_name = "adsl",
+#'   date = EOSDT
+#' )
+#'
+#' newdrg <- censor_source(
+#'   dataset_name = "adsl",
+#'   date = NEWDRGDT
+#' )
+#'
+#' improvement <- event_source(
+#'   dataset_name = "adqs",
+#'   date = ADT,
+#'   filter = CHG >= 10
+#' )
+#'
+#' valid_assessment <- censor_source(
+#'   dataset_name = "adqs",
+#'   date = ADT,
+#'   filter = !is.na(CHG)
+#' )
+#'
+#' derive_param_tte(
+#'   dataset_adsl = adsl,
+#'   source_datasets = list(adsl = adsl, adqs = adqs),
+#'   start_date = TRTSDT,
+#'   end_dates = list(eos, newdrg),
+#'   event_conditions = list(improvement),
+#'   censor_conditions = list(valid_assessment),
+#'   event_type = "positive",
+#'   set_values_to = exprs(PARAMCD = "TTIMPROV")
+#' ) %>%
+#'   select(-STUDYID) %>%
+#'   derive_vars_merged(
+#'     dataset_add = adsl,
+#'     by_vars = exprs(USUBJID),
+#'     new_vars = exprs(EOSDT, NEWDRGDT)
+#'   )
+#'
+#' @info Please note that subject `01` and `02` are censored at the end of the
+#'  observation period instead of at the last assessment.
+#'
+#' @caption Differentiating censoring reasons
+#' @info There are three ADaM variables which allow to differentiate censoring
+#'   reasons:
+#'   - `CNSR`: different values `>1` can be used to differentiate censoring
+#'   reasons, e.g., `1` for end of study, `2` for new drug, etc.
+#'   - `EVNTDESC`: description of the event or censoring, e.g., `"END OF STUDY"`.
+#'   - `CNSDTDSC`: description of the date used for censoring when different
+#'   from the censoring event, e.g., `"LAST ASSESSMENT"` if the censoring event
+#'   is the end of the study but the censoring date is not the end of study date
+#'   but the last assessment date before the end of the study.
+#'
+#' In the example five censoring events are considered:
+#' - end of study (`eos`, `no_worsening`)
+#' - start of a new drug (`newdrg`, `no_worsening`)
+#' - no post-baseline assessments (`no_post_baseline`)
+#' - no baseline assessment (`no_baseline`)
+#' - no assessments (`no_assessments`)
+#'
+#' In the example data, the first five subjects have the five censoring events,
+#' respectively, and the sixth subject has an event.
+#'
+#' @code
+#' adsl <- tribble(
+#' ~USUBJID, ~TRTSDT,           ~EOSDT,            ~NEWDRGDT,
+#' "01",     ymd("2020-12-06"), ymd("2021-03-06"), NA,
+#' "02",     ymd("2021-01-16"), ymd("2021-04-03"), ymd("2021-03-21"),
+#' "03",     ymd("2021-03-10"), NA,                NA,
+#' "04",     ymd("2021-04-02"), NA,                NA,
+#' "05",     ymd("2021-05-09"), NA,                NA,
+#' "06",     ymd("2021-02-01"), NA,                NA
+#' ) %>%
+#'   mutate(STUDYID = "AB42")
+#'
+#' adqs <- tribble(
+#'   ~USUBJID, ~ADT,              ~CHG, ~ABLFL,
+#'   "01",     ymd("2021-12-06"),    0, "Y",
+#'   "01",     ymd("2021-02-03"),   -2, NA,
+#'   "01",     ymd("2021-03-01"),   NA, NA,
+#'   "01",     ymd("2021-03-07"),   10, NA,
+#'   "02",     ymd("2021-01-16"),    0, "Y",
+#'   "02",     ymd("2021-02-03"),   -1, NA,
+#'   "02",     ymd("2021-04-01"),  -12, NA,
+#'   "03",     ymd("2021-03-20"),   NA, NA,
+#'   "03",     ymd("2021-04-07"),   NA, NA,
+#'   "04",     ymd("2021-04-02"),    0, "Y",
+#'   "06",     ymd("2021-02-01"),    0, "Y",
+#'   "06",     ymd("2021-03-15"),  -15, NA
+#' ) %>%
+#'   mutate(STUDYID = "AB42") %>%
+#'   derive_vars_merged(
+#'     dataset_add = adsl,
+#'     by_vars = exprs(USUBJID),
+#'     new_vars = exprs(TRTSDT)
+#'   )
+#'
+#' @info The `eos` and `newdrg` censoring events define the end dates.
+#'
+#' @code
+#' eos <- censor_source(
+#'   dataset_name = "adsl",
+#'   date = EOSDT,
+#'   censor = 1,
+#'   set_values_to = exprs(
+#'     EVNTDESC = "END OF STUDY"
+#'   )
+#' )
+#'
+#' newdrg <- censor_source(
 #'   dataset_name = "adsl",
 #'   date = NEWDRGDT,
 #'   censor = 2,
 #'   set_values_to = exprs(
-#'     EVNTDESC = "NEW DRUG RECEIVED",
-#'     SRCDOM = "ADSL",
-#'     SRCVAR = "NEWDRGDT"
+#'     EVNTDESC = "NEW DRUG"
 #'   )
 #' )
 #'
-#' derive_param_tte(
-#'   dataset_adsl = adsl,
-#'   by_vars = exprs(AEDECOD),
-#'   event_conditions = list(ttae),
-#'   censor_conditions = list(eos, newdrug),
-#'   source_datasets = list(adsl = adsl, adae = adae),
-#'   set_values_to = exprs(
-#'     PARAMCD = paste0("TTAE", as.numeric(as.factor(AEDECOD))),
-#'     PARAM = paste("Time to First", AEDECOD, "Adverse Event")
-#'   )
-#' ) %>%
-#'   select(USUBJID, STARTDT, PARAMCD, PARAM, ADT, CNSR, SRCSEQ)
+#' @info The `worsening` and `valid_assessment` events define which assessments
+#'   are events and which are valid assessments, respectively. The `EVNTDESC`
+#'   variable is not set by `valid_assessment` as it's value is retrieved from
+#'   the `eos` or `newdrg` censoring events.
 #'
-#' @info In this case the results are still the same, because as explained in
-#'   the above example the latest censor condition is always taken for those
-#'   without an event. For the second subject this is still the end of study
-#'   date.
-#'
-#' So, if we wanted to instead censor here at the new drug date if subject
-#' has one, then we would need to again use the `filter` argument, but this
-#' time for a new end of study censor source object.
 #' @code
-#' eos_nonewdrug <- censor_source(
-#'   dataset_name = "adsl",
-#'   filter = is.na(NEWDRGDT),
-#'   date = EOSDT,
+#' worsening <- event_source(
+#'   dataset_name = "adqs",
+#'   date = ADT,
+#'   filter = CHG <= -10,
 #'   set_values_to = exprs(
-#'     EVNTDESC = "END OF STUDY",
-#'     SRCDOM = "ADSL",
-#'     SRCVAR = "EOSDT"
+#'     EVNTDESC = "WORSENING",
+#'     SRCDOM = "ADQS",
+#'     SRCVAR = "ADT"
 #'   )
 #' )
 #'
+#' valid_assessment <- censor_source(
+#'   dataset_name = "adqs",
+#'   date = ADT,
+#'   filter = !is.na(CHG),
+#'   set_values_to = exprs(
+#'     CNSDTDSC = "LAST ASSESSMENT",
+#'     SRCDOM = "ADQS",
+#'     SRCVAR = "ADT"
+#'   )
+#' )
+#'
+#' @info The `no_baseline`, `no_post_baseline`, and `no_assessment` censoring
+#'   events are used to censor subjects without valid assessments at day one
+#'   (`TRTSDT`). Three events are defined to distinguish the reasons for not
+#'   having valid assessments. The `consider_end_dates = FALSE` argument is used
+#'   for these censoring events to avoid that the `ENVTDESC` and `CNSR` value
+#'   from the end date (`eos` and `newdrg`) is used.
+#'
+#' @code
+#' no_baseline <- censor_source(
+#'   dataset_name = "adqs",
+#'   date = TRTSDT,
+#'   censor = 3,
+#'   filter = is.na(ABLFL),
+#'   order = exprs(ADT),
+#'   consider_end_dates = FALSE,
+#'   set_values_to = exprs(
+#'     EVNTDESC = "NO BASELINE ASSESSMENT",
+#'     CNSDTDSC = "TREATMENT START",
+#'     SRCDOM = "ADQS",
+#'     SRCVAR = "TRTSDT"
+#'   )
+#' )
+#'
+#' no_post_baseline <- censor_source(
+#'   dataset_name = "adqs",
+#'   date = TRTSDT,
+#'   censor = 4,
+#'   filter = ABLFL == "Y",
+#'   order = exprs(ADT),
+#'   consider_end_dates = FALSE,
+#'   set_values_to = exprs(
+#'     EVNTDESC = "NO POST-BASELINE ASSESSMENT",
+#'     CNSDTDSC = "TREATMENT START",
+#'     SRCDOM = "ADQS",
+#'     SRCVAR = "TRTSDT"
+#'   )
+#' )
+#'
+#' no_assessment <- censor_source(
+#'   dataset_name = "adsl",
+#'   date = TRTSDT,
+#'   censor = 5,
+#'   consider_end_dates = FALSE,
+#'   set_values_to = exprs(
+#'     EVNTDESC = "NO ASSESSMENTS",
+#'     CNSDTDSC = "TREATMENT START",
+#'     SRCDOM = "ADSL",
+#'     SRCVAR = "TRTSDT"
+#'   )
+#' )
+#'
+#' @info In the `derive_param_tte()` function call, the order of the censoring
+#'   events in the `censor_conditions` argument is important. For censoring
+#'   events the records with the last date is selected. If there are multiple
+#'   records with the same last date, then the last record in the order
+#'   specified in the `censor_conditions` argument is selected. The events
+#'   `no_assessment`, `no_post_baseline`, and `no_baseline` all use `TRTSDT` as
+#'   date, i.e., the date is the same for them. Specifying `no_assessment`
+#'   before `no_post_baseline` ensures that if a subject has no post-baseline
+#'   assessments the record from `no_post_baseline` is used, i.e., `EVNTDESC` is
+#'   set to `"NO POST-BASELINE ASSESSMENT"`.
+#'
+#' @code
 #' derive_param_tte(
 #'   dataset_adsl = adsl,
-#'   by_vars = exprs(AEDECOD),
-#'   event_conditions = list(ttae),
-#'   censor_conditions = list(eos_nonewdrug, newdrug),
-#'   source_datasets = list(adsl = adsl, adae = adae),
-#'   set_values_to = exprs(
-#'     PARAMCD = paste0("TTAE", as.numeric(as.factor(AEDECOD))),
-#'     PARAM = paste("Time to First", AEDECOD, "Adverse Event")
-#'   )
+#'   source_datasets = list(adsl = adsl, adqs = adqs),
+#'   start_date = TRTSDT,
+#'   end_dates = list(eos, newdrg),
+#'   event_conditions = list(worsening),
+#'   censor_conditions = list(valid_assessment, no_assessment, no_post_baseline, no_baseline),
+#'   set_values_to = exprs(PARAMCD = "TTWORSE")
 #' ) %>%
-#'   select(USUBJID, STARTDT, PARAMCD, PARAM, ADT, CNSR, SRCSEQ)
+#'   select(-STUDYID, -PARAMCD)
 #'
 #' @caption Overall survival time to event parameter
 #' @info In oncology trials, this is commonly derived as time from randomization
@@ -597,19 +918,21 @@
 #'
 #' @caption Further examples
 #' @info Further example usages of this function can be found in the
-#'   `vignette("bds_tte")`.
+#'   `vignette("bds_tte")` and `vignette("tte_analyses")`.
 derive_param_tte <- function(dataset = NULL,
                              dataset_adsl,
                              source_datasets,
                              by_vars = NULL,
                              start_date = TRTSDT,
+                             end_dates = NULL,
                              event_conditions,
-                             censor_conditions,
+                             censor_conditions = NULL,
+                             event_type = "negative",
                              create_datetime = FALSE,
                              set_values_to,
                              subject_keys = get_admiral_option("subject_keys"),
                              check_type = "warning") {
-  # checking and quoting #
+  # checking and quoting ----
   check_type <- assert_character_scalar(
     check_type,
     values = c("warning", "message", "error", "none"),
@@ -619,6 +942,7 @@ derive_param_tte <- function(dataset = NULL,
   assert_vars(by_vars, optional = TRUE)
   start_date <- assert_symbol(enexpr(start_date))
   assert_data_frame(dataset_adsl, required_vars = exprs(!!start_date))
+  assert_list_of(end_dates, "censor_source")
   assert_vars(subject_keys)
   assert_list_of(event_conditions, "event_source")
   assert_list_of(censor_conditions, "censor_source")
@@ -656,6 +980,11 @@ derive_param_tte <- function(dataset = NULL,
       )
     )
   )
+  event_type <- assert_character_scalar(
+    event_type,
+    values = c("negative", "positive"),
+    case_sensitive = FALSE
+  )
   assert_logical_scalar(create_datetime)
   assert_varval_list(set_values_to, optional = TRUE)
   if (!is.null(by_vars)) {
@@ -666,7 +995,36 @@ derive_param_tte <- function(dataset = NULL,
   }
   tmp_event <- get_new_tmp_var(dataset)
 
-  # determine events #
+  # select source records ----
+  if (!is.null(end_dates)) {
+    # determine end of observation period
+    end_date_data <- filter_date_sources(
+      sources = end_dates,
+      source_datasets = source_datasets,
+      by_vars = by_vars,
+      create_datetime = create_datetime,
+      subject_keys = subject_keys,
+      mode = "first",
+      check_type = check_type
+    )
+
+    end_date_var <- get_new_tmp_var(end_date_data, prefix = "tmp_end_date")
+
+    end_date_data <- end_date_data %>%
+      rename(!!end_date_var := ADT)
+
+    if (event_type == "positive" || is.null(censor_conditions)) {
+      # this results in censoring at the first of the end dates because dates
+      # after the first of the end dates are excluded and then the last date is
+      # selected
+      censor_conditions <- c(censor_conditions, end_dates)
+    }
+  } else {
+    end_date_data <- NULL
+    end_date_var <- NULL
+  }
+
+  # determine events
   event_data <- filter_date_sources(
     sources = event_conditions,
     source_datasets = source_datasets,
@@ -674,11 +1032,13 @@ derive_param_tte <- function(dataset = NULL,
     create_datetime = create_datetime,
     subject_keys = subject_keys,
     mode = "first",
+    end_date_data = end_date_data,
+    end_date_var = end_date_var,
     check_type = check_type
   ) %>%
     mutate(!!tmp_event := 1L)
 
-  # determine censoring observations #
+  # determine censoring observations
   censor_data <- filter_date_sources(
     sources = censor_conditions,
     source_datasets = source_datasets,
@@ -686,11 +1046,13 @@ derive_param_tte <- function(dataset = NULL,
     create_datetime = create_datetime,
     subject_keys = subject_keys,
     mode = "last",
+    end_date_data = end_date_data,
+    end_date_var = end_date_var,
     check_type = check_type
   ) %>%
     mutate(!!tmp_event := 0L)
 
-  # determine variable to add from ADSL #
+  # determine variable to add from ADSL ----
   if (create_datetime) {
     date_var <- sym("ADTM")
     start_var <- sym("STARTDTM")
@@ -724,7 +1086,7 @@ derive_param_tte <- function(dataset = NULL,
   adsl <- dataset_adsl %>%
     select(!!!adsl_vars)
 
-  # create observations for new parameter #
+  # create observations for new parameter ----
   new_param <- filter_extreme(
     bind_rows(event_data, censor_data),
     by_vars = expr_c(subject_keys, by_vars),
@@ -745,7 +1107,7 @@ derive_param_tte <- function(dataset = NULL,
       assert_one_to_one(new_param, exprs(PARAMCD), by_vars)
     }
 
-    # -vars2chr(by_vars) does not work for 3.5 #
+    # -vars2chr(by_vars) does not work for 3.5
     new_param <- select(new_param, !!!negate_vars(by_vars))
   }
 
@@ -757,7 +1119,7 @@ derive_param_tte <- function(dataset = NULL,
     }
   }
 
-  # add new parameter to input dataset #
+  # add new parameter to input dataset
   bind_rows(dataset, new_param)
 }
 
@@ -882,6 +1244,8 @@ filter_date_sources <- function(sources,
                                 create_datetime = FALSE,
                                 subject_keys,
                                 mode,
+                                end_date_data = NULL,
+                                end_date_var = NULL,
                                 check_type = "none") {
   assert_list_of(sources, "tte_source")
   assert_list_of(source_datasets, "data.frame")
@@ -892,7 +1256,8 @@ filter_date_sources <- function(sources,
     values = c("first", "last"),
     case_sensitive = FALSE
   )
-
+  assert_data_frame(end_date_data, optional = TRUE)
+  assert_symbol(end_date_var, optional = TRUE)
   if (create_datetime) {
     date_var <- sym("ADTM")
   } else {
@@ -917,6 +1282,29 @@ filter_date_sources <- function(sources,
       var = !!source_date_var,
       dataset_name = sources[[i]]$dataset_name
     )
+
+    if (!is.null(end_date_data) && sources[[i]]$consider_end_dates) {
+      if (mode == "first") {
+        # for events only the end date variable should be added but not CNSR
+        new_vars <- exprs(!!end_date_var)
+      } else {
+        new_vars <- NULL
+      }
+      source_dataset <- derive_vars_merged(
+        source_dataset,
+        dataset_add = end_date_data,
+        by_vars = expr_c(subject_keys, by_vars),
+        new_vars = new_vars
+      ) %>%
+        # use filter_out() in admiral 1.6
+        filter(
+          !(!!source_date_var > !!end_date_var) | is.na(!!source_date_var) |
+            is.na(!!end_date_var)
+        )
+      keep_end_date_vars <- setdiff(syms(colnames(end_date_data)), c(subject_keys, by_vars))
+    } else {
+      keep_end_date_vars <- NULL
+    }
     # wrap filter_extreme in tryCatch to catch duplicate records and create a message
     data[[i]] <- rlang::try_fetch(
       {
@@ -951,13 +1339,21 @@ filter_date_sources <- function(sources,
       date_derv <- exprs(!!date_var := date(!!source_date_var))
     }
 
+    if ("CNSR" %in% colnames(data[[i]])) {
+      # if CNSR is already available (from the end_date_data), use it otherwise
+      # use the value from the tte_source object
+      cnsr_val <- expr(coalesce(CNSR, sources[[i]]$censor))
+    } else {
+      cnsr_val <- expr(sources[[i]]$censor)
+    }
     data[[i]] <- mutate(
       data[[i]],
       !!!by_vars,
       !!!subject_keys,
       !!!sources[[i]]$set_values_to,
-      CNSR = sources[[i]]$censor,
+      CNSR = !!cnsr_val,
       !!!date_derv,
+      !!!keep_end_date_vars,
       tmp_source_nr = i,
       .keep = "none"
     )
@@ -1112,6 +1508,13 @@ extend_source_datasets <- function(source_datasets,
 #'
 #' @permitted list of variables created by `exprs()` e.g. `exprs(ASEQ)`.
 #'
+#' @param consider_end_dates Should end dates be considered?
+#'
+#'   If end dates are considered, the records which are after the end date are
+#'   ignored and the censor value specified for the end date takes precedence.
+#'
+#' @permitted [boolean]
+#'
 #' @keywords source_specifications
 #' @family source_specifications
 #'
@@ -1123,7 +1526,8 @@ tte_source <- function(dataset_name,
                        date,
                        censor = 0,
                        set_values_to = NULL,
-                       order = order) {
+                       order = order,
+                       consider_end_dates = TRUE) {
   out <- list(
     dataset_name = assert_character_scalar(dataset_name),
     filter = assert_filter_cond(enexpr(filter), optional = TRUE),
@@ -1134,7 +1538,8 @@ tte_source <- function(dataset_name,
       named = TRUE,
       optional = TRUE
     ),
-    order = order
+    order = order,
+    consider_end_dates = assert_logical_scalar(consider_end_dates)
   )
   class(out) <- c("tte_source", "source", "list")
   out
@@ -1183,7 +1588,8 @@ event_source <- function(dataset_name,
     date = !!assert_expr(enexpr(date)),
     censor = 0,
     set_values_to = set_values_to,
-    order = order
+    order = order,
+    consider_end_dates = TRUE
   )
   class(out) <- c("event_source", class(out))
   out
@@ -1225,14 +1631,16 @@ censor_source <- function(dataset_name,
                           date,
                           censor = 1,
                           set_values_to = NULL,
-                          order = NULL) {
+                          order = NULL,
+                          consider_end_dates = TRUE) {
   out <- tte_source(
     dataset_name = assert_character_scalar(dataset_name),
     filter = !!enexpr(filter),
     date = !!assert_expr(enexpr(date)),
     censor = assert_integer_scalar(censor, subset = "positive"),
     set_values_to = set_values_to,
-    order = order
+    order = order,
+    consider_end_dates = assert_logical_scalar(consider_end_dates)
   )
   class(out) <- c("censor_source", class(out))
   out

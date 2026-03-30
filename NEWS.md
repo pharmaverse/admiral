@@ -4,8 +4,14 @@
 
 ## Updates of Existing Functions
 
-- The `filter_add` argument in `derive_var_joined_exist_flag()` is no longer erroneously
-ignored. (#3018)
+- The `end_dates` argument for specifying dates which restrict the observation
+period and the `event_type` argument for specifying if the event is negative
+(progression, death, worsening, ...) were added to `derive_param_tte()`. The
+`consider_end_dates` field was added to the `event_source()`, `censor_source()`,
+and `tte_source()` objects. (#2952)
+
+- The `filter_add` argument in `derive_var_joined_exist_flag()` is no longer
+erroneously ignored. (#3018)
 
 - Fixed poorly formatted warning messages in `derive_param_computed()` and `derive_vars_computed()`. (#2969)
 
@@ -26,6 +32,9 @@ specified under `save_path`. This is because this functionality did not work as 
   **Phase 4 (removed)**
 
 ## Documentation
+
+- New vignette "Time-to-Event Analyses" added to provide guidance for different
+scenarios. (#2900)
 
 - Fix `UDTC` derivation in `ADPPK` to use source domain `DTC` variables. (#3011)
 

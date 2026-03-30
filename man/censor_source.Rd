@@ -10,7 +10,8 @@ censor_source(
   date,
   censor = 1,
   set_values_to = NULL,
-  order = NULL
+  order = NULL,
+  consider_end_dates = TRUE
 )
 }
 \arguments{
@@ -66,6 +67,16 @@ that the source dataset is sorted on after \code{date}.
 \describe{
 \item{Permitted values}{list of variables created by \code{exprs()} e.g. \code{exprs(ASEQ)}.}
 \item{Default value}{\code{order}}
+}}
+
+\item{consider_end_dates}{Should end dates be considered?
+
+If end dates are considered, the records which are after the end date are
+ignored and the censor value specified for the end date takes precedence.
+
+\describe{
+\item{Permitted values}{\code{TRUE}, \code{FALSE}}
+\item{Default value}{\code{TRUE}}
 }}
 }
 \value{

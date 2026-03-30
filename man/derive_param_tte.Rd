@@ -10,8 +10,10 @@ derive_param_tte(
   source_datasets,
   by_vars = NULL,
   start_date = TRTSDT,
+  end_dates = NULL,
   event_conditions,
-  censor_conditions,
+  censor_conditions = NULL,
+  event_type = "negative",
   create_datetime = FALSE,
   set_values_to,
   subject_keys = get_admiral_option("subject_keys"),
@@ -77,6 +79,25 @@ the origin date.
 \item{Default value}{\code{TRTSDT}}
 }}
 
+\item{end_dates}{Time to event end date(s)
+
+A list of \code{censor_source()} objects is expected. Each date restricts the
+observation period for time-to-event analysis. For each subject the
+earliest date across all \code{end_dates} is used as the end date for that
+subject. The records defined by \code{event_conditions} and \code{censor_conditions}
+are restricted to dates before or equal to the selected end date.
+
+This argument should be specified if there is more than one reason for
+stopping the observation of a subject, e.g., end of study, death, or
+intercurrent events like start of new drug. If there is only one reason for
+stopping the observation, it is sufficient to just include this as a
+censoring condition in \code{censor_conditions}.
+
+\describe{
+\item{Permitted values}{a list of source objects, e.g., \code{list(pd, death)}}
+\item{Default value}{\code{NULL}}
+}}
+
 \item{event_conditions}{Sources and conditions defining events
 
 A list of \code{event_source()} objects is expected.
@@ -88,11 +109,37 @@ A list of \code{event_source()} objects is expected.
 
 \item{censor_conditions}{Sources and conditions defining censorings
 
-A list of \code{censor_source()} objects is expected.
+A list of \code{censor_source()} objects is expected. Each records defined by
+the \code{censor_conditions} should be a possible censoring time, i.e., at this
+time there should be known that the event of interest has not yet occurred.
+Assessment were it is not known whether the event of interest has occurred
+or not should not be included as censoring times, e.g., when an assessment
+was not evaluable.
+
+It is acceptable to include records with event as long as these are also
+included in \code{event_conditions} because event take precedence over
+censorings.
 
 \describe{
 \item{Permitted values}{a list of source objects, e.g., \code{list(pd, death)}}
-\item{Default value}{none}
+\item{Default value}{\code{NULL}}
+}}
+
+\item{event_type}{Type of event
+
+For events that are considered unfavorable, e.g., adverse events,
+progression, worsening, etc., the value should be \code{"negative"} and for
+events that are considered favorable, e.g., response to treatment,
+improvement, etc., the value should be \code{"positive"}.
+
+If \code{event_type} is specified as \code{"positive"}, the objects specified for
+\code{end_dates} are added to the censoring conditions (\code{censor_conditions}).
+I.e., if a subject is censored, it is censored at the earliest date
+provided by \code{end_dates}.
+
+\describe{
+\item{Permitted values}{\code{"negative"}, \code{"positive"}}
+\item{Default value}{\code{"negative"}}
 }}
 
 \item{create_datetime}{Create datetime variables?
@@ -128,10 +175,10 @@ A list of symbols created using \code{exprs()} is expected.
 
 \item{check_type}{Check uniqueness
 
-If \code{"warning"}, \code{"message"}, or \code{"error"} is specified, the specified message is issued
-if the observations of the source datasets are not unique with respect to the
-by variables and the date and order specified in the \code{event_source()} and
-\code{censor_source()} objects.
+If \code{"warning"}, \code{"message"}, or \code{"error"} is specified, the specified
+message is issued if the observations of the source datasets are not unique
+with respect to the by variables and the date and order specified in the
+\code{event_source()} and \code{censor_source()} objects.
 
 \describe{
 \item{Permitted values}{\code{"none"}, \code{"message"}, \code{"warning"}, \code{"error"}}
@@ -292,6 +339,14 @@ derive_param_tte(
 By variables can be added using the \code{by_vars} argument, e.g., now for
 each subject the time to first occurrence of each adverse event preferred
 term (\code{AEDECOD}) should be created as parameters.
+
+Please note that CDISC requires separate parameters (\code{PARAMCD}, \code{PARAM}) for
+the by groups. Therefore the variables specified for the \code{by_vars} parameter
+are not included in the output dataset. The \code{PARAMCD} variable should be
+specified for the \code{set_value_to} parameter using an expression on the right
+hand side which results in a unique value for each by group. If the values of
+the by variables should be included in the output dataset, they can be stored
+in \code{PARCATy} variables.
 
 \if{html}{\out{<div class="sourceCode r">}}\preformatted{derive_param_tte(
   dataset_adsl = adsl,
@@ -503,84 +558,362 @@ derive_param_tte(
 
 Note above how the earliest event date is always taken and the latest
 censor date.}
-\subsection{Using different censor values (\code{censor}) and censoring at earliest
-occurring censor condition}{
+\subsection{End of the observation period (\code{end_dates})}{
 
-Within \code{censor_source()} the value used to denote a censor can be
-changed from the default of \code{1}.
+The \code{end_dates} argument can be used to specify the end of the
+observation period if there is more than one date which restricts the
+observation period, e.g., end of study date and intercurrent events like
+new drug date. The earliest date is used as the end of the observation
+period and events/censorings occurring after this date are not considered.
 
-In this example an extra censor is used for new drug date with the value of \code{2}.
+In the example two \code{censor_source()} objects are defined, \code{eos} and \code{newdrg},
+for end of study date and new drug date, respectively, and then passed to the
+\code{end_dates} argument.
 
-\if{html}{\out{<div class="sourceCode r">}}\preformatted{newdrug <- censor_source(
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{adsl <- tribble(
+  ~USUBJID, ~TRTSDT,           ~EOSDT,            ~NEWDRGDT,
+  "01",     ymd("2020-12-06"), ymd("2021-03-06"), NA,
+  "02",     ymd("2021-01-16"), ymd("2021-04-03"), ymd("2021-03-21"),
+  "03",     ymd("2021-02-01"), NA,                NA,
+  "04",     ymd("2021-03-10"), NA,                NA
+) \%>\%
+  mutate(STUDYID = "AB42")
+
+adqs <- tribble(
+  ~USUBJID, ~ADT,              ~CHG,
+  "01",     ymd("2021-01-03"),    5,
+  "01",     ymd("2021-02-03"),   -2,
+  "01",     ymd("2021-03-01"),   NA,
+  "01",     ymd("2021-03-07"),   10,
+  "02",     ymd("2021-01-03"),    4,
+  "02",     ymd("2021-02-03"),   -1,
+  "02",     ymd("2021-04-01"),  -12,
+  "03",     ymd("2021-02-15"),    3,
+  "03",     ymd("2021-03-15"),  -15
+) \%>\%
+  mutate(STUDYID = "AB42")
+
+eos <- censor_source(
+  dataset_name = "adsl",
+  date = EOSDT
+)
+
+newdrg <- censor_source(
+  dataset_name = "adsl",
+  date = NEWDRGDT
+)
+
+# Note to user: The source function has changed.
+worsening <- event_source(
+  dataset_name = "adqs",
+  date = ADT,
+  filter = CHG <= -10
+)
+
+valid_assessment <- censor_source(
+  dataset_name = "adqs",
+  date = ADT,
+  filter = !is.na(CHG)
+)
+
+no_assessment <- censor_source(
+  dataset_name = "adsl",
+  date = TRTSDT
+)
+
+derive_param_tte(
+  dataset_adsl = adsl,
+  source_datasets = list(adsl = adsl, adqs = adqs),
+  start_date = TRTSDT,
+  end_dates = list(eos, newdrg),
+  event_conditions = list(worsening),
+  censor_conditions = list(valid_assessment, no_assessment),
+  set_values_to = exprs(PARAMCD = "TTWORSE")
+) \%>\%
+  select(-STUDYID, -PARAMCD) \%>\%
+  derive_vars_merged(
+    dataset_add = adsl,
+    by_vars = exprs(USUBJID),
+    new_vars = exprs(EOSDT, NEWDRGDT)
+  )
+#> # A tibble: 4 × 6
+#>   USUBJID ADT         CNSR STARTDT    EOSDT      NEWDRGDT  
+#>   <chr>   <date>     <int> <date>     <date>     <date>    
+#> 1 01      2021-02-03     1 2020-12-06 2021-03-06 NA        
+#> 2 02      2021-02-03     1 2021-01-16 2021-04-03 2021-03-21
+#> 3 03      2021-03-15     0 2021-02-01 NA         NA        
+#> 4 04      2021-03-10     1 2021-03-10 NA         NA        }\if{html}{\out{</div>}}
+
+Please note that
+\itemize{
+\item subject \code{02} has no event because the assessment with \code{CHG = -12} was
+excluded as it is after the start of a new drug.
+\item subject \code{01} and \code{02} are censored at the last valid assessment before the
+end of the observation period.
+}}
+\subsection{Positive event (\code{event_type})}{
+
+If positive events like response or improvement are analyzed,
+\code{event_type = "positive"} should be used. Subjects without events are
+censored at the end of the observation period (defined by \code{end_dates})
+instead of the last assessment. For positive events this is the more
+conservative approach.
+
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{adsl <- tribble(
+  ~USUBJID, ~TRTSDT,           ~EOSDT,            ~NEWDRGDT,
+  "01",     ymd("2020-12-06"), ymd("2021-03-06"), NA,
+  "02",     ymd("2021-01-16"), ymd("2021-04-03"), ymd("2021-03-21"),
+  "03",     ymd("2021-02-01"), NA,                NA
+) \%>\%
+  mutate(STUDYID = "AB42")
+
+adqs <- tribble(
+  ~USUBJID, ~ADT,              ~CHG,
+  "01",     ymd("2021-01-03"),    5,
+  "01",     ymd("2021-02-03"),   -2,
+  "01",     ymd("2021-03-01"),   NA,
+  "01",     ymd("2021-03-07"),   10,
+  "02",     ymd("2021-01-03"),    4,
+  "02",     ymd("2021-02-03"),   -1,
+  "02",     ymd("2021-04-01"),  -12,
+  "03",     ymd("2021-02-15"),    3,
+  "03",     ymd("2021-03-15"),   15
+) \%>\%
+  mutate(STUDYID = "AB42")
+
+eos <- censor_source(
+  dataset_name = "adsl",
+  date = EOSDT
+)
+
+newdrg <- censor_source(
+  dataset_name = "adsl",
+  date = NEWDRGDT
+)
+
+improvement <- event_source(
+  dataset_name = "adqs",
+  date = ADT,
+  filter = CHG >= 10
+)
+
+valid_assessment <- censor_source(
+  dataset_name = "adqs",
+  date = ADT,
+  filter = !is.na(CHG)
+)
+
+derive_param_tte(
+  dataset_adsl = adsl,
+  source_datasets = list(adsl = adsl, adqs = adqs),
+  start_date = TRTSDT,
+  end_dates = list(eos, newdrg),
+  event_conditions = list(improvement),
+  censor_conditions = list(valid_assessment),
+  event_type = "positive",
+  set_values_to = exprs(PARAMCD = "TTIMPROV")
+) \%>\%
+  select(-STUDYID) \%>\%
+  derive_vars_merged(
+    dataset_add = adsl,
+    by_vars = exprs(USUBJID),
+    new_vars = exprs(EOSDT, NEWDRGDT)
+  )
+#> # A tibble: 3 × 7
+#>   USUBJID ADT         CNSR STARTDT    PARAMCD  EOSDT      NEWDRGDT  
+#>   <chr>   <date>     <int> <date>     <chr>    <date>     <date>    
+#> 1 01      2021-03-06     1 2020-12-06 TTIMPROV 2021-03-06 NA        
+#> 2 02      2021-03-21     1 2021-01-16 TTIMPROV 2021-04-03 2021-03-21
+#> 3 03      2021-03-15     0 2021-02-01 TTIMPROV NA         NA        }\if{html}{\out{</div>}}
+
+Please note that subject \code{01} and \code{02} are censored at the end of the
+observation period instead of at the last assessment.}
+\subsection{Differentiating censoring reasons}{
+
+There are three ADaM variables which allow to differentiate censoring
+reasons:
+\itemize{
+\item \code{CNSR}: different values \verb{>1} can be used to differentiate censoring
+reasons, e.g., \code{1} for end of study, \code{2} for new drug, etc.
+\item \code{EVNTDESC}: description of the event or censoring, e.g., \code{"END OF STUDY"}.
+\item \code{CNSDTDSC}: description of the date used for censoring when different
+from the censoring event, e.g., \code{"LAST ASSESSMENT"} if the censoring event
+is the end of the study but the censoring date is not the end of study date
+but the last assessment date before the end of the study.
+}
+
+In the example five censoring events are considered:
+\itemize{
+\item end of study (\code{eos}, \code{no_worsening})
+\item start of a new drug (\code{newdrg}, \code{no_worsening})
+\item no post-baseline assessments (\code{no_post_baseline})
+\item no baseline assessment (\code{no_baseline})
+\item no assessments (\code{no_assessments})
+}
+
+In the example data, the first five subjects have the five censoring events,
+respectively, and the sixth subject has an event.
+
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{adsl <- tribble(
+~USUBJID, ~TRTSDT,           ~EOSDT,            ~NEWDRGDT,
+"01",     ymd("2020-12-06"), ymd("2021-03-06"), NA,
+"02",     ymd("2021-01-16"), ymd("2021-04-03"), ymd("2021-03-21"),
+"03",     ymd("2021-03-10"), NA,                NA,
+"04",     ymd("2021-04-02"), NA,                NA,
+"05",     ymd("2021-05-09"), NA,                NA,
+"06",     ymd("2021-02-01"), NA,                NA
+) \%>\%
+  mutate(STUDYID = "AB42")
+
+adqs <- tribble(
+  ~USUBJID, ~ADT,              ~CHG, ~ABLFL,
+  "01",     ymd("2021-12-06"),    0, "Y",
+  "01",     ymd("2021-02-03"),   -2, NA,
+  "01",     ymd("2021-03-01"),   NA, NA,
+  "01",     ymd("2021-03-07"),   10, NA,
+  "02",     ymd("2021-01-16"),    0, "Y",
+  "02",     ymd("2021-02-03"),   -1, NA,
+  "02",     ymd("2021-04-01"),  -12, NA,
+  "03",     ymd("2021-03-20"),   NA, NA,
+  "03",     ymd("2021-04-07"),   NA, NA,
+  "04",     ymd("2021-04-02"),    0, "Y",
+  "06",     ymd("2021-02-01"),    0, "Y",
+  "06",     ymd("2021-03-15"),  -15, NA
+) \%>\%
+  mutate(STUDYID = "AB42") \%>\%
+  derive_vars_merged(
+    dataset_add = adsl,
+    by_vars = exprs(USUBJID),
+    new_vars = exprs(TRTSDT)
+  )}\if{html}{\out{</div>}}
+
+The \code{eos} and \code{newdrg} censoring events define the end dates.
+
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{eos <- censor_source(
+  dataset_name = "adsl",
+  date = EOSDT,
+  censor = 1,
+  set_values_to = exprs(
+    EVNTDESC = "END OF STUDY"
+  )
+)
+
+newdrg <- censor_source(
   dataset_name = "adsl",
   date = NEWDRGDT,
   censor = 2,
   set_values_to = exprs(
-    EVNTDESC = "NEW DRUG RECEIVED",
-    SRCDOM = "ADSL",
-    SRCVAR = "NEWDRGDT"
+    EVNTDESC = "NEW DRUG"
+  )
+)}\if{html}{\out{</div>}}
+
+The \code{worsening} and \code{valid_assessment} events define which assessments
+are events and which are valid assessments, respectively. The \code{EVNTDESC}
+variable is not set by \code{valid_assessment} as it's value is retrieved from
+the \code{eos} or \code{newdrg} censoring events.
+
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{worsening <- event_source(
+  dataset_name = "adqs",
+  date = ADT,
+  filter = CHG <= -10,
+  set_values_to = exprs(
+    EVNTDESC = "WORSENING",
+    SRCDOM = "ADQS",
+    SRCVAR = "ADT"
   )
 )
 
-derive_param_tte(
-  dataset_adsl = adsl,
-  by_vars = exprs(AEDECOD),
-  event_conditions = list(ttae),
-  censor_conditions = list(eos, newdrug),
-  source_datasets = list(adsl = adsl, adae = adae),
+valid_assessment <- censor_source(
+  dataset_name = "adqs",
+  date = ADT,
+  filter = !is.na(CHG),
   set_values_to = exprs(
-    PARAMCD = paste0("TTAE", as.numeric(as.factor(AEDECOD))),
-    PARAM = paste("Time to First", AEDECOD, "Adverse Event")
+    CNSDTDSC = "LAST ASSESSMENT",
+    SRCDOM = "ADQS",
+    SRCVAR = "ADT"
   )
-) \%>\%
-  select(USUBJID, STARTDT, PARAMCD, PARAM, ADT, CNSR, SRCSEQ)
-#> # A tibble: 4 × 7
-#>   USUBJID STARTDT    PARAMCD PARAM                       ADT         CNSR SRCSEQ
-#>   <chr>   <date>     <chr>   <chr>                       <date>     <int>  <dbl>
-#> 1 01      2020-12-06 TTAE1   Time to First Cough Advers… 2021-03-04     0      2
-#> 2 01      2020-12-06 TTAE2   Time to First Flu Adverse … 2021-01-03     0      1
-#> 3 02      2021-01-16 TTAE1   Time to First Cough Advers… 2021-02-03     1     NA
-#> 4 02      2021-01-16 TTAE2   Time to First Flu Adverse … 2021-02-03     1     NA}\if{html}{\out{</div>}}
+)}\if{html}{\out{</div>}}
 
-In this case the results are still the same, because as explained in
-the above example the latest censor condition is always taken for those
-without an event. For the second subject this is still the end of study
-date.
+The \code{no_baseline}, \code{no_post_baseline}, and \code{no_assessment} censoring
+events are used to censor subjects without valid assessments at day one
+(\code{TRTSDT}). Three events are defined to distinguish the reasons for not
+having valid assessments. The \code{consider_end_dates = FALSE} argument is used
+for these censoring events to avoid that the \code{ENVTDESC} and \code{CNSR} value
+from the end date (\code{eos} and \code{newdrg}) is used.
 
-So, if we wanted to instead censor here at the new drug date if subject
-has one, then we would need to again use the \code{filter} argument, but this
-time for a new end of study censor source object.
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{no_baseline <- censor_source(
+  dataset_name = "adqs",
+  date = TRTSDT,
+  censor = 3,
+  filter = is.na(ABLFL),
+  order = exprs(ADT),
+  consider_end_dates = FALSE,
+  set_values_to = exprs(
+    EVNTDESC = "NO BASELINE ASSESSMENT",
+    CNSDTDSC = "TREATMENT START",
+    SRCDOM = "ADQS",
+    SRCVAR = "TRTSDT"
+  )
+)
 
-\if{html}{\out{<div class="sourceCode r">}}\preformatted{eos_nonewdrug <- censor_source(
+no_post_baseline <- censor_source(
+  dataset_name = "adqs",
+  date = TRTSDT,
+  censor = 4,
+  filter = ABLFL == "Y",
+  order = exprs(ADT),
+  consider_end_dates = FALSE,
+  set_values_to = exprs(
+    EVNTDESC = "NO POST-BASELINE ASSESSMENT",
+    CNSDTDSC = "TREATMENT START",
+    SRCDOM = "ADQS",
+    SRCVAR = "TRTSDT"
+  )
+)
+
+no_assessment <- censor_source(
   dataset_name = "adsl",
-  filter = is.na(NEWDRGDT),
-  date = EOSDT,
+  date = TRTSDT,
+  censor = 5,
+  consider_end_dates = FALSE,
   set_values_to = exprs(
-    EVNTDESC = "END OF STUDY",
+    EVNTDESC = "NO ASSESSMENTS",
+    CNSDTDSC = "TREATMENT START",
     SRCDOM = "ADSL",
-    SRCVAR = "EOSDT"
+    SRCVAR = "TRTSDT"
   )
-)
+)}\if{html}{\out{</div>}}
 
-derive_param_tte(
+In the \code{derive_param_tte()} function call, the order of the censoring
+events in the \code{censor_conditions} argument is important. For censoring
+events the records with the last date is selected. If there are multiple
+records with the same last date, then the last record in the order
+specified in the \code{censor_conditions} argument is selected. The events
+\code{no_assessment}, \code{no_post_baseline}, and \code{no_baseline} all use \code{TRTSDT} as
+date, i.e., the date is the same for them. Specifying \code{no_assessment}
+before \code{no_post_baseline} ensures that if a subject has no post-baseline
+assessments the record from \code{no_post_baseline} is used, i.e., \code{EVNTDESC} is
+set to \code{"NO POST-BASELINE ASSESSMENT"}.
+
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{derive_param_tte(
   dataset_adsl = adsl,
-  by_vars = exprs(AEDECOD),
-  event_conditions = list(ttae),
-  censor_conditions = list(eos_nonewdrug, newdrug),
-  source_datasets = list(adsl = adsl, adae = adae),
-  set_values_to = exprs(
-    PARAMCD = paste0("TTAE", as.numeric(as.factor(AEDECOD))),
-    PARAM = paste("Time to First", AEDECOD, "Adverse Event")
-  )
+  source_datasets = list(adsl = adsl, adqs = adqs),
+  start_date = TRTSDT,
+  end_dates = list(eos, newdrg),
+  event_conditions = list(worsening),
+  censor_conditions = list(valid_assessment, no_assessment, no_post_baseline, no_baseline),
+  set_values_to = exprs(PARAMCD = "TTWORSE")
 ) \%>\%
-  select(USUBJID, STARTDT, PARAMCD, PARAM, ADT, CNSR, SRCSEQ)
-#> # A tibble: 4 × 7
-#>   USUBJID STARTDT    PARAMCD PARAM                       ADT         CNSR SRCSEQ
-#>   <chr>   <date>     <chr>   <chr>                       <date>     <int>  <dbl>
-#> 1 01      2020-12-06 TTAE1   Time to First Cough Advers… 2021-03-04     0      2
-#> 2 01      2020-12-06 TTAE2   Time to First Flu Adverse … 2021-01-03     0      1
-#> 3 02      2021-01-16 TTAE1   Time to First Cough Advers… 2021-01-16     2     NA
-#> 4 02      2021-01-16 TTAE2   Time to First Flu Adverse … 2021-01-16     2     NA}\if{html}{\out{</div>}}}
+  select(-STUDYID, -PARAMCD)
+#> # A tibble: 6 × 8
+#>   USUBJID ADT        EVNTDESC            SRCDOM SRCVAR  CNSR CNSDTDSC STARTDT   
+#>   <chr>   <date>     <chr>               <chr>  <chr>  <int> <chr>    <date>    
+#> 1 01      2021-02-03 END OF STUDY        ADQS   ADT        1 LAST AS… 2020-12-06
+#> 2 02      2021-02-03 NEW DRUG            ADQS   ADT        2 LAST AS… 2021-01-16
+#> 3 03      2021-03-10 NO BASELINE ASSESS… ADQS   TRTSDT     3 TREATME… 2021-03-10
+#> 4 04      2021-04-02 NO POST-BASELINE A… ADQS   TRTSDT     4 TREATME… 2021-04-02
+#> 5 05      2021-05-09 NO ASSESSMENTS      ADSL   TRTSDT     5 TREATME… 2021-05-09
+#> 6 06      2021-03-15 WORSENING           ADQS   ADT        0 <NA>     2021-02-01}\if{html}{\out{</div>}}}
 \subsection{Overall survival time to event parameter}{
 
 In oncology trials, this is commonly derived as time from randomization
@@ -723,5 +1056,5 @@ derive_param_tte(
 \subsection{Further examples}{
 
 Further example usages of this function can be found in the
-\code{vignette("bds_tte")}.}}
+\code{vignette("bds_tte")} and \code{vignette("tte_analyses")}.}}
 
