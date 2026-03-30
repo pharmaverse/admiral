@@ -22,7 +22,7 @@ articles:
   questionnaires: questionnaires.html
   articles/templates: templates.html
   visits_periods: visits_periods.html
-last_built: 2026-03-24T18:36Z
+last_built: 2026-03-30T15:20Z
 urls:
   reference: https:/pharmaverse.github.io/admiral/2906-enhance-examples-derive-var-merged-ef-msrc/reference
   article: https:/pharmaverse.github.io/admiral/2906-enhance-examples-derive-var-merged-ef-msrc/articles

@@ -45,13 +45,18 @@
 - The documentation for
   [`derive_var_merged_ef_msrc()`](https:/pharmaverse.github.io/admiral/2906-enhance-examples-derive-var-merged-ef-msrc/reference/derive_var_merged_ef_msrc.md)
   was enhanced with structured examples covering `flag_events` with
-  multiple sources, customizing
-  `true_value`/`false_value`/`missing_value`, and per-source `by_vars`
-  renaming.
+  multiple sources, customizing `true_value`, `false_value`, and
+  `missing_value`, and per-source `by_vars` renaming.
   ([\#2906](https://github.com/pharmaverse/admiral/issues/2906))
 
 - Fix `UDTC` derivation in `ADPPK` to use source domain `DTC` variables.
   ([\#3011](https://github.com/pharmaverse/admiral/issues/3011))
+
+- Fixed example in
+  [`derive_var_nfrlt()`](https:/pharmaverse.github.io/admiral/2906-enhance-examples-derive-var-merged-ef-msrc/reference/derive_var_nfrlt.md)
+  to use `NA_character_` instead of `""` for missing unit values,
+  consistent with the admiral programming strategy.
+  ([\#3027](https://github.com/pharmaverse/admiral/issues/3027))
 
 - New Estimands vignette added, describing possible implementations of
   estimands with [admiral](https://pharmaverse.github.io/admiral/) code.
