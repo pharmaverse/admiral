@@ -39,7 +39,7 @@ consolidate_metadata(
   Permitted values
 
   :   A list of variables created by
-      [`exprs()`](https:/pharmaverse.github.io/admiral/cran-release/copilot/enhance-examples-derive-vars-merged-summary/reference/reexport-exprs.md)
+      [`exprs()`](https:/pharmaverse.github.io/admiral/copilot/enhance-examples-derive-vars-merged-summary/reference/reexport-exprs.md)
 
   Default value
 
@@ -107,9 +107,9 @@ selected.
 ## See also
 
 Creating auxiliary datasets:
-[`create_period_dataset()`](https:/pharmaverse.github.io/admiral/cran-release/copilot/enhance-examples-derive-vars-merged-summary/reference/create_period_dataset.md),
-[`create_query_data()`](https:/pharmaverse.github.io/admiral/cran-release/copilot/enhance-examples-derive-vars-merged-summary/reference/create_query_data.md),
-[`create_single_dose_dataset()`](https:/pharmaverse.github.io/admiral/cran-release/copilot/enhance-examples-derive-vars-merged-summary/reference/create_single_dose_dataset.md)
+[`create_period_dataset()`](https:/pharmaverse.github.io/admiral/copilot/enhance-examples-derive-vars-merged-summary/reference/create_period_dataset.md),
+[`create_query_data()`](https:/pharmaverse.github.io/admiral/copilot/enhance-examples-derive-vars-merged-summary/reference/create_query_data.md),
+[`create_single_dose_dataset()`](https:/pharmaverse.github.io/admiral/copilot/enhance-examples-derive-vars-merged-summary/reference/create_single_dose_dataset.md)
 
 ## Examples
 

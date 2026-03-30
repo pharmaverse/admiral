@@ -16,7 +16,7 @@ records_source(dataset_name, filter = NULL, new_vars)
 
   The name refers to the dataset provided by the `source_datasets`
   argument of
-  [`derive_param_extreme_record()`](https:/pharmaverse.github.io/admiral/cran-release/copilot/enhance-examples-derive-vars-merged-summary/reference/derive_param_extreme_record.md).
+  [`derive_param_extreme_record()`](https:/pharmaverse.github.io/admiral/copilot/enhance-examples-derive-vars-merged-summary/reference/derive_param_extreme_record.md).
 
   Default value
 
@@ -45,12 +45,12 @@ records_source(dataset_name, filter = NULL, new_vars)
   `old_var2` from the source dataset and adds them to the input dataset
   renaming `old_var2` to `new_var2`. Expressions can be used to create
   new variables (see for example `new_vars` argument in
-  [`derive_vars_merged()`](https:/pharmaverse.github.io/admiral/cran-release/copilot/enhance-examples-derive-vars-merged-summary/reference/derive_vars_merged.md)).
+  [`derive_vars_merged()`](https:/pharmaverse.github.io/admiral/copilot/enhance-examples-derive-vars-merged-summary/reference/derive_vars_merged.md)).
 
   Permitted values
 
   :   list of expressions created by
-      [`exprs()`](https:/pharmaverse.github.io/admiral/cran-release/copilot/enhance-examples-derive-vars-merged-summary/reference/reexport-exprs.md),
+      [`exprs()`](https:/pharmaverse.github.io/admiral/copilot/enhance-examples-derive-vars-merged-summary/reference/reexport-exprs.md),
       e.g., `exprs(ADT, desc(AVAL))`
 
   Default value
@@ -63,15 +63,15 @@ An object of class `records_source`
 
 ## See also
 
-[`derive_param_extreme_record()`](https:/pharmaverse.github.io/admiral/cran-release/copilot/enhance-examples-derive-vars-merged-summary/reference/derive_param_extreme_record.md)
+[`derive_param_extreme_record()`](https:/pharmaverse.github.io/admiral/copilot/enhance-examples-derive-vars-merged-summary/reference/derive_param_extreme_record.md)
 
 Source Objects:
-[`basket_select()`](https:/pharmaverse.github.io/admiral/cran-release/copilot/enhance-examples-derive-vars-merged-summary/reference/basket_select.md),
-[`censor_source()`](https:/pharmaverse.github.io/admiral/cran-release/copilot/enhance-examples-derive-vars-merged-summary/reference/censor_source.md),
-[`death_event`](https:/pharmaverse.github.io/admiral/cran-release/copilot/enhance-examples-derive-vars-merged-summary/reference/tte_source_objects.md),
-[`event()`](https:/pharmaverse.github.io/admiral/cran-release/copilot/enhance-examples-derive-vars-merged-summary/reference/event.md),
-[`event_joined()`](https:/pharmaverse.github.io/admiral/cran-release/copilot/enhance-examples-derive-vars-merged-summary/reference/event_joined.md),
-[`event_source()`](https:/pharmaverse.github.io/admiral/cran-release/copilot/enhance-examples-derive-vars-merged-summary/reference/event_source.md),
-[`flag_event()`](https:/pharmaverse.github.io/admiral/cran-release/copilot/enhance-examples-derive-vars-merged-summary/reference/flag_event.md),
-[`query()`](https:/pharmaverse.github.io/admiral/cran-release/copilot/enhance-examples-derive-vars-merged-summary/reference/query.md),
-[`tte_source()`](https:/pharmaverse.github.io/admiral/cran-release/copilot/enhance-examples-derive-vars-merged-summary/reference/tte_source.md)
+[`basket_select()`](https:/pharmaverse.github.io/admiral/copilot/enhance-examples-derive-vars-merged-summary/reference/basket_select.md),
+[`censor_source()`](https:/pharmaverse.github.io/admiral/copilot/enhance-examples-derive-vars-merged-summary/reference/censor_source.md),
+[`death_event`](https:/pharmaverse.github.io/admiral/copilot/enhance-examples-derive-vars-merged-summary/reference/tte_source_objects.md),
+[`event()`](https:/pharmaverse.github.io/admiral/copilot/enhance-examples-derive-vars-merged-summary/reference/event.md),
+[`event_joined()`](https:/pharmaverse.github.io/admiral/copilot/enhance-examples-derive-vars-merged-summary/reference/event_joined.md),
+[`event_source()`](https:/pharmaverse.github.io/admiral/copilot/enhance-examples-derive-vars-merged-summary/reference/event_source.md),
+[`flag_event()`](https:/pharmaverse.github.io/admiral/copilot/enhance-examples-derive-vars-merged-summary/reference/flag_event.md),
+[`query()`](https:/pharmaverse.github.io/admiral/copilot/enhance-examples-derive-vars-merged-summary/reference/query.md),
+[`tte_source()`](https:/pharmaverse.github.io/admiral/copilot/enhance-examples-derive-vars-merged-summary/reference/tte_source.md)

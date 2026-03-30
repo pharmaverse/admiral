@@ -28,14 +28,14 @@ The return value of the function call
 ## See also
 
 Other deprecated:
-[`date_source()`](https:/pharmaverse.github.io/admiral/cran-release/copilot/enhance-examples-derive-vars-merged-summary/reference/date_source.md),
-[`derive_param_extreme_record()`](https:/pharmaverse.github.io/admiral/cran-release/copilot/enhance-examples-derive-vars-merged-summary/reference/derive_param_extreme_record.md),
-[`derive_var_dthcaus()`](https:/pharmaverse.github.io/admiral/cran-release/copilot/enhance-examples-derive-vars-merged-summary/reference/derive_var_dthcaus.md),
-[`derive_var_extreme_dt()`](https:/pharmaverse.github.io/admiral/cran-release/copilot/enhance-examples-derive-vars-merged-summary/reference/derive_var_extreme_dt.md),
-[`derive_var_extreme_dtm()`](https:/pharmaverse.github.io/admiral/cran-release/copilot/enhance-examples-derive-vars-merged-summary/reference/derive_var_extreme_dtm.md),
-[`derive_var_merged_summary()`](https:/pharmaverse.github.io/admiral/cran-release/copilot/enhance-examples-derive-vars-merged-summary/reference/derive_var_merged_summary.md),
-[`dthcaus_source()`](https:/pharmaverse.github.io/admiral/cran-release/copilot/enhance-examples-derive-vars-merged-summary/reference/dthcaus_source.md),
-[`get_summary_records()`](https:/pharmaverse.github.io/admiral/cran-release/copilot/enhance-examples-derive-vars-merged-summary/reference/get_summary_records.md)
+[`date_source()`](https:/pharmaverse.github.io/admiral/copilot/enhance-examples-derive-vars-merged-summary/reference/date_source.md),
+[`derive_param_extreme_record()`](https:/pharmaverse.github.io/admiral/copilot/enhance-examples-derive-vars-merged-summary/reference/derive_param_extreme_record.md),
+[`derive_var_dthcaus()`](https:/pharmaverse.github.io/admiral/copilot/enhance-examples-derive-vars-merged-summary/reference/derive_var_dthcaus.md),
+[`derive_var_extreme_dt()`](https:/pharmaverse.github.io/admiral/copilot/enhance-examples-derive-vars-merged-summary/reference/derive_var_extreme_dt.md),
+[`derive_var_extreme_dtm()`](https:/pharmaverse.github.io/admiral/copilot/enhance-examples-derive-vars-merged-summary/reference/derive_var_extreme_dtm.md),
+[`derive_var_merged_summary()`](https:/pharmaverse.github.io/admiral/copilot/enhance-examples-derive-vars-merged-summary/reference/derive_var_merged_summary.md),
+[`dthcaus_source()`](https:/pharmaverse.github.io/admiral/copilot/enhance-examples-derive-vars-merged-summary/reference/dthcaus_source.md),
+[`get_summary_records()`](https:/pharmaverse.github.io/admiral/copilot/enhance-examples-derive-vars-merged-summary/reference/get_summary_records.md)
 
 ## Examples
 

@@ -21,8 +21,8 @@ Derived from the `ex` dataset using `{admiral}` and `{dplyr}`
 ## See also
 
 Other datasets:
-[`admiral_adlb`](https:/pharmaverse.github.io/admiral/cran-release/copilot/enhance-examples-derive-vars-merged-summary/reference/admiral_adlb.md),
-[`admiral_adsl`](https:/pharmaverse.github.io/admiral/cran-release/copilot/enhance-examples-derive-vars-merged-summary/reference/admiral_adsl.md),
-[`example_qs`](https:/pharmaverse.github.io/admiral/cran-release/copilot/enhance-examples-derive-vars-merged-summary/reference/example_qs.md),
-[`queries`](https:/pharmaverse.github.io/admiral/cran-release/copilot/enhance-examples-derive-vars-merged-summary/reference/queries.md),
-[`queries_mh`](https:/pharmaverse.github.io/admiral/cran-release/copilot/enhance-examples-derive-vars-merged-summary/reference/queries_mh.md)
+[`admiral_adlb`](https:/pharmaverse.github.io/admiral/copilot/enhance-examples-derive-vars-merged-summary/reference/admiral_adlb.md),
+[`admiral_adsl`](https:/pharmaverse.github.io/admiral/copilot/enhance-examples-derive-vars-merged-summary/reference/admiral_adsl.md),
+[`example_qs`](https:/pharmaverse.github.io/admiral/copilot/enhance-examples-derive-vars-merged-summary/reference/example_qs.md),
+[`queries`](https:/pharmaverse.github.io/admiral/copilot/enhance-examples-derive-vars-merged-summary/reference/queries.md),
+[`queries_mh`](https:/pharmaverse.github.io/admiral/copilot/enhance-examples-derive-vars-merged-summary/reference/queries_mh.md)

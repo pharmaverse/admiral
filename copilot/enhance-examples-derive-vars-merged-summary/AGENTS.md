@@ -165,9 +165,9 @@ The following principles are key when designing a new function:
 ## Admiral Options
 
 - An exception is made for admiral options, see
-  [`get_admiral_option()`](https:/pharmaverse.github.io/admiral/cran-release/copilot/enhance-examples-derive-vars-merged-summary/reference/get_admiral_option.md)
+  [`get_admiral_option()`](https:/pharmaverse.github.io/admiral/copilot/enhance-examples-derive-vars-merged-summary/reference/get_admiral_option.md)
   and
-  [`set_admiral_options()`](https:/pharmaverse.github.io/admiral/cran-release/copilot/enhance-examples-derive-vars-merged-summary/reference/set_admiral_options.md),
+  [`set_admiral_options()`](https:/pharmaverse.github.io/admiral/copilot/enhance-examples-derive-vars-merged-summary/reference/set_admiral_options.md),
   where we have certain pre-defined defaults with added flexibility to
   allow for user-defined defaults on *commonly used* function arguments
   e.g. `subject_keys` currently pre-defined as
@@ -182,12 +182,12 @@ The following principles are key when designing a new function:
   it can be added as an admiral option. In the function formals define
   `future_input = get_admiral_option("future_input")` then proceed to
   modify the body and roxygen documentation of
-  [`set_admiral_options()`](https:/pharmaverse.github.io/admiral/cran-release/copilot/enhance-examples-derive-vars-merged-summary/reference/set_admiral_options.md).
+  [`set_admiral_options()`](https:/pharmaverse.github.io/admiral/copilot/enhance-examples-derive-vars-merged-summary/reference/set_admiral_options.md).
 
 ## Function Names
 
 - Function names should start with a verb and use snake case,
-  e.g. [`derive_var_base()`](https:/pharmaverse.github.io/admiral/cran-release/copilot/enhance-examples-derive-vars-merged-summary/reference/derive_var_base.md).
+  e.g. [`derive_var_base()`](https:/pharmaverse.github.io/admiral/copilot/enhance-examples-derive-vars-merged-summary/reference/derive_var_base.md).
 
 | Function name prefix                      | Description                                                                                         |
 |-------------------------------------------|-----------------------------------------------------------------------------------------------------|
@@ -223,14 +223,14 @@ portion is contained in one step as part of the overall `derive_`
 function, reducing clutter in the main function body and assisting in
 debugging. In addition, a `compute_` function should be implemented if
 the calculation could be used for more than one derivation. For example
-[`compute_bmi()`](https:/pharmaverse.github.io/admiral/cran-release/copilot/enhance-examples-derive-vars-merged-summary/reference/compute_bmi.md)
+[`compute_bmi()`](https:/pharmaverse.github.io/admiral/copilot/enhance-examples-derive-vars-merged-summary/reference/compute_bmi.md)
 could be used to derive a baseline BMI variable in ADSL (based on
 baseline weight and baseline height variables) and could also be used to
 derive a BMI parameter in ADVS (based on weight and height parameters).
 Please see
-[`compute_age_years()`](https:/pharmaverse.github.io/admiral/cran-release/copilot/enhance-examples-derive-vars-merged-summary/reference/compute_age_years.md)
+[`compute_age_years()`](https:/pharmaverse.github.io/admiral/copilot/enhance-examples-derive-vars-merged-summary/reference/compute_age_years.md)
 and
-[`derive_var_age_years()`](https:/pharmaverse.github.io/admiral/cran-release/copilot/enhance-examples-derive-vars-merged-summary/reference/derive_var_age_years.md)
+[`derive_var_age_years()`](https:/pharmaverse.github.io/admiral/copilot/enhance-examples-derive-vars-merged-summary/reference/derive_var_age_years.md)
 as another example.
 
 ## Function Arguments
@@ -253,7 +253,7 @@ Names of variables inside a dataset should be passed as symbols rather
 than strings, i.e. `AVAL` rather than `"AVAL"`. If an argument accepts
 one or more variables or expressions as input then the variables and
 expressions should be wrapped inside
-[`exprs()`](https:/pharmaverse.github.io/admiral/cran-release/copilot/enhance-examples-derive-vars-merged-summary/reference/reexport-exprs.md).
+[`exprs()`](https:/pharmaverse.github.io/admiral/copilot/enhance-examples-derive-vars-merged-summary/reference/reexport-exprs.md).
 
 For example:
 
@@ -573,15 +573,15 @@ called BDS-Specific.
 The families allow for similar functions to be displayed in the **See
 Also** section of a function’s documentation. For example, a user
 looking at
-[`derive_vars_dy()`](https:/pharmaverse.github.io/admiral/cran-release/copilot/enhance-examples-derive-vars-merged-summary/reference/derive_vars_dy.md)
+[`derive_vars_dy()`](https:/pharmaverse.github.io/admiral/copilot/enhance-examples-derive-vars-merged-summary/reference/derive_vars_dy.md)
 function documentation might be interested in other Date/Time functions.
 Using the `@family` tag `der_date_time` will display all the Date/Time
 functions available in admiral to the user in the **See Also** section
 of
-[`derive_vars_dy()`](https:/pharmaverse.github.io/admiral/cran-release/copilot/enhance-examples-derive-vars-merged-summary/reference/derive_vars_dy.md)
+[`derive_vars_dy()`](https:/pharmaverse.github.io/admiral/copilot/enhance-examples-derive-vars-merged-summary/reference/derive_vars_dy.md)
 function documentation. Please take a look at the function documentation
 for
-[`derive_vars_dy()`](https:/pharmaverse.github.io/admiral/cran-release/copilot/enhance-examples-derive-vars-merged-summary/reference/derive_vars_dy.md)
+[`derive_vars_dy()`](https:/pharmaverse.github.io/admiral/copilot/enhance-examples-derive-vars-merged-summary/reference/derive_vars_dy.md)
 to see the family tag in action.
 
 Below are the list of available keyword/family tags to be used in
@@ -878,7 +878,7 @@ fun_xxx <- function(dataset, some_param, other_param) {
 **Phase 1:** If the argument is renamed or replaced, a **message** must
 be issued and the new argument takes the value of the old argument until
 the next phase. Note: arguments which are not passed as
-[`exprs()`](https:/pharmaverse.github.io/admiral/cran-release/copilot/enhance-examples-derive-vars-merged-summary/reference/reexport-exprs.md)
+[`exprs()`](https:/pharmaverse.github.io/admiral/copilot/enhance-examples-derive-vars-merged-summary/reference/reexport-exprs.md)
 argument (e.g. `new_var = VAR1` or `filter = AVAL > 10`) will need to be
 quoted.
 
@@ -893,7 +893,7 @@ quoted.
 **Phase 2:** If the argument is renamed or replaced, a **warning** must
 be issued and the new argument takes the value of the old argument until
 the next phase Note: arguments which are not passed as
-[`exprs()`](https:/pharmaverse.github.io/admiral/cran-release/copilot/enhance-examples-derive-vars-merged-summary/reference/reexport-exprs.md)
+[`exprs()`](https:/pharmaverse.github.io/admiral/copilot/enhance-examples-derive-vars-merged-summary/reference/reexport-exprs.md)
 argument (e.g. `new_var = VAR1` or `filter = AVAL > 10`) will need to be
 quoted.
 
@@ -1011,7 +1011,7 @@ its rules if possible.
   `assert_character_scalar()/assert_character_vector()`.
 - Many admiral arguments require capturing an expression, typically
   encased in a
-  [`exprs()`](https:/pharmaverse.github.io/admiral/cran-release/copilot/enhance-examples-derive-vars-merged-summary/reference/reexport-exprs.md)
+  [`exprs()`](https:/pharmaverse.github.io/admiral/copilot/enhance-examples-derive-vars-merged-summary/reference/reexport-exprs.md)
   statement, which are to be evaluated *later* inside the function body,
   see arguments like `new_vars`,
   e.g. `new_vars = exprs(TRTSDTM = EXSTDTM)`. Oftentimes, the assertion

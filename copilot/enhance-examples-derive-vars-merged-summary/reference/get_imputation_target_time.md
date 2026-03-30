@@ -42,15 +42,15 @@ A list of character vectors. The elements of the list are named "hour",
 
 ## See also
 
-[`impute_dtc_dtm()`](https:/pharmaverse.github.io/admiral/cran-release/copilot/enhance-examples-derive-vars-merged-summary/reference/impute_dtc_dtm.md)
+[`impute_dtc_dtm()`](https:/pharmaverse.github.io/admiral/copilot/enhance-examples-derive-vars-merged-summary/reference/impute_dtc_dtm.md)
 
 Utilities used for date imputation:
-[`dt_level()`](https:/pharmaverse.github.io/admiral/cran-release/copilot/enhance-examples-derive-vars-merged-summary/reference/dt_level.md),
-[`dtm_level()`](https:/pharmaverse.github.io/admiral/cran-release/copilot/enhance-examples-derive-vars-merged-summary/reference/dtm_level.md),
-[`get_imputation_target_date()`](https:/pharmaverse.github.io/admiral/cran-release/copilot/enhance-examples-derive-vars-merged-summary/reference/get_imputation_target_date.md),
-[`get_partialdatetime()`](https:/pharmaverse.github.io/admiral/cran-release/copilot/enhance-examples-derive-vars-merged-summary/reference/get_partialdatetime.md),
-[`restrict_imputed_dtc_dt()`](https:/pharmaverse.github.io/admiral/cran-release/copilot/enhance-examples-derive-vars-merged-summary/reference/restrict_imputed_dtc_dt.md),
-[`restrict_imputed_dtc_dtm()`](https:/pharmaverse.github.io/admiral/cran-release/copilot/enhance-examples-derive-vars-merged-summary/reference/restrict_imputed_dtc_dtm.md)
+[`dt_level()`](https:/pharmaverse.github.io/admiral/copilot/enhance-examples-derive-vars-merged-summary/reference/dt_level.md),
+[`dtm_level()`](https:/pharmaverse.github.io/admiral/copilot/enhance-examples-derive-vars-merged-summary/reference/dtm_level.md),
+[`get_imputation_target_date()`](https:/pharmaverse.github.io/admiral/copilot/enhance-examples-derive-vars-merged-summary/reference/get_imputation_target_date.md),
+[`get_partialdatetime()`](https:/pharmaverse.github.io/admiral/copilot/enhance-examples-derive-vars-merged-summary/reference/get_partialdatetime.md),
+[`restrict_imputed_dtc_dt()`](https:/pharmaverse.github.io/admiral/copilot/enhance-examples-derive-vars-merged-summary/reference/restrict_imputed_dtc_dt.md),
+[`restrict_imputed_dtc_dtm()`](https:/pharmaverse.github.io/admiral/copilot/enhance-examples-derive-vars-merged-summary/reference/restrict_imputed_dtc_dtm.md)
 
 ## Examples
 

@@ -48,7 +48,7 @@ derive_param_wbc_abs(
   Variables to set
 
   A named list returned by
-  [`exprs()`](https:/pharmaverse.github.io/admiral/cran-release/copilot/enhance-examples-derive-vars-merged-summary/reference/reexport-exprs.md)
+  [`exprs()`](https:/pharmaverse.github.io/admiral/copilot/enhance-examples-derive-vars-merged-summary/reference/reexport-exprs.md)
   defining the variables to be set for the new parameter, e.g.
   `exprs(PARAMCD = "LYMPH", PARAM = "Lymphocytes Abs (10^9/L)")` is
   expected.
@@ -142,22 +142,22 @@ value (identified by `wbc_code`) and the white blood cell differential
 ## See also
 
 BDS-Findings Functions for adding Parameters/Records:
-[`default_qtc_paramcd()`](https:/pharmaverse.github.io/admiral/cran-release/copilot/enhance-examples-derive-vars-merged-summary/reference/default_qtc_paramcd.md),
-[`derive_expected_records()`](https:/pharmaverse.github.io/admiral/cran-release/copilot/enhance-examples-derive-vars-merged-summary/reference/derive_expected_records.md),
-[`derive_extreme_event()`](https:/pharmaverse.github.io/admiral/cran-release/copilot/enhance-examples-derive-vars-merged-summary/reference/derive_extreme_event.md),
-[`derive_extreme_records()`](https:/pharmaverse.github.io/admiral/cran-release/copilot/enhance-examples-derive-vars-merged-summary/reference/derive_extreme_records.md),
-[`derive_locf_records()`](https:/pharmaverse.github.io/admiral/cran-release/copilot/enhance-examples-derive-vars-merged-summary/reference/derive_locf_records.md),
-[`derive_param_bmi()`](https:/pharmaverse.github.io/admiral/cran-release/copilot/enhance-examples-derive-vars-merged-summary/reference/derive_param_bmi.md),
-[`derive_param_bsa()`](https:/pharmaverse.github.io/admiral/cran-release/copilot/enhance-examples-derive-vars-merged-summary/reference/derive_param_bsa.md),
-[`derive_param_computed()`](https:/pharmaverse.github.io/admiral/cran-release/copilot/enhance-examples-derive-vars-merged-summary/reference/derive_param_computed.md),
-[`derive_param_doseint()`](https:/pharmaverse.github.io/admiral/cran-release/copilot/enhance-examples-derive-vars-merged-summary/reference/derive_param_doseint.md),
-[`derive_param_exist_flag()`](https:/pharmaverse.github.io/admiral/cran-release/copilot/enhance-examples-derive-vars-merged-summary/reference/derive_param_exist_flag.md),
-[`derive_param_exposure()`](https:/pharmaverse.github.io/admiral/cran-release/copilot/enhance-examples-derive-vars-merged-summary/reference/derive_param_exposure.md),
-[`derive_param_framingham()`](https:/pharmaverse.github.io/admiral/cran-release/copilot/enhance-examples-derive-vars-merged-summary/reference/derive_param_framingham.md),
-[`derive_param_map()`](https:/pharmaverse.github.io/admiral/cran-release/copilot/enhance-examples-derive-vars-merged-summary/reference/derive_param_map.md),
-[`derive_param_qtc()`](https:/pharmaverse.github.io/admiral/cran-release/copilot/enhance-examples-derive-vars-merged-summary/reference/derive_param_qtc.md),
-[`derive_param_rr()`](https:/pharmaverse.github.io/admiral/cran-release/copilot/enhance-examples-derive-vars-merged-summary/reference/derive_param_rr.md),
-[`derive_summary_records()`](https:/pharmaverse.github.io/admiral/cran-release/copilot/enhance-examples-derive-vars-merged-summary/reference/derive_summary_records.md)
+[`default_qtc_paramcd()`](https:/pharmaverse.github.io/admiral/copilot/enhance-examples-derive-vars-merged-summary/reference/default_qtc_paramcd.md),
+[`derive_expected_records()`](https:/pharmaverse.github.io/admiral/copilot/enhance-examples-derive-vars-merged-summary/reference/derive_expected_records.md),
+[`derive_extreme_event()`](https:/pharmaverse.github.io/admiral/copilot/enhance-examples-derive-vars-merged-summary/reference/derive_extreme_event.md),
+[`derive_extreme_records()`](https:/pharmaverse.github.io/admiral/copilot/enhance-examples-derive-vars-merged-summary/reference/derive_extreme_records.md),
+[`derive_locf_records()`](https:/pharmaverse.github.io/admiral/copilot/enhance-examples-derive-vars-merged-summary/reference/derive_locf_records.md),
+[`derive_param_bmi()`](https:/pharmaverse.github.io/admiral/copilot/enhance-examples-derive-vars-merged-summary/reference/derive_param_bmi.md),
+[`derive_param_bsa()`](https:/pharmaverse.github.io/admiral/copilot/enhance-examples-derive-vars-merged-summary/reference/derive_param_bsa.md),
+[`derive_param_computed()`](https:/pharmaverse.github.io/admiral/copilot/enhance-examples-derive-vars-merged-summary/reference/derive_param_computed.md),
+[`derive_param_doseint()`](https:/pharmaverse.github.io/admiral/copilot/enhance-examples-derive-vars-merged-summary/reference/derive_param_doseint.md),
+[`derive_param_exist_flag()`](https:/pharmaverse.github.io/admiral/copilot/enhance-examples-derive-vars-merged-summary/reference/derive_param_exist_flag.md),
+[`derive_param_exposure()`](https:/pharmaverse.github.io/admiral/copilot/enhance-examples-derive-vars-merged-summary/reference/derive_param_exposure.md),
+[`derive_param_framingham()`](https:/pharmaverse.github.io/admiral/copilot/enhance-examples-derive-vars-merged-summary/reference/derive_param_framingham.md),
+[`derive_param_map()`](https:/pharmaverse.github.io/admiral/copilot/enhance-examples-derive-vars-merged-summary/reference/derive_param_map.md),
+[`derive_param_qtc()`](https:/pharmaverse.github.io/admiral/copilot/enhance-examples-derive-vars-merged-summary/reference/derive_param_qtc.md),
+[`derive_param_rr()`](https:/pharmaverse.github.io/admiral/copilot/enhance-examples-derive-vars-merged-summary/reference/derive_param_rr.md),
+[`derive_summary_records()`](https:/pharmaverse.github.io/admiral/copilot/enhance-examples-derive-vars-merged-summary/reference/derive_summary_records.md)
 
 ## Examples
 

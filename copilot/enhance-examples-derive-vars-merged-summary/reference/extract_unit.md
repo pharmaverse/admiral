@@ -25,9 +25,9 @@ A string
 ## See also
 
 Utilities used within Derivation functions:
-[`get_flagged_records()`](https:/pharmaverse.github.io/admiral/cran-release/copilot/enhance-examples-derive-vars-merged-summary/reference/get_flagged_records.md),
-[`get_not_mapped()`](https:/pharmaverse.github.io/admiral/cran-release/copilot/enhance-examples-derive-vars-merged-summary/reference/get_not_mapped.md),
-[`get_vars_query()`](https:/pharmaverse.github.io/admiral/cran-release/copilot/enhance-examples-derive-vars-merged-summary/reference/get_vars_query.md)
+[`get_flagged_records()`](https:/pharmaverse.github.io/admiral/copilot/enhance-examples-derive-vars-merged-summary/reference/get_flagged_records.md),
+[`get_not_mapped()`](https:/pharmaverse.github.io/admiral/copilot/enhance-examples-derive-vars-merged-summary/reference/get_not_mapped.md),
+[`get_vars_query()`](https:/pharmaverse.github.io/admiral/copilot/enhance-examples-derive-vars-merged-summary/reference/get_vars_query.md)
 
 ## Examples
 

@@ -21,12 +21,12 @@ chr2vars(chr)
 ## Value
 
 A `list` of expressions as returned by
-[`exprs()`](https:/pharmaverse.github.io/admiral/cran-release/copilot/enhance-examples-derive-vars-merged-summary/reference/reexport-exprs.md)
+[`exprs()`](https:/pharmaverse.github.io/admiral/copilot/enhance-examples-derive-vars-merged-summary/reference/reexport-exprs.md)
 
 ## See also
 
 Utilities for working with quosures/list of expressions:
-[`negate_vars()`](https:/pharmaverse.github.io/admiral/cran-release/copilot/enhance-examples-derive-vars-merged-summary/reference/negate_vars.md)
+[`negate_vars()`](https:/pharmaverse.github.io/admiral/copilot/enhance-examples-derive-vars-merged-summary/reference/negate_vars.md)
 
 ## Examples
 

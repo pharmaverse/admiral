@@ -1,6 +1,6 @@
 # FAQ
 
-##### **What is admiral**?
+##### **What is `{admiral}`**?
 
 - Think of [admiral](https://pharmaverse.github.io/admiral/) as a
   toolbox of modular blocks (R functions) to create analysis
@@ -12,7 +12,16 @@
   that are based on [admiral](https://pharmaverse.github.io/admiral/)
   modular functions and user created modular functions.
 
-##### **Why** did we decide to start **admiral**?
+##### **Why is the `{admiral}` logo a red butterfly?**?
+
+- The logo is inspired from the [Red
+  Admiral](https://en.wikipedia.org/wiki/Vanessa_atalanta), also known
+  as *Vanessa atalanta*, which is a species of butterfly. However, our
+  [extension packages](https://pharmaverse.org/e2eclinical/adam/) have
+  branched out from this and have differently colored butterflies in
+  their logos.
+
+##### **Why** did we decide to start **`{admiral}`**?
 
 - Data analysis challenges in clinical trials vary depending on
   scientific goals, therapeutic areas, indications, data sources and
@@ -59,7 +68,7 @@
 
 - Functions are usually parameter driven:
   - e.g. the
-    [`derive_vars_aage()`](https:/pharmaverse.github.io/admiral/cran-release/copilot/enhance-examples-derive-vars-merged-summary/reference/derive_vars_aage.md)
+    [`derive_vars_aage()`](https:/pharmaverse.github.io/admiral/copilot/enhance-examples-derive-vars-merged-summary/reference/derive_vars_aage.md)
     has a parameterized start and end-date and a unit.
   - Depending on the parameters results may vary as does the
     specification.
@@ -228,9 +237,9 @@
   preserve attributes.
 - For [admiral](https://pharmaverse.github.io/admiral/) functions which
   preserve attributes like
-  [`convert_blanks_to_na()`](https:/pharmaverse.github.io/admiral/cran-release/copilot/enhance-examples-derive-vars-merged-summary/reference/convert_blanks_to_na.md)
+  [`convert_blanks_to_na()`](https:/pharmaverse.github.io/admiral/copilot/enhance-examples-derive-vars-merged-summary/reference/convert_blanks_to_na.md)
   and
-  [`convert_na_to_blanks()`](https:/pharmaverse.github.io/admiral/cran-release/copilot/enhance-examples-derive-vars-merged-summary/reference/convert_na_to_blanks.md)
+  [`convert_na_to_blanks()`](https:/pharmaverse.github.io/admiral/copilot/enhance-examples-derive-vars-merged-summary/reference/convert_na_to_blanks.md)
   this is explicitly mentioned in the documentation.
 - The recommended approach is to apply variable labels and other
   metadata as a final step in your data derivation process using

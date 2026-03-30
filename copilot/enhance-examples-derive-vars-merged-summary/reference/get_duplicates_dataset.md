@@ -28,8 +28,8 @@ can no longer be accessed (unless it has been saved in a variable).
 ## See also
 
 Utilities for Dataset Checking:
-[`get_many_to_one_dataset()`](https:/pharmaverse.github.io/admiral/cran-release/copilot/enhance-examples-derive-vars-merged-summary/reference/get_many_to_one_dataset.md),
-[`get_one_to_many_dataset()`](https:/pharmaverse.github.io/admiral/cran-release/copilot/enhance-examples-derive-vars-merged-summary/reference/get_one_to_many_dataset.md)
+[`get_many_to_one_dataset()`](https:/pharmaverse.github.io/admiral/copilot/enhance-examples-derive-vars-merged-summary/reference/get_many_to_one_dataset.md),
+[`get_one_to_many_dataset()`](https:/pharmaverse.github.io/admiral/copilot/enhance-examples-derive-vars-merged-summary/reference/get_one_to_many_dataset.md)
 
 ## Examples
 

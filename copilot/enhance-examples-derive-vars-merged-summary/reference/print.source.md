@@ -35,9 +35,9 @@ No return value, called for side effects
 ## See also
 
 Utilities for printing:
-[`print.adam_templates()`](https:/pharmaverse.github.io/admiral/cran-release/copilot/enhance-examples-derive-vars-merged-summary/reference/print.adam_templates.md),
-[`print.duplicates()`](https:/pharmaverse.github.io/admiral/cran-release/copilot/enhance-examples-derive-vars-merged-summary/reference/print.duplicates.md),
-[`print_named_list()`](https:/pharmaverse.github.io/admiral/cran-release/copilot/enhance-examples-derive-vars-merged-summary/reference/print_named_list.md)
+[`print.adam_templates()`](https:/pharmaverse.github.io/admiral/copilot/enhance-examples-derive-vars-merged-summary/reference/print.adam_templates.md),
+[`print.duplicates()`](https:/pharmaverse.github.io/admiral/copilot/enhance-examples-derive-vars-merged-summary/reference/print.duplicates.md),
+[`print_named_list()`](https:/pharmaverse.github.io/admiral/copilot/enhance-examples-derive-vars-merged-summary/reference/print_named_list.md)
 
 ## Examples
 

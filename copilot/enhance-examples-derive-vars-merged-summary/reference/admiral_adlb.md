@@ -23,8 +23,8 @@ size by the following USUBJIDs: 01-701-1015, 01-701-1023, 01-701-1028,
 ## See also
 
 Other datasets:
-[`admiral_adsl`](https:/pharmaverse.github.io/admiral/cran-release/copilot/enhance-examples-derive-vars-merged-summary/reference/admiral_adsl.md),
-[`ex_single`](https:/pharmaverse.github.io/admiral/cran-release/copilot/enhance-examples-derive-vars-merged-summary/reference/ex_single.md),
-[`example_qs`](https:/pharmaverse.github.io/admiral/cran-release/copilot/enhance-examples-derive-vars-merged-summary/reference/example_qs.md),
-[`queries`](https:/pharmaverse.github.io/admiral/cran-release/copilot/enhance-examples-derive-vars-merged-summary/reference/queries.md),
-[`queries_mh`](https:/pharmaverse.github.io/admiral/cran-release/copilot/enhance-examples-derive-vars-merged-summary/reference/queries_mh.md)
+[`admiral_adsl`](https:/pharmaverse.github.io/admiral/copilot/enhance-examples-derive-vars-merged-summary/reference/admiral_adsl.md),
+[`ex_single`](https:/pharmaverse.github.io/admiral/copilot/enhance-examples-derive-vars-merged-summary/reference/ex_single.md),
+[`example_qs`](https:/pharmaverse.github.io/admiral/copilot/enhance-examples-derive-vars-merged-summary/reference/example_qs.md),
+[`queries`](https:/pharmaverse.github.io/admiral/copilot/enhance-examples-derive-vars-merged-summary/reference/queries.md),
+[`queries_mh`](https:/pharmaverse.github.io/admiral/copilot/enhance-examples-derive-vars-merged-summary/reference/queries_mh.md)

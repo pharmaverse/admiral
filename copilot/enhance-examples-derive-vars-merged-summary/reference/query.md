@@ -3,7 +3,7 @@
 A `query` object defines a query, e.g., a Standard MedDRA Query (SMQ), a
 Standardized Drug Grouping (SDG), or a customized query (CQ). It is used
 as input to
-[`create_query_data()`](https:/pharmaverse.github.io/admiral/cran-release/copilot/enhance-examples-derive-vars-merged-summary/reference/create_query_data.md).
+[`create_query_data()`](https:/pharmaverse.github.io/admiral/copilot/enhance-examples-derive-vars-merged-summary/reference/create_query_data.md).
 
 ## Usage
 
@@ -16,7 +16,7 @@ query(prefix, name = auto, id = NULL, add_scope_num = FALSE, definition = NULL)
 - prefix:
 
   The value is used to populate `PREFIX` in the output dataset of
-  [`create_query_data()`](https:/pharmaverse.github.io/admiral/cran-release/copilot/enhance-examples-derive-vars-merged-summary/reference/create_query_data.md),
+  [`create_query_data()`](https:/pharmaverse.github.io/admiral/copilot/enhance-examples-derive-vars-merged-summary/reference/create_query_data.md),
   e.g., `"SMQ03"`
 
   Default value
@@ -26,7 +26,7 @@ query(prefix, name = auto, id = NULL, add_scope_num = FALSE, definition = NULL)
 - name:
 
   The value is used to populate `GRPNAME` in the output dataset of
-  [`create_query_data()`](https:/pharmaverse.github.io/admiral/cran-release/copilot/enhance-examples-derive-vars-merged-summary/reference/create_query_data.md).
+  [`create_query_data()`](https:/pharmaverse.github.io/admiral/copilot/enhance-examples-derive-vars-merged-summary/reference/create_query_data.md).
   If the `auto` keyword is specified, the variable is set to the name of
   the query in the SMQ/SDG database.
 
@@ -34,7 +34,7 @@ query(prefix, name = auto, id = NULL, add_scope_num = FALSE, definition = NULL)
 
   :   A character scalar or the `auto` keyword. The `auto` keyword is
       permitted only for queries which are defined by an
-      [`basket_select()`](https:/pharmaverse.github.io/admiral/cran-release/copilot/enhance-examples-derive-vars-merged-summary/reference/basket_select.md)
+      [`basket_select()`](https:/pharmaverse.github.io/admiral/copilot/enhance-examples-derive-vars-merged-summary/reference/basket_select.md)
       object.
 
   Default value
@@ -44,7 +44,7 @@ query(prefix, name = auto, id = NULL, add_scope_num = FALSE, definition = NULL)
 - id:
 
   The value is used to populate `GRPID` in the output dataset of
-  [`create_query_data()`](https:/pharmaverse.github.io/admiral/cran-release/copilot/enhance-examples-derive-vars-merged-summary/reference/create_query_data.md).
+  [`create_query_data()`](https:/pharmaverse.github.io/admiral/copilot/enhance-examples-derive-vars-merged-summary/reference/create_query_data.md).
   If the `auto` keyword is specified, the variable is set to the id of
   the query in the SMQ/SDG database.
 
@@ -52,7 +52,7 @@ query(prefix, name = auto, id = NULL, add_scope_num = FALSE, definition = NULL)
 
   :   A integer scalar or the `auto` keyword. The `auto` keyword is
       permitted only for queries which are defined by an
-      [`basket_select()`](https:/pharmaverse.github.io/admiral/cran-release/copilot/enhance-examples-derive-vars-merged-summary/reference/basket_select.md)
+      [`basket_select()`](https:/pharmaverse.github.io/admiral/copilot/enhance-examples-derive-vars-merged-summary/reference/basket_select.md)
       object.
 
   Default value
@@ -62,11 +62,11 @@ query(prefix, name = auto, id = NULL, add_scope_num = FALSE, definition = NULL)
 - add_scope_num:
 
   Determines if `SCOPEN` in the output dataset of
-  [`create_query_data()`](https:/pharmaverse.github.io/admiral/cran-release/copilot/enhance-examples-derive-vars-merged-summary/reference/create_query_data.md)
+  [`create_query_data()`](https:/pharmaverse.github.io/admiral/copilot/enhance-examples-derive-vars-merged-summary/reference/create_query_data.md)
   is populated
 
   If the parameter is set to `TRUE`, the definition must be an
-  [`basket_select()`](https:/pharmaverse.github.io/admiral/cran-release/copilot/enhance-examples-derive-vars-merged-summary/reference/basket_select.md)
+  [`basket_select()`](https:/pharmaverse.github.io/admiral/copilot/enhance-examples-derive-vars-merged-summary/reference/basket_select.md)
   object.
 
   *Default*: `FALSE`
@@ -86,7 +86,7 @@ query(prefix, name = auto, id = NULL, add_scope_num = FALSE, definition = NULL)
   There are three different ways to define the terms:
 
   - An
-    [`basket_select()`](https:/pharmaverse.github.io/admiral/cran-release/copilot/enhance-examples-derive-vars-merged-summary/reference/basket_select.md)
+    [`basket_select()`](https:/pharmaverse.github.io/admiral/copilot/enhance-examples-derive-vars-merged-summary/reference/basket_select.md)
     object is specified to select a query from the SMQ database.
 
   - A data frame with columns `SRCVAR` and `TERMCHAR` or `TERMNUM` can
@@ -103,7 +103,7 @@ query(prefix, name = auto, id = NULL, add_scope_num = FALSE, definition = NULL)
     `TERMCHAR` respectively can be omitted.
 
   - A list of data frames and
-    [`basket_select()`](https:/pharmaverse.github.io/admiral/cran-release/copilot/enhance-examples-derive-vars-merged-summary/reference/basket_select.md)
+    [`basket_select()`](https:/pharmaverse.github.io/admiral/copilot/enhance-examples-derive-vars-merged-summary/reference/basket_select.md)
     objects can be specified to define a customized query based on
     custom terms and SMQs. The data frames must have the same structure
     as described for the previous item.
@@ -111,9 +111,9 @@ query(prefix, name = auto, id = NULL, add_scope_num = FALSE, definition = NULL)
   Permitted values
 
   :   an
-      [`basket_select()`](https:/pharmaverse.github.io/admiral/cran-release/copilot/enhance-examples-derive-vars-merged-summary/reference/basket_select.md)
+      [`basket_select()`](https:/pharmaverse.github.io/admiral/copilot/enhance-examples-derive-vars-merged-summary/reference/basket_select.md)
       object, a data frame, or a list of data frames and
-      [`basket_select()`](https:/pharmaverse.github.io/admiral/cran-release/copilot/enhance-examples-derive-vars-merged-summary/reference/basket_select.md)
+      [`basket_select()`](https:/pharmaverse.github.io/admiral/copilot/enhance-examples-derive-vars-merged-summary/reference/basket_select.md)
       objects.
 
   Default value
@@ -126,20 +126,20 @@ An object of class `query`.
 
 ## See also
 
-[`create_query_data()`](https:/pharmaverse.github.io/admiral/cran-release/copilot/enhance-examples-derive-vars-merged-summary/reference/create_query_data.md),
-[`basket_select()`](https:/pharmaverse.github.io/admiral/cran-release/copilot/enhance-examples-derive-vars-merged-summary/reference/basket_select.md),
-[`vignette("queries_dataset")`](https:/pharmaverse.github.io/admiral/cran-release/copilot/enhance-examples-derive-vars-merged-summary/articles/queries_dataset.md)
+[`create_query_data()`](https:/pharmaverse.github.io/admiral/copilot/enhance-examples-derive-vars-merged-summary/reference/create_query_data.md),
+[`basket_select()`](https:/pharmaverse.github.io/admiral/copilot/enhance-examples-derive-vars-merged-summary/reference/basket_select.md),
+[`vignette("queries_dataset")`](https:/pharmaverse.github.io/admiral/copilot/enhance-examples-derive-vars-merged-summary/articles/queries_dataset.md)
 
 Source Objects:
-[`basket_select()`](https:/pharmaverse.github.io/admiral/cran-release/copilot/enhance-examples-derive-vars-merged-summary/reference/basket_select.md),
-[`censor_source()`](https:/pharmaverse.github.io/admiral/cran-release/copilot/enhance-examples-derive-vars-merged-summary/reference/censor_source.md),
-[`death_event`](https:/pharmaverse.github.io/admiral/cran-release/copilot/enhance-examples-derive-vars-merged-summary/reference/tte_source_objects.md),
-[`event()`](https:/pharmaverse.github.io/admiral/cran-release/copilot/enhance-examples-derive-vars-merged-summary/reference/event.md),
-[`event_joined()`](https:/pharmaverse.github.io/admiral/cran-release/copilot/enhance-examples-derive-vars-merged-summary/reference/event_joined.md),
-[`event_source()`](https:/pharmaverse.github.io/admiral/cran-release/copilot/enhance-examples-derive-vars-merged-summary/reference/event_source.md),
-[`flag_event()`](https:/pharmaverse.github.io/admiral/cran-release/copilot/enhance-examples-derive-vars-merged-summary/reference/flag_event.md),
-[`records_source()`](https:/pharmaverse.github.io/admiral/cran-release/copilot/enhance-examples-derive-vars-merged-summary/reference/records_source.md),
-[`tte_source()`](https:/pharmaverse.github.io/admiral/cran-release/copilot/enhance-examples-derive-vars-merged-summary/reference/tte_source.md)
+[`basket_select()`](https:/pharmaverse.github.io/admiral/copilot/enhance-examples-derive-vars-merged-summary/reference/basket_select.md),
+[`censor_source()`](https:/pharmaverse.github.io/admiral/copilot/enhance-examples-derive-vars-merged-summary/reference/censor_source.md),
+[`death_event`](https:/pharmaverse.github.io/admiral/copilot/enhance-examples-derive-vars-merged-summary/reference/tte_source_objects.md),
+[`event()`](https:/pharmaverse.github.io/admiral/copilot/enhance-examples-derive-vars-merged-summary/reference/event.md),
+[`event_joined()`](https:/pharmaverse.github.io/admiral/copilot/enhance-examples-derive-vars-merged-summary/reference/event_joined.md),
+[`event_source()`](https:/pharmaverse.github.io/admiral/copilot/enhance-examples-derive-vars-merged-summary/reference/event_source.md),
+[`flag_event()`](https:/pharmaverse.github.io/admiral/copilot/enhance-examples-derive-vars-merged-summary/reference/flag_event.md),
+[`records_source()`](https:/pharmaverse.github.io/admiral/copilot/enhance-examples-derive-vars-merged-summary/reference/records_source.md),
+[`tte_source()`](https:/pharmaverse.github.io/admiral/copilot/enhance-examples-derive-vars-merged-summary/reference/tte_source.md)
 
 ## Examples
 

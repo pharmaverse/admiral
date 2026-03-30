@@ -83,17 +83,17 @@ to:
 ## See also
 
 BDS-Findings Functions that returns variable appended to dataset:
-[`derive_basetype_records()`](https:/pharmaverse.github.io/admiral/cran-release/copilot/enhance-examples-derive-vars-merged-summary/reference/derive_basetype_records.md),
-[`derive_var_analysis_ratio()`](https:/pharmaverse.github.io/admiral/cran-release/copilot/enhance-examples-derive-vars-merged-summary/reference/derive_var_analysis_ratio.md),
-[`derive_var_atoxgr()`](https:/pharmaverse.github.io/admiral/cran-release/copilot/enhance-examples-derive-vars-merged-summary/reference/derive_var_atoxgr.md),
-[`derive_var_atoxgr_dir()`](https:/pharmaverse.github.io/admiral/cran-release/copilot/enhance-examples-derive-vars-merged-summary/reference/derive_var_atoxgr_dir.md),
-[`derive_var_base()`](https:/pharmaverse.github.io/admiral/cran-release/copilot/enhance-examples-derive-vars-merged-summary/reference/derive_var_base.md),
-[`derive_var_chg()`](https:/pharmaverse.github.io/admiral/cran-release/copilot/enhance-examples-derive-vars-merged-summary/reference/derive_var_chg.md),
-[`derive_var_nfrlt()`](https:/pharmaverse.github.io/admiral/cran-release/copilot/enhance-examples-derive-vars-merged-summary/reference/derive_var_nfrlt.md),
-[`derive_var_ontrtfl()`](https:/pharmaverse.github.io/admiral/cran-release/copilot/enhance-examples-derive-vars-merged-summary/reference/derive_var_ontrtfl.md),
-[`derive_var_pchg()`](https:/pharmaverse.github.io/admiral/cran-release/copilot/enhance-examples-derive-vars-merged-summary/reference/derive_var_pchg.md),
-[`derive_var_shift()`](https:/pharmaverse.github.io/admiral/cran-release/copilot/enhance-examples-derive-vars-merged-summary/reference/derive_var_shift.md),
-[`derive_vars_crit_flag()`](https:/pharmaverse.github.io/admiral/cran-release/copilot/enhance-examples-derive-vars-merged-summary/reference/derive_vars_crit_flag.md)
+[`derive_basetype_records()`](https:/pharmaverse.github.io/admiral/copilot/enhance-examples-derive-vars-merged-summary/reference/derive_basetype_records.md),
+[`derive_var_analysis_ratio()`](https:/pharmaverse.github.io/admiral/copilot/enhance-examples-derive-vars-merged-summary/reference/derive_var_analysis_ratio.md),
+[`derive_var_atoxgr()`](https:/pharmaverse.github.io/admiral/copilot/enhance-examples-derive-vars-merged-summary/reference/derive_var_atoxgr.md),
+[`derive_var_atoxgr_dir()`](https:/pharmaverse.github.io/admiral/copilot/enhance-examples-derive-vars-merged-summary/reference/derive_var_atoxgr_dir.md),
+[`derive_var_base()`](https:/pharmaverse.github.io/admiral/copilot/enhance-examples-derive-vars-merged-summary/reference/derive_var_base.md),
+[`derive_var_chg()`](https:/pharmaverse.github.io/admiral/copilot/enhance-examples-derive-vars-merged-summary/reference/derive_var_chg.md),
+[`derive_var_nfrlt()`](https:/pharmaverse.github.io/admiral/copilot/enhance-examples-derive-vars-merged-summary/reference/derive_var_nfrlt.md),
+[`derive_var_ontrtfl()`](https:/pharmaverse.github.io/admiral/copilot/enhance-examples-derive-vars-merged-summary/reference/derive_var_ontrtfl.md),
+[`derive_var_pchg()`](https:/pharmaverse.github.io/admiral/copilot/enhance-examples-derive-vars-merged-summary/reference/derive_var_pchg.md),
+[`derive_var_shift()`](https:/pharmaverse.github.io/admiral/copilot/enhance-examples-derive-vars-merged-summary/reference/derive_var_shift.md),
+[`derive_vars_crit_flag()`](https:/pharmaverse.github.io/admiral/copilot/enhance-examples-derive-vars-merged-summary/reference/derive_vars_crit_flag.md)
 
 ## Examples
 

@@ -10,7 +10,7 @@ without visiting the [admiral](https://pharmaverse.github.io/admiral/)
 repository.
 
 As a reminder, you can create a starter script from a template using
-[`admiral::use_ad_template()`](https:/pharmaverse.github.io/admiral/cran-release/copilot/enhance-examples-derive-vars-merged-summary/reference/use_ad_template.md),
+[`admiral::use_ad_template()`](https:/pharmaverse.github.io/admiral/copilot/enhance-examples-derive-vars-merged-summary/reference/use_ad_template.md),
 e.g.,
 
 ``` r

@@ -1,7 +1,7 @@
 # Create a `derivation_slice` Object
 
 Create a `derivation_slice` object as input for
-[`slice_derivation()`](https:/pharmaverse.github.io/admiral/cran-release/copilot/enhance-examples-derive-vars-merged-summary/reference/slice_derivation.md).
+[`slice_derivation()`](https:/pharmaverse.github.io/admiral/copilot/enhance-examples-derive-vars-merged-summary/reference/slice_derivation.md).
 
 ## Usage
 
@@ -24,7 +24,7 @@ derivation_slice(filter, args = NULL)
   Arguments of the derivation to be used for the slice
 
   A
-  [`params()`](https:/pharmaverse.github.io/admiral/cran-release/copilot/enhance-examples-derive-vars-merged-summary/reference/params.md)
+  [`params()`](https:/pharmaverse.github.io/admiral/copilot/enhance-examples-derive-vars-merged-summary/reference/params.md)
   object is expected.
 
   Default value
@@ -37,10 +37,10 @@ An object of class `derivation_slice`
 
 ## See also
 
-[`slice_derivation()`](https:/pharmaverse.github.io/admiral/cran-release/copilot/enhance-examples-derive-vars-merged-summary/reference/slice_derivation.md),
-[`params()`](https:/pharmaverse.github.io/admiral/cran-release/copilot/enhance-examples-derive-vars-merged-summary/reference/params.md)
+[`slice_derivation()`](https:/pharmaverse.github.io/admiral/copilot/enhance-examples-derive-vars-merged-summary/reference/slice_derivation.md),
+[`params()`](https:/pharmaverse.github.io/admiral/copilot/enhance-examples-derive-vars-merged-summary/reference/params.md)
 
 Higher Order Functions:
-[`call_derivation()`](https:/pharmaverse.github.io/admiral/cran-release/copilot/enhance-examples-derive-vars-merged-summary/reference/call_derivation.md),
-[`restrict_derivation()`](https:/pharmaverse.github.io/admiral/cran-release/copilot/enhance-examples-derive-vars-merged-summary/reference/restrict_derivation.md),
-[`slice_derivation()`](https:/pharmaverse.github.io/admiral/cran-release/copilot/enhance-examples-derive-vars-merged-summary/reference/slice_derivation.md)
+[`call_derivation()`](https:/pharmaverse.github.io/admiral/copilot/enhance-examples-derive-vars-merged-summary/reference/call_derivation.md),
+[`restrict_derivation()`](https:/pharmaverse.github.io/admiral/copilot/enhance-examples-derive-vars-merged-summary/reference/restrict_derivation.md),
+[`slice_derivation()`](https:/pharmaverse.github.io/admiral/copilot/enhance-examples-derive-vars-merged-summary/reference/slice_derivation.md)

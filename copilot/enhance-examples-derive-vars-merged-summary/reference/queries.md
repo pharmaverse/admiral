@@ -21,8 +21,8 @@ MedDRA Query variables in ADAE
 ## See also
 
 Other datasets:
-[`admiral_adlb`](https:/pharmaverse.github.io/admiral/cran-release/copilot/enhance-examples-derive-vars-merged-summary/reference/admiral_adlb.md),
-[`admiral_adsl`](https:/pharmaverse.github.io/admiral/cran-release/copilot/enhance-examples-derive-vars-merged-summary/reference/admiral_adsl.md),
-[`ex_single`](https:/pharmaverse.github.io/admiral/cran-release/copilot/enhance-examples-derive-vars-merged-summary/reference/ex_single.md),
-[`example_qs`](https:/pharmaverse.github.io/admiral/cran-release/copilot/enhance-examples-derive-vars-merged-summary/reference/example_qs.md),
-[`queries_mh`](https:/pharmaverse.github.io/admiral/cran-release/copilot/enhance-examples-derive-vars-merged-summary/reference/queries_mh.md)
+[`admiral_adlb`](https:/pharmaverse.github.io/admiral/copilot/enhance-examples-derive-vars-merged-summary/reference/admiral_adlb.md),
+[`admiral_adsl`](https:/pharmaverse.github.io/admiral/copilot/enhance-examples-derive-vars-merged-summary/reference/admiral_adsl.md),
+[`ex_single`](https:/pharmaverse.github.io/admiral/copilot/enhance-examples-derive-vars-merged-summary/reference/ex_single.md),
+[`example_qs`](https:/pharmaverse.github.io/admiral/copilot/enhance-examples-derive-vars-merged-summary/reference/example_qs.md),
+[`queries_mh`](https:/pharmaverse.github.io/admiral/copilot/enhance-examples-derive-vars-merged-summary/reference/queries_mh.md)

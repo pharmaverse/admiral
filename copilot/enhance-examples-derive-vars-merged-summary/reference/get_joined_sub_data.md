@@ -2,7 +2,7 @@
 
 The helper function joins the data for the "joined" functions. All
 `.join` variables are included in the output dataset. It is called by
-[`get_joined_data()`](https:/pharmaverse.github.io/admiral/cran-release/copilot/enhance-examples-derive-vars-merged-summary/reference/get_joined_data.md)
+[`get_joined_data()`](https:/pharmaverse.github.io/admiral/copilot/enhance-examples-derive-vars-merged-summary/reference/get_joined_data.md)
 to process each by group separately. This reduces the memory
 consumption.
 
@@ -67,7 +67,7 @@ get_joined_sub_data(
   Permitted values
 
   :   list of variables created by
-      [`exprs()`](https:/pharmaverse.github.io/admiral/cran-release/copilot/enhance-examples-derive-vars-merged-summary/reference/reexport-exprs.md),
+      [`exprs()`](https:/pharmaverse.github.io/admiral/copilot/enhance-examples-derive-vars-merged-summary/reference/reexport-exprs.md),
       e.g., `exprs(USUBJID, VISIT)`
 
   Default value

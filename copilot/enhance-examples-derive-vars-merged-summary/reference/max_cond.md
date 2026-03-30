@@ -30,13 +30,13 @@ max_cond(var, cond)
 ## See also
 
 Utilities for Filtering Observations:
-[`count_vals()`](https:/pharmaverse.github.io/admiral/cran-release/copilot/enhance-examples-derive-vars-merged-summary/reference/count_vals.md),
-[`filter_exist()`](https:/pharmaverse.github.io/admiral/cran-release/copilot/enhance-examples-derive-vars-merged-summary/reference/filter_exist.md),
-[`filter_extreme()`](https:/pharmaverse.github.io/admiral/cran-release/copilot/enhance-examples-derive-vars-merged-summary/reference/filter_extreme.md),
-[`filter_joined()`](https:/pharmaverse.github.io/admiral/cran-release/copilot/enhance-examples-derive-vars-merged-summary/reference/filter_joined.md),
-[`filter_not_exist()`](https:/pharmaverse.github.io/admiral/cran-release/copilot/enhance-examples-derive-vars-merged-summary/reference/filter_not_exist.md),
-[`filter_relative()`](https:/pharmaverse.github.io/admiral/cran-release/copilot/enhance-examples-derive-vars-merged-summary/reference/filter_relative.md),
-[`min_cond()`](https:/pharmaverse.github.io/admiral/cran-release/copilot/enhance-examples-derive-vars-merged-summary/reference/min_cond.md)
+[`count_vals()`](https:/pharmaverse.github.io/admiral/copilot/enhance-examples-derive-vars-merged-summary/reference/count_vals.md),
+[`filter_exist()`](https:/pharmaverse.github.io/admiral/copilot/enhance-examples-derive-vars-merged-summary/reference/filter_exist.md),
+[`filter_extreme()`](https:/pharmaverse.github.io/admiral/copilot/enhance-examples-derive-vars-merged-summary/reference/filter_extreme.md),
+[`filter_joined()`](https:/pharmaverse.github.io/admiral/copilot/enhance-examples-derive-vars-merged-summary/reference/filter_joined.md),
+[`filter_not_exist()`](https:/pharmaverse.github.io/admiral/copilot/enhance-examples-derive-vars-merged-summary/reference/filter_not_exist.md),
+[`filter_relative()`](https:/pharmaverse.github.io/admiral/copilot/enhance-examples-derive-vars-merged-summary/reference/filter_relative.md),
+[`min_cond()`](https:/pharmaverse.github.io/admiral/copilot/enhance-examples-derive-vars-merged-summary/reference/min_cond.md)
 
 ## Examples
 

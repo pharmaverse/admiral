@@ -24,4 +24,4 @@ The original object.
 
 ## See also
 
-[`basket_select()`](https:/pharmaverse.github.io/admiral/cran-release/copilot/enhance-examples-derive-vars-merged-summary/reference/basket_select.md)
+[`basket_select()`](https:/pharmaverse.github.io/admiral/copilot/enhance-examples-derive-vars-merged-summary/reference/basket_select.md)

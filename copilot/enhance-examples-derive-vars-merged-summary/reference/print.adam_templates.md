@@ -33,12 +33,12 @@ No return value, called for side effects
 
 ## See also
 
-[`list_all_templates()`](https:/pharmaverse.github.io/admiral/cran-release/copilot/enhance-examples-derive-vars-merged-summary/reference/list_all_templates.md)
+[`list_all_templates()`](https:/pharmaverse.github.io/admiral/copilot/enhance-examples-derive-vars-merged-summary/reference/list_all_templates.md)
 
 Utilities for printing:
-[`print.duplicates()`](https:/pharmaverse.github.io/admiral/cran-release/copilot/enhance-examples-derive-vars-merged-summary/reference/print.duplicates.md),
-[`print.source()`](https:/pharmaverse.github.io/admiral/cran-release/copilot/enhance-examples-derive-vars-merged-summary/reference/print.source.md),
-[`print_named_list()`](https:/pharmaverse.github.io/admiral/cran-release/copilot/enhance-examples-derive-vars-merged-summary/reference/print_named_list.md)
+[`print.duplicates()`](https:/pharmaverse.github.io/admiral/copilot/enhance-examples-derive-vars-merged-summary/reference/print.duplicates.md),
+[`print.source()`](https:/pharmaverse.github.io/admiral/copilot/enhance-examples-derive-vars-merged-summary/reference/print.source.md),
+[`print_named_list()`](https:/pharmaverse.github.io/admiral/copilot/enhance-examples-derive-vars-merged-summary/reference/print_named_list.md)
 
 ## Examples
 

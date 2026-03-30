@@ -5,7 +5,7 @@
 Derives nominal/planned time from first dose in hours by combining visit
 day information with timepoint descriptions. The function converts
 timepoint strings to hours using
-[`convert_xxtpt_to_hours()`](https:/pharmaverse.github.io/admiral/cran-release/copilot/enhance-examples-derive-vars-merged-summary/reference/convert_xxtpt_to_hours.md)
+[`convert_xxtpt_to_hours()`](https:/pharmaverse.github.io/admiral/copilot/enhance-examples-derive-vars-merged-summary/reference/convert_xxtpt_to_hours.md)
 and adds them to the day-based offset. Optionally creates a
 corresponding unit variable.
 
@@ -145,7 +145,7 @@ derive_var_nfrlt(
     each record can have a different treatment duration
 
   Passed to
-  [`convert_xxtpt_to_hours()`](https:/pharmaverse.github.io/admiral/cran-release/copilot/enhance-examples-derive-vars-merged-summary/reference/convert_xxtpt_to_hours.md).
+  [`convert_xxtpt_to_hours()`](https:/pharmaverse.github.io/admiral/copilot/enhance-examples-derive-vars-merged-summary/reference/convert_xxtpt_to_hours.md).
   Must be non-negative. Default is 0 hours (for instantaneous treatments
   like oral medications).
 
@@ -161,7 +161,7 @@ derive_var_nfrlt(
 
   Method for converting time ranges to single values. Options are
   "midpoint" (default), "start", or "end". Passed to
-  [`convert_xxtpt_to_hours()`](https:/pharmaverse.github.io/admiral/cran-release/copilot/enhance-examples-derive-vars-merged-summary/reference/convert_xxtpt_to_hours.md).
+  [`convert_xxtpt_to_hours()`](https:/pharmaverse.github.io/admiral/copilot/enhance-examples-derive-vars-merged-summary/reference/convert_xxtpt_to_hours.md).
   For example, "0-6h" with midpoint returns 3, with start returns 0,
   with end returns 6.
 
@@ -206,7 +206,7 @@ Where:
   accounting for the absence of Day 0 in clinical trial convention
 
 - `timepoint_hours` is derived from the timepoint description using
-  [`convert_xxtpt_to_hours()`](https:/pharmaverse.github.io/admiral/cran-release/copilot/enhance-examples-derive-vars-merged-summary/reference/convert_xxtpt_to_hours.md),
+  [`convert_xxtpt_to_hours()`](https:/pharmaverse.github.io/admiral/copilot/enhance-examples-derive-vars-merged-summary/reference/convert_xxtpt_to_hours.md),
   or 0 if `tpt_var` is not provided
 
 - `conversion_factor` is:
@@ -232,7 +232,7 @@ example:
 - `NA` when the corresponding time value is `NA`
 
 This matches the behavior of
-[`derive_vars_duration()`](https:/pharmaverse.github.io/admiral/cran-release/copilot/enhance-examples-derive-vars-merged-summary/reference/derive_vars_duration.md)
+[`derive_vars_duration()`](https:/pharmaverse.github.io/admiral/copilot/enhance-examples-derive-vars-merged-summary/reference/derive_vars_duration.md)
 and allows consistency when deriving multiple time variables.
 
 **Handling "No Day 0":**
@@ -313,7 +313,7 @@ With `first_dose_day = 7`:
   relative time or `new_var_unit = RRLTU` for reference relative time
 
 - **Consistency with duration**: Use the same case for `out_unit` across
-  [`derive_vars_duration()`](https:/pharmaverse.github.io/admiral/cran-release/copilot/enhance-examples-derive-vars-merged-summary/reference/derive_vars_duration.md)
+  [`derive_vars_duration()`](https:/pharmaverse.github.io/admiral/copilot/enhance-examples-derive-vars-merged-summary/reference/derive_vars_duration.md)
   and `derive_var_nfrlt()` to ensure unit variables match
 
 **Important Notes:**
@@ -370,21 +370,21 @@ replace those `NA` values:
 
 ## See also
 
-[`convert_xxtpt_to_hours()`](https:/pharmaverse.github.io/admiral/cran-release/copilot/enhance-examples-derive-vars-merged-summary/reference/convert_xxtpt_to_hours.md),
-[`derive_vars_duration()`](https:/pharmaverse.github.io/admiral/cran-release/copilot/enhance-examples-derive-vars-merged-summary/reference/derive_vars_duration.md)
+[`convert_xxtpt_to_hours()`](https:/pharmaverse.github.io/admiral/copilot/enhance-examples-derive-vars-merged-summary/reference/convert_xxtpt_to_hours.md),
+[`derive_vars_duration()`](https:/pharmaverse.github.io/admiral/copilot/enhance-examples-derive-vars-merged-summary/reference/derive_vars_duration.md)
 
 BDS-Findings Functions that returns variable appended to dataset:
-[`derive_basetype_records()`](https:/pharmaverse.github.io/admiral/cran-release/copilot/enhance-examples-derive-vars-merged-summary/reference/derive_basetype_records.md),
-[`derive_var_analysis_ratio()`](https:/pharmaverse.github.io/admiral/cran-release/copilot/enhance-examples-derive-vars-merged-summary/reference/derive_var_analysis_ratio.md),
-[`derive_var_anrind()`](https:/pharmaverse.github.io/admiral/cran-release/copilot/enhance-examples-derive-vars-merged-summary/reference/derive_var_anrind.md),
-[`derive_var_atoxgr()`](https:/pharmaverse.github.io/admiral/cran-release/copilot/enhance-examples-derive-vars-merged-summary/reference/derive_var_atoxgr.md),
-[`derive_var_atoxgr_dir()`](https:/pharmaverse.github.io/admiral/cran-release/copilot/enhance-examples-derive-vars-merged-summary/reference/derive_var_atoxgr_dir.md),
-[`derive_var_base()`](https:/pharmaverse.github.io/admiral/cran-release/copilot/enhance-examples-derive-vars-merged-summary/reference/derive_var_base.md),
-[`derive_var_chg()`](https:/pharmaverse.github.io/admiral/cran-release/copilot/enhance-examples-derive-vars-merged-summary/reference/derive_var_chg.md),
-[`derive_var_ontrtfl()`](https:/pharmaverse.github.io/admiral/cran-release/copilot/enhance-examples-derive-vars-merged-summary/reference/derive_var_ontrtfl.md),
-[`derive_var_pchg()`](https:/pharmaverse.github.io/admiral/cran-release/copilot/enhance-examples-derive-vars-merged-summary/reference/derive_var_pchg.md),
-[`derive_var_shift()`](https:/pharmaverse.github.io/admiral/cran-release/copilot/enhance-examples-derive-vars-merged-summary/reference/derive_var_shift.md),
-[`derive_vars_crit_flag()`](https:/pharmaverse.github.io/admiral/cran-release/copilot/enhance-examples-derive-vars-merged-summary/reference/derive_vars_crit_flag.md)
+[`derive_basetype_records()`](https:/pharmaverse.github.io/admiral/copilot/enhance-examples-derive-vars-merged-summary/reference/derive_basetype_records.md),
+[`derive_var_analysis_ratio()`](https:/pharmaverse.github.io/admiral/copilot/enhance-examples-derive-vars-merged-summary/reference/derive_var_analysis_ratio.md),
+[`derive_var_anrind()`](https:/pharmaverse.github.io/admiral/copilot/enhance-examples-derive-vars-merged-summary/reference/derive_var_anrind.md),
+[`derive_var_atoxgr()`](https:/pharmaverse.github.io/admiral/copilot/enhance-examples-derive-vars-merged-summary/reference/derive_var_atoxgr.md),
+[`derive_var_atoxgr_dir()`](https:/pharmaverse.github.io/admiral/copilot/enhance-examples-derive-vars-merged-summary/reference/derive_var_atoxgr_dir.md),
+[`derive_var_base()`](https:/pharmaverse.github.io/admiral/copilot/enhance-examples-derive-vars-merged-summary/reference/derive_var_base.md),
+[`derive_var_chg()`](https:/pharmaverse.github.io/admiral/copilot/enhance-examples-derive-vars-merged-summary/reference/derive_var_chg.md),
+[`derive_var_ontrtfl()`](https:/pharmaverse.github.io/admiral/copilot/enhance-examples-derive-vars-merged-summary/reference/derive_var_ontrtfl.md),
+[`derive_var_pchg()`](https:/pharmaverse.github.io/admiral/copilot/enhance-examples-derive-vars-merged-summary/reference/derive_var_pchg.md),
+[`derive_var_shift()`](https:/pharmaverse.github.io/admiral/copilot/enhance-examples-derive-vars-merged-summary/reference/derive_var_shift.md),
+[`derive_vars_crit_flag()`](https:/pharmaverse.github.io/admiral/copilot/enhance-examples-derive-vars-merged-summary/reference/derive_vars_crit_flag.md)
 
 ## Examples
 
@@ -863,15 +863,15 @@ Using mutate to set NFRLT to 99999 for unscheduled visits
       ) %>%
       mutate(
         NFRLT = if_else(is.na(NFRLT) & VISIT == "UNSCHEDULED", 99999, NFRLT),
-        FRLTU = if_else(is.na(FRLTU) & VISIT == "UNSCHEDULED", "", FRLTU)
+        FRLTU = if_else(is.na(FRLTU) & VISIT == "UNSCHEDULED", NA_character_, FRLTU)
       )
     #> # A tibble: 4 × 6
     #>   USUBJID VISITDY VISIT       PCTPT        NFRLT FRLTU
     #>   <chr>     <dbl> <chr>       <chr>        <dbl> <chr>
-    #> 1 001           1 VISIT 1     Pre-dose         0 "HOURS"
-    #> 2 001           1 VISIT 1     2H Post-dose     2 "HOURS"
-    #> 3 001          NA UNSCHEDULED Pre-dose     99999 ""
-    #> 4 001          NA UNSCHEDULED 2H Post-dose 99999 ""     
+    #> 1 001           1 VISIT 1     Pre-dose         0 HOURS
+    #> 2 001           1 VISIT 1     2H Post-dose     2 HOURS
+    #> 3 001          NA UNSCHEDULED Pre-dose     99999 <NA>
+    #> 4 001          NA UNSCHEDULED 2H Post-dose 99999 <NA> 
 
 ### Custom range method
 
