@@ -61,6 +61,13 @@ the pull request title to trigger website creation. (#2984)
 (`inst/pkgdown.yml`). (#2950)
 </details>
 
+- The helper functions `roxygen_param_dataset()`, `roxygen_param_by_vars()`,
+  `roxygen_order_na_handling()`, and `roxygen_save_memory()` have been moved
+  from `{admiral}` to `{admiraldev}`. They are now exported from `{admiraldev}`
+  and remain accessible in `{admiral}` via the existing `@import admiraldev`
+  dependency. [(#517)](https://github.com/pharmaverse/admiraldev/issues/517)
+
+
 # admiral 1.4.1
 
 ## Updates of Existing Functions
