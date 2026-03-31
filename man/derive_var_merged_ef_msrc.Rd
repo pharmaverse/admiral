@@ -241,9 +241,9 @@ the condition
 \item \code{missing_value}: subject has \strong{no} records in any source
 }
 
-In the example below, \code{ADSL} is used as the input dataset and the dose
-adjustment sources from the previous example are summarized to subject level.
-This reveals all three cases in the output:
+In the example below, a subject-level \code{ADSL} dataset is used together with
+dose adjustment sources (\code{adex}, \code{ec}, \code{fa}). This reveals all three cases
+in the output:
 \itemize{
 \item Subjects \code{"1"} and \code{"3"}: dose adjustment found → \code{"Y"} via \code{true_value}
 \item Subject \code{"2"}: present in \code{adex} but no adjustment found → \code{"N"} via

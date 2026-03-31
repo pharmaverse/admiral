@@ -173,9 +173,9 @@
 #'   the condition
 #' - `missing_value`: subject has **no** records in any source
 #'
-#' In the example below, `ADSL` is used as the input dataset and the dose
-#' adjustment sources from the previous example are summarized to subject level.
-#' This reveals all three cases in the output:
+#' In the example below, a subject-level `ADSL` dataset is used together with
+#' dose adjustment sources (`adex`, `ec`, `fa`). This reveals all three cases
+#' in the output:
 #'
 #' - Subjects `"1"` and `"3"`: dose adjustment found → `"Y"` via `true_value`
 #' - Subject `"2"`: present in `adex` but no adjustment found → `"N"` via
