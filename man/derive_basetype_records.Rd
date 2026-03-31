@@ -70,7 +70,8 @@ BDS-Findings Functions that returns variable appended to dataset:
 The \code{basetypes} argument is a named list of expressions where each name
 becomes a value of \code{BASETYPE} and each expression defines which records
 receive that value. A record can match multiple expressions and will be
-duplicated once for each matching \code{BASETYPE}.
+duplicated once for each matching \code{BASETYPE}. In this example, records for
+subject \code{P01} show the duplication across all three baseline types.
 
 \if{html}{\out{<div class="sourceCode r">}}\preformatted{library(tibble)
 library(dplyr, warn.conflicts = FALSE)
@@ -82,12 +83,7 @@ bds <- tribble(
   "P01",    "DOUBLE-BLIND", "PARAM01",     3,   9.2,
   "P01",    "DOUBLE-BLIND", "PARAM01",     4,  10.1,
   "P01",    "OPEN-LABEL",   "PARAM01",     5,  10.4,
-  "P01",    "OPEN-LABEL",   "PARAM01",     6,   9.9,
-  "P02",    "RUN-IN",       "PARAM01",     1,  12.1,
-  "P02",    "DOUBLE-BLIND", "PARAM01",     2,  10.2,
-  "P02",    "DOUBLE-BLIND", "PARAM01",     3,  10.8,
-  "P02",    "OPEN-LABEL",   "PARAM01",     4,  11.4,
-  "P02",    "OPEN-LABEL",   "PARAM01",     5,  10.8
+  "P01",    "OPEN-LABEL",   "PARAM01",     6,   9.9
 )
 
 derive_basetype_records(
@@ -98,20 +94,20 @@ derive_basetype_records(
     "OPEN-LABEL" = EPOCH == "OPEN-LABEL"
   )
 )
-#> # A tibble: 23 × 6
-#>    USUBJID EPOCH        PARAMCD  ASEQ  AVAL BASETYPE
-#>    <chr>   <chr>        <chr>   <dbl> <dbl> <chr>   
-#>  1 P01     RUN-IN       PARAM01     1  10   RUN-IN  
-#>  2 P01     RUN-IN       PARAM01     2   9.8 RUN-IN  
-#>  3 P01     DOUBLE-BLIND PARAM01     3   9.2 RUN-IN  
-#>  4 P01     DOUBLE-BLIND PARAM01     4  10.1 RUN-IN  
-#>  5 P01     OPEN-LABEL   PARAM01     5  10.4 RUN-IN  
-#>  6 P01     OPEN-LABEL   PARAM01     6   9.9 RUN-IN  
-#>  7 P02     RUN-IN       PARAM01     1  12.1 RUN-IN  
-#>  8 P02     DOUBLE-BLIND PARAM01     2  10.2 RUN-IN  
-#>  9 P02     DOUBLE-BLIND PARAM01     3  10.8 RUN-IN  
-#> 10 P02     OPEN-LABEL   PARAM01     4  11.4 RUN-IN  
-#> # i 13 more rows}\if{html}{\out{</div>}}}
+#> # A tibble: 12 × 6
+#>    USUBJID EPOCH        PARAMCD  ASEQ  AVAL BASETYPE    
+#>    <chr>   <chr>        <chr>   <dbl> <dbl> <chr>       
+#>  1 P01     RUN-IN       PARAM01     1  10   RUN-IN      
+#>  2 P01     RUN-IN       PARAM01     2   9.8 RUN-IN      
+#>  3 P01     DOUBLE-BLIND PARAM01     3   9.2 RUN-IN      
+#>  4 P01     DOUBLE-BLIND PARAM01     4  10.1 RUN-IN      
+#>  5 P01     OPEN-LABEL   PARAM01     5  10.4 RUN-IN      
+#>  6 P01     OPEN-LABEL   PARAM01     6   9.9 RUN-IN      
+#>  7 P01     DOUBLE-BLIND PARAM01     3   9.2 DOUBLE-BLIND
+#>  8 P01     DOUBLE-BLIND PARAM01     4  10.1 DOUBLE-BLIND
+#>  9 P01     OPEN-LABEL   PARAM01     5  10.4 DOUBLE-BLIND
+#> 10 P01     OPEN-LABEL   PARAM01     6   9.9 DOUBLE-BLIND
+#> # i 2 more rows}\if{html}{\out{</div>}}}
 \subsection{Records not matching any condition are retained with \code{BASETYPE = NA}}{
 
 Records that do not match any condition in \code{basetypes} are kept in the

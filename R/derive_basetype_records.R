@@ -43,7 +43,8 @@
 #' @info The `basetypes` argument is a named list of expressions where each name
 #' becomes a value of `BASETYPE` and each expression defines which records
 #' receive that value. A record can match multiple expressions and will be
-#' duplicated once for each matching `BASETYPE`.
+#' duplicated once for each matching `BASETYPE`. In this example, records for
+#' subject `P01` show the duplication across all three baseline types.
 #' @code
 #' library(tibble)
 #' library(dplyr, warn.conflicts = FALSE)
@@ -55,12 +56,7 @@
 #'   "P01",    "DOUBLE-BLIND", "PARAM01",     3,   9.2,
 #'   "P01",    "DOUBLE-BLIND", "PARAM01",     4,  10.1,
 #'   "P01",    "OPEN-LABEL",   "PARAM01",     5,  10.4,
-#'   "P01",    "OPEN-LABEL",   "PARAM01",     6,   9.9,
-#'   "P02",    "RUN-IN",       "PARAM01",     1,  12.1,
-#'   "P02",    "DOUBLE-BLIND", "PARAM01",     2,  10.2,
-#'   "P02",    "DOUBLE-BLIND", "PARAM01",     3,  10.8,
-#'   "P02",    "OPEN-LABEL",   "PARAM01",     4,  11.4,
-#'   "P02",    "OPEN-LABEL",   "PARAM01",     5,  10.8
+#'   "P01",    "OPEN-LABEL",   "PARAM01",     6,   9.9
 #' )
 #'
 #' derive_basetype_records(
