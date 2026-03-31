@@ -90,16 +90,25 @@
 #'
 #' @export
 #'
-#' @examples
+#' @examplesx
+#'
+#' @caption Data setup
+#'
+#' @info The following examples use the datasets below. `adsl` is the subject-
+#' level dataset onto which the flag is merged. `cm` contains concomitant
+#' medication records and `pr` contains procedure records — both are used as
+#' sources in the examples.
+#'
+#' @code
 #' library(dplyr)
 #'
-#' # Derive a flag indicating anti-cancer treatment based on CM and PR
 #' adsl <- tribble(
 #'   ~USUBJID,
 #'   "1",
 #'   "2",
 #'   "3",
-#'   "4"
+#'   "4",
+#'   "5"
 #' )
 #'
 #' cm <- tribble(
@@ -107,16 +116,36 @@
 #'   "1",      "ANTI-CANCER",      1,
 #'   "1",      "GENERAL",          2,
 #'   "2",      "GENERAL",          1,
-#'   "3",      "ANTI-CANCER",      1
+#'   "3",      "ANTI-CANCER",      1,
+#'   "5",      "GENERAL",          1
 #' )
 #'
-#' # Assuming all records in PR indicate cancer treatment
-#' pr <- tibble::tribble(
+#' # All records in PR are assumed to indicate cancer treatment
+#' pr <- tribble(
 #'   ~USUBJID, ~PRSEQ,
 #'   "2",      1,
 #'   "3",      1
 #' )
 #'
+#' @caption Flagging from multiple sources (`flag_events`)
+#'
+#' @info The `flag_events` argument takes a list of `flag_event()` objects, each
+#' pointing to a named source dataset and an optional `condition`. For a given
+#' by group, the new variable is set to `true_value` if the condition evaluates
+#' to `TRUE` at least once in **any** of the sources.
+#'
+#' In the example below, an anti-cancer treatment flag `CANCTRFL` is derived
+#' from two sources:
+#'
+#' - `cm`: flagged when `CMCAT == "ANTI-CANCER"`
+#' - `pr`: all records qualify (no `condition` specified), so any subject with
+#'   a procedure record is flagged
+#'
+#' Subject `"4"` has no records in either source, so `CANCTRFL` is `NA`.
+#' Subject `"5"` has a `cm` record but it does not meet the anti-cancer
+#' condition, so `CANCTRFL` is also `NA` (via the default `false_value`).
+#'
+#' @code
 #' derive_var_merged_ef_msrc(
 #'   adsl,
 #'   by_vars = exprs(USUBJID),
@@ -133,8 +162,91 @@
 #'   new_var = CANCTRFL
 #' )
 #'
-#' # Using different by variables depending on the source
-#' # Add a dose adjustment flag to ADEX based on ADEX, EC, and FA
+#' @caption Controlling flag values (`true_value`, `false_value`, `missing_value`)
+#'
+#' @info By default `true_value = "Y"`, `false_value = NA_character_`, and
+#' `missing_value = NA_character_`. Setting them explicitly lets you distinguish
+#' three subject-level states:
+#'
+#' - `true_value`: subject has at least one qualifying record in any source
+#' - `false_value`: subject appears in at least one source, but no record meets
+#'   the condition
+#' - `missing_value`: subject has **no** records in any source
+#'
+#' In the example below, a subject-level `ADSL` dataset is used together with
+#' dose adjustment sources (`adex`, `ec`, `fa`). This reveals all three cases
+#' in the output:
+#'
+#' - Subjects `"1"` and `"3"`: dose adjustment found → `"Y"` via `true_value`
+#' - Subject `"2"`: present in `adex` but no adjustment found → `"N"` via
+#'   `false_value`
+#' - Subject `"4"`: absent from all sources → `NA` via `missing_value`
+#'
+#' @code
+#' adsl_ex <- tribble(
+#'   ~USUBJID,
+#'   "1",
+#'   "2",
+#'   "3",
+#'   "4"
+#' )
+#'
+#' adex <- tribble(
+#'   ~USUBJID, ~EXADJ,
+#'   "1",      "DOSE REDUCED",
+#'   "2",      NA_character_
+#' )
+#'
+#' ec <- tribble(
+#'   ~USUBJID, ~ECADJ,
+#'   "3",      "DOSE REDUCED"
+#' )
+#'
+#' fa <- tribble(
+#'   ~USUBJID, ~FATESTCD, ~FAOBJ,            ~FASTRESC,
+#'   "1",      "OCCUR",   "DOSE ADJUSTMENT", "Y"
+#' )
+#'
+#' derive_var_merged_ef_msrc(
+#'   adsl_ex,
+#'   by_vars = exprs(USUBJID),
+#'   flag_events = list(
+#'     flag_event(
+#'       dataset_name = "ex",
+#'       condition = !is.na(EXADJ)
+#'     ),
+#'     flag_event(
+#'       dataset_name = "ec",
+#'       condition = !is.na(ECADJ)
+#'     ),
+#'     flag_event(
+#'       dataset_name = "fa",
+#'       condition = FATESTCD == "OCCUR" & FAOBJ == "DOSE ADJUSTMENT" & FASTRESC == "Y"
+#'     )
+#'   ),
+#'   source_datasets = list(ex = adex, ec = ec, fa = fa),
+#'   new_var = DOSADJFL,
+#'   true_value = "Y",
+#'   false_value = "N",
+#'   missing_value = NA_character_
+#' )
+#'
+#' @caption Per-source `by_vars` renaming
+#'
+#' @info When the grouping variable has a different name in a source dataset,
+#' the `by_vars` argument of `flag_event()` can be used to rename it using the
+#' `exprs(<target> = <source>)` syntax. This allows each source to use its own
+#' link variable while still merging correctly onto the input dataset.
+#'
+#' In the example below, a dose adjustment flag `DOSADJFL` is derived for each
+#' exposure record in `adex`. The flag is set to `"Y"` if a dose adjustment is
+#' recorded in any of three sources:
+#'
+#' - `ex`: directly via `EXADJ`
+#' - `ec`: linked via `ECLNKID` (renamed to `EXLNKID` for the merge)
+#' - `fa`: linked via `FALNKID` (renamed to `EXLNKID` for the merge)
+#'
+#' @code
 #' adex <- tribble(
 #'   ~USUBJID, ~EXLNKID, ~EXADJ,
 #'   "1",      "1",      "AE",

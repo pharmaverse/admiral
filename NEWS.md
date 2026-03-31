@@ -27,6 +27,8 @@ specified under `save_path`. This is because this functionality did not work as 
 
 ## Documentation
 
+- The documentation for `derive_var_merged_ef_msrc()` was enhanced with structured examples covering `flag_events` with multiple sources, customizing `true_value`, `false_value`, and `missing_value`, and per-source `by_vars` renaming. (#2906)
+
 - Fix `UDTC` derivation in `ADPPK` to use source domain `DTC` variables. (#3011)
 
 - Fixed example in `derive_var_nfrlt()` to use `NA_character_` instead of `""` for missing unit values, consistent with the admiral programming strategy. (#3027)
