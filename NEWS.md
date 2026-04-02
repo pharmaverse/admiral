@@ -45,6 +45,8 @@ of packages were updated to specify the level of contributions required for auth
 
 - Added a new custom [404 page](https://pharmaverse.github.io/admiral/404.html) with a butterfly quiz for lost users. (#2982)
 
+- Added information about how to print out records with missing information when using `datasetref` in `derive_summary_records()`. (#3012)
+
 ## Various
 
 <details>
