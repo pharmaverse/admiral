@@ -258,7 +258,7 @@
 #' missingness of data. Using the example above, the data can be
 #' filtered to include `DTYPE = "PHANTOM"`.
 #'
-#' #' @code
+#' @code
 #' adeg_allparamvis <- tribble(
 #'   ~USUBJID,   ~PARAM,             ~AVISIT,
 #'   "XYZ-1001", "QTcF Int. (msec)", "Baseline",

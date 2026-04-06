@@ -402,35 +402,38 @@ It may be helpful to print out missing records to determine
 missingness of data. Using the example above, the data can be
 filtered to include \code{DTYPE = "PHANTOM"}.
 
-#' @code
-adeg_allparamvis <- tribble(
-~USUBJID,   ~PARAM,             ~AVISIT,
-"XYZ-1001", "QTcF Int. (msec)", "Baseline",
-"XYZ-1001", "QTcF Int. (msec)", "Visit 2",
-"XYZ-1001", "QTcF Int. (msec)", "Visit 3",
-"XYZ-1002", "QTcF Int. (msec)", "Baseline",
-"XYZ-1002", "QTcF Int. (msec)", "Visit 2",
-"XYZ-1002", "QTcF Int. (msec)", "Visit 3"
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{adeg_allparamvis <- tribble(
+  ~USUBJID,   ~PARAM,             ~AVISIT,
+  "XYZ-1001", "QTcF Int. (msec)", "Baseline",
+  "XYZ-1001", "QTcF Int. (msec)", "Visit 2",
+  "XYZ-1001", "QTcF Int. (msec)", "Visit 3",
+  "XYZ-1002", "QTcF Int. (msec)", "Baseline",
+  "XYZ-1002", "QTcF Int. (msec)", "Visit 2",
+  "XYZ-1002", "QTcF Int. (msec)", "Visit 3"
 )
 
 derive_summary_records(
-adeg,
-dataset_add = adeg,
-dataset_ref = adeg_allparamvis,
-by_vars = exprs(USUBJID, PARAM, AVISIT),
-set_values_to = exprs(
-AVAL = mean(AVAL, na.rm = TRUE),
-ADTM = max(ADTM),
-DTYPE = "AVERAGE"
-),
-missing_values = exprs(
-AVAL = NA,
-ADTM = NA,
-DTYPE = "PHANTOM"
-)
+  adeg,
+  dataset_add = adeg,
+  dataset_ref = adeg_allparamvis,
+  by_vars = exprs(USUBJID, PARAM, AVISIT),
+  set_values_to = exprs(
+    AVAL = mean(AVAL, na.rm = TRUE),
+    ADTM = max(ADTM),
+    DTYPE = "AVERAGE"
+  ),
+  missing_values = exprs(
+    AVAL = NA,
+    ADTM = NA,
+    DTYPE = "PHANTOM"
+  )
 ) \%>\%
-arrange(USUBJID, AVISIT) \%>\%
-filter(DTYPE == "PHANTOM")
+  arrange(USUBJID, AVISIT) \%>\%
+  filter(DTYPE == "PHANTOM")
+#> # A tibble: 1 × 7
+#>   USUBJID  PARAM            AVISIT  EGDTC  AVAL ADTM   DTYPE  
+#>   <chr>    <chr>            <chr>   <chr> <dbl> <dttm> <chr>  
+#> 1 XYZ-1002 QTcF Int. (msec) Visit 2 <NA>     NA NA     PHANTOM}\if{html}{\out{</div>}}
 
 The string passed to \code{DTYPE} in the call to \code{filter()} depends on
 what is specified in the \code{missing_values} argument of
