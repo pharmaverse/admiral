@@ -33,49 +33,22 @@
 #'
 #' @family der_bds_findings
 #'
-#' @family der_prm_bds_findings
-#'
-#' @keywords der_prm_bds_findings
-#'
-#' @export
-#'
-#' @examplesx
-#'
-#' @caption Derive `BASETYPE` based on epoch (`basetypes`)
+#' @caption Add records for different baseline types (`basetypes`)
 #' @info The `basetypes` argument is a named list of expressions where each name
 #' becomes a value of `BASETYPE` and each expression defines which records
 #' receive that value. A record can match multiple expressions and will be
 #' duplicated once for each matching `BASETYPE`. In this example, records for
-#' subject `P01` show the duplication across all three baseline types.
+#' subject `P01` show the duplication across both baseline types.
+#'
+#' Records that do not match any condition in `basetypes` are kept in the
+#' output dataset with `BASETYPE` set to `NA`. In this example, `SCREENING`
+#' records do not match any of the `basetypes` conditions and are therefore
+#' retained with `BASETYPE = NA`.
+#'
 #' @code
 #' library(tibble)
 #' library(dplyr, warn.conflicts = FALSE)
 #'
-#' bds <- tribble(
-#'   ~USUBJID, ~EPOCH,         ~PARAMCD,  ~ASEQ, ~AVAL,
-#'   "P01",    "RUN-IN",       "PARAM01",     1,  10.0,
-#'   "P01",    "RUN-IN",       "PARAM01",     2,   9.8,
-#'   "P01",    "DOUBLE-BLIND", "PARAM01",     3,   9.2,
-#'   "P01",    "DOUBLE-BLIND", "PARAM01",     4,  10.1,
-#'   "P01",    "OPEN-LABEL",   "PARAM01",     5,  10.4,
-#'   "P01",    "OPEN-LABEL",   "PARAM01",     6,   9.9
-#' )
-#'
-#' derive_basetype_records(
-#'   dataset = bds,
-#'   basetypes = exprs(
-#'     "RUN-IN" = EPOCH %in% c("RUN-IN", "STABILIZATION", "DOUBLE-BLIND", "OPEN-LABEL"),
-#'     "DOUBLE-BLIND" = EPOCH %in% c("DOUBLE-BLIND", "OPEN-LABEL"),
-#'     "OPEN-LABEL" = EPOCH == "OPEN-LABEL"
-#'   )
-#' )
-#'
-#' @caption Records not matching any condition are retained with `BASETYPE = NA`
-#' @info Records that do not match any condition in `basetypes` are kept in the
-#' output dataset with `BASETYPE` set to `NA`. In this example, `SCREENING`
-#' records do not match any of the `basetypes` conditions and are therefore
-#' retained with `BASETYPE = NA`.
-#' @code
 #' bds <- tribble(
 #'   ~USUBJID, ~EPOCH,         ~PARAMCD,  ~ASEQ, ~AVAL,
 #'   "P01",    "SCREENING",    "PARAM01",     1,  10.2,
@@ -94,7 +67,7 @@
 #'     "RUN-IN" = EPOCH %in% c("RUN-IN", "DOUBLE-BLIND"),
 #'     "DOUBLE-BLIND" = EPOCH == "DOUBLE-BLIND"
 #'   )
-#' )
+#' )```
 #'
 #' @caption Include all records for multiple baseline type derivations (`basetypes = TRUE`)
 #' @info When all parameter records need to be included for multiple baseline
