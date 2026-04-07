@@ -35,9 +35,9 @@ No return value, called for side effects
 ## See also
 
 Utilities for printing:
-[`print.adam_templates()`](https:/pharmaverse.github.io/admiral/cran-release/copilot/enhance-examples-derive-basetype-records/reference/print.adam_templates.md),
-[`print.duplicates()`](https:/pharmaverse.github.io/admiral/cran-release/copilot/enhance-examples-derive-basetype-records/reference/print.duplicates.md),
-[`print.source()`](https:/pharmaverse.github.io/admiral/cran-release/copilot/enhance-examples-derive-basetype-records/reference/print.source.md)
+[`print.adam_templates()`](https:/pharmaverse.github.io/admiral/copilot/enhance-examples-derive-basetype-records/reference/print.adam_templates.md),
+[`print.duplicates()`](https:/pharmaverse.github.io/admiral/copilot/enhance-examples-derive-basetype-records/reference/print.duplicates.md),
+[`print.source()`](https:/pharmaverse.github.io/admiral/copilot/enhance-examples-derive-basetype-records/reference/print.source.md)
 
 ## Examples
 

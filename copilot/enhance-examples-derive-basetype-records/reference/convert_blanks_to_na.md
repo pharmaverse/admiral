@@ -46,8 +46,8 @@ as labels are preserved.
 ## See also
 
 Utilities for Formatting Observations:
-[`convert_na_to_blanks()`](https:/pharmaverse.github.io/admiral/cran-release/copilot/enhance-examples-derive-basetype-records/reference/convert_na_to_blanks.md),
-[`yn_to_numeric()`](https:/pharmaverse.github.io/admiral/cran-release/copilot/enhance-examples-derive-basetype-records/reference/yn_to_numeric.md)
+[`convert_na_to_blanks()`](https:/pharmaverse.github.io/admiral/copilot/enhance-examples-derive-basetype-records/reference/convert_na_to_blanks.md),
+[`yn_to_numeric()`](https:/pharmaverse.github.io/admiral/copilot/enhance-examples-derive-basetype-records/reference/yn_to_numeric.md)
 
 ## Examples
 

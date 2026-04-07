@@ -24,4 +24,4 @@ The original object.
 
 ## See also
 
-[`query()`](https:/pharmaverse.github.io/admiral/cran-release/copilot/enhance-examples-derive-basetype-records/reference/query.md)
+[`query()`](https:/pharmaverse.github.io/admiral/copilot/enhance-examples-derive-basetype-records/reference/query.md)

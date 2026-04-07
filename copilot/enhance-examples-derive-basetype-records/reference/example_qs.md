@@ -25,8 +25,8 @@ Created by
 ## See also
 
 Other datasets:
-[`admiral_adlb`](https:/pharmaverse.github.io/admiral/cran-release/copilot/enhance-examples-derive-basetype-records/reference/admiral_adlb.md),
-[`admiral_adsl`](https:/pharmaverse.github.io/admiral/cran-release/copilot/enhance-examples-derive-basetype-records/reference/admiral_adsl.md),
-[`ex_single`](https:/pharmaverse.github.io/admiral/cran-release/copilot/enhance-examples-derive-basetype-records/reference/ex_single.md),
-[`queries`](https:/pharmaverse.github.io/admiral/cran-release/copilot/enhance-examples-derive-basetype-records/reference/queries.md),
-[`queries_mh`](https:/pharmaverse.github.io/admiral/cran-release/copilot/enhance-examples-derive-basetype-records/reference/queries_mh.md)
+[`admiral_adlb`](https:/pharmaverse.github.io/admiral/copilot/enhance-examples-derive-basetype-records/reference/admiral_adlb.md),
+[`admiral_adsl`](https:/pharmaverse.github.io/admiral/copilot/enhance-examples-derive-basetype-records/reference/admiral_adsl.md),
+[`ex_single`](https:/pharmaverse.github.io/admiral/copilot/enhance-examples-derive-basetype-records/reference/ex_single.md),
+[`queries`](https:/pharmaverse.github.io/admiral/copilot/enhance-examples-derive-basetype-records/reference/queries.md),
+[`queries_mh`](https:/pharmaverse.github.io/admiral/copilot/enhance-examples-derive-basetype-records/reference/queries_mh.md)

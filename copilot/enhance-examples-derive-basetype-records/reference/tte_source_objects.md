@@ -1,7 +1,7 @@
 # Pre-Defined Time-to-Event Source Objects
 
 These pre-defined `tte_source` objects can be used as input to
-[`derive_param_tte()`](https:/pharmaverse.github.io/admiral/cran-release/copilot/enhance-examples-derive-basetype-records/reference/derive_param_tte.md).
+[`derive_param_tte()`](https:/pharmaverse.github.io/admiral/copilot/enhance-examples-derive-basetype-records/reference/derive_param_tte.md).
 
 ## Usage
 
@@ -36,25 +36,25 @@ ae_wd_event
 To see the definition of the various objects simply print the object in
 the R console, e.g. `print(death_event)`. For details of how to use
 these objects please refer to
-[`derive_param_tte()`](https:/pharmaverse.github.io/admiral/cran-release/copilot/enhance-examples-derive-basetype-records/reference/derive_param_tte.md).
+[`derive_param_tte()`](https:/pharmaverse.github.io/admiral/copilot/enhance-examples-derive-basetype-records/reference/derive_param_tte.md).
 
 ## See also
 
-[`derive_param_tte()`](https:/pharmaverse.github.io/admiral/cran-release/copilot/enhance-examples-derive-basetype-records/reference/derive_param_tte.md),
-[`tte_source()`](https:/pharmaverse.github.io/admiral/cran-release/copilot/enhance-examples-derive-basetype-records/reference/tte_source.md),
-[`event_source()`](https:/pharmaverse.github.io/admiral/cran-release/copilot/enhance-examples-derive-basetype-records/reference/event_source.md),
-[`censor_source()`](https:/pharmaverse.github.io/admiral/cran-release/copilot/enhance-examples-derive-basetype-records/reference/censor_source.md)
+[`derive_param_tte()`](https:/pharmaverse.github.io/admiral/copilot/enhance-examples-derive-basetype-records/reference/derive_param_tte.md),
+[`tte_source()`](https:/pharmaverse.github.io/admiral/copilot/enhance-examples-derive-basetype-records/reference/tte_source.md),
+[`event_source()`](https:/pharmaverse.github.io/admiral/copilot/enhance-examples-derive-basetype-records/reference/event_source.md),
+[`censor_source()`](https:/pharmaverse.github.io/admiral/copilot/enhance-examples-derive-basetype-records/reference/censor_source.md)
 
 Source Objects:
-[`basket_select()`](https:/pharmaverse.github.io/admiral/cran-release/copilot/enhance-examples-derive-basetype-records/reference/basket_select.md),
-[`censor_source()`](https:/pharmaverse.github.io/admiral/cran-release/copilot/enhance-examples-derive-basetype-records/reference/censor_source.md),
-[`event()`](https:/pharmaverse.github.io/admiral/cran-release/copilot/enhance-examples-derive-basetype-records/reference/event.md),
-[`event_joined()`](https:/pharmaverse.github.io/admiral/cran-release/copilot/enhance-examples-derive-basetype-records/reference/event_joined.md),
-[`event_source()`](https:/pharmaverse.github.io/admiral/cran-release/copilot/enhance-examples-derive-basetype-records/reference/event_source.md),
-[`flag_event()`](https:/pharmaverse.github.io/admiral/cran-release/copilot/enhance-examples-derive-basetype-records/reference/flag_event.md),
-[`query()`](https:/pharmaverse.github.io/admiral/cran-release/copilot/enhance-examples-derive-basetype-records/reference/query.md),
-[`records_source()`](https:/pharmaverse.github.io/admiral/cran-release/copilot/enhance-examples-derive-basetype-records/reference/records_source.md),
-[`tte_source()`](https:/pharmaverse.github.io/admiral/cran-release/copilot/enhance-examples-derive-basetype-records/reference/tte_source.md)
+[`basket_select()`](https:/pharmaverse.github.io/admiral/copilot/enhance-examples-derive-basetype-records/reference/basket_select.md),
+[`censor_source()`](https:/pharmaverse.github.io/admiral/copilot/enhance-examples-derive-basetype-records/reference/censor_source.md),
+[`event()`](https:/pharmaverse.github.io/admiral/copilot/enhance-examples-derive-basetype-records/reference/event.md),
+[`event_joined()`](https:/pharmaverse.github.io/admiral/copilot/enhance-examples-derive-basetype-records/reference/event_joined.md),
+[`event_source()`](https:/pharmaverse.github.io/admiral/copilot/enhance-examples-derive-basetype-records/reference/event_source.md),
+[`flag_event()`](https:/pharmaverse.github.io/admiral/copilot/enhance-examples-derive-basetype-records/reference/flag_event.md),
+[`query()`](https:/pharmaverse.github.io/admiral/copilot/enhance-examples-derive-basetype-records/reference/query.md),
+[`records_source()`](https:/pharmaverse.github.io/admiral/copilot/enhance-examples-derive-basetype-records/reference/records_source.md),
+[`tte_source()`](https:/pharmaverse.github.io/admiral/copilot/enhance-examples-derive-basetype-records/reference/tte_source.md)
 
 ## Examples
 
