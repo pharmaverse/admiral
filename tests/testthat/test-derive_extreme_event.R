@@ -601,14 +601,17 @@ test_that("derive_extreme_event Test 7: mode and condition used in event()", {
   )
 })
 
-test_that("by_vars in event_joined()", {
+## Test 8: by_vars in event_joined() ----
+test_that("derive_extreme_event Test 8: by_vars in event_joined()", {
   adbds <- tribble(
     ~USUBJID, ~AVISITN,  ~AVALC,
     "1",             1,  "Y",
     "1",             2,  "N",
     "1",             3,  "Y",
     "1",             4,  "Y",
-    "1",             5,  "Y"
+    "1",             5,  "Y",
+    "2",             1,  "Y",
+    "2",             3,  "Y"
   ) %>%
     mutate(PARAMCD = "RESP")
 
@@ -617,7 +620,8 @@ test_that("by_vars in event_joined()", {
     adbds %>%
       mutate(
         PARAMCD = "CONFRESP",
-        AVALC = if_else(AVALC == "Y" & dplyr::lead(AVALC) == "Y", "Y", "N", "N")
+        AVALC = if_else(AVALC == "Y" & dplyr::lead(AVALC) == "Y", "Y", "N", "N"),
+        .by = USUBJID
       )
   )
 
@@ -660,8 +664,8 @@ test_that("by_vars in event_joined()", {
   )
 })
 
-## Test 8: error if source dataset not available ----
-test_that("derive_extreme_event Test 8: error if source dataset not available", {
+## Test 9: error if source dataset not available ----
+test_that("derive_extreme_event Test 9: error if source dataset not available", {
   adhy <- tibble::tribble(
     ~USUBJID, ~AVISITN, ~CRIT1FL,
     "1",             1, "Y",
@@ -706,8 +710,8 @@ test_that("derive_extreme_event Test 8: error if source dataset not available", 
   )
 })
 
-## Test 9: test for duplicates: one warning ----
-test_that("derive_extreme_event Test 11: test for duplicates: one warning", {
+## Test 10: test for duplicates: one warning ----
+test_that("derive_extreme_event Test 10: test for duplicates: one warning", {
   ad1 <- tribble(
     ~USUBJID, ~AVALC, ~ADY, ~ASEQ,
     "1",      "Y",       3,     1,
@@ -766,8 +770,8 @@ test_that("derive_extreme_event Test 11: test for duplicates: one warning", {
 })
 
 
-## Test 10: test for duplicates: with error ----
-test_that("derive_extreme_event Test 12: test for duplicates: with error", {
+## Test 11: test for duplicates: with error ----
+test_that("derive_extreme_event Test 11: test for duplicates: with error", {
   ad1 <- tribble(
     ~USUBJID, ~AVALC, ~ADY, ~ASEQ,
     "1",      "Y",       3,     1,

@@ -303,15 +303,15 @@
 #' For example, we want to derive a new parameter for each visit indicating
 #' response at this visit and the next one. For this we need to specify the
 #' `by_vars` argument in `event_joined()` which overwrites the value specified
-#' in the `derive_extreme_events()` call. There `by_vars = exprs(USUBJID,
-#' AVISITN)` is used because we want to add a new records for each subject and
+#' in the `derive_extreme_event()` call. There `by_vars = exprs(USUBJID,
+#' AVISITN)` is used because we want to add new records for each subject and
 #' visit. In `event_joined()`, `by_vars = exprs(USUBJID)` is used because we
 #' want to join the records by subject only.
 #'
 #' The `tmp_obs_nr_var` argument is specified to create a variable which numbers
 #' the records within each subject. This variable is then used in the
 #' `condition` argument to ensure that the current record is compared with the
-#' next one. This ensures that missing visit like for subject 2 are handled
+#' next one. This ensures that missing visits like for subject 2 are handled
 #' correctly.
 #'
 #' @code
