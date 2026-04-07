@@ -553,7 +553,7 @@
 #'   ) %>%
 #'   mutate(
 #'     NFRLT = if_else(is.na(NFRLT) & VISIT == "UNSCHEDULED", 99999, NFRLT),
-#'     FRLTU = if_else(is.na(FRLTU) & VISIT == "UNSCHEDULED", "", FRLTU)
+#'     FRLTU = if_else(is.na(FRLTU) & VISIT == "UNSCHEDULED", NA_character_, FRLTU)
 #'   )
 #'
 #' @caption Custom range method
