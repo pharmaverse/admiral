@@ -180,6 +180,7 @@ derive_vars_computed <- function(dataset,
     by_vars = by_vars,
     parameters = parameters,
     set_values_to = new_vars,
+    filter = !!filter_add,
     constant_by_vars = constant_by_vars,
     constant_parameters = constant_parameters,
     keep_nas = TRUE

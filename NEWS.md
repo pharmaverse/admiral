@@ -4,6 +4,11 @@
 
 ## Updates of Existing Functions
 
+- The `filter_add` argument in `derive_var_joined_exist_flag()` is no longer erroneously
+ignored. (#3018)
+
+- Fixed poorly formatted warning messages in `derive_param_computed()` and `derive_vars_computed()`. (#2969)
+
 - `use_ad_template()` was updated to remove the `open` argument, meaning the generated template will never automatically open
 in a new window, and will instead just be accessible by clicking the link outputted in the console or going to the path
 specified under `save_path`. This is because this functionality did not work as expected outside of RStudio. (#2989)
@@ -22,6 +27,10 @@ specified under `save_path`. This is because this functionality did not work as 
 
 ## Documentation
 
+- Fix `UDTC` derivation in `ADPPK` to use source domain `DTC` variables. (#3011)
+
+- Fixed example in `derive_var_nfrlt()` to use `NA_character_` instead of `""` for missing unit values, consistent with the admiral programming strategy. (#3027)
+
 - New Estimands vignette added, describing possible implementations of estimands with `{admiral}` code. (#2954)
 
 - A night mode option has been added to the `{admiral}` website. This can be be toggled using the sun/moon icon in the top right corner 
@@ -36,10 +45,14 @@ of packages were updated to specify the level of contributions required for auth
 
 - Added IDs to each template script in the "Explore ADaM Templates" vignette, enabling links to them from across the website. (#3006)
 
+- Added a new custom [404 page](https://pharmaverse.github.io/admiral/404.html) with a butterfly quiz for lost users. (#2982)
+
 ## Various
 
 <details>
 <summary>Developer Notes</summary>
+
+- Add instructions for AI coding agents: Workflow from `{admiralci}` copies information from `{admiraldev}` to `AGENTS.md` instruction files. (#2920)
 
 - Increased the maximum height of the drop-down menus in the website navigation bar to ensure all items are visible without scrolling. (#2974)
 

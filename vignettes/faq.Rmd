@@ -17,7 +17,7 @@ knitr::opts_chunk$set(
 )
 ```
 
-##### **What is admiral**?
+##### **What is `{admiral}`**?
 
 * Think of `{admiral}` as a toolbox of modular blocks (R functions) to create analysis derivations:
   * each block has a stand alone purpose (each function provides a specific functionality)
@@ -25,7 +25,13 @@ knitr::opts_chunk$set(
 
 * Constructing ADaM dataset should become like building out of blocks that are based on `{admiral}` modular functions and user created modular functions. 
 
-##### **Why** did we decide to start **admiral**?
+##### **Why is the `{admiral}` logo a red butterfly?**?
+
+* The logo is inspired from the [Red Admiral](https://en.wikipedia.org/wiki/Vanessa_atalanta), also known as *Vanessa atalanta*, 
+which is a species of butterfly. However, our [extension packages](https://pharmaverse.org/e2eclinical/adam/) have branched
+out from this and have differently colored butterflies in their logos.
+
+##### **Why** did we decide to start **`{admiral}`**?
 
   * Data analysis challenges in clinical trials vary depending on scientific goals, therapeutic areas, indications, data sources and data quality. We all face the same challenge so why limit ourselves only to company-level adoption and crowd-sourcing to create ADaM datasets? 
   * Build ADaMs via collaboration and co-creation

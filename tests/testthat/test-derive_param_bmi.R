@@ -128,12 +128,12 @@ test_that("derive_param_bmi Test 8: BMI parameter NOT added", {
 
 ## derive_param_bmi: Obs created ----
 
-bmi <- function(hgt, wgt) {
-  wgt / (hgt / 100)^2
-}
-
 ## Test 9: BMI parameter is correctly added ----
 test_that("derive_param_bmi Test 9: BMI parameter is correctly added", {
+  bmi <- function(hgt, wgt) {
+    wgt / (hgt / 100)^2
+  }
+
   expected_output <- tibble::tribble(
     ~USUBJID, ~PARAMCD, ~PARAM, ~VISIT, ~VSSTRESU, ~AVAL,
     "01-701-1015", "HEIGHT", "Height (cm)", "BASELINE", "cm", 170,

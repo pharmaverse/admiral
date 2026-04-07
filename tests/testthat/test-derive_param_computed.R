@@ -108,8 +108,8 @@ test_that("derive_param_computed Test 3: no new observations if filtered dataset
     "01-701-1028", "SYSBP", "Systolic Blood Pressure (mmHg)", 132, "mmHg", "WEEK 2"
   )
 
-  expect_warning(
-    derive_param_computed(
+  expect_snapshot(
+    result <- derive_param_computed(
       input,
       filter = VISIT == "WEEK 24",
       parameters = c("SYSBP", "DIABP"),
@@ -120,12 +120,9 @@ test_that("derive_param_computed Test 3: no new observations if filtered dataset
         PARAM = "Mean arterial pressure (mmHg)",
         AVALU = "mmHg"
       )
-    ) %>%
-      expect_dfs_equal(input,
-        keys = c("USUBJID", "PARAMCD", "VISIT")
-      ),
-    "The input dataset does not contain any observations fullfiling the filter condition .*"
+    )
   )
+  expect_dfs_equal(result, input, keys = c("USUBJID", "PARAMCD", "VISIT"))
 })
 
 ## Test 4: no new observations are added if a parameter is missing ----
@@ -142,8 +139,8 @@ test_that("derive_param_computed Test 4: no new observations are added if a para
     "01-701-1028", "SYSBP", "Systolic Blood Pressure (mmHg)", 132, "mmHg", "WEEK 2"
   )
 
-  expect_warning(
-    derive_param_computed(
+  expect_snapshot(
+    result <- derive_param_computed(
       input,
       filter = PARAMCD == "DIABP",
       parameters = exprs(SYSBP, DIABP),
@@ -155,12 +152,8 @@ test_that("derive_param_computed Test 4: no new observations are added if a para
         AVALU = "mmHg"
       )
     )
-    %>%
-      expect_dfs_equal(input,
-        keys = c("USUBJID", "PARAMCD", "VISIT")
-      ),
-    "The input dataset does not contain any observations fullfiling the filter condition .*"
   )
+  expect_dfs_equal(result, input, keys = c("USUBJID", "PARAMCD", "VISIT"))
 })
 
 
@@ -329,7 +322,7 @@ test_that("derive_param_computed Test 8: no new observations if a constant param
     "01-701-1028", "WEIGHT", "Weight (kg)",  80.7, "kg",   "WEEK 2"
   )
 
-  expect_warning(
+  expect_snapshot(
     output <- derive_param_computed(
       input,
       parameters = c("WEIGHT"),
@@ -342,8 +335,7 @@ test_that("derive_param_computed Test 8: no new observations if a constant param
         PARAM = "Body Mass Index (kg/m2)",
         AVALU = "kg/m2"
       )
-    ),
-    regexp = "The input dataset does not contain any observations fullfiling the filter"
+    )
   )
 
   expect_dfs_equal(
