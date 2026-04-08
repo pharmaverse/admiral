@@ -275,7 +275,6 @@ then use a subsequent \code{mutate()} call to replace those \code{NA} values:
 \code{\link[=convert_xxtpt_to_hours]{convert_xxtpt_to_hours()}}, \code{\link[=derive_vars_duration]{derive_vars_duration()}}
 
 BDS-Findings Functions that returns variable appended to dataset:
-\code{\link{derive_basetype_records}()},
 \code{\link{derive_var_analysis_ratio}()},
 \code{\link{derive_var_anrind}()},
 \code{\link{derive_var_atoxgr}()},
