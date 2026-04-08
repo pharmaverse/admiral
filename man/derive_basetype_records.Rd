@@ -49,73 +49,45 @@ expression. Then, all subsets are stacked. Records which do not match any
 condition are kept and \code{BASETYPE} is set to \code{NA}.
 }
 \seealso{
-BDS-Findings Functions that returns variable appended to dataset:
-\code{\link{derive_var_analysis_ratio}()},
-\code{\link{derive_var_anrind}()},
-\code{\link{derive_var_atoxgr}()},
-\code{\link{derive_var_atoxgr_dir}()},
-\code{\link{derive_var_base}()},
-\code{\link{derive_var_chg}()},
-\code{\link{derive_var_nfrlt}()},
-\code{\link{derive_var_ontrtfl}()},
-\code{\link{derive_var_pchg}()},
-\code{\link{derive_var_shift}()},
-\code{\link{derive_vars_crit_flag}()}
+BDS-Findings Functions for adding Parameters/Records:
+\code{\link{default_qtc_paramcd}()},
+\code{\link{derive_expected_records}()},
+\code{\link{derive_extreme_event}()},
+\code{\link{derive_extreme_records}()},
+\code{\link{derive_locf_records}()},
+\code{\link{derive_param_bmi}()},
+\code{\link{derive_param_bsa}()},
+\code{\link{derive_param_computed}()},
+\code{\link{derive_param_doseint}()},
+\code{\link{derive_param_exist_flag}()},
+\code{\link{derive_param_exposure}()},
+\code{\link{derive_param_framingham}()},
+\code{\link{derive_param_map}()},
+\code{\link{derive_param_qtc}()},
+\code{\link{derive_param_rr}()},
+\code{\link{derive_param_wbc_abs}()},
+\code{\link{derive_summary_records}()}
 }
-\concept{der_bds_findings}
-\keyword{der_bds_findings}
+\concept{der_prm_bds_findings}
+\keyword{der_prm_bds_findings}
 \section{Examples}{
-\subsection{Derive \code{BASETYPE} based on epoch (\code{basetypes})}{
+\subsection{Add records for different baseline types (\code{basetypes})}{
 
 The \code{basetypes} argument is a named list of expressions where each name
 becomes a value of \code{BASETYPE} and each expression defines which records
 receive that value. A record can match multiple expressions and will be
 duplicated once for each matching \code{BASETYPE}. In this example, records for
-subject \code{P01} show the duplication across all three baseline types.
-
-\if{html}{\out{<div class="sourceCode r">}}\preformatted{library(tibble)
-library(dplyr, warn.conflicts = FALSE)
-
-bds <- tribble(
-  ~USUBJID, ~EPOCH,         ~PARAMCD,  ~ASEQ, ~AVAL,
-  "P01",    "RUN-IN",       "PARAM01",     1,  10.0,
-  "P01",    "RUN-IN",       "PARAM01",     2,   9.8,
-  "P01",    "DOUBLE-BLIND", "PARAM01",     3,   9.2,
-  "P01",    "DOUBLE-BLIND", "PARAM01",     4,  10.1,
-  "P01",    "OPEN-LABEL",   "PARAM01",     5,  10.4,
-  "P01",    "OPEN-LABEL",   "PARAM01",     6,   9.9
-)
-
-derive_basetype_records(
-  dataset = bds,
-  basetypes = exprs(
-    "RUN-IN" = EPOCH \%in\% c("RUN-IN", "STABILIZATION", "DOUBLE-BLIND", "OPEN-LABEL"),
-    "DOUBLE-BLIND" = EPOCH \%in\% c("DOUBLE-BLIND", "OPEN-LABEL"),
-    "OPEN-LABEL" = EPOCH == "OPEN-LABEL"
-  )
-)
-#> # A tibble: 12 × 6
-#>    USUBJID EPOCH        PARAMCD  ASEQ  AVAL BASETYPE    
-#>    <chr>   <chr>        <chr>   <dbl> <dbl> <chr>       
-#>  1 P01     RUN-IN       PARAM01     1  10   RUN-IN      
-#>  2 P01     RUN-IN       PARAM01     2   9.8 RUN-IN      
-#>  3 P01     DOUBLE-BLIND PARAM01     3   9.2 RUN-IN      
-#>  4 P01     DOUBLE-BLIND PARAM01     4  10.1 RUN-IN      
-#>  5 P01     OPEN-LABEL   PARAM01     5  10.4 RUN-IN      
-#>  6 P01     OPEN-LABEL   PARAM01     6   9.9 RUN-IN      
-#>  7 P01     DOUBLE-BLIND PARAM01     3   9.2 DOUBLE-BLIND
-#>  8 P01     DOUBLE-BLIND PARAM01     4  10.1 DOUBLE-BLIND
-#>  9 P01     OPEN-LABEL   PARAM01     5  10.4 DOUBLE-BLIND
-#> 10 P01     OPEN-LABEL   PARAM01     6   9.9 DOUBLE-BLIND
-#> # i 2 more rows}\if{html}{\out{</div>}}}
-\subsection{Records not matching any condition are retained with \code{BASETYPE = NA}}{
+subject \code{P01} show the duplication across both baseline types.
 
 Records that do not match any condition in \code{basetypes} are kept in the
 output dataset with \code{BASETYPE} set to \code{NA}. In this example, \code{SCREENING}
 records do not match any of the \code{basetypes} conditions and are therefore
 retained with \code{BASETYPE = NA}.
 
-\if{html}{\out{<div class="sourceCode r">}}\preformatted{bds <- tribble(
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{library(tibble)
+library(dplyr, warn.conflicts = FALSE)
+
+bds <- tribble(
   ~USUBJID, ~EPOCH,         ~PARAMCD,  ~ASEQ, ~AVAL,
   "P01",    "SCREENING",    "PARAM01",     1,  10.2,
   "P01",    "RUN-IN",       "PARAM01",     2,  10.0,

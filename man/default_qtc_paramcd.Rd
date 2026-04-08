@@ -28,6 +28,7 @@ default_qtc_paramcd("Sagie")
 \code{\link[=derive_param_qtc]{derive_param_qtc()}}
 
 BDS-Findings Functions for adding Parameters/Records:
+\code{\link{derive_basetype_records}()},
 \code{\link{derive_expected_records}()},
 \code{\link{derive_extreme_event}()},
 \code{\link{derive_extreme_records}()},

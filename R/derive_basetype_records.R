@@ -31,7 +31,13 @@
 #' @return The input dataset with variable `BASETYPE` added
 #'
 #'
-#' @family der_bds_findings
+#' @family der_prm_bds_findings
+#'
+#' @keywords der_prm_bds_findings
+#'
+#' @export
+#'
+#' @examplesx
 #'
 #' @caption Add records for different baseline types (`basetypes`)
 #' @info The `basetypes` argument is a named list of expressions where each name
@@ -67,7 +73,7 @@
 #'     "RUN-IN" = EPOCH %in% c("RUN-IN", "DOUBLE-BLIND"),
 #'     "DOUBLE-BLIND" = EPOCH == "DOUBLE-BLIND"
 #'   )
-#' )```
+#' )
 #'
 #' @caption Include all records for multiple baseline type derivations (`basetypes = TRUE`)
 #' @info When all parameter records need to be included for multiple baseline
