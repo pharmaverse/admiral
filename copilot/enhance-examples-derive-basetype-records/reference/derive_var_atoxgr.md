@@ -76,7 +76,6 @@ Function applies the following rules:
 ## See also
 
 BDS-Findings Functions that returns variable appended to dataset:
-[`derive_basetype_records()`](https:/pharmaverse.github.io/admiral/copilot/enhance-examples-derive-basetype-records/reference/derive_basetype_records.md),
 [`derive_var_analysis_ratio()`](https:/pharmaverse.github.io/admiral/copilot/enhance-examples-derive-basetype-records/reference/derive_var_analysis_ratio.md),
 [`derive_var_anrind()`](https:/pharmaverse.github.io/admiral/copilot/enhance-examples-derive-basetype-records/reference/derive_var_anrind.md),
 [`derive_var_atoxgr_dir()`](https:/pharmaverse.github.io/admiral/copilot/enhance-examples-derive-basetype-records/reference/derive_var_atoxgr_dir.md),

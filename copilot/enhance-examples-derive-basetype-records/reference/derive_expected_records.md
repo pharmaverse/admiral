@@ -85,6 +85,7 @@ are added to the output dataset.
 
 BDS-Findings Functions for adding Parameters/Records:
 [`default_qtc_paramcd()`](https:/pharmaverse.github.io/admiral/copilot/enhance-examples-derive-basetype-records/reference/default_qtc_paramcd.md),
+[`derive_basetype_records()`](https:/pharmaverse.github.io/admiral/copilot/enhance-examples-derive-basetype-records/reference/derive_basetype_records.md),
 [`derive_extreme_event()`](https:/pharmaverse.github.io/admiral/copilot/enhance-examples-derive-basetype-records/reference/derive_extreme_event.md),
 [`derive_extreme_records()`](https:/pharmaverse.github.io/admiral/copilot/enhance-examples-derive-basetype-records/reference/derive_extreme_records.md),
 [`derive_locf_records()`](https:/pharmaverse.github.io/admiral/copilot/enhance-examples-derive-basetype-records/reference/derive_locf_records.md),

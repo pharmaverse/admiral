@@ -58,71 +58,42 @@ match any condition are kept and `BASETYPE` is set to `NA`.
 
 ## See also
 
-BDS-Findings Functions that returns variable appended to dataset:
-[`derive_var_analysis_ratio()`](https:/pharmaverse.github.io/admiral/copilot/enhance-examples-derive-basetype-records/reference/derive_var_analysis_ratio.md),
-[`derive_var_anrind()`](https:/pharmaverse.github.io/admiral/copilot/enhance-examples-derive-basetype-records/reference/derive_var_anrind.md),
-[`derive_var_atoxgr()`](https:/pharmaverse.github.io/admiral/copilot/enhance-examples-derive-basetype-records/reference/derive_var_atoxgr.md),
-[`derive_var_atoxgr_dir()`](https:/pharmaverse.github.io/admiral/copilot/enhance-examples-derive-basetype-records/reference/derive_var_atoxgr_dir.md),
-[`derive_var_base()`](https:/pharmaverse.github.io/admiral/copilot/enhance-examples-derive-basetype-records/reference/derive_var_base.md),
-[`derive_var_chg()`](https:/pharmaverse.github.io/admiral/copilot/enhance-examples-derive-basetype-records/reference/derive_var_chg.md),
-[`derive_var_nfrlt()`](https:/pharmaverse.github.io/admiral/copilot/enhance-examples-derive-basetype-records/reference/derive_var_nfrlt.md),
-[`derive_var_ontrtfl()`](https:/pharmaverse.github.io/admiral/copilot/enhance-examples-derive-basetype-records/reference/derive_var_ontrtfl.md),
-[`derive_var_pchg()`](https:/pharmaverse.github.io/admiral/copilot/enhance-examples-derive-basetype-records/reference/derive_var_pchg.md),
-[`derive_var_shift()`](https:/pharmaverse.github.io/admiral/copilot/enhance-examples-derive-basetype-records/reference/derive_var_shift.md),
-[`derive_vars_crit_flag()`](https:/pharmaverse.github.io/admiral/copilot/enhance-examples-derive-basetype-records/reference/derive_vars_crit_flag.md)
+BDS-Findings Functions for adding Parameters/Records:
+[`default_qtc_paramcd()`](https:/pharmaverse.github.io/admiral/copilot/enhance-examples-derive-basetype-records/reference/default_qtc_paramcd.md),
+[`derive_expected_records()`](https:/pharmaverse.github.io/admiral/copilot/enhance-examples-derive-basetype-records/reference/derive_expected_records.md),
+[`derive_extreme_event()`](https:/pharmaverse.github.io/admiral/copilot/enhance-examples-derive-basetype-records/reference/derive_extreme_event.md),
+[`derive_extreme_records()`](https:/pharmaverse.github.io/admiral/copilot/enhance-examples-derive-basetype-records/reference/derive_extreme_records.md),
+[`derive_locf_records()`](https:/pharmaverse.github.io/admiral/copilot/enhance-examples-derive-basetype-records/reference/derive_locf_records.md),
+[`derive_param_bmi()`](https:/pharmaverse.github.io/admiral/copilot/enhance-examples-derive-basetype-records/reference/derive_param_bmi.md),
+[`derive_param_bsa()`](https:/pharmaverse.github.io/admiral/copilot/enhance-examples-derive-basetype-records/reference/derive_param_bsa.md),
+[`derive_param_computed()`](https:/pharmaverse.github.io/admiral/copilot/enhance-examples-derive-basetype-records/reference/derive_param_computed.md),
+[`derive_param_doseint()`](https:/pharmaverse.github.io/admiral/copilot/enhance-examples-derive-basetype-records/reference/derive_param_doseint.md),
+[`derive_param_exist_flag()`](https:/pharmaverse.github.io/admiral/copilot/enhance-examples-derive-basetype-records/reference/derive_param_exist_flag.md),
+[`derive_param_exposure()`](https:/pharmaverse.github.io/admiral/copilot/enhance-examples-derive-basetype-records/reference/derive_param_exposure.md),
+[`derive_param_framingham()`](https:/pharmaverse.github.io/admiral/copilot/enhance-examples-derive-basetype-records/reference/derive_param_framingham.md),
+[`derive_param_map()`](https:/pharmaverse.github.io/admiral/copilot/enhance-examples-derive-basetype-records/reference/derive_param_map.md),
+[`derive_param_qtc()`](https:/pharmaverse.github.io/admiral/copilot/enhance-examples-derive-basetype-records/reference/derive_param_qtc.md),
+[`derive_param_rr()`](https:/pharmaverse.github.io/admiral/copilot/enhance-examples-derive-basetype-records/reference/derive_param_rr.md),
+[`derive_param_wbc_abs()`](https:/pharmaverse.github.io/admiral/copilot/enhance-examples-derive-basetype-records/reference/derive_param_wbc_abs.md),
+[`derive_summary_records()`](https:/pharmaverse.github.io/admiral/copilot/enhance-examples-derive-basetype-records/reference/derive_summary_records.md)
 
 ## Examples
 
-### Derive `BASETYPE` based on epoch (`basetypes`)
+### Add records for different baseline types (`basetypes`)
 
 The `basetypes` argument is a named list of expressions where each name
 becomes a value of `BASETYPE` and each expression defines which records
 receive that value. A record can match multiple expressions and will be
 duplicated once for each matching `BASETYPE`. In this example, records
-for subject `P01` show the duplication across all three baseline types.
-
-    library(tibble)
-    library(dplyr, warn.conflicts = FALSE)
-
-    bds <- tribble(
-      ~USUBJID, ~EPOCH,         ~PARAMCD,  ~ASEQ, ~AVAL,
-      "P01",    "RUN-IN",       "PARAM01",     1,  10.0,
-      "P01",    "RUN-IN",       "PARAM01",     2,   9.8,
-      "P01",    "DOUBLE-BLIND", "PARAM01",     3,   9.2,
-      "P01",    "DOUBLE-BLIND", "PARAM01",     4,  10.1,
-      "P01",    "OPEN-LABEL",   "PARAM01",     5,  10.4,
-      "P01",    "OPEN-LABEL",   "PARAM01",     6,   9.9
-    )
-
-    derive_basetype_records(
-      dataset = bds,
-      basetypes = exprs(
-        "RUN-IN" = EPOCH %in% c("RUN-IN", "STABILIZATION", "DOUBLE-BLIND", "OPEN-LABEL"),
-        "DOUBLE-BLIND" = EPOCH %in% c("DOUBLE-BLIND", "OPEN-LABEL"),
-        "OPEN-LABEL" = EPOCH == "OPEN-LABEL"
-      )
-    )
-    #> # A tibble: 12 × 6
-    #>    USUBJID EPOCH        PARAMCD  ASEQ  AVAL BASETYPE
-    #>    <chr>   <chr>        <chr>   <dbl> <dbl> <chr>
-    #>  1 P01     RUN-IN       PARAM01     1  10   RUN-IN
-    #>  2 P01     RUN-IN       PARAM01     2   9.8 RUN-IN
-    #>  3 P01     DOUBLE-BLIND PARAM01     3   9.2 RUN-IN
-    #>  4 P01     DOUBLE-BLIND PARAM01     4  10.1 RUN-IN
-    #>  5 P01     OPEN-LABEL   PARAM01     5  10.4 RUN-IN
-    #>  6 P01     OPEN-LABEL   PARAM01     6   9.9 RUN-IN
-    #>  7 P01     DOUBLE-BLIND PARAM01     3   9.2 DOUBLE-BLIND
-    #>  8 P01     DOUBLE-BLIND PARAM01     4  10.1 DOUBLE-BLIND
-    #>  9 P01     OPEN-LABEL   PARAM01     5  10.4 DOUBLE-BLIND
-    #> 10 P01     OPEN-LABEL   PARAM01     6   9.9 DOUBLE-BLIND
-    #> # i 2 more rows
-
-### Records not matching any condition are retained with `BASETYPE = NA`
+for subject `P01` show the duplication across both baseline types.
 
 Records that do not match any condition in `basetypes` are kept in the
 output dataset with `BASETYPE` set to `NA`. In this example, `SCREENING`
 records do not match any of the `basetypes` conditions and are therefore
 retained with `BASETYPE = NA`.
+
+    library(tibble)
+    library(dplyr, warn.conflicts = FALSE)
 
     bds <- tribble(
       ~USUBJID, ~EPOCH,         ~PARAMCD,  ~ASEQ, ~AVAL,
