@@ -87,7 +87,6 @@ data \%>\%
 }
 \seealso{
 BDS-Findings Functions that returns variable appended to dataset:
-\code{\link{derive_basetype_records}()},
 \code{\link{derive_var_anrind}()},
 \code{\link{derive_var_atoxgr}()},
 \code{\link{derive_var_atoxgr_dir}()},

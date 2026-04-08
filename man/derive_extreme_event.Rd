@@ -199,6 +199,7 @@ This reduces the memory consumption but increases the run-time.
 
 BDS-Findings Functions for adding Parameters/Records:
 \code{\link{default_qtc_paramcd}()},
+\code{\link{derive_basetype_records}()},
 \code{\link{derive_expected_records}()},
 \code{\link{derive_extreme_records}()},
 \code{\link{derive_locf_records}()},
