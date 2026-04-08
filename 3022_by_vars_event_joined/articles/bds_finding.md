@@ -307,7 +307,7 @@ derive_param_wbc_abs(
 ```
 
 When all `PARAMCD` have been derived and added to the dataset, the other
-information from the look-up table (`PARAM`, `PARAMCAT1`,…) should be
+information from the look-up table (`PARAM`, `PARCAT1`,…) should be
 added.
 
 ``` r
