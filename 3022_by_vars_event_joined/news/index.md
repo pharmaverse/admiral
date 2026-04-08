@@ -76,6 +76,12 @@
   for authorship/acknowledgments.
   ([\#2979](https://github.com/pharmaverse/admiral/issues/2979))
 
+- The examples for
+  [`derive_basetype_records()`](https:/pharmaverse.github.io/admiral/3022_by_vars_event_joined/reference/derive_basetype_records.md)
+  were enhanced to include a case where records that do not match any
+  condition in `basetypes` are retained with `BASETYPE` set to `NA`.
+  ([\#2904](https://github.com/pharmaverse/admiral/issues/2904))
+
 - Additional information about timing variable conventions has been
   added to the
   [`derive_vars_dy()`](https:/pharmaverse.github.io/admiral/3022_by_vars_event_joined/reference/derive_vars_dy.md)

@@ -58,123 +58,107 @@ match any condition are kept and `BASETYPE` is set to `NA`.
 
 ## See also
 
-BDS-Findings Functions that returns variable appended to dataset:
-[`derive_var_analysis_ratio()`](https:/pharmaverse.github.io/admiral/3022_by_vars_event_joined/reference/derive_var_analysis_ratio.md),
-[`derive_var_anrind()`](https:/pharmaverse.github.io/admiral/3022_by_vars_event_joined/reference/derive_var_anrind.md),
-[`derive_var_atoxgr()`](https:/pharmaverse.github.io/admiral/3022_by_vars_event_joined/reference/derive_var_atoxgr.md),
-[`derive_var_atoxgr_dir()`](https:/pharmaverse.github.io/admiral/3022_by_vars_event_joined/reference/derive_var_atoxgr_dir.md),
-[`derive_var_base()`](https:/pharmaverse.github.io/admiral/3022_by_vars_event_joined/reference/derive_var_base.md),
-[`derive_var_chg()`](https:/pharmaverse.github.io/admiral/3022_by_vars_event_joined/reference/derive_var_chg.md),
-[`derive_var_nfrlt()`](https:/pharmaverse.github.io/admiral/3022_by_vars_event_joined/reference/derive_var_nfrlt.md),
-[`derive_var_ontrtfl()`](https:/pharmaverse.github.io/admiral/3022_by_vars_event_joined/reference/derive_var_ontrtfl.md),
-[`derive_var_pchg()`](https:/pharmaverse.github.io/admiral/3022_by_vars_event_joined/reference/derive_var_pchg.md),
-[`derive_var_shift()`](https:/pharmaverse.github.io/admiral/3022_by_vars_event_joined/reference/derive_var_shift.md),
-[`derive_vars_crit_flag()`](https:/pharmaverse.github.io/admiral/3022_by_vars_event_joined/reference/derive_vars_crit_flag.md)
+BDS-Findings Functions for adding Parameters/Records:
+[`default_qtc_paramcd()`](https:/pharmaverse.github.io/admiral/3022_by_vars_event_joined/reference/default_qtc_paramcd.md),
+[`derive_expected_records()`](https:/pharmaverse.github.io/admiral/3022_by_vars_event_joined/reference/derive_expected_records.md),
+[`derive_extreme_event()`](https:/pharmaverse.github.io/admiral/3022_by_vars_event_joined/reference/derive_extreme_event.md),
+[`derive_extreme_records()`](https:/pharmaverse.github.io/admiral/3022_by_vars_event_joined/reference/derive_extreme_records.md),
+[`derive_locf_records()`](https:/pharmaverse.github.io/admiral/3022_by_vars_event_joined/reference/derive_locf_records.md),
+[`derive_param_bmi()`](https:/pharmaverse.github.io/admiral/3022_by_vars_event_joined/reference/derive_param_bmi.md),
+[`derive_param_bsa()`](https:/pharmaverse.github.io/admiral/3022_by_vars_event_joined/reference/derive_param_bsa.md),
+[`derive_param_computed()`](https:/pharmaverse.github.io/admiral/3022_by_vars_event_joined/reference/derive_param_computed.md),
+[`derive_param_doseint()`](https:/pharmaverse.github.io/admiral/3022_by_vars_event_joined/reference/derive_param_doseint.md),
+[`derive_param_exist_flag()`](https:/pharmaverse.github.io/admiral/3022_by_vars_event_joined/reference/derive_param_exist_flag.md),
+[`derive_param_exposure()`](https:/pharmaverse.github.io/admiral/3022_by_vars_event_joined/reference/derive_param_exposure.md),
+[`derive_param_framingham()`](https:/pharmaverse.github.io/admiral/3022_by_vars_event_joined/reference/derive_param_framingham.md),
+[`derive_param_map()`](https:/pharmaverse.github.io/admiral/3022_by_vars_event_joined/reference/derive_param_map.md),
+[`derive_param_qtc()`](https:/pharmaverse.github.io/admiral/3022_by_vars_event_joined/reference/derive_param_qtc.md),
+[`derive_param_rr()`](https:/pharmaverse.github.io/admiral/3022_by_vars_event_joined/reference/derive_param_rr.md),
+[`derive_param_wbc_abs()`](https:/pharmaverse.github.io/admiral/3022_by_vars_event_joined/reference/derive_param_wbc_abs.md),
+[`derive_summary_records()`](https:/pharmaverse.github.io/admiral/3022_by_vars_event_joined/reference/derive_summary_records.md)
 
 ## Examples
 
-``` r
-library(tibble)
-library(dplyr, warn.conflicts = FALSE)
+### Add records for different baseline types (`basetypes`)
 
-bds <- tribble(
-  ~USUBJID, ~EPOCH,         ~PARAMCD,  ~ASEQ, ~AVAL,
-  "P01",    "RUN-IN",       "PARAM01",     1,  10.0,
-  "P01",    "RUN-IN",       "PARAM01",     2,   9.8,
-  "P01",    "DOUBLE-BLIND", "PARAM01",     3,   9.2,
-  "P01",    "DOUBLE-BLIND", "PARAM01",     4,  10.1,
-  "P01",    "OPEN-LABEL",   "PARAM01",     5,  10.4,
-  "P01",    "OPEN-LABEL",   "PARAM01",     6,   9.9,
-  "P02",    "RUN-IN",       "PARAM01",     1,  12.1,
-  "P02",    "DOUBLE-BLIND", "PARAM01",     2,  10.2,
-  "P02",    "DOUBLE-BLIND", "PARAM01",     3,  10.8,
-  "P02",    "OPEN-LABEL",   "PARAM01",     4,  11.4,
-  "P02",    "OPEN-LABEL",   "PARAM01",     5,  10.8
-)
+The `basetypes` argument is a named list of expressions where each name
+becomes a value of `BASETYPE` and each expression defines which records
+receive that value. A record can match multiple expressions and will be
+duplicated once for each matching `BASETYPE`. In this example, records
+for subject `P01` show the duplication across both baseline types.
 
-bds_with_basetype <- derive_basetype_records(
-  dataset = bds,
-  basetypes = exprs(
-    "RUN-IN" = EPOCH %in% c("RUN-IN", "STABILIZATION", "DOUBLE-BLIND", "OPEN-LABEL"),
-    "DOUBLE-BLIND" = EPOCH %in% c("DOUBLE-BLIND", "OPEN-LABEL"),
-    "OPEN-LABEL" = EPOCH == "OPEN-LABEL"
-  )
-)
+Records that do not match any condition in `basetypes` are kept in the
+output dataset with `BASETYPE` set to `NA`. In this example, `SCREENING`
+records do not match any of the `basetypes` conditions and are therefore
+retained with `BASETYPE = NA`.
 
+    library(tibble)
+    library(dplyr, warn.conflicts = FALSE)
 
-# Below print statement will print all 23 records in the data frame
-# bds_with_basetype
-print(bds_with_basetype, n = Inf)
-#> # A tibble: 23 × 6
-#>    USUBJID EPOCH        PARAMCD  ASEQ  AVAL BASETYPE    
-#>    <chr>   <chr>        <chr>   <dbl> <dbl> <chr>       
-#>  1 P01     RUN-IN       PARAM01     1  10   RUN-IN      
-#>  2 P01     RUN-IN       PARAM01     2   9.8 RUN-IN      
-#>  3 P01     DOUBLE-BLIND PARAM01     3   9.2 RUN-IN      
-#>  4 P01     DOUBLE-BLIND PARAM01     4  10.1 RUN-IN      
-#>  5 P01     OPEN-LABEL   PARAM01     5  10.4 RUN-IN      
-#>  6 P01     OPEN-LABEL   PARAM01     6   9.9 RUN-IN      
-#>  7 P02     RUN-IN       PARAM01     1  12.1 RUN-IN      
-#>  8 P02     DOUBLE-BLIND PARAM01     2  10.2 RUN-IN      
-#>  9 P02     DOUBLE-BLIND PARAM01     3  10.8 RUN-IN      
-#> 10 P02     OPEN-LABEL   PARAM01     4  11.4 RUN-IN      
-#> 11 P02     OPEN-LABEL   PARAM01     5  10.8 RUN-IN      
-#> 12 P01     DOUBLE-BLIND PARAM01     3   9.2 DOUBLE-BLIND
-#> 13 P01     DOUBLE-BLIND PARAM01     4  10.1 DOUBLE-BLIND
-#> 14 P01     OPEN-LABEL   PARAM01     5  10.4 DOUBLE-BLIND
-#> 15 P01     OPEN-LABEL   PARAM01     6   9.9 DOUBLE-BLIND
-#> 16 P02     DOUBLE-BLIND PARAM01     2  10.2 DOUBLE-BLIND
-#> 17 P02     DOUBLE-BLIND PARAM01     3  10.8 DOUBLE-BLIND
-#> 18 P02     OPEN-LABEL   PARAM01     4  11.4 DOUBLE-BLIND
-#> 19 P02     OPEN-LABEL   PARAM01     5  10.8 DOUBLE-BLIND
-#> 20 P01     OPEN-LABEL   PARAM01     5  10.4 OPEN-LABEL  
-#> 21 P01     OPEN-LABEL   PARAM01     6   9.9 OPEN-LABEL  
-#> 22 P02     OPEN-LABEL   PARAM01     4  11.4 OPEN-LABEL  
-#> 23 P02     OPEN-LABEL   PARAM01     5  10.8 OPEN-LABEL  
+    bds <- tribble(
+      ~USUBJID, ~EPOCH,         ~PARAMCD,  ~ASEQ, ~AVAL,
+      "P01",    "SCREENING",    "PARAM01",     1,  10.2,
+      "P01",    "RUN-IN",       "PARAM01",     2,  10.0,
+      "P01",    "RUN-IN",       "PARAM01",     3,   9.8,
+      "P01",    "DOUBLE-BLIND", "PARAM01",     4,   9.2,
+      "P01",    "DOUBLE-BLIND", "PARAM01",     5,  10.1,
+      "P02",    "SCREENING",    "PARAM01",     1,  12.2,
+      "P02",    "RUN-IN",       "PARAM01",     2,  12.1,
+      "P02",    "DOUBLE-BLIND", "PARAM01",     3,  10.2
+    )
 
-count(bds_with_basetype, BASETYPE, name = "Number of Records")
-#> # A tibble: 3 × 2
-#>   BASETYPE     `Number of Records`
-#>   <chr>                      <int>
-#> 1 DOUBLE-BLIND                   8
-#> 2 OPEN-LABEL                     4
-#> 3 RUN-IN                        11
+    derive_basetype_records(
+      dataset = bds,
+      basetypes = exprs(
+        "RUN-IN" = EPOCH %in% c("RUN-IN", "DOUBLE-BLIND"),
+        "DOUBLE-BLIND" = EPOCH == "DOUBLE-BLIND"
+      )
+    )
+    #> # A tibble: 11 × 6
+    #>    USUBJID EPOCH        PARAMCD  ASEQ  AVAL BASETYPE
+    #>    <chr>   <chr>        <chr>   <dbl> <dbl> <chr>
+    #>  1 P01     SCREENING    PARAM01     1  10.2 <NA>
+    #>  2 P02     SCREENING    PARAM01     1  12.2 <NA>
+    #>  3 P01     RUN-IN       PARAM01     2  10   RUN-IN
+    #>  4 P01     RUN-IN       PARAM01     3   9.8 RUN-IN
+    #>  5 P01     DOUBLE-BLIND PARAM01     4   9.2 RUN-IN
+    #>  6 P01     DOUBLE-BLIND PARAM01     5  10.1 RUN-IN
+    #>  7 P02     RUN-IN       PARAM01     2  12.1 RUN-IN
+    #>  8 P02     DOUBLE-BLIND PARAM01     3  10.2 RUN-IN
+    #>  9 P01     DOUBLE-BLIND PARAM01     4   9.2 DOUBLE-BLIND
+    #> 10 P01     DOUBLE-BLIND PARAM01     5  10.1 DOUBLE-BLIND
+    #> 11 P02     DOUBLE-BLIND PARAM01     3  10.2 DOUBLE-BLIND
 
-# An example where all parameter records need to be included for 2 different
-# baseline type derivations (such as LAST and WORST)
-bds <- tribble(
-  ~USUBJID, ~EPOCH,         ~PARAMCD,  ~ASEQ, ~AVAL,
-  "P01",    "RUN-IN",       "PARAM01",     1,  10.0,
-  "P01",    "RUN-IN",       "PARAM01",     2,   9.8,
-  "P01",    "DOUBLE-BLIND", "PARAM01",     3,   9.2,
-  "P01",    "DOUBLE-BLIND", "PARAM01",     4,  10.1
-)
+### Include all records for multiple baseline type derivations (`basetypes = TRUE`)
 
-bds_with_basetype <- derive_basetype_records(
-  dataset = bds,
-  basetypes = exprs(
-    "LAST" = TRUE,
-    "WORST" = TRUE
-  )
-)
+When all parameter records need to be included for multiple baseline
+type derivations (such as `"LAST"` and `"WORST"`), set each expression
+in `basetypes` to `TRUE`. This duplicates every record once for each
+named baseline type.
 
-print(bds_with_basetype, n = Inf)
-#> # A tibble: 8 × 6
-#>   USUBJID EPOCH        PARAMCD  ASEQ  AVAL BASETYPE
-#>   <chr>   <chr>        <chr>   <dbl> <dbl> <chr>   
-#> 1 P01     RUN-IN       PARAM01     1  10   LAST    
-#> 2 P01     RUN-IN       PARAM01     2   9.8 LAST    
-#> 3 P01     DOUBLE-BLIND PARAM01     3   9.2 LAST    
-#> 4 P01     DOUBLE-BLIND PARAM01     4  10.1 LAST    
-#> 5 P01     RUN-IN       PARAM01     1  10   WORST   
-#> 6 P01     RUN-IN       PARAM01     2   9.8 WORST   
-#> 7 P01     DOUBLE-BLIND PARAM01     3   9.2 WORST   
-#> 8 P01     DOUBLE-BLIND PARAM01     4  10.1 WORST   
+    bds <- tribble(
+      ~USUBJID, ~EPOCH,         ~PARAMCD,  ~ASEQ, ~AVAL,
+      "P01",    "RUN-IN",       "PARAM01",     1,  10.0,
+      "P01",    "RUN-IN",       "PARAM01",     2,   9.8,
+      "P01",    "DOUBLE-BLIND", "PARAM01",     3,   9.2,
+      "P01",    "DOUBLE-BLIND", "PARAM01",     4,  10.1
+    )
 
-count(bds_with_basetype, BASETYPE, name = "Number of Records")
-#> # A tibble: 2 × 2
-#>   BASETYPE `Number of Records`
-#>   <chr>                  <int>
-#> 1 LAST                       4
-#> 2 WORST                      4
-```
+    derive_basetype_records(
+      dataset = bds,
+      basetypes = exprs(
+        "LAST" = TRUE,
+        "WORST" = TRUE
+      )
+    )
+    #> # A tibble: 8 × 6
+    #>   USUBJID EPOCH        PARAMCD  ASEQ  AVAL BASETYPE
+    #>   <chr>   <chr>        <chr>   <dbl> <dbl> <chr>
+    #> 1 P01     RUN-IN       PARAM01     1  10   LAST
+    #> 2 P01     RUN-IN       PARAM01     2   9.8 LAST
+    #> 3 P01     DOUBLE-BLIND PARAM01     3   9.2 LAST
+    #> 4 P01     DOUBLE-BLIND PARAM01     4  10.1 LAST
+    #> 5 P01     RUN-IN       PARAM01     1  10   WORST
+    #> 6 P01     RUN-IN       PARAM01     2   9.8 WORST
+    #> 7 P01     DOUBLE-BLIND PARAM01     3   9.2 WORST
+    #> 8 P01     DOUBLE-BLIND PARAM01     4  10.1 WORST   

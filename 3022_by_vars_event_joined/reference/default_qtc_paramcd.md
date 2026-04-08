@@ -32,6 +32,7 @@ default_qtc_paramcd(method)
 [`derive_param_qtc()`](https:/pharmaverse.github.io/admiral/3022_by_vars_event_joined/reference/derive_param_qtc.md)
 
 BDS-Findings Functions for adding Parameters/Records:
+[`derive_basetype_records()`](https:/pharmaverse.github.io/admiral/3022_by_vars_event_joined/reference/derive_basetype_records.md),
 [`derive_expected_records()`](https:/pharmaverse.github.io/admiral/3022_by_vars_event_joined/reference/derive_expected_records.md),
 [`derive_extreme_event()`](https:/pharmaverse.github.io/admiral/3022_by_vars_event_joined/reference/derive_extreme_event.md),
 [`derive_extreme_records()`](https:/pharmaverse.github.io/admiral/3022_by_vars_event_joined/reference/derive_extreme_records.md),
