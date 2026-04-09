@@ -159,8 +159,6 @@ test_that("derive_param_bmi Test 9: BMI parameter is correctly added", {
   )
 })
 
-
-# Derive BMI where height is measured only once
 ## Test 10: Derive BMI where height is measured only once ----
 test_that("derive_param_bmi Test 10: Derive BMI where height is measured only once", {
   input <- tibble::tribble(
