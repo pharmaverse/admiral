@@ -310,7 +310,7 @@ to produce additional datasets
 - [`event()`](https:/pharmaverse.github.io/admiral/main/reference/event.md)
   :
 
-  Create a `event` Object
+  Create an `event` Object
 
 - [`event_joined()`](https:/pharmaverse.github.io/admiral/main/reference/event_joined.md)
   :
