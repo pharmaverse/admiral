@@ -92,9 +92,6 @@ Derivation functions helpful for building the ADSL dataset
 Derivation functions helpful for building the BDS datasets (e.g. advs,
 adlb, adeg, adex)
 
-- [`derive_basetype_records()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/derive_basetype_records.md)
-  : Derive Basetype Variable
-
 - [`derive_var_analysis_ratio()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/derive_var_analysis_ratio.md)
   : Derive Ratio Variable
 
@@ -150,6 +147,8 @@ adcm, admh)
 
 - [`default_qtc_paramcd()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/default_qtc_paramcd.md)
   : Get Default Parameter Code for Corrected QT
+- [`derive_basetype_records()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/derive_basetype_records.md)
+  : Derive Basetype Variable
 - [`derive_expected_records()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/derive_expected_records.md)
   : Derive Expected Records
 - [`derive_extreme_event()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/derive_extreme_event.md)

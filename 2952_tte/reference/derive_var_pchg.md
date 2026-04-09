@@ -33,7 +33,6 @@ result by `100`.
 [`derive_var_chg()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/derive_var_chg.md)
 
 BDS-Findings Functions that returns variable appended to dataset:
-[`derive_basetype_records()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/derive_basetype_records.md),
 [`derive_var_analysis_ratio()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/derive_var_analysis_ratio.md),
 [`derive_var_anrind()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/derive_var_anrind.md),
 [`derive_var_atoxgr()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/derive_var_atoxgr.md),
