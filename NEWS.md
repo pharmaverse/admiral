@@ -10,6 +10,10 @@ period and the `event_type` argument for specifying if the event is negative
 `consider_end_dates` field was added to the `event_source()`, `censor_source()`,
 and `tte_source()` objects. (#2952)
 
+- The `by_vars` and the `tmp_obs_nr_var` arguments were added to
+  `event_joined()`. This allows to derive parameters requiring confirmation _by
+  visit_ using `derive_extreme_event()`. (#3022)
+
 - The `filter_add` argument in `derive_var_joined_exist_flag()` is no longer
 erroneously ignored. (#3018)
 

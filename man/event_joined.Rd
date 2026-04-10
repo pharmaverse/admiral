@@ -7,7 +7,9 @@
 event_joined(
   dataset_name = NULL,
   condition,
+  by_vars = NULL,
   order = NULL,
+  tmp_obs_nr_var = NULL,
   join_vars,
   join_type,
   first_cond_lower = NULL,
@@ -45,6 +47,17 @@ observations up to the confirmation observation the response is "CR" or
 \item{Default value}{none}
 }}
 
+\item{by_vars}{By variables
+
+The specified variables are used to join the dataset with itself. If the
+argument is not specified (or set to \code{NULL}), the by variables specified for
+\code{derive_extreme_event()} are used.
+
+\describe{
+\item{Permitted values}{list of variables created by \code{exprs()}, e.g., \code{exprs(USUBJID, VISIT)}}
+\item{Default value}{\code{NULL}}
+}}
+
 \item{order}{If specified, the specified variables or expressions are used to
 select the first observation.
 
@@ -53,6 +66,22 @@ For handling of \code{NA}s in sorting variables see the "Sort Order" section in 
 \describe{
 \item{Permitted values}{list of expressions created by \code{exprs()}, e.g.,
 \code{exprs(ADT, desc(AVAL))} or \code{NULL}}
+\item{Default value}{\code{NULL}}
+}}
+
+\item{tmp_obs_nr_var}{Temporary observation number
+
+The specified variable is added to the source dataset (\code{dataset_name}). It
+is set to the observation number with respect to \code{order}. For each by group
+(\code{by_vars}) the observation number starts with \code{1}. If there is more than
+one record for specific values for \code{by_vars} and \code{order}, all records get
+the same observation number. The variable can be used in the conditions
+(\code{filter_join}, \code{first_cond_upper}, \code{first_cond_lower}). It is not included
+in the output dataset. It can also be used to select events depending on
+consecutive observations or the last observation.
+
+\describe{
+\item{Permitted values}{an unquoted symbol, e.g., \code{AVAL}}
 \item{Default value}{\code{NULL}}
 }}
 
