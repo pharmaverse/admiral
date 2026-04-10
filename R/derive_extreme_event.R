@@ -353,6 +353,57 @@
 #'   set_values_to = exprs(PARAMCD = "CONFRESP")
 #' )
 #'
+#' @caption Restricting source data before join
+#' @info Sometimes it is useful to restrict the source data of some events
+#'   before the join. For example, in the following example, records with
+#'   missing results should be ignored for the confirmation.
+#'
+#' @code
+#' adbds <- tribble(
+#'   ~USUBJID, ~AVISITN,  ~AVALC,
+#'   "1",             1,  "Y",
+#'   "1",             2,  "N",
+#'   "1",             3,  "Y",
+#'   "1",             4,  "Y",
+#'   "1",             5,  "Y",
+#'   "2",             1,  "Y",
+#'   "2",             2,   NA,
+#'   "2",             3,  "Y"
+#' ) %>%
+#'   mutate(PARAMCD = "RESP")
+#'
+#' derive_extreme_event(
+#'   adbds,
+#'   by_vars = exprs(USUBJID, AVISITN),
+#'   source_datasets = list(adbds = adbds),
+#'   tmp_event_nr_var = event_nr,
+#'   order = exprs(event_nr),
+#'   mode = "first",
+#'   events = list(
+#'     event_joined(
+#'       dataset_name = "adbds",
+#'       filter_source = !is.na(AVALC),
+#'       by_vars = exprs(USUBJID),
+#'       order = exprs(AVISITN),
+#'       join_vars = exprs(AVALC),
+#'       join_type = "after",
+#'       tmp_obs_nr_var = tmp_obs_nr,
+#'       condition = AVALC == "Y" & AVALC.join == "Y" & tmp_obs_nr.join == tmp_obs_nr + 1,
+#'       set_values_to = exprs(AVALC = "Y")
+#'     ),
+#'     event(
+#'       dataset_name = "adbds",
+#'       set_values_to = exprs(AVALC = "N")
+#'     )
+#'   ),
+#'   set_values_to = exprs(
+#'     PARAMCD = "CONFRESP"
+#'   )
+#' )
+#'
+#' @info Note that for subject `2` the results at visit `1` is considered as
+#'   confirmed because the missing result at visit `2` is ignored.
+#'
 #' @caption Specifying different arguments across `event()` objects
 #' @info Here we consider a Hy's Law use case. We are interested in
 #'   knowing whether a subject's Alkaline Phosphatase has ever been
@@ -710,19 +761,21 @@ derive_extreme_event <- function(dataset = NULL,
           event_by_vars <- event$by_vars
         }
 
-        data_events <- filter_joined(
-          data_source,
-          dataset_add = data_source,
-          by_vars = event_by_vars,
-          join_vars = event$join_vars,
-          join_type = event$join_type,
-          first_cond_lower = !!event$first_cond_lower,
-          first_cond_upper = !!event$first_cond_upper,
-          order = event_order,
-          tmp_obs_nr_var = !!event$tmp_obs_nr_var,
-          check_type = "none",
-          filter_join = !!event$condition
-        )
+        data_events <- data_source %>%
+          filter_if(event$filter_source) %>%
+          filter_joined(
+            .,
+            dataset_add = .,
+            by_vars = event_by_vars,
+            join_vars = event$join_vars,
+            join_type = event$join_type,
+            first_cond_lower = !!event$first_cond_lower,
+            first_cond_upper = !!event$first_cond_upper,
+            order = event_order,
+            tmp_obs_nr_var = !!event$tmp_obs_nr_var,
+            check_type = "none",
+            filter_join = !!event$condition
+          )
       }
       if (is.null(event$keep_source_vars)) {
         event_keep_source_vars <- keep_source_vars
