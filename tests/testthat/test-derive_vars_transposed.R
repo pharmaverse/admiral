@@ -1,11 +1,14 @@
 ## Test 1: the merge dataset is transposed and merged correctly ----
 test_that("derive_vars_transposed Test 1: the merge dataset is transposed and merged correctly", {
-  dataset <- tibble::tribble(
-    ~STUDYID,  ~USUBJID, ~VAR1,
-    "STUDY01", "P01",        3,
-    "STUDY01", "P02",       31,
-    "STUDY01", "P03",       42
+  expected_output <- tibble::tribble(
+    ~STUDYID,  ~USUBJID, ~VAR1, ~T01, ~T02,
+    "STUDY01", "P01",        3,   31,    5,
+    "STUDY01", "P02",       31,    3,   NA,
+    "STUDY01", "P03",       42,   NA,    9
   )
+  
+  dataset <- select(expected_output, -T01, -T02)
+  
   dataset_merge <- tibble::tribble(
     ~STUDYID,  ~USUBJID, ~TESTCD, ~VALUE,
     "STUDY01", "P01",    "T01",       31,
@@ -13,12 +16,7 @@ test_that("derive_vars_transposed Test 1: the merge dataset is transposed and me
     "STUDY01", "P02",    "T01",        3,
     "STUDY01", "P03",    "T02",        9
   )
-  expected_output <- tibble::tribble(
-    ~STUDYID,  ~USUBJID, ~VAR1, ~T01, ~T02,
-    "STUDY01", "P01",        3,   31,    5,
-    "STUDY01", "P02",       31,    3,   NA,
-    "STUDY01", "P03",       42,   NA,    9
-  )
+
   actual_output <- derive_vars_transposed(
     dataset,
     dataset_merge,
@@ -33,24 +31,21 @@ test_that("derive_vars_transposed Test 1: the merge dataset is transposed and me
 
 ## Test 2: filtering the merge dataset works ----
 test_that("derive_vars_transposed Test 2: filtering the merge dataset works", {
-  dataset <- tibble::tribble(
-    ~STUDYID,  ~USUBJID, ~VAR1,
-    "STUDY01", "P01",        3,
-    "STUDY01", "P02",       31,
-    "STUDY01", "P03",       42
+  expected_output <- tibble::tribble(
+    ~STUDYID,  ~USUBJID, ~VAR1, ~T01, ~T02,
+    "STUDY01", "P01",        3,   31,    5,
+    "STUDY01", "P02",       31,    3,   NA,
+    "STUDY01", "P03",       42,   NA,    9
   )
+  
+  dataset <- select(expected_output, -T01, -T02)
+  
   dataset_merge <- tibble::tribble(
     ~STUDYID,  ~USUBJID, ~TESTCD, ~VALUE,
     "STUDY01", "P01",    "T01",       31,
     "STUDY01", "P01",    "T02",        5,
     "STUDY01", "P02",    "T01",        3,
-    "STUDY01", "P01",    "T02",        9
-  )
-  expected_output <- tibble::tribble(
-    ~STUDYID,  ~USUBJID, ~VAR1, ~T01,
-    "STUDY01", "P01",        3,   31,
-    "STUDY01", "P02",       31,    3,
-    "STUDY01", "P03",       42,   NA
+    "STUDY01", "P03",    "T02",        9
   )
 
   actual_output <- derive_vars_transposed(
