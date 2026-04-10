@@ -689,7 +689,7 @@ test_that("derive_extreme_event Test 9: filter_source in event_joined()", {
       "1",             4,  "Y",
       "1",             5,  "N",
       "2",             1,  "Y",
-      "2",            NA,   NA,
+      "2",            NA,  NA,
       "2",             3,  "N"
     ) %>%
       mutate(PARAMCD = "CONFRESP")
