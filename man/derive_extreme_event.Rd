@@ -493,7 +493,7 @@ missing results should be ignored for the confirmation.
   "1",             4,  "Y",
   "1",             5,  "Y",
   "2",             1,  "Y",
-  "2",             2,  NA,
+  "2",             2,   NA,
   "2",             3,  "Y"
 ) \%>\%
   mutate(PARAMCD = "RESP")
