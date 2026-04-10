@@ -739,39 +739,39 @@ For adding a new parameter instead of a new variable the
 ```{r}
 adqs_ext <- adqs_a %>%
   derive_extreme_event(
-  by_vars = exprs(USUBJID, AVISITN),
-  source_datasets = list(adqs = adqs_a),
-  tmp_event_nr_var = event_nr,
-  order = exprs(event_nr),
-  mode = "first",
-  events = list(
-    event_joined(
-      dataset_name = "adqs",
-      # TODO: add filter_source to restrict the records to be considered to ANL01FL == "Y"
-      by_vars = exprs(USUBJID),
-      order = exprs(AVISITN),
-      join_vars = exprs(CHGCAT1),
-      join_type = "after",
-      tmp_obs_nr_var = tmp_obs_nr,
-      condition = CHGCAT1 %in% c("IMPROVED", "WORSENED") & CHGCAT1 == CHGCAT1.join &
-        tmp_obs_nr.join == tmp_obs_nr + 1,
-      set_values_to = exprs(
-        AVALC = "Y"
+    by_vars = exprs(USUBJID, AVISITN),
+    source_datasets = list(adqs = adqs_a),
+    tmp_event_nr_var = event_nr,
+    order = exprs(event_nr),
+    mode = "first",
+    events = list(
+      event_joined(
+        dataset_name = "adqs",
+        # TODO: add filter_source to restrict the records to be considered to ANL01FL == "Y"
+        by_vars = exprs(USUBJID),
+        order = exprs(AVISITN),
+        join_vars = exprs(CHGCAT1),
+        join_type = "after",
+        tmp_obs_nr_var = tmp_obs_nr,
+        condition = CHGCAT1 %in% c("IMPROVED", "WORSENED") & CHGCAT1 == CHGCAT1.join &
+          tmp_obs_nr.join == tmp_obs_nr + 1,
+        set_values_to = exprs(
+          AVALC = "Y"
+        )
+      ),
+      event(
+        dataset_name = "adqs",
+        set_values_to = exprs(
+          AVALC = "N"
+        )
       )
     ),
-    event(
-      dataset_name = "adqs",
-      set_values_to = exprs(
-        AVALC = "N"
-      )
+    set_values_to = exprs(
+      PARAMCD = "CONFCHGA",
+      PARAM = "Confirmed change of score A",
+      AVAL = yn_to_numeric(AVALC)
     )
-  ),
-  set_values_to = exprs(
-    PARAMCD = "CONFCHGA",
-    PARAM = "Confirmed change of score A",
-    AVAL = yn_to_numeric(AVALC)
   )
-)
 ```
 
 <details open>
