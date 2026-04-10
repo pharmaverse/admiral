@@ -18,6 +18,13 @@
   objects.
   ([\#2952](https://github.com/pharmaverse/admiral/issues/2952))
 
+- The `by_vars` and the `tmp_obs_nr_var` arguments were added to
+  [`event_joined()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/event_joined.md).
+  This allows to derive parameters requiring confirmation *by visit*
+  using
+  [`derive_extreme_event()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/derive_extreme_event.md).
+  ([\#3022](https://github.com/pharmaverse/admiral/issues/3022))
+
 - The `filter_add` argument in
   [`derive_var_joined_exist_flag()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/derive_var_joined_exist_flag.md)
   is no longer erroneously ignored.

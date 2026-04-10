@@ -19,7 +19,9 @@ See its documentation for more details.
 event_joined(
   dataset_name = NULL,
   condition,
+  by_vars = NULL,
   order = NULL,
+  tmp_obs_nr_var = NULL,
   join_vars,
   join_type,
   first_cond_lower = NULL,
@@ -75,6 +77,26 @@ event_joined(
 
   :   none
 
+- by_vars:
+
+  By variables
+
+  The specified variables are used to join the dataset with itself. If
+  the argument is not specified (or set to `NULL`), the by variables
+  specified for
+  [`derive_extreme_event()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/derive_extreme_event.md)
+  are used.
+
+  Permitted values
+
+  :   list of variables created by
+      [`exprs()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/reexport-exprs.md),
+      e.g., `exprs(USUBJID, VISIT)`
+
+  Default value
+
+  :   `NULL`
+
 - order:
 
   If specified, the specified variables or expressions are used to
@@ -89,6 +111,28 @@ event_joined(
   :   list of expressions created by
       [`exprs()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/reexport-exprs.md),
       e.g., `exprs(ADT, desc(AVAL))` or `NULL`
+
+  Default value
+
+  :   `NULL`
+
+- tmp_obs_nr_var:
+
+  Temporary observation number
+
+  The specified variable is added to the source dataset
+  (`dataset_name`). It is set to the observation number with respect to
+  `order`. For each by group (`by_vars`) the observation number starts
+  with `1`. If there is more than one record for specific values for
+  `by_vars` and `order`, all records get the same observation number.
+  The variable can be used in the conditions (`filter_join`,
+  `first_cond_upper`, `first_cond_lower`). It is not included in the
+  output dataset. It can also be used to select events depending on
+  consecutive observations or the last observation.
+
+  Permitted values
+
+  :   an unquoted symbol, e.g., `AVAL`
 
   Default value
 
