@@ -234,8 +234,72 @@ For adding a new parameter instead of a new variable the
 [`derive_extreme_event()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/derive_extreme_event.md)
 function can be used.
 
-TODO: add example for time to confirmed worsening using a confirmed
-worsening parameter.
+``` r
+adqs_ext <- adqs_a %>%
+  derive_extreme_event(
+    by_vars = exprs(USUBJID, AVISITN),
+    source_datasets = list(adqs = adqs_a),
+    tmp_event_nr_var = event_nr,
+    order = exprs(event_nr),
+    mode = "first",
+    events = list(
+      event_joined(
+        dataset_name = "adqs",
+        # TODO: add filter_source to restrict the records to be considered to ANL01FL == "Y"
+        by_vars = exprs(USUBJID),
+        order = exprs(AVISITN),
+        join_vars = exprs(CHGCAT1),
+        join_type = "after",
+        tmp_obs_nr_var = tmp_obs_nr,
+        condition = CHGCAT1 %in% c("IMPROVED", "WORSENED") & CHGCAT1 == CHGCAT1.join &
+          tmp_obs_nr.join == tmp_obs_nr + 1,
+        set_values_to = exprs(
+          AVALC = "Y"
+        )
+      ),
+      event(
+        dataset_name = "adqs",
+        set_values_to = exprs(
+          AVALC = "N"
+        )
+      )
+    ),
+    set_values_to = exprs(
+      PARAMCD = "CONFCHGA",
+      PARAM = "Confirmed change of score A",
+      AVAL = yn_to_numeric(AVALC)
+    )
+  )
+```
+
+`adqs_ext` dataset
+
+The new parameter `CONFCHGA` is then used in the definition of the event
+for confirmed worsening.
+
+``` r
+confirmed_worsening <- event_source(
+  dataset_name = "adqs",
+  filter = PARAMCD == "CONFCHGA" & CHGCAT1 == "WORSENED" & AVALC == "Y",
+  date = ADT
+)
+
+adtte <- derive_param_tte(
+  dataset_adsl = adsl,
+  source_datasets = list(adsl = adsl, adqs = adqs_ext),
+  end_dates = list(trt_end),
+  event_conditions = list(confirmed_worsening),
+  censor_conditions = list(valid_assessment),
+  set_values_to = exprs(
+    PARAMCD = "TTCWORS",
+    PARAM = "Time to confirmed worsening"
+  )
+)
+```
+
+`adtte` dataset
+
+![](tte_analyses_files/figure-html/unnamed-chunk-23-1.png)
 
 ### Using `derive_extreme_event()` to Derive Confirmation and Time-to-Event in One Step
 
@@ -289,7 +353,7 @@ adtte <- derive_extreme_event(
 
 `adtte` dataset
 
-![](tte_analyses_files/figure-html/unnamed-chunk-21-1.png)
+![](tte_analyses_files/figure-html/unnamed-chunk-26-1.png)
 
 ## Combined Events
 
@@ -311,7 +375,7 @@ improvement in score A or score B.
 
 `adqs_all` dataset
 
-![](tte_analyses_files/figure-html/unnamed-chunk-23-1.png)
+![](tte_analyses_files/figure-html/unnamed-chunk-28-1.png)
 
 We define the events for improvement in score A and score B separately
 and then specify both events for the `event_conditions` argument of
@@ -346,7 +410,7 @@ adtte <- derive_param_tte(
 
 `adtte` dataset
 
-![](tte_analyses_files/figure-html/unnamed-chunk-26-1.png)
+![](tte_analyses_files/figure-html/unnamed-chunk-31-1.png)
 
 ### Events Combined by “and”
 
@@ -404,7 +468,7 @@ adtte <- derive_param_tte(
 
 `adtte` dataset
 
-![](tte_analyses_files/figure-html/unnamed-chunk-31-1.png)
+![](tte_analyses_files/figure-html/unnamed-chunk-36-1.png)
 
 ------------------------------------------------------------------------
 
