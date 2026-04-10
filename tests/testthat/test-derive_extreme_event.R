@@ -601,8 +601,71 @@ test_that("derive_extreme_event Test 7: mode and condition used in event()", {
   )
 })
 
-## Test 8: error if source dataset not available ----
-test_that("derive_extreme_event Test 8: error if source dataset not available", {
+## Test 8: by_vars in event_joined() ----
+test_that("derive_extreme_event Test 8: by_vars in event_joined()", {
+  adbds <- tribble(
+    ~USUBJID, ~AVISITN,  ~AVALC,
+    "1",             1,  "Y",
+    "1",             2,  "N",
+    "1",             3,  "Y",
+    "1",             4,  "Y",
+    "1",             5,  "Y",
+    "2",             1,  "Y",
+    "2",             3,  "Y"
+  ) %>%
+    mutate(PARAMCD = "RESP")
+
+  expected <- bind_rows(
+    adbds,
+    adbds %>%
+      mutate(
+        PARAMCD = "CONFRESP",
+        AVALC = if_else(AVALC == "Y" & dplyr::lead(AVALC) == "Y", "Y", "N", "N"),
+        .by = USUBJID
+      )
+  )
+
+  actual <- derive_extreme_event(
+    adbds,
+    by_vars = exprs(USUBJID, AVISITN),
+    source_datasets = list(adbds = adbds),
+    tmp_event_nr_var = event_nr,
+    order = exprs(event_nr),
+    mode = "first",
+    events = list(
+      event_joined(
+        dataset_name = "adbds",
+        by_vars = exprs(USUBJID),
+        order = exprs(AVISITN),
+        join_vars = exprs(AVALC),
+        join_type = "after",
+        tmp_obs_nr_var = tmp_obs_nr,
+        condition = AVALC == "Y" & AVALC.join == "Y" & tmp_obs_nr.join == tmp_obs_nr + 1,
+        set_values_to = exprs(
+          AVALC = "Y"
+        )
+      ),
+      event(
+        dataset_name = "adbds",
+        set_values_to = exprs(
+          AVALC = "N"
+        )
+      )
+    ),
+    set_values_to = exprs(
+      PARAMCD = "CONFRESP"
+    )
+  )
+
+  expect_dfs_equal(
+    base = expected,
+    compare = actual,
+    keys = c("USUBJID", "AVISITN", "PARAMCD")
+  )
+})
+
+## Test 9: error if source dataset not available ----
+test_that("derive_extreme_event Test 9: error if source dataset not available", {
   adhy <- tibble::tribble(
     ~USUBJID, ~AVISITN, ~CRIT1FL,
     "1",             1, "Y",
@@ -647,8 +710,8 @@ test_that("derive_extreme_event Test 8: error if source dataset not available", 
   )
 })
 
-## Test 9: test for duplicates: one warning ----
-test_that("derive_extreme_event Test 11: test for duplicates: one warning", {
+## Test 10: test for duplicates: one warning ----
+test_that("derive_extreme_event Test 10: test for duplicates: one warning", {
   ad1 <- tribble(
     ~USUBJID, ~AVALC, ~ADY, ~ASEQ,
     "1",      "Y",       3,     1,
@@ -707,8 +770,8 @@ test_that("derive_extreme_event Test 11: test for duplicates: one warning", {
 })
 
 
-## Test 10: test for duplicates: with error ----
-test_that("derive_extreme_event Test 12: test for duplicates: with error", {
+## Test 11: test for duplicates: with error ----
+test_that("derive_extreme_event Test 11: test for duplicates: with error", {
   ad1 <- tribble(
     ~USUBJID, ~AVALC, ~ADY, ~ASEQ,
     "1",      "Y",       3,     1,

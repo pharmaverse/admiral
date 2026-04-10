@@ -4,8 +4,12 @@
 
 ## Updates of Existing Functions
 
-- The `filter_add` argument in `derive_var_joined_exist_flag()` is no longer erroneously
-ignored. (#3018)
+- The `by_vars` and the `tmp_obs_nr_var` arguments were added to
+  `event_joined()`. This allows to derive parameters requiring confirmation _by
+  visit_ using `derive_extreme_event()`. (#3022)
+
+- The `filter_add` argument in `derive_var_joined_exist_flag()` is no longer
+erroneously ignored. (#3018)
 
 - Fixed poorly formatted warning messages in `derive_param_computed()` and `derive_vars_computed()`. (#2969)
 
@@ -39,6 +43,8 @@ of the navigation bar. Tooltips have also been set up for each of the icons on t
 - The [contributions guidelines](https://pharmaverse.github.io/admiral/cran-release/CONTRIBUTING.html) for the `{admiral}` ecosystem 
 of packages were updated to specify the level of contributions required for authorship/acknowledgments. (#2979)
 
+- The examples for `derive_basetype_records()` were enhanced to include a case where records that do not match any
+  condition in `basetypes` are retained with `BASETYPE` set to `NA`. (#2904)
 - Additional information about timing variable conventions has been added to the `derive_vars_dy()` function documentation. (#2995)
 
 - Added IDs to each template script in the "Explore ADaM Templates" vignette, enabling links to them from across the website. (#3006)
@@ -61,6 +67,12 @@ the pull request title to trigger website creation. (#2984)
 
 - `_pkdown.yml` was updated to add metadata for linking across packages
 (`inst/pkgdown.yml`). (#2950)
+
+- The helper functions `roxygen_param_dataset()`, `roxygen_param_by_vars()`,
+  `roxygen_order_na_handling()`, and `roxygen_save_memory()` have been moved
+  from `{admiral}` to `{admiraldev}`. They are now exported from `{admiraldev}`
+  and remain accessible in `{admiral}` via the existing `@import admiraldev`
+  dependency. ([admiraldev/#517](https://github.com/pharmaverse/admiraldev/issues/517))
 </details>
 
 # admiral 1.4.1
