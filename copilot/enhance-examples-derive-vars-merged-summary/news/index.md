@@ -6,6 +6,13 @@
 
 ### Updates of Existing Functions
 
+- The `by_vars` and the `tmp_obs_nr_var` arguments were added to
+  [`event_joined()`](https:/pharmaverse.github.io/admiral/copilot/enhance-examples-derive-vars-merged-summary/reference/event_joined.md).
+  This allows to derive parameters requiring confirmation *by visit*
+  using
+  [`derive_extreme_event()`](https:/pharmaverse.github.io/admiral/copilot/enhance-examples-derive-vars-merged-summary/reference/derive_extreme_event.md).
+  ([\#3022](https://github.com/pharmaverse/admiral/issues/3022))
+
 - The `filter_add` argument in
   [`derive_var_joined_exist_flag()`](https:/pharmaverse.github.io/admiral/copilot/enhance-examples-derive-vars-merged-summary/reference/derive_var_joined_exist_flag.md)
   is no longer erroneously ignored.
@@ -69,6 +76,12 @@
   for authorship/acknowledgments.
   ([\#2979](https://github.com/pharmaverse/admiral/issues/2979))
 
+- The examples for
+  [`derive_basetype_records()`](https:/pharmaverse.github.io/admiral/copilot/enhance-examples-derive-vars-merged-summary/reference/derive_basetype_records.md)
+  were enhanced to include a case where records that do not match any
+  condition in `basetypes` are retained with `BASETYPE` set to `NA`.
+  ([\#2904](https://github.com/pharmaverse/admiral/issues/2904))
+
 - Additional information about timing variable conventions has been
   added to the
   [`derive_vars_dy()`](https:/pharmaverse.github.io/admiral/copilot/enhance-examples-derive-vars-merged-summary/reference/derive_vars_dy.md)
@@ -112,6 +125,20 @@ Developer Notes
 - `_pkdown.yml` was updated to add metadata for linking across packages
   (`inst/pkgdown.yml`).
   ([\#2950](https://github.com/pharmaverse/admiral/issues/2950))
+
+- The helper functions
+  [`roxygen_param_dataset()`](https://pharmaverse.github.io/admiraldev/reference/roxygen_param_dataset.html),
+  [`roxygen_param_by_vars()`](https://pharmaverse.github.io/admiraldev/reference/roxygen_param_by_vars.html),
+  [`roxygen_order_na_handling()`](https://pharmaverse.github.io/admiraldev/reference/roxygen_order_na_handling.html),
+  and
+  [`roxygen_save_memory()`](https://pharmaverse.github.io/admiraldev/reference/roxygen_save_memory.html)
+  have been moved from [admiral](https://pharmaverse.github.io/admiral/)
+  to [admiraldev](https://pharmaverse.github.io/admiraldev/). They are
+  now exported from
+  [admiraldev](https://pharmaverse.github.io/admiraldev/) and remain
+  accessible in [admiral](https://pharmaverse.github.io/admiral/) via
+  the existing `@import admiraldev` dependency.
+  ([admiraldev/#517](https://github.com/pharmaverse/admiraldev/issues/517))
 
 ## admiral 1.4.1
 

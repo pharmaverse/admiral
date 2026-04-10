@@ -83,7 +83,6 @@ to:
 ## See also
 
 BDS-Findings Functions that returns variable appended to dataset:
-[`derive_basetype_records()`](https:/pharmaverse.github.io/admiral/copilot/enhance-examples-derive-vars-merged-summary/reference/derive_basetype_records.md),
 [`derive_var_analysis_ratio()`](https:/pharmaverse.github.io/admiral/copilot/enhance-examples-derive-vars-merged-summary/reference/derive_var_analysis_ratio.md),
 [`derive_var_atoxgr()`](https:/pharmaverse.github.io/admiral/copilot/enhance-examples-derive-vars-merged-summary/reference/derive_var_atoxgr.md),
 [`derive_var_atoxgr_dir()`](https:/pharmaverse.github.io/admiral/copilot/enhance-examples-derive-vars-merged-summary/reference/derive_var_atoxgr_dir.md),
