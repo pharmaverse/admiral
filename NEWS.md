@@ -14,6 +14,10 @@ and `tte_source()` objects. (#2952)
   `event_joined()`. This allows to derive parameters requiring confirmation _by
   visit_ using `derive_extreme_event()`. (#3022)
 
+- The `filter_source` argument was added to `event_joined()`, allowing to
+specify a condition to restrict the source dataset before the join, e.g., when
+using `derive_extreme_event()`. (#3033)
+
 - The `filter_add` argument in `derive_var_joined_exist_flag()` is no longer
 erroneously ignored. (#3018)
 
