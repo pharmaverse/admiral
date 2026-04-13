@@ -669,7 +669,7 @@ can be used in the `derive_param_tte()` function to select the event records.
 To derive a variable (`CONFFL`) which indicates whether the worsening or
 improvement is confirmed or not, the `derive_var_joined_exist_flag()` function
 can be used. Here an assessment is considered as confirmed if it doesn't change
-at the next visit. Only assessments within the treatment period (`ANL01FL ==
+at the next visit. Only assessments within the observation period (`ANL01FL ==
 "Y"`) are considered for the confirmation.
 
 ```{r}
@@ -731,10 +731,12 @@ dataset_vignette(adtte)
 plot_data(adqs_ext, dataset_tte = adtte)
 ```
 
-## Adding a Confirmation Parameters to the Source Dataset
+## Adding a Confirmation Parameter to the Source Dataset
 
 For adding a new parameter instead of a new variable the
-`derive_extreme_event()` function can be used.
+`derive_extreme_event()` function can be used. The `filter_source` argument of
+the `event_joined()` object is used to restrict the records to observation
+period (`ANL01FL == "Y"`).
 
 ```{r}
 adqs_ext <- adqs_a %>%
@@ -747,7 +749,7 @@ adqs_ext <- adqs_a %>%
     events = list(
       event_joined(
         dataset_name = "adqs",
-        # TODO: add filter_source to restrict the records to be considered to ANL01FL == "Y"
+        filter_source = ANL01FL == "Y",
         by_vars = exprs(USUBJID),
         order = exprs(AVISITN),
         join_vars = exprs(CHGCAT1),
