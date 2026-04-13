@@ -33,19 +33,15 @@ get_sdg <- function(basket_select,
   }
 }
 
-make_cqterms <- function() {
-  tibble::tribble(
+# create_query_data ----
+## Test 1: customized query defined by terms ----
+test_that("create_query_data Test 1: customized query defined by terms", {
+  cqterms <- tibble::tribble(
     ~TERMCHAR,                    ~TERMNUM,
     "APPLICATION SITE ERYTHEMA", 10003041L,
     "APPLICATION SITE PRURITUS", 10003053L
   ) %>%
     mutate(SRCVAR = "AEDECOD")
-}
-
-# create_query_data ----
-## Test 1: customized query defined by terms ----
-test_that("create_query_data Test 1: customized query defined by terms", {
-  cqterms <- make_cqterms()
 
   cq <- query(
     prefix = "CQ01",
@@ -126,7 +122,12 @@ test_that("create_query_data Test 2: customized query defined by SMQs", {
 
 ## Test 3: customized query defined by terms and SMQs ----
 test_that("create_query_data Test 3: customized query defined by terms and SMQs", {
-  cqterms <- make_cqterms()
+  cqterms <- tibble::tribble(
+    ~TERMCHAR,                    ~TERMNUM,
+    "APPLICATION SITE ERYTHEMA", 10003041L,
+    "APPLICATION SITE PRURITUS", 10003053L
+  ) %>%
+    mutate(SRCVAR = "AEDECOD")
 
   cq <- query(
     prefix = "CQ03",
@@ -383,7 +384,12 @@ test_that("create_query_data Test 9: catching error from user function (get_term
 # query ----
 ## Test 10: error if name = auto for non SMQs/SDGs ----
 test_that("query Test 10: error if name = auto for non SMQs/SDGs", {
-  cqterms <- make_cqterms()
+  cqterms <- tibble::tribble(
+    ~TERMCHAR,                    ~TERMNUM,
+    "APPLICATION SITE ERYTHEMA", 10003041L,
+    "APPLICATION SITE PRURITUS", 10003053L
+  ) %>%
+    mutate(SRCVAR = "AEDECOD")
 
   expect_snapshot(
     sdg <- query(
@@ -396,7 +402,12 @@ test_that("query Test 10: error if name = auto for non SMQs/SDGs", {
 
 ## Test 11: error if id = auto for non SMQs/SDGs ----
 test_that("query Test 11: error if id = auto for non SMQs/SDGs", {
-  cqterms <- make_cqterms()
+  cqterms <- tibble::tribble(
+    ~TERMCHAR,                    ~TERMNUM,
+    "APPLICATION SITE ERYTHEMA", 10003041L,
+    "APPLICATION SITE PRURITUS", 10003053L
+  ) %>%
+    mutate(SRCVAR = "AEDECOD")
 
   expect_snapshot(
     sdg <- query(
@@ -446,7 +457,12 @@ test_that("validate_query Test 13: error if definition is not a data frame or ba
 # assert_terms ----
 ## Test 14: error if SRCVAR missing ----
 test_that("assert_terms Test 14: error if SRCVAR missing", {
-  cqterms <- make_cqterms()
+  cqterms <- tibble::tribble(
+    ~TERMCHAR,                    ~TERMNUM,
+    "APPLICATION SITE ERYTHEMA", 10003041L,
+    "APPLICATION SITE PRURITUS", 10003053L
+  ) %>%
+    mutate(SRCVAR = "AEDECOD")
 
   expect_snapshot(
     assert_terms(
@@ -459,7 +475,12 @@ test_that("assert_terms Test 14: error if SRCVAR missing", {
 
 ## Test 15: error if SRCVAR and GRPNAME missing ----
 test_that("assert_terms Test 15: error if SRCVAR and GRPNAME missing", {
-  cqterms <- make_cqterms()
+  cqterms <- tibble::tribble(
+    ~TERMCHAR,                    ~TERMNUM,
+    "APPLICATION SITE ERYTHEMA", 10003041L,
+    "APPLICATION SITE PRURITUS", 10003053L
+  ) %>%
+    mutate(SRCVAR = "AEDECOD")
 
   expect_snapshot(
     assert_terms(
@@ -473,7 +494,12 @@ test_that("assert_terms Test 15: error if SRCVAR and GRPNAME missing", {
 
 ## Test 16: error if TERMCHAR and TERMNUM missing ----
 test_that("assert_terms Test 16: error if TERMCHAR and TERMNUM missing", {
-  cqterms <- make_cqterms()
+  cqterms <- tibble::tribble(
+    ~TERMCHAR,                    ~TERMNUM,
+    "APPLICATION SITE ERYTHEMA", 10003041L,
+    "APPLICATION SITE PRURITUS", 10003053L
+  ) %>%
+    mutate(SRCVAR = "AEDECOD")
 
   expect_snapshot(
     assert_terms(
@@ -497,7 +523,12 @@ test_that("assert_terms Test 17: error if no data frame", {
 
 ## Test 18: error if no observations ----
 test_that("assert_terms Test 18: error if no observations", {
-  cqterms <- make_cqterms()
+  cqterms <- tibble::tribble(
+    ~TERMCHAR,                    ~TERMNUM,
+    "APPLICATION SITE ERYTHEMA", 10003041L,
+    "APPLICATION SITE PRURITUS", 10003053L
+  ) %>%
+    mutate(SRCVAR = "AEDECOD")
 
   expect_snapshot(
     assert_terms(
@@ -510,7 +541,12 @@ test_that("assert_terms Test 18: error if no observations", {
 
 ## Test 19: error if GRPNAME is missing ----
 test_that("assert_terms Test 19: error if GRPNAME is missing", {
-  cqterms <- make_cqterms()
+  cqterms <- tibble::tribble(
+    ~TERMCHAR,                    ~TERMNUM,
+    "APPLICATION SITE ERYTHEMA", 10003041L,
+    "APPLICATION SITE PRURITUS", 10003053L
+  ) %>%
+    mutate(SRCVAR = "AEDECOD")
 
   expect_snapshot(
     assert_terms(
@@ -524,7 +560,12 @@ test_that("assert_terms Test 19: error if GRPNAME is missing", {
 
 ## Test 20: error if GRPID is missing ----
 test_that("assert_terms Test 20: error if GRPID is missing", {
-  cqterms <- make_cqterms()
+  cqterms <- tibble::tribble(
+    ~TERMCHAR,                    ~TERMNUM,
+    "APPLICATION SITE ERYTHEMA", 10003041L,
+    "APPLICATION SITE PRURITUS", 10003053L
+  ) %>%
+    mutate(SRCVAR = "AEDECOD")
 
   expect_snapshot(
     assert_terms(
