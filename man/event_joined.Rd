@@ -6,6 +6,7 @@
 \usage{
 event_joined(
   dataset_name = NULL,
+  filter_source = NULL,
   condition,
   by_vars = NULL,
   order = NULL,
@@ -30,6 +31,13 @@ dataset (\code{dataset}) of \code{derive_extreme_event()} is used.
 \item{Default value}{\code{NULL}}
 }}
 
+\item{filter_source}{A condition to restrict the source dataset before joining
+
+\describe{
+\item{Permitted values}{an unquoted condition, e.g., \code{AVISIT == "BASELINE"}}
+\item{Default value}{\code{NULL}}
+}}
+
 \item{condition}{An unquoted condition for selecting the observations, which
 will contribute to the extreme event.
 
@@ -43,7 +51,7 @@ observations up to the confirmation observation the response is "CR" or
 "NE" and there is at most one "NE".
 
 \describe{
-\item{Permitted values}{an unquoted condition}
+\item{Permitted values}{an unquoted condition, e.g., \code{AVISIT == "BASELINE"}}
 \item{Default value}{none}
 }}
 
@@ -123,7 +131,7 @@ certain observation before the current observation up to the current
 observation.
 
 \describe{
-\item{Permitted values}{an unquoted condition}
+\item{Permitted values}{an unquoted condition, e.g., \code{AVISIT == "BASELINE"}}
 \item{Default value}{\code{NULL}}
 }}
 
@@ -139,7 +147,7 @@ functions which should not apply to all observations but only up to the
 confirmation assessment.
 
 \describe{
-\item{Permitted values}{an unquoted condition}
+\item{Permitted values}{an unquoted condition, e.g., \code{AVISIT == "BASELINE"}}
 \item{Default value}{\code{NULL}}
 }}
 
