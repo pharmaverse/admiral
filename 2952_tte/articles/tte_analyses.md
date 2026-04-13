@@ -181,7 +181,8 @@ improvement is confirmed or not, the
 [`derive_var_joined_exist_flag()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/derive_var_joined_exist_flag.md)
 function can be used. Here an assessment is considered as confirmed if
 it doesn’t change at the next visit. Only assessments within the
-treatment period (`ANL01FL == "Y"`) are considered for the confirmation.
+observation period (`ANL01FL == "Y"`) are considered for the
+confirmation.
 
 ``` r
 adqs_ext <- adqs_a %>%
@@ -228,11 +229,14 @@ adtte <- derive_param_tte(
 
 ![](tte_analyses_files/figure-html/unnamed-chunk-18-1.png)
 
-### Adding a Confirmation Parameters to the Source Dataset
+### Adding a Confirmation Parameter to the Source Dataset
 
 For adding a new parameter instead of a new variable the
 [`derive_extreme_event()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/derive_extreme_event.md)
-function can be used.
+function can be used. The `filter_source` argument of the
+[`event_joined()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/event_joined.md)
+object is used to restrict the records to observation period
+(`ANL01FL == "Y"`).
 
 ``` r
 adqs_ext <- adqs_a %>%
@@ -245,7 +249,7 @@ adqs_ext <- adqs_a %>%
     events = list(
       event_joined(
         dataset_name = "adqs",
-        # TODO: add filter_source to restrict the records to be considered to ANL01FL == "Y"
+        filter_source = ANL01FL == "Y",
         by_vars = exprs(USUBJID),
         order = exprs(AVISITN),
         join_vars = exprs(CHGCAT1),
