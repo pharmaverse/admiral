@@ -35,7 +35,7 @@ test_that("derive_vars_transposed Test 2: filtering the merge dataset works", {
     ~STUDYID,  ~USUBJID, ~VAR1, ~T01,
     "STUDY01", "P01",        3,   31,
     "STUDY01", "P02",       31,    3,
-    "STUDY01", "P03",       42,   NA,
+    "STUDY01", "P03",       42,   NA
   )
 
   dataset <- select(expected_output, -T01)
