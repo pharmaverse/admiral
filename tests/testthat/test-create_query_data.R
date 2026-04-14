@@ -33,16 +33,16 @@ get_sdg <- function(basket_select,
   }
 }
 
-cqterms <- tibble::tribble(
-  ~TERMCHAR, ~TERMNUM,
-  "APPLICATION SITE ERYTHEMA", 10003041L,
-  "APPLICATION SITE PRURITUS", 10003053L
-) %>%
-  mutate(SRCVAR = "AEDECOD")
-
 # create_query_data ----
 ## Test 1: customized query defined by terms ----
 test_that("create_query_data Test 1: customized query defined by terms", {
+  cqterms <- tibble::tribble(
+    ~TERMCHAR,                    ~TERMNUM,
+    "APPLICATION SITE ERYTHEMA", 10003041L,
+    "APPLICATION SITE PRURITUS", 10003053L
+  ) %>%
+    mutate(SRCVAR = "AEDECOD")
+
   cq <- query(
     prefix = "CQ01",
     name = "Application Site Issues",
@@ -122,6 +122,13 @@ test_that("create_query_data Test 2: customized query defined by SMQs", {
 
 ## Test 3: customized query defined by terms and SMQs ----
 test_that("create_query_data Test 3: customized query defined by terms and SMQs", {
+  cqterms <- tibble::tribble(
+    ~TERMCHAR,                    ~TERMNUM,
+    "APPLICATION SITE ERYTHEMA", 10003041L,
+    "APPLICATION SITE PRURITUS", 10003053L
+  ) %>%
+    mutate(SRCVAR = "AEDECOD")
+
   cq <- query(
     prefix = "CQ03",
     name = "Immune-Mediated Meningoencephalitis or Application Site Issues",
@@ -377,6 +384,13 @@ test_that("create_query_data Test 9: catching error from user function (get_term
 # query ----
 ## Test 10: error if name = auto for non SMQs/SDGs ----
 test_that("query Test 10: error if name = auto for non SMQs/SDGs", {
+  cqterms <- tibble::tribble(
+    ~TERMCHAR,                    ~TERMNUM,
+    "APPLICATION SITE ERYTHEMA", 10003041L,
+    "APPLICATION SITE PRURITUS", 10003053L
+  ) %>%
+    mutate(SRCVAR = "AEDECOD")
+
   expect_snapshot(
     sdg <- query(
       prefix = "CQ01",
@@ -388,6 +402,13 @@ test_that("query Test 10: error if name = auto for non SMQs/SDGs", {
 
 ## Test 11: error if id = auto for non SMQs/SDGs ----
 test_that("query Test 11: error if id = auto for non SMQs/SDGs", {
+  cqterms <- tibble::tribble(
+    ~TERMCHAR,                    ~TERMNUM,
+    "APPLICATION SITE ERYTHEMA", 10003041L,
+    "APPLICATION SITE PRURITUS", 10003053L
+  ) %>%
+    mutate(SRCVAR = "AEDECOD")
+
   expect_snapshot(
     sdg <- query(
       name = "My CQ",
@@ -436,6 +457,13 @@ test_that("validate_query Test 13: error if definition is not a data frame or ba
 # assert_terms ----
 ## Test 14: error if SRCVAR missing ----
 test_that("assert_terms Test 14: error if SRCVAR missing", {
+  cqterms <- tibble::tribble(
+    ~TERMCHAR,                    ~TERMNUM,
+    "APPLICATION SITE ERYTHEMA", 10003041L,
+    "APPLICATION SITE PRURITUS", 10003053L
+  ) %>%
+    mutate(SRCVAR = "AEDECOD")
+
   expect_snapshot(
     assert_terms(
       terms = select(cqterms, -SRCVAR),
@@ -447,6 +475,13 @@ test_that("assert_terms Test 14: error if SRCVAR missing", {
 
 ## Test 15: error if SRCVAR and GRPNAME missing ----
 test_that("assert_terms Test 15: error if SRCVAR and GRPNAME missing", {
+  cqterms <- tibble::tribble(
+    ~TERMCHAR,                    ~TERMNUM,
+    "APPLICATION SITE ERYTHEMA", 10003041L,
+    "APPLICATION SITE PRURITUS", 10003053L
+  ) %>%
+    mutate(SRCVAR = "AEDECOD")
+
   expect_snapshot(
     assert_terms(
       terms = select(cqterms, -SRCVAR),
@@ -459,6 +494,13 @@ test_that("assert_terms Test 15: error if SRCVAR and GRPNAME missing", {
 
 ## Test 16: error if TERMCHAR and TERMNUM missing ----
 test_that("assert_terms Test 16: error if TERMCHAR and TERMNUM missing", {
+  cqterms <- tibble::tribble(
+    ~TERMCHAR,                    ~TERMNUM,
+    "APPLICATION SITE ERYTHEMA", 10003041L,
+    "APPLICATION SITE PRURITUS", 10003053L
+  ) %>%
+    mutate(SRCVAR = "AEDECOD")
+
   expect_snapshot(
     assert_terms(
       terms = select(cqterms, SRCVAR),
@@ -481,6 +523,13 @@ test_that("assert_terms Test 17: error if no data frame", {
 
 ## Test 18: error if no observations ----
 test_that("assert_terms Test 18: error if no observations", {
+  cqterms <- tibble::tribble(
+    ~TERMCHAR,                    ~TERMNUM,
+    "APPLICATION SITE ERYTHEMA", 10003041L,
+    "APPLICATION SITE PRURITUS", 10003053L
+  ) %>%
+    mutate(SRCVAR = "AEDECOD")
+
   expect_snapshot(
     assert_terms(
       terms = filter(cqterms, TERMNUM == 42),
@@ -492,6 +541,13 @@ test_that("assert_terms Test 18: error if no observations", {
 
 ## Test 19: error if GRPNAME is missing ----
 test_that("assert_terms Test 19: error if GRPNAME is missing", {
+  cqterms <- tibble::tribble(
+    ~TERMCHAR,                    ~TERMNUM,
+    "APPLICATION SITE ERYTHEMA", 10003041L,
+    "APPLICATION SITE PRURITUS", 10003053L
+  ) %>%
+    mutate(SRCVAR = "AEDECOD")
+
   expect_snapshot(
     assert_terms(
       terms = cqterms,
@@ -504,6 +560,13 @@ test_that("assert_terms Test 19: error if GRPNAME is missing", {
 
 ## Test 20: error if GRPID is missing ----
 test_that("assert_terms Test 20: error if GRPID is missing", {
+  cqterms <- tibble::tribble(
+    ~TERMCHAR,                    ~TERMNUM,
+    "APPLICATION SITE ERYTHEMA", 10003041L,
+    "APPLICATION SITE PRURITUS", 10003053L
+  ) %>%
+    mutate(SRCVAR = "AEDECOD")
+
   expect_snapshot(
     assert_terms(
       terms = cqterms,
@@ -558,37 +621,35 @@ test_that("basket_select Test 24: error if arguments inside ... are not named", 
   )
 })
 
-# basket_select customized query defined by SMQs extra arguments ----
-get_smq_oth <- function(basket_select,
-                        version,
-                        keep_id = FALSE,
-                        temp_env) {
-  if (basket_select$scope == "NARROW") {
-    end <- 1
-  } else {
-    end <- 2
-  }
-
-  if (is.null(basket_select$name)) {
-    basket_select$name <- paste("SMQ name of", basket_select$id)
-  }
-  terms <- tibble(TERMCHAR = paste(basket_select$name, "Term", c(1:end)))
-  terms <- mutate(terms,
-    SRCVAR = "AEDECOD",
-    GRPNAME = basket_select$name,
-    TEST1_VAR = basket_select$TEST1_VAR,
-    TEST2_VAR = basket_select$TEST2_VAR
-  )
-  if (keep_id) {
-    mutate(terms, GRPID = 42)
-  } else {
-    terms
-  }
-}
-
-
 ## Test 25: basket_select customized query defined by SMQs extra arguments ----
 test_that("basket_select Test 25: basket_select customized query defined by SMQs extra arguments", {
+  get_smq_oth <- function(basket_select,
+                          version,
+                          keep_id = FALSE,
+                          temp_env) {
+    if (basket_select$scope == "NARROW") {
+      end <- 1
+    } else {
+      end <- 2
+    }
+
+    if (is.null(basket_select$name)) {
+      basket_select$name <- paste("SMQ name of", basket_select$id)
+    }
+    terms <- tibble(TERMCHAR = paste(basket_select$name, "Term", c(1:end)))
+    terms <- mutate(terms,
+      SRCVAR = "AEDECOD",
+      GRPNAME = basket_select$name,
+      TEST1_VAR = basket_select$TEST1_VAR,
+      TEST2_VAR = basket_select$TEST2_VAR
+    )
+    if (keep_id) {
+      mutate(terms, GRPID = 42)
+    } else {
+      terms
+    }
+  }
+
   cq <- query(
     prefix = "CQ02",
     name = "Immune-Mediated Meningoencephalitis",
