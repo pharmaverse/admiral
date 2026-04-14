@@ -431,7 +431,7 @@ adlb <- adlb %>%
 
 ## Get ASEQ ----
 adlb <- adlb %>%
-  # Calculate ASEQ
+  # Calculate ASEQ (Optional Variable)
   derive_var_obs_number(
     new_var = ASEQ,
     by_vars = exprs(STUDYID, USUBJID),
