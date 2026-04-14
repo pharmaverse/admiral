@@ -479,6 +479,75 @@ derive_extreme_event(
 #> 12 1             5 N     CONFRESP
 #> 13 2             1 Y     CONFRESP
 #> 14 2             3 N     CONFRESP}\if{html}{\out{</div>}}}
+\subsection{Restricting source data before join}{
+
+Sometimes it is useful to restrict the source data of some events
+before the join. For example, in the following example, records with
+missing results should be ignored for the confirmation.
+
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{adbds <- tribble(
+  ~USUBJID, ~AVISITN,  ~AVALC,
+  "1",             1,  "Y",
+  "1",             2,  "N",
+  "1",             3,  "Y",
+  "1",             4,  "Y",
+  "1",             5,  "Y",
+  "2",             1,  "Y",
+  "2",             2,  NA,
+  "2",             3,  "Y"
+) \%>\%
+  mutate(PARAMCD = "RESP")
+
+derive_extreme_event(
+  adbds,
+  by_vars = exprs(USUBJID, AVISITN),
+  source_datasets = list(adbds = adbds),
+  tmp_event_nr_var = event_nr,
+  order = exprs(event_nr),
+  mode = "first",
+  events = list(
+    event_joined(
+      dataset_name = "adbds",
+      filter_source = !is.na(AVALC),
+      by_vars = exprs(USUBJID),
+      order = exprs(AVISITN),
+      join_vars = exprs(AVALC),
+      join_type = "after",
+      tmp_obs_nr_var = tmp_obs_nr,
+      condition = AVALC == "Y" & AVALC.join == "Y" & tmp_obs_nr.join == tmp_obs_nr + 1,
+      set_values_to = exprs(AVALC = "Y")
+    ),
+    event(
+      dataset_name = "adbds",
+      set_values_to = exprs(AVALC = "N")
+    )
+  ),
+  set_values_to = exprs(
+    PARAMCD = "CONFRESP"
+  )
+)
+#> # A tibble: 16 × 4
+#>    USUBJID AVISITN AVALC PARAMCD 
+#>    <chr>     <dbl> <chr> <chr>   
+#>  1 1             1 Y     RESP    
+#>  2 1             2 N     RESP    
+#>  3 1             3 Y     RESP    
+#>  4 1             4 Y     RESP    
+#>  5 1             5 Y     RESP    
+#>  6 2             1 Y     RESP    
+#>  7 2             2 <NA>  RESP    
+#>  8 2             3 Y     RESP    
+#>  9 1             1 N     CONFRESP
+#> 10 1             2 N     CONFRESP
+#> 11 1             3 Y     CONFRESP
+#> 12 1             4 Y     CONFRESP
+#> 13 1             5 N     CONFRESP
+#> 14 2             1 Y     CONFRESP
+#> 15 2             2 N     CONFRESP
+#> 16 2             3 N     CONFRESP}\if{html}{\out{</div>}}
+
+Note that for subject \code{2} the results at visit \code{1} is considered as
+confirmed because the missing result at visit \code{2} is ignored.}
 \subsection{Specifying different arguments across \code{event()} objects}{
 
 Here we consider a Hy's Law use case. We are interested in
