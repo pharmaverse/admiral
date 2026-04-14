@@ -486,7 +486,9 @@ adae <- adae %>%
 The function
 [`derive_var_obs_number()`](https:/pharmaverse.github.io/admiral/main/reference/derive_var_obs_number.md)
 can be used for deriving `ASEQ` variable to ensure the uniqueness of
-subject records within the dataset.
+subject records within the dataset. Note that creating `ASEQ` is not
+required for all ADaM datasets according to the ADaM IG, and this is
+just for demonstration purpose.
 
 For example, there can be multiple records present in `ADCM` for a
 single subject with the same `ASTDTM` and `CMSEQ` variables. But these
@@ -503,6 +505,7 @@ adcm <- tibble::tribble(
 )
 
 adcm_aseq <- adcm %>%
+  # Calculate ASEQ (Optional Variable)
   derive_var_obs_number(
     by_vars    = exprs(USUBJID),
     order      = exprs(ASTDTM, CMSEQ, ATC1CD, ATC2CD, ATC3CD, ATC4CD),

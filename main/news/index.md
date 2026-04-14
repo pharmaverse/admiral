@@ -104,6 +104,10 @@
   quiz for lost users.
   ([\#2982](https://github.com/pharmaverse/admiral/issues/2982))
 
+- Usage of `ASEQ` which is an optional variable was clarified within the
+  corresponding Vignettes and Templates.
+  ([\#2986](https://github.com/pharmaverse/admiral/issues/2986))
+
 ### Various
 
 Developer Notes

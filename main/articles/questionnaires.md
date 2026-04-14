@@ -206,7 +206,7 @@ adgdssf <- adgdssf %>%
     derivation = derive_var_pchg,
     filter = AVISITN > 0
   ) %>%
-  # Derive sequence number
+  # Derive sequence number (Optional Variable)
   derive_var_obs_number(
     by_vars = exprs(STUDYID, USUBJID),
     order = exprs(PARAMCD, ADT),

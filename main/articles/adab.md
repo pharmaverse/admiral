@@ -1482,7 +1482,9 @@ After merging the `adab_param_data`, final adjustments are made to
 is based on SDTM v2.0 or an earlier version (prior to v1.8).
 
 Last step is computing `ASEQ`. `ASEQ` should be computed last since the
-sort key includes values in `PARAMCD` and `PARAM`.
+sort key includes values in `PARAMCD` and `PARAM`. Note that creating
+`ASEQ` is not required for all ADaM datasets according to the ADaM IG,
+and this is just for demonstration purpose.
 
 ``` r
 # Study Specific Specs Post-Processing ------------------------------------
@@ -1549,7 +1551,7 @@ adab_params <- adab_adafl %>%
 
 # Sort by the key variables then compute ASEQ
 adab_prefinal <- adab_params %>%
-  # Calculate ASEQ
+  # Calculate ASEQ (Optional Variable)
   derive_var_obs_number(
     new_var = ASEQ,
     by_vars = exprs(STUDYID, USUBJID),
