@@ -647,7 +647,6 @@ test_that("derive_vars_dtm Test 20: date and time imputed to last, no DTF/TMF", 
 })
 
 ## Test 21: date and time imputed to last, DTF only ----
-## Test 21: date and time imputed to last, DTF only ----
 test_that("derive_vars_dtm Test 21: date and time imputed to last, DTF only", {
   input <- tibble::tribble(
     ~XXSTDTC,
