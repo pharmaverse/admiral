@@ -1,19 +1,18 @@
-input <- c(
-  "2019-07-18T15:25:40.243",
-  "2019-07-18T15:25:40",
-  "2019-07-18T15:25",
-  "2019-07-18",
-  "2019-02",
-  "2019",
-  "2019---07",
-  "2003-12-15T-:15:18",
-  "2003-12-15T13:-:19",
-  "2020-07--T00:00"
-)
-
 # impute_dtc_dtm ----
 ## Test 1: default: no date imputation, time part set to 00:00:00 ----
 test_that("impute_dtc_dtm Test 1: default: no date imputation, time part set to 00:00:00", {
+  input <- c(
+    "2019-07-18T15:25:40.243",
+    "2019-07-18T15:25:40",
+    "2019-07-18T15:25",
+    "2019-07-18",
+    "2019-02",
+    "2019",
+    "2019---07",
+    "2003-12-15T-:15:18",
+    "2003-12-15T13:-:19",
+    "2020-07--T00:00"
+  )
   expected_output <- c(
     "2019-07-18T15:25:40.243",
     "2019-07-18T15:25:40",
@@ -31,6 +30,18 @@ test_that("impute_dtc_dtm Test 1: default: no date imputation, time part set to 
 
 ## Test 2: no date imputation, min and sec imputed with 59 ----
 test_that("impute_dtc_dtm Test 2: no date imputation, min and sec imputed with 59", {
+  input <- c(
+    "2019-07-18T15:25:40.243",
+    "2019-07-18T15:25:40",
+    "2019-07-18T15:25",
+    "2019-07-18",
+    "2019-02",
+    "2019",
+    "2019---07",
+    "2003-12-15T-:15:18",
+    "2003-12-15T13:-:19",
+    "2020-07--T00:00"
+  )
   expected_output <- c(
     "2019-07-18T15:25:40.243",
     "2019-07-18T15:25:40",
@@ -64,6 +75,18 @@ test_that("impute_dtc_dtm Test 2: no date imputation, min and sec imputed with 5
 
 ## Test 3: impute month and day to first, time to 00:00:00 ----
 test_that("impute_dtc_dtm Test 3: impute month and day to first, time to 00:00:00", {
+  input <- c(
+    "2019-07-18T15:25:40.243",
+    "2019-07-18T15:25:40",
+    "2019-07-18T15:25",
+    "2019-07-18",
+    "2019-02",
+    "2019",
+    "2019---07",
+    "2003-12-15T-:15:18",
+    "2003-12-15T13:-:19",
+    "2020-07--T00:00"
+  )
   expected_output <- c(
     "2019-07-18T15:25:40.243",
     "2019-07-18T15:25:40",
@@ -98,6 +121,18 @@ test_that("impute_dtc_dtm Test 3: impute month and day to first, time to 00:00:0
 
 ## Test 4: impute day to last, time to 23:59:59 ----
 test_that("impute_dtc_dtm Test 4: impute day to last, time to 23:59:59", {
+  input <- c(
+    "2019-07-18T15:25:40.243",
+    "2019-07-18T15:25:40",
+    "2019-07-18T15:25",
+    "2019-07-18",
+    "2019-02",
+    "2019",
+    "2019---07",
+    "2003-12-15T-:15:18",
+    "2003-12-15T13:-:19",
+    "2020-07--T00:00"
+  )
   expected_output <- c(
     "2019-07-18T15:25:40.243",
     "2019-07-18T15:25:40",
@@ -123,6 +158,18 @@ test_that("impute_dtc_dtm Test 4: impute day to last, time to 23:59:59", {
 
 ## Test 5: impute month, day to last, time to 23:59:59, preserve = TRUE ----
 test_that("impute_dtc_dtm Test 5: impute month, day to last, time to 23:59:59, preserve = TRUE", {
+  input <- c(
+    "2019-07-18T15:25:40.243",
+    "2019-07-18T15:25:40",
+    "2019-07-18T15:25",
+    "2019-07-18",
+    "2019-02",
+    "2019",
+    "2019---07",
+    "2003-12-15T-:15:18",
+    "2003-12-15T13:-:19",
+    "2020-07--T00:00"
+  )
   expected_output <- c(
     "2019-07-18T15:25:40.243",
     "2019-07-18T15:25:40",
@@ -149,6 +196,18 @@ test_that("impute_dtc_dtm Test 5: impute month, day to last, time to 23:59:59, p
 
 ## Test 6: no date imputation, impute second to 59 ----
 test_that("impute_dtc_dtm Test 6: no date imputation, impute second to 59", {
+  input <- c(
+    "2019-07-18T15:25:40.243",
+    "2019-07-18T15:25:40",
+    "2019-07-18T15:25",
+    "2019-07-18",
+    "2019-02",
+    "2019",
+    "2019---07",
+    "2003-12-15T-:15:18",
+    "2003-12-15T13:-:19",
+    "2020-07--T00:00"
+  )
   expected_output <- c(
     "2019-07-18T15:25:40.243",
     "2019-07-18T15:25:40",
@@ -175,6 +234,18 @@ test_that("impute_dtc_dtm Test 6: no date imputation, impute second to 59", {
 
 ## Test 7: impute month and day to mid, time to first ----
 test_that("impute_dtc_dtm Test 7: impute month and day to mid, time to first", {
+  input <- c(
+    "2019-07-18T15:25:40.243",
+    "2019-07-18T15:25:40",
+    "2019-07-18T15:25",
+    "2019-07-18",
+    "2019-02",
+    "2019",
+    "2019---07",
+    "2003-12-15T-:15:18",
+    "2003-12-15T13:-:19",
+    "2020-07--T00:00"
+  )
   expected_output <- c(
     "2019-07-18T15:25:40.243",
     "2019-07-18T15:25:40",
@@ -362,7 +433,7 @@ test_that("impute_dtc_dtm Test 13: wrong input to `date_imputation`", {
 ## Test 14: Convert a complete -- DTC into a date time object ----
 test_that("convert_dtc_to_dtm Test 14: Convert a complete -- DTC into a date time object", {
   expect_equal(
-    convert_dtc_to_dtm(input[1]),
+    convert_dtc_to_dtm("2019-07-18T15:25:40.243"),
     ymd_hms("2019-07-18T15:25:40.243")
   )
 })
@@ -458,19 +529,18 @@ test_that("compute_tmf Test 17: ignore_seconds_flag  = TRUE", {
 
 # derive_vars_dtm ----
 
-input <- tibble::tribble(
-  ~XXSTDTC,
-  "2019-07-18T15:25:40",
-  "2019-07-18T15:25",
-  "2019-07-18T15",
-  "2019-07-18",
-  "2019-02",
-  "2019",
-  "2019---07"
-)
-
 ## Test 18: default behavior ----
 test_that("derive_vars_dtm Test 18: default behavior", {
+  input <- tibble::tribble(
+    ~XXSTDTC,
+    "2019-07-18T15:25:40",
+    "2019-07-18T15:25",
+    "2019-07-18T15",
+    "2019-07-18",
+    "2019-02",
+    "2019",
+    "2019---07"
+  )
   expected_output <- tibble::tribble(
     ~XXSTDTC,              ~ASTDTM,                        ~ASTTMF,
     "2019-07-18T15:25:40", ymd_hms("2019-07-18T15:25:40"), NA_character_,
@@ -499,6 +569,16 @@ test_that("derive_vars_dtm Test 18: default behavior", {
 
 ## Test 19: date imputed to first, auto DTF/TMF ----
 test_that("derive_vars_dtm Test 19: date imputed to first, auto DTF/TMF", {
+  input <- tibble::tribble(
+    ~XXSTDTC,
+    "2019-07-18T15:25:40",
+    "2019-07-18T15:25",
+    "2019-07-18T15",
+    "2019-07-18",
+    "2019-02",
+    "2019",
+    "2019---07"
+  )
   expected_output <- tibble::tribble(
     ~XXSTDTC,              ~ASTDTM,                        ~ASTDTF,       ~ASTTMF,
     "2019-07-18T15:25:40", ymd_hms("2019-07-18T15:25:40"), NA_character_, NA_character_,
@@ -528,6 +608,16 @@ test_that("derive_vars_dtm Test 19: date imputed to first, auto DTF/TMF", {
 
 ## Test 20: date and time imputed to last, no DTF/TMF ----
 test_that("derive_vars_dtm Test 20: date and time imputed to last, no DTF/TMF", {
+  input <- tibble::tribble(
+    ~XXSTDTC,
+    "2019-07-18T15:25:40",
+    "2019-07-18T15:25",
+    "2019-07-18T15",
+    "2019-07-18",
+    "2019-02",
+    "2019",
+    "2019---07"
+  )
   expected_output <- tibble::tribble(
     ~XXSTDTC,              ~AENDTM,
     "2019-07-18T15:25:40", ymd_hms("2019-07-18T15:25:40"),
@@ -557,7 +647,18 @@ test_that("derive_vars_dtm Test 20: date and time imputed to last, no DTF/TMF", 
 })
 
 ## Test 21: date and time imputed to last, DTF only ----
+## Test 21: date and time imputed to last, DTF only ----
 test_that("derive_vars_dtm Test 21: date and time imputed to last, DTF only", {
+  input <- tibble::tribble(
+    ~XXSTDTC,
+    "2019-07-18T15:25:40",
+    "2019-07-18T15:25",
+    "2019-07-18T15",
+    "2019-07-18",
+    "2019-02",
+    "2019",
+    "2019---07"
+  )
   expected_output <- tibble::tribble(
     ~XXSTDTC,              ~AENDTM,                        ~AENDTF,
     "2019-07-18T15:25:40", ymd_hms("2019-07-18T15:25:40"), NA_character_,
@@ -588,6 +689,16 @@ test_that("derive_vars_dtm Test 21: date and time imputed to last, DTF only", {
 
 ## Test 22: date imputed to MID, time to first, TMF only ----
 test_that("derive_vars_dtm Test 22: date imputed to MID, time to first, TMF only", {
+  input <- tibble::tribble(
+    ~XXSTDTC,
+    "2019-07-18T15:25:40",
+    "2019-07-18T15:25",
+    "2019-07-18T15",
+    "2019-07-18",
+    "2019-02",
+    "2019",
+    "2019---07"
+  )
   expected_output <- tibble::tribble(
     ~XXSTDTC,              ~ASTDTM,                        ~ASTTMF,
     "2019-07-18T15:25:40", ymd_hms("2019-07-18T15:25:40"), NA_character_,
@@ -619,6 +730,16 @@ test_that("derive_vars_dtm Test 22: date imputed to MID, time to first, TMF only
 
 ## Test 23: No re-derivation is done if --DTF variable already exists ----
 test_that("derive_vars_dtm Test 23: No re-derivation is done if --DTF variable already exists", {
+  input <- tibble::tribble(
+    ~XXSTDTC,
+    "2019-07-18T15:25:40",
+    "2019-07-18T15:25",
+    "2019-07-18T15",
+    "2019-07-18",
+    "2019-02",
+    "2019",
+    "2019---07"
+  )
   expected_output <- tibble::tribble(
     ~XXSTDTC,              ~ASTDTM,                        ~ASTDTF,       ~ASTTMF,
     "2019-07-18T15:25:40", ymd_hms("2019-07-18T15:25:40"), NA_character_, NA_character_,
@@ -674,17 +795,6 @@ test_that("derive_vars_dtm Test 24: max_dates parameter works as expected", {
     keys = c("XXSTDTC")
   )
 })
-
-input_secs <- tibble::tribble(
-  ~XXSTDTC,
-  "2019-07-18T15:25:40",
-  "2019-07-18T15:25",
-  "2019-07-18T15",
-  "2019-07-18",
-  "2019-02",
-  "2019",
-  "2019---07"
-)
 
 ## Test 25: NA imputation for highest_imputation = Y & max_dates ----
 test_that("derive_vars_dtm Test 25: NA imputation for highest_imputation = Y & max_dates", {
@@ -866,6 +976,16 @@ test_that("derive_vars_dtm Test 31: Supplying both min/max dates for highest_imp
 
 ## Test 32: catch ignore_seconds_flag error ----
 test_that("derive_vars_dtm Test 32: catch ignore_seconds_flag error", {
+  input <- tibble::tribble(
+    ~XXSTDTC,
+    "2019-07-18T15:25:40",
+    "2019-07-18T15:25",
+    "2019-07-18T15",
+    "2019-07-18",
+    "2019-02",
+    "2019",
+    "2019---07"
+  )
   expect_snapshot(
     derive_vars_dtm(
       input,
@@ -889,5 +1009,3 @@ test_that("derive_vars_dt Test 30: impute_dtc_dt where dtc is empty", {
     character(0)
   )
 })
-
-rm(list = c("input"))
