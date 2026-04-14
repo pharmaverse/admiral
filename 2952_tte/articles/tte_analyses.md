@@ -6,9 +6,10 @@ The basic concept of preparing data for time-to-event analyses is quite
 simple:
 
 - we need to know whether the event occurred or not
-- if it did, the first time when it occurred is set as the *event time*
+- if it did, the first time when it occurred is set as the **event
+  time**
 - if it did not, the last time when it is known that the subject didn’t
-  had an event is set as the *censoring time*.
+  have an event is set as the **censoring time**.
 
 Depending on the definition of the event and the collection of the data,
 the creation of a time-to-event ADaM dataset can be more or less
@@ -25,7 +26,7 @@ of experiencing the event. Usually it starts at the beginning of the
 treatment. The end of the observation period is study- or
 analysis-specific. It may be derived from more than one date, e.g., the
 end of the treatment plus a fixed time, the end of the study, death, the
-start of an alternative treatment, …
+start of an alternative treatment, etc.
 
 The records of the input datasets need to be restricted to the
 observation period. This can be done by deriving `ANLzzFL` variables in
@@ -57,15 +58,15 @@ observation period.
 
 Many events require dedicated assessments to determine whether the event
 occurred or not, e.g., lab assessments, tumor assessments,
-questionnaires, etc. I.e., information about the event is available only
-at these time points and it may happen that for some assessments it is
-unknown if the event occurred or not, e.g., tumor scans were not
+questionnaires, etc. That is, information about the event is available
+only at these time points and it may happen that for some assessments it
+is unknown if the event occurred or not, e.g., tumor scans were not
 readable or the score couldn’t be calculated because too few questions
 were answered. In this case, the event time is the time of the first
 assessment where the event is recorded. For the censoring time it
 depends on the type of the event. If the event is a negative event like
-death, worsening, adverse event, …, the most conservative approach is to
-ignore time points where it is not known if the event occurred. I.e.,
+death, worsening, adverse event, etc., the most conservative approach is
+to ignore time points where it is not known if the event occurred, i.e.,
 the censoring time is set to the time of the last assessment where it is
 known that the event didn’t occur [¹](#fn1).
 
@@ -76,7 +77,7 @@ The variable `CHGCAT1` indicates whether the subject worsened, improved,
 or was unchanged compared to baseline. For some records it is unknown
 whether the subject worsened or not.
 
-`adqs_a` dataset
+**`adqs_a` dataset** (click to expand/collapse)
 
 ![](tte_analyses_files/figure-html/unnamed-chunk-6-1.png)
 
@@ -123,10 +124,10 @@ adtte <- derive_param_tte(
 
 ### Discrete Assessments, Positive Event
 
-For positive events like improvement, response, …, the most conservative
-approach is to set the censoring time to the end of the observation
-period, even if it is not known whether the event occurred or not at
-this time point.
+For positive events like improvement, response, etc., the most
+conservative approach is to set the censoring time to the end of the
+observation period, even if it is not known whether the event occurred
+or not at this time point.
 
 ![](tte_analyses_files/figure-html/unnamed-chunk-10-1.png)
 
