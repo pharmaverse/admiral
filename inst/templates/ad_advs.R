@@ -282,7 +282,6 @@ advs <- advs %>%
   derive_vars_merged(dataset_add = select(param_lookup, -VSTESTCD), by_vars = exprs(PARAMCD))
 
 
-
 # Add all ADSL variables
 advs <- advs %>%
   derive_vars_merged(
