@@ -18,6 +18,7 @@ See its documentation for more details.
 ``` r
 event_joined(
   dataset_name = NULL,
+  filter_source = NULL,
   condition,
   by_vars = NULL,
   order = NULL,
@@ -51,6 +52,18 @@ event_joined(
 
   :   `NULL`
 
+- filter_source:
+
+  A condition to restrict the source dataset before joining
+
+  Permitted values
+
+  :   an unquoted condition, e.g., `AVISIT == "BASELINE"`
+
+  Default value
+
+  :   `NULL`
+
 - condition:
 
   An unquoted condition for selecting the observations, which will
@@ -71,7 +84,7 @@ event_joined(
 
   Permitted values
 
-  :   an unquoted condition
+  :   an unquoted condition, e.g., `AVISIT == "BASELINE"`
 
   Default value
 
@@ -195,7 +208,7 @@ event_joined(
 
   Permitted values
 
-  :   an unquoted condition
+  :   an unquoted condition, e.g., `AVISIT == "BASELINE"`
 
   Default value
 
@@ -217,7 +230,7 @@ event_joined(
 
   Permitted values
 
-  :   an unquoted condition
+  :   an unquoted condition, e.g., `AVISIT == "BASELINE"`
 
   Default value
 

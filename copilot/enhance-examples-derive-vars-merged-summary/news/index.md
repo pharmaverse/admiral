@@ -13,6 +13,13 @@
   [`derive_extreme_event()`](https:/pharmaverse.github.io/admiral/copilot/enhance-examples-derive-vars-merged-summary/reference/derive_extreme_event.md).
   ([\#3022](https://github.com/pharmaverse/admiral/issues/3022))
 
+- The `filter_source` argument was added to
+  [`event_joined()`](https:/pharmaverse.github.io/admiral/copilot/enhance-examples-derive-vars-merged-summary/reference/event_joined.md),
+  allowing to specify a condition to restrict the source dataset before
+  the join, e.g., when using
+  [`derive_extreme_event()`](https:/pharmaverse.github.io/admiral/copilot/enhance-examples-derive-vars-merged-summary/reference/derive_extreme_event.md).
+  ([\#3033](https://github.com/pharmaverse/admiral/issues/3033))
+
 - The `filter_add` argument in
   [`derive_var_joined_exist_flag()`](https:/pharmaverse.github.io/admiral/copilot/enhance-examples-derive-vars-merged-summary/reference/derive_var_joined_exist_flag.md)
   is no longer erroneously ignored.
@@ -103,6 +110,10 @@
   page](https://pharmaverse.github.io/admiral/404.html) with a butterfly
   quiz for lost users.
   ([\#2982](https://github.com/pharmaverse/admiral/issues/2982))
+
+- Usage of `ASEQ` which is an optional variable was clarified within the
+  corresponding Vignettes and Templates.
+  ([\#2986](https://github.com/pharmaverse/admiral/issues/2986))
 
 ### Various
 
