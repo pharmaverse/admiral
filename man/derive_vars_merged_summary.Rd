@@ -235,54 +235,28 @@ By default, records in \code{dataset} with no matching by group in
 argument allows you to specify a different value for these non-matching
 records.
 
-A common use-case is \strong{population median imputation}: subjects without a
-baseline measurement are assigned the median baseline value observed across
-the rest of the population. In the example below, \code{adlb_bl} contains one
-baseline record per subject for subjects 1–10, except subjects \code{"5"} and
-\code{"8"} who have no baseline record. Without \code{missing_values} those two
-subjects would receive \code{NA}; supplying the pre-computed population median
-imputes that value instead:
+A natural use-case is counting observations per subject and defaulting to
+\code{0} (rather than \code{NA}) for subjects with no matching records. In the example
+below, the number of distinct post-baseline visits per subject is derived
+from \code{adbds} and merged onto \code{adsl}. Subject \code{"3"} has no records in
+\code{adbds}, so without \code{missing_values} the new variable would be \code{NA};
+setting \code{missing_values = exprs(NVIS = 0L)} makes the count meaningful
+for all subjects:
 
-\if{html}{\out{<div class="sourceCode r">}}\preformatted{adsl2 <- tribble(
-  ~USUBJID,
-  "1", "2", "3", "4", "5", "6", "7", "8", "9", "10"
-)
-
-adlb_bl <- tribble(
-  ~USUBJID, ~ABLFL, ~AVAL,
-  "1",      "Y",       10,
-  "2",      "Y",       15,
-  "3",      "Y",       20,
-  "4",      "Y",       28,
-  "6",      "Y",       35,
-  "7",      "Y",       42,
-  "9",      "Y",       50,
-  "10",     "Y",       60
-)
-
-pop_median <- median(adlb_bl$AVAL, na.rm = TRUE)
-
-derive_vars_merged_summary(
-  adsl2,
-  dataset_add = adlb_bl,
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{derive_vars_merged_summary(
+  adsl,
+  dataset_add = adbds,
   by_vars = exprs(USUBJID),
-  new_vars = exprs(BASE = mean(AVAL, na.rm = TRUE)),
-  filter_add = ABLFL == "Y",
-  missing_values = exprs(BASE = !!pop_median)
+  new_vars = exprs(NVIS = n_distinct(AVISIT)),
+  missing_values = exprs(NVIS = 0L)
 )
-#> # A tibble: 10 × 2
-#>    USUBJID  BASE
-#>    <chr>   <dbl>
-#>  1 1        10  
-#>  2 2        15  
-#>  3 3        20  
-#>  4 4        28  
-#>  5 5        31.5
-#>  6 6        35  
-#>  7 7        42  
-#>  8 8        31.5
-#>  9 9        50  
-#> 10 10       60  }\if{html}{\out{</div>}}}
+#> # A tibble: 3 × 2
+#>   USUBJID  NVIS
+#>   <chr>   <int>
+#> 1 1           4
+#> 2 2           2
+#> 3 3           0
+}\if{html}{\out{</div>}}}
 \subsection{Renaming by variables (\code{by_vars})}{
 
 The \code{by_vars} argument supports renaming, using the syntax
