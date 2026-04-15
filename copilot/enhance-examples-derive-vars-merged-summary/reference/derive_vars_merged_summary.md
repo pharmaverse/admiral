@@ -285,54 +285,27 @@ By default, records in `dataset` with no matching by group in
 argument allows you to specify a different value for these non-matching
 records.
 
-A common use-case is **population median imputation**: subjects without
-a baseline measurement are assigned the median baseline value observed
-across the rest of the population. In the example below, `adlb_bl`
-contains one baseline record per subject for subjects 1–10, except
-subjects `"5"` and `"8"` who have no baseline record. Without
-`missing_values` those two subjects would receive `NA`; supplying the
-pre-computed population median imputes that value instead:
-
-    adsl2 <- tribble(
-      ~USUBJID,
-      "1", "2", "3", "4", "5", "6", "7", "8", "9", "10"
-    )
-
-    adlb_bl <- tribble(
-      ~USUBJID, ~ABLFL, ~AVAL,
-      "1",      "Y",       10,
-      "2",      "Y",       15,
-      "3",      "Y",       20,
-      "4",      "Y",       28,
-      "6",      "Y",       35,
-      "7",      "Y",       42,
-      "9",      "Y",       50,
-      "10",     "Y",       60
-    )
-
-    pop_median <- median(adlb_bl$AVAL, na.rm = TRUE)
+A natural use-case is counting observations per subject and defaulting
+to `0` (rather than `NA`) for subjects with no matching records. In the
+example below, the number of distinct post-baseline visits per subject
+is derived from `adbds` and merged onto `adsl`. Subject `"3"` has no
+records in `adbds`, so without `missing_values` the new variable would
+be `NA`; setting `missing_values = exprs(NVIS = 0L)` makes the count
+meaningful for all subjects:
 
     derive_vars_merged_summary(
-      adsl2,
-      dataset_add = adlb_bl,
+      adsl,
+      dataset_add = adbds,
       by_vars = exprs(USUBJID),
-      new_vars = exprs(BASE = mean(AVAL, na.rm = TRUE)),
-      filter_add = ABLFL == "Y",
-      missing_values = exprs(BASE = !!pop_median)
+      new_vars = exprs(NVIS = n_distinct(AVISIT)),
+      missing_values = exprs(NVIS = 0L)
     )
-    #> # A tibble: 10 × 2
-    #>    USUBJID  BASE
-    #>    <chr>   <dbl>
-    #>  1 1        10
-    #>  2 2        15
-    #>  3 3        20
-    #>  4 4        28
-    #>  5 5        31.5
-    #>  6 6        35
-    #>  7 7        42
-    #>  8 8        31.5
-    #>  9 9        50
-    #> 10 10       60  
+    #> # A tibble: 3 × 2
+    #>   USUBJID  NVIS
+    #>   <chr>   <int>
+    #> 1 1           4
+    #> 2 2           2
+    #> 3 3           0
 
 ### Renaming by variables (`by_vars`)
 
