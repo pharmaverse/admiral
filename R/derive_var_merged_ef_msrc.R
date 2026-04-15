@@ -141,9 +141,12 @@
 #' - `pr`: all records qualify (no `condition` specified), so any subject with
 #'   a procedure record is flagged
 #'
-#' Subject `"4"` has no records in either source, so `CANCTRFL` is `NA`.
-#' Subject `"5"` has a `cm` record but it does not meet the anti-cancer
-#' condition, so `CANCTRFL` is also `NA` (via the default `false_value`).
+#' With the default `false_value = NA_character_` and `missing_value =
+#' NA_character_`, both subjects `"4"` and `"5"` receive `NA` — but for
+#' different reasons: subject `"5"` is present in `cm` but has no anti-cancer
+#' record (`false_value`), while subject `"4"` is absent from all sources
+#' (`missing_value`). See the next section to learn how to distinguish these
+#' two cases by setting `false_value` and `missing_value` to different values.
 #'
 #' @code
 #' derive_var_merged_ef_msrc(

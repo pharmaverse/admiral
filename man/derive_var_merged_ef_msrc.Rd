@@ -202,9 +202,11 @@ from two sources:
 a procedure record is flagged
 }
 
-Subject \code{"4"} has no records in either source, so \code{CANCTRFL} is \code{NA}.
-Subject \code{"5"} has a \code{cm} record but it does not meet the anti-cancer
-condition, so \code{CANCTRFL} is also \code{NA} (via the default \code{false_value}).
+With the default \code{false_value = NA_character_} and \code{missing_value = NA_character_}, both subjects \code{"4"} and \code{"5"} receive \code{NA} — but for
+different reasons: subject \code{"5"} is present in \code{cm} but has no anti-cancer
+record (\code{false_value}), while subject \code{"4"} is absent from all sources
+(\code{missing_value}). See the next section to learn how to distinguish these
+two cases by setting \code{false_value} and \code{missing_value} to different values.
 
 \if{html}{\out{<div class="sourceCode r">}}\preformatted{derive_var_merged_ef_msrc(
   adsl,
