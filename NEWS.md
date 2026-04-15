@@ -8,6 +8,10 @@
   `event_joined()`. This allows to derive parameters requiring confirmation _by
   visit_ using `derive_extreme_event()`. (#3022)
 
+- The `filter_source` argument was added to `event_joined()`, allowing to
+specify a condition to restrict the source dataset before the join, e.g., when
+using `derive_extreme_event()`. (#3033)
+
 - The `filter_add` argument in `derive_var_joined_exist_flag()` is no longer
 erroneously ignored. (#3018)
 
@@ -52,6 +56,8 @@ of packages were updated to specify the level of contributions required for auth
 - The documentation for `derive_vars_merged_summary()` was enhanced with structured examples covering the `new_vars`, `filter_add`, `missing_values`, `by_vars` renaming, and string aggregation use cases. (#2775)
 
 - Added a new custom [404 page](https://pharmaverse.github.io/admiral/404.html) with a butterfly quiz for lost users. (#2982)
+
+- Usage of `ASEQ` which is an optional variable was clarified within the corresponding Vignettes and Templates. (#2986)
 
 ## Various
 
