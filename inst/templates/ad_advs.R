@@ -266,7 +266,7 @@ advs <- advs %>%
 
 ## Get ASEQ and AVALCATx and add PARAM/PARAMN ----
 advs <- advs %>%
-  # Calculate ASEQ
+  # Calculate ASEQ (Optional Variable)
   derive_var_obs_number(
     new_var = ASEQ,
     by_vars = exprs(STUDYID, USUBJID),
@@ -280,7 +280,6 @@ advs <- advs %>%
   ) %>%
   # Derive PARAM and PARAMN
   derive_vars_merged(dataset_add = select(param_lookup, -VSTESTCD), by_vars = exprs(PARAMCD))
-
 
 
 # Add all ADSL variables

@@ -6,8 +6,11 @@
 \usage{
 event_joined(
   dataset_name = NULL,
+  filter_source = NULL,
   condition,
+  by_vars = NULL,
   order = NULL,
+  tmp_obs_nr_var = NULL,
   join_vars,
   join_type,
   first_cond_lower = NULL,
@@ -28,6 +31,13 @@ dataset (\code{dataset}) of \code{derive_extreme_event()} is used.
 \item{Default value}{\code{NULL}}
 }}
 
+\item{filter_source}{A condition to restrict the source dataset before joining
+
+\describe{
+\item{Permitted values}{an unquoted condition, e.g., \code{AVISIT == "BASELINE"}}
+\item{Default value}{\code{NULL}}
+}}
+
 \item{condition}{An unquoted condition for selecting the observations, which
 will contribute to the extreme event.
 
@@ -41,8 +51,19 @@ observations up to the confirmation observation the response is "CR" or
 "NE" and there is at most one "NE".
 
 \describe{
-\item{Permitted values}{an unquoted condition}
+\item{Permitted values}{an unquoted condition, e.g., \code{AVISIT == "BASELINE"}}
 \item{Default value}{none}
+}}
+
+\item{by_vars}{By variables
+
+The specified variables are used to join the dataset with itself. If the
+argument is not specified (or set to \code{NULL}), the by variables specified for
+\code{derive_extreme_event()} are used.
+
+\describe{
+\item{Permitted values}{list of variables created by \code{exprs()}, e.g., \code{exprs(USUBJID, VISIT)}}
+\item{Default value}{\code{NULL}}
 }}
 
 \item{order}{If specified, the specified variables or expressions are used to
@@ -53,6 +74,22 @@ For handling of \code{NA}s in sorting variables see the "Sort Order" section in 
 \describe{
 \item{Permitted values}{list of expressions created by \code{exprs()}, e.g.,
 \code{exprs(ADT, desc(AVAL))} or \code{NULL}}
+\item{Default value}{\code{NULL}}
+}}
+
+\item{tmp_obs_nr_var}{Temporary observation number
+
+The specified variable is added to the source dataset (\code{dataset_name}). It
+is set to the observation number with respect to \code{order}. For each by group
+(\code{by_vars}) the observation number starts with \code{1}. If there is more than
+one record for specific values for \code{by_vars} and \code{order}, all records get
+the same observation number. The variable can be used in the conditions
+(\code{filter_join}, \code{first_cond_upper}, \code{first_cond_lower}). It is not included
+in the output dataset. It can also be used to select events depending on
+consecutive observations or the last observation.
+
+\describe{
+\item{Permitted values}{an unquoted symbol, e.g., \code{AVAL}}
 \item{Default value}{\code{NULL}}
 }}
 
@@ -94,7 +131,7 @@ certain observation before the current observation up to the current
 observation.
 
 \describe{
-\item{Permitted values}{an unquoted condition}
+\item{Permitted values}{an unquoted condition, e.g., \code{AVISIT == "BASELINE"}}
 \item{Default value}{\code{NULL}}
 }}
 
@@ -110,7 +147,7 @@ functions which should not apply to all observations but only up to the
 confirmation assessment.
 
 \describe{
-\item{Permitted values}{an unquoted condition}
+\item{Permitted values}{an unquoted condition, e.g., \code{AVISIT == "BASELINE"}}
 \item{Default value}{\code{NULL}}
 }}
 
