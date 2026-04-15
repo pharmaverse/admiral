@@ -206,7 +206,7 @@ adgdssf <- adgdssf %>%
     derivation = derive_var_pchg,
     filter = AVISITN > 0
   ) %>%
-  # Derive sequence number
+  # Derive sequence number (Optional Variable)
   derive_var_obs_number(
     by_vars = exprs(STUDYID, USUBJID),
     order = exprs(PARAMCD, ADT),
@@ -224,7 +224,7 @@ categorization variables in `ADQS`. For example:
 ``` r
 # Create AVALCATy lookup table
 avalcat_lookup <- exprs(
-  ~PARAMCD, ~condition, ~AVALCAT1, ~AVALCAT1N,
+  ~PARAMCD, ~condition, ~AVALCAT1, ~AVALCA1N,
   "GDS02TS", AVAL <= 5, "Normal", 0L,
   "GDS02TS", AVAL <= 10 & AVAL > 5, "Possible Depression", 1L,
   "GDS02TS", AVAL > 10, "Likely Depression", 2L
@@ -232,9 +232,9 @@ avalcat_lookup <- exprs(
 # Create CHGCAT1 lookup table
 chgcat_lookup <- exprs(
   ~condition, ~CHGCAT1,
-  AVALCAT1N > BASECA1N, "WORSENED",
-  AVALCAT1N == BASECA1N, "NO CHANGE",
-  AVALCAT1N < BASECA1N, "IMPROVED"
+  AVALCA1N > BASECA1N, "WORSENED",
+  AVALCA1N == BASECA1N, "NO CHANGE",
+  AVALCA1N < BASECA1N, "IMPROVED"
 )
 
 adgdssf <- adgdssf %>%
@@ -249,7 +249,7 @@ adgdssf <- adgdssf %>%
   ) %>%
   derive_var_base(
     by_vars = exprs(STUDYID, USUBJID, PARAMCD),
-    source_var = AVALCAT1N,
+    source_var = AVALCA1N,
     new_var = BASECA1N
   ) %>%
   derive_vars_cat(

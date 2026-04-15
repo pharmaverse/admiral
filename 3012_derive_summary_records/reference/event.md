@@ -1,4 +1,4 @@
-# Create a `event` Object
+# Create an `event` Object
 
 The `event` object is used to define events as input for the
 [`derive_extreme_event()`](https:/pharmaverse.github.io/admiral/3012_derive_summary_records/reference/derive_extreme_event.md)

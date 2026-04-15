@@ -491,9 +491,12 @@ adex <- adex %>%
 
 The [admiral](https://pharmaverse.github.io/admiral/) function
 [`derive_var_obs_number()`](https:/pharmaverse.github.io/admiral/3012_derive_summary_records/reference/derive_var_obs_number.md)
-can be used to derive `ASEQ`. An example call is:
+can be used to derive `ASEQ`. Note that creating `ASEQ` is not required
+for all ADaM datasets according to the ADaM IG, and this is just for
+demonstration purpose. An example call is:
 
 ``` r
+# Calculate ASEQ (Optional Variable)
 adex <- derive_var_obs_number(
   adex,
   new_var = ASEQ,

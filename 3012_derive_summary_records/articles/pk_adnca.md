@@ -738,7 +738,9 @@ is used to derive change from baseline `CHG`.
 We also now derive `ASEQ` using
 [`derive_var_obs_number()`](https:/pharmaverse.github.io/admiral/3012_derive_summary_records/reference/derive_var_obs_number.md)
 and we drop intermediate variables such as those ending with “\_prev”
-and “\_next”.
+and “\_next”. Note that creating `ASEQ` is not required for all ADaM
+datasets according to the ADaM IG, and this is just for demonstration
+purpose.
 
 Finally we derive `PARAM` and `PARAMN` from a lookup table.
 
@@ -765,7 +767,7 @@ adpc_chg <- restrict_derivation(
 # ---- Add ASEQ ----
 
 adpc_aseq <- adpc_chg %>%
-  # Calculate ASEQ
+  # Calculate ASEQ (Optional Variable)
   derive_var_obs_number(
     new_var = ASEQ,
     by_vars = exprs(STUDYID, USUBJID),
