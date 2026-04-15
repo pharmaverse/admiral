@@ -1,4 +1,4 @@
-#' Create a `event` Object
+#' Create an `event` Object
 #'
 #' The `event` object is used to define events as input for the
 #' `derive_extreme_event()` and `derive_vars_extreme_event()` functions.
@@ -111,6 +111,10 @@ event <- function(dataset_name = NULL,
 #'
 #' @permitted a character scalar
 #'
+#' @param filter_source A condition to restrict the source dataset before joining
+#'
+#' @permitted [condition]
+#'
 #' @param condition An unquoted condition for selecting the observations, which
 #'   will contribute to the extreme event.
 #'
@@ -125,7 +129,28 @@ event <- function(dataset_name = NULL,
 #'   observations up to the confirmation observation the response is "CR" or
 #'   "NE" and there is at most one "NE".
 #'
-#' @permitted an unquoted condition
+#' @permitted [condition]
+#'
+#' @param by_vars By variables
+#'
+#' The specified variables are used to join the dataset with itself. If the
+#' argument is not specified (or set to `NULL`), the by variables specified for
+#' `derive_extreme_event()` are used.
+#'
+#' @permitted [var_list]
+#'
+#' @param tmp_obs_nr_var Temporary observation number
+#'
+#'   The specified variable is added to the source dataset (`dataset_name`). It
+#'   is set to the observation number with respect to `order`. For each by group
+#'   (`by_vars`) the observation number starts with `1`. If there is more than
+#'   one record for specific values for `by_vars` and `order`, all records get
+#'   the same observation number. The variable can be used in the conditions
+#'   (`filter_join`, `first_cond_upper`, `first_cond_lower`). It is not included
+#'   in the output dataset. It can also be used to select events depending on
+#'   consecutive observations or the last observation.
+#'
+#' @permitted [var]
 #'
 #' @param join_vars Variables to keep from joined dataset
 #'
@@ -162,7 +187,7 @@ event <- function(dataset_name = NULL,
 #'   certain observation before the current observation up to the current
 #'   observation.
 #'
-#' @permitted an unquoted condition
+#' @permitted [condition]
 #'
 #' @param first_cond_upper Condition for selecting range of data (after)
 #'
@@ -175,7 +200,7 @@ event <- function(dataset_name = NULL,
 #'   functions which should not apply to all observations but only up to the
 #'   confirmation assessment.
 #'
-#' @permitted an unquoted condition
+#' @permitted [condition]
 #'
 #' @param order If specified, the specified variables or expressions are used to
 #'   select the first observation.
@@ -331,8 +356,11 @@ event <- function(dataset_name = NULL,
 #' ) %>%
 #'   filter(PARAMCD == "CBOR")
 event_joined <- function(dataset_name = NULL,
+                         filter_source = NULL,
                          condition,
+                         by_vars = NULL,
                          order = NULL,
+                         tmp_obs_nr_var = NULL,
                          join_vars,
                          join_type,
                          first_cond_lower = NULL,
@@ -340,13 +368,14 @@ event_joined <- function(dataset_name = NULL,
                          set_values_to = NULL,
                          keep_source_vars = NULL,
                          description = NULL) {
-  first_cond_upper <- assert_filter_cond(enexpr(first_cond_upper), optional = TRUE)
-
   out <- list(
     description = assert_character_scalar(description, optional = TRUE),
     dataset_name = assert_character_scalar(dataset_name, optional = TRUE),
+    filter_source = assert_filter_cond(enexpr(filter_source), optional = TRUE),
     condition = assert_filter_cond(enexpr(condition), optional = TRUE),
+    by_vars = assert_vars(by_vars, optional = TRUE),
     order = assert_expr_list(order, optional = TRUE),
+    tmp_obs_nr_var = assert_symbol(enexpr(tmp_obs_nr_var), optional = TRUE),
     join_vars = assert_vars(join_vars),
     join_type = assert_character_scalar(
       join_type,
@@ -354,7 +383,7 @@ event_joined <- function(dataset_name = NULL,
       case_sensitive = FALSE
     ),
     first_cond_lower = assert_filter_cond(enexpr(first_cond_lower), optional = TRUE),
-    first_cond_upper = first_cond_upper,
+    first_cond_upper = assert_filter_cond(enexpr(first_cond_upper), optional = TRUE),
     set_values_to = assert_expr_list(
       set_values_to,
       named = TRUE,

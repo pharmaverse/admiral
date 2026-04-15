@@ -283,7 +283,7 @@ adeg <- adeg %>%
 
 ## Get ASEQ and AVALCAT1/CHGCAT1 and add PARAM/PARAMN ----
 adeg <- adeg %>%
-  # Calculate ASEQ
+  # Calculate ASEQ (Optional Variable)
   derive_var_obs_number(
     new_var = ASEQ,
     by_vars = exprs(STUDYID, USUBJID),

@@ -222,6 +222,7 @@ dataset is provided, a new dataset is created.
 
 BDS-Findings Functions for adding Parameters/Records:
 \code{\link{default_qtc_paramcd}()},
+\code{\link{derive_basetype_records}()},
 \code{\link{derive_expected_records}()},
 \code{\link{derive_extreme_event}()},
 \code{\link{derive_locf_records}()},

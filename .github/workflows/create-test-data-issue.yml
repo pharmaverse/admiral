@@ -1,0 +1,69 @@
+name: Create Test Data Cleanup Issue
+
+on:
+  workflow_dispatch:
+    inputs:
+      test_file:
+        description: "Test file to create a cleanup issue for"
+        required: true
+        type: choice
+        options:
+          - tests/testthat/test-create_query_data.R
+          - tests/testthat/test-derive_merged.R
+          - tests/testthat/test-derive_param_bmi.R
+          - tests/testthat/test-derive_param_bsa.R
+          - tests/testthat/test-derive_param_exist_flag.R
+          - tests/testthat/test-derive_param_exposure.R
+          - tests/testthat/test-derive_param_framingham.R
+          - tests/testthat/test-derive_param_map.R
+          - tests/testthat/test-derive_var_anrind.R
+          - tests/testthat/test-derive_var_atoxgr.R
+          - tests/testthat/test-derive_var_extreme_date.R
+          - tests/testthat/test-derive_var_extreme_flag.R
+          - tests/testthat/test-derive_var_joined_exist_flag.R
+          - tests/testthat/test-derive_var_trtemfl.R
+          - tests/testthat/test-derive_vars_cat.R
+          - tests/testthat/test-derive_vars_dt.R
+          - tests/testthat/test-derive_vars_dtm_to_tm.R
+          - tests/testthat/test-derive_vars_dtm.R
+          - tests/testthat/test-derive_vars_transposed.R
+          - tests/testthat/test-dt_level.R
+          - tests/testthat/test-filter_joined.R
+          - tests/testthat/test-filter_relative.R
+
+jobs:
+  create-issue:
+    runs-on: ubuntu-latest
+    permissions:
+      issues: write
+    steps:
+      - name: Create child issue and comment on parent
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          TEST_FILE: ${{ inputs.test_file }}
+        run: |
+          TITLE="Tests: Move data/objects within testthat calls for \"${TEST_FILE}\""
+
+          BODY="## Background
+
+          Please see https://github.com/pharmaverse/admiral/issues/2978 for additional background and discussion.
+
+          The tests in \`${TEST_FILE}\` have data being created outside of the testthat calls which can have unintended side effects.
+
+          The data should be moved inside the testthat calls if it is small. For data that is large or repeatedly used throughout tests another method should be used, e.g. use of \`withr\` and/or creating an additional subfolder within testthat called \`testdata\`. All efforts should be made to ensure data does not spillover into another test.
+
+          ## Definition of Done
+
+          - [ ] Tests in \`${TEST_FILE}\` have all data self-contained
+          - [ ] Test Data is documented as needed"
+
+          ISSUE_URL=$(gh issue create \
+            --repo "${{ github.repository }}" \
+            --title "${TITLE}" \
+            --body "${BODY}")
+
+          echo "Created issue: ${ISSUE_URL}"
+
+          gh issue comment 2978 \
+            --repo "${{ github.repository }}" \
+            --body "Created tracking issue for \`${TEST_FILE}\`: ${ISSUE_URL}"

@@ -1,19 +1,13 @@
-input <- c(
-  "2019-07-18", # full date
-  "--07-18", # missing year
-  "2019", # missing month and day
-  "2019-07--", # missing day
-  "2019---07" # missing just month
-)
-
-input_warnings <- c(
-  "", # empty string
-  NA_character_, # NA
-  "2019/07/18" # inappropriate date format/string
-)
-
 ## Test 1: default: no date imputation ----
 test_that("derive_vars_dt Test 1: default: no date imputation", {
+  input <- c(
+    "2019-07-18", # full date
+    "--07-18", # missing year
+    "2019", # missing month and day
+    "2019-07--", # missing day
+    "2019---07" # missing just month
+  )
+
   expected_output <- c(
     "2019-07-18",
     NA_character_,
@@ -28,6 +22,14 @@ test_that("derive_vars_dt Test 1: default: no date imputation", {
 
 ## Test 2: impute month and day to first ----
 test_that("derive_vars_dt Test 2: impute month and day to first", {
+  input <- c(
+    "2019-07-18", # full date
+    "--07-18", # missing year
+    "2019", # missing month and day
+    "2019-07--", # missing day
+    "2019---07" # missing just month
+  )
+
   expected_output <- c(
     "2019-07-18",
     NA_character_,
@@ -61,6 +63,14 @@ test_that("derive_vars_dt Test 2: impute month and day to first", {
 
 ## Test 3: impute day to last ----
 test_that("derive_vars_dt Test 3: impute day to last", {
+  input <- c(
+    "2019-07-18", # full date
+    "--07-18", # missing year
+    "2019", # missing month and day
+    "2019-07--", # missing day
+    "2019---07" # missing just month
+  )
+
   expected_output <- c(
     "2019-07-18",
     NA_character_,
@@ -81,6 +91,14 @@ test_that("derive_vars_dt Test 3: impute day to last", {
 
 ## Test 4: impute month and day to last and preserve = TRUE ----
 test_that("derive_vars_dt Test 4: impute month and day to last and preserve = TRUE", {
+  input <- c(
+    "2019-07-18", # full date
+    "--07-18", # missing year
+    "2019", # missing month and day
+    "2019-07--", # missing day
+    "2019---07" # missing just month
+  )
+
   expected_output <- c(
     "2019-07-18",
     NA_character_,
@@ -102,6 +120,14 @@ test_that("derive_vars_dt Test 4: impute month and day to last and preserve = TR
 
 ## Test 5: impute month and day to mid ----
 test_that("derive_vars_dt Test 5: impute month and day to mid", {
+  input <- c(
+    "2019-07-18", # full date
+    "--07-18", # missing year
+    "2019", # missing month and day
+    "2019-07--", # missing day
+    "2019---07" # missing just month
+  )
+
   expected_output <- c(
     "2019-07-18",
     NA_character_,
@@ -121,6 +147,14 @@ test_that("derive_vars_dt Test 5: impute month and day to mid", {
 
 ## Test 6: min_dates parameter works ----
 test_that("derive_vars_dt Test 6: min_dates parameter works", {
+  input <- c(
+    "2019-07-18", # full date
+    "--07-18", # missing year
+    "2019", # missing month and day
+    "2019-07--", # missing day
+    "2019---07" # missing just month
+  )
+
   expect_equal(
     impute_dtc_dt(
       input,
@@ -149,6 +183,14 @@ test_that("derive_vars_dt Test 6: min_dates parameter works", {
 
 ## Test 7: max_dates parameter works ----
 test_that("derive_vars_dt Test 7: max_dates parameter works", {
+  input <- c(
+    "2019-07-18", # full date
+    "--07-18", # missing year
+    "2019", # missing month and day
+    "2019-07--", # missing day
+    "2019---07" # missing just month
+  )
+
   expect_equal(
     impute_dtc_dt(
       input,
@@ -178,6 +220,14 @@ test_that("derive_vars_dt Test 7: max_dates parameter works", {
 
 ## Test 8: min_dates length mismatch provides error ----
 test_that("derive_vars_dt Test 8: min_dates length mismatch provides error", {
+  input <- c(
+    "2019-07-18", # full date
+    "--07-18", # missing year
+    "2019", # missing month and day
+    "2019-07--", # missing day
+    "2019---07" # missing just month
+  )
+
   expect_snapshot(
     impute_dtc_dt(
       input,
@@ -194,6 +244,14 @@ test_that("derive_vars_dt Test 8: min_dates length mismatch provides error", {
 
 ## Test 9: max_dates length mismatch provides error ----
 test_that("derive_vars_dt Test 9: max_dates length mismatch provides error", {
+  input <- c(
+    "2019-07-18", # full date
+    "--07-18", # missing year
+    "2019", # missing month and day
+    "2019-07--", # missing day
+    "2019---07" # missing just month
+  )
+
   expect_snapshot(
     impute_dtc_dt(
       input,
@@ -210,6 +268,14 @@ test_that("derive_vars_dt Test 9: max_dates length mismatch provides error", {
 
 ## Test 10: Warning if null min/max_dates when highest_imputation = Y ----
 test_that("derive_vars_dt Test 10: Error if null min/max_dates when highest_imputation = Y", {
+  input <- c(
+    "2019-07-18", # full date
+    "--07-18", # missing year
+    "2019", # missing month and day
+    "2019-07--", # missing day
+    "2019---07" # missing just month
+  )
+
   expect_snapshot(
     impute_dtc_dt(
       input,
@@ -221,6 +287,12 @@ test_that("derive_vars_dt Test 10: Error if null min/max_dates when highest_impu
 
 ## Test 11: appropriate warnings/return object for impute_dtc_dt ----
 test_that("derive_vars_dt Test 11: appropriate warnings/return object for impute_dtc_dt", {
+  input_warnings <- c(
+    "", # empty string
+    NA_character_, # NA
+    "2019/07/18" # inappropriate date format/string
+  )
+
   expect_warning(
     impute_dtc_dt(dtc = input_warnings),
     regexp = "incorrect datetime format"
@@ -234,6 +306,14 @@ test_that("derive_vars_dt Test 11: appropriate warnings/return object for impute
 
 ## Test 12: wrong input to `date_imputation` ----
 test_that("derive_vars_dt Test 12: wrong input to `date_imputation`", {
+  input <- c(
+    "2019-07-18", # full date
+    "--07-18", # missing year
+    "2019", # missing month and day
+    "2019-07--", # missing day
+    "2019---07" # missing just month
+  )
+
   # impossible month 13
   expect_snapshot(
     impute_dtc_dt(
@@ -287,6 +367,14 @@ test_that("derive_vars_dt Test 12: wrong input to `date_imputation`", {
 # convert_dtc_to_dt ----
 ## Test 13: Convert a complete -- DTC into a date object ----
 test_that("convert_dtc_to_dt Test 13: Convert a complete -- DTC into a date object", {
+  input <- c(
+    "2019-07-18", # full date
+    "--07-18", # missing year
+    "2019", # missing month and day
+    "2019-07--", # missing day
+    "2019---07" # missing just month
+  )
+
   expected_output <- c(
     as.Date("2019-07-18")
   )
@@ -298,31 +386,31 @@ test_that("convert_dtc_to_dt Test 13: Convert a complete -- DTC into a date obje
 
 # compute_dtf ----
 
-inputdtc <- c(
-  "2019-07-18",
-  "2019-02",
-  "2019",
-  "2019---07",
-  "2019---06T00:00",
-  "2019----T00:00",
-  "2019-06--T00:00",
-  "--06-06T00:00",
-  "-----T00:00"
-)
-inputdt <- c(
-  as.Date("2019-07-18"),
-  as.Date("2019-02-01"),
-  as.Date("2019-01-01"),
-  as.Date("2019-01-01"),
-  as.Date("2019-06-06"),
-  as.Date("2019-06-06"),
-  as.Date("2019-06-06"),
-  as.Date("2019-06-06"),
-  as.Date("2019-06-06")
-)
-
 ## Test 14: compute DTF ----
 test_that("compute_dtf Test 14: compute DTF", {
+  inputdtc <- c(
+    "2019-07-18",
+    "2019-02",
+    "2019",
+    "2019---07",
+    "2019---06T00:00",
+    "2019----T00:00",
+    "2019-06--T00:00",
+    "--06-06T00:00",
+    "-----T00:00"
+  )
+  inputdt <- c(
+    as.Date("2019-07-18"),
+    as.Date("2019-02-01"),
+    as.Date("2019-01-01"),
+    as.Date("2019-01-01"),
+    as.Date("2019-06-06"),
+    as.Date("2019-06-06"),
+    as.Date("2019-06-06"),
+    as.Date("2019-06-06"),
+    as.Date("2019-06-06")
+  )
+
   expected_output <- c(
     NA_character_,
     "D",
@@ -346,6 +434,14 @@ test_that("compute_dtf Test 14: compute DTF", {
 # restrict_imputed_dtc_dt ----
 ## Test 15: restrict_imputed_dtc_dt works as expected ----
 test_that("restrict_imputed_dtc_dt Test 15: restrict_imputed_dtc_dt works as expected", {
+  input <- c(
+    "2019-07-18", # full date
+    "--07-18", # missing year
+    "2019", # missing month and day
+    "2019-07--", # missing day
+    "2019---07" # missing just month
+  )
+
   imputed_dtc <- impute_dtc_dt(
     input,
     min_dates = list(
@@ -411,17 +507,17 @@ test_that("restrict_imputed_dtc_dt Test 15: restrict_imputed_dtc_dt works as exp
 
 # derive_vars_dt ----
 
-date <- tibble::tribble(
-  ~XXSTDTC,
-  "2019-07-18T15:25:40",
-  "2019-07-18",
-  "2019-02",
-  "2019",
-  "2019---07"
-)
-
 ## Test 16: default behavior ----
 test_that("derive_vars_dt Test 16: default behavior", {
+  date <- tibble::tribble(
+    ~XXSTDTC,
+    "2019-07-18T15:25:40",
+    "2019-07-18",
+    "2019-02",
+    "2019",
+    "2019---07"
+  )
+
   expected_output <- tibble::tribble(
     ~XXSTDTC,              ~ASTDT,
     "2019-07-18T15:25:40", as.Date("2019-07-18"),
@@ -446,6 +542,15 @@ test_that("derive_vars_dt Test 16: default behavior", {
 
 ## Test 17: no date imputation, add DTF ----
 test_that("derive_vars_dt Test 17: no date imputation, add DTF", {
+  date <- tibble::tribble(
+    ~XXSTDTC,
+    "2019-07-18T15:25:40",
+    "2019-07-18",
+    "2019-02",
+    "2019",
+    "2019---07"
+  )
+
   expected_output <- tibble::tribble(
     ~XXSTDTC,              ~ASTDT,                ~ASTDTF,
     "2019-07-18T15:25:40", as.Date("2019-07-18"), NA_character_,
@@ -471,6 +576,15 @@ test_that("derive_vars_dt Test 17: no date imputation, add DTF", {
 
 ## Test 18: date imputed to first, auto DTF ----
 test_that("derive_vars_dt Test 18: date imputed to first, auto DTF", {
+  date <- tibble::tribble(
+    ~XXSTDTC,
+    "2019-07-18T15:25:40",
+    "2019-07-18",
+    "2019-02",
+    "2019",
+    "2019---07"
+  )
+
   expected_output <- tibble::tribble(
     ~XXSTDTC,              ~ASTDT,                ~ASTDTF,
     "2019-07-18T15:25:40", as.Date("2019-07-18"), NA_character_,
@@ -497,6 +611,15 @@ test_that("derive_vars_dt Test 18: date imputed to first, auto DTF", {
 
 ## Test 19: date imputed to last, no DTF ----
 test_that("derive_vars_dt Test 19: date imputed to last, no DTF", {
+  date <- tibble::tribble(
+    ~XXSTDTC,
+    "2019-07-18T15:25:40",
+    "2019-07-18",
+    "2019-02",
+    "2019",
+    "2019---07"
+  )
+
   expected_output <- tibble::tribble(
     ~XXSTDTC,              ~AENDT,
     "2019-07-18T15:25:40", as.Date("2019-07-18"),
@@ -816,5 +939,3 @@ test_that("derive_vars_dt Test 31: Test Min Date Equals Max Date", {
     keys = "XXSTDTC"
   )
 })
-
-rm(input, input_warnings, inputdt, inputdtc, date)

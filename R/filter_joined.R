@@ -40,12 +40,16 @@
 #'
 #'   The variables needed from the other observations should be specified for
 #'   this parameter. The specified variables are added to the joined dataset
-#'   with suffix ".join". For example to select all observations with `AVALC ==
+#'   with suffix `.join`. For example to select all observations with `AVALC ==
 #'   "Y"` and `AVALC == "Y"` for at least one subsequent visit `join_vars =
 #'   exprs(AVALC, AVISITN)` and `filter_join = AVALC == "Y" & AVALC.join == "Y"
 #'   & AVISITN < AVISITN.join` could be specified.
 #'
 #'   The `*.join` variables are not included in the output dataset.
+#'
+#'   The variable specified for `tmp_obs_nr_var` must not be included in
+#'   `join_vars`. It is added automatically to the joined dataset with the
+#'   suffix `.join`.
 #'
 #' @permitted [var_list]
 #'
