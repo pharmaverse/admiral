@@ -137,7 +137,6 @@ The input dataset with the variables `CRITy`, `CRITyFL`, and optionally
 ## See also
 
 BDS-Findings Functions that returns variable appended to dataset:
-[`derive_basetype_records()`](https:/pharmaverse.github.io/admiral/2906-enhance-examples-derive-var-merged-ef-msrc/reference/derive_basetype_records.md),
 [`derive_var_analysis_ratio()`](https:/pharmaverse.github.io/admiral/2906-enhance-examples-derive-var-merged-ef-msrc/reference/derive_var_analysis_ratio.md),
 [`derive_var_anrind()`](https:/pharmaverse.github.io/admiral/2906-enhance-examples-derive-var-merged-ef-msrc/reference/derive_var_anrind.md),
 [`derive_var_atoxgr()`](https:/pharmaverse.github.io/admiral/2906-enhance-examples-derive-var-merged-ef-msrc/reference/derive_var_atoxgr.md),

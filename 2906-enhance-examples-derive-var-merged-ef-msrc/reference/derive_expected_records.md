@@ -85,6 +85,7 @@ are added to the output dataset.
 
 BDS-Findings Functions for adding Parameters/Records:
 [`default_qtc_paramcd()`](https:/pharmaverse.github.io/admiral/2906-enhance-examples-derive-var-merged-ef-msrc/reference/default_qtc_paramcd.md),
+[`derive_basetype_records()`](https:/pharmaverse.github.io/admiral/2906-enhance-examples-derive-var-merged-ef-msrc/reference/derive_basetype_records.md),
 [`derive_extreme_event()`](https:/pharmaverse.github.io/admiral/2906-enhance-examples-derive-var-merged-ef-msrc/reference/derive_extreme_event.md),
 [`derive_extreme_records()`](https:/pharmaverse.github.io/admiral/2906-enhance-examples-derive-var-merged-ef-msrc/reference/derive_extreme_records.md),
 [`derive_locf_records()`](https:/pharmaverse.github.io/admiral/2906-enhance-examples-derive-var-merged-ef-msrc/reference/derive_locf_records.md),

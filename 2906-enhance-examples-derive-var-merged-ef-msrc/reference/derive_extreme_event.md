@@ -288,6 +288,7 @@ This reduces the memory consumption but increases the run-time.
 
 BDS-Findings Functions for adding Parameters/Records:
 [`default_qtc_paramcd()`](https:/pharmaverse.github.io/admiral/2906-enhance-examples-derive-var-merged-ef-msrc/reference/default_qtc_paramcd.md),
+[`derive_basetype_records()`](https:/pharmaverse.github.io/admiral/2906-enhance-examples-derive-var-merged-ef-msrc/reference/derive_basetype_records.md),
 [`derive_expected_records()`](https:/pharmaverse.github.io/admiral/2906-enhance-examples-derive-var-merged-ef-msrc/reference/derive_expected_records.md),
 [`derive_extreme_records()`](https:/pharmaverse.github.io/admiral/2906-enhance-examples-derive-var-merged-ef-msrc/reference/derive_extreme_records.md),
 [`derive_locf_records()`](https:/pharmaverse.github.io/admiral/2906-enhance-examples-derive-var-merged-ef-msrc/reference/derive_locf_records.md),
@@ -506,6 +507,156 @@ sleep on consecutive days.
     #> 8 4       WSP        No sleep two nights in a row     3     0 Worst Sleeping Pr…
     #> 9 5       WSP        No sleep                         4     1 Worst Sleeping Pr…
 
+### Events across records by record
+
+In the previous example, the new parameter was derived for each subject,
+i.e., all records of a subject were summarized. However, there are cases
+where we may want to derive a new parameter by record, but where the
+condition for deriving the parameter for a given record may involve
+comparison with other records.
+
+For example, we want to derive a new parameter for each visit indicating
+response at this visit and the next one. For this we need to specify the
+`by_vars` argument in
+[`event_joined()`](https:/pharmaverse.github.io/admiral/2906-enhance-examples-derive-var-merged-ef-msrc/reference/event_joined.md)
+which overwrites the value specified in the `derive_extreme_event()`
+call. There `by_vars = exprs(USUBJID, AVISITN)` is used because we want
+to add new records for each subject and visit. In
+[`event_joined()`](https:/pharmaverse.github.io/admiral/2906-enhance-examples-derive-var-merged-ef-msrc/reference/event_joined.md),
+`by_vars = exprs(USUBJID)` is used because we want to join the records
+by subject only.
+
+The `tmp_obs_nr_var` argument is specified to create a variable which
+numbers the records within each subject. This variable is then used in
+the `condition` argument to ensure that the current record is compared
+with the next one. This ensures that missing visits like for subject 2
+are handled correctly.
+
+    adbds <- tribble(
+      ~USUBJID, ~AVISITN,  ~AVALC,
+      "1",             1,  "Y",
+      "1",             2,  "N",
+      "1",             3,  "Y",
+      "1",             4,  "Y",
+      "1",             5,  "Y",
+      "2",             1,  "Y",
+      "2",             3,  "Y",
+    ) %>%
+      mutate(PARAMCD = "RESP")
+
+    derive_extreme_event(
+      adbds,
+      by_vars = exprs(USUBJID, AVISITN),
+      source_datasets = list(adbds = adbds),
+      tmp_event_nr_var = event_nr,
+      order = exprs(event_nr),
+      mode = "first",
+      events = list(
+        event_joined(
+          dataset_name = "adbds",
+          by_vars = exprs(USUBJID),
+          order = exprs(AVISITN),
+          join_vars = exprs(AVALC),
+          join_type = "after",
+          tmp_obs_nr_var = obs_nr,
+          condition = AVALC == "Y" & AVALC.join == "Y" & obs_nr.join == obs_nr + 1,
+          set_values_to = exprs(AVALC = "Y")
+        ),
+        event(
+          dataset_name = "adbds",
+          set_values_to = exprs(AVALC = "N")
+        )
+      ),
+      set_values_to = exprs(PARAMCD = "CONFRESP")
+    )
+    #> # A tibble: 14 × 4
+    #>    USUBJID AVISITN AVALC PARAMCD
+    #>    <chr>     <dbl> <chr> <chr>
+    #>  1 1             1 Y     RESP
+    #>  2 1             2 N     RESP
+    #>  3 1             3 Y     RESP
+    #>  4 1             4 Y     RESP
+    #>  5 1             5 Y     RESP
+    #>  6 2             1 Y     RESP
+    #>  7 2             3 Y     RESP
+    #>  8 1             1 N     CONFRESP
+    #>  9 1             2 N     CONFRESP
+    #> 10 1             3 Y     CONFRESP
+    #> 11 1             4 Y     CONFRESP
+    #> 12 1             5 N     CONFRESP
+    #> 13 2             1 Y     CONFRESP
+    #> 14 2             3 N     CONFRESP
+
+### Restricting source data before join
+
+Sometimes it is useful to restrict the source data of some events before
+the join. For example, in the following example, records with missing
+results should be ignored for the confirmation.
+
+    adbds <- tribble(
+      ~USUBJID, ~AVISITN,  ~AVALC,
+      "1",             1,  "Y",
+      "1",             2,  "N",
+      "1",             3,  "Y",
+      "1",             4,  "Y",
+      "1",             5,  "Y",
+      "2",             1,  "Y",
+      "2",             2,  NA,
+      "2",             3,  "Y"
+    ) %>%
+      mutate(PARAMCD = "RESP")
+
+    derive_extreme_event(
+      adbds,
+      by_vars = exprs(USUBJID, AVISITN),
+      source_datasets = list(adbds = adbds),
+      tmp_event_nr_var = event_nr,
+      order = exprs(event_nr),
+      mode = "first",
+      events = list(
+        event_joined(
+          dataset_name = "adbds",
+          filter_source = !is.na(AVALC),
+          by_vars = exprs(USUBJID),
+          order = exprs(AVISITN),
+          join_vars = exprs(AVALC),
+          join_type = "after",
+          tmp_obs_nr_var = tmp_obs_nr,
+          condition = AVALC == "Y" & AVALC.join == "Y" & tmp_obs_nr.join == tmp_obs_nr + 1,
+          set_values_to = exprs(AVALC = "Y")
+        ),
+        event(
+          dataset_name = "adbds",
+          set_values_to = exprs(AVALC = "N")
+        )
+      ),
+      set_values_to = exprs(
+        PARAMCD = "CONFRESP"
+      )
+    )
+    #> # A tibble: 16 × 4
+    #>    USUBJID AVISITN AVALC PARAMCD
+    #>    <chr>     <dbl> <chr> <chr>
+    #>  1 1             1 Y     RESP
+    #>  2 1             2 N     RESP
+    #>  3 1             3 Y     RESP
+    #>  4 1             4 Y     RESP
+    #>  5 1             5 Y     RESP
+    #>  6 2             1 Y     RESP
+    #>  7 2             2 <NA>  RESP
+    #>  8 2             3 Y     RESP
+    #>  9 1             1 N     CONFRESP
+    #> 10 1             2 N     CONFRESP
+    #> 11 1             3 Y     CONFRESP
+    #> 12 1             4 Y     CONFRESP
+    #> 13 1             5 N     CONFRESP
+    #> 14 2             1 Y     CONFRESP
+    #> 15 2             2 N     CONFRESP
+    #> 16 2             3 N     CONFRESP
+
+Note that for subject `2` the results at visit `1` is considered as
+confirmed because the missing result at visit `2` is ignored.
+
 ### Specifying different arguments across [`event()`](https:/pharmaverse.github.io/admiral/2906-enhance-examples-derive-var-merged-ef-msrc/reference/event.md) objects
 
 Here we consider a Hy's Law use case. We are interested in knowing
@@ -516,7 +667,7 @@ wish to retain the last record. As such, for this case now we need to
 vary our usage of the `mode` argument dependent on the
 [`event()`](https:/pharmaverse.github.io/admiral/2906-enhance-examples-derive-var-merged-ef-msrc/reference/event.md).
 
-- In first
+- In the first
   [`event()`](https:/pharmaverse.github.io/admiral/2906-enhance-examples-derive-var-merged-ef-msrc/reference/event.md),
   since we simply seek the first time that `CRIT1FL` is `"Y"`, it's
   enough to specify the `condition`, because we inherit `order` and
