@@ -255,8 +255,7 @@ for all subjects:
 #>   <chr>   <int>
 #> 1 1           4
 #> 2 2           2
-#> 3 3           0
-}\if{html}{\out{</div>}}}
+#> 3 3           0}\if{html}{\out{</div>}}}
 \subsection{Renaming by variables (\code{by_vars})}{
 
 The \code{by_vars} argument supports renaming, using the syntax
