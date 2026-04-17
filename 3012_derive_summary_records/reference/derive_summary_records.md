@@ -501,11 +501,6 @@ of data. Using the example above, the data can be filtered to include
     #>   <chr>    <chr>            <chr>   <chr> <dbl> <dttm> <chr>
     #> 1 XYZ-1002 QTcF Int. (msec) Visit 2 <NA>     NA NA     PHANTOM
 
-The string passed to `DTYPE` in the call to
-[`filter()`](https://dplyr.tidyverse.org/reference/filter.html) depends
-on what is specified in the `missing_values` argument of
-`derive_summary_records()`.
-
 ### Add constant values to derived and missing summary records
 
 The `constant_values` argument allows you to assign fixed, common values

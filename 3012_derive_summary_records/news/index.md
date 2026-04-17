@@ -56,6 +56,13 @@
 
 ### Documentation
 
+- The documentation for
+  [`derive_var_merged_ef_msrc()`](https:/pharmaverse.github.io/admiral/3012_derive_summary_records/reference/derive_var_merged_ef_msrc.md)
+  was enhanced with structured examples covering `flag_events` with
+  multiple sources, customizing `true_value`, `false_value`, and
+  `missing_value`, and per-source `by_vars` renaming.
+  ([\#2906](https://github.com/pharmaverse/admiral/issues/2906))
+
 - Fix `UDTC` derivation in `ADPPK` to use source domain `DTC` variables.
   ([\#3011](https://github.com/pharmaverse/admiral/issues/3011))
 
