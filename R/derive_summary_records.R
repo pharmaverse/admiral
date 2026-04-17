@@ -288,10 +288,6 @@
 #'   arrange(USUBJID, AVISIT) %>%
 #'   filter(DTYPE == "PHANTOM")
 #'
-#' @info The string passed to `DTYPE` in the call to `filter()` depends on
-#' what is specified in the `missing_values` argument of
-#' `derive_summary_records()`.
-#'
 #' @caption Add constant values to derived and missing summary records
 #'
 #' @info The `constant_values` argument allows you to assign fixed, common values

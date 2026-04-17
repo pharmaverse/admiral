@@ -434,11 +434,7 @@ derive_summary_records(
 #> # A tibble: 1 × 7
 #>   USUBJID  PARAM            AVISIT  EGDTC  AVAL ADTM   DTYPE  
 #>   <chr>    <chr>            <chr>   <chr> <dbl> <dttm> <chr>  
-#> 1 XYZ-1002 QTcF Int. (msec) Visit 2 <NA>     NA NA     PHANTOM}\if{html}{\out{</div>}}
-
-The string passed to \code{DTYPE} in the call to \code{filter()} depends on
-what is specified in the \code{missing_values} argument of
-\code{derive_summary_records()}.}
+#> 1 XYZ-1002 QTcF Int. (msec) Visit 2 <NA>     NA NA     PHANTOM}\if{html}{\out{</div>}}}
 \subsection{Add constant values to derived and missing summary records}{
 
 The \code{constant_values} argument allows you to assign fixed, common values
