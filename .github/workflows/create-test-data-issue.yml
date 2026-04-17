@@ -8,10 +8,7 @@ on:
         required: true
         type: choice
         options:
-          - tests/testthat/test-create_query_data.R
           - tests/testthat/test-derive_merged.R
-          - tests/testthat/test-derive_param_bmi.R
-          - tests/testthat/test-derive_param_bsa.R
           - tests/testthat/test-derive_param_exist_flag.R
           - tests/testthat/test-derive_param_exposure.R
           - tests/testthat/test-derive_param_framingham.R
@@ -23,10 +20,7 @@ on:
           - tests/testthat/test-derive_var_joined_exist_flag.R
           - tests/testthat/test-derive_var_trtemfl.R
           - tests/testthat/test-derive_vars_cat.R
-          - tests/testthat/test-derive_vars_dt.R
           - tests/testthat/test-derive_vars_dtm_to_tm.R
-          - tests/testthat/test-derive_vars_dtm.R
-          - tests/testthat/test-derive_vars_transposed.R
           - tests/testthat/test-dt_level.R
           - tests/testthat/test-filter_joined.R
           - tests/testthat/test-filter_relative.R
