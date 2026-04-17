@@ -111,6 +111,11 @@
   quiz for lost users.
   ([\#2982](https://github.com/pharmaverse/admiral/issues/2982))
 
+- Added information about how to print out records with missing
+  information when using `datasetref` in
+  [`derive_summary_records()`](https:/pharmaverse.github.io/admiral/main/reference/derive_summary_records.md).
+  ([\#3012](https://github.com/pharmaverse/admiral/issues/3012))
+
 - Usage of `ASEQ` which is an optional variable was clarified within the
   corresponding Vignettes and Templates.
   ([\#2986](https://github.com/pharmaverse/admiral/issues/2986))
