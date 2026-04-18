@@ -240,7 +240,7 @@ A natural use-case is counting observations per subject and defaulting to
 below, the number of distinct post-baseline visits per subject is derived
 from \code{adbds} and merged onto \code{adsl}. Subject \code{"3"} has no records in
 \code{adbds}, so without \code{missing_values} the new variable would be \code{NA};
-setting \code{missing_values = exprs(NVIS = 0L)} makes the count meaningful
+setting \code{missing_values = exprs(NVIS = 0)} makes the count meaningful
 for all subjects:
 
 \if{html}{\out{<div class="sourceCode r">}}\preformatted{derive_vars_merged_summary(
@@ -248,11 +248,11 @@ for all subjects:
   dataset_add = adbds,
   by_vars = exprs(USUBJID),
   new_vars = exprs(NVIS = n_distinct(AVISIT)),
-  missing_values = exprs(NVIS = 0L)
+  missing_values = exprs(NVIS = 0)
 )
 #> # A tibble: 3 × 2
 #>   USUBJID  NVIS
-#>   <chr>   <int>
+#>   <chr>   <dbl>
 #> 1 1           4
 #> 2 2           2
 #> 3 3           0}\if{html}{\out{</div>}}}

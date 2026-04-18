@@ -482,7 +482,7 @@ derive_vars_merged <- function(dataset,
   # in this case an error is issued to avoid renaming of varibles by left_join()
   common_vars <-
     setdiff(intersect(names(dataset), names(add_data)), vars2chr(by_vars))
-  if (length(common_vars) > 0L) {
+  if (length(common_vars) > 0) {
     cli_abort(
       c(
         "The variable{?s} {.var {common_vars}} {?is/are} contained in both datasets.",
@@ -1032,7 +1032,7 @@ get_not_mapped <- function() {
 #' below, the number of distinct post-baseline visits per subject is derived
 #' from `adbds` and merged onto `adsl`. Subject `"3"` has no records in
 #' `adbds`, so without `missing_values` the new variable would be `NA`;
-#' setting `missing_values = exprs(NVIS = 0L)` makes the count meaningful
+#' setting `missing_values = exprs(NVIS = 0)` makes the count meaningful
 #' for all subjects:
 #'
 #' @code
@@ -1041,7 +1041,7 @@ get_not_mapped <- function() {
 #'   dataset_add = adbds,
 #'   by_vars = exprs(USUBJID),
 #'   new_vars = exprs(NVIS = n_distinct(AVISIT)),
-#'   missing_values = exprs(NVIS = 0L)
+#'   missing_values = exprs(NVIS = 0)
 #' )
 #'
 #' @caption Renaming by variables (`by_vars`)
