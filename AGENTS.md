@@ -958,7 +958,7 @@ In the following [PR](https://github.com/pharmaverse/admiral/pull/2065/files), y
 
 The benefits of having a programmatic way to write documentation is that if any changes need to be made, _making the modification on the corresponding function, in this case, `roxygen_param_dataset()`, scales across the codebase, can be tested, and is less prone to user-error such as typos or grammar mistakes_.
 
-These functions are implemented in `roxygen2.R` and the naming convention for each argument will be as follows `roxygen_param_xxx()`, where "xxx" is the be replaced with the argument name.
+These functions are implemented in `{admiraldev}` (in `roxygen2.R`) and the naming convention for each argument will be as follows `roxygen_param_xxx()`, where "xxx" is to be replaced with the argument name. The available helper functions are `roxygen_param_dataset()`, `roxygen_param_by_vars()`, `roxygen_order_na_handling()`, and `roxygen_save_memory()`.
 
 # R and Package Versions for Development
 

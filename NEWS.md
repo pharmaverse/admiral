@@ -35,6 +35,8 @@ specified under `save_path`. This is because this functionality did not work as 
 
 ## Documentation
 
+- The documentation for `derive_var_merged_ef_msrc()` was enhanced with structured examples covering `flag_events` with multiple sources, customizing `true_value`, `false_value`, and `missing_value`, and per-source `by_vars` renaming. (#2906)
+
 - Fix `UDTC` derivation in `ADPPK` to use source domain `DTC` variables. (#3011)
 
 - Fixed example in `derive_var_nfrlt()` to use `NA_character_` instead of `""` for missing unit values, consistent with the admiral programming strategy. (#3027)
@@ -57,6 +59,7 @@ of packages were updated to specify the level of contributions required for auth
 
 - Added a new custom [404 page](https://pharmaverse.github.io/admiral/404.html) with a butterfly quiz for lost users. (#2982)
 
+- Added information about how to print out records with missing information when using `datasetref` in `derive_summary_records()`. (#3012)
 - Usage of `ASEQ` which is an optional variable was clarified within the corresponding Vignettes and Templates. (#2986)
 
 ## Various
