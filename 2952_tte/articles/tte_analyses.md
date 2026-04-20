@@ -177,7 +177,7 @@ function to select the event records.
 
 Whether to derive a variable or a parameter depends mainly on the users
 preference. If the confirmed change is considered as a separate
-endpoint, CDSIC recommends to derive a separate parameter. If the
+endpoint, CDISC recommends to derive a separate parameter. If the
 confirmation is considered only as a selection criterion for the
 time-to-event analysis, both options are possible.
 
