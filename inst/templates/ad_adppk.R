@@ -327,7 +327,7 @@ adppk_aval <- adppk_aprlt %>%
 # ---- Add ASEQ ----
 
 adppk_aseq <- adppk_aval %>%
-  # Calculate ASEQ
+  # Calculate ASEQ (Optional Variable)
   derive_var_obs_number(
     new_var = ASEQ,
     by_vars = exprs(STUDYID, USUBJID),

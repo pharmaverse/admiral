@@ -98,7 +98,7 @@ adpp_aval <- adpp_pp %>%
   ) %>%
   # Remove variables
   select(-PPSTRESN, -PPSTRESC) %>%
-  # Add ASEQ
+  # Add SRCSEQ
   mutate(
     SRCDOM = DOMAIN,
     SRCVAR = "SEQ",
