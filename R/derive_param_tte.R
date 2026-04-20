@@ -71,15 +71,15 @@
 #'
 #' @param censor_conditions Sources and conditions defining censorings
 #'
-#'   A list of `censor_source()` objects is expected. Each records defined by
-#'   the `censor_conditions` should be a possible censoring time, i.e., at this
-#'   time there should be known that the event of interest has not yet occurred.
-#'   Assessment were it is not known whether the event of interest has occurred
+#'   A list of `censor_source()` objects is expected. Each record defined by the
+#'   `censor_conditions` should be a possible censoring time, i.e., at this time
+#'   it should be known that the event of interest has not yet occurred.
+#'   Assessment where it is not known whether the event of interest has occurred
 #'   or not should not be included as censoring times, e.g., when an assessment
 #'   was not evaluable.
 #'
 #'   It is acceptable to include records with event as long as these are also
-#'   included in `event_conditions` because event take precedence over
+#'   included in `event_conditions` because events take precedence over
 #'   censorings.
 #'
 #' @permitted [source_list]
@@ -135,8 +135,10 @@
 #'   **Deriving the events:**
 #'
 #'   \enumerate{ \item For each event source dataset the observations as
-#'   specified by the `filter` element are selected. Then for each subject the
-#'   first observation (with respect to `date` and `order`) is selected.
+#'   specified by the `filter` element are selected. If the `end_dates` argument
+#'   is specified, records after the first of the end dates are excluded. Then
+#'   for each subject the first observation (with respect to `date` and `order`)
+#'   is selected.
 #'
 #'   \item The `ADT` variable is set to the variable specified by the
 #'   \code{date} element. If the date variable is a datetime variable, only
@@ -157,15 +159,31 @@
 #'
 #'   **Deriving the censoring observations:**
 #'
-#'   \enumerate{ \item For each censoring source dataset the observations as
-#'   specified by the `filter` element are selected. Then for each subject the
-#'   last observation (with respect to `date` and `order`) is selected.
+#'   \enumerate{ \item For each censoring source dataset:
+#'   \enumerate{ \item The observations as specified by the `filter` element are
+#'   selected.
+#' 
+#'   \item If the `end_dates` argument is specified, records after the first of
+#'   the end dates are excluded and the variables defined by the `set_values_to`
+#'   element of the first end date are added.
+#' 
+#'   \item If `event_type = "positive"` and the `end_dates` argument is
+#'   specified, new records with the first end date and the variables defined by
+#'   the `set_values_to` element are added. (These will be selected in the next
+#'   step, i.e., for positive events the first end date is used as censoring
+#'   date.)
+#' 
+#'   \item Then for each subject the last observation (with respect to `date`
+#'   and `order`) is selected. }
 #'
 #'   \item The `ADT` variable is set to the variable specified by the
 #'   \code{date} element. If the date variable is a datetime variable, only
 #'   the datepart is copied.
 #'
-#'   \item The `CNSR` variable is added and set to the \code{censor} element.
+#'   \item The `CNSR` variable is added. If the `end_dates` argument is
+#'   specified and the `consider_end_dates` element is `TRUE`, it is set to the
+#'   censor value of the first of the end dates. Otherwise, it set to the
+#'   \code{censor} element.
 #'
 #'   \item The variables specified by the \code{set_values_to} element are
 #'   added.
@@ -529,7 +547,7 @@
 #'     new_vars = exprs(EOSDT, NEWDRGDT)
 #'   )
 #'
-#' @info Please note that
+#' @info Please note that:
 #' - subject `02` has no event because the assessment with `CHG = -12` was
 #'   excluded as it is after the start of a new drug.
 #' - subject `01` and `02` are censored at the last valid assessment before the
@@ -686,7 +704,7 @@
 #'
 #' @info The `worsening` and `valid_assessment` events define which assessments
 #'   are events and which are valid assessments, respectively. The `EVNTDESC`
-#'   variable is not set by `valid_assessment` as it's value is retrieved from
+#'   variable is not set by `valid_assessment` as its value is retrieved from
 #'   the `eos` or `newdrg` censoring events.
 #'
 #' @code

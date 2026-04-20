@@ -263,7 +263,7 @@ plot_scenario <- function(assessment_type, event_type) {
 ```
 
 ```{r, echo=FALSE}
-plot_data <- function(dataset, dataset_tte = NULL) {
+plot_data <- function(dataset, dataset_tte = NULL, title = NULL, subtitle = NULL) {
   if (length(unique(dataset$PARAMCD)) == 1) {
     final_plot <- ggplot(dataset) +
       theme_classic() +
@@ -274,7 +274,9 @@ plot_data <- function(dataset, dataset_tte = NULL) {
       ) +
       labs(
         y = "Subject",
-        x = "Time"
+        x = "Time",
+        title = title,
+        subtitle = subtitle
       ) +
       geom_rect(
         aes(
@@ -344,7 +346,9 @@ plot_data <- function(dataset, dataset_tte = NULL) {
       ) +
       labs(
         y = NULL,
-        x = "Time"
+        x = "Time",
+        title = title,
+        subtitle = subtitle
       ) +
       geom_rect(
         aes(
@@ -557,7 +561,7 @@ dataset_vignette(
 </details>
 
 ```{r, echo=FALSE}
-plot_data(adqs_a)
+plot_data(adqs_a, title = "Change from Baseline Categories over Time")
 ```
 
 A "time to worsening" parameter is derived by using `derive_param_tte()`. By
@@ -604,7 +608,11 @@ dataset_vignette(adtte)
 </details>
 
 ```{r, echo=FALSE}
-plot_data(adqs_a, dataset_tte = adtte)
+plot_data(
+  adqs_a,
+  dataset_tte = adtte,
+  title = "Event/Censoring Times for Worsening"
+)
 ```
 
 ## Discrete Assessments, Positive Event
@@ -649,7 +657,11 @@ dataset_vignette(adtte)
 </details>
 
 ```{r, echo=FALSE}
-plot_data(adqs_a, dataset_tte = adtte)
+plot_data(
+  adqs_a,
+  dataset_tte = adtte,
+  title = "Event/Censoring Times for Improvement"
+)
 ```
 
 # Events Considering more than one Assessment
@@ -663,6 +675,12 @@ whether an event occurred or not. Thus the confirmation information needs to be
 derived in the input dataset, e.g., by deriving a variable or a parameter which
 indicates whether the event is confirmed or not. Then this variable or parameter
 can be used in the `derive_param_tte()` function to select the event records.
+
+Whether to derive a variable or a parameter depends mainly on the users
+preference. If the confirmed change is considered as a separate endpoint, CDSIC
+recommends to derive a separate parameter. If the confirmation is considered
+only as a selection criterion for the time-to-event analysis, both options are
+possible.
 
 ## Adding a Confirmation Flag to the Source Dataset
 
@@ -728,7 +746,11 @@ dataset_vignette(adtte)
 </details>
 
 ```{r, echo=FALSE}
-plot_data(adqs_ext, dataset_tte = adtte)
+plot_data(
+  adqs_ext,
+  dataset_tte = adtte,
+  title = "Event/Censoring Times for Confirmed Worsening"
+)
 ```
 
 ## Adding a Confirmation Parameter to the Source Dataset
@@ -816,7 +838,11 @@ dataset_vignette(adtte)
 </details>
 
 ```{r, echo=FALSE}
-plot_data(filter(adqs_ext, PARAMCD == "A"), dataset_tte = adtte)
+plot_data(
+  filter(adqs_ext, PARAMCD == "A"),
+  dataset_tte = adtte,
+  title = "Event/Censoring Times for Confirmed Worsening"
+)
 ```
 
 ## Using `derive_extreme_event()` to Derive Confirmation and Time-to-Event in One Step
@@ -872,9 +898,12 @@ dataset_vignette(adtte)
 </details>
 
 ```{r, echo=FALSE}
-plot_data(adqs_a, dataset_tte = adtte)
+plot_data(
+  adqs_a,
+  dataset_tte = adtte,
+  title = "Event/Censoring Times for Confirmed Worsening"
+)
 ```
-
 
 # Combined Events
 
@@ -902,10 +931,14 @@ dataset_vignette(
 </details>
 
 ```{r, echo=FALSE}
-plot_data(adqs_all)
+plot_data(
+  adqs_all,
+  title = "Change from Baseline Categories over Time for Score A and Score B"
+)
 ```
 
-We define the events for improvement in score A and score B separately and then specify both events for the `event_conditions` argument of `derive_param_tte()`.
+We define the events for improvement in score A and score B separately and then
+specify both events for the `event_conditions` argument of `derive_param_tte()`.
 
 ```{r}
 improvement_a <- event_source(
@@ -942,7 +975,10 @@ dataset_vignette(adtte)
 </details>
 
 ```{r, echo=FALSE}
-plot_data(adqs_all, dataset_tte = adtte)
+plot_data(
+  adqs_all,
+  dataset_tte = adtte,
+  title = "Event/Censoring Times for Improvement in Score A or Score B")
 ```
 
 ## Events Combined by "and"
@@ -1007,5 +1043,9 @@ dataset_vignette(adtte)
 </details>
 
 ```{r, echo=FALSE}
-plot_data(adqs_all, dataset_tte = adtte)
+plot_data(
+  adqs_all,
+  dataset_tte = adtte,
+  title = "Event/Censoring Times for Improvement in Score A and Stable Score B"
+)
 ```

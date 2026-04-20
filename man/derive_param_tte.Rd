@@ -109,15 +109,15 @@ A list of \code{event_source()} objects is expected.
 
 \item{censor_conditions}{Sources and conditions defining censorings
 
-A list of \code{censor_source()} objects is expected. Each records defined by
-the \code{censor_conditions} should be a possible censoring time, i.e., at this
-time there should be known that the event of interest has not yet occurred.
-Assessment were it is not known whether the event of interest has occurred
+A list of \code{censor_source()} objects is expected. Each record defined by the
+\code{censor_conditions} should be a possible censoring time, i.e., at this time
+it should be known that the event of interest has not yet occurred.
+Assessment where it is not known whether the event of interest has occurred
 or not should not be included as censoring times, e.g., when an assessment
 was not evaluable.
 
 It is acceptable to include records with event as long as these are also
-included in \code{event_conditions} because event take precedence over
+included in \code{event_conditions} because events take precedence over
 censorings.
 
 \describe{
@@ -198,8 +198,10 @@ new parameter:
 \strong{Deriving the events:}
 
 \enumerate{ \item For each event source dataset the observations as
-specified by the \code{filter} element are selected. Then for each subject the
-first observation (with respect to \code{date} and \code{order}) is selected.
+specified by the \code{filter} element are selected. If the \code{end_dates} argument
+is specified, records after the first of the end dates are excluded. Then
+for each subject the first observation (with respect to \code{date} and \code{order})
+is selected.
 
 \item The \code{ADT} variable is set to the variable specified by the
 \code{date} element. If the date variable is a datetime variable, only
@@ -220,15 +222,31 @@ order of events in \code{event_conditions} is selected.}
 
 \strong{Deriving the censoring observations:}
 
-\enumerate{ \item For each censoring source dataset the observations as
-specified by the \code{filter} element are selected. Then for each subject the
-last observation (with respect to \code{date} and \code{order}) is selected.
+\enumerate{ \item For each censoring source dataset:
+\enumerate{ \item The observations as specified by the \code{filter} element are
+selected.
+
+\item If the \code{end_dates} argument is specified, records after the first of
+the end dates are excluded and the variables defined by the \code{set_values_to}
+element of the first end date are added.
+
+\item If \code{event_type = "positive"} and the \code{end_dates} argument is
+specified, new records with the first end date and the variables defined by
+the \code{set_values_to} element are added. (These will be selected in the next
+step, i.e., for positive events the first end date is used as censoring
+date.)
+
+\item Then for each subject the last observation (with respect to \code{date}
+and \code{order}) is selected. }
 
 \item The \code{ADT} variable is set to the variable specified by the
 \code{date} element. If the date variable is a datetime variable, only
 the datepart is copied.
 
-\item The \code{CNSR} variable is added and set to the \code{censor} element.
+\item The \code{CNSR} variable is added. If the \code{end_dates} argument is
+specified and the \code{consider_end_dates} element is \code{TRUE}, it is set to the
+censor value of the first of the end dates. Otherwise, it set to the
+\code{censor} element.
 
 \item The variables specified by the \code{set_values_to} element are
 added.
@@ -644,7 +662,7 @@ derive_param_tte(
 #> 3 03      2021-03-15     0 2021-02-01 NA         NA        
 #> 4 04      2021-03-10     1 2021-03-10 NA         NA        }\if{html}{\out{</div>}}
 
-Please note that
+Please note that:
 \itemize{
 \item subject \code{02} has no event because the assessment with \code{CHG = -12} was
 excluded as it is after the start of a new drug.
@@ -809,7 +827,7 @@ newdrg <- censor_source(
 
 The \code{worsening} and \code{valid_assessment} events define which assessments
 are events and which are valid assessments, respectively. The \code{EVNTDESC}
-variable is not set by \code{valid_assessment} as it's value is retrieved from
+variable is not set by \code{valid_assessment} as its value is retrieved from
 the \code{eos} or \code{newdrg} censoring events.
 
 \if{html}{\out{<div class="sourceCode r">}}\preformatted{worsening <- event_source(
