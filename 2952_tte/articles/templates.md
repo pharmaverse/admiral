@@ -1254,7 +1254,7 @@ adab_params <- adab_adafl %>%
 
 # Sort by the key variables then compute ASEQ
 adab_prefinal <- adab_params %>%
-  # Calculate ASEQ
+  # Calculate ASEQ (Optional Variable)
   derive_var_obs_number(
     new_var = ASEQ,
     by_vars = exprs(STUDYID, USUBJID),
@@ -1902,7 +1902,7 @@ adeg <- adeg %>%
 
 ## Get ASEQ and AVALCAT1/CHGCAT1 and add PARAM/PARAMN ----
 adeg <- adeg %>%
-  # Calculate ASEQ
+  # Calculate ASEQ (Optional Variable)
   derive_var_obs_number(
     new_var = ASEQ,
     by_vars = exprs(STUDYID, USUBJID),
@@ -2252,7 +2252,7 @@ adex <- adex %>%
     definition = avalcax_lookup,
     by_vars = exprs(PARAMCD)
   ) %>%
-  # Calculate ASEQ
+  # Calculate ASEQ (Optional Variable)
   derive_var_obs_number(
     new_var = ASEQ,
     by_vars = exprs(STUDYID, USUBJID),
@@ -2718,7 +2718,7 @@ adlb <- adlb %>%
 
 ## Get ASEQ ----
 adlb <- adlb %>%
-  # Calculate ASEQ
+  # Calculate ASEQ (Optional Variable)
   derive_var_obs_number(
     new_var = ASEQ,
     by_vars = exprs(STUDYID, USUBJID),
@@ -3505,7 +3505,7 @@ adpc_chg <- restrict_derivation(
 # ---- Add ASEQ ----
 
 adpc_aseq <- adpc_chg %>%
-  # Calculate ASEQ
+  # Calculate ASEQ (Optional Variable)
   derive_var_obs_number(
     new_var = ASEQ,
     by_vars = exprs(STUDYID, USUBJID),
@@ -3668,7 +3668,7 @@ adpp_aval <- adpp_pp %>%
   ) %>%
   # Remove variables
   select(-PPSTRESN, -PPSTRESC) %>%
-  # Add ASEQ
+  # Add SRCSEQ
   mutate(
     SRCDOM = DOMAIN,
     SRCVAR = "SEQ",
@@ -4052,7 +4052,7 @@ adppk_aval <- adppk_aprlt %>%
 # ---- Add ASEQ ----
 
 adppk_aseq <- adppk_aval %>%
-  # Calculate ASEQ
+  # Calculate ASEQ (Optional Variable)
   derive_var_obs_number(
     new_var = ASEQ,
     by_vars = exprs(STUDYID, USUBJID),
@@ -4781,7 +4781,7 @@ advs <- advs %>%
 
 ## Get ASEQ and AVALCATx and add PARAM/PARAMN ----
 advs <- advs %>%
-  # Calculate ASEQ
+  # Calculate ASEQ (Optional Variable)
   derive_var_obs_number(
     new_var = ASEQ,
     by_vars = exprs(STUDYID, USUBJID),
@@ -4795,7 +4795,6 @@ advs <- advs %>%
   ) %>%
   # Derive PARAM and PARAMN
   derive_vars_merged(dataset_add = select(param_lookup, -VSTESTCD), by_vars = exprs(PARAMCD))
-
 
 
 # Add all ADSL variables

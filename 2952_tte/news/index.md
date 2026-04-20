@@ -72,6 +72,13 @@
   different scenarios.
   ([\#2900](https://github.com/pharmaverse/admiral/issues/2900))
 
+- The documentation for
+  [`derive_var_merged_ef_msrc()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/derive_var_merged_ef_msrc.md)
+  was enhanced with structured examples covering `flag_events` with
+  multiple sources, customizing `true_value`, `false_value`, and
+  `missing_value`, and per-source `by_vars` renaming.
+  ([\#2906](https://github.com/pharmaverse/admiral/issues/2906))
+
 - Fix `UDTC` derivation in `ADPPK` to use source domain `DTC` variables.
   ([\#3011](https://github.com/pharmaverse/admiral/issues/3011))
 
@@ -119,6 +126,15 @@
   page](https://pharmaverse.github.io/admiral/404.html) with a butterfly
   quiz for lost users.
   ([\#2982](https://github.com/pharmaverse/admiral/issues/2982))
+
+- Added information about how to print out records with missing
+  information when using `datasetref` in
+  [`derive_summary_records()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/derive_summary_records.md).
+  ([\#3012](https://github.com/pharmaverse/admiral/issues/3012))
+
+- Usage of `ASEQ` which is an optional variable was clarified within the
+  corresponding Vignettes and Templates.
+  ([\#2986](https://github.com/pharmaverse/admiral/issues/2986))
 
 ### Various
 

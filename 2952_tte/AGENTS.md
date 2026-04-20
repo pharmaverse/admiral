@@ -1044,9 +1044,13 @@ corresponding function, in this case, `roxygen_param_dataset()`, scales
 across the codebase, can be tested, and is less prone to user-error such
 as typos or grammar mistakes*.
 
-These functions are implemented in `roxygen2.R` and the naming
-convention for each argument will be as follows `roxygen_param_xxx()`,
-where “xxx” is the be replaced with the argument name.
+These functions are implemented in
+[admiraldev](https://pharmaverse.github.io/admiraldev/) (in
+`roxygen2.R`) and the naming convention for each argument will be as
+follows `roxygen_param_xxx()`, where “xxx” is to be replaced with the
+argument name. The available helper functions are
+`roxygen_param_dataset()`, `roxygen_param_by_vars()`,
+`roxygen_order_na_handling()`, and `roxygen_save_memory()`.
 
 # R and Package Versions for Development
 

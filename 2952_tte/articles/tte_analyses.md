@@ -175,6 +175,12 @@ parameter can be used in the
 [`derive_param_tte()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/derive_param_tte.md)
 function to select the event records.
 
+Whether to derive a variable or a parameter depends mainly on the users
+preference. If the confirmed change is considered as a separate
+endpoint, CDSIC recommends to derive a separate parameter. If the
+confirmation is considered only as a selection criterion for the
+time-to-event analysis, both options are possible.
+
 ### Adding a Confirmation Flag to the Source Dataset
 
 To derive a variable (`CONFFL`) which indicates whether the worsening or

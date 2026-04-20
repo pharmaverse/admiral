@@ -158,16 +158,16 @@ derive_param_tte(
 
   A list of
   [`censor_source()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/censor_source.md)
-  objects is expected. Each records defined by the `censor_conditions`
-  should be a possible censoring time, i.e., at this time there should
-  be known that the event of interest has not yet occurred. Assessment
-  were it is not known whether the event of interest has occurred or not
-  should not be included as censoring times, e.g., when an assessment
-  was not evaluable.
+  objects is expected. Each record defined by the `censor_conditions`
+  should be a possible censoring time, i.e., at this time it should be
+  known that the event of interest has not yet occurred. Assessment
+  where it is not known whether the event of interest has occurred or
+  not should not be included as censoring times, e.g., when an
+  assessment was not evaluable.
 
   It is acceptable to include records with event as long as these are
-  also included in `event_conditions` because event take precedence over
-  censorings.
+  also included in `event_conditions` because events take precedence
+  over censorings.
 
   Permitted values
 
@@ -286,8 +286,10 @@ parameter:
 **Deriving the events:**
 
 1.  For each event source dataset the observations as specified by the
-    `filter` element are selected. Then for each subject the first
-    observation (with respect to `date` and `order`) is selected.
+    `filter` element are selected. If the `end_dates` argument is
+    specified, records after the first of the end dates are excluded.
+    Then for each subject the first observation (with respect to `date`
+    and `order`) is selected.
 
 2.  The `ADT` variable is set to the variable specified by the `date`
     element. If the date variable is a datetime variable, only the
@@ -307,15 +309,32 @@ parameter:
 
 **Deriving the censoring observations:**
 
-1.  For each censoring source dataset the observations as specified by
-    the `filter` element are selected. Then for each subject the last
-    observation (with respect to `date` and `order`) is selected.
+1.  For each censoring source dataset:
+
+    1.  The observations as specified by the `filter` element are
+        selected.
+
+    2.  If the `end_dates` argument is specified, records after the
+        first of the end dates are excluded and the variables defined by
+        the `set_values_to` element of the first end date are added.
+
+    3.  If `event_type = "positive"` and the `end_dates` argument is
+        specified, new records with the first end date and the variables
+        defined by the `set_values_to` element are added. (These will be
+        selected in the next step, i.e., for positive events the first
+        end date is used as censoring date.)
+
+    4.  Then for each subject the last observation (with respect to
+        `date` and `order`) is selected.
 
 2.  The `ADT` variable is set to the variable specified by the `date`
     element. If the date variable is a datetime variable, only the
     datepart is copied.
 
-3.  The `CNSR` variable is added and set to the `censor` element.
+3.  The `CNSR` variable is added. If the `end_dates` argument is
+    specified and the `consider_end_dates` element is `TRUE`, it is set
+    to the censor value of the first of the end dates. Otherwise, it set
+    to the `censor` element.
 
 4.  The variables specified by the `set_values_to` element are added.
 
@@ -749,7 +768,7 @@ drug date, respectively, and then passed to the `end_dates` argument.
     #> 3 03      2021-03-15     0 2021-02-01 NA         NA
     #> 4 04      2021-03-10     1 2021-03-10 NA         NA        
 
-Please note that
+Please note that:
 
 - subject `02` has no event because the assessment with `CHG = -12` was
   excluded as it is after the start of a new drug.
@@ -921,8 +940,8 @@ The `eos` and `newdrg` censoring events define the end dates.
 
 The `worsening` and `valid_assessment` events define which assessments
 are events and which are valid assessments, respectively. The `EVNTDESC`
-variable is not set by `valid_assessment` as it's value is retrieved
-from the `eos` or `newdrg` censoring events.
+variable is not set by `valid_assessment` as its value is retrieved from
+the `eos` or `newdrg` censoring events.
 
     worsening <- event_source(
       dataset_name = "adqs",
