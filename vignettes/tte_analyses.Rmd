@@ -677,7 +677,7 @@ indicates whether the event is confirmed or not. Then this variable or parameter
 can be used in the `derive_param_tte()` function to select the event records.
 
 Whether to derive a variable or a parameter depends mainly on the users
-preference. If the confirmed change is considered as a separate endpoint, CDSIC
+preference. If the confirmed change is considered as a separate endpoint, CDISC
 recommends to derive a separate parameter. If the confirmation is considered
 only as a selection criterion for the time-to-event analysis, both options are
 possible.
@@ -978,7 +978,8 @@ dataset_vignette(adtte)
 plot_data(
   adqs_all,
   dataset_tte = adtte,
-  title = "Event/Censoring Times for Improvement in Score A or Score B")
+  title = "Event/Censoring Times for Improvement in Score A or Score B"
+)
 ```
 
 ## Events Combined by "and"

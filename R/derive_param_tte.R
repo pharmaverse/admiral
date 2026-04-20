@@ -162,17 +162,17 @@
 #'   \enumerate{ \item For each censoring source dataset:
 #'   \enumerate{ \item The observations as specified by the `filter` element are
 #'   selected.
-#' 
+#'
 #'   \item If the `end_dates` argument is specified, records after the first of
 #'   the end dates are excluded and the variables defined by the `set_values_to`
 #'   element of the first end date are added.
-#' 
+#'
 #'   \item If `event_type = "positive"` and the `end_dates` argument is
 #'   specified, new records with the first end date and the variables defined by
 #'   the `set_values_to` element are added. (These will be selected in the next
 #'   step, i.e., for positive events the first end date is used as censoring
 #'   date.)
-#' 
+#'
 #'   \item Then for each subject the last observation (with respect to `date`
 #'   and `order`) is selected. }
 #'
