@@ -234,7 +234,9 @@ visit are derived and merged back onto the input dataset:
 
 In the example above, subject `"1"` at `"WEEK 2"` has only missing
 `AVAL` values, so `MEANVIS` is `NaN` (the result of
-`mean(NA, na.rm = TRUE)`) and `SUMVIS` is `0`.
+`mean(NA, na.rm = TRUE)`) and `SUMVIS` is `0`. If `NA` is required
+instead of `NaN` for downstream processing, use the `missing_values`
+argument, e.g. `missing_values = exprs(MEANVIS = NA_real_)`.
 
 ### Restricting source records (`filter_add`)
 
@@ -290,7 +292,7 @@ to `0` (rather than `NA`) for subjects with no matching records. In the
 example below, the number of distinct post-baseline visits per subject
 is derived from `adbds` and merged onto `adsl`. Subject `"3"` has no
 records in `adbds`, so without `missing_values` the new variable would
-be `NA`; setting `missing_values = exprs(NVIS = 0L)` makes the count
+be `NA`; setting `missing_values = exprs(NVIS = 0)` makes the count
 meaningful for all subjects:
 
     derive_vars_merged_summary(
@@ -298,11 +300,11 @@ meaningful for all subjects:
       dataset_add = adbds,
       by_vars = exprs(USUBJID),
       new_vars = exprs(NVIS = n_distinct(AVISIT)),
-      missing_values = exprs(NVIS = 0L)
+      missing_values = exprs(NVIS = 0)
     )
     #> # A tibble: 3 × 2
     #>   USUBJID  NVIS
-    #>   <chr>   <int>
+    #>   <chr>   <dbl>
     #> 1 1           4
     #> 2 2           2
     #> 3 3           0
