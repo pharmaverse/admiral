@@ -25,7 +25,9 @@ ex <- pharmaversesdtm::ex
 # https://pharmaverse.github.io/admiral/cran-release/articles/admiral.html#handling-of-missing-values # nolint
 
 ae <- convert_blanks_to_na(ae)
-ex <- convert_blanks_to_na(ex) %>%
+# Create single dose dataset for use in date of last dose derivations
+ex_single <- convert_blanks_to_na(ex) %>%
+  # Filter to doses relevant for this study (placebo and active doses)
   filter(EXDOSE %in% c(0, 54)) %>%
   derive_vars_dt(dtc = EXSTDTC, new_vars_prefix = "EXST") %>%
   derive_vars_dt(dtc = EXENDTC, new_vars_prefix = "EXEN") %>%
@@ -42,6 +44,7 @@ ex <- convert_blanks_to_na(ex) %>%
     EXSTDTC = as.character(EXSTDT),
     EXENDTC = as.character(EXENDT)
   )
+ex <- ex_single
 
 
 # Derivations ----

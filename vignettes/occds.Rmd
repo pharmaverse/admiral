@@ -64,7 +64,9 @@ adsl <- admiral::admiral_adsl
 ex <- pharmaversesdtm::ex
 
 ae <- convert_blanks_to_na(ae)
+# Create single dose dataset: expand multi-day dose intervals into one row per day
 ex_single <- convert_blanks_to_na(ex) %>%
+  # Filter to doses relevant for this study (placebo and active doses)
   filter(EXDOSE %in% c(0, 54)) %>%
   derive_vars_dt(dtc = EXSTDTC, new_vars_prefix = "EXST") %>%
   derive_vars_dt(dtc = EXENDTC, new_vars_prefix = "EXEN") %>%
@@ -77,6 +79,7 @@ ex_single <- convert_blanks_to_na(ex) %>%
       STUDYID, USUBJID, EXTRT, EXDOSE, EXDOSU, EXDOSFRQ, EXSTDT, EXENDT
     )
   ) %>%
+  # Convert date objects back to character DTC format for use in derive_vars_dtm()
   mutate(
     EXSTDTC = as.character(EXSTDT),
     EXENDTC = as.character(EXENDT)
