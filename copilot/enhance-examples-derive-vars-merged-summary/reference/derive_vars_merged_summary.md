@@ -234,9 +234,36 @@ visit are derived and merged back onto the input dataset:
 
 In the example above, subject `"1"` at `"WEEK 2"` has only missing
 `AVAL` values, so `MEANVIS` is `NaN` (the result of
-`mean(NA, na.rm = TRUE)`) and `SUMVIS` is `0`. If `NA` is required
-instead of `NaN` for downstream processing, use the `missing_values`
-argument, e.g. `missing_values = exprs(MEANVIS = NA_real_)`.
+`mean(NA, na.rm = TRUE)`) and `SUMVIS` is `0`. Note that
+`missing_values` cannot be used here because the by group *exists* in
+`dataset_add` — it merely produces `NaN`. To coerce `NaN` to `NA`, apply
+a follow-up
+[`mutate()`](https://dplyr.tidyverse.org/reference/mutate.html) step:
+
+    derive_vars_merged_summary(
+      adbds,
+      dataset_add = adbds,
+      by_vars = exprs(USUBJID, AVISIT),
+      new_vars = exprs(
+        MEANVIS = mean(AVAL, na.rm = TRUE),
+        SUMVIS = sum(AVAL, na.rm = TRUE)
+      )
+    ) %>%
+      mutate(MEANVIS = ifelse(is.nan(MEANVIS), NA_real_, MEANVIS))
+    #> # A tibble: 9 × 6
+    #>   USUBJID AVISIT  ASEQ  AVAL MEANVIS SUMVIS
+    #>   <chr>   <chr>  <dbl> <dbl>   <dbl>  <dbl>
+    #> 1 1       WEEK 1     1    10      10     10
+    #> 2 1       WEEK 1     2    NA      10     10
+    #> 3 1       WEEK 2     3    NA      NA      0
+    #> 4 1       WEEK 3     4    42      42     42
+    #> 5 1       WEEK 4     5    12      13     39
+    #> 6 1       WEEK 4     6    12      13     39
+    #> 7 1       WEEK 4     7    15      13     39
+    #> 8 2       WEEK 1     1    21      21     21
+    #> 9 2       WEEK 4     2    22      22     22
+
+Subject `"1"` at `"WEEK 2"` now has `MEANVIS = NA` instead of `NaN`.
 
 ### Restricting source records (`filter_add`)
 
