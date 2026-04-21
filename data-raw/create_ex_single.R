@@ -63,5 +63,3 @@ attr(ex_single$EXSEQ, "label") <- attr(ex$EXSEQ, "label")
 attr(ex_single$EXSTDTC, "label") <- attr(ex$EXSTDTC, "label")
 attr(ex_single$EXENDTC, "label") <- attr(ex$EXENDTC, "label")
 attr(ex_single$EXDOSFRQ, "label") <- attr(ex$EXDOSFRQ, "label")
-
-usethis::use_data(ex_single, overwrite = TRUE)

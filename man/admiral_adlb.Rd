@@ -23,7 +23,6 @@ An example of lab analysis dataset
 \seealso{
 Other datasets: 
 \code{\link{admiral_adsl}},
-\code{\link{ex_single}},
 \code{\link{example_qs}},
 \code{\link{queries}},
 \code{\link{queries_mh}}

@@ -80,6 +80,10 @@ the pull request title to trigger website creation. (#2984)
   from `{admiral}` to `{admiraldev}`. They are now exported from `{admiraldev}`
   and remain accessible in `{admiral}` via the existing `@import admiraldev`
   dependency. ([admiraldev/#517](https://github.com/pharmaverse/admiraldev/issues/517))
+
+- To reduce the size of the package, the `ex_single` dataset was removed. It is
+  now derived on the fly in the `ADAE` template and the `OCCDS` vignette using
+  `create_single_dose_dataset()`. (#3060)
 </details>
 
 # admiral 1.4.1

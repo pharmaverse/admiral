@@ -61,9 +61,26 @@ library(lubridate)
 
 ae <- pharmaversesdtm::ae
 adsl <- admiral::admiral_adsl
-ex_single <- admiral::ex_single
+ex <- pharmaversesdtm::ex
 
 ae <- convert_blanks_to_na(ae)
+ex_single <- convert_blanks_to_na(ex) %>%
+  filter(EXDOSE %in% c(0, 54)) %>%
+  derive_vars_dt(dtc = EXSTDTC, new_vars_prefix = "EXST") %>%
+  derive_vars_dt(dtc = EXENDTC, new_vars_prefix = "EXEN") %>%
+  filter(!is.na(EXSTDT), !is.na(EXENDT)) %>%
+  create_single_dose_dataset(
+    dose_freq = EXDOSFRQ,
+    start_date = EXSTDT,
+    end_date = EXENDT,
+    keep_source_vars = exprs(
+      STUDYID, USUBJID, EXTRT, EXDOSE, EXDOSU, EXDOSFRQ, EXSTDT, EXENDT
+    )
+  ) %>%
+  mutate(
+    EXSTDTC = as.character(EXSTDT),
+    EXENDTC = as.character(EXENDT)
+  )
 ```
 ```{r echo = FALSE}
 ae <- filter(ae, USUBJID %in% c("01-701-1015", "01-701-1023", "01-703-1086", "01-703-1096", "01-707-1037", "01-716-1024"))

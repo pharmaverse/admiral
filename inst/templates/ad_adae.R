@@ -2,7 +2,7 @@
 #
 # Label: Adverse Event Analysis Dataset
 #
-# Input: ae, adsl, ex_single
+# Input: ae, adsl, ex
 library(admiral)
 library(pharmaversesdtm) # Contains example datasets from the CDISC pilot project
 library(dplyr)
@@ -17,7 +17,7 @@ library(lubridate)
 ae <- pharmaversesdtm::ae
 suppae <- pharmaversesdtm::suppae
 adsl <- admiral::admiral_adsl
-ex_single <- admiral::ex_single
+ex <- pharmaversesdtm::ex
 
 # When SAS datasets are imported into R using haven::read_sas(), missing
 # character values from SAS appear as "" characters in R, instead of appearing
@@ -25,7 +25,23 @@ ex_single <- admiral::ex_single
 # https://pharmaverse.github.io/admiral/cran-release/articles/admiral.html#handling-of-missing-values # nolint
 
 ae <- convert_blanks_to_na(ae)
-ex <- convert_blanks_to_na(ex_single)
+ex <- convert_blanks_to_na(ex) %>%
+  filter(EXDOSE %in% c(0, 54)) %>%
+  derive_vars_dt(dtc = EXSTDTC, new_vars_prefix = "EXST") %>%
+  derive_vars_dt(dtc = EXENDTC, new_vars_prefix = "EXEN") %>%
+  filter(!is.na(EXSTDT), !is.na(EXENDT)) %>%
+  create_single_dose_dataset(
+    dose_freq = EXDOSFRQ,
+    start_date = EXSTDT,
+    end_date = EXENDT,
+    keep_source_vars = exprs(
+      STUDYID, USUBJID, EXTRT, EXDOSE, EXDOSU, EXDOSFRQ, EXSTDT, EXENDT
+    )
+  ) %>%
+  mutate(
+    EXSTDTC = as.character(EXSTDT),
+    EXENDTC = as.character(EXENDT)
+  )
 
 
 # Derivations ----
