@@ -186,7 +186,9 @@ and visit are derived and merged back onto the input dataset:
 
 In the example above, subject \code{"1"} at \code{"WEEK 2"} has only missing
 \code{AVAL} values, so \code{MEANVIS} is \code{NaN} (the result of
-\code{mean(NA, na.rm = TRUE)}) and \code{SUMVIS} is \code{0}.}
+\code{mean(NA, na.rm = TRUE)}) and \code{SUMVIS} is \code{0}. If \code{NA} is required instead
+of \code{NaN} for downstream processing, use the \code{missing_values} argument, e.g.
+\code{missing_values = exprs(MEANVIS = NA_real_)}.}
 \subsection{Restricting source records (\code{filter_add})}{
 
 The \code{filter_add} argument restricts the records in \code{dataset_add} that

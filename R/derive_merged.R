@@ -981,7 +981,9 @@ get_not_mapped <- function() {
 #'
 #' @info In the example above, subject `"1"` at `"WEEK 2"` has only missing
 #' `AVAL` values, so `MEANVIS` is `NaN` (the result of
-#' `mean(NA, na.rm = TRUE)`) and `SUMVIS` is `0`.
+#' `mean(NA, na.rm = TRUE)`) and `SUMVIS` is `0`. If `NA` is required instead
+#' of `NaN` for downstream processing, use the `missing_values` argument, e.g.
+#' `missing_values = exprs(MEANVIS = NA_real_)`.
 #'
 #' @caption Restricting source records (`filter_add`)
 #'
