@@ -223,7 +223,7 @@ two cases by setting \code{false_value} and \code{missing_value} to different va
   source_datasets = list(cm = cm, pr = pr),
   new_var = CANCTRFL
 )
-#> # A tibble: 5 × 2
+#> # A tibble: 5 x 2
 #>   USUBJID CANCTRFL
 #>   <chr>   <chr>   
 #> 1 1       Y       
@@ -300,7 +300,7 @@ derive_var_merged_ef_msrc(
   false_value = "N",
   missing_value = NA_character_
 )
-#> # A tibble: 4 × 2
+#> # A tibble: 4 x 2
 #>   USUBJID DOSADJFL
 #>   <chr>   <chr>   
 #> 1 1       Y       
@@ -365,7 +365,7 @@ derive_var_merged_ef_msrc(
   source_datasets = list(ex = adex, ec = ec, fa = fa),
   new_var = DOSADJFL
 )
-#> # A tibble: 5 × 4
+#> # A tibble: 5 x 4
 #>   USUBJID EXLNKID EXADJ DOSADJFL
 #>   <chr>   <chr>   <chr> <chr>   
 #> 1 1       1       AE    Y       

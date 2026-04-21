@@ -224,7 +224,7 @@ derive_vars_dt(
   new_vars_prefix = "AST",
   dtc = MHSTDTC
 )
-#> # A tibble: 7 × 2
+#> # A tibble: 7 x 2
 #>   MHSTDTC               ASTDT     
 #>   <chr>                 <date>    
 #> 1 "2019-07-18T15:25:40" 2019-07-18
@@ -250,7 +250,7 @@ on the date.
   highest_imputation = "M",
   date_imputation = "first"
 )
-#> # A tibble: 7 × 3
+#> # A tibble: 7 x 3
 #>   MHSTDTC               ASTDT      ASTDTF
 #>   <chr>                 <date>     <chr> 
 #> 1 "2019-07-18T15:25:40" 2019-07-18 <NA>  
@@ -283,7 +283,7 @@ derive_vars_dt(
   highest_imputation = "M",
   date_imputation = "last"
 )
-#> # A tibble: 7 × 3
+#> # A tibble: 7 x 3
 #>   QSDTC                 ADT        ADTF 
 #>   <chr>                 <date>     <chr>
 #> 1 "2019-07-18T15:25:40" 2019-07-18 <NA> 
@@ -322,7 +322,7 @@ derive_vars_dt(
   date_imputation = "mid",
   flag_imputation = "none"
 )
-#> # A tibble: 7 × 2
+#> # A tibble: 7 x 2
 #>   EXSTDTC               TRTSDT    
 #>   <chr>                 <date>    
 #> 1 "2019-07-18T15:25:40" 2019-07-18
@@ -345,7 +345,7 @@ imputation of the record with \code{"2019-02"}.
   highest_imputation = "M",
   date_imputation = "04-06"
   )
-#> # A tibble: 7 × 3
+#> # A tibble: 7 x 3
 #>   MHSTDTC               ASTDT      ASTDTF
 #>   <chr>                 <date>     <chr> 
 #> 1 "2019-07-18T15:25:40" 2019-07-18 <NA>  
@@ -388,7 +388,7 @@ derive_vars_dt(
   date_imputation = "first",
   min_dates = exprs(TRTSDTM)
   )
-#> # A tibble: 5 × 5
+#> # A tibble: 5 x 5
 #>    case AESTDTC TRTSDTM             ASTDT      ASTDTF
 #>   <dbl> <chr>   <dttm>              <date>     <chr> 
 #> 1     1 2020-12 2020-12-06 12:12:12 2020-12-06 D     
@@ -429,7 +429,7 @@ derive_vars_dt(
   date_imputation = "last",
   max_dates = exprs(TRTEDTM)
 )
-#> # A tibble: 5 × 6
+#> # A tibble: 5 x 6
 #>    case AESTDTC TRTSDTM             TRTEDTM             ASTDT      ASTDTF
 #>   <dbl> <chr>   <dttm>              <dttm>              <date>     <chr> 
 #> 1     1 2020-12 2020-01-01 12:12:12 2020-12-20 23:59:59 2020-12-20 D     
@@ -451,7 +451,7 @@ For example, \code{"2019---07"}, will be displayed as \code{"2019-06-07"} rather
   date_imputation = "mid",
   preserve = TRUE
 )
-#> # A tibble: 7 × 3
+#> # A tibble: 7 x 3
 #>   MHSTDTC               ASTDT      ASTDTF
 #>   <chr>                 <date>     <chr> 
 #> 1 "2019-07-18T15:25:40" 2019-07-18 <NA>  

@@ -124,7 +124,8 @@ adsl <- admiral::admiral_adsl
 lb <- convert_blanks_to_na(lb)
 ```
 ```{r echo=FALSE}
-lb <- filter(lb, USUBJID %in% c("01-701-1115", "01-705-1186", "01-705-1349", "01-708-1286", "01-707-1037", "01-716-1024"))
+lb <- filter(lb, USUBJID %in% c("01-701-1115", "01-705-1186", "01-705-1349", "01-708-1286", "01-707-1037", "01-716-1024")) %>%
+  select(-LBORRES, -LBORRESU, -LBORNRLO, -LBORNRHI, -LBSTRESC, -LBBLFL, -LBNRIND, -VISITDY, -LBDY)
 ```
 
 <br>
@@ -255,11 +256,6 @@ adlb <- lb %>%
   mutate(
     PARCAT1 = LBCAT,
     AVAL = LBSTRESN,
-    AVALC = ifelse(
-      is.na(LBSTRESN) | as.character(LBSTRESN) != LBSTRESC,
-      LBSTRESC,
-      NA
-    ),
     ANRLO = LBSTNRLO,
     ANRHI = LBSTNRHI,
     BASE = AVAL - 10
@@ -531,13 +527,14 @@ The following CTCAE v5.0 SOC values were identified for grading, these are "Inve
 
 From these SOC values the following terms criteria is implemented in `{admiral}` 
 
-From SOC = "Investigations" there are 21 CTCAE v5.0 Terms:
+From SOC = "Investigations" there are 22 CTCAE v5.0 Terms:
 
   + Activated partial thromboplastin time prolonged
   + Alanine aminotransferase increased
   + Alkaline phosphatase increased
   + Aspartate aminotransferase increased
   + Blood bilirubin increased
+  + Blood lactate dehydrogenase increased
   + CD4 lymphocytes decreased
   + Cholesterol high
   + CPK increased

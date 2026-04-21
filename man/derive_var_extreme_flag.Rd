@@ -199,7 +199,7 @@ variable is passed through the \code{new_var = LASTFL} call.
   ) \%>\%
   arrange(STUDYID, USUBJID, PARAMCD, ADT) \%>\%
   select(STUDYID, everything())
-#> # A tibble: 14 × 7
+#> # A tibble: 14 x 7
 #>    STUDYID USUBJID PARAMCD AVISIT    ADT         AVAL LASTFL
 #>    <chr>   <chr>   <chr>   <chr>     <date>     <dbl> <chr> 
 #>  1 AB123   1015    TEMP    BASELINE  2021-04-25  39   <NA>  
@@ -230,7 +230,7 @@ of \code{desc()} within the sorting specified by \code{order}:
   ) \%>\%
   arrange(STUDYID, USUBJID, PARAMCD, ADT) \%>\%
   select(STUDYID, everything())
-#> # A tibble: 14 × 7
+#> # A tibble: 14 x 7
 #>    STUDYID USUBJID PARAMCD AVISIT    ADT         AVAL FIRSTFL
 #>    <chr>   <chr>   <chr>   <chr>     <date>     <dbl> <chr>  
 #>  1 AB123   1015    TEMP    BASELINE  2021-04-25  39   Y      
@@ -266,7 +266,7 @@ which is why they were not specified in the example above.
   ) \%>\%
   arrange(STUDYID, USUBJID, PARAMCD, ADT) \%>\%
   select(STUDYID, everything())
-#> # A tibble: 14 × 7
+#> # A tibble: 14 x 7
 #>    STUDYID USUBJID PARAMCD AVISIT    ADT         AVAL LASTFL
 #>    <chr>   <chr>   <chr>   <chr>     <date>     <dbl> <chr> 
 #>  1 AB123   1015    TEMP    BASELINE  2021-04-25  39   No    
@@ -306,7 +306,7 @@ to ensure we only flag the \emph{first} occurrence, we specify \code{AESTDY} and
   ) \%>\%
   arrange(STUDYID, USUBJID, AESTDY, AESEQ) \%>\%
   select(STUDYID, USUBJID, AEDECOD, AESEV, AESTDY, AESEQ, AOCCIFL)
-#> # A tibble: 7 × 7
+#> # A tibble: 7 x 7
 #>   STUDYID USUBJID AEDECOD   AESEV  AESTDY AESEQ AOCCIFL
 #>   <chr>   <chr>   <chr>     <chr>   <dbl> <dbl> <chr>  
 #> 1 AB123   1015    ERYTHEMA  MILD        2     1 Y      
@@ -348,7 +348,7 @@ on the same day (e.g. for subject \code{"1015"}) as they are both flagged.
   ) \%>\%
   arrange(STUDYID, USUBJID, AESTDY, AESEQ) \%>\%
   select(STUDYID, USUBJID, AEDECOD, AESEV, AESTDY, AESEQ, AOCCIFL)
-#> # A tibble: 7 × 7
+#> # A tibble: 7 x 7
 #>   STUDYID USUBJID AEDECOD   AESEV  AESTDY AESEQ AOCCIFL
 #>   <chr>   <chr>   <chr>     <chr>   <dbl> <dbl> <chr>  
 #> 1 AB123   1015    ERYTHEMA  MILD        2     1 Y      
@@ -386,7 +386,7 @@ argument.
 ) \%>\%
   arrange(STUDYID, USUBJID, PARAMCD, ADT) \%>\%
   select(STUDYID, everything())
-#> # A tibble: 14 × 7
+#> # A tibble: 14 x 7
 #>    STUDYID USUBJID PARAMCD AVISIT    ADT         AVAL ABLFL
 #>    <chr>   <chr>   <chr>   <chr>     <date>     <dbl> <chr>
 #>  1 AB123   1015    TEMP    BASELINE  2021-04-25  39   <NA> 
@@ -427,7 +427,7 @@ subject \code{"1023"}'s temperature records.
 ) \%>\%
   arrange(STUDYID, USUBJID, PARAMCD, ADT) \%>\%
   select(STUDYID, everything())
-#> # A tibble: 14 × 7
+#> # A tibble: 14 x 7
 #>    STUDYID USUBJID PARAMCD AVISIT    ADT         AVAL ABLFL
 #>    <chr>   <chr>   <chr>   <chr>     <date>     <dbl> <chr>
 #>  1 AB123   1015    TEMP    BASELINE  2021-04-25  39   <NA> 
@@ -472,7 +472,7 @@ we again select the latest observation if there are multiple.
 ) \%>\%
   arrange(STUDYID, USUBJID, PARAMCD, ADT) \%>\%
   select(STUDYID, everything())
-#> # A tibble: 14 × 7
+#> # A tibble: 14 x 7
 #>    STUDYID USUBJID PARAMCD AVISIT    ADT         AVAL ABLFL
 #>    <chr>   <chr>   <chr>   <chr>     <date>     <dbl> <chr>
 #>  1 AB123   1015    TEMP    BASELINE  2021-04-25  39   <NA> 
