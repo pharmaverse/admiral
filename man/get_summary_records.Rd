@@ -173,7 +173,8 @@ Other deprecated:
 \code{\link{derive_var_extreme_dt}()},
 \code{\link{derive_var_extreme_dtm}()},
 \code{\link{derive_var_merged_summary}()},
-\code{\link{dthcaus_source}()}
+\code{\link{dthcaus_source}()},
+\code{\link{ex_single}}
 }
 \concept{deprecated}
 \keyword{deprecated}

@@ -1,3 +1,16 @@
+#' Single Dose Exposure Dataset (Removed)
+#'
+#' @description
+#' `r lifecycle::badge("deprecated")`
+#'
+#' The `ex_single` dataset has been removed from `{admiral}` to reduce package
+#' size. Derive it on the fly using [create_single_dose_dataset()].
+#' See `vignette("occds", package = "admiral")` for a full example.
+#'
+#' @keywords deprecated
+#' @family deprecated
+#' @export
+ex_single <- data.frame(NULL)
 #' Example `QS` Dataset
 #'
 #' An example `QS` dataset based on the examples from the CDISC ADaM Supplements
