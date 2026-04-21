@@ -186,9 +186,35 @@ and visit are derived and merged back onto the input dataset:
 
 In the example above, subject \code{"1"} at \code{"WEEK 2"} has only missing
 \code{AVAL} values, so \code{MEANVIS} is \code{NaN} (the result of
-\code{mean(NA, na.rm = TRUE)}) and \code{SUMVIS} is \code{0}. If \code{NA} is required instead
-of \code{NaN} for downstream processing, use the \code{missing_values} argument, e.g.
-\code{missing_values = exprs(MEANVIS = NA_real_)}.}
+\code{mean(NA, na.rm = TRUE)}) and \code{SUMVIS} is \code{0}. Note that \code{missing_values}
+cannot be used here because the by group \emph{exists} in \code{dataset_add} — it
+merely produces \code{NaN}. To coerce \code{NaN} to \code{NA}, apply a follow-up
+\code{mutate()} step:
+
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{derive_vars_merged_summary(
+  adbds,
+  dataset_add = adbds,
+  by_vars = exprs(USUBJID, AVISIT),
+  new_vars = exprs(
+    MEANVIS = mean(AVAL, na.rm = TRUE),
+    SUMVIS = sum(AVAL, na.rm = TRUE)
+  )
+) \%>\%
+  mutate(MEANVIS = ifelse(is.nan(MEANVIS), NA_real_, MEANVIS))
+#> # A tibble: 9 × 6
+#>   USUBJID AVISIT  ASEQ  AVAL MEANVIS SUMVIS
+#>   <chr>   <chr>  <dbl> <dbl>   <dbl>  <dbl>
+#> 1 1       WEEK 1     1    10      10     10
+#> 2 1       WEEK 1     2    NA      10     10
+#> 3 1       WEEK 2     3    NA      NA      0
+#> 4 1       WEEK 3     4    42      42     42
+#> 5 1       WEEK 4     5    12      13     39
+#> 6 1       WEEK 4     6    12      13     39
+#> 7 1       WEEK 4     7    15      13     39
+#> 8 2       WEEK 1     1    21      21     21
+#> 9 2       WEEK 4     2    22      22     22}\if{html}{\out{</div>}}
+
+Subject \code{"1"} at \code{"WEEK 2"} now has \code{MEANVIS = NA} instead of \code{NaN}.}
 \subsection{Restricting source records (\code{filter_add})}{
 
 The \code{filter_add} argument restricts the records in \code{dataset_add} that
