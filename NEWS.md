@@ -21,6 +21,8 @@ erroneously ignored. (#3018)
 in a new window, and will instead just be accessible by clicking the link outputted in the console or going to the path
 specified under `save_path`. This is because this functionality did not work as expected outside of RStudio. (#2989)
 
+- NCICTCAEv5 grading criteria (`atoxgr_criteria_ctcv5`, `atoxgr_criteria_ctcv5_uscv`),  updated to add term `"Blood lactate dehydrogenase increase"` (#3025).
+
 ## Breaking Changes
 
 - The following function arguments are entering the next phase of the [deprecation process](https://pharmaverse.github.io/admiraldev/articles/programming_strategy.html#deprecation): 

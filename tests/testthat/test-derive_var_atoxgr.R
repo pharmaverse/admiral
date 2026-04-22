@@ -93,7 +93,10 @@ test_that("derive_var_atoxgr Test 4: ATOXGR < 0 (HYPO)", {
 
 # derive_var_atoxgr_dir
 
-test_low <- function(input, expected, meta, high = "HIGH", low = "LOW") {
+test_low <- function(expected, meta, high = "HIGH", low = "LOW") {
+  input <- expected %>%
+    select(-ATOXGRL)
+
   actual <- derive_var_atoxgr_dir(
     input,
     new_var = ATOXGRL,
@@ -112,7 +115,10 @@ test_low <- function(input, expected, meta, high = "HIGH", low = "LOW") {
   )
 }
 
-test_high <- function(input, expected, meta, high = "HIGH", low = "LOW") {
+test_high <- function(expected, meta, high = "HIGH", low = "LOW") {
+  input <- expected %>%
+    select(-ATOXGRH)
+
   actual <- derive_var_atoxgr_dir(
     input,
     new_var = ATOXGRH,
@@ -165,13 +171,9 @@ exp_anemia_si <- tibble::tribble(
   "Anemia",       NA,     140,    NA,     "G/L",  NA,       16,
 )
 
-input_anemia_si <- exp_anemia_si %>%
-  select(-ATOXGRL)
-
-
 ## Test 5a: CTCAEv4 Anemia ----
 test_that("derive_var_atoxgr_dir Test 5a: CTCAEv4 Anemia (SI unit)", {
-  test_low(input = input_anemia_si, expected = exp_anemia_si, meta = atoxgr_criteria_ctcv4)
+  test_low(expected = exp_anemia_si, meta = atoxgr_criteria_ctcv4)
 })
 
 # CV_UNIT is g/dL so divide numeric values by 10
@@ -183,12 +185,9 @@ exp_anemia_cv <- exp_anemia_si %>%
     AVALU = if_else(toupper(AVALU) == "G/L", "g/dL", AVALU)
   )
 
-input_anemia_cv <- exp_anemia_cv %>%
-  select(-ATOXGRL)
-
 ## Test 5b: CTCAEv4 Anemia (CV unit) ----
 test_that("derive_var_atoxgr_dir Test 5b: CTCAEv4 Anemia (CV unit)", {
-  test_low(input = input_anemia_cv, expected = exp_anemia_cv, meta = atoxgr_criteria_ctcv4_uscv)
+  test_low(expected = exp_anemia_cv, meta = atoxgr_criteria_ctcv4_uscv)
 })
 
 ## Test 5c: CTCAEv4 Anemia (SI + CV unit) ----
@@ -197,36 +196,30 @@ test_that("derive_var_atoxgr_dir Test 5c: CTCAEv4 Anemia (SI + CV unit)", {
     mutate(TESTNUM = TESTNUM + 16) %>%
     bind_rows(exp_anemia_si)
 
-  input_anemia_sicv <- exp_anemia_sicv %>%
-    select(-ATOXGRL)
-
   atoxgr_criteria_ctcv4_siuscv <- atoxgr_criteria_ctcv4_uscv %>%
     bind_rows(atoxgr_criteria_ctcv4)
 
-  test_low(
-    input = input_anemia_sicv, expected = exp_anemia_sicv,
-    meta = atoxgr_criteria_ctcv4_siuscv
-  )
+  test_low(expected = exp_anemia_sicv, meta = atoxgr_criteria_ctcv4_siuscv)
 })
 
 ## Test 6a: CTCAEv5 Anemia (SI unit) ----
 test_that("derive_var_atoxgr_dir Test 6a: CTCAEv5 Anemia (SI unit)", {
-  test_low(input = input_anemia_si, expected = exp_anemia_si, meta = atoxgr_criteria_ctcv5)
+  test_low(expected = exp_anemia_si, meta = atoxgr_criteria_ctcv5)
 })
 
 ## Test 6b: CTCAEv5 Anemia (CV unit) ----
 test_that("derive_var_atoxgr_dir Test 6b: CTCAEv5 Anemia (CV unit)", {
-  test_low(input = input_anemia_cv, expected = exp_anemia_cv, meta = atoxgr_criteria_ctcv5_uscv)
+  test_low(expected = exp_anemia_cv, meta = atoxgr_criteria_ctcv5_uscv)
 })
 
 ## Test 6c: CTCAEv6 Anemia (SI unit) ----
 test_that("derive_var_atoxgr_dir Test 6c: CTCAEv6 Anemia (SI unit)", {
-  test_low(input = input_anemia_si, expected = exp_anemia_si, meta = atoxgr_criteria_ctcv6)
+  test_low(expected = exp_anemia_si, meta = atoxgr_criteria_ctcv6)
 })
 
 ## Test 6d: CTCAEv6 Anemia (CV unit) ----
 test_that("derive_var_atoxgr_dir Test 6d: CTCAEv6 Anemia (CV unit)", {
-  test_low(input = input_anemia_cv, expected = exp_anemia_cv, meta = atoxgr_criteria_ctcv6_uscv)
+  test_low(expected = exp_anemia_cv, meta = atoxgr_criteria_ctcv6_uscv)
 })
 
 ### Leukocytosis
@@ -251,13 +244,10 @@ exp_leuko_si <- tibble::tribble(
   # AVAL missing cannot grade
   "Leukocytosis", NA,     0,      40,     "10^9/L",  NA,       8,
 )
-input_leuko_si <- exp_leuko_si %>%
-  select(-ATOXGRH)
-
 
 ## Test 7a: CTCAEv4 Leukocytosis (SI unit) ----
 test_that("derive_var_atoxgr_dir Test 7a: CTCAEv4 Leukocytosis (SI unit)", {
-  test_high(input = input_leuko_si, expected = exp_leuko_si, meta = atoxgr_criteria_ctcv4)
+  test_high(expected = exp_leuko_si, meta = atoxgr_criteria_ctcv4)
 })
 
 exp_leuko_cv <- exp_leuko_si %>%
@@ -265,12 +255,9 @@ exp_leuko_cv <- exp_leuko_si %>%
     AVALU = if_else(str_to_upper(AVALU) == "10^9/L", "10^3/uL", AVALU)
   )
 
-input_leuko_cv <- exp_leuko_cv %>%
-  select(-ATOXGRH)
-
 ## Test 7b: CTCAEv4 Leukocytosis (USCV unit) ----
 test_that("derive_var_atoxgr_dir Test 7b: CTCAEv4 Leukocytosis (USCV unit)", {
-  test_high(input = input_leuko_cv, expected = exp_leuko_cv, meta = atoxgr_criteria_ctcv4_uscv)
+  test_high(expected = exp_leuko_cv, meta = atoxgr_criteria_ctcv4_uscv)
 })
 
 exp_leuko_cv2 <- exp_leuko_si %>%
@@ -279,42 +266,40 @@ exp_leuko_cv2 <- exp_leuko_si %>%
     ANRHI = 1000 * ANRHI,
     AVALU = if_else(str_to_upper(AVALU) == "10^9/L", "10^3/mL", AVALU)
   )
-input_leuko_cv2 <- exp_leuko_cv2 %>%
-  select(-ATOXGRH)
 
 ## Test 7c: CTCAEv4 Leukocytosis (legacy USCV unit) ----
 test_that("derive_var_atoxgr_dir Test 7c: CTCAEv4 Leukocytosis (legacy USCV unit)", {
-  test_high(input = input_leuko_cv2, expected = exp_leuko_cv2, meta = atoxgr_criteria_ctcv4_uscv)
+  test_high(expected = exp_leuko_cv2, meta = atoxgr_criteria_ctcv4_uscv)
 })
 
 ## Test 8a: CTCAEv5 Leukocytosis (SI unit) ----
 test_that("derive_var_atoxgr_dir Test 8a: CTCAEv5 Leukocytosis (SI unit)", {
-  test_high(input = input_leuko_si, expected = exp_leuko_si, meta = atoxgr_criteria_ctcv5)
+  test_high(expected = exp_leuko_si, meta = atoxgr_criteria_ctcv5)
 })
 
 ## Test 8b: CTCAEv5 Leukocytosis (USCV unit) ----
 test_that("derive_var_atoxgr_dir Test 8b: CTCAEv5 Leukocytosis (USCV unit)", {
-  test_high(input = input_leuko_cv, expected = exp_leuko_cv, meta = atoxgr_criteria_ctcv5_uscv)
+  test_high(expected = exp_leuko_cv, meta = atoxgr_criteria_ctcv5_uscv)
 })
 
 ## Test 8c: CTCAEv5 Leukocytosis (legacy USCV unit) ----
 test_that("derive_var_atoxgr_dir Test 8c: CTCAEv5 Leukocytosis (legacy USCV unit)", {
-  test_high(input = input_leuko_cv2, expected = exp_leuko_cv2, meta = atoxgr_criteria_ctcv4_uscv)
+  test_high(expected = exp_leuko_cv2, meta = atoxgr_criteria_ctcv4_uscv)
 })
 
 ## Test 8d: CTCAEv6 Leukocytosis (SI unit) ----
 test_that("derive_var_atoxgr_dir Test 8d: CTCAEv6 Leukocytosis (SI unit)", {
-  test_high(input = input_leuko_si, expected = exp_leuko_si, meta = atoxgr_criteria_ctcv6)
+  test_high(expected = exp_leuko_si, meta = atoxgr_criteria_ctcv6)
 })
 
 ## Test 8e: CTCAEv6 Leukocytosis (USCV unit) ----
 test_that("derive_var_atoxgr_dir Test 8e: CTCAEv6 Leukocytosis (USCV unit)", {
-  test_high(input = input_leuko_cv, expected = exp_leuko_cv, meta = atoxgr_criteria_ctcv6_uscv)
+  test_high(expected = exp_leuko_cv, meta = atoxgr_criteria_ctcv6_uscv)
 })
 
 ## Test 8f: CTCAEv6 Leukocytosis (legacy USCV unit) ----
 test_that("derive_var_atoxgr_dir Test 8f: CTCAEv6 Leukocytosis (legacy USCV unit)", {
-  test_high(input = input_leuko_cv2, expected = exp_leuko_cv2, meta = atoxgr_criteria_ctcv6_uscv)
+  test_high(expected = exp_leuko_cv2, meta = atoxgr_criteria_ctcv6_uscv)
 })
 
 
@@ -343,12 +328,9 @@ exp_aptt <- tibble::tribble(
 ) %>%
   mutate(AVALU = NA_character_)
 
-input_aptt <- exp_aptt %>%
-  select(-ATOXGRH)
-
 ## Test 9a: CTCAEv4 Act. partial thromboplastin time prolonged ----
 test_that("derive_var_atoxgr_dir Test 9a: CTCAEv4 Act. partial thromboplastin time prolonged", {
-  test_high(input = input_aptt, expected = exp_aptt, meta = atoxgr_criteria_ctcv4)
+  test_high(expected = exp_aptt, meta = atoxgr_criteria_ctcv4)
 })
 
 ## Test 9b: CTCAEv4 Activated partial thromboplastin time prolonged (SI + CV METDATA) ----
@@ -359,22 +341,22 @@ test_that(paste(
   atoxgr_criteria_ctcv4_sicv <- atoxgr_criteria_ctcv4 %>%
     bind_rows(atoxgr_criteria_ctcv4_uscv)
 
-  test_high(input = input_aptt, expected = exp_aptt, meta = atoxgr_criteria_ctcv4_sicv)
+  test_high(expected = exp_aptt, meta = atoxgr_criteria_ctcv4_sicv)
 })
 
 ## Test 10a: CTCAEv5 Act. partial thromboplastin time prolonged ----
 test_that("derive_var_atoxgr_dir Test 10a: CTCAEv5 Act. partial thromboplastin time prolonged", {
-  test_high(input = input_aptt, expected = exp_aptt, meta = atoxgr_criteria_ctcv5)
+  test_high(expected = exp_aptt, meta = atoxgr_criteria_ctcv5)
 })
 
 ## Test 10b: CTCAEv6 Act. partial thromboplastin time prolonged ----
 test_that("derive_var_atoxgr_dir Test 10b: CTCAEv6 Act. partial thromboplastin time prolonged", {
-  test_high(input = input_aptt, expected = exp_aptt, meta = atoxgr_criteria_ctcv6)
+  test_high(expected = exp_aptt, meta = atoxgr_criteria_ctcv6)
 })
 
 ## Test 10c: CTCAEv6 Act. part. thromboplastin time prolonged (CV) ----
 test_that("derive_var_atoxgr_dir Test 10c: CTCAEv6 Act. part. thromboplastin time prolonged (CV)", {
-  test_high(input = input_aptt, expected = exp_aptt, meta = atoxgr_criteria_ctcv4_uscv)
+  test_high(expected = exp_aptt, meta = atoxgr_criteria_ctcv4_uscv)
 })
 
 ### Alanine aminotransferase increased
@@ -405,10 +387,7 @@ exp_alt_ctcv4 <- tibble::tribble(
 
 ## Test 11: CTCAEv4 Alanine aminotransferase increased ----
 test_that("derive_var_atoxgr_dir Test 11: CTCAEv4 Alanine aminotransferase increased", {
-  input_alt <- exp_alt_ctcv4 %>%
-    select(-ATOXGRH)
-
-  test_high(input = input_alt, expected = exp_alt_ctcv4, meta = atoxgr_criteria_ctcv4)
+  test_high(expected = exp_alt_ctcv4, meta = atoxgr_criteria_ctcv4)
 })
 
 ### NCICTCAEv5 same criteria as NCICTCAEv4 when BASELINE is normal
@@ -456,11 +435,7 @@ test_that("derive_var_atoxgr_dir Test 12a: CTCAEv5 Alanine aminotransferase incr
   exp_alt_ctcv5 <- exp_alt_ctcv5_norm %>%
     bind_rows(exp_alt_ctcv5_abn)
 
-
-  input_alt <- exp_alt_ctcv5 %>%
-    select(-ATOXGRH)
-
-  test_high(input = input_alt, expected = exp_alt_ctcv5, meta = atoxgr_criteria_ctcv5)
+  test_high(expected = exp_alt_ctcv5, meta = atoxgr_criteria_ctcv5)
 })
 
 ### NCICTCAEv6 same criteria as NCICTCAEv4 when BASELINE is normal
@@ -514,11 +489,7 @@ test_that("derive_var_atoxgr_dir Test 12b: CTCAEv6 Alanine aminotransferase incr
   exp_alt_ctcv6 <- exp_alt_ctcv6_norm %>%
     bind_rows(exp_alt_ctcv6_abn)
 
-
-  input_alt <- exp_alt_ctcv6 %>%
-    select(-ATOXGRH)
-
-  test_high(input = input_alt, expected = exp_alt_ctcv6, meta = atoxgr_criteria_ctcv6)
+  test_high(expected = exp_alt_ctcv6, meta = atoxgr_criteria_ctcv6)
 })
 
 ### Alkaline phosphatase increased
@@ -549,10 +520,7 @@ exp_alkp_ctcv4 <- tibble::tribble(
 
 ## Test 13: CTCAEv4 Alkaline phosphatase increased ----
 test_that("derive_var_atoxgr_dir Test 13: CTCAEv4 Alkaline phosphatase increased", {
-  input_alkp_ <- exp_alkp_ctcv4 %>%
-    select(-ATOXGRH)
-
-  test_high(input = input_alkp_, expected = exp_alkp_ctcv4, meta = atoxgr_criteria_ctcv4)
+  test_high(expected = exp_alkp_ctcv4, meta = atoxgr_criteria_ctcv4)
 })
 
 ### Alkaline phosphatase increased
@@ -602,10 +570,7 @@ test_that("derive_var_atoxgr_dir Test 14a: CTCAEv5 Alkaline phosphatase increase
   exp_alkp_ctcv5 <- exp_alkp_ctcv5_norm %>%
     bind_rows(exp_alkp_ctcv5_abn)
 
-  input_alkp_ <- exp_alkp_ctcv5 %>%
-    select(-ATOXGRH)
-
-  test_high(input = input_alkp_, expected = exp_alkp_ctcv5, meta = atoxgr_criteria_ctcv5)
+  test_high(expected = exp_alkp_ctcv5, meta = atoxgr_criteria_ctcv5)
 })
 
 ### Alkaline phosphatase increased
@@ -631,17 +596,14 @@ exp_alkp_ctcv6 <- tibble::tribble(
 ) %>%
   mutate(AVALU = NA_character_)
 
-input_alkp_ctcv6 <- exp_alkp_ctcv6 %>%
-  select(-ATOXGRH)
-
 ## Test 14b: CTCAEv6 Alkaline phosphatase increased ----
 test_that("derive_var_atoxgr_dir Test 14b: CTCAEv6 Alkaline phosphatase increased", {
-  test_high(input = input_alkp_ctcv6, expected = exp_alkp_ctcv6, meta = atoxgr_criteria_ctcv6)
+  test_high(expected = exp_alkp_ctcv6, meta = atoxgr_criteria_ctcv6)
 })
 
 ## Test 14c: CTCAEv6 Alkaline phosphatase increased (CV unit) ----
 test_that("derive_var_atoxgr_dir Test 14c: CTCAEv6 Alkaline phosphatase increased (CV unit)", {
-  test_high(input = input_alkp_ctcv6, expected = exp_alkp_ctcv6, meta = atoxgr_criteria_ctcv6_uscv)
+  test_high(expected = exp_alkp_ctcv6, meta = atoxgr_criteria_ctcv6_uscv)
 })
 
 
@@ -673,10 +635,7 @@ exp_ast_ctcv4 <- tibble::tribble(
 
 ## Test 15: CTCAEv4 Aspartate aminotransferase increased ----
 test_that("derive_var_atoxgr_dir Test 15: CTCAEv4 Aspartate aminotransferase increased", {
-  input_ast <- exp_ast_ctcv4 %>%
-    select(-ATOXGRH)
-
-  test_high(input = input_ast, expected = exp_ast_ctcv4, meta = atoxgr_criteria_ctcv4)
+  test_high(expected = exp_ast_ctcv4, meta = atoxgr_criteria_ctcv4)
 })
 
 ### NCICTCAEv5 same criteria as NCICTCAEv4 when BASELINE is normal
@@ -724,10 +683,7 @@ test_that("derive_var_atoxgr_dir Test 16a: CTCAEv5 Aspartate aminotransferase in
   exp_ast_ctcv5 <- exp_ast_ctcv5_norm %>%
     bind_rows(exp_ast_ctcv5_abn)
 
-  input_ast <- exp_ast_ctcv5 %>%
-    select(-ATOXGRH)
-
-  test_high(input = input_ast, expected = exp_ast_ctcv5, meta = atoxgr_criteria_ctcv5)
+  test_high(expected = exp_ast_ctcv5, meta = atoxgr_criteria_ctcv5)
 })
 
 ### NCICTCAEv6 same criteria as NCICTCAEv5 when BASELINE is normal
@@ -779,10 +735,7 @@ test_that("derive_var_atoxgr_dir Test 16b: CTCAEv6 Aspartate aminotransferase in
   exp_ast_ctcv6 <- exp_ast_ctcv6_norm %>%
     bind_rows(exp_ast_ctcv6_abn)
 
-  input_ast <- exp_ast_ctcv6 %>%
-    select(-ATOXGRH)
-
-  test_high(input = input_ast, expected = exp_ast_ctcv6, meta = atoxgr_criteria_ctcv6)
+  test_high(expected = exp_ast_ctcv6, meta = atoxgr_criteria_ctcv6)
 })
 
 ### Blood bilirubin increased
@@ -813,10 +766,7 @@ exp_bili_ctcv4 <- tibble::tribble(
 
 ## Test 17: CTCAEv4 Blood bilirubin increased ----
 test_that("derive_var_atoxgr_dir Test 17: CTCAEv4 Blood bilirubin increased", {
-  input_bili <- exp_bili_ctcv4 %>%
-    select(-ATOXGRH)
-
-  test_high(input = input_bili, expected = exp_bili_ctcv4, meta = atoxgr_criteria_ctcv4)
+  test_high(expected = exp_bili_ctcv4, meta = atoxgr_criteria_ctcv4)
 })
 
 ## Test 18a: CTCAEv5  Blood bilirubin increased ----
@@ -840,10 +790,7 @@ test_that("derive_var_atoxgr_dir Test 18a: CTCAEv5  Blood bilirubin increased", 
     ) %>%
     bind_rows(exp_bili_ctcv5_norm)
 
-  input_bili <- exp_bili_ctcv5 %>%
-    select(-ATOXGRH)
-
-  test_high(input = input_bili, expected = exp_bili_ctcv5, meta = atoxgr_criteria_ctcv5)
+  test_high(expected = exp_bili_ctcv5, meta = atoxgr_criteria_ctcv5)
 })
 
 ### NCICTCAEv6 small difference to NCICTCAEv5 when BASELINE is abnormal
@@ -893,12 +840,9 @@ exp_bili_ctcv6 <- tibble::tribble(
   ) %>%
   bind_rows(exp_bili_ctcv6_norm)
 
-input_bili_ctcv6 <- exp_bili_ctcv6 %>%
-  select(-ATOXGRH)
-
 ## Test 18b: CTCAEv6  Blood bilirubin increased ----
 test_that("derive_var_atoxgr_dir Test 18b: CTCAEv6  Blood bilirubin increased", {
-  test_high(input = input_bili_ctcv6, expected = exp_bili_ctcv6, meta = atoxgr_criteria_ctcv6)
+  test_high(expected = exp_bili_ctcv6, meta = atoxgr_criteria_ctcv6)
 })
 
 ### CD4 Lymphocytes decreased
@@ -944,9 +888,6 @@ exp_cd4_si <- tibble::tribble(
   "CD4 lymphocytes decreased",  NA,     0.8,    "10^9/L",  NA,       21,
 )
 
-input_cd4_si <- exp_cd4_si %>%
-  select(-ATOXGRL)
-
 exp_cd4_cv <- exp_cd4_si %>%
   mutate(
     AVAL = AVAL * 1000,
@@ -954,37 +895,34 @@ exp_cd4_cv <- exp_cd4_si %>%
     AVALU = if_else(str_to_upper(AVALU) == "10^9/L", "1/uL", NA_character_)
   )
 
-input_cd4_cv <- exp_cd4_cv %>%
-  select(-ATOXGRL)
-
 ## Test 19a: CTCAEv4 CD4 Lymphocytes decreased (SI unit) ----
 test_that("derive_var_atoxgr_dir Test 19a: CTCAEv4 CD4 Lymphocytes decreased (SI unit)", {
-  test_low(input = input_cd4_si, expected = exp_cd4_si, meta = atoxgr_criteria_ctcv4)
+  test_low(expected = exp_cd4_si, meta = atoxgr_criteria_ctcv4)
 })
 
 ## Test 19b: CTCAEv4 CD4 Lymphocytes decreased (USCV unit) ----
 test_that("derive_var_atoxgr_dir Test 19b: CTCAEv4 CD4 Lymphocytes decreased (USCV unit)", {
-  test_low(input = input_cd4_cv, expected = exp_cd4_cv, meta = atoxgr_criteria_ctcv4_uscv)
+  test_low(expected = exp_cd4_cv, meta = atoxgr_criteria_ctcv4_uscv)
 })
 
 ## Test 20a: CTCAEv5 CD4 Lymphocytes decreased (SI unit) ----
 test_that("derive_var_atoxgr_dir Test 20a: CTCAEv5 CD4 Lymphocytes decreased (SI unit)", {
-  test_low(input = input_cd4_si, expected = exp_cd4_si, meta = atoxgr_criteria_ctcv5)
+  test_low(expected = exp_cd4_si, meta = atoxgr_criteria_ctcv5)
 })
 
 ## Test 20b: CTCAEv5 CD4 Lymphocytes decreased (USCV unit) ----
 test_that("derive_var_atoxgr_dir Test 20b: CTCAEv5 CD4 Lymphocytes decreased (USCV unit)", {
-  test_low(input = input_cd4_cv, expected = exp_cd4_cv, meta = atoxgr_criteria_ctcv5_uscv)
+  test_low(expected = exp_cd4_cv, meta = atoxgr_criteria_ctcv5_uscv)
 })
 
 ## Test 20c: CTCAEv6 CD4 Lymphocytes decreased (SI unit) ----
 test_that("derive_var_atoxgr_dir Test 20c: CTCAEv6 CD4 Lymphocytes decreased (SI unit)", {
-  test_low(input = input_cd4_si, expected = exp_cd4_si, meta = atoxgr_criteria_ctcv6)
+  test_low(expected = exp_cd4_si, meta = atoxgr_criteria_ctcv6)
 })
 
 ## Test 20d: CTCAEv6 CD4 Lymphocytes decreased (USCV unit) ----
 test_that("derive_var_atoxgr_dir Test 20d: CTCAEv6 CD4 Lymphocytes decreased (USCV unit)", {
-  test_low(input = input_cd4_cv, expected = exp_cd4_cv, meta = atoxgr_criteria_ctcv6_uscv)
+  test_low(expected = exp_cd4_cv, meta = atoxgr_criteria_ctcv6_uscv)
 })
 
 ### Cholesterol high
@@ -1062,41 +1000,34 @@ exp_choles_cv <- tibble::tribble(
   "Cholesterol high",  NA,     0,       200,    "mmol/L",        NA, 21,
 )
 
-
-input_choles_si <- exp_choles_si %>%
-  select(-ATOXGRH)
-
-input_choles_cv <- exp_choles_cv %>%
-  select(-ATOXGRH)
-
 ## Test 21a: CTCAEv4 Cholesterol high (SI unit) ----
 test_that("derive_var_atoxgr_dir Test 21a: CTCAEv4 Cholesterol high (SI unit)", {
-  test_high(input = input_choles_si, expected = exp_choles_si, meta = atoxgr_criteria_ctcv4)
+  test_high(expected = exp_choles_si, meta = atoxgr_criteria_ctcv4)
 })
 
 ## Test 21b: CTCAEv4 Cholesterol high (USCV unit) ----
 test_that("derive_var_atoxgr_dir Test 21b: CTCAEv4 Cholesterol high (USCV unit)", {
-  test_high(input = input_choles_cv, expected = exp_choles_cv, meta = atoxgr_criteria_ctcv4_uscv)
+  test_high(expected = exp_choles_cv, meta = atoxgr_criteria_ctcv4_uscv)
 })
 
 ## Test 22a: CTCAEv5 Cholesterol high (SI unit) ----
 test_that("derive_var_atoxgr_dir Test 22a: CTCAEv5 Cholesterol high (SI unit)", {
-  test_high(input = input_choles_si, expected = exp_choles_si, meta = atoxgr_criteria_ctcv5)
+  test_high(expected = exp_choles_si, meta = atoxgr_criteria_ctcv5)
 })
 
 ## Test 22b: CTCAEv5 Cholesterol high (USCV unit) ----
 test_that("derive_var_atoxgr_dir Test 22b: CTCAEv5 Cholesterol high (USCV unit)", {
-  test_high(input = input_choles_cv, expected = exp_choles_cv, meta = atoxgr_criteria_ctcv5_uscv)
+  test_high(expected = exp_choles_cv, meta = atoxgr_criteria_ctcv5_uscv)
 })
 
 ## Test 22c: CTCAEv6 Cholesterol high (SI unit) ----
 test_that("derive_var_atoxgr_dir Test 22c: CTCAEv6 Cholesterol high (SI unit)", {
-  test_high(input = input_choles_si, expected = exp_choles_si, meta = atoxgr_criteria_ctcv6)
+  test_high(expected = exp_choles_si, meta = atoxgr_criteria_ctcv6)
 })
 
 ## Test 22d: CTCAEv6 Cholesterol high (USCV unit) ----
 test_that("derive_var_atoxgr_dir Test 22d: CTCAEv6 Cholesterol high (USCV unit)", {
-  test_high(input = input_choles_cv, expected = exp_choles_cv, meta = atoxgr_criteria_ctcv6_uscv)
+  test_high(expected = exp_choles_cv, meta = atoxgr_criteria_ctcv6_uscv)
 })
 
 ### CPK increased
@@ -1125,17 +1056,14 @@ exp_cpk <- tibble::tribble(
 ) %>%
   mutate(AVALU = NA_character_)
 
-input_cpk <- exp_cpk %>%
-  select(-ATOXGRH)
-
 ## Test 23: CTCAEv4 CPK increased ----
 test_that("derive_var_atoxgr_dir Test 23: CTCAEv4 CPK increased", {
-  test_high(input = input_cpk, expected = exp_cpk, meta = atoxgr_criteria_ctcv4)
+  test_high(expected = exp_cpk, meta = atoxgr_criteria_ctcv4)
 })
 
 ## Test 24: CTCAEv5 CPK increased ----
 test_that("derive_var_atoxgr_dir Test 24: CTCAEv5 CPK increased", {
-  test_high(input = input_cpk, expected = exp_cpk, meta = atoxgr_criteria_ctcv5)
+  test_high(expected = exp_cpk, meta = atoxgr_criteria_ctcv5)
 })
 
 ### Creatinine increased (NCICTCv4)
@@ -1181,10 +1109,7 @@ test_that("derive_var_atoxgr_dir Test 25: CTCAEv4 Creatinine increased", {
   exp_creatn <- exp_creatn %>%
     filter(V4 == "Y")
 
-  input_creatn <- exp_creatn %>%
-    select(-ATOXGRH)
-
-  test_high(input = input_creatn, expected = exp_creatn, meta = atoxgr_criteria_ctcv4)
+  test_high(expected = exp_creatn, meta = atoxgr_criteria_ctcv4)
 })
 
 ### Creatinine increased (NCICTCv5)
@@ -1199,10 +1124,7 @@ test_that("derive_var_atoxgr_dir Test 26a: CTCAEv5 Creatinine increased", {
   exp_creatn <- exp_creatn %>%
     filter(V5 == "Y")
 
-  input_creatn <- exp_creatn %>%
-    select(-ATOXGRH)
-
-  test_high(input = input_creatn, expected = exp_creatn, meta = atoxgr_criteria_ctcv5)
+  test_high(expected = exp_creatn, meta = atoxgr_criteria_ctcv5)
 })
 
 ### Creatinine increased (NCICTCv6)
@@ -1241,10 +1163,7 @@ test_that("derive_var_atoxgr_dir Test 26b: CTCAEv6 Creatinine increased", {
   ) %>%
     mutate(AVALU = NA_character_)
 
-  input_creatn <- exp_creatn %>%
-    select(-ATOXGRH)
-
-  test_high(input = input_creatn, expected = exp_creatn, meta = atoxgr_criteria_ctcv6)
+  test_high(expected = exp_creatn, meta = atoxgr_criteria_ctcv6)
 })
 
 ### Fibrinogen decreased (NCICTCv4)
@@ -1308,10 +1227,8 @@ test_that("derive_var_atoxgr_dir Test 27: CTCAEv4 Fibrinogen decreased", {
     # missing unit cannot grade as it may satisfy grade 4
     "Fibrinogen decreased",  1.5,    1.5,    0,      NA,      NA,       26,
   )
-  input_fib <- exp_fib %>%
-    select(-ATOXGRL)
 
-  test_low(input = input_fib, expected = exp_fib, meta = atoxgr_criteria_ctcv4)
+  test_low(expected = exp_fib, meta = atoxgr_criteria_ctcv4)
 })
 
 ### Fibrinogen decreased (NCICTCv5 + NCICTCv6)
@@ -1373,17 +1290,15 @@ exp_fib <- tibble::tribble(
   # missing unit cannot grade as it may satisfy grade 4
   "Fibrinogen decreased",  1.5,    1.5,     0,          NA,        NA, 26,
 )
-input_fib <- exp_fib %>%
-  select(-ATOXGRL)
 
 ## Test 28a: CTCAEv5 Fibrinogen decreased ----
 test_that("derive_var_atoxgr_dir Test 28a: CTCAEv5 Fibrinogen decreased", {
-  test_low(input = input_fib, expected = exp_fib, meta = atoxgr_criteria_ctcv5)
+  test_low(expected = exp_fib, meta = atoxgr_criteria_ctcv5)
 })
 
 ## Test 28b: CTCAEv6 Fibrinogen decreased ----
 test_that("derive_var_atoxgr_dir Test 28b: CTCAEv6 Fibrinogen decreased", {
-  test_low(input = input_fib, expected = exp_fib, meta = atoxgr_criteria_ctcv6)
+  test_low(expected = exp_fib, meta = atoxgr_criteria_ctcv6)
 })
 
 ### GGT increased (NCICTCv4)
@@ -1414,10 +1329,7 @@ exp_ggt_ctcv4 <- tibble::tribble(
 
 ## Test 29: CTCAEv4 GGT increased ----
 test_that("derive_var_atoxgr_dir Test 29: CTCAEv4 GGT increased", {
-  input_ggt <- exp_ggt_ctcv4 %>%
-    select(-ATOXGRH)
-
-  test_high(input = input_ggt, expected = exp_ggt_ctcv4, meta = atoxgr_criteria_ctcv4)
+  test_high(expected = exp_ggt_ctcv4, meta = atoxgr_criteria_ctcv4)
 })
 
 ### GGT increased (NCICTCv5)
@@ -1466,14 +1378,7 @@ test_that("derive_var_atoxgr_dir Test 30a: CTCAEv5 GGT increased", {
   # combine records with baseline normal and abnormal
   exp_ggt_ctcv5 <- exp_ggt_ctcv5_norm %>%
     bind_rows(exp_ggt_ctcv5_abn)
-
-  input_ggt <- exp_ggt_ctcv5 %>%
-    select(-ATOXGRH)
-
-  test_high(
-    input = input_ggt, expected = exp_ggt_ctcv5, meta = atoxgr_criteria_ctcv5,
-    high = "HIGH HIGH"
-  )
+  test_high(expected = exp_ggt_ctcv5, meta = atoxgr_criteria_ctcv5, high = "HIGH HIGH")
 })
 
 ### GGT increased (NCICTCv6)
@@ -1523,13 +1428,7 @@ test_that("derive_var_atoxgr_dir Test 30b: CTCAEv6 GGT increased", {
   exp_ggt_ctcv6 <- exp_ggt_ctcv6_norm %>%
     bind_rows(exp_ggt_ctcv6_abn)
 
-  input_ggt <- exp_ggt_ctcv6 %>%
-    select(-ATOXGRH)
-
-  test_high(
-    input = input_ggt, expected = exp_ggt_ctcv6, meta = atoxgr_criteria_ctcv6,
-    high = "HIGH HIGH"
-  )
+  test_high(expected = exp_ggt_ctcv6, meta = atoxgr_criteria_ctcv6, high = "HIGH HIGH")
 })
 
 ### Haptoglobin decreased (NCICTCv4)
@@ -1550,22 +1449,19 @@ exp_hapt <- tibble::tribble(
 ) %>%
   mutate(AVALU = NA_character_)
 
-input_hapt <- exp_hapt %>%
-  select(-ATOXGRL)
-
 ## Test 31: CTCAEv4 Haptoglobin decreased ----
 test_that("derive_var_atoxgr_dir Test 31: CTCAEv4 Haptoglobin decreased", {
-  test_low(input = input_hapt, expected = exp_hapt, meta = atoxgr_criteria_ctcv4)
+  test_low(expected = exp_hapt, meta = atoxgr_criteria_ctcv4)
 })
 
 ## Test 32a: CTCAEv5 Haptoglobin decreased ----
 test_that("derive_var_atoxgr_dir Test 32a: CTCAEv5 Haptoglobin decreased", {
-  test_low(input = input_hapt, expected = exp_hapt, meta = atoxgr_criteria_ctcv5)
+  test_low(expected = exp_hapt, meta = atoxgr_criteria_ctcv5)
 })
 
 ## Test 32b: CTCAEv6 Haptoglobin decreased ----
 test_that("derive_var_atoxgr_dir Test 32b: CTCAEv6 Haptoglobin decreased", {
-  test_low(input = input_hapt, expected = exp_hapt, meta = atoxgr_criteria_ctcv6)
+  test_low(expected = exp_hapt, meta = atoxgr_criteria_ctcv6)
 })
 
 ### Hemoglobin increased
@@ -1621,18 +1517,12 @@ exp_hgbi_cv <- exp_hgbi_si %>%
 
 ## Test 33a: CTCAEv4 Hemoglobin increased (SI unit) ----
 test_that("derive_var_atoxgr_dir Test 33a: CTCAEv4 Hemoglobin increased (SI unit)", {
-  input_hgbi_si <- exp_hgbi_si %>%
-    select(-ATOXGRH)
-
-  test_high(input = input_hgbi_si, expected = exp_hgbi_si, meta = atoxgr_criteria_ctcv4)
+  test_high(expected = exp_hgbi_si, meta = atoxgr_criteria_ctcv4)
 })
 
 ## Test 33b: CTCAEv4 Hemoglobin increased (USCV unit) ----
 test_that("derive_var_atoxgr_dir Test 33b: CTCAEv4 Hemoglobin increased (USCV unit)", {
-  input_hgbi_cv <- exp_hgbi_cv %>%
-    select(-ATOXGRH)
-
-  test_high(input = input_hgbi_cv, expected = exp_hgbi_cv, meta = atoxgr_criteria_ctcv4_uscv)
+  test_high(expected = exp_hgbi_cv, meta = atoxgr_criteria_ctcv4_uscv)
 })
 
 ## Test 34a: CTCAEv5 Hemoglobin increased (SI unit) ----
@@ -1640,10 +1530,7 @@ test_that("derive_var_atoxgr_dir Test 34a: CTCAEv5 Hemoglobin increased (SI unit
   exp_hgbi_si <- exp_hgbi_si %>%
     filter(V5 == "Y")
 
-  input_hgbi_si <- exp_hgbi_si %>%
-    select(-ATOXGRH)
-
-  test_high(input = input_hgbi_si, expected = exp_hgbi_si, meta = atoxgr_criteria_ctcv5)
+  test_high(expected = exp_hgbi_si, meta = atoxgr_criteria_ctcv5)
 })
 
 ## Test 34b: CTCAEv5 Hemoglobin increased (USCV unit) ----
@@ -1651,10 +1538,7 @@ test_that("derive_var_atoxgr_dir Test 34b: CTCAEv5 Hemoglobin increased (USCV un
   exp_hgbi_cv <- exp_hgbi_cv %>%
     filter(V5 == "Y")
 
-  input_hgbi_cv <- exp_hgbi_cv %>%
-    select(-ATOXGRH)
-
-  test_high(input = input_hgbi_cv, expected = exp_hgbi_cv, meta = atoxgr_criteria_ctcv5_uscv)
+  test_high(expected = exp_hgbi_cv, meta = atoxgr_criteria_ctcv5_uscv)
 })
 
 ## Test 34c: CTCAEv6 Hemoglobin increased (SI unit) ----
@@ -1662,10 +1546,7 @@ test_that("derive_var_atoxgr_dir Test 34c: CTCAEv6 Hemoglobin increased (SI unit
   exp_hgbi_si <- exp_hgbi_si %>%
     filter(V5 == "Y")
 
-  input_hgbi_si <- exp_hgbi_si %>%
-    select(-ATOXGRH)
-
-  test_high(input = input_hgbi_si, expected = exp_hgbi_si, meta = atoxgr_criteria_ctcv6)
+  test_high(expected = exp_hgbi_si, meta = atoxgr_criteria_ctcv6)
 })
 
 ## Test 34d: CTCAEv6 Hemoglobin increased (USCV unit) ----
@@ -1673,10 +1554,7 @@ test_that("derive_var_atoxgr_dir Test 34d: CTCAEv6 Hemoglobin increased (USCV un
   exp_hgbi_cv <- exp_hgbi_cv %>%
     filter(V5 == "Y")
 
-  input_hgbi_cv <- exp_hgbi_cv %>%
-    select(-ATOXGRH)
-
-  test_high(input = input_hgbi_cv, expected = exp_hgbi_cv, meta = atoxgr_criteria_ctcv6_uscv)
+  test_high(expected = exp_hgbi_cv, meta = atoxgr_criteria_ctcv6_uscv)
 })
 
 ### INR increased (NCICTCV4)
@@ -1712,10 +1590,8 @@ test_that("derive_var_atoxgr_dir Test 35: CTCAEv4 INR increased", {
     # AVAL missing cannot grade
     "INR Increased", NA,    100,   100,    NA_character_, NA,       17,
   )
-  input_inri <- exp_inri %>%
-    select(-ATOXGRH)
 
-  test_high(input = input_inri, expected = exp_inri, meta = atoxgr_criteria_ctcv4)
+  test_high(expected = exp_inri, meta = atoxgr_criteria_ctcv4)
 })
 
 ### INR increased (NCICTCV5)
@@ -1749,10 +1625,8 @@ test_that("derive_var_atoxgr_dir Test 36a: CTCAEv5 INR increased", {
     # AVAL missing cannot grade
     "INR Increased", NA,    100,   NA_character_, NA,       16,
   )
-  input_inri <- exp_inri %>%
-    select(-ATOXGRH)
 
-  test_high(input = input_inri, expected = exp_inri, meta = atoxgr_criteria_ctcv5)
+  test_high(expected = exp_inri, meta = atoxgr_criteria_ctcv5)
 })
 
 ## Test 36b: CTCAEv6 INR increased ----
@@ -1780,10 +1654,8 @@ test_that("derive_var_atoxgr_dir Test 36b: CTCAEv6 INR increased", {
     # AVAL missing cannot grade
     "INR Increased", NA,    100,   NA_character_, NA,       16,
   )
-  input_inri <- exp_inri %>%
-    select(-ATOXGRH)
 
-  test_high(input = input_inri, expected = exp_inri, meta = atoxgr_criteria_ctcv6)
+  test_high(expected = exp_inri, meta = atoxgr_criteria_ctcv6)
 })
 
 ### Lipase increased
@@ -1812,17 +1684,14 @@ exp_lip <- tibble::tribble(
 ) %>%
   mutate(AVALU = NA_character_)
 
-input_lip <- exp_lip %>%
-  select(-ATOXGRH)
-
 ## Test 37: CTCAEv4 Lipase increased ----
 test_that("derive_var_atoxgr_dir Test 37: CTCAEv4 Lipase increased", {
-  test_high(input = input_lip, expected = exp_lip, meta = atoxgr_criteria_ctcv4)
+  test_high(expected = exp_lip, meta = atoxgr_criteria_ctcv4)
 })
 
 ## Test 38a: CTCAEv5 Lipase increased ----
 test_that("derive_var_atoxgr_dir Test 38a: CTCAEv5 Lipase increased", {
-  test_high(input = input_lip, expected = exp_lip, meta = atoxgr_criteria_ctcv5)
+  test_high(expected = exp_lip, meta = atoxgr_criteria_ctcv5)
 })
 
 ### Lipase increased NCICTCAEv6 (small difference to v4 and v5)
@@ -1850,13 +1719,9 @@ exp_lipv6 <- tibble::tribble(
 ) %>%
   mutate(AVALU = NA_character_)
 
-input_lipv6 <- exp_lipv6 %>%
-  select(-ATOXGRH)
-
-
 ## Test 38b: CTCAEv6 Lipase increased ----
 test_that("derive_var_atoxgr_dir Test 38b: CTCAEv6 Lipase increased", {
-  test_high(input = input_lipv6, expected = exp_lipv6, meta = atoxgr_criteria_ctcv6)
+  test_high(expected = exp_lipv6, meta = atoxgr_criteria_ctcv6)
 })
 
 ### Lymphocyte count decreased
@@ -1898,24 +1763,19 @@ exp_lymd_si <- tibble::tribble(
   "Lymphocyte count decreased", 1.1,    1.1,    NA,     "10^9/L",  "0",      20,
 )
 
-input_lymd_si <- exp_lymd_si %>%
-  select(-ATOXGRL)
-
 ## Test 39a: CTCAEv4 Lymphocyte count decreased (SI unit) ----
 test_that("derive_var_atoxgr_dir Test 39a: CTCAEv4 Lymphocyte count decreased (SI unit)", {
-  test_low(input = input_lymd_si, expected = exp_lymd_si, meta = atoxgr_criteria_ctcv4)
+  test_low(expected = exp_lymd_si, meta = atoxgr_criteria_ctcv4)
 })
 
 exp_lymd_cv <- exp_lymd_si %>%
   mutate(
     AVALU = if_else(str_to_upper(AVALU) == "10^9/L", "10^3/uL", AVALU)
   )
-input_lymd_cv <- exp_lymd_cv %>%
-  select(-ATOXGRL)
 
 ## Test 39b: CTCAEv4 Lymphocyte count decreased (USCV unit) ----
 test_that("derive_var_atoxgr_dir Test 39b: CTCAEv4 Lymphocyte count decreased (USCV unit)", {
-  test_low(input = input_lymd_cv, expected = exp_lymd_cv, meta = atoxgr_criteria_ctcv4_uscv)
+  test_low(expected = exp_lymd_cv, meta = atoxgr_criteria_ctcv4_uscv)
 })
 
 exp_lymd_cv2 <- exp_lymd_si %>%
@@ -1925,22 +1785,20 @@ exp_lymd_cv2 <- exp_lymd_si %>%
     ANRHI = ANRHI * 1000,
     AVALU = if_else(str_to_upper(AVALU) == "10^9/L", "10^3/mL", AVALU)
   )
-input_lymd_cv2 <- exp_lymd_cv2 %>%
-  select(-ATOXGRL)
 
 ## Test 39c: CTCAEv4 Lymphocyte count decreased (legacy USCV unit) ----
 test_that("derive_var_atoxgr_dir Test 39c: CTCAEv4 Lymphocyte count decreased (legacy USCV unit)", {
-  test_low(input = input_lymd_cv2, expected = exp_lymd_cv2, meta = atoxgr_criteria_ctcv4_uscv)
+  test_low(expected = exp_lymd_cv2, meta = atoxgr_criteria_ctcv4_uscv)
 })
 
 ## Test 40a: CTCAEv5 Lymphocyte count decreased (SI unit) ----
 test_that("derive_var_atoxgr_dir Test 40a: CTCAEv5 Lymphocyte count decreased (SI unit)", {
-  test_low(input = input_lymd_si, expected = exp_lymd_si, meta = atoxgr_criteria_ctcv5)
+  test_low(expected = exp_lymd_si, meta = atoxgr_criteria_ctcv5)
 })
 
 ## Test 40b: CTCAEv5 Lymphocyte count decreased (USCV unit) ----
 test_that("derive_var_atoxgr_dir Test 40b: CTCAEv5 Lymphocyte count decreased (USCV unit)", {
-  test_low(input = input_lymd_cv, expected = exp_lymd_cv, meta = atoxgr_criteria_ctcv5_uscv)
+  test_low(expected = exp_lymd_cv, meta = atoxgr_criteria_ctcv5_uscv)
 })
 
 exp_lymd_cv2 <- exp_lymd_si %>%
@@ -1950,12 +1808,10 @@ exp_lymd_cv2 <- exp_lymd_si %>%
     ANRHI = ANRHI * 1000,
     AVALU = if_else(str_to_upper(AVALU) == "10^9/L", "10^3/mL", AVALU)
   )
-input_lymd_cv2 <- exp_lymd_cv2 %>%
-  select(-ATOXGRL)
 
 ## Test 40c: CTCAEv5 Lymphocyte count decreased (legacy USCV unit) ----
 test_that("derive_var_atoxgr_dir Test 40c: CTCAEv5 Lymphocyte count decreased (legacy USCV unit)", {
-  test_low(input = input_lymd_cv2, expected = exp_lymd_cv2, meta = atoxgr_criteria_ctcv5_uscv)
+  test_low(expected = exp_lymd_cv2, meta = atoxgr_criteria_ctcv5_uscv)
 })
 
 ### Lymphocyte count increased
@@ -1979,12 +1835,10 @@ exp_lymi_si <- tibble::tribble(
   # AVAL missing cannot grade
   "Lymphocyte count increased", NA,     NA,     NA,     "10^9/L",  NA,       8,
 )
-input_lymi_si <- exp_lymi_si %>%
-  select(-ATOXGRH)
 
 ## Test 41a: CTCAEv4 Lymphocyte count increased (SI unit) ----
 test_that("derive_var_atoxgr_dir Test 41a: CTCAEv4 Lymphocyte count increased (SI unit)", {
-  test_high(input = input_lymi_si, expected = exp_lymi_si, meta = atoxgr_criteria_ctcv4)
+  test_high(expected = exp_lymi_si, meta = atoxgr_criteria_ctcv4)
 })
 
 exp_lymi_cv1 <- exp_lymi_si %>%
@@ -2003,33 +1857,30 @@ exp_lymi_cv2 <- exp_lymi_si %>%
 
 exp_lymi_cv <- bind_rows(exp_lymi_cv1, exp_lymi_cv2)
 
-input_lymi_cv <- exp_lymi_cv %>%
-  select(-ATOXGRH)
-
 ## Test 41b: CTCAEv4 Lymphocyte count increased  (USCV unit) ----
 test_that("derive_var_atoxgr_dir Test 41b: CTCAEv4 Lymphocyte count increased  (USCV unit)", {
-  test_high(input = input_lymi_cv, expected = exp_lymi_cv, meta = atoxgr_criteria_ctcv4_uscv)
+  test_high(expected = exp_lymi_cv, meta = atoxgr_criteria_ctcv4_uscv)
 })
 
 
 ## Test 42a: CTCAEv5 Lymphocyte count increased (SI unit) ----
 test_that("derive_var_atoxgr_dir Test 42a: CTCAEv5 Lymphocyte count increased (SI unit)", {
-  test_high(input = input_lymi_si, expected = exp_lymi_si, meta = atoxgr_criteria_ctcv5)
+  test_high(expected = exp_lymi_si, meta = atoxgr_criteria_ctcv5)
 })
 
 ## Test 42b: CTCAEv5 Lymphocyte count increased (USCV unit) ----
 test_that("derive_var_atoxgr_dir Test 42b: CTCAEv5 Lymphocyte count increased (USCV unit)", {
-  test_high(input = input_lymi_cv, expected = exp_lymi_cv, meta = atoxgr_criteria_ctcv5_uscv)
+  test_high(expected = exp_lymi_cv, meta = atoxgr_criteria_ctcv5_uscv)
 })
 
 ## Test 42c: CTCAEv6 Lymphocyte count increased (SI unit) ----
 test_that("derive_var_atoxgr_dir Test 42c: CTCAEv6 Lymphocyte count increased (SI unit)", {
-  test_high(input = input_lymi_si, expected = exp_lymi_si, meta = atoxgr_criteria_ctcv6)
+  test_high(expected = exp_lymi_si, meta = atoxgr_criteria_ctcv6)
 })
 
 ## Test 42d: CTCAEv6 Lymphocyte count increased (USCV unit) ----
 test_that("derive_var_atoxgr_dir Test 42d: CTCAEv6 Lymphocyte count increased (USCV unit)", {
-  test_high(input = input_lymi_cv, expected = exp_lymi_cv, meta = atoxgr_criteria_ctcv6_uscv)
+  test_high(expected = exp_lymi_cv, meta = atoxgr_criteria_ctcv6_uscv)
 })
 
 ### Neutrophil count decreased
@@ -2070,13 +1921,10 @@ exp_neut_si <- tibble::tribble(
   # AVAL missing cannot grade
   "Neutrophil count decreased", NA,     2,      NA,     "10^9/L",  NA,       20,
 )
-input_neut_si <- exp_neut_si %>%
-  select(-ATOXGRL)
-
 
 ## Test 43a: CTCAEv4 Neutrophil count decreased (SI unit) ----
 test_that("derive_var_atoxgr_dir Test 43a: CTCAEv4 Neutrophil count decreased (SI unit)", {
-  test_low(input = input_neut_si, expected = exp_neut_si, meta = atoxgr_criteria_ctcv4)
+  test_low(expected = exp_neut_si, meta = atoxgr_criteria_ctcv4)
 })
 
 exp_neut_cv1 <- exp_neut_si %>%
@@ -2095,23 +1943,20 @@ exp_neut_cv2 <- exp_neut_si %>%
 
 exp_neut_cv <- bind_rows(exp_neut_cv1, exp_neut_cv2)
 
-input_neut_cv <- exp_neut_cv %>%
-  select(-ATOXGRL)
-
 ## Test 43b: CTCAEv4 Neutrophil count decreased (USCV unit) ----
 test_that("derive_var_atoxgr_dir Test 43b: CTCAEv4 Neutrophil count decreased (USCV unit)", {
-  test_low(input = input_neut_cv, expected = exp_neut_cv, meta = atoxgr_criteria_ctcv4_uscv)
+  test_low(expected = exp_neut_cv, meta = atoxgr_criteria_ctcv4_uscv)
 })
 
 
 ## Test 44a: CTCAEv5 Neutrophil count decreased (SI unit) ----
 test_that("derive_var_atoxgr_dir Test 44a: CTCAEv5 Neutrophil count decreased (SI unit)", {
-  test_low(input = input_neut_si, expected = exp_neut_si, meta = atoxgr_criteria_ctcv5)
+  test_low(expected = exp_neut_si, meta = atoxgr_criteria_ctcv5)
 })
 
 ## Test 44b: CTCAEv5 Neutrophil count decreased (USCV unit) ----
 test_that("derive_var_atoxgr_dir Test 44b: CTCAEv5 Neutrophil count decreased (USCV unit)", {
-  test_low(input = input_neut_cv, expected = exp_neut_cv, meta = atoxgr_criteria_ctcv5_uscv)
+  test_low(expected = exp_neut_cv, meta = atoxgr_criteria_ctcv5_uscv)
 })
 
 ### Neutrophil count decreased NCICTCAEv6 (different to v4 and v5)
@@ -2141,12 +1986,10 @@ exp_neut_siv6 <- tibble::tribble(
   # AVAL missing cannot grade
   "Neutrophil count decreased", NA,     "10^9/L",  NA,       20,
 )
-input_neut_siv6 <- exp_neut_siv6 %>%
-  select(-ATOXGRL)
 
 ## Test 44c: CTCAEv6 Neutrophil count decreased (SI unit) ----
 test_that("derive_var_atoxgr_dir Test 44c: CTCAEv6 Neutrophil count decreased (SI unit)", {
-  test_low(input = input_neut_siv6, expected = exp_neut_siv6, meta = atoxgr_criteria_ctcv6)
+  test_low(expected = exp_neut_siv6, meta = atoxgr_criteria_ctcv6)
 })
 
 ## Test 44d: CTCAEv6 Neutrophil count decreased (USCV unit) ----
@@ -2156,10 +1999,7 @@ test_that("derive_var_atoxgr_dir Test 44d: CTCAEv6 Neutrophil count decreased (U
       AVALU = if_else(AVALU == "10^9/L", "10^3/uL", AVALU)
     )
 
-  input_neut_usv6 <- exp_neut_usv6 %>%
-    select(-ATOXGRL)
-
-  test_low(input = input_neut_usv6, expected = exp_neut_usv6, meta = atoxgr_criteria_ctcv6_uscv)
+  test_low(expected = exp_neut_usv6, meta = atoxgr_criteria_ctcv6_uscv)
 })
 
 ## Test 44e: CTCAEv6 Neutrophil count decreased (legacy USCV unit) ----
@@ -2170,10 +2010,7 @@ test_that("derive_var_atoxgr_dir Test 44e: CTCAEv6 Neutrophil count decreased (l
       AVAL = AVAL * 1000
     )
 
-  input_neut_us2v6 <- exp_neut_us2v6 %>%
-    select(-ATOXGRL)
-
-  test_low(input = input_neut_us2v6, expected = exp_neut_us2v6, meta = atoxgr_criteria_ctcv6_uscv)
+  test_low(expected = exp_neut_us2v6, meta = atoxgr_criteria_ctcv6_uscv)
 })
 
 ### Platelet count decreased
@@ -2214,24 +2051,20 @@ exp_plate_si <- tibble::tribble(
   # AVAL missing cannot grade
   "Platelet count decreased", NA,    100,    NA,     "10^9/L", NA,       20,
 )
-input_plate_si <- exp_plate_si %>%
-  select(-ATOXGRL)
 
 ## Test 45a: CTCAEv4 Platelet count decreased (SI unit) ----
 test_that("derive_var_atoxgr_dir Test 45a: CTCAEv4 Platelet count decreased (SI unit)", {
-  test_low(input = input_plate_si, expected = exp_plate_si, meta = atoxgr_criteria_ctcv4)
+  test_low(expected = exp_plate_si, meta = atoxgr_criteria_ctcv4)
 })
 
 exp_plate_cv <- exp_plate_si %>%
   mutate(
     AVALU = if_else(str_to_upper(AVALU) == "10^9/L", "10^3/uL", AVALU)
   )
-input_plate_cv <- exp_plate_cv %>%
-  select(-ATOXGRL)
 
 ## Test 45b: CTCAEv4 Platelet count decreased (USCV unit) ----
 test_that("derive_var_atoxgr_dir Test 45b: CTCAEv4 Platelet count decreased (USCV unit)", {
-  test_low(input = input_plate_cv, expected = exp_plate_cv, meta = atoxgr_criteria_ctcv4_uscv)
+  test_low(expected = exp_plate_cv, meta = atoxgr_criteria_ctcv4_uscv)
 })
 
 exp_plate_cv2 <- exp_plate_si %>%
@@ -2241,27 +2074,25 @@ exp_plate_cv2 <- exp_plate_si %>%
     ANRHI = ANRHI * 1000,
     AVALU = if_else(str_to_upper(AVALU) == "10^9/L", "10^3/mL", AVALU)
   )
-input_plate_cv2 <- exp_plate_cv2 %>%
-  select(-ATOXGRL)
 
 ## Test 45c: CTCAEv4 Platelet count decreased (legacy USCV unit) ----
 test_that("derive_var_atoxgr_dir Test 45c: CTCAEv4 Platelet count decreased (legacy USCV unit)", {
-  test_low(input = input_plate_cv2, expected = exp_plate_cv2, meta = atoxgr_criteria_ctcv4_uscv)
+  test_low(expected = exp_plate_cv2, meta = atoxgr_criteria_ctcv4_uscv)
 })
 
 ## Test 46a: CTCAEv5 Platelet count decreased (SI unit) ----
 test_that("derive_var_atoxgr_dir Test 46a: CTCAEv5 Platelet count decreased (SI unit)", {
-  test_low(input = input_plate_si, expected = exp_plate_si, meta = atoxgr_criteria_ctcv5)
+  test_low(expected = exp_plate_si, meta = atoxgr_criteria_ctcv5)
 })
 
 ## Test 46b: CTCAEv5 Platelet count decreased (USCV unit) ----
 test_that("derive_var_atoxgr_dir Test 46b: CTCAEv5 Platelet count decreased (USCV unit)", {
-  test_low(input = input_plate_cv, expected = exp_plate_cv, meta = atoxgr_criteria_ctcv5_uscv)
+  test_low(expected = exp_plate_cv, meta = atoxgr_criteria_ctcv5_uscv)
 })
 
 ## Test 46c: CTCAEv5 Platelet count decreased (legacy USCV unit) ----
 test_that("derive_var_atoxgr_dir Test 46c: CTCAEv5 Platelet count decreased (legacy USCV unit)", {
-  test_low(input = input_plate_cv2, expected = exp_plate_cv2, meta = atoxgr_criteria_ctcv5_uscv)
+  test_low(expected = exp_plate_cv2, meta = atoxgr_criteria_ctcv5_uscv)
 })
 
 ### For NCICTCAEv6 Term: Thrombocytopenia replaces Term: Platelet count decreased in NCICTCAEv5
@@ -2289,9 +2120,7 @@ exp_plate_v6_si <- exp_plate_si %>%
 
 ## Test 46d: CTCAEv6 Thrombocytopenia (SI unit) ----
 test_that("derive_var_atoxgr_dir Test 46d: CTCAEv6 Thrombocytopenia (SI unit)", {
-  input_plate_v6_si <- exp_plate_v6_si %>%
-    select(-ATOXGRL)
-  test_low(input = input_plate_v6_si, expected = exp_plate_v6_si, meta = atoxgr_criteria_ctcv6)
+  test_low(expected = exp_plate_v6_si, meta = atoxgr_criteria_ctcv6)
 })
 
 ## Test 46e: CTCAEv6 Thrombocytopenia (USCV unit) ----
@@ -2299,9 +2128,7 @@ test_that("derive_var_atoxgr_dir Test 46e: CTCAEv6 Thrombocytopenia (USCV unit)"
   exp_plate_v6_cv <- exp_plate_v6_si %>%
     mutate(AVALU = if_else(str_to_upper(AVALU) == "10^9/L", "10^3/uL", AVALU))
 
-  input_plate_v6_cv <- exp_plate_v6_cv %>%
-    select(-ATOXGRL)
-  test_low(input = input_plate_v6_cv, expected = exp_plate_v6_cv, meta = atoxgr_criteria_ctcv6_uscv)
+  test_low(expected = exp_plate_v6_cv, meta = atoxgr_criteria_ctcv6_uscv)
 })
 
 ## Test 46f: CTCAEv6 Thrombocytopenia (legacy USCV unit) ----
@@ -2314,10 +2141,7 @@ test_that("derive_var_atoxgr_dir Test 46f: CTCAEv6 Platelet count decreased (leg
       AVALU = if_else(str_to_upper(AVALU) == "10^9/L", "10^3/mL", AVALU)
     )
 
-  input_plate_v6cv2 <- exp_plate_v6cv2 %>%
-    select(-ATOXGRL)
-
-  test_low(input = input_plate_v6cv2, expected = exp_plate_v6cv2, meta = atoxgr_criteria_ctcv6_uscv)
+  test_low(expected = exp_plate_v6cv2, meta = atoxgr_criteria_ctcv6_uscv)
 })
 
 ### Serum amylase increased
@@ -2346,32 +2170,29 @@ exp_seri <- tibble::tribble(
 ) %>%
   mutate(AVALU = NA_character_)
 
-input_seri <- exp_seri %>%
-  select(-ATOXGRH)
-
 ## Test 47a: CTCAEv4 Serum amylase increased (SI unit) ----
 test_that("derive_var_atoxgr_dir Test 47a: CTCAEv4 Serum amylase increased (SI unit)", {
-  test_high(input = input_seri, expected = exp_seri, meta = atoxgr_criteria_ctcv4)
+  test_high(expected = exp_seri, meta = atoxgr_criteria_ctcv4)
 })
 
 ## Test 47b: CTCAEv4 Serum amylase increased (USCV unit) ----
 test_that("derive_var_atoxgr_dir Test 47b: CTCAEv4 Serum amylase increased (USCV unit)", {
-  test_high(input = input_seri, expected = exp_seri, meta = atoxgr_criteria_ctcv4_uscv)
+  test_high(expected = exp_seri, meta = atoxgr_criteria_ctcv4_uscv)
 })
 
 ## Test 48a: CTCAEv5 Serum amylase increased (SI unit) ----
 test_that("derive_var_atoxgr_dir Test 48a: CTCAEv5 Serum amylase Nincreased (SI unit)", {
-  test_high(input = input_seri, expected = exp_seri, meta = atoxgr_criteria_ctcv5)
+  test_high(expected = exp_seri, meta = atoxgr_criteria_ctcv5)
 })
 
 ## Test 48b: CTCAEv5 Serum amylase increased (USCV unit) ----
 test_that("derive_var_atoxgr_dir Test 48b: CTCAEv5 Serum amylase increased (USCV unit)", {
-  test_high(input = input_seri, expected = exp_seri, meta = atoxgr_criteria_ctcv5_uscv)
+  test_high(expected = exp_seri, meta = atoxgr_criteria_ctcv5_uscv)
 })
 
 ## Test 48c: CTCAEv6 Serum amylase increased (SI unit) ----
 test_that("derive_var_atoxgr_dir Test 48c: CTCAEv6 Serum amylase increased (SI unit)", {
-  test_high(input = input_seri, expected = exp_seri, meta = atoxgr_criteria_ctcv6)
+  test_high(expected = exp_seri, meta = atoxgr_criteria_ctcv6)
 })
 
 ### White blood cell decreased
@@ -2409,8 +2230,6 @@ exp_wbcd <- tibble::tribble(
   # AVAL missing cannot grade
   "White blood cell decreased", NA,    100,    NA,     "10^9/L", NA,       20,
 )
-input_wbcd <- exp_wbcd %>%
-  select(-ATOXGRL)
 
 exp_wbcd_uscv1 <- exp_wbcd %>%
   mutate(AVALU = if_else(AVALU == "10^9/L", "10^3/uL", AVALU))
@@ -2425,39 +2244,35 @@ exp_wbcd_uscv2 <- exp_wbcd %>%
 
 exp_wbcd_uscv <- bind_rows(exp_wbcd_uscv1, exp_wbcd_uscv2)
 
-input_wbcd_uscv <- exp_wbcd_uscv %>%
-  select(-ATOXGRL)
-
-
 ## Test 49a: CTCAEv4 White blood cell decreased (SI unit) ----
 test_that("derive_var_atoxgr_dir Test 49a: CTCAEv4 White blood cell decreased (SI unit)", {
-  test_low(input = input_wbcd, expected = exp_wbcd, meta = atoxgr_criteria_ctcv4)
+  test_low(expected = exp_wbcd, meta = atoxgr_criteria_ctcv4)
 })
 
 ## Test 49b: CTCAEv4 White blood cell decreased (USCV unit) ----
 test_that("derive_var_atoxgr_dir Test 49b: CTCAEv4 White blood cell decreased (USCV unit)", {
-  test_low(input = input_wbcd_uscv, expected = exp_wbcd_uscv, meta = atoxgr_criteria_ctcv4_uscv)
+  test_low(expected = exp_wbcd_uscv, meta = atoxgr_criteria_ctcv4_uscv)
 })
 
 
 ## Test 50a: CTCAEv5 White blood cell decreased (SI unit) ----
 test_that("derive_var_atoxgr_dir Test 50a: CTCAEv5 White blood cell decreased (SI unit)", {
-  test_low(input = input_wbcd, expected = exp_wbcd, meta = atoxgr_criteria_ctcv5)
+  test_low(expected = exp_wbcd, meta = atoxgr_criteria_ctcv5)
 })
 
 ## Test 50b: CTCAEv5 White blood cell decreased (USCV unit) ----
 test_that("derive_var_atoxgr_dir Test 50b: CTCAEv5 White blood cell decreased (USCV unit)", {
-  test_low(input = input_wbcd_uscv, expected = exp_wbcd_uscv, meta = atoxgr_criteria_ctcv5_uscv)
+  test_low(expected = exp_wbcd_uscv, meta = atoxgr_criteria_ctcv5_uscv)
 })
 
 ## Test 50c: CTCAEv6 White blood cell decreased (SI unit) ----
 test_that("derive_var_atoxgr_dir Test 50c: CTCAEv6 White blood cell decreased (SI unit)", {
-  test_low(input = input_wbcd, expected = exp_wbcd, meta = atoxgr_criteria_ctcv6)
+  test_low(expected = exp_wbcd, meta = atoxgr_criteria_ctcv6)
 })
 
 ## Test 50d: CTCAEv6 White blood cell decreased (USCV unit) ----
 test_that("derive_var_atoxgr_dir Test 50d: CTCAEv6 White blood cell decreased (USCV unit)", {
-  test_low(input = input_wbcd_uscv, expected = exp_wbcd_uscv, meta = atoxgr_criteria_ctcv6_uscv)
+  test_low(expected = exp_wbcd_uscv, meta = atoxgr_criteria_ctcv6_uscv)
 })
 
 ## Metabolism and nutrition disorders
@@ -2504,8 +2319,6 @@ exp_calci_si <- tibble::tribble(
   # AVAL missing cannot grade
   "Hypercalcemia", NA,     0,      2.5,    "mmol/L",  NA,       20,
 )
-input_calci_si <- exp_calci_si %>%
-  select(-ATOXGRH)
 
 exp_calci_cv <- tibble::tribble(
   ~ATOXDSCH,       ~AVAL,  ~ANRLO, ~ANRHI,   ~AVALU,   ~ATOXGRH, ~TESTNUM,
@@ -2535,37 +2348,35 @@ exp_calci_cv <- tibble::tribble(
   # AVAL missing cannot grade
   "Hypercalcemia", NA,     0,      10.5,    "mg/dL",         NA,       20,
 )
-input_calci_cv <- exp_calci_cv %>%
-  select(-ATOXGRH)
 
 ## Test 51a: CTCAEv4 Hypercalcemia (SI unit) ----
 test_that("derive_var_atoxgr_dir Test 51a: CTCAEv4 Hypercalcemia (SI unit)", {
-  test_high(input = input_calci_si, expected = exp_calci_si, meta = atoxgr_criteria_ctcv4)
+  test_high(expected = exp_calci_si, meta = atoxgr_criteria_ctcv4)
 })
 
 ## Test 51b: CTCAEv4 Hypercalcemia (USCV unit) ----
 test_that("derive_var_atoxgr_dir Test 51b: CTCAEv4 Hypercalcemia (USCV unit)", {
-  test_high(input = input_calci_cv, expected = exp_calci_cv, meta = atoxgr_criteria_ctcv4_uscv)
+  test_high(expected = exp_calci_cv, meta = atoxgr_criteria_ctcv4_uscv)
 })
 
 ## Test 52a: CTCAEv5 Hypercalcemia (SI unit) ----
 test_that("derive_var_atoxgr_dir Test 52a: CTCAEv5 Hypercalcemia (SI unit)", {
-  test_high(input = input_calci_si, expected = exp_calci_si, meta = atoxgr_criteria_ctcv5)
+  test_high(expected = exp_calci_si, meta = atoxgr_criteria_ctcv5)
 })
 
 ## Test 52b: CTCAEv5 Hypercalcemia (USCV unit) ----
 test_that("derive_var_atoxgr_dir Test 52b: CTCAEv5 Hypercalcemia (USCV unit)", {
-  test_high(input = input_calci_cv, expected = exp_calci_cv, meta = atoxgr_criteria_ctcv5_uscv)
+  test_high(expected = exp_calci_cv, meta = atoxgr_criteria_ctcv5_uscv)
 })
 
 ## Test 52c: CTCAEv6 Hypercalcemia (SI unit) ----
 test_that("derive_var_atoxgr_dir Test 52c: CTCAEv6 Hypercalcemia (SI unit)", {
-  test_high(input = input_calci_si, expected = exp_calci_si, meta = atoxgr_criteria_ctcv6)
+  test_high(expected = exp_calci_si, meta = atoxgr_criteria_ctcv6)
 })
 
 ## Test 52c: CTCAEv6 Hypercalcemia (USCV unit) ----
 test_that("derive_var_atoxgr_dir Test 52c: CTCAEv6 Hypercalcemia (USCV unit)", {
-  test_high(input = input_calci_cv, expected = exp_calci_cv, meta = atoxgr_criteria_ctcv6_uscv)
+  test_high(expected = exp_calci_cv, meta = atoxgr_criteria_ctcv6_uscv)
 })
 
 ### Hypercalcemia (Ionized)
@@ -2610,8 +2421,6 @@ exp_calioni_si <- tibble::tribble(
   # AVAL missing cannot grade
   "Hypercalcemia (Ionized)", NA,     0,      1.3,    "mmol/L",  NA,       20,
 )
-input_calioni_si <- exp_calioni_si %>%
-  select(-ATOXGRH)
 
 exp_calioni_cv <- tibble::tribble(
   ~ATOXDSCH,                  ~AVAL,  ~ANRLO,  ~ANRHI,   ~AVALU,  ~ATOXGRH,  ~TESTNUM,
@@ -2641,37 +2450,35 @@ exp_calioni_cv <- tibble::tribble(
   # AVAL missing cannot grade
   "Hypercalcemia (Ionized)",  NA,     0,       5,       "mg/dL",        NA,  20,
 )
-input_calioni_cv <- exp_calioni_cv %>%
-  select(-ATOXGRH)
 
 ## Test 53a: CTCAEv4 Hypercalcemia (Ionized) (SI unit) ----
 test_that("derive_var_atoxgr_dir Test 53a: CTCAEv4 Hypercalcemia (Ionized) (SI unit)", {
-  test_high(input = input_calioni_si, expected = exp_calioni_si, meta = atoxgr_criteria_ctcv4)
+  test_high(expected = exp_calioni_si, meta = atoxgr_criteria_ctcv4)
 })
 
 ## Test 53b: CTCAEv4 Hypercalcemia (Ionized) (USCV unit) ----
 test_that("derive_var_atoxgr_dir Test 53b: CTCAEv4 Hypercalcemia (Ionized) (USCV unit)", {
-  test_high(input = input_calioni_cv, expected = exp_calioni_cv, meta = atoxgr_criteria_ctcv4_uscv)
+  test_high(expected = exp_calioni_cv, meta = atoxgr_criteria_ctcv4_uscv)
 })
 
 ## Test 54a: CTCAEv5 Hypercalcemia (Ionized) (SI unit) ----
 test_that("derive_var_atoxgr_dir Test 54a: CTCAEv5 Hypercalcemia (Ionized) (SI unit)", {
-  test_high(input = input_calioni_si, expected = exp_calioni_si, meta = atoxgr_criteria_ctcv5)
+  test_high(expected = exp_calioni_si, meta = atoxgr_criteria_ctcv5)
 })
 
 ## Test 54b: CTCAEv5 Hypercalcemia (Ionized) (USCV unit) ----
 test_that("derive_var_atoxgr_dir Test 54b: CTCAEv5 Hypercalcemia (Ionized) (USCV unit)", {
-  test_high(input = input_calioni_cv, expected = exp_calioni_cv, meta = atoxgr_criteria_ctcv5_uscv)
+  test_high(expected = exp_calioni_cv, meta = atoxgr_criteria_ctcv5_uscv)
 })
 
 ## Test 54c: CTCAEv6 Hypercalcemia (Ionized) (SI unit) ----
 test_that("derive_var_atoxgr_dir Test 54c: CTCAEv6 Hypercalcemia (Ionized) (SI unit)", {
-  test_high(input = input_calioni_si, expected = exp_calioni_si, meta = atoxgr_criteria_ctcv6)
+  test_high(expected = exp_calioni_si, meta = atoxgr_criteria_ctcv6)
 })
 
 ## Test 54d: CTCAEv6 Hypercalcemia (Ionized) (USCV unit) ----
 test_that("derive_var_atoxgr_dir Test 54d: CTCAEv6 Hypercalcemia (Ionized) (USCV unit)", {
-  test_high(input = input_calioni_cv, expected = exp_calioni_cv, meta = atoxgr_criteria_ctcv6_uscv)
+  test_high(expected = exp_calioni_cv, meta = atoxgr_criteria_ctcv6_uscv)
 })
 
 ### Hyperglycemia (Fasting) (NCICTCAEv4 and NCICTCAEv6)
@@ -2717,12 +2524,9 @@ exp_glycfi <- tibble::tribble(
   "Hyperglycemia (Fasting)", NA,     0,      5.3,    "mmol/L",  NA,       20,
 )
 
-input_glycfi <- exp_glycfi %>%
-  select(-ATOXGRH)
-
 ## Test 55a: CTCAEv4 Hyperglycemia (Fasting) (SI unit) ----
 test_that("derive_var_atoxgr_dir Test 55a: CTCAEv4 Hyperglycemia (Fasting) (SI unit)", {
-  test_high(input = input_glycfi, expected = exp_glycfi, meta = atoxgr_criteria_ctcv4)
+  test_high(expected = exp_glycfi, meta = atoxgr_criteria_ctcv4)
 })
 
 ## Test 55b: CTCAEv4 Hyperglycemia (Fasting) (USCV unit) ----
@@ -2755,16 +2559,13 @@ test_that("derive_var_atoxgr_dir Test 55b: CTCAEv4 Hyperglycemia (Fasting) (USCV
     # AVAL missing cannot grade
     "Hyperglycemia (Fasting)",  NA,     0,       5.3,     "mg/dL",       NA,  20,
   )
-  input_glycfi <- exp_glycfi %>%
-    select(-ATOXGRH)
 
-
-  test_high(input = input_glycfi, expected = exp_glycfi, meta = atoxgr_criteria_ctcv4_uscv)
+  test_high(expected = exp_glycfi, meta = atoxgr_criteria_ctcv4_uscv)
 })
 
 ## Test 55c: CTCAEv6 Hyperglycemia (Fasting) (SI unit) ----
 test_that("derive_var_atoxgr_dir Test 55c: CTCAEv6 Hyperglycemia (Fasting) (SI unit)", {
-  test_high(input = input_glycfi, expected = exp_glycfi, meta = atoxgr_criteria_ctcv6)
+  test_high(expected = exp_glycfi, meta = atoxgr_criteria_ctcv6)
 })
 
 ### Hyperglycemia (NCICTCAEv4 and NCICTCAEv6)
@@ -2791,8 +2592,6 @@ exp_glyci <- tibble::tribble(
   # AVAL missing cannot grade
   "Hyperglycemia", NA,     0,      5.3,    "mmol/L",  NA,       9,
 )
-input_glyci <- exp_glyci %>%
-  select(-ATOXGRH)
 
 exp_glyci_uscv <- tibble::tribble(
   ~ATOXDSCH,        ~AVAL,  ~ANRLO,  ~ANRHI,   ~AVALU,  ~ATOXGRH,  ~TESTNUM,
@@ -2808,27 +2607,25 @@ exp_glyci_uscv <- tibble::tribble(
   # AVAL missing cannot grade
   "Hyperglycemia",  NA,     0,       5.3,     "mg/dL",        NA,  9,
 )
-input_glyci_uscv <- exp_glyci_uscv %>%
-  select(-ATOXGRH)
 
 ## Test 56a: CTCAEv4 Hyperglycemia (SI unit) ----
 test_that("derive_var_atoxgr_dir Test 56a: CTCAEv4 Hyperglycemia (SI unit)", {
-  test_high(input = input_glyci, expected = exp_glyci, meta = atoxgr_criteria_ctcv4)
+  test_high(expected = exp_glyci, meta = atoxgr_criteria_ctcv4)
 })
 
 ## Test 56b: CTCAEv4 Hyperglycemia (USCV unit) ----
 test_that("derive_var_atoxgr_dir Test 56b: CTCAEv4 Hyperglycemia (USCV unit)", {
-  test_high(input = input_glyci_uscv, expected = exp_glyci_uscv, meta = atoxgr_criteria_ctcv4_uscv)
+  test_high(expected = exp_glyci_uscv, meta = atoxgr_criteria_ctcv4_uscv)
 })
 
 ## Test 56c: CTCAEv6 Hyperglycemia (SI unit) ----
 test_that("derive_var_atoxgr_dir Test 56c: CTCAEv6 Hyperglycemia (SI unit)", {
-  test_high(input = input_glyci, expected = exp_glyci, meta = atoxgr_criteria_ctcv6)
+  test_high(expected = exp_glyci, meta = atoxgr_criteria_ctcv6)
 })
 
 ## Test 56d: CTCAEv6 Hyperglycemia (USCV unit) ----
 test_that("derive_var_atoxgr_dir Test 56d: CTCAEv6 Hyperglycemia (USCV unit)", {
-  test_high(input = input_glyci_uscv, expected = exp_glyci_uscv, meta = atoxgr_criteria_ctcv6_uscv)
+  test_high(expected = exp_glyci_uscv, meta = atoxgr_criteria_ctcv6_uscv)
 })
 
 ### Hyperkalemia
@@ -2867,32 +2664,30 @@ exp_kalei <- tibble::tribble(
   # AVAL missing cannot grade
   "Hyperkalemia",  NA,     0,      5.1,    "mmol/L",  NA,       20,
 )
-input_kalei <- exp_kalei %>%
-  select(-ATOXGRH)
 
 ## Test 57a: CTCAEv4 Hyperkalemia (SI unit) ----
 test_that("derive_var_atoxgr_dir Test 57a: CTCAEv4 Hyperkalemia (SI unit)", {
-  test_high(input = input_kalei, expected = exp_kalei, meta = atoxgr_criteria_ctcv4)
+  test_high(expected = exp_kalei, meta = atoxgr_criteria_ctcv4)
 })
 
 ## Test 57b: CTCAEv4 Hyperkalemia (USCV unit) ----
 test_that("derive_var_atoxgr_dir Test 57b: CTCAEv4 Hyperkalemia (USCV unit)", {
-  test_high(input = input_kalei, expected = exp_kalei, meta = atoxgr_criteria_ctcv4_uscv)
+  test_high(expected = exp_kalei, meta = atoxgr_criteria_ctcv4_uscv)
 })
 
 ## Test 58a: CTCAEv5 Hyperkalemia (SI unit) ----
 test_that("derive_var_atoxgr_dir Test 58a: CTCAEv5 Hyperkalemia (SI unit)", {
-  test_high(input = input_kalei, expected = exp_kalei, meta = atoxgr_criteria_ctcv5)
+  test_high(expected = exp_kalei, meta = atoxgr_criteria_ctcv5)
 })
 
 ## Test 58b: CTCAEv5 Hyperkalemia (USCV unit) ----
 test_that("derive_var_atoxgr_dir Test 58b: CTCAEv5 Hyperkalemia (USCV unit)", {
-  test_high(input = input_kalei, expected = exp_kalei, meta = atoxgr_criteria_ctcv5_uscv)
+  test_high(expected = exp_kalei, meta = atoxgr_criteria_ctcv5_uscv)
 })
 
 ## Test 58c: CTCAEv6 Hyperkalemia (SI unit) ----
 test_that("derive_var_atoxgr_dir Test 58c: CTCAEv6 Hyperkalemia (SI unit)", {
-  test_high(input = input_kalei, expected = exp_kalei, meta = atoxgr_criteria_ctcv6)
+  test_high(expected = exp_kalei, meta = atoxgr_criteria_ctcv6)
 })
 
 ### Hypermagnesemia
@@ -2932,8 +2727,6 @@ exp_magni_si <- tibble::tribble(
   # AVAL missing cannot grade
   "Hypermagnesemia", NA,    0,      0.8,    "mmol/L", NA,       16,
 )
-input_magni_si <- exp_magni_si %>%
-  select(-ATOXGRH)
 
 exp_magni_cv <- tibble::tribble(
   ~ATOXDSCH,          ~AVAL,  ~ANRLO,  ~ANRHI,   ~AVALU, ~ATOXGRH,  ~TESTNUM,
@@ -2959,38 +2752,35 @@ exp_magni_cv <- tibble::tribble(
   # AVAL missing cannot grade
   "Hypermagnesemia",  NA,     0,       1.2,     "mg/dL",       NA,  16,
 )
-input_magni_cv <- exp_magni_cv %>%
-  select(-ATOXGRH)
-
 
 ## Test 59a: CTCAEv4 Hypermagnesemia (SI unit) ----
 test_that("derive_var_atoxgr_dir Test 59a: CTCAEv4 Hypermagnesemia (SI unit)", {
-  test_high(input = input_magni_si, expected = exp_magni_si, meta = atoxgr_criteria_ctcv4)
+  test_high(expected = exp_magni_si, meta = atoxgr_criteria_ctcv4)
 })
 
 ## Test 59b: CTCAEv4 Hypermagnesemia (USCV unit) ----
 test_that("derive_var_atoxgr_dir Test 59b: CTCAEv4 Hypermagnesemia (USCV unit)", {
-  test_high(input = input_magni_cv, expected = exp_magni_cv, meta = atoxgr_criteria_ctcv4_uscv)
+  test_high(expected = exp_magni_cv, meta = atoxgr_criteria_ctcv4_uscv)
 })
 
 ## Test 60a: CTCAEv5 Hypermagnesemia (SI unit) ----
 test_that("derive_var_atoxgr_dir Test 60a: CTCAEv5 Hypermagnesemia (SI unit)", {
-  test_high(input = input_magni_si, expected = exp_magni_si, meta = atoxgr_criteria_ctcv5)
+  test_high(expected = exp_magni_si, meta = atoxgr_criteria_ctcv5)
 })
 
 ## Test 60b: CTCAEv5 Hypermagnesemia (USCV unit) ----
 test_that("derive_var_atoxgr_dir Test 60b: CTCAEv5 Hypermagnesemia (USCV unit)", {
-  test_high(input = input_magni_cv, expected = exp_magni_cv, meta = atoxgr_criteria_ctcv5_uscv)
+  test_high(expected = exp_magni_cv, meta = atoxgr_criteria_ctcv5_uscv)
 })
 
 ## Test 60c: CTCAEv6 Hypermagnesemia (SI unit) ----
 test_that("derive_var_atoxgr_dir Test 60c: CTCAEv6 Hypermagnesemia (SI unit)", {
-  test_high(input = input_magni_si, expected = exp_magni_si, meta = atoxgr_criteria_ctcv6)
+  test_high(expected = exp_magni_si, meta = atoxgr_criteria_ctcv6)
 })
 
 ## Test 60d: CTCAEv6 Hypermagnesemia (USCV unit) ----
 test_that("derive_var_atoxgr_dir Test 60d: CTCAEv6 Hypermagnesemia (USCV unit)", {
-  test_high(input = input_magni_cv, expected = exp_magni_cv, meta = atoxgr_criteria_ctcv6_uscv)
+  test_high(expected = exp_magni_cv, meta = atoxgr_criteria_ctcv6_uscv)
 })
 
 ### Hypernatremia
@@ -3029,32 +2819,30 @@ exp_natri <- tibble::tribble(
   # AVAL missing cannot grade
   "Hypernatremia",  NA,     0,      140,    "mmol/L",  NA,       20,
 )
-input_natri <- exp_natri %>%
-  select(-ATOXGRH)
 
 ## Test 61a: CTCAEv4 Hypernatremia (SI unit) ----
 test_that("derive_var_atoxgr_dir Test 61a: CTCAEv4 Hypernatremia (SI unit)", {
-  test_high(input = input_natri, expected = exp_natri, meta = atoxgr_criteria_ctcv4)
+  test_high(expected = exp_natri, meta = atoxgr_criteria_ctcv4)
 })
 
 ## Test 61b: CTCAEv4 Hypernatremia (USCV unit) ----
 test_that("derive_var_atoxgr_dir Test 61b: CTCAEv4 Hypernatremia (USCV unit)", {
-  test_high(input = input_natri, expected = exp_natri, meta = atoxgr_criteria_ctcv4_uscv)
+  test_high(expected = exp_natri, meta = atoxgr_criteria_ctcv4_uscv)
 })
 
 ## Test 62a: CTCAEv5 Hypernatremia (SI unit) ----
 test_that("derive_var_atoxgr_dir Test 62a: CTCAEv5 Hypernatremia (SI unit)", {
-  test_high(input = input_natri, expected = exp_natri, meta = atoxgr_criteria_ctcv5)
+  test_high(expected = exp_natri, meta = atoxgr_criteria_ctcv5)
 })
 
 ## Test 62b: CTCAEv5 Hypernatremia (USCV unit) ----
 test_that("derive_var_atoxgr_dir Test 62b: CTCAEv5 Hypernatremia (USCV unit)", {
-  test_high(input = input_natri, expected = exp_natri, meta = atoxgr_criteria_ctcv5_uscv)
+  test_high(expected = exp_natri, meta = atoxgr_criteria_ctcv5_uscv)
 })
 
 ## Test 62c: CTCAEv6 Hypernatremia (SI unit) ----
 test_that("derive_var_atoxgr_dir Test 62c: CTCAEv6 Hypernatremia (SI unit)", {
-  test_high(input = input_natri, expected = exp_natri, meta = atoxgr_criteria_ctcv6)
+  test_high(expected = exp_natri, meta = atoxgr_criteria_ctcv6)
 })
 
 ### Hypertriglyceridemia
@@ -3089,8 +2877,6 @@ exp_trigi_si <- tibble::tribble(
   # AVAL missing cannot grade
   "Hypertriglyceridemia",  NA,     0,      2.1,    "mmol/L",  NA,       12,
 )
-input_trigi_si <- exp_trigi_si %>%
-  select(-ATOXGRH)
 
 exp_trigi_cv <- tibble::tribble(
   ~ATOXDSCH,               ~AVAL,  ~ANRLO, ~ANRHI,  ~AVALU,   ~ATOXGRH, ~TESTNUM,
@@ -3109,38 +2895,35 @@ exp_trigi_cv <- tibble::tribble(
   # AVAL missing cannot grade
   "Hypertriglyceridemia",  NA,     0,      50,      "mg/dL",  NA,       12,
 )
-input_trigi_cv <- exp_trigi_cv %>%
-  select(-ATOXGRH)
-
 
 ## Test 63a: CTCAEv4 Hypertriglyceridemia (SI unit) ----
 test_that("derive_var_atoxgr_dir Test 63a: CTCAEv4 Hypertriglyceridemia (SI unit)", {
-  test_high(input = input_trigi_si, expected = exp_trigi_si, meta = atoxgr_criteria_ctcv4)
+  test_high(expected = exp_trigi_si, meta = atoxgr_criteria_ctcv4)
 })
 
 ## Test 63b: CTCAEv4 Hypertriglyceridemia (USCV unit) ----
 test_that("derive_var_atoxgr_dir Test 63b: CTCAEv4 Hypertriglyceridemia (USCV unit)", {
-  test_high(input = input_trigi_cv, expected = exp_trigi_cv, meta = atoxgr_criteria_ctcv4_uscv)
+  test_high(expected = exp_trigi_cv, meta = atoxgr_criteria_ctcv4_uscv)
 })
 
 ## Test 64a: CTCAEv5 Hypertriglyceridemia (SI unit) ----
 test_that("derive_var_atoxgr_dir Test 64a: CTCAEv5 Hypertriglyceridemia (SI unit)", {
-  test_high(input = input_trigi_si, expected = exp_trigi_si, meta = atoxgr_criteria_ctcv5)
+  test_high(expected = exp_trigi_si, meta = atoxgr_criteria_ctcv5)
 })
 
 ## Test 64b: CTCAEv5 Hypertriglyceridemia (USCV unit) ----
 test_that("derive_var_atoxgr_dir Test 64b: CTCAEv5 Hypertriglyceridemia (USCV unit)", {
-  test_high(input = input_trigi_cv, expected = exp_trigi_cv, meta = atoxgr_criteria_ctcv5_uscv)
+  test_high(expected = exp_trigi_cv, meta = atoxgr_criteria_ctcv5_uscv)
 })
 
 ## Test 64c: CTCAEv6 Hypertriglyceridemia (SI unit) ----
 test_that("derive_var_atoxgr_dir Test 64c: CTCAEv6 Hypertriglyceridemia (SI unit)", {
-  test_high(input = input_trigi_si, expected = exp_trigi_si, meta = atoxgr_criteria_ctcv6)
+  test_high(expected = exp_trigi_si, meta = atoxgr_criteria_ctcv6)
 })
 
 ## Test 64d: CTCAEv6 Hypertriglyceridemia (USCV unit) ----
 test_that("derive_var_atoxgr_dir Test 64d: CTCAEv6 Hypertriglyceridemia (USCV unit)", {
-  test_high(input = input_trigi_cv, expected = exp_trigi_cv, meta = atoxgr_criteria_ctcv6_uscv)
+  test_high(expected = exp_trigi_cv, meta = atoxgr_criteria_ctcv6_uscv)
 })
 
 ### Hyperuricemia (NCICTCAEv4)
@@ -3174,8 +2957,6 @@ exp_urici_si <- tibble::tribble(
   # AVAL missing cannot grade
   "Hyperuricemia",  NA,     0,       200,     "umol/L",       NA, 12,
 )
-input_urici_si <- exp_urici_si %>%
-  select(-ATOXGRH)
 
 exp_urici_cv <- tibble::tribble(
   ~ATOXDSCH,        ~AVAL, ~ANRLO, ~ANRHI,  ~AVALU,  ~ATOXGRH, ~TESTNUM,
@@ -3198,9 +2979,6 @@ exp_urici_cv <- tibble::tribble(
   "Hyperuricemia",  NA,    0,      5,      "mg/dL",  NA,       12,
 )
 
-input_urici_cv <- exp_urici_cv %>%
-  select(-ATOXGRH)
-
 ### Hyperuricemia (NCICTCAEv5)
 ### NCICTCAEv5 only has grade 3
 ### Grade 3: >ULN
@@ -3209,40 +2987,32 @@ input_urici_cv <- exp_urici_cv %>%
 test_that("derive_var_atoxgr_dir Test 65a: CTCAEv5 Hyperuricemia (SI unit)", {
   exp_urici_si <- exp_urici_si %>%
     filter(is.na(ATOXGRH) | ATOXGRH != "4")
-  input_urici_si <- exp_urici_si %>%
-    select(-ATOXGRH)
 
-  test_high(input = input_urici_si, expected = exp_urici_si, meta = atoxgr_criteria_ctcv5)
+  test_high(expected = exp_urici_si, meta = atoxgr_criteria_ctcv5)
 })
 
 ## Test 65b: CTCAEv5 Hyperuricemia (USCV unit) ----
 test_that("derive_var_atoxgr_dir Test 65b: CTCAEv5 Hyperuricemia (USCV unit)", {
   exp_urici_cv <- exp_urici_cv %>%
     filter(is.na(ATOXGRH) | ATOXGRH != "4")
-  input_urici_cv <- exp_urici_cv %>%
-    select(-ATOXGRH)
 
-  test_high(input = input_urici_cv, expected = exp_urici_cv, meta = atoxgr_criteria_ctcv5_uscv)
+  test_high(expected = exp_urici_cv, meta = atoxgr_criteria_ctcv5_uscv)
 })
 
 ## Test 65c: CTCAEv6 Hyperuricemia (SI unit) ----
 test_that("derive_var_atoxgr_dir Test 65c: CTCAEv6 Hyperuricemia (SI unit)", {
   exp_urici_si <- exp_urici_si %>%
     filter(is.na(ATOXGRH) | ATOXGRH != "4")
-  input_urici_si <- exp_urici_si %>%
-    select(-ATOXGRH)
 
-  test_high(input = input_urici_si, expected = exp_urici_si, meta = atoxgr_criteria_ctcv6)
+  test_high(expected = exp_urici_si, meta = atoxgr_criteria_ctcv6)
 })
 
 ## Test 65d: CTCAEv6 Hyperuricemia (USCV unit) ----
 test_that("derive_var_atoxgr_dir Test 65d: CTCAEv6 Hyperuricemia (USCV unit)", {
   exp_urici_cv <- exp_urici_cv %>%
     filter(is.na(ATOXGRH) | ATOXGRH != "4")
-  input_urici_cv <- exp_urici_cv %>%
-    select(-ATOXGRH)
 
-  test_high(input = input_urici_cv, expected = exp_urici_cv, meta = atoxgr_criteria_ctcv6_uscv)
+  test_high(expected = exp_urici_cv, meta = atoxgr_criteria_ctcv6_uscv)
 })
 
 
@@ -3255,7 +3025,7 @@ test_that("derive_var_atoxgr_dir Test 66a: CTCAEv4 Hyperuricemia (SI unit)", {
   input_urici_si <- exp_urici_si %>%
     select(-ATOXGRH)
 
-  test_high(input = input_urici_si, expected = exp_urici_si, meta = atoxgr_criteria_ctcv4)
+  test_high(expected = exp_urici_si, meta = atoxgr_criteria_ctcv4)
 })
 
 ## Test 66b: CTCAEv4 Hyperuricemia (USCV unit) ----
@@ -3263,10 +3033,7 @@ test_that("derive_var_atoxgr_dir Test 66b: CTCAEv4 Hyperuricemia (USCV unit)", {
   exp_urici_cv <- exp_urici_cv %>%
     mutate(ATOXGRH = if_else(is.na(AVALU), NA_character_, ATOXGRH))
 
-  input_urici_cv <- exp_urici_cv %>%
-    select(-ATOXGRH)
-
-  test_high(input = input_urici_cv, expected = exp_urici_cv, meta = atoxgr_criteria_ctcv4_uscv)
+  test_high(expected = exp_urici_cv, meta = atoxgr_criteria_ctcv4_uscv)
 })
 
 ### Hypoalbuminemia
@@ -3301,8 +3068,6 @@ exp_albd_si <- tibble::tribble(
   # AVAL missing cannot grade
   "Hypoalbuminemia",  NA,     40,     100,    "G/L",  NA,       17,
 )
-input_albd_si <- exp_albd_si %>%
-  select(-ATOXGRL)
 
 exp_albd_cv <- exp_albd_si %>%
   mutate(
@@ -3312,38 +3077,34 @@ exp_albd_cv <- exp_albd_si %>%
     AVALU = if_else(is.na(AVALU), NA_character_, "g/dL")
   )
 
-input_albd_cv <- exp_albd_cv %>%
-  select(-ATOXGRL)
-
-
 ## Test 67a: CTCAEv4 Hypoalbuminemia (SI unit) ----
 test_that("derive_var_atoxgr_dir Test 67a: CTCAEv4 Hypoalbuminemia (SI unit)", {
-  test_low(input = input_albd_si, expected = exp_albd_si, meta = atoxgr_criteria_ctcv4)
+  test_low(expected = exp_albd_si, meta = atoxgr_criteria_ctcv4)
 })
 
 ## Test 67b: CTCAEv4 Hypoalbuminemia (USCV unit) ----
 test_that("derive_var_atoxgr_dir Test 67b: CTCAEv4 Hypoalbuminemia (USCV unit)", {
-  test_low(input = input_albd_cv, expected = exp_albd_cv, meta = atoxgr_criteria_ctcv4_uscv)
+  test_low(expected = exp_albd_cv, meta = atoxgr_criteria_ctcv4_uscv)
 })
 
 ## Test 68a: CTCAEv5 Hypoalbuminemia (SI unit) ----
 test_that("derive_var_atoxgr_dir Test 68a: CTCAEv5 Hypoalbuminemia (SI unit)", {
-  test_low(input = input_albd_si, expected = exp_albd_si, meta = atoxgr_criteria_ctcv5)
+  test_low(expected = exp_albd_si, meta = atoxgr_criteria_ctcv5)
 })
 
 ## Test 68b: CTCAEv5 Hypoalbuminemia (USCV unit) ----
 test_that("derive_var_atoxgr_dir Test 68b: CTCAEv5 Hypoalbuminemia (USCV unit)", {
-  test_low(input = input_albd_cv, expected = exp_albd_cv, meta = atoxgr_criteria_ctcv5_uscv)
+  test_low(expected = exp_albd_cv, meta = atoxgr_criteria_ctcv5_uscv)
 })
 
 ## Test 68c: CTCAEv6 Hypoalbuminemia (SI unit) ----
 test_that("derive_var_atoxgr_dir Test 68c: CTCAEv6 Hypoalbuminemia (SI unit)", {
-  test_low(input = input_albd_si, expected = exp_albd_si, meta = atoxgr_criteria_ctcv6)
+  test_low(expected = exp_albd_si, meta = atoxgr_criteria_ctcv6)
 })
 
 ## Test 68d: CTCAEv6 Hypoalbuminemia (USCV unit) ----
 test_that("derive_var_atoxgr_dir Test 68d: CTCAEv6 Hypoalbuminemia (USCV unit)", {
-  test_low(input = input_albd_cv, expected = exp_albd_cv, meta = atoxgr_criteria_ctcv6_uscv)
+  test_low(expected = exp_albd_cv, meta = atoxgr_criteria_ctcv6_uscv)
 })
 
 ### Hypocalcemia
@@ -3388,8 +3149,6 @@ exp_calcd_si <- tibble::tribble(
   # AVAL missing cannot grade
   "Hypocalcemia",  NA,     4,      100,    "mmol/L",  NA,       20,
 )
-input_calcd_si <- exp_calcd_si %>%
-  select(-ATOXGRL)
 
 exp_calcd_cv <- tibble::tribble(
   ~ATOXDSCL,       ~AVAL,  ~ANRLO,  ~ANRHI,   ~AVALU,  ~ATOXGRL, ~TESTNUM,
@@ -3419,37 +3178,35 @@ exp_calcd_cv <- tibble::tribble(
   # AVAL missing cannot grade
   "Hypocalcemia",  NA,     9,       100,     "mg/dL",        NA, 20,
 )
-input_calcd_cv <- exp_calcd_cv %>%
-  select(-ATOXGRL)
 
 ## Test 69a: CTCAEv4 Hypocalcemia (SI unit) ----
 test_that("derive_var_atoxgr_dir Test 69a: CTCAEv4 Hypocalcemia (SI unit)", {
-  test_low(input = input_calcd_si, expected = exp_calcd_si, meta = atoxgr_criteria_ctcv4)
+  test_low(expected = exp_calcd_si, meta = atoxgr_criteria_ctcv4)
 })
 
 ## Test 69b: CTCAEv4 Hypocalcemia (USCV unit) ----
 test_that("derive_var_atoxgr_dir Test 69b: CTCAEv4 Hypocalcemia (USCV unit)", {
-  test_low(input = input_calcd_cv, expected = exp_calcd_cv, meta = atoxgr_criteria_ctcv4_uscv)
+  test_low(expected = exp_calcd_cv, meta = atoxgr_criteria_ctcv4_uscv)
 })
 
 ## Test 70a: CTCAEv5 Hypocalcemia (SI unit) ----
 test_that("derive_var_atoxgr_dir Test 70a: CTCAEv5 Hypocalcemia (SI unit)", {
-  test_low(input = input_calcd_si, expected = exp_calcd_si, meta = atoxgr_criteria_ctcv5)
+  test_low(expected = exp_calcd_si, meta = atoxgr_criteria_ctcv5)
 })
 
 ## Test 70b: CTCAEv5 Hypocalcemia (USCV unit) ----
 test_that("derive_var_atoxgr_dir Test 70b: CTCAEv5 Hypocalcemia (USCV unit)", {
-  test_low(input = input_calcd_cv, expected = exp_calcd_cv, meta = atoxgr_criteria_ctcv5_uscv)
+  test_low(expected = exp_calcd_cv, meta = atoxgr_criteria_ctcv5_uscv)
 })
 
 ## Test 70c: CTCAEv6 Hypocalcemia (SI unit) ----
 test_that("derive_var_atoxgr_dir Test 70c: CTCAEv6 Hypocalcemia (SI unit)", {
-  test_low(input = input_calcd_si, expected = exp_calcd_si, meta = atoxgr_criteria_ctcv6)
+  test_low(expected = exp_calcd_si, meta = atoxgr_criteria_ctcv6)
 })
 
 ## Test 70d: CTCAEv6 Hypocalcemia (USCV unit) ----
 test_that("derive_var_atoxgr_dir Test 70d: CTCAEv6 Hypocalcemia (USCV unit)", {
-  test_low(input = input_calcd_cv, expected = exp_calcd_cv, meta = atoxgr_criteria_ctcv6_uscv)
+  test_low(expected = exp_calcd_cv, meta = atoxgr_criteria_ctcv6_uscv)
 })
 
 ### Hypocalcemia (Ionized)
@@ -3492,8 +3249,6 @@ exp_caliond_si <- tibble::tribble(
   # AVAL missing cannot grade
   "Hypocalcemia (Ionized)",  NA,     1.3,    100,    "mmol/L",  NA,       20,
 )
-input_caliond_si <- exp_caliond_si %>%
-  select(-ATOXGRL)
 
 exp_caliond_cv <- exp_caliond_si %>%
   mutate(
@@ -3502,37 +3257,35 @@ exp_caliond_cv <- exp_caliond_si %>%
     ANRLO = ANRLO * 4,
     AVALU = if_else(is.na(AVALU), NA_character_, "mg/dL")
   )
-input_caliond_cv <- exp_caliond_cv %>%
-  select(-ATOXGRL)
 
 ## Test 71a: CTCAEv4 Hypocalcemia (Ionized) (SI unit) ----
 test_that("derive_var_atoxgr_dir Test 71a: CTCAEv4 Hypocalcemia (Ionized) (SI unit)", {
-  test_low(input = input_caliond_si, expected = exp_caliond_si, meta = atoxgr_criteria_ctcv4)
+  test_low(expected = exp_caliond_si, meta = atoxgr_criteria_ctcv4)
 })
 
 ## Test 71b: CTCAEv4 Hypocalcemia (Ionized) (USCV unit) ----
 test_that("derive_var_atoxgr_dir Test 71b: CTCAEv4 Hypocalcemia (Ionized) (USCV unit)", {
-  test_low(input = input_caliond_cv, expected = exp_caliond_cv, meta = atoxgr_criteria_ctcv4_uscv)
+  test_low(expected = exp_caliond_cv, meta = atoxgr_criteria_ctcv4_uscv)
 })
 
 ## Test 72a: CTCAEv5 Hypocalcemia (Ionized) (SI unit) ----
 test_that("derive_var_atoxgr_dir Test 72a: CTCAEv5 Hypocalcemia (Ionized) (SI unit)", {
-  test_low(input = input_caliond_si, expected = exp_caliond_si, meta = atoxgr_criteria_ctcv5)
+  test_low(expected = exp_caliond_si, meta = atoxgr_criteria_ctcv5)
 })
 
 ## Test 72b: CTCAEv5 Hypocalcemia (Ionized) (USCV unit) ----
 test_that("derive_var_atoxgr_dir Test 72b: CTCAEv5 Hypocalcemia (Ionized) (USCV unit)", {
-  test_low(input = input_caliond_cv, expected = exp_caliond_cv, meta = atoxgr_criteria_ctcv5_uscv)
+  test_low(expected = exp_caliond_cv, meta = atoxgr_criteria_ctcv5_uscv)
 })
 
 ## Test 72c: CTCAEv6 Hypocalcemia (Ionized) (SI unit) ----
 test_that("derive_var_atoxgr_dir Test 72c: CTCAEv6 Hypocalcemia (Ionized) (SI unit)", {
-  test_low(input = input_caliond_si, expected = exp_caliond_si, meta = atoxgr_criteria_ctcv6)
+  test_low(expected = exp_caliond_si, meta = atoxgr_criteria_ctcv6)
 })
 
 ## Test 72d: CTCAEv6 Hypocalcemia (Ionized) (USCV unit) ----
 test_that("derive_var_atoxgr_dir Test 72d: CTCAEv6 Hypocalcemia (Ionized) (USCV unit)", {
-  test_low(input = input_caliond_cv, expected = exp_caliond_cv, meta = atoxgr_criteria_ctcv6_uscv)
+  test_low(expected = exp_caliond_cv, meta = atoxgr_criteria_ctcv6_uscv)
 })
 
 ### Hypoglycemia
@@ -3578,8 +3331,6 @@ exp_glycd_si <- tibble::tribble(
   # AVAL missing cannot grade
   "Hypoglycemia",  NA,     4,       100,     "mmol/L",        NA, 20,
 )
-input_glycd_si <- exp_glycd_si %>%
-  select(-ATOXGRL)
 
 exp_glycd_cv <- tibble::tribble(
   ~ATOXDSCL,       ~AVAL,  ~ANRLO, ~ANRHI,   ~AVALU,  ~ATOXGRL, ~TESTNUM,
@@ -3609,38 +3360,36 @@ exp_glycd_cv <- tibble::tribble(
   # AVAL missing cannot grade
   "Hypoglycemia",  NA,     70,     100,     "mg/dL",        NA, 20,
 )
-input_glycd_cv <- exp_glycd_cv %>%
-  select(-ATOXGRL)
 
 ## Test 73a: CTCAEv4 Hypoglycemia (SI unit) ----
 test_that("derive_var_atoxgr_dir Test 73a: CTCAEv4 Hypoglycemia (SI unit)", {
-  test_low(input = input_glycd_si, expected = exp_glycd_si, meta = atoxgr_criteria_ctcv4)
+  test_low(expected = exp_glycd_si, meta = atoxgr_criteria_ctcv4)
 })
 
 ## Test 73b: CTCAEv4 Hypoglycemia (USCV unit) ----
 test_that("derive_var_atoxgr_dir Test 73b: CTCAEv4 Hypoglycemia (USCV unit)", {
-  test_low(input = input_glycd_cv, expected = exp_glycd_cv, meta = atoxgr_criteria_ctcv4_uscv)
+  test_low(expected = exp_glycd_cv, meta = atoxgr_criteria_ctcv4_uscv)
 })
 
 
 ## Test 74a: CTCAEv5 Hypoglycemia (SI unit) ----
 test_that("derive_var_atoxgr_dir Test 74a: CTCAEv5 Hypoglycemia (SI unit)", {
-  test_low(input = input_glycd_si, expected = exp_glycd_si, meta = atoxgr_criteria_ctcv5)
+  test_low(expected = exp_glycd_si, meta = atoxgr_criteria_ctcv5)
 })
 
 ## Test 74b: CTCAEv5 Hypoglycemia (USCV unit) ----
 test_that("derive_var_atoxgr_dir Test 74b: CTCAEv5 Hypoglycemia (USCV unit)", {
-  test_low(input = input_glycd_cv, expected = exp_glycd_cv, meta = atoxgr_criteria_ctcv5_uscv)
+  test_low(expected = exp_glycd_cv, meta = atoxgr_criteria_ctcv5_uscv)
 })
 
 ## Test 74c: CTCAEv6 Hypoglycemia (SI unit) ----
 test_that("derive_var_atoxgr_dir Test 74c: CTCAEv6 Hypoglycemia (SI unit)", {
-  test_low(input = input_glycd_si, expected = exp_glycd_si, meta = atoxgr_criteria_ctcv6)
+  test_low(expected = exp_glycd_si, meta = atoxgr_criteria_ctcv6)
 })
 
 ## Test 74d: CTCAEv6 Hypoglycemia (USCV unit) ----
 test_that("derive_var_atoxgr_dir Test 74d: CTCAEv6 Hypoglycemia (USCV unit)", {
-  test_low(input = input_glycd_cv, expected = exp_glycd_cv, meta = atoxgr_criteria_ctcv6_uscv)
+  test_low(expected = exp_glycd_cv, meta = atoxgr_criteria_ctcv6_uscv)
 })
 
 ### Hypokalemia
@@ -3674,37 +3423,35 @@ exp_kaled <- tibble::tribble(
   # AVAL missing cannot grade
   "Hypokalemia",  NA,     4,      100,    "mmol/L",  NA,       16,
 )
-input_kaled <- exp_kaled %>%
-  select(-ATOXGRL)
 
 ## Test 75a: CTCAEv4 Hypokalemia (SI unit) ----
 test_that("derive_var_atoxgr_dir Test 75a: CTCAEv4 Hypokalemia (SI unit)", {
-  test_low(input = input_kaled, expected = exp_kaled, meta = atoxgr_criteria_ctcv4)
+  test_low(expected = exp_kaled, meta = atoxgr_criteria_ctcv4)
 })
 
 ## Test 75b: CTCAEv4 Hypokalemia (USCV unit) ----
 test_that("derive_var_atoxgr_dir Test 75b: CTCAEv4 Hypokalemia (USCV unit)", {
-  test_low(input = input_kaled, expected = exp_kaled, meta = atoxgr_criteria_ctcv4_uscv)
+  test_low(expected = exp_kaled, meta = atoxgr_criteria_ctcv4_uscv)
 })
 
 ## Test 76a: CTCAEv5 Hypokalemia (SI unit) ----
 test_that("derive_var_atoxgr_dir Test 76a: CTCAEv5 Hypokalemia (SI unit)", {
-  test_low(input = input_kaled, expected = exp_kaled, meta = atoxgr_criteria_ctcv5)
+  test_low(expected = exp_kaled, meta = atoxgr_criteria_ctcv5)
 })
 
 ## Test 76b: CTCAEv5 Hypokalemia (USCV unit) ----
 test_that("derive_var_atoxgr_dir Test 76b: CTCAEv5 Hypokalemia (USCV unit)", {
-  test_low(input = input_kaled, expected = exp_kaled, meta = atoxgr_criteria_ctcv5_uscv)
+  test_low(expected = exp_kaled, meta = atoxgr_criteria_ctcv5_uscv)
 })
 
 ## Test 76c: CTCAEv6 Hypokalemia (SI unit) ----
 test_that("derive_var_atoxgr_dir Test 76c: CTCAEv6 Hypokalemia (SI unit)", {
-  test_low(input = input_kaled, expected = exp_kaled, meta = atoxgr_criteria_ctcv6)
+  test_low(expected = exp_kaled, meta = atoxgr_criteria_ctcv6)
 })
 
 ## Test 76d: CTCAEv6 Hypokalemia (USCV unit) ----
 test_that("derive_var_atoxgr_dir Test 76d: CTCAEv6 Hypokalemia (USCV unit)", {
-  test_low(input = input_kaled, expected = exp_kaled, meta = atoxgr_criteria_ctcv6_uscv)
+  test_low(expected = exp_kaled, meta = atoxgr_criteria_ctcv6_uscv)
 })
 
 ### Hypomagnesemia
@@ -3750,8 +3497,6 @@ exp_magnd_si <- tibble::tribble(
   # AVAL missing cannot grade
   "Hypomagnesemia",  NA,     1,      100,    "mmol/L",  NA,       20,
 )
-input_magnd_si <- exp_magnd_si %>%
-  select(-ATOXGRL)
 
 exp_magnd_cv <- tibble::tribble(
   ~ATOXDSCL,         ~AVAL,  ~ANRLO,  ~ANRHI,   ~AVALU,  ~ATOXGRL, ~TESTNUM,
@@ -3781,37 +3526,35 @@ exp_magnd_cv <- tibble::tribble(
   # AVAL missing cannot grade
   "Hypomagnesemia",  NA,     1.5,     10,      "mg/dL",        NA, 20,
 )
-input_magnd_cv <- exp_magnd_cv %>%
-  select(-ATOXGRL)
 
 ## Test 77a: CTCAEv4 Hypomagnesemia (SI unit) ----
 test_that("derive_var_atoxgr_dir Test 77a: CTCAEv4 Hypomagnesemia (SI unit)", {
-  test_low(input = input_magnd_si, expected = exp_magnd_si, meta = atoxgr_criteria_ctcv4)
+  test_low(expected = exp_magnd_si, meta = atoxgr_criteria_ctcv4)
 })
 
 ## Test 77b: CTCAEv4 Hypomagnesemia (USCV unit) ----
 test_that("derive_var_atoxgr_dir Test 77b: CTCAEv4 Hypomagnesemia (USCV unit)", {
-  test_low(input = input_magnd_cv, expected = exp_magnd_cv, meta = atoxgr_criteria_ctcv4_uscv)
+  test_low(expected = exp_magnd_cv, meta = atoxgr_criteria_ctcv4_uscv)
 })
 
 ## Test 78a: CTCAEv5 Hypomagnesemia (SI unit) ----
 test_that("derive_var_atoxgr_dir Test 78a: CTCAEv5 Hypomagnesemia (SI unit)", {
-  test_low(input = input_magnd_si, expected = exp_magnd_si, meta = atoxgr_criteria_ctcv5)
+  test_low(expected = exp_magnd_si, meta = atoxgr_criteria_ctcv5)
 })
 
 ## Test 78b: CTCAEv5 Hypomagnesemia (USCV unit) ----
 test_that("derive_var_atoxgr_dir Test 78b: CTCAEv5 Hypomagnesemia (USCV unit)", {
-  test_low(input = input_magnd_cv, expected = exp_magnd_cv, meta = atoxgr_criteria_ctcv5_uscv)
+  test_low(expected = exp_magnd_cv, meta = atoxgr_criteria_ctcv5_uscv)
 })
 
 ## Test 78c: CTCAEv6 Hypomagnesemia (SI unit) ----
 test_that("derive_var_atoxgr_dir Test 78c: CTCAEv6 Hypomagnesemia (SI unit)", {
-  test_low(input = input_magnd_si, expected = exp_magnd_si, meta = atoxgr_criteria_ctcv6)
+  test_low(expected = exp_magnd_si, meta = atoxgr_criteria_ctcv6)
 })
 
 ## Test 78d: CTCAEv6 Hypomagnesemia (USCV unit) ----
 test_that("derive_var_atoxgr_dir Test 78d: CTCAEv6 Hypomagnesemia (USCV unit)", {
-  test_low(input = input_magnd_cv, expected = exp_magnd_cv, meta = atoxgr_criteria_ctcv6_uscv)
+  test_low(expected = exp_magnd_cv, meta = atoxgr_criteria_ctcv6_uscv)
 })
 
 ### Hyponatremia (NCICTCAEv4)
@@ -3845,32 +3588,30 @@ exp_natrd <- tibble::tribble(
   # AVAL missing cannot grade
   "Hyponatremia",  NA,     140,      100,    "mmol/L",  NA,       16,
 )
-input_natrd <- exp_natrd %>%
-  select(-ATOXGRL)
 
 ## Test 79a: CTCAEv4 Hyponatremia (SI unit) ----
 test_that("derive_var_atoxgr_dir Test 79a: CTCAEv4 Hyponatremia (SI unit)", {
-  test_low(input = input_natrd, expected = exp_natrd, meta = atoxgr_criteria_ctcv4)
+  test_low(expected = exp_natrd, meta = atoxgr_criteria_ctcv4)
 })
 
 ## Test 79b: CTCAEv4 Hyponatremia (USCV unit) ----
 test_that("derive_var_atoxgr_dir Test 79b: CTCAEv4 Hyponatremia (USCV unit)", {
-  test_low(input = input_natrd, expected = exp_natrd, meta = atoxgr_criteria_ctcv4_uscv)
+  test_low(expected = exp_natrd, meta = atoxgr_criteria_ctcv4_uscv)
 })
 
 ## Test 80a: CTCAEv5 Hyponatremia (SI unit) ----
 test_that("derive_var_atoxgr_dir Test 80a: CTCAEv5 Hyponatremia (SI unit)", {
-  test_low(input = input_natrd, expected = exp_natrd, meta = atoxgr_criteria_ctcv5)
+  test_low(expected = exp_natrd, meta = atoxgr_criteria_ctcv5)
 })
 
 ## Test 80b: CTCAEv5 Hyponatremia (USCV unit) ----
 test_that("derive_var_atoxgr_dir Test 80b: CTCAEv5 Hyponatremia (USCV unit)", {
-  test_low(input = input_natrd, expected = exp_natrd, meta = atoxgr_criteria_ctcv5_uscv)
+  test_low(expected = exp_natrd, meta = atoxgr_criteria_ctcv5_uscv)
 })
 
 ## Test 80c: CTCAEv6 Hyponatremia (SI unit) ----
 test_that("derive_var_atoxgr_dir Test 80c: CTCAEv6 Hyponatremia (SI unit)", {
-  test_low(input = input_natrd, expected = exp_natrd, meta = atoxgr_criteria_ctcv6)
+  test_low(expected = exp_natrd, meta = atoxgr_criteria_ctcv6)
 })
 
 ### Hypophosphatemia
@@ -3918,10 +3659,8 @@ test_that("derive_var_atoxgr_dir Test 81: CTCAEv4 Hypophosphatemia (SI unit)", {
     # AVAL missing cannot grade
     "Hypophosphatemia",  NA,     1,      100,    "mmol/L",  NA,       20,
   )
-  input_phosd <- exp_phosd %>%
-    select(-ATOXGRL)
 
-  test_low(input = input_phosd, expected = exp_phosd, meta = atoxgr_criteria_ctcv4)
+  test_low(expected = exp_phosd, meta = atoxgr_criteria_ctcv4)
 })
 
 ## Test 81b: CTCAEv4 Hypophosphatemia (USCV unit) ----
@@ -3954,10 +3693,8 @@ test_that("derive_var_atoxgr_dir Test 81: CTCAEv4 Hypophosphatemia (USCV unit)",
     # AVAL missing cannot grade
     "Hypophosphatemia",  NA,     1,       100,     "mg/dL",        NA, 20,
   )
-  input_phosd <- exp_phosd %>%
-    select(-ATOXGRL)
 
-  test_low(input = input_phosd, expected = exp_phosd, meta = atoxgr_criteria_ctcv4_uscv)
+  test_low(expected = exp_phosd, meta = atoxgr_criteria_ctcv4_uscv)
 })
 
 # DAIDS grading----
@@ -3991,10 +3728,7 @@ test_that("derive_var_atoxgr_dir Test 82: DAIDS Acidosis", {
   ) %>%
     mutate(AVALU = NA_character_)
 
-  input_acido_daids <- exp_acido_daids %>%
-    select(-ATOXGRL)
-
-  test_low(input = input_acido_daids, expected = exp_acido_daids, meta = atoxgr_criteria_daids)
+  test_low(expected = exp_acido_daids, meta = atoxgr_criteria_daids)
 })
 
 ### Albumin, Low
@@ -4028,9 +3762,6 @@ exp_albl_daids_si <- tibble::tribble(
   "Albumin, Low", NA,     40,     "g/L",  NA,       16,
 )
 
-input_albl_daids_si <- exp_albl_daids_si %>%
-  select(-ATOXGRL)
-
 exp_albl_daids_cv <- exp_albl_daids_si %>%
   mutate(
     AVAL = AVAL / 10,
@@ -4038,20 +3769,14 @@ exp_albl_daids_cv <- exp_albl_daids_si %>%
     AVALU = if_else(is.na(AVALU), NA_character_, "g/dL")
   )
 
-input_albl_daids_cv <- exp_albl_daids_cv %>%
-  select(-ATOXGRL)
-
 ## Test 83a: DAIDS Albumin, Low (SI unit) ----
 test_that("derive_var_atoxgr_dir Test 83a: DAIDS Albumin, Low (SI unit)", {
-  test_low(input = input_albl_daids_si, expected = exp_albl_daids_si, meta = atoxgr_criteria_daids)
+  test_low(expected = exp_albl_daids_si, meta = atoxgr_criteria_daids)
 })
 
 ## Test 83b: DAIDS Albumin, Low (USCV unit) ----
 test_that("derive_var_atoxgr_dir Test 83b: DAIDS Albumin, Low (USCV unit)", {
-  test_low(
-    input = input_albl_daids_cv, expected = exp_albl_daids_cv,
-    meta = atoxgr_criteria_daids_uscv
-  )
+  test_low(expected = exp_albl_daids_cv, meta = atoxgr_criteria_daids_uscv)
 })
 
 
@@ -4085,10 +3810,7 @@ test_that("derive_var_atoxgr_dir Test 84: DAIDS Alkaline Phosphatase, High", {
   ) %>%
     mutate(AVALU = NA_character_)
 
-  input_alkp_i_daids <- exp_alkp_i_daids %>%
-    select(-ATOXGRH)
-
-  test_high(input = input_alkp_i_daids, expected = exp_alkp_i_daids, meta = atoxgr_criteria_daids)
+  test_high(expected = exp_alkp_i_daids, meta = atoxgr_criteria_daids)
 })
 
 ### Alkalosis
@@ -4120,10 +3842,7 @@ test_that("derive_var_atoxgr_dir Test 85: DAIDS Alkalosis", {
   ) %>%
     mutate(AVALU = NA_character_)
 
-  input_alkalo_daids <- exp_alkalo_daids %>%
-    select(-ATOXGRH)
-
-  test_high(input = input_alkalo_daids, expected = exp_alkalo_daids, meta = atoxgr_criteria_daids)
+  test_high(expected = exp_alkalo_daids, meta = atoxgr_criteria_daids)
 })
 
 
@@ -4157,10 +3876,7 @@ test_that("derive_var_atoxgr_dir Test 86: DAIDS ALT, High", {
   ) %>%
     mutate(AVALU = NA_character_)
 
-  input_alti_daids <- exp_alti_daids %>%
-    select(-ATOXGRH)
-
-  test_high(input = input_alti_daids, expected = exp_alti_daids, meta = atoxgr_criteria_daids)
+  test_high(expected = exp_alti_daids, meta = atoxgr_criteria_daids)
 })
 
 
@@ -4193,10 +3909,7 @@ test_that("derive_var_atoxgr_dir Test 87: DAIDS Amylase, High", {
   ) %>%
     mutate(AVALU = NA_character_)
 
-  input_amyli_daids <- exp_amyli_daids %>%
-    select(-ATOXGRH)
-
-  test_high(input = input_amyli_daids, expected = exp_amyli_daids, meta = atoxgr_criteria_daids)
+  test_high(expected = exp_amyli_daids, meta = atoxgr_criteria_daids)
 })
 
 ### AST, High
@@ -4229,10 +3942,7 @@ test_that("derive_var_atoxgr_dir Test 88: DAIDS AST, High", {
   ) %>%
     mutate(AVALU = NA_character_)
 
-  input_asti_daids <- exp_asti_daids %>%
-    select(-ATOXGRH)
-
-  test_high(input = input_asti_daids, expected = exp_asti_daids, meta = atoxgr_criteria_daids)
+  test_high(expected = exp_asti_daids, meta = atoxgr_criteria_daids)
 })
 
 
@@ -4271,17 +3981,15 @@ exp_bicad_daids <- tibble::tribble(
   # AVAL missing cannot grade
   "Bicarbonate, Low",  NA,     20,     "mmol/L",  NA,       20,
 )
-input_bicad_daids <- exp_bicad_daids %>%
-  select(-ATOXGRL)
 
 ## Test 89a: DAIDS Bicarbonate, Low (SI unit) ----
 test_that("derive_var_atoxgr_dir Test 89a: DAIDS Bicarbonate, Low (SI unit)", {
-  test_low(input = input_bicad_daids, expected = exp_bicad_daids, meta = atoxgr_criteria_daids)
+  test_low(expected = exp_bicad_daids, meta = atoxgr_criteria_daids)
 })
 
 ## Test 89b: DAIDS Bicarbonate, Low (USCV unit) ----
 test_that("derive_var_atoxgr_dir Test 89b: DAIDS Bicarbonate, Low (USCV unit)", {
-  test_low(input = input_bicad_daids, expected = exp_bicad_daids, meta = atoxgr_criteria_daids_uscv)
+  test_low(expected = exp_bicad_daids, meta = atoxgr_criteria_daids_uscv)
 })
 
 
@@ -4394,7 +4102,6 @@ exp_dbilile28d_daids_cv <- tibble::tribble(
     ADT = lubridate::ymd("2023-01-29")
   )
 
-
 ### add subjects with missing ADT or BRTHDT
 
 ## SI unit
@@ -4433,24 +4140,12 @@ exp_dbili_daids_cv <- exp_dbilinoage_daids_cv %>%
 
 ## Test 90a: DAIDS Direct Bilirubin, High (SI unit) ----
 test_that("derive_var_atoxgr_dir Test 90: DAIDS Direct Bilirubin, High (SI unit)", {
-  input_dbili_daids_si <- exp_dbili_daids_si %>%
-    select(-ATOXGRH)
-
-  test_high(
-    input = input_dbili_daids_si, expected = exp_dbili_daids_si,
-    meta = atoxgr_criteria_daids
-  )
+  test_high(expected = exp_dbili_daids_si, meta = atoxgr_criteria_daids)
 })
 
 ## Test 90b: DAIDS Direct Bilirubin, High (USCV unit) ----
 test_that("derive_var_atoxgr_dir Test 90b: DAIDS Direct Bilirubin, High (USCV unit)", {
-  input_dbili_daids_cv <- exp_dbili_daids_cv %>%
-    select(-ATOXGRH)
-
-  test_high(
-    input = input_dbili_daids_cv, expected = exp_dbili_daids_cv,
-    meta = atoxgr_criteria_daids_uscv
-  )
+  test_high(expected = exp_dbili_daids_cv, meta = atoxgr_criteria_daids_uscv)
 })
 
 ### Total Bilirubin, High
@@ -4514,9 +4209,7 @@ exp_tbili_daids <- exp_tbilinoage_daids %>%
 
 ## Test 91: DAIDS Total Bilirubin, High ----
 test_that("derive_var_atoxgr_dir Test 91: DAIDS Total Bilirubin, High", {
-  input_tbili_daids <- exp_tbili_daids %>%
-    select(-ATOXGRH)
-  test_high(input = input_tbili_daids, expected = exp_tbili_daids, meta = atoxgr_criteria_daids)
+  test_high(expected = exp_tbili_daids, meta = atoxgr_criteria_daids)
 })
 
 ### Calcium, High
@@ -4675,24 +4368,12 @@ exp_calci_daids_cv <- exp_calcinoage_daids_cv %>%
   )
 ## Test 92a: DAIDS Calcium, High (SI unit) ----
 test_that("derive_var_atoxgr_dir Test 92a: DAIDS Calcium, High (SI unit)", {
-  input_calci_daids_si <- exp_calci_daids_si %>%
-    select(-ATOXGRH)
-
-  test_high(
-    input = input_calci_daids_si, expected = exp_calci_daids_si,
-    meta = atoxgr_criteria_daids
-  )
+  test_high(expected = exp_calci_daids_si, meta = atoxgr_criteria_daids)
 })
 
 ## Test 92b: DAIDS Calcium, High (USCV unit) ----
 test_that("derive_var_atoxgr_dir Test 92b: DAIDS Calcium, High (USCV unit)", {
-  input_calci_daids_cv <- exp_calci_daids_cv %>%
-    select(-ATOXGRH)
-
-  test_high(
-    input = input_calci_daids_cv, expected = exp_calci_daids_cv,
-    meta = atoxgr_criteria_daids_uscv
-  )
+  test_high(expected = exp_calci_daids_cv, meta = atoxgr_criteria_daids_uscv)
 })
 
 
@@ -4738,8 +4419,6 @@ exp_calioni_daids_si <- tibble::tribble(
   # AVAL missing cannot grade
   "Calcium (Ionized), High", NA,    1.1,    1.4,    "mmol/L", NA,       20,
 )
-input_calioni_daids_si <- exp_calioni_daids_si %>%
-  select(-ATOXGRH)
 
 exp_calioni_daids_cv <- exp_calioni_daids_si %>%
   mutate(
@@ -4748,23 +4427,15 @@ exp_calioni_daids_cv <- exp_calioni_daids_si %>%
     ANRHI = 4 * ANRHI,
     AVALU = if_else(is.na(AVALU), NA_character_, "mg/dL")
   )
-input_calioni_daids_cv <- exp_calioni_daids_cv %>%
-  select(-ATOXGRH)
 
 ## Test 93a: DAIDS Calcium (Ionized), High (SI unit) ----
 test_that("derive_var_atoxgr_dir Test 93a: DAIDS Calcium (Ionized), High (SI unit)", {
-  test_high(
-    input = input_calioni_daids_si, expected = exp_calioni_daids_si,
-    meta = atoxgr_criteria_daids
-  )
+  test_high(expected = exp_calioni_daids_si, meta = atoxgr_criteria_daids)
 })
 
 ## Test 93b: DAIDS Calcium (Ionized), High (USCV unit) ----
 test_that("derive_var_atoxgr_dir Test 93b: DAIDS Calcium (Ionized), High (USCV unit)", {
-  test_high(
-    input = input_calioni_daids_cv, expected = exp_calioni_daids_cv,
-    meta = atoxgr_criteria_daids_uscv
-  )
+  test_high(expected = exp_calioni_daids_cv, meta = atoxgr_criteria_daids_uscv)
 })
 
 
@@ -4927,25 +4598,12 @@ exp_calcd_daids_cv <- exp_calcdnoage_daids_cv %>%
 
 ## Test 94a: DAIDS Calcium, Low (SI unit) ----
 test_that("derive_var_atoxgr_dir Test 94a: DAIDS Calcium, Low (SI unit)", {
-  input_calcd_daids_si <- exp_calcd_daids_si %>%
-    select(-ATOXGRL)
-
-
-  test_low(
-    input = input_calcd_daids_si, expected = exp_calcd_daids_si,
-    meta = atoxgr_criteria_daids
-  )
+  test_low(expected = exp_calcd_daids_si, meta = atoxgr_criteria_daids)
 })
 
 ## Test 94b: DAIDS Calcium, Low (USCV unit) ----
 test_that("derive_var_atoxgr_dir Test 94b: DAIDS Calcium, Low (USCV unit)", {
-  input_calcd_daids_cv <- exp_calcd_daids_cv %>%
-    select(-ATOXGRL)
-
-  test_low(
-    input = input_calcd_daids_cv, expected = exp_calcd_daids_cv,
-    meta = atoxgr_criteria_daids_uscv
-  )
+  test_low(expected = exp_calcd_daids_cv, meta = atoxgr_criteria_daids_uscv)
 })
 
 
@@ -4991,8 +4649,6 @@ exp_caliond_daids_si <- tibble::tribble(
   # AVAL missing cannot grade
   "Calcium (Ionized), Low", NA,    1.1,    100,    "mmol/L", NA,       20,
 )
-input_caliond_daids_si <- exp_caliond_daids_si %>%
-  select(-ATOXGRL)
 
 exp_caliond_daids_cv <- exp_caliond_daids_si %>%
   mutate(
@@ -5000,23 +4656,15 @@ exp_caliond_daids_cv <- exp_caliond_daids_si %>%
     ANRLO = ANRLO * 4,
     AVALU = if_else(is.na(AVALU), NA_character_, "mg/dL")
   )
-input_caliond_daids_cv <- exp_caliond_daids_cv %>%
-  select(-ATOXGRL)
 
 ## Test 95a: DAIDS Calcium (Ionized), Low (SI unit) ----
 test_that("derive_var_atoxgr_dir Test 95a: DAIDS Calcium (Ionized), Low (SI unit)", {
-  test_low(
-    input = input_caliond_daids_si, expected = exp_caliond_daids_si,
-    meta = atoxgr_criteria_daids
-  )
+  test_low(expected = exp_caliond_daids_si, meta = atoxgr_criteria_daids)
 })
 
 ## Test 95b: DAIDS Calcium (Ionized), Low (USCV unit) ----
 test_that("derive_var_atoxgr_dir Test 95b: DAIDS Calcium (Ionized), Low (USCV unit)", {
-  test_low(
-    input = input_caliond_daids_cv, expected = exp_caliond_daids_cv,
-    meta = atoxgr_criteria_daids_uscv
-  )
+  test_low(expected = exp_caliond_daids_cv, meta = atoxgr_criteria_daids_uscv)
 })
 
 
@@ -5046,10 +4694,7 @@ test_that("derive_var_atoxgr_dir Test 96: DAIDS Creatine Kinase, High", {
     "Creatine Kinase, High", NA,    NA,     NA_character_, NA,       12,
   )
 
-  input_cki_daids <- exp_cki_daids %>%
-    select(-ATOXGRH)
-
-  test_high(input = input_cki_daids, expected = exp_cki_daids, meta = atoxgr_criteria_daids)
+  test_high(expected = exp_cki_daids, meta = atoxgr_criteria_daids)
 })
 
 
@@ -5085,10 +4730,7 @@ test_that("derive_var_atoxgr_dir Test 97: DAIDS Creatinine, High", {
   ) %>%
     mutate(AVALU = NA_character_)
 
-  input_creati_daids <- exp_creati_daids %>%
-    select(-ATOXGRH)
-
-  test_high(input = input_creati_daids, expected = exp_creati_daids, meta = atoxgr_criteria_daids)
+  test_high(expected = exp_creati_daids, meta = atoxgr_criteria_daids)
 })
 
 
@@ -5126,13 +4768,7 @@ test_that("derive_var_atoxgr_dir Test 98a:  DAIDS Glucose Fasting, High (SI unit
     "Glucose Fasting, High", NA,     "mmol/L", NA,       12,
   )
 
-  input_glucfi_daids_si <- exp_glucfi_daids_si %>%
-    select(-ATOXGRH)
-
-  test_high(
-    input = input_glucfi_daids_si, expected = exp_glucfi_daids_si,
-    meta = atoxgr_criteria_daids
-  )
+  test_high(expected = exp_glucfi_daids_si, meta = atoxgr_criteria_daids)
 })
 
 ## Test 98b:  DAIDS Glucose Fasting, High (USCV unit)----
@@ -5155,13 +4791,7 @@ test_that("derive_var_atoxgr_dir Test 98b:  DAIDS Glucose Fasting, High (USCV un
     "Glucose Fasting, High", NA,     "mg/dL",  NA,       12,
   )
 
-  input_glucfi_daids_cv <- exp_glucfi_daids_cv %>%
-    select(-ATOXGRH)
-
-  test_high(
-    input = input_glucfi_daids_cv, expected = exp_glucfi_daids_cv,
-    meta = atoxgr_criteria_daids_uscv
-  )
+  test_high(expected = exp_glucfi_daids_cv, meta = atoxgr_criteria_daids_uscv)
 })
 
 ### Glucose Nonfasting, High
@@ -5198,13 +4828,7 @@ test_that("derive_var_atoxgr_dir Test 99a:  DAIDS Glucose Nonfasting, High (SI u
     "Glucose Nonfasting, High", NA,     "mmol/L", NA,       12,
   )
 
-  input_glucnfi_daids_si <- exp_glucnfi_daids_si %>%
-    select(-ATOXGRH)
-
-  test_high(
-    input = input_glucnfi_daids_si, expected = exp_glucnfi_daids_si,
-    meta = atoxgr_criteria_daids
-  )
+  test_high(expected = exp_glucnfi_daids_si, meta = atoxgr_criteria_daids)
 })
 
 ## Test 99b:  DAIDS Glucose Nonfasting, High (USCV unit) ----
@@ -5227,13 +4851,7 @@ test_that("derive_var_atoxgr_dir Test 99b:  DAIDS Glucose Nonfasting, High (USCV
     "Glucose Nonfasting, High",  NA,    "mg/dL",        NA,  12,
   )
 
-  input_glucnfi_daids_cv <- exp_glucnfi_daids_cv %>%
-    select(-ATOXGRH)
-
-  test_high(
-    input = input_glucnfi_daids_cv, expected = exp_glucnfi_daids_cv,
-    meta = atoxgr_criteria_daids_uscv
-  )
+  test_high(expected = exp_glucnfi_daids_cv, meta = atoxgr_criteria_daids_uscv)
 })
 
 ### Glucose, Low
@@ -5392,24 +5010,12 @@ exp_glucd_daids_cv <- exp_glucdnoage_daids_cv %>%
 
 ## Test 100a:  DAIDS Glucose, Low (SI unit) ----
 test_that("derive_var_atoxgr_dir Test 100a:  DAIDS Glucose, Low (SI unit)", {
-  input_glucd_daids_si <- exp_glucd_daids_si %>%
-    select(-ATOXGRL)
-
-  test_low(
-    input = input_glucd_daids_si, expected = exp_glucd_daids_si,
-    meta = atoxgr_criteria_daids
-  )
+  test_low(expected = exp_glucd_daids_si, meta = atoxgr_criteria_daids)
 })
 
 ## Test 100b:  DAIDS Glucose, Low (USCV unit) ----
 test_that("derive_var_atoxgr_dir Test 100b:  DAIDS Glucose, Low (USCV unit)", {
-  input_glucd_daids_cv <- exp_glucd_daids_cv %>%
-    select(-ATOXGRL)
-
-  test_low(
-    input = input_glucd_daids_cv, expected = exp_glucd_daids_cv,
-    meta = atoxgr_criteria_daids_uscv
-  )
+  test_low(expected = exp_glucd_daids_cv, meta = atoxgr_criteria_daids_uscv)
 })
 
 
@@ -5435,10 +5041,7 @@ test_that("derive_var_atoxgr_dir Test 101:  DAIDS Lactate, High", {
   ) %>%
     mutate(AVALU = NA_character_)
 
-  input_lacti_daids <- exp_lacti_daids %>%
-    select(-ATOXGRH)
-
-  test_high(input = input_lacti_daids, expected = exp_lacti_daids, meta = atoxgr_criteria_daids)
+  test_high(expected = exp_lacti_daids, meta = atoxgr_criteria_daids)
 })
 
 
@@ -5470,10 +5073,7 @@ test_that("derive_var_atoxgr_dir Test 102:  DAIDS Lipase, High", {
   ) %>%
     mutate(AVALU = NA_character_)
 
-  input_lipi_daids <- exp_lipi_daids %>%
-    select(-ATOXGRH)
-
-  test_high(input = input_lipi_daids, expected = exp_lipi_daids, meta = atoxgr_criteria_daids)
+  test_high(expected = exp_lipi_daids, meta = atoxgr_criteria_daids)
 })
 
 
@@ -5619,24 +5219,12 @@ exp_cholfi_daids_cv <- exp_cholfinoage_daids_cv %>%
 
 ## Test 103a: DAIDS Cholesterol, Fasting, High (SI unit) ----
 test_that("derive_var_atoxgr_dir Test 103a: DAIDS Cholesterol, Fasting, High (SI unit)", {
-  input_cholfi_daids_si <- exp_cholfi_daids_si %>%
-    select(-ATOXGRH)
-
-  test_high(
-    input = input_cholfi_daids_si, expected = exp_cholfi_daids_si,
-    meta = atoxgr_criteria_daids
-  )
+  test_high(expected = exp_cholfi_daids_si, meta = atoxgr_criteria_daids)
 })
 
 ## Test 103b: DAIDS Cholesterol, Fasting, High (USCV unit) ----
 test_that("derive_var_atoxgr_dir Test 103b: DAIDS Cholesterol, Fasting, High (USCV unit)", {
-  input_cholfi_daids_cv <- exp_cholfi_daids_cv %>%
-    select(-ATOXGRH)
-
-  test_high(
-    input = input_cholfi_daids_cv, expected = exp_cholfi_daids_cv,
-    meta = atoxgr_criteria_daids_uscv
-  )
+  test_high(expected = exp_cholfi_daids_cv, meta = atoxgr_criteria_daids_uscv)
 })
 
 ### LDL, Fasting, High
@@ -5801,24 +5389,12 @@ exp_ldlfi_daids_cv <- exp_ldlfile2y_daids_cv %>%
 
 ## Test 104a: DAIDS LDL, Fasting, High (SI unit) ----
 test_that("derive_var_atoxgr_dir Test 104a: DAIDS LDL, Fasting, High (SI unit)", {
-  input_ldlfi_daids_si <- exp_ldlfi_daids_si %>%
-    select(-ATOXGRH)
-
-  test_high(
-    input = input_ldlfi_daids_si, expected = exp_ldlfi_daids_si,
-    meta = atoxgr_criteria_daids
-  )
+  test_high(expected = exp_ldlfi_daids_si, meta = atoxgr_criteria_daids)
 })
 
 ## Test 104b: DAIDS LDL, Fasting, High (USCV unit) ----
 test_that("derive_var_atoxgr_dir Test 104b: DAIDS LDL, Fasting, High (USCV unit)", {
-  input_ldlfi_daids_cv <- exp_ldlfi_daids_cv %>%
-    select(-ATOXGRH)
-
-  test_high(
-    input = input_ldlfi_daids_cv, expected = exp_ldlfi_daids_cv,
-    meta = atoxgr_criteria_daids_uscv
-  )
+  test_high(expected = exp_ldlfi_daids_cv, meta = atoxgr_criteria_daids_uscv)
 })
 
 ### Triglycerides, Fasting, High
@@ -5855,13 +5431,7 @@ test_that("derive_var_atoxgr_dir Test 105a: DAIDS Triglycerides, Fasting, High (
     "Triglycerides, Fasting, High",  NA,     "mmol/L",  NA,       12,
   )
 
-  input_trigfi_daids_si <- exp_trigfi_daids_si %>%
-    select(-ATOXGRH)
-
-  test_high(
-    input = input_trigfi_daids_si, expected = exp_trigfi_daids_si,
-    meta = atoxgr_criteria_daids
-  )
+  test_high(expected = exp_trigfi_daids_si, meta = atoxgr_criteria_daids)
 })
 
 ## Test 105b: DAIDS Triglycerides, Fasting, High (USCV unit) ----
@@ -5884,13 +5454,7 @@ test_that("derive_var_atoxgr_dir Test 105b: DAIDS Triglycerides, Fasting, High (
     "Triglycerides, Fasting, High",  NA,      "mg/dL",   NA,       12,
   )
 
-  input_trigfi_daids_cv <- exp_trigfi_daids_cv %>%
-    select(-ATOXGRH)
-
-  test_high(
-    input = input_trigfi_daids_cv, expected = exp_trigfi_daids_cv,
-    meta = atoxgr_criteria_daids_uscv
-  )
+  test_high(expected = exp_trigfi_daids_cv, meta = atoxgr_criteria_daids_uscv)
 })
 
 ### Magnesium, Low
@@ -5931,21 +5495,12 @@ exp_magd_daids_cv <- exp_magd_daids_si %>%
 
 ## Test 106a: DAIDS Magnesium, Low (SI unit) ----
 test_that("derive_var_atoxgr_dir Test 106a: DAIDS Magnesium, Low (SI unit)", {
-  input_magd_daids_si <- exp_magd_daids_si %>%
-    select(-ATOXGRL)
-
-  test_low(input = input_magd_daids_si, expected = exp_magd_daids_si, meta = atoxgr_criteria_daids)
+  test_low(expected = exp_magd_daids_si, meta = atoxgr_criteria_daids)
 })
 
 ## Test 106b: DAIDS Magnesium, Low (USCV unit) ----
 test_that("derive_var_atoxgr_dir Test 106b: DAIDS Magnesium, Low (USCV unit)", {
-  input_magd_daids_cv <- exp_magd_daids_cv %>%
-    select(-ATOXGRL)
-
-  test_low(
-    input = input_magd_daids_cv, expected = exp_magd_daids_cv,
-    meta = atoxgr_criteria_daids_uscv
-  )
+  test_low(expected = exp_magd_daids_cv, meta = atoxgr_criteria_daids_uscv)
 })
 
 ### Phosphate, Low
@@ -6174,24 +5729,12 @@ exp_phosd_daids_cv <- exp_phosd_daids_gt14y_cv %>%
 
 ## Test 107a: DAIDS Phosphate, Low (SI unit) ----
 test_that("derive_var_atoxgr_dir Test 107a: DAIDS Phosphate, Low (SI unit)", {
-  input_phosd_daids_si <- exp_phosd_daids_si %>%
-    select(-ATOXGRL)
-
-  test_low(
-    input = input_phosd_daids_si, expected = exp_phosd_daids_si,
-    meta = atoxgr_criteria_daids
-  )
+  test_low(expected = exp_phosd_daids_si, meta = atoxgr_criteria_daids)
 })
 
 ## Test 107b: DAIDS Phosphate, Low (USCV unit) ----
 test_that("derive_var_atoxgr_dir Test 107b: DAIDS Phosphate, Low (USCV unit)", {
-  input_phosd_daids_cv <- exp_phosd_daids_cv %>%
-    select(-ATOXGRL)
-
-  test_low(
-    input = input_phosd_daids_cv, expected = exp_phosd_daids_cv,
-    meta = atoxgr_criteria_daids_uscv
-  )
+  test_low(expected = exp_phosd_daids_cv, meta = atoxgr_criteria_daids_uscv)
 })
 
 ### Potassium, High
@@ -6220,20 +5763,14 @@ exp_poti_daids <- tibble::tribble(
   "Potassium, High",  NA,     "mmol/L",  NA,       12,
 )
 
-input_poti_daids <- exp_poti_daids %>%
-  select(-ATOXGRH)
-
 ## Test 108a: DAIDS Potassium, High (SI unit) ----
 test_that("derive_var_atoxgr_dir Test 108a: DAIDS Potassium, High (SI unit)", {
-  test_high(input = input_poti_daids, expected = exp_poti_daids, meta = atoxgr_criteria_daids)
+  test_high(expected = exp_poti_daids, meta = atoxgr_criteria_daids)
 })
 
 ## Test 108b: DAIDS Potassium, High (USCV unit) ----
 test_that("derive_var_atoxgr_dir Test 108b: DAIDS Potassium, High (USCV unit)", {
-  test_high(
-    input = input_poti_daids, expected = exp_poti_daids,
-    meta = atoxgr_criteria_daids_uscv
-  )
+  test_high(expected = exp_poti_daids, meta = atoxgr_criteria_daids_uscv)
 })
 
 ### Potassium, Low
@@ -6262,20 +5799,14 @@ exp_potd_daids <- tibble::tribble(
   "Potassium, Low",  NA,     "mmol/L",  NA,       12,
 )
 
-input_potd_daids <- exp_potd_daids %>%
-  select(-ATOXGRL)
-
 ## Test 109a: DAIDS Potassium, Low (SI unit) ----
 test_that("derive_var_atoxgr_dir Test 109a: DAIDS Potassium, Low (SI unit)", {
-  test_low(input = input_potd_daids, expected = exp_potd_daids, meta = atoxgr_criteria_daids)
+  test_low(expected = exp_potd_daids, meta = atoxgr_criteria_daids)
 })
 
 ## Test 109b: DAIDS Potassium, Low (USCV unit) ----
 test_that("derive_var_atoxgr_dir Test 109b: DAIDS Potassium, Low (USCV unit)", {
-  test_low(
-    input = input_potd_daids, expected = exp_potd_daids,
-    meta = atoxgr_criteria_daids_uscv
-  )
+  test_low(expected = exp_potd_daids, meta = atoxgr_criteria_daids_uscv)
 })
 
 ### Sodium, High
@@ -6304,20 +5835,14 @@ exp_sodi_daids <- tibble::tribble(
   "Sodium, High",  NA,     "mmol/L",  NA,       12,
 )
 
-input_sodi_daids <- exp_sodi_daids %>%
-  select(-ATOXGRH)
-
 ## Test 110a: DAIDS Sodium, High (SI unit) ----
 test_that("derive_var_atoxgr_dir Test 110a: DAIDS Sodium, High (SI unit)", {
-  test_high(input = input_sodi_daids, expected = exp_sodi_daids, meta = atoxgr_criteria_daids)
+  test_high(expected = exp_sodi_daids, meta = atoxgr_criteria_daids)
 })
 
 ## Test 110b: DAIDS Sodium, High (USCV unit) ----
 test_that("derive_var_atoxgr_dir Test 110b: DAIDS Sodium, High (USCV unit)", {
-  test_high(
-    input = input_sodi_daids, expected = exp_sodi_daids,
-    meta = atoxgr_criteria_daids_uscv
-  )
+  test_high(exp_sodi_daids, meta = atoxgr_criteria_daids_uscv)
 })
 
 ### Sodium, Low
@@ -6346,17 +5871,14 @@ exp_sodd_daids <- tibble::tribble(
   "Sodium, Low",  NA,     "mmol/L",  NA,       12,
 )
 
-input_sodd_daids <- exp_sodd_daids %>%
-  select(-ATOXGRL)
-
 ## Test 111a: DAIDS Sodium, Low (SI unit) ----
 test_that("derive_var_atoxgr_dir Test 111a: DAIDS Sodium, Low (SI unit)", {
-  test_low(input = input_sodd_daids, expected = exp_sodd_daids, meta = atoxgr_criteria_daids)
+  test_low(expected = exp_sodd_daids, meta = atoxgr_criteria_daids)
 })
 
 ## Test 111b: DAIDS Sodium, Low (USCV unit) ----
 test_that("derive_var_atoxgr_dir Test 111b: DAIDS Sodium, Low (USCV unit)", {
-  test_low(input = input_sodd_daids, expected = exp_sodd_daids, meta = atoxgr_criteria_daids_uscv)
+  test_low(expected = exp_sodd_daids, meta = atoxgr_criteria_daids_uscv)
 })
 ### Uric Acid, High
 
@@ -6392,10 +5914,7 @@ test_that("derive_var_atoxgr_dir Test 112a: DAIDS Uric Acid, High (SI unit)", {
     "Uric Acid, High",  NA,    "umol/L",  NA,       12,
   )
 
-  input_urici_daids <- exp_urici_daids %>%
-    select(-ATOXGRH)
-
-  test_high(input = input_urici_daids, expected = exp_urici_daids, meta = atoxgr_criteria_daids)
+  test_high(expected = exp_urici_daids, meta = atoxgr_criteria_daids)
 })
 
 ## Test 112b: DAIDS Uric Acid, High (USCV unit) ----
@@ -6418,10 +5937,7 @@ test_that("derive_var_atoxgr_dir Test 112b: DAIDS Uric Acid, High (USCV unit)", 
     "Uric Acid, High", NA,    "mg/dL",        NA, 12,
   )
 
-  input_uric_daids <- exp_uric_daids %>%
-    select(-ATOXGRH)
-
-  test_high(input = input_uric_daids, expected = exp_uric_daids, meta = atoxgr_criteria_daids_uscv)
+  test_high(expected = exp_uric_daids, meta = atoxgr_criteria_daids_uscv)
 })
 
 ### Absolute CD4+ Count, Low
@@ -6480,17 +5996,10 @@ exp_cd4d_daids_si <- exp_cd4d_daids_gt5y %>%
     exp_cd4d_daids_noage
   )
 
-input_cd4d_daids_si <- exp_cd4d_daids_si %>%
-  select(-ATOXGRL)
-
 ## Test 113a: DAIDS Absolute CD4 Count, Low (SI unit) ----
 test_that("derive_var_atoxgr_dir Test 113a: DAIDS Absolute CD4 Count, Low (SI unit)", {
-  test_low(
-    input = input_cd4d_daids_si, expected = exp_cd4d_daids_si,
-    meta = atoxgr_criteria_daids
-  )
+  test_low(expected = exp_cd4d_daids_si, meta = atoxgr_criteria_daids)
 })
-
 
 exp_cd4d_daids_cv <- exp_cd4d_daids_si %>%
   mutate(
@@ -6498,15 +6007,9 @@ exp_cd4d_daids_cv <- exp_cd4d_daids_si %>%
     AVALU = if_else(str_to_upper(AVALU) == "10^9/L", "1/uL", AVALU)
   )
 
-input_cd4d_daids_cv <- exp_cd4d_daids_cv %>%
-  select(-ATOXGRL)
-
 ## Test 113b: DAIDS Absolute CD4 Count, Low (USCV unit) ----
 test_that("derive_var_atoxgr_dir Test 113b: DAIDS Absolute CD4 Count, Low (USCV unit)", {
-  test_low(
-    input = input_cd4d_daids_cv, expected = exp_cd4d_daids_cv,
-    meta = atoxgr_criteria_daids_uscv
-  )
+  test_low(expected = exp_cd4d_daids_cv, meta = atoxgr_criteria_daids_uscv)
 })
 
 ### Absolute Lymphocyte Count, Low
@@ -6566,16 +6069,9 @@ exp_lymphd_daids_si <- exp_lymphd_daids_gt5y %>%
     exp_lymphd_daids_noage
   )
 
-input_lymphd_daids_si <- exp_lymphd_daids_si %>%
-  select(-ATOXGRL)
-
-
 ## Test 114a: DAIDS Absolute Lymphocyte Count, Low (SI unit) ----
 test_that("derive_var_atoxgr_dir Test 114a: DAIDS Absolute Lymphocyte Count, Low (SI unit)", {
-  test_low(
-    input = input_lymphd_daids_si, expected = exp_lymphd_daids_si,
-    meta = atoxgr_criteria_daids
-  )
+  test_low(expected = exp_lymphd_daids_si, meta = atoxgr_criteria_daids)
 })
 
 exp_lymphd_daids_cv <- exp_lymphd_daids_si %>%
@@ -6583,15 +6079,9 @@ exp_lymphd_daids_cv <- exp_lymphd_daids_si %>%
     AVALU = if_else(str_to_upper(AVALU) == "10^9/L", "10^3/uL", AVALU)
   )
 
-input_lymphd_daids_cv <- exp_lymphd_daids_cv %>%
-  select(-ATOXGRL)
-
 ## Test 114b: DAIDS Absolute Lymphocyte Count, Low (USCV unit) ----
 test_that("derive_var_atoxgr_dir Test 114b: DAIDS Absolute Lymphocyte Count, Low (USCV unit)", {
-  test_low(
-    input = input_lymphd_daids_cv, expected = exp_lymphd_daids_cv,
-    meta = atoxgr_criteria_daids_uscv
-  )
+  test_low(expected = exp_lymphd_daids_cv, meta = atoxgr_criteria_daids_uscv)
 })
 
 exp_lymphd_daids_cv2 <- exp_lymphd_daids_si %>%
@@ -6600,15 +6090,9 @@ exp_lymphd_daids_cv2 <- exp_lymphd_daids_si %>%
     AVALU = if_else(str_to_upper(AVALU) == "10^9/L", "10^3/mL", AVALU)
   )
 
-input_lymphd_daids_cv2 <- exp_lymphd_daids_cv2 %>%
-  select(-ATOXGRL)
-
 ## Test 114c: DAIDS Absolute Lymph. Count, Low (legacy USCV unit) ----
 test_that("derive_var_atoxgr_dir Test 114c: DAIDS Absolute Lymph. Count, Low (legacy USCV unit)", {
-  test_low(
-    input = input_lymphd_daids_cv2, expected = exp_lymphd_daids_cv2,
-    meta = atoxgr_criteria_daids_uscv
-  )
+  test_low(expected = exp_lymphd_daids_cv2, meta = atoxgr_criteria_daids_uscv)
 })
 
 ### Absolute Neutrophil Count (ANC), Low
@@ -6725,29 +6209,19 @@ exp_ancd_daids_noage <- exp_ancd_daids %>%
 exp_ancd_daids_si <- exp_ancd_daids %>%
   bind_rows(exp_ancd_daids_noage)
 
-
-input_ancd_daids_si <- exp_ancd_daids_si %>%
-  select(-ATOXGRL)
-
-
 ## Test 115a: DAIDS ANC Low (SI unit) ----
 test_that("derive_var_atoxgr_dir Test 115a: DAIDS ANC Low (SI unit)", {
-  test_low(input = input_ancd_daids_si, expected = exp_ancd_daids_si, meta = atoxgr_criteria_daids)
+  test_low(expected = exp_ancd_daids_si, meta = atoxgr_criteria_daids)
 })
 
 exp_ancd_daids_cv <- exp_ancd_daids_si %>%
   mutate(
     AVALU = if_else(str_to_upper(AVALU) == "10^9/L", "10^3/uL", AVALU)
   )
-input_ancd_daids_cv <- exp_ancd_daids_cv %>%
-  select(-ATOXGRL)
 
 ## Test 115b: DAIDS ANC Low (USCV unit) ----
 test_that("derive_var_atoxgr_dir Test 115b: DAIDS ANC Low (USCV unit)", {
-  test_low(
-    input = input_ancd_daids_cv, expected = exp_ancd_daids_cv,
-    meta = atoxgr_criteria_daids_uscv
-  )
+  test_low(expected = exp_ancd_daids_cv, meta = atoxgr_criteria_daids_uscv)
 })
 
 exp_ancd_daids_cv2 <- exp_ancd_daids_si %>%
@@ -6755,15 +6229,10 @@ exp_ancd_daids_cv2 <- exp_ancd_daids_si %>%
     AVAL = AVAL * 1000,
     AVALU = if_else(str_to_upper(AVALU) == "10^9/L", "10^3/mL", AVALU)
   )
-input_ancd_daids_cv2 <- exp_ancd_daids_cv2 %>%
-  select(-ATOXGRL)
 
 ## Test 115c: DAIDS ANC Low (legacy USCV unit) ----
 test_that("derive_var_atoxgr_dir Test 115c: DAIDS ANC Low (legacy USCV unit)", {
-  test_low(
-    input = input_ancd_daids_cv2, expected = exp_ancd_daids_cv2,
-    meta = atoxgr_criteria_daids_uscv
-  )
+  test_low(expected = exp_ancd_daids_cv2, meta = atoxgr_criteria_daids_uscv)
 })
 
 
@@ -6806,12 +6275,9 @@ exp_fibd_daids_si <- tibble::tribble(
   "Fibrinogen Decreased", NA,    1,      "g/L",  NA,       23,
 )
 
-input_fibd_daids_si <- exp_fibd_daids_si %>%
-  select(-ATOXGRL)
-
 ## Test 116a: DAIDS Fibrinogen Decreased (SI unit) ----
 test_that("derive_var_atoxgr_dir Test 116a: DAIDS Fibrinogen Decreased (SI unit)", {
-  test_low(input = input_fibd_daids_si, expected = exp_fibd_daids_si, meta = atoxgr_criteria_daids)
+  test_low(expected = exp_fibd_daids_si, meta = atoxgr_criteria_daids)
 })
 
 ## CV unit is mg/dL which is 100 * SI unit of g/L
@@ -6822,15 +6288,9 @@ exp_fibd_daids_cv <- exp_fibd_daids_si %>%
     AVALU = if_else(str_to_upper(AVALU) == "G/L", "mg/dL", NA_character_)
   )
 
-input_fibd_daids_cv <- exp_fibd_daids_cv %>%
-  select(-ATOXGRL)
-
 ## Test 116b: DAIDS Fibrinogen Decreased (USCV unit) ----
 test_that("derive_var_atoxgr_dir Test 116b: DAIDS Fibrinogen Decreased (USCV unit)", {
-  test_low(
-    input = input_fibd_daids_cv, expected = exp_fibd_daids_cv,
-    meta = atoxgr_criteria_daids_uscv
-  )
+  test_low(expected = exp_fibd_daids_cv, meta = atoxgr_criteria_daids_uscv)
 })
 
 ### Hemoglobin, Low
@@ -7050,13 +6510,9 @@ exp_hgbd_daids_noage <- exp_hgbd_daids %>%
 exp_hgbd_daids <- exp_hgbd_daids %>%
   bind_rows(exp_hgbd_daids_noage)
 
-
-input_hgbd_daids <- exp_hgbd_daids %>%
-  select(-ATOXGRL)
-
 ## Test 117a: DAIDS HGB Low (SI unit) ----
 test_that("derive_var_atoxgr_dir Test 117a: DAIDS HGB Low (SI unit)", {
-  test_low(input = input_hgbd_daids, expected = exp_hgbd_daids, meta = atoxgr_criteria_daids)
+  test_low(expected = exp_hgbd_daids, meta = atoxgr_criteria_daids)
 })
 
 ## Test 117b: DAIDS HGB Low (CV unit) ----
@@ -7067,14 +6523,7 @@ test_that("derive_var_atoxgr_dir Test 117b: DAIDS HGB Low (CV unit)", {
       AVALU = if_else(!is.na(AVALU) & str_to_upper(AVALU) == "G/L", "g/dL", NA_character_)
     )
 
-  input_hgbd_daids_cv <- exp_hgbd_daids_cv %>%
-    select(-ATOXGRL)
-
-
-  test_low(
-    input = input_hgbd_daids_cv, expected = exp_hgbd_daids_cv,
-    meta = atoxgr_criteria_daids_uscv
-  )
+  test_low(expected = exp_hgbd_daids_cv, meta = atoxgr_criteria_daids_uscv)
 })
 
 
@@ -7106,10 +6555,7 @@ test_that("derive_var_atoxgr_dir Test 118: DAIDS INR High", {
   ) %>%
     mutate(AVALU = NA_character_)
 
-  input_inri_daids <- exp_inri_daids %>%
-    select(-ATOXGRH)
-
-  test_high(input = input_inri_daids, expected = exp_inri_daids, meta = atoxgr_criteria_daids)
+  test_high(expected = exp_inri_daids, meta = atoxgr_criteria_daids)
 })
 
 
@@ -7139,20 +6585,14 @@ exp_methi_daids <- tibble::tribble(
   "Methemoglobin",   NA,    "%",     NA,       12,
 )
 
-input_methi_daids <- exp_methi_daids %>%
-  select(-ATOXGRH)
-
 ## Test 119a: DAIDS Methemoglobin (SI unit) ----
 test_that("derive_var_atoxgr_dir Test 119a: DAIDS Methemoglobin (SI unit)", {
-  test_high(input = input_methi_daids, expected = exp_methi_daids, meta = atoxgr_criteria_daids)
+  test_high(expected = exp_methi_daids, meta = atoxgr_criteria_daids)
 })
 
 ## Test 119b: DAIDS Methemoglobin (USCV unit) ----
 test_that("derive_var_atoxgr_dir Test 119b: DAIDS Methemoglobin (USCV unit)", {
-  test_high(
-    input = input_methi_daids, expected = exp_methi_daids,
-    meta = atoxgr_criteria_daids_uscv
-  )
+  test_high(expected = exp_methi_daids, meta = atoxgr_criteria_daids_uscv)
 })
 
 ### PTT, high
@@ -7182,10 +6622,7 @@ test_that("derive_var_atoxgr_dir Test 120: DAIDS PTT High", {
     "PTT, High",   NA,    80,     NA_character_, NA,       12,
   )
 
-  input_ptti_daids <- exp_ptti_daids %>%
-    select(-ATOXGRH)
-
-  test_high(input = input_ptti_daids, expected = exp_ptti_daids, meta = atoxgr_criteria_daids)
+  test_high(expected = exp_ptti_daids, meta = atoxgr_criteria_daids)
 })
 
 
@@ -7213,15 +6650,9 @@ exp_plated_daids_si <- tibble::tribble(
   "Platelets, Decreased", 125,   "10^9/L",  "0",      11,
 )
 
-input_plated_daids_si <- exp_plated_daids_si %>%
-  select(-ATOXGRL)
-
 ## Test 121a: DAIDS Platelets decreased (SI unit) ----
 test_that("derive_var_atoxgr_dir Test 121a: DAIDS Platelets decreased (SI unit)", {
-  test_low(
-    input = input_plated_daids_si, expected = exp_plated_daids_si,
-    meta = atoxgr_criteria_daids
-  )
+  test_low(expected = exp_plated_daids_si, meta = atoxgr_criteria_daids)
 })
 
 exp_plated_daids_cv <- exp_plated_daids_si %>%
@@ -7229,15 +6660,9 @@ exp_plated_daids_cv <- exp_plated_daids_si %>%
     AVALU = if_else(str_to_upper(AVALU) == "10^9/L", "10^3/uL", AVALU)
   )
 
-input_plated_daids_cv <- exp_plated_daids_cv %>%
-  select(-ATOXGRL)
-
 ## Test 121b: DAIDS Platelets decreased (USCV unit) ----
 test_that("derive_var_atoxgr_dir Test 121b: DAIDS Platelets decreased (USCV unit)", {
-  test_low(
-    input = input_plated_daids_cv, expected = exp_plated_daids_cv,
-    meta = atoxgr_criteria_daids_uscv
-  )
+  test_low(expected = exp_plated_daids_cv, meta = atoxgr_criteria_daids_uscv)
 })
 
 exp_plated_daids_cv2 <- exp_plated_daids_si %>%
@@ -7246,15 +6671,9 @@ exp_plated_daids_cv2 <- exp_plated_daids_si %>%
     AVALU = if_else(str_to_upper(AVALU) == "10^9/L", "10^3/mL", AVALU)
   )
 
-input_plated_daids_cv2 <- exp_plated_daids_cv2 %>%
-  select(-ATOXGRL)
-
 ## Test 121c: DAIDS Platelets decreased (legacy USCV unit) ----
 test_that("derive_var_atoxgr_dir Test 121c: DAIDS Platelets decreased (legacy USCV unit)", {
-  test_low(
-    input = input_plated_daids_cv2, expected = exp_plated_daids_cv2,
-    meta = atoxgr_criteria_daids_uscv
-  )
+  test_low(expected = exp_plated_daids_cv2, meta = atoxgr_criteria_daids_uscv)
 })
 
 ### PT, high
@@ -7284,10 +6703,7 @@ test_that("derive_var_atoxgr_dir Test 122: DAIDS PT High", {
     "PT, High",    NA,     100,     NA_character_,  NA,       12,
   )
 
-  input_pti_daids <- exp_pti_daids %>%
-    select(-ATOXGRH)
-
-  test_high(input = input_pti_daids, expected = exp_pti_daids, meta = atoxgr_criteria_daids)
+  test_high(expected = exp_pti_daids, meta = atoxgr_criteria_daids)
 })
 
 ### White blood cell decreased (> 7 days of age)
@@ -7361,12 +6777,9 @@ exp_wbcd_daids_si <- exp_wbcd_daids_gt7d %>%
     exp_wbcd_daids_noage
   )
 
-input_wbcd_daids_si <- exp_wbcd_daids_si %>%
-  select(-ATOXGRL)
-
 ## Test 123a: DAIDS White blood cell decreased (SI unit) ----
 test_that("derive_var_atoxgr_dir Test 123a: DAIDS White blood cell decreased (SI unit)", {
-  test_low(input = input_wbcd_daids_si, expected = exp_wbcd_daids_si, meta = atoxgr_criteria_daids)
+  test_low(expected = exp_wbcd_daids_si, meta = atoxgr_criteria_daids)
 })
 
 exp_wbcd_daids_cv <- exp_wbcd_daids_si %>%
@@ -7374,15 +6787,9 @@ exp_wbcd_daids_cv <- exp_wbcd_daids_si %>%
     AVALU = if_else(str_to_upper(AVALU) == "10^9/L", "10^3/uL", AVALU)
   )
 
-input_wbcd_daids_cv <- exp_wbcd_daids_cv %>%
-  select(-ATOXGRL)
-
 ## Test 123b: DAIDS White blood cell decreased (USCV unit) ----
 test_that("derive_var_atoxgr_dir Test 123b: DAIDS White blood cell decreased (USCV unit)", {
-  test_low(
-    input = input_wbcd_daids_cv, expected = exp_wbcd_daids_cv,
-    meta = atoxgr_criteria_daids_uscv
-  )
+  test_low(expected = exp_wbcd_daids_cv, meta = atoxgr_criteria_daids_uscv)
 })
 
 exp_wbcd_daids_cv2 <- exp_wbcd_daids_si %>%
@@ -7391,15 +6798,9 @@ exp_wbcd_daids_cv2 <- exp_wbcd_daids_si %>%
     AVALU = if_else(str_to_upper(AVALU) == "10^9/L", "10^3/mL", AVALU)
   )
 
-input_wbcd_daids_cv2 <- exp_wbcd_daids_cv2 %>%
-  select(-ATOXGRL)
-
 ## Test 123c: DAIDS White blood cell decreased (USCV unit) ----
 test_that("derive_var_atoxgr_dir Test 123c: DAIDS White blood cell decreased (USCV unit)", {
-  test_low(
-    input = input_wbcd_daids_cv2, expected = exp_wbcd_daids_cv2,
-    meta = atoxgr_criteria_daids_uscv
-  )
+  test_low(expected = exp_wbcd_daids_cv2, meta = atoxgr_criteria_daids_uscv)
 })
 
 # NCICTCAEv6 new grading----
@@ -7421,10 +6822,7 @@ test_that("derive_var_atoxgr_dir Test 124: CTCAEv6 LDH increased (SI unit)", {
   ) %>%
     mutate(AVALU = NA_character_)
 
-  input_ldhi_si <- exp_ldhi_si %>%
-    select(-ATOXGRH)
-
-  test_high(input = input_ldhi_si, expected = exp_ldhi_si, meta = atoxgr_criteria_ctcv6)
+  test_high(expected = exp_ldhi_si, meta = atoxgr_criteria_ctcv6)
 })
 
 ## Test 125: CTCAEv6 HDL decreased (SI unit) ----
@@ -7440,10 +6838,7 @@ test_that("derive_var_atoxgr_dir Test 125: CTCAEv6 HDL decreased (SI unit)", {
   ) %>%
     mutate(AVALU = NA_character_)
 
-  input_hdld_si <- exp_hdld_si %>%
-    select(-ATOXGRL)
-
-  test_low(input = input_hdld_si, expected = exp_hdld_si, meta = atoxgr_criteria_ctcv6)
+  test_low(expected = exp_hdld_si, meta = atoxgr_criteria_ctcv6)
 })
 
 ## Test 126: CTCAEv6 LDL increased (SI unit) ----
@@ -7459,10 +6854,7 @@ test_that("derive_var_atoxgr_dir Test 126: CTCAEv6 LDL increased (SI unit)", {
   ) %>%
     mutate(AVALU = NA_character_)
 
-  input_ldli_si <- exp_ldli_si %>%
-    select(-ATOXGRH)
-
-  test_high(input = input_ldli_si, expected = exp_ldli_si, meta = atoxgr_criteria_ctcv6)
+  test_high(expected = exp_ldli_si, meta = atoxgr_criteria_ctcv6)
 })
 
 ### Acidosis
@@ -7493,10 +6885,7 @@ test_that("derive_var_atoxgr_dir Test 127: CTCAEv6 Acidosis (SI unit)", {
   ) %>%
     mutate(AVALU = NA_character_)
 
-  input_acido <- exp_acido %>%
-    select(-ATOXGRL)
-
-  test_low(input = input_acido, expected = exp_acido, meta = atoxgr_criteria_ctcv6)
+  test_low(expected = exp_acido, meta = atoxgr_criteria_ctcv6)
 })
 
 
@@ -7528,10 +6917,7 @@ test_that("derive_var_atoxgr_dir Test 128: CTCAEv6 Alkalosis (SI unit)", {
   ) %>%
     mutate(AVALU = NA_character_)
 
-  input_alkalo <- exp_alkalo %>%
-    select(-ATOXGRH)
-
-  test_high(input = input_alkalo, expected = exp_alkalo, meta = atoxgr_criteria_ctcv6)
+  test_high(expected = exp_alkalo, meta = atoxgr_criteria_ctcv6)
 })
 
 ### Creatinine clearance decreased
@@ -7558,11 +6944,11 @@ test_that("derive_var_atoxgr_dir Test 129: CTCAEv6 Creat. clear. dec. (SI unit)"
     "Creatinine clearance decreased",  50,     NA,        "L/min",   14,
   )
 
-  input_crcl_d <- exp_crcl_d %>%
-    select(-ATOXGRL)
-
-  test_low(input = input_crcl_d, expected = exp_crcl_d, meta = atoxgr_criteria_ctcv6)
+  test_low(expected = exp_crcl_d, meta = atoxgr_criteria_ctcv6)
 })
+
+input_bili_ctcv6 <- exp_bili_ctcv6 %>%
+  select(-ATOXGRH)
 
 ## Test when deprecated abnormal_indicator used - should map to high_indicator
 ## Test 130: CTCAEv6  Blood bilirubin increased ----
