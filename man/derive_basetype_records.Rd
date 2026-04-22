@@ -106,7 +106,7 @@ derive_basetype_records(
     "DOUBLE-BLIND" = EPOCH == "DOUBLE-BLIND"
   )
 )
-#> # A tibble: 11 x 6
+#> # A tibble: 11 × 6
 #>    USUBJID EPOCH        PARAMCD  ASEQ  AVAL BASETYPE    
 #>    <chr>   <chr>        <chr>   <dbl> <dbl> <chr>       
 #>  1 P01     SCREENING    PARAM01     1  10.2 <NA>        
@@ -142,7 +142,7 @@ derive_basetype_records(
     "WORST" = TRUE
   )
 )
-#> # A tibble: 8 x 6
+#> # A tibble: 8 × 6
 #>   USUBJID EPOCH        PARAMCD  ASEQ  AVAL BASETYPE
 #>   <chr>   <chr>        <chr>   <dbl> <dbl> <chr>   
 #> 1 P01     RUN-IN       PARAM01     1  10   LAST    

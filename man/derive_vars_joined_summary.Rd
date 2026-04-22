@@ -354,7 +354,7 @@ derive_vars_joined_summary(
   join_vars = exprs(ADY),
   new_vars = exprs(CUMDOSA = sum(AVAL, na.rm = TRUE))
 )
-#> # A tibble: 6 x 4
+#> # A tibble: 6 × 4
 #>   USUBJID   ADY AEDECOD    CUMDOSA
 #>   <chr>   <dbl> <chr>        <dbl>
 #> 1 1           2 Fatigue         10
@@ -379,7 +379,7 @@ by specifying the \code{missing_values} argument.
   new_vars = exprs(CUMDOSE = sum(AVAL, na.rm = TRUE)),
   missing_values = exprs(CUMDOSE = 0)
 )
-#> # A tibble: 6 x 4
+#> # A tibble: 6 × 4
 #>   USUBJID   ADY AEDECOD    CUMDOSE
 #>   <chr>   <dbl> <chr>        <dbl>
 #> 1 1           2 Fatigue         10
@@ -414,7 +414,7 @@ derive_vars_joined_summary(
   join_type = "before",
   new_vars = exprs(SELECTED_DAYS = paste(DAY, collapse = ", "))
 )
-#> # A tibble: 5 x 2
+#> # A tibble: 5 × 2
 #>     DAY SELECTED_DAYS
 #>   <dbl> <chr>        
 #> 1     1 <NA>         
@@ -430,7 +430,7 @@ derive_vars_joined_summary(
   join_type = "after",
   new_vars = exprs(SELECTED_DAYS = paste(DAY, collapse = ", "))
 )
-#> # A tibble: 5 x 2
+#> # A tibble: 5 × 2
 #>     DAY SELECTED_DAYS
 #>   <dbl> <chr>        
 #> 1     1 2, 3, 4, 5   
@@ -467,7 +467,7 @@ the selected days.
   first_cond_lower = DAY.join == 2,
   new_vars = exprs(SELECTED_DAYS = paste(sort(DAY), collapse = ", "))
 )
-#> # A tibble: 5 x 2
+#> # A tibble: 5 × 2
 #>     DAY SELECTED_DAYS
 #>   <dbl> <chr>        
 #> 1     1 <NA>         
@@ -484,7 +484,7 @@ derive_vars_joined_summary(
   first_cond_upper = DAY.join == 4,
   new_vars = exprs(SELECTED_DAYS = paste(DAY, collapse = ", "))
 )
-#> # A tibble: 5 x 2
+#> # A tibble: 5 × 2
 #>     DAY SELECTED_DAYS
 #>   <dbl> <chr>        
 #> 1     1 2, 3, 4      
@@ -502,7 +502,7 @@ derive_vars_joined_summary(
   first_cond_upper = DAY.join == 4,
   new_vars = exprs(SELECTED_DAYS = paste(sort(DAY), collapse = ", "))
 )
-#> # A tibble: 5 x 2
+#> # A tibble: 5 × 2
 #>     DAY SELECTED_DAYS
 #>   <dbl> <chr>        
 #> 1     1 2, 3, 4      
@@ -553,7 +553,7 @@ derive_vars_joined_summary(
   join_vars = exprs(ADY),
   new_vars = exprs(AVAL = if_else(n() >= 3, mean(AVAL, na.rm = TRUE), NA))
 )
-#> # A tibble: 3 x 4
+#> # A tibble: 3 × 4
 #>   USUBJID AVISIT   ADY  AVAL
 #>   <chr>   <chr>  <dbl> <dbl>
 #> 1 1       WEEK 1     8    10

@@ -349,7 +349,7 @@ filter_joined(
   join_type = "all",
   filter_join = ADURN > 30 & ACOVFL.join == "Y" & ADY.join <= ADY + 7
 )
-#> # A tibble: 2 x 4
+#> # A tibble: 2 × 4
 #>   USUBJID   ADY ACOVFL ADURN
 #>   <chr>   <dbl> <chr>  <dbl>
 #> 1 1          21 N         50
@@ -383,7 +383,7 @@ filter_joined(
   order = exprs(AVISITN),
   filter_join = AVALC == "Y" & AVALC.join == "Y"
 )
-#> # A tibble: 1 x 3
+#> # A tibble: 1 × 3
 #>   USUBJID AVISITN AVALC
 #>   <chr>     <dbl> <chr>
 #> 1 1             1 Y    }\if{html}{\out{</div>}}}
@@ -421,7 +421,7 @@ To select \code{"0"} where all results from the first \code{"++"} before the
   first_cond_lower = val.join == "++",
   filter_join = val == "0" & all(val.join \%in\% c("+", "++"))
 )
-#> # A tibble: 1 x 3
+#> # A tibble: 1 × 3
 #>   subj    day val  
 #>   <chr> <dbl> <chr>
 #> 1 2         4 0    }\if{html}{\out{</div>}}
@@ -440,7 +440,7 @@ up to the first \code{"++"} after the \code{"0"} are \code{"+"} or \code{"++"} t
   first_cond_upper = val.join == "++",
   filter_join = val == "0" & all(val.join \%in\% c("+", "++"))
 )
-#> # A tibble: 1 x 3
+#> # A tibble: 1 × 3
 #>   subj    day val  
 #>   <chr> <dbl> <chr>
 #> 1 1         3 0    }\if{html}{\out{</div>}}}
@@ -489,7 +489,7 @@ filter_joined(
   filter_join = AVALC == "CR" & all(AVALC.join \%in\% c("CR", "NE")) &
     count_vals(var = AVALC.join, val = "NE") <= 1
 )
-#> # A tibble: 1 x 3
+#> # A tibble: 1 × 3
 #>   USUBJID AVISITN AVALC
 #>   <chr>     <dbl> <chr>
 #> 1 1             2 CR   }\if{html}{\out{</div>}}}
@@ -547,7 +547,7 @@ filter_joined(
         count_vals(var = AVALC.join, val = "CR") == 0
     )
 )
-#> # A tibble: 1 x 3
+#> # A tibble: 1 × 3
 #>   USUBJID   ADY AVALC
 #>   <chr>   <dbl> <chr>
 #> 1 4          32 PR   }\if{html}{\out{</div>}}}
@@ -584,7 +584,7 @@ filter_joined(
   filter_join = CRIT1FL == "Y" & CRIT1FL.join == "Y" &
     (tmp_obs_nr + 1 == tmp_obs_nr.join | tmp_obs_nr == max(tmp_obs_nr.join))
 )
-#> # A tibble: 2 x 3
+#> # A tibble: 2 × 3
 #>   USUBJID AVISITN CRIT1FL
 #>   <chr>     <dbl> <chr>  
 #> 1 2             1 Y      
