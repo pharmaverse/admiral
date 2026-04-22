@@ -6400,7 +6400,7 @@ test_that("derive_var_atoxgr_dir Test 112a: DAIDS Uric Acid, High (SI unit)", {
 
 ## Test 112b: DAIDS Uric Acid, High (USCV unit) ----
 test_that("derive_var_atoxgr_dir Test 112b: DAIDS Uric Acid, High (USCV unit)", {
-  exp_urici_daids <- tibble::tribble(
+  exp_uric_daids <- tibble::tribble(
     ~ATOXDSCH,         ~AVAL,  ~AVALU,  ~ATOXGRH, ~TESTNUM,
     "Not a term",      15,    "mg/dL",        NA, 1,
     NA_character_,     15,    "mg/dL",        NA, 2,
@@ -6418,10 +6418,10 @@ test_that("derive_var_atoxgr_dir Test 112b: DAIDS Uric Acid, High (USCV unit)", 
     "Uric Acid, High", NA,    "mg/dL",        NA, 12,
   )
 
-  input_urici_daids <- exp_urici_daids %>%
+  input_uric_daids <- exp_uric_daids %>%
     select(-ATOXGRH)
 
-  test_high(input = input_urici_daids, expected = exp_urici_daids, meta = atoxgr_criteria_daids_uscv)
+  test_high(input = input_uric_daids, expected = exp_uric_daids, meta = atoxgr_criteria_daids_uscv)
 })
 
 ### Absolute CD4+ Count, Low
@@ -7218,7 +7218,10 @@ input_plated_daids_si <- exp_plated_daids_si %>%
 
 ## Test 121a: DAIDS Platelets decreased (SI unit) ----
 test_that("derive_var_atoxgr_dir Test 121a: DAIDS Platelets decreased (SI unit)", {
-  test_low(input = input_plated_daids_si, expected = exp_plated_daids_si, meta = atoxgr_criteria_daids)
+  test_low(
+    input = input_plated_daids_si, expected = exp_plated_daids_si,
+    meta = atoxgr_criteria_daids
+  )
 })
 
 exp_plated_daids_cv <- exp_plated_daids_si %>%
@@ -7231,7 +7234,10 @@ input_plated_daids_cv <- exp_plated_daids_cv %>%
 
 ## Test 121b: DAIDS Platelets decreased (USCV unit) ----
 test_that("derive_var_atoxgr_dir Test 121b: DAIDS Platelets decreased (USCV unit)", {
-  test_low(input = input_plated_daids_cv, expected = exp_plated_daids_cv, meta = atoxgr_criteria_daids_uscv)
+  test_low(
+    input = input_plated_daids_cv, expected = exp_plated_daids_cv,
+    meta = atoxgr_criteria_daids_uscv
+  )
 })
 
 exp_plated_daids_cv2 <- exp_plated_daids_si %>%
