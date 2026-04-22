@@ -4276,7 +4276,7 @@ input_bicad_daids <- exp_bicad_daids %>%
 
 ## Test 89a: DAIDS Bicarbonate, Low (SI unit) ----
 test_that("derive_var_atoxgr_dir Test 89a: DAIDS Bicarbonate, Low (SI unit)", {
-  test_low(input = input_bicarbd_daids, expected = exp_bicarbd_daids, meta = atoxgr_criteria_daids)
+  test_low(input = input_bicad_daids, expected = exp_bicad_daids, meta = atoxgr_criteria_daids)
 })
 
 ## Test 89b: DAIDS Bicarbonate, Low (USCV unit) ----
