@@ -682,6 +682,10 @@ recommends to derive a separate parameter. If the confirmation is considered
 only as a selection criterion for the time-to-event analysis, both options are
 possible.
 
+In the following sections three options are presented how to derive a "confirmed
+worsening" parameter in `ADTTE`. The dataset and plot displayed at the end of
+each section is the same but the code to derive it is different.
+
 ## Adding a Confirmation Flag to the Source Dataset
 
 To derive a variable (`CONFFL`) which indicates whether the worsening or
