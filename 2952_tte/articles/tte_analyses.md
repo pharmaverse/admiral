@@ -118,7 +118,7 @@ adtte <- derive_param_tte(
 )
 ```
 
-`adtte` dataset
+**`adtte` dataset** (click to expand/collapse)
 
 ![](tte_analyses_files/figure-html/unnamed-chunk-9-1.png)
 
@@ -156,7 +156,7 @@ adtte <- derive_param_tte(
 )
 ```
 
-`adtte` dataset
+**`adtte` dataset** (click to expand/collapse)
 
 ![](tte_analyses_files/figure-html/unnamed-chunk-13-1.png)
 
@@ -212,7 +212,7 @@ adqs_ext <- adqs_a %>%
   )
 ```
 
-`adqs_ext` dataset
+**`adqs_ext` dataset** (click to expand/collapse)
 
 The new variable `CONFFL` is then used in the definition of the event
 for confirmed worsening.
@@ -237,7 +237,7 @@ adtte <- derive_param_tte(
 )
 ```
 
-`adtte` dataset
+**`adtte` dataset** (click to expand/collapse)
 
 ![](tte_analyses_files/figure-html/unnamed-chunk-18-1.png)
 
@@ -288,7 +288,7 @@ adqs_ext <- adqs_a %>%
   )
 ```
 
-`adqs_ext` dataset
+**`adqs_ext` dataset** (click to expand/collapse)
 
 The new parameter `CONFCHGA` is then used in the definition of the event
 for confirmed worsening.
@@ -313,7 +313,7 @@ adtte <- derive_param_tte(
 )
 ```
 
-`adtte` dataset
+**`adtte` dataset** (click to expand/collapse)
 
 ![](tte_analyses_files/figure-html/unnamed-chunk-23-1.png)
 
@@ -367,7 +367,7 @@ adtte <- derive_extreme_event(
 )
 ```
 
-`adtte` dataset
+**`adtte` dataset** (click to expand/collapse)
 
 ![](tte_analyses_files/figure-html/unnamed-chunk-26-1.png)
 
@@ -389,7 +389,7 @@ not needs to be derived in the input dataset.
 Assume we want to derive a time to improvement parameter which requires
 improvement in score A or score B.
 
-`adqs_all` dataset
+**`adqs_all` dataset** (click to expand/collapse)
 
 ![](tte_analyses_files/figure-html/unnamed-chunk-28-1.png)
 
@@ -424,7 +424,7 @@ adtte <- derive_param_tte(
 )
 ```
 
-`adtte` dataset
+**`adtte` dataset** (click to expand/collapse)
 
 ![](tte_analyses_files/figure-html/unnamed-chunk-31-1.png)
 
@@ -455,7 +455,7 @@ adqs_all_ext <- adqs_all %>%
   )
 ```
 
-`adqs_all_ext` dataset
+**`adqs_all_ext` dataset** (click to expand/collapse)
 
 Now the new parameter can be used in the
 [`derive_param_tte()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/derive_param_tte.md)
@@ -482,7 +482,7 @@ adtte <- derive_param_tte(
 )
 ```
 
-`adtte` dataset
+**`adtte` dataset** (click to expand/collapse)
 
 ![](tte_analyses_files/figure-html/unnamed-chunk-36-1.png)
 
