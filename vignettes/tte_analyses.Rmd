@@ -601,7 +601,7 @@ adtte <- derive_param_tte(
 ```
 
 <details>
-<summary>`adtte` dataset</summary>
+<summary>**`adtte` dataset** <small>(click to expand/collapse)</small></summary>
 ```{r, echo=FALSE}
 dataset_vignette(adtte)
 ```
@@ -650,7 +650,7 @@ adtte <- derive_param_tte(
 ```
 
 <details>
-<summary>`adtte` dataset</summary>
+<summary>**`adtte` dataset** <small>(click to expand/collapse)</small></summary>
 ```{r, echo=FALSE}
 dataset_vignette(adtte)
 ```
@@ -711,7 +711,7 @@ adqs_ext <- adqs_a %>%
 ```
 
 <details open>
-<summary>`adqs_ext` dataset</summary>
+<summary>**`adqs_ext` dataset** <small>(click to expand/collapse)</small></summary>
 ```{r, echo=FALSE}
 dataset_vignette(
   adqs_ext,
@@ -743,7 +743,7 @@ adtte <- derive_param_tte(
 ```
 
 <details>
-<summary>`adtte` dataset</summary>
+<summary>**`adtte` dataset** <small>(click to expand/collapse)</small></summary>
 ```{r, echo=FALSE}
 dataset_vignette(adtte)
 ```
@@ -803,7 +803,7 @@ adqs_ext <- adqs_a %>%
 ```
 
 <details open>
-<summary>`adqs_ext` dataset</summary>
+<summary>**`adqs_ext` dataset** <small>(click to expand/collapse)</small></summary>
 ```{r, echo=FALSE}
 dataset_vignette(
   adqs_ext,
@@ -835,7 +835,7 @@ adtte <- derive_param_tte(
 ```
 
 <details>
-<summary>`adtte` dataset</summary>
+<summary>**`adtte` dataset** <small>(click to expand/collapse)</small></summary>
 ```{r, echo=FALSE}
 dataset_vignette(adtte)
 ```
@@ -895,7 +895,7 @@ adtte <- derive_extreme_event(
 ```
 
 <details>
-<summary>`adtte` dataset</summary>
+<summary>**`adtte` dataset** <small>(click to expand/collapse)</small></summary>
 ```{r, echo=FALSE}
 dataset_vignette(adtte)
 ```
@@ -925,7 +925,7 @@ Assume we want to derive a time to improvement parameter which requires
 improvement in score A or score B.
 
 <details>
-<summary>`adqs_all` dataset</summary>
+<summary>**`adqs_all` dataset** <small>(click to expand/collapse)</small></summary>
 ```{r, echo=FALSE}
 dataset_vignette(
   adqs_all,
@@ -972,7 +972,7 @@ adtte <- derive_param_tte(
 ```
 
 <details>
-<summary>`adtte` dataset</summary>
+<summary>**`adtte` dataset** <small>(click to expand/collapse)</small></summary>
 ```{r, echo=FALSE}
 dataset_vignette(adtte)
 ```
@@ -1011,7 +1011,7 @@ adqs_all_ext <- adqs_all %>%
 ```
 
 <details>
-<summary>`adqs_all_ext` dataset</summary>
+<summary>**`adqs_all_ext` dataset** <small>(click to expand/collapse)</small></summary>
 ```{r, echo=FALSE}
 dataset_vignette(adqs_all_ext)
 ```
@@ -1041,7 +1041,7 @@ adtte <- derive_param_tte(
 ```
 
 <details>
-<summary>`adtte` dataset</summary>
+<summary>**`adtte` dataset** <small>(click to expand/collapse)</small></summary>
 ```{r, echo=FALSE}
 dataset_vignette(adtte)
 ```
