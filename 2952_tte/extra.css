@@ -36,3 +36,7 @@
   /* Activate scrollbar if window is too small */
   overflow-y: auto !important;
 }
+
+[data-bs-theme="dark"] .r-plt {
+  filter: invert(100%) hue-rotate(90deg) !important;
+}
