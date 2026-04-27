@@ -40,7 +40,7 @@ Please note that we try to align to best practices used in other R packages' dev
   
   🦋  We advise to contact an `{admiral}` core development team directly via [Slack](https://app.slack.com/client/T028PB489D3/C02M8KN8269) before submitting code for complex functionality.
   
-  🦋  We welcome the use of AI for contribtuions, but it must also follow the same steps as the humans!
+  🦋  We welcome the use of AI for contributions, but it must also follow the same steps as the humans!
 
 
 ### Detailed Development Process
