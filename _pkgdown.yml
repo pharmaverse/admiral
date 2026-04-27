@@ -267,7 +267,7 @@ navbar:
       - text: Visit and Period Variables
         href: articles/visits_periods.html
       - text: Time-to-Event Analyses
-        href: articles/tte_analyses.html
+        href: articles/tte_analyses_web.html
       - text: Queries Dataset Documentation
         href: articles/queries_dataset.html
       - text: Lab Grading

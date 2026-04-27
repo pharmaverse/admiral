@@ -37,6 +37,7 @@
   overflow-y: auto !important;
 }
 
+/* Adjust color transformation for plots in dark mode */
 [data-bs-theme="dark"] .r-plt {
   filter: invert(100%) hue-rotate(90deg) !important;
 }
