@@ -32,6 +32,17 @@ Please note that we try to align to best practices used in other R packages' dev
   
   🦋  We advise to contact an `{admiral}` core development team directly via [Slack](https://app.slack.com/client/T028PB489D3/C02M8KN8269) before submitting code for complex functionality.
 
+### Type 3: Contribution with AI
+
+  🦋  First, the user creates an issue or comments on an existing issue to notify that they’d like to contribute code.
+  
+  🦋  Follow our development process step-by-step guide.
+  
+  🦋  We advise to contact an `{admiral}` core development team directly via [Slack](https://app.slack.com/client/T028PB489D3/C02M8KN8269) before submitting code for complex functionality.
+  
+  🦋  We welcome the use of AI for contribtuions, but it must also follow the same steps as the humans!
+
+
 ### Detailed Development Process
 
 If you decide to contribute with code and you're ready to make your first code contribution, this detailed development process step-by-step guide will help tie all the other detailed vignettes together to give you the simplest experience of helping to grow and enhance our codebase.
