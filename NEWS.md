@@ -37,6 +37,7 @@ specified under `save_path`. This is because this functionality did not work as 
 
 - The following new and existing User Guides have been changed from vignettes to articles, meaning they are no longer accessible
 offline via `vignette("vignette_name")`:
+
   - Creating an ADAB ADaM
   - Estimands (new)
   
@@ -81,7 +82,7 @@ of packages were updated to specify the level of contributions required for auth
 - Creating the website for pull requests was enabled. Add "[create website]" to
 the pull request title to trigger website creation. (#2984)
 
-- `_pkdown.yml` was updated to add metadata for linking across packages
+- `_pkgdown.yml` was updated to add metadata for linking across packages
 (`inst/pkgdown.yml`). (#2950)
 
 - The helper functions `roxygen_param_dataset()`, `roxygen_param_by_vars()`,
