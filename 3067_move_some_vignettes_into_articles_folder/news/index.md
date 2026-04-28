@@ -153,7 +153,7 @@ Developer Notes
   website\]” to the pull request title to trigger website creation.
   ([\#2984](https://github.com/pharmaverse/admiral/issues/2984))
 
-- `_pkdown.yml` was updated to add metadata for linking across packages
+- `_pkgdown.yml` was updated to add metadata for linking across packages
   (`inst/pkgdown.yml`).
   ([\#2950](https://github.com/pharmaverse/admiral/issues/2950))
 

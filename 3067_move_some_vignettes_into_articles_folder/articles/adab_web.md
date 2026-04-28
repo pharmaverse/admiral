@@ -30,7 +30,7 @@ An important aspect of this dataset is the separation of original by
 visit data, adding by visit interpreted results and creation of summary
 parameters. An analogy to `ADAB` structure would be `ADEX` as it has a
 mix of original visit based records and overall/summary records. These
-will be illustrated later in this vignette.
+will be illustrated later in this article.
 
 Here are the relative time variables we will use for by visit records.
 These correspond to the names in the CDISC Implementation Guide:

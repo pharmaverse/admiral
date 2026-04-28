@@ -39,7 +39,7 @@ effort to help teams understand the basics, i.e.:
 
 ## Data Setup
 
-The examples in this vignette require the following packages and
+The examples in this article require the following packages and
 datasets, but note that for the purpose of the example data extracts
 shown in this article we have made some tweaks to test data to make the
 examples more interesting.
