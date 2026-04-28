@@ -103,7 +103,7 @@ The function
 [`derive_vars_merged()`](https:/pharmaverse.github.io/admiral/main/reference/derive_vars_merged.md)
 can be used to derive the treatment start and end date/times using the
 `ex` domain. A pre-processing step for `ex` is required to convert the
-variable `EXSTDTC` and `EXSTDTC` to datetime variables and impute
+variable `EXSTDTC` and `EXENDTC` to datetime variables and impute
 missing date or time components. Conversion and imputation is done by
 [`derive_vars_dtm()`](https:/pharmaverse.github.io/admiral/main/reference/derive_vars_dtm.md).
 
