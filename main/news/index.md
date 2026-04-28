@@ -40,6 +40,11 @@
   RStudio.
   ([\#2989](https://github.com/pharmaverse/admiral/issues/2989))
 
+- NCICTCAEv5 grading criteria (`atoxgr_criteria_ctcv5`,
+  `atoxgr_criteria_ctcv5_uscv`), updated to add term
+  `"Blood lactate dehydrogenase increase"`
+  ([\#3025](https://github.com/pharmaverse/admiral/issues/3025)).
+
 ### Breaking Changes
 
 - The following function arguments are entering the next phase of the
@@ -155,6 +160,9 @@ Developer Notes
   accessible in [admiral](https://pharmaverse.github.io/admiral/) via
   the existing `@import admiraldev` dependency.
   ([admiraldev/#517](https://github.com/pharmaverse/admiraldev/issues/517))
+
+- The HTML tag `<br/>` was removed from the roxygen headers.
+  ([\#3042](https://github.com/pharmaverse/admiral/issues/3042))
 
 ## admiral 1.4.1
 
