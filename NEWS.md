@@ -79,7 +79,10 @@ the pull request title to trigger website creation. (#2984)
   `roxygen_order_na_handling()`, and `roxygen_save_memory()` have been moved
   from `{admiral}` to `{admiraldev}`. They are now exported from `{admiraldev}`
   and remain accessible in `{admiral}` via the existing `@import admiraldev`
-  dependency. ([admiraldev/#517](https://github.com/pharmaverse/admiraldev/issues/517))
+  dependency.
+  ([admiraldev/#517](https://github.com/pharmaverse/admiraldev/issues/517))
+  
+- The HTML tag `<br/>` was removed from the roxygen headers. (#3042)
 </details>
 
 # admiral 1.4.1
