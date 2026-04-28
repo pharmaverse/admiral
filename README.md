@@ -204,7 +204,7 @@ Jaxon Abercrombie, Mahdi About, Teckla Akinyi, Anthony Arroyo, Alex Assuied, Jam
 Liming Clark, Bill Denney, Kamila Duniec, Alice Ehmann, Romain Francois, G Gayatri, Ania Golab, Alana Harris, Declan Hodges,
 Solveig Holmgaard, Anthony Howard, Shimeng Huang, Samia Kabi, Leena Khatri, James Kim, John Kirkpatrick, Robin Koeger, Konstantina Koukourikou, 
 Dinakar Kulkarni, Pavan Kumar, Pooja Kumari, Shan Lee, Wenyi Liu, Sadchla Mascary, Iain McCay, Jack McGavigan, Jordanna Morrish, Syed Mubasheer,
-Kirill Muller, Thomas Neitmann, Yohann Omnes, Barbara O'Reilly, Celine Piraux, Hamza Rahal, Nick Ramirez, Tom Ratford, 
+Kirill Muller, Marco Musca, Thomas Neitmann, Yohann Omnes, Barbara O'Reilly, Celine Piraux, Hamza Rahal, Nick Ramirez, Tom Ratford, 
 Sukalpo Saha, Tamara Senior, Sophie Shapcott, Vladyslav Shuliar, Eric Simms, Daniel Sjoberg, Ondrej Slama, Andrew Smith, Daniil Stefonishin,
 Vignesh Thanikachalam, Michael Thorpe, Steven Ting, Ojesh Upadhyay, Franciszek Walkowiak, Enki Wang, Phillip Webster, 
 Annie Yang, Andrii Yurovskyi, Junze Zhang, Kangjie Zhang, Zelos Zhu
