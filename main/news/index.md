@@ -156,6 +156,9 @@ Developer Notes
   the existing `@import admiraldev` dependency.
   ([admiraldev/#517](https://github.com/pharmaverse/admiraldev/issues/517))
 
+- The HTML tag `<br/>` was removed from the roxygen headers.
+  ([\#3042](https://github.com/pharmaverse/admiral/issues/3042))
+
 ## admiral 1.4.1
 
 CRAN release: 2026-02-03
