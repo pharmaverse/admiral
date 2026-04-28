@@ -193,7 +193,7 @@ For a full collection of `{admiral}` conference presentations over the years, pl
 
 We use the following for support and communications between user and developer community:
 
-* [Slack](https://pharmaverse.slack.com/)---for informal discussions, Q\&A and building our user community. If you don't have access, use this [link](https://pharmaverse.slack.com) to join the pharmaverse Slack workspace.
+* [Slack](https://pharmaverse.slack.com/)---for informal discussions, Q\&A and building our user community. If you don't have access, use this [link](https://join.slack.com/t/pharmaverse/shared_invite/zt-yv5atkr4-Np2ytJ6W_QKz_4Olo7Jo9A) to join the pharmaverse Slack workspace.
 * [GitHub Issues](https://github.com/pharmaverse/admiral/issues)---for direct feedback, enhancement requests or raising bugs.
 
 ## Acknowledgments
@@ -204,7 +204,7 @@ Jaxon Abercrombie, Mahdi About, Teckla Akinyi, Anthony Arroyo, Alex Assuied, Jam
 Liming Clark, Bill Denney, Kamila Duniec, Alice Ehmann, Romain Francois, G Gayatri, Ania Golab, Alana Harris, Declan Hodges,
 Solveig Holmgaard, Anthony Howard, Shimeng Huang, Samia Kabi, Leena Khatri, James Kim, John Kirkpatrick, Robin Koeger, Konstantina Koukourikou, 
 Dinakar Kulkarni, Pavan Kumar, Pooja Kumari, Shan Lee, Wenyi Liu, Sadchla Mascary, Iain McCay, Jack McGavigan, Jordanna Morrish, Syed Mubasheer,
-Kirill Muller, Thomas Neitmann, Yohann Omnes, Barbara O'Reilly, Celine Piraux, Hamza Rahal, Nick Ramirez, Tom Ratford, 
+Kirill Muller, Marco Musca, Thomas Neitmann, Yohann Omnes, Barbara O'Reilly, Celine Piraux, Hamza Rahal, Nick Ramirez, Tom Ratford, 
 Sukalpo Saha, Tamara Senior, Sophie Shapcott, Vladyslav Shuliar, Eric Simms, Daniel Sjoberg, Ondrej Slama, Andrew Smith, Daniil Stefonishin,
 Vignesh Thanikachalam, Michael Thorpe, Steven Ting, Ojesh Upadhyay, Franciszek Walkowiak, Enki Wang, Phillip Webster, 
-Annie Yang, Andrii Yurovskyi, Junze Zhang, Kangjie Zhang, Zelos Zhu, Marco Musca
+Annie Yang, Andrii Yurovskyi, Junze Zhang, Kangjie Zhang, Zelos Zhu
