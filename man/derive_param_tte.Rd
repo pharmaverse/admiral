@@ -93,6 +93,12 @@ intercurrent events like start of new drug. If there is only one reason for
 stopping the observation, it is sufficient to just include this as a
 censoring condition in \code{censor_conditions}.
 
+See the \if{html}{\out{<a href = "#differentiating-censoring-reasons">}}Differentiating
+censoring reasons\if{html}{\out{</a>}} and \if{html}{\out{<a href =
+"#differentiating-censoring-date-description">}}Differentiating censoring
+date description\if{html}{\out{</a>}} examples to see how the values (\code{set_value_to}) set by
+end dates interact with the values set by the censoring conditions.
+
 \describe{
 \item{Permitted values}{a list of source objects, e.g., \code{list(pd, death)}}
 \item{Default value}{\code{NULL}}
@@ -932,6 +938,113 @@ set to \code{"NO POST-BASELINE ASSESSMENT"}.
 #> 4 04      2021-04-02 NO POST-BASELINE A… ADQS   TRTSDT     4 TREATME… 2021-04-02
 #> 5 05      2021-05-09 NO ASSESSMENTS      ADSL   TRTSDT     5 TREATME… 2021-05-09
 #> 6 06      2021-03-15 WORSENING           ADQS   ADT        0 <NA>     2021-02-01}\if{html}{\out{</div>}}}
+\subsection{Differentiating censoring date description}{
+
+In this example, the event description (\code{EVNTDESC}) and the censoring
+date description (\code{CNSDTDSC}) should distinguish between the different
+censoring reasons: end of study, new drug, or just last assessment. If a
+variable like \code{CNSDTDSC} is set in both the end dates and the censoring
+condition, the latter overwrites the former. However, the \code{coalesce()}
+function can be used to avoid this.
+
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{adsl <- tribble(
+~USUBJID, ~TRTSDT,           ~EOSDT,            ~NEWDRGDT,
+"01",     ymd("2020-12-06"), ymd("2021-03-06"), NA,
+"02",     ymd("2021-01-16"), ymd("2021-04-03"), ymd("2021-03-21"),
+"03",     ymd("2021-03-10"), NA,                NA,
+"04",     ymd("2021-04-02"), NA,                NA,
+"05",     ymd("2021-05-09"), ymd("2021-07-30"), NA
+) \%>\%
+  mutate(STUDYID = "AB42")
+
+adqs <- tribble(
+  ~USUBJID, ~ADT,              ~CHG,
+  "01",     ymd("2021-02-03"),   -2,
+  "01",     ymd("2021-03-01"),   NA,
+  "01",     ymd("2021-03-07"),   10,
+  "02",     ymd("2021-02-03"),   -1,
+  "02",     ymd("2021-04-01"),  -12,
+  "03",     ymd("2021-03-20"),    2,
+  "03",     ymd("2021-04-07"),    5,
+  "04",     ymd("2021-04-15"),  -15,
+  "05",     ymd("2021-06-01"),  -13
+) \%>\%
+  mutate(STUDYID = "AB42") \%>\%
+  derive_vars_merged(
+    dataset_add = adsl,
+    by_vars = exprs(USUBJID),
+    new_vars = exprs(TRTSDT)
+  )}\if{html}{\out{</div>}}
+
+Here two end dates are defined which set both \code{EVNTDESC} and \code{CNSDTDSC}.
+
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{eos <- censor_source(
+  dataset_name = "adsl",
+  date = EOSDT,
+  set_values_to = exprs(
+    EVNTDESC = "END OF STUDY",
+    CNSDTDSC = "LAST QA BEFORE EOS"
+  )
+)
+
+newdrg <- censor_source(
+  dataset_name = "adsl",
+  date = NEWDRGDT,
+  set_values_to = exprs(
+    EVNTDESC = "NEW DRUG",
+    CNSDTDSC = "LAST QA BEFORE NEW DRUG"
+  )
+)}\if{html}{\out{</div>}}
+
+For the censoring condition (\code{valid_assessment}) the \code{coalesce()}
+function is used to set the descriptions only if they are not already set
+by the end dates.
+
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{valid_assessment <- censor_source(
+  dataset_name = "adqs",
+  date = ADT,
+  filter = !is.na(CHG),
+  set_values_to = exprs(
+    EVNTDESC = coalesce(EVNTDESC, "NO WORSENING"),
+    CNSDTDSC = coalesce(CNSDTDSC, "LAST QA"),
+    SRCDOM = "ADQS",
+    SRCVAR = "ADT"
+  )
+)
+
+worsening <- event_source(
+  dataset_name = "adqs",
+  date = ADT,
+  filter = CHG <= -10,
+  set_values_to = exprs(
+    EVNTDESC = "WORSENING",
+    SRCDOM = "ADQS",
+    SRCVAR = "ADT"
+  )
+)
+
+derive_param_tte(
+  dataset_adsl = adsl,
+  source_datasets = list(adsl = adsl, adqs = adqs),
+  start_date = TRTSDT,
+  end_dates = list(eos, newdrg),
+  event_conditions = list(worsening),
+  censor_conditions = list(valid_assessment),
+  set_values_to = exprs(PARAMCD = "TTWORSE")
+) \%>\%
+  select(-STUDYID, -PARAMCD, -STARTDT, -SRCDOM, -SRCVAR)
+#> # A tibble: 5 × 5
+#>   USUBJID ADT        EVNTDESC      CNSR CNSDTDSC               
+#>   <chr>   <date>     <chr>        <int> <chr>                  
+#> 1 01      2021-02-03 END OF STUDY     1 LAST QA BEFORE EOS     
+#> 2 02      2021-02-03 NEW DRUG         1 LAST QA BEFORE NEW DRUG
+#> 3 03      2021-04-07 NO WORSENING     1 LAST QA                
+#> 4 04      2021-04-15 WORSENING        0 <NA>                   
+#> 5 05      2021-06-01 WORSENING        0 <NA>                   }\if{html}{\out{</div>}}
+
+For subjects \code{01} and \code{02} the descriptions from the end dates are
+used. As subject \code{03} has no end dates, the descriptions from the censoring
+condition (\code{valid_assessments}) are used.}
 \subsection{Overall survival time to event parameter}{
 
 In oncology trials, this is commonly derived as time from randomization

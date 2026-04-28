@@ -61,6 +61,12 @@
 #'   stopping the observation, it is sufficient to just include this as a
 #'   censoring condition in `censor_conditions`.
 #'
+#'   See the <a href = "#differentiating-censoring-reasons">Differentiating
+#'   censoring reasons</a> and <a href =
+#'   "#differentiating-censoring-date-description">Differentiating censoring
+#'   date description</a> examples to see how the values (`set_value_to`) set by
+#'   end dates interact with the values set by the censoring conditions.
+#'
 #' @permitted [source_list]
 #'
 #' @param event_conditions Sources and conditions defining events
@@ -804,6 +810,106 @@
 #' ) %>%
 #'   select(-STUDYID, -PARAMCD)
 #'
+#' @caption Differentiating censoring date description
+#' @info In this example, the event description (`EVNTDESC`) and the censoring
+#'   date description (`CNSDTDSC`) should distinguish between the different
+#'   censoring reasons: end of study, new drug, or just last assessment. If a
+#'   variable like `CNSDTDSC` is set in both the end dates and the censoring
+#'   condition, the latter overwrites the former. However, the `coalesce()`
+#'   function can be used to avoid this.
+#'
+#' @code
+#' adsl <- tribble(
+#' ~USUBJID, ~TRTSDT,           ~EOSDT,            ~NEWDRGDT,
+#' "01",     ymd("2020-12-06"), ymd("2021-03-06"), NA,
+#' "02",     ymd("2021-01-16"), ymd("2021-04-03"), ymd("2021-03-21"),
+#' "03",     ymd("2021-03-10"), NA,                NA,
+#' "04",     ymd("2021-04-02"), NA,                NA,
+#' "05",     ymd("2021-05-09"), ymd("2021-07-30"), NA
+#' ) %>%
+#'   mutate(STUDYID = "AB42")
+#'
+#' adqs <- tribble(
+#'   ~USUBJID, ~ADT,              ~CHG,
+#'   "01",     ymd("2021-02-03"),   -2,
+#'   "01",     ymd("2021-03-01"),   NA,
+#'   "01",     ymd("2021-03-07"),   10,
+#'   "02",     ymd("2021-02-03"),   -1,
+#'   "02",     ymd("2021-04-01"),  -12,
+#'   "03",     ymd("2021-03-20"),    2,
+#'   "03",     ymd("2021-04-07"),    5,
+#'   "04",     ymd("2021-04-15"),  -15,
+#'   "05",     ymd("2021-06-01"),  -13
+#' ) %>%
+#'   mutate(STUDYID = "AB42") %>%
+#'   derive_vars_merged(
+#'     dataset_add = adsl,
+#'     by_vars = exprs(USUBJID),
+#'     new_vars = exprs(TRTSDT)
+#'   )
+#'
+#' @info Here two end dates are defined which set both `EVNTDESC` and `CNSDTDSC`.
+#' @code
+#' eos <- censor_source(
+#'   dataset_name = "adsl",
+#'   date = EOSDT,
+#'   set_values_to = exprs(
+#'     EVNTDESC = "END OF STUDY",
+#'     CNSDTDSC = "LAST QA BEFORE EOS"
+#'   )
+#' )
+#'
+#' newdrg <- censor_source(
+#'   dataset_name = "adsl",
+#'   date = NEWDRGDT,
+#'   set_values_to = exprs(
+#'     EVNTDESC = "NEW DRUG",
+#'     CNSDTDSC = "LAST QA BEFORE NEW DRUG"
+#'   )
+#' )
+#'
+#' @info For the censoring condition (`valid_assessment`) the `coalesce()`
+#'   function is used to set the descriptions only if they are not already set
+#'   by the end dates.
+#' @code
+#' valid_assessment <- censor_source(
+#'   dataset_name = "adqs",
+#'   date = ADT,
+#'   filter = !is.na(CHG),
+#'   set_values_to = exprs(
+#'     EVNTDESC = coalesce(EVNTDESC, "NO WORSENING"),
+#'     CNSDTDSC = coalesce(CNSDTDSC, "LAST QA"),
+#'     SRCDOM = "ADQS",
+#'     SRCVAR = "ADT"
+#'   )
+#' )
+#'
+#' worsening <- event_source(
+#'   dataset_name = "adqs",
+#'   date = ADT,
+#'   filter = CHG <= -10,
+#'   set_values_to = exprs(
+#'     EVNTDESC = "WORSENING",
+#'     SRCDOM = "ADQS",
+#'     SRCVAR = "ADT"
+#'   )
+#' )
+#'
+#' derive_param_tte(
+#'   dataset_adsl = adsl,
+#'   source_datasets = list(adsl = adsl, adqs = adqs),
+#'   start_date = TRTSDT,
+#'   end_dates = list(eos, newdrg),
+#'   event_conditions = list(worsening),
+#'   censor_conditions = list(valid_assessment),
+#'   set_values_to = exprs(PARAMCD = "TTWORSE")
+#' ) %>%
+#'   select(-STUDYID, -PARAMCD, -STARTDT, -SRCDOM, -SRCVAR)
+#'
+#' @info For subjects `01` and `02` the descriptions from the end dates are
+#'   used. As subject `03` has no end dates, the descriptions from the censoring
+#'   condition (`valid_assessments`) are used.
+#'
 #' @caption Overall survival time to event parameter
 #' @info In oncology trials, this is commonly derived as time from randomization
 #'   date to death. For those without event, they are censored at the last date
@@ -1364,6 +1470,8 @@ filter_date_sources <- function(sources,
     } else {
       cnsr_val <- expr(sources[[i]]$censor)
     }
+
+    keep_end_date_vars <- intersect(keep_end_date_vars, syms(colnames(data[[i]])))
     data[[i]] <- mutate(
       data[[i]],
       !!!by_vars,
