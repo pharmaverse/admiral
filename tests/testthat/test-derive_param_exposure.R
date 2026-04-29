@@ -1,32 +1,29 @@
-input <- tibble::tribble(
-  ~USUBJID, ~VISIT, ~PARAMCD, ~AVAL, ~AVALC, ~EXSTDTC, ~EXENDTC,
-  "01-701-1015", "BASELINE", "DOSE", 80, NA, "2020-07-01", "2020-07-14",
-  "01-701-1015", "WEEK 2", "DOSE", 80, NA, "2020-07-15", "2020-09-23",
-  "01-701-1015", "WEEK 12", "DOSE", 65, NA, "2020-09-24", "2020-12-16",
-  "01-701-1015", "WEEK 24", "DOSE", 65, NA, "2020-12-17", "2021-06-02",
-  "01-701-1015", "BASELINE", "ADJ", NA, NA, "2020-07-01", "2020-07-14",
-  "01-701-1015", "WEEK 2", "ADJ", NA, "Y", "2020-07-15", "2020-09-23",
-  "01-701-1015", "WEEK 12", "ADJ", NA, "Y", "2020-09-24", "2020-12-16",
-  "01-701-1015", "WEEK 24", "ADJ", NA, NA, "2020-12-17", "2021-06-02",
-  "01-701-1281", "BASELINE", "DOSE", 80, NA, "2020-07-03", "2020-07-18",
-  "01-701-1281", "WEEK 2", "DOSE", 80, NA, "2020-07-19", "2020-10-01",
-  "01-701-1281", "WEEK 12", "DOSE", 82, NA, "2020-10-02", "2020-12-01",
-  "01-701-1281", "BASELINE", "ADJ", NA, NA, "2020-07-03", "2020-07-18",
-  "01-701-1281", "WEEK 2", "ADJ", NA, NA, "2020-07-19", "2020-10-01",
-  "01-701-1281", "WEEK 12", "ADJ", NA, NA, "2020-10-02", "2020-12-01"
-) %>%
-  mutate(
-    ASTDTM = ymd_hms(paste(EXSTDTC, "T00:00:00")),
-    ASTDT = date(ASTDTM),
-    AENDTM = ymd_hms(paste(EXENDTC, "T00:00:00")),
-    AENDT = date(AENDTM)
-  )
-
-input_no_dtm <- input %>%
-  select(-ASTDTM, -AENDTM)
-
 ## Test 1: works with DTM variables ----
 test_that("derive_param_exposure Test 1: works with DTM variables", {
+  input <- tibble::tribble(
+    ~USUBJID, ~VISIT, ~PARAMCD, ~AVAL, ~AVALC, ~EXSTDTC, ~EXENDTC,
+    "01-701-1015", "BASELINE", "DOSE", 80, NA, "2020-07-01", "2020-07-14",
+    "01-701-1015", "WEEK 2", "DOSE", 80, NA, "2020-07-15", "2020-09-23",
+    "01-701-1015", "WEEK 12", "DOSE", 65, NA, "2020-09-24", "2020-12-16",
+    "01-701-1015", "WEEK 24", "DOSE", 65, NA, "2020-12-17", "2021-06-02",
+    "01-701-1015", "BASELINE", "ADJ", NA, NA, "2020-07-01", "2020-07-14",
+    "01-701-1015", "WEEK 2", "ADJ", NA, "Y", "2020-07-15", "2020-09-23",
+    "01-701-1015", "WEEK 12", "ADJ", NA, "Y", "2020-09-24", "2020-12-16",
+    "01-701-1015", "WEEK 24", "ADJ", NA, NA, "2020-12-17", "2021-06-02",
+    "01-701-1281", "BASELINE", "DOSE", 80, NA, "2020-07-03", "2020-07-18",
+    "01-701-1281", "WEEK 2", "DOSE", 80, NA, "2020-07-19", "2020-10-01",
+    "01-701-1281", "WEEK 12", "DOSE", 82, NA, "2020-10-02", "2020-12-01",
+    "01-701-1281", "BASELINE", "ADJ", NA, NA, "2020-07-03", "2020-07-18",
+    "01-701-1281", "WEEK 2", "ADJ", NA, NA, "2020-07-19", "2020-10-01",
+    "01-701-1281", "WEEK 12", "ADJ", NA, NA, "2020-10-02", "2020-12-01"
+  ) %>%
+    mutate(
+      ASTDTM = ymd_hms(paste(EXSTDTC, "T00:00:00")),
+      ASTDT = date(ASTDTM),
+      AENDTM = ymd_hms(paste(EXENDTC, "T00:00:00")),
+      AENDT = date(AENDTM)
+    )
+
   new_obs1 <- input %>%
     filter(PARAMCD == "DOSE") %>%
     group_by(USUBJID) %>%
@@ -100,6 +97,28 @@ test_that("derive_param_exposure Test 1: works with DTM variables", {
 
 ## Test 2: works with DT variables ----
 test_that("derive_param_exposure Test 2: works with DT variables", {
+  input_no_dtm <- tibble::tribble(
+    ~USUBJID, ~VISIT, ~PARAMCD, ~AVAL, ~AVALC, ~EXSTDTC, ~EXENDTC,
+    "01-701-1015", "BASELINE", "DOSE", 80, NA, "2020-07-01", "2020-07-14",
+    "01-701-1015", "WEEK 2", "DOSE", 80, NA, "2020-07-15", "2020-09-23",
+    "01-701-1015", "WEEK 12", "DOSE", 65, NA, "2020-09-24", "2020-12-16",
+    "01-701-1015", "WEEK 24", "DOSE", 65, NA, "2020-12-17", "2021-06-02",
+    "01-701-1015", "BASELINE", "ADJ", NA, NA, "2020-07-01", "2020-07-14",
+    "01-701-1015", "WEEK 2", "ADJ", NA, "Y", "2020-07-15", "2020-09-23",
+    "01-701-1015", "WEEK 12", "ADJ", NA, "Y", "2020-09-24", "2020-12-16",
+    "01-701-1015", "WEEK 24", "ADJ", NA, NA, "2020-12-17", "2021-06-02",
+    "01-701-1281", "BASELINE", "DOSE", 80, NA, "2020-07-03", "2020-07-18",
+    "01-701-1281", "WEEK 2", "DOSE", 80, NA, "2020-07-19", "2020-10-01",
+    "01-701-1281", "WEEK 12", "DOSE", 82, NA, "2020-10-02", "2020-12-01",
+    "01-701-1281", "BASELINE", "ADJ", NA, NA, "2020-07-03", "2020-07-18",
+    "01-701-1281", "WEEK 2", "ADJ", NA, NA, "2020-07-19", "2020-10-01",
+    "01-701-1281", "WEEK 12", "ADJ", NA, NA, "2020-10-02", "2020-12-01"
+  ) %>%
+    mutate(
+      ASTDT = ymd(EXSTDTC),
+      AENDT = ymd(EXENDTC)
+    )
+
   new_obs1 <- input_no_dtm %>%
     filter(PARAMCD == "DOSE") %>%
     group_by(USUBJID) %>%
@@ -173,50 +192,75 @@ test_that("derive_param_exposure Test 2: works with DT variables", {
 
 ## Test 3: Errors ----
 test_that("derive_param_exposure Test 3: Errors", {
+  input <- tibble::tribble(
+    ~USUBJID, ~VISIT, ~PARAMCD, ~AVAL, ~AVALC, ~EXSTDTC, ~EXENDTC,
+    "01-701-1015", "BASELINE", "DOSE", 80, NA, "2020-07-01", "2020-07-14",
+    "01-701-1015", "WEEK 2", "DOSE", 80, NA, "2020-07-15", "2020-09-23",
+    "01-701-1015", "WEEK 12", "DOSE", 65, NA, "2020-09-24", "2020-12-16",
+    "01-701-1015", "WEEK 24", "DOSE", 65, NA, "2020-12-17", "2021-06-02",
+    "01-701-1015", "BASELINE", "ADJ", NA, NA, "2020-07-01", "2020-07-14",
+    "01-701-1015", "WEEK 2", "ADJ", NA, "Y", "2020-07-15", "2020-09-23",
+    "01-701-1015", "WEEK 12", "ADJ", NA, "Y", "2020-09-24", "2020-12-16",
+    "01-701-1015", "WEEK 24", "ADJ", NA, NA, "2020-12-17", "2021-06-02",
+    "01-701-1281", "BASELINE", "DOSE", 80, NA, "2020-07-03", "2020-07-18",
+    "01-701-1281", "WEEK 2", "DOSE", 80, NA, "2020-07-19", "2020-10-01",
+    "01-701-1281", "WEEK 12", "DOSE", 82, NA, "2020-10-02", "2020-12-01",
+    "01-701-1281", "BASELINE", "ADJ", NA, NA, "2020-07-03", "2020-07-18",
+    "01-701-1281", "WEEK 2", "ADJ", NA, NA, "2020-07-19", "2020-10-01",
+    "01-701-1281", "WEEK 12", "ADJ", NA, NA, "2020-10-02", "2020-12-01"
+  ) %>%
+    mutate(
+      ASTDTM = ymd_hms(paste(EXSTDTC, "T00:00:00")),
+      ASTDT = date(ASTDTM),
+      AENDTM = ymd_hms(paste(EXENDTC, "T00:00:00")),
+      AENDT = date(AENDTM)
+    )
+
   # PARAMCD must be specified
   expect_error(
-    input <- input %>%
-      derive_param_exposure(
-        dataset_add = input,
-        by_vars = exprs(USUBJID),
-        input_code = "DOSE",
-        set_values_to = exprs(
-          PARCAT1 = "OVERALL",
-          AVAL = mean(AVAL, na.rm = TRUE)
-        )
-      ),
+    derive_param_exposure(
+      input,
+      dataset_add = input,
+      by_vars = exprs(USUBJID),
+      input_code = "DOSE",
+      set_values_to = exprs(
+        PARCAT1 = "OVERALL",
+        AVAL = mean(AVAL, na.rm = TRUE)
+      )
+    ),
     class = "assert_varval_list"
   )
   # input code must be present
   expect_error(
-    input <- input %>%
-      derive_param_exposure(
-        dataset_add = input,
-        by_vars = exprs(USUBJID),
-        input_code = "DOSED",
-        set_values_to = exprs(
-          PARAMCD = "TDOSE",
-          PARCAT1 = "OVERALL",
-          AVAL = mean(AVAL, na.rm = TRUE)
-        )
-      ),
+    derive_param_exposure(
+      input,
+      dataset_add = input,
+      by_vars = exprs(USUBJID),
+      input_code = "DOSED",
+      set_values_to = exprs(
+        PARAMCD = "TDOSE",
+        PARCAT1 = "OVERALL",
+        AVAL = mean(AVAL, na.rm = TRUE)
+      )
+    ),
     class = "assert_character_vector"
   )
 
   # ASTDTM/AENDTM or ASTDT/AENDT must be present
+  input_no_dt <- input %>%
+    select(-starts_with("AST"), -starts_with("AEN"))
+
   expect_error(
-    input <- input %>%
-      select(-starts_with("AST"), -starts_with("AEN")) %>%
-      derive_param_exposure(
-        dataset = .,
-        dataset_add = .,
-        by_vars = exprs(USUBJID),
-        input_code = "DOSE",
-        set_values_to = exprs(
-          PARCAT1 = "OVERALL",
-          AVAL = mean(AVAL, na.rm = TRUE)
-        )
-      ),
+    derive_param_exposure(
+      input_no_dt,
+      dataset_add = input_no_dt,
+      by_vars = exprs(USUBJID),
+      input_code = "DOSE",
+      set_values_to = exprs(
+        PARCAT1 = "OVERALL",
+        AVAL = mean(AVAL, na.rm = TRUE)
+      )
+    ),
     regexp = paste("Required variables `ASTDT` and `AENDT` are missing")
   )
 })
