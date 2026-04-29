@@ -1,0 +1,545 @@
+# Creating an OCCDS ADaM
+
+## Introduction
+
+This article describes creating an OCCDS ADaM. Examples are currently
+presented and tested in the context of `ADAE`. However, the examples
+could be applied to other OCCDS ADaMs such as `ADCM`, `ADMH`, `ADDV`,
+etc.
+
+**Note**: *All examples assume CDISC SDTM and/or ADaM format as input
+unless otherwise specified.*
+
+## Programming Workflow
+
+- [Read in Data](#readdata)
+- [Derive/Impute End and Start Analysis Date/time and Relative
+  Day](#datetime)
+- [Derive Durations](#duration)
+- [Derive ATC variables](#atc)
+- [Derive Planned and Actual Treatment](#trtpa)
+- [Derive Date/Date-time of Last Dose](#last_dose)
+- [Derive Treatment Dose and Unit](#dose_unit)
+- [Derive Severity, Causality, and Toxicity Grade](#severity)
+- [Derive Treatment Emergent Flag](#trtflag)
+- [Derive Occurrence Flags](#occflag)
+- [Derive Query Variables](#query)
+- [Add ADSL variables](#adsl_vars)
+- [Derive Analysis Sequence Number](#aseq)
+- [Add Labels and Attributes](#attributes)
+
+### Read in Data
+
+To start, all data frames needed for the creation of `ADAE` should be
+read into the environment. This will be a company specific process. Some
+of the data frames needed may be `AE` and `ADSL`
+
+For example purpose, the CDISC Pilot SDTM and ADaM datasets —which are
+included in
+[pharmaversesdtm](https://pharmaverse.github.io/pharmaversesdtm/)— are
+used.
+
+``` r
+library(admiral)
+library(dplyr, warn.conflicts = FALSE)
+library(pharmaversesdtm)
+library(lubridate)
+
+ae <- pharmaversesdtm::ae
+adsl <- admiral::admiral_adsl
+ex_single <- admiral::ex_single
+
+ae <- convert_blanks_to_na(ae)
+```
+
+At this step, it may be useful to join `ADSL` to your `AE` domain as
+well. Only the `ADSL` variables used for derivations are selected at
+this step. The rest of the relevant `ADSL` variables would be added
+later.
+
+``` r
+adsl_vars <- exprs(TRTSDT, TRTEDT, TRT01A, TRT01P, DTHDT, EOSDT)
+
+adae <- derive_vars_merged(
+  ae,
+  dataset_add = adsl,
+  new_vars = adsl_vars,
+  by = exprs(STUDYID, USUBJID)
+)
+```
+
+### Derive/Impute End and Start Analysis Date/time and Relative Day
+
+This part derives `ASTDTM`, `ASTDT`, `ASTDY`, `AENDTM`, `AENDT`, and
+`AENDY`. The function
+[`derive_vars_dtm()`](https:/pharmaverse.github.io/admiral/v1.4.1/reference/derive_vars_dtm.md)
+can be used to derive `ASTDTM` and `AENDTM` where `ASTDTM` could be
+company-specific. `ASTDT` and `AENDT` can be derived from `ASTDTM` and
+`AENDTM`, respectively, using function
+[`derive_vars_dtm_to_dt()`](https:/pharmaverse.github.io/admiral/v1.4.1/reference/derive_vars_dtm_to_dt.md).
+[`derive_vars_dy()`](https:/pharmaverse.github.io/admiral/v1.4.1/reference/derive_vars_dy.md)
+can be used to create `ASTDY` and `AENDY`.
+
+``` r
+adae <- adae %>%
+  derive_vars_dtm(
+    dtc = AESTDTC,
+    new_vars_prefix = "AST",
+    highest_imputation = "M",
+    min_dates = exprs(TRTSDT)
+  ) %>%
+  derive_vars_dtm(
+    dtc = AEENDTC,
+    new_vars_prefix = "AEN",
+    highest_imputation = "M",
+    date_imputation = "last",
+    time_imputation = "last",
+    max_dates = exprs(DTHDT, EOSDT)
+  ) %>%
+  derive_vars_dtm_to_dt(exprs(ASTDTM, AENDTM)) %>%
+  derive_vars_dy(
+    reference_date = TRTSDT,
+    source_vars = exprs(ASTDT, AENDT)
+  )
+```
+
+See also [Date and Time
+Imputation](https:/pharmaverse.github.io/admiral/v1.4.1/articles/imputation.md).
+
+### Derive Durations
+
+The function
+[`derive_vars_duration()`](https:/pharmaverse.github.io/admiral/v1.4.1/reference/derive_vars_duration.md)
+can be used to create the variables `ADURN` and `ADURU`.
+
+``` r
+adae <- adae %>%
+  derive_vars_duration(
+    new_var = ADURN,
+    new_var_unit = ADURU,
+    start_date = ASTDT,
+    end_date = AENDT
+  )
+```
+
+### Derive ATC variables
+
+The function
+[`derive_vars_atc()`](https:/pharmaverse.github.io/admiral/v1.4.1/reference/derive_vars_atc.md)
+can be used to derive ATC Class Variables.
+
+It helps to add Anatomical Therapeutic Chemical class variables from
+`FACM` to `ADCM`.
+
+The expected result is the input dataset with ATC variables added.
+
+``` r
+cm <- tibble::tribble(
+  ~STUDYID,  ~USUBJID,       ~CMGRPID, ~CMREFID,  ~CMDECOD,
+  "STUDY01", "BP40257-1001", "14",     "1192056", "PARACETAMOL",
+  "STUDY01", "BP40257-1001", "18",     "2007001", "SOLUMEDROL",
+  "STUDY01", "BP40257-1002", "19",     "2791596", "SPIRONOLACTONE"
+)
+facm <- tibble::tribble(
+  ~STUDYID,  ~USUBJID,       ~FAGRPID, ~FAREFID,  ~FATESTCD,  ~FASTRESC,
+  "STUDY01", "BP40257-1001", "1",      "1192056", "CMATC1CD", "N",
+  "STUDY01", "BP40257-1001", "1",      "1192056", "CMATC2CD", "N02",
+  "STUDY01", "BP40257-1001", "1",      "1192056", "CMATC3CD", "N02B",
+  "STUDY01", "BP40257-1001", "1",      "1192056", "CMATC4CD", "N02BE",
+  "STUDY01", "BP40257-1001", "1",      "2007001", "CMATC1CD", "D",
+  "STUDY01", "BP40257-1001", "1",      "2007001", "CMATC2CD", "D10",
+  "STUDY01", "BP40257-1001", "1",      "2007001", "CMATC3CD", "D10A",
+  "STUDY01", "BP40257-1001", "1",      "2007001", "CMATC4CD", "D10AA",
+  "STUDY01", "BP40257-1001", "2",      "2007001", "CMATC1CD", "D",
+  "STUDY01", "BP40257-1001", "2",      "2007001", "CMATC2CD", "D07",
+  "STUDY01", "BP40257-1001", "2",      "2007001", "CMATC3CD", "D07A",
+  "STUDY01", "BP40257-1001", "2",      "2007001", "CMATC4CD", "D07AA",
+  "STUDY01", "BP40257-1001", "3",      "2007001", "CMATC1CD", "H",
+  "STUDY01", "BP40257-1001", "3",      "2007001", "CMATC2CD", "H02",
+  "STUDY01", "BP40257-1001", "3",      "2007001", "CMATC3CD", "H02A",
+  "STUDY01", "BP40257-1001", "3",      "2007001", "CMATC4CD", "H02AB",
+  "STUDY01", "BP40257-1002", "1",      "2791596", "CMATC1CD", "C",
+  "STUDY01", "BP40257-1002", "1",      "2791596", "CMATC2CD", "C03",
+  "STUDY01", "BP40257-1002", "1",      "2791596", "CMATC3CD", "C03D",
+  "STUDY01", "BP40257-1002", "1",      "2791596", "CMATC4CD", "C03DA"
+)
+
+derive_vars_atc(cm, dataset_facm = facm, id_vars = exprs(FAGRPID))
+#> # A tibble: 5 × 9
+#>   STUDYID USUBJID      CMGRPID CMREFID CMDECOD       ATC1CD ATC2CD ATC3CD ATC4CD
+#>   <chr>   <chr>        <chr>   <chr>   <chr>         <chr>  <chr>  <chr>  <chr> 
+#> 1 STUDY01 BP40257-1001 14      1192056 PARACETAMOL   N      N02    N02B   N02BE 
+#> 2 STUDY01 BP40257-1001 18      2007001 SOLUMEDROL    D      D10    D10A   D10AA 
+#> 3 STUDY01 BP40257-1001 18      2007001 SOLUMEDROL    D      D07    D07A   D07AA 
+#> 4 STUDY01 BP40257-1001 18      2007001 SOLUMEDROL    H      H02    H02A   H02AB 
+#> 5 STUDY01 BP40257-1002 19      2791596 SPIRONOLACTO… C      C03    C03D   C03DA
+```
+
+### Derive Planned and Actual Treatment
+
+`TRTA` and `TRTP` must match at least one value of the character
+treatment variables in ADSL (e.g., `TRTxxA`/`TRTxxP`,
+`TRTSEQA`/`TRTSEQP`, `TRxxAGy`/`TRxxPGy`).
+
+An example of a simple implementation for a study without periods could
+be:
+
+``` r
+adae <- mutate(adae, TRTP = TRT01P, TRTA = TRT01A)
+
+count(adae, TRTP, TRTA, TRT01P, TRT01A)
+#> # A tibble: 2 × 5
+#>   TRTP                TRTA                TRT01P              TRT01A           n
+#>   <chr>               <chr>               <chr>               <chr>        <int>
+#> 1 Placebo             Placebo             Placebo             Placebo         10
+#> 2 Xanomeline Low Dose Xanomeline Low Dose Xanomeline Low Dose Xanomeline …     6
+```
+
+For studies with periods see the [“Visit and Period Variables”
+vignette](https:/pharmaverse.github.io/admiral/v1.4.1/articles/visits_periods.html#treatment_bds).
+
+### Derive Date/Date-time of Last Dose
+
+The function
+[`derive_vars_joined()`](https:/pharmaverse.github.io/admiral/v1.4.1/reference/derive_vars_joined.md)
+can be used to derive the last dose date before the start of the event.
+
+``` r
+ex_single <- derive_vars_dtm(
+  ex_single,
+  dtc = EXSTDTC,
+  new_vars_prefix = "EXST",
+  flag_imputation = "none"
+)
+
+adae <- derive_vars_joined(
+  adae,
+  ex_single,
+  by_vars = exprs(STUDYID, USUBJID),
+  new_vars = exprs(LDOSEDTM = EXSTDTM),
+  join_vars = exprs(EXSTDTM),
+  join_type = "all",
+  order = exprs(EXSTDTM),
+  filter_add = (EXDOSE > 0 | (EXDOSE == 0 & grepl("PLACEBO", EXTRT))) & !is.na(EXSTDTM),
+  filter_join = EXSTDTM <= ASTDTM,
+  mode = "last"
+)
+```
+
+### Derive Treatment Dose and Unit
+
+In a similar manner, you could derive the treatment dose and unit at the
+time of the event. Please note that it is assumed that the dosing
+intervals do not overlap. If this case occurs, the
+[`derive_vars_joined()`](https:/pharmaverse.github.io/admiral/v1.4.1/reference/derive_vars_joined.md)
+call below will throw an error as handling this case is study-specific.
+
+``` r
+ex_single <- derive_vars_dtm(
+  ex_single,
+  dtc = EXENDTC,
+  new_vars_prefix = "EXEN",
+  time_imputation = "last",
+  flag_imputation = "none"
+)
+
+adae <- derive_vars_joined(
+  adae,
+  ex_single,
+  by_vars = exprs(STUDYID, USUBJID),
+  new_vars = exprs(DOSEON = EXDOSE, DOSEU = EXDOSU),
+  join_vars = exprs(EXSTDTM, EXENDTM),
+  join_type = "all",
+  filter_add = (EXDOSE > 0 | (EXDOSE == 0 & grepl("PLACEBO", EXTRT))) & !is.na(EXSTDTM),
+  filter_join = EXSTDTM <= ASTDTM & (ASTDTM <= EXENDTM | is.na(EXENDTM))
+)
+```
+
+### Derive Severity, Causality, and Toxicity Grade
+
+The variables `ASEV`, `AREL`, and `ATOXGR` can be added using simple
+[`dplyr::mutate()`](https://dplyr.tidyverse.org/reference/mutate.html)
+assignments, if no imputation is required.
+
+``` r
+adae <- adae %>%
+  mutate(
+    ASEV = AESEV,
+    AREL = AEREL
+  )
+```
+
+### Derive Treatment Emergent Flag
+
+To derive the treatment emergent flag `TRTEMFL`, one can call
+[`derive_var_trtemfl()`](https:/pharmaverse.github.io/admiral/v1.4.1/reference/derive_var_trtemfl.md).
+In the example below, we use 30 days in the flag derivation.
+
+``` r
+adae <- adae %>%
+  derive_var_trtemfl(
+    trt_start_date = TRTSDT,
+    trt_end_date = TRTEDT,
+    end_window = 30
+  )
+```
+
+To derive on-treatment flag (`ONTRTFL`) in an ADaM dataset with a single
+occurrence date, we use
+[`derive_var_ontrtfl()`](https:/pharmaverse.github.io/admiral/v1.4.1/reference/derive_var_ontrtfl.md).
+
+The expected result is the input dataset with an additional column named
+`ONTRTFL` with a value of `"Y"` or `NA`.
+
+If you want to also check an end date, you could add the `end_date`
+argument. Note that in this scenario you could set `span_period = TRUE`
+if you want occurrences that started prior to drug intake, and was
+ongoing or ended after this time to be considered as on-treatment.
+
+``` r
+bds1 <- tibble::tribble(
+  ~USUBJID, ~ADT,              ~TRTSDT,           ~TRTEDT,
+  "P01",    ymd("2020-02-24"), ymd("2020-01-01"), ymd("2020-03-01"),
+  "P02",    ymd("2020-01-01"), ymd("2020-01-01"), ymd("2020-03-01"),
+  "P03",    ymd("2019-12-31"), ymd("2020-01-01"), ymd("2020-03-01")
+)
+derive_var_ontrtfl(
+  bds1,
+  start_date = ADT,
+  ref_start_date = TRTSDT,
+  ref_end_date = TRTEDT
+)
+#> # A tibble: 3 × 5
+#>   USUBJID ADT        TRTSDT     TRTEDT     ONTRTFL
+#>   <chr>   <date>     <date>     <date>     <chr>  
+#> 1 P01     2020-02-24 2020-01-01 2020-03-01 Y      
+#> 2 P02     2020-01-01 2020-01-01 2020-03-01 Y      
+#> 3 P03     2019-12-31 2020-01-01 2020-03-01 NA
+
+bds2 <- tibble::tribble(
+  ~USUBJID, ~ADT,              ~TRTSDT,           ~TRTEDT,
+  "P01",    ymd("2020-07-01"), ymd("2020-01-01"), ymd("2020-03-01"),
+  "P02",    ymd("2020-04-30"), ymd("2020-01-01"), ymd("2020-03-01"),
+  "P03",    ymd("2020-03-15"), ymd("2020-01-01"), ymd("2020-03-01")
+)
+derive_var_ontrtfl(
+  bds2,
+  start_date = ADT,
+  ref_start_date = TRTSDT,
+  ref_end_date = TRTEDT,
+  ref_end_window = 60
+)
+#> # A tibble: 3 × 5
+#>   USUBJID ADT        TRTSDT     TRTEDT     ONTRTFL
+#>   <chr>   <date>     <date>     <date>     <chr>  
+#> 1 P01     2020-07-01 2020-01-01 2020-03-01 NA     
+#> 2 P02     2020-04-30 2020-01-01 2020-03-01 Y      
+#> 3 P03     2020-03-15 2020-01-01 2020-03-01 Y
+
+bds3 <- tibble::tribble(
+  ~ADTM,              ~TRTSDTM,           ~TRTEDTM,           ~TPT,
+  "2020-01-02T12:00", "2020-01-01T12:00", "2020-03-01T12:00", NA,
+  "2020-01-01T12:00", "2020-01-01T12:00", "2020-03-01T12:00", "PRE",
+  "2019-12-31T12:00", "2020-01-01T12:00", "2020-03-01T12:00", NA
+) %>%
+  mutate(
+    ADTM = ymd_hm(ADTM),
+    TRTSDTM = ymd_hm(TRTSDTM),
+    TRTEDTM = ymd_hm(TRTEDTM)
+  )
+derive_var_ontrtfl(
+  bds3,
+  start_date = ADTM,
+  ref_start_date = TRTSDTM,
+  ref_end_date = TRTEDTM,
+  filter_pre_timepoint = TPT == "PRE"
+)
+#> # A tibble: 3 × 5
+#>   ADTM                TRTSDTM             TRTEDTM             TPT   ONTRTFL
+#>   <dttm>              <dttm>              <dttm>              <chr> <chr>  
+#> 1 2020-01-02 12:00:00 2020-01-01 12:00:00 2020-03-01 12:00:00 NA    Y      
+#> 2 2020-01-01 12:00:00 2020-01-01 12:00:00 2020-03-01 12:00:00 PRE   NA     
+#> 3 2019-12-31 12:00:00 2020-01-01 12:00:00 2020-03-01 12:00:00 NA    NA
+```
+
+### Derive Occurrence Flags
+
+The function
+[`derive_var_extreme_flag()`](https:/pharmaverse.github.io/admiral/v1.4.1/reference/derive_var_extreme_flag.md)
+can help derive variables such as `AOCCIFL`, `AOCCPIFL`, `AOCCSIFL`, and
+`AOCCzzFL`.
+
+If grades were collected, the following can be used to flag first
+occurrence of maximum toxicity grade.
+
+``` r
+adae <- adae %>%
+  restrict_derivation(
+    derivation = derive_var_extreme_flag,
+    args = params(
+      by_vars = exprs(USUBJID),
+      order = exprs(desc(ATOXGR), ASTDTM, AESEQ),
+      new_var = AOCCIFL,
+      mode = "first"
+    ),
+    filter = TRTEMFL == "Y"
+  )
+```
+
+Similarly, `ASEV` can also be used to derive the occurrence flags, if
+severity is collected. In this case, the variable will need to be
+recoded to a numeric variable. Flag first occurrence of most severe
+adverse event:
+
+``` r
+adae <- adae %>%
+  restrict_derivation(
+    derivation = derive_var_extreme_flag,
+    args = params(
+      by_vars = exprs(USUBJID),
+      order = exprs(
+        as.integer(factor(
+          ASEV,
+          levels = c("DEATH THREATENING", "SEVERE", "MODERATE", "MILD")
+        )),
+        ASTDTM, AESEQ
+      ),
+      new_var = AOCCIFL,
+      mode = "first"
+    ),
+    filter = TRTEMFL == "Y"
+  )
+```
+
+### Derive Query Variables
+
+For deriving query variables `SMQzzNAM`, `SMQzzCD`, `SMQzzSC`,
+`SMQzzSCN`, or `CQzzNAM` the
+[`derive_vars_query()`](https:/pharmaverse.github.io/admiral/v1.4.1/reference/derive_vars_query.md)
+function can be used. As input it expects a queries dataset, which
+provides the definition of the queries. See [Queries dataset
+documentation](https:/pharmaverse.github.io/admiral/v1.4.1/articles/queries_dataset.md)
+for a detailed description of the queries dataset. The
+[`create_query_data()`](https:/pharmaverse.github.io/admiral/v1.4.1/reference/create_query_data.md)
+function can be used to create queries datasets.
+
+The following example shows how to derive query variables for
+Standardized MedDRA Queries (SMQs) in ADAE.
+
+``` r
+queries <- admiral::queries
+```
+
+``` r
+adae1 <- tibble::tribble(
+  ~USUBJID, ~ASTDTM, ~AETERM, ~AESEQ, ~AEDECOD, ~AELLT, ~AELLTCD,
+  "01", "2020-06-02 23:59:59", "ALANINE AMINOTRANSFERASE ABNORMAL",
+  3, "Alanine aminotransferase abnormal", NA_character_, NA_integer_,
+  "02", "2020-06-05 23:59:59", "BASEDOW'S DISEASE",
+  5, "Basedow's disease", NA_character_, 1L,
+  "03", "2020-06-07 23:59:59", "SOME TERM",
+  2, "Some query", "Some term", NA_integer_,
+  "05", "2020-06-09 23:59:59", "ALVEOLAR PROTEINOSIS",
+  7, "Alveolar proteinosis", NA_character_, NA_integer_
+)
+
+adae_query <- derive_vars_query(dataset = adae1, dataset_queries = queries)
+```
+
+Similarly to SMQ, the
+[`derive_vars_query()`](https:/pharmaverse.github.io/admiral/v1.4.1/reference/derive_vars_query.md)
+function can be used to derive Standardized Drug Groupings (SDG).
+
+``` r
+sdg <- tibble::tribble(
+  ~PREFIX, ~GRPNAME,          ~GRPID, ~SCOPE,  ~SCOPEN, ~SRCVAR,   ~TERMCHAR,          ~TERMNUM,
+  "SDG01", "Diuretics",           11, "BROAD", 1,       "CMDECOD", "Diuretic 1",       NA,
+  "SDG01", "Diuretics",           11, "BROAD", 1,       "CMDECOD", "Diuretic 2",       NA,
+  "SDG02", "Costicosteroids",     12, "BROAD", 1,       "CMDECOD", "Costicosteroid 1", NA,
+  "SDG02", "Costicosteroids",     12, "BROAD", 1,       "CMDECOD", "Costicosteroid 2", NA,
+  "SDG02", "Costicosteroids",     12, "BROAD", 1,       "CMDECOD", "Costicosteroid 3", NA,
+)
+adcm <- tibble::tribble(
+  ~USUBJID, ~ASTDTM,               ~CMDECOD,
+  "01",     "2020-06-02 23:59:59", "Diuretic 1",
+  "02",     "2020-06-05 23:59:59", "Diuretic 1",
+  "03",     "2020-06-07 23:59:59", "Costicosteroid 2",
+  "05",     "2020-06-09 23:59:59", "Diuretic 2"
+)
+adcm_query <- derive_vars_query(adcm, sdg)
+```
+
+### Add the `ADSL` variables
+
+If needed, the other `ADSL` variables can now be added:
+
+``` r
+adae <- adae %>%
+  derive_vars_merged(
+    dataset_add = select(adsl, !!!negate_vars(adsl_vars)),
+    by_vars = exprs(STUDYID, USUBJID)
+  )
+```
+
+### Derive Analysis Sequence Number
+
+The function
+[`derive_var_obs_number()`](https:/pharmaverse.github.io/admiral/v1.4.1/reference/derive_var_obs_number.md)
+can be used for deriving `ASEQ` variable to ensure the uniqueness of
+subject records within the dataset.
+
+For example, there can be multiple records present in `ADCM` for a
+single subject with the same `ASTDTM` and `CMSEQ` variables. But these
+records still differ at ATC level:
+
+``` r
+adcm <- tibble::tribble(
+  ~USUBJID,       ~ASTDTM,          ~CMSEQ, ~CMDECOD,         ~ATC1CD, ~ATC2CD, ~ATC3CD, ~ATC4CD,
+  "BP40257-1001", "2013-07-05 UTC", "14",   "PARACETAMOL",    "N",     "N02",   "N02B",  "N02BE",
+  "BP40257-1001", "2013-08-15 UTC", "18",   "SOLUMEDROL",     "D",     "D10",   "D10A",  "D10AA",
+  "BP40257-1001", "2013-08-15 UTC", "18",   "SOLUMEDROL",     "D",     "D07",   "D07A",  "D07AA",
+  "BP40257-1001", "2013-08-15 UTC", "18",   "SOLUMEDROL",     "H",     "H02",   "H02A",  "H02AB",
+  "BP40257-1002", "2012-12-15 UTC", "19",   "SPIRONOLACTONE", "C",     "C03",   "C03D",  "C03DA"
+)
+
+adcm_aseq <- adcm %>%
+  derive_var_obs_number(
+    by_vars    = exprs(USUBJID),
+    order      = exprs(ASTDTM, CMSEQ, ATC1CD, ATC2CD, ATC3CD, ATC4CD),
+    new_var    = ASEQ,
+    check_type = "error"
+  )
+```
+
+### Add Labels and Attributes
+
+Note that attributes may not be preserved in some cases after processing
+with [admiral](https://pharmaverse.github.io/admiral/). The recommended
+approach is to apply variable labels and other metadata as a final step
+in your data derivation process using packages like:
+
+- [metacore](https://atorus-research.github.io/metacore/): establish a
+  common foundation for the use of metadata within an R session.
+
+- [metatools](https://pharmaverse.github.io/metatools/): enable the use
+  of metacore objects. Metatools can be used to build datasets or
+  enhance columns in existing datasets as well as checking datasets
+  against the metadata.
+
+- [xportr](https://atorus-research.github.io/xportr/): functionality to
+  associate all metadata information to a local R data frame, perform
+  data set level validation checks and convert into a [transport v5
+  file(xpt)](https://documentation.sas.com/doc/en/pgmsascdc/9.4_3.5/movefile/n1xbwdre0giahfn11c99yjkpi2yb.htm).
+
+NOTE: Together with [admiral](https://pharmaverse.github.io/admiral/)
+these packages comprise an End to End pipeline under the umbrella of the
+[pharmaverse](https://github.com/pharmaverse). An example of applying
+metadata and perform associated checks can be found at the [pharmaverse
+E2E example](https://pharmaverse.github.io/examples/adam/adsl).
+
+## Example Scripts
+
+| ADaM | Sourcing Command          |
+|------|---------------------------|
+| ADAE | `use_ad_template("ADAE")` |
+| ADCM | `use_ad_template("ADCM")` |

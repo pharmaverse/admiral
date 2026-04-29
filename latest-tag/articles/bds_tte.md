@@ -1,0 +1,570 @@
+# Creating a BDS Time-to-Event ADaM
+
+## Introduction
+
+This article describes creating a BDS time-to-event ADaM.
+
+The main part in programming a time-to-event dataset is the definition
+of the events and censoring times.
+[admiral](https://pharmaverse.github.io/admiral/) supports single events
+like death or composite events like disease progression or death. More
+than one source dataset can be used for the definition of the event and
+censoring times.
+
+**Note**: *All examples assume CDISC SDTM and/or ADaM format as input
+unless otherwise specified.*
+
+### Required Packages
+
+The examples of this vignette require the following packages.
+
+``` r
+library(admiral)
+library(dplyr, warn.conflicts = FALSE)
+library(pharmaversesdtm)
+```
+
+## Programming Workflow
+
+- [Read in Data](#readdata)
+- [Derive Parameters (`CNSR`, `ADT`, `STARTDT`)](#parameters)
+- [Derive Analysis Value (`AVAL`)](#aval)
+- [Derive Analysis Sequence Number (`ASEQ`)](#aseq)
+- [Add ADSL Variables](#adslvars)
+- [Add Labels and Attributes](#attributes)
+
+### Read in Data
+
+To start, all datasets needed for the creation of the time-to-event
+dataset should be read into the environment. This will be a company
+specific process.
+
+For example purpose, the ADSL dataset—which is included in
+[admiral](https://pharmaverse.github.io/admiral/)—and the SDTM datasets
+from [pharmaversesdtm](https://pharmaverse.github.io/pharmaversesdtm/)
+are used.
+
+``` r
+ae <- pharmaversesdtm::ae
+adsl <- admiral::admiral_adsl
+
+ae <- convert_blanks_to_na(ae)
+```
+
+The following code creates a minimally viable ADAE dataset to be used
+throughout the following examples.
+
+``` r
+adae <- ae %>%
+  left_join(adsl, by = c("STUDYID", "USUBJID")) %>%
+  derive_vars_dt(
+    new_vars_prefix = "AST",
+    dtc = AESTDTC,
+    highest_imputation = "M"
+  ) %>%
+  derive_vars_dt(
+    new_vars_prefix = "AEN",
+    dtc = AEENDTC,
+    highest_imputation = "M",
+    date_imputation = "last"
+  ) %>%
+  mutate(TRTEMFL = if_else(ASTDT >= TRTSDT &
+    AENDT <= TRTEDT + days(30), "Y", NA_character_))
+```
+
+### Derive Parameters (`CNSR`, `ADT`, `STARTDT`)
+
+To derive the parameter dependent variables like `CNSR`, `ADT`,
+`STARTDT`, `EVNTDESC`, `SRCDOM`, `PARAMCD`, … the
+[`derive_param_tte()`](https:/pharmaverse.github.io/admiral/v1.4.1/reference/derive_param_tte.md)
+function can be used. It adds one parameter to the input dataset with
+one observation per subject. Usually it is called several times.
+
+For each subject it is determined if an event occurred. In the
+affirmative the analysis date `ADT` is set to the earliest event date.
+If no event occurred, the analysis date is set to the latest censoring
+date.
+
+The events and censorings are defined by the
+[`event_source()`](https:/pharmaverse.github.io/admiral/v1.4.1/reference/event_source.md)
+and the
+[`censor_source()`](https:/pharmaverse.github.io/admiral/v1.4.1/reference/censor_source.md)
+class respectively. It defines
+
+- which observations (`filter` parameter) of a source dataset
+  (`dataset_name` parameter) are potential events or censorings,
+- the value of the `CNSR` variable (`censor` parameter), and
+- which variable provides the date (`date` parameter).
+
+The date can be provided as date (`--DT` variable) or datetime (`--DTM`
+variable).
+
+CDISC strongly recommends `CNSR = 0` for events and positive integers
+for censorings. [admiral](https://pharmaverse.github.io/admiral/)
+enforces this recommendation. Therefore the `censor` parameter is
+available for
+[`censor_source()`](https:/pharmaverse.github.io/admiral/v1.4.1/reference/censor_source.md)
+only. It is defaulted to `1`.
+
+The `dataset_name` parameter expects a character value which is used as
+an identifier. The actual data which is used for the derivation of the
+parameter is provided via the `source_datasets` parameter of
+[`derive_param_tte()`](https:/pharmaverse.github.io/admiral/v1.4.1/reference/derive_param_tte.md).
+It expects a named list of datasets. The names correspond to the
+identifiers specified for the `dataset_name` parameter. This allows to
+define events and censoring independent of the data.
+
+#### Pre-Defined Time-to-Event Source Objects
+
+The table below shows all pre-defined `tte_source` objects which should
+cover the most common use cases.
+
+[TABLE]
+
+These pre-defined objects can be passed directly to
+[`derive_param_tte()`](https:/pharmaverse.github.io/admiral/v1.4.1/reference/derive_param_tte.md)
+to create a new time-to-event parameter.
+
+``` r
+adtte <- derive_param_tte(
+  dataset_adsl = adsl,
+  start_date = TRTSDT,
+  event_conditions = list(ae_ser_event),
+  censor_conditions = list(lastalive_censor),
+  source_datasets = list(adsl = adsl, adae = adae),
+  set_values_to = exprs(PARAMCD = "TTAESER", PARAM = "Time to First Serious AE")
+)
+```
+
+#### Single Event
+
+For example, the overall survival time could be defined from treatment
+start to death. Patients alive or lost to follow-up would be censored to
+the last alive date. The following call defines a death event based on
+ADSL variables.
+
+``` r
+death <- event_source(
+  dataset_name = "adsl",
+  filter = DTHFL == "Y",
+  date = DTHDT
+)
+```
+
+A corresponding censoring based on the last known alive date can be
+defined by the following call.
+
+``` r
+lstalv <- censor_source(
+  dataset_name = "adsl",
+  date = LSTALVDT
+)
+```
+
+The definitions can be passed to
+[`derive_param_tte()`](https:/pharmaverse.github.io/admiral/v1.4.1/reference/derive_param_tte.md)
+to create a new time-to-event parameter.
+
+``` r
+adtte <- derive_param_tte(
+  dataset_adsl = adsl,
+  source_datasets = list(adsl = adsl),
+  start_date = TRTSDT,
+  event_conditions = list(death),
+  censor_conditions = list(lstalv),
+  set_values_to = exprs(PARAMCD = "OS", PARAM = "Overall Survival")
+)
+```
+
+Note that in practice for efficacy parameters you might use
+randomization date as the time to event origin date.
+
+#### Add Additional Information for Events and Censoring (`EVNTDESC`, `SRCVAR`, …)
+
+To add additional information like event or censoring description
+(`EVNTDESC`) or source variable (`SRCVAR`) the `set_values_to` parameter
+can be specified in the event/censoring definition.
+
+``` r
+# define death event #
+death <- event_source(
+  dataset_name = "adsl",
+  filter = DTHFL == "Y",
+  date = DTHDT,
+  set_values_to = exprs(
+    EVNTDESC = "DEATH",
+    SRCDOM = "ADSL",
+    SRCVAR = "DTHDT"
+  )
+)
+
+# define censoring at last known alive date #
+lstalv <- censor_source(
+  dataset_name = "adsl",
+  date = LSTALVDT,
+  set_values_to = exprs(
+    EVNTDESC = "LAST KNOWN ALIVE DATE",
+    SRCDOM = "ADSL",
+    SRCVAR = "LSTALVDT"
+  )
+)
+
+# derive time-to-event parameter #
+adtte <- derive_param_tte(
+  dataset_adsl = adsl,
+  source_datasets = list(adsl = adsl),
+  event_conditions = list(death),
+  censor_conditions = list(lstalv),
+  set_values_to = exprs(PARAMCD = "OS", PARAM = "Overall Survival")
+)
+```
+
+#### Handling Subjects Without Assessment
+
+If a subject has no event and has no record meeting the censoring rule,
+it will not be included in the output dataset. In order to have a record
+for this subject in the output dataset, another `censoring_source()`
+object should be created to specify how those patients will be censored.
+Therefore the `start` censoring is defined below to achieve that
+subjects without data in `adrs` are censored at the start date.
+
+The ADaM IG requires that a computed date must be accompanied by
+imputation flags. Thus, if the function detects a `--DTF` and/or `--TMF`
+variable corresponding to `start_date` then `STARTDTF` and `STARTTMF`
+are set automatically to the values of these variables. If a date
+variable from one of the event or censoring source datasets is imputed,
+the imputation flag can be specified for the `set_values_to` parameter
+in
+[`event_source()`](https:/pharmaverse.github.io/admiral/v1.4.1/reference/event_source.md)
+or
+[`censor_source()`](https:/pharmaverse.github.io/admiral/v1.4.1/reference/censor_source.md)
+(see definition of the `start` censoring below).
+
+As the CDISC pilot does not contain a `RS` dataset, the following
+example for progression free survival uses manually created datasets.
+
+    View(adsl)
+
+    View(adrs)
+
+An event for progression free survival occurs if
+
+- progression of disease is observed or
+- the subject dies.
+
+Therefore two
+[`event_source()`](https:/pharmaverse.github.io/admiral/v1.4.1/reference/event_source.md)
+objects are defined:
+
+- `pd` for progression of disease and
+- `death` for death.
+
+Some subjects may experience both events. In this case the first one is
+selected by
+[`derive_param_tte()`](https:/pharmaverse.github.io/admiral/v1.4.1/reference/derive_param_tte.md).
+
+``` r
+# progressive disease event #
+pd <- event_source(
+  dataset_name = "adrs",
+  filter = AVALC == "PD",
+  date = ADT,
+  set_values_to = exprs(
+    EVNTDESC = "PD",
+    SRCDOM = "ADRS",
+    SRCVAR = "ADT",
+    SRCSEQ = ASEQ
+  )
+)
+
+# death event #
+death <- event_source(
+  dataset_name = "adsl",
+  filter = DTHFL == "Y",
+  date = DTHDT,
+  set_values_to = exprs(
+    EVNTDESC = "DEATH",
+    SRCDOM = "ADSL",
+    SRCVAR = "DTHDT"
+  )
+)
+```
+
+Subjects without event must be censored at the last tumor assessment.
+For the censoring the `lastvisit` object is defined as *all* tumor
+assessments. Please note that it is not necessary to select the last one
+or exclude assessments which resulted in progression of disease. This is
+handled within
+[`derive_param_tte()`](https:/pharmaverse.github.io/admiral/v1.4.1/reference/derive_param_tte.md).
+
+``` r
+# last tumor assessment censoring (CNSR = 1 by default) #
+lastvisit <- censor_source(
+  dataset_name = "adrs",
+  date = ADT,
+  set_values_to = exprs(
+    EVNTDESC = "LAST TUMOR ASSESSMENT",
+    SRCDOM = "ADRS",
+    SRCVAR = "ADT",
+    SRCSEQ = ASEQ
+  )
+)
+```
+
+Patients without tumor assessment should be censored at the start date.
+Therefore the `start` object is defined with the treatment start date as
+censoring date. It is not necessary to exclude patient with tumor
+assessment in the definition of `start` because
+[`derive_param_tte()`](https:/pharmaverse.github.io/admiral/v1.4.1/reference/derive_param_tte.md)
+selects the last date across all
+[`censor_source()`](https:/pharmaverse.github.io/admiral/v1.4.1/reference/censor_source.md)
+objects as censoring date.
+
+``` r
+# start date censoring (for patients without tumor assessment) (CNSR = 2) #
+start <- censor_source(
+  dataset_name = "adsl",
+  date = TRTSDT,
+  censor = 2,
+  set_values_to = exprs(
+    EVNTDESC = "TREATMENT START",
+    SRCDOM = "ADSL",
+    SRCVAR = "TRTSDT",
+    ADTF = TRTSDTF
+  )
+)
+
+# derive time-to-event parameter #
+adtte <- derive_param_tte(
+  dataset_adsl = adsl,
+  source_datasets = list(adsl = adsl, adrs = adrs),
+  start_date = TRTSDT,
+  event_conditions = list(pd, death),
+  censor_conditions = list(lastvisit, start),
+  set_values_to = exprs(PARAMCD = "PFS", PARAM = "Progression Free Survival")
+)
+```
+
+#### Deriving a Series of Time-to-Event Parameters
+
+If several similar time-to-event parameters need to be derived the
+[`call_derivation()`](https:/pharmaverse.github.io/admiral/v1.4.1/reference/call_derivation.md)
+function is useful.
+
+In the following example parameters for time to first AE, time to first
+serious AE, and time to first related AE are derived. The censoring is
+the same for all three. Only the definition of the event differs.
+
+``` r
+# define censoring #
+observation_end <- censor_source(
+  dataset_name = "adsl",
+  date = pmin(TRTEDT + days(30), EOSDT),
+  censor = 1,
+  set_values_to = exprs(
+    EVNTDESC = "END OF TREATMENT",
+    SRCDOM = "ADSL",
+    SRCVAR = "TRTEDT"
+  )
+)
+
+# define time to first AE #
+tt_ae <- event_source(
+  dataset_name = "ae",
+  date = ASTDT,
+  order = exprs(AESEQ),
+  set_values_to = exprs(
+    EVNTDESC = "ADVERSE EVENT",
+    SRCDOM = "AE",
+    SRCVAR = "AESTDTC",
+    SRCSEQ = AESEQ
+  )
+)
+
+# define time to first serious AE #
+tt_ser_ae <- event_source(
+  dataset_name = "ae",
+  filter = AESER == "Y",
+  date = ASTDT,
+  order = exprs(AESEQ),
+  set_values_to = exprs(
+    EVNTDESC = "SERIOUS ADVERSE EVENT",
+    SRCDOM = "AE",
+    SRCVAR = "AESTDTC",
+    SRCSEQ = AESEQ
+  )
+)
+
+# define time to first related AE #
+tt_rel_ae <- event_source(
+  dataset_name = "ae",
+  filter = AEREL %in% c("PROBABLE", "POSSIBLE", "REMOTE"),
+  date = ASTDT,
+  order = exprs(AESEQ),
+  set_values_to = exprs(
+    EVNTDESC = "RELATED ADVERSE EVENT",
+    SRCDOM = "AE",
+    SRCVAR = "AESTDTC",
+    SRCSEQ = AESEQ
+  )
+)
+
+# derive all three time to event parameters #
+adaette <- call_derivation(
+  derivation = derive_param_tte,
+  variable_params = list(
+    params(
+      event_conditions = list(tt_ae),
+      set_values_to = exprs(PARAMCD = "TTAE")
+    ),
+    params(
+      event_conditions = list(tt_ser_ae),
+      set_values_to = exprs(PARAMCD = "TTSERAE")
+    ),
+    params(
+      event_conditions = list(tt_rel_ae),
+      set_values_to = exprs(PARAMCD = "TTRELAE")
+    )
+  ),
+  dataset_adsl = adsl,
+  source_datasets = list(
+    adsl = adsl,
+    ae = filter(adae, TRTEMFL == "Y")
+  ),
+  censor_conditions = list(observation_end)
+)
+```
+
+#### Deriving Time-to-Event Parameters Using By Groups
+
+If time-to-event parameters need to be derived for each by group of a
+source dataset, the `by_vars` parameter can be specified. Then a
+time-to-event parameter is derived for each by group.
+
+Please note that CDISC requires separate parameters (`PARAMCD`, `PARAM`)
+for the by groups. Therefore the variables specified for the `by_vars`
+parameter are not included in the output dataset. The `PARAMCD` variable
+should be specified for the `set_value_to` parameter using an expression
+on the right hand side which results in a unique value for each by
+group. If the values of the by variables should be included in the
+output dataset, they can be stored in `PARCATn` variables.
+
+In the following example a time-to-event parameter for each preferred
+term in the AE dataset is derived.
+
+    View(adsl)
+
+    View(ae)
+
+``` r
+# define time to first adverse event event #
+ttae <- event_source(
+  dataset_name = "ae",
+  date = AESTDT,
+  set_values_to = exprs(
+    EVNTDESC = "AE",
+    SRCDOM = "AE",
+    SRCVAR = "AESTDTC",
+    SRCSEQ = AESEQ
+  )
+)
+
+# define censoring at end of study #
+eos <- censor_source(
+  dataset_name = "adsl",
+  date = EOSDT,
+  set_values_to = exprs(
+    EVNTDESC = "END OF STUDY",
+    SRCDOM = "ADSL",
+    SRCVAR = "EOSDT"
+  )
+)
+
+# derive time-to-event parameter #
+adtte <- derive_param_tte(
+  dataset_adsl = adsl,
+  by_vars = exprs(AEDECOD),
+  start_date = TRTSDT,
+  event_conditions = list(ttae),
+  censor_conditions = list(eos),
+  source_datasets = list(adsl = adsl, ae = ae),
+  set_values_to = exprs(
+    PARAMCD = paste0("TTAE", as.numeric(as.factor(AEDECOD))),
+    PARAM = paste("Time to First", AEDECOD, "Adverse Event"),
+    PARCAT1 = "TTAE",
+    PARCAT2 = AEDECOD
+  )
+)
+```
+
+### Derive Analysis Value (`AVAL`)
+
+The analysis value (`AVAL`) can be derived by calling
+[`derive_vars_duration()`](https:/pharmaverse.github.io/admiral/v1.4.1/reference/derive_vars_duration.md).
+
+This example derives the time to event in days. Other units can be
+requested by the specifying the `out_unit` parameter.
+
+``` r
+adtte <- derive_vars_duration(
+  adtte,
+  new_var = AVAL,
+  start_date = STARTDT,
+  end_date = ADT
+)
+```
+
+### Derive Analysis Sequence Number (`ASEQ`)
+
+The [admiral](https://pharmaverse.github.io/admiral/) function
+[`derive_var_obs_number()`](https:/pharmaverse.github.io/admiral/v1.4.1/reference/derive_var_obs_number.md)
+can be used to derive `ASEQ`:
+
+``` r
+adtte <- derive_var_obs_number(
+  adtte,
+  by_vars = exprs(STUDYID, USUBJID),
+  order = exprs(PARAMCD),
+  check_type = "error"
+)
+```
+
+### Add ADSL Variables
+
+Variables from ADSL which are required for time-to-event analyses, e.g.,
+treatment variables or covariates can be added using
+[`derive_vars_merged()`](https:/pharmaverse.github.io/admiral/v1.4.1/reference/derive_vars_merged.md).
+
+``` r
+adtte <- derive_vars_merged(
+  adtte,
+  dataset_add = adsl,
+  new_vars = exprs(ARMCD, ARM, ACTARMCD, ACTARM, AGE, SEX),
+  by_vars = exprs(STUDYID, USUBJID)
+)
+```
+
+### Add Labels and Attributes
+
+Adding labels and attributes for SAS transport files is supported by the
+following packages:
+
+- [metacore](https://atorus-research.github.io/metacore/): establish a
+  common foundation for the use of metadata within an R session.
+
+- [metatools](https://pharmaverse.github.io/metatools/): enable the use
+  of metacore objects. Metatools can be used to build datasets or
+  enhance columns in existing datasets as well as checking datasets
+  against the metadata.
+
+- [xportr](https://atorus-research.github.io/xportr/): functionality to
+  associate all metadata information to a local R data frame, perform
+  data set level validation checks and convert into a [transport v5
+  file(xpt)](https://documentation.sas.com/doc/en/pgmsascdc/9.4_3.5/movefile/n1xbwdre0giahfn11c99yjkpi2yb.htm).
+
+NOTE: All these packages are in the experimental phase, but the vision
+is to have them associated with an End to End pipeline under the
+umbrella of the [pharmaverse](https://github.com/pharmaverse). An
+example of applying metadata and perform associated checks can be found
+at the [pharmaverse E2E
+example](https://pharmaverse.github.io/examples/adam/adsl).

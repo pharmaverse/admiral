@@ -1,0 +1,215 @@
+# Queries Dataset Documentation
+
+## Introduction
+
+To support the safety analysis, it is quite common to define specific
+grouping of events. One of the most common ways is to group events or
+medications by a specific medical concept such as a Standard MedDRA
+Queries (SMQs) or WHO-Drug Standardized Drug Groupings (SDGs).
+
+To help with the derivation of these variables, the {admiral} function
+[`derive_vars_query()`](https:/pharmaverse.github.io/admiral/v1.4.1/reference/derive_vars_query.md)
+can be used. This function takes as input the dataset (`dataset`) where
+the grouping must occur (e.g `ADAE`) and a dataset containing the
+required information to perform the derivation of the grouping variables
+(`dataset_queries`).
+
+The dataset passed to the `dataset_queries` argument of the
+[`derive_vars_query()`](https:/pharmaverse.github.io/admiral/v1.4.1/reference/derive_vars_query.md)
+function can be created by the
+[`create_query_data()`](https:/pharmaverse.github.io/admiral/v1.4.1/reference/create_query_data.md)
+function. For SMQs and SDGs company-specific functions for accessing the
+SMQ and SDG database need to be passed to the
+[`create_query_data()`](https:/pharmaverse.github.io/admiral/v1.4.1/reference/create_query_data.md)
+function (see the description of the `get_terms_fun` argument for
+details).
+
+This vignette describes the expected structure and content of the
+dataset passed to the `dataset_queries` argument in the
+[`derive_vars_query()`](https:/pharmaverse.github.io/admiral/v1.4.1/reference/derive_vars_query.md)
+function.
+
+## Structure of the Query Dataset
+
+### Variables
+
+| Variable     | Scope                                                                       | Type      | Example Value                               |
+|--------------|-----------------------------------------------------------------------------|-----------|---------------------------------------------|
+| **PREFIX**   | The prefix used to define the grouping variables                            | Character | `"SMQ01"`                                   |
+| **GRPNAME**  | The value provided to the grouping variables name                           | Character | `"Immune-Mediated Guillain-Barre Syndrome"` |
+| **SRCVAR**   | The variable used to define the grouping. Used in conjunction with TERMCHAR | Character | `"AEDECOD"`                                 |
+| **TERMCHAR** | A term used to define the grouping. Used in conjunction with SRCVAR         | Character | `"GUILLAIN-BARRE SYNDROME"`                 |
+| **TERMNUM**  | A code used to define the grouping. Used in conjunction with SRCVAR         | Integer   | `10018767`                                  |
+| GRPID        | Id number of the query. This could be a SMQ identifier                      | Integer   | `20000131`                                  |
+| SCOPE        | Scope (Broad/Narrow) of the query                                           | Character | `BROAD`, `NARROW`, `NA`                     |
+| SCOPEN       | Scope (Broad/Narrow) of the query                                           | Integer   | `1`, `2`, `NA`                              |
+| VERSION      | The version of the dictionary                                               | Character | `"20.1"`                                    |
+
+**Bold variables** are required in `dataset_queries`: an error is issued
+if any of these variables is missing. `TERMCHAR` is only REQUIRED if
+there is character variable named in `SRCVAR`. `TERMNUM` is only
+REQUIRED if there is numeric variable named in `SRCVAR`. When `SRCVAR`
+contains both character and numeric variables, then both `TERMCHAR` and
+`TERMNUM` are required. Other variables are optional.
+
+The `VERSION` variable is not used by
+[`derive_vars_query()`](https:/pharmaverse.github.io/admiral/v1.4.1/reference/derive_vars_query.md)
+but can be used to check if the dictionary version of the queries
+dataset and the analysis dataset are in line.
+
+### Required Content
+
+Each row must be unique within the dataset.
+
+As described above, the variables `PREFIX`, `GRPNAME`, `SRCVAR`,
+`TERMCHAR` and `TERMNUM` are required. The combination of these
+variables will allow the creation of the grouping variable.
+
+#### Input
+
+- `PREFIX` must be a character string starting with 2 or 3 letters,
+  followed by a 2-digits number (e.g. “CQ01”).
+
+- `GRPNAME` must be a non missing character string and it must be unique
+  within `PREFIX`.
+
+- `SRCVAR` must be a non missing character string.
+
+  - Each value in `SRCVAR` represents a variable from `dataset` used to
+    define the grouping variables (e.g. `AEDECOD`,`AEBODSYS`,
+    `AELLTCD`).
+
+  - The function
+    [`derive_vars_query()`](https:/pharmaverse.github.io/admiral/v1.4.1/reference/derive_vars_query.md)
+    will check that each value given in `SRCVAR` has a corresponding
+    variable in the input `dataset` and issue an error otherwise.
+
+  - Different `SRCVAR` variables may be specified within a `PREFIX`.
+
+- `TERMCHAR` must be a character string. This **must** be populated if
+  `TERMNUM` is missing.
+
+- `TERMNUM` must be an integer. This **must** be populated if `TERMCHAR`
+  is missing.
+
+#### Output
+
+- `PREFIX` will be used to create the grouping variable appending the
+  suffix “NAM”. This variable will now be referred to as `ABCzzNAM`: the
+  name of the grouping variable.
+
+  - E.g. `PREFIX == "SMQ01"` will create the `SMQ01NAM` variable.
+
+  - For each `PREFIX`, a new `ABCzzNAM` variable is created in
+    `dataset`.
+
+- `GRPNAME` will be used to populate the corresponding `ABCzzNAM`
+  variable.
+
+- `SRCVAR` will be used to identify the variables from `dataset` used to
+  perform the grouping (e.g. `AEDECOD`,`AEBODSYS`, `AELLTCD`).
+
+- `TERMCHAR` (for character variables), `TERMNUM` (for numeric
+  variables) will be used to identify the records meeting the criteria
+  in `dataset` based on the variable defined in `SRCVAR`.
+
+- **Result:**
+
+  - For each record in `dataset`, where the variable defined by `SRCVAR`
+    match a term from the `TERMCHAR` (for character variables) or
+    `TERMNUM` (for numeric variables) in the `datasets_queries`,
+    `ABCzzNAM` is populated with `GRPNAME`.
+
+  - Note: The type (numeric or character) of the variable defined in
+    `SRCVAR` is checked in `dataset`. If the variable is a character
+    variable (e.g. `AEDECOD`), it is expected that `TERMCHAR` is
+    populated, if it is a numeric variable (e.g. `AEBDSYCD`), it is
+    expected that `TERMNUM` is populated, otherwise an error is issued.
+
+#### Example
+
+In this example, one standard MedDRA query (`PREFIX = "SMQ01"`) and one
+customized query (`PREFIX = "CQ02"`) are defined to analyze the adverse
+events.
+
+- The standard MedDRA query variable `SMQ01NAM` \[`PREFIX`\] will be
+  populated with “Standard Query 1” \[`GRPNAME`\] if any preferred term
+  (`AEDECOD`) \[`SRCVAR`\] in `dataset` is equal to “AE1” or “AE2”
+  \[`TERMCHAR`\]
+
+- The customized query (`CQ02NAM`) \[`PREFIX`\] will be populated with
+  “Query 2” \[`GRPNAME`\] if any Low Level Term Code (`AELLTCD`)
+  \[`SRCVAR`\] in `dataset` is equal to 10 \[`TERMNUM`\] or any
+  preferred term (`AEDECOD`) \[`SRCVAR`\] in `dataset` is equal to “AE4”
+  \[`TERMCHAR`\].
+
+##### Query Dataset (`ds_query`)
+
+| PREFIX | GRPNAME          | SRCVAR  | TERMCHAR | TERMNUM |     |
+|--------|------------------|---------|----------|---------|-----|
+| SMQ01  | Standard Query 1 | AEDECOD | AE1      |         |     |
+| SMQ01  | Standard Query 1 | AEDECOD | AE2      |         |     |
+| CQ02   | Query 2          | AELLTCD |          | 10      |     |
+| CQ02   | Query 2          | AEDECOD | AE4      |         |     |
+
+##### Adverse Event Dataset (`ae`)
+
+| USUBJID | AEDECOD | AELLTCD |
+|---------|---------|---------|
+| 0001    | AE1     | 101     |
+| 0001    | AE3     | 10      |
+| 0001    | AE4     | 120     |
+| 0001    | AE5     | 130     |
+
+##### Output Dataset
+
+Generated by calling
+`derive_vars_query(dataset = ae, dataset_queries = ds_query)`.
+
+| USUBJID | AEDECOD | AELLTCD | SMQ01NAM         | CQ02NAM |
+|---------|---------|---------|------------------|---------|
+| 0001    | AE1     | 101     | Standard Query 1 |         |
+| 0001    | AE3     | 10      |                  | Query 2 |
+| 0001    | AE4     | 120     |                  | Query 2 |
+| 0001    | AE5     | 130     |                  |         |
+
+Subject 0001 has one event meeting the Standard Query 1 criteria
+(`AEDECOD = "AE1"`) and two events meeting the customized query
+(`AELLTCD = 10` and `AEDECOD = "AE4"`).
+
+### Optional Content
+
+When standardized MedDRA Queries are added to the dataset, it is
+expected that the name of the query (`ABCzzNAM`) is populated along with
+its number code (`ABCzzCD`), and its Broad or Narrow scope (`ABCzzSC`).
+
+The following variables can be added to `queries_datset` to derive this
+information.
+
+#### Input
+
+- `GRPID` must be an integer.
+
+- `SCOPE` must be a character string. Possible values are: “BROAD”,
+  “NARROW” or `NA`.
+
+- `SCOPEN` must be an integer. Possible values are: `1`, `2` or `NA`.
+
+#### Output
+
+- `GRPID`, `SCOPE` and `SCOPEN` will be used in the same way as
+  `GRPNAME` [(see here)](#GRPNAME) and will help in the creation of the
+  `ABCzzCD`, `ABCzzSC` and `ABCzzSCN` variables.
+
+#### Output Variables
+
+These variables are optional and if not populated in `dataset_queries`,
+the corresponding output variable will not be created:
+
+| PREFIX | GRPNAME | GRPID    | SCOPE  | SCOPEN | **Variables created**                        |
+|--------|---------|----------|--------|--------|----------------------------------------------|
+| SMQ01  | Query 1 | XXXXXXXX | NARROW | 2      | `SMQ01NAM`, `SMQ01CD`, `SMQ01SC`, `SMQ01SCN` |
+| SMQ02  | Query 2 | XXXXXXXX | BROAD  |        | `SMQ02NAM`, `SMQ02CD`, `SMQ02SC`             |
+| SMQ03  | Query 3 | XXXXXXXX |        | 1      | `SMQ03NAM`, `SMQ03CD`, `SMQ03SCN`            |
+| SMQ04  | Query 4 | XXXXXXXX |        |        | `SMQ04NAM`, `SMQ04CD`                        |
+| SMQ05  | Query 5 |          |        |        | `SMQ05NAM`                                   |
