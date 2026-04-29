@@ -40,6 +40,11 @@
   RStudio.
   ([\#2989](https://github.com/pharmaverse/admiral/issues/2989))
 
+- NCICTCAEv5 grading criteria (`atoxgr_criteria_ctcv5`,
+  `atoxgr_criteria_ctcv5_uscv`), updated to add term
+  `"Blood lactate dehydrogenase increase"`
+  ([\#3025](https://github.com/pharmaverse/admiral/issues/3025)).
+
 ### Breaking Changes
 
 - The following function arguments are entering the next phase of the
@@ -63,10 +68,10 @@
   - Creating an ADAB ADaM
   - Estimands (new)
 
-  This helps keep the size of
-  [admiral](https://pharmaverse.github.io/admiral/) under 5MB. The
-  articles are still accessible through the User Guides section of the
-  [admiral
+  This helps minimize the size of
+  [admiral](https://pharmaverse.github.io/admiral/) for installation.
+  The articles are still accessible through the User Guides section of
+  the [admiral
   website](https://pharmaverse.github.io/admiral/cran-release/).
   ([\#3067](https://github.com/pharmaverse/admiral/issues/3067))
 
