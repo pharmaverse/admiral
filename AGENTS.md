@@ -170,7 +170,7 @@ documentation of `set_admiral_options()`.
 
 | Other Common Function Name Terms             | Description                                                                                         |
 |----------------------------------------------|-----------------------------------------------------------------------------------------------------|
-| `_merged_` / `_joined_` / `_extreme_`        | Functions that follow the [generic function user-guide](https://pharmaverse.github.io/admiral/articles/generic.html).                                              |
+| `_merged_` / `_joined_` / `_extreme_`        | Functions that follow the [generic function user-guide](https://pharmaverse.github.io/admiral/cran-release/articles/generic.html).                                              |
 
 
 
@@ -367,7 +367,7 @@ These custom assertion functions should either return an error in case of an inv
 
 For the most common types of input arguments like a single variable, a list of
 variables, a dataset, ... functions for checking are available (see
-[assertions](https://pharmaverse.github.io/admiral/reference/index.html#section-assertions)).
+[assertions](https://pharmaverse.github.io/admiral/cran-release/reference/index.html#section-assertions)).
 
 Arguments which expect keywords should handle them in a case-insensitive manner,
 e.g., both `date_imputation = "FIRST"` and `date_imputation = "first"` should be
