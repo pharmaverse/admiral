@@ -41,7 +41,7 @@ offline via `vignette("vignette_name")`:
   - Creating an ADAB ADaM
   - Estimands (new)
   
-   This helps keep the size of `{admiral}` under 5MB. The articles are still accessible through the User Guides section of the 
+   This helps minimize the size of `{admiral}` for installation. The articles are still accessible through the User Guides section of the 
 [admiral website](https://pharmaverse.github.io/admiral/cran-release/). (#3067)
 
 - The documentation for `derive_var_merged_ef_msrc()` was enhanced with structured examples covering `flag_events` with multiple sources, customizing `true_value`, `false_value`, and `missing_value`, and per-source `by_vars` renaming. (#2906)
