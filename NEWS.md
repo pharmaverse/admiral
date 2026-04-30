@@ -21,6 +21,8 @@ erroneously ignored. (#3018)
 in a new window, and will instead just be accessible by clicking the link outputted in the console or going to the path
 specified under `save_path`. This is because this functionality did not work as expected outside of RStudio. (#2989)
 
+- NCICTCAEv5 grading criteria (`atoxgr_criteria_ctcv5`, `atoxgr_criteria_ctcv5_uscv`),  updated to add term `"Blood lactate dehydrogenase increase"` (#3025).
+
 ## Breaking Changes
 
 - The following function arguments are entering the next phase of the [deprecation process](https://pharmaverse.github.io/admiraldev/articles/programming_strategy.html#deprecation): 
@@ -35,13 +37,22 @@ specified under `save_path`. This is because this functionality did not work as 
 
 ## Documentation
 
+- The following new and existing User Guides have been changed from vignettes to articles, meaning they are no longer accessible
+offline via `vignette("vignette_name")`:
+
+  - Creating an ADAB ADaM
+  - Estimands (new)
+  
+   This helps minimize the size of `{admiral}` for installation. The articles are still accessible through the User Guides section of the 
+[admiral website](https://pharmaverse.github.io/admiral/cran-release/). (#3067)
+
 - The documentation for `derive_var_merged_ef_msrc()` was enhanced with structured examples covering `flag_events` with multiple sources, customizing `true_value`, `false_value`, and `missing_value`, and per-source `by_vars` renaming. (#2906)
 
 - Fix `UDTC` derivation in `ADPPK` to use source domain `DTC` variables. (#3011)
 
 - Fixed example in `derive_var_nfrlt()` to use `NA_character_` instead of `""` for missing unit values, consistent with the admiral programming strategy. (#3027)
 
-- New Estimands vignette added, describing possible implementations of estimands with `{admiral}` code. (#2954)
+- New web-only Estimands article added, describing possible implementations of estimands with `{admiral}` code. (#2954)
 
 - A night mode option has been added to the `{admiral}` website. This can be be toggled using the sun/moon icon in the top right corner 
 of the navigation bar. Tooltips have also been set up for each of the icons on the navigation bar. (#2959)
@@ -58,6 +69,7 @@ of packages were updated to specify the level of contributions required for auth
 - Added a new custom [404 page](https://pharmaverse.github.io/admiral/404.html) with a butterfly quiz for lost users. (#2982)
 
 - Added information about how to print out records with missing information when using `datasetref` in `derive_summary_records()`. (#3012)
+
 - Usage of `ASEQ` which is an optional variable was clarified within the corresponding Vignettes and Templates. (#2986)
 
 ## Various
@@ -72,7 +84,7 @@ of packages were updated to specify the level of contributions required for auth
 - Creating the website for pull requests was enabled. Add "[create website]" to
 the pull request title to trigger website creation. (#2984)
 
-- `_pkdown.yml` was updated to add metadata for linking across packages
+- `_pkgdown.yml` was updated to add metadata for linking across packages
 (`inst/pkgdown.yml`). (#2950)
 
 - The helper functions `roxygen_param_dataset()`, `roxygen_param_by_vars()`,
@@ -84,6 +96,10 @@ the pull request title to trigger website creation. (#2984)
 - To reduce the size of the package, the `ex_single` dataset was removed. It is
   now derived on the fly in the `ADAE` template and the `OCCDS` vignette using
   `create_single_dose_dataset()`. (#3060)
+  dependency.
+  ([admiraldev/#517](https://github.com/pharmaverse/admiraldev/issues/517))
+  
+- The HTML tag `<br/>` was removed from the roxygen headers. (#3042)
 </details>
 
 # admiral 1.4.1
