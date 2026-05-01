@@ -125,7 +125,6 @@ Other deprecated:
 \code{\link{derive_var_extreme_dt}()},
 \code{\link{derive_var_extreme_dtm}()},
 \code{\link{dthcaus_source}()},
-\code{\link{ex_single}},
 \code{\link{get_summary_records}()}
 }
 \concept{deprecated}

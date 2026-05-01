@@ -27,8 +27,6 @@ ex <- pharmaversesdtm::ex
 ae <- convert_blanks_to_na(ae)
 # Create single dose dataset for use in date of last dose derivations
 ex_single <- convert_blanks_to_na(ex) %>%
-  # Filter to doses relevant for this study (placebo and active doses)
-  filter(EXDOSE %in% c(0, 54)) %>%
   derive_vars_dt(dtc = EXSTDTC, new_vars_prefix = "EXST") %>%
   derive_vars_dt(dtc = EXENDTC, new_vars_prefix = "EXEN") %>%
   filter(!is.na(EXSTDT), !is.na(EXENDT)) %>%
@@ -39,13 +37,7 @@ ex_single <- convert_blanks_to_na(ex) %>%
     keep_source_vars = exprs(
       STUDYID, USUBJID, EXTRT, EXDOSE, EXDOSU, EXDOSFRQ, EXSTDT, EXENDT
     )
-  ) %>%
-  mutate(
-    EXSTDTC = as.character(EXSTDT),
-    EXENDTC = as.character(EXENDT)
   )
-ex <- ex_single
-
 
 # Derivations ----
 
@@ -94,17 +86,10 @@ adae <- ae %>%
     trunc_out = FALSE
   )
 
-ex_ext <- derive_vars_dtm(
-  ex,
-  dtc = EXSTDTC,
-  new_vars_prefix = "EXST",
-  flag_imputation = "none"
-) %>%
-  derive_vars_dtm(
-    dtc = EXENDTC,
-    new_vars_prefix = "EXEN",
-    time_imputation = "last",
-    flag_imputation = "none"
+ex_ext <- ex_single %>%
+  mutate(
+    EXSTDTM = as_datetime(EXSTDT),
+    EXENDTM = as_datetime(EXENDT)
   )
 
 adae <- adae %>%
