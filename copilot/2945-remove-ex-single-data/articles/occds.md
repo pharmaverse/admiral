@@ -210,6 +210,9 @@ depends on how dosing data were collected in your study. For ongoing
 studies, you may also need to impute missing end dates (e.g., with the
 data cut-off date) before calling
 [`create_single_dose_dataset()`](https:/pharmaverse.github.io/admiral/copilot/2945-remove-ex-single-data/reference/create_single_dose_dataset.md).
+For a detailed discussion of dose expansion, including guidance on
+handling missing end dates for ongoing studies, see
+[`vignette("pk_adnca", package = "admiral")`](https:/pharmaverse.github.io/admiral/copilot/2945-remove-ex-single-data/articles/pk_adnca.md).
 
 ``` r
 ex_single <- convert_blanks_to_na(ex) %>%

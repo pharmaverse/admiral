@@ -187,9 +187,11 @@ Developer Notes
   removed. It is now derived on the fly in the `ADAE` template and the
   `OCCDS` vignette using
   [`create_single_dose_dataset()`](https:/pharmaverse.github.io/admiral/copilot/2945-remove-ex-single-data/reference/create_single_dose_dataset.md).
+  For a detailed discussion of dose expansion using
+  [`create_single_dose_dataset()`](https:/pharmaverse.github.io/admiral/copilot/2945-remove-ex-single-data/reference/create_single_dose_dataset.md),
+  including handling of missing end dates for ongoing studies, see
+  [`vignette("pk_adnca", package = "admiral")`](https:/pharmaverse.github.io/admiral/copilot/2945-remove-ex-single-data/articles/pk_adnca.md).
   ([\#3060](https://github.com/pharmaverse/admiral/issues/3060))
-  dependency.
-  ([admiraldev/#517](https://github.com/pharmaverse/admiraldev/issues/517))
 
 - The HTML tag `<br/>` was removed from the roxygen headers.
   ([\#3042](https://github.com/pharmaverse/admiral/issues/3042))
