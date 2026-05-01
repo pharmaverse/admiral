@@ -72,4 +72,4 @@ Language: en-US
 LazyData: true
 Roxygen: list(markdown = TRUE, roclets = c("collate", "namespace",
     "admiraldev::rdx_roclet"))
-RoxygenNote: 8.0.0
+RoxygenNote: 7.3.3
