@@ -231,7 +231,8 @@ one record per treatment period rather than one record per dose), use
 `create_single_dose_dataset()` to expand them into one record per day. Whether
 this step is necessary depends on how dosing data were collected in your study.
 For ongoing studies, you may also need to impute missing end dates (e.g., with
-the data cut-off date) before calling `create_single_dose_dataset()`.
+the data cut-off date) before calling `create_single_dose_dataset()`. For a detailed discussion of dose expansion, including guidance on handling
+missing end dates for ongoing studies, see `vignette("pk_adnca", package = "admiral")`.
 
 ```{r eval=TRUE}
 ex_single <- convert_blanks_to_na(ex) %>%

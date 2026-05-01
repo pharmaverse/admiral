@@ -95,10 +95,10 @@ the pull request title to trigger website creation. (#2984)
 
 - To reduce the size of the package, the `ex_single` dataset was removed. It is
   now derived on the fly in the `ADAE` template and the `OCCDS` vignette using
-  `create_single_dose_dataset()`. (#3060)
-  dependency.
-  ([admiraldev/#517](https://github.com/pharmaverse/admiraldev/issues/517))
-  
+  `create_single_dose_dataset()`. For a detailed discussion of dose expansion using `create_single_dose_dataset()`,
+including handling of missing end dates for ongoing studies, see
+`vignette("pk_adnca", package = "admiral")`. (#3060)
+    
 - The HTML tag `<br/>` was removed from the roxygen headers. (#3042)
 </details>
 
