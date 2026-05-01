@@ -1,69 +1,23 @@
-adsl <- tibble::tribble(
-  ~USUBJID, ~SEX, ~COUNTRY,
-  "ST42-1", "F",  "AUT",
-  "ST42-2", "M",  "MWI",
-  "ST42-3", "M",  "NOR",
-  "ST42-4", "F",  "UGA"
-) %>% mutate(STUDYID = "ST42")
-
-adsl1 <- tibble::tribble(
-  ~ID, ~SEX, ~COUNTRY,
-  "ST42-1", "F", "AUT",
-  "ST42-2", "M", "MWI",
-  "ST42-3", "M", "NOR",
-  "ST42-4", "F", "UGA"
-) %>% mutate(STUDYID = "ST42")
-
-adsl2 <- tibble::tribble(
-  ~ID, ~SEX, ~COUNTRY,
-  "ST42-1", "F", "AUT",
-  "ST42-1", "F", "NOR",
-  "ST42-2", "M", "MWI",
-  "ST42-3", "M", "NOR",
-  "ST42-4", "F", "UGA"
-) %>% mutate(STUDYID = "ST42")
-
-
-advs <- tibble::tribble(
-  ~USUBJID, ~PARAMCD, ~AVISIT,    ~AVAL,
-  "ST42-1", "WEIGHT", "BASELINE", 66,
-  "ST42-1", "WEIGHT", "Week 2",   68,
-  "ST42-2", "WEIGHT", "BASELINE", 88,
-  "ST42-3", "WEIGHT", "Week 2",   55,
-  "ST42-3", "WEIGHT", "Week 4",   50
-) %>% mutate(STUDYID = "ST42")
-
-advs1 <- tibble::tribble(
-  ~ID, ~PARAMCD, ~AVISIT, ~AVAL,
-  "ST42-1", "WEIGHT", "BASELINE", 66,
-  "ST42-1", "WEIGHT", "Week 2", 68,
-  "ST42-2", "WEIGHT", "BASELINE", 88,
-  "ST42-3", "WEIGHT", "Week 2", 55,
-  "ST42-3", "WEIGHT", "Week 4", 50
-) %>% mutate(STUDYID = "ST42")
-
-
-ex <- tibble::tribble(
-  ~USUBJID, ~EXSTDTC,
-  "ST42-1", "2020-12-07",
-  "ST42-1", "2020-12-14",
-  "ST42-2", "2021-01-12T12:00:00",
-  "ST42-2", "2021-01-26T13:21",
-  "ST42-3", "2021-03-02"
-) %>% mutate(STUDYID = "ST42")
-
-vs <- tibble::tribble(
-  ~USUBJID, ~VSTESTCD, ~VSTEST, ~VSORRES, ~VSSEQ,
-  "ST42-1", "DIABP", "Diastolic Blood Pressure", 64, 1,
-  "ST42-1", "DIABP", "Diastolic Blood Pressure", 83, 2,
-  "ST42-1", "WEIGHT", "Weight", 120, 3,
-  "ST42-2", "WEIGHT", "Weight", 110, 1,
-  "ST42-2", "HEIGHT", "Height", 58, 2
-) %>% mutate(STUDYID = "ST42")
-
 # derive_vars_merged ----
 ## Test 1: merge all variables ----
 test_that("derive_vars_merged Test 1: merge all variables", {
+  adsl <- tibble::tribble(
+    ~USUBJID, ~SEX, ~COUNTRY,
+    "ST42-1", "F",  "AUT",
+    "ST42-2", "M",  "MWI",
+    "ST42-3", "M",  "NOR",
+    "ST42-4", "F",  "UGA"
+  ) %>% mutate(STUDYID = "ST42")
+
+  advs <- tibble::tribble(
+    ~USUBJID, ~PARAMCD, ~AVISIT,    ~AVAL,
+    "ST42-1", "WEIGHT", "BASELINE",    66,
+    "ST42-1", "WEIGHT", "Week 2",      68,
+    "ST42-2", "WEIGHT", "BASELINE",    88,
+    "ST42-3", "WEIGHT", "Week 2",      55,
+    "ST42-3", "WEIGHT", "Week 4",      50
+  ) %>% mutate(STUDYID = "ST42")
+
   actual <- derive_vars_merged(advs,
     dataset_add = adsl,
     by_vars = exprs(STUDYID, USUBJID)
@@ -80,6 +34,23 @@ test_that("derive_vars_merged Test 1: merge all variables", {
 
 ## Test 2: merge selected variables ----
 test_that("derive_vars_merged Test 2: merge selected variables", {
+  adsl <- tibble::tribble(
+    ~USUBJID, ~SEX, ~COUNTRY,
+    "ST42-1", "F",  "AUT",
+    "ST42-2", "M",  "MWI",
+    "ST42-3", "M",  "NOR",
+    "ST42-4", "F",  "UGA"
+  ) %>% mutate(STUDYID = "ST42")
+
+  advs <- tibble::tribble(
+    ~USUBJID, ~PARAMCD, ~AVISIT,    ~AVAL,
+    "ST42-1", "WEIGHT", "BASELINE",    66,
+    "ST42-1", "WEIGHT", "Week 2",      68,
+    "ST42-2", "WEIGHT", "BASELINE",    88,
+    "ST42-3", "WEIGHT", "Week 2",      55,
+    "ST42-3", "WEIGHT", "Week 4",      50
+  ) %>% mutate(STUDYID = "ST42")
+
   actual <- derive_vars_merged(advs,
     dataset_add = adsl,
     by_vars = exprs(USUBJID),
@@ -97,6 +68,23 @@ test_that("derive_vars_merged Test 2: merge selected variables", {
 
 ## Test 3: merge last value and flag matched by groups ----
 test_that("derive_vars_merged Test 3: merge last value and flag matched by groups", {
+  adsl <- tibble::tribble(
+    ~USUBJID, ~SEX, ~COUNTRY,
+    "ST42-1", "F",  "AUT",
+    "ST42-2", "M",  "MWI",
+    "ST42-3", "M",  "NOR",
+    "ST42-4", "F",  "UGA"
+  ) %>% mutate(STUDYID = "ST42")
+
+  advs <- tibble::tribble(
+    ~USUBJID, ~PARAMCD, ~AVISIT,    ~AVAL,
+    "ST42-1", "WEIGHT", "BASELINE",    66,
+    "ST42-1", "WEIGHT", "Week 2",      68,
+    "ST42-2", "WEIGHT", "BASELINE",    88,
+    "ST42-3", "WEIGHT", "Week 2",      55,
+    "ST42-3", "WEIGHT", "Week 4",      50
+  ) %>% mutate(STUDYID = "ST42")
+
   actual <- derive_vars_merged(adsl,
     dataset_add = advs,
     order = exprs(AVAL),
@@ -119,6 +107,23 @@ test_that("derive_vars_merged Test 3: merge last value and flag matched by group
 
 ## Test 4: merge last value and flag matched by groups ----
 test_that("derive_vars_merged Test 4: merge last value and flag matched by groups", {
+  adsl <- tibble::tribble(
+    ~USUBJID, ~SEX, ~COUNTRY,
+    "ST42-1", "F",  "AUT",
+    "ST42-2", "M",  "MWI",
+    "ST42-3", "M",  "NOR",
+    "ST42-4", "F",  "UGA"
+  ) %>% mutate(STUDYID = "ST42")
+
+  advs <- tibble::tribble(
+    ~USUBJID, ~PARAMCD, ~AVISIT,    ~AVAL,
+    "ST42-1", "WEIGHT", "BASELINE",    66,
+    "ST42-1", "WEIGHT", "Week 2",      68,
+    "ST42-2", "WEIGHT", "BASELINE",    88,
+    "ST42-3", "WEIGHT", "Week 2",      55,
+    "ST42-3", "WEIGHT", "Week 4",      50
+  ) %>% mutate(STUDYID = "ST42")
+
   actual <- derive_vars_merged(adsl,
     dataset_add = advs,
     order = exprs(AVAL),
@@ -143,6 +148,23 @@ test_that("derive_vars_merged Test 4: merge last value and flag matched by group
 
 ## Test 5: error if variable in both datasets ----
 test_that("derive_vars_merged Test 5: error if variable in both datasets", {
+  adsl <- tibble::tribble(
+    ~USUBJID, ~SEX, ~COUNTRY,
+    "ST42-1", "F",  "AUT",
+    "ST42-2", "M",  "MWI",
+    "ST42-3", "M",  "NOR",
+    "ST42-4", "F",  "UGA"
+  ) %>% mutate(STUDYID = "ST42")
+
+  advs <- tibble::tribble(
+    ~USUBJID, ~PARAMCD, ~AVISIT,    ~AVAL,
+    "ST42-1", "WEIGHT", "BASELINE",    66,
+    "ST42-1", "WEIGHT", "Week 2",      68,
+    "ST42-2", "WEIGHT", "BASELINE",    88,
+    "ST42-3", "WEIGHT", "Week 2",      55,
+    "ST42-3", "WEIGHT", "Week 4",      50
+  ) %>% mutate(STUDYID = "ST42")
+
   expect_snapshot(
     derive_vars_merged(advs,
       dataset_add = adsl,
@@ -154,6 +176,23 @@ test_that("derive_vars_merged Test 5: error if variable in both datasets", {
 
 ## Test 6: by_vars with rename ----
 test_that("derive_vars_merged Test 6: by_vars with rename", {
+  adsl1 <- tibble::tribble(
+    ~ID,      ~SEX, ~COUNTRY,
+    "ST42-1", "F",  "AUT",
+    "ST42-2", "M",  "MWI",
+    "ST42-3", "M",  "NOR",
+    "ST42-4", "F",  "UGA"
+  ) %>% mutate(STUDYID = "ST42")
+
+  advs <- tibble::tribble(
+    ~USUBJID, ~PARAMCD, ~AVISIT,    ~AVAL,
+    "ST42-1", "WEIGHT", "BASELINE",    66,
+    "ST42-1", "WEIGHT", "Week 2",      68,
+    "ST42-2", "WEIGHT", "BASELINE",    88,
+    "ST42-3", "WEIGHT", "Week 2",      55,
+    "ST42-3", "WEIGHT", "Week 4",      50
+  ) %>% mutate(STUDYID = "ST42")
+
   actual <- derive_vars_merged(advs,
     dataset_add = adsl1,
     by_vars = exprs(STUDYID, USUBJID = ID),
@@ -172,6 +211,23 @@ test_that("derive_vars_merged Test 6: by_vars with rename", {
 
 ## Test 7: expressions for new_vars and missing_values ----
 test_that("derive_vars_merged Test 7: expressions for new_vars and missing_values", {
+  adsl <- tibble::tribble(
+    ~USUBJID, ~SEX, ~COUNTRY,
+    "ST42-1", "F",  "AUT",
+    "ST42-2", "M",  "MWI",
+    "ST42-3", "M",  "NOR",
+    "ST42-4", "F",  "UGA"
+  ) %>% mutate(STUDYID = "ST42")
+
+  advs <- tibble::tribble(
+    ~USUBJID, ~PARAMCD, ~AVISIT,    ~AVAL,
+    "ST42-1", "WEIGHT", "BASELINE",    66,
+    "ST42-1", "WEIGHT", "Week 2",      68,
+    "ST42-2", "WEIGHT", "BASELINE",    88,
+    "ST42-3", "WEIGHT", "Week 2",      55,
+    "ST42-3", "WEIGHT", "Week 4",      50
+  ) %>% mutate(STUDYID = "ST42")
+
   actual <- derive_vars_merged(
     adsl,
     dataset_add = advs,
@@ -196,6 +252,23 @@ test_that("derive_vars_merged Test 7: expressions for new_vars and missing_value
 
 ## Test 8: Use of missing_values and exist_flags ----
 test_that("derive_vars_merged Test 8: Use of missing_values and exist_flags", {
+  adsl <- tibble::tribble(
+    ~USUBJID, ~SEX, ~COUNTRY,
+    "ST42-1", "F",  "AUT",
+    "ST42-2", "M",  "MWI",
+    "ST42-3", "M",  "NOR",
+    "ST42-4", "F",  "UGA"
+  ) %>% mutate(STUDYID = "ST42")
+
+  advs <- tibble::tribble(
+    ~USUBJID, ~PARAMCD, ~AVISIT,    ~AVAL,
+    "ST42-1", "WEIGHT", "BASELINE",    66,
+    "ST42-1", "WEIGHT", "Week 2",      68,
+    "ST42-2", "WEIGHT", "BASELINE",    88,
+    "ST42-3", "WEIGHT", "Week 2",      55,
+    "ST42-3", "WEIGHT", "Week 4",      50
+  ) %>% mutate(STUDYID = "ST42")
+
   actual <- derive_vars_merged(
     adsl,
     dataset_add = advs,
@@ -225,6 +298,14 @@ test_that("derive_vars_merged Test 8: Use of missing_values and exist_flags", {
 
 ## Test 9: use new variables in filter_add and order ----
 test_that("derive_vars_merged Test 9: use new variables in filter_add and order", {
+  adsl <- tibble::tribble(
+    ~USUBJID, ~SEX, ~COUNTRY,
+    "ST42-1", "F",  "AUT",
+    "ST42-2", "M",  "MWI",
+    "ST42-3", "M",  "NOR",
+    "ST42-4", "F",  "UGA"
+  ) %>% mutate(STUDYID = "ST42")
+
   expected <- tibble::tribble(
     ~USUBJID, ~TRTSDT,      ~TRTSSEQ,
     "ST42-1", "2020-12-14",        2,
@@ -264,6 +345,24 @@ test_that("derive_vars_merged Test 9: use new variables in filter_add and order"
 
 ## Test 10: warning if not unique w.r.t the by variables and the order ----
 test_that("derive_vars_merged Test 10: warning if not unique w.r.t the by variables and the order", { # nolint
+  adsl2 <- tibble::tribble(
+    ~ID,      ~SEX, ~COUNTRY,
+    "ST42-1", "F",  "AUT",
+    "ST42-1", "F",  "NOR",
+    "ST42-2", "M",  "MWI",
+    "ST42-3", "M",  "NOR",
+    "ST42-4", "F",  "UGA"
+  ) %>% mutate(STUDYID = "ST42")
+
+  advs <- tibble::tribble(
+    ~USUBJID, ~PARAMCD, ~AVISIT,    ~AVAL,
+    "ST42-1", "WEIGHT", "BASELINE",    66,
+    "ST42-1", "WEIGHT", "Week 2",      68,
+    "ST42-2", "WEIGHT", "BASELINE",    88,
+    "ST42-3", "WEIGHT", "Week 2",      55,
+    "ST42-3", "WEIGHT", "Week 4",      50
+  ) %>% mutate(STUDYID = "ST42")
+
   expect_warning(
     actual <- derive_vars_merged(advs,
       dataset_add = adsl2,
@@ -278,6 +377,24 @@ test_that("derive_vars_merged Test 10: warning if not unique w.r.t the by variab
 
 ## Test 11: error if not unique w.r.t the by variables and the order ----
 test_that("derive_vars_merged Test 11: error if not unique w.r.t the by variables and the order", {
+  adsl2 <- tibble::tribble(
+    ~ID,      ~SEX, ~COUNTRY,
+    "ST42-1", "F",  "AUT",
+    "ST42-1", "F",  "NOR",
+    "ST42-2", "M",  "MWI",
+    "ST42-3", "M",  "NOR",
+    "ST42-4", "F",  "UGA"
+  ) %>% mutate(STUDYID = "ST42")
+
+  advs <- tibble::tribble(
+    ~USUBJID, ~PARAMCD, ~AVISIT,    ~AVAL,
+    "ST42-1", "WEIGHT", "BASELINE",    66,
+    "ST42-1", "WEIGHT", "Week 2",      68,
+    "ST42-2", "WEIGHT", "BASELINE",    88,
+    "ST42-3", "WEIGHT", "Week 2",      55,
+    "ST42-3", "WEIGHT", "Week 4",      50
+  ) %>% mutate(STUDYID = "ST42")
+
   expect_snapshot(
     actual <- derive_vars_merged(advs,
       dataset_add = adsl2,
@@ -293,6 +410,23 @@ test_that("derive_vars_merged Test 11: error if not unique w.r.t the by variable
 
 ## Test 12: error if variables in missing_values but not in new_vars ----
 test_that("derive_vars_merged Test 12: error if variables in missing_values but not in new_vars", {
+  adsl <- tibble::tribble(
+    ~USUBJID, ~SEX, ~COUNTRY,
+    "ST42-1", "F",  "AUT",
+    "ST42-2", "M",  "MWI",
+    "ST42-3", "M",  "NOR",
+    "ST42-4", "F",  "UGA"
+  ) %>% mutate(STUDYID = "ST42")
+
+  advs <- tibble::tribble(
+    ~USUBJID, ~PARAMCD, ~AVISIT,    ~AVAL,
+    "ST42-1", "WEIGHT", "BASELINE",    66,
+    "ST42-1", "WEIGHT", "Week 2",      68,
+    "ST42-2", "WEIGHT", "BASELINE",    88,
+    "ST42-3", "WEIGHT", "Week 2",      55,
+    "ST42-3", "WEIGHT", "Week 4",      50
+  ) %>% mutate(STUDYID = "ST42")
+
   expect_snapshot(
     derive_vars_merged(
       adsl,
@@ -309,6 +443,24 @@ test_that("derive_vars_merged Test 12: error if variables in missing_values but 
 
 ## Test 13: error if not unique, no order, check_type = error ----
 test_that("derive_vars_merged Test 13: error if not unique, no order, check_type = error", {
+  adsl2 <- tibble::tribble(
+    ~ID,      ~SEX, ~COUNTRY,
+    "ST42-1", "F",  "AUT",
+    "ST42-1", "F",  "NOR",
+    "ST42-2", "M",  "MWI",
+    "ST42-3", "M",  "NOR",
+    "ST42-4", "F",  "UGA"
+  ) %>% mutate(STUDYID = "ST42")
+
+  advs <- tibble::tribble(
+    ~USUBJID, ~PARAMCD, ~AVISIT,    ~AVAL,
+    "ST42-1", "WEIGHT", "BASELINE",    66,
+    "ST42-1", "WEIGHT", "Week 2",      68,
+    "ST42-2", "WEIGHT", "BASELINE",    88,
+    "ST42-3", "WEIGHT", "Week 2",      55,
+    "ST42-3", "WEIGHT", "Week 4",      50
+  ) %>% mutate(STUDYID = "ST42")
+
   expect_snapshot(
     actual <- derive_vars_merged(advs,
       dataset_add = adsl2,
@@ -322,6 +474,24 @@ test_that("derive_vars_merged Test 13: error if not unique, no order, check_type
 
 ## Test 14: error if not unique, no order, check_type = warning ----
 test_that("derive_vars_merged Test 14: error if not unique, no order, check_type = warning", {
+  adsl2 <- tibble::tribble(
+    ~ID,      ~SEX, ~COUNTRY,
+    "ST42-1", "F",  "AUT",
+    "ST42-1", "F",  "NOR",
+    "ST42-2", "M",  "MWI",
+    "ST42-3", "M",  "NOR",
+    "ST42-4", "F",  "UGA"
+  ) %>% mutate(STUDYID = "ST42")
+
+  advs <- tibble::tribble(
+    ~USUBJID, ~PARAMCD, ~AVISIT,    ~AVAL,
+    "ST42-1", "WEIGHT", "BASELINE",    66,
+    "ST42-1", "WEIGHT", "Week 2",      68,
+    "ST42-2", "WEIGHT", "BASELINE",    88,
+    "ST42-3", "WEIGHT", "Week 2",      55,
+    "ST42-3", "WEIGHT", "Week 4",      50
+  ) %>% mutate(STUDYID = "ST42")
+
   expect_snapshot(
     actual <- derive_vars_merged(
       advs,
@@ -336,6 +506,24 @@ test_that("derive_vars_merged Test 14: error if not unique, no order, check_type
 
 ## Test 15: error if not unique, no order, check_type = NULL ----
 test_that("derive_vars_merged Test 15: error if not unique, no order, check_type = NULL", {
+  adsl2 <- tibble::tribble(
+    ~ID,      ~SEX, ~COUNTRY,
+    "ST42-1", "F",  "AUT",
+    "ST42-1", "F",  "NOR",
+    "ST42-2", "M",  "MWI",
+    "ST42-3", "M",  "NOR",
+    "ST42-4", "F",  "UGA"
+  ) %>% mutate(STUDYID = "ST42")
+
+  advs <- tibble::tribble(
+    ~USUBJID, ~PARAMCD, ~AVISIT,    ~AVAL,
+    "ST42-1", "WEIGHT", "BASELINE",    66,
+    "ST42-1", "WEIGHT", "Week 2",      68,
+    "ST42-2", "WEIGHT", "BASELINE",    88,
+    "ST42-3", "WEIGHT", "Week 2",      55,
+    "ST42-3", "WEIGHT", "Week 4",      50
+  ) %>% mutate(STUDYID = "ST42")
+
   expect_snapshot(
     actual <- derive_vars_merged(
       advs,
@@ -350,6 +538,23 @@ test_that("derive_vars_merged Test 15: error if not unique, no order, check_type
 
 ## Test 16: merge relationship as 'many-to-one' ----
 test_that("derive_vars_merged Test 16: merge relationship as 'many-to-one'", {
+  adsl <- tibble::tribble(
+    ~USUBJID, ~SEX, ~COUNTRY,
+    "ST42-1", "F",  "AUT",
+    "ST42-2", "M",  "MWI",
+    "ST42-3", "M",  "NOR",
+    "ST42-4", "F",  "UGA"
+  ) %>% mutate(STUDYID = "ST42")
+
+  advs <- tibble::tribble(
+    ~USUBJID, ~PARAMCD, ~AVISIT,    ~AVAL,
+    "ST42-1", "WEIGHT", "BASELINE",    66,
+    "ST42-1", "WEIGHT", "Week 2",      68,
+    "ST42-2", "WEIGHT", "BASELINE",    88,
+    "ST42-3", "WEIGHT", "Week 2",      55,
+    "ST42-3", "WEIGHT", "Week 4",      50
+  ) %>% mutate(STUDYID = "ST42")
+
   actual <- derive_vars_merged(advs,
     dataset_add = adsl,
     by_vars = exprs(USUBJID),
@@ -368,6 +573,23 @@ test_that("derive_vars_merged Test 16: merge relationship as 'many-to-one'", {
 
 ## Test 17: error incorrect 'one-to-one' ----
 test_that("derive_vars_merged Test 17: error incorrect 'one-to-one'", {
+  adsl <- tibble::tribble(
+    ~USUBJID, ~SEX, ~COUNTRY,
+    "ST42-1", "F",  "AUT",
+    "ST42-2", "M",  "MWI",
+    "ST42-3", "M",  "NOR",
+    "ST42-4", "F",  "UGA"
+  ) %>% mutate(STUDYID = "ST42")
+
+  advs <- tibble::tribble(
+    ~USUBJID, ~PARAMCD, ~AVISIT,    ~AVAL,
+    "ST42-1", "WEIGHT", "BASELINE",    66,
+    "ST42-1", "WEIGHT", "Week 2",      68,
+    "ST42-2", "WEIGHT", "BASELINE",    88,
+    "ST42-3", "WEIGHT", "Week 2",      55,
+    "ST42-3", "WEIGHT", "Week 4",      50
+  ) %>% mutate(STUDYID = "ST42")
+
   expect_snapshot(
     derive_vars_merged(advs,
       dataset_add = adsl,
@@ -381,6 +603,23 @@ test_that("derive_vars_merged Test 17: error incorrect 'one-to-one'", {
 
 ## Test 18: merge sel vars 'one-to-one' ----
 test_that("derive_vars_merged Test 18: merge sel vars 'one-to-one'", {
+  adsl <- tibble::tribble(
+    ~USUBJID, ~SEX, ~COUNTRY,
+    "ST42-1", "F",  "AUT",
+    "ST42-2", "M",  "MWI",
+    "ST42-3", "M",  "NOR",
+    "ST42-4", "F",  "UGA"
+  ) %>% mutate(STUDYID = "ST42")
+
+  advs <- tibble::tribble(
+    ~USUBJID, ~PARAMCD, ~AVISIT,    ~AVAL,
+    "ST42-1", "WEIGHT", "BASELINE",    66,
+    "ST42-1", "WEIGHT", "Week 2",      68,
+    "ST42-2", "WEIGHT", "BASELINE",    88,
+    "ST42-3", "WEIGHT", "Week 2",      55,
+    "ST42-3", "WEIGHT", "Week 4",      50
+  ) %>% mutate(STUDYID = "ST42")
+
   expect_snapshot(
     derive_vars_merged(adsl,
       dataset_add = advs,
@@ -395,6 +634,23 @@ test_that("derive_vars_merged Test 18: merge sel vars 'one-to-one'", {
 # derive_var_merged_exist_flag ----
 ## Test 19: merge existence flag ----
 test_that("derive_var_merged_exist_flag Test 19: merge existence flag", {
+  adsl <- tibble::tribble(
+    ~USUBJID, ~SEX, ~COUNTRY,
+    "ST42-1", "F",  "AUT",
+    "ST42-2", "M",  "MWI",
+    "ST42-3", "M",  "NOR",
+    "ST42-4", "F",  "UGA"
+  ) %>% mutate(STUDYID = "ST42")
+
+  advs <- tibble::tribble(
+    ~USUBJID, ~PARAMCD, ~AVISIT,    ~AVAL,
+    "ST42-1", "WEIGHT", "BASELINE",    66,
+    "ST42-1", "WEIGHT", "Week 2",      68,
+    "ST42-2", "WEIGHT", "BASELINE",    88,
+    "ST42-3", "WEIGHT", "Week 2",      55,
+    "ST42-3", "WEIGHT", "Week 4",      50
+  ) %>% mutate(STUDYID = "ST42")
+
   actual <- derive_var_merged_exist_flag(
     adsl,
     advs,
@@ -413,6 +669,23 @@ test_that("derive_var_merged_exist_flag Test 19: merge existence flag", {
 
 ## Test 20: by_vars with rename ----
 test_that("derive_var_merged_exist_flag Test 20: by_vars with rename", {
+  adsl <- tibble::tribble(
+    ~USUBJID, ~SEX, ~COUNTRY,
+    "ST42-1", "F",  "AUT",
+    "ST42-2", "M",  "MWI",
+    "ST42-3", "M",  "NOR",
+    "ST42-4", "F",  "UGA"
+  ) %>% mutate(STUDYID = "ST42")
+
+  advs1 <- tibble::tribble(
+    ~ID,      ~PARAMCD, ~AVISIT,    ~AVAL,
+    "ST42-1", "WEIGHT", "BASELINE",    66,
+    "ST42-1", "WEIGHT", "Week 2",      68,
+    "ST42-2", "WEIGHT", "BASELINE",    88,
+    "ST42-3", "WEIGHT", "Week 2",      55,
+    "ST42-3", "WEIGHT", "Week 4",      50
+  ) %>% mutate(STUDYID = "ST42")
+
   actual <- derive_var_merged_exist_flag(
     adsl,
     dataset_add = advs1,
@@ -435,11 +708,20 @@ test_that("derive_var_merged_exist_flag Test 20: by_vars with rename", {
 # derive_vars_merged_lookup ----
 ## Test 21: merge lookup table ----
 test_that("derive_vars_merged_lookup Test 21: merge lookup table", {
+  vs <- tibble::tribble(
+    ~USUBJID, ~VSTESTCD, ~VSTEST,                    ~VSORRES, ~VSSEQ,
+    "ST42-1", "DIABP",   "Diastolic Blood Pressure",       64,      1,
+    "ST42-1", "DIABP",   "Diastolic Blood Pressure",       83,      2,
+    "ST42-1", "WEIGHT",  "Weight",                        120,      3,
+    "ST42-2", "WEIGHT",  "Weight",                        110,      1,
+    "ST42-2", "HEIGHT",  "Height",                         58,      2
+  ) %>% mutate(STUDYID = "ST42")
+
   param_lookup <- tibble::tribble(
-    ~VSTESTCD, ~VSTEST, ~PARAMCD, ~DESCRIPTION,
-    "WEIGHT", "Weight", "WEIGHT", "Weight (kg)",
-    "HEIGHT", "Height", "HEIGHT", "Height (cm)",
-    "BMI", "Body Mass Index", "BMI", "Body Mass Index(kg/m^2)"
+    ~VSTESTCD, ~VSTEST,           ~PARAMCD, ~DESCRIPTION,
+    "WEIGHT",  "Weight",          "WEIGHT", "Weight (kg)",
+    "HEIGHT",  "Height",          "HEIGHT", "Height (cm)",
+    "BMI",     "Body Mass Index", "BMI",    "Body Mass Index(kg/m^2)"
   )
 
   attr(param_lookup$VSTESTCD, "label") <- "Vital Signs Test Short Name"
@@ -471,12 +753,21 @@ test_that("derive_vars_merged_lookup Test 21: merge lookup table", {
 ## the lookup table
 ## Test 22:  all by_vars have records in the lookup table ----
 test_that("derive_vars_merged_lookup Test 22:  all by_vars have records in the lookup table", {
+  vs <- tibble::tribble(
+    ~USUBJID, ~VSTESTCD, ~VSTEST,                    ~VSORRES, ~VSSEQ,
+    "ST42-1", "DIABP",   "Diastolic Blood Pressure",       64,      1,
+    "ST42-1", "DIABP",   "Diastolic Blood Pressure",       83,      2,
+    "ST42-1", "WEIGHT",  "Weight",                        120,      3,
+    "ST42-2", "WEIGHT",  "Weight",                        110,      1,
+    "ST42-2", "HEIGHT",  "Height",                         58,      2
+  ) %>% mutate(STUDYID = "ST42")
+
   param_lookup <- tibble::tribble(
-    ~VSTESTCD, ~VSTEST, ~PARAMCD, ~DESCRIPTION,
-    "WEIGHT", "Weight", "WEIGHT", "Weight (kg)",
-    "HEIGHT", "Height", "HEIGHT", "Height (cm)",
-    "BMI", "Body Mass Index", "BMI", "Body Mass Index(kg/m^2)",
-    "DIABP", "Diastolic Blood Pressure", "DIABP", "Diastolic Blood Pressure (mmHg)"
+    ~VSTESTCD, ~VSTEST,                    ~PARAMCD, ~DESCRIPTION,
+    "WEIGHT",  "Weight",                   "WEIGHT", "Weight (kg)",
+    "HEIGHT",  "Height",                   "HEIGHT", "Height (cm)",
+    "BMI",     "Body Mass Index",          "BMI",    "Body Mass Index(kg/m^2)",
+    "DIABP",   "Diastolic Blood Pressure", "DIABP",  "Diastolic Blood Pressure (mmHg)"
   )
 
   attr(param_lookup$VSTESTCD, "label") <- "Vital Signs Test Short Name"
@@ -507,11 +798,20 @@ test_that("derive_vars_merged_lookup Test 22:  all by_vars have records in the l
 
 ## Test 23: by_vars with rename ----
 test_that("derive_vars_merged_lookup Test 23: by_vars with rename", {
+  vs <- tibble::tribble(
+    ~USUBJID, ~VSTESTCD, ~VSTEST,                    ~VSORRES, ~VSSEQ,
+    "ST42-1", "DIABP",   "Diastolic Blood Pressure",       64,      1,
+    "ST42-1", "DIABP",   "Diastolic Blood Pressure",       83,      2,
+    "ST42-1", "WEIGHT",  "Weight",                        120,      3,
+    "ST42-2", "WEIGHT",  "Weight",                        110,      1,
+    "ST42-2", "HEIGHT",  "Height",                         58,      2
+  ) %>% mutate(STUDYID = "ST42")
+
   param_lookup <- tibble::tribble(
-    ~TESTCD, ~VSTEST, ~PARAMCD, ~DESCRIPTION,
-    "WEIGHT", "Weight", "WEIGHT", "Weight (kg)",
-    "HEIGHT", "Height", "HEIGHT", "Height (cm)",
-    "BMI", "Body Mass Index", "BMI", "Body Mass Index(kg/m^2)"
+    ~TESTCD,   ~VSTEST,           ~PARAMCD, ~DESCRIPTION,
+    "WEIGHT",  "Weight",          "WEIGHT", "Weight (kg)",
+    "HEIGHT",  "Height",          "HEIGHT", "Height (cm)",
+    "BMI",     "Body Mass Index", "BMI",    "Body Mass Index(kg/m^2)"
   )
 
   attr(param_lookup$TESTCD, "label") <- "Vital Signs Test Short Name"
@@ -542,11 +842,20 @@ test_that("derive_vars_merged_lookup Test 23: by_vars with rename", {
 # get_not_mapped ----
 ## Test 24: not all by_vars have records in the lookup table ----
 test_that("get_not_mapped Test 24: not all by_vars have records in the lookup table", {
+  vs <- tibble::tribble(
+    ~USUBJID, ~VSTESTCD, ~VSTEST,                    ~VSORRES, ~VSSEQ,
+    "ST42-1", "DIABP",   "Diastolic Blood Pressure",       64,      1,
+    "ST42-1", "DIABP",   "Diastolic Blood Pressure",       83,      2,
+    "ST42-1", "WEIGHT",  "Weight",                        120,      3,
+    "ST42-2", "WEIGHT",  "Weight",                        110,      1,
+    "ST42-2", "HEIGHT",  "Height",                         58,      2
+  ) %>% mutate(STUDYID = "ST42")
+
   param_lookup <- tibble::tribble(
-    ~VSTESTCD, ~VSTEST, ~PARAMCD, ~DESCRIPTION,
-    "WEIGHT", "Weight", "WEIGHT", "Weight (kg)",
-    "HEIGHT", "Height", "HEIGHT", "Height (cm)",
-    "BMI", "Body Mass Index", "BMI", "Body Mass Index(kg/m^2)"
+    ~VSTESTCD, ~VSTEST,           ~PARAMCD, ~DESCRIPTION,
+    "WEIGHT",  "Weight",          "WEIGHT", "Weight (kg)",
+    "HEIGHT",  "Height",          "HEIGHT", "Height (cm)",
+    "BMI",     "Body Mass Index", "BMI",    "Body Mass Index(kg/m^2)"
   )
 
   attr(param_lookup$VSTESTCD, "label") <- "Vital Signs Test Short Name"

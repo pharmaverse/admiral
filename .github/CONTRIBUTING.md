@@ -24,13 +24,15 @@ Please note that we try to align to best practices used in other R packages' dev
   🦋  The `{admiral}` core development team will contact the issue creator as soon as possible to discuss further details.
  
 
-### Type 2: Contribution with Code
+### Type 2: Contribution with Code (Human and/or AI)
 
   🦋  First, the user creates an issue or comments on an existing issue to notify that they’d like to contribute code.
   
   🦋  Follow our development process step-by-step guide.
   
   🦋  We advise to contact an `{admiral}` core development team directly via [Slack](https://app.slack.com/client/T028PB489D3/C02M8KN8269) before submitting code for complex functionality.
+
+  🦋  We welcome the use of AI for contributions, but it must also follow the same steps as the humans!
 
 ### Detailed Development Process
 
