@@ -1,30 +1,30 @@
-adsl <- tibble::tribble(
-  ~STUDYID,  ~USUBJID, ~TRTEDTM,                       ~DTHDTC,
-  "STUDY01", "1",      ymd_hms("2020-01-01T12:00:00"), NA_character_,
-  "STUDY01", "2",      NA,                             "2020-06",
-  "STUDY01", "3",      ymd_hms("2020-04-12T13:15:00"), NA_character_
-) %>%
-  mutate(
-    DTHDT = c(ymd(""), ymd("2020-06-01"), ymd(""))
-  )
-
-ae <- tibble::tribble(
-  ~STUDYID,  ~USUBJID, ~AESTDTC,     ~AEENDTC,      ~AESEQ,
-  "STUDY01", "1",      "2019-11-01", "2019-11-23",  1,
-  "STUDY01", "1",      "2020-02-01", "2020-02-01",  2,
-  "STUDY01", "3",      "2020-02-02", "2020-02-03",  1,
-  "STUDY01", "3",      "2020-04-11", NA_character_, 2
-) %>%
-  mutate(
-    AESTDT = ymd(AESTDTC),
-    AEENDT = ymd(AEENDTC),
-    AESTDTM = ymd_hms(paste(AESTDTC, "12:00:00")),
-    AEENDTM = ymd_hms(if_else(is.na(AEENDTC), "", paste(AEENDTC, "12:00:00")))
-  )
-
 # derive_var_extreme_dt ----
 ## Test 1: deprecation message if function is called ----
 test_that("derive_var_extreme_dt Test 1: deprecation message if function is called", {
+  adsl <- tibble::tribble(
+    ~STUDYID,  ~USUBJID, ~TRTEDTM,                       ~DTHDTC,
+    "STUDY01", "1",      ymd_hms("2020-01-01T12:00:00"), NA_character_,
+    "STUDY01", "2",      NA,                             "2020-06",
+    "STUDY01", "3",      ymd_hms("2020-04-12T13:15:00"), NA_character_
+  ) %>%
+    mutate(
+      DTHDT = c(ymd(""), ymd("2020-06-01"), ymd(""))
+    )
+
+  ae <- tibble::tribble(
+    ~STUDYID,  ~USUBJID, ~AESTDTC,     ~AEENDTC,      ~AESEQ,
+    "STUDY01", "1",      "2019-11-01", "2019-11-23",  1,
+    "STUDY01", "1",      "2020-02-01", "2020-02-01",  2,
+    "STUDY01", "3",      "2020-02-02", "2020-02-03",  1,
+    "STUDY01", "3",      "2020-04-11", NA_character_, 2
+  ) %>%
+    mutate(
+      AESTDT = ymd(AESTDTC),
+      AEENDT = ymd(AEENDTC),
+      AESTDTM = ymd_hms(paste(AESTDTC, "12:00:00")),
+      AEENDTM = ymd_hms(if_else(is.na(AEENDTC), "", paste(AEENDTC, "12:00:00")))
+    )
+
   expect_snapshot({
     ae_start <- date_source(
       dataset_name = "ae",
@@ -62,6 +62,30 @@ test_that("derive_var_extreme_dt Test 1: deprecation message if function is call
 test_that("derive_var_extreme_dt Test 2: LSTALVDT is derived", {
   # Suppress lifecycle messages within the test environment
   withr::local_options(list(lifecycle_verbosity = "quiet"))
+
+  adsl <- tibble::tribble(
+    ~STUDYID,  ~USUBJID, ~TRTEDTM,                       ~DTHDTC,
+    "STUDY01", "1",      ymd_hms("2020-01-01T12:00:00"), NA_character_,
+    "STUDY01", "2",      NA,                             "2020-06",
+    "STUDY01", "3",      ymd_hms("2020-04-12T13:15:00"), NA_character_
+  ) %>%
+    mutate(
+      DTHDT = c(ymd(""), ymd("2020-06-01"), ymd(""))
+    )
+
+  ae <- tibble::tribble(
+    ~STUDYID,  ~USUBJID, ~AESTDTC,     ~AEENDTC,      ~AESEQ,
+    "STUDY01", "1",      "2019-11-01", "2019-11-23",  1,
+    "STUDY01", "1",      "2020-02-01", "2020-02-01",  2,
+    "STUDY01", "3",      "2020-02-02", "2020-02-03",  1,
+    "STUDY01", "3",      "2020-04-11", NA_character_, 2
+  ) %>%
+    mutate(
+      AESTDT = ymd(AESTDTC),
+      AEENDT = ymd(AEENDTC),
+      AESTDTM = ymd_hms(paste(AESTDTC, "12:00:00")),
+      AEENDTM = ymd_hms(if_else(is.na(AEENDTC), "", paste(AEENDTC, "12:00:00")))
+    )
 
   ae_start <- date_source(
     dataset_name = "ae",
@@ -142,6 +166,30 @@ test_that("derive_var_extreme_dt Test 4: `NA` dates are excluded", {
   # Suppress lifecycle messages within the test environment
   withr::local_options(list(lifecycle_verbosity = "quiet"))
 
+  adsl <- tibble::tribble(
+    ~STUDYID,  ~USUBJID, ~TRTEDTM,                       ~DTHDTC,
+    "STUDY01", "1",      ymd_hms("2020-01-01T12:00:00"), NA_character_,
+    "STUDY01", "2",      NA,                             "2020-06",
+    "STUDY01", "3",      ymd_hms("2020-04-12T13:15:00"), NA_character_
+  ) %>%
+    mutate(
+      DTHDT = c(ymd(""), ymd("2020-06-01"), ymd(""))
+    )
+
+  ae <- tibble::tribble(
+    ~STUDYID,  ~USUBJID, ~AESTDTC,     ~AEENDTC,      ~AESEQ,
+    "STUDY01", "1",      "2019-11-01", "2019-11-23",  1,
+    "STUDY01", "1",      "2020-02-01", "2020-02-01",  2,
+    "STUDY01", "3",      "2020-02-02", "2020-02-03",  1,
+    "STUDY01", "3",      "2020-04-11", NA_character_, 2
+  ) %>%
+    mutate(
+      AESTDT = ymd(AESTDTC),
+      AEENDT = ymd(AEENDTC),
+      AESTDTM = ymd_hms(paste(AESTDTC, "12:00:00")),
+      AEENDTM = ymd_hms(if_else(is.na(AEENDTC), "", paste(AEENDTC, "12:00:00")))
+    )
+
   ae_end <- date_source(
     dataset_name = "ae",
     date = AEENDTM
@@ -167,6 +215,30 @@ test_that("derive_var_extreme_dt Test 4: `NA` dates are excluded", {
 # derive_var_extreme_dtm ----
 ## Test 5: Message sent to users ----
 test_that("derive_var_extreme_dtm Test 5: Message sent to users", {
+  adsl <- tibble::tribble(
+    ~STUDYID,  ~USUBJID, ~TRTEDTM,                       ~DTHDTC,
+    "STUDY01", "1",      ymd_hms("2020-01-01T12:00:00"), NA_character_,
+    "STUDY01", "2",      NA,                             "2020-06",
+    "STUDY01", "3",      ymd_hms("2020-04-12T13:15:00"), NA_character_
+  ) %>%
+    mutate(
+      DTHDT = c(ymd(""), ymd("2020-06-01"), ymd(""))
+    )
+
+  ae <- tibble::tribble(
+    ~STUDYID,  ~USUBJID, ~AESTDTC,     ~AEENDTC,      ~AESEQ,
+    "STUDY01", "1",      "2019-11-01", "2019-11-23",  1,
+    "STUDY01", "1",      "2020-02-01", "2020-02-01",  2,
+    "STUDY01", "3",      "2020-02-02", "2020-02-03",  1,
+    "STUDY01", "3",      "2020-04-11", NA_character_, 2
+  ) %>%
+    mutate(
+      AESTDT = ymd(AESTDTC),
+      AEENDT = ymd(AEENDTC),
+      AESTDTM = ymd_hms(paste(AESTDTC, "12:00:00")),
+      AEENDTM = ymd_hms(if_else(is.na(AEENDTC), "", paste(AEENDTC, "12:00:00")))
+    )
+
   expect_snapshot({
     ae_start <- date_source(
       dataset_name = "ae",
@@ -224,6 +296,30 @@ test_that("derive_var_extreme_dtm Test 5: Message sent to users", {
 test_that("derive_var_extreme_dtm Test 6: `LSTALVDTM` and traceability variables are derived", {
   # Suppress lifecycle messages within the test environment
   withr::local_options(list(lifecycle_verbosity = "quiet"))
+
+  adsl <- tibble::tribble(
+    ~STUDYID,  ~USUBJID, ~TRTEDTM,                       ~DTHDTC,
+    "STUDY01", "1",      ymd_hms("2020-01-01T12:00:00"), NA_character_,
+    "STUDY01", "2",      NA,                             "2020-06",
+    "STUDY01", "3",      ymd_hms("2020-04-12T13:15:00"), NA_character_
+  ) %>%
+    mutate(
+      DTHDT = c(ymd(""), ymd("2020-06-01"), ymd(""))
+    )
+
+  ae <- tibble::tribble(
+    ~STUDYID,  ~USUBJID, ~AESTDTC,     ~AEENDTC,      ~AESEQ,
+    "STUDY01", "1",      "2019-11-01", "2019-11-23",  1,
+    "STUDY01", "1",      "2020-02-01", "2020-02-01",  2,
+    "STUDY01", "3",      "2020-02-02", "2020-02-03",  1,
+    "STUDY01", "3",      "2020-04-11", NA_character_, 2
+  ) %>%
+    mutate(
+      AESTDT = ymd(AESTDTC),
+      AEENDT = ymd(AEENDTC),
+      AESTDTM = ymd_hms(paste(AESTDTC, "12:00:00")),
+      AEENDTM = ymd_hms(if_else(is.na(AEENDTC), "", paste(AEENDTC, "12:00:00")))
+    )
 
   ae_start <- date_source(
     dataset_name = "ae",
@@ -294,6 +390,30 @@ test_that("derive_var_extreme_dtm Test 7: error is issued if `--DTC` variable is
   # Suppress lifecycle messages within the test environment
   withr::local_options(list(lifecycle_verbosity = "quiet"))
 
+  adsl <- tibble::tribble(
+    ~STUDYID,  ~USUBJID, ~TRTEDTM,                       ~DTHDTC,
+    "STUDY01", "1",      ymd_hms("2020-01-01T12:00:00"), NA_character_,
+    "STUDY01", "2",      NA,                             "2020-06",
+    "STUDY01", "3",      ymd_hms("2020-04-12T13:15:00"), NA_character_
+  ) %>%
+    mutate(
+      DTHDT = c(ymd(""), ymd("2020-06-01"), ymd(""))
+    )
+
+  ae <- tibble::tribble(
+    ~STUDYID,  ~USUBJID, ~AESTDTC,     ~AEENDTC,      ~AESEQ,
+    "STUDY01", "1",      "2019-11-01", "2019-11-23",  1,
+    "STUDY01", "1",      "2020-02-01", "2020-02-01",  2,
+    "STUDY01", "3",      "2020-02-02", "2020-02-03",  1,
+    "STUDY01", "3",      "2020-04-11", NA_character_, 2
+  ) %>%
+    mutate(
+      AESTDT = ymd(AESTDTC),
+      AEENDT = ymd(AEENDTC),
+      AESTDTM = ymd_hms(paste(AESTDTC, "12:00:00")),
+      AEENDTM = ymd_hms(if_else(is.na(AEENDTC), "", paste(AEENDTC, "12:00:00")))
+    )
+
   ae_start <- date_source(
     dataset_name = "ae",
     date = AESTDTC,
@@ -320,6 +440,30 @@ test_that("derive_var_extreme_dtm Test 7: error is issued if `--DTC` variable is
 test_that("derive_var_extreme_dtm Test 8: error if source dataset is not available", {
   # Suppress lifecycle messages within the test environment
   withr::local_options(list(lifecycle_verbosity = "quiet"))
+
+  adsl <- tibble::tribble(
+    ~STUDYID,  ~USUBJID, ~TRTEDTM,                       ~DTHDTC,
+    "STUDY01", "1",      ymd_hms("2020-01-01T12:00:00"), NA_character_,
+    "STUDY01", "2",      NA,                             "2020-06",
+    "STUDY01", "3",      ymd_hms("2020-04-12T13:15:00"), NA_character_
+  ) %>%
+    mutate(
+      DTHDT = c(ymd(""), ymd("2020-06-01"), ymd(""))
+    )
+
+  ae <- tibble::tribble(
+    ~STUDYID,  ~USUBJID, ~AESTDTC,     ~AEENDTC,      ~AESEQ,
+    "STUDY01", "1",      "2019-11-01", "2019-11-23",  1,
+    "STUDY01", "1",      "2020-02-01", "2020-02-01",  2,
+    "STUDY01", "3",      "2020-02-02", "2020-02-03",  1,
+    "STUDY01", "3",      "2020-04-11", NA_character_, 2
+  ) %>%
+    mutate(
+      AESTDT = ymd(AESTDTC),
+      AEENDT = ymd(AEENDTC),
+      AESTDTM = ymd_hms(paste(AESTDTC, "12:00:00")),
+      AEENDTM = ymd_hms(if_else(is.na(AEENDTC), "", paste(AEENDTC, "12:00:00")))
+    )
 
   expect_snapshot(
     {
