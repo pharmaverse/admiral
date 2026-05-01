@@ -50,26 +50,6 @@ adsl <- admiral::admiral_adsl
 ex <- pharmaversesdtm::ex
 
 ae <- convert_blanks_to_na(ae)
-# Create single dose dataset: expand multi-day dose intervals into one row per day
-ex_single <- convert_blanks_to_na(ex) %>%
-  # Filter to doses relevant for this study (placebo and active doses)
-  filter(EXDOSE %in% c(0, 54)) %>%
-  derive_vars_dt(dtc = EXSTDTC, new_vars_prefix = "EXST") %>%
-  derive_vars_dt(dtc = EXENDTC, new_vars_prefix = "EXEN") %>%
-  filter(!is.na(EXSTDT), !is.na(EXENDT)) %>%
-  create_single_dose_dataset(
-    dose_freq = EXDOSFRQ,
-    start_date = EXSTDT,
-    end_date = EXENDT,
-    keep_source_vars = exprs(
-      STUDYID, USUBJID, EXTRT, EXDOSE, EXDOSU, EXDOSFRQ, EXSTDT, EXENDT
-    )
-  ) %>%
-  # Convert date objects back to character DTC format for use in derive_vars_dtm()
-  mutate(
-    EXSTDTC = as.character(EXSTDT),
-    EXENDTC = as.character(EXENDT)
-  )
 ```
 
 At this step, it may be useful to join `ADSL` to your `AE` domain as
@@ -220,18 +200,41 @@ vignette](https:/pharmaverse.github.io/admiral/copilot/2945-remove-ex-single-dat
 
 ### Derive Date/Date-time of Last Dose
 
+Before deriving the last dose date, an `ex_single` dataset is created
+from the `EX` domain. If the exposure dataset contains multi-day dosing
+records (e.g., one record per treatment period rather than one record
+per dose), use
+[`create_single_dose_dataset()`](https:/pharmaverse.github.io/admiral/copilot/2945-remove-ex-single-data/reference/create_single_dose_dataset.md)
+to expand them into one record per day. Whether this step is necessary
+depends on how dosing data were collected in your study. For ongoing
+studies, you may also need to impute missing end dates (e.g., with the
+data cut-off date) before calling
+[`create_single_dose_dataset()`](https:/pharmaverse.github.io/admiral/copilot/2945-remove-ex-single-data/reference/create_single_dose_dataset.md).
+
+``` r
+ex_single <- convert_blanks_to_na(ex) %>%
+  derive_vars_dt(dtc = EXSTDTC, new_vars_prefix = "EXST") %>%
+  derive_vars_dt(dtc = EXENDTC, new_vars_prefix = "EXEN") %>%
+  filter(!is.na(EXSTDT), !is.na(EXENDT)) %>%
+  create_single_dose_dataset(
+    dose_freq = EXDOSFRQ,
+    start_date = EXSTDT,
+    end_date = EXENDT,
+    keep_source_vars = exprs(
+      STUDYID, USUBJID, EXTRT, EXDOSE, EXDOSU, EXDOSFRQ, EXSTDT, EXENDT
+    )
+  ) %>%
+  mutate(
+    EXSTDTM = as_datetime(EXSTDT),
+    EXENDTM = as_datetime(EXENDT)
+  )
+```
+
 The function
 [`derive_vars_joined()`](https:/pharmaverse.github.io/admiral/copilot/2945-remove-ex-single-data/reference/derive_vars_joined.md)
 can be used to derive the last dose date before the start of the event.
 
 ``` r
-ex_single <- derive_vars_dtm(
-  ex_single,
-  dtc = EXSTDTC,
-  new_vars_prefix = "EXST",
-  flag_imputation = "none"
-)
-
 adae <- derive_vars_joined(
   adae,
   ex_single,
@@ -255,14 +258,6 @@ intervals do not overlap. If this case occurs, the
 call below will throw an error as handling this case is study-specific.
 
 ``` r
-ex_single <- derive_vars_dtm(
-  ex_single,
-  dtc = EXENDTC,
-  new_vars_prefix = "EXEN",
-  time_imputation = "last",
-  flag_imputation = "none"
-)
-
 adae <- derive_vars_joined(
   adae,
   ex_single,

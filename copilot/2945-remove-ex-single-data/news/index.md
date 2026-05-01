@@ -126,6 +126,13 @@
   vignette, enabling links to them from across the website.
   ([\#3006](https://github.com/pharmaverse/admiral/issues/3006))
 
+- The documentation for
+  [`derive_vars_merged_summary()`](https:/pharmaverse.github.io/admiral/copilot/2945-remove-ex-single-data/reference/derive_vars_merged_summary.md)
+  was enhanced with structured examples covering the `new_vars`,
+  `filter_add`, `missing_values`, `by_vars` renaming, and string
+  aggregation use cases.
+  ([\#2775](https://github.com/pharmaverse/admiral/issues/2775))
+
 - Added a new custom [404
   page](https://pharmaverse.github.io/admiral/404.html) with a butterfly
   quiz for lost users.

@@ -170,5 +170,4 @@ Other deprecated:
 [`derive_var_extreme_dt()`](https:/pharmaverse.github.io/admiral/copilot/2945-remove-ex-single-data/reference/derive_var_extreme_dt.md),
 [`derive_var_extreme_dtm()`](https:/pharmaverse.github.io/admiral/copilot/2945-remove-ex-single-data/reference/derive_var_extreme_dtm.md),
 [`dthcaus_source()`](https:/pharmaverse.github.io/admiral/copilot/2945-remove-ex-single-data/reference/dthcaus_source.md),
-[`ex_single`](https:/pharmaverse.github.io/admiral/copilot/2945-remove-ex-single-data/reference/ex_single.md),
 [`get_summary_records()`](https:/pharmaverse.github.io/admiral/copilot/2945-remove-ex-single-data/reference/get_summary_records.md)

@@ -922,9 +922,6 @@ deprecated:
 
   Create a `dthcaus_source` Object
 
-- [`ex_single`](https:/pharmaverse.github.io/admiral/copilot/2945-remove-ex-single-data/reference/ex_single.md)
-  **\[deprecated\]** : Single Dose Exposure Dataset (Removed)
-
 - [`get_summary_records()`](https:/pharmaverse.github.io/admiral/copilot/2945-remove-ex-single-data/reference/get_summary_records.md)
   **\[deprecated\]** : Create Summary Records
 

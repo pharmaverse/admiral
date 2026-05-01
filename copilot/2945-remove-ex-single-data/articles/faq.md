@@ -196,8 +196,8 @@
   strategy](https://pharmaverse.github.io/admiraldev/articles/programming_strategy.html)
   serves as a framework for users how to create their own functions.
 - Please see the [contribution
-  model](https://pharmaverse.github.io/admiral/CONTRIBUTING.html) for a
-  detailed description on how to contribute to the project
+  model](https://pharmaverse.github.io/admiral/cran-release/CONTRIBUTING.html)
+  for a detailed description on how to contribute to the project
 
 ##### How has `{admiral}` been **tested externally** to Roche/GSK?
 
