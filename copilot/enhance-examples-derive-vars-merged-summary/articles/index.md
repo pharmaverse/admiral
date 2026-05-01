@@ -3,6 +3,8 @@
 ### All vignettes
 
 - [Creating an ADAB
+  ADaM](https:/pharmaverse.github.io/admiral/copilot/enhance-examples-derive-vars-merged-summary/articles/adab_web.md):
+- [Creating an ADAB
   ADaM](https:/pharmaverse.github.io/admiral/copilot/enhance-examples-derive-vars-merged-summary/articles/adab.md):
 - [Get
   Started](https:/pharmaverse.github.io/admiral/copilot/enhance-examples-derive-vars-merged-summary/articles/admiral.md):
@@ -16,6 +18,7 @@
   ADaM](https:/pharmaverse.github.io/admiral/copilot/enhance-examples-derive-vars-merged-summary/articles/bds_tte.md):
 - [Programming Concepts and
   Conventions](https:/pharmaverse.github.io/admiral/copilot/enhance-examples-derive-vars-merged-summary/articles/concepts_conventions.md):
+- [Estimands](https:/pharmaverse.github.io/admiral/copilot/enhance-examples-derive-vars-merged-summary/articles/estimands_web.md):
 - [Estimands](https:/pharmaverse.github.io/admiral/copilot/enhance-examples-derive-vars-merged-summary/articles/estimands.md):
 - [FAQ](https:/pharmaverse.github.io/admiral/copilot/enhance-examples-derive-vars-merged-summary/articles/faq.md):
 - [Generic

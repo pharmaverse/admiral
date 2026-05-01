@@ -11,7 +11,7 @@ atoxgr_criteria_ctcv5_uscv
 
 ## Format
 
-An object of class `data.frame` with 45 rows and 13 columns.
+An object of class `data.frame` with 46 rows and 13 columns.
 
 ## Details
 
