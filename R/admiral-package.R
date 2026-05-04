@@ -7,12 +7,12 @@
 #' @importFrom lifecycle deprecate_warn deprecate_stop deprecated
 #' @importFrom lubridate %--% as_datetime ceiling_date date days duration floor_date hour hours is.Date is.instant is.POSIXct minute minutes rollback second time_length weeks ymd ymd_hms years
 #' @importFrom magrittr %>%
-#' @importFrom purrr compose discard every flatten keep map map_chr map_dbl map_if map_lgl map2 modify_at modify_if pmap reduce transpose walk
-#' @importFrom rlang := abort arg_match as_data_mask as_function as_label as_name as_string call2 call_name caller_env cnd_muffle cnd_signal current_env .data enexpr enexprs eval_tidy expr exec expr_label exprs inform is_call is_expression is_missing is_named list2 new_environment parse_expr parse_exprs set_names sym syms type_of zap
+#' @importFrom purrr discard every flatten keep map map_chr map_dbl map_if map_lgl map2 pmap reduce walk
+#' @importFrom rlang := arg_match as_data_mask as_label as_name as_string call2 caller_env cnd_muffle cnd_signal current_env .data enexpr enexprs eval_tidy expr exec expr_label exprs inform is_call is_expression is_missing is_named list2 new_environment parse_expr parse_exprs set_names sym syms zap
 #' @importFrom stats setNames
 #' @importFrom stringr fixed str_c str_count str_detect str_extract str_glue str_length str_locate str_locate_all str_match str_remove str_remove_all str_replace str_replace_all str_split str_starts str_sub str_subset str_to_lower str_to_title str_to_upper str_trim regex
 #' @importFrom tidyr crossing drop_na fill nest pivot_longer pivot_wider unnest
-#' @importFrom tidyselect all_of any_of contains matches vars_select
-#' @importFrom utils capture.output file.edit object.size str
+#' @importFrom tidyselect all_of any_of contains matches
+#' @importFrom utils capture.output object.size str
 #'
 "_PACKAGE"
