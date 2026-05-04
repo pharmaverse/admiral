@@ -198,23 +198,23 @@ This reduces the memory consumption but increases the run-time.
 \code{\link[=event]{event()}}, \code{\link[=event_joined]{event_joined()}}, \code{\link[=derive_vars_extreme_event]{derive_vars_extreme_event()}}
 
 BDS-Findings Functions for adding Parameters/Records:
-\code{\link{default_qtc_paramcd}()},
-\code{\link{derive_basetype_records}()},
-\code{\link{derive_expected_records}()},
-\code{\link{derive_extreme_records}()},
-\code{\link{derive_locf_records}()},
-\code{\link{derive_param_bmi}()},
-\code{\link{derive_param_bsa}()},
-\code{\link{derive_param_computed}()},
-\code{\link{derive_param_doseint}()},
-\code{\link{derive_param_exist_flag}()},
-\code{\link{derive_param_exposure}()},
-\code{\link{derive_param_framingham}()},
-\code{\link{derive_param_map}()},
-\code{\link{derive_param_qtc}()},
-\code{\link{derive_param_rr}()},
-\code{\link{derive_param_wbc_abs}()},
-\code{\link{derive_summary_records}()}
+\code{\link[=default_qtc_paramcd]{default_qtc_paramcd()}},
+\code{\link[=derive_basetype_records]{derive_basetype_records()}},
+\code{\link[=derive_expected_records]{derive_expected_records()}},
+\code{\link[=derive_extreme_records]{derive_extreme_records()}},
+\code{\link[=derive_locf_records]{derive_locf_records()}},
+\code{\link[=derive_param_bmi]{derive_param_bmi()}},
+\code{\link[=derive_param_bsa]{derive_param_bsa()}},
+\code{\link[=derive_param_computed]{derive_param_computed()}},
+\code{\link[=derive_param_doseint]{derive_param_doseint()}},
+\code{\link[=derive_param_exist_flag]{derive_param_exist_flag()}},
+\code{\link[=derive_param_exposure]{derive_param_exposure()}},
+\code{\link[=derive_param_framingham]{derive_param_framingham()}},
+\code{\link[=derive_param_map]{derive_param_map()}},
+\code{\link[=derive_param_qtc]{derive_param_qtc()}},
+\code{\link[=derive_param_rr]{derive_param_rr()}},
+\code{\link[=derive_param_wbc_abs]{derive_param_wbc_abs()}},
+\code{\link[=derive_summary_records]{derive_summary_records()}}
 }
 \concept{der_prm_bds_findings}
 \keyword{der_prm_bds_findings}

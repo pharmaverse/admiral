@@ -104,7 +104,7 @@ call_derivation(
 \code{\link[=call_derivation]{call_derivation()}}
 
 Other Advanced Functions:
-\code{\link{list_tte_source_objects}()}
+\code{\link[=list_tte_source_objects]{list_tte_source_objects()}}
 }
 \concept{other_advanced}
 \keyword{other_advanced}
