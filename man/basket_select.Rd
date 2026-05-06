@@ -58,15 +58,15 @@ Exactly one of \code{name} or \code{id} must be specified.
 \code{\link[=create_query_data]{create_query_data()}}, \code{\link[=query]{query()}}
 
 Source Objects:
-\code{\link{censor_source}()},
+\code{\link[=censor_source]{censor_source()}},
 \code{\link{death_event}},
-\code{\link{event}()},
-\code{\link{event_joined}()},
-\code{\link{event_source}()},
-\code{\link{flag_event}()},
-\code{\link{query}()},
-\code{\link{records_source}()},
-\code{\link{tte_source}()}
+\code{\link[=event]{event()}},
+\code{\link[=event_joined]{event_joined()}},
+\code{\link[=event_source]{event_source()}},
+\code{\link[=flag_event]{flag_event()}},
+\code{\link[=query]{query()}},
+\code{\link[=records_source]{records_source()}},
+\code{\link[=tte_source]{tte_source()}}
 }
 \concept{source_specifications}
 \keyword{source_specifications}
