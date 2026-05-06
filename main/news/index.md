@@ -151,6 +151,9 @@
 
 Developer Notes
 
+- Update to roxygen2 8.0.0.
+  ([\#3090](https://github.com/pharmaverse/admiral/issues/3090))
+
 - Add instructions for AI coding agents: Workflow from `{admiralci}`
   copies information from
   [admiraldev](https://pharmaverse.github.io/admiraldev/) to `AGENTS.md`
