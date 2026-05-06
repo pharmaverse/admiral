@@ -303,13 +303,13 @@ This reduces the memory consumption but increases the run-time.
 \code{\link[=count_vals]{count_vals()}}, \code{\link[=min_cond]{min_cond()}}, \code{\link[=max_cond]{max_cond()}}
 
 Utilities for Filtering Observations:
-\code{\link{count_vals}()},
-\code{\link{filter_exist}()},
-\code{\link{filter_extreme}()},
-\code{\link{filter_not_exist}()},
-\code{\link{filter_relative}()},
-\code{\link{max_cond}()},
-\code{\link{min_cond}()}
+\code{\link[=count_vals]{count_vals()}},
+\code{\link[=filter_exist]{filter_exist()}},
+\code{\link[=filter_extreme]{filter_extreme()}},
+\code{\link[=filter_not_exist]{filter_not_exist()}},
+\code{\link[=filter_relative]{filter_relative()}},
+\code{\link[=max_cond]{max_cond()}},
+\code{\link[=min_cond]{min_cond()}}
 }
 \concept{utils_fil}
 \keyword{utils_fil}

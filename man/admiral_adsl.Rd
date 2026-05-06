@@ -17,7 +17,7 @@ admiral_adsl
 An example subject level analysis dataset
 }
 \seealso{
-Other datasets: 
+Other datasets:
 \code{\link{admiral_adlb}},
 \code{\link{ex_single}},
 \code{\link{example_qs}},

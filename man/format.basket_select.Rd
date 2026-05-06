@@ -33,10 +33,10 @@ format(basket_select(id = 42, scope = "NARROW", type = "smq"))
 \seealso{
 \code{\link[=basket_select]{basket_select()}}
 
-Other internal: 
+Other internal:
 \code{\link{admiral-package}},
-\code{\link{extract_duplicate_records}()},
-\code{\link{signal_duplicate_records}()}
+\code{\link[=extract_duplicate_records]{extract_duplicate_records()}},
+\code{\link[=signal_duplicate_records]{signal_duplicate_records()}}
 }
 \concept{internal}
 \keyword{internal}

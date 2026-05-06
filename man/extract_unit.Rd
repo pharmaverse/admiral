@@ -26,9 +26,9 @@ extract_unit("Diastolic Blood Pressure (mmHg)")
 }
 \seealso{
 Utilities used within Derivation functions:
-\code{\link{get_flagged_records}()},
-\code{\link{get_not_mapped}()},
-\code{\link{get_vars_query}()}
+\code{\link[=get_flagged_records]{get_flagged_records()}},
+\code{\link[=get_not_mapped]{get_not_mapped()}},
+\code{\link[=get_vars_query]{get_vars_query()}}
 }
 \concept{utils_help}
 \keyword{utils_help}

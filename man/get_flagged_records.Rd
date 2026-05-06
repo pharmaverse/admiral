@@ -101,9 +101,9 @@ get_flagged_records(
 }
 \seealso{
 Utilities used within Derivation functions:
-\code{\link{extract_unit}()},
-\code{\link{get_not_mapped}()},
-\code{\link{get_vars_query}()}
+\code{\link[=extract_unit]{extract_unit()}},
+\code{\link[=get_not_mapped]{get_not_mapped()}},
+\code{\link[=get_vars_query]{get_vars_query()}}
 }
 \concept{utils_help}
 \keyword{utils_help}
