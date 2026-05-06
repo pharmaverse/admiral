@@ -1,24 +1,24 @@
-data <- tibble::tribble(
-  ~USUBJID, ~AVISITN, ~AVALC,
-  "1",      1,        "PR",
-  "1",      2,        "CR",
-  "1",      3,        "CR",
-  "1",      4,        "SD",
-  "1",      5,        "NE",
-  "2",      1,        "SD",
-  "2",      2,        "PD",
-  "2",      3,        "PD",
-  "3",      1,        "SD",
-  "4",      1,        "PR",
-  "4",      2,        "PD",
-  "4",      3,        "SD",
-  "4",      4,        "SD",
-  "4",      5,        "PR"
-)
-
 # filter_relative ----
 ## filter_relative Test 1: mode = first, selection = before, inclusive = TRUE ----
 test_that("filter_relative Test 1: mode = first, selection = before, inclusive = TRUE", {
+  data <- tibble::tribble(
+    ~USUBJID, ~AVISITN, ~AVALC,
+    "1",      1,        "PR",
+    "1",      2,        "CR",
+    "1",      3,        "CR",
+    "1",      4,        "SD",
+    "1",      5,        "NE",
+    "2",      1,        "SD",
+    "2",      2,        "PD",
+    "2",      3,        "PD",
+    "3",      1,        "SD",
+    "4",      1,        "PR",
+    "4",      2,        "PD",
+    "4",      3,        "SD",
+    "4",      4,        "SD",
+    "4",      5,        "PR"
+  )
+
   actual <- filter_relative(
     data,
     by_vars = exprs(USUBJID),
@@ -52,6 +52,24 @@ test_that("filter_relative Test 1: mode = first, selection = before, inclusive =
 
 ## filter_relative Test 2: mode = first, selection = before, inclusive = FALSE ----
 test_that("filter_relative Test 2: mode = first, selection = before, inclusive = FALSE", {
+  data <- tibble::tribble(
+    ~USUBJID, ~AVISITN, ~AVALC,
+    "1",      1,        "PR",
+    "1",      2,        "CR",
+    "1",      3,        "CR",
+    "1",      4,        "SD",
+    "1",      5,        "NE",
+    "2",      1,        "SD",
+    "2",      2,        "PD",
+    "2",      3,        "PD",
+    "3",      1,        "SD",
+    "4",      1,        "PR",
+    "4",      2,        "PD",
+    "4",      3,        "SD",
+    "4",      4,        "SD",
+    "4",      5,        "PR"
+  )
+
   actual <- filter_relative(
     data,
     by_vars = exprs(USUBJID),
@@ -78,6 +96,24 @@ test_that("filter_relative Test 2: mode = first, selection = before, inclusive =
 
 ## filter_relative Test 3: mode = first, selection = after, inclusive = TRUE ----
 test_that("filter_relative Test 3: mode = first, selection = after, inclusive = TRUE", {
+  data <- tibble::tribble(
+    ~USUBJID, ~AVISITN, ~AVALC,
+    "1",      1,        "PR",
+    "1",      2,        "CR",
+    "1",      3,        "CR",
+    "1",      4,        "SD",
+    "1",      5,        "NE",
+    "2",      1,        "SD",
+    "2",      2,        "PD",
+    "2",      3,        "PD",
+    "3",      1,        "SD",
+    "4",      1,        "PR",
+    "4",      2,        "PD",
+    "4",      3,        "SD",
+    "4",      4,        "SD",
+    "4",      5,        "PR"
+  )
+
   actual <- filter_relative(
     data,
     by_vars = exprs(USUBJID),
@@ -108,6 +144,24 @@ test_that("filter_relative Test 3: mode = first, selection = after, inclusive = 
 
 ## filter_relative Test 4: mode = first, selection = after, inclusive = FALSE ----
 test_that("filter_relative Test 4: mode = first, selection = after, inclusive = FALSE", {
+  data <- tibble::tribble(
+    ~USUBJID, ~AVISITN, ~AVALC,
+    "1",      1,        "PR",
+    "1",      2,        "CR",
+    "1",      3,        "CR",
+    "1",      4,        "SD",
+    "1",      5,        "NE",
+    "2",      1,        "SD",
+    "2",      2,        "PD",
+    "2",      3,        "PD",
+    "3",      1,        "SD",
+    "4",      1,        "PR",
+    "4",      2,        "PD",
+    "4",      3,        "SD",
+    "4",      4,        "SD",
+    "4",      5,        "PR"
+  )
+
   actual <- filter_relative(
     data,
     by_vars = exprs(USUBJID),
@@ -140,7 +194,25 @@ test_that("filter_relative Test 4: mode = first, selection = after, inclusive = 
 })
 
 ## filter_relative Test 5: mode = last, selection = before, inclusive = TRUE ----
-test_that("filter_relative Test 1: mode = last, selection = before, inclusive = TRUE", {
+test_that("filter_relative Test 5: mode = last, selection = before, inclusive = TRUE", {
+  data <- tibble::tribble(
+    ~USUBJID, ~AVISITN, ~AVALC,
+    "1",      1,        "PR",
+    "1",      2,        "CR",
+    "1",      3,        "CR",
+    "1",      4,        "SD",
+    "1",      5,        "NE",
+    "2",      1,        "SD",
+    "2",      2,        "PD",
+    "2",      3,        "PD",
+    "3",      1,        "SD",
+    "4",      1,        "PR",
+    "4",      2,        "PD",
+    "4",      3,        "SD",
+    "4",      4,        "SD",
+    "4",      5,        "PR"
+  )
+
   actual <- filter_relative(
     data,
     by_vars = exprs(USUBJID),
@@ -174,7 +246,25 @@ test_that("filter_relative Test 1: mode = last, selection = before, inclusive = 
 })
 
 ## filter_relative Test 6: mode = last, selection = before, inclusive = FALSE ----
-test_that("filter_relative Test 2: mode = last, selection = before, inclusive = FALSE", {
+test_that("filter_relative Test 6: mode = last, selection = before, inclusive = FALSE", {
+  data <- tibble::tribble(
+    ~USUBJID, ~AVISITN, ~AVALC,
+    "1",      1,        "PR",
+    "1",      2,        "CR",
+    "1",      3,        "CR",
+    "1",      4,        "SD",
+    "1",      5,        "NE",
+    "2",      1,        "SD",
+    "2",      2,        "PD",
+    "2",      3,        "PD",
+    "3",      1,        "SD",
+    "4",      1,        "PR",
+    "4",      2,        "PD",
+    "4",      3,        "SD",
+    "4",      4,        "SD",
+    "4",      5,        "PR"
+  )
+
   actual <- filter_relative(
     data,
     by_vars = exprs(USUBJID),
@@ -205,6 +295,24 @@ test_that("filter_relative Test 2: mode = last, selection = before, inclusive = 
 
 ## filter_relative Test 7: mode = last, selection = after, inclusive = TRUE ----
 test_that("filter_relative Test 7: mode = last, selection = after, inclusive = TRUE", {
+  data <- tibble::tribble(
+    ~USUBJID, ~AVISITN, ~AVALC,
+    "1",      1,        "PR",
+    "1",      2,        "CR",
+    "1",      3,        "CR",
+    "1",      4,        "SD",
+    "1",      5,        "NE",
+    "2",      1,        "SD",
+    "2",      2,        "PD",
+    "2",      3,        "PD",
+    "3",      1,        "SD",
+    "4",      1,        "PR",
+    "4",      2,        "PD",
+    "4",      3,        "SD",
+    "4",      4,        "SD",
+    "4",      5,        "PR"
+  )
+
   actual <- filter_relative(
     data,
     by_vars = exprs(USUBJID),
@@ -237,6 +345,24 @@ test_that("filter_relative Test 7: mode = last, selection = after, inclusive = T
 
 ## filter_relative Test 8: mode = last, selection = after, inclusive = FALSE ----
 test_that("filter_relative Test 8: mode = last, selection = after, inclusive = FALSE", {
+  data <- tibble::tribble(
+    ~USUBJID, ~AVISITN, ~AVALC,
+    "1",      1,        "PR",
+    "1",      2,        "CR",
+    "1",      3,        "CR",
+    "1",      4,        "SD",
+    "1",      5,        "NE",
+    "2",      1,        "SD",
+    "2",      2,        "PD",
+    "2",      3,        "PD",
+    "3",      1,        "SD",
+    "4",      1,        "PR",
+    "4",      2,        "PD",
+    "4",      3,        "SD",
+    "4",      4,        "SD",
+    "4",      5,        "PR"
+  )
+
   actual <- filter_relative(
     data,
     by_vars = exprs(USUBJID),

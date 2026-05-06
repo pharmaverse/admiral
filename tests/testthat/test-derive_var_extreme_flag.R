@@ -55,23 +55,22 @@ test_that("derive_var_extreme_flag Test 2: last observation for each group is fl
   )
 })
 
-
-test_flag_all <- tibble::tribble(
-  ~STUDYID, ~USUBJID,               ~ADTM, ~AVISITN, ~BASETYPE,  ~PARAM,
-  "TEST01",  "PAT01",  "2020-02-01T12:00",        1,   "ontrt", "test1",
-  "TEST01",  "PAT01",  "2020-02-01T12:00",        1,   "ontrt", "test2",
-  "TEST01",  "PAT01",  "2020-02-01T12:01",        1,   "ontrt", "test1",
-  "TEST01",  "PAT01",  "2020-02-01T13:00",        1,   "ontrt", "test1",
-  "TEST01",  "PAT01",  "2020-02-01T13:00",        1,   "ontrt", "test2"
-)
-
 ## Test 3: flag_all = FALSE when mode is first ----
 test_that("derive_var_extreme_flag Test 3: flag_all = FALSE when mode is first", {
-  expected_output <- test_flag_all %>%
+  input <- tibble::tribble(
+    ~STUDYID, ~USUBJID,               ~ADTM, ~AVISITN, ~BASETYPE,  ~PARAM,
+    "TEST01",  "PAT01",  "2020-02-01T12:00",        1,   "ontrt", "test1",
+    "TEST01",  "PAT01",  "2020-02-01T12:00",        1,   "ontrt", "test2",
+    "TEST01",  "PAT01",  "2020-02-01T12:01",        1,   "ontrt", "test1",
+    "TEST01",  "PAT01",  "2020-02-01T13:00",        1,   "ontrt", "test1",
+    "TEST01",  "PAT01",  "2020-02-01T13:00",        1,   "ontrt", "test2"
+  )
+
+  expected_output <- input %>%
     mutate(FIRSTFL = c("Y", NA, NA, NA, NA))
 
   actual_output <- derive_var_extreme_flag(
-    test_flag_all,
+    input,
     by_vars = exprs(STUDYID, USUBJID, BASETYPE, AVISITN),
     order = exprs(ADTM),
     new_var = FIRSTFL,
@@ -89,11 +88,20 @@ test_that("derive_var_extreme_flag Test 3: flag_all = FALSE when mode is first",
 
 ## Test 4: flag_all = TRUE when mode is first ----
 test_that("derive_var_extreme_flag Test 4: flag_all = TRUE when mode is first", {
-  expected_output <- test_flag_all %>%
+  input <- tibble::tribble(
+    ~STUDYID, ~USUBJID,               ~ADTM, ~AVISITN, ~BASETYPE,  ~PARAM,
+    "TEST01",  "PAT01",  "2020-02-01T12:00",        1,   "ontrt", "test1",
+    "TEST01",  "PAT01",  "2020-02-01T12:00",        1,   "ontrt", "test2",
+    "TEST01",  "PAT01",  "2020-02-01T12:01",        1,   "ontrt", "test1",
+    "TEST01",  "PAT01",  "2020-02-01T13:00",        1,   "ontrt", "test1",
+    "TEST01",  "PAT01",  "2020-02-01T13:00",        1,   "ontrt", "test2"
+  )
+
+  expected_output <- input %>%
     mutate(FIRSTFL = c("Y", "Y", NA, NA, NA))
 
   actual_output <- derive_var_extreme_flag(
-    test_flag_all,
+    input,
     by_vars = exprs(STUDYID, USUBJID, BASETYPE, AVISITN),
     order = exprs(ADTM),
     new_var = FIRSTFL,
@@ -110,11 +118,20 @@ test_that("derive_var_extreme_flag Test 4: flag_all = TRUE when mode is first", 
 
 ## Test 5: flag_all = FALSE when mode is last ----
 test_that("derive_var_extreme_flag Test 5: flag_all = FALSE when mode is last", {
-  expected_output <- test_flag_all %>%
+  input <- tibble::tribble(
+    ~STUDYID, ~USUBJID,               ~ADTM, ~AVISITN, ~BASETYPE,  ~PARAM,
+    "TEST01",  "PAT01",  "2020-02-01T12:00",        1,   "ontrt", "test1",
+    "TEST01",  "PAT01",  "2020-02-01T12:00",        1,   "ontrt", "test2",
+    "TEST01",  "PAT01",  "2020-02-01T12:01",        1,   "ontrt", "test1",
+    "TEST01",  "PAT01",  "2020-02-01T13:00",        1,   "ontrt", "test1",
+    "TEST01",  "PAT01",  "2020-02-01T13:00",        1,   "ontrt", "test2"
+  )
+
+  expected_output <- input %>%
     mutate(LASTFL = c(NA, NA, NA, NA, "Y"))
 
   actual_output <- derive_var_extreme_flag(
-    test_flag_all,
+    input,
     by_vars = exprs(STUDYID, USUBJID, BASETYPE, AVISITN),
     order = exprs(ADTM),
     new_var = LASTFL,
@@ -132,11 +149,20 @@ test_that("derive_var_extreme_flag Test 5: flag_all = FALSE when mode is last", 
 
 ## Test 6: flag_all = TRUE when mode is last ----
 test_that("derive_var_extreme_flag Test 6: flag_all = TRUE when mode is last", {
-  expected_output <- test_flag_all %>%
+  input <- tibble::tribble(
+    ~STUDYID, ~USUBJID,               ~ADTM, ~AVISITN, ~BASETYPE,  ~PARAM,
+    "TEST01",  "PAT01",  "2020-02-01T12:00",        1,   "ontrt", "test1",
+    "TEST01",  "PAT01",  "2020-02-01T12:00",        1,   "ontrt", "test2",
+    "TEST01",  "PAT01",  "2020-02-01T12:01",        1,   "ontrt", "test1",
+    "TEST01",  "PAT01",  "2020-02-01T13:00",        1,   "ontrt", "test1",
+    "TEST01",  "PAT01",  "2020-02-01T13:00",        1,   "ontrt", "test2"
+  )
+
+  expected_output <- input %>%
     mutate(LASTFL = c(NA, NA, NA, "Y", "Y"))
 
   actual_output <- derive_var_extreme_flag(
-    test_flag_all,
+    input,
     by_vars = exprs(STUDYID, USUBJID, BASETYPE, AVISITN),
     order = exprs(ADTM),
     new_var = LASTFL,
