@@ -114,6 +114,8 @@ adae <- adae %>%
     mode = "last"
   ) %>%
   ## Derive treatment dose and unit ----
+  # For this example, EX has been expanded to one record per day and
+  # EXSTDTM/EXENDTM represent day-level treatment windows.
   derive_vars_joined(
     dataset_add = ex_single,
     by_vars = exprs(STUDYID, USUBJID),
@@ -121,7 +123,7 @@ adae <- adae %>%
     join_vars = exprs(EXSTDTM, EXENDTM),
     join_type = "all",
     filter_add = (EXDOSE > 0 | (EXDOSE == 0 & grepl("PLACEBO", EXTRT))) & !is.na(EXSTDTM),
-    filter_join = EXSTDTM <= ASTDTM & (ASTDTM <= EXENDTM | is.na(EXENDTM))
+    filter_join = EXSTDTM <= ASTDTM & ASTDTM <= EXENDTM
   ) %>%
   ## Derive severity / causality / ... ----
   mutate(
