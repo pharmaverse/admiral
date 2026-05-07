@@ -228,7 +228,7 @@ vignette](visits_periods.html#treatment_bds).
 Before deriving the last dose date, an `ex_single` dataset is created from the
 `EX` domain. If the exposure dataset contains multi-day dosing records (e.g.,
 one record per treatment period rather than one record per dose), use
-`create_single_dose_dataset()` to expand them into one record per day. Whether
+`create_single_dose_dataset()` to expand them into one record per dose. Whether
 this step is necessary depends on how dosing data were collected in your study.
 For ongoing studies, you may also need to impute missing end dates (e.g., with
 the data cut-off date) before calling `create_single_dose_dataset()`. For a detailed discussion of dose expansion, including guidance on handling
