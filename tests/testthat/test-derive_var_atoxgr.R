@@ -93,11 +93,19 @@ test_that("derive_var_atoxgr Test 4: ATOXGR < 0 (HYPO)", {
 
 # derive_var_atoxgr_dir
 
-# Create fresh shared test data on each access to avoid cross-test spillover.
-# `name` is the binding name to create and `expr` is re-evaluated each time the
-# binding is accessed. If the same binding is redefined later in the file, the
-# previous value is made available while evaluating the new definition so
-# sequential fixture construction keeps working.
+#' Create fresh shared test data bindings
+#'
+#' `local_exp()` creates an active binding named by `name`. Each access
+#' re-evaluates `expr` in the caller environment to provide a fresh copy of the
+#' fixture. If the binding is redefined later, the previous value is exposed
+#' while evaluating the new definition so sequential fixture construction keeps
+#' working.
+#'
+#' @param name Binding name to create.
+#' @param expr Expression to evaluate each time the binding is accessed.
+#'
+#' @return No explicit return value. Called for its side effect of creating an
+#'   active binding in the caller environment.
 local_exp <- function(name, expr) {
   expr <- substitute(expr)
   env <- parent.frame()
