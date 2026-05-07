@@ -59,6 +59,15 @@
 
   **Phase 4 (removed)**
 
+- The `ex_single` dataset was removed from
+  [admiral](https://pharmaverse.github.io/admiral/) to reduce the
+  package size. It can be derived on the fly using
+  [`create_single_dose_dataset()`](https:/pharmaverse.github.io/admiral/copilot/2945-remove-ex-single-data/reference/create_single_dose_dataset.md).
+  See the `OCCDS` vignette or
+  [`?create_single_dose_dataset`](https:/pharmaverse.github.io/admiral/copilot/2945-remove-ex-single-data/reference/create_single_dose_dataset.md)
+  for examples.
+  ([\#3060](https://github.com/pharmaverse/admiral/issues/3060))
+
 ### Documentation
 
 - The following new and existing User Guides have been changed from
@@ -185,16 +194,6 @@ Developer Notes
   accessible in [admiral](https://pharmaverse.github.io/admiral/) via
   the existing `@import admiraldev` dependency.
   ([admiraldev/#517](https://github.com/pharmaverse/admiraldev/issues/517))
-
-- To reduce the size of the package, the `ex_single` dataset was
-  removed. It is now derived on the fly in the `ADAE` template and the
-  `OCCDS` vignette using
-  [`create_single_dose_dataset()`](https:/pharmaverse.github.io/admiral/copilot/2945-remove-ex-single-data/reference/create_single_dose_dataset.md).
-  For a detailed discussion of dose expansion using
-  [`create_single_dose_dataset()`](https:/pharmaverse.github.io/admiral/copilot/2945-remove-ex-single-data/reference/create_single_dose_dataset.md),
-  including handling of missing end dates for ongoing studies, see
-  [`vignette("pk_adnca", package = "admiral")`](https:/pharmaverse.github.io/admiral/copilot/2945-remove-ex-single-data/articles/pk_adnca.md).
-  ([\#3060](https://github.com/pharmaverse/admiral/issues/3060))
 
 - The HTML tag `<br/>` was removed from the roxygen headers.
   ([\#3042](https://github.com/pharmaverse/admiral/issues/3042))

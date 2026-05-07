@@ -200,24 +200,33 @@ vignette](https:/pharmaverse.github.io/admiral/copilot/2945-remove-ex-single-dat
 
 ### Derive Date/Date-time of Last Dose
 
-Before deriving the last dose date, an `ex_single` dataset is created
-from the `EX` domain. If the exposure dataset contains multi-day dosing
-records (e.g., one record per treatment period rather than one record
-per dose), use
+Before deriving the last dose date, it may be necessary to create an
+`ex_single` dataset from the `EX` domain. If the exposure dataset
+contains multi-day dosing records (e.g., one record per treatment period
+rather than one record per dose), use
 [`create_single_dose_dataset()`](https:/pharmaverse.github.io/admiral/copilot/2945-remove-ex-single-data/reference/create_single_dose_dataset.md)
 to expand them into one record per dose. Whether this step is necessary
 depends on how dosing data were collected in your study. For ongoing
 studies, you may also need to impute missing end dates (e.g., with the
 data cut-off date) before calling
 [`create_single_dose_dataset()`](https:/pharmaverse.github.io/admiral/copilot/2945-remove-ex-single-data/reference/create_single_dose_dataset.md).
-For a detailed discussion of dose expansion, including guidance on
-handling missing end dates for ongoing studies, see
-[`vignette("pk_adnca", package = "admiral")`](https:/pharmaverse.github.io/admiral/copilot/2945-remove-ex-single-data/articles/pk_adnca.md).
+For examples including handling of missing end dates, see
+[`?create_single_dose_dataset`](https:/pharmaverse.github.io/admiral/copilot/2945-remove-ex-single-data/reference/create_single_dose_dataset.md).
+
+The test data contains one record per treatment period and the dose
+frequency is daily (`QD`). The following call creates one record per
+day.
 
 ``` r
 ex_single <- convert_blanks_to_na(ex) %>%
-  derive_vars_dt(dtc = EXSTDTC, new_vars_prefix = "EXST") %>%
-  derive_vars_dt(dtc = EXENDTC, new_vars_prefix = "EXEN") %>%
+  derive_vars_dtm(dtc = EXSTDTC, new_vars_prefix = "EXST", flag_imputation = "none") %>%
+  derive_vars_dtm(
+    dtc = EXENDTC,
+    new_vars_prefix = "EXEN",
+    time_imputation = "last",
+    flag_imputation = "none"
+  ) %>%
+  derive_vars_dtm_to_dt(exprs(EXSTDTM, EXENDTM)) %>%
   filter(!is.na(EXSTDT), !is.na(EXENDT)) %>%
   create_single_dose_dataset(
     dose_freq = EXDOSFRQ,
