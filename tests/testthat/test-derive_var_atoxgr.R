@@ -93,6 +93,38 @@ test_that("derive_var_atoxgr Test 4: ATOXGR < 0 (HYPO)", {
 
 # derive_var_atoxgr_dir
 
+# Create fresh shared test data on each access to avoid cross-test spillover.
+local_exp <- function(name, expr) {
+  expr <- substitute(expr)
+  env <- parent.frame()
+  has_old <- exists(name, envir = env, inherits = FALSE)
+  old_value <- if (has_old) get(name, envir = env, inherits = FALSE)
+
+  if (has_old) {
+    rm(list = name, envir = env)
+  }
+
+  makeActiveBinding(
+    name,
+    local({
+      expr <- expr
+      env <- env
+      has_old <- has_old
+      old_value <- old_value
+      function() {
+        eval_env <- new.env(parent = env)
+
+        if (has_old) {
+          assign(name, old_value, envir = eval_env)
+        }
+
+        eval(expr, eval_env)
+      }
+    }),
+    env = env
+  )
+}
+
 test_low <- function(expected, meta, high = "HIGH", low = "LOW") {
   input <- expected %>%
     select(-ATOXGRL)
@@ -145,7 +177,7 @@ test_high <- function(expected, meta, high = "HIGH", low = "LOW") {
 ### Grade 2: <100 - 80g/L
 ### Grade 1: <LLN - 100 g/L
 
-exp_anemia_si <- tibble::tribble(
+local_exp("exp_anemia_si", tibble::tribble(
   ~ATOXDSCL,      ~AVAL,  ~ANRLO, ~ANRHI, ~AVALU, ~ATOXGRL, ~TESTNUM,
   "Not a term",   80,     120,    200,    "G/L",  NA,       1,
   NA_character_,  60,     50,     100,    "G/L",  NA,       2,
@@ -170,6 +202,7 @@ exp_anemia_si <- tibble::tribble(
   # AVAL missing cannot grade
   "Anemia",       NA,     140,    NA,     "G/L",  NA,       16,
 )
+)
 
 ## Test 5a: CTCAEv4 Anemia ----
 test_that("derive_var_atoxgr_dir Test 5a: CTCAEv4 Anemia (SI unit)", {
@@ -177,13 +210,14 @@ test_that("derive_var_atoxgr_dir Test 5a: CTCAEv4 Anemia (SI unit)", {
 })
 
 # CV_UNIT is g/dL so divide numeric values by 10
-exp_anemia_cv <- exp_anemia_si %>%
+local_exp("exp_anemia_cv", exp_anemia_si %>%
   mutate(
     AVAL = if_else(is.na(AVAL), NA_real_, AVAL / 10),
     ANRLO = if_else(is.na(ANRLO), NA_real_, ANRLO / 10),
     ANRHI = if_else(is.na(ANRHI), NA_real_, ANRHI / 10),
     AVALU = if_else(toupper(AVALU) == "G/L", "g/dL", AVALU)
   )
+)
 
 ## Test 5b: CTCAEv4 Anemia (CV unit) ----
 test_that("derive_var_atoxgr_dir Test 5b: CTCAEv4 Anemia (CV unit)", {
@@ -230,7 +264,7 @@ test_that("derive_var_atoxgr_dir Test 6d: CTCAEv6 Anemia (CV unit)", {
 
 ### Grade 3: >100,000/mm3
 
-exp_leuko_si <- tibble::tribble(
+local_exp("exp_leuko_si", tibble::tribble(
   ~ATOXDSCH,      ~AVAL,  ~ANRLO, ~ANRHI, ~AVALU,    ~ATOXGRH, ~TESTNUM,
   "Not a term",   99,     0,      NA,     "10^9/L",  NA,       1,
   NA,             99,     0,      NA,     "10^9/L",  NA,       2,
@@ -244,28 +278,31 @@ exp_leuko_si <- tibble::tribble(
   # AVAL missing cannot grade
   "Leukocytosis", NA,     0,      40,     "10^9/L",  NA,       8,
 )
+)
 
 ## Test 7a: CTCAEv4 Leukocytosis (SI unit) ----
 test_that("derive_var_atoxgr_dir Test 7a: CTCAEv4 Leukocytosis (SI unit)", {
   test_high(expected = exp_leuko_si, meta = atoxgr_criteria_ctcv4)
 })
 
-exp_leuko_cv <- exp_leuko_si %>%
+local_exp("exp_leuko_cv", exp_leuko_si %>%
   mutate(
     AVALU = if_else(str_to_upper(AVALU) == "10^9/L", "10^3/uL", AVALU)
   )
+)
 
 ## Test 7b: CTCAEv4 Leukocytosis (USCV unit) ----
 test_that("derive_var_atoxgr_dir Test 7b: CTCAEv4 Leukocytosis (USCV unit)", {
   test_high(expected = exp_leuko_cv, meta = atoxgr_criteria_ctcv4_uscv)
 })
 
-exp_leuko_cv2 <- exp_leuko_si %>%
+local_exp("exp_leuko_cv2", exp_leuko_si %>%
   mutate(
     AVAL = 1000 * AVAL,
     ANRHI = 1000 * ANRHI,
     AVALU = if_else(str_to_upper(AVALU) == "10^9/L", "10^3/mL", AVALU)
   )
+)
 
 ## Test 7c: CTCAEv4 Leukocytosis (legacy USCV unit) ----
 test_that("derive_var_atoxgr_dir Test 7c: CTCAEv4 Leukocytosis (legacy USCV unit)", {
@@ -311,7 +348,7 @@ test_that("derive_var_atoxgr_dir Test 8f: CTCAEv6 Leukocytosis (legacy USCV unit
 ### Grade 2: >1.5 - 2.5 x ULN
 ### Grade 1: >ULN - 1.5 x ULN
 
-exp_aptt <- tibble::tribble(
+local_exp("exp_aptt", tibble::tribble(
   ~ATOXDSCH,                                         ~AVAL,  ~ANRHI,  ~ATOXGRH, ~TESTNUM,
   "Not a term",                                      80,     100,     NA,       1,
   NA_character_,                                     60,     100,     NA,       2,
@@ -327,6 +364,7 @@ exp_aptt <- tibble::tribble(
   "Activated partial thromboplastin time prolonged", NA,     100,     NA,       10,
 ) %>%
   mutate(AVALU = NA_character_)
+)
 
 ## Test 9a: CTCAEv4 Act. partial thromboplastin time prolonged ----
 test_that("derive_var_atoxgr_dir Test 9a: CTCAEv4 Act. partial thromboplastin time prolonged", {
@@ -366,7 +404,7 @@ test_that("derive_var_atoxgr_dir Test 10c: CTCAEv6 Act. part. thromboplastin tim
 ### Grade 2: >3.0 - 5.0 x ULN
 ### Grade 1: >ULN - 3.0 x ULN
 
-exp_alt_ctcv4 <- tibble::tribble(
+local_exp("exp_alt_ctcv4", tibble::tribble(
   ~ATOXDSCH,                            ~AVAL,  ~ANRHI, ~ATOXGRH, ~TESTNUM,
   "Not a term",                         80,     40,     NA,       1,
   NA_character_,                        60,     40,     NA,       2,
@@ -384,6 +422,7 @@ exp_alt_ctcv4 <- tibble::tribble(
   "Alanine aminotransferase Increased", NA,     40,     NA,       12,
 ) %>%
   mutate(AVALU = NA_character_)
+)
 
 ## Test 11: CTCAEv4 Alanine aminotransferase increased ----
 test_that("derive_var_atoxgr_dir Test 11: CTCAEv4 Alanine aminotransferase increased", {
@@ -498,7 +537,7 @@ test_that("derive_var_atoxgr_dir Test 12b: CTCAEv6 Alanine aminotransferase incr
 ### Grade 3: >5.0 - 20.0 x ULN
 ### Grade 2: >2.5 - 5.0 x ULN
 ### Grade 1: >ULN - 2.5 x ULN
-exp_alkp_ctcv4 <- tibble::tribble(
+local_exp("exp_alkp_ctcv4", tibble::tribble(
   ~ATOXDSCH,                         ~AVAL,  ~ANRHI, ~ATOXGRH, ~TESTNUM,
   "Not a term",                      80,     40,     NA,       1,
   NA_character_,                     60,     40,     NA,       2,
@@ -516,6 +555,7 @@ exp_alkp_ctcv4 <- tibble::tribble(
   "Alkaline phosphatase increased",  NA,     40,     NA,       12,
 ) %>%
   mutate(AVALU = NA_character_)
+)
 
 
 ## Test 13: CTCAEv4 Alkaline phosphatase increased ----
@@ -577,7 +617,7 @@ test_that("derive_var_atoxgr_dir Test 14a: CTCAEv5 Alkaline phosphatase increase
 ### NCICTCAEv6 different to NCICTCAEv5
 ### Grade 1: >Baseline and ULN
 
-exp_alkp_ctcv6 <- tibble::tribble(
+local_exp("exp_alkp_ctcv6", tibble::tribble(
   ~ATOXDSCH,                         ~AVAL,  ~BASE,  ~ANRHI,  ~ATOXGRH, ~TESTNUM,
   "Not a term",                      80,     40,     40,      NA,       1,
   NA_character_,                     60,     40,     40,      NA,       2,
@@ -595,6 +635,7 @@ exp_alkp_ctcv6 <- tibble::tribble(
   "Alkaline phosphatase increased",  NA,     40,     40,      NA,       11,
 ) %>%
   mutate(AVALU = NA_character_)
+)
 
 ## Test 14b: CTCAEv6 Alkaline phosphatase increased ----
 test_that("derive_var_atoxgr_dir Test 14b: CTCAEv6 Alkaline phosphatase increased", {
@@ -614,7 +655,7 @@ test_that("derive_var_atoxgr_dir Test 14c: CTCAEv6 Alkaline phosphatase increase
 ### Grade 2: >3.0 - 5.0 x ULN
 ### Grade 1: >ULN - 3.0 x ULN
 
-exp_ast_ctcv4 <- tibble::tribble(
+local_exp("exp_ast_ctcv4", tibble::tribble(
   ~ATOXDSCH,                              ~AVAL,  ~ANRHI, ~ATOXGRH, ~TESTNUM,
   "Not a term",                           80,     40,     NA,       1,
   NA_character_,                          60,     40,     NA,       2,
@@ -632,6 +673,7 @@ exp_ast_ctcv4 <- tibble::tribble(
   "Aspartate aminotransferase Increased", NA,     40,     NA,       12,
 ) %>%
   mutate(AVALU = NA_character_)
+)
 
 ## Test 15: CTCAEv4 Aspartate aminotransferase increased ----
 test_that("derive_var_atoxgr_dir Test 15: CTCAEv4 Aspartate aminotransferase increased", {
@@ -745,7 +787,7 @@ test_that("derive_var_atoxgr_dir Test 16b: CTCAEv6 Aspartate aminotransferase in
 ### Grade 2: >1.5 - 3.0 x ULN
 ### Grade 1: >ULN - 1.5 x ULN
 
-exp_bili_ctcv4 <- tibble::tribble(
+local_exp("exp_bili_ctcv4", tibble::tribble(
   ~ATOXDSCH,                   ~AVAL,  ~ANRHI, ~ATOXGRH, ~TESTNUM,
   "Not a term",                80,     40,     NA,       1,
   NA_character_,               60,     40,     NA,       2,
@@ -763,6 +805,7 @@ exp_bili_ctcv4 <- tibble::tribble(
   "Blood bilirubin increased", NA,     40,     NA,       12,
 ) %>%
   mutate(AVALU = NA_character_)
+)
 
 ## Test 17: CTCAEv4 Blood bilirubin increased ----
 test_that("derive_var_atoxgr_dir Test 17: CTCAEv4 Blood bilirubin increased", {
@@ -806,15 +849,16 @@ test_that("derive_var_atoxgr_dir Test 18a: CTCAEv5  Blood bilirubin increased", 
 ### 1.0 - 1.5 x baseline if baseline was >ULN
 
 # V5 and V6 criteria identical when BASELINE normal
-exp_bili_ctcv6_norm <- exp_bili_ctcv4 %>%
+local_exp("exp_bili_ctcv6_norm", exp_bili_ctcv4 %>%
   # set BASE to be normal (not HIGH) and create FLAG
   mutate(
     BASE = ANRHI,
     BNRIND = "NORMAL"
   )
+)
 
 # create records with abnormal BASE then add records with normal BASE
-exp_bili_ctcv6 <- tibble::tribble(
+local_exp("exp_bili_ctcv6", tibble::tribble(
   ~ATOXDSCH,                   ~AVAL,  ~BASE,  ~ATOXGRH, ~TESTNUM,
   "Not a term",                80,     40,     NA,       13,
   NA_character_,               60,     40,     NA,       14,
@@ -839,6 +883,7 @@ exp_bili_ctcv6 <- tibble::tribble(
     TESTNUM = TESTNUM + 12
   ) %>%
   bind_rows(exp_bili_ctcv6_norm)
+)
 
 ## Test 18b: CTCAEv6  Blood bilirubin increased ----
 test_that("derive_var_atoxgr_dir Test 18b: CTCAEv6  Blood bilirubin increased", {
@@ -858,7 +903,7 @@ test_that("derive_var_atoxgr_dir Test 18b: CTCAEv6  Blood bilirubin increased", 
 ### Grade 2: <500 - 200/mm3
 ### Grade 1: <LLN - 500/mm3
 
-exp_cd4_si <- tibble::tribble(
+local_exp("exp_cd4_si", tibble::tribble(
   ~ATOXDSCL,                    ~AVAL,  ~ANRLO, ~AVALU,    ~ATOXGRL, ~TESTNUM,
   "Not a term",                 80,     120,    "10^9/L",  NA,       1,
   NA_character_,                60,     50,     "10^9/L",  NA,       2,
@@ -887,13 +932,15 @@ exp_cd4_si <- tibble::tribble(
   # AVAL missing cannot grade
   "CD4 lymphocytes decreased",  NA,     0.8,    "10^9/L",  NA,       21,
 )
+)
 
-exp_cd4_cv <- exp_cd4_si %>%
+local_exp("exp_cd4_cv", exp_cd4_si %>%
   mutate(
     AVAL = AVAL * 1000,
     ANRLO = ANRLO * 1000,
     AVALU = if_else(str_to_upper(AVALU) == "10^9/L", "1/uL", NA_character_)
   )
+)
 
 ## Test 19a: CTCAEv4 CD4 Lymphocytes decreased (SI unit) ----
 test_that("derive_var_atoxgr_dir Test 19a: CTCAEv4 CD4 Lymphocytes decreased (SI unit)", {
@@ -940,7 +987,7 @@ test_that("derive_var_atoxgr_dir Test 20d: CTCAEv6 CD4 Lymphocytes decreased (US
 ### Grade 2: >300 - 400 mg/dL
 ### Grade 1: >ULN - 300 mg/dL
 
-exp_choles_si <- tibble::tribble(
+local_exp("exp_choles_si", tibble::tribble(
   ~ATOXDSCH,          ~AVAL,  ~ANRLO, ~ANRHI, ~AVALU,    ~ATOXGRH, ~TESTNUM,
   "Not a term",       8,      0,      5,      "mmol/L",  NA,       1,
   NA_character_,      10,     0,      5,      "mmol/L",  NA,       2,
@@ -969,8 +1016,9 @@ exp_choles_si <- tibble::tribble(
   # AVAL missing cannot grade
   "Cholesterol high", NA,     0,      5,      "mmol/L",  NA,       21,
 )
+)
 
-exp_choles_cv <- tibble::tribble(
+local_exp("exp_choles_cv", tibble::tribble(
   ~ATOXDSCH,           ~AVAL,  ~ANRLO,  ~ANRHI,   ~AVALU,  ~ATOXGRH, ~TESTNUM,
   "Not a term",        8,      0,       200,     "mg/dL",        NA, 1,
   NA_character_,       10,     0,       200,     "mg/dL",        NA, 2,
@@ -998,6 +1046,7 @@ exp_choles_cv <- tibble::tribble(
   "Cholesterol high",  200,    0,       200,          NA,        NA, 20,
   # AVAL missing cannot grade
   "Cholesterol high",  NA,     0,       200,    "mmol/L",        NA, 21,
+)
 )
 
 ## Test 21a: CTCAEv4 Cholesterol high (SI unit) ----
@@ -1037,7 +1086,7 @@ test_that("derive_var_atoxgr_dir Test 22d: CTCAEv6 Cholesterol high (USCV unit)"
 ### Grade 2: >2.5 - 5.0 x ULN
 ### Grade 1: >ULN - 2.5 x ULN
 
-exp_cpk <- tibble::tribble(
+local_exp("exp_cpk", tibble::tribble(
   ~ATOXDSCH,        ~AVAL,  ~ANRLO,  ~ANRHI, ~ATOXGRH, ~TESTNUM,
   "Not a term",     80,     0,       40,     NA,       1,
   NA_character_,    60,     0,       40,     NA,       2,
@@ -1055,6 +1104,7 @@ exp_cpk <- tibble::tribble(
   "CPK increased",  NA,     0,       40,     NA,       12,
 ) %>%
   mutate(AVALU = NA_character_)
+)
 
 ## Test 23: CTCAEv4 CPK increased ----
 test_that("derive_var_atoxgr_dir Test 23: CTCAEv4 CPK increased", {
@@ -1074,7 +1124,7 @@ test_that("derive_var_atoxgr_dir Test 24: CTCAEv5 CPK increased", {
 ### Grade 1: >1 - 1.5 x baseline; >ULN - 1.5 x ULN
 
 # create flag to remove obs not relevant for NCI-CTCAEv5
-exp_creatn <- tibble::tribble(
+local_exp("exp_creatn", tibble::tribble(
   ~ATOXDSCH,               ~AVAL,  ~BASE, ~ANRHI, ~ATOXGRH, ~V4, ~V5, ~TESTNUM,
   "Not a term",            80,     80,    40,     NA,       "Y", "Y", 1,
   NA_character_,           60,     60,    40,     NA,       "Y", "Y", 2,
@@ -1103,6 +1153,7 @@ exp_creatn <- tibble::tribble(
   "Creatinine increased",  NA,     0,     40,     NA,       "Y", "Y", 20,
 ) %>%
   mutate(AVALU = NA_character_)
+)
 
 ## Test 25: CTCAEv4 Creatinine increased ----
 test_that("derive_var_atoxgr_dir Test 25: CTCAEv4 Creatinine increased", {
@@ -1237,7 +1288,7 @@ test_that("derive_var_atoxgr_dir Test 27: CTCAEv4 Fibrinogen decreased", {
 ### Grade 2: <0.75 - 0.5 x LLN OR if abnormal, 25 - <50% dec. from BL
 ### Grade 1: <1.0 - 0.75 x LLN OR if abnormal, <25% dec. from BL
 
-exp_fib <- tibble::tribble(
+local_exp("exp_fib", tibble::tribble(
   ~ATOXDSCL,               ~AVAL,  ~ANRLO,  ~PCHG,  ~AVALU,  ~ATOXGRL, ~TESTNUM,
   "Not a term",            9,      10,      40,      "g/L",        NA, 1,
   NA_character_,           10,     10,      40,      "g/L",        NA, 2,
@@ -1290,6 +1341,7 @@ exp_fib <- tibble::tribble(
   # missing unit cannot grade as it may satisfy grade 4
   "Fibrinogen decreased",  1.5,    1.5,     0,          NA,        NA, 26,
 )
+)
 
 ## Test 28a: CTCAEv5 Fibrinogen decreased ----
 test_that("derive_var_atoxgr_dir Test 28a: CTCAEv5 Fibrinogen decreased", {
@@ -1308,7 +1360,7 @@ test_that("derive_var_atoxgr_dir Test 28b: CTCAEv6 Fibrinogen decreased", {
 ### Grade 2: >2.5 - 5.0 x ULN
 ### Grade 1: >ULN - 2.5 x ULN
 
-exp_ggt_ctcv4 <- tibble::tribble(
+local_exp("exp_ggt_ctcv4", tibble::tribble(
   ~ATOXDSCH,       ~AVAL, ~ANRLO, ~ANRHI, ~ATOXGRH, ~TESTNUM,
   "Not a term",    80,    0,      40,     NA,       1,
   NA_character_,   60,    0,      40,     NA,       2,
@@ -1326,6 +1378,7 @@ exp_ggt_ctcv4 <- tibble::tribble(
   "GGT increased", NA,    0,      NA,     NA,       12,
 ) %>%
   mutate(AVALU = NA_character_)
+)
 
 ## Test 29: CTCAEv4 GGT increased ----
 test_that("derive_var_atoxgr_dir Test 29: CTCAEv4 GGT increased", {
@@ -1435,7 +1488,7 @@ test_that("derive_var_atoxgr_dir Test 30b: CTCAEv6 GGT increased", {
 # Same as NCICTCv5
 ### Grade 1: <LLN
 
-exp_hapt <- tibble::tribble(
+local_exp("exp_hapt", tibble::tribble(
   ~ATOXDSCL,               ~AVAL,  ~ANRLO, ~ANRHI, ~ATOXGRL, ~TESTNUM,
   "Not a term",            9,      10,     40,     NA,       1,
   NA_character_,           10,     10,     40,     NA,       2,
@@ -1448,6 +1501,7 @@ exp_hapt <- tibble::tribble(
   "Haptoglobin decreased", 10,     NA,     NA,     NA,       7,
 ) %>%
   mutate(AVALU = NA_character_)
+)
 
 ## Test 31: CTCAEv4 Haptoglobin decreased ----
 test_that("derive_var_atoxgr_dir Test 31: CTCAEv4 Haptoglobin decreased", {
@@ -1471,7 +1525,7 @@ test_that("derive_var_atoxgr_dir Test 32b: CTCAEv6 Haptoglobin decreased", {
 ### Grade 2: Increase in >2 - 4 gm/dL above ULN or above baseline if baseline is above ULN
 ### Grade 1: Increase in >0 - 2 gm/dL above ULN or above baseline if baseline is above ULN
 
-exp_hgbi_si <- tibble::tribble(
+local_exp("exp_hgbi_si", tibble::tribble(
   ~ATOXDSCH,              ~AVAL, ~BASE, ~ANRHI, ~AVALU, ~ATOXGRH, ~TESTNUM, ~V5,
   "Not a term",           80,    120,   200,     "g/L",       NA,        1, "Y",
   NA_character_,          60,    50,    100,     "g/L",       NA,        2, "Y",
@@ -1506,14 +1560,16 @@ exp_hgbi_si <- tibble::tribble(
   # AVAL missing cannot grade
   "Hemoglobin increased", NA,    60,    65,      "g/L",       NA,       26, "Y",
 )
+)
 
-exp_hgbi_cv <- exp_hgbi_si %>%
+local_exp("exp_hgbi_cv", exp_hgbi_si %>%
   mutate(
     AVAL = AVAL / 10,
     BASE = BASE / 10,
     ANRHI = ANRHI / 10,
     AVALU = if_else(str_to_upper(AVALU) == "G/L", "g/dL", NA_character_)
   )
+)
 
 ## Test 33a: CTCAEv4 Hemoglobin increased (SI unit) ----
 test_that("derive_var_atoxgr_dir Test 33a: CTCAEv4 Hemoglobin increased (SI unit)", {
@@ -1665,7 +1721,7 @@ test_that("derive_var_atoxgr_dir Test 36b: CTCAEv6 INR increased", {
 ### Grade 2: >1.5 - 2.0 x ULN
 ### Grade 1: >ULN - 1.5 x ULN
 
-exp_lip <- tibble::tribble(
+local_exp("exp_lip", tibble::tribble(
   ~ATOXDSCH,          ~AVAL,  ~ANRLO, ~ANRHI, ~ATOXGRH, ~TESTNUM,
   "Not a term",       80,     120,    200,    NA,       1,
   NA_character_,      60,     50,     100,    NA,       2,
@@ -1683,6 +1739,7 @@ exp_lip <- tibble::tribble(
   "Lipase Increased", NA,     0,      100,    NA,       12,
 ) %>%
   mutate(AVALU = NA_character_)
+)
 
 ## Test 37: CTCAEv4 Lipase increased ----
 test_that("derive_var_atoxgr_dir Test 37: CTCAEv4 Lipase increased", {
@@ -1700,7 +1757,7 @@ test_that("derive_var_atoxgr_dir Test 38a: CTCAEv5 Lipase increased", {
 ### Grade 2: >1.5 - 3.0 x ULN
 ### Grade 1: >ULN - 1.5 x ULN
 
-exp_lipv6 <- tibble::tribble(
+local_exp("exp_lipv6", tibble::tribble(
   ~ATOXDSCH,          ~AVAL,  ~ANRLO, ~ANRHI, ~ATOXGRH, ~TESTNUM,
   "Not a term",       80,     120,    200,    NA,       1,
   NA_character_,      60,     50,     100,    NA,       2,
@@ -1718,6 +1775,7 @@ exp_lipv6 <- tibble::tribble(
   "Lipase Increased", NA,     0,      100,    NA,       12,
 ) %>%
   mutate(AVALU = NA_character_)
+)
 
 ## Test 38b: CTCAEv6 Lipase increased ----
 test_that("derive_var_atoxgr_dir Test 38b: CTCAEv6 Lipase increased", {
@@ -1734,7 +1792,7 @@ test_that("derive_var_atoxgr_dir Test 38b: CTCAEv6 Lipase increased", {
 ### Grade 2: <0.8 - 0.5 x 10e9 /L
 ### Grade 1: <LLN - 0.8 x 10e9/L
 
-exp_lymd_si <- tibble::tribble(
+local_exp("exp_lymd_si", tibble::tribble(
   ~ATOXDSCL,                    ~AVAL,  ~ANRLO, ~ANRHI, ~AVALU,    ~ATOXGRL, ~TESTNUM,
   "Not a term",                 80,     120,    200,    "10^9/L",  NA,       1,
   NA_character_,                60,     50,     100,    "10^9/L",  NA,       2,
@@ -1762,29 +1820,32 @@ exp_lymd_si <- tibble::tribble(
   # AVAL missing cannot grade
   "Lymphocyte count decreased", 1.1,    1.1,    NA,     "10^9/L",  "0",      20,
 )
+)
 
 ## Test 39a: CTCAEv4 Lymphocyte count decreased (SI unit) ----
 test_that("derive_var_atoxgr_dir Test 39a: CTCAEv4 Lymphocyte count decreased (SI unit)", {
   test_low(expected = exp_lymd_si, meta = atoxgr_criteria_ctcv4)
 })
 
-exp_lymd_cv <- exp_lymd_si %>%
+local_exp("exp_lymd_cv", exp_lymd_si %>%
   mutate(
     AVALU = if_else(str_to_upper(AVALU) == "10^9/L", "10^3/uL", AVALU)
   )
+)
 
 ## Test 39b: CTCAEv4 Lymphocyte count decreased (USCV unit) ----
 test_that("derive_var_atoxgr_dir Test 39b: CTCAEv4 Lymphocyte count decreased (USCV unit)", {
   test_low(expected = exp_lymd_cv, meta = atoxgr_criteria_ctcv4_uscv)
 })
 
-exp_lymd_cv2 <- exp_lymd_si %>%
+local_exp("exp_lymd_cv2", exp_lymd_si %>%
   mutate(
     AVAL = AVAL * 1000,
     ANRLO = ANRLO * 1000,
     ANRHI = ANRHI * 1000,
     AVALU = if_else(str_to_upper(AVALU) == "10^9/L", "10^3/mL", AVALU)
   )
+)
 
 ## Test 39c: CTCAEv4 Lymphocyte count decreased (legacy USCV unit) ----
 test_that("derive_var_atoxgr_dir Test 39c: CTCAEv4 Lymphocyte count decreased (legacy USCV unit)", {
@@ -1801,13 +1862,14 @@ test_that("derive_var_atoxgr_dir Test 40b: CTCAEv5 Lymphocyte count decreased (U
   test_low(expected = exp_lymd_cv, meta = atoxgr_criteria_ctcv5_uscv)
 })
 
-exp_lymd_cv2 <- exp_lymd_si %>%
+local_exp("exp_lymd_cv2", exp_lymd_si %>%
   mutate(
     AVAL = AVAL * 1000,
     ANRLO = ANRLO * 1000,
     ANRHI = ANRHI * 1000,
     AVALU = if_else(str_to_upper(AVALU) == "10^9/L", "10^3/mL", AVALU)
   )
+)
 
 ## Test 40c: CTCAEv5 Lymphocyte count decreased (legacy USCV unit) ----
 test_that("derive_var_atoxgr_dir Test 40c: CTCAEv5 Lymphocyte count decreased (legacy USCV unit)", {
@@ -1822,7 +1884,7 @@ test_that("derive_var_atoxgr_dir Test 40c: CTCAEv5 Lymphocyte count decreased (l
 ### Grade 3: >20,000/mm3
 ### Grade 2: >4000/mm3 - 20,000/mm3
 
-exp_lymi_si <- tibble::tribble(
+local_exp("exp_lymi_si", tibble::tribble(
   ~ATOXDSCH,                    ~AVAL,  ~ANRLO, ~ANRHI, ~AVALU,    ~ATOXGRH, ~TESTNUM,
   "Not a term",                 80,     120,    200,    "10^9/L",  NA,       1,
   NA_character_,                60,     50,     100,    "10^9/L",  NA,       2,
@@ -1835,18 +1897,20 @@ exp_lymi_si <- tibble::tribble(
   # AVAL missing cannot grade
   "Lymphocyte count increased", NA,     NA,     NA,     "10^9/L",  NA,       8,
 )
+)
 
 ## Test 41a: CTCAEv4 Lymphocyte count increased (SI unit) ----
 test_that("derive_var_atoxgr_dir Test 41a: CTCAEv4 Lymphocyte count increased (SI unit)", {
   test_high(expected = exp_lymi_si, meta = atoxgr_criteria_ctcv4)
 })
 
-exp_lymi_cv1 <- exp_lymi_si %>%
+local_exp("exp_lymi_cv1", exp_lymi_si %>%
   mutate(
     AVALU = if_else(str_to_upper(AVALU) == "10^9/L", "10^3/uL", AVALU)
   )
+)
 
-exp_lymi_cv2 <- exp_lymi_si %>%
+local_exp("exp_lymi_cv2", exp_lymi_si %>%
   mutate(
     AVAL = AVAL * 1000,
     ANRLO = ANRLO * 1000,
@@ -1854,8 +1918,10 @@ exp_lymi_cv2 <- exp_lymi_si %>%
     AVALU = if_else(str_to_upper(AVALU) == "10^9/L", "10^3/mL", AVALU),
     TESTNUM = TESTNUM + 8
   )
+)
 
-exp_lymi_cv <- bind_rows(exp_lymi_cv1, exp_lymi_cv2)
+local_exp("exp_lymi_cv", bind_rows(exp_lymi_cv1, exp_lymi_cv2)
+)
 
 ## Test 41b: CTCAEv4 Lymphocyte count increased  (USCV unit) ----
 test_that("derive_var_atoxgr_dir Test 41b: CTCAEv4 Lymphocyte count increased  (USCV unit)", {
@@ -1893,7 +1959,7 @@ test_that("derive_var_atoxgr_dir Test 42d: CTCAEv6 Lymphocyte count increased (U
 ### Grade 2: <1.5 - 1.0 x 10e9 /L
 ### Grade 1: <LLN - 1.5 x 10e9 /L
 
-exp_neut_si <- tibble::tribble(
+local_exp("exp_neut_si", tibble::tribble(
   ~ATOXDSCL,                    ~AVAL,  ~ANRLO, ~ANRHI, ~AVALU,    ~ATOXGRL, ~TESTNUM,
   "Not a term",                 80,     120,    200,    "10^9/L",  NA,       1,
   NA_character_,                60,     50,     100,    "10^9/L",  NA,       2,
@@ -1921,18 +1987,20 @@ exp_neut_si <- tibble::tribble(
   # AVAL missing cannot grade
   "Neutrophil count decreased", NA,     2,      NA,     "10^9/L",  NA,       20,
 )
+)
 
 ## Test 43a: CTCAEv4 Neutrophil count decreased (SI unit) ----
 test_that("derive_var_atoxgr_dir Test 43a: CTCAEv4 Neutrophil count decreased (SI unit)", {
   test_low(expected = exp_neut_si, meta = atoxgr_criteria_ctcv4)
 })
 
-exp_neut_cv1 <- exp_neut_si %>%
+local_exp("exp_neut_cv1", exp_neut_si %>%
   mutate(
     AVALU = if_else(str_to_upper(AVALU) == "10^9/L", "10^3/uL", AVALU)
   )
+)
 
-exp_neut_cv2 <- exp_neut_si %>%
+local_exp("exp_neut_cv2", exp_neut_si %>%
   mutate(
     AVAL = AVAL * 1000,
     ANRLO = ANRLO * 1000,
@@ -1940,8 +2008,10 @@ exp_neut_cv2 <- exp_neut_si %>%
     AVALU = if_else(str_to_upper(AVALU) == "10^9/L", "10^3/mL", AVALU),
     TESTNUM = TESTNUM + 20
   )
+)
 
-exp_neut_cv <- bind_rows(exp_neut_cv1, exp_neut_cv2)
+local_exp("exp_neut_cv", bind_rows(exp_neut_cv1, exp_neut_cv2)
+)
 
 ## Test 43b: CTCAEv4 Neutrophil count decreased (USCV unit) ----
 test_that("derive_var_atoxgr_dir Test 43b: CTCAEv4 Neutrophil count decreased (USCV unit)", {
@@ -1968,7 +2038,7 @@ test_that("derive_var_atoxgr_dir Test 44b: CTCAEv5 Neutrophil count decreased (U
 ### Grade 2: <1.0 - 0.5 x 10^9/L
 ### Grade 1: <1.5 - 1.0 x 10^9/L
 
-exp_neut_siv6 <- tibble::tribble(
+local_exp("exp_neut_siv6", tibble::tribble(
   ~ATOXDSCL,                    ~AVAL,  ~AVALU,    ~ATOXGRL, ~TESTNUM,
   "Not a term",                 80,     "10^9/L",  NA,       1,
   NA_character_,                60,     "10^9/L",  NA,       2,
@@ -1985,6 +2055,7 @@ exp_neut_siv6 <- tibble::tribble(
   "Neutrophil count decreased", NA,     NA,        NA,       19,
   # AVAL missing cannot grade
   "Neutrophil count decreased", NA,     "10^9/L",  NA,       20,
+)
 )
 
 ## Test 44c: CTCAEv6 Neutrophil count decreased (SI unit) ----
@@ -2023,7 +2094,7 @@ test_that("derive_var_atoxgr_dir Test 44e: CTCAEv6 Neutrophil count decreased (l
 ### Grade 2: <75.0 - 50.0 x 10e9 /L
 ### Grade 1: <LLN - 75.0 x 10e9 /L
 
-exp_plate_si <- tibble::tribble(
+local_exp("exp_plate_si", tibble::tribble(
   ~ATOXDSCL,                  ~AVAL, ~ANRLO, ~ANRHI, ~AVALU,   ~ATOXGRL, ~TESTNUM,
   "Not a term",               80,    120,    200,    "10^9/L", NA,       1,
   NA_character_,              60,    50,     100,    "10^9/L", NA,       2,
@@ -2051,29 +2122,32 @@ exp_plate_si <- tibble::tribble(
   # AVAL missing cannot grade
   "Platelet count decreased", NA,    100,    NA,     "10^9/L", NA,       20,
 )
+)
 
 ## Test 45a: CTCAEv4 Platelet count decreased (SI unit) ----
 test_that("derive_var_atoxgr_dir Test 45a: CTCAEv4 Platelet count decreased (SI unit)", {
   test_low(expected = exp_plate_si, meta = atoxgr_criteria_ctcv4)
 })
 
-exp_plate_cv <- exp_plate_si %>%
+local_exp("exp_plate_cv", exp_plate_si %>%
   mutate(
     AVALU = if_else(str_to_upper(AVALU) == "10^9/L", "10^3/uL", AVALU)
   )
+)
 
 ## Test 45b: CTCAEv4 Platelet count decreased (USCV unit) ----
 test_that("derive_var_atoxgr_dir Test 45b: CTCAEv4 Platelet count decreased (USCV unit)", {
   test_low(expected = exp_plate_cv, meta = atoxgr_criteria_ctcv4_uscv)
 })
 
-exp_plate_cv2 <- exp_plate_si %>%
+local_exp("exp_plate_cv2", exp_plate_si %>%
   mutate(
     AVAL = AVAL * 1000,
     ANRLO = ANRLO * 1000,
     ANRHI = ANRHI * 1000,
     AVALU = if_else(str_to_upper(AVALU) == "10^9/L", "10^3/mL", AVALU)
   )
+)
 
 ## Test 45c: CTCAEv4 Platelet count decreased (legacy USCV unit) ----
 test_that("derive_var_atoxgr_dir Test 45c: CTCAEv4 Platelet count decreased (legacy USCV unit)", {
@@ -2106,7 +2180,7 @@ test_that("derive_var_atoxgr_dir Test 46c: CTCAEv5 Platelet count decreased (leg
 ### Grade 2: <75.0 - 50.0 x 10e9 /L
 ### Grade 1: <LLN - 75.0 x 10e9 /L
 
-exp_plate_v6_si <- exp_plate_si %>%
+local_exp("exp_plate_v6_si", exp_plate_si %>%
   mutate(
     ATOXDSCL = if_else(
       ATOXDSCL == "Platelet count decreased", "Thrombocytopenia", ATOXDSCL
@@ -2117,6 +2191,7 @@ exp_plate_v6_si <- exp_plate_si %>%
       TRUE ~ AVAL
     )
   )
+)
 
 ## Test 46d: CTCAEv6 Thrombocytopenia (SI unit) ----
 test_that("derive_var_atoxgr_dir Test 46d: CTCAEv6 Thrombocytopenia (SI unit)", {
@@ -2151,7 +2226,7 @@ test_that("derive_var_atoxgr_dir Test 46f: CTCAEv6 Platelet count decreased (leg
 ### Grade 2: >1.5 - 2.0 x ULN
 ### Grade 1: >ULN - 1.5 x ULN
 
-exp_seri <- tibble::tribble(
+local_exp("exp_seri", tibble::tribble(
   ~ATOXDSCH,                 ~AVAL,  ~ANRLO, ~ANRHI, ~ATOXGRH, ~TESTNUM,
   "Not a term",              80,     120,    200,    NA,       1,
   NA_character_,             60,     50,     100,    NA,       2,
@@ -2169,6 +2244,7 @@ exp_seri <- tibble::tribble(
   "Serum amylase increased", NA,     0,      100,    NA,       12,
 ) %>%
   mutate(AVALU = NA_character_)
+)
 
 ## Test 47a: CTCAEv4 Serum amylase increased (SI unit) ----
 test_that("derive_var_atoxgr_dir Test 47a: CTCAEv4 Serum amylase increased (SI unit)", {
@@ -2202,7 +2278,7 @@ test_that("derive_var_atoxgr_dir Test 48c: CTCAEv6 Serum amylase increased (SI u
 ### Grade 2: <3.0 - 2.0 x 10e9 /L
 ### Grade 1: <LLN - 3.0 x 10e9 /L
 
-exp_wbcd <- tibble::tribble(
+local_exp("exp_wbcd", tibble::tribble(
   ~ATOXDSCL,                    ~AVAL, ~ANRLO, ~ANRHI, ~AVALU,   ~ATOXGRL, ~TESTNUM,
   "Not a term",                 1,     5,      15,     "10^9/L", NA,       1,
   NA_character_,                2,     5,      15,     "10^9/L", NA,       2,
@@ -2230,19 +2306,23 @@ exp_wbcd <- tibble::tribble(
   # AVAL missing cannot grade
   "White blood cell decreased", NA,    100,    NA,     "10^9/L", NA,       20,
 )
+)
 
-exp_wbcd_uscv1 <- exp_wbcd %>%
+local_exp("exp_wbcd_uscv1", exp_wbcd %>%
   mutate(AVALU = if_else(AVALU == "10^9/L", "10^3/uL", AVALU))
+)
 
-exp_wbcd_uscv2 <- exp_wbcd %>%
+local_exp("exp_wbcd_uscv2", exp_wbcd %>%
   mutate(
     ANRLO = if_else(!is.na(ANRLO), ANRLO * 1000, NA),
     AVAL = if_else(!is.na(AVAL), AVAL * 1000, NA),
     AVALU = if_else(AVALU == "10^9/L", "10^3/mL", AVALU),
     TESTNUM = TESTNUM + 20
   )
+)
 
-exp_wbcd_uscv <- bind_rows(exp_wbcd_uscv1, exp_wbcd_uscv2)
+local_exp("exp_wbcd_uscv", bind_rows(exp_wbcd_uscv1, exp_wbcd_uscv2)
+)
 
 ## Test 49a: CTCAEv4 White blood cell decreased (SI unit) ----
 test_that("derive_var_atoxgr_dir Test 49a: CTCAEv4 White blood cell decreased (SI unit)", {
@@ -2291,7 +2371,7 @@ test_that("derive_var_atoxgr_dir Test 50d: CTCAEv6 White blood cell decreased (U
 ### Grade 2: >11.5 - 12.5 mg/dL
 ### Grade 1: >ULN - 11.5 mg/dL
 
-exp_calci_si <- tibble::tribble(
+local_exp("exp_calci_si", tibble::tribble(
   ~ATOXDSCH,       ~AVAL,  ~ANRLO, ~ANRHI, ~AVALU,    ~ATOXGRH, ~TESTNUM,
   "Not a term",    3.5,    0,      2.5,    "mmol/L",  NA,       1,
   NA_character_,   3.5,    0,      2.5,    "mmol/L",  NA,       2,
@@ -2319,8 +2399,9 @@ exp_calci_si <- tibble::tribble(
   # AVAL missing cannot grade
   "Hypercalcemia", NA,     0,      2.5,    "mmol/L",  NA,       20,
 )
+)
 
-exp_calci_cv <- tibble::tribble(
+local_exp("exp_calci_cv", tibble::tribble(
   ~ATOXDSCH,       ~AVAL,  ~ANRLO, ~ANRHI,   ~AVALU,   ~ATOXGRH, ~TESTNUM,
   "Not a term",    13.6,   0,      10.5,    "mg/dL",         NA,        1,
   NA_character_,   13.6,   0,      10.5,    "mg/dL",         NA,        2,
@@ -2347,6 +2428,7 @@ exp_calci_cv <- tibble::tribble(
   "Hypercalcemia", 10.5,   0,      10.5,         NA,         NA,       19,
   # AVAL missing cannot grade
   "Hypercalcemia", NA,     0,      10.5,    "mg/dL",         NA,       20,
+)
 )
 
 ## Test 51a: CTCAEv4 Hypercalcemia (SI unit) ----
@@ -2393,7 +2475,7 @@ test_that("derive_var_atoxgr_dir Test 52c: CTCAEv6 Hypercalcemia (USCV unit)", {
 ### Grade 2: >6 - 6.4 mg/dL
 ### Grade 1: >ULN - 11.5 mg/dL
 
-exp_calioni_si <- tibble::tribble(
+local_exp("exp_calioni_si", tibble::tribble(
   ~ATOXDSCH,                 ~AVAL,  ~ANRLO, ~ANRHI, ~AVALU,    ~ATOXGRH, ~TESTNUM,
   "Not a term",              1.9,    0,      1.3,    "mmol/L",  NA,       1,
   NA_character_,             1.9,    0,      1.3,    "mmol/L",  NA,       2,
@@ -2421,8 +2503,9 @@ exp_calioni_si <- tibble::tribble(
   # AVAL missing cannot grade
   "Hypercalcemia (Ionized)", NA,     0,      1.3,    "mmol/L",  NA,       20,
 )
+)
 
-exp_calioni_cv <- tibble::tribble(
+local_exp("exp_calioni_cv", tibble::tribble(
   ~ATOXDSCH,                  ~AVAL,  ~ANRLO,  ~ANRHI,   ~AVALU,  ~ATOXGRH,  ~TESTNUM,
   "Not a term",               7.3,    0,       5,       "mg/dL",        NA,  1,
   NA_character_,              7.3,    0,       5,       "mg/dL",        NA,  2,
@@ -2449,6 +2532,7 @@ exp_calioni_cv <- tibble::tribble(
   "Hypercalcemia (Ionized)",  5,      0,       5,            NA,        NA,  19,
   # AVAL missing cannot grade
   "Hypercalcemia (Ionized)",  NA,     0,       5,       "mg/dL",        NA,  20,
+)
 )
 
 ## Test 53a: CTCAEv4 Hypercalcemia (Ionized) (SI unit) ----
@@ -2495,7 +2579,7 @@ test_that("derive_var_atoxgr_dir Test 54d: CTCAEv6 Hypercalcemia (Ionized) (USCV
 ### Grade 2: >160 - 250 mg/dL
 ### Grade 1: >ULN - 160 mg/dL
 
-exp_glycfi <- tibble::tribble(
+local_exp("exp_glycfi", tibble::tribble(
   ~ATOXDSCH,                 ~AVAL,  ~ANRLO, ~ANRHI, ~AVALU,    ~ATOXGRH, ~TESTNUM,
   "Not a term",              27.9,   0,      5.3,    "mmol/L",  NA,       1,
   NA_character_,             27.9,   0,      5.3,    "mmol/L",  NA,       2,
@@ -2522,6 +2606,7 @@ exp_glycfi <- tibble::tribble(
   "Hyperglycemia (Fasting)", 5.3,    0,      5.3,    NA,        NA,       19,
   # AVAL missing cannot grade
   "Hyperglycemia (Fasting)", NA,     0,      5.3,    "mmol/L",  NA,       20,
+)
 )
 
 ## Test 55a: CTCAEv4 Hyperglycemia (Fasting) (SI unit) ----
@@ -2578,7 +2663,7 @@ test_that("derive_var_atoxgr_dir Test 55c: CTCAEv6 Hyperglycemia (Fasting) (SI u
 ### Grade 4: >500 mg/dL
 ### Grade 3: >250 - 500 mg/dL
 
-exp_glyci <- tibble::tribble(
+local_exp("exp_glyci", tibble::tribble(
   ~ATOXDSCH,       ~AVAL,  ~ANRLO, ~ANRHI, ~AVALU,    ~ATOXGRH, ~TESTNUM,
   "Not a term",    27.9,   0,      5.3,    "mmol/L",  NA,       1,
   NA_character_,   27.9,   0,      5.3,    "mmol/L",  NA,       2,
@@ -2592,8 +2677,9 @@ exp_glyci <- tibble::tribble(
   # AVAL missing cannot grade
   "Hyperglycemia", NA,     0,      5.3,    "mmol/L",  NA,       9,
 )
+)
 
-exp_glyci_uscv <- tibble::tribble(
+local_exp("exp_glyci_uscv", tibble::tribble(
   ~ATOXDSCH,        ~AVAL,  ~ANRLO,  ~ANRHI,   ~AVALU,  ~ATOXGRH,  ~TESTNUM,
   "Not a term",     501,    0,       5.3,     "mg/dL",        NA,  1,
   NA_character_,    501,    0,       5.3,     "mg/dL",        NA,  2,
@@ -2606,6 +2692,7 @@ exp_glyci_uscv <- tibble::tribble(
   "Hyperglycemia",  250,    0,       5.3,          NA,        NA,  8,
   # AVAL missing cannot grade
   "Hyperglycemia",  NA,     0,       5.3,     "mg/dL",        NA,  9,
+)
 )
 
 ## Test 56a: CTCAEv4 Hyperglycemia (SI unit) ----
@@ -2636,7 +2723,7 @@ test_that("derive_var_atoxgr_dir Test 56d: CTCAEv6 Hyperglycemia (USCV unit)", {
 ### Grade 2: >5.5 - 6.0 mmol/L
 ### Grade 1: >ULN - 5.5 mmol/L
 
-exp_kalei <- tibble::tribble(
+local_exp("exp_kalei", tibble::tribble(
   ~ATOXDSCH,       ~AVAL,  ~ANRLO, ~ANRHI, ~AVALU,    ~ATOXGRH, ~TESTNUM,
   "Not a term",    7.1,    0,      5.1,    "mmol/L",  NA,       1,
   NA_character_,   7.1,    0,      5.1,    "mmol/L",  NA,       2,
@@ -2663,6 +2750,7 @@ exp_kalei <- tibble::tribble(
   "Hyperkalemia",  5.1,    0,      5.1,    NA,        NA,       19,
   # AVAL missing cannot grade
   "Hyperkalemia",  NA,     0,      5.1,    "mmol/L",  NA,       20,
+)
 )
 
 ## Test 57a: CTCAEv4 Hyperkalemia (SI unit) ----
@@ -2703,7 +2791,7 @@ test_that("derive_var_atoxgr_dir Test 58c: CTCAEv6 Hyperkalemia (SI unit)", {
 ### Grade 3: >3 - 8 mg/dL
 ### Grade 1: >ULN - 3 mg/dL
 
-exp_magni_si <- tibble::tribble(
+local_exp("exp_magni_si", tibble::tribble(
   ~ATOXDSCH,         ~AVAL, ~ANRLO, ~ANRHI, ~AVALU,   ~ATOXGRH, ~TESTNUM,
   "Not a term",      3.4,   0,      0.8,    "mmol/L", NA,       1,
   NA_character_,     3.4,   0,      0.8,    "mmol/L", NA,       2,
@@ -2727,8 +2815,9 @@ exp_magni_si <- tibble::tribble(
   # AVAL missing cannot grade
   "Hypermagnesemia", NA,    0,      0.8,    "mmol/L", NA,       16,
 )
+)
 
-exp_magni_cv <- tibble::tribble(
+local_exp("exp_magni_cv", tibble::tribble(
   ~ATOXDSCH,          ~AVAL,  ~ANRLO,  ~ANRHI,   ~AVALU, ~ATOXGRH,  ~TESTNUM,
   "Not a term",       8.1,    0,       1.2,     "mg/dL",       NA,  1,
   NA_character_,      8.1,    0,       1.2,     "mg/dL",       NA,  2,
@@ -2751,6 +2840,7 @@ exp_magni_cv <- tibble::tribble(
   "Hypermagnesemia",  1.2,    0,       1.2,          NA,       NA,  15,
   # AVAL missing cannot grade
   "Hypermagnesemia",  NA,     0,       1.2,     "mg/dL",       NA,  16,
+)
 )
 
 ## Test 59a: CTCAEv4 Hypermagnesemia (SI unit) ----
@@ -2791,7 +2881,7 @@ test_that("derive_var_atoxgr_dir Test 60d: CTCAEv6 Hypermagnesemia (USCV unit)",
 ### Grade 2: >150 - 155 mmol/L
 ### Grade 1: >ULN - 150 mmol/L
 
-exp_natri <- tibble::tribble(
+local_exp("exp_natri", tibble::tribble(
   ~ATOXDSCH,        ~AVAL,  ~ANRLO, ~ANRHI, ~AVALU,    ~ATOXGRH, ~TESTNUM,
   "Not a term",     161,    0,      140,    "mmol/L",  NA,       1,
   NA_character_,    161,    0,      140,    "mmol/L",  NA,       2,
@@ -2818,6 +2908,7 @@ exp_natri <- tibble::tribble(
   "Hypernatremia",  140,    0,      140,    NA,        NA,       19,
   # AVAL missing cannot grade
   "Hypernatremia",  NA,     0,      140,    "mmol/L",  NA,       20,
+)
 )
 
 ## Test 61a: CTCAEv4 Hypernatremia (SI unit) ----
@@ -2860,7 +2951,7 @@ test_that("derive_var_atoxgr_dir Test 62c: CTCAEv6 Hypernatremia (SI unit)", {
 ### Grade 2: >300 - 500 mg/dL
 ### Grade 1: 150 - 300 mg/dL
 
-exp_trigi_si <- tibble::tribble(
+local_exp("exp_trigi_si", tibble::tribble(
   ~ATOXDSCH,               ~AVAL,  ~ANRLO, ~ANRHI, ~AVALU,    ~ATOXGRH, ~TESTNUM,
   "Not a term",            11.5,   0,      2.1,    "mmol/L",  NA,       1,
   NA_character_,           11.5,   0,      2.1,    "mmol/L",  NA,       2,
@@ -2877,8 +2968,9 @@ exp_trigi_si <- tibble::tribble(
   # AVAL missing cannot grade
   "Hypertriglyceridemia",  NA,     0,      2.1,    "mmol/L",  NA,       12,
 )
+)
 
-exp_trigi_cv <- tibble::tribble(
+local_exp("exp_trigi_cv", tibble::tribble(
   ~ATOXDSCH,               ~AVAL,  ~ANRLO, ~ANRHI,  ~AVALU,   ~ATOXGRH, ~TESTNUM,
   "Not a term",            1001,   0,      50,      "mg/dL",  NA,       1,
   NA_character_,           1001,   0,      50,      "mg/dL",  NA,       2,
@@ -2894,6 +2986,7 @@ exp_trigi_cv <- tibble::tribble(
   "Hypertriglyceridemia",  150,    0,      50,      NA,       NA,       11,
   # AVAL missing cannot grade
   "Hypertriglyceridemia",  NA,     0,      50,      "mg/dL",  NA,       12,
+)
 )
 
 ## Test 63a: CTCAEv4 Hypertriglyceridemia (SI unit) ----
@@ -2937,7 +3030,7 @@ test_that("derive_var_atoxgr_dir Test 64d: CTCAEv6 Hypertriglyceridemia (USCV un
 ### Grade 3: >ULN - 10 mg/dL
 
 
-exp_urici_si <- tibble::tribble(
+local_exp("exp_urici_si", tibble::tribble(
   ~ATOXDSCH,        ~AVAL,  ~ANRLO,  ~ANRHI,    ~AVALU, ~ATOXGRH, ~TESTNUM,
   "Not a term",     591,    0,       200,     "umol/L",       NA, 1,
   NA_character_,    591,    0,       200,     "umol/L",       NA, 2,
@@ -2957,8 +3050,9 @@ exp_urici_si <- tibble::tribble(
   # AVAL missing cannot grade
   "Hyperuricemia",  NA,     0,       200,     "umol/L",       NA, 12,
 )
+)
 
-exp_urici_cv <- tibble::tribble(
+local_exp("exp_urici_cv", tibble::tribble(
   ~ATOXDSCH,        ~AVAL, ~ANRLO, ~ANRHI,  ~AVALU,  ~ATOXGRH, ~TESTNUM,
   "Not a term",     11,    0,      5,      "mg/dL",  NA,       1,
   NA_character_,    11,    0,      5,      "mg/dL",  NA,       2,
@@ -2977,6 +3071,7 @@ exp_urici_cv <- tibble::tribble(
   "Hyperuricemia",  5,     0,      5,           NA,  "0",      11,
   # AVAL missing cannot grade
   "Hyperuricemia",  NA,    0,      5,      "mg/dL",  NA,       12,
+)
 )
 
 ### Hyperuricemia (NCICTCAEv5)
@@ -3043,7 +3138,7 @@ test_that("derive_var_atoxgr_dir Test 66b: CTCAEv4 Hyperuricemia (USCV unit)", {
 ### Grade 2: <30 - 20 g/L
 ### Grade 1: <LLN - 30 g/L
 
-exp_albd_si <- tibble::tribble(
+local_exp("exp_albd_si", tibble::tribble(
   ~ATOXDSCL,          ~AVAL,  ~ANRLO, ~ANRHI, ~AVALU, ~ATOXGRL, ~TESTNUM,
   "Not a term",       19,     40,     100,    "G/L",  NA,       1,
   NA_character_,      19,     40,     100,    "G/L",  NA,       2,
@@ -3068,14 +3163,16 @@ exp_albd_si <- tibble::tribble(
   # AVAL missing cannot grade
   "Hypoalbuminemia",  NA,     40,     100,    "G/L",  NA,       17,
 )
+)
 
-exp_albd_cv <- exp_albd_si %>%
+local_exp("exp_albd_cv", exp_albd_si %>%
   mutate(
     AVAL = AVAL / 10,
     ANRLO = ANRLO / 10,
     ANRHI = ANRHI / 10,
     AVALU = if_else(is.na(AVALU), NA_character_, "g/dL")
   )
+)
 
 ## Test 67a: CTCAEv4 Hypoalbuminemia (SI unit) ----
 test_that("derive_var_atoxgr_dir Test 67a: CTCAEv4 Hypoalbuminemia (SI unit)", {
@@ -3121,7 +3218,7 @@ test_that("derive_var_atoxgr_dir Test 68d: CTCAEv6 Hypoalbuminemia (USCV unit)",
 ### Grade 2: <8 - 7 mg/dL
 ### Grade 1: <LLN - 8 mg/dL
 
-exp_calcd_si <- tibble::tribble(
+local_exp("exp_calcd_si", tibble::tribble(
   ~ATOXDSCL,       ~AVAL,  ~ANRLO, ~ANRHI, ~AVALU,    ~ATOXGRL, ~TESTNUM,
   "Not a term",    1.4,    4,      100,    "mmol/L",  NA,       1,
   NA_character_,   1.4,    4,      100,    "mmol/L",  NA,       2,
@@ -3149,8 +3246,9 @@ exp_calcd_si <- tibble::tribble(
   # AVAL missing cannot grade
   "Hypocalcemia",  NA,     4,      100,    "mmol/L",  NA,       20,
 )
+)
 
-exp_calcd_cv <- tibble::tribble(
+local_exp("exp_calcd_cv", tibble::tribble(
   ~ATOXDSCL,       ~AVAL,  ~ANRLO,  ~ANRHI,   ~AVALU,  ~ATOXGRL, ~TESTNUM,
   "Not a term",    5.9,    9,       100,     "mg/dL",        NA, 1,
   NA_character_,   5.9,    9,       100,     "mg/dL",        NA, 2,
@@ -3177,6 +3275,7 @@ exp_calcd_cv <- tibble::tribble(
   "Hypocalcemia",  9,      9,       100,          NA,        NA, 19,
   # AVAL missing cannot grade
   "Hypocalcemia",  NA,     9,       100,     "mg/dL",        NA, 20,
+)
 )
 
 ## Test 69a: CTCAEv4 Hypocalcemia (SI unit) ----
@@ -3221,7 +3320,7 @@ test_that("derive_var_atoxgr_dir Test 70d: CTCAEv6 Hypocalcemia (USCV unit)", {
 ### mg/dL is 4 x mmol/L
 
 
-exp_caliond_si <- tibble::tribble(
+local_exp("exp_caliond_si", tibble::tribble(
   ~ATOXDSCL,                 ~AVAL,  ~ANRLO, ~ANRHI, ~AVALU,    ~ATOXGRL, ~TESTNUM,
   "Not a term",              0.79,   1.3,    100,    "mmol/L",  NA,       1,
   NA_character_,             0.79,   1.3,    100,    "mmol/L",  NA,       2,
@@ -3249,14 +3348,16 @@ exp_caliond_si <- tibble::tribble(
   # AVAL missing cannot grade
   "Hypocalcemia (Ionized)",  NA,     1.3,    100,    "mmol/L",  NA,       20,
 )
+)
 
-exp_caliond_cv <- exp_caliond_si %>%
+local_exp("exp_caliond_cv", exp_caliond_si %>%
   mutate(
     AVAL = AVAL * 4,
     ANRHI = ANRHI * 4,
     ANRLO = ANRLO * 4,
     AVALU = if_else(is.na(AVALU), NA_character_, "mg/dL")
   )
+)
 
 ## Test 71a: CTCAEv4 Hypocalcemia (Ionized) (SI unit) ----
 test_that("derive_var_atoxgr_dir Test 71a: CTCAEv4 Hypocalcemia (Ionized) (SI unit)", {
@@ -3303,7 +3404,7 @@ test_that("derive_var_atoxgr_dir Test 72d: CTCAEv6 Hypocalcemia (Ionized) (USCV 
 ### Grade 2: <55 - 40 mg/dL
 ### Grade 1: <LLN - 55 mg/dL
 
-exp_glycd_si <- tibble::tribble(
+local_exp("exp_glycd_si", tibble::tribble(
   ~ATOXDSCL,       ~AVAL,  ~ANRLO,  ~ANRHI,    ~AVALU,  ~ATOXGRL, ~TESTNUM,
   "Not a term",    1.69,   4,       100,     "mmol/L",        NA, 1,
   NA_character_,   1.69,   4,       100,     "mmol/L",        NA, 2,
@@ -3331,8 +3432,9 @@ exp_glycd_si <- tibble::tribble(
   # AVAL missing cannot grade
   "Hypoglycemia",  NA,     4,       100,     "mmol/L",        NA, 20,
 )
+)
 
-exp_glycd_cv <- tibble::tribble(
+local_exp("exp_glycd_cv", tibble::tribble(
   ~ATOXDSCL,       ~AVAL,  ~ANRLO, ~ANRHI,   ~AVALU,  ~ATOXGRL, ~TESTNUM,
   "Not a term",    29,     70,     100,     "mg/dL",        NA, 1,
   NA_character_,   29,     70,     100,      "g/dL",        NA, 2,
@@ -3359,6 +3461,7 @@ exp_glycd_cv <- tibble::tribble(
   "Hypoglycemia",  70,     70,     100,          NA,        NA, 19,
   # AVAL missing cannot grade
   "Hypoglycemia",  NA,     70,     100,     "mg/dL",        NA, 20,
+)
 )
 
 ## Test 73a: CTCAEv4 Hypoglycemia (SI unit) ----
@@ -3399,7 +3502,7 @@ test_that("derive_var_atoxgr_dir Test 74d: CTCAEv6 Hypoglycemia (USCV unit)", {
 ### Grade 3: <3.0 - 2.5 mmol/L
 ### Grade 2: <LLN - 3.0 mmol/L
 
-exp_kaled <- tibble::tribble(
+local_exp("exp_kaled", tibble::tribble(
   ~ATOXDSCL,      ~AVAL,  ~ANRLO, ~ANRHI, ~AVALU,    ~ATOXGRL, ~TESTNUM,
   "Not a term",   2.49,   4,      100,    "mmol/L",  NA,       1,
   NA_character_,  2.49,   4,      100,    "mmol/L",  NA,       2,
@@ -3422,6 +3525,7 @@ exp_kaled <- tibble::tribble(
   "Hypokalemia",  4,      4,      100,    NA,        NA,       15,
   # AVAL missing cannot grade
   "Hypokalemia",  NA,     4,      100,    "mmol/L",  NA,       16,
+)
 )
 
 ## Test 75a: CTCAEv4 Hypokalemia (SI unit) ----
@@ -3469,7 +3573,7 @@ test_that("derive_var_atoxgr_dir Test 76d: CTCAEv6 Hypokalemia (USCV unit)", {
 ### Grade 2: <1.2 - 0.9 mg/dL
 ### Grade 1: <LLN - 1.2 mg/dL
 
-exp_magnd_si <- tibble::tribble(
+local_exp("exp_magnd_si", tibble::tribble(
   ~ATOXDSCL,         ~AVAL,  ~ANRLO, ~ANRHI, ~AVALU,    ~ATOXGRL, ~TESTNUM,
   "Not a term",      0.29,   1,      100,    "mmol/L",  NA,       1,
   NA_character_,     0.29,   1,      100,    "mmol/L",  NA,       2,
@@ -3497,8 +3601,9 @@ exp_magnd_si <- tibble::tribble(
   # AVAL missing cannot grade
   "Hypomagnesemia",  NA,     1,      100,    "mmol/L",  NA,       20,
 )
+)
 
-exp_magnd_cv <- tibble::tribble(
+local_exp("exp_magnd_cv", tibble::tribble(
   ~ATOXDSCL,         ~AVAL,  ~ANRLO,  ~ANRHI,   ~AVALU,  ~ATOXGRL, ~TESTNUM,
   "Not a term",      0.69,   1.5,     10,      "mg/dL",        NA, 1,
   NA_character_,     0.69,   1.5,     10,      "mg/dL",        NA, 2,
@@ -3525,6 +3630,7 @@ exp_magnd_cv <- tibble::tribble(
   "Hypomagnesemia",  1.5,    1.5,     10,           NA,        NA, 19,
   # AVAL missing cannot grade
   "Hypomagnesemia",  NA,     1.5,     10,      "mg/dL",        NA, 20,
+)
 )
 
 ## Test 77a: CTCAEv4 Hypomagnesemia (SI unit) ----
@@ -3564,7 +3670,7 @@ test_that("derive_var_atoxgr_dir Test 78d: CTCAEv6 Hypomagnesemia (USCV unit)", 
 ### Grade 3: <130 - 120 mmol/L
 ### Grade 1: <LLN - 130 mmol/L
 
-exp_natrd <- tibble::tribble(
+local_exp("exp_natrd", tibble::tribble(
   ~ATOXDSCL,       ~AVAL,  ~ANRLO,   ~ANRHI, ~AVALU,    ~ATOXGRL, ~TESTNUM,
   "Not a term",    119,    140,      100,    "mmol/L",  NA,       1,
   NA_character_,   119,    140,      100,    "mmol/L",  NA,       2,
@@ -3587,6 +3693,7 @@ exp_natrd <- tibble::tribble(
   "Hyponatremia",  140,    140,      100,    NA,        NA,       15,
   # AVAL missing cannot grade
   "Hyponatremia",  NA,     140,      100,    "mmol/L",  NA,       16,
+)
 )
 
 ## Test 79a: CTCAEv4 Hyponatremia (SI unit) ----
@@ -3737,7 +3844,7 @@ test_that("derive_var_atoxgr_dir Test 82: DAIDS Acidosis", {
 ### Grade 2: >= 20 to < 30
 ### Grade 1: 30 to < LLN
 
-exp_albl_daids_si <- tibble::tribble(
+local_exp("exp_albl_daids_si", tibble::tribble(
   ~ATOXDSCL,      ~AVAL,  ~ANRLO, ~AVALU, ~ATOXGRL, ~TESTNUM,
   "Not a term",   35,     40,     "g/L",  NA,       1,
   NA_character_,  35,     40,     "g/L",  NA,       2,
@@ -3761,13 +3868,15 @@ exp_albl_daids_si <- tibble::tribble(
   # AVAL missing cannot grade
   "Albumin, Low", NA,     40,     "g/L",  NA,       16,
 )
+)
 
-exp_albl_daids_cv <- exp_albl_daids_si %>%
+local_exp("exp_albl_daids_cv", exp_albl_daids_si %>%
   mutate(
     AVAL = AVAL / 10,
     ANRLO = ANRLO / 10,
     AVALU = if_else(is.na(AVALU), NA_character_, "g/dL")
   )
+)
 
 ## Test 83a: DAIDS Albumin, Low (SI unit) ----
 test_that("derive_var_atoxgr_dir Test 83a: DAIDS Albumin, Low (SI unit)", {
@@ -3953,7 +4062,7 @@ test_that("derive_var_atoxgr_dir Test 88: DAIDS AST, High", {
 ### Grade 2: 11.0 -< 16.0 mmol/L
 ### Grade 1: 16.0 mmol/L -< LLN
 
-exp_bicad_daids <- tibble::tribble(
+local_exp("exp_bicad_daids", tibble::tribble(
   ~ATOXDSCL,           ~AVAL,  ~ANRLO, ~AVALU,    ~ATOXGRL, ~TESTNUM,
   "Not a term",        22,     20,     "mmol/L",  NA,       1,
   NA_character_,       22,     20,     "mmol/L",  NA,       2,
@@ -3981,6 +4090,7 @@ exp_bicad_daids <- tibble::tribble(
   # AVAL missing cannot grade
   "Bicarbonate, Low",  NA,     20,     "mmol/L",  NA,       20,
 )
+)
 
 ## Test 89a: DAIDS Bicarbonate, Low (SI unit) ----
 test_that("derive_var_atoxgr_dir Test 89a: DAIDS Bicarbonate, Low (SI unit)", {
@@ -4004,7 +4114,7 @@ test_that("derive_var_atoxgr_dir Test 89b: DAIDS Bicarbonate, Low (USCV unit)", 
 ### Grade 4: > ULN
 
 ## SI unit
-exp_dbiligt28d_daids_si <- tibble::tribble(
+local_exp("exp_dbiligt28d_daids_si", tibble::tribble(
   ~ATOXDSCH,                  ~AVAL,  ~ANRHI, ~AVALU,   ~ATOXGRH, ~TESTNUM,
   "Not a term",               7,      8,      "umol/L", NA,       1,
   NA_character_,              7,      8,      "umol/L", NA,       2,
@@ -4023,13 +4133,15 @@ exp_dbiligt28d_daids_si <- tibble::tribble(
     BRTHDT = lubridate::ymd("2023-01-01"),
     ADT = lubridate::ymd("2023-01-30")
   )
+)
 
 ## CV unit
-exp_dbiligt28d_daids_cv <- exp_dbiligt28d_daids_si %>%
+local_exp("exp_dbiligt28d_daids_cv", exp_dbiligt28d_daids_si %>%
   mutate(
     AVALU = "mg/dL",
     TESTNUM = TESTNUM + 30
   )
+)
 
 ### <= 28 days of age
 
@@ -4039,7 +4151,7 @@ exp_dbiligt28d_daids_cv <- exp_dbiligt28d_daids_si %>%
 ### Grade 1: ULN to <= 1 mg/dL (ULN to <= 17.1 umol/L)
 
 ## SI unit
-exp_dbilile28d_daids_si <- tibble::tribble(
+local_exp("exp_dbilile28d_daids_si", tibble::tribble(
   ~ATOXDSCH,                  ~AVAL,  ~ANRHI, ~AVALU,   ~ATOXGRH, ~TESTNUM,
   "Not a term",               7,      8,      "umol/L", NA,       10,
   NA_character_,              7,      8,      "umol/L", NA,       11,
@@ -4069,9 +4181,10 @@ exp_dbilile28d_daids_si <- tibble::tribble(
     BRTHDT = lubridate::ymd("2023-01-01"),
     ADT = lubridate::ymd("2023-01-29")
   )
+)
 
 ## CV unit
-exp_dbilile28d_daids_cv <- tibble::tribble(
+local_exp("exp_dbilile28d_daids_cv", tibble::tribble(
   ~ATOXDSCH,                  ~AVAL,  ~ANRHI, ~AVALU,  ~ATOXGRH, ~TESTNUM,
   "Not a term",               2.1,    0.5,    "mg/dL", NA,       10,
   NA_character_,              2.1,    0.5,    "mg/dL", NA,       11,
@@ -4101,11 +4214,12 @@ exp_dbilile28d_daids_cv <- tibble::tribble(
     BRTHDT = lubridate::ymd("2023-01-01"),
     ADT = lubridate::ymd("2023-01-29")
   )
+)
 
 ### add subjects with missing ADT or BRTHDT
 
 ## SI unit
-exp_dbilinoage_daids_si <- exp_dbilile28d_daids_si %>%
+local_exp("exp_dbilinoage_daids_si", exp_dbilile28d_daids_si %>%
   filter(TESTNUM %in% c(18, 19)) %>%
   mutate(
     ADT = if_else(TESTNUM == 18, NA, ADT),
@@ -4113,9 +4227,10 @@ exp_dbilinoage_daids_si <- exp_dbilile28d_daids_si %>%
     ATOXGRH = NA_character_,
     TESTNUM = if_else(TESTNUM == 18, 29, 30)
   )
+)
 
 ## CV unit
-exp_dbilinoage_daids_cv <- exp_dbilile28d_daids_cv %>%
+local_exp("exp_dbilinoage_daids_cv", exp_dbilile28d_daids_cv %>%
   filter(TESTNUM %in% c(48, 49)) %>%
   mutate(
     ADT = if_else(TESTNUM == 48, NA, ADT),
@@ -4123,20 +4238,23 @@ exp_dbilinoage_daids_cv <- exp_dbilile28d_daids_cv %>%
     ATOXGRH = NA_character_,
     TESTNUM = if_else(TESTNUM == 48, 59, 60)
   )
+)
 
 ### put all SI data together
-exp_dbili_daids_si <- exp_dbilinoage_daids_si %>%
+local_exp("exp_dbili_daids_si", exp_dbilinoage_daids_si %>%
   bind_rows(
     exp_dbilile28d_daids_si,
     exp_dbiligt28d_daids_si
   )
+)
 
 ### put all CV data together
-exp_dbili_daids_cv <- exp_dbilinoage_daids_cv %>%
+local_exp("exp_dbili_daids_cv", exp_dbilinoage_daids_cv %>%
   bind_rows(
     exp_dbilile28d_daids_cv,
     exp_dbiligt28d_daids_cv
   )
+)
 
 ## Test 90a: DAIDS Direct Bilirubin, High (SI unit) ----
 test_that("derive_var_atoxgr_dir Test 90: DAIDS Direct Bilirubin, High (SI unit)", {
@@ -4157,7 +4275,7 @@ test_that("derive_var_atoxgr_dir Test 90b: DAIDS Direct Bilirubin, High (USCV un
 ### Grade 2: 1.6 to < 2.6 x ULN
 ### Grade 1: 1.1 to < 1.6 x ULN
 
-exp_tbiligt28d_daids <- tibble::tribble(
+local_exp("exp_tbiligt28d_daids", tibble::tribble(
   ~ATOXDSCH,                ~AVAL,  ~ANRHI, ~AVALU,    ~ATOXGRH, ~TESTNUM,
   "Not a term",             9,      10,     "umol/L",  NA,       1,
   NA_character_,            9,      10,     "umol/L",  NA,       2,
@@ -4181,17 +4299,19 @@ exp_tbiligt28d_daids <- tibble::tribble(
     BRTHDT = lubridate::ymd("2023-01-01"),
     ADT = lubridate::ymd("2023-01-30")
   )
+)
 
 ### make Age <= 28 all results NA for ATOXGRH
-exp_tbilile28d_daids <- exp_tbiligt28d_daids %>%
+local_exp("exp_tbilile28d_daids", exp_tbiligt28d_daids %>%
   mutate(
     ADT = lubridate::ymd("2023-01-29"),
     ATOXGRH = NA_character_,
     TESTNUM = TESTNUM + 13
   )
+)
 
 ### make Age missing results NA for ATOXGRH
-exp_tbilinoage_daids <- exp_tbiligt28d_daids %>%
+local_exp("exp_tbilinoage_daids", exp_tbiligt28d_daids %>%
   filter(TESTNUM %in% c(10, 11)) %>%
   mutate(
     ADT = if_else(TESTNUM == 10, NA, ADT),
@@ -4199,12 +4319,14 @@ exp_tbilinoage_daids <- exp_tbiligt28d_daids %>%
     ATOXGRH = NA_character_,
     TESTNUM = if_else(TESTNUM == 10, 27, 28)
   )
+)
 
-exp_tbili_daids <- exp_tbilinoage_daids %>%
+local_exp("exp_tbili_daids", exp_tbilinoage_daids %>%
   bind_rows(
     exp_tbiligt28d_daids,
     exp_tbilile28d_daids
   )
+)
 
 
 ## Test 91: DAIDS Total Bilirubin, High ----
@@ -4228,7 +4350,7 @@ test_that("derive_var_atoxgr_dir Test 91: DAIDS Total Bilirubin, High", {
 ### Grade 2: 11.5 -< 12.5 mg/dL
 ### Grade 1: 10.6 -< 11.5 mg/dL
 
-exp_calcige7d_daids_si <- tibble::tribble(
+local_exp("exp_calcige7d_daids_si", tibble::tribble(
   ~ATOXDSCH,       ~AVAL,  ~AVALU,    ~ATOXGRH, ~TESTNUM,
   "Not a term",    3.5,    "mmol/L",  NA,       1,
   NA_character_,   3.5,    "mmol/L",  NA,       2,
@@ -4250,8 +4372,9 @@ exp_calcige7d_daids_si <- tibble::tribble(
     BRTHDT = lubridate::ymd("2023-01-01"),
     ADT = lubridate::ymd("2023-01-08")
   )
+)
 
-exp_calcige7d_daids_cv <- tibble::tribble(
+local_exp("exp_calcige7d_daids_cv", tibble::tribble(
   ~ATOXDSCH,        ~AVAL,   ~AVALU,  ~ATOXGRH,  ~TESTNUM,
   "Not a term",     13.5,   "mg/dL",        NA,  1,
   NA_character_,    13.5,   "mg/dL",        NA,  2,
@@ -4273,6 +4396,7 @@ exp_calcige7d_daids_cv <- tibble::tribble(
     BRTHDT = lubridate::ymd("2023-01-01"),
     ADT = lubridate::ymd("2023-01-08")
   )
+)
 
 ### < 7 days of age
 ### SI unit is mmol/L
@@ -4287,7 +4411,7 @@ exp_calcige7d_daids_cv <- tibble::tribble(
 ### Grade 2: 12.4 -< 12.9 mg/dL
 ### Grade 1: 11.5 -< 12.4 mg/dL
 
-exp_calcilt7d_daids_si <- tibble::tribble(
+local_exp("exp_calcilt7d_daids_si", tibble::tribble(
   ~ATOXDSCH,       ~AVAL,  ~AVALU,    ~ATOXGRH, ~TESTNUM,
   "Not a term",    3.5,    "mmol/L",  NA,       13,
   NA_character_,   3.5,    "mmol/L",  NA,       14,
@@ -4309,8 +4433,9 @@ exp_calcilt7d_daids_si <- tibble::tribble(
     BRTHDT = lubridate::ymd("2023-01-01"),
     ADT = lubridate::ymd("2023-01-07")
   )
+)
 
-exp_calcilt7d_daids_cv <- tibble::tribble(
+local_exp("exp_calcilt7d_daids_cv", tibble::tribble(
   ~ATOXDSCH,       ~AVAL,  ~AVALU,   ~ATOXGRH, ~TESTNUM,
   "Not a term",    13.5,   "mg/dL",  NA,       13,
   NA_character_,   13.5,   "mg/dL",  NA,       14,
@@ -4332,9 +4457,10 @@ exp_calcilt7d_daids_cv <- tibble::tribble(
     BRTHDT = lubridate::ymd("2023-01-01"),
     ADT = lubridate::ymd("2023-01-07")
   )
+)
 
 ## create data with age missing for SI unit
-exp_calcinoage_daids_si <- exp_calcige7d_daids_si %>%
+local_exp("exp_calcinoage_daids_si", exp_calcige7d_daids_si %>%
   filter(TESTNUM %in% c(9, 10)) %>%
   mutate(
     ADT = if_else(TESTNUM == 9, NA, ADT),
@@ -4342,9 +4468,10 @@ exp_calcinoage_daids_si <- exp_calcige7d_daids_si %>%
     ATOXGRH = NA_character_,
     TESTNUM = if_else(TESTNUM == 9, 25, 26)
   )
+)
 
 ## create data with age missing for CV unit
-exp_calcinoage_daids_cv <- exp_calcige7d_daids_cv %>%
+local_exp("exp_calcinoage_daids_cv", exp_calcige7d_daids_cv %>%
   filter(TESTNUM %in% c(9, 10)) %>%
   mutate(
     ADT = if_else(TESTNUM == 9, NA, ADT),
@@ -4352,20 +4479,23 @@ exp_calcinoage_daids_cv <- exp_calcige7d_daids_cv %>%
     ATOXGRH = NA_character_,
     TESTNUM = if_else(TESTNUM == 9, 25, 26)
   )
+)
 
 # put all SI data together
-exp_calci_daids_si <- exp_calcinoage_daids_si %>%
+local_exp("exp_calci_daids_si", exp_calcinoage_daids_si %>%
   bind_rows(
     exp_calcige7d_daids_si,
     exp_calcilt7d_daids_si
   )
+)
 
 # put all CV data together
-exp_calci_daids_cv <- exp_calcinoage_daids_cv %>%
+local_exp("exp_calci_daids_cv", exp_calcinoage_daids_cv %>%
   bind_rows(
     exp_calcige7d_daids_cv,
     exp_calcilt7d_daids_cv
   )
+)
 ## Test 92a: DAIDS Calcium, High (SI unit) ----
 test_that("derive_var_atoxgr_dir Test 92a: DAIDS Calcium, High (SI unit)", {
   test_high(expected = exp_calci_daids_si, meta = atoxgr_criteria_daids)
@@ -4391,7 +4521,7 @@ test_that("derive_var_atoxgr_dir Test 92b: DAIDS Calcium, High (USCV unit)", {
 ### Grade 2: 6.0 -< 6.4 mg/dL
 ### Grade 1: >ULN -< 6.0 mg/dL
 
-exp_calioni_daids_si <- tibble::tribble(
+local_exp("exp_calioni_daids_si", tibble::tribble(
   ~ATOXDSCH,                 ~AVAL, ~ANRLO, ~ANRHI, ~AVALU,   ~ATOXGRH, ~TESTNUM,
   "Not a term",              1.8,   1.1,    1.4,    "mmol/L", NA,       1,
   NA_character_,             1.79,  1.1,    1.4,    "mmol/L", NA,       2,
@@ -4419,14 +4549,16 @@ exp_calioni_daids_si <- tibble::tribble(
   # AVAL missing cannot grade
   "Calcium (Ionized), High", NA,    1.1,    1.4,    "mmol/L", NA,       20,
 )
+)
 
-exp_calioni_daids_cv <- exp_calioni_daids_si %>%
+local_exp("exp_calioni_daids_cv", exp_calioni_daids_si %>%
   mutate(
     AVAL = 4 * AVAL,
     ANRLO = 4 * ANRLO,
     ANRHI = 4 * ANRHI,
     AVALU = if_else(is.na(AVALU), NA_character_, "mg/dL")
   )
+)
 
 ## Test 93a: DAIDS Calcium (Ionized), High (SI unit) ----
 test_that("derive_var_atoxgr_dir Test 93a: DAIDS Calcium (Ionized), High (SI unit)", {
@@ -4455,7 +4587,7 @@ test_that("derive_var_atoxgr_dir Test 93b: DAIDS Calcium (Ionized), High (USCV u
 ### Grade 2: 7.0 -< 7.8 mg/dL
 ### Grade 1: 7.8 -< 8.4 mg/dL
 
-exp_calcdge7d_daids_si <- tibble::tribble(
+local_exp("exp_calcdge7d_daids_si", tibble::tribble(
   ~ATOXDSCL,       ~AVAL,  ~AVALU,    ~ATOXGRL, ~TESTNUM,
   "Not a term",    2.2,    "mmol/L",  NA,       1,
   NA_character_,   2.2,    "mmol/L",  NA,       2,
@@ -4477,8 +4609,9 @@ exp_calcdge7d_daids_si <- tibble::tribble(
     BRTHDT = lubridate::ymd("2023-01-01"),
     ADT = lubridate::ymd("2023-01-08")
   )
+)
 
-exp_calcdge7d_daids_cv <- tibble::tribble(
+local_exp("exp_calcdge7d_daids_cv", tibble::tribble(
   ~ATOXDSCL,       ~AVAL,   ~AVALU,  ~ATOXGRL,  ~TESTNUM,
   "Not a term",    6.09,   "mg/dL",        NA,  1,
   NA_character_,   6.09,   "mg/dL",        NA,  2,
@@ -4500,6 +4633,7 @@ exp_calcdge7d_daids_cv <- tibble::tribble(
     BRTHDT = lubridate::ymd("2023-01-01"),
     ADT = lubridate::ymd("2023-01-08")
   )
+)
 
 ### < 7 days of age
 ### SI unit is mmol/L
@@ -4515,7 +4649,7 @@ exp_calcdge7d_daids_cv <- tibble::tribble(
 ### Grade 1: 6.5 -< 7.5 mg/dL
 
 ### SI unit
-exp_calcdlt7d_daids_si <- tibble::tribble(
+local_exp("exp_calcdlt7d_daids_si", tibble::tribble(
   ~ATOXDSCL,      ~AVAL, ~AVALU,   ~ATOXGRL, ~TESTNUM,
   "Not a term",   2.2,   "mmol/L", NA,       13,
   NA_character_,  2.2,   "mmol/L", NA,       14,
@@ -4537,8 +4671,9 @@ exp_calcdlt7d_daids_si <- tibble::tribble(
     BRTHDT = lubridate::ymd("2023-01-01"),
     ADT = lubridate::ymd("2023-01-07")
   )
+)
 ### CV unit
-exp_calcdlt7d_daids_cv <- tibble::tribble(
+local_exp("exp_calcdlt7d_daids_cv", tibble::tribble(
   ~ATOXDSCL,       ~AVAL,   ~AVALU,  ~ATOXGRL,  ~TESTNUM,
   "Not a term",    5.49,   "mg/dL",        NA,  13,
   NA_character_,   5.49,   "mg/dL",        NA,  14,
@@ -4560,9 +4695,10 @@ exp_calcdlt7d_daids_cv <- tibble::tribble(
     BRTHDT = lubridate::ymd("2023-01-01"),
     ADT = lubridate::ymd("2023-01-07")
   )
+)
 
 ## create SI records with age missing
-exp_calcdnoage_daids_si <- exp_calcdge7d_daids_si %>%
+local_exp("exp_calcdnoage_daids_si", exp_calcdge7d_daids_si %>%
   filter(TESTNUM %in% c(9, 10)) %>%
   mutate(
     ADT = if_else(TESTNUM == 9, NA, ADT),
@@ -4570,9 +4706,10 @@ exp_calcdnoage_daids_si <- exp_calcdge7d_daids_si %>%
     ATOXGRL = NA_character_,
     TESTNUM = if_else(TESTNUM == 9, 25, 26)
   )
+)
 
 ## create CV records with age missing
-exp_calcdnoage_daids_cv <- exp_calcdge7d_daids_cv %>%
+local_exp("exp_calcdnoage_daids_cv", exp_calcdge7d_daids_cv %>%
   filter(TESTNUM %in% c(9, 10)) %>%
   mutate(
     ADT = if_else(TESTNUM == 9, NA, ADT),
@@ -4580,20 +4717,23 @@ exp_calcdnoage_daids_cv <- exp_calcdge7d_daids_cv %>%
     ATOXGRL = NA_character_,
     TESTNUM = if_else(TESTNUM == 9, 25, 26)
   )
+)
 
 ## put all SI records together
-exp_calcd_daids_si <- exp_calcdnoage_daids_si %>%
+local_exp("exp_calcd_daids_si", exp_calcdnoage_daids_si %>%
   bind_rows(
     exp_calcdge7d_daids_si,
     exp_calcdlt7d_daids_si
   )
+)
 
 ## put all CV records together
-exp_calcd_daids_cv <- exp_calcdnoage_daids_cv %>%
+local_exp("exp_calcd_daids_cv", exp_calcdnoage_daids_cv %>%
   bind_rows(
     exp_calcdge7d_daids_cv,
     exp_calcdlt7d_daids_cv
   )
+)
 
 
 ## Test 94a: DAIDS Calcium, Low (SI unit) ----
@@ -4621,7 +4761,7 @@ test_that("derive_var_atoxgr_dir Test 94b: DAIDS Calcium, Low (USCV unit)", {
 ### Grade 2: 3.6 -< 4.0 mg/dL
 ### Grade 1: 4.0 mg/dL -< LLN
 
-exp_caliond_daids_si <- tibble::tribble(
+local_exp("exp_caliond_daids_si", tibble::tribble(
   ~ATOXDSCL,                ~AVAL, ~ANRLO, ~ANRHI, ~AVALU,   ~ATOXGRL, ~TESTNUM,
   "Not a term",             0.79,  1.1,    100,    "mmol/L", NA,       1,
   NA_character_,            0.79,  1.1,    100,    "mmol/L", NA,       2,
@@ -4649,13 +4789,15 @@ exp_caliond_daids_si <- tibble::tribble(
   # AVAL missing cannot grade
   "Calcium (Ionized), Low", NA,    1.1,    100,    "mmol/L", NA,       20,
 )
+)
 
-exp_caliond_daids_cv <- exp_caliond_daids_si %>%
+local_exp("exp_caliond_daids_cv", exp_caliond_daids_si %>%
   mutate(
     AVAL = AVAL * 4,
     ANRLO = ANRLO * 4,
     AVALU = if_else(is.na(AVALU), NA_character_, "mg/dL")
   )
+)
 
 ## Test 95a: DAIDS Calcium (Ionized), Low (SI unit) ----
 test_that("derive_var_atoxgr_dir Test 95a: DAIDS Calcium (Ionized), Low (SI unit)", {
@@ -4871,7 +5013,7 @@ test_that("derive_var_atoxgr_dir Test 99b:  DAIDS Glucose Nonfasting, High (USCV
 ### Grade 1: 55 - 64 mg/dL
 
 ### SI unit
-exp_glucdge1m_daids_si <- tibble::tribble(
+local_exp("exp_glucdge1m_daids_si", tibble::tribble(
   ~ATOXDSCL,      ~AVAL,  ~AVALU,   ~ATOXGRL, ~TESTNUM,
   "Not a term",   9.5,    "mg/L",   NA,       1,
   NA_character_,  4.1,    "mmol/L", NA,       2,
@@ -4892,9 +5034,10 @@ exp_glucdge1m_daids_si <- tibble::tribble(
     BRTHDT = lubridate::ymd("2022-11-30"),
     ADT = lubridate::ymd("2022-12-30"),
   )
+)
 
 ### CV unit
-exp_glucdge1m_daids_cv <- tibble::tribble(
+local_exp("exp_glucdge1m_daids_cv", tibble::tribble(
   ~ATOXDSCL, ~AVAL, ~AVALU, ~ATOXGRL, ~TESTNUM,
   "Not a term", 29, "mg/L", NA, 1,
   NA_character_, 29, "mg/dL", NA, 2,
@@ -4915,6 +5058,7 @@ exp_glucdge1m_daids_cv <- tibble::tribble(
     BRTHDT = lubridate::ymd("2022-11-30"),
     ADT = lubridate::ymd("2022-12-30"),
   )
+)
 
 ### < 1 month of age
 
@@ -4930,7 +5074,7 @@ exp_glucdge1m_daids_cv <- tibble::tribble(
 ### Grade 2: 40 -< 50 mg/dL
 ### Grade 1: 50 - 54 mg/dL
 
-exp_glucdlt1m_daids_si <- tibble::tribble(
+local_exp("exp_glucdlt1m_daids_si", tibble::tribble(
   ~ATOXDSCL,      ~AVAL,  ~AVALU,   ~ATOXGRL, ~TESTNUM,
   "Not a term",   9.5,    "mg/L",   NA,       13,
   NA_character_,  4.1,    "mmol/L", NA,       14,
@@ -4951,8 +5095,9 @@ exp_glucdlt1m_daids_si <- tibble::tribble(
     BRTHDT = lubridate::ymd("2022-11-30"),
     ADT = lubridate::ymd("2022-12-29"),
   )
+)
 
-exp_glucdlt1m_daids_cv <- tibble::tribble(
+local_exp("exp_glucdlt1m_daids_cv", tibble::tribble(
   ~ATOXDSCL,      ~AVAL,  ~AVALU,   ~ATOXGRL, ~TESTNUM,
   "Not a term",   29,     "mg/L",   NA,       13,
   NA_character_,  29,     "mg/dL",  NA,       14,
@@ -4973,9 +5118,10 @@ exp_glucdlt1m_daids_cv <- tibble::tribble(
     BRTHDT = lubridate::ymd("2022-11-30"),
     ADT = lubridate::ymd("2022-12-29"),
   )
+)
 
 ## create SI records with age missing
-exp_glucdnoage_daids_si <- exp_glucdge1m_daids_si %>%
+local_exp("exp_glucdnoage_daids_si", exp_glucdge1m_daids_si %>%
   filter(TESTNUM %in% c(9, 10)) %>%
   mutate(
     ATOXGRL = NA_character_,
@@ -4983,8 +5129,9 @@ exp_glucdnoage_daids_si <- exp_glucdge1m_daids_si %>%
     BRTHDT = if_else(TESTNUM == 10, NA, BRTHDT),
     TESTNUM = if_else(TESTNUM == 9, 25, 26)
   )
+)
 ## create CV records with age missing
-exp_glucdnoage_daids_cv <- exp_glucdge1m_daids_cv %>%
+local_exp("exp_glucdnoage_daids_cv", exp_glucdge1m_daids_cv %>%
   filter(TESTNUM %in% c(9, 10)) %>%
   mutate(
     ATOXGRL = NA_character_,
@@ -4992,20 +5139,23 @@ exp_glucdnoage_daids_cv <- exp_glucdge1m_daids_cv %>%
     BRTHDT = if_else(TESTNUM == 10, NA, BRTHDT),
     TESTNUM = if_else(TESTNUM == 9, 25, 26)
   )
+)
 
 ## put all SI records together
-exp_glucd_daids_si <- exp_glucdnoage_daids_si %>%
+local_exp("exp_glucd_daids_si", exp_glucdnoage_daids_si %>%
   bind_rows(
     exp_glucdge1m_daids_si,
     exp_glucdlt1m_daids_si
   )
+)
 
 ## put all CV records together
-exp_glucd_daids_cv <- exp_glucdnoage_daids_cv %>%
+local_exp("exp_glucd_daids_cv", exp_glucdnoage_daids_cv %>%
   bind_rows(
     exp_glucdge1m_daids_cv,
     exp_glucdlt1m_daids_cv
   )
+)
 
 
 ## Test 100a:  DAIDS Glucose, Low (SI unit) ----
@@ -5091,7 +5241,7 @@ test_that("derive_var_atoxgr_dir Test 102:  DAIDS Lipase, High", {
 ### Grade 1: 200 -< 240 mg/dL
 
 ### SI data
-exp_cholfige18y_daids_si <- tibble::tribble(
+local_exp("exp_cholfige18y_daids_si", tibble::tribble(
   ~ATOXDSCH,                    ~AVAL,  ~AVALU,    ~ATOXGRH, ~TESTNUM,
   "Not a term",                 3.5,    "mmol/L",  NA,       1,
   NA_character_,                3.5,    "mmol/L",  NA,       2,
@@ -5110,9 +5260,10 @@ exp_cholfige18y_daids_si <- tibble::tribble(
     BRTHDT = lubridate::ymd("2005-01-08"),
     ADT = lubridate::ymd("2023-01-08")
   )
+)
 
 ### CV data
-exp_cholfige18y_daids_cv <- tibble::tribble(
+local_exp("exp_cholfige18y_daids_cv", tibble::tribble(
   ~ATOXDSCH,                    ~AVAL,  ~AVALU,    ~ATOXGRH, ~TESTNUM,
   "Not a term",                 300,    "mg/dL",   NA,       1,
   NA_character_,                300,    "mg/dL",   NA,       2,
@@ -5131,6 +5282,7 @@ exp_cholfige18y_daids_cv <- tibble::tribble(
     BRTHDT = lubridate::ymd("2005-01-08"),
     ADT = lubridate::ymd("2023-01-08")
   )
+)
 
 ### < 18 years of age
 ### SI unit is mmol/L
@@ -5143,7 +5295,7 @@ exp_cholfige18y_daids_cv <- tibble::tribble(
 ### Grade 2: 200 -< 300 mg/dL
 ### Grade 1: 170 -< 200 mg/dL
 
-exp_cholfilt18y_daids_si <- tibble::tribble(
+local_exp("exp_cholfilt18y_daids_si", tibble::tribble(
   ~ATOXDSCH,                    ~AVAL,  ~AVALU,    ~ATOXGRH, ~TESTNUM,
   "Not a term",                 3.5,    "mmol/L",  NA,       13,
   NA_character_,                3.5,    "mmol/L",  NA,       14,
@@ -5162,8 +5314,9 @@ exp_cholfilt18y_daids_si <- tibble::tribble(
     BRTHDT = lubridate::ymd("2005-01-08"),
     ADT = lubridate::ymd("2023-01-07")
   )
+)
 
-exp_cholfilt18y_daids_cv <- tibble::tribble(
+local_exp("exp_cholfilt18y_daids_cv", tibble::tribble(
   ~ATOXDSCH,                    ~AVAL,  ~AVALU,   ~ATOXGRH, ~TESTNUM,
   "Not a term",                 300,    "mg/dL",  NA,       13,
   NA_character_,                300,    "mg/dL",  NA,       14,
@@ -5182,9 +5335,10 @@ exp_cholfilt18y_daids_cv <- tibble::tribble(
     BRTHDT = lubridate::ymd("2005-01-08"),
     ADT = lubridate::ymd("2023-01-07")
   )
+)
 
 ## create SI records with age missing
-exp_cholfinoage_daids_si <- exp_cholfige18y_daids_si %>%
+local_exp("exp_cholfinoage_daids_si", exp_cholfige18y_daids_si %>%
   filter(TESTNUM %in% c(9, 10)) %>%
   mutate(
     ADT = if_else(TESTNUM == 9, NA, ADT),
@@ -5192,9 +5346,10 @@ exp_cholfinoage_daids_si <- exp_cholfige18y_daids_si %>%
     ATOXGRH = NA_character_,
     TESTNUM = if_else(TESTNUM == 9, 25, 26)
   )
+)
 
 ## create CV records with age missing
-exp_cholfinoage_daids_cv <- exp_cholfige18y_daids_cv %>%
+local_exp("exp_cholfinoage_daids_cv", exp_cholfige18y_daids_cv %>%
   filter(TESTNUM %in% c(9, 10)) %>%
   mutate(
     ADT = if_else(TESTNUM == 9, NA, ADT),
@@ -5202,20 +5357,23 @@ exp_cholfinoage_daids_cv <- exp_cholfige18y_daids_cv %>%
     ATOXGRH = NA_character_,
     TESTNUM = if_else(TESTNUM == 9, 25, 26)
   )
+)
 
 ## put all SI data together
-exp_cholfi_daids_si <- exp_cholfinoage_daids_si %>%
+local_exp("exp_cholfi_daids_si", exp_cholfinoage_daids_si %>%
   bind_rows(
     exp_cholfige18y_daids_si,
     exp_cholfilt18y_daids_si
   )
+)
 
 ## put all CV data together
-exp_cholfi_daids_cv <- exp_cholfinoage_daids_cv %>%
+local_exp("exp_cholfi_daids_cv", exp_cholfinoage_daids_cv %>%
   bind_rows(
     exp_cholfige18y_daids_cv,
     exp_cholfilt18y_daids_cv
   )
+)
 
 ## Test 103a: DAIDS Cholesterol, Fasting, High (SI unit) ----
 test_that("derive_var_atoxgr_dir Test 103a: DAIDS Cholesterol, Fasting, High (SI unit)", {
@@ -5241,7 +5399,7 @@ test_that("derive_var_atoxgr_dir Test 103b: DAIDS Cholesterol, Fasting, High (US
 ### Grade 2: 160 -< 190 mg/dL
 ### Grade 1: 130 -< 160 mg/dL
 
-exp_ldlfige18y_daids_si <- tibble::tribble(
+local_exp("exp_ldlfige18y_daids_si", tibble::tribble(
   ~ATOXDSCH,            ~AVAL,  ~AVALU,    ~ATOXGRH, ~TESTNUM,
   "Not a term",         3.1,    "mmol/L",  NA,       1,
   NA_character_,        3.1,    "mmol/L",  NA,       2,
@@ -5260,8 +5418,9 @@ exp_ldlfige18y_daids_si <- tibble::tribble(
     BRTHDT = lubridate::ymd("2005-01-08"),
     ADT = lubridate::ymd("2023-01-08")
   )
+)
 
-exp_ldlfige18y_daids_cv <- tibble::tribble(
+local_exp("exp_ldlfige18y_daids_cv", tibble::tribble(
   ~ATOXDSCH,             ~AVAL,   ~AVALU,  ~ATOXGRH,  ~TESTNUM,
   "Not a term",          190,    "mg/dL",        NA,  1,
   NA_character_,         190,    "mg/dL",        NA,  2,
@@ -5280,6 +5439,7 @@ exp_ldlfige18y_daids_cv <- tibble::tribble(
     BRTHDT = lubridate::ymd("2005-01-08"),
     ADT = lubridate::ymd("2023-01-08")
   )
+)
 
 ## SI unit is mmol/L
 ### > 2 to < 18 years of age
@@ -5293,7 +5453,7 @@ exp_ldlfige18y_daids_cv <- tibble::tribble(
 ### Grade 1: 110 -< 130 mg/dL
 
 ## SI data
-exp_ldlfilt18y_daids_si <- tibble::tribble(
+local_exp("exp_ldlfilt18y_daids_si", tibble::tribble(
   ~ATOXDSCH,            ~AVAL,  ~AVALU,    ~ATOXGRH, ~TESTNUM,
   "Not a term",         2.8,    "mmol/L",  NA,       11,
   NA_character_,        2.8,    "mmol/L",  NA,       12,
@@ -5312,8 +5472,9 @@ exp_ldlfilt18y_daids_si <- tibble::tribble(
     BRTHDT = lubridate::ymd("2020-01-07"),
     ADT = lubridate::ymd("2023-01-07")
   )
+)
 ## CV data
-exp_ldlfilt18y_daids_cv <- tibble::tribble(
+local_exp("exp_ldlfilt18y_daids_cv", tibble::tribble(
   ~ATOXDSCH,            ~AVAL,  ~AVALU,   ~ATOXGRH, ~TESTNUM,
   "Not a term",         190,    "mg/dL",  NA,       11,
   NA_character_,        190,    "mg/dL",  NA,       12,
@@ -5332,9 +5493,10 @@ exp_ldlfilt18y_daids_cv <- tibble::tribble(
     BRTHDT = lubridate::ymd("2020-01-07"),
     ADT = lubridate::ymd("2023-01-07")
   )
+)
 
 ## create SI records with age mssing
-exp_ldlfinoage_daids_si <- exp_ldlfige18y_daids_si %>%
+local_exp("exp_ldlfinoage_daids_si", exp_ldlfige18y_daids_si %>%
   filter(TESTNUM %in% c(7, 8)) %>%
   mutate(
     ADT = if_else(TESTNUM == 7, NA, ADT),
@@ -5342,9 +5504,10 @@ exp_ldlfinoage_daids_si <- exp_ldlfige18y_daids_si %>%
     ATOXGRH = NA_character_,
     TESTNUM = if_else(TESTNUM == 7, 25, 26)
   )
+)
 
 ## create CV records with age mssing
-exp_ldlfinoage_daids_cv <- exp_ldlfige18y_daids_cv %>%
+local_exp("exp_ldlfinoage_daids_cv", exp_ldlfige18y_daids_cv %>%
   filter(TESTNUM %in% c(7, 8)) %>%
   mutate(
     ADT = if_else(TESTNUM == 7, NA, ADT),
@@ -5352,40 +5515,45 @@ exp_ldlfinoage_daids_cv <- exp_ldlfige18y_daids_cv %>%
     ATOXGRH = NA_character_,
     TESTNUM = if_else(TESTNUM == 7, 25, 26)
   )
+)
 
 ## create SI records with age <= 2 years
-exp_ldlfile2y_daids_si <- exp_ldlfige18y_daids_si %>%
+local_exp("exp_ldlfile2y_daids_si", exp_ldlfige18y_daids_si %>%
   filter(TESTNUM %in% c(7, 8)) %>%
   mutate(
     BRTHDT = if_else(TESTNUM == 7, lubridate::ymd("2021-01-07"), lubridate::ymd("2022-01-07")),
     ATOXGRH = NA_character_,
     TESTNUM = if_else(TESTNUM == 7, 27, 28)
   )
+)
 
 ## create CV records with age <= 2 years
-exp_ldlfile2y_daids_cv <- exp_ldlfige18y_daids_cv %>%
+local_exp("exp_ldlfile2y_daids_cv", exp_ldlfige18y_daids_cv %>%
   filter(TESTNUM %in% c(7, 8)) %>%
   mutate(
     BRTHDT = if_else(TESTNUM == 7, lubridate::ymd("2021-01-07"), lubridate::ymd("2022-01-07")),
     ATOXGRH = NA_character_,
     TESTNUM = if_else(TESTNUM == 7, 27, 28)
   )
+)
 
 ## put all SI records together
-exp_ldlfi_daids_si <- exp_ldlfile2y_daids_si %>%
+local_exp("exp_ldlfi_daids_si", exp_ldlfile2y_daids_si %>%
   bind_rows(
     exp_ldlfinoage_daids_si,
     exp_ldlfige18y_daids_si,
     exp_ldlfilt18y_daids_si
   )
+)
 
 ## put all CV records together
-exp_ldlfi_daids_cv <- exp_ldlfile2y_daids_cv %>%
+local_exp("exp_ldlfi_daids_cv", exp_ldlfile2y_daids_cv %>%
   bind_rows(
     exp_ldlfinoage_daids_cv,
     exp_ldlfige18y_daids_cv,
     exp_ldlfilt18y_daids_cv
   )
+)
 
 ## Test 104a: DAIDS LDL, Fasting, High (SI unit) ----
 test_that("derive_var_atoxgr_dir Test 104a: DAIDS LDL, Fasting, High (SI unit)", {
@@ -5468,7 +5636,7 @@ test_that("derive_var_atoxgr_dir Test 105b: DAIDS Triglycerides, Fasting, High (
 ### CV unit is mg/dL
 ### Conversion factor 2.431 used to convert mmol/L to mg/dL
 
-exp_magd_daids_si <- tibble::tribble(
+local_exp("exp_magd_daids_si", tibble::tribble(
   ~ATOXDSCL,         ~AVAL,  ~AVALU,    ~ATOXGRL, ~TESTNUM,
   "Not a term",      0.5,    "mmol/L",  NA,       1,
   NA_character_,     0.5,    "mmol/L",  NA,       2,
@@ -5485,13 +5653,15 @@ exp_magd_daids_si <- tibble::tribble(
   # AVAL missing cannot grade
   "Magnesium, Low",  NA,     "mmol/L",  NA,       12,
 )
+)
 
 ## CV unit using conversions factor 2.431
-exp_magd_daids_cv <- exp_magd_daids_si %>%
+local_exp("exp_magd_daids_cv", exp_magd_daids_si %>%
   mutate(
     AVAL = AVAL * 2.431,
     AVALU = if_else(is.na(AVALU), NA_character_, "mg/dL")
   )
+)
 
 ## Test 106a: DAIDS Magnesium, Low (SI unit) ----
 test_that("derive_var_atoxgr_dir Test 106a: DAIDS Magnesium, Low (SI unit)", {
@@ -5519,7 +5689,7 @@ test_that("derive_var_atoxgr_dir Test 106b: DAIDS Magnesium, Low (USCV unit)", {
 ### Grade 2: 1.4 to < 2 mg/dL
 ### Grade 1: 2 to < LLN mg/dL
 
-exp_phosd_daids_gt14y_si <- tibble::tribble(
+local_exp("exp_phosd_daids_gt14y_si", tibble::tribble(
   ~AVAL, ~ANRLO, ~AVALU,   ~ATOXGRL, ~TESTNUM,
   0.9,   0.8,    "MM3",    NA,       1,
   0.31,  0.8,    "mmol/L", "4",      2,
@@ -5550,8 +5720,9 @@ exp_phosd_daids_gt14y_si <- tibble::tribble(
     BRTHDT = lubridate::ymd("2008-07-01"),
     ADT = lubridate::ymd("2023-07-01")
   )
+)
 
-exp_phosd_daids_gt14y_cv <- tibble::tribble(
+local_exp("exp_phosd_daids_gt14y_cv", tibble::tribble(
   ~AVAL,  ~ANRLO,   ~AVALU,  ~ATOXGRL,  ~TESTNUM,
   0.9,    2.5,       "MM3",        NA,  1,
   0.9,    2.5,     "mg/dL",       "4",  2,
@@ -5582,6 +5753,7 @@ exp_phosd_daids_gt14y_cv <- tibble::tribble(
     BRTHDT = lubridate::ymd("2008-07-01"),
     ADT = lubridate::ymd("2023-07-01")
   )
+)
 
 ### 1 to 14 years of age
 
@@ -5597,7 +5769,7 @@ exp_phosd_daids_gt14y_cv <- tibble::tribble(
 ### Grade 2: 2.5 to < 3 mg/dL
 ### Grade 1: 3 to < 3.5 mg/dL
 
-exp_phosd_daids_le14y_si <- tibble::tribble(
+local_exp("exp_phosd_daids_le14y_si", tibble::tribble(
   ~AVAL,  ~AVALU,    ~ATOXGRL, ~TESTNUM,
   1.2,    "MM3",     NA,       20,
   0.47,   "mmol/L",  "4",      21,
@@ -5616,8 +5788,9 @@ exp_phosd_daids_le14y_si <- tibble::tribble(
     BRTHDT = lubridate::ymd("2022-07-01"),
     ADT = lubridate::ymd("2023-07-01")
   )
+)
 
-exp_phosd_daids_le14y_cv <- tibble::tribble(
+local_exp("exp_phosd_daids_le14y_cv", tibble::tribble(
   ~AVAL,  ~AVALU,    ~ATOXGRL, ~TESTNUM,
   1.49,   "MM3",     NA,       20,
   1.49,   "mg/dL",   "4",      21,
@@ -5636,6 +5809,7 @@ exp_phosd_daids_le14y_cv <- tibble::tribble(
     BRTHDT = lubridate::ymd("2022-07-01"),
     ADT = lubridate::ymd("2023-07-01")
   )
+)
 
 ### < 1 year of age
 
@@ -5651,7 +5825,7 @@ exp_phosd_daids_le14y_cv <- tibble::tribble(
 ### Grade 2: 2.5 to < 3.5 mg/dL
 ### Grade 1: 3.5 to < 4.5 mg/dL
 
-exp_phosd_daids_lt1y_si <- tibble::tribble(
+local_exp("exp_phosd_daids_lt1y_si", tibble::tribble(
   ~AVAL,  ~AVALU,    ~ATOXGRL, ~TESTNUM,
   1.5,    "MM3",     NA,       31,
   0.47,   "mmol/L",  "4",      32,
@@ -5670,8 +5844,9 @@ exp_phosd_daids_lt1y_si <- tibble::tribble(
     BRTHDT = lubridate::ymd("2023-07-01"),
     ADT = lubridate::ymd("2023-07-02")
   )
+)
 
-exp_phosd_daids_lt1y_cv <- tibble::tribble(
+local_exp("exp_phosd_daids_lt1y_cv", tibble::tribble(
   ~AVAL,  ~AVALU,    ~ATOXGRL, ~TESTNUM,
   1.49,   "MM3",     NA,       31,
   1.49,   "mg/dL",   "4",      32,
@@ -5690,10 +5865,11 @@ exp_phosd_daids_lt1y_cv <- tibble::tribble(
     BRTHDT = lubridate::ymd("2023-07-01"),
     ADT = lubridate::ymd("2023-07-02")
   )
+)
 
 
 # Set lab date or birth date to missing for SI records
-exp_phosd_daids_noage_si <- exp_phosd_daids_gt14y_si %>%
+local_exp("exp_phosd_daids_noage_si", exp_phosd_daids_gt14y_si %>%
   filter(TESTNUM %in% c(8, 9)) %>%
   mutate(
     ADT = if_else(TESTNUM == 8, NA, ADT),
@@ -5701,8 +5877,9 @@ exp_phosd_daids_noage_si <- exp_phosd_daids_gt14y_si %>%
     ATOXGRL = NA,
     TESTNUM = if_else(TESTNUM == 8, 42, 43)
   )
+)
 # Set lab date or birth date to missing for CV records
-exp_phosd_daids_noage_cv <- exp_phosd_daids_gt14y_cv %>%
+local_exp("exp_phosd_daids_noage_cv", exp_phosd_daids_gt14y_cv %>%
   filter(TESTNUM %in% c(8, 9)) %>%
   mutate(
     ADT = if_else(TESTNUM == 8, NA, ADT),
@@ -5710,22 +5887,25 @@ exp_phosd_daids_noage_cv <- exp_phosd_daids_gt14y_cv %>%
     ATOXGRL = NA,
     TESTNUM = if_else(TESTNUM == 8, 42, 43)
   )
+)
 
 ## put all SI records together
-exp_phosd_daids_si <- exp_phosd_daids_gt14y_si %>%
+local_exp("exp_phosd_daids_si", exp_phosd_daids_gt14y_si %>%
   bind_rows(
     exp_phosd_daids_le14y_si,
     exp_phosd_daids_lt1y_si,
     exp_phosd_daids_noage_si
   )
+)
 
 ## put all CV records together
-exp_phosd_daids_cv <- exp_phosd_daids_gt14y_cv %>%
+local_exp("exp_phosd_daids_cv", exp_phosd_daids_gt14y_cv %>%
   bind_rows(
     exp_phosd_daids_le14y_cv,
     exp_phosd_daids_lt1y_cv,
     exp_phosd_daids_noage_cv
   )
+)
 
 ## Test 107a: DAIDS Phosphate, Low (SI unit) ----
 test_that("derive_var_atoxgr_dir Test 107a: DAIDS Phosphate, Low (SI unit)", {
@@ -5745,7 +5925,7 @@ test_that("derive_var_atoxgr_dir Test 107b: DAIDS Phosphate, Low (USCV unit)", {
 ### Grade 2: 6 -< 6.5 mmol/L
 ### Grade 1: 5.6 -< 6 mmol/L
 
-exp_poti_daids <- tibble::tribble(
+local_exp("exp_poti_daids", tibble::tribble(
   ~ATOXDSCH,          ~AVAL,  ~AVALU,    ~ATOXGRH, ~TESTNUM,
   "Not a term",       5,      "mmol/L",  NA,       1,
   NA_character_,      5,      "mmol/L",  NA,       2,
@@ -5761,6 +5941,7 @@ exp_poti_daids <- tibble::tribble(
   "Potassium, High",  5,      NA,        NA,       11,
   # AVAL missing cannot grade
   "Potassium, High",  NA,     "mmol/L",  NA,       12,
+)
 )
 
 ## Test 108a: DAIDS Potassium, High (SI unit) ----
@@ -5781,7 +5962,7 @@ test_that("derive_var_atoxgr_dir Test 108b: DAIDS Potassium, High (USCV unit)", 
 ### Grade 2: 2.5 -< 3 mmol/L
 ### Grade 1: 3 -< 3.4 mmol/L
 
-exp_potd_daids <- tibble::tribble(
+local_exp("exp_potd_daids", tibble::tribble(
   ~ATOXDSCL,         ~AVAL,  ~AVALU,    ~ATOXGRL, ~TESTNUM,
   "Not a term",      3,      "mmol/L",  NA,       1,
   NA_character_,     3,      "mmol/L",  NA,       2,
@@ -5797,6 +5978,7 @@ exp_potd_daids <- tibble::tribble(
   "Potassium, Low",  3,      NA,        NA,       11,
   # AVAL missing cannot grade
   "Potassium, Low",  NA,     "mmol/L",  NA,       12,
+)
 )
 
 ## Test 109a: DAIDS Potassium, Low (SI unit) ----
@@ -5817,7 +5999,7 @@ test_that("derive_var_atoxgr_dir Test 109b: DAIDS Potassium, Low (USCV unit)", {
 ### Grade 2: 150 -< 154 mmol/L
 ### Grade 1: 146 -< 150 mmol/L
 
-exp_sodi_daids <- tibble::tribble(
+local_exp("exp_sodi_daids", tibble::tribble(
   ~ATOXDSCH,       ~AVAL,  ~AVALU,    ~ATOXGRH, ~TESTNUM,
   "Not a term",    146,    "mmol/L",  NA,       1,
   NA_character_,   146,    "mmol/L",  NA,       2,
@@ -5833,6 +6015,7 @@ exp_sodi_daids <- tibble::tribble(
   "Sodium, High",  140,    NA,        NA,       11,
   # AVAL missing cannot grade
   "Sodium, High",  NA,     "mmol/L",  NA,       12,
+)
 )
 
 ## Test 110a: DAIDS Sodium, High (SI unit) ----
@@ -5853,7 +6036,7 @@ test_that("derive_var_atoxgr_dir Test 110b: DAIDS Sodium, High (USCV unit)", {
 ### Grade 2: 125 -< 130 mmol/L
 ### Grade 1: 130 -< 135 mmol/L
 
-exp_sodd_daids <- tibble::tribble(
+local_exp("exp_sodd_daids", tibble::tribble(
   ~ATOXDSCL,      ~AVAL,  ~AVALU,    ~ATOXGRL, ~TESTNUM,
   "Not a term",   119,    "mmol/L",  NA,       1,
   NA_character_,  119,    "mmol/L",  NA,       2,
@@ -5869,6 +6052,7 @@ exp_sodd_daids <- tibble::tribble(
   "Sodium, Low",  140,    NA,        NA,       11,
   # AVAL missing cannot grade
   "Sodium, Low",  NA,     "mmol/L",  NA,       12,
+)
 )
 
 ## Test 111a: DAIDS Sodium, Low (SI unit) ----
@@ -5952,7 +6136,7 @@ test_that("derive_var_atoxgr_dir Test 112b: DAIDS Uric Acid, High (USCV unit)", 
 ### Grade 2: 0.2 to < 0.3 10^9/L
 ### Grade 1: 0.3 to < 0.4 10^9/L
 
-exp_cd4d_daids_gt5y <- tibble::tribble(
+local_exp("exp_cd4d_daids_gt5y", tibble::tribble(
   ~AVAL,  ~AVALU,    ~ATOXGRL, ~TESTNUM,
   0.1,    "MM3",     NA,       1,
   0.09,   "10^9/L",  "4",      2,
@@ -5971,17 +6155,19 @@ exp_cd4d_daids_gt5y <- tibble::tribble(
     BRTHDT = lubridate::ymd("2023-07-01"),
     ADT = lubridate::ymd("2029-07-01")
   )
+)
 
 # no criteria for age <= 5 years set grade to missing
-exp_cd4d_daids_le5y <- exp_cd4d_daids_gt5y %>%
+local_exp("exp_cd4d_daids_le5y", exp_cd4d_daids_gt5y %>%
   mutate(
     ADT = lubridate::ymd("2028-07-01"),
     ATOXGRL = NA_character_,
     TESTNUM = TESTNUM + 11
   )
+)
 
 # add missing ADT and BRTHDT
-exp_cd4d_daids_noage <- exp_cd4d_daids_gt5y %>%
+local_exp("exp_cd4d_daids_noage", exp_cd4d_daids_gt5y %>%
   filter(TESTNUM %in% c(5, 6)) %>%
   mutate(
     ADT = if_else(TESTNUM == 5, NA, ADT),
@@ -5989,23 +6175,26 @@ exp_cd4d_daids_noage <- exp_cd4d_daids_gt5y %>%
     ATOXGRL = NA_character_,
     TESTNUM = if_else(TESTNUM == 5, 23, 24)
   )
+)
 
-exp_cd4d_daids_si <- exp_cd4d_daids_gt5y %>%
+local_exp("exp_cd4d_daids_si", exp_cd4d_daids_gt5y %>%
   bind_rows(
     exp_cd4d_daids_le5y,
     exp_cd4d_daids_noage
   )
+)
 
 ## Test 113a: DAIDS Absolute CD4 Count, Low (SI unit) ----
 test_that("derive_var_atoxgr_dir Test 113a: DAIDS Absolute CD4 Count, Low (SI unit)", {
   test_low(expected = exp_cd4d_daids_si, meta = atoxgr_criteria_daids)
 })
 
-exp_cd4d_daids_cv <- exp_cd4d_daids_si %>%
+local_exp("exp_cd4d_daids_cv", exp_cd4d_daids_si %>%
   mutate(
     AVAL = AVAL * 1000,
     AVALU = if_else(str_to_upper(AVALU) == "10^9/L", "1/uL", AVALU)
   )
+)
 
 ## Test 113b: DAIDS Absolute CD4 Count, Low (USCV unit) ----
 test_that("derive_var_atoxgr_dir Test 113b: DAIDS Absolute CD4 Count, Low (USCV unit)", {
@@ -6024,7 +6213,7 @@ test_that("derive_var_atoxgr_dir Test 113b: DAIDS Absolute CD4 Count, Low (USCV 
 ### Grade 2: 0.5 to < 0.6 10^9/L
 ### Grade 1: 0.6 to < 0.65 10^9/L
 
-exp_lymphd_daids_gt5y <- tibble::tribble(
+local_exp("exp_lymphd_daids_gt5y", tibble::tribble(
   ~AVAL,  ~AVALU,    ~ATOXGRL, ~TESTNUM,
   0.35,   "MM3",     NA,       1,
   0.34,   "10^9/L",  "4",      2,
@@ -6044,17 +6233,19 @@ exp_lymphd_daids_gt5y <- tibble::tribble(
     BRTHDT = lubridate::ymd("2023-07-01"),
     ADT = lubridate::ymd("2029-07-01")
   )
+)
 
 # no criteria for age <= 5 years set grade to missing
-exp_lymphd_daids_le5y <- exp_lymphd_daids_gt5y %>%
+local_exp("exp_lymphd_daids_le5y", exp_lymphd_daids_gt5y %>%
   mutate(
     ADT = lubridate::ymd("2028-07-01"),
     ATOXGRL = NA_character_,
     TESTNUM = TESTNUM + 12
   )
+)
 
 # add missing ADT and BRTHDT
-exp_lymphd_daids_noage <- exp_lymphd_daids_gt5y %>%
+local_exp("exp_lymphd_daids_noage", exp_lymphd_daids_gt5y %>%
   filter(TESTNUM %in% c(5, 6)) %>%
   mutate(
     ADT = if_else(TESTNUM == 5, NA, ADT),
@@ -6062,33 +6253,37 @@ exp_lymphd_daids_noage <- exp_lymphd_daids_gt5y %>%
     ATOXGRL = NA_character_,
     TESTNUM = if_else(TESTNUM == 5, 25, 26)
   )
+)
 
-exp_lymphd_daids_si <- exp_lymphd_daids_gt5y %>%
+local_exp("exp_lymphd_daids_si", exp_lymphd_daids_gt5y %>%
   bind_rows(
     exp_lymphd_daids_le5y,
     exp_lymphd_daids_noage
   )
+)
 
 ## Test 114a: DAIDS Absolute Lymphocyte Count, Low (SI unit) ----
 test_that("derive_var_atoxgr_dir Test 114a: DAIDS Absolute Lymphocyte Count, Low (SI unit)", {
   test_low(expected = exp_lymphd_daids_si, meta = atoxgr_criteria_daids)
 })
 
-exp_lymphd_daids_cv <- exp_lymphd_daids_si %>%
+local_exp("exp_lymphd_daids_cv", exp_lymphd_daids_si %>%
   mutate(
     AVALU = if_else(str_to_upper(AVALU) == "10^9/L", "10^3/uL", AVALU)
   )
+)
 
 ## Test 114b: DAIDS Absolute Lymphocyte Count, Low (USCV unit) ----
 test_that("derive_var_atoxgr_dir Test 114b: DAIDS Absolute Lymphocyte Count, Low (USCV unit)", {
   test_low(expected = exp_lymphd_daids_cv, meta = atoxgr_criteria_daids_uscv)
 })
 
-exp_lymphd_daids_cv2 <- exp_lymphd_daids_si %>%
+local_exp("exp_lymphd_daids_cv2", exp_lymphd_daids_si %>%
   mutate(
     AVAL = AVAL * 1000,
     AVALU = if_else(str_to_upper(AVALU) == "10^9/L", "10^3/mL", AVALU)
   )
+)
 
 ## Test 114c: DAIDS Absolute Lymph. Count, Low (legacy USCV unit) ----
 test_that("derive_var_atoxgr_dir Test 114c: DAIDS Absolute Lymph. Count, Low (legacy USCV unit)", {
@@ -6107,7 +6302,7 @@ test_that("derive_var_atoxgr_dir Test 114c: DAIDS Absolute Lymph. Count, Low (le
 ### Grade 2: 0.6 to < 0.8 10^9/L
 ### Grade 1: 0.8 to 1 10^9/L
 
-exp_ancd_daids_gt7d <- tibble::tribble(
+local_exp("exp_ancd_daids_gt7d", tibble::tribble(
   ~AVAL,  ~AVALU,    ~ATOXGRL, ~TESTNUM,
   0.3,    "MM3",     NA,       1,
   0.399,  "10^9/L",  "4",      2,
@@ -6126,6 +6321,7 @@ exp_ancd_daids_gt7d <- tibble::tribble(
     BRTHDT = lubridate::ymd("2023-07-01"),
     ADT = lubridate::ymd("2023-07-09")
   )
+)
 
 ### 2 to 7 days of age
 
@@ -6137,7 +6333,7 @@ exp_ancd_daids_gt7d <- tibble::tribble(
 ### Grade 2: 1.0 to < 1.25 10^9/L
 ### Grade 1: 1.25 to 1.5 10^9/L
 
-exp_ancd_daids_ge2d <- tibble::tribble(
+local_exp("exp_ancd_daids_ge2d", tibble::tribble(
   ~AVAL,  ~AVALU,    ~ATOXGRL, ~TESTNUM,
   0.7,    "MM3",     NA,       12,
   0.749,  "10^9/L",  "4",      13,
@@ -6156,6 +6352,7 @@ exp_ancd_daids_ge2d <- tibble::tribble(
     BRTHDT = lubridate::ymd("2023-07-01"),
     ADT = lubridate::ymd("2023-07-03")
   )
+)
 
 ### <= 1 day of age
 
@@ -6167,7 +6364,7 @@ exp_ancd_daids_ge2d <- tibble::tribble(
 ### Grade 2: 3.0 to < 4.0 10^9/L
 ### Grade 1: 4.0 to 5.0 10^9/L
 
-exp_ancd_daids_le1d <- tibble::tribble(
+local_exp("exp_ancd_daids_le1d", tibble::tribble(
   ~AVAL,  ~AVALU,    ~ATOXGRL, ~TESTNUM,
   1.5,    "MM3",     NA,       23,
   1.499,  "10^9/L",  "4",      24,
@@ -6186,15 +6383,17 @@ exp_ancd_daids_le1d <- tibble::tribble(
     BRTHDT = lubridate::ymd("2023-07-01"),
     ADT = lubridate::ymd("2023-07-02")
   )
+)
 
-exp_ancd_daids <- exp_ancd_daids_gt7d %>%
+local_exp("exp_ancd_daids", exp_ancd_daids_gt7d %>%
   bind_rows(
     exp_ancd_daids_ge2d,
     exp_ancd_daids_le1d
   )
+)
 
 # Set lab date/birth date to missing
-exp_ancd_daids_noage <- exp_ancd_daids %>%
+local_exp("exp_ancd_daids_noage", exp_ancd_daids %>%
   filter(TESTNUM %in% c(20, 31)) %>%
   mutate(
     ADT = if_else(TESTNUM == 20, NA, ADT),
@@ -6205,30 +6404,34 @@ exp_ancd_daids_noage <- exp_ancd_daids %>%
       TESTNUM == 31 ~ 35
     )
   )
+)
 
-exp_ancd_daids_si <- exp_ancd_daids %>%
+local_exp("exp_ancd_daids_si", exp_ancd_daids %>%
   bind_rows(exp_ancd_daids_noage)
+)
 
 ## Test 115a: DAIDS ANC Low (SI unit) ----
 test_that("derive_var_atoxgr_dir Test 115a: DAIDS ANC Low (SI unit)", {
   test_low(expected = exp_ancd_daids_si, meta = atoxgr_criteria_daids)
 })
 
-exp_ancd_daids_cv <- exp_ancd_daids_si %>%
+local_exp("exp_ancd_daids_cv", exp_ancd_daids_si %>%
   mutate(
     AVALU = if_else(str_to_upper(AVALU) == "10^9/L", "10^3/uL", AVALU)
   )
+)
 
 ## Test 115b: DAIDS ANC Low (USCV unit) ----
 test_that("derive_var_atoxgr_dir Test 115b: DAIDS ANC Low (USCV unit)", {
   test_low(expected = exp_ancd_daids_cv, meta = atoxgr_criteria_daids_uscv)
 })
 
-exp_ancd_daids_cv2 <- exp_ancd_daids_si %>%
+local_exp("exp_ancd_daids_cv2", exp_ancd_daids_si %>%
   mutate(
     AVAL = AVAL * 1000,
     AVALU = if_else(str_to_upper(AVALU) == "10^9/L", "10^3/mL", AVALU)
   )
+)
 
 ## Test 115c: DAIDS ANC Low (legacy USCV unit) ----
 test_that("derive_var_atoxgr_dir Test 115c: DAIDS ANC Low (legacy USCV unit)", {
@@ -6245,7 +6448,7 @@ test_that("derive_var_atoxgr_dir Test 115c: DAIDS ANC Low (legacy USCV unit)", {
 
 ### CV unit is mg/dL (= 100 * g/L)
 
-exp_fibd_daids_si <- tibble::tribble(
+local_exp("exp_fibd_daids_si", tibble::tribble(
   ~ATOXDSCL,              ~AVAL, ~ANRLO, ~AVALU, ~ATOXGRL, ~TESTNUM,
   "Not a term",           2,     1,      "g/L",  NA,       1,
   NA_character_,          2,     1,      "g/L",  NA,       2,
@@ -6274,6 +6477,7 @@ exp_fibd_daids_si <- tibble::tribble(
   "Fibrinogen Decreased", 2,     1,      NA,     NA,       22,
   "Fibrinogen Decreased", NA,    1,      "g/L",  NA,       23,
 )
+)
 
 ## Test 116a: DAIDS Fibrinogen Decreased (SI unit) ----
 test_that("derive_var_atoxgr_dir Test 116a: DAIDS Fibrinogen Decreased (SI unit)", {
@@ -6281,12 +6485,13 @@ test_that("derive_var_atoxgr_dir Test 116a: DAIDS Fibrinogen Decreased (SI unit)
 })
 
 ## CV unit is mg/dL which is 100 * SI unit of g/L
-exp_fibd_daids_cv <- exp_fibd_daids_si %>%
+local_exp("exp_fibd_daids_cv", exp_fibd_daids_si %>%
   mutate(
     AVAL = 100 * AVAL,
     ANRLO = 100 * ANRLO,
     AVALU = if_else(str_to_upper(AVALU) == "G/L", "mg/dL", NA_character_)
   )
+)
 
 ## Test 116b: DAIDS Fibrinogen Decreased (USCV unit) ----
 test_that("derive_var_atoxgr_dir Test 116b: DAIDS Fibrinogen Decreased (USCV unit)", {
@@ -6304,7 +6509,7 @@ test_that("derive_var_atoxgr_dir Test 116b: DAIDS Fibrinogen Decreased (USCV uni
 ### Grade 2: 90 to < 100 g/L
 ### Grade 1: 100 to 109 g/L
 
-exp_hgbd_daids_ge13ym <- tibble::tribble(
+local_exp("exp_hgbd_daids_ge13ym", tibble::tribble(
   ~ATOXDSCL,         ~AVAL, ~AVALU, ~ATOXGRL, ~SEX, ~TESTNUM,
   "Hemoglobin, Low", 69,    "MM3",  NA,       "M",  1,
   "Hemoglobin, Low", 69,    "g/L",  "4",      "M",  2,
@@ -6323,6 +6528,7 @@ exp_hgbd_daids_ge13ym <- tibble::tribble(
     BRTHDT = lubridate::ymd("2010-07-01"),
     ADT = lubridate::ymd("2023-07-01")
   )
+)
 
 ### >= 13 years of age (female only)
 
@@ -6331,7 +6537,7 @@ exp_hgbd_daids_ge13ym <- tibble::tribble(
 ### Grade 2: 85 to < 95 g/L
 ### Grade 1: 95 to 104 g/L
 
-exp_hgbd_daids_ge13yf <- tibble::tribble(
+local_exp("exp_hgbd_daids_ge13yf", tibble::tribble(
   ~ATOXDSCL,         ~AVAL, ~AVALU, ~ATOXGRL, ~SEX, ~TESTNUM,
   "Hemoglobin, Low", 64,    "MM3",  NA,       "F",  13,
   "Hemoglobin, Low", 64,    "g/L",  "4",      "F",  14,
@@ -6350,6 +6556,7 @@ exp_hgbd_daids_ge13yf <- tibble::tribble(
     BRTHDT = lubridate::ymd("2010-07-01"),
     ADT = lubridate::ymd("2023-07-01")
   )
+)
 
 
 ### 57 days to < 13 years of age (male and female)
@@ -6359,7 +6566,7 @@ exp_hgbd_daids_ge13yf <- tibble::tribble(
 ### Grade 2: 85 to < 95 g/L
 ### Grade 1: 95 to 104 g/L
 
-exp_hgbd_daids_lt13y <- tibble::tribble(
+local_exp("exp_hgbd_daids_lt13y", tibble::tribble(
   ~ATOXDSCL,         ~AVAL, ~AVALU, ~ATOXGRL, ~TESTNUM,
   "Hemoglobin, Low", 64,    "MM3",  NA,       25,
   "Hemoglobin, Low", 64,    "g/L",  "4",      26,
@@ -6377,6 +6584,7 @@ exp_hgbd_daids_lt13y <- tibble::tribble(
     BRTHDT = lubridate::ymd("2010-07-01"),
     ADT = lubridate::ymd("2023-06-30")
   )
+)
 
 ### 36 to <= 56 days of age (male and female)
 
@@ -6385,7 +6593,7 @@ exp_hgbd_daids_lt13y <- tibble::tribble(
 ### Grade 2: 70 to < 85 g/L
 ### Grade 1: 85 to 96 g/L
 
-exp_hgbd_daids_le56d <- tibble::tribble(
+local_exp("exp_hgbd_daids_le56d", tibble::tribble(
   ~ATOXDSCL,         ~AVAL, ~AVALU, ~ATOXGRL, ~TESTNUM,
   "Hemoglobin, Low", 59,    "MM3",  NA,       36,
   "Hemoglobin, Low", 59,    "g/L",  "4",      37,
@@ -6403,6 +6611,7 @@ exp_hgbd_daids_le56d <- tibble::tribble(
     BRTHDT = lubridate::ymd("2023-07-01"),
     ADT = lubridate::ymd("2023-08-26")
   )
+)
 
 
 ### 22 to <= 35 days of age (male and female)
@@ -6412,7 +6621,7 @@ exp_hgbd_daids_le56d <- tibble::tribble(
 ### Grade 2: 80 to < 95 g/L
 ### Grade 1: 95 to 110 g/L
 
-exp_hgbd_daids_le35d <- tibble::tribble(
+local_exp("exp_hgbd_daids_le35d", tibble::tribble(
   ~ATOXDSCL,         ~AVAL, ~AVALU, ~ATOXGRL, ~TESTNUM,
   "Hemoglobin, Low", 66,    "MM3",  NA,       47,
   "Hemoglobin, Low", 66,    "g/L",  "4",      48,
@@ -6430,6 +6639,7 @@ exp_hgbd_daids_le35d <- tibble::tribble(
     BRTHDT = lubridate::ymd("2023-07-01"),
     ADT = lubridate::ymd("2023-08-05")
   )
+)
 
 
 ### 8 to <= 21 days of age (male and female)
@@ -6439,7 +6649,7 @@ exp_hgbd_daids_le35d <- tibble::tribble(
 ### Grade 2: 90 to < 110 g/L
 ### Grade 1: 110 to 130 g/L
 
-exp_hgbd_daids_le21d <- tibble::tribble(
+local_exp("exp_hgbd_daids_le21d", tibble::tribble(
   ~ATOXDSCL,         ~AVAL, ~AVALU, ~ATOXGRL, ~TESTNUM,
   "Hemoglobin, Low", 79,    "MM3",  NA,       58,
   "Hemoglobin, Low", 79,    "g/L",  "4",      59,
@@ -6457,6 +6667,7 @@ exp_hgbd_daids_le21d <- tibble::tribble(
     BRTHDT = lubridate::ymd("2023-07-01"),
     ADT = lubridate::ymd("2023-07-22")
   )
+)
 
 ### <= 7 days of age (male and female)
 
@@ -6465,7 +6676,7 @@ exp_hgbd_daids_le21d <- tibble::tribble(
 ### Grade 2: 100 to < 130 g/L
 ### Grade 1: 130 to 140 g/L
 
-exp_hgbd_daids_le7d <- tibble::tribble(
+local_exp("exp_hgbd_daids_le7d", tibble::tribble(
   ~ATOXDSCL,         ~AVAL, ~AVALU, ~ATOXGRL, ~TESTNUM,
   "Hemoglobin, Low", 89,    "MM3",  NA,       69,
   "Hemoglobin, Low", 89,    "g/L",  "4",      70,
@@ -6483,8 +6694,9 @@ exp_hgbd_daids_le7d <- tibble::tribble(
     BRTHDT = lubridate::ymd("2023-07-01"),
     ADT = lubridate::ymd("2023-07-08")
   )
+)
 
-exp_hgbd_daids <- exp_hgbd_daids_ge13ym %>%
+local_exp("exp_hgbd_daids", exp_hgbd_daids_ge13ym %>%
   bind_rows(
     exp_hgbd_daids_ge13yf,
     exp_hgbd_daids_lt13y,
@@ -6493,9 +6705,10 @@ exp_hgbd_daids <- exp_hgbd_daids_ge13ym %>%
     exp_hgbd_daids_le21d,
     exp_hgbd_daids_le7d
   )
+)
 
 # Set lab date to missing fo each type, ie SEX is M, F or missing
-exp_hgbd_daids_noage <- exp_hgbd_daids %>%
+local_exp("exp_hgbd_daids_noage", exp_hgbd_daids %>%
   filter(TESTNUM %in% c(5, 17, 29)) %>%
   mutate(
     ADT = NA,
@@ -6506,9 +6719,11 @@ exp_hgbd_daids_noage <- exp_hgbd_daids %>%
       TESTNUM == 29 ~ 82
     )
   )
+)
 
-exp_hgbd_daids <- exp_hgbd_daids %>%
+local_exp("exp_hgbd_daids", exp_hgbd_daids %>%
   bind_rows(exp_hgbd_daids_noage)
+)
 
 ## Test 117a: DAIDS HGB Low (SI unit) ----
 test_that("derive_var_atoxgr_dir Test 117a: DAIDS HGB Low (SI unit)", {
@@ -6567,7 +6782,7 @@ test_that("derive_var_atoxgr_dir Test 118: DAIDS INR High", {
 ### Grade 2: 10 to < 15%
 ### Grade 1: 5 to <10%
 
-exp_methi_daids <- tibble::tribble(
+local_exp("exp_methi_daids", tibble::tribble(
   ~ATOXDSCH,         ~AVAL, ~AVALU,  ~ATOXGRH, ~TESTNUM,
   "Not a term",      20,    "%",     NA,       1,
   NA_character_,     20,    "%",     NA,       2,
@@ -6583,6 +6798,7 @@ exp_methi_daids <- tibble::tribble(
   "Methemoglobin",   100,   NA,      NA,       11,
   # AVAL missing cannot grade
   "Methemoglobin",   NA,    "%",     NA,       12,
+)
 )
 
 ## Test 119a: DAIDS Methemoglobin (SI unit) ----
@@ -6635,7 +6851,7 @@ test_that("derive_var_atoxgr_dir Test 120: DAIDS PTT High", {
 ### Grade 2: 50 to <100 - x 10e9
 ### Grade 1: 100 - 125 x 10e9 /L
 
-exp_plated_daids_si <- tibble::tribble(
+local_exp("exp_plated_daids_si", tibble::tribble(
   ~ATOXDSCL,              ~AVAL, ~AVALU,    ~ATOXGRL, ~TESTNUM,
   "Not a term",           126,   "10^9/L",  NA,       1,
   NA_character_,          120,   "10^9/L",  NA,       2,
@@ -6649,27 +6865,30 @@ exp_plated_daids_si <- tibble::tribble(
   "Platelets, Decreased", 124.9, "10^9/L",  "1",      10,
   "Platelets, Decreased", 125,   "10^9/L",  "0",      11,
 )
+)
 
 ## Test 121a: DAIDS Platelets decreased (SI unit) ----
 test_that("derive_var_atoxgr_dir Test 121a: DAIDS Platelets decreased (SI unit)", {
   test_low(expected = exp_plated_daids_si, meta = atoxgr_criteria_daids)
 })
 
-exp_plated_daids_cv <- exp_plated_daids_si %>%
+local_exp("exp_plated_daids_cv", exp_plated_daids_si %>%
   mutate(
     AVALU = if_else(str_to_upper(AVALU) == "10^9/L", "10^3/uL", AVALU)
   )
+)
 
 ## Test 121b: DAIDS Platelets decreased (USCV unit) ----
 test_that("derive_var_atoxgr_dir Test 121b: DAIDS Platelets decreased (USCV unit)", {
   test_low(expected = exp_plated_daids_cv, meta = atoxgr_criteria_daids_uscv)
 })
 
-exp_plated_daids_cv2 <- exp_plated_daids_si %>%
+local_exp("exp_plated_daids_cv2", exp_plated_daids_si %>%
   mutate(
     AVAL = AVAL * 1000,
     AVALU = if_else(str_to_upper(AVALU) == "10^9/L", "10^3/mL", AVALU)
   )
+)
 
 ## Test 121c: DAIDS Platelets decreased (legacy USCV unit) ----
 test_that("derive_var_atoxgr_dir Test 121c: DAIDS Platelets decreased (legacy USCV unit)", {
@@ -6716,7 +6935,7 @@ test_that("derive_var_atoxgr_dir Test 122: DAIDS PT High", {
 ### Grade 2: 1.5 to 1.999 x 10e9/L
 ### Grade 1: 2 to 2.499 x 10e9/L
 
-exp_wbcd_daids_gt7d <- tibble::tribble(
+local_exp("exp_wbcd_daids_gt7d", tibble::tribble(
   ~ATOXDSCL,        ~AVAL, ~AVALU,    ~ATOXGRL, ~TESTNUM,
   "Not a term",     1,     "10^9/L",  NA,       1,
   NA_character_,    2,     "10^9/L",  NA,       2,
@@ -6734,6 +6953,7 @@ exp_wbcd_daids_gt7d <- tibble::tribble(
     BRTHDT = lubridate::ymd("2023-07-01"),
     ADT = lubridate::ymd("2023-07-09")
   )
+)
 
 ### White blood cell decreased (<= 7 days of age)
 
@@ -6745,7 +6965,7 @@ exp_wbcd_daids_gt7d <- tibble::tribble(
 ### Grade 2:   4 to 5.499 x 10e9/L
 ### Grade 1: 5.5 to 6.999 x 10e9/L
 
-exp_wbcd_daids_le7d <- tibble::tribble(
+local_exp("exp_wbcd_daids_le7d", tibble::tribble(
   ~ATOXDSCL,        ~AVAL, ~AVALU,   ~ATOXGRL, ~TESTNUM,
   "WBC, Decreased", 2.49,  "MM3",    NA,       12,
   "WBC, Decreased", 2.49,  "10^9/L", "4",      13,
@@ -6761,8 +6981,9 @@ exp_wbcd_daids_le7d <- tibble::tribble(
     BRTHDT = lubridate::ymd("2023-07-01"),
     ADT = lubridate::ymd("2023-07-08")
   )
+)
 
-exp_wbcd_daids_noage <- exp_wbcd_daids_gt7d %>%
+local_exp("exp_wbcd_daids_noage", exp_wbcd_daids_gt7d %>%
   filter(TESTNUM %in% c(10, 11)) %>%
   mutate(
     BRTHDT = if_else(TESTNUM == 10, NA, BRTHDT),
@@ -6770,33 +6991,37 @@ exp_wbcd_daids_noage <- exp_wbcd_daids_gt7d %>%
     ATOXGRL = NA_character_,
     TESTNUM = TESTNUM + 11
   )
+)
 
-exp_wbcd_daids_si <- exp_wbcd_daids_gt7d %>%
+local_exp("exp_wbcd_daids_si", exp_wbcd_daids_gt7d %>%
   bind_rows(
     exp_wbcd_daids_le7d,
     exp_wbcd_daids_noage
   )
+)
 
 ## Test 123a: DAIDS White blood cell decreased (SI unit) ----
 test_that("derive_var_atoxgr_dir Test 123a: DAIDS White blood cell decreased (SI unit)", {
   test_low(expected = exp_wbcd_daids_si, meta = atoxgr_criteria_daids)
 })
 
-exp_wbcd_daids_cv <- exp_wbcd_daids_si %>%
+local_exp("exp_wbcd_daids_cv", exp_wbcd_daids_si %>%
   mutate(
     AVALU = if_else(str_to_upper(AVALU) == "10^9/L", "10^3/uL", AVALU)
   )
+)
 
 ## Test 123b: DAIDS White blood cell decreased (USCV unit) ----
 test_that("derive_var_atoxgr_dir Test 123b: DAIDS White blood cell decreased (USCV unit)", {
   test_low(expected = exp_wbcd_daids_cv, meta = atoxgr_criteria_daids_uscv)
 })
 
-exp_wbcd_daids_cv2 <- exp_wbcd_daids_si %>%
+local_exp("exp_wbcd_daids_cv2", exp_wbcd_daids_si %>%
   mutate(
     AVAL = AVAL * 1000,
     AVALU = if_else(str_to_upper(AVALU) == "10^9/L", "10^3/mL", AVALU)
   )
+)
 
 ## Test 123c: DAIDS White blood cell decreased (USCV unit) ----
 test_that("derive_var_atoxgr_dir Test 123c: DAIDS White blood cell decreased (USCV unit)", {
