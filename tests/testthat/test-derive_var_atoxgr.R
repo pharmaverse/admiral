@@ -106,6 +106,11 @@ test_that("derive_var_atoxgr Test 4: ATOXGR < 0 (HYPO)", {
 #'
 #' @return No explicit return value. Called for its side effect of creating an
 #'   active binding in the caller environment.
+#' @noRd
+#'
+#' @examples
+#' local_exp("exp_example", tibble::tibble(value = 1))
+#' exp_example
 local_exp <- function(name, expr) {
   expr <- substitute(expr)
   env <- parent.frame()
