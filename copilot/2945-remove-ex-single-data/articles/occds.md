@@ -269,6 +269,12 @@ intervals do not overlap. If this case occurs, the
 [`derive_vars_joined()`](https:/pharmaverse.github.io/admiral/copilot/2945-remove-ex-single-data/reference/derive_vars_joined.md)
 call below will throw an error as handling this case is study-specific.
 
+In this example, the exposure records are expanded to one record per day
+and the join compares `ASTDTM` against day-level treatment windows
+(`EXSTDTM` to `EXENDTM`). If your exposure records already represent
+single doses or include true dosing times, adapt this logic to your
+study data.
+
 ``` r
 adae <- derive_vars_joined(
   adae,
@@ -278,7 +284,7 @@ adae <- derive_vars_joined(
   join_vars = exprs(EXSTDTM, EXENDTM),
   join_type = "all",
   filter_add = (EXDOSE > 0 | (EXDOSE == 0 & grepl("PLACEBO", EXTRT))) & !is.na(EXSTDTM),
-  filter_join = EXSTDTM <= ASTDTM & (ASTDTM <= EXENDTM | is.na(EXENDTM))
+  filter_join = EXSTDTM <= ASTDTM & ASTDTM <= EXENDTM
 )
 ```
 
