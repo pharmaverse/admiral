@@ -137,7 +137,7 @@ local_exp <- function(name, expr) {
   )
 }
 
-## Test 5: local_exp creates fresh data on access ----
+## Test 1: local_exp creates fresh data on access ----
 test_that("local_exp Test 1: creates fresh data on access", {
   local_exp("exp_local_exp", tibble::tibble(value = 1))
 
@@ -150,7 +150,7 @@ test_that("local_exp Test 1: creates fresh data on access", {
   )
 })
 
-## Test 6: local_exp supports sequential fixture construction ----
+## Test 2: local_exp supports sequential fixture construction ----
 test_that("local_exp Test 2: supports sequential fixture construction", {
   local_exp("exp_local_exp", tibble::tibble(value = 1))
   local_exp("exp_local_exp", exp_local_exp %>% mutate(extra = 2))
