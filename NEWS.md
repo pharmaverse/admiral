@@ -79,6 +79,8 @@ of packages were updated to specify the level of contributions required for auth
 <details>
 <summary>Developer Notes</summary>
 
+- Update to roxygen2 8.0.0. (#3090)
+
 - Add instructions for AI coding agents: Workflow from `{admiralci}` copies information from `{admiraldev}` to `AGENTS.md` instruction files. (#2920)
 
 - Increased the maximum height of the drop-down menus in the website navigation bar to ensure all items are visible without scrolling. (#2974)

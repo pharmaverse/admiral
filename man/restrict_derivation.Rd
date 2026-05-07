@@ -96,9 +96,9 @@ restrict_derivation(
 \code{\link[=params]{params()}} \code{\link[=slice_derivation]{slice_derivation()}} \code{\link[=call_derivation]{call_derivation()}}
 
 Higher Order Functions:
-\code{\link{call_derivation}()},
-\code{\link{derivation_slice}()},
-\code{\link{slice_derivation}()}
+\code{\link[=call_derivation]{call_derivation()}},
+\code{\link[=derivation_slice]{derivation_slice()}},
+\code{\link[=slice_derivation]{slice_derivation()}}
 }
 \concept{high_order_function}
 \keyword{high_order_function}

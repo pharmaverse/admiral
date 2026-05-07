@@ -59,8 +59,8 @@ derive_vars_merged(
 \code{\link[=derive_var_dthcaus]{derive_var_dthcaus()}}, \code{\link[=derive_var_extreme_dtm]{derive_var_extreme_dtm()}}, \code{\link[=derive_vars_period]{derive_vars_period()}},
 \code{\link[=create_period_dataset]{create_period_dataset()}}
 
-Other admiral_options: 
-\code{\link{set_admiral_options}()}
+Other admiral_options:
+\code{\link[=set_admiral_options]{set_admiral_options()}}
 }
 \concept{admiral_options}
 \keyword{admiral_options}

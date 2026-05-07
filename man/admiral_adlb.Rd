@@ -21,7 +21,7 @@ admiral_adlb
 An example of lab analysis dataset
 }
 \seealso{
-Other datasets: 
+Other datasets:
 \code{\link{admiral_adsl}},
 \code{\link{example_qs}},
 \code{\link{queries}},

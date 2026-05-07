@@ -19,7 +19,7 @@ An example \code{QS} dataset based on the examples from the CDISC ADaM Supplemen
 and \href{https://www.cdisc.org/standards/foundational/qrs/geriatric-depression-scale-short-form-0}{Geriatric Depression Scale Short Form (GDS-SF)}.
 }
 \seealso{
-Other datasets: 
+Other datasets:
 \code{\link{admiral_adlb}},
 \code{\link{admiral_adsl}},
 \code{\link{queries}},

@@ -18,7 +18,7 @@ queries_mh
 Queries MH Dataset
 }
 \seealso{
-Other datasets: 
+Other datasets:
 \code{\link{admiral_adlb}},
 \code{\link{admiral_adsl}},
 \code{\link{example_qs}},

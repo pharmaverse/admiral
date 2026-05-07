@@ -92,12 +92,12 @@ derive_vars_dy(
 }
 \seealso{
 Date/Time Derivation Functions that returns variable appended to dataset:
-\code{\link{derive_var_trtdurd}()},
-\code{\link{derive_vars_dt}()},
-\code{\link{derive_vars_dtm}()},
-\code{\link{derive_vars_dtm_to_dt}()},
-\code{\link{derive_vars_dtm_to_tm}()},
-\code{\link{derive_vars_duration}()}
+\code{\link[=derive_var_trtdurd]{derive_var_trtdurd()}},
+\code{\link[=derive_vars_dt]{derive_vars_dt()}},
+\code{\link[=derive_vars_dtm]{derive_vars_dtm()}},
+\code{\link[=derive_vars_dtm_to_dt]{derive_vars_dtm_to_dt()}},
+\code{\link[=derive_vars_dtm_to_tm]{derive_vars_dtm_to_tm()}},
+\code{\link[=derive_vars_duration]{derive_vars_duration()}}
 }
 \concept{der_date_time}
 \keyword{der_date_time}

@@ -1,32 +1,31 @@
-expected_result <- tibble::tribble(
-  ~USUBJID,       ~VSTEST,  ~AVAL, ~AVALCAT1, ~AVALCA1N,
-  "01-701-1015", "Height", 147.32,    "<160",         2,
-  "01-701-1023", "Height", 162.56,   ">=160",         1,
-  "01-701-1028", "Height",  177.8,   ">=160",         1,
-  "01-701-1033", "Height", 175.26,   ">=160",         1,
-  "01-701-1034", "Height",     NA,        NA,        NA,
-  "01-701-1047", "Height",     NA,        NA,        NA,
-  "01-701-1097", "Height", 168.91,   ">=160",         1,
-  "01-701-1111", "Height", 158.24,    "<160",         2,
-  "01-701-1115", "Height", 181.61,   ">=160",         1,
-  "01-701-1118", "Height", 180.34,   ">=160",         1,
-  "01-701-1015", "Weight",  53.98,        NA,        NA,
-  "01-701-1023", "Weight",  78.47,        NA,        NA,
-  "01-701-1028", "Weight",  98.88,        NA,        NA,
-  "01-701-1033", "Weight",  88.45,        NA,        NA,
-  "01-701-1034", "Weight",     NA,        NA,        NA,
-  "01-701-1047", "Weight",     NA,        NA,        NA,
-  "01-701-1097", "Weight",  78.02,        NA,        NA,
-  "01-701-1111", "Weight",  60.33,        NA,        NA,
-  "01-701-1115", "Weight",   78.7,        NA,        NA,
-  "01-701-1118", "Weight",  71.67,        NA,        NA
-)
-
-advs <- expected_result %>% select(
-  USUBJID, VSTEST, AVAL
-)
 ## Test 1: Basic functionality without by_vars ----
 test_that("derive_vars_cat Test 1: Basic functionality without by_vars", {
+  expected_result <- tibble::tribble(
+    ~USUBJID,       ~VSTEST,  ~AVAL, ~AVALCAT1, ~AVALCA1N,
+    "01-701-1015", "Height", 147.32,    "<160",         2,
+    "01-701-1023", "Height", 162.56,   ">=160",         1,
+    "01-701-1028", "Height",  177.8,   ">=160",         1,
+    "01-701-1033", "Height", 175.26,   ">=160",         1,
+    "01-701-1034", "Height",     NA,        NA,        NA,
+    "01-701-1047", "Height",     NA,        NA,        NA,
+    "01-701-1097", "Height", 168.91,   ">=160",         1,
+    "01-701-1111", "Height", 158.24,    "<160",         2,
+    "01-701-1115", "Height", 181.61,   ">=160",         1,
+    "01-701-1118", "Height", 180.34,   ">=160",         1,
+    "01-701-1015", "Weight",  53.98,        NA,        NA,
+    "01-701-1023", "Weight",  78.47,        NA,        NA,
+    "01-701-1028", "Weight",  98.88,        NA,        NA,
+    "01-701-1033", "Weight",  88.45,        NA,        NA,
+    "01-701-1034", "Weight",     NA,        NA,        NA,
+    "01-701-1047", "Weight",     NA,        NA,        NA,
+    "01-701-1097", "Weight",  78.02,        NA,        NA,
+    "01-701-1111", "Weight",  60.33,        NA,        NA,
+    "01-701-1115", "Weight",   78.7,        NA,        NA,
+    "01-701-1118", "Weight",  71.67,        NA,        NA
+  )
+
+  advs <- expected_result %>% select(USUBJID, VSTEST, AVAL)
+
   # Define the condition and categories
   definition <- exprs(
     ~condition,                     ~AVALCAT1, ~AVALCA1N,
@@ -47,13 +46,38 @@ test_that("derive_vars_cat Test 1: Basic functionality without by_vars", {
 
 ## Test 2: Basic functionality with by_vars ----
 test_that("derive_vars_cat Test 2: Basic functionality with by_vars", {
+  expected_result <- tibble::tribble(
+    ~USUBJID,       ~VSTEST,  ~AVAL, ~AVALCAT1, ~AVALCA1N,
+    "01-701-1015", "Height", 147.32,    "<160",         2,
+    "01-701-1023", "Height", 162.56,   ">=160",         1,
+    "01-701-1028", "Height",  177.8,   ">=160",         1,
+    "01-701-1033", "Height", 175.26,   ">=160",         1,
+    "01-701-1034", "Height",     NA,        NA,        NA,
+    "01-701-1047", "Height",     NA,        NA,        NA,
+    "01-701-1097", "Height", 168.91,   ">=160",         1,
+    "01-701-1111", "Height", 158.24,    "<160",         2,
+    "01-701-1115", "Height", 181.61,   ">=160",         1,
+    "01-701-1118", "Height", 180.34,   ">=160",         1,
+    "01-701-1015", "Weight",  53.98,        NA,        NA,
+    "01-701-1023", "Weight",  78.47,        NA,        NA,
+    "01-701-1028", "Weight",  98.88,        NA,        NA,
+    "01-701-1033", "Weight",  88.45,        NA,        NA,
+    "01-701-1034", "Weight",     NA,        NA,        NA,
+    "01-701-1047", "Weight",     NA,        NA,        NA,
+    "01-701-1097", "Weight",  78.02,        NA,        NA,
+    "01-701-1111", "Weight",  60.33,        NA,        NA,
+    "01-701-1115", "Weight",   78.7,        NA,        NA,
+    "01-701-1118", "Weight",  71.67,        NA,        NA
+  )
+
+  advs <- expected_result %>% select(USUBJID, VSTEST, AVAL)
+
   # Define the condition and categories
   definition <- exprs(
     ~VSTEST,   ~condition, ~AVALCAT1, ~AVALCA1N,
     "Height", AVAL >= 160,   ">=160",         1,
     "Height",  AVAL < 160,    "<160",         2
   )
-
 
   expect_dfs_equal(
     base =
@@ -69,6 +93,30 @@ test_that("derive_vars_cat Test 2: Basic functionality with by_vars", {
 
 ## Test 3: Forgot to specify by_vars ----
 test_that("derive_vars_cat Test 3: Forgot to specify by_vars", {
+  advs <- tibble::tribble(
+    ~USUBJID,       ~VSTEST,  ~AVAL,
+    "01-701-1015", "Height", 147.32,
+    "01-701-1023", "Height", 162.56,
+    "01-701-1028", "Height",  177.8,
+    "01-701-1033", "Height", 175.26,
+    "01-701-1034", "Height",     NA,
+    "01-701-1047", "Height",     NA,
+    "01-701-1097", "Height", 168.91,
+    "01-701-1111", "Height", 158.24,
+    "01-701-1115", "Height", 181.61,
+    "01-701-1118", "Height", 180.34,
+    "01-701-1015", "Weight",  53.98,
+    "01-701-1023", "Weight",  78.47,
+    "01-701-1028", "Weight",  98.88,
+    "01-701-1033", "Weight",  88.45,
+    "01-701-1034", "Weight",     NA,
+    "01-701-1047", "Weight",     NA,
+    "01-701-1097", "Weight",  78.02,
+    "01-701-1111", "Weight",  60.33,
+    "01-701-1115", "Weight",   78.7,
+    "01-701-1118", "Weight",  71.67
+  )
+
   definition <- exprs(
     ~VSTEST,   ~condition, ~AVALCAT1, ~AVALCA1N,
     "Height", AVAL >= 160,   ">=160",         1,
@@ -96,6 +144,30 @@ test_that("derive_vars_cat Test 4: Error when dataset is not a dataframe", {
 
 ## Test 5: Error when definition is not an exprs object ----
 test_that("derive_vars_cat Test 5: Error when definition is not an exprs object", {
+  advs <- tibble::tribble(
+    ~USUBJID,       ~VSTEST,  ~AVAL,
+    "01-701-1015", "Height", 147.32,
+    "01-701-1023", "Height", 162.56,
+    "01-701-1028", "Height",  177.8,
+    "01-701-1033", "Height", 175.26,
+    "01-701-1034", "Height",     NA,
+    "01-701-1047", "Height",     NA,
+    "01-701-1097", "Height", 168.91,
+    "01-701-1111", "Height", 158.24,
+    "01-701-1115", "Height", 181.61,
+    "01-701-1118", "Height", 180.34,
+    "01-701-1015", "Weight",  53.98,
+    "01-701-1023", "Weight",  78.47,
+    "01-701-1028", "Weight",  98.88,
+    "01-701-1033", "Weight",  88.45,
+    "01-701-1034", "Weight",     NA,
+    "01-701-1047", "Weight",     NA,
+    "01-701-1097", "Weight",  78.02,
+    "01-701-1111", "Weight",  60.33,
+    "01-701-1115", "Weight",   78.7,
+    "01-701-1118", "Weight",  71.67
+  )
+
   definition <- tribble(
     ~condition,  ~AVALCAT1, ~AVALCA1N,
     "AVAL >= 160", ">=160",         1,
@@ -110,6 +182,30 @@ test_that("derive_vars_cat Test 5: Error when definition is not an exprs object"
 
 ## Test 6: Error when required columns are missing from dataset ----
 test_that("derive_vars_cat Test 6: Error when required columns are missing from dataset", {
+  advs <- tibble::tribble(
+    ~USUBJID,       ~VSTEST,  ~AVAL,
+    "01-701-1015", "Height", 147.32,
+    "01-701-1023", "Height", 162.56,
+    "01-701-1028", "Height",  177.8,
+    "01-701-1033", "Height", 175.26,
+    "01-701-1034", "Height",     NA,
+    "01-701-1047", "Height",     NA,
+    "01-701-1097", "Height", 168.91,
+    "01-701-1111", "Height", 158.24,
+    "01-701-1115", "Height", 181.61,
+    "01-701-1118", "Height", 180.34,
+    "01-701-1015", "Weight",  53.98,
+    "01-701-1023", "Weight",  78.47,
+    "01-701-1028", "Weight",  98.88,
+    "01-701-1033", "Weight",  88.45,
+    "01-701-1034", "Weight",     NA,
+    "01-701-1047", "Weight",     NA,
+    "01-701-1097", "Weight",  78.02,
+    "01-701-1111", "Weight",  60.33,
+    "01-701-1115", "Weight",   78.7,
+    "01-701-1118", "Weight",  71.67
+  )
+
   # Define the condition and categories (without VSTEST in the dataset)
   definition <- exprs(
     ~VSTEST,   ~condition, ~AVALCAT1, ~AVALCA1N,
@@ -129,6 +225,30 @@ test_that("derive_vars_cat Test 6: Error when required columns are missing from 
 
 ## Test 7: Correct behavior when no conditions are met ----
 test_that("derive_vars_cat Test 7: Correct behavior when no conditions are met", {
+  advs <- tibble::tribble(
+    ~USUBJID,       ~VSTEST,  ~AVAL,
+    "01-701-1015", "Height", 147.32,
+    "01-701-1023", "Height", 162.56,
+    "01-701-1028", "Height",  177.8,
+    "01-701-1033", "Height", 175.26,
+    "01-701-1034", "Height",     NA,
+    "01-701-1047", "Height",     NA,
+    "01-701-1097", "Height", 168.91,
+    "01-701-1111", "Height", 158.24,
+    "01-701-1115", "Height", 181.61,
+    "01-701-1118", "Height", 180.34,
+    "01-701-1015", "Weight",  53.98,
+    "01-701-1023", "Weight",  78.47,
+    "01-701-1028", "Weight",  98.88,
+    "01-701-1033", "Weight",  88.45,
+    "01-701-1034", "Weight",     NA,
+    "01-701-1047", "Weight",     NA,
+    "01-701-1097", "Weight",  78.02,
+    "01-701-1111", "Weight",  60.33,
+    "01-701-1115", "Weight",   78.7,
+    "01-701-1118", "Weight",  71.67
+  )
+
   # Define conditions that do not match any rows
   definition <- exprs(
     ~condition,                    ~AVALCAT1, ~AVALCA1N,
@@ -168,6 +288,30 @@ test_that("derive_vars_cat Test 7: Correct behavior when no conditions are met",
 
 ## Test 8: Overlapping conditions handled correctly ----
 test_that("derive_vars_cat Test 8: Overlapping conditions handled correctly", {
+  advs <- tibble::tribble(
+    ~USUBJID,       ~VSTEST,  ~AVAL,
+    "01-701-1015", "Height", 147.32,
+    "01-701-1023", "Height", 162.56,
+    "01-701-1028", "Height",  177.8,
+    "01-701-1033", "Height", 175.26,
+    "01-701-1034", "Height",     NA,
+    "01-701-1047", "Height",     NA,
+    "01-701-1097", "Height", 168.91,
+    "01-701-1111", "Height", 158.24,
+    "01-701-1115", "Height", 181.61,
+    "01-701-1118", "Height", 180.34,
+    "01-701-1015", "Weight",  53.98,
+    "01-701-1023", "Weight",  78.47,
+    "01-701-1028", "Weight",  98.88,
+    "01-701-1033", "Weight",  88.45,
+    "01-701-1034", "Weight",     NA,
+    "01-701-1047", "Weight",     NA,
+    "01-701-1097", "Weight",  78.02,
+    "01-701-1111", "Weight",  60.33,
+    "01-701-1115", "Weight",   78.7,
+    "01-701-1118", "Weight",  71.67
+  )
+
   # Define overlapping conditions
   definition <- exprs(
     ~VSTEST,   ~condition, ~AVALCAT1, ~AVALCA1N,
@@ -210,6 +354,30 @@ test_that("derive_vars_cat Test 8: Overlapping conditions handled correctly", {
 
 ## Test 9: Error when condition is missing from `definition` ----
 test_that("derive_vars_cat Test 9: Error when condition is missing from `definition`", {
+  advs <- tibble::tribble(
+    ~USUBJID,       ~VSTEST,  ~AVAL,
+    "01-701-1015", "Height", 147.32,
+    "01-701-1023", "Height", 162.56,
+    "01-701-1028", "Height",  177.8,
+    "01-701-1033", "Height", 175.26,
+    "01-701-1034", "Height",     NA,
+    "01-701-1047", "Height",     NA,
+    "01-701-1097", "Height", 168.91,
+    "01-701-1111", "Height", 158.24,
+    "01-701-1115", "Height", 181.61,
+    "01-701-1118", "Height", 180.34,
+    "01-701-1015", "Weight",  53.98,
+    "01-701-1023", "Weight",  78.47,
+    "01-701-1028", "Weight",  98.88,
+    "01-701-1033", "Weight",  88.45,
+    "01-701-1034", "Weight",     NA,
+    "01-701-1047", "Weight",     NA,
+    "01-701-1097", "Weight",  78.02,
+    "01-701-1111", "Weight",  60.33,
+    "01-701-1115", "Weight",   78.7,
+    "01-701-1118", "Weight",  71.67
+  )
+
   # Define the condition but omit the 'condition' column from the definition
   definition <- exprs(
     ~AVALCAT1, ~AVALCA1N,
@@ -226,6 +394,30 @@ test_that("derive_vars_cat Test 9: Error when condition is missing from `definit
 
 ## Test 10: Conditions for multiple VSTESTs (Height and Weight) ----
 test_that("derive_vars_cat Test 10: Conditions for multiple VSTESTs (Height and Weight)", {
+  advs <- tibble::tribble(
+    ~USUBJID,       ~VSTEST,  ~AVAL,
+    "01-701-1015", "Height", 147.32,
+    "01-701-1023", "Height", 162.56,
+    "01-701-1028", "Height",  177.8,
+    "01-701-1033", "Height", 175.26,
+    "01-701-1034", "Height",     NA,
+    "01-701-1047", "Height",     NA,
+    "01-701-1097", "Height", 168.91,
+    "01-701-1111", "Height", 158.24,
+    "01-701-1115", "Height", 181.61,
+    "01-701-1118", "Height", 180.34,
+    "01-701-1015", "Weight",  53.98,
+    "01-701-1023", "Weight",  78.47,
+    "01-701-1028", "Weight",  98.88,
+    "01-701-1033", "Weight",  88.45,
+    "01-701-1034", "Weight",     NA,
+    "01-701-1047", "Weight",     NA,
+    "01-701-1097", "Weight",  78.02,
+    "01-701-1111", "Weight",  60.33,
+    "01-701-1115", "Weight",   78.7,
+    "01-701-1118", "Weight",  71.67
+  )
+
   # Define conditions for two different VSTEST values: Height and BILI
   definition <- exprs(
     ~VSTEST,     ~condition,         ~AVALCAT1, ~AVALCA1N,
@@ -267,6 +459,30 @@ test_that("derive_vars_cat Test 10: Conditions for multiple VSTESTs (Height and 
 
 ## Test 11: Adding an extra variable (flag) to the dataset ----
 test_that("derive_vars_cat Test 11: Adding an extra variable (flag) to the dataset", {
+  advs <- tibble::tribble(
+    ~USUBJID,       ~VSTEST,  ~AVAL,
+    "01-701-1015", "Height", 147.32,
+    "01-701-1023", "Height", 162.56,
+    "01-701-1028", "Height",  177.8,
+    "01-701-1033", "Height", 175.26,
+    "01-701-1034", "Height",     NA,
+    "01-701-1047", "Height",     NA,
+    "01-701-1097", "Height", 168.91,
+    "01-701-1111", "Height", 158.24,
+    "01-701-1115", "Height", 181.61,
+    "01-701-1118", "Height", 180.34,
+    "01-701-1015", "Weight",  53.98,
+    "01-701-1023", "Weight",  78.47,
+    "01-701-1028", "Weight",  98.88,
+    "01-701-1033", "Weight",  88.45,
+    "01-701-1034", "Weight",     NA,
+    "01-701-1047", "Weight",     NA,
+    "01-701-1097", "Weight",  78.02,
+    "01-701-1111", "Weight",  60.33,
+    "01-701-1115", "Weight",   78.7,
+    "01-701-1118", "Weight",  71.67
+  )
+
   # Define conditions and add a third variable (flag) that is TRUE or FALSE
   definition <- exprs(
     ~VSTEST,   ~condition, ~AVALCAT1, ~AVALCA1N, ~extra_var,
@@ -306,6 +522,30 @@ test_that("derive_vars_cat Test 11: Adding an extra variable (flag) to the datas
 
 ## Test 12: Wrong input for by_vars ----
 test_that("derive_vars_cat Test 12: Wrong input for by_vars", {
+  advs <- tibble::tribble(
+    ~USUBJID,       ~VSTEST,  ~AVAL,
+    "01-701-1015", "Height", 147.32,
+    "01-701-1023", "Height", 162.56,
+    "01-701-1028", "Height",  177.8,
+    "01-701-1033", "Height", 175.26,
+    "01-701-1034", "Height",     NA,
+    "01-701-1047", "Height",     NA,
+    "01-701-1097", "Height", 168.91,
+    "01-701-1111", "Height", 158.24,
+    "01-701-1115", "Height", 181.61,
+    "01-701-1118", "Height", 180.34,
+    "01-701-1015", "Weight",  53.98,
+    "01-701-1023", "Weight",  78.47,
+    "01-701-1028", "Weight",  98.88,
+    "01-701-1033", "Weight",  88.45,
+    "01-701-1034", "Weight",     NA,
+    "01-701-1047", "Weight",     NA,
+    "01-701-1097", "Weight",  78.02,
+    "01-701-1111", "Weight",  60.33,
+    "01-701-1115", "Weight",   78.7,
+    "01-701-1118", "Weight",  71.67
+  )
+
   # Define conditions
   definition <- exprs(
     ~VSTEST,   ~condition, ~AVALCAT1, ~AVALCA1N,
@@ -320,6 +560,30 @@ test_that("derive_vars_cat Test 12: Wrong input for by_vars", {
 
 ## Test 13: definition has wrong shape ----
 test_that("derive_vars_cat Test 13: definition has wrong shape", {
+  advs <- tibble::tribble(
+    ~USUBJID,       ~VSTEST,  ~AVAL,
+    "01-701-1015", "Height", 147.32,
+    "01-701-1023", "Height", 162.56,
+    "01-701-1028", "Height",  177.8,
+    "01-701-1033", "Height", 175.26,
+    "01-701-1034", "Height",     NA,
+    "01-701-1047", "Height",     NA,
+    "01-701-1097", "Height", 168.91,
+    "01-701-1111", "Height", 158.24,
+    "01-701-1115", "Height", 181.61,
+    "01-701-1118", "Height", 180.34,
+    "01-701-1015", "Weight",  53.98,
+    "01-701-1023", "Weight",  78.47,
+    "01-701-1028", "Weight",  98.88,
+    "01-701-1033", "Weight",  88.45,
+    "01-701-1034", "Weight",     NA,
+    "01-701-1047", "Weight",     NA,
+    "01-701-1097", "Weight",  78.02,
+    "01-701-1111", "Weight",  60.33,
+    "01-701-1115", "Weight",   78.7,
+    "01-701-1118", "Weight",  71.67
+  )
+
   # Define conditions
   definition_wrong_shape <- exprs(
     ~VSTEST,   ~condition, ~AVALCAT1, ~AVALCA1N,
@@ -332,6 +596,30 @@ test_that("derive_vars_cat Test 13: definition has wrong shape", {
 
 ## Test 14: two by_vars variables ----
 test_that("derive_vars_cat Test 14: two by_vars variables", {
+  advs <- tibble::tribble(
+    ~USUBJID,       ~VSTEST,  ~AVAL,
+    "01-701-1015", "Height", 147.32,
+    "01-701-1023", "Height", 162.56,
+    "01-701-1028", "Height",  177.8,
+    "01-701-1033", "Height", 175.26,
+    "01-701-1034", "Height",     NA,
+    "01-701-1047", "Height",     NA,
+    "01-701-1097", "Height", 168.91,
+    "01-701-1111", "Height", 158.24,
+    "01-701-1115", "Height", 181.61,
+    "01-701-1118", "Height", 180.34,
+    "01-701-1015", "Weight",  53.98,
+    "01-701-1023", "Weight",  78.47,
+    "01-701-1028", "Weight",  98.88,
+    "01-701-1033", "Weight",  88.45,
+    "01-701-1034", "Weight",     NA,
+    "01-701-1047", "Weight",     NA,
+    "01-701-1097", "Weight",  78.02,
+    "01-701-1111", "Weight",  60.33,
+    "01-701-1115", "Weight",   78.7,
+    "01-701-1118", "Weight",  71.67
+  )
+
   # Define conditions
   definition <- exprs(
     ~VISIT,     ~VSTEST,  ~condition, ~AVALCAT1, ~AVALCA1N,

@@ -1,7 +1,7 @@
 Type: Package
 Package: admiral
 Title: ADaM in R Asset Library
-Version: 1.4.1.9052
+Version: 1.4.1.9054
 Authors@R: c(
     person("Ben", "Straub", , "ben.x.straub@gsk.com", role = c("aut", "cre")),
     person("Stefan", "Bundfuss", role = "aut",
@@ -66,10 +66,10 @@ Suggests:
 VignetteBuilder:
     knitr
 Config/Needs/website: gert, rmarkdown
+Config/roxygen2/markdown: TRUE
+Config/roxygen2/roclets: collate, namespace, admiraldev::rdx_roclet
+Config/roxygen2/version: 8.0.0
 Config/testthat/edition: 3
 Encoding: UTF-8
 Language: en-US
 LazyData: true
-Roxygen: list(markdown = TRUE, roclets = c("collate", "namespace",
-    "admiraldev::rdx_roclet"))
-RoxygenNote: 7.3.3
