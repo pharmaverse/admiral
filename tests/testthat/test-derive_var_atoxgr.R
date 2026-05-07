@@ -94,6 +94,10 @@ test_that("derive_var_atoxgr Test 4: ATOXGR < 0 (HYPO)", {
 # derive_var_atoxgr_dir
 
 # Create fresh shared test data on each access to avoid cross-test spillover.
+# `name` is the binding name to create and `expr` is re-evaluated each time the
+# binding is accessed. If the same binding is redefined later in the file, the
+# previous value is made available while evaluating the new definition so
+# sequential fixture construction keeps working.
 local_exp <- function(name, expr) {
   expr <- substitute(expr)
   env <- parent.frame()
@@ -124,6 +128,30 @@ local_exp <- function(name, expr) {
     env = env
   )
 }
+
+## Test 5: local_exp creates fresh data on access ----
+test_that("derive_var_atoxgr_dir Test 5: local_exp creates fresh data on access", {
+  local_exp("exp_local_exp", tibble::tibble(value = 1))
+
+  first_access <- exp_local_exp
+  first_access$value <- 2
+
+  expect_dfs_equal(
+    base = tibble::tibble(value = 1),
+    compare = exp_local_exp
+  )
+})
+
+## Test 6: local_exp supports sequential fixture construction ----
+test_that("derive_var_atoxgr_dir Test 6: local_exp supports sequential fixture construction", {
+  local_exp("exp_local_exp", tibble::tibble(value = 1))
+  local_exp("exp_local_exp", exp_local_exp %>% mutate(extra = 2))
+
+  expect_dfs_equal(
+    base = tibble::tibble(value = 1, extra = 2),
+    compare = exp_local_exp
+  )
+})
 
 test_low <- function(expected, meta, high = "HIGH", low = "LOW") {
   input <- expected %>%
