@@ -35,6 +35,10 @@ specified under `save_path`. This is because this functionality did not work as 
   
   **Phase 4 (removed)**
 
+- The `ex_single` dataset was removed from `{admiral}` to reduce the package
+  size. It can be derived on the fly using `create_single_dose_dataset()`.
+  See the `OCCDS` vignette or `?create_single_dose_dataset` for examples. (#3060)
+
 ## Documentation
 
 - The following new and existing User Guides have been changed from vignettes to articles, meaning they are no longer accessible
@@ -97,12 +101,6 @@ the pull request title to trigger website creation. (#2984)
   and remain accessible in `{admiral}` via the existing `@import admiraldev`
   dependency. ([admiraldev/#517](https://github.com/pharmaverse/admiraldev/issues/517))
 
-- To reduce the size of the package, the `ex_single` dataset was removed. It is
-  now derived on the fly in the `ADAE` template and the `OCCDS` vignette using
-  `create_single_dose_dataset()`. For a detailed discussion of dose expansion using `create_single_dose_dataset()`,
-including handling of missing end dates for ongoing studies, see
-`vignette("pk_adnca", package = "admiral")`. (#3060)
-    
 - The HTML tag `<br/>` was removed from the roxygen headers. (#3042)
 </details>
 

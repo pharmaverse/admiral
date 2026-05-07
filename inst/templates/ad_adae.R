@@ -25,10 +25,20 @@ ex <- pharmaversesdtm::ex
 # https://pharmaverse.github.io/admiral/cran-release/articles/admiral.html#handling-of-missing-values # nolint
 
 ae <- convert_blanks_to_na(ae)
-# Create single dose dataset for use in date of last dose derivations
+# Create single dose dataset for use in date of last dose derivations.
+# If the exposure dataset contains multi-day dosing records (e.g., one record
+# per treatment period rather than one record per dose), use
+# create_single_dose_dataset() to expand them into one record per dose.
+# Whether this step is necessary depends on how dosing data were collected.
 ex_single <- convert_blanks_to_na(ex) %>%
-  derive_vars_dt(dtc = EXSTDTC, new_vars_prefix = "EXST") %>%
-  derive_vars_dt(dtc = EXENDTC, new_vars_prefix = "EXEN") %>%
+  derive_vars_dtm(dtc = EXSTDTC, new_vars_prefix = "EXST", flag_imputation = "none") %>%
+  derive_vars_dtm(
+    dtc = EXENDTC,
+    new_vars_prefix = "EXEN",
+    time_imputation = "last",
+    flag_imputation = "none"
+  ) %>%
+  derive_vars_dtm_to_dt(exprs(EXSTDTM, EXENDTM)) %>%
   filter(!is.na(EXSTDT), !is.na(EXENDT)) %>%
   create_single_dose_dataset(
     dose_freq = EXDOSFRQ,
@@ -37,6 +47,10 @@ ex_single <- convert_blanks_to_na(ex) %>%
     keep_source_vars = exprs(
       STUDYID, USUBJID, EXTRT, EXDOSE, EXDOSU, EXDOSFRQ, EXSTDT, EXENDT
     )
+  ) %>%
+  mutate(
+    EXSTDTM = as_datetime(EXSTDT),
+    EXENDTM = as_datetime(EXENDT)
   )
 
 # Derivations ----
@@ -86,16 +100,10 @@ adae <- ae %>%
     trunc_out = FALSE
   )
 
-ex_ext <- ex_single %>%
-  mutate(
-    EXSTDTM = as_datetime(EXSTDT),
-    EXENDTM = as_datetime(EXENDT)
-  )
-
 adae <- adae %>%
   ## Derive last dose date/time ----
   derive_vars_joined(
-    dataset_add = ex_ext,
+    dataset_add = ex_single,
     by_vars = exprs(STUDYID, USUBJID),
     new_vars = exprs(LDOSEDTM = EXSTDTM),
     join_vars = exprs(EXSTDTM),
@@ -107,7 +115,7 @@ adae <- adae %>%
   ) %>%
   ## Derive treatment dose and unit ----
   derive_vars_joined(
-    dataset_add = ex_ext,
+    dataset_add = ex_single,
     by_vars = exprs(STUDYID, USUBJID),
     new_vars = exprs(DOSEON = EXDOSE, DOSEU = EXDOSU),
     join_vars = exprs(EXSTDTM, EXENDTM),
