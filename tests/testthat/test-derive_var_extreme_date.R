@@ -1,3 +1,5 @@
+# NOTE: Test data is defined within each `test_that()` call to avoid cross-test spillover.
+
 # derive_var_extreme_dt ----
 ## Test 1: deprecation message if function is called ----
 test_that("derive_var_extreme_dt Test 1: deprecation message if function is called", {
