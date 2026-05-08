@@ -567,14 +567,6 @@ exp_lymd_cv2 <- exp_lymd_si %>%
     AVALU = if_else(str_to_upper(AVALU) == "10^9/L", "10^3/mL", AVALU)
   )
 
-exp_lymd_cv2 <- exp_lymd_si %>%
-  mutate(
-    AVAL = AVAL * 1000,
-    ANRLO = ANRLO * 1000,
-    ANRHI = ANRHI * 1000,
-    AVALU = if_else(str_to_upper(AVALU) == "10^9/L", "10^3/mL", AVALU)
-  )
-
 exp_lymi_si <- tibble::tribble(
   ~ATOXDSCH,                    ~AVAL,  ~ANRLO, ~ANRHI, ~AVALU,    ~ATOXGRH, ~TESTNUM,
   "Not a term",                 80,     120,    200,    "10^9/L",  NA,       1,
