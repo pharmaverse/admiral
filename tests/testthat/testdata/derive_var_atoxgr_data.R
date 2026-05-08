@@ -824,7 +824,7 @@ exp_calci_cv <- tibble::tribble(
   "Hypercalcemia", 12.6,   0,      NA,      "mg/dL",        "3",       13,
   "Hypercalcemia", 12.5,   0,      NA,      "mg/dL",        "2",       14,
   "Hypercalcemia", 11.6,   0,      NA,      "mg/dL",        "2",       15,
-  # ANRHI missing - can NOT grade 0 or 1mg/d
+  # ANRHI missing - can NOT grade 0 or 1 mg/dL
   "Hypercalcemia", 11.5,   0,      NA,      "mg/dL",         NA,       16,
   "Hypercalcemia", 10.6,   0,      NA,      "mg/dL",         NA,       17,
   "Hypercalcemia", 10.5,   0,      NA,      "mg/dL",         NA,       18,
@@ -857,7 +857,7 @@ exp_calioni_si <- tibble::tribble(
   "Hypercalcemia (Ionized)", 1.5,    0,      NA,     "mmol/L",  NA,       16,
   "Hypercalcemia (Ionized)", 1.4,    0,      NA,     "mmol/L",  NA,       17,
   "Hypercalcemia (Ionized)", 1.3,    0,      NA,     "mmol/L",  NA,       18,
-  # Unit missing cannot grade       1,
+  # Unit missing cannot grade
   "Hypercalcemia (Ionized)", 1.3,    0,      1.3,    NA,        NA,       19,
   # AVAL missing cannot grade
   "Hypercalcemia (Ionized)", NA,     0,      1.3,    "mmol/L",  NA,       20,
@@ -1285,7 +1285,7 @@ exp_glycd_si <- tibble::tribble(
   "Hypoglycemia",  2.19,   NA,      100,     "mmol/L",       "3", 13,
   "Hypoglycemia",  2.2,    NA,      100,     "mmol/L",       "2", 14,
   "Hypoglycemia",  2.9,    NA,      100,     "mmol/L",       "2", 15,
-  # ANRLO missing - can NOT grade 0 or 1mg/dL
+  # ANRLO missing - can NOT grade 0 or 1 mg/dL
   "Hypoglycemia",  3,      NA,      100,     "mmol/L",        NA, 16,
   "Hypoglycemia",  3.9,    NA,      100,     "mmol/L",        NA, 17,
   "Hypoglycemia",  4,      NA,      100,     "mmol/L",        NA, 18,
@@ -1318,7 +1318,7 @@ exp_glycd_cv <- tibble::tribble(
   "Hypoglycemia",  55,     NA,     100,     "mg/dL",        NA, 16,
   "Hypoglycemia",  69,     NA,     100,     "mg/dL",        NA, 17,
   "Hypoglycemia",  70,     NA,     100,     "mg/dL",        NA, 18,
-  # Unit missing cannot     grade
+  # Unit missing cannot grade
   "Hypoglycemia",  70,     70,     100,          NA,        NA, 19,
   # AVAL missing cannot grade
   "Hypoglycemia",  NA,     70,     100,     "mg/dL",        NA, 20,
@@ -1573,7 +1573,7 @@ exp_dbilile28d_daids_cv <- tibble::tribble(
   "Direct Bilirubin, High",   1,      NA,     "mg/dL", NA,       25,
   "Direct Bilirubin, High",   0.5,    NA,     "mg/dL", NA,       26,
   "Direct Bilirubin, High",   0.49,   NA,     "mg/dL", NA,       27,
-  # AVAL missing cannot grademg/dL
+  # AVAL missing cannot grade
   "Direct Bilirubin, High",   NA,     0.5,    "mg/dL", NA,       28,
 ) %>%
   mutate(
