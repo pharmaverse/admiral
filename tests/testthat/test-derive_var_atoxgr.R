@@ -2,9 +2,9 @@
 # This keeps large, repeated fixtures out of the test body while ensuring
 # each `test_that()` block gets a fresh local copy.
 local_atoxgr_test_data <- function(env = parent.frame()) {
-  source(
+  sys.source(
     testthat::test_path("testdata", "derive_var_atoxgr_data.R"),
-    local = env
+    envir = env
   )
 }
 
@@ -4331,13 +4331,13 @@ test_that("derive_var_atoxgr_dir Test 129: CTCAEv6 Creat. clear. dec. (SI unit)"
   test_low(expected = exp_crcl_d, meta = atoxgr_criteria_ctcv6)
 })
 
-input_bili_ctcv6 <- exp_bili_ctcv6 %>%
-  select(-ATOXGRH)
-
 ## Test when deprecated abnormal_indicator used - should map to high_indicator
 ## Test 130: CTCAEv6  Blood bilirubin increased ----
 test_that("derive_var_atoxgr_dir Test 130: CTCAEv6  Blood bilirubin increased", {
   local_atoxgr_test_data()
+  input_bili_ctcv6 <- exp_bili_ctcv6 %>%
+    select(-ATOXGRH)
+
   expect_snapshot(
     actual_bili_ctcv6 <- derive_var_atoxgr_dir(
       input_bili_ctcv6,
@@ -4361,6 +4361,9 @@ test_that("derive_var_atoxgr_dir Test 130: CTCAEv6  Blood bilirubin increased", 
 ## Test 131: CTCAEv6  Blood bili incr. high_indicator not defined ----
 test_that("derive_var_atoxgr_dir Test 131: CTCAEv6  Blood bili incr. high_indicator not defined", {
   local_atoxgr_test_data()
+  input_bili_ctcv6 <- exp_bili_ctcv6 %>%
+    select(-ATOXGRH)
+
   expect_error(
     actual_bili_ctcv6 <- derive_var_atoxgr_dir(
       input_bili_ctcv6,
