@@ -207,9 +207,9 @@ The following principles are key when designing a new function:
 | `_date` / `_time` / `_dt` / `_dtc` / `_dtm` | Functions associated with dates, times, datetimes, and their character equivalents.                  |
 | `_source`                                   | Functions that create source datasets that usually will be passed through other `derive_` functions. |
 
-| Other Common Function Name Terms      | Description                                                                                                           |
-|---------------------------------------|-----------------------------------------------------------------------------------------------------------------------|
-| `_merged_` / `_joined_` / `_extreme_` | Functions that follow the [generic function user-guide](https://pharmaverse.github.io/admiral/articles/generic.html). |
+| Other Common Function Name Terms      | Description                                                                                                                        |
+|---------------------------------------|------------------------------------------------------------------------------------------------------------------------------------|
+| `_merged_` / `_joined_` / `_extreme_` | Functions that follow the [generic function user-guide](https://pharmaverse.github.io/admiral/cran-release/articles/generic.html). |
 
 Please note that the appropriate *var*/*vars* prefix should be used for
 all cases in which the function creates any variable(s), regardless of
@@ -434,7 +434,7 @@ of an invalid input or return nothing.
 For the most common types of input arguments like a single variable, a
 list of variables, a dataset, … functions for checking are available
 (see
-[assertions](https://pharmaverse.github.io/admiral/reference/index.html#section-assertions)).
+[assertions](https://pharmaverse.github.io/admiral/cran-release/reference/index.html#section-assertions)).
 
 Arguments which expect keywords should handle them in a case-insensitive
 manner, e.g., both `date_imputation = "FIRST"` and

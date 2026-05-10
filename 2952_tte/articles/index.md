@@ -3,6 +3,8 @@
 ### All vignettes
 
 - [Creating an ADAB
+  ADaM](https:/pharmaverse.github.io/admiral/2952_tte/articles/adab_web.md):
+- [Creating an ADAB
   ADaM](https:/pharmaverse.github.io/admiral/2952_tte/articles/adab.md):
 - [Get
   Started](https:/pharmaverse.github.io/admiral/2952_tte/articles/admiral.md):
@@ -16,6 +18,7 @@
   ADaM](https:/pharmaverse.github.io/admiral/2952_tte/articles/bds_tte.md):
 - [Programming Concepts and
   Conventions](https:/pharmaverse.github.io/admiral/2952_tte/articles/concepts_conventions.md):
+- [Estimands](https:/pharmaverse.github.io/admiral/2952_tte/articles/estimands_web.md):
 - [Estimands](https:/pharmaverse.github.io/admiral/2952_tte/articles/estimands.md):
 - [FAQ](https:/pharmaverse.github.io/admiral/2952_tte/articles/faq.md):
 - [Generic

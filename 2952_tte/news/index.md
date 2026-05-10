@@ -52,6 +52,11 @@
   RStudio.
   ([\#2989](https://github.com/pharmaverse/admiral/issues/2989))
 
+- NCICTCAEv5 grading criteria (`atoxgr_criteria_ctcv5`,
+  `atoxgr_criteria_ctcv5_uscv`), updated to add term
+  `"Blood lactate dehydrogenase increase"`
+  ([\#3025](https://github.com/pharmaverse/admiral/issues/3025)).
+
 ### Breaking Changes
 
 - The following function arguments are entering the next phase of the
@@ -72,6 +77,20 @@
   different scenarios.
   ([\#2900](https://github.com/pharmaverse/admiral/issues/2900))
 
+- The following new and existing User Guides have been changed from
+  vignettes to articles, meaning they are no longer accessible offline
+  via `vignette("vignette_name")`:
+
+  - Creating an ADAB ADaM
+  - Estimands (new)
+
+  This helps minimize the size of
+  [admiral](https://pharmaverse.github.io/admiral/) for installation.
+  The articles are still accessible through the User Guides section of
+  the [admiral
+  website](https://pharmaverse.github.io/admiral/cran-release/).
+  ([\#3067](https://github.com/pharmaverse/admiral/issues/3067))
+
 - The documentation for
   [`derive_var_merged_ef_msrc()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/derive_var_merged_ef_msrc.md)
   was enhanced with structured examples covering `flag_events` with
@@ -88,8 +107,9 @@
   consistent with the admiral programming strategy.
   ([\#3027](https://github.com/pharmaverse/admiral/issues/3027))
 
-- New Estimands vignette added, describing possible implementations of
-  estimands with [admiral](https://pharmaverse.github.io/admiral/) code.
+- New web-only Estimands article added, describing possible
+  implementations of estimands with
+  [admiral](https://pharmaverse.github.io/admiral/) code.
   ([\#2954](https://github.com/pharmaverse/admiral/issues/2954))
 
 - A night mode option has been added to the
@@ -122,6 +142,13 @@
   vignette, enabling links to them from across the website.
   ([\#3006](https://github.com/pharmaverse/admiral/issues/3006))
 
+- The documentation for
+  [`derive_vars_merged_summary()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/derive_vars_merged_summary.md)
+  was enhanced with structured examples covering the `new_vars`,
+  `filter_add`, `missing_values`, `by_vars` renaming, and string
+  aggregation use cases.
+  ([\#2775](https://github.com/pharmaverse/admiral/issues/2775))
+
 - Added a new custom [404
   page](https://pharmaverse.github.io/admiral/404.html) with a butterfly
   quiz for lost users.
@@ -140,6 +167,9 @@
 
 Developer Notes
 
+- Update to roxygen2 8.0.0.
+  ([\#3090](https://github.com/pharmaverse/admiral/issues/3090))
+
 - Add instructions for AI coding agents: Workflow from `{admiralci}`
   copies information from
   [admiraldev](https://pharmaverse.github.io/admiraldev/) to `AGENTS.md`
@@ -154,7 +184,7 @@ Developer Notes
   website\]” to the pull request title to trigger website creation.
   ([\#2984](https://github.com/pharmaverse/admiral/issues/2984))
 
-- `_pkdown.yml` was updated to add metadata for linking across packages
+- `_pkgdown.yml` was updated to add metadata for linking across packages
   (`inst/pkgdown.yml`).
   ([\#2950](https://github.com/pharmaverse/admiral/issues/2950))
 
@@ -171,6 +201,9 @@ Developer Notes
   accessible in [admiral](https://pharmaverse.github.io/admiral/) via
   the existing `@import admiraldev` dependency.
   ([admiraldev/#517](https://github.com/pharmaverse/admiraldev/issues/517))
+
+- The HTML tag `<br/>` was removed from the roxygen headers.
+  ([\#3042](https://github.com/pharmaverse/admiral/issues/3042))
 
 ## admiral 1.4.1
 

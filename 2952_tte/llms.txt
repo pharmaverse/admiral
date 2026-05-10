@@ -341,13 +341,14 @@ Golab, Alana Harris, Declan Hodges, Solveig Holmgaard, Anthony Howard,
 Shimeng Huang, Samia Kabi, Leena Khatri, James Kim, John Kirkpatrick,
 Robin Koeger, Konstantina Koukourikou, Dinakar Kulkarni, Pavan Kumar,
 Pooja Kumari, Shan Lee, Wenyi Liu, Sadchla Mascary, Iain McCay, Jack
-McGavigan, Jordanna Morrish, Syed Mubasheer, Kirill Muller, Thomas
-Neitmann, Yohann Omnes, Barbara O’Reilly, Celine Piraux, Hamza Rahal,
-Nick Ramirez, Tom Ratford, Sukalpo Saha, Tamara Senior, Sophie Shapcott,
-Vladyslav Shuliar, Eric Simms, Daniel Sjoberg, Ondrej Slama, Andrew
-Smith, Daniil Stefonishin, Vignesh Thanikachalam, Michael Thorpe, Steven
-Ting, Ojesh Upadhyay, Franciszek Walkowiak, Enki Wang, Phillip Webster,
-Annie Yang, Andrii Yurovskyi, Junze Zhang, Kangjie Zhang, Zelos Zhu
+McGavigan, Jordanna Morrish, Syed Mubasheer, Kirill Muller, Marco Musca,
+Thomas Neitmann, Yohann Omnes, Barbara O’Reilly, Celine Piraux, Hamza
+Rahal, Nick Ramirez, Tom Ratford, Sukalpo Saha, Tamara Senior, Sophie
+Shapcott, Vladyslav Shuliar, Eric Simms, Daniel Sjoberg, Ondrej Slama,
+Andrew Smith, Daniil Stefonishin, Vignesh Thanikachalam, Michael Thorpe,
+Steven Ting, Ojesh Upadhyay, Franciszek Walkowiak, Enki Wang, Phillip
+Webster, Annie Yang, Andrii Yurovskyi, Junze Zhang, Kangjie Zhang, Zelos
+Zhu
 
 # Package index
 
@@ -954,6 +955,8 @@ receive feedback but doesn’t burden us with a deprecation cycle.
 ### All vignettes
 
 - [Creating an ADAB
+  ADaM](https:/pharmaverse.github.io/admiral/2952_tte/articles/adab_web.md):
+- [Creating an ADAB
   ADaM](https:/pharmaverse.github.io/admiral/2952_tte/articles/adab.md):
 - [Get
   Started](https:/pharmaverse.github.io/admiral/2952_tte/articles/admiral.md):
@@ -967,6 +970,7 @@ receive feedback but doesn’t burden us with a deprecation cycle.
   ADaM](https:/pharmaverse.github.io/admiral/2952_tte/articles/bds_tte.md):
 - [Programming Concepts and
   Conventions](https:/pharmaverse.github.io/admiral/2952_tte/articles/concepts_conventions.md):
+- [Estimands](https:/pharmaverse.github.io/admiral/2952_tte/articles/estimands_web.md):
 - [Estimands](https:/pharmaverse.github.io/admiral/2952_tte/articles/estimands.md):
 - [FAQ](https:/pharmaverse.github.io/admiral/2952_tte/articles/faq.md):
 - [Generic

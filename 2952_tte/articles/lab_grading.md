@@ -225,11 +225,6 @@ adlb <- lb %>%
   mutate(
     PARCAT1 = LBCAT,
     AVAL = LBSTRESN,
-    AVALC = ifelse(
-      is.na(LBSTRESN) | as.character(LBSTRESN) != LBSTRESC,
-      LBSTRESC,
-      NA
-    ),
     ANRLO = LBSTNRLO,
     ANRHI = LBSTNRHI,
     BASE = AVAL - 10
@@ -467,13 +462,14 @@ these are “Investigations”, “Metabolism and nutrition disorders” and
 From these SOC values the following terms criteria is implemented in
 [admiral](https://pharmaverse.github.io/admiral/)
 
-From SOC = “Investigations” there are 21 CTCAE v5.0 Terms:
+From SOC = “Investigations” there are 22 CTCAE v5.0 Terms:
 
 - Activated partial thromboplastin time prolonged
 - Alanine aminotransferase increased
 - Alkaline phosphatase increased
 - Aspartate aminotransferase increased
 - Blood bilirubin increased
+- Blood lactate dehydrogenase increased
 - CD4 lymphocytes decreased
 - Cholesterol high
 - CPK increased

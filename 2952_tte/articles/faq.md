@@ -92,7 +92,7 @@
 ##### Where can a user quickly find some **references or advice** to use a function?
 
 - For more detailed description, please refer to the [Reference
-  section](https://pharmaverse.github.io/admiral/reference/index.html).
+  section](https://pharmaverse.github.io/admiral/cran-release/reference/index.html).
 - [admiraldiscovery](https://pharmaverse.github.io/admiraldiscovery/articles/reactable.html)
   provides a way to look up common ADaM variables with recommended
   [admiral](https://pharmaverse.github.io/admiral/) functions to
@@ -196,8 +196,8 @@
   strategy](https://pharmaverse.github.io/admiraldev/articles/programming_strategy.html)
   serves as a framework for users how to create their own functions.
 - Please see the [contribution
-  model](https://pharmaverse.github.io/admiral/CONTRIBUTING.html) for a
-  detailed description on how to contribute to the project
+  model](https://pharmaverse.github.io/admiral/cran-release/CONTRIBUTING.html)
+  for a detailed description on how to contribute to the project
 
 ##### How has `{admiral}` been **tested externally** to Roche/GSK?
 
