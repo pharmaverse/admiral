@@ -69,7 +69,7 @@ out from this and have differently colored butterflies in their logos.
 
 ##### Where can a user quickly find some **references or advice** to use a function?
 
-* For more detailed description, please refer to the [Reference section](https://pharmaverse.github.io/admiral/reference/index.html). 
+* For more detailed description, please refer to the [Reference section](https://pharmaverse.github.io/admiral/cran-release/reference/index.html). 
 * [admiraldiscovery](https://pharmaverse.github.io/admiraldiscovery/articles/reactable.html) provides
 a way to look up common ADaM variables with recommended `{admiral}` functions to complete the derivation.
 * Check out the [admiral Cheat Sheet](https://github.com/pharmaverse/admiral/blob/main/inst/cheatsheet/admiral_cheatsheet.pdf) as well!
@@ -122,7 +122,7 @@ a way to look up common ADaM variables with recommended `{admiral}` functions to
 
  * Our [programming strategy](https://pharmaverse.github.io/admiraldev/articles/programming_strategy.html) serves as a framework
  for users how to create their own functions. 
- * Please see the [contribution model](https://pharmaverse.github.io/admiral/CONTRIBUTING.html) for a detailed description on how to contribute to the project
+ * Please see the [contribution model](https://pharmaverse.github.io/admiral/cran-release/CONTRIBUTING.html) for a detailed description on how to contribute to the project
 
 ##### How has `{admiral}` been **tested externally** to Roche/GSK?
 

@@ -1,36 +1,36 @@
-adsl <- tibble::tribble(
-  ~USUBJID,
-  "1",
-  "2",
-  "3"
-) %>%
-  mutate(STUDYID = "XX1234")
-
-adrs <- tibble::tribble(
-  ~USUBJID, ~AVALC, ~PARAMCD,
-  "1",      "PR",   "OVR",
-  "1",      "CR",   "OVR",
-  "1",      "CR",   "OVR",
-  "1",      "SD",   "OVR",
-  "2",      "SD",   "OVR",
-  "2",      "PD",   "OVR",
-  "2",      "PD",   "OVR",
-  "1",      "PR",   "OVRF",
-  "1",      "CR",   "OVRF",
-  "1",      "CR",   "OVRF",
-  "1",      "PD",   "OVRF",
-  "2",      "SD",   "OVRF",
-  "2",      "PD",   "OVRF",
-  "2",      "PD",   "OVRF"
-) %>%
-  mutate(
-    STUDYID = "XX1234",
-    ANL01FL = "Y"
-  )
-
 # derive_param_merged_exist_flag ----
 ## Test 1: derive parameter indicating PD ----
 test_that("derive_param_merged_exist_flag Test 1: derive parameter indicating PD", {
+  adsl <- tibble::tribble(
+    ~USUBJID,
+    "1",
+    "2",
+    "3"
+  ) %>%
+    mutate(STUDYID = "XX1234")
+
+  adrs <- tibble::tribble(
+    ~USUBJID, ~AVALC, ~PARAMCD,
+    "1",      "PR",   "OVR",
+    "1",      "CR",   "OVR",
+    "1",      "CR",   "OVR",
+    "1",      "SD",   "OVR",
+    "2",      "SD",   "OVR",
+    "2",      "PD",   "OVR",
+    "2",      "PD",   "OVR",
+    "1",      "PR",   "OVRF",
+    "1",      "CR",   "OVRF",
+    "1",      "CR",   "OVRF",
+    "1",      "PD",   "OVRF",
+    "2",      "SD",   "OVRF",
+    "2",      "PD",   "OVRF",
+    "2",      "PD",   "OVRF"
+  ) %>%
+    mutate(
+      STUDYID = "XX1234",
+      ANL01FL = "Y"
+    )
+
   actual <- derive_param_exist_flag(
     dataset_ref = adsl,
     dataset_add = adrs,
@@ -66,6 +66,36 @@ test_that("derive_param_merged_exist_flag Test 1: derive parameter indicating PD
 
 ## Test 2: error is issued if parameter already exists in dataset ----
 test_that("derive_param_merged_exist_flag Test 2: error is issued if parameter already exists in dataset", { # nolint
+  adsl <- tibble::tribble(
+    ~USUBJID,
+    "1",
+    "2",
+    "3"
+  ) %>%
+    mutate(STUDYID = "XX1234")
+
+  adrs <- tibble::tribble(
+    ~USUBJID, ~AVALC, ~PARAMCD,
+    "1",      "PR",   "OVR",
+    "1",      "CR",   "OVR",
+    "1",      "CR",   "OVR",
+    "1",      "SD",   "OVR",
+    "2",      "SD",   "OVR",
+    "2",      "PD",   "OVR",
+    "2",      "PD",   "OVR",
+    "1",      "PR",   "OVRF",
+    "1",      "CR",   "OVRF",
+    "1",      "CR",   "OVRF",
+    "1",      "PD",   "OVRF",
+    "2",      "SD",   "OVRF",
+    "2",      "PD",   "OVRF",
+    "2",      "PD",   "OVRF"
+  ) %>%
+    mutate(
+      STUDYID = "XX1234",
+      ANL01FL = "Y"
+    )
+
   expect_error(
     derive_param_exist_flag(
       dataset = adrs,

@@ -174,12 +174,12 @@ The input dataset with the new parameter added. Note, a variable will only
 be populated in the new parameter rows if it is specified in \code{by_vars}.
 }
 \description{
-Adds a parameter computed from the analysis value of other parameters. It is
-expected that the analysis value of the new parameter is defined by an
-expression using the analysis values of other parameters, such as addition/sum,
-subtraction/difference, multiplication/product, division/ratio,
-exponentiation/logarithm, or by formula.
-\if{html}{\out{<br/>}}\if{html}{\out{<br/>}}
+Adds a parameter computed from the analysis value of other
+parameters. It is expected that the analysis value of the new parameter is
+defined by an expression using the analysis values of other parameters, such
+as addition/sum, subtraction/difference, multiplication/product,
+division/ratio, exponentiation/logarithm, or by formula.
+
 For example mean arterial pressure (MAP) can be derived from systolic (SYSBP)
 and diastolic blood pressure (DIABP) with the formula
 \deqn{MAP = \frac{SYSBP + 2 DIABP}{3}}{MAP = (SYSBP + 2 DIABP) / 3}
@@ -199,23 +199,23 @@ dataset are set to \code{NA}.
 }
 \seealso{
 BDS-Findings Functions for adding Parameters/Records:
-\code{\link{default_qtc_paramcd}()},
-\code{\link{derive_basetype_records}()},
-\code{\link{derive_expected_records}()},
-\code{\link{derive_extreme_event}()},
-\code{\link{derive_extreme_records}()},
-\code{\link{derive_locf_records}()},
-\code{\link{derive_param_bmi}()},
-\code{\link{derive_param_bsa}()},
-\code{\link{derive_param_doseint}()},
-\code{\link{derive_param_exist_flag}()},
-\code{\link{derive_param_exposure}()},
-\code{\link{derive_param_framingham}()},
-\code{\link{derive_param_map}()},
-\code{\link{derive_param_qtc}()},
-\code{\link{derive_param_rr}()},
-\code{\link{derive_param_wbc_abs}()},
-\code{\link{derive_summary_records}()}
+\code{\link[=default_qtc_paramcd]{default_qtc_paramcd()}},
+\code{\link[=derive_basetype_records]{derive_basetype_records()}},
+\code{\link[=derive_expected_records]{derive_expected_records()}},
+\code{\link[=derive_extreme_event]{derive_extreme_event()}},
+\code{\link[=derive_extreme_records]{derive_extreme_records()}},
+\code{\link[=derive_locf_records]{derive_locf_records()}},
+\code{\link[=derive_param_bmi]{derive_param_bmi()}},
+\code{\link[=derive_param_bsa]{derive_param_bsa()}},
+\code{\link[=derive_param_doseint]{derive_param_doseint()}},
+\code{\link[=derive_param_exist_flag]{derive_param_exist_flag()}},
+\code{\link[=derive_param_exposure]{derive_param_exposure()}},
+\code{\link[=derive_param_framingham]{derive_param_framingham()}},
+\code{\link[=derive_param_map]{derive_param_map()}},
+\code{\link[=derive_param_qtc]{derive_param_qtc()}},
+\code{\link[=derive_param_rr]{derive_param_rr()}},
+\code{\link[=derive_param_wbc_abs]{derive_param_wbc_abs()}},
+\code{\link[=derive_summary_records]{derive_summary_records()}}
 }
 \concept{der_prm_bds_findings}
 \keyword{der_prm_bds_findings}

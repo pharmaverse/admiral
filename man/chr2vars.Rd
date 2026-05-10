@@ -24,7 +24,7 @@ chr2vars(c("USUBJID", "AVAL"))
 }
 \seealso{
 Utilities for working with quosures/list of expressions:
-\code{\link{negate_vars}()}
+\code{\link[=negate_vars]{negate_vars()}}
 }
 \concept{utils_quo}
 \keyword{utils_quo}
