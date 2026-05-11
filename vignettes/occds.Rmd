@@ -274,13 +274,12 @@ In a similar manner, you could derive the treatment dose and unit at the time of
 the event. Please note that it is assumed that the dosing intervals do not
 overlap. If this case occurs, the `derive_vars_joined()` call below will throw
 an error as handling this case is study-specific. It doesn't matter if one
-record per treatment period or one record per dose is collected. However, the
-drug clearance duration should be considered when matching the exposure records
-with the adverse event records because the exposure dates in `EX` are usually
-just the time it takes to receive the drug. For a pill it is just a point in
-time and `EXSTDTC` equals `EXENDTC`. Thus the drug clearance duration should be
-added to the exposure end date to get the period in which the drug is in the
-body.
+record per treatment period or one record per dose is collected. Note that drug
+clearance duration should be considered when matching exposure records with
+adverse events. Usually, `EXSTDTC` and `EXENDTC` represent only the
+administration period, not the time the drug remains in the body. To account for
+this, add the drug clearance duration to `EXENDTM` when determining the dose at
+the time of an adverse event.
 
 For the example data a drug clearance period of one day is assumed (see
 `filter_join` argument below).
