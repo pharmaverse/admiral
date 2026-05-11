@@ -61,7 +61,7 @@ library(lubridate)
 
 ae <- pharmaversesdtm::ae
 adsl <- admiral::admiral_adsl
-ex <- pharmaversesdtm::ex %>% 
+ex <- pharmaversesdtm::ex %>%
   derive_vars_dtm(
     dtc = EXSTDTC,
     new_vars_prefix = "EXST"
@@ -294,7 +294,7 @@ adae <- derive_vars_joined(
   join_vars = exprs(EXSTDTM, EXENDTM),
   join_type = "all",
   filter_add = (EXDOSE > 0 | (EXDOSE == 0 & grepl("PLACEBO", EXTRT))) & !is.na(EXSTDTM),
-  filter_join = EXSTDTM <= ASTDTM & (ASTDTM <= EXENDTM + days(1)| is.na(EXENDTM))
+  filter_join = EXSTDTM <= ASTDTM & (ASTDTM <= EXENDTM + days(1) | is.na(EXENDTM))
 )
 ```
 
