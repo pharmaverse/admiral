@@ -43,7 +43,7 @@ specified under `save_path`. This is because this functionality did not work as 
 
 ## Documentation
 
-- New vignette "Time-to-Event Analyses" added to provide guidance for different
+- New article "Time-to-Event Analyses" added to provide guidance for different
 scenarios. (#2900)
 - The following new and existing User Guides have been changed from vignettes to articles, meaning they are no longer accessible
 offline via `vignette("vignette_name")`:
