@@ -30,7 +30,7 @@ Follow a practical step-by-step workflow to build ADSL from SDTM sources, from t
 ### [Creating an OCCDS ADaM](occds.html)
 Walk through a full OCCDS example (ADAE-focused) covering timing, treatment-emergent logic, flags, sequence derivation, and final dataset assembly.
 
-### [Creating a BDS Findings ADAM](bds_finding.html)
+### [Creating a BDS Findings ADaM](bds_finding.html)
 Build a BDS findings dataset (ADVS-style) with examples for parameters, baseline/change logic, analysis flags, categorization, and record creation.
 
 ### [Creating a BDS Exposure ADaM](bds_exposure.html)
