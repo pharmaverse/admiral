@@ -37,6 +37,8 @@ specified under `save_path`. This is because this functionality did not work as 
 
 ## Documentation
 
+- Added a User Guides landing page with one-sentence summaries for each guide and linked it to the "User Guides" navbar item.
+
 - The following new and existing User Guides have been changed from vignettes to articles, meaning they are no longer accessible
 offline via `vignette("vignette_name")`:
 

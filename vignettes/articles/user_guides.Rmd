@@ -1,0 +1,74 @@
+---
+title: "User Guides"
+output:
+  rmarkdown::html_vignette:
+    toc: false
+vignette: >
+  %\VignetteIndexEntry{User Guides}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+The `{admiral}` User Guides are grouped by topic so you can quickly find conceptual guidance, end-to-end ADaM examples, and focused methodology references.
+
+## General Guides
+
+### [Programming Concepts and Conventions](concepts_conventions.html)
+Learn the core `{admiral}` programming principles, including expression handling, missing-value conventions, and common workflow expectations.
+
+### [Generic Derivations](generic.html)
+Get an overview of reusable derivation patterns and functions for adding variables, parameters, and records across many ADaM use cases.
+
+### [Higher Order Functions](higher_order.html)
+See how to use higher-order helpers like `call_derivation()`, `restrict_derivation()`, and `slice_derivation()` to reduce repetitive derivation code.
+
+## ADaM Script Guides
+
+### [Creating a Basic ADSL](adsl.html)
+Follow a practical step-by-step workflow to build ADSL from SDTM sources, from treatment and disposition variables through final labeling.
+
+### [Creating an OCCDS ADaM](occds.html)
+Walk through a full OCCDS example (ADAE-focused) covering timing, treatment-emergent logic, flags, sequence derivation, and final dataset assembly.
+
+### [Creating a BDS Findings ADAM](bds_finding.html)
+Build a BDS findings dataset (ADVS-style) with examples for parameters, baseline/change logic, analysis flags, categorization, and record creation.
+
+### [Creating a BDS Exposure ADaM](bds_exposure.html)
+Explore example approaches for structuring exposure analysis data in BDS format, including one-to-one records, summaries, and parameter mappings.
+
+### [Creating a BDS Time-to-Event ADaM](bds_tte.html)
+Learn how to define events and censoring sources and derive core time-to-event analysis variables and parameters.
+
+### [Creating Questionnaire ADaMs](questionnaires.html)
+Review common questionnaire derivation patterns for original items, transformed values, and score/scale parameters rather than a single fixed workflow.
+
+### [Creating a PK NCA or Population PK ADaM](pk_adnca.html)
+Work through examples for building PK analysis datasets (ADNCA/ADPC and ADPPK), with emphasis on relative timing and dose-reference derivations.
+
+### [Creating an Antidrug Antibody ADaM](adab_web.html)
+See an experimental ADAB workflow covering data staging, parameter computation, visit/summary assembly, and final analysis-variable derivations.
+
+### [Hy's Law Implementation](hys_law.html)
+Use ADLB-based examples to derive criteria flags and joined records that support identifying potential Hy's Law drug-induced liver injury events.
+
+## Special Topics Guides
+
+### [Date and Time Imputation](imputation.html)
+Understand `{admiral}` date/time imputation rules and apply both vector-level and dataset-level imputation workflows for ADaM timing variables.
+
+### [Visit and Period Variables](visits_periods.html)
+Learn practical strategies and helper functions for deriving visit windows plus period, subperiod, and phase variables in study-specific designs.
+
+### [Queries Dataset Documentation](queries_dataset.html)
+Reference the required structure and content of query metadata datasets used by `derive_vars_query()` for grouped-event derivations.
+
+### [Lab Grading](lab_grading.html)
+Understand how `{admiral}` implements lab toxicity grading from metadata (e.g., CTCAE and DAIDS) and how to apply grading in ADLB workflows.
+
+### [Estimands](estimands_web.html)
+Review example patterns for representing intercurrent events and implementing estimand-oriented analysis logic in `{admiral}` datasets.
+
+## FAQ
+
+### [FAQ](faq.html)
+Find quick answers to common questions about `{admiral}` goals, scope, validation expectations, and practical usage.

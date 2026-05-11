@@ -232,6 +232,7 @@ navbar:
       href: reference/
     articles:
       text: User Guides
+      href: articles/user_guides.html
       menu:
       - text: "General Guides"
       - text: Programming Concepts and Conventions
