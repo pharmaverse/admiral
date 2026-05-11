@@ -373,16 +373,16 @@ adtte <- derive_extreme_event(
 
 ## Combined Events
 
-Some events are defined by a combination of more than one event, e.g.,
-for progression free survival the event is defined as progression *or*
-death. For these events which are combined by “or” separate
+Some events are defined as a combination of multiple events. For
+example, progression-free survival is defined as progression *or* death.
+For events combined by “or”, you can create separate
 [`event_source()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/event_source.md)
-objects can be created for each event and then specified for the
-`event_conditions` argument of
+objects for each event and pass them to the `event_conditions` argument
+of
 [`derive_param_tte()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/derive_param_tte.md).
-For events which are combined by “and” or more complex combinations, a
-variable or parameter indicating whether the combined event occurred or
-not needs to be derived in the input dataset.
+For events combined by “and” or more complex combinations, you must
+first derive a variable or parameter in the input dataset that indicates
+whether the combined event occurred.
 
 ### Events Combined by “or”
 
@@ -485,6 +485,26 @@ adtte <- derive_param_tte(
 **`adtte` dataset** (click to expand/collapse)
 
 ![](tte_analyses_web_files/figure-html/unnamed-chunk-36-1.png)
+
+## Summary
+
+The preparation of time-to-event datasets can be more or less complex
+depending on the definition of the event and the collection of the data.
+The
+[`derive_param_tte()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/derive_param_tte.md)
+function provides a flexible framework to derive time-to-event
+parameters for a wide range of scenarios. For more guidance and examples
+see the documentation of
+[`derive_param_tte()`](https:/pharmaverse.github.io/admiral/2952_tte/reference/derive_param_tte.md)
+and the [Creating a BDS Time-to-Event
+ADaM](https:/pharmaverse.github.io/admiral/2952_tte/articles/bds_tte.md)
+vignette.
+
+If your use case is not covered or you are unsure how to implement it
+using admiral, please create an issue in the [admiral GitHub
+repository](https://github.com/pharmaverse/admiral/issues/new/choose).
+Any feedback helps us improving
+[admiral](https://pharmaverse.github.io/admiral/)!
 
 ------------------------------------------------------------------------
 

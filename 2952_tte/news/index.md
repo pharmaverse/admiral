@@ -73,7 +73,7 @@
 
 ### Documentation
 
-- New vignette “Time-to-Event Analyses” added to provide guidance for
+- New article “Time-to-Event Analyses” added to provide guidance for
   different scenarios.
   ([\#2900](https://github.com/pharmaverse/admiral/issues/2900))
 
