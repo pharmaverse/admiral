@@ -257,7 +257,7 @@ ex_single <- ex %>%
       STUDYID, USUBJID, EXTRT, EXDOSE, EXDOSU, EXDOSFRQ, EXSTDT, EXENDT, EXSTDTM,
       EXENDTM,
     )
-  ) 
+  )
 ```
 
 The function `derive_vars_joined()` can be used to derive the last dose date before the start of the event.
