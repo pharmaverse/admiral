@@ -78,6 +78,9 @@ of packages were updated to specify the level of contributions required for auth
 
 - Usage of `ASEQ` which is an optional variable was clarified within the corresponding Vignettes and Templates. (#2986)
 
+- The derivation of `DOSEON` and `DOSEU` variables in the OCCDS vignette was
+  clarified and generalized to cover more scenarios. (#3101)
+
 ## Various
 
 <details>
