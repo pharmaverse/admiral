@@ -47,6 +47,15 @@ library(lubridate)
 
 ae <- pharmaversesdtm::ae
 adsl <- admiral::admiral_adsl
+ex <- pharmaversesdtm::ex %>%
+  derive_vars_dtm(
+    dtc = EXSTDTC,
+    new_vars_prefix = "EXST"
+  ) %>%
+  derive_vars_dtm(
+    dtc = EXENDTC,
+    new_vars_prefix = "EXEN"
+  )
 ex_single <- admiral::ex_single
 
 ae <- convert_blanks_to_na(ae)
@@ -233,25 +242,27 @@ time of the event. Please note that it is assumed that the dosing
 intervals do not overlap. If this case occurs, the
 [`derive_vars_joined()`](https:/pharmaverse.github.io/admiral/main/reference/derive_vars_joined.md)
 call below will throw an error as handling this case is study-specific.
+It doesn’t matter if one record per treatment period or one record per
+dose is collected. Note that drug clearance duration should be
+considered when matching exposure records with adverse events. Usually,
+`EXSTDTC` and `EXENDTC` represent only the administration period, not
+the time the drug remains in the body. To account for this, add the drug
+clearance duration to `EXENDTM` when determining the dose at the time of
+an adverse event.
+
+For the example data a drug clearance period of one day is assumed (see
+`filter_join` argument below).
 
 ``` r
-ex_single <- derive_vars_dtm(
-  ex_single,
-  dtc = EXENDTC,
-  new_vars_prefix = "EXEN",
-  time_imputation = "last",
-  flag_imputation = "none"
-)
-
 adae <- derive_vars_joined(
   adae,
-  ex_single,
+  ex,
   by_vars = exprs(STUDYID, USUBJID),
   new_vars = exprs(DOSEON = EXDOSE, DOSEU = EXDOSU),
   join_vars = exprs(EXSTDTM, EXENDTM),
   join_type = "all",
   filter_add = (EXDOSE > 0 | (EXDOSE == 0 & grepl("PLACEBO", EXTRT))) & !is.na(EXSTDTM),
-  filter_join = EXSTDTM <= ASTDTM & (ASTDTM <= EXENDTM | is.na(EXENDTM))
+  filter_join = EXSTDTM <= ASTDTM & (ASTDTM <= EXENDTM + days(1) | is.na(EXENDTM))
 )
 ```
 

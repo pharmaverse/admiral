@@ -147,6 +147,10 @@
   corresponding Vignettes and Templates.
   ([\#2986](https://github.com/pharmaverse/admiral/issues/2986))
 
+- The derivation of `DOSEON` and `DOSEU` variables in the OCCDS vignette
+  was clarified and generalized to cover more scenarios.
+  ([\#3101](https://github.com/pharmaverse/admiral/issues/3101))
+
 ### Various
 
 Developer Notes
