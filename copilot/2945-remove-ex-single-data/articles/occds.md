@@ -48,7 +48,6 @@ library(lubridate)
 ae <- pharmaversesdtm::ae
 adsl <- admiral::admiral_adsl
 ex <- pharmaversesdtm::ex
-
 ae <- convert_blanks_to_na(ae)
 ```
 
@@ -218,8 +217,8 @@ frequency is daily (`QD`). The following call creates one record per
 day.
 
 ``` r
-ex_single <- convert_blanks_to_na(ex) %>%
-  derive_vars_dtm(dtc = EXSTDTC, new_vars_prefix = "EXST", flag_imputation = "none") %>%
+ex_single <- ex %>%
+derive_vars_dtm(dtc = EXSTDTC, new_vars_prefix = "EXST", flag_imputation = "none") %>%
   derive_vars_dtm(
     dtc = EXENDTC,
     new_vars_prefix = "EXEN",
