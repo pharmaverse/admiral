@@ -1477,14 +1477,13 @@ ad_adae.R
 <span>  <span class="fu"><a href="../reference/create_single_dose_dataset.html">create_single_dose_dataset</a></span><span class="op">(</span></span>
 <span>    dose_freq <span class="op">=</span> <span class="va">EXDOSFRQ</span>,</span>
 <span>    start_date <span class="op">=</span> <span class="va">EXSTDT</span>,</span>
+<span>    start_datetime <span class="op">=</span> <span class="va">EXSTDTM</span>,</span>
 <span>    end_date <span class="op">=</span> <span class="va">EXENDT</span>,</span>
+<span>    end_datetime <span class="op">=</span> <span class="va">EXENDTM</span>,</span>
 <span>    keep_source_vars <span class="op">=</span> <span class="fu"><a href="../reference/reexport-exprs.html">exprs</a></span><span class="op">(</span></span>
-<span>      <span class="va">STUDYID</span>, <span class="va">USUBJID</span>, <span class="va">EXTRT</span>, <span class="va">EXDOSE</span>, <span class="va">EXDOSU</span>, <span class="va">EXDOSFRQ</span>, <span class="va">EXSTDT</span>, <span class="va">EXENDT</span></span>
+<span>      <span class="va">STUDYID</span>, <span class="va">USUBJID</span>, <span class="va">EXTRT</span>, <span class="va">EXDOSE</span>, <span class="va">EXDOSU</span>, <span class="va">EXDOSFRQ</span>, <span class="va">EXSTDT</span>, <span class="va">EXENDT</span>, <span class="va">EXSTDTM</span>,</span>
+<span>      <span class="va">EXENDTM</span>,</span>
 <span>    <span class="op">)</span></span>
-<span>  <span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span></span>
-<span>    EXSTDTM <span class="op">=</span> <span class="fu"><a href="https://lubridate.tidyverse.org/reference/as_date.html" class="external-link">as_datetime</a></span><span class="op">(</span><span class="va">EXSTDT</span><span class="op">)</span>,</span>
-<span>    EXENDTM <span class="op">=</span> <span class="fu"><a href="https://lubridate.tidyverse.org/reference/as_date.html" class="external-link">as_datetime</a></span><span class="op">(</span><span class="va">EXENDT</span><span class="op">)</span></span>
 <span>  <span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Derivations ----</span></span>

@@ -1350,14 +1350,13 @@ ex_single <- convert_blanks_to_na(ex) %>%
   create_single_dose_dataset(
     dose_freq = EXDOSFRQ,
     start_date = EXSTDT,
+    start_datetime = EXSTDTM,
     end_date = EXENDT,
+    end_datetime = EXENDTM,
     keep_source_vars = exprs(
-      STUDYID, USUBJID, EXTRT, EXDOSE, EXDOSU, EXDOSFRQ, EXSTDT, EXENDT
+      STUDYID, USUBJID, EXTRT, EXDOSE, EXDOSU, EXDOSFRQ, EXSTDT, EXENDT, EXSTDTM,
+      EXENDTM,
     )
-  ) %>%
-  mutate(
-    EXSTDTM = as_datetime(EXSTDT),
-    EXENDTM = as_datetime(EXENDT)
   )
 
 # Derivations ----

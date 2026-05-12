@@ -237,7 +237,7 @@ ex_single <- ex %>%
       STUDYID, USUBJID, EXTRT, EXDOSE, EXDOSU, EXDOSFRQ, EXSTDT, EXENDT, EXSTDTM,
       EXENDTM,
     )
-  ) 
+  )
 ```
 
 The function
