@@ -237,8 +237,8 @@ The test data contains one record per treatment period and the dose frequency is
 daily (`QD`). The following call creates one record per day.
 
 ```{r eval=TRUE}
-ex_single <- convert_blanks_to_na(ex) %>%
-  derive_vars_dtm(dtc = EXSTDTC, new_vars_prefix = "EXST", flag_imputation = "none") %>%
+ex_single <- ex %>%
+derive_vars_dtm(dtc = EXSTDTC, new_vars_prefix = "EXST", flag_imputation = "none") %>%
   derive_vars_dtm(
     dtc = EXENDTC,
     new_vars_prefix = "EXEN",
