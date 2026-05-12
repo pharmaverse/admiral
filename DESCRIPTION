@@ -29,7 +29,7 @@ Description: A toolbox for programming Clinical Data Interchange Standards
     <https://www.cdisc.org/standards/foundational/adam>).
 License: Apache License (>= 2)
 URL: https://pharmaverse.github.io/admiral/,
-    https://github.com/pharmaverse/admiral
+     https://github.com/pharmaverse/admiral
 BugReports: https://github.com/pharmaverse/admiral/issues
 Depends:
     R (>= 4.1)
@@ -70,3 +70,4 @@ Config/testthat/edition: 3
 Encoding: UTF-8
 Language: en-US
 LazyData: true
+RoxygenNote: 8.0.0

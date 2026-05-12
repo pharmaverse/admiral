@@ -31,7 +31,6 @@ Authors:
 \itemize{
   \item Ben Straub \email{ben.x.straub@gsk.com}
   \item Stefan Bundfuss (\href{https://orcid.org/0009-0005-0027-1198}{ORCID})
-  \item Matt Bearham
   \item Arianna Cascone (\href{https://orcid.org/0000-0001-5948-2831}{ORCID})
   \item Kristin Dahnert
   \item Jeffrey Dickinson
@@ -40,7 +39,6 @@ Authors:
   \item Edoardo Mancini (\href{https://orcid.org/0009-0006-4899-8641}{ORCID})
   \item Gordon Miller
   \item Lina Patil
-  \item Jim Rothstein (\href{https://orcid.org/0009-0009-8659-6071}{ORCID})
 }
 
 Other contributors:
