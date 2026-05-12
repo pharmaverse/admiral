@@ -6,7 +6,6 @@ Authors@R: c(
     person("Ben", "Straub", , "ben.x.straub@gsk.com", role = c("aut", "cre")),
     person("Stefan", "Bundfuss", role = "aut",
            comment = c(ORCID = "0009-0005-0027-1198")),
-    person("Matt", "Bearham", role = "aut"),
     person("Arianna", "Cascone", role = "aut",
            comment = c(ORCID = "0000-0001-5948-2831")),
     person("Kristin", "Dahnert", role = "aut"),
@@ -17,8 +16,6 @@ Authors@R: c(
            comment = c(ORCID = "0009-0006-4899-8641")),
     person("Gordon", "Miller", role = "aut"),
     person("Lina", "Patil", role = "aut"),
-    person("Jim", "Rothstein", role = "aut",
-           comment = c(ORCID = "0009-0009-8659-6071")),
     person("F. Hoffmann-La Roche AG", role = c("cph", "fnd")),
     person("GlaxoSmithKline LLC", role = c("cph", "fnd"))
   )

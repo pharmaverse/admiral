@@ -99,6 +99,8 @@ the pull request title to trigger website creation. (#2984)
   ([admiraldev/#517](https://github.com/pharmaverse/admiraldev/issues/517))
   
 - The HTML tag `<br/>` was removed from the roxygen headers. (#3042)
+
+- Clickable links to personal websites or GitHub profiles were added in the home page sidebar for every `{admiral}` author. (#3112)
 </details>
 
 # admiral 1.4.1
