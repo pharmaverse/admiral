@@ -62,7 +62,6 @@ library(lubridate)
 ae <- pharmaversesdtm::ae
 adsl <- admiral::admiral_adsl
 ex <- pharmaversesdtm::ex
-
 ae <- convert_blanks_to_na(ae)
 ```
 ```{r echo = FALSE}
