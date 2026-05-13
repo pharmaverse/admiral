@@ -6,6 +6,18 @@
 
 ### Updates of Existing Functions
 
+- The `end_dates` argument for specifying dates which restrict the
+  observation period and the `event_type` argument for specifying if the
+  event is negative (progression, death, worsening, …) were added to
+  [`derive_param_tte()`](https:/pharmaverse.github.io/admiral/copilot/2945-remove-ex-single-data/reference/derive_param_tte.md).
+  The `consider_end_dates` field was added to the
+  [`event_source()`](https:/pharmaverse.github.io/admiral/copilot/2945-remove-ex-single-data/reference/event_source.md),
+  [`censor_source()`](https:/pharmaverse.github.io/admiral/copilot/2945-remove-ex-single-data/reference/censor_source.md),
+  and
+  [`tte_source()`](https:/pharmaverse.github.io/admiral/copilot/2945-remove-ex-single-data/reference/tte_source.md)
+  objects.
+  ([\#2952](https://github.com/pharmaverse/admiral/issues/2952))
+
 - The `by_vars` and the `tmp_obs_nr_var` arguments were added to
   [`event_joined()`](https:/pharmaverse.github.io/admiral/copilot/2945-remove-ex-single-data/reference/event_joined.md).
   This allows to derive parameters requiring confirmation *by visit*
@@ -69,6 +81,10 @@
   ([\#3060](https://github.com/pharmaverse/admiral/issues/3060))
 
 ### Documentation
+
+- New article “Time-to-Event Analyses” added to provide guidance for
+  different scenarios.
+  ([\#2900](https://github.com/pharmaverse/admiral/issues/2900))
 
 - The following new and existing User Guides have been changed from
   vignettes to articles, meaning they are no longer accessible offline
