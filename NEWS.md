@@ -4,6 +4,12 @@
 
 ## Updates of Existing Functions
 
+- The `end_dates` argument for specifying dates which restrict the observation
+period and the `event_type` argument for specifying if the event is negative
+(progression, death, worsening, ...) were added to `derive_param_tte()`. The
+`consider_end_dates` field was added to the `event_source()`, `censor_source()`,
+and `tte_source()` objects. (#2952)
+
 - The `by_vars` and the `tmp_obs_nr_var` arguments were added to
   `event_joined()`. This allows to derive parameters requiring confirmation _by
   visit_ using `derive_extreme_event()`. (#3022)
@@ -41,6 +47,8 @@ specified under `save_path`. This is because this functionality did not work as 
 
 ## Documentation
 
+- New article "Time-to-Event Analyses" added to provide guidance for different
+scenarios. (#2900)
 - The following new and existing User Guides have been changed from vignettes to articles, meaning they are no longer accessible
 offline via `vignette("vignette_name")`:
 
