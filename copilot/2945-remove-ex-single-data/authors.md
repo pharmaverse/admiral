@@ -2,29 +2,29 @@
 
 ## Authors
 
-- **Ben Straub**. Author, maintainer.
+- **[Ben Straub](https://github.com/bms63)**. Author, maintainer.
 
-- **Stefan Bundfuss**. Author. [](https://orcid.org/0009-0005-0027-1198)
+- **[Stefan Bundfuss](https://github.com/bundfussr)**. Author.
+  [](https://orcid.org/0009-0005-0027-1198)
 
-- **Matt Bearham**. Author.
+- **[Arianna Cascone](https://arianna-cascone.quarto.pub/)**. Author.
+  [](https://orcid.org/0000-0001-5948-2831)
 
-- **Arianna Cascone**. Author. [](https://orcid.org/0000-0001-5948-2831)
+- **[Kristin Dahnert](https://github.com/Kcdahn)**. Author.
 
-- **Kristin Dahnert**. Author.
+- **[Jeffrey Dickinson](https://github.com/jeffreyad)**. Author.
 
-- **Jeffrey Dickinson**. Author.
+- **[Ross Farrugia](https://github.com/rossfarrugia)**. Author.
 
-- **Ross Farrugia**. Author.
+- **[Fanny Gautier](https://github.com/Fanny-Gautier)**. Author.
+  [](https://orcid.org/0009-0004-3581-0131)
 
-- **Fanny Gautier**. Author.
+- **[Edoardo Mancini](https://manciniedoardo.github.io/)**. Author.
+  [](https://orcid.org/0009-0006-4899-8641)
 
-- **Edoardo Mancini**. Author. [](https://orcid.org/0009-0006-4899-8641)
+- **[Gordon Miller](https://github.com/millerg23)**. Author.
 
-- **Gordon Miller**. Author.
-
-- **Lina Patil**. Author.
-
-- **Jim Rothstein**. Author. [](https://orcid.org/0009-0009-8659-6071)
+- **[Lina Patil](https://github.com/Lina2689)**. Author.
 
 - **[](https://roche.com/)[![Roche
   logo](reference/figures/roche_logo.png)](https://www.roche.com/)**.
@@ -39,15 +39,15 @@
 Source:
 [`DESCRIPTION`](https://github.com/pharmaverse/admiral/blob/main/DESCRIPTION)
 
-Straub B, Bundfuss S, Bearham M, Cascone A, Dahnert K, Dickinson J,
-Farrugia R, Gautier F, Mancini E, Miller G, Patil L, Rothstein J (2026).
-*admiral: ADaM in R Asset Library*. R package version 1.4.1.9057,
+Straub B, Bundfuss S, Cascone A, Dahnert K, Dickinson J, Farrugia R,
+Gautier F, Mancini E, Miller G, Patil L (2026). *admiral: ADaM in R
+Asset Library*. R package version 1.4.1.9058,
 <https://pharmaverse.github.io/admiral/>.
 
     @Manual{,
       title = {admiral: ADaM in R Asset Library},
-      author = {Ben Straub and Stefan Bundfuss and Matt Bearham and Arianna Cascone and Kristin Dahnert and Jeffrey Dickinson and Ross Farrugia and Fanny Gautier and Edoardo Mancini and Gordon Miller and Lina Patil and Jim Rothstein},
+      author = {Ben Straub and Stefan Bundfuss and Arianna Cascone and Kristin Dahnert and Jeffrey Dickinson and Ross Farrugia and Fanny Gautier and Edoardo Mancini and Gordon Miller and Lina Patil},
       year = {2026},
-      note = {R package version 1.4.1.9057},
+      note = {R package version 1.4.1.9058},
       url = {https://pharmaverse.github.io/admiral/},
     }
