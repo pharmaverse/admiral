@@ -33,8 +33,6 @@ Authors:
 
 - Stefan Bundfuss ([ORCID](https://orcid.org/0009-0005-0027-1198))
 
-- Matt Bearham
-
 - Arianna Cascone ([ORCID](https://orcid.org/0000-0001-5948-2831))
 
 - Kristin Dahnert
@@ -43,15 +41,13 @@ Authors:
 
 - Ross Farrugia
 
-- Fanny Gautier
+- Fanny Gautier ([ORCID](https://orcid.org/0009-0004-3581-0131))
 
 - Edoardo Mancini ([ORCID](https://orcid.org/0009-0006-4899-8641))
 
 - Gordon Miller
 
 - Lina Patil
-
-- Jim Rothstein ([ORCID](https://orcid.org/0009-0009-8659-6071))
 
 Other contributors:
 

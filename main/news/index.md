@@ -209,6 +209,11 @@ Developer Notes
 - The HTML tag `<br/>` was removed from the roxygen headers.
   ([\#3042](https://github.com/pharmaverse/admiral/issues/3042))
 
+- Clickable links to personal websites or GitHub profiles were added in
+  the home page sidebar for every
+  [admiral](https://pharmaverse.github.io/admiral/) author.
+  ([\#3112](https://github.com/pharmaverse/admiral/issues/3112))
+
 ## admiral 1.4.1
 
 CRAN release: 2026-02-03
