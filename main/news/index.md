@@ -71,6 +71,15 @@
 
   **Phase 4 (removed)**
 
+- The `ex_single` dataset was removed from
+  [admiral](https://pharmaverse.github.io/admiral/) to reduce the
+  package size. It can be derived on the fly using
+  [`create_single_dose_dataset()`](https:/pharmaverse.github.io/admiral/main/reference/create_single_dose_dataset.md).
+  See the `OCCDS` vignette or
+  [`?create_single_dose_dataset`](https:/pharmaverse.github.io/admiral/main/reference/create_single_dose_dataset.md)
+  for examples.
+  ([\#3060](https://github.com/pharmaverse/admiral/issues/3060))
+
 ### Documentation
 
 - New article “Time-to-Event Analyses” added to provide guidance for

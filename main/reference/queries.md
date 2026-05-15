@@ -23,6 +23,5 @@ MedDRA Query variables in ADAE
 Other datasets:
 [`admiral_adlb`](https:/pharmaverse.github.io/admiral/main/reference/admiral_adlb.md),
 [`admiral_adsl`](https:/pharmaverse.github.io/admiral/main/reference/admiral_adsl.md),
-[`ex_single`](https:/pharmaverse.github.io/admiral/main/reference/ex_single.md),
 [`example_qs`](https:/pharmaverse.github.io/admiral/main/reference/example_qs.md),
 [`queries_mh`](https:/pharmaverse.github.io/admiral/main/reference/queries_mh.md)
