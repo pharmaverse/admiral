@@ -1322,7 +1322,6 @@ library(lubridate)
 # For illustration purposes read in admiral test data
 
 ae <- pharmaversesdtm::ae
-suppae <- pharmaversesdtm::suppae
 adsl <- admiral::admiral_adsl
 ex <- pharmaversesdtm::ex
 
@@ -1339,10 +1338,12 @@ ex <- convert_blanks_to_na(ex)
 # create_single_dose_dataset() to expand them into one record per dose.
 # Whether this step is necessary depends on how dosing data were collected.
 ex_single <- ex %>%
-  derive_vars_dtm(dtc = EXSTDTC, 
-    new_vars_prefix = "EXST", 
-    time_imputation = "last",
-    flag_imputation = "none") %>%
+  derive_vars_dtm(
+    dtc = EXSTDTC,
+    new_vars_prefix = "EXST",
+    time_imputation = "first",
+    flag_imputation = "none"
+  ) %>%
   derive_vars_dtm(
     dtc = EXENDTC,
     new_vars_prefix = "EXEN",
@@ -1392,7 +1393,7 @@ adae <- ae %>%
   ) %>%
   ## Derive analysis end/start date ----
   derive_vars_dtm_to_dt(exprs(ASTDTM, AENDTM)) %>%
-  ## Derive analysis start relative day and  analysis end relative day ----
+  ## Derive analysis start relative day and analysis end relative day ----
   derive_vars_dy(
     reference_date = TRTSDT,
     source_vars = exprs(ASTDT, AENDT)

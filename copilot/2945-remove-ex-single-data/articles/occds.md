@@ -223,6 +223,7 @@ ex_single <- ex %>%
   derive_vars_dtm(
     dtc = EXSTDTC,
     new_vars_prefix = "EXST",
+    time_imputation = "first",
     flag_imputation = "none"
   ) %>%
   derive_vars_dtm(
@@ -289,10 +290,11 @@ applying a date buffer across all exposure rows.
 earlier.
 
 ``` r
-ex_dose <- convert_blanks_to_na(ex) %>%
+ex_dose <- ex %>%
   derive_vars_dtm(
     dtc = EXSTDTC,
     new_vars_prefix = "EXST",
+    time_imputation = "first",
     flag_imputation = "none"
   ) %>%
   derive_vars_dtm(
