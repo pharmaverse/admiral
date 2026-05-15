@@ -35,7 +35,7 @@ Authors:
   \item Kristin Dahnert
   \item Jeffrey Dickinson
   \item Ross Farrugia
-  \item Fanny Gautier
+  \item Fanny Gautier (\href{https://orcid.org/0009-0004-3581-0131}{ORCID})
   \item Edoardo Mancini (\href{https://orcid.org/0009-0006-4899-8641}{ORCID})
   \item Gordon Miller
   \item Lina Patil
