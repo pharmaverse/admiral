@@ -102,17 +102,19 @@ build_source_tarball <- function(repo_dir, build_dir) {
 download_cran_tarball <- function(package_name, cran_mirror, download_dir) {
   dir.create(download_dir, recursive = TRUE, showWarnings = FALSE)
 
-  cran_db <- tools::CRAN_package_db(repos = cran_mirror)
-  row_index <- match(package_name, cran_db$Package)
+  cran_db <- utils::available.packages(
+    repos = cran_mirror,
+    type = "source"
+  )
 
-  if (is.na(row_index)) {
+  if (!package_name %in% rownames(cran_db)) {
     stop(
       sprintf("Package '%s' was not found in the CRAN package database.", package_name),
       call. = FALSE
     )
   }
 
-  cran_version <- cran_db$Version[[row_index]]
+  cran_version <- cran_db[package_name, "Version"]
   cran_url <- sprintf(
     "%s/%s_%s.tar.gz",
     utils::contrib.url(cran_mirror, type = "source"),
