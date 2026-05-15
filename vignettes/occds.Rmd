@@ -244,6 +244,7 @@ ex_single <- ex %>%
   derive_vars_dtm(
     dtc = EXSTDTC,
     new_vars_prefix = "EXST",
+    time_imputation = "first",
     flag_imputation = "none"
   ) %>%
   derive_vars_dtm(
@@ -315,10 +316,11 @@ from applying a date buffer across all exposure rows.
 `TRTEDTM` is available on `adae` via the `adsl_vars` merge performed earlier.
 
 ```{r eval=TRUE}
-ex_dose <- convert_blanks_to_na(ex) %>%
+ex_dose <- ex %>%
   derive_vars_dtm(
     dtc = EXSTDTC,
     new_vars_prefix = "EXST",
+    time_imputation = "first",
     flag_imputation = "none"
   ) %>%
   derive_vars_dtm(
