@@ -60,9 +60,32 @@ test_that("use_ad_template Test 5: error if ADaM template file already exists", 
   file.remove(file)
 })
 
+# admiral_add_labels_attrs_section ----
+## Test 6: default header level outputs ## heading ----
+test_that("admiral_add_labels_attrs_section Test 6: default header level outputs ## heading", {
+  output <- capture.output(admiral_add_labels_attrs_section())
+  expect_true(any(grepl("^## Add Labels and Attributes", output)))
+  expect_true(any(grepl("metacore", output)))
+  expect_true(any(grepl("metatools", output)))
+  expect_true(any(grepl("xportr", output)))
+  expect_true(any(grepl("pharmaverse", output)))
+})
+
+## Test 7: custom header level outputs # heading ----
+test_that("admiral_add_labels_attrs_section Test 7: custom header level outputs # heading", {
+  output <- capture.output(admiral_add_labels_attrs_section(header_lvl = "#"))
+  expect_true(any(grepl("^# Add Labels and Attributes", output)))
+})
+
+## Test 8: custom header level outputs ### heading ----
+test_that("admiral_add_labels_attrs_section Test 8: custom header level outputs ### heading", {
+  output <- capture.output(admiral_add_labels_attrs_section(header_lvl = "###"))
+  expect_true(any(grepl("^### Add Labels and Attributes", output)))
+})
+
 # print.adam_templates ----
-## Test 6: no templates ----
-test_that("print.adam_templates Test 6: no templates", {
+## Test 9: no templates ----
+test_that("print.adam_templates Test 9: no templates", {
   templates <- list_all_templates(package = "dplyr")
   expected_print_output <- c(
     "No ADaM templates available in package 'dplyr'"
@@ -70,8 +93,8 @@ test_that("print.adam_templates Test 6: no templates", {
   expect_identical(capture.output(print(templates)), expected_print_output)
 })
 
-## Test 7: some templates ----
-test_that("print.adam_templates Test 7: some templates", {
+## Test 10: some templates ----
+test_that("print.adam_templates Test 10: some templates", {
   templates <- c("ADAE", "ADSL") %>%
     structure(class = c("adam_templates", "character"), package = "admiral") # nolint: undesirable_function_linter
   expected_print_output <- c(
