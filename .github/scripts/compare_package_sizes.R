@@ -67,18 +67,36 @@ run_command <- function(command, args, working_directory = NULL) {
 build_source_tarball <- function(repo_dir, build_dir) {
   dir.create(build_dir, recursive = TRUE, showWarnings = FALSE)
 
+  package_dir <- normalizePath(repo_dir, winslash = "/", mustWork = TRUE)
+  package_name <- basename(package_dir)
+  parent_dir <- dirname(package_dir)
+
   run_command(
     command = file.path(R.home("bin"), "R"),
-    args = c("CMD", "build", "--output-dir", build_dir, "."),
-    working_directory = repo_dir
+    args = c("CMD", "build", package_name),
+    working_directory = parent_dir
   )
 
-  tarballs <- list.files(build_dir, pattern = "\\.tar\\.gz$", full.names = TRUE)
-  if (length(tarballs) == 0) {
+  tarballs <- list.files(parent_dir, pattern = "\\.tar\\.gz$", full.names = TRUE)
+  package_tarballs <- tarballs[basename(tarballs) %in% sprintf("%s_*.tar.gz", package_name)]
+
+  if (length(package_tarballs) == 0) {
+    package_tarballs <- tarballs[grepl(sprintf("^%s_.*\\.tar\\.gz$", package_name), basename(tarballs))]
+  }
+
+  if (length(package_tarballs) == 0) {
     stop("No source tarball was created by `R CMD build`.", call. = FALSE)
   }
 
-  tarballs[[which.max(file.info(tarballs)$mtime)]]
+  latest_tarball <- package_tarballs[[which.max(file.info(package_tarballs)$mtime)]]
+  destination <- file.path(build_dir, basename(latest_tarball))
+  success <- file.copy(latest_tarball, destination, overwrite = TRUE)
+
+  if (!isTRUE(success)) {
+    stop("Failed to copy the built source tarball to the build directory.", call. = FALSE)
+  }
+
+  destination
 }
 
 download_cran_tarball <- function(package_name, cran_mirror, download_dir) {
