@@ -2,7 +2,7 @@
 
 ## New Features
 
-- The `admiral_add_labels_attrs_section()` function was added to output
+- The `admiral_labels_attrs_section()` function was added to output
   standardized boilerplate markdown for the "Add Labels and Attributes" section
   in ADaM-specific vignettes. All relevant vignettes have been updated to use
   this function, ensuring consistent content that can be maintained in one

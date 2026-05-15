@@ -610,7 +610,7 @@ adex <- adex %>%
 ```
 
 ```{r, results='asis', echo=FALSE}
-admiral_add_labels_attrs_section()
+admiral_labels_attrs_section()
 ```
 
 # Example Script {#example}

@@ -60,33 +60,33 @@ test_that("use_ad_template Test 5: error if ADaM template file already exists", 
   file.remove(file)
 })
 
-# admiral_add_labels_attrs_section ----
+# admiral_labels_attrs_section ----
 ## Test 6: default header level outputs ## heading ----
-test_that("admiral_add_labels_attrs_section Test 6: default header level outputs ## heading", {
-  output <- capture.output(admiral_add_labels_attrs_section())
-  expect_true(any(grepl("^## Add Labels and Attributes", output)))
-  expect_true(any(grepl("metacore", output)))
-  expect_true(any(grepl("metatools", output)))
-  expect_true(any(grepl("xportr", output)))
-  expect_true(any(grepl("pharmaverse", output)))
+test_that("admiral_labels_attrs_section Test 6: default header level outputs ## heading", {
+  output <- capture.output(admiral_labels_attrs_section())
+  expect_true(any(str_detect(output, "^## Add Labels and Attributes")))
+  expect_true(any(str_detect(output, "metacore")))
+  expect_true(any(str_detect(output, "metatools")))
+  expect_true(any(str_detect(output, "xportr")))
+  expect_true(any(str_detect(output, "pharmaverse")))
 })
 
 ## Test 7: custom header level outputs # heading ----
-test_that("admiral_add_labels_attrs_section Test 7: custom header level outputs # heading", {
-  output <- capture.output(admiral_add_labels_attrs_section(header_lvl = "#"))
-  expect_true(any(grepl("^# Add Labels and Attributes", output)))
+test_that("admiral_labels_attrs_section Test 7: custom header level outputs # heading", {
+  output <- capture.output(admiral_labels_attrs_section(header_lvl = "#"))
+  expect_true(any(str_detect(output, "^# Add Labels and Attributes")))
 })
 
 ## Test 8: custom header level outputs ### heading ----
-test_that("admiral_add_labels_attrs_section Test 8: custom header level outputs ### heading", {
-  output <- capture.output(admiral_add_labels_attrs_section(header_lvl = "###"))
-  expect_true(any(grepl("^### Add Labels and Attributes", output)))
+test_that("admiral_labels_attrs_section Test 8: custom header level outputs ### heading", {
+  output <- capture.output(admiral_labels_attrs_section(header_lvl = "###"))
+  expect_true(any(str_detect(output, "^### Add Labels and Attributes")))
 })
 
 ## Test 9: invalid header_lvl raises error ----
-test_that("admiral_add_labels_attrs_section Test 9: invalid header_lvl raises error", {
+test_that("admiral_labels_attrs_section Test 9: invalid header_lvl raises error", {
   expect_error(
-    admiral_add_labels_attrs_section(header_lvl = "abc"),
+    admiral_labels_attrs_section(header_lvl = "abc"),
     regexp = "header_lvl.*must consist only of hash marks"
   )
 })

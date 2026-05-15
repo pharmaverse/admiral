@@ -1651,7 +1651,7 @@ adab <- adab_prefinal %>%
 ```
 
 ```{r, results='asis', echo=FALSE}
-admiral_add_labels_attrs_section(header_lvl = "#")
+admiral_labels_attrs_section(header_lvl = "#")
 ```
 
 

@@ -115,10 +115,10 @@ list_all_templates <- function(package = "admiral") {
 #' @export
 #'
 #' @examples
-#' admiral_add_labels_attrs_section()
+#' admiral_labels_attrs_section()
 #'
-#' admiral_add_labels_attrs_section(header_lvl = "#")
-admiral_add_labels_attrs_section <- function(header_lvl = "##") {
+#' admiral_labels_attrs_section(header_lvl = "#")
+admiral_labels_attrs_section <- function(header_lvl = "##") {
   assert_character_scalar(header_lvl)
   if (!str_detect(header_lvl, "^#+$")) {
     cli_abort(c(
@@ -141,8 +141,8 @@ admiral_add_labels_attrs_section <- function(header_lvl = "##") {
     "-   [xportr](https://atorus-research.github.io/xportr/): functionality\n",
     "    to associate all metadata information to a local R data frame,\n",
     "    perform data set level validation checks and convert into a\n",
-    "    [transport v5\n",
-    "    file(xpt)](https://documentation.sas.com/doc/en/pgmsascdc/9.4_3.5/movefile/n1xbwdre0giahfn11c99yjkpi2yb.htm).\n\n",
+    "    [transport v5 file(xpt)](https://documentation.sas.com/doc/en/",
+    "pgmsascdc/9.4_3.5/movefile/n1xbwdre0giahfn11c99yjkpi2yb.htm).\n\n",
     "NOTE: Together with `{admiral}` these packages comprise an End to End\n",
     "pipeline under the umbrella of the\n",
     "[pharmaverse](https://github.com/pharmaverse). An example of applying\n",
