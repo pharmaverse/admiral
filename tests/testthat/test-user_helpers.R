@@ -83,6 +83,14 @@ test_that("admiral_add_labels_attrs_section Test 8: custom header level outputs 
   expect_true(any(grepl("^### Add Labels and Attributes", output)))
 })
 
+## Test 9: invalid header_lvl raises error ----
+test_that("admiral_add_labels_attrs_section Test 9: invalid header_lvl raises error", {
+  expect_error(
+    admiral_add_labels_attrs_section(header_lvl = "abc"),
+    regexp = "header_lvl.*must consist only of hash marks"
+  )
+})
+
 # print.adam_templates ----
 ## Test 9: no templates ----
 test_that("print.adam_templates Test 9: no templates", {

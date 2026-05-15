@@ -97,10 +97,12 @@ list_all_templates <- function(package = "admiral") {
 #' inside an R Markdown code chunk with `results='asis'` and `echo=FALSE`.
 #'
 #' @param header_lvl The markdown header level for the section heading. Must
-#'   be a character string of one or more hash marks, e.g. `"#"`, `"##"`, or
-#'   `"###"`. The default is `"##"`.
+#'   be a character string consisting only of hash marks, e.g. `"#"`, `"##"`,
+#'   or `"###"`. The default is `"##"`.
 #'
-#' @return No return value, called for side effects.
+#' @return No return value. The function outputs text directly to the console
+#'   or output stream via `cat()`, intended for use in R Markdown documents
+#'   with `results='asis'`.
 #'
 #' @details
 #' The outputted section describes how to add variable labels and other
@@ -118,6 +120,12 @@ list_all_templates <- function(package = "admiral") {
 #' admiral_add_labels_attrs_section(header_lvl = "#")
 admiral_add_labels_attrs_section <- function(header_lvl = "##") {
   assert_character_scalar(header_lvl)
+  if (!str_detect(header_lvl, "^#+$")) {
+    cli_abort(c(
+      "{.arg header_lvl} must consist only of hash marks (e.g., {.code \"#\"}, {.code \"##\"}).",
+      x = "Got {.val {header_lvl}}."
+    ))
+  }
   cat(paste0(
     header_lvl, " Add Labels and Attributes {#attributes}\n\n",
     "Note that attributes may not be preserved in some cases after processing\n",
@@ -138,7 +146,7 @@ admiral_add_labels_attrs_section <- function(header_lvl = "##") {
     "NOTE: Together with `{admiral}` these packages comprise an End to End\n",
     "pipeline under the umbrella of the\n",
     "[pharmaverse](https://github.com/pharmaverse). An example of applying\n",
-    "metadata and perform associated checks can be found at the [pharmaverse\n",
+    "metadata and performing associated checks can be found at the [pharmaverse\n",
     "E2E example](https://pharmaverse.github.io/examples/adam/adsl).\n"
   ))
 }

@@ -8,15 +8,17 @@ admiral_add_labels_attrs_section(header_lvl = "##")
 }
 \arguments{
 \item{header_lvl}{The markdown header level for the section heading. Must
-be a character string of one or more hash marks, e.g. \code{"#"}, \code{"##"}, or
-\code{"###"}. The default is \code{"##"}.
+be a character string consisting only of hash marks, e.g. \code{"#"}, \code{"##"},
+or \code{"###"}. The default is \code{"##"}.
 
 \describe{
 \item{Default value}{\code{"##"}}
 }}
 }
 \value{
-No return value, called for side effects.
+No return value. The function outputs text directly to the console
+or output stream via \code{cat()}, intended for use in R Markdown documents
+with \code{results='asis'}.
 }
 \description{
 Outputs the standard markdown text used in ADaM-specific vignettes for the
