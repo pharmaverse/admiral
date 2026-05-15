@@ -41,5 +41,9 @@
   ADaMs](https:/pharmaverse.github.io/admiral/3112_dev_links/articles/questionnaires.md):
 - [Explore the admiral ADaM
   Templates](https:/pharmaverse.github.io/admiral/3112_dev_links/articles/templates.md):
+- [Time-to-Event
+  Analyses](https:/pharmaverse.github.io/admiral/3112_dev_links/articles/tte_analyses_web.md):
+- [Time-to-Event
+  Analyses](https:/pharmaverse.github.io/admiral/3112_dev_links/articles/tte_analyses.md):
 - [Visit and Period
   Variables](https:/pharmaverse.github.io/admiral/3112_dev_links/articles/visits_periods.md):

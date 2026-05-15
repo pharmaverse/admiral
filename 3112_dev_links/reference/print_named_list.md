@@ -52,4 +52,5 @@ print_named_list(death_event)
 #>   SRCDOM: "ADSL"
 #>   SRCVAR: "DTHDT"
 #> order: NULL
+#> consider_end_dates: TRUE
 ```

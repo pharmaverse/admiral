@@ -41,7 +41,7 @@ Authors:
 
 - Ross Farrugia
 
-- Fanny Gautier
+- Fanny Gautier ([ORCID](https://orcid.org/0009-0004-3581-0131))
 
 - Edoardo Mancini ([ORCID](https://orcid.org/0009-0006-4899-8641))
 
