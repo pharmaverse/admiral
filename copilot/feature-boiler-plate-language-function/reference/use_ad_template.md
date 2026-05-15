@@ -65,6 +65,7 @@ to discover which templates are available.
 ## See also
 
 Utilities used for examples and template scripts:
+[`admiral_labels_attrs_section()`](https:/pharmaverse.github.io/admiral/copilot/feature-boiler-plate-language-function/reference/admiral_labels_attrs_section.md),
 [`list_all_templates()`](https:/pharmaverse.github.io/admiral/copilot/feature-boiler-plate-language-function/reference/list_all_templates.md)
 
 ## Examples

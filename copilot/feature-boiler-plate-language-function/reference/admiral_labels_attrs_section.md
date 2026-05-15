@@ -8,12 +8,12 @@ called inside an R Markdown code chunk with `results='asis'` and
 ## Usage
 
 ``` r
-admiral_add_labels_attrs_section(header_lvl = "##")
+admiral_labels_attrs_section(header_lvl = "##")
 ```
 
 ## Arguments
 
-- header_lvl :
+- header_lvl:
 
   The markdown header level for the section heading. Must be a character
   string consisting only of hash marks, e.g. `"#"`, `"##"`, or `"###"`.
@@ -44,7 +44,7 @@ Utilities used for examples and template scripts:
 ## Examples
 
 ``` r
-admiral_add_labels_attrs_section()
+admiral_labels_attrs_section()
 #> ## Add Labels and Attributes {#attributes}
 #> 
 #> Note that attributes may not be preserved in some cases after processing
@@ -63,8 +63,7 @@ admiral_add_labels_attrs_section()
 #> -   [xportr](https://atorus-research.github.io/xportr/): functionality
 #>     to associate all metadata information to a local R data frame,
 #>     perform data set level validation checks and convert into a
-#>     [transport v5
-#>     file(xpt)](https://documentation.sas.com/doc/en/pgmsascdc/9.4_3.5/movefile/n1xbwdre0giahfn11c99yjkpi2yb.htm).
+#>     [transport v5 file(xpt)](https://documentation.sas.com/doc/en/pgmsascdc/9.4_3.5/movefile/n1xbwdre0giahfn11c99yjkpi2yb.htm).
 #> 
 #> NOTE: Together with `{admiral}` these packages comprise an End to End
 #> pipeline under the umbrella of the
@@ -72,7 +71,7 @@ admiral_add_labels_attrs_section()
 #> metadata and performing associated checks can be found at the [pharmaverse
 #> E2E example](https://pharmaverse.github.io/examples/adam/adsl).
 
-admiral_add_labels_attrs_section(header_lvl = "#")
+admiral_labels_attrs_section(header_lvl = "#")
 #> # Add Labels and Attributes {#attributes}
 #> 
 #> Note that attributes may not be preserved in some cases after processing
@@ -91,8 +90,7 @@ admiral_add_labels_attrs_section(header_lvl = "#")
 #> -   [xportr](https://atorus-research.github.io/xportr/): functionality
 #>     to associate all metadata information to a local R data frame,
 #>     perform data set level validation checks and convert into a
-#>     [transport v5
-#>     file(xpt)](https://documentation.sas.com/doc/en/pgmsascdc/9.4_3.5/movefile/n1xbwdre0giahfn11c99yjkpi2yb.htm).
+#>     [transport v5 file(xpt)](https://documentation.sas.com/doc/en/pgmsascdc/9.4_3.5/movefile/n1xbwdre0giahfn11c99yjkpi2yb.htm).
 #> 
 #> NOTE: Together with `{admiral}` these packages comprise an End to End
 #> pipeline under the umbrella of the

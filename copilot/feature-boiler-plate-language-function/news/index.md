@@ -5,7 +5,7 @@
 ### New Features
 
 - The
-  [`admiral_add_labels_attrs_section()`](https:/pharmaverse.github.io/admiral/copilot/feature-boiler-plate-language-function/reference/admiral_add_labels_attrs_section.md)
+  [`admiral_labels_attrs_section()`](https:/pharmaverse.github.io/admiral/copilot/feature-boiler-plate-language-function/reference/admiral_labels_attrs_section.md)
   function was added to output standardized boilerplate markdown for the
   “Add Labels and Attributes” section in ADaM-specific vignettes. All
   relevant vignettes have been updated to use this function, ensuring

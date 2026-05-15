@@ -25,6 +25,7 @@ A `character` vector of all available templates
 ## See also
 
 Utilities used for examples and template scripts:
+[`admiral_labels_attrs_section()`](https:/pharmaverse.github.io/admiral/copilot/feature-boiler-plate-language-function/reference/admiral_labels_attrs_section.md),
 [`use_ad_template()`](https:/pharmaverse.github.io/admiral/copilot/feature-boiler-plate-language-function/reference/use_ad_template.md)
 
 ## Examples
