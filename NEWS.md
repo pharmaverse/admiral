@@ -41,6 +41,10 @@ specified under `save_path`. This is because this functionality did not work as 
   
   **Phase 4 (removed)**
 
+- The `ex_single` dataset was removed from `{admiral}` to reduce the package
+  size. It can be derived on the fly using `create_single_dose_dataset()`.
+  See the `OCCDS` vignette or `?create_single_dose_dataset` for examples. (#3060)
+
 ## Documentation
 
 - New article "Time-to-Event Analyses" added to provide guidance for different
@@ -106,9 +110,8 @@ the pull request title to trigger website creation. (#2984)
   `roxygen_order_na_handling()`, and `roxygen_save_memory()` have been moved
   from `{admiral}` to `{admiraldev}`. They are now exported from `{admiraldev}`
   and remain accessible in `{admiral}` via the existing `@import admiraldev`
-  dependency.
-  ([admiraldev/#517](https://github.com/pharmaverse/admiraldev/issues/517))
-  
+  dependency. ([admiraldev/#517](https://github.com/pharmaverse/admiraldev/issues/517))
+
 - The HTML tag `<br/>` was removed from the roxygen headers. (#3042)
 
 - Clickable links to personal websites or GitHub profiles were added in the home page sidebar for every `{admiral}` author. (#3112)

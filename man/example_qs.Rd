@@ -22,7 +22,6 @@ and \href{https://www.cdisc.org/standards/foundational/qrs/geriatric-depression-
 Other datasets:
 \code{\link{admiral_adlb}},
 \code{\link{admiral_adsl}},
-\code{\link{ex_single}},
 \code{\link{queries}},
 \code{\link{queries_mh}}
 }
