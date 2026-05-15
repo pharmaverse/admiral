@@ -115,9 +115,6 @@ the pull request title to trigger website creation. (#2984)
 - The HTML tag `<br/>` was removed from the roxygen headers. (#3042)
 
 - Clickable links to personal websites or GitHub profiles were added in the home page sidebar for every `{admiral}` author. (#3112)
-
-- Added a manual GitHub Action to compare the CRAN package size with a selected
-  development ref and generate markdown/csv package size reports.
 </details>
 
 # admiral 1.4.1
