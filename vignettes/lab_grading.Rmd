@@ -361,7 +361,7 @@ adlb %>%
 
 ## Deriving Baseline Toxicity Grades
 
-Per the ADaM Implementation Guide 1.2, baseline toxicity grades are required to evaluate 
+ Per the ADaM Implementation Guide 1.2, baseline toxicity grades are required to evaluate 
 shifts from baseline. For directional toxicity grading, split variables are utilized for 
 directionality: `BTOXGRL` (Baseline Toxicity Grade Low) and `BTOXGRH` (Baseline Toxicity Grade High).
 
@@ -369,7 +369,7 @@ After the directional toxicity grades (`ATOXGRL`, `ATOXGRH`) are derived, the co
 variables can be added to all records by applying the `derive_var_base()` function.
 
 If a combined toxicity grade variable (`ATOXGR`) has also been derived, the corresponding baseline
-variable (`BTOXGR`) can be derived with the same approach.
+variable (`BTOXGR`) can be derived with the same approach. 
 
 The following example demonstrates how to derive baseline toxicity grade variables 
 (`BTOXGR`, `BTOXGRL`, and `BTOXGRH`) from the baseline records:
