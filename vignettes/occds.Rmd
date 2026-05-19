@@ -74,7 +74,7 @@ appropriate. In the example below, we impute the time as the first time of the
 day. The `min_dates` argument is used in the second call to ensure that the end
 datetime is not imputed to be before the start datetime.
 ```{r}
-ex <- ex %>% 
+ex <- ex %>%
   derive_vars_dtm(
     dtc = EXSTDTC,
     new_vars_prefix = "EXST",
@@ -87,7 +87,7 @@ ex <- ex %>%
     time_imputation = "first",
     flag_imputation = "none",
     min_dates = exprs(EXSTDTM)
-  ) %>% 
+  ) %>%
   derive_vars_dtm_to_dt(exprs(EXSTDTM, EXENDTM))
 ```
 
