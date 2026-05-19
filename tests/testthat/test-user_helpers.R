@@ -60,9 +60,40 @@ test_that("use_ad_template Test 5: error if ADaM template file already exists", 
   file.remove(file)
 })
 
+# admiral_labels_attrs_section ----
+## Test 6: default header level outputs ## heading ----
+test_that("admiral_labels_attrs_section Test 6: default header level outputs ## heading", {
+  output <- capture.output(admiral_labels_attrs_section())
+  expect_true(any(str_detect(output, "^## Add Labels and Attributes")))
+  expect_true(any(str_detect(output, "metacore")))
+  expect_true(any(str_detect(output, "metatools")))
+  expect_true(any(str_detect(output, "xportr")))
+  expect_true(any(str_detect(output, "pharmaverse")))
+})
+
+## Test 7: custom header level outputs # heading ----
+test_that("admiral_labels_attrs_section Test 7: custom header level outputs # heading", {
+  output <- capture.output(admiral_labels_attrs_section(header_lvl = "#"))
+  expect_true(any(str_detect(output, "^# Add Labels and Attributes")))
+})
+
+## Test 8: custom header level outputs ### heading ----
+test_that("admiral_labels_attrs_section Test 8: custom header level outputs ### heading", {
+  output <- capture.output(admiral_labels_attrs_section(header_lvl = "###"))
+  expect_true(any(str_detect(output, "^### Add Labels and Attributes")))
+})
+
+## Test 9: invalid header_lvl raises error ----
+test_that("admiral_labels_attrs_section Test 9: invalid header_lvl raises error", {
+  expect_error(
+    admiral_labels_attrs_section(header_lvl = "abc"),
+    regexp = "header_lvl.*must consist only of hash marks"
+  )
+})
+
 # print.adam_templates ----
-## Test 6: no templates ----
-test_that("print.adam_templates Test 6: no templates", {
+## Test 9: no templates ----
+test_that("print.adam_templates Test 9: no templates", {
   templates <- list_all_templates(package = "dplyr")
   expected_print_output <- c(
     "No ADaM templates available in package 'dplyr'"
@@ -70,8 +101,8 @@ test_that("print.adam_templates Test 6: no templates", {
   expect_identical(capture.output(print(templates)), expected_print_output)
 })
 
-## Test 7: some templates ----
-test_that("print.adam_templates Test 7: some templates", {
+## Test 10: some templates ----
+test_that("print.adam_templates Test 10: some templates", {
   templates <- c("ADAE", "ADSL") %>%
     structure(class = c("adam_templates", "character"), package = "admiral") # nolint: undesirable_function_linter
   expected_print_output <- c(

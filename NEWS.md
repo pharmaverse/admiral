@@ -2,6 +2,12 @@
 
 ## New Features
 
+- The `admiral_labels_attrs_section()` function was added to output
+  standardized boilerplate markdown for the "Add Labels and Attributes" section
+  in ADaM-specific vignettes. All relevant vignettes have been updated to use
+  this function, ensuring consistent content that can be maintained in one
+  place. (#2926)
+
 ## Updates of Existing Functions
 
 - The `end_dates` argument for specifying dates which restrict the observation
