@@ -496,9 +496,6 @@ to produce additional datasets
 
 ### Utilities used for Examples and Template Scripts
 
-- [`admiral_labels_attrs_section()`](https:/pharmaverse.github.io/admiral/copilot/feature-boiler-plate-language-function/reference/admiral_labels_attrs_section.md)
-  : Output Boilerplate for the "Add Labels and Attributes" Vignette
-  Section
 - [`list_all_templates()`](https:/pharmaverse.github.io/admiral/copilot/feature-boiler-plate-language-function/reference/list_all_templates.md)
   : List All Available ADaM Templates
 - [`use_ad_template()`](https:/pharmaverse.github.io/admiral/copilot/feature-boiler-plate-language-function/reference/use_ad_template.md)

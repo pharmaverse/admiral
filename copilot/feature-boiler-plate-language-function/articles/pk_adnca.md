@@ -883,7 +883,8 @@ in `ADPC` but did not keep.
 
 - [Combine Covariates with `ADPPK` Data](#final)
 
-### Find First Dose `ADPPK`
+- [Add Labels and Attributes (Same as `ADPC`)](#attributes) \## Find
+  First Dose `ADPPK` {#ppkfirst}
 
 The initial programming steps for `ADPPK` will follow the same sequence
 as the `ADPC`. This includes reading in the

@@ -23,12 +23,6 @@ The outputted section describes how to add variable labels and other
 metadata to ADaM datasets as a final step in the derivation process,
 using the `{metacore}`, `{metatools}`, and `{xportr}` packages.
 
-## See also
-
-Utilities used for examples and template scripts:
-[`list_all_templates()`](https:/pharmaverse.github.io/admiral/copilot/feature-boiler-plate-language-function/reference/list_all_templates.md),
-[`use_ad_template()`](https:/pharmaverse.github.io/admiral/copilot/feature-boiler-plate-language-function/reference/use_ad_template.md)
-
 ## Examples
 
 ``` r
