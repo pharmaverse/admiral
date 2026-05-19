@@ -61,34 +61,14 @@ test_that("use_ad_template Test 5: error if ADaM template file already exists", 
 })
 
 # admiral_labels_attrs_section ----
-## Test 6: default header level outputs ## heading ----
-test_that("admiral_labels_attrs_section Test 6: default header level outputs ## heading", {
+## Test 6: outputs ## heading and expected content ----
+test_that("admiral_labels_attrs_section Test 6: outputs ## heading and expected content", {
   output <- capture.output(admiral_labels_attrs_section())
   expect_true(any(str_detect(output, "^## Add Labels and Attributes")))
   expect_true(any(str_detect(output, "metacore")))
   expect_true(any(str_detect(output, "metatools")))
   expect_true(any(str_detect(output, "xportr")))
   expect_true(any(str_detect(output, "pharmaverse")))
-})
-
-## Test 7: custom header level outputs # heading ----
-test_that("admiral_labels_attrs_section Test 7: custom header level outputs # heading", {
-  output <- capture.output(admiral_labels_attrs_section(header_lvl = "#"))
-  expect_true(any(str_detect(output, "^# Add Labels and Attributes")))
-})
-
-## Test 8: custom header level outputs ### heading ----
-test_that("admiral_labels_attrs_section Test 8: custom header level outputs ### heading", {
-  output <- capture.output(admiral_labels_attrs_section(header_lvl = "###"))
-  expect_true(any(str_detect(output, "^### Add Labels and Attributes")))
-})
-
-## Test 9: invalid header_lvl raises error ----
-test_that("admiral_labels_attrs_section Test 9: invalid header_lvl raises error", {
-  expect_error(
-    admiral_labels_attrs_section(header_lvl = "abc"),
-    regexp = "header_lvl.*must consist only of hash marks"
-  )
 })
 
 # print.adam_templates ----

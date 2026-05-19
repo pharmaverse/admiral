@@ -4,16 +4,7 @@
 \alias{admiral_labels_attrs_section}
 \title{Output Boilerplate for the "Add Labels and Attributes" Vignette Section}
 \usage{
-admiral_labels_attrs_section(header_lvl = "##")
-}
-\arguments{
-\item{header_lvl}{The markdown header level for the section heading. Must
-be a character string consisting only of hash marks, e.g. \code{"#"}, \code{"##"},
-or \code{"###"}. The default is \code{"##"}.
-
-\describe{
-\item{Default value}{\code{"##"}}
-}}
+admiral_labels_attrs_section()
 }
 \value{
 No return value. The function outputs text directly to the console
@@ -32,8 +23,6 @@ using the \code{{metacore}}, \code{{metatools}}, and \code{{xportr}} packages.
 }
 \examples{
 admiral_labels_attrs_section()
-
-admiral_labels_attrs_section(header_lvl = "#")
 }
 \seealso{
 Utilities used for examples and template scripts:
