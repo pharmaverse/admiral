@@ -107,6 +107,8 @@ list_all_templates <- function(package = "admiral") {
 #'
 #' @keywords internal
 #'
+#' @export
+#'
 #' @examples
 #' admiral_labels_attrs_section()
 admiral_labels_attrs_section <- function() {
