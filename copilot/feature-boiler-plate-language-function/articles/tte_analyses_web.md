@@ -194,7 +194,7 @@ improvement is confirmed or not, the
 function can be used. Here an assessment is considered as confirmed if
 it doesn’t change at the next visit. Only assessments within the
 observation period (`ANL01FL == "Y"`) are considered for the
-confirmation.
+confirmation [²](#fn2).
 
 ``` r
 adqs_ext <- adqs_a %>%
@@ -511,3 +511,8 @@ Any feedback helps us improving
 1.  see for example [Clinical Trial Endpoints for the Approval of
     Non-Small Cell Lung Cancer Drugs and Biologics Guidance for
     Industry](https://www.fda.gov/media/116860/download)
+
+2.  See also the [CDISC Diabetic Kidney Disease Therapeutic Area User
+    Guide
+    v1.0](https://www.cdisc.org/standards/therapeutic-areas/diabetic-kidney-disease/diabetic-kidney-disease-therapeutic-area-user)
+    for a similar example.

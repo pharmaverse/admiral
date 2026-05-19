@@ -4,14 +4,6 @@
 
 ### New Features
 
-- The
-  [`admiral_labels_attrs_section()`](https:/pharmaverse.github.io/admiral/copilot/feature-boiler-plate-language-function/reference/admiral_labels_attrs_section.md)
-  function was added to output standardized boilerplate markdown for the
-  “Add Labels and Attributes” section in ADaM-specific vignettes. All
-  relevant vignettes have been updated to use this function, ensuring
-  consistent content that can be maintained in one place.
-  ([\#2926](https://github.com/pharmaverse/admiral/issues/2926))
-
 ### Updates of Existing Functions
 
 - The `end_dates` argument for specifying dates which restrict the
@@ -78,6 +70,15 @@
   **Phase 3 (error)**
 
   **Phase 4 (removed)**
+
+- The `ex_single` dataset was removed from
+  [admiral](https://pharmaverse.github.io/admiral/) to reduce the
+  package size. It can be derived on the fly using
+  [`create_single_dose_dataset()`](https:/pharmaverse.github.io/admiral/copilot/feature-boiler-plate-language-function/reference/create_single_dose_dataset.md).
+  See the `OCCDS` vignette or
+  [`?create_single_dose_dataset`](https:/pharmaverse.github.io/admiral/copilot/feature-boiler-plate-language-function/reference/create_single_dose_dataset.md)
+  for examples.
+  ([\#3060](https://github.com/pharmaverse/admiral/issues/3060))
 
 ### Documentation
 
@@ -181,6 +182,14 @@ Developer Notes
 
 - Update to roxygen2 8.0.0.
   ([\#3090](https://github.com/pharmaverse/admiral/issues/3090))
+
+- The
+  [`admiral_labels_attrs_section()`](https:/pharmaverse.github.io/admiral/copilot/feature-boiler-plate-language-function/reference/admiral_labels_attrs_section.md)
+  function was added to output standardized boilerplate markdown for the
+  “Add Labels and Attributes” section in ADaM-specific vignettes. All
+  relevant vignettes have been updated to use this function, ensuring
+  consistent content that can be maintained in one place.
+  ([\#2926](https://github.com/pharmaverse/admiral/issues/2926))
 
 - Add instructions for AI coding agents: Workflow from `{admiralci}`
   copies information from

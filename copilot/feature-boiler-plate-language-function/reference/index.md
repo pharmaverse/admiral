@@ -237,9 +237,6 @@ to produce additional datasets
 - [`admiral_adsl`](https:/pharmaverse.github.io/admiral/copilot/feature-boiler-plate-language-function/reference/admiral_adsl.md)
   : Subject Level Analysis Dataset
 
-- [`ex_single`](https:/pharmaverse.github.io/admiral/copilot/feature-boiler-plate-language-function/reference/ex_single.md)
-  : Single Dose Exposure Dataset
-
 - [`example_qs`](https:/pharmaverse.github.io/admiral/copilot/feature-boiler-plate-language-function/reference/example_qs.md)
   :
 

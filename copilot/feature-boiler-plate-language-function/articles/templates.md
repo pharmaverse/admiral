@@ -1309,7 +1309,7 @@ ad_adae.R
 #
 # Label: Adverse Event Analysis Dataset
 #
-# Input: ae, adsl, ex_single
+# Input: ae, adsl, ex
 library(admiral)
 library(pharmaversesdtm) # Contains example datasets from the CDISC pilot project
 library(dplyr)
@@ -1322,23 +1322,51 @@ library(lubridate)
 # For illustration purposes read in admiral test data
 
 ae <- pharmaversesdtm::ae
-suppae <- pharmaversesdtm::suppae
 adsl <- admiral::admiral_adsl
-ex_single <- admiral::ex_single
+ex <- pharmaversesdtm::ex
 
 # When SAS datasets are imported into R using haven::read_sas(), missing
 # character values from SAS appear as "" characters in R, instead of appearing
 # as NA values. Further details can be obtained via the following link:
 # https://pharmaverse.github.io/admiral/cran-release/articles/admiral.html#handling-of-missing-values # nolint
-
 ae <- convert_blanks_to_na(ae)
-ex <- convert_blanks_to_na(ex_single)
+ex <- convert_blanks_to_na(ex)
 
+# Create single dose dataset for use in date of last dose derivations.
+# If the exposure dataset contains multi-day dosing records (e.g., one record
+# per treatment period rather than one record per dose), use
+# create_single_dose_dataset() to expand them into one record per dose.
+# Whether this step is necessary depends on how dosing data were collected.
+ex_single <- ex %>%
+  derive_vars_dtm(
+    dtc = EXSTDTC,
+    new_vars_prefix = "EXST",
+    time_imputation = "first",
+    flag_imputation = "none"
+  ) %>%
+  derive_vars_dtm(
+    dtc = EXENDTC,
+    new_vars_prefix = "EXEN",
+    time_imputation = "last",
+    flag_imputation = "none"
+  ) %>%
+  derive_vars_dtm_to_dt(exprs(EXSTDTM, EXENDTM)) %>%
+  filter(!is.na(EXSTDT), !is.na(EXENDT)) %>%
+  create_single_dose_dataset(
+    dose_freq = EXDOSFRQ,
+    start_date = EXSTDT,
+    start_datetime = EXSTDTM,
+    end_date = EXENDT,
+    end_datetime = EXENDTM,
+    keep_source_vars = exprs(
+      STUDYID, USUBJID, EXTRT, EXDOSE, EXDOSU, EXDOSFRQ, EXSTDT, EXENDT, EXSTDTM, EXENDTM
+    )
+  )
 
 # Derivations ----
 
 # Get list of ADSL vars required for derivations
-adsl_vars <- exprs(TRTSDT, TRTEDT, DTHDT, EOSDT)
+adsl_vars <- exprs(TRTSDT, TRTEDT, TRTEDTM, DTHDT, EOSDT)
 
 adae <- ae %>%
   # join adsl to ae
@@ -1365,7 +1393,7 @@ adae <- ae %>%
   ) %>%
   ## Derive analysis end/start date ----
   derive_vars_dtm_to_dt(exprs(ASTDTM, AENDTM)) %>%
-  ## Derive analysis start relative day and  analysis end relative day ----
+  ## Derive analysis start relative day and analysis end relative day ----
   derive_vars_dy(
     reference_date = TRTSDT,
     source_vars = exprs(ASTDT, AENDT)
@@ -1382,23 +1410,10 @@ adae <- ae %>%
     trunc_out = FALSE
   )
 
-ex_ext <- derive_vars_dtm(
-  ex,
-  dtc = EXSTDTC,
-  new_vars_prefix = "EXST",
-  flag_imputation = "none"
-) %>%
-  derive_vars_dtm(
-    dtc = EXENDTC,
-    new_vars_prefix = "EXEN",
-    time_imputation = "last",
-    flag_imputation = "none"
-  )
-
 adae <- adae %>%
   ## Derive last dose date/time ----
   derive_vars_joined(
-    dataset_add = ex_ext,
+    dataset_add = ex_single,
     by_vars = exprs(STUDYID, USUBJID),
     new_vars = exprs(LDOSEDTM = EXSTDTM),
     join_vars = exprs(EXSTDTM),
@@ -1409,14 +1424,31 @@ adae <- adae %>%
     mode = "last"
   ) %>%
   ## Derive treatment dose and unit ----
+  # ex_single has been expanded to one record per day so EXSTDTM and EXENDTM
+  # represent day-level treatment windows (00:00:00 to 23:59:59).
+  # It is assumed that dosing intervals do not overlap; if they do,
+  # derive_vars_joined() will throw an error as handling this is study-specific.
+  # Drug clearance duration should be considered when matching exposure records
+  # with adverse events. EXSTDTC and EXENDTC represent the administration period
+  # only, not the time the drug remains in the body. The clearance buffer is
+  # applied to TRTEDTM (last exposure end datetime from ADSL) rather than to
+  # every exposure record, to avoid duplicate matches across daily rows.
+  # Replace days(1) with the study-specific drug clearance period. If no
+  # clearance buffer is required, simplify filter_join to:
+  # EXSTDTM <= ASTDTM & ASTDTM <= EXENDTM
   derive_vars_joined(
-    dataset_add = ex_ext,
+    dataset_add = ex_single,
     by_vars = exprs(STUDYID, USUBJID),
     new_vars = exprs(DOSEON = EXDOSE, DOSEU = EXDOSU),
     join_vars = exprs(EXSTDTM, EXENDTM),
     join_type = "all",
     filter_add = (EXDOSE > 0 | (EXDOSE == 0 & grepl("PLACEBO", EXTRT))) & !is.na(EXSTDTM),
-    filter_join = EXSTDTM <= ASTDTM & (ASTDTM <= EXENDTM | is.na(EXENDTM))
+    filter_join = EXSTDTM <= ASTDTM & (
+      ASTDTM <= EXENDTM |
+        # Apply study-specific drug clearance window to last dose only.
+        # Replace days(1) with the appropriate clearance period for your study.
+        (EXENDTM == TRTEDTM & ASTDTM <= TRTEDTM + days(1))
+    )
   ) %>%
   ## Derive severity / causality / ... ----
   mutate(
