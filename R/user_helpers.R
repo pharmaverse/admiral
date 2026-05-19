@@ -105,10 +105,7 @@ list_all_templates <- function(package = "admiral") {
 #' metadata to ADaM datasets as a final step in the derivation process,
 #' using the `{metacore}`, `{metatools}`, and `{xportr}` packages.
 #'
-#' @family utils_examples
-#' @keywords utils_examples
-#'
-#' @export
+#' @keywords internal
 #'
 #' @examples
 #' admiral_labels_attrs_section()

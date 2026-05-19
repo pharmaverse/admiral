@@ -72,8 +72,8 @@ test_that("admiral_labels_attrs_section Test 6: outputs ## heading and expected 
 })
 
 # print.adam_templates ----
-## Test 9: no templates ----
-test_that("print.adam_templates Test 9: no templates", {
+## Test 7: no templates ----
+test_that("print.adam_templates Test 7: no templates", {
   templates <- list_all_templates(package = "dplyr")
   expected_print_output <- c(
     "No ADaM templates available in package 'dplyr'"
@@ -81,8 +81,8 @@ test_that("print.adam_templates Test 9: no templates", {
   expect_identical(capture.output(print(templates)), expected_print_output)
 })
 
-## Test 10: some templates ----
-test_that("print.adam_templates Test 10: some templates", {
+## Test 8: some templates ----
+test_that("print.adam_templates Test 8: some templates", {
   templates <- c("ADAE", "ADSL") %>%
     structure(class = c("adam_templates", "character"), package = "admiral") # nolint: undesirable_function_linter
   expected_print_output <- c(

@@ -56,7 +56,6 @@ if (interactive()) {
 }
 \seealso{
 Utilities used for examples and template scripts:
-\code{\link[=admiral_labels_attrs_section]{admiral_labels_attrs_section()}},
 \code{\link[=list_all_templates]{list_all_templates()}}
 }
 \concept{utils_examples}

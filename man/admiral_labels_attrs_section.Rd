@@ -24,10 +24,4 @@ using the \code{{metacore}}, \code{{metatools}}, and \code{{xportr}} packages.
 \examples{
 admiral_labels_attrs_section()
 }
-\seealso{
-Utilities used for examples and template scripts:
-\code{\link[=list_all_templates]{list_all_templates()}},
-\code{\link[=use_ad_template]{use_ad_template()}}
-}
-\concept{utils_examples}
-\keyword{utils_examples}
+\keyword{internal}
