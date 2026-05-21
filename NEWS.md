@@ -1,3 +1,7 @@
+# admiral 1.4.2
+
+* Maintainer switched from Ben Straub to Edoardo Mancini
+
 # admiral 1.4.1
 
 ## Updates of Existing Functions
