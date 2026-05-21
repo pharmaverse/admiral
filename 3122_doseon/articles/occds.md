@@ -280,17 +280,17 @@ adae <- derive_vars_joined(
 
 ### Derive Treatment Dose and Unit
 
-In a similar manner, you could derive the treatment dose and unit at the
-time of the event. Please note that drug clearance duration should be
-considered when matching exposure records with adverse events. `EXSTDTC`
-and `EXENDTC` typically represent the administration period only, not
-the time the drug remains in the body. To account for drug clearance,
-you may extend the last exposure end date by the appropriate clearance
-duration. For example, if the exposure dataset contains one records per
-dose and the drug administration is instantaneous, e.g., a pill, we have
-`EXSTDTC == EXENDTC`. I.e., without adding a clearance duration, the
-dose will only be considered as active at the exact time of
-administration.
+In a similar manner, you could derive the treatment dose (`DOSEON`) and
+unit (`DOSEU`) at the time of the event. Please note that drug clearance
+duration should be considered when matching exposure records with
+adverse events. `EXSTDTC` and `EXENDTC` typically represent the
+administration period only, not the time the drug remains in the body.
+To account for drug clearance, you may extend the last exposure end date
+by the appropriate clearance duration. For example, if the exposure
+dataset contains one records per dose and the drug administration is
+instantaneous, e.g., a pill, we have `EXSTDTC == EXENDTC`. I.e., without
+adding a clearance duration, the dose will only be considered as active
+at the exact time of administration.
 
 Adding a clearance duration to the end date may result in overlapping
 dosing intervals for some subjects. Therefore the last dosing record
