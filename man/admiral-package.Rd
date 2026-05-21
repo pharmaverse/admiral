@@ -25,7 +25,7 @@ Other internal:
 \code{\link{signal_duplicate_records}()}
 }
 \author{
-\strong{Maintainer}: Edoardo edoardo.mancini@roche.com Mancini (\href{https://orcid.org/0009-0006-4899-8641}{ORCID})
+\strong{Maintainer}: Edoardo Mancini \email{edoardo.mancini@roche.com} (\href{https://orcid.org/0009-0006-4899-8641}{ORCID})
 
 Authors:
 \itemize{
