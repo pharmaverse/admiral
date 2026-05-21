@@ -25,7 +25,7 @@ ex <- pharmaversesdtm::ex
 ae <- convert_blanks_to_na(ae)
 ex <- convert_blanks_to_na(ex)
 
-# Derive dose start and end dates requires for last dose before event and DOSEON
+# Derive dose start and end dates required for last dose before event and DOSEON
 # The imputation methods should be adjusted to the study needs.
 ex <- ex %>%
   derive_vars_dtm(
