@@ -53,6 +53,32 @@ ae <- convert_blanks_to_na(ae)
 ex <- convert_blanks_to_na(ex)
 ```
 
+As the start and end datetime of the dosing records is required by
+multiple derivations, it is derived once at the beginning. Please note
+that it depends on the study whether imputation is required and if so,
+which imputation method is appropriate. In the example below, we impute
+the time as the first time of the day. The `min_dates` argument is used
+in the second call to ensure that the end datetime is not imputed to be
+before the start datetime.
+
+``` r
+ex <- ex %>%
+  derive_vars_dtm(
+    dtc = EXSTDTC,
+    new_vars_prefix = "EXST",
+    time_imputation = "first",
+    flag_imputation = "none"
+  ) %>%
+  derive_vars_dtm(
+    dtc = EXENDTC,
+    new_vars_prefix = "EXEN",
+    time_imputation = "first",
+    flag_imputation = "none",
+    min_dates = exprs(EXSTDTM)
+  ) %>%
+  derive_vars_dtm_to_dt(exprs(EXSTDTM, EXENDTM))
+```
+
 At this step, it may be useful to join `ADSL` to your `AE` domain as
 well. Only the `ADSL` variables used for derivations are selected at
 this step. The rest of the relevant `ADSL` variables would be added
@@ -220,19 +246,6 @@ day.
 
 ``` r
 ex_single <- ex %>%
-  derive_vars_dtm(
-    dtc = EXSTDTC,
-    new_vars_prefix = "EXST",
-    time_imputation = "first",
-    flag_imputation = "none"
-  ) %>%
-  derive_vars_dtm(
-    dtc = EXENDTC,
-    new_vars_prefix = "EXEN",
-    time_imputation = "last",
-    flag_imputation = "none"
-  ) %>%
-  derive_vars_dtm_to_dt(exprs(EXSTDTM, EXENDTM)) %>%
   filter(!is.na(EXSTDT), !is.na(EXENDT)) %>%
   create_single_dose_dataset(
     dose_freq = EXDOSFRQ,
@@ -241,7 +254,7 @@ ex_single <- ex %>%
     end_date = EXENDT,
     end_datetime = EXENDTM,
     keep_source_vars = exprs(
-      STUDYID, USUBJID, EXTRT, EXDOSE, EXDOSU, EXDOSFRQ, EXSTDT, EXENDT, EXSTDTM, EXENDTM
+      STUDYID, USUBJID, EXTRT, EXDOSE, EXDOSU, EXSTDT, EXENDT, EXSTDTM, EXENDTM
     )
   )
 ```
@@ -267,63 +280,48 @@ adae <- derive_vars_joined(
 
 ### Derive Treatment Dose and Unit
 
-In a similar manner, you could derive the treatment dose and unit at the
-time of the event. Please note that it is assumed that the dosing
-intervals do not overlap. If this case occurs, the
+In a similar manner, you could derive the treatment dose (`DOSEON`) and
+unit (`DOSEU`) at the time of the event. Please note that drug clearance
+duration should be considered when matching exposure records with
+adverse events. `EXSTDTC` and `EXENDTC` typically represent the
+administration period only, not the time the drug remains in the body.
+To account for drug clearance, you may extend the last exposure end date
+by the appropriate clearance duration. For example, if the exposure
+dataset contains one records per dose and the drug administration is
+instantaneous, e.g., a pill, we have `EXSTDTC == EXENDTC`. I.e., without
+adding a clearance duration, the dose will only be considered as active
+at the exact time of administration.
+
+Adding a clearance duration to the end date may result in overlapping
+dosing intervals for some subjects. Therefore the last dosing record
+before the adverse event is selected in the example below. If
+overlapping is not expected based on the study design and data
+collection, the `order` and the `mode` argument in the
 [`derive_vars_joined()`](https:/pharmaverse.github.io/admiral/main/reference/derive_vars_joined.md)
-call below will throw an error as handling this case is study-specific.
-It does not matter whether one record per treatment period or one record
-per dose was collected.
+call below can be removed. Then the function will throw an error if
+overlapping dosing intervals are found.
 
-Note that drug clearance duration should be considered when matching
-exposure records with adverse events. `EXSTDTC` and `EXENDTC` typically
-represent the administration period only, not the time the drug remains
-in the body. To account for drug clearance, you may extend the last
-exposure end date by the appropriate clearance duration. Since clearance
-applies after the *last* dose only (not after every intermediate dose
-period), the clearance buffer is applied to `TRTEDTM` — the last
-exposure end datetime already derived in `ADSL` — rather than to every
-exposure record. This avoids duplicate matches that would arise from
-applying a date buffer across all exposure rows.
-
-`TRTEDTM` is available on `adae` via the `adsl_vars` merge performed
-earlier.
-
-``` r
-ex_dose <- ex %>%
-  derive_vars_dtm(
-    dtc = EXSTDTC,
-    new_vars_prefix = "EXST",
-    time_imputation = "first",
-    flag_imputation = "none"
-  ) %>%
-  derive_vars_dtm(
-    dtc = EXENDTC,
-    new_vars_prefix = "EXEN",
-    time_imputation = "last",
-    flag_imputation = "none"
-  )
-```
-
-Replace `days(n)` in `filter_join` below with the study-specific drug
-clearance period. If no clearance buffer is required, simplify to
-`EXSTDTM <= ASTDTM & (ASTDTM <= EXENDTM | is.na(EXENDTM))`.
+Replace `days(1)` in `filter_join` below with the study-specific drug
+clearance period.
 
 ``` r
 adae <- derive_vars_joined(
   adae,
-  ex_dose,
+  ex,
   by_vars = exprs(STUDYID, USUBJID),
   new_vars = exprs(DOSEON = EXDOSE, DOSEU = EXDOSU),
+  order = exprs(EXSTDTM),
+  mode = "last",
   join_vars = exprs(EXSTDTM, EXENDTM),
   join_type = "all",
   filter_add = (EXDOSE > 0 | (EXDOSE == 0 & grepl("PLACEBO", EXTRT))) & !is.na(EXSTDTM),
-  filter_join = EXSTDTM <= ASTDTM & (
-    ASTDTM <= EXENDTM |
-      (EXENDTM == TRTEDTM & ASTDTM <= TRTEDTM + days(1))
-  )
+  filter_join = EXSTDTM <= ASTDTM & (ASTDTM < EXENDTM + days(1) | is.na(EXENDTM))
 )
 ```
+
+If no time is collected for exposure or adverse events, it may be better
+to use the date variables (`EXSTDT`, `EXENDT`, and `ASTDT`) instead of
+the datetime variables.
 
 ### Derive Severity, Causality, and Toxicity Grade
 
