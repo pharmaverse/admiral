@@ -27,3 +27,4 @@
 ^inst/cheatsheet$
 ^data-raw$
 ^doc$
+^dev$
