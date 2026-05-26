@@ -9,35 +9,19 @@ derive_var_analysis_ratio(dataset, numer_var, denom_var, new_var = NULL)
 \arguments{
 \item{dataset}{Input dataset
 
-The variables specified by the \code{numer_var} and \code{denom_var} arguments are expected to be in the dataset.
-
-\describe{
-\item{Default value}{none}
-}}
+The variables specified by the \code{numer_var} and \code{denom_var} arguments are expected to be in the dataset.}
 
 \item{numer_var}{Variable containing numeric values to be used in the numerator of
-the ratio calculation.
-
-\describe{
-\item{Default value}{none}
-}}
+the ratio calculation.}
 
 \item{denom_var}{Variable containing numeric values to be used in the denominator of
-the ratio calculation.
-
-\describe{
-\item{Default value}{none}
-}}
+the ratio calculation.}
 
 \item{new_var}{A user-defined variable that will be appended to the dataset.
 The default behavior will take the denominator variable and prefix it with \code{R2}
 and append to the dataset. Using this argument will override this default behavior.
 
-Default is \code{NULL}.
-
-\describe{
-\item{Default value}{\code{NULL}}
-}}
+Default is \code{NULL}.}
 }
 \value{
 The input dataset with a ratio variable appended

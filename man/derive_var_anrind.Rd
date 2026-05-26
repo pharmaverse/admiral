@@ -13,27 +13,15 @@ derive_var_anrind(
 \arguments{
 \item{dataset}{Input dataset
 \code{ANRLO}, \code{ANRHI}, and \code{AVAL} are expected and if \code{use_a1hia1lo} is set to \code{TRUE},
-\code{A1LO} and \code{A1H1} are expected as well.
-
-\describe{
-\item{Default value}{none}
-}}
+\code{A1LO} and \code{A1H1} are expected as well.}
 
 \item{signif_dig}{Number of significant digits to use when comparing values.
 
 Significant digits used to avoid floating point discrepancies when comparing numeric values.
-See blog: \href{https://pharmaverse.github.io/blog/posts/2023-10-30_floating_point/floating_point.html}{How admiral handles floating points}
-
-\describe{
-\item{Default value}{\code{get_admiral_option("signif_digits")}}
-}}
+See blog: \href{https://pharmaverse.github.io/blog/posts/2023-10-30_floating_point/floating_point.html}{How admiral handles floating points}}
 
 \item{use_a1hia1lo}{A logical value indicating whether to use \code{A1H1} and \code{A1LO} in
-the derivation of \code{ANRIND}.
-
-\describe{
-\item{Default value}{\code{FALSE}}
-}}
+the derivation of \code{ANRIND}.}
 }
 \value{
 The input dataset with additional column \code{ANRIND}

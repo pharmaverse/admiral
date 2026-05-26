@@ -7,11 +7,7 @@
 yn_to_numeric(arg)
 }
 \arguments{
-\item{arg}{Character vector
-
-\describe{
-\item{Default value}{none}
-}}
+\item{arg}{Character vector}
 }
 \value{
 \code{1} if \code{arg} equals \code{"Y"}, \code{0} if \code{arg} equals \code{"N"}, \code{NA_real_} otherwise

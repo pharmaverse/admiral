@@ -10,11 +10,7 @@ compute_rr(hr)
 \item{hr}{Heart rate
 
 A numeric vector is expected. It is expected that heart rate is measured in
-beats/min.
-
-\describe{
-\item{Default value}{none}
-}}
+beats/min.}
 }
 \value{
 RR interval in ms:

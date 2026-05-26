@@ -11,11 +11,7 @@ get_admiral_option(option)
 
 As of now, support only available for
 "subject_keys", "signif_digits", and "save_memory".
-See \code{set_admiral_options()} for a description of the options.
-
-\describe{
-\item{Default value}{none}
-}}
+See \code{set_admiral_options()} for a description of the options.}
 }
 \value{
 The value of the specified option.

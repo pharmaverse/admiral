@@ -20,19 +20,9 @@ derive_extreme_event(
 \arguments{
 \item{dataset}{Input dataset
 
-The variables specified by the \code{by_vars} and \code{order} arguments are expected to be in the dataset.
+The variables specified by the \code{by_vars} and \code{order} arguments are expected to be in the dataset.}
 
-\describe{
-\item{Permitted values}{a dataset, i.e., a \code{data.frame} or tibble}
-\item{Default value}{none}
-}}
-
-\item{by_vars}{Grouping variables
-
-\describe{
-\item{Permitted values}{list of variables created by \code{exprs()}, e.g., \code{exprs(USUBJID, VISIT)}}
-\item{Default value}{\code{NULL}}
-}}
+\item{by_vars}{Grouping variables}
 
 \item{events}{Conditions and new values defining events
 
@@ -43,12 +33,7 @@ record sorted by \code{order}. The data is grouped by \code{by_vars}, i.e., summ
 functions like \code{all()} or \code{any()} can be used in \code{condition}.
 
 For \code{event_joined()} events the observations are selected by calling
-\code{filter_joined()}. The \code{condition} field is passed to the \code{filter_join} argument.
-
-\describe{
-\item{Permitted values}{an \code{event()} or \code{event_joined()} object}
-\item{Default value}{none}
-}}
+\code{filter_joined()}. The \code{condition} field is passed to the \code{filter_join} argument.}
 
 \item{tmp_event_nr_var}{Temporary event number variable
 
@@ -58,56 +43,31 @@ number of the event before selecting the records of the event.
 It can be used in \code{order} to determine which record should be used if
 records from more than one event are selected.
 
-The variable is not included in the output dataset.
-
-\describe{
-\item{Permitted values}{an unquoted symbol, e.g., \code{AVAL}}
-\item{Default value}{\code{NULL}}
-}}
+The variable is not included in the output dataset.}
 
 \item{order}{Sort order
 
 If a particular event from \code{events} has more than one observation, within
 the event and by group, the records are ordered by the specified order.
 
-For handling of \code{NA}s in sorting variables see the "Sort Order" section in \code{vignette("generic")}.
-
-\describe{
-\item{Permitted values}{list of variables created by \code{exprs()}, e.g., \code{exprs(USUBJID, VISIT)}}
-\item{Default value}{none}
-}}
+For handling of \code{NA}s in sorting variables see the "Sort Order" section in \code{vignette("generic")}.}
 
 \item{mode}{Selection mode (first or last)
 
 If a particular event from \code{events} has more than one observation,
 \code{"first"}/\code{"last"} is used to select the first/last record of this type of
-event sorting by \code{order}.
-
-\describe{
-\item{Permitted values}{\code{"first"}, \code{"last"}}
-\item{Default value}{none}
-}}
+event sorting by \code{order}.}
 
 \item{source_datasets}{Source datasets
 
 A named list of datasets is expected. The \code{dataset_name} field of \code{event()}
-and \code{event_joined()} refers to the dataset provided in the list.
-
-\describe{
-\item{Permitted values}{named list of datasets, e.g., \code{list(adsl = adsl, ae = ae)}}
-\item{Default value}{\code{NULL}}
-}}
+and \code{event_joined()} refers to the dataset provided in the list.}
 
 \item{check_type}{Check uniqueness?
 
 If \code{"warning"} or \code{"error"} is specified, the specified message is issued
 if the observations of the input dataset are not unique with respect to the
-by variables and the order.
-
-\describe{
-\item{Permitted values}{\code{"none"}, \code{"message"}, \code{"warning"}, \code{"error"}}
-\item{Default value}{\code{"warning"}}
-}}
+by variables and the order.}
 
 \item{set_values_to}{Variables to be set
 
@@ -127,12 +87,7 @@ For example:
     PARAMCD = "WOBS",
     PARAM = "Worst Observations"
   )
-}\if{html}{\out{</div>}}
-
-\describe{
-\item{Permitted values}{list of named expressions created by a formula using \code{exprs()}, e.g., \code{exprs(AVALC = VSSTRESC, AVAL = yn_to_numeric(AVALC))}}
-\item{Default value}{\code{NULL}}
-}}
+}\if{html}{\out{</div>}}}
 
 \item{keep_source_vars}{Variables to keep from the source dataset
 
@@ -140,12 +95,7 @@ For each event the specified variables are kept from the selected
 observations. The variables specified for \code{by_vars} and created by
 \code{set_values_to} are always kept. The \code{keep_source_vars} field of
 the event will take precedence over the value of the \code{keep_source_vars}
-argument.
-
-\describe{
-\item{Permitted values}{list of variables created by \code{exprs()}, e.g., \code{exprs(USUBJID, VISIT)}}
-\item{Default value}{\code{exprs(everything())}}
-}}
+argument.}
 }
 \value{
 The input dataset with the best or worst observation of each by group
@@ -217,451 +167,3 @@ BDS-Findings Functions for adding Parameters/Records:
 }
 \concept{der_prm_bds_findings}
 \keyword{der_prm_bds_findings}
-\section{Examples}{
-\subsection{Add a new record for the worst observation using \code{event()} objects}{
-
-For each subject, the observation containing the worst sleeping problem
-(if any exist) should be identified and added as a new record, retaining
-all variables from the original observation. If multiple occurrences of the
-worst sleeping problem occur, or no sleeping problems, then take the
-observation occurring at the latest day.
-\itemize{
-\item The groups for which new records are added are specified by the \code{by_vars}
-argument. Here for each \emph{subject} a record should be added. Thus
-\code{by_vars = exprs(STUDYID, USUBJID)} is specified.
-\item The sets of possible sleeping problems are passed through the \code{events}
-argument as \code{event()} objects. Each event contains a \code{condition} which
-may or may not be satisfied by each record (or possibly a group of
-records) within the input dataset \code{dataset}. Summary functions such as
-\code{any()} and \code{all()} are often handy to use within conditions, as is done
-here for the third event, which checks that the subject had no sleeping
-issues. The final event uses a catch-all \code{condition = TRUE} to ensure all
-subjects have a new record derived. Note that in this example, as no
-condition involves analysis of \strong{cross-comparison values of within  records},
-it is sufficient to use \code{event()} objects rather than \code{event_joined()} -
-see the next example for a more complex condition.
-\item If any subject has one or more records satisfying the conditions from
-events, we can select just one record using the \code{order} argument. In this
-example, the first argument passed to \code{order} is \code{event_nr}, which is a
-temporary variable created through the \code{tmp_event_nr_var} argument, which
-numbers the events consecutively. Since \code{mode = "first"}, we only consider
-the first event for which a condition is satisfied. Within that event, we
-consider only the observation with the latest day, because the second
-argument for the order is \code{desc(ADY)}.
-\item Once a record is identified as satisfying an event's condition, a new
-observation is created by the following process:
-\enumerate{
-\item the selected record is copied,
-\item the variables specified in the event's \code{set_values_to} (here,
-\code{AVAL} and \code{AVALC}) are created/updated,
-\item the variables specified in \code{keep_source_vars} (here, \code{ADY} does due
-to the use of the tidyselect expression \code{everything()}) (plus \code{by_vars}
-and the variables from \code{set_values_to}) are kept,
-\item the variables specified in the global \code{set_values_to} (here,
-\code{PARAM} and \code{PARAMCD}) are created/updated.
-}
-}
-
-\if{html}{\out{<div class="sourceCode r">}}\preformatted{library(tibble, warn.conflicts = FALSE)
-library(dplyr, warn.conflicts = FALSE)
-library(lubridate, warn.conflicts = FALSE)
-
-adqs1 <- tribble(
-  ~USUBJID, ~PARAMCD,         ~AVALC,        ~ADY,
-  "1",      "NO SLEEP",       "N",              1,
-  "1",      "WAKE UP 3X",     "N",              2,
-  "2",      "NO SLEEP",       "N",              1,
-  "2",      "WAKE UP 3X",     "Y",              2,
-  "2",      "WAKE UP 3X",     "Y",              3,
-  "3",      "NO SLEEP",       NA_character_,    1
-) \%>\%
-mutate(STUDYID = "AB42")
-
-derive_extreme_event(
-  adqs1,
-  by_vars = exprs(STUDYID, USUBJID),
-  events = list(
-    event(
-      condition = PARAMCD == "NO SLEEP" & AVALC == "Y",
-      set_values_to = exprs(AVALC = "No sleep", AVAL = 1)
-    ),
-    event(
-      condition = PARAMCD == "WAKE UP 3X" & AVALC == "Y",
-      set_values_to = exprs(AVALC = "Waking up three times", AVAL = 2)
-    ),
-    event(
-      condition = all(AVALC == "N"),
-      set_values_to = exprs(AVALC = "No sleeping problems", AVAL = 3)
-    ),
-    event(
-      condition = TRUE,
-      set_values_to = exprs(AVALC = "Missing", AVAL = 99)
-    )
-  ),
-  tmp_event_nr_var = event_nr,
-  order = exprs(event_nr, desc(ADY)),
-  mode = "first",
-  set_values_to = exprs(
-    PARAMCD = "WSP",
-    PARAM = "Worst Sleeping Problem"
-  ),
-  keep_source_vars = exprs(everything())
-) \%>\%
-select(-STUDYID)
-#> # A tibble: 9 × 6
-#>   USUBJID PARAMCD    AVALC                   ADY  AVAL PARAM                 
-#>   <chr>   <chr>      <chr>                 <dbl> <dbl> <chr>                 
-#> 1 1       NO SLEEP   N                         1    NA <NA>                  
-#> 2 1       WAKE UP 3X N                         2    NA <NA>                  
-#> 3 2       NO SLEEP   N                         1    NA <NA>                  
-#> 4 2       WAKE UP 3X Y                         2    NA <NA>                  
-#> 5 2       WAKE UP 3X Y                         3    NA <NA>                  
-#> 6 3       NO SLEEP   <NA>                      1    NA <NA>                  
-#> 7 1       WSP        No sleeping problems      2     3 Worst Sleeping Problem
-#> 8 2       WSP        Waking up three times     3     2 Worst Sleeping Problem
-#> 9 3       WSP        Missing                   1    99 Worst Sleeping Problem}\if{html}{\out{</div>}}}
-\subsection{Events based on comparison across records (\code{event_joined()})}{
-
-We'll now extend the above example. Specifically, we consider a new
-possible worst sleeping problem, namely if a subject experiences no
-sleep on consecutive days.
-\itemize{
-\item The "consecutive days" portion of the condition requires records to be
-compared with each other. This is done by using an \code{event_joined()} object,
-specifically by passing \code{dataset_name = adqs2} to it so that the \code{adqs2}
-dataset is joined onto itself. The \code{condition} now checks for two
-no sleep records, and crucially compares the \code{ADY} values to see if
-they differ by one day. The \code{.join} syntax distinguishes between the
-\code{ADY} value of the parent and joined datasets. As the condition involves
-\code{AVALC}, \code{PARAMCD} and \code{ADY}, we specify these variables with \code{join_vars},
-and finally, because we wish to compare all records with each other, we
-select \code{join_type = "all"}.
-}
-
-\if{html}{\out{<div class="sourceCode r">}}\preformatted{adqs2 <- tribble(
-   ~USUBJID, ~PARAMCD,     ~AVALC, ~ADY,
-   "4",      "WAKE UP",    "N",    1,
-   "4",      "NO SLEEP",   "Y",    2,
-   "4",      "NO SLEEP",   "Y",    3,
-   "5",      "NO SLEEP",   "N",    1,
-   "5",      "NO SLEEP",   "Y",    2,
-   "5",      "WAKE UP 3X", "Y",    3,
-   "5",      "NO SLEEP",   "Y",    4
-) \%>\%
-mutate(STUDYID = "AB42")
-
-derive_extreme_event(
-  adqs2,
-  by_vars = exprs(STUDYID, USUBJID),
-  events = list(
-    event_joined(
-      join_vars = exprs(AVALC, PARAMCD, ADY),
-      join_type = "all",
-      condition = PARAMCD == "NO SLEEP" & AVALC == "Y" &
-        PARAMCD.join == "NO SLEEP" & AVALC.join == "Y" &
-        ADY == ADY.join + 1,
-      set_values_to = exprs(AVALC = "No sleep two nights in a row", AVAL = 0)
-    ),
-    event(
-      condition = PARAMCD == "NO SLEEP" & AVALC == "Y",
-      set_values_to = exprs(AVALC = "No sleep", AVAL = 1)
-    ),
-    event(
-      condition = PARAMCD == "WAKE UP 3X" & AVALC == "Y",
-      set_values_to = exprs(AVALC = "Waking up three times", AVAL = 2)
-    ),
-    event(
-      condition = all(AVALC == "N"),
-      set_values_to = exprs(
-        AVALC = "No sleeping problems", AVAL = 3
-      )
-    ),
-    event(
-      condition = TRUE,
-      set_values_to = exprs(AVALC = "Missing", AVAL = 99)
-    )
-  ),
-  tmp_event_nr_var = event_nr,
-  order = exprs(event_nr, desc(ADY)),
-  mode = "first",
-  set_values_to = exprs(
-    PARAMCD = "WSP",
-    PARAM = "Worst Sleeping Problem"
-  ),
-  keep_source_vars = exprs(everything())
-) \%>\%
-select(-STUDYID)
-#> # A tibble: 9 × 6
-#>   USUBJID PARAMCD    AVALC                          ADY  AVAL PARAM             
-#>   <chr>   <chr>      <chr>                        <dbl> <dbl> <chr>             
-#> 1 4       WAKE UP    N                                1    NA <NA>              
-#> 2 4       NO SLEEP   Y                                2    NA <NA>              
-#> 3 4       NO SLEEP   Y                                3    NA <NA>              
-#> 4 5       NO SLEEP   N                                1    NA <NA>              
-#> 5 5       NO SLEEP   Y                                2    NA <NA>              
-#> 6 5       WAKE UP 3X Y                                3    NA <NA>              
-#> 7 5       NO SLEEP   Y                                4    NA <NA>              
-#> 8 4       WSP        No sleep two nights in a row     3     0 Worst Sleeping Pr…
-#> 9 5       WSP        No sleep                         4     1 Worst Sleeping Pr…}\if{html}{\out{</div>}}}
-\subsection{Specifying different arguments across \code{event()} objects}{
-
-Here we consider a Hy's Law use case. We are interested in
-knowing whether a subject's Alkaline Phosphatase has ever been
-above twice the upper limit of normal range. If so, i.e. if
-\code{CRIT1FL} is \code{Y}, we are interested in the record for the first
-time this occurs, and if not, we wish to retain the last record.
-As such, for this case now we need to vary our usage of the
-\code{mode} argument dependent on the \code{event()}.
-\itemize{
-\item In first \code{event()}, since we simply seek the first time that
-\code{CRIT1FL} is \code{"Y"}, it's enough to specify the \code{condition},
-because we inherit \code{order} and \code{mode} from the main
-\code{derive_extreme_event()} call here which will automatically
-select the first occurrence by \code{AVISITN}.
-\item In the second \code{event()}, we select the last record among the
-full set of records where \code{CRIT1FL} are all \code{"N"} by additionally
-specifying \code{mode = "last"} within the \code{event()}.
-\item Note now the usage of \code{keep_source_vars = exprs(AVISITN)}
-rather than \code{everything()} as in the previous example. This
-is done to ensure \code{CRIT1} and \code{CRIT1FL} are not populated for
-the new records.
-}
-
-\if{html}{\out{<div class="sourceCode r">}}\preformatted{adhy <- tribble(
-  ~USUBJID, ~AVISITN,              ~CRIT1, ~CRIT1FL,
-  "1",             1, "ALT > 2 times ULN", "N",
-  "1",             2, "ALT > 2 times ULN", "N",
-  "2",             1, "ALT > 2 times ULN", "N",
-  "2",             2, "ALT > 2 times ULN", "Y",
-  "2",             3, "ALT > 2 times ULN", "N",
-  "2",             4, "ALT > 2 times ULN", "Y"
-) \%>\%
-  mutate(
-    PARAMCD = "ALT",
-    PARAM = "ALT (U/L)",
-    STUDYID = "AB42"
-  )
-
-derive_extreme_event(
-  adhy,
-  by_vars = exprs(STUDYID, USUBJID),
-  events = list(
-    event(
-      condition = CRIT1FL == "Y",
-      set_values_to = exprs(AVALC = "Y")
-    ),
-    event(
-      condition = CRIT1FL == "N",
-      mode = "last",
-      set_values_to = exprs(AVALC = "N")
-    )
-  ),
-  tmp_event_nr_var = event_nr,
-  order = exprs(event_nr, AVISITN),
-  mode = "first",
-  keep_source_vars = exprs(AVISITN),
-  set_values_to = exprs(
-    PARAMCD = "ALT2",
-    PARAM = "ALT > 2 times ULN"
-  )
-) \%>\%
-  select(-STUDYID)
-#> # A tibble: 8 × 7
-#>   USUBJID AVISITN CRIT1             CRIT1FL PARAMCD PARAM             AVALC
-#>   <chr>     <dbl> <chr>             <chr>   <chr>   <chr>             <chr>
-#> 1 1             1 ALT > 2 times ULN N       ALT     ALT (U/L)         <NA> 
-#> 2 1             2 ALT > 2 times ULN N       ALT     ALT (U/L)         <NA> 
-#> 3 2             1 ALT > 2 times ULN N       ALT     ALT (U/L)         <NA> 
-#> 4 2             2 ALT > 2 times ULN Y       ALT     ALT (U/L)         <NA> 
-#> 5 2             3 ALT > 2 times ULN N       ALT     ALT (U/L)         <NA> 
-#> 6 2             4 ALT > 2 times ULN Y       ALT     ALT (U/L)         <NA> 
-#> 7 1             2 <NA>              <NA>    ALT2    ALT > 2 times ULN N    
-#> 8 2             2 <NA>              <NA>    ALT2    ALT > 2 times ULN Y    }\if{html}{\out{</div>}}}
-\subsection{A more complex example: Confirmed Best Overall Response
-(\code{first/last_cond_upper}, \code{join_type}, \code{source_datasets})}{
-
-The final example showcases a use of \code{derive_extreme_event()}
-to calculate the Confirmed Best Overall Response (CBOR) in an
-\code{ADRS} dataset, as is common in many oncology trials. This example
-builds on all the previous ones and thus assumes a baseline level
-of confidence with \code{derive_extreme_event()}.
-
-The following \code{ADSL} and \code{ADRS} datasets will be used
-throughout:
-
-\if{html}{\out{<div class="sourceCode r">}}\preformatted{adsl <- tribble(
-  ~USUBJID, ~TRTSDTC,
-  "1",      "2020-01-01",
-  "2",      "2019-12-12",
-  "3",      "2019-11-11",
-  "4",      "2019-12-30",
-  "5",      "2020-01-01",
-  "6",      "2020-02-02",
-  "7",      "2020-02-02",
-  "8",      "2020-02-01"
-) \%>\%
-mutate(
-  TRTSDT = ymd(TRTSDTC),
-  STUDYID = "AB42"
-)
-
-adrs <- tribble(
-  ~USUBJID, ~ADTC,        ~AVALC,
-  "1",      "2020-01-01", "PR",
-  "1",      "2020-02-01", "CR",
-  "1",      "2020-02-16", "NE",
-  "1",      "2020-03-01", "CR",
-  "1",      "2020-04-01", "SD",
-  "2",      "2020-01-01", "SD",
-  "2",      "2020-02-01", "PR",
-  "2",      "2020-03-01", "SD",
-  "2",      "2020-03-13", "CR",
-  "4",      "2020-01-01", "PR",
-  "4",      "2020-03-01", "NE",
-  "4",      "2020-04-01", "NE",
-  "4",      "2020-05-01", "PR",
-  "5",      "2020-01-01", "PR",
-  "5",      "2020-01-10", "PR",
-  "5",      "2020-01-20", "PR",
-  "6",      "2020-02-06", "PR",
-  "6",      "2020-02-16", "CR",
-  "6",      "2020-03-30", "PR",
-  "7",      "2020-02-06", "PR",
-  "7",      "2020-02-16", "CR",
-  "7",      "2020-04-01", "NE",
-  "8",      "2020-02-16", "PD"
-) \%>\%
-  mutate(
-    ADT = ymd(ADTC),
-    STUDYID = "AB42",
-    PARAMCD = "OVR",
-    PARAM = "Overall Response by Investigator"
-  ) \%>\%
-  derive_vars_merged(
-    dataset_add = adsl,
-    by_vars = exprs(STUDYID, USUBJID),
-    new_vars = exprs(TRTSDT)
-  )}\if{html}{\out{</div>}}
-
-Since the CBOR derivation contains multiple complex parts, it's
-convenient to make use of the \code{description} argument within each event object
-to describe what condition is being checked.
-\itemize{
-\item For the Confirmed Response (CR), for each \code{"CR"} record in the original \code{ADRS}
-dataset that will be identified by the first part of the \code{condition} argument
-(\code{AVALC == "CR"}), we need to use the \code{first_cond_upper} argument to limit the
-group of observations to consider alongside it. Namely, we need to look up to
-and including the second CR (\code{AVALC.join == "CR"}) over 28 days from the first
-one (\code{ADT.join >= ADT + 28}). The observations satisfying \code{first_cond_upper}
-then form part of our "join group", meaning that the remaining portions of
-\code{condition} which reference joined variables are limited to this group.
-In particular, within \code{condition} we use \code{all()} to check that all observations
-are either \code{"CR"} or \code{"NE"}, and \code{count_vals()} to ensure at most one is
-\code{"NE"}.
-
-Note that the selection of \code{join_type = "after"} is critical here, due to the
-fact that the restriction implied by \code{join_type} is applied before the one
-implied by \code{first_cond_upper}. Picking the first subject (who was correctly
-identified as a confirmed responder) as an example, selecting
-\code{join_type = "all"} instead of \code{"after"} would mean the first \code{"PR"} record
-from \code{"2020-01-01"} would also be considered when evaluating the
-\code{all(AVALC.join \%in\% c("CR", "NE"))} portion of \code{condition}. In turn, the
-condition would not be satisfied anymore, and in this case, following the
-later event logic shows the subject would be considered a partial responder
-instead.
-\item The Partial Response (PR), is very similar; with the difference being that the
-first portion of \code{condition} now references \code{"PR"} and \code{first_cond_upper}
-accepts a confirmatory \code{"PR"} or \code{"CR"} 28 days later. Note that now we must add
-\code{"PR"} as an option within the \code{all()} condition to account for confirmatory
-\code{"PR"}s.
-\item The Stable Disease (SD), Progressive Disease (PD) and Not Evaluable (NE)
-events are simpler and just require \code{event()} calls.
-\item Finally, we use a catch-all \code{event()} with \code{condition = TRUE} and
-\code{dataset_name = "adsl"} to identify those subjects who do not appear in \code{ADRS}
-and list their CBOR as \code{"MISSING"}. Note here the fact that \code{dataset_name} is
-set to \code{"adsl"}, which is a new source dataset. As such it's important in the
-main \code{derive_extreme_event()} call to list \code{adsl} as another source dataset
-with \code{source_datasets = list(adsl = adsl)}.
-}
-
-\if{html}{\out{<div class="sourceCode r">}}\preformatted{derive_extreme_event(
-  adrs,
-  by_vars = exprs(STUDYID, USUBJID),
-  tmp_event_nr_var = event_nr,
-  order = exprs(event_nr, ADT),
-  mode = "first",
-  source_datasets = list(adsl = adsl),
-  events = list(
-    event_joined(
-      description = paste(
-        "CR needs to be confirmed by a second CR at least 28 days later",
-        "at most one NE is acceptable between the two assessments"
-      ),
-      join_vars = exprs(AVALC, ADT),
-      join_type = "after",
-      first_cond_upper = AVALC.join == "CR" & ADT.join >= ADT + 28,
-      condition = AVALC == "CR" &
-        all(AVALC.join \%in\% c("CR", "NE")) &
-        count_vals(var = AVALC.join, val = "NE") <= 1,
-      set_values_to = exprs(AVALC = "CR")
-    ),
-    event_joined(
-      description = paste(
-        "PR needs to be confirmed by a second CR or PR at least 28 days later,",
-        "at most one NE is acceptable between the two assessments"
-      ),
-      join_vars = exprs(AVALC, ADT),
-      join_type = "after",
-      first_cond_upper = AVALC.join \%in\% c("CR", "PR") & ADT.join >= ADT + 28,
-      condition = AVALC == "PR" &
-        all(AVALC.join \%in\% c("CR", "PR", "NE")) &
-        count_vals(var = AVALC.join, val = "NE") <= 1,
-      set_values_to = exprs(AVALC = "PR")
-    ),
-    event(
-      description = paste(
-        "CR, PR, or SD are considered as SD if occurring at least 28",
-        "after treatment start"
-      ),
-      condition = AVALC \%in\% c("CR", "PR", "SD") & ADT >= TRTSDT + 28,
-      set_values_to = exprs(AVALC = "SD")
-    ),
-    event(
-      condition = AVALC == "PD",
-      set_values_to = exprs(AVALC = "PD")
-    ),
-    event(
-      condition = AVALC \%in\% c("CR", "PR", "SD", "NE"),
-      set_values_to = exprs(AVALC = "NE")
-    ),
-    event(
-      description = "Set response to MISSING for patients without records in ADRS",
-      dataset_name = "adsl",
-      condition = TRUE,
-      set_values_to = exprs(AVALC = "MISSING"),
-      keep_source_vars = exprs(TRTSDT)
-    )
-  ),
-  set_values_to = exprs(
-    PARAMCD = "CBOR",
-    PARAM = "Best Confirmed Overall Response by Investigator"
-  )
-) \%>\%
-  filter(PARAMCD == "CBOR") \%>\%
-  select(-STUDYID, -ADTC)
-#> # A tibble: 8 × 6
-#>   USUBJID AVALC   ADT        PARAMCD PARAM                            TRTSDT    
-#>   <chr>   <chr>   <date>     <chr>   <chr>                            <date>    
-#> 1 1       CR      2020-02-01 CBOR    Best Confirmed Overall Response… 2020-01-01
-#> 2 2       SD      2020-02-01 CBOR    Best Confirmed Overall Response… 2019-12-12
-#> 3 3       MISSING NA         CBOR    Best Confirmed Overall Response… 2019-11-11
-#> 4 4       SD      2020-05-01 CBOR    Best Confirmed Overall Response… 2019-12-30
-#> 5 5       NE      2020-01-01 CBOR    Best Confirmed Overall Response… 2020-01-01
-#> 6 6       PR      2020-02-06 CBOR    Best Confirmed Overall Response… 2020-02-02
-#> 7 7       NE      2020-02-06 CBOR    Best Confirmed Overall Response… 2020-02-02
-#> 8 8       PD      2020-02-16 CBOR    Best Confirmed Overall Response… 2020-02-01}\if{html}{\out{</div>}}}
-\subsection{Further examples}{
-
-Equivalent examples for using the\code{check_type} argument can be found in
-\code{derive_extreme_records()}.}}
-

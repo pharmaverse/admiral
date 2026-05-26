@@ -7,21 +7,13 @@
 get_vars_query(dataset, dataset_queries)
 }
 \arguments{
-\item{dataset}{Input dataset
-
-\describe{
-\item{Default value}{none}
-}}
+\item{dataset}{Input dataset}
 
 \item{dataset_queries}{A dataset containing required columns \code{PREFIX},
 \code{GRPNAME}, \code{SRCVAR}, \code{TERMCHAR} and/or \code{TERMNUM}, and optional columns
 \code{GRPID}, \code{SCOPE}, \code{SCOPEN}.
 
-\code{create_query_data()} can be used to create the dataset.
-
-\describe{
-\item{Default value}{none}
-}}
+\code{create_query_data()} can be used to create the dataset.}
 }
 \value{
 The processed query dataset with \code{SRCVAR} and \code{TERM_NAME_ID} so that

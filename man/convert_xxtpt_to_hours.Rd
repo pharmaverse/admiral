@@ -13,12 +13,7 @@ convert_xxtpt_to_hours(
 \arguments{
 \item{xxtpt}{A character vector of timepoint descriptions from SDTM
 \code{--TPT} variables (e.g., \code{PCTPT}, \code{VSTPT}, \code{EGTPT}, \code{ISTPT}, \code{LBTPT}).
-Can contain \code{NA} values.
-
-\describe{
-\item{Permitted values}{character vector}
-\item{Default value}{none}
-}}
+Can contain \code{NA} values.}
 
 \item{treatment_duration}{Numeric value(s) specifying the duration of treatment
 in hours. Used to convert "EOI/EOT" (End of Infusion/Treatment) patterns
@@ -29,21 +24,11 @@ Can be either:
 \item A vector of the same length as \code{xxtpt} (one value per timepoint)
 }
 
-Default is 0 hours (for instantaneous treatments like oral medications).
-
-\describe{
-\item{Permitted values}{numeric scalar or vector (non-negative)}
-\item{Default value}{\code{0}}
-}}
+Default is 0 hours (for instantaneous treatments like oral medications).}
 
 \item{range_method}{Method for converting time ranges to single values.
 Options are "midpoint" (default), "start", or "end". For example,
-"0-6h" with midpoint returns 3, with start returns 0, with end returns 6.
-
-\describe{
-\item{Permitted values}{character scalar ("midpoint", "start", or "end")}
-\item{Default value}{\code{"midpoint"}}
-}}
+"0-6h" with midpoint returns 3, with start returns 0, with end returns 6.}
 }
 \value{
 A numeric vector of timepoints in hours. Returns \code{NA_real_} for:
@@ -168,118 +153,3 @@ Date/Time Computation Functions that returns a vector:
 \concept{com_date_time}
 \keyword{com_date_time}
 \keyword{experimental}
-\section{Examples}{
-\subsection{Basic timepoint patterns}{
-
-Convert basic dose-centric patterns to hours
-
-\if{html}{\out{<div class="sourceCode r">}}\preformatted{convert_xxtpt_to_hours(c(
-  "Screening",
-  "Pre-dose",
-  "Pre-treatment",
-  "Before",
-  "30M",
-  "1H",
-  "2H POSTDOSE",
-  "Day 1"
-))
-#> [1]  0.0  0.0  0.0  0.0  0.5  1.0  2.0 24.0}\if{html}{\out{</div>}}}
-\subsection{Predose and before patterns}{
-
-Convert predose/before patterns that return negative times
-
-\if{html}{\out{<div class="sourceCode r">}}\preformatted{convert_xxtpt_to_hours(c("5 MIN PREDOSE", "5 MIN PRE-DOSE", "1 HOUR BEFORE"))
-#> [1] -0.08333333 -0.08333333 -1.00000000}\if{html}{\out{</div>}}}
-\subsection{Treatment-related patterns (oral medications)}{
-
-With default treatment_duration = 0 for oral medications
-
-\if{html}{\out{<div class="sourceCode r">}}\preformatted{convert_xxtpt_to_hours(c(
-  "EOT",
-  "1 HOUR POST EOT",
-  "1 HOUR AFTER EOT",
-  "After End of Treatment"
-))
-#> [1] 0 1 1 0}\if{html}{\out{</div>}}}
-\subsection{Infusion-related patterns}{
-
-With treatment_duration = 1 hour for IV infusions
-
-\if{html}{\out{<div class="sourceCode r">}}\preformatted{convert_xxtpt_to_hours(
-  c(
-    "EOI",
-    "1 HOUR POST EOI",
-    "24 HR POST INF",
-    "24 HR POST-INF",
-    "30MIN AFTER END OF INFUSION",
-    "8H PRIOR START OF INFUSION",
-    "10MIN PRE EOI"
-  ),
-  treatment_duration = 1
-)
-#> [1]  1.0000000  2.0000000 25.0000000 25.0000000  1.5000000 -8.0000000  0.8333333}\if{html}{\out{</div>}}}
-\subsection{Vectorized treatment duration}{
-
-Different treatment durations per timepoint
-
-\if{html}{\out{<div class="sourceCode r">}}\preformatted{convert_xxtpt_to_hours(
-  c("EOI", "1 HOUR POST EOI", "EOI", "1 HOUR POST EOI"),
-  treatment_duration = c(1, 1, 2, 2)
-)
-#> [1] 1 2 2 3}\if{html}{\out{</div>}}}
-\subsection{Time ranges with midpoint method}{
-
-Default midpoint method for ranges
-
-\if{html}{\out{<div class="sourceCode r">}}\preformatted{convert_xxtpt_to_hours(c(
-  "0-6h Post-dose",
-  "0-4H PRIOR START OF INFUSION",
-  "8-16H POST START OF INFUSION"
-))
-#> [1]  3 -2 12}\if{html}{\out{</div>}}}
-\subsection{Time ranges with custom methods}{
-
-Specify start or end method for ranges
-
-\if{html}{\out{<div class="sourceCode r">}}\preformatted{convert_xxtpt_to_hours("0-6h Post-dose", range_method = "end")
-#> [1] 6
-convert_xxtpt_to_hours("0-6h Post-dose", range_method = "start")
-#> [1] 0}\if{html}{\out{</div>}}}
-\subsection{Ranges relative to EOI/EOT}{
-
-Time ranges after end of infusion/treatment
-
-\if{html}{\out{<div class="sourceCode r">}}\preformatted{convert_xxtpt_to_hours(
-  c(
-    "0-4H AFTER EOI",
-    "0-4H POST EOI",
-    "4-8H AFTER END OF INFUSION",
-    "4-8H AFTER EOT",
-    "4-8H POST INFUSION",
-    "4-8H POST-INF"
-  ),
-  treatment_duration = 1
-)
-#> [1] 3 3 7 7 7 7}\if{html}{\out{</div>}}}
-\subsection{POST vs POST EOI distinction}{
-
-Difference between POST (from start) and POST EOI (from end)
-
-\if{html}{\out{<div class="sourceCode r">}}\preformatted{convert_xxtpt_to_hours(
-  c("Pre-dose", "1H POST", "2H POST", "4H POST"),
-  treatment_duration = 2
-)
-#> [1] 0 1 2 4
-
-convert_xxtpt_to_hours(
-  c("Pre-dose", "EOI", "1H POST EOI", "2H POST EOI"),
-  treatment_duration = 2
-)
-#> [1] 0 2 3 4
-
-convert_xxtpt_to_hours(
-  c("1H POST", "1H POST EOI", "1H POST INFUSION"),
-  treatment_duration = 2
-)
-#> [1] 1 3 3}\if{html}{\out{</div>}}}}
-

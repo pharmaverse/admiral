@@ -9,17 +9,9 @@ get_dt_dtm_range(dtc, create_datetime)
 \arguments{
 \item{dtc}{A character vector of dates in ISO 8601 format
 (e.g., \code{"2022-12-15"}, \code{"2022-12"}, \code{"2022"}).
-Partial dates are allowed.
+Partial dates are allowed.}
 
-\describe{
-\item{Default value}{none}
-}}
-
-\item{create_datetime}{return the range in datetime format.
-
-\describe{
-\item{Default value}{none}
-}}
+\item{create_datetime}{return the range in datetime format.}
 }
 \value{
 A list containing two vectors of fully imputed dates

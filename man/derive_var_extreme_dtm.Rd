@@ -16,50 +16,25 @@ derive_var_extreme_dtm(
 \arguments{
 \item{dataset}{Input dataset
 
-The variables specified by the \code{subject_keys} argument are expected to be in the dataset.
+The variables specified by the \code{subject_keys} argument are expected to be in the dataset.}
 
-\describe{
-\item{Default value}{none}
-}}
-
-\item{new_var}{Name of variable to create
-
-\describe{
-\item{Default value}{none}
-}}
+\item{new_var}{Name of variable to create}
 
 \item{...}{Source(s) of dates. One or more \code{date_source()} objects are
-expected.
-
-\describe{
-\item{Default value}{none}
-}}
+expected.}
 
 \item{source_datasets}{A named \code{list} containing datasets in which to search
-for the first or last date
-
-\describe{
-\item{Default value}{none}
-}}
+for the first or last date}
 
 \item{mode}{Selection mode (first or last)
 
 If \code{"first"} is specified, the first date for each subject is selected. If
-\code{"last"} is specified, the last date for each subject is selected.
-
-\describe{
-\item{Permitted values}{\code{"first"}, \code{"last"}}
-\item{Default value}{none}
-}}
+\code{"last"} is specified, the last date for each subject is selected.}
 
 \item{subject_keys}{Variables to uniquely identify a subject
 
 A list of expressions where the expressions are symbols as returned by
-\code{exprs()} is expected.
-
-\describe{
-\item{Default value}{\code{get_admiral_option("subject_keys")}}
-}}
+\code{exprs()} is expected.}
 }
 \value{
 The input dataset with the new variable added.

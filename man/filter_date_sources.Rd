@@ -17,68 +17,38 @@ filter_date_sources(
 \arguments{
 \item{sources}{Sources
 
-A list of \code{tte_source()} objects is expected.
-
-\describe{
-\item{Default value}{none}
-}}
+A list of \code{tte_source()} objects is expected.}
 
 \item{source_datasets}{Source datasets
 
 A named list of datasets is expected. The \code{dataset_name} field of
-\code{tte_source()} refers to the dataset provided in the list.
-
-\describe{
-\item{Default value}{none}
-}}
+\code{tte_source()} refers to the dataset provided in the list.}
 
 \item{by_vars}{By variables
 
 If the parameter is specified, for each by group the observations are
-selected separately.
-
-\describe{
-\item{Default value}{none}
-}}
+selected separately.}
 
 \item{create_datetime}{Create datetime variable?
 
 If set to \code{TRUE}, variables \code{ADTM} is created. Otherwise, variables \code{ADT}
-is created.
-
-\describe{
-\item{Default value}{\code{FALSE}}
-}}
+is created.}
 
 \item{subject_keys}{Variables to uniquely identify a subject
 
-A list of symbols created using \code{exprs()} is expected.
-
-\describe{
-\item{Default value}{none}
-}}
+A list of symbols created using \code{exprs()} is expected.}
 
 \item{mode}{Selection mode (first or last)
 
 If \code{"first"} is specified, for each subject the first observation with
 respect to the date is included in the output dataset. If \code{"last"} is
-specified, the last observation is included in the output dataset.
-
-\describe{
-\item{Permitted values}{\code{"first"}, \code{"last"}}
-\item{Default value}{none}
-}}
+specified, the last observation is included in the output dataset.}
 
 \item{check_type}{Check uniqueness
 
 If \code{"warning"}, \code{"message"}, or \code{"error"} is specified, the specified message is issued
 if the observations of the source datasets are not unique with respect to the
-by variables and the date and order specified in the \code{tte_source()} objects.
-
-\describe{
-\item{Permitted values}{\code{"none"}, \code{"warning"}, \code{"error"}, \code{"message"}}
-\item{Default value}{\code{"none"}}
-}}
+by variables and the date and order specified in the \code{tte_source()} objects.}
 }
 \value{
 A dataset with one observation per subject as described in the

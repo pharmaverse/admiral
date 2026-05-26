@@ -7,17 +7,9 @@
 min_cond(var, cond)
 }
 \arguments{
-\item{var}{A vector
+\item{var}{A vector}
 
-\describe{
-\item{Default value}{none}
-}}
-
-\item{cond}{A condition
-
-\describe{
-\item{Default value}{none}
-}}
+\item{cond}{A condition}
 }
 \description{
 The function derives the minimum value of a vector/column on a subset of

@@ -30,134 +30,63 @@ The variables specified by the \code{by_vars} argument are expected to be in the
 The variable specified by \code{by_vars} and \code{PARAMCD} must be a unique key of
 the input dataset after restricting it by the filter condition (\code{filter}
 parameter) and to the parameters specified by \code{sysbp_code}, \code{chol_code}
-and \code{hdl_code}.
-
-\describe{
-\item{Default value}{none}
-}}
+and \code{hdl_code}.}
 
 \item{by_vars}{Grouping variables
 
 Only variables specified in \code{by_vars} will be populated
-in the newly created records.
-
-\describe{
-\item{Permitted values}{list of variables created by \code{exprs()}, e.g., \code{exprs(USUBJID, VISIT)}}
-\item{Default value}{none}
-}}
+in the newly created records.}
 
 \item{set_values_to}{Variables to be set
 
 The specified variables are set to the specified values for the new
 observations. For example \code{exprs(PARAMCD = "MAP")} defines the parameter code
-for the new parameter.
-
-\describe{
-\item{Permitted values}{List of variable-value pairs}
-\item{Default value}{\code{exprs(PARAMCD = "MAP")}}
-}}
+for the new parameter.}
 
 \item{sysbp_code}{Systolic blood pressure parameter code
 
 The observations where \code{PARAMCD} equals the specified value are considered
-as the systolic blood pressure assessments.
-
-\describe{
-\item{Permitted values}{a character scalar, i.e., a character vector of length one}
-\item{Default value}{\code{"SYSBP"}}
-}}
+as the systolic blood pressure assessments.}
 
 \item{chol_code}{Total serum cholesterol code
 
 The observations where \code{PARAMCD} equals the specified value are considered
-as the total cholesterol assessments. This must be measured in mg/dL.
-
-\describe{
-\item{Permitted values}{a character scalar, i.e., a character vector of length one}
-\item{Default value}{\code{"CHOL"}}
-}}
+as the total cholesterol assessments. This must be measured in mg/dL.}
 
 \item{cholhdl_code}{HDL serum cholesterol code
 
 The observations where \code{PARAMCD} equals the specified value are considered
-as the HDL cholesterol assessments. This must be measured in mg/dL.
-
-\describe{
-\item{Permitted values}{a character scalar, i.e., a character vector of length one}
-\item{Default value}{\code{"CHOLHDL"}}
-}}
+as the HDL cholesterol assessments. This must be measured in mg/dL.}
 
 \item{age}{Subject age
 
-A variable containing the subject's age.
-
-\describe{
-\item{Permitted values}{A numeric variable name that refers to a subject age
-column of the input dataset}
-\item{Default value}{\code{AGE}}
-}}
+A variable containing the subject's age.}
 
 \item{sex}{Subject sex
 
-A variable containing the subject's sex.
-
-\describe{
-\item{Permitted values}{A character variable name that refers to a subject sex
-column of the input dataset}
-\item{Default value}{\code{SEX}}
-}}
+A variable containing the subject's sex.}
 
 \item{smokefl}{Smoking status flag
 
-A flag indicating smoking status.
-
-\describe{
-\item{Permitted values}{A character variable name that refers to a smoking status
-column of the input dataset.}
-\item{Default value}{\code{SMOKEFL}}
-}}
+A flag indicating smoking status.}
 
 \item{diabetfl}{Diabetic flag
 
-A flag indicating diabetic status.
-
-\describe{
-\item{Permitted values}{A character variable name that refers to a diabetic
-status column of the input dataset}
-\item{Default value}{\code{DIABETFL}}
-}}
+A flag indicating diabetic status.}
 
 \item{trthypfl}{Treated with hypertension medication flag
 
-A flag indicating if a subject was treated with hypertension medication.
-
-\describe{
-\item{Permitted values}{A character variable name that refers to a column that
-indicates whether a subject is treated for high blood
-pressure}
-\item{Default value}{\code{TRTHYPFL}}
-}}
+A flag indicating if a subject was treated with hypertension medication.}
 
 \item{get_unit_expr}{An expression providing the unit of the parameter
 
-The result is used to check the units of the input parameters.
-
-\describe{
-\item{Permitted values}{An expression which is evaluable in the input dataset
-and results in a character value}
-\item{Default value}{none}
-}}
+The result is used to check the units of the input parameters.}
 
 \item{filter}{Filter condition
 
 The specified condition is applied to the input dataset before deriving the
 new parameter, i.e., only observations fulfilling the condition are taken
-into account.
-
-\describe{
-\item{Permitted values}{an unquoted condition, e.g., \code{AVISIT == "BASELINE"}}
-\item{Default value}{\code{NULL}}
-}}
+into account.}
 }
 \value{
 The input dataset with the new parameter added

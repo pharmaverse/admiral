@@ -19,19 +19,9 @@ derive_vars_extreme_event(
 \arguments{
 \item{dataset}{Input dataset
 
-The variables specified by the \code{by_vars} and \code{order} arguments are expected to be in the dataset.
+The variables specified by the \code{by_vars} and \code{order} arguments are expected to be in the dataset.}
 
-\describe{
-\item{Permitted values}{a dataset, i.e., a \code{data.frame} or tibble}
-\item{Default value}{none}
-}}
-
-\item{by_vars}{Grouping variables
-
-\describe{
-\item{Permitted values}{list of variables created by \code{exprs()}, e.g., \code{exprs(USUBJID, VISIT)}}
-\item{Default value}{\code{NULL}}
-}}
+\item{by_vars}{Grouping variables}
 
 \item{events}{Conditions and new values defining events
 
@@ -42,11 +32,7 @@ record sorted by \code{order}. The data is grouped by \code{by_vars}, i.e., summ
 functions like \code{all()} or \code{any()} can be used in \code{condition}.
 
 For \code{event_joined()} events the observations are selected by calling
-\code{filter_joined()}. The \code{condition} field is passed to the \code{filter_join} argument.
-
-\describe{
-\item{Default value}{none}
-}}
+\code{filter_joined()}. The \code{condition} field is passed to the \code{filter_join} argument.}
 
 \item{tmp_event_nr_var}{Temporary event number variable
 
@@ -56,64 +42,36 @@ number of the event before selecting the records of the event.
 It can be used in \code{order} to determine which record should be used if
 records from more than one event are selected.
 
-The variable is not included in the output dataset.
-
-\describe{
-\item{Default value}{\code{NULL}}
-}}
+The variable is not included in the output dataset.}
 
 \item{order}{Sort order
 
 If a particular event from \code{events} has more than one observation, within
 the event and by group, the records are ordered by the specified order.
 
-For handling of \code{NA}s in sorting variables see the "Sort Order" section in \code{vignette("generic")}.
-
-\describe{
-\item{Permitted values}{list of expressions created by \code{exprs()}, e.g.,
-\code{exprs(ADT, desc(AVAL))}}
-\item{Default value}{none}
-}}
+For handling of \code{NA}s in sorting variables see the "Sort Order" section in \code{vignette("generic")}.}
 
 \item{mode}{Selection mode (first or last)
 
 If a particular event from \code{events} has more than one observation,
 \code{"first"}/\code{"last"} is used to select the first/last record of this type of
-event sorting by \code{order}.
-
-\describe{
-\item{Permitted values}{\code{"first"}, \code{"last"}}
-\item{Default value}{none}
-}}
+event sorting by \code{order}.}
 
 \item{source_datasets}{Source datasets
 
 A named list of datasets is expected. The \code{dataset_name} field of \code{event()}
-and \code{event_joined()} refers to the dataset provided in the list.
-
-\describe{
-\item{Default value}{\code{NULL}}
-}}
+and \code{event_joined()} refers to the dataset provided in the list.}
 
 \item{check_type}{Check uniqueness?
 
 If \code{"warning"} or \code{"error"} is specified, the specified message is issued
 if the observations of the input dataset are not unique with respect to the
-by variables and the order.
-
-\describe{
-\item{Permitted values}{\code{"none"}, \code{"message"}, \code{"warning"}, \code{"error"}}
-\item{Default value}{\code{"warning"}}
-}}
+by variables and the order.}
 
 \item{new_vars}{Variables to add
 
 The specified variables from the events are added to the output
-dataset. Variables can be renamed by naming the element, i.e., \verb{new_vars = exprs(<new name> = <old name>)}.
-
-\describe{
-\item{Default value}{none}
-}}
+dataset. Variables can be renamed by naming the element, i.e., \verb{new_vars = exprs(<new name> = <old name>)}.}
 }
 \value{
 The input dataset with the best or worst observation of each by group

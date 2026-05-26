@@ -7,17 +7,9 @@
 \method{print}{adam_templates}(x, ...)
 }
 \arguments{
-\item{x}{A \code{adam_templates} object
+\item{x}{A \code{adam_templates} object}
 
-\describe{
-\item{Default value}{none}
-}}
-
-\item{...}{Not used
-
-\describe{
-\item{Default value}{none}
-}}
+\item{...}{Not used}
 }
 \value{
 No return value, called for side effects

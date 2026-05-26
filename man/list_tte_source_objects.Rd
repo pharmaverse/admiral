@@ -7,11 +7,7 @@
 list_tte_source_objects(package = "admiral")
 }
 \arguments{
-\item{package}{The name of the package in which to search for \code{tte_source} objects
-
-\describe{
-\item{Default value}{\code{"admiral"}}
-}}
+\item{package}{The name of the package in which to search for \code{tte_source} objects}
 }
 \value{
 A \code{data.frame} where each row corresponds to one \code{tte_source} object or \code{NULL}

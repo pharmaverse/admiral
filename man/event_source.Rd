@@ -16,47 +16,26 @@ event_source(
 \item{dataset_name}{The name of the source dataset
 
 The name refers to the dataset provided by the \code{source_datasets} parameter
-of \code{derive_param_tte()}.
-
-\describe{
-\item{Default value}{none}
-}}
+of \code{derive_param_tte()}.}
 
 \item{filter}{An unquoted condition for selecting the observations from
-\code{dataset} which are events or possible censoring time points.
-
-\describe{
-\item{Default value}{\code{NULL}}
-}}
+\code{dataset} which are events or possible censoring time points.}
 
 \item{date}{A variable or expression providing the date of the event or
 censoring. A date, or a datetime can be specified. An unquoted symbol or
 expression is expected.
 
 Refer to \code{derive_vars_dt()} or \code{convert_dtc_to_dt()} to impute and derive a
-date from a date character vector to a date object.
-
-\describe{
-\item{Default value}{none}
-}}
+date from a date character vector to a date object.}
 
 \item{set_values_to}{A named list returned by \code{exprs()} defining the variables
 to be set for the event or censoring, e.g. \code{exprs(EVENTDESC = "DEATH", SRCDOM = "ADSL", SRCVAR = "DTHDT")}. The values must be a symbol, a
-character string, a numeric value, an expression, or \code{NA}.
-
-\describe{
-\item{Default value}{\code{NULL}}
-}}
+character string, a numeric value, an expression, or \code{NA}.}
 
 \item{order}{Sort order
 
 An optional named list returned by \code{exprs()} defining additional variables
-that the source dataset is sorted on after \code{date}.
-
-\describe{
-\item{Permitted values}{list of variables created by \code{exprs()} e.g. \code{exprs(ASEQ)}.}
-\item{Default value}{\code{order}}
-}}
+that the source dataset is sorted on after \code{date}.}
 }
 \value{
 An object of class \code{event_source}, inheriting from class \code{tte_source}

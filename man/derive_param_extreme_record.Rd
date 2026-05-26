@@ -15,38 +15,22 @@ derive_param_extreme_record(
 )
 }
 \arguments{
-\item{dataset}{Input dataset
-
-\describe{
-\item{Default value}{\code{NULL}}
-}}
+\item{dataset}{Input dataset}
 
 \item{sources}{Sources
 
-A list of \code{records_source()} objects is expected.
-
-\describe{
-\item{Default value}{none}
-}}
+A list of \code{records_source()} objects is expected.}
 
 \item{source_datasets}{Source datasets
 
 A named list of datasets is expected. The \code{dataset_name} field of
 \code{records_source()} refers to the dataset provided in the list. The variables
-specified by the \code{order} and the \code{by_vars} arguments are expected after applying \code{new_vars}.
-
-\describe{
-\item{Default value}{none}
-}}
+specified by the \code{order} and the \code{by_vars} arguments are expected after applying \code{new_vars}.}
 
 \item{by_vars}{Grouping variables
 
 If the argument is specified, for each by group the observations are
-selected separately.
-
-\describe{
-\item{Default value}{\code{NULL}}
-}}
+selected separately.}
 
 \item{order}{Sort order
 
@@ -58,24 +42,13 @@ can be specified as well (see examples below).
 Please note that \code{NA} is considered as the last value. I.e., if a order
 variable is \code{NA} and \code{mode = "last"}, this observation is chosen while for
 \code{mode = "first"} the observation is chosen only if there are no
-observations where the variable is not \code{NA}.
-
-\describe{
-\item{Permitted values}{list of expressions created by \code{exprs()}, e.g.,
-\code{exprs(ADT, desc(AVAL))}}
-\item{Default value}{none}
-}}
+observations where the variable is not \code{NA}.}
 
 \item{mode}{Selection mode (first or last)
 
 If \code{"first"} is specified, for each by group the first observation with
 respect to \code{order} is included in the output dataset. If \code{"last"} is
-specified, the last observation is included in the output dataset.
-
-\describe{
-\item{Permitted values}{\code{"first"}, \code{"last"}}
-\item{Default value}{none}
-}}
+specified, the last observation is included in the output dataset.}
 
 \item{set_values_to}{Variables to be set
 
@@ -87,10 +60,6 @@ A list of variable name-value pairs is expected.
 \item LHS refers to a variable.
 \item RHS refers to the values to set to the variable. This can be a string, a
 symbol, a numeric value or \code{NA}, e.g., \code{exprs(PARAMCD = "PD", PARAM =   "First Progressive Disease")}.
-}
-
-\describe{
-\item{Default value}{none}
 }}
 }
 \value{

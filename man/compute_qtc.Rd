@@ -10,27 +10,14 @@ compute_qtc(qt, rr, method)
 \item{qt}{QT interval
 
 A numeric vector is expected. It is expected that QT is measured in ms or
-msec.
-
-\describe{
-\item{Default value}{none}
-}}
+msec.}
 
 \item{rr}{RR interval
 
 A numeric vector is expected. It is expected that RR is measured in ms or
-msec.
+msec.}
 
-\describe{
-\item{Default value}{none}
-}}
-
-\item{method}{Method used to QT correction
-
-\describe{
-\item{Permitted values}{\code{"Bazett"}, \code{"Fridericia"}, \code{"Sagie"}}
-\item{Default value}{none}
-}}
+\item{method}{Method used to QT correction}
 }
 \value{
 QT interval in ms
