@@ -883,7 +883,8 @@ in `ADPC` but did not keep.
 
 - [Combine Covariates with `ADPPK` Data](#final)
 
-### Find First Dose `ADPPK`
+- [Add Labels and Attributes (Same as `ADPC`)](#attributes) \## Find
+  First Dose `ADPPK` {#ppkfirst}
 
 The initial programming steps for `ADPPK` will follow the same sequence
 as the `ADPC`. This includes reading in the
@@ -1281,7 +1282,7 @@ adppk <- adppk_aseq %>%
   mutate(RECSEQ = row_number())
 ```
 
-## Add Labels and Attributes
+### Add Labels and Attributes
 
 Note that attributes may not be preserved in some cases after processing
 with [admiral](https://pharmaverse.github.io/admiral/). The recommended
@@ -1304,8 +1305,9 @@ in your data derivation process using packages like:
 NOTE: Together with [admiral](https://pharmaverse.github.io/admiral/)
 these packages comprise an End to End pipeline under the umbrella of the
 [pharmaverse](https://github.com/pharmaverse). An example of applying
-metadata and perform associated checks can be found at the [pharmaverse
-E2E example](https://pharmaverse.github.io/examples/adam/adsl).
+metadata and performing associated checks can be found at the
+[pharmaverse E2E
+example](https://pharmaverse.github.io/examples/adam/adsl).
 
 ## Example Scripts
 

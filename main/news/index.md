@@ -183,6 +183,14 @@ Developer Notes
 - Update to roxygen2 8.0.0.
   ([\#3090](https://github.com/pharmaverse/admiral/issues/3090))
 
+- The
+  [`admiral_labels_attrs_section()`](https:/pharmaverse.github.io/admiral/main/reference/admiral_labels_attrs_section.md)
+  function was added to output standardized boilerplate markdown for the
+  “Add Labels and Attributes” section in ADaM-specific vignettes. All
+  relevant vignettes have been updated to use this function, ensuring
+  consistent content that can be maintained in one place.
+  ([\#2926](https://github.com/pharmaverse/admiral/issues/2926))
+
 - Add instructions for AI coding agents: Workflow from `{admiralci}`
   copies information from
   [admiraldev](https://pharmaverse.github.io/admiraldev/) to `AGENTS.md`
