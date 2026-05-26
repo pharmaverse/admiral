@@ -96,6 +96,12 @@ of packages were updated to specify the level of contributions required for auth
 
 - Update to roxygen2 8.0.0. (#3090)
 
+- The `admiral_labels_attrs_section()` function was added to output
+  standardized boilerplate markdown for the "Add Labels and Attributes" section
+  in ADaM-specific vignettes. All relevant vignettes have been updated to use
+  this function, ensuring consistent content that can be maintained in one
+  place. (#2926)
+
 - Add instructions for AI coding agents: Workflow from `{admiralci}` copies information from `{admiraldev}` to `AGENTS.md` instruction files. (#2920)
 
 - Increased the maximum height of the drop-down menus in the website navigation bar to ensure all items are visible without scrolling. (#2974)
