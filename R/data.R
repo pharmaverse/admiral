@@ -4,7 +4,7 @@
 #' @keywords datasets
 #' @family datasets
 #' @source
-#' Derived from the `ex` dataset using `{admiral}` and `{dplyr}` (\url{https://github.com/pharmaverse/admiral/blob/main/data-raw/create_ex_single.R})
+#' Derived from the `ex` dataset using `{admiral}` and `{dplyr}`
 "ex_single"
 
 #' Example `QS` Dataset

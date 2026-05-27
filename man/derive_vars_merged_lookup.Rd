@@ -20,11 +20,21 @@ derive_vars_merged_lookup(
 \arguments{
 \item{dataset}{Input dataset
 
-The variables specified by the \code{by_vars} argument are expected to be in the dataset.}
+The variables specified by the \code{by_vars} argument are expected to be in the dataset.
+
+\describe{
+\item{Permitted values}{a dataset, i.e., a \code{data.frame} or tibble}
+\item{Default value}{none}
+}}
 
 \item{dataset_add}{Lookup table
 
-The variables specified by the \code{by_vars} argument are expected.}
+The variables specified by the \code{by_vars} argument are expected.
+
+\describe{
+\item{Permitted values}{a dataset, i.e., a \code{data.frame} or tibble}
+\item{Default value}{none}
+}}
 
 \item{by_vars}{Grouping variables
 
@@ -32,7 +42,12 @@ The input dataset and the selected observations from the additional dataset
 are merged by the specified variables.
 
 Variables can be renamed by naming the element, i.e.
-\verb{by_vars = exprs(<name in input dataset> = <name in additional dataset>)}, similar to the \code{dplyr} joins.}
+\verb{by_vars = exprs(<name in input dataset> = <name in additional dataset>)}, similar to the \code{dplyr} joins.
+
+\describe{
+\item{Permitted values}{list of variables created by \code{exprs()}, e.g., \code{exprs(USUBJID, VISIT)}}
+\item{Default value}{none}
+}}
 
 \item{order}{Sort order
 
@@ -42,7 +57,12 @@ specified order.
 
 Variables defined by the \code{new_vars} argument can be used in the sort order.
 
-For handling of \code{NA}s in sorting variables see the "Sort Order" section in \code{vignette("generic")}.}
+For handling of \code{NA}s in sorting variables see the "Sort Order" section in \code{vignette("generic")}.
+
+\describe{
+\item{Permitted values}{list of variables created by \code{exprs()}, e.g., \code{exprs(USUBJID, VISIT)}}
+\item{Default value}{\code{NULL}}
+}}
 
 \item{new_vars}{Variables to add
 
@@ -64,14 +84,24 @@ variable \code{LASTRSP} to the dataset and sets it to the upper case value of
 If the argument is not specified or set to \code{NULL}, all variables from the
 additional dataset (\code{dataset_add}) are added. In the case when a variable
 exists in both datasets, an error is issued to ensure the user either adds
-to \code{by_vars}, removes or renames.}
+to \code{by_vars}, removes or renames.
+
+\describe{
+\item{Permitted values}{list of variables created by \code{exprs()}, e.g., \code{exprs(USUBJID, VISIT)}}
+\item{Default value}{\code{NULL}}
+}}
 
 \item{mode}{Selection mode
 
 Determines if the first or last observation is selected. If the \code{order}
 argument is specified, \code{mode} must be non-null.
 
-If the \code{order} argument is not specified, the \code{mode} argument is ignored.}
+If the \code{order} argument is not specified, the \code{mode} argument is ignored.
+
+\describe{
+\item{Permitted values}{\code{"first"}, \code{"last"}}
+\item{Default value}{\code{NULL}}
+}}
 
 \item{filter_add}{Filter for additional dataset (\code{dataset_add})
 
@@ -80,7 +110,12 @@ for merging. If the argument is not specified, all observations are
 considered.
 
 Variables defined by the \code{new_vars} argument can be used in the filter
-condition.}
+condition.
+
+\describe{
+\item{Permitted values}{an unquoted condition, e.g., \code{AVISIT == "BASELINE"}}
+\item{Default value}{\code{NULL}}
+}}
 
 \item{check_type}{Check uniqueness?
 
@@ -90,14 +125,33 @@ with respect to the by variables and the order.
 
 If the \code{order} argument is not specified, the \code{check_type} argument is ignored:
 if the observations of the (restricted) additional dataset are not unique with respect
-to the by variables, an error is issued.}
+to the by variables, an error is issued.
+
+\describe{
+\item{Permitted values}{\code{"none"}, \code{"message"}, \code{"warning"}, \code{"error"}}
+\item{Default value}{\code{"warning"}}
+}}
 
 \item{duplicate_msg}{Message of unique check
 
-If the uniqueness check fails, the specified message is displayed.}
+If the uniqueness check fails, the specified message is displayed.
+
+\describe{
+\item{Permitted values}{a console message to be printed, e.g. \code{"Attention"} or for longer messages use \code{paste("Line 1", "Line 2")}}
+\item{Default value}{\if{html}{\out{<div class="sourceCode r">}}\preformatted{paste(
+  "Dataset \{.arg dataset_add\} contains duplicate records with respect to",
+  "\{.var \{vars2chr(by_vars)\}\}."
+)
+}\if{html}{\out{</div>}}}
+}}
 
 \item{print_not_mapped}{Print a list of unique \code{by_vars} values that do not
-have corresponding records from the lookup table?}
+have corresponding records from the lookup table?
+
+\describe{
+\item{Permitted values}{\code{TRUE}, \code{FALSE}}
+\item{Default value}{\code{TRUE}}
+}}
 }
 \value{
 The output dataset contains all observations and variables of the

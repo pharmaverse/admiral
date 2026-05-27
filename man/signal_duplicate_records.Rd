@@ -16,20 +16,43 @@ signal_duplicate_records(
 \arguments{
 \item{dataset}{Input dataset
 
-The variables specified by the \code{by_vars} argument are expected to be in the dataset.}
+The variables specified by the \code{by_vars} argument are expected to be in the dataset.
+
+\describe{
+\item{Default value}{none}
+}}
 
 \item{by_vars}{Grouping variables
 
-Defines groups of records in which to look for duplicates.}
+Defines groups of records in which to look for duplicates.
 
-\item{msg}{The condition message}
+\describe{
+\item{Permitted values}{list of variables created by \code{exprs()}, e.g., \code{exprs(USUBJID, VISIT)}}
+\item{Default value}{none}
+}}
 
-\item{cnd_type}{Type of condition to signal when detecting duplicate records.}
+\item{msg}{The condition message
+
+\describe{
+\item{Default value}{\code{paste("Dataset contains duplicate records", "with respect to",
+  "{.var {replace_values_by_names(by_vars)}}")}}
+}}
+
+\item{cnd_type}{Type of condition to signal when detecting duplicate records.
+
+\describe{
+\item{Permitted values}{\code{"message"}, \code{"warning"}, or \code{"error"}}
+\item{Default value}{\code{"error"}}
+}}
 
 \item{class}{Class of the condition
 
 The specified classes are added to the classes of the condition.
-\code{c("duplicate_records", "assert-admiral")} is always added.}
+\code{c("duplicate_records", "assert-admiral")} is always added.
+
+\describe{
+\item{Default value}{\code{NULL}}
+}}
 }
 \value{
 No return value, called for side effects

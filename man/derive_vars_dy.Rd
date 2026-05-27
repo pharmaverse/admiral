@@ -9,19 +9,31 @@ derive_vars_dy(dataset, reference_date, source_vars)
 \arguments{
 \item{dataset}{Input dataset
 
-The variables specified by the \code{reference_date} and \code{source_vars} arguments are expected to be in the dataset.}
+The variables specified by the \code{reference_date} and \code{source_vars} arguments are expected to be in the dataset.
+
+\describe{
+\item{Default value}{none}
+}}
 
 \item{reference_date}{A date or date-time column, e.g., date of first treatment
 or date-time of last exposure to treatment.
 
 Refer to \code{derive_vars_dt()} to impute and derive a date from a date
-character vector to a date object.}
+character vector to a date object.
+
+\describe{
+\item{Default value}{none}
+}}
 
 \item{source_vars}{A list of datetime or date variables created using
 \code{exprs()} from which dates are to be extracted. This can either be a list of
 date(time) variables or named \verb{*DY} variables and corresponding \verb{*DT(M)}
 variables e.g. \code{exprs(TRTSDTM, ASTDTM, AENDT)} or \code{exprs(TRTSDT, ASTDTM, AENDT, DEATHDY = DTHDT)}. If the source variable does not end in \verb{*DT(M)}, a
-name for the resulting \verb{*DY} variable must be provided.}
+name for the resulting \verb{*DY} variable must be provided.
+
+\describe{
+\item{Default value}{none}
+}}
 }
 \value{
 The input dataset with \verb{*DY} corresponding to the \verb{*DTM} or \verb{*DT}

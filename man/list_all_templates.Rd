@@ -7,7 +7,11 @@
 list_all_templates(package = "admiral")
 }
 \arguments{
-\item{package}{The R package in which to look for templates. By default \code{"admiral"}.}
+\item{package}{The R package in which to look for templates. By default \code{"admiral"}.
+
+\describe{
+\item{Default value}{\code{"admiral"}}
+}}
 }
 \value{
 A \code{character} vector of all available templates

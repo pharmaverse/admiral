@@ -9,39 +9,71 @@ compute_framingham(sysbp, chol, cholhdl, age, sex, smokefl, diabetfl, trthypfl)
 \arguments{
 \item{sysbp}{Systolic blood pressure
 
-A numeric vector is expected.}
+A numeric vector is expected.
+
+\describe{
+\item{Default value}{none}
+}}
 
 \item{chol}{Total serum cholesterol (mg/dL)
 
-A numeric vector is expected.}
+A numeric vector is expected.
+
+\describe{
+\item{Default value}{none}
+}}
 
 \item{cholhdl}{HDL serum cholesterol (mg/dL)
 
-A numeric vector is expected.}
+A numeric vector is expected.
+
+\describe{
+\item{Default value}{none}
+}}
 
 \item{age}{Age (years)
 
-A numeric vector is expected.}
+A numeric vector is expected.
+
+\describe{
+\item{Default value}{none}
+}}
 
 \item{sex}{Gender
 
 A character vector is expected.
-Expected Values: 'M' 'F'}
+Expected Values: 'M' 'F'
+
+\describe{
+\item{Default value}{none}
+}}
 
 \item{smokefl}{Smoking Status
 
 A character vector  is expected.
-Expected Values: 'Y' 'N'}
+Expected Values: 'Y' 'N'
+
+\describe{
+\item{Default value}{none}
+}}
 
 \item{diabetfl}{Diabetic Status
 
 A character vector is expected.
-Expected Values: 'Y' 'N'}
+Expected Values: 'Y' 'N'
+
+\describe{
+\item{Default value}{none}
+}}
 
 \item{trthypfl}{Treated for hypertension status
 
 A character vector is expected.
-Expected Values: 'Y' 'N'}
+Expected Values: 'Y' 'N'
+
+\describe{
+\item{Default value}{none}
+}}
 }
 \value{
 A numeric vector of Framingham values

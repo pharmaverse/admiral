@@ -7,7 +7,11 @@
 call_user_fun(call)
 }
 \arguments{
-\item{call}{Call to be executed}
+\item{call}{Call to be executed
+
+\describe{
+\item{Default value}{none}
+}}
 }
 \value{
 The return value of the function call

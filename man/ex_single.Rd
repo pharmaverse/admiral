@@ -8,7 +8,7 @@
 An object of class \code{tbl_df} (inherits from \code{tbl}, \code{data.frame}) with 22439 rows and 16 columns.
 }
 \source{
-Derived from the \code{ex} dataset using \code{{admiral}} and \code{{dplyr}} (\url{https://github.com/pharmaverse/admiral/blob/main/data-raw/create_ex_single.R})
+Derived from the \code{ex} dataset using \code{{admiral}} and \code{{dplyr}}
 }
 \usage{
 ex_single

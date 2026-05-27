@@ -7,11 +7,19 @@
 print_named_list(list, indent = 0)
 }
 \arguments{
-\item{list}{A named list}
+\item{list}{A named list
+
+\describe{
+\item{Default value}{none}
+}}
 
 \item{indent}{Indent
 
-The output is indented by the specified number of characters.}
+The output is indented by the specified number of characters.
+
+\describe{
+\item{Default value}{\code{0}}
+}}
 }
 \value{
 No return value, called for side effects

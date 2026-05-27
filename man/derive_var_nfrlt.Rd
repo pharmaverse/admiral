@@ -19,16 +19,31 @@ derive_var_nfrlt(
 }
 \arguments{
 \item{dataset}{Input dataset containing visit day variable and optionally
-timepoint variable.}
+timepoint variable.
+
+\describe{
+\item{Permitted values}{A data frame or tibble}
+\item{Default value}{none}
+}}
 
 \item{new_var}{Name of the new variable to create (unquoted). Default is
-\code{NFRLT}.}
+\code{NFRLT}.
+
+\describe{
+\item{Permitted values}{Unquoted variable name}
+\item{Default value}{\code{NFRLT}}
+}}
 
 \item{new_var_unit}{Name of the unit variable to create (unquoted). If
 specified, a character variable will be created containing the unit of
 time exactly as provided in \code{out_unit}. Common CDISC variables are
 \code{FRLTU} (First Dose Relative Time Unit) or \code{RRLTU} (Reference Relative
-Time Unit). If not specified, no unit variable is created.}
+Time Unit). If not specified, no unit variable is created.
+
+\describe{
+\item{Permitted values}{Unquoted variable name (optional)}
+\item{Default value}{\code{NULL}}
+}}
 
 \item{out_unit}{Unit of time for the output variable. Options are:
 \itemize{
@@ -40,19 +55,39 @@ Time Unit). If not specified, no unit variable is created.}
 
 Case-insensitive. The internal calculation is performed in hours, then
 converted to the specified unit. If \code{new_var_unit} is specified, it will
-contain the value exactly as provided by the user.}
+contain the value exactly as provided by the user.
+
+\describe{
+\item{Permitted values}{Character scalar (see options above)}
+\item{Default value}{\code{"HOURS"}}
+}}
 
 \item{tpt_var}{Timepoint variable containing descriptions like "Pre-dose",
 "1H Post-dose", etc. (unquoted). If not provided or if the variable
 doesn't exist in the dataset, only the visit day offset is calculated
-(timepoint contribution is 0).}
+(timepoint contribution is 0).
+
+\describe{
+\item{Permitted values}{Unquoted variable name (optional)}
+\item{Default value}{\code{NULL}}
+}}
 
 \item{visit_day}{Visit day variable (unquoted). This should be the planned/
 nominal visit day (e.g., \code{VISITDY}). Records with \code{NA} in this variable
-will have NFRLT set to \code{NA}.}
+will have NFRLT set to \code{NA}.
+
+\describe{
+\item{Permitted values}{Unquoted variable name}
+\item{Default value}{none}
+}}
 
 \item{first_dose_day}{The day number considered as the first dose day.
-Default is 1. For multiple-dose studies, this is typically Day 1.}
+Default is 1. For multiple-dose studies, this is typically Day 1.
+
+\describe{
+\item{Permitted values}{Numeric scalar (positive integer)}
+\item{Default value}{\code{1}}
+}}
 
 \item{treatment_duration}{Duration of treatment in hours. Can be either:
 \itemize{
@@ -62,18 +97,33 @@ record can have a different treatment duration
 }
 
 Passed to \code{convert_xxtpt_to_hours()}. Must be non-negative. Default is 0
-hours (for instantaneous treatments like oral medications).}
+hours (for instantaneous treatments like oral medications).
+
+\describe{
+\item{Permitted values}{Numeric scalar or unquoted variable name (non-negative)}
+\item{Default value}{\code{0}}
+}}
 
 \item{range_method}{Method for converting time ranges to single values.
 Options are "midpoint" (default), "start", or "end". Passed to
 \code{convert_xxtpt_to_hours()}. For example, "0-6h" with midpoint returns 3,
-with start returns 0, with end returns 6.}
+with start returns 0, with end returns 6.
+
+\describe{
+\item{Permitted values}{Character scalar ("midpoint", "start", or "end")}
+\item{Default value}{\code{"midpoint"}}
+}}
 
 \item{set_values_to_na}{An optional condition that marks derived NFRLT
 values as \code{NA}. For example, \code{set_values_to_na = VISIT == "UNSCHEDULED"}
 will set NFRLT to \code{NA} for all unscheduled visits. Can use any variables
 in the dataset. When \code{new_var_unit} is specified, the unit variable will
-also be set to \code{NA} for these records.}
+also be set to \code{NA} for these records.
+
+\describe{
+\item{Permitted values}{Condition (optional)}
+\item{Default value}{\code{NULL}}
+}}
 }
 \value{
 The input dataset with the new nominal relative time variable added,
@@ -240,3 +290,560 @@ BDS-Findings Functions that returns variable appended to dataset:
 \concept{der_bds_findings}
 \keyword{der_bds_findings}
 \keyword{experimental}
+\section{Examples}{
+\subsection{Single dose study}{
+
+Day 1 only with oral medication
+
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{library(dplyr)
+library(tibble)
+
+adpc <- tribble(
+  ~USUBJID, ~VISITDY, ~PCTPT,
+  "001",    1,        "Pre-dose",
+  "001",    1,        "1H Post-dose",
+  "001",    1,        "2H Post-dose",
+  "001",    1,        "4H Post-dose",
+  "001",    1,        "24H Post-dose"
+)
+
+derive_var_nfrlt(
+  adpc,
+  new_var = NFRLT,
+  tpt_var = PCTPT,
+  visit_day = VISITDY
+)
+#> # A tibble: 5 × 4
+#>   USUBJID VISITDY PCTPT         NFRLT
+#>   <chr>     <dbl> <chr>         <dbl>
+#> 1 001           1 Pre-dose          0
+#> 2 001           1 1H Post-dose      1
+#> 3 001           1 2H Post-dose      2
+#> 4 001           1 4H Post-dose      4
+#> 5 001           1 24H Post-dose    24}\if{html}{\out{</div>}}}
+\subsection{Single dose study with unit variable}{
+
+Creating NFRLT with FRLTU unit variable
+
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{derive_var_nfrlt(
+  adpc,
+  new_var = NFRLT,
+  new_var_unit = FRLTU,
+  tpt_var = PCTPT,
+  visit_day = VISITDY
+)
+#> # A tibble: 5 × 5
+#>   USUBJID VISITDY PCTPT         NFRLT FRLTU
+#>   <chr>     <dbl> <chr>         <dbl> <chr>
+#> 1 001           1 Pre-dose          0 HOURS
+#> 2 001           1 1H Post-dose      1 HOURS
+#> 3 001           1 2H Post-dose      2 HOURS
+#> 4 001           1 4H Post-dose      4 HOURS
+#> 5 001           1 24H Post-dose    24 HOURS}\if{html}{\out{</div>}}}
+\subsection{Single dose study with different output units}{
+
+Deriving NFRLT in different time units with unit variables
+
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{adpc \%>\%
+  derive_var_nfrlt(
+    new_var = NFRLT,
+    new_var_unit = FRLTU,
+    out_unit = "HOURS",
+    tpt_var = PCTPT,
+    visit_day = VISITDY
+  ) \%>\%
+  derive_var_nfrlt(
+    new_var = NFRLTDY,
+    new_var_unit = FRLTDYU,
+    out_unit = "days",
+    tpt_var = PCTPT,
+    visit_day = VISITDY
+  )
+#> # A tibble: 5 × 7
+#>   USUBJID VISITDY PCTPT         NFRLT FRLTU NFRLTDY FRLTDYU
+#>   <chr>     <dbl> <chr>         <dbl> <chr>   <dbl> <chr>  
+#> 1 001           1 Pre-dose          0 HOURS  0      days   
+#> 2 001           1 1H Post-dose      1 HOURS  0.0417 days   
+#> 3 001           1 2H Post-dose      2 HOURS  0.0833 days   
+#> 4 001           1 4H Post-dose      4 HOURS  0.167  days   
+#> 5 001           1 24H Post-dose    24 HOURS  1      days   }\if{html}{\out{</div>}}}
+\subsection{Study with screening visits}{
+
+Handling negative visit days (no Day 0 in clinical trials)
+
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{adpc_screen <- tribble(
+  ~USUBJID, ~VISITDY, ~PCTPT,
+  "001",    -14,      "Screening",
+  "001",    -7,       "Pre-dose",
+  "001",    -1,       "Pre-dose",
+  "001",    1,        "Pre-dose",
+  "001",    1,        "2H Post-dose"
+)
+
+derive_var_nfrlt(
+  adpc_screen,
+  new_var = NFRLT,
+  new_var_unit = FRLTU,
+  tpt_var = PCTPT,
+  visit_day = VISITDY
+)
+#> # A tibble: 5 × 5
+#>   USUBJID VISITDY PCTPT        NFRLT FRLTU
+#>   <chr>     <dbl> <chr>        <dbl> <chr>
+#> 1 001         -14 Screening     -336 HOURS
+#> 2 001          -7 Pre-dose      -168 HOURS
+#> 3 001          -1 Pre-dose       -24 HOURS
+#> 4 001           1 Pre-dose         0 HOURS
+#> 5 001           1 2H Post-dose     2 HOURS}\if{html}{\out{</div>}}}
+\subsection{Multiple dose study}{
+
+Dosing on Days 1, 8, and 15
+
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{adpc_md <- tribble(
+  ~USUBJID, ~VISITDY, ~PCTPT,
+  "001",    1,        "Pre-dose",
+  "001",    1,        "2H Post-dose",
+  "001",    8,        "Pre-dose",
+  "001",    8,        "2H Post-dose",
+  "001",    15,       "Pre-dose",
+  "001",    15,       "2H Post-dose"
+)
+
+derive_var_nfrlt(
+  adpc_md,
+  new_var = NFRLT,
+  new_var_unit = FRLTU,
+  tpt_var = PCTPT,
+  visit_day = VISITDY
+)
+#> # A tibble: 6 × 5
+#>   USUBJID VISITDY PCTPT        NFRLT FRLTU
+#>   <chr>     <dbl> <chr>        <dbl> <chr>
+#> 1 001           1 Pre-dose         0 HOURS
+#> 2 001           1 2H Post-dose     2 HOURS
+#> 3 001           8 Pre-dose       168 HOURS
+#> 4 001           8 2H Post-dose   170 HOURS
+#> 5 001          15 Pre-dose       336 HOURS
+#> 6 001          15 2H Post-dose   338 HOURS}\if{html}{\out{</div>}}}
+\subsection{Multiple dose study with days output}{
+
+Deriving both NFRLT (hours) and NFRLTDY (days) with unit variables
+
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{adpc_md \%>\%
+  derive_var_nfrlt(
+    new_var = NFRLT,
+    new_var_unit = FRLTU,
+    tpt_var = PCTPT,
+    visit_day = VISITDY
+  ) \%>\%
+  derive_var_nfrlt(
+    new_var = NFRLTDY,
+    new_var_unit = FRLTDYU,
+    out_unit = "days",
+    tpt_var = PCTPT,
+    visit_day = VISITDY
+  )
+#> # A tibble: 6 × 7
+#>   USUBJID VISITDY PCTPT        NFRLT FRLTU NFRLTDY FRLTDYU
+#>   <chr>     <dbl> <chr>        <dbl> <chr>   <dbl> <chr>  
+#> 1 001           1 Pre-dose         0 HOURS  0      days   
+#> 2 001           1 2H Post-dose     2 HOURS  0.0833 days   
+#> 3 001           8 Pre-dose       168 HOURS  7      days   
+#> 4 001           8 2H Post-dose   170 HOURS  7.08   days   
+#> 5 001          15 Pre-dose       336 HOURS 14      days   
+#> 6 001          15 2H Post-dose   338 HOURS 14.1    days   }\if{html}{\out{</div>}}}
+\subsection{Weekly dosing study}{
+
+Long-term study with weekly dosing, using weeks output
+
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{adpc_weekly <- tribble(
+  ~USUBJID, ~VISITDY, ~PCTPT,
+  "001",    1,        "Pre-dose",
+  "001",    8,        "Pre-dose",
+  "001",    15,       "Pre-dose",
+  "001",    22,       "Pre-dose",
+  "001",    29,       "Pre-dose"
+)
+
+derive_var_nfrlt(
+  adpc_weekly,
+  new_var = NFRLTWK,
+  new_var_unit = FRLTU,
+  out_unit = "weeks",
+  tpt_var = PCTPT,
+  visit_day = VISITDY
+)
+#> # A tibble: 5 × 5
+#>   USUBJID VISITDY PCTPT    NFRLTWK FRLTU
+#>   <chr>     <dbl> <chr>      <dbl> <chr>
+#> 1 001           1 Pre-dose       0 weeks
+#> 2 001           8 Pre-dose       1 weeks
+#> 3 001          15 Pre-dose       2 weeks
+#> 4 001          22 Pre-dose       3 weeks
+#> 5 001          29 Pre-dose       4 weeks}\if{html}{\out{</div>}}}
+\subsection{Short-term PK study with minutes}{
+
+Very short timepoints requiring minute precision
+
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{adpc_short <- tribble(
+  ~USUBJID, ~VISITDY, ~PCTPT,
+  "001",    1,        "Pre-dose",
+  "001",    1,        "5 MIN POST",
+  "001",    1,        "15 MIN POST",
+  "001",    1,        "30 MIN POST",
+  "001",    1,        "1H POST"
+)
+
+derive_var_nfrlt(
+  adpc_short,
+  new_var = NFRLTMIN,
+  new_var_unit = FRLTU,
+  out_unit = "minutes",
+  tpt_var = PCTPT,
+  visit_day = VISITDY
+)
+#> # A tibble: 5 × 5
+#>   USUBJID VISITDY PCTPT       NFRLTMIN FRLTU  
+#>   <chr>     <dbl> <chr>          <dbl> <chr>  
+#> 1 001           1 Pre-dose           0 minutes
+#> 2 001           1 5 MIN POST         5 minutes
+#> 3 001           1 15 MIN POST       15 minutes
+#> 4 001           1 30 MIN POST       30 minutes
+#> 5 001           1 1H POST           60 minutes}\if{html}{\out{</div>}}}
+\subsection{Custom first dose day}{
+
+First dose on Day 7 instead of Day 1
+
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{adpc_day7 <- tribble(
+  ~USUBJID, ~VISITDY, ~PCTPT,
+  "001",    -1,       "Pre-dose",
+  "001",    1,        "Pre-dose",
+  "001",    6,        "Pre-dose",
+  "001",    7,        "Pre-dose",
+  "001",    8,        "Pre-dose"
+)
+
+derive_var_nfrlt(
+  adpc_day7,
+  new_var = NFRLT,
+  new_var_unit = FRLTU,
+  tpt_var = PCTPT,
+  visit_day = VISITDY,
+  first_dose_day = 7
+)
+#> # A tibble: 5 × 5
+#>   USUBJID VISITDY PCTPT    NFRLT FRLTU
+#>   <chr>     <dbl> <chr>    <dbl> <chr>
+#> 1 001          -1 Pre-dose  -168 HOURS
+#> 2 001           1 Pre-dose  -144 HOURS
+#> 3 001           6 Pre-dose   -24 HOURS
+#> 4 001           7 Pre-dose     0 HOURS
+#> 5 001           8 Pre-dose    24 HOURS}\if{html}{\out{</div>}}}
+\subsection{IV infusion with scalar treatment duration}{
+
+2-hour infusion duration for all records
+
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{adpc_inf <- tribble(
+  ~USUBJID, ~VISITDY, ~PCTPT,
+  "001",    1,        "Pre-dose",
+  "001",    1,        "EOI",
+  "001",    1,        "1H Post EOI",
+  "001",    1,        "10MIN PRE EOI"
+)
+
+derive_var_nfrlt(
+  adpc_inf,
+  new_var = NFRLT,
+  new_var_unit = FRLTU,
+  tpt_var = PCTPT,
+  visit_day = VISITDY,
+  treatment_duration = 2
+)
+#> # A tibble: 4 × 5
+#>   USUBJID VISITDY PCTPT         NFRLT FRLTU
+#>   <chr>     <dbl> <chr>         <dbl> <chr>
+#> 1 001           1 Pre-dose       0    HOURS
+#> 2 001           1 EOI            2    HOURS
+#> 3 001           1 1H Post EOI    3    HOURS
+#> 4 001           1 10MIN PRE EOI  1.83 HOURS}\if{html}{\out{</div>}}}
+\subsection{Variable treatment duration}{
+
+Different treatment durations per subject using a variable
+
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{adpc_var_dur <- tribble(
+  ~USUBJID, ~VISITDY, ~PCTPT,           ~EXDUR,
+  "001",    1,        "Pre-dose",       1,
+  "001",    1,        "EOI",            1,
+  "001",    1,        "1H POST EOI",    1,
+  "002",    1,        "Pre-dose",       2,
+  "002",    1,        "EOI",            2,
+  "002",    1,        "1H POST EOI",    2
+)
+
+derive_var_nfrlt(
+  adpc_var_dur,
+  new_var = NFRLT,
+  new_var_unit = FRLTU,
+  tpt_var = PCTPT,
+  visit_day = VISITDY,
+  treatment_duration = EXDUR
+)
+#> # A tibble: 6 × 6
+#>   USUBJID VISITDY PCTPT       EXDUR NFRLT FRLTU
+#>   <chr>     <dbl> <chr>       <dbl> <dbl> <chr>
+#> 1 001           1 Pre-dose        1     0 HOURS
+#> 2 001           1 EOI             1     1 HOURS
+#> 3 001           1 1H POST EOI     1     2 HOURS
+#> 4 002           1 Pre-dose        2     0 HOURS
+#> 5 002           1 EOI             2     2 HOURS
+#> 6 002           1 1H POST EOI     2     3 HOURS}\if{html}{\out{</div>}}}
+\subsection{Exposure records without timepoint variable}{
+
+Deriving NFRLT based only on visit day
+
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{ex <- tribble(
+  ~USUBJID, ~VISITDY,
+  "001",    1,
+  "001",    8,
+  "001",    15
+)
+
+derive_var_nfrlt(
+  ex,
+  new_var = NFRLT,
+  new_var_unit = FRLTU,
+  visit_day = VISITDY
+)
+#> # A tibble: 3 × 4
+#>   USUBJID VISITDY NFRLT FRLTU
+#>   <chr>     <dbl> <dbl> <chr>
+#> 1 001           1     0 HOURS
+#> 2 001           8   168 HOURS
+#> 3 001          15   336 HOURS}\if{html}{\out{</div>}}}
+\subsection{Exposure records with different output units}{
+
+Deriving NFRLT in hours, days, and weeks for exposure records
+
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{ex \%>\%
+  derive_var_nfrlt(
+    new_var = NFRLT,
+    new_var_unit = FRLTU,
+    visit_day = VISITDY
+  ) \%>\%
+  derive_var_nfrlt(
+    new_var = NFRLTDY,
+    new_var_unit = FRLTDYU,
+    out_unit = "days",
+    visit_day = VISITDY
+  ) \%>\%
+  derive_var_nfrlt(
+    new_var = NFRLTWK,
+    new_var_unit = FRLTWKU,
+    out_unit = "weeks",
+    visit_day = VISITDY
+  )
+#> # A tibble: 3 × 8
+#>   USUBJID VISITDY NFRLT FRLTU NFRLTDY FRLTDYU NFRLTWK FRLTWKU
+#>   <chr>     <dbl> <dbl> <chr>   <dbl> <chr>     <dbl> <chr>  
+#> 1 001           1     0 HOURS       0 days          0 weeks  
+#> 2 001           8   168 HOURS       7 days          1 weeks  
+#> 3 001          15   336 HOURS      14 days          2 weeks  }\if{html}{\out{</div>}}}
+\subsection{Unscheduled visits}{
+
+Setting NFRLT to NA for unscheduled visits
+
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{adpc_unsched <- tribble(
+  ~USUBJID, ~VISITDY, ~VISIT,        ~PCTPT,
+  "001",    1,        "VISIT 1",     "Pre-dose",
+  "001",    1,        "VISIT 1",     "2H Post-dose",
+  "001",    NA_real_, "UNSCHEDULED", "Pre-dose",
+  "001",    NA_real_, "UNSCHEDULED", "2H Post-dose"
+)
+
+derive_var_nfrlt(
+  adpc_unsched,
+  new_var = NFRLT,
+  new_var_unit = FRLTU,
+  tpt_var = PCTPT,
+  visit_day = VISITDY,
+  set_values_to_na = VISIT == "UNSCHEDULED"
+)
+#> # A tibble: 4 × 6
+#>   USUBJID VISITDY VISIT       PCTPT        NFRLT FRLTU
+#>   <chr>     <dbl> <chr>       <chr>        <dbl> <chr>
+#> 1 001           1 VISIT 1     Pre-dose         0 HOURS
+#> 2 001           1 VISIT 1     2H Post-dose     2 HOURS
+#> 3 001          NA UNSCHEDULED Pre-dose        NA <NA> 
+#> 4 001          NA UNSCHEDULED 2H Post-dose    NA <NA> }\if{html}{\out{</div>}}}
+\subsection{Early discontinuation visits}{
+
+Handling study drug early discontinuation
+
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{adpc_disc <- tribble(
+  ~USUBJID, ~VISITDY, ~VISIT,                              ~PCTPT,
+  "001",    1,        "VISIT 1",                           "Pre-dose",
+  "001",    1,        "VISIT 1",                           "2H Post-dose",
+  "001",    NA_real_, "STUDY DRUG EARLY DISCONTINUATION",  "Pre-dose"
+)
+
+derive_var_nfrlt(
+  adpc_disc,
+  new_var = NFRLT,
+  new_var_unit = FRLTU,
+  tpt_var = PCTPT,
+  visit_day = VISITDY,
+  set_values_to_na = VISIT == "STUDY DRUG EARLY DISCONTINUATION"
+)
+#> # A tibble: 3 × 6
+#>   USUBJID VISITDY VISIT                            PCTPT        NFRLT FRLTU
+#>   <chr>     <dbl> <chr>                            <chr>        <dbl> <chr>
+#> 1 001           1 VISIT 1                          Pre-dose         0 HOURS
+#> 2 001           1 VISIT 1                          2H Post-dose     2 HOURS
+#> 3 001          NA STUDY DRUG EARLY DISCONTINUATION Pre-dose        NA <NA> }\if{html}{\out{</div>}}}
+\subsection{Multiple exclusion criteria}{
+
+Excluding multiple visit types
+
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{adpc_multi <- tribble(
+  ~USUBJID, ~VISITDY, ~VISIT,                              ~PCTPT,
+  "001",    1,        "VISIT 1",                           "Pre-dose",
+  "001",    NA_real_, "UNSCHEDULED",                       "Pre-dose",
+  "001",    NA_real_, "STUDY DRUG EARLY DISCONTINUATION",  "Pre-dose"
+)
+
+derive_var_nfrlt(
+  adpc_multi,
+  new_var = NFRLT,
+  new_var_unit = FRLTU,
+  tpt_var = PCTPT,
+  visit_day = VISITDY,
+  set_values_to_na = VISIT \%in\% c(
+    "UNSCHEDULED",
+    "STUDY DRUG EARLY DISCONTINUATION"
+  )
+)
+#> # A tibble: 3 × 6
+#>   USUBJID VISITDY VISIT                            PCTPT    NFRLT FRLTU
+#>   <chr>     <dbl> <chr>                            <chr>    <dbl> <chr>
+#> 1 001           1 VISIT 1                          Pre-dose     0 HOURS
+#> 2 001          NA UNSCHEDULED                      Pre-dose    NA <NA> 
+#> 3 001          NA STUDY DRUG EARLY DISCONTINUATION Pre-dose    NA <NA> }\if{html}{\out{</div>}}}
+\subsection{Setting special values instead of NA}{
+
+Using mutate to set NFRLT to 99999 for unscheduled visits
+
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{adpc_unsched_value <- tribble(
+  ~USUBJID, ~VISITDY, ~VISIT,        ~PCTPT,
+  "001",    1,        "VISIT 1",     "Pre-dose",
+  "001",    1,        "VISIT 1",     "2H Post-dose",
+  "001",    NA_real_, "UNSCHEDULED", "Pre-dose",
+  "001",    NA_real_, "UNSCHEDULED", "2H Post-dose"
+)
+
+adpc_unsched_value \%>\%
+  derive_var_nfrlt(
+    new_var = NFRLT,
+    new_var_unit = FRLTU,
+    tpt_var = PCTPT,
+    visit_day = VISITDY,
+    set_values_to_na = VISIT == "UNSCHEDULED"
+  ) \%>\%
+  mutate(
+    NFRLT = if_else(is.na(NFRLT) & VISIT == "UNSCHEDULED", 99999, NFRLT),
+    FRLTU = if_else(is.na(FRLTU) & VISIT == "UNSCHEDULED", "", FRLTU)
+  )
+#> # A tibble: 4 × 6
+#>   USUBJID VISITDY VISIT       PCTPT        NFRLT FRLTU  
+#>   <chr>     <dbl> <chr>       <chr>        <dbl> <chr>  
+#> 1 001           1 VISIT 1     Pre-dose         0 "HOURS"
+#> 2 001           1 VISIT 1     2H Post-dose     2 "HOURS"
+#> 3 001          NA UNSCHEDULED Pre-dose     99999 ""     
+#> 4 001          NA UNSCHEDULED 2H Post-dose 99999 ""     }\if{html}{\out{</div>}}}
+\subsection{Custom range method}{
+
+Using end of range instead of midpoint
+
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{adpc_range <- tribble(
+  ~USUBJID, ~VISITDY, ~PCTPT,
+  "001",    1,        "Pre-dose",
+  "001",    1,        "0-6h Post-dose"
+)
+
+derive_var_nfrlt(
+  adpc_range,
+  new_var = NFRLT,
+  new_var_unit = FRLTU,
+  tpt_var = PCTPT,
+  visit_day = VISITDY,
+  range_method = "end"
+)
+#> # A tibble: 2 × 5
+#>   USUBJID VISITDY PCTPT          NFRLT FRLTU
+#>   <chr>     <dbl> <chr>          <dbl> <chr>
+#> 1 001           1 Pre-dose           0 HOURS
+#> 2 001           1 0-6h Post-dose     6 HOURS}\if{html}{\out{</div>}}}
+\subsection{Alternative terminology}{
+
+Using "Before" and "After" terminology
+
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{adpc_alt <- tribble(
+  ~USUBJID, ~VISITDY, ~PCTPT,
+  "001",    1,        "Before",
+  "001",    1,        "1H After",
+  "001",    1,        "2H After"
+)
+
+derive_var_nfrlt(
+  adpc_alt,
+  new_var = NFRLT,
+  new_var_unit = FRLTU,
+  tpt_var = PCTPT,
+  visit_day = VISITDY
+)
+#> # A tibble: 3 × 5
+#>   USUBJID VISITDY PCTPT    NFRLT FRLTU
+#>   <chr>     <dbl> <chr>    <dbl> <chr>
+#> 1 001           1 Before       0 HOURS
+#> 2 001           1 1H After     1 HOURS
+#> 3 001           1 2H After     2 HOURS}\if{html}{\out{</div>}}}
+\subsection{Reference relative time with RRLTU}{
+
+Using RRLTU for reference relative time instead of first dose
+
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{derive_var_nfrlt(
+  adpc,
+  new_var = NRRLT,
+  new_var_unit = RRLTU,
+  tpt_var = PCTPT,
+  visit_day = VISITDY,
+  first_dose_day = 8
+)
+#> # A tibble: 5 × 5
+#>   USUBJID VISITDY PCTPT         NRRLT RRLTU
+#>   <chr>     <dbl> <chr>         <dbl> <chr>
+#> 1 001           1 Pre-dose       -168 HOURS
+#> 2 001           1 1H Post-dose   -167 HOURS
+#> 3 001           1 2H Post-dose   -166 HOURS
+#> 4 001           1 4H Post-dose   -164 HOURS
+#> 5 001           1 24H Post-dose  -144 HOURS}\if{html}{\out{</div>}}}
+\subsection{Case sensitivity in out_unit}{
+
+Unit variable preserves the case provided in out_unit
+
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{derive_var_nfrlt(
+  adpc,
+  new_var = NFRLT,
+  new_var_unit = FRLTU,
+  out_unit = "HOURS",
+  tpt_var = PCTPT,
+  visit_day = VISITDY
+)
+#> # A tibble: 5 × 5
+#>   USUBJID VISITDY PCTPT         NFRLT FRLTU
+#>   <chr>     <dbl> <chr>         <dbl> <chr>
+#> 1 001           1 Pre-dose          0 HOURS
+#> 2 001           1 1H Post-dose      1 HOURS
+#> 3 001           1 2H Post-dose      2 HOURS
+#> 4 001           1 4H Post-dose      4 HOURS
+#> 5 001           1 24H Post-dose    24 HOURS}\if{html}{\out{</div>}}}}
+

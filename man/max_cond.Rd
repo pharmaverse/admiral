@@ -7,9 +7,17 @@
 max_cond(var, cond)
 }
 \arguments{
-\item{var}{A vector}
+\item{var}{A vector
 
-\item{cond}{A condition}
+\describe{
+\item{Default value}{none}
+}}
+
+\item{cond}{A condition
+
+\describe{
+\item{Default value}{none}
+}}
 }
 \description{
 The function derives the maximum value of a vector/column on a subset of

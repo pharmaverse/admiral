@@ -9,11 +9,21 @@ compute_bmi(height, weight)
 \arguments{
 \item{height}{HEIGHT value
 
-It is expected that HEIGHT is in cm.}
+It is expected that HEIGHT is in cm.
+
+\describe{
+\item{Permitted values}{numeric vector}
+\item{Default value}{none}
+}}
 
 \item{weight}{WEIGHT value
 
-It is expected that WEIGHT is in kg.}
+It is expected that WEIGHT is in kg.
+
+\describe{
+\item{Permitted values}{numeric vector}
+\item{Default value}{none}
+}}
 }
 \value{
 The BMI (Body Mass Index Area) in kg/m^2.

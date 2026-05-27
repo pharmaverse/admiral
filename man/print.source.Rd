@@ -7,10 +7,18 @@
 \method{print}{source}(x, ...)
 }
 \arguments{
-\item{x}{An \code{source} object}
+\item{x}{An \code{source} object
+
+\describe{
+\item{Default value}{none}
+}}
 
 \item{...}{If \verb{indent = <numeric value>} is specified the output is indented
-by the specified number of characters.}
+by the specified number of characters.
+
+\describe{
+\item{Default value}{none}
+}}
 }
 \value{
 No return value, called for side effects

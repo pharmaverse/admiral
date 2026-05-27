@@ -7,9 +7,17 @@
 impute_date_time(partial, target)
 }
 \arguments{
-\item{partial}{A list of partial date/time components.}
+\item{partial}{A list of partial date/time components.
 
-\item{target}{A list of target values for imputation.}
+\describe{
+\item{Default value}{none}
+}}
+
+\item{target}{A list of target values for imputation.
+
+\describe{
+\item{Default value}{none}
+}}
 }
 \value{
 A list of imputed date/time components.

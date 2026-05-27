@@ -7,7 +7,11 @@
 validate_query(obj)
 }
 \arguments{
-\item{obj}{An object to be validated.}
+\item{obj}{An object to be validated.
+
+\describe{
+\item{Default value}{none}
+}}
 }
 \value{
 The original object.

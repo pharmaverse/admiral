@@ -7,7 +7,13 @@
 dt_level(level)
 }
 \arguments{
-\item{level}{Date level}
+\item{level}{Date level
+
+\describe{
+\item{Permitted values}{\code{"Y"} (year, highest level), \code{"M"} (month), \code{"D"}
+(day), \code{"n"} (none, lowest level)}
+\item{Default value}{none}
+}}
 }
 \value{
 A \code{dt_level} object

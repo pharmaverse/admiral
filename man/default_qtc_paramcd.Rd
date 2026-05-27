@@ -7,7 +7,12 @@
 default_qtc_paramcd(method)
 }
 \arguments{
-\item{method}{Method used to QT correction}
+\item{method}{Method used to QT correction
+
+\describe{
+\item{Permitted values}{\code{"Bazett"}, \code{"Fridericia"}, \code{"Sagie"}}
+\item{Default value}{none}
+}}
 }
 \value{
 \code{"QTCBR"} if \code{method} is \code{"Bazett"}, \code{"QTCFR"} if it's \code{"Fridericia"} or

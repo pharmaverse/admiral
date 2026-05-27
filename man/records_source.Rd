@@ -10,10 +10,18 @@ records_source(dataset_name, filter = NULL, new_vars)
 \item{dataset_name}{The name of the source dataset
 
 The name refers to the dataset provided by the \code{source_datasets} argument
-of \code{derive_param_extreme_record()}.}
+of \code{derive_param_extreme_record()}.
+
+\describe{
+\item{Default value}{none}
+}}
 
 \item{filter}{An unquoted condition for selecting the observations from
-\code{dataset}.}
+\code{dataset}.
+
+\describe{
+\item{Default value}{\code{NULL}}
+}}
 
 \item{new_vars}{Variables to add
 
@@ -26,7 +34,13 @@ from to the input dataset.
 And \code{new_vars = exprs(var1, new_var2 = old_var2)} takes \code{var1} and
 \code{old_var2} from the source dataset and adds them to the input dataset renaming
 \code{old_var2} to \code{new_var2}. Expressions can be used to create new variables
-(see for example \code{new_vars} argument in \code{derive_vars_merged()}).}
+(see for example \code{new_vars} argument in \code{derive_vars_merged()}).
+
+\describe{
+\item{Permitted values}{list of expressions created by \code{exprs()}, e.g.,
+\code{exprs(ADT, desc(AVAL))}}
+\item{Default value}{none}
+}}
 }
 \value{
 An object of class \code{records_source}

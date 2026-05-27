@@ -7,7 +7,11 @@
 is_partial_datetime(partial)
 }
 \arguments{
-\item{partial}{A named list containing date or datetime components.}
+\item{partial}{A named list containing date or datetime components.
+
+\describe{
+\item{Default value}{none}
+}}
 }
 \value{
 A logical value. TRUE if the partial represents a datetime,

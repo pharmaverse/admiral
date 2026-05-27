@@ -7,9 +7,17 @@
 adjust_last_day_imputation(imputed_dtc, partial)
 }
 \arguments{
-\item{imputed_dtc}{A character vector of imputed date/datetime strings.}
+\item{imputed_dtc}{A character vector of imputed date/datetime strings.
 
-\item{partial}{A list of partial date/time components.}
+\describe{
+\item{Default value}{none}
+}}
+
+\item{partial}{A list of partial date/time components.
+
+\describe{
+\item{Default value}{none}
+}}
 }
 \value{
 A character vector of adjusted date/datetime strings.
