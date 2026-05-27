@@ -248,7 +248,7 @@
 #'   in action for the `ADVS` dataset. Note that for these derivations it is
 #'   often convenient to leverage higher order functions such as
 #'   `restrict_derivation()` and `slice_derivation()`. Please read the
-#'   [Higher Order Functions](https://pharmaverse.github.io/admiral/articles/higher_order.html)
+#'   [Higher Order Functions](https://pharmaverse.github.io/admiral/cran-release/articles/higher_order.html)
 #'   vignette, as well as their specific reference pages, to learn more.
 #'
 #'   To set the baseline flag for the last observation among those where
