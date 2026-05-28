@@ -852,16 +852,11 @@ conservative approach.
         new_vars = exprs(EOSDT, NEWDRGDT)
       )
     #> # A tibble: 3 × 7
-    #>   USUBJID ADT         CNSR
-    #>   <chr>   <date>     <int>
-    #> 1 01      2021-03-06     1
-    #> 2 02      2021-03-21     1
-    #> 3 03      2021-03-15     0
-    #> # i 4 more variables:
-    #> #   STARTDT <date>,
-    #> #   PARAMCD <chr>,
-    #> #   EOSDT <date>,
-    #> #   NEWDRGDT <date>
+    #>   USUBJID ADT         CNSR STARTDT    PARAMCD  EOSDT      NEWDRGDT
+    #>   <chr>   <date>     <int> <date>     <chr>    <date>     <date>
+    #> 1 01      2021-03-06     1 2020-12-06 TTIMPROV 2021-03-06 NA
+    #> 2 02      2021-03-21     1 2021-01-16 TTIMPROV 2021-04-03 2021-03-21
+    #> 3 03      2021-03-15     0 2021-02-01 TTIMPROV NA         NA        
 
 Please note that subject `01` and `02` are censored at the end of the
 observation period instead of at the last assessment.
@@ -1049,17 +1044,14 @@ is set to `"NO POST-BASELINE ASSESSMENT"`.
     ) %>%
       select(-STUDYID, -PARAMCD)
     #> # A tibble: 6 × 8
-    #>   USUBJID ADT        EVNTDESC       SRCDOM
-    #>   <chr>   <date>     <chr>          <chr>
-    #> 1 01      2021-02-03 END OF STUDY   ADQS
-    #> 2 02      2021-02-03 NEW DRUG       ADQS
-    #> 3 03      2021-03-10 NO BASELINE A… ADQS
-    #> 4 04      2021-04-02 NO POST-BASEL… ADQS
-    #> 5 05      2021-05-09 NO ASSESSMENTS ADSL
-    #> 6 06      2021-03-15 WORSENING      ADQS
-    #> # i 4 more variables: SRCVAR <chr>,
-    #> #   CNSR <int>, CNSDTDSC <chr>,
-    #> #   STARTDT <date>
+    #>   USUBJID ADT        EVNTDESC            SRCDOM SRCVAR  CNSR CNSDTDSC STARTDT
+    #>   <chr>   <date>     <chr>               <chr>  <chr>  <int> <chr>    <date>
+    #> 1 01      2021-02-03 END OF STUDY        ADQS   ADT        1 LAST AS… 2020-12-06
+    #> 2 02      2021-02-03 NEW DRUG            ADQS   ADT        2 LAST AS… 2021-01-16
+    #> 3 03      2021-03-10 NO BASELINE ASSESS… ADQS   TRTSDT     3 TREATME… 2021-03-10
+    #> 4 04      2021-04-02 NO POST-BASELINE A… ADQS   TRTSDT     4 TREATME… 2021-04-02
+    #> 5 05      2021-05-09 NO ASSESSMENTS      ADSL   TRTSDT     5 TREATME… 2021-05-09
+    #> 6 06      2021-03-15 WORSENING           ADQS   ADT        0 <NA>     2021-02-01
 
 ### Differentiating censoring date description
 
