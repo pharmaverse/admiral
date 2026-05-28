@@ -437,7 +437,7 @@ often convenient to leverage higher order functions such as
 and
 [`slice_derivation()`](https:/pharmaverse.github.io/admiral/main/reference/slice_derivation.md).
 Please read the [Higher Order
-Functions](https://pharmaverse.github.io/admiral/articles/higher_order.html)
+Functions](https://pharmaverse.github.io/admiral/cran-release/articles/higher_order.html)
 vignette, as well as their specific reference pages, to learn more.
 
 To set the baseline flag for the last observation among those where

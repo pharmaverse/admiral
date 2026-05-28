@@ -25,11 +25,13 @@ Other internal:
 
 ## Author
 
-**Maintainer**: Ben Straub <ben.x.straub@gsk.com>
+**Maintainer**: Edoardo Mancini <edoardo.mancini@roche.com>
+([ORCID](https://orcid.org/0009-0006-4899-8641))
 
 Authors:
 
-- Ben Straub <ben.x.straub@gsk.com>
+- Edoardo Mancini <edoardo.mancini@roche.com>
+  ([ORCID](https://orcid.org/0009-0006-4899-8641))
 
 - Stefan Bundfuss ([ORCID](https://orcid.org/0009-0005-0027-1198))
 
@@ -43,11 +45,11 @@ Authors:
 
 - Fanny Gautier ([ORCID](https://orcid.org/0009-0004-3581-0131))
 
-- Edoardo Mancini ([ORCID](https://orcid.org/0009-0006-4899-8641))
-
 - Gordon Miller
 
 - Lina Patil
+
+- Ben Straub
 
 Other contributors:
 
