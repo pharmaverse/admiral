@@ -178,6 +178,11 @@
 
 ### Various
 
+- Fixed typo in
+  [`derive_summary_records()`](https:/pharmaverse.github.io/admiral/main/reference/derive_summary_records.md)
+  error message.
+  ([\#3127](https://github.com/pharmaverse/admiral/issues/3127))
+
 Developer Notes
 
 - Update to roxygen2 8.0.0.
@@ -209,15 +214,18 @@ Developer Notes
   (`inst/pkgdown.yml`).
   ([\#2950](https://github.com/pharmaverse/admiral/issues/2950))
 
-- The helper functions `roxygen_param_dataset()`,
-  `roxygen_param_by_vars()`, `roxygen_order_na_handling()`, and
-  `roxygen_save_memory()` have been moved from
-  [admiral](https://pharmaverse.github.io/admiral/) to
-  [admiraldev](https://pharmaverse.github.io/admiraldev/). They are now
-  exported from [admiraldev](https://pharmaverse.github.io/admiraldev/)
-  and remain accessible in
-  [admiral](https://pharmaverse.github.io/admiral/) via the existing
-  `@import admiraldev` dependency.
+- The helper functions
+  [`roxygen_param_dataset()`](https://pharmaverse.github.io/admiraldev/reference/roxygen_param_dataset.html),
+  [`roxygen_param_by_vars()`](https://pharmaverse.github.io/admiraldev/reference/roxygen_param_by_vars.html),
+  [`roxygen_order_na_handling()`](https://pharmaverse.github.io/admiraldev/reference/roxygen_order_na_handling.html),
+  and
+  [`roxygen_save_memory()`](https://pharmaverse.github.io/admiraldev/reference/roxygen_save_memory.html)
+  have been moved from [admiral](https://pharmaverse.github.io/admiral/)
+  to [admiraldev](https://pharmaverse.github.io/admiraldev/). They are
+  now exported from
+  [admiraldev](https://pharmaverse.github.io/admiraldev/) and remain
+  accessible in [admiral](https://pharmaverse.github.io/admiral/) via
+  the existing `@import admiraldev` dependency.
   ([admiraldev/#517](https://github.com/pharmaverse/admiraldev/issues/517))
 
 - The HTML tag `<br/>` was removed from the roxygen headers.
@@ -229,6 +237,8 @@ Developer Notes
   ([\#3112](https://github.com/pharmaverse/admiral/issues/3112))
 
 ## admiral 1.4.2
+
+CRAN release: 2026-05-28
 
 - Maintainer switched from Ben Straub to Edoardo Mancini.
 
