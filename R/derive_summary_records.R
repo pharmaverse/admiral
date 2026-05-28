@@ -372,7 +372,7 @@ derive_summary_records <- function(dataset = NULL,
     by_vars = by_vars,
     msg = c(
       paste(
-        "After summarising, the dataset contains mulitple records with",
+        "After summarising, the dataset contains multiple records with",
         "respect to {.var {by_vars}}."
       ),
       paste(
