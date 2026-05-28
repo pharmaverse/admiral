@@ -136,6 +136,7 @@ download_cran_tarball <- function(package_name, cran_mirror, download_dir) {
 collect_tarball_inventory <- function(tarball) {
   extract_dir <- tempfile("package-size-")
   dir.create(extract_dir)
+  on.exit(unlink(extract_dir, recursive = TRUE), add = TRUE)
   utils::untar(tarball, exdir = extract_dir)
 
   package_roots <- list.dirs(extract_dir, recursive = FALSE, full.names = TRUE)
@@ -156,25 +157,50 @@ collect_tarball_inventory <- function(tarball) {
     no.. = TRUE
   )
 
-  normalized_root <- normalizePath(package_root, winslash = "/", mustWork = TRUE)
-  normalized_files <- normalizePath(files, winslash = "/", mustWork = TRUE)
-  relative_paths <- sub(paste0("^", normalized_root, "/"), "", normalized_files)
-  file_sizes <- unname(file.info(files)$size)
+  file_metadata <- file.info(files)
+  keep <- !is.na(file_metadata$size) &
+    !is.na(file_metadata$isdir) &
+    !file_metadata$isdir
+  files <- files[keep]
+  file_metadata <- file_metadata[keep, , drop = FALSE]
+
+  relative_paths <- substring(files, nchar(package_root) + 2)
+  file_sizes <- unname(file_metadata$size)
+
+  extensions <- tolower(sub(".*\\.", "", basename(relative_paths)))
+  extensions[!grepl("\\.", basename(relative_paths))] <- "<none>"
+  top_level_dirs <- sub("/.*$", "", relative_paths)
+  top_level_dirs[!grepl("/", relative_paths)] <- "<root>"
 
   inventory <- data.frame(
     path = relative_paths,
     size_bytes = file_sizes,
     size_mb = round(file_sizes / 1024 ^ 2, 6),
+    extension = extensions,
+    top_level_dir = top_level_dirs,
     stringsAsFactors = FALSE
   )
 
   inventory <- inventory[order(-inventory$size_bytes, inventory$path), ]
   inventory$rank <- seq_len(nrow(inventory))
-  inventory[, c("rank", "path", "size_bytes", "size_mb")]
+  inventory[, c("rank", "path", "size_bytes", "size_mb", "extension", "top_level_dir")]
 }
 
 format_mb <- function(size_bytes) {
   sprintf("%.2f", size_bytes / 1024 ^ 2)
+}
+
+summarize_inventory_by <- function(inventory, column) {
+  summary <- stats::aggregate(
+    inventory$size_bytes,
+    by = list(category = inventory[[column]]),
+    FUN = sum
+  )
+  names(summary)[names(summary) == "x"] <- "size_bytes"
+  summary <- summary[order(-summary$size_bytes, summary$category), ]
+  rownames(summary) <- NULL
+  summary$size_mb <- round(summary$size_bytes / 1024 ^ 2, 4)
+  summary
 }
 
 write_markdown_report <- function(
@@ -213,6 +239,54 @@ write_markdown_report <- function(
     format(top_files$size_bytes, big.mark = ",", scientific = FALSE, trim = TRUE),
     " | ",
     sprintf("%.2f", top_files$size_mb),
+    " |"
+  )
+
+  rd_files <- development_inventory[grepl("\\.Rd$", development_inventory$path), ]
+  rd_size_bytes <- sum(rd_files$size_bytes)
+  total_size_bytes <- sum(development_inventory$size_bytes)
+  rd_percent <- if (total_size_bytes == 0) {
+    0
+  } else {
+    (rd_size_bytes / total_size_bytes) * 100
+  }
+
+  top_docs <- utils::head(rd_files[order(-rd_files$size_bytes, rd_files$path), ], n = 5)
+  top_doc_lines <- if (nrow(top_docs) == 0) {
+    "| - | - | - | - |"
+  } else {
+    paste0(
+      "| ",
+      seq_len(nrow(top_docs)),
+      " | `",
+      top_docs$path,
+      "` | ",
+      format(top_docs$size_bytes, big.mark = ",", scientific = FALSE, trim = TRUE),
+      " | ",
+      sprintf("%.2f", top_docs$size_mb),
+      " |"
+    )
+  }
+
+  extension_summary <- utils::head(summarize_inventory_by(development_inventory, "extension"), n = 10)
+  extension_lines <- paste0(
+    "| `",
+    extension_summary$category,
+    "` | ",
+    format(extension_summary$size_bytes, big.mark = ",", scientific = FALSE, trim = TRUE),
+    " | ",
+    sprintf("%.2f", extension_summary$size_mb),
+    " |"
+  )
+
+  directory_summary <- utils::head(summarize_inventory_by(development_inventory, "top_level_dir"), n = 10)
+  directory_lines <- paste0(
+    "| `",
+    directory_summary$category,
+    "` | ",
+    format(directory_summary$size_bytes, big.mark = ",", scientific = FALSE, trim = TRUE),
+    " | ",
+    sprintf("%.2f", directory_summary$size_mb),
     " |"
   )
 
@@ -259,12 +333,36 @@ write_markdown_report <- function(
       "The development tarball contains %s files after `R CMD build` packaging.",
       format(nrow(development_inventory), big.mark = ",", trim = TRUE)
     ),
+    sprintf(
+      "Documentation (`.Rd`) accounts for %s files and %s MB (%s%%) of extracted package size.",
+      format(nrow(rd_files), big.mark = ",", trim = TRUE),
+      format_mb(rd_size_bytes),
+      sprintf("%.2f", rd_percent)
+    ),
     "",
     "## Largest files in the development package",
     "",
     "| Rank | File | Size (bytes) | Size (MB) |",
     "| ---: | --- | ---: | ---: |",
-    top_file_lines
+    top_file_lines,
+    "",
+    "## Largest `.Rd` documentation files",
+    "",
+    "| Rank | File | Size (bytes) | Size (MB) |",
+    "| ---: | --- | ---: | ---: |",
+    top_doc_lines,
+    "",
+    "## Size by file extension",
+    "",
+    "| Extension | Total size (bytes) | Total size (MB) |",
+    "| --- | ---: | ---: |",
+    extension_lines,
+    "",
+    "## Size by top-level package directory",
+    "",
+    "| Directory | Total size (bytes) | Total size (MB) |",
+    "| --- | ---: | ---: |",
+    directory_lines
   )
 
   writeLines(report_lines, con = output_file)
