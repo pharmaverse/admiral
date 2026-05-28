@@ -92,6 +92,8 @@ of packages were updated to specify the level of contributions required for auth
 
 ## Various
 
+* Fixed typo in `derive_summary_records()` error message. (#3127)
+
 <details>
 <summary>Developer Notes</summary>
 
