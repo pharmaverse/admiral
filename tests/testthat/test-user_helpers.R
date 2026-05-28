@@ -24,7 +24,7 @@ test_that("list_all_templates Test 2: Error Message is returned if package is no
 test_that("use_ad_template Test 3: package templates can be used", {
   dir <- tempdir()
   suppressMessages(file <- file.path(dir, "advs.R"))
-  suppressMessages(use_ad_template("advs", save_path = file, open = FALSE))
+  suppressMessages(use_ad_template("advs", save_path = file))
 
   expect_true(file.exists(file))
   expect_identical(
@@ -39,7 +39,7 @@ test_that("use_ad_template Test 4: Error Message is returned if no ADaM template
   dir <- tempdir()
   suppressMessages(file <- file.path(dir, "adxx.R"))
   expect_snapshot(
-    suppressMessages(use_ad_template("adxx", save_path = file, open = FALSE)),
+    suppressMessages(use_ad_template("adxx", save_path = file)),
     error = TRUE
   )
 })
@@ -48,10 +48,10 @@ test_that("use_ad_template Test 4: Error Message is returned if no ADaM template
 test_that("use_ad_template Test 5: error if ADaM template file already exists", {
   dir <- tempdir()
   suppressMessages(file <- file.path(dir, "adsl.R"))
-  suppressMessages(use_ad_template("adsl", save_path = file, open = FALSE))
+  suppressMessages(use_ad_template("adsl", save_path = file))
 
   expect_error(
-    suppressMessages(use_ad_template("adsl", save_path = file, open = FALSE)),
+    suppressMessages(use_ad_template("adsl", save_path = file)),
     regexp = paste("A file named '.*' already exists.",
       "i Set `overwrite = TRUE` to force overwriting it.",
       sep = "\n"
@@ -60,9 +60,20 @@ test_that("use_ad_template Test 5: error if ADaM template file already exists", 
   file.remove(file)
 })
 
+# admiral_labels_attrs_section ----
+## Test 6: outputs ## heading and expected content ----
+test_that("admiral_labels_attrs_section Test 6: outputs ## heading and expected content", {
+  output <- capture.output(admiral_labels_attrs_section())
+  expect_true(any(str_detect(output, "^## Add Labels and Attributes")))
+  expect_true(any(str_detect(output, "metacore")))
+  expect_true(any(str_detect(output, "metatools")))
+  expect_true(any(str_detect(output, "xportr")))
+  expect_true(any(str_detect(output, "pharmaverse")))
+})
+
 # print.adam_templates ----
-## Test 6: no templates ----
-test_that("print.adam_templates Test 6: no templates", {
+## Test 7: no templates ----
+test_that("print.adam_templates Test 7: no templates", {
   templates <- list_all_templates(package = "dplyr")
   expected_print_output <- c(
     "No ADaM templates available in package 'dplyr'"
@@ -70,8 +81,8 @@ test_that("print.adam_templates Test 6: no templates", {
   expect_identical(capture.output(print(templates)), expected_print_output)
 })
 
-## Test 7: some templates ----
-test_that("print.adam_templates Test 7: some templates", {
+## Test 8: some templates ----
+test_that("print.adam_templates Test 8: some templates", {
   templates <- c("ADAE", "ADSL") %>%
     structure(class = c("adam_templates", "character"), package = "admiral") # nolint: undesirable_function_linter
   expected_print_output <- c(

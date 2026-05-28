@@ -17,7 +17,7 @@ knitr::opts_chunk$set(
 )
 ```
 
-##### **What is admiral**?
+##### **What is `{admiral}`**?
 
 * Think of `{admiral}` as a toolbox of modular blocks (R functions) to create analysis derivations:
   * each block has a stand alone purpose (each function provides a specific functionality)
@@ -25,7 +25,13 @@ knitr::opts_chunk$set(
 
 * Constructing ADaM dataset should become like building out of blocks that are based on `{admiral}` modular functions and user created modular functions. 
 
-##### **Why** did we decide to start **admiral**?
+##### **Why is the `{admiral}` logo a red butterfly?**?
+
+* The logo is inspired from the [Red Admiral](https://en.wikipedia.org/wiki/Vanessa_atalanta), also known as *Vanessa atalanta*, 
+which is a species of butterfly. However, our [extension packages](https://pharmaverse.org/e2eclinical/adam/) have branched
+out from this and have differently colored butterflies in their logos.
+
+##### **Why** did we decide to start **`{admiral}`**?
 
   * Data analysis challenges in clinical trials vary depending on scientific goals, therapeutic areas, indications, data sources and data quality. We all face the same challenge so why limit ourselves only to company-level adoption and crowd-sourcing to create ADaM datasets? 
   * Build ADaMs via collaboration and co-creation
@@ -63,7 +69,7 @@ knitr::opts_chunk$set(
 
 ##### Where can a user quickly find some **references or advice** to use a function?
 
-* For more detailed description, please refer to the [Reference section](https://pharmaverse.github.io/admiral/reference/index.html). 
+* For more detailed description, please refer to the [Reference section](https://pharmaverse.github.io/admiral/cran-release/reference/index.html). 
 * [admiraldiscovery](https://pharmaverse.github.io/admiraldiscovery/articles/reactable.html) provides
 a way to look up common ADaM variables with recommended `{admiral}` functions to complete the derivation.
 * Check out the [admiral Cheat Sheet](https://github.com/pharmaverse/admiral/blob/main/inst/cheatsheet/admiral_cheatsheet.pdf) as well!
@@ -116,7 +122,7 @@ a way to look up common ADaM variables with recommended `{admiral}` functions to
 
  * Our [programming strategy](https://pharmaverse.github.io/admiraldev/articles/programming_strategy.html) serves as a framework
  for users how to create their own functions. 
- * Please see the [contribution model](https://pharmaverse.github.io/admiral/CONTRIBUTING.html) for a detailed description on how to contribute to the project
+ * Please see the [contribution model](https://pharmaverse.github.io/admiral/cran-release/CONTRIBUTING.html) for a detailed description on how to contribute to the project
 
 ##### How has `{admiral}` been **tested externally** to Roche/GSK?
 

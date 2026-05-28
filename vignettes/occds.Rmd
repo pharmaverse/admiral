@@ -48,7 +48,7 @@ otherwise specified.*
 
 To start, all data frames needed for the creation of `ADAE` should be read into
 the environment. This will be a company specific process. Some of the data
-frames needed may be `AE` and `ADSL`
+frames needed may be `AE` and `ADSL`.
 
 For example purpose, the CDISC Pilot SDTM and ADaM datasets ---which are
 included in `{pharmaversesdtm}`--- are used.
@@ -61,12 +61,38 @@ library(lubridate)
 
 ae <- pharmaversesdtm::ae
 adsl <- admiral::admiral_adsl
-ex_single <- admiral::ex_single
+ex <- pharmaversesdtm::ex
 
 ae <- convert_blanks_to_na(ae)
+ex <- convert_blanks_to_na(ex)
 ```
+
+As the start and end datetime of the dosing records is required by multiple
+derivations, it is derived once at the beginning. Please note that it depends on
+the study whether imputation is required and if so, which imputation method is
+appropriate. In the example below, we impute the time as the first time of the
+day. The `min_dates` argument is used in the second call to ensure that the end
+datetime is not imputed to be before the start datetime.
+```{r}
+ex <- ex %>%
+  derive_vars_dtm(
+    dtc = EXSTDTC,
+    new_vars_prefix = "EXST",
+    time_imputation = "first",
+    flag_imputation = "none"
+  ) %>%
+  derive_vars_dtm(
+    dtc = EXENDTC,
+    new_vars_prefix = "EXEN",
+    time_imputation = "first",
+    flag_imputation = "none",
+    min_dates = exprs(EXSTDTM)
+  ) %>%
+  derive_vars_dtm_to_dt(exprs(EXSTDTM, EXENDTM))
+```
+
 ```{r echo = FALSE}
-ae <- filter(ae, USUBJID %in% c("01-701-1015", "01-701-1023", "01-703-1086", "01-703-1096", "01-707-1037", "01-716-1024"))
+ae <- filter(ae, USUBJID %in% c("01-701-1015", "01-701-1023", "01-701-1211", "01-703-1086", "01-703-1096", "01-707-1037", "01-716-1024"))
 ```
 
 At this step, it may be useful to join `ADSL` to your `AE` domain as well. Only the 
@@ -74,7 +100,7 @@ At this step, it may be useful to join `ADSL` to your `AE` domain as well. Only 
 relevant `ADSL` variables would be added later.
 
 ```{r eval=TRUE}
-adsl_vars <- exprs(TRTSDT, TRTEDT, TRT01A, TRT01P, DTHDT, EOSDT)
+adsl_vars <- exprs(TRTSDT, TRTEDT, TRTEDTM, TRT01A, TRT01P, DTHDT, EOSDT)
 
 adae <- derive_vars_merged(
   ae,
@@ -225,16 +251,38 @@ vignette](visits_periods.html#treatment_bds).
 
 ## Derive Date/Date-time of Last Dose {#last_dose}
 
-The function `derive_vars_joined()` can be used to derive the last dose date before the start of the event. 
+Before deriving the last dose date, it may be necessary to create an `ex_single`
+dataset from the `EX` domain. If the exposure dataset contains multi-day dosing
+records (e.g., one record per treatment period rather than one record per dose),
+use `create_single_dose_dataset()` to expand them into one record per dose.
+Whether this step is necessary depends on how dosing data were collected in your
+study. For ongoing studies, you may also need to impute missing end dates (e.g.,
+with the data cut-off date) before calling `create_single_dose_dataset()`. For
+examples including handling of missing end dates, see
+`?create_single_dose_dataset`.
+
+The test data contains one record per treatment period and the dose frequency is
+daily (`QD`). The following call creates one record per day.
 
 ```{r eval=TRUE}
-ex_single <- derive_vars_dtm(
-  ex_single,
-  dtc = EXSTDTC,
-  new_vars_prefix = "EXST",
-  flag_imputation = "none"
-)
+ex_single <- ex %>%
+  filter(!is.na(EXSTDT), !is.na(EXENDT)) %>%
+  create_single_dose_dataset(
+    dose_freq = EXDOSFRQ,
+    start_date = EXSTDT,
+    start_datetime = EXSTDTM,
+    end_date = EXENDT,
+    end_datetime = EXENDTM,
+    keep_source_vars = exprs(
+      STUDYID, USUBJID, EXTRT, EXDOSE, EXDOSU, EXSTDT, EXENDT, EXSTDTM, EXENDTM
+    )
+  )
+```
 
+The function `derive_vars_joined()` can be used to derive the last dose date
+before the start of the event.
+
+```{r eval=TRUE}
 adae <- derive_vars_joined(
   adae,
   ex_single,
@@ -261,29 +309,39 @@ dataset_vignette(
 
 ## Derive Treatment Dose and Unit {#dose_unit}
 
-In a similar manner, you could derive the treatment dose and unit at the time of
-the event. Please note that it is assumed that the dosing intervals do not
-overlap. If this case occurs, the `derive_vars_joined()` call below will throw
-an error as handling this case is study-specific.
+In a similar manner, you could derive the treatment dose (`DOSEON`) and unit
+(`DOSEU`) at the time of the event. Please note that drug clearance duration
+should be considered when matching exposure records with adverse events.
+`EXSTDTC` and `EXENDTC` typically represent the administration period only, not
+the time the drug remains in the body. To account for drug clearance, you may
+extend the last exposure end date by the appropriate clearance duration. For
+example, if the exposure dataset contains one records per dose and the drug
+administration is instantaneous, e.g., a pill, we have `EXSTDTC == EXENDTC`.
+I.e., without adding a clearance duration, the dose will only be considered as
+active at the exact time of administration.
+
+Adding a clearance duration to the end date may result in overlapping dosing
+intervals for some subjects. Therefore the last dosing record before the adverse
+event is selected in the example below. If overlapping is not expected based on
+the study design and data collection, the `order` and the `mode` argument in the
+`derive_vars_joined()` call below can be removed. Then the function will throw
+an error if overlapping dosing intervals are found.
+
+Replace `days(1)` in `filter_join` below with the study-specific drug clearance
+period.
 
 ```{r eval=TRUE}
-ex_single <- derive_vars_dtm(
-  ex_single,
-  dtc = EXENDTC,
-  new_vars_prefix = "EXEN",
-  time_imputation = "last",
-  flag_imputation = "none"
-)
-
 adae <- derive_vars_joined(
   adae,
-  ex_single,
+  ex,
   by_vars = exprs(STUDYID, USUBJID),
   new_vars = exprs(DOSEON = EXDOSE, DOSEU = EXDOSU),
+  order = exprs(EXSTDTM),
+  mode = "last",
   join_vars = exprs(EXSTDTM, EXENDTM),
   join_type = "all",
   filter_add = (EXDOSE > 0 | (EXDOSE == 0 & grepl("PLACEBO", EXTRT))) & !is.na(EXSTDTM),
-  filter_join = EXSTDTM <= ASTDTM & (ASTDTM <= EXENDTM | is.na(EXENDTM))
+  filter_join = EXSTDTM <= ASTDTM & (ASTDTM < EXENDTM + days(1) | is.na(EXENDTM))
 )
 ```
 
@@ -296,6 +354,10 @@ dataset_vignette(
   )
 )
 ```
+
+If no time is collected for exposure or adverse events, it may be better to use
+the date variables (`EXSTDT`, `EXENDT`, and `ASTDT`) instead of the datetime
+variables.
 
 ## Derive Severity, Causality, and Toxicity Grade {#severity}
 
@@ -398,8 +460,11 @@ derive_var_ontrtfl(
 The function `derive_var_extreme_flag()` can help derive variables such as
 `AOCCIFL`, `AOCCPIFL`, `AOCCSIFL`, and `AOCCzzFL`.
 
-If grades were collected, the following can be used to flag first occurrence of
-maximum toxicity grade.
+If grades were collected, `ATOXGR` should first be derived from the source data
+(e.g., `mutate(ATOXGR = AETOXGR)`) and then the following can be used to flag
+first occurrence of maximum toxicity grade. Note that the example below is for
+illustration only and is not evaluated as the test data does not contain
+toxicity grade information.
 
 ```{r, eval=FALSE}
 adae <- adae %>%
@@ -539,6 +604,7 @@ dataset_vignette(
 ## Derive Analysis Sequence Number  {#aseq}
 
 The function `derive_var_obs_number()` can be used for deriving `ASEQ` variable to ensure the uniqueness of subject records within the dataset.
+Note that creating `ASEQ` is not required for all ADaM datasets according to the ADaM IG, and this is just for demonstration purpose.
 
 For example, there can be multiple records present in `ADCM` for a single subject with the same `ASTDTM` and `CMSEQ` variables. But these records still differ at ATC level:
 
@@ -553,6 +619,7 @@ adcm <- tibble::tribble(
 )
 
 adcm_aseq <- adcm %>%
+  # Calculate ASEQ (Optional Variable)
   derive_var_obs_number(
     by_vars    = exprs(USUBJID),
     order      = exprs(ASTDTM, CMSEQ, ATC1CD, ATC2CD, ATC3CD, ATC4CD),
@@ -565,35 +632,13 @@ adcm_aseq <- adcm %>%
 dataset_vignette(adcm_aseq)
 ```
 
-## Add Labels and Attributes {#attributes}
-
-Note that attributes may not be preserved in some cases after processing
-with `{admiral}`. The recommended approach is to apply variable labels
-and other metadata as a final step in your data derivation process using
-packages like:
-
--   [metacore](https://atorus-research.github.io/metacore/): establish a
-    common foundation for the use of metadata within an R session.
-
--   [metatools](https://pharmaverse.github.io/metatools/): enable the
-    use of metacore objects. Metatools can be used to build datasets or
-    enhance columns in existing datasets as well as checking datasets
-    against the metadata.
-
--   [xportr](https://atorus-research.github.io/xportr/): functionality
-    to associate all metadata information to a local R data frame,
-    perform data set level validation checks and convert into a
-    [transport v5
-    file(xpt)](https://documentation.sas.com/doc/en/pgmsascdc/9.4_3.5/movefile/n1xbwdre0giahfn11c99yjkpi2yb.htm).
-
-NOTE: Together with `{admiral}` these packages comprise an End to End
-pipeline under the umbrella of the 
-[pharmaverse](https://github.com/pharmaverse). An example of applying metadata 
-and perform associated checks can be found at the [pharmaverse E2E example](https://pharmaverse.github.io/examples/adam/adsl).
+```{r, results='asis', echo=FALSE}
+admiral_labels_attrs_section()
+```
 
 # Example Scripts
 
 ADaM | Sourcing Command
 ---- | --------------
-ADAE | `use_ad_template("ADAE")`
-ADCM | `use_ad_template("ADCM")`
+[`ADAE`](templates.html#adae) | `use_ad_template("ADAE")`
+[`ADCM`](templates.html#adcm) | `use_ad_template("ADCM")`

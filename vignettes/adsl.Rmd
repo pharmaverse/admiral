@@ -119,7 +119,7 @@ vignette](visits_periods.html#treatment_adsl).
 
 The function `derive_vars_merged()` can be used to derive the treatment start
 and end date/times using the `ex` domain. A pre-processing step for `ex` is
-required to convert the variable `EXSTDTC` and `EXSTDTC` to datetime variables
+required to convert the variable `EXSTDTC` and `EXENDTC` to datetime variables
 and impute missing date or time components. Conversion and imputation is done by
 `derive_vars_dtm()`.
 
@@ -805,34 +805,12 @@ The following functions are helpful for many ADSL derivations:
 
 See also [Generic Functions](generic.html).
 
-## Add Labels and Attributes {#attributes}
-
-Note that attributes may not be preserved in some cases after processing
-with `{admiral}`. The recommended approach is to apply variable labels
-and other metadata as a final step in your data derivation process using
-packages like:
-
--   [metacore](https://atorus-research.github.io/metacore/): establish a
-    common foundation for the use of metadata within an R session.
-
--   [metatools](https://pharmaverse.github.io/metatools/): enable the
-    use of metacore objects. Metatools can be used to build datasets or
-    enhance columns in existing datasets as well as checking datasets
-    against the metadata.
-
--   [xportr](https://atorus-research.github.io/xportr/): functionality
-    to associate all metadata information to a local R data frame,
-    perform data set level validation checks and convert into a
-    [transport v5
-    file(xpt)](https://documentation.sas.com/doc/en/pgmsascdc/9.4_3.5/movefile/n1xbwdre0giahfn11c99yjkpi2yb.htm).
-
-NOTE: Together with `{admiral}` these packages comprise an End to End
-pipeline under the umbrella of the
-[pharmaverse](https://github.com/pharmaverse). An example of applying metadata 
-and perform associated checks can be found at the [pharmaverse E2E example](https://pharmaverse.github.io/examples/adam/adsl).
+```{r, results='asis', echo=FALSE}
+admiral_labels_attrs_section()
+```
 
 # Example Script 
 
 ADaM | Sourcing Command
 ---- | --------------
-ADSL | `use_ad_template("ADSL")`
+[`ADSL`](templates.html#adsl) | `use_ad_template("ADSL")`

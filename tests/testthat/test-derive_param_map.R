@@ -164,12 +164,12 @@ test_that("derive_param_map Test 11: MAP parameter NOT added", {
 
 ## derive_param_map: Obs created ----
 
-maphr <- function(sbp, dbp, hr) {
-  dbp + 0.01 * exp(4.14 - 40.74 / hr) * (sbp - dbp)
-}
-
 ## Test 12: MAP parameter (DBP/SBP/PULSE) is correctly added ----
 test_that("derive_param_map Test 12: MAP parameter (DBP/SBP/PULSE) is correctly added", {
+  maphr <- function(sbp, dbp, hr) {
+    dbp + 0.01 * exp(4.14 - 40.74 / hr) * (sbp - dbp)
+  }
+
   expected_output <- tibble::tribble(
     ~USUBJID, ~PARAMCD, ~PARAM, ~VISIT, ~AVAL,
     "01-701-1015", "PULSE", "Pulse (beats/min)", "BASELINE", 59,
@@ -200,12 +200,12 @@ test_that("derive_param_map Test 12: MAP parameter (DBP/SBP/PULSE) is correctly 
   )
 })
 
-map <- function(sbp, dbp) {
-  (2 * dbp + sbp) / 3
-}
-
 ## Test 13: MAP parameter (DBP/SBP) is correctly added ----
 test_that("derive_param_map Test 13: MAP parameter (DBP/SBP) is correctly added", {
+  map <- function(sbp, dbp) {
+    (2 * dbp + sbp) / 3
+  }
+
   expected_output <- tibble::tribble(
     ~USUBJID, ~PARAMCD, ~PARAM, ~VISIT, ~AVAL,
     "01-701-1015", "DIABP", "Diastolic Blood Pressure (mmHg)", "BASELINE", 51,

@@ -32,9 +32,9 @@ Create a \code{derivation_slice} object as input for \code{slice_derivation()}.
 \code{\link[=slice_derivation]{slice_derivation()}}, \code{\link[=params]{params()}}
 
 Higher Order Functions:
-\code{\link{call_derivation}()},
-\code{\link{restrict_derivation}()},
-\code{\link{slice_derivation}()}
+\code{\link[=call_derivation]{call_derivation()}},
+\code{\link[=restrict_derivation]{restrict_derivation()}},
+\code{\link[=slice_derivation]{slice_derivation()}}
 }
 \concept{high_order_function}
 \keyword{high_order_function}

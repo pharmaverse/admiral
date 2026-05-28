@@ -215,7 +215,7 @@ get_imputation_target_time <- function(time_imputation) {
 #' Convert a Date into a Datetime Object
 #'
 #' @description Convert a date (datetime, date, or date character) into a Date
-#' vector (usually `'--DTM'`).
+#' vector (usually `*DTM`).
 #'
 #' **Note:** This is a wrapper function for the function `convert_dtc_to_dtm()`.
 #'
@@ -271,7 +271,7 @@ convert_date_to_dtm <- function(dt,
 
 #' Parse `--DTC` variable and Determine Components
 #'
-#' @param dtc The `'--DTC'` date to parse
+#' @param dtc The `--DTC` date to parse
 #'
 #'   A character date is expected in a format like `yyyy-mm-dd` or
 #'   `yyyy-mm-ddThh:mm:ss`. Trailing components can be omitted and `-` is a

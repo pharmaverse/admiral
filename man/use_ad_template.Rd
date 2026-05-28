@@ -8,8 +8,7 @@ use_ad_template(
   adam_name = "adsl",
   save_path = paste0("./", adam_name, ".R"),
   package = "admiral",
-  overwrite = FALSE,
-  open = interactive()
+  overwrite = FALSE
 )
 }
 \arguments{
@@ -39,12 +38,6 @@ The dataset name is case-insensitive. The default dataset name is \code{"ADSL"}.
 \describe{
 \item{Default value}{\code{FALSE}}
 }}
-
-\item{open}{Whether to open the script right away.
-
-\describe{
-\item{Default value}{\code{interactive()}}
-}}
 }
 \value{
 No return values, called for side effects
@@ -63,7 +56,7 @@ if (interactive()) {
 }
 \seealso{
 Utilities used for examples and template scripts:
-\code{\link{list_all_templates}()}
+\code{\link[=list_all_templates]{list_all_templates()}}
 }
 \concept{utils_examples}
 \keyword{utils_examples}

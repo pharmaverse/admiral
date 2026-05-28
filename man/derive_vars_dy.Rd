@@ -45,11 +45,13 @@ Adds relative day variables (\verb{*DY}) to the dataset, e.g., \code{ASTDY} and
 }
 \details{
 The relative day is derived as number of days from the reference
-date to the end date. If it is nonnegative, one is added. I.e., the
+date to the end date. If it is nonnegative, one is added. That is, the
 relative day of the reference date is 1. Unless a name is explicitly
 specified, the name of the resulting relative day variable is generated
 from the source variable name by replacing DT (or DTM as appropriate) with
-DY.
+DY. In the ADaM as in the SDTM, there is no Day 0. If there is a need to
+create a relative day variable that includes Day 0, then its name
+must not end in DY.
 }
 \examples{
 library(tibble)
@@ -90,12 +92,12 @@ derive_vars_dy(
 }
 \seealso{
 Date/Time Derivation Functions that returns variable appended to dataset:
-\code{\link{derive_var_trtdurd}()},
-\code{\link{derive_vars_dt}()},
-\code{\link{derive_vars_dtm}()},
-\code{\link{derive_vars_dtm_to_dt}()},
-\code{\link{derive_vars_dtm_to_tm}()},
-\code{\link{derive_vars_duration}()}
+\code{\link[=derive_var_trtdurd]{derive_var_trtdurd()}},
+\code{\link[=derive_vars_dt]{derive_vars_dt()}},
+\code{\link[=derive_vars_dtm]{derive_vars_dtm()}},
+\code{\link[=derive_vars_dtm_to_dt]{derive_vars_dtm_to_dt()}},
+\code{\link[=derive_vars_dtm_to_tm]{derive_vars_dtm_to_tm()}},
+\code{\link[=derive_vars_duration]{derive_vars_duration()}}
 }
 \concept{der_date_time}
 \keyword{der_date_time}

@@ -303,7 +303,7 @@ ex_exp <- ex_dates %>%
     lookup_column = CDISC_VALUE,
     keep_source_vars = exprs(
       STUDYID, USUBJID, EVID, EXDOSFRQ, EXDOSFRM,
-      NFRLT, EXDOSE, EXDOSU, EXTRT, ASTDT, ASTDTM, AENDT, AENDTM,
+      NFRLT, EXDOSE, EXDOSU, EXTRT, EXSTDTC, ASTDT, ASTDTM, AENDT, AENDTM,
       VISIT, VISITNUM, VISITDY, TRT01A, TRT01P, DOMAIN, EXSEQ, !!!adsl_vars
     )
   ) %>%
@@ -854,6 +854,8 @@ baseline `CHG`.
 
 We also now derive `ASEQ` using `derive_var_obs_number()` and we drop
 intermediate variables such as those ending with "\_prev" and "\_next".
+Note that creating `ASEQ` is not required for all ADaM datasets according to the ADaM IG,
+and this is just for demonstration purpose.
 
 Finally we derive `PARAM` and `PARAMN` from a lookup table.
 
@@ -880,7 +882,7 @@ adpc_chg <- restrict_derivation(
 # ---- Add ASEQ ----
 
 adpc_aseq <- adpc_chg %>%
-  # Calculate ASEQ
+  # Calculate ASEQ (Optional Variable)
   derive_var_obs_number(
     new_var = ASEQ,
     by_vars = exprs(STUDYID, USUBJID),
@@ -1009,6 +1011,7 @@ in `ADPC` but did not keep.
 
 -   [Combine Covariates with `ADPPK` Data](#final)
 
+-   [Add Labels and Attributes (Same as `ADPC`)](#attributes)
 ## Find First Dose `ADPPK` {#ppkfirst}
 
 The initial programming steps for `ADPPK` will follow the same sequence
@@ -1241,7 +1244,7 @@ adppk_aval <- adppk_aprlt %>%
       EVID == 1 ~ NA_character_,
       TRUE ~ PCSTRESU
     ),
-    UDTC = format_ISO8601(ADTM),
+    UDTC = coalesce(PCDTC, EXSTDTC),
     II = if_else(EVID == 1, 1, 0),
     SS = if_else(EVID == 1, 1, 0)
   )
@@ -1469,36 +1472,13 @@ dataset_vignette(
 )
 ```
 
-# Add Labels and Attributes {#attributes}
-
-Note that attributes may not be preserved in some cases after processing
-with `{admiral}`. The recommended approach is to apply variable labels
-and other metadata as a final step in your data derivation process using
-packages like:
-
--   [metacore](https://atorus-research.github.io/metacore/): establish a
-    common foundation for the use of metadata within an R session.
-
--   [metatools](https://pharmaverse.github.io/metatools/): enable the
-    use of metacore objects. Metatools can be used to build datasets or
-    enhance columns in existing datasets as well as checking datasets
-    against the metadata.
-
--   [xportr](https://atorus-research.github.io/xportr/): functionality
-    to associate all metadata information to a local R data frame,
-    perform data set level validation checks and convert into a
-    [transport v5
-    file(xpt)](https://documentation.sas.com/doc/en/pgmsascdc/9.4_3.5/movefile/n1xbwdre0giahfn11c99yjkpi2yb.htm).
-
-NOTE: Together with `{admiral}` these packages comprise an End to End
-pipeline under the umbrella of the
-[pharmaverse](https://github.com/pharmaverse). An example of applying
-metadata and perform associated checks can be found at the [pharmaverse
-E2E example](https://pharmaverse.github.io/examples/adam/adsl).
+```{r, results='asis', echo=FALSE}
+admiral_labels_attrs_section()
+```
 
 # Example Scripts {#example}
 
-| ADaM  | Sourcing Command           |
-|-------|----------------------------|
-| ADPC  | `use_ad_template("ADPC")`  |
-| ADPPK | `use_ad_template("ADPPK")` |
+ADaM | Sourcing Command
+---- | --------------
+| [`ADPC`](templates.html#adpc)   | `use_ad_template("ADPC")`
+| [`ADPPK`](templates.html#adppk) | `use_ad_template("ADPPK")`

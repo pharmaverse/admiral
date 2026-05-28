@@ -211,7 +211,7 @@ We hope by demonstrating the flexibility of `admiral` functions and using a gene
 
 # Example Script 
 
-ADaM     | Sourcing Command
-------   | --------------
-`ADLBHY` | `use_ad_template("ADLBHY")`
+ADaM | Sourcing Command
+---- | --------------
+[`ADLBHY`](templates.html#adlbhy) | `use_ad_template("ADLBHY")`
 

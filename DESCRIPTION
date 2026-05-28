@@ -1,23 +1,21 @@
 Type: Package
 Package: admiral
 Title: ADaM in R Asset Library
-Version: 1.4.2
+Version: 1.4.2.9000
 Authors@R: c(
     person("Edoardo", "Mancini", , "edoardo.mancini@roche.com", role = c("aut", "cre"),
            comment = c(ORCID = "0009-0006-4899-8641")),
     person("Stefan", "Bundfuss", role = "aut",
            comment = c(ORCID = "0009-0005-0027-1198")),
-    person("Matt", "Bearham", role = "aut"),
     person("Arianna", "Cascone", role = "aut",
            comment = c(ORCID = "0000-0001-5948-2831")),
     person("Kristin", "Dahnert", role = "aut"),
     person("Jeffrey", "Dickinson", role = "aut"),
     person("Ross", "Farrugia", role = "aut"),
-    person("Fanny", "Gautier", role = "aut"),
+    person("Fanny", "Gautier", role = "aut",
+           comment = c(ORCID = "0009-0004-3581-0131")),
     person("Gordon", "Miller", role = "aut"),
     person("Lina", "Patil", role = "aut"),
-    person("Jim", "Rothstein", role = "aut",
-           comment = c(ORCID = "0009-0009-8659-6071")),
     person("Ben", "Straub", role = "aut"),
     person("F. Hoffmann-La Roche AG", role = c("cph", "fnd")),
     person("GlaxoSmithKline LLC", role = c("cph", "fnd"))
@@ -52,6 +50,8 @@ Imports:
 Suggests:
     diffdf,
     DT,
+    ggnewscale,
+    ggplot2,
     here,
     htmltools,
     knitr,
@@ -66,10 +66,10 @@ Suggests:
 VignetteBuilder:
     knitr
 Config/Needs/website: gert, rmarkdown
+Config/roxygen2/markdown: TRUE
+Config/roxygen2/roclets: collate, namespace, admiraldev::rdx_roclet
+Config/roxygen2/version: 8.0.0
 Config/testthat/edition: 3
 Encoding: UTF-8
 Language: en-US
 LazyData: true
-Roxygen: list(markdown = TRUE, roclets = c("collate", "namespace",
-    "admiraldev::rdx_roclet"))
-RoxygenNote: 7.3.3

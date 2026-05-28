@@ -25,7 +25,7 @@ list_tte_source_objects()
 }
 \seealso{
 Other Advanced Functions:
-\code{\link{params}()}
+\code{\link[=params]{params()}}
 }
 \concept{other_advanced}
 \keyword{other_advanced}

@@ -33,16 +33,16 @@ compute_qual_imputation_dec(c("0.35", "1"))
 }
 \seealso{
 BDS-Findings Functions that returns a vector:
-\code{\link{compute_bmi}()},
-\code{\link{compute_bsa}()},
-\code{\link{compute_egfr}()},
-\code{\link{compute_framingham}()},
-\code{\link{compute_map}()},
-\code{\link{compute_qtc}()},
-\code{\link{compute_qual_imputation}()},
-\code{\link{compute_rr}()},
-\code{\link{compute_scale}()},
-\code{\link{transform_range}()}
+\code{\link[=compute_bmi]{compute_bmi()}},
+\code{\link[=compute_bsa]{compute_bsa()}},
+\code{\link[=compute_egfr]{compute_egfr()}},
+\code{\link[=compute_framingham]{compute_framingham()}},
+\code{\link[=compute_map]{compute_map()}},
+\code{\link[=compute_qtc]{compute_qtc()}},
+\code{\link[=compute_qual_imputation]{compute_qual_imputation()}},
+\code{\link[=compute_rr]{compute_rr()}},
+\code{\link[=compute_scale]{compute_scale()}},
+\code{\link[=transform_range]{transform_range()}}
 }
 \concept{com_bds_findings}
 \keyword{com_bds_findings}

@@ -275,17 +275,16 @@ then use a subsequent \code{mutate()} call to replace those \code{NA} values:
 \code{\link[=convert_xxtpt_to_hours]{convert_xxtpt_to_hours()}}, \code{\link[=derive_vars_duration]{derive_vars_duration()}}
 
 BDS-Findings Functions that returns variable appended to dataset:
-\code{\link{derive_basetype_records}()},
-\code{\link{derive_var_analysis_ratio}()},
-\code{\link{derive_var_anrind}()},
-\code{\link{derive_var_atoxgr}()},
-\code{\link{derive_var_atoxgr_dir}()},
-\code{\link{derive_var_base}()},
-\code{\link{derive_var_chg}()},
-\code{\link{derive_var_ontrtfl}()},
-\code{\link{derive_var_pchg}()},
-\code{\link{derive_var_shift}()},
-\code{\link{derive_vars_crit_flag}()}
+\code{\link[=derive_var_analysis_ratio]{derive_var_analysis_ratio()}},
+\code{\link[=derive_var_anrind]{derive_var_anrind()}},
+\code{\link[=derive_var_atoxgr]{derive_var_atoxgr()}},
+\code{\link[=derive_var_atoxgr_dir]{derive_var_atoxgr_dir()}},
+\code{\link[=derive_var_base]{derive_var_base()}},
+\code{\link[=derive_var_chg]{derive_var_chg()}},
+\code{\link[=derive_var_ontrtfl]{derive_var_ontrtfl()}},
+\code{\link[=derive_var_pchg]{derive_var_pchg()}},
+\code{\link[=derive_var_shift]{derive_var_shift()}},
+\code{\link[=derive_vars_crit_flag]{derive_vars_crit_flag()}}
 }
 \concept{der_bds_findings}
 \keyword{der_bds_findings}
@@ -750,15 +749,15 @@ adpc_unsched_value \%>\%
   ) \%>\%
   mutate(
     NFRLT = if_else(is.na(NFRLT) & VISIT == "UNSCHEDULED", 99999, NFRLT),
-    FRLTU = if_else(is.na(FRLTU) & VISIT == "UNSCHEDULED", "", FRLTU)
+    FRLTU = if_else(is.na(FRLTU) & VISIT == "UNSCHEDULED", NA_character_, FRLTU)
   )
 #> # A tibble: 4 × 6
-#>   USUBJID VISITDY VISIT       PCTPT        NFRLT FRLTU  
-#>   <chr>     <dbl> <chr>       <chr>        <dbl> <chr>  
-#> 1 001           1 VISIT 1     Pre-dose         0 "HOURS"
-#> 2 001           1 VISIT 1     2H Post-dose     2 "HOURS"
-#> 3 001          NA UNSCHEDULED Pre-dose     99999 ""     
-#> 4 001          NA UNSCHEDULED 2H Post-dose 99999 ""     }\if{html}{\out{</div>}}}
+#>   USUBJID VISITDY VISIT       PCTPT        NFRLT FRLTU
+#>   <chr>     <dbl> <chr>       <chr>        <dbl> <chr>
+#> 1 001           1 VISIT 1     Pre-dose         0 HOURS
+#> 2 001           1 VISIT 1     2H Post-dose     2 HOURS
+#> 3 001          NA UNSCHEDULED Pre-dose     99999 <NA> 
+#> 4 001          NA UNSCHEDULED 2H Post-dose 99999 <NA> }\if{html}{\out{</div>}}}
 \subsection{Custom range method}{
 
 Using end of range instead of midpoint

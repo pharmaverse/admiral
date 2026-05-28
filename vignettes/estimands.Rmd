@@ -1,0 +1,19 @@
+---
+title: "Estimands"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Estimands}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+
+library(admiraldev)
+```
+
+This article is web-only - please access it through the User Guides section of the [admiral website](https://pharmaverse.github.io/admiral/cran-release/).

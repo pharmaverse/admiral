@@ -198,22 +198,23 @@ This reduces the memory consumption but increases the run-time.
 \code{\link[=event]{event()}}, \code{\link[=event_joined]{event_joined()}}, \code{\link[=derive_vars_extreme_event]{derive_vars_extreme_event()}}
 
 BDS-Findings Functions for adding Parameters/Records:
-\code{\link{default_qtc_paramcd}()},
-\code{\link{derive_expected_records}()},
-\code{\link{derive_extreme_records}()},
-\code{\link{derive_locf_records}()},
-\code{\link{derive_param_bmi}()},
-\code{\link{derive_param_bsa}()},
-\code{\link{derive_param_computed}()},
-\code{\link{derive_param_doseint}()},
-\code{\link{derive_param_exist_flag}()},
-\code{\link{derive_param_exposure}()},
-\code{\link{derive_param_framingham}()},
-\code{\link{derive_param_map}()},
-\code{\link{derive_param_qtc}()},
-\code{\link{derive_param_rr}()},
-\code{\link{derive_param_wbc_abs}()},
-\code{\link{derive_summary_records}()}
+\code{\link[=default_qtc_paramcd]{default_qtc_paramcd()}},
+\code{\link[=derive_basetype_records]{derive_basetype_records()}},
+\code{\link[=derive_expected_records]{derive_expected_records()}},
+\code{\link[=derive_extreme_records]{derive_extreme_records()}},
+\code{\link[=derive_locf_records]{derive_locf_records()}},
+\code{\link[=derive_param_bmi]{derive_param_bmi()}},
+\code{\link[=derive_param_bsa]{derive_param_bsa()}},
+\code{\link[=derive_param_computed]{derive_param_computed()}},
+\code{\link[=derive_param_doseint]{derive_param_doseint()}},
+\code{\link[=derive_param_exist_flag]{derive_param_exist_flag()}},
+\code{\link[=derive_param_exposure]{derive_param_exposure()}},
+\code{\link[=derive_param_framingham]{derive_param_framingham()}},
+\code{\link[=derive_param_map]{derive_param_map()}},
+\code{\link[=derive_param_qtc]{derive_param_qtc()}},
+\code{\link[=derive_param_rr]{derive_param_rr()}},
+\code{\link[=derive_param_wbc_abs]{derive_param_wbc_abs()}},
+\code{\link[=derive_summary_records]{derive_summary_records()}}
 }
 \concept{der_prm_bds_findings}
 \keyword{der_prm_bds_findings}
@@ -403,6 +404,150 @@ select(-STUDYID)
 #> 7 5       NO SLEEP   Y                                4    NA <NA>              
 #> 8 4       WSP        No sleep two nights in a row     3     0 Worst Sleeping Pr…
 #> 9 5       WSP        No sleep                         4     1 Worst Sleeping Pr…}\if{html}{\out{</div>}}}
+\subsection{Events across records by record}{
+
+In the previous example, the new parameter was derived for each
+subject, i.e., all records of a subject were summarized. However, there are
+cases where we may want to derive a new parameter by record, but where the
+condition for deriving the parameter for a given record may involve
+comparison with other records.
+
+For example, we want to derive a new parameter for each visit indicating
+response at this visit and the next one. For this we need to specify the
+\code{by_vars} argument in \code{event_joined()} which overwrites the value specified
+in the \code{derive_extreme_event()} call. There \code{by_vars = exprs(USUBJID, AVISITN)} is used because we want to add new records for each subject and
+visit. In \code{event_joined()}, \code{by_vars = exprs(USUBJID)} is used because we
+want to join the records by subject only.
+
+The \code{tmp_obs_nr_var} argument is specified to create a variable which numbers
+the records within each subject. This variable is then used in the
+\code{condition} argument to ensure that the current record is compared with the
+next one. This ensures that missing visits like for subject 2 are handled
+correctly.
+
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{adbds <- tribble(
+  ~USUBJID, ~AVISITN,  ~AVALC,
+  "1",             1,  "Y",
+  "1",             2,  "N",
+  "1",             3,  "Y",
+  "1",             4,  "Y",
+  "1",             5,  "Y",
+  "2",             1,  "Y",
+  "2",             3,  "Y",
+) \%>\%
+  mutate(PARAMCD = "RESP")
+
+derive_extreme_event(
+  adbds,
+  by_vars = exprs(USUBJID, AVISITN),
+  source_datasets = list(adbds = adbds),
+  tmp_event_nr_var = event_nr,
+  order = exprs(event_nr),
+  mode = "first",
+  events = list(
+    event_joined(
+      dataset_name = "adbds",
+      by_vars = exprs(USUBJID),
+      order = exprs(AVISITN),
+      join_vars = exprs(AVALC),
+      join_type = "after",
+      tmp_obs_nr_var = obs_nr,
+      condition = AVALC == "Y" & AVALC.join == "Y" & obs_nr.join == obs_nr + 1,
+      set_values_to = exprs(AVALC = "Y")
+    ),
+    event(
+      dataset_name = "adbds",
+      set_values_to = exprs(AVALC = "N")
+    )
+  ),
+  set_values_to = exprs(PARAMCD = "CONFRESP")
+)
+#> # A tibble: 14 × 4
+#>    USUBJID AVISITN AVALC PARAMCD 
+#>    <chr>     <dbl> <chr> <chr>   
+#>  1 1             1 Y     RESP    
+#>  2 1             2 N     RESP    
+#>  3 1             3 Y     RESP    
+#>  4 1             4 Y     RESP    
+#>  5 1             5 Y     RESP    
+#>  6 2             1 Y     RESP    
+#>  7 2             3 Y     RESP    
+#>  8 1             1 N     CONFRESP
+#>  9 1             2 N     CONFRESP
+#> 10 1             3 Y     CONFRESP
+#> 11 1             4 Y     CONFRESP
+#> 12 1             5 N     CONFRESP
+#> 13 2             1 Y     CONFRESP
+#> 14 2             3 N     CONFRESP}\if{html}{\out{</div>}}}
+\subsection{Restricting source data before join}{
+
+Sometimes it is useful to restrict the source data of some events
+before the join. For example, in the following example, records with
+missing results should be ignored for the confirmation.
+
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{adbds <- tribble(
+  ~USUBJID, ~AVISITN,  ~AVALC,
+  "1",             1,  "Y",
+  "1",             2,  "N",
+  "1",             3,  "Y",
+  "1",             4,  "Y",
+  "1",             5,  "Y",
+  "2",             1,  "Y",
+  "2",             2,  NA,
+  "2",             3,  "Y"
+) \%>\%
+  mutate(PARAMCD = "RESP")
+
+derive_extreme_event(
+  adbds,
+  by_vars = exprs(USUBJID, AVISITN),
+  source_datasets = list(adbds = adbds),
+  tmp_event_nr_var = event_nr,
+  order = exprs(event_nr),
+  mode = "first",
+  events = list(
+    event_joined(
+      dataset_name = "adbds",
+      filter_source = !is.na(AVALC),
+      by_vars = exprs(USUBJID),
+      order = exprs(AVISITN),
+      join_vars = exprs(AVALC),
+      join_type = "after",
+      tmp_obs_nr_var = tmp_obs_nr,
+      condition = AVALC == "Y" & AVALC.join == "Y" & tmp_obs_nr.join == tmp_obs_nr + 1,
+      set_values_to = exprs(AVALC = "Y")
+    ),
+    event(
+      dataset_name = "adbds",
+      set_values_to = exprs(AVALC = "N")
+    )
+  ),
+  set_values_to = exprs(
+    PARAMCD = "CONFRESP"
+  )
+)
+#> # A tibble: 16 × 4
+#>    USUBJID AVISITN AVALC PARAMCD 
+#>    <chr>     <dbl> <chr> <chr>   
+#>  1 1             1 Y     RESP    
+#>  2 1             2 N     RESP    
+#>  3 1             3 Y     RESP    
+#>  4 1             4 Y     RESP    
+#>  5 1             5 Y     RESP    
+#>  6 2             1 Y     RESP    
+#>  7 2             2 <NA>  RESP    
+#>  8 2             3 Y     RESP    
+#>  9 1             1 N     CONFRESP
+#> 10 1             2 N     CONFRESP
+#> 11 1             3 Y     CONFRESP
+#> 12 1             4 Y     CONFRESP
+#> 13 1             5 N     CONFRESP
+#> 14 2             1 Y     CONFRESP
+#> 15 2             2 N     CONFRESP
+#> 16 2             3 N     CONFRESP}\if{html}{\out{</div>}}
+
+Note that for subject \code{2} the results at visit \code{1} is considered as
+confirmed because the missing result at visit \code{2} is ignored.}
 \subsection{Specifying different arguments across \code{event()} objects}{
 
 Here we consider a Hy's Law use case. We are interested in
@@ -413,7 +558,7 @@ time this occurs, and if not, we wish to retain the last record.
 As such, for this case now we need to vary our usage of the
 \code{mode} argument dependent on the \code{event()}.
 \itemize{
-\item In first \code{event()}, since we simply seek the first time that
+\item In the first \code{event()}, since we simply seek the first time that
 \code{CRIT1FL} is \code{"Y"}, it's enough to specify the \code{condition},
 because we inherit \code{order} and \code{mode} from the main
 \code{derive_extreme_event()} call here which will automatically

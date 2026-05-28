@@ -2,7 +2,7 @@
 % Please edit documentation in R/event.R
 \name{event}
 \alias{event}
-\title{Create a \code{event} Object}
+\title{Create an \code{event} Object}
 \usage{
 event(
   dataset_name = NULL,
@@ -95,15 +95,15 @@ The \code{event} object is used to define events as input for the
 \code{\link[=derive_extreme_event]{derive_extreme_event()}}, \code{\link[=derive_vars_extreme_event]{derive_vars_extreme_event()}}, \code{\link[=event_joined]{event_joined()}}
 
 Source Objects:
-\code{\link{basket_select}()},
-\code{\link{censor_source}()},
+\code{\link[=basket_select]{basket_select()}},
+\code{\link[=censor_source]{censor_source()}},
 \code{\link{death_event}},
-\code{\link{event_joined}()},
-\code{\link{event_source}()},
-\code{\link{flag_event}()},
-\code{\link{query}()},
-\code{\link{records_source}()},
-\code{\link{tte_source}()}
+\code{\link[=event_joined]{event_joined()}},
+\code{\link[=event_source]{event_source()}},
+\code{\link[=flag_event]{flag_event()}},
+\code{\link[=query]{query()}},
+\code{\link[=records_source]{records_source()}},
+\code{\link[=tte_source]{tte_source()}}
 }
 \concept{source_specifications}
 \keyword{source_specifications}

@@ -7,7 +7,6 @@
 #' @param save_path Path to save the script.
 #' @param package The R package in which to look for templates. By default `"admiral"`.
 #' @param overwrite Whether to overwrite an existing file named `save_path`.
-#' @param open Whether to open the script right away.
 #'
 #' @return No return values, called for side effects
 #'
@@ -26,13 +25,11 @@
 use_ad_template <- function(adam_name = "adsl",
                             save_path = paste0("./", adam_name, ".R"),
                             package = "admiral",
-                            overwrite = FALSE,
-                            open = interactive()) {
+                            overwrite = FALSE) {
   assert_character_scalar(adam_name)
   assert_character_scalar(save_path)
   assert_character_scalar(package)
   assert_logical_scalar(overwrite)
-  assert_logical_scalar(open)
 
   if (!toupper(adam_name) %in% list_all_templates(package)) {
     cli_abort(c(
@@ -58,10 +55,6 @@ use_ad_template <- function(adam_name = "adsl",
 
   if (file.copy(template_file, save_path, overwrite = TRUE)) {
     cli_inform(c(v = "File {.file {save_path}} has been created successfully"))
-  }
-
-  if (open) {
-    file.edit(save_path) # nocov
   }
 
   invisible(TRUE)
@@ -95,6 +88,53 @@ list_all_templates <- function(package = "admiral") {
     str_remove("^ad_") %>%
     toupper() %>%
     structure(class = c("adam_templates", "character"), package = package) # nolint: undesirable_function_linter
+}
+
+#' Output Boilerplate for the "Add Labels and Attributes" Vignette Section
+#'
+#' Outputs the standard markdown text used in ADaM-specific vignettes for the
+#' "Add Labels and Attributes" section. This function is intended to be called
+#' inside an R Markdown code chunk with `results='asis'` and `echo=FALSE`.
+#'
+#' @return No return value. The function outputs text directly to the console
+#'   or output stream via `cat()`, intended for use in R Markdown documents
+#'   with `results='asis'`.
+#'
+#' @details
+#' The outputted section describes how to add variable labels and other
+#' metadata to ADaM datasets as a final step in the derivation process,
+#' using the `{metacore}`, `{metatools}`, and `{xportr}` packages.
+#'
+#' @keywords internal
+#'
+#' @export
+#'
+#' @examples
+#' admiral_labels_attrs_section()
+admiral_labels_attrs_section <- function() {
+  cat(paste0(
+    "## Add Labels and Attributes {#attributes}\n\n",
+    "Note that attributes may not be preserved in some cases after processing\n",
+    "with `{admiral}`. The recommended approach is to apply variable labels\n",
+    "and other metadata as a final step in your data derivation process using\n",
+    "packages like:\n\n",
+    "-   [metacore](https://atorus-research.github.io/metacore/): establish a\n",
+    "    common foundation for the use of metadata within an R session.\n\n",
+    "-   [metatools](https://pharmaverse.github.io/metatools/): enable the\n",
+    "    use of metacore objects. Metatools can be used to build datasets or\n",
+    "    enhance columns in existing datasets as well as checking datasets\n",
+    "    against the metadata.\n\n",
+    "-   [xportr](https://atorus-research.github.io/xportr/): functionality\n",
+    "    to associate all metadata information to a local R data frame,\n",
+    "    perform data set level validation checks and convert into a\n",
+    "    [transport v5 file(xpt)](https://documentation.sas.com/doc/en/",
+    "pgmsascdc/9.4_3.5/movefile/n1xbwdre0giahfn11c99yjkpi2yb.htm).\n\n",
+    "NOTE: Together with `{admiral}` these packages comprise an End to End\n",
+    "pipeline under the umbrella of the\n",
+    "[pharmaverse](https://github.com/pharmaverse). An example of applying\n",
+    "metadata and performing associated checks can be found at the [pharmaverse\n",
+    "E2E example](https://pharmaverse.github.io/examples/adam/adsl).\n"
+  ))
 }
 
 #' Print `adam_templates` Objects

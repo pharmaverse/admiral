@@ -482,7 +482,7 @@ derive_vars_merged <- function(dataset,
   # in this case an error is issued to avoid renaming of varibles by left_join()
   common_vars <-
     setdiff(intersect(names(dataset), names(add_data)), vars2chr(by_vars))
-  if (length(common_vars) > 0L) {
+  if (length(common_vars) > 0) {
     cli_abort(
       c(
         "The variable{?s} {.var {common_vars}} {?is/are} contained in both datasets.",
@@ -935,10 +935,16 @@ get_not_mapped <- function() {
 #'
 #' @export
 #'
-#' @examples
-#' library(tibble)
+#' @examplesx
 #'
-#' # Add a variable for the mean of AVAL within each visit
+#' @caption Data setup
+#'
+#' @info The following examples use the BDS dataset below as a basis.
+#'
+#' @code
+#' library(tibble)
+#' library(dplyr, warn.conflicts = FALSE)
+#'
 #' adbds <- tribble(
 #'   ~USUBJID,  ~AVISIT,  ~ASEQ, ~AVAL,
 #'   "1",      "WEEK 1",      1,    10,
@@ -952,17 +958,62 @@ get_not_mapped <- function() {
 #'   "2",      "WEEK 4",      2,    22
 #' )
 #'
+#' @caption Summarize one or more variables using summary functions (`new_vars`)
+#'
+#' @info The `new_vars` argument specifies a named list of expressions where the
+#' right-hand side uses summary functions (e.g. `mean()`, `sum()`, `max()`) to
+#' aggregate values from `dataset_add` within each by group. Multiple summary
+#' variables can be added in a single call.
+#'
+#' In the example below, the mean and sum of `AVAL` within each subject
+#' and visit are derived and merged back onto the input dataset:
+#'
+#' @code
 #' derive_vars_merged_summary(
 #'   adbds,
 #'   dataset_add = adbds,
 #'   by_vars = exprs(USUBJID, AVISIT),
 #'   new_vars = exprs(
 #'     MEANVIS = mean(AVAL, na.rm = TRUE),
-#'     MAXVIS = max(AVAL, na.rm = TRUE)
+#'     SUMVIS = sum(AVAL, na.rm = TRUE)
 #'   )
 #' )
 #'
-#' # Add a variable listing the lesion ids at baseline
+#' @info In the example above, subject `"1"` at `"WEEK 2"` has only missing
+#' `AVAL` values, so `MEANVIS` is `NaN` (the result of
+#' `mean(NA, na.rm = TRUE)`) and `SUMVIS` is `0`. Note that `missing_values`
+#' cannot be used here because the by group *exists* in `dataset_add` — it
+#' merely produces `NaN`. To coerce `NaN` to `NA`, apply a follow-up
+#' `mutate()` step:
+#'
+#' @code
+#' derive_vars_merged_summary(
+#'   adbds,
+#'   dataset_add = adbds,
+#'   by_vars = exprs(USUBJID, AVISIT),
+#'   new_vars = exprs(
+#'     MEANVIS = mean(AVAL, na.rm = TRUE),
+#'     SUMVIS = sum(AVAL, na.rm = TRUE)
+#'   )
+#' ) %>%
+#'   mutate(MEANVIS = ifelse(is.nan(MEANVIS), NA_real_, MEANVIS))
+#'
+#' @info Subject `"1"` at `"WEEK 2"` now has `MEANVIS = NA` instead of `NaN`.
+#'
+#' @caption Restricting source records (`filter_add`)
+#'
+#' @info The `filter_add` argument restricts the records in `dataset_add` that
+#' are used for the summarization. Only records satisfying the filter condition
+#' contribute to the summary values. This can be useful, for example, to
+#' compute a summary statistic based only on records before or after a certain
+#' time point.
+#'
+#' In the following example, the mean of `AVAL` is computed only for records
+#' with a positive study day (`ADY > 0`), and the result is merged onto the
+#' `ADSL`-like dataset. Subject `"2"` has no records with `ADY > 0`, so
+#' `MEANPBL` is `NA` for that subject.
+#'
+#' @code
 #' adsl <- tribble(
 #'   ~USUBJID,
 #'   "1",
@@ -970,6 +1021,80 @@ get_not_mapped <- function() {
 #'   "3"
 #' )
 #'
+#' adbds2 <- tribble(
+#'   ~USUBJID, ~ADY, ~AVAL,
+#'   "1",        -3,    10,
+#'   "1",         2,    12,
+#'   "1",         8,    15,
+#'   "3",         4,    42
+#' )
+#'
+#' derive_vars_merged_summary(
+#'   adsl,
+#'   dataset_add = adbds2,
+#'   by_vars = exprs(USUBJID),
+#'   new_vars = exprs(MEANPBL = mean(AVAL, na.rm = TRUE)),
+#'   filter_add = ADY > 0
+#' )
+#'
+#' @caption Handling non-matching observations (`missing_values`)
+#'
+#' @info By default, records in `dataset` with no matching by group in
+#' `dataset_add` receive `NA` for the new variables. The `missing_values`
+#' argument allows you to specify a different value for these non-matching
+#' records.
+#'
+#' A natural use-case is counting observations per subject and defaulting to
+#' `0` (rather than `NA`) for subjects with no matching records. In the example
+#' below, the number of distinct post-baseline visits per subject is derived
+#' from `adbds` and merged onto `adsl`. Subject `"3"` has no records in
+#' `adbds`, so without `missing_values` the new variable would be `NA`;
+#' setting `missing_values = exprs(NVIS = 0)` makes the count meaningful
+#' for all subjects:
+#'
+#' @code
+#' derive_vars_merged_summary(
+#'   adsl,
+#'   dataset_add = adbds,
+#'   by_vars = exprs(USUBJID),
+#'   new_vars = exprs(NVIS = n_distinct(AVISIT)),
+#'   missing_values = exprs(NVIS = 0)
+#' )
+#'
+#' @caption Renaming by variables (`by_vars`)
+#'
+#' @info The `by_vars` argument supports renaming, using the syntax
+#' `exprs(<left_name> = <right_name>)`, where `<left_name>` is the variable
+#' name in `dataset` and `<right_name>` is the corresponding variable in
+#' `dataset_add`. This is useful when the grouping variable has different names
+#' in the two datasets.
+#'
+#' In the example below the input dataset uses `AVISIT` while the additional
+#' dataset uses `VISIT` for the same concept. The `by_vars` argument maps them
+#' together so the merge can proceed correctly:
+#'
+#' @code
+#' adbds_renamed <- adbds %>% rename(VISIT = AVISIT)
+#'
+#' derive_vars_merged_summary(
+#'   adbds,
+#'   dataset_add = adbds_renamed,
+#'   by_vars = exprs(USUBJID, AVISIT = VISIT),
+#'   new_vars = exprs(MEANVIS = mean(AVAL, na.rm = TRUE))
+#' )
+#'
+#' @caption String aggregation
+#'
+#' @info Summary expressions are not restricted to numeric aggregations. Any
+#' expression that reduces a group to a single value is permitted. For example,
+#' `paste(..., collapse = ", ")` can be used to concatenate character values
+#' within a by group into a single string.
+#'
+#' In the example below, the lesion identifiers observed at baseline for each
+#' subject are collected into a single comma-separated string and merged onto
+#' the `ADSL` dataset:
+#'
+#' @code
 #' adtr <- tribble(
 #'   ~USUBJID,     ~AVISIT, ~LESIONID,
 #'   "1",       "BASELINE",  "INV-T1",

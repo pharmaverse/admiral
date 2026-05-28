@@ -85,15 +85,15 @@ event_source(
 \code{\link[=derive_param_tte]{derive_param_tte()}}, \code{\link[=censor_source]{censor_source()}}
 
 Source Objects:
-\code{\link{basket_select}()},
-\code{\link{censor_source}()},
+\code{\link[=basket_select]{basket_select()}},
+\code{\link[=censor_source]{censor_source()}},
 \code{\link{death_event}},
-\code{\link{event}()},
-\code{\link{event_joined}()},
-\code{\link{flag_event}()},
-\code{\link{query}()},
-\code{\link{records_source}()},
-\code{\link{tte_source}()}
+\code{\link[=event]{event()}},
+\code{\link[=event_joined]{event_joined()}},
+\code{\link[=flag_event]{flag_event()}},
+\code{\link[=query]{query()}},
+\code{\link[=records_source]{records_source()}},
+\code{\link[=tte_source]{tte_source()}}
 }
 \concept{source_specifications}
 \keyword{source_specifications}

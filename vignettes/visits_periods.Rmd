@@ -51,7 +51,7 @@ The most common ways of deriving `AVISIT` and `AVISITN` are:
 -   The variables are set based on time windows.
 
 The former can be achieved simply by calling `mutate()`, like in the
-vignettes and the template scripts.
+vignettes and the [template scripts](templates.html).
 
 For the latter a (study-specific) reference dataset needs to be created
 which provides for each visit the start and end day (`AWLO` and `AWHI`)

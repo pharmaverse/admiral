@@ -47,7 +47,8 @@ for (file_path in template_files) {
   # Construct collapsible block
   cat(paste0(
     "<details style='margin-bottom: 10px; border: 1px solid #ccc; border-radius: 5px; padding: 5px;'>\n",
-    "  <summary style='cursor: pointer; font-weight: bold;'>", file_name, "</summary>\n",
+    "  <summary id=\"", stringr::str_match(file_name, "ad_(?<dataset>\\w+)\\.R")[1, "dataset"],
+    "\" style='cursor: pointer; font-weight: bold;'>", file_name, "</summary>\n",
     "  <pre style='max-height: 90vh'><code>", escaped_code, "</code></pre>\n",
     "</details>\n\n"
   ))

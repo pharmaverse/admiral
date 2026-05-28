@@ -1,26 +1,25 @@
-data <- tibble::tribble(
-  ~USUBJID, ~AVISITN, ~AVALC,
-  "1",      1,        "PR",
-  "1",      2,        "CR",
-  "1",      3,        "CR",
-  "1",      4,        "SD",
-  "1",      5,        "NE",
-  "2",      1,        "SD",
-  "2",      2,        "PR",
-  "2",      3,        "PD",
-  "3",      1,        "SD",
-  "4",      1,        "PR",
-  "4",      2,        "PD",
-  "4",      3,        "SD",
-  "4",      4,        "SD",
-  "4",      5,        "PR"
-)
-
-
 # derive_var_joined_exist_flag ----
 ## Flagging any patient PR value that is followed by a CR or PR
 ## Test 1: filter without first_cond ----
 test_that("derive_var_joined_exist_flag Test 1: filter without first_cond", {
+  data <- tibble::tribble(
+    ~USUBJID, ~AVISITN, ~AVALC,
+    "1",      1,        "PR",
+    "1",      2,        "CR",
+    "1",      3,        "CR",
+    "1",      4,        "SD",
+    "1",      5,        "NE",
+    "2",      1,        "SD",
+    "2",      2,        "PR",
+    "2",      3,        "PD",
+    "3",      1,        "SD",
+    "4",      1,        "PR",
+    "4",      2,        "PD",
+    "4",      3,        "SD",
+    "4",      4,        "SD",
+    "4",      5,        "PR"
+  )
+
   actual <-
     derive_var_joined_exist_flag(
       data,
@@ -119,6 +118,23 @@ test_that("derive_var_joined_exist_flag Test 2: filter with first_cond", {
 ## and at most one SD in between
 ## Test 3: filter with first_cond and summary function ----
 test_that("derive_var_joined_exist_flag Test 3: filter with first_cond and summary function", {
+  data <- tibble::tribble(
+    ~USUBJID, ~AVISITN, ~AVALC,
+    "1",      1,        "PR",
+    "1",      2,        "CR",
+    "1",      3,        "CR",
+    "1",      4,        "SD",
+    "1",      5,        "NE",
+    "2",      1,        "SD",
+    "2",      2,        "PR",
+    "2",      3,        "PD",
+    "3",      1,        "SD",
+    "4",      1,        "PR",
+    "4",      2,        "PD",
+    "4",      3,        "SD",
+    "4",      4,        "SD",
+    "4",      5,        "PR"
+  )
   actual <-
     derive_var_joined_exist_flag(
       data,
@@ -322,5 +338,38 @@ test_that("derive_var_joined_exist_flag Test 7: no warning if multiple records m
       filter_join = OECAT == "ADVERSE EVENTS-INTRAOCULAR INFLAMMATION" & OEGRPID == AEGRPID
     ),
     keys = c("USUBJID", "AEGRPID")
+  )
+})
+
+## Test 8: filter_add is considered ----
+test_that("derive_var_joined_exist_flag Test 8: filter_add is considered", {
+  expected <- tibble::tribble(
+    ~USUBJID, ~ADY, ~CRIT1FL, ~ANL01FL,      ~CONFFL,
+    "1",        10, "N",      "Y",           NA_character_,
+    "1",        21, "Y",      "Y",           NA_character_,
+    "1",        23, "Y",      NA_character_, NA_character_,
+    "2",         2, "Y",      "Y",           "Y",
+    "2",        11, "Y",      "Y",           NA_character_,
+    "2",        23, "N",      "Y",           NA_character_
+  )
+
+  input <- select(expected, -CONFFL)
+
+  actual <- derive_var_joined_exist_flag(
+    dataset = input,
+    dataset_add = input,
+    by_vars = exprs(USUBJID),
+    new_var = CONFFL,
+    join_type = "after",
+    join_vars = exprs(CRIT1FL),
+    order = exprs(ADY),
+    filter_join = CRIT1FL == "Y" & CRIT1FL.join == "Y",
+    filter_add = ANL01FL == "Y"
+  )
+
+  expect_dfs_equal(
+    expected,
+    actual,
+    keys = c("USUBJID", "ADY")
   )
 })

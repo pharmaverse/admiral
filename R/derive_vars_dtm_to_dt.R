@@ -10,8 +10,8 @@
 #'
 #'
 #' @return
-#' A data frame containing the input dataset with the corresponding date (`--DT`)
-#' variable(s) of all datetime variables (`--DTM`) specified in `source_vars.`
+#' A data frame containing the input dataset with the corresponding date (`*DT`)
+#' variable(s) of all datetime variables (`*DTM`) specified in `source_vars.`
 #'
 #' @family der_date_time
 #'
@@ -45,7 +45,7 @@ derive_vars_dtm_to_dt <- function(dataset, source_vars) {
   assert_vars(source_vars)
   assert_data_frame(dataset, required_vars = source_vars)
 
-  # Warn if `--TM` variables already exist
+  # Warn if `*DT` variables already exist
   dtm_vars <- expr_c(source_vars)
   dtm_vars2 <- vars2chr(dtm_vars)
   n_vars <- length(dtm_vars)

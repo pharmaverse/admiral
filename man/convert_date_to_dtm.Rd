@@ -158,7 +158,7 @@ A datetime object
 }
 \description{
 Convert a date (datetime, date, or date character) into a Date
-vector (usually \code{'--DTM'}).
+vector (usually \verb{*DTM}).
 
 \strong{Note:} This is a wrapper function for the function \code{convert_dtc_to_dtm()}.
 }
@@ -174,15 +174,15 @@ convert_date_to_dtm("2019-07-18")
 }
 \seealso{
 Date/Time Computation Functions that returns a vector:
-\code{\link{compute_age_years}()},
-\code{\link{compute_dtf}()},
-\code{\link{compute_duration}()},
-\code{\link{compute_tmf}()},
-\code{\link{convert_dtc_to_dt}()},
-\code{\link{convert_dtc_to_dtm}()},
-\code{\link{convert_xxtpt_to_hours}()},
-\code{\link{impute_dtc_dt}()},
-\code{\link{impute_dtc_dtm}()}
+\code{\link[=compute_age_years]{compute_age_years()}},
+\code{\link[=compute_dtf]{compute_dtf()}},
+\code{\link[=compute_duration]{compute_duration()}},
+\code{\link[=compute_tmf]{compute_tmf()}},
+\code{\link[=convert_dtc_to_dt]{convert_dtc_to_dt()}},
+\code{\link[=convert_dtc_to_dtm]{convert_dtc_to_dtm()}},
+\code{\link[=convert_xxtpt_to_hours]{convert_xxtpt_to_hours()}},
+\code{\link[=impute_dtc_dt]{impute_dtc_dt()}},
+\code{\link[=impute_dtc_dtm]{impute_dtc_dtm()}}
 }
 \concept{com_date_time}
 \keyword{com_date_time}

@@ -19,26 +19,25 @@ Useful links:
 }
 
 
-Other internal: 
-\code{\link{extract_duplicate_records}()},
-\code{\link{format.basket_select}()},
-\code{\link{signal_duplicate_records}()}
+Other internal:
+\code{\link[=extract_duplicate_records]{extract_duplicate_records()}},
+\code{\link[=format.basket_select]{format.basket_select()}},
+\code{\link[=signal_duplicate_records]{signal_duplicate_records()}}
 }
 \author{
 \strong{Maintainer}: Edoardo Mancini \email{edoardo.mancini@roche.com} (\href{https://orcid.org/0009-0006-4899-8641}{ORCID})
 
 Authors:
 \itemize{
+  \item Edoardo Mancini \email{edoardo.mancini@roche.com} (\href{https://orcid.org/0009-0006-4899-8641}{ORCID})
   \item Stefan Bundfuss (\href{https://orcid.org/0009-0005-0027-1198}{ORCID})
-  \item Matt Bearham
   \item Arianna Cascone (\href{https://orcid.org/0000-0001-5948-2831}{ORCID})
   \item Kristin Dahnert
   \item Jeffrey Dickinson
   \item Ross Farrugia
-  \item Fanny Gautier
+  \item Fanny Gautier (\href{https://orcid.org/0009-0004-3581-0131}{ORCID})
   \item Gordon Miller
   \item Lina Patil
-  \item Jim Rothstein (\href{https://orcid.org/0009-0009-8659-6071}{ORCID})
   \item Ben Straub
 }
 

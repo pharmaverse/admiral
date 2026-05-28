@@ -81,9 +81,9 @@ get_vars_query(adae, queries)
 \code{\link[=create_query_data]{create_query_data()}}
 
 Utilities used within Derivation functions:
-\code{\link{extract_unit}()},
-\code{\link{get_flagged_records}()},
-\code{\link{get_not_mapped}()}
+\code{\link[=extract_unit]{extract_unit()}},
+\code{\link[=get_flagged_records]{get_flagged_records()}},
+\code{\link[=get_not_mapped]{get_not_mapped()}}
 }
 \concept{utils_help}
 \keyword{utils_help}

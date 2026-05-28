@@ -1,6 +1,131 @@
+# admiral (development version)
+
+## New Features
+
+## Updates of Existing Functions
+
+- The `end_dates` argument for specifying dates which restrict the observation
+period and the `event_type` argument for specifying if the event is negative
+(progression, death, worsening, ...) were added to `derive_param_tte()`. The
+`consider_end_dates` field was added to the `event_source()`, `censor_source()`,
+and `tte_source()` objects. (#2952)
+
+- The `by_vars` and the `tmp_obs_nr_var` arguments were added to
+  `event_joined()`. This allows to derive parameters requiring confirmation _by
+  visit_ using `derive_extreme_event()`. (#3022)
+
+- The `filter_source` argument was added to `event_joined()`, allowing to
+specify a condition to restrict the source dataset before the join, e.g., when
+using `derive_extreme_event()`. (#3033)
+
+- The `filter_add` argument in `derive_var_joined_exist_flag()` is no longer
+erroneously ignored. (#3018)
+
+- Fixed poorly formatted warning messages in `derive_param_computed()` and `derive_vars_computed()`. (#2969)
+
+- `use_ad_template()` was updated to remove the `open` argument, meaning the generated template will never automatically open
+in a new window, and will instead just be accessible by clicking the link outputted in the console or going to the path
+specified under `save_path`. This is because this functionality did not work as expected outside of RStudio. (#2989)
+
+- NCICTCAEv5 grading criteria (`atoxgr_criteria_ctcv5`, `atoxgr_criteria_ctcv5_uscv`),  updated to add term `"Blood lactate dehydrogenase increase"` (#3025).
+
+## Breaking Changes
+
+- The following function arguments are entering the next phase of the [deprecation process](https://pharmaverse.github.io/admiraldev/articles/programming_strategy.html#deprecation): 
+
+  **Phase 1 (message)**
+    
+  **Phase 2 (warning)**
+    
+  **Phase 3 (error)**
+  
+  **Phase 4 (removed)**
+
+- The `ex_single` dataset was removed from `{admiral}` to reduce the package
+  size. It can be derived on the fly using `create_single_dose_dataset()`.
+  See the `OCCDS` vignette or `?create_single_dose_dataset` for examples. (#3060)
+
+## Documentation
+
+- New article "Time-to-Event Analyses" added to provide guidance for different
+scenarios. (#2900)
+- The following new and existing User Guides have been changed from vignettes to articles, meaning they are no longer accessible
+offline via `vignette("vignette_name")`:
+
+  - Creating an ADAB ADaM
+  - Estimands (new)
+  
+   This helps minimize the size of `{admiral}` for installation. The articles are still accessible through the User Guides section of the 
+[admiral website](https://pharmaverse.github.io/admiral/cran-release/). (#3067)
+
+- The documentation for `derive_var_merged_ef_msrc()` was enhanced with structured examples covering `flag_events` with multiple sources, customizing `true_value`, `false_value`, and `missing_value`, and per-source `by_vars` renaming. (#2906)
+
+- Fix `UDTC` derivation in `ADPPK` to use source domain `DTC` variables. (#3011)
+
+- Fixed example in `derive_var_nfrlt()` to use `NA_character_` instead of `""` for missing unit values, consistent with the admiral programming strategy. (#3027)
+
+- New web-only Estimands article added, describing possible implementations of estimands with `{admiral}` code. (#2954)
+
+- A night mode option has been added to the `{admiral}` website. This can be be toggled using the sun/moon icon in the top right corner 
+of the navigation bar. Tooltips have also been set up for each of the icons on the navigation bar. (#2959)
+
+- The [contributions guidelines](https://pharmaverse.github.io/admiral/cran-release/CONTRIBUTING.html) for the `{admiral}` ecosystem 
+of packages were updated to specify the level of contributions required for authorship/acknowledgments. (#2979)
+
+- The examples for `derive_basetype_records()` were enhanced to include a case where records that do not match any
+  condition in `basetypes` are retained with `BASETYPE` set to `NA`. (#2904)
+- Additional information about timing variable conventions has been added to the `derive_vars_dy()` function documentation. (#2995)
+
+- Added IDs to each template script in the "Explore ADaM Templates" vignette, enabling links to them from across the website. (#3006)
+
+- The documentation for `derive_vars_merged_summary()` was enhanced with structured examples covering the `new_vars`, `filter_add`, `missing_values`, `by_vars` renaming, and string aggregation use cases. (#2775)
+
+- Added a new custom [404 page](https://pharmaverse.github.io/admiral/404.html) with a butterfly quiz for lost users. (#2982)
+
+- Added information about how to print out records with missing information when using `datasetref` in `derive_summary_records()`. (#3012)
+
+- Usage of `ASEQ` which is an optional variable was clarified within the corresponding Vignettes and Templates. (#2986)
+
+- The derivation of `DOSEON` and `DOSEU` variables in the OCCDS vignette was
+  clarified and generalized to cover more scenarios. (#3101)
+
+## Various
+
+<details>
+<summary>Developer Notes</summary>
+
+- Update to roxygen2 8.0.0. (#3090)
+
+- The `admiral_labels_attrs_section()` function was added to output
+  standardized boilerplate markdown for the "Add Labels and Attributes" section
+  in ADaM-specific vignettes. All relevant vignettes have been updated to use
+  this function, ensuring consistent content that can be maintained in one
+  place. (#2926)
+
+- Add instructions for AI coding agents: Workflow from `{admiralci}` copies information from `{admiraldev}` to `AGENTS.md` instruction files. (#2920)
+
+- Increased the maximum height of the drop-down menus in the website navigation bar to ensure all items are visible without scrolling. (#2974)
+
+- Creating the website for pull requests was enabled. Add "[create website]" to
+the pull request title to trigger website creation. (#2984)
+
+- `_pkgdown.yml` was updated to add metadata for linking across packages
+(`inst/pkgdown.yml`). (#2950)
+
+- The helper functions `roxygen_param_dataset()`, `roxygen_param_by_vars()`,
+  `roxygen_order_na_handling()`, and `roxygen_save_memory()` have been moved
+  from `{admiral}` to `{admiraldev}`. They are now exported from `{admiraldev}`
+  and remain accessible in `{admiral}` via the existing `@import admiraldev`
+  dependency. ([admiraldev/#517](https://github.com/pharmaverse/admiraldev/issues/517))
+
+- The HTML tag `<br/>` was removed from the roxygen headers. (#3042)
+
+- Clickable links to personal websites or GitHub profiles were added in the home page sidebar for every `{admiral}` author. (#3112)
+</details>
+
 # admiral 1.4.2
 
-* Maintainer switched from Ben Straub to Edoardo Mancini
+* Maintainer switched from Ben Straub to Edoardo Mancini.
 
 # admiral 1.4.1
 

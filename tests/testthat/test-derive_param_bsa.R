@@ -320,12 +320,11 @@ test_that("derive_param_bsa Test 27: BSA parameter NOT added", {
 
 ## derive_param_bsa: Obs created ----
 
-mosteller <- function(hgt, wgt) {
-  sqrt(hgt * wgt / 3600)
-}
-
 ## Test 28: BSA parameter (Mosteller Method) is correctly added ----
 test_that("derive_param_bsa Test 28: BSA parameter (Mosteller Method) is correctly added", {
+  mosteller <- function(hgt, wgt) {
+    sqrt(hgt * wgt / 3600)
+  }
   expected_output <- tibble::tribble(
     ~USUBJID, ~PARAMCD, ~PARAM, ~VISIT, ~VSSTRESU, ~AVAL,
     "01-701-1015", "HEIGHT", "Height (cm)", "BASELINE", "cm", 170,
@@ -355,12 +354,11 @@ test_that("derive_param_bsa Test 28: BSA parameter (Mosteller Method) is correct
   )
 })
 
-dubois <- function(hgt, wgt) {
-  0.007184 * hgt^0.725 * wgt^0.425
-}
-
 ## Test 29: BSA parameter (DuBois-DuBois method) is correctly added ----
 test_that("derive_param_bsa Test 29: BSA parameter (DuBois-DuBois method) is correctly added", {
+  dubois <- function(hgt, wgt) {
+    0.007184 * hgt^0.725 * wgt^0.425
+  }
   expected_output <- tibble::tribble(
     ~USUBJID, ~PARAMCD, ~PARAM, ~VISIT, ~VSSTRESU, ~AVAL,
     "01-701-1015", "HEIGHT", "Height (cm)", "BASELINE", "cm", 170,
@@ -391,12 +389,11 @@ test_that("derive_param_bsa Test 29: BSA parameter (DuBois-DuBois method) is cor
   )
 })
 
-haycock <- function(hgt, wgt) {
-  0.024265 * hgt^0.3964 * wgt^0.5378
-}
-
 ## Test 30: BSA parameter (Haycock method) is correctly added ----
 test_that("derive_param_bsa Test 30: BSA parameter (Haycock method) is correctly added", {
+  haycock <- function(hgt, wgt) {
+    0.024265 * hgt^0.3964 * wgt^0.5378
+  }
   expected_output <- tibble::tribble(
     ~USUBJID, ~PARAMCD, ~PARAM, ~VISIT, ~VSSTRESU, ~AVAL,
     "01-701-1015", "HEIGHT", "Height (cm)", "BASELINE", "cm", 170,
@@ -426,12 +423,11 @@ test_that("derive_param_bsa Test 30: BSA parameter (Haycock method) is correctly
   )
 })
 
-gehan <- function(hgt, wgt) {
-  0.0235 * hgt^0.42246 * wgt^0.51456
-}
-
 ## Test 31: BSA parameter (Gehan-George method) is correctly added ----
 test_that("derive_param_bsa Test 31: BSA parameter (Gehan-George method) is correctly added", {
+  gehan <- function(hgt, wgt) {
+    0.0235 * hgt^0.42246 * wgt^0.51456
+  }
   expected_output <- tibble::tribble(
     ~USUBJID, ~PARAMCD, ~PARAM, ~VISIT, ~VSSTRESU, ~AVAL,
     "01-701-1015", "HEIGHT", "Height (cm)", "BASELINE", "cm", 170,
@@ -462,12 +458,11 @@ test_that("derive_param_bsa Test 31: BSA parameter (Gehan-George method) is corr
   )
 })
 
-boyd <- function(hgt, wgt) {
-  0.0003207 * (hgt^0.3) * (1000 * wgt)^(0.7285 - (0.0188 * log10(1000 * wgt))) # nolint
-}
-
 ## Test 32: BSA parameter (Boyd method) is correctly added ----
 test_that("derive_param_bsa Test 32: BSA parameter (Boyd method) is correctly added", {
+  boyd <- function(hgt, wgt) {
+    0.0003207 * (hgt^0.3) * (1000 * wgt)^(0.7285 - (0.0188 * log10(1000 * wgt))) # nolint
+  }
   expected_output <- tibble::tribble(
     ~USUBJID, ~PARAMCD, ~PARAM, ~VISIT, ~VSSTRESU, ~AVAL,
     "01-701-1015", "HEIGHT", "Height (cm)", "BASELINE", "cm", 170,
@@ -497,12 +492,11 @@ test_that("derive_param_bsa Test 32: BSA parameter (Boyd method) is correctly ad
   )
 })
 
-fujimoto <- function(hgt, wgt) {
-  0.008883 * hgt^0.663 * wgt^0.444
-}
-
 ## Test 33: BSA parameter (Fujimoto method) is correctly added ----
 test_that("derive_param_bsa Test 33: BSA parameter (Fujimoto method) is correctly added", {
+  fujimoto <- function(hgt, wgt) {
+    0.008883 * hgt^0.663 * wgt^0.444
+  }
   expected_output <- tibble::tribble(
     ~USUBJID, ~PARAMCD, ~PARAM, ~VISIT, ~VSSTRESU, ~AVAL,
     "01-701-1015", "HEIGHT", "Height (cm)", "BASELINE", "cm", 170,
@@ -533,12 +527,11 @@ test_that("derive_param_bsa Test 33: BSA parameter (Fujimoto method) is correctl
   )
 })
 
-takahira <- function(hgt, wgt) {
-  0.007241 * hgt^0.725 * wgt^0.425
-}
-
 ## Test 34: BSA parameter (Takahira method) is correctly added ----
 test_that("derive_param_bsa Test 34: BSA parameter (Takahira method) is correctly added", {
+  takahira <- function(hgt, wgt) {
+    0.007241 * hgt^0.725 * wgt^0.425
+  }
   expected_output <- tibble::tribble(
     ~USUBJID, ~PARAMCD, ~PARAM, ~VISIT, ~VSSTRESU, ~AVAL,
     "01-701-1015", "HEIGHT", "Height (cm)", "BASELINE", "cm", 170,

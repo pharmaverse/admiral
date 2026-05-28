@@ -74,12 +74,12 @@ print(target_custom)
 \code{\link[=impute_dtc_dtm]{impute_dtc_dtm()}}, \code{\link[=impute_dtc_dt]{impute_dtc_dt()}}
 
 Utilities used for date imputation:
-\code{\link{dt_level}()},
-\code{\link{dtm_level}()},
-\code{\link{get_imputation_target_time}()},
-\code{\link{get_partialdatetime}()},
-\code{\link{restrict_imputed_dtc_dt}()},
-\code{\link{restrict_imputed_dtc_dtm}()}
+\code{\link[=dt_level]{dt_level()}},
+\code{\link[=dtm_level]{dtm_level()}},
+\code{\link[=get_imputation_target_time]{get_imputation_target_time()}},
+\code{\link[=get_partialdatetime]{get_partialdatetime()}},
+\code{\link[=restrict_imputed_dtc_dt]{restrict_imputed_dtc_dt()}},
+\code{\link[=restrict_imputed_dtc_dtm]{restrict_imputed_dtc_dtm()}}
 }
 \concept{utils_impute}
 \keyword{internal}

@@ -1116,17 +1116,210 @@ test_that("derive_param_tte Test 16: produces consistent results regardless of i
   expect_equal(result_sorted, result_unsorted)
 })
 
+## Test 17: end dates ----
+test_that("derive_param_tte Test 17: end dates", {
+  adsl <- tribble(
+    ~USUBJID, ~TRTSDT,           ~EOSDT,            ~NEWDRGDT,
+    "01",     ymd("2020-12-06"), ymd("2021-03-06"), NA,
+    "02",     ymd("2021-01-16"), ymd("2021-04-03"), ymd("2021-03-21"),
+    "03",     ymd("2021-02-01"), NA,                NA,
+    "04",     ymd("2021-03-10"), ymd("2021-03-28"), NA
+  )
+
+  adqs <- tribble(
+    ~USUBJID, ~ADT,              ~CHG,
+    "01",     ymd("2021-01-03"),    5,
+    "01",     ymd("2021-02-03"),   -2,
+    "01",     ymd("2021-03-01"),   NA,
+    "01",     ymd("2021-03-07"),   10,
+    "02",     ymd("2021-01-03"),    4,
+    "02",     ymd("2021-02-03"),   -1,
+    "02",     ymd("2021-04-01"),  -12,
+    "03",     ymd("2021-02-15"),    3,
+    "03",     ymd("2021-03-15"),  -15
+  )
+
+  actual <- derive_param_tte(
+    dataset_adsl = adsl,
+    source_datasets = list(adsl = adsl, adqs = adqs),
+    start_date = TRTSDT,
+    end_dates = list(
+      censor_source(
+        dataset_name = "adsl",
+        date = EOSDT,
+        set_values_to = exprs(
+          EVNTDESC = "END OF STUDY"
+        )
+      ),
+      censor_source(
+        dataset_name = "adsl",
+        date = NEWDRGDT,
+        censor = 2,
+        set_values_to = exprs(
+          EVNTDESC = "NEW DRUG"
+        )
+      )
+    ),
+    event_conditions = list(event_source(
+      dataset_name = "adqs",
+      date = ADT,
+      filter = CHG <= -10,
+      set_values_to = exprs(
+        EVNTDESC = "WORSENING",
+        SRCDOM = "ADQS",
+        SRCVAR = "ADT"
+      )
+    )),
+    censor_conditions = list(
+      censor_source(
+        dataset_name = "adqs",
+        date = ADT,
+        filter = !is.na(CHG),
+        set_values_to = exprs(
+          CNSDTDSC = "LAST ASSESSMENT",
+          SRCDOM = "ADQS",
+          SRCVAR = "ADT"
+        )
+      ),
+      censor_source(
+        dataset_name = "adsl",
+        date = TRTSDT,
+        censor = 3,
+        set_values_to = exprs(
+          EVNTDESC = "NO ASSESSMENTS",
+          CNSDTDSC = "TREATMENT START",
+          SRCDOM = "ADSL",
+          SRCVAR = "TRTSDT"
+        ),
+        consider_end_dates = FALSE
+      )
+    ),
+    set_values_to = exprs(PARAMCD = "TTWORSE"),
+    subject_keys = exprs(USUBJID)
+  )
+
+  expected <- tribble(
+    ~USUBJID, ~ADT,         ~CNSR, ~EVNTDESC,        ~CNSDTDSC,         ~STARTDT,
+    "01",     "2021-02-03",    1L, "END OF STUDY",   "LAST ASSESSMENT", "2020-12-06",
+    "02",     "2021-02-03",    2L, "NEW DRUG",       "LAST ASSESSMENT", "2021-01-16",
+    "03",     "2021-03-15",    0L, "WORSENING",      NA,                "2021-02-01",
+    "04",     "2021-03-10",    3L, "NO ASSESSMENTS", "TREATMENT START", "2021-03-10"
+  ) %>%
+    mutate(
+      SRCDOM = if_else(USUBJID == "04", "ADSL", "ADQS"),
+      SRCVAR = if_else(USUBJID == "04", "TRTSDT", "ADT"),
+      PARAMCD = "TTWORSE",
+      ADT = ymd(ADT),
+      STARTDT = ymd(STARTDT)
+    )
+
+  expect_dfs_equal(
+    base = expected,
+    compare = actual,
+    keys = "USUBJID"
+  )
+})
+
+## Test 18: positive events ----
+test_that("derive_param_tte Test 18: positive events", {
+  adsl <- tribble(
+    ~USUBJID, ~TRTSDT,           ~EOSDT,            ~NEWDRGDT,
+    "01",     ymd("2020-12-06"), ymd("2021-03-06"), NA,
+    "02",     ymd("2021-01-16"), ymd("2021-04-03"), ymd("2021-03-21"),
+    "03",     ymd("2021-02-01"), NA,                NA
+  )
+
+  adqs <- tribble(
+    ~USUBJID, ~ADT,              ~CHG,
+    "01",     ymd("2021-01-03"),    5,
+    "01",     ymd("2021-02-03"),   -2,
+    "01",     ymd("2021-03-01"),   NA,
+    "01",     ymd("2021-03-07"),   10,
+    "02",     ymd("2021-01-03"),    4,
+    "02",     ymd("2021-02-03"),   -1,
+    "02",     ymd("2021-04-01"),  -12,
+    "03",     ymd("2021-02-15"),    3,
+    "03",     ymd("2021-03-15"),   15
+  )
+
+  actual <- derive_param_tte(
+    dataset_adsl = adsl,
+    source_datasets = list(adsl = adsl, adqs = adqs),
+    start_date = TRTSDT,
+    end_dates = list(
+      censor_source(
+        dataset_name = "adsl",
+        date = EOSDT,
+        set_values_to = exprs(
+          EVNTDESC = "END OF STUDY",
+          SRCDOM = "ADSL",
+          SRCVAR = "EOSDT"
+        )
+      ),
+      censor_source(
+        dataset_name = "adsl",
+        date = NEWDRGDT,
+        set_values_to = exprs(
+          EVNTDESC = "NEW DRUG",
+          SRCDOM = "ADSL",
+          SRCVAR = "NEWDRGDT"
+        )
+      )
+    ),
+    event_conditions = list(event_source(
+      dataset_name = "adqs",
+      date = ADT,
+      filter = CHG >= 10,
+      set_values_to = exprs(
+        EVNTDESC = "IMPROVEMENT",
+        SRCDOM = "ADQS",
+        SRCVAR = "ADT"
+      )
+    )),
+    censor_conditions = list(censor_source(
+      dataset_name = "adqs",
+      date = ADT,
+      filter = !is.na(CHG),
+      set_values_to = exprs(
+        SRCDOM = "ADQS",
+        SRCVAR = "ADT"
+      )
+    )),
+    event_type = "positive",
+    set_values_to = exprs(PARAMCD = "TTIMPROV"),
+    subject_keys = exprs(USUBJID)
+  )
+
+  expected <- tribble(
+    ~USUBJID, ~ADT,         ~CNSR, ~EVNTDESC,      ~STARTDT,     ~SRCDOM, ~SRCVAR,
+    "01",     "2021-03-06",    1L, "END OF STUDY", "2020-12-06", "ADSL",  "EOSDT",
+    "02",     "2021-03-21",    1L, "NEW DRUG",     "2021-01-16", "ADSL",  "NEWDRGDT",
+    "03",     "2021-03-15",    0L, "IMPROVEMENT",  "2021-02-01", "ADQS",  "ADT"
+  ) %>%
+    mutate(
+      PARAMCD = "TTIMPROV",
+      ADT = ymd(ADT),
+      STARTDT = ymd(STARTDT)
+    )
+
+  expect_dfs_equal(
+    base = expected,
+    compare = actual,
+    keys = "USUBJID"
+  )
+})
+
 # list_tte_source_objects ----
-## Test 17: error is issued if package does not exist ----
-test_that("list_tte_source_objects Test 17: error is issued if package does not exist", {
+## Test 19: error is issued if package does not exist ----
+test_that("list_tte_source_objects Test 19: error is issued if package does not exist", {
   expect_snapshot(
     list_tte_source_objects(package = "tte"),
     error = TRUE
   )
 })
 
-## Test 18: expected objects produced ----
-test_that("list_tte_source_objects Test 18: expected objects produced", {
+## Test 20: expected objects produced ----
+test_that("list_tte_source_objects Test 20: expected objects produced", {
   expected_output <- tibble::tribble(
     ~object,            ~dataset_name,                                              ~filter,
     "ae_ser_event",            "adae",                 quote(TRTEMFL == "Y" & AESER == "Y"),

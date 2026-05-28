@@ -10,7 +10,8 @@ tte_source(
   date,
   censor = 0,
   set_values_to = NULL,
-  order = order
+  order = order,
+  consider_end_dates = TRUE
 )
 }
 \arguments{
@@ -67,6 +68,16 @@ that the source dataset is sorted on after \code{date}.
 \item{Permitted values}{list of variables created by \code{exprs()} e.g. \code{exprs(ASEQ)}.}
 \item{Default value}{\code{order}}
 }}
+
+\item{consider_end_dates}{Should end dates be considered?
+
+If end dates are considered, the records which are after the end date are
+ignored and the censor value specified for the end date takes precedence.
+
+\describe{
+\item{Permitted values}{\code{TRUE}, \code{FALSE}}
+\item{Default value}{\code{TRUE}}
+}}
 }
 \value{
 An object of class \code{tte_source}
@@ -78,15 +89,15 @@ The \code{tte_source} object is used to define events and possible censorings.
 \code{\link[=derive_param_tte]{derive_param_tte()}}, \code{\link[=censor_source]{censor_source()}}, \code{\link[=event_source]{event_source()}}
 
 Source Objects:
-\code{\link{basket_select}()},
-\code{\link{censor_source}()},
+\code{\link[=basket_select]{basket_select()}},
+\code{\link[=censor_source]{censor_source()}},
 \code{\link{death_event}},
-\code{\link{event}()},
-\code{\link{event_joined}()},
-\code{\link{event_source}()},
-\code{\link{flag_event}()},
-\code{\link{query}()},
-\code{\link{records_source}()}
+\code{\link[=event]{event()}},
+\code{\link[=event_joined]{event_joined()}},
+\code{\link[=event_source]{event_source()}},
+\code{\link[=flag_event]{flag_event()}},
+\code{\link[=query]{query()}},
+\code{\link[=records_source]{records_source()}}
 }
 \concept{source_specifications}
 \keyword{source_specifications}
