@@ -19,13 +19,14 @@ Useful links:
 - Report bugs at <https://github.com/pharmaverse/admiral/issues>
 
 Other internal:
-[`extract_duplicate_records()`](https:/pharmaverse.github.io/admiral/v1.4.1/reference/extract_duplicate_records.md),
-[`format.basket_select()`](https:/pharmaverse.github.io/admiral/v1.4.1/reference/format.basket_select.md),
-[`signal_duplicate_records()`](https:/pharmaverse.github.io/admiral/v1.4.1/reference/signal_duplicate_records.md)
+[`extract_duplicate_records()`](https:/pharmaverse.github.io/admiral/v1.4.2/reference/extract_duplicate_records.md),
+[`format.basket_select()`](https:/pharmaverse.github.io/admiral/v1.4.2/reference/format.basket_select.md),
+[`signal_duplicate_records()`](https:/pharmaverse.github.io/admiral/v1.4.2/reference/signal_duplicate_records.md)
 
 ## Author
 
-**Maintainer**: Ben Straub <ben.x.straub@gsk.com>
+**Maintainer**: Edoardo Mancini <edoardo.mancini@roche.com>
+([ORCID](https://orcid.org/0009-0006-4899-8641))
 
 Authors:
 
@@ -43,13 +44,13 @@ Authors:
 
 - Fanny Gautier
 
-- Edoardo Mancini ([ORCID](https://orcid.org/0009-0006-4899-8641))
-
 - Gordon Miller
 
 - Lina Patil
 
 - Jim Rothstein ([ORCID](https://orcid.org/0009-0009-8659-6071))
+
+- Ben Straub
 
 Other contributors:
 

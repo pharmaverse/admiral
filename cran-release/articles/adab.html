@@ -19,8 +19,8 @@
     }
   };
 </script><script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
-<script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
+<link href="../deps/bootstrap-5.3.8/bootstrap.min.css" rel="stylesheet">
+<script src="../deps/bootstrap-5.3.8/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
 <script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Creating an ADAB ADaM">
 <script async src="https://widget.kapa.ai/kapa-widget.bundle.js" data-website-id="2c7249cc-f1dc-4a63-8674-6ecbcb34d95c" data-project-name="admiral" data-project-color="#2c3e50" data-project-logo="https://pharmaverse.github.io/admiral/cran-release/logo.png" data-consent-required="true" data-user-analytics-cookie-enabled="true" data-consent-screen-title="Help us improve our AI assistant" data-consent-screen-disclaimer="By clicking 'Allow tracking', you consent to anonymous user tracking which helps us improve our service. We don't collect any personally identifiable information." data-consent-screen-accept-button-text="Allow tracking" data-consent-screen-reject-button-text="No, thanks" data-modal-example-questions="Tell me a little about the {admiral} package., What are some important {admiral} functions and what do they do?" data-modal-search-placeholder="Ask me a question about {admiral} or the {admiral} ecosystem..." data-modal-z-index="9999"></script>
@@ -33,7 +33,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">admiral</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.4.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.4.2</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -87,6 +87,7 @@
     <div class="dropdown-menu" aria-labelledby="dropdown-versions">
     <a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/main">main</a>
 <a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/cran-release">cran-release</a>
+<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v1.4.2">v1.4.2</a>
 <a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v1.4.1">v1.4.1</a>
 <a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v1.4.0">v1.4.0</a>
 <a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v1.3.1">v1.3.1</a>
@@ -323,7 +324,7 @@ time. User would add custom code for this.</p>
 <span></span>
 <span>    <span class="co"># Map the analyte test to corresponding DRUG in on EX.EXTRT</span></span>
 <span>    <span class="co"># This is especially critical when multiple analytes and EX.EXTRT instances</span></span>
-<span>    DRUG <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/case_when.html" class="external-link">case_when</a></span><span class="op">(</span></span>
+<span>    DRUG <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/case-and-replace-when.html" class="external-link">case_when</a></span><span class="op">(</span></span>
 <span>      <span class="fu"><a href="https://rdrr.io/r/base/chartr.html" class="external-link">toupper</a></span><span class="op">(</span><span class="va">ADAPARM</span><span class="op">)</span> <span class="op">==</span> <span class="st">"XANOMELINE"</span> <span class="op">~</span> <span class="st">"XANOMELINE"</span>,</span>
 <span>      <span class="fu"><a href="https://rdrr.io/r/base/chartr.html" class="external-link">toupper</a></span><span class="op">(</span><span class="va">ADAPARM</span><span class="op">)</span> <span class="op">==</span> <span class="st">"OTHER_DRUG"</span> <span class="op">~</span> <span class="st">"OTHER_DRUG"</span>,</span>
 <span>      <span class="cn">TRUE</span> <span class="op">~</span> <span class="cn">NA_character_</span></span>
@@ -345,7 +346,7 @@ time. User would add custom code for this.</p>
 <span>    set_values_to_na <span class="op">=</span> <span class="fu"><a href="https://stringr.tidyverse.org/reference/str_detect.html" class="external-link">str_detect</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/chartr.html" class="external-link">toupper</a></span><span class="op">(</span><span class="va">VISIT</span><span class="op">)</span>, <span class="st">"UNSCHED"</span><span class="op">)</span> <span class="op">|</span> <span class="fu"><a href="https://stringr.tidyverse.org/reference/str_detect.html" class="external-link">str_detect</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/chartr.html" class="external-link">toupper</a></span><span class="op">(</span><span class="va">VISIT</span><span class="op">)</span>, <span class="st">"TREATMENT DISC"</span><span class="op">)</span></span>
 <span>  <span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span></span>
-<span>    NFRLT <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/case_when.html" class="external-link">case_when</a></span><span class="op">(</span></span>
+<span>    NFRLT <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/case-and-replace-when.html" class="external-link">case_when</a></span><span class="op">(</span></span>
 <span>      <span class="fu"><a href="https://stringr.tidyverse.org/reference/str_detect.html" class="external-link">str_detect</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/chartr.html" class="external-link">toupper</a></span><span class="op">(</span><span class="va">VISIT</span><span class="op">)</span>, <span class="st">"TREATMENT DISC"</span><span class="op">)</span> <span class="op">~</span> <span class="fl">99997</span>,</span>
 <span>      <span class="fu"><a href="https://stringr.tidyverse.org/reference/str_detect.html" class="external-link">str_detect</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/chartr.html" class="external-link">toupper</a></span><span class="op">(</span><span class="va">VISIT</span><span class="op">)</span>, <span class="st">"UNSCHED"</span><span class="op">)</span> <span class="op">~</span> <span class="fl">99999</span>,</span>
 <span>      <span class="cn">TRUE</span> <span class="op">~</span> <span class="va">NFRLT</span></span>
@@ -413,7 +414,7 @@ create date part variables using
 <span>    <span class="co"># This will be used to merge first dose into IS working data.</span></span>
 <span>    <span class="co"># PLACEBO example is for if/when ADA was also collected on Placebo subjects</span></span>
 <span>    <span class="co"># or treatments are scrambled prior to database lock.</span></span>
-<span>    DRUG <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/case_when.html" class="external-link">case_when</a></span><span class="op">(</span></span>
+<span>    DRUG <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/case-and-replace-when.html" class="external-link">case_when</a></span><span class="op">(</span></span>
 <span>      <span class="fu"><a href="https://stringr.tidyverse.org/reference/str_detect.html" class="external-link">str_detect</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/chartr.html" class="external-link">toupper</a></span><span class="op">(</span><span class="va">EXTRT</span><span class="op">)</span>, <span class="st">"XANOMELINE"</span><span class="op">)</span> <span class="op">~</span> <span class="st">"XANOMELINE"</span>,</span>
 <span>      <span class="fu"><a href="https://stringr.tidyverse.org/reference/str_detect.html" class="external-link">str_detect</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/chartr.html" class="external-link">toupper</a></span><span class="op">(</span><span class="va">EXTRT</span><span class="op">)</span>, <span class="st">"PLACEBO"</span><span class="op">)</span> <span class="op">~</span> <span class="st">"XANOMELINE"</span>,</span>
 <span>      <span class="fu"><a href="https://stringr.tidyverse.org/reference/str_detect.html" class="external-link">str_detect</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/chartr.html" class="external-link">toupper</a></span><span class="op">(</span><span class="va">EXTRT</span><span class="op">)</span>, <span class="st">"OTHER_DRUG"</span><span class="op">)</span> <span class="op">~</span> <span class="st">"OTHER_DRUG"</span>,</span>
@@ -537,17 +538,17 @@ assignments in this step accordingly.</p>
 <span></span>
 <span><span class="va">is_aval</span> <span class="op">&lt;-</span> <span class="va">is_basetype</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span></span>
-<span>    MRT <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/case_when.html" class="external-link">case_when</a></span><span class="op">(</span></span>
+<span>    MRT <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/case-and-replace-when.html" class="external-link">case_when</a></span><span class="op">(</span></span>
 <span>      <span class="va">ADATYPE</span> <span class="op">==</span> <span class="st">"ADA_BAB"</span> <span class="op">&amp;</span> <span class="va">ADAPARM</span> <span class="op">==</span> <span class="st">"XANOMELINE"</span> <span class="op">~</span> <span class="fl">1.4</span>,</span>
 <span>      <span class="va">ADATYPE</span> <span class="op">==</span> <span class="st">"ADA_BAB"</span> <span class="op">&amp;</span> <span class="va">ADAPARM</span> <span class="op">==</span> <span class="st">"OTHER_DRUG"</span> <span class="op">~</span> <span class="fl">9.9</span>,</span>
 <span>      <span class="cn">TRUE</span> <span class="op">~</span> <span class="cn">NA_real_</span></span>
 <span>    <span class="op">)</span>,</span>
-<span>    DTL <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/case_when.html" class="external-link">case_when</a></span><span class="op">(</span></span>
+<span>    DTL <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/case-and-replace-when.html" class="external-link">case_when</a></span><span class="op">(</span></span>
 <span>      <span class="va">ADATYPE</span> <span class="op">==</span> <span class="st">"ADA_BAB"</span> <span class="op">&amp;</span> <span class="va">ADAPARM</span> <span class="op">==</span> <span class="st">"XANOMELINE"</span> <span class="op">~</span> <span class="fl">999</span>,</span>
 <span>      <span class="va">ADATYPE</span> <span class="op">==</span> <span class="st">"ADA_BAB"</span> <span class="op">&amp;</span> <span class="va">ADAPARM</span> <span class="op">==</span> <span class="st">"OTHER_DRUG"</span> <span class="op">~</span> <span class="fl">888</span>,</span>
 <span>      <span class="cn">TRUE</span> <span class="op">~</span> <span class="cn">NA_real_</span></span>
 <span>    <span class="op">)</span>,</span>
-<span>    RESULTC <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/case_when.html" class="external-link">case_when</a></span><span class="op">(</span></span>
+<span>    RESULTC <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/case-and-replace-when.html" class="external-link">case_when</a></span><span class="op">(</span></span>
 <span>      <span class="fu"><a href="https://rdrr.io/r/base/chartr.html" class="external-link">toupper</a></span><span class="op">(</span><span class="va">ISSTRESC</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span>
 <span>        <span class="st">"NEGATIVE"</span>, <span class="st">"NEGATIVE SCREEN"</span>, <span class="st">"NEGATIVE IMMUNODEPLETION"</span>,</span>
 <span>        <span class="st">"NEGATIVE CONFIRMATION"</span></span>
@@ -559,29 +560,29 @@ assignments in this step accordingly.</p>
 <span>      <span class="va">ISSTRESN</span> <span class="op">&gt;</span> <span class="fl">0</span> <span class="op">~</span> <span class="st">"POSITIVE"</span>,</span>
 <span>      <span class="cn">TRUE</span> <span class="op">~</span> <span class="cn">NA_character_</span></span>
 <span>    <span class="op">)</span>,</span>
-<span>    RESULTN <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/case_when.html" class="external-link">case_when</a></span><span class="op">(</span></span>
+<span>    RESULTN <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/case-and-replace-when.html" class="external-link">case_when</a></span><span class="op">(</span></span>
 <span>      <span class="fu"><a href="https://rdrr.io/r/base/chartr.html" class="external-link">toupper</a></span><span class="op">(</span><span class="va">RESULTC</span><span class="op">)</span> <span class="op">==</span> <span class="st">"POSITIVE"</span> <span class="op">~</span> <span class="fl">1</span>,</span>
 <span>      <span class="fu"><a href="https://rdrr.io/r/base/chartr.html" class="external-link">toupper</a></span><span class="op">(</span><span class="va">RESULTC</span><span class="op">)</span> <span class="op">==</span> <span class="st">"NEGATIVE"</span> <span class="op">~</span> <span class="fl">0</span>,</span>
 <span>      <span class="cn">TRUE</span> <span class="op">~</span> <span class="cn">NA_integer_</span></span>
 <span>    <span class="op">)</span>,</span>
-<span>    AVAL <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/case_when.html" class="external-link">case_when</a></span><span class="op">(</span></span>
+<span>    AVAL <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/case-and-replace-when.html" class="external-link">case_when</a></span><span class="op">(</span></span>
 <span>      <span class="va">ADATYPE</span> <span class="op">==</span> <span class="st">"ADA_BAB"</span> <span class="op">&amp;</span> <span class="fu"><a href="https://rdrr.io/r/base/chartr.html" class="external-link">toupper</a></span><span class="op">(</span><span class="va">RESULTC</span><span class="op">)</span> <span class="op">==</span> <span class="st">"POSITIVE"</span> <span class="op">&amp;</span> <span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">ISSTRESN</span><span class="op">)</span> <span class="op">~</span> <span class="va">ISSTRESN</span>,</span>
 <span>      <span class="va">ADATYPE</span> <span class="op">==</span> <span class="st">"ADA_BAB"</span> <span class="op">&amp;</span> <span class="fu"><a href="https://rdrr.io/r/base/chartr.html" class="external-link">toupper</a></span><span class="op">(</span><span class="va">RESULTC</span><span class="op">)</span> <span class="op">==</span> <span class="st">"POSITIVE"</span> <span class="op">&amp;</span> <span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">ISSTRESN</span><span class="op">)</span> <span class="op">&amp;</span> <span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">MRT</span><span class="op">)</span> <span class="op">~</span> <span class="va">MRT</span>,</span>
 <span>      <span class="cn">TRUE</span> <span class="op">~</span> <span class="cn">NA_real_</span></span>
 <span>    <span class="op">)</span>,</span>
-<span>    AVALC <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/case_when.html" class="external-link">case_when</a></span><span class="op">(</span></span>
+<span>    AVALC <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/case-and-replace-when.html" class="external-link">case_when</a></span><span class="op">(</span></span>
 <span>      <span class="co"># NABSTAT gets ISSTRESC, Standard ADA is set to NA as AVAL are numeric original results</span></span>
 <span>      <span class="va">ADATYPE</span> <span class="op">==</span> <span class="st">"ADA_NAB"</span> <span class="op">~</span> <span class="va">ISSTRESC</span>,</span>
 <span>      <span class="cn">TRUE</span> <span class="op">~</span> <span class="cn">NA_character_</span></span>
 <span>    <span class="op">)</span>,</span>
-<span>    AVALU <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/case_when.html" class="external-link">case_when</a></span><span class="op">(</span></span>
+<span>    AVALU <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/case-and-replace-when.html" class="external-link">case_when</a></span><span class="op">(</span></span>
 <span>      <span class="va">ADATYPE</span> <span class="op">==</span> <span class="st">"ADA_NAB"</span> <span class="op">~</span> <span class="va">ISSTRESU</span>,</span>
 <span>      <span class="va">ADATYPE</span> <span class="op">==</span> <span class="st">"ADA_BAB"</span> <span class="op">&amp;</span> <span class="fu"><a href="https://rdrr.io/r/base/chartr.html" class="external-link">toupper</a></span><span class="op">(</span><span class="va">RESULTC</span><span class="op">)</span> <span class="op">==</span> <span class="st">"POSITIVE"</span> <span class="op">&amp;</span> <span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">ISSTRESN</span><span class="op">)</span> <span class="op">~</span> <span class="va">ISSTRESU</span>,</span>
 <span>      <span class="va">ADATYPE</span> <span class="op">==</span> <span class="st">"ADA_BAB"</span> <span class="op">&amp;</span> <span class="fu"><a href="https://rdrr.io/r/base/chartr.html" class="external-link">toupper</a></span><span class="op">(</span><span class="va">RESULTC</span><span class="op">)</span> <span class="op">==</span> <span class="st">"POSITIVE"</span> <span class="op">&amp;</span> <span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">ISSTRESN</span><span class="op">)</span> <span class="op">&amp;</span> <span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">MRT</span><span class="op">)</span></span>
 <span>      <span class="op">~</span> <span class="st">"titer"</span>,</span>
 <span>      <span class="cn">TRUE</span> <span class="op">~</span> <span class="cn">NA_character_</span></span>
 <span>    <span class="op">)</span>,</span>
-<span>    DTYPE <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/case_when.html" class="external-link">case_when</a></span><span class="op">(</span></span>
+<span>    DTYPE <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/case-and-replace-when.html" class="external-link">case_when</a></span><span class="op">(</span></span>
 <span>      <span class="va">ADATYPE</span> <span class="op">==</span> <span class="st">"ADA_BAB"</span> <span class="op">&amp;</span> <span class="fu"><a href="https://rdrr.io/r/base/chartr.html" class="external-link">toupper</a></span><span class="op">(</span><span class="va">RESULTC</span><span class="op">)</span> <span class="op">==</span> <span class="st">"POSITIVE"</span> <span class="op">&amp;</span> <span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">ISSTRESN</span><span class="op">)</span> <span class="op">&amp;</span> <span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">MRT</span><span class="op">)</span> <span class="op">~</span> <span class="st">"MRT"</span>,</span>
 <span>      <span class="cn">TRUE</span> <span class="op">~</span> <span class="cn">NA_character_</span></span>
 <span>    <span class="op">)</span></span>
@@ -628,12 +629,12 @@ requires post-baseline to not have missing values.</p>
 <span>    <span class="co">#   Note: VALIDBASE is not used as this template allows a baseline to be valid as</span></span>
 <span>    <span class="co">#        as long as its present (can be missing), adapt as needed.</span></span>
 <span>    <span class="co"># VALIDPOST flags non-missing values on post-baseline (by each ADATYPE and ADAPARM)</span></span>
-<span>    VALIDBASE <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/case_when.html" class="external-link">case_when</a></span><span class="op">(</span></span>
+<span>    VALIDBASE <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/case-and-replace-when.html" class="external-link">case_when</a></span><span class="op">(</span></span>
 <span>      <span class="va">ABLFL</span> <span class="op">==</span> <span class="st">"Y"</span> <span class="op">&amp;</span> <span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">AVALC</span><span class="op">)</span> <span class="op">|</span> <span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">RESULTC</span><span class="op">)</span> <span class="op">|</span> <span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">AVAL</span><span class="op">)</span><span class="op">)</span> <span class="op">~</span> <span class="st">"Y"</span>,</span>
 <span>      <span class="va">ABLFL</span> <span class="op">==</span> <span class="st">"Y"</span> <span class="op">&amp;</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">AVALC</span><span class="op">)</span> <span class="op">&amp;</span> <span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">RESULTC</span><span class="op">)</span> <span class="op">&amp;</span> <span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">AVAL</span><span class="op">)</span><span class="op">)</span> <span class="op">~</span> <span class="st">"N"</span>,</span>
 <span>      <span class="cn">TRUE</span> <span class="op">~</span> <span class="cn">NA_character_</span></span>
 <span>    <span class="op">)</span>,</span>
-<span>    VALIDPOST <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/case_when.html" class="external-link">case_when</a></span><span class="op">(</span></span>
+<span>    VALIDPOST <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/case-and-replace-when.html" class="external-link">case_when</a></span><span class="op">(</span></span>
 <span>      <span class="va">ADTM</span> <span class="op">&gt;</span> <span class="va">FANLDTM</span> <span class="op">&amp;</span> <span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">ABLFL</span><span class="op">)</span> <span class="op">&amp;</span> <span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">RESULTC</span><span class="op">)</span> <span class="op">|</span> <span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">AVAL</span><span class="op">)</span><span class="op">)</span> <span class="op">~</span> <span class="st">"Y"</span>,</span>
 <span>      <span class="va">ADTM</span> <span class="op">&gt;</span> <span class="va">FANLDTM</span> <span class="op">&amp;</span> <span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">ABLFL</span><span class="op">)</span> <span class="op">&amp;</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">RESULTC</span><span class="op">)</span> <span class="op">&amp;</span> <span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">AVAL</span><span class="op">)</span><span class="op">)</span> <span class="op">~</span> <span class="st">"N"</span>,</span>
 <span>      <span class="cn">TRUE</span> <span class="op">~</span> <span class="cn">NA_character_</span></span>
@@ -740,7 +741,7 @@ Baseline &lt; 0.60</p>
 <span><span class="co"># Calculate the By Visit parameters</span></span>
 <span><span class="va">is_visit_flags</span> <span class="op">&lt;-</span> <span class="va">is_result_change</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span></span>
-<span>    TFLAGV <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/case_when.html" class="external-link">case_when</a></span><span class="op">(</span></span>
+<span>    TFLAGV <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/case-and-replace-when.html" class="external-link">case_when</a></span><span class="op">(</span></span>
 <span>      <span class="va">VALIDPOST</span> <span class="op">==</span> <span class="st">"Y"</span> <span class="op">&amp;</span> <span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">ABLFL</span><span class="op">)</span> <span class="op">&amp;</span> <span class="va">ADATYPE</span> <span class="op">==</span> <span class="st">"ADA_BAB"</span> <span class="op">&amp;</span> <span class="op">(</span><span class="va">BASE_RESULT</span> <span class="op">==</span> <span class="fl">1</span> <span class="op">&amp;</span> <span class="op">(</span><span class="va">CHG</span> <span class="op">&gt;=</span> <span class="fl">0.6</span><span class="op">)</span><span class="op">)</span></span>
 <span>      <span class="op">~</span> <span class="fl">2</span>,</span>
 <span>      <span class="va">VALIDPOST</span> <span class="op">==</span> <span class="st">"Y"</span> <span class="op">&amp;</span> <span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">ABLFL</span><span class="op">)</span> <span class="op">&amp;</span> <span class="va">ADATYPE</span> <span class="op">==</span> <span class="st">"ADA_BAB"</span> <span class="op">&amp;</span> <span class="va">BASE_RESULT</span> <span class="op">==</span> <span class="fl">1</span> <span class="op">&amp;</span></span>
@@ -751,12 +752,12 @@ Baseline &lt; 0.60</p>
 <span>        <span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">BASE_RESULT</span><span class="op">)</span><span class="op">)</span> <span class="op">&amp;</span> <span class="va">RESULTN</span> <span class="op">==</span> <span class="fl">1</span><span class="op">)</span> <span class="op">~</span> <span class="fl">1</span>,</span>
 <span>      <span class="cn">TRUE</span> <span class="op">~</span> <span class="cn">NA_integer_</span></span>
 <span>    <span class="op">)</span>,</span>
-<span>    PBFLAGV <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/case_when.html" class="external-link">case_when</a></span><span class="op">(</span></span>
+<span>    PBFLAGV <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/case-and-replace-when.html" class="external-link">case_when</a></span><span class="op">(</span></span>
 <span>      <span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">TFLAGV</span><span class="op">)</span> <span class="op">&amp;</span> <span class="va">TFLAGV</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">2</span><span class="op">)</span> <span class="op">~</span> <span class="fl">1</span>,</span>
 <span>      <span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">TFLAGV</span><span class="op">)</span> <span class="op">&amp;</span> <span class="va">TFLAGV</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">3</span><span class="op">)</span> <span class="op">~</span> <span class="fl">0</span>,</span>
 <span>      <span class="cn">TRUE</span> <span class="op">~</span> <span class="cn">NA_integer_</span></span>
 <span>    <span class="op">)</span>,</span>
-<span>    ADASTATV <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/case_when.html" class="external-link">case_when</a></span><span class="op">(</span></span>
+<span>    ADASTATV <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/case-and-replace-when.html" class="external-link">case_when</a></span><span class="op">(</span></span>
 <span>      <span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">PBFLAGV</span><span class="op">)</span> <span class="op">&amp;</span> <span class="va">PBFLAGV</span> <span class="op">==</span> <span class="fl">1</span> <span class="op">~</span> <span class="st">"ADA+"</span>,</span>
 <span>      <span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">PBFLAGV</span><span class="op">)</span> <span class="op">&amp;</span> <span class="va">PBFLAGV</span> <span class="op">==</span> <span class="fl">0</span> <span class="op">~</span> <span class="st">"ADA-"</span>,</span>
 <span>      <span class="va">VALIDPOST</span> <span class="op">==</span> <span class="st">"Y"</span> <span class="op">&amp;</span> <span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">ABLFL</span><span class="op">)</span> <span class="op">&amp;</span> <span class="va">ADATYPE</span> <span class="op">==</span> <span class="st">"ADA_BAB"</span> <span class="op">&amp;</span> <span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">PBFLAGV</span><span class="op">)</span> <span class="op">~</span> <span class="st">"MISSING"</span>,</span>
@@ -826,13 +827,13 @@ Baseline &lt; 0.60</p>
 <span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span></span>
 <span>    BFLAG <span class="op">=</span></span>
-<span>      <span class="fu"><a href="https://dplyr.tidyverse.org/reference/case_when.html" class="external-link">case_when</a></span><span class="op">(</span></span>
+<span>      <span class="fu"><a href="https://dplyr.tidyverse.org/reference/case-and-replace-when.html" class="external-link">case_when</a></span><span class="op">(</span></span>
 <span>        <span class="va">BASE_RESULT</span> <span class="op">==</span> <span class="fl">0</span> <span class="op">~</span> <span class="fl">0</span>,</span>
 <span>        <span class="va">BASE_RESULT</span> <span class="op">==</span> <span class="fl">1</span> <span class="op">~</span> <span class="fl">1</span>,</span>
 <span>        <span class="cn">TRUE</span> <span class="op">~</span> <span class="cn">NA_integer_</span></span>
 <span>      <span class="op">)</span>,</span>
 <span>    TFLAG <span class="op">=</span></span>
-<span>      <span class="fu"><a href="https://dplyr.tidyverse.org/reference/case_when.html" class="external-link">case_when</a></span><span class="op">(</span></span>
+<span>      <span class="fu"><a href="https://dplyr.tidyverse.org/reference/case-and-replace-when.html" class="external-link">case_when</a></span><span class="op">(</span></span>
 <span>        <span class="op">(</span><span class="va">BFLAG</span> <span class="op">==</span> <span class="fl">0</span> <span class="op">|</span> <span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">BFLAG</span><span class="op">)</span><span class="op">)</span> <span class="op">&amp;</span> <span class="va">RESULT_P</span> <span class="op">==</span> <span class="fl">0</span> <span class="op">~</span> <span class="fl">0</span>,</span>
 <span>        <span class="op">(</span><span class="va">BFLAG</span> <span class="op">==</span> <span class="fl">0</span> <span class="op">|</span> <span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">BFLAG</span><span class="op">)</span><span class="op">)</span> <span class="op">&amp;</span> <span class="va">RESULT_P</span> <span class="op">==</span> <span class="fl">1</span> <span class="op">~</span> <span class="fl">1</span>,</span>
 <span>        <span class="va">BFLAG</span> <span class="op">==</span> <span class="fl">1</span> <span class="op">&amp;</span> <span class="op">(</span><span class="va">MAXCHG</span> <span class="op">&gt;=</span> <span class="fl">0.6</span><span class="op">)</span> <span class="op">~</span> <span class="fl">2</span>,</span>
@@ -841,14 +842,14 @@ Baseline &lt; 0.60</p>
 <span>        <span class="cn">TRUE</span> <span class="op">~</span> <span class="cn">NA_integer_</span></span>
 <span>      <span class="op">)</span>,</span>
 <span>    PBFLAG <span class="op">=</span></span>
-<span>      <span class="fu"><a href="https://dplyr.tidyverse.org/reference/case_when.html" class="external-link">case_when</a></span><span class="op">(</span></span>
+<span>      <span class="fu"><a href="https://dplyr.tidyverse.org/reference/case-and-replace-when.html" class="external-link">case_when</a></span><span class="op">(</span></span>
 <span>        <span class="va">ADATYPE</span> <span class="op">==</span> <span class="st">"ADA_BAB"</span> <span class="op">&amp;</span> <span class="op">(</span><span class="va">TFLAG</span> <span class="op">==</span> <span class="fl">1</span> <span class="op">|</span> <span class="va">TFLAG</span> <span class="op">==</span> <span class="fl">2</span><span class="op">)</span> <span class="op">~</span> <span class="fl">1</span>,</span>
 <span>        <span class="va">ADATYPE</span> <span class="op">==</span> <span class="st">"ADA_BAB"</span> <span class="op">&amp;</span> <span class="op">(</span><span class="va">TFLAG</span> <span class="op">==</span> <span class="fl">0</span> <span class="op">|</span> <span class="va">TFLAG</span> <span class="op">==</span> <span class="fl">3</span><span class="op">)</span> <span class="op">~</span> <span class="fl">0</span>,</span>
 <span>        <span class="va">ADATYPE</span> <span class="op">==</span> <span class="st">"ADA_NAB"</span> <span class="op">&amp;</span> <span class="va">RESULT_P</span> <span class="op">==</span> <span class="fl">0</span> <span class="op">~</span> <span class="fl">0</span>,</span>
 <span>        <span class="va">ADATYPE</span> <span class="op">==</span> <span class="st">"ADA_NAB"</span> <span class="op">&amp;</span> <span class="va">RESULT_P</span> <span class="op">==</span> <span class="fl">1</span> <span class="op">~</span> <span class="fl">1</span>,</span>
 <span>        <span class="cn">TRUE</span> <span class="op">~</span> <span class="cn">NA_integer_</span></span>
 <span>      <span class="op">)</span>,</span>
-<span>    ADASTAT <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/case_when.html" class="external-link">case_when</a></span><span class="op">(</span></span>
+<span>    ADASTAT <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/case-and-replace-when.html" class="external-link">case_when</a></span><span class="op">(</span></span>
 <span>      <span class="va">ADATYPE</span> <span class="op">==</span> <span class="st">"ADA_BAB"</span> <span class="op">&amp;</span> <span class="va">PBFLAG</span> <span class="op">==</span> <span class="fl">1</span> <span class="op">~</span> <span class="fl">1</span>,</span>
 <span>      <span class="va">ADATYPE</span> <span class="op">==</span> <span class="st">"ADA_BAB"</span> <span class="op">&amp;</span> <span class="va">PBFLAG</span> <span class="op">==</span> <span class="fl">0</span> <span class="op">~</span> <span class="fl">0</span>,</span>
 <span>      <span class="cn">TRUE</span> <span class="op">~</span> <span class="cn">NA_integer_</span></span>
@@ -893,14 +894,14 @@ is set to either NA or “MISSING” as desired.</p>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span></span>
 <span>    <span class="co"># For Option 1, if any post baseline NAB were blank without a Positive (NABPOSTMISS = Y),</span></span>
 <span>    <span class="co"># NABSTAT = missing</span></span>
-<span>    nabstat_opt1 <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/case_when.html" class="external-link">case_when</a></span><span class="op">(</span></span>
+<span>    nabstat_opt1 <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/case-and-replace-when.html" class="external-link">case_when</a></span><span class="op">(</span></span>
 <span>      <span class="co"># Based on ADASTAT (EMERNEG/EMERPOS) and NAB results</span></span>
 <span>      <span class="va">ADATYPE</span> <span class="op">==</span> <span class="st">"ADA_NAB"</span> <span class="op">&amp;</span> <span class="va">ADASTAT_MAIN</span> <span class="op">==</span> <span class="fl">1</span> <span class="op">&amp;</span> <span class="va">RESULT_P</span> <span class="op">==</span> <span class="fl">1</span> <span class="op">~</span> <span class="fl">1</span>,</span>
 <span>      <span class="va">ADATYPE</span> <span class="op">==</span> <span class="st">"ADA_NAB"</span> <span class="op">&amp;</span> <span class="va">ADASTAT_MAIN</span> <span class="op">==</span> <span class="fl">1</span> <span class="op">&amp;</span> <span class="va">RESULT_P</span> <span class="op">==</span> <span class="fl">0</span> <span class="op">&amp;</span></span>
 <span>        <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">NABPOSTMISS</span><span class="op">)</span> <span class="op">|</span> <span class="va">NABPOSTMISS</span> <span class="op">==</span> <span class="st">"N"</span><span class="op">)</span> <span class="op">~</span> <span class="fl">0</span>,</span>
 <span>      <span class="cn">TRUE</span> <span class="op">~</span> <span class="cn">NA_integer_</span></span>
 <span>    <span class="op">)</span>,</span>
-<span>    nabstat_opt2 <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/case_when.html" class="external-link">case_when</a></span><span class="op">(</span></span>
+<span>    nabstat_opt2 <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/case-and-replace-when.html" class="external-link">case_when</a></span><span class="op">(</span></span>
 <span>      <span class="co"># Based on ADASTAT (EMERNEG/EMERPOS) Only.</span></span>
 <span>      <span class="va">ADATYPE</span> <span class="op">==</span> <span class="st">"ADA_NAB"</span> <span class="op">&amp;</span> <span class="va">ADASTAT_MAIN</span> <span class="op">==</span> <span class="fl">1</span> <span class="op">~</span> <span class="fl">1</span>,</span>
 <span>      <span class="va">ADATYPE</span> <span class="op">==</span> <span class="st">"ADA_NAB"</span> <span class="op">&amp;</span> <span class="va">ADASTAT_MAIN</span> <span class="op">==</span> <span class="fl">0</span> <span class="op">~</span> <span class="fl">0</span>,</span>
@@ -1023,7 +1024,7 @@ post-baseline result</td>
 <span>  <span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">ungroup</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span></span>
-<span>    LFLAGPOS <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/case_when.html" class="external-link">case_when</a></span><span class="op">(</span></span>
+<span>    LFLAGPOS <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/case-and-replace-when.html" class="external-link">case_when</a></span><span class="op">(</span></span>
 <span>      <span class="va">ADTM</span> <span class="op">==</span> <span class="va">MaxADTM</span> <span class="op">&amp;</span> <span class="op">(</span><span class="va">TFLAGV</span> <span class="op">==</span> <span class="fl">1</span><span class="op">)</span> <span class="op">~</span> <span class="fl">1</span>,</span>
 <span>      <span class="va">ADTM</span> <span class="op">==</span> <span class="va">MaxADTM</span> <span class="op">&amp;</span> <span class="op">(</span><span class="va">TFLAGV</span> <span class="op">==</span> <span class="fl">2</span><span class="op">)</span> <span class="op">~</span> <span class="fl">1</span>,</span>
 <span>      <span class="cn">TRUE</span> <span class="op">~</span> <span class="cn">NA_integer_</span></span>
@@ -1072,7 +1073,7 @@ post-baseline result</td>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span></span>
 <span>    FPPDT <span class="op">=</span> <span class="fu"><a href="https://lubridate.tidyverse.org/reference/as_date.html" class="external-link">as_date</a></span><span class="op">(</span><span class="va">FPPDTM</span><span class="op">)</span>,</span>
 <span>    LPPDT <span class="op">=</span> <span class="fu"><a href="https://lubridate.tidyverse.org/reference/as_date.html" class="external-link">as_date</a></span><span class="op">(</span><span class="va">LPPDTM</span><span class="op">)</span>,</span>
-<span>    ADADUR <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/case_when.html" class="external-link">case_when</a></span><span class="op">(</span></span>
+<span>    ADADUR <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/case-and-replace-when.html" class="external-link">case_when</a></span><span class="op">(</span></span>
 <span>      <span class="va">LPPDTM</span> <span class="op">-</span> <span class="va">FPPDTM</span> <span class="op">==</span> <span class="fl">0</span> <span class="op">&amp;</span> <span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">LPPDTM</span><span class="op">)</span> <span class="op">&amp;</span> <span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">FPPDTM</span><span class="op">)</span><span class="op">)</span> <span class="op">~</span> <span class="fl">1</span> <span class="op">/</span> <span class="fl">7</span>,</span>
 <span>      <span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">LPPDTM</span><span class="op">)</span> <span class="op">&amp;</span> <span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">FPPDTM</span><span class="op">)</span></span>
 <span>      <span class="op">~</span> <span class="op">(</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/numeric.html" class="external-link">as.numeric</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/difftime.html" class="external-link">difftime</a></span><span class="op">(</span><span class="va">LPPDTM</span>, <span class="va">FPPDTM</span>, units <span class="op">=</span> <span class="st">"secs"</span><span class="op">)</span><span class="op">)</span> <span class="op">/</span> <span class="op">(</span><span class="fl">60</span> <span class="op">*</span> <span class="fl">60</span> <span class="op">*</span> <span class="fl">24</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> <span class="fl">1</span><span class="op">)</span> <span class="op">/</span> <span class="fl">7</span>,</span>
@@ -1080,42 +1081,42 @@ post-baseline result</td>
 <span>      <span class="op">~</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/numeric.html" class="external-link">as.numeric</a></span><span class="op">(</span><span class="va">LPPDT</span> <span class="op">-</span> <span class="va">FPPDT</span><span class="op">)</span> <span class="op">+</span> <span class="fl">1</span><span class="op">)</span> <span class="op">/</span> <span class="fl">7</span>,</span>
 <span>      <span class="cn">TRUE</span> <span class="op">~</span> <span class="cn">NA_real_</span></span>
 <span>    <span class="op">)</span>,</span>
-<span>    TIMADA <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/case_when.html" class="external-link">case_when</a></span><span class="op">(</span></span>
+<span>    TIMADA <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/case-and-replace-when.html" class="external-link">case_when</a></span><span class="op">(</span></span>
 <span>      <span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">FPPDTM</span><span class="op">)</span> <span class="op">&amp;</span> <span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">FANLDTM</span><span class="op">)</span> <span class="op">~</span> <span class="fu"><a href="https://rdrr.io/r/base/numeric.html" class="external-link">as.numeric</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/difftime.html" class="external-link">difftime</a></span><span class="op">(</span><span class="va">FPPDTM</span>, <span class="va">FANLDTM</span>, units <span class="op">=</span> <span class="st">"weeks"</span><span class="op">)</span><span class="op">)</span>,</span>
 <span>      <span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">FPPDT</span><span class="op">)</span> <span class="op">&amp;</span> <span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">FANLDT</span><span class="op">)</span> <span class="op">~</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/numeric.html" class="external-link">as.numeric</a></span><span class="op">(</span><span class="va">FPPDT</span> <span class="op">-</span> <span class="va">FANLDT</span><span class="op">)</span> <span class="op">+</span> <span class="fl">1</span><span class="op">)</span> <span class="op">/</span> <span class="fl">7</span>,</span>
 <span>      <span class="cn">TRUE</span> <span class="op">~</span> <span class="cn">NA_real_</span></span>
 <span>    <span class="op">)</span>,</span>
-<span>    tdur <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/case_when.html" class="external-link">case_when</a></span><span class="op">(</span></span>
+<span>    tdur <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/case-and-replace-when.html" class="external-link">case_when</a></span><span class="op">(</span></span>
 <span>      <span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">LPPDTM</span><span class="op">)</span> <span class="op">&amp;</span> <span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">FPPDTM</span><span class="op">)</span> <span class="op">~</span></span>
 <span>        <span class="fu"><a href="https://rdrr.io/r/base/numeric.html" class="external-link">as.numeric</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/difftime.html" class="external-link">difftime</a></span><span class="op">(</span><span class="va">LPPDTM</span>, <span class="va">FPPDTM</span>, units <span class="op">=</span> <span class="st">"secs"</span><span class="op">)</span><span class="op">)</span> <span class="op">/</span> <span class="op">(</span><span class="fl">7</span> <span class="op">*</span> <span class="fl">3600</span> <span class="op">*</span> <span class="fl">24</span><span class="op">)</span>,</span>
 <span>      <span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">LPPDT</span><span class="op">)</span> <span class="op">&amp;</span> <span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">FPPDT</span><span class="op">)</span> <span class="op">~</span> <span class="fu"><a href="https://rdrr.io/r/base/numeric.html" class="external-link">as.numeric</a></span><span class="op">(</span><span class="va">LPPDT</span> <span class="op">-</span> <span class="va">FPPDT</span> <span class="op">+</span> <span class="fl">1</span><span class="op">)</span> <span class="op">/</span> <span class="fl">7</span>,</span>
 <span>      <span class="cn">TRUE</span> <span class="op">~</span> <span class="cn">NA_real_</span></span>
 <span>    <span class="op">)</span>,</span>
 <span>    <span class="co"># Standard TRANADA and PERSADA based on TFLAGV = 1 (Induced)</span></span>
-<span>    TRANADA <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/case_when.html" class="external-link">case_when</a></span><span class="op">(</span></span>
+<span>    TRANADA <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/case-and-replace-when.html" class="external-link">case_when</a></span><span class="op">(</span></span>
 <span>      <span class="va">TFLAGV</span> <span class="op">==</span> <span class="fl">1</span> <span class="op">&amp;</span> <span class="op">(</span><span class="op">(</span><span class="va">COUNT_EXC_LAST</span> <span class="op">==</span> <span class="fl">1</span> <span class="op">|</span> <span class="op">(</span><span class="va">COUNT_INC_LAST</span> <span class="op">&gt;=</span> <span class="fl">2</span> <span class="op">&amp;</span> <span class="va">tdur</span> <span class="op">&lt;</span> <span class="fl">16</span><span class="op">)</span><span class="op">)</span> <span class="op">&amp;</span> <span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">LFLAGPOS</span><span class="op">)</span><span class="op">)</span> <span class="op">~</span> <span class="fl">1</span>,</span>
 <span>      <span class="cn">TRUE</span> <span class="op">~</span> <span class="cn">NA_integer_</span></span>
 <span>    <span class="op">)</span>,</span>
-<span>    PERSADA <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/case_when.html" class="external-link">case_when</a></span><span class="op">(</span></span>
+<span>    PERSADA <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/case-and-replace-when.html" class="external-link">case_when</a></span><span class="op">(</span></span>
 <span>      <span class="va">TFLAGV</span> <span class="op">==</span> <span class="fl">1</span> <span class="op">&amp;</span> <span class="op">(</span><span class="va">COUNT_INC_LAST</span> <span class="op">==</span> <span class="fl">1</span> <span class="op">&amp;</span> <span class="op">(</span><span class="va">COUNT_EXC_LAST</span> <span class="op">&lt;=</span> <span class="fl">0</span> <span class="op">|</span> <span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">COUNT_EXC_LAST</span><span class="op">)</span><span class="op">)</span> <span class="op">|</span></span>
 <span>        <span class="op">(</span><span class="va">COUNT_INC_LAST</span> <span class="op">&gt;=</span> <span class="fl">2</span> <span class="op">&amp;</span> <span class="va">tdur</span> <span class="op">&gt;=</span> <span class="fl">16</span><span class="op">)</span> <span class="op">|</span> <span class="va">LFLAGPOS</span> <span class="op">==</span> <span class="fl">1</span><span class="op">)</span> <span class="op">~</span> <span class="fl">1</span>,</span>
 <span>      <span class="cn">TRUE</span> <span class="op">~</span> <span class="cn">NA_integer_</span></span>
 <span>    <span class="op">)</span>,</span>
 <span>    <span class="co"># These TRANADAE and PERSADAE based on TFLAGV = 1 or TFLAGV=2 (Induced or Enhanced)</span></span>
-<span>    TRANADAE <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/case_when.html" class="external-link">case_when</a></span><span class="op">(</span></span>
+<span>    TRANADAE <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/case-and-replace-when.html" class="external-link">case_when</a></span><span class="op">(</span></span>
 <span>      <span class="va">TFLAGV</span> <span class="op">&gt;=</span> <span class="fl">1</span> <span class="op">&amp;</span> <span class="op">(</span><span class="op">(</span><span class="va">COUNT_EXC_LAST</span> <span class="op">==</span> <span class="fl">1</span> <span class="op">|</span> <span class="op">(</span><span class="va">COUNT_INC_LAST</span> <span class="op">&gt;=</span> <span class="fl">2</span> <span class="op">&amp;</span> <span class="va">tdur</span> <span class="op">&lt;</span> <span class="fl">16</span><span class="op">)</span><span class="op">)</span> <span class="op">&amp;</span> <span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">LFLAGPOS</span><span class="op">)</span><span class="op">)</span> <span class="op">~</span> <span class="fl">1</span>,</span>
 <span>      <span class="cn">TRUE</span> <span class="op">~</span> <span class="cn">NA_integer_</span></span>
 <span>    <span class="op">)</span>,</span>
-<span>    PERSADAE <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/case_when.html" class="external-link">case_when</a></span><span class="op">(</span></span>
+<span>    PERSADAE <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/case-and-replace-when.html" class="external-link">case_when</a></span><span class="op">(</span></span>
 <span>      <span class="va">TFLAGV</span> <span class="op">&gt;=</span> <span class="fl">1</span> <span class="op">&amp;</span> <span class="op">(</span><span class="va">COUNT_INC_LAST</span> <span class="op">==</span> <span class="fl">1</span> <span class="op">&amp;</span> <span class="op">(</span><span class="va">COUNT_EXC_LAST</span> <span class="op">&lt;=</span> <span class="fl">0</span> <span class="op">|</span> <span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">COUNT_EXC_LAST</span><span class="op">)</span><span class="op">)</span> <span class="op">|</span></span>
 <span>        <span class="op">(</span><span class="va">COUNT_INC_LAST</span> <span class="op">&gt;=</span> <span class="fl">2</span> <span class="op">&amp;</span> <span class="va">tdur</span> <span class="op">&gt;=</span> <span class="fl">16</span><span class="op">)</span> <span class="op">|</span> <span class="va">LFLAGPOS</span> <span class="op">==</span> <span class="fl">1</span><span class="op">)</span> <span class="op">~</span> <span class="fl">1</span>,</span>
 <span>      <span class="cn">TRUE</span> <span class="op">~</span> <span class="cn">NA_integer_</span></span>
 <span>    <span class="op">)</span>,</span>
-<span>    INDUCED <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/case_when.html" class="external-link">case_when</a></span><span class="op">(</span></span>
+<span>    INDUCED <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/case-and-replace-when.html" class="external-link">case_when</a></span><span class="op">(</span></span>
 <span>      <span class="va">TFLAGV</span> <span class="op">==</span> <span class="fl">1</span> <span class="op">~</span> <span class="st">"Y"</span>,</span>
 <span>      <span class="cn">TRUE</span> <span class="op">~</span> <span class="st">"N"</span></span>
 <span>    <span class="op">)</span>,</span>
-<span>    ENHANCED <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/case_when.html" class="external-link">case_when</a></span><span class="op">(</span></span>
+<span>    ENHANCED <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/case-and-replace-when.html" class="external-link">case_when</a></span><span class="op">(</span></span>
 <span>      <span class="va">TFLAGV</span> <span class="op">==</span> <span class="fl">2</span> <span class="op">~</span> <span class="st">"Y"</span>,</span>
 <span>      <span class="cn">TRUE</span> <span class="op">~</span> <span class="st">"N"</span></span>
 <span>    <span class="op">)</span></span>
@@ -1138,19 +1139,19 @@ post-baseline result</td>
 <span>    ATPT <span class="op">=</span> <span class="va">ISTPT</span>,</span>
 <span>    ADADUR <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">ADADUR</span>, digits <span class="op">=</span> <span class="fl">4</span><span class="op">)</span>,</span>
 <span>    TIMADA <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">TIMADA</span>, digits <span class="op">=</span> <span class="fl">4</span><span class="op">)</span>,</span>
-<span>    PERSADA <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/case_when.html" class="external-link">case_when</a></span><span class="op">(</span></span>
+<span>    PERSADA <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/case-and-replace-when.html" class="external-link">case_when</a></span><span class="op">(</span></span>
 <span>      <span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">PERSADA</span><span class="op">)</span> <span class="op">~</span> <span class="fl">0</span>,</span>
 <span>      <span class="cn">TRUE</span> <span class="op">~</span> <span class="va">PERSADA</span></span>
 <span>    <span class="op">)</span>,</span>
-<span>    PERSADAE <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/case_when.html" class="external-link">case_when</a></span><span class="op">(</span></span>
+<span>    PERSADAE <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/case-and-replace-when.html" class="external-link">case_when</a></span><span class="op">(</span></span>
 <span>      <span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">PERSADAE</span><span class="op">)</span> <span class="op">~</span> <span class="fl">0</span>,</span>
 <span>      <span class="cn">TRUE</span> <span class="op">~</span> <span class="va">PERSADAE</span></span>
 <span>    <span class="op">)</span>,</span>
-<span>    TRANADA <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/case_when.html" class="external-link">case_when</a></span><span class="op">(</span></span>
+<span>    TRANADA <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/case-and-replace-when.html" class="external-link">case_when</a></span><span class="op">(</span></span>
 <span>      <span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">TRANADA</span><span class="op">)</span> <span class="op">~</span> <span class="fl">0</span>,</span>
 <span>      <span class="cn">TRUE</span> <span class="op">~</span> <span class="va">TRANADA</span></span>
 <span>    <span class="op">)</span>,</span>
-<span>    TRANADAE <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/case_when.html" class="external-link">case_when</a></span><span class="op">(</span></span>
+<span>    TRANADAE <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/case-and-replace-when.html" class="external-link">case_when</a></span><span class="op">(</span></span>
 <span>      <span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">TRANADAE</span><span class="op">)</span> <span class="op">~</span> <span class="fl">0</span>,</span>
 <span>      <span class="cn">TRUE</span> <span class="op">~</span> <span class="va">TRANADAE</span></span>
 <span>    <span class="op">)</span>,</span>
@@ -1202,7 +1203,7 @@ has unique keeps or drops, they are noted below as comments.</p>
 <span>    <span class="co"># SDTM V1.x: Assign PARAM from ISTEST or customize</span></span>
 <span>    PARCAT1 <span class="op">=</span> <span class="va">ISTEST</span>,</span>
 <span>    <span class="co"># SDTM V2.x: Assign PARAM using text values plus ADAPARM</span></span>
-<span>    PARCAT1 <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/case_when.html" class="external-link">case_when</a></span><span class="op">(</span></span>
+<span>    PARCAT1 <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/case-and-replace-when.html" class="external-link">case_when</a></span><span class="op">(</span></span>
 <span>      <span class="va">ADATYPE</span> <span class="op">==</span> <span class="st">"ADA_BAB"</span> <span class="op">~</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="st">"Anti-"</span>, <span class="va">ADAPARM</span>, <span class="st">" Antibody"</span>, sep <span class="op">=</span> <span class="st">""</span><span class="op">)</span>,</span>
 <span>      <span class="va">ADATYPE</span> <span class="op">==</span> <span class="st">"ADA_NAB"</span> <span class="op">~</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="st">"Anti-"</span>, <span class="va">ADAPARM</span>, <span class="st">" Neutralizing Antibody"</span>, sep <span class="op">=</span> <span class="st">""</span><span class="op">)</span>,</span>
 <span>      <span class="cn">TRUE</span> <span class="op">~</span> <span class="cn">NA_character_</span></span>
@@ -1233,7 +1234,7 @@ has unique keeps or drops, they are noted below as comments.</p>
 <span>    PARAMCD <span class="op">=</span> <span class="st">"RESULTy"</span>,</span>
 <span>    PARAM <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="st">"ADA interpreted per sample result,"</span>, <span class="va">PARCAT1</span>, sep <span class="op">=</span> <span class="st">" "</span><span class="op">)</span>,</span>
 <span>    AVALC <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/chartr.html" class="external-link">toupper</a></span><span class="op">(</span><span class="va">RESULTC</span><span class="op">)</span>,</span>
-<span>    AVAL <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/case_when.html" class="external-link">case_when</a></span><span class="op">(</span></span>
+<span>    AVAL <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/case-and-replace-when.html" class="external-link">case_when</a></span><span class="op">(</span></span>
 <span>      <span class="va">AVALC</span> <span class="op">==</span> <span class="st">"NEGATIVE"</span> <span class="op">~</span> <span class="fl">0</span>,</span>
 <span>      <span class="va">AVALC</span> <span class="op">==</span> <span class="st">"POSITIVE"</span> <span class="op">~</span> <span class="fl">1</span>,</span>
 <span>      <span class="cn">TRUE</span> <span class="op">~</span> <span class="cn">NA_integer_</span></span>
@@ -1263,7 +1264,7 @@ has unique keeps or drops, they are noted below as comments.</p>
 <span>    PARAMCD <span class="op">=</span> <span class="st">"RESULTy"</span>,</span>
 <span>    PARAM <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="st">"Nab interpreted per sample result,"</span>, <span class="va">PARCAT1</span>, sep <span class="op">=</span> <span class="st">" "</span><span class="op">)</span>,</span>
 <span>    AVALC <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/chartr.html" class="external-link">toupper</a></span><span class="op">(</span><span class="va">RESULTC</span><span class="op">)</span>,</span>
-<span>    AVAL <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/case_when.html" class="external-link">case_when</a></span><span class="op">(</span></span>
+<span>    AVAL <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/case-and-replace-when.html" class="external-link">case_when</a></span><span class="op">(</span></span>
 <span>      <span class="va">AVALC</span> <span class="op">==</span> <span class="st">"NEGATIVE"</span> <span class="op">~</span> <span class="fl">0</span>,</span>
 <span>      <span class="va">AVALC</span> <span class="op">==</span> <span class="st">"POSITIVE"</span> <span class="op">~</span> <span class="fl">1</span>,</span>
 <span>      <span class="cn">TRUE</span> <span class="op">~</span> <span class="cn">NA_integer_</span></span>
@@ -1308,12 +1309,12 @@ has unique keeps or drops, they are noted below as comments.</p>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span></span>
 <span>    PARAMCD <span class="op">=</span> <span class="st">"PBFLAGV"</span>,</span>
 <span>    PARAM <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="st">"Post Baseline Pos/Neg by Visit,"</span>, <span class="va">PARCAT1</span>, sep <span class="op">=</span> <span class="st">" "</span><span class="op">)</span>,</span>
-<span>    AVALC <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/case_when.html" class="external-link">case_when</a></span><span class="op">(</span></span>
+<span>    AVALC <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/case-and-replace-when.html" class="external-link">case_when</a></span><span class="op">(</span></span>
 <span>      <span class="va">PBFLAGV</span> <span class="op">==</span> <span class="fl">1</span> <span class="op">|</span> <span class="va">PBFLAGV</span> <span class="op">==</span> <span class="fl">2</span> <span class="op">~</span> <span class="st">"POSITIVE"</span>,</span>
 <span>      <span class="va">PBFLAGV</span> <span class="op">==</span> <span class="fl">0</span> <span class="op">|</span> <span class="va">PBFLAGV</span> <span class="op">==</span> <span class="fl">3</span> <span class="op">~</span> <span class="st">"NEGATIVE"</span>,</span>
 <span>      <span class="cn">TRUE</span> <span class="op">~</span> <span class="st">"MISSING"</span></span>
 <span>    <span class="op">)</span>,</span>
-<span>    AVAL <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/case_when.html" class="external-link">case_when</a></span><span class="op">(</span></span>
+<span>    AVAL <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/case-and-replace-when.html" class="external-link">case_when</a></span><span class="op">(</span></span>
 <span>      <span class="va">AVALC</span> <span class="op">==</span> <span class="st">"POSITIVE"</span> <span class="op">~</span> <span class="fl">1</span>,</span>
 <span>      <span class="va">AVALC</span> <span class="op">==</span> <span class="st">"NEGATIVE"</span> <span class="op">~</span> <span class="fl">0</span>,</span>
 <span>      <span class="cn">TRUE</span> <span class="op">~</span> <span class="cn">NA_integer_</span></span>
@@ -1331,7 +1332,7 @@ has unique keeps or drops, they are noted below as comments.</p>
 <span>    PARAMCD <span class="op">=</span> <span class="st">"ADASTATV"</span>,</span>
 <span>    PARAM <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="st">"ADA Status of a patient by Visit,"</span>, <span class="va">PARCAT1</span>, sep <span class="op">=</span> <span class="st">" "</span><span class="op">)</span>,</span>
 <span>    AVALC <span class="op">=</span> <span class="va">ADASTATV</span>,</span>
-<span>    AVAL <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/case_when.html" class="external-link">case_when</a></span><span class="op">(</span></span>
+<span>    AVAL <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/case-and-replace-when.html" class="external-link">case_when</a></span><span class="op">(</span></span>
 <span>      <span class="va">AVALC</span> <span class="op">==</span> <span class="st">"ADA+"</span> <span class="op">~</span> <span class="fl">1</span>,</span>
 <span>      <span class="va">AVALC</span> <span class="op">==</span> <span class="st">"ADA-"</span> <span class="op">~</span> <span class="fl">0</span>,</span>
 <span>      <span class="cn">TRUE</span> <span class="op">~</span> <span class="cn">NA_integer_</span></span>
@@ -1361,7 +1362,7 @@ has unique keeps or drops, they are noted below as comments.</p>
 <span>    PARAMCD <span class="op">=</span> <span class="st">"BFLAGy"</span>,</span>
 <span>    PARAM <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="st">"Baseline Pos/Neg,"</span>, <span class="va">PARCAT1</span>, sep <span class="op">=</span> <span class="st">" "</span><span class="op">)</span>,</span>
 <span>    AVAL <span class="op">=</span> <span class="va">BFLAG</span>,</span>
-<span>    AVALC <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/case_when.html" class="external-link">case_when</a></span><span class="op">(</span></span>
+<span>    AVALC <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/case-and-replace-when.html" class="external-link">case_when</a></span><span class="op">(</span></span>
 <span>      <span class="va">AVAL</span> <span class="op">==</span> <span class="fl">1</span> <span class="op">~</span> <span class="st">"Y"</span>,</span>
 <span>      <span class="va">AVAL</span> <span class="op">==</span> <span class="fl">0</span> <span class="op">~</span> <span class="st">"N"</span>,</span>
 <span>      <span class="cn">TRUE</span> <span class="op">~</span> <span class="cn">NA_character_</span></span>
@@ -1379,11 +1380,11 @@ has unique keeps or drops, they are noted below as comments.</p>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span></span>
 <span>    PARAMCD <span class="op">=</span> <span class="st">"INDUCDy"</span>,</span>
 <span>    PARAM <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="st">"Treatment induced ADA,"</span>, <span class="va">PARCAT1</span>, sep <span class="op">=</span> <span class="st">" "</span><span class="op">)</span>,</span>
-<span>    AVAL <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/case_when.html" class="external-link">case_when</a></span><span class="op">(</span></span>
+<span>    AVAL <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/case-and-replace-when.html" class="external-link">case_when</a></span><span class="op">(</span></span>
 <span>      <span class="va">TFLAG</span> <span class="op">==</span> <span class="fl">1</span> <span class="op">~</span> <span class="fl">1</span>,</span>
 <span>      <span class="cn">TRUE</span> <span class="op">~</span> <span class="fl">0</span></span>
 <span>    <span class="op">)</span>,</span>
-<span>    AVALC <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/case_when.html" class="external-link">case_when</a></span><span class="op">(</span></span>
+<span>    AVALC <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/case-and-replace-when.html" class="external-link">case_when</a></span><span class="op">(</span></span>
 <span>      <span class="va">AVAL</span> <span class="op">==</span> <span class="fl">1</span> <span class="op">~</span> <span class="st">"Y"</span>,</span>
 <span>      <span class="va">AVAL</span> <span class="op">==</span> <span class="fl">0</span> <span class="op">~</span> <span class="st">"N"</span>,</span>
 <span>      <span class="cn">TRUE</span> <span class="op">~</span> <span class="cn">NA_character_</span></span>
@@ -1401,11 +1402,11 @@ has unique keeps or drops, they are noted below as comments.</p>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span></span>
 <span>    PARAMCD <span class="op">=</span> <span class="st">"ENHANCy"</span>,</span>
 <span>    PARAM <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="st">"Treatment enhanced ADA,"</span>, <span class="va">PARCAT1</span>, sep <span class="op">=</span> <span class="st">" "</span><span class="op">)</span>,</span>
-<span>    AVAL <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/case_when.html" class="external-link">case_when</a></span><span class="op">(</span></span>
+<span>    AVAL <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/case-and-replace-when.html" class="external-link">case_when</a></span><span class="op">(</span></span>
 <span>      <span class="va">TFLAG</span> <span class="op">==</span> <span class="fl">2</span> <span class="op">~</span> <span class="fl">1</span>,</span>
 <span>      <span class="cn">TRUE</span> <span class="op">~</span> <span class="fl">0</span></span>
 <span>    <span class="op">)</span>,</span>
-<span>    AVALC <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/case_when.html" class="external-link">case_when</a></span><span class="op">(</span></span>
+<span>    AVALC <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/case-and-replace-when.html" class="external-link">case_when</a></span><span class="op">(</span></span>
 <span>      <span class="va">AVAL</span> <span class="op">==</span> <span class="fl">1</span> <span class="op">~</span> <span class="st">"Y"</span>,</span>
 <span>      <span class="va">AVAL</span> <span class="op">==</span> <span class="fl">0</span> <span class="op">~</span> <span class="st">"N"</span>,</span>
 <span>      <span class="cn">TRUE</span> <span class="op">~</span> <span class="cn">NA_character_</span></span>
@@ -1423,11 +1424,11 @@ has unique keeps or drops, they are noted below as comments.</p>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span></span>
 <span>    PARAMCD <span class="op">=</span> <span class="st">"EMERPOSy"</span>,</span>
 <span>    PARAM <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="st">"Treatment Emergent - Positive,"</span>, <span class="va">PARCAT1</span>, sep <span class="op">=</span> <span class="st">" "</span><span class="op">)</span>,</span>
-<span>    AVAL <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/case_when.html" class="external-link">case_when</a></span><span class="op">(</span></span>
+<span>    AVAL <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/case-and-replace-when.html" class="external-link">case_when</a></span><span class="op">(</span></span>
 <span>      <span class="va">PBFLAG</span> <span class="op">==</span> <span class="fl">1</span> <span class="op">~</span> <span class="fl">1</span>,</span>
 <span>      <span class="cn">TRUE</span> <span class="op">~</span> <span class="fl">0</span></span>
 <span>    <span class="op">)</span>,</span>
-<span>    AVALC <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/case_when.html" class="external-link">case_when</a></span><span class="op">(</span></span>
+<span>    AVALC <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/case-and-replace-when.html" class="external-link">case_when</a></span><span class="op">(</span></span>
 <span>      <span class="va">AVAL</span> <span class="op">==</span> <span class="fl">1</span> <span class="op">~</span> <span class="st">"Y"</span>,</span>
 <span>      <span class="va">AVAL</span> <span class="op">==</span> <span class="fl">0</span> <span class="op">~</span> <span class="st">"N"</span>,</span>
 <span>      <span class="cn">TRUE</span> <span class="op">~</span> <span class="cn">NA_character_</span></span>
@@ -1445,11 +1446,11 @@ has unique keeps or drops, they are noted below as comments.</p>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span></span>
 <span>    PARAMCD <span class="op">=</span> <span class="st">"TRUNAFFy"</span>,</span>
 <span>    PARAM <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="st">"Treatment unaffected,"</span>, <span class="va">PARCAT1</span>, sep <span class="op">=</span> <span class="st">" "</span><span class="op">)</span>,</span>
-<span>    AVAL <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/case_when.html" class="external-link">case_when</a></span><span class="op">(</span></span>
+<span>    AVAL <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/case-and-replace-when.html" class="external-link">case_when</a></span><span class="op">(</span></span>
 <span>      <span class="va">TFLAG</span> <span class="op">==</span> <span class="fl">3</span> <span class="op">~</span> <span class="fl">1</span>,</span>
 <span>      <span class="cn">TRUE</span> <span class="op">~</span> <span class="fl">0</span></span>
 <span>    <span class="op">)</span>,</span>
-<span>    AVALC <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/case_when.html" class="external-link">case_when</a></span><span class="op">(</span></span>
+<span>    AVALC <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/case-and-replace-when.html" class="external-link">case_when</a></span><span class="op">(</span></span>
 <span>      <span class="va">AVAL</span> <span class="op">==</span> <span class="fl">1</span> <span class="op">~</span> <span class="st">"Y"</span>,</span>
 <span>      <span class="va">AVAL</span> <span class="op">==</span> <span class="fl">0</span> <span class="op">~</span> <span class="st">"N"</span>,</span>
 <span>      <span class="cn">TRUE</span> <span class="op">~</span> <span class="cn">NA_character_</span></span>
@@ -1467,11 +1468,11 @@ has unique keeps or drops, they are noted below as comments.</p>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span></span>
 <span>    PARAMCD <span class="op">=</span> <span class="st">"EMERNEGy"</span>,</span>
 <span>    PARAM <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="st">"Treatment Emergent - Negative,"</span>, <span class="va">PARCAT1</span>, sep <span class="op">=</span> <span class="st">" "</span><span class="op">)</span>,</span>
-<span>    AVAL <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/case_when.html" class="external-link">case_when</a></span><span class="op">(</span></span>
+<span>    AVAL <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/case-and-replace-when.html" class="external-link">case_when</a></span><span class="op">(</span></span>
 <span>      <span class="va">PBFLAG</span> <span class="op">==</span> <span class="fl">0</span> <span class="op">~</span> <span class="fl">1</span>,</span>
 <span>      <span class="cn">TRUE</span> <span class="op">~</span> <span class="fl">0</span></span>
 <span>    <span class="op">)</span>,</span>
-<span>    AVALC <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/case_when.html" class="external-link">case_when</a></span><span class="op">(</span></span>
+<span>    AVALC <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/case-and-replace-when.html" class="external-link">case_when</a></span><span class="op">(</span></span>
 <span>      <span class="va">AVAL</span> <span class="op">==</span> <span class="fl">1</span> <span class="op">~</span> <span class="st">"Y"</span>,</span>
 <span>      <span class="va">AVAL</span> <span class="op">==</span> <span class="fl">0</span> <span class="op">~</span> <span class="st">"N"</span>,</span>
 <span>      <span class="cn">TRUE</span> <span class="op">~</span> <span class="cn">NA_character_</span></span>
@@ -1489,11 +1490,11 @@ has unique keeps or drops, they are noted below as comments.</p>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span></span>
 <span>    PARAMCD <span class="op">=</span> <span class="st">"NOTRRELy"</span>,</span>
 <span>    PARAM <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="st">"No treatment related ADA,"</span>, <span class="va">PARCAT1</span>, sep <span class="op">=</span> <span class="st">" "</span><span class="op">)</span>,</span>
-<span>    AVAL <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/case_when.html" class="external-link">case_when</a></span><span class="op">(</span></span>
+<span>    AVAL <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/case-and-replace-when.html" class="external-link">case_when</a></span><span class="op">(</span></span>
 <span>      <span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">PBFLAG</span><span class="op">)</span> <span class="op">~</span> <span class="fl">1</span>,</span>
 <span>      <span class="cn">TRUE</span> <span class="op">~</span> <span class="fl">0</span></span>
 <span>    <span class="op">)</span>,</span>
-<span>    AVALC <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/case_when.html" class="external-link">case_when</a></span><span class="op">(</span></span>
+<span>    AVALC <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/case-and-replace-when.html" class="external-link">case_when</a></span><span class="op">(</span></span>
 <span>      <span class="va">AVAL</span> <span class="op">==</span> <span class="fl">1</span> <span class="op">~</span> <span class="st">"Y"</span>,</span>
 <span>      <span class="va">AVAL</span> <span class="op">==</span> <span class="fl">0</span> <span class="op">~</span> <span class="st">"N"</span>,</span>
 <span>      <span class="cn">TRUE</span> <span class="op">~</span> <span class="cn">NA_character_</span></span>
@@ -1512,7 +1513,7 @@ has unique keeps or drops, they are noted below as comments.</p>
 <span>    PARAMCD <span class="op">=</span> <span class="st">"ADASTATy"</span>,</span>
 <span>    PARAM <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="st">"ADA Status of a patient,"</span>, <span class="va">PARCAT1</span>, sep <span class="op">=</span> <span class="st">" "</span><span class="op">)</span>,</span>
 <span>    AVAL <span class="op">=</span> <span class="va">ADASTAT</span>,</span>
-<span>    AVALC <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/case_when.html" class="external-link">case_when</a></span><span class="op">(</span></span>
+<span>    AVALC <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/case-and-replace-when.html" class="external-link">case_when</a></span><span class="op">(</span></span>
 <span>      <span class="va">AVAL</span> <span class="op">==</span> <span class="fl">1</span> <span class="op">~</span> <span class="st">"POSITIVE"</span>,</span>
 <span>      <span class="va">AVAL</span> <span class="op">==</span> <span class="fl">0</span> <span class="op">~</span> <span class="st">"NEGATIVE"</span>,</span>
 <span>      <span class="cn">TRUE</span> <span class="op">~</span> <span class="st">"MISSING"</span></span>
@@ -1546,7 +1547,7 @@ has unique keeps or drops, they are noted below as comments.</p>
 <span>    PARAMCD <span class="op">=</span> <span class="st">"PERSADAy"</span>,</span>
 <span>    PARAM <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="st">"Persistent ADA,"</span>, <span class="va">PARCAT1</span>, sep <span class="op">=</span> <span class="st">" "</span><span class="op">)</span>,</span>
 <span>    AVAL <span class="op">=</span> <span class="va">PERSADA</span>,</span>
-<span>    AVALC <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/case_when.html" class="external-link">case_when</a></span><span class="op">(</span></span>
+<span>    AVALC <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/case-and-replace-when.html" class="external-link">case_when</a></span><span class="op">(</span></span>
 <span>      <span class="va">AVAL</span> <span class="op">==</span> <span class="fl">1</span> <span class="op">~</span> <span class="st">"Y"</span>,</span>
 <span>      <span class="va">AVAL</span> <span class="op">==</span> <span class="fl">0</span> <span class="op">~</span> <span class="st">"N"</span>,</span>
 <span>      <span class="cn">TRUE</span> <span class="op">~</span> <span class="cn">NA_character_</span></span>
@@ -1565,7 +1566,7 @@ has unique keeps or drops, they are noted below as comments.</p>
 <span>    PARAMCD <span class="op">=</span> <span class="st">"TRANADAy"</span>,</span>
 <span>    PARAM <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="st">"Transient ADA,"</span>, <span class="va">PARCAT1</span>, sep <span class="op">=</span> <span class="st">" "</span><span class="op">)</span>,</span>
 <span>    AVAL <span class="op">=</span> <span class="va">TRANADA</span>,</span>
-<span>    AVALC <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/case_when.html" class="external-link">case_when</a></span><span class="op">(</span></span>
+<span>    AVALC <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/case-and-replace-when.html" class="external-link">case_when</a></span><span class="op">(</span></span>
 <span>      <span class="va">AVAL</span> <span class="op">==</span> <span class="fl">1</span> <span class="op">~</span> <span class="st">"Y"</span>,</span>
 <span>      <span class="va">AVAL</span> <span class="op">==</span> <span class="fl">0</span> <span class="op">~</span> <span class="st">"N"</span>,</span>
 <span>      <span class="cn">TRUE</span> <span class="op">~</span> <span class="cn">NA_character_</span></span>
@@ -1584,7 +1585,7 @@ has unique keeps or drops, they are noted below as comments.</p>
 <span>    PARAMCD <span class="op">=</span> <span class="st">"NABSTATy"</span>,</span>
 <span>    PARAM <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="st">"Nab Status,"</span>, <span class="va">PARCAT1</span>, sep <span class="op">=</span> <span class="st">" "</span><span class="op">)</span>,</span>
 <span>    AVAL <span class="op">=</span> <span class="va">NABSTAT</span>,</span>
-<span>    AVALC <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/case_when.html" class="external-link">case_when</a></span><span class="op">(</span></span>
+<span>    AVALC <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/case-and-replace-when.html" class="external-link">case_when</a></span><span class="op">(</span></span>
 <span>      <span class="va">AVAL</span> <span class="op">==</span> <span class="fl">1</span> <span class="op">~</span> <span class="st">"POSITIVE"</span>,</span>
 <span>      <span class="va">AVAL</span> <span class="op">==</span> <span class="fl">0</span> <span class="op">~</span> <span class="st">"NEGATIVE"</span>,</span>
 <span>      <span class="cn">TRUE</span> <span class="op">~</span> <span class="st">"MISSING"</span></span>
@@ -1764,17 +1765,17 @@ and <code>PARAM</code>.</p>
 <span>  <span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="co"># for the original data, assign PARAM</span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span></span>
-<span>    PARAM <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/case_when.html" class="external-link">case_when</a></span><span class="op">(</span></span>
+<span>    PARAM <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/case-and-replace-when.html" class="external-link">case_when</a></span><span class="op">(</span></span>
 <span>      <span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">PARAM_SUFFIX</span><span class="op">)</span> <span class="op">~</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="va">PARAM</span>, <span class="va">PARAM_SUFFIX</span>, sep <span class="op">=</span> <span class="st">" "</span><span class="op">)</span>,</span>
 <span>      <span class="cn">TRUE</span> <span class="op">~</span> <span class="va">PARAM</span></span>
 <span>    <span class="op">)</span>,</span>
 <span>    <span class="co"># Example to assign PARAMCD based on ADAPARM assigned at program start (SDTM.IS &lt; v2.0)</span></span>
-<span>    PARAMCD <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/case_when.html" class="external-link">case_when</a></span><span class="op">(</span></span>
+<span>    PARAMCD <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/case-and-replace-when.html" class="external-link">case_when</a></span><span class="op">(</span></span>
 <span>      <span class="va">PARAMCD</span> <span class="op">==</span> <span class="va">ADAPARM</span> <span class="op">~</span> <span class="va">PARAMCD</span>,</span>
 <span>      <span class="cn">TRUE</span> <span class="op">~</span> <span class="va">PARAMCD_NEW</span></span>
 <span>    <span class="op">)</span>,</span>
 <span>    <span class="co"># Example to assign PARAMCD based ISTESTCD type and last 5 chars of ISBDAGNT (SDTM.IS &gt;= v2.0)</span></span>
-<span>    PARAMCD <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/case_when.html" class="external-link">case_when</a></span><span class="op">(</span></span>
+<span>    PARAMCD <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/case-and-replace-when.html" class="external-link">case_when</a></span><span class="op">(</span></span>
 <span>      <span class="va">ISTESTCD</span> <span class="op">==</span> <span class="st">"ADA_BAB"</span> <span class="op">&amp;</span> <span class="va">PARAMCD</span> <span class="op">==</span> <span class="st">"XANOMELINE"</span> <span class="op">~</span></span>
 <span>        <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="st">"BAB"</span>, <span class="fu"><a href="https://rdrr.io/r/base/substr.html" class="external-link">substr</a></span><span class="op">(</span><span class="va">ISBDAGNT</span>, <span class="fl">1</span>, <span class="fl">5</span><span class="op">)</span>, sep <span class="op">=</span> <span class="st">""</span><span class="op">)</span>,</span>
 <span>      <span class="va">ISTESTCD</span> <span class="op">==</span> <span class="st">"ADA_NAB"</span> <span class="op">&amp;</span> <span class="va">PARAMCD</span> <span class="op">==</span> <span class="st">"XANOMELINE"</span> <span class="op">~</span></span>
@@ -1868,7 +1869,7 @@ example</a>.</p>
 
 
     <footer><div class="pkgdown-footer-left">
-  <p>Developed by F. Hoffmann-La Roche AG, GlaxoSmithKline LLC, Ben Straub, Stefan Bundfuss, Matt Bearham, Arianna Cascone, Kristin Dahnert, Jeffrey Dickinson, Ross Farrugia, Fanny Gautier, Edoardo Mancini, Gordon Miller, Lina Patil, Jim Rothstein.</p>
+  <p>Developed by F. Hoffmann-La Roche AG, GlaxoSmithKline LLC, Edoardo Mancini, Stefan Bundfuss, Matt Bearham, Arianna Cascone, Kristin Dahnert, Jeffrey Dickinson, Ross Farrugia, Fanny Gautier, Gordon Miller, Lina Patil, Jim Rothstein, Ben Straub.</p>
 </div>
 
 <div class="pkgdown-footer-right">

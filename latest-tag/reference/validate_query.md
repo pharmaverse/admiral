@@ -24,4 +24,4 @@ The original object.
 
 ## See also
 
-[`query()`](https:/pharmaverse.github.io/admiral/v1.4.1/reference/query.md)
+[`query()`](https:/pharmaverse.github.io/admiral/v1.4.2/reference/query.md)

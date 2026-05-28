@@ -28,8 +28,8 @@ can no longer be accessed (unless it has been saved in a variable).
 ## See also
 
 Utilities for Dataset Checking:
-[`get_many_to_one_dataset()`](https:/pharmaverse.github.io/admiral/v1.4.1/reference/get_many_to_one_dataset.md),
-[`get_one_to_many_dataset()`](https:/pharmaverse.github.io/admiral/v1.4.1/reference/get_one_to_many_dataset.md)
+[`get_many_to_one_dataset()`](https:/pharmaverse.github.io/admiral/v1.4.2/reference/get_many_to_one_dataset.md),
+[`get_one_to_many_dataset()`](https:/pharmaverse.github.io/admiral/v1.4.2/reference/get_one_to_many_dataset.md)
 
 ## Examples
 

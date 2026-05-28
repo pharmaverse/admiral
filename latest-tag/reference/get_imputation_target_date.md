@@ -57,16 +57,16 @@ is set to `NA_character_` in the imputation functions.
 
 ## See also
 
-[`impute_dtc_dtm()`](https:/pharmaverse.github.io/admiral/v1.4.1/reference/impute_dtc_dtm.md),
-[`impute_dtc_dt()`](https:/pharmaverse.github.io/admiral/v1.4.1/reference/impute_dtc_dt.md)
+[`impute_dtc_dtm()`](https:/pharmaverse.github.io/admiral/v1.4.2/reference/impute_dtc_dtm.md),
+[`impute_dtc_dt()`](https:/pharmaverse.github.io/admiral/v1.4.2/reference/impute_dtc_dt.md)
 
 Utilities used for date imputation:
-[`dt_level()`](https:/pharmaverse.github.io/admiral/v1.4.1/reference/dt_level.md),
-[`dtm_level()`](https:/pharmaverse.github.io/admiral/v1.4.1/reference/dtm_level.md),
-[`get_imputation_target_time()`](https:/pharmaverse.github.io/admiral/v1.4.1/reference/get_imputation_target_time.md),
-[`get_partialdatetime()`](https:/pharmaverse.github.io/admiral/v1.4.1/reference/get_partialdatetime.md),
-[`restrict_imputed_dtc_dt()`](https:/pharmaverse.github.io/admiral/v1.4.1/reference/restrict_imputed_dtc_dt.md),
-[`restrict_imputed_dtc_dtm()`](https:/pharmaverse.github.io/admiral/v1.4.1/reference/restrict_imputed_dtc_dtm.md)
+[`dt_level()`](https:/pharmaverse.github.io/admiral/v1.4.2/reference/dt_level.md),
+[`dtm_level()`](https:/pharmaverse.github.io/admiral/v1.4.2/reference/dtm_level.md),
+[`get_imputation_target_time()`](https:/pharmaverse.github.io/admiral/v1.4.2/reference/get_imputation_target_time.md),
+[`get_partialdatetime()`](https:/pharmaverse.github.io/admiral/v1.4.2/reference/get_partialdatetime.md),
+[`restrict_imputed_dtc_dt()`](https:/pharmaverse.github.io/admiral/v1.4.2/reference/restrict_imputed_dtc_dt.md),
+[`restrict_imputed_dtc_dtm()`](https:/pharmaverse.github.io/admiral/v1.4.2/reference/restrict_imputed_dtc_dtm.md)
 
 ## Examples
 

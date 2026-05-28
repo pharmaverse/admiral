@@ -31,19 +31,19 @@ Usually this computation function can not be used with `%>%`.
 
 ## See also
 
-[`derive_param_rr()`](https:/pharmaverse.github.io/admiral/v1.4.1/reference/derive_param_rr.md)
+[`derive_param_rr()`](https:/pharmaverse.github.io/admiral/v1.4.2/reference/derive_param_rr.md)
 
 BDS-Findings Functions that returns a vector:
-[`compute_bmi()`](https:/pharmaverse.github.io/admiral/v1.4.1/reference/compute_bmi.md),
-[`compute_bsa()`](https:/pharmaverse.github.io/admiral/v1.4.1/reference/compute_bsa.md),
-[`compute_egfr()`](https:/pharmaverse.github.io/admiral/v1.4.1/reference/compute_egfr.md),
-[`compute_framingham()`](https:/pharmaverse.github.io/admiral/v1.4.1/reference/compute_framingham.md),
-[`compute_map()`](https:/pharmaverse.github.io/admiral/v1.4.1/reference/compute_map.md),
-[`compute_qtc()`](https:/pharmaverse.github.io/admiral/v1.4.1/reference/compute_qtc.md),
-[`compute_qual_imputation()`](https:/pharmaverse.github.io/admiral/v1.4.1/reference/compute_qual_imputation.md),
-[`compute_qual_imputation_dec()`](https:/pharmaverse.github.io/admiral/v1.4.1/reference/compute_qual_imputation_dec.md),
-[`compute_scale()`](https:/pharmaverse.github.io/admiral/v1.4.1/reference/compute_scale.md),
-[`transform_range()`](https:/pharmaverse.github.io/admiral/v1.4.1/reference/transform_range.md)
+[`compute_bmi()`](https:/pharmaverse.github.io/admiral/v1.4.2/reference/compute_bmi.md),
+[`compute_bsa()`](https:/pharmaverse.github.io/admiral/v1.4.2/reference/compute_bsa.md),
+[`compute_egfr()`](https:/pharmaverse.github.io/admiral/v1.4.2/reference/compute_egfr.md),
+[`compute_framingham()`](https:/pharmaverse.github.io/admiral/v1.4.2/reference/compute_framingham.md),
+[`compute_map()`](https:/pharmaverse.github.io/admiral/v1.4.2/reference/compute_map.md),
+[`compute_qtc()`](https:/pharmaverse.github.io/admiral/v1.4.2/reference/compute_qtc.md),
+[`compute_qual_imputation()`](https:/pharmaverse.github.io/admiral/v1.4.2/reference/compute_qual_imputation.md),
+[`compute_qual_imputation_dec()`](https:/pharmaverse.github.io/admiral/v1.4.2/reference/compute_qual_imputation_dec.md),
+[`compute_scale()`](https:/pharmaverse.github.io/admiral/v1.4.2/reference/compute_scale.md),
+[`transform_range()`](https:/pharmaverse.github.io/admiral/v1.4.2/reference/transform_range.md)
 
 ## Examples
 

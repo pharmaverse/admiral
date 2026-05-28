@@ -172,15 +172,15 @@ Usually this computation function can not be used with `%>%`.
 ## See also
 
 Date/Time Computation Functions that returns a vector:
-[`compute_age_years()`](https:/pharmaverse.github.io/admiral/v1.4.1/reference/compute_age_years.md),
-[`compute_dtf()`](https:/pharmaverse.github.io/admiral/v1.4.1/reference/compute_dtf.md),
-[`compute_duration()`](https:/pharmaverse.github.io/admiral/v1.4.1/reference/compute_duration.md),
-[`compute_tmf()`](https:/pharmaverse.github.io/admiral/v1.4.1/reference/compute_tmf.md),
-[`convert_date_to_dtm()`](https:/pharmaverse.github.io/admiral/v1.4.1/reference/convert_date_to_dtm.md),
-[`convert_dtc_to_dtm()`](https:/pharmaverse.github.io/admiral/v1.4.1/reference/convert_dtc_to_dtm.md),
-[`convert_xxtpt_to_hours()`](https:/pharmaverse.github.io/admiral/v1.4.1/reference/convert_xxtpt_to_hours.md),
-[`impute_dtc_dt()`](https:/pharmaverse.github.io/admiral/v1.4.1/reference/impute_dtc_dt.md),
-[`impute_dtc_dtm()`](https:/pharmaverse.github.io/admiral/v1.4.1/reference/impute_dtc_dtm.md)
+[`compute_age_years()`](https:/pharmaverse.github.io/admiral/v1.4.2/reference/compute_age_years.md),
+[`compute_dtf()`](https:/pharmaverse.github.io/admiral/v1.4.2/reference/compute_dtf.md),
+[`compute_duration()`](https:/pharmaverse.github.io/admiral/v1.4.2/reference/compute_duration.md),
+[`compute_tmf()`](https:/pharmaverse.github.io/admiral/v1.4.2/reference/compute_tmf.md),
+[`convert_date_to_dtm()`](https:/pharmaverse.github.io/admiral/v1.4.2/reference/convert_date_to_dtm.md),
+[`convert_dtc_to_dtm()`](https:/pharmaverse.github.io/admiral/v1.4.2/reference/convert_dtc_to_dtm.md),
+[`convert_xxtpt_to_hours()`](https:/pharmaverse.github.io/admiral/v1.4.2/reference/convert_xxtpt_to_hours.md),
+[`impute_dtc_dt()`](https:/pharmaverse.github.io/admiral/v1.4.2/reference/impute_dtc_dt.md),
+[`impute_dtc_dtm()`](https:/pharmaverse.github.io/admiral/v1.4.2/reference/impute_dtc_dtm.md)
 
 ## Examples
 
