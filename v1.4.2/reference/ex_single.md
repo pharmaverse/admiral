@@ -1,0 +1,27 @@
+# Single Dose Exposure Dataset
+
+A derived dataset with single dose per date.
+
+## Usage
+
+``` r
+ex_single
+```
+
+## Format
+
+An object of class `tbl_df` (inherits from `tbl`, `data.frame`) with
+22439 rows and 16 columns.
+
+## Source
+
+Derived from the `ex` dataset using `{admiral}` and `{dplyr}`
+
+## See also
+
+Other datasets:
+[`admiral_adlb`](https:/pharmaverse.github.io/admiral/v1.4.2/reference/admiral_adlb.md),
+[`admiral_adsl`](https:/pharmaverse.github.io/admiral/v1.4.2/reference/admiral_adsl.md),
+[`example_qs`](https:/pharmaverse.github.io/admiral/v1.4.2/reference/example_qs.md),
+[`queries`](https:/pharmaverse.github.io/admiral/v1.4.2/reference/queries.md),
+[`queries_mh`](https:/pharmaverse.github.io/admiral/v1.4.2/reference/queries_mh.md)
