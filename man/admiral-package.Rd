@@ -25,20 +25,20 @@ Other internal:
 \code{\link[=signal_duplicate_records]{signal_duplicate_records()}}
 }
 \author{
-\strong{Maintainer}: Ben Straub \email{ben.x.straub@gsk.com}
+\strong{Maintainer}: Edoardo Mancini \email{edoardo.mancini@roche.com} (\href{https://orcid.org/0009-0006-4899-8641}{ORCID})
 
 Authors:
 \itemize{
-  \item Ben Straub \email{ben.x.straub@gsk.com}
+  \item Edoardo Mancini \email{edoardo.mancini@roche.com} (\href{https://orcid.org/0009-0006-4899-8641}{ORCID})
   \item Stefan Bundfuss (\href{https://orcid.org/0009-0005-0027-1198}{ORCID})
   \item Arianna Cascone (\href{https://orcid.org/0000-0001-5948-2831}{ORCID})
   \item Kristin Dahnert
   \item Jeffrey Dickinson
   \item Ross Farrugia
   \item Fanny Gautier (\href{https://orcid.org/0009-0004-3581-0131}{ORCID})
-  \item Edoardo Mancini (\href{https://orcid.org/0009-0006-4899-8641}{ORCID})
   \item Gordon Miller
   \item Lina Patil
+  \item Ben Straub
 }
 
 Other contributors:

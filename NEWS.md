@@ -74,6 +74,7 @@ of packages were updated to specify the level of contributions required for auth
 
 - The examples for `derive_basetype_records()` were enhanced to include a case where records that do not match any
   condition in `basetypes` are retained with `BASETYPE` set to `NA`. (#2904)
+  
 - Additional information about timing variable conventions has been added to the `derive_vars_dy()` function documentation. (#2995)
 
 - Added IDs to each template script in the "Explore ADaM Templates" vignette, enabling links to them from across the website. (#3006)
@@ -98,6 +99,12 @@ of packages were updated to specify the level of contributions required for auth
 
 - Update to roxygen2 8.0.0. (#3090)
 
+- The `admiral_labels_attrs_section()` function was added to output
+  standardized boilerplate markdown for the "Add Labels and Attributes" section
+  in ADaM-specific vignettes. All relevant vignettes have been updated to use
+  this function, ensuring consistent content that can be maintained in one
+  place. (#2926)
+
 - Add instructions for AI coding agents: Workflow from `{admiralci}` copies information from `{admiraldev}` to `AGENTS.md` instruction files. (#2920)
 
 - Increased the maximum height of the drop-down menus in the website navigation bar to ensure all items are visible without scrolling. (#2974)
@@ -118,6 +125,10 @@ the pull request title to trigger website creation. (#2984)
 
 - Clickable links to personal websites or GitHub profiles were added in the home page sidebar for every `{admiral}` author. (#3112)
 </details>
+
+# admiral 1.4.2
+
+* Maintainer switched from Ben Straub to Edoardo Mancini.
 
 # admiral 1.4.1
 
