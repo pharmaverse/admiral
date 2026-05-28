@@ -74,6 +74,7 @@ of packages were updated to specify the level of contributions required for auth
 
 - The examples for `derive_basetype_records()` were enhanced to include a case where records that do not match any
   condition in `basetypes` are retained with `BASETYPE` set to `NA`. (#2904)
+  
 - Additional information about timing variable conventions has been added to the `derive_vars_dy()` function documentation. (#2995)
 
 - Added IDs to each template script in the "Explore ADaM Templates" vignette, enabling links to them from across the website. (#3006)
@@ -122,6 +123,10 @@ the pull request title to trigger website creation. (#2984)
 
 - Clickable links to personal websites or GitHub profiles were added in the home page sidebar for every `{admiral}` author. (#3112)
 </details>
+
+# admiral 1.4.2
+
+* Maintainer switched from Ben Straub to Edoardo Mancini.
 
 # admiral 1.4.1
 

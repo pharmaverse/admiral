@@ -242,7 +242,8 @@
 #'   to a datetime, within the `order` argument.
 #' - Then the `mode` argument is set to `"last"` to ensure the last sorted value
 #'   is taken. Be cautious if `NA` values are possible in the `order` variables -
-#'   see [Sort Order](https://pharmaverse.github.io/admiral/articles/generic.html#sort_order).
+#'   see [Sort
+#'   Order](https://pharmaverse.github.io/admiral/cran-release/articles/generic.html#sort_order).
 #' - The `filter_add` argument is used to restrict the vital signs records only
 #'   to weight assessments.
 #' @code

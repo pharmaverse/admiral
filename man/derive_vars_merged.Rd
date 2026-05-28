@@ -326,7 +326,7 @@ Merge the last occurring weight for each subject to the demographics dataset.
 to a datetime, within the \code{order} argument.
 \item Then the \code{mode} argument is set to \code{"last"} to ensure the last sorted value
 is taken. Be cautious if \code{NA} values are possible in the \code{order} variables -
-see \href{https://pharmaverse.github.io/admiral/articles/generic.html#sort_order}{Sort Order}.
+see \href{https://pharmaverse.github.io/admiral/cran-release/articles/generic.html#sort_order}{Sort Order}.
 \item The \code{filter_add} argument is used to restrict the vital signs records only
 to weight assessments.
 }
