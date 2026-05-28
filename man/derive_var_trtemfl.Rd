@@ -246,28 +246,24 @@ derive_var_trtemfl(
   trt_start_date = TRTSDT
 ) \%>\% select(USUBJID, TRTSDT, ASTDT, AENDT, TRTEMFL)
 #> # A tibble: 16 × 5
-#>    USUBJID TRTSDT    
-#>    <chr>   <date>    
-#>  1 1       2022-01-01
-#>  2 1       2022-01-01
-#>  3 1       2022-01-01
-#>  4 1       2022-01-01
-#>  5 1       2022-01-01
-#>  6 1       2022-01-01
-#>  7 1       2022-01-01
-#>  8 1       2022-01-01
-#>  9 1       2022-01-01
-#> 10 1       2022-01-01
-#> 11 1       2022-01-01
-#> 12 1       2022-01-01
-#> 13 1       2022-01-01
-#> 14 2       NA        
-#> 15 2       NA        
-#> 16 2       NA        
-#> # i 3 more variables:
-#> #   ASTDT <date>,
-#> #   AENDT <date>,
-#> #   TRTEMFL <chr>}\if{html}{\out{</div>}}}
+#>    USUBJID TRTSDT     ASTDT      AENDT      TRTEMFL
+#>    <chr>   <date>     <date>     <date>     <chr>  
+#>  1 1       2022-01-01 2021-12-13 2021-12-15 <NA>   
+#>  2 1       2022-01-01 2021-12-14 2021-12-14 <NA>   
+#>  3 1       2022-01-01 2021-12-30 2022-01-14 <NA>   
+#>  4 1       2022-01-01 2021-12-31 2022-01-01 <NA>   
+#>  5 1       2022-01-01 2022-01-01 2022-01-02 Y      
+#>  6 1       2022-01-01 2022-05-10 2022-05-10 Y      
+#>  7 1       2022-01-01 2022-05-11 2022-05-11 Y      
+#>  8 1       2022-01-01 NA         NA         Y      
+#>  9 1       2022-01-01 2021-12-30 NA         <NA>   
+#> 10 1       2022-01-01 2021-12-31 NA         <NA>   
+#> 11 1       2022-01-01 NA         2022-01-04 Y      
+#> 12 1       2022-01-01 NA         2021-12-24 <NA>   
+#> 13 1       2022-01-01 NA         2022-06-04 Y      
+#> 14 2       NA         NA         2021-12-03 <NA>   
+#> 15 2       NA         2021-12-01 2021-12-03 <NA>   
+#> 16 2       NA         2021-12-06 NA         <NA>   }\if{html}{\out{</div>}}}
 \subsection{Considering treatment end date (\code{trt_end_date} and \code{end_window})}{
 
 Derive \code{TRTEMFL} taking a treatment end window into account
