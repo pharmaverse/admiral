@@ -157,16 +157,16 @@ derive_vars_cat(
   definition = definition
 )
 #> # A tibble: 8 × 6
-#>   USUBJID     VSTEST  AVAL AVALCAT1 AVALCA1N NEWCOL
-#>   <chr>       <chr>  <dbl> <chr>       <dbl> <chr> 
-#> 1 01-701-1015 Height 147.  <=160 cm        2 extra2
-#> 2 01-701-1015 Weight  54.0 <NA>           NA <NA>  
-#> 3 01-701-1023 Height 163.  >160 cm         1 extra1
-#> 4 01-701-1023 Weight  NA   <NA>           NA <NA>  
-#> 5 01-701-1028 Height  NA   <NA>           NA <NA>  
-#> 6 01-701-1028 Weight  NA   <NA>           NA <NA>  
-#> 7 01-701-1033 Height 175.  >160 cm         1 extra1
-#> 8 01-701-1033 Weight  88.4 <NA>           NA <NA>  }\if{html}{\out{</div>}}}
+#>   USUBJID   VSTEST  AVAL AVALCAT1 AVALCA1N NEWCOL
+#>   <chr>     <chr>  <dbl> <chr>       <dbl> <chr> 
+#> 1 01-701-1… Height 147.  <=160 cm        2 extra2
+#> 2 01-701-1… Weight  54.0 <NA>           NA <NA>  
+#> 3 01-701-1… Height 163.  >160 cm         1 extra1
+#> 4 01-701-1… Weight  NA   <NA>           NA <NA>  
+#> 5 01-701-1… Height  NA   <NA>           NA <NA>  
+#> 6 01-701-1… Weight  NA   <NA>           NA <NA>  
+#> 7 01-701-1… Height 175.  >160 cm         1 extra1
+#> 8 01-701-1… Weight  88.4 <NA>           NA <NA>  }\if{html}{\out{</div>}}}
 \subsection{Derive categorization variables using \code{by_vars}}{
 
 When using \code{by_vars}, the conditions are automatically scoped to records
