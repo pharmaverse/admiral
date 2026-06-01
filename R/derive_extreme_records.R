@@ -236,7 +236,7 @@
 #'   value across all records.
 #' @code
 #' mean_value <- mean(adlb$AVAL, na.rm = TRUE)
-#' 
+#'
 #' derive_extreme_records(
 #'   adlb,
 #'   dataset_add = adlb,
