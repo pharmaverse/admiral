@@ -103,6 +103,14 @@
 #'
 #' @permitted [var_list_tidyselect]
 #'
+#' @param missing_values Values for missing records
+#'
+#'   For observations of the reference dataset (`dataset_ref`) which do not have a
+#'   matching record in `dataset_add` (after applying `filter_add`). Only variables
+#'   specified for `set_values_to` can be specified for `missing_values`.
+#'
+#' @permitted [expr_list_summary]
+#'
 #' @inheritParams filter_extreme
 #' @inheritParams derive_summary_records
 #'
@@ -116,7 +124,8 @@
 #'   1. If `dataset_ref` is specified, observations which are in `dataset_ref`
 #'   but not in the selected records are added. Variables that are common
 #'   across `dataset_ref`, `dataset_add` and `keep_source_vars()` are also
-#'   populated for the new observations.
+#'   populated for the new observations. If `missing_values` is specified,
+#'   the specified values are set for these observations.
 #'   1. The variables specified by the `set_values_to` argument are added to
 #'   the selected observations.
 #'   1. The variables specified by the `keep_source_vars` argument are selected
@@ -217,6 +226,34 @@
 #'     AVISITN = 99
 #'   )
 #' )
+#'
+#' @caption Setting values for missing groups (`missing_values`)
+#' @info When using `dataset_ref`, groups without matching records in
+#'   `dataset_add` get new records with `NA` values by default. The
+#'   `missing_values` argument allows setting specific values for these
+#'   records. In the example records for the last non-missing value are added.
+#'   For subjects without assessments the value is set to the mean analysis
+#'   value across all records.
+#' @code
+#' mean_value <- mean(adlb$AVAL, na.rm = TRUE)
+#' 
+#' derive_extreme_records(
+#'   adlb,
+#'   dataset_add = adlb,
+#'   filter_add = !is.na(AVAL),
+#'   dataset_ref = adlb,
+#'   by_vars = exprs(USUBJID),
+#'   order = exprs(AVISITN),
+#'   mode = "last",
+#'   set_values_to = exprs(
+#'     AVISITN = 99
+#'   ),
+#'   missing_values = exprs(
+#'     AVAL = !!mean_value,
+#'     DTYPE = "MOV"
+#'   )
+#' )
+#'
 #'
 #' @caption Selecting variables for new records (`keep_source_vars`)
 #' @info Which variables from the source dataset are kept for the new records
@@ -522,7 +559,8 @@ derive_extreme_records <- function(dataset = NULL,
                                    true_value = "Y",
                                    false_value = NA_character_,
                                    keep_source_vars = exprs(everything()),
-                                   set_values_to) {
+                                   set_values_to,
+                                   missing_values = NULL) {
   # Check input arguments
   assert_vars(by_vars, optional = is.null(dataset_ref))
   assert_expr_list(order, optional = TRUE)
@@ -550,6 +588,7 @@ derive_extreme_records <- function(dataset = NULL,
   exist_flag <- assert_symbol(enexpr(exist_flag), optional = TRUE)
   filter_add <- assert_filter_cond(enexpr(filter_add), optional = TRUE)
   assert_varval_list(set_values_to)
+  assert_expr_list(missing_values, named = TRUE, optional = TRUE)
 
   # Create new observations
   new_add_obs <- filter_if(dataset_add, filter_add)
@@ -573,6 +612,11 @@ derive_extreme_records <- function(dataset = NULL,
       select(new_add_obs, !!!by_vars),
       by = map_chr(by_vars, as_name)
     )
+
+    if (!is.null(missing_values)) {
+      new_ref_obs <- new_ref_obs %>%
+        mutate(!!!missing_values)
+    }
 
     if (!is.null(exist_flag)) {
       new_add_obs <- mutate(new_add_obs, !!exist_flag := true_value)
