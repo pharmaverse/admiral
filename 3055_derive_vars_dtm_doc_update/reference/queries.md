@@ -1,0 +1,27 @@
+# Queries Dataset
+
+Queries Dataset
+
+## Usage
+
+``` r
+queries
+```
+
+## Format
+
+An object of class `tbl_df` (inherits from `tbl`, `data.frame`) with 15
+rows and 8 columns.
+
+## Source
+
+An example of standard query dataset to be used in deriving Standardized
+MedDRA Query variables in ADAE
+
+## See also
+
+Other datasets:
+[`admiral_adlb`](https:/pharmaverse.github.io/admiral/3055_derive_vars_dtm_doc_update/reference/admiral_adlb.md),
+[`admiral_adsl`](https:/pharmaverse.github.io/admiral/3055_derive_vars_dtm_doc_update/reference/admiral_adsl.md),
+[`example_qs`](https:/pharmaverse.github.io/admiral/3055_derive_vars_dtm_doc_update/reference/example_qs.md),
+[`queries_mh`](https:/pharmaverse.github.io/admiral/3055_derive_vars_dtm_doc_update/reference/queries_mh.md)
