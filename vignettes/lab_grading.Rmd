@@ -361,7 +361,7 @@ adlb %>%
 
 ## Deriving Baseline Toxicity Grades
 
- Per the ADaM Implementation Guide 1.2, baseline toxicity grades are required to evaluate 
+Per the ADaM Implementation Guide 1.2, baseline toxicity grades are required to evaluate 
 shifts from baseline. For directional toxicity grading, split variables show grading 
 direction: `BTOXGRL` (Baseline Toxicity Grade Low) and `BTOXGRH` (Baseline Toxicity Grade High).
 
