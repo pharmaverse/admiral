@@ -75,7 +75,7 @@ missing.
 
 A character value is expected.
 \itemize{
-\item If  \code{highest_imputation} is \code{"M"}, month and day can be
+\item If (and only if) \code{highest_imputation} is \code{"M"}, month and day can be
 specified as \code{"mm-dd"}: e.g. \code{"06-15"} for the 15th of June
 \item When  \code{highest_imputation} is \code{"M"} or  \code{"D"}, the following keywords are available:
 \code{"first"}, \code{"mid"}, \code{"last"} to impute to the first/mid/last
@@ -259,6 +259,30 @@ on the date.
 #> 4 "2019-02"             2019-02-01 D     
 #> 5 "2019"                2019-01-01 M     
 #> 6 "2019---07"           2019-01-01 M     
+#> 7 ""                    NA         <NA>  }\if{html}{\out{</div>}}
+
+It is also possible to just impute the day, with \code{highest_imputation = "D"}. Here
+dates with just a missing day have it imputed to the 10th of the month. Note that in this
+case care needs to be taken to ensure invalid dates are not created, e.g.
+\code{date_imputation = "30"} would create an invalid date of \code{"2020-02-31"} when trying to impute
+the day for \code{"2020-02"}.
+
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{derive_vars_dt(
+  mhdt,
+  new_vars_prefix = "AST",
+  dtc = MHSTDTC,
+  highest_imputation = "D",
+  date_imputation = "10"
+)
+#> # A tibble: 7 × 3
+#>   MHSTDTC               ASTDT      ASTDTF
+#>   <chr>                 <date>     <chr> 
+#> 1 "2019-07-18T15:25:40" 2019-07-18 <NA>  
+#> 2 "2019-07-18T15:25"    2019-07-18 <NA>  
+#> 3 "2019-07-18"          2019-07-18 <NA>  
+#> 4 "2019-02"             2019-02-10 D     
+#> 5 "2019"                NA         <NA>  
+#> 6 "2019---07"           NA         <NA>  
 #> 7 ""                    NA         <NA>  }\if{html}{\out{</div>}}}
 \subsection{Impute to the last day/month (\code{date_imputation = "last"})}{
 

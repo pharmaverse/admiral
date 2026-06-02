@@ -52,7 +52,7 @@ missing.
 
 A character value is expected.
 \itemize{
-\item If  \code{highest_imputation} is \code{"M"}, month and day can be
+\item If (and only if) \code{highest_imputation} is \code{"M"}, month and day can be
 specified as \code{"mm-dd"}: e.g. \code{"06-15"} for the 15th of June
 \item When  \code{highest_imputation} is \code{"M"} or  \code{"D"}, the following keywords are available:
 \code{"first"}, \code{"mid"}, \code{"last"} to impute to the first/mid/last
@@ -178,6 +178,13 @@ impute_dtc_dt(
   dtc = dates,
   highest_imputation = "M",
   date_imputation = "mid"
+)
+
+# Impute to a given day of the month if only day is missing
+impute_dtc_dt(
+  dtc = dates,
+  highest_imputation = "D",
+  date_imputation = "10"
 )
 
 # Impute a date and ensure that the imputed date is not before a list of

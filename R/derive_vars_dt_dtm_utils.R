@@ -83,9 +83,10 @@ dt_level <- function(level) {
 #' @param date_imputation The value to impute the day/month when a datepart is
 #'   missing.
 #'
-#'   A character value is expected, either as a
+#'   A character value is expected, as a:
 #'   - format with month and day specified as `"mm-dd"`: e.g. `"06-15"` for the 15th
 #'   of June,
+#'   - format with day specified as `"dd"`: e.g. `"15"` for the 15th day of a month
 #'   - or as a keyword: `"first"`, `"mid"`, `"last"` to impute to the first/mid/last
 #'   day/month.
 #'
@@ -101,6 +102,7 @@ dt_level <- function(level) {
 #'   otherwise `"15"` returned.
 #'  - For `date_imputation = "last"` `"9999"`, `"12"`, `"28"` are returned.
 #'  - For `date_imputation = "<mm>-<dd>"` `"xxxx"`, `"<mm>"`, `"<dd>"` are returned.
+#'  - For `date_imputation = "<dd>"` `"xxxx"`, `"xx"`, `"<dd>"` are returned.
 #'
 #'  `"xxxx"` indicates that the component is undefined. If an undefined
 #'  component occurs in the imputed `--DTC` value, the imputed `--DTC` value is set to
@@ -125,6 +127,10 @@ dt_level <- function(level) {
 #'
 #' # Get imputation target for custom date imputation "06-15"
 #' target_custom <- admiral:::get_imputation_target_date("06-15", month = NA)
+#' print(target_custom)
+#'
+#' # Get imputation target for custom date imputation "11"
+#' target_custom <- admiral:::get_imputation_target_date("11", month = NA)
 #' print(target_custom)
 #'
 #' @family utils_impute
@@ -152,7 +158,14 @@ get_imputation_target_date <- function(date_imputation,
       month = "12",
       day = "28"
     )
-  } else {
+  }else if (str_detect(date_imputation, "^(0[1-9]|[12][0-9]|3[01])$")) {
+    list(
+      year = "xxxx",
+      month = "xx",
+      day = date_imputation
+    )
+  }
+  else {
     list(
       year = "xxxx",
       month = str_sub(date_imputation, 1, 2),
@@ -384,7 +397,17 @@ assert_date_imputation <- function(date_imputation, highest_imputation) {
 
   date_imputation <- tolower(date_imputation)
   if (highest_imputation == "D") {
-    assert_character_scalar(date_imputation, values = c("first", "mid", "last"))
+    is_dd_format <- str_detect(date_imputation, "^(0[1-9]|[12][0-9]|3[01])$")
+    is_one_of_keys <- date_imputation %in% c("first", "mid", "last")
+    if (!{
+      is_dd_format || is_one_of_keys
+    }) {
+      cli_abort(paste(
+        "If {.code highest_imputation = \"D\"} is specified, {.arg date_imputation} must be",
+        "one of {.val first}, {.val mid}, {.val last}",
+        "or a format with day specified as {.val dd}: e.g. {.val 15}"
+      ))
+    }
   }
 
   if (highest_imputation == "M") {
@@ -710,6 +733,7 @@ get_highest_imputation_level <- function(highest_imputation, create_datetime) {
 #'
 #' @keywords internal
 get_imputation_targets <- function(partial, date_imputation = NULL, time_imputation = NULL) {
+
   target_date <- get_imputation_target_date(
     date_imputation = date_imputation,
     month = partial[["month"]]

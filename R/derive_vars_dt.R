@@ -99,6 +99,21 @@
 #'   date_imputation = "first"
 #' )
 #'
+#' @info It is also possible to just impute the day, with `highest_imputation = "D"`. Here
+#' dates with just a missing day have it imputed to the 10th of the month. Note that in this
+#' case care needs to be taken to ensure invalid dates are not created, e.g.
+#' `date_imputation = "30"` would create an invalid date of `"2020-02-31"` when trying to impute
+#' the day for `"2020-02"`.
+#'
+#' @code
+#' derive_vars_dt(
+#'   mhdt,
+#'   new_vars_prefix = "AST",
+#'   dtc = MHSTDTC,
+#'   highest_imputation = "D",
+#'   date_imputation = "10"
+#' )
+#'
 #' @caption Impute to the last day/month (`date_imputation = "last"`)
 #' @info In this example, we derive `ADT` impute partial dates to last day/month, i.e.
 #' `date_imputation = "last"`.
@@ -297,7 +312,7 @@ derive_vars_dt <- function(dataset,
 
   # derive DTF
   if (flag_imputation == "date" ||
-    flag_imputation == "auto" && highest_imputation != "n") {
+      flag_imputation == "auto" && highest_imputation != "n") {
     # add *DTF if not there already
     dtf <- paste0(new_vars_prefix, "DTF")
     dtf_exist <- dtf %in% colnames(dataset)
@@ -400,7 +415,7 @@ convert_dtc_to_dt <- function(dtc,
 #'   missing.
 #'
 #'   A character value is expected.
-#'    - If  `highest_imputation` is `"M"`, month and day can be
+#'    - If (and only if) `highest_imputation` is `"M"`, month and day can be
 #'      specified as `"mm-dd"`: e.g. `"06-15"` for the 15th of June
 #'    - When  `highest_imputation` is `"M"` or  `"D"`, the following keywords are available:
 #'      `"first"`, `"mid"`, `"last"` to impute to the first/mid/last
@@ -516,6 +531,13 @@ convert_dtc_to_dt <- function(dtc,
 #'   date_imputation = "mid"
 #' )
 #'
+#' # Impute to a given day of the month if only day is missing
+#' impute_dtc_dt(
+#'   dtc = dates,
+#'   highest_imputation = "D",
+#'   date_imputation = "10"
+#' )
+#'
 #' # Impute a date and ensure that the imputed date is not before a list of
 #' # minimum dates
 #' impute_dtc_dt(
@@ -597,9 +619,20 @@ impute_dtc_dt <- function(dtc,
   imputed <- impute_date_time(partial, target)
   imputed_dtc <- format_imputed_dtc(imputed)
 
-
   if (date_imputation == "last") {
     imputed_dtc <- adjust_last_day_imputation(imputed_dtc, partial)
+  }
+
+  # Check if any valid dates have been
+  if (any(is.na(ymd(imputed_dtc)) & !is.na(imputed_dtc))) {
+    cli_abort(c(
+      "Some imputed dates are invalid.",
+      "i" = paste(
+        "{.arg date_imputation} is set to {.val {date_imputation}}.",
+        "Are you sure that with this value you are generating all valid dates?",
+        "E.g. {.code date_imputation = 31} would impute '2020-02' to '2020-02-31', which is invalid."
+      )
+    ))
   }
 
   # Handle min_dates and max_dates argument ----
@@ -727,7 +760,8 @@ compute_dtf <- function(dtc, dt) {
   warn_if_invalid_dtc(dtc, valid_dtc)
 
   # Find date portion
-  date_portion <- if_else(str_detect(dtc, "T"),
+  date_portion <- if_else(
+    str_detect(dtc, "T"),
     gsub("T", "", substr(dtc, 1, str_locate(dtc, "T")[, 1])),
     substr(dtc, 1, 10)
   )

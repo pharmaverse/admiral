@@ -51,14 +51,6 @@
 ---
 
     Code
-      impute_dtc_dt(dtc = input, highest_imputation = "D", date_imputation = "01")
-    Condition
-      Error in `assert_date_imputation()`:
-      ! Argument `date_imputation` must be equal to one of "first", "mid", or "last".
-
----
-
-    Code
       impute_dtc_dt(dtc = input, highest_imputation = "Y", date_imputation = "2006-01-01")
     Condition
       Error in `assert_highest_imputation()`:
