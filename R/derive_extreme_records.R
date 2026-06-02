@@ -120,9 +120,9 @@
 #'       PARAM = "Worst Observations"
 #'     )
 #'   ```
-#' 
+#'
 #' @permitted [expr_list_named]
-#' 
+#'
 #' @inheritParams filter_extreme
 #' @inheritParams derive_summary_records
 #'
