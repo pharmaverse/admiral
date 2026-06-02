@@ -234,6 +234,10 @@ choose to say impute months, but not days.
 The presence of a \verb{*DTF} variable is checked and the variable is not derived
 if it already exists in the input dataset. However, if \verb{*TMF} already exists
 in the input dataset, a warning is issued and \verb{*TMF} will be overwritten.
+
+Additionally, the function will throw an error if imputation rules cause an
+invalid datetime (e.g. "2020-02-01T25:00:00") to be generated. In this case,
+the user should adjust the imputation rules.
 }
 \seealso{
 \code{vignette("imputation")}

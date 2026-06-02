@@ -29,15 +29,6 @@
 # impute_dtc_dtm Test 13: wrong input to `date_imputation`
 
     Code
-      impute_dtc_dtm(dtc = c("2020-12", "2020-11", NA_character_, "2020-02-02"),
-      highest_imputation = "D", date_imputation = "15", time_imputation = "last")
-    Condition
-      Error in `assert_date_imputation()`:
-      ! Argument `date_imputation` must be equal to one of "first", "mid", or "last".
-
----
-
-    Code
       impute_dtc_dtm(dtc = c("2020-12", "2020-11", NA_character_, "2020-02-02",
         "2020"), highest_imputation = "M", date_imputation = "10:12",
       time_imputation = "last")
@@ -53,15 +44,6 @@
     Condition
       Error in `assert_date_imputation()`:
       ! If `highest_imputation = "M"` is specified, `date_imputation` must be one of "first", "mid", "last" or a format with month and day specified as "mm-dd": e.g. "06-15"
-
----
-
-    Code
-      impute_dtc_dtm(dtc = c("2020-12", "2020-11", NA_character_, "2020-02-02",
-        "2020"), highest_imputation = "D", date_imputation = "15", time_imputation = "last")
-    Condition
-      Error in `assert_date_imputation()`:
-      ! Argument `date_imputation` must be equal to one of "first", "mid", or "last".
 
 ---
 

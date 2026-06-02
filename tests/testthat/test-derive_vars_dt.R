@@ -311,7 +311,8 @@ test_that("derive_vars_dt Test 12: wrong input to `date_imputation`", {
     "--07-18", # missing year
     "2019", # missing month and day
     "2019-07--", # missing day
-    "2019---07" # missing just month
+    "2019---07", # missing just month
+    "2020-02" # used to impute day = 31 in last test
   )
 
   # impossible month 13
@@ -344,21 +345,22 @@ test_that("derive_vars_dt Test 12: wrong input to `date_imputation`", {
     error = TRUE
   )
 
-  # not using key for date_imputation when highest_imputation = "D"
-  expect_snapshot(
-    impute_dtc_dt(
-      dtc = input,
-      highest_imputation = "D",
-      date_imputation = "01"
-    ),
-    error = TRUE
-  )
   # only first or last is allowed when highest_imputation = "Y"
   expect_snapshot(
     impute_dtc_dt(
       dtc = input,
       highest_imputation = "Y",
       date_imputation = "2006-01-01"
+    ),
+    error = TRUE
+  )
+
+  # Create invalid date
+  expect_snapshot(
+    impute_dtc_dt(
+      dtc = input,
+      highest_imputation = "D",
+      date_imputation = "31"
     ),
     error = TRUE
   )

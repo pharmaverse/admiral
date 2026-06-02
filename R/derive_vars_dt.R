@@ -46,6 +46,9 @@
 #' The presence of a `*DTF` variable is checked and if it already exists in the input dataset,
 #' a warning is issued and `*DTF` will be overwritten.
 #'
+#' Additionally, the function will throw an error if imputation rules cause an
+#' invalid date (e.g. "2020-02-31") to be generated. In this case,  the user should adjust
+#' the imputation rules.
 #'
 #' @seealso `vignette("imputation")`
 #'
@@ -312,7 +315,7 @@ derive_vars_dt <- function(dataset,
 
   # derive DTF
   if (flag_imputation == "date" ||
-      flag_imputation == "auto" && highest_imputation != "n") {
+    flag_imputation == "auto" && highest_imputation != "n") {
     # add *DTF if not there already
     dtf <- paste0(new_vars_prefix, "DTF")
     dtf_exist <- dtf %in% colnames(dataset)
@@ -476,7 +479,13 @@ convert_dtc_to_dt <- function(dtc,
 #'
 #' @permitted [boolean]
 #'
-#' @details Usually this computation function can not be used with `%>%`.
+#' @details
+#'
+#' Usually this computation function can not be used with `%>%`.
+#'
+#' Additionally, the function will throw an error if imputation rules cause an
+#' invalid datetime (e.g. "2020-02-31") to be generated. In this case, the user
+#' should adjust the imputation rules.
 #'
 #' @return A character vector
 #'
@@ -623,14 +632,14 @@ impute_dtc_dt <- function(dtc,
     imputed_dtc <- adjust_last_day_imputation(imputed_dtc, partial)
   }
 
-  # Check if any valid dates have been
-  if (any(is.na(ymd(imputed_dtc)) & !is.na(imputed_dtc))) {
+  if (!all(is_valid_dtc(imputed_dtc, check_dtc = TRUE))) {
     cli_abort(c(
       "Some imputed dates are invalid.",
       "i" = paste(
         "{.arg date_imputation} is set to {.val {date_imputation}}.",
         "Are you sure that with this value you are generating all valid dates?",
-        "E.g. {.code date_imputation = 31} would impute '2020-02' to '2020-02-31', which is invalid."
+        "E.g. {.code date_imputation = 31} would impute \"2020-02\" to \"2020-02-31\",",
+        "which is invalid."
       )
     ))
   }

@@ -158,14 +158,13 @@ get_imputation_target_date <- function(date_imputation,
       month = "12",
       day = "28"
     )
-  }else if (str_detect(date_imputation, "^(0[1-9]|[12][0-9]|3[01])$")) {
+  } else if (str_detect(date_imputation, "^(0[1-9]|[12][0-9]|3[01])$")) {
     list(
       year = "xxxx",
       month = "xx",
       day = date_imputation
     )
-  }
-  else {
+  } else {
     list(
       year = "xxxx",
       month = str_sub(date_imputation, 1, 2),
@@ -733,7 +732,6 @@ get_highest_imputation_level <- function(highest_imputation, create_datetime) {
 #'
 #' @keywords internal
 get_imputation_targets <- function(partial, date_imputation = NULL, time_imputation = NULL) {
-
   target_date <- get_imputation_target_date(
     date_imputation = date_imputation,
     month = partial[["month"]]

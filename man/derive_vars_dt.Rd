@@ -184,6 +184,10 @@ choose to say impute months, but not days.
 
 The presence of a \verb{*DTF} variable is checked and if it already exists in the input dataset,
 a warning is issued and \verb{*DTF} will be overwritten.
+
+Additionally, the function will throw an error if imputation rules cause an
+invalid date (e.g. "2020-02-31") to be generated. In this case,  the user should adjust
+the imputation rules.
 }
 \seealso{
 \code{vignette("imputation")}

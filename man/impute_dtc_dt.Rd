@@ -135,6 +135,10 @@ Imputation partial date portion of a \code{--DTC} variable based on user input.
 }
 \details{
 Usually this computation function can not be used with \verb{\%>\%}.
+
+Additionally, the function will throw an error if imputation rules cause an
+invalid datetime (e.g. "2020-02-31") to be generated. In this case, the user
+should adjust the imputation rules.
 }
 \examples{
 library(lubridate)
