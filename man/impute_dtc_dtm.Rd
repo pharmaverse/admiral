@@ -30,7 +30,18 @@ valid "missing" value for any component.
 
 The \code{highest_imputation} argument controls which components of the \code{--DTC}
 value are imputed if they are missing. All components up to the specified
-level are imputed, and a numeric variable is added to the input dataset.
+level are imputed.
+
+If a component at a higher level than the highest imputation level is
+missing, \code{NA} is returned. For example, for \code{highest_imputation = "D"}
+\code{"2020"} results in \code{NA} because the month is missing.
+
+If \code{"n"} is specified, no imputation is performed, i.e., if any component is
+missing, \code{NA} is returned.
+
+If \code{"Y"} is specified, \code{date_imputation} should be \code{"first"} or \code{"last"}
+and \code{min_dates} or \code{max_dates} should be specified respectively. Otherwise,
+\code{NA} is returned if the year component is missing.
 
 \describe{
 \item{Permitted values}{\code{"Y"} (year, highest level), \code{"M"} (month), \code{"D"}
