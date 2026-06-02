@@ -103,14 +103,26 @@
 #'
 #' @permitted [var_list_tidyselect]
 #'
-#' @param missing_values Values for missing records
+#' @param set_values_to Variables to be set
 #'
-#'   For observations of the reference dataset (`dataset_ref`) which do not have a
-#'   matching record in `dataset_add` (after applying `filter_add`). Only variables
-#'   specified for `set_values_to` can be specified for `missing_values`.
+#'   The specified variables are set to the specified values for the new
+#'   observations.
 #'
-#' @permitted [expr_list_summary]
+#'   Set a list of variables to some specified value for the new records
+#'   + LHS refers to a variable.
+#'   + RHS refers to the values to set to the variable. This can be a string, a
+#'   symbol, a numeric value, an expression or NA.
 #'
+#'   For example:
+#'   ```
+#'     set_values_to = exprs(
+#'       PARAMCD = "WOBS",
+#'       PARAM = "Worst Observations"
+#'     )
+#'   ```
+#' 
+#' @permitted [expr_list_named]
+#' 
 #' @inheritParams filter_extreme
 #' @inheritParams derive_summary_records
 #'

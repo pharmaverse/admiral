@@ -127,7 +127,7 @@
 #'   be avoided unless the list of variable-value pairs is clearly
 #'   specified in a statement via the `set_values_to` argument.
 #'
-#' @permitted [expr_list_formula]
+#' @permitted [expr_list_named]
 #'
 #' @param keep_nas Keep observations with `NA`s
 #'

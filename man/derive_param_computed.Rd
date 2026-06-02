@@ -105,7 +105,7 @@ be avoided unless the list of variable-value pairs is clearly
 specified in a statement via the \code{set_values_to} argument.
 
 \describe{
-\item{Permitted values}{list of named expressions created by a formula using \code{exprs()}, e.g., \code{exprs(AVALC = VSSTRESC, AVAL = yn_to_numeric(AVALC))}}
+\item{Permitted values}{list of named expressions created by \code{exprs()}, e.g., \code{exprs(AVALC = VSSTRESC, AVAL = yn_to_numeric(AVALC))}}
 \item{Default value}{none}
 }}
 

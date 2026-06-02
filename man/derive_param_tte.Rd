@@ -166,7 +166,7 @@ expected. The values must be symbols, character strings, numeric values,
 expressions, or \code{NA}.
 
 \describe{
-\item{Permitted values}{list of named expressions created by a formula using \code{exprs()}, e.g., \code{exprs(AVALC = VSSTRESC, AVAL = yn_to_numeric(AVALC))}}
+\item{Permitted values}{list of named expressions created by \code{exprs()}, e.g., \code{exprs(AVALC = VSSTRESC, AVAL = yn_to_numeric(AVALC))}}
 \item{Default value}{none}
 }}
 
