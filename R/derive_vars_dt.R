@@ -297,7 +297,7 @@ derive_vars_dt <- function(dataset,
 
   # derive DTF
   if (flag_imputation == "date" ||
-    flag_imputation == "auto" && highest_imputation != "n") {
+      flag_imputation == "auto" && highest_imputation != "n") {
     # add *DTF if not there already
     dtf <- paste0(new_vars_prefix, "DTF")
     dtf_exist <- dtf %in% colnames(dataset)
@@ -384,11 +384,11 @@ convert_dtc_to_dt <- function(dtc,
 #'   level are imputed.
 #'
 #'   If a component at a higher level than the highest imputation level is
-#'   missing, `NA_character_` is returned. For example, for `highest_imputation
-#'   = "D"` `"2020"` results in `NA_character_` because the month is missing.
+#'   missing, `NA` is returned. For example, for `highest_imputation = "D"`
+#'   `"2020"` results in `NA` because the month is missing.
 #'
 #'   If `"n"` (none, lowest level) is specified no imputation is performed, i.e.,
-#'   if any component is missing, `NA_character_` is returned.
+#'   if any component is missing, `NA` is returned.
 #'
 #'   If `"Y"` (year, highest level) is specified, `date_imputation` must be `"first"` or `"last"`
 #'   and `min_dates` or `max_dates` must be specified respectively. Otherwise,
@@ -728,8 +728,8 @@ compute_dtf <- function(dtc, dt) {
 
   # Find date portion
   date_portion <- if_else(str_detect(dtc, "T"),
-    gsub("T", "", substr(dtc, 1, str_locate(dtc, "T")[, 1])),
-    substr(dtc, 1, 10)
+                          gsub("T", "", substr(dtc, 1, str_locate(dtc, "T")[, 1])),
+                          substr(dtc, 1, 10)
   )
   n_chr_date_portion <- nchar(date_portion)
 
