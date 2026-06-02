@@ -363,7 +363,18 @@ convert_dtc_to_dtm <- function(dtc,
 #'
 #'   The `highest_imputation` argument controls which components of the `--DTC`
 #'   value are imputed if they are missing. All components up to the specified
-#'   level are imputed, and a numeric variable is added to the input dataset.
+#'   level are imputed.
+#'
+#'   If a component at a higher level than the highest imputation level is
+#'   missing, `NA_character_` is returned. For example, for `highest_imputation
+#'   = "D"` `"2020"` results in `NA_character_` because the month is missing.
+#'
+#'   If `"n"` is specified, no imputation is performed, i.e., if any component is
+#'   missing, `NA_character_` is returned.
+#'
+#'   If `"Y"` is specified, `date_imputation` should be `"first"` or `"last"`
+#'   and `min_dates` or `max_dates` should be specified respectively. Otherwise,
+#'   `NA_character_` is returned if the year component is missing.
 #'
 #' @permitted [date_time_high_imp]
 #'
