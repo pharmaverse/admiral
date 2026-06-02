@@ -178,6 +178,8 @@
 
 - The documentation for
   [`derive_vars_dtm()`](https:/pharmaverse.github.io/admiral/3055_derive_vars_dtm_doc_update/reference/derive_vars_dtm.md)
+  and
+  [`derive_vars_dt()`](https:/pharmaverse.github.io/admiral/3055_derive_vars_dtm_doc_update/reference/derive_vars_dt.md)
   was updated to clarify details of the `highest_imputation` argument.
   ([\#3055](https://github.com/pharmaverse/admiral/issues/3055))
 
