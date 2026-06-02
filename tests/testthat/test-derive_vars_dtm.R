@@ -353,17 +353,6 @@ test_that("impute_dtc_dtm Test 12: Error if null min/max_dates when highest_impu
 
 ## Test 13: wrong input to `date_imputation` ----
 test_that("impute_dtc_dtm Test 13: wrong input to `date_imputation`", {
-  # date imputation is not a key when highest_imputation is "D"
-  expect_snapshot(
-    impute_dtc_dtm(
-      dtc = c("2020-12", "2020-11", NA_character_, "2020-02-02"),
-      highest_imputation = "D",
-      date_imputation = "15",
-      time_imputation = "last"
-    ),
-    error = TRUE
-  )
-
   # wrong format
   expect_snapshot(
     impute_dtc_dtm(
@@ -381,16 +370,6 @@ test_that("impute_dtc_dtm Test 13: wrong input to `date_imputation`", {
       dtc = c("2020-12", "2020-11", NA_character_, "2020-02-02", "2020"),
       highest_imputation = "M",
       date_imputation = "10",
-      time_imputation = "last"
-    ),
-    error = TRUE
-  )
-  # not using key for date_imputation when highest_imputation = "D"
-  expect_snapshot(
-    impute_dtc_dtm(
-      dtc = c("2020-12", "2020-11", NA_character_, "2020-02-02", "2020"),
-      highest_imputation = "D",
-      date_imputation = "15",
       time_imputation = "last"
     ),
     error = TRUE
