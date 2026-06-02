@@ -45,15 +45,15 @@ Date and time is collected in SDTM as character values using the
 extended [ISO 8601](https://en.wikipedia.org/wiki/ISO_8601) format. For
 example, `"2019-10-9T13:42:00"`. It allows that some parts of the date
 or time are missing, e.g., `"2019-10"` if the day and the time is
-unknown. These times and date-times are represented by the POSIXct 
-class in R, which stores date and time in seconds, so seconds will 
-always be included in the time stamp of a *DTM variable.
+unknown.
 
 The ADaM timing variables like `ADTM` (Analysis Datetime) or `ADY`
 (Analysis Relative Day) are numeric variables. They can be derived only
 if the date or datetime is complete. Therefore `{admiral}` provides
 imputation functions which fill in missing date or time parts according
-to certain imputation rules.
+to certain imputation rules. These times and date-times are represented 
+by the POSIXct class in R, which stores date and time in seconds, 
+so seconds will always be included in the time stamp of a *DTM variable.
 
 In `{admiral}` users will primarily use two functions `derive_vars_dt()`
 and `derive_vars_dtm()` for date and datetime imputations respectively.
