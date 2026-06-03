@@ -56,8 +56,7 @@ Utilities used for date imputation:
 
 ``` r
 # Get imputation target for "first" time
-target_first_time <- admiral:::get_imputation_target_time("first")
-print(target_first_time)
+admiral:::get_imputation_target_time("first")
 #> $hour
 #> [1] "00"
 #> 
@@ -69,8 +68,7 @@ print(target_first_time)
 #> 
 
 # Get imputation target for "last" time
-target_last_time <- admiral:::get_imputation_target_time("last")
-print(target_last_time)
+admiral:::get_imputation_target_time("last")
 #> $hour
 #> [1] "23"
 #> 
@@ -82,8 +80,7 @@ print(target_last_time)
 #> 
 
 # Get imputation target for custom time imputation "12-34-56"
-target_custom_time <- admiral:::get_imputation_target_time("12-34-56")
-print(target_custom_time)
+admiral:::get_imputation_target_time("12-34-56")
 #> $hour
 #> [1] "12"
 #> 

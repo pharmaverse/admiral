@@ -67,9 +67,6 @@ convert_dtc_to_dtm(
 
   A character value is expected.
 
-  - If (and only if) `highest_imputation` is `"M"`, month and day can be
-    specified as `"mm-dd"`: e.g. `"06-15"` for the 15th of June
-
   - When `highest_imputation` is `"M"` or `"D"`, the following keywords
     are available: `"first"`, `"mid"`, `"last"` to impute to the
     first/mid/last day/month. If `"mid"` is specified, missing
@@ -81,13 +78,24 @@ convert_dtc_to_dtm(
     - If only day is missing, it is imputed as `"15"` (middle of the
       month).
 
-  The year can not be specified; for imputing the year `"first"` or
-  `"last"` together with `min_dates` or `max_dates` argument can be used
-  (see examples).
+  - `"<dd>"` can be specified only if `highest_imputation = "D"`.
+    Missing days are imputed by the specified day, e.g. `"10"` for the
+    10th day of the month. The specified day should be valid for all
+    months as otherwise an error might be issued. For example,
+    `date_imputation = "30"` results in an invalid date of "2024-02-30"
+    for the partial date "2024-02".
+
+  - `"mm-dd"` can be specified only if `highest_imputation` is `"M"`,
+    e.g. `"06-15"` for the 15th of June.
+
+  - Note that the year can not be specified; for imputing the year
+    `"first"` or `"last"` together with `min_dates` or `max_dates`
+    argument can be used (see examples).
 
   Permitted values
-
-  :   `"first"`, `"mid"`, `"last"`, or user-defined
+  :   a key-word, i.e. `"first"`, `"mid"`, `"last"`, or "-
+  :   " or "
+  :   "
 
   Default value
 
