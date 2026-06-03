@@ -7,7 +7,9 @@
 ### Updates of Existing Functions
 
 - [`derive_vars_dt()`](https:/pharmaverse.github.io/admiral/3014_derive_vars_dt_user_defined_date_imp_with_d/reference/derive_vars_dt.md)
-  was enhanced to allow user-defined `date_imputation` values (e.g.
+  and
+  [`derive_vars_dtm()`](https:/pharmaverse.github.io/admiral/3014_derive_vars_dt_user_defined_date_imp_with_d/reference/derive_vars_dtm.md)
+  were enhanced to allow user-defined `date_imputation` values (e.g.
   `date_imputation = "10"`) in combination with
   `highest_imputation = "D"`. Additionally, functions such as
   [`derive_vars_dt()`](https:/pharmaverse.github.io/admiral/3014_derive_vars_dt_user_defined_date_imp_with_d/reference/derive_vars_dt.md),

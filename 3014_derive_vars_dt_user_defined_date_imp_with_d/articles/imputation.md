@@ -104,12 +104,12 @@ invalid dates, e.g.,
 impute_dtc_dtm(
   "2019-02",
   highest_imputation = "M",
-  date_imputation = "02-31",
+  date_imputation = "12-31",
   time_imputation = "00:00:00"
 )
 #> Error in `impute_dtc_dtm()`:
 #> ! Some imputed dates are invalid.
-#> ℹ `date_imputation` is set to "02-31". Are you sure that with this value you
+#> ℹ `date_imputation` is set to "12-31". Are you sure that with this value you
 #>   are generating all valid dates? E.g. `date_imputation = 31` would impute
 #>   "2020-02" to "2020-02-31", which is invalid.
 ```
