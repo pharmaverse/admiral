@@ -110,28 +110,22 @@ dt_level <- function(level) {
 #'
 #' @examples
 #' # Get imputation target for "first"
-#' target_first <- admiral:::get_imputation_target_date("first", month = NA)
-#' print(target_first)
+#' admiral:::get_imputation_target_date("first", month = NA)
 #'
 #' # Get imputation target for "mid" with specified month
-#' target_mid <- admiral:::get_imputation_target_date("mid", month = "03")
-#' print(target_mid)
+#' admiral:::get_imputation_target_date("mid", month = "03")
 #'
 #' # Get imputation target for "mid" with NA month
-#' target_mid_na <- admiral:::get_imputation_target_date("mid", month = NA)
-#' print(target_mid_na)
+#' admiral:::get_imputation_target_date("mid", month = NA)
 #'
 #' # Get imputation target for "last"
-#' target_last <- admiral:::get_imputation_target_date("last", month = NA)
-#' print(target_last)
+#' admiral:::get_imputation_target_date("last", month = NA)
 #'
 #' # Get imputation target for custom date imputation "06-15"
-#' target_custom <- admiral:::get_imputation_target_date("06-15", month = NA)
-#' print(target_custom)
+#' admiral:::get_imputation_target_date("06-15", month = NA)
 #'
 #' # Get imputation target for custom date imputation "11"
-#' target_custom <- admiral:::get_imputation_target_date("11", month = NA)
-#' print(target_custom)
+#' admiral:::get_imputation_target_date("11", month = NA)
 #'
 #' @family utils_impute
 #'
@@ -194,16 +188,13 @@ get_imputation_target_date <- function(date_imputation,
 #'
 #' @examples
 #' # Get imputation target for "first" time
-#' target_first_time <- admiral:::get_imputation_target_time("first")
-#' print(target_first_time)
+#' admiral:::get_imputation_target_time("first")
 #'
 #' # Get imputation target for "last" time
-#' target_last_time <- admiral:::get_imputation_target_time("last")
-#' print(target_last_time)
+#' admiral:::get_imputation_target_time("last")
 #'
 #' # Get imputation target for custom time imputation "12-34-56"
-#' target_custom_time <- admiral:::get_imputation_target_time("12-34-56")
-#' print(target_custom_time)
+#' admiral:::get_imputation_target_time("12-34-56")
 #'
 #' @family utils_impute
 #'
@@ -398,9 +389,7 @@ assert_date_imputation <- function(date_imputation, highest_imputation) {
   if (highest_imputation == "D") {
     is_dd_format <- str_detect(date_imputation, "^(0[1-9]|[12][0-9]|3[01])$")
     is_one_of_keys <- date_imputation %in% c("first", "mid", "last")
-    if (!{
-      is_dd_format || is_one_of_keys
-    }) {
+    if (!(is_dd_format || is_one_of_keys)) {
       cli_abort(paste(
         "If {.code highest_imputation = \"D\"} is specified, {.arg date_imputation} must be",
         "one of {.val first}, {.val mid}, {.val last}",
@@ -412,9 +401,7 @@ assert_date_imputation <- function(date_imputation, highest_imputation) {
   if (highest_imputation == "M") {
     is_mm_dd_format <- str_detect(date_imputation, "^(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])$")
     is_one_of_keys <- date_imputation %in% c("first", "mid", "last")
-    if (!{
-      is_mm_dd_format || is_one_of_keys
-    }) {
+    if (!(is_mm_dd_format || is_one_of_keys)) {
       cli_abort(paste(
         "If {.code highest_imputation = \"M\"} is specified, {.arg date_imputation} must be",
         "one of {.val first}, {.val mid}, {.val last}",
@@ -468,9 +455,7 @@ assert_time_imputation <- function(time_imputation, highest_imputation) {
   )
   is_one_of_keys <- time_imputation %in% c("first", "last")
 
-  if (!{
-    is_hh_mm_ss_format || is_one_of_keys
-  } && highest_imputation != "n") {
+  if (!(is_hh_mm_ss_format || is_one_of_keys) && highest_imputation != "n") {
     cli_abort(paste(
       "{.arg time_imputation} must be",
       "one of {.val first}, {.val last}",

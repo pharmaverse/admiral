@@ -52,28 +52,22 @@ component occurs in the imputed \code{--DTC} value, the imputed \code{--DTC} val
 }
 \examples{
 # Get imputation target for "first"
-target_first <- admiral:::get_imputation_target_date("first", month = NA)
-print(target_first)
+admiral:::get_imputation_target_date("first", month = NA)
 
 # Get imputation target for "mid" with specified month
-target_mid <- admiral:::get_imputation_target_date("mid", month = "03")
-print(target_mid)
+admiral:::get_imputation_target_date("mid", month = "03")
 
 # Get imputation target for "mid" with NA month
-target_mid_na <- admiral:::get_imputation_target_date("mid", month = NA)
-print(target_mid_na)
+admiral:::get_imputation_target_date("mid", month = NA)
 
 # Get imputation target for "last"
-target_last <- admiral:::get_imputation_target_date("last", month = NA)
-print(target_last)
+admiral:::get_imputation_target_date("last", month = NA)
 
 # Get imputation target for custom date imputation "06-15"
-target_custom <- admiral:::get_imputation_target_date("06-15", month = NA)
-print(target_custom)
+admiral:::get_imputation_target_date("06-15", month = NA)
 
 # Get imputation target for custom date imputation "11"
-target_custom <- admiral:::get_imputation_target_date("11", month = NA)
-print(target_custom)
+admiral:::get_imputation_target_date("11", month = NA)
 
 }
 \seealso{
