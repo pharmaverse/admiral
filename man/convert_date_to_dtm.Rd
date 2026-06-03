@@ -51,10 +51,11 @@ missing.
 
 A character value is expected.
 \itemize{
-\item When \code{highest_imputation} is \code{"M"} or \code{"D"}, the following keywords are available:
-\code{"first"}, \code{"mid"}, \code{"last"} to impute to the first/mid/last
-day/month. If \code{"mid"} is specified, missing components are imputed as the
-middle of the possible range:
+\item The\code{"first"} and \code{"last"} keywords allow imputation to the first/last
+day/month. They can also be used to impute the year if used in conjunction
+with the \code{min_dates} or \code{max_dates} arguments (see examples).
+\item When \code{highest_imputation} is \code{"M"} or \code{"D"}, the \code{"mid"} keyword can also be
+specified to impute missing components to the middle of the possible range:
 \itemize{
 \item If both month and day are missing, they are imputed as \code{"06-30"}
 (middle of the year).
@@ -67,13 +68,10 @@ issued. For example, \code{date_imputation = "30"} results in an invalid date of
 "2024-02-30" for the partial date "2024-02".
 \item \code{"mm-dd"} can be specified only if \code{highest_imputation} is \code{"M"},  e.g. \code{"06-15"}
 for the 15th of June.
-\item Note that the year can not be specified; for imputing the year
-\code{"first"} or \code{"last"} together with \code{min_dates} or \code{max_dates} argument can
-be used (see examples).
 }
 
 \describe{
-\item{Permitted values}{a key-word, i.e. \code{"first"}, \code{"mid"}, \code{"last"}, or "\if{html}{\out{<mm>}}-\if{html}{\out{<dd>}}" or "\if{html}{\out{<dd>}}"}
+\item{Permitted values}{a key-word, i.e. \code{"first"}, \code{"mid"}, \code{"last"}, or \code{"<mm>-<dd>"} or \code{"<dd>"}}
 \item{Default value}{\code{"first"}}
 }}
 

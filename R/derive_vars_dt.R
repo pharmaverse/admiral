@@ -418,10 +418,11 @@ convert_dtc_to_dt <- function(dtc,
 #'   missing.
 #'
 #'   A character value is expected.
-#'   - When `highest_imputation` is `"M"` or `"D"`, the following keywords are available:
-#'     `"first"`, `"mid"`, `"last"` to impute to the first/mid/last
-#'     day/month. If `"mid"` is specified, missing components are imputed as the
-#'     middle of the possible range:
+#'   - The`"first"` and `"last"` keywords allow imputation to the first/last
+#'     day/month. They can also be used to impute the year if used in conjunction
+#'     with the `min_dates` or `max_dates` arguments (see examples).
+#'   - When `highest_imputation` is `"M"` or `"D"`, the `"mid"` keyword can also be
+#'     specified to impute missing components to the middle of the possible range:
 #'       - If both month and day are missing, they are imputed as `"06-30"`
 #'        (middle of the year).
 #'       - If only day is missing, it is imputed as `"15"` (middle of the month).
@@ -431,10 +432,7 @@ convert_dtc_to_dt <- function(dtc,
 #'     issued. For example, `date_imputation = "30"` results in an invalid date of
 #'     "2024-02-30" for the partial date "2024-02".
 #'    - `"mm-dd"` can be specified only if `highest_imputation` is `"M"`,  e.g. `"06-15"`
-#'    for the 15th of June.
-#'    - Note that the year can not be specified; for imputing the year
-#'      `"first"` or `"last"` together with `min_dates` or `max_dates` argument can
-#'      be used (see examples).
+#'      for the 15th of June.
 #'
 #' @permitted [date_imp]
 #'
