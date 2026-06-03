@@ -105,7 +105,7 @@ invalid dates, e.g.,
 impute_dtc_dtm(
   "2019-02",
   highest_imputation = "M",
-  date_imputation = "02-31",
+  date_imputation = "12-31",
   time_imputation = "00:00:00"
 )
 ```
