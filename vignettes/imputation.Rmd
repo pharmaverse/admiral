@@ -101,7 +101,7 @@ impute_dtc_dtm(
 Next we impute using `2019-02`, which if done naively can result in
 invalid dates, e.g.,
 
-```{r}
+```{r, error = TRUE}
 impute_dtc_dtm(
   "2019-02",
   highest_imputation = "M",
