@@ -38,12 +38,12 @@ Get Date Imputation Targets
 }
 \details{
 \itemize{
-\item For \code{date_imputation = "first"} \code{"0000"}, \code{"01"}, \code{"01"} are returned.
-\item For \code{date_imputation = "mid"} \code{"xxxx"}, \code{"06"}, \code{"30"} if \code{month} is \code{NA}.
+\item For \code{date_imputation = "first"}, \code{"0000"}, \code{"01"}, \code{"01"} are returned.
+\item For \code{date_imputation = "mid"}, \code{"xxxx"}, \code{"06"}, \code{"30"} if \code{month} is \code{NA}.
 otherwise \code{"15"} returned.
-\item For \code{date_imputation = "last"} \code{"9999"}, \code{"12"}, \code{"28"} are returned.
-\item For \code{date_imputation = "<mm>-<dd>"} \code{"xxxx"}, \code{"<mm>"}, \code{"<dd>"} are returned.
-\item For \code{date_imputation = "<dd>"} \code{"xxxx"}, \code{"xx"}, \code{"<dd>"} are returned.
+\item For \code{date_imputation = "last"}, \code{"9999"}, \code{"12"}, \code{"28"} are returned.
+\item For \code{date_imputation = "<mm>-<dd>"}, \code{"xxxx"}, \code{"<mm>"}, \code{"<dd>"} are returned.
+\item For \code{date_imputation = "<dd>"}, \code{"xxxx"}, \code{"xx"}, \code{"<dd>"} are returned.
 }
 
 \code{"xxxx"} indicates that the component is undefined. If an undefined

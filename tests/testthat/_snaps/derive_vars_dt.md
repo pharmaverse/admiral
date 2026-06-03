@@ -43,6 +43,14 @@
 ---
 
     Code
+      impute_dtc_dt(dtc = input, highest_imputation = "D", date_imputation = "12:01")
+    Condition
+      Error in `assert_date_imputation()`:
+      ! If `highest_imputation = "D"` is specified, `date_imputation` must be one of "first", "mid", "last" or a format with day specified as "dd": e.g. "15"
+
+---
+
+    Code
       impute_dtc_dt(dtc = input, highest_imputation = "M", date_imputation = "01")
     Condition
       Error in `assert_date_imputation()`:

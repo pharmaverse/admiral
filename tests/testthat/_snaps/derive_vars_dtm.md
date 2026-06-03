@@ -75,6 +75,15 @@
       Error in `assert_time_imputation()`:
       ! `time_imputation` must be one of "first", "last" or time specified as "hh:mm:ss": e.g. "12:00:00"
 
+---
+
+    Code
+      impute_dtc_dtm(dtc = c("2019-02"), highest_imputation = "D", date_imputation = "30")
+    Condition
+      Error in `impute_dtc_dtm()`:
+      ! Some imputed dates are invalid.
+      i `date_imputation` is set to "30". Are you sure that with this value you are generating all valid dates? E.g. `date_imputation = 31` would impute "2020-02" to "2020-02-31", which is invalid.
+
 # compute_tmf Test 16: throws ERROR when ignore_seconds_flag  = T and seconds are present
 
     Code

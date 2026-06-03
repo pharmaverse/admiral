@@ -406,6 +406,16 @@ test_that("impute_dtc_dtm Test 13: wrong input to `date_imputation`", {
     ),
     error = TRUE
   )
+
+  # impossible date/time after imputation
+  expect_snapshot(
+    impute_dtc_dtm(
+      dtc = c("2019-02"),
+      highest_imputation = "D",
+      date_imputation = "30"
+    ),
+    error = TRUE
+  )
 })
 
 # convert_dtc_to_dtm ----

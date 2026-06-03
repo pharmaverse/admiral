@@ -97,12 +97,12 @@ dt_level <- function(level) {
 #'
 #' @details
 #'
-#'  - For `date_imputation = "first"` `"0000"`, `"01"`, `"01"` are returned.
-#'  - For `date_imputation = "mid"` `"xxxx"`, `"06"`, `"30"` if `month` is `NA`.
+#'  - For `date_imputation = "first"`, `"0000"`, `"01"`, `"01"` are returned.
+#'  - For `date_imputation = "mid"`, `"xxxx"`, `"06"`, `"30"` if `month` is `NA`.
 #'   otherwise `"15"` returned.
-#'  - For `date_imputation = "last"` `"9999"`, `"12"`, `"28"` are returned.
-#'  - For `date_imputation = "<mm>-<dd>"` `"xxxx"`, `"<mm>"`, `"<dd>"` are returned.
-#'  - For `date_imputation = "<dd>"` `"xxxx"`, `"xx"`, `"<dd>"` are returned.
+#'  - For `date_imputation = "last"`, `"9999"`, `"12"`, `"28"` are returned.
+#'  - For `date_imputation = "<mm>-<dd>"`, `"xxxx"`, `"<mm>"`, `"<dd>"` are returned.
+#'  - For `date_imputation = "<dd>"`, `"xxxx"`, `"xx"`, `"<dd>"` are returned.
 #'
 #'  `"xxxx"` indicates that the component is undefined. If an undefined
 #'  component occurs in the imputed `--DTC` value, the imputed `--DTC` value is set to
@@ -188,9 +188,9 @@ get_imputation_target_date <- function(date_imputation,
 #'
 #' @details
 #'
-#'  - For `time_imputation = "first"` `"00"`, `"00"`, `"00"` are returned.
-#'  - For `time_imputation = "last"` `"23"`, `"59"`, `"59"` are returned.
-#'  - For `time_imputation = "<hh>:<mm>:<ss>"` `"<hh>"`, `"<mm>"`, `"<ss>"` are returned.
+#'  - For `time_imputation = "first"`, `"00"`, `"00"`, `"00"` are returned.
+#'  - For `time_imputation = "last"`, `"23"`, `"59"`, `"59"` are returned.
+#'  - For `time_imputation = "<hh>:<mm>:<ss>"`, `"<hh>"`, `"<mm>"`, `"<ss>"` are returned.
 #'
 #' @examples
 #' # Get imputation target for "first" time

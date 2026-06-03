@@ -268,7 +268,7 @@ on the date.
 It is also possible to just impute the day, with \code{highest_imputation = "D"}. Here
 dates with just a missing day have it imputed to the 10th of the month. Note that in this
 case care needs to be taken to ensure invalid dates are not created, e.g.
-\code{date_imputation = "30"} would create an invalid date of \code{"2020-02-31"} when trying to impute
+\code{date_imputation = "30"} would create an invalid date of \code{"2020-02-30"} when trying to impute
 the day for \code{"2020-02"}.
 
 \if{html}{\out{<div class="sourceCode r">}}\preformatted{derive_vars_dt(

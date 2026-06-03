@@ -325,11 +325,21 @@ test_that("derive_vars_dt Test 12: wrong input to `date_imputation`", {
     error = TRUE
   )
 
-  # wrong format
+  # wrong format with highest_imputation = "M"
   expect_snapshot(
     impute_dtc_dt(
       dtc = input,
       highest_imputation = "M",
+      date_imputation = "12:01"
+    ),
+    error = TRUE
+  )
+
+  # wrong format with highest_imputation = "D"
+  expect_snapshot(
+    impute_dtc_dt(
+      dtc = input,
+      highest_imputation = "D",
       date_imputation = "12:01"
     ),
     error = TRUE

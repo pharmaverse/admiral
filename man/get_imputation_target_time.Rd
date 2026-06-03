@@ -30,9 +30,9 @@ Get Time Imputation Targets
 }
 \details{
 \itemize{
-\item For \code{time_imputation = "first"} \code{"00"}, \code{"00"}, \code{"00"} are returned.
-\item For \code{time_imputation = "last"} \code{"23"}, \code{"59"}, \code{"59"} are returned.
-\item For \code{time_imputation = "<hh>:<mm>:<ss>"} \code{"<hh>"}, \code{"<mm>"}, \code{"<ss>"} are returned.
+\item For \code{time_imputation = "first"}, \code{"00"}, \code{"00"}, \code{"00"} are returned.
+\item For \code{time_imputation = "last"}, \code{"23"}, \code{"59"}, \code{"59"} are returned.
+\item For \code{time_imputation = "<hh>:<mm>:<ss>"}, \code{"<hh>"}, \code{"<mm>"}, \code{"<ss>"} are returned.
 }
 }
 \examples{

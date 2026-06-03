@@ -105,7 +105,7 @@
 #' @info It is also possible to just impute the day, with `highest_imputation = "D"`. Here
 #' dates with just a missing day have it imputed to the 10th of the month. Note that in this
 #' case care needs to be taken to ensure invalid dates are not created, e.g.
-#' `date_imputation = "30"` would create an invalid date of `"2020-02-31"` when trying to impute
+#' `date_imputation = "30"` would create an invalid date of `"2020-02-30"` when trying to impute
 #' the day for `"2020-02"`.
 #'
 #' @code
