@@ -4,7 +4,7 @@
 
 ## Updates of Existing Functions
 
-- `derive_vars_dt()` was enhanced to allow user-defined date_imputation (e.g.
+- `derive_vars_dt()` was enhanced to allow user-defined `date_imputation` values (e.g.
 `date_imputation = "10"`) in combination with `highest_imputation = "D"`. Additionally,
 functions such as `derive_vars_dt()`, `derive_vars_dtm()`, `impute_dtc_dt()` and 
 `impute_dtc_dtm()` now issue an error if any invalid dates (e.g. "2020-02-31"). (#3014)
