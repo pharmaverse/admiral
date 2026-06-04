@@ -94,6 +94,10 @@ of packages were updated to specify the level of contributions required for auth
 
 - The derivation of `DOSEON` and `DOSEU` variables in the OCCDS vignette was
   clarified and generalized to cover more scenarios. (#3101)
+  
+- The documentation for `derive_vars_dtm()` and `derive_vars_dt()` was updated to clarify details of the `highest_imputation` argument. (#3055)
+
+- The 'Date and Time Imputation' vignette was updated to point out the difference between the character `*DTC` variables and the numeric `*DTM` variables. (#3055)
 
 ## Various
 
