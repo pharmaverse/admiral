@@ -42,17 +42,16 @@ convert_date_to_dtm(
   the specified level are imputed.
 
   If a component at a higher level than the highest imputation level is
-  missing, `NA_character_` is returned. For example, for
-  `highest_imputation = "D"` `"2020"` results in `NA_character_` because
-  the month is missing.
+  missing, `NA` is returned. For example, for `highest_imputation = "D"`
+  `"2020"` results in `NA` because the month is missing.
 
   If `"n"` is specified, no imputation is performed, i.e., if any
-  component is missing, `NA_character_` is returned.
+  component is missing, `NA` is returned.
 
   If `"Y"` is specified, `date_imputation` should be `"first"` or
   `"last"` and `min_dates` or `max_dates` should be specified
-  respectively. Otherwise, `NA_character_` is returned if the year
-  component is missing.
+  respectively. Otherwise, `NA` is returned if the year component is
+  missing.
 
   Permitted values
 
@@ -234,7 +233,7 @@ Date/Time Computation Functions that returns a vector:
 convert_date_to_dtm("2019-07-18T15:25:00")
 #> [1] "2019-07-18 15:25:00 UTC"
 convert_date_to_dtm(Sys.time())
-#> [1] "2026-06-03 12:40:41 UTC"
+#> [1] "2026-06-04 15:12:51 UTC"
 convert_date_to_dtm(as.Date("2019-07-18"), time_imputation = "23:59:59")
 #> [1] "2019-07-18 23:59:59 UTC"
 convert_date_to_dtm("2019-07-18", time_imputation = "23:59:59")

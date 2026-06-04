@@ -79,12 +79,11 @@ derive_vars_dt(
   the specified level are imputed.
 
   If a component at a higher level than the highest imputation level is
-  missing, `NA_character_` is returned. For example, for
-  `highest_imputation = "D"` `"2020"` results in `NA_character_` because
-  the month is missing.
+  missing, `NA` is returned. For example, for `highest_imputation = "D"`
+  `"2020"` results in `NA` because the month is missing.
 
   If `"n"` (none, lowest level) is specified no imputation is performed,
-  i.e., if any component is missing, `NA_character_` is returned.
+  i.e., if any component is missing, `NA` is returned.
 
   If `"Y"` (year, highest level) is specified, `date_imputation` must be
   `"first"` or `"last"` and `min_dates` or `max_dates` must be specified

@@ -190,6 +190,18 @@
   was clarified and generalized to cover more scenarios.
   ([\#3101](https://github.com/pharmaverse/admiral/issues/3101))
 
+- The documentation for
+  [`derive_vars_dtm()`](https:/pharmaverse.github.io/admiral/3014_derive_vars_dt_user_defined_date_imp_with_d/reference/derive_vars_dtm.md)
+  and
+  [`derive_vars_dt()`](https:/pharmaverse.github.io/admiral/3014_derive_vars_dt_user_defined_date_imp_with_d/reference/derive_vars_dt.md)
+  was updated to clarify details of the `highest_imputation` argument.
+  ([\#3055](https://github.com/pharmaverse/admiral/issues/3055))
+
+- The ‘Date and Time Imputation’ vignette was updated to point out the
+  difference between the character `*DTC` variables and the numeric
+  `*DTM` variables.
+  ([\#3055](https://github.com/pharmaverse/admiral/issues/3055))
+
 ### Various
 
 - Fixed typo in
