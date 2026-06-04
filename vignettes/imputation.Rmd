@@ -51,7 +51,9 @@ The ADaM timing variables like `ADTM` (Analysis Datetime) or `ADY`
 (Analysis Relative Day) are numeric variables. They can be derived only
 if the date or datetime is complete. Therefore `{admiral}` provides
 imputation functions which fill in missing date or time parts according
-to certain imputation rules.
+to certain imputation rules. These times and date-times are represented 
+by the `POSIXct` class in R, which stores date and time in seconds, 
+so seconds will always be included in the time stamp of a `*DTM` variable.
 
 In `{admiral}` users will primarily use two functions `derive_vars_dt()`
 and `derive_vars_dtm()` for date and datetime imputations respectively.
