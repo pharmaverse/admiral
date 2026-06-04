@@ -252,7 +252,7 @@ derive_vars_dtm <- function(dataset,
   )
 
   if (flag_imputation %in% c("both", "date") ||
-      flag_imputation == "auto" && dtm_level(highest_imputation) > dtm_level("h")) {
+    flag_imputation == "auto" && dtm_level(highest_imputation) > dtm_level("h")) {
     # add *DTF if not there already
     dtf <- paste0(new_vars_prefix, "DTF")
     dtf_exist <- dtf %in% colnames(dataset)
@@ -268,7 +268,7 @@ derive_vars_dtm <- function(dataset,
   }
 
   if (flag_imputation %in% c("both", "time") ||
-      flag_imputation == "auto" && highest_imputation != "n") {
+    flag_imputation == "auto" && highest_imputation != "n") {
     # add *TMF variable
     tmf <- paste0(new_vars_prefix, "TMF")
     warn_if_vars_exist(dataset, tmf)
@@ -780,12 +780,12 @@ compute_tmf <- function(dtc,
   for (c in hms) {
     highest_miss <-
       if_else((is.na(partial[[c]]) & is.na(highest_miss)) |
-                (
-                  !is.na(partial[[c]]) &
-                    is.na(highest_miss) & as.numeric(partial[[c]]) != time_part[[c]]
-                ),
-              c,
-              highest_miss
+        (
+          !is.na(partial[[c]]) &
+            is.na(highest_miss) & as.numeric(partial[[c]]) != time_part[[c]]
+        ),
+      c,
+      highest_miss
       )
   }
 
