@@ -238,7 +238,7 @@ derive_vars_merged(
 
   Permitted values
 
-  :   list of named expressions created by a formula using
+  :   list of named expressions created by
       [`exprs()`](https:/pharmaverse.github.io/admiral/3014_derive_vars_dt_user_defined_date_imp_with_d/reference/reexport-exprs.md),
       e.g., `exprs(AVALC = VSSTRESC, AVAL = yn_to_numeric(AVALC))`
 

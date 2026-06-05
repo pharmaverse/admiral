@@ -22,6 +22,10 @@ list_all_templates(package = "admiral")
 
 A `character` vector of all available templates
 
+## Details
+
+The function only lists the `.R` templates.
+
 ## See also
 
 Utilities used for examples and template scripts:

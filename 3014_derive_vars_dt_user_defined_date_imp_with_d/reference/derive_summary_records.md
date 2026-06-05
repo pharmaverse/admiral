@@ -124,7 +124,7 @@ derive_summary_records(
 
   Set a list of variables to some specified value for the new records
 
-  - LHS refer to a variable.
+  - LHS refers to a variable.
 
   - RHS refers to the values to set to the variable. This can be an
     expression.
@@ -148,7 +148,7 @@ derive_summary_records(
 
   Set a list of variables to some specified value for the new records
 
-  - LHS refer to a variable.
+  - LHS refers to a variable.
 
   - RHS refers to the values to set to the variable. This can be a
     string, a symbol, a numeric value, an expression or NA. If summary
@@ -175,12 +175,12 @@ derive_summary_records(
 
 - missing_values:
 
-  Values for missing summary values
+  Values for missing records
 
   For observations of the reference dataset (`dataset_ref`) which do not
-  have a complete mapping defined by the summarization defined in
-  `set_values_to`. Only variables specified for `set_values_to` can be
-  specified for `missing_values`.
+  have a matching record in `dataset_add` (with respect to `by_vars` and
+  after applying `filter_add`), the specified variables are set to the
+  specified values for the new observations.
 
   Permitted values
 

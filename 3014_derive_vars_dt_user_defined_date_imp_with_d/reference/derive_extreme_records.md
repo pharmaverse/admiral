@@ -24,7 +24,8 @@ derive_extreme_records(
   true_value = "Y",
   false_value = NA_character_,
   keep_source_vars = exprs(everything()),
-  set_values_to
+  set_values_to,
+  missing_values = NULL
 )
 ```
 
@@ -248,20 +249,36 @@ derive_extreme_records(
 
   Set a list of variables to some specified value for the new records
 
-  - LHS refer to a variable.
+  - LHS refers to a variable.
 
   - RHS refers to the values to set to the variable. This can be a
-    string, a symbol, a numeric value, an expression or NA. If summary
-    functions are used, the values are summarized by the variables
-    specified for `by_vars`. Any expression on the RHS must result in a
-    single value per by group.
+    string, a symbol, a numeric value, an expression or NA.
 
   For example:
 
         set_values_to = exprs(
-          AVAL = sum(AVAL),
-          DTYPE = "AVERAGE",
+          PARAMCD = "WOBS",
+          PARAM = "Worst Observations"
         )
+
+  Permitted values
+
+  :   list of named expressions created by
+      [`exprs()`](https:/pharmaverse.github.io/admiral/3014_derive_vars_dt_user_defined_date_imp_with_d/reference/reexport-exprs.md),
+      e.g., `exprs(AVALC = VSSTRESC, AVAL = yn_to_numeric(AVALC))`
+
+  Default value
+
+  :   none
+
+- missing_values:
+
+  Values for missing records
+
+  For observations of the reference dataset (`dataset_ref`) which do not
+  have a matching record in `dataset_add` (with respect to `by_vars` and
+  after applying `filter_add`), the specified variables are set to the
+  specified values for the new observations.
 
   Permitted values
 
@@ -271,7 +288,7 @@ derive_extreme_records(
 
   Default value
 
-  :   none
+  :   `NULL`
 
 ## Value
 
@@ -291,7 +308,9 @@ added as new observations.
 3.  If `dataset_ref` is specified, observations which are in
     `dataset_ref` but not in the selected records are added. Variables
     that are common across `dataset_ref`, `dataset_add` and
-    `keep_source_vars()` are also populated for the new observations.
+    `keep_source_vars()` are also populated for the new observations. If
+    `missing_values` is specified, the specified values are set for
+    these observations.
 
 4.  The variables specified by the `set_values_to` argument are added to
     the selected observations.
@@ -447,6 +466,45 @@ valid analysis value:
     #> 6 1            99   111
     #> 7 2            99   101
     #> 8 3            99    NA
+
+### Setting values for missing groups (`missing_values`)
+
+When using `dataset_ref`, groups without matching records in
+`dataset_add` get new records with `NA` values by default. The
+`missing_values` argument allows setting specific values for these
+records. In the example records for the last non-missing value are
+added. For subjects without assessments the value is set to the mean
+analysis value across all records.
+
+    mean_value <- mean(adlb$AVAL, na.rm = TRUE)
+
+    derive_extreme_records(
+      adlb,
+      dataset_add = adlb,
+      filter_add = !is.na(AVAL),
+      dataset_ref = adlb,
+      by_vars = exprs(USUBJID),
+      order = exprs(AVISITN),
+      mode = "last",
+      set_values_to = exprs(
+        AVISITN = 99
+      ),
+      missing_values = exprs(
+        AVAL = !!mean_value,
+        DTYPE = "MOV"
+      )
+    )
+    #> # A tibble: 8 × 4
+    #>   USUBJID AVISITN  AVAL DTYPE
+    #>   <chr>     <dbl> <dbl> <chr>
+    #> 1 1             1  113  <NA>
+    #> 2 1             2  111  <NA>
+    #> 3 2             1  101  <NA>
+    #> 4 2             2   NA  <NA>
+    #> 5 3             1   NA  <NA>
+    #> 6 1            99  111  <NA>
+    #> 7 2            99  101  <NA>
+    #> 8 3            99  108. MOV  
 
 ### Selecting variables for new records (`keep_source_vars`)
 

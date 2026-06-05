@@ -71,6 +71,17 @@
   `"Blood lactate dehydrogenase increase"`
   ([\#3025](https://github.com/pharmaverse/admiral/issues/3025)).
 
+- The `missing_values` argument was added to
+  [`derive_extreme_records()`](https:/pharmaverse.github.io/admiral/3014_derive_vars_dt_user_defined_date_imp_with_d/reference/derive_extreme_records.md).
+  This allows users to specify values for variables in the new records
+  originating from `dataset_ref`.
+  ([\#3017](https://github.com/pharmaverse/admiral/issues/3017))
+
+- [`list_all_templates()`](https:/pharmaverse.github.io/admiral/3014_derive_vars_dt_user_defined_date_imp_with_d/reference/list_all_templates.md)
+  now only lists out `.R` files with the `templates` folder of the
+  target package.
+  ([\#3136](https://github.com/pharmaverse/admiral/issues/3136))
+
 ### Breaking Changes
 
 - The following function arguments are entering the next phase of the

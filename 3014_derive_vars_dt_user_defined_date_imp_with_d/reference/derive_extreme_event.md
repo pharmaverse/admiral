@@ -190,21 +190,21 @@ derive_extreme_event(
 
   Set a list of variables to some specified value for the new records
 
-  - LHS refer to a variable.
+  - LHS refers to a variable.
 
   - RHS refers to the values to set to the variable. This can be a
-    string, a symbol, a numeric value, an expression or NA.
+    string, a symbol, a numeric value, an expression, or \`NA“.
 
   For example:
 
         set_values_to = exprs(
-          PARAMCD = "WOBS",
-          PARAM = "Worst Observations"
+          AVISIT = "LAST VALUE",
+          DTYPE = "LOV"
         )
 
   Permitted values
 
-  :   list of named expressions created by a formula using
+  :   list of named expressions created by
       [`exprs()`](https:/pharmaverse.github.io/admiral/3014_derive_vars_dt_user_defined_date_imp_with_d/reference/reexport-exprs.md),
       e.g., `exprs(AVALC = VSSTRESC, AVAL = yn_to_numeric(AVALC))`
 
