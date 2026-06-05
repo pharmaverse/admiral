@@ -85,7 +85,7 @@ no data imputed using \code{dataset_ref} and \code{missing_values}.
 
 Set a list of variables to some specified value for the new records
 \itemize{
-\item LHS refer to a variable.
+\item LHS refers to a variable.
 \item RHS refers to the values to set to the variable. This can be an
 expression.
 }
@@ -102,7 +102,7 @@ observations.
 
 Set a list of variables to some specified value for the new records
 \itemize{
-\item LHS refer to a variable.
+\item LHS refers to a variable.
 \item RHS refers to the values to set to the variable. This can be a string, a
 symbol, a numeric value, an expression or NA. If summary functions are
 used, the values are summarized by the variables specified for \code{by_vars}.
@@ -122,11 +122,12 @@ For example:
 \item{Default value}{none}
 }}
 
-\item{missing_values}{Values for missing summary values
+\item{missing_values}{Values for missing records
 
-For observations of the reference dataset (\code{dataset_ref}) which do not have a
-complete mapping defined by the summarization defined in \code{set_values_to}.  Only variables
-specified for \code{set_values_to} can be specified for \code{missing_values}.
+For observations of the reference dataset (\code{dataset_ref}) which do not have
+a matching record in \code{dataset_add} (with respect to \code{by_vars} and after
+applying \code{filter_add}), the specified variables are set to the specified
+values for the new observations.
 
 \describe{
 \item{Permitted values}{list of named expressions created by \code{exprs()}, e.g., \code{exprs(CUMDOSA = sum(AVAL, na.rm = TRUE), AVALU = "ml")}}

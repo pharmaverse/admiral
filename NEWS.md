@@ -29,6 +29,10 @@ specified under `save_path`. This is because this functionality did not work as 
 
 - NCICTCAEv5 grading criteria (`atoxgr_criteria_ctcv5`, `atoxgr_criteria_ctcv5_uscv`),  updated to add term `"Blood lactate dehydrogenase increase"` (#3025).
 
+- The `missing_values` argument was added to `derive_extreme_records()`. This
+  allows users to specify values for variables in the new records originating
+  from `dataset_ref`. (#3017)
+
 ## Breaking Changes
 
 - The following function arguments are entering the next phase of the [deprecation process](https://pharmaverse.github.io/admiraldev/articles/programming_strategy.html#deprecation): 
