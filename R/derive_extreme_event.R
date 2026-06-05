@@ -62,19 +62,19 @@
 #'   observations.
 #'
 #'   Set a list of variables to some specified value for the new records
-#'   + LHS refer to a variable.
+#'   + LHS refers to a variable.
 #'   + RHS refers to the values to set to the variable. This can be a string, a
-#'   symbol, a numeric value, an expression or NA.
+#'   symbol, a numeric value, an expression, or `NA``.
 #'
 #'   For example:
 #'   ```
 #'     set_values_to = exprs(
-#'       PARAMCD = "WOBS",
-#'       PARAM = "Worst Observations"
+#'       AVISIT = "LAST VALUE",
+#'       DTYPE = "LOV"
 #'     )
 #'   ```
 #'
-#' @permitted [expr_list_formula]
+#' @permitted [expr_list_named]
 #'
 #' @param keep_source_vars Variables to keep from the source dataset
 #'

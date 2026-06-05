@@ -64,11 +64,12 @@ use_ad_template <- function(adam_name = "adsl",
 #'
 #' @param package The R package in which to look for templates. By default `"admiral"`.
 #'
-#'
 #' @family utils_examples
 #' @keywords utils_examples
 #'
 #' @return A `character` vector of all available templates
+#'
+#' @details The function only lists the `.R` templates.
 #'
 #' @export
 #'
@@ -83,7 +84,7 @@ list_all_templates <- function(package = "admiral") {
     )
   }
 
-  list.files(system.file("templates", package = package)) %>%
+  list.files(system.file("templates", package = package), pattern = "\\.R$") %>%
     str_remove(".R$") %>%
     str_remove("^ad_") %>%
     toupper() %>%
