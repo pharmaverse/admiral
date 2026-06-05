@@ -63,6 +63,11 @@
   originating from `dataset_ref`.
   ([\#3017](https://github.com/pharmaverse/admiral/issues/3017))
 
+- [`list_all_templates()`](https:/pharmaverse.github.io/admiral/main/reference/list_all_templates.md)
+  now only lists out `.R` files with the `templates` folder of the
+  target package.
+  ([\#3136](https://github.com/pharmaverse/admiral/issues/3136))
+
 ### Breaking Changes
 
 - The following function arguments are entering the next phase of the
