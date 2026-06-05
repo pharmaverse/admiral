@@ -41,7 +41,9 @@ The ADaM timing variables like `ADTM` (Analysis Datetime) or `ADY`
 if the date or datetime is complete. Therefore
 [admiral](https://pharmaverse.github.io/admiral/) provides imputation
 functions which fill in missing date or time parts according to certain
-imputation rules.
+imputation rules. These times and date-times are represented by the
+`POSIXct` class in R, which stores date and time in seconds, so seconds
+will always be included in the time stamp of a `*DTM` variable.
 
 In [admiral](https://pharmaverse.github.io/admiral/) users will
 primarily use two functions

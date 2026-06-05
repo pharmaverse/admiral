@@ -234,7 +234,7 @@ derive_param_tte(
 
   Permitted values
 
-  :   list of named expressions created by a formula using
+  :   list of named expressions created by
       [`exprs()`](https:/pharmaverse.github.io/admiral/main/reference/reexport-exprs.md),
       e.g., `exprs(AVALC = VSSTRESC, AVAL = yn_to_numeric(AVALC))`
 

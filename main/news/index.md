@@ -57,6 +57,12 @@
   `"Blood lactate dehydrogenase increase"`
   ([\#3025](https://github.com/pharmaverse/admiral/issues/3025)).
 
+- The `missing_values` argument was added to
+  [`derive_extreme_records()`](https:/pharmaverse.github.io/admiral/main/reference/derive_extreme_records.md).
+  This allows users to specify values for variables in the new records
+  originating from `dataset_ref`.
+  ([\#3017](https://github.com/pharmaverse/admiral/issues/3017))
+
 ### Breaking Changes
 
 - The following function arguments are entering the next phase of the
@@ -175,6 +181,18 @@
 - The derivation of `DOSEON` and `DOSEU` variables in the OCCDS vignette
   was clarified and generalized to cover more scenarios.
   ([\#3101](https://github.com/pharmaverse/admiral/issues/3101))
+
+- The documentation for
+  [`derive_vars_dtm()`](https:/pharmaverse.github.io/admiral/main/reference/derive_vars_dtm.md)
+  and
+  [`derive_vars_dt()`](https:/pharmaverse.github.io/admiral/main/reference/derive_vars_dt.md)
+  was updated to clarify details of the `highest_imputation` argument.
+  ([\#3055](https://github.com/pharmaverse/admiral/issues/3055))
+
+- The ‘Date and Time Imputation’ vignette was updated to point out the
+  difference between the character `*DTC` variables and the numeric
+  `*DTM` variables.
+  ([\#3055](https://github.com/pharmaverse/admiral/issues/3055))
 
 ### Various
 
