@@ -32,6 +32,9 @@ specified under `save_path`. This is because this functionality did not work as 
 - The `missing_values` argument was added to `derive_extreme_records()`. This
   allows users to specify values for variables in the new records originating
   from `dataset_ref`. (#3017)
+  
+- `list_all_templates()` now only lists out `.R` files with the `templates` folder
+of the target package. (#3136)
 
 ## Breaking Changes
 

@@ -83,7 +83,7 @@ list_all_templates <- function(package = "admiral") {
     )
   }
 
-  list.files(system.file("templates", package = package)) %>%
+  list.files(system.file("templates", package = package), pattern = "\\.R$") %>%
     str_remove(".R$") %>%
     str_remove("^ad_") %>%
     toupper() %>%
