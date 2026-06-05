@@ -1,11 +1,10 @@
-# admiral guidelines loaded
-
 parse_args <- function(args) {
   defaults <- list(
-    repo = getwd(),
     output_dir = file.path(getwd(), "reports"),
-    label = "main",
-    cran_mirror = "https://cran.r-project.org"
+    package_name = "admiral",
+    cran_mirror = "https://cran.r-project.org",
+    github_repo = "pharmaverse/admiral",
+    github_ref = "main"
   )
 
   if (length(args) == 0) {
@@ -32,16 +31,9 @@ parse_args <- function(args) {
   parsed
 }
 
-run_command <- function(command, args, working_directory = NULL) {
-  old_directory <- getwd()
-  on.exit(setwd(old_directory), add = TRUE)
-
-  if (!is.null(working_directory)) {
-    setwd(working_directory)
-  }
-
+run_du <- function(args) {
   output <- system2(
-    command = command,
+    command = "du",
     args = args,
     stdout = TRUE,
     stderr = TRUE
@@ -50,511 +42,153 @@ run_command <- function(command, args, working_directory = NULL) {
   status <- attr(output, "status")
   if (!is.null(status) && status != 0) {
     stop(
-      paste(
-        c(
-          sprintf("Command failed: %s %s", command, paste(args, collapse = " ")),
-          output
-        ),
-        collapse = "\n"
-      ),
+      paste(c(sprintf("Command failed: du %s", paste(args, collapse = " ")), output), collapse = "\n"),
       call. = FALSE
     )
   }
 
-  invisible(output)
+  output[[1]]
 }
 
-build_source_tarball <- function(repo_dir, build_dir) {
-  dir.create(build_dir, recursive = TRUE, showWarnings = FALSE)
+measure_installed_package <- function(package_name, library_dir) {
+  package_path <- find.package(package_name, lib.loc = library_dir)
+  size_human <- sub("[[:space:]].*$", "", run_du(c("-sh", package_path)))
+  size_bytes <- suppressWarnings(as.numeric(sub("[[:space:]].*$", "", run_du(c("-sb", package_path)))))
 
-  package_dir <- normalizePath(repo_dir, winslash = "/", mustWork = TRUE)
-  package_name <- basename(package_dir)
-  parent_dir <- dirname(package_dir)
+  if (is.na(size_bytes)) {
+    stop(sprintf("Could not parse byte size for '%s'.", package_path), call. = FALSE)
+  }
 
-  run_command(
-    command = file.path(R.home("bin"), "R"),
-    args = c("CMD", "build", package_name),
-    working_directory = parent_dir
+  description_path <- file.path(package_path, "DESCRIPTION")
+  package_version <- read.dcf(description_path)[1, "Version"]
+
+  list(
+    path = package_path,
+    size_human = size_human,
+    size_bytes = size_bytes,
+    version = package_version
   )
-
-  tarballs <- list.files(parent_dir, pattern = "\\.tar\\.gz$", full.names = TRUE)
-  package_tarballs <- tarballs[basename(tarballs) %in% sprintf("%s_*.tar.gz", package_name)]
-
-  if (length(package_tarballs) == 0) {
-    package_tarballs <- tarballs[grepl(sprintf("^%s_.*\\.tar\\.gz$", package_name), basename(tarballs))]
-  }
-
-  if (length(package_tarballs) == 0) {
-    stop("No source tarball was created by `R CMD build`.", call. = FALSE)
-  }
-
-  latest_tarball <- package_tarballs[[which.max(file.info(package_tarballs)$mtime)]]
-  destination <- file.path(build_dir, basename(latest_tarball))
-  success <- file.copy(latest_tarball, destination, overwrite = TRUE)
-
-  if (!isTRUE(success)) {
-    stop("Failed to copy the built source tarball to the build directory.", call. = FALSE)
-  }
-
-  destination
 }
 
-download_cran_tarball <- function(package_name, cran_mirror, download_dir) {
-  dir.create(download_dir, recursive = TRUE, showWarnings = FALSE)
-
-  cran_db <- utils::available.packages(
-    repos = cran_mirror,
-    type = "source"
-  )
-
-  if (!package_name %in% rownames(cran_db)) {
-    stop(
-      sprintf("Package '%s' was not found in the CRAN package database.", package_name),
-      call. = FALSE
-    )
-  }
-
-  cran_version <- cran_db[package_name, "Version"]
-  cran_url <- sprintf(
-    "%s/%s_%s.tar.gz",
-    utils::contrib.url(cran_mirror, type = "source"),
-    package_name,
-    cran_version
-  )
-  destination <- file.path(download_dir, basename(cran_url))
-
-  utils::download.file(
-    url = cran_url,
-    destfile = destination,
-    mode = "wb",
-    quiet = TRUE
-  )
-
-  list(path = destination, version = cran_version)
-}
-
-collect_tarball_inventory <- function(tarball) {
-  extract_dir <- tempfile("package-size-")
-  dir.create(extract_dir)
-  on.exit(unlink(extract_dir, recursive = TRUE), add = TRUE)
-  utils::untar(tarball, exdir = extract_dir)
-
-  package_roots <- list.dirs(extract_dir, recursive = FALSE, full.names = TRUE)
-  if (length(package_roots) == 0) {
-    stop(
-      sprintf("No package contents were extracted from '%s'.", tarball),
-      call. = FALSE
-    )
-  }
-
-  package_root <- package_roots[[1]]
-  files <- list.files(
-    package_root,
-    recursive = TRUE,
-    full.names = TRUE,
-    all.files = TRUE,
-    include.dirs = FALSE,
-    no.. = TRUE
-  )
-
-  file_metadata <- file.info(files)
-  keep <- !is.na(file_metadata$size) &
-    !is.na(file_metadata$isdir) &
-    !file_metadata$isdir
-  files <- files[keep]
-  file_metadata <- file_metadata[keep, , drop = FALSE]
-
-  relative_paths <- substring(files, nchar(package_root) + 2)
-  file_sizes <- unname(file_metadata$size)
-
-  extensions <- tolower(sub(".*\\.", "", basename(relative_paths)))
-  extensions[!grepl("\\.", basename(relative_paths))] <- "<none>"
-  top_level_dirs <- sub("/.*$", "", relative_paths)
-  top_level_dirs[!grepl("/", relative_paths)] <- "<root>"
-
-  inventory <- data.frame(
-    path = relative_paths,
-    size_bytes = file_sizes,
-    size_mb = round(file_sizes / 1024 ^ 2, 6),
-    extension = extensions,
-    top_level_dir = top_level_dirs,
-    stringsAsFactors = FALSE
-  )
-
-  inventory <- inventory[order(-inventory$size_bytes, inventory$path), ]
-  inventory$rank <- seq_len(nrow(inventory))
-  inventory[, c("rank", "path", "size_bytes", "size_mb", "extension", "top_level_dir")]
-}
-
-install_tarball <- function(tarball, library_dir) {
-  dir.create(library_dir, recursive = TRUE, showWarnings = FALSE)
+install_from_cran <- function(package_name, cran_mirror, library_dir) {
   utils::install.packages(
-    pkgs = tarball,
-    repos = NULL,
-    type = "source",
+    package_name,
+    repos = cran_mirror,
     lib = library_dir,
     quiet = TRUE
   )
+
+  measure_installed_package(package_name, library_dir)
 }
 
-collect_installed_inventory <- function(library_dir, package_name) {
-  package_root <- file.path(library_dir, package_name)
-  if (!dir.exists(package_root)) {
-    stop(
-      sprintf(
-        "Installed package directory '%s' was not found after installation.",
-        package_root
-      ),
-      call. = FALSE
-    )
+ensure_remotes <- function(cran_mirror) {
+  if (!requireNamespace("remotes", quietly = TRUE)) {
+    utils::install.packages("remotes", repos = cran_mirror, quiet = TRUE)
   }
-
-  files <- list.files(
-    package_root,
-    recursive = TRUE,
-    full.names = TRUE,
-    all.files = TRUE,
-    include.dirs = FALSE,
-    no.. = TRUE
-  )
-
-  file_metadata <- file.info(files)
-  keep <- !is.na(file_metadata$size) &
-    !is.na(file_metadata$isdir) &
-    !file_metadata$isdir
-  files <- files[keep]
-  file_metadata <- file_metadata[keep, , drop = FALSE]
-
-  relative_paths <- substring(files, nchar(package_root) + 2)
-  file_sizes <- unname(file_metadata$size)
-
-  extensions <- tolower(sub(".*\\.", "", basename(relative_paths)))
-  extensions[!grepl("\\.", basename(relative_paths))] <- "<none>"
-  top_level_dirs <- sub("/.*$", "", relative_paths)
-  top_level_dirs[!grepl("/", relative_paths)] <- "<root>"
-
-  inventory <- data.frame(
-    path = relative_paths,
-    size_bytes = file_sizes,
-    size_mb = round(file_sizes / 1024 ^ 2, 6),
-    extension = extensions,
-    top_level_dir = top_level_dirs,
-    stringsAsFactors = FALSE
-  )
-
-  inventory <- inventory[order(-inventory$size_bytes, inventory$path), ]
-  inventory$rank <- seq_len(nrow(inventory))
-  inventory[, c("rank", "path", "size_bytes", "size_mb", "extension", "top_level_dir")]
 }
 
-compute_du_size_bytes <- function(path) {
-  output <- system2(
-    command = "du",
-    args = c("-sb", path),
-    stdout = TRUE,
-    stderr = TRUE
+install_from_github <- function(package_name, github_repo, github_ref, library_dir, cran_mirror) {
+  ensure_remotes(cran_mirror)
+
+  remotes::install_github(
+    repo = github_repo,
+    ref = github_ref,
+    lib = library_dir,
+    upgrade = "never",
+    quiet = TRUE,
+    dependencies = TRUE
   )
 
-  status <- attr(output, "status")
-  if (!is.null(status) && status != 0) {
-    stop(
-      sprintf("`du -sb` failed for '%s': %s", path, paste(output, collapse = " ")),
-      call. = FALSE
-    )
-  }
-
-  size_bytes <- suppressWarnings(as.numeric(sub("^([0-9]+).*", "\\1", output[[1]])))
-  if (is.na(size_bytes)) {
-    stop(sprintf("Could not parse `du -sb` output for '%s'.", path), call. = FALSE)
-  }
-
-  size_bytes
+  measure_installed_package(package_name, library_dir)
 }
 
-format_mb <- function(size_bytes) {
-  sprintf("%.2f", size_bytes / 1024 ^ 2)
+format_size_change <- function(size_bytes) {
+  sign <- if (size_bytes > 0) "+" else ""
+  sprintf("%s%.2f MB", sign, size_bytes / 1024 ^ 2)
 }
 
-summarize_inventory_by <- function(inventory, column) {
-  summary <- stats::aggregate(
-    inventory$size_bytes,
-    by = list(category = inventory[[column]]),
-    FUN = sum
-  )
-  names(summary)[names(summary) == "x"] <- "size_bytes"
-  summary <- summary[order(-summary$size_bytes, summary$category), ]
-  rownames(summary) <- NULL
-  summary$size_mb <- round(summary$size_bytes / 1024 ^ 2, 4)
-  summary
+format_percent_change <- function(size_bytes, baseline_bytes) {
+  if (baseline_bytes == 0) {
+    return("N/A")
+  }
+
+  sign <- if (size_bytes > 0) "+" else ""
+  sprintf("%s%.1f%%", sign, (size_bytes / baseline_bytes) * 100)
 }
 
-write_markdown_report <- function(
-    output_file,
-    summary_output_file,
-    package_name,
-    cran_version,
-    cran_installed_size_bytes,
-    cran_tarball_size_bytes,
-    cran_extracted_size_bytes,
-    development_version,
-    development_label,
-    development_installed_size_bytes,
-    development_tarball_size_bytes,
-    development_extracted_size_bytes,
-    development_inventory
-) {
-  installed_size_difference_bytes <- development_installed_size_bytes - cran_installed_size_bytes
-  installed_percent_difference <- if (cran_installed_size_bytes == 0) {
-    NA_real_
-  } else {
-    (installed_size_difference_bytes / cran_installed_size_bytes) * 100
-  }
+write_reports <- function(output_dir, package_name, cran_result, github_result, github_repo, github_ref) {
+  difference_bytes <- github_result$size_bytes - cran_result$size_bytes
 
-  tarball_size_difference_bytes <- development_tarball_size_bytes - cran_tarball_size_bytes
-  tarball_percent_difference <- if (cran_tarball_size_bytes == 0) {
-    NA_real_
-  } else {
-    (tarball_size_difference_bytes / cran_tarball_size_bytes) * 100
-  }
-
-  extracted_size_difference_bytes <- development_extracted_size_bytes - cran_extracted_size_bytes
-  extracted_percent_difference <- if (cran_extracted_size_bytes == 0) {
-    NA_real_
-  } else {
-    (extracted_size_difference_bytes / cran_extracted_size_bytes) * 100
-  }
-
-  top_files <- utils::head(development_inventory, n = 10)
-  top_file_lines <- paste0(
-    "| ",
-    top_files$rank,
-    " | `",
-    top_files$path,
-    "` | ",
-    format(top_files$size_bytes, big.mark = ",", scientific = FALSE, trim = TRUE),
-    " | ",
-    sprintf("%.2f", top_files$size_mb),
-    " |"
-  )
-
-  rd_files <- development_inventory[grepl("\\.Rd$", development_inventory$path), ]
-  rd_size_bytes <- sum(rd_files$size_bytes)
-  total_size_bytes <- sum(development_inventory$size_bytes)
-  rd_percent <- if (total_size_bytes == 0) {
-    0
-  } else {
-    (rd_size_bytes / total_size_bytes) * 100
-  }
-
-  top_docs <- utils::head(rd_files[order(-rd_files$size_bytes, rd_files$path), ], n = 5)
-  top_doc_lines <- if (nrow(top_docs) == 0) {
-    "| - | - | - | - |"
-  } else {
-    paste0(
-      "| ",
-      seq_len(nrow(top_docs)),
-      " | `",
-      top_docs$path,
-      "` | ",
-      format(top_docs$size_bytes, big.mark = ",", scientific = FALSE, trim = TRUE),
-      " | ",
-      sprintf("%.2f", top_docs$size_mb),
-      " |"
-    )
-  }
-
-  extension_summary <- utils::head(summarize_inventory_by(development_inventory, "extension"), n = 10)
-  extension_lines <- paste0(
-    "| `",
-    extension_summary$category,
-    "` | ",
-    format(extension_summary$size_bytes, big.mark = ",", scientific = FALSE, trim = TRUE),
-    " | ",
-    sprintf("%.2f", extension_summary$size_mb),
-    " |"
-  )
-
-  directory_summary <- utils::head(summarize_inventory_by(development_inventory, "top_level_dir"), n = 10)
-  directory_lines <- paste0(
-    "| `",
-    directory_summary$category,
-    "` | ",
-    format(directory_summary$size_bytes, big.mark = ",", scientific = FALSE, trim = TRUE),
-    " | ",
-    sprintf("%.2f", directory_summary$size_mb),
-    " |"
-  )
-
-  primary_summary_lines <- c(
+  summary_lines <- c(
     sprintf("# %s package size comparison", package_name),
     "",
     sprintf("Generated: %s UTC", format(Sys.time(), tz = "UTC", usetz = FALSE)),
     "",
-    "## Installed package size (`du -sh` equivalent)",
+    "This report intentionally uses a very simple comparison:",
     "",
-    "| Source | Version | Size (MB) |",
-    "| --- | --- | ---: |",
-    sprintf("| CRAN | %s | %s |", cran_version, format_mb(cran_installed_size_bytes)),
-    sprintf(
-      "| Development (%s) | %s | %s |",
-      development_label,
-      development_version,
-      format_mb(development_installed_size_bytes)
-    ),
-    sprintf("| Difference (development - CRAN) | - | %s |", format_mb(installed_size_difference_bytes)),
-    sprintf(
-      "| Percent difference | - | %s%% |",
-      if (is.na(installed_percent_difference)) "N/A" else sprintf("%.2f", installed_percent_difference)
-    ),
+    sprintf("1. `install.packages(\"%s\")`", package_name),
+    sprintf("2. `du -sh $(Rscript -e 'cat(find.package(\"%s\"))')`", package_name),
+    sprintf("3. `remotes::install_github(\"%s\", ref = \"%s\")`", github_repo, github_ref),
+    sprintf("4. `du -sh $(Rscript -e 'cat(find.package(\"%s\"))')`", package_name),
     "",
-    "Installed size is computed after `R CMD INSTALL` to match `du -sh $(Rscript -e 'cat(find.package(\"admiral\"))')`.",
+    "## Summary",
     "",
-    "## Source tarball size (CRAN submission artifact)",
-    "",
-    "| Source | Version | Size (MB) |",
-    "| --- | --- | ---: |",
-    sprintf("| CRAN | %s | %s |", cran_version, format_mb(cran_tarball_size_bytes)),
-    sprintf(
-      "| Development (%s) | %s | %s |",
-      development_label,
-      development_version,
-      format_mb(development_tarball_size_bytes)
-    ),
-    sprintf("| Difference (development - CRAN) | - | %s |", format_mb(tarball_size_difference_bytes)),
-    sprintf(
-      "| Percent difference | - | %s%% |",
-      if (is.na(tarball_percent_difference)) "N/A" else sprintf("%.2f", tarball_percent_difference)
-    )
+    "| Source | Version | Installed size | Path |",
+    "| --- | --- | ---: | --- |",
+    sprintf("| CRAN | %s | %s | `%s` |", cran_result$version, cran_result$size_human, cran_result$path),
+    sprintf("| GitHub (`%s`) | %s | %s | `%s` |", github_ref, github_result$version, github_result$size_human, github_result$path),
+    sprintf("| Difference (GitHub - CRAN) | - | %s | - |", format_size_change(difference_bytes)),
+    sprintf("| Percent difference | - | %s | - |", format_percent_change(difference_bytes, cran_result$size_bytes))
   )
 
   report_lines <- c(
-    primary_summary_lines,
+    summary_lines,
     "",
-    "Use the installed-size section above for the package size comparison that matches `du -sh` checks.",
-    "The extracted-content totals below remain diagnostic unpacked-source sizes.",
+    "## Raw measurements",
     "",
-    "## Extracted package contents size (diagnostic)",
-    "",
-    "| Source | Version | Size (MB) |",
-    "| --- | --- | ---: |",
-    sprintf("| CRAN | %s | %s |", cran_version, format_mb(cran_extracted_size_bytes)),
-    sprintf(
-      "| Development (%s) | %s | %s |",
-      development_label,
-      development_version,
-      format_mb(development_extracted_size_bytes)
-    ),
-    sprintf("| Difference (development - CRAN) | - | %s |", format_mb(extracted_size_difference_bytes)),
-    sprintf(
-      "| Percent difference | - | %s%% |",
-      if (is.na(extracted_percent_difference)) "N/A" else sprintf("%.2f", extracted_percent_difference)
-    ),
-    "",
-    sprintf(
-      "The development package installation contains %s files after `R CMD INSTALL`.",
-      format(nrow(development_inventory), big.mark = ",", trim = TRUE)
-    ),
-    sprintf(
-      "Documentation (`.Rd`) accounts for %s files and %s MB (%s%%) of installed package size.",
-      format(nrow(rd_files), big.mark = ",", trim = TRUE),
-      format_mb(rd_size_bytes),
-      sprintf("%.2f", rd_percent)
-    ),
-    "",
-    "## Largest files in the development package",
-    "",
-    "| Rank | File | Size (bytes) | Size (MB) |",
-    "| ---: | --- | ---: | ---: |",
-    top_file_lines,
-    "",
-    "## Largest `.Rd` documentation files",
-    "",
-    "| Rank | File | Size (bytes) | Size (MB) |",
-    "| ---: | --- | ---: | ---: |",
-    top_doc_lines,
-    "",
-    "## Size by file extension",
-    "",
-    "| Extension | Total size (bytes) | Total size (MB) |",
+    "| Source | `du -sh` | Bytes (`du -sb`) |",
     "| --- | ---: | ---: |",
-    extension_lines,
+    sprintf("| CRAN | %s | %s |", cran_result$size_human, format(cran_result$size_bytes, big.mark = ",", scientific = FALSE, trim = TRUE)),
+    sprintf("| GitHub (`%s`) | %s | %s |", github_ref, github_result$size_human, format(github_result$size_bytes, big.mark = ",", scientific = FALSE, trim = TRUE)),
     "",
-    "## Size by top-level package directory",
+    "## Notes",
     "",
-    "| Directory | Total size (bytes) | Total size (MB) |",
-    "| --- | ---: | ---: |",
-    directory_lines
+    "- Each install uses its own temporary library directory so the measurements stay isolated.",
+    sprintf("- The GitHub install is taken from `%s` at ref `%s`.", github_repo, github_ref),
+    "- The summary above is intended to be easy to read directly from the workflow run."
   )
 
-  writeLines(
-    c(
-      primary_summary_lines,
-      "",
-      "Use the installed-size table as the `du -sh` comparable package size comparison.",
-      "See the uploaded full report for extracted-content diagnostics."
-    ),
-    con = summary_output_file
-  )
-  writeLines(report_lines, con = output_file)
+  writeLines(summary_lines, con = file.path(output_dir, "package-size-summary.md"))
+  writeLines(report_lines, con = file.path(output_dir, "package-size-report.md"))
 }
 
 arguments <- parse_args(commandArgs(trailingOnly = TRUE))
-repo_dir <- normalizePath(arguments$repo, mustWork = TRUE)
 dir.create(arguments$output_dir, recursive = TRUE, showWarnings = FALSE)
 output_dir <- normalizePath(arguments$output_dir, mustWork = FALSE)
+cran_library <- tempfile("cran-library-")
+github_library <- tempfile("github-library-")
+dir.create(cran_library, recursive = TRUE, showWarnings = FALSE)
+dir.create(github_library, recursive = TRUE, showWarnings = FALSE)
 
-description <- read.dcf(file.path(repo_dir, "DESCRIPTION"))
-package_name <- description[1, "Package"]
-development_version <- description[1, "Version"]
-
-development_tarball <- build_source_tarball(
-  repo_dir = repo_dir,
-  build_dir = file.path(tempdir(), "development-build")
-)
-cran_download <- download_cran_tarball(
-  package_name = package_name,
+cran_result <- install_from_cran(
+  package_name = arguments$package_name,
   cran_mirror = arguments$cran_mirror,
-  download_dir = file.path(tempdir(), "cran-download")
+  library_dir = cran_library
 )
 
-development_inventory <- collect_tarball_inventory(development_tarball)
-cran_inventory <- collect_tarball_inventory(cran_download$path)
+github_result <- install_from_github(
+  package_name = arguments$package_name,
+  github_repo = arguments$github_repo,
+  github_ref = arguments$github_ref,
+  library_dir = github_library,
+  cran_mirror = arguments$cran_mirror
+)
 
-cran_library <- file.path(tempdir(), "cran-installed-lib")
-development_library <- file.path(tempdir(), "development-installed-lib")
-install_tarball(cran_download$path, cran_library)
-install_tarball(development_tarball, development_library)
-
-cran_installed_inventory <- collect_installed_inventory(cran_library, package_name)
-development_installed_inventory <- collect_installed_inventory(development_library, package_name)
-cran_installed_root <- file.path(cran_library, package_name)
-development_installed_root <- file.path(development_library, package_name)
-
-development_tarball_size_bytes <- unname(file.info(development_tarball)$size)
-cran_tarball_size_bytes <- unname(file.info(cran_download$path)$size)
-development_extracted_size_bytes <- sum(development_inventory$size_bytes)
-cran_extracted_size_bytes <- sum(cran_inventory$size_bytes)
-development_installed_size_bytes <- compute_du_size_bytes(development_installed_root)
-cran_installed_size_bytes <- compute_du_size_bytes(cran_installed_root)
-
-csv_output <- file.path(output_dir, "package-size-development-files.csv")
-summary_output <- file.path(output_dir, "package-size-summary.md")
-markdown_output <- file.path(output_dir, "package-size-report.md")
-
-utils::write.csv(development_installed_inventory, csv_output, row.names = FALSE)
-
-write_markdown_report(
-  output_file = markdown_output,
-  summary_output_file = summary_output,
-  package_name = package_name,
-  cran_version = cran_download$version,
-  cran_installed_size_bytes = cran_installed_size_bytes,
-  cran_tarball_size_bytes = cran_tarball_size_bytes,
-  cran_extracted_size_bytes = cran_extracted_size_bytes,
-  development_version = development_version,
-  development_label = arguments$label,
-  development_installed_size_bytes = development_installed_size_bytes,
-  development_tarball_size_bytes = development_tarball_size_bytes,
-  development_extracted_size_bytes = development_extracted_size_bytes,
-  development_inventory = development_installed_inventory
+write_reports(
+  output_dir = output_dir,
+  package_name = arguments$package_name,
+  cran_result = cran_result,
+  github_result = github_result,
+  github_repo = arguments$github_repo,
+  github_ref = arguments$github_ref
 )

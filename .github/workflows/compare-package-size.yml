@@ -21,26 +21,16 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
-        with:
-          ref: ${{ inputs.ref }}
 
       - name: Set up R
         uses: r-lib/actions/setup-r@v2
 
-      - name: Set up Pandoc
-        uses: r-lib/actions/setup-pandoc@v2
-
-      - name: Install package dependencies
-        uses: r-lib/actions/setup-r-dependencies@v2
-        with:
-          needs: check
-
       - name: Generate package size reports
         run: |
           Rscript "${{ github.workspace }}/.github/scripts/compare_package_sizes.R" \
-            --repo "${{ github.workspace }}" \
             --output_dir "${{ github.workspace }}/reports" \
-            --label "${{ inputs.ref }}"
+            --github_repo "pharmaverse/admiral" \
+            --github_ref "${{ inputs.ref }}"
 
       - name: Publish package size summary to job summary
         run: cat "${{ github.workspace }}/reports/package-size-summary.md" >> "$GITHUB_STEP_SUMMARY"
@@ -52,5 +42,4 @@ jobs:
           path: |
             ${{ github.workspace }}/reports/package-size-summary.md
             ${{ github.workspace }}/reports/package-size-report.md
-            ${{ github.workspace }}/reports/package-size-development-files.csv
           if-no-files-found: error
