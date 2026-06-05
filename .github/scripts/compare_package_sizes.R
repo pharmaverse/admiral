@@ -186,6 +186,91 @@ collect_tarball_inventory <- function(tarball) {
   inventory[, c("rank", "path", "size_bytes", "size_mb", "extension", "top_level_dir")]
 }
 
+install_tarball <- function(tarball, library_dir) {
+  dir.create(library_dir, recursive = TRUE, showWarnings = FALSE)
+  utils::install.packages(
+    pkgs = tarball,
+    repos = NULL,
+    type = "source",
+    lib = library_dir,
+    quiet = TRUE
+  )
+}
+
+collect_installed_inventory <- function(library_dir, package_name) {
+  package_root <- file.path(library_dir, package_name)
+  if (!dir.exists(package_root)) {
+    stop(
+      sprintf(
+        "Installed package directory '%s' was not found after installation.",
+        package_root
+      ),
+      call. = FALSE
+    )
+  }
+
+  files <- list.files(
+    package_root,
+    recursive = TRUE,
+    full.names = TRUE,
+    all.files = TRUE,
+    include.dirs = FALSE,
+    no.. = TRUE
+  )
+
+  file_metadata <- file.info(files)
+  keep <- !is.na(file_metadata$size) &
+    !is.na(file_metadata$isdir) &
+    !file_metadata$isdir
+  files <- files[keep]
+  file_metadata <- file_metadata[keep, , drop = FALSE]
+
+  relative_paths <- substring(files, nchar(package_root) + 2)
+  file_sizes <- unname(file_metadata$size)
+
+  extensions <- tolower(sub(".*\\.", "", basename(relative_paths)))
+  extensions[!grepl("\\.", basename(relative_paths))] <- "<none>"
+  top_level_dirs <- sub("/.*$", "", relative_paths)
+  top_level_dirs[!grepl("/", relative_paths)] <- "<root>"
+
+  inventory <- data.frame(
+    path = relative_paths,
+    size_bytes = file_sizes,
+    size_mb = round(file_sizes / 1024 ^ 2, 6),
+    extension = extensions,
+    top_level_dir = top_level_dirs,
+    stringsAsFactors = FALSE
+  )
+
+  inventory <- inventory[order(-inventory$size_bytes, inventory$path), ]
+  inventory$rank <- seq_len(nrow(inventory))
+  inventory[, c("rank", "path", "size_bytes", "size_mb", "extension", "top_level_dir")]
+}
+
+compute_du_size_bytes <- function(path) {
+  output <- system2(
+    command = "du",
+    args = c("-sb", path),
+    stdout = TRUE,
+    stderr = TRUE
+  )
+
+  status <- attr(output, "status")
+  if (!is.null(status) && status != 0) {
+    stop(
+      sprintf("`du -sb` failed for '%s': %s", path, paste(output, collapse = " ")),
+      call. = FALSE
+    )
+  }
+
+  size_bytes <- suppressWarnings(as.numeric(sub("^([0-9]+).*", "\\1", output[[1]])))
+  if (is.na(size_bytes)) {
+    stop(sprintf("Could not parse `du -sb` output for '%s'.", path), call. = FALSE)
+  }
+
+  size_bytes
+}
+
 format_mb <- function(size_bytes) {
   sprintf("%.2f", size_bytes / 1024 ^ 2)
 }
@@ -208,14 +293,23 @@ write_markdown_report <- function(
     summary_output_file,
     package_name,
     cran_version,
+    cran_installed_size_bytes,
     cran_tarball_size_bytes,
     cran_extracted_size_bytes,
     development_version,
     development_label,
+    development_installed_size_bytes,
     development_tarball_size_bytes,
     development_extracted_size_bytes,
     development_inventory
 ) {
+  installed_size_difference_bytes <- development_installed_size_bytes - cran_installed_size_bytes
+  installed_percent_difference <- if (cran_installed_size_bytes == 0) {
+    NA_real_
+  } else {
+    (installed_size_difference_bytes / cran_installed_size_bytes) * 100
+  }
+
   tarball_size_difference_bytes <- development_tarball_size_bytes - cran_tarball_size_bytes
   tarball_percent_difference <- if (cran_tarball_size_bytes == 0) {
     NA_real_
@@ -296,7 +390,26 @@ write_markdown_report <- function(
     "",
     sprintf("Generated: %s UTC", format(Sys.time(), tz = "UTC", usetz = FALSE)),
     "",
-    "## Source tarball size (CRAN-relevant)",
+    "## Installed package size (`du -sh` equivalent)",
+    "",
+    "| Source | Version | Size (MB) |",
+    "| --- | --- | ---: |",
+    sprintf("| CRAN | %s | %s |", cran_version, format_mb(cran_installed_size_bytes)),
+    sprintf(
+      "| Development (%s) | %s | %s |",
+      development_label,
+      development_version,
+      format_mb(development_installed_size_bytes)
+    ),
+    sprintf("| Difference (development - CRAN) | - | %s |", format_mb(installed_size_difference_bytes)),
+    sprintf(
+      "| Percent difference | - | %s%% |",
+      if (is.na(installed_percent_difference)) "N/A" else sprintf("%.2f", installed_percent_difference)
+    ),
+    "",
+    "Installed size is computed after `R CMD INSTALL` to match `du -sh $(Rscript -e 'cat(find.package(\"admiral\"))')`.",
+    "",
+    "## Source tarball size (CRAN submission artifact)",
     "",
     "| Source | Version | Size (MB) |",
     "| --- | --- | ---: |",
@@ -317,8 +430,8 @@ write_markdown_report <- function(
   report_lines <- c(
     primary_summary_lines,
     "",
-    "Use the tarball section above for the package size comparison.",
-    "The extracted-content totals below are diagnostic unpacked sizes, so they can resemble the pre-change report even when the tarball comparison changes.",
+    "Use the installed-size section above for the package size comparison that matches `du -sh` checks.",
+    "The extracted-content totals below remain diagnostic unpacked-source sizes.",
     "",
     "## Extracted package contents size (diagnostic)",
     "",
@@ -338,11 +451,11 @@ write_markdown_report <- function(
     ),
     "",
     sprintf(
-      "The development tarball contains %s files after `R CMD build` packaging.",
+      "The development package installation contains %s files after `R CMD INSTALL`.",
       format(nrow(development_inventory), big.mark = ",", trim = TRUE)
     ),
     sprintf(
-      "Documentation (`.Rd`) accounts for %s files and %s MB (%s%%) of extracted package size.",
+      "Documentation (`.Rd`) accounts for %s files and %s MB (%s%%) of installed package size.",
       format(nrow(rd_files), big.mark = ",", trim = TRUE),
       format_mb(rd_size_bytes),
       sprintf("%.2f", rd_percent)
@@ -377,7 +490,7 @@ write_markdown_report <- function(
     c(
       primary_summary_lines,
       "",
-      "Use this tarball table as the CRAN-relevant package size comparison.",
+      "Use the installed-size table as the `du -sh` comparable package size comparison.",
       "See the uploaded full report for extracted-content diagnostics."
     ),
     con = summary_output_file
@@ -407,27 +520,41 @@ cran_download <- download_cran_tarball(
 development_inventory <- collect_tarball_inventory(development_tarball)
 cran_inventory <- collect_tarball_inventory(cran_download$path)
 
+cran_library <- file.path(tempdir(), "cran-installed-lib")
+development_library <- file.path(tempdir(), "development-installed-lib")
+install_tarball(cran_download$path, cran_library)
+install_tarball(development_tarball, development_library)
+
+cran_installed_inventory <- collect_installed_inventory(cran_library, package_name)
+development_installed_inventory <- collect_installed_inventory(development_library, package_name)
+cran_installed_root <- file.path(cran_library, package_name)
+development_installed_root <- file.path(development_library, package_name)
+
 development_tarball_size_bytes <- unname(file.info(development_tarball)$size)
 cran_tarball_size_bytes <- unname(file.info(cran_download$path)$size)
 development_extracted_size_bytes <- sum(development_inventory$size_bytes)
 cran_extracted_size_bytes <- sum(cran_inventory$size_bytes)
+development_installed_size_bytes <- compute_du_size_bytes(development_installed_root)
+cran_installed_size_bytes <- compute_du_size_bytes(cran_installed_root)
 
 csv_output <- file.path(output_dir, "package-size-development-files.csv")
 summary_output <- file.path(output_dir, "package-size-summary.md")
 markdown_output <- file.path(output_dir, "package-size-report.md")
 
-utils::write.csv(development_inventory, csv_output, row.names = FALSE)
+utils::write.csv(development_installed_inventory, csv_output, row.names = FALSE)
 
 write_markdown_report(
   output_file = markdown_output,
   summary_output_file = summary_output,
   package_name = package_name,
   cran_version = cran_download$version,
+  cran_installed_size_bytes = cran_installed_size_bytes,
   cran_tarball_size_bytes = cran_tarball_size_bytes,
   cran_extracted_size_bytes = cran_extracted_size_bytes,
   development_version = development_version,
   development_label = arguments$label,
+  development_installed_size_bytes = development_installed_size_bytes,
   development_tarball_size_bytes = development_tarball_size_bytes,
   development_extracted_size_bytes = development_extracted_size_bytes,
-  development_inventory = development_inventory
+  development_inventory = development_installed_inventory
 )
