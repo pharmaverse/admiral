@@ -451,11 +451,11 @@ write_markdown_report <- function(
     ),
     "",
     sprintf(
-      "The development tarball contains %s files after `R CMD build` packaging.",
+      "The development package installation contains %s files after `R CMD INSTALL`.",
       format(nrow(development_inventory), big.mark = ",", trim = TRUE)
     ),
     sprintf(
-      "Documentation (`.Rd`) accounts for %s files and %s MB (%s%%) of extracted package size.",
+      "Documentation (`.Rd`) accounts for %s files and %s MB (%s%%) of installed package size.",
       format(nrow(rd_files), big.mark = ",", trim = TRUE),
       format_mb(rd_size_bytes),
       sprintf("%.2f", rd_percent)
