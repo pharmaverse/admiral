@@ -247,6 +247,30 @@ collect_installed_inventory <- function(library_dir, package_name) {
   inventory[, c("rank", "path", "size_bytes", "size_mb", "extension", "top_level_dir")]
 }
 
+compute_du_size_bytes <- function(path) {
+  output <- system2(
+    command = "du",
+    args = c("-sb", path),
+    stdout = TRUE,
+    stderr = TRUE
+  )
+
+  status <- attr(output, "status")
+  if (!is.null(status) && status != 0) {
+    stop(
+      sprintf("`du -sb` failed for '%s': %s", path, paste(output, collapse = " ")),
+      call. = FALSE
+    )
+  }
+
+  size_bytes <- suppressWarnings(as.numeric(sub("^([0-9]+).*", "\\1", output[[1]])))
+  if (is.na(size_bytes)) {
+    stop(sprintf("Could not parse `du -sb` output for '%s'.", path), call. = FALSE)
+  }
+
+  size_bytes
+}
+
 format_mb <- function(size_bytes) {
   sprintf("%.2f", size_bytes / 1024 ^ 2)
 }
@@ -503,13 +527,15 @@ install_tarball(development_tarball, development_library)
 
 cran_installed_inventory <- collect_installed_inventory(cran_library, package_name)
 development_installed_inventory <- collect_installed_inventory(development_library, package_name)
+cran_installed_root <- file.path(cran_library, package_name)
+development_installed_root <- file.path(development_library, package_name)
 
 development_tarball_size_bytes <- unname(file.info(development_tarball)$size)
 cran_tarball_size_bytes <- unname(file.info(cran_download$path)$size)
 development_extracted_size_bytes <- sum(development_inventory$size_bytes)
 cran_extracted_size_bytes <- sum(cran_inventory$size_bytes)
-development_installed_size_bytes <- sum(development_installed_inventory$size_bytes)
-cran_installed_size_bytes <- sum(cran_installed_inventory$size_bytes)
+development_installed_size_bytes <- compute_du_size_bytes(development_installed_root)
+cran_installed_size_bytes <- compute_du_size_bytes(cran_installed_root)
 
 csv_output <- file.path(output_dir, "package-size-development-files.csv")
 summary_output <- file.path(output_dir, "package-size-summary.md")
