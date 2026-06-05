@@ -29,6 +29,13 @@ specified under `save_path`. This is because this functionality did not work as 
 
 - NCICTCAEv5 grading criteria (`atoxgr_criteria_ctcv5`, `atoxgr_criteria_ctcv5_uscv`),  updated to add term `"Blood lactate dehydrogenase increase"` (#3025).
 
+- The `missing_values` argument was added to `derive_extreme_records()`. This
+  allows users to specify values for variables in the new records originating
+  from `dataset_ref`. (#3017)
+  
+- `list_all_templates()` now only lists out `.R` files with the `templates` folder
+of the target package. (#3136)
+
 ## Breaking Changes
 
 - The following function arguments are entering the next phase of the [deprecation process](https://pharmaverse.github.io/admiraldev/articles/programming_strategy.html#deprecation): 
@@ -89,6 +96,10 @@ of packages were updated to specify the level of contributions required for auth
 
 - The derivation of `DOSEON` and `DOSEU` variables in the OCCDS vignette was
   clarified and generalized to cover more scenarios. (#3101)
+  
+- The documentation for `derive_vars_dtm()` and `derive_vars_dt()` was updated to clarify details of the `highest_imputation` argument. (#3055)
+
+- The 'Date and Time Imputation' vignette was updated to point out the difference between the character `*DTC` variables and the numeric `*DTM` variables. (#3055)
 
 ## Various
 

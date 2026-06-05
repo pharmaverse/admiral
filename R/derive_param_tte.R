@@ -118,7 +118,7 @@
 #'   expected. The values must be symbols, character strings, numeric values,
 #'   expressions, or `NA`.
 #'
-#' @permitted [expr_list_formula]
+#' @permitted [expr_list_named]
 #'
 #' @param subject_keys Variables to uniquely identify a subject
 #'

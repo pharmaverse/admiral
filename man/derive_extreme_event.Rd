@@ -116,21 +116,21 @@ observations.
 
 Set a list of variables to some specified value for the new records
 \itemize{
-\item LHS refer to a variable.
+\item LHS refers to a variable.
 \item RHS refers to the values to set to the variable. This can be a string, a
-symbol, a numeric value, an expression or NA.
+symbol, a numeric value, an expression, or `NA``.
 }
 
 For example:
 
 \if{html}{\out{<div class="sourceCode">}}\preformatted{  set_values_to = exprs(
-    PARAMCD = "WOBS",
-    PARAM = "Worst Observations"
+    AVISIT = "LAST VALUE",
+    DTYPE = "LOV"
   )
 }\if{html}{\out{</div>}}
 
 \describe{
-\item{Permitted values}{list of named expressions created by a formula using \code{exprs()}, e.g., \code{exprs(AVALC = VSSTRESC, AVAL = yn_to_numeric(AVALC))}}
+\item{Permitted values}{list of named expressions created by \code{exprs()}, e.g., \code{exprs(AVALC = VSSTRESC, AVAL = yn_to_numeric(AVALC))}}
 \item{Default value}{\code{NULL}}
 }}
 
