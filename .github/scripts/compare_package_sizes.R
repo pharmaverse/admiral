@@ -205,6 +205,7 @@ summarize_inventory_by <- function(inventory, column) {
 
 write_markdown_report <- function(
     output_file,
+    summary_output_file,
     package_name,
     cran_version,
     cran_tarball_size_bytes,
@@ -290,7 +291,7 @@ write_markdown_report <- function(
     " |"
   )
 
-  report_lines <- c(
+  primary_summary_lines <- c(
     sprintf("# %s package size comparison", package_name),
     "",
     sprintf("Generated: %s UTC", format(Sys.time(), tz = "UTC", usetz = FALSE)),
@@ -310,7 +311,14 @@ write_markdown_report <- function(
     sprintf(
       "| Percent difference | - | %s%% |",
       if (is.na(tarball_percent_difference)) "N/A" else sprintf("%.2f", tarball_percent_difference)
-    ),
+    )
+  )
+
+  report_lines <- c(
+    primary_summary_lines,
+    "",
+    "Use the tarball section above for the package size comparison.",
+    "The extracted-content totals below are diagnostic unpacked sizes, so they can resemble the pre-change report even when the tarball comparison changes.",
     "",
     "## Extracted package contents size (diagnostic)",
     "",
@@ -365,6 +373,15 @@ write_markdown_report <- function(
     directory_lines
   )
 
+  writeLines(
+    c(
+      primary_summary_lines,
+      "",
+      "Use this tarball table as the CRAN-relevant package size comparison.",
+      "See the uploaded full report for extracted-content diagnostics."
+    ),
+    con = summary_output_file
+  )
   writeLines(report_lines, con = output_file)
 }
 
@@ -396,12 +413,14 @@ development_extracted_size_bytes <- sum(development_inventory$size_bytes)
 cran_extracted_size_bytes <- sum(cran_inventory$size_bytes)
 
 csv_output <- file.path(output_dir, "package-size-development-files.csv")
+summary_output <- file.path(output_dir, "package-size-summary.md")
 markdown_output <- file.path(output_dir, "package-size-report.md")
 
 utils::write.csv(development_inventory, csv_output, row.names = FALSE)
 
 write_markdown_report(
   output_file = markdown_output,
+  summary_output_file = summary_output,
   package_name = package_name,
   cran_version = cran_download$version,
   cran_tarball_size_bytes = cran_tarball_size_bytes,
