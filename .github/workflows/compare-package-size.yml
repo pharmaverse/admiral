@@ -42,14 +42,15 @@ jobs:
             --output_dir "${{ github.workspace }}/reports" \
             --label "${{ inputs.ref }}"
 
-      - name: Publish markdown report to job summary
-        run: cat "${{ github.workspace }}/reports/package-size-report.md" >> "$GITHUB_STEP_SUMMARY"
+      - name: Publish package size summary to job summary
+        run: cat "${{ github.workspace }}/reports/package-size-summary.md" >> "$GITHUB_STEP_SUMMARY"
 
       - name: Upload package size reports
         uses: actions/upload-artifact@v4
         with:
           name: package-size-reports
           path: |
+            ${{ github.workspace }}/reports/package-size-summary.md
             ${{ github.workspace }}/reports/package-size-report.md
             ${{ github.workspace }}/reports/package-size-development-files.csv
           if-no-files-found: error
