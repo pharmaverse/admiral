@@ -258,8 +258,12 @@ adlb <- lb %>%
     AVAL = LBSTRESN,
     ANRLO = LBSTNRLO,
     ANRHI = LBSTNRHI,
-    BASE = AVAL - 10
+    BASE = AVAL - 10,
+    ABLFL = case_when(
+    VISIT == "SCREENING 1" ~ "Y",
+    TRUE ~ NA_character_
   )
+)
 ```
 
 Another look-up table is used to add on `ATOXDSCL` and `ATOXDSCH` using
