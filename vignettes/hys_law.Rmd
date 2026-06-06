@@ -213,5 +213,5 @@ We hope by demonstrating the flexibility of `admiral` functions and using a gene
 
 ADaM | Sourcing Command
 ---- | --------------
-[`ADLBHY`](templates.html#adlbhy) | `use_ad_template("ADLBHY")`
+`ADLBHY` | `use_ad_template("ADLBHY")`
 

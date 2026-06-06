@@ -1659,4 +1659,4 @@ admiral_labels_attrs_section()
 
 ADaM | Sourcing Command
 ---- | --------------
-[`ADAB`](templates.html#adab) | `use_ad_template("ADAB")`
+`ADAB` | `use_ad_template("ADAB")`
