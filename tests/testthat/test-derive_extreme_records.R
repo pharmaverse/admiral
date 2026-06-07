@@ -390,8 +390,57 @@ test_that("derive_extreme_records Test 8: keep all vars in the new records when 
   )
 })
 
-## Test 9: order vars from dataset_add ----
-test_that("derive_extreme_records Test 9: order vars from dataset_add", {
+## Test 9: missing_values with dataset_ref ----
+test_that("derive_extreme_records Test 9: missing_values with dataset_ref", {
+  adsl <- tibble::tribble(
+    ~USUBJID,
+    "1",
+    "2",
+    "3"
+  ) %>%
+    mutate(STUDYID = "XX1234")
+
+  adrs <- tibble::tribble(
+    ~USUBJID, ~AVALC, ~AVAL,
+    "1",      "Y",    1,
+    "2",      "Y",    1
+  ) %>%
+    mutate(STUDYID = "XX1234")
+
+  actual <- derive_extreme_records(
+    dataset_ref = adsl,
+    dataset_add = adrs,
+    by_vars = exprs(STUDYID, USUBJID),
+    mode = "first",
+    set_values_to = exprs(
+      PARAMCD = "PARAM1"
+    ),
+    missing_values = exprs(
+      AVALC = "N",
+      AVAL = 0
+    )
+  )
+
+  expected <- tibble::tribble(
+    ~USUBJID, ~AVALC, ~AVAL,
+    "1",      "Y",    1,
+    "2",      "Y",    1,
+    "3",      "N",    0
+  ) %>%
+    mutate(
+      STUDYID = "XX1234",
+      PARAMCD = "PARAM1"
+    )
+
+  expect_dfs_equal(
+    base = expected,
+    comp = actual,
+    keys = c("USUBJID", "PARAMCD")
+  )
+})
+
+## Test 10: order vars from dataset_add ----
+test_that("derive_extreme_records Test 10: order vars from dataset_add", {
   bds <- tibble::tribble(
     ~USUBJID, ~PARAMCD, ~AVALC,
     "1",      "PARAM",  "1"
