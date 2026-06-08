@@ -53,7 +53,8 @@ The BSA (Body Surface Area) in m^2.
 Computes BSA from height and weight making use of the specified derivation method
 }
 \details{
-Usually this computation function can not be used with \verb{\%>\%}.
+This is a vector-oriented helper and is not usually called directly on a data
+frame with \verb{\%>\%}.
 }
 \examples{
 # Derive BSA by the Mosteller method

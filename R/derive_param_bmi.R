@@ -221,8 +221,8 @@ derive_param_bmi <- function(dataset,
 #'
 #' @permitted numeric vector
 #'
-#'
-#' @details Usually this computation function can not be used with `%>%`.
+#' @details This is a vector-oriented helper and is not usually called directly on a data
+#' frame with `%>%`.
 #'
 #' @return The BMI (Body Mass Index Area) in kg/m^2.
 #'

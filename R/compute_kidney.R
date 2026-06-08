@@ -82,6 +82,9 @@
 #'
 #' units = mL/min/1.73 m2
 #'
+#' This is a vector-oriented helper and is not usually called directly on a data
+#' frame with `%>%`.
+#'
 #' @return A numeric vector of egfr values
 #'
 #' @keywords com_bds_findings

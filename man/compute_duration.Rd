@@ -159,6 +159,9 @@ length is \code{30.4375}, i.e. \code{29 / 30.4375 = 0.95}.
 
 For additional details, review the
 \href{https://lubridate.tidyverse.org/reference/timespan.html}{lubridate time span reference page}.
+
+This is a vector-oriented helper and is not usually called directly on a data
+frame with \verb{\%>\%}.
 }
 
 \examples{

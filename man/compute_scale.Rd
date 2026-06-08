@@ -83,6 +83,9 @@ Returns a numeric value. If source contains less than \code{min_n} values,
 the result is set to \code{NA}. If \code{source_range} and \code{target_range} aren't
 specified, the mean will be computed without any transformation being
 performed.
+
+This is a vector-oriented helper and is not usually called directly on a data
+frame with \verb{\%>\%}.
 }
 \examples{
 compute_scale(
