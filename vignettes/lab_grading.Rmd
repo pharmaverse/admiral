@@ -260,10 +260,10 @@ adlb <- lb %>%
     ANRHI = LBSTNRHI,
     BASE = AVAL - 10,
     ABLFL = case_when(
-    VISIT == "SCREENING 1" ~ "Y",
-    TRUE ~ NA_character_
+      VISIT == "SCREENING 1" ~ "Y",
+      TRUE ~ NA_character_
+    )
   )
-)
 ```
 
 Another look-up table is used to add on `ATOXDSCL` and `ATOXDSCH` using
@@ -399,7 +399,7 @@ adlb <- adlb %>%
 
 ```{r, eval=TRUE, echo=FALSE}
 adlb %>%
-  filter(PARAMCD == "ALB", USUBJID == "01-705-1349") %>% 
+  filter(PARAMCD == "ALB", USUBJID == "01-705-1349") %>%
   dataset_vignette(
     display_vars = exprs(USUBJID, PARAMCD, ABLFL, ATOXGRL, ATOXGRH, ATOXGR, BTOXGRL, BTOXGRH, BTOXGR)
   )
