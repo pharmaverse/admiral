@@ -487,7 +487,8 @@ convert_dtc_to_dt <- function(dtc,
 #'
 #' @details
 #'
-#' Usually this computation function can not be used with `%>%`.
+#' This is a vector-oriented helper and is not usually called directly on a data
+#' frame with `%>%`.
 #'
 #' Additionally, the function will throw an error if imputation rules cause an
 #' invalid datetime (e.g. "2020-02-31") to be generated. In this case, the user
@@ -747,7 +748,8 @@ restrict_imputed_dtc_dt <- function(dtc,
 #'
 #'   A date object is expected.
 #'
-#' @details Usually this computation function can not be used with `%>%`.
+#' @details This is a vector-oriented helper and is not usually called directly on a data
+#'   frame with `%>%`.
 #'
 #' @return The date imputation flag (`*DTF`) (character value of `"D"`, `"M"` , `"Y"` or `NA`)
 #'
