@@ -344,7 +344,8 @@ derive_vars_dt <- function(dataset,
 #'
 #' @inheritParams impute_dtc_dt
 #'
-#' @details Usually this computation function can not be used with `%>%`.
+#' @details This is a vector-oriented helper and is not usually called
+#'   directly on a data frame with `%>%`.
 #'
 #' @return a date object
 #'
@@ -420,7 +421,8 @@ convert_dtc_to_dt <- function(dtc,
 #'   A character value is expected.
 #'   - The`"first"` and `"last"` keywords allow imputation to the first/last
 #'     day/month. They can also be used to impute the year if used in conjunction
-#'     with the `min_dates` or `max_dates` arguments (see examples).
+#'     with the `min_dates` or `max_dates` arguments. Some examples of this are available
+#'     [here](https://pharmaverse.github.io/admiral/cran-release/articles/imputation.html#minimummaximum-dates).
 #'   - When `highest_imputation` is `"M"` or `"D"`, the `"mid"` keyword can also be
 #'     specified to impute missing components to the middle of the possible range:
 #'       - If both month and day are missing, they are imputed as `"06-30"`

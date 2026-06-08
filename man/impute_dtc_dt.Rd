@@ -55,7 +55,8 @@ A character value is expected.
 \itemize{
 \item The\code{"first"} and \code{"last"} keywords allow imputation to the first/last
 day/month. They can also be used to impute the year if used in conjunction
-with the \code{min_dates} or \code{max_dates} arguments (see examples).
+with the \code{min_dates} or \code{max_dates} arguments. Some examples of this are available
+\href{https://pharmaverse.github.io/admiral/cran-release/articles/imputation.html#minimummaximum-dates}{here}.
 \item When \code{highest_imputation} is \code{"M"} or \code{"D"}, the \code{"mid"} keyword can also be
 specified to impute missing components to the middle of the possible range:
 \itemize{
