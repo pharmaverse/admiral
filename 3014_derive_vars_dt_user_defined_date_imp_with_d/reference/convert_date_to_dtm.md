@@ -70,8 +70,9 @@ convert_date_to_dtm(
 
   - The`"first"` and `"last"` keywords allow imputation to the
     first/last day/month. They can also be used to impute the year if
-    used in conjunction with the `min_dates` or `max_dates` arguments
-    (see examples).
+    used in conjunction with the `min_dates` or `max_dates` arguments.
+    Some examples of this are available
+    [here](https://pharmaverse.github.io/admiral/cran-release/articles/imputation.html#minimummaximum-dates).
 
   - When `highest_imputation` is `"M"` or `"D"`, the `"mid"` keyword can
     also be specified to impute missing components to the middle of the
@@ -233,7 +234,7 @@ Date/Time Computation Functions that returns a vector:
 convert_date_to_dtm("2019-07-18T15:25:00")
 #> [1] "2019-07-18 15:25:00 UTC"
 convert_date_to_dtm(Sys.time())
-#> [1] "2026-06-05 14:54:04 UTC"
+#> [1] "2026-06-08 08:01:22 UTC"
 convert_date_to_dtm(as.Date("2019-07-18"), time_imputation = "23:59:59")
 #> [1] "2019-07-18 23:59:59 UTC"
 convert_date_to_dtm("2019-07-18", time_imputation = "23:59:59")
