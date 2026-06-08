@@ -91,8 +91,8 @@ convert_date_to_dtm(
     `date_imputation = "30"` results in an invalid date of "2024-02-30"
     for the partial date "2024-02".
 
-  - `"mm-dd"` can be specified only if `highest_imputation` is `"M"`,
-    e.g. `"06-15"` for the 15th of June.
+  - `"<mm>-<dd>"` can be specified only if `highest_imputation` is
+    `"M"`, e.g. `"06-15"` for the 15th of June.
 
   Permitted values
 
@@ -234,7 +234,7 @@ Date/Time Computation Functions that returns a vector:
 convert_date_to_dtm("2019-07-18T15:25:00")
 #> [1] "2019-07-18 15:25:00 UTC"
 convert_date_to_dtm(Sys.time())
-#> [1] "2026-06-08 08:13:18 UTC"
+#> [1] "2026-06-08 09:43:06 UTC"
 convert_date_to_dtm(as.Date("2019-07-18"), time_imputation = "23:59:59")
 #> [1] "2019-07-18 23:59:59 UTC"
 convert_date_to_dtm("2019-07-18", time_imputation = "23:59:59")

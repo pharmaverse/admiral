@@ -91,8 +91,8 @@ impute_dtc_dt(
     `date_imputation = "30"` results in an invalid date of "2024-02-30"
     for the partial date "2024-02".
 
-  - `"mm-dd"` can be specified only if `highest_imputation` is `"M"`,
-    e.g. `"06-15"` for the 15th of June.
+  - `"<mm>-<dd>"` can be specified only if `highest_imputation` is
+    `"M"`, e.g. `"06-15"` for the 15th of June.
 
   Permitted values
 
@@ -179,7 +179,8 @@ A character vector
 
 ## Details
 
-Usually this computation function can not be used with `%>%`.
+This is a vector-oriented helper and is not usually called directly on a
+data frame with `%>%`.
 
 Additionally, the function will throw an error if imputation rules cause
 an invalid datetime (e.g. "2020-02-31") to be generated. In this case,

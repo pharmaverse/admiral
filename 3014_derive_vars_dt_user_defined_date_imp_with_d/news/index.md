@@ -273,6 +273,13 @@ Developer Notes
   [admiral](https://pharmaverse.github.io/admiral/) author.
   ([\#3112](https://github.com/pharmaverse/admiral/issues/3112))
 
+&nbsp;
+
+- Added notes and examples for deriving baseline toxicity grade
+  variables (`BTOXGR`, `BTOXGRL`, `BTOXGRH`) in the Lab Grading
+  vignette.
+  ([\#3119](https://github.com/pharmaverse/admiral/issues/3119))
+
 ## admiral 1.4.2
 
 CRAN release: 2026-05-28
