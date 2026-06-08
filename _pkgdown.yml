@@ -68,8 +68,8 @@ authors:
     text: "Developed by F. Hoffmann-La Roche AG, GlaxoSmithKline LLC,"
   sidebar:
     roles: [aut, fnd]
-  Ben Straub:
-    href: https://github.com/bms63
+  Edoardo Mancini:
+    href: https://manciniedoardo.github.io/
   Stefan Bundfuss:
     href: https://github.com/bundfussr
   Arianna Cascone:
@@ -82,12 +82,14 @@ authors:
     href: https://github.com/rossfarrugia
   Fanny Gautier:
     href: https://github.com/Fanny-Gautier
-  Edoardo Mancini:
-    href: https://manciniedoardo.github.io/
+  Liam Hobby:
+    href: https://github.com/LiamHobby
   Gordon Miller:
     href: https://github.com/millerg23
   Lina Patil:
     href: https://github.com/Lina2689
+  Ben Straub:
+    href: https://github.com/bms63
   F. Hoffmann-La Roche AG:
     html: "<a href='https://www.roche.com/'><img src='man/figures/roche_logo.png' height='34' alt='Roche logo' /></a>"
     href: https://roche.com/
