@@ -142,6 +142,8 @@ the pull request title to trigger website creation. (#2984)
 - Clickable links to personal websites or GitHub profiles were added in the home page sidebar for every `{admiral}` author. (#3112)
 </details>
 
+- Added notes and examples for deriving baseline toxicity grade variables (`BTOXGR`, `BTOXGRL`, `BTOXGRH`) in the Lab Grading vignette. (#3119)
+
 # admiral 1.4.2
 
 * Maintainer switched from Ben Straub to Edoardo Mancini.
