@@ -397,6 +397,12 @@ adlb <- adlb %>%
   )
 ```
 
+```{r, eval=TRUE, echo=FALSE}
+adlb %>%
+  filter(PARAMCD == "ALB", USUBJID == "01-705-1349") %>% 
+  dataset_vignette(
+    display_vars = exprs(USUBJID, PARAMCD, ABLFL, ATOXGRL, ATOXGRH, ATOXGR, BTOXGRL, BTOXGRH, BTOXGR)
+  )
 # NCI-CTCAEV4 implementation{#implement_ctcv4}
 
 ## Terms graded
