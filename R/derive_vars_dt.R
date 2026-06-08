@@ -422,7 +422,9 @@ convert_dtc_to_dt <- function(dtc,
 #'   - The`"first"` and `"last"` keywords allow imputation to the first/last
 #'     day/month. They can also be used to impute the year if used in conjunction
 #'     with the `min_dates` or `max_dates` arguments. Some examples of this are available
+# nolint start
 #'     [here](https://pharmaverse.github.io/admiral/cran-release/articles/imputation.html#minimummaximum-dates).
+# nolint end
 #'   - When `highest_imputation` is `"M"` or `"D"`, the `"mid"` keyword can also be
 #'     specified to impute missing components to the middle of the possible range:
 #'       - If both month and day are missing, they are imputed as `"06-30"`
