@@ -639,15 +639,25 @@ impute_dtc_dt <- function(dtc,
     imputed_dtc <- adjust_last_day_imputation(imputed_dtc, partial)
   }
 
-  if (!all(is_valid_dtc(imputed_dtc, check_dtc = TRUE))) {
+  # Check if any imputations produced invalid dates ----
+  is_valid <- is_valid_dtc(imputed_dtc, check_dtc = TRUE)
+  if (!all(is_valid)) {
+    invalid_indices <- which(!is_valid)
+    n_invalid <- length(invalid_indices)
+    n_show <- min(5, length(invalid_indices))
+
+    invalid_examples <- paste(
+      dtc[invalid_indices[1:n_show]], "imputed to", imputed_dtc[invalid_indices[1:n_show]]
+    )
+    names(invalid_examples) <- rep("*", n_show)
+
     cli_abort(c(
-      "Some imputed dates are invalid.",
-      "i" = paste(
-        "{.arg date_imputation} is set to {.val {date_imputation}}.",
-        "Are you sure that with this value you are generating all valid dates?",
-        "E.g. {.code date_imputation = 31} would impute \"2020-02\" to \"2020-02-31\",",
-        "which is invalid."
-      )
+      paste0(
+        "{n_invalid} imputed date{?s} {?is/are} invalid. Please ",
+        "review the function arguments and/or your data and correct your selection{?s}."
+      ),
+      "x" = "{qty(n_invalid)}See the {if (n_invalid > 5) 'first five ' else ''}
+      problematic date{if (n_invalid > 1) 's' else ''} below:", invalid_examples
     ))
   }
 

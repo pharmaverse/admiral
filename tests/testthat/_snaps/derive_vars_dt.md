@@ -70,8 +70,9 @@
       impute_dtc_dt(dtc = input, highest_imputation = "D", date_imputation = "31")
     Condition
       Error in `impute_dtc_dt()`:
-      ! Some imputed dates are invalid.
-      i `date_imputation` is set to "31". Are you sure that with this value you are generating all valid dates? E.g. `date_imputation = 31` would impute "2020-02" to "2020-02-31", which is invalid.
+      ! 1 imputed date is invalid. Please review the function arguments and/or your data and correct your selection.
+      x See the problematic date below:
+      * 2020-02 imputed to 2020-02-31
 
 # derive_vars_dt Test 21: NA imputation for highest_imputation = Y & max_dates but date_imputation = first
 
