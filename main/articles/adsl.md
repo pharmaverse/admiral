@@ -788,6 +788,6 @@ example](https://pharmaverse.github.io/examples/adam/adsl).
 
 ## Example Script
 
-| ADaM                                                                             | Sourcing Command          |
-|----------------------------------------------------------------------------------|---------------------------|
-| [`ADSL`](https:/pharmaverse.github.io/admiral/main/articles/templates.html#adsl) | `use_ad_template("ADSL")` |
+| ADaM   | Sourcing Command          |
+|--------|---------------------------|
+| `ADSL` | `use_ad_template("ADSL")` |

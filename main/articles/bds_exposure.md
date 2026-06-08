@@ -547,6 +547,6 @@ example](https://pharmaverse.github.io/examples/adam/adsl).
 
 ## Example Script
 
-| ADaM                                                                             | Sourcing Command          |
-|----------------------------------------------------------------------------------|---------------------------|
-| [`ADEX`](https:/pharmaverse.github.io/admiral/main/articles/templates.html#adex) | `use_ad_template("ADEX")` |
+| ADaM   | Sourcing Command          |
+|--------|---------------------------|
+| `ADEX` | `use_ad_template("ADEX")` |

@@ -20,6 +20,8 @@
 - **[Fanny Gautier](https://github.com/Fanny-Gautier)**. Author.
   [](https://orcid.org/0009-0004-3581-0131)
 
+- **[Liam Hobby](https://github.com/LiamHobby)**. Author.
+
 - **[Gordon Miller](https://github.com/millerg23)**. Author.
 
 - **[Lina Patil](https://github.com/Lina2689)**. Author.
@@ -40,14 +42,14 @@ Source:
 [`DESCRIPTION`](https://github.com/pharmaverse/admiral/blob/main/DESCRIPTION)
 
 Mancini E, Bundfuss S, Cascone A, Dahnert K, Dickinson J, Farrugia R,
-Gautier F, Miller G, Patil L, Straub B (2026). *admiral: ADaM in R Asset
-Library*. R package version 1.4.2.9004,
+Gautier F, Hobby L, Miller G, Patil L, Straub B (2026). *admiral: ADaM
+in R Asset Library*. R package version 1.4.2.9005,
 <https://pharmaverse.github.io/admiral/>.
 
     @Manual{,
       title = {admiral: ADaM in R Asset Library},
-      author = {Edoardo Mancini and Stefan Bundfuss and Arianna Cascone and Kristin Dahnert and Jeffrey Dickinson and Ross Farrugia and Fanny Gautier and Gordon Miller and Lina Patil and Ben Straub},
+      author = {Edoardo Mancini and Stefan Bundfuss and Arianna Cascone and Kristin Dahnert and Jeffrey Dickinson and Ross Farrugia and Fanny Gautier and Liam Hobby and Gordon Miller and Lina Patil and Ben Straub},
       year = {2026},
-      note = {R package version 1.4.2.9004},
+      note = {R package version 1.4.2.9005},
       url = {https://pharmaverse.github.io/admiral/},
     }

@@ -45,6 +45,8 @@ Authors:
 
 - Fanny Gautier ([ORCID](https://orcid.org/0009-0004-3581-0131))
 
+- Liam Hobby <liam.f.hobby@gsk.com>
+
 - Gordon Miller
 
 - Lina Patil
