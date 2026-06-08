@@ -36,6 +36,7 @@ Authors:
   \item Jeffrey Dickinson
   \item Ross Farrugia
   \item Fanny Gautier (\href{https://orcid.org/0009-0004-3581-0131}{ORCID})
+  \item Liam Hobby \email{liam.f.hobby@gsk.com}
   \item Gordon Miller
   \item Lina Patil
   \item Ben Straub
