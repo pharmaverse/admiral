@@ -14,6 +14,7 @@ Authors@R: c(
     person("Ross", "Farrugia", role = "aut"),
     person("Fanny", "Gautier", role = "aut",
            comment = c(ORCID = "0009-0004-3581-0131")),
+    person("Liam", "Hobby", , "liam.f.hobby@gsk.com", role = "aut"),
     person("Gordon", "Miller", role = "aut"),
     person("Lina", "Patil", role = "aut"),
     person("Ben", "Straub", role = "aut"),
