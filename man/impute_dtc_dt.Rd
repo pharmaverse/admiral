@@ -69,7 +69,7 @@ imputed by the specified day, e.g. \code{"10"} for the 10th day of the month.
 The specified day should be valid for all months as otherwise an error might be
 issued. For example, \code{date_imputation = "30"} results in an invalid date of
 "2024-02-30" for the partial date "2024-02".
-\item \code{"mm-dd"} can be specified only if \code{highest_imputation} is \code{"M"},  e.g. \code{"06-15"}
+\item \code{"<mm>-<dd>"} can be specified only if \code{highest_imputation} is \code{"M"},  e.g. \code{"06-15"}
 for the 15th of June.
 }
 
@@ -138,7 +138,8 @@ A character vector
 Imputation partial date portion of a \code{--DTC} variable based on user input.
 }
 \details{
-Usually this computation function can not be used with \verb{\%>\%}.
+This is a vector-oriented helper and is not usually called directly on a data
+frame with \verb{\%>\%}.
 
 Additionally, the function will throw an error if imputation rules cause an
 invalid datetime (e.g. "2020-02-31") to be generated. In this case, the user

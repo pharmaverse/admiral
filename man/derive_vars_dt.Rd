@@ -92,7 +92,7 @@ imputed by the specified day, e.g. \code{"10"} for the 10th day of the month.
 The specified day should be valid for all months as otherwise an error might be
 issued. For example, \code{date_imputation = "30"} results in an invalid date of
 "2024-02-30" for the partial date "2024-02".
-\item \code{"mm-dd"} can be specified only if \code{highest_imputation} is \code{"M"},  e.g. \code{"06-15"}
+\item \code{"<mm>-<dd>"} can be specified only if \code{highest_imputation} is \code{"M"},  e.g. \code{"06-15"}
 for the 15th of June.
 }
 
