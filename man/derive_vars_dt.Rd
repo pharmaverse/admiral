@@ -76,25 +76,28 @@ missing.
 
 A character value is expected.
 \itemize{
-\item If  \code{highest_imputation} is \code{"M"}, month and day can be
-specified as \code{"mm-dd"}: e.g. \code{"06-15"} for the 15th of June
-\item When  \code{highest_imputation} is \code{"M"} or  \code{"D"}, the following keywords are available:
-\code{"first"}, \code{"mid"}, \code{"last"} to impute to the first/mid/last
-day/month. If \code{"mid"} is specified, missing components are imputed as the
-middle of the possible range:
+\item The\code{"first"} and \code{"last"} keywords allow imputation to the first/last
+day/month. They can also be used to impute the year if used in conjunction
+with the \code{min_dates} or \code{max_dates} arguments. Some examples of this are available
+\href{https://pharmaverse.github.io/admiral/cran-release/articles/imputation.html#minimummaximum-dates}{here}.
+\item When \code{highest_imputation} is \code{"M"} or \code{"D"}, the \code{"mid"} keyword can also be
+specified to impute missing components to the middle of the possible range:
 \itemize{
 \item If both month and day are missing, they are imputed as \code{"06-30"}
 (middle of the year).
 \item If only day is missing, it is imputed as \code{"15"} (middle of the month).
 }
+\item \code{"<dd>"} can be specified only if \code{highest_imputation = "D"}. Missing days are
+imputed by the specified day, e.g. \code{"10"} for the 10th day of the month.
+The specified day should be valid for all months as otherwise an error might be
+issued. For example, \code{date_imputation = "30"} results in an invalid date of
+"2024-02-30" for the partial date "2024-02".
+\item \code{"<mm>-<dd>"} can be specified only if \code{highest_imputation} is \code{"M"},  e.g. \code{"06-15"}
+for the 15th of June.
 }
 
-The year can not be specified; for imputing the year
-\code{"first"} or \code{"last"} together with \code{min_dates} or \code{max_dates} argument can
-be used (see examples).
-
 \describe{
-\item{Permitted values}{\code{"first"}, \code{"mid"}, \code{"last"}, or user-defined}
+\item{Permitted values}{a key-word, i.e. \code{"first"}, \code{"mid"}, \code{"last"}, or \code{"<mm>-<dd>"} or \code{"<dd>"}}
 \item{Default value}{\code{"first"}}
 }}
 
@@ -185,6 +188,10 @@ choose to say impute months, but not days.
 
 The presence of a \verb{*DTF} variable is checked and if it already exists in the input dataset,
 a warning is issued and \verb{*DTF} will be overwritten.
+
+Additionally, the function will throw an error if imputation rules cause an
+invalid date (e.g. "2020-02-31") to be generated. In this case,  the user should adjust
+the imputation rules.
 }
 \seealso{
 \code{vignette("imputation")}
@@ -260,6 +267,30 @@ on the date.
 #> 4 "2019-02"             2019-02-01 D     
 #> 5 "2019"                2019-01-01 M     
 #> 6 "2019---07"           2019-01-01 M     
+#> 7 ""                    NA         <NA>  }\if{html}{\out{</div>}}
+
+It is also possible to just impute the day, with \code{highest_imputation = "D"}. Here
+dates with just a missing day have it imputed to the 10th of the month. Note that in this
+case care needs to be taken to ensure invalid dates are not created, e.g.
+\code{date_imputation = "30"} would create an invalid date of \code{"2020-02-30"} when trying to impute
+the day for \code{"2020-02"}.
+
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{derive_vars_dt(
+  mhdt,
+  new_vars_prefix = "AST",
+  dtc = MHSTDTC,
+  highest_imputation = "D",
+  date_imputation = "10"
+)
+#> # A tibble: 7 × 3
+#>   MHSTDTC               ASTDT      ASTDTF
+#>   <chr>                 <date>     <chr> 
+#> 1 "2019-07-18T15:25:40" 2019-07-18 <NA>  
+#> 2 "2019-07-18T15:25"    2019-07-18 <NA>  
+#> 3 "2019-07-18"          2019-07-18 <NA>  
+#> 4 "2019-02"             2019-02-10 D     
+#> 5 "2019"                NA         <NA>  
+#> 6 "2019---07"           NA         <NA>  
 #> 7 ""                    NA         <NA>  }\if{html}{\out{</div>}}}
 \subsection{Impute to the last day/month (\code{date_imputation = "last"})}{
 

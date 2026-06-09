@@ -88,6 +88,11 @@ the minimum or maximum dates.
 \description{
 Restrict Imputed \code{--DTC} date to Minimum/Maximum Dates
 }
+\details{
+The function will throw an error if imputation rules cause an
+invalid datetime (e.g. "2020-02-01T25:00:00") to be generated. In this case,
+the user should adjust the imputation rules.
+}
 \seealso{
 \code{\link[=impute_dtc_dtm]{impute_dtc_dtm()}}, \code{\link[=impute_dtc_dt]{impute_dtc_dt()}}
 

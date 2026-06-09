@@ -46,6 +46,9 @@
 #' The presence of a `*DTF` variable is checked and if it already exists in the input dataset,
 #' a warning is issued and `*DTF` will be overwritten.
 #'
+#' Additionally, the function will throw an error if imputation rules cause an
+#' invalid date (e.g. "2020-02-31") to be generated. In this case,  the user should adjust
+#' the imputation rules.
 #'
 #' @seealso `vignette("imputation")`
 #'
@@ -97,6 +100,21 @@
 #'   dtc = MHSTDTC,
 #'   highest_imputation = "M",
 #'   date_imputation = "first"
+#' )
+#'
+#' @info It is also possible to just impute the day, with `highest_imputation = "D"`. Here
+#' dates with just a missing day have it imputed to the 10th of the month. Note that in this
+#' case care needs to be taken to ensure invalid dates are not created, e.g.
+#' `date_imputation = "30"` would create an invalid date of `"2020-02-30"` when trying to impute
+#' the day for `"2020-02"`.
+#'
+#' @code
+#' derive_vars_dt(
+#'   mhdt,
+#'   new_vars_prefix = "AST",
+#'   dtc = MHSTDTC,
+#'   highest_imputation = "D",
+#'   date_imputation = "10"
 #' )
 #'
 #' @caption Impute to the last day/month (`date_imputation = "last"`)
@@ -326,7 +344,8 @@ derive_vars_dt <- function(dataset,
 #'
 #' @inheritParams impute_dtc_dt
 #'
-#' @details Usually this computation function can not be used with `%>%`.
+#' @details This is a vector-oriented helper and is not usually called
+#'   directly on a data frame with `%>%`.
 #'
 #' @return a date object
 #'
@@ -400,19 +419,24 @@ convert_dtc_to_dt <- function(dtc,
 #'   missing.
 #'
 #'   A character value is expected.
-#'    - If  `highest_imputation` is `"M"`, month and day can be
-#'      specified as `"mm-dd"`: e.g. `"06-15"` for the 15th of June
-#'    - When  `highest_imputation` is `"M"` or  `"D"`, the following keywords are available:
-#'      `"first"`, `"mid"`, `"last"` to impute to the first/mid/last
-#'      day/month. If `"mid"` is specified, missing components are imputed as the
-#'      middle of the possible range:
+#'   - The`"first"` and `"last"` keywords allow imputation to the first/last
+#'     day/month. They can also be used to impute the year if used in conjunction
+#'     with the `min_dates` or `max_dates` arguments. Some examples of this are available
+# nolint start
+#'     [here](https://pharmaverse.github.io/admiral/cran-release/articles/imputation.html#minimummaximum-dates).
+# nolint end
+#'   - When `highest_imputation` is `"M"` or `"D"`, the `"mid"` keyword can also be
+#'     specified to impute missing components to the middle of the possible range:
 #'       - If both month and day are missing, they are imputed as `"06-30"`
 #'        (middle of the year).
 #'       - If only day is missing, it is imputed as `"15"` (middle of the month).
-#'
-#'   The year can not be specified; for imputing the year
-#'   `"first"` or `"last"` together with `min_dates` or `max_dates` argument can
-#'   be used (see examples).
+#'   - `"<dd>"` can be specified only if `highest_imputation = "D"`. Missing days are
+#'     imputed by the specified day, e.g. `"10"` for the 10th day of the month.
+#'     The specified day should be valid for all months as otherwise an error might be
+#'     issued. For example, `date_imputation = "30"` results in an invalid date of
+#'     "2024-02-30" for the partial date "2024-02".
+#'    - `"<mm>-<dd>"` can be specified only if `highest_imputation` is `"M"`,  e.g. `"06-15"`
+#'      for the 15th of June.
 #'
 #' @permitted [date_imp]
 #'
@@ -461,7 +485,14 @@ convert_dtc_to_dt <- function(dtc,
 #'
 #' @permitted [boolean]
 #'
-#' @details Usually this computation function can not be used with `%>%`.
+#' @details
+#'
+#' This is a vector-oriented helper and is not usually called directly on a data
+#' frame with `%>%`.
+#'
+#' Additionally, the function will throw an error if imputation rules cause an
+#' invalid datetime (e.g. "2020-02-31") to be generated. In this case, the user
+#' should adjust the imputation rules.
 #'
 #' @return A character vector
 #'
@@ -514,6 +545,13 @@ convert_dtc_to_dt <- function(dtc,
 #'   dtc = dates,
 #'   highest_imputation = "M",
 #'   date_imputation = "mid"
+#' )
+#'
+#' # Impute to a given day of the month if only day is missing
+#' impute_dtc_dt(
+#'   dtc = dates,
+#'   highest_imputation = "D",
+#'   date_imputation = "10"
 #' )
 #'
 #' # Impute a date and ensure that the imputed date is not before a list of
@@ -597,9 +635,27 @@ impute_dtc_dt <- function(dtc,
   imputed <- impute_date_time(partial, target)
   imputed_dtc <- format_imputed_dtc(imputed)
 
-
   if (date_imputation == "last") {
     imputed_dtc <- adjust_last_day_imputation(imputed_dtc, partial)
+  }
+
+  # Check if any imputations produced invalid dates ----
+  is_valid <- is_valid_dtc(imputed_dtc, check_dtc = TRUE)
+  if (!all(is_valid)) {
+    invalid_indices <- which(!is_valid)
+
+    invalid_examples <- dtc[invalid_indices] %>%
+      paste("imputed to", imputed_dtc[invalid_indices]) %>%
+      unique()
+    n_invalid <- length(invalid_examples)
+
+    cli_abort(c(
+      paste0(
+        "{n_invalid} imputed date{?s} {?is/are} invalid. Please ",
+        "review the function arguments and/or your data and correct your selection{?s}.",
+        "{qty(n_invalid)} See the problematic date{?s}: {invalid_examples}."
+      )
+    ))
   }
 
   # Handle min_dates and max_dates argument ----
@@ -699,7 +755,8 @@ restrict_imputed_dtc_dt <- function(dtc,
 #'
 #'   A date object is expected.
 #'
-#' @details Usually this computation function can not be used with `%>%`.
+#' @details This is a vector-oriented helper and is not usually called directly on a data
+#'   frame with `%>%`.
 #'
 #' @return The date imputation flag (`*DTF`) (character value of `"D"`, `"M"` , `"Y"` or `NA`)
 #'
@@ -727,7 +784,8 @@ compute_dtf <- function(dtc, dt) {
   warn_if_invalid_dtc(dtc, valid_dtc)
 
   # Find date portion
-  date_portion <- if_else(str_detect(dtc, "T"),
+  date_portion <- if_else(
+    str_detect(dtc, "T"),
     gsub("T", "", substr(dtc, 1, str_locate(dtc, "T")[, 1])),
     substr(dtc, 1, 10)
   )

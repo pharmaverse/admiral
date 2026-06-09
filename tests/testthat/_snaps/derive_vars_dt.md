@@ -43,6 +43,14 @@
 ---
 
     Code
+      impute_dtc_dt(dtc = input, highest_imputation = "D", date_imputation = "12:01")
+    Condition
+      Error in `assert_date_imputation()`:
+      ! If `highest_imputation = "D"` is specified, `date_imputation` must be one of "first", "mid", "last" or a format with day specified as "dd": e.g. "15"
+
+---
+
+    Code
       impute_dtc_dt(dtc = input, highest_imputation = "M", date_imputation = "01")
     Condition
       Error in `assert_date_imputation()`:
@@ -51,18 +59,18 @@
 ---
 
     Code
-      impute_dtc_dt(dtc = input, highest_imputation = "D", date_imputation = "01")
-    Condition
-      Error in `assert_date_imputation()`:
-      ! Argument `date_imputation` must be equal to one of "first", "mid", or "last".
-
----
-
-    Code
       impute_dtc_dt(dtc = input, highest_imputation = "Y", date_imputation = "2006-01-01")
     Condition
       Error in `assert_highest_imputation()`:
       ! Argument `date_imputation` must be equal to one of "first" or "last".
+
+---
+
+    Code
+      impute_dtc_dt(dtc = input, highest_imputation = "D", date_imputation = "31")
+    Condition
+      Error in `impute_dtc_dt()`:
+      ! 1 imputed date is invalid. Please review the function arguments and/or your data and correct your selection. See the problematic date: 2020-02 imputed to 2020-02-31.
 
 # derive_vars_dt Test 21: NA imputation for highest_imputation = Y & max_dates but date_imputation = first
 

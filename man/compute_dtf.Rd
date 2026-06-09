@@ -31,7 +31,8 @@ Derive the date imputation flag (\verb{*DTF}) comparing a date character vector
 (\code{--DTC}) with a Date vector (\verb{*DT}).
 }
 \details{
-Usually this computation function can not be used with \verb{\%>\%}.
+This is a vector-oriented helper and is not usually called directly on a data
+frame with \verb{\%>\%}.
 }
 \examples{
 compute_dtf(dtc = "2019-07", dt = as.Date("2019-07-18"))
