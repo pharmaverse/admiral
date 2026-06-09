@@ -1119,6 +1119,6 @@ admiral_labels_attrs_section()
 
 ADaM | Sourcing Command
 ---- | --------------
-[`ADEG`](templates.html#adeg) | `use_ad_template("ADEG")`
-[`ADVS`](templates.html#advs) | `use_ad_template("ADVS")`
-[`ADLB`](templates.html#adlb) | `use_ad_template("ADLB")`
+`ADEG` | `use_ad_template("ADEG")`
+`ADVS` | `use_ad_template("ADVS")`
+`ADLB` | `use_ad_template("ADLB")`

@@ -1480,5 +1480,5 @@ admiral_labels_attrs_section()
 
 ADaM | Sourcing Command
 ---- | --------------
-| [`ADPC`](templates.html#adpc)   | `use_ad_template("ADPC")`
-| [`ADPPK`](templates.html#adppk) | `use_ad_template("ADPPK")`
+`ADPC`  | `use_ad_template("ADPC")`
+`ADPPK` | `use_ad_template("ADPPK")`
