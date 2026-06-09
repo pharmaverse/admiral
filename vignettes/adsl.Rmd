@@ -813,4 +813,4 @@ admiral_labels_attrs_section()
 
 ADaM | Sourcing Command
 ---- | --------------
-[`ADSL`](templates.html#adsl) | `use_ad_template("ADSL")`
+`ADSL` | `use_ad_template("ADSL")`

@@ -640,5 +640,5 @@ admiral_labels_attrs_section()
 
 ADaM | Sourcing Command
 ---- | --------------
-[`ADAE`](templates.html#adae) | `use_ad_template("ADAE")`
-[`ADCM`](templates.html#adcm) | `use_ad_template("ADCM")`
+`ADAE` | `use_ad_template("ADAE")`
+`ADCM` | `use_ad_template("ADCM")`

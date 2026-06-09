@@ -48,6 +48,10 @@
 #' if it already exists in the input dataset. However, if `*TMF` already exists
 #' in the input dataset, a warning is issued and `*TMF` will be overwritten.
 #'
+#' Additionally, the function will throw an error if imputation rules cause an
+#' invalid datetime (e.g. "2020-02-01T25:00:00") to be generated. In this case,
+#' the user should adjust the imputation rules.
+#'
 #' @return  The input dataset with the datetime `*DTM` (and the date/time imputation
 #' flag `*DTF`, `*TMF`) added.
 #'
@@ -621,6 +625,19 @@ impute_dtc_dtm <- function(dtc,
     imputed_dtc <- adjust_last_day_imputation(imputed_dtc, partial)
   }
 
+  # Check if any invalid dates (e.g. 2020-02-31) have been generated
+  if (!all(is_valid_dtc(imputed_dtc, check_dtc = TRUE))) {
+    cli_abort(c(
+      "Some imputed dates are invalid.",
+      "i" = paste(
+        "{.arg date_imputation} is set to {.val {date_imputation}}.",
+        "Are you sure that with this value you are generating all valid dates?",
+        "E.g. {.code date_imputation = 31} would impute \"2020-02\" to \"2020-02-31\",",
+        "which is invalid."
+      )
+    ))
+  }
+
   # Handle min_dates and max_dates argument ----
   restricted <- restrict_imputed_dtc_dtm(
     dtc,
@@ -646,6 +663,11 @@ impute_dtc_dtm <- function(dtc,
 #'   - `imputed_dtc` if the partial `--DTC` date (`dtc`) is not in range of any of
 #'   the minimum or maximum dates.
 #'
+#' @details
+#'
+#' The function will throw an error if imputation rules cause an
+#' invalid datetime (e.g. "2020-02-01T25:00:00") to be generated. In this case,
+#' the user should adjust the imputation rules.
 #'
 #' @family utils_impute
 #'
