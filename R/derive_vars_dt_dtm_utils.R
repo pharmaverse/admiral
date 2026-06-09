@@ -225,10 +225,10 @@ get_imputation_target_time <- function(time_imputation) {
 #'
 #' @inheritParams convert_dtc_to_dtm
 #'
-#' @details Usually this computation function can not be used with `%>%`.
+#' @details This is a vector-oriented helper and is not usually called directly on a data
+#' frame with `%>%`.
 #'
 #' @returns A datetime object
-#'
 #'
 #' @family com_date_time
 #'

@@ -135,7 +135,8 @@ A character vector
 Imputation partial date portion of a \code{--DTC} variable based on user input.
 }
 \details{
-Usually this computation function can not be used with \verb{\%>\%}.
+This is a vector-oriented helper and is not usually called directly on a data
+frame with \verb{\%>\%}.
 }
 \examples{
 library(lubridate)

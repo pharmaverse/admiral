@@ -326,7 +326,8 @@ derive_vars_dt <- function(dataset,
 #'
 #' @inheritParams impute_dtc_dt
 #'
-#' @details Usually this computation function can not be used with `%>%`.
+#' @details This is a vector-oriented helper and is not usually called directly on a data
+#' frame with `%>%`.
 #'
 #' @return a date object
 #'
@@ -461,7 +462,8 @@ convert_dtc_to_dt <- function(dtc,
 #'
 #' @permitted [boolean]
 #'
-#' @details Usually this computation function can not be used with `%>%`.
+#' @details This is a vector-oriented helper and is not usually called directly on a data
+#' frame with `%>%`.
 #'
 #' @return A character vector
 #'
@@ -699,7 +701,8 @@ restrict_imputed_dtc_dt <- function(dtc,
 #'
 #'   A date object is expected.
 #'
-#' @details Usually this computation function can not be used with `%>%`.
+#' @details This is a vector-oriented helper and is not usually called directly on a data
+#' frame with `%>%`.
 #'
 #' @return The date imputation flag (`*DTF`) (character value of `"D"`, `"M"` , `"Y"` or `NA`)
 #'
