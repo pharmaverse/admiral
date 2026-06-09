@@ -68,13 +68,15 @@ impute_dtc_dt(
 
   A character value is expected.
 
-  - If `highest_imputation` is `"M"`, month and day can be specified as
-    `"mm-dd"`: e.g. `"06-15"` for the 15th of June
+  - The`"first"` and `"last"` keywords allow imputation to the
+    first/last day/month. They can also be used to impute the year if
+    used in conjunction with the `min_dates` or `max_dates` arguments.
+    Some examples of this are available
+    [here](https://pharmaverse.github.io/admiral/cran-release/articles/imputation.html#minimummaximum-dates).
 
-  - When `highest_imputation` is `"M"` or `"D"`, the following keywords
-    are available: `"first"`, `"mid"`, `"last"` to impute to the
-    first/mid/last day/month. If `"mid"` is specified, missing
-    components are imputed as the middle of the possible range:
+  - When `highest_imputation` is `"M"` or `"D"`, the `"mid"` keyword can
+    also be specified to impute missing components to the middle of the
+    possible range:
 
     - If both month and day are missing, they are imputed as `"06-30"`
       (middle of the year).
@@ -82,13 +84,20 @@ impute_dtc_dt(
     - If only day is missing, it is imputed as `"15"` (middle of the
       month).
 
-  The year can not be specified; for imputing the year `"first"` or
-  `"last"` together with `min_dates` or `max_dates` argument can be used
-  (see examples).
+  - `"<dd>"` can be specified only if `highest_imputation = "D"`.
+    Missing days are imputed by the specified day, e.g. `"10"` for the
+    10th day of the month. The specified day should be valid for all
+    months as otherwise an error might be issued. For example,
+    `date_imputation = "30"` results in an invalid date of "2024-02-30"
+    for the partial date "2024-02".
+
+  - `"<mm>-<dd>"` can be specified only if `highest_imputation` is
+    `"M"`, e.g. `"06-15"` for the 15th of June.
 
   Permitted values
 
-  :   `"first"`, `"mid"`, `"last"`, or user-defined
+  :   a key-word, i.e. `"first"`, `"mid"`, `"last"`, or `"<mm>-<dd>"` or
+      `"<dd>"`
 
   Default value
 
@@ -170,7 +179,12 @@ A character vector
 
 ## Details
 
-Usually this computation function can not be used with `%>%`.
+This is a vector-oriented helper and is not usually called directly on a
+data frame with `%>%`.
+
+Additionally, the function will throw an error if imputation rules cause
+an invalid datetime (e.g. "2020-02-31") to be generated. In this case,
+the user should adjust the imputation rules.
 
 ## See also
 
@@ -240,6 +254,15 @@ impute_dtc_dt(
 )
 #> [1] "2019-07-18" "2019-07-18" "2019-07-18" "2019-07-18" "2019-02-15"
 #> [6] "2019-06-30" "2019-06-30" "2019-06-30" NA          
+
+# Impute to a given day of the month if only day is missing
+impute_dtc_dt(
+  dtc = dates,
+  highest_imputation = "D",
+  date_imputation = "10"
+)
+#> [1] "2019-07-18" "2019-07-18" "2019-07-18" "2019-07-18" "2019-02-10"
+#> [6] NA           NA           NA           NA          
 
 # Impute a date and ensure that the imputed date is not before a list of
 # minimum dates

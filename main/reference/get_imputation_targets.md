@@ -26,10 +26,13 @@ get_imputation_targets(partial, date_imputation = NULL, time_imputation = NULL)
 
   The value to impute the day/month when a datepart is missing.
 
-  A character value is expected, either as a
+  A character value is expected, as a:
 
   - format with month and day specified as `"mm-dd"`: e.g. `"06-15"` for
     the 15th of June,
+
+  - format with day specified as `"dd"`: e.g. `"15"` for the 15th day of
+    a month
 
   - or as a keyword: `"first"`, `"mid"`, `"last"` to impute to the
     first/mid/last day/month.

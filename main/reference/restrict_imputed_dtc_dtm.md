@@ -110,6 +110,12 @@ restrict_imputed_dtc_dtm(dtc, imputed_dtc, min_dates, max_dates)
 - `imputed_dtc` if the partial `--DTC` date (`dtc`) is not in range of
   any of the minimum or maximum dates.
 
+## Details
+
+The function will throw an error if imputation rules cause an invalid
+datetime (e.g. "2020-02-01T25:00:00") to be generated. In this case, the
+user should adjust the imputation rules.
+
 ## See also
 
 [`impute_dtc_dtm()`](https:/pharmaverse.github.io/admiral/main/reference/impute_dtc_dtm.md),
