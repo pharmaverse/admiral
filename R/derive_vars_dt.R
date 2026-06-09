@@ -643,21 +643,18 @@ impute_dtc_dt <- function(dtc,
   is_valid <- is_valid_dtc(imputed_dtc, check_dtc = TRUE)
   if (!all(is_valid)) {
     invalid_indices <- which(!is_valid)
-    n_invalid <- length(invalid_indices)
-    n_show <- min(5, length(invalid_indices))
 
-    invalid_examples <- paste(
-      dtc[invalid_indices[1:n_show]], "imputed to", imputed_dtc[invalid_indices[1:n_show]]
-    )
-    names(invalid_examples) <- rep("*", n_show)
+    invalid_examples <- dtc[invalid_indices] %>%
+      paste("imputed to", imputed_dtc[invalid_indices]) %>%
+      unique()
+    n_invalid <- length(invalid_examples)
 
     cli_abort(c(
       paste0(
         "{n_invalid} imputed date{?s} {?is/are} invalid. Please ",
-        "review the function arguments and/or your data and correct your selection{?s}."
-      ),
-      "x" = "{qty(n_invalid)}See the {if (n_invalid > 5) 'first five ' else ''}
-      problematic date{if (n_invalid > 1) 's' else ''} below:", invalid_examples
+        "review the function arguments and/or your data and correct your selection{?s}.",
+        "{qty(n_invalid)} See the problematic date{?s}: {invalid_examples}."
+      )
     ))
   }
 
