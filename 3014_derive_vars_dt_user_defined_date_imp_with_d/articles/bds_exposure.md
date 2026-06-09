@@ -547,6 +547,6 @@ example](https://pharmaverse.github.io/examples/adam/adsl).
 
 ## Example Script
 
-| ADaM                                                                                                                         | Sourcing Command          |
-|------------------------------------------------------------------------------------------------------------------------------|---------------------------|
-| [`ADEX`](https:/pharmaverse.github.io/admiral/3014_derive_vars_dt_user_defined_date_imp_with_d/articles/templates.html#adex) | `use_ad_template("ADEX")` |
+| ADaM   | Sourcing Command          |
+|--------|---------------------------|
+| `ADEX` | `use_ad_template("ADEX")` |
