@@ -1,7 +1,7 @@
 Type: Package
 Package: admiral
 Title: ADaM in R Asset Library
-Version: 1.4.2.9006
+Version: 1.4.2.9007
 Authors@R: c(
     person("Edoardo", "Mancini", , "edoardo.mancini@roche.com", role = c("aut", "cre"),
            comment = c(ORCID = "0009-0006-4899-8641")),
