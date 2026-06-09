@@ -30,23 +30,20 @@ Get Time Imputation Targets
 }
 \details{
 \itemize{
-\item For \code{time_imputation = "first"} \code{"00"}, \code{"00"}, \code{"00"} are returned.
-\item For \code{time_imputation = "last"} \code{"23"}, \code{"59"}, \code{"59"} are returned.
-\item For \code{time_imputation = "<hh>:<mm>:<ss>"} \code{"<hh>"}, \code{"<mm>"}, \code{"<ss>"} are returned.
+\item For \code{time_imputation = "first"}, \code{"00"}, \code{"00"}, \code{"00"} are returned.
+\item For \code{time_imputation = "last"}, \code{"23"}, \code{"59"}, \code{"59"} are returned.
+\item For \code{time_imputation = "<hh>:<mm>:<ss>"}, \code{"<hh>"}, \code{"<mm>"}, \code{"<ss>"} are returned.
 }
 }
 \examples{
 # Get imputation target for "first" time
-target_first_time <- admiral:::get_imputation_target_time("first")
-print(target_first_time)
+admiral:::get_imputation_target_time("first")
 
 # Get imputation target for "last" time
-target_last_time <- admiral:::get_imputation_target_time("last")
-print(target_last_time)
+admiral:::get_imputation_target_time("last")
 
 # Get imputation target for custom time imputation "12-34-56"
-target_custom_time <- admiral:::get_imputation_target_time("12-34-56")
-print(target_custom_time)
+admiral:::get_imputation_target_time("12-34-56")
 
 }
 \seealso{

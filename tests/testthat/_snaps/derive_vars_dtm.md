@@ -29,15 +29,6 @@
 # impute_dtc_dtm Test 13: wrong input to `date_imputation`
 
     Code
-      impute_dtc_dtm(dtc = c("2020-12", "2020-11", NA_character_, "2020-02-02"),
-      highest_imputation = "D", date_imputation = "15", time_imputation = "last")
-    Condition
-      Error in `assert_date_imputation()`:
-      ! Argument `date_imputation` must be equal to one of "first", "mid", or "last".
-
----
-
-    Code
       impute_dtc_dtm(dtc = c("2020-12", "2020-11", NA_character_, "2020-02-02",
         "2020"), highest_imputation = "M", date_imputation = "10:12",
       time_imputation = "last")
@@ -53,15 +44,6 @@
     Condition
       Error in `assert_date_imputation()`:
       ! If `highest_imputation = "M"` is specified, `date_imputation` must be one of "first", "mid", "last" or a format with month and day specified as "mm-dd": e.g. "06-15"
-
----
-
-    Code
-      impute_dtc_dtm(dtc = c("2020-12", "2020-11", NA_character_, "2020-02-02",
-        "2020"), highest_imputation = "D", date_imputation = "15", time_imputation = "last")
-    Condition
-      Error in `assert_date_imputation()`:
-      ! Argument `date_imputation` must be equal to one of "first", "mid", or "last".
 
 ---
 
@@ -92,6 +74,15 @@
     Condition
       Error in `assert_time_imputation()`:
       ! `time_imputation` must be one of "first", "last" or time specified as "hh:mm:ss": e.g. "12:00:00"
+
+---
+
+    Code
+      impute_dtc_dtm(dtc = c("2019-02"), highest_imputation = "D", date_imputation = "30")
+    Condition
+      Error in `impute_dtc_dtm()`:
+      ! Some imputed dates are invalid.
+      i `date_imputation` is set to "30". Are you sure that with this value you are generating all valid dates? E.g. `date_imputation = 31` would impute "2020-02" to "2020-02-31", which is invalid.
 
 # compute_tmf Test 16: throws ERROR when ignore_seconds_flag  = T and seconds are present
 

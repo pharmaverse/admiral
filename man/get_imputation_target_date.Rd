@@ -10,10 +10,11 @@ get_imputation_target_date(date_imputation, month)
 \item{date_imputation}{The value to impute the day/month when a datepart is
 missing.
 
-A character value is expected, either as a
+A character value is expected, as a:
 \itemize{
 \item format with month and day specified as \code{"mm-dd"}: e.g. \code{"06-15"} for the 15th
 of June,
+\item format with day specified as \code{"dd"}: e.g. \code{"15"} for the 15th day of a month
 \item or as a keyword: \code{"first"}, \code{"mid"}, \code{"last"} to impute to the first/mid/last
 day/month.
 }
@@ -37,11 +38,12 @@ Get Date Imputation Targets
 }
 \details{
 \itemize{
-\item For \code{date_imputation = "first"} \code{"0000"}, \code{"01"}, \code{"01"} are returned.
-\item For \code{date_imputation = "mid"} \code{"xxxx"}, \code{"06"}, \code{"30"} if \code{month} is \code{NA}.
+\item For \code{date_imputation = "first"}, \code{"0000"}, \code{"01"}, \code{"01"} are returned.
+\item For \code{date_imputation = "mid"}, \code{"xxxx"}, \code{"06"}, \code{"30"} if \code{month} is \code{NA}.
 otherwise \code{"15"} returned.
-\item For \code{date_imputation = "last"} \code{"9999"}, \code{"12"}, \code{"28"} are returned.
-\item For \code{date_imputation = "<mm>-<dd>"} \code{"xxxx"}, \code{"<mm>"}, \code{"<dd>"} are returned.
+\item For \code{date_imputation = "last"}, \code{"9999"}, \code{"12"}, \code{"28"} are returned.
+\item For \code{date_imputation = "<mm>-<dd>"}, \code{"xxxx"}, \code{"<mm>"}, \code{"<dd>"} are returned.
+\item For \code{date_imputation = "<dd>"}, \code{"xxxx"}, \code{"xx"}, \code{"<dd>"} are returned.
 }
 
 \code{"xxxx"} indicates that the component is undefined. If an undefined
@@ -50,24 +52,22 @@ component occurs in the imputed \code{--DTC} value, the imputed \code{--DTC} val
 }
 \examples{
 # Get imputation target for "first"
-target_first <- admiral:::get_imputation_target_date("first", month = NA)
-print(target_first)
+admiral:::get_imputation_target_date("first", month = NA)
 
 # Get imputation target for "mid" with specified month
-target_mid <- admiral:::get_imputation_target_date("mid", month = "03")
-print(target_mid)
+admiral:::get_imputation_target_date("mid", month = "03")
 
 # Get imputation target for "mid" with NA month
-target_mid_na <- admiral:::get_imputation_target_date("mid", month = NA)
-print(target_mid_na)
+admiral:::get_imputation_target_date("mid", month = NA)
 
 # Get imputation target for "last"
-target_last <- admiral:::get_imputation_target_date("last", month = NA)
-print(target_last)
+admiral:::get_imputation_target_date("last", month = NA)
 
 # Get imputation target for custom date imputation "06-15"
-target_custom <- admiral:::get_imputation_target_date("06-15", month = NA)
-print(target_custom)
+admiral:::get_imputation_target_date("06-15", month = NA)
+
+# Get imputation target for custom date imputation "11"
+admiral:::get_imputation_target_date("11", month = NA)
 
 }
 \seealso{

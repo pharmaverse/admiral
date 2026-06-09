@@ -617,4 +617,4 @@ admiral_labels_attrs_section()
 
 ADaM | Sourcing Command
 ---- | --------------
-[`ADEX`](templates.html#adex) | `use_ad_template("ADEX")`
+`ADEX` | `use_ad_template("ADEX")`
