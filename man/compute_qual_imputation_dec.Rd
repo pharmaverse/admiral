@@ -26,6 +26,9 @@ added to the value.  This is an intermediate function.
 }
 \details{
 Derive an imputed value
+
+This is a vector-oriented helper and is not usually called directly on a data
+frame with \verb{\%>\%}.
 }
 \examples{
 compute_qual_imputation_dec("<40.1")

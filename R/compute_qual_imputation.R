@@ -15,6 +15,8 @@
 #'
 #' @export
 #'
+#' @details This is a vector-oriented helper and is not usually called directly on a data
+#' frame with `%>%`.
 #'
 #' @keywords com_bds_findings
 #' @family com_bds_findings

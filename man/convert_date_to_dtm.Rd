@@ -167,7 +167,8 @@ vector (usually \verb{*DTM}).
 \strong{Note:} This is a wrapper function for the function \code{convert_dtc_to_dtm()}.
 }
 \details{
-Usually this computation function can not be used with \verb{\%>\%}.
+This is a vector-oriented helper and is not usually called directly on a data
+frame with \verb{\%>\%}.
 }
 \examples{
 convert_date_to_dtm("2019-07-18T15:25:00")

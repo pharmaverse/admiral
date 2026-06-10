@@ -344,8 +344,8 @@ derive_vars_dt <- function(dataset,
 #'
 #' @inheritParams impute_dtc_dt
 #'
-#' @details This is a vector-oriented helper and is not usually called
-#'   directly on a data frame with `%>%`.
+#' @details This is a vector-oriented helper and is not usually called directly on a data
+#' frame with `%>%`.
 #'
 #' @return a date object
 #'

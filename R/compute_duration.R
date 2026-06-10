@@ -114,6 +114,8 @@
 #' For additional details, review the
 #' [lubridate time span reference page](https://lubridate.tidyverse.org/reference/timespan.html).
 #'
+#' This is a vector-oriented helper and is not usually called directly on a data
+#' frame with `%>%`.
 #'
 #' @return The duration between the two date in the specified unit
 #'

@@ -120,6 +120,9 @@ SCr = standardized serum creatinine in mg/dL
 (Note SCr(mg/dL) = Creat(umol/L) / 88.42)
 
 units = mL/min/1.73 m2
+
+This is a vector-oriented helper and is not usually called directly on a data
+frame with \verb{\%>\%}.
 }
 \examples{
 compute_egfr(

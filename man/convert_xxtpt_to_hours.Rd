@@ -147,6 +147,9 @@ This distinction follows standard pharmacokinetic conventions where "post-dose"
 refers to time from treatment initiation, while "post end of infusion" refers
 to time from treatment completion.
 
+This is a vector-oriented helper and is not usually called directly on a data
+frame with \verb{\%>\%}.
+
 \strong{Vectorized Treatment Duration:}
 
 When \code{treatment_duration} is a vector, each timepoint uses its corresponding
