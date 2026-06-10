@@ -32,6 +32,9 @@ Decimal precision value to add or subtract
 
 Derive an imputed value
 
+This is a vector-oriented helper and is not usually called directly on a
+data frame with `%>%`.
+
 ## See also
 
 BDS-Findings Functions that returns a vector:

@@ -99,6 +99,9 @@ the result is set to `NA`. If `source_range` and `target_range` aren't
 specified, the mean will be computed without any transformation being
 performed.
 
+This is a vector-oriented helper and is not usually called directly on a
+data frame with `%>%`.
+
 ## See also
 
 BDS-Findings Functions that returns a vector:

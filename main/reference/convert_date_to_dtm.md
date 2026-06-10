@@ -213,7 +213,8 @@ A datetime object
 
 ## Details
 
-Usually this computation function can not be used with `%>%`.
+This is a vector-oriented helper and is not usually called directly on a
+data frame with `%>%`.
 
 ## See also
 
@@ -234,7 +235,7 @@ Date/Time Computation Functions that returns a vector:
 convert_date_to_dtm("2019-07-18T15:25:00")
 #> [1] "2019-07-18 15:25:00 UTC"
 convert_date_to_dtm(Sys.time())
-#> [1] "2026-06-09 09:47:36 UTC"
+#> [1] "2026-06-10 07:30:42 UTC"
 convert_date_to_dtm(as.Date("2019-07-18"), time_imputation = "23:59:59")
 #> [1] "2019-07-18 23:59:59 UTC"
 convert_date_to_dtm("2019-07-18", time_imputation = "23:59:59")

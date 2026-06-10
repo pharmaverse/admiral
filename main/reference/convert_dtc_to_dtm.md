@@ -211,7 +211,8 @@ A datetime object
 
 ## Details
 
-Usually this computation function can not be used with `%>%`.
+This is a vector-oriented helper and is not usually called directly on a
+data frame with `%>%`.
 
 ## See also
 

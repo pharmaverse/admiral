@@ -198,6 +198,9 @@ days, and the average month length is `30.4375`, i.e.
 For additional details, review the [lubridate time span reference
 page](https://lubridate.tidyverse.org/reference/timespan.html).
 
+This is a vector-oriented helper and is not usually called directly on a
+data frame with `%>%`.
+
 ## See also
 
 [`derive_vars_duration()`](https:/pharmaverse.github.io/admiral/main/reference/derive_vars_duration.md)

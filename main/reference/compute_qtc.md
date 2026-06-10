@@ -59,7 +59,8 @@ Depending on the chosen `method` one of the following formulae is used.
 *Sagie*: \$\$1000\left(\frac{QT}{1000} + 0.154\left(1 -
 \frac{RR}{1000}\right)\right)\$\$
 
-Usually this computation function can not be used with `%>%`.
+This is a vector-oriented helper and is not usually called directly on a
+data frame with `%>%`.
 
 ## See also
 

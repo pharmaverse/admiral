@@ -213,6 +213,11 @@
   `*DTM` variables.
   ([\#3055](https://github.com/pharmaverse/admiral/issues/3055))
 
+- The documentation for `compute_*()` and other computation functions
+  was updated to clarify that they are vector-oriented helpers and are
+  not usually called directly on a data frame with `%>%`.
+  ([\#3146](https://github.com/pharmaverse/admiral/issues/3146))
+
 ### Various
 
 - Fixed typo in

@@ -146,6 +146,9 @@ SysBPFactor) + Smoker + Diabetes Present - AvgRisk\$\$
 
 \$\$Risk = 100 \* (1 - RiskPeriodFactor ^ exp(RiskFactors))\$\$
 
+This is a vector-oriented helper and is not usually called directly on a
+data frame with `%>%`.
+
 ## See also
 
 [`derive_param_framingham()`](https:/pharmaverse.github.io/admiral/main/reference/derive_param_framingham.md)
