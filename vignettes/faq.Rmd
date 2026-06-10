@@ -41,19 +41,19 @@ out from this and have differently colored butterflies in their logos.
   * TA specific requirements can be open sourced again and transformed into a common ADaM approach for such analysis
   * the long-term gain of a consistent way of producing ADaM and a wider community of across-industry developers contributing to grow the codebase to cover the infinite array of possibilities
   * Contributors: An option to make a name for yourself in the Pharma open-source community & an avenue to collaborate with other like-minded people across the industry
-  * Imagine if ADaMs are built in a consistent manner with the same code from openly maintained functions and its impact on the Health Authorities, readable code, QC, talent flow  
+  * Imagine if ADaMs are built in a consistent manner with the same code from openly maintained functions and its impact on the Health Authorities, readable code, QC, talent flow.  
 
 ##### Why did we use **R as a programming language**?
 
- * R is not an isolated software product, everyone can contribute (open source principal)
- * People from University/Statistical talent pipeline more likely to come through with R skills rather than a proprietary language 
+ * R is not an isolated software product, everyone can contribute (open source principle)
+ * People from University/Statistical talent pipeline are more likely to come through with R skills rather than a proprietary language 
  * There seems to be a strong data science/analytics R community
- * FDA open to accepting R submissions and are heavy users themselves
+ * FDA are open to accepting R submissions and are heavy users themselves
  * Top of the line visualization/graphics - R-Shiny for interactive data displays and also R Markdown offers great report writing functionality
  * R is very popular among statisticians so new statistical methods are likely implemented in R before any other language
- * There might be equally suited programming languages out there - however at some stage we had to make a decision :)
+ * There might be equally suited programming languages out there - however at some stage we had to make a decision! :)
  
-##### Admiral offers a **toolbox of functions to facilitate ADaM**. What does that mean?
+##### `{admiral}` offers a **toolbox of functions to facilitate ADaM**. What does that mean?
 
 * Functions are usually parameter driven: 
     * e.g. the `derive_vars_aage()` has a parameterized start and end-date and a unit.
@@ -78,60 +78,50 @@ a way to look up common ADaM variables with recommended `{admiral}` functions to
 
  * `{admiral}` is meant as a toolbox to enable Data Scientists to build ADaMs according to their varying analysis needs
  * `{admiral}` is not meant as a "click a button, out comes your ADaM" tool
- * on the `{admiral}` webpage, example scripts are provided which can be used as a starting point to create an ADaM (see at the end of a vignette)  
+ * On the `{admiral}` website, example scripts are provided which can be used as a starting point to create an ADaM (see at the end of a vignette).  
 
 ##### In **which order** does a user need to execute the functions?
 
-* Guidance will be provided for ADSL, BDS and OCCDS ADaM structure including template scripts.
+* Guidance is available for ADSL, BDS and OCCDS ADaM structure including template scripts.
 
 ##### Is the `{admiral}` package **validated**?
 
- * All functions  are reviewed and tested (see [What will be provided around **function testing**?]) to ensure that  they  work as described in the documentation. 
- * Test  cases for each function  will  be part of the R package.
+ * All functionsare reviewed and tested (see [What is provided around **function testing**?]) to ensure that  they  work as described in the documentation. 
+ * Test cases for each function are  be part of the R package.
  * Users can add to the  tests or provide additional feedback.
- * The  testing the  `{admiral}` team will do for each function does **not replace the QC and validation process at each company**.
+ * The  testing the  `{admiral}` team does for each function does **not replace the QC and validation process at each company**.
  * A [GitHub action](https://github.com/marketplace/actions/r-package-validation-report) (using open source packages) exists to generate a validation report for an R package, which would be an option for any company to use. An example report using an earlier version of `{admiral}` exists [here](https://github.com/insightsengineering/thevalidatoR/blob/main/readme_files/report-0.1-admiral.pdf) as an illustration.
 
-##### What will be provided around **function testing**?
+##### What is available around **function testing**?
 
  * Unit tests for reliability of each function - available as part of open source release
- * Some integration testing will be done to ensure functions can be called together to create ADaM (e.g. even via the internal testing teams)
+ * Some integration testing is be done to ensure functions can be called together to create ADaM (e.g. even via the internal testing teams)
  * Guidance for testing and documentation expectations of community contribution functions. Then it is for each company to cover the following:
    * validation to be able to use the package on company-specific SCE for GxP purposes and associated audit evidence 
    * strategy of how the use of `{admiral}` fits into company-specific quality assurance process (double programming comparison versus your company-specific legacy ADaM solution could be appropriate until confidence builds)
    * see our guidance on [unit testing](https://pharmaverse.github.io/admiraldev/articles/unit_test_guidance.html)
 
-##### Will **admiral provide harmonized define.xml** or submittable specifications for functions?
+##### Does **admiral provide harmonized define.xml** or submittable specifications for functions?
 
- * No. The functions  are documented  via programming  headers, the define.xml is the responsibility of the end user.
+ * No. The functions are documented via programming  headers, the define.xml is the responsibility of the end user.
  * Functions  are usually  generalized  and not specific. (see [Admiral offers a **toolbox of functions to facilitate ADaM**. What does that mean?](#admiral-offers-a-toolbox-of-functions-to-facilitate-adam--what-does-that-mean))
  * The users are responsible to make sure they use the functions and their parameters in the right way to ensure alignment with their define.xml
 
-##### Will `{admiral}` provide ADaM IG **CDISC compliant** datasets?
+##### Does `{admiral}` provide ADaM IG **CDISC compliant** datasets?
 
 * Although `{admiral}` follows CDISC standards it does not claim that the dataset resulting from calling `{admiral}` functions is ADaM compliant. This has to be ensured by the user.
 
-##### How much of the **ADaM IG is covered by admiral?**
+##### How much of the **ADaM IG is covered by `{admiral}`?**
 
- * ADaM  IG is a standard framework without a specific number of datasets or variables, so it cannot be used as a specific baseline to answer that question.
- * We will provide guidance for each ADaM  dataset structure (ADSL, OCCDS and BDS) that will highlight which functionality `{admiral}` covers. (see [In **which order** does a user need to execute the functions?])
- * The guidance will also highlight the gaps to be filled by the user (e.g. timing, ranges).
- * For standard ADaM datasets (ADAE, ADCM, ...) we can provide an estimated coverage based on early adopters Roche/GSK ADaM implementation
+ * ADaM IG is a standard framework without a specific number of datasets or variables, so it cannot be used as a specific baseline to answer that question.
+ * We provide guidance for each ADaM  dataset structure (ADSL, OCCDS and BDS) that highlights which functionality `{admiral}` covers. (see [In **which order** does a user need to execute the functions?])
+ * The guidance also highlights the gaps to be filled by the user (e.g. timing, ranges).
 
-##### Will there be a user/**contribution** guide?
+##### Is there be a user/**contribution** guide?
 
  * Our [programming strategy](https://pharmaverse.github.io/admiraldev/articles/programming_strategy.html) serves as a framework
  for users how to create their own functions. 
- * Please see the [contribution model](https://pharmaverse.github.io/admiral/cran-release/CONTRIBUTING.html) for a detailed description on how to contribute to the project
-
-##### How has `{admiral}` been **tested externally** to Roche/GSK?
-
-* During Sept/Oct 2021, a limited release testing was conducted with 18 other companies (and >50 individuals) in order to assess compatibility of the `{admiral}` toolkit with different company standards implementations and to test the usability of the functions, e.g. clarity, reliability, robustness, and flexibility.
-* This foundational version of `{admiral}` achieved a 7.9 / 10 average score from all the survey respondents and >75% said they'd advocate using `{admiral}` for ADaM transformations in R.
-* Some tester quotes:
-  * _"Extremely easy to learn and get into, well thought and planned. Plenty of minor functions instead of aiming to create a large "jack of all trades" framework. The toolkit does not attempt to become a large one-button ADaM generator (which is fantastic)."_
-  * _"It is a huge advantage for all Pharma companies that we have common functions for common stuff we develop. It will be easier for the authorities when it is the same foundation in the ADaM programs. The development goes faster for every one when we develop across companies, and bug-fixing is faster as many are using same package and will most likely find potential bugs."_
-  * _"I am a huge proponent of shared solutions within Pharma. Overall I was VERY impressed with the `{admiral}` project -- both the design, development, documentation, and validation details are available for teams to readily adopt."_
+ * Please see the [contribution model](https://pharmaverse.github.io/admiral/cran-release/CONTRIBUTING.html) for a detailed description on how to contribute to the project.
 
 ##### Do `{admiral}` functions **preserve variable attributes** like labels?
 
