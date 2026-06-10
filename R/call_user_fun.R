@@ -27,7 +27,7 @@
 #'   weight = "hallo"
 #' )))
 call_user_fun <- function(call) {
-  deprecate_warn(
+  deprecate_stop(
     when = "1.3.0",
     what = "call_user_fun()",
     details = c(
