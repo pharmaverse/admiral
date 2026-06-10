@@ -49,13 +49,20 @@ of the target package. (#3136)
 - The following function arguments are entering the next phase of the [deprecation process](https://pharmaverse.github.io/admiraldev/articles/programming_strategy.html#deprecation): 
 
   **Phase 1 (message)**
+  
+  No functions or arguments in this phase.
     
   **Phase 2 (warning)**
-    
+  
+  No functions or arguments in this phase.  
+  
   **Phase 3 (error)**
+  - `call_user_fun()` is deprecated and will have no replacement.
   
   **Phase 4 (removed)**
-
+  
+  No functions or arguments in this phase.
+  
 - The `ex_single` dataset was removed from `{admiral}` to reduce the package
   size. It can be derived on the fly using `create_single_dose_dataset()`.
   See the `OCCDS` vignette or `?create_single_dose_dataset` for examples. (#3060)
@@ -247,11 +254,11 @@ to work with a deprecation message until the beginning of 2027. (#1858)
 
   **Phase 3 (error)**
   
-  No functions or arguments in this Phase
+  No functions or arguments in this phase.
 
   **Phase 4 (removed)**
     
-  No functions or arguments in this Phase
+  No functions or arguments in this phase.
     
 ## Documentation
 
@@ -422,15 +429,15 @@ records. (#2683)
   
   **Phase 2 (warning)**
     
-  No functions or arguments in this Phase
+  No functions or arguments in this phase.
 
   **Phase 3 (error)**
     
-  No functions or arguments in this Phase
+  No functions or arguments in this phase.
 
   **Phase 4 (removed)**
     
-  No functions or arguments in this Phase
+  No functions or arguments in this phase.
 
 ## Documentation
 
