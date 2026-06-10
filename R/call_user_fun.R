@@ -15,17 +15,6 @@
 #' @keywords deprecated
 #'
 #' @export
-#'
-#' @examples
-#' call_user_fun(compute_bmi(
-#'   height = 172,
-#'   weight = 60
-#' ))
-#'
-#' try(call_user_fun(compute_bmi(
-#'   height = 172,
-#'   weight = "hallo"
-#' )))
 call_user_fun <- function(call) {
   deprecate_stop(
     when = "1.3.0",
