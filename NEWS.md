@@ -113,6 +113,10 @@ of packages were updated to specify the level of contributions required for auth
 
 - The 'Date and Time Imputation' vignette was updated to point out the difference between the character `*DTC` variables and the numeric `*DTM` variables. (#3055)
 
+- The documentation for `compute_*()` and other computation functions was updated to clarify 
+that they are vector-oriented helpers and are not usually called directly on a
+data frame with `%>%`. (#3146)
+
 ## Various
 
 * Fixed typo in `derive_summary_records()` error message. (#3127)

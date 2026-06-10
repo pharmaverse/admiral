@@ -202,7 +202,8 @@ derive_param_map <- function(dataset,
 #' DIABP + 0.01 exp(4.14 - 40.74 / HR) (SYSBP - DIABP)}
 #' if it is based on diastolic, systolic blood pressure, and heart rate.
 #'
-#' Usually this computation function can not be used with `%>%`.
+#' This is a vector-oriented helper and is not usually called directly on a data
+#' frame with `%>%`.
 #'
 #' @return A numeric vector of MAP values
 #'

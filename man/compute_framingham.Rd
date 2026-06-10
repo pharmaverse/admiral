@@ -132,6 +132,9 @@ Risk Period \tab 0.88936 \cr
 + Diabetes Present - AvgRisk}
 
 \deqn{Risk = 100 * (1 - RiskPeriodFactor ^ exp(RiskFactors))}
+
+This is a vector-oriented helper and is not usually called directly on a data
+frame with \verb{\%>\%}.
 }
 \examples{
 compute_framingham(

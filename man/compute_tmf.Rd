@@ -46,7 +46,8 @@ Derive the time imputation flag (\verb{*TMF}) comparing a date character vector
 (\code{--DTC}) with a Datetime vector (\verb{*DTM}).
 }
 \details{
-Usually this computation function can not be used with \verb{\%>\%}.
+This is a vector-oriented helper and is not usually called directly on a data
+frame with \verb{\%>\%}.
 }
 \examples{
 library(lubridate)

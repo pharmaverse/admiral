@@ -48,6 +48,9 @@
 #'   specified, the mean will be computed without any transformation being
 #'   performed.
 #'
+#'   This is a vector-oriented helper and is not usually called directly on a data
+#'   frame with `%>%`.
+#'
 #' @return The average of source transformed to the target range or `NA` if
 #'   source doesn't contain `min_n` values.
 #'

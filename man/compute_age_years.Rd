@@ -39,6 +39,9 @@ Returns a numeric vector of ages in years as doubles. Note
 that passing \code{NA_character_} as a unit will result in an \code{NA} value for the outputted
 age. Also note, underlying computations assume an equal number of days in each
 year (365.25).
+
+This is a vector-oriented helper and is not usually called directly on a data
+frame with \verb{\%>\%}.
 }
 \examples{
 compute_age_years(
