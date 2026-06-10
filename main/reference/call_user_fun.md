@@ -36,26 +36,3 @@ Other deprecated:
 [`derive_var_merged_summary()`](https:/pharmaverse.github.io/admiral/main/reference/derive_var_merged_summary.md),
 [`dthcaus_source()`](https:/pharmaverse.github.io/admiral/main/reference/dthcaus_source.md),
 [`get_summary_records()`](https:/pharmaverse.github.io/admiral/main/reference/get_summary_records.md)
-
-## Examples
-
-``` r
-call_user_fun(compute_bmi(
-  height = 172,
-  weight = 60
-))
-#> Warning: `call_user_fun()` was deprecated in admiral 1.3.0.
-#> ℹ `call_user_fun()` is no longer supported and no replacement is provided;
-#> ℹ The original code for this function is here:
-#> ℹ https://github.com/pharmaverse/admiral/blob/v1.2.0/R/call_user_fun.R#L26-L39
-#> [1] 20.28123
-
-try(call_user_fun(compute_bmi(
-  height = 172,
-  weight = "hallo"
-)))
-#> Error in call_user_fun(compute_bmi(height = 172, weight = "hallo")) : 
-#>   Calling `compute_bmi(height = 172, weight = "hallo")` caused the
-#> following error:
-#> Argument `weight` must be a numeric vector, but it is a string.
-```

@@ -90,11 +90,20 @@
 
   **Phase 1 (message)**
 
+  No functions or arguments in this phase
+
   **Phase 2 (warning)**
+
+  No functions or arguments in this phase
 
   **Phase 3 (error)**
 
+  - [`call_user_fun()`](https:/pharmaverse.github.io/admiral/main/reference/call_user_fun.md)
+    is deprecated and will have no replacement.
+
   **Phase 4 (removed)**
+
+  No functions or arguments in this phase
 
 - The `ex_single` dataset was removed from
   [admiral](https://pharmaverse.github.io/admiral/) to reduce the
