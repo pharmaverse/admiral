@@ -86,7 +86,7 @@ a way to look up common ADaM variables with recommended `{admiral}` functions to
 
 ##### Is the `{admiral}` package **validated**?
 
- * All functionsare reviewed and tested (see [What is provided around **function testing**?]) to ensure that  they  work as described in the documentation. 
+ * All functions are reviewed and tested (see [What is provided around **function testing**?]) to ensure that  they  work as described in the documentation. 
  * Test cases for each function are  be part of the R package.
  * Users can add to the  tests or provide additional feedback.
  * The  testing the  `{admiral}` team does for each function does **not replace the QC and validation process at each company**.
