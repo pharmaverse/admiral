@@ -119,7 +119,7 @@
 
 ##### Is the `{admiral}` package **validated**?
 
-- All functionsare reviewed and tested (see \[What is provided around
+- All functions are reviewed and tested (see \[What is provided around
   **function testing**?\]) to ensure that they work as described in the
   documentation.
 - Test cases for each function are be part of the R package.
