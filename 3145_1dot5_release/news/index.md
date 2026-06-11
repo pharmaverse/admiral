@@ -159,7 +159,7 @@
   strategy.
   ([\#3027](https://github.com/pharmaverse/admiral/issues/3027))
 
-- A new web-only “Estimands”” article was added, describing possible
+- A new web-only “Estimands” article was added, describing possible
   implementations of Estimands with
   [admiral](https://pharmaverse.github.io/admiral/) code.
   ([\#2954](https://github.com/pharmaverse/admiral/issues/2954))

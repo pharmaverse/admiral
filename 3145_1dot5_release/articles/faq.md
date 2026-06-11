@@ -56,7 +56,7 @@
 - People from University/Statistical talent pipeline are more likely to
   come through with R skills rather than a proprietary language
 - There seems to be a strong data science/analytics R community
-- FDA are open to accepting R submissions and are heavy users themselves
+- FDA is open to accepting R submissions and are heavy users themselves
 - Top of the line visualization/graphics - R-Shiny for interactive data
   displays and also R Markdown offers great report writing functionality
 - R is very popular among statisticians so new statistical methods are
