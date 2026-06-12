@@ -4,8 +4,8 @@ Adds a parameter computed from the analysis value of other parameters.
 It is expected that the analysis value of the new parameter is defined
 by an expression using the analysis values of other parameters, such as
 addition/sum, subtraction/difference, multiplication/product,
-division/ratio, exponentiation/logarithm, or by formula.  
-  
+division/ratio, exponentiation/logarithm, or by formula.
+
 For example mean arterial pressure (MAP) can be derived from systolic
 (SYSBP) and diastolic blood pressure (DIABP) with the formula \$\$MAP =
 \frac{SYSBP + 2 DIABP}{3}\$\$
@@ -80,7 +80,7 @@ derive_param_computed(
   Permitted values
 
   :   list of variables created by
-      [`exprs()`](https:/pharmaverse.github.io/admiral/v1.4.2/reference/reexport-exprs.md),
+      [`exprs()`](https:/pharmaverse.github.io/admiral/v1.5.0/reference/reexport-exprs.md),
       e.g., `exprs(USUBJID, VISIT)`
 
   Default value
@@ -144,8 +144,8 @@ derive_param_computed(
 
   Permitted values
 
-  :   list of named expressions created by a formula using
-      [`exprs()`](https:/pharmaverse.github.io/admiral/v1.4.2/reference/reexport-exprs.md),
+  :   list of named expressions created by
+      [`exprs()`](https:/pharmaverse.github.io/admiral/v1.5.0/reference/reexport-exprs.md),
       e.g., `exprs(AVALC = VSSTRESC, AVAL = yn_to_numeric(AVALC))`
 
   Default value
@@ -179,7 +179,7 @@ derive_param_computed(
   Permitted values
 
   :   list of variables created by
-      [`exprs()`](https:/pharmaverse.github.io/admiral/v1.4.2/reference/reexport-exprs.md),
+      [`exprs()`](https:/pharmaverse.github.io/admiral/v1.5.0/reference/reexport-exprs.md),
       e.g., `exprs(USUBJID, VISIT)`
 
   Default value
@@ -235,7 +235,7 @@ derive_param_computed(
   Permitted values
 
   :   `TRUE`, `FALSE`, or a list of variables created by
-      [`exprs()`](https:/pharmaverse.github.io/admiral/v1.4.2/reference/reexport-exprs.md)
+      [`exprs()`](https:/pharmaverse.github.io/admiral/v1.5.0/reference/reexport-exprs.md)
       e.g. `exprs(ADTF, ATMF)`
 
   Default value
@@ -265,22 +265,23 @@ input dataset are set to `NA`.
 ## See also
 
 BDS-Findings Functions for adding Parameters/Records:
-[`default_qtc_paramcd()`](https:/pharmaverse.github.io/admiral/v1.4.2/reference/default_qtc_paramcd.md),
-[`derive_expected_records()`](https:/pharmaverse.github.io/admiral/v1.4.2/reference/derive_expected_records.md),
-[`derive_extreme_event()`](https:/pharmaverse.github.io/admiral/v1.4.2/reference/derive_extreme_event.md),
-[`derive_extreme_records()`](https:/pharmaverse.github.io/admiral/v1.4.2/reference/derive_extreme_records.md),
-[`derive_locf_records()`](https:/pharmaverse.github.io/admiral/v1.4.2/reference/derive_locf_records.md),
-[`derive_param_bmi()`](https:/pharmaverse.github.io/admiral/v1.4.2/reference/derive_param_bmi.md),
-[`derive_param_bsa()`](https:/pharmaverse.github.io/admiral/v1.4.2/reference/derive_param_bsa.md),
-[`derive_param_doseint()`](https:/pharmaverse.github.io/admiral/v1.4.2/reference/derive_param_doseint.md),
-[`derive_param_exist_flag()`](https:/pharmaverse.github.io/admiral/v1.4.2/reference/derive_param_exist_flag.md),
-[`derive_param_exposure()`](https:/pharmaverse.github.io/admiral/v1.4.2/reference/derive_param_exposure.md),
-[`derive_param_framingham()`](https:/pharmaverse.github.io/admiral/v1.4.2/reference/derive_param_framingham.md),
-[`derive_param_map()`](https:/pharmaverse.github.io/admiral/v1.4.2/reference/derive_param_map.md),
-[`derive_param_qtc()`](https:/pharmaverse.github.io/admiral/v1.4.2/reference/derive_param_qtc.md),
-[`derive_param_rr()`](https:/pharmaverse.github.io/admiral/v1.4.2/reference/derive_param_rr.md),
-[`derive_param_wbc_abs()`](https:/pharmaverse.github.io/admiral/v1.4.2/reference/derive_param_wbc_abs.md),
-[`derive_summary_records()`](https:/pharmaverse.github.io/admiral/v1.4.2/reference/derive_summary_records.md)
+[`default_qtc_paramcd()`](https:/pharmaverse.github.io/admiral/v1.5.0/reference/default_qtc_paramcd.md),
+[`derive_basetype_records()`](https:/pharmaverse.github.io/admiral/v1.5.0/reference/derive_basetype_records.md),
+[`derive_expected_records()`](https:/pharmaverse.github.io/admiral/v1.5.0/reference/derive_expected_records.md),
+[`derive_extreme_event()`](https:/pharmaverse.github.io/admiral/v1.5.0/reference/derive_extreme_event.md),
+[`derive_extreme_records()`](https:/pharmaverse.github.io/admiral/v1.5.0/reference/derive_extreme_records.md),
+[`derive_locf_records()`](https:/pharmaverse.github.io/admiral/v1.5.0/reference/derive_locf_records.md),
+[`derive_param_bmi()`](https:/pharmaverse.github.io/admiral/v1.5.0/reference/derive_param_bmi.md),
+[`derive_param_bsa()`](https:/pharmaverse.github.io/admiral/v1.5.0/reference/derive_param_bsa.md),
+[`derive_param_doseint()`](https:/pharmaverse.github.io/admiral/v1.5.0/reference/derive_param_doseint.md),
+[`derive_param_exist_flag()`](https:/pharmaverse.github.io/admiral/v1.5.0/reference/derive_param_exist_flag.md),
+[`derive_param_exposure()`](https:/pharmaverse.github.io/admiral/v1.5.0/reference/derive_param_exposure.md),
+[`derive_param_framingham()`](https:/pharmaverse.github.io/admiral/v1.5.0/reference/derive_param_framingham.md),
+[`derive_param_map()`](https:/pharmaverse.github.io/admiral/v1.5.0/reference/derive_param_map.md),
+[`derive_param_qtc()`](https:/pharmaverse.github.io/admiral/v1.5.0/reference/derive_param_qtc.md),
+[`derive_param_rr()`](https:/pharmaverse.github.io/admiral/v1.5.0/reference/derive_param_rr.md),
+[`derive_param_wbc_abs()`](https:/pharmaverse.github.io/admiral/v1.5.0/reference/derive_param_wbc_abs.md),
+[`derive_summary_records()`](https:/pharmaverse.github.io/admiral/v1.5.0/reference/derive_summary_records.md)
 
 ## Examples
 
@@ -514,7 +515,7 @@ Use data from an additional dataset and other variables than `AVAL`.
 - Then, `set_values_to` is used to specify the values for the new
   observations of each variable, and variable-value pairs from both
   datasets are referenced via
-  [`exprs()`](https:/pharmaverse.github.io/admiral/v1.4.2/reference/reexport-exprs.md).
+  [`exprs()`](https:/pharmaverse.github.io/admiral/v1.5.0/reference/reexport-exprs.md).
 
     QS <- tribble(
       ~USUBJID, ~AVISIT,   ~QSTESTCD, ~QSORRES, ~QSSTRESN,

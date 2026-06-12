@@ -1,16 +1,16 @@
 # Create a `event_joined` Object
 
 The `event_joined` object is used to define events as input for the
-[`derive_extreme_event()`](https:/pharmaverse.github.io/admiral/v1.4.2/reference/derive_extreme_event.md)
+[`derive_extreme_event()`](https:/pharmaverse.github.io/admiral/v1.5.0/reference/derive_extreme_event.md)
 and
-[`derive_vars_extreme_event()`](https:/pharmaverse.github.io/admiral/v1.4.2/reference/derive_vars_extreme_event.md)
+[`derive_vars_extreme_event()`](https:/pharmaverse.github.io/admiral/v1.5.0/reference/derive_vars_extreme_event.md)
 functions. This object should be used if the event does not depend on a
 single observation of the source dataset but on multiple observations.
 For example, if the event needs to be confirmed by a second observation
 of the source dataset.
 
 The events are selected by calling
-[`filter_joined()`](https:/pharmaverse.github.io/admiral/v1.4.2/reference/filter_joined.md).
+[`filter_joined()`](https:/pharmaverse.github.io/admiral/v1.5.0/reference/filter_joined.md).
 See its documentation for more details.
 
 ## Usage
@@ -18,8 +18,11 @@ See its documentation for more details.
 ``` r
 event_joined(
   dataset_name = NULL,
+  filter_source = NULL,
   condition,
+  by_vars = NULL,
   order = NULL,
+  tmp_obs_nr_var = NULL,
   join_vars,
   join_type,
   first_cond_lower = NULL,
@@ -36,14 +39,26 @@ event_joined(
 
   Dataset name of the dataset to be used as input for the event. The
   name refers to the dataset specified for `source_datasets` in
-  [`derive_extreme_event()`](https:/pharmaverse.github.io/admiral/v1.4.2/reference/derive_extreme_event.md).
+  [`derive_extreme_event()`](https:/pharmaverse.github.io/admiral/v1.5.0/reference/derive_extreme_event.md).
   If the argument is not specified, the input dataset (`dataset`) of
-  [`derive_extreme_event()`](https:/pharmaverse.github.io/admiral/v1.4.2/reference/derive_extreme_event.md)
+  [`derive_extreme_event()`](https:/pharmaverse.github.io/admiral/v1.5.0/reference/derive_extreme_event.md)
   is used.
 
   Permitted values
 
   :   a character scalar
+
+  Default value
+
+  :   `NULL`
+
+- filter_source:
+
+  A condition to restrict the source dataset before joining
+
+  Permitted values
+
+  :   an unquoted condition, e.g., `AVISIT == "BASELINE"`
 
   Default value
 
@@ -69,11 +84,31 @@ event_joined(
 
   Permitted values
 
-  :   an unquoted condition
+  :   an unquoted condition, e.g., `AVISIT == "BASELINE"`
 
   Default value
 
   :   none
+
+- by_vars:
+
+  By variables
+
+  The specified variables are used to join the dataset with itself. If
+  the argument is not specified (or set to `NULL`), the by variables
+  specified for
+  [`derive_extreme_event()`](https:/pharmaverse.github.io/admiral/v1.5.0/reference/derive_extreme_event.md)
+  are used.
+
+  Permitted values
+
+  :   list of variables created by
+      [`exprs()`](https:/pharmaverse.github.io/admiral/v1.5.0/reference/reexport-exprs.md),
+      e.g., `exprs(USUBJID, VISIT)`
+
+  Default value
+
+  :   `NULL`
 
 - order:
 
@@ -82,13 +117,35 @@ event_joined(
 
   For handling of `NA`s in sorting variables see the "Sort Order"
   section in
-  [`vignette("generic")`](https:/pharmaverse.github.io/admiral/v1.4.2/articles/generic.md).
+  [`vignette("generic")`](https:/pharmaverse.github.io/admiral/v1.5.0/articles/generic.md).
 
   Permitted values
 
   :   list of expressions created by
-      [`exprs()`](https:/pharmaverse.github.io/admiral/v1.4.2/reference/reexport-exprs.md),
+      [`exprs()`](https:/pharmaverse.github.io/admiral/v1.5.0/reference/reexport-exprs.md),
       e.g., `exprs(ADT, desc(AVAL))` or `NULL`
+
+  Default value
+
+  :   `NULL`
+
+- tmp_obs_nr_var:
+
+  Temporary observation number
+
+  The specified variable is added to the source dataset
+  (`dataset_name`). It is set to the observation number with respect to
+  `order`. For each by group (`by_vars`) the observation number starts
+  with `1`. If there is more than one record for specific values for
+  `by_vars` and `order`, all records get the same observation number.
+  The variable can be used in the conditions (`filter_join`,
+  `first_cond_upper`, `first_cond_lower`). It is not included in the
+  output dataset. It can also be used to select events depending on
+  consecutive observations or the last observation.
+
+  Permitted values
+
+  :   an unquoted symbol, e.g., `AVAL`
 
   Default value
 
@@ -111,7 +168,7 @@ event_joined(
   Permitted values
 
   :   a named list of expressions, e.g., created by
-      [`exprs()`](https:/pharmaverse.github.io/admiral/v1.4.2/reference/reexport-exprs.md)
+      [`exprs()`](https:/pharmaverse.github.io/admiral/v1.5.0/reference/reexport-exprs.md)
 
   Default value
 
@@ -151,7 +208,7 @@ event_joined(
 
   Permitted values
 
-  :   an unquoted condition
+  :   an unquoted condition, e.g., `AVISIT == "BASELINE"`
 
   Default value
 
@@ -173,7 +230,7 @@ event_joined(
 
   Permitted values
 
-  :   an unquoted condition
+  :   an unquoted condition, e.g., `AVISIT == "BASELINE"`
 
   Default value
 
@@ -182,7 +239,7 @@ event_joined(
 - set_values_to:
 
   A named list returned by
-  [`exprs()`](https:/pharmaverse.github.io/admiral/v1.4.2/reference/reexport-exprs.md)
+  [`exprs()`](https:/pharmaverse.github.io/admiral/v1.5.0/reference/reexport-exprs.md)
   defining the variables to be set for the event, e.g.
   `exprs(PARAMCD = "WSP", PARAM = "Worst Sleeping Problems")`. The
   values can be a symbol, a character string, a numeric value, `NA` or
@@ -191,7 +248,7 @@ event_joined(
   Permitted values
 
   :   a named list of expressions, e.g., created by
-      [`exprs()`](https:/pharmaverse.github.io/admiral/v1.4.2/reference/reexport-exprs.md)
+      [`exprs()`](https:/pharmaverse.github.io/admiral/v1.5.0/reference/reexport-exprs.md)
 
   Default value
 
@@ -203,7 +260,7 @@ event_joined(
 
   The specified variables are kept for the selected observations. The
   variables specified for `by_vars` (of
-  [`derive_extreme_event()`](https:/pharmaverse.github.io/admiral/v1.4.2/reference/derive_extreme_event.md))
+  [`derive_extreme_event()`](https:/pharmaverse.github.io/admiral/v1.5.0/reference/derive_extreme_event.md))
   and created by `set_values_to` are always kept.
 
   Permitted values
@@ -237,20 +294,20 @@ An object of class `event_joined`
 
 ## See also
 
-[`derive_extreme_event()`](https:/pharmaverse.github.io/admiral/v1.4.2/reference/derive_extreme_event.md),
-[`derive_vars_extreme_event()`](https:/pharmaverse.github.io/admiral/v1.4.2/reference/derive_vars_extreme_event.md),
-[`event()`](https:/pharmaverse.github.io/admiral/v1.4.2/reference/event.md)
+[`derive_extreme_event()`](https:/pharmaverse.github.io/admiral/v1.5.0/reference/derive_extreme_event.md),
+[`derive_vars_extreme_event()`](https:/pharmaverse.github.io/admiral/v1.5.0/reference/derive_vars_extreme_event.md),
+[`event()`](https:/pharmaverse.github.io/admiral/v1.5.0/reference/event.md)
 
 Source Objects:
-[`basket_select()`](https:/pharmaverse.github.io/admiral/v1.4.2/reference/basket_select.md),
-[`censor_source()`](https:/pharmaverse.github.io/admiral/v1.4.2/reference/censor_source.md),
-[`death_event`](https:/pharmaverse.github.io/admiral/v1.4.2/reference/tte_source_objects.md),
-[`event()`](https:/pharmaverse.github.io/admiral/v1.4.2/reference/event.md),
-[`event_source()`](https:/pharmaverse.github.io/admiral/v1.4.2/reference/event_source.md),
-[`flag_event()`](https:/pharmaverse.github.io/admiral/v1.4.2/reference/flag_event.md),
-[`query()`](https:/pharmaverse.github.io/admiral/v1.4.2/reference/query.md),
-[`records_source()`](https:/pharmaverse.github.io/admiral/v1.4.2/reference/records_source.md),
-[`tte_source()`](https:/pharmaverse.github.io/admiral/v1.4.2/reference/tte_source.md)
+[`basket_select()`](https:/pharmaverse.github.io/admiral/v1.5.0/reference/basket_select.md),
+[`censor_source()`](https:/pharmaverse.github.io/admiral/v1.5.0/reference/censor_source.md),
+[`death_event`](https:/pharmaverse.github.io/admiral/v1.5.0/reference/tte_source_objects.md),
+[`event()`](https:/pharmaverse.github.io/admiral/v1.5.0/reference/event.md),
+[`event_source()`](https:/pharmaverse.github.io/admiral/v1.5.0/reference/event_source.md),
+[`flag_event()`](https:/pharmaverse.github.io/admiral/v1.5.0/reference/flag_event.md),
+[`query()`](https:/pharmaverse.github.io/admiral/v1.5.0/reference/query.md),
+[`records_source()`](https:/pharmaverse.github.io/admiral/v1.5.0/reference/records_source.md),
+[`tte_source()`](https:/pharmaverse.github.io/admiral/v1.5.0/reference/tte_source.md)
 
 ## Examples
 

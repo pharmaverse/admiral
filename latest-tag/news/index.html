@@ -18,23 +18,38 @@
       fontURL: "https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/output/chtml/fonts/woff-v2"
     }
   };
-</script><script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+</script><script src="../lightswitch.js"></script><script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="../deps/bootstrap-5.3.8/bootstrap.min.css" rel="stylesheet">
 <script src="../deps/bootstrap-5.3.8/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
-<script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Changelog">
-<meta property="og:image" content="https:/pharmaverse.github.io/admiral/v1.4.2/logo.png">
-<script async src="https://widget.kapa.ai/kapa-widget.bundle.js" data-website-id="2c7249cc-f1dc-4a63-8674-6ecbcb34d95c" data-project-name="admiral" data-project-color="#2c3e50" data-project-logo="https://pharmaverse.github.io/admiral/cran-release/logo.png" data-consent-required="true" data-user-analytics-cookie-enabled="true" data-consent-screen-title="Help us improve our AI assistant" data-consent-screen-disclaimer="By clicking 'Allow tracking', you consent to anonymous user tracking which helps us improve our service. We don't collect any personally identifiable information." data-consent-screen-accept-button-text="Allow tracking" data-consent-screen-reject-button-text="No, thanks" data-modal-example-questions="Tell me a little about the {admiral} package., What are some important {admiral} functions and what do they do?" data-modal-search-placeholder="Ask me a question about {admiral} or the {admiral} ecosystem..." data-modal-z-index="9999"></script>
+<script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><link href="../extra.css" rel="stylesheet">
+<meta property="og:title" content="Changelog">
+<meta property="og:image" content="https:/pharmaverse.github.io/admiral/v1.5.0/logo.png">
+<script async src="https://widget.kapa.ai/kapa-widget.bundle.js" data-website-id="2c7249cc-f1dc-4a63-8674-6ecbcb34d95c" data-project-name="admiral" data-project-color="#2c3e50" data-project-logo="https://pharmaverse.github.io/admiral/cran-release/logo.png" data-consent-required="true" data-user-analytics-cookie-enabled="true" data-consent-screen-title="Help us improve our AI assistant" data-consent-screen-disclaimer="By clicking 'Allow tracking', you consent to anonymous user tracking which helps us improve our service. We don't collect any personally identifiable information." data-consent-screen-accept-button-text="Allow tracking" data-consent-screen-reject-button-text="No, thanks" data-modal-example-questions="Tell me a little about the {admiral} package., What are some important {admiral} functions and what do they do?" data-modal-search-placeholder="Ask me a question about {admiral} or the {admiral} ecosystem..." data-modal-z-index="9999"></script><script>
+document.addEventListener("DOMContentLoaded", function () {
+  // Select all navbar links that have an aria-label
+  var navLinks = document.querySelectorAll('.navbar-nav .nav-link[aria-label]');
+
+  navLinks.forEach(function (link) {
+    // Initialize Bootstrap 5 Tooltip
+    link.setAttribute('title', link.getAttribute('aria-label'));
+    new bootstrap.Tooltip(link, {
+      placement: 'bottom', // Tooltip appears below the icon
+      trigger: 'hover'
+    });
+  });
+});
+</script>
 </head>
 <body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
 
 
-    <nav class="navbar navbar-expand-lg fixed-top bg-primary" data-bs-theme="dark" aria-label="Site navigation"><div class="container">
+    <nav class="navbar navbar-expand-lg fixed-top " aria-label="Site navigation"><div class="container">
 
     <a class="navbar-brand me-2" href="../index.html">admiral</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.4.2</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.5.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -69,14 +84,16 @@
     <li><a class="dropdown-item" href="../articles/bds_tte.html">Creating a BDS Time-to-Event ADaM</a></li>
     <li><a class="dropdown-item" href="../articles/questionnaires.html">Creating Questionnaire ADaMs</a></li>
     <li><a class="dropdown-item" href="../articles/pk_adnca.html">Creating a PK NCA or Population PK ADaM</a></li>
-    <li><a class="dropdown-item" href="../articles/adab.html">Creating an Antidrug Antibody ADaM</a></li>
+    <li><a class="dropdown-item" href="../articles/adab_web.html">Creating an Antidrug Antibody ADaM</a></li>
     <li><a class="dropdown-item" href="../articles/hys_law.html">Hy's Law Implementation</a></li>
     <li><hr class="dropdown-divider"></li>
     <li><h6 class="dropdown-header" data-toc-skip>Special Topics Guides</h6></li>
     <li><a class="dropdown-item" href="../articles/imputation.html">Date and Time Imputation</a></li>
     <li><a class="dropdown-item" href="../articles/visits_periods.html">Visit and Period Variables</a></li>
+    <li><a class="dropdown-item" href="../articles/tte_analyses_web.html">Time-to-Event Analyses</a></li>
     <li><a class="dropdown-item" href="../articles/queries_dataset.html">Queries Dataset Documentation</a></li>
     <li><a class="dropdown-item" href="../articles/lab_grading.html">Lab Grading</a></li>
+    <li><a class="dropdown-item" href="../articles/estimands_web.html">Estimands</a></li>
     <li><hr class="dropdown-divider"></li>
     <li><a class="dropdown-item" href="../articles/faq.html">FAQ</a></li>
   </ul>
@@ -88,6 +105,7 @@
     <div class="dropdown-menu" aria-labelledby="dropdown-versions">
     <a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/main">main</a>
 <a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/cran-release">cran-release</a>
+<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v1.5.0">v1.5.0</a>
 <a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v1.4.2">v1.4.2</a>
 <a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v1.4.1">v1.4.1</a>
 <a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v1.4.0">v1.4.0</a>
@@ -106,9 +124,17 @@
 <li class="nav-item"><form class="form-inline" role="search">
  <input class="form-control" type="search" name="search-input" id="search-input" autocomplete="off" aria-label="Search site" placeholder="Search for" data-search-index="../search.json">
 </form></li>
-<li class="nav-item"><a class="external-link nav-link" href="https://pharmaverse.slack.com/" aria-label="Slack"><span class="fa fa-slack"></span></a></li>
-<li class="nav-item"><a class="external-link nav-link" href="https://github.com/pharmaverse/admiral/issues/new/choose" aria-label="New Issue"><span class="fa fa-bug"></span></a></li>
+<li class="nav-item"><a class="external-link nav-link" href="https://pharmaverse.slack.com/" aria-label="Join the pharmaverse Slack!"><span class="fa fa-slack"></span></a></li>
+<li class="nav-item"><a class="external-link nav-link" href="https://github.com/pharmaverse/admiral/issues/new/choose" aria-label="Report an issue"><span class="fa fa-bug"></span></a></li>
 <li class="nav-item"><a class="external-link nav-link" href="https://github.com/pharmaverse/admiral/" aria-label="GitHub"><span class="fa fab fa-github fa-lg"></span></a></li>
+<li class="nav-item dropdown">
+  <button class="nav-link dropdown-toggle" type="button" id="dropdown-lightswitch" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true" aria-label="Light switch"><span class="fa fa-sun"></span></button>
+  <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdown-lightswitch">
+<li><button class="dropdown-item" data-bs-theme-value="light"><span class="fa fa-sun"></span> Light</button></li>
+    <li><button class="dropdown-item" data-bs-theme-value="dark"><span class="fa fa-moon"></span> Dark</button></li>
+    <li><button class="dropdown-item" data-bs-theme-value="auto"><span class="fa fa-adjust"></span> Auto</button></li>
+  </ul>
+</li>
       </ul>
 </div>
 
@@ -122,10 +148,102 @@
     </div>
 
     <div class="section level2">
+<h2 class="pkg-version" data-toc-text="1.5.0" id="admiral-150">admiral 1.5.0<a class="anchor" aria-label="anchor" href="#admiral-150"></a>
+</h2>
+<div class="section level3">
+<h3 id="updates-of-existing-functions-1-5-0">Updates of Existing Functions<a class="anchor" aria-label="anchor" href="#updates-of-existing-functions-1-5-0"></a>
+</h3>
+<ul>
+<li><p><code><a href="../reference/derive_vars_dt.html">derive_vars_dt()</a></code> and <code><a href="../reference/derive_vars_dtm.html">derive_vars_dtm()</a></code> were enhanced to allow user-defined <code>date_imputation</code> values (e.g. <code>date_imputation = "10"</code>) in combination with <code>highest_imputation = "D"</code>. Additionally, functions such as <code><a href="../reference/derive_vars_dt.html">derive_vars_dt()</a></code>, <code><a href="../reference/derive_vars_dtm.html">derive_vars_dtm()</a></code>, <code><a href="../reference/impute_dtc_dt.html">impute_dtc_dt()</a></code> and <code><a href="../reference/impute_dtc_dtm.html">impute_dtc_dtm()</a></code> now issue an error if any invalid dates (e.g. “2020-02-31”). (<a href="https://github.com/pharmaverse/admiral/issues/3014" class="external-link">#3014</a>)</p></li>
+<li><p>The <code>end_dates</code> argument for specifying dates which restrict the observation period and the <code>event_type</code> argument for specifying if the event is negative (progression, death, worsening, …) were added to <code><a href="../reference/derive_param_tte.html">derive_param_tte()</a></code>. The <code>consider_end_dates</code> field was added to the <code><a href="../reference/event_source.html">event_source()</a></code>, <code><a href="../reference/censor_source.html">censor_source()</a></code>, and <code><a href="../reference/tte_source.html">tte_source()</a></code> objects. (<a href="https://github.com/pharmaverse/admiral/issues/2952" class="external-link">#2952</a>)</p></li>
+<li><p>The <code>by_vars</code> and the <code>tmp_obs_nr_var</code> arguments were added to <code><a href="../reference/event_joined.html">event_joined()</a></code>. This allows to derive parameters requiring confirmation <em>by visit</em> using <code><a href="../reference/derive_extreme_event.html">derive_extreme_event()</a></code>. (<a href="https://github.com/pharmaverse/admiral/issues/3022" class="external-link">#3022</a>)</p></li>
+<li><p>The <code>filter_source</code> argument was added to <code><a href="../reference/event_joined.html">event_joined()</a></code>, allowing to specify a condition to restrict the source dataset before the join, e.g., when using <code><a href="../reference/derive_extreme_event.html">derive_extreme_event()</a></code>. (<a href="https://github.com/pharmaverse/admiral/issues/3033" class="external-link">#3033</a>)</p></li>
+<li><p>The <code>filter_add</code> argument in <code><a href="../reference/derive_var_joined_exist_flag.html">derive_var_joined_exist_flag()</a></code> is no longer erroneously ignored. (<a href="https://github.com/pharmaverse/admiral/issues/3018" class="external-link">#3018</a>)</p></li>
+<li><p>Poorly formatted warning messages in <code><a href="../reference/derive_param_computed.html">derive_param_computed()</a></code> and <code><a href="../reference/derive_vars_computed.html">derive_vars_computed()</a></code> were improved. (<a href="https://github.com/pharmaverse/admiral/issues/2969" class="external-link">#2969</a>)</p></li>
+<li><p>Fixed typo in <code><a href="../reference/derive_summary_records.html">derive_summary_records()</a></code> error message. (<a href="https://github.com/pharmaverse/admiral/issues/3127" class="external-link">#3127</a>)</p></li>
+<li><p><code><a href="../reference/use_ad_template.html">use_ad_template()</a></code> was updated to remove the <code>open</code> argument, meaning the generated template will never automatically open in a new window, and will instead just be accessible by clicking the link outputted in the console or going to the path specified under <code>save_path</code>. This is because this functionality did not work as expected outside of RStudio. (<a href="https://github.com/pharmaverse/admiral/issues/2989" class="external-link">#2989</a>)</p></li>
+<li><p>The NCICTCAEv5 grading criteria (<code>atoxgr_criteria_ctcv5</code>, <code>atoxgr_criteria_ctcv5_uscv</code>) were updated to add the term <code>"Blood lactate dehydrogenase increase"</code> (<a href="https://github.com/pharmaverse/admiral/issues/3025" class="external-link">#3025</a>).</p></li>
+<li><p>The <code>missing_values</code> argument was added to <code><a href="../reference/derive_extreme_records.html">derive_extreme_records()</a></code>. This allows users to specify values for variables in the new records originating from <code>dataset_ref</code>. (<a href="https://github.com/pharmaverse/admiral/issues/3017" class="external-link">#3017</a>)</p></li>
+<li><p><code><a href="../reference/list_all_templates.html">list_all_templates()</a></code> now only lists out <code>.R</code> files with the <code>templates</code> folder of the target package. (<a href="https://github.com/pharmaverse/admiral/issues/3136" class="external-link">#3136</a>)</p></li>
+</ul>
+</div>
+<div class="section level3">
+<h3 id="breaking-changes-1-5-0">Breaking Changes<a class="anchor" aria-label="anchor" href="#breaking-changes-1-5-0"></a>
+</h3>
+<ul>
+<li>
+<p>The following function arguments are entering the next phase of the <a href="https://pharmaverse.github.io/admiraldev/articles/programming_strategy.html#deprecation" class="external-link">deprecation process</a>:</p>
+<p><strong>Phase 1 (message)</strong></p>
+<p>No functions or arguments in this phase.</p>
+<p><strong>Phase 2 (warning)</strong></p>
+<p>No functions or arguments in this phase.</p>
+<p><strong>Phase 3 (error)</strong></p>
+<ul>
+<li>
+<code><a href="../reference/call_user_fun.html">call_user_fun()</a></code> is deprecated and will have no replacement.</li>
+</ul>
+<p><strong>Phase 4 (removed)</strong></p>
+<p>No functions or arguments in this phase.</p>
+</li>
+<li><p>The <code>ex_single</code> dataset was removed from <a href="https://pharmaverse.github.io/admiral/" class="external-link">admiral</a> to reduce the package size. It can be derived on the fly using <code><a href="../reference/create_single_dose_dataset.html">create_single_dose_dataset()</a></code>. See the <code>OCCDS</code> vignette or <code><a href="../reference/create_single_dose_dataset.html">?create_single_dose_dataset</a></code> for examples. (<a href="https://github.com/pharmaverse/admiral/issues/3060" class="external-link">#3060</a>)</p></li>
+</ul>
+</div>
+<div class="section level3">
+<h3 id="documentation-1-5-0">Documentation<a class="anchor" aria-label="anchor" href="#documentation-1-5-0"></a>
+</h3>
+<ul>
+<li><p>A new article “Time-to-Event Analyses” was added to provide guidance for different TTE scenarios. (<a href="https://github.com/pharmaverse/admiral/issues/2900" class="external-link">#2900</a>)</p></li>
+<li>
+<p>The following new and existing User Guides have been changed from vignettes to articles, meaning they are no longer accessible offline via <code>vignette("vignette_name")</code>:</p>
+<ul>
+<li>Creating an ADAB ADaM</li>
+<li>Estimands (new)</li>
+</ul>
+<p>This helps minimize the size of <a href="https://pharmaverse.github.io/admiral/" class="external-link">admiral</a> for installation. The articles are still accessible through the User Guides section of the <a href="https://pharmaverse.github.io/admiral/cran-release/" class="external-link">admiral website</a>. (<a href="https://github.com/pharmaverse/admiral/issues/3067" class="external-link">#3067</a>)</p>
+</li>
+<li><p>The documentation for <code><a href="../reference/derive_var_merged_ef_msrc.html">derive_var_merged_ef_msrc()</a></code> was enhanced with structured examples covering <code>flag_events</code> with multiple sources, customizing <code>true_value</code>, <code>false_value</code>, and <code>missing_value</code>, and per-source <code>by_vars</code> renaming. (<a href="https://github.com/pharmaverse/admiral/issues/2906" class="external-link">#2906</a>)</p></li>
+<li><p>The <code>UDTC</code> derivation in <code>ADPPK</code> was updated to use source domain <code>DTC</code> variables. (<a href="https://github.com/pharmaverse/admiral/issues/3011" class="external-link">#3011</a>)</p></li>
+<li><p>The example for <code><a href="../reference/derive_var_nfrlt.html">derive_var_nfrlt()</a></code> was updated to use <code>NA_character_</code> instead of <code>""</code> for missing unit values, consistent with the <a href="https://pharmaverse.github.io/admiral/" class="external-link">admiral</a> programming strategy. (<a href="https://github.com/pharmaverse/admiral/issues/3027" class="external-link">#3027</a>)</p></li>
+<li><p>A new web-only “Estimands” article was added, describing possible implementations of Estimands with <a href="https://pharmaverse.github.io/admiral/" class="external-link">admiral</a> code. (<a href="https://github.com/pharmaverse/admiral/issues/2954" class="external-link">#2954</a>)</p></li>
+<li><p>A night mode option has been added to the <a href="https://pharmaverse.github.io/admiral/" class="external-link">admiral</a> website. This can be be toggled using the sun/moon icon in the top right corner of the navigation bar. Tooltips have also been set up for each of the icons on the navigation bar. (<a href="https://github.com/pharmaverse/admiral/issues/2959" class="external-link">#2959</a>)</p></li>
+<li><p>The <a href="https://pharmaverse.github.io/admiral/cran-release/CONTRIBUTING.html" class="external-link">contribution guidelines</a> for the <a href="https://pharmaverse.github.io/admiral/" class="external-link">admiral</a> ecosystem of packages were updated to specify the level of contributions required for authorship/acknowledgments. (<a href="https://github.com/pharmaverse/admiral/issues/2979" class="external-link">#2979</a>)</p></li>
+<li><p>The examples for <code><a href="../reference/derive_basetype_records.html">derive_basetype_records()</a></code> were enhanced to include a case where records that do not match any condition in <code>basetypes</code> are retained with <code>BASETYPE</code> set to <code>NA</code>. (<a href="https://github.com/pharmaverse/admiral/issues/2904" class="external-link">#2904</a>)</p></li>
+<li><p>Additional information about timing variable conventions has been added to the <code><a href="../reference/derive_vars_dy.html">derive_vars_dy()</a></code> function documentation. (<a href="https://github.com/pharmaverse/admiral/issues/2995" class="external-link">#2995</a>)</p></li>
+<li><p>The documentation for <code><a href="../reference/derive_vars_merged_summary.html">derive_vars_merged_summary()</a></code> was enhanced with structured examples covering the <code>new_vars</code>, <code>filter_add</code>, <code>missing_values</code>, <code>by_vars</code> renaming, and string aggregation use cases. (<a href="https://github.com/pharmaverse/admiral/issues/2775" class="external-link">#2775</a>)</p></li>
+<li><p>A new custom <a href="https://pharmaverse.github.io/admiral/404.html" class="external-link">404 page</a> was added with a butterfly quiz for lost users. (<a href="https://github.com/pharmaverse/admiral/issues/2982" class="external-link">#2982</a>)</p></li>
+<li><p>Added information about how to print out records with missing information when using <code>datasetref</code> in <code><a href="../reference/derive_summary_records.html">derive_summary_records()</a></code>. (<a href="https://github.com/pharmaverse/admiral/issues/3012" class="external-link">#3012</a>)</p></li>
+<li><p>Usage of <code>ASEQ</code> (an optional variable) was clarified within the corresponding Vignettes and Templates. (<a href="https://github.com/pharmaverse/admiral/issues/2986" class="external-link">#2986</a>)</p></li>
+<li><p>The derivation of <code>DOSEON</code> and <code>DOSEU</code> variables in the OCCDS vignette was clarified and generalized to cover more scenarios. (<a href="https://github.com/pharmaverse/admiral/issues/3101" class="external-link">#3101</a>)</p></li>
+<li><p>The documentation for <code><a href="../reference/derive_vars_dtm.html">derive_vars_dtm()</a></code> and <code><a href="../reference/derive_vars_dt.html">derive_vars_dt()</a></code> was updated to clarify details of the <code>highest_imputation</code> argument. (<a href="https://github.com/pharmaverse/admiral/issues/3055" class="external-link">#3055</a>)</p></li>
+<li><p>The “Date and Time Imputation” vignette was updated to point out the difference between the character <code>*DTC</code> variables and the numeric <code>*DTM</code> variables. (<a href="https://github.com/pharmaverse/admiral/issues/3055" class="external-link">#3055</a>)</p></li>
+<li><p>The documentation for <code>compute_*()</code> and other computation functions was updated to clarify that they are vector-oriented helpers and are not usually called directly on a data frame with <code>%&gt;%</code>. (<a href="https://github.com/pharmaverse/admiral/issues/3146" class="external-link">#3146</a>)</p></li>
+<li><p>Added notes and examples for deriving baseline toxicity grade variables (<code>BTOXGR</code>, <code>BTOXGRL</code>, <code>BTOXGRH</code>) in the Lab Grading vignette. (<a href="https://github.com/pharmaverse/admiral/issues/3119" class="external-link">#3119</a>)</p></li>
+</ul>
+</div>
+<div class="section level3">
+<h3 id="various-1-5-0">Various<a class="anchor" aria-label="anchor" href="#various-1-5-0"></a>
+</h3>
+<details><summary>
+Developer Notes
+</summary><ul>
+<li><p>Update to roxygen2 8.0.0. (<a href="https://github.com/pharmaverse/admiral/issues/3090" class="external-link">#3090</a>)</p></li>
+<li><p>The <code><a href="../reference/admiral_labels_attrs_section.html">admiral_labels_attrs_section()</a></code> function was added to output standardized boilerplate markdown for the “Add Labels and Attributes” section in ADaM-specific vignettes. All relevant vignettes have been updated to use this function, ensuring consistent content that can be maintained in one place. (<a href="https://github.com/pharmaverse/admiral/issues/2926" class="external-link">#2926</a>)</p></li>
+<li><p>Add instructions for AI coding agents: Workflow from <code>{admiralci}</code> copies information from <a href="https://pharmaverse.github.io/admiraldev/" class="external-link">admiraldev</a> to <code>AGENTS.md</code> instruction files. (<a href="https://github.com/pharmaverse/admiral/issues/2920" class="external-link">#2920</a>)</p></li>
+<li><p>Increased the maximum height of the drop-down menus in the website navigation bar to ensure all items are visible without scrolling. (<a href="https://github.com/pharmaverse/admiral/issues/2974" class="external-link">#2974</a>)</p></li>
+<li><p>Creating the website for pull requests was enabled. Add “[create website]” to the pull request title to trigger website creation. (<a href="https://github.com/pharmaverse/admiral/issues/2984" class="external-link">#2984</a>)</p></li>
+<li><p><code>_pkgdown.yml</code> was updated to add metadata for linking across packages (<code>inst/pkgdown.yml</code>). (<a href="https://github.com/pharmaverse/admiral/issues/2950" class="external-link">#2950</a>)</p></li>
+<li><p>The helper functions <code><a href="https://pharmaverse.github.io/admiraldev/reference/roxygen_param_dataset.html" class="external-link">roxygen_param_dataset()</a></code>, <code><a href="https://pharmaverse.github.io/admiraldev/reference/roxygen_param_by_vars.html" class="external-link">roxygen_param_by_vars()</a></code>, <code><a href="https://pharmaverse.github.io/admiraldev/reference/roxygen_order_na_handling.html" class="external-link">roxygen_order_na_handling()</a></code>, and <code><a href="https://pharmaverse.github.io/admiraldev/reference/roxygen_save_memory.html" class="external-link">roxygen_save_memory()</a></code> have been moved from <a href="https://pharmaverse.github.io/admiral/" class="external-link">admiral</a> to <a href="https://pharmaverse.github.io/admiraldev/" class="external-link">admiraldev</a>. They are now exported from <a href="https://pharmaverse.github.io/admiraldev/" class="external-link">admiraldev</a> and remain accessible in <a href="https://pharmaverse.github.io/admiral/" class="external-link">admiral</a> via the existing <code>@import admiraldev</code> dependency. (<a href="https://github.com/pharmaverse/admiraldev/issues/517" class="external-link">admiraldev/#517</a>)</p></li>
+<li><p>The HTML tag <code>&lt;br/&gt;</code> was removed from the roxygen headers. (<a href="https://github.com/pharmaverse/admiral/issues/3042" class="external-link">#3042</a>)</p></li>
+<li><p>Clickable links to personal websites or GitHub profiles were added in the home page sidebar for every <a href="https://pharmaverse.github.io/admiral/" class="external-link">admiral</a> author. (<a href="https://github.com/pharmaverse/admiral/issues/3112" class="external-link">#3112</a>)</p></li>
+</ul></details>
+</div>
+</div>
+    <div class="section level2">
 <h2 class="pkg-version" data-toc-text="1.4.2" id="admiral-142">admiral 1.4.2<a class="anchor" aria-label="anchor" href="#admiral-142"></a>
 </h2>
+<p class="text-muted">CRAN release: 2026-05-28</p>
 <ul>
-<li>Maintainer switched from Ben Straub to Edoardo Mancini</li>
+<li>Maintainer switched from Ben Straub to Edoardo Mancini.</li>
 </ul>
 </div>
     <div class="section level2">
@@ -210,9 +328,9 @@
 <code><a href="../reference/get_summary_records.html">get_summary_records()</a></code> is deprecated. Please use <code><a href="../reference/derive_summary_records.html">derive_summary_records()</a></code> with the <code>dataset_add</code> argument and without the <code>dataset</code> argument.</li>
 </ul>
 <p><strong>Phase 3 (error)</strong></p>
-<p>No functions or arguments in this Phase</p>
+<p>No functions or arguments in this phase.</p>
 <p><strong>Phase 4 (removed)</strong></p>
-<p>No functions or arguments in this Phase</p>
+<p>No functions or arguments in this phase.</p>
 </li>
 </ul>
 </div>
@@ -382,11 +500,11 @@ Developer Notes
 <code><a href="../reference/get_summary_records.html">get_summary_records()</a></code> is deprecated. Please use <code><a href="../reference/derive_summary_records.html">derive_summary_records()</a></code> with the <code>dataset_add</code> argument and without the <code>dataset</code> argument.</li>
 </ul>
 <p><strong>Phase 2 (warning)</strong></p>
-<p>No functions or arguments in this Phase</p>
+<p>No functions or arguments in this phase.</p>
 <p><strong>Phase 3 (error)</strong></p>
-<p>No functions or arguments in this Phase</p>
+<p>No functions or arguments in this phase.</p>
 <p><strong>Phase 4 (removed)</strong></p>
-<p>No functions or arguments in this Phase</p>
+<p>No functions or arguments in this phase.</p>
 </li>
 </ul>
 </div>
@@ -880,7 +998,7 @@ ignore_event_order = TRUE,</code></pre>
 <li><p>The function <code><a href="../reference/derive_vars_dy.html">derive_vars_dy()</a></code> is updated to avoid potential error when the input <code>dataset</code> with columns ending with <code>temp</code>. (<a href="https://github.com/pharmaverse/admiral/issues/2012" class="external-link">#2012</a>)</p></li>
 <li><p>Argument <code>keep_source_vars</code> was added to <code><a href="../reference/derive_extreme_records.html">derive_extreme_records()</a></code> which specifies which variables in the new observations should be kept. (<a href="https://github.com/pharmaverse/admiral/issues/1697" class="external-link">#1697</a>)</p></li>
 <li><p>Templates, vignettes, and other uses of <code>{admiral.test}</code> SDTM data are updated to use <a href="https://pharmaverse.github.io/pharmaversesdtm/" class="external-link">pharmaversesdtm</a> instead. (<a href="https://github.com/pharmaverse/admiral/issues/2040" class="external-link">#2040</a>)</p></li>
-<li><p>The <code>traceability_vars</code> argument in <code><a href="../reference/date_source.html">date_source()</a></code> and <code>dthcaus_source</code> were deprecated in favor of <code>set_values_to</code>. The <code><a href="../reference/date_source.html">date_source()</a></code> function creates a date_source object as input for <code><a href="../reference/derive_var_extreme_dt.html">derive_var_extreme_dt()</a></code> and <code><a href="../reference/derive_var_extreme_dtm.html">derive_var_extreme_dtm()</a></code>,users can now define the traceability variables by assigning those variables to the <code>set_values_to</code>argument.Similarly, the <code>dthcaus_source</code> creates a dthcaus_source Object. (<a href="https://github.com/pharmaverse/admiral/issues/2068" class="external-link">#2068</a>)</p></li>
+<li><p>The <code>traceability_vars</code> argument in <code><a href="../reference/date_source.html">date_source()</a></code> and <code>dthcaus_source</code> were deprecated in favor of <code>set_values_to</code>. The <code><a href="../reference/date_source.html">date_source()</a></code> function creates a date_source object as input for <code><a href="../reference/derive_var_extreme_dt.html">derive_var_extreme_dt()</a></code> and <code><a href="../reference/derive_var_extreme_dtm.html">derive_var_extreme_dtm()</a></code>,users can now define the traceability variables by assigning those variables to the <code>set_values_to</code>argument. Similarly, the <code>dthcaus_source</code> creates a dthcaus_source Object. (<a href="https://github.com/pharmaverse/admiral/issues/2068" class="external-link">#2068</a>)</p></li>
 <li>
 <p><code><a href="../reference/derive_extreme_event.html">derive_extreme_event()</a></code> was enhanced (<a href="https://github.com/pharmaverse/admiral/issues/1960" class="external-link">#1960</a>):</p>
 <ul>
@@ -2012,7 +2130,7 @@ ignore_event_order = TRUE,</code></pre>
 
 
     <footer><div class="pkgdown-footer-left">
-  <p>Developed by F. Hoffmann-La Roche AG, GlaxoSmithKline LLC, Edoardo Mancini, Stefan Bundfuss, Matt Bearham, Arianna Cascone, Kristin Dahnert, Jeffrey Dickinson, Ross Farrugia, Fanny Gautier, Gordon Miller, Lina Patil, Jim Rothstein, Ben Straub.</p>
+  <p>Developed by F. Hoffmann-La Roche AG, GlaxoSmithKline LLC, <a href="https://manciniedoardo.github.io/" class="external-link">Edoardo Mancini</a>, <a href="https://github.com/bundfussr" class="external-link">Stefan Bundfuss</a>, <a href="https://arianna-cascone.quarto.pub/" class="external-link">Arianna Cascone</a>, <a href="https://github.com/Kcdahn" class="external-link">Kristin Dahnert</a>, <a href="https://github.com/jeffreyad" class="external-link">Jeffrey Dickinson</a>, <a href="https://github.com/rossfarrugia" class="external-link">Ross Farrugia</a>, <a href="https://github.com/Fanny-Gautier" class="external-link">Fanny Gautier</a>, <a href="https://github.com/LiamHobby" class="external-link">Liam Hobby</a>, <a href="https://github.com/millerg23" class="external-link">Gordon Miller</a>, <a href="https://github.com/Lina2689" class="external-link">Lina Patil</a>, <a href="https://github.com/bms63" class="external-link">Ben Straub</a>.</p>
 </div>
 
 <div class="pkgdown-footer-right">

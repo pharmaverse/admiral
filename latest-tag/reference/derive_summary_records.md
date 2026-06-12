@@ -77,14 +77,14 @@ derive_summary_records(
 
   Variables to consider for generation of groupwise summary records.
   Providing the names of variables in
-  [`exprs()`](https:/pharmaverse.github.io/admiral/v1.4.2/reference/reexport-exprs.md)
+  [`exprs()`](https:/pharmaverse.github.io/admiral/v1.5.0/reference/reexport-exprs.md)
   will create a groupwise summary and generate summary records for the
   specified groups.
 
   Permitted values
 
   :   list of variables created by
-      [`exprs()`](https:/pharmaverse.github.io/admiral/v1.4.2/reference/reexport-exprs.md),
+      [`exprs()`](https:/pharmaverse.github.io/admiral/v1.5.0/reference/reexport-exprs.md),
       e.g., `exprs(USUBJID, VISIT)`
 
   Default value
@@ -124,7 +124,7 @@ derive_summary_records(
 
   Set a list of variables to some specified value for the new records
 
-  - LHS refer to a variable.
+  - LHS refers to a variable.
 
   - RHS refers to the values to set to the variable. This can be an
     expression.
@@ -132,7 +132,7 @@ derive_summary_records(
   Permitted values
 
   :   list of named expressions created by
-      [`exprs()`](https:/pharmaverse.github.io/admiral/v1.4.2/reference/reexport-exprs.md),
+      [`exprs()`](https:/pharmaverse.github.io/admiral/v1.5.0/reference/reexport-exprs.md),
       e.g., `exprs(CUMDOSA = sum(AVAL, na.rm = TRUE), AVALU = "ml")`
 
   Default value
@@ -148,7 +148,7 @@ derive_summary_records(
 
   Set a list of variables to some specified value for the new records
 
-  - LHS refer to a variable.
+  - LHS refers to a variable.
 
   - RHS refers to the values to set to the variable. This can be a
     string, a symbol, a numeric value, an expression or NA. If summary
@@ -166,7 +166,7 @@ derive_summary_records(
   Permitted values
 
   :   list of named expressions created by
-      [`exprs()`](https:/pharmaverse.github.io/admiral/v1.4.2/reference/reexport-exprs.md),
+      [`exprs()`](https:/pharmaverse.github.io/admiral/v1.5.0/reference/reexport-exprs.md),
       e.g., `exprs(CUMDOSA = sum(AVAL, na.rm = TRUE), AVALU = "ml")`
 
   Default value
@@ -175,17 +175,17 @@ derive_summary_records(
 
 - missing_values:
 
-  Values for missing summary values
+  Values for missing records
 
   For observations of the reference dataset (`dataset_ref`) which do not
-  have a complete mapping defined by the summarization defined in
-  `set_values_to`. Only variables specified for `set_values_to` can be
-  specified for `missing_values`.
+  have a matching record in `dataset_add` (with respect to `by_vars` and
+  after applying `filter_add`), the specified variables are set to the
+  specified values for the new observations.
 
   Permitted values
 
   :   list of named expressions created by
-      [`exprs()`](https:/pharmaverse.github.io/admiral/v1.4.2/reference/reexport-exprs.md),
+      [`exprs()`](https:/pharmaverse.github.io/admiral/v1.5.0/reference/reexport-exprs.md),
       e.g., `exprs(CUMDOSA = sum(AVAL, na.rm = TRUE), AVALU = "ml")`
 
   Default value
@@ -204,25 +204,26 @@ or `set_values_to` will be populated. All other variables will be set to
 
 ## See also
 
-[`derive_vars_merged_summary()`](https:/pharmaverse.github.io/admiral/v1.4.2/reference/derive_vars_merged_summary.md)
+[`derive_vars_merged_summary()`](https:/pharmaverse.github.io/admiral/v1.5.0/reference/derive_vars_merged_summary.md)
 
 BDS-Findings Functions for adding Parameters/Records:
-[`default_qtc_paramcd()`](https:/pharmaverse.github.io/admiral/v1.4.2/reference/default_qtc_paramcd.md),
-[`derive_expected_records()`](https:/pharmaverse.github.io/admiral/v1.4.2/reference/derive_expected_records.md),
-[`derive_extreme_event()`](https:/pharmaverse.github.io/admiral/v1.4.2/reference/derive_extreme_event.md),
-[`derive_extreme_records()`](https:/pharmaverse.github.io/admiral/v1.4.2/reference/derive_extreme_records.md),
-[`derive_locf_records()`](https:/pharmaverse.github.io/admiral/v1.4.2/reference/derive_locf_records.md),
-[`derive_param_bmi()`](https:/pharmaverse.github.io/admiral/v1.4.2/reference/derive_param_bmi.md),
-[`derive_param_bsa()`](https:/pharmaverse.github.io/admiral/v1.4.2/reference/derive_param_bsa.md),
-[`derive_param_computed()`](https:/pharmaverse.github.io/admiral/v1.4.2/reference/derive_param_computed.md),
-[`derive_param_doseint()`](https:/pharmaverse.github.io/admiral/v1.4.2/reference/derive_param_doseint.md),
-[`derive_param_exist_flag()`](https:/pharmaverse.github.io/admiral/v1.4.2/reference/derive_param_exist_flag.md),
-[`derive_param_exposure()`](https:/pharmaverse.github.io/admiral/v1.4.2/reference/derive_param_exposure.md),
-[`derive_param_framingham()`](https:/pharmaverse.github.io/admiral/v1.4.2/reference/derive_param_framingham.md),
-[`derive_param_map()`](https:/pharmaverse.github.io/admiral/v1.4.2/reference/derive_param_map.md),
-[`derive_param_qtc()`](https:/pharmaverse.github.io/admiral/v1.4.2/reference/derive_param_qtc.md),
-[`derive_param_rr()`](https:/pharmaverse.github.io/admiral/v1.4.2/reference/derive_param_rr.md),
-[`derive_param_wbc_abs()`](https:/pharmaverse.github.io/admiral/v1.4.2/reference/derive_param_wbc_abs.md)
+[`default_qtc_paramcd()`](https:/pharmaverse.github.io/admiral/v1.5.0/reference/default_qtc_paramcd.md),
+[`derive_basetype_records()`](https:/pharmaverse.github.io/admiral/v1.5.0/reference/derive_basetype_records.md),
+[`derive_expected_records()`](https:/pharmaverse.github.io/admiral/v1.5.0/reference/derive_expected_records.md),
+[`derive_extreme_event()`](https:/pharmaverse.github.io/admiral/v1.5.0/reference/derive_extreme_event.md),
+[`derive_extreme_records()`](https:/pharmaverse.github.io/admiral/v1.5.0/reference/derive_extreme_records.md),
+[`derive_locf_records()`](https:/pharmaverse.github.io/admiral/v1.5.0/reference/derive_locf_records.md),
+[`derive_param_bmi()`](https:/pharmaverse.github.io/admiral/v1.5.0/reference/derive_param_bmi.md),
+[`derive_param_bsa()`](https:/pharmaverse.github.io/admiral/v1.5.0/reference/derive_param_bsa.md),
+[`derive_param_computed()`](https:/pharmaverse.github.io/admiral/v1.5.0/reference/derive_param_computed.md),
+[`derive_param_doseint()`](https:/pharmaverse.github.io/admiral/v1.5.0/reference/derive_param_doseint.md),
+[`derive_param_exist_flag()`](https:/pharmaverse.github.io/admiral/v1.5.0/reference/derive_param_exist_flag.md),
+[`derive_param_exposure()`](https:/pharmaverse.github.io/admiral/v1.5.0/reference/derive_param_exposure.md),
+[`derive_param_framingham()`](https:/pharmaverse.github.io/admiral/v1.5.0/reference/derive_param_framingham.md),
+[`derive_param_map()`](https:/pharmaverse.github.io/admiral/v1.5.0/reference/derive_param_map.md),
+[`derive_param_qtc()`](https:/pharmaverse.github.io/admiral/v1.5.0/reference/derive_param_qtc.md),
+[`derive_param_rr()`](https:/pharmaverse.github.io/admiral/v1.5.0/reference/derive_param_rr.md),
+[`derive_param_wbc_abs()`](https:/pharmaverse.github.io/admiral/v1.5.0/reference/derive_param_wbc_abs.md)
 
 ## Examples
 
@@ -461,7 +462,46 @@ of the analysis variables to be populated should be specified within the
     #> 17 XYZ-1002 QTcF Int. (msec) Visit 3  2016-03-2…  402  2016-03-24 10:56:00 <NA>
     #> 18 XYZ-1002 QTcF Int. (msec) Visit 3  <NA>        408  2016-03-24 10:56:00 AVER…
 
-### Add constant values to derived and missing summary records.
+### Filtering out missing summary records
+
+It may be helpful to print out missing records to determine missingness
+of data. Using the example above, the data can be filtered to include
+`DTYPE = "PHANTOM"`.
+
+    adeg_allparamvis <- tribble(
+      ~USUBJID,   ~PARAM,             ~AVISIT,
+      "XYZ-1001", "QTcF Int. (msec)", "Baseline",
+      "XYZ-1001", "QTcF Int. (msec)", "Visit 2",
+      "XYZ-1001", "QTcF Int. (msec)", "Visit 3",
+      "XYZ-1002", "QTcF Int. (msec)", "Baseline",
+      "XYZ-1002", "QTcF Int. (msec)", "Visit 2",
+      "XYZ-1002", "QTcF Int. (msec)", "Visit 3"
+    )
+
+    derive_summary_records(
+      adeg,
+      dataset_add = adeg,
+      dataset_ref = adeg_allparamvis,
+      by_vars = exprs(USUBJID, PARAM, AVISIT),
+      set_values_to = exprs(
+        AVAL = mean(AVAL, na.rm = TRUE),
+        ADTM = max(ADTM),
+        DTYPE = "AVERAGE"
+      ),
+      missing_values = exprs(
+        AVAL = NA,
+        ADTM = NA,
+        DTYPE = "PHANTOM"
+      )
+    ) %>%
+      arrange(USUBJID, AVISIT) %>%
+      filter(DTYPE == "PHANTOM")
+    #> # A tibble: 1 × 7
+    #>   USUBJID  PARAM            AVISIT  EGDTC  AVAL ADTM   DTYPE
+    #>   <chr>    <chr>            <chr>   <chr> <dbl> <dttm> <chr>
+    #> 1 XYZ-1002 QTcF Int. (msec) Visit 2 <NA>     NA NA     PHANTOM
+
+### Add constant values to derived and missing summary records
 
 The `constant_values` argument allows you to assign fixed, common values
 to all summary records generated by the function. This is particularly

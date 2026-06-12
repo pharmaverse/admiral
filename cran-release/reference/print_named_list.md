@@ -35,9 +35,9 @@ No return value, called for side effects
 ## See also
 
 Utilities for printing:
-[`print.adam_templates()`](https:/pharmaverse.github.io/admiral/v1.4.2/reference/print.adam_templates.md),
-[`print.duplicates()`](https:/pharmaverse.github.io/admiral/v1.4.2/reference/print.duplicates.md),
-[`print.source()`](https:/pharmaverse.github.io/admiral/v1.4.2/reference/print.source.md)
+[`print.adam_templates()`](https:/pharmaverse.github.io/admiral/v1.5.0/reference/print.adam_templates.md),
+[`print.duplicates()`](https:/pharmaverse.github.io/admiral/v1.5.0/reference/print.duplicates.md),
+[`print.source()`](https:/pharmaverse.github.io/admiral/v1.5.0/reference/print.source.md)
 
 ## Examples
 
@@ -52,4 +52,5 @@ print_named_list(death_event)
 #>   SRCDOM: "ADSL"
 #>   SRCVAR: "DTHDT"
 #> order: NULL
+#> consider_end_dates: TRUE
 ```

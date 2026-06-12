@@ -24,4 +24,4 @@ The original object.
 
 ## See also
 
-[`basket_select()`](https:/pharmaverse.github.io/admiral/v1.4.2/reference/basket_select.md)
+[`basket_select()`](https:/pharmaverse.github.io/admiral/v1.5.0/reference/basket_select.md)

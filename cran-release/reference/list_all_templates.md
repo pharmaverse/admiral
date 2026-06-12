@@ -22,10 +22,14 @@ list_all_templates(package = "admiral")
 
 A `character` vector of all available templates
 
+## Details
+
+The function only lists the `.R` templates.
+
 ## See also
 
 Utilities used for examples and template scripts:
-[`use_ad_template()`](https:/pharmaverse.github.io/admiral/v1.4.2/reference/use_ad_template.md)
+[`use_ad_template()`](https:/pharmaverse.github.io/admiral/v1.5.0/reference/use_ad_template.md)
 
 ## Examples
 

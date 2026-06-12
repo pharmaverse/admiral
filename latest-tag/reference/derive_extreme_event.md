@@ -4,7 +4,7 @@ Add the first available record from `events` for each by group as new
 records, all variables of the selected observation are kept. It can be
 used for selecting the extreme observation from a series of user-defined
 events. This distinguishes `derive_extreme_event()` from
-[`derive_extreme_records()`](https:/pharmaverse.github.io/admiral/v1.4.2/reference/derive_extreme_records.md),
+[`derive_extreme_records()`](https:/pharmaverse.github.io/admiral/v1.5.0/reference/derive_extreme_records.md),
 where extreme records are derived based on certain order of existing
 variables.
 
@@ -49,7 +49,7 @@ derive_extreme_event(
   Permitted values
 
   :   list of variables created by
-      [`exprs()`](https:/pharmaverse.github.io/admiral/v1.4.2/reference/reexport-exprs.md),
+      [`exprs()`](https:/pharmaverse.github.io/admiral/v1.5.0/reference/reexport-exprs.md),
       e.g., `exprs(USUBJID, VISIT)`
 
   Default value
@@ -61,9 +61,9 @@ derive_extreme_event(
   Conditions and new values defining events
 
   A list of
-  [`event()`](https:/pharmaverse.github.io/admiral/v1.4.2/reference/event.md)
+  [`event()`](https:/pharmaverse.github.io/admiral/v1.5.0/reference/event.md)
   or
-  [`event_joined()`](https:/pharmaverse.github.io/admiral/v1.4.2/reference/event_joined.md)
+  [`event_joined()`](https:/pharmaverse.github.io/admiral/v1.5.0/reference/event_joined.md)
   objects is expected. Only observations listed in the `events` are
   considered for deriving extreme event. If multiple records meet the
   filter `condition`, take the first record sorted by `order`. The data
@@ -72,17 +72,17 @@ derive_extreme_event(
   [`any()`](https://rdrr.io/r/base/any.html) can be used in `condition`.
 
   For
-  [`event_joined()`](https:/pharmaverse.github.io/admiral/v1.4.2/reference/event_joined.md)
+  [`event_joined()`](https:/pharmaverse.github.io/admiral/v1.5.0/reference/event_joined.md)
   events the observations are selected by calling
-  [`filter_joined()`](https:/pharmaverse.github.io/admiral/v1.4.2/reference/filter_joined.md).
+  [`filter_joined()`](https:/pharmaverse.github.io/admiral/v1.5.0/reference/filter_joined.md).
   The `condition` field is passed to the `filter_join` argument.
 
   Permitted values
 
   :   an
-      [`event()`](https:/pharmaverse.github.io/admiral/v1.4.2/reference/event.md)
+      [`event()`](https:/pharmaverse.github.io/admiral/v1.5.0/reference/event.md)
       or
-      [`event_joined()`](https:/pharmaverse.github.io/admiral/v1.4.2/reference/event_joined.md)
+      [`event_joined()`](https:/pharmaverse.github.io/admiral/v1.5.0/reference/event_joined.md)
       object
 
   Default value
@@ -119,12 +119,12 @@ derive_extreme_event(
 
   For handling of `NA`s in sorting variables see the "Sort Order"
   section in
-  [`vignette("generic")`](https:/pharmaverse.github.io/admiral/v1.4.2/articles/generic.md).
+  [`vignette("generic")`](https:/pharmaverse.github.io/admiral/v1.5.0/articles/generic.md).
 
   Permitted values
 
   :   list of variables created by
-      [`exprs()`](https:/pharmaverse.github.io/admiral/v1.4.2/reference/reexport-exprs.md),
+      [`exprs()`](https:/pharmaverse.github.io/admiral/v1.5.0/reference/reexport-exprs.md),
       e.g., `exprs(USUBJID, VISIT)`
 
   Default value
@@ -152,9 +152,9 @@ derive_extreme_event(
   Source datasets
 
   A named list of datasets is expected. The `dataset_name` field of
-  [`event()`](https:/pharmaverse.github.io/admiral/v1.4.2/reference/event.md)
+  [`event()`](https:/pharmaverse.github.io/admiral/v1.5.0/reference/event.md)
   and
-  [`event_joined()`](https:/pharmaverse.github.io/admiral/v1.4.2/reference/event_joined.md)
+  [`event_joined()`](https:/pharmaverse.github.io/admiral/v1.5.0/reference/event_joined.md)
   refers to the dataset provided in the list.
 
   Permitted values
@@ -190,22 +190,22 @@ derive_extreme_event(
 
   Set a list of variables to some specified value for the new records
 
-  - LHS refer to a variable.
+  - LHS refers to a variable.
 
   - RHS refers to the values to set to the variable. This can be a
-    string, a symbol, a numeric value, an expression or NA.
+    string, a symbol, a numeric value, an expression, or \`NA“.
 
   For example:
 
         set_values_to = exprs(
-          PARAMCD = "WOBS",
-          PARAM = "Worst Observations"
+          AVISIT = "LAST VALUE",
+          DTYPE = "LOV"
         )
 
   Permitted values
 
-  :   list of named expressions created by a formula using
-      [`exprs()`](https:/pharmaverse.github.io/admiral/v1.4.2/reference/reexport-exprs.md),
+  :   list of named expressions created by
+      [`exprs()`](https:/pharmaverse.github.io/admiral/v1.5.0/reference/reexport-exprs.md),
       e.g., `exprs(AVALC = VSSTRESC, AVAL = yn_to_numeric(AVALC))`
 
   Default value
@@ -225,7 +225,7 @@ derive_extreme_event(
   Permitted values
 
   :   list of variables created by
-      [`exprs()`](https:/pharmaverse.github.io/admiral/v1.4.2/reference/reexport-exprs.md),
+      [`exprs()`](https:/pharmaverse.github.io/admiral/v1.5.0/reference/reexport-exprs.md),
       e.g., `exprs(USUBJID, VISIT)`
 
   Default value
@@ -246,7 +246,7 @@ added as new observations.
         (`mode`) observation per by group (`by_vars`) is selected.
 
         If the event is of class `event_joined`,
-        [`filter_joined()`](https:/pharmaverse.github.io/admiral/v1.4.2/reference/filter_joined.md)
+        [`filter_joined()`](https:/pharmaverse.github.io/admiral/v1.5.0/reference/filter_joined.md)
         is called to select the observations.
 
     2.  The variables specified by the `set_values_to` field of the
@@ -277,36 +277,37 @@ added as new observations.
 **Note:** This function creates temporary datasets which may be much
 bigger than the input datasets. If this causes memory issues, please try
 setting the admiral option `save_memory` to `TRUE` (see
-[`set_admiral_options()`](https:/pharmaverse.github.io/admiral/v1.4.2/reference/set_admiral_options.md)).
+[`set_admiral_options()`](https:/pharmaverse.github.io/admiral/v1.5.0/reference/set_admiral_options.md)).
 This reduces the memory consumption but increases the run-time.
 
 ## See also
 
-[`event()`](https:/pharmaverse.github.io/admiral/v1.4.2/reference/event.md),
-[`event_joined()`](https:/pharmaverse.github.io/admiral/v1.4.2/reference/event_joined.md),
-[`derive_vars_extreme_event()`](https:/pharmaverse.github.io/admiral/v1.4.2/reference/derive_vars_extreme_event.md)
+[`event()`](https:/pharmaverse.github.io/admiral/v1.5.0/reference/event.md),
+[`event_joined()`](https:/pharmaverse.github.io/admiral/v1.5.0/reference/event_joined.md),
+[`derive_vars_extreme_event()`](https:/pharmaverse.github.io/admiral/v1.5.0/reference/derive_vars_extreme_event.md)
 
 BDS-Findings Functions for adding Parameters/Records:
-[`default_qtc_paramcd()`](https:/pharmaverse.github.io/admiral/v1.4.2/reference/default_qtc_paramcd.md),
-[`derive_expected_records()`](https:/pharmaverse.github.io/admiral/v1.4.2/reference/derive_expected_records.md),
-[`derive_extreme_records()`](https:/pharmaverse.github.io/admiral/v1.4.2/reference/derive_extreme_records.md),
-[`derive_locf_records()`](https:/pharmaverse.github.io/admiral/v1.4.2/reference/derive_locf_records.md),
-[`derive_param_bmi()`](https:/pharmaverse.github.io/admiral/v1.4.2/reference/derive_param_bmi.md),
-[`derive_param_bsa()`](https:/pharmaverse.github.io/admiral/v1.4.2/reference/derive_param_bsa.md),
-[`derive_param_computed()`](https:/pharmaverse.github.io/admiral/v1.4.2/reference/derive_param_computed.md),
-[`derive_param_doseint()`](https:/pharmaverse.github.io/admiral/v1.4.2/reference/derive_param_doseint.md),
-[`derive_param_exist_flag()`](https:/pharmaverse.github.io/admiral/v1.4.2/reference/derive_param_exist_flag.md),
-[`derive_param_exposure()`](https:/pharmaverse.github.io/admiral/v1.4.2/reference/derive_param_exposure.md),
-[`derive_param_framingham()`](https:/pharmaverse.github.io/admiral/v1.4.2/reference/derive_param_framingham.md),
-[`derive_param_map()`](https:/pharmaverse.github.io/admiral/v1.4.2/reference/derive_param_map.md),
-[`derive_param_qtc()`](https:/pharmaverse.github.io/admiral/v1.4.2/reference/derive_param_qtc.md),
-[`derive_param_rr()`](https:/pharmaverse.github.io/admiral/v1.4.2/reference/derive_param_rr.md),
-[`derive_param_wbc_abs()`](https:/pharmaverse.github.io/admiral/v1.4.2/reference/derive_param_wbc_abs.md),
-[`derive_summary_records()`](https:/pharmaverse.github.io/admiral/v1.4.2/reference/derive_summary_records.md)
+[`default_qtc_paramcd()`](https:/pharmaverse.github.io/admiral/v1.5.0/reference/default_qtc_paramcd.md),
+[`derive_basetype_records()`](https:/pharmaverse.github.io/admiral/v1.5.0/reference/derive_basetype_records.md),
+[`derive_expected_records()`](https:/pharmaverse.github.io/admiral/v1.5.0/reference/derive_expected_records.md),
+[`derive_extreme_records()`](https:/pharmaverse.github.io/admiral/v1.5.0/reference/derive_extreme_records.md),
+[`derive_locf_records()`](https:/pharmaverse.github.io/admiral/v1.5.0/reference/derive_locf_records.md),
+[`derive_param_bmi()`](https:/pharmaverse.github.io/admiral/v1.5.0/reference/derive_param_bmi.md),
+[`derive_param_bsa()`](https:/pharmaverse.github.io/admiral/v1.5.0/reference/derive_param_bsa.md),
+[`derive_param_computed()`](https:/pharmaverse.github.io/admiral/v1.5.0/reference/derive_param_computed.md),
+[`derive_param_doseint()`](https:/pharmaverse.github.io/admiral/v1.5.0/reference/derive_param_doseint.md),
+[`derive_param_exist_flag()`](https:/pharmaverse.github.io/admiral/v1.5.0/reference/derive_param_exist_flag.md),
+[`derive_param_exposure()`](https:/pharmaverse.github.io/admiral/v1.5.0/reference/derive_param_exposure.md),
+[`derive_param_framingham()`](https:/pharmaverse.github.io/admiral/v1.5.0/reference/derive_param_framingham.md),
+[`derive_param_map()`](https:/pharmaverse.github.io/admiral/v1.5.0/reference/derive_param_map.md),
+[`derive_param_qtc()`](https:/pharmaverse.github.io/admiral/v1.5.0/reference/derive_param_qtc.md),
+[`derive_param_rr()`](https:/pharmaverse.github.io/admiral/v1.5.0/reference/derive_param_rr.md),
+[`derive_param_wbc_abs()`](https:/pharmaverse.github.io/admiral/v1.5.0/reference/derive_param_wbc_abs.md),
+[`derive_summary_records()`](https:/pharmaverse.github.io/admiral/v1.5.0/reference/derive_summary_records.md)
 
 ## Examples
 
-### Add a new record for the worst observation using [`event()`](https:/pharmaverse.github.io/admiral/v1.4.2/reference/event.md) objects
+### Add a new record for the worst observation using [`event()`](https:/pharmaverse.github.io/admiral/v1.5.0/reference/event.md) objects
 
 For each subject, the observation containing the worst sleeping problem
 (if any exist) should be identified and added as a new record, retaining
@@ -320,7 +321,7 @@ observation occurring at the latest day.
 
 - The sets of possible sleeping problems are passed through the `events`
   argument as
-  [`event()`](https:/pharmaverse.github.io/admiral/v1.4.2/reference/event.md)
+  [`event()`](https:/pharmaverse.github.io/admiral/v1.5.0/reference/event.md)
   objects. Each event contains a `condition` which may or may not be
   satisfied by each record (or possibly a group of records) within the
   input dataset `dataset`. Summary functions such as
@@ -332,9 +333,9 @@ observation occurring at the latest day.
   derived. Note that in this example, as no condition involves analysis
   of **cross-comparison values of within records**, it is sufficient to
   use
-  [`event()`](https:/pharmaverse.github.io/admiral/v1.4.2/reference/event.md)
+  [`event()`](https:/pharmaverse.github.io/admiral/v1.5.0/reference/event.md)
   objects rather than
-  [`event_joined()`](https:/pharmaverse.github.io/admiral/v1.4.2/reference/event_joined.md) -
+  [`event_joined()`](https:/pharmaverse.github.io/admiral/v1.5.0/reference/event_joined.md) -
   see the next example for a more complex condition.
 
 - If any subject has one or more records satisfying the conditions from
@@ -422,7 +423,7 @@ observation occurring at the latest day.
     #> 8 2       WSP        Waking up three times     3     2 Worst Sleeping Problem
     #> 9 3       WSP        Missing                   1    99 Worst Sleeping Problem
 
-### Events based on comparison across records ([`event_joined()`](https:/pharmaverse.github.io/admiral/v1.4.2/reference/event_joined.md))
+### Events based on comparison across records ([`event_joined()`](https:/pharmaverse.github.io/admiral/v1.5.0/reference/event_joined.md))
 
 We'll now extend the above example. Specifically, we consider a new
 possible worst sleeping problem, namely if a subject experiences no
@@ -430,7 +431,7 @@ sleep on consecutive days.
 
 - The "consecutive days" portion of the condition requires records to be
   compared with each other. This is done by using an
-  [`event_joined()`](https:/pharmaverse.github.io/admiral/v1.4.2/reference/event_joined.md)
+  [`event_joined()`](https:/pharmaverse.github.io/admiral/v1.5.0/reference/event_joined.md)
   object, specifically by passing `dataset_name = adqs2` to it so that
   the `adqs2` dataset is joined onto itself. The `condition` now checks
   for two no sleep records, and crucially compares the `ADY` values to
@@ -506,7 +507,157 @@ sleep on consecutive days.
     #> 8 4       WSP        No sleep two nights in a row     3     0 Worst Sleeping Pr…
     #> 9 5       WSP        No sleep                         4     1 Worst Sleeping Pr…
 
-### Specifying different arguments across [`event()`](https:/pharmaverse.github.io/admiral/v1.4.2/reference/event.md) objects
+### Events across records by record
+
+In the previous example, the new parameter was derived for each subject,
+i.e., all records of a subject were summarized. However, there are cases
+where we may want to derive a new parameter by record, but where the
+condition for deriving the parameter for a given record may involve
+comparison with other records.
+
+For example, we want to derive a new parameter for each visit indicating
+response at this visit and the next one. For this we need to specify the
+`by_vars` argument in
+[`event_joined()`](https:/pharmaverse.github.io/admiral/v1.5.0/reference/event_joined.md)
+which overwrites the value specified in the `derive_extreme_event()`
+call. There `by_vars = exprs(USUBJID, AVISITN)` is used because we want
+to add new records for each subject and visit. In
+[`event_joined()`](https:/pharmaverse.github.io/admiral/v1.5.0/reference/event_joined.md),
+`by_vars = exprs(USUBJID)` is used because we want to join the records
+by subject only.
+
+The `tmp_obs_nr_var` argument is specified to create a variable which
+numbers the records within each subject. This variable is then used in
+the `condition` argument to ensure that the current record is compared
+with the next one. This ensures that missing visits like for subject 2
+are handled correctly.
+
+    adbds <- tribble(
+      ~USUBJID, ~AVISITN,  ~AVALC,
+      "1",             1,  "Y",
+      "1",             2,  "N",
+      "1",             3,  "Y",
+      "1",             4,  "Y",
+      "1",             5,  "Y",
+      "2",             1,  "Y",
+      "2",             3,  "Y",
+    ) %>%
+      mutate(PARAMCD = "RESP")
+
+    derive_extreme_event(
+      adbds,
+      by_vars = exprs(USUBJID, AVISITN),
+      source_datasets = list(adbds = adbds),
+      tmp_event_nr_var = event_nr,
+      order = exprs(event_nr),
+      mode = "first",
+      events = list(
+        event_joined(
+          dataset_name = "adbds",
+          by_vars = exprs(USUBJID),
+          order = exprs(AVISITN),
+          join_vars = exprs(AVALC),
+          join_type = "after",
+          tmp_obs_nr_var = obs_nr,
+          condition = AVALC == "Y" & AVALC.join == "Y" & obs_nr.join == obs_nr + 1,
+          set_values_to = exprs(AVALC = "Y")
+        ),
+        event(
+          dataset_name = "adbds",
+          set_values_to = exprs(AVALC = "N")
+        )
+      ),
+      set_values_to = exprs(PARAMCD = "CONFRESP")
+    )
+    #> # A tibble: 14 × 4
+    #>    USUBJID AVISITN AVALC PARAMCD
+    #>    <chr>     <dbl> <chr> <chr>
+    #>  1 1             1 Y     RESP
+    #>  2 1             2 N     RESP
+    #>  3 1             3 Y     RESP
+    #>  4 1             4 Y     RESP
+    #>  5 1             5 Y     RESP
+    #>  6 2             1 Y     RESP
+    #>  7 2             3 Y     RESP
+    #>  8 1             1 N     CONFRESP
+    #>  9 1             2 N     CONFRESP
+    #> 10 1             3 Y     CONFRESP
+    #> 11 1             4 Y     CONFRESP
+    #> 12 1             5 N     CONFRESP
+    #> 13 2             1 Y     CONFRESP
+    #> 14 2             3 N     CONFRESP
+
+### Restricting source data before join
+
+Sometimes it is useful to restrict the source data of some events before
+the join. For example, in the following example, records with missing
+results should be ignored for the confirmation.
+
+    adbds <- tribble(
+      ~USUBJID, ~AVISITN,  ~AVALC,
+      "1",             1,  "Y",
+      "1",             2,  "N",
+      "1",             3,  "Y",
+      "1",             4,  "Y",
+      "1",             5,  "Y",
+      "2",             1,  "Y",
+      "2",             2,  NA,
+      "2",             3,  "Y"
+    ) %>%
+      mutate(PARAMCD = "RESP")
+
+    derive_extreme_event(
+      adbds,
+      by_vars = exprs(USUBJID, AVISITN),
+      source_datasets = list(adbds = adbds),
+      tmp_event_nr_var = event_nr,
+      order = exprs(event_nr),
+      mode = "first",
+      events = list(
+        event_joined(
+          dataset_name = "adbds",
+          filter_source = !is.na(AVALC),
+          by_vars = exprs(USUBJID),
+          order = exprs(AVISITN),
+          join_vars = exprs(AVALC),
+          join_type = "after",
+          tmp_obs_nr_var = tmp_obs_nr,
+          condition = AVALC == "Y" & AVALC.join == "Y" & tmp_obs_nr.join == tmp_obs_nr + 1,
+          set_values_to = exprs(AVALC = "Y")
+        ),
+        event(
+          dataset_name = "adbds",
+          set_values_to = exprs(AVALC = "N")
+        )
+      ),
+      set_values_to = exprs(
+        PARAMCD = "CONFRESP"
+      )
+    )
+    #> # A tibble: 16 × 4
+    #>    USUBJID AVISITN AVALC PARAMCD
+    #>    <chr>     <dbl> <chr> <chr>
+    #>  1 1             1 Y     RESP
+    #>  2 1             2 N     RESP
+    #>  3 1             3 Y     RESP
+    #>  4 1             4 Y     RESP
+    #>  5 1             5 Y     RESP
+    #>  6 2             1 Y     RESP
+    #>  7 2             2 <NA>  RESP
+    #>  8 2             3 Y     RESP
+    #>  9 1             1 N     CONFRESP
+    #> 10 1             2 N     CONFRESP
+    #> 11 1             3 Y     CONFRESP
+    #> 12 1             4 Y     CONFRESP
+    #> 13 1             5 N     CONFRESP
+    #> 14 2             1 Y     CONFRESP
+    #> 15 2             2 N     CONFRESP
+    #> 16 2             3 N     CONFRESP
+
+Note that for subject `2` the results at visit `1` is considered as
+confirmed because the missing result at visit `2` is ignored.
+
+### Specifying different arguments across [`event()`](https:/pharmaverse.github.io/admiral/v1.5.0/reference/event.md) objects
 
 Here we consider a Hy's Law use case. We are interested in knowing
 whether a subject's Alkaline Phosphatase has ever been above twice the
@@ -514,21 +665,21 @@ upper limit of normal range. If so, i.e. if `CRIT1FL` is `Y`, we are
 interested in the record for the first time this occurs, and if not, we
 wish to retain the last record. As such, for this case now we need to
 vary our usage of the `mode` argument dependent on the
-[`event()`](https:/pharmaverse.github.io/admiral/v1.4.2/reference/event.md).
+[`event()`](https:/pharmaverse.github.io/admiral/v1.5.0/reference/event.md).
 
-- In first
-  [`event()`](https:/pharmaverse.github.io/admiral/v1.4.2/reference/event.md),
+- In the first
+  [`event()`](https:/pharmaverse.github.io/admiral/v1.5.0/reference/event.md),
   since we simply seek the first time that `CRIT1FL` is `"Y"`, it's
   enough to specify the `condition`, because we inherit `order` and
   `mode` from the main `derive_extreme_event()` call here which will
   automatically select the first occurrence by `AVISITN`.
 
 - In the second
-  [`event()`](https:/pharmaverse.github.io/admiral/v1.4.2/reference/event.md),
+  [`event()`](https:/pharmaverse.github.io/admiral/v1.5.0/reference/event.md),
   we select the last record among the full set of records where
   `CRIT1FL` are all `"N"` by additionally specifying `mode = "last"`
   within the
-  [`event()`](https:/pharmaverse.github.io/admiral/v1.4.2/reference/event.md).
+  [`event()`](https:/pharmaverse.github.io/admiral/v1.5.0/reference/event.md).
 
 - Note now the usage of `keep_source_vars = exprs(AVISITN)` rather than
   [`everything()`](https://tidyselect.r-lib.org/reference/everything.html)
@@ -666,7 +817,7 @@ object to describe what condition is being checked.
   are limited to this group. In particular, within `condition` we use
   [`all()`](https://rdrr.io/r/base/all.html) to check that all
   observations are either `"CR"` or `"NE"`, and
-  [`count_vals()`](https:/pharmaverse.github.io/admiral/v1.4.2/reference/count_vals.md)
+  [`count_vals()`](https:/pharmaverse.github.io/admiral/v1.5.0/reference/count_vals.md)
   to ensure at most one is `"NE"`.
 
   Note that the selection of `join_type = "after"` is critical here, due
@@ -689,11 +840,11 @@ object to describe what condition is being checked.
 
 - The Stable Disease (SD), Progressive Disease (PD) and Not Evaluable
   (NE) events are simpler and just require
-  [`event()`](https:/pharmaverse.github.io/admiral/v1.4.2/reference/event.md)
+  [`event()`](https:/pharmaverse.github.io/admiral/v1.5.0/reference/event.md)
   calls.
 
 - Finally, we use a catch-all
-  [`event()`](https:/pharmaverse.github.io/admiral/v1.4.2/reference/event.md)
+  [`event()`](https:/pharmaverse.github.io/admiral/v1.5.0/reference/event.md)
   with `condition = TRUE` and `dataset_name = "adsl"` to identify those
   subjects who do not appear in `ADRS` and list their CBOR as
   `"MISSING"`. Note here the fact that `dataset_name` is set to
@@ -781,4 +932,4 @@ object to describe what condition is being checked.
 ### Further examples
 
 Equivalent examples for using the`check_type` argument can be found in
-[`derive_extreme_records()`](https:/pharmaverse.github.io/admiral/v1.4.2/reference/derive_extreme_records.md).
+[`derive_extreme_records()`](https:/pharmaverse.github.io/admiral/v1.5.0/reference/derive_extreme_records.md).

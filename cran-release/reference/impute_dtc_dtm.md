@@ -44,17 +44,16 @@ impute_dtc_dtm(
   the specified level are imputed.
 
   If a component at a higher level than the highest imputation level is
-  missing, `NA_character_` is returned. For example, for
-  `highest_imputation = "D"` `"2020"` results in `NA_character_` because
-  the month is missing.
+  missing, `NA` is returned. For example, for `highest_imputation = "D"`
+  `"2020"` results in `NA` because the month is missing.
 
   If `"n"` is specified, no imputation is performed, i.e., if any
-  component is missing, `NA_character_` is returned.
+  component is missing, `NA` is returned.
 
   If `"Y"` is specified, `date_imputation` should be `"first"` or
   `"last"` and `min_dates` or `max_dates` should be specified
-  respectively. Otherwise, `NA_character_` is returned if the year
-  component is missing.
+  respectively. Otherwise, `NA` is returned if the year component is
+  missing.
 
   Permitted values
 
@@ -71,13 +70,15 @@ impute_dtc_dtm(
 
   A character value is expected.
 
-  - If `highest_imputation` is `"M"`, month and day can be specified as
-    `"mm-dd"`: e.g. `"06-15"` for the 15th of June
+  - The`"first"` and `"last"` keywords allow imputation to the
+    first/last day/month. They can also be used to impute the year if
+    used in conjunction with the `min_dates` or `max_dates` arguments.
+    Some examples of this are available
+    [here](https://pharmaverse.github.io/admiral/cran-release/articles/imputation.html#minimummaximum-dates).
 
-  - When `highest_imputation` is `"M"` or `"D"`, the following keywords
-    are available: `"first"`, `"mid"`, `"last"` to impute to the
-    first/mid/last day/month. If `"mid"` is specified, missing
-    components are imputed as the middle of the possible range:
+  - When `highest_imputation` is `"M"` or `"D"`, the `"mid"` keyword can
+    also be specified to impute missing components to the middle of the
+    possible range:
 
     - If both month and day are missing, they are imputed as `"06-30"`
       (middle of the year).
@@ -85,13 +86,20 @@ impute_dtc_dtm(
     - If only day is missing, it is imputed as `"15"` (middle of the
       month).
 
-  The year can not be specified; for imputing the year `"first"` or
-  `"last"` together with `min_dates` or `max_dates` argument can be used
-  (see examples).
+  - `"<dd>"` can be specified only if `highest_imputation = "D"`.
+    Missing days are imputed by the specified day, e.g. `"10"` for the
+    10th day of the month. The specified day should be valid for all
+    months as otherwise an error might be issued. For example,
+    `date_imputation = "30"` results in an invalid date of "2024-02-30"
+    for the partial date "2024-02".
+
+  - `"<mm>-<dd>"` can be specified only if `highest_imputation` is
+    `"M"`, e.g. `"06-15"` for the 15th of June.
 
   Permitted values
 
-  :   `"first"`, `"mid"`, `"last"`, or user-defined
+  :   a key-word, i.e. `"first"`, `"mid"`, `"last"`, or `"<mm>-<dd>"` or
+      `"<dd>"`
 
   Default value
 
@@ -207,20 +215,21 @@ A character vector
 
 ## Details
 
-Usually this computation function can not be used with `%>%`.
+This is a vector-oriented helper and is not usually called directly on a
+data frame with `%>%`.
 
 ## See also
 
 Date/Time Computation Functions that returns a vector:
-[`compute_age_years()`](https:/pharmaverse.github.io/admiral/v1.4.2/reference/compute_age_years.md),
-[`compute_dtf()`](https:/pharmaverse.github.io/admiral/v1.4.2/reference/compute_dtf.md),
-[`compute_duration()`](https:/pharmaverse.github.io/admiral/v1.4.2/reference/compute_duration.md),
-[`compute_tmf()`](https:/pharmaverse.github.io/admiral/v1.4.2/reference/compute_tmf.md),
-[`convert_date_to_dtm()`](https:/pharmaverse.github.io/admiral/v1.4.2/reference/convert_date_to_dtm.md),
-[`convert_dtc_to_dt()`](https:/pharmaverse.github.io/admiral/v1.4.2/reference/convert_dtc_to_dt.md),
-[`convert_dtc_to_dtm()`](https:/pharmaverse.github.io/admiral/v1.4.2/reference/convert_dtc_to_dtm.md),
-[`convert_xxtpt_to_hours()`](https:/pharmaverse.github.io/admiral/v1.4.2/reference/convert_xxtpt_to_hours.md),
-[`impute_dtc_dt()`](https:/pharmaverse.github.io/admiral/v1.4.2/reference/impute_dtc_dt.md)
+[`compute_age_years()`](https:/pharmaverse.github.io/admiral/v1.5.0/reference/compute_age_years.md),
+[`compute_dtf()`](https:/pharmaverse.github.io/admiral/v1.5.0/reference/compute_dtf.md),
+[`compute_duration()`](https:/pharmaverse.github.io/admiral/v1.5.0/reference/compute_duration.md),
+[`compute_tmf()`](https:/pharmaverse.github.io/admiral/v1.5.0/reference/compute_tmf.md),
+[`convert_date_to_dtm()`](https:/pharmaverse.github.io/admiral/v1.5.0/reference/convert_date_to_dtm.md),
+[`convert_dtc_to_dt()`](https:/pharmaverse.github.io/admiral/v1.5.0/reference/convert_dtc_to_dt.md),
+[`convert_dtc_to_dtm()`](https:/pharmaverse.github.io/admiral/v1.5.0/reference/convert_dtc_to_dtm.md),
+[`convert_xxtpt_to_hours()`](https:/pharmaverse.github.io/admiral/v1.5.0/reference/convert_xxtpt_to_hours.md),
+[`impute_dtc_dt()`](https:/pharmaverse.github.io/admiral/v1.5.0/reference/impute_dtc_dt.md)
 
 ## Examples
 

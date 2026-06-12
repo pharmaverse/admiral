@@ -58,7 +58,7 @@ derive_vars_merged_summary(
   Permitted values
 
   :   list of variables created by
-      [`exprs()`](https:/pharmaverse.github.io/admiral/v1.4.2/reference/reexport-exprs.md),
+      [`exprs()`](https:/pharmaverse.github.io/admiral/v1.5.0/reference/reexport-exprs.md),
       e.g., `exprs(USUBJID, VISIT)`
 
   Default value
@@ -90,7 +90,7 @@ derive_vars_merged_summary(
   Permitted values
 
   :   list of variables created by
-      [`exprs()`](https:/pharmaverse.github.io/admiral/v1.4.2/reference/reexport-exprs.md),
+      [`exprs()`](https:/pharmaverse.github.io/admiral/v1.5.0/reference/reexport-exprs.md),
       e.g., `exprs(USUBJID, VISIT)`
 
   Default value
@@ -125,8 +125,8 @@ derive_vars_merged_summary(
 
   Permitted values
 
-  :   list of named expressions created by a formula using
-      [`exprs()`](https:/pharmaverse.github.io/admiral/v1.4.2/reference/reexport-exprs.md),
+  :   list of named expressions created by
+      [`exprs()`](https:/pharmaverse.github.io/admiral/v1.5.0/reference/reexport-exprs.md),
       e.g., `exprs(AVALC = VSSTRESC, AVAL = yn_to_numeric(AVALC))`
 
   Default value
@@ -156,106 +156,256 @@ dataset and additionally the variables specified for `new_vars`.
 
 ## See also
 
-[`derive_summary_records()`](https:/pharmaverse.github.io/admiral/v1.4.2/reference/derive_summary_records.md),
-[`get_summary_records()`](https:/pharmaverse.github.io/admiral/v1.4.2/reference/get_summary_records.md)
+[`derive_summary_records()`](https:/pharmaverse.github.io/admiral/v1.5.0/reference/derive_summary_records.md),
+[`get_summary_records()`](https:/pharmaverse.github.io/admiral/v1.5.0/reference/get_summary_records.md)
 
 General Derivation Functions for all ADaMs that returns variable
 appended to dataset:
-[`derive_var_extreme_flag()`](https:/pharmaverse.github.io/admiral/v1.4.2/reference/derive_var_extreme_flag.md),
-[`derive_var_joined_exist_flag()`](https:/pharmaverse.github.io/admiral/v1.4.2/reference/derive_var_joined_exist_flag.md),
-[`derive_var_merged_ef_msrc()`](https:/pharmaverse.github.io/admiral/v1.4.2/reference/derive_var_merged_ef_msrc.md),
-[`derive_var_merged_exist_flag()`](https:/pharmaverse.github.io/admiral/v1.4.2/reference/derive_var_merged_exist_flag.md),
-[`derive_var_obs_number()`](https:/pharmaverse.github.io/admiral/v1.4.2/reference/derive_var_obs_number.md),
-[`derive_var_relative_flag()`](https:/pharmaverse.github.io/admiral/v1.4.2/reference/derive_var_relative_flag.md),
-[`derive_vars_cat()`](https:/pharmaverse.github.io/admiral/v1.4.2/reference/derive_vars_cat.md),
-[`derive_vars_computed()`](https:/pharmaverse.github.io/admiral/v1.4.2/reference/derive_vars_computed.md),
-[`derive_vars_joined()`](https:/pharmaverse.github.io/admiral/v1.4.2/reference/derive_vars_joined.md),
-[`derive_vars_joined_summary()`](https:/pharmaverse.github.io/admiral/v1.4.2/reference/derive_vars_joined_summary.md),
-[`derive_vars_merged()`](https:/pharmaverse.github.io/admiral/v1.4.2/reference/derive_vars_merged.md),
-[`derive_vars_merged_lookup()`](https:/pharmaverse.github.io/admiral/v1.4.2/reference/derive_vars_merged_lookup.md),
-[`derive_vars_transposed()`](https:/pharmaverse.github.io/admiral/v1.4.2/reference/derive_vars_transposed.md)
+[`derive_var_extreme_flag()`](https:/pharmaverse.github.io/admiral/v1.5.0/reference/derive_var_extreme_flag.md),
+[`derive_var_joined_exist_flag()`](https:/pharmaverse.github.io/admiral/v1.5.0/reference/derive_var_joined_exist_flag.md),
+[`derive_var_merged_ef_msrc()`](https:/pharmaverse.github.io/admiral/v1.5.0/reference/derive_var_merged_ef_msrc.md),
+[`derive_var_merged_exist_flag()`](https:/pharmaverse.github.io/admiral/v1.5.0/reference/derive_var_merged_exist_flag.md),
+[`derive_var_obs_number()`](https:/pharmaverse.github.io/admiral/v1.5.0/reference/derive_var_obs_number.md),
+[`derive_var_relative_flag()`](https:/pharmaverse.github.io/admiral/v1.5.0/reference/derive_var_relative_flag.md),
+[`derive_vars_cat()`](https:/pharmaverse.github.io/admiral/v1.5.0/reference/derive_vars_cat.md),
+[`derive_vars_computed()`](https:/pharmaverse.github.io/admiral/v1.5.0/reference/derive_vars_computed.md),
+[`derive_vars_joined()`](https:/pharmaverse.github.io/admiral/v1.5.0/reference/derive_vars_joined.md),
+[`derive_vars_joined_summary()`](https:/pharmaverse.github.io/admiral/v1.5.0/reference/derive_vars_joined_summary.md),
+[`derive_vars_merged()`](https:/pharmaverse.github.io/admiral/v1.5.0/reference/derive_vars_merged.md),
+[`derive_vars_merged_lookup()`](https:/pharmaverse.github.io/admiral/v1.5.0/reference/derive_vars_merged_lookup.md),
+[`derive_vars_transposed()`](https:/pharmaverse.github.io/admiral/v1.5.0/reference/derive_vars_transposed.md)
 
 ## Examples
 
-``` r
-library(tibble)
+### Data setup
 
-# Add a variable for the mean of AVAL within each visit
-adbds <- tribble(
-  ~USUBJID,  ~AVISIT,  ~ASEQ, ~AVAL,
-  "1",      "WEEK 1",      1,    10,
-  "1",      "WEEK 1",      2,    NA,
-  "1",      "WEEK 2",      3,    NA,
-  "1",      "WEEK 3",      4,    42,
-  "1",      "WEEK 4",      5,    12,
-  "1",      "WEEK 4",      6,    12,
-  "1",      "WEEK 4",      7,    15,
-  "2",      "WEEK 1",      1,    21,
-  "2",      "WEEK 4",      2,    22
-)
+The following examples use the BDS dataset below as a basis.
 
-derive_vars_merged_summary(
-  adbds,
-  dataset_add = adbds,
-  by_vars = exprs(USUBJID, AVISIT),
-  new_vars = exprs(
-    MEANVIS = mean(AVAL, na.rm = TRUE),
-    MAXVIS = max(AVAL, na.rm = TRUE)
-  )
-)
-#> Warning: There was 1 warning in `reframe()`.
-#> ℹ In argument: `MAXVIS = max(AVAL, na.rm = TRUE)`.
-#> ℹ In group 2: `USUBJID = "1"`, `AVISIT = "WEEK 2"`.
-#> Caused by warning in `max()`:
-#> ! no non-missing arguments to max; returning -Inf
-#> # A tibble: 9 × 6
-#>   USUBJID AVISIT  ASEQ  AVAL MEANVIS MAXVIS
-#>   <chr>   <chr>  <dbl> <dbl>   <dbl>  <dbl>
-#> 1 1       WEEK 1     1    10      10     10
-#> 2 1       WEEK 1     2    NA      10     10
-#> 3 1       WEEK 2     3    NA     NaN   -Inf
-#> 4 1       WEEK 3     4    42      42     42
-#> 5 1       WEEK 4     5    12      13     15
-#> 6 1       WEEK 4     6    12      13     15
-#> 7 1       WEEK 4     7    15      13     15
-#> 8 2       WEEK 1     1    21      21     21
-#> 9 2       WEEK 4     2    22      22     22
+    library(tibble)
+    library(dplyr, warn.conflicts = FALSE)
 
-# Add a variable listing the lesion ids at baseline
-adsl <- tribble(
-  ~USUBJID,
-  "1",
-  "2",
-  "3"
-)
+    adbds <- tribble(
+      ~USUBJID,  ~AVISIT,  ~ASEQ, ~AVAL,
+      "1",      "WEEK 1",      1,    10,
+      "1",      "WEEK 1",      2,    NA,
+      "1",      "WEEK 2",      3,    NA,
+      "1",      "WEEK 3",      4,    42,
+      "1",      "WEEK 4",      5,    12,
+      "1",      "WEEK 4",      6,    12,
+      "1",      "WEEK 4",      7,    15,
+      "2",      "WEEK 1",      1,    21,
+      "2",      "WEEK 4",      2,    22
+    )
 
-adtr <- tribble(
-  ~USUBJID,     ~AVISIT, ~LESIONID,
-  "1",       "BASELINE",  "INV-T1",
-  "1",       "BASELINE",  "INV-T2",
-  "1",       "BASELINE",  "INV-T3",
-  "1",       "BASELINE",  "INV-T4",
-  "1",         "WEEK 1",  "INV-T1",
-  "1",         "WEEK 1",  "INV-T2",
-  "1",         "WEEK 1",  "INV-T4",
-  "2",       "BASELINE",  "INV-T1",
-  "2",       "BASELINE",  "INV-T2",
-  "2",       "BASELINE",  "INV-T3",
-  "2",         "WEEK 1",  "INV-T1",
-  "2",         "WEEK 1",  "INV-N1"
-)
+### Summarize one or more variables using summary functions (`new_vars`)
 
-derive_vars_merged_summary(
-  adsl,
-  dataset_add = adtr,
-  by_vars = exprs(USUBJID),
-  filter_add = AVISIT == "BASELINE",
-  new_vars = exprs(LESIONSBL = paste(LESIONID, collapse = ", "))
-)
-#> # A tibble: 3 × 2
-#>   USUBJID LESIONSBL                     
-#>   <chr>   <chr>                         
-#> 1 1       INV-T1, INV-T2, INV-T3, INV-T4
-#> 2 2       INV-T1, INV-T2, INV-T3        
-#> 3 3       NA                            
-```
+The `new_vars` argument specifies a named list of expressions where the
+right-hand side uses summary functions (e.g.
+[`mean()`](https://rdrr.io/r/base/mean.html),
+[`sum()`](https://rdrr.io/r/base/sum.html),
+[`max()`](https://rdrr.io/r/base/Extremes.html)) to aggregate values
+from `dataset_add` within each by group. Multiple summary variables can
+be added in a single call.
+
+In the example below, the mean and sum of `AVAL` within each subject and
+visit are derived and merged back onto the input dataset:
+
+    derive_vars_merged_summary(
+      adbds,
+      dataset_add = adbds,
+      by_vars = exprs(USUBJID, AVISIT),
+      new_vars = exprs(
+        MEANVIS = mean(AVAL, na.rm = TRUE),
+        SUMVIS = sum(AVAL, na.rm = TRUE)
+      )
+    )
+    #> # A tibble: 9 × 6
+    #>   USUBJID AVISIT  ASEQ  AVAL MEANVIS SUMVIS
+    #>   <chr>   <chr>  <dbl> <dbl>   <dbl>  <dbl>
+    #> 1 1       WEEK 1     1    10      10     10
+    #> 2 1       WEEK 1     2    NA      10     10
+    #> 3 1       WEEK 2     3    NA     NaN      0
+    #> 4 1       WEEK 3     4    42      42     42
+    #> 5 1       WEEK 4     5    12      13     39
+    #> 6 1       WEEK 4     6    12      13     39
+    #> 7 1       WEEK 4     7    15      13     39
+    #> 8 2       WEEK 1     1    21      21     21
+    #> 9 2       WEEK 4     2    22      22     22
+
+In the example above, subject `"1"` at `"WEEK 2"` has only missing
+`AVAL` values, so `MEANVIS` is `NaN` (the result of
+`mean(NA, na.rm = TRUE)`) and `SUMVIS` is `0`. Note that
+`missing_values` cannot be used here because the by group *exists* in
+`dataset_add` — it merely produces `NaN`. To coerce `NaN` to `NA`, apply
+a follow-up
+[`mutate()`](https://dplyr.tidyverse.org/reference/mutate.html) step:
+
+    derive_vars_merged_summary(
+      adbds,
+      dataset_add = adbds,
+      by_vars = exprs(USUBJID, AVISIT),
+      new_vars = exprs(
+        MEANVIS = mean(AVAL, na.rm = TRUE),
+        SUMVIS = sum(AVAL, na.rm = TRUE)
+      )
+    ) %>%
+      mutate(MEANVIS = ifelse(is.nan(MEANVIS), NA_real_, MEANVIS))
+    #> # A tibble: 9 × 6
+    #>   USUBJID AVISIT  ASEQ  AVAL MEANVIS SUMVIS
+    #>   <chr>   <chr>  <dbl> <dbl>   <dbl>  <dbl>
+    #> 1 1       WEEK 1     1    10      10     10
+    #> 2 1       WEEK 1     2    NA      10     10
+    #> 3 1       WEEK 2     3    NA      NA      0
+    #> 4 1       WEEK 3     4    42      42     42
+    #> 5 1       WEEK 4     5    12      13     39
+    #> 6 1       WEEK 4     6    12      13     39
+    #> 7 1       WEEK 4     7    15      13     39
+    #> 8 2       WEEK 1     1    21      21     21
+    #> 9 2       WEEK 4     2    22      22     22
+
+Subject `"1"` at `"WEEK 2"` now has `MEANVIS = NA` instead of `NaN`.
+
+### Restricting source records (`filter_add`)
+
+The `filter_add` argument restricts the records in `dataset_add` that
+are used for the summarization. Only records satisfying the filter
+condition contribute to the summary values. This can be useful, for
+example, to compute a summary statistic based only on records before or
+after a certain time point.
+
+In the following example, the mean of `AVAL` is computed only for
+records with a positive study day (`ADY > 0`), and the result is merged
+onto the `ADSL`-like dataset. Subject `"2"` has no records with
+`ADY > 0`, so `MEANPBL` is `NA` for that subject.
+
+    adsl <- tribble(
+      ~USUBJID,
+      "1",
+      "2",
+      "3"
+    )
+
+    adbds2 <- tribble(
+      ~USUBJID, ~ADY, ~AVAL,
+      "1",        -3,    10,
+      "1",         2,    12,
+      "1",         8,    15,
+      "3",         4,    42
+    )
+
+    derive_vars_merged_summary(
+      adsl,
+      dataset_add = adbds2,
+      by_vars = exprs(USUBJID),
+      new_vars = exprs(MEANPBL = mean(AVAL, na.rm = TRUE)),
+      filter_add = ADY > 0
+    )
+    #> # A tibble: 3 × 2
+    #>   USUBJID MEANPBL
+    #>   <chr>     <dbl>
+    #> 1 1          13.5
+    #> 2 2          NA
+    #> 3 3          42  
+
+### Handling non-matching observations (`missing_values`)
+
+By default, records in `dataset` with no matching by group in
+`dataset_add` receive `NA` for the new variables. The `missing_values`
+argument allows you to specify a different value for these non-matching
+records.
+
+A natural use-case is counting observations per subject and defaulting
+to `0` (rather than `NA`) for subjects with no matching records. In the
+example below, the number of distinct post-baseline visits per subject
+is derived from `adbds` and merged onto `adsl`. Subject `"3"` has no
+records in `adbds`, so without `missing_values` the new variable would
+be `NA`; setting `missing_values = exprs(NVIS = 0)` makes the count
+meaningful for all subjects:
+
+    derive_vars_merged_summary(
+      adsl,
+      dataset_add = adbds,
+      by_vars = exprs(USUBJID),
+      new_vars = exprs(NVIS = n_distinct(AVISIT)),
+      missing_values = exprs(NVIS = 0)
+    )
+    #> # A tibble: 3 × 2
+    #>   USUBJID  NVIS
+    #>   <chr>   <dbl>
+    #> 1 1           4
+    #> 2 2           2
+    #> 3 3           0
+
+### Renaming by variables (`by_vars`)
+
+The `by_vars` argument supports renaming, using the syntax
+`exprs(<left_name> = <right_name>)`, where `<left_name>` is the variable
+name in `dataset` and `<right_name>` is the corresponding variable in
+`dataset_add`. This is useful when the grouping variable has different
+names in the two datasets.
+
+In the example below the input dataset uses `AVISIT` while the
+additional dataset uses `VISIT` for the same concept. The `by_vars`
+argument maps them together so the merge can proceed correctly:
+
+    adbds_renamed <- adbds %>% rename(VISIT = AVISIT)
+
+    derive_vars_merged_summary(
+      adbds,
+      dataset_add = adbds_renamed,
+      by_vars = exprs(USUBJID, AVISIT = VISIT),
+      new_vars = exprs(MEANVIS = mean(AVAL, na.rm = TRUE))
+    )
+    #> # A tibble: 9 × 5
+    #>   USUBJID AVISIT  ASEQ  AVAL MEANVIS
+    #>   <chr>   <chr>  <dbl> <dbl>   <dbl>
+    #> 1 1       WEEK 1     1    10      10
+    #> 2 1       WEEK 1     2    NA      10
+    #> 3 1       WEEK 2     3    NA     NaN
+    #> 4 1       WEEK 3     4    42      42
+    #> 5 1       WEEK 4     5    12      13
+    #> 6 1       WEEK 4     6    12      13
+    #> 7 1       WEEK 4     7    15      13
+    #> 8 2       WEEK 1     1    21      21
+    #> 9 2       WEEK 4     2    22      22
+
+### String aggregation
+
+Summary expressions are not restricted to numeric aggregations. Any
+expression that reduces a group to a single value is permitted. For
+example, `paste(..., collapse = ", ")` can be used to concatenate
+character values within a by group into a single string.
+
+In the example below, the lesion identifiers observed at baseline for
+each subject are collected into a single comma-separated string and
+merged onto the `ADSL` dataset:
+
+    adtr <- tribble(
+      ~USUBJID,     ~AVISIT, ~LESIONID,
+      "1",       "BASELINE",  "INV-T1",
+      "1",       "BASELINE",  "INV-T2",
+      "1",       "BASELINE",  "INV-T3",
+      "1",       "BASELINE",  "INV-T4",
+      "1",         "WEEK 1",  "INV-T1",
+      "1",         "WEEK 1",  "INV-T2",
+      "1",         "WEEK 1",  "INV-T4",
+      "2",       "BASELINE",  "INV-T1",
+      "2",       "BASELINE",  "INV-T2",
+      "2",       "BASELINE",  "INV-T3",
+      "2",         "WEEK 1",  "INV-T1",
+      "2",         "WEEK 1",  "INV-N1"
+    )
+
+    derive_vars_merged_summary(
+      adsl,
+      dataset_add = adtr,
+      by_vars = exprs(USUBJID),
+      filter_add = AVISIT == "BASELINE",
+      new_vars = exprs(LESIONSBL = paste(LESIONID, collapse = ", "))
+    )
+    #> # A tibble: 3 × 2
+    #>   USUBJID LESIONSBL
+    #>   <chr>   <chr>
+    #> 1 1       INV-T1, INV-T2, INV-T3, INV-T4
+    #> 2 2       INV-T1, INV-T2, INV-T3
+    #> 3 3       <NA>                          

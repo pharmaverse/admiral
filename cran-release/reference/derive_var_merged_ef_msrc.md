@@ -45,7 +45,7 @@ derive_var_merged_ef_msrc(
   Permitted values
 
   :   list of variables created by
-      [`exprs()`](https:/pharmaverse.github.io/admiral/v1.4.2/reference/reexport-exprs.md),
+      [`exprs()`](https:/pharmaverse.github.io/admiral/v1.5.0/reference/reexport-exprs.md),
       e.g., `exprs(USUBJID, VISIT)`
 
   Default value
@@ -57,7 +57,7 @@ derive_var_merged_ef_msrc(
   Flag events
 
   A list of
-  [`flag_event()`](https:/pharmaverse.github.io/admiral/v1.4.2/reference/flag_event.md)
+  [`flag_event()`](https:/pharmaverse.github.io/admiral/v1.5.0/reference/flag_event.md)
   objects is expected. For each event the condition (`condition` field)
   is evaluated in the source dataset referenced by the `dataset_name`
   field. If it evaluates to `TRUE` at least once, the new variable is
@@ -66,7 +66,7 @@ derive_var_merged_ef_msrc(
   Permitted values
 
   :   a list of
-      [`flag_event()`](https:/pharmaverse.github.io/admiral/v1.4.2/reference/flag_event.md)
+      [`flag_event()`](https:/pharmaverse.github.io/admiral/v1.5.0/reference/flag_event.md)
       objects
 
   Default value
@@ -78,7 +78,7 @@ derive_var_merged_ef_msrc(
   Source datasets
 
   A named list of datasets is expected. The `dataset_name` field of
-  [`flag_event()`](https:/pharmaverse.github.io/admiral/v1.4.2/reference/flag_event.md)
+  [`flag_event()`](https:/pharmaverse.github.io/admiral/v1.5.0/reference/flag_event.md)
   refers to the dataset provided in the list.
 
   Permitted values
@@ -167,7 +167,7 @@ dataset and additionally the variable specified for `new_var`.
 ## Details
 
 1.  For each
-    [`flag_event()`](https:/pharmaverse.github.io/admiral/v1.4.2/reference/flag_event.md)
+    [`flag_event()`](https:/pharmaverse.github.io/admiral/v1.5.0/reference/flag_event.md)
     object specified for `flag_events`: The condition (`condition`) is
     evaluated in the dataset referenced by `dataset_name`. If the
     `by_vars` field is specified the dataset is grouped by the specified
@@ -187,126 +187,255 @@ dataset and additionally the variable specified for `new_var`.
 
 ## See also
 
-[`flag_event()`](https:/pharmaverse.github.io/admiral/v1.4.2/reference/flag_event.md)
+[`flag_event()`](https:/pharmaverse.github.io/admiral/v1.5.0/reference/flag_event.md)
 
 General Derivation Functions for all ADaMs that returns variable
 appended to dataset:
-[`derive_var_extreme_flag()`](https:/pharmaverse.github.io/admiral/v1.4.2/reference/derive_var_extreme_flag.md),
-[`derive_var_joined_exist_flag()`](https:/pharmaverse.github.io/admiral/v1.4.2/reference/derive_var_joined_exist_flag.md),
-[`derive_var_merged_exist_flag()`](https:/pharmaverse.github.io/admiral/v1.4.2/reference/derive_var_merged_exist_flag.md),
-[`derive_var_obs_number()`](https:/pharmaverse.github.io/admiral/v1.4.2/reference/derive_var_obs_number.md),
-[`derive_var_relative_flag()`](https:/pharmaverse.github.io/admiral/v1.4.2/reference/derive_var_relative_flag.md),
-[`derive_vars_cat()`](https:/pharmaverse.github.io/admiral/v1.4.2/reference/derive_vars_cat.md),
-[`derive_vars_computed()`](https:/pharmaverse.github.io/admiral/v1.4.2/reference/derive_vars_computed.md),
-[`derive_vars_joined()`](https:/pharmaverse.github.io/admiral/v1.4.2/reference/derive_vars_joined.md),
-[`derive_vars_joined_summary()`](https:/pharmaverse.github.io/admiral/v1.4.2/reference/derive_vars_joined_summary.md),
-[`derive_vars_merged()`](https:/pharmaverse.github.io/admiral/v1.4.2/reference/derive_vars_merged.md),
-[`derive_vars_merged_lookup()`](https:/pharmaverse.github.io/admiral/v1.4.2/reference/derive_vars_merged_lookup.md),
-[`derive_vars_merged_summary()`](https:/pharmaverse.github.io/admiral/v1.4.2/reference/derive_vars_merged_summary.md),
-[`derive_vars_transposed()`](https:/pharmaverse.github.io/admiral/v1.4.2/reference/derive_vars_transposed.md)
+[`derive_var_extreme_flag()`](https:/pharmaverse.github.io/admiral/v1.5.0/reference/derive_var_extreme_flag.md),
+[`derive_var_joined_exist_flag()`](https:/pharmaverse.github.io/admiral/v1.5.0/reference/derive_var_joined_exist_flag.md),
+[`derive_var_merged_exist_flag()`](https:/pharmaverse.github.io/admiral/v1.5.0/reference/derive_var_merged_exist_flag.md),
+[`derive_var_obs_number()`](https:/pharmaverse.github.io/admiral/v1.5.0/reference/derive_var_obs_number.md),
+[`derive_var_relative_flag()`](https:/pharmaverse.github.io/admiral/v1.5.0/reference/derive_var_relative_flag.md),
+[`derive_vars_cat()`](https:/pharmaverse.github.io/admiral/v1.5.0/reference/derive_vars_cat.md),
+[`derive_vars_computed()`](https:/pharmaverse.github.io/admiral/v1.5.0/reference/derive_vars_computed.md),
+[`derive_vars_joined()`](https:/pharmaverse.github.io/admiral/v1.5.0/reference/derive_vars_joined.md),
+[`derive_vars_joined_summary()`](https:/pharmaverse.github.io/admiral/v1.5.0/reference/derive_vars_joined_summary.md),
+[`derive_vars_merged()`](https:/pharmaverse.github.io/admiral/v1.5.0/reference/derive_vars_merged.md),
+[`derive_vars_merged_lookup()`](https:/pharmaverse.github.io/admiral/v1.5.0/reference/derive_vars_merged_lookup.md),
+[`derive_vars_merged_summary()`](https:/pharmaverse.github.io/admiral/v1.5.0/reference/derive_vars_merged_summary.md),
+[`derive_vars_transposed()`](https:/pharmaverse.github.io/admiral/v1.5.0/reference/derive_vars_transposed.md)
 
 ## Examples
 
-``` r
-library(dplyr)
+### Data setup
 
-# Derive a flag indicating anti-cancer treatment based on CM and PR
-adsl <- tribble(
-  ~USUBJID,
-  "1",
-  "2",
-  "3",
-  "4"
-)
+The following examples use the datasets below. `adsl` is the subject-
+level dataset onto which the flag is merged. `cm` contains concomitant
+medication records and `pr` contains procedure records — both are used
+as sources in the examples.
 
-cm <- tribble(
-  ~USUBJID, ~CMCAT,        ~CMSEQ,
-  "1",      "ANTI-CANCER",      1,
-  "1",      "GENERAL",          2,
-  "2",      "GENERAL",          1,
-  "3",      "ANTI-CANCER",      1
-)
+    library(dplyr)
 
-# Assuming all records in PR indicate cancer treatment
-pr <- tibble::tribble(
-  ~USUBJID, ~PRSEQ,
-  "2",      1,
-  "3",      1
-)
-
-derive_var_merged_ef_msrc(
-  adsl,
-  by_vars = exprs(USUBJID),
-  flag_events = list(
-    flag_event(
-      dataset_name = "cm",
-      condition = CMCAT == "ANTI-CANCER"
-    ),
-    flag_event(
-      dataset_name = "pr"
+    adsl <- tribble(
+      ~USUBJID,
+      "1",
+      "2",
+      "3",
+      "4",
+      "5"
     )
-  ),
-  source_datasets = list(cm = cm, pr = pr),
-  new_var = CANCTRFL
-)
-#> # A tibble: 4 × 2
-#>   USUBJID CANCTRFL
-#>   <chr>   <chr>   
-#> 1 1       Y       
-#> 2 2       Y       
-#> 3 3       Y       
-#> 4 4       NA      
 
-# Using different by variables depending on the source
-# Add a dose adjustment flag to ADEX based on ADEX, EC, and FA
-adex <- tribble(
-  ~USUBJID, ~EXLNKID, ~EXADJ,
-  "1",      "1",      "AE",
-  "1",      "2",      NA_character_,
-  "1",      "3",      NA_character_,
-  "2",      "1",      NA_character_,
-  "3",      "1",      NA_character_
-)
-
-ec <- tribble(
-  ~USUBJID, ~ECLNKID, ~ECADJ,
-  "1",      "3",      "AE",
-  "3",      "1",      NA_character_
-)
-
-fa <- tribble(
-  ~USUBJID, ~FALNKID, ~FATESTCD, ~FAOBJ,            ~FASTRESC,
-  "3",      "1",      "OCCUR",   "DOSE ADJUSTMENT", "Y"
-)
-
-derive_var_merged_ef_msrc(
-  adex,
-  by_vars = exprs(USUBJID, EXLNKID),
-  flag_events = list(
-    flag_event(
-      dataset_name = "ex",
-      condition = !is.na(EXADJ)
-    ),
-    flag_event(
-      dataset_name = "ec",
-      condition = !is.na(ECADJ),
-      by_vars = exprs(USUBJID, EXLNKID = ECLNKID)
-    ),
-    flag_event(
-      dataset_name = "fa",
-      condition = FATESTCD == "OCCUR" & FAOBJ == "DOSE ADJUSTMENT" & FASTRESC == "Y",
-      by_vars = exprs(USUBJID, EXLNKID = FALNKID)
+    cm <- tribble(
+      ~USUBJID, ~CMCAT,        ~CMSEQ,
+      "1",      "ANTI-CANCER",      1,
+      "1",      "GENERAL",          2,
+      "2",      "GENERAL",          1,
+      "3",      "ANTI-CANCER",      1,
+      "5",      "GENERAL",          1
     )
-  ),
-  source_datasets = list(ex = adex, ec = ec, fa = fa),
-  new_var = DOSADJFL
-)
-#> # A tibble: 5 × 4
-#>   USUBJID EXLNKID EXADJ DOSADJFL
-#>   <chr>   <chr>   <chr> <chr>   
-#> 1 1       1       AE    Y       
-#> 2 1       2       NA    NA      
-#> 3 1       3       NA    Y       
-#> 4 2       1       NA    NA      
-#> 5 3       1       NA    Y       
-```
+
+    # All records in PR are assumed to indicate cancer treatment
+    pr <- tribble(
+      ~USUBJID, ~PRSEQ,
+      "2",      1,
+      "3",      1
+    )
+
+### Flagging from multiple sources (`flag_events`)
+
+The `flag_events` argument takes a list of
+[`flag_event()`](https:/pharmaverse.github.io/admiral/v1.5.0/reference/flag_event.md)
+objects, each pointing to a named source dataset and an optional
+`condition`. For a given by group, the new variable is set to
+`true_value` if the condition evaluates to `TRUE` at least once in
+**any** of the sources.
+
+In the example below, an anti-cancer treatment flag `CANCTRFL` is
+derived from two sources:
+
+- `cm`: flagged when `CMCAT == "ANTI-CANCER"`
+
+- `pr`: all records qualify (no `condition` specified), so any subject
+  with a procedure record is flagged
+
+With the default `false_value = NA_character_` and
+`missing_value = NA_character_`, both subjects `"4"` and `"5"` receive
+`NA` — but for different reasons: subject `"5"` is present in `cm` but
+has no anti-cancer record (`false_value`), while subject `"4"` is absent
+from all sources (`missing_value`). See the next section to learn how to
+distinguish these two cases by setting `false_value` and `missing_value`
+to different values.
+
+    derive_var_merged_ef_msrc(
+      adsl,
+      by_vars = exprs(USUBJID),
+      flag_events = list(
+        flag_event(
+          dataset_name = "cm",
+          condition = CMCAT == "ANTI-CANCER"
+        ),
+        flag_event(
+          dataset_name = "pr"
+        )
+      ),
+      source_datasets = list(cm = cm, pr = pr),
+      new_var = CANCTRFL
+    )
+    #> # A tibble: 5 × 2
+    #>   USUBJID CANCTRFL
+    #>   <chr>   <chr>
+    #> 1 1       Y
+    #> 2 2       Y
+    #> 3 3       Y
+    #> 4 4       <NA>
+    #> 5 5       <NA>    
+
+### Controlling flag values (`true_value`, `false_value`, `missing_value`)
+
+By default `true_value = "Y"`, `false_value = NA_character_`, and
+`missing_value = NA_character_`. Setting them explicitly lets you
+distinguish three subject-level states:
+
+- `true_value`: subject has at least one qualifying record in any source
+
+- `false_value`: subject appears in at least one source, but no record
+  meets the condition
+
+- `missing_value`: subject has **no** records in any source
+
+In the example below, a subject-level `ADSL` dataset is used together
+with dose adjustment sources (`adex`, `ec`, `fa`). This reveals all
+three cases in the output:
+
+- Subjects `"1"` and `"3"`: dose adjustment found → `"Y"` via
+  `true_value`
+
+- Subject `"2"`: present in `adex` but no adjustment found → `"N"` via
+  `false_value`
+
+- Subject `"4"`: absent from all sources → `NA` via `missing_value`
+
+    adsl_ex <- tribble(
+      ~USUBJID,
+      "1",
+      "2",
+      "3",
+      "4"
+    )
+
+    adex <- tribble(
+      ~USUBJID, ~EXADJ,
+      "1",      "DOSE REDUCED",
+      "2",      NA_character_
+    )
+
+    ec <- tribble(
+      ~USUBJID, ~ECADJ,
+      "3",      "DOSE REDUCED"
+    )
+
+    fa <- tribble(
+      ~USUBJID, ~FATESTCD, ~FAOBJ,            ~FASTRESC,
+      "1",      "OCCUR",   "DOSE ADJUSTMENT", "Y"
+    )
+
+    derive_var_merged_ef_msrc(
+      adsl_ex,
+      by_vars = exprs(USUBJID),
+      flag_events = list(
+        flag_event(
+          dataset_name = "ex",
+          condition = !is.na(EXADJ)
+        ),
+        flag_event(
+          dataset_name = "ec",
+          condition = !is.na(ECADJ)
+        ),
+        flag_event(
+          dataset_name = "fa",
+          condition = FATESTCD == "OCCUR" & FAOBJ == "DOSE ADJUSTMENT" & FASTRESC == "Y"
+        )
+      ),
+      source_datasets = list(ex = adex, ec = ec, fa = fa),
+      new_var = DOSADJFL,
+      true_value = "Y",
+      false_value = "N",
+      missing_value = NA_character_
+    )
+    #> # A tibble: 4 × 2
+    #>   USUBJID DOSADJFL
+    #>   <chr>   <chr>
+    #> 1 1       Y
+    #> 2 2       N
+    #> 3 3       Y
+    #> 4 4       <NA>    
+
+### Per-source `by_vars` renaming
+
+When the grouping variable has a different name in a source dataset, the
+`by_vars` argument of
+[`flag_event()`](https:/pharmaverse.github.io/admiral/v1.5.0/reference/flag_event.md)
+can be used to rename it using the `exprs(<target> = <source>)` syntax.
+This allows each source to use its own link variable while still merging
+correctly onto the input dataset.
+
+In the example below, a dose adjustment flag `DOSADJFL` is derived for
+each exposure record in `adex`. The flag is set to `"Y"` if a dose
+adjustment is recorded in any of three sources:
+
+- `ex`: directly via `EXADJ`
+
+- `ec`: linked via `ECLNKID` (renamed to `EXLNKID` for the merge)
+
+- `fa`: linked via `FALNKID` (renamed to `EXLNKID` for the merge)
+
+    adex <- tribble(
+      ~USUBJID, ~EXLNKID, ~EXADJ,
+      "1",      "1",      "AE",
+      "1",      "2",      NA_character_,
+      "1",      "3",      NA_character_,
+      "2",      "1",      NA_character_,
+      "3",      "1",      NA_character_
+    )
+
+    ec <- tribble(
+      ~USUBJID, ~ECLNKID, ~ECADJ,
+      "1",      "3",      "AE",
+      "3",      "1",      NA_character_
+    )
+
+    fa <- tribble(
+      ~USUBJID, ~FALNKID, ~FATESTCD, ~FAOBJ,            ~FASTRESC,
+      "3",      "1",      "OCCUR",   "DOSE ADJUSTMENT", "Y"
+    )
+
+    derive_var_merged_ef_msrc(
+      adex,
+      by_vars = exprs(USUBJID, EXLNKID),
+      flag_events = list(
+        flag_event(
+          dataset_name = "ex",
+          condition = !is.na(EXADJ)
+        ),
+        flag_event(
+          dataset_name = "ec",
+          condition = !is.na(ECADJ),
+          by_vars = exprs(USUBJID, EXLNKID = ECLNKID)
+        ),
+        flag_event(
+          dataset_name = "fa",
+          condition = FATESTCD == "OCCUR" & FAOBJ == "DOSE ADJUSTMENT" & FASTRESC == "Y",
+          by_vars = exprs(USUBJID, EXLNKID = FALNKID)
+        )
+      ),
+      source_datasets = list(ex = adex, ec = ec, fa = fa),
+      new_var = DOSADJFL
+    )
+    #> # A tibble: 5 × 4
+    #>   USUBJID EXLNKID EXADJ DOSADJFL
+    #>   <chr>   <chr>   <chr> <chr>
+    #> 1 1       1       AE    Y
+    #> 2 1       2       <NA>  <NA>
+    #> 3 1       3       <NA>  Y
+    #> 4 2       1       <NA>  <NA>
+    #> 5 3       1       <NA>  Y       

@@ -32,7 +32,7 @@ unless otherwise specified.*
 
 To start, all data frames needed for the creation of `ADAE` should be
 read into the environment. This will be a company specific process. Some
-of the data frames needed may be `AE` and `ADSL`
+of the data frames needed may be `AE` and `ADSL`.
 
 For example purpose, the CDISC Pilot SDTM and ADaM datasets —which are
 included in
@@ -47,9 +47,36 @@ library(lubridate)
 
 ae <- pharmaversesdtm::ae
 adsl <- admiral::admiral_adsl
-ex_single <- admiral::ex_single
+ex <- pharmaversesdtm::ex
 
 ae <- convert_blanks_to_na(ae)
+ex <- convert_blanks_to_na(ex)
+```
+
+As the start and end datetime of the dosing records is required by
+multiple derivations, it is derived once at the beginning. Please note
+that it depends on the study whether imputation is required and if so,
+which imputation method is appropriate. In the example below, we impute
+the time as the first time of the day. The `min_dates` argument is used
+in the second call to ensure that the end datetime is not imputed to be
+before the start datetime.
+
+``` r
+ex <- ex %>%
+  derive_vars_dtm(
+    dtc = EXSTDTC,
+    new_vars_prefix = "EXST",
+    time_imputation = "first",
+    flag_imputation = "none"
+  ) %>%
+  derive_vars_dtm(
+    dtc = EXENDTC,
+    new_vars_prefix = "EXEN",
+    time_imputation = "first",
+    flag_imputation = "none",
+    min_dates = exprs(EXSTDTM)
+  ) %>%
+  derive_vars_dtm_to_dt(exprs(EXSTDTM, EXENDTM))
 ```
 
 At this step, it may be useful to join `ADSL` to your `AE` domain as
@@ -58,7 +85,7 @@ this step. The rest of the relevant `ADSL` variables would be added
 later.
 
 ``` r
-adsl_vars <- exprs(TRTSDT, TRTEDT, TRT01A, TRT01P, DTHDT, EOSDT)
+adsl_vars <- exprs(TRTSDT, TRTEDT, TRTEDTM, TRT01A, TRT01P, DTHDT, EOSDT)
 
 adae <- derive_vars_merged(
   ae,
@@ -72,12 +99,12 @@ adae <- derive_vars_merged(
 
 This part derives `ASTDTM`, `ASTDT`, `ASTDY`, `AENDTM`, `AENDT`, and
 `AENDY`. The function
-[`derive_vars_dtm()`](https:/pharmaverse.github.io/admiral/v1.4.2/reference/derive_vars_dtm.md)
+[`derive_vars_dtm()`](https:/pharmaverse.github.io/admiral/v1.5.0/reference/derive_vars_dtm.md)
 can be used to derive `ASTDTM` and `AENDTM` where `ASTDTM` could be
 company-specific. `ASTDT` and `AENDT` can be derived from `ASTDTM` and
 `AENDTM`, respectively, using function
-[`derive_vars_dtm_to_dt()`](https:/pharmaverse.github.io/admiral/v1.4.2/reference/derive_vars_dtm_to_dt.md).
-[`derive_vars_dy()`](https:/pharmaverse.github.io/admiral/v1.4.2/reference/derive_vars_dy.md)
+[`derive_vars_dtm_to_dt()`](https:/pharmaverse.github.io/admiral/v1.5.0/reference/derive_vars_dtm_to_dt.md).
+[`derive_vars_dy()`](https:/pharmaverse.github.io/admiral/v1.5.0/reference/derive_vars_dy.md)
 can be used to create `ASTDY` and `AENDY`.
 
 ``` r
@@ -104,12 +131,12 @@ adae <- adae %>%
 ```
 
 See also [Date and Time
-Imputation](https:/pharmaverse.github.io/admiral/v1.4.2/articles/imputation.md).
+Imputation](https:/pharmaverse.github.io/admiral/v1.5.0/articles/imputation.md).
 
 ### Derive Durations
 
 The function
-[`derive_vars_duration()`](https:/pharmaverse.github.io/admiral/v1.4.2/reference/derive_vars_duration.md)
+[`derive_vars_duration()`](https:/pharmaverse.github.io/admiral/v1.5.0/reference/derive_vars_duration.md)
 can be used to create the variables `ADURN` and `ADURU`.
 
 ``` r
@@ -125,7 +152,7 @@ adae <- adae %>%
 ### Derive ATC variables
 
 The function
-[`derive_vars_atc()`](https:/pharmaverse.github.io/admiral/v1.4.2/reference/derive_vars_atc.md)
+[`derive_vars_atc()`](https:/pharmaverse.github.io/admiral/v1.5.0/reference/derive_vars_atc.md)
 can be used to derive ATC Class Variables.
 
 It helps to add Anatomical Therapeutic Chemical class variables from
@@ -192,26 +219,51 @@ count(adae, TRTP, TRTA, TRT01P, TRT01A)
 #>   TRTP                TRTA                TRT01P              TRT01A           n
 #>   <chr>               <chr>               <chr>               <chr>        <int>
 #> 1 Placebo             Placebo             Placebo             Placebo         10
-#> 2 Xanomeline Low Dose Xanomeline Low Dose Xanomeline Low Dose Xanomeline …     6
+#> 2 Xanomeline Low Dose Xanomeline Low Dose Xanomeline Low Dose Xanomeline …    15
 ```
 
 For studies with periods see the [“Visit and Period Variables”
-vignette](https:/pharmaverse.github.io/admiral/v1.4.2/articles/visits_periods.html#treatment_bds).
+vignette](https:/pharmaverse.github.io/admiral/v1.5.0/articles/visits_periods.html#treatment_bds).
 
 ### Derive Date/Date-time of Last Dose
 
+Before deriving the last dose date, it may be necessary to create an
+`ex_single` dataset from the `EX` domain. If the exposure dataset
+contains multi-day dosing records (e.g., one record per treatment period
+rather than one record per dose), use
+[`create_single_dose_dataset()`](https:/pharmaverse.github.io/admiral/v1.5.0/reference/create_single_dose_dataset.md)
+to expand them into one record per dose. Whether this step is necessary
+depends on how dosing data were collected in your study. For ongoing
+studies, you may also need to impute missing end dates (e.g., with the
+data cut-off date) before calling
+[`create_single_dose_dataset()`](https:/pharmaverse.github.io/admiral/v1.5.0/reference/create_single_dose_dataset.md).
+For examples including handling of missing end dates, see
+[`?create_single_dose_dataset`](https:/pharmaverse.github.io/admiral/v1.5.0/reference/create_single_dose_dataset.md).
+
+The test data contains one record per treatment period and the dose
+frequency is daily (`QD`). The following call creates one record per
+day.
+
+``` r
+ex_single <- ex %>%
+  filter(!is.na(EXSTDT), !is.na(EXENDT)) %>%
+  create_single_dose_dataset(
+    dose_freq = EXDOSFRQ,
+    start_date = EXSTDT,
+    start_datetime = EXSTDTM,
+    end_date = EXENDT,
+    end_datetime = EXENDTM,
+    keep_source_vars = exprs(
+      STUDYID, USUBJID, EXTRT, EXDOSE, EXDOSU, EXSTDT, EXENDT, EXSTDTM, EXENDTM
+    )
+  )
+```
+
 The function
-[`derive_vars_joined()`](https:/pharmaverse.github.io/admiral/v1.4.2/reference/derive_vars_joined.md)
+[`derive_vars_joined()`](https:/pharmaverse.github.io/admiral/v1.5.0/reference/derive_vars_joined.md)
 can be used to derive the last dose date before the start of the event.
 
 ``` r
-ex_single <- derive_vars_dtm(
-  ex_single,
-  dtc = EXSTDTC,
-  new_vars_prefix = "EXST",
-  flag_imputation = "none"
-)
-
 adae <- derive_vars_joined(
   adae,
   ex_single,
@@ -228,32 +280,48 @@ adae <- derive_vars_joined(
 
 ### Derive Treatment Dose and Unit
 
-In a similar manner, you could derive the treatment dose and unit at the
-time of the event. Please note that it is assumed that the dosing
-intervals do not overlap. If this case occurs, the
-[`derive_vars_joined()`](https:/pharmaverse.github.io/admiral/v1.4.2/reference/derive_vars_joined.md)
-call below will throw an error as handling this case is study-specific.
+In a similar manner, you could derive the treatment dose (`DOSEON`) and
+unit (`DOSEU`) at the time of the event. Please note that drug clearance
+duration should be considered when matching exposure records with
+adverse events. `EXSTDTC` and `EXENDTC` typically represent the
+administration period only, not the time the drug remains in the body.
+To account for drug clearance, you may extend the last exposure end date
+by the appropriate clearance duration. For example, if the exposure
+dataset contains one records per dose and the drug administration is
+instantaneous, e.g., a pill, we have `EXSTDTC == EXENDTC`. I.e., without
+adding a clearance duration, the dose will only be considered as active
+at the exact time of administration.
+
+Adding a clearance duration to the end date may result in overlapping
+dosing intervals for some subjects. Therefore the last dosing record
+before the adverse event is selected in the example below. If
+overlapping is not expected based on the study design and data
+collection, the `order` and the `mode` argument in the
+[`derive_vars_joined()`](https:/pharmaverse.github.io/admiral/v1.5.0/reference/derive_vars_joined.md)
+call below can be removed. Then the function will throw an error if
+overlapping dosing intervals are found.
+
+Replace `days(1)` in `filter_join` below with the study-specific drug
+clearance period.
 
 ``` r
-ex_single <- derive_vars_dtm(
-  ex_single,
-  dtc = EXENDTC,
-  new_vars_prefix = "EXEN",
-  time_imputation = "last",
-  flag_imputation = "none"
-)
-
 adae <- derive_vars_joined(
   adae,
-  ex_single,
+  ex,
   by_vars = exprs(STUDYID, USUBJID),
   new_vars = exprs(DOSEON = EXDOSE, DOSEU = EXDOSU),
+  order = exprs(EXSTDTM),
+  mode = "last",
   join_vars = exprs(EXSTDTM, EXENDTM),
   join_type = "all",
   filter_add = (EXDOSE > 0 | (EXDOSE == 0 & grepl("PLACEBO", EXTRT))) & !is.na(EXSTDTM),
-  filter_join = EXSTDTM <= ASTDTM & (ASTDTM <= EXENDTM | is.na(EXENDTM))
+  filter_join = EXSTDTM <= ASTDTM & (ASTDTM < EXENDTM + days(1) | is.na(EXENDTM))
 )
 ```
+
+If no time is collected for exposure or adverse events, it may be better
+to use the date variables (`EXSTDT`, `EXENDT`, and `ASTDT`) instead of
+the datetime variables.
 
 ### Derive Severity, Causality, and Toxicity Grade
 
@@ -272,7 +340,7 @@ adae <- adae %>%
 ### Derive Treatment Emergent Flag
 
 To derive the treatment emergent flag `TRTEMFL`, one can call
-[`derive_var_trtemfl()`](https:/pharmaverse.github.io/admiral/v1.4.2/reference/derive_var_trtemfl.md).
+[`derive_var_trtemfl()`](https:/pharmaverse.github.io/admiral/v1.5.0/reference/derive_var_trtemfl.md).
 In the example below, we use 30 days in the flag derivation.
 
 ``` r
@@ -286,7 +354,7 @@ adae <- adae %>%
 
 To derive on-treatment flag (`ONTRTFL`) in an ADaM dataset with a single
 occurrence date, we use
-[`derive_var_ontrtfl()`](https:/pharmaverse.github.io/admiral/v1.4.2/reference/derive_var_ontrtfl.md).
+[`derive_var_ontrtfl()`](https:/pharmaverse.github.io/admiral/v1.5.0/reference/derive_var_ontrtfl.md).
 
 The expected result is the input dataset with an additional column named
 `ONTRTFL` with a value of `"Y"` or `NA`.
@@ -365,12 +433,15 @@ derive_var_ontrtfl(
 ### Derive Occurrence Flags
 
 The function
-[`derive_var_extreme_flag()`](https:/pharmaverse.github.io/admiral/v1.4.2/reference/derive_var_extreme_flag.md)
+[`derive_var_extreme_flag()`](https:/pharmaverse.github.io/admiral/v1.5.0/reference/derive_var_extreme_flag.md)
 can help derive variables such as `AOCCIFL`, `AOCCPIFL`, `AOCCSIFL`, and
 `AOCCzzFL`.
 
-If grades were collected, the following can be used to flag first
-occurrence of maximum toxicity grade.
+If grades were collected, `ATOXGR` should first be derived from the
+source data (e.g., `mutate(ATOXGR = AETOXGR)`) and then the following
+can be used to flag first occurrence of maximum toxicity grade. Note
+that the example below is for illustration only and is not evaluated as
+the test data does not contain toxicity grade information.
 
 ``` r
 adae <- adae %>%
@@ -415,12 +486,12 @@ adae <- adae %>%
 
 For deriving query variables `SMQzzNAM`, `SMQzzCD`, `SMQzzSC`,
 `SMQzzSCN`, or `CQzzNAM` the
-[`derive_vars_query()`](https:/pharmaverse.github.io/admiral/v1.4.2/reference/derive_vars_query.md)
+[`derive_vars_query()`](https:/pharmaverse.github.io/admiral/v1.5.0/reference/derive_vars_query.md)
 function can be used. As input it expects a queries dataset, which
 provides the definition of the queries. See [Queries dataset
-documentation](https:/pharmaverse.github.io/admiral/v1.4.2/articles/queries_dataset.md)
+documentation](https:/pharmaverse.github.io/admiral/v1.5.0/articles/queries_dataset.md)
 for a detailed description of the queries dataset. The
-[`create_query_data()`](https:/pharmaverse.github.io/admiral/v1.4.2/reference/create_query_data.md)
+[`create_query_data()`](https:/pharmaverse.github.io/admiral/v1.5.0/reference/create_query_data.md)
 function can be used to create queries datasets.
 
 The following example shows how to derive query variables for
@@ -447,7 +518,7 @@ adae_query <- derive_vars_query(dataset = adae1, dataset_queries = queries)
 ```
 
 Similarly to SMQ, the
-[`derive_vars_query()`](https:/pharmaverse.github.io/admiral/v1.4.2/reference/derive_vars_query.md)
+[`derive_vars_query()`](https:/pharmaverse.github.io/admiral/v1.5.0/reference/derive_vars_query.md)
 function can be used to derive Standardized Drug Groupings (SDG).
 
 ``` r
@@ -484,9 +555,11 @@ adae <- adae %>%
 ### Derive Analysis Sequence Number
 
 The function
-[`derive_var_obs_number()`](https:/pharmaverse.github.io/admiral/v1.4.2/reference/derive_var_obs_number.md)
+[`derive_var_obs_number()`](https:/pharmaverse.github.io/admiral/v1.5.0/reference/derive_var_obs_number.md)
 can be used for deriving `ASEQ` variable to ensure the uniqueness of
-subject records within the dataset.
+subject records within the dataset. Note that creating `ASEQ` is not
+required for all ADaM datasets according to the ADaM IG, and this is
+just for demonstration purpose.
 
 For example, there can be multiple records present in `ADCM` for a
 single subject with the same `ASTDTM` and `CMSEQ` variables. But these
@@ -503,6 +576,7 @@ adcm <- tibble::tribble(
 )
 
 adcm_aseq <- adcm %>%
+  # Calculate ASEQ (Optional Variable)
   derive_var_obs_number(
     by_vars    = exprs(USUBJID),
     order      = exprs(ASTDTM, CMSEQ, ATC1CD, ATC2CD, ATC3CD, ATC4CD),
@@ -534,12 +608,13 @@ in your data derivation process using packages like:
 NOTE: Together with [admiral](https://pharmaverse.github.io/admiral/)
 these packages comprise an End to End pipeline under the umbrella of the
 [pharmaverse](https://github.com/pharmaverse). An example of applying
-metadata and perform associated checks can be found at the [pharmaverse
-E2E example](https://pharmaverse.github.io/examples/adam/adsl).
+metadata and performing associated checks can be found at the
+[pharmaverse E2E
+example](https://pharmaverse.github.io/examples/adam/adsl).
 
 ## Example Scripts
 
-| ADaM | Sourcing Command          |
-|------|---------------------------|
-| ADAE | `use_ad_template("ADAE")` |
-| ADCM | `use_ad_template("ADCM")` |
+| ADaM   | Sourcing Command          |
+|--------|---------------------------|
+| `ADAE` | `use_ad_template("ADAE")` |
+| `ADCM` | `use_ad_template("ADCM")` |

@@ -9,8 +9,7 @@ use_ad_template(
   adam_name = "adsl",
   save_path = paste0("./", adam_name, ".R"),
   package = "admiral",
-  overwrite = FALSE,
-  open = interactive()
+  overwrite = FALSE
 )
 ```
 
@@ -52,14 +51,6 @@ use_ad_template(
 
   :   `FALSE`
 
-- open:
-
-  Whether to open the script right away.
-
-  Default value
-
-  :   [`interactive()`](https://rdrr.io/r/base/interactive.html)
-
 ## Value
 
 No return values, called for side effects
@@ -68,13 +59,13 @@ No return values, called for side effects
 
 Running without any arguments such as `use_ad_template()` auto-generates
 `adsl.R` in the current path. Use
-[`list_all_templates()`](https:/pharmaverse.github.io/admiral/v1.4.2/reference/list_all_templates.md)
+[`list_all_templates()`](https:/pharmaverse.github.io/admiral/v1.5.0/reference/list_all_templates.md)
 to discover which templates are available.
 
 ## See also
 
 Utilities used for examples and template scripts:
-[`list_all_templates()`](https:/pharmaverse.github.io/admiral/v1.4.2/reference/list_all_templates.md)
+[`list_all_templates()`](https:/pharmaverse.github.io/admiral/v1.5.0/reference/list_all_templates.md)
 
 ## Examples
 

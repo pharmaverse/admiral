@@ -5,7 +5,7 @@ The new observations can be selected from the additional dataset. This
 function can be used for adding the maximum or minimum value as a
 separate visit. All variables of the selected observation are kept. This
 distinguishes `derive_extreme_records()` from
-[`derive_summary_records()`](https:/pharmaverse.github.io/admiral/v1.4.2/reference/derive_summary_records.md),
+[`derive_summary_records()`](https:/pharmaverse.github.io/admiral/v1.5.0/reference/derive_summary_records.md),
 where only the by variables are populated for the new records.
 
 ## Usage
@@ -24,7 +24,8 @@ derive_extreme_records(
   true_value = "Y",
   false_value = NA_character_,
   keep_source_vars = exprs(everything()),
-  set_values_to
+  set_values_to,
+  missing_values = NULL
 )
 ```
 
@@ -97,7 +98,7 @@ derive_extreme_records(
   Permitted values
 
   :   list of variables created by
-      [`exprs()`](https:/pharmaverse.github.io/admiral/v1.4.2/reference/reexport-exprs.md),
+      [`exprs()`](https:/pharmaverse.github.io/admiral/v1.5.0/reference/reexport-exprs.md),
       e.g., `exprs(USUBJID, VISIT)`
 
   Default value
@@ -114,7 +115,7 @@ derive_extreme_records(
   Permitted values
 
   :   list of variables created by
-      [`exprs()`](https:/pharmaverse.github.io/admiral/v1.4.2/reference/reexport-exprs.md),
+      [`exprs()`](https:/pharmaverse.github.io/admiral/v1.5.0/reference/reexport-exprs.md),
       e.g., `exprs(USUBJID, VISIT)`
 
   Default value
@@ -224,7 +225,7 @@ derive_extreme_records(
   Variables to be kept in the new records
 
   A named list or tidyselect expressions created by
-  [`exprs()`](https:/pharmaverse.github.io/admiral/v1.4.2/reference/reexport-exprs.md)
+  [`exprs()`](https:/pharmaverse.github.io/admiral/v1.5.0/reference/reexport-exprs.md)
   defining the variables to be kept for the new records. The variables
   specified for `by_vars` and `set_values_to` need not be specified here
   as they are kept automatically.
@@ -232,7 +233,7 @@ derive_extreme_records(
   Permitted values
 
   :   list of variables or tidyselect expressions created by
-      [`exprs()`](https:/pharmaverse.github.io/admiral/v1.4.2/reference/reexport-exprs.md),
+      [`exprs()`](https:/pharmaverse.github.io/admiral/v1.5.0/reference/reexport-exprs.md),
       e.g., `exprs(DTHDT, starts_with("AST"))` or `exprs(everything)`
 
   Default value
@@ -248,30 +249,46 @@ derive_extreme_records(
 
   Set a list of variables to some specified value for the new records
 
-  - LHS refer to a variable.
+  - LHS refers to a variable.
 
   - RHS refers to the values to set to the variable. This can be a
-    string, a symbol, a numeric value, an expression or NA. If summary
-    functions are used, the values are summarized by the variables
-    specified for `by_vars`. Any expression on the RHS must result in a
-    single value per by group.
+    string, a symbol, a numeric value, an expression or NA.
 
   For example:
 
         set_values_to = exprs(
-          AVAL = sum(AVAL),
-          DTYPE = "AVERAGE",
+          PARAMCD = "WOBS",
+          PARAM = "Worst Observations"
         )
 
   Permitted values
 
   :   list of named expressions created by
-      [`exprs()`](https:/pharmaverse.github.io/admiral/v1.4.2/reference/reexport-exprs.md),
-      e.g., `exprs(CUMDOSA = sum(AVAL, na.rm = TRUE), AVALU = "ml")`
+      [`exprs()`](https:/pharmaverse.github.io/admiral/v1.5.0/reference/reexport-exprs.md),
+      e.g., `exprs(AVALC = VSSTRESC, AVAL = yn_to_numeric(AVALC))`
 
   Default value
 
   :   none
+
+- missing_values:
+
+  Values for missing records
+
+  For observations of the reference dataset (`dataset_ref`) which do not
+  have a matching record in `dataset_add` (with respect to `by_vars` and
+  after applying `filter_add`), the specified variables are set to the
+  specified values for the new observations.
+
+  Permitted values
+
+  :   list of named expressions created by
+      [`exprs()`](https:/pharmaverse.github.io/admiral/v1.5.0/reference/reexport-exprs.md),
+      e.g., `exprs(CUMDOSA = sum(AVAL, na.rm = TRUE), AVALU = "ml")`
+
+  Default value
+
+  :   `NULL`
 
 ## Value
 
@@ -291,7 +308,9 @@ added as new observations.
 3.  If `dataset_ref` is specified, observations which are in
     `dataset_ref` but not in the selected records are added. Variables
     that are common across `dataset_ref`, `dataset_add` and
-    `keep_source_vars()` are also populated for the new observations.
+    `keep_source_vars()` are also populated for the new observations. If
+    `missing_values` is specified, the specified values are set for
+    these observations.
 
 4.  The variables specified by the `set_values_to` argument are added to
     the selected observations.
@@ -305,25 +324,26 @@ added as new observations.
 
 ## See also
 
-[`derive_summary_records()`](https:/pharmaverse.github.io/admiral/v1.4.2/reference/derive_summary_records.md)
+[`derive_summary_records()`](https:/pharmaverse.github.io/admiral/v1.5.0/reference/derive_summary_records.md)
 
 BDS-Findings Functions for adding Parameters/Records:
-[`default_qtc_paramcd()`](https:/pharmaverse.github.io/admiral/v1.4.2/reference/default_qtc_paramcd.md),
-[`derive_expected_records()`](https:/pharmaverse.github.io/admiral/v1.4.2/reference/derive_expected_records.md),
-[`derive_extreme_event()`](https:/pharmaverse.github.io/admiral/v1.4.2/reference/derive_extreme_event.md),
-[`derive_locf_records()`](https:/pharmaverse.github.io/admiral/v1.4.2/reference/derive_locf_records.md),
-[`derive_param_bmi()`](https:/pharmaverse.github.io/admiral/v1.4.2/reference/derive_param_bmi.md),
-[`derive_param_bsa()`](https:/pharmaverse.github.io/admiral/v1.4.2/reference/derive_param_bsa.md),
-[`derive_param_computed()`](https:/pharmaverse.github.io/admiral/v1.4.2/reference/derive_param_computed.md),
-[`derive_param_doseint()`](https:/pharmaverse.github.io/admiral/v1.4.2/reference/derive_param_doseint.md),
-[`derive_param_exist_flag()`](https:/pharmaverse.github.io/admiral/v1.4.2/reference/derive_param_exist_flag.md),
-[`derive_param_exposure()`](https:/pharmaverse.github.io/admiral/v1.4.2/reference/derive_param_exposure.md),
-[`derive_param_framingham()`](https:/pharmaverse.github.io/admiral/v1.4.2/reference/derive_param_framingham.md),
-[`derive_param_map()`](https:/pharmaverse.github.io/admiral/v1.4.2/reference/derive_param_map.md),
-[`derive_param_qtc()`](https:/pharmaverse.github.io/admiral/v1.4.2/reference/derive_param_qtc.md),
-[`derive_param_rr()`](https:/pharmaverse.github.io/admiral/v1.4.2/reference/derive_param_rr.md),
-[`derive_param_wbc_abs()`](https:/pharmaverse.github.io/admiral/v1.4.2/reference/derive_param_wbc_abs.md),
-[`derive_summary_records()`](https:/pharmaverse.github.io/admiral/v1.4.2/reference/derive_summary_records.md)
+[`default_qtc_paramcd()`](https:/pharmaverse.github.io/admiral/v1.5.0/reference/default_qtc_paramcd.md),
+[`derive_basetype_records()`](https:/pharmaverse.github.io/admiral/v1.5.0/reference/derive_basetype_records.md),
+[`derive_expected_records()`](https:/pharmaverse.github.io/admiral/v1.5.0/reference/derive_expected_records.md),
+[`derive_extreme_event()`](https:/pharmaverse.github.io/admiral/v1.5.0/reference/derive_extreme_event.md),
+[`derive_locf_records()`](https:/pharmaverse.github.io/admiral/v1.5.0/reference/derive_locf_records.md),
+[`derive_param_bmi()`](https:/pharmaverse.github.io/admiral/v1.5.0/reference/derive_param_bmi.md),
+[`derive_param_bsa()`](https:/pharmaverse.github.io/admiral/v1.5.0/reference/derive_param_bsa.md),
+[`derive_param_computed()`](https:/pharmaverse.github.io/admiral/v1.5.0/reference/derive_param_computed.md),
+[`derive_param_doseint()`](https:/pharmaverse.github.io/admiral/v1.5.0/reference/derive_param_doseint.md),
+[`derive_param_exist_flag()`](https:/pharmaverse.github.io/admiral/v1.5.0/reference/derive_param_exist_flag.md),
+[`derive_param_exposure()`](https:/pharmaverse.github.io/admiral/v1.5.0/reference/derive_param_exposure.md),
+[`derive_param_framingham()`](https:/pharmaverse.github.io/admiral/v1.5.0/reference/derive_param_framingham.md),
+[`derive_param_map()`](https:/pharmaverse.github.io/admiral/v1.5.0/reference/derive_param_map.md),
+[`derive_param_qtc()`](https:/pharmaverse.github.io/admiral/v1.5.0/reference/derive_param_qtc.md),
+[`derive_param_rr()`](https:/pharmaverse.github.io/admiral/v1.5.0/reference/derive_param_rr.md),
+[`derive_param_wbc_abs()`](https:/pharmaverse.github.io/admiral/v1.5.0/reference/derive_param_wbc_abs.md),
+[`derive_summary_records()`](https:/pharmaverse.github.io/admiral/v1.5.0/reference/derive_summary_records.md)
 
 ## Examples
 
@@ -447,6 +467,45 @@ valid analysis value:
     #> 7 2            99   101
     #> 8 3            99    NA
 
+### Setting values for missing groups (`missing_values`)
+
+When using `dataset_ref`, groups without matching records in
+`dataset_add` get new records with `NA` values by default. The
+`missing_values` argument allows setting specific values for these
+records. In the example records for the last non-missing value are
+added. For subjects without assessments the value is set to the mean
+analysis value across all records.
+
+    mean_value <- mean(adlb$AVAL, na.rm = TRUE)
+
+    derive_extreme_records(
+      adlb,
+      dataset_add = adlb,
+      filter_add = !is.na(AVAL),
+      dataset_ref = adlb,
+      by_vars = exprs(USUBJID),
+      order = exprs(AVISITN),
+      mode = "last",
+      set_values_to = exprs(
+        AVISITN = 99
+      ),
+      missing_values = exprs(
+        AVAL = !!mean_value,
+        DTYPE = "MOV"
+      )
+    )
+    #> # A tibble: 8 × 4
+    #>   USUBJID AVISITN  AVAL DTYPE
+    #>   <chr>     <dbl> <dbl> <chr>
+    #> 1 1             1  113  <NA>
+    #> 2 1             2  111  <NA>
+    #> 3 2             1  101  <NA>
+    #> 4 2             2   NA  <NA>
+    #> 5 3             1   NA  <NA>
+    #> 6 1            99  111  <NA>
+    #> 7 2            99  101  <NA>
+    #> 8 3            99  108. MOV  
+
 ### Selecting variables for new records (`keep_source_vars`)
 
 Which variables from the source dataset are kept for the new records can
@@ -515,7 +574,7 @@ are found.
 
 For investigating the issue, the dataset of the duplicate source records
 can be obtained by calling
-[`get_duplicates_dataset()`](https:/pharmaverse.github.io/admiral/v1.4.2/reference/get_duplicates_dataset.md):
+[`get_duplicates_dataset()`](https:/pharmaverse.github.io/admiral/v1.5.0/reference/get_duplicates_dataset.md):
 
     get_duplicates_dataset()
     #> Duplicate records with respect to `USUBJID` and `AVAL`.

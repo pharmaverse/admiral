@@ -56,7 +56,7 @@ adsl <- tribble(
 
 The original items, i.e. the answers to the questionnaire questions, can
 be handled in the same way as in a [BDS finding
-ADaM](https:/pharmaverse.github.io/admiral/v1.4.2/articles/bds_finding.md).
+ADaM](https:/pharmaverse.github.io/admiral/v1.5.0/articles/bds_finding.md).
 For example:
 
 ``` r
@@ -86,9 +86,9 @@ adqs <- qs %>%
 
 We handle unscheduled visits as normal visits. For deriving visits based
 on time-windows, see [Visit and Period
-Variables](https:/pharmaverse.github.io/admiral/v1.4.2/articles/visits_periods.html#visits).
+Variables](https:/pharmaverse.github.io/admiral/v1.5.0/articles/visits_periods.html#visits).
 And for flagging values to be used for analysis, see
-[`derive_var_extreme_flag()`](https:/pharmaverse.github.io/admiral/v1.4.2/reference/derive_var_extreme_flag.md).
+[`derive_var_extreme_flag()`](https:/pharmaverse.github.io/admiral/v1.5.0/reference/derive_var_extreme_flag.md).
 
 ## Transformed Items
 
@@ -106,7 +106,7 @@ the original items. For example if a scale should be derived as the
 average but the range of the contributing items varies. In this case the
 values could be linearly transformed to a unified range like `[0, 100]`.
 The computation function
-[`transform_range()`](https:/pharmaverse.github.io/admiral/v1.4.2/reference/transform_range.md)
+[`transform_range()`](https:/pharmaverse.github.io/admiral/v1.5.0/reference/transform_range.md)
 can be used for the transformation.
 
 ## Scales and Scores
@@ -114,7 +114,7 @@ can be used for the transformation.
 Scales and Scores are often derived as the sum or the average across a
 subset of the items. For the GAD-7 questionnaire, the total score is
 derived as the sum. The
-[`derive_summary_records()`](https:/pharmaverse.github.io/admiral/v1.4.2/reference/derive_summary_records.md)
+[`derive_summary_records()`](https:/pharmaverse.github.io/admiral/v1.5.0/reference/derive_summary_records.md)
 function with [`sum()`](https://rdrr.io/r/base/sum.html) can be used to
 derive it as a new parameter. For selecting the parameters to be
 summarized, regular expressions like in the example below may be
@@ -144,9 +144,9 @@ For the GDS-SF questionnaire, the total score is defined as the average
 of the item values transformed to the range \[0, 15\] and rounded up to
 the next integer. If more than five items are missing, the total score
 is considered as missing. This parameter can be derived by
-[`compute_scale()`](https:/pharmaverse.github.io/admiral/v1.4.2/reference/compute_scale.md)
+[`compute_scale()`](https:/pharmaverse.github.io/admiral/v1.5.0/reference/compute_scale.md)
 and
-[`derive_summary_records()`](https:/pharmaverse.github.io/admiral/v1.4.2/reference/derive_summary_records.md):
+[`derive_summary_records()`](https:/pharmaverse.github.io/admiral/v1.5.0/reference/derive_summary_records.md):
 
 ``` r
 adgdssf <- adqs %>%
@@ -206,7 +206,7 @@ adgdssf <- adgdssf %>%
     derivation = derive_var_pchg,
     filter = AVISITN > 0
   ) %>%
-  # Derive sequence number
+  # Derive sequence number (Optional Variable)
   derive_var_obs_number(
     by_vars = exprs(STUDYID, USUBJID),
     order = exprs(PARAMCD, ADT),
@@ -224,7 +224,7 @@ categorization variables in `ADQS`. For example:
 ``` r
 # Create AVALCATy lookup table
 avalcat_lookup <- exprs(
-  ~PARAMCD, ~condition, ~AVALCAT1, ~AVALCAT1N,
+  ~PARAMCD, ~condition, ~AVALCAT1, ~AVALCA1N,
   "GDS02TS", AVAL <= 5, "Normal", 0L,
   "GDS02TS", AVAL <= 10 & AVAL > 5, "Possible Depression", 1L,
   "GDS02TS", AVAL > 10, "Likely Depression", 2L
@@ -232,9 +232,9 @@ avalcat_lookup <- exprs(
 # Create CHGCAT1 lookup table
 chgcat_lookup <- exprs(
   ~condition, ~CHGCAT1,
-  AVALCAT1N > BASECA1N, "WORSENED",
-  AVALCAT1N == BASECA1N, "NO CHANGE",
-  AVALCAT1N < BASECA1N, "IMPROVED"
+  AVALCA1N > BASECA1N, "WORSENED",
+  AVALCA1N == BASECA1N, "NO CHANGE",
+  AVALCA1N < BASECA1N, "IMPROVED"
 )
 
 adgdssf <- adgdssf %>%
@@ -249,7 +249,7 @@ adgdssf <- adgdssf %>%
   ) %>%
   derive_var_base(
     by_vars = exprs(STUDYID, USUBJID, PARAMCD),
-    source_var = AVALCAT1N,
+    source_var = AVALCA1N,
     new_var = BASECA1N
   ) %>%
   derive_vars_cat(
@@ -321,7 +321,7 @@ The derivation of confirmed/definitive deterioration/improvement
 parameters is very similar to the unconfirmed deterioration parameters
 except that the event is not based on `CHGCATy`, but on a confirmation
 flag variable. This confirmation flag can be derived by
-[`derive_var_joined_exist_flag()`](https:/pharmaverse.github.io/admiral/v1.4.2/reference/derive_var_joined_exist_flag.md).
+[`derive_var_joined_exist_flag()`](https:/pharmaverse.github.io/admiral/v1.5.0/reference/derive_var_joined_exist_flag.md).
 For example, flagging deteriorations, which are confirmed by a second
 assessment at least seven days later:
 
@@ -464,7 +464,7 @@ adsp <- adqs %>%
 
 Parameters for completion, like “at least 90% of the questions were
 answered”, can be derived by
-[`derive_summary_records()`](https:/pharmaverse.github.io/admiral/v1.4.2/reference/derive_summary_records.md).
+[`derive_summary_records()`](https:/pharmaverse.github.io/admiral/v1.5.0/reference/derive_summary_records.md).
 
 ``` r
 adgdssf <- adgdssf %>%
@@ -489,7 +489,7 @@ that case.
 
 If missed visits need to be taken into account, the expected records can
 be added to the input dataset by calling
-[`derive_expected_records()`](https:/pharmaverse.github.io/admiral/v1.4.2/reference/derive_expected_records.md):
+[`derive_expected_records()`](https:/pharmaverse.github.io/admiral/v1.5.0/reference/derive_expected_records.md):
 
 ``` r
 # Create dataset with expected visits and parameters (GDS0201 - GDS0215)

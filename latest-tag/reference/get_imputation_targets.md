@@ -1,9 +1,9 @@
 # Get Imputation Targets
 
 Determines the imputation targets for date (see
-[`get_imputation_target_date()`](https:/pharmaverse.github.io/admiral/v1.4.2/reference/get_imputation_target_date.md)
+[`get_imputation_target_date()`](https:/pharmaverse.github.io/admiral/v1.5.0/reference/get_imputation_target_date.md)
 and time (see
-[`get_imputation_target_time()`](https:/pharmaverse.github.io/admiral/v1.4.2/reference/get_imputation_target_time.md))
+[`get_imputation_target_time()`](https:/pharmaverse.github.io/admiral/v1.5.0/reference/get_imputation_target_time.md))
 components.
 
 ## Usage
@@ -26,10 +26,13 @@ get_imputation_targets(partial, date_imputation = NULL, time_imputation = NULL)
 
   The value to impute the day/month when a datepart is missing.
 
-  A character value is expected, either as a
+  A character value is expected, as a:
 
   - format with month and day specified as `"mm-dd"`: e.g. `"06-15"` for
     the 15th of June,
+
+  - format with day specified as `"dd"`: e.g. `"15"` for the 15th day of
+    a month
 
   - or as a keyword: `"first"`, `"mid"`, `"last"` to impute to the
     first/mid/last day/month.

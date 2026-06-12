@@ -21,8 +21,7 @@ Standardized MedDRA Query variables in ADMH
 ## See also
 
 Other datasets:
-[`admiral_adlb`](https:/pharmaverse.github.io/admiral/v1.4.2/reference/admiral_adlb.md),
-[`admiral_adsl`](https:/pharmaverse.github.io/admiral/v1.4.2/reference/admiral_adsl.md),
-[`ex_single`](https:/pharmaverse.github.io/admiral/v1.4.2/reference/ex_single.md),
-[`example_qs`](https:/pharmaverse.github.io/admiral/v1.4.2/reference/example_qs.md),
-[`queries`](https:/pharmaverse.github.io/admiral/v1.4.2/reference/queries.md)
+[`admiral_adlb`](https:/pharmaverse.github.io/admiral/v1.5.0/reference/admiral_adlb.md),
+[`admiral_adsl`](https:/pharmaverse.github.io/admiral/v1.5.0/reference/admiral_adsl.md),
+[`example_qs`](https:/pharmaverse.github.io/admiral/v1.5.0/reference/example_qs.md),
+[`queries`](https:/pharmaverse.github.io/admiral/v1.5.0/reference/queries.md)

@@ -10,7 +10,7 @@ without visiting the [admiral](https://pharmaverse.github.io/admiral/)
 repository.
 
 As a reminder, you can create a starter script from a template using
-[`admiral::use_ad_template()`](https:/pharmaverse.github.io/admiral/v1.4.2/reference/use_ad_template.md),
+[`admiral::use_ad_template()`](https:/pharmaverse.github.io/admiral/v1.5.0/reference/use_ad_template.md),
 e.g.,
 
 ``` r
@@ -1254,7 +1254,7 @@ adab_params <- adab_adafl %>%
 
 # Sort by the key variables then compute ASEQ
 adab_prefinal <- adab_params %>%
-  # Calculate ASEQ
+  # Calculate ASEQ (Optional Variable)
   derive_var_obs_number(
     new_var = ASEQ,
     by_vars = exprs(STUDYID, USUBJID),
@@ -1309,7 +1309,7 @@ ad_adae.R
 #
 # Label: Adverse Event Analysis Dataset
 #
-# Input: ae, adsl, ex_single
+# Input: ae, adsl, ex
 library(admiral)
 library(pharmaversesdtm) # Contains example datasets from the CDISC pilot project
 library(dplyr)
@@ -1322,23 +1322,56 @@ library(lubridate)
 # For illustration purposes read in admiral test data
 
 ae <- pharmaversesdtm::ae
-suppae <- pharmaversesdtm::suppae
 adsl <- admiral::admiral_adsl
-ex_single <- admiral::ex_single
+ex <- pharmaversesdtm::ex
 
 # When SAS datasets are imported into R using haven::read_sas(), missing
 # character values from SAS appear as "" characters in R, instead of appearing
 # as NA values. Further details can be obtained via the following link:
 # https://pharmaverse.github.io/admiral/cran-release/articles/admiral.html#handling-of-missing-values # nolint
-
 ae <- convert_blanks_to_na(ae)
-ex <- convert_blanks_to_na(ex_single)
+ex <- convert_blanks_to_na(ex)
 
+# Derive dose start and end dates required for last dose before event and DOSEON
+# The imputation methods should be adjusted to the study needs.
+ex <- ex %>%
+  derive_vars_dtm(
+    dtc = EXSTDTC,
+    new_vars_prefix = "EXST",
+    time_imputation = "first",
+    flag_imputation = "none"
+  ) %>%
+  derive_vars_dtm(
+    dtc = EXENDTC,
+    new_vars_prefix = "EXEN",
+    time_imputation = "first",
+    flag_imputation = "none",
+    min_dates = exprs(EXSTDTM)
+  ) %>%
+  derive_vars_dtm_to_dt(exprs(EXSTDTM, EXENDTM))
+
+# Create single dose dataset for use in date of last dose derivations.
+# If the exposure dataset contains multi-day dosing records (e.g., one record
+# per treatment period rather than one record per dose), use
+# create_single_dose_dataset() to expand them into one record per dose.
+# Whether this step is necessary depends on how dosing data were collected.
+ex_single <- ex %>%
+  filter(!is.na(EXSTDT), !is.na(EXENDT)) %>%
+  create_single_dose_dataset(
+    dose_freq = EXDOSFRQ,
+    start_date = EXSTDT,
+    start_datetime = EXSTDTM,
+    end_date = EXENDT,
+    end_datetime = EXENDTM,
+    keep_source_vars = exprs(
+      STUDYID, USUBJID, EXTRT, EXDOSE, EXDOSU, EXDOSFRQ, EXSTDT, EXENDT, EXSTDTM, EXENDTM
+    )
+  )
 
 # Derivations ----
 
 # Get list of ADSL vars required for derivations
-adsl_vars <- exprs(TRTSDT, TRTEDT, DTHDT, EOSDT)
+adsl_vars <- exprs(TRTSDT, TRTEDT, TRTEDTM, DTHDT, EOSDT)
 
 adae <- ae %>%
   # join adsl to ae
@@ -1365,7 +1398,7 @@ adae <- ae %>%
   ) %>%
   ## Derive analysis end/start date ----
   derive_vars_dtm_to_dt(exprs(ASTDTM, AENDTM)) %>%
-  ## Derive analysis start relative day and  analysis end relative day ----
+  ## Derive analysis start relative day and analysis end relative day ----
   derive_vars_dy(
     reference_date = TRTSDT,
     source_vars = exprs(ASTDT, AENDT)
@@ -1382,23 +1415,10 @@ adae <- ae %>%
     trunc_out = FALSE
   )
 
-ex_ext <- derive_vars_dtm(
-  ex,
-  dtc = EXSTDTC,
-  new_vars_prefix = "EXST",
-  flag_imputation = "none"
-) %>%
-  derive_vars_dtm(
-    dtc = EXENDTC,
-    new_vars_prefix = "EXEN",
-    time_imputation = "last",
-    flag_imputation = "none"
-  )
-
 adae <- adae %>%
   ## Derive last dose date/time ----
   derive_vars_joined(
-    dataset_add = ex_ext,
+    dataset_add = ex_single,
     by_vars = exprs(STUDYID, USUBJID),
     new_vars = exprs(LDOSEDTM = EXSTDTM),
     join_vars = exprs(EXSTDTM),
@@ -1409,14 +1429,27 @@ adae <- adae %>%
     mode = "last"
   ) %>%
   ## Derive treatment dose and unit ----
+  # Drug clearance duration should be considered when matching exposure records
+  # with adverse events. EXSTDTC and EXENDTC represent the administration period
+  # only, not the time the drug remains in the body. Thus it may be necessary to
+  # extend the exposure period by a drug-specific clearance duration.
+  # Adding the clearance period may lead to overlaps. Thus the last dose records
+  # before the adverse event is selected below. If overlaps are not expected,
+  # the order and the mode argument should be removed. The function will issue
+  # an error then if overlaps are found.
+  # Replace days(1) below with the study-specific drug clearance period.
+  # If no time is collected for exposure or adverse event, the date variables
+  # (EXSTDT, EXENDT, and ASTDT) can be used instead of the datetime variables.
   derive_vars_joined(
-    dataset_add = ex_ext,
+    dataset_add = ex,
     by_vars = exprs(STUDYID, USUBJID),
     new_vars = exprs(DOSEON = EXDOSE, DOSEU = EXDOSU),
+    order = exprs(EXSTDTM),
+    mode = "last",
     join_vars = exprs(EXSTDTM, EXENDTM),
     join_type = "all",
     filter_add = (EXDOSE > 0 | (EXDOSE == 0 & grepl("PLACEBO", EXTRT))) & !is.na(EXSTDTM),
-    filter_join = EXSTDTM <= ASTDTM & (ASTDTM <= EXENDTM | is.na(EXENDTM))
+    filter_join = EXSTDTM <= ASTDTM & (ASTDTM < EXENDTM + days(1) | is.na(EXENDTM))
   ) %>%
   ## Derive severity / causality / ... ----
   mutate(
@@ -1902,7 +1935,7 @@ adeg <- adeg %>%
 
 ## Get ASEQ and AVALCAT1/CHGCAT1 and add PARAM/PARAMN ----
 adeg <- adeg %>%
-  # Calculate ASEQ
+  # Calculate ASEQ (Optional Variable)
   derive_var_obs_number(
     new_var = ASEQ,
     by_vars = exprs(STUDYID, USUBJID),
@@ -2252,7 +2285,7 @@ adex <- adex %>%
     definition = avalcax_lookup,
     by_vars = exprs(PARAMCD)
   ) %>%
-  # Calculate ASEQ
+  # Calculate ASEQ (Optional Variable)
   derive_var_obs_number(
     new_var = ASEQ,
     by_vars = exprs(STUDYID, USUBJID),
@@ -2718,7 +2751,7 @@ adlb <- adlb %>%
 
 ## Get ASEQ ----
 adlb <- adlb %>%
-  # Calculate ASEQ
+  # Calculate ASEQ (Optional Variable)
   derive_var_obs_number(
     new_var = ASEQ,
     by_vars = exprs(STUDYID, USUBJID),
@@ -3505,7 +3538,7 @@ adpc_chg <- restrict_derivation(
 # ---- Add ASEQ ----
 
 adpc_aseq <- adpc_chg %>%
-  # Calculate ASEQ
+  # Calculate ASEQ (Optional Variable)
   derive_var_obs_number(
     new_var = ASEQ,
     by_vars = exprs(STUDYID, USUBJID),
@@ -3668,7 +3701,7 @@ adpp_aval <- adpp_pp %>%
   ) %>%
   # Remove variables
   select(-PPSTRESN, -PPSTRESC) %>%
-  # Add ASEQ
+  # Add SRCSEQ
   mutate(
     SRCDOM = DOMAIN,
     SRCVAR = "SEQ",
@@ -3861,7 +3894,7 @@ ex_exp <- ex_dates %>%
     lookup_column = CDISC_VALUE,
     keep_source_vars = exprs(
       STUDYID, USUBJID, EVID, EXDOSFRQ, EXDOSFRM,
-      NFRLT, EXDOSE, EXDOSU, EXTRT, ASTDT, ASTDTM, AENDT, AENDTM,
+      NFRLT, EXDOSE, EXDOSU, EXTRT, EXSTDTC, ASTDT, ASTDTM, AENDT, AENDTM,
       VISIT, VISITNUM, VISITDY,
       TRT01A, TRT01P, DOMAIN, EXSEQ, !!!adsl_vars
     )
@@ -4044,7 +4077,7 @@ adppk_aval <- adppk_aprlt %>%
       EVID == 1 ~ NA_character_,
       TRUE ~ PCSTRESU
     ),
-    UDTC = format_ISO8601(ADTM),
+    UDTC = coalesce(PCDTC, EXSTDTC),
     II = if_else(EVID == 1, 1, 0),
     SS = if_else(EVID == 1, 1, 0)
   )
@@ -4052,7 +4085,7 @@ adppk_aval <- adppk_aprlt %>%
 # ---- Add ASEQ ----
 
 adppk_aseq <- adppk_aval %>%
-  # Calculate ASEQ
+  # Calculate ASEQ (Optional Variable)
   derive_var_obs_number(
     new_var = ASEQ,
     by_vars = exprs(STUDYID, USUBJID),
@@ -4781,7 +4814,7 @@ advs <- advs %>%
 
 ## Get ASEQ and AVALCATx and add PARAM/PARAMN ----
 advs <- advs %>%
-  # Calculate ASEQ
+  # Calculate ASEQ (Optional Variable)
   derive_var_obs_number(
     new_var = ASEQ,
     by_vars = exprs(STUDYID, USUBJID),
@@ -4795,7 +4828,6 @@ advs <- advs %>%
   ) %>%
   # Derive PARAM and PARAMN
   derive_vars_merged(dataset_add = select(param_lookup, -VSTESTCD), by_vars = exprs(PARAMCD))
-
 
 
 # Add all ADSL variables

@@ -79,12 +79,11 @@ derive_vars_dt(
   the specified level are imputed.
 
   If a component at a higher level than the highest imputation level is
-  missing, `NA_character_` is returned. For example, for
-  `highest_imputation = "D"` `"2020"` results in `NA_character_` because
-  the month is missing.
+  missing, `NA` is returned. For example, for `highest_imputation = "D"`
+  `"2020"` results in `NA` because the month is missing.
 
   If `"n"` (none, lowest level) is specified no imputation is performed,
-  i.e., if any component is missing, `NA_character_` is returned.
+  i.e., if any component is missing, `NA` is returned.
 
   If `"Y"` (year, highest level) is specified, `date_imputation` must be
   `"first"` or `"last"` and `min_dates` or `max_dates` must be specified
@@ -105,13 +104,15 @@ derive_vars_dt(
 
   A character value is expected.
 
-  - If `highest_imputation` is `"M"`, month and day can be specified as
-    `"mm-dd"`: e.g. `"06-15"` for the 15th of June
+  - The`"first"` and `"last"` keywords allow imputation to the
+    first/last day/month. They can also be used to impute the year if
+    used in conjunction with the `min_dates` or `max_dates` arguments.
+    Some examples of this are available
+    [here](https://pharmaverse.github.io/admiral/cran-release/articles/imputation.html#minimummaximum-dates).
 
-  - When `highest_imputation` is `"M"` or `"D"`, the following keywords
-    are available: `"first"`, `"mid"`, `"last"` to impute to the
-    first/mid/last day/month. If `"mid"` is specified, missing
-    components are imputed as the middle of the possible range:
+  - When `highest_imputation` is `"M"` or `"D"`, the `"mid"` keyword can
+    also be specified to impute missing components to the middle of the
+    possible range:
 
     - If both month and day are missing, they are imputed as `"06-30"`
       (middle of the year).
@@ -119,13 +120,20 @@ derive_vars_dt(
     - If only day is missing, it is imputed as `"15"` (middle of the
       month).
 
-  The year can not be specified; for imputing the year `"first"` or
-  `"last"` together with `min_dates` or `max_dates` argument can be used
-  (see examples).
+  - `"<dd>"` can be specified only if `highest_imputation = "D"`.
+    Missing days are imputed by the specified day, e.g. `"10"` for the
+    10th day of the month. The specified day should be valid for all
+    months as otherwise an error might be issued. For example,
+    `date_imputation = "30"` results in an invalid date of "2024-02-30"
+    for the partial date "2024-02".
+
+  - `"<mm>-<dd>"` can be specified only if `highest_imputation` is
+    `"M"`, e.g. `"06-15"` for the 15th of June.
 
   Permitted values
 
-  :   `"first"`, `"mid"`, `"last"`, or user-defined
+  :   a key-word, i.e. `"first"`, `"mid"`, `"last"`, or `"<mm>-<dd>"` or
+      `"<dd>"`
 
   Default value
 
@@ -239,18 +247,22 @@ i.e. you couldn't choose to say impute months, but not days.
 The presence of a `*DTF` variable is checked and if it already exists in
 the input dataset, a warning is issued and `*DTF` will be overwritten.
 
+Additionally, the function will throw an error if imputation rules cause
+an invalid date (e.g. "2020-02-31") to be generated. In this case, the
+user should adjust the imputation rules.
+
 ## See also
 
-[`vignette("imputation")`](https:/pharmaverse.github.io/admiral/v1.4.2/articles/imputation.md)
+[`vignette("imputation")`](https:/pharmaverse.github.io/admiral/v1.5.0/articles/imputation.md)
 
 Date/Time Derivation Functions that returns variable appended to
 dataset:
-[`derive_var_trtdurd()`](https:/pharmaverse.github.io/admiral/v1.4.2/reference/derive_var_trtdurd.md),
-[`derive_vars_dtm()`](https:/pharmaverse.github.io/admiral/v1.4.2/reference/derive_vars_dtm.md),
-[`derive_vars_dtm_to_dt()`](https:/pharmaverse.github.io/admiral/v1.4.2/reference/derive_vars_dtm_to_dt.md),
-[`derive_vars_dtm_to_tm()`](https:/pharmaverse.github.io/admiral/v1.4.2/reference/derive_vars_dtm_to_tm.md),
-[`derive_vars_duration()`](https:/pharmaverse.github.io/admiral/v1.4.2/reference/derive_vars_duration.md),
-[`derive_vars_dy()`](https:/pharmaverse.github.io/admiral/v1.4.2/reference/derive_vars_dy.md)
+[`derive_var_trtdurd()`](https:/pharmaverse.github.io/admiral/v1.5.0/reference/derive_var_trtdurd.md),
+[`derive_vars_dtm()`](https:/pharmaverse.github.io/admiral/v1.5.0/reference/derive_vars_dtm.md),
+[`derive_vars_dtm_to_dt()`](https:/pharmaverse.github.io/admiral/v1.5.0/reference/derive_vars_dtm_to_dt.md),
+[`derive_vars_dtm_to_tm()`](https:/pharmaverse.github.io/admiral/v1.5.0/reference/derive_vars_dtm_to_tm.md),
+[`derive_vars_duration()`](https:/pharmaverse.github.io/admiral/v1.5.0/reference/derive_vars_duration.md),
+[`derive_vars_dy()`](https:/pharmaverse.github.io/admiral/v1.5.0/reference/derive_vars_dy.md)
 
 ## Examples
 
@@ -315,6 +327,31 @@ done on the date.
     #> 4 "2019-02"             2019-02-01 D
     #> 5 "2019"                2019-01-01 M
     #> 6 "2019---07"           2019-01-01 M
+    #> 7 ""                    NA         <NA>  
+
+It is also possible to just impute the day, with
+`highest_imputation = "D"`. Here dates with just a missing day have it
+imputed to the 10th of the month. Note that in this case care needs to
+be taken to ensure invalid dates are not created, e.g.
+`date_imputation = "30"` would create an invalid date of `"2020-02-30"`
+when trying to impute the day for `"2020-02"`.
+
+    derive_vars_dt(
+      mhdt,
+      new_vars_prefix = "AST",
+      dtc = MHSTDTC,
+      highest_imputation = "D",
+      date_imputation = "10"
+    )
+    #> # A tibble: 7 × 3
+    #>   MHSTDTC               ASTDT      ASTDTF
+    #>   <chr>                 <date>     <chr>
+    #> 1 "2019-07-18T15:25:40" 2019-07-18 <NA>
+    #> 2 "2019-07-18T15:25"    2019-07-18 <NA>
+    #> 3 "2019-07-18"          2019-07-18 <NA>
+    #> 4 "2019-02"             2019-02-10 D
+    #> 5 "2019"                NA         <NA>
+    #> 6 "2019---07"           NA         <NA>
     #> 7 ""                    NA         <NA>  
 
 ### Impute to the last day/month (`date_imputation = "last"`)
@@ -527,4 +564,4 @@ partial dates. For example, `"2019---07"`, will be displayed as
 ### Further examples
 
 Further example usages of this function can be found in the
-[`vignette("imputation")`](https:/pharmaverse.github.io/admiral/v1.4.2/articles/imputation.md).
+[`vignette("imputation")`](https:/pharmaverse.github.io/admiral/v1.5.0/articles/imputation.md).

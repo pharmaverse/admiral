@@ -98,7 +98,7 @@ unexpected results can occur due to floating point issues. To solve this
 issue {admiral} used the [`signif()`](https://rdrr.io/r/base/Round.html)
 function on both side of the equation, the number of significant digits
 used to compare is passed into the function
-[`derive_var_atoxgr_dir()`](https:/pharmaverse.github.io/admiral/v1.4.2/reference/derive_var_atoxgr_dir.md)
+[`derive_var_atoxgr_dir()`](https:/pharmaverse.github.io/admiral/v1.5.0/reference/derive_var_atoxgr_dir.md)
 via the argument `signif_dig`. Please see documentation of the function
 for more details and the blog post [How admiral handles floating
 points](https://pharmaverse.github.io/blog/posts/2023-10-30_floating_point/floating_point.html)
@@ -155,7 +155,7 @@ Using CDISC data these lab tests can be mapped to the correct terms,
 firstly create `PARAMCD`, `PARAM`, `AVAL`, `ANRLO` and `ANRHI`, also
 some lab grading criteria require `BASE` and `PCHG`, so these would also
 need to be created before running
-[`derive_var_atoxgr_dir()`](https:/pharmaverse.github.io/admiral/v1.4.2/reference/derive_var_atoxgr_dir.md)
+[`derive_var_atoxgr_dir()`](https:/pharmaverse.github.io/admiral/v1.5.0/reference/derive_var_atoxgr_dir.md)
 function.  
 
 ``` r
@@ -225,14 +225,13 @@ adlb <- lb %>%
   mutate(
     PARCAT1 = LBCAT,
     AVAL = LBSTRESN,
-    AVALC = ifelse(
-      is.na(LBSTRESN) | as.character(LBSTRESN) != LBSTRESC,
-      LBSTRESC,
-      NA
-    ),
     ANRLO = LBSTNRLO,
     ANRHI = LBSTNRHI,
-    BASE = AVAL - 10
+    BASE = AVAL - 10,
+    ABLFL = case_when(
+      VISIT == "SCREENING 1" ~ "Y",
+      TRUE ~ NA_character_
+    )
   )
 #> All `LBTESTCD` are mapped.
 ```
@@ -308,11 +307,11 @@ Note: [admiral](https://pharmaverse.github.io/admiral/) does not grade
 SI unit of ‘g/L’, however the CDISC data has SI unit of ‘mmol/L’. Please
 see `UNIT_CHECK` variable in
 [admiral](https://pharmaverse.github.io/admiral/) metadata
-[`atoxgr_criteria_ctcv4()`](https:/pharmaverse.github.io/admiral/v1.4.2/reference/atoxgr_criteria_ctcv4.md)
+[`atoxgr_criteria_ctcv4()`](https:/pharmaverse.github.io/admiral/v1.5.0/reference/atoxgr_criteria_ctcv4.md)
 or
-[`atoxgr_criteria_ctcv5()`](https:/pharmaverse.github.io/admiral/v1.4.2/reference/atoxgr_criteria_ctcv5.md)
+[`atoxgr_criteria_ctcv5()`](https:/pharmaverse.github.io/admiral/v1.5.0/reference/atoxgr_criteria_ctcv5.md)
 or
-[`atoxgr_criteria_daids()`](https:/pharmaverse.github.io/admiral/v1.4.2/reference/atoxgr_criteria_daids.md),
+[`atoxgr_criteria_daids()`](https:/pharmaverse.github.io/admiral/v1.5.0/reference/atoxgr_criteria_daids.md),
 the metadata is in the data folder of
 [admiral](https://pharmaverse.github.io/admiral/).  
 
@@ -329,6 +328,46 @@ adlb <- adlb %>%
 ```
 
   
+
+### Deriving Baseline Toxicity Grades
+
+Per the ADaM Implementation Guide 1.2, baseline toxicity grades are
+required to evaluate shifts from baseline. For directional toxicity
+grading, split variables show grading direction: `BTOXGRL` (Baseline
+Toxicity Grade Low) and `BTOXGRH` (Baseline Toxicity Grade High).
+
+After the directional toxicity grades (`ATOXGRL`, `ATOXGRH`) are
+derived, the corresponding baseline variables can be added to all
+records by applying the
+[`derive_var_base()`](https:/pharmaverse.github.io/admiral/v1.5.0/reference/derive_var_base.md)
+function.
+
+If a combined toxicity grade variable (`ATOXGR`) has also been derived,
+the corresponding baseline variable (`BTOXGR`) can be derived with the
+same approach.
+
+The following example demonstrates how to derive baseline toxicity grade
+variables (`BTOXGR`, `BTOXGRL`, and `BTOXGRH`) from the baseline
+records:
+
+``` r
+adlb <- adlb %>%
+  derive_var_base(
+    by_vars = exprs(STUDYID, USUBJID, PARAMCD),
+    source_var = ATOXGRL,
+    new_var = BTOXGRL
+  ) %>%
+  derive_var_base(
+    by_vars = exprs(STUDYID, USUBJID, PARAMCD),
+    source_var = ATOXGRH,
+    new_var = BTOXGRH
+  ) %>%
+  derive_var_base(
+    by_vars = exprs(STUDYID, USUBJID, PARAMCD),
+    source_var = ATOXGR,
+    new_var = BTOXGR
+  )
+```
 
 ## NCI-CTCAEV4 implementation
 
@@ -467,13 +506,14 @@ these are “Investigations”, “Metabolism and nutrition disorders” and
 From these SOC values the following terms criteria is implemented in
 [admiral](https://pharmaverse.github.io/admiral/)
 
-From SOC = “Investigations” there are 21 CTCAE v5.0 Terms:
+From SOC = “Investigations” there are 22 CTCAE v5.0 Terms:
 
 - Activated partial thromboplastin time prolonged
 - Alanine aminotransferase increased
 - Alkaline phosphatase increased
 - Aspartate aminotransferase increased
 - Blood bilirubin increased
+- Blood lactate dehydrogenase increased
 - CD4 lymphocytes decreased
 - Cholesterol high
 - CPK increased
@@ -542,7 +582,7 @@ Value being normal or abnormal. We use the variable `BNRIND` to
 determine this, and users can pass in the value(s) of `BNRIND` that
 indicate the baseline is abnormal via the arguments `high_indicator` and
 `low_indicator` in the function
-[`derive_var_atoxgr_dir()`](https:/pharmaverse.github.io/admiral/v1.4.2/reference/derive_var_atoxgr_dir.md).
+[`derive_var_atoxgr_dir()`](https:/pharmaverse.github.io/admiral/v1.5.0/reference/derive_var_atoxgr_dir.md).
 For example, setting `high_indicator = "HIGH"` would mean any
 observations with `BNRIND = "HIGH"` would be deemed to have a high
 abnormal Baseline Value. Likewise, setting `low_indicator = "LOW"` would
@@ -710,7 +750,7 @@ Value being normal or abnormal. We use the variable `BNRIND` to
 determine this, and users can pass in the value(s) of `BNRIND` that
 indicate the baseline is abnormal via the arguments `high_indicator` and
 `low_indicator` in the function
-[`derive_var_atoxgr_dir()`](https:/pharmaverse.github.io/admiral/v1.4.2/reference/derive_var_atoxgr_dir.md).
+[`derive_var_atoxgr_dir()`](https:/pharmaverse.github.io/admiral/v1.5.0/reference/derive_var_atoxgr_dir.md).
 For example, setting `high_indicator = "HIGH"` would mean any
 observations with `BNRIND = "HIGH"` would be deemed to have a high
 abnormal Baseline Value. Likewise, setting `low_indicator = "LOW"` would

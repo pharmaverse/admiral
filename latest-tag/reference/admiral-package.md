@@ -19,9 +19,9 @@ Useful links:
 - Report bugs at <https://github.com/pharmaverse/admiral/issues>
 
 Other internal:
-[`extract_duplicate_records()`](https:/pharmaverse.github.io/admiral/v1.4.2/reference/extract_duplicate_records.md),
-[`format.basket_select()`](https:/pharmaverse.github.io/admiral/v1.4.2/reference/format.basket_select.md),
-[`signal_duplicate_records()`](https:/pharmaverse.github.io/admiral/v1.4.2/reference/signal_duplicate_records.md)
+[`extract_duplicate_records()`](https:/pharmaverse.github.io/admiral/v1.5.0/reference/extract_duplicate_records.md),
+[`format.basket_select()`](https:/pharmaverse.github.io/admiral/v1.5.0/reference/format.basket_select.md),
+[`signal_duplicate_records()`](https:/pharmaverse.github.io/admiral/v1.5.0/reference/signal_duplicate_records.md)
 
 ## Author
 
@@ -30,9 +30,10 @@ Other internal:
 
 Authors:
 
-- Stefan Bundfuss ([ORCID](https://orcid.org/0009-0005-0027-1198))
+- Edoardo Mancini <edoardo.mancini@roche.com>
+  ([ORCID](https://orcid.org/0009-0006-4899-8641))
 
-- Matt Bearham
+- Stefan Bundfuss ([ORCID](https://orcid.org/0009-0005-0027-1198))
 
 - Arianna Cascone ([ORCID](https://orcid.org/0000-0001-5948-2831))
 
@@ -42,13 +43,13 @@ Authors:
 
 - Ross Farrugia
 
-- Fanny Gautier
+- Fanny Gautier ([ORCID](https://orcid.org/0009-0004-3581-0131))
+
+- Liam Hobby <liam.f.hobby@gsk.com>
 
 - Gordon Miller
 
 - Lina Patil
-
-- Jim Rothstein ([ORCID](https://orcid.org/0009-0009-8659-6071))
 
 - Ben Straub
 

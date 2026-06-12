@@ -46,8 +46,8 @@ as labels are preserved.
 ## See also
 
 Utilities for Formatting Observations:
-[`convert_na_to_blanks()`](https:/pharmaverse.github.io/admiral/v1.4.2/reference/convert_na_to_blanks.md),
-[`yn_to_numeric()`](https:/pharmaverse.github.io/admiral/v1.4.2/reference/yn_to_numeric.md)
+[`convert_na_to_blanks()`](https:/pharmaverse.github.io/admiral/v1.5.0/reference/convert_na_to_blanks.md),
+[`yn_to_numeric()`](https:/pharmaverse.github.io/admiral/v1.5.0/reference/yn_to_numeric.md)
 
 ## Examples
 

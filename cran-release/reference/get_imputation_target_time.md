@@ -33,31 +33,30 @@ A list of character vectors. The elements of the list are named "hour",
 
 ## Details
 
-- For `time_imputation = "first"` `"00"`, `"00"`, `"00"` are returned.
+- For `time_imputation = "first"`, `"00"`, `"00"`, `"00"` are returned.
 
-- For `time_imputation = "last"` `"23"`, `"59"`, `"59"` are returned.
+- For `time_imputation = "last"`, `"23"`, `"59"`, `"59"` are returned.
 
-- For `time_imputation = "<hh>:<mm>:<ss>"` `"<hh>"`, `"<mm>"`, `"<ss>"`
+- For `time_imputation = "<hh>:<mm>:<ss>"`, `"<hh>"`, `"<mm>"`, `"<ss>"`
   are returned.
 
 ## See also
 
-[`impute_dtc_dtm()`](https:/pharmaverse.github.io/admiral/v1.4.2/reference/impute_dtc_dtm.md)
+[`impute_dtc_dtm()`](https:/pharmaverse.github.io/admiral/v1.5.0/reference/impute_dtc_dtm.md)
 
 Utilities used for date imputation:
-[`dt_level()`](https:/pharmaverse.github.io/admiral/v1.4.2/reference/dt_level.md),
-[`dtm_level()`](https:/pharmaverse.github.io/admiral/v1.4.2/reference/dtm_level.md),
-[`get_imputation_target_date()`](https:/pharmaverse.github.io/admiral/v1.4.2/reference/get_imputation_target_date.md),
-[`get_partialdatetime()`](https:/pharmaverse.github.io/admiral/v1.4.2/reference/get_partialdatetime.md),
-[`restrict_imputed_dtc_dt()`](https:/pharmaverse.github.io/admiral/v1.4.2/reference/restrict_imputed_dtc_dt.md),
-[`restrict_imputed_dtc_dtm()`](https:/pharmaverse.github.io/admiral/v1.4.2/reference/restrict_imputed_dtc_dtm.md)
+[`dt_level()`](https:/pharmaverse.github.io/admiral/v1.5.0/reference/dt_level.md),
+[`dtm_level()`](https:/pharmaverse.github.io/admiral/v1.5.0/reference/dtm_level.md),
+[`get_imputation_target_date()`](https:/pharmaverse.github.io/admiral/v1.5.0/reference/get_imputation_target_date.md),
+[`get_partialdatetime()`](https:/pharmaverse.github.io/admiral/v1.5.0/reference/get_partialdatetime.md),
+[`restrict_imputed_dtc_dt()`](https:/pharmaverse.github.io/admiral/v1.5.0/reference/restrict_imputed_dtc_dt.md),
+[`restrict_imputed_dtc_dtm()`](https:/pharmaverse.github.io/admiral/v1.5.0/reference/restrict_imputed_dtc_dtm.md)
 
 ## Examples
 
 ``` r
 # Get imputation target for "first" time
-target_first_time <- admiral:::get_imputation_target_time("first")
-print(target_first_time)
+admiral:::get_imputation_target_time("first")
 #> $hour
 #> [1] "00"
 #> 
@@ -69,8 +68,7 @@ print(target_first_time)
 #> 
 
 # Get imputation target for "last" time
-target_last_time <- admiral:::get_imputation_target_time("last")
-print(target_last_time)
+admiral:::get_imputation_target_time("last")
 #> $hour
 #> [1] "23"
 #> 
@@ -82,8 +80,7 @@ print(target_last_time)
 #> 
 
 # Get imputation target for custom time imputation "12-34-56"
-target_custom_time <- admiral:::get_imputation_target_time("12-34-56")
-print(target_custom_time)
+admiral:::get_imputation_target_time("12-34-56")
 #> $hour
 #> [1] "12"
 #> 

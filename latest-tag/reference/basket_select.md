@@ -57,7 +57,7 @@ basket_select(name = NULL, id = NULL, scope = NULL, type, ...)
   company specific conditions or flags that will then be used in
   user-defined function that is passed into argument `get_terms_fun` for
   function
-  [`create_query_data()`](https:/pharmaverse.github.io/admiral/v1.4.2/reference/create_query_data.md).
+  [`create_query_data()`](https:/pharmaverse.github.io/admiral/v1.5.0/reference/create_query_data.md).
 
   Default value
 
@@ -73,16 +73,16 @@ Exactly one of `name` or `id` must be specified.
 
 ## See also
 
-[`create_query_data()`](https:/pharmaverse.github.io/admiral/v1.4.2/reference/create_query_data.md),
-[`query()`](https:/pharmaverse.github.io/admiral/v1.4.2/reference/query.md)
+[`create_query_data()`](https:/pharmaverse.github.io/admiral/v1.5.0/reference/create_query_data.md),
+[`query()`](https:/pharmaverse.github.io/admiral/v1.5.0/reference/query.md)
 
 Source Objects:
-[`censor_source()`](https:/pharmaverse.github.io/admiral/v1.4.2/reference/censor_source.md),
-[`death_event`](https:/pharmaverse.github.io/admiral/v1.4.2/reference/tte_source_objects.md),
-[`event()`](https:/pharmaverse.github.io/admiral/v1.4.2/reference/event.md),
-[`event_joined()`](https:/pharmaverse.github.io/admiral/v1.4.2/reference/event_joined.md),
-[`event_source()`](https:/pharmaverse.github.io/admiral/v1.4.2/reference/event_source.md),
-[`flag_event()`](https:/pharmaverse.github.io/admiral/v1.4.2/reference/flag_event.md),
-[`query()`](https:/pharmaverse.github.io/admiral/v1.4.2/reference/query.md),
-[`records_source()`](https:/pharmaverse.github.io/admiral/v1.4.2/reference/records_source.md),
-[`tte_source()`](https:/pharmaverse.github.io/admiral/v1.4.2/reference/tte_source.md)
+[`censor_source()`](https:/pharmaverse.github.io/admiral/v1.5.0/reference/censor_source.md),
+[`death_event`](https:/pharmaverse.github.io/admiral/v1.5.0/reference/tte_source_objects.md),
+[`event()`](https:/pharmaverse.github.io/admiral/v1.5.0/reference/event.md),
+[`event_joined()`](https:/pharmaverse.github.io/admiral/v1.5.0/reference/event_joined.md),
+[`event_source()`](https:/pharmaverse.github.io/admiral/v1.5.0/reference/event_source.md),
+[`flag_event()`](https:/pharmaverse.github.io/admiral/v1.5.0/reference/flag_event.md),
+[`query()`](https:/pharmaverse.github.io/admiral/v1.5.0/reference/query.md),
+[`records_source()`](https:/pharmaverse.github.io/admiral/v1.5.0/reference/records_source.md),
+[`tte_source()`](https:/pharmaverse.github.io/admiral/v1.5.0/reference/tte_source.md)

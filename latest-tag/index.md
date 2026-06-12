@@ -67,7 +67,7 @@ the below schedule shows, or there may even be ad-hoc releases.
 | Release Schedule | Phase 1- Date and Packages                                          | Phase 2- Date and Packages                                            |
 |------------------|---------------------------------------------------------------------|-----------------------------------------------------------------------|
 |                  |                                                                     |                                                                       |
-| Q2 2026          | Mid-June 2026                                                       | End of June 2026                                                      |
+| Q4 2026/Q1 2027  | Late December 2026/Early January 2027                               | Mid-January 2027                                                      |
 |                  | [{pharmaversesdtm}](https://pharmaverse.github.io/pharmaversesdtm/) | [{admiralonco}](https://pharmaverse.github.io/admiralonco/)           |
 |                  | [{admiraldev}](https://pharmaverse.github.io/admiraldev/)           | [{admiralophtha}](https://pharmaverse.github.io/admiralophtha/)       |
 |                  | [{admiral}](https://pharmaverse.github.io/admiral/)                 | [{admiralvaccine}](https://pharmaverse.github.io/admiralvaccine/)     |
@@ -75,8 +75,7 @@ the below schedule shows, or there may even be ad-hoc releases.
 |                  |                                                                     | [{admiralmetabolic}](https://pharmaverse.github.io/admiralmetabolic/) |
 |                  |                                                                     | [{admiralneuro}](https://pharmaverse.github.io/admiralneuro/)         |
 |                  |                                                                     | [{pharmaverseadam}](https://pharmaverse.github.io/pharmaverseadam/)   |
-|                  |                                                                     |                                                                       |
-| Q4 2026/Q1 2027  | Late December 2026/Early January 2027                               | Mid-January 2027                                                      |
+| Q2 2027          | Mid-June 2027                                                       | End of June 2027                                                      |
 |                  | [{pharmaversesdtm}](https://pharmaverse.github.io/pharmaversesdtm/) | [{admiralonco}](https://pharmaverse.github.io/admiralonco/)           |
 |                  | [{admiraldev}](https://pharmaverse.github.io/admiraldev/)           | [{admiralophtha}](https://pharmaverse.github.io/admiralophtha/)       |
 |                  | [{admiral}](https://pharmaverse.github.io/admiral/)                 | [{admiralvaccine}](https://pharmaverse.github.io/admiralvaccine/)     |
@@ -341,10 +340,11 @@ Golab, Alana Harris, Declan Hodges, Solveig Holmgaard, Anthony Howard,
 Shimeng Huang, Samia Kabi, Leena Khatri, James Kim, John Kirkpatrick,
 Robin Koeger, Konstantina Koukourikou, Dinakar Kulkarni, Pavan Kumar,
 Pooja Kumari, Shan Lee, Wenyi Liu, Sadchla Mascary, Iain McCay, Jack
-McGavigan, Jordanna Morrish, Syed Mubasheer, Kirill Muller, Thomas
-Neitmann, Yohann Omnes, Barbara O’Reilly, Celine Piraux, Hamza Rahal,
-Nick Ramirez, Tom Ratford, Sukalpo Saha, Tamara Senior, Sophie Shapcott,
-Vladyslav Shuliar, Eric Simms, Daniel Sjoberg, Ondrej Slama, Andrew
-Smith, Daniil Stefonishin, Vignesh Thanikachalam, Michael Thorpe, Steven
-Ting, Ojesh Upadhyay, Franciszek Walkowiak, Enki Wang, Phillip Webster,
-Annie Yang, Andrii Yurovskyi, Junze Zhang, Kangjie Zhang, Zelos Zhu
+McGavigan, Jordanna Morrish, Syed Mubasheer, Kirill Muller, Marco Musca,
+Thomas Neitmann, Yohann Omnes, Barbara O’Reilly, Dimple Patel, Celine
+Piraux, Hamza Rahal, Nick Ramirez, Tom Ratford, Sukalpo Saha, Tamara
+Senior, Sophie Shapcott, Vladyslav Shuliar, Eric Simms, Daniel Sjoberg,
+Ondrej Slama, Andrew Smith, Daniil Stefonishin, Vignesh Thanikachalam,
+Michael Thorpe, Steven Ting, Ojesh Upadhyay, Franciszek Walkowiak, Enki
+Wang, Phillip Webster, Annie Yang, Andrii Yurovskyi, Junze Zhang,
+Kangjie Zhang, Zelos Zhu

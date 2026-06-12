@@ -12,7 +12,8 @@ tte_source(
   date,
   censor = 0,
   set_values_to = NULL,
-  order = order
+  order = order,
+  consider_end_dates = TRUE
 )
 ```
 
@@ -24,7 +25,7 @@ tte_source(
 
   The name refers to the dataset provided by the `source_datasets`
   parameter of
-  [`derive_param_tte()`](https:/pharmaverse.github.io/admiral/v1.4.2/reference/derive_param_tte.md).
+  [`derive_param_tte()`](https:/pharmaverse.github.io/admiral/v1.5.0/reference/derive_param_tte.md).
 
   Default value
 
@@ -46,9 +47,9 @@ tte_source(
   expression is expected.
 
   Refer to
-  [`derive_vars_dt()`](https:/pharmaverse.github.io/admiral/v1.4.2/reference/derive_vars_dt.md)
+  [`derive_vars_dt()`](https:/pharmaverse.github.io/admiral/v1.5.0/reference/derive_vars_dt.md)
   or
-  [`convert_dtc_to_dt()`](https:/pharmaverse.github.io/admiral/v1.4.2/reference/convert_dtc_to_dt.md)
+  [`convert_dtc_to_dt()`](https:/pharmaverse.github.io/admiral/v1.5.0/reference/convert_dtc_to_dt.md)
   to impute and derive a date from a date character vector to a date
   object.
 
@@ -70,7 +71,7 @@ tte_source(
 - set_values_to:
 
   A named list returned by
-  [`exprs()`](https:/pharmaverse.github.io/admiral/v1.4.2/reference/reexport-exprs.md)
+  [`exprs()`](https:/pharmaverse.github.io/admiral/v1.5.0/reference/reexport-exprs.md)
   defining the variables to be set for the event or censoring, e.g.
   `exprs(EVENTDESC = "DEATH", SRCDOM = "ADSL", SRCVAR = "DTHDT")`. The
   values must be a symbol, a character string, a numeric value, an
@@ -85,19 +86,35 @@ tte_source(
   Sort order
 
   An optional named list returned by
-  [`exprs()`](https:/pharmaverse.github.io/admiral/v1.4.2/reference/reexport-exprs.md)
+  [`exprs()`](https:/pharmaverse.github.io/admiral/v1.5.0/reference/reexport-exprs.md)
   defining additional variables that the source dataset is sorted on
   after `date`.
 
   Permitted values
 
   :   list of variables created by
-      [`exprs()`](https:/pharmaverse.github.io/admiral/v1.4.2/reference/reexport-exprs.md)
+      [`exprs()`](https:/pharmaverse.github.io/admiral/v1.5.0/reference/reexport-exprs.md)
       e.g. `exprs(ASEQ)`.
 
   Default value
 
   :   `order`
+
+- consider_end_dates:
+
+  Should end dates be considered?
+
+  If end dates are considered, the records which are after the end date
+  are ignored and the censor value specified for the end date takes
+  precedence.
+
+  Permitted values
+
+  :   `TRUE`, `FALSE`
+
+  Default value
+
+  :   `TRUE`
 
 ## Value
 
@@ -105,17 +122,17 @@ An object of class `tte_source`
 
 ## See also
 
-[`derive_param_tte()`](https:/pharmaverse.github.io/admiral/v1.4.2/reference/derive_param_tte.md),
-[`censor_source()`](https:/pharmaverse.github.io/admiral/v1.4.2/reference/censor_source.md),
-[`event_source()`](https:/pharmaverse.github.io/admiral/v1.4.2/reference/event_source.md)
+[`derive_param_tte()`](https:/pharmaverse.github.io/admiral/v1.5.0/reference/derive_param_tte.md),
+[`censor_source()`](https:/pharmaverse.github.io/admiral/v1.5.0/reference/censor_source.md),
+[`event_source()`](https:/pharmaverse.github.io/admiral/v1.5.0/reference/event_source.md)
 
 Source Objects:
-[`basket_select()`](https:/pharmaverse.github.io/admiral/v1.4.2/reference/basket_select.md),
-[`censor_source()`](https:/pharmaverse.github.io/admiral/v1.4.2/reference/censor_source.md),
-[`death_event`](https:/pharmaverse.github.io/admiral/v1.4.2/reference/tte_source_objects.md),
-[`event()`](https:/pharmaverse.github.io/admiral/v1.4.2/reference/event.md),
-[`event_joined()`](https:/pharmaverse.github.io/admiral/v1.4.2/reference/event_joined.md),
-[`event_source()`](https:/pharmaverse.github.io/admiral/v1.4.2/reference/event_source.md),
-[`flag_event()`](https:/pharmaverse.github.io/admiral/v1.4.2/reference/flag_event.md),
-[`query()`](https:/pharmaverse.github.io/admiral/v1.4.2/reference/query.md),
-[`records_source()`](https:/pharmaverse.github.io/admiral/v1.4.2/reference/records_source.md)
+[`basket_select()`](https:/pharmaverse.github.io/admiral/v1.5.0/reference/basket_select.md),
+[`censor_source()`](https:/pharmaverse.github.io/admiral/v1.5.0/reference/censor_source.md),
+[`death_event`](https:/pharmaverse.github.io/admiral/v1.5.0/reference/tte_source_objects.md),
+[`event()`](https:/pharmaverse.github.io/admiral/v1.5.0/reference/event.md),
+[`event_joined()`](https:/pharmaverse.github.io/admiral/v1.5.0/reference/event_joined.md),
+[`event_source()`](https:/pharmaverse.github.io/admiral/v1.5.0/reference/event_source.md),
+[`flag_event()`](https:/pharmaverse.github.io/admiral/v1.5.0/reference/flag_event.md),
+[`query()`](https:/pharmaverse.github.io/admiral/v1.5.0/reference/query.md),
+[`records_source()`](https:/pharmaverse.github.io/admiral/v1.5.0/reference/records_source.md)
