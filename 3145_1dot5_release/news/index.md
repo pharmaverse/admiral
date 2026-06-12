@@ -2,8 +2,6 @@
 
 ## admiral 1.5.0
 
-### New Features
-
 ### Updates of Existing Functions
 
 - [`derive_vars_dt()`](https:/pharmaverse.github.io/admiral/3145_1dot5_release/reference/derive_vars_dt.md)

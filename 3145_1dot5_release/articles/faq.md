@@ -7,7 +7,8 @@
   derivations:
   - each block has a stand alone purpose (each function provides a
     specific functionality)
-  - Data Scientists can create their own blocks (create own R functions)
+  - Data Scientists can create their own blocks (create own R
+    functions).
 - Constructing ADaM dataset should become like building out of blocks
   that are based on [admiral](https://pharmaverse.github.io/admiral/)
   modular functions and user created modular functions.
@@ -28,39 +29,40 @@
   data quality. We all face the same challenge so why limit ourselves
   only to company-level adoption and crowd-sourcing to create ADaM
   datasets?
-- Build ADaMs via collaboration and co-creation
-- Early engagement with other like-minded companies moving towards R
-  could lead to our solution being shared open source as a framework for
-  contribution across-industry
-- Building ADaMs like a modular building blocks, everyone can contribute
-  and each module has a clear input and output to enable re-usable
-  solutions
+- In an effort to build ADaMs via collaboration and co-creation.
+- We believed early engagement with other like-minded companies moving
+  towards R could lead to our solution being shared open source as a
+  framework for contribution across-industry.
+- By building ADaMs like a modular building blocks, everyone can
+  contribute and each module has a clear input and output to enable
+  re-usable solutions.
 - Users can “slot in” their own modules to address specific
-  company/TA/Molecule/Study requirements
+  company/TA/Molecule/Study requirements.
 - TA specific requirements can be open sourced again and transformed
-  into a common ADaM approach for such analysis
-- the long-term gain of a consistent way of producing ADaM and a wider
-  community of across-industry developers contributing to grow the
-  codebase to cover the infinite array of possibilities
-- Contributors: An option to make a name for yourself in the Pharma
-  open-source community & an avenue to collaborate with other
-  like-minded people across the industry
-- Imagine if ADaMs are built in a consistent manner with the same code
-  from openly maintained functions and its impact on the Health
-  Authorities, readable code, QC, talent flow.
+  into a common ADaM approach for such analysis.
+- We saw the long-term potential of a consistent way of producing ADaM
+  and a wider community of across-industry developers contributing to
+  grow the codebase to cover the infinite array of possibilities.
+- We wanted to offer contributors an option to make a name for
+  themselves in the Pharma open-source community and an avenue to
+  collaborate with other like-minded people across the industry.
+- Finally, imagine if ADaMs are built in a consistent manner with the
+  same code from openly maintained functions and its impact on the
+  Health Authorities, readable code, QC, talent flow…!
 
 ##### Why did we use **R as a programming language**?
 
 - R is not an isolated software product, everyone can contribute (open
-  source principle)
+  source principle).
 - People from University/Statistical talent pipeline are more likely to
-  come through with R skills rather than a proprietary language
-- There seems to be a strong data science/analytics R community
-- FDA is open to accepting R submissions and are heavy users themselves
+  come through with R skills rather than a proprietary language .
+- There is a strong data science/analytics R community.
+- FDA is open to accepting R submissions and are heavy users themselves.
 - Top of the line visualization/graphics - R-Shiny for interactive data
-  displays and also R Markdown offers great report writing functionality
+  displays and also R Markdown offers great report writing
+  functionality.
 - R is very popular among statisticians so new statistical methods are
-  likely implemented in R before any other language
+  likely implemented in R before any other language.
 - There might be equally suited programming languages out there -
   however at some stage we had to make a decision! :)
 
@@ -105,9 +107,9 @@
 
 - [admiral](https://pharmaverse.github.io/admiral/) is meant as a
   toolbox to enable Data Scientists to build ADaMs according to their
-  varying analysis needs
+  varying analysis needs.
 - [admiral](https://pharmaverse.github.io/admiral/) is not meant as a
-  “click a button, out comes your ADaM” tool
+  “click a button, out comes your ADaM” tool.
 - On the [admiral](https://pharmaverse.github.io/admiral/) website,
   example scripts are provided which can be used as a starting point to
   create an ADaM (see at the end of a vignette).
@@ -132,16 +134,16 @@
   (using open source packages) exists to generate a validation report
   for an R package, which would be an option for any company to use. An
   example report using an earlier version of
-  [admiral](https://pharmaverse.github.io/admiral/) exists
+  [admiral](https://pharmaverse.github.io/admiral/) exists.
   [here](https://github.com/insightsengineering/thevalidatoR/blob/main/readme_files/report-0.1-admiral.pdf)
   as an illustration.
 
 ##### What is available around **function testing**?
 
 - Unit tests for reliability of each function - available as part of
-  open source release
+  open source release.
 - Some integration testing is be done to ensure functions can be called
-  together to create ADaM (e.g. even via the internal testing teams)
+  together to create ADaM (e.g. even via the internal testing teams).
 - Guidance for testing and documentation expectations of community
   contribution functions. Then it is for each company to cover the
   following:
@@ -153,7 +155,7 @@
     comparison versus your company-specific legacy ADaM solution could
     be appropriate until confidence builds)
   - see our guidance on [unit
-    testing](https://pharmaverse.github.io/admiraldev/articles/unit_test_guidance.html)
+    testing](https://pharmaverse.github.io/admiraldev/articles/unit_test_guidance.html).
 
 ##### Does **admiral provide harmonized define.xml** or submittable specifications for functions?
 
@@ -182,7 +184,7 @@
   BDS) that highlights which functionality
   [admiral](https://pharmaverse.github.io/admiral/) covers. (see [In
   **which order** does a user need to execute the
-  functions?](#in-which-order-does-a-user-need-to-execute-the-functions))
+  functions?](#in-which-order-does-a-user-need-to-execute-the-functions)).
 - The guidance also highlights the gaps to be filled by the user
   (e.g. timing, ranges).
 
