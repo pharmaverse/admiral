@@ -1,8 +1,6 @@
 # Changelog
 
-## admiral (development version)
-
-### New Features
+## admiral 1.5.0
 
 ### Updates of Existing Functions
 
@@ -51,11 +49,17 @@
   is no longer erroneously ignored.
   ([\#3018](https://github.com/pharmaverse/admiral/issues/3018))
 
-- Fixed poorly formatted warning messages in
+- Poorly formatted warning messages in
   [`derive_param_computed()`](https:/pharmaverse.github.io/admiral/main/reference/derive_param_computed.md)
   and
-  [`derive_vars_computed()`](https:/pharmaverse.github.io/admiral/main/reference/derive_vars_computed.md).
+  [`derive_vars_computed()`](https:/pharmaverse.github.io/admiral/main/reference/derive_vars_computed.md)
+  were improved.
   ([\#2969](https://github.com/pharmaverse/admiral/issues/2969))
+
+- Fixed typo in
+  [`derive_summary_records()`](https:/pharmaverse.github.io/admiral/main/reference/derive_summary_records.md)
+  error message.
+  ([\#3127](https://github.com/pharmaverse/admiral/issues/3127))
 
 - [`use_ad_template()`](https:/pharmaverse.github.io/admiral/main/reference/use_ad_template.md)
   was updated to remove the `open` argument, meaning the generated
@@ -66,8 +70,8 @@
   RStudio.
   ([\#2989](https://github.com/pharmaverse/admiral/issues/2989))
 
-- NCICTCAEv5 grading criteria (`atoxgr_criteria_ctcv5`,
-  `atoxgr_criteria_ctcv5_uscv`), updated to add term
+- The NCICTCAEv5 grading criteria (`atoxgr_criteria_ctcv5`,
+  `atoxgr_criteria_ctcv5_uscv`) were updated to add the term
   `"Blood lactate dehydrogenase increase"`
   ([\#3025](https://github.com/pharmaverse/admiral/issues/3025)).
 
@@ -90,11 +94,11 @@
 
   **Phase 1 (message)**
 
-  No functions or arguments in this phase
+  No functions or arguments in this phase.
 
   **Phase 2 (warning)**
 
-  No functions or arguments in this phase
+  No functions or arguments in this phase.
 
   **Phase 3 (error)**
 
@@ -103,7 +107,7 @@
 
   **Phase 4 (removed)**
 
-  No functions or arguments in this phase
+  No functions or arguments in this phase.
 
 - The `ex_single` dataset was removed from
   [admiral](https://pharmaverse.github.io/admiral/) to reduce the
@@ -116,8 +120,8 @@
 
 ### Documentation
 
-- New article “Time-to-Event Analyses” added to provide guidance for
-  different scenarios.
+- A new article “Time-to-Event Analyses” was added to provide guidance
+  for different TTE scenarios.
   ([\#2900](https://github.com/pharmaverse/admiral/issues/2900))
 
 - The following new and existing User Guides have been changed from
@@ -141,17 +145,20 @@
   `missing_value`, and per-source `by_vars` renaming.
   ([\#2906](https://github.com/pharmaverse/admiral/issues/2906))
 
-- Fix `UDTC` derivation in `ADPPK` to use source domain `DTC` variables.
+- The `UDTC` derivation in `ADPPK` was updated to use source domain
+  `DTC` variables.
   ([\#3011](https://github.com/pharmaverse/admiral/issues/3011))
 
-- Fixed example in
+- The example for
   [`derive_var_nfrlt()`](https:/pharmaverse.github.io/admiral/main/reference/derive_var_nfrlt.md)
-  to use `NA_character_` instead of `""` for missing unit values,
-  consistent with the admiral programming strategy.
+  was updated to use `NA_character_` instead of `""` for missing unit
+  values, consistent with the
+  [admiral](https://pharmaverse.github.io/admiral/) programming
+  strategy.
   ([\#3027](https://github.com/pharmaverse/admiral/issues/3027))
 
-- New web-only Estimands article added, describing possible
-  implementations of estimands with
+- A new web-only “Estimands” article was added, describing possible
+  implementations of Estimands with
   [admiral](https://pharmaverse.github.io/admiral/) code.
   ([\#2954](https://github.com/pharmaverse/admiral/issues/2954))
 
@@ -162,7 +169,7 @@
   on the navigation bar.
   ([\#2959](https://github.com/pharmaverse/admiral/issues/2959))
 
-- The [contributions
+- The [contribution
   guidelines](https://pharmaverse.github.io/admiral/cran-release/CONTRIBUTING.html)
   for the [admiral](https://pharmaverse.github.io/admiral/) ecosystem of
   packages were updated to specify the level of contributions required
@@ -181,10 +188,6 @@
   function documentation.
   ([\#2995](https://github.com/pharmaverse/admiral/issues/2995))
 
-- Added IDs to each template script in the “Explore ADaM Templates”
-  vignette, enabling links to them from across the website.
-  ([\#3006](https://github.com/pharmaverse/admiral/issues/3006))
-
 - The documentation for
   [`derive_vars_merged_summary()`](https:/pharmaverse.github.io/admiral/main/reference/derive_vars_merged_summary.md)
   was enhanced with structured examples covering the `new_vars`,
@@ -192,9 +195,9 @@
   aggregation use cases.
   ([\#2775](https://github.com/pharmaverse/admiral/issues/2775))
 
-- Added a new custom [404
-  page](https://pharmaverse.github.io/admiral/404.html) with a butterfly
-  quiz for lost users.
+- A new custom [404
+  page](https://pharmaverse.github.io/admiral/404.html) was added with a
+  butterfly quiz for lost users.
   ([\#2982](https://github.com/pharmaverse/admiral/issues/2982))
 
 - Added information about how to print out records with missing
@@ -202,7 +205,7 @@
   [`derive_summary_records()`](https:/pharmaverse.github.io/admiral/main/reference/derive_summary_records.md).
   ([\#3012](https://github.com/pharmaverse/admiral/issues/3012))
 
-- Usage of `ASEQ` which is an optional variable was clarified within the
+- Usage of `ASEQ` (an optional variable) was clarified within the
   corresponding Vignettes and Templates.
   ([\#2986](https://github.com/pharmaverse/admiral/issues/2986))
 
@@ -217,7 +220,7 @@
   was updated to clarify details of the `highest_imputation` argument.
   ([\#3055](https://github.com/pharmaverse/admiral/issues/3055))
 
-- The ‘Date and Time Imputation’ vignette was updated to point out the
+- The “Date and Time Imputation” vignette was updated to point out the
   difference between the character `*DTC` variables and the numeric
   `*DTM` variables.
   ([\#3055](https://github.com/pharmaverse/admiral/issues/3055))
@@ -227,12 +230,12 @@
   not usually called directly on a data frame with `%>%`.
   ([\#3146](https://github.com/pharmaverse/admiral/issues/3146))
 
-### Various
+- Added notes and examples for deriving baseline toxicity grade
+  variables (`BTOXGR`, `BTOXGRL`, `BTOXGRH`) in the Lab Grading
+  vignette.
+  ([\#3119](https://github.com/pharmaverse/admiral/issues/3119))
 
-- Fixed typo in
-  [`derive_summary_records()`](https:/pharmaverse.github.io/admiral/main/reference/derive_summary_records.md)
-  error message.
-  ([\#3127](https://github.com/pharmaverse/admiral/issues/3127))
+### Various
 
 Developer Notes
 
@@ -286,13 +289,6 @@ Developer Notes
   the home page sidebar for every
   [admiral](https://pharmaverse.github.io/admiral/) author.
   ([\#3112](https://github.com/pharmaverse/admiral/issues/3112))
-
-&nbsp;
-
-- Added notes and examples for deriving baseline toxicity grade
-  variables (`BTOXGR`, `BTOXGRL`, `BTOXGRH`) in the Lab Grading
-  vignette.
-  ([\#3119](https://github.com/pharmaverse/admiral/issues/3119))
 
 ## admiral 1.4.2
 
@@ -469,11 +465,11 @@ CRAN release: 2026-01-15
 
   **Phase 3 (error)**
 
-  No functions or arguments in this Phase
+  No functions or arguments in this phase.
 
   **Phase 4 (removed)**
 
-  No functions or arguments in this Phase
+  No functions or arguments in this phase.
 
 ### Documentation
 
@@ -809,15 +805,15 @@ CRAN release: 2025-06-25
 
   **Phase 2 (warning)**
 
-  No functions or arguments in this Phase
+  No functions or arguments in this phase.
 
   **Phase 3 (error)**
 
-  No functions or arguments in this Phase
+  No functions or arguments in this phase.
 
   **Phase 4 (removed)**
 
-  No functions or arguments in this Phase
+  No functions or arguments in this phase.
 
 ### Documentation
 
@@ -1956,8 +1952,8 @@ CRAN release: 2023-09-12
   and
   [`derive_var_extreme_dtm()`](https:/pharmaverse.github.io/admiral/main/reference/derive_var_extreme_dtm.md),users
   can now define the traceability variables by assigning those variables
-  to the `set_values_to`argument.Similarly, the `dthcaus_source` creates
-  a dthcaus_source Object.
+  to the `set_values_to`argument. Similarly, the `dthcaus_source`
+  creates a dthcaus_source Object.
   ([\#2068](https://github.com/pharmaverse/admiral/issues/2068))
 
 - [`derive_extreme_event()`](https:/pharmaverse.github.io/admiral/main/reference/derive_extreme_event.md)
