@@ -25,6 +25,13 @@ The variables specified by the \code{dataset_ref} and \code{by_vars} arguments a
 Data frame with the expected observations, e.g., all the expected
 combinations of \code{PARAMCD}, \code{PARAM}, \code{AVISIT}, \code{AVISITN}, ...
 
+\code{dataset_ref} should contain \emph{only} the variables that define the expected
+observations. Every variable in \code{dataset_ref} is used to match the expected
+observations against the input dataset, so any additional variable becomes
+part of the matching key and can result in more records being created than
+intended (see Details). All variables in \code{dataset_ref} must also be present
+in \code{dataset}.
+
 \describe{
 \item{Default value}{none}
 }}
@@ -68,6 +75,14 @@ contains missing observations.
 For each group (the variables specified in the \code{by_vars} parameter),
 those records from \code{dataset_ref} that are missing in the input
 dataset are added to the output dataset.
+
+All variables in \code{dataset_ref} are used to identify the expected observations
+and to match them against the input dataset. For this reason \code{dataset_ref}
+should contain only the variables that define the expected observations
+(e.g. the visit and/or parameter variables). Including any additional
+variable extends the matching key and can lead to more records being added
+than intended, as input records that differ only on the extra variable are
+no longer recognized as already present.
 }
 \examples{
 library(tibble)

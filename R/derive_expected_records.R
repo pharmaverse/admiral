@@ -11,6 +11,13 @@
 #'   Data frame with the expected observations, e.g., all the expected
 #'   combinations of `PARAMCD`, `PARAM`, `AVISIT`, `AVISITN`, ...
 #'
+#'   `dataset_ref` should contain *only* the variables that define the expected
+#'   observations. Every variable in `dataset_ref` is used to match the expected
+#'   observations against the input dataset, so any additional variable becomes
+#'   part of the matching key and can result in more records being created than
+#'   intended (see Details). All variables in `dataset_ref` must also be present
+#'   in `dataset`.
+#'
 #' @param by_vars Grouping variables
 #'
 #'   For each group defined by `by_vars` those observations from `dataset_ref`
@@ -33,6 +40,14 @@
 #' @details For each group (the variables specified in the `by_vars` parameter),
 #' those records from `dataset_ref` that are missing in the input
 #' dataset are added to the output dataset.
+#'
+#' All variables in `dataset_ref` are used to identify the expected observations
+#' and to match them against the input dataset. For this reason `dataset_ref`
+#' should contain only the variables that define the expected observations
+#' (e.g. the visit and/or parameter variables). Including any additional
+#' variable extends the matching key and can lead to more records being added
+#' than intended, as input records that differ only on the extra variable are
+#' no longer recognized as already present.
 #'
 #' @return The input dataset with the missed expected observations added for each
 #' `by_vars`. Note, a variable will only be populated in the new parameter rows

@@ -8,6 +8,11 @@
 
 ## Documentation
 
+- The documentation of `derive_expected_records()` was clarified to state that
+`dataset_ref` should contain only the variables that define the expected
+observations, as any additional variable becomes part of the matching key and
+can lead to more records being created than intended. (#3135)
+
 ## Various
 
 <details>
