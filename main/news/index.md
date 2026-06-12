@@ -1,5 +1,19 @@
 # Changelog
 
+## admiral (development version)
+
+### New Features
+
+### Updates of Existing Functions
+
+### Breaking Changes
+
+### Documentation
+
+### Various
+
+Developer Notes
+
 ## admiral 1.5.0
 
 ### Updates of Existing Functions
