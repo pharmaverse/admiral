@@ -1,7 +1,5 @@
 # admiral 1.5.0
 
-## New Features
-
 ## Updates of Existing Functions
 
 - `derive_vars_dt()` and `derive_vars_dtm()` were enhanced to allow user-defined `date_imputation` values (e.g.
