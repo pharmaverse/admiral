@@ -49,6 +49,11 @@
 #' than intended, as input records that differ only on the extra variable are
 #' no longer recognized as already present.
 #'
+#' At runtime the function reports the variables used to identify the expected
+#' observations and the number of records added, so an unintended extra variable
+#' in `dataset_ref` becomes visible. This message can be silenced with
+#' `suppressMessages()`.
+#'
 #' @return The input dataset with the missed expected observations added for each
 #' `by_vars`. Note, a variable will only be populated in the new parameter rows
 #' if it is specified in `by_vars` or `set_values_to`.
@@ -130,6 +135,17 @@ derive_expected_records <- function(dataset,
   new_obs <- exp_obsv %>%
     mutate(!!!set_values_to) %>%
     anti_join(dataset %>% select(all_of(exp_obs_vars)), by = c(exp_obs_vars))
+
+  cli_inform(
+    c(
+      "Expected observations identified by {.var {exp_obs_vars}}.",
+      i = "{nrow(new_obs)} new record{?s} added to the input dataset.",
+      i = paste(
+        "If more records were added than expected, check that {.arg dataset_ref}",
+        "contains only the variables that define the expected observations."
+      )
+    )
+  )
 
   # Combine dataset + newly added records
   bind_rows(dataset, new_obs) %>%

@@ -83,6 +83,11 @@ should contain only the variables that define the expected observations
 variable extends the matching key and can lead to more records being added
 than intended, as input records that differ only on the extra variable are
 no longer recognized as already present.
+
+At runtime the function reports the variables used to identify the expected
+observations and the number of records added, so an unintended extra variable
+in \code{dataset_ref} becomes visible. This message can be silenced with
+\code{suppressMessages()}.
 }
 \examples{
 library(tibble)
