@@ -8,7 +8,8 @@ derive_expected_records(
   dataset,
   dataset_ref,
   by_vars = NULL,
-  set_values_to = NULL
+  set_values_to = NULL,
+  quiet = FALSE
 )
 }
 \arguments{
@@ -61,6 +62,18 @@ symbol, a numeric value, \code{NA}, or expressions, e.g., \code{exprs(PARAMCD = 
 \describe{
 \item{Default value}{\code{NULL}}
 }}
+
+\item{quiet}{Suppress the message?
+
+The variables used to identify the expected observations are derived from
+\code{dataset_ref} rather than stated explicitly in the function call. By default
+a message reports them. Set \code{quiet = TRUE} to suppress this message.
+
+\emph{Permitted values}: \code{TRUE}, \code{FALSE}
+
+\describe{
+\item{Default value}{\code{FALSE}}
+}}
 }
 \value{
 The input dataset with the missed expected observations added for each
@@ -84,10 +97,9 @@ variable extends the matching key and can lead to more records being added
 than intended, as input records that differ only on the extra variable are
 no longer recognized as already present.
 
-At runtime the function reports the variables used to identify the expected
-observations and the number of records added, so an unintended extra variable
-in \code{dataset_ref} becomes visible. This message can be silenced with
-\code{suppressMessages()}.
+By default the function reports the variables used to identify the expected
+observations, as these are derived from \code{dataset_ref} rather than stated
+explicitly in the call. Set \code{quiet = TRUE} to suppress this message.
 }
 \examples{
 library(tibble)

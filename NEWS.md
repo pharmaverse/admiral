@@ -4,10 +4,10 @@
 
 ## Updates of Existing Functions
 
-- `derive_expected_records()` now prints a message reporting the variables used
-to identify the expected observations and the number of records added, so an
-unintended extra variable in `dataset_ref` becomes visible. The message can be
-silenced with `suppressMessages()`. (#3135)
+- `derive_expected_records()` now reports the variables used to identify the
+expected observations (derived from `dataset_ref`), so an unintended extra
+variable in `dataset_ref` becomes visible. The message can be suppressed with
+the new `quiet` argument. (#3135)
 
 ## Breaking Changes
 

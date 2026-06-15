@@ -170,8 +170,8 @@ test_that("derive_expected_records Test 4: visit variables are parameter depende
 })
 
 
-## Test 5: message reports matching variables and records added ----
-test_that("derive_expected_records Test 5: message reports matching variables and records added", {
+## Test 5: message reports matching variables, suppressed by `quiet` ----
+test_that("derive_expected_records Test 5: message reports matching variables, suppressed by `quiet`", {
   input <- tibble::tribble(
     ~USUBJID, ~PARAMCD, ~AVISITN, ~AVISIT, ~AVAL,
     "1", "a", 1, "WEEK 1", 10,
@@ -186,6 +186,7 @@ test_that("derive_expected_records Test 5: message reports matching variables an
     "b", 2, "WEEK 2"
   )
 
+  # message issued by default
   expect_message(
     derive_expected_records(
       dataset = input,
@@ -194,5 +195,16 @@ test_that("derive_expected_records Test 5: message reports matching variables an
       set_values_to = exprs(DTYPE = "DERIVED")
     ),
     "Expected observations identified"
+  )
+
+  # message suppressed when `quiet = TRUE`
+  expect_no_message(
+    derive_expected_records(
+      dataset = input,
+      dataset_ref = expected_obsv,
+      by_vars = NULL,
+      set_values_to = exprs(DTYPE = "DERIVED"),
+      quiet = TRUE
+    )
   )
 })
