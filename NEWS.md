@@ -4,9 +4,19 @@
 
 ## Updates of Existing Functions
 
+- `derive_expected_records()` now reports the variables used to identify the
+expected observations (derived from `dataset_ref`), so an unintended extra
+variable in `dataset_ref` becomes visible. The message can be suppressed with
+the new `quiet` argument. (#3135)
+
 ## Breaking Changes
 
 ## Documentation
+
+- The documentation of `derive_expected_records()` was clarified to state that
+`dataset_ref` should contain only the variables that define the expected
+observations, as any additional variable becomes part of the matching key and
+can lead to more records being created than intended. (#3135)
 
 ## Various
 

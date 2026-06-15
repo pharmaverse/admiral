@@ -11,6 +11,13 @@
 #'   Data frame with the expected observations, e.g., all the expected
 #'   combinations of `PARAMCD`, `PARAM`, `AVISIT`, `AVISITN`, ...
 #'
+#'   `dataset_ref` should contain *only* the variables that define the expected
+#'   observations. Every variable in `dataset_ref` is used to match the expected
+#'   observations against the input dataset, so any additional variable becomes
+#'   part of the matching key and can result in more records being created than
+#'   intended (see Details). All variables in `dataset_ref` must also be present
+#'   in `dataset`.
+#'
 #' @param by_vars Grouping variables
 #'
 #'   For each group defined by `by_vars` those observations from `dataset_ref`
@@ -30,9 +37,29 @@
 #'   symbol, a numeric value, `NA`, or expressions, e.g., `exprs(PARAMCD =
 #'   "TDOSE", PARCAT1 = "OVERALL")`.
 #'
+#' @param quiet Suppress the message?
+#'
+#'   The variables used to identify the expected observations are derived from
+#'   `dataset_ref` rather than stated explicitly in the function call. By default
+#'   a message reports them. Set `quiet = TRUE` to suppress this message.
+#'
+#'   *Permitted values*: `TRUE`, `FALSE`
+#'
 #' @details For each group (the variables specified in the `by_vars` parameter),
 #' those records from `dataset_ref` that are missing in the input
 #' dataset are added to the output dataset.
+#'
+#' All variables in `dataset_ref` are used to identify the expected observations
+#' and to match them against the input dataset. For this reason `dataset_ref`
+#' should contain only the variables that define the expected observations
+#' (e.g. the visit and/or parameter variables). Including any additional
+#' variable extends the matching key and can lead to more records being added
+#' than intended, as input records that differ only on the extra variable are
+#' no longer recognized as already present.
+#'
+#' By default the function reports the variables used to identify the expected
+#' observations, as these are derived from `dataset_ref` rather than stated
+#' explicitly in the call. Set `quiet = TRUE` to suppress this message.
 #'
 #' @return The input dataset with the missed expected observations added for each
 #' `by_vars`. Note, a variable will only be populated in the new parameter rows
@@ -86,7 +113,8 @@
 derive_expected_records <- function(dataset,
                                     dataset_ref,
                                     by_vars = NULL,
-                                    set_values_to = NULL) {
+                                    set_values_to = NULL,
+                                    quiet = FALSE) {
   # Check input parameters
   assert_vars(by_vars, optional = TRUE)
   assert_data_frame(dataset_ref)
@@ -95,6 +123,7 @@ derive_expected_records <- function(dataset,
     required_vars = expr_c(by_vars, chr2vars(colnames(dataset_ref)))
   )
   assert_varval_list(set_values_to, optional = TRUE)
+  assert_logical_scalar(quiet)
 
   # Derive expected records
   ## ids: Variables from by_vars but not in dataset_ref
@@ -115,6 +144,10 @@ derive_expected_records <- function(dataset,
   new_obs <- exp_obsv %>%
     mutate(!!!set_values_to) %>%
     anti_join(dataset %>% select(all_of(exp_obs_vars)), by = c(exp_obs_vars))
+
+  if (!quiet) {
+    cli_inform("Expected observations identified by {.var {exp_obs_vars}}.")
+  }
 
   # Combine dataset + newly added records
   bind_rows(dataset, new_obs) %>%
