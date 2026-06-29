@@ -59,7 +59,8 @@ derivations of ADaM datasets.
   programming workflow. It could be an
   [admiral](https://pharmaverse.github.io/admiral/) function or a
   company specific function.
-- Admiral functions can be re-used for company specific functions.
+- [admiral](https://pharmaverse.github.io/admiral/) functions can be
+  re-used for company specific functions.
 - Each function belongs to one category defined in keywords/family.
 - Each function that is used to derive one or multiple variable(s) is
   required to be unit tested.
@@ -93,8 +94,9 @@ corresponding imputation flag) then a single function would provide both
 variables.
 
 If something needed for ADaM could be achieved simply via an existing
-tidyverse function, then we do not wrap this into an admiral function,
-as that would add an unnecessary extra layer for users.
+tidyverse function, then we do not wrap this into an
+[admiral](https://pharmaverse.github.io/admiral/) function, as that
+would add an unnecessary extra layer for users.
 
 The following principles are key when designing a new function:
 
@@ -164,7 +166,8 @@ The following principles are key when designing a new function:
 
 ## Admiral Options
 
-- An exception is made for admiral options, see
+- An exception is made for
+  [admiral](https://pharmaverse.github.io/admiral/) options, see
   [`get_admiral_option()`](https:/pharmaverse.github.io/admiral/main/reference/get_admiral_option.md)
   and
   [`set_admiral_options()`](https:/pharmaverse.github.io/admiral/main/reference/set_admiral_options.md),
@@ -179,7 +182,9 @@ The following principles are key when designing a new function:
   functions.
 - If this additional flexibility needs to be added for another *commonly
   used* function argument e.g. `future_input` to be set as `exprs(...)`
-  it can be added as an admiral option. In the function formals define
+  it can be added as an
+  [admiral](https://pharmaverse.github.io/admiral/) option. In the
+  function formals define
   `future_input = get_admiral_option("future_input")` then proceed to
   modify the body and roxygen documentation of
   [`set_admiral_options()`](https:/pharmaverse.github.io/admiral/main/reference/set_admiral_options.md).
@@ -577,8 +582,8 @@ looking at
 [`derive_vars_dy()`](https:/pharmaverse.github.io/admiral/main/reference/derive_vars_dy.md)
 function documentation might be interested in other Date/Time functions.
 Using the `@family` tag `der_date_time` will display all the Date/Time
-functions available in admiral to the user in the **See Also** section
-of
+functions available in [admiral](https://pharmaverse.github.io/admiral/)
+to the user in the **See Also** section of
 [`derive_vars_dy()`](https:/pharmaverse.github.io/admiral/main/reference/derive_vars_dy.md)
 function documentation. Please take a look at the function documentation
 for
@@ -589,45 +594,45 @@ Below are the list of available keyword/family tags to be used in
 `admiral` functions. If you think an additional keyword/family tag
 should be added, then please add an issue in GitHub for discussion.
 
-| Keyword/Family          | Description                                                                                                  |
-|-------------------------|--------------------------------------------------------------------------------------------------------------|
-| `com_date_time`         | Date/Time Computation Functions that returns a vector                                                        |
-| `com_bds_findings`      | BDS-Findings Functions that returns a vector                                                                 |
-| `create_aux`            | Functions for Creating Auxiliary Datasets                                                                    |
-| `datasets`              | Example datasets used within admiral                                                                         |
-| `der_gen`               | General Derivation Functions that can be used for any ADaM.                                                  |
-| `der_date_time`         | Date/Time Derivation Function                                                                                |
-| `der_bds_gen`           | Basic Data Structure (BDS) Functions that can be used across different BDS ADaM (adex, advs, adlb, etc)      |
-| `der_bds_findings`      | Basic Data Structure (BDS) Functions specific to the BDS-Findings ADaMs                                      |
-| `der_prm_bds_findings`  | BDS-Findings Functions for adding Parameters                                                                 |
-| `der_adsl`              | Functions that can only be used for creating ADSL.                                                           |
-| `der_tte`               | Function used only for creating a Time to Event (TTE) Dataset                                                |
-| `der_occds`             | OCCDS specific derivation of helper Functions                                                                |
-| `der_prm_tte`           | TTE Functions for adding Parameters to TTE Dataset                                                           |
-| `deprecated`            | Function which will be removed from admiral after next release. See [Deprecation Guidance](#deprecation).    |
-| `metadata`              | Auxiliary datasets providing definitions as input for derivations, e.g. grading criteria or dose frequencies |
-| `utils_ds_chk`          | Utilities for Dataset Checking                                                                               |
-| `utils_fil`             | Utilities for Filtering Observations                                                                         |
-| `utils_fmt`             | Utilities for Formatting Observations                                                                        |
-| `utils_print`           | Utilities for Printing Objects in the Console                                                                |
-| `utils_help`            | Utilities used within Derivation functions                                                                   |
-| `utils_examples`        | Utilities used for examples and template scripts                                                             |
-| `source_specifications` | Source Objects                                                                                               |
-| `other_advanced`        | Other Advanced Functions                                                                                     |
-| `high_order_function`   | Higher Order Functions                                                                                       |
-| `internal`              | Internal functions only available to admiral developers                                                      |
-|                         |                                                                                                              |
-| `assertion`\*           | Asserts a certain type and gives warning, error to user                                                      |
-| `warning`               | Provides custom warnings to user                                                                             |
-| `what`                  | A function that …                                                                                            |
-| `is`                    | A function that …                                                                                            |
-| `get`                   | A function that …                                                                                            |
+| Keyword/Family          | Description                                                                                                                                         |
+|-------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------|
+| `com_date_time`         | Date/Time Computation Functions that returns a vector                                                                                               |
+| `com_bds_findings`      | BDS-Findings Functions that returns a vector                                                                                                        |
+| `create_aux`            | Functions for Creating Auxiliary Datasets                                                                                                           |
+| `datasets`              | Example datasets used within [admiral](https://pharmaverse.github.io/admiral/)                                                                      |
+| `der_gen`               | General Derivation Functions that can be used for any ADaM.                                                                                         |
+| `der_date_time`         | Date/Time Derivation Function                                                                                                                       |
+| `der_bds_gen`           | Basic Data Structure (BDS) Functions that can be used across different BDS ADaM (adex, advs, adlb, etc)                                             |
+| `der_bds_findings`      | Basic Data Structure (BDS) Functions specific to the BDS-Findings ADaMs                                                                             |
+| `der_prm_bds_findings`  | BDS-Findings Functions for adding Parameters                                                                                                        |
+| `der_adsl`              | Functions that can only be used for creating ADSL.                                                                                                  |
+| `der_tte`               | Function used only for creating a Time to Event (TTE) Dataset                                                                                       |
+| `der_occds`             | OCCDS specific derivation of helper Functions                                                                                                       |
+| `der_prm_tte`           | TTE Functions for adding Parameters to TTE Dataset                                                                                                  |
+| `deprecated`            | Function which will be removed from [admiral](https://pharmaverse.github.io/admiral/) after next release. See [Deprecation Guidance](#deprecation). |
+| `metadata`              | Auxiliary datasets providing definitions as input for derivations, e.g. grading criteria or dose frequencies                                        |
+| `utils_ds_chk`          | Utilities for Dataset Checking                                                                                                                      |
+| `utils_fil`             | Utilities for Filtering Observations                                                                                                                |
+| `utils_fmt`             | Utilities for Formatting Observations                                                                                                               |
+| `utils_print`           | Utilities for Printing Objects in the Console                                                                                                       |
+| `utils_help`            | Utilities used within Derivation functions                                                                                                          |
+| `utils_examples`        | Utilities used for examples and template scripts                                                                                                    |
+| `source_specifications` | Source Objects                                                                                                                                      |
+| `other_advanced`        | Other Advanced Functions                                                                                                                            |
+| `high_order_function`   | Higher Order Functions                                                                                                                              |
+| `internal`              | Internal functions only available to [admiral](https://pharmaverse.github.io/admiral/) developers                                                   |
+|                         |                                                                                                                                                     |
+| `assertion`\*           | Asserts a certain type and gives warning, error to user                                                                                             |
+| `warning`               | Provides custom warnings to user                                                                                                                    |
+| `what`                  | A function that …                                                                                                                                   |
+| `is`                    | A function that …                                                                                                                                   |
+| `get`                   | A function that …                                                                                                                                   |
 
 **NOTE:** It is strongly encouraged that each `@keyword` and `@family`
 are to be identical. This eases the burden of development and
-maintenance for admiral functions. If you need to use multiple keywords
-or families, please reach out to the core development team for
-discussion.
+maintenance for [admiral](https://pharmaverse.github.io/admiral/)
+functions. If you need to use multiple keywords or families, please
+reach out to the core development team for discussion.
 
 # Missing values
 
@@ -697,10 +702,11 @@ would have to be included in that file:
 it is easier to track all of our dependencies in one place and improves
 code readability.
 
-Some of these functions become critically important while using admiral
-and should be included as an export. This applies to functions which are
-frequently called within
-[admiral](https://pharmaverse.github.io/admiral/) function calls like
+Some of these functions become critically important while using
+[admiral](https://pharmaverse.github.io/admiral/) and should be included
+as an export. This applies to functions which are frequently called
+within [admiral](https://pharmaverse.github.io/admiral/) function calls
+like
 [`rlang::exprs()`](https://rlang.r-lib.org/reference/defusing-advanced.html),
 [`dplyr::desc()`](https://dplyr.tidyverse.org/reference/desc.html) or
 the pipe operator `dplyr::%>%`. To export these functions, the following
@@ -724,8 +730,8 @@ for details.
 # Deprecation
 
 The below deprecation strategy provides stability to users while
-allowing admiral developers the ability to remove and update the code
-base in the coming days.
+allowing [admiral](https://pharmaverse.github.io/admiral/) developers
+the ability to remove and update the code base in the coming days.
 
 - **Phase 1:** In the release where the identified function or argument
   is to be deprecated, there will be a message issued when using the
@@ -977,17 +983,13 @@ Other unit tests of the deprecated function must be removed.
 
 # Experimental Functions
 
-admiral is stable with its core functions. New functions added to
-admiral must be labelled with the lifecycle badge **experimental**.
-
-`` {r, eval=FALSE} #' Title of the function #' #' @description #' `r lifecycle::badge("experimental")` #' ``
-
-Experimental functions will be given two release before we remove the
-badge. No deprecation messages will be given to the user if breaking
-changes are implemented within the two releases cycle. However, admiral
-will document the breaking change in the `News.md`. Once the two release
-cycles is reached, admiral will remove the **experimental** badge and we
-will proceed with the normal deprecation cycle if needed.
+[admiral](https://pharmaverse.github.io/admiral/) is stable with its
+core functions. In the rare case that new functions are added, the dev
+team may choose to label them with the “Experimental” lifecycle badge.
+While a function has this badge, no deprecation messages will be given
+to the user if a change is introduced, although these will be documented
+in the “Changelog”. Experimental functions will have the “Experimental”
+badge removed once the dev team feels the function is stable.
 
 This experimental time period allows for us to test out the function and
 receive feedback but doesn’t burden us with a deprecation cycle.
@@ -1006,12 +1008,13 @@ its rules if possible.
 
 ## How Quoting is used
 
-- Some admiral arguments require selecting one particular option like
-  `mode`, e.g. `mode = "last"`. Use quotation marks to capture these.
-  The expected assertion function corresponding to these arguments is
+- Some [admiral](https://pharmaverse.github.io/admiral/) arguments
+  require selecting one particular option like `mode`,
+  e.g. `mode = "last"`. Use quotation marks to capture these. The
+  expected assertion function corresponding to these arguments is
   `assert_character_scalar()/assert_character_vector()`.
-- Many admiral arguments require capturing an expression, typically
-  encased in a
+- Many [admiral](https://pharmaverse.github.io/admiral/) arguments
+  require capturing an expression, typically encased in a
   [`exprs()`](https:/pharmaverse.github.io/admiral/main/reference/reexport-exprs.md)
   statement, which are to be evaluated *later* inside the function body,
   see arguments like `new_vars`,
@@ -1019,11 +1022,11 @@ its rules if possible.
   function corresponding to these are
   `assert_expr()/assert_expr_list()`. These arguments are unquoted by
   using `!!!`.
-- Some admiral arguments like `new_var` or `filter` which expect a
-  *single* variable or expression are not quoted in the call. In the
-  function body, it has to be quoted by using `enexpr().` Usually this
-  is combined with the assertion, e.g.,
-  `new_var <- assert_symbol(enexpr(new_var))`. These arguments are
+- Some [admiral](https://pharmaverse.github.io/admiral/) arguments like
+  `new_var` or `filter` which expect a *single* variable or expression
+  are not quoted in the call. In the function body, it has to be quoted
+  by using `enexpr().` Usually this is combined with the assertion,
+  e.g., `new_var <- assert_symbol(enexpr(new_var))`. These arguments are
   unquoted by using `!!`.
 - Keep in mind `!!` is a one-to-one replacement and `!!!` is a
   one-to-many replacement. Please see [this
@@ -1165,8 +1168,9 @@ the use of AI from contributors. However, contributors still need to
 follow all [contributor
 guidelines](https://pharmaverse.github.io/admiral/cran-release/CONTRIBUTING.html)
 as well as ensuring their contributions do not violate copyright,
-regardless of whether AI tools were used in their creation. The admiral
-core team has created the
+regardless of whether AI tools were used in their creation. The
+[admiral](https://pharmaverse.github.io/admiral/) core team has created
+the
 [`AGENTS.md`](https://github.com/pharmaverse/admiral/blob/main/AGENTS.md)
 file to provide the AI with guidance on admiral’s particular needs, as
 well as the contribution guidelines that should be followed. The

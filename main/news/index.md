@@ -16,6 +16,8 @@ Developer Notes
 
 ## admiral 1.5.0
 
+CRAN release: 2026-06-12
+
 ### Updates of Existing Functions
 
 - [`derive_vars_dt()`](https:/pharmaverse.github.io/admiral/main/reference/derive_vars_dt.md)
