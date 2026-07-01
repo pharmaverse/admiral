@@ -8,6 +8,9 @@
 
 ## Documentation
 
+- Fixed the ADAETTE example in the "Higher Order Functions" vignette so that it no
+longer issues a duplicate records warning. (#3153)
+
 ## Various
 
 <details>
