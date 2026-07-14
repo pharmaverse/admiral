@@ -12,6 +12,14 @@
 
 ### Various
 
+- Updated the default `ae_event`, `ae_ser_event`, `ae_gr1_event`,
+  `ae_gr2_event`, `ae_gr3_event`, `ae_gr4_event`, `ae_gr5_event`,
+  `ae_gr_35_event`, `ae_wd_event` and `ae_sev_event` objects to specify
+  `order = exprs(AESEQ)` so that AEs on the same date are
+  differentiated. This fixes a duplicate warning in the “Higher Order
+  Functions” vignette.
+  ([\#3153](https://github.com/pharmaverse/admiral/issues/3153))
+
 Developer Notes
 
 ## admiral 1.5.0

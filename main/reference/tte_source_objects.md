@@ -77,7 +77,8 @@ for (obj in list_tte_source_objects()$object) {
 #>   SRCDOM: "ADAE"
 #>   SRCVAR: "ASTDT"
 #>   SRCSEQ: AESEQ
-#> order: NULL
+#> order:
+#>   AESEQ
 #> consider_end_dates: TRUE
 #> 
 #> ae_wd_event 
@@ -91,7 +92,8 @@ for (obj in list_tte_source_objects()$object) {
 #>   SRCDOM: "ADAE"
 #>   SRCVAR: "ASTDT"
 #>   SRCSEQ: AESEQ
-#> order: NULL
+#> order:
+#>   AESEQ
 #> consider_end_dates: TRUE
 #> 
 #> ae_gr35_event 
@@ -105,7 +107,8 @@ for (obj in list_tte_source_objects()$object) {
 #>   SRCDOM: "ADAE"
 #>   SRCVAR: "ASTDT"
 #>   SRCSEQ: AESEQ
-#> order: NULL
+#> order:
+#>   AESEQ
 #> consider_end_dates: TRUE
 #> 
 #> lastalive_censor 
@@ -132,7 +135,8 @@ for (obj in list_tte_source_objects()$object) {
 #>   SRCDOM: "ADAE"
 #>   SRCVAR: "ASTDT"
 #>   SRCSEQ: AESEQ
-#> order: NULL
+#> order:
+#>   AESEQ
 #> consider_end_dates: TRUE
 #> 
 #> ae_ser_event 
@@ -146,7 +150,8 @@ for (obj in list_tte_source_objects()$object) {
 #>   SRCDOM: "ADAE"
 #>   SRCVAR: "ASTDT"
 #>   SRCSEQ: AESEQ
-#> order: NULL
+#> order:
+#>   AESEQ
 #> consider_end_dates: TRUE
 #> 
 #> ae_gr2_event 
@@ -160,7 +165,8 @@ for (obj in list_tte_source_objects()$object) {
 #>   SRCDOM: "ADAE"
 #>   SRCVAR: "ASTDT"
 #>   SRCSEQ: AESEQ
-#> order: NULL
+#> order:
+#>   AESEQ
 #> consider_end_dates: TRUE
 #> 
 #> ae_event 
@@ -174,7 +180,8 @@ for (obj in list_tte_source_objects()$object) {
 #>   SRCDOM: "ADAE"
 #>   SRCVAR: "ASTDT"
 #>   SRCSEQ: AESEQ
-#> order: NULL
+#> order:
+#>   AESEQ
 #> consider_end_dates: TRUE
 #> 
 #> ae_gr4_event 
@@ -188,7 +195,8 @@ for (obj in list_tte_source_objects()$object) {
 #>   SRCDOM: "ADAE"
 #>   SRCVAR: "ASTDT"
 #>   SRCSEQ: AESEQ
-#> order: NULL
+#> order:
+#>   AESEQ
 #> consider_end_dates: TRUE
 #> 
 #> ae_gr5_event 
@@ -202,7 +210,8 @@ for (obj in list_tte_source_objects()$object) {
 #>   SRCDOM: "ADAE"
 #>   SRCVAR: "ASTDT"
 #>   SRCSEQ: AESEQ
-#> order: NULL
+#> order:
+#>   AESEQ
 #> consider_end_dates: TRUE
 #> 
 #> ae_sev_event 
@@ -216,7 +225,8 @@ for (obj in list_tte_source_objects()$object) {
 #>   SRCDOM: "ADAE"
 #>   SRCVAR: "ASTDT"
 #>   SRCSEQ: AESEQ
-#> order: NULL
+#> order:
+#>   AESEQ
 #> consider_end_dates: TRUE
 #> 
 #> death_event 

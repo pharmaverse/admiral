@@ -153,9 +153,6 @@ adaette <- call_derivation(
   source_datasets = list(adsl = adsl, adae = adae),
   censor_conditions = list(lastalive_censor)
 )
-#> Warning: Dataset "adae" contains duplicate records with respect to `STUDYID`, `USUBJID`,
-#> and `ASTDT`
-#> ℹ Run `admiral::get_duplicates_dataset()` to access the duplicate records
 ```
 
 Developing your ADaM scripts this way using
