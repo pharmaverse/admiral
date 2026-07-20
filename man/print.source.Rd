@@ -33,7 +33,9 @@ print(death_event)
 Utilities for printing:
 \code{\link[=print.adam_templates]{print.adam_templates()}},
 \code{\link[=print.duplicates]{print.duplicates()}},
-\code{\link[=print_named_list]{print_named_list()}}
+\code{\link[=print.summary_admiral_df]{print.summary_admiral_df()}},
+\code{\link[=print_named_list]{print_named_list()}},
+\code{\link[=summary.admiral_df]{summary.admiral_df()}}
 }
 \concept{utils_print}
 \keyword{internal}
