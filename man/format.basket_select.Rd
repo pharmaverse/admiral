@@ -35,7 +35,10 @@ format(basket_select(id = 42, scope = "NARROW", type = "smq"))
 
 Other internal:
 \code{\link{admiral-package}},
+\code{\link[=as_admiral_df]{as_admiral_df()}},
 \code{\link[=extract_duplicate_records]{extract_duplicate_records()}},
+\code{\link[=get_admiral_df_type]{get_admiral_df_type()}},
+\code{\link[=is_adsl_structure]{is_adsl_structure()}},
 \code{\link[=signal_duplicate_records]{signal_duplicate_records()}}
 }
 \concept{internal}
