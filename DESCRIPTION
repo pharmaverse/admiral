@@ -41,7 +41,7 @@ Imports:
     dplyr (>= 1.1.1),
     hms (>= 0.5.3),
     lifecycle (>= 0.1.0),
-    lubridate (>= 1.7.4),
+    lubridate (>= 1.7.8),
     magrittr (>= 1.5),
     purrr (>= 0.3.3),
     rlang (>= 0.4.4),

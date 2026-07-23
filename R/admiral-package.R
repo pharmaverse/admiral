@@ -17,9 +17,9 @@
 #' @importFrom lifecycle deprecate_warn deprecate_stop deprecated
 #'
 #' @importFrom lubridate %--% as_datetime ceiling_date date days duration
-#' @importFrom lubridate floor_date hour hours is.Date is.instant is.POSIXct
-#' @importFrom lubridate minute minutes rollback second time_length weeks ymd
-#' @importFrom lubridate ymd_hms years
+#' @importFrom lubridate floor_date format_ISO8601 hour hours is.Date is.instant
+#' @importFrom lubridate is.POSIXct minute minutes rollback second time_length
+#' @importFrom lubridate weeks ymd ymd_hms years
 #'
 #' @importFrom magrittr %>%
 #'

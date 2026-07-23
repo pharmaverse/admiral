@@ -215,7 +215,9 @@ derive_vars_dtm <- function(dataset,
                             time_imputation = "first",
                             flag_imputation = "auto",
                             min_dates = NULL,
+                            min_dates_strict = NULL,
                             max_dates = NULL,
+                            max_dates_strict = NULL,
                             preserve = FALSE,
                             ignore_seconds_flag = TRUE) {
   # check and quote arguments
@@ -236,7 +238,9 @@ derive_vars_dtm <- function(dataset,
     highest_imputation_values = c("Y", "M", "D", "h", "m", "s", "n"),
     date_imputation = date_imputation,
     min_dates = min_dates,
-    max_dates = max_dates
+    min_dates = min_dates_strict,
+    max_dates = max_dates,
+    max_dates = max_dates_strict
   )
 
   dtm <- paste0(new_vars_prefix, "DTM")
@@ -251,7 +255,9 @@ derive_vars_dtm <- function(dataset,
     date_imputation = date_imputation,
     time_imputation = time_imputation,
     min_dates = lapply(min_dates, eval_tidy, data = mask),
+    min_dates_strict = lapply(min_dates_strict, eval_tidy, data = mask),
     max_dates = lapply(max_dates, eval_tidy, data = mask),
+    max_dates_strict = lapply(max_dates_strict, eval_tidy, data = mask),
     preserve = preserve
   )
 
@@ -326,7 +332,9 @@ convert_dtc_to_dtm <- function(dtc,
                                date_imputation = "first",
                                time_imputation = "first",
                                min_dates = NULL,
+                               min_dates_strict = NULL,
                                max_dates = NULL,
+                               max_dates_strict = NULL,
                                preserve = FALSE) {
   assert_character_vector(dtc)
   warn_if_invalid_dtc(dtc, is_valid_dtc(dtc))
@@ -337,7 +345,9 @@ convert_dtc_to_dtm <- function(dtc,
     date_imputation = date_imputation,
     time_imputation = time_imputation,
     min_dates = min_dates,
+    min_dates_strict = min_dates_strict,
     max_dates = max_dates,
+    max_dates_strict = max_dates_strict,
     preserve = preserve
   )
 
@@ -549,7 +559,9 @@ impute_dtc_dtm <- function(dtc,
                            date_imputation = "first",
                            time_imputation = "first",
                            min_dates = NULL,
+                           min_dates_strict = NULL,
                            max_dates = NULL,
+                           max_dates_strict = NULL,
                            preserve = FALSE) {
   # Check arguments ----
   assert_character_vector(dtc)
@@ -570,7 +582,9 @@ impute_dtc_dtm <- function(dtc,
     highest_imputation_values = imputation_levels,
     date_imputation = date_imputation,
     min_dates = min_dates,
-    max_dates = max_dates
+    min_dates_strict = min_dates_strict,
+    max_dates = max_dates,
+    max_dates_strict = max_dates_strict
   )
 
 
@@ -643,10 +657,10 @@ impute_dtc_dtm <- function(dtc,
     dtc,
     imputed_dtc = imputed_dtc,
     min_dates = min_dates,
-    max_dates = max_dates
+    min_dates_strict = min_dates_strict,
+    max_dates = max_dates,
+    max_dates_strict = max_dates_strict
   )
-
-  restricted
 }
 
 #' Restrict Imputed `--DTC` date to Minimum/Maximum Dates
@@ -677,25 +691,31 @@ impute_dtc_dtm <- function(dtc,
 restrict_imputed_dtc_dtm <- function(dtc,
                                      imputed_dtc,
                                      min_dates,
-                                     max_dates) {
-  any_mindate <- !(is.null(min_dates) || length(min_dates) == 0)
-  any_maxdate <- !(is.null(max_dates) || length(max_dates) == 0)
+                                     min_dates_strict,
+                                     max_dates,
+                                     max_dates_strict) {
+  any_mindate <- !((is.null(min_dates) || length(min_dates) == 0) &&
+    (is.null(min_dates_strict) || length(min_dates_strict) == 0))
+  any_maxdate <- !((is.null(max_dates) || length(max_dates) == 0) &&
+    (is.null(max_dates_strict) || length(max_dates_strict) == 0))
   if (any_mindate || any_maxdate) {
     dtc_range <-
       get_dt_dtm_range(
         dtc,
+        lower_bounds = min_dates_strict,
+        upper_bounds = max_dates_strict,
         create_datetime = TRUE
       )
     min_dtc <- dtc_range[["lower"]]
     max_dtc <- dtc_range[["upper"]]
   }
   if (any_mindate) {
-    if (length(unique(c(length(imputed_dtc), unlist(lapply(min_dates, length))))) != 1) {
+    if (length(unique(c(length(imputed_dtc), lengths(min_dates)))) != 1) {
       cli_abort("Length of {.arg min_dates} do not match length of dates to be imputed.")
     }
     # for each minimum date within the range ensure that the imputed date is not
     # before it
-    for (min_date in min_dates) {
+    for (min_date in c(min_dates, min_dates_strict)) {
       assert_date_vector(min_date)
       min_date_iso <- strftime(min_date, format = "%Y-%m-%dT%H:%M:%S", tz = "UTC")
       imputed_dtc <- if_else(
@@ -707,12 +727,12 @@ restrict_imputed_dtc_dtm <- function(dtc,
     }
   }
   if (any_maxdate) {
-    if (length(unique(c(length(imputed_dtc), unlist(lapply(max_dates, length))))) != 1) {
+    if (length(unique(c(length(imputed_dtc), lengths(max_dates)))) != 1) {
       cli_abort("Length of {.arg max_dates} do not match length of dates to be imputed.")
     }
     # for each maximum date within the range ensure that the imputed date is not
     # after it
-    for (max_date in max_dates) {
+    for (max_date in c(max_dates, max_dates_strict)) {
       assert_date_vector(max_date)
       max_date <- convert_date_to_dtm(
         max_date,

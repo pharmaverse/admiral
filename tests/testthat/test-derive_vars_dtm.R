@@ -309,6 +309,32 @@ test_that("impute_dtc_dtm Test 9: max_dates parameter works", {
   )
 })
 
+test_that("min_dates_strict parameter works", {
+  expect_equal(
+    impute_dtc_dtm(c("2020-12", "2020", "2020-11", NA_character_),
+      min_dates = list(
+        c(
+          ymd_hms("2020-12-06T12:12:12"),
+          ymd_hms("2020-12-06T12:12:12"),
+          ymd_hms("2020-12-06T12:12:12"),
+          NA
+        )
+      ),
+      max_dates_strict = list(
+        c(
+        ymd_hms("2020-12-05T00:00:00"),
+        ymd_hms("2020-12-15T00:00:00"),
+        ymd_hms("2020-11-12T12:00:00"),
+        NA
+      )),
+      highest_imputation = "Y",
+      date_imputation = "first",
+      time_imputation = "first"
+    ),
+    c("2020-12-01T00:00:00", "2020-12-06T12:12:12", "2020-11-01T00:00:00", NA_character_)
+  )
+})
+
 ## Test 10: min_dates length mismatch provides error ----
 test_that("impute_dtc_dtm Test 10: min_dates length mismatch provides error", {
   expect_snapshot(

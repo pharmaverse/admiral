@@ -490,9 +490,13 @@ assert_time_imputation <- function(time_imputation, highest_imputation) {
 #' @returns Returns `NULL` invisibly if assertions pass.
 #'
 #' @keywords internal
-assert_highest_imputation <- function(highest_imputation, highest_imputation_values,
+assert_highest_imputation <- function(highest_imputation,
+                                      highest_imputation_values,
                                       date_imputation = NULL,
-                                      max_dates, min_dates) {
+                                      min_dates,
+                                      min_dates_strict,
+                                      max_dates,
+                                      max_dates_strict) {
   assert_character_scalar(
     highest_imputation,
     values = highest_imputation_values,
@@ -504,13 +508,16 @@ assert_highest_imputation <- function(highest_imputation, highest_imputation_val
   }
 
   assert_character_scalar(date_imputation, values = c("first", "last"))
-  no_mindates <- is.null(min_dates) || length(min_dates) == 0
-  no_maxdates <- is.null(max_dates) || length(max_dates) == 0
+  no_mindates <- (is.null(min_dates) || length(min_dates) == 0) &&
+    (is.null(min_dates_strict) || length(min_dates_strict) == 0)
+  no_maxdates <- (is.null(max_dates) || length(max_dates) == 0) &&
+    (is.null(max_dates_strict) || length(max_dates_strict) == 0)
 
   if (no_maxdates && no_mindates) {
     cli_abort(paste(
-      "If {.code highest_imputation = \"Y\"} is specified, {.arg min_dates} or",
-      "{.arg max_dates} must be specified respectively."
+      "If {.code highest_imputation = \"Y\"} is specified, {.arg min_dates},",
+      "{.arg min_dates_strict}, {.arg max_dates}, or {.arg max_dates_strict}",
+      "must be specified."
     ))
   }
 
@@ -518,14 +525,14 @@ assert_highest_imputation <- function(highest_imputation, highest_imputation_val
   if (no_mindates && date_imputation == "first") {
     cli_abort(paste(
       "If {.code highest_imputation = \"Y\"} and {.code date_imputation = \"first\"}",
-      "is specified, {.arg min_dates} must be specified."
+      "is specified, {.arg min_dates} or {.arg min_dates_strict} must be specified."
     ))
   }
 
   if (no_maxdates && date_imputation == "last") {
     cli_abort(paste(
       "If {.code highest_imputation = \"Y\"} and {.code date_imputation = \"last\"}",
-      "is specified, {.arg max_dates} must be specified."
+      "is specified, {.arg max_dates} or {.arg max_dates_strict) must be specified."
     ))
   }
   invisible(NULL)
@@ -569,6 +576,8 @@ assert_highest_imputation <- function(highest_imputation, highest_imputation_val
 #'
 #' @keywords internal
 get_dt_dtm_range <- function(dtc,
+                             lower_bounds,
+                             upper_bounds,
                              create_datetime) {
   assert_character_vector(dtc)
   valid_dtc <- is_valid_dtc(dtc)
@@ -605,6 +614,22 @@ get_dt_dtm_range <- function(dtc,
   })
 
   imputed_dtcs[[2]] <- adjust_last_day_imputation(imputed_dtcs[[2]], partial)
+
+  if (!(is.na(lower_bounds) || length(lower_bounds) == 0)) {
+    imputed_dtcs[[1]] <- do.call(
+      pmax,
+      args = c(list(ymd_hms(imputed_dtcs[[1]])), lower_bounds, na.rm = TRUE)
+    ) %>% 
+      format_ISO8601()
+  }
+
+  if (!(is.na(upper_bounds) || length(upper_bounds) == 0)) {
+    imputed_dtcs[[2]] <- do.call(
+      pmax,
+      args = c(list(ymd_hms(imputed_dtcs[[2]])), upper_bounds, na.rm = TRUE)
+    ) %>% 
+      format_ISO8601()
+  }
 
   names(imputed_dtcs) <- c("lower", "upper")
 
