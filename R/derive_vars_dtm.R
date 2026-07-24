@@ -238,9 +238,9 @@ derive_vars_dtm <- function(dataset,
     highest_imputation_values = c("Y", "M", "D", "h", "m", "s", "n"),
     date_imputation = date_imputation,
     min_dates = min_dates,
-    min_dates = min_dates_strict,
+    min_dates_strict = min_dates_strict,
     max_dates = max_dates,
-    max_dates = max_dates_strict
+    max_dates_strict = max_dates_strict
   )
 
   dtm <- paste0(new_vars_prefix, "DTM")
@@ -653,7 +653,7 @@ impute_dtc_dtm <- function(dtc,
   }
 
   # Handle min_dates and max_dates argument ----
-  restricted <- restrict_imputed_dtc_dtm(
+  restrict_imputed_dtc_dtm(
     dtc,
     imputed_dtc = imputed_dtc,
     min_dates = min_dates,

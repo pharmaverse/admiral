@@ -532,7 +532,7 @@ assert_highest_imputation <- function(highest_imputation,
   if (no_maxdates && date_imputation == "last") {
     cli_abort(paste(
       "If {.code highest_imputation = \"Y\"} and {.code date_imputation = \"last\"}",
-      "is specified, {.arg max_dates} or {.arg max_dates_strict) must be specified."
+      "is specified, {.arg max_dates} or {.arg max_dates_strict} must be specified."
     ))
   }
   invisible(NULL)
@@ -576,8 +576,8 @@ assert_highest_imputation <- function(highest_imputation,
 #'
 #' @keywords internal
 get_dt_dtm_range <- function(dtc,
-                             lower_bounds,
-                             upper_bounds,
+                             lower_bounds = NULL,
+                             upper_bounds = NULL,
                              create_datetime) {
   assert_character_vector(dtc)
   valid_dtc <- is_valid_dtc(dtc)
@@ -614,21 +614,38 @@ get_dt_dtm_range <- function(dtc,
   })
 
   imputed_dtcs[[2]] <- adjust_last_day_imputation(imputed_dtcs[[2]], partial)
-
-  if (!(is.na(lower_bounds) || length(lower_bounds) == 0)) {
-    imputed_dtcs[[1]] <- do.call(
-      pmax,
-      args = c(list(ymd_hms(imputed_dtcs[[1]])), lower_bounds, na.rm = TRUE)
-    ) %>% 
-      format_ISO8601()
+  if (create_datetime) {
+    date_function <- ymd_hms
+  } else {
+    date_function <- ymd
   }
 
-  if (!(is.na(upper_bounds) || length(upper_bounds) == 0)) {
-    imputed_dtcs[[2]] <- do.call(
-      pmax,
-      args = c(list(ymd_hms(imputed_dtcs[[2]])), upper_bounds, na.rm = TRUE)
-    ) %>% 
-      format_ISO8601()
+  if (!(is.null(lower_bounds) || length(lower_bounds) == 0)) {
+    upper_dt <-  date_function(imputed_dtcs[[2]])
+    for (i in seq_along(lower_bounds)) {
+      lower_dt <- date_function(imputed_dtcs[[1]])
+      # consider only bounds that are within the imputed range
+      imputed_dtcs[[1]] <- if_else(
+        lower_dt <= lower_bounds[[i]] & lower_bounds[[i]] <= upper_dt,
+        pmax(lower_dt, lower_bounds[[i]], na.rm = TRUE) %>% format_ISO8601(),
+        imputed_dtcs[[1]],
+        missing = imputed_dtcs[[1]]
+      )
+    }
+  }
+
+  if (!(is.null(upper_bounds) || length(upper_bounds) == 0)) {
+    lower_dt <-  date_function(imputed_dtcs[[1]])
+    for (i in seq_along(upper_bounds)) {
+      upper_dt <- date_function(imputed_dtcs[[2]])
+      # consider only bounds that are within the imputed range
+      imputed_dtcs[[2]] <- if_else(
+        lower_dt <= upper_bounds[[i]] & upper_bounds[[i]] <= upper_dt,
+        pmin(upper_dt, upper_bounds[[i]], na.rm = TRUE) %>% format_ISO8601(),
+        imputed_dtcs[[2]],
+        missing = imputed_dtcs[[2]]
+      )
+    }
   }
 
   names(imputed_dtcs) <- c("lower", "upper")

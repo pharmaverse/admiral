@@ -1,32 +1,31 @@
-# impute_dtc_dtm Test 10: min_dates length mismatch provides error
+# impute_dtc_dtm Test 12: min_dates length mismatch provides error
 
     Code
-      impute_dtc_dtm(c("2020-12", NA_character_), min_dates = list(c(ymd_hms(
-        "2020-12-06T12:12:12")), c(ymd_hms("2020-11-11T11:11:11"))),
-      highest_imputation = "Y")
+      impute_dtc_dtm(c("2020-12", NA_character_), min_dates = list(ymd_hms(
+        "2020-12-06T12:12:12"), ymd_hms("2020-11-11T11:11:11")), highest_imputation = "Y")
     Condition
       Error in `restrict_imputed_dtc_dtm()`:
       ! Length of `min_dates` do not match length of dates to be imputed.
 
-# impute_dtc_dtm Test 11: max_dates length mismatch provides error
+# impute_dtc_dtm Test 13: max_dates length mismatch provides error
 
     Code
-      impute_dtc_dtm(c("2020-12", NA_character_), max_dates = list(c(ymd_hms(
-        "2020-12-06T12:12:12")), c(ymd_hms("2020-11-11T11:11:11"))),
-      highest_imputation = "Y", date_imputation = "last")
+      impute_dtc_dtm(c("2020-12", NA_character_), max_dates = list(ymd_hms(
+        "2020-12-06T12:12:12"), ymd_hms("2020-11-11T11:11:11")), highest_imputation = "Y",
+      date_imputation = "last")
     Condition
       Error in `restrict_imputed_dtc_dtm()`:
       ! Length of `max_dates` do not match length of dates to be imputed.
 
-# impute_dtc_dtm Test 12: Error if null min/max_dates when highest_imputation = Y
+# impute_dtc_dtm Test 14: Error if null min/max_dates when highest_imputation = Y
 
     Code
       impute_dtc_dtm(c("2020-12", NA_character_), highest_imputation = "Y")
     Condition
       Error in `assert_highest_imputation()`:
-      ! If `highest_imputation = "Y"` is specified, `min_dates` or `max_dates` must be specified respectively.
+      ! If `highest_imputation = "Y"` is specified, `min_dates`, `min_dates_strict`, `max_dates`, or `max_dates_strict` must be specified.
 
-# impute_dtc_dtm Test 13: wrong input to `date_imputation`
+# impute_dtc_dtm Test 15: wrong input to `date_imputation`
 
     Code
       impute_dtc_dtm(dtc = c("2020-12", "2020-11", NA_character_, "2020-02-02",
@@ -84,7 +83,7 @@
       ! Some imputed dates are invalid.
       i `date_imputation` is set to "30". Are you sure that with this value you are generating all valid dates? E.g. `date_imputation = 31` would impute "2020-02" to "2020-02-31", which is invalid.
 
-# compute_tmf Test 16: throws ERROR when ignore_seconds_flag  = T and seconds are present
+# compute_tmf Test 18: throws ERROR when ignore_seconds_flag  = T and seconds are present
 
     Code
       compute_tmf(dtc = c("2020-11-11T11:11:11", "2020-11-11T11:11"), dtm = ymd_hms(c(
@@ -93,7 +92,7 @@
       Error in `compute_tmf()`:
       ! Seconds detected in data while `ignore_seconds_flag` is invoked
 
-# derive_vars_dtm Test 23: No re-derivation is done if --DTF variable already exists
+# derive_vars_dtm Test 25: No re-derivation is done if --DTF variable already exists
 
     Code
       actual_output <- derive_vars_dtm(mutate(input, ASTDTF = c(NA, NA, NA, NA, "D",
@@ -102,7 +101,7 @@
     Message
       The `ASTDTF` variable is already present in the input dataset and will not be re-derived.
 
-# derive_vars_dtm Test 26: Error for highest_imputation = Y & max_dates but date_imputation = first
+# derive_vars_dtm Test 28: Error for highest_imputation = Y & max_dates but date_imputation = first
 
     Code
       (data.frame(AESTDTC = c(NA_character_, NA_character_), TRTSDTM = c(ymd_hms(
@@ -112,9 +111,9 @@
           max_dates = exprs(TRTSDTM)))
     Condition
       Error in `assert_highest_imputation()`:
-      ! If `highest_imputation = "Y"` and `date_imputation = "first"` is specified, `min_dates` must be specified.
+      ! If `highest_imputation = "Y"` and `date_imputation = "first"` is specified, `min_dates` or `min_dates_strict` must be specified.
 
-# derive_vars_dtm Test 28: Error for highest_imputation = Y & min_dates but date_imputation = last
+# derive_vars_dtm Test 30: Error for highest_imputation = Y & min_dates but date_imputation = last
 
     Code
       data.frame(AESTDTC = c(NA_character_, NA_character_), TRTSDTM = c(ymd_hms(
@@ -124,9 +123,9 @@
           min_dates = exprs(TRTSDTM))
     Condition
       Error in `assert_highest_imputation()`:
-      ! If `highest_imputation = "Y"` and `date_imputation = "last"` is specified, `max_dates` must be specified.
+      ! If `highest_imputation = "Y"` and `date_imputation = "last"` is specified, `max_dates` or `max_dates_strict` must be specified.
 
-# derive_vars_dtm Test 29: NA imputation for highest_imputation = Y but null min/max dates fails
+# derive_vars_dtm Test 31: NA imputation for highest_imputation = Y but null min/max dates fails
 
     Code
       data.frame(AESTDTC = c(NA_character_, NA_character_), TRTSDTM = c(ymd_hms(
@@ -135,9 +134,9 @@
           date_imputation = "first", time_imputation = "first", flag_imputation = "both")
     Condition
       Error in `assert_highest_imputation()`:
-      ! If `highest_imputation = "Y"` is specified, `min_dates` or `max_dates` must be specified respectively.
+      ! If `highest_imputation = "Y"` is specified, `min_dates`, `min_dates_strict`, `max_dates`, or `max_dates_strict` must be specified.
 
-# derive_vars_dtm Test 32: catch ignore_seconds_flag error
+# derive_vars_dtm Test 34: catch ignore_seconds_flag error
 
     Code
       derive_vars_dtm(input, new_vars_prefix = "AST", dtc = XXSTDTC,
