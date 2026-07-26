@@ -118,55 +118,6 @@ the \code{filter} element are selected.
 \code{order} variable) for each by group (specified by \code{by_vars}) from multiple sources
 is selected and added to the input dataset. }
 }
-\examples{
-aevent_samp <- tibble::tribble(
-  ~USUBJID, ~PARAMCD,                       ~PARAM,     ~RSSTDTC,
-  "1",          "PD",  "First Progressive Disease", "2022-04-01",
-  "2",          "PD",  "First Progressive Disease", "2021-04-01",
-  "3",          "PD",  "First Progressive Disease", "2023-04-01"
-)
-
-cm <- tibble::tribble(
-  ~STUDYID, ~USUBJID, ~CMDECOD,     ~CMSTDTC,
-  "1001",        "1",    "ACT", "2021-12-25"
-)
-
-pr <- tibble::tribble(
-  ~STUDYID, ~USUBJID, ~PRDECOD,     ~PRSTDTC,
-  "1001",        "1",    "ACS", "2021-12-27",
-  "1001",        "2",    "ACS", "2020-12-25",
-  "1001",        "3",    "ACS", "2022-12-25",
-)
-derive_param_extreme_record(
-  dataset = aevent_samp,
-  sources = list(
-    records_source(
-      dataset_name = "cm",
-      filter = CMDECOD == "ACT",
-      new_vars = exprs(
-        ADT = convert_dtc_to_dt(CMSTDTC),
-        AVALC = CMDECOD
-      )
-    ),
-    records_source(
-      dataset_name = "pr",
-      filter = PRDECOD == "ACS",
-      new_vars = exprs(
-        ADT = convert_dtc_to_dt(PRSTDTC),
-        AVALC = PRDECOD
-      )
-    )
-  ),
-  source_datasets = list(cm = cm, pr = pr),
-  by_vars = exprs(USUBJID),
-  order = exprs(ADT),
-  mode = "first",
-  set_values_to = exprs(
-    PARAMCD = "FIRSTACT",
-    PARAM = "First Anti-Cancer Therapy"
-  )
-)
-}
 \seealso{
 Other deprecated:
 \code{\link[=call_user_fun]{call_user_fun()}},

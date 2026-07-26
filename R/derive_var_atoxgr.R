@@ -167,11 +167,11 @@ derive_var_atoxgr_dir <- function(dataset,
       )
     }
 
-    deprecate_inform(
-      when = "1.4.0",
+    deprecate_warn(
+      when = "1.6.0",
       what = "derive_var_atoxgr_dir(abnormal_indicator = )",
       details = c(
-        x = "This message will turn into a warning at the beginning of 2027.",
+        x = "This message will turn into an error at the beginning of 2028.",
         i = paste0(
           "See admiral's deprecation guidance: ",
           "https://pharmaverse.github.io/admiraldev/dev/articles/",

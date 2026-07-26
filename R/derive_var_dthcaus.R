@@ -35,120 +35,14 @@
 #'
 #' @seealso [dthcaus_source()]
 #'
-#' @examples
-#' library(tibble)
-#' library(dplyr, warn.conflicts = FALSE)
-#'
-#' adsl <- tribble(
-#'   ~STUDYID,  ~USUBJID,
-#'   "STUDY01", "PAT01",
-#'   "STUDY01", "PAT02",
-#'   "STUDY01", "PAT03"
-#' )
-#' ae <- tribble(
-#'   ~STUDYID,  ~USUBJID, ~AESEQ, ~AEDECOD,       ~AEOUT,  ~AEDTHDTC,
-#'   "STUDY01", "PAT01",  12,     "SUDDEN DEATH", "FATAL", "2021-04-04"
-#' )
-#'
-#' ds <- tribble(
-#'   ~STUDYID, ~USUBJID, ~DSSEQ, ~DSDECOD, ~DSTERM, ~DSSTDTC,
-#'   "STUDY01", "PAT02", 1, "INFORMED CONSENT OBTAINED", "INFORMED CONSENT OBTAINED", "2021-04-03",
-#'   "STUDY01", "PAT02", 2, "RANDOMIZATION", "RANDOMIZATION", "2021-04-11",
-#'   "STUDY01", "PAT02", 3, "DEATH", "DEATH DUE TO PROGRESSION OF DISEASE", "2022-02-01",
-#'   "STUDY01", "PAT03", 1, "DEATH", "POST STUDY REPORTING OF DEATH", "2022-03-03"
-#' )
-#'
-#' # Derive `DTHCAUS` only - for on-study deaths only
-#' src_ae <- dthcaus_source(
-#'   dataset_name = "ae",
-#'   filter = AEOUT == "FATAL",
-#'   date = convert_dtc_to_dt(AEDTHDTC),
-#'   mode = "first",
-#'   dthcaus = AEDECOD
-#' )
-#'
-#' src_ds <- dthcaus_source(
-#'   dataset_name = "ds",
-#'   filter = DSDECOD == "DEATH" & grepl("DEATH DUE TO", DSTERM),
-#'   date = convert_dtc_to_dt(DSSTDTC),
-#'   mode = "first",
-#'   dthcaus = DSTERM
-#' )
-#'
-#' derive_var_dthcaus(adsl, src_ae, src_ds, source_datasets = list(ae = ae, ds = ds))
-#'
-#' # Derive `DTHCAUS` and add traceability variables - for on-study deaths only
-#' src_ae <- dthcaus_source(
-#'   dataset_name = "ae",
-#'   filter = AEOUT == "FATAL",
-#'   date = convert_dtc_to_dt(AEDTHDTC),
-#'   mode = "first",
-#'   dthcaus = AEDECOD,
-#'   set_values_to = exprs(DTHDOM = "AE", DTHSEQ = AESEQ)
-#' )
-#'
-#' src_ds <- dthcaus_source(
-#'   dataset_name = "ds",
-#'   filter = DSDECOD == "DEATH" & grepl("DEATH DUE TO", DSTERM),
-#'   date = convert_dtc_to_dt(DSSTDTC),
-#'   mode = "first",
-#'   dthcaus = DSTERM,
-#'   set_values_to = exprs(DTHDOM = "DS", DTHSEQ = DSSEQ)
-#' )
-#'
-#' derive_var_dthcaus(adsl, src_ae, src_ds, source_datasets = list(ae = ae, ds = ds))
-#'
-#' # Derive `DTHCAUS` as above - now including post-study deaths with different `DTHCAUS` value
-#' src_ae <- dthcaus_source(
-#'   dataset_name = "ae",
-#'   filter = AEOUT == "FATAL",
-#'   date = convert_dtc_to_dt(AEDTHDTC),
-#'   mode = "first",
-#'   dthcaus = AEDECOD,
-#'   set_values_to = exprs(DTHDOM = "AE", DTHSEQ = AESEQ)
-#' )
-#'
-#' ds <- mutate(
-#'   ds,
-#'   DSSTDT = convert_dtc_to_dt(DSSTDTC)
-#' )
-#'
-#' src_ds <- dthcaus_source(
-#'   dataset_name = "ds",
-#'   filter = DSDECOD == "DEATH" & grepl("DEATH DUE TO", DSTERM),
-#'   date = DSSTDT,
-#'   mode = "first",
-#'   dthcaus = DSTERM,
-#'   set_values_to = exprs(DTHDOM = "DS", DTHSEQ = DSSEQ)
-#' )
-#'
-#' src_ds_post <- dthcaus_source(
-#'   dataset_name = "ds",
-#'   filter = DSDECOD == "DEATH" & DSTERM == "POST STUDY REPORTING OF DEATH",
-#'   date = DSSTDT,
-#'   mode = "first",
-#'   dthcaus = "POST STUDY: UNKNOWN CAUSE",
-#'   set_values_to = exprs(DTHDOM = "DS", DTHSEQ = DSSEQ)
-#' )
-#'
-#' derive_var_dthcaus(
-#'   adsl,
-#'   src_ae, src_ds, src_ds_post,
-#'   source_datasets = list(ae = ae, ds = ds)
-#' )
 derive_var_dthcaus <- function(dataset,
                                ...,
                                source_datasets,
                                subject_keys = get_admiral_option("subject_keys")) {
-  deprecate_warn(
-    when = "1.2.0",
+  deprecate_stop(
+    when = "1.6.0",
     what = "derive_var_dthcaus()",
-    with = "derive_vars_extreme_event()",
-    details = c(
-      x = "This message will turn into an error at the beginning of 2027.",
-      i = "See admiral's deprecation guidance:
-      https://pharmaverse.github.io/admiraldev/dev/articles/programming_strategy.html#deprecation"
-    )
+    with = "derive_vars_extreme_event()"
   )
 
   assert_vars(subject_keys)
@@ -303,24 +197,6 @@ derive_var_dthcaus <- function(dataset,
 #'
 #' @return An object of class "dthcaus_source".
 #'
-#' @examples
-#' # Deaths sourced from AE
-#' src_ae <- dthcaus_source(
-#'   dataset_name = "ae",
-#'   filter = AEOUT == "FATAL",
-#'   date = AEDTHDT,
-#'   mode = "first",
-#'   dthcaus = AEDECOD
-#' )
-#'
-#' # Deaths sourced from DS
-#' src_ds <- dthcaus_source(
-#'   dataset_name = "ds",
-#'   filter = DSDECOD == "DEATH",
-#'   date = convert_dtc_to_dt(DSSTDTC),
-#'   mode = "first",
-#'   dthcaus = DSTERM
-#' )
 dthcaus_source <- function(dataset_name,
                            filter,
                            date,
@@ -328,15 +204,10 @@ dthcaus_source <- function(dataset_name,
                            mode = "first",
                            dthcaus,
                            set_values_to = NULL) {
-  deprecate_warn(
-    when = "1.2.0",
+  deprecate_stop(
+    when = "1.6.0",
     what = "dthcaus_source()",
-    with = "event()",
-    details = c(
-      x = "This message will turn into an error at the beginning of 2027.",
-      i = "See admiral's deprecation guidance:
-      https://pharmaverse.github.io/admiraldev/dev/articles/programming_strategy.html#deprecation"
-    )
+    with = "event()"
   )
 
   out <- list(
