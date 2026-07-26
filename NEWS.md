@@ -28,6 +28,11 @@
 
   - `call_user_fun()` has been removed.
 
+## Documentation
+
+- Updated the "Lab Grading" vignette to replace the deprecated `abnormal_indicator` argument reference
+  with the new `high_indicator` argument in `derive_var_atoxgr_dir()`.
+
 ## Various
 
 - Updated the default `ae_event`, `ae_ser_event`, `ae_gr1_event`, `ae_gr2_event`, `ae_gr3_event`, 
