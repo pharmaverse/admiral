@@ -71,7 +71,7 @@ get_summary_records <- function(dataset,
                                 filter = NULL,
                                 set_values_to = NULL) {
   deprecate_stop(
-    when = "1.6.0",
+    when = "1.2.0",
     what = "get_summary_records()",
     with = "derive_summary_records()"
   )

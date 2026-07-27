@@ -168,7 +168,7 @@ derive_var_atoxgr_dir <- function(dataset,
     }
 
     deprecate_warn(
-      when = "1.6.0",
+      when = "1.4.0",
       what = "derive_var_atoxgr_dir(abnormal_indicator = )",
       details = c(
         x = "This message will turn into an error at the beginning of 2028.",

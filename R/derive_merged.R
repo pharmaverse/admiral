@@ -1272,7 +1272,7 @@ derive_var_merged_summary <- function(dataset,
                                       filter_add = NULL,
                                       missing_values = NULL) {
   deprecate_warn(
-    when = "1.6.0",
+    when = "1.4",
     what = "derive_var_merged_summary()",
     with = "derive_vars_merged_summary()",
     details = c(

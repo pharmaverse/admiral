@@ -40,7 +40,7 @@ derive_var_dthcaus <- function(dataset,
                                source_datasets,
                                subject_keys = get_admiral_option("subject_keys")) {
   deprecate_stop(
-    when = "1.6.0",
+    when = "1.2.0",
     what = "derive_var_dthcaus()",
     with = "derive_vars_extreme_event()"
   )
@@ -205,7 +205,7 @@ dthcaus_source <- function(dataset_name,
                            dthcaus,
                            set_values_to = NULL) {
   deprecate_stop(
-    when = "1.6.0",
+    when = "1.2.0",
     what = "dthcaus_source()",
     with = "event()"
   )
