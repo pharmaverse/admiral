@@ -513,7 +513,7 @@ convert_dtc_to_dt <- function(dtc,
 #'
 #' @param min_dates_strict Minimum dates (strict)
 #'
-#' The argument works like the `min_dates` argument but it affects the behaviour
+#' The argument works like the `min_dates` argument but it affects the behavior
 #' of the `min_dates` and `max_dates` arguments. The range which is used to
 #' determine which of the `min_dates` and `max_dates` are considered is
 #' restricted by the dates specified for `min_dates_strict`.
@@ -552,7 +552,7 @@ convert_dtc_to_dt <- function(dtc,
 #'
 #' @param max_dates_strict Maximum dates (strict)
 #'
-#' The argument works like the `max_dates` argument but it affects the behaviour
+#' The argument works like the `max_dates` argument but it affects the behavior
 #' of the `min_dates` and `max_dates` arguments. The range which is used to
 #' determine which of the `min_dates` and `max_dates` are considered is
 #' restricted by the dates specified for `max_dates_strict`.

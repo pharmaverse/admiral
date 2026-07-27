@@ -154,7 +154,7 @@ missing (in the \code{dtc} date).
 
 \item{min_dates_strict}{Minimum dates (strict)
 
-The argument works like the \code{min_dates} argument but it affects the behaviour
+The argument works like the \code{min_dates} argument but it affects the behavior
 of the \code{min_dates} and \code{max_dates} arguments. The range which is used to
 determine which of the \code{min_dates} and \code{max_dates} are considered is
 restricted by the dates specified for \code{min_dates_strict}.
@@ -200,7 +200,7 @@ considered. A date or date-time object is expected.
 
 \item{max_dates_strict}{Maximum dates (strict)
 
-The argument works like the \code{max_dates} argument but it affects the behaviour
+The argument works like the \code{max_dates} argument but it affects the behavior
 of the \code{min_dates} and \code{max_dates} arguments. The range which is used to
 determine which of the \code{min_dates} and \code{max_dates} are considered is
 restricted by the dates specified for \code{max_dates_strict}.
