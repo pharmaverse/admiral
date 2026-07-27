@@ -183,7 +183,7 @@
 #'   dtc = MHSTDTC,
 #'   highest_imputation = "M",
 #'   date_imputation = "04-06"
-#'   )
+#' )
 #'
 #' @caption Applying a lower boundary to date imputation with (`min_dates`)
 #' @info In this example, we derive `ASTDT` where `AESTDTC` is all partial dates in
@@ -200,12 +200,12 @@
 #'
 #' @code
 #' adae <- tribble(
-#'   ~case, ~AESTDTC, ~TRTSDTM,
-#'   1, "2020-12", ymd_hms("2020-12-06T12:12:12"),
-#'   2, "2020", ymd_hms("2020-12-06T12:12:12"),
-#'   3, "2020-11", ymd_hms("2020-12-06T12:12:12"),
-#'   4, "2020-01", ymd_hms("2020-12-06T12:12:12"),
-#'   5, "2021-01", ymd_hms("2020-12-06T12:12:12")
+#'   ~case, ~AESTDTC,  ~TRTSDTM,
+#'   1,     "2020-12", ymd_hms("2020-12-06T12:12:12"),
+#'   2,     "2020",    ymd_hms("2020-12-06T12:12:12"),
+#'   3,     "2020-11", ymd_hms("2020-12-06T12:12:12"),
+#'   4,     "2020-01", ymd_hms("2020-12-06T12:12:12"),
+#'   5,     "2021-01", ymd_hms("2020-12-06T12:12:12")
 #' )
 #'
 #' derive_vars_dt(
@@ -215,7 +215,39 @@
 #'   highest_imputation = "M",
 #'   date_imputation = "first",
 #'   min_dates = exprs(TRTSDTM)
-#'   )
+#' )
+#'
+#' @caption Restricting the range for `min_dates` (`max_dates_strict`)
+#' @info As in the previous example, we derive `ASTDT` from `AESTDTC`. Here we
+#' additionally consider `AENDT` to determine if the potential start dates
+#' include `TRTSDTM`.
+#' 
+#' - For partial dates that could potentially include `TRTSDTM` and where
+#'   `AENDT` is at or after `TRTSDTM` (case 1), the imputed date is adjusted to
+#'   `TRTSDTM`.
+#' - For partial dates that could potentially include `TRTSDTM` but `AENDT` is
+#'   before `TRTSDTM` (case 2), standard imputation rules apply without
+#'   adjustment.
+#'
+#' @code
+#' adae <- tribble(
+#'   ~case, ~AESTDTC,  ~AENDT,            ~TRTSDTM,
+#'   1,     "2020-12", ymd("2020-12-12"), ymd_hms("2020-12-06T12:12:12"),
+#'   2,     "2020",    ymd("2020-11-11"), ymd_hms("2020-12-06T12:12:12"),
+#'   3,     "2020-11", ymd("2020-11-03"), ymd_hms("2020-12-06T12:12:12"),
+#'   4,     "2020-01", ymd("2020-01-04"), ymd_hms("2020-12-06T12:12:12"),
+#'   5,     "2021-01", ymd("2021-01-17"), ymd_hms("2020-12-06T12:12:12")
+#' )
+#'
+#' derive_vars_dt(
+#'   adae,
+#'   dtc = AESTDTC,
+#'   new_vars_prefix = "AST",
+#'   highest_imputation = "M",
+#'   date_imputation = "first",
+#'   min_dates = exprs(TRTSDTM),
+#'   max_dates_strict = exprs(AENDT)
+#' )
 #'
 #' @caption Applying an upper boundary to date imputation with (`max_dates`)
 #' @info In this example, we derive `ASTDT` where `AESTDTC` is all partial dates in
@@ -232,12 +264,12 @@
 #'
 #' @code
 #' adae <- tribble(
-#'   ~case, ~AESTDTC, ~TRTSDTM, ~TRTEDTM,
-#'   1, "2020-12", ymd_hms("2020-01-01T12:12:12"), ymd_hms("2020-12-20T23:59:59"),
-#'   2, "2020", ymd_hms("2020-01-01T12:12:12"), ymd_hms("2020-12-20T23:59:59"),
-#'   3, "2020-11", ymd_hms("2020-01-01T12:12:12"), ymd_hms("2020-12-20T23:59:59"),
-#'   4, "2020-01", ymd_hms("2020-01-01T12:12:12"), ymd_hms("2020-12-20T23:59:59"),
-#'   5, "2021-01", ymd_hms("2020-01-01T12:12:12"), ymd_hms("2020-12-20T23:59:59")
+#'   ~case, ~AESTDTC,  ~TRTEDTM,
+#'   1,     "2020-12", ymd_hms("2020-12-20T23:59:59"),
+#'   2,     "2020",    ymd_hms("2020-12-20T23:59:59"),
+#'   3,     "2020-11", ymd_hms("2020-12-20T23:59:59"),
+#'   4,     "2020-01", ymd_hms("2020-12-20T23:59:59"),
+#'   5,     "2021-01", ymd_hms("2020-12-20T23:59:59")
 #' )
 #'
 #' derive_vars_dt(
@@ -273,7 +305,9 @@ derive_vars_dt <- function(dataset,
                            date_imputation = "first",
                            flag_imputation = "auto",
                            min_dates = NULL,
+                           min_dates_strict = NULL,
                            max_dates = NULL,
+                           max_dates_strict = NULL,
                            preserve = FALSE) {
   # check and quote arguments
   dtc <- assert_symbol(enexpr(dtc))
@@ -293,7 +327,9 @@ derive_vars_dt <- function(dataset,
     highest_imputation_values = c("Y", "M", "D", "n"),
     date_imputation = date_imputation,
     min_dates = min_dates,
-    max_dates = max_dates
+    min_dates_strict = min_dates_strict,
+    max_dates = max_dates,
+    max_dates_strict = max_dates_strict
   )
 
   # output varname
@@ -308,7 +344,9 @@ derive_vars_dt <- function(dataset,
         highest_imputation = highest_imputation,
         date_imputation = date_imputation,
         min_dates = lapply(min_dates, eval_tidy, data = as_data_mask(.)),
+        min_dates_strict = lapply(min_dates_strict, eval_tidy, data = as_data_mask(.)),
         max_dates = lapply(max_dates, eval_tidy, data = as_data_mask(.)),
+        max_dates_strict = lapply(max_dates_strict, eval_tidy, data = as_data_mask(.)),
         preserve = preserve
       )
     )
@@ -362,7 +400,9 @@ convert_dtc_to_dt <- function(dtc,
                               highest_imputation = "n",
                               date_imputation = "first",
                               min_dates = NULL,
+                              min_dates_strict = NULL,
                               max_dates = NULL,
+                              max_dates_strict = NULL,
                               preserve = FALSE) {
   assert_character_vector(dtc)
   warn_if_invalid_dtc(dtc, is_valid_dtc(dtc))
@@ -373,7 +413,9 @@ convert_dtc_to_dt <- function(dtc,
     highest_imputation = highest_imputation,
     date_imputation = date_imputation,
     min_dates = min_dates,
+    min_dates_strict = min_dates_strict,
     max_dates = max_dates,
+    max_dates_strict = max_dates_strict,
     preserve = preserve
   )
   imputed_dtc <- if_else(
@@ -452,21 +494,51 @@ convert_dtc_to_dt <- function(dtc,
 #' For example
 #'
 #' ```{r echo=TRUE, eval=FALSE}
-#' impute_dtc_dtm(
+#' impute_dtc_dt(
 #'   "2020-11",
 #'   min_dates = list(
-#'    ymd_hms("2020-12-06T12:12:12"),
-#'    ymd_hms("2020-11-11T11:11:11")
+#'    ymd("2020-12-06"),
+#'    ymd("2020-11-11")
 #'   ),
 #'   highest_imputation = "M"
 #' )
 #' ```
 #'
-#' returns `"2020-11-11T11:11:11"` because the possible dates for `"2020-11"`
-#' range from `"2020-11-01T00:00:00"` to `"2020-11-30T23:59:59"`. Therefore
-#' `"2020-12-06T12:12:12"` is ignored. Returning `"2020-12-06T12:12:12"` would
-#' have changed the month although it is not missing (in the `dtc` date).
+#' returns `"2020-11-11"` because the possible dates for `"2020-11"` range from
+#' `"2020-11-01"` to `"2020-11-30"`. Therefore `"2020-12-06"` is ignored.
+#' Returning `"2020-12-06"` would have changed the month although it is not
+#' missing (in the `dtc` date).
 #'
+#' @permitted [date_list]
+#'
+#' @param min_dates_strict Minimum dates (strict)
+#' 
+#' The argument works like the `min_dates` argument but it affects the behaviour
+#' of the `min_dates` and `max_dates` arguments. The range which is used to
+#' determine which of the `min_dates` and `max_dates` are considered is
+#' restricted by the dates specified for `min_dates_strict`.
+#'
+#' For example
+#' ```{r echo=TRUE, eval=FALSE}
+#' impute_dtc_dt(
+#'   "2020-11",
+#'   min_dates_strict = list(
+#'    ymd("2020-11-24")
+#'   ),
+#'   max_dates = list(
+#'     ymd("2020-11-22")
+#'   ),
+#'   highest_imputation = "M",
+#'   date_imputation = "last",
+#'   time_imputation = "last"
+#' )
+#' ```
+#' returns `"2020-11-30"`. The possible dates for `"2020-11"` range from
+#' `"2020-11-01"` to `"2020-11-30"`. The `min_dates_strict` argument restricts
+#' this range to `"2020-11-24"` to `"2020-11-30"`. Therefore `"2020-11-22"`
+#' (from the `max_dates` argument) is ignored as it is not within the restricted
+#' range.
+#' 
 #' @permitted [date_list]
 #'
 #' @param max_dates Maximum dates
@@ -478,6 +550,15 @@ convert_dtc_to_dt <- function(dtc,
 #'
 #' @permitted [date_list]
 #'
+#' @param max_dates_strict Maximum dates (strict)
+#' 
+#' The argument works like the `max_dates` argument but it affects the behaviour
+#' of the `min_dates` and `max_dates` arguments. The range which is used to
+#' determine which of the `min_dates` and `max_dates` are considered is
+#' restricted by the dates specified for `max_dates_strict`.
+#' 
+#' @permitted [date_list]
+#' 
 #' @param preserve Preserve day if month is missing and day is present
 #'
 #' For example `"2019---07"` would return `"2019-06-07` if `preserve = TRUE`
@@ -578,7 +659,9 @@ impute_dtc_dt <- function(dtc,
                           highest_imputation = "n",
                           date_imputation = "first",
                           min_dates = NULL,
+                          min_dates_strict = NULL,
                           max_dates = NULL,
+                          max_dates_strict = NULL,
                           preserve = FALSE) {
   # Check arguments ----
   assert_character_vector(dtc)
@@ -596,7 +679,9 @@ impute_dtc_dt <- function(dtc,
     highest_imputation_values = imputation_levels,
     date_imputation = date_imputation,
     min_dates = min_dates,
-    max_dates = max_dates
+    min_dates_strict = min_dates_strict,
+    max_dates = max_dates,
+    max_dates_strict = max_dates_strict
   )
 
   highest_imputation <- dt_level(highest_imputation)
@@ -663,7 +748,9 @@ impute_dtc_dt <- function(dtc,
     dtc,
     imputed_dtc = imputed_dtc,
     min_dates = min_dates,
-    max_dates = max_dates
+    min_dates_strict = min_dates_strict,
+    max_dates = max_dates,
+    max_dates_strict = max_dates_strict
   )
 
   restricted
@@ -692,26 +779,33 @@ impute_dtc_dt <- function(dtc,
 restrict_imputed_dtc_dt <- function(dtc,
                                     imputed_dtc,
                                     min_dates,
-                                    max_dates) {
-  any_mindate <- !(is.null(min_dates) || length(min_dates) == 0)
-  any_maxdate <- !(is.null(max_dates) || length(max_dates) == 0)
+                                    min_dates_strict,
+                                    max_dates,
+                                    max_dates_strict) {
+  any_mindate <- !((is.null(min_dates) || length(min_dates) == 0) &&
+    (is.null(min_dates_strict) || length(min_dates_strict) == 0))
+  any_maxdate <- !((is.null(max_dates) || length(max_dates) == 0) &&
+    (is.null(max_dates_strict) || length(max_dates_strict) == 0))
   if (any_mindate || any_maxdate) {
     # determine range of possible dates
     dtc_range <-
       get_dt_dtm_range(
         dtc,
+        lower_bounds = min_dates_strict,
+        upper_bounds = max_dates_strict,
         create_datetime = FALSE
       )
     min_dtc <- dtc_range[["lower"]]
     max_dtc <- dtc_range[["upper"]]
   }
   if (any_mindate) {
-    if (length(unique(c(length(imputed_dtc), unlist(lapply(min_dates, length))))) != 1) {
+    all_min_dates <- c(min_dates, min_dates_strict)
+    if (length(unique(c(length(imputed_dtc), lengths(all_min_dates)))) != 1) {
       cli_abort("Length of {.arg min_dates} do not match length of dates to be imputed.")
     }
     # for each minimum date within the range ensure that the imputed date is not
     # before it
-    for (min_date in min_dates) {
+    for (min_date in all_min_dates) {
       assert_date_vector(min_date)
       min_date_iso <- strftime(min_date, format = "%Y-%m-%d", tz = "UTC")
       imputed_dtc <- if_else(
@@ -723,12 +817,13 @@ restrict_imputed_dtc_dt <- function(dtc,
     }
   }
   if (any_maxdate) {
-    if (length(unique(c(length(imputed_dtc), unlist(lapply(max_dates, length))))) != 1) {
+    all_max_dates <- c(max_dates, max_dates_strict)
+    if (length(unique(c(length(imputed_dtc), lengths(all_max_dates)))) != 1) {
       cli_abort("Length of {.arg max_dates} do not match length of dates to be imputed.")
     }
     # for each maximum date within the range ensure that the imputed date is not
     # after it
-    for (max_date in max_dates) {
+    for (max_date in all_max_dates) {
       assert_date_vector(max_date)
       max_date_iso <- strftime(max_date, format = "%Y-%m-%d", tz = "UTC")
       imputed_dtc <- if_else(

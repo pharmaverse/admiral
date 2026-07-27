@@ -436,6 +436,36 @@ convert_dtc_to_dtm <- function(dtc,
 #' imputed. If only time is imputed, date variables do not affect the result.
 #'
 #' @permitted [date_list]
+#' 
+#' @param min_dates_strict Minimum dates (strict)
+#' 
+#' The argument works like the `min_dates` argument but it affects the behaviour
+#' of the `min_dates` and `max_dates` arguments. The range which is used to
+#' determine which of the `min_dates` and `max_dates` are considered is
+#' restricted by the dates specified for `min_dates_strict`.
+#'
+#' For example
+#' ```{r echo=TRUE, eval=FALSE}
+#' impute_dtc_dtm(
+#'   "2020-11",
+#'   min_dates_strict = list(
+#'    ymd_hm("2020-11-24T00:00")
+#'   ),
+#'   max_dates = list(
+#'     ymd_hm("2020-11-22T12:12")
+#'   ),
+#'   highest_imputation = "M",
+#'   date_imputation = "last",
+#'   time_imputation = "last"
+#' )
+#' ```
+#' returns `"2020-11-30T23:59:59"`. The possible dates for `"2020-11"` range
+#' from `"2020-11-01T00:00:00"` to `"2020-11-30T23:59:59"`. The
+#' `min_dates_strict` argument restricts this range to `"2020-11-24T00:00:00"`
+#' to `"2020-11-30T23:59:59"`. Therefore `"2020-11-22T12:12:12"` (from the
+#' `max_dates` argument) is ignored as it is not within the restricted range.
+#' 
+#' @permitted [date_list]
 #'
 #' @param max_dates Maximum dates
 #'
@@ -450,6 +480,15 @@ convert_dtc_to_dtm <- function(dtc,
 #'
 #' @permitted [date_list]
 #'
+#' @param max_dates_strict Maximum dates (strict)
+#' 
+#' The argument works like the `max_dates` argument but it affects the behaviour
+#' of the `min_dates` and `max_dates` arguments. The range which is used to
+#' determine which of the `min_dates` and `max_dates` are considered is
+#' restricted by the dates specified for `max_dates_strict`.
+#' 
+#' @permitted [date_list]
+#' 
 #' @param preserve Preserve lower level date/time part when higher order part
 #' is missing, e.g. preserve day if month is missing or
 #' preserve minute when hour is missing.
@@ -709,13 +748,15 @@ restrict_imputed_dtc_dtm <- function(dtc,
     min_dtc <- dtc_range[["lower"]]
     max_dtc <- dtc_range[["upper"]]
   }
+  
   if (any_mindate) {
-    if (length(unique(c(length(imputed_dtc), lengths(min_dates)))) != 1) {
+    all_min_dates <- c(min_dates, min_dates_strict)
+    if (length(unique(c(length(imputed_dtc), lengths(all_min_dates)))) != 1) {
       cli_abort("Length of {.arg min_dates} do not match length of dates to be imputed.")
     }
     # for each minimum date within the range ensure that the imputed date is not
     # before it
-    for (min_date in c(min_dates, min_dates_strict)) {
+    for (min_date in all_min_dates) {
       assert_date_vector(min_date)
       min_date_iso <- strftime(min_date, format = "%Y-%m-%dT%H:%M:%S", tz = "UTC")
       imputed_dtc <- if_else(
@@ -727,12 +768,13 @@ restrict_imputed_dtc_dtm <- function(dtc,
     }
   }
   if (any_maxdate) {
-    if (length(unique(c(length(imputed_dtc), lengths(max_dates)))) != 1) {
+    all_max_dates <- c(max_dates, max_dates_strict)
+    if (length(unique(c(length(imputed_dtc), lengths(all_max_dates)))) != 1) {
       cli_abort("Length of {.arg max_dates} do not match length of dates to be imputed.")
     }
     # for each maximum date within the range ensure that the imputed date is not
     # after it
-    for (max_date in c(max_dates, max_dates_strict)) {
+    for (max_date in all_max_dates) {
       assert_date_vector(max_date)
       max_date <- convert_date_to_dtm(
         max_date,

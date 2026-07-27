@@ -9,7 +9,9 @@ convert_dtc_to_dt(
   highest_imputation = "n",
   date_imputation = "first",
   min_dates = NULL,
+  min_dates_strict = NULL,
   max_dates = NULL,
+  max_dates_strict = NULL,
   preserve = FALSE
 )
 }
@@ -85,20 +87,54 @@ ensures that the non-missing parts of the \code{dtc} date are not changed.
 A date or date-time object is expected.
 For example
 
-\if{html}{\out{<div class="sourceCode r">}}\preformatted{impute_dtc_dtm(
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{impute_dtc_dt(
   "2020-11",
   min_dates = list(
-   ymd_hms("2020-12-06T12:12:12"),
-   ymd_hms("2020-11-11T11:11:11")
+   ymd("2020-12-06"),
+   ymd("2020-11-11")
   ),
   highest_imputation = "M"
 )
 }\if{html}{\out{</div>}}
 
-returns \code{"2020-11-11T11:11:11"} because the possible dates for \code{"2020-11"}
-range from \code{"2020-11-01T00:00:00"} to \code{"2020-11-30T23:59:59"}. Therefore
-\code{"2020-12-06T12:12:12"} is ignored. Returning \code{"2020-12-06T12:12:12"} would
-have changed the month although it is not missing (in the \code{dtc} date).
+returns \code{"2020-11-11"} because the possible dates for \code{"2020-11"} range from
+\code{"2020-11-01"} to \code{"2020-11-30"}. Therefore \code{"2020-12-06"} is ignored.
+Returning \code{"2020-12-06"} would have changed the month although it is not
+missing (in the \code{dtc} date).
+
+\describe{
+\item{Permitted values}{a list of dates, e.g. \code{list(ymd_hms("2021-07-01T04:03:01"), ymd_hms("2022-05-12T13:57:23"))}}
+\item{Default value}{\code{NULL}}
+}}
+
+\item{min_dates_strict}{Minimum dates (strict)
+
+The argument works like the \code{min_dates} argument but it affects the behaviour
+of the \code{min_dates} and \code{max_dates} arguments. The range which is used to
+determine which of the \code{min_dates} and \code{max_dates} are considered is
+restricted by the dates specified for \code{min_dates_strict}.
+
+For example
+
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{impute_dtc_dt(
+  "2020-11",
+  min_dates_strict = list(
+   ymd("2020-11-24")
+  ),
+  max_dates = list(
+    ymd("2020-11-22")
+  ),
+  highest_imputation = "M",
+  date_imputation = "last",
+  time_imputation = "last"
+)
+}\if{html}{\out{</div>}}
+
+returns \code{"2020-11-30"}. The possible dates for \code{"2020-11"} range from
+\code{"2020-11-01"} to \code{"2020-11-30"}. The \code{min_dates_strict} argument restricts
+this range to \code{"2020-11-24"} to \code{"2020-11-30"}. Therefore \code{"2020-11-22"}
+(from the \code{max_dates} argument) is ignored as it is not within the restricted
+range.
 
 \describe{
 \item{Permitted values}{a list of dates, e.g. \code{list(ymd_hms("2021-07-01T04:03:01"), ymd_hms("2022-05-12T13:57:23"))}}
@@ -111,6 +147,18 @@ A list of dates is expected. It is ensured that the imputed date is not after
 any of the specified dates, e.g., that the imputed date is not after the data
 cut off date. Only dates which are in the range of possible dates are
 considered. A date or date-time object is expected.
+
+\describe{
+\item{Permitted values}{a list of dates, e.g. \code{list(ymd_hms("2021-07-01T04:03:01"), ymd_hms("2022-05-12T13:57:23"))}}
+\item{Default value}{\code{NULL}}
+}}
+
+\item{max_dates_strict}{Maximum dates (strict)
+
+The argument works like the \code{max_dates} argument but it affects the behaviour
+of the \code{min_dates} and \code{max_dates} arguments. The range which is used to
+determine which of the \code{min_dates} and \code{max_dates} are considered is
+restricted by the dates specified for \code{max_dates_strict}.
 
 \describe{
 \item{Permitted values}{a list of dates, e.g. \code{list(ymd_hms("2021-07-01T04:03:01"), ymd_hms("2022-05-12T13:57:23"))}}

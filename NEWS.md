@@ -4,6 +4,10 @@
 
 ## Updates of Existing Functions
 
+- The `min_dates_strict` and `max_dates_strict` arguments were added to
+  `derive_vars_dt()` and `derive_vars_dtm()` and other imputation functions. See
+  `derive_vars_dt()` documentation for details and examples. (#2708) 
+
 ## Breaking Changes
 
 ## Documentation

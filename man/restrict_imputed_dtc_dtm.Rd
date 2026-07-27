@@ -4,7 +4,14 @@
 \alias{restrict_imputed_dtc_dtm}
 \title{Restrict Imputed \code{--DTC} date to Minimum/Maximum Dates}
 \usage{
-restrict_imputed_dtc_dtm(dtc, imputed_dtc, min_dates, max_dates)
+restrict_imputed_dtc_dtm(
+  dtc,
+  imputed_dtc,
+  min_dates,
+  min_dates_strict,
+  max_dates,
+  max_dates_strict
+)
 }
 \arguments{
 \item{dtc}{The \code{--DTC} date to impute
@@ -59,6 +66,40 @@ imputed. If only time is imputed, date variables do not affect the result.
 \item{Default value}{\code{NULL}}
 }}
 
+\item{min_dates_strict}{Minimum dates (strict)
+
+The argument works like the \code{min_dates} argument but it affects the behaviour
+of the \code{min_dates} and \code{max_dates} arguments. The range which is used to
+determine which of the \code{min_dates} and \code{max_dates} are considered is
+restricted by the dates specified for \code{min_dates_strict}.
+
+For example
+
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{impute_dtc_dtm(
+  "2020-11",
+  min_dates_strict = list(
+   ymd_hm("2020-11-24T00:00")
+  ),
+  max_dates = list(
+    ymd_hm("2020-11-22T12:12")
+  ),
+  highest_imputation = "M",
+  date_imputation = "last",
+  time_imputation = "last"
+)
+}\if{html}{\out{</div>}}
+
+returns \code{"2020-11-30T23:59:59"}. The possible dates for \code{"2020-11"} range
+from \code{"2020-11-01T00:00:00"} to \code{"2020-11-30T23:59:59"}. The
+\code{min_dates_strict} argument restricts this range to \code{"2020-11-24T00:00:00"}
+to \code{"2020-11-30T23:59:59"}. Therefore \code{"2020-11-22T12:12:12"} (from the
+\code{max_dates} argument) is ignored as it is not within the restricted range.
+
+\describe{
+\item{Permitted values}{a list of dates, e.g. \code{list(ymd_hms("2021-07-01T04:03:01"), ymd_hms("2022-05-12T13:57:23"))}}
+\item{Default value}{\code{NULL}}
+}}
+
 \item{max_dates}{Maximum dates
 
 A list of dates is expected. It is ensured that the imputed date is not after
@@ -69,6 +110,18 @@ considered. A date or date-time object is expected.
 For date variables (not datetime) in the list the time is imputed to
 \code{"23:59:59"}. Specifying date variables makes sense only if the date is
 imputed. If only time is imputed, date variables do not affect the result.
+
+\describe{
+\item{Permitted values}{a list of dates, e.g. \code{list(ymd_hms("2021-07-01T04:03:01"), ymd_hms("2022-05-12T13:57:23"))}}
+\item{Default value}{\code{NULL}}
+}}
+
+\item{max_dates_strict}{Maximum dates (strict)
+
+The argument works like the \code{max_dates} argument but it affects the behaviour
+of the \code{min_dates} and \code{max_dates} arguments. The range which is used to
+determine which of the \code{min_dates} and \code{max_dates} are considered is
+restricted by the dates specified for \code{max_dates_strict}.
 
 \describe{
 \item{Permitted values}{a list of dates, e.g. \code{list(ymd_hms("2021-07-01T04:03:01"), ymd_hms("2022-05-12T13:57:23"))}}

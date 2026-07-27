@@ -4,7 +4,12 @@
 \alias{get_dt_dtm_range}
 \title{Get Range of Partial Date / Datetime}
 \usage{
-get_dt_dtm_range(dtc, create_datetime)
+get_dt_dtm_range(
+  dtc,
+  lower_bounds = NULL,
+  upper_bounds = NULL,
+  create_datetime
+)
 }
 \arguments{
 \item{dtc}{A character vector of dates in ISO 8601 format

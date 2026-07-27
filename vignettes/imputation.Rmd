@@ -273,6 +273,9 @@ impute_dtc_dtm(
 )
 ```
 
+See the `derive_vars_dt()` and `derive_vars_dtm()` function documentation for
+more details and examples on minimum and maximum dates.
+
 # Imputation Flags
 
 ADaM requires that date or datetime variables for which imputation was

@@ -250,7 +250,9 @@ convert_date_to_dtm <- function(dt,
                                 date_imputation = "first",
                                 time_imputation = "first",
                                 min_dates = NULL,
+                                min_dates_strict = NULL,
                                 max_dates = NULL,
+                                max_dates_strict = NULL,
                                 preserve = FALSE) {
   if (is.POSIXct(dt)) {
     dt
@@ -266,7 +268,9 @@ convert_date_to_dtm <- function(dt,
         date_imputation = date_imputation,
         time_imputation = time_imputation,
         min_dates = min_dates,
+        min_dates_strict = min_dates_strict,
         max_dates = max_dates,
+        max_dates_strict = max_dates_strict,
         preserve = preserve
       )
   }
@@ -622,12 +626,12 @@ get_dt_dtm_range <- function(dtc,
 
   if (!(is.null(lower_bounds) || length(lower_bounds) == 0)) {
     upper_dt <-  date_function(imputed_dtcs[[2]])
-    for (i in seq_along(lower_bounds)) {
+    for (lower_bound in lower_bounds) {
       lower_dt <- date_function(imputed_dtcs[[1]])
       # consider only bounds that are within the imputed range
       imputed_dtcs[[1]] <- if_else(
-        lower_dt <= lower_bounds[[i]] & lower_bounds[[i]] <= upper_dt,
-        pmax(lower_dt, lower_bounds[[i]], na.rm = TRUE) %>% format_ISO8601(),
+        lower_dt <= lower_bound & lower_bound <= upper_dt,
+        pmax(lower_dt, lower_bound, na.rm = TRUE) %>% format_ISO8601(),
         imputed_dtcs[[1]],
         missing = imputed_dtcs[[1]]
       )
@@ -636,16 +640,23 @@ get_dt_dtm_range <- function(dtc,
 
   if (!(is.null(upper_bounds) || length(upper_bounds) == 0)) {
     lower_dt <-  date_function(imputed_dtcs[[1]])
-    for (i in seq_along(upper_bounds)) {
+    for (upper_bound in upper_bounds) {
+      if (create_datetime) {
+        # set time to 23:59:59 for dates
+      upper_bound <- convert_date_to_dtm(
+        upper_bound,
+        time_imputation = "last"
+      )
+    }
       upper_dt <- date_function(imputed_dtcs[[2]])
       # consider only bounds that are within the imputed range
       imputed_dtcs[[2]] <- if_else(
-        lower_dt <= upper_bounds[[i]] & upper_bounds[[i]] <= upper_dt,
-        pmin(upper_dt, upper_bounds[[i]], na.rm = TRUE) %>% format_ISO8601(),
+        lower_dt <= upper_bound & upper_bound <= upper_dt,
+        pmin(upper_dt, upper_bound, na.rm = TRUE) %>% format_ISO8601(),
         imputed_dtcs[[2]],
         missing = imputed_dtcs[[2]]
       )
-    }
+      }
   }
 
   names(imputed_dtcs) <- c("lower", "upper")
