@@ -100,7 +100,6 @@ test_that("get_imputation_target_time Test 12: get correct target for missing ti
 # get_dt_dtm_range ----
 ## Test 13: get_dt_dtm_range correctly imputes date ranges ----
 test_that("get_dt_dtm_range Test 13: get_dt_dtm_range correctly imputes date ranges", {
-
   # Validate date range imputation for complete dates and partial dates
   expect_equal(
     get_dt_dtm_range(

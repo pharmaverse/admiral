@@ -625,7 +625,7 @@ get_dt_dtm_range <- function(dtc,
   }
 
   if (!(is.null(lower_bounds) || length(lower_bounds) == 0)) {
-    upper_dt <-  date_function(imputed_dtcs[[2]])
+    upper_dt <- date_function(imputed_dtcs[[2]])
     for (lower_bound in lower_bounds) {
       lower_dt <- date_function(imputed_dtcs[[1]])
       # consider only bounds that are within the imputed range
@@ -639,15 +639,15 @@ get_dt_dtm_range <- function(dtc,
   }
 
   if (!(is.null(upper_bounds) || length(upper_bounds) == 0)) {
-    lower_dt <-  date_function(imputed_dtcs[[1]])
+    lower_dt <- date_function(imputed_dtcs[[1]])
     for (upper_bound in upper_bounds) {
       if (create_datetime) {
         # set time to 23:59:59 for dates
-      upper_bound <- convert_date_to_dtm(
-        upper_bound,
-        time_imputation = "last"
-      )
-    }
+        upper_bound <- convert_date_to_dtm(
+          upper_bound,
+          time_imputation = "last"
+        )
+      }
       upper_dt <- date_function(imputed_dtcs[[2]])
       # consider only bounds that are within the imputed range
       imputed_dtcs[[2]] <- if_else(
@@ -656,7 +656,7 @@ get_dt_dtm_range <- function(dtc,
         imputed_dtcs[[2]],
         missing = imputed_dtcs[[2]]
       )
-      }
+    }
   }
 
   names(imputed_dtcs) <- c("lower", "upper")

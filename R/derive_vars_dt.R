@@ -221,7 +221,7 @@
 #' @info As in the previous example, we derive `ASTDT` from `AESTDTC`. Here we
 #' additionally consider `AENDT` to determine if the potential start dates
 #' include `TRTSDTM`.
-#' 
+#'
 #' - For partial dates that could potentially include `TRTSDTM` and where
 #'   `AENDT` is at or after `TRTSDTM` (case 1), the imputed date is adjusted to
 #'   `TRTSDTM`.
@@ -512,7 +512,7 @@ convert_dtc_to_dt <- function(dtc,
 #' @permitted [date_list]
 #'
 #' @param min_dates_strict Minimum dates (strict)
-#' 
+#'
 #' The argument works like the `min_dates` argument but it affects the behaviour
 #' of the `min_dates` and `max_dates` arguments. The range which is used to
 #' determine which of the `min_dates` and `max_dates` are considered is
@@ -538,7 +538,7 @@ convert_dtc_to_dt <- function(dtc,
 #' this range to `"2020-11-24"` to `"2020-11-30"`. Therefore `"2020-11-22"`
 #' (from the `max_dates` argument) is ignored as it is not within the restricted
 #' range.
-#' 
+#'
 #' @permitted [date_list]
 #'
 #' @param max_dates Maximum dates
@@ -551,14 +551,14 @@ convert_dtc_to_dt <- function(dtc,
 #' @permitted [date_list]
 #'
 #' @param max_dates_strict Maximum dates (strict)
-#' 
+#'
 #' The argument works like the `max_dates` argument but it affects the behaviour
 #' of the `min_dates` and `max_dates` arguments. The range which is used to
 #' determine which of the `min_dates` and `max_dates` are considered is
 #' restricted by the dates specified for `max_dates_strict`.
-#' 
+#'
 #' @permitted [date_list]
-#' 
+#'
 #' @param preserve Preserve day if month is missing and day is present
 #'
 #' For example `"2019---07"` would return `"2019-06-07` if `preserve = TRUE`

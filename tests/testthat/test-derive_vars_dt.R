@@ -304,11 +304,12 @@ test_that("impute_dtc_dt Test 10: min_dates_strict parameter works", {
       ),
       min_dates_strict = list(
         c(
-        ymd("2020-12-28"),
-        ymd("2020-12-15"),
-        ymd("2020-11-12"),
-        NA
-      )),
+          ymd("2020-12-28"),
+          ymd("2020-12-15"),
+          ymd("2020-11-12"),
+          NA
+        )
+      ),
       highest_imputation = "Y",
       date_imputation = "last"
     ),
@@ -330,11 +331,12 @@ test_that("impute_dtc_dt Test 11: max_dates_strict parameter works", {
       ),
       max_dates_strict = list(
         c(
-        ymd("2020-12-05"),
-        ymd("2020-12-15"),
-        ymd("2020-11-12"),
-        NA
-      )),
+          ymd("2020-12-05"),
+          ymd("2020-12-15"),
+          ymd("2020-11-12"),
+          NA
+        )
+      ),
       highest_imputation = "Y",
       date_imputation = "first"
     ),
