@@ -1,8 +1,8 @@
 #' @keywords internal
 #' @family internal
 #' @import admiraldev
-#' @importFrom cli cli_abort ansi_collapse cli_div cli_inform cli_text cli_warn
-#' @importFrom cli qty
+#' @importFrom cli cli_abort ansi_collapse cli_bullets cli_div cli_inform
+#' @importFrom cli cli_text cli_verbatim cli_warn qty
 #'
 #' @importFrom dplyr anti_join across arrange between bind_cols bind_rows
 #' @importFrom dplyr case_when coalesce cross_join desc distinct ends_with
