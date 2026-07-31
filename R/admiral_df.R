@@ -8,27 +8,42 @@
 #'
 #' @param dataset A data frame (or `NULL`)
 #'
+#' @param keys Optional character vector of the intended key variables of
+#'   `dataset`, i.e. the variables it should have one record per, e.g. the
+#'   `by_vars` (plus `PARAMCD`) of the derivation that produced it. When
+#'   supplied, it is stored in the `"admiral_keys"` attribute and used by
+#'   [summary.admiral_df()] to check the record structure instead of guessing
+#'   it. `NULL` leaves any existing attribute untouched.
+#'
 #' @return
 #'   If `dataset` is `NULL`, `NULL` is returned unchanged. Otherwise `dataset`
-#'   with `"admiral_df"` prepended to its class attribute.
+#'   with `"admiral_df"` prepended to its class attribute (and, if `keys` is
+#'   supplied, an `"admiral_keys"` attribute).
 #'
 #' @keywords internal
 #' @family internal
-as_admiral_df <- function(dataset) {
+as_admiral_df <- function(dataset, keys = NULL) {
   if (is.null(dataset)) {
     return(dataset)
   }
   if (!inherits(dataset, "admiral_df")) {
     class(dataset) <- c("admiral_df", class(dataset))
   }
+  if (!is.null(keys)) {
+    attr(dataset, "admiral_keys") <- keys
+  }
   dataset
 }
 
-#' Determine the ADaM Structure of a Dataset
+#' Determine the ADaM Dataset Type
 #'
-#' Classifies a data frame as one of the common ADaM structures based on the
+#' Classifies a data frame as one of the common ADaM dataset types based on the
 #' variables it contains. This is used by [summary.admiral_df()] to tailor the
 #' diagnostic output.
+#'
+#' Note that this is the *type* of the dataset (`ADSL`, `BDS`, ...), not its
+#' record structure: the latter is the set of key variables it has one record
+#' per, see [infer_admiral_keys()].
 #'
 #' @param dataset A data frame
 #'
