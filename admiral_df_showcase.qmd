@@ -1,0 +1,979 @@
+---
+title: "`admiral_df`: dataset diagnostics for admiral"
+subtitle: "Issue #3160 proof of concept — what is implemented, how it works, and what persists"
+author: "admiral development"
+date: last-modified
+format:
+  html:
+    toc: true
+    toc-depth: 3
+    toc-expand: 2
+    number-sections: true
+    code-fold: show
+    code-tools: true
+    code-overflow: wrap
+    df-print: kable
+    theme:
+      light: flatly
+      dark: darkly
+execute:
+  warning: true
+  message: true
+  collapse: true
+---
+
+```{r}
+#| label: setup
+#| include: false
+suppressMessages({
+  library(dplyr)
+  library(tidyr)
+  library(tibble)
+  library(cli)
+  library(rlang)
+})
+# plain-text cli output so the rendered document is readable without ANSI codes
+options(cli.num_colors = 1)
+devtools::load_all(quiet = TRUE)
+```
+
+# What this document is
+
+This is a developer-facing walkthrough of the `admiral_df` proof of concept for
+[issue #3160](https://github.com/pharmaverse/admiral/issues/3160). Every code
+chunk below **executes against the real functions** in `R/admiral_df.R` — re-render
+this document to re-verify the behaviour it describes.
+
+The core idea: a clinical programmer who has just run a derivation is asking two
+questions —
+
+1. **Did I create what I expected?** (counts, parameters, visits, treatment arms)
+2. **Did I break anything?** (duplicated baselines, duplicated occurrence flags,
+   records that shouldn't exist)
+
+The second question is where the value is, and it is what a generic
+`str()`/`skimr`-style summary cannot answer. The POC answers both with a single
+call: `summary()` on a tagged dataset.
+
+::: {.callout-note title="Design principle: diagnostics, not validation"}
+Every check in this system is **reported, never signalled**. If `summary()` ever
+errored, people would stop calling it, and it would become useless as a browsing
+tool. It is deliberately not a replacement for `{diffdf}` or a study's QC
+scripts.
+:::
+
+# The `admiral_df` class
+
+## Two independent pieces of state
+
+The whole system rests on two pieces of metadata attached to an ordinary
+tibble, and it is essential to understand that they **travel independently**
+(this becomes the crux of @sec-persistence):
+
+| State | What it is | What it does |
+|---|---|---|
+| `admiral_df` **class** | Prepended to the class vector | Makes `summary()` dispatch to `summary.admiral_df()` instead of `summary.data.frame()` |
+| `admiral_keys` **attribute** | Character vector of variable names | Declares the intended record structure — the variables the dataset should have exactly one record per |
+
+`as_admiral_df()` is the low-level tagger. It is idempotent, cheap, and
+`NULL`-safe (a `NULL` dataset passes through unchanged, which lets derivations
+call it unconditionally on early returns):
+
+```{r}
+advs <- tribble(
+  ~STUDYID,  ~USUBJID,      ~PARAMCD, ~AVAL, ~AVISIT,
+  "PILOT01", "01-701-1015", "DIABP",     51, "BASELINE",
+  "PILOT01", "01-701-1015", "SYSBP",    121, "BASELINE",
+  "PILOT01", "01-701-1028", "DIABP",     79, "BASELINE",
+  "PILOT01", "01-701-1028", "SYSBP",    130, "BASELINE"
+)
+
+tagged <- as_admiral_df(advs, keys = c("USUBJID", "PARAMCD"))
+class(tagged)
+attr(tagged, "admiral_keys")
+```
+
+Note the subtlety in the `keys` argument: `keys = NULL` (the default) **leaves
+any existing attribute untouched** rather than clearing it. Re-tagging with
+`as_admiral_df(x)` therefore restores the class but keeps whatever attribute was
+already riding along — including a stale one. This is deliberate (it makes
+re-tagging after `summarise()` cheap) but has consequences discussed in
+@sec-persistence.
+
+## Type detection: `get_admiral_df_type()`
+
+`summary()` tailors its output to the ADaM structure of the dataset, detected
+purely from the columns present. The precedence order matters because the
+signals overlap (both BDS and TTE contain `PARAMCD`):
+
+1. **`TTE`** — has `PARAMCD` + `CNSR` + `STARTDT`
+2. **`OCCDS`** — no `PARAMCD`, but has a `--DECOD`/`--TERM` variable and/or
+   `TRTEMFL`/`AOCCxxFL` (regex `"(DECOD|TERM)$|^AOCC.*FL$|^TRTEMFL$"`)
+3. **`BDS`** — has `PARAMCD` + (`AVAL` or `AVALC`)
+4. **`ADSL`** — no `PARAMCD`, and either one row per subject key **or** typical
+   subject-level variables (`TRT01P`/`TRTSDT`)
+5. **`other`** — none of the above
+
+```{r}
+c(
+  bds   = get_admiral_df_type(advs),
+  adsl  = get_admiral_df_type(tibble(USUBJID = "1", TRT01P = "Placebo")),
+  tte   = get_admiral_df_type(tibble(PARAMCD = "OS", CNSR = 0, STARTDT = Sys.Date())),
+  occds = get_admiral_df_type(tibble(USUBJID = "1", AEDECOD = "HEADACHE", ASEQ = 1L)),
+  other = get_admiral_df_type(tibble(x = 1))
+)
+```
+
+The ADSL fallback is worth spelling out: `is_adsl_structure()` accepts a
+dataset as subject-level either **structurally** (already unique per
+`get_admiral_option("subject_keys")`) or **semantically** (carries `TRT01P` or
+`TRTSDT`). The semantic route matters because a *broken* ADSL — one with a
+duplicated subject — must still be classified as ADSL, or the diagnostic could
+never report the duplication.
+
+# How the keys are resolved {#sec-keys}
+
+This is the heart of the design, and the part with the most moving pieces. The
+record-structure check needs to know *which* variables the dataset should be
+unique by, and there are **three pathways** for that knowledge to arrive,
+resolved in strict precedence order:
+
+```{mermaid}
+flowchart TD
+    A["summary(x, keys = ?)"] --> B{"keys argument<br/>supplied?"}
+    B -- "yes" --> S["<b>supplied</b><br/>character vector, or a Metacore<br/>object resolved via get_admiral_keys()<br/><i>transient — this call only</i>"]
+    B -- "no" --> C{"'admiral_keys'<br/>attribute set?"}
+    C -- "yes" --> D["<b>declared</b><br/><i>persistent — travels with the object</i>"]
+    C -- "no (NULL)" --> I["<b>inferred</b><br/>infer_admiral_keys()<br/><i>heuristic, recomputed every call</i>"]
+    D --> D1["set by metacore spec:<br/>set_admiral_keys(x, spec, 'ADVS')"]
+    D --> D2["set by the user:<br/>as_admiral_df(x, keys = c(...))"]
+    D --> D3["set by a derivation:<br/>derive_param_computed() stamps<br/>c(vars2chr(by_vars), 'PARAMCD')"]
+```
+
+The layering — *explicit argument overrides persistent metadata overrides
+heuristic* — is a well-worn R idiom (`print(x, digits =)` over
+`getOption("digits")`). Each pathway is examined below.
+
+## Pathway 1 — declared via a metacore specification
+
+`{metacore}` specs already know the intended keys of every dataset: the
+`key_seq` column of `ds_vars`. Two functions expose this:
+
+- **`get_admiral_keys(spec, "ADSL")`** — a thin wrapper around
+  `metacore::get_keys()` that returns the key variable names as a plain
+  character vector, in key order. It adds a `dataset_name = NULL` convenience
+  for single-dataset specs (e.g. after `metacore::select_dataset()`), and warns
+  when the spec defines no keys. Internally it must splice the dataset name in
+  with `rlang::inject(... !!dataset_name)`, because `get_keys()` captures its
+  argument via NSE and would otherwise filter for the literal symbol.
+- **`set_admiral_keys(dataset, spec, "ADSL")`** — attaches those keys as the
+  `admiral_keys` attribute, stores the dataset name in `admiral_ds_name` (shown
+  in the summary heading), and tags the class.
+
+`{metacore}` is a *suggested* dependency: it is only required at the moment
+these functions are called (`rlang::check_installed()` prompts otherwise).
+
+```{r}
+#| eval: !expr 'requireNamespace("metacore", quietly = TRUE)'
+load(metacore::metacore_example("pilot_ADaM.rda")) # loads `metacore`
+spec <- metacore
+
+get_admiral_keys(spec, "ADSL")
+
+adsl_wip <- tibble(
+  STUDYID = "PILOT01",
+  USUBJID = c("01-701-1015", "01-701-1028"),
+  TRT01P  = c("Placebo", "Xanomeline"),
+  TRTSDT  = as.Date(c("2024-01-10", "2024-01-11"))
+)
+
+adsl_spec <- set_admiral_keys(adsl_wip, spec, "ADSL")
+class(adsl_spec)
+attr(adsl_spec, "admiral_keys")
+attr(adsl_spec, "admiral_ds_name")
+```
+
+The attribute is exactly what the spec declares — nothing is inferred. `summary()`
+then reports the structure **without** any annotation, because declared keys are
+the trusted default:
+
+```{r}
+#| eval: !expr 'requireNamespace("metacore", quietly = TRUE)'
+summary(adsl_spec)
+```
+
+::: {.callout-warning title="One documented asymmetry"}
+`summary(x, keys = spec)` is **transient** while `set_admiral_keys(x, spec)` is
+**persistent** — same spec, different lifetime. This mirrors
+argument-vs-options semantics, but it is the one place a user could plausibly
+expect the call to have tagged the object when it did not.
+:::
+
+## Pathway 2 — declared by the user or by a derivation
+
+The user can stamp keys directly (`as_admiral_df(x, keys =)`), and — this is
+the original #3160 story — **derivations stamp their own output**.
+`derive_param_computed()` ends with:
+
+```r
+# the output has one record per `by_vars` + `PARAMCD`; record that so
+# `summary()` can check the structure exactly instead of inferring it
+as_admiral_df(
+  bind_rows(dataset, hori_data),
+  keys = c(vars2chr(by_vars), "PARAMCD")
+)
+```
+
+The function that *creates* a dataset knows its intended structure better than
+anyone downstream, and persisting that knowledge is what makes the
+zero-ceremony post-derivation check work — including three pipeline steps
+later:
+
+```{r}
+map <- derive_param_computed(
+  advs,
+  by_vars = exprs(USUBJID, AVISIT),
+  parameters = c("SYSBP", "DIABP"),
+  set_values_to = exprs(
+    AVAL = (AVAL.SYSBP + 2 * AVAL.DIABP) / 3,
+    PARAMCD = "MAP"
+  )
+)
+attr(map, "admiral_keys")
+summary(map)
+```
+
+Note the structure line has **no** `(inferred)` tag: the keys came from the
+derivation's `by_vars`. And when a derivation genuinely goes wrong — say a
+record is added twice — the same line becomes a finding:
+
+```{r}
+dup <- as_admiral_df(
+  bind_rows(map, filter(map, PARAMCD == "MAP")[1, ]),
+  keys = c("USUBJID", "AVISIT", "PARAMCD")
+)
+summary(dup)
+```
+
+## Pathway 3 — inferred from type and data
+
+When no keys were supplied or declared, `infer_admiral_keys()` guesses. This is
+the fallback, always annotated `(inferred)` in the output, and it is more
+careful than a naive guess:
+
+**Step 1 — semantic core by type.** ADSL starts from the subject keys; BDS and
+TTE start from subject keys + `PARAMCD`; anything `other` gives up
+(`character(0)`, no structure line at all).
+
+**Step 2 — minimal expansion.** `minimal_unique_key()` adds standard ADaM key
+variables one at a time, in precedence order (`AVISITN`, `AVISIT`, `ATPTN`,
+`ATPT`, `ADTM`, `ADT`, `APERIOD`, `APERIODC`, `ASPID`), **only as far as needed**
+to make the key unique. A single-visit dataset therefore reports the minimal key
+without `AVISIT` padding; a multi-visit one automatically expands:
+
+```{r}
+# single visit: AVISIT is present but NOT needed for uniqueness
+summary(as_admiral_df(advs))
+```
+
+```{r}
+advs_2visits <- tribble(
+  ~STUDYID,  ~USUBJID,      ~PARAMCD, ~AVAL, ~AVISIT,
+  "PILOT01", "01-701-1015", "DIABP",     51, "BASELINE",
+  "PILOT01", "01-701-1015", "DIABP",     50, "WEEK 2",
+  "PILOT01", "01-701-1015", "SYSBP",    121, "BASELINE",
+  "PILOT01", "01-701-1015", "SYSBP",    119, "WEEK 2"
+)
+# two visits: the key expands automatically until unique
+summary(as_admiral_df(advs_2visits))
+```
+
+**Step 3 — the surrogate-key guardrail.** For BDS/TTE the candidate list
+deliberately excludes sequence variables (`ASEQ`, `SRCSEQ`, ...). If `ASEQ`
+were allowed in, uniqueness would be reached *trivially* — every row has its own
+sequence number — and genuine duplicates would be masked:
+
+```{r}
+advs_aseq <- tribble(
+  ~STUDYID,  ~USUBJID,      ~PARAMCD, ~AVAL, ~AVISIT,    ~ASEQ,
+  "PILOT01", "01-701-1015", "MAP",       74, "BASELINE",  1L,
+  "PILOT01", "01-701-1015", "MAP",       75, "BASELINE",  2L  # dup grain, new ASEQ
+)
+# ASEQ is excluded from inference, so the duplicate is still found
+summary(as_admiral_df(advs_aseq))
+```
+
+**The OCCDS exception.** OCCDS has no analysis-value structure to fall back on:
+multiple records per subject and term are legitimate (a subject can have the
+same AE twice). There, `ASEQ` *is* the genuine record key, so it is **required**
+rather than treated as a surrogate — and if it is absent, inference refuses to
+guess and warns instead:
+
+```{r}
+adae <- tribble(
+  ~STUDYID,  ~USUBJID,      ~AEDECOD,   ~TRTEMFL, ~ASEQ,
+  "PILOT01", "01-701-1015", "HEADACHE", "Y",      1L,
+  "PILOT01", "01-701-1015", "NAUSEA",   "Y",      2L,
+  "PILOT01", "01-701-1028", "HEADACHE", "Y",      1L
+)
+summary(as_admiral_df(adae))          # grain = USUBJID + ASEQ
+summary(as_admiral_df(select(adae, -ASEQ)))  # cannot check -> warning
+```
+
+## Why keep both the argument and the attribute?
+
+Both the `keys =` argument and the `admiral_keys` attribute exist, which looks
+redundant at first. The assessment (see `keys_design_notes.md`) is that they
+solve **two different problems**:
+
+- The **attribute is the producer's channel** — the derivation or the spec
+  records the *intended* structure once, and every later `summary()` checks it
+  with zero ceremony. Dropping it would kill the derivation tagging that
+  motivated #3160.
+- The **argument is the consumer's channel** — "is this dataset unique by *the
+  keys I say*", explicit at the call site, no mutation of the object, and the
+  escape hatch when the declared keys are wrong.
+
+The genuine risk of dual pathways is comprehension ("why did summary check
+*these* keys?"), and that is addressed by provenance: `key_source` is stored in
+the returned object, and the printout annotates `(supplied)` and `(inferred)`
+while leaving the trusted declared case unmarked.
+
+# What `summary()` reports per type
+
+Beyond the shared header (type, subjects, observations, structure check),
+each type gets a tailored section, organized around **facts vs red flags**.
+Every item degrades gracefully — an element is only computed when the variables
+it needs exist and are not entirely `NA`, so a mid-derivation dataset is
+summarized as far as it goes. A check that could not run is *not mentioned at
+all* — not run is different from passed.
+
+The check-printing logic is shared (`print_summary_checks()`): failing checks
+each get their own bullet with the offending count; passing checks collapse
+into **one** confirmation line that still names each of them, so a clean
+dataset does not cost a screen of zeroes but you can still see what was
+verified.
+
+::: {.panel-tabset}
+
+## ADSL
+
+`summarize_adsl()` collects the denominators a programmer checks first —
+treatment breakdown (preferring `TRT01P`, falling back to `TRT01A` then `ARM`),
+population flag counts, the subject funnel (randomized / treated / completed),
+treatment duration, end-of-study status, deaths, demographics — plus four
+checks:
+
+- 🚩 `ARM` ≠ `ACTARM` (mis-dosed subjects)
+- 🚩 `SAFFL == "Y"` with missing `TRTSDT` (no treatment-emergent records can be
+  derived downstream)
+- 🚩 `TRTEDT < TRTSDT` (negative treatment duration)
+- 🚩 population flag values outside `Y`/`N`/`NA` (`"Yes"`, `"y"`, `""` are
+  silently dropped by `== "Y"` subsetting and poison every denominator)
+
+```{r}
+adsl <- as_admiral_df(admiral_adsl, keys = "USUBJID")
+summary(adsl)
+```
+
+The 12 flagged subjects are not an artefact: in the CDISC pilot data they were
+planned for Xanomeline High Dose and actually took Low Dose — a genuine dose
+deviation. Whether that is a finding or a known feature of the study is the
+programmer's call, which is why the check *reports* rather than signals.
+
+Now the same ADSL with defects injected. **Neither defect changes the record
+count, the subject count, or the record structure** — the pre-existing summary
+would have shown nothing:
+
+```{r}
+clean <- admiral_adsl %>%
+  filter(is.na(ARM) | is.na(ACTARM) | ARM == ACTARM)
+
+mis_rows <- head(which(clean$ARM == "Placebo"), 3)
+saf_rows <- head(which(clean$SAFFL == "Y" & !is.na(clean$TRTSDT)), 2)
+
+broken_adsl <- clean %>%
+  mutate(
+    ACTARM = if_else(row_number() %in% mis_rows, "Xanomeline High Dose", ACTARM),
+    TRTSDT = if_else(row_number() %in% saf_rows, as.Date(NA), TRTSDT)
+  ) %>%
+  as_admiral_df(keys = "USUBJID")
+
+summary(broken_adsl)
+```
+
+And a partially built ADSL: every unavailable item is dropped rather than
+reported as missing, so the summary stays readable mid-derivation. Note the
+checks line is absent too — neither check could run, which is different from
+both passing:
+
+```{r}
+partial_adsl <- admiral_adsl %>%
+  select(STUDYID, USUBJID, AGE, SEX, ARM) %>%
+  as_admiral_df(keys = "USUBJID")
+summary(partial_adsl)
+```
+
+## BDS
+
+`summarize_bds()`'s centrepiece is the **per-parameter table** — records,
+subjects, visits, missing `AVAL`, min/median/max per `PARAMCD` — replacing the
+flat parameter list. Most BDS defects (empty parameter, missing-value spike,
+absurd min/max) are visible as a row. The statistics expressions are assembled
+conditionally (`stats$subjects <- quote(n_distinct(USUBJID))` only when
+`USUBJID` exists) and spliced into a single `summarise(!!!stats)`, so the table
+adapts to whatever columns are present. It also reports derived records by
+`DTYPE` — exactly what the derivations added — and four checks:
+
+- 🚩 more than one `ABLFL == "Y"` per subject/parameter (and `BASETYPE`/`ATPT`
+  where present) — the classic silent defect that corrupts `BASE`/`CHG`/`PCHG`
+- 🚩 `CHG`/`PCHG` populated where `BASE` is missing
+- 🚩 `AVISIT` ↔ `AVISITN` not mapping one-to-one
+- 🚩 more than one `PARAM` label or `AVALU` unit under one `PARAMCD`
+
+```{r}
+adlb <- as_admiral_df(admiral_adlb)
+summary(adlb)
+```
+
+Four classic defects injected — again, none changes any record count, so only
+the checks tell the two summaries apart:
+
+```{r}
+dup_base_row <- head(
+  which(
+    admiral_adlb$PARAMCD == "ALT" & is.na(admiral_adlb$ABLFL) &
+      is.na(admiral_adlb$DTYPE) & admiral_adlb$USUBJID == admiral_adlb$USUBJID[1]
+  ),
+  1
+)
+chg_row <- head(which(!is.na(admiral_adlb$CHG)), 1)
+visit_row <- head(which(admiral_adlb$AVISIT == "Week 2"), 1)
+param_row <- head(which(admiral_adlb$PARAMCD == "ALT"), 1)
+
+broken_adlb <- admiral_adlb %>%
+  mutate(
+    ABLFL = if_else(row_number() == dup_base_row, "Y", ABLFL),
+    BASE = if_else(row_number() == chg_row, NA_real_, BASE),
+    AVISITN = if_else(row_number() == visit_row, 99, AVISITN),
+    PARAM = if_else(row_number() == param_row, "ALT (U/L)", PARAM)
+  ) %>%
+  as_admiral_df()
+
+summary(broken_adlb)
+```
+
+And the original #3160 use case — summarizing a derivation's output directly.
+The new `ASTALT` row in the parameter table shows what was added, with its
+value range as a sanity check:
+
+```{r}
+ratio <- admiral_adlb %>%
+  filter(is.na(DTYPE)) %>%
+  derive_param_computed(
+    by_vars = exprs(USUBJID, AVISIT, AVISITN),
+    parameters = c("AST", "ALT"),
+    set_values_to = exprs(
+      AVAL = AVAL.AST / AVAL.ALT,
+      PARAMCD = "ASTALT",
+      PARAM = "AST/ALT ratio"
+    )
+  )
+summary(ratio)
+```
+
+## OCCDS
+
+`summarize_occds()` reports distinct terms per coding level
+(`--BODSYS`/`--DECOD`/`--TERM`), treatment-emergent vs total records (the
+denominator shift — most AE outputs are restricted to `TRTEMFL == "Y"`),
+severity/grade (preferring the analysis version `ASEV` over `AESEV`, and
+severity over toxicity grade), serious count, and three checks:
+
+- 🚩 **occurrence flag integrity** — the grouping level is derived from the
+  flag's infix (the part between `AOCC` and `FL`): `S` → per subject and body
+  system, `P` → per subject and dictionary term, anything else (`AOCCFL`,
+  `AOCC02FL`, ...) → per subject. Only *more than one* `"Y"` per group is a
+  defect — zero is legitimate, because the flags are typically restricted to
+  the emergent records. This is the classic OCCDS defect: a duplicated flag
+  double-counts the subject in every "n (%) of subjects" table downstream, and
+  the record-structure check cannot see it because the record count is
+  unchanged.
+- 🚩 missing `ASTDT` (the record silently drops out of every
+  `TRTEMFL`-restricted output)
+- 🚩 treatment-emergent records starting before `TRTSDT` (the record
+  contradicts its own flag)
+
+```{r}
+#| eval: !expr 'requireNamespace("pharmaversesdtm", quietly = TRUE)'
+adae_full <- pharmaversesdtm::ae %>%
+  convert_blanks_to_na() %>%
+  derive_vars_merged(
+    dataset_add = admiral_adsl,
+    new_vars = exprs(TRTSDT, TRTEDT, TRT01A),
+    by_vars = exprs(STUDYID, USUBJID)
+  ) %>%
+  derive_vars_dt(new_vars_prefix = "AST", dtc = AESTDTC, highest_imputation = "M") %>%
+  derive_vars_dt(new_vars_prefix = "AEN", dtc = AEENDTC) %>%
+  derive_var_trtemfl(
+    start_date = ASTDT, end_date = AENDT,
+    trt_start_date = TRTSDT, trt_end_date = TRTEDT
+  ) %>%
+  mutate(ASEQ = AESEQ) %>%
+  restrict_derivation(
+    derivation = derive_var_extreme_flag,
+    args = params(
+      by_vars = exprs(USUBJID), order = exprs(ASTDT, AESEQ),
+      new_var = AOCCFL, mode = "first"
+    ),
+    filter = TRTEMFL == "Y"
+  ) %>%
+  restrict_derivation(
+    derivation = derive_var_extreme_flag,
+    args = params(
+      by_vars = exprs(USUBJID, AEBODSYS), order = exprs(ASTDT, AESEQ),
+      new_var = AOCCSFL, mode = "first"
+    ),
+    filter = TRTEMFL == "Y"
+  ) %>%
+  as_admiral_df(keys = c("USUBJID", "ASEQ"))
+
+summary(adae_full)
+```
+
+```{r}
+#| eval: !expr 'requireNamespace("pharmaversesdtm", quietly = TRUE)'
+emergent <- which(
+  adae_full$TRTEMFL == "Y" & !is.na(adae_full$ASTDT) & !is.na(adae_full$TRTSDT)
+)
+dup_row <- head(which(adae_full$TRTEMFL == "Y" & is.na(adae_full$AOCCFL)), 1)
+na_row <- head(setdiff(emergent, dup_row), 1)
+pre_row <- head(setdiff(emergent, c(dup_row, na_row)), 1)
+
+broken_adae <- adae_full %>%
+  mutate(
+    AOCCFL = if_else(row_number() == dup_row, "Y", AOCCFL),
+    ASTDT = case_when(
+      row_number() == na_row ~ as.Date(NA),
+      row_number() == pre_row ~ TRTSDT - 10,
+      TRUE ~ ASTDT
+    )
+  ) %>%
+  as_admiral_df(keys = c("USUBJID", "ASEQ"))
+
+summary(broken_adae)
+```
+
+## TTE
+
+TTE currently gets the shared header plus events vs censored (`CNSR == 0` vs
+otherwise). The design notes flag that this should become **per-`PARAMCD`**
+counts (each parameter is a separate endpoint, so a single total is misleading
+with more than one endpoint) — that increment is not yet implemented.
+
+```{r}
+adtte <- tribble(
+  ~STUDYID,  ~USUBJID,      ~PARAMCD, ~CNSR, ~STARTDT,
+  "PILOT01", "01-701-1015", "OS",         0, as.Date("2024-01-10"),
+  "PILOT01", "01-701-1028", "OS",         1, as.Date("2024-01-11")
+)
+summary(as_admiral_df(adtte))
+```
+
+:::
+
+# Comparing a dataset against ADSL {#sec-vs-adsl}
+
+For non-ADSL types, `summary()` accepts an **optional** `adsl =` argument:
+
+```r
+summary(object, keys = NULL, adsl = NULL, ...)
+```
+
+ADSL is the subject-level source of truth, and a record-level dataset can be
+wrong *relative to it* in ways it can never reveal on its own. Three things
+only ADSL can provide:
+
+1. **The full subject universe** — a child dataset cannot know who is
+   *missing* from it, nor supply the denominator for any "n (%) of subjects"
+   statement.
+2. **The authoritative subject-level values** — `TRTSDT`, `TRT01A`, `SAFFL` in
+   a child dataset are *copies* (via `derive_vars_merged()`), and copies go
+   stale when ADSL is refreshed after the child was built.
+3. **Subject-level events the child must respect** — records dated after death
+   are defects the child dataset cannot detect alone.
+
+When `adsl` is supplied, `summarize_vs_adsl()` adds a comparison section;
+when it is not, the section is absent entirely — not run is different from
+passed, as everywhere else. Everything is one `USUBJID`-level join plus
+vectorized comparisons, so it stays cheap on large datasets.
+
+## Facts: coverage and denominators
+
+The facts are the denominators programmers open ADSL for: overall coverage,
+the safety-population denominator, and per-arm coverage (an empty or thin arm
+is the shape of every downstream incidence table):
+
+```{r}
+adsl_ref <- tribble(
+  ~USUBJID,      ~SAFFL, ~TRT01A,      ~TRTSDT,               ~DTHDT,
+  "01-701-1015", "Y",    "Placebo",    as.Date("2024-01-01"), as.Date(NA),
+  "01-701-1028", "Y",    "Xanomeline", as.Date("2024-01-02"), as.Date(NA),
+  "01-701-1034", "N",    "Placebo",    as.Date(NA),           as.Date(NA)
+)
+
+summary(as_admiral_df(advs), adsl = adsl_ref)
+```
+
+## Red flags: what only the comparison can catch
+
+Four checks run through the same `print_summary_checks()` machinery as the
+per-type ones — failures get their own bullet, passes collapse into one line,
+and a check whose variables are absent on either side is not mentioned:
+
+- 🚩 **Orphan subjects** — in the dataset but not in ADSL (wrong ADSL version,
+  screen failures or test subjects left in, or `USUBJID` formatting drift —
+  which *presents* as orphans, so the failure bullet includes example IDs and
+  the full vector is stored in `$vs_adsl$orphans`).
+- 🚩 **Stale shared variables** — every shared subject-level variable from a
+  curated list (`TRTSDT`, `TRTEDT`, `TRT01P`, `TRT01A`, `SAFFL`, `ITTFL`,
+  `DTHDT`, `EOSDT`, `AGE`, `SEX`, `RACE`) is compared per subject, as
+  character with `NA` equal to `NA`. Reported as "disagrees with ADSL" without
+  presuming which side is wrong — the cause may be an outdated child *or* a
+  newer ADSL. The per-variable breakdown is stored in `$vs_adsl$stale_vars`.
+- 🚩 **Records after death** — `ADT`/`ASTDT` after the subject's `DTHDT` in
+  ADSL.
+- 🚩 **Emergent without treatment** (OCCDS) — `TRTEMFL == "Y"` for a subject
+  whose ADSL `TRTSDT` is missing, checked against the *authoritative* date, so
+  it works even when (and especially when) the merged copy is absent or stale.
+
+```{r}
+adae_small <- as_admiral_df(
+  tribble(
+    ~USUBJID,      ~ASEQ, ~AEDECOD,    ~TRTEMFL, ~ASTDT,                ~TRTSDT,
+    "01-701-1015",    1L, "HEADACHE",  "Y",      as.Date("2024-01-10"), as.Date("2024-01-01"),
+    # TRTSDT stale vs ADSL, and the record is dated after death
+    "01-701-1028",    1L, "NAUSEA",    "Y",      as.Date("2024-03-10"), as.Date("2024-01-02"),
+    # emergent, but ADSL says this subject was never treated (TRTSDT is NA)
+    "01-701-1034",    1L, "FATIGUE",   "Y",      as.Date("2024-01-20"), as.Date(NA),
+    # an orphan subject: not in ADSL at all, so it is its own finding and is
+    # deliberately NOT double-counted by the per-variable or emergent checks
+    "01-701-9999",    1L, "DIZZINESS", "Y",      as.Date("2024-01-15"), as.Date(NA)
+  ),
+  keys = c("USUBJID", "ASEQ")
+)
+
+adsl_broken <- adsl_ref %>%
+  mutate(
+    TRTSDT = if_else(USUBJID == "01-701-1028", as.Date("2024-01-05"), TRTSDT),
+    DTHDT = if_else(USUBJID == "01-701-1028", as.Date("2024-02-01"), DTHDT)
+  )
+
+summary(adae_small, adsl = adsl_broken)
+```
+
+Note the OCCDS summary also gained the **incidence line** ("subjects with a
+treatment-emergent record: n of N"), preferring the `SAFFL == "Y"` denominator
+and falling back to all of ADSL — the number every AE table leads with, which
+the child dataset alone cannot compute because subjects with zero occurrences
+are not in it.
+
+## Argument semantics
+
+Two deliberate boundaries, mirroring the design-notes decisions:
+
+- **Malformed `adsl` aborts.** The data checks never signal, but *argument*
+  validation may: an `adsl` without `USUBJID`, or with more than one record
+  per subject, makes every comparison ambiguous — that is caller error, and
+  `summary()` errors informatively rather than reporting nonsense.
+- **`adsl` on an ADSL is ignored with a warning.** Comparing an ADSL against
+  itself is meaningless; comparing two ADSL versions is a different feature
+  (`{diffdf}` territory).
+
+```{r}
+#| error: true
+summary(
+  as_admiral_df(advs),
+  adsl = tibble(USUBJID = c("1", "1"), SAFFL = "Y")  # duplicate subject
+)
+```
+
+# Persistence: when does the tag survive a pipeline? {#sec-persistence}
+
+This section matters most for the go-forward decision. The class and the
+attribute are ordinary R metadata, and their survival through a pipeline is a
+property of **dplyr, not of admiral** — the behaviour below was verified with
+dplyr 1.2.1 / tidyr 1.3.2 and can change with dplyr releases.
+
+## The mechanism: `dplyr_reconstruct()`
+
+Most dplyr verbs rebuild their result with `dplyr::dplyr_reconstruct()`, whose
+`data.frame` method copies **all** attributes from the template object —
+including a custom class and `admiral_keys`. This is the opposite of the common
+assumption that attributes never survive dplyr. The tag is lost only when:
+
+1. an operation builds a **new** data frame from scratch (`summarise()`,
+   pivots, `nest()`), or
+2. the template it reconstructs from is a different, *untagged* object
+   (`bind_rows(plain, tagged)`, joins where the tagged dataset is `y`).
+
+```{r}
+#| code-fold: true
+#| code-summary: "helper: tag_status() — records what is left of the tag"
+tag_status <- function(label, data) {
+  tibble(
+    operation = label,
+    class_kept = inherits(data, "admiral_df"),
+    keys_kept = !is.null(attr(data, "admiral_keys"))
+  )
+}
+
+advs_tagged <- as_admiral_df(advs, keys = c("USUBJID", "PARAMCD"))
+
+# a genuinely plain row: neither the class nor the attribute
+plain_row <- tribble(
+  ~STUDYID,  ~USUBJID,      ~PARAMCD, ~AVAL, ~AVISIT,
+  "PILOT01", "01-701-1015", "MAP",       74, "BASELINE"
+)
+```
+
+## Survives, drops, and the treacherous middle
+
+```{r}
+#| code-fold: true
+#| code-summary: "code: run every operation and collect the results"
+survives <- bind_rows(
+  tag_status("mutate()", mutate(advs_tagged, AVALC = as.character(AVAL))),
+  tag_status("filter()", filter(advs_tagged, AVAL > 60)),
+  tag_status("arrange()", arrange(advs_tagged, desc(AVAL))),
+  tag_status("select()", select(advs_tagged, USUBJID, PARAMCD, AVAL)),
+  tag_status("slice() / head() / [i, ]", slice(advs_tagged, 1:2)),
+  tag_status("distinct()", distinct(advs_tagged, USUBJID, PARAMCD, AVAL)),
+  tag_status("count()", count(advs_tagged, USUBJID)),
+  tag_status("bind_cols()", bind_cols(advs_tagged, tibble(FLAG = rep("Y", 4)))),
+  tag_status("bind_rows(tagged, plain)", bind_rows(advs_tagged, plain_row)),
+  tag_status(
+    "left_join(tagged, plain)",
+    left_join(advs_tagged, tibble(USUBJID = "01-701-1015", TRT01P = "Placebo"),
+      by = "USUBJID"
+    )
+  ),
+  tag_status("tidyr::fill()", tidyr::fill(advs_tagged, AVAL)),
+  tag_status("saveRDS() -> readRDS()", {
+    f <- tempfile(fileext = ".rds")
+    saveRDS(advs_tagged, f)
+    out <- readRDS(f)
+    unlink(f)
+    out
+  })
+)
+
+drops_both <- bind_rows(
+  tag_status("summarise()", summarise(advs_tagged, N = n(), .by = USUBJID)),
+  tag_status("group_by() |> ungroup()", ungroup(group_by(advs_tagged, USUBJID))),
+  tag_status(
+    "tidyr::pivot_wider()",
+    pivot_wider(advs_tagged, names_from = PARAMCD, values_from = AVAL)
+  ),
+  tag_status("tidyr::pivot_longer()", pivot_longer(advs_tagged, AVAL)),
+  tag_status("nest() |> unnest()", unnest(nest(advs_tagged, data = AVAL), data)),
+  tag_status("tidyr::complete()", complete(advs_tagged, USUBJID, PARAMCD)),
+  tag_status("bind_rows(plain, tagged)", bind_rows(plain_row, advs_tagged)),
+  tag_status(
+    "left_join(plain, tagged)",
+    left_join(tibble(USUBJID = c("01-701-1015", "01-701-1028")), advs_tagged,
+      by = "USUBJID"
+    )
+  )
+)
+
+partial <- bind_rows(
+  tag_status("group_by()", group_by(advs_tagged, USUBJID)),
+  tag_status("rowwise()", rowwise(advs_tagged)),
+  tag_status("as_tibble()", as_tibble(advs_tagged)),
+  tag_status("as.data.frame()", as.data.frame(advs_tagged)),
+  tag_status("tidyr::drop_na()", drop_na(advs_tagged))
+)
+```
+
+::: {.panel-tabset}
+
+### ✅ Keeps both
+
+The everyday derivation pipeline keeps its tag end to end:
+
+```{r}
+#| echo: false
+survives
+```
+
+### ❌ Drops both
+
+Operations that build a new frame from scratch — and, critically, **argument
+order**: `bind_rows()` reconstructs from its *first* argument and joins from
+`x`, so the same data with the arguments swapped loses the tag:
+
+```{r}
+#| echo: false
+drops_both
+```
+
+### ⚠️ Partial drops
+
+The two halves are **not always lost together**. These keep `admiral_keys` but
+drop the class:
+
+```{r}
+#| echo: false
+partial
+```
+
+Two distinct failure modes fall out of this:
+
+- **Class gone, attribute kept** (`as_tibble()`, `as.data.frame()`, and —
+  *inside* the grouped block — `group_by()`): `summary()` dispatches to
+  `summary.data.frame()`, so the admiral diagnostic disappears **without any
+  error**. This is the dangerous case, because re-tagging with a bare
+  `as_admiral_df(x)` restores the class but silently promotes the possibly-stale
+  orphaned attribute back to "declared".
+- **`group_by()` specifically** replaces the class vector outright, so
+  `inherits(x, "admiral_df")` is already `FALSE` inside the grouped block;
+  `ungroup()` then removes `admiral_keys` as well.
+
+:::
+
+## Stale keys: preserved, and therefore able to go wrong
+
+The keys are stored as plain variable names, so `rename()` and `select()`
+preserve the attribute **without updating it**:
+
+```{r}
+renamed <- rename(advs_tagged, SUBJID = USUBJID)
+colnames(renamed)
+attr(renamed, "admiral_keys")   # still says USUBJID
+```
+
+`summary()` refuses to let this pass silently. A declared (or supplied) key
+that is absent from the dataset triggers a warning explaining exactly how the
+check was weakened — without it, the partially stale case would check the grain
+on `PARAMCD` alone and report the verdict as a declared one, inventing
+duplicates here and just as easily hiding real ones with different data:
+
+```{r}
+summary(renamed)                      # partially stale: checked on PARAMCD only
+```
+
+```{r}
+res <- summary(select(renamed, -PARAMCD))  # fully stale: nothing left to check
+print(res)
+```
+
+Inferred keys never trigger this warning — they are derived from the columns
+actually present.
+
+## The three states of `admiral_keys`
+
+A subtlety that any go-forward design must handle: the attribute has **three
+distinct states** that print almost identically but behave differently in
+`summary.admiral_df()`:
+
+| State | `summary()` behaviour |
+|---|---|
+| `NULL` (no attribute) | Falls back to `infer_admiral_keys()` — structure still checked, marked `(inferred)` |
+| `character(0)` (attribute set but empty) | Inference fallback is **skipped** *and* there is no key to check — **no structure check at all, silently**. `set_admiral_keys()` produces exactly this when the spec defines no `key_seq`. |
+| variable names | Checked as declared — but only for the names still present (see stale keys above) |
+
+Beware also that `all(NULL %in% cols)` is `TRUE` in R (`all(logical(0))`), so a
+naive "are the keys present?" check reports success for a dataset that declares
+no keys at all.
+
+## `check_admiral_df()`: auditing the tag
+
+Because the class and the attribute travel independently,
+`inherits(x, "admiral_df")` alone is not evidence that the structure will be
+checked — and `admiral_keys` alone is not evidence that `summary()` will even
+dispatch. `check_admiral_df()` is the exported reporter for exactly this: it
+mirrors the key resolution of `summary.admiral_df()` (including the
+`NULL`-vs-`character(0)` distinction) without emitting any of its warnings, and
+returns a programmable `admiral_df_check` object.
+
+```{r}
+check_admiral_df(advs_tagged)          # fully tagged
+```
+
+```{r}
+check_admiral_df(renamed)              # declared keys gone stale
+```
+
+```{r}
+check_admiral_df(as_tibble(advs_tagged))  # the orphaned-attribute case
+```
+
+The result is usable programmatically, e.g. as a guard in a pipeline:
+
+```{r}
+check_admiral_df(advs_tagged)$structure_checked
+```
+
+## Safe patterns
+
+Distilled from the above, the guidance for pipelines today:
+
+1. **Tag last** — run `as_admiral_df()` / `set_admiral_keys()` after reshaping
+   is done, not before.
+2. **Re-tag after** `summarise()`, `ungroup()`, `pivot_*()` and friends —
+   `as_admiral_df()` is idempotent and cheap.
+3. **Keep the tagged dataset first** — first argument of `bind_rows()`, the `x`
+   of a join.
+4. **Re-tag with explicit `keys`** after `rename()` of a key variable, and
+   after anything that orphaned the attribute — a bare `as_admiral_df(x)`
+   restores the class but keeps the stale attribute.
+
+::: {.callout-important title="Why persistence is the go-forward question"}
+The value proposition of the declared-keys pathway — *tag once, check anywhere*
+— depends entirely on the attribute actually surviving the pipelines users
+write. The evidence above says it survives the everyday derivation verbs but
+not reshaping, and it can go stale or become orphaned in ways that fail
+silently unless mitigated. The current mitigations are the stale-key warning
+in `summary()` and `check_admiral_df()`. Options for going further include:
+having *every* `derive_*` function re-tag its output (extending the
+`derive_param_computed()` pattern, which would make the tag self-healing across
+admiral pipelines); implementing `dplyr` group/rowwise S3 methods for
+`admiral_df` to survive `group_by()`; or accepting the current behaviour and
+documenting the safe patterns. This decision shapes how much users can trust
+the declared pathway versus how often they fall back to supplied or inferred
+keys.
+:::
+
+# Current status and open questions
+
+**Implemented** (this branch, `3160_poc_liam`):
+
+- `as_admiral_df()`, `get_admiral_df_type()`, `is_adsl_structure()`
+- `infer_admiral_keys()` + `minimal_unique_key()` with the surrogate-key
+  guardrail and the OCCDS/`ASEQ` special case
+- `get_admiral_keys()` / `set_admiral_keys()` — the metacore pathway
+- `summary.admiral_df()` with the supplied > declared > inferred precedence,
+  `rlang::check_dots_empty()`, stale-key warnings, and `key_source` provenance
+- Per-type content: ADSL (facts + 4 checks), BDS (per-parameter table, `DTYPE`
+  breakdown + 4 checks), OCCDS (terms, emergent, severity + 3 checks), TTE
+  (events/censored)
+- `check_admiral_df()` + printers; `derive_param_computed()` tags its output
+- The `adsl =` argument (@sec-vs-adsl): coverage/denominator facts, orphan
+  subjects, stale shared variables, records after death, OCCDS incidence and
+  emergent-without-treatment (`summarize_vs_adsl()`)
+
+**Open questions** (from the design notes):
+
+1. **ADSL linkage, next increments** — the first increment is implemented via
+   `adsl =` (@sec-vs-adsl); still open: TTE per-endpoint completeness,
+   fatal-AE vs `DTHFL` consistency, a `population =` argument for
+   denominators, and a session-wide `set_admiral_options(adsl =)` channel.
+2. **`metacore =` as a full argument** — beyond keys: mandatory variables from
+   `ds_vars` not yet present, expected vs actual `PARAMCD` from `value_spec`.
+3. **TTE per-parameter counts** — the current single events/censored total is
+   misleading with multiple endpoints.
+4. **Verbosity** — the full wishlist runs past one screen; likely a
+   `print(x, detail =)` gate with everything always computed into the object.
+5. **Persistence strategy** — see @sec-persistence; this is the decision that
+   determines how trustworthy the declared pathway is in real pipelines.

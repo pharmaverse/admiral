@@ -2,10 +2,10 @@
 #' @family internal
 #' @import admiraldev
 #' @importFrom cli cli_abort ansi_collapse cli_bullets cli_div cli_inform
-#' @importFrom cli cli_text cli_verbatim cli_warn qty
+#' @importFrom cli cli_rule cli_text cli_verbatim cli_warn qty
 #'
 #' @importFrom dplyr anti_join across arrange between bind_cols bind_rows
-#' @importFrom dplyr case_when coalesce cross_join desc distinct ends_with
+#' @importFrom dplyr case_when coalesce count cross_join desc distinct ends_with
 #' @importFrom dplyr everything filter first full_join group_by group_by_at
 #' @importFrom dplyr group_split if_else inner_join lag left_join mutate n
 #' @importFrom dplyr n_distinct na_if pull reframe rename rename_with row_number
@@ -32,7 +32,7 @@
 #' @importFrom rlang is_expression is_missing is_named list2 new_environment
 #' @importFrom rlang parse_expr parse_exprs set_names sym syms zap
 #'
-#' @importFrom stats setNames
+#' @importFrom stats median setNames
 #'
 #' @importFrom stringr fixed str_c str_count str_detect str_extract str_glue
 #' @importFrom stringr str_length str_locate str_locate_all str_match str_remove
@@ -44,6 +44,6 @@
 #'
 #' @importFrom tidyselect all_of any_of contains matches
 #'
-#' @importFrom utils capture.output object.size str
+#' @importFrom utils capture.output head object.size str
 #'
 "_PACKAGE"
