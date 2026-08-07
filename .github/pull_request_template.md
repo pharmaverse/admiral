@@ -16,6 +16,6 @@ Please check off each taskbox as an acknowledgment that you completed the task o
 - [ ] Run `R CMD check` locally and address all errors and warnings - `devtools::check()`
 - [ ] Link the issue in the Development Section on the right hand side.
 - [ ] Address all merge conflicts and resolve appropriately
-- [ ] To create the website for the content of this PR add "[create website]" to the title of the pull request. **Note:** This feature is not available for forks: _For security reasons, committing to the gh-pages branch is not allowable from a fork_. 
+- [ ] To create the website for the content of this PR add "[create website]" to the title of the pull request. **Note:** This feature is not available for forks: _For security reasons, committing to the `gh-pages` branch is not allowable from a fork_. 
 - [ ] Pat yourself on the back for a job well done! Much love to your accomplishment!
 
