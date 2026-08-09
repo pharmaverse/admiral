@@ -120,7 +120,6 @@ is selected and added to the input dataset. }
 }
 \seealso{
 Other deprecated:
-\code{\link[=call_user_fun]{call_user_fun()}},
 \code{\link[=date_source]{date_source()}},
 \code{\link[=derive_var_dthcaus]{derive_var_dthcaus()}},
 \code{\link[=derive_var_extreme_dt]{derive_var_extreme_dt()}},

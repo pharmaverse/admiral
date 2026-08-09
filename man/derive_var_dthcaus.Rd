@@ -62,7 +62,6 @@ the preferred order.
 \code{\link[=dthcaus_source]{dthcaus_source()}}
 
 Other deprecated:
-\code{\link[=call_user_fun]{call_user_fun()}},
 \code{\link[=date_source]{date_source()}},
 \code{\link[=derive_param_extreme_record]{derive_param_extreme_record()}},
 \code{\link[=derive_var_extreme_dt]{derive_var_extreme_dt()}},

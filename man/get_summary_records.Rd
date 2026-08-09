@@ -88,7 +88,6 @@ see the \code{derive_summary_records()} function.
 \code{\link[=derive_summary_records]{derive_summary_records()}}, \code{\link[=derive_vars_merged_summary]{derive_vars_merged_summary()}}
 
 Other deprecated:
-\code{\link[=call_user_fun]{call_user_fun()}},
 \code{\link[=date_source]{date_source()}},
 \code{\link[=derive_param_extreme_record]{derive_param_extreme_record()}},
 \code{\link[=derive_var_dthcaus]{derive_var_dthcaus()}},

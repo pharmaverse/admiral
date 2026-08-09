@@ -8,6 +8,10 @@
 
 - The following functions are entering the next phase of the [deprecation process](https://pharmaverse.github.io/admiraldev/articles/programming_strategy.html#deprecation):
 
+  **Phase 1 (message)**
+
+  No functions or arguments in this phase.
+
   **Phase 2 (warning)**
 
   - `derive_var_merged_summary()` is deprecated in favor of `derive_vars_merged_summary()`.
