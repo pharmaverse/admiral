@@ -115,7 +115,7 @@ matching observation in the input dataset are ignored.
 }
 }
 \seealso{
-\code{\link[=derive_summary_records]{derive_summary_records()}}, \code{\link[=get_summary_records]{get_summary_records()}}
+\code{\link[=derive_summary_records]{derive_summary_records()}}
 
 Other deprecated:
 \code{\link[=date_source]{date_source()}},
