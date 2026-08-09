@@ -121,7 +121,7 @@ The following steps are performed to create the output dataset:
 [`derive_var_extreme_dt()`](https:/pharmaverse.github.io/admiral/copilot/fix-1-6-deprecations/reference/derive_var_extreme_dt.md),
 [`derive_vars_merged()`](https:/pharmaverse.github.io/admiral/copilot/fix-1-6-deprecations/reference/derive_vars_merged.md)
 
-Other deprecated: `call_user_fun()`,
+Other deprecated:
 [`date_source()`](https:/pharmaverse.github.io/admiral/copilot/fix-1-6-deprecations/reference/date_source.md),
 [`derive_param_extreme_record()`](https:/pharmaverse.github.io/admiral/copilot/fix-1-6-deprecations/reference/derive_param_extreme_record.md),
 [`derive_var_dthcaus()`](https:/pharmaverse.github.io/admiral/copilot/fix-1-6-deprecations/reference/derive_var_dthcaus.md),

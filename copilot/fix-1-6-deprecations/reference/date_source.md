@@ -59,7 +59,7 @@ An object of class `date_source`.
 [`derive_var_extreme_dtm()`](https:/pharmaverse.github.io/admiral/copilot/fix-1-6-deprecations/reference/derive_var_extreme_dtm.md),
 [`derive_var_extreme_dt()`](https:/pharmaverse.github.io/admiral/copilot/fix-1-6-deprecations/reference/derive_var_extreme_dt.md)
 
-Other deprecated: `call_user_fun()`,
+Other deprecated:
 [`derive_param_extreme_record()`](https:/pharmaverse.github.io/admiral/copilot/fix-1-6-deprecations/reference/derive_param_extreme_record.md),
 [`derive_var_dthcaus()`](https:/pharmaverse.github.io/admiral/copilot/fix-1-6-deprecations/reference/derive_var_dthcaus.md),
 [`derive_var_extreme_dt()`](https:/pharmaverse.github.io/admiral/copilot/fix-1-6-deprecations/reference/derive_var_extreme_dt.md),

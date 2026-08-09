@@ -12,6 +12,10 @@
   [deprecation
   process](https://pharmaverse.github.io/admiraldev/articles/programming_strategy.html#deprecation):
 
+  **Phase 1 (message)**
+
+  No functions or arguments in this phase.
+
   **Phase 2 (warning)**
 
   - [`derive_var_merged_summary()`](https:/pharmaverse.github.io/admiral/copilot/fix-1-6-deprecations/reference/derive_var_merged_summary.md)

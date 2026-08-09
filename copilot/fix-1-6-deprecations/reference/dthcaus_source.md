@@ -105,7 +105,7 @@ An object of class "dthcaus_source".
 
 [`derive_var_dthcaus()`](https:/pharmaverse.github.io/admiral/copilot/fix-1-6-deprecations/reference/derive_var_dthcaus.md)
 
-Other deprecated: `call_user_fun()`,
+Other deprecated:
 [`date_source()`](https:/pharmaverse.github.io/admiral/copilot/fix-1-6-deprecations/reference/date_source.md),
 [`derive_param_extreme_record()`](https:/pharmaverse.github.io/admiral/copilot/fix-1-6-deprecations/reference/derive_param_extreme_record.md),
 [`derive_var_dthcaus()`](https:/pharmaverse.github.io/admiral/copilot/fix-1-6-deprecations/reference/derive_var_dthcaus.md),
