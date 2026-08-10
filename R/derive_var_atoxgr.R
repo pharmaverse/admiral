@@ -337,6 +337,11 @@ derive_var_atoxgr_dir <- function(dataset,
         }
       }
       # remove lab data just graded from data still to be graded for the specified TERM
+      # Not converted to filter_out(): unlike restrict_derivation()'s `!(x) | is.na(x)`
+      # pattern, this condition has no is.na() guard, so it relies on filter()'s NA
+      # rows being dropped (not retained) here. filter_out() keeps NA-condition rows
+      # instead of dropping them, which would change which records remain eligible
+      # for grading by a subsequent FILTER for this TERM.
       grade_this_term <- grade_this_term %>%
         filter(!(eval(parse(text = meta_this_filter_unit$FILTER))))
     }

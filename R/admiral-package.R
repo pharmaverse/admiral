@@ -6,9 +6,10 @@
 #'
 #' @importFrom dplyr anti_join across arrange between bind_cols bind_rows
 #' @importFrom dplyr case_when coalesce cross_join desc distinct ends_with
-#' @importFrom dplyr everything filter first full_join group_by group_by_at
-#' @importFrom dplyr group_split if_else inner_join lag left_join mutate n
-#' @importFrom dplyr n_distinct na_if pull reframe rename rename_with row_number
+#' @importFrom dplyr everything filter filter_out first full_join group_by
+#' @importFrom dplyr group_by_at group_split if_else inner_join lag left_join
+#' @importFrom dplyr mutate n n_distinct na_if pull recode_values reframe
+#' @importFrom dplyr rename rename_with replace_when row_number
 #' @importFrom dplyr select semi_join slice starts_with summarise summarise_all
 #' @importFrom dplyr tibble tribble ungroup union
 #'

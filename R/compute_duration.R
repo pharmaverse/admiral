@@ -259,45 +259,18 @@ compute_duration <- function(start_date,
 #' @noRd
 get_unified_time_unit <- function(time_unit) {
   lowercase <- tolower(time_unit)
-  case_when(
-    # map common years units
-    lowercase == "year" ~ "years",
-    lowercase == "years" ~ "years",
-    lowercase == "yr" ~ "years",
-    lowercase == "yrs" ~ "years",
-    lowercase == "y" ~ "years",
-    # map common months units
-    lowercase == "month" ~ "months",
-    lowercase == "months" ~ "months",
-    lowercase == "mo" ~ "months",
-    lowercase == "mos" ~ "months",
-    # map common weeks units
-    lowercase == "week" ~ "weeks",
-    lowercase == "weeks" ~ "weeks",
-    lowercase == "wk" ~ "weeks",
-    lowercase == "wks" ~ "weeks",
-    lowercase == "w" ~ "weeks",
-    # map common days units
-    lowercase == "day" ~ "days",
-    lowercase == "days" ~ "days",
-    lowercase == "d" ~ "days",
-    # map common hours units
-    lowercase == "hour" ~ "hours",
-    lowercase == "hours" ~ "hours",
-    lowercase == "hr" ~ "hours",
-    lowercase == "hrs" ~ "hours",
-    lowercase == "h" ~ "hours",
-    # map common minutes units
-    lowercase == "minute" ~ "minutes",
-    lowercase == "minutes" ~ "minutes",
-    lowercase == "min" ~ "minutes",
-    lowercase == "mins" ~ "minutes",
-    # map common seconds units
-    lowercase == "second" ~ "seconds",
-    lowercase == "seconds" ~ "seconds",
-    lowercase == "sec" ~ "seconds",
-    lowercase == "secs" ~ "seconds",
-    lowercase == "s" ~ "seconds",
-    TRUE ~ time_unit
+  recode_values(
+    lowercase,
+    from = list(
+      c("year", "years", "yr", "yrs", "y"),
+      c("month", "months", "mo", "mos"),
+      c("week", "weeks", "wk", "wks", "w"),
+      c("day", "days", "d"),
+      c("hour", "hours", "hr", "hrs", "h"),
+      c("minute", "minutes", "min", "mins"),
+      c("second", "seconds", "sec", "secs", "s")
+    ),
+    to = c("years", "months", "weeks", "days", "hours", "minutes", "seconds"),
+    default = time_unit
   )
 }

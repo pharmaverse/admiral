@@ -10,6 +10,13 @@
 
 ## Various
 
+- Internal `case_when()`/`filter()` patterns that were pure value-matching or
+NA-preserving negations (e.g. in `restrict_derivation()`, `derive_locf_records()`,
+`get_unified_time_unit()`, `yn_to_numeric()`, `compute_egfr()`, `derive_param_doseint()`,
+and `compute_qual_imputation()`) were converted to use dplyr 1.2.0's `filter_out()`,
+`recode_values()`, and `replace_when()` for readability. No behavior change is
+intended; the minimum `dplyr` version was bumped to `1.2.0`. (#3163)
+
 - Updated the default `ae_event`, `ae_ser_event`, `ae_gr1_event`, `ae_gr2_event`, `ae_gr3_event`, 
 `ae_gr4_event`, `ae_gr5_event`, `ae_gr_35_event`, `ae_wd_event` and `ae_sev_event` objects to 
 specify `order = exprs(AESEQ)` so that AEs on the same date are differentiated. This fixes a
