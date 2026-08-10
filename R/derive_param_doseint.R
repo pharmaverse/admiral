@@ -134,7 +134,7 @@ derive_param_doseint <- function(dataset,
   # handle 0 doses planned if needed
   if (zero_doses == "100") {
     update_aval <- exprs(
-      AVAL = replace_when(
+      AVAL = dplyr::replace_when(
         AVAL,
         !!aval_tpdm == 0 &
           !!aval_tadm > 0 ~ 100,
