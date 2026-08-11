@@ -132,9 +132,12 @@ derive_param_doseint <- function(dataset,
   analysis_value <- exprs(AVAL = !!aval_tadm / !!aval_tpdm * 100)
 
   # handle 0 doses planned if needed
+  # dplyr:: is used explicitly because `update_aval` is evaluated later by
+  # admiraldev::process_set_values_to(), whose mutate() call happens inside
+  # admiraldev's own namespace, which does not import replace_when()
   if (zero_doses == "100") {
     update_aval <- exprs(
-      AVAL = replace_when(
+      AVAL = dplyr::replace_when(
         AVAL,
         !!aval_tpdm == 0 &
           !!aval_tadm > 0 ~ 100,
