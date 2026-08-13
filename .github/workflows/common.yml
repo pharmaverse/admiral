@@ -94,6 +94,36 @@ jobs:
         ^main$|^cran-release$|^v([0-9]+\\.)?([0-9]+\\.)?([0-9]+)
     secrets:
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
+  fix_search_urls:
+    name: Fix Search Index URLs
+    needs: docs
+    runs-on: ubuntu-latest
+    # Run after docs are deployed on push/tag events to fix a pkgdown bug where
+    # URLs in search.json and pkgdown.yml are generated with https:/ (single
+    # slash) instead of https:// (double slash).
+    if: >
+      github.event_name == 'push' ||
+      startsWith(github.ref, 'refs/tags/v')
+    steps:
+      - name: Checkout gh-pages branch
+        uses: actions/checkout@v4
+        with:
+          ref: gh-pages
+          token: ${{ secrets.GITHUB_TOKEN }}
+      - name: Fix single-slash https:/ URLs in search index and pkgdown.yml
+        run: |
+          # pkgdown generates https:/ (one slash) instead of https:// (two
+          # slashes) in search.json and pkgdown.yml files due to an internal
+          # URL construction bug. This step corrects all such occurrences.
+          find . \( -name "search.json" -o -name "pkgdown.yml" \) -print0 \
+            | xargs -0 perl -pi -e 's@https:/([^/])@https://\1@g'
+          git config --local user.email "actions@github.com"
+          git config --local user.name "GitHub Actions"
+          git add -A
+          git diff --staged --quiet \
+            || git commit \
+              -m "[actions skip] Fix https:/ -> https:// in search index and pkgdown.yml"
+          git push
   remove_docs:
     name: Remove PR Website
     uses: pharmaverse/admiralci/.github/workflows/remove_pr_website.yml@main
