@@ -46,7 +46,12 @@ duplicate warning in the "Higher Order Functions" vignette. (#3153)
 
 <details>
 <summary>Developer Notes</summary>
+
+- Update to roxygen2 8.1.0. (#3171)
+
 </details>
+
+
 
 # admiral 1.5.0
 
