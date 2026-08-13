@@ -156,8 +156,7 @@ dataset and additionally the variables specified for `new_vars`.
 
 ## See also
 
-[`derive_summary_records()`](https:/pharmaverse.github.io/admiral/main/reference/derive_summary_records.md),
-[`get_summary_records()`](https:/pharmaverse.github.io/admiral/main/reference/get_summary_records.md)
+[`derive_summary_records()`](https:/pharmaverse.github.io/admiral/main/reference/derive_summary_records.md)
 
 General Derivation Functions for all ADaMs that returns variable
 appended to dataset:

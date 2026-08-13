@@ -159,11 +159,9 @@ dataset and additionally the variables specified for `new_vars`.
 
 ## See also
 
-[`derive_summary_records()`](https:/pharmaverse.github.io/admiral/main/reference/derive_summary_records.md),
-[`get_summary_records()`](https:/pharmaverse.github.io/admiral/main/reference/get_summary_records.md)
+[`derive_summary_records()`](https:/pharmaverse.github.io/admiral/main/reference/derive_summary_records.md)
 
 Other deprecated:
-[`call_user_fun()`](https:/pharmaverse.github.io/admiral/main/reference/call_user_fun.md),
 [`date_source()`](https:/pharmaverse.github.io/admiral/main/reference/date_source.md),
 [`derive_param_extreme_record()`](https:/pharmaverse.github.io/admiral/main/reference/derive_param_extreme_record.md),
 [`derive_var_dthcaus()`](https:/pharmaverse.github.io/admiral/main/reference/derive_var_dthcaus.md),

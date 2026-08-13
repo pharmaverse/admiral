@@ -756,7 +756,7 @@ observations with `BNRIND = "HIGH"` would be deemed to have a high
 abnormal Baseline Value. Likewise, setting `low_indicator = "LOW"` would
 mean any observations with `BNRIND = "LOW"` would be deemed to have a
 low abnormal Baseline Value. Note: you can pass in multiple values,
-`abnormal_indicator = c("H", "HIGH")`
+`high_indicator = c("H", "HIGH")`
 
 Excluding “Creatinine increased”, for the other 4 terms, this means if
 `BNRIND` is abnormal then the grade is always one for the baseline
