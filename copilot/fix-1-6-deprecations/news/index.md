@@ -71,6 +71,9 @@
 
 Developer Notes
 
+- Update to roxygen2 8.1.0.
+  ([\#3171](https://github.com/pharmaverse/admiral/issues/3171))
+
 ## admiral 1.5.0
 
 CRAN release: 2026-06-12
