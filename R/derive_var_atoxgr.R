@@ -171,7 +171,10 @@ derive_var_atoxgr_dir <- function(dataset,
       when = "1.4.0",
       what = "derive_var_atoxgr_dir()",
       details = c(
-        i = "The `abnormal_indicator` argument is deprecated. Please use `low_indicator` or `high_indicator` instead.",
+        i = paste0(
+          "The `abnormal_indicator` argument is deprecated. ",
+          "Please use `low_indicator` or `high_indicator` instead."
+        ),
         x = "This message will turn into an error at the beginning of 2028.",
         i = paste0(
           "See admiral's deprecation guidance: ",
