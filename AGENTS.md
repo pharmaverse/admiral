@@ -742,6 +742,11 @@ function or argument.
 **Phase 1:** At the start of this phase the call to `deprecate_inform()` will 
 appear as:
 
+> **Important:** The `when` argument must be set to the version in which the
+> function or argument **first entered the deprecation cycle (Phase 1)** and
+> must **never be changed** in subsequent phases. It is the historical record
+> of when the deprecation process started, not the version of the current phase.
+
 ```r
 fun_xxx <- function(dataset, some_param, other_param) {
   deprecate_inform(

@@ -932,7 +932,7 @@ get_not_mapped <- function() {
 #' @family der_gen
 #' @keywords der_gen
 #'
-#' @seealso [derive_summary_records()], [get_summary_records()]
+#' @seealso [derive_summary_records()]
 #'
 #' @export
 #'
@@ -1261,7 +1261,7 @@ derive_vars_merged_summary <- function(dataset,
 #' @family deprecated
 #' @keywords deprecated
 #'
-#' @seealso [derive_summary_records()], [get_summary_records()]
+#' @seealso [derive_summary_records()]
 #'
 #' @export
 #'
@@ -1271,13 +1271,12 @@ derive_var_merged_summary <- function(dataset,
                                       new_vars = NULL,
                                       filter_add = NULL,
                                       missing_values = NULL) {
-  deprecate_inform(
+  deprecate_warn(
     when = "1.4",
     what = "derive_var_merged_summary()",
     with = "derive_vars_merged_summary()",
     details = c(
-      x = "Function is brought inline with our programming strategy - warning
-      will be issued in January 2027",
+      x = "This message will turn into an error at the beginning of 2028.",
       i = "See admiral's deprecation guidance:
       https://pharmaverse.github.io/admiraldev/dev/articles/programming_strategy.html#deprecation"
     )

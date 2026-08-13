@@ -849,7 +849,7 @@ via the arguments `high_indicator` and `low_indicator` in the function `derive_v
 For example, setting `high_indicator = "HIGH"` would mean any observations with `BNRIND = "HIGH"` would
 be deemed to have a high abnormal Baseline Value. Likewise, setting `low_indicator = "LOW"` would mean any
 observations with `BNRIND = "LOW"` would be deemed to have a low abnormal Baseline Value.
-Note: you can pass in multiple values, `abnormal_indicator = c("H", "HIGH")`
+Note: you can pass in multiple values, `high_indicator = c("H", "HIGH")`
 
 Excluding "Creatinine increased", for the other 4 terms, this means if `BNRIND` is abnormal then the grade is always one for the
 baseline observation. For "Creatinine increased" if `BNRIND` is abnormal then the grade could be zero, one or four, as grade 1 and 4
