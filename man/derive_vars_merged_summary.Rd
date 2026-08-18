@@ -113,7 +113,7 @@ matching observation in the input dataset are ignored.
 }
 }
 \seealso{
-\code{\link[=derive_summary_records]{derive_summary_records()}}, \code{\link[=get_summary_records]{get_summary_records()}}
+\code{\link[=derive_summary_records]{derive_summary_records()}}
 
 General Derivation Functions for all ADaMs that returns variable appended to dataset:
 \code{\link[=derive_var_extreme_flag]{derive_var_extreme_flag()}},

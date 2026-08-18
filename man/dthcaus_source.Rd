@@ -80,30 +80,10 @@ An object of class "dthcaus_source".
 function and \code{dthcaus_source()} have been deprecated in favor of
 \code{event()}.
 }
-\examples{
-# Deaths sourced from AE
-src_ae <- dthcaus_source(
-  dataset_name = "ae",
-  filter = AEOUT == "FATAL",
-  date = AEDTHDT,
-  mode = "first",
-  dthcaus = AEDECOD
-)
-
-# Deaths sourced from DS
-src_ds <- dthcaus_source(
-  dataset_name = "ds",
-  filter = DSDECOD == "DEATH",
-  date = convert_dtc_to_dt(DSSTDTC),
-  mode = "first",
-  dthcaus = DSTERM
-)
-}
 \seealso{
 \code{\link[=derive_var_dthcaus]{derive_var_dthcaus()}}
 
 Other deprecated:
-\code{\link[=call_user_fun]{call_user_fun()}},
 \code{\link[=date_source]{date_source()}},
 \code{\link[=derive_param_extreme_record]{derive_param_extreme_record()}},
 \code{\link[=derive_var_dthcaus]{derive_var_dthcaus()}},
