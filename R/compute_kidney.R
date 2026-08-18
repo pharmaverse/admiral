@@ -179,11 +179,11 @@ compute_egfr <- function(creat, creatu = "SI", age, weight, sex, race = NULL, me
       TRUE ~ NA_real_
     )
   } else if (method == "CKD-EPI") {
-    kappa <- recode_values(sex, from = c("F", "M"), to = c(0.7, 0.9))
+    kappa <- recode_values(sex, "F" ~ 0.7, "M" ~ 0.9)
 
-    alpha <- recode_values(sex, from = c("F", "M"), to = c(-0.241, -0.302))
+    alpha <- recode_values(sex, "F" ~ -0.241, "M" ~ -0.302)
 
-    gender_coefficent <- recode_values(sex, from = c("F", "M"), to = c(1.012, 1))
+    gender_coefficent <- recode_values(sex, "F" ~ 1.012, "M" ~ 1)
 
     egfr <- 142 * pmin(scr / kappa, 1)^(alpha) *
       pmax(scr / kappa, 1)^(-1.200) *

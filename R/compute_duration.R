@@ -261,16 +261,13 @@ get_unified_time_unit <- function(time_unit) {
   lowercase <- tolower(time_unit)
   recode_values(
     lowercase,
-    from = list(
-      c("year", "years", "yr", "yrs", "y"),
-      c("month", "months", "mo", "mos"),
-      c("week", "weeks", "wk", "wks", "w"),
-      c("day", "days", "d"),
-      c("hour", "hours", "hr", "hrs", "h"),
-      c("minute", "minutes", "min", "mins"),
-      c("second", "seconds", "sec", "secs", "s")
-    ),
-    to = c("years", "months", "weeks", "days", "hours", "minutes", "seconds"),
+    c("year", "years", "yr", "yrs", "y") ~ "years",
+    c("month", "months", "mo", "mos") ~ "months",
+    c("week", "weeks", "wk", "wks", "w") ~ "weeks",
+    c("day", "days", "d") ~ "days",
+    c("hour", "hours", "hr", "hrs", "h") ~ "hours",
+    c("minute", "minutes", "min", "mins") ~ "minutes",
+    c("second", "seconds", "sec", "secs", "s") ~ "seconds",
     default = time_unit
   )
 }

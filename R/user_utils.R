@@ -260,7 +260,7 @@ get_many_to_one_dataset <- function() {
 #' yn_to_numeric(c("Y", "N", NA_character_))
 yn_to_numeric <- function(arg) {
   assert_character_vector(arg)
-  recode_values(arg, from = c("Y", "N"), to = c(1, 0))
+  recode_values(arg, "Y" ~ 1, "N" ~ 0)
 }
 
 #' Print `source` Objects
