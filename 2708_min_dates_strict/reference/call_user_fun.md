@@ -13,7 +13,7 @@ call_user_fun(call)
 
 ## Arguments
 
-- call:
+- call :
 
   Call to be executed
 

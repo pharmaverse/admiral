@@ -17,7 +17,56 @@
 
 ### Breaking Changes
 
+- The following functions are entering the next phase of the
+  [deprecation
+  process](https://pharmaverse.github.io/admiraldev/articles/programming_strategy.html#deprecation):
+
+  **Phase 1 (message)**
+
+  No functions or arguments in this phase.
+
+  **Phase 2 (warning)**
+
+  - [`derive_var_merged_summary()`](https:/pharmaverse.github.io/admiral/2708_min_dates_strict/reference/derive_var_merged_summary.md)
+    is deprecated in favor of
+    [`derive_vars_merged_summary()`](https:/pharmaverse.github.io/admiral/2708_min_dates_strict/reference/derive_vars_merged_summary.md).
+  - `derive_var_atoxgr_dir(abnormal_indicator = )` is deprecated in
+    favor of the `low_indicator` and `high_indicator` arguments.
+
+  **Phase 3 (error)**
+
+  - [`derive_param_extreme_record()`](https:/pharmaverse.github.io/admiral/2708_min_dates_strict/reference/derive_param_extreme_record.md)
+    is deprecated in favor of
+    [`derive_extreme_event()`](https:/pharmaverse.github.io/admiral/2708_min_dates_strict/reference/derive_extreme_event.md).
+  - [`derive_var_dthcaus()`](https:/pharmaverse.github.io/admiral/2708_min_dates_strict/reference/derive_var_dthcaus.md)
+    is deprecated in favor of
+    [`derive_vars_extreme_event()`](https:/pharmaverse.github.io/admiral/2708_min_dates_strict/reference/derive_vars_extreme_event.md).
+  - [`dthcaus_source()`](https:/pharmaverse.github.io/admiral/2708_min_dates_strict/reference/dthcaus_source.md)
+    is deprecated in favor of
+    [`event()`](https:/pharmaverse.github.io/admiral/2708_min_dates_strict/reference/event.md).
+  - [`date_source()`](https:/pharmaverse.github.io/admiral/2708_min_dates_strict/reference/date_source.md)
+    is deprecated in favor of
+    [`event()`](https:/pharmaverse.github.io/admiral/2708_min_dates_strict/reference/event.md).
+  - [`derive_var_extreme_dt()`](https:/pharmaverse.github.io/admiral/2708_min_dates_strict/reference/derive_var_extreme_dt.md)
+    is deprecated in favor of
+    [`derive_vars_extreme_event()`](https:/pharmaverse.github.io/admiral/2708_min_dates_strict/reference/derive_vars_extreme_event.md).
+  - [`derive_var_extreme_dtm()`](https:/pharmaverse.github.io/admiral/2708_min_dates_strict/reference/derive_var_extreme_dtm.md)
+    is deprecated in favor of
+    [`derive_vars_extreme_event()`](https:/pharmaverse.github.io/admiral/2708_min_dates_strict/reference/derive_vars_extreme_event.md).
+  - [`get_summary_records()`](https:/pharmaverse.github.io/admiral/2708_min_dates_strict/reference/get_summary_records.md)
+    is deprecated in favor of
+    [`derive_summary_records()`](https:/pharmaverse.github.io/admiral/2708_min_dates_strict/reference/derive_summary_records.md).
+
+  **Phase 4 (removed)**
+
+  - `call_user_fun()` has been removed.
+
 ### Documentation
+
+- Updated the “Lab Grading” vignette to replace the deprecated
+  `abnormal_indicator` argument reference with the new `high_indicator`
+  argument in
+  [`derive_var_atoxgr_dir()`](https:/pharmaverse.github.io/admiral/2708_min_dates_strict/reference/derive_var_atoxgr_dir.md).
 
 ### Various
 
@@ -30,6 +79,9 @@
   ([\#3153](https://github.com/pharmaverse/admiral/issues/3153))
 
 Developer Notes
+
+- Update to roxygen2 8.1.0.
+  ([\#3171](https://github.com/pharmaverse/admiral/issues/3171))
 
 ## admiral 1.5.0
 
@@ -135,8 +187,7 @@ CRAN release: 2026-06-12
 
   **Phase 3 (error)**
 
-  - [`call_user_fun()`](https:/pharmaverse.github.io/admiral/2708_min_dates_strict/reference/call_user_fun.md)
-    is deprecated and will have no replacement.
+  - `call_user_fun()` is deprecated and will have no replacement.
 
   **Phase 4 (removed)**
 
@@ -471,8 +522,7 @@ CRAN release: 2026-01-15
 
   **Phase 2 (warning)**
 
-  - [`call_user_fun()`](https:/pharmaverse.github.io/admiral/2708_min_dates_strict/reference/call_user_fun.md)
-    is deprecated and will have no replacement.
+  - `call_user_fun()` is deprecated and will have no replacement.
     ([\#2678](https://github.com/pharmaverse/admiral/issues/2678))
   - [`derive_param_extreme_record()`](https:/pharmaverse.github.io/admiral/2708_min_dates_strict/reference/derive_param_extreme_record.md)
     is deprecated and replaced by
@@ -811,8 +861,7 @@ CRAN release: 2025-06-25
 
   **Phase 1 (message)**
 
-  - [`call_user_fun()`](https:/pharmaverse.github.io/admiral/2708_min_dates_strict/reference/call_user_fun.md)
-    is deprecated and will have no replacement.
+  - `call_user_fun()` is deprecated and will have no replacement.
     ([\#2678](https://github.com/pharmaverse/admiral/issues/2678))
   - [`derive_param_extreme_record()`](https:/pharmaverse.github.io/admiral/2708_min_dates_strict/reference/derive_param_extreme_record.md)
     is deprecated and replaced by

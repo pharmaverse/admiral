@@ -297,7 +297,7 @@ Date/Time Computation Functions that returns a vector:
 convert_date_to_dtm("2019-07-18T15:25:00")
 #> [1] "2019-07-18 15:25:00 UTC"
 convert_date_to_dtm(Sys.time())
-#> [1] "2026-07-27 17:12:06 UTC"
+#> [1] "2026-08-18 17:10:34 UTC"
 convert_date_to_dtm(as.Date("2019-07-18"), time_imputation = "23:59:59")
 #> [1] "2019-07-18 23:59:59 UTC"
 convert_date_to_dtm("2019-07-18", time_imputation = "23:59:59")

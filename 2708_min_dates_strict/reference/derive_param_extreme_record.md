@@ -150,7 +150,6 @@ The following steps are performed to create the output dataset:
 ## See also
 
 Other deprecated:
-[`call_user_fun()`](https:/pharmaverse.github.io/admiral/2708_min_dates_strict/reference/call_user_fun.md),
 [`date_source()`](https:/pharmaverse.github.io/admiral/2708_min_dates_strict/reference/date_source.md),
 [`derive_var_dthcaus()`](https:/pharmaverse.github.io/admiral/2708_min_dates_strict/reference/derive_var_dthcaus.md),
 [`derive_var_extreme_dt()`](https:/pharmaverse.github.io/admiral/2708_min_dates_strict/reference/derive_var_extreme_dt.md),
@@ -158,69 +157,3 @@ Other deprecated:
 [`derive_var_merged_summary()`](https:/pharmaverse.github.io/admiral/2708_min_dates_strict/reference/derive_var_merged_summary.md),
 [`dthcaus_source()`](https:/pharmaverse.github.io/admiral/2708_min_dates_strict/reference/dthcaus_source.md),
 [`get_summary_records()`](https:/pharmaverse.github.io/admiral/2708_min_dates_strict/reference/get_summary_records.md)
-
-## Examples
-
-``` r
-aevent_samp <- tibble::tribble(
-  ~USUBJID, ~PARAMCD,                       ~PARAM,     ~RSSTDTC,
-  "1",          "PD",  "First Progressive Disease", "2022-04-01",
-  "2",          "PD",  "First Progressive Disease", "2021-04-01",
-  "3",          "PD",  "First Progressive Disease", "2023-04-01"
-)
-
-cm <- tibble::tribble(
-  ~STUDYID, ~USUBJID, ~CMDECOD,     ~CMSTDTC,
-  "1001",        "1",    "ACT", "2021-12-25"
-)
-
-pr <- tibble::tribble(
-  ~STUDYID, ~USUBJID, ~PRDECOD,     ~PRSTDTC,
-  "1001",        "1",    "ACS", "2021-12-27",
-  "1001",        "2",    "ACS", "2020-12-25",
-  "1001",        "3",    "ACS", "2022-12-25",
-)
-derive_param_extreme_record(
-  dataset = aevent_samp,
-  sources = list(
-    records_source(
-      dataset_name = "cm",
-      filter = CMDECOD == "ACT",
-      new_vars = exprs(
-        ADT = convert_dtc_to_dt(CMSTDTC),
-        AVALC = CMDECOD
-      )
-    ),
-    records_source(
-      dataset_name = "pr",
-      filter = PRDECOD == "ACS",
-      new_vars = exprs(
-        ADT = convert_dtc_to_dt(PRSTDTC),
-        AVALC = PRDECOD
-      )
-    )
-  ),
-  source_datasets = list(cm = cm, pr = pr),
-  by_vars = exprs(USUBJID),
-  order = exprs(ADT),
-  mode = "first",
-  set_values_to = exprs(
-    PARAMCD = "FIRSTACT",
-    PARAM = "First Anti-Cancer Therapy"
-  )
-)
-#> Warning: `derive_param_extreme_record()` was deprecated in admiral 1.2.0.
-#> ℹ Please use `derive_extreme_event()` instead.
-#> ✖ This message will turn into an error at the beginning of 2027.
-#> ℹ See admiral's deprecation guidance:
-#>   https://pharmaverse.github.io/admiraldev/dev/articles/programming_strategy.html#deprecation
-#> # A tibble: 6 × 6
-#>   USUBJID PARAMCD  PARAM                     RSSTDTC    ADT        AVALC
-#>   <chr>   <chr>    <chr>                     <chr>      <date>     <chr>
-#> 1 1       PD       First Progressive Disease 2022-04-01 NA         NA   
-#> 2 2       PD       First Progressive Disease 2021-04-01 NA         NA   
-#> 3 3       PD       First Progressive Disease 2023-04-01 NA         NA   
-#> 4 1       FIRSTACT First Anti-Cancer Therapy NA         2021-12-25 ACT  
-#> 5 2       FIRSTACT First Anti-Cancer Therapy NA         2020-12-25 ACS  
-#> 6 3       FIRSTACT First Anti-Cancer Therapy NA         2022-12-25 ACS  
-```
