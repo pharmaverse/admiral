@@ -891,9 +891,6 @@ message produced as well as in the function’s documentation.*
 Below, you can find a list of functions in the process of being
 deprecated:
 
-- [`call_user_fun()`](https:/pharmaverse.github.io/admiral/3163-explore-use-of-dplyr-120/reference/call_user_fun.md)
-  **\[deprecated\]** : Calls a Function Provided by the User
-
 - [`date_source()`](https:/pharmaverse.github.io/admiral/3163-explore-use-of-dplyr-120/reference/date_source.md)
   **\[deprecated\]** :
 

@@ -8,29 +8,66 @@
 
 ### Breaking Changes
 
+- The following functions are entering the next phase of the
+  [deprecation
+  process](https://pharmaverse.github.io/admiraldev/articles/programming_strategy.html#deprecation):
+
+  **Phase 1 (message)**
+
+  No functions or arguments in this phase.
+
+  **Phase 2 (warning)**
+
+  - [`derive_var_merged_summary()`](https:/pharmaverse.github.io/admiral/3163-explore-use-of-dplyr-120/reference/derive_var_merged_summary.md)
+    is deprecated in favor of
+    [`derive_vars_merged_summary()`](https:/pharmaverse.github.io/admiral/3163-explore-use-of-dplyr-120/reference/derive_vars_merged_summary.md).
+  - `derive_var_atoxgr_dir(abnormal_indicator = )` is deprecated in
+    favor of the `low_indicator` and `high_indicator` arguments.
+
+  **Phase 3 (error)**
+
+  - [`derive_param_extreme_record()`](https:/pharmaverse.github.io/admiral/3163-explore-use-of-dplyr-120/reference/derive_param_extreme_record.md)
+    is deprecated in favor of
+    [`derive_extreme_event()`](https:/pharmaverse.github.io/admiral/3163-explore-use-of-dplyr-120/reference/derive_extreme_event.md).
+  - [`derive_var_dthcaus()`](https:/pharmaverse.github.io/admiral/3163-explore-use-of-dplyr-120/reference/derive_var_dthcaus.md)
+    is deprecated in favor of
+    [`derive_vars_extreme_event()`](https:/pharmaverse.github.io/admiral/3163-explore-use-of-dplyr-120/reference/derive_vars_extreme_event.md).
+  - [`dthcaus_source()`](https:/pharmaverse.github.io/admiral/3163-explore-use-of-dplyr-120/reference/dthcaus_source.md)
+    is deprecated in favor of
+    [`event()`](https:/pharmaverse.github.io/admiral/3163-explore-use-of-dplyr-120/reference/event.md).
+  - [`date_source()`](https:/pharmaverse.github.io/admiral/3163-explore-use-of-dplyr-120/reference/date_source.md)
+    is deprecated in favor of
+    [`event()`](https:/pharmaverse.github.io/admiral/3163-explore-use-of-dplyr-120/reference/event.md).
+  - [`derive_var_extreme_dt()`](https:/pharmaverse.github.io/admiral/3163-explore-use-of-dplyr-120/reference/derive_var_extreme_dt.md)
+    is deprecated in favor of
+    [`derive_vars_extreme_event()`](https:/pharmaverse.github.io/admiral/3163-explore-use-of-dplyr-120/reference/derive_vars_extreme_event.md).
+  - [`derive_var_extreme_dtm()`](https:/pharmaverse.github.io/admiral/3163-explore-use-of-dplyr-120/reference/derive_var_extreme_dtm.md)
+    is deprecated in favor of
+    [`derive_vars_extreme_event()`](https:/pharmaverse.github.io/admiral/3163-explore-use-of-dplyr-120/reference/derive_vars_extreme_event.md).
+  - [`get_summary_records()`](https:/pharmaverse.github.io/admiral/3163-explore-use-of-dplyr-120/reference/get_summary_records.md)
+    is deprecated in favor of
+    [`derive_summary_records()`](https:/pharmaverse.github.io/admiral/3163-explore-use-of-dplyr-120/reference/derive_summary_records.md).
+
+  **Phase 4 (removed)**
+
+  - `call_user_fun()` has been removed.
+
 ### Documentation
+
+- Updated the “Lab Grading” vignette to replace the deprecated
+  `abnormal_indicator` argument reference with the new `high_indicator`
+  argument in
+  [`derive_var_atoxgr_dir()`](https:/pharmaverse.github.io/admiral/3163-explore-use-of-dplyr-120/reference/derive_var_atoxgr_dir.md).
 
 ### Various
 
-- Internal
-  [`case_when()`](https://dplyr.tidyverse.org/reference/case-and-replace-when.html)/[`filter()`](https://dplyr.tidyverse.org/reference/filter.html)
-  patterns that were pure value-matching or NA-preserving negations
-  (e.g. in
-  [`restrict_derivation()`](https:/pharmaverse.github.io/admiral/3163-explore-use-of-dplyr-120/reference/restrict_derivation.md),
-  [`derive_locf_records()`](https:/pharmaverse.github.io/admiral/3163-explore-use-of-dplyr-120/reference/derive_locf_records.md),
-  `get_unified_time_unit()`,
-  [`yn_to_numeric()`](https:/pharmaverse.github.io/admiral/3163-explore-use-of-dplyr-120/reference/yn_to_numeric.md),
-  [`compute_egfr()`](https:/pharmaverse.github.io/admiral/3163-explore-use-of-dplyr-120/reference/compute_egfr.md),
-  [`derive_param_doseint()`](https:/pharmaverse.github.io/admiral/3163-explore-use-of-dplyr-120/reference/derive_param_doseint.md),
-  and
-  [`compute_qual_imputation()`](https:/pharmaverse.github.io/admiral/3163-explore-use-of-dplyr-120/reference/compute_qual_imputation.md))
-  were converted to use dplyr 1.2.0’s
-  [`filter_out()`](https://dplyr.tidyverse.org/reference/filter.html),
+- The minimum `dplyr` version was bumped to `1.2.0` to make use of the
+  new
   [`recode_values()`](https://dplyr.tidyverse.org/reference/recode-and-replace-values.html),
+  [`filter_out()`](https://dplyr.tidyverse.org/reference/filter.html),
   and
   [`replace_when()`](https://dplyr.tidyverse.org/reference/case-and-replace-when.html)
-  for readability. No behavior change is intended; the minimum `dplyr`
-  version was bumped to `1.2.0`.
+  functions.
   ([\#3163](https://github.com/pharmaverse/admiral/issues/3163))
 
 - Updated the default `ae_event`, `ae_ser_event`, `ae_gr1_event`,
@@ -150,8 +187,7 @@ CRAN release: 2026-06-12
 
   **Phase 3 (error)**
 
-  - [`call_user_fun()`](https:/pharmaverse.github.io/admiral/3163-explore-use-of-dplyr-120/reference/call_user_fun.md)
-    is deprecated and will have no replacement.
+  - `call_user_fun()` is deprecated and will have no replacement.
 
   **Phase 4 (removed)**
 
@@ -486,8 +522,7 @@ CRAN release: 2026-01-15
 
   **Phase 2 (warning)**
 
-  - [`call_user_fun()`](https:/pharmaverse.github.io/admiral/3163-explore-use-of-dplyr-120/reference/call_user_fun.md)
-    is deprecated and will have no replacement.
+  - `call_user_fun()` is deprecated and will have no replacement.
     ([\#2678](https://github.com/pharmaverse/admiral/issues/2678))
   - [`derive_param_extreme_record()`](https:/pharmaverse.github.io/admiral/3163-explore-use-of-dplyr-120/reference/derive_param_extreme_record.md)
     is deprecated and replaced by
@@ -826,8 +861,7 @@ CRAN release: 2025-06-25
 
   **Phase 1 (message)**
 
-  - [`call_user_fun()`](https:/pharmaverse.github.io/admiral/3163-explore-use-of-dplyr-120/reference/call_user_fun.md)
-    is deprecated and will have no replacement.
+  - `call_user_fun()` is deprecated and will have no replacement.
     ([\#2678](https://github.com/pharmaverse/admiral/issues/2678))
   - [`derive_param_extreme_record()`](https:/pharmaverse.github.io/admiral/3163-explore-use-of-dplyr-120/reference/derive_param_extreme_record.md)
     is deprecated and replaced by

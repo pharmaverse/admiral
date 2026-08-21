@@ -106,7 +106,6 @@ An object of class "dthcaus_source".
 [`derive_var_dthcaus()`](https:/pharmaverse.github.io/admiral/3163-explore-use-of-dplyr-120/reference/derive_var_dthcaus.md)
 
 Other deprecated:
-[`call_user_fun()`](https:/pharmaverse.github.io/admiral/3163-explore-use-of-dplyr-120/reference/call_user_fun.md),
 [`date_source()`](https:/pharmaverse.github.io/admiral/3163-explore-use-of-dplyr-120/reference/date_source.md),
 [`derive_param_extreme_record()`](https:/pharmaverse.github.io/admiral/3163-explore-use-of-dplyr-120/reference/derive_param_extreme_record.md),
 [`derive_var_dthcaus()`](https:/pharmaverse.github.io/admiral/3163-explore-use-of-dplyr-120/reference/derive_var_dthcaus.md),
@@ -114,25 +113,3 @@ Other deprecated:
 [`derive_var_extreme_dtm()`](https:/pharmaverse.github.io/admiral/3163-explore-use-of-dplyr-120/reference/derive_var_extreme_dtm.md),
 [`derive_var_merged_summary()`](https:/pharmaverse.github.io/admiral/3163-explore-use-of-dplyr-120/reference/derive_var_merged_summary.md),
 [`get_summary_records()`](https:/pharmaverse.github.io/admiral/3163-explore-use-of-dplyr-120/reference/get_summary_records.md)
-
-## Examples
-
-``` r
-# Deaths sourced from AE
-src_ae <- dthcaus_source(
-  dataset_name = "ae",
-  filter = AEOUT == "FATAL",
-  date = AEDTHDT,
-  mode = "first",
-  dthcaus = AEDECOD
-)
-
-# Deaths sourced from DS
-src_ds <- dthcaus_source(
-  dataset_name = "ds",
-  filter = DSDECOD == "DEATH",
-  date = convert_dtc_to_dt(DSSTDTC),
-  mode = "first",
-  dthcaus = DSTERM
-)
-```
