@@ -2,6 +2,12 @@
 
 ## New Features
 
+- Admiral datasets can now carry an `admiral_df` class with a dedicated
+`summary()` method, providing a quick diagnostic of a dataset (its ADaM
+structure, number of subjects and observations, list of parameters, and
+analysis visits). As a first step, `derive_param_computed()` tags its output
+with this class. (#3160)
+
 ## Updates of Existing Functions
 
 ## Breaking Changes
