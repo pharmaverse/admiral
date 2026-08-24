@@ -525,7 +525,6 @@ assert_highest_imputation <- function(highest_imputation,
     ))
   }
 
-
   if (no_mindates && date_imputation == "first") {
     cli_abort(paste(
       "If {.code highest_imputation = \"Y\"} and {.code date_imputation = \"first\"}",
@@ -542,6 +541,20 @@ assert_highest_imputation <- function(highest_imputation,
   invisible(NULL)
 }
 
+assert_dates_strict <- function(min_dates_strict, max_dates_strict) {
+  if (!is.null(min_dates_strict) && length(min_dates_strict) > 0 &
+      !is.null(max_dates_strict) && length(max_dates_strict) > 0) {
+    min_dates <- reduce(min_dates_strict, pmin)
+    max_dates <- reduce(max_dates_strict, pmax)
+    bad_i <- which(min_dates > max_dates)
+    if (any(bad_i)) {
+      cli_abort(paste(
+        "The minimum date(s) specified in {.arg min_dates_strict} must not be greater than the maximum date(s) specified in {.arg max_dates_strict}."
+      ))
+    }
+  }
+}
+
 #' Get Range of Partial Date / Datetime
 #'
 #' @description
@@ -552,26 +565,46 @@ assert_highest_imputation <- function(highest_imputation,
 #' (e.g., `"2022-12-15"`, `"2022-12"`, `"2022"`).
 #' Partial dates are allowed.
 #'
+#' @param lower_bounds Lower bounds restricting the range
+#'
+#'   The specified bounds restrict the lower limit of the returned range if it
+#'   is within the range of the possible dates.
+#'
+#' @permitted [date_list]
+#'
+#' @param upper_bounds Upper bounds restricting the range
+#'
+#'   The specified bounds restrict the upper limit of the returned range if it
+#'   is within the range of the possible dates.
+#'
+#' @permitted [date_list]
+#'
 #' @param create_datetime return the range in datetime format.
 #'
 #' @returns A list containing two vectors of fully imputed dates
 #' in `"YYYY-MM-DD"` or `"YYYY-MM-DDThh:mm:ss"` format - the lower and upper limit of the range.
 #'
 #' @examples
+#' library(lubridate)
 #' # Get Range from Partial Dates
 #' dtc_dates <- c("2020-02-29", "2021-03")
-#' imputed_dates_first <- admiral:::get_dt_dtm_range(dtc_dates, create_datetime = FALSE)
-#' print(imputed_dates_first)
-#'
+#' admiral:::get_dt_dtm_range(dtc_dates, create_datetime = FALSE)
 #'
 #' # Get Range from Partial Datetime
 #' dtc_datetimes <- c("2020-02-29T12:00", "2021-03T14:30")
-#' imputed_datetimes_first <- admiral:::get_dt_dtm_range(dtc_datetimes, create_datetime = TRUE)
-#' print(imputed_datetimes_first)
+#' admiral:::get_dt_dtm_range(dtc_datetimes, create_datetime = TRUE)
+#'
+#' # Get Range with Bounds
+#' dtc_dates <- c("2020-02-29", "2021-03")
+#' admiral:::get_dt_dtm_range(
+#'   dtc_dates,
+#'   lower_bounds = list(c(ymd("2020-01-01"), ymd("2021-03-05"))),
+#'   upper_bounds = list(c(ymd("2020-12-31"), ymd("2021-03-25"))),
+#'   create_datetime = FALSE
+#' )
 #'
 #' # Edge case: Return empty character vector for empty input
-#' imputed_empty <- admiral:::get_dt_dtm_range(character(0), create_datetime = TRUE)
-#' print(imputed_empty)
+#' admiral:::get_dt_dtm_range(character(0), create_datetime = TRUE)
 #'
 #' @details
 #' The functions replaces missing components in `dtc` with the earliest (lower bound)
