@@ -447,11 +447,11 @@ imputation.
 
 ``` r
 ae <- tribble(
-  ~AESTDTC, ~TRTSDTM,
+  ~AESTDTC,           ~TRTSDTM,
   "2019-08-09T12:34", ymd_hm("2019-11-11T12:34"),
-  "2019-10", ymd_hm("2019-11-11T12:34"),
-  "2019-11", ymd_hm("2019-11-11T12:34"),
-  "2019-12-04", ymd_hm("2019-11-11T12:34")
+  "2019-10",          ymd_hm("2019-11-11T12:34"),
+  "2019-11",          ymd_hm("2019-11-11T12:34"),
+  "2019-12-04",       ymd_hm("2019-11-11T12:34")
 ) %>%
   derive_vars_dtm(
     dtc = AESTDTC,
@@ -460,6 +460,38 @@ ae <- tribble(
     date_imputation = "first",
     time_imputation = "first",
     min_dates = exprs(TRTSDTM)
+  )
+```
+
+The previous example may result in imputed event start dates after event
+end dates. For example if the event end date (`AEENDTC`) of the third
+event in the example is `2019-11-10` , it would be before the imputed
+event start date of `2019-11-11`. This can be avoided by specifying the
+`max_dates_strict` argument.
+
+``` r
+ae <- tribble(
+  ~AESTDTC,           ~AEENDTC,     ~TRTSDTM,
+  "2019-08-09T12:34", "2019-08-10", ymd_hm("2019-11-11T12:34"),
+  "2019-10",          "2019-10-22", ymd_hm("2019-11-11T12:34"),
+  "2019-11",          "2019-11-10", ymd_hm("2019-11-11T12:34"),
+  "2019-12-04",       "2019-12-06", ymd_hm("2019-11-11T12:34")
+) %>%
+  derive_vars_dtm(
+    dtc = AEENDTC,
+    new_vars_prefix = "AEN",
+    highest_imputation = "M",
+    date_imputation = "last",
+    time_imputation = "last"
+  ) %>% 
+  derive_vars_dtm(
+    dtc = AESTDTC,
+    new_vars_prefix = "AST",
+    highest_imputation = "M",
+    date_imputation = "first",
+    time_imputation = "first",
+    min_dates = exprs(TRTSDTM),
+    max_dates_strict = exprs(AENDTM)
   )
 ```
 
@@ -478,11 +510,11 @@ separate data cleaning or data cut off step.
 
 ``` r
 ae <- tribble(
-  ~AEENDTC, ~DTHDT, ~DCUTDT,
+  ~AEENDTC,           ~DTHDT,            ~DCUTDT,
   "2019-08-09T12:34", ymd("2019-11-11"), ymd("2019-12-02"),
-  "2019-11", ymd("2019-11-11"), ymd("2019-12-02"),
-  "2019-12", NA, ymd("2019-12-02"),
-  "2019-12-04", NA, ymd("2019-12-02")
+  "2019-11",          ymd("2019-11-11"), ymd("2019-12-02"),
+  "2019-12",          NA,                ymd("2019-12-02"),
+  "2019-12-04",       NA,                ymd("2019-12-02")
 ) %>%
   derive_vars_dtm(
     dtc = AEENDTC,

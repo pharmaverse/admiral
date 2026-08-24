@@ -114,6 +114,7 @@ convert_dtc_to_dt(
   parts of the `dtc` date are not changed. A date or date-time object is
   expected. For example
 
+      library(lubridate)
       impute_dtc_dt(
         "2020-11",
         min_dates = list(
@@ -122,6 +123,7 @@ convert_dtc_to_dt(
         ),
         highest_imputation = "M"
       )
+      #> [1] "2020-11-11"
 
   returns `"2020-11-11"` because the possible dates for `"2020-11"`
   range from `"2020-11-01"` to `"2020-11-30"`. Therefore `"2020-12-06"`
@@ -144,29 +146,41 @@ convert_dtc_to_dt(
   The argument works like the `min_dates` argument but it affects the
   behavior of the `min_dates` and `max_dates` arguments. The range which
   is used to determine which of the `min_dates` and `max_dates` are
-  considered is restricted by the dates specified for
-  `min_dates_strict`.
+  considered is restricted by the dates specified for `min_dates_strict`
+  (see example below).
+
+  This argument is useful if the `max_dates` argument is used and there
+  are strict restrictions on the imputed date like the event start date
+  if event end date is imputed.
 
   For example
 
+      library(lubridate)
       impute_dtc_dt(
-        "2020-11",
+        c("2020-11", "2020-11"),
         min_dates_strict = list(
-         ymd("2020-11-24")
+         c(ymd("2020-11-24"), ymd("2020-11-11"))
         ),
         max_dates = list(
-          ymd("2020-11-22")
+          c(ymd("2020-11-22"), ymd("2020-11-22"))
         ),
         highest_imputation = "M",
-        date_imputation = "last",
-        time_imputation = "last"
+        date_imputation = "last"
       )
+      #> [1] "2020-11-30" "2020-11-22"
 
   returns `"2020-11-30"`. The possible dates for `"2020-11"` range from
-  `"2020-11-01"` to `"2020-11-30"`. The `min_dates_strict` argument
-  restricts this range to `"2020-11-24"` to `"2020-11-30"`. Therefore
-  `"2020-11-22"` (from the `max_dates` argument) is ignored as it is not
-  within the restricted range.
+  `"2020-11-01"` to `"2020-11-30"`.
+
+  For the first element, the `min_dates_strict` argument restricts this
+  range to `"2020-11-24"` to `"2020-11-30"`. Therefore `"2020-11-22"`
+  (from the `max_dates` argument) is ignored as it is not within the
+  restricted range.
+
+  For the second element, the `min_dates_strict` argument restricts this
+  range to `"2020-11-11"` to `"2020-11-30"`. In this case `"2020-11-22"`
+  (from the `max_dates` argument) is within the restricted range and is
+  considered.
 
   Permitted values
 
@@ -202,8 +216,41 @@ convert_dtc_to_dt(
   The argument works like the `max_dates` argument but it affects the
   behavior of the `min_dates` and `max_dates` arguments. The range which
   is used to determine which of the `min_dates` and `max_dates` are
-  considered is restricted by the dates specified for
-  `max_dates_strict`.
+  considered is restricted by the dates specified for `max_dates_strict`
+  (see example below).
+
+  This argument is useful if the `min_dates` argument is used and there
+  are strict restrictions on the imputed date like date of death or the
+  event end date if event start date is imputed.
+
+  For example
+
+      library(lubridate)
+      impute_dtc_dt(
+        c("2020-11", "2020-11"),
+        max_dates_strict = list(
+         c(ymd("2020-11-24"), ymd("2020-11-11"))
+        ),
+        min_dates = list(
+          c(ymd("2020-11-22"), ymd("2020-11-22"))
+        ),
+        highest_imputation = "M",
+        date_imputation = "first"
+      )
+      #> [1] "2020-11-22" "2020-11-01"
+
+  returns (`"2020-11-22"`, `"2020-11-01"`). The possible dates for
+  `"2020-11"` range from `"2020-11-01"` to `"2020-11-30"`.
+
+  For the first element, the `max_dates_strict` argument restricts this
+  range to `"2020-11-01"` to `"2020-11-24"`. The date `"2020-11-22"`
+  (from the `min_dates` argument) is within the restricted range and is
+  therefore it is considered.
+
+  For the second element, the `max_dates_strict` argument restricts this
+  range to `"2020-11-01"` to `"2020-11-11"`. In this case `"2020-11-22"`
+  (from the `max_dates` argument) is outside the restricted range and
+  thus it is ignored.
 
   Permitted values
 

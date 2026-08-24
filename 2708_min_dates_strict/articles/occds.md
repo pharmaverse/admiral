@@ -131,6 +131,12 @@ adae <- adae %>%
   )
 ```
 
+Please note that using the `max_dates_strict` argument in the `ASTDTM`
+derivation avoids that the imputed event start date is after the event
+end date. See the examples of
+[`derive_vars_dt()`](https:/pharmaverse.github.io/admiral/2708_min_dates_strict/reference/derive_vars_dt.md)
+for more details.
+
 See also [Date and Time
 Imputation](https:/pharmaverse.github.io/admiral/2708_min_dates_strict/articles/imputation.md).
 
