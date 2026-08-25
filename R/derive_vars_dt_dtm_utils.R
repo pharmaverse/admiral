@@ -557,8 +557,8 @@ assert_highest_imputation <- function(highest_imputation,
 #'
 #' @keywords internal
 assert_dates_strict <- function(min_dates_strict, max_dates_strict) {
-  if (!is.null(min_dates_strict) & length(min_dates_strict) > 0 &
-    !is.null(max_dates_strict) & length(max_dates_strict) > 0) {
+  if (!is.null(min_dates_strict) && length(min_dates_strict) > 0 &&
+    !is.null(max_dates_strict) && length(max_dates_strict) > 0) {
     min_dates <- reduce(min_dates_strict, pmax)
     max_dates <- reduce(max_dates_strict, pmin)
     bad_i <- which(min_dates > max_dates)
