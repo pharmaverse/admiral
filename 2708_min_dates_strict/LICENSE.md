@@ -1,6 +1,6 @@
 # Apache License
 
-*Version 2.0, January 2004* *\<<http://www.apache.org/licenses/>\>*
+*Version 2.0, January 2004* *\<<https://www.apache.org/licenses/>\>*
 
 ### Terms and Conditions for use, reproduction, and distribution
 

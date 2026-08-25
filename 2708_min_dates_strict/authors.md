@@ -28,11 +28,11 @@
 
 - **[Ben Straub](https://github.com/bms63)**. Author.
 
-- **[](https://roche.com/)[![Roche
+- **[](https://www.roche.com/)[![Roche
   logo](reference/figures/roche_logo.png)](https://www.roche.com/)**.
   Copyright holder, funder.
 
-- **[](https://gsk.com/)[![GSK
+- **[](https://www.gsk.com/en-gb)[![GSK
   logo](reference/figures/gsk_logo.png)](https://www.gsk.com/)**.
   Copyright holder, funder.
 

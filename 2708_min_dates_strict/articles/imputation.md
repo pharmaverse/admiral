@@ -483,7 +483,7 @@ ae <- tribble(
     highest_imputation = "M",
     date_imputation = "last",
     time_imputation = "last"
-  ) %>% 
+  ) %>%
   derive_vars_dtm(
     dtc = AESTDTC,
     new_vars_prefix = "AST",

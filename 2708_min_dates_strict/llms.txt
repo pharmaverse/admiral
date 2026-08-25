@@ -1,12 +1,12 @@
 # admiral
 
 [![pharmaverse admiral
-Badge](http://pharmaverse.org/shields/admiral.svg)](https://pharmaverse.org)
+Badge](https://pharmaverse.org/shields/admiral.svg)](https://pharmaverse.org)
 [![CRAN
 status](https://www.r-pkg.org/badges/version/admiral)](https://CRAN.R-project.org/package=admiral)
 ![Test
 Coverage](https://raw.githubusercontent.com/pharmaverse/admiral/badges/main/test-coverage.svg)[![Total
-Downloads](http://cranlogs.r-pkg.org/badges/grand-total/admiral?color=green)](https://cran.r-project.org/package=admiral)
+Downloads](https://cranlogs.r-pkg.org/badges/grand-total/admiral?color=green)](https://cran.r-project.org/package=admiral)
 [![admiral CI/CD
 Workflows](https://github.com/pharmaverse/admiral/actions/workflows/common.yml/badge.svg)](https://github.com/pharmaverse/admiral/actions/workflows/common.yml)
 
@@ -321,7 +321,7 @@ Archive](https://pharmaverse.github.io/admiraldiscovery/articles/presentation_ar
 We use the following for support and communications between user and
 developer community:
 
-- [Slack](https://pharmaverse.slack.com/)—for informal discussions, Q&A
+- [Slack](https://pharmaverse.slack.com)—for informal discussions, Q&A
   and building our user community. If you don’t have access, use this
   [link](https://join.slack.com/t/pharmaverse/shared_invite/zt-yv5atkr4-Np2ytJ6W_QKz_4Olo7Jo9A)
   to join the pharmaverse Slack workspace.
