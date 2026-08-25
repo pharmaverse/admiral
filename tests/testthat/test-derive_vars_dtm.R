@@ -285,7 +285,8 @@ test_that("impute_dtc_dtm Test 8: dtc is empty", {
 ## Test 9: min_dates argument works ----
 test_that("impute_dtc_dtm Test 9: min_dates argument works", {
   expect_equal(
-    impute_dtc_dtm(c("2020-12", "2020-11", NA_character_),
+    impute_dtc_dtm(
+      c("2020-12", "2020-11", NA_character_),
       min_dates = list(
         c(
           ymd_hms("2020-12-06T12:12:12"),
@@ -308,7 +309,8 @@ test_that("impute_dtc_dtm Test 9: min_dates argument works", {
 ## Test 10: max_dates argument works ----
 test_that("impute_dtc_dtm Test 10: max_dates argument works", {
   expect_equal(
-    impute_dtc_dtm(c("2020-12", "2020-11", NA_character_, "2020-02-02"),
+    impute_dtc_dtm(
+      c("2020-12", "2020-11", NA_character_, "2020-02-02"),
       max_dates = list(
         c(ymd_hms("2020-12-06T12:12:12"), NA, ymd_hms("2020-09-13T08:30:00"), NA),
         c(ymd(""), ymd("2020-11-11"), ymd(""), ymd("2020-02-02"))
@@ -324,21 +326,22 @@ test_that("impute_dtc_dtm Test 10: max_dates argument works", {
 ## Test 11: min_dates_strict argument only works ----
 test_that("impute_dtc_dtm Test 11: min_dates_strict argument only works", {
   expect_equal(
-    impute_dtc_dtm(c("2020-12", "2020-11", NA_character_),
-                   min_dates_strict = list(
-                     c(
-                       ymd_hms("2020-12-06T12:12:12"),
-                       NA,
-                       NA
-                     ),
-                     c(
-                       ymd_hms("2020-11-11T11:11:11"),
-                       ymd_hms("2020-11-11T11:11:11"),
-                       ymd_hms("2020-11-11T11:11:11")
-                     )
-                   ),
-                   highest_imputation = "Y",
-                   date_imputation = "first"
+    impute_dtc_dtm(
+      c("2020-12", "2020-11", NA_character_),
+      min_dates_strict = list(
+        c(
+          ymd_hms("2020-12-06T12:12:12"),
+          NA,
+          NA
+        ),
+        c(
+          ymd_hms("2020-11-11T11:11:11"),
+          ymd_hms("2020-11-11T11:11:11"),
+          ymd_hms("2020-11-11T11:11:11")
+        )
+      ),
+      highest_imputation = "Y",
+      date_imputation = "first"
     ),
     c("2020-12-06T12:12:12", "2020-11-11T11:11:11", "2020-11-11T11:11:11")
   )
@@ -347,23 +350,24 @@ test_that("impute_dtc_dtm Test 11: min_dates_strict argument only works", {
 ## Test 12: min_dates and min_dates_strict arguments work ----
 test_that("impute_dtc_dtm Test 12: min_dates and min_dates_strict arguments work", {
   expect_equal(
-    impute_dtc_dtm(c("2020-12", "2020-11", NA_character_),
-                   min_dates = list(
-                     c(
-                       ymd_hms("2020-12-06T12:12:12"),
-                       NA,
-                       NA
-                     )
-                   ),
-                   min_dates_strict = list(
-                     c(
-                       ymd_hms("2020-11-11T11:11:11"),
-                       ymd_hms("2020-11-11T11:11:11"),
-                       ymd_hms("2020-11-11T11:11:11")
-                     )
-                   ),
-                   highest_imputation = "Y",
-                   date_imputation = "first"
+    impute_dtc_dtm(
+      c("2020-12", "2020-11", NA_character_),
+      min_dates = list(
+        c(
+          ymd_hms("2020-12-06T12:12:12"),
+          NA,
+          NA
+        )
+      ),
+      min_dates_strict = list(
+        c(
+          ymd_hms("2020-11-11T11:11:11"),
+          ymd_hms("2020-11-11T11:11:11"),
+          ymd_hms("2020-11-11T11:11:11")
+        )
+      ),
+      highest_imputation = "Y",
+      date_imputation = "first"
     ),
     c("2020-12-06T12:12:12", "2020-11-11T11:11:11", "2020-11-11T11:11:11")
   )
@@ -372,7 +376,8 @@ test_that("impute_dtc_dtm Test 12: min_dates and min_dates_strict arguments work
 ## Test 13: max_dates_strict argument only works ----
 test_that("impute_dtc_dtm Test 13: max_dates_strict argument only works", {
   expect_equal(
-    impute_dtc_dtm(c("2020-12", "2020-11", NA_character_, "2020-02-02"),
+    impute_dtc_dtm(
+      c("2020-12", "2020-11", NA_character_, "2020-02-02"),
       max_dates_strict = list(
         c(ymd_hms("2020-12-06T12:12:12"), NA, ymd_hms("2020-09-13T08:30:00"), NA),
         c(ymd(""), ymd("2020-11-11"), ymd(""), ymd("2020-02-02"))
@@ -388,16 +393,17 @@ test_that("impute_dtc_dtm Test 13: max_dates_strict argument only works", {
 ## Test 14: max_dates and max_dates_strict arguments work ----
 test_that("impute_dtc_dtm Test 14: max_dates and max_dates_strict arguments work", {
   expect_equal(
-    impute_dtc_dtm(c("2020-12", "2020-11", NA_character_, "2020-02-02"),
-                   max_dates_strict = list(
-                     c(ymd_hms("2020-12-06T12:12:12"), NA, ymd_hms("2020-09-13T08:30:00"), NA)
-                   ),
-                   max_dates = list(
-                     c(ymd(""), ymd("2020-11-11"), ymd(""), ymd("2020-02-02"))
-                   ),
-                   highest_imputation = "Y",
-                   date_imputation = "last",
-                   time_imputation = "last"
+    impute_dtc_dtm(
+      c("2020-12", "2020-11", NA_character_, "2020-02-02"),
+      max_dates_strict = list(
+        c(ymd_hms("2020-12-06T12:12:12"), NA, ymd_hms("2020-09-13T08:30:00"), NA)
+      ),
+      max_dates = list(
+        c(ymd(""), ymd("2020-11-11"), ymd(""), ymd("2020-02-02"))
+      ),
+      highest_imputation = "Y",
+      date_imputation = "last",
+      time_imputation = "last"
     ),
     c("2020-12-06T12:12:12", "2020-11-11T23:59:59", "2020-09-13T08:30:00", "2020-02-02T23:59:59")
   )
@@ -406,7 +412,8 @@ test_that("impute_dtc_dtm Test 14: max_dates and max_dates_strict arguments work
 ## Test 15: max_dates_strict argument works ----
 test_that("impute_dtc_dtm Test 15: max_dates_strict argument works", {
   expect_equal(
-    impute_dtc_dtm(c("2020-12", "2020", "2020-11", NA_character_),
+    impute_dtc_dtm(
+      c("2020-12", "2020", "2020-11", NA_character_),
       min_dates = list(
         c(
           ymd_hms("2020-12-06T12:12:12"),
@@ -434,7 +441,8 @@ test_that("impute_dtc_dtm Test 15: max_dates_strict argument works", {
 ## Test 16: min_dates_strict argument works ----
 test_that("impute_dtc_dtm Test 16: min_dates_strict argument works", {
   expect_equal(
-    impute_dtc_dtm(c("2020-12", "2020", "2020-11", NA_character_),
+    impute_dtc_dtm(
+      c("2020-12", "2020", "2020-11", NA_character_),
       max_dates = list(
         c(
           ymd_hms("2020-12-26T12:12:12"),
