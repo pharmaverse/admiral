@@ -119,6 +119,11 @@ impute_dtc_dt(
   expected. For example
 
       library(lubridate)
+      #>
+      #> Attaching package: 'lubridate'
+      #> The following objects are masked from 'package:base':
+      #>
+      #>     date, intersect, setdiff, union
       impute_dtc_dt(
         "2020-11",
         min_dates = list(

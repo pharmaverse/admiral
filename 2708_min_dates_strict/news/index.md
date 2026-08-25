@@ -7,10 +7,16 @@
 ### Updates of Existing Functions
 
 - The `min_dates_strict` and `max_dates_strict` arguments were added to
-  [`derive_vars_dt()`](https:/pharmaverse.github.io/admiral/2708_min_dates_strict/reference/derive_vars_dt.md)
-  and
-  [`derive_vars_dtm()`](https:/pharmaverse.github.io/admiral/2708_min_dates_strict/reference/derive_vars_dtm.md)
-  and other imputation functions. See
+  [`derive_vars_dt()`](https:/pharmaverse.github.io/admiral/2708_min_dates_strict/reference/derive_vars_dt.md),
+  [`derive_vars_dtm()`](https:/pharmaverse.github.io/admiral/2708_min_dates_strict/reference/derive_vars_dtm.md),
+  [`convert_dtc_to_dt()`](https:/pharmaverse.github.io/admiral/2708_min_dates_strict/reference/convert_dtc_to_dt.md),
+  [`convert_dtc_to_dtm()`](https:/pharmaverse.github.io/admiral/2708_min_dates_strict/reference/convert_dtc_to_dtm.md),
+  [`impute_dtc_dt()`](https:/pharmaverse.github.io/admiral/2708_min_dates_strict/reference/impute_dtc_dt.md),
+  [`impute_dtc_dtm()`](https:/pharmaverse.github.io/admiral/2708_min_dates_strict/reference/impute_dtc_dtm.md).
+  The new arguments can be used to avoid invalid imputed dates. E.g., if
+  `AESTDTC` is imputed with `min_dates = exprs(TRTSDTM)`,
+  `max_dates_strict = exprs(AENDTM)` can be specified to avoid that the
+  imputed event start date is after the even end date. See
   [`derive_vars_dt()`](https:/pharmaverse.github.io/admiral/2708_min_dates_strict/reference/derive_vars_dt.md)
   documentation for details and examples.
   ([\#2708](https://github.com/pharmaverse/admiral/issues/2708))
