@@ -41,3 +41,14 @@
       Error in `is_partial_datetime()`:
       ! `partial` must be a named list containing either all date components or all datetime components
 
+# error if invalid
+
+    Code
+      assert_dates_strict(min_dates, max_dates)
+    Condition
+      Error in `assert_dates_strict()`:
+      ! The minimum date(s) specified in `min_dates_strict` must not be greater than the maximum date(s) specified in `max_dates_strict`.
+      The following combinations of minimum and maximum dates are invalid:
+      `min_dates_strict`, `max_dates_strict`
+      2021-01-01, 2020-12-31
+

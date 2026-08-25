@@ -541,18 +541,47 @@ assert_highest_imputation <- function(highest_imputation,
   invisible(NULL)
 }
 
+#' Assert Strict Date Ranges
+#'
+#' Asserts that the minimum dates specified in `min_dates_strict` are not
+#' greater than the maximum dates specified in `max_dates_strict`.
+#'
+#' @param min_dates_strict A list of minimum dates to check.
+#' @param max_dates_strict A list of maximum dates to check.
+#'
+#' @details
+#' If any minimum date is greater than its corresponding maximum date, an error
+#' is thrown with the invalid combinations of minimum and maximum dates.
+#'
+#' @returns Invisibly returns `NULL` if the assertion passes.
+#'
+#' @keywords internal
 assert_dates_strict <- function(min_dates_strict, max_dates_strict) {
   if (!is.null(min_dates_strict) && length(min_dates_strict) > 0 &
       !is.null(max_dates_strict) && length(max_dates_strict) > 0) {
-    min_dates <- reduce(min_dates_strict, pmin)
-    max_dates <- reduce(max_dates_strict, pmax)
+    min_dates <- reduce(min_dates_strict, pmax)
+    max_dates <- reduce(max_dates_strict, pmin)
     bad_i <- which(min_dates > max_dates)
     if (any(bad_i)) {
-      cli_abort(paste(
-        "The minimum date(s) specified in {.arg min_dates_strict} must not be greater than the maximum date(s) specified in {.arg max_dates_strict}."
+      bads <- data.frame(
+        min_dates = min_dates[bad_i],
+        max_dates = max_dates[bad_i]
+      ) %>% unique()
+      invalids <- c(
+        "{.arg min_dates_strict}, {.arg max_dates_strict}",
+        paste0(bads$min_dates, ", ", bads$max_dates)
+      )
+      cli_abort(c(
+        paste(
+          "The minimum date(s) specified in {.arg min_dates_strict} must not be",
+          "greater than the maximum date(s) specified in {.arg max_dates_strict}."
+        ),
+        "The following combinations of minimum and maximum dates are invalid:",
+        invalids
       ))
     }
   }
+  invisible(NULL)
 }
 
 #' Get Range of Partial Date / Datetime

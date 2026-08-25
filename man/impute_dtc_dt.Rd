@@ -92,6 +92,11 @@ A date or date-time object is expected.
 For example
 
 \if{html}{\out{<div class="sourceCode r">}}\preformatted{library(lubridate)
+#> 
+#> Attaching package: 'lubridate'
+#> The following objects are masked from 'package:base':
+#> 
+#>     date, intersect, setdiff, union
 impute_dtc_dt(
   "2020-11",
   min_dates = list(

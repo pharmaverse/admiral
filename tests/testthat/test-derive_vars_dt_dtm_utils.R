@@ -549,3 +549,30 @@ test_that("assert_time_imputation Test 34: gives error when input not a valid fo
     )
   )
 })
+
+# assert_dates_strict ----
+test_that("no error if valid", {
+  min_dates <- list(
+    ymd("2020-01-01"),
+    ymd("2020-02-01")
+  )
+  max_dates <- list(
+    ymd("2020-07-31"),
+    ymd("2020-12-31")
+  )
+  expect_null(assert_dates_strict(min_dates, max_dates))
+  expect_null(assert_dates_strict(min_dates, NULL))
+  expect_null(assert_dates_strict(NULL, max_dates))
+  expect_null(assert_dates_strict(NULL, NULL))
+})
+
+test_that("error if invalid", {
+  min_dates <- list(
+    c(ymd("2020-01-01"), ymd("2020-01-01"), ymd("2020-01-01")),
+    c(ymd("2021-01-01"), ymd("2021-01-01"), ymd("2021-01-01"))
+  )
+  max_dates <- list(
+    c(ymd("2020-12-31"), ymd("2021-12-31"), ymd("2020-12-31"))
+  )
+  expect_snapshot(assert_dates_strict(min_dates, max_dates), error = TRUE)
+})

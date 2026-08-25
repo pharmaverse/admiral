@@ -664,6 +664,11 @@ impute_dtc_dtm <- function(dtc,
     year = "Y"
   )
 
+  assert_dates_strict(
+    min_dates_strict = min_dates_strict,
+    max_dates_strict = max_dates_strict
+  )
+
   assert_highest_imputation(
     highest_imputation = highest_imputation,
     highest_imputation_values = imputation_levels,
