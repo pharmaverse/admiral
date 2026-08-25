@@ -14,7 +14,7 @@ create_single_dose_dataset(
   lookup_table = dose_freq_lookup,
   lookup_column = CDISC_VALUE,
   nominal_time = NULL,
-  keep_source_vars = expr_c(get_admiral_option("subject_keys"), dose_freq, start_date,
+  keep_source_vars = c(get_admiral_option("subject_keys"), dose_freq, start_date,
     start_datetime, end_date, end_datetime)
 )
 }
@@ -130,8 +130,8 @@ the output dataset. For example \code{EXTRT} for studies with more than one
 drug.
 
 \describe{
-\item{Default value}{\code{expr_c(get_admiral_option("subject_keys"), dose_freq, start_date,
-start_datetime, end_date, end_datetime)}}
+\item{Default value}{\code{c(get_admiral_option("subject_keys"), dose_freq, start_date, start_datetime,
+end_date, end_datetime)}}
 }}
 }
 \value{
