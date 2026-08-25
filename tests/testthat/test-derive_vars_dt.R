@@ -146,8 +146,8 @@ test_that("impute_dtc_dt Test 5: impute month and day to mid", {
   )
 })
 
-## Test 6: min_dates parameter works ----
-test_that("impute_dtc_dt Test 6: min_dates parameter works", {
+## Test 6: min_dates argument works ----
+test_that("impute_dtc_dt Test 6: min_dates argument works", {
   input <- c(
     "2019-07-18", # full date
     "--07-18", # missing year
@@ -182,8 +182,8 @@ test_that("impute_dtc_dt Test 6: min_dates parameter works", {
   )
 })
 
-## Test 7: max_dates parameter works ----
-test_that("impute_dtc_dt Test 7: max_dates parameter works", {
+## Test 7: max_dates argument works ----
+test_that("impute_dtc_dt Test 7: max_dates argument works", {
   input <- c(
     "2019-07-18", # full date
     "--07-18", # missing year
@@ -218,8 +218,8 @@ test_that("impute_dtc_dt Test 7: max_dates parameter works", {
   )
 })
 
-## Test 8: min_dates_strict parameter only works ----
-test_that("impute_dtc_dt Test 8: min_dates_strict parameter only works", {
+## Test 8: min_dates_strict argument only works ----
+test_that("impute_dtc_dt Test 8: min_dates_strict argument only works", {
   input <- c(
     "2019-07-18", # full date
     "--07-18", # missing year
@@ -254,8 +254,46 @@ test_that("impute_dtc_dt Test 8: min_dates_strict parameter only works", {
   )
 })
 
-## Test 9: max_dates_strict parameter only works ----
-test_that("impute_dtc_dt Test 9: max_dates_strict parameter only works", {
+## Test 9: min_dates and min_dates_strict arguments work ----
+test_that("impute_dtc_dt Test 9: min_dates and min_dates_strict arguments work", {
+  input <- c(
+    "2019-07-18", # full date
+    "--07-18", # missing year
+    "2019", # missing month and day
+    "2019-07--", # missing day
+    "2019---07" # missing just month
+  )
+
+  expect_equal(
+    impute_dtc_dt(
+      input,
+      min_dates = list(
+        c(
+          ymd("2019-07-06"),
+          ymd("2019-07-06"),
+          ymd("2019-07-06"),
+          ymd("2019-07-06"),
+          ymd("2019-07-06")
+        )
+      ),
+      min_dates_strict = list(
+        c(
+          ymd("2019-06-06"),
+          ymd("2019-06-06"),
+          ymd("2019-06-06"),
+          ymd("2019-06-06"),
+          ymd("2019-06-06")
+        )
+      ),
+      highest_imputation = "Y",
+      date_imputation = "first"
+    ),
+    c("2019-07-18", "2019-07-06", "2019-07-06", "2019-07-06", "2019-07-06")
+  )
+})
+
+## Test 10: max_dates_strict argument only works ----
+test_that("impute_dtc_dt Test 10: max_dates_strict argument only works", {
   input <- c(
     "2019-07-18", # full date
     "--07-18", # missing year
@@ -290,8 +328,46 @@ test_that("impute_dtc_dt Test 9: max_dates_strict parameter only works", {
   )
 })
 
-## Test 10: min_dates_strict parameter works ----
-test_that("impute_dtc_dt Test 10: min_dates_strict parameter works", {
+## Test 11: max_dates and max_dates_strict argument work ----
+test_that("impute_dtc_dt Test 11: max_dates and max_dates_strict argument work", {
+  input <- c(
+    "2019-07-18", # full date
+    "--07-18", # missing year
+    "2019", # missing month and day
+    "2019-07--", # missing day
+    "2019---07" # missing just month
+  )
+
+  expect_equal(
+    impute_dtc_dt(
+      input,
+      max_dates_strict = list(
+        c(
+          ymd("2019-07-06"),
+          ymd("2019-07-06"),
+          ymd("2019-07-06"),
+          ymd("2019-07-06"),
+          ymd("2019-07-06")
+        )
+      ),
+      max_dates = list(
+        c(
+          ymd("2019-06-06"),
+          ymd("2019-06-06"),
+          ymd("2019-06-06"),
+          ymd("2019-06-06"),
+          ymd("2019-06-06")
+        )
+      ),
+      highest_imputation = "Y",
+      date_imputation = "last"
+    ),
+    c("2019-07-18", "2019-06-06", "2019-06-06", "2019-07-06", "2019-06-06")
+  )
+})
+
+## Test 12: min_dates_strict argument works ----
+test_that("impute_dtc_dt Test 12: min_dates_strict argument works", {
   expect_equal(
     impute_dtc_dt(c("2020-12", "2020", "2020-11", NA_character_),
       max_dates = list(
@@ -317,8 +393,8 @@ test_that("impute_dtc_dt Test 10: min_dates_strict parameter works", {
   )
 })
 
-## Test 11: max_dates_strict parameter works ----
-test_that("impute_dtc_dt Test 11: max_dates_strict parameter works", {
+## Test 13: max_dates_strict argument works ----
+test_that("impute_dtc_dt Test 13: max_dates_strict argument works", {
   expect_equal(
     impute_dtc_dt(c("2020-12", "2020", "2020-11", NA_character_),
       min_dates = list(
@@ -344,8 +420,8 @@ test_that("impute_dtc_dt Test 11: max_dates_strict parameter works", {
   )
 })
 
-## Test 12: min_dates length mismatch provides error ----
-test_that("impute_dtc_dt Test 12: min_dates length mismatch provides error", {
+## Test 14: min_dates length mismatch provides error ----
+test_that("impute_dtc_dt Test 14: min_dates length mismatch provides error", {
   input <- c(
     "2019-07-18", # full date
     "--07-18", # missing year
@@ -368,8 +444,8 @@ test_that("impute_dtc_dt Test 12: min_dates length mismatch provides error", {
   )
 })
 
-## Test 13: max_dates length mismatch provides error ----
-test_that("impute_dtc_dt Test 13: max_dates length mismatch provides error", {
+## Test 15: max_dates length mismatch provides error ----
+test_that("impute_dtc_dt Test 15: max_dates length mismatch provides error", {
   input <- c(
     "2019-07-18", # full date
     "--07-18", # missing year
@@ -392,8 +468,8 @@ test_that("impute_dtc_dt Test 13: max_dates length mismatch provides error", {
   )
 })
 
-## Test 14: Error if null min/max_dates when highest_imputation = Y ----
-test_that("impute_dtc_dt Test 14: Error if null min/max_dates when highest_imputation = Y", {
+## Test 16: Error if null min/max_dates when highest_imputation = Y ----
+test_that("impute_dtc_dt Test 16: Error if null min/max_dates when highest_imputation = Y", {
   input <- c(
     "2019-07-18", # full date
     "--07-18", # missing year
@@ -411,8 +487,8 @@ test_that("impute_dtc_dt Test 14: Error if null min/max_dates when highest_imput
   )
 })
 
-## Test 15: appropriate warnings/return object for impute_dtc_dt ----
-test_that("impute_dtc_dt Test 15: appropriate warnings/return object for impute_dtc_dt", {
+## Test 17: appropriate warnings/return object for impute_dtc_dt ----
+test_that("impute_dtc_dt Test 17: appropriate warnings/return object for impute_dtc_dt", {
   input_warnings <- c(
     "", # empty string
     NA_character_, # NA
@@ -430,8 +506,8 @@ test_that("impute_dtc_dt Test 15: appropriate warnings/return object for impute_
   )
 })
 
-## Test 16: wrong input to `date_imputation` ----
-test_that("impute_dtc_dt Test 16: wrong input to `date_imputation`", {
+## Test 18: wrong input to `date_imputation` ----
+test_that("impute_dtc_dt Test 18: wrong input to `date_imputation`", {
   input <- c(
     "2019-07-18", # full date
     "--07-18", # missing year
@@ -503,8 +579,8 @@ test_that("impute_dtc_dt Test 16: wrong input to `date_imputation`", {
 })
 
 # convert_dtc_to_dt ----
-## Test 17: Convert a complete -- DTC into a date object ----
-test_that("convert_dtc_to_dt Test 17: Convert a complete -- DTC into a date object", {
+## Test 19: Convert a complete -- DTC into a date object ----
+test_that("convert_dtc_to_dt Test 19: Convert a complete -- DTC into a date object", {
   input <- c(
     "2019-07-18", # full date
     "--07-18", # missing year
@@ -524,8 +600,8 @@ test_that("convert_dtc_to_dt Test 17: Convert a complete -- DTC into a date obje
 
 # compute_dtf ----
 
-## Test 18: compute DTF ----
-test_that("compute_dtf Test 18: compute DTF", {
+## Test 20: compute DTF ----
+test_that("compute_dtf Test 20: compute DTF", {
   inputdtc <- c(
     "2019-07-18",
     "2019-02",
@@ -570,8 +646,8 @@ test_that("compute_dtf Test 18: compute DTF", {
 })
 
 # restrict_imputed_dtc_dt ----
-## Test 19: restrict_imputed_dtc_dt works as expected ----
-test_that("restrict_imputed_dtc_dt Test 19: restrict_imputed_dtc_dt works as expected", {
+## Test 21: restrict_imputed_dtc_dt works as expected ----
+test_that("restrict_imputed_dtc_dt Test 21: restrict_imputed_dtc_dt works as expected", {
   input <- c(
     "2019-07-18", # full date
     "--07-18", # missing year
@@ -647,8 +723,8 @@ test_that("restrict_imputed_dtc_dt Test 19: restrict_imputed_dtc_dt works as exp
 
 # derive_vars_dt ----
 
-## Test 20: default behavior ----
-test_that("derive_vars_dt Test 20: default behavior", {
+## Test 22: default behavior ----
+test_that("derive_vars_dt Test 22: default behavior", {
   date <- tibble::tribble(
     ~XXSTDTC,
     "2019-07-18T15:25:40",
@@ -680,8 +756,8 @@ test_that("derive_vars_dt Test 20: default behavior", {
   )
 })
 
-## Test 21: no date imputation, add DTF ----
-test_that("derive_vars_dt Test 21: no date imputation, add DTF", {
+## Test 23: no date imputation, add DTF ----
+test_that("derive_vars_dt Test 23: no date imputation, add DTF", {
   date <- tibble::tribble(
     ~XXSTDTC,
     "2019-07-18T15:25:40",
@@ -714,8 +790,8 @@ test_that("derive_vars_dt Test 21: no date imputation, add DTF", {
   )
 })
 
-## Test 22: date imputed to first, auto DTF ----
-test_that("derive_vars_dt Test 22: date imputed to first, auto DTF", {
+## Test 24: date imputed to first, auto DTF ----
+test_that("derive_vars_dt Test 24: date imputed to first, auto DTF", {
   date <- tibble::tribble(
     ~XXSTDTC,
     "2019-07-18T15:25:40",
@@ -749,8 +825,8 @@ test_that("derive_vars_dt Test 22: date imputed to first, auto DTF", {
   )
 })
 
-## Test 23: date imputed to last, no DTF ----
-test_that("derive_vars_dt Test 23: date imputed to last, no DTF", {
+## Test 25: date imputed to last, no DTF ----
+test_that("derive_vars_dt Test 25: date imputed to last, no DTF", {
   date <- tibble::tribble(
     ~XXSTDTC,
     "2019-07-18T15:25:40",
@@ -785,8 +861,8 @@ test_that("derive_vars_dt Test 23: date imputed to last, no DTF", {
   )
 })
 
-## Test 24: highest_imputation = Y & max_dates ----
-test_that("derive_vars_dt Test 24: highest_imputation = Y & max_dates", {
+## Test 26: highest_imputation = Y & max_dates ----
+test_that("derive_vars_dt Test 26: highest_imputation = Y & max_dates", {
   actual <- data.frame(
     AESTDTC = c(NA_character_, NA_character_),
     TRTSDT = c(ymd("2022-01-01"), NA)
@@ -811,8 +887,8 @@ test_that("derive_vars_dt Test 24: highest_imputation = Y & max_dates", {
   expect_dfs_equal(actual, expected, keys = c("ASTDT", "ASTDTF"))
 })
 
-## Test 25: NA imputation for highest_imputation = Y & max_dates but date_imputation = first ----
-test_that("derive_vars_dt Test 25: NA imputation for highest_imputation = Y & max_dates but date_imputation = first", { # nolint
+## Test 27: NA imputation for highest_imputation = Y & max_dates but date_imputation = first ----
+test_that("derive_vars_dt Test 27: NA imputation for highest_imputation = Y & max_dates but date_imputation = first", { # nolint
   expect_snapshot(
     data.frame(
       AESTDTC = c(NA_character_, NA_character_),
@@ -830,8 +906,8 @@ test_that("derive_vars_dt Test 25: NA imputation for highest_imputation = Y & ma
     error = TRUE
   )
 })
-## Test 26: NA imputation for highest_imputation = Y & min_dates ----
-test_that("derive_vars_dt Test 26: NA imputation for highest_imputation = Y & min_dates", {
+## Test 28: NA imputation for highest_imputation = Y & min_dates ----
+test_that("derive_vars_dt Test 28: NA imputation for highest_imputation = Y & min_dates", {
   actual <- data.frame(
     AESTDTC = c(NA_character_, NA_character_),
     TRTSDT = c(ymd("2022-01-01"), NA)
@@ -856,8 +932,8 @@ test_that("derive_vars_dt Test 26: NA imputation for highest_imputation = Y & mi
   expect_dfs_equal(actual, expected, keys = c("ASTDT", "ASTDTF"))
 })
 
-## Test 27: Error for highest_imputation = Y & min_dates but date_imputation = last ----
-test_that("derive_vars_dt Test 27: Error for highest_imputation = Y & min_dates but date_imputation = last", { # nolint
+## Test 29: Error for highest_imputation = Y & min_dates but date_imputation = last ----
+test_that("derive_vars_dt Test 29: Error for highest_imputation = Y & min_dates but date_imputation = last", { # nolint
   expect_snapshot(
     data.frame(
       AESTDTC = c(NA_character_, NA_character_),
@@ -876,8 +952,8 @@ test_that("derive_vars_dt Test 27: Error for highest_imputation = Y & min_dates 
   )
 })
 
-## Test 28: Error for highest_imputation = Y but null min/max dates fails ----
-test_that("derive_vars_dt Test 28: Error for highest_imputation = Y but null min/max dates fails", { # nolint
+## Test 30: Error for highest_imputation = Y but null min/max dates fails ----
+test_that("derive_vars_dt Test 30: Error for highest_imputation = Y but null min/max dates fails", { # nolint
   expect_snapshot(
     data.frame(
       AESTDTC = c(NA_character_, NA_character_),
@@ -895,8 +971,8 @@ test_that("derive_vars_dt Test 28: Error for highest_imputation = Y but null min
   )
 })
 
-## Test 29: Supplying both min/max dates for highest_imputation = Y works ----
-test_that("derive_vars_dt Test 29: Supplying both min/max dates for highest_imputation = Y works", { # nolint
+## Test 31: Supplying both min/max dates for highest_imputation = Y works ----
+test_that("derive_vars_dt Test 31: Supplying both min/max dates for highest_imputation = Y works", { # nolint
   actual <- data.frame(
     AESTDTC = c(NA_character_, NA_character_),
     TRTSDT = c(ymd("2022-01-01"), NA),
@@ -922,8 +998,8 @@ test_that("derive_vars_dt Test 29: Supplying both min/max dates for highest_impu
   expect_dfs_equal(actual, expected, keys = c("ASTDT", "ASTDTF"))
 })
 
-## Test 30: Supplying both min/max dates for highest_imputation = Y works ----
-test_that("derive_vars_dt Test 30: Supplying both min/max dates for highest_imputation = Y works", { # nolint
+## Test 32: Supplying both min/max dates for highest_imputation = Y works ----
+test_that("derive_vars_dt Test 32: Supplying both min/max dates for highest_imputation = Y works", { # nolint
   actual <- data.frame(
     AESTDTC = c(NA_character_, NA_character_),
     TRTSDT = c(ymd("2022-01-01"), NA),
@@ -950,8 +1026,8 @@ test_that("derive_vars_dt Test 30: Supplying both min/max dates for highest_impu
   expect_dfs_equal(actual, expected, keys = c("ASTDT", "ASTDTF"))
 })
 
-## Test 31: Supplying both min/max dates for highest_imputation = Y works ----
-test_that("derive_vars_dt Test 31: Supplying both min/max dates for highest_imputation = Y works", { # nolint
+## Test 33: Supplying both min/max dates for highest_imputation = Y works ----
+test_that("derive_vars_dt Test 33: Supplying both min/max dates for highest_imputation = Y works", { # nolint
   actual <- data.frame(
     AESTDTC = c(NA_character_, NA_character_),
     TRTSDT = c(ymd("2022-01-01"), NA),
@@ -979,8 +1055,8 @@ test_that("derive_vars_dt Test 31: Supplying both min/max dates for highest_impu
 })
 
 
-## Test 32: no date imputation, DTF present ----
-test_that("derive_vars_dt Test 32: no date imputation, DTF present", {
+## Test 34: no date imputation, DTF present ----
+test_that("derive_vars_dt Test 34: no date imputation, DTF present", {
   expected_output <- tibble::tribble(
     ~XXSTDTC,              ~ASTDT,                ~ASTDTF,
     "2019-07-18T15:25:40", as.Date("2019-07-18"), NA_character_,
@@ -1008,8 +1084,8 @@ test_that("derive_vars_dt Test 32: no date imputation, DTF present", {
   )
 })
 
-## Test 33: correctly imputes last day in February on leap year ----
-test_that("derive_vars_dt Test 33: correctly imputes last day in February on leap year", {
+## Test 35: correctly imputes last day in February on leap year ----
+test_that("derive_vars_dt Test 35: correctly imputes last day in February on leap year", {
   leap_input <- tibble::tribble(
     ~XXSTDTC,
     "2019-02--",
@@ -1037,8 +1113,8 @@ test_that("derive_vars_dt Test 33: correctly imputes last day in February on lea
   )
 })
 
-## Test 34: impute_dtc_dt where dtc is empty ----
-test_that("derive_vars_dt Test 34: impute_dtc_dt where dtc is empty", {
+## Test 36: impute_dtc_dt where dtc is empty ----
+test_that("derive_vars_dt Test 36: impute_dtc_dt where dtc is empty", {
   empty_impute <- impute_dtc_dt(
     dtc = character()
   )
@@ -1049,8 +1125,8 @@ test_that("derive_vars_dt Test 34: impute_dtc_dt where dtc is empty", {
   )
 })
 
-## Test 35: Test Min Date Equals Max Date ----
-test_that("derive_vars_dt Test 35: Test Min Date Equals Max Date", {
+## Test 37: Test Min Date Equals Max Date ----
+test_that("derive_vars_dt Test 37: Test Min Date Equals Max Date", {
   date <- tibble::tribble(
     ~XXSTDTC,  ~TRTSDT,
     "2020-05", ymd("2020-05-01"),

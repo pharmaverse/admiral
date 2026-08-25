@@ -1,4 +1,4 @@
-# impute_dtc_dt Test 12: min_dates length mismatch provides error
+# impute_dtc_dt Test 14: min_dates length mismatch provides error
 
     Code
       impute_dtc_dt(input, min_dates = list(c(ymd("2019-07-06")), c(ymd("2019-06-06"))),
@@ -7,7 +7,7 @@
       Error in `restrict_imputed_dtc_dt()`:
       ! Length of `min_dates` or `min_dates_strict` do not match length of dates to be imputed.
 
-# impute_dtc_dt Test 13: max_dates length mismatch provides error
+# impute_dtc_dt Test 15: max_dates length mismatch provides error
 
     Code
       impute_dtc_dt(input, max_dates = list(c(ymd("2019-07-06")), c(ymd("2019-06-06"))),
@@ -16,7 +16,7 @@
       Error in `restrict_imputed_dtc_dt()`:
       ! Length of `max_dates` or `max_dates_strict` do not match length of dates to be imputed.
 
-# impute_dtc_dt Test 14: Error if null min/max_dates when highest_imputation = Y
+# impute_dtc_dt Test 16: Error if null min/max_dates when highest_imputation = Y
 
     Code
       impute_dtc_dt(input, highest_imputation = "Y")
@@ -24,7 +24,7 @@
       Error in `assert_highest_imputation()`:
       ! If `highest_imputation = "Y"` is specified, `min_dates`, `min_dates_strict`, `max_dates`, or `max_dates_strict` must be specified.
 
-# impute_dtc_dt Test 16: wrong input to `date_imputation`
+# impute_dtc_dt Test 18: wrong input to `date_imputation`
 
     Code
       impute_dtc_dt(dtc = input, highest_imputation = "M", date_imputation = "13-01")
@@ -72,7 +72,7 @@
       Error in `impute_dtc_dt()`:
       ! 1 imputed date is invalid. Please review the function arguments and/or your data and correct your selection. See the problematic date: 2020-02 imputed to 2020-02-31.
 
-# derive_vars_dt Test 25: NA imputation for highest_imputation = Y & max_dates but date_imputation = first
+# derive_vars_dt Test 27: NA imputation for highest_imputation = Y & max_dates but date_imputation = first
 
     Code
       data.frame(AESTDTC = c(NA_character_, NA_character_), TRTSDT = c(ymd(
@@ -84,7 +84,7 @@
       Error in `assert_highest_imputation()`:
       ! If `highest_imputation = "Y"` and `date_imputation = "first"` is specified, `min_dates` or `min_dates_strict` must be specified.
 
-# derive_vars_dt Test 27: Error for highest_imputation = Y & min_dates but date_imputation = last
+# derive_vars_dt Test 29: Error for highest_imputation = Y & min_dates but date_imputation = last
 
     Code
       data.frame(AESTDTC = c(NA_character_, NA_character_), TRTSDT = c(ymd(
@@ -96,7 +96,7 @@
       Error in `assert_highest_imputation()`:
       ! If `highest_imputation = "Y"` and `date_imputation = "last"` is specified, `max_dates` or `max_dates_strict` must be specified.
 
-# derive_vars_dt Test 28: Error for highest_imputation = Y but null min/max dates fails
+# derive_vars_dt Test 30: Error for highest_imputation = Y but null min/max dates fails
 
     Code
       data.frame(AESTDTC = c(NA_character_, NA_character_), TRTSDT = c(ymd(

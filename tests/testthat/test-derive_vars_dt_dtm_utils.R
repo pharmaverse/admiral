@@ -551,7 +551,8 @@ test_that("assert_time_imputation Test 34: gives error when input not a valid fo
 })
 
 # assert_dates_strict ----
-test_that("no error if valid", {
+## Test 35: no error if valid ----
+test_that("assert_dates_strict Test 35: no error if valid", {
   min_dates <- list(
     ymd("2020-01-01"),
     ymd("2020-02-01")
@@ -566,7 +567,8 @@ test_that("no error if valid", {
   expect_null(assert_dates_strict(NULL, NULL))
 })
 
-test_that("error if invalid", {
+## Test 36: error if invalid ----
+test_that("assert_dates_strict Test 36: error if invalid", {
   min_dates <- list(
     c(ymd("2020-01-01"), ymd("2020-01-01"), ymd("2020-01-01")),
     c(ymd("2021-01-01"), ymd("2021-01-01"), ymd("2021-01-01"))

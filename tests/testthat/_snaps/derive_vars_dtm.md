@@ -1,4 +1,4 @@
-# impute_dtc_dtm Test 15: min_dates length mismatch provides error
+# impute_dtc_dtm Test 17: min_dates length mismatch provides error
 
     Code
       impute_dtc_dtm(c("2020-12", NA_character_), min_dates = list(ymd_hms(
@@ -7,7 +7,7 @@
       Error in `restrict_imputed_dtc_dtm()`:
       ! Length of `min_dates` or `min_dates_strict` do not match length of dates to be imputed.
 
-# impute_dtc_dtm Test 16: max_dates length mismatch provides error
+# impute_dtc_dtm Test 18: max_dates length mismatch provides error
 
     Code
       impute_dtc_dtm(c("2020-12", NA_character_), max_dates = list(ymd_hms(
@@ -17,7 +17,7 @@
       Error in `restrict_imputed_dtc_dtm()`:
       ! Length of `max_dates` or `max_dates_strict` do not match length of dates to be imputed.
 
-# impute_dtc_dtm Test 17: Error if null min/max_dates when highest_imputation = Y
+# impute_dtc_dtm Test 19: Error if null min/max_dates when highest_imputation = Y
 
     Code
       impute_dtc_dtm(c("2020-12", NA_character_), highest_imputation = "Y")
@@ -25,7 +25,7 @@
       Error in `assert_highest_imputation()`:
       ! If `highest_imputation = "Y"` is specified, `min_dates`, `min_dates_strict`, `max_dates`, or `max_dates_strict` must be specified.
 
-# impute_dtc_dtm Test 18: wrong input to `date_imputation`
+# impute_dtc_dtm Test 20: wrong input to `date_imputation`
 
     Code
       impute_dtc_dtm(dtc = c("2020-12", "2020-11", NA_character_, "2020-02-02",
@@ -83,7 +83,7 @@
       ! Some imputed dates are invalid.
       i `date_imputation` is set to "30". Are you sure that with this value you are generating all valid dates? E.g. `date_imputation = 31` would impute "2020-02" to "2020-02-31", which is invalid.
 
-# compute_tmf Test 21: throws ERROR when ignore_seconds_flag  = T and seconds are present
+# compute_tmf Test 23: throws ERROR when ignore_seconds_flag  = T and seconds are present
 
     Code
       compute_tmf(dtc = c("2020-11-11T11:11:11", "2020-11-11T11:11"), dtm = ymd_hms(c(
@@ -92,7 +92,7 @@
       Error in `compute_tmf()`:
       ! Seconds detected in data while `ignore_seconds_flag` is invoked
 
-# derive_vars_dtm Test 28: No re-derivation is done if --DTF variable already exists
+# derive_vars_dtm Test 30: No re-derivation is done if --DTF variable already exists
 
     Code
       actual_output <- derive_vars_dtm(mutate(input, ASTDTF = c(NA, NA, NA, NA, "D",
@@ -101,7 +101,7 @@
     Message
       The `ASTDTF` variable is already present in the input dataset and will not be re-derived.
 
-# derive_vars_dtm Test 31: Error for highest_imputation = Y & max_dates but date_imputation = first
+# derive_vars_dtm Test 33: Error for highest_imputation = Y & max_dates but date_imputation = first
 
     Code
       (data.frame(AESTDTC = c(NA_character_, NA_character_), TRTSDTM = c(ymd_hms(
@@ -113,7 +113,7 @@
       Error in `assert_highest_imputation()`:
       ! If `highest_imputation = "Y"` and `date_imputation = "first"` is specified, `min_dates` or `min_dates_strict` must be specified.
 
-# derive_vars_dtm Test 33: Error for highest_imputation = Y & min_dates but date_imputation = last
+# derive_vars_dtm Test 35: Error for highest_imputation = Y & min_dates but date_imputation = last
 
     Code
       data.frame(AESTDTC = c(NA_character_, NA_character_), TRTSDTM = c(ymd_hms(
@@ -125,7 +125,7 @@
       Error in `assert_highest_imputation()`:
       ! If `highest_imputation = "Y"` and `date_imputation = "last"` is specified, `max_dates` or `max_dates_strict` must be specified.
 
-# derive_vars_dtm Test 34: NA imputation for highest_imputation = Y but null min/max dates fails
+# derive_vars_dtm Test 36: NA imputation for highest_imputation = Y but null min/max dates fails
 
     Code
       data.frame(AESTDTC = c(NA_character_, NA_character_), TRTSDTM = c(ymd_hms(
@@ -136,7 +136,7 @@
       Error in `assert_highest_imputation()`:
       ! If `highest_imputation = "Y"` is specified, `min_dates`, `min_dates_strict`, `max_dates`, or `max_dates_strict` must be specified.
 
-# derive_vars_dtm Test 37: catch ignore_seconds_flag error
+# derive_vars_dtm Test 39: catch ignore_seconds_flag error
 
     Code
       derive_vars_dtm(input, new_vars_prefix = "AST", dtc = XXSTDTC,

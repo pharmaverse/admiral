@@ -41,7 +41,7 @@
       Error in `is_partial_datetime()`:
       ! `partial` must be a named list containing either all date components or all datetime components
 
-# error if invalid
+# assert_dates_strict Test 36: error if invalid
 
     Code
       assert_dates_strict(min_dates, max_dates)
