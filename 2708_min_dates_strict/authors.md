@@ -32,8 +32,8 @@
   logo](reference/figures/roche_logo.png)](https://www.roche.com/)**.
   Copyright holder, funder.
 
-- **[](https://www.gsk.com/en-gb)[![GSK
-  logo](reference/figures/gsk_logo.png)](https://www.gsk.com/)**.
+- **[](https://www.gsk.com/en-gb/)[![GSK
+  logo](reference/figures/gsk_logo.png)](https://www.gsk.com/en-gb/)**.
   Copyright holder, funder.
 
 ## Citation
