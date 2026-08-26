@@ -191,7 +191,7 @@ derive_var_ontrtfl <- function(dataset,
   ref_end_date <- assert_symbol(enexpr(ref_end_date), optional = TRUE)
   assert_data_frame(
     dataset,
-    required_vars = expr_c(start_date, end_date, ref_start_date, ref_end_date)
+    required_vars = c(start_date, end_date, ref_start_date, ref_end_date)
   )
   warn_if_vars_exist(dataset, as_name(new_var))
 

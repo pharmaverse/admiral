@@ -105,7 +105,7 @@ derive_var_extreme_dtm <- function(dataset,
     )
   )
 
-  warn_if_vars_exist(dataset, vars2chr(expr_c(new_var)))
+  warn_if_vars_exist(dataset, vars2chr(c(new_var)))
 
   add_data <- vector("list", length(sources))
   for (i in seq_along(sources)) {

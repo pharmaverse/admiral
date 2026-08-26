@@ -55,7 +55,9 @@ duplicate warning in the "Higher Order Functions" vignette. (#3153)
 <details>
 <summary>Developer Notes</summary>
 
-- Update to roxygen2 8.1.0. (#3171)
+- Updated to roxygen2 8.1.0. (#3171)
+
+- Replaced internal uses of `expr_c()` with `c()` due to `{admiraldev}`'s deprecation of `expr_c()`. (#3179)
 
 </details>
 

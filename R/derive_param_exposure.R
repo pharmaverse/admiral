@@ -166,7 +166,7 @@ derive_param_exposure <- function(dataset = NULL,
 
   assert_data_frame(dataset, required_vars = by_vars, optional = TRUE)
   assert_data_frame(dataset_add,
-    required_vars = expr_c(by_vars, exprs(PARAMCD), dates)
+    required_vars = c(by_vars, exprs(PARAMCD), dates)
   )
 
   filter_add <- assert_filter_cond(enexpr(filter_add), optional = TRUE)
