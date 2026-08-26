@@ -195,7 +195,7 @@ derive_var_relative_flag <- function(dataset,
   derive_var_merged_exist_flag(
     data,
     dataset_add = flag_obs,
-    by_vars = expr_c(by_vars, tmp_obs_nr),
+    by_vars = c(by_vars, tmp_obs_nr),
     new_var = !!new_var,
     condition = TRUE
   ) %>%

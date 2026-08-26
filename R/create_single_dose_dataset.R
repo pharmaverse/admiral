@@ -268,7 +268,7 @@ create_single_dose_dataset <- function(dataset,
                                        lookup_table = dose_freq_lookup,
                                        lookup_column = CDISC_VALUE,
                                        nominal_time = NULL,
-                                       keep_source_vars = expr_c(
+                                       keep_source_vars = c(
                                          get_admiral_option("subject_keys"), dose_freq,
                                          start_date, start_datetime,
                                          end_date, end_datetime
@@ -280,7 +280,7 @@ create_single_dose_dataset <- function(dataset,
   end_date <- assert_symbol(enexpr(end_date))
   end_datetime <- assert_symbol(enexpr(end_datetime), optional = TRUE)
   nominal_time <- assert_symbol(enexpr(nominal_time), optional = TRUE)
-  assert_data_frame(dataset, required_vars = expr_c(dose_freq, start_date, end_date))
+  assert_data_frame(dataset, required_vars = c(dose_freq, start_date, end_date))
   assert_data_frame(
     lookup_table,
     required_vars = exprs(!!lookup_column, DOSE_WINDOW, DOSE_COUNT, CONVERSION_FACTOR)

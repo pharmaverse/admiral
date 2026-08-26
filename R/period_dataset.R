@@ -216,7 +216,7 @@ create_period_dataset <- function(dataset,
       period_ref_final <- derive_vars_merged(
         period_ref_final,
         dataset_add = period_ref[[i]],
-        by_vars = expr_c(subject_keys, by_vars)
+        by_vars = c(subject_keys, by_vars)
       )
     }
   }
@@ -410,7 +410,7 @@ derive_vars_period <- function(dataset,
     id_vars <- exprs(APHASEN)
   }
 
-  assert_data_frame(dataset_ref, required_vars = expr_c(subject_keys, new_vars, id_vars))
+  assert_data_frame(dataset_ref, required_vars = c(subject_keys, new_vars, id_vars))
 
   # Strip period reference dataset of any variables not required for later derivations
   ref_cols <- names(dataset_ref) %in% c(subject_keys, new_vars_chr, id_vars)

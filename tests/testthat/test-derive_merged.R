@@ -1118,8 +1118,8 @@ test_that("derive_var_merged_summary Test 32: error if no summary function", {
   )
 })
 
-## Test 33: deprecation message ----
-test_that("derive_var_merged_summary Test 33: deprecation message", {
+## Test 33: deprecation warning ----
+test_that("derive_var_merged_summary Test 33: deprecation warning", {
   expected <- tibble::tribble(
     ~AVISIT,  ~ASEQ, ~AVAL, ~MEANVIS,
     "WEEK 1",     1,    10,       10,
@@ -1134,12 +1134,13 @@ test_that("derive_var_merged_summary Test 33: deprecation message", {
   adbds1 <- select(expected, -MEANVIS) %>%
     rename(VISIT = AVISIT)
 
-  expect_snapshot(
+  expect_warning(
     derive_var_merged_summary(
       adbds,
       dataset_add = adbds1,
       by_vars = exprs(AVISIT = VISIT),
       new_vars = exprs(MEANVIS = mean(AVAL, na.rm = TRUE))
-    )
+    ),
+    class = "lifecycle_warning_deprecated"
   )
 })

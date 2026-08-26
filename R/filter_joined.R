@@ -526,12 +526,12 @@ filter_joined <- function(dataset,
     )
   assert_data_frame(
     dataset,
-    required_vars = expr_c(by_vars, extract_vars(order))
+    required_vars = c(by_vars, extract_vars(order))
   )
 
   assert_data_frame(
     dataset_add,
-    required_vars = expr_c(by_vars, join_vars, extract_vars(order))
+    required_vars = c(by_vars, join_vars, extract_vars(order))
   )
 
   tmp_obs_nr_unique <- get_new_tmp_var(dataset, prefix = "tmp_obs_nr_unique")
