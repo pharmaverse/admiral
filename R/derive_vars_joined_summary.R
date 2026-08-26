@@ -427,7 +427,7 @@ derive_vars_joined_summary <- function(dataset,
   assert_data_frame(dataset, required_vars = by_vars_left)
   assert_data_frame(
     dataset_add,
-    required_vars = expr_c(
+    required_vars = c(
       by_vars,
       extract_vars(order),
       setdiff(extract_vars(join_vars), replace_values_by_names(order))
@@ -466,7 +466,7 @@ derive_vars_joined_summary <- function(dataset,
     data,
     dataset_add = dataset_add,
     by_vars = by_vars,
-    join_vars = expr_c(
+    join_vars = c(
       join_vars,
       intersect(unname(extract_vars(new_vars)), chr2vars(colnames(dataset_add)))
     ),

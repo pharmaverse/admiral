@@ -215,7 +215,7 @@ derive_locf_records <- function(dataset,
   assert_data_frame(dataset_ref)
   assert_data_frame(
     dataset,
-    required_vars = expr_c(
+    required_vars = c(
       by_vars, analysis_var, extract_vars(order), keep_vars,
       chr2vars(colnames(dataset_ref))
     )

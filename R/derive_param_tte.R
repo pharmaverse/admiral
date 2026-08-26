@@ -1213,7 +1213,7 @@ derive_param_tte <- function(dataset = NULL,
   # create observations for new parameter ----
   new_param <- filter_extreme(
     bind_rows(event_data, censor_data),
-    by_vars = expr_c(subject_keys, by_vars),
+    by_vars = c(subject_keys, by_vars),
     order = exprs(!!tmp_event),
     mode = "last",
     check_type = "none"
@@ -1417,7 +1417,7 @@ filter_date_sources <- function(sources,
       source_dataset <- derive_vars_merged(
         source_dataset,
         dataset_add = end_date_data,
-        by_vars = expr_c(subject_keys, by_vars),
+        by_vars = c(subject_keys, by_vars),
         new_vars = new_vars
       ) %>%
         # use filter_out() in admiral 1.6
@@ -1435,8 +1435,8 @@ filter_date_sources <- function(sources,
         source_dataset %>%
           filter_if(sources[[i]]$filter) %>%
           filter_extreme(
-            order = expr_c(exprs(!!source_date_var), sources[[i]]$order),
-            by_vars = expr_c(subject_keys, by_vars),
+            order = c(exprs(!!source_date_var), sources[[i]]$order),
+            by_vars = c(subject_keys, by_vars),
             mode = mode,
             check_type = check_type
           )
@@ -1490,7 +1490,7 @@ filter_date_sources <- function(sources,
     bind_rows() %>%
     filter(!is.na(!!date_var)) %>%
     filter_extreme(
-      by_vars = expr_c(subject_keys, by_vars),
+      by_vars = c(subject_keys, by_vars),
       order = exprs(!!date_var, tmp_source_nr),
       mode = mode,
       check_type = "none"
