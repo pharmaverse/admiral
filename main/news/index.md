@@ -71,8 +71,16 @@
 
 Developer Notes
 
-- Update to roxygen2 8.1.0.
+- Updated to roxygen2 8.1.0.
   ([\#3171](https://github.com/pharmaverse/admiral/issues/3171))
+
+- Replaced internal uses of
+  [`expr_c()`](https://pharmaverse.github.io/admiraldev/reference/expr_c.html)
+  with [`c()`](https://rdrr.io/r/base/c.html) due to
+  [admiraldev](https://pharmaverse.github.io/admiraldev/)’s deprecation
+  of
+  [`expr_c()`](https://pharmaverse.github.io/admiraldev/reference/expr_c.html).
+  ([\#3179](https://github.com/pharmaverse/admiral/issues/3179))
 
 ## admiral 1.5.0
 

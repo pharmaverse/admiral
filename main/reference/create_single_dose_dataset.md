@@ -18,7 +18,7 @@ create_single_dose_dataset(
   lookup_table = dose_freq_lookup,
   lookup_column = CDISC_VALUE,
   nominal_time = NULL,
-  keep_source_vars = expr_c(get_admiral_option("subject_keys"), dose_freq, start_date,
+  keep_source_vars = c(get_admiral_option("subject_keys"), dose_freq, start_date,
     start_datetime, end_date, end_datetime)
 )
 ```
@@ -173,7 +173,7 @@ create_single_dose_dataset(
 
   Default value
 
-  :   `expr_c(get_admiral_option("subject_keys"), dose_freq, start_date, start_datetime, end_date, end_datetime)`
+  :   `c(get_admiral_option("subject_keys"), dose_freq, start_date, start_datetime, end_date, end_datetime)`
 
 ## Value
 
