@@ -110,19 +110,20 @@ jobs:
         with:
           ref: gh-pages
           token: ${{ secrets.GITHUB_TOKEN }}
-      - name: Fix single-slash https:/ URLs in search index and pkgdown.yml
+      - name: Fix single-slash https:/ URLs in search index, pkgdown.yml and LLM .md files
         run: |
           # pkgdown generates https:/ (one slash) instead of https:// (two
-          # slashes) in search.json and pkgdown.yml files due to an internal
-          # URL construction bug. This step corrects all such occurrences.
-          find . \( -name "search.json" -o -name "pkgdown.yml" \) -print0 \
+          # slashes) in search.json, pkgdown.yml, and the LLM-facing .md files
+          # due to an internal URL construction bug. This step corrects all
+          # such occurrences across all three file types.
+          find . \( -name "search.json" -o -name "pkgdown.yml" -o -name "*.md" \) -print0 \
             | xargs -0 perl -pi -e 's@https:/([^/])@https://\1@g'
           git config --local user.email "actions@github.com"
           git config --local user.name "GitHub Actions"
           git add -A
           git diff --staged --quiet \
             || git commit \
-              -m "[actions skip] Fix https:/ -> https:// in search index and pkgdown.yml"
+              -m "[actions skip] Fix https:/ -> https:// in search index, pkgdown.yml and LLM .md files"
           git push
   remove_docs:
     name: Remove PR Website
