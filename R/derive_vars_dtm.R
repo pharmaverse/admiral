@@ -441,15 +441,15 @@ convert_dtc_to_dtm <- function(dtc,
 #' @param min_dates_strict Minimum dates (strict)
 #'
 #' The argument works like the `min_dates` argument but it affects the behavior
-#' of the `min_dates` and `max_dates` arguments. The range which is used to
+#' of the `min_dates` and `max_dates` arguments. The range that is used to
 #' determine which of the `min_dates` and `max_dates` are considered is
 #' restricted by the dates specified for `min_dates_strict` (see example below
 #' and the example in the "Avoid Imputed Dates Before a Particular Date" section
 #' in `vignette("imputation")`).
 #'
 #' This argument is useful if the `max_dates` argument is used and there are
-#' strict restrictions on the imputed date like the event start date if event
-#' end date is imputed.
+#' strict restrictions on the imputed date, like the event start date when the
+#' event end date is imputed.
 #'
 #' For example
 #' ```{r echo=TRUE, eval=TRUE}
@@ -499,13 +499,13 @@ convert_dtc_to_dtm <- function(dtc,
 #' @param max_dates_strict Maximum dates (strict)
 #'
 #' The argument works like the `max_dates` argument but it affects the behavior
-#' of the `min_dates` and `max_dates` arguments. The range which is used to
+#' of the `min_dates` and `max_dates` arguments. The range that is used to
 #' determine which of the `min_dates` and `max_dates` are considered is
 #' restricted by the dates specified for `max_dates_strict` (see example below).
 #'
 #' This argument is useful if the `min_dates` argument is used and there are
-#' strict restrictions on the imputed date like date of death or the event end
-#' date if event start date is imputed.
+#' strict restrictions on the imputed date, like date of death or the event end
+#' date when the event start date is imputed.
 #'
 #' For example
 #' ```{r echo=TRUE, eval=TRUE}
@@ -808,7 +808,7 @@ restrict_imputed_dtc_dtm <- function(dtc,
     all_min_dates <- c(min_dates, min_dates_strict)
     if (length(unique(c(length(imputed_dtc), lengths(all_min_dates)))) != 1) {
       cli_abort(paste(
-        "Length of {.arg min_dates} or {.arg min_dates_strict} do not match",
+        "Length of {.arg min_dates} or {.arg min_dates_strict} does not match",
         "length of dates to be imputed."
       ))
     }
@@ -829,7 +829,7 @@ restrict_imputed_dtc_dtm <- function(dtc,
     all_max_dates <- c(max_dates, max_dates_strict)
     if (length(unique(c(length(imputed_dtc), lengths(all_max_dates)))) != 1) {
       cli_abort(paste(
-        "Length of {.arg max_dates} or {.arg max_dates_strict} do not match",
+        "Length of {.arg max_dates} or {.arg max_dates_strict} does not match",
         "length of dates to be imputed."
       ))
     }

@@ -5,7 +5,7 @@
         "2020-12-06T12:12:12"), ymd_hms("2020-11-11T11:11:11")), highest_imputation = "Y")
     Condition
       Error in `restrict_imputed_dtc_dtm()`:
-      ! Length of `min_dates` or `min_dates_strict` do not match length of dates to be imputed.
+      ! Length of `min_dates` or `min_dates_strict` does not match length of dates to be imputed.
 
 # impute_dtc_dtm Test 18: max_dates length mismatch provides error
 
@@ -15,7 +15,7 @@
       date_imputation = "last")
     Condition
       Error in `restrict_imputed_dtc_dtm()`:
-      ! Length of `max_dates` or `max_dates_strict` do not match length of dates to be imputed.
+      ! Length of `max_dates` or `max_dates_strict` does not match length of dates to be imputed.
 
 # impute_dtc_dtm Test 19: Error if null min/max_dates when highest_imputation = Y
 

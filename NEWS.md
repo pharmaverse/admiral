@@ -10,8 +10,8 @@
 can be used to avoid invalid imputed dates. E.g., if `AESTDTC` is imputed with
 `min_dates = exprs(TRTSDTM)`, `max_dates_strict = exprs(AENDTM)` can be
 specified to ensure the imputed event start date is not after the event end
-date. See `derive_vars_dt()` documentation and the "Avoid Imputed Dates Before a
-Particular Date" section of the [Date and Time
+date. See the `derive_vars_dt()` documentation and the "Avoid Imputed Dates
+Before a Particular Date" section of the [Date and Time
 Imputation](imputation.html#avoid-imputed-dates-before-a-particular-date)
 vignette for details and examples. (#2708)
 

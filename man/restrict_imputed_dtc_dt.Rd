@@ -67,15 +67,15 @@ missing (in the \code{dtc} date).
 \item{min_dates_strict}{Minimum dates (strict)
 
 The argument works like the \code{min_dates} argument but it affects the behavior
-of the \code{min_dates} and \code{max_dates} arguments. The range which is used to
+of the \code{min_dates} and \code{max_dates} arguments. The range that is used to
 determine which of the \code{min_dates} and \code{max_dates} are considered is
 restricted by the dates specified for \code{min_dates_strict} (see example below
 and the example in the "Avoid Imputed Dates Before a Particular Date" section
 in \code{vignette("imputation")}).
 
 This argument is useful if the \code{max_dates} argument is used and there are
-strict restrictions on the imputed date like the event start date if event
-end date is imputed.
+strict restrictions on the imputed date, like the event start date when the
+event end date is imputed.
 
 For example
 
@@ -125,13 +125,13 @@ considered. A date or date-time object is expected.
 \item{max_dates_strict}{Maximum dates (strict)
 
 The argument works like the \code{max_dates} argument but it affects the behavior
-of the \code{min_dates} and \code{max_dates} arguments. The range which is used to
+of the \code{min_dates} and \code{max_dates} arguments. The range that is used to
 determine which of the \code{min_dates} and \code{max_dates} are considered is
 restricted by the dates specified for \code{max_dates_strict} (see example below).
 
 This argument is useful if the \code{min_dates} argument is used and there are
-strict restrictions on the imputed date like date of death or the event end
-date if event start date is imputed.
+strict restrictions on the imputed date, like date of death or the event end
+date when the event start date is imputed.
 
 For example
 

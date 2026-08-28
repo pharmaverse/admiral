@@ -5,7 +5,7 @@
       highest_imputation = "Y", date_imputation = "first")
     Condition
       Error in `restrict_imputed_dtc_dt()`:
-      ! Length of `min_dates` or `min_dates_strict` do not match length of dates to be imputed.
+      ! Length of `min_dates` or `min_dates_strict` does not match length of dates to be imputed.
 
 # impute_dtc_dt Test 15: max_dates length mismatch provides error
 
@@ -14,7 +14,7 @@
       highest_imputation = "Y", date_imputation = "last")
     Condition
       Error in `restrict_imputed_dtc_dt()`:
-      ! Length of `max_dates` or `max_dates_strict` do not match length of dates to be imputed.
+      ! Length of `max_dates` or `max_dates_strict` does not match length of dates to be imputed.
 
 # impute_dtc_dt Test 16: Error if null min/max_dates when highest_imputation = Y
 
