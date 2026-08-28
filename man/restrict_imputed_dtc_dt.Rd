@@ -42,7 +42,7 @@ ensures that the non-missing parts of the \code{dtc} date are not changed.
 A date or date-time object is expected.
 For example
 
-\if{html}{\out{<div class="sourceCode r">}}\preformatted{library(lubridate)
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{library(lubridate, warn.conflicts = FALSE)
 impute_dtc_dt(
   "2020-11",
   min_dates = list(
