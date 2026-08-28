@@ -114,7 +114,7 @@ convert_dtc_to_dt(
   parts of the `dtc` date are not changed. A date or date-time object is
   expected. For example
 
-      library(lubridate)
+      library(lubridate, warn.conflicts = FALSE)
       impute_dtc_dt(
         "2020-11",
         min_dates = list(
