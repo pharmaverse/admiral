@@ -73,7 +73,9 @@ imputed. If only time is imputed, date variables do not affect the result.
 The argument works like the \code{min_dates} argument but it affects the behavior
 of the \code{min_dates} and \code{max_dates} arguments. The range which is used to
 determine which of the \code{min_dates} and \code{max_dates} are considered is
-restricted by the dates specified for \code{min_dates_strict} (see example below).
+restricted by the dates specified for \code{min_dates_strict} (see example below
+and the example in the "Avoid Imputed Dates Before a Particular Date" section
+in \code{vignette("imputation")}).
 
 This argument is useful if the \code{max_dates} argument is used and there are
 strict restrictions on the imputed date like the event start date if event
@@ -168,7 +170,7 @@ dates for \code{"2020-11"} range from \code{"2020-11-01T00:00:00"} to
 For the first element, the \code{max_dates_strict} argument restricts this range
 to \code{"2020-11-01T00:00:00"} to \code{"2020-11-24T00:00:00"}. The date
 \code{"2020-11-22T12:12:00"} (from the \code{min_dates} argument) is within the
-restricted range and is therefore it is considered.
+restricted range and is therefore considered.
 
 For the second element, the \code{max_dates_strict} argument restricts this range
 to \code{"2020-11-01T00:00:00"} to \code{"2020-11-11T11:11:00"}. In this case

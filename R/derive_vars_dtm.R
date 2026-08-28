@@ -443,7 +443,9 @@ convert_dtc_to_dtm <- function(dtc,
 #' The argument works like the `min_dates` argument but it affects the behavior
 #' of the `min_dates` and `max_dates` arguments. The range which is used to
 #' determine which of the `min_dates` and `max_dates` are considered is
-#' restricted by the dates specified for `min_dates_strict` (see example below).
+#' restricted by the dates specified for `min_dates_strict` (see example below
+#' and the example in the "Avoid Imputed Dates Before a Particular Date" section
+#' in `vignette("imputation")`).
 #'
 #' This argument is useful if the `max_dates` argument is used and there are
 #' strict restrictions on the imputed date like the event start date if event
@@ -528,7 +530,7 @@ convert_dtc_to_dtm <- function(dtc,
 #' For the first element, the `max_dates_strict` argument restricts this range
 #' to `"2020-11-01T00:00:00"` to `"2020-11-24T00:00:00"`. The date
 #' `"2020-11-22T12:12:00"` (from the `min_dates` argument) is within the
-#' restricted range and is therefore it is considered.
+#' restricted range and is therefore considered.
 #'
 #' For the second element, the `max_dates_strict` argument restricts this range
 #' to `"2020-11-01T00:00:00"` to `"2020-11-11T11:11:00"`. In this case

@@ -88,11 +88,6 @@ A date or date-time object is expected.
 For example
 
 \if{html}{\out{<div class="sourceCode r">}}\preformatted{library(lubridate)
-#> 
-#> Attaching package: 'lubridate'
-#> The following objects are masked from 'package:base':
-#> 
-#>     date, intersect, setdiff, union
 impute_dtc_dt(
   "2020-11",
   min_dates = list(
@@ -119,7 +114,9 @@ missing (in the \code{dtc} date).
 The argument works like the \code{min_dates} argument but it affects the behavior
 of the \code{min_dates} and \code{max_dates} arguments. The range which is used to
 determine which of the \code{min_dates} and \code{max_dates} are considered is
-restricted by the dates specified for \code{min_dates_strict} (see example below).
+restricted by the dates specified for \code{min_dates_strict} (see example below
+and the example in the "Avoid Imputed Dates Before a Particular Date" section
+in \code{vignette("imputation")}).
 
 This argument is useful if the \code{max_dates} argument is used and there are
 strict restrictions on the imputed date like the event start date if event
@@ -203,7 +200,7 @@ range from \code{"2020-11-01"} to \code{"2020-11-30"}.
 
 For the first element, the \code{max_dates_strict} argument restricts this range
 to \code{"2020-11-01"} to \code{"2020-11-24"}. The date \code{"2020-11-22"} (from the
-\code{min_dates} argument) is within the restricted range and is therefore it is
+\code{min_dates} argument) is within the restricted range and is therefore
 considered.
 
 For the second element, the \code{max_dates_strict} argument restricts this range
