@@ -1395,7 +1395,7 @@ adae <- ae %>%
     new_vars_prefix = "AST",
     highest_imputation = "M",
     min_dates = exprs(TRTSDT),
-    max_dates_strict = exprs(AENDTM) # avoid that the start time is after the end time
+    max_dates_strict = exprs(AENDTM) # ensure the start time is not after the end time
   ) %>%
   ## Derive analysis end/start date ----
   derive_vars_dtm_to_dt(exprs(ASTDTM, AENDTM)) %>%

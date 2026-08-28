@@ -90,14 +90,16 @@ restrict_imputed_dtc_dtm(
   Minimum dates (strict)
 
   The argument works like the `min_dates` argument but it affects the
-  behavior of the `min_dates` and `max_dates` arguments. The range which
+  behavior of the `min_dates` and `max_dates` arguments. The range that
   is used to determine which of the `min_dates` and `max_dates` are
   considered is restricted by the dates specified for `min_dates_strict`
-  (see example below).
+  (see example below and the example in the "Avoid Imputed Dates Before
+  a Particular Date" section in
+  [`vignette("imputation")`](https:/pharmaverse.github.io/admiral/2708_min_dates_strict/articles/imputation.md)).
 
   This argument is useful if the `max_dates` argument is used and there
-  are strict restrictions on the imputed date like the event start date
-  if event end date is imputed.
+  are strict restrictions on the imputed date, like the event start date
+  when the event end date is imputed.
 
   For example
 
@@ -167,14 +169,14 @@ restrict_imputed_dtc_dtm(
   Maximum dates (strict)
 
   The argument works like the `max_dates` argument but it affects the
-  behavior of the `min_dates` and `max_dates` arguments. The range which
+  behavior of the `min_dates` and `max_dates` arguments. The range that
   is used to determine which of the `min_dates` and `max_dates` are
   considered is restricted by the dates specified for `max_dates_strict`
   (see example below).
 
   This argument is useful if the `min_dates` argument is used and there
-  are strict restrictions on the imputed date like date of death or the
-  event end date if event start date is imputed.
+  are strict restrictions on the imputed date, like date of death or the
+  event end date when the event start date is imputed.
 
   For example
 
@@ -200,7 +202,7 @@ restrict_imputed_dtc_dtm(
   For the first element, the `max_dates_strict` argument restricts this
   range to `"2020-11-01T00:00:00"` to `"2020-11-24T00:00:00"`. The date
   `"2020-11-22T12:12:00"` (from the `min_dates` argument) is within the
-  restricted range and is therefore it is considered.
+  restricted range and is therefore considered.
 
   For the second element, the `max_dates_strict` argument restricts this
   range to `"2020-11-01T00:00:00"` to `"2020-11-11T11:11:00"`. In this

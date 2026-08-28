@@ -464,8 +464,8 @@ ae <- tribble(
 ```
 
 The previous example may result in imputed event start dates after event
-end dates. For example if the event end date (`AEENDTC`) of the third
-event in the example is `2019-11-10` , it would be before the imputed
+end dates. For example, if the event end date (`AEENDTC`) of the third
+event in the example is `2019-11-10`, it would be before the imputed
 event start date of `2019-11-11`. This can be avoided by specifying the
 `max_dates_strict` argument.
 

@@ -115,11 +115,6 @@ convert_dtc_to_dt(
   expected. For example
 
       library(lubridate)
-      #>
-      #> Attaching package: 'lubridate'
-      #> The following objects are masked from 'package:base':
-      #>
-      #>     date, intersect, setdiff, union
       impute_dtc_dt(
         "2020-11",
         min_dates = list(
@@ -149,14 +144,16 @@ convert_dtc_to_dt(
   Minimum dates (strict)
 
   The argument works like the `min_dates` argument but it affects the
-  behavior of the `min_dates` and `max_dates` arguments. The range which
+  behavior of the `min_dates` and `max_dates` arguments. The range that
   is used to determine which of the `min_dates` and `max_dates` are
   considered is restricted by the dates specified for `min_dates_strict`
-  (see example below).
+  (see example below and the example in the "Avoid Imputed Dates Before
+  a Particular Date" section in
+  [`vignette("imputation")`](https:/pharmaverse.github.io/admiral/2708_min_dates_strict/articles/imputation.md)).
 
   This argument is useful if the `max_dates` argument is used and there
-  are strict restrictions on the imputed date like the event start date
-  if event end date is imputed.
+  are strict restrictions on the imputed date, like the event start date
+  when the event end date is imputed.
 
   For example
 
@@ -219,14 +216,14 @@ convert_dtc_to_dt(
   Maximum dates (strict)
 
   The argument works like the `max_dates` argument but it affects the
-  behavior of the `min_dates` and `max_dates` arguments. The range which
+  behavior of the `min_dates` and `max_dates` arguments. The range that
   is used to determine which of the `min_dates` and `max_dates` are
   considered is restricted by the dates specified for `max_dates_strict`
   (see example below).
 
   This argument is useful if the `min_dates` argument is used and there
-  are strict restrictions on the imputed date like date of death or the
-  event end date if event start date is imputed.
+  are strict restrictions on the imputed date, like date of death or the
+  event end date when the event start date is imputed.
 
   For example
 
@@ -250,7 +247,7 @@ convert_dtc_to_dt(
   For the first element, the `max_dates_strict` argument restricts this
   range to `"2020-11-01"` to `"2020-11-24"`. The date `"2020-11-22"`
   (from the `min_dates` argument) is within the restricted range and is
-  therefore it is considered.
+  therefore considered.
 
   For the second element, the `max_dates_strict` argument restricts this
   range to `"2020-11-01"` to `"2020-11-11"`. In this case `"2020-11-22"`
