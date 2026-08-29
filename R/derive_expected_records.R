@@ -92,7 +92,7 @@ derive_expected_records <- function(dataset,
   assert_data_frame(dataset_ref)
   assert_data_frame(
     dataset,
-    required_vars = expr_c(by_vars, chr2vars(colnames(dataset_ref)))
+    required_vars = c(by_vars, chr2vars(colnames(dataset_ref)))
   )
   assert_varval_list(set_values_to, optional = TRUE)
 

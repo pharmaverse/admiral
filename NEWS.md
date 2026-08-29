@@ -6,7 +6,36 @@
 
 ## Breaking Changes
 
+- The following functions are entering the next phase of the [deprecation process](https://pharmaverse.github.io/admiraldev/articles/programming_strategy.html#deprecation):
+
+  **Phase 1 (message)**
+
+  No functions or arguments in this phase.
+
+  **Phase 2 (warning)**
+
+  - `derive_var_merged_summary()` is deprecated in favor of `derive_vars_merged_summary()`.
+  - `derive_var_atoxgr_dir(abnormal_indicator = )` is deprecated in favor of the `low_indicator` and
+  `high_indicator` arguments.
+
+  **Phase 3 (error)**
+
+  - `derive_param_extreme_record()` is deprecated in favor of `derive_extreme_event()`.
+  - `derive_var_dthcaus()` is deprecated in favor of `derive_vars_extreme_event()`.
+  - `dthcaus_source()` is deprecated in favor of `event()`.
+  - `date_source()` is deprecated in favor of `event()`.
+  - `derive_var_extreme_dt()` is deprecated in favor of `derive_vars_extreme_event()`.
+  - `derive_var_extreme_dtm()` is deprecated in favor of `derive_vars_extreme_event()`.
+  - `get_summary_records()` is deprecated in favor of `derive_summary_records()`.
+
+  **Phase 4 (removed)**
+
+  - `call_user_fun()` has been removed.
+
 ## Documentation
+
+- Updated the "Lab Grading" vignette to replace the deprecated `abnormal_indicator` argument reference
+  with the new `high_indicator` argument in `derive_var_atoxgr_dir()`.
 
 ## Various
 
@@ -18,7 +47,9 @@ duplicate warning in the "Higher Order Functions" vignette. (#3153)
 <details>
 <summary>Developer Notes</summary>
 
-- Update to roxygen2 8.1.0. (#3171)
+- Updated to roxygen2 8.1.0. (#3171)
+
+- Replaced internal uses of `expr_c()` with `c()` due to `{admiraldev}`'s deprecation of `expr_c()`. (#3179)
 
 </details>
 

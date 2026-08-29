@@ -161,7 +161,7 @@ filter_relative <- function(dataset,
       case_sensitive = FALSE
     )
   assert_logical_scalar(inclusive)
-  assert_data_frame(dataset, required_vars = expr_c(by_vars, extract_vars(order)))
+  assert_data_frame(dataset, required_vars = c(by_vars, extract_vars(order)))
   check_type <-
     assert_character_scalar(
       check_type,

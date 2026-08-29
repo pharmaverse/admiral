@@ -70,7 +70,7 @@ derive_var_analysis_ratio <- function(dataset,
   numer_var <- assert_symbol(enexpr(numer_var))
   denom_var <- assert_symbol(enexpr(denom_var))
 
-  assert_data_frame(dataset, required_vars = expr_c(numer_var, denom_var))
+  assert_data_frame(dataset, required_vars = c(numer_var, denom_var))
   new_var <- assert_symbol(enexpr(new_var), optional = TRUE)
 
   if (is.null(new_var)) {

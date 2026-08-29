@@ -584,7 +584,7 @@ derive_extreme_records <- function(dataset = NULL,
   )
   assert_data_frame(
     dataset_add,
-    required_vars = expr_c(by_vars, extract_vars(order))
+    required_vars = c(by_vars, extract_vars(order))
   )
   assert_data_frame(
     dataset_ref,

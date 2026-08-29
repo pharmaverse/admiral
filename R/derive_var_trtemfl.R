@@ -392,7 +392,7 @@ derive_var_trtemfl <- function(dataset,
 
   # Assert required variables
   required_vars <-
-    expr_c(
+    c(
       start_date,
       end_date,
       trt_start_date,
@@ -449,7 +449,7 @@ derive_var_trtemfl <- function(dataset,
     dataset <- dataset %>%
       derive_vars_merged(
         dataset_add = dataset,
-        by_vars = expr_c(subject_keys, group_var),
+        by_vars = c(subject_keys, group_var),
         order = exprs(!!start_date),
         new_vars = exprs(!!new_ae_cond := "N"),
         filter_add = !!start_date < !!trt_start_date,
