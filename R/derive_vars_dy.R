@@ -79,7 +79,7 @@ derive_vars_dy <- function(dataset,
   # assertions
   reference_date <- assert_symbol(enexpr(reference_date))
   assert_vars(source_vars)
-  assert_data_frame(dataset, required_vars = expr_c(source_vars, reference_date))
+  assert_data_frame(dataset, required_vars = c(source_vars, reference_date))
 
   # Warn if `*DY` variables already exist
   n_vars <- length(source_vars)

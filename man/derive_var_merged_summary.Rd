@@ -115,10 +115,9 @@ matching observation in the input dataset are ignored.
 }
 }
 \seealso{
-\code{\link[=derive_summary_records]{derive_summary_records()}}, \code{\link[=get_summary_records]{get_summary_records()}}
+\code{\link[=derive_summary_records]{derive_summary_records()}}
 
 Other deprecated:
-\code{\link[=call_user_fun]{call_user_fun()}},
 \code{\link[=date_source]{date_source()}},
 \code{\link[=derive_param_extreme_record]{derive_param_extreme_record()}},
 \code{\link[=derive_var_dthcaus]{derive_var_dthcaus()}},

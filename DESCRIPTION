@@ -1,7 +1,7 @@
 Type: Package
 Package: admiral
 Title: ADaM in R Asset Library
-Version: 1.5.0.9003
+Version: 1.5.0.9007
 Authors@R: c(
     person("Edoardo", "Mancini", , "edoardo.mancini@roche.com", role = c("aut", "cre"),
            comment = c(ORCID = "0009-0006-4899-8641")),
@@ -69,7 +69,7 @@ VignetteBuilder:
 Config/Needs/website: gert, rmarkdown
 Config/roxygen2/markdown: TRUE
 Config/roxygen2/roclets: collate, namespace, admiraldev::rdx_roclet
-Config/roxygen2/version: 8.0.0
+Config/roxygen2/version: 8.1.0
 Config/testthat/edition: 3
 Encoding: UTF-8
 Language: en-US

@@ -141,7 +141,7 @@ derive_vars_transposed <- function(dataset,
   assert_vars(by_vars)
   assert_vars(id_vars, optional = TRUE)
   assert_data_frame(dataset, required_vars = replace_values_by_names(by_vars))
-  assert_data_frame(dataset_merge, required_vars = expr_c(by_vars, key_var, value_var))
+  assert_data_frame(dataset_merge, required_vars = c(by_vars, key_var, value_var))
   relationship <- assert_character_scalar(
     relationship,
     values = c("one-to-one", "one-to-many", "many-to-one", "many-to-many"),

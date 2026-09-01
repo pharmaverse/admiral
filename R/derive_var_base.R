@@ -92,7 +92,7 @@ derive_var_base <- function(dataset,
   filter <- assert_filter_cond(enexpr(filter))
   assert_data_frame(
     dataset,
-    required_vars = expr_c(by_vars, source_var)
+    required_vars = c(by_vars, source_var)
   )
   warn_if_vars_exist(dataset, as_name(new_var))
 

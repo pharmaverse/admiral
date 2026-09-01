@@ -98,7 +98,7 @@ derive_vars_aage <- function(dataset,
                              type = "interval") {
   start_date <- assert_symbol(enexpr(start_date))
   end_date <- assert_symbol(enexpr(end_date))
-  assert_data_frame(dataset, required_vars = expr_c(start_date, end_date))
+  assert_data_frame(dataset, required_vars = c(start_date, end_date))
 
   assert_character_scalar(age_unit, values = c(
     c("year", "years", "yr", "yrs", "y"),
@@ -189,7 +189,7 @@ derive_vars_aage <- function(dataset,
 #' derive_var_age_years(data, AGE, age_unit = "months", new_var = AAGE)
 derive_var_age_years <- function(dataset, age_var, age_unit = NULL, new_var) {
   age_variable <- assert_symbol(enexpr(age_var))
-  assert_data_frame(dataset, required_vars = expr_c(age_variable))
+  assert_data_frame(dataset, required_vars = c(age_variable))
 
   age_var <- pull(dataset, !!age_variable)
   assert_numeric_vector(age_var)
