@@ -54,6 +54,10 @@
 
 ### Documentation
 
+- Corrected the ADLB template label for `PARAMCD = "CK"` from
+  `"Creatinine Kinase"` to `"Creatine Kinase"`
+  ([\#3170](https://github.com/pharmaverse/admiral/issues/3170)).
+
 - Updated the “Lab Grading” vignette to replace the deprecated
   `abnormal_indicator` argument reference with the new `high_indicator`
   argument in
