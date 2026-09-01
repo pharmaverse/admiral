@@ -8,6 +8,8 @@
 
 ## Documentation
 
+- Correct the ADLB template label for `PARAMCD = "CK"` from `"Creatinine Kinase"` to `"Creatine Kinase"` (#3170).
+
 ## Various
 
 - Updated the default `ae_event`, `ae_ser_event`, `ae_gr1_event`, `ae_gr2_event`, `ae_gr3_event`, 
