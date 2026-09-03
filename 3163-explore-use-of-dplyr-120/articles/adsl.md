@@ -710,9 +710,11 @@ format_agegr1 <- function(var_input) {
   )
 }
 format_region1 <- function(var_input) {
-  replace_when(
-    if_else(is.na(var_input), "Missing", "Rest of the World"),
-    var_input %in% c("CAN", "USA") ~ "North America"
+  recode_values(
+    var_input,
+    c("CAN", "USA") ~ "North America",
+    NA_character_ ~ "Missing",
+    default = "Rest of the World"
   )
 }
 
