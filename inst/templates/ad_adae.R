@@ -73,13 +73,6 @@ adae <- ae %>%
     new_vars = adsl_vars,
     by = exprs(STUDYID, USUBJID)
   ) %>%
-  ## Derive analysis start time ----
-  derive_vars_dtm(
-    dtc = AESTDTC,
-    new_vars_prefix = "AST",
-    highest_imputation = "M",
-    min_dates = exprs(TRTSDT)
-  ) %>%
   ## Derive analysis end time ----
   derive_vars_dtm(
     dtc = AEENDTC,
@@ -88,6 +81,14 @@ adae <- ae %>%
     date_imputation = "last",
     time_imputation = "last",
     max_dates = exprs(DTHDT, EOSDT)
+  ) %>%
+  ## Derive analysis start time ----
+  derive_vars_dtm(
+    dtc = AESTDTC,
+    new_vars_prefix = "AST",
+    highest_imputation = "M",
+    min_dates = exprs(TRTSDT),
+    max_dates_strict = exprs(AENDTM) # ensure the start time is not after the end time
   ) %>%
   ## Derive analysis end/start date ----
   derive_vars_dtm_to_dt(exprs(ASTDTM, AENDTM)) %>%

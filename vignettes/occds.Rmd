@@ -131,18 +131,19 @@ from `ASTDTM` and `AENDTM`, respectively, using function `derive_vars_dtm_to_dt(
 ```{r eval=TRUE}
 adae <- adae %>%
   derive_vars_dtm(
-    dtc = AESTDTC,
-    new_vars_prefix = "AST",
-    highest_imputation = "M",
-    min_dates = exprs(TRTSDT)
-  ) %>%
-  derive_vars_dtm(
     dtc = AEENDTC,
     new_vars_prefix = "AEN",
     highest_imputation = "M",
     date_imputation = "last",
     time_imputation = "last",
     max_dates = exprs(DTHDT, EOSDT)
+  ) %>%
+  derive_vars_dtm(
+    dtc = AESTDTC,
+    new_vars_prefix = "AST",
+    highest_imputation = "M",
+    min_dates = exprs(TRTSDT),
+    max_dates_strict = exprs(AENDTM)
   ) %>%
   derive_vars_dtm_to_dt(exprs(ASTDTM, AENDTM)) %>%
   derive_vars_dy(
@@ -160,6 +161,13 @@ dataset_vignette(
   )
 )
 ```
+
+Please note that using the `max_dates_strict` argument in the `ASTDTM`
+derivation ensures the imputed event start date is not after the event end date.
+See the examples of `derive_vars_dt()` and the example in the "Avoid Imputed
+Dates Before a Particular Date" section of the [Date and Time
+Imputation](imputation.html#avoid-imputed-dates-before-a-particular-date)
+vignette for more details.
 
 See also [Date and Time Imputation](imputation.html).
 

@@ -1,4 +1,4 @@
-url: https://pharmaverse.github.io/admiral
+url: https://pharmaverse.github.io/admiral/
 
 template:
   math-rendering: mathjax
@@ -92,10 +92,10 @@ authors:
     href: https://github.com/bms63
   F. Hoffmann-La Roche AG:
     html: "<a href='https://www.roche.com/'><img src='man/figures/roche_logo.png' height='34' alt='Roche logo' /></a>"
-    href: https://roche.com/
+    href: https://www.roche.com/
   GlaxoSmithKline LLC:
-    html: "<a href='https://www.gsk.com/'><img src='man/figures/gsk_logo.png' height='20' alt='GSK logo' /></a>"
-    href: https://gsk.com/
+    html: "<a href='https://www.gsk.com/en-gb/'><img src='man/figures/gsk_logo.png' height='20' alt='GSK logo' /></a>"
+    href: https://www.gsk.com/en-gb/
 
 reference:
 - title: Derivations for Adding Variables
