@@ -260,11 +260,7 @@ get_many_to_one_dataset <- function() {
 #' yn_to_numeric(c("Y", "N", NA_character_))
 yn_to_numeric <- function(arg) {
   assert_character_vector(arg)
-  case_when(
-    arg == "Y" ~ 1,
-    arg == "N" ~ 0,
-    TRUE ~ NA_real_
-  )
+  recode_values(arg, "Y" ~ 1, "N" ~ 0)
 }
 
 #' Print `source` Objects

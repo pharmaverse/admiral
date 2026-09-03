@@ -41,6 +41,9 @@
 
 ## Various
 
+- The minimum `dplyr` version was bumped to `1.2.0` to make use of the new
+`recode_values()`, `filter_out()`, and `replace_when()` functions. (#3163)
+
 - Updated the default `ae_event`, `ae_ser_event`, `ae_gr1_event`, `ae_gr2_event`, `ae_gr3_event`, 
 `ae_gr4_event`, `ae_gr5_event`, `ae_gr_35_event`, `ae_wd_event` and `ae_sev_event` objects to 
 specify `order = exprs(AESEQ)` so that AEs on the same date are differentiated. This fixes a

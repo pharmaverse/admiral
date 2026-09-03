@@ -88,7 +88,7 @@ restrict_derivation <- function(dataset,
 
   # Split input dataset
   data_ignore <- dataset %>%
-    filter(!(!!filter) | is.na(!!filter))
+    filter_out(!!filter)
   data_derive <- dataset %>%
     filter(!!filter)
 
