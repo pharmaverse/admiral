@@ -177,6 +177,7 @@ that all our developers and contributors must follow, so that all our code has a
 * Please see the [FAQ](https://pharmaverse.github.io/admiral/cran-release/articles/faq.html) for the most frequent questions.
 * Please see the [Contribution Model](https://pharmaverse.github.io/admiral/cran-release/CONTRIBUTING.html) for how to get involved with making contributions.
 * Please see [FAQ: R and Package Versions](https://pharmaverse.github.io/admiral/cran-release/articles/faq.html#why-do-we-use-a-certain-r-version-and-package-versions-for-development) for why we develop with certain R and package versions.
+* Please see the [{admiral} agent skills](https://github.com/RConsortium/pharma-skills/tree/main/admiral) for AI-agent skill definitions that help derive ADaM datasets with `{admiral}`.
 
 ## Pharmaverse Blog
 

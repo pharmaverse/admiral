@@ -249,6 +249,8 @@ navbar:
         href: articles/templates.html
       - text: Presentation Archive
         href: https://pharmaverse.github.io/admiraldiscovery/articles/presentation_archive.html
+      - text: Agent Skills 🤖
+        href: https://github.com/RConsortium/pharma-skills/tree/main/admiral
     reference:
       text: Reference
       href: reference/
