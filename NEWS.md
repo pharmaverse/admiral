@@ -39,6 +39,9 @@
 - Updated the "Lab Grading" vignette to replace the deprecated `abnormal_indicator` argument reference
   with the new `high_indicator` argument in `derive_var_atoxgr_dir()`.
 
+- Referenced the [{admiral} agent skills](https://github.com/RConsortium/pharma-skills/tree/main/admiral)
+  in the README and the pkgdown "Get Started" navbar. (#3159)
+
 ## Various
 
 - Updated the default `ae_event`, `ae_ser_event`, `ae_gr1_event`, `ae_gr2_event`, `ae_gr3_event`, 
