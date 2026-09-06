@@ -6,7 +6,7 @@ name: admiral CI/CD Workflows
 
 on:
   # 'workflow_dispatch' gives you the ability
-  # to run this workflow on demand, anytime
+  # to run this workflow on demand
   workflow_dispatch:
   # 'push' events are triggered when commits
   # are pushed to one of these branches
