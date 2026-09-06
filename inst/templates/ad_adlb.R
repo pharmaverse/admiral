@@ -41,7 +41,7 @@ param_lookup <- tibble::tribble(
   "BUN",        "BUN",                     "Blood Urea Nitrogen (mmol/L)",       9,
   "CA",          "CA",                                 "Calcium (mmol/L)",      10,
   "CHOL",    "CHOLES",                             "Cholesterol (mmol/L)",      11,
-  "CK",          "CK",                          "Creatinine Kinase (U/L)",      12,
+  "CK",          "CK",                            "Creatine Kinase (U/L)",      12,
   "CL",          "CL",                                "Chloride (mmol/L)",      13,
   "COLOR",    "COLOR",                                            "Color",      14,
   "CREAT",    "CREAT",                              "Creatinine (umol/L)",      15,
