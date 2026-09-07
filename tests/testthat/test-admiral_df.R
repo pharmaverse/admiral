@@ -54,11 +54,13 @@ test_that("get_admiral_keys Test 4: extracts the keys defined for a single datas
   skip_if_not_installed("metacore")
 
   adsl_spec <- load_pilot_adam_dataset_spec("ADSL")
+  adae_spec <- load_pilot_adam_dataset_spec("ADAE")
 
-  result <- get_admiral_keys(adsl_spec)
+  adsl_keys <- get_admiral_keys(adsl_spec)
+  adae_keys <- get_admiral_keys(adae_spec)
 
-  expect_true(is.character(result))
-  expect_true(length(result) > 0)
+  expect_identical(adsl_keys, "USUBJID")
+  expect_identical(adae_keys, c("USUBJID", "AETERM", "ASTDT", "AESEQ"))
 })
 
 ## Test 5: dataset_name is required when the spec has more than one dataset ----
