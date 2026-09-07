@@ -2,6 +2,12 @@
 
 ## New Features
 
+- Added `get_admiral_keys()` and `set_admiral_keys()` to extract a dataset's
+key variables from a `{metacore}` specification, and `as_admiral_df()` to tag
+a data frame with the new `admiral_df` class. These are new exported
+utilities with no behavioral effect yet -- `summary()` support for
+`admiral_df` objects lands in a follow-up PR. (#3160)
+
 ## Updates of Existing Functions
 
 ## Breaking Changes

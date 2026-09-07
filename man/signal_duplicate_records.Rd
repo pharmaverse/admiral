@@ -71,6 +71,7 @@ signal_duplicate_records(adsl, exprs(USUBJID), cnd_type = "message")
 \seealso{
 Other internal:
 \code{\link{admiral-package}},
+\code{\link[=as_admiral_df]{as_admiral_df()}},
 \code{\link[=extract_duplicate_records]{extract_duplicate_records()}},
 \code{\link[=format.basket_select]{format.basket_select()}}
 }
