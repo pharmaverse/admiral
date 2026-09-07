@@ -110,12 +110,6 @@ can be used to create `ASTDY` and `AENDY`.
 ``` r
 adae <- adae %>%
   derive_vars_dtm(
-    dtc = AESTDTC,
-    new_vars_prefix = "AST",
-    highest_imputation = "M",
-    min_dates = exprs(TRTSDT)
-  ) %>%
-  derive_vars_dtm(
     dtc = AEENDTC,
     new_vars_prefix = "AEN",
     highest_imputation = "M",
@@ -123,12 +117,28 @@ adae <- adae %>%
     time_imputation = "last",
     max_dates = exprs(DTHDT, EOSDT)
   ) %>%
+  derive_vars_dtm(
+    dtc = AESTDTC,
+    new_vars_prefix = "AST",
+    highest_imputation = "M",
+    min_dates = exprs(TRTSDT),
+    max_dates_strict = exprs(AENDTM)
+  ) %>%
   derive_vars_dtm_to_dt(exprs(ASTDTM, AENDTM)) %>%
   derive_vars_dy(
     reference_date = TRTSDT,
     source_vars = exprs(ASTDT, AENDT)
   )
 ```
+
+Please note that using the `max_dates_strict` argument in the `ASTDTM`
+derivation ensures the imputed event start date is not after the event
+end date. See the examples of
+[`derive_vars_dt()`](https:/pharmaverse.github.io/admiral/main/reference/derive_vars_dt.md)
+and the example in the “Avoid Imputed Dates Before a Particular Date”
+section of the [Date and Time
+Imputation](https:/pharmaverse.github.io/admiral/main/articles/imputation.html#avoid-imputed-dates-before-a-particular-date)
+vignette for more details.
 
 See also [Date and Time
 Imputation](https:/pharmaverse.github.io/admiral/main/articles/imputation.md).

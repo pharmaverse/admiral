@@ -11,7 +11,9 @@ convert_dtc_to_dt(
   highest_imputation = "n",
   date_imputation = "first",
   min_dates = NULL,
+  min_dates_strict = NULL,
   max_dates = NULL,
+  max_dates_strict = NULL,
   preserve = FALSE
 )
 ```
@@ -112,20 +114,75 @@ convert_dtc_to_dt(
   parts of the `dtc` date are not changed. A date or date-time object is
   expected. For example
 
-      impute_dtc_dtm(
+      library(lubridate, warn.conflicts = FALSE)
+      impute_dtc_dt(
         "2020-11",
         min_dates = list(
-         ymd_hms("2020-12-06T12:12:12"),
-         ymd_hms("2020-11-11T11:11:11")
+         ymd("2020-12-06"),
+         ymd("2020-11-11")
         ),
         highest_imputation = "M"
       )
+      #> [1] "2020-11-11"
 
-  returns `"2020-11-11T11:11:11"` because the possible dates for
-  `"2020-11"` range from `"2020-11-01T00:00:00"` to
-  `"2020-11-30T23:59:59"`. Therefore `"2020-12-06T12:12:12"` is ignored.
-  Returning `"2020-12-06T12:12:12"` would have changed the month
+  returns `"2020-11-11"` because the possible dates for `"2020-11"`
+  range from `"2020-11-01"` to `"2020-11-30"`. Therefore `"2020-12-06"`
+  is ignored. Returning `"2020-12-06"` would have changed the month
   although it is not missing (in the `dtc` date).
+
+  Permitted values
+
+  :   a list of dates, e.g.
+      `list(ymd_hms("2021-07-01T04:03:01"), ymd_hms("2022-05-12T13:57:23"))`
+
+  Default value
+
+  :   `NULL`
+
+- min_dates_strict:
+
+  Minimum dates (strict)
+
+  The argument works like the `min_dates` argument but it affects the
+  behavior of the `min_dates` and `max_dates` arguments. The range that
+  is used to determine which of the `min_dates` and `max_dates` are
+  considered is restricted by the dates specified for `min_dates_strict`
+  (see example below and the example in the "Avoid Imputed Dates Before
+  a Particular Date" section in
+  [`vignette("imputation")`](https:/pharmaverse.github.io/admiral/main/articles/imputation.md)).
+
+  This argument is useful if the `max_dates` argument is used and there
+  are strict restrictions on the imputed date, like the event start date
+  when the event end date is imputed.
+
+  For example
+
+      library(lubridate)
+      impute_dtc_dt(
+        c("2020-11", "2020-11"),
+        min_dates_strict = list(
+         c(ymd("2020-11-24"), ymd("2020-11-11"))
+        ),
+        max_dates = list(
+          c(ymd("2020-11-22"), ymd("2020-11-22"))
+        ),
+        highest_imputation = "M",
+        date_imputation = "last"
+      )
+      #> [1] "2020-11-30" "2020-11-22"
+
+  returns `"2020-11-30"`. The possible dates for `"2020-11"` range from
+  `"2020-11-01"` to `"2020-11-30"`.
+
+  For the first element, the `min_dates_strict` argument restricts this
+  range to `"2020-11-24"` to `"2020-11-30"`. Therefore `"2020-11-22"`
+  (from the `max_dates` argument) is ignored as it is not within the
+  restricted range.
+
+  For the second element, the `min_dates_strict` argument restricts this
+  range to `"2020-11-11"` to `"2020-11-30"`. In this case `"2020-11-22"`
+  (from the `max_dates` argument) is within the restricted range and is
+  considered.
 
   Permitted values
 
@@ -144,6 +201,58 @@ convert_dtc_to_dt(
   not after any of the specified dates, e.g., that the imputed date is
   not after the data cut off date. Only dates which are in the range of
   possible dates are considered. A date or date-time object is expected.
+
+  Permitted values
+
+  :   a list of dates, e.g.
+      `list(ymd_hms("2021-07-01T04:03:01"), ymd_hms("2022-05-12T13:57:23"))`
+
+  Default value
+
+  :   `NULL`
+
+- max_dates_strict:
+
+  Maximum dates (strict)
+
+  The argument works like the `max_dates` argument but it affects the
+  behavior of the `min_dates` and `max_dates` arguments. The range that
+  is used to determine which of the `min_dates` and `max_dates` are
+  considered is restricted by the dates specified for `max_dates_strict`
+  (see example below).
+
+  This argument is useful if the `min_dates` argument is used and there
+  are strict restrictions on the imputed date, like date of death or the
+  event end date when the event start date is imputed.
+
+  For example
+
+      library(lubridate)
+      impute_dtc_dt(
+        c("2020-11", "2020-11"),
+        max_dates_strict = list(
+         c(ymd("2020-11-24"), ymd("2020-11-11"))
+        ),
+        min_dates = list(
+          c(ymd("2020-11-22"), ymd("2020-11-22"))
+        ),
+        highest_imputation = "M",
+        date_imputation = "first"
+      )
+      #> [1] "2020-11-22" "2020-11-01"
+
+  returns (`"2020-11-22"`, `"2020-11-01"`). The possible dates for
+  `"2020-11"` range from `"2020-11-01"` to `"2020-11-30"`.
+
+  For the first element, the `max_dates_strict` argument restricts this
+  range to `"2020-11-01"` to `"2020-11-24"`. The date `"2020-11-22"`
+  (from the `min_dates` argument) is within the restricted range and is
+  therefore considered.
+
+  For the second element, the `max_dates_strict` argument restricts this
+  range to `"2020-11-01"` to `"2020-11-11"`. In this case `"2020-11-22"`
+  (from the `max_dates` argument) is outside the restricted range and
+  thus it is ignored.
 
   Permitted values
 

@@ -15,7 +15,9 @@ derive_vars_dt(
   date_imputation = "first",
   flag_imputation = "auto",
   min_dates = NULL,
+  min_dates_strict = NULL,
   max_dates = NULL,
+  max_dates_strict = NULL,
   preserve = FALSE
 )
 ```
@@ -176,20 +178,75 @@ derive_vars_dt(
   parts of the `dtc` date are not changed. A date or date-time object is
   expected. For example
 
-      impute_dtc_dtm(
+      library(lubridate, warn.conflicts = FALSE)
+      impute_dtc_dt(
         "2020-11",
         min_dates = list(
-         ymd_hms("2020-12-06T12:12:12"),
-         ymd_hms("2020-11-11T11:11:11")
+         ymd("2020-12-06"),
+         ymd("2020-11-11")
         ),
         highest_imputation = "M"
       )
+      #> [1] "2020-11-11"
 
-  returns `"2020-11-11T11:11:11"` because the possible dates for
-  `"2020-11"` range from `"2020-11-01T00:00:00"` to
-  `"2020-11-30T23:59:59"`. Therefore `"2020-12-06T12:12:12"` is ignored.
-  Returning `"2020-12-06T12:12:12"` would have changed the month
+  returns `"2020-11-11"` because the possible dates for `"2020-11"`
+  range from `"2020-11-01"` to `"2020-11-30"`. Therefore `"2020-12-06"`
+  is ignored. Returning `"2020-12-06"` would have changed the month
   although it is not missing (in the `dtc` date).
+
+  Permitted values
+
+  :   a list of dates, e.g.
+      `list(ymd_hms("2021-07-01T04:03:01"), ymd_hms("2022-05-12T13:57:23"))`
+
+  Default value
+
+  :   `NULL`
+
+- min_dates_strict:
+
+  Minimum dates (strict)
+
+  The argument works like the `min_dates` argument but it affects the
+  behavior of the `min_dates` and `max_dates` arguments. The range that
+  is used to determine which of the `min_dates` and `max_dates` are
+  considered is restricted by the dates specified for `min_dates_strict`
+  (see example below and the example in the "Avoid Imputed Dates Before
+  a Particular Date" section in
+  [`vignette("imputation")`](https:/pharmaverse.github.io/admiral/main/articles/imputation.md)).
+
+  This argument is useful if the `max_dates` argument is used and there
+  are strict restrictions on the imputed date, like the event start date
+  when the event end date is imputed.
+
+  For example
+
+      library(lubridate)
+      impute_dtc_dt(
+        c("2020-11", "2020-11"),
+        min_dates_strict = list(
+         c(ymd("2020-11-24"), ymd("2020-11-11"))
+        ),
+        max_dates = list(
+          c(ymd("2020-11-22"), ymd("2020-11-22"))
+        ),
+        highest_imputation = "M",
+        date_imputation = "last"
+      )
+      #> [1] "2020-11-30" "2020-11-22"
+
+  returns `"2020-11-30"`. The possible dates for `"2020-11"` range from
+  `"2020-11-01"` to `"2020-11-30"`.
+
+  For the first element, the `min_dates_strict` argument restricts this
+  range to `"2020-11-24"` to `"2020-11-30"`. Therefore `"2020-11-22"`
+  (from the `max_dates` argument) is ignored as it is not within the
+  restricted range.
+
+  For the second element, the `min_dates_strict` argument restricts this
+  range to `"2020-11-11"` to `"2020-11-30"`. In this case `"2020-11-22"`
+  (from the `max_dates` argument) is within the restricted range and is
+  considered.
 
   Permitted values
 
@@ -208,6 +265,58 @@ derive_vars_dt(
   not after any of the specified dates, e.g., that the imputed date is
   not after the data cut off date. Only dates which are in the range of
   possible dates are considered. A date or date-time object is expected.
+
+  Permitted values
+
+  :   a list of dates, e.g.
+      `list(ymd_hms("2021-07-01T04:03:01"), ymd_hms("2022-05-12T13:57:23"))`
+
+  Default value
+
+  :   `NULL`
+
+- max_dates_strict:
+
+  Maximum dates (strict)
+
+  The argument works like the `max_dates` argument but it affects the
+  behavior of the `min_dates` and `max_dates` arguments. The range that
+  is used to determine which of the `min_dates` and `max_dates` are
+  considered is restricted by the dates specified for `max_dates_strict`
+  (see example below).
+
+  This argument is useful if the `min_dates` argument is used and there
+  are strict restrictions on the imputed date, like date of death or the
+  event end date when the event start date is imputed.
+
+  For example
+
+      library(lubridate)
+      impute_dtc_dt(
+        c("2020-11", "2020-11"),
+        max_dates_strict = list(
+         c(ymd("2020-11-24"), ymd("2020-11-11"))
+        ),
+        min_dates = list(
+          c(ymd("2020-11-22"), ymd("2020-11-22"))
+        ),
+        highest_imputation = "M",
+        date_imputation = "first"
+      )
+      #> [1] "2020-11-22" "2020-11-01"
+
+  returns (`"2020-11-22"`, `"2020-11-01"`). The possible dates for
+  `"2020-11"` range from `"2020-11-01"` to `"2020-11-30"`.
+
+  For the first element, the `max_dates_strict` argument restricts this
+  range to `"2020-11-01"` to `"2020-11-24"`. The date `"2020-11-22"`
+  (from the `min_dates` argument) is within the restricted range and is
+  therefore considered.
+
+  For the second element, the `max_dates_strict` argument restricts this
+  range to `"2020-11-01"` to `"2020-11-11"`. In this case `"2020-11-22"`
+  (from the `max_dates` argument) is outside the restricted range and
+  thus it is ignored.
 
   Permitted values
 
@@ -439,7 +548,7 @@ the imputation of the record with `"2019-02"`.
       dtc = MHSTDTC,
       highest_imputation = "M",
       date_imputation = "04-06"
-      )
+    )
     #> # A tibble: 7 × 3
     #>   MHSTDTC               ASTDT      ASTDTF
     #>   <chr>                 <date>     <chr>
@@ -468,12 +577,12 @@ lower boundary for imputation via the `min_dates` argument. This means:
   imputation rules apply
 
     adae <- tribble(
-      ~case, ~AESTDTC, ~TRTSDTM,
-      1, "2020-12", ymd_hms("2020-12-06T12:12:12"),
-      2, "2020", ymd_hms("2020-12-06T12:12:12"),
-      3, "2020-11", ymd_hms("2020-12-06T12:12:12"),
-      4, "2020-01", ymd_hms("2020-12-06T12:12:12"),
-      5, "2021-01", ymd_hms("2020-12-06T12:12:12")
+      ~case, ~AESTDTC,  ~TRTSDTM,
+      1,     "2020-12", ymd_hms("2020-12-06T12:12:12"),
+      2,     "2020",    ymd_hms("2020-12-06T12:12:12"),
+      3,     "2020-11", ymd_hms("2020-12-06T12:12:12"),
+      4,     "2020-01", ymd_hms("2020-12-06T12:12:12"),
+      5,     "2021-01", ymd_hms("2020-12-06T12:12:12")
     )
 
     derive_vars_dt(
@@ -483,7 +592,7 @@ lower boundary for imputation via the `min_dates` argument. This means:
       highest_imputation = "M",
       date_imputation = "first",
       min_dates = exprs(TRTSDTM)
-      )
+    )
     #> # A tibble: 5 × 5
     #>    case AESTDTC TRTSDTM             ASTDT      ASTDTF
     #>   <dbl> <chr>   <dttm>              <date>     <chr>
@@ -492,6 +601,47 @@ lower boundary for imputation via the `min_dates` argument. This means:
     #> 3     3 2020-11 2020-12-06 12:12:12 2020-11-01 D
     #> 4     4 2020-01 2020-12-06 12:12:12 2020-01-01 D
     #> 5     5 2021-01 2020-12-06 12:12:12 2021-01-01 D     
+
+### Restricting the range for `min_dates` (`max_dates_strict`)
+
+As in the previous example, we derive `ASTDT` from `AESTDTC`. Here we
+additionally consider `AENDT` to determine if the potential start dates
+include `TRTSDTM`.
+
+- For partial dates that could potentially include `TRTSDTM` and where
+  `AENDT` is at or after `TRTSDTM` (case 1), the imputed date is
+  adjusted to `TRTSDTM`.
+
+- For partial dates that could potentially include `TRTSDTM` but `AENDT`
+  is before `TRTSDTM` (case 2), standard imputation rules apply without
+  adjustment.
+
+    adae <- tribble(
+      ~case, ~AESTDTC,  ~AENDT,            ~TRTSDTM,
+      1,     "2020-12", ymd("2020-12-12"), ymd_hms("2020-12-06T12:12:12"),
+      2,     "2020",    ymd("2020-11-11"), ymd_hms("2020-12-06T12:12:12"),
+      3,     "2020-11", ymd("2020-11-03"), ymd_hms("2020-12-06T12:12:12"),
+      4,     "2020-01", ymd("2020-01-04"), ymd_hms("2020-12-06T12:12:12"),
+      5,     "2021-01", ymd("2021-01-17"), ymd_hms("2020-12-06T12:12:12")
+    )
+
+    derive_vars_dt(
+      adae,
+      dtc = AESTDTC,
+      new_vars_prefix = "AST",
+      highest_imputation = "M",
+      date_imputation = "first",
+      min_dates = exprs(TRTSDTM),
+      max_dates_strict = exprs(AENDT)
+    )
+    #> # A tibble: 5 × 6
+    #>    case AESTDTC AENDT      TRTSDTM             ASTDT      ASTDTF
+    #>   <dbl> <chr>   <date>     <dttm>              <date>     <chr>
+    #> 1     1 2020-12 2020-12-12 2020-12-06 12:12:12 2020-12-06 D
+    #> 2     2 2020    2020-11-11 2020-12-06 12:12:12 2020-01-01 M
+    #> 3     3 2020-11 2020-11-03 2020-12-06 12:12:12 2020-11-01 D
+    #> 4     4 2020-01 2020-01-04 2020-12-06 12:12:12 2020-01-01 D
+    #> 5     5 2021-01 2021-01-17 2020-12-06 12:12:12 2021-01-01 D     
 
 ### Applying an upper boundary to date imputation with (`max_dates`)
 
@@ -510,12 +660,12 @@ upper boundary for imputation via the `max_dates` argument. This means:
   imputation rules apply
 
     adae <- tribble(
-      ~case, ~AESTDTC, ~TRTSDTM, ~TRTEDTM,
-      1, "2020-12", ymd_hms("2020-01-01T12:12:12"), ymd_hms("2020-12-20T23:59:59"),
-      2, "2020", ymd_hms("2020-01-01T12:12:12"), ymd_hms("2020-12-20T23:59:59"),
-      3, "2020-11", ymd_hms("2020-01-01T12:12:12"), ymd_hms("2020-12-20T23:59:59"),
-      4, "2020-01", ymd_hms("2020-01-01T12:12:12"), ymd_hms("2020-12-20T23:59:59"),
-      5, "2021-01", ymd_hms("2020-01-01T12:12:12"), ymd_hms("2020-12-20T23:59:59")
+      ~case, ~AESTDTC,  ~TRTEDTM,
+      1,     "2020-12", ymd_hms("2020-12-20T23:59:59"),
+      2,     "2020",    ymd_hms("2020-12-20T23:59:59"),
+      3,     "2020-11", ymd_hms("2020-12-20T23:59:59"),
+      4,     "2020-01", ymd_hms("2020-12-20T23:59:59"),
+      5,     "2021-01", ymd_hms("2020-12-20T23:59:59")
     )
 
     derive_vars_dt(
@@ -526,14 +676,14 @@ upper boundary for imputation via the `max_dates` argument. This means:
       date_imputation = "last",
       max_dates = exprs(TRTEDTM)
     )
-    #> # A tibble: 5 × 6
-    #>    case AESTDTC TRTSDTM             TRTEDTM             ASTDT      ASTDTF
-    #>   <dbl> <chr>   <dttm>              <dttm>              <date>     <chr>
-    #> 1     1 2020-12 2020-01-01 12:12:12 2020-12-20 23:59:59 2020-12-20 D
-    #> 2     2 2020    2020-01-01 12:12:12 2020-12-20 23:59:59 2020-12-20 M
-    #> 3     3 2020-11 2020-01-01 12:12:12 2020-12-20 23:59:59 2020-11-30 D
-    #> 4     4 2020-01 2020-01-01 12:12:12 2020-12-20 23:59:59 2020-01-31 D
-    #> 5     5 2021-01 2020-01-01 12:12:12 2020-12-20 23:59:59 2021-01-31 D     
+    #> # A tibble: 5 × 5
+    #>    case AESTDTC TRTEDTM             ASTDT      ASTDTF
+    #>   <dbl> <chr>   <dttm>              <date>     <chr>
+    #> 1     1 2020-12 2020-12-20 23:59:59 2020-12-20 D
+    #> 2     2 2020    2020-12-20 23:59:59 2020-12-20 M
+    #> 3     3 2020-11 2020-12-20 23:59:59 2020-11-30 D
+    #> 4     4 2020-01 2020-12-20 23:59:59 2020-01-31 D
+    #> 5     5 2021-01 2020-12-20 23:59:59 2021-01-31 D     
 
 ### Preserve lower components if higher ones were imputed (`preserve`)
 
