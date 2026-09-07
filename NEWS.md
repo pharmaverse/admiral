@@ -2,16 +2,9 @@
 
 ## New Features
 
-- `as_admiral_df()` was added: it tags a data frame with the `admiral_df` S3
-class, preserving its existing classes. Every exported `derive_*()`,
-`restrict_derivation()`, `slice_derivation()`, `call_derivation()`,
-`filter_extreme()`, `filter_joined()`, `filter_relative()`, `filter_exist()`,
-`filter_not_exist()`, `create_period_dataset()`,
-`create_single_dose_dataset()`, `create_query_data()`,
-`consolidate_metadata()`, and `extract_duplicate_records()` now tags its
-output with this class. This is the first step of a larger `admiral_df`
-diagnostics feature and has no behavioral effect on its own -- no `summary()`
-method is attached yet. (#3160)
+- Add function `as_admiral_df()`. Tags a data frame with the `admiral_df` S3
+class, preserving its existing classes. Admiral dataset functions now tag their
+output with this class. (#3160)
 
 ## Updates of Existing Functions
 
