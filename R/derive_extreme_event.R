@@ -818,5 +818,5 @@ derive_extreme_event <- function(dataset = NULL,
     select(-!!tmp_event_nr_var)
 
   # Create output dataset
-  bind_rows(dataset, new_obs)
+  as_admiral_df(bind_rows(dataset, new_obs))
 }

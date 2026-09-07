@@ -54,10 +54,10 @@ derive_var_trtdurd <- function(dataset,
   end_date <- assert_symbol(enexpr(end_date))
   assert_data_frame(dataset, exprs(!!start_date, !!end_date))
 
-  derive_vars_duration(
+  as_admiral_df(derive_vars_duration(
     dataset,
     new_var = TRTDURD,
     start_date = !!start_date,
     end_date = !!end_date
-  )
+  ))
 }

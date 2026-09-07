@@ -757,7 +757,8 @@ derive_vars_joined <- function(dataset,
         sep = "\n"
       )
     ) %>%
-    remove_tmp_vars()
+    remove_tmp_vars() %>%
+    as_admiral_df()
 }
 
 #' Join Data for "joined" functions

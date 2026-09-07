@@ -219,5 +219,6 @@ filter_relative <- function(dataset,
 
   data %>%
     filter(!!parse_expr(selection_condition)) %>%
-    select(-tmp_obs_nr_match_filter_relative, -tmp_obs_nr_filter_relative)
+    select(-tmp_obs_nr_match_filter_relative, -tmp_obs_nr_filter_relative) %>%
+    as_admiral_df()
 }

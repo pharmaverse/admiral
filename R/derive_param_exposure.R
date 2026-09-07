@@ -180,7 +180,7 @@ derive_param_exposure <- function(dataset = NULL,
     filter_add <- TRUE
   }
 
-  derive_summary_records(
+  as_admiral_df(derive_summary_records(
     dataset,
     dataset_add,
     by_vars = by_vars,
@@ -190,5 +190,5 @@ derive_param_exposure <- function(dataset = NULL,
       !!!set_dt,
       !!!set_values_to
     )
-  )
+  ))
 }

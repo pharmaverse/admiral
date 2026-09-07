@@ -209,7 +209,7 @@ derive_param_bsa <- function(dataset,
     constant_parameters <- c(height_code)
   }
 
-  withCallingHandlers(
+  as_admiral_df(withCallingHandlers(
     derive_param_computed(
       dataset,
       filter = !!filter,
@@ -235,7 +235,7 @@ derive_param_bsa <- function(dataset,
       )
       cnd_muffle(cnd)
     }
-  )
+  ))
 }
 
 #' Compute Body Surface Area (BSA)

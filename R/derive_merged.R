@@ -535,7 +535,8 @@ derive_vars_merged <- function(dataset,
   }
 
   dataset %>%
-    remove_tmp_vars()
+    remove_tmp_vars() %>%
+    as_admiral_df()
 }
 
 
@@ -706,7 +707,8 @@ derive_var_merged_exist_flag <- function(dataset,
     check_type = "none",
     mode = "last"
   ) %>%
-    mutate(!!new_var := if_else(!!new_var == 1, true_value, false_value, missing_value))
+    mutate(!!new_var := if_else(!!new_var == 1, true_value, false_value, missing_value)) %>%
+    as_admiral_df()
 }
 
 #' Merge Lookup Table with Source Dataset
@@ -840,7 +842,9 @@ derive_vars_merged_lookup <- function(dataset,
     }
   }
 
-  res %>% remove_tmp_vars()
+  res %>%
+    remove_tmp_vars() %>%
+    as_admiral_df()
 }
 
 #' Get list of records not mapped from the lookup table.
@@ -1147,7 +1151,7 @@ derive_vars_merged_summary <- function(dataset,
   # one record is created per by group, the error from signal_duplicates_records()
   # need to be updated and the warning from dplyr needs to be suppressed as it
   # is misleading.
-  tryCatch(
+  as_admiral_df(tryCatch(
     derive_vars_merged(
       dataset,
       dataset_add = derive_summary_records(
@@ -1178,7 +1182,7 @@ derive_vars_merged_summary <- function(dataset,
         by_vars = cnd$by_vars
       )
     }
-  )
+  ))
 }
 
 #' Merge Summary Variables
@@ -1289,12 +1293,12 @@ derive_var_merged_summary <- function(dataset,
   assert_data_frame(dataset_add)
   assert_vars(by_vars)
 
-  derive_vars_merged_summary(
+  as_admiral_df(derive_vars_merged_summary(
     dataset = dataset,
     dataset_add = dataset_add,
     by_vars = by_vars,
     new_vars = new_vars,
     filter_add = !!enexpr(filter_add),
     missing_values = missing_values
-  )
+  ))
 }

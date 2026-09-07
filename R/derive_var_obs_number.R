@@ -139,5 +139,6 @@ derive_var_obs_number <- function(dataset,
 
   data %>%
     mutate(!!new_var := row_number()) %>%
-    ungroup()
+    ungroup() %>%
+    as_admiral_df()
 }
