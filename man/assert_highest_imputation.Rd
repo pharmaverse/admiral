@@ -8,8 +8,10 @@ assert_highest_imputation(
   highest_imputation,
   highest_imputation_values,
   date_imputation = NULL,
+  min_dates,
+  min_dates_strict,
   max_dates,
-  min_dates
+  max_dates_strict
 )
 }
 \arguments{
@@ -31,13 +33,13 @@ assert_highest_imputation(
 \item{Default value}{\code{NULL}}
 }}
 
-\item{max_dates}{Optional vector specifying maximum dates for imputation.
+\item{min_dates}{Optional vector specifying minimum dates for imputation.
 
 \describe{
 \item{Default value}{none}
 }}
 
-\item{min_dates}{Optional vector specifying minimum dates for imputation.
+\item{max_dates}{Optional vector specifying maximum dates for imputation.
 
 \describe{
 \item{Default value}{none}
