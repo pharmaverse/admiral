@@ -252,7 +252,7 @@ derive_locf_records <- function(dataset,
   # Get unique combination of visits/timepoints per parameter per subject
   # from the input dataset
   advs_unique_original <- dataset %>%
-    filter(!(is.na(!!analysis_var))) %>%
+    filter_out(is.na(!!analysis_var)) %>%
     select(all_of(exp_obs_by_vars)) %>%
     distinct()
 
@@ -307,7 +307,7 @@ derive_locf_records <- function(dataset,
     group_by(!!!by_vars) %>%
     fill(!!analysis_var, !!!keep_vars) %>%
     ungroup() %>%
-    filter(!(!is.na(!!tmp_missing_avar) & is.na(!!tmp_new_records) & is.na(DTYPE))) %>%
+    filter_out(!is.na(!!tmp_missing_avar) & is.na(!!tmp_new_records) & is.na(DTYPE)) %>%
     remove_tmp_vars()
 
 
@@ -317,7 +317,7 @@ derive_locf_records <- function(dataset,
   if (imputation == "add") {
     # Non-imputed records
     non_locf <- aval_locf %>%
-      filter(!(DTYPE %in% c("LOCF")))
+      filter_out(DTYPE %in% c("LOCF"))
 
     # imputed records
     locf <- aval_locf %>%

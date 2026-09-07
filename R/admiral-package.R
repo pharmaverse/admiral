@@ -6,11 +6,11 @@
 #'
 #' @importFrom dplyr
 #'   across anti_join arrange between bind_cols bind_rows case_when coalesce
-#'   cross_join desc distinct ends_with everything filter first full_join
-#'   group_by group_by_at group_split if_else inner_join lag left_join mutate
-#'   n n_distinct na_if pull reframe rename rename_with row_number select
-#'   semi_join slice starts_with summarise summarise_all tibble tribble
-#'   ungroup union
+#'   cross_join desc distinct ends_with everything filter filter_out first
+#'   full_join group_by group_by_at group_split if_else inner_join lag
+#'   left_join mutate n n_distinct na_if pull recode_values reframe rename
+#'   rename_with replace_when row_number select semi_join slice starts_with
+#'   summarise summarise_all tibble tribble ungroup union
 #'
 #' @importFrom hms as_hms
 #'
