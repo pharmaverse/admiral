@@ -1,0 +1,65 @@
+# 3rd August, 2026 Core Team Meeting - Gemini notes
+
+### Summary
+
+Technical discussions explored NFRT updates and {admiral} summary prototypes alongside community engagement and recruitment strategies for {metacore}.
+
+### Details
+
+#### Meeting Opening and Weather Check
+
+Participants opened the meeting by discussing the weather, with @LiamHobby noting a two-month drought in London and others sharing updates on their respective environments. @mancinie initiated the agenda, noting the meeting would be smaller than usual due to summer holidays.
+
+#### NFRT Function Update
+
+@Kcdahn discussed a proposed update to the NFRT function, specifically regarding the handling of unscheduled visits (such as treatment or study termination visits) that lack nominal times. @Kcdahn explained that these currently require post-processing and proposed using a parameter to set them to `NA` or a placeholder value like 999999. @mancinie advised @Kcdahn and @jeffreyad to evaluate how to program this using existing helper functions to avoid unnecessary complexity or the need for a new helper, noting that the proposed "special" function appeared to be pseudocode rather than actionable code.
+
+#### {admiral} Summary Functionality Presentation
+
+@LiamHobby presented a "kitchen sink" prototype for an {admiral} summary feature designed to automatically summarize datasets. The implementation supports key detection through three methods: inference based on data structure, explicit user input, or metadata retrieved from {metacore}. @LiamHobby demonstrated how this feature generates summaries for ADSL, BDS, and occurrence datasets, including internal data quality checks such as treatment group consistency and missing start dates.
+
+#### {admiral} Summary Functionality Feedback and Refinement
+
+@mancinie expressed concern regarding the integration of data quality checks directly into the {admiral} package, suggesting that it might be better to outsource these to a separate 'ADaM checks' package rather than opening a "can of worms." The group reached a consensus to adopt an iterative approach where the summary function adds checks or information only when relevant variables are present, rather than attempting to perform all checks simultaneously. @LiamHobby agreed to refine the implementation over the coming week by removing excessive checks and focusing on building the summary output based on the variables identified within the data.
+
+#### Use of AI in Development
+
+@LiamHobby shared their experience using Claude to generate the initial prototype for the {admiral} summary functionality, noting the significant efficiency gained from the initial prompt. @mancinie expressed interest in the potential to use large language models for future tasks, such as generating enhanced examples for existing functions like `derive_vars_extreme_event()`.
+
+#### Typo in Template
+
+@mancinie reported a typo in a template where "creatinine" was incorrectly labeled as "creatin," noting that @Lina2689 would be assigned to fix the mapping of the parameter code.
+
+#### Documentation Enhancements
+
+@mancinie highlighted that the function `derive_vars_extreme_event()` (issue 3165) lacks enhanced examples and suggested that someone, possibly using an AI assistant, should take on the task of creating them.
+
+#### {metacore} {metatools} Control Terminology Issue
+
+@mancinie raised an issue where control terminology checks in {metacore} {metatools} often flag errors for numeric values in character fields, such as EG test results, even when the data is valid. @LiamHobby explained that the current tool lacks the capability to pick the correct control terminology list for specific variables when numeric versions exist. @mancinie agreed to open an issue in {metatools}, and @LiamHobby noted they would look into the possibility of allowing numeric comparisons within these checks.
+
+#### Call for Contributions to {metacore}
+
+@LiamHobby requested support from the group for pull requests and code reviews in {metacore}, noting that the package lacks a dedicated core development team. @mancinie suggested posting a call for help in the Pharmaverse Slack, noting that while {admiral} is currently too complex for new contributors due to its codebase maturity, {metacore} could be a more accessible entry point for community members to assist with smaller tasks or hackathons.
+
+#### Strategies for Recruiting Project Contributors
+
+@mancinie suggested that @LiamHobby consider applying to a hackathon or posting on the team Slack channel to find support for their work. @LiamHobby plans to post on Slack to inquire if anyone has free time or interest in getting involved with a different package. @mancinie advised @LiamHobby to provide specific details about the project goals and to present a prepackaged example or clearly define tasks, making it easier for potential contributors to see how they might fit into the project.
+
+#### External Testing and Community Engagement Strategy
+
+@LiamHobby emphasized that it is important to have people, particularly from other companies, test the project internally on their systems to observe behavior, noting that they cannot accomplish this task alone. In response, @mancinie advised against using LinkedIn for this purpose, citing that it often attracts people seeking superficial acknowledgement rather than substantive contribution. Instead, @mancinie recommended that @LiamHobby utilize the dedicated Pharmaverse Slack channel to find more reliable and dedicated assistance.
+
+#### Meeting Conclusion
+
+Following the advice provided, @LiamHobby expressed appreciation for the guidance. @mancinie thanked the attendees, and the meeting concluded with farewells from @mancinie, @adcascone, @LiamHobby, and @Kcdahn.
+
+### Suggested next steps
+
+* @Kcdahn and @jeffreyad will evaluate implementation methods for the NFRLT function to handle unscheduled and special visits without requiring new helper functions.
+* @LiamHobby will iterate on the summary feature by removing data checks and expanding the additive building block based approach.
+* @Lina2689 will amend the mapping of the parameter code to fix the "creatinine" typo.
+* The group will provide additional usage illustrations for the function `derive_vars_extreme_event()` listed in issue 3165.
+* @mancinie will create an issue in {metatools} to document the requirement to allow numeric values in control terminology checks.
+* @LiamHobby will divide the current large pull request for Define XML into multiple smaller components to facilitate review.
+* @LiamHobby will solicit contributions for the {metacore} package via the Pharmaverse Slack channel.

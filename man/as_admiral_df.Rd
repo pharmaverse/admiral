@@ -4,7 +4,7 @@
 \alias{as_admiral_df}
 \title{Tag a Dataset with the \code{admiral_df} Class}
 \usage{
-as_admiral_df(dataset)
+as_admiral_df(dataset, keys = NULL)
 }
 \arguments{
 \item{dataset}{A data frame (or \code{NULL})
@@ -12,10 +12,22 @@ as_admiral_df(dataset)
 \describe{
 \item{Default value}{none}
 }}
+
+\item{keys}{Optional character vector of the intended key variables of
+\code{dataset}, i.e. the variables it should have one record per, e.g. the
+\code{by_vars} (plus \code{PARAMCD}) of the derivation that produced it. When
+supplied, it is stored in the \code{"admiral_keys"} attribute and used by
+\code{\link[=summary.admiral_df]{summary.admiral_df()}} to check the record structure instead of guessing
+it. \code{NULL} leaves any existing attribute untouched.
+
+\describe{
+\item{Default value}{\code{NULL}}
+}}
 }
 \value{
 If \code{dataset} is \code{NULL}, \code{NULL} is returned unchanged. Otherwise \code{dataset}
-with \code{"admiral_df"} prepended to its class attribute.
+with \code{"admiral_df"} prepended to its class attribute (and, if \code{keys} is
+supplied, an \code{"admiral_keys"} attribute).
 }
 \description{
 Adds the \code{admiral_df} class to a data frame (unless it is already present),
@@ -29,8 +41,20 @@ Other internal:
 \code{\link[=extract_duplicate_records]{extract_duplicate_records()}},
 \code{\link[=format.basket_select]{format.basket_select()}},
 \code{\link[=get_admiral_df_type]{get_admiral_df_type()}},
+\code{\link[=infer_admiral_keys]{infer_admiral_keys()}},
 \code{\link[=is_adsl_structure]{is_adsl_structure()}},
-\code{\link[=signal_duplicate_records]{signal_duplicate_records()}}
+\code{\link[=minimal_unique_key]{minimal_unique_key()}},
+\code{\link[=print_adsl_summary]{print_adsl_summary()}},
+\code{\link[=print_bds_summary]{print_bds_summary()}},
+\code{\link[=print_occds_summary]{print_occds_summary()}},
+\code{\link[=print_summary_checks]{print_summary_checks()}},
+\code{\link[=print_vs_adsl_summary]{print_vs_adsl_summary()}},
+\code{\link[=render_summary_table]{render_summary_table()}},
+\code{\link[=signal_duplicate_records]{signal_duplicate_records()}},
+\code{\link[=summarize_adsl]{summarize_adsl()}},
+\code{\link[=summarize_bds]{summarize_bds()}},
+\code{\link[=summarize_occds]{summarize_occds()}},
+\code{\link[=summarize_vs_adsl]{summarize_vs_adsl()}}
 }
 \concept{internal}
 \keyword{internal}

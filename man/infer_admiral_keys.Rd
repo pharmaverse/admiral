@@ -42,17 +42,30 @@ derivation keys are available (i.e. the dataset was not tagged via
 \code{\link[=set_admiral_keys]{set_admiral_keys()}} or by a \verb{derive_*} function). It starts from the
 semantic core of the detected ADaM dataset type (e.g. \code{USUBJID} + \code{PARAMCD}
 for BDS) and adds standard ADaM key variables (analysis visit, timepoint,
-date, period, derivation type) only as far as needed to make the key unique
-(see \code{\link[=minimal_unique_key]{minimal_unique_key()}}).
+relative time, date, interval start/end, period, derivation type) only as far
+as needed to make the key unique, then drops those which turn out not to
+discriminate (see \code{\link[=minimal_unique_key]{minimal_unique_key()}}). The candidate list has to span
+several dataset shapes: findings data is keyed by visit and timepoint,
+exposure by interval start, population-PK by relative time and not by visit
+at all, and any of them may carry derived records separated only by \code{DTYPE}.
 }
 \details{
 For \code{BDS}/\code{TTE}, surrogate/sequence keys such as \code{ASEQ} are deliberately
 \emph{not} used, so that unintended duplicate records remain detectable. For
-\code{OCCDS}, however, \code{ASEQ} \emph{is} the intended record key (there is no
-analysis-value structure to fall back on), so it is required: if \code{ASEQ} is
-absent the record structure cannot be checked and a warning is issued. This
-is still a heuristic; spec-defined or \code{by_vars}-derived keys should be
-preferred.
+\code{OCCDS}, however, the sequence number \emph{is} the intended record key (there is
+no analysis-value structure to fall back on: two adverse events for the same
+subject need not differ in any analysis variable), so it is required rather
+than excluded. \code{ASEQ} is preferred, falling back to the SDTM domain sequence
+(\code{AESEQ}, \code{CMSEQ}, \code{MHSEQ}, ...) which is what occurrence datasets most often
+carry; the two-letter domain prefix is what distinguishes those from
+provenance variables such as \code{SRCSEQ}. If neither is present -- or several
+domain sequences are, making the record key ambiguous -- the record structure
+cannot be checked and a warning is issued.
+
+Note that a well-formed sequence makes the key unique by construction, so the
+\code{OCCDS} structure check is not looking for semantic duplicates but for whole
+records duplicated by a fanned-out merge. This is still a heuristic;
+spec-defined or \code{by_vars}-derived keys should be preferred.
 }
 \seealso{
 Other internal:
@@ -67,11 +80,13 @@ Other internal:
 \code{\link[=print_bds_summary]{print_bds_summary()}},
 \code{\link[=print_occds_summary]{print_occds_summary()}},
 \code{\link[=print_summary_checks]{print_summary_checks()}},
+\code{\link[=print_vs_adsl_summary]{print_vs_adsl_summary()}},
 \code{\link[=render_summary_table]{render_summary_table()}},
 \code{\link[=signal_duplicate_records]{signal_duplicate_records()}},
 \code{\link[=summarize_adsl]{summarize_adsl()}},
 \code{\link[=summarize_bds]{summarize_bds()}},
-\code{\link[=summarize_occds]{summarize_occds()}}
+\code{\link[=summarize_occds]{summarize_occds()}},
+\code{\link[=summarize_vs_adsl]{summarize_vs_adsl()}}
 }
 \concept{internal}
 \keyword{internal}

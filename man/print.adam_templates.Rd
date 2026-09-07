@@ -33,6 +33,8 @@ print(templates)
 \code{\link[=list_all_templates]{list_all_templates()}}
 
 Utilities for printing:
+\code{\link[=check_admiral_df]{check_admiral_df()}},
+\code{\link[=print.admiral_df_check]{print.admiral_df_check()}},
 \code{\link[=print.duplicates]{print.duplicates()}},
 \code{\link[=print.source]{print.source()}},
 \code{\link[=print.summary_admiral_df]{print.summary_admiral_df()}},

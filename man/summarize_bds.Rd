@@ -27,23 +27,26 @@ min / median / max of \code{AVAL}, depending on the variables present.
 \item \code{dtype} -- count of derived records per \code{DTYPE}.
 \item \code{multiple_baselines} -- subject/parameter (and \code{BASETYPE}/\code{ATPT} where
 present) combinations with more than one \code{ABLFL == "Y"} record.
-\item \code{chg_no_base} -- records with \code{CHG}/\code{PCHG} but no \code{BASE}.
-\item \code{avisit_mismatch} -- \code{AVISIT} values mapping to more than one \code{AVISITN},
-plus the reverse.
-\item \code{param_inconsistent} -- \code{PARAMCD} values with more than one distinct
-\code{PARAM} label or \code{AVALU} unit.
 }
 }
 \description{
 Collects the parameter-level information \code{\link[=summary.admiral_df]{summary.admiral_df()}} reports for a
 dataset of type \code{"BDS"}: a per-parameter table (most BDS defects are visible
-in a per-parameter row), the derived records by \code{DTYPE}, and a set of
-record-level consistency checks.
+in a per-parameter row), the derived records by \code{DTYPE}, and the baseline
+uniqueness check.
 }
 \details{
 As for \code{\link[=summarize_adsl]{summarize_adsl()}}, every item is optional: an element is only
-returned when the variables it needs are in the dataset, and the checks are
-diagnostics rather than validations -- reported, never signalled.
+returned when the variables it needs are in the dataset, and
+\code{multiple_baselines} is a diagnostic rather than a validation -- reported,
+never signalled.
+
+It is the only BDS check: \code{ABLFL == "Y"} is expected to be unique within a
+subject and parameter, which makes it the same kind of statement as the
+record structure check, just on a subset of the records. The value-level
+checks (\code{CHG} without \code{BASE}, \code{AVISIT}/\code{AVISITN} consistency, one \code{PARAM}
+per \code{PARAMCD}) were removed in favour of a dedicated ADaM checks package,
+see the entry for 2026-08-03 in \code{summary_admiral_df_design_notes.md}.
 }
 \seealso{
 Other internal:
@@ -59,10 +62,12 @@ Other internal:
 \code{\link[=print_bds_summary]{print_bds_summary()}},
 \code{\link[=print_occds_summary]{print_occds_summary()}},
 \code{\link[=print_summary_checks]{print_summary_checks()}},
+\code{\link[=print_vs_adsl_summary]{print_vs_adsl_summary()}},
 \code{\link[=render_summary_table]{render_summary_table()}},
 \code{\link[=signal_duplicate_records]{signal_duplicate_records()}},
 \code{\link[=summarize_adsl]{summarize_adsl()}},
-\code{\link[=summarize_occds]{summarize_occds()}}
+\code{\link[=summarize_occds]{summarize_occds()}},
+\code{\link[=summarize_vs_adsl]{summarize_vs_adsl()}}
 }
 \concept{internal}
 \keyword{internal}

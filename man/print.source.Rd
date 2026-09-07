@@ -31,7 +31,9 @@ print(death_event)
 }
 \seealso{
 Utilities for printing:
+\code{\link[=check_admiral_df]{check_admiral_df()}},
 \code{\link[=print.adam_templates]{print.adam_templates()}},
+\code{\link[=print.admiral_df_check]{print.admiral_df_check()}},
 \code{\link[=print.duplicates]{print.duplicates()}},
 \code{\link[=print.summary_admiral_df]{print.summary_admiral_df()}},
 \code{\link[=print_named_list]{print_named_list()}},

@@ -33,27 +33,23 @@ stages.
 \item \code{n_dth}, \code{dthcaus} -- death count, and the cause breakdown among the
 deaths.
 \item \code{age}, \code{sex} -- age range and sex breakdown.
-\item \code{arm_mismatch} -- subjects whose \code{ARM} and \code{ACTARM} differ.
-\item \code{saffl_no_trtsdt} -- subjects in the safety population with no treatment
-start date.
-\item \code{trt_end_before_start} -- subjects with \code{TRTEDT} before \code{TRTSDT}.
-\item \code{flag_domain}, \code{flag_domain_vars} -- count of population flag values
-outside \code{Y}/\code{N}/\code{NA}, and the flags containing them.
 }
 }
 \description{
 Collects the subject-level information \code{\link[=summary.admiral_df]{summary.admiral_df()}} reports for a
-dataset of type \code{"ADSL"}: the treatment and population breakdowns a
-programmer checks first, plus a small number of subject-level consistency
-checks.
+dataset of type \code{"ADSL"}: the treatment, population, disposition and
+demographic breakdowns a programmer checks first.
 }
 \details{
 Every item is optional: an element is only returned when the variables it
 needs are in the dataset, so a partially built ADSL is summarized as far as
 it goes. A variable which is present but entirely \code{NA} is treated as not
-yet derived, i.e. the same as absent. The checks (\code{arm_mismatch},
-\code{saffl_no_trtsdt}) are diagnostics rather than validations -- they are
-reported, never signalled.
+yet derived, i.e. the same as absent.
+
+ADSL reports facts only. Subject-level consistency checks (\code{ARM} against
+\code{ACTARM}, treatment dates, population flag domains) were removed in favour
+of a dedicated ADaM checks package, see the entry for 2026-08-03 in
+\code{summary_admiral_df_design_notes.md}.
 }
 \seealso{
 Other internal:
@@ -69,10 +65,12 @@ Other internal:
 \code{\link[=print_bds_summary]{print_bds_summary()}},
 \code{\link[=print_occds_summary]{print_occds_summary()}},
 \code{\link[=print_summary_checks]{print_summary_checks()}},
+\code{\link[=print_vs_adsl_summary]{print_vs_adsl_summary()}},
 \code{\link[=render_summary_table]{render_summary_table()}},
 \code{\link[=signal_duplicate_records]{signal_duplicate_records()}},
 \code{\link[=summarize_bds]{summarize_bds()}},
-\code{\link[=summarize_occds]{summarize_occds()}}
+\code{\link[=summarize_occds]{summarize_occds()}},
+\code{\link[=summarize_vs_adsl]{summarize_vs_adsl()}}
 }
 \concept{internal}
 \keyword{internal}

@@ -8,11 +8,28 @@ cross-dataset section. ADSL is the subject-level source of truth — population
 membership, treatment assignment and dates, death, disposition — so a child
 dataset can be wrong *relative to ADSL* in ways it can never reveal on its own.
 
-Status: the **suggested first increment below is implemented** (2026-08-03,
-`summarize_vs_adsl()` / `print_vs_adsl_summary()` and the
-`summary(x, adsl =)` argument; see `admiral_df_showcase.qmd`). The remaining
-catalogue items (TTE completeness, fatal-AE vs `DTHFL`, `STUDYID` agreement,
-data-cut/consent windows, `population =`, the options channel) are still open.
+Status: the suggested first increment below was implemented on 2026-08-03
+(`summarize_vs_adsl()` / `print_vs_adsl_summary()` and the
+`summary(x, adsl =)` argument; see `admiral_df_showcase.qmd`), and then
+**trimmed the same day** by the core team decision recorded in
+`summary_admiral_df_design_notes.md`.
+
+**What survives in {admiral}:** the facts — the coverage line, the safety
+population and per-arm denominators, OCCDS incidence — and exactly one check,
+**orphan subjects** (`n_orphans`). Orphans stayed because a subject key with
+nothing to point at is a referential-integrity failure, the cross-dataset form
+of the record structure check, rather than a judgement about a value.
+
+**What was removed:** the stale shared variables comparison
+(`stale_total`/`stale_vars`), records after death (`n_after_death`), and
+treatment-emergent records for untreated subjects (`n_emergent_untreated`).
+These compare *values* between two datasets, which is the ADaM checks package's
+job, not a derivation package's.
+
+Section B below is therefore entirely out of scope for {admiral}, and section C
+almost entirely. They are kept as the specification to hand over, not as a
+backlog. The remaining *facts* (per-parameter coverage, `population =`, the
+options channel) are still open and still in scope.
 
 ## Why ADSL specifically
 
@@ -137,11 +154,16 @@ conventions exactly:
 
 Highest signal, no new machinery beyond one join:
 
-1. 🚩 Orphan subjects (with example `USUBJID`s in the object).
-2. Coverage line + per-arm coverage (facts).
-3. 🚩 Stale shared variables, starting with the treatment/date/flag list.
-4. 🚩 Records after death (`DTHDT`).
-5. OCCDS: incidence percentage; 🚩 emergent-without-treatment via ADSL.
+1. 🚩 Orphan subjects (with example `USUBJID`s in the object). — **kept**
+2. Coverage line + per-arm coverage (facts). — **kept**
+3. ~~🚩 Stale shared variables, starting with the treatment/date/flag list.~~
+   Implemented then removed 2026-08-03.
+4. ~~🚩 Records after death (`DTHDT`).~~ Implemented then removed 2026-08-03.
+5. OCCDS: incidence percentage — **kept**;
+   ~~🚩 emergent-without-treatment via ADSL~~ removed 2026-08-03.
 
-TTE per-endpoint completeness and the death-consistency checks are the natural
-second increment (they want the TTE per-`PARAMCD` rework first).
+TTE per-endpoint completeness and the death-consistency checks were the
+intended second increment. After 2026-08-03 only the *fact* half of that is in
+scope here — the TTE per-`PARAMCD` rework (events and censored per endpoint),
+which the `vs ADSL` section can then supply a denominator for. Completeness and
+death consistency go to the ADaM checks package.

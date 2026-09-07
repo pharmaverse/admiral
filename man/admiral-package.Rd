@@ -24,8 +24,20 @@ Other internal:
 \code{\link[=extract_duplicate_records]{extract_duplicate_records()}},
 \code{\link[=format.basket_select]{format.basket_select()}},
 \code{\link[=get_admiral_df_type]{get_admiral_df_type()}},
+\code{\link[=infer_admiral_keys]{infer_admiral_keys()}},
 \code{\link[=is_adsl_structure]{is_adsl_structure()}},
-\code{\link[=signal_duplicate_records]{signal_duplicate_records()}}
+\code{\link[=minimal_unique_key]{minimal_unique_key()}},
+\code{\link[=print_adsl_summary]{print_adsl_summary()}},
+\code{\link[=print_bds_summary]{print_bds_summary()}},
+\code{\link[=print_occds_summary]{print_occds_summary()}},
+\code{\link[=print_summary_checks]{print_summary_checks()}},
+\code{\link[=print_vs_adsl_summary]{print_vs_adsl_summary()}},
+\code{\link[=render_summary_table]{render_summary_table()}},
+\code{\link[=signal_duplicate_records]{signal_duplicate_records()}},
+\code{\link[=summarize_adsl]{summarize_adsl()}},
+\code{\link[=summarize_bds]{summarize_bds()}},
+\code{\link[=summarize_occds]{summarize_occds()}},
+\code{\link[=summarize_vs_adsl]{summarize_vs_adsl()}}
 }
 \author{
 \strong{Maintainer}: Edoardo Mancini \email{edoardo.mancini@roche.com} (\href{https://orcid.org/0009-0006-4899-8641}{ORCID})

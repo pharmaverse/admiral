@@ -5,7 +5,7 @@
     Message
       -- input: BDS summary ----------------------------------------------------------
       Subjects (USUBJID): 2
-      Observations: 3
+      Observations: 3 | Variables: 5
       v Structure (inferred): one record per USUBJID, PARAMCD
       Analysis visits (AVISIT): BASELINE
       Parameters (2):
@@ -50,52 +50,49 @@
         `as_admiral_df()`, passing `keys` explicitly to replace the existing
         attribute.
 
-# print.summary_admiral_df Test 15: the subject-level check lines name what ran
+# print.summary_admiral_df Test 15: the check lines distinguish passed, failed, and not run
 
     Code
       print(summary(clean))
     Message
-      -- clean: ADSL summary ---------------------------------------------------------
-      Subjects (USUBJID): 2
-      Observations: 2
-      v Structure (inferred): one record per USUBJID
-      Treatment (ARM): Drug A: 1 | Placebo: 1
-      Populations: SAFFL 2
-      Subject flow: treated 2
-      v Checks passed: ARM matches ACTARM; no missing TRTSDT in the safety
-        population; population flags only contain Y/N/NA
+      -- clean: BDS summary ----------------------------------------------------------
+      Subjects (USUBJID): 1
+      Observations: 2 | Variables: 6
+      v Structure (inferred): one record per USUBJID, PARAMCD, AVISIT
+      Analysis visits (AVISIT): BASELINE, WEEK 2
+      Parameters (1):
+        PARAMCD  records  subjects  visits  missing  min  median  max
+        SYSBP          2         1       2        0  121   125.5  130
+      v Checks passed: at most one baseline per subject and parameter
 
 ---
 
     Code
       print(summary(broken))
     Message
-      -- broken: ADSL summary --------------------------------------------------------
-      Subjects (USUBJID): 2
-      Observations: 2
-      v Structure (inferred): one record per USUBJID
-      Treatment (ARM): Drug A: 1 | Placebo: 1
-      Populations: SAFFL 2
-      Subject flow: treated 1
-      x 1 subject has different `ARM` and `ACTARM`
-      x 1 subject in the safety population has no `TRTSDT`
-      v Checks passed: population flags only contain Y/N/NA
+      -- broken: BDS summary ---------------------------------------------------------
+      Subjects (USUBJID): 1
+      Observations: 2 | Variables: 6
+      v Structure (inferred): one record per USUBJID, PARAMCD, AVISIT
+      Analysis visits (AVISIT): BASELINE, BASELINE 2
+      Parameters (1):
+        PARAMCD  records  subjects  visits  missing  min  median  max
+        SYSBP          2         1       2        0  118   119.5  121
+      x 1 subject-parameter combination has more than one baseline record (`ABLFL`)
 
 ---
 
     Code
-      print(summary(mixed))
+      print(summary(not_run))
     Message
-      -- mixed: ADSL summary ---------------------------------------------------------
-      Subjects (USUBJID): 2
-      Observations: 2
-      v Structure (inferred): one record per USUBJID
-      Treatment (ARM): Drug A: 1 | Placebo: 1
-      Populations: SAFFL 2
-      Subject flow: treated 2
-      x 1 subject has different `ARM` and `ACTARM`
-      v Checks passed: no missing TRTSDT in the safety population; population flags
-        only contain Y/N/NA
+      -- not_run: BDS summary --------------------------------------------------------
+      Subjects (USUBJID): 1
+      Observations: 2 | Variables: 5
+      v Structure (inferred): one record per USUBJID, PARAMCD, AVISIT
+      Analysis visits (AVISIT): BASELINE, WEEK 2
+      Parameters (1):
+        PARAMCD  records  subjects  visits  missing  min  median  max
+        SYSBP          2         1       2        0  121   125.5  130
 
 # print.summary_admiral_df Test 21: BDS formatted output is stable
 
@@ -104,7 +101,7 @@
     Message
       -- input: BDS summary ----------------------------------------------------------
       Subjects (USUBJID): 2
-      Observations: 5
+      Observations: 5 | Variables: 7
       v Structure (inferred): one record per USUBJID, PARAMCD, AVISITN
       Analysis visits (AVISIT): BASELINE, WEEK 2, WEEK 4
       Parameters (2):
@@ -112,7 +109,23 @@
         DIABP          4         2       3        1   60      65   70
         SYSBP          1         1       1        0  120     120  120
       Derived records (DTYPE): LOCF: 1
-      v Checks passed: AVISIT and AVISITN are consistent; one PARAM/AVALU per PARAMCD
+
+# print.summary_admiral_df Test 30: ADSL comparison formatted output is stable
+
+    Code
+      print(summary(input, adsl = adsl))
+    Message
+      -- input: BDS summary ----------------------------------------------------------
+      Subjects (USUBJID): 3
+      Observations: 3 | Variables: 5
+      v Structure (inferred): one record per USUBJID, PARAMCD
+      Parameters (1):
+        PARAMCD  records  subjects  missing  min  median  max
+        SYSBP          3         3        0  115     121  130
+      Compared with ADSL: 2 of 3 subjects have records (66.7%) | safety population 2
+      of 2
+      By arm (TRT01A): Active 1/1 | Placebo 1/2
+      x 1 subject is not in ADSL (e.g. "9")
 
 # print.summary_admiral_df Test 25: OCCDS formatted output is stable
 
@@ -121,12 +134,11 @@
     Message
       -- input: OCCDS summary --------------------------------------------------------
       Subjects (USUBJID): 2
-      Observations: 4
+      Observations: 4 | Variables: 10
       v Structure (inferred): one record per USUBJID, ASEQ
       Distinct terms: AEBODSYS 2 | AEDECOD 3
       Treatment emergent (TRTEMFL): 3 of 4 records
       Severity/grade (AESEV): MILD: 2 | MODERATE: 1 | SEVERE: 1
       Serious (AESER): 1
-      v Checks passed: occurrence flags are unique per subject and level; no missing
-        ASTDT; no treatment-emergent record before TRTSDT
+      v Checks passed: occurrence flags are unique per subject and level
 

@@ -26,8 +26,9 @@ label (no markup -- cli does not interpret markup in interpolated values)
 No return value, called for side effects.
 }
 \description{
-Shared by the per-type printers (\code{\link[=print_adsl_summary]{print_adsl_summary()}},
-\code{\link[=print_bds_summary]{print_bds_summary()}}): partitions the checks defined in \code{checks} into
+Shared by the per-type printers (\code{\link[=print_bds_summary]{print_bds_summary()}},
+\code{\link[=print_occds_summary]{print_occds_summary()}}, \code{\link[=print_vs_adsl_summary]{print_vs_adsl_summary()}}): partitions the checks
+defined in \code{checks} into
 failed / passed / not run, prints a detailed red bullet per failing check and
 one green confirmation line naming each passed check. A check whose element
 is absent from \code{x} did not run and is not mentioned at all.
@@ -45,11 +46,13 @@ Other internal:
 \code{\link[=print_adsl_summary]{print_adsl_summary()}},
 \code{\link[=print_bds_summary]{print_bds_summary()}},
 \code{\link[=print_occds_summary]{print_occds_summary()}},
+\code{\link[=print_vs_adsl_summary]{print_vs_adsl_summary()}},
 \code{\link[=render_summary_table]{render_summary_table()}},
 \code{\link[=signal_duplicate_records]{signal_duplicate_records()}},
 \code{\link[=summarize_adsl]{summarize_adsl()}},
 \code{\link[=summarize_bds]{summarize_bds()}},
-\code{\link[=summarize_occds]{summarize_occds()}}
+\code{\link[=summarize_occds]{summarize_occds()}},
+\code{\link[=summarize_vs_adsl]{summarize_vs_adsl()}}
 }
 \concept{internal}
 \keyword{internal}

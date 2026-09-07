@@ -2,7 +2,7 @@
 % Please edit documentation in R/admiral_df.R
 \name{get_admiral_df_type}
 \alias{get_admiral_df_type}
-\title{Determine the ADaM Structure of a Dataset}
+\title{Determine the ADaM Dataset Type}
 \usage{
 get_admiral_df_type(dataset)
 }
@@ -18,11 +18,15 @@ A character scalar: one of \code{"ADSL"}, \code{"BDS"}, \code{"OCCDS"}, \code{"T
 \code{"other"}.
 }
 \description{
-Classifies a data frame as one of the common ADaM structures based on the
+Classifies a data frame as one of the common ADaM dataset types based on the
 variables it contains. This is used by \code{\link[=summary.admiral_df]{summary.admiral_df()}} to tailor the
 diagnostic output.
 }
 \details{
+Note that this is the \emph{type} of the dataset (\code{ADSL}, \code{BDS}, ...), not its
+record structure: the latter is the set of key variables it has one record
+per, see \code{\link[=infer_admiral_keys]{infer_admiral_keys()}}.
+
 The following precedence is used (the order matters as, e.g., both \code{"BDS"}
 and \code{"TTE"} datasets contain \code{PARAMCD}):
 \enumerate{
@@ -42,8 +46,20 @@ Other internal:
 \code{\link[=as_admiral_df]{as_admiral_df()}},
 \code{\link[=extract_duplicate_records]{extract_duplicate_records()}},
 \code{\link[=format.basket_select]{format.basket_select()}},
+\code{\link[=infer_admiral_keys]{infer_admiral_keys()}},
 \code{\link[=is_adsl_structure]{is_adsl_structure()}},
-\code{\link[=signal_duplicate_records]{signal_duplicate_records()}}
+\code{\link[=minimal_unique_key]{minimal_unique_key()}},
+\code{\link[=print_adsl_summary]{print_adsl_summary()}},
+\code{\link[=print_bds_summary]{print_bds_summary()}},
+\code{\link[=print_occds_summary]{print_occds_summary()}},
+\code{\link[=print_summary_checks]{print_summary_checks()}},
+\code{\link[=print_vs_adsl_summary]{print_vs_adsl_summary()}},
+\code{\link[=render_summary_table]{render_summary_table()}},
+\code{\link[=signal_duplicate_records]{signal_duplicate_records()}},
+\code{\link[=summarize_adsl]{summarize_adsl()}},
+\code{\link[=summarize_bds]{summarize_bds()}},
+\code{\link[=summarize_occds]{summarize_occds()}},
+\code{\link[=summarize_vs_adsl]{summarize_vs_adsl()}}
 }
 \concept{internal}
 \keyword{internal}

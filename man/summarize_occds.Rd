@@ -31,23 +31,26 @@ record count per value.
 \item \code{n_serious} -- records with \code{AESER == "Y"}.
 \item \code{occ_flag_dups}, \code{occ_flag_vars} -- occurrence flag groups with more
 than one \code{"Y"}, and the flags containing them.
-\item \code{missing_astdt} -- records with no \code{ASTDT}.
-\item \code{pre_trt_emergent} -- treatment-emergent records starting before
-\code{TRTSDT}.
 }
 }
 \description{
 Collects the occurrence-level information \code{\link[=summary.admiral_df]{summary.admiral_df()}} reports for
 a dataset of type \code{"OCCDS"}: the distinct terms at each coding level, the
 treatment-emergent and severity/seriousness breakdowns, and the occurrence
-consistency checks -- in particular the occurrence flag integrity check,
-which the record structure check cannot catch (an \code{AOCCFL} duplicated per
-subject does not change the record count).
+flag integrity check, which the record structure check cannot catch (an
+\code{AOCCFL} duplicated per subject does not change the record count).
 }
 \details{
 As for \code{\link[=summarize_adsl]{summarize_adsl()}}, every item is optional: an element is only
-returned when the variables it needs are in the dataset, and the checks are
-diagnostics rather than validations -- reported, never signalled.
+returned when the variables it needs are in the dataset, and
+\code{occ_flag_dups} is a diagnostic rather than a validation -- reported, never
+signalled.
+
+It is the only OCCDS check, for the same reason \code{multiple_baselines} is the
+only BDS one: it states that a flag is unique within a group. The
+record-level checks (missing \code{ASTDT}, treatment-emergent records before
+\code{TRTSDT}) were removed in favour of a dedicated ADaM checks package, see
+the entry for 2026-08-03 in \code{summary_admiral_df_design_notes.md}.
 
 The occurrence flag check derives its grouping from the flag name: a flag
 whose infix (the part between \code{AOCC} and \code{FL}) contains \code{"S"} (e.g.
@@ -58,6 +61,14 @@ subject. Only \emph{more than one} \code{"Y"} per group is a defect; zero is
 legitimate, because occurrence flags are typically restricted to a subset
 such as the treatment-emergent records. A flag whose level variable is
 absent from the dataset is skipped.
+
+\code{APERIOD} is added to the grouping whenever it is present and populated,
+for every flag. Multi-period designs -- vaccine studies especially -- scope
+their occurrence flags per period, so the first occurrence is flagged once
+per subject \emph{per vaccination}, which is correct and must not be reported as
+a duplicate. The flag name cannot express this (\code{AOCC01FL} is a sponsor
+numbering, not a level), so it is read from the data instead; in a
+single-period study \code{APERIOD} is constant and the grouping is unchanged.
 }
 \seealso{
 Other internal:
@@ -73,10 +84,12 @@ Other internal:
 \code{\link[=print_bds_summary]{print_bds_summary()}},
 \code{\link[=print_occds_summary]{print_occds_summary()}},
 \code{\link[=print_summary_checks]{print_summary_checks()}},
+\code{\link[=print_vs_adsl_summary]{print_vs_adsl_summary()}},
 \code{\link[=render_summary_table]{render_summary_table()}},
 \code{\link[=signal_duplicate_records]{signal_duplicate_records()}},
 \code{\link[=summarize_adsl]{summarize_adsl()}},
-\code{\link[=summarize_bds]{summarize_bds()}}
+\code{\link[=summarize_bds]{summarize_bds()}},
+\code{\link[=summarize_vs_adsl]{summarize_vs_adsl()}}
 }
 \concept{internal}
 \keyword{internal}

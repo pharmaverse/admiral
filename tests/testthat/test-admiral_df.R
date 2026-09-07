@@ -88,6 +88,7 @@ test_that("summary.admiral_df Test 5: returns the expected diagnostics for a BDS
   expect_s3_class(result, "summary_admiral_df")
   expect_identical(result$type, "BDS")
   expect_identical(result$n_obs, 6L)
+  expect_identical(result$n_vars, 5L)
   expect_identical(result$n_subjects, 2L)
   expect_identical(result$params$PARAMCD, c("DIABP", "MAP", "SYSBP"))
   expect_identical(result$avisits, c("BASELINE", "WEEK 2"))
@@ -140,6 +141,94 @@ test_that("summary.admiral_df Test 7: warns if declared keys are no longer in th
     "PILOT01", "1",      "SYSBP",    121,
     "PILOT01", "2",      "SYSBP",    130
   ))))
+})
+
+## Test 31: OCCDS keys fall back to the SDTM domain sequence ----
+test_that("infer_admiral_keys Test 31: OCCDS keys fall back to the SDTM domain sequence", { # nolint
+  occds <- function(...) {
+    as_admiral_df(tibble::tibble(
+      STUDYID = "PILOT01", USUBJID = c("1", "1"), AEDECOD = c("HEADACHE", "NAUSEA"),
+      ...
+    ))
+  }
+
+  # `ASEQ` is preferred when present
+  expect_identical(
+    summary(occds(ASEQ = 1:2, AESEQ = 3:4))$keys,
+    c("USUBJID", "ASEQ")
+  )
+
+  # occurrence datasets most often carry only the domain sequence
+  expect_identical(summary(occds(AESEQ = 1:2))$keys, c("USUBJID", "AESEQ"))
+  expect_identical(summary(occds(CMSEQ = 1:2))$keys, c("USUBJID", "CMSEQ"))
+
+  # `SRCSEQ` is provenance, not a record key: three letters before SEQ, so it
+  # must not be mistaken for a domain sequence
+  expect_warning(
+    result <- summary(occds(SRCSEQ = 1:2)),
+    regexp = "domain sequence"
+  )
+  expect_null(result$keys)
+
+  # several domain sequences make the record key ambiguous rather than obvious
+  expect_warning(
+    ambiguous <- summary(occds(AESEQ = 1:2, CESEQ = 1:2)),
+    regexp = "ambiguous"
+  )
+  expect_null(ambiguous$keys)
+
+  # a duplicated record -- the defect the OCCDS structure check exists for,
+  # since a well-formed sequence is unique by construction
+  dups <- as_admiral_df(tibble::tibble(
+    STUDYID = "PILOT01", USUBJID = c("1", "1"),
+    AEDECOD = c("HEADACHE", "HEADACHE"), AESEQ = c(1L, 1L)
+  ))
+  expect_identical(summary(dups)$n_duplicate_keys, 1L)
+})
+
+## Test 32: the inferred key spans BDS shapes and drops what does not discriminate ----
+test_that("infer_admiral_keys Test 32: the inferred key spans BDS shapes and drops what does not discriminate", { # nolint
+  # exposure: one record per subject, parameter and dosing interval, keyed by
+  # the interval start rather than by an analysis date or a visit
+  adex <- as_admiral_df(tibble::tibble(
+    STUDYID = "PILOT01", USUBJID = "1", PARAMCD = "DOSE", AVAL = c(54, 81),
+    ASTDT = as.Date(c("2024-01-01", "2024-02-01")),
+    AENDT = as.Date(c("2024-01-31", "2024-02-28"))
+  ))
+  expect_identical(summary(adex)$keys, c("USUBJID", "PARAMCD", "ASTDT"))
+
+  # population PK: keyed by relative time, with no visit structure at all
+  adppk <- as_admiral_df(tibble::tibble(
+    STUDYID = "PILOT01", USUBJID = "1", PARAMCD = "CONC",
+    NFRLT = c(0, 1, 2), AVAL = c(0, 12, 8)
+  ))
+  expect_identical(summary(adppk)$keys, c("USUBJID", "PARAMCD", "NFRLT"))
+
+  # a derived record shares every analysis variable with the record it was
+  # derived from, so only DTYPE separates the two within a visit
+  locf <- as_admiral_df(tibble::tibble(
+    STUDYID = "PILOT01", USUBJID = "1", PARAMCD = "SYSBP",
+    AVISITN = c(2, 2, 4, 4), AVAL = c(121, 121, 130, 130),
+    DTYPE = c(NA, "LOCF", NA, "LOCF")
+  ))
+  expect_identical(
+    summary(locf)$keys,
+    c("USUBJID", "PARAMCD", "AVISITN", "DTYPE")
+  )
+
+  # `AVISIT` (redundant with `AVISITN`), `ATPTN`/`ATPT` and `ADT` (constant)
+  # all sit ahead of `DTYPE` in the candidate order, so the walk carries them
+  # on its way to it. None discriminates, so none belongs in the reported key.
+  padded <- as_admiral_df(tibble::tibble(
+    STUDYID = "PILOT01", USUBJID = "1", PARAMCD = "SYSBP",
+    AVISITN = c(2, 2, 4, 4), AVISIT = c("WEEK 2", "WEEK 2", "WEEK 4", "WEEK 4"),
+    ATPTN = 1, ATPT = "PRE", ADT = as.Date("2024-01-15"),
+    AVAL = c(121, 121, 130, 130), DTYPE = c(NA, "LOCF", NA, "LOCF")
+  ))
+  expect_identical(
+    summary(padded)$keys,
+    c("USUBJID", "PARAMCD", "AVISITN", "DTYPE")
+  )
 })
 
 ## Test 8: formatted output is stable ----
@@ -293,31 +382,32 @@ test_that("summarize_adsl Test 14: treats all-NA variables as not yet derived", 
   expect_null(summary(all_na)$adsl$trt_var)
 })
 
-## Test 15: the subject-level check lines name what ran ----
-test_that("print.summary_admiral_df Test 15: the subject-level check lines name what ran", {
+## Test 15: the check lines distinguish passed, failed, and not run ----
+test_that("print.summary_admiral_df Test 15: the check lines distinguish passed, failed, and not run", { # nolint
   clean <- as_admiral_df(tibble::tribble(
-    ~STUDYID,  ~USUBJID, ~ARM,      ~ACTARM,   ~SAFFL, ~TRTSDT,
-    "PILOT01", "1",      "Placebo", "Placebo", "Y",    as.Date("2024-01-01"),
-    "PILOT01", "2",      "Drug A",  "Drug A",  "Y",    as.Date("2024-01-02")
+    ~STUDYID,  ~USUBJID, ~PARAMCD, ~AVISIT,    ~AVAL, ~ABLFL,
+    "PILOT01", "1",      "SYSBP",  "BASELINE",   121, "Y",
+    "PILOT01", "1",      "SYSBP",  "WEEK 2",     130, NA_character_
   ))
-  # both checks pass: one confirmation line naming each check
+  # the check passes: one confirmation line naming it
   expect_snapshot(print(summary(clean)))
 
   broken <- as_admiral_df(tibble::tribble(
-    ~STUDYID,  ~USUBJID, ~ARM,      ~ACTARM,  ~SAFFL, ~TRTSDT,
-    "PILOT01", "1",      "Placebo", "Drug A", "Y",    as.Date("2024-01-01"),
-    "PILOT01", "2",      "Drug A",  "Drug A", "Y",    as.Date(NA)
+    ~STUDYID,  ~USUBJID, ~PARAMCD, ~AVISIT,      ~AVAL, ~ABLFL,
+    "PILOT01", "1",      "SYSBP",  "BASELINE",     121, "Y",
+    "PILOT01", "1",      "SYSBP",  "BASELINE 2",   118, "Y"
   ))
-  # both checks fail: one detailed bullet each, no confirmation line
+  # the check fails: a detailed bullet with the count, no confirmation line
   expect_snapshot(print(summary(broken)))
 
-  # one fails, one passes: the passing check is still reported by name
-  mixed <- as_admiral_df(tibble::tribble(
-    ~STUDYID,  ~USUBJID, ~ARM,      ~ACTARM,  ~SAFFL, ~TRTSDT,
-    "PILOT01", "1",      "Placebo", "Drug A", "Y",    as.Date("2024-01-01"),
-    "PILOT01", "2",      "Drug A",  "Drug A", "Y",    as.Date("2024-01-02")
+  # without ABLFL the check cannot run, and is not mentioned either way --
+  # not run is different from passed
+  not_run <- as_admiral_df(tibble::tribble(
+    ~STUDYID,  ~USUBJID, ~PARAMCD, ~AVISIT,    ~AVAL,
+    "PILOT01", "1",      "SYSBP",  "BASELINE",   121,
+    "PILOT01", "1",      "SYSBP",  "WEEK 2",     130
   ))
-  expect_snapshot(print(summary(mixed)))
+  expect_snapshot(print(summary(not_run)))
 })
 
 ## Test 16: supplied keys override the attribute and inference ----
@@ -384,8 +474,8 @@ test_that("summary.admiral_df Test 17: keys can be read from a metacore specific
   expect_error(summary(input, keys = spec), regexp = "dataset_name")
 })
 
-## Test 18: reports subject flow, deaths, and the date/flag-domain checks ----
-test_that("summarize_adsl Test 18: reports subject flow, deaths, and the date/flag-domain checks", {
+## Test 18: reports subject flow and deaths, and no longer checks ADSL ----
+test_that("summarize_adsl Test 18: reports subject flow and deaths, and no longer checks ADSL", { # nolint
   input <- as_admiral_df(tibble::tibble(
     STUDYID = "PILOT01",
     USUBJID = c("1", "2", "3", "4"),
@@ -393,11 +483,15 @@ test_that("summarize_adsl Test 18: reports subject flow, deaths, and the date/fl
     TRTSDT = as.Date(c("2024-01-05", "2024-01-06", "2024-01-07", NA)),
     # subject 2 ends treatment before starting it
     TRTEDT = as.Date(c("2024-02-01", "2024-01-01", "2024-02-03", NA)),
+    ARM = c("Placebo", "Active", "Placebo", "Placebo"),
+    # subject 2 was mis-dosed
+    ACTARM = c("Placebo", "Placebo", "Placebo", "Placebo"),
     EOSSTT = c("COMPLETED", "DISCONTINUED", "COMPLETED", NA),
     DTHFL = c(NA, "Y", NA, NA),
     DTHCAUS = c(NA, "ADVERSE EVENT", NA, NA),
-    # subject 3 has a flag value outside the Y/N/NA domain
-    SAFFL = c("Y", "Y", "Yes", NA)
+    # subject 3 has a flag value outside the Y/N/NA domain, subject 4 is in the
+    # safety population with no treatment start date
+    SAFFL = c("Y", "Y", "Yes", "Y")
   ))
 
   result <- summary(input)$adsl
@@ -408,9 +502,14 @@ test_that("summarize_adsl Test 18: reports subject flow, deaths, and the date/fl
   )
   expect_identical(result$n_dth, 1L)
   expect_identical(result$dthcaus$DTHCAUS, "ADVERSE EVENT")
-  expect_identical(result$trt_end_before_start, 1L)
-  expect_identical(result$flag_domain, 1L)
-  expect_identical(result$flag_domain_vars, "SAFFL")
+
+  # ADSL reports facts only: the subject-level consistency checks belong in a
+  # dedicated ADaM checks package, so none of these defects is reported here
+  expect_null(result$arm_mismatch)
+  expect_null(result$saffl_no_trtsdt)
+  expect_null(result$trt_end_before_start)
+  expect_null(result$flag_domain)
+  expect_null(result$flag_domain_vars)
 })
 
 # summarize_bds ----
@@ -438,16 +537,12 @@ test_that("summarize_bds Test 19: builds the per-parameter table and DTYPE break
   expect_identical(result$dtype$DTYPE, "LOCF")
   expect_identical(result$dtype$n, 1L)
 
-  # consistent AVISIT/AVISITN and PARAM: the checks ran and passed
-  expect_identical(result$avisit_mismatch, 0L)
-  expect_identical(result$param_inconsistent, 0L)
-  # no ABLFL, CHG, or BASE: those checks did not run
+  # no ABLFL: the one BDS check did not run
   expect_null(result$multiple_baselines)
-  expect_null(result$chg_no_base)
 })
 
-## Test 20: the BDS checks find injected defects ----
-test_that("summarize_bds Test 20: the BDS checks find injected defects", {
+## Test 20: the baseline check finds a duplicate, the value checks are gone ----
+test_that("summarize_bds Test 20: the baseline check finds a duplicate, the value checks are gone", { # nolint
   input <- as_admiral_df(tibble::tribble(
     ~USUBJID, ~PARAMCD, ~PARAM,        ~AVISIT,      ~AVISITN, ~AVAL, ~ABLFL, ~BASE, ~CHG,
     "1",      "SYSBP",  "Systolic BP", "BASELINE",          0,   120, "Y",      120,   NA,
@@ -462,9 +557,12 @@ test_that("summarize_bds Test 20: the BDS checks find injected defects", {
   result <- summary(input)$bds
 
   expect_identical(result$multiple_baselines, 1L)
-  expect_identical(result$chg_no_base, 1L)
-  expect_identical(result$avisit_mismatch, 1L)
-  expect_identical(result$param_inconsistent, 1L)
+
+  # the value-level checks were moved out of admiral: the CHG without BASE, the
+  # split AVISIT, and the second PARAM label are all present but not reported
+  expect_null(result$chg_no_base)
+  expect_null(result$avisit_mismatch)
+  expect_null(result$param_inconsistent)
 })
 
 ## Test 22: the dataset name is captured for the heading ----
@@ -527,16 +625,12 @@ test_that("summarize_occds Test 23: reports terms, treatment-emergent, severity,
   expect_identical(result$sev$n, c(2L, 1L))
   expect_identical(result$n_serious, 1L)
 
-  # the date checks ran and passed; the pre-treatment record is not flagged
-  # treatment emergent, so it is not a defect
-  expect_identical(result$missing_astdt, 0L)
-  expect_identical(result$pre_trt_emergent, 0L)
-  # no occurrence flags: that check did not run
+  # no occurrence flags: the one OCCDS check did not run
   expect_null(result$occ_flag_dups)
 })
 
-## Test 24: the OCCDS checks find injected defects ----
-test_that("summarize_occds Test 24: the OCCDS checks find injected defects", {
+## Test 24: the occurrence flag check finds duplicates, the date checks are gone ----
+test_that("summarize_occds Test 24: the occurrence flag check finds duplicates, the date checks are gone", { # nolint
   input <- as_admiral_df(tibble::tribble(
     ~USUBJID, ~ASEQ, ~AEBODSYS, ~AEDECOD,    ~TRTEMFL, ~AOCCFL,       ~AOCCSFL,      ~ASTDT,                 ~TRTSDT, # nolint
     # a treatment-emergent record starting before treatment
@@ -551,8 +645,34 @@ test_that("summarize_occds Test 24: the OCCDS checks find injected defects", {
 
   expect_identical(result$occ_flag_dups, 2L)
   expect_identical(result$occ_flag_vars, c("AOCCFL", "AOCCSFL"))
-  expect_identical(result$missing_astdt, 1L)
-  expect_identical(result$pre_trt_emergent, 1L)
+
+  # the record-level date checks were moved out of admiral: the missing ASTDT
+  # and the pre-treatment emergent record are present but not reported
+  expect_null(result$missing_astdt)
+  expect_null(result$pre_trt_emergent)
+
+  # a period-scoped flag: the shape of every multi-period vaccine study, where
+  # the first occurrence is flagged once per subject per vaccination. The flag
+  # name cannot say so, so `APERIOD` has to come from the data.
+  multi_period <- as_admiral_df(tibble::tribble(
+    ~USUBJID, ~ASEQ, ~AEDECOD,   ~APERIOD, ~AOCC01FL,
+    "1",         1L, "HEADACHE",       1L, "Y",
+    "1",         2L, "NAUSEA",         1L, NA_character_,
+    "1",         3L, "PYREXIA",        2L, "Y"
+  ))
+  expect_identical(summary(multi_period)$occds$occ_flag_dups, 0L)
+
+  # the same data without periods is a genuine duplicate again, so the check
+  # has not simply been switched off
+  expect_identical(
+    summary(as_admiral_df(select(multi_period, -APERIOD)))$occds$occ_flag_dups,
+    1L
+  )
+
+  # a second "Y" within one period is still a defect
+  broken_period <- multi_period
+  broken_period$AOCC01FL[2] <- "Y"
+  expect_identical(summary(broken_period)$occds$occ_flag_dups, 1L)
 
   # a flag whose level variable is absent cannot be judged and is skipped:
   # AOCCPFL needs a --DECOD variable
@@ -589,17 +709,12 @@ test_that("summarize_vs_adsl Test 26: reports coverage and denominators from ADS
   expect_identical(result$arm_coverage$subjects, c(1L, 1L))
   expect_identical(result$arm_coverage$total, c(1L, 2L))
 
-  # subject 3 having no records is legitimate absence, not a defect; the
-  # shared TRTSDT matches and no record is dated after death
+  # subject 3 having no records is legitimate absence, not a defect
   expect_identical(result$n_orphans, 0L)
-  expect_identical(result$stale_total, 0L)
-  expect_identical(result$stale_vars$variable, character(0))
-  expect_identical(result$after_death_var, "ADT")
-  expect_identical(result$n_after_death, 0L)
 })
 
-## Test 27: the ADSL comparison checks find injected defects ----
-test_that("summarize_vs_adsl Test 27: the ADSL comparison checks find injected defects", {
+## Test 27: the orphan check finds a subject missing from ADSL ----
+test_that("summarize_vs_adsl Test 27: the orphan check finds a subject missing from ADSL", {
   adsl <- tibble::tribble(
     ~USUBJID, ~TRTSDT,               ~DTHDT,
     "1",      as.Date("2024-01-01"), as.Date("2024-02-01"),
@@ -618,15 +733,17 @@ test_that("summarize_vs_adsl Test 27: the ADSL comparison checks find injected d
 
   expect_identical(result$n_orphans, 1L)
   expect_identical(result$orphans, "9")
-  # the orphan's NA TRTSDT is not additionally counted as a mismatch
-  expect_identical(result$stale_total, 1L)
-  expect_identical(result$stale_vars$variable, "TRTSDT")
-  expect_identical(result$stale_vars$subjects, 1L)
-  expect_identical(result$n_after_death, 1L)
+
+  # the value comparisons were moved out of admiral: the stale TRTSDT and the
+  # record dated after death are present but not reported
+  expect_null(result$stale_total)
+  expect_null(result$stale_vars)
+  expect_null(result$n_after_death)
+  expect_null(result$after_death_var)
 })
 
-## Test 28: OCCDS gains the incidence and emergent-untreated items ----
-test_that("summarize_vs_adsl Test 28: OCCDS gains the incidence and emergent-untreated items", { # nolint
+## Test 28: OCCDS gains the incidence denominator ----
+test_that("summarize_vs_adsl Test 28: OCCDS gains the incidence denominator", {
   adsl <- tibble::tribble(
     ~USUBJID, ~SAFFL, ~TRTSDT,
     "1",      "Y",    as.Date("2024-01-01"),
@@ -646,7 +763,7 @@ test_that("summarize_vs_adsl Test 28: OCCDS gains the incidence and emergent-unt
 
   expect_identical(result$incidence, c(subjects = 2L, total = 3L))
   expect_identical(result$incidence_denom, "safety population")
-  expect_identical(result$n_emergent_untreated, 1L)
+  expect_null(result$n_emergent_untreated)
 
   # without SAFFL the denominator falls back to all of ADSL
   no_saffl <- summary(input, adsl = select(adsl, -SAFFL))$vs_adsl
@@ -695,9 +812,9 @@ test_that("print.summary_admiral_df Test 30: ADSL comparison formatted output is
   )
   input <- as_admiral_df(tibble::tribble(
     ~USUBJID, ~PARAMCD, ~AVAL, ~ADT,                  ~TRTSDT,
-    # TRTSDT stale vs ADSL
+    # TRTSDT stale vs ADSL, and dated after death: neither is reported any
+    # more, so only the orphan bullet is expected below
     "1",      "SYSBP",    121, as.Date("2024-01-10"), as.Date("2024-01-05"),
-    # dated after death
     "2",      "SYSBP",    130, as.Date("2024-02-10"), as.Date("2024-01-02"),
     # orphan
     "9",      "SYSBP",    115, as.Date("2024-01-15"), as.Date(NA)

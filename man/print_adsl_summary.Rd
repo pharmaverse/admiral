@@ -21,11 +21,8 @@ No return value, called for side effects.
 Print the ADSL-Specific Part of a Summary
 }
 \details{
-Facts are printed first, then the checks. A failing check is printed as its
-own bullet with the offending count; the checks which passed are collapsed
-into a single confirmation line which names each of them, so a clean ADSL
-stays one line without hiding what was checked. A check whose variables are
-absent is not mentioned at all -- not run is different from passed.
+One line per fact, each printed only when the variables it needs are in the
+dataset. There is no check section: see \code{\link[=summarize_adsl]{summarize_adsl()}}.
 }
 \seealso{
 Other internal:
@@ -40,11 +37,13 @@ Other internal:
 \code{\link[=print_bds_summary]{print_bds_summary()}},
 \code{\link[=print_occds_summary]{print_occds_summary()}},
 \code{\link[=print_summary_checks]{print_summary_checks()}},
+\code{\link[=print_vs_adsl_summary]{print_vs_adsl_summary()}},
 \code{\link[=render_summary_table]{render_summary_table()}},
 \code{\link[=signal_duplicate_records]{signal_duplicate_records()}},
 \code{\link[=summarize_adsl]{summarize_adsl()}},
 \code{\link[=summarize_bds]{summarize_bds()}},
-\code{\link[=summarize_occds]{summarize_occds()}}
+\code{\link[=summarize_occds]{summarize_occds()}},
+\code{\link[=summarize_vs_adsl]{summarize_vs_adsl()}}
 }
 \concept{internal}
 \keyword{internal}

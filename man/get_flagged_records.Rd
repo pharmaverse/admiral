@@ -102,8 +102,10 @@ get_flagged_records(
 \seealso{
 Utilities used within Derivation functions:
 \code{\link[=extract_unit]{extract_unit()}},
+\code{\link[=get_admiral_keys]{get_admiral_keys()}},
 \code{\link[=get_not_mapped]{get_not_mapped()}},
-\code{\link[=get_vars_query]{get_vars_query()}}
+\code{\link[=get_vars_query]{get_vars_query()}},
+\code{\link[=set_admiral_keys]{set_admiral_keys()}}
 }
 \concept{utils_help}
 \keyword{utils_help}

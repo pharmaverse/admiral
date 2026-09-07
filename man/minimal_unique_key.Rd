@@ -31,10 +31,14 @@ A character vector of key variable names.
 }
 \description{
 Starting from \code{must_have}, adds variables from \code{optional} one at a time (in
-the given order) until the combination is a unique key of \code{dataset}, and
-returns the smallest such combination. If uniqueness is never reached, the
-full set (\code{must_have} plus all of \code{optional}) is returned -- the caller can
-detect this because the returned key still yields duplicates.
+the given order) until the combination is a unique key of \code{dataset}, then
+drops any added variable which is not needed for uniqueness (lowest priority
+first) and returns what is left. Without that second pass the result would
+depend on where a genuinely needed variable sits in \code{optional}: everything
+ahead of it would be carried along whether it discriminates or not, and the
+reported record structure would overstate the key. If uniqueness is never
+reached, the full set (\code{must_have} plus all of \code{optional}) is returned -- the
+caller can detect this because the returned key still yields duplicates.
 }
 \details{
 This is used by \code{\link[=infer_admiral_keys]{infer_admiral_keys()}} to discover the record structure from
@@ -56,11 +60,13 @@ Other internal:
 \code{\link[=print_bds_summary]{print_bds_summary()}},
 \code{\link[=print_occds_summary]{print_occds_summary()}},
 \code{\link[=print_summary_checks]{print_summary_checks()}},
+\code{\link[=print_vs_adsl_summary]{print_vs_adsl_summary()}},
 \code{\link[=render_summary_table]{render_summary_table()}},
 \code{\link[=signal_duplicate_records]{signal_duplicate_records()}},
 \code{\link[=summarize_adsl]{summarize_adsl()}},
 \code{\link[=summarize_bds]{summarize_bds()}},
-\code{\link[=summarize_occds]{summarize_occds()}}
+\code{\link[=summarize_occds]{summarize_occds()}},
+\code{\link[=summarize_vs_adsl]{summarize_vs_adsl()}}
 }
 \concept{internal}
 \keyword{internal}

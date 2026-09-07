@@ -831,7 +831,6 @@ The records for \code{USUBJID == "2"} are not unique with respect to
 accessed by calling \code{get_duplicates_dataset()}:
 
 \if{html}{\out{<div class="sourceCode r">}}\preformatted{get_duplicates_dataset()
-#> Duplicate records with respect to `USUBJID` and `AVISITN`.
 #> # A tibble: 2 × 4
 #>   USUBJID AVISITN   ADY AVALC
 #> * <chr>     <dbl> <dbl> <chr>

@@ -4,7 +4,7 @@
 \alias{summary.admiral_df}
 \title{Summarize an \code{admiral_df} Dataset}
 \usage{
-\method{summary}{admiral_df}(object, ...)
+\method{summary}{admiral_df}(object, keys = NULL, adsl = NULL, ...)
 }
 \arguments{
 \item{object}{An \code{admiral_df} object
@@ -13,7 +13,35 @@
 \item{Default value}{none}
 }}
 
-\item{...}{Not used
+\item{keys}{Optional intended key variables of \code{object}, i.e. the variables
+it should have one record per: either a character vector, or a \code{{metacore}}
+specification object from which they are read with \code{\link[=get_admiral_keys]{get_admiral_keys()}}
+(the specification must describe a single dataset -- select one with
+\code{metacore::select_dataset()} first, or pass
+\code{get_admiral_keys(spec, "ADVS")} instead). When supplied, \code{keys} overrides
+both the \code{"admiral_keys"} attribute and key inference, and the record
+structure is reported with \code{key_source = "supplied"}. A zero-length vector
+skips the record structure check.
+
+\describe{
+\item{Default value}{\code{NULL}}
+}}
+
+\item{adsl}{Optional subject-level dataset to compare \code{object} against: a
+data frame with one record per \code{USUBJID}. When supplied (for a non-ADSL
+type), the summary gains a comparison section -- subject coverage overall,
+within the safety population, and per arm, plus checks for subjects not in
+ADSL, shared subject-level variables disagreeing with ADSL, records dated
+after death, and (OCCDS) the treatment-emergent incidence and
+treatment-emergent records for subjects ADSL says were never treated. See
+\code{\link[=summarize_vs_adsl]{summarize_vs_adsl()}} for the details of each item. For a dataset of type
+\code{"ADSL"} the argument is ignored with a warning.
+
+\describe{
+\item{Default value}{\code{NULL}}
+}}
+
+\item{...}{Not used; must be empty
 
 \describe{
 \item{Default value}{none}
@@ -21,16 +49,25 @@
 }
 \value{
 An object of class \code{summary_admiral_df} (a named list) which is printed by
-\code{\link[=print.summary_admiral_df]{print.summary_admiral_df()}}. It always contains \code{type}, \code{n_obs}, and
-\code{n_subjects}, and, depending on the dataset structure, \code{params}, \code{avisits},
-\code{n_events}/\code{n_censored}, and \code{n_terms}.
+\code{\link[=print.summary_admiral_df]{print.summary_admiral_df()}}. It always contains \code{type}, \code{n_obs},
+\code{n_vars}, and \code{n_subjects}, and, depending on the dataset structure,
+\code{keys}/\code{key_source}/\code{n_duplicate_keys}, \code{params}, \code{avisits},
+\code{n_events}/\code{n_censored}, the per-type elements \code{adsl}
+(\code{\link[=summarize_adsl]{summarize_adsl()}}), \code{bds} (\code{\link[=summarize_bds]{summarize_bds()}}), and \code{occds}
+(\code{\link[=summarize_occds]{summarize_occds()}}), and -- when the \code{adsl} argument is supplied --
+\code{vs_adsl} (\code{\link[=summarize_vs_adsl]{summarize_vs_adsl()}}). \code{ds_name} -- the dataset name shown
+in the printed heading -- is the name stored by \code{\link[=set_admiral_keys]{set_admiral_keys()}} or,
+failing that, the variable name \code{summary()} was called on (it is absent
+when neither is available, e.g. under the \code{magrittr} pipe).
 }
 \description{
 Provides a quick diagnostic of an admiral dataset, such as the number of
-subjects and observations, the list of parameters (\code{PARAMCD}/\code{PARAM}), and
-the list of analysis visits (\code{AVISIT}). The information shown is tailored to
-the ADaM structure of the dataset (\code{ADSL}, \code{BDS}, \code{OCCDS}, \code{TTE}, or \code{other}),
-as determined by \code{\link[=get_admiral_df_type]{get_admiral_df_type()}}.
+subjects, observations and variables, the list of parameters
+(\code{PARAMCD}/\code{PARAM}), and
+the list of analysis visits (\code{AVISIT}). It also reports the record structure,
+i.e. whether the dataset has exactly one record per key variable combination.
+The information shown is tailored to the ADaM type of the dataset (\code{ADSL},
+\code{BDS}, \code{OCCDS}, \code{TTE}, or \code{other}), as determined by \code{\link[=get_admiral_df_type]{get_admiral_df_type()}}.
 }
 \details{
 This is useful for checking whether a derivation, e.g.,
@@ -38,7 +75,9 @@ This is useful for checking whether a derivation, e.g.,
 }
 \seealso{
 Utilities for printing:
+\code{\link[=check_admiral_df]{check_admiral_df()}},
 \code{\link[=print.adam_templates]{print.adam_templates()}},
+\code{\link[=print.admiral_df_check]{print.admiral_df_check()}},
 \code{\link[=print.duplicates]{print.duplicates()}},
 \code{\link[=print.source]{print.source()}},
 \code{\link[=print.summary_admiral_df]{print.summary_admiral_df()}},
@@ -71,5 +110,27 @@ map <- derive_param_computed(
 )
 
 summary(map)
+#> }\if{html}{\out{</div>}}}
+\subsection{Supplying the intended keys}{
+
+The record structure is then checked against the supplied keys instead
+of the tagged or inferred ones. The keys can also be read from a
+\code{{metacore}} specification, see \code{\link[=get_admiral_keys]{get_admiral_keys()}}.
+
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{summary(map, keys = c("USUBJID", "AVISIT", "PARAMCD"))
+#> }\if{html}{\out{</div>}}}
+\subsection{Comparing against ADSL}{
+
+Supplying \code{adsl} adds the subject-coverage facts and the referential
+checks only a subject-level source of truth makes possible.
+
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{adsl <- tribble(
+  ~USUBJID,      ~SAFFL, ~TRT01A,
+  "01-701-1015", "Y",    "Placebo",
+  "01-701-1028", "Y",    "Xanomeline",
+  "01-701-1034", "N",    NA_character_
+)
+
+summary(map, adsl = adsl)
 #> }\if{html}{\out{</div>}}}}
 

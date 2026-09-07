@@ -88,22 +88,14 @@ advs <- as_admiral_df(
 )
 
 check_admiral_df(advs)
-#> ── admiral_df tag check ────────────────────────────────────────────────────────
-#>   is an admiral_df:   TRUE
-#>   key variables:      USUBJID, PARAMCD
-#>   keys present:       all present
-#>   structure checked:  yes -- one record per USUBJID, PARAMCD (declared)}\if{html}{\out{</div>}}}
+#> }\if{html}{\out{</div>}}}
 \subsection{Keys which no longer match the dataset}{
 
 The keys are stored as plain variable names, so they are not updated by
 \code{dplyr::rename()}.
 
 \if{html}{\out{<div class="sourceCode r">}}\preformatted{check_admiral_df(dplyr::rename(advs, SUBJID = USUBJID))
-#> ── admiral_df tag check ────────────────────────────────────────────────────────
-#>   is an admiral_df:   TRUE
-#>   key variables:      USUBJID, PARAMCD
-#>   keys present:       stale: USUBJID missing; checked on PARAMCD only
-#>   structure checked:  yes -- one record per PARAMCD (declared)}\if{html}{\out{</div>}}}
+#> }\if{html}{\out{</div>}}}
 \subsection{Using the result programmatically}{
 
 \if{html}{\out{<div class="sourceCode r">}}\preformatted{if (!check_admiral_df(advs)$structure_checked) {

@@ -247,10 +247,14 @@ set_admiral_keys <- function(dataset, metacore, dataset_name = NULL) {
 #' Find the Minimal Set of Variables that Uniquely Identifies Rows
 #'
 #' Starting from `must_have`, adds variables from `optional` one at a time (in
-#' the given order) until the combination is a unique key of `dataset`, and
-#' returns the smallest such combination. If uniqueness is never reached, the
-#' full set (`must_have` plus all of `optional`) is returned -- the caller can
-#' detect this because the returned key still yields duplicates.
+#' the given order) until the combination is a unique key of `dataset`, then
+#' drops any added variable which is not needed for uniqueness (lowest priority
+#' first) and returns what is left. Without that second pass the result would
+#' depend on where a genuinely needed variable sits in `optional`: everything
+#' ahead of it would be carried along whether it discriminates or not, and the
+#' reported record structure would overstate the key. If uniqueness is never
+#' reached, the full set (`must_have` plus all of `optional`) is returned -- the
+#' caller can detect this because the returned key still yields duplicates.
 #'
 #' This is used by [infer_admiral_keys()] to discover the record structure from
 #' the data rather than assuming a fixed key. Only *semantic* key variables
@@ -278,6 +282,16 @@ minimal_unique_key <- function(dataset, must_have, optional) {
   for (v in setdiff(optional, key)) {
     key <- c(key, v)
     if (is_unique(key)) {
+      # the walk stops at the first unique *prefix* of `optional`, so the key
+      # can carry variables passed over on the way which contribute nothing to
+      # uniqueness. Drop those, lowest priority first, so the reported record
+      # structure is the one the dataset actually has rather than an artefact
+      # of the candidate ordering.
+      for (redundant in rev(setdiff(key, must_have))) {
+        if (is_unique(setdiff(key, redundant))) {
+          key <- setdiff(key, redundant)
+        }
+      }
       return(key)
     }
   }
@@ -292,16 +306,29 @@ minimal_unique_key <- function(dataset, must_have, optional) {
 #' [set_admiral_keys()] or by a `derive_*` function). It starts from the
 #' semantic core of the detected ADaM dataset type (e.g. `USUBJID` + `PARAMCD`
 #' for BDS) and adds standard ADaM key variables (analysis visit, timepoint,
-#' date, period, derivation type) only as far as needed to make the key unique
-#' (see [minimal_unique_key()]).
+#' relative time, date, interval start/end, period, derivation type) only as far
+#' as needed to make the key unique, then drops those which turn out not to
+#' discriminate (see [minimal_unique_key()]). The candidate list has to span
+#' several dataset shapes: findings data is keyed by visit and timepoint,
+#' exposure by interval start, population-PK by relative time and not by visit
+#' at all, and any of them may carry derived records separated only by `DTYPE`.
 #'
 #' For `BDS`/`TTE`, surrogate/sequence keys such as `ASEQ` are deliberately
 #' *not* used, so that unintended duplicate records remain detectable. For
-#' `OCCDS`, however, `ASEQ` *is* the intended record key (there is no
-#' analysis-value structure to fall back on), so it is required: if `ASEQ` is
-#' absent the record structure cannot be checked and a warning is issued. This
-#' is still a heuristic; spec-defined or `by_vars`-derived keys should be
-#' preferred.
+#' `OCCDS`, however, the sequence number *is* the intended record key (there is
+#' no analysis-value structure to fall back on: two adverse events for the same
+#' subject need not differ in any analysis variable), so it is required rather
+#' than excluded. `ASEQ` is preferred, falling back to the SDTM domain sequence
+#' (`AESEQ`, `CMSEQ`, `MHSEQ`, ...) which is what occurrence datasets most often
+#' carry; the two-letter domain prefix is what distinguishes those from
+#' provenance variables such as `SRCSEQ`. If neither is present -- or several
+#' domain sequences are, making the record key ambiguous -- the record structure
+#' cannot be checked and a warning is issued.
+#'
+#' Note that a well-formed sequence makes the key unique by construction, so the
+#' `OCCDS` structure check is not looking for semantic duplicates but for whole
+#' records duplicated by a fanned-out merge. This is still a heuristic;
+#' spec-defined or `by_vars`-derived keys should be preferred.
 #'
 #' @param type The dataset type, see [get_admiral_df_type()]
 #' @param subject_keys The subject-level key variables present in the dataset
@@ -314,19 +341,35 @@ minimal_unique_key <- function(dataset, must_have, optional) {
 #' @keywords internal
 #' @family internal
 infer_admiral_keys <- function(type, subject_keys, cols, dataset) {
-  # OCCDS has no analysis-value structure to fall back on; `ASEQ` is its genuine
-  # record key, so (unlike BDS/TTE) it is required rather than a surrogate
+  # OCCDS has no analysis-value structure to fall back on; the sequence number
+  # is its genuine record key, so (unlike BDS/TTE) it is required rather than
+  # excluded as a surrogate
   if (type == "OCCDS") {
-    if (!"ASEQ" %in% cols) {
+    seq_var <- NULL
+    # `ASEQ` is the ADaM analysis sequence, but many occurrence datasets carry
+    # only the SDTM domain sequence (`AESEQ`, `CMSEQ`, `MHSEQ`, ...). The
+    # two-letter domain prefix is what distinguishes those from provenance
+    # variables such as `SRCSEQ`, which is not a record key.
+    domain_seq <- str_subset(cols, "^[A-Z]{2}SEQ$")
+    if ("ASEQ" %in% cols) {
+      seq_var <- "ASEQ"
+    } else if (length(domain_seq) == 1) {
+      seq_var <- domain_seq
+    }
+    if (is.null(seq_var)) {
       cli_warn(c(
         "Cannot check the record structure of an {.val OCCDS} dataset without
-         {.var ASEQ}.",
+         {.var ASEQ} or a single domain sequence variable.",
+        i = if (length(domain_seq) > 1) {
+          "{.var {domain_seq}} are all candidates, so the record key is
+           ambiguous."
+        },
         i = "Attach the intended keys with {.fun set_admiral_keys} to check
              that the dataset has one record per key."
       ))
       return(character(0))
     }
-    return(intersect(c(subject_keys, "ASEQ"), cols))
+    return(intersect(c(subject_keys, seq_var), cols))
   }
 
   core <- switch(type,
@@ -340,11 +383,17 @@ infer_admiral_keys <- function(type, subject_keys, cols, dataset) {
     return(character(0))
   }
 
-  # standard "within-core" key variables, in ADaM precedence order.
+  # standard "within-core" key variables, in ADaM precedence order: visit,
+  # timepoint, relative time (PK), analysis date, interval start/end, period,
+  # then `DTYPE` last -- a derived record (LOCF, AVERAGE, ...) shares every
+  # analysis variable with the record it was derived from, so `DTYPE` is what
+  # separates them, but only after the semantic variables have had their turn.
   # NOTE: no surrogate/sequence keys (ASEQ, SRCSEQ, ...) -- see minimal_unique_key()
   extra <- c(
     "AVISITN", "AVISIT", "ATPTN", "ATPT",
-    "ADTM", "ADT", "APERIOD", "APERIODC", "ASPID"
+    "NFRLT", "AFRLT",
+    "ADTM", "ADT", "ASTDTM", "ASTDT", "AENDT",
+    "APERIOD", "APERIODC", "ASPID", "DTYPE"
   )
   minimal_unique_key(
     dataset,
@@ -572,9 +621,8 @@ print.admiral_df_check <- function(x, ...) {
 #' Summarize the ADSL-Specific Content of a Dataset
 #'
 #' Collects the subject-level information [summary.admiral_df()] reports for a
-#' dataset of type `"ADSL"`: the treatment and population breakdowns a
-#' programmer checks first, plus a small number of subject-level consistency
-#' checks.
+#' dataset of type `"ADSL"`: the treatment, population, disposition and
+#' demographic breakdowns a programmer checks first.
 #'
 #' @param dataset An ADSL-like data frame
 #' @param cols The column names of `dataset`
@@ -583,9 +631,12 @@ print.admiral_df_check <- function(x, ...) {
 #'   Every item is optional: an element is only returned when the variables it
 #'   needs are in the dataset, so a partially built ADSL is summarized as far as
 #'   it goes. A variable which is present but entirely `NA` is treated as not
-#'   yet derived, i.e. the same as absent. The checks (`arm_mismatch`,
-#'   `saffl_no_trtsdt`) are diagnostics rather than validations -- they are
-#'   reported, never signalled.
+#'   yet derived, i.e. the same as absent.
+#'
+#'   ADSL reports facts only. Subject-level consistency checks (`ARM` against
+#'   `ACTARM`, treatment dates, population flag domains) were removed in favour
+#'   of a dedicated ADaM checks package, see the entry for 2026-08-03 in
+#'   `summary_admiral_df_design_notes.md`.
 #'
 #' @return
 #'   A named list with any of the following elements, to be spliced into the
@@ -601,12 +652,6 @@ print.admiral_df_check <- function(x, ...) {
 #'   * `n_dth`, `dthcaus` -- death count, and the cause breakdown among the
 #'     deaths.
 #'   * `age`, `sex` -- age range and sex breakdown.
-#'   * `arm_mismatch` -- subjects whose `ARM` and `ACTARM` differ.
-#'   * `saffl_no_trtsdt` -- subjects in the safety population with no treatment
-#'     start date.
-#'   * `trt_end_before_start` -- subjects with `TRTEDT` before `TRTSDT`.
-#'   * `flag_domain`, `flag_domain_vars` -- count of population flag values
-#'     outside `Y`/`N`/`NA`, and the flags containing them.
 #'
 #' @keywords internal
 #' @family internal
@@ -697,44 +742,6 @@ summarize_adsl <- function(dataset, cols) {
     out$sex <- count(dataset, SEX, name = "n")
   }
 
-  # planned and actual treatment differing means a subject was mis-dosed, which
-  # changes which population they belong to -- always worth surfacing
-  if (all(c("ARM", "ACTARM") %in% cols)) {
-    out$arm_mismatch <- sum(
-      !is.na(dataset$ARM) & !is.na(dataset$ACTARM) &
-        dataset$ARM != dataset$ACTARM
-    )
-  }
-
-  # a subject in the safety population with no treatment start date cannot have
-  # treatment-emergent records derived for them downstream
-  if (all(c("SAFFL", "TRTSDT") %in% cols)) {
-    out$saffl_no_trtsdt <- sum(
-      dataset$SAFFL == "Y" & is.na(dataset$TRTSDT),
-      na.rm = TRUE
-    )
-  }
-
-  # treatment ending before it started is always a derivation defect
-  if (all(c("TRTSDT", "TRTEDT") %in% cols)) {
-    out$trt_end_before_start <- sum(
-      !is.na(dataset$TRTSDT) & !is.na(dataset$TRTEDT) &
-        dataset$TRTEDT < dataset$TRTSDT
-    )
-  }
-
-  # values like "Yes", "y", or "" are silently dropped by `== "Y"` subsetting,
-  # so a flag outside the Y/N/NA domain poisons every downstream denominator
-  if (length(pop_vars) > 0) {
-    bad_flags <- vapply(
-      pop_vars,
-      function(v) sum(!dataset[[v]] %in% c("Y", "N", NA)),
-      integer(1)
-    )
-    out$flag_domain <- sum(bad_flags)
-    out$flag_domain_vars <- names(bad_flags)[bad_flags > 0]
-  }
-
   out
 }
 
@@ -742,16 +749,24 @@ summarize_adsl <- function(dataset, cols) {
 #'
 #' Collects the parameter-level information [summary.admiral_df()] reports for a
 #' dataset of type `"BDS"`: a per-parameter table (most BDS defects are visible
-#' in a per-parameter row), the derived records by `DTYPE`, and a set of
-#' record-level consistency checks.
+#' in a per-parameter row), the derived records by `DTYPE`, and the baseline
+#' uniqueness check.
 #'
 #' @param dataset A BDS-like data frame
 #' @param cols The column names of `dataset`
 #'
 #' @details
 #'   As for [summarize_adsl()], every item is optional: an element is only
-#'   returned when the variables it needs are in the dataset, and the checks are
-#'   diagnostics rather than validations -- reported, never signalled.
+#'   returned when the variables it needs are in the dataset, and
+#'   `multiple_baselines` is a diagnostic rather than a validation -- reported,
+#'   never signalled.
+#'
+#'   It is the only BDS check: `ABLFL == "Y"` is expected to be unique within a
+#'   subject and parameter, which makes it the same kind of statement as the
+#'   record structure check, just on a subset of the records. The value-level
+#'   checks (`CHG` without `BASE`, `AVISIT`/`AVISITN` consistency, one `PARAM`
+#'   per `PARAMCD`) were removed in favour of a dedicated ADaM checks package,
+#'   see the entry for 2026-08-03 in `summary_admiral_df_design_notes.md`.
 #'
 #' @return
 #'   A named list with any of the following elements:
@@ -761,11 +776,6 @@ summarize_adsl <- function(dataset, cols) {
 #'   * `dtype` -- count of derived records per `DTYPE`.
 #'   * `multiple_baselines` -- subject/parameter (and `BASETYPE`/`ATPT` where
 #'     present) combinations with more than one `ABLFL == "Y"` record.
-#'   * `chg_no_base` -- records with `CHG`/`PCHG` but no `BASE`.
-#'   * `avisit_mismatch` -- `AVISIT` values mapping to more than one `AVISITN`,
-#'     plus the reverse.
-#'   * `param_inconsistent` -- `PARAMCD` values with more than one distinct
-#'     `PARAM` label or `AVALU` unit.
 #'
 #' @keywords internal
 #' @family internal
@@ -813,42 +823,6 @@ summarize_bds <- function(dataset, cols) {
       nrow()
   }
 
-  # a change from baseline without a baseline means CHG was derived before (or
-  # despite) BASE -- the values cannot be trusted
-  chg_vars <- intersect(c("CHG", "PCHG"), cols)
-  if (length(chg_vars) > 0 && "BASE" %in% cols) {
-    out$chg_no_base <- sum(
-      rowSums(!is.na(dataset[chg_vars])) > 0 & is.na(dataset$BASE)
-    )
-  }
-
-  # AVISIT and AVISITN must map one-to-one; a mismatch (including one side
-  # missing) splits or merges visits in every by-visit output
-  if (all(c("AVISIT", "AVISITN") %in% cols)) {
-    pairs <- distinct(dataset, AVISIT, AVISITN)
-    out$avisit_mismatch <-
-      nrow(filter(count(filter(pairs, !is.na(AVISIT)), AVISIT), n > 1)) +
-      nrow(filter(count(filter(pairs, !is.na(AVISITN)), AVISITN), n > 1))
-  }
-
-  # PARAMCD is the key; two PARAM labels or two units under one code usually
-  # means two different measurements were merged into one parameter
-  incons_vars <- intersect(c("PARAM", "AVALU"), cols)
-  if ("PARAMCD" %in% cols && length(incons_vars) > 0) {
-    out$param_inconsistent <- sum(vapply(
-      incons_vars,
-      function(v) {
-        dataset %>%
-          filter(!is.na(PARAMCD), !is.na(!!sym(v))) %>%
-          distinct(PARAMCD, !!sym(v)) %>%
-          count(PARAMCD, name = "n") %>%
-          filter(n > 1) %>%
-          nrow()
-      },
-      integer(1)
-    ))
-  }
-
   out
 }
 
@@ -857,17 +831,23 @@ summarize_bds <- function(dataset, cols) {
 #' Collects the occurrence-level information [summary.admiral_df()] reports for
 #' a dataset of type `"OCCDS"`: the distinct terms at each coding level, the
 #' treatment-emergent and severity/seriousness breakdowns, and the occurrence
-#' consistency checks -- in particular the occurrence flag integrity check,
-#' which the record structure check cannot catch (an `AOCCFL` duplicated per
-#' subject does not change the record count).
+#' flag integrity check, which the record structure check cannot catch (an
+#' `AOCCFL` duplicated per subject does not change the record count).
 #'
 #' @param dataset An OCCDS-like data frame
 #' @param cols The column names of `dataset`
 #'
 #' @details
 #'   As for [summarize_adsl()], every item is optional: an element is only
-#'   returned when the variables it needs are in the dataset, and the checks are
-#'   diagnostics rather than validations -- reported, never signalled.
+#'   returned when the variables it needs are in the dataset, and
+#'   `occ_flag_dups` is a diagnostic rather than a validation -- reported, never
+#'   signalled.
+#'
+#'   It is the only OCCDS check, for the same reason `multiple_baselines` is the
+#'   only BDS one: it states that a flag is unique within a group. The
+#'   record-level checks (missing `ASTDT`, treatment-emergent records before
+#'   `TRTSDT`) were removed in favour of a dedicated ADaM checks package, see
+#'   the entry for 2026-08-03 in `summary_admiral_df_design_notes.md`.
 #'
 #'   The occurrence flag check derives its grouping from the flag name: a flag
 #'   whose infix (the part between `AOCC` and `FL`) contains `"S"` (e.g.
@@ -878,6 +858,14 @@ summarize_bds <- function(dataset, cols) {
 #'   legitimate, because occurrence flags are typically restricted to a subset
 #'   such as the treatment-emergent records. A flag whose level variable is
 #'   absent from the dataset is skipped.
+#'
+#'   `APERIOD` is added to the grouping whenever it is present and populated,
+#'   for every flag. Multi-period designs -- vaccine studies especially -- scope
+#'   their occurrence flags per period, so the first occurrence is flagged once
+#'   per subject *per vaccination*, which is correct and must not be reported as
+#'   a duplicate. The flag name cannot express this (`AOCC01FL` is a sponsor
+#'   numbering, not a level), so it is read from the data instead; in a
+#'   single-period study `APERIOD` is constant and the grouping is unchanged.
 #'
 #' @return
 #'   A named list with any of the following elements:
@@ -891,9 +879,6 @@ summarize_bds <- function(dataset, cols) {
 #'   * `n_serious` -- records with `AESER == "Y"`.
 #'   * `occ_flag_dups`, `occ_flag_vars` -- occurrence flag groups with more
 #'     than one `"Y"`, and the flags containing them.
-#'   * `missing_astdt` -- records with no `ASTDT`.
-#'   * `pre_trt_emergent` -- treatment-emergent records starting before
-#'     `TRTSDT`.
 #'
 #' @keywords internal
 #' @family internal
@@ -955,12 +940,21 @@ summarize_occds <- function(dataset, cols) {
   if (length(occ_flags) > 0 && "USUBJID" %in% cols) {
     bodsys_var <- str_subset(cols, "BODSYS$")[1]
     decod_var <- str_subset(cols, "DECOD$")[1]
+    # multi-period designs (vaccine studies above all) scope their occurrence
+    # flags per period, so the first occurrence is flagged once per subject
+    # *per vaccination*. The flag name cannot express that -- `AOCC01FL` is a
+    # sponsor numbering, not a level -- so period-scoping has to be read from
+    # the data. In a single-period study `APERIOD` is constant and adding it
+    # changes nothing.
+    period_var <- if ("APERIOD" %in% cols && any(!is.na(dataset$APERIOD))) {
+      "APERIOD"
+    }
     count_dups <- function(flag) {
       # the flag infix encodes the level it is unique per: "S" = body system,
       # "P" = dictionary term, anything else (including numbered sponsor
       # flags) = subject
       infix <- str_remove(str_remove(flag, "^AOCC"), "FL$")
-      group <- "USUBJID"
+      group <- c("USUBJID", period_var)
       if (str_detect(infix, "S")) {
         if (is.na(bodsys_var)) {
           return(NA_integer_)
@@ -986,21 +980,6 @@ summarize_occds <- function(dataset, cols) {
     }
   }
 
-  # an occurrence without a start date cannot be classified as treatment
-  # emergent, so it silently drops out of every TRTEMFL-restricted output
-  if ("ASTDT" %in% cols) {
-    out$missing_astdt <- sum(is.na(dataset$ASTDT))
-  }
-
-  # a treatment-emergent record starting before treatment contradicts its own
-  # flag -- either the flag or the date imputation is wrong
-  if (all(c("TRTEMFL", "ASTDT", "TRTSDT") %in% cols)) {
-    out$pre_trt_emergent <- sum(
-      dataset$TRTEMFL == "Y" & dataset$ASTDT < dataset$TRTSDT,
-      na.rm = TRUE
-    )
-  }
-
   out
 }
 
@@ -1010,10 +989,9 @@ summarize_occds <- function(dataset, cols) {
 #' subject-level dataset is supplied via its `adsl` argument. ADSL is the
 #' subject-level source of truth -- the full subject universe, the
 #' authoritative treatment/population values, and the subject-level events
-#' (death) a record-level dataset must respect -- so a dataset can be wrong
-#' *relative to ADSL* in ways it can never reveal on its own: orphan subjects,
-#' stale merged variables, records after death, and it can never supply an
-#' "n (%) of subjects" denominator by itself.
+#' a record-level dataset must respect -- so a dataset can be wrong *relative to
+#' ADSL* in ways it can never reveal on its own: subjects with no ADSL entry,
+#' and the "n (%) of subjects" denominators it can never supply by itself.
 #'
 #' @param dataset A data frame with a `USUBJID` variable
 #' @param cols The column names of `dataset`
@@ -1023,15 +1001,16 @@ summarize_occds <- function(dataset, cols) {
 #' @details
 #'   As for [summarize_adsl()], every item is optional: an element is only
 #'   returned when the variables it needs are present (on both sides, where the
-#'   comparison needs both), and the checks are diagnostics rather than
-#'   validations -- reported, never signalled.
+#'   comparison needs both), and `n_orphans` is a diagnostic rather than a
+#'   validation -- reported, never signalled.
 #'
 #'   Subjects are matched by `USUBJID` alone (other subject keys may be `NA` on
-#'   derivation-added records). Shared subject-level variables are compared as
-#'   character, per record, with `NA` equal to `NA`; a subject not in ADSL is
-#'   reported as an orphan, not additionally as a mismatch. Mismatches are
-#'   reported as "disagrees with ADSL" without presuming which side is wrong:
-#'   the cause may be an outdated dataset *or* a newer ADSL.
+#'   derivation-added records). The orphan check is the cross-dataset form of
+#'   the record structure check -- a subject key with nothing to point at -- and
+#'   is the only check here: the value comparisons (stale merged variables,
+#'   records after death, treatment-emergent records for untreated subjects)
+#'   were removed in favour of a dedicated ADaM checks package, see the entry
+#'   for 2026-08-03 in `summary_admiral_df_design_notes.md`.
 #'
 #' @return
 #'   A named list with any of the following elements:
@@ -1046,18 +1025,9 @@ summarize_occds <- function(dataset, cols) {
 #'   * `n_orphans`, `orphans` -- subjects in `dataset` but not in `adsl`; the
 #'     `USUBJID` values are kept because orphans caused by formatting drift are
 #'     only diagnosable from examples.
-#'   * `stale_total`, `stale_vars` -- subject/variable combinations where a
-#'     shared subject-level variable (`TRTSDT`, `TRTEDT`, `TRT01P`, `TRT01A`,
-#'     `SAFFL`, `ITTFL`, `DTHDT`, `EOSDT`, `AGE`, `SEX`, `RACE`) disagrees with
-#'     ADSL, and the per-variable breakdown.
-#'   * `after_death_var`, `n_after_death` -- the analysis date variable used
-#'     (`ADT` or `ASTDT`) and the records dated after the subject's `DTHDT` in
-#'     `adsl`.
 #'   * `incidence`, `incidence_denom` -- (OCCDS) subjects with at least one
 #'     `TRTEMFL == "Y"` record over the safety-population (or, failing that,
 #'     ADSL) denominator.
-#'   * `n_emergent_untreated` -- (OCCDS) subjects with treatment-emergent
-#'     records whose `TRTSDT` in `adsl` is missing.
 #'
 #' @keywords internal
 #' @family internal
@@ -1068,8 +1038,6 @@ summarize_vs_adsl <- function(dataset, cols, adsl, type) {
   ds_subj <- unique(dataset$USUBJID)
   ds_subj <- ds_subj[!is.na(ds_subj)]
   adsl_subj <- adsl$USUBJID
-  # row index of each record's subject in `adsl`; NA for orphans
-  adsl_idx <- match(dataset$USUBJID, adsl_subj)
 
   out$n_adsl <- length(adsl_subj)
   out$n_common <- length(intersect(ds_subj, adsl_subj))
@@ -1111,45 +1079,6 @@ summarize_vs_adsl <- function(dataset, cols, adsl, type) {
       )
   }
 
-  # shared subject-level variables are copies of ADSL, so any disagreement
-  # means a stale merge (ADSL refreshed after this dataset was built) or a
-  # merge by the wrong keys; compared as character so dates, factors, and
-  # numerics all compare without type gymnastics, with NA equal to NA
-  shared_vars <- intersect(
-    c(
-      "TRTSDT", "TRTEDT", "TRT01P", "TRT01A", "SAFFL", "ITTFL",
-      "DTHDT", "EOSDT", "AGE", "SEX", "RACE"
-    ),
-    intersect(cols, adsl_cols)
-  )
-  if (length(shared_vars) > 0) {
-    mismatched_subjects <- function(v) {
-      child <- as.character(dataset[[v]])
-      ref <- as.character(adsl[[v]])[adsl_idx]
-      differ <- (is.na(child) != is.na(ref)) |
-        (!is.na(child) & !is.na(ref) & child != ref)
-      # orphans are reported by their own check, not per variable
-      differ[is.na(adsl_idx)] <- FALSE
-      n_distinct(dataset$USUBJID[differ])
-    }
-    stale <- vapply(shared_vars, mismatched_subjects, integer(1))
-    out$stale_total <- sum(stale)
-    out$stale_vars <- tibble(
-      variable = names(stale),
-      subjects = unname(stale)
-    ) %>%
-      filter(subjects > 0)
-  }
-
-  # records dated after the subject's death are always a finding
-  date_var <- intersect(c("ADT", "ASTDT"), cols)
-  if (length(date_var) > 0 && "DTHDT" %in% adsl_cols) {
-    dth <- adsl$DTHDT[adsl_idx]
-    dv <- dataset[[date_var[1]]]
-    out$after_death_var <- date_var[1]
-    out$n_after_death <- sum(!is.na(dv) & !is.na(dth) & dv > dth)
-  }
-
   if (type == "OCCDS" && "TRTEMFL" %in% cols) {
     em_subj <- unique(dataset$USUBJID[
       !is.na(dataset$USUBJID) &
@@ -1170,14 +1099,6 @@ summarize_vs_adsl <- function(dataset, cols, adsl, type) {
         total = out$n_adsl
       )
       out$incidence_denom <- "ADSL"
-    }
-
-    # a treatment-emergent record for a subject ADSL says was never treated
-    # contradicts the flag; checked against the authoritative TRTSDT, so it
-    # works even when (and especially when) the merged copy is absent or stale
-    if ("TRTSDT" %in% adsl_cols) {
-      untreated <- adsl_subj[is.na(adsl$TRTSDT)]
-      out$n_emergent_untreated <- length(intersect(em_subj, untreated))
     }
   }
 
@@ -1247,21 +1168,6 @@ print_vs_adsl_summary <- function(x) {
       failed = "{x$n_orphans} subject{?s} {?is/are} not in ADSL
                 (e.g. {.val {head(x$orphans, 3)}})",
       passed = "all subjects are in ADSL"
-    ),
-    stale_total = list(
-      failed = "{x$stale_total} subject/variable combination{?s}
-                disagree{?s/} with ADSL (in {.var {x$stale_vars$variable}})",
-      passed = "shared subject-level variables match ADSL"
-    ),
-    n_after_death = list(
-      failed = "{x$n_after_death} record{?s} ({.var {x$after_death_var}})
-                dated after death ({.var DTHDT} in ADSL)",
-      passed = "no records after death"
-    ),
-    n_emergent_untreated = list(
-      failed = "{x$n_emergent_untreated} subject{?s} with treatment-emergent
-                records {?has/have} no {.var TRTSDT} in ADSL",
-      passed = "no treatment-emergent records for untreated subjects"
     )
   ))
 
@@ -1271,7 +1177,8 @@ print_vs_adsl_summary <- function(x) {
 #' Summarize an `admiral_df` Dataset
 #'
 #' Provides a quick diagnostic of an admiral dataset, such as the number of
-#' subjects and observations, the list of parameters (`PARAMCD`/`PARAM`), and
+#' subjects, observations and variables, the list of parameters
+#' (`PARAMCD`/`PARAM`), and
 #' the list of analysis visits (`AVISIT`). It also reports the record structure,
 #' i.e. whether the dataset has exactly one record per key variable combination.
 #' The information shown is tailored to the ADaM type of the dataset (`ADSL`,
@@ -1306,8 +1213,8 @@ print_vs_adsl_summary <- function(x) {
 #'
 #' @return
 #'   An object of class `summary_admiral_df` (a named list) which is printed by
-#'   [print.summary_admiral_df()]. It always contains `type`, `n_obs`, and
-#'   `n_subjects`, and, depending on the dataset structure,
+#'   [print.summary_admiral_df()]. It always contains `type`, `n_obs`,
+#'   `n_vars`, and `n_subjects`, and, depending on the dataset structure,
 #'   `keys`/`key_source`/`n_duplicate_keys`, `params`, `avisits`,
 #'   `n_events`/`n_censored`, the per-type elements `adsl`
 #'   ([summarize_adsl()]), `bds` ([summarize_bds()]), and `occds`
@@ -1420,6 +1327,7 @@ summary.admiral_df <- function(object, keys = NULL, adsl = NULL, ...) {
   out <- list(
     type = type,
     n_obs = nrow(object),
+    n_vars = ncol(object),
     n_subjects = n_subjects,
     subject_keys = subject_keys
   )
@@ -1533,8 +1441,9 @@ summary.admiral_df <- function(object, keys = NULL, adsl = NULL, ...) {
 
 #' Print the Check Section of a Summary
 #'
-#' Shared by the per-type printers ([print_adsl_summary()],
-#' [print_bds_summary()]): partitions the checks defined in `checks` into
+#' Shared by the per-type printers ([print_bds_summary()],
+#' [print_occds_summary()], [print_vs_adsl_summary()]): partitions the checks
+#' defined in `checks` into
 #' failed / passed / not run, prints a detailed red bullet per failing check and
 #' one green confirmation line naming each passed check. A check whose element
 #' is absent from `x` did not run and is not mentioned at all.
@@ -1575,11 +1484,8 @@ print_summary_checks <- function(x, checks) {
 #'   [summarize_adsl()]
 #'
 #' @details
-#'   Facts are printed first, then the checks. A failing check is printed as its
-#'   own bullet with the offending count; the checks which passed are collapsed
-#'   into a single confirmation line which names each of them, so a clean ADSL
-#'   stays one line without hiding what was checked. A check whose variables are
-#'   absent is not mentioned at all -- not run is different from passed.
+#'   One line per fact, each printed only when the variables it needs are in the
+#'   dataset. There is no check section: see [summarize_adsl()].
 #'
 #' @return No return value, called for side effects.
 #'
@@ -1629,30 +1535,6 @@ print_adsl_summary <- function(x) {
     cli_text("Demographics: {paste(c(age, sex), collapse = ' | ')}")
   }
 
-  # see print_summary_checks() for how failed/passed/not-run are reported
-  print_summary_checks(x, checks = list(
-    arm_mismatch = list(
-      failed = "{x$arm_mismatch} subject{?s} {?has/have} different {.var ARM}
-                and {.var ACTARM}",
-      passed = "ARM matches ACTARM"
-    ),
-    saffl_no_trtsdt = list(
-      failed = "{x$saffl_no_trtsdt} subject{?s} in the safety population
-                {?has/have} no {.var TRTSDT}",
-      passed = "no missing TRTSDT in the safety population"
-    ),
-    trt_end_before_start = list(
-      failed = "{x$trt_end_before_start} subject{?s} {?has/have} {.var TRTEDT}
-                before {.var TRTSDT}",
-      passed = "no TRTEDT before TRTSDT"
-    ),
-    flag_domain = list(
-      failed = "{x$flag_domain} population flag value{?s} outside Y/N/NA
-                (in {.var {x$flag_domain_vars}})",
-      passed = "population flags only contain Y/N/NA"
-    )
-  ))
-
   invisible(NULL)
 }
 
@@ -1697,21 +1579,6 @@ print_bds_summary <- function(x, max_params = 10) {
       failed = "{x$multiple_baselines} subject-parameter combination{?s}
                 {?has/have} more than one baseline record ({.var ABLFL})",
       passed = "at most one baseline per subject and parameter"
-    ),
-    chg_no_base = list(
-      failed = "{x$chg_no_base} record{?s} {?has/have} {.var CHG}/{.var PCHG}
-                but no {.var BASE}",
-      passed = "no CHG/PCHG without BASE"
-    ),
-    avisit_mismatch = list(
-      failed = "{x$avisit_mismatch} {.var AVISIT}/{.var AVISITN} value{?s}
-                map{?s/} to more than one counterpart",
-      passed = "AVISIT and AVISITN are consistent"
-    ),
-    param_inconsistent = list(
-      failed = "{x$param_inconsistent} {.var PARAMCD}{?s} {?has/have} more than
-                one {.var PARAM} or {.var AVALU} value",
-      passed = "one PARAM/AVALU per PARAMCD"
     )
   ))
 
@@ -1760,15 +1627,6 @@ print_occds_summary <- function(x) {
       failed = "{x$occ_flag_dups} occurrence flag group{?s} {?has/have} more
                 than one {.val Y} (in {.var {x$occ_flag_vars}})",
       passed = "occurrence flags are unique per subject and level"
-    ),
-    missing_astdt = list(
-      failed = "{x$missing_astdt} record{?s} {?has/have} no {.var ASTDT}",
-      passed = "no missing ASTDT"
-    ),
-    pre_trt_emergent = list(
-      failed = "{x$pre_trt_emergent} treatment-emergent record{?s} start{?s/}
-                before {.var TRTSDT}",
-      passed = "no treatment-emergent record before TRTSDT"
     )
   ))
 
@@ -1861,7 +1719,9 @@ print.summary_admiral_df <- function(x, ...) {
     ""
   }
   cli_text("Subjects{subj_label}: {x$n_subjects}")
-  cli_text("Observations: {x$n_obs}")
+  # the two dimensions of the dataset belong on one line; the variable count is
+  # how a programmer spots a dropped or unexpectedly wide result at a glance
+  cli_text("Observations: {x$n_obs} | Variables: {x$n_vars}")
 
   if (!is.null(x$keys)) {
     keys <- paste(x$keys, collapse = ", ")

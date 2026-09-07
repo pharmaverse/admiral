@@ -51,10 +51,5 @@ advs <- as_admiral_df(
   keys = c("USUBJID", "PARAMCD")
 )
 
-print(check_admiral_df(advs))
-#> ── admiral_df tag check ────────────────────────────────────────────────────────
-#>   is an admiral_df:   TRUE
-#>   key variables:      USUBJID, PARAMCD
-#>   keys present:       all present
-#>   structure checked:  yes -- one record per USUBJID, PARAMCD (declared)}\if{html}{\out{</div>}}}}
+print(check_admiral_df(advs))}\if{html}{\out{</div>}}}}
 
