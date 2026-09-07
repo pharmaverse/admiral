@@ -198,6 +198,16 @@ test_that("derive_param_map Test 12: MAP parameter (DBP/SBP/PULSE) is correctly 
     expected_output,
     keys = c("USUBJID", "PARAMCD", "VISIT")
   )
+
+  expect_s3_class(
+    derive_param_map(
+      input,
+      by_vars = exprs(USUBJID, VISIT),
+      hr_code = "PULSE",
+      get_unit_expr = extract_unit(PARAM)
+    ),
+    "admiral_df"
+  )
 })
 
 ## Test 13: MAP parameter (DBP/SBP) is correctly added ----

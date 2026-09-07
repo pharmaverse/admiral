@@ -44,6 +44,21 @@ test_that("derive_param_computed Test 1: new observations are derived correctly"
     expected_output,
     keys = c("USUBJID", "PARAMCD", "VISIT")
   )
+
+  expect_s3_class(
+    derive_param_computed(
+      input,
+      parameters = exprs(SYSBP, DIABP),
+      by_vars = exprs(USUBJID, VISIT),
+      set_values_to = exprs(
+        AVAL = (AVAL.SYSBP + 2 * AVAL.DIABP) / 3,
+        PARAMCD = "MAP",
+        PARAM = "Mean arterial pressure (mmHg)",
+        AVALU = "mmHg"
+      )
+    ),
+    "admiral_df"
+  )
 })
 
 ## Test 2: new observations with constant parameters ----

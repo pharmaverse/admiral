@@ -30,6 +30,8 @@ test_that("derive_param_qtc Test 1: Bazett's method", {
     compare = actual,
     keys = c("USUBJID", "PARAMCD", "VISIT")
   )
+
+  expect_s3_class(actual, "admiral_df")
 })
 
 ## Test 2: Fridericia's method ----

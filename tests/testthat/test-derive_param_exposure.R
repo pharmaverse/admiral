@@ -93,6 +93,8 @@ test_that("derive_param_exposure Test 1: works with DTM variables", {
     expected_output,
     keys = c("USUBJID", "VISIT", "PARAMCD")
   )
+
+  expect_s3_class(actual_output, "admiral_df")
 })
 
 ## Test 2: works with DT variables ----

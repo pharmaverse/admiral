@@ -157,6 +157,11 @@ test_that("derive_param_bmi Test 9: BMI parameter is correctly added", {
     expected_output,
     keys = c("USUBJID", "PARAMCD", "VISIT")
   )
+
+  expect_s3_class(
+    derive_param_bmi(input, by_vars = exprs(USUBJID, VISIT), get_unit_expr = VSSTRESU),
+    "admiral_df"
+  )
 })
 
 

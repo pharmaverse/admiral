@@ -33,6 +33,7 @@ test_that("derive_vars_query Test 1: Derive CQ and SMQ variables with two term l
   actual_output <- derive_vars_query(adae, queries)
 
   expect_dfs_equal(expected_output, actual_output, keys = "USUBJID")
+  expect_s3_class(actual_output, "admiral_df")
 })
 
 ## Test 2: Derive when no unique key excluding `SRCVAR` columns ----
@@ -61,7 +62,7 @@ test_that("derive_vars_query Test 2: Derive when no unique key excluding `SRCVAR
 
   actual_output <- derive_vars_query(my_ae, dataset_queries = query)
 
-  expect_equal(expected_output, actual_output)
+  expect_equal(as_admiral_df(expected_output), actual_output)
 })
 
 ## Test 3: Derive when an adverse event is in multiple baskets ----
@@ -90,7 +91,7 @@ test_that("derive_vars_query Test 3: Derive when an adverse event is in multiple
 
   actual_output <- derive_vars_query(my_ae, dataset_queries = query)
 
-  expect_equal(expected_output, actual_output)
+  expect_equal(as_admiral_df(expected_output), actual_output)
 })
 
 
@@ -120,7 +121,7 @@ test_that("derive_vars_query Test 4: Derive when no GRPID or SCOPE column", {
     "1", 2, "something", "other", NA_character_
   )
 
-  expect_equal(expected_output, actual_output)
+  expect_equal(as_admiral_df(expected_output), actual_output)
 })
 
 ## Test 5: Derive decides between TERMCHAR and TERMNUM based on type ----
@@ -147,7 +148,7 @@ test_that("derive_vars_query Test 5: Derive decides between TERMCHAR and TERMNUM
     "1", 3, NA, NA, 1, NA, NA, "My Query 2", 2
   )
 
-  expect_equal(expected_output, actual_output)
+  expect_equal(as_admiral_df(expected_output), actual_output)
 
   expect_snapshot(
     derive_vars_query(mutate(my_ae, AELLTCD = as.logical(AELLTCD)), query),
@@ -198,7 +199,7 @@ test_that("derive_vars_query Test 7: character SRCVAR and just TERMCHAR is provi
     "1", 3, NA, NA, 1, NA, NA
   )
 
-  expect_equal(expected_output, actual_output)
+  expect_equal(as_admiral_df(expected_output), actual_output)
 })
 
 ## Test 8: numeric SRCVAR and just TERMNUM is provided ----
@@ -224,7 +225,7 @@ test_that("derive_vars_query Test 8: numeric SRCVAR and just TERMNUM is provided
     "1", 3, NA, NA, 1, "My Query 2", 2
   )
 
-  expect_equal(expected_output, actual_output)
+  expect_equal(as_admiral_df(expected_output), actual_output)
 })
 
 ## Test 9: Error if requested variables already exist ----

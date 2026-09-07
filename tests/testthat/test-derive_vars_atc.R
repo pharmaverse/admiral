@@ -46,6 +46,7 @@ test_that("derive_vars_atc Test 1: ATC variables are merged properly", {
   )
 
   expect_dfs_equal(expected_output, actual_output, keys = c("USUBJID", "CMDECOD", "ATC4CD"))
+  expect_s3_class(actual_output, "admiral_df")
 })
 
 ## Test 2: error if facm not unique ----
