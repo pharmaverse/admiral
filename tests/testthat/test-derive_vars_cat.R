@@ -33,15 +33,17 @@ test_that("derive_vars_cat Test 1: Basic functionality without by_vars", {
     VSTEST == "Height" & AVAL < 160,   "<160",         2
   )
 
+  actual_output <- derive_vars_cat(
+    advs,
+    definition
+  )
+
   expect_dfs_equal(
-    base =
-      derive_vars_cat(
-        advs,
-        definition
-      ),
+    base = actual_output,
     compare = expected_result,
     keys = c("USUBJID", "VSTEST")
   )
+  expect_s3_class(actual_output, "admiral_df")
 })
 
 ## Test 2: Basic functionality with by_vars ----

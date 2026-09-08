@@ -42,6 +42,13 @@ test_that("new observations are derived correctly when zero_doses is NULL", {
     expected_output,
     keys = c("USUBJID", "PARAMCD", "VISIT")
   )
+
+  expect_s3_class(
+    derive_param_doseint(input,
+      by_vars = exprs(USUBJID, VISIT)
+    ),
+    "admiral_df"
+  )
 })
 
 test_that("new observations are derived correctly when zero_doses is Y", {

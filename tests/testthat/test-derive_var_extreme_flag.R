@@ -25,6 +25,7 @@ test_that("derive_var_extreme_flag Test 1: first observation for each group is f
     compare = actual_output,
     keys = c("USUBJID", "AVISITN", "AVAL")
   )
+  expect_s3_class(actual_output, "admiral_df")
 })
 
 ## Test 2: last observation for each group is flagged ----

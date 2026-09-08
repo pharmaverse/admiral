@@ -60,4 +60,17 @@ test_that("derive_param_framingham Test 1: New observations are derived correctl
     expected_output,
     keys = c("USUBJID", "PARAMCD", "VISIT")
   )
+
+  expect_s3_class(
+    derive_param_framingham(
+      input,
+      by_vars = exprs(USUBJID, VISIT),
+      set_values_to = exprs(
+        PARAMCD = "FCVD101",
+        PARAM = "FCVD1-Framingham CVD 10-Year Risk Score (%)"
+      ),
+      get_unit_expr = AVALU
+    ),
+    "admiral_df"
+  )
 })

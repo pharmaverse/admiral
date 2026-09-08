@@ -15,12 +15,14 @@ test_that("derive_var_anrind Test 1: two-sided reference ranges work", {
     "P03",    "PUL",        2,    40,     60,    100,    40,   110,       "LOW"
   )
   input <- select(expected_output, USUBJID:A1HI)
+  actual_output <- derive_var_anrind(input, use_a1hia1lo = TRUE)
 
   expect_dfs_equal(
-    derive_var_anrind(input, use_a1hia1lo = TRUE),
+    actual_output,
     expected_output,
     keys = c("USUBJID", "PARAMCD", "ASEQ")
   )
+  expect_s3_class(actual_output, "admiral_df")
 })
 
 ## Test 2: explicitly requesting to use `A1LO` and `A1HI` works ----

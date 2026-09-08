@@ -173,7 +173,7 @@ derive_vars_transposed <- function(dataset,
       id_cols = c(as.character(by_vars), as.character(id_vars))
     )
 
-  tryCatch(
+  as_admiral_df(tryCatch(
     left_join(
       dataset,
       dataset_transposed,
@@ -214,5 +214,5 @@ derive_vars_transposed <- function(dataset,
         call = parent.frame(n = 4)
       )
     }
-  )
+  ))
 }

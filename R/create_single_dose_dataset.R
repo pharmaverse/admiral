@@ -489,5 +489,6 @@ create_single_dose_dataset <- function(dataset,
   # Stitch back together
 
   bind_rows(data_once, data_not_once) %>%
-    select(!!!keep_source_vars)
+    select(!!!keep_source_vars) %>%
+    as_admiral_df()
 }

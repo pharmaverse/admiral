@@ -28,6 +28,7 @@ test_that("derive_vars_dy Test 1: Single --DT input when ref date is --DTM", {
     actual_output,
     keys = c("STUDYID", "USUBJID")
   )
+  expect_s3_class(actual_output, "admiral_df")
 })
 
 ## Test 2: DT input, ref date DTM, DY var specified ----

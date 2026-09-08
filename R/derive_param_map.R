@@ -150,7 +150,7 @@ derive_param_map <- function(dataset,
     )
   }
 
-  withCallingHandlers(
+  as_admiral_df(withCallingHandlers(
     derive_param_computed(
       dataset,
       filter = !!filter,
@@ -174,7 +174,7 @@ derive_param_map <- function(dataset,
       )
       cnd_muffle(cnd)
     }
-  )
+  ))
 }
 
 #' Compute Mean Arterial Pressure (MAP)

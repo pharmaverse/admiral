@@ -35,6 +35,7 @@ test_that("derive_vars_joined_summary Test 1: summing up values up to current re
     compare = actual,
     keys = c("USUBJID", "ADY", "AEDECOD")
   )
+  expect_s3_class(actual, "admiral_df")
 })
 ## Test 2: missing_values works ----
 test_that("derive_vars_joined_summary Test 2: missing_values works", {

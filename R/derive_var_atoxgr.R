@@ -350,7 +350,7 @@ derive_var_atoxgr_dir <- function(dataset,
       filter(!!tox_description_var != list_of_terms$TERM[i])
   }
 
-  out_data
+  as_admiral_df(out_data)
 }
 
 
@@ -444,5 +444,6 @@ derive_var_atoxgr <- function(dataset,
       (ATOXGRL == "0" | is.na(!!lotox_description_var)) & ATOXGRH == "0" ~ "0",
       (ATOXGRH == "0" | is.na(!!hitox_description_var)) & ATOXGRL == "0" ~ "0",
       TRUE ~ NA_character_
-    ))
+    )) %>%
+    as_admiral_df()
 }

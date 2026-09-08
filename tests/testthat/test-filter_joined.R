@@ -42,6 +42,7 @@ test_that("filter_joined Test 1: filter without first_cond_upper", {
     compare = actual,
     keys = c("USUBJID", "AVISITN")
   )
+  expect_s3_class(actual, "admiral_df")
 })
 
 ## Test 2: filter with first_cond ----

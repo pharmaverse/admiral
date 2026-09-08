@@ -104,5 +104,6 @@ derive_vars_atc <- function(dataset,
   )
   data_transposed %>%
     select(-starts_with("FA")) %>%
-    rename_with(.fn = ~ str_remove(.x, "^CM"), .cols = starts_with("CMATC"))
+    rename_with(.fn = ~ str_remove(.x, "^CM"), .cols = starts_with("CMATC")) %>%
+    as_admiral_df()
 }

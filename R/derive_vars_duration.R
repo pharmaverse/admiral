@@ -193,5 +193,5 @@ derive_vars_duration <- function(dataset,
       mutate(!!new_var_unit := if_else(is.na(!!new_var), NA_character_, original_out_unit))
   }
 
-  dataset
+  as_admiral_df(dataset)
 }

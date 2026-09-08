@@ -346,7 +346,7 @@ derive_var_merged_ef_msrc <- function(dataset,
     }
   )
 
-  derive_var_merged_exist_flag(
+  as_admiral_df(derive_var_merged_exist_flag(
     dataset,
     dataset_add = bind_rows(selected_records),
     by_vars = by_vars,
@@ -355,7 +355,7 @@ derive_var_merged_ef_msrc <- function(dataset,
     true_value = true_value,
     false_value = false_value,
     missing_value = missing_value
-  )
+  ))
 }
 
 #' Create a `flag_event` Object

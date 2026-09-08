@@ -51,6 +51,8 @@ test_that("create_query_data Test 1: customized query defined by terms", {
 
   actual_output <- create_query_data(queries = list(cq))
 
+  expect_s3_class(actual_output, "admiral_df")
+
   expected_output <- cqterms %>% mutate(
     GRPNAME = "Application Site Issues",
     PREFIX = "CQ01"

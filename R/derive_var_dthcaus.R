@@ -146,7 +146,7 @@ derive_var_dthcaus <- function(dataset,
     ) %>%
     remove_tmp_vars()
 
-  derive_vars_merged(dataset, dataset_add = dataset_add, by_vars = subject_keys)
+  as_admiral_df(derive_vars_merged(dataset, dataset_add = dataset_add, by_vars = subject_keys))
 }
 
 #' Create a `dthcaus_source` Object

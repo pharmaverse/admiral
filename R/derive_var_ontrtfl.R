@@ -281,5 +281,5 @@ derive_var_ontrtfl <- function(dataset,
     )
   }
 
-  dataset
+  as_admiral_df(dataset)
 }

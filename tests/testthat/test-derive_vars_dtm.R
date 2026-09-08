@@ -712,6 +712,7 @@ test_that("derive_vars_dtm Test 25: default behavior", {
     compare = actual_output,
     keys = "XXSTDTC"
   )
+  expect_s3_class(actual_output, "admiral_df")
 })
 
 ## Test 26: date imputed to first, auto DTF/TMF ----

@@ -55,6 +55,7 @@ test_that("derive_var_joined_exist_flag Test 1: filter without first_cond", {
     compare = actual,
     keys = c("USUBJID", "AVISITN")
   )
+  expect_s3_class(actual, "admiral_df")
 })
 
 ## Flagging any patient CR value that is followed by a CR
