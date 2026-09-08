@@ -692,9 +692,9 @@ derive_var_merged_exist_flag <- function(dataset,
   new_var <- assert_symbol(enexpr(new_var))
   filter_add <- assert_filter_cond(enexpr(filter_add), optional = TRUE)
   add_data <- get_flagged_records(dataset_add,
-    new_var = !!new_var,
-    condition = !!condition,
-    !!filter_add
+                                  new_var = !!new_var,
+                                  condition = !!condition,
+                                  !!filter_add
   )
 
   derive_vars_merged(
@@ -723,6 +723,9 @@ derive_var_merged_exist_flag <- function(dataset,
 #'
 #' @param print_not_mapped Print a list of unique `by_vars` values that do not
 #' have corresponding records from the lookup table?
+#'
+#' @param warn_not_mapped Issue a warning if some records from the input dataset
+#' are not mapped?
 #'
 #' @permitted [boolean]
 #'
@@ -793,7 +796,8 @@ derive_vars_merged_lookup <- function(dataset,
                                       filter_add = NULL,
                                       check_type = "warning",
                                       duplicate_msg = NULL,
-                                      print_not_mapped = TRUE) {
+                                      print_not_mapped = TRUE,
+                                      warn_not_mapped = FALSE) {
   by_vars_left <- replace_values_by_names(by_vars)
   assert_logical_scalar(print_not_mapped)
   filter_add <- assert_filter_cond(enexpr(filter_add), optional = TRUE)
@@ -813,29 +817,43 @@ derive_vars_merged_lookup <- function(dataset,
     duplicate_msg = duplicate_msg
   )
 
-  if (print_not_mapped) {
+  if (print_not_mapped || warn_not_mapped) {
+
     temp_not_mapped <- res %>%
       filter(is.na(!!tmp_lookup_flag)) %>%
       distinct(!!!by_vars_left)
+    some_not_mapped <- nrow(temp_not_mapped) > 0
 
-    if (nrow(temp_not_mapped) > 0) {
-      # nolint start: undesirable_function_linter
-      admiral_environment$nmap <- structure(
-        temp_not_mapped,
-        class = union("nmap", class(temp_not_mapped)),
-        by_vars = vars2chr(by_vars_left)
-      )
-      # nolint end
+    if(print_not_mapped){
 
-      cli_inform(
-        c("List of {.var {vars2chr(by_vars_left)}} not mapped:",
-          capture.output(temp_not_mapped),
+      if (some_not_mapped) {
+        # nolint start: undesirable_function_linter
+        admiral_environment$nmap <- structure(
+          temp_not_mapped,
+          class = union("nmap", class(temp_not_mapped)),
+          by_vars = vars2chr(by_vars_left)
+        )
+        # nolint end
+
+        if(warn_not_mapped) cli_function <- cli_warn else cli_function <- cli_inform
+
+        cli_function(
+          c("List of {.var {vars2chr(by_vars_left)}} not mapped:",
+            capture.output(temp_not_mapped),
+            i = "Run {.run admiral::get_not_mapped()} to access the full list."
+          )
+        )
+      } else {
+        cli_inform(
+          "All {.var {vars2chr(by_vars_left)}} are mapped."
+        )
+      }
+
+    }else if(some_not_mapped && warn_not_mapped){
+      cli_warn(
+        c("Some {.var {vars2chr(by_vars_left)}} are not mapped.",
           i = "Run {.run admiral::get_not_mapped()} to access the full list."
         )
-      )
-    } else if (nrow(temp_not_mapped) == 0) {
-      cli_inform(
-        "All {.var {vars2chr(by_vars_left)}} are mapped."
       )
     }
   }

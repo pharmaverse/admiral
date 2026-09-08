@@ -16,6 +16,10 @@ accordingly).
     See the `derive_vars_dt()` documentation and the "Avoid Imputed Dates Before
     a Particular Date" section of the "Date and Time Imputation" vignette
     (`vignette("imputation")`) for details and examples. (#2708)
+    
+- `derive_vars_merged_lookup()` was enhanced with a new `warn_not_mapped` argument
+which allows users to control whether a warning is issued when some records are not
+mapped using the lookup dataset. (#3188)
 
 ## Breaking Changes
 
