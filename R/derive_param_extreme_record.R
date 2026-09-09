@@ -94,46 +94,6 @@ derive_param_extreme_record <- function(dataset = NULL,
     with = "derive_extreme_event()"
   )
 
-  # Check arguments assertions
-  assert_data_frame(dataset, optional = TRUE)
-  assert_list_of(sources, cls = "records_source")
-  assert_list_of(source_datasets, cls = "data.frame")
-  assert_vars(by_vars, optional = TRUE)
-  assert_character_scalar(
-    mode,
-    values = c("first", "last"),
-    case_sensitive = FALSE
-  )
-  assert_varval_list(set_values_to, accept_expr = TRUE, optional = TRUE)
-
-  source_names <- names(source_datasets)
-
-  # Create Empty list to contain source datasets
-  data_list <- vector("list", length(sources))
-
-  # Evaluate the expressions contained in the sources
-  for (i in seq_along(sources)) {
-    source_dataset <- source_datasets[[sources[[i]]$dataset_name]]
-    new_vars_colnames <- replace_values_by_names(sources[[i]]$new_vars)
-    data_list[[i]] <- source_dataset %>%
-      filter_if(sources[[i]]$filter) %>%
-      mutate(!!!sources[[i]]$new_vars) %>%
-      select(!!!by_vars, !!!new_vars_colnames)
-  }
-
-  # Bind the source datasets together and parse out the extreme value
-  param_data <- bind_rows(data_list) %>%
-    filter_extreme(.,
-      by_vars = by_vars,
-      order = order,
-      mode = mode
-    ) %>%
-    process_set_values_to(
-      set_values_to
-    )
-
-  # Bind the parameter rows back to original dataset
-  bind_rows(dataset, param_data)
 }
 
 #' Create a `records_source` Object

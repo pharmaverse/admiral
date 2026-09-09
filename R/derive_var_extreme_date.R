@@ -75,109 +75,6 @@ derive_var_extreme_dtm <- function(dataset,
     with = "derive_vars_extreme_event()"
   )
 
-  assert_vars(subject_keys)
-  assert_data_frame(dataset, required_vars = subject_keys)
-  new_var <- assert_symbol(enexpr(new_var))
-  assert_list_of(source_datasets, "data.frame")
-  sources <- list2(...)
-  assert_list_of(sources, "date_source")
-  mode <- assert_character_scalar(
-    mode,
-    values = c("first", "last"),
-    case_sensitive = FALSE
-  )
-
-  source_names <- names(source_datasets)
-  assert_list_element(
-    list = sources,
-    element = "dataset_name",
-    condition = dataset_name %in% source_names,
-    source_names = source_names,
-    message_text = c(
-      paste0(
-        "The dataset names must be included in the list specified for the ",
-        "{.arg source_datasets} argument."
-      ),
-      i = paste(
-        "Following names were provided by {.arg source_datasets}:",
-        ansi_collapse(source_names)
-      )
-    )
-  )
-
-  warn_if_vars_exist(dataset, vars2chr(c(new_var)))
-
-  add_data <- vector("list", length(sources))
-  for (i in seq_along(sources)) {
-    if (i > 1) {
-      warn_if_inconsistent_list(
-        base = sources[[i - 1]]$set_values_to,
-        compare = sources[[i]]$set_values_to,
-        list_name = "date_source()",
-        i = i
-      )
-    }
-
-    source_dataset_name <- sources[[i]]$dataset_name
-    source_dataset <- source_datasets[[source_dataset_name]]
-
-    date <- sources[[i]]$date
-    if (is.symbol(date)) {
-      date_var <- date
-    } else {
-      date_var <- get_new_tmp_var(dataset = source_dataset, prefix = "tmp_date")
-      source_dataset <- mutate(
-        source_dataset,
-        !!date_var := !!date
-      )
-    }
-    assert_date_var(
-      dataset = source_dataset,
-      var = !!date_var,
-      dataset_name = source_dataset_name
-    )
-
-    if (!is.null(sources[[i]]$set_values_to)) {
-      warn_if_vars_exist(source_dataset, names(sources[[i]]$set_values_to))
-      assert_data_frame(
-        source_dataset,
-        required_vars = get_source_vars(sources[[i]]$set_values_to)
-      )
-    }
-
-    add_data[[i]] <- source_dataset %>%
-      filter_if(sources[[i]]$filter) %>%
-      filter(!is.na(!!date_var)) %>%
-      filter_extreme(
-        order = exprs(!!date_var),
-        by_vars = subject_keys,
-        mode = mode,
-        check_type = "none"
-      )
-
-    add_data[[i]] <- mutate(
-      add_data[[i]],
-      !!!subject_keys,
-      !!!sources[[i]]$set_values_to,
-      !!new_var := convert_date_to_dtm(!!date_var),
-      .keep = "none"
-    )
-  }
-
-  all_data <- add_data %>%
-    bind_rows() %>%
-    filter_extreme(
-      by_vars = subject_keys,
-      order = exprs(!!new_var),
-      mode = mode,
-      check_type = "none"
-    )
-
-  derive_vars_merged(
-    dataset,
-    dataset_add = all_data,
-    by_vars = subject_keys
-  )
 }
 
 #' Derive First or Last Date from Multiple Sources
@@ -236,21 +133,6 @@ derive_var_extreme_dt <- function(dataset,
     with = "derive_vars_extreme_event()"
   )
 
-
-  new_var <- assert_symbol(enexpr(new_var))
-
-  sources <- list(...)
-  assert_list_of(sources, "date_source")
-
-  derive_var_extreme_dtm(
-    dataset,
-    new_var = !!new_var,
-    !!!sources,
-    source_datasets = source_datasets,
-    mode = mode,
-    subject_keys = subject_keys
-  ) %>%
-    mutate(!!new_var := date(!!new_var))
 }
 
 #' Create a `date_source` object
@@ -291,12 +173,4 @@ date_source <- function(dataset_name,
     with = "event()"
   )
 
-  out <- list(
-    dataset_name = assert_character_scalar(dataset_name),
-    filter = assert_filter_cond(enexpr(filter), optional = TRUE),
-    date = assert_expr(enexpr(date)),
-    set_values_to = assert_expr_list(set_values_to, named = TRUE, optional = TRUE)
-  )
-  class(out) <- c("date_source", "source", "list")
-  out
 }
