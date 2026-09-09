@@ -14,8 +14,8 @@ derive_vars_merged_lookup(
   filter_add = NULL,
   check_type = "warning",
   duplicate_msg = NULL,
-  print_not_mapped = TRUE,
-  check_not_mapped_type = "none"
+  print_not_mapped = NULL,
+  check_not_mapped_type = "message"
 )
 }
 \arguments{
@@ -151,7 +151,7 @@ If the uniqueness check fails, the specified message is displayed.
 
 \describe{
 \item{Permitted values}{\code{TRUE}, \code{FALSE}}
-\item{Default value}{\code{TRUE}}
+\item{Default value}{\code{NULL}}
 }}
 
 \item{check_not_mapped_type}{Check if any observations are not mapped?
@@ -161,7 +161,7 @@ if some records from the input dataset are not mapped using the lookup table.
 
 \describe{
 \item{Permitted values}{\code{"none"}, \code{"message"}, \code{"warning"}, \code{"error"}}
-\item{Default value}{\code{"none"}}
+\item{Default value}{\code{"message"}}
 }}
 }
 \value{

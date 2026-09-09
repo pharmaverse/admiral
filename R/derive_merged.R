@@ -692,9 +692,9 @@ derive_var_merged_exist_flag <- function(dataset,
   new_var <- assert_symbol(enexpr(new_var))
   filter_add <- assert_filter_cond(enexpr(filter_add), optional = TRUE)
   add_data <- get_flagged_records(dataset_add,
-                                  new_var = !!new_var,
-                                  condition = !!condition,
-                                  !!filter_add
+    new_var = !!new_var,
+    condition = !!condition,
+    !!filter_add
   )
 
   derive_vars_merged(
@@ -828,7 +828,6 @@ derive_vars_merged_lookup <- function(dataset,
   )
 
   if ((!is.null(print_not_mapped) && print_not_mapped) || check_not_mapped_type != "none") {
-
     # Identify if any unmapped records exist
     temp_not_mapped <- res %>%
       filter(is.na(!!tmp_lookup_flag)) %>%
@@ -837,7 +836,7 @@ derive_vars_merged_lookup <- function(dataset,
     some_not_mapped <- nrow(temp_not_mapped) > 0
 
     # Store unmapped records
-    if(some_not_mapped){
+    if (some_not_mapped) {
       # nolint start: undesirable_function_linter
       admiral_environment$nmap <- structure(
         temp_not_mapped,
@@ -847,19 +846,20 @@ derive_vars_merged_lookup <- function(dataset,
       # nolint end
     }
 
-    if(!is.null(print_not_mapped)){
+    if (!is.null(print_not_mapped)) {
       deprecate_inform(
         when = "1.6.0",
         what = "derive_vars_merged_lookup(print_not_mapped)",
         with = "derive_vars_merged_lookup(check_not_mapped_type)",
         details = c(
           x = "This message will turn into a warning at the beginning of 2028.",
+          # nolint start: line_length_linter
           i = "See admiral's deprecation guidance:
               https://pharmaverse.github.io/admiraldev/dev/articles/programming_strategy.html#deprecation"
+          # nolint end: line_length_linter
         )
       )
       if (print_not_mapped && some_not_mapped) {
-
         cli_inform(
           c("List of {.var {vars2chr(by_vars_left)}} not mapped:",
             capture.output(temp_not_mapped),
@@ -874,9 +874,7 @@ derive_vars_merged_lookup <- function(dataset,
     }
 
     if (check_not_mapped_type != "none" && some_not_mapped) {
-
-      cli_function <- switch(
-        check_not_mapped_type,
+      cli_function <- switch(check_not_mapped_type,
         warning = cli_warn,
         message = cli_inform,
         error = cli_abort
