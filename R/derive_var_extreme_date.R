@@ -74,7 +74,6 @@ derive_var_extreme_dtm <- function(dataset,
     what = "derive_var_extreme_dtm()",
     with = "derive_vars_extreme_event()"
   )
-
 }
 
 #' Derive First or Last Date from Multiple Sources
@@ -132,7 +131,6 @@ derive_var_extreme_dt <- function(dataset,
     what = "derive_var_extreme_dt()",
     with = "derive_vars_extreme_event()"
   )
-
 }
 
 #' Create a `date_source` object
@@ -172,5 +170,4 @@ date_source <- function(dataset_name,
     what = "date_source()",
     with = "event()"
   )
-
 }

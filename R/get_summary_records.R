@@ -75,5 +75,4 @@ get_summary_records <- function(dataset,
     what = "get_summary_records()",
     with = "derive_summary_records()"
   )
-
 }

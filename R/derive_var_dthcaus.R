@@ -44,7 +44,6 @@ derive_var_dthcaus <- function(dataset,
     what = "derive_var_dthcaus()",
     with = "derive_vars_extreme_event()"
   )
-
 }
 
 #' Create a `dthcaus_source` Object
@@ -107,5 +106,4 @@ dthcaus_source <- function(dataset_name,
     what = "dthcaus_source()",
     with = "event()"
   )
-
 }
