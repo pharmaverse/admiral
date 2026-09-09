@@ -850,7 +850,6 @@ test_that("derive_vars_merged_lookup Test 24: deperecation message for print_not
   param_lookup <- tibble::tribble(
     ~VSTESTCD, ~VSTEST,           ~PARAMCD, ~DESCRIPTION,
     "WEIGHT",  "Weight",          "WEIGHT", "Weight (kg)",
-    "HEIGHT",  "Height",          "HEIGHT", "Height (cm)",
     "BMI",     "Body Mass Index", "BMI",    "Body Mass Index(kg/m^2)"
   )
 
@@ -860,7 +859,7 @@ test_that("derive_vars_merged_lookup Test 24: deperecation message for print_not
       dataset_add = param_lookup,
       by_vars = exprs(VSTESTCD, VSTEST),
       new_var = exprs(PARAMCD, PARAM = DESCRIPTION),
-      check_not_mapped_type = "message"
+      print_not_mapped = TRUE
     )
   )
 })

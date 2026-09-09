@@ -117,13 +117,25 @@
     Code
       derive_vars_merged_lookup(vs, dataset_add = param_lookup, by_vars = exprs(
         VSTESTCD, VSTEST), new_var = exprs(PARAMCD, PARAM = DESCRIPTION),
-      check_not_mapped_type = "message")
+      print_not_mapped = TRUE)
     Message
+      The `print_not_mapped` argument of `derive_vars_merged_lookup()` is deprecated as of admiral 1.6.0.
+      i Please use the `check_not_mapped_type` argument instead.
+      x This message will turn into a warning at the beginning of 2028.
+      i See admiral's deprecation guidance: https://pharmaverse.github.io/admiraldev/dev/articles/programming_strategy.html#deprecation
       List of `VSTESTCD` and `VSTEST` not mapped:
-      # A tibble: 1 x 2
+      # A tibble: 2 x 2
       VSTESTCD VSTEST
       <chr> <chr>
       1 DIABP Diastolic Blood Pressure
+      2 HEIGHT Height
+      i Run `admiral::get_not_mapped()` to access the full list.
+      List of `VSTESTCD` and `VSTEST` not mapped:
+      # A tibble: 2 x 2
+      VSTESTCD VSTEST
+      <chr> <chr>
+      1 DIABP Diastolic Blood Pressure
+      2 HEIGHT Height
       i Run `admiral::get_not_mapped()` to access the full list.
     Output
       # A tibble: 5 x 8
@@ -133,7 +145,7 @@
       2 ST42-1  DIABP    Diastolic Blood Pressure      83     2 ST42    <NA>    <NA>  
       3 ST42-1  WEIGHT   Weight                       120     3 ST42    WEIGHT  Weigh~
       4 ST42-2  WEIGHT   Weight                       110     1 ST42    WEIGHT  Weigh~
-      5 ST42-2  HEIGHT   Height                        58     2 ST42    HEIGHT  Heigh~
+      5 ST42-2  HEIGHT   Height                        58     2 ST42    <NA>    <NA>  
 
 # get_not_mapped Test 25: not all by_vars have records in the lookup table
 
