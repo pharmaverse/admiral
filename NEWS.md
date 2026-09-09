@@ -16,6 +16,11 @@ accordingly).
     See the `derive_vars_dt()` documentation and the "Avoid Imputed Dates Before
     a Particular Date" section of the "Date and Time Imputation" vignette
     (`vignette("imputation")`) for details and examples. (#2708)
+    
+- `derive_vars_merged_lookup()` was enhanced with a new `check_not_mapped_type` argument
+which allows users to control whether if a message, warning, error, or no message at all
+is issued when some records are not mapped using the lookup dataset. The `print_not_mapped`
+argument will thus be deprecated. (#3188)
 
 ## Breaking Changes
 
@@ -23,7 +28,8 @@ accordingly).
 
   **Phase 1 (message)**
 
-  No functions or arguments in this phase.
+  - `derive_vars_merged_lookup(print_not_mapped = )` is deprecated in favor of the 
+  `check_not_mapped_type` argument.
 
   **Phase 2 (warning)**
 

@@ -94,7 +94,8 @@ adeg <- adeg %>%
   derive_vars_merged_lookup(
     dataset_add = param_lookup,
     new_vars = exprs(PARAMCD),
-    by_vars = exprs(EGTESTCD)
+    by_vars = exprs(EGTESTCD),
+    check_not_mapped_type = "none"
   ) %>%
   ## Calculate AVAL and AVALC ----
   mutate(

@@ -83,7 +83,8 @@ advs <- advs %>%
   derive_vars_merged_lookup(
     dataset_add = param_lookup,
     new_vars = exprs(PARAMCD),
-    by_vars = exprs(VSTESTCD)
+    by_vars = exprs(VSTESTCD),
+    check_not_mapped_type = "none"
   ) %>%
   ## Calculate AVAL and AVALC ----
   # AVALC should only be mapped if it contains non-redundant information.
