@@ -75,20 +75,4 @@ get_summary_records <- function(dataset,
     what = "get_summary_records()",
     with = "derive_summary_records()"
   )
-
-  assert_vars(by_vars)
-  filter <- assert_filter_cond(enexpr(filter), optional = TRUE)
-  assert_data_frame(
-    dataset,
-    required_vars = by_vars,
-    check_is_grouped = FALSE
-  )
-  assert_varval_list(set_values_to)
-
-  # Summarise the analysis value
-  dataset %>%
-    group_by(!!!by_vars) %>%
-    filter_if(filter) %>%
-    summarise(!!!set_values_to) %>%
-    ungroup()
 }
