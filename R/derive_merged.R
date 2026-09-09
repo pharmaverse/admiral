@@ -721,13 +721,17 @@ derive_var_merged_exist_flag <- function(dataset,
 #'
 #' @permitted [dataset]
 #'
-#' @param print_not_mapped Print a list of unique `by_vars` values that do not
-#' have corresponding records from the lookup table?
-#'
-#' @param warn_not_mapped Issue a warning if some records from the input dataset
-#' are not mapped?
+#' @param print_not_mapped `r lifecycle::badge("deprecated")` Print a list of unique
+#' `by_vars` values that do not have corresponding records from the lookup table?
 #'
 #' @permitted [boolean]
+#'
+#' @param check_not_mapped_type Check if any observations are not mapped?
+#'
+#'   If `"warning"`, `"message"`, or `"error"` is specified, the specified message is issued
+#'   if some records from the input dataset are not mapped using the lookup table.
+#'
+#' @permitted [msg_type]
 #'
 #' @inheritParams derive_vars_merged
 #'
@@ -796,11 +800,17 @@ derive_vars_merged_lookup <- function(dataset,
                                       filter_add = NULL,
                                       check_type = "warning",
                                       duplicate_msg = NULL,
-                                      print_not_mapped = TRUE,
-                                      warn_not_mapped = FALSE) {
+                                      print_not_mapped = NULL,
+                                      check_not_mapped_type = "message") {
   by_vars_left <- replace_values_by_names(by_vars)
-  assert_logical_scalar(print_not_mapped)
+  assert_logical_scalar(print_not_mapped, optional = TRUE)
   filter_add <- assert_filter_cond(enexpr(filter_add), optional = TRUE)
+  check_not_mapped_type <-
+    assert_character_scalar(
+      check_not_mapped_type,
+      values = c("none", "warning", "error", "message"),
+      case_sensitive = FALSE
+    )
 
   tmp_lookup_flag <- get_new_tmp_var(dataset_add, prefix = "tmp_lookup_flag")
 
@@ -817,27 +827,40 @@ derive_vars_merged_lookup <- function(dataset,
     duplicate_msg = duplicate_msg
   )
 
-  if (print_not_mapped || warn_not_mapped) {
+  if ((!is.null(print_not_mapped) && print_not_mapped) || check_not_mapped_type != "none") {
 
+    # Identify if any unmapped records exist
     temp_not_mapped <- res %>%
       filter(is.na(!!tmp_lookup_flag)) %>%
       distinct(!!!by_vars_left)
+
     some_not_mapped <- nrow(temp_not_mapped) > 0
 
-    if(print_not_mapped){
+    # Store unmapped records
+    if(some_not_mapped){
+      # nolint start: undesirable_function_linter
+      admiral_environment$nmap <- structure(
+        temp_not_mapped,
+        class = union("nmap", class(temp_not_mapped)),
+        by_vars = vars2chr(by_vars_left)
+      )
+      # nolint end
+    }
 
-      if (some_not_mapped) {
-        # nolint start: undesirable_function_linter
-        admiral_environment$nmap <- structure(
-          temp_not_mapped,
-          class = union("nmap", class(temp_not_mapped)),
-          by_vars = vars2chr(by_vars_left)
+    if(!is.null(print_not_mapped)){
+      deprecate_inform(
+        when = "1.6.0",
+        what = "derive_vars_merged_lookup(print_not_mapped)",
+        with = "derive_vars_merged_lookup(check_not_mapped_type)",
+        details = c(
+          x = "This message will turn into a warning at the beginning of 2028.",
+          i = "See admiral's deprecation guidance:
+              https://pharmaverse.github.io/admiraldev/dev/articles/programming_strategy.html#deprecation"
         )
-        # nolint end
+      )
+      if (print_not_mapped && some_not_mapped) {
 
-        if(warn_not_mapped) cli_function <- cli_warn else cli_function <- cli_inform
-
-        cli_function(
+        cli_inform(
           c("List of {.var {vars2chr(by_vars_left)}} not mapped:",
             capture.output(temp_not_mapped),
             i = "Run {.run admiral::get_not_mapped()} to access the full list."
@@ -848,12 +871,26 @@ derive_vars_merged_lookup <- function(dataset,
           "All {.var {vars2chr(by_vars_left)}} are mapped."
         )
       }
+    }
 
-    }else if(some_not_mapped && warn_not_mapped){
-      cli_warn(
-        c("Some {.var {vars2chr(by_vars_left)}} are not mapped.",
+    if (check_not_mapped_type != "none" && some_not_mapped) {
+
+      cli_function <- switch(
+        check_not_mapped_type,
+        warning = cli_warn,
+        message = cli_inform,
+        error = cli_abort
+      )
+
+      cli_function(
+        c("List of {.var {vars2chr(by_vars_left)}} not mapped:",
+          capture.output(temp_not_mapped),
           i = "Run {.run admiral::get_not_mapped()} to access the full list."
         )
+      )
+    } else if (check_not_mapped_type != "none" && !some_not_mapped) {
+      cli_inform(
+        "All {.var {vars2chr(by_vars_left)}} are mapped."
       )
     }
   }

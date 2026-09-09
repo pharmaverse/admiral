@@ -15,7 +15,7 @@ derive_vars_merged_lookup(
   check_type = "warning",
   duplicate_msg = NULL,
   print_not_mapped = TRUE,
-  warn_not_mapped = FALSE
+  check_not_mapped_type = "none"
 )
 }
 \arguments{
@@ -146,19 +146,22 @@ If the uniqueness check fails, the specified message is displayed.
 }\if{html}{\out{</div>}}}
 }}
 
-\item{print_not_mapped}{Print a list of unique \code{by_vars} values that do not
-have corresponding records from the lookup table?
-
-\describe{
-\item{Default value}{\code{TRUE}}
-}}
-
-\item{warn_not_mapped}{Issue a warning if some records from the input dataset
-are not mapped?
+\item{print_not_mapped}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}} Print a list of unique
+\code{by_vars} values that do not have corresponding records from the lookup table?
 
 \describe{
 \item{Permitted values}{\code{TRUE}, \code{FALSE}}
-\item{Default value}{\code{FALSE}}
+\item{Default value}{\code{TRUE}}
+}}
+
+\item{check_not_mapped_type}{Check if any observations are not mapped?
+
+If \code{"warning"}, \code{"message"}, or \code{"error"} is specified, the specified message is issued
+if some records from the input dataset are not mapped using the lookup table.
+
+\describe{
+\item{Permitted values}{\code{"none"}, \code{"message"}, \code{"warning"}, \code{"error"}}
+\item{Default value}{\code{"none"}}
 }}
 }
 \value{

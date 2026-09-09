@@ -238,7 +238,8 @@ advs <- derive_vars_merged_lookup(
   advs,
   dataset_add = param_lookup,
   new_vars = exprs(PARAMCD),
-  by_vars = exprs(VSTESTCD)
+  by_vars = exprs(VSTESTCD),
+  check_not_mapped_type = "message"
 )
 ```
 
@@ -255,6 +256,11 @@ necessary to expand this lookup or create a separate look up for `PARAMCD`.
 If more than one lookup table, e.g., company parameter mappings and project
 parameter mappings, are available, `consolidate_metadata()` can be used to
 consolidate these into a single lookup table.
+
+The `check_not_mapped_type` argument can be used to control whether a message, 
+warning, error, or no message at all is issued when some records are not mapped.
+This can be useful as a failsafe in the case that it is expected that all records 
+should be mapped using the lookup table.
 
 Additionally note that each parameter is mapped to only one `PARCAT1` variable. 
 This is described in section 3.3.4.1 of the ADaM Implementation Guide, 

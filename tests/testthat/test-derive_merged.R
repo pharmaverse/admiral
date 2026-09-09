@@ -733,14 +733,13 @@ test_that("derive_vars_merged_lookup Test 21: merge lookup table", {
       dataset_add = param_lookup,
       by_vars = exprs(VSTESTCD, VSTEST),
       new_var = exprs(PARAMCD, PARAM = DESCRIPTION),
-      print_not_mapped = TRUE
+      check_not_mapped_type = "warning"
     )
   )
 
   expected <-
     left_join(vs, param_lookup, by = c("VSTESTCD", "VSTEST")) %>%
     rename(PARAM = DESCRIPTION)
-
 
   expect_dfs_equal(
     base = expected,
@@ -751,8 +750,8 @@ test_that("derive_vars_merged_lookup Test 21: merge lookup table", {
 
 
 ## the lookup table
-## Test 22:  all by_vars have records in the lookup table ----
-test_that("derive_vars_merged_lookup Test 22:  all by_vars have records in the lookup table", {
+## Test 22: all by_vars have records in the lookup table ----
+test_that("derive_vars_merged_lookup Test 22: all by_vars have records in the lookup table", {
   vs <- tibble::tribble(
     ~USUBJID, ~VSTESTCD, ~VSTEST,                    ~VSORRES, ~VSSEQ,
     "ST42-1", "DIABP",   "Diastolic Blood Pressure",       64,      1,
@@ -779,7 +778,7 @@ test_that("derive_vars_merged_lookup Test 22:  all by_vars have records in the l
       dataset_add = param_lookup,
       by_vars = exprs(VSTESTCD, VSTEST),
       new_var = exprs(PARAMCD, PARAM = DESCRIPTION),
-      print_not_mapped = TRUE
+      check_not_mapped_type = "message"
     ),
     regex = "All `VSTESTCD` and `VSTEST` are mapped."
   )
@@ -787,7 +786,6 @@ test_that("derive_vars_merged_lookup Test 22:  all by_vars have records in the l
   expected <-
     left_join(vs, param_lookup, by = c("VSTESTCD", "VSTEST")) %>%
     rename(PARAM = DESCRIPTION)
-
 
   expect_dfs_equal(
     base = expected,
@@ -823,7 +821,7 @@ test_that("derive_vars_merged_lookup Test 23: by_vars with rename", {
       dataset_add = param_lookup,
       by_vars = exprs(VSTESTCD = TESTCD, VSTEST),
       new_var = exprs(PARAMCD, PARAM = DESCRIPTION),
-      print_not_mapped = TRUE
+      check_not_mapped_type = "message"
     )
   )
 
@@ -838,10 +836,38 @@ test_that("derive_vars_merged_lookup Test 23: by_vars with rename", {
   )
 })
 
+## Test 24: deperecation message for print_not_mapped argument ----
+test_that("derive_vars_merged_lookup Test 24: deperecation message for print_not_mapped argument", {
+  vs <- tibble::tribble(
+    ~USUBJID, ~VSTESTCD, ~VSTEST,                    ~VSORRES, ~VSSEQ,
+    "ST42-1", "DIABP",   "Diastolic Blood Pressure",       64,      1,
+    "ST42-1", "DIABP",   "Diastolic Blood Pressure",       83,      2,
+    "ST42-1", "WEIGHT",  "Weight",                        120,      3,
+    "ST42-2", "WEIGHT",  "Weight",                        110,      1,
+    "ST42-2", "HEIGHT",  "Height",                         58,      2
+  ) %>% mutate(STUDYID = "ST42")
+
+  param_lookup <- tibble::tribble(
+    ~VSTESTCD, ~VSTEST,           ~PARAMCD, ~DESCRIPTION,
+    "WEIGHT",  "Weight",          "WEIGHT", "Weight (kg)",
+    "HEIGHT",  "Height",          "HEIGHT", "Height (cm)",
+    "BMI",     "Body Mass Index", "BMI",    "Body Mass Index(kg/m^2)"
+  )
+
+  expect_snapshot(
+    derive_vars_merged_lookup(
+      vs,
+      dataset_add = param_lookup,
+      by_vars = exprs(VSTESTCD, VSTEST),
+      new_var = exprs(PARAMCD, PARAM = DESCRIPTION),
+      check_not_mapped_type = "message"
+    )
+  )
+})
 
 # get_not_mapped ----
-## Test 24: not all by_vars have records in the lookup table ----
-test_that("get_not_mapped Test 24: not all by_vars have records in the lookup table", {
+## Test 25: not all by_vars have records in the lookup table ----
+test_that("get_not_mapped Test 25: not all by_vars have records in the lookup table", {
   vs <- tibble::tribble(
     ~USUBJID, ~VSTESTCD, ~VSTEST,                    ~VSORRES, ~VSSEQ,
     "ST42-1", "DIABP",   "Diastolic Blood Pressure",       64,      1,
@@ -867,7 +893,7 @@ test_that("get_not_mapped Test 24: not all by_vars have records in the lookup ta
       dataset_add = param_lookup,
       by_vars = exprs(VSTESTCD, VSTEST),
       new_var = exprs(PARAMCD, PARAM = DESCRIPTION),
-      print_not_mapped = TRUE
+      check_not_mapped_type = "message"
     )
   )
 
@@ -887,8 +913,8 @@ test_that("get_not_mapped Test 24: not all by_vars have records in the lookup ta
 })
 
 # derive_vars_merged_summary ----
-## Test 25: dataset == dataset_add, no filter ----
-test_that("derive_vars_merged_summary Test 25: dataset == dataset_add, no filter", {
+## Test 26: dataset == dataset_add, no filter ----
+test_that("derive_vars_merged_summary Test 26: dataset == dataset_add, no filter", {
   expected <- tibble::tribble(
     ~AVISIT,  ~ASEQ, ~AVAL, ~MEANVIS,
     "WEEK 1",     1,    10,       10,
@@ -914,8 +940,8 @@ test_that("derive_vars_merged_summary Test 25: dataset == dataset_add, no filter
   )
 })
 
-## Test 26: dataset != dataset_add, filter ----
-test_that("derive_vars_merged_summary Test 26: dataset != dataset_add, filter", {
+## Test 27: dataset != dataset_add, filter ----
+test_that("derive_vars_merged_summary Test 27: dataset != dataset_add, filter", {
   expected <- tibble::tribble(
     ~USUBJID, ~MEANPBL,
     "1",          13.5,
@@ -946,8 +972,8 @@ test_that("derive_vars_merged_summary Test 26: dataset != dataset_add, filter", 
   )
 })
 
-## Test 27: by_vars with rename ----
-test_that("derive_vars_merged_summary Test 27: by_vars with rename", {
+## Test 28: by_vars with rename ----
+test_that("derive_vars_merged_summary Test 28: by_vars with rename", {
   expected <- tibble::tribble(
     ~AVISIT,  ~ASEQ, ~AVAL, ~MEANVIS,
     "WEEK 1",     1,    10,       10,
@@ -974,8 +1000,8 @@ test_that("derive_vars_merged_summary Test 27: by_vars with rename", {
   )
 })
 
-## Test 28: error if no summary function ----
-test_that("derive_vars_merged_summary Test 28: error if no summary function", {
+## Test 29: error if no summary function ----
+test_that("derive_vars_merged_summary Test 29: error if no summary function", {
   adbds <- tibble::tribble(
     ~AVISIT,  ~ASEQ, ~AVAL,
     "WEEK 1",     1,    10,
@@ -999,8 +1025,8 @@ test_that("derive_vars_merged_summary Test 28: error if no summary function", {
 })
 
 # derive_var_merged_summary ----
-## Test 29: dataset == dataset_add, no filter ----
-test_that("derive_var_merged_summary Test 29: dataset == dataset_add, no filter", {
+## Test 30: dataset == dataset_add, no filter ----
+test_that("derive_var_merged_summary Test 30: dataset == dataset_add, no filter", {
   withr::local_options(list(lifecycle_verbosity = "quiet"))
 
   expected <- tibble::tribble(
@@ -1028,8 +1054,8 @@ test_that("derive_var_merged_summary Test 29: dataset == dataset_add, no filter"
   )
 })
 
-## Test 30: dataset != dataset_add, filter ----
-test_that("derive_var_merged_summary Test 30: dataset != dataset_add, filter", {
+## Test 31: dataset != dataset_add, filter ----
+test_that("derive_var_merged_summary Test 31: dataset != dataset_add, filter", {
   withr::local_options(list(lifecycle_verbosity = "quiet"))
 
   expected <- tibble::tribble(
@@ -1062,8 +1088,8 @@ test_that("derive_var_merged_summary Test 30: dataset != dataset_add, filter", {
   )
 })
 
-## Test 31: by_vars with rename ----
-test_that("derive_var_merged_summary Test 31: by_vars with rename", {
+## Test 32: by_vars with rename ----
+test_that("derive_var_merged_summary Test 32: by_vars with rename", {
   withr::local_options(list(lifecycle_verbosity = "quiet"))
 
   expected <- tibble::tribble(
@@ -1092,8 +1118,8 @@ test_that("derive_var_merged_summary Test 31: by_vars with rename", {
   )
 })
 
-## Test 32: error if no summary function ----
-test_that("derive_var_merged_summary Test 32: error if no summary function", {
+## Test 33: error if no summary function ----
+test_that("derive_var_merged_summary Test 33: error if no summary function", {
   withr::local_options(list(lifecycle_verbosity = "quiet"))
 
   adbds <- tibble::tribble(
@@ -1118,8 +1144,8 @@ test_that("derive_var_merged_summary Test 32: error if no summary function", {
   )
 })
 
-## Test 33: deprecation warning ----
-test_that("derive_var_merged_summary Test 33: deprecation warning", {
+## Test 34: deprecation warning ----
+test_that("derive_var_merged_summary Test 34: deprecation warning", {
   expected <- tibble::tribble(
     ~AVISIT,  ~ASEQ, ~AVAL, ~MEANVIS,
     "WEEK 1",     1,    10,       10,
