@@ -98,6 +98,8 @@ jobs:
     name: Fix Search Index URLs
     needs: docs
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     # Run after docs are deployed on push/tag events to fix a pkgdown bug where
     # URLs in search.json and pkgdown.yml are generated with https:/ (single
     # slash) instead of https:// (double slash).
