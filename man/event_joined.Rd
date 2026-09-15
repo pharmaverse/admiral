@@ -342,7 +342,6 @@ Source Objects:
 \code{\link[=event_source]{event_source()}},
 \code{\link[=flag_event]{flag_event()}},
 \code{\link[=query]{query()}},
-\code{\link[=records_source]{records_source()}},
 \code{\link[=tte_source]{tte_source()}}
 }
 \concept{source_specifications}
