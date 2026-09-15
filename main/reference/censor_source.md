@@ -137,7 +137,6 @@ Source Objects:
 [`event_source()`](https:/pharmaverse.github.io/admiral/main/reference/event_source.md),
 [`flag_event()`](https:/pharmaverse.github.io/admiral/main/reference/flag_event.md),
 [`query()`](https:/pharmaverse.github.io/admiral/main/reference/query.md),
-[`records_source()`](https:/pharmaverse.github.io/admiral/main/reference/records_source.md),
 [`tte_source()`](https:/pharmaverse.github.io/admiral/main/reference/tte_source.md)
 
 ## Examples
