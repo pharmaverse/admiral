@@ -219,7 +219,7 @@ derive_vars_merged_lookup(
   dataset_add = param_lookup,
   by_vars = exprs(VSTESTCD),
   new_vars = exprs(PARAMCD, PARAM),
-  print_not_mapped = TRUE
+  check_not_mapped_type = "message"
 )
 }
 \seealso{
