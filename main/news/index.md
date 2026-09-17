@@ -28,6 +28,13 @@
   for details and examples.
   ([\#2708](https://github.com/pharmaverse/admiral/issues/2708))
 
+- [`derive_vars_merged_lookup()`](https:/pharmaverse.github.io/admiral/main/reference/derive_vars_merged_lookup.md)
+  was enhanced with a new `check_not_mapped_type` argument which allows
+  users to control whether a message, warning, error, or no message at
+  all is issued when some records are not mapped using the lookup
+  dataset. The `print_not_mapped` argument will thus be deprecated.
+  ([\#3188](https://github.com/pharmaverse/admiral/issues/3188))
+
 ### Breaking Changes
 
 - The following functions are entering the next phase of the
@@ -36,7 +43,8 @@
 
   **Phase 1 (message)**
 
-  No functions or arguments in this phase.
+  - `derive_vars_merged_lookup(print_not_mapped = )` is deprecated in
+    favor of the `check_not_mapped_type` argument.
 
   **Phase 2 (warning)**
 
