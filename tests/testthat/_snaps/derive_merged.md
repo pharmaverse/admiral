@@ -97,6 +97,7 @@
       <chr> <chr>
       1 DIABP Diastolic Blood Pressure
       i Run `admiral::get_not_mapped()` to access the full list.
+      i If this is acceptable, consider using `check_not_mapped = "none".
 
 # derive_vars_merged_lookup Test 23: by_vars with rename
 
@@ -111,6 +112,7 @@
       <chr> <chr>
       1 DIABP Diastolic Blood Pressure
       i Run `admiral::get_not_mapped()` to access the full list.
+      i If this is acceptable, consider using `check_not_mapped = "none".
 
 # derive_vars_merged_lookup Test 24: deperecation message for print_not_mapped argument
 
@@ -130,13 +132,7 @@
       1 DIABP Diastolic Blood Pressure
       2 HEIGHT Height
       i Run `admiral::get_not_mapped()` to access the full list.
-      List of `VSTESTCD` and `VSTEST` not mapped:
-      # A tibble: 2 x 2
-      VSTESTCD VSTEST
-      <chr> <chr>
-      1 DIABP Diastolic Blood Pressure
-      2 HEIGHT Height
-      i Run `admiral::get_not_mapped()` to access the full list.
+      i If this is acceptable, consider using `check_not_mapped = "none".
     Output
       # A tibble: 5 x 8
         USUBJID VSTESTCD VSTEST                   VSORRES VSSEQ STUDYID PARAMCD PARAM 
@@ -160,6 +156,7 @@
       <chr> <chr>
       1 DIABP Diastolic Blood Pressure
       i Run `admiral::get_not_mapped()` to access the full list.
+      i If this is acceptable, consider using `check_not_mapped = "none".
 
 # derive_vars_merged_summary Test 29: error if no summary function
 

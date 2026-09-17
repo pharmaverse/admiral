@@ -107,7 +107,7 @@ adlb <- adlb %>%
     new_vars = exprs(PARAMCD, PARAM, PARAMN),
     by_vars = exprs(LBTESTCD),
     check_type = "none",
-    check_not_mapped_type = "none"
+    check_not_mapped_type = "warning"
   ) %>%
   ## Calculate PARCAT1 AVAL AVALC ANRLO ANRHI ----
   mutate(

@@ -18,7 +18,7 @@ accordingly).
     (`vignette("imputation")`) for details and examples. (#2708)
     
 - `derive_vars_merged_lookup()` was enhanced with a new `check_not_mapped_type` argument
-which allows users to control whether if a message, warning, error, or no message at all
+which allows users to control whether a message, warning, error, or no message at all
 is issued when some records are not mapped using the lookup dataset. The `print_not_mapped`
 argument will thus be deprecated. (#3188)
 

@@ -789,7 +789,7 @@ derive_var_merged_exist_flag <- function(dataset,
 #'   dataset_add = param_lookup,
 #'   by_vars = exprs(VSTESTCD),
 #'   new_vars = exprs(PARAMCD, PARAM),
-#'   print_not_mapped = TRUE
+#'   check_not_mapped_type = "message"
 #' )
 derive_vars_merged_lookup <- function(dataset,
                                       dataset_add,
@@ -812,6 +812,27 @@ derive_vars_merged_lookup <- function(dataset,
       case_sensitive = FALSE
     )
 
+  if (!is.null(print_not_mapped)) {
+    deprecate_inform(
+      when = "1.6.0",
+      what = "derive_vars_merged_lookup(print_not_mapped)",
+      with = "derive_vars_merged_lookup(check_not_mapped_type)",
+      details = c(
+        x = "This message will turn into a warning at the beginning of 2028.",
+        # nolint start: line_length_linter
+        i = "See admiral's deprecation guidance:
+              https://pharmaverse.github.io/admiraldev/dev/articles/programming_strategy.html#deprecation"
+        # nolint end: line_length_linter
+      )
+    )
+
+    # Upgrade check_not_mapped_type to "message" if deprecated argument
+    # print_not_mapped was used instead
+    if (check_not_mapped_type == "none" && print_not_mapped) {
+      check_not_mapped_type <- "message"
+    }
+  }
+
   tmp_lookup_flag <- get_new_tmp_var(dataset_add, prefix = "tmp_lookup_flag")
 
   res <- derive_vars_merged(
@@ -827,7 +848,7 @@ derive_vars_merged_lookup <- function(dataset,
     duplicate_msg = duplicate_msg
   )
 
-  if ((!is.null(print_not_mapped) && print_not_mapped) || check_not_mapped_type != "none") {
+  if (check_not_mapped_type != "none") {
     # Identify if any unmapped records exist
     temp_not_mapped <- res %>%
       filter(is.na(!!tmp_lookup_flag)) %>%
@@ -846,33 +867,6 @@ derive_vars_merged_lookup <- function(dataset,
       # nolint end
     }
 
-    if (!is.null(print_not_mapped)) {
-      deprecate_inform(
-        when = "1.6.0",
-        what = "derive_vars_merged_lookup(print_not_mapped)",
-        with = "derive_vars_merged_lookup(check_not_mapped_type)",
-        details = c(
-          x = "This message will turn into a warning at the beginning of 2028.",
-          # nolint start: line_length_linter
-          i = "See admiral's deprecation guidance:
-              https://pharmaverse.github.io/admiraldev/dev/articles/programming_strategy.html#deprecation"
-          # nolint end: line_length_linter
-        )
-      )
-      if (print_not_mapped && some_not_mapped) {
-        cli_inform(
-          c("List of {.var {vars2chr(by_vars_left)}} not mapped:",
-            capture.output(temp_not_mapped),
-            i = "Run {.run admiral::get_not_mapped()} to access the full list."
-          )
-        )
-      } else {
-        cli_inform(
-          "All {.var {vars2chr(by_vars_left)}} are mapped."
-        )
-      }
-    }
-
     if (check_not_mapped_type != "none" && some_not_mapped) {
       cli_function <- switch(check_not_mapped_type,
         warning = cli_warn,
@@ -883,7 +877,8 @@ derive_vars_merged_lookup <- function(dataset,
       cli_function(
         c("List of {.var {vars2chr(by_vars_left)}} not mapped:",
           capture.output(temp_not_mapped),
-          i = "Run {.run admiral::get_not_mapped()} to access the full list."
+          i = "Run {.run admiral::get_not_mapped()} to access the full list.",
+          i = "If this is acceptable, consider using `check_not_mapped = \"none\"."
         )
       )
     } else if (check_not_mapped_type != "none" && !some_not_mapped) {

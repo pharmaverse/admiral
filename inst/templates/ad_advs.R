@@ -84,7 +84,7 @@ advs <- advs %>%
     dataset_add = param_lookup,
     new_vars = exprs(PARAMCD),
     by_vars = exprs(VSTESTCD),
-    check_not_mapped_type = "none"
+    check_not_mapped_type = "warning"
   ) %>%
   ## Calculate AVAL and AVALC ----
   # AVALC should only be mapped if it contains non-redundant information.

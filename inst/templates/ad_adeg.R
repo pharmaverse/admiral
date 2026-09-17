@@ -95,7 +95,7 @@ adeg <- adeg %>%
     dataset_add = param_lookup,
     new_vars = exprs(PARAMCD),
     by_vars = exprs(EGTESTCD),
-    check_not_mapped_type = "none"
+    check_not_mapped_type = "warning"
   ) %>%
   ## Calculate AVAL and AVALC ----
   mutate(
