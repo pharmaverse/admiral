@@ -187,11 +187,12 @@ derive_vars_computed <- function(dataset,
   )
 
   if (!is.null(derive_param_return)) {
-    as_admiral_df(derive_vars_merged(
+    derive_vars_merged(
       dataset,
       dataset_add = derive_param_return,
       by_vars = by_vars
-    ))
+    ) %>%
+      as_admiral_df()
   } else {
     dataset %>%
       mutate(!!!setNames(rep(list(NA_integer_), length(names(new_vars))), names(new_vars))) %>%

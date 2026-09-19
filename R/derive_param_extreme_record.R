@@ -133,7 +133,8 @@ derive_param_extreme_record <- function(dataset = NULL,
     )
 
   # Bind the parameter rows back to original dataset
-  as_admiral_df(bind_rows(dataset, param_data))
+  bind_rows(dataset, param_data) %>%
+    as_admiral_df()
 }
 
 #' Create a `records_source` Object

@@ -201,5 +201,6 @@ derive_param_exist_flag <- function(dataset = NULL,
   )
 
   # Create output dataset
-  as_admiral_df(bind_rows(dataset, new_obs))
+  bind_rows(dataset, new_obs) %>%
+    as_admiral_df()
 }

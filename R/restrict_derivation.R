@@ -102,5 +102,6 @@ restrict_derivation <- function(dataset,
     )
 
   # Put datasets together again
-  as_admiral_df(bind_rows(data_derive, data_ignore))
+  bind_rows(data_derive, data_ignore) %>%
+    as_admiral_df()
 }

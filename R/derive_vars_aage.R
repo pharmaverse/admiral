@@ -110,7 +110,7 @@ derive_vars_aage <- function(dataset,
     c("second", "seconds", "sec", "secs", "s")
   ), case_sensitive = FALSE)
 
-  as_admiral_df(derive_vars_duration(
+  derive_vars_duration(
     dataset,
     new_var = AAGE,
     new_var_unit = AAGEU,
@@ -120,7 +120,8 @@ derive_vars_aage <- function(dataset,
     add_one = FALSE,
     trunc_out = TRUE,
     type = type
-  ))
+  ) %>%
+    as_admiral_df()
 }
 
 

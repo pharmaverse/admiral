@@ -1199,7 +1199,7 @@ derive_vars_merged_summary <- function(dataset,
   # one record is created per by group, the error from signal_duplicates_records()
   # need to be updated and the warning from dplyr needs to be suppressed as it
   # is misleading.
-  as_admiral_df(tryCatch(
+  tryCatch(
     derive_vars_merged(
       dataset,
       dataset_add = derive_summary_records(
@@ -1230,7 +1230,8 @@ derive_vars_merged_summary <- function(dataset,
         by_vars = cnd$by_vars
       )
     }
-  ))
+  ) %>%
+    as_admiral_df()
 }
 
 #' Merge Summary Variables

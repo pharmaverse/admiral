@@ -220,10 +220,11 @@ derive_vars_extreme_event <- function(dataset,
     check_type = check_type
   )
 
-  as_admiral_df(derive_vars_merged(
+  derive_vars_merged(
     dataset,
     dataset_add = new_obs,
     new_vars = new_vars,
     by_vars = by_vars
-  ))
+  ) %>%
+    as_admiral_df()
 }

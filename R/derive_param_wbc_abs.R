@@ -175,6 +175,7 @@ derive_param_wbc_abs <- function(dataset,
     cli_inform("No source records meet condition for calculation, therefore no new records created")
     as_admiral_df(dataset)
   } else {
-    as_admiral_df(bind_rows(dataset, dataset_new))
+    bind_rows(dataset, dataset_new) %>%
+      as_admiral_df()
   }
 }

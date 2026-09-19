@@ -522,7 +522,8 @@ derive_param_computed <- function(dataset = NULL,
     process_set_values_to(set_values_to) %>%
     select(-all_of(analysis_vars_chr[str_detect(analysis_vars_chr, "\\.")]))
 
-  as_admiral_df(bind_rows(dataset, hori_data))
+  bind_rows(dataset, hori_data) %>%
+    as_admiral_df()
 }
 
 #' Asserts `parameters` Argument and Converts to List of Expressions

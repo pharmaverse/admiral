@@ -647,5 +647,6 @@ derive_extreme_records <- function(dataset = NULL,
 
 
   # Create output dataset
-  as_admiral_df(bind_rows(dataset, new_obs))
+  bind_rows(dataset, new_obs) %>%
+    as_admiral_df()
 }

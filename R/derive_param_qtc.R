@@ -153,7 +153,7 @@ derive_param_qtc <- function(dataset,
     get_unit_expr = !!get_unit_expr
   )
 
-  as_admiral_df(withCallingHandlers(
+  withCallingHandlers(
     derive_param_computed(
       dataset,
       filter = !!filter,
@@ -181,7 +181,8 @@ derive_param_qtc <- function(dataset,
       )
       cnd_muffle(cnd)
     }
-  ))
+  ) %>%
+    as_admiral_df()
 }
 
 #' Get Default Parameter Code for Corrected QT

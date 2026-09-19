@@ -258,7 +258,7 @@ derive_param_framingham <- function(dataset,
   )
 
 
-  as_admiral_df(derive_param_computed(
+  derive_param_computed(
     dataset,
     filter = !!filter,
     parameters = c(sysbp_code, chol_code, cholhdl_code),
@@ -274,5 +274,6 @@ derive_param_framingham <- function(dataset,
       AVAL = !!analysis_value,
       !!!set_values_to
     )
-  ))
+  ) %>%
+    as_admiral_df()
 }

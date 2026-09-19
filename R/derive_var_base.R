@@ -96,7 +96,7 @@ derive_var_base <- function(dataset,
   )
   warn_if_vars_exist(dataset, as_name(new_var))
 
-  as_admiral_df(derive_vars_merged(
+  derive_vars_merged(
     dataset,
     dataset_add = dataset,
     filter_add = !!filter,
@@ -106,5 +106,6 @@ derive_var_base <- function(dataset,
       "Input dataset contains multiple baseline records with respect to",
       "{.var {by_vars}}"
     )
-  ))
+  ) %>%
+    as_admiral_df()
 }

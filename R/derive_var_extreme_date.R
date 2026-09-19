@@ -173,11 +173,12 @@ derive_var_extreme_dtm <- function(dataset,
       check_type = "none"
     )
 
-  as_admiral_df(derive_vars_merged(
+  derive_vars_merged(
     dataset,
     dataset_add = all_data,
     by_vars = subject_keys
-  ))
+  ) %>%
+    as_admiral_df()
 }
 
 #' Derive First or Last Date from Multiple Sources
