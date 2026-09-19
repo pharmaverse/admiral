@@ -236,7 +236,6 @@ derive_var_extreme_dt <- function(dataset,
     with = "derive_vars_extreme_event()"
   )
 
-
   new_var <- assert_symbol(enexpr(new_var))
 
   sources <- list(...)
@@ -291,13 +290,4 @@ date_source <- function(dataset_name,
     what = "date_source()",
     with = "event()"
   )
-
-  out <- list(
-    dataset_name = assert_character_scalar(dataset_name),
-    filter = assert_filter_cond(enexpr(filter), optional = TRUE),
-    date = assert_expr(enexpr(date)),
-    set_values_to = assert_expr_list(set_values_to, named = TRUE, optional = TRUE)
-  )
-  class(out) <- c("date_source", "source", "list")
-  out
 }

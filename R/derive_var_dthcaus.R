@@ -209,16 +209,4 @@ dthcaus_source <- function(dataset_name,
     what = "dthcaus_source()",
     with = "event()"
   )
-
-  out <- list(
-    dataset_name = assert_character_scalar(dataset_name),
-    filter = assert_filter_cond(enexpr(filter), optional = TRUE),
-    date = assert_expr(enexpr(date)),
-    order = assert_expr_list(order, optional = TRUE),
-    mode = assert_character_scalar(mode, values = c("first", "last"), case_sensitive = FALSE),
-    dthcaus = assert_expr(enexpr(dthcaus)),
-    traceability = assert_expr_list(set_values_to, named = TRUE, optional = TRUE)
-  )
-  class(out) <- c("dthcaus_source", "source", "list")
-  out
 }

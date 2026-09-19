@@ -88,21 +88,23 @@
     Code
       actual <- derive_vars_merged_lookup(vs, dataset_add = param_lookup, by_vars = exprs(
         VSTESTCD, VSTEST), new_var = exprs(PARAMCD, PARAM = DESCRIPTION),
-      print_not_mapped = TRUE)
-    Message
+      check_not_mapped_type = "warning")
+    Condition
+      Warning:
       List of `VSTESTCD` and `VSTEST` not mapped:
       # A tibble: 1 x 2
       VSTESTCD VSTEST
       <chr> <chr>
       1 DIABP Diastolic Blood Pressure
       i Run `admiral::get_not_mapped()` to access the full list.
+      i If this is acceptable, consider using `check_not_mapped = "none".
 
 # derive_vars_merged_lookup Test 23: by_vars with rename
 
     Code
       actual <- derive_vars_merged_lookup(vs, dataset_add = param_lookup, by_vars = exprs(
         VSTESTCD = TESTCD, VSTEST), new_var = exprs(PARAMCD, PARAM = DESCRIPTION),
-      print_not_mapped = TRUE)
+      check_not_mapped_type = "message")
     Message
       List of `VSTESTCD` and `VSTEST` not mapped:
       # A tibble: 1 x 2
@@ -110,13 +112,43 @@
       <chr> <chr>
       1 DIABP Diastolic Blood Pressure
       i Run `admiral::get_not_mapped()` to access the full list.
+      i If this is acceptable, consider using `check_not_mapped = "none".
 
-# get_not_mapped Test 24: not all by_vars have records in the lookup table
+# derive_vars_merged_lookup Test 24: deperecation message for print_not_mapped argument
+
+    Code
+      derive_vars_merged_lookup(vs, dataset_add = param_lookup, by_vars = exprs(
+        VSTESTCD, VSTEST), new_var = exprs(PARAMCD, PARAM = DESCRIPTION),
+      print_not_mapped = TRUE)
+    Message
+      The `print_not_mapped` argument of `derive_vars_merged_lookup()` is deprecated as of admiral 1.6.0.
+      i Please use the `check_not_mapped_type` argument instead.
+      x This message will turn into a warning at the beginning of 2028.
+      i See admiral's deprecation guidance: https://pharmaverse.github.io/admiraldev/dev/articles/programming_strategy.html#deprecation
+      List of `VSTESTCD` and `VSTEST` not mapped:
+      # A tibble: 2 x 2
+      VSTESTCD VSTEST
+      <chr> <chr>
+      1 DIABP Diastolic Blood Pressure
+      2 HEIGHT Height
+      i Run `admiral::get_not_mapped()` to access the full list.
+      i If this is acceptable, consider using `check_not_mapped = "none".
+    Output
+      # A tibble: 5 x 8
+        USUBJID VSTESTCD VSTEST                   VSORRES VSSEQ STUDYID PARAMCD PARAM 
+        <chr>   <chr>    <chr>                      <dbl> <dbl> <chr>   <chr>   <chr> 
+      1 ST42-1  DIABP    Diastolic Blood Pressure      64     1 ST42    <NA>    <NA>  
+      2 ST42-1  DIABP    Diastolic Blood Pressure      83     2 ST42    <NA>    <NA>  
+      3 ST42-1  WEIGHT   Weight                       120     3 ST42    WEIGHT  Weigh~
+      4 ST42-2  WEIGHT   Weight                       110     1 ST42    WEIGHT  Weigh~
+      5 ST42-2  HEIGHT   Height                        58     2 ST42    <NA>    <NA>  
+
+# get_not_mapped Test 25: not all by_vars have records in the lookup table
 
     Code
       act_vs_param <- derive_vars_merged_lookup(vs, dataset_add = param_lookup,
         by_vars = exprs(VSTESTCD, VSTEST), new_var = exprs(PARAMCD, PARAM = DESCRIPTION),
-        print_not_mapped = TRUE)
+        check_not_mapped_type = "message")
     Message
       List of `VSTESTCD` and `VSTEST` not mapped:
       # A tibble: 1 x 2
@@ -124,8 +156,9 @@
       <chr> <chr>
       1 DIABP Diastolic Blood Pressure
       i Run `admiral::get_not_mapped()` to access the full list.
+      i If this is acceptable, consider using `check_not_mapped = "none".
 
-# derive_vars_merged_summary Test 28: error if no summary function
+# derive_vars_merged_summary Test 29: error if no summary function
 
     Code
       derive_vars_merged_summary(adbds, dataset_add = adbds, by_vars = exprs(AVISIT),
@@ -136,7 +169,7 @@
       Please check the `new_vars` argument if summary functions like `mean()`, `sum()`, ... are used on the right hand side.
       i Run `admiral::get_duplicates_dataset()` to access the duplicate records
 
-# derive_var_merged_summary Test 32: error if no summary function
+# derive_var_merged_summary Test 33: error if no summary function
 
     Code
       derive_var_merged_summary(adbds, dataset_add = adbds, by_vars = exprs(AVISIT),
