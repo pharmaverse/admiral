@@ -2,9 +2,9 @@
 
 ## New Features
 
-- Add function `as_admiral_df()`. Tags a data frame with the `admiral_df` S3
-class, preserving its existing classes. Admiral dataset functions now tag their
-output with this class. (#3160)
+- Added function `as_admiral_df()`. Tags a data frame with the `admiral_df` S3
+class, preserving its existing classes. All `{admiral}` dataset functions now tag their
+output datasets with this class. (#3160)
 
 ## Updates of Existing Functions
 
