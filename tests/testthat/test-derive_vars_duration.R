@@ -24,6 +24,7 @@ test_that("derive_vars_duration Test 1: Duration and unit variable are added", {
     mutate(AGEU = toupper(AGEU))
 
   expect_dfs_equal(actual_output, expected_output, keys = "USUBJID")
+  expect_s3_class(actual_output, "admiral_df")
 })
 
 ## Test 2: Duration and unit variable are added ----

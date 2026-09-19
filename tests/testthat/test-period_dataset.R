@@ -34,6 +34,13 @@ test_that("create_period_dataset Test 1: periods", {
     ),
     keys = c("USUBJID", "APERIOD")
   )
+  expect_s3_class(
+    create_period_dataset(
+      adsl,
+      new_vars = exprs(APERSDT = APxxSDT, APEREDT = APxxEDT)
+    ),
+    "admiral_df"
+  )
 })
 
 ## Test 2: phases ----
@@ -218,6 +225,14 @@ test_that("derive_vars_period Test 7: periods", {
       new_vars = exprs(APxxSDT = APERSDT, APxxEDT = APEREDT)
     ),
     keys = c("USUBJID")
+  )
+  expect_s3_class(
+    derive_vars_period(
+      adsl,
+      dataset_ref = period_ref,
+      new_vars = exprs(APxxSDT = APERSDT, APxxEDT = APEREDT)
+    ),
+    "admiral_df"
   )
 })
 

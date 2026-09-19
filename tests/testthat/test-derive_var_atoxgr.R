@@ -15,14 +15,17 @@ test_that("derive_var_atoxgr Test 1: ATOXGR cannot be graded", {
   input_1 <- exp_out_1 %>%
     select(-ATOXGR)
 
-  expect_equal(
-    derive_var_atoxgr(
-      input_1,
-      lotox_description_var = ATOXDSCL,
-      hitox_description_var = ATOXDSCH
-    ),
-    exp_out_1
+  actual_output <- derive_var_atoxgr(
+    input_1,
+    lotox_description_var = ATOXDSCL,
+    hitox_description_var = ATOXDSCH
   )
+
+  expect_equal(
+    actual_output,
+    as_admiral_df(exp_out_1)
+  )
+  expect_s3_class(actual_output, "admiral_df")
 })
 
 ## Test 2: ATOXGR = 0 (normal) ----
@@ -43,7 +46,7 @@ test_that("derive_var_atoxgr Test 2: ATOXGR = 0 (normal)", {
       lotox_description_var = ATOXDSCL,
       hitox_description_var = ATOXDSCH
     ),
-    exp_out_2
+    as_admiral_df(exp_out_2)
   )
 })
 
@@ -65,7 +68,7 @@ test_that("derive_var_atoxgr Test 3: ATOXGR > 0 (HYPER)", {
       lotox_description_var = ATOXDSCL,
       hitox_description_var = ATOXDSCH
     ),
-    exp_out_3
+    as_admiral_df(exp_out_3)
   )
 })
 
@@ -87,7 +90,7 @@ test_that("derive_var_atoxgr Test 4: ATOXGR < 0 (HYPO)", {
       lotox_description_var = ATOXDSCL,
       hitox_description_var = ATOXDSCH
     ),
-    exp_out_4
+    as_admiral_df(exp_out_4)
   )
 })
 
@@ -113,6 +116,7 @@ test_low <- function(expected, meta, high = "HIGH", low = "LOW") {
     compare = actual,
     keys = c("TESTNUM")
   )
+  expect_s3_class(actual, "admiral_df")
 }
 
 test_high <- function(expected, meta, high = "HIGH", low = "LOW") {

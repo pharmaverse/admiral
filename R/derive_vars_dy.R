@@ -112,5 +112,6 @@ derive_vars_dy <- function(dataset,
         .fns = ~ compute_duration(start_date = !!reference_date, end_date = .x),
         .names = "{dy_vars}"
       )
-    )
+    ) %>%
+    as_admiral_df()
 }
