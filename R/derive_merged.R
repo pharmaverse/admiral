@@ -1293,12 +1293,13 @@ derive_var_merged_summary <- function(dataset,
   assert_data_frame(dataset_add)
   assert_vars(by_vars)
 
-  as_admiral_df(derive_vars_merged_summary(
+  derive_vars_merged_summary(
     dataset = dataset,
     dataset_add = dataset_add,
     by_vars = by_vars,
     new_vars = new_vars,
     filter_add = !!enexpr(filter_add),
     missing_values = missing_values
-  ))
+  ) %>%
+    as_admiral_df()
 }

@@ -343,24 +343,19 @@ test_that("derive_param_bsa Test 28: BSA parameter (Mosteller Method) is correct
 
   input <- expected_output %>% filter(PARAMCD != "BSA")
 
+  result <- derive_param_bsa(input,
+    by_vars = exprs(USUBJID, VISIT),
+    method = "Mosteller",
+    get_unit_expr = VSSTRESU
+  )
+
   expect_dfs_equal(
-    derive_param_bsa(input,
-      by_vars = exprs(USUBJID, VISIT),
-      method = "Mosteller",
-      get_unit_expr = VSSTRESU
-    ),
+    result,
     expected_output,
     keys = c("USUBJID", "PARAMCD", "VISIT")
   )
 
-  expect_s3_class(
-    derive_param_bsa(input,
-      by_vars = exprs(USUBJID, VISIT),
-      method = "Mosteller",
-      get_unit_expr = VSSTRESU
-    ),
-    "admiral_df"
-  )
+  expect_s3_class(result, "admiral_df")
 })
 
 ## Test 29: BSA parameter (DuBois-DuBois method) is correctly added ----

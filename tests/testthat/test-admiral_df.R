@@ -9,8 +9,9 @@ test_that("as_admiral_df Test 1: adds the admiral_df class to a data frame", {
 
   actual <- as_admiral_df(input)
 
-  expect_s3_class(actual, "admiral_df")
   expect_equal(class(actual), c("admiral_df", class(input)))
+  # Test that the dataset is not changed
+  expect_equal(unclass(actual), unclass(input))
 })
 
 ## Test 2: is idempotent when the class is already present ----
@@ -25,18 +26,6 @@ test_that("as_admiral_df Test 2: is idempotent when the class is already present
 
   expect_equal(class(once), class(twice))
   expect_equal(sum(class(twice) == "admiral_df"), 1L)
-})
-
-## Test 3: preserves the existing classes of the data frame ----
-test_that("as_admiral_df Test 3: preserves the existing classes of the data frame", {
-  input <- tibble::tribble(
-    ~USUBJID, ~AVAL,
-    "1",      10
-  )
-
-  actual <- as_admiral_df(input)
-
-  expect_true(all(c("tbl_df", "tbl", "data.frame") %in% class(actual)))
 })
 
 ## Test 4: returns NULL unchanged ----
