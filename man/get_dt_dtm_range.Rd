@@ -4,7 +4,12 @@
 \alias{get_dt_dtm_range}
 \title{Get Range of Partial Date / Datetime}
 \usage{
-get_dt_dtm_range(dtc, create_datetime)
+get_dt_dtm_range(
+  dtc,
+  lower_bounds = NULL,
+  upper_bounds = NULL,
+  create_datetime
+)
 }
 \arguments{
 \item{dtc}{A character vector of dates in ISO 8601 format
@@ -13,6 +18,26 @@ Partial dates are allowed.
 
 \describe{
 \item{Default value}{none}
+}}
+
+\item{lower_bounds}{Lower bounds restricting the range
+
+The specified bounds restrict the lower limit of the returned range if it
+is within the range of the possible dates.
+
+\describe{
+\item{Permitted values}{a list of dates, e.g. \code{list(ymd_hms("2021-07-01T04:03:01"), ymd_hms("2022-05-12T13:57:23"))}}
+\item{Default value}{\code{NULL}}
+}}
+
+\item{upper_bounds}{Upper bounds restricting the range
+
+The specified bounds restrict the upper limit of the returned range if it
+is within the range of the possible dates.
+
+\describe{
+\item{Permitted values}{a list of dates, e.g. \code{list(ymd_hms("2021-07-01T04:03:01"), ymd_hms("2022-05-12T13:57:23"))}}
+\item{Default value}{\code{NULL}}
 }}
 
 \item{create_datetime}{return the range in datetime format.
@@ -35,20 +60,26 @@ and latest (upper bound) possible value. Missing year is replaced with \code{"00
 lower bound and \code{"9999"} for the upper bound.
 }
 \examples{
+library(lubridate)
 # Get Range from Partial Dates
 dtc_dates <- c("2020-02-29", "2021-03")
-imputed_dates_first <- admiral:::get_dt_dtm_range(dtc_dates, create_datetime = FALSE)
-print(imputed_dates_first)
-
+admiral:::get_dt_dtm_range(dtc_dates, create_datetime = FALSE)
 
 # Get Range from Partial Datetime
 dtc_datetimes <- c("2020-02-29T12:00", "2021-03T14:30")
-imputed_datetimes_first <- admiral:::get_dt_dtm_range(dtc_datetimes, create_datetime = TRUE)
-print(imputed_datetimes_first)
+admiral:::get_dt_dtm_range(dtc_datetimes, create_datetime = TRUE)
+
+# Get Range with Bounds
+dtc_dates <- c("2020-02-29", "2021-03")
+admiral:::get_dt_dtm_range(
+  dtc_dates,
+  lower_bounds = list(c(ymd("2020-01-01"), ymd("2021-03-05"))),
+  upper_bounds = list(c(ymd("2020-12-31"), ymd("2021-03-25"))),
+  create_datetime = FALSE
+)
 
 # Edge case: Return empty character vector for empty input
-imputed_empty <- admiral:::get_dt_dtm_range(character(0), create_datetime = TRUE)
-print(imputed_empty)
+admiral:::get_dt_dtm_range(character(0), create_datetime = TRUE)
 
 }
 \keyword{internal}
