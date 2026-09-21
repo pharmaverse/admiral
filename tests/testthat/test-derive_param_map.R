@@ -188,26 +188,20 @@ test_that("derive_param_map Test 12: MAP parameter (DBP/SBP/PULSE) is correctly 
 
   input <- expected_output %>% filter(PARAMCD != "MAP")
 
+  actual_output <- derive_param_map(
+    input,
+    by_vars = exprs(USUBJID, VISIT),
+    hr_code = "PULSE",
+    get_unit_expr = extract_unit(PARAM)
+  )
+
   expect_dfs_equal(
-    derive_param_map(
-      input,
-      by_vars = exprs(USUBJID, VISIT),
-      hr_code = "PULSE",
-      get_unit_expr = extract_unit(PARAM)
-    ),
+    actual_output,
     expected_output,
     keys = c("USUBJID", "PARAMCD", "VISIT")
   )
 
-  expect_s3_class(
-    derive_param_map(
-      input,
-      by_vars = exprs(USUBJID, VISIT),
-      hr_code = "PULSE",
-      get_unit_expr = extract_unit(PARAM)
-    ),
-    "admiral_df"
-  )
+  expect_s3_class(actual_output, "admiral_df")
 })
 
 ## Test 13: MAP parameter (DBP/SBP) is correctly added ----

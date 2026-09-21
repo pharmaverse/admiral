@@ -12,11 +12,10 @@ test_that("extract_duplicate_records Test 1: duplicate records are extracted", {
   )
   expected_ouput <- input[c(1:2, 5:6), ]
 
-  expect_equal(
-    as_admiral_df(expected_ouput),
-    extract_duplicate_records(input, exprs(USUBJID))
-  )
-  expect_s3_class(extract_duplicate_records(input, exprs(USUBJID)), "admiral_df")
+  actual_output <- extract_duplicate_records(input, exprs(USUBJID))
+
+  expect_equal(as_admiral_df(expected_ouput), actual_output)
+  expect_s3_class(actual_output, "admiral_df")
 })
 
 ## Test 2: duplicate records for all variables ----

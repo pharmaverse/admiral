@@ -29,36 +29,25 @@ test_that("derive_param_computed Test 1: new observations are derived correctly"
     select(-AVAL.DIABP, -AVAL.SYSBP)
   expected_output <- bind_rows(input, new_obs)
 
+  actual_output <- derive_param_computed(
+    input,
+    parameters = exprs(SYSBP, DIABP),
+    by_vars = exprs(USUBJID, VISIT),
+    set_values_to = exprs(
+      AVAL = (AVAL.SYSBP + 2 * AVAL.DIABP) / 3,
+      PARAMCD = "MAP",
+      PARAM = "Mean arterial pressure (mmHg)",
+      AVALU = "mmHg"
+    )
+  )
+
   expect_dfs_equal(
-    derive_param_computed(
-      input,
-      parameters = exprs(SYSBP, DIABP),
-      by_vars = exprs(USUBJID, VISIT),
-      set_values_to = exprs(
-        AVAL = (AVAL.SYSBP + 2 * AVAL.DIABP) / 3,
-        PARAMCD = "MAP",
-        PARAM = "Mean arterial pressure (mmHg)",
-        AVALU = "mmHg"
-      )
-    ),
+    actual_output,
     expected_output,
     keys = c("USUBJID", "PARAMCD", "VISIT")
   )
 
-  expect_s3_class(
-    derive_param_computed(
-      input,
-      parameters = exprs(SYSBP, DIABP),
-      by_vars = exprs(USUBJID, VISIT),
-      set_values_to = exprs(
-        AVAL = (AVAL.SYSBP + 2 * AVAL.DIABP) / 3,
-        PARAMCD = "MAP",
-        PARAM = "Mean arterial pressure (mmHg)",
-        AVALU = "mmHg"
-      )
-    ),
-    "admiral_df"
-  )
+  expect_s3_class(actual_output, "admiral_df")
 })
 
 ## Test 2: new observations with constant parameters ----

@@ -20,24 +20,15 @@ test_that("filter_exist Test 1: filter_exist() works as expected", {
   expected_output <- input_dataset %>%
     filter(USUBJID %in% c("01-701-1034", "01-701-1115"))
 
-  expect_equal(
-    filter_exist(
-      dataset = input_dataset,
-      dataset_add = input_dataset_add,
-      by_vars = exprs(USUBJID),
-      filter_add = AEDECOD == "FATIGUE"
-    ),
-    as_admiral_df(expected_output)
+  actual_output <- filter_exist(
+    dataset = input_dataset,
+    dataset_add = input_dataset_add,
+    by_vars = exprs(USUBJID),
+    filter_add = AEDECOD == "FATIGUE"
   )
-  expect_s3_class(
-    filter_exist(
-      dataset = input_dataset,
-      dataset_add = input_dataset_add,
-      by_vars = exprs(USUBJID),
-      filter_add = AEDECOD == "FATIGUE"
-    ),
-    "admiral_df"
-  )
+
+  expect_equal(actual_output, as_admiral_df(expected_output))
+  expect_s3_class(actual_output, "admiral_df")
 })
 
 # filter_not_exist ----
@@ -62,22 +53,13 @@ test_that("filter_not_exist Test 2: filter_not_exist() works as expected", {
   expected_output <- input_dataset %>%
     filter(USUBJID %in% c("01-701-1015", "01-701-1444"))
 
-  expect_equal(
-    filter_not_exist(
-      dataset = input_dataset,
-      dataset_add = input_dataset_add,
-      by_vars = exprs(USUBJID),
-      filter_add = AEDECOD == "FATIGUE"
-    ),
-    as_admiral_df(expected_output)
+  actual_output <- filter_not_exist(
+    dataset = input_dataset,
+    dataset_add = input_dataset_add,
+    by_vars = exprs(USUBJID),
+    filter_add = AEDECOD == "FATIGUE"
   )
-  expect_s3_class(
-    filter_not_exist(
-      dataset = input_dataset,
-      dataset_add = input_dataset_add,
-      by_vars = exprs(USUBJID),
-      filter_add = AEDECOD == "FATIGUE"
-    ),
-    "admiral_df"
-  )
+
+  expect_equal(actual_output, as_admiral_df(expected_output))
+  expect_s3_class(actual_output, "admiral_df")
 })

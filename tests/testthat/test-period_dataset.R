@@ -26,21 +26,17 @@ test_that("create_period_dataset Test 1: periods", {
       dplyr::across(matches("APER[ES]DT"), ymd)
     )
 
+  actual_output <- create_period_dataset(
+    adsl,
+    new_vars = exprs(APERSDT = APxxSDT, APEREDT = APxxEDT)
+  )
+
   expect_dfs_equal(
     base = expected,
-    compare = create_period_dataset(
-      adsl,
-      new_vars = exprs(APERSDT = APxxSDT, APEREDT = APxxEDT)
-    ),
+    compare = actual_output,
     keys = c("USUBJID", "APERIOD")
   )
-  expect_s3_class(
-    create_period_dataset(
-      adsl,
-      new_vars = exprs(APERSDT = APxxSDT, APEREDT = APxxEDT)
-    ),
-    "admiral_df"
-  )
+  expect_s3_class(actual_output, "admiral_df")
 })
 
 ## Test 2: phases ----
@@ -217,23 +213,18 @@ test_that("derive_vars_period Test 7: periods", {
 
   adsl <- tibble::tibble(STUDYID = "xyz", USUBJID = c("1", "2"))
 
+  actual_output <- derive_vars_period(
+    adsl,
+    dataset_ref = period_ref,
+    new_vars = exprs(APxxSDT = APERSDT, APxxEDT = APEREDT)
+  )
+
   expect_dfs_equal(
     base = expected,
-    compare = derive_vars_period(
-      adsl,
-      dataset_ref = period_ref,
-      new_vars = exprs(APxxSDT = APERSDT, APxxEDT = APEREDT)
-    ),
+    compare = actual_output,
     keys = c("USUBJID")
   )
-  expect_s3_class(
-    derive_vars_period(
-      adsl,
-      dataset_ref = period_ref,
-      new_vars = exprs(APxxSDT = APERSDT, APxxEDT = APEREDT)
-    ),
-    "admiral_df"
-  )
+  expect_s3_class(actual_output, "admiral_df")
 })
 
 ## Test 8: phases ----
