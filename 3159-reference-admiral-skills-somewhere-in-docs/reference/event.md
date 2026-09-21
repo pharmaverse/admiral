@@ -156,5 +156,4 @@ Source Objects:
 [`event_source()`](https:/pharmaverse.github.io/admiral/3159-reference-admiral-skills-somewhere-in-docs/reference/event_source.md),
 [`flag_event()`](https:/pharmaverse.github.io/admiral/3159-reference-admiral-skills-somewhere-in-docs/reference/flag_event.md),
 [`query()`](https:/pharmaverse.github.io/admiral/3159-reference-admiral-skills-somewhere-in-docs/reference/query.md),
-[`records_source()`](https:/pharmaverse.github.io/admiral/3159-reference-admiral-skills-somewhere-in-docs/reference/records_source.md),
 [`tte_source()`](https:/pharmaverse.github.io/admiral/3159-reference-admiral-skills-somewhere-in-docs/reference/tte_source.md)

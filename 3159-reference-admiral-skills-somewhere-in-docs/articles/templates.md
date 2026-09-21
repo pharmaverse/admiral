@@ -1380,13 +1380,6 @@ adae <- ae %>%
     new_vars = adsl_vars,
     by = exprs(STUDYID, USUBJID)
   ) %>%
-  ## Derive analysis start time ----
-  derive_vars_dtm(
-    dtc = AESTDTC,
-    new_vars_prefix = "AST",
-    highest_imputation = "M",
-    min_dates = exprs(TRTSDT)
-  ) %>%
   ## Derive analysis end time ----
   derive_vars_dtm(
     dtc = AEENDTC,
@@ -1395,6 +1388,14 @@ adae <- ae %>%
     date_imputation = "last",
     time_imputation = "last",
     max_dates = exprs(DTHDT, EOSDT)
+  ) %>%
+  ## Derive analysis start time ----
+  derive_vars_dtm(
+    dtc = AESTDTC,
+    new_vars_prefix = "AST",
+    highest_imputation = "M",
+    min_dates = exprs(TRTSDT),
+    max_dates_strict = exprs(AENDTM) # ensure the start time is not after the end time
   ) %>%
   ## Derive analysis end/start date ----
   derive_vars_dtm_to_dt(exprs(ASTDTM, AENDTM)) %>%
@@ -1746,7 +1747,8 @@ adeg <- adeg %>%
   derive_vars_merged_lookup(
     dataset_add = param_lookup,
     new_vars = exprs(PARAMCD),
-    by_vars = exprs(EGTESTCD)
+    by_vars = exprs(EGTESTCD),
+    check_not_mapped_type = "warning"
   ) %>%
   ## Calculate AVAL and AVALC ----
   mutate(
@@ -2427,7 +2429,7 @@ adlb <- adlb %>%
     new_vars = exprs(PARAMCD, PARAM, PARAMN),
     by_vars = exprs(LBTESTCD),
     check_type = "none",
-    print_not_mapped = FALSE
+    check_not_mapped_type = "warning"
   ) %>%
   ## Calculate PARCAT1 AVAL AVALC ANRLO ANRHI ----
   mutate(
@@ -4631,7 +4633,8 @@ advs <- advs %>%
   derive_vars_merged_lookup(
     dataset_add = param_lookup,
     new_vars = exprs(PARAMCD),
-    by_vars = exprs(VSTESTCD)
+    by_vars = exprs(VSTESTCD),
+    check_not_mapped_type = "warning"
   ) %>%
   ## Calculate AVAL and AVALC ----
   # AVALC should only be mapped if it contains non-redundant information.

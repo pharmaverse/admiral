@@ -12,8 +12,10 @@ assert_highest_imputation(
   highest_imputation,
   highest_imputation_values,
   date_imputation = NULL,
+  min_dates,
+  min_dates_strict,
   max_dates,
-  min_dates
+  max_dates_strict
 )
 ```
 
@@ -43,17 +45,17 @@ assert_highest_imputation(
 
   :   `NULL`
 
-- max_dates:
+- min_dates:
 
-  Optional vector specifying maximum dates for imputation.
+  Optional vector specifying minimum dates for imputation.
 
   Default value
 
   :   none
 
-- min_dates:
+- max_dates:
 
-  Optional vector specifying minimum dates for imputation.
+  Optional vector specifying maximum dates for imputation.
 
   Default value
 

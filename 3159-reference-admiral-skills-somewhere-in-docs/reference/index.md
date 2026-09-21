@@ -329,11 +329,6 @@ to produce additional datasets
 
   Create an `query` object
 
-- [`records_source()`](https:/pharmaverse.github.io/admiral/3159-reference-admiral-skills-somewhere-in-docs/reference/records_source.md)
-  :
-
-  Create a `records_source` Object
-
 - [`tte_source()`](https:/pharmaverse.github.io/admiral/3159-reference-admiral-skills-somewhere-in-docs/reference/tte_source.md)
   :
 

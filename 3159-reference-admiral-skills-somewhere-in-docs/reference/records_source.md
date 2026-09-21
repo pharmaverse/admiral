@@ -10,7 +10,7 @@ records_source(dataset_name, filter = NULL, new_vars)
 
 ## Arguments
 
-- dataset_name:
+- dataset_name :
 
   The name of the source dataset
 
@@ -22,7 +22,7 @@ records_source(dataset_name, filter = NULL, new_vars)
 
   :   none
 
-- filter:
+- filter :
 
   An unquoted condition for selecting the observations from `dataset`.
 
@@ -30,7 +30,7 @@ records_source(dataset_name, filter = NULL, new_vars)
 
   :   `NULL`
 
-- new_vars:
+- new_vars :
 
   Variables to add
 
