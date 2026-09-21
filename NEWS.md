@@ -40,7 +40,7 @@
   with the new `high_indicator` argument in `derive_var_atoxgr_dir()`.
 
 - Referenced the [{admiral} agent skills](https://github.com/RConsortium/pharma-skills/tree/main/admiral)
-  in the README and the pkgdown "Get Started" navbar. (#3159)
+  in the README and the "Get Started" navigation bar. (#3159)
 
 ## Various
 
