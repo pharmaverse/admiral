@@ -25,6 +25,8 @@
 #'   for flagging. If the argument is not specified, all observations are
 #'   considered.
 #'
+#'   `r roxygen_float_comparison()`
+#'
 #' @permitted a condition
 #'
 #' @return The output dataset is the input dataset filtered by the `filter` condition

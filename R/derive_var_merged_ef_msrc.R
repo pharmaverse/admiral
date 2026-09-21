@@ -375,6 +375,8 @@ derive_var_merged_ef_msrc <- function(dataset,
 #'   all by groups where it evaluates as `TRUE` at least once the new variable
 #'   is set to the true value (`true_value`).
 #'
+#'   `r roxygen_float_comparison()`
+#'
 #' @permitted [condition]
 #'
 #' @param by_vars Grouping variables

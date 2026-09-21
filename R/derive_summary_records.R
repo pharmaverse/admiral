@@ -56,6 +56,8 @@
 #'   + `filter_add = (dplyr::n() > 2)` will filter n count of `by_vars` greater
 #'   than 2.
 #'
+#'   `r roxygen_float_comparison()`
+#'
 #' @permitted [condition]
 #'
 #' @param constant_values Constant variables to set

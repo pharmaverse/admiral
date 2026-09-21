@@ -58,6 +58,12 @@ argument will thus be deprecated. (#3188)
 - Updated the "Lab Grading" vignette to replace the deprecated `abnormal_indicator` argument reference
   with the new `high_indicator` argument in `derive_var_atoxgr_dir()`.
 
+- Added a "Floating Point Comparisons" section to the "Programming Concepts and Conventions"
+  vignette explaining how comparisons of derived numeric variables to fixed values in conditions
+  can give unexpected results and how to avoid this. The section is referenced in the
+  documentation of all function arguments which accept conditions, e.g., `condition` of
+  `derive_vars_crit_flag()` or `filter_add`. (#3178)
+
 ## Various
 
 - Updated the default `ae_event`, `ae_ser_event`, `ae_gr1_event`, `ae_gr2_event`, `ae_gr3_event`, 

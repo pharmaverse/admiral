@@ -22,6 +22,8 @@ The condition is evaluated at the dataset referenced by \code{dataset_name}. For
 all by groups where it evaluates as \code{TRUE} at least once the new variable
 is set to the true value (\code{true_value}).
 
+Comparing derived numeric variables to fixed values, e.g., \code{PCHG <= -90}, may give unexpected results due to floating point representation. For details and solutions see the "Floating Point Comparisons" section in \code{vignette("concepts_conventions")}.
+
 \describe{
 \item{Permitted values}{an unquoted condition, e.g., \code{AVISIT == "BASELINE"}}
 \item{Default value}{\code{NULL}}
