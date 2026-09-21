@@ -329,11 +329,6 @@ to produce additional datasets
 
   Create an `query` object
 
-- [`records_source()`](https:/pharmaverse.github.io/admiral/3163-explore-use-of-dplyr-120/reference/records_source.md)
-  :
-
-  Create a `records_source` Object
-
 - [`tte_source()`](https:/pharmaverse.github.io/admiral/3163-explore-use-of-dplyr-120/reference/tte_source.md)
   :
 

@@ -53,7 +53,6 @@ Source Objects:
 [`event_source()`](https:/pharmaverse.github.io/admiral/3163-explore-use-of-dplyr-120/reference/event_source.md),
 [`flag_event()`](https:/pharmaverse.github.io/admiral/3163-explore-use-of-dplyr-120/reference/flag_event.md),
 [`query()`](https:/pharmaverse.github.io/admiral/3163-explore-use-of-dplyr-120/reference/query.md),
-[`records_source()`](https:/pharmaverse.github.io/admiral/3163-explore-use-of-dplyr-120/reference/records_source.md),
 [`tte_source()`](https:/pharmaverse.github.io/admiral/3163-explore-use-of-dplyr-120/reference/tte_source.md)
 
 ## Examples

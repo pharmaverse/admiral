@@ -170,7 +170,8 @@ advs <- derive_vars_merged_lookup(
   advs,
   dataset_add = param_lookup,
   new_vars = exprs(PARAMCD),
-  by_vars = exprs(VSTESTCD)
+  by_vars = exprs(VSTESTCD),
+  check_not_mapped_type = "warning"
 )
 #> All `VSTESTCD` are mapped.
 ```
@@ -184,6 +185,13 @@ If more than one lookup table, e.g., company parameter mappings and
 project parameter mappings, are available,
 [`consolidate_metadata()`](https:/pharmaverse.github.io/admiral/3163-explore-use-of-dplyr-120/reference/consolidate_metadata.md)
 can be used to consolidate these into a single lookup table.
+
+The `check_not_mapped_type` argument is used to control whether a
+message, warning, error, or no message at all is issued when some
+records are not mapped. This can be useful as a failsafe to flag that
+some records are not being mapped using the lookup table, which can
+often occur in cases where new data comes through and the lookup table
+has not been updated.
 
 Additionally note that each parameter is mapped to only one `PARCAT1`
 variable. This is described in section 3.3.4.1 of the ADaM

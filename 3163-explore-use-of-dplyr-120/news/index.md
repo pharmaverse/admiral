@@ -6,6 +6,35 @@
 
 ### Updates of Existing Functions
 
+- The `min_dates_strict` and `max_dates_strict` arguments were added to
+  [`derive_vars_dt()`](https:/pharmaverse.github.io/admiral/3163-explore-use-of-dplyr-120/reference/derive_vars_dt.md),
+  [`derive_vars_dtm()`](https:/pharmaverse.github.io/admiral/3163-explore-use-of-dplyr-120/reference/derive_vars_dtm.md),
+  [`convert_dtc_to_dt()`](https:/pharmaverse.github.io/admiral/3163-explore-use-of-dplyr-120/reference/convert_dtc_to_dt.md),
+  [`convert_dtc_to_dtm()`](https:/pharmaverse.github.io/admiral/3163-explore-use-of-dplyr-120/reference/convert_dtc_to_dtm.md),
+  [`impute_dtc_dt()`](https:/pharmaverse.github.io/admiral/3163-explore-use-of-dplyr-120/reference/impute_dtc_dt.md),
+  [`impute_dtc_dtm()`](https:/pharmaverse.github.io/admiral/3163-explore-use-of-dplyr-120/reference/impute_dtc_dtm.md).
+  The new arguments can be used to avoid invalid imputed dates. E.g., if
+  `AESTDTC` is imputed with `min_dates = exprs(TRTSDTM)`,
+  `max_dates_strict = exprs(AENDTM)` can be specified to ensure the
+  imputed event start date is not after the event end date (the `ADAE`
+  template and the “Creating an OCCDS ADaM” vignette were updated
+  accordingly).
+
+  See the
+  [`derive_vars_dt()`](https:/pharmaverse.github.io/admiral/3163-explore-use-of-dplyr-120/reference/derive_vars_dt.md)
+  documentation and the “Avoid Imputed Dates Before a Particular Date”
+  section of the “Date and Time Imputation” vignette
+  ([`vignette("imputation")`](https:/pharmaverse.github.io/admiral/3163-explore-use-of-dplyr-120/articles/imputation.md))
+  for details and examples.
+  ([\#2708](https://github.com/pharmaverse/admiral/issues/2708))
+
+- [`derive_vars_merged_lookup()`](https:/pharmaverse.github.io/admiral/3163-explore-use-of-dplyr-120/reference/derive_vars_merged_lookup.md)
+  was enhanced with a new `check_not_mapped_type` argument which allows
+  users to control whether a message, warning, error, or no message at
+  all is issued when some records are not mapped using the lookup
+  dataset. The `print_not_mapped` argument will thus be deprecated.
+  ([\#3188](https://github.com/pharmaverse/admiral/issues/3188))
+
 ### Breaking Changes
 
 - The following functions are entering the next phase of the
@@ -14,7 +43,8 @@
 
   **Phase 1 (message)**
 
-  No functions or arguments in this phase.
+  - `derive_vars_merged_lookup(print_not_mapped = )` is deprecated in
+    favor of the `check_not_mapped_type` argument.
 
   **Phase 2 (warning)**
 

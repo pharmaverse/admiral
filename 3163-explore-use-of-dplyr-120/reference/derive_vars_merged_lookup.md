@@ -17,7 +17,8 @@ derive_vars_merged_lookup(
   filter_add = NULL,
   check_type = "warning",
   duplicate_msg = NULL,
-  print_not_mapped = TRUE
+  print_not_mapped = NULL,
+  check_not_mapped_type = "message"
 )
 ```
 
@@ -211,8 +212,8 @@ derive_vars_merged_lookup(
 
 - print_not_mapped:
 
-  Print a list of unique `by_vars` values that do not have corresponding
-  records from the lookup table?
+  **\[deprecated\]** Print a list of unique `by_vars` values that do not
+  have corresponding records from the lookup table?
 
   Permitted values
 
@@ -220,7 +221,23 @@ derive_vars_merged_lookup(
 
   Default value
 
-  :   `TRUE`
+  :   `NULL`
+
+- check_not_mapped_type:
+
+  Check if any observations are not mapped?
+
+  If `"warning"`, `"message"`, or `"error"` is specified, the specified
+  message is issued if some records from the input dataset are not
+  mapped using the lookup table.
+
+  Permitted values
+
+  :   `"none"`, `"message"`, `"warning"`, `"error"`
+
+  Default value
+
+  :   `"message"`
 
 ## Value
 
@@ -293,7 +310,7 @@ derive_vars_merged_lookup(
   dataset_add = param_lookup,
   by_vars = exprs(VSTESTCD),
   new_vars = exprs(PARAMCD, PARAM),
-  print_not_mapped = TRUE
+  check_not_mapped_type = "message"
 )
 #> All `VSTESTCD` are mapped.
 #> # A tibble: 21 × 8

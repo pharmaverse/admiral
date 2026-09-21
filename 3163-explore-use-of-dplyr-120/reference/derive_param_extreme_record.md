@@ -36,9 +36,7 @@ derive_param_extreme_record(
 
   Sources
 
-  A list of
-  [`records_source()`](https:/pharmaverse.github.io/admiral/3163-explore-use-of-dplyr-120/reference/records_source.md)
-  objects is expected.
+  A list of `records_source()` objects is expected.
 
   Default value
 
@@ -49,10 +47,9 @@ derive_param_extreme_record(
   Source datasets
 
   A named list of datasets is expected. The `dataset_name` field of
-  [`records_source()`](https:/pharmaverse.github.io/admiral/3163-explore-use-of-dplyr-120/reference/records_source.md)
-  refers to the dataset provided in the list. The variables specified by
-  the `order` and the `by_vars` arguments are expected after applying
-  `new_vars`.
+  `records_source()` refers to the dataset provided in the list. The
+  variables specified by the `order` and the `by_vars` arguments are
+  expected after applying `new_vars`.
 
   Default value
 
