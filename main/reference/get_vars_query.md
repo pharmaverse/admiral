@@ -78,6 +78,7 @@ and `SCOPEN` respectively, whenever not missing.
 [`create_query_data()`](https:/pharmaverse.github.io/admiral/main/reference/create_query_data.md)
 
 Utilities used within Derivation functions:
+[`as_admiral_df()`](https:/pharmaverse.github.io/admiral/main/reference/as_admiral_df.md),
 [`extract_unit()`](https:/pharmaverse.github.io/admiral/main/reference/extract_unit.md),
 [`get_flagged_records()`](https:/pharmaverse.github.io/admiral/main/reference/get_flagged_records.md),
 [`get_not_mapped()`](https:/pharmaverse.github.io/admiral/main/reference/get_not_mapped.md)

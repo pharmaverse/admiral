@@ -803,12 +803,20 @@ to produce additional datasets
 
 ### Utilities used within Derivation Functions
 
+- [`as_admiral_df()`](https:/pharmaverse.github.io/admiral/main/reference/as_admiral_df.md)
+  :
+
+  Tag a Dataset with the `admiral_df` Class
+
 - [`extract_unit()`](https:/pharmaverse.github.io/admiral/main/reference/extract_unit.md)
   : Extract Unit From Parameter Description
+
 - [`get_flagged_records()`](https:/pharmaverse.github.io/admiral/main/reference/get_flagged_records.md)
   : Create an Existence Flag
+
 - [`get_not_mapped()`](https:/pharmaverse.github.io/admiral/main/reference/get_not_mapped.md)
   : Get list of records not mapped from the lookup table.
+
 - [`get_vars_query()`](https:/pharmaverse.github.io/admiral/main/reference/get_vars_query.md)
   : Get Query Variables
 
