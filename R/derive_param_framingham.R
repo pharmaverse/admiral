@@ -274,5 +274,6 @@ derive_param_framingham <- function(dataset,
       AVAL = !!analysis_value,
       !!!set_values_to
     )
-  )
+  ) %>%
+    as_admiral_df()
 }

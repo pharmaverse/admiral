@@ -562,7 +562,8 @@ filter_joined <- function(dataset,
     slice(1L) %>%
     ungroup() %>%
     select(colnames(dataset)) %>%
-    remove_tmp_vars()
+    remove_tmp_vars() %>%
+    as_admiral_df()
 }
 
 #' Count Number of Observations Where a Variable Equals a Value

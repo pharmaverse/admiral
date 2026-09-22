@@ -59,6 +59,7 @@ test_that("derive_param_tte Test 1: new observations with analysis date are deri
     expected_output,
     keys = c("USUBJID", "PARAMCD")
   )
+  expect_s3_class(actual_output, "admiral_df")
 })
 
 ## Test 2: new parameter with analysis datetime is derived correctly ----

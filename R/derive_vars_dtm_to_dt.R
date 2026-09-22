@@ -58,9 +58,11 @@ derive_vars_dtm_to_dt <- function(dataset, source_vars) {
   if (n_vars > 1L) {
     dataset %>%
       mutate(across(.cols = vars2chr(source_vars), .fns = list(new = date))) %>%
-      rename_with(.cols = ends_with("new"), .fn = ~ str_replace(., "DTM_new", "DT"))
+      rename_with(.cols = ends_with("new"), .fn = ~ str_replace(., "DTM_new", "DT")) %>%
+      as_admiral_df()
   } else {
     dataset %>%
-      mutate(!!sym(dt_vars) := date(!!sym(dtm_vars2)))
+      mutate(!!sym(dt_vars) := date(!!sym(dtm_vars2))) %>%
+      as_admiral_df()
   }
 }

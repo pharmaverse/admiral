@@ -152,5 +152,6 @@ derive_param_doseint <- function(dataset,
     parameters = c(tadm_code, tpadm_code),
     by_vars = by_vars,
     set_values_to = c(set_values_to, analysis_value, update_aval)
-  )
+  ) %>%
+    as_admiral_df()
 }

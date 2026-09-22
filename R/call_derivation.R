@@ -144,7 +144,7 @@ call_derivation <- function(dataset = NULL, derivation, variable_params, ...) {
     dataset <- eval_tidy(call, env = eval_env)
   }
 
-  dataset
+  as_admiral_df(dataset)
 }
 
 #' Create a Set of Parameters

@@ -181,7 +181,8 @@ derive_param_qtc <- function(dataset,
       )
       cnd_muffle(cnd)
     }
-  )
+  ) %>%
+    as_admiral_df()
 }
 
 #' Get Default Parameter Code for Corrected QT

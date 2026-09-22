@@ -100,7 +100,7 @@ test_that("compute_scale Test 5: works as expected within derive_summary_records
         PARAMCD = "ITEMAVG"
       )
     ),
-    expected_output
+    as_admiral_df(expected_output)
   )
 })
 

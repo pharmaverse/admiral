@@ -25,6 +25,8 @@ test_that("derive_vars_merged Test 1: merge all variables", {
 
   expected <- left_join(advs, adsl, by = c("STUDYID", "USUBJID"))
 
+  expect_s3_class(actual, "admiral_df")
+
   expect_dfs_equal(
     base = expected,
     compare = actual,
@@ -660,6 +662,9 @@ test_that("derive_var_merged_exist_flag Test 19: merge existence flag", {
   )
   expected <-
     mutate(adsl, VSEVALFL = c("Y", "Y", NA_character_, NA_character_))
+
+  expect_s3_class(actual, "admiral_df")
+
   expect_dfs_equal(
     base = expected,
     compare = actual,
@@ -740,6 +745,8 @@ test_that("derive_vars_merged_lookup Test 21: merge lookup table", {
   expected <-
     left_join(vs, param_lookup, by = c("VSTESTCD", "VSTEST")) %>%
     rename(PARAM = DESCRIPTION)
+
+  expect_s3_class(actual, "admiral_df")
 
   expect_dfs_equal(
     base = expected,
@@ -927,14 +934,18 @@ test_that("derive_vars_merged_summary Test 26: dataset == dataset_add, no filter
 
   adbds <- select(expected, -MEANVIS)
 
+  actual_output <- derive_vars_merged_summary(
+    adbds,
+    dataset_add = adbds,
+    by_vars = exprs(AVISIT),
+    new_vars = exprs(MEANVIS = mean(AVAL, na.rm = TRUE))
+  )
+
+  expect_s3_class(actual_output, "admiral_df")
+
   expect_dfs_equal(
     base = expected,
-    compare = derive_vars_merged_summary(
-      adbds,
-      dataset_add = adbds,
-      by_vars = exprs(AVISIT),
-      new_vars = exprs(MEANVIS = mean(AVAL, na.rm = TRUE))
-    ),
+    compare = actual_output,
     keys = c("AVISIT", "ASEQ")
   )
 })
@@ -1041,14 +1052,18 @@ test_that("derive_var_merged_summary Test 30: dataset == dataset_add, no filter"
 
   adbds <- select(expected, -MEANVIS)
 
+  actual_output <- derive_var_merged_summary(
+    adbds,
+    dataset_add = adbds,
+    by_vars = exprs(AVISIT),
+    new_vars = exprs(MEANVIS = mean(AVAL, na.rm = TRUE))
+  )
+
+  expect_s3_class(actual_output, "admiral_df")
+
   expect_dfs_equal(
     base = expected,
-    compare = derive_var_merged_summary(
-      adbds,
-      dataset_add = adbds,
-      by_vars = exprs(AVISIT),
-      new_vars = exprs(MEANVIS = mean(AVAL, na.rm = TRUE))
-    ),
+    compare = actual_output,
     keys = c("AVISIT", "ASEQ")
   )
 })

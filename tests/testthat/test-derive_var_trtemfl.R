@@ -33,12 +33,14 @@ test_that("derive_var_trtemfl Test 1: end_window and worsening parameters not sp
       TRTEDTM = if_else(USUBJID == "1", lubridate::ymd_hm("2022-04-30T11:30"), ymd_hms(""))
     )
   adae <- select(expected, -starts_with("TRTEM"))
+  actual <- derive_var_trtemfl(adae)
 
   expect_dfs_equal(
     base = select(expected, -TRTEM2FL, -TRTEM3FL),
-    comp = derive_var_trtemfl(adae),
+    comp = actual,
     keys = c("USUBJID", "ASTDTM", "AENDTM")
   )
+  expect_s3_class(actual, "admiral_df")
 })
 
 ## Test 2: with end_window and worsening ----

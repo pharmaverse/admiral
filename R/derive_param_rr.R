@@ -114,7 +114,8 @@ derive_param_rr <- function(dataset,
       )
       cnd_muffle(cnd)
     }
-  )
+  ) %>%
+    as_admiral_df()
 }
 
 #' Compute RR Interval From Heart Rate

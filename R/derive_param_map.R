@@ -174,7 +174,8 @@ derive_param_map <- function(dataset,
       )
       cnd_muffle(cnd)
     }
-  )
+  ) %>%
+    as_admiral_df()
 }
 
 #' Compute Mean Arterial Pressure (MAP)
