@@ -122,7 +122,7 @@ We use the following for support and communications between user and developer c
 
 * [Slack](https://pharmaverse.slack.com)---for informal discussions, Q\&A and building our user community. If you don't have access, use this [link](https://join.slack.com/t/pharmaverse/shared_invite/zt-yv5atkr4-Np2ytJ6W_QKz_4Olo7Jo9A) to join the pharmaverse Slack workspace.
 * [GitHub Issues](https://github.com/pharmaverse/admiral/issues)---for direct feedback, enhancement requests or raising bugs.
-* [Pharmaverse blog](https://pharmaverse.github.io/blog/)---for bite-sized posts showcasing how `{admiral}` and other packages in the pharmaverse can be used to realize the vision of full end-to-end Clinical Reporting in R.
+* [Pharmaverse Blog](https://pharmaverse.github.io/blog/)---for bite-sized posts showcasing how `{admiral}` and other packages in the pharmaverse can be used to realize the vision of full end-to-end Clinical Reporting in R.
 * [Presentation Archive](https://pharmaverse.github.io/admiraldiscovery/articles/presentation_archive.html)---for a full collection of `{admiral}` conference presentations over the years.
 
 ## Acknowledgments
