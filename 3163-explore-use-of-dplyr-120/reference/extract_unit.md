@@ -25,6 +25,7 @@ A string
 ## See also
 
 Utilities used within Derivation functions:
+[`as_admiral_df()`](https:/pharmaverse.github.io/admiral/3163-explore-use-of-dplyr-120/reference/as_admiral_df.md),
 [`get_flagged_records()`](https:/pharmaverse.github.io/admiral/3163-explore-use-of-dplyr-120/reference/get_flagged_records.md),
 [`get_not_mapped()`](https:/pharmaverse.github.io/admiral/3163-explore-use-of-dplyr-120/reference/get_not_mapped.md),
 [`get_vars_query()`](https:/pharmaverse.github.io/admiral/3163-explore-use-of-dplyr-120/reference/get_vars_query.md)

@@ -4,6 +4,14 @@
 
 ### New Features
 
+- Added function
+  [`as_admiral_df()`](https:/pharmaverse.github.io/admiral/3163-explore-use-of-dplyr-120/reference/as_admiral_df.md).
+  Tags a data frame with the `admiral_df` S3 class, preserving its
+  existing classes. All
+  [admiral](https://pharmaverse.github.io/admiral/) dataset functions
+  now tag their output datasets with this class.
+  ([\#3160](https://github.com/pharmaverse/admiral/issues/3160))
+
 ### Updates of Existing Functions
 
 - The `min_dates_strict` and `max_dates_strict` arguments were added to

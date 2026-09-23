@@ -452,12 +452,20 @@ to produce additional datasets
 
 ### Utilities used within Derivation Functions
 
+- [`as_admiral_df()`](https:/pharmaverse.github.io/admiral/3163-explore-use-of-dplyr-120/reference/as_admiral_df.md)
+  :
+
+  Tag a Dataset with the `admiral_df` Class
+
 - [`extract_unit()`](https:/pharmaverse.github.io/admiral/3163-explore-use-of-dplyr-120/reference/extract_unit.md)
   : Extract Unit From Parameter Description
+
 - [`get_flagged_records()`](https:/pharmaverse.github.io/admiral/3163-explore-use-of-dplyr-120/reference/get_flagged_records.md)
   : Create an Existence Flag
+
 - [`get_not_mapped()`](https:/pharmaverse.github.io/admiral/3163-explore-use-of-dplyr-120/reference/get_not_mapped.md)
   : Get list of records not mapped from the lookup table.
+
 - [`get_vars_query()`](https:/pharmaverse.github.io/admiral/3163-explore-use-of-dplyr-120/reference/get_vars_query.md)
   : Get Query Variables
 

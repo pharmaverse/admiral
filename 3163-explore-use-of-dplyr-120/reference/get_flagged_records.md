@@ -71,6 +71,7 @@ flag for the condition.
 ## See also
 
 Utilities used within Derivation functions:
+[`as_admiral_df()`](https:/pharmaverse.github.io/admiral/3163-explore-use-of-dplyr-120/reference/as_admiral_df.md),
 [`extract_unit()`](https:/pharmaverse.github.io/admiral/3163-explore-use-of-dplyr-120/reference/extract_unit.md),
 [`get_not_mapped()`](https:/pharmaverse.github.io/admiral/3163-explore-use-of-dplyr-120/reference/get_not_mapped.md),
 [`get_vars_query()`](https:/pharmaverse.github.io/admiral/3163-explore-use-of-dplyr-120/reference/get_vars_query.md)
