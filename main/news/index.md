@@ -103,6 +103,15 @@
 
 ### Various
 
+- The minimum `dplyr` version was bumped to `1.2.0` to make use of the
+  new
+  [`recode_values()`](https://dplyr.tidyverse.org/reference/recode-and-replace-values.html),
+  [`filter_out()`](https://dplyr.tidyverse.org/reference/filter.html),
+  and
+  [`replace_when()`](https://dplyr.tidyverse.org/reference/case-and-replace-when.html)
+  functions.
+  ([\#3163](https://github.com/pharmaverse/admiral/issues/3163))
+
 - Updated the default `ae_event`, `ae_ser_event`, `ae_gr1_event`,
   `ae_gr2_event`, `ae_gr3_event`, `ae_gr4_event`, `ae_gr5_event`,
   `ae_gr_35_event`, `ae_wd_event` and `ae_sev_event` objects to specify
