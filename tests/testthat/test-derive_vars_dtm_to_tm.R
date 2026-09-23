@@ -42,6 +42,7 @@ test_that("derive_vars_dtm_to_tm Test 1: mutliple variables", {
     actual_output,
     keys = c("STUDYID", "USUBJID", "TRTSDTM", "ASTDTM", "AENDTM")
   )
+  expect_s3_class(actual_output, "admiral_df")
 })
 
 ## Test 2: single variable ----

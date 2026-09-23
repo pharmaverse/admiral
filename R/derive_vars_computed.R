@@ -191,9 +191,11 @@ derive_vars_computed <- function(dataset,
       dataset,
       dataset_add = derive_param_return,
       by_vars = by_vars
-    )
+    ) %>%
+      as_admiral_df()
   } else {
     dataset %>%
-      mutate(!!!setNames(rep(list(NA_integer_), length(names(new_vars))), names(new_vars)))
+      mutate(!!!setNames(rep(list(NA_integer_), length(names(new_vars))), names(new_vars))) %>%
+      as_admiral_df()
   }
 }

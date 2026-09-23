@@ -42,6 +42,7 @@ test_that("derive_var_base Test 1: `target` is set to `source` where `ABLFL == '
     actual_output,
     keys = c("STUDYID", "USUBJID", "PARAMCD", "ASEQ")
   )
+  expect_s3_class(actual_output, "admiral_df")
 })
 
 ## Test 2: `target` is set to `NA` if a baseline record is missing ----

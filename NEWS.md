@@ -2,6 +2,10 @@
 
 ## New Features
 
+- Added function `as_admiral_df()`. Tags a data frame with the `admiral_df` S3
+class, preserving its existing classes. All `{admiral}` dataset functions now tag their
+output datasets with this class. (#3160)
+
 ## Updates of Existing Functions
 
 - The `min_dates_strict` and `max_dates_strict` arguments were added to

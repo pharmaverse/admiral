@@ -26,6 +26,7 @@ test_that("derive_vars_transposed Test 1: the merge dataset is transposed and me
   )
 
   expect_dfs_equal(expected_output, actual_output, keys = "USUBJID")
+  expect_s3_class(actual_output, "admiral_df")
 })
 
 

@@ -754,6 +754,7 @@ test_that("derive_vars_dt Test 22: default behavior", {
     actual_output,
     "XXSTDTC"
   )
+  expect_s3_class(actual_output, "admiral_df")
 })
 
 ## Test 23: no date imputation, add DTF ----

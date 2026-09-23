@@ -30,6 +30,8 @@ test_that("derive_extreme_records Test 1: add last observation for each group", 
     set_values_to = exprs(DTYPE = "LOV")
   )
 
+  expect_s3_class(actual_output, "admiral_df")
+
   expect_dfs_equal(
     base = expected_output,
     compare = actual_output,

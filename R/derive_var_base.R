@@ -106,5 +106,6 @@ derive_var_base <- function(dataset,
       "Input dataset contains multiple baseline records with respect to",
       "{.var {by_vars}}"
     )
-  )
+  ) %>%
+    as_admiral_df()
 }

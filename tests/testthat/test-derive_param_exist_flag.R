@@ -61,6 +61,8 @@ test_that("derive_param_merged_exist_flag Test 1: derive parameter indicating PD
     comp = actual,
     keys = c("USUBJID", "PARAMCD")
   )
+
+  expect_s3_class(actual, "admiral_df")
 })
 
 

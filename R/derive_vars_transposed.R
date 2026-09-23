@@ -214,5 +214,6 @@ derive_vars_transposed <- function(dataset,
         call = parent.frame(n = 4)
       )
     }
-  )
+  ) %>%
+    as_admiral_df()
 }

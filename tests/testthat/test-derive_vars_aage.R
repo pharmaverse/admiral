@@ -6,8 +6,10 @@ test_that("derive_vars_aage Test 1: duration and unit variable are added", {
     ymd("1999-09-09"), ymd("2020-02-20")
   )
   expected_output <- mutate(input, AAGE = 20, AAGEU = "YEARS")
+  actual_output <- derive_vars_aage(input)
 
-  expect_dfs_equal(derive_vars_aage(input), expected_output, keys = c("BRTHDT", "RANDDT"))
+  expect_dfs_equal(actual_output, expected_output, keys = c("BRTHDT", "RANDDT"))
+  expect_s3_class(actual_output, "admiral_df")
 })
 
 ## Test 2: Error is thrown when age_unit is not proper unit ----
@@ -35,8 +37,10 @@ test_that("derive_var_age_years Test 3: derive_var_age_years works as expected w
     input,
     AAGE = c(1, 2, 3, 4, 5)
   )
+  actual_output <- derive_var_age_years(input, AGE, new_var = AAGE)
 
-  expect_dfs_equal(derive_var_age_years(input, AGE, new_var = AAGE), expected_output, keys = "AGE")
+  expect_dfs_equal(actual_output, expected_output, keys = "AGE")
+  expect_s3_class(actual_output, "admiral_df")
 })
 
 ## Test 4: AGEU doesn't exist and `age_unit` is used ----
