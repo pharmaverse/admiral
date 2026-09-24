@@ -90,7 +90,8 @@ filter_exist <- function(dataset,
       dataset_add %>%
         filter_if(filter_add),
       by = vars2chr(by_vars)
-    )
+    ) %>%
+    as_admiral_df()
 }
 
 #' Returns records that don't fit into existing by groups in a filtered source dataset
@@ -175,5 +176,6 @@ filter_not_exist <- function(dataset,
       dataset_add %>%
         filter_if(filter_add),
       by = vars2chr(by_vars)
-    )
+    ) %>%
+    as_admiral_df()
 }

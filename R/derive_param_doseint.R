@@ -132,14 +132,18 @@ derive_param_doseint <- function(dataset,
   analysis_value <- exprs(AVAL = !!aval_tadm / !!aval_tpdm * 100)
 
   # handle 0 doses planned if needed
+  # {{ }} embraces replace_when() as a value (resolved here, inside admiral's
+  # own namespace) rather than as a symbol to be looked up later by
+  # admiraldev::process_set_values_to(); see the same pattern for compute_map()
+  # in derive_param_map()
   if (zero_doses == "100") {
     update_aval <- exprs(
-      AVAL = case_when(
+      AVAL = {{ replace_when }}(
+        AVAL,
         !!aval_tpdm == 0 &
           !!aval_tadm > 0 ~ 100,
         !!aval_tpdm == 0 &
-          !!aval_tadm == 0 ~ 0,
-        TRUE ~ AVAL
+          !!aval_tadm == 0 ~ 0
       )
     )
   } else {
@@ -152,5 +156,6 @@ derive_param_doseint <- function(dataset,
     parameters = c(tadm_code, tpadm_code),
     by_vars = by_vars,
     set_values_to = c(set_values_to, analysis_value, update_aval)
-  )
+  ) %>%
+    as_admiral_df()
 }

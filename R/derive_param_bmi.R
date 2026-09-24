@@ -202,7 +202,8 @@ derive_param_bmi <- function(dataset,
       )
       cnd_muffle(cnd)
     }
-  )
+  ) %>%
+    as_admiral_df()
 }
 
 #' Compute Body Mass Index (BMI)

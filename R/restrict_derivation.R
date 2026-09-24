@@ -88,7 +88,7 @@ restrict_derivation <- function(dataset,
 
   # Split input dataset
   data_ignore <- dataset %>%
-    filter(!(!!filter) | is.na(!!filter))
+    filter_out(!!filter)
   data_derive <- dataset %>%
     filter(!!filter)
 
@@ -102,5 +102,6 @@ restrict_derivation <- function(dataset,
     )
 
   # Put datasets together again
-  bind_rows(data_derive, data_ignore)
+  bind_rows(data_derive, data_ignore) %>%
+    as_admiral_df()
 }

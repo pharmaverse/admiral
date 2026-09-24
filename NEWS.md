@@ -2,6 +2,10 @@
 
 ## New Features
 
+- Added function `as_admiral_df()`. Tags a data frame with the `admiral_df` S3
+class, preserving its existing classes. All `{admiral}` dataset functions now tag their
+output datasets with this class. (#3160)
+
 ## Updates of Existing Functions
 
 - The `min_dates_strict` and `max_dates_strict` arguments were added to
@@ -62,6 +66,9 @@ argument will thus be deprecated. (#3188)
   in the README and the "Get Started" navigation bar. (#3159)
 
 ## Various
+
+- The minimum `dplyr` version was bumped to `1.2.0` to make use of the new
+`recode_values()`, `filter_out()`, and `replace_when()` functions. (#3163)
 
 - Updated the default `ae_event`, `ae_ser_event`, `ae_gr1_event`, `ae_gr2_event`, `ae_gr3_event`, 
 `ae_gr4_event`, `ae_gr5_event`, `ae_gr_35_event`, `ae_wd_event` and `ae_sev_event` objects to 

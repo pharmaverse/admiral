@@ -48,6 +48,7 @@ test_that("filter_relative Test 1: mode = first, selection = before, inclusive =
     comp = actual,
     keys = c("USUBJID", "AVISITN")
   )
+  expect_s3_class(actual, "admiral_df")
 })
 
 ## filter_relative Test 2: mode = first, selection = before, inclusive = FALSE ----

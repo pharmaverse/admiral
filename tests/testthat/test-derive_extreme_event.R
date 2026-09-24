@@ -59,6 +59,8 @@ test_that("derive_extreme_event Test 1: `mode` = first", {
     check_type = "none"
   )
 
+  expect_s3_class(actual_output, "admiral_df")
+
   expect_dfs_equal(
     base = expected_output,
     compare = actual_output,

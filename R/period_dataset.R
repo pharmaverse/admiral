@@ -127,11 +127,11 @@ create_period_dataset <- function(dataset,
     str_replace("w", "\\\\d") %>%
     str_replace("(\\w+)\\\\d", "(\\1)\\\\d") %>%
     str_replace_all("((\\\\d)+)", "(\\1)")
-  mode <- case_when(
+  mode <- replace_when(
+    rep("none", length(new_vars_chr)),
     str_detect(new_vars_chr, "\\w+xx\\w+w\\w*") ~ "subperiod",
     str_detect(new_vars_chr, "\\w+xx\\w*") ~ "period",
-    str_detect(new_vars_chr, "\\w+w\\w*") ~ "phase",
-    TRUE ~ "none"
+    str_detect(new_vars_chr, "\\w+w\\w*") ~ "phase"
   ) %>% unique()
   if (any(mode == "none")) {
     cli_abort(
@@ -220,7 +220,7 @@ create_period_dataset <- function(dataset,
       )
     }
   }
-  period_ref_final
+  as_admiral_df(period_ref_final)
 }
 
 #' Add Subperiod, Period, or Phase Variables to ADSL
@@ -359,11 +359,11 @@ derive_vars_period <- function(dataset,
 
   new_vars_names <- names(new_vars)
   new_vars_chr <- vars2chr(new_vars)
-  mode <- case_when(
+  mode <- replace_when(
+    rep("none", length(new_vars_names)),
     str_detect(new_vars_names, "\\w+xx\\w+w\\w*") ~ "subperiod",
     str_detect(new_vars_names, "\\w+xx\\w*") ~ "period",
-    str_detect(new_vars_names, "\\w+w\\w*") ~ "phase",
-    TRUE ~ "none"
+    str_detect(new_vars_names, "\\w+w\\w*") ~ "phase"
   ) %>% unique()
   if (any(mode == "none")) {
     cli_abort(
@@ -447,5 +447,7 @@ derive_vars_period <- function(dataset,
     dataset,
     dataset_add = ref_wide,
     by_vars = subject_keys
-  ) %>% rename(all_of(rename_arg))
+  ) %>%
+    rename(all_of(rename_arg)) %>%
+    as_admiral_df()
 }

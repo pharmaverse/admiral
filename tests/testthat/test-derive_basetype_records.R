@@ -50,6 +50,8 @@ test_that("derive_basetype_records Test 1: records are duplicated across differe
     )
   )
 
+  expect_s3_class(actual_output, "admiral_df")
+
   expect_dfs_equal(actual_output, expect_output, keys = c("USUBJID", "BASETYPE", "PARAMCD", "ASEQ"))
 })
 
