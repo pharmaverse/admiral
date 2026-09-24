@@ -15,6 +15,7 @@ A `data.frame` or `NULL`
 ## See also
 
 Utilities used within Derivation functions:
+[`as_admiral_df()`](https:/pharmaverse.github.io/admiral/3159-reference-admiral-skills-somewhere-in-docs/reference/as_admiral_df.md),
 [`extract_unit()`](https:/pharmaverse.github.io/admiral/3159-reference-admiral-skills-somewhere-in-docs/reference/extract_unit.md),
 [`get_flagged_records()`](https:/pharmaverse.github.io/admiral/3159-reference-admiral-skills-somewhere-in-docs/reference/get_flagged_records.md),
 [`get_vars_query()`](https:/pharmaverse.github.io/admiral/3159-reference-admiral-skills-somewhere-in-docs/reference/get_vars_query.md)

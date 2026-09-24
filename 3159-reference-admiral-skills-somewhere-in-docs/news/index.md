@@ -4,6 +4,14 @@
 
 ### New Features
 
+- Added function
+  [`as_admiral_df()`](https:/pharmaverse.github.io/admiral/3159-reference-admiral-skills-somewhere-in-docs/reference/as_admiral_df.md).
+  Tags a data frame with the `admiral_df` S3 class, preserving its
+  existing classes. All
+  [admiral](https://pharmaverse.github.io/admiral/) dataset functions
+  now tag their output datasets with this class.
+  ([\#3160](https://github.com/pharmaverse/admiral/issues/3160))
+
 ### Updates of Existing Functions
 
 - The `min_dates_strict` and `max_dates_strict` arguments were added to
@@ -99,6 +107,15 @@
   ([\#3159](https://github.com/pharmaverse/admiral/issues/3159))
 
 ### Various
+
+- The minimum `dplyr` version was bumped to `1.2.0` to make use of the
+  new
+  [`recode_values()`](https://dplyr.tidyverse.org/reference/recode-and-replace-values.html),
+  [`filter_out()`](https://dplyr.tidyverse.org/reference/filter.html),
+  and
+  [`replace_when()`](https://dplyr.tidyverse.org/reference/case-and-replace-when.html)
+  functions.
+  ([\#3163](https://github.com/pharmaverse/admiral/issues/3163))
 
 - Updated the default `ae_event`, `ae_ser_event`, `ae_gr1_event`,
   `ae_gr2_event`, `ae_gr3_event`, `ae_gr4_event`, `ae_gr5_event`,
