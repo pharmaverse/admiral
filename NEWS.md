@@ -61,6 +61,9 @@ argument will thus be deprecated. (#3188)
 
 - Updated the "Lab Grading" vignette to replace the deprecated `abnormal_indicator` argument reference
   with the new `high_indicator` argument in `derive_var_atoxgr_dir()`.
+  
+- `{admiral}`'s README was updated to remove redundant information and consolidate a number of sections
+together. Additionally, the package manifesto was moved to the `{admiraldev}` website. (#3154)
 
 ## Various
 
@@ -80,8 +83,6 @@ duplicate warning in the "Higher Order Functions" vignette. (#3153)
 - Replaced internal uses of `expr_c()` with `c()` due to `{admiraldev}`'s deprecation of `expr_c()`. (#3179)
 
 </details>
-
-
 
 # admiral 1.5.0
 
