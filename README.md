@@ -124,6 +124,7 @@ We use the following for support and communications between user and developer c
 * [GitHub Issues](https://github.com/pharmaverse/admiral/issues)---for direct feedback, enhancement requests or raising bugs.
 * [Pharmaverse Blog](https://pharmaverse.github.io/blog/)---for bite-sized posts showcasing how `{admiral}` and other packages in the pharmaverse can be used to realize the vision of full end-to-end Clinical Reporting in R.
 * [Presentation Archive](https://pharmaverse.github.io/admiraldiscovery/articles/presentation_archive.html)---for a full collection of `{admiral}` conference presentations over the years.
+* Please see the [{admiral} agent skills](https://github.com/RConsortium/pharma-skills/tree/main/admiral) for AI-agent skill definitions that help derive ADaM datasets with `{admiral}`.
 
 ## Acknowledgments
 
