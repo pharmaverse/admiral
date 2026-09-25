@@ -119,6 +119,8 @@
 #'   certain observation before the current observation up to the current
 #'   observation. For an example, see the "Examples" section below.
 #'
+#'   `r roxygen_float_comparison()`
+#'
 #' @permitted [condition]
 #'
 #' @param first_cond_upper Condition for selecting range of data (after)
@@ -132,6 +134,8 @@
 #'   functions which should not apply to all observations but only up to the
 #'   confirmation assessment. For an example, see the "Examples" section below.
 #'
+#'   `r roxygen_float_comparison()`
+#'
 #' @permitted [condition]
 #'
 #' @param filter_join Filter for the joined dataset
@@ -144,6 +148,8 @@
 #'
 #'   The condition can include summary functions like `all()` or `any()`. The
 #'   joined dataset is grouped by the original observations.
+#'
+#'   `r roxygen_float_comparison()`
 #'
 #' @permitted [condition]
 #'
@@ -863,6 +869,8 @@ derive_vars_joined <- function(dataset,
 #'   The condition can include summary functions like `all()` or `any()`. The
 #'   additional dataset is grouped by the by variables (`by_vars`).
 #'
+#'   `r roxygen_float_comparison()`
+#'
 #' @permitted [condition]
 #'
 #' @param first_cond_lower Condition for selecting range of data (before)
@@ -878,6 +886,8 @@ derive_vars_joined <- function(dataset,
 #'   certain observation before the current observation up to the current
 #'   observation.
 #'
+#'   `r roxygen_float_comparison()`
+#'
 #' @permitted [condition]
 #'
 #' @param first_cond_upper Condition for selecting range of data (after)
@@ -891,6 +901,8 @@ derive_vars_joined <- function(dataset,
 #'   functions which should not apply to all observations but only up to the
 #'   confirmation assessment.
 #'
+#'   `r roxygen_float_comparison()`
+#'
 #' @permitted [condition]
 #'
 #' @param filter_join Filter for the joined dataset
@@ -903,6 +915,8 @@ derive_vars_joined <- function(dataset,
 #'
 #'   The condition can include summary functions like `all()` or `any()`. The
 #'   joined dataset is grouped by the original observations.
+#'
+#'   `r roxygen_float_comparison()`
 #'
 #' @permitted [condition]
 #'

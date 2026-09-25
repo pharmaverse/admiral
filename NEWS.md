@@ -65,6 +65,12 @@ argument will thus be deprecated. (#3188)
 - `{admiral}`'s README was updated to remove redundant information and consolidate a number of sections
 together. Additionally, the package manifesto was moved to the `{admiraldev}` website. (#3154)
 
+- Added a "Floating Point Comparisons" section to the "Programming Concepts and Conventions"
+  vignette explaining how comparisons of derived numeric variables to fixed values in conditions
+  can give unexpected results and how to avoid this. The section is referenced in the
+  documentation of all function arguments which accept conditions, e.g., `condition` of
+  `derive_vars_crit_flag()` or `filter_add`. (#3178)
+
 ## Various
 
 - The minimum `dplyr` version was bumped to `1.2.0` to make use of the new

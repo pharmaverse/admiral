@@ -113,6 +113,8 @@ event <- function(dataset_name = NULL,
 #'
 #' @param filter_source A condition to restrict the source dataset before joining
 #'
+#'   `r roxygen_float_comparison()`
+#'
 #' @permitted [condition]
 #'
 #' @param condition An unquoted condition for selecting the observations, which
@@ -128,6 +130,8 @@ event <- function(dataset_name = NULL,
 #'   "NE") <= 1` selects observations with response "CR" and for all
 #'   observations up to the confirmation observation the response is "CR" or
 #'   "NE" and there is at most one "NE".
+#'
+#'   `r roxygen_float_comparison()`
 #'
 #' @permitted [condition]
 #'
@@ -187,6 +191,8 @@ event <- function(dataset_name = NULL,
 #'   certain observation before the current observation up to the current
 #'   observation.
 #'
+#'   `r roxygen_float_comparison()`
+#'
 #' @permitted [condition]
 #'
 #' @param first_cond_upper Condition for selecting range of data (after)
@@ -199,6 +205,8 @@ event <- function(dataset_name = NULL,
 #'   This parameter should be specified if `condition` contains summary
 #'   functions which should not apply to all observations but only up to the
 #'   confirmation assessment.
+#'
+#'   `r roxygen_float_comparison()`
 #'
 #' @permitted [condition]
 #'

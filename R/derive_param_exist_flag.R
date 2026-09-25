@@ -66,6 +66,8 @@
 #'   for flagging. If the parameter is not specified, all observations are
 #'   considered.
 #'
+#'   `r roxygen_float_comparison()`
+#'
 #' @permitted a condition
 #'
 #' @param set_values_to Variables to set

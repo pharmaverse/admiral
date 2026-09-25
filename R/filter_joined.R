@@ -66,6 +66,8 @@
 #'   certain observation before the current observation up to the current
 #'   observation. For examples see the "Examples" section below.
 #'
+#'   `r roxygen_float_comparison()`
+#'
 #' @permitted [condition]
 #'
 #' @param first_cond_upper Condition for selecting range of data (after)
@@ -78,6 +80,8 @@
 #'   This parameter should be specified if `filter_join` contains summary
 #'   functions which should not apply to all observations but only up to the
 #'   confirmation assessment. For examples see the "Examples" section below.
+#'
+#'   `r roxygen_float_comparison()`
 #'
 #' @permitted [condition]
 #'
@@ -118,6 +122,8 @@
 #'   The condition can include summary functions. The additional dataset is
 #'   grouped by the by variables (`by_vars`).
 #'
+#'   `r roxygen_float_comparison()`
+#'
 #' @permitted [condition]
 #'
 #' @param filter_join Condition for selecting observations
@@ -132,6 +138,8 @@
 #'   "NE") <= 1` selects observations with response "CR" and for all
 #'   observations up to the confirmation observation the response is "CR" or
 #'   "NE" and there is at most one "NE".
+#'
+#'   `r roxygen_float_comparison()`
 #'
 #' @permitted [condition]
 #'

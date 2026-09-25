@@ -40,6 +40,8 @@
 #'   new parameter, i.e., only observations fulfilling the condition are taken
 #'   into account.
 #'
+#'   `r roxygen_float_comparison()`
+#'
 #' @permitted [condition]
 #'
 #' @param parameters Required parameter codes
