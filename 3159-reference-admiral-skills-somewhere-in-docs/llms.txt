@@ -66,7 +66,6 @@ the below schedule shows, or there may even be ad-hoc releases.
 
 | Release Schedule | Phase 1- Date and Packages                                          | Phase 2- Date and Packages                                            |
 |------------------|---------------------------------------------------------------------|-----------------------------------------------------------------------|
-|                  |                                                                     |                                                                       |
 | Q4 2026/Q1 2027  | Late December 2026/Early January 2027                               | Mid-January 2027                                                      |
 |                  | [{pharmaversesdtm}](https://pharmaverse.github.io/pharmaversesdtm/) | [{admiralonco}](https://pharmaverse.github.io/admiralonco/)           |
 |                  | [{admiraldev}](https://pharmaverse.github.io/admiraldev/)           | [{admiralophtha}](https://pharmaverse.github.io/admiralophtha/)       |
@@ -106,14 +105,14 @@ grow over time to an asset library that is robust, easy to use and has
 an across-industry focus. We do not see a coverage of 100% of all ADaM
 derivations as ever achievable—ADaM is endless.
 
-We will provide:
+We provide:
 
 - A toolbox of re-usable functions and utilities to create ADaM datasets
   using R scripts in a modular manner (an “opinionated” design
   strategy).
 - Pharmaceutical communities and companies are encouraged to contribute
   to [admiral](https://pharmaverse.github.io/admiral/) following the
-  provided programming strategy and modular approach
+  provided programming strategy and modular approach.
 - Functions that are comprehensively documented and tested, including
   example calls—these are all listed in the [Reference
   section](https://pharmaverse.github.io/admiral/cran-release/reference/index.html).
@@ -168,162 +167,10 @@ The following packages are also useful when working with ADaM datasets:
 - [{xportr}](https://atorus-research.github.io/xportr/)—this provides
   functionality to get xpt files ready for transport.
 
-## `{admiral}` Manifesto
-
-For [admiral](https://pharmaverse.github.io/admiral/) and all extension
-packages, we prioritize providing our users with a **simple to adopt**
-toolkit that enables them to produce **readable** and **easily
-constructible** ADaM programs. The following explains our philosophy,
-which we try to adhere to across the
-[admiral](https://pharmaverse.github.io/admiral/) family of packages.
-There isn’t always a clear single, straightforward rule, but there are
-guiding principles we adhere to for
-[admiral](https://pharmaverse.github.io/admiral/). This manifesto helps
-show the considerations of our developers when making decisions.
-
-We have four design principles to achieve the main goal:
-
-### Usability
-
-All [admiral](https://pharmaverse.github.io/admiral/) functions should
-be easy to use.
-
-- Documentation is an absolute priority. Each function reference page
-  should cover the purpose, descriptions of each argument with permitted
-  values, the expected input and output, with clear real-life
-  examples—so that users don’t need to dig through code to find answers.
-- Vignettes that complement the functional documentation to help users
-  see how best the functions can be applied to achieve ADaM
-  requirements.
-- Functions should be written and structured in a way that users are
-  able to read, re-use or extend them for study specific purposes if
-  needed (see Readability below).
-
-### Simplicity
-
-All [admiral](https://pharmaverse.github.io/admiral/) functions have a
-clear purpose.
-
-- We try not to ever design single functions that could achieve numerous
-  very different derivations. For example if you as a user pick up a
-  function with \>10 different arguments then chances are it is going to
-  be difficult to understand if this function could be applied for your
-  specific need. The intention is that arguments/parameters can
-  influence how the output of a function is calculated, but not change
-  the purpose of the function.
-
-- We try to combine similar tasks and algorithms into one function where
-  applicable to reduce the amount of repetitive functions with similar
-  algorithms and to group together similar functionality to increase
-  usability (e.g. one study day calculation rather than a function per
-  variable).
-
-- We strive to design functions that are not too general and trying to
-  fulfill multiple, complex purposes.
-
-- Functions should not allow expressions as arguments that are used as
-  code snippets in function calls.
-
-- We recommend to avoid copy and paste of complex computational
-  algorithms or repetitive code like checks and advise to wrap them into
-  a function. However we would also like to avoid multi-layered
-  functional nesting, so this needs to be considered carefully to keep
-  the nesting of 3-4 functions an exception rather than the rule.
-
-### Findability
-
-All [admiral](https://pharmaverse.github.io/admiral/) functions are
-easily findable.
-
-- In a growing code base, across a family of packages, we make every
-  effort to make our functions easily findable.
-- We use consistent naming conventions across all our functions, and
-  provide vignettes and [ADaM
-  templates](https://pharmaverse.github.io/admiral/cran-release/articles/templates.html)
-  that help users to get started and build familiarity. Each
-  [admiral](https://pharmaverse.github.io/admiral/) family package
-  website is searchable.
-- We avoid repetitive functions that will do similar tasks (as explained
-  above with study day example).
-- Each package extension is kept focused on the specific scope,
-  e.g. features that are relevant across multiple extension packages
-  will be moved to the core
-  [admiral](https://pharmaverse.github.io/admiral/) package.
-
-### Readability
-
-All [admiral](https://pharmaverse.github.io/admiral/) functions follow
-the [Programming
-Strategy](https://pharmaverse.github.io/admiraldev/articles/programming_strategy.html)
-that all our developers and contributors must follow, so that all our
-code has a high degree of consistency and readability.
-
-- We encourage use of tidyverse (e.g. dplyr) over similar functionality
-  existing in base R.
-- For sections of code that perform the actual derivations (e.g. besides
-  assertions or basic utilities), we try to limit nesting of too many
-  dependencies or functions.
-- Modularity is a focus—we don’t try to achieve too many steps in one.
-- All code has to be well commented.
-- We recognize that a user or a Health Authority reviewer may have the
-  wish to delve into the code base (especially given this open source
-  setting), or users may need to extend/adapt the code for their study
-  specific needs. We therefore want any module to be understandable to
-  all, not only the [admiral](https://pharmaverse.github.io/admiral/)
-  developers.
-
-## References and Documentation
-
-- Please go to [Get
-  Started](https://pharmaverse.github.io/admiral/cran-release/articles/admiral.html)
-  section to start using
-  [admiral](https://pharmaverse.github.io/admiral/).
-- Please see the [pharmaverse YouTube
-  channel](https://www.youtube.com/channel/UCxQFEv8HNqM01DXzdQLCy6Q) for
-  videos related to [admiral](https://pharmaverse.github.io/admiral/).
-- Please see the [Programming
-  Strategy](https://pharmaverse.github.io/admiraldev/articles/programming_strategy.html)
-  to understand how functions are created.
-- Please see the
-  [FAQ](https://pharmaverse.github.io/admiral/cran-release/articles/faq.html)
-  for the most frequent questions.
-- Please see the [Contribution
-  Model](https://pharmaverse.github.io/admiral/cran-release/CONTRIBUTING.html)
-  for how to get involved with making contributions.
-- Please see [FAQ: R and Package
-  Versions](https://pharmaverse.github.io/admiral/cran-release/articles/faq.html#why-do-we-use-a-certain-r-version-and-package-versions-for-development)
-  for why we develop with certain R and package versions.
-- Please see the [{admiral} agent
-  skills](https://github.com/RConsortium/pharma-skills/tree/main/admiral)
-  for AI-agent skill definitions that help derive ADaM datasets with
-  [admiral](https://pharmaverse.github.io/admiral/).
-
-## Pharmaverse Blog
-
-If you are interested in R and Clinical Reporting, then visit the
-[pharmaverse blog](https://pharmaverse.github.io/blog/). This contains
-regular, bite-sized posts showcasing how
-[admiral](https://pharmaverse.github.io/admiral/) and other packages in
-the pharmaverse can be used to realize the vision of full end-to-end
-Clinical Reporting in R.
-
-We are also always looking for keen
-[admiral](https://pharmaverse.github.io/admiral/) users to publish their
-own blog posts about how they use the package. If this could be you,
-feel free make an issue in the [GitHub
-repo](https://github.com/pharmaverse/blog) and get started!
-
-## Recent Conference Presentations
-
-For a full collection of
-[admiral](https://pharmaverse.github.io/admiral/) conference
-presentations over the years, please travel to our [Presentation
-Archive](https://pharmaverse.github.io/admiraldiscovery/articles/presentation_archive.html).
-
-## Contact
+## Contact and Further Reading
 
 We use the following for support and communications between user and
-developer community:
+developer community and for sharing of knowledge and experience:
 
 - [Slack](https://pharmaverse.slack.com)—for informal discussions, Q&A
   and building our user community. If you don’t have access, use this
@@ -331,6 +178,18 @@ developer community:
   to join the pharmaverse Slack workspace.
 - [GitHub Issues](https://github.com/pharmaverse/admiral/issues)—for
   direct feedback, enhancement requests or raising bugs.
+- [Pharmaverse Blog](https://pharmaverse.github.io/blog/)—for bite-sized
+  posts showcasing how [admiral](https://pharmaverse.github.io/admiral/)
+  and other packages in the pharmaverse can be used to realize the
+  vision of full end-to-end Clinical Reporting in R.
+- [Presentation
+  Archive](https://pharmaverse.github.io/admiraldiscovery/articles/presentation_archive.html)—for
+  a full collection of [admiral](https://pharmaverse.github.io/admiral/)
+  conference presentations over the years.
+- Please see the [{admiral} agent
+  skills](https://github.com/RConsortium/pharma-skills/tree/main/admiral)
+  for AI-agent skill definitions that help derive ADaM datasets with
+  [admiral](https://pharmaverse.github.io/admiral/).
 
 ## Acknowledgments
 

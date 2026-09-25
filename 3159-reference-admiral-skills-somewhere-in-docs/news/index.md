@@ -101,6 +101,12 @@
   argument in
   [`derive_var_atoxgr_dir()`](https:/pharmaverse.github.io/admiral/3159-reference-admiral-skills-somewhere-in-docs/reference/derive_var_atoxgr_dir.md).
 
+- [admiral](https://pharmaverse.github.io/admiral/)’s README was updated
+  to remove redundant information and consolidate a number of sections
+  together. Additionally, the package manifesto was moved to the
+  [admiraldev](https://pharmaverse.github.io/admiraldev/) website.
+  ([\#3154](https://github.com/pharmaverse/admiral/issues/3154))
+
 - Referenced the [{admiral} agent
   skills](https://github.com/RConsortium/pharma-skills/tree/main/admiral)
   in the README and the “Get Started” navigation bar.
