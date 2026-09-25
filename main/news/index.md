@@ -101,6 +101,12 @@
   argument in
   [`derive_var_atoxgr_dir()`](https:/pharmaverse.github.io/admiral/main/reference/derive_var_atoxgr_dir.md).
 
+- [admiral](https://pharmaverse.github.io/admiral/)’s README was updated
+  to remove redundant information and consolidate a number of sections
+  together. Additionally, the package manifesto was moved to the
+  [admiraldev](https://pharmaverse.github.io/admiraldev/) website.
+  ([\#3154](https://github.com/pharmaverse/admiral/issues/3154))
+
 ### Various
 
 - The minimum `dplyr` version was bumped to `1.2.0` to make use of the
