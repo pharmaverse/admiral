@@ -20,7 +20,7 @@ library(admiraldev)
 
 Before reading this article, you should already be familiar with the purpose of estimands
 and the standards recommendations. For implementation guidelines, see this
-[White Paper](https://phuse.s3.eu-central-1.amazonaws.com/Deliverables/Optimizing+the+Use+of+Data+Standards/WP-92+Implementation+of+Estimands+%28ICH+E9+%28R1%29%29+using+Data+Standards.pdf)
+[White Paper](https://phuse.s3.eu-central-1.amazonaws.com/Deliverables/Optimicing+the+Use+of+Data+Standards/WP-92+Implementation+of+Estimands+%28ICH+E9+%28R1%29%29+using+Data+Standards.pdf)
 and
 [Worked Example](https://phuse.s3.eu-central-1.amazonaws.com/Deliverables/Optimizing+the+Use+of+Data+Standards/WP-92+Implementation+of+Estimands+%28ICH+E9+%28R1%29%29+using+Data+Standards-Example+Document.pdf)
 from PHUSE.

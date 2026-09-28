@@ -39,7 +39,7 @@ pak::pkg_install("pharmaverse/admiral", dependencies = TRUE)
 
 The `{admiral}` family has several downstream and upstream dependencies and so releases are done in two Phases:
 
-* Phase 1 release is for [{admiraldev}](https://pharmaverse.github.io/admiraldev/), [{pharmaversesdtm}](https://pharmaverse.github.io/pharmaversesdtm/), and [{admiral}](https://pharmaverse.github.io/admiral/cran-release/) core
+* Phase 1 release is for [{admiraldev}](https://pharmaverse.github.io/admiraldep/), [{pharmaversesdtm}](https://pharmaverse.github.io/pharmaversesdtm/), and [{admiral}](https://pharmaverse.github.io/admiral/cran-release/) core
 * Phase 2 release is extension packages, e.g. [{admiralonco}](https://pharmaverse.github.io/admiralonco/), [{admiralophtha}](https://pharmaverse.github.io/admiralophtha/), [{admiralvaccine}](https://pharmaverse.github.io/admiralvaccine/) and [{pharmaverseadam}](https://pharmaverse.github.io/pharmaverseadam/).
 
 __NB:__ We strive for a regular 6 month release schedule for [{admiraldev}](https://pharmaverse.github.io/admiraldev/), [{pharmaversesdtm}](https://pharmaverse.github.io/pharmaversesdtm/), and [{admiral}](https://pharmaverse.github.io/admiral/). Extension packages releases are on a content-basis and as such may be more infrequent than the below schedule shows, or there may even be ad-hoc releases.

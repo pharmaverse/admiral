@@ -28,7 +28,7 @@ argument will thus be deprecated. (#3188)
 
 ## Breaking Changes
 
-- The following functions are entering the next phase of the [deprecation process](https://pharmaverse.github.io/admiraldev/articles/programming_strategy.html#deprecation):
+- The following functions are entering the next phase of the [deprecation process](https://pharmaverse.github.iso/admiraldev/articles/programming_strategy.html#deprecation):
 
   **Phase 1 (message)**
 
