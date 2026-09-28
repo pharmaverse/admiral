@@ -62,7 +62,7 @@ argument will thus be deprecated. (#3188)
   vignette explaining how comparisons of derived numeric variables to fixed values in conditions
   can give unexpected results and how to avoid this. The section is referenced in the
   documentation of all function arguments which accept conditions, e.g., `condition` of
-  `derive_vars_crit_flag()` or `filter_add`. (#3178)
+  `derive_vars_crit_flag()` or `filter_add` of `derive_vars_merged()`. (#3178)
 
 ## Various
 

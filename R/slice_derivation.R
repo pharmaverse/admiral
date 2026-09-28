@@ -193,6 +193,8 @@ slice_derivation <- function(dataset,
 #' @param filter An unquoted condition for defining the observations of the
 #'   slice
 #'
+#'   `r roxygen_float_comparison()`
+#'
 #' @param args Arguments of the derivation to be used for the slice
 #'
 #'   A `params()` object is expected.

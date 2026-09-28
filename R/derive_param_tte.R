@@ -1610,6 +1610,8 @@ extend_source_datasets <- function(source_datasets,
 #' @param filter An unquoted condition for selecting the observations from
 #'   `dataset` which are events or possible censoring time points.
 #'
+#'   `r roxygen_float_comparison()`
+#'
 #' @param date A variable or expression providing the date of the event or
 #'   censoring. A date, or a datetime can be specified. An unquoted symbol or
 #'   expression is expected.

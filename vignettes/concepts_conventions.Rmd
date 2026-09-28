@@ -136,7 +136,8 @@ adbds %>%
 ```
 
 In the example above, the second subject is not flagged although their
-percent change from baseline is -90.
+percent change from baseline appears to be -90, due to issues with
+floating point comparisons.
 
 To avoid this, one of the following approaches can be used:
 

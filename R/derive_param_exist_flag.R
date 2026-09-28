@@ -37,6 +37,8 @@
 #'   For all groups not present in the additional dataset `AVALC` is set to
 #'   the missing value (`missing_value`).
 #'
+#'   `r roxygen_float_comparison()`
+#'
 #' @param true_value True value
 #'
 #'   For all groups with at least one observations in the additional dataset

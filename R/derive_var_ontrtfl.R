@@ -59,6 +59,8 @@
 #'   ref_start_date`, `filter_pre_timepoint` should be used to denote when the
 #'   on-treatment flag should be set to null. Optional; default is `NULL`.
 #'
+#'   `r roxygen_float_comparison()`
+#'
 #' @param span_period A logical scalar. If `TRUE`, events that started
 #'   prior to the `ref_start_date`and are ongoing or end after the
 #'   `ref_start_date` are flagged as `"Y"`. Optional; default is `FALSE`.

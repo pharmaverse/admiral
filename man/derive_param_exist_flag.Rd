@@ -63,6 +63,8 @@ For all groups where it evaluates as \code{FALSE} or \code{NA} for all observati
 For all groups not present in the additional dataset \code{AVALC} is set to
 the missing value (\code{missing_value}).
 
+Comparing derived numeric variables to fixed values, e.g., \code{PCHG <= -90}, may give unexpected results due to floating point representation. For details and solutions see the "Floating Point Comparisons" section in \code{vignette("concepts_conventions")}.
+
 \describe{
 \item{Default value}{none}
 }}

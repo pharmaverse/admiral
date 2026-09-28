@@ -101,6 +101,8 @@ on-treatment when \code{date} = \code{ref_start_date}. For example, if observati
 where \code{VSTPT = PRE} should not be considered on-treatment when \code{date = ref_start_date}, \code{filter_pre_timepoint} should be used to denote when the
 on-treatment flag should be set to null. Optional; default is \code{NULL}.
 
+Comparing derived numeric variables to fixed values, e.g., \code{PCHG <= -90}, may give unexpected results due to floating point representation. For details and solutions see the "Floating Point Comparisons" section in \code{vignette("concepts_conventions")}.
+
 \describe{
 \item{Default value}{\code{NULL}}
 }}

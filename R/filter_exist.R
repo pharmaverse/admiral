@@ -25,6 +25,7 @@
 #'   Alternatively, if no filter condition is supplied, no subsetting of the source
 #'   dataset will be performed.
 #'
+#'   `r roxygen_float_comparison()`
 #'
 #' @details Returns the records in `dataset` which match an existing by group in `dataset_add`,
 #'   after being filtered according to `filter_add`. If there are no by groups that exist

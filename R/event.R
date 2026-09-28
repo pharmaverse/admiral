@@ -14,6 +14,8 @@
 #'   will contribute to the extreme event. If the condition contains summary
 #'   functions like `all()`, they are evaluated for each by group separately.
 #'
+#'   `r roxygen_float_comparison()`
+#'
 #' @permitted an unquoted condition
 #'
 #' @param mode If specified, the first or last observation with respect to `order` is
