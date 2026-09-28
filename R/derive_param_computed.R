@@ -601,6 +601,8 @@ assert_parameters_argument <- function(parameters, optional = TRUE) {
 #'    The specified filter condition is used in the warnings only. It is not
 #'    applied to the input dataset.
 #'
+#'   `r roxygen_float_comparison()`
+#'
 #' @permitted An unquoted expression
 #'
 #' @return A dataset with one observation per by group. It contains the
