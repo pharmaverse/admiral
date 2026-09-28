@@ -186,6 +186,10 @@ developer community and for sharing of knowledge and experience:
   Archive](https://pharmaverse.github.io/admiraldiscovery/articles/presentation_archive.html)—for
   a full collection of [admiral](https://pharmaverse.github.io/admiral/)
   conference presentations over the years.
+- [{admiral} agent
+  skills](https://github.com/RConsortium/pharma-skills/tree/main/admiral)—for
+  AI-agent skill definitions that help derive ADaM datasets with
+  [admiral](https://pharmaverse.github.io/admiral/).
 
 ## Acknowledgments
 
