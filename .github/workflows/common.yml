@@ -100,12 +100,6 @@ jobs:
     if: github.event_name == 'pull_request' && contains(github.event.pull_request.title, '[create website]')
     secrets:
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
-  remove_docs:
-    name: Remove PR Website
-    uses: pharmaverse/admiralci/.github/workflows/remove_pr_website.yml@220_update_pkgdown
-    if: github.event_name == 'pull_request' && contains(github.event.pull_request.title, '[create website]')
-    secrets:
-      GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
   linter:
     name: Lint
     uses: pharmaverse/admiralci/.github/workflows/lintr.yml@main
@@ -115,7 +109,7 @@ jobs:
       r-version: "${{ needs.get_r_version.outputs.r-version }}"
   links:
     name: Links
-    uses: pharmaverse/admiralci/.github/workflows/links.yml@main
+    uses: pharmaverse/admiralci/.github/workflows/links.yml@3158_cran_link_check
     if: >
       github.event_name == 'push' || (github.event_name == 'pull_request' && github.event.action != 'closed')
   coverage:
