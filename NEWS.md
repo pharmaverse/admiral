@@ -65,6 +65,9 @@ argument will thus be deprecated. (#3188)
 - `{admiral}`'s README was updated to remove redundant information and consolidate a number of sections
 together. Additionally, the package manifesto was moved to the `{admiraldev}` website. (#3154)
 
+- Referenced the [{admiral} agent skills](https://github.com/RConsortium/pharma-skills/tree/main/admiral)
+  in the README and the "Get Started" navigation bar. (#3159)
+
 ## Various
 
 - The minimum `dplyr` version was bumped to `1.2.0` to make use of the new
