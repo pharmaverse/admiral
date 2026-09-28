@@ -5,7 +5,7 @@
 \alias{atoxgr_criteria_ctcv5}
 \title{Metadata Holding Grading Criteria for NCI-CTCAEv5 using SI unit where applicable}
 \format{
-An object of class \code{data.frame} with 39 rows and 13 columns.
+An object of class \code{data.frame} with 40 rows and 13 columns.
 }
 \usage{
 atoxgr_criteria_ctcv5
@@ -45,7 +45,7 @@ From these variables only 'TERM' is used in the \code{{admiral}} code, the rest 
 traceability only.
 }
 \seealso{
-Other metadata: 
+Other metadata:
 \code{\link{atoxgr_criteria_ctcv4}},
 \code{\link{atoxgr_criteria_ctcv4_uscv}},
 \code{\link{atoxgr_criteria_ctcv5_uscv}},

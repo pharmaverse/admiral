@@ -115,7 +115,7 @@
 #'   of the specified variables are set to the specified value. Only variables
 #'   specified for `new_vars` can be specified for `missing_values`.
 #'
-#' @permitted [expr_list_formula]
+#' @permitted [expr_list_named]
 #'
 #' @param check_type Check uniqueness?
 #'
@@ -242,7 +242,8 @@
 #'   to a datetime, within the `order` argument.
 #' - Then the `mode` argument is set to `"last"` to ensure the last sorted value
 #'   is taken. Be cautious if `NA` values are possible in the `order` variables -
-#'   see [Sort Order](https://pharmaverse.github.io/admiral/articles/generic.html#sort_order).
+#'   see [Sort
+#'   Order](https://pharmaverse.github.io/admiral/cran-release/articles/generic.html#sort_order).
 #' - The `filter_add` argument is used to restrict the vital signs records only
 #'   to weight assessments.
 #' @code
@@ -405,7 +406,7 @@ derive_vars_merged <- function(dataset,
   assert_data_frame(dataset, required_vars = by_vars_left)
   assert_data_frame(
     dataset_add,
-    required_vars = expr_c(
+    required_vars = c(
       by_vars_right,
       setdiff(extract_vars(order), replace_values_by_names(new_vars)),
       extract_vars(new_vars)
@@ -482,7 +483,7 @@ derive_vars_merged <- function(dataset,
   # in this case an error is issued to avoid renaming of varibles by left_join()
   common_vars <-
     setdiff(intersect(names(dataset), names(add_data)), vars2chr(by_vars))
-  if (length(common_vars) > 0L) {
+  if (length(common_vars) > 0) {
     cli_abort(
       c(
         "The variable{?s} {.var {common_vars}} {?is/are} contained in both datasets.",
@@ -534,7 +535,8 @@ derive_vars_merged <- function(dataset,
   }
 
   dataset %>%
-    remove_tmp_vars()
+    remove_tmp_vars() %>%
+    as_admiral_df()
 }
 
 
@@ -705,7 +707,8 @@ derive_var_merged_exist_flag <- function(dataset,
     check_type = "none",
     mode = "last"
   ) %>%
-    mutate(!!new_var := if_else(!!new_var == 1, true_value, false_value, missing_value))
+    mutate(!!new_var := if_else(!!new_var == 1, true_value, false_value, missing_value)) %>%
+    as_admiral_df()
 }
 
 #' Merge Lookup Table with Source Dataset
@@ -720,10 +723,17 @@ derive_var_merged_exist_flag <- function(dataset,
 #'
 #' @permitted [dataset]
 #'
-#' @param print_not_mapped Print a list of unique `by_vars` values that do not
-#' have corresponding records from the lookup table?
+#' @param print_not_mapped `r lifecycle::badge("deprecated")` Print a list of unique
+#' `by_vars` values that do not have corresponding records from the lookup table?
 #'
 #' @permitted [boolean]
+#'
+#' @param check_not_mapped_type Check if any observations are not mapped?
+#'
+#'   If `"warning"`, `"message"`, or `"error"` is specified, the specified message is issued
+#'   if some records from the input dataset are not mapped using the lookup table.
+#'
+#' @permitted [msg_type]
 #'
 #' @inheritParams derive_vars_merged
 #'
@@ -781,7 +791,7 @@ derive_var_merged_exist_flag <- function(dataset,
 #'   dataset_add = param_lookup,
 #'   by_vars = exprs(VSTESTCD),
 #'   new_vars = exprs(PARAMCD, PARAM),
-#'   print_not_mapped = TRUE
+#'   check_not_mapped_type = "message"
 #' )
 derive_vars_merged_lookup <- function(dataset,
                                       dataset_add,
@@ -792,10 +802,38 @@ derive_vars_merged_lookup <- function(dataset,
                                       filter_add = NULL,
                                       check_type = "warning",
                                       duplicate_msg = NULL,
-                                      print_not_mapped = TRUE) {
+                                      print_not_mapped = NULL,
+                                      check_not_mapped_type = "message") {
   by_vars_left <- replace_values_by_names(by_vars)
-  assert_logical_scalar(print_not_mapped)
+  assert_logical_scalar(print_not_mapped, optional = TRUE)
   filter_add <- assert_filter_cond(enexpr(filter_add), optional = TRUE)
+  check_not_mapped_type <-
+    assert_character_scalar(
+      check_not_mapped_type,
+      values = c("none", "warning", "error", "message"),
+      case_sensitive = FALSE
+    )
+
+  if (!is.null(print_not_mapped)) {
+    deprecate_inform(
+      when = "1.6.0",
+      what = "derive_vars_merged_lookup(print_not_mapped)",
+      with = "derive_vars_merged_lookup(check_not_mapped_type)",
+      details = c(
+        x = "This message will turn into a warning at the beginning of 2028.",
+        # nolint start: line_length_linter
+        i = "See admiral's deprecation guidance:
+              https://pharmaverse.github.io/admiraldev/dev/articles/programming_strategy.html#deprecation"
+        # nolint end: line_length_linter
+      )
+    )
+
+    # Upgrade check_not_mapped_type to "message" if deprecated argument
+    # print_not_mapped was used instead
+    if (check_not_mapped_type == "none" && print_not_mapped) {
+      check_not_mapped_type <- "message"
+    }
+  }
 
   tmp_lookup_flag <- get_new_tmp_var(dataset_add, prefix = "tmp_lookup_flag")
 
@@ -812,12 +850,16 @@ derive_vars_merged_lookup <- function(dataset,
     duplicate_msg = duplicate_msg
   )
 
-  if (print_not_mapped) {
+  if (check_not_mapped_type != "none") {
+    # Identify if any unmapped records exist
     temp_not_mapped <- res %>%
       filter(is.na(!!tmp_lookup_flag)) %>%
       distinct(!!!by_vars_left)
 
-    if (nrow(temp_not_mapped) > 0) {
+    some_not_mapped <- nrow(temp_not_mapped) > 0
+
+    # Store unmapped records
+    if (some_not_mapped) {
       # nolint start: undesirable_function_linter
       admiral_environment$nmap <- structure(
         temp_not_mapped,
@@ -825,21 +867,32 @@ derive_vars_merged_lookup <- function(dataset,
         by_vars = vars2chr(by_vars_left)
       )
       # nolint end
+    }
 
-      cli_inform(
+    if (check_not_mapped_type != "none" && some_not_mapped) {
+      cli_function <- switch(check_not_mapped_type,
+        warning = cli_warn,
+        message = cli_inform,
+        error = cli_abort
+      )
+
+      cli_function(
         c("List of {.var {vars2chr(by_vars_left)}} not mapped:",
           capture.output(temp_not_mapped),
-          i = "Run {.run admiral::get_not_mapped()} to access the full list."
+          i = "Run {.run admiral::get_not_mapped()} to access the full list.",
+          i = "If this is acceptable, consider using `check_not_mapped = \"none\"."
         )
       )
-    } else if (nrow(temp_not_mapped) == 0) {
+    } else if (check_not_mapped_type != "none" && !some_not_mapped) {
       cli_inform(
         "All {.var {vars2chr(by_vars_left)}} are mapped."
       )
     }
   }
 
-  res %>% remove_tmp_vars()
+  res %>%
+    remove_tmp_vars() %>%
+    as_admiral_df()
 }
 
 #' Get list of records not mapped from the lookup table.
@@ -931,14 +984,20 @@ get_not_mapped <- function() {
 #' @family der_gen
 #' @keywords der_gen
 #'
-#' @seealso [derive_summary_records()], [get_summary_records()]
+#' @seealso [derive_summary_records()]
 #'
 #' @export
 #'
-#' @examples
-#' library(tibble)
+#' @examplesx
 #'
-#' # Add a variable for the mean of AVAL within each visit
+#' @caption Data setup
+#'
+#' @info The following examples use the BDS dataset below as a basis.
+#'
+#' @code
+#' library(tibble)
+#' library(dplyr, warn.conflicts = FALSE)
+#'
 #' adbds <- tribble(
 #'   ~USUBJID,  ~AVISIT,  ~ASEQ, ~AVAL,
 #'   "1",      "WEEK 1",      1,    10,
@@ -952,17 +1011,62 @@ get_not_mapped <- function() {
 #'   "2",      "WEEK 4",      2,    22
 #' )
 #'
+#' @caption Summarize one or more variables using summary functions (`new_vars`)
+#'
+#' @info The `new_vars` argument specifies a named list of expressions where the
+#' right-hand side uses summary functions (e.g. `mean()`, `sum()`, `max()`) to
+#' aggregate values from `dataset_add` within each by group. Multiple summary
+#' variables can be added in a single call.
+#'
+#' In the example below, the mean and sum of `AVAL` within each subject
+#' and visit are derived and merged back onto the input dataset:
+#'
+#' @code
 #' derive_vars_merged_summary(
 #'   adbds,
 #'   dataset_add = adbds,
 #'   by_vars = exprs(USUBJID, AVISIT),
 #'   new_vars = exprs(
 #'     MEANVIS = mean(AVAL, na.rm = TRUE),
-#'     MAXVIS = max(AVAL, na.rm = TRUE)
+#'     SUMVIS = sum(AVAL, na.rm = TRUE)
 #'   )
 #' )
 #'
-#' # Add a variable listing the lesion ids at baseline
+#' @info In the example above, subject `"1"` at `"WEEK 2"` has only missing
+#' `AVAL` values, so `MEANVIS` is `NaN` (the result of
+#' `mean(NA, na.rm = TRUE)`) and `SUMVIS` is `0`. Note that `missing_values`
+#' cannot be used here because the by group *exists* in `dataset_add` — it
+#' merely produces `NaN`. To coerce `NaN` to `NA`, apply a follow-up
+#' `mutate()` step:
+#'
+#' @code
+#' derive_vars_merged_summary(
+#'   adbds,
+#'   dataset_add = adbds,
+#'   by_vars = exprs(USUBJID, AVISIT),
+#'   new_vars = exprs(
+#'     MEANVIS = mean(AVAL, na.rm = TRUE),
+#'     SUMVIS = sum(AVAL, na.rm = TRUE)
+#'   )
+#' ) %>%
+#'   mutate(MEANVIS = ifelse(is.nan(MEANVIS), NA_real_, MEANVIS))
+#'
+#' @info Subject `"1"` at `"WEEK 2"` now has `MEANVIS = NA` instead of `NaN`.
+#'
+#' @caption Restricting source records (`filter_add`)
+#'
+#' @info The `filter_add` argument restricts the records in `dataset_add` that
+#' are used for the summarization. Only records satisfying the filter condition
+#' contribute to the summary values. This can be useful, for example, to
+#' compute a summary statistic based only on records before or after a certain
+#' time point.
+#'
+#' In the following example, the mean of `AVAL` is computed only for records
+#' with a positive study day (`ADY > 0`), and the result is merged onto the
+#' `ADSL`-like dataset. Subject `"2"` has no records with `ADY > 0`, so
+#' `MEANPBL` is `NA` for that subject.
+#'
+#' @code
 #' adsl <- tribble(
 #'   ~USUBJID,
 #'   "1",
@@ -970,6 +1074,80 @@ get_not_mapped <- function() {
 #'   "3"
 #' )
 #'
+#' adbds2 <- tribble(
+#'   ~USUBJID, ~ADY, ~AVAL,
+#'   "1",        -3,    10,
+#'   "1",         2,    12,
+#'   "1",         8,    15,
+#'   "3",         4,    42
+#' )
+#'
+#' derive_vars_merged_summary(
+#'   adsl,
+#'   dataset_add = adbds2,
+#'   by_vars = exprs(USUBJID),
+#'   new_vars = exprs(MEANPBL = mean(AVAL, na.rm = TRUE)),
+#'   filter_add = ADY > 0
+#' )
+#'
+#' @caption Handling non-matching observations (`missing_values`)
+#'
+#' @info By default, records in `dataset` with no matching by group in
+#' `dataset_add` receive `NA` for the new variables. The `missing_values`
+#' argument allows you to specify a different value for these non-matching
+#' records.
+#'
+#' A natural use-case is counting observations per subject and defaulting to
+#' `0` (rather than `NA`) for subjects with no matching records. In the example
+#' below, the number of distinct post-baseline visits per subject is derived
+#' from `adbds` and merged onto `adsl`. Subject `"3"` has no records in
+#' `adbds`, so without `missing_values` the new variable would be `NA`;
+#' setting `missing_values = exprs(NVIS = 0)` makes the count meaningful
+#' for all subjects:
+#'
+#' @code
+#' derive_vars_merged_summary(
+#'   adsl,
+#'   dataset_add = adbds,
+#'   by_vars = exprs(USUBJID),
+#'   new_vars = exprs(NVIS = n_distinct(AVISIT)),
+#'   missing_values = exprs(NVIS = 0)
+#' )
+#'
+#' @caption Renaming by variables (`by_vars`)
+#'
+#' @info The `by_vars` argument supports renaming, using the syntax
+#' `exprs(<left_name> = <right_name>)`, where `<left_name>` is the variable
+#' name in `dataset` and `<right_name>` is the corresponding variable in
+#' `dataset_add`. This is useful when the grouping variable has different names
+#' in the two datasets.
+#'
+#' In the example below the input dataset uses `AVISIT` while the additional
+#' dataset uses `VISIT` for the same concept. The `by_vars` argument maps them
+#' together so the merge can proceed correctly:
+#'
+#' @code
+#' adbds_renamed <- adbds %>% rename(VISIT = AVISIT)
+#'
+#' derive_vars_merged_summary(
+#'   adbds,
+#'   dataset_add = adbds_renamed,
+#'   by_vars = exprs(USUBJID, AVISIT = VISIT),
+#'   new_vars = exprs(MEANVIS = mean(AVAL, na.rm = TRUE))
+#' )
+#'
+#' @caption String aggregation
+#'
+#' @info Summary expressions are not restricted to numeric aggregations. Any
+#' expression that reduces a group to a single value is permitted. For example,
+#' `paste(..., collapse = ", ")` can be used to concatenate character values
+#' within a by group into a single string.
+#'
+#' In the example below, the lesion identifiers observed at baseline for each
+#' subject are collected into a single comma-separated string and merged onto
+#' the `ADSL` dataset:
+#'
+#' @code
 #' adtr <- tribble(
 #'   ~USUBJID,     ~AVISIT, ~LESIONID,
 #'   "1",       "BASELINE",  "INV-T1",
@@ -1013,7 +1191,7 @@ derive_vars_merged_summary <- function(dataset,
   )
   assert_data_frame(
     dataset_add,
-    required_vars = expr_c(by_vars_right, extract_vars(new_vars))
+    required_vars = c(by_vars_right, extract_vars(new_vars))
   )
 
   # Summarise the analysis value and merge to the original dataset
@@ -1052,7 +1230,8 @@ derive_vars_merged_summary <- function(dataset,
         by_vars = cnd$by_vars
       )
     }
-  )
+  ) %>%
+    as_admiral_df()
 }
 
 #' Merge Summary Variables
@@ -1135,7 +1314,7 @@ derive_vars_merged_summary <- function(dataset,
 #' @family deprecated
 #' @keywords deprecated
 #'
-#' @seealso [derive_summary_records()], [get_summary_records()]
+#' @seealso [derive_summary_records()]
 #'
 #' @export
 #'
@@ -1145,13 +1324,12 @@ derive_var_merged_summary <- function(dataset,
                                       new_vars = NULL,
                                       filter_add = NULL,
                                       missing_values = NULL) {
-  deprecate_inform(
+  deprecate_warn(
     when = "1.4",
     what = "derive_var_merged_summary()",
     with = "derive_vars_merged_summary()",
     details = c(
-      x = "Function is brought inline with our programming strategy - warning
-      will be issued in January 2027",
+      x = "This message will turn into an error at the beginning of 2028.",
       i = "See admiral's deprecation guidance:
       https://pharmaverse.github.io/admiraldev/dev/articles/programming_strategy.html#deprecation"
     )
@@ -1171,5 +1349,6 @@ derive_var_merged_summary <- function(dataset,
     new_vars = new_vars,
     filter_add = !!enexpr(filter_add),
     missing_values = missing_values
-  )
+  ) %>%
+    as_admiral_df()
 }

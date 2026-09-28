@@ -167,11 +167,15 @@ derive_var_atoxgr_dir <- function(dataset,
       )
     }
 
-    deprecate_inform(
+    deprecate_warn(
       when = "1.4.0",
-      what = "derive_var_atoxgr_dir(abnormal_indicator = )",
+      what = "derive_var_atoxgr_dir()",
       details = c(
-        x = "This message will turn into a warning at the beginning of 2027.",
+        i = paste0(
+          "The `abnormal_indicator` argument is deprecated. ",
+          "Please use `low_indicator` or `high_indicator` instead."
+        ),
+        x = "This message will turn into an error at the beginning of 2028.",
         i = paste0(
           "See admiral's deprecation guidance: ",
           "https://pharmaverse.github.io/admiraldev/dev/articles/",
@@ -337,6 +341,11 @@ derive_var_atoxgr_dir <- function(dataset,
         }
       }
       # remove lab data just graded from data still to be graded for the specified TERM
+      # Not converted to filter_out(): unlike restrict_derivation()'s `!(x) | is.na(x)`
+      # pattern, this condition has no is.na() guard, so it relies on filter()'s NA
+      # rows being dropped (not retained) here. filter_out() keeps NA-condition rows
+      # instead of dropping them, which would change which records remain eligible
+      # for grading by a subsequent FILTER for this TERM.
       grade_this_term <- grade_this_term %>%
         filter(!(eval(parse(text = meta_this_filter_unit$FILTER))))
     }
@@ -346,7 +355,7 @@ derive_var_atoxgr_dir <- function(dataset,
       filter(!!tox_description_var != list_of_terms$TERM[i])
   }
 
-  out_data
+  as_admiral_df(out_data)
 }
 
 
@@ -440,5 +449,6 @@ derive_var_atoxgr <- function(dataset,
       (ATOXGRL == "0" | is.na(!!lotox_description_var)) & ATOXGRH == "0" ~ "0",
       (ATOXGRH == "0" | is.na(!!hitox_description_var)) & ATOXGRL == "0" ~ "0",
       TRUE ~ NA_character_
-    ))
+    )) %>%
+    as_admiral_df()
 }

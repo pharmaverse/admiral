@@ -305,7 +305,7 @@ adex <- adex %>%
     definition = avalcax_lookup,
     by_vars = exprs(PARAMCD)
   ) %>%
-  # Calculate ASEQ
+  # Calculate ASEQ (Optional Variable)
   derive_var_obs_number(
     new_var = ASEQ,
     by_vars = exprs(STUDYID, USUBJID),

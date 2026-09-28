@@ -22,6 +22,7 @@ test_that("derive_var_nfrlt Test 1: basic single dose study", {
     result$NFRLT,
     c(0, 1, 2, 4, 24)
   )
+  expect_s3_class(result, "admiral_df")
 })
 
 ## Test 2: multiple dose study ----

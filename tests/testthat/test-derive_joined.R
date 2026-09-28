@@ -18,15 +18,19 @@ test_that("derive_vars_joined Test 1: no by_vars, no order, no new_vars", {
     "WEEK 4",      23,    30
   )
 
+  actual_output <- derive_vars_joined(
+    select(expected, USUBJID, ADY),
+    dataset_add = windows,
+    join_vars = exprs(AWHI, AWLO),
+    join_type = "all",
+    filter_join = AWLO <= ADY & ADY <= AWHI
+  )
+
+  expect_s3_class(actual_output, "admiral_df")
+
   expect_dfs_equal(
     base = expected,
-    comp = derive_vars_joined(
-      select(expected, USUBJID, ADY),
-      dataset_add = windows,
-      join_vars = exprs(AWHI, AWLO),
-      join_type = "all",
-      filter_join = AWLO <= ADY & ADY <= AWHI
-    ),
+    comp = actual_output,
     keys = c("USUBJID", "ADY")
   )
 })

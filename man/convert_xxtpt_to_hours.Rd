@@ -147,6 +147,9 @@ This distinction follows standard pharmacokinetic conventions where "post-dose"
 refers to time from treatment initiation, while "post end of infusion" refers
 to time from treatment completion.
 
+This is a vector-oriented helper and is not usually called directly on a data
+frame with \verb{\%>\%}.
+
 \strong{Vectorized Treatment Duration:}
 
 When \code{treatment_duration} is a vector, each timepoint uses its corresponding
@@ -155,15 +158,15 @@ treatment durations (e.g., different infusion lengths).
 }
 \seealso{
 Date/Time Computation Functions that returns a vector:
-\code{\link{compute_age_years}()},
-\code{\link{compute_dtf}()},
-\code{\link{compute_duration}()},
-\code{\link{compute_tmf}()},
-\code{\link{convert_date_to_dtm}()},
-\code{\link{convert_dtc_to_dt}()},
-\code{\link{convert_dtc_to_dtm}()},
-\code{\link{impute_dtc_dt}()},
-\code{\link{impute_dtc_dtm}()}
+\code{\link[=compute_age_years]{compute_age_years()}},
+\code{\link[=compute_dtf]{compute_dtf()}},
+\code{\link[=compute_duration]{compute_duration()}},
+\code{\link[=compute_tmf]{compute_tmf()}},
+\code{\link[=convert_date_to_dtm]{convert_date_to_dtm()}},
+\code{\link[=convert_dtc_to_dt]{convert_dtc_to_dt()}},
+\code{\link[=convert_dtc_to_dtm]{convert_dtc_to_dtm()}},
+\code{\link[=impute_dtc_dt]{impute_dtc_dt()}},
+\code{\link[=impute_dtc_dtm]{impute_dtc_dtm()}}
 }
 \concept{com_date_time}
 \keyword{com_date_time}

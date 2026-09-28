@@ -94,7 +94,8 @@ adeg <- adeg %>%
   derive_vars_merged_lookup(
     dataset_add = param_lookup,
     new_vars = exprs(PARAMCD),
-    by_vars = exprs(EGTESTCD)
+    by_vars = exprs(EGTESTCD),
+    check_not_mapped_type = "warning"
   ) %>%
   ## Calculate AVAL and AVALC ----
   mutate(
@@ -283,7 +284,7 @@ adeg <- adeg %>%
 
 ## Get ASEQ and AVALCAT1/CHGCAT1 and add PARAM/PARAMN ----
 adeg <- adeg %>%
-  # Calculate ASEQ
+  # Calculate ASEQ (Optional Variable)
   derive_var_obs_number(
     new_var = ASEQ,
     by_vars = exprs(STUDYID, USUBJID),

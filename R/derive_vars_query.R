@@ -297,7 +297,8 @@ derive_vars_query <- function(dataset, dataset_queries) {
   )
   # join queries to input dataset, remove temp col(s)
   derive_vars_merged(dataset, dataset_add = joined, by_vars = exprs(!!!syms(static_cols))) %>%
-    remove_tmp_vars()
+    remove_tmp_vars() %>%
+    as_admiral_df()
 }
 
 #' Verify if a Dataset Has the Required Format as Queries Dataset.

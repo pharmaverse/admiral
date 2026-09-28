@@ -93,13 +93,13 @@ filter_not_exist(
 }
 \seealso{
 Utilities for Filtering Observations:
-\code{\link{count_vals}()},
-\code{\link{filter_exist}()},
-\code{\link{filter_extreme}()},
-\code{\link{filter_joined}()},
-\code{\link{filter_relative}()},
-\code{\link{max_cond}()},
-\code{\link{min_cond}()}
+\code{\link[=count_vals]{count_vals()}},
+\code{\link[=filter_exist]{filter_exist()}},
+\code{\link[=filter_extreme]{filter_extreme()}},
+\code{\link[=filter_joined]{filter_joined()}},
+\code{\link[=filter_relative]{filter_relative()}},
+\code{\link[=max_cond]{max_cond()}},
+\code{\link[=min_cond]{min_cond()}}
 }
 \concept{utils_fil}
 \keyword{utils_fil}

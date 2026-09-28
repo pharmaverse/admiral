@@ -17,7 +17,8 @@ derive_extreme_records(
   true_value = "Y",
   false_value = NA_character_,
   keep_source_vars = exprs(everything()),
-  set_values_to
+  set_values_to,
+  missing_values = NULL
 )
 }
 \arguments{
@@ -164,24 +165,34 @@ observations.
 
 Set a list of variables to some specified value for the new records
 \itemize{
-\item LHS refer to a variable.
+\item LHS refers to a variable.
 \item RHS refers to the values to set to the variable. This can be a string, a
-symbol, a numeric value, an expression or NA. If summary functions are
-used, the values are summarized by the variables specified for \code{by_vars}.
-Any expression on the RHS must result in a single value per by group.
+symbol, a numeric value, an expression or NA.
 }
 
 For example:
 
 \if{html}{\out{<div class="sourceCode">}}\preformatted{  set_values_to = exprs(
-    AVAL = sum(AVAL),
-    DTYPE = "AVERAGE",
+    PARAMCD = "WOBS",
+    PARAM = "Worst Observations"
   )
 }\if{html}{\out{</div>}}
 
 \describe{
-\item{Permitted values}{list of named expressions created by \code{exprs()}, e.g., \code{exprs(CUMDOSA = sum(AVAL, na.rm = TRUE), AVALU = "ml")}}
+\item{Permitted values}{list of named expressions created by \code{exprs()}, e.g., \code{exprs(AVALC = VSSTRESC, AVAL = yn_to_numeric(AVALC))}}
 \item{Default value}{none}
+}}
+
+\item{missing_values}{Values for missing records
+
+For observations of the reference dataset (\code{dataset_ref}) which do not have
+a matching record in \code{dataset_add} (with respect to \code{by_vars} and after
+applying \code{filter_add}), the specified variables are set to the specified
+values for the new observations.
+
+\describe{
+\item{Permitted values}{list of named expressions created by \code{exprs()}, e.g., \code{exprs(CUMDOSA = sum(AVAL, na.rm = TRUE), AVALU = "ml")}}
+\item{Default value}{\code{NULL}}
 }}
 }
 \value{
@@ -207,7 +218,8 @@ order specified for the \code{order} argument and the mode specified for the
 \item If \code{dataset_ref} is specified, observations which are in \code{dataset_ref}
 but not in the selected records are added. Variables that are common
 across \code{dataset_ref}, \code{dataset_add} and \code{keep_source_vars()} are also
-populated for the new observations.
+populated for the new observations. If \code{missing_values} is specified,
+the specified values are set for these observations.
 \item The variables specified by the \code{set_values_to} argument are added to
 the selected observations.
 \item The variables specified by the \code{keep_source_vars} argument are selected
@@ -221,22 +233,23 @@ dataset is provided, a new dataset is created.
 \code{\link[=derive_summary_records]{derive_summary_records()}}
 
 BDS-Findings Functions for adding Parameters/Records:
-\code{\link{default_qtc_paramcd}()},
-\code{\link{derive_expected_records}()},
-\code{\link{derive_extreme_event}()},
-\code{\link{derive_locf_records}()},
-\code{\link{derive_param_bmi}()},
-\code{\link{derive_param_bsa}()},
-\code{\link{derive_param_computed}()},
-\code{\link{derive_param_doseint}()},
-\code{\link{derive_param_exist_flag}()},
-\code{\link{derive_param_exposure}()},
-\code{\link{derive_param_framingham}()},
-\code{\link{derive_param_map}()},
-\code{\link{derive_param_qtc}()},
-\code{\link{derive_param_rr}()},
-\code{\link{derive_param_wbc_abs}()},
-\code{\link{derive_summary_records}()}
+\code{\link[=default_qtc_paramcd]{default_qtc_paramcd()}},
+\code{\link[=derive_basetype_records]{derive_basetype_records()}},
+\code{\link[=derive_expected_records]{derive_expected_records()}},
+\code{\link[=derive_extreme_event]{derive_extreme_event()}},
+\code{\link[=derive_locf_records]{derive_locf_records()}},
+\code{\link[=derive_param_bmi]{derive_param_bmi()}},
+\code{\link[=derive_param_bsa]{derive_param_bsa()}},
+\code{\link[=derive_param_computed]{derive_param_computed()}},
+\code{\link[=derive_param_doseint]{derive_param_doseint()}},
+\code{\link[=derive_param_exist_flag]{derive_param_exist_flag()}},
+\code{\link[=derive_param_exposure]{derive_param_exposure()}},
+\code{\link[=derive_param_framingham]{derive_param_framingham()}},
+\code{\link[=derive_param_map]{derive_param_map()}},
+\code{\link[=derive_param_qtc]{derive_param_qtc()}},
+\code{\link[=derive_param_rr]{derive_param_rr()}},
+\code{\link[=derive_param_wbc_abs]{derive_param_wbc_abs()}},
+\code{\link[=derive_summary_records]{derive_summary_records()}}
 }
 \concept{der_prm_bds_findings}
 \keyword{der_prm_bds_findings}
@@ -354,6 +367,44 @@ that new records are added also for subject without a valid analysis value:
 #> 6 1            99   111
 #> 7 2            99   101
 #> 8 3            99    NA}\if{html}{\out{</div>}}}
+\subsection{Setting values for missing groups (\code{missing_values})}{
+
+When using \code{dataset_ref}, groups without matching records in
+\code{dataset_add} get new records with \code{NA} values by default. The
+\code{missing_values} argument allows setting specific values for these
+records. In the example records for the last non-missing value are added.
+For subjects without assessments the value is set to the mean analysis
+value across all records.
+
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{mean_value <- mean(adlb$AVAL, na.rm = TRUE)
+
+derive_extreme_records(
+  adlb,
+  dataset_add = adlb,
+  filter_add = !is.na(AVAL),
+  dataset_ref = adlb,
+  by_vars = exprs(USUBJID),
+  order = exprs(AVISITN),
+  mode = "last",
+  set_values_to = exprs(
+    AVISITN = 99
+  ),
+  missing_values = exprs(
+    AVAL = !!mean_value,
+    DTYPE = "MOV"
+  )
+)
+#> # A tibble: 8 × 4
+#>   USUBJID AVISITN  AVAL DTYPE
+#>   <chr>     <dbl> <dbl> <chr>
+#> 1 1             1  113  <NA> 
+#> 2 1             2  111  <NA> 
+#> 3 2             1  101  <NA> 
+#> 4 2             2   NA  <NA> 
+#> 5 3             1   NA  <NA> 
+#> 6 1            99  111  <NA> 
+#> 7 2            99  101  <NA> 
+#> 8 3            99  108. MOV  }\if{html}{\out{</div>}}}
 \subsection{Selecting variables for new records (\code{keep_source_vars})}{
 
 Which variables from the source dataset are kept for the new records

@@ -36,6 +36,7 @@ test_that("derive_summary_records Test 1: creates new record per group and group
     compare = actual_output,
     keys = c("subj", "visit", "seq", "type")
   )
+  expect_s3_class(actual_output, "admiral_df")
 })
 
 ## Test 2: Filter record within `by_vars` ----

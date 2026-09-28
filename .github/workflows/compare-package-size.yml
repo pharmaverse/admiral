@@ -1,0 +1,55 @@
+---
+name: Compare Package Size to CRAN
+
+on:
+  workflow_dispatch:
+    inputs:
+      ref:
+        description: Git ref to compare against the current CRAN release
+        required: true
+        default: main
+        type: string
+
+permissions:
+  contents: read
+
+jobs:
+  compare-package-size:
+    name: Compare package size
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.ref }}
+
+      - name: Set up R
+        uses: r-lib/actions/setup-r@v2
+
+      - name: Set up Pandoc
+        uses: r-lib/actions/setup-pandoc@v2
+
+      - name: Install package dependencies
+        uses: r-lib/actions/setup-r-dependencies@v2
+        with:
+          needs: check
+
+      - name: Generate package size reports
+        run: |
+          Rscript "${{ github.workspace }}/.github/scripts/compare_package_sizes.R" \
+            --repo "${{ github.workspace }}" \
+            --output_dir "${{ github.workspace }}/reports" \
+            --label "${{ inputs.ref }}"
+
+      - name: Publish markdown report to job summary
+        run: cat "${{ github.workspace }}/reports/package-size-report.md" >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Upload package size reports
+        uses: actions/upload-artifact@v4
+        with:
+          name: package-size-reports
+          path: |
+            ${{ github.workspace }}/reports/package-size-report.md
+            ${{ github.workspace }}/reports/package-size-development-files.csv
+          if-no-files-found: error

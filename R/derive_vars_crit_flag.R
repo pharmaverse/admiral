@@ -248,5 +248,5 @@ derive_vars_crit_flag <- function(dataset,
       !!new_critfnvar := as.integer(yn_to_numeric(!!sym(new_critflvar)))
     )
   }
-  dataset
+  as_admiral_df(dataset)
 }

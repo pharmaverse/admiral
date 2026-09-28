@@ -79,7 +79,7 @@
       2 02      AB42    END OF TRT ADSL   TRTEDT      NA     1 2021-01-30 2021-01-16
       # i 1 more variable: PARAMCD <chr>
 
-# list_tte_source_objects Test 17: error is issued if package does not exist
+# list_tte_source_objects Test 19: error is issued if package does not exist
 
     Code
       list_tte_source_objects(package = "tte")

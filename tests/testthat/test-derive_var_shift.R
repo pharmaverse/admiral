@@ -19,15 +19,18 @@ test_that("derive_var_shift Test 1: Shift based on character variables", {
     "P02", "SODIUM", 147, "Y", "HIGH", "HIGH", "HIGH to HIGH"
   )
 
-  expect_equal(
-    derive_var_shift(
-      input,
-      new_var = SHIFT1,
-      from_var = BNRIND,
-      to_var = ANRIND
-    ),
-    expected_output
+  actual_output <- derive_var_shift(
+    input,
+    new_var = SHIFT1,
+    from_var = BNRIND,
+    to_var = ANRIND
   )
+
+  expect_equal(
+    actual_output,
+    as_admiral_df(expected_output)
+  )
+  expect_s3_class(actual_output, "admiral_df")
 })
 
 
@@ -59,7 +62,7 @@ test_that("derive_var_shift Test 2: Shift based on character variables with miss
       from_var = BNRIND,
       to_var = ANRIND
     ),
-    expected_output
+    as_admiral_df(expected_output)
   )
 })
 
@@ -92,7 +95,7 @@ test_that("derive_var_shift Test 3: Shift based on numeric variables with missin
       from_var = BASE,
       to_var = AVAL
     ),
-    expected_output
+    as_admiral_df(expected_output)
   )
 })
 
@@ -126,6 +129,6 @@ test_that("derive_var_shift Test 4: Shift with user-specified missing_value and 
       missing_value = "MISSING",
       sep_val = " - "
     ),
-    expected_output
+    as_admiral_df(expected_output)
   )
 })

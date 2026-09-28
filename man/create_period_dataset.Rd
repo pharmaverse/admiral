@@ -135,9 +135,9 @@ create_period_dataset(
 \code{\link[=derive_vars_period]{derive_vars_period()}}
 
 Creating auxiliary datasets:
-\code{\link{consolidate_metadata}()},
-\code{\link{create_query_data}()},
-\code{\link{create_single_dose_dataset}()}
+\code{\link[=consolidate_metadata]{consolidate_metadata()}},
+\code{\link[=create_query_data]{create_query_data()}},
+\code{\link[=create_single_dose_dataset]{create_single_dose_dataset()}}
 }
 \concept{create_aux}
 \keyword{create_aux}

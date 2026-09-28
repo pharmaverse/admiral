@@ -124,19 +124,19 @@ parameter the first or last record will be flagged across the whole dataset.
 }
 \seealso{
 General Derivation Functions for all ADaMs that returns variable appended to dataset:
-\code{\link{derive_var_joined_exist_flag}()},
-\code{\link{derive_var_merged_ef_msrc}()},
-\code{\link{derive_var_merged_exist_flag}()},
-\code{\link{derive_var_obs_number}()},
-\code{\link{derive_var_relative_flag}()},
-\code{\link{derive_vars_cat}()},
-\code{\link{derive_vars_computed}()},
-\code{\link{derive_vars_joined}()},
-\code{\link{derive_vars_joined_summary}()},
-\code{\link{derive_vars_merged}()},
-\code{\link{derive_vars_merged_lookup}()},
-\code{\link{derive_vars_merged_summary}()},
-\code{\link{derive_vars_transposed}()}
+\code{\link[=derive_var_joined_exist_flag]{derive_var_joined_exist_flag()}},
+\code{\link[=derive_var_merged_ef_msrc]{derive_var_merged_ef_msrc()}},
+\code{\link[=derive_var_merged_exist_flag]{derive_var_merged_exist_flag()}},
+\code{\link[=derive_var_obs_number]{derive_var_obs_number()}},
+\code{\link[=derive_var_relative_flag]{derive_var_relative_flag()}},
+\code{\link[=derive_vars_cat]{derive_vars_cat()}},
+\code{\link[=derive_vars_computed]{derive_vars_computed()}},
+\code{\link[=derive_vars_joined]{derive_vars_joined()}},
+\code{\link[=derive_vars_joined_summary]{derive_vars_joined_summary()}},
+\code{\link[=derive_vars_merged]{derive_vars_merged()}},
+\code{\link[=derive_vars_merged_lookup]{derive_vars_merged_lookup()}},
+\code{\link[=derive_vars_merged_summary]{derive_vars_merged_summary()}},
+\code{\link[=derive_vars_transposed]{derive_vars_transposed()}}
 }
 \concept{der_gen}
 \keyword{der_gen}
@@ -365,7 +365,7 @@ flag \code{ABLFL}, so the following section contains various examples of this
 in action for the \code{ADVS} dataset. Note that for these derivations it is
 often convenient to leverage higher order functions such as
 \code{restrict_derivation()} and \code{slice_derivation()}. Please read the
-\href{https://pharmaverse.github.io/admiral/articles/higher_order.html}{Higher Order Functions}
+\href{https://pharmaverse.github.io/admiral/cran-release/articles/higher_order.html}{Higher Order Functions}
 vignette, as well as their specific reference pages, to learn more.
 
 To set the baseline flag for the last observation among those where

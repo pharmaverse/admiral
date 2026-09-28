@@ -14,7 +14,8 @@ derive_vars_merged_lookup(
   filter_add = NULL,
   check_type = "warning",
   duplicate_msg = NULL,
-  print_not_mapped = TRUE
+  print_not_mapped = NULL,
+  check_not_mapped_type = "message"
 )
 }
 \arguments{
@@ -145,12 +146,22 @@ If the uniqueness check fails, the specified message is displayed.
 }\if{html}{\out{</div>}}}
 }}
 
-\item{print_not_mapped}{Print a list of unique \code{by_vars} values that do not
-have corresponding records from the lookup table?
+\item{print_not_mapped}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}} Print a list of unique
+\code{by_vars} values that do not have corresponding records from the lookup table?
 
 \describe{
 \item{Permitted values}{\code{TRUE}, \code{FALSE}}
-\item{Default value}{\code{TRUE}}
+\item{Default value}{\code{NULL}}
+}}
+
+\item{check_not_mapped_type}{Check if any observations are not mapped?
+
+If \code{"warning"}, \code{"message"}, or \code{"error"} is specified, the specified message is issued
+if some records from the input dataset are not mapped using the lookup table.
+
+\describe{
+\item{Permitted values}{\code{"none"}, \code{"message"}, \code{"warning"}, \code{"error"}}
+\item{Default value}{\code{"message"}}
 }}
 }
 \value{
@@ -208,24 +219,24 @@ derive_vars_merged_lookup(
   dataset_add = param_lookup,
   by_vars = exprs(VSTESTCD),
   new_vars = exprs(PARAMCD, PARAM),
-  print_not_mapped = TRUE
+  check_not_mapped_type = "message"
 )
 }
 \seealso{
 General Derivation Functions for all ADaMs that returns variable appended to dataset:
-\code{\link{derive_var_extreme_flag}()},
-\code{\link{derive_var_joined_exist_flag}()},
-\code{\link{derive_var_merged_ef_msrc}()},
-\code{\link{derive_var_merged_exist_flag}()},
-\code{\link{derive_var_obs_number}()},
-\code{\link{derive_var_relative_flag}()},
-\code{\link{derive_vars_cat}()},
-\code{\link{derive_vars_computed}()},
-\code{\link{derive_vars_joined}()},
-\code{\link{derive_vars_joined_summary}()},
-\code{\link{derive_vars_merged}()},
-\code{\link{derive_vars_merged_summary}()},
-\code{\link{derive_vars_transposed}()}
+\code{\link[=derive_var_extreme_flag]{derive_var_extreme_flag()}},
+\code{\link[=derive_var_joined_exist_flag]{derive_var_joined_exist_flag()}},
+\code{\link[=derive_var_merged_ef_msrc]{derive_var_merged_ef_msrc()}},
+\code{\link[=derive_var_merged_exist_flag]{derive_var_merged_exist_flag()}},
+\code{\link[=derive_var_obs_number]{derive_var_obs_number()}},
+\code{\link[=derive_var_relative_flag]{derive_var_relative_flag()}},
+\code{\link[=derive_vars_cat]{derive_vars_cat()}},
+\code{\link[=derive_vars_computed]{derive_vars_computed()}},
+\code{\link[=derive_vars_joined]{derive_vars_joined()}},
+\code{\link[=derive_vars_joined_summary]{derive_vars_joined_summary()}},
+\code{\link[=derive_vars_merged]{derive_vars_merged()}},
+\code{\link[=derive_vars_merged_summary]{derive_vars_merged_summary()}},
+\code{\link[=derive_vars_transposed]{derive_vars_transposed()}}
 }
 \concept{der_gen}
 \keyword{der_gen}

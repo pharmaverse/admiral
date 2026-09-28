@@ -45,6 +45,7 @@ test_that("derive_var_merged_ef_msrc Test 1: wihtout by_vars", {
     compare = actual,
     keys = "USUBJID"
   )
+  expect_s3_class(actual, "admiral_df")
 })
 
 ## Test 2: with by_vars ----

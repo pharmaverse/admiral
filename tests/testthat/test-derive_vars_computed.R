@@ -30,24 +30,27 @@ test_that("derive_vars_computed Test 1: new variable is derived correctly", {
     ))
 
 
+  actual_output <- derive_vars_computed(
+    dataset = adsl,
+    dataset_add = advs,
+    by_vars = exprs(STUDYID, USUBJID),
+    parameters = c("WEIGHT"),
+    constant_by_vars = exprs(STUDYID, USUBJID),
+    constant_parameters = c("HEIGHT"),
+    new_vars = exprs(BMIBL = compute_bmi(height = AVAL.HEIGHT, weight = AVAL.WEIGHT)),
+    filter_add = ABLFL == "Y"
+  )
+
   expect_dfs_equal(
-    derive_vars_computed(
-      dataset = adsl,
-      dataset_add = advs,
-      by_vars = exprs(STUDYID, USUBJID),
-      parameters = c("WEIGHT"),
-      constant_by_vars = exprs(STUDYID, USUBJID),
-      constant_parameters = c("HEIGHT"),
-      new_vars = exprs(BMIBL = compute_bmi(height = AVAL.HEIGHT, weight = AVAL.WEIGHT)),
-      filter_add = ABLFL == "Y"
-    ),
+    actual_output,
     expected_output,
     keys = c("USUBJID")
   )
+  expect_s3_class(actual_output, "admiral_df")
 })
 
-## Test 2: no new variables added if filtered dataset is empty ----
-test_that("derive_vars_computed Test 2: no new variables added if filtered dataset is empty", {
+## Test 2: no new variables added if filtered dataset is empty (non-existent value) ----
+test_that("derive_vars_computed Test 2: no new variables added if filtered dataset is empty (non-existent value)", { # nolint
   adsl <- tribble(
     ~STUDYID,   ~USUBJID, ~AGE,   ~AGEU,
     "PILOT01", "01-1302",   61, "YEARS",
@@ -73,8 +76,8 @@ test_that("derive_vars_computed Test 2: no new variables added if filtered datas
   expected <- adsl %>%
     mutate(BMIBL = NA_integer_)
 
-  expect_warning(
-    derive_vars_computed(
+  expect_snapshot(
+    result <- derive_vars_computed(
       dataset = adsl,
       dataset_add = advs,
       by_vars = exprs(USUBJID),
@@ -82,13 +85,10 @@ test_that("derive_vars_computed Test 2: no new variables added if filtered datas
       constant_by_vars = exprs(USUBJID),
       constant_parameters = c("HEIGHT"),
       new_vars = exprs(BMIBL = compute_bmi(height = AVAL.HEIGHT, weight = AVAL.WEIGHT)),
-      filter_add = ABLFL == ""
-    ) %>%
-      expect_dfs_equal(expected,
-        keys = c("USUBJID")
-      ),
-    "The input dataset does not contain any observations fullfiling the filter condition .*"
+      filter_add = ABLFL == "N"
+    )
   )
+  expect_dfs_equal(result, expected, keys = c("USUBJID"))
 })
 
 ## Test 3: no new variables are added if a parameter is missing ----
@@ -116,8 +116,8 @@ test_that("derive_vars_computed Test 3: no new variables are added if a paramete
   expected <- adsl %>%
     mutate(BMIBL = NA_integer_)
 
-  expect_warning(
-    derive_vars_computed(
+  expect_snapshot(
+    result <- derive_vars_computed(
       dataset = adsl,
       dataset_add = advs,
       by_vars = exprs(STUDYID, USUBJID),
@@ -127,10 +127,6 @@ test_that("derive_vars_computed Test 3: no new variables are added if a paramete
       new_vars = exprs(BMIBL = compute_bmi(height = AVAL.HEIGHT, weight = AVAL.WEIGHT)),
       filter_add = ABLFL == "Y"
     )
-    %>%
-      expect_dfs_equal(expected,
-        keys = c("USUBJID")
-      ),
-    "The input dataset does not contain any observations fullfiling the filter condition .*"
   )
+  expect_dfs_equal(result, expected, keys = c("USUBJID"))
 })

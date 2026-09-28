@@ -33,9 +33,9 @@ print(templates)
 \code{\link[=list_all_templates]{list_all_templates()}}
 
 Utilities for printing:
-\code{\link{print.duplicates}()},
-\code{\link{print.source}()},
-\code{\link{print_named_list}()}
+\code{\link[=print.duplicates]{print.duplicates()}},
+\code{\link[=print.source]{print.source()}},
+\code{\link[=print_named_list]{print_named_list()}}
 }
 \concept{utils_print}
 \keyword{internal}

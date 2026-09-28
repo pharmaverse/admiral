@@ -13,7 +13,9 @@ derive_vars_dtm(
   time_imputation = "first",
   flag_imputation = "auto",
   min_dates = NULL,
+  min_dates_strict = NULL,
   max_dates = NULL,
+  max_dates_strict = NULL,
   preserve = FALSE,
   ignore_seconds_flag = TRUE
 )
@@ -58,14 +60,15 @@ value are imputed if they are missing. All components up to the specified
 level are imputed.
 
 If a component at a higher level than the highest imputation level is
-missing, \code{NA_character_} is returned. For example, for \code{highest_imputation = "D"} \code{"2020"} results in \code{NA_character_} because the month is missing.
+missing, \code{NA} is returned. For example, for \code{highest_imputation = "D"}
+\code{"2020"} results in \code{NA} because the month is missing.
 
 If \code{"n"} is specified, no imputation is performed, i.e., if any component is
-missing, \code{NA_character_} is returned.
+missing, \code{NA} is returned.
 
 If \code{"Y"} is specified, \code{date_imputation} should be \code{"first"} or \code{"last"}
 and \code{min_dates} or \code{max_dates} should be specified respectively. Otherwise,
-\code{NA_character_} is returned if the year component is missing.
+\code{NA} is returned if the year component is missing.
 
 \describe{
 \item{Permitted values}{\code{"Y"} (year, highest level), \code{"M"} (month), \code{"D"}
@@ -79,25 +82,28 @@ missing.
 
 A character value is expected.
 \itemize{
-\item If  \code{highest_imputation} is \code{"M"}, month and day can be
-specified as \code{"mm-dd"}: e.g. \code{"06-15"} for the 15th of June
-\item When  \code{highest_imputation} is \code{"M"} or  \code{"D"}, the following keywords are available:
-\code{"first"}, \code{"mid"}, \code{"last"} to impute to the first/mid/last
-day/month. If \code{"mid"} is specified, missing components are imputed as the
-middle of the possible range:
+\item The\code{"first"} and \code{"last"} keywords allow imputation to the first/last
+day/month. They can also be used to impute the year if used in conjunction
+with the \code{min_dates} or \code{max_dates} arguments. Some examples of this are available
+\href{https://pharmaverse.github.io/admiral/cran-release/articles/imputation.html#minimummaximum-dates}{here}.
+\item When \code{highest_imputation} is \code{"M"} or \code{"D"}, the \code{"mid"} keyword can also be
+specified to impute missing components to the middle of the possible range:
 \itemize{
 \item If both month and day are missing, they are imputed as \code{"06-30"}
 (middle of the year).
 \item If only day is missing, it is imputed as \code{"15"} (middle of the month).
 }
+\item \code{"<dd>"} can be specified only if \code{highest_imputation = "D"}. Missing days are
+imputed by the specified day, e.g. \code{"10"} for the 10th day of the month.
+The specified day should be valid for all months as otherwise an error might be
+issued. For example, \code{date_imputation = "30"} results in an invalid date of
+"2024-02-30" for the partial date "2024-02".
+\item \code{"<mm>-<dd>"} can be specified only if \code{highest_imputation} is \code{"M"},  e.g. \code{"06-15"}
+for the 15th of June.
 }
 
-The year can not be specified; for imputing the year
-\code{"first"} or \code{"last"} together with \code{min_dates} or \code{max_dates} argument can
-be used (see examples).
-
 \describe{
-\item{Permitted values}{\code{"first"}, \code{"mid"}, \code{"last"}, or user-defined}
+\item{Permitted values}{a key-word, i.e. \code{"first"}, \code{"mid"}, \code{"last"}, or \code{"<mm>-<dd>"} or \code{"<dd>"}}
 \item{Default value}{\code{"first"}}
 }}
 
@@ -150,7 +156,8 @@ ensures that the non-missing parts of the \code{dtc} date are not changed.
 A date or date-time object is expected.
 For example
 
-\if{html}{\out{<div class="sourceCode r">}}\preformatted{impute_dtc_dtm(
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{library(lubridate)
+impute_dtc_dtm(
   "2020-11",
   min_dates = list(
    ymd_hm("2020-12-06T12:12"),
@@ -158,9 +165,10 @@ For example
   ),
   highest_imputation = "M"
 )
+#> [1] "2020-11-11T11:11:00"
 }\if{html}{\out{</div>}}
 
-returns \code{"2020-11-11T11:11:11"} because the possible dates for \code{"2020-11"}
+returns \code{"2020-11-11T11:11:00"} because the possible dates for \code{"2020-11"}
 range from \code{"2020-11-01T00:00:00"} to \code{"2020-11-30T23:59:59"}. Therefore
 \code{"2020-12-06T12:12:12"} is ignored. Returning \code{"2020-12-06T12:12:12"} would
 have changed the month although it is not missing (in the \code{dtc} date).
@@ -168,6 +176,56 @@ have changed the month although it is not missing (in the \code{dtc} date).
 For date variables (not datetime) in the list the time is imputed to
 \code{"00:00:00"}. Specifying date variables makes sense only if the date is
 imputed. If only time is imputed, date variables do not affect the result.
+
+\describe{
+\item{Permitted values}{a list of dates, e.g. \code{list(ymd_hms("2021-07-01T04:03:01"), ymd_hms("2022-05-12T13:57:23"))}}
+\item{Default value}{\code{NULL}}
+}}
+
+\item{min_dates_strict}{Minimum dates (strict)
+
+The argument works like the \code{min_dates} argument but it affects the behavior
+of the \code{min_dates} and \code{max_dates} arguments. The range that is used to
+determine which of the \code{min_dates} and \code{max_dates} are considered is
+restricted by the dates specified for \code{min_dates_strict} (see example below
+and the example in the "Avoid Imputed Dates Before a Particular Date" section
+in \code{vignette("imputation")}).
+
+This argument is useful if the \code{max_dates} argument is used and there are
+strict restrictions on the imputed date, like the event start date when the
+event end date is imputed.
+
+For example
+
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{library(lubridate)
+impute_dtc_dtm(
+  c("2020-11", "2020-11"),
+  min_dates_strict = list(
+   c(ymd_hm("2020-11-24T00:00"), ymd_hm("2020-11-11T11:11"))
+  ),
+  max_dates = list(
+    c(ymd_hm("2020-11-22T12:12"), ymd_hm("2020-11-22T12:12"))
+  ),
+  highest_imputation = "M",
+  date_imputation = "last",
+  time_imputation = "last"
+)
+#> [1] "2020-11-30T23:59:59" "2020-11-22T12:12:00"
+}\if{html}{\out{</div>}}
+
+returns (\code{"2020-11-30T23:59:59"}, \code{"2020-11-22T12:12:00"}). The possible
+dates for \code{"2020-11"} range from \code{"2020-11-01T00:00:00"} to
+\code{"2020-11-30T23:59:59"}.
+
+For the first element, the \code{min_dates_strict} argument restricts this range
+to \code{"2020-11-24T00:00:00"} to \code{"2020-11-30T23:59:59"}. Therefore
+\code{"2020-11-22T12:12:00"} (from the \code{max_dates} argument) is ignored as it is
+not within the restricted range.
+
+For the second element, the \code{min_dates_strict} argument restricts this range
+to \code{"2020-11-11T11:11:00"} to \code{"2020-11-30T23:59:59"}. In this case
+\code{"2020-11-22T12:12:00"} (from the \code{max_dates} argument) is within the
+restricted range and is considered.
 
 \describe{
 \item{Permitted values}{a list of dates, e.g. \code{list(ymd_hms("2021-07-01T04:03:01"), ymd_hms("2022-05-12T13:57:23"))}}
@@ -184,6 +242,54 @@ considered. A date or date-time object is expected.
 For date variables (not datetime) in the list the time is imputed to
 \code{"23:59:59"}. Specifying date variables makes sense only if the date is
 imputed. If only time is imputed, date variables do not affect the result.
+
+\describe{
+\item{Permitted values}{a list of dates, e.g. \code{list(ymd_hms("2021-07-01T04:03:01"), ymd_hms("2022-05-12T13:57:23"))}}
+\item{Default value}{\code{NULL}}
+}}
+
+\item{max_dates_strict}{Maximum dates (strict)
+
+The argument works like the \code{max_dates} argument but it affects the behavior
+of the \code{min_dates} and \code{max_dates} arguments. The range that is used to
+determine which of the \code{min_dates} and \code{max_dates} are considered is
+restricted by the dates specified for \code{max_dates_strict} (see example below).
+
+This argument is useful if the \code{min_dates} argument is used and there are
+strict restrictions on the imputed date, like date of death or the event end
+date when the event start date is imputed.
+
+For example
+
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{library(lubridate)
+impute_dtc_dtm(
+  c("2020-11", "2020-11"),
+  max_dates_strict = list(
+   c(ymd_hm("2020-11-24T00:00"), ymd_hm("2020-11-11T11:11"))
+  ),
+  min_dates = list(
+    c(ymd_hm("2020-11-22T12:12"), ymd_hm("2020-11-22T12:12"))
+  ),
+  highest_imputation = "M",
+  date_imputation = "first",
+  time_imputation = "first"
+)
+#> [1] "2020-11-22T12:12:00" "2020-11-01T00:00:00"
+}\if{html}{\out{</div>}}
+
+returns (\code{"2020-11-22T12:12:00"}, \code{"2020-11-01T00:00:00"}). The possible
+dates for \code{"2020-11"} range from \code{"2020-11-01T00:00:00"} to
+\code{"2020-11-30T23:59:59"}.
+
+For the first element, the \code{max_dates_strict} argument restricts this range
+to \code{"2020-11-01T00:00:00"} to \code{"2020-11-24T00:00:00"}. The date
+\code{"2020-11-22T12:12:00"} (from the \code{min_dates} argument) is within the
+restricted range and is therefore considered.
+
+For the second element, the \code{max_dates_strict} argument restricts this range
+to \code{"2020-11-01T00:00:00"} to \code{"2020-11-11T11:11:00"}. In this case
+\code{"2020-11-22T12:12:00"} (from the \code{max_dates} argument) is outside the
+restricted range and thus it is ignored.
 
 \describe{
 \item{Permitted values}{a list of dates, e.g. \code{list(ymd_hms("2021-07-01T04:03:01"), ymd_hms("2022-05-12T13:57:23"))}}
@@ -234,17 +340,21 @@ choose to say impute months, but not days.
 The presence of a \verb{*DTF} variable is checked and the variable is not derived
 if it already exists in the input dataset. However, if \verb{*TMF} already exists
 in the input dataset, a warning is issued and \verb{*TMF} will be overwritten.
+
+Additionally, the function will throw an error if imputation rules cause an
+invalid datetime (e.g. "2020-02-01T25:00:00") to be generated. In this case,
+the user should adjust the imputation rules.
 }
 \seealso{
 \code{vignette("imputation")}
 
 Date/Time Derivation Functions that returns variable appended to dataset:
-\code{\link{derive_var_trtdurd}()},
-\code{\link{derive_vars_dt}()},
-\code{\link{derive_vars_dtm_to_dt}()},
-\code{\link{derive_vars_dtm_to_tm}()},
-\code{\link{derive_vars_duration}()},
-\code{\link{derive_vars_dy}()}
+\code{\link[=derive_var_trtdurd]{derive_var_trtdurd()}},
+\code{\link[=derive_vars_dt]{derive_vars_dt()}},
+\code{\link[=derive_vars_dtm_to_dt]{derive_vars_dtm_to_dt()}},
+\code{\link[=derive_vars_dtm_to_tm]{derive_vars_dtm_to_tm()}},
+\code{\link[=derive_vars_duration]{derive_vars_duration()}},
+\code{\link[=derive_vars_dy]{derive_vars_dy()}}
 }
 \concept{der_date_time}
 \keyword{der_date_time}

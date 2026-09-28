@@ -1,4 +1,4 @@
-# derive_extreme_event Test 8: error if source dataset not available
+# derive_extreme_event Test 10: error if source dataset not available
 
     Code
       derive_extreme_event(adhy, by_vars = exprs(USUBJID), events = list(event(

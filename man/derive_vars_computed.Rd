@@ -141,12 +141,12 @@ parameter code \code{"HGHT"}.
 The input dataset with the new variables added.
 }
 \description{
-Adds Variable(s) computed from the analysis value of one or more parameters.
-It is expected that the value of the new variable is defined by an expression
-using the analysis values of other parameters, such as addition/sum,
-subtraction/difference, multiplication/product, division/ratio,
+Adds Variable(s) computed from the analysis value of one or more
+parameters. It is expected that the value of the new variable is defined by
+an expression using the analysis values of other parameters, such as
+addition/sum, subtraction/difference, multiplication/product, division/ratio,
 exponentiation/logarithm, or by formula.
-\if{html}{\out{<br/>}}\if{html}{\out{<br/>}}
+
 For example Body Mass Index at
 Baseline (\code{BMIBL}) in \code{ADSL} can be derived from of HEIGHT and WEIGHT
 parameters in \code{ADVS}.
@@ -196,19 +196,19 @@ derive_vars_computed(
 }
 \seealso{
 General Derivation Functions for all ADaMs that returns variable appended to dataset:
-\code{\link{derive_var_extreme_flag}()},
-\code{\link{derive_var_joined_exist_flag}()},
-\code{\link{derive_var_merged_ef_msrc}()},
-\code{\link{derive_var_merged_exist_flag}()},
-\code{\link{derive_var_obs_number}()},
-\code{\link{derive_var_relative_flag}()},
-\code{\link{derive_vars_cat}()},
-\code{\link{derive_vars_joined}()},
-\code{\link{derive_vars_joined_summary}()},
-\code{\link{derive_vars_merged}()},
-\code{\link{derive_vars_merged_lookup}()},
-\code{\link{derive_vars_merged_summary}()},
-\code{\link{derive_vars_transposed}()}
+\code{\link[=derive_var_extreme_flag]{derive_var_extreme_flag()}},
+\code{\link[=derive_var_joined_exist_flag]{derive_var_joined_exist_flag()}},
+\code{\link[=derive_var_merged_ef_msrc]{derive_var_merged_ef_msrc()}},
+\code{\link[=derive_var_merged_exist_flag]{derive_var_merged_exist_flag()}},
+\code{\link[=derive_var_obs_number]{derive_var_obs_number()}},
+\code{\link[=derive_var_relative_flag]{derive_var_relative_flag()}},
+\code{\link[=derive_vars_cat]{derive_vars_cat()}},
+\code{\link[=derive_vars_joined]{derive_vars_joined()}},
+\code{\link[=derive_vars_joined_summary]{derive_vars_joined_summary()}},
+\code{\link[=derive_vars_merged]{derive_vars_merged()}},
+\code{\link[=derive_vars_merged_lookup]{derive_vars_merged_lookup()}},
+\code{\link[=derive_vars_merged_summary]{derive_vars_merged_summary()}},
+\code{\link[=derive_vars_transposed]{derive_vars_transposed()}}
 }
 \concept{der_gen}
 \keyword{der_gen}

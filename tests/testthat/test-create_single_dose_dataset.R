@@ -22,8 +22,12 @@ test_that("create_single_dose_dataset Test 1: Works as expected for Q*/EVERY * c
     "STUDY01", "P02",    "ONCE",    ymd("2021-02-02"), ymd("2021-02-02")
   )
 
+  actual_output <- create_single_dose_dataset(input)
+
+  expect_s3_class(actual_output, "admiral_df")
+
   expect_dfs_equal(
-    create_single_dose_dataset(input),
+    actual_output,
     expected_output,
     keys = "ASTDT"
   )

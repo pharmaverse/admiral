@@ -163,7 +163,7 @@ of the specified variables are set to the specified value. Only variables
 specified for \code{new_vars} can be specified for \code{missing_values}.
 
 \describe{
-\item{Permitted values}{list of named expressions created by a formula using \code{exprs()}, e.g., \code{exprs(AVALC = VSSTRESC, AVAL = yn_to_numeric(AVALC))}}
+\item{Permitted values}{list of named expressions created by \code{exprs()}, e.g., \code{exprs(AVALC = VSSTRESC, AVAL = yn_to_numeric(AVALC))}}
 \item{Default value}{\code{NULL}}
 }}
 
@@ -238,19 +238,19 @@ in the input dataset are ignored.
 }
 \seealso{
 General Derivation Functions for all ADaMs that returns variable appended to dataset:
-\code{\link{derive_var_extreme_flag}()},
-\code{\link{derive_var_joined_exist_flag}()},
-\code{\link{derive_var_merged_ef_msrc}()},
-\code{\link{derive_var_merged_exist_flag}()},
-\code{\link{derive_var_obs_number}()},
-\code{\link{derive_var_relative_flag}()},
-\code{\link{derive_vars_cat}()},
-\code{\link{derive_vars_computed}()},
-\code{\link{derive_vars_joined}()},
-\code{\link{derive_vars_joined_summary}()},
-\code{\link{derive_vars_merged_lookup}()},
-\code{\link{derive_vars_merged_summary}()},
-\code{\link{derive_vars_transposed}()}
+\code{\link[=derive_var_extreme_flag]{derive_var_extreme_flag()}},
+\code{\link[=derive_var_joined_exist_flag]{derive_var_joined_exist_flag()}},
+\code{\link[=derive_var_merged_ef_msrc]{derive_var_merged_ef_msrc()}},
+\code{\link[=derive_var_merged_exist_flag]{derive_var_merged_exist_flag()}},
+\code{\link[=derive_var_obs_number]{derive_var_obs_number()}},
+\code{\link[=derive_var_relative_flag]{derive_var_relative_flag()}},
+\code{\link[=derive_vars_cat]{derive_vars_cat()}},
+\code{\link[=derive_vars_computed]{derive_vars_computed()}},
+\code{\link[=derive_vars_joined]{derive_vars_joined()}},
+\code{\link[=derive_vars_joined_summary]{derive_vars_joined_summary()}},
+\code{\link[=derive_vars_merged_lookup]{derive_vars_merged_lookup()}},
+\code{\link[=derive_vars_merged_summary]{derive_vars_merged_summary()}},
+\code{\link[=derive_vars_transposed]{derive_vars_transposed()}}
 }
 \concept{der_gen}
 \keyword{der_gen}
@@ -326,7 +326,7 @@ Merge the last occurring weight for each subject to the demographics dataset.
 to a datetime, within the \code{order} argument.
 \item Then the \code{mode} argument is set to \code{"last"} to ensure the last sorted value
 is taken. Be cautious if \code{NA} values are possible in the \code{order} variables -
-see \href{https://pharmaverse.github.io/admiral/articles/generic.html#sort_order}{Sort Order}.
+see \href{https://pharmaverse.github.io/admiral/cran-release/articles/generic.html#sort_order}{Sort Order}.
 \item The \code{filter_add} argument is used to restrict the vital signs records only
 to weight assessments.
 }

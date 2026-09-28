@@ -638,6 +638,7 @@ derive_var_joined_exist_flag <- function(dataset,
     join_type = join_type,
     first_cond_lower = !!first_cond_lower,
     first_cond_upper = !!first_cond_upper,
+    filter_add = !!filter_add,
     filter_join = !!filter_join,
     check_type = check_type
   )
@@ -652,5 +653,6 @@ derive_var_joined_exist_flag <- function(dataset,
     false_value = false_value,
     missing_value = false_value
   ) %>%
-    remove_tmp_vars()
+    remove_tmp_vars() %>%
+    as_admiral_df()
 }

@@ -2,32 +2,251 @@
 
 ## New Features
 
+- Added function `as_admiral_df()`. Tags a data frame with the `admiral_df` S3
+class, preserving its existing classes. All `{admiral}` dataset functions now tag their
+output datasets with this class. (#3160)
+
 ## Updates of Existing Functions
+
+- The `min_dates_strict` and `max_dates_strict` arguments were added to
+`derive_vars_dt()`, `derive_vars_dtm()`, `convert_dtc_to_dt()`,
+`convert_dtc_to_dtm()`, `impute_dtc_dt()`, `impute_dtc_dtm()`. The new arguments
+can be used to avoid invalid imputed dates. E.g., if `AESTDTC` is imputed with
+`min_dates = exprs(TRTSDTM)`, `max_dates_strict = exprs(AENDTM)` can be
+specified to ensure the imputed event start date is not after the event end
+date (the `ADAE` template and the "Creating an OCCDS ADaM" vignette were updated
+accordingly).
+
+    See the `derive_vars_dt()` documentation and the "Avoid Imputed Dates Before
+    a Particular Date" section of the "Date and Time Imputation" vignette
+    (`vignette("imputation")`) for details and examples. (#2708)
+    
+- `derive_vars_merged_lookup()` was enhanced with a new `check_not_mapped_type` argument
+which allows users to control whether a message, warning, error, or no message at all
+is issued when some records are not mapped using the lookup dataset. The `print_not_mapped`
+argument will thus be deprecated. (#3188)
+
+## Breaking Changes
+
+- The following functions are entering the next phase of the [deprecation process](https://pharmaverse.github.io/admiraldev/articles/programming_strategy.html#deprecation):
+
+  **Phase 1 (message)**
+
+  - `derive_vars_merged_lookup(print_not_mapped = )` is deprecated in favor of the 
+  `check_not_mapped_type` argument.
+
+  **Phase 2 (warning)**
+
+  - `derive_var_merged_summary()` is deprecated in favor of `derive_vars_merged_summary()`.
+  - `derive_var_atoxgr_dir(abnormal_indicator = )` is deprecated in favor of the `low_indicator` and
+  `high_indicator` arguments.
+
+  **Phase 3 (error)**
+
+  - `derive_param_extreme_record()` is deprecated in favor of `derive_extreme_event()`.
+  - `derive_var_dthcaus()` is deprecated in favor of `derive_vars_extreme_event()`.
+  - `dthcaus_source()` is deprecated in favor of `event()`.
+  - `date_source()` is deprecated in favor of `event()`.
+  - `derive_var_extreme_dt()` is deprecated in favor of `derive_vars_extreme_event()`.
+  - `derive_var_extreme_dtm()` is deprecated in favor of `derive_vars_extreme_event()`.
+  - `get_summary_records()` is deprecated in favor of `derive_summary_records()`.
+
+  **Phase 4 (removed)**
+
+  - `call_user_fun()` has been removed.
+
+## Documentation
+
+- Corrected the ADLB template label for `PARAMCD = "CK"` from `"Creatinine Kinase"` to `"Creatine Kinase"` (#3170).
+
+- Updated the "Lab Grading" vignette to replace the deprecated `abnormal_indicator` argument reference
+  with the new `high_indicator` argument in `derive_var_atoxgr_dir()`.
+  
+- `{admiral}`'s README was updated to remove redundant information and consolidate a number of sections
+together. Additionally, the package manifesto was moved to the `{admiraldev}` website. (#3154)
+
+- Referenced the [{admiral} agent skills](https://github.com/RConsortium/pharma-skills/tree/main/admiral)
+  in the README and the "Get Started" navigation bar. (#3159)
+
+## Various
+
+- The minimum `dplyr` version was bumped to `1.2.0` to make use of the new
+`recode_values()`, `filter_out()`, and `replace_when()` functions. (#3163)
+
+- Updated the default `ae_event`, `ae_ser_event`, `ae_gr1_event`, `ae_gr2_event`, `ae_gr3_event`, 
+`ae_gr4_event`, `ae_gr5_event`, `ae_gr_35_event`, `ae_wd_event` and `ae_sev_event` objects to 
+specify `order = exprs(AESEQ)` so that AEs on the same date are differentiated. This fixes a
+duplicate warning in the "Higher Order Functions" vignette. (#3153)
+
+<details>
+<summary>Developer Notes</summary>
+
+- Updated to roxygen2 8.1.0. (#3171)
+
+- Replaced internal uses of `expr_c()` with `c()` due to `{admiraldev}`'s deprecation of `expr_c()`. (#3179)
+
+</details>
+
+# admiral 1.5.0
+
+## Updates of Existing Functions
+
+- `derive_vars_dt()` and `derive_vars_dtm()` were enhanced to allow user-defined `date_imputation` values (e.g.
+`date_imputation = "10"`) in combination with `highest_imputation = "D"`. Additionally,
+functions such as `derive_vars_dt()`, `derive_vars_dtm()`, `impute_dtc_dt()` and 
+`impute_dtc_dtm()` now issue an error if any invalid dates (e.g. "2020-02-31"). (#3014)
+
+- The `end_dates` argument for specifying dates which restrict the observation
+period and the `event_type` argument for specifying if the event is negative
+(progression, death, worsening, ...) were added to `derive_param_tte()`. The
+`consider_end_dates` field was added to the `event_source()`, `censor_source()`,
+and `tte_source()` objects. (#2952)
+
+- The `by_vars` and the `tmp_obs_nr_var` arguments were added to
+  `event_joined()`. This allows to derive parameters requiring confirmation _by
+  visit_ using `derive_extreme_event()`. (#3022)
+
+- The `filter_source` argument was added to `event_joined()`, allowing to
+specify a condition to restrict the source dataset before the join, e.g., when
+using `derive_extreme_event()`. (#3033)
+
+- The `filter_add` argument in `derive_var_joined_exist_flag()` is no longer
+erroneously ignored. (#3018)
+
+- Poorly formatted warning messages in `derive_param_computed()` and `derive_vars_computed()` were improved. (#2969)
+
+* Fixed typo in `derive_summary_records()` error message. (#3127)
+
+- `use_ad_template()` was updated to remove the `open` argument, meaning the generated template will never automatically open
+in a new window, and will instead just be accessible by clicking the link outputted in the console or going to the path
+specified under `save_path`. This is because this functionality did not work as expected outside of RStudio. (#2989)
+
+- The NCICTCAEv5 grading criteria (`atoxgr_criteria_ctcv5`, `atoxgr_criteria_ctcv5_uscv`) were updated 
+to add the term `"Blood lactate dehydrogenase increase"` (#3025).
+
+- The `missing_values` argument was added to `derive_extreme_records()`. This
+  allows users to specify values for variables in the new records originating
+  from `dataset_ref`. (#3017)
+  
+- `list_all_templates()` now only lists out `.R` files with the `templates` folder
+of the target package. (#3136)
 
 ## Breaking Changes
 
 - The following function arguments are entering the next phase of the [deprecation process](https://pharmaverse.github.io/admiraldev/articles/programming_strategy.html#deprecation): 
 
   **Phase 1 (message)**
+  
+  No functions or arguments in this phase.
     
   **Phase 2 (warning)**
-    
+  
+  No functions or arguments in this phase.  
+  
   **Phase 3 (error)**
+  - `call_user_fun()` is deprecated and will have no replacement.
   
   **Phase 4 (removed)**
+  
+  No functions or arguments in this phase.
+  
+- The `ex_single` dataset was removed from `{admiral}` to reduce the package
+  size. It can be derived on the fly using `create_single_dose_dataset()`.
+  See the `OCCDS` vignette or `?create_single_dose_dataset` for examples. (#3060)
 
 ## Documentation
 
-- New Estimands vignette added, describing possible implementations of estimands with `{admiral}` code. (#2954)
+- A new article "Time-to-Event Analyses" was added to provide guidance for different TTE scenarios. (#2900)
+
+- The following new and existing User Guides have been changed from vignettes to articles, meaning they are no longer accessible
+offline via `vignette("vignette_name")`:
+
+  - Creating an ADAB ADaM
+  - Estimands (new)
+  
+   This helps minimize the size of `{admiral}` for installation. The articles are still accessible through the User Guides section of the 
+[admiral website](https://pharmaverse.github.io/admiral/cran-release/). (#3067)
+
+- The documentation for `derive_var_merged_ef_msrc()` was enhanced with structured examples covering `flag_events` with multiple
+sources, customizing `true_value`, `false_value`, and `missing_value`, and per-source `by_vars` renaming. (#2906)
+
+- The `UDTC` derivation in `ADPPK` was updated to use source domain `DTC` variables. (#3011)
+
+- The example for `derive_var_nfrlt()` was updated to use `NA_character_` instead of `""` for missing unit values, consistent with
+the `{admiral}` programming strategy. (#3027)
+
+- A new web-only "Estimands" article was added, describing possible implementations of Estimands with `{admiral}` code. (#2954)
 
 - A night mode option has been added to the `{admiral}` website. This can be be toggled using the sun/moon icon in the top right corner 
 of the navigation bar. Tooltips have also been set up for each of the icons on the navigation bar. (#2959)
+
+- The [contribution guidelines](https://pharmaverse.github.io/admiral/cran-release/CONTRIBUTING.html) for the `{admiral}` ecosystem 
+of packages were updated to specify the level of contributions required for authorship/acknowledgments. (#2979)
+
+- The examples for `derive_basetype_records()` were enhanced to include a case where records that do not match any
+  condition in `basetypes` are retained with `BASETYPE` set to `NA`. (#2904)
+  
+- Additional information about timing variable conventions has been added to the `derive_vars_dy()` function documentation. (#2995)
+
+- The documentation for `derive_vars_merged_summary()` was enhanced with structured examples covering
+the `new_vars`, `filter_add`, `missing_values`, `by_vars` renaming, and string aggregation use cases. (#2775)
+
+- A new custom [404 page](https://pharmaverse.github.io/admiral/404.html) was added with a butterfly quiz for lost users. (#2982)
+
+- Added information about how to print out records with missing information when using `datasetref` in `derive_summary_records()`. (#3012)
+
+- Usage of `ASEQ` (an optional variable) was clarified within the corresponding Vignettes and Templates. (#2986)
+
+- The derivation of `DOSEON` and `DOSEU` variables in the OCCDS vignette was
+  clarified and generalized to cover more scenarios. (#3101)
+  
+- The documentation for `derive_vars_dtm()` and `derive_vars_dt()` was updated to clarify details of the `highest_imputation` argument. (#3055)
+
+- The "Date and Time Imputation" vignette was updated to point out the difference between the character `*DTC` variables and the numeric `*DTM` variables. (#3055)
+
+- The documentation for `compute_*()` and other computation functions was updated to clarify 
+that they are vector-oriented helpers and are not usually called directly on a
+data frame with `%>%`. (#3146)
+
+- Added notes and examples for deriving baseline toxicity grade variables (`BTOXGR`, `BTOXGRL`, `BTOXGRH`) in the Lab Grading vignette. (#3119)
 
 ## Various
 
 <details>
 <summary>Developer Notes</summary>
+
+- Update to roxygen2 8.0.0. (#3090)
+
+- The `admiral_labels_attrs_section()` function was added to output
+  standardized boilerplate markdown for the "Add Labels and Attributes" section
+  in ADaM-specific vignettes. All relevant vignettes have been updated to use
+  this function, ensuring consistent content that can be maintained in one
+  place. (#2926)
+
+- Add instructions for AI coding agents: Workflow from `{admiralci}` copies information from `{admiraldev}` to `AGENTS.md` instruction files. (#2920)
+
+- Increased the maximum height of the drop-down menus in the website navigation bar to ensure all items are visible without scrolling. (#2974)
+
+- Creating the website for pull requests was enabled. Add "[create website]" to
+the pull request title to trigger website creation. (#2984)
+
+- `_pkgdown.yml` was updated to add metadata for linking across packages
+(`inst/pkgdown.yml`). (#2950)
+
+- The helper functions `roxygen_param_dataset()`, `roxygen_param_by_vars()`,
+  `roxygen_order_na_handling()`, and `roxygen_save_memory()` have been moved
+  from `{admiral}` to `{admiraldev}`. They are now exported from `{admiraldev}`
+  and remain accessible in `{admiral}` via the existing `@import admiraldev`
+  dependency. ([admiraldev/#517](https://github.com/pharmaverse/admiraldev/issues/517))
+
+- The HTML tag `<br/>` was removed from the roxygen headers. (#3042)
+
+- Clickable links to personal websites or GitHub profiles were added in the home page sidebar for every `{admiral}` author. (#3112)
 </details>
+
+# admiral 1.4.2
+
+* Maintainer switched from Ben Straub to Edoardo Mancini.
 
 # admiral 1.4.1
 
@@ -122,11 +341,11 @@ to work with a deprecation message until the beginning of 2027. (#1858)
 
   **Phase 3 (error)**
   
-  No functions or arguments in this Phase
+  No functions or arguments in this phase.
 
   **Phase 4 (removed)**
     
-  No functions or arguments in this Phase
+  No functions or arguments in this phase.
     
 ## Documentation
 
@@ -146,7 +365,8 @@ and receive answers from an LLM. It is trained on the documentation of both pack
 
 - A link to the [{admiral} ecosystem](https://pharmaverse.org/e2eclinical/adam/) page was added to the README sidebar and main text. (#2881)
 
-- The ADSL template and vignette were updated to add derivation of analysis age (`AAGE`/`AAGEU`) using `derive_vars_aage()`. This includes deriving birth date (`BRTHDT`) from birth date character variable (`BRTHDTC`) using `derive_vars_dt()`. (#2584)
+- The ADSL template and vignette were updated to add derivation of analysis age (`AAGE`/`AAGEU`) using `derive_vars_aage()`. This 
+includes deriving birth date (`BRTHDT`) from birth date character variable (`BRTHDTC`) using `derive_vars_dt()`. (#2584)
 
 - Standardized variable notation across documentation to use `--` for SDTM variables (e.g., `--DTC`) and `*` for ADaM variables (e.g., `*DTM`, `*DT`). (#2757)
 
@@ -225,7 +445,8 @@ CRAN requirements. (#2788)
 subsets, however this can lead to issues when the input dataset is empty. Now
 the derivation is called for all subsets. (#2645)
 
-- The examples section for the function `derive_var_trtemfl()` was enhanced to include a showcasing of all scenarios discussed in the following [PHUSE White Paper on Treatment-Emergent AEs](https://phuse.s3.eu-central-1.amazonaws.com/Deliverables/Safety+Analytics/WP-087+Recommended+Definition+of++Treatment-Emergent+Adverse+Events+in+Clinical+Trials+.pdf). (#2455)
+- The examples section for the function `derive_var_trtemfl()` was enhanced to include a showcasing of all scenarios discussed in the following [PHUSE 
+White Paper on Treatment-Emergent AEs](https://phuse.s3.eu-central-1.amazonaws.com/Deliverables/Safety+Analytics/WP-087+Recommended+Definition+of++Treatment-Emergent+Adverse+Events+in+Clinical+Trials+.pdf). (#2455)
 
 - `derive_var_atoxgr_dir()` updated to handle more than one unit in grading metadata. Related to providing US (Conventional) units for grading (#2557).
 
@@ -250,7 +471,9 @@ the `filter_add` argument is used. (#2863)
   when determining which observations to add to the input dataset. The `imputation` argument lets users decide whether 
   to update `analysis_var` when its value is `NA` ("update" and "update_add"), or to add a new observation instead ("add"). (#2694) (#2680) (#2717)
 
-- `derive_vars_dt()`, `derive_vars_dtm()`, `impute_dtc_dt()`, `impute_dtc_dtm()`, `convert_dtc_to_dt()`, & `convert_dtc_to_dtm()` and related functions will now throw an error instead of a warning when `highest_imputation = "Y"` but neither `min_date` (when `date_imputation = "first"`) nor `max_dates` (when `date_imputation = "last"`) are specified. (#2654)
+- `derive_vars_dt()`, `derive_vars_dtm()`, `impute_dtc_dt()`, `impute_dtc_dtm()`, `convert_dtc_to_dt()`, & 
+`convert_dtc_to_dtm()` and related functions will now throw an error instead of a warning when `highest_imputation = "Y"` 
+but neither `min_date` (when `date_imputation = "first"`) nor `max_dates` (when `date_imputation = "last"`) are specified. (#2654)
 
 - `create_query_data()` no longer issues warnings when `basket_select()` objects
 with custom arguments of length greater than one are used. (#2751)
@@ -293,15 +516,15 @@ records. (#2683)
   
   **Phase 2 (warning)**
     
-  No functions or arguments in this Phase
+  No functions or arguments in this phase.
 
   **Phase 3 (error)**
     
-  No functions or arguments in this Phase
+  No functions or arguments in this phase.
 
   **Phase 4 (removed)**
     
-  No functions or arguments in this Phase
+  No functions or arguments in this phase.
 
 ## Documentation
 
@@ -366,9 +589,12 @@ target range. (#2571)
 
 - NCICTCAEv5 grading criteria (`atoxgr_criteria_ctcv5`):
 
-  - fix for `TERM = "INR increased"`, criteria was wrongly using `x ULN`, for first part of criteria for grades 1 to 3. For example, `">2.5 x ULN"` changed to `">2.5"` for grade 3. (#2534).
-  - when looking at abnormal baseline we now use `BNRIND` instead of comparing `BASE` with `ANRHI`,  as `ANRHI` may differ within a subject and lab test due to data from different lab vendors. This effects 5 terms, namely, `Alanine aminotransferase increased`, `Alkaline phosphatase increased`, `Aspartate aminotransferase increased`, `Blood bilirubin increased` and `GGT Increased`. (#249)
-  - `derive_var_atoxgr_dir()`: new argument `abnormal_indicator` to pass in value of `BNRIND` to indicate lab test is abnormal. This is only used for the 5 lab tests described above. (#249)
+  - fix for `TERM = "INR increased"`, criteria was wrongly using `x ULN`, for first part of criteria for grades 1 to 3. For example, 
+  `">2.5 x ULN"` changed to `">2.5"` for grade 3. (#2534).
+  - when looking at abnormal baseline we now use `BNRIND` instead of comparing `BASE` with `ANRHI`,  as `ANRHI` may differ within a 
+  subject and lab test due to data from different lab vendors. This effects 5 terms, namely, `Alanine aminotransferase increased`, `Alkaline phosphatase increased`, `Aspartate aminotransferase increased`, `Blood bilirubin increased` and `GGT Increased`. (#249)
+  - `derive_var_atoxgr_dir()`: new argument `abnormal_indicator` to pass in value of `BNRIND` to indicate lab test is abnormal. This 
+  is only used for the 5 lab tests described above. (#249)
 
 - The `keep_nas` argument of `derive_param_computed()` was enhanced such that it
 is now possible to specify a list of variables for which `NA`s are acceptable.
@@ -569,7 +795,8 @@ functions and some of the more advanced topics have been moved to the new "Progr
 <summary>Developer Notes</summary>
 
 - In the previous version, `renv` was the default framework used to manage package dependencies. Now, we use `devtools` as our main package manager (some changes also occurred for  [admiralci workflows](https://github.com/pharmaverse/admiralci)).
-There is a possibility to get package dependency versions used for the workflows to ensure local reproducibility. For this, you need to go under the latest action summary in your current PR. You can see a deps artifact. For each version of R used for `R CMD CHECKS` jobs, there is an associated renv.lock file (under the deps artifact).
+There is a possibility to get package dependency versions used for the workflows to ensure local reproducibility. For this, 
+you need to go under the latest action summary in your current PR. You can see a deps artifact. For each version of R used for `R CMD CHECKS` jobs, there is an associated renv.lock file (under the deps artifact).
 - Splitting out `R` and `test` files for date/time functions for cyclomatic complexity refactor (#2340)(#2339)
 - Created three unit tests for `get_summary_records()`. (#2304)
 - Created unit tests for developer internal function `get_imputation_target_date()` (#2378)
@@ -579,7 +806,11 @@ There is a possibility to get package dependency versions used for the workflows
 
 # admiral 1.0.2
 
-- Fix bug in `derive_param_tte()` where argument `dataset` populated and `PARAMCD` in `set_values_to` argument is an expression. Previously, there was a check early in function to see if `PARAMCD` defined in `set_values_to` argument, already existed in the dataset passed into `dataset` argument. If `PARAMCD` was not an expression i.e. `PARAMCD = "XYZ"` then check worked. However, if `PARAMCD` to be created was an expression, and wasn't resolved yet, this caused an ERROR. The check has been moved to near the end of the function, where `PARAMCD` is resolved in the dataset holding the new parameters. (#2336)
+- Fix bug in `derive_param_tte()` where argument `dataset` populated and `PARAMCD` in `set_values_to` argument is an expression. Previously, 
+there was a check early in function to see if `PARAMCD` defined in `set_values_to` argument, already existed in the dataset passed into `dataset` 
+argument. If `PARAMCD` was not an expression i.e. `PARAMCD = "XYZ"` then check worked. However, if `PARAMCD` to be created was an expression, and 
+wasn't resolved yet, this caused an ERROR. The check has been moved to near the end of the function, where `PARAMCD` is resolved in the dataset 
+holding the new parameters. (#2336)
 
 # admiral 1.0.1
 
@@ -622,7 +853,11 @@ character vector (`'--DTC'`), was imputed. (#2146)
 were enhanced such that more than one summary variable can be derived, e.g.,
 `AVAL` as the sum and `ADT` as the maximum of the contributing records. (#1792)
 
-- `derive_summary_records()` was enhanced with the following arguments: `dataset_add` (required), `dataset_ref` (optional), `missing_values` (optional). These arguments respectively, generate summary variables from additional datasets, retain/add specific records from a reference dataset, and impute user-defined missing values. Note that `dataset_add` can be set to the same value as `dataset` if a different additional dataset is not required. `derive_param_exposure()` was enhanced with `dataset_add` as well. (#2142)
+- `derive_summary_records()` was enhanced with the following arguments: `dataset_add` (required), `dataset_ref` (optional), 
+`missing_values` (optional). These arguments respectively, generate summary variables from additional datasets, retain/add 
+specific records from a reference dataset, and impute user-defined missing values. Note that `dataset_add` can be set to the
+same value as `dataset` if a different additional dataset is not required. `derive_param_exposure()` was enhanced with 
+`dataset_add` as well. (#2142)
 
 - The `missing_values` argument was added to `derive_var_merged_summary()`. It
 allows to define values for by groups, e.g., subjects which are not in the
@@ -825,7 +1060,10 @@ documentation. (#2154)
 - `derive_extreme_records()` no longer fails if `dataset_add` is specified and a
 variable specified for `order` is not in `dataset`. (#2113)
 
-- The `type` argument in `compute_duration()` changed the underlying default behavior in `derive_vars_duration()` without allowing the user to toggle between `"duration"` and `"interval"` as originally intended. This was fixed by adding the `type` argument for `derive_vars_duration()` and a wrapper function `derive_vars_aage()` such that it gets passed through `compute_duration()` appropriately (#2112)
+- The `type` argument in `compute_duration()` changed the underlying default behavior in `derive_vars_duration()` 
+without allowing the user to toggle between `"duration"` and `"interval"` as originally intended. This was fixed by
+adding the `type` argument for `derive_vars_duration()` and a wrapper function `derive_vars_aage()` such that it 
+gets passed through `compute_duration()` appropriately (#2112)
 
 - Template `ad_adpp.R` updated to replace `left_join()` with `derive_vars_merged()` (#2109).
 
@@ -861,7 +1099,9 @@ specifies which variables in the new observations should be kept. (#1697)
 
 - Templates, vignettes, and other uses of `{admiral.test}` SDTM data are updated to use `{pharmaversesdtm}` instead. (#2040)
 
-- The `traceability_vars` argument in `date_source()` and `dthcaus_source` were deprecated in favor of `set_values_to`. The `date_source()` function creates a date_source object as input for `derive_var_extreme_dt()` and `derive_var_extreme_dtm()`,users can now define the traceability variables by assigning those variables to the `set_values_to`argument.Similarly, the `dthcaus_source` creates a dthcaus_source Object. (#2068)
+- The `traceability_vars` argument in `date_source()` and `dthcaus_source` were deprecated in favor of `set_values_to`. The `date_source()` function creates 
+a date_source object as input for `derive_var_extreme_dt()` and `derive_var_extreme_dtm()`,users can now define the traceability variables by assigning those 
+variables to the `set_values_to`argument. Similarly, the `dthcaus_source` creates a dthcaus_source Object. (#2068)
 
 
 - `derive_extreme_event()` was enhanced (#1960):
@@ -948,7 +1188,9 @@ dates updated (#2028)
 
 ## Various
 
-- The list of package authors/contributors has been reformatted so that those who are actively maintaining the code base are now marked as *authors*, whereas those who made a significant contribution in the past are now down as *contributors*. All other acknowledgments have been moved to README section (#1941).
+- The list of package authors/contributors has been reformatted so that those who are actively maintaining 
+the code base are now marked as *authors*, whereas those who made a significant contribution in the 
+past are now down as *contributors*. All other acknowledgments have been moved to README section (#1941).
 
 - `derive_vars_joined()` had two bugs with regards to duplicates messaging and when `new_vars` was set to `NULL` that have now been addressed (#1966). 
 
@@ -1324,7 +1566,10 @@ visits/time points or when `AVAL` is `NA` for particular visits/time points. (#1
 
 ## Updates of Existing Functions
 
-- Function `derive_param_first_event()` has been replaced by a more generalized `derive_param_extreme_event()` function with new argument `mode` allowing for the selection of either the `"first"` or `"last"` event record according to the conditions provided. Also the `date_var` argument has been replaced with the `order` argument instead. In addition, three new arguments `new_var`, `true_value`, and `false_value` have been added to allow the user to choose what variable is used to indicate whether an event happened, and the values it is given. (#1317, #1242)
+- Function `derive_param_first_event()` has been replaced by a more generalized `derive_param_extreme_event()` function with new argument 
+`mode` allowing for the selection of either the `"first"` or `"last"` event record according to the conditions provided. Also the `date_var` 
+argument has been replaced with the `order` argument instead. In addition, three new arguments `new_var`, `true_value`, and `false_value` have 
+been added to allow the user to choose what variable is used to indicate whether an event happened, and the values it is given. (#1317, #1242)
 
 - Argument `ignore_time_for_ref_end_date` was added to `derive_var_ontrtfl()`,
 which controls if time is considered for the condition if `start_date` is after
@@ -1457,7 +1702,10 @@ users feedback (#1300):
 character vector to be used for sorting the `dataset`, `derive_vars_dthcaus()` 
 updated to process additional parameter (#1125).
 
-- `create_single_dose_dataset()` Fixed bug where `ASTDTM` and `AENDTM` were not updated when `start_date = ASTDT` and `end_date = AENDT`. The function has been amended to now require `start_datetime` and `end_datetime` parameters in addition to `start_date` and `end_date`.The `keep_source_vars` has been added to specify the variables to be retained from the source dataset (#1224)
+- `create_single_dose_dataset()` Fixed bug where `ASTDTM` and `AENDTM` were not updated when 
+`start_date = ASTDT` and `end_date = AENDT`. The function has been amended to now require `start_datetime` 
+and `end_datetime` parameters in addition to `start_date` and `end_date`.The `keep_source_vars` has 
+been added to specify the variables to be retained from the source dataset (#1224)
 
 ## Breaking Changes
 
@@ -1544,7 +1792,8 @@ duration (#1207)
     - `AVAL` is derived instead of `AVALN` and
     - all variables from the source dataset are kept.
     
-- `create_single_dose_dataset()` Fixed bug where ASTDTM and AENDTM were not updated when `start_date=ASTDT` and `end_date=AENDT`. The function has been amended to now require start_datetime and end_datetime parameters in addition to start_date and end_date.The keep_source_vars has been added to specify the variables to be retained from the source dataset.
+- `create_single_dose_dataset()` Fixed bug where ASTDTM and AENDTM were not updated when `start_date=ASTDT` and `end_date=AENDT`. 
+The function has been amended to now require start_datetime and end_datetime parameters in addition to start_date and end_date.The keep_source_vars has been added to specify the variables to be retained from the source dataset.
 
 - `slice_derivation()` was updated such that it no longer fails if a slice is
 empty (#1309)

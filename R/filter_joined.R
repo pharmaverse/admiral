@@ -40,12 +40,16 @@
 #'
 #'   The variables needed from the other observations should be specified for
 #'   this parameter. The specified variables are added to the joined dataset
-#'   with suffix ".join". For example to select all observations with `AVALC ==
+#'   with suffix `.join`. For example to select all observations with `AVALC ==
 #'   "Y"` and `AVALC == "Y"` for at least one subsequent visit `join_vars =
 #'   exprs(AVALC, AVISITN)` and `filter_join = AVALC == "Y" & AVALC.join == "Y"
 #'   & AVISITN < AVISITN.join` could be specified.
 #'
 #'   The `*.join` variables are not included in the output dataset.
+#'
+#'   The variable specified for `tmp_obs_nr_var` must not be included in
+#'   `join_vars`. It is added automatically to the joined dataset with the
+#'   suffix `.join`.
 #'
 #' @permitted [var_list]
 #'
@@ -522,12 +526,12 @@ filter_joined <- function(dataset,
     )
   assert_data_frame(
     dataset,
-    required_vars = expr_c(by_vars, extract_vars(order))
+    required_vars = c(by_vars, extract_vars(order))
   )
 
   assert_data_frame(
     dataset_add,
-    required_vars = expr_c(by_vars, join_vars, extract_vars(order))
+    required_vars = c(by_vars, join_vars, extract_vars(order))
   )
 
   tmp_obs_nr_unique <- get_new_tmp_var(dataset, prefix = "tmp_obs_nr_unique")
@@ -558,7 +562,8 @@ filter_joined <- function(dataset,
     slice(1L) %>%
     ungroup() %>%
     select(colnames(dataset)) %>%
-    remove_tmp_vars()
+    remove_tmp_vars() %>%
+    as_admiral_df()
 }
 
 #' Count Number of Observations Where a Variable Equals a Value

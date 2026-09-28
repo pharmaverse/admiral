@@ -15,6 +15,8 @@
 #'
 #' @export
 #'
+#' @details This is a vector-oriented helper and is not usually called directly on a data
+#' frame with `%>%`.
 #'
 #' @keywords com_bds_findings
 #' @family com_bds_findings
@@ -50,10 +52,6 @@ compute_qual_imputation_dec <- function(character_value_decimal) {
 #'
 #' @return The imputed value
 #'
-#' @importFrom dplyr case_when
-#' @importFrom dplyr if_else
-#' @importFrom stringr str_detect
-#'
 #' @export
 #'
 #'
@@ -78,23 +76,23 @@ compute_qual_imputation <- function(character_value, imputation_type = 1, factor
 
   if (imputation_type == 1) {
     numeric_value <-
-      case_when(
+      replace_when(
+        numeric_value,
         str_detect(character_value, ">") & !str_detect(character_value, "=") ~
           numeric_value + factor,
         str_detect(character_value, "<") & !str_detect(character_value, "=") ~
-          numeric_value - factor,
-        TRUE ~ numeric_value
+          numeric_value - factor
       )
   }
 
   if (imputation_type == 2) {
     numeric_value <-
-      case_when(
+      replace_when(
+        numeric_value,
         str_detect(character_value, ">") & !str_detect(character_value, "=") ~
           numeric_value + compute_qual_imputation_dec(character_value),
         str_detect(character_value, "<") & !str_detect(character_value, "=") ~
-          numeric_value - compute_qual_imputation_dec(character_value),
-        TRUE ~ numeric_value
+          numeric_value - compute_qual_imputation_dec(character_value)
       )
   }
 

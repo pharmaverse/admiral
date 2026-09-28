@@ -1,12 +1,3 @@
-#' Single Dose Exposure Dataset
-#'
-#' A derived dataset with single dose per date.
-#' @keywords datasets
-#' @family datasets
-#' @source
-#' Derived from the `ex` dataset using `{admiral}` and `{dplyr}` (\url{https://github.com/pharmaverse/admiral/blob/main/data-raw/create_ex_single.R})
-"ex_single"
-
 #' Example `QS` Dataset
 #'
 #' An example `QS` dataset based on the examples from the CDISC ADaM Supplements

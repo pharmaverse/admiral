@@ -104,5 +104,5 @@ derive_var_anrind <- function(dataset,
       )
     )
 
-  result
+  as_admiral_df(result)
 }

@@ -54,8 +54,8 @@ convert_blanks_to_na(df)
 }
 \seealso{
 Utilities for Formatting Observations:
-\code{\link{convert_na_to_blanks}()},
-\code{\link{yn_to_numeric}()}
+\code{\link[=convert_na_to_blanks]{convert_na_to_blanks()}},
+\code{\link[=yn_to_numeric]{yn_to_numeric()}}
 }
 \concept{utils_fmt}
 \keyword{utils_fmt}

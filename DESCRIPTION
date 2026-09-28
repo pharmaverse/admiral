@@ -1,24 +1,23 @@
 Type: Package
 Package: admiral
 Title: ADaM in R Asset Library
-Version: 1.4.1.9004
+Version: 1.5.0.9015
 Authors@R: c(
-    person("Ben", "Straub", , "ben.x.straub@gsk.com", role = c("aut", "cre")),
+    person("Edoardo", "Mancini", , "edoardo.mancini@roche.com", role = c("aut", "cre"),
+           comment = c(ORCID = "0009-0006-4899-8641")),
     person("Stefan", "Bundfuss", role = "aut",
            comment = c(ORCID = "0009-0005-0027-1198")),
-    person("Matt", "Bearham", role = "aut"),
     person("Arianna", "Cascone", role = "aut",
            comment = c(ORCID = "0000-0001-5948-2831")),
     person("Kristin", "Dahnert", role = "aut"),
     person("Jeffrey", "Dickinson", role = "aut"),
     person("Ross", "Farrugia", role = "aut"),
-    person("Fanny", "Gautier", role = "aut"),
-    person("Edoardo", "Mancini", role = "aut",
-           comment = c(ORCID = "0009-0006-4899-8641")),
+    person("Fanny", "Gautier", role = "aut",
+           comment = c(ORCID = "0009-0004-3581-0131")),
+    person("Liam", "Hobby", , "liam.f.hobby@gsk.com", role = "aut"),
     person("Gordon", "Miller", role = "aut"),
     person("Lina", "Patil", role = "aut"),
-    person("Jim", "Rothstein", role = "aut",
-           comment = c(ORCID = "0009-0009-8659-6071")),
+    person("Ben", "Straub", role = "aut"),
     person("F. Hoffmann-La Roche AG", role = c("cph", "fnd")),
     person("GlaxoSmithKline LLC", role = c("cph", "fnd"))
   )
@@ -37,12 +36,12 @@ BugReports: https://github.com/pharmaverse/admiral/issues
 Depends:
     R (>= 4.1)
 Imports:
-    admiraldev (>= 1.4.0),
+    admiraldev (>= 1.5.0),
     cli (>= 3.6.2),
-    dplyr (>= 1.1.1),
+    dplyr (>= 1.2.0),
     hms (>= 0.5.3),
     lifecycle (>= 0.1.0),
-    lubridate (>= 1.7.4),
+    lubridate (>= 1.7.8),
     magrittr (>= 1.5),
     purrr (>= 0.3.3),
     rlang (>= 0.4.4),
@@ -52,6 +51,8 @@ Imports:
 Suggests:
     diffdf,
     DT,
+    ggnewscale,
+    ggplot2,
     here,
     htmltools,
     knitr,
@@ -66,10 +67,10 @@ Suggests:
 VignetteBuilder:
     knitr
 Config/Needs/website: gert, rmarkdown
+Config/roxygen2/markdown: TRUE
+Config/roxygen2/roclets: collate, namespace, admiraldev::rdx_roclet
+Config/roxygen2/version: 8.1.0
 Config/testthat/edition: 3
 Encoding: UTF-8
 Language: en-US
 LazyData: true
-Roxygen: list(markdown = TRUE, roclets = c("collate", "namespace",
-    "admiraldev::rdx_roclet"))
-RoxygenNote: 7.3.3

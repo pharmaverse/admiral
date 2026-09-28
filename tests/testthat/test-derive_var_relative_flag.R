@@ -20,20 +20,23 @@ test_that("derive_var_relative_flag Test 1: flag observations up to first PD", {
 
   response <- select(expected, -ANL02FL)
 
+  actual <- derive_var_relative_flag(
+    response,
+    by_vars = exprs(USUBJID),
+    order = exprs(AVISITN),
+    new_var = ANL02FL,
+    condition = AVALC == "PD",
+    mode = "first",
+    selection = "before",
+    inclusive = TRUE
+  )
+
   expect_dfs_equal(
     base = expected,
-    compare = derive_var_relative_flag(
-      response,
-      by_vars = exprs(USUBJID),
-      order = exprs(AVISITN),
-      new_var = ANL02FL,
-      condition = AVALC == "PD",
-      mode = "first",
-      selection = "before",
-      inclusive = TRUE
-    ),
+    compare = actual,
     keys = c("USUBJID", "AVISITN")
   )
+  expect_s3_class(actual, "admiral_df")
 })
 
 ## Test 2: Flag AEs after COVID AE ----

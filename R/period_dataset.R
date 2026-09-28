@@ -127,11 +127,11 @@ create_period_dataset <- function(dataset,
     str_replace("w", "\\\\d") %>%
     str_replace("(\\w+)\\\\d", "(\\1)\\\\d") %>%
     str_replace_all("((\\\\d)+)", "(\\1)")
-  mode <- case_when(
+  mode <- replace_when(
+    rep("none", length(new_vars_chr)),
     str_detect(new_vars_chr, "\\w+xx\\w+w\\w*") ~ "subperiod",
     str_detect(new_vars_chr, "\\w+xx\\w*") ~ "period",
-    str_detect(new_vars_chr, "\\w+w\\w*") ~ "phase",
-    TRUE ~ "none"
+    str_detect(new_vars_chr, "\\w+w\\w*") ~ "phase"
   ) %>% unique()
   if (any(mode == "none")) {
     cli_abort(
@@ -216,11 +216,11 @@ create_period_dataset <- function(dataset,
       period_ref_final <- derive_vars_merged(
         period_ref_final,
         dataset_add = period_ref[[i]],
-        by_vars = expr_c(subject_keys, by_vars)
+        by_vars = c(subject_keys, by_vars)
       )
     }
   }
-  period_ref_final
+  as_admiral_df(period_ref_final)
 }
 
 #' Add Subperiod, Period, or Phase Variables to ADSL
@@ -359,11 +359,11 @@ derive_vars_period <- function(dataset,
 
   new_vars_names <- names(new_vars)
   new_vars_chr <- vars2chr(new_vars)
-  mode <- case_when(
+  mode <- replace_when(
+    rep("none", length(new_vars_names)),
     str_detect(new_vars_names, "\\w+xx\\w+w\\w*") ~ "subperiod",
     str_detect(new_vars_names, "\\w+xx\\w*") ~ "period",
-    str_detect(new_vars_names, "\\w+w\\w*") ~ "phase",
-    TRUE ~ "none"
+    str_detect(new_vars_names, "\\w+w\\w*") ~ "phase"
   ) %>% unique()
   if (any(mode == "none")) {
     cli_abort(
@@ -410,7 +410,7 @@ derive_vars_period <- function(dataset,
     id_vars <- exprs(APHASEN)
   }
 
-  assert_data_frame(dataset_ref, required_vars = expr_c(subject_keys, new_vars, id_vars))
+  assert_data_frame(dataset_ref, required_vars = c(subject_keys, new_vars, id_vars))
 
   # Strip period reference dataset of any variables not required for later derivations
   ref_cols <- names(dataset_ref) %in% c(subject_keys, new_vars_chr, id_vars)
@@ -447,5 +447,7 @@ derive_vars_period <- function(dataset,
     dataset,
     dataset_add = ref_wide,
     by_vars = subject_keys
-  ) %>% rename(all_of(rename_arg))
+  ) %>%
+    rename(all_of(rename_arg)) %>%
+    as_admiral_df()
 }

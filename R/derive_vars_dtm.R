@@ -48,6 +48,10 @@
 #' if it already exists in the input dataset. However, if `*TMF` already exists
 #' in the input dataset, a warning is issued and `*TMF` will be overwritten.
 #'
+#' Additionally, the function will throw an error if imputation rules cause an
+#' invalid datetime (e.g. "2020-02-01T25:00:00") to be generated. In this case,
+#' the user should adjust the imputation rules.
+#'
 #' @return  The input dataset with the datetime `*DTM` (and the date/time imputation
 #' flag `*DTF`, `*TMF`) added.
 #'
@@ -211,7 +215,9 @@ derive_vars_dtm <- function(dataset,
                             time_imputation = "first",
                             flag_imputation = "auto",
                             min_dates = NULL,
+                            min_dates_strict = NULL,
                             max_dates = NULL,
+                            max_dates_strict = NULL,
                             preserve = FALSE,
                             ignore_seconds_flag = TRUE) {
   # check and quote arguments
@@ -232,7 +238,9 @@ derive_vars_dtm <- function(dataset,
     highest_imputation_values = c("Y", "M", "D", "h", "m", "s", "n"),
     date_imputation = date_imputation,
     min_dates = min_dates,
-    max_dates = max_dates
+    min_dates_strict = min_dates_strict,
+    max_dates = max_dates,
+    max_dates_strict = max_dates_strict
   )
 
   dtm <- paste0(new_vars_prefix, "DTM")
@@ -247,7 +255,9 @@ derive_vars_dtm <- function(dataset,
     date_imputation = date_imputation,
     time_imputation = time_imputation,
     min_dates = lapply(min_dates, eval_tidy, data = mask),
+    min_dates_strict = lapply(min_dates_strict, eval_tidy, data = mask),
     max_dates = lapply(max_dates, eval_tidy, data = mask),
+    max_dates_strict = lapply(max_dates_strict, eval_tidy, data = mask),
     preserve = preserve
   )
 
@@ -289,7 +299,7 @@ derive_vars_dtm <- function(dataset,
     )
   }
 
-  dataset
+  as_admiral_df(dataset)
 }
 
 #' Convert a Date Character Vector into a Datetime Object
@@ -302,10 +312,10 @@ derive_vars_dtm <- function(dataset,
 #'
 #' @inheritParams impute_dtc_dtm
 #'
-#' @details Usually this computation function can not be used with `%>%`.
+#' @details This is a vector-oriented helper and is not usually called directly on a data
+#' frame with `%>%`.
 #'
 #' @return A datetime object
-#'
 #'
 #' @family com_date_time
 #'
@@ -322,7 +332,9 @@ convert_dtc_to_dtm <- function(dtc,
                                date_imputation = "first",
                                time_imputation = "first",
                                min_dates = NULL,
+                               min_dates_strict = NULL,
                                max_dates = NULL,
+                               max_dates_strict = NULL,
                                preserve = FALSE) {
   assert_character_vector(dtc)
   warn_if_invalid_dtc(dtc, is_valid_dtc(dtc))
@@ -333,7 +345,9 @@ convert_dtc_to_dtm <- function(dtc,
     date_imputation = date_imputation,
     time_imputation = time_imputation,
     min_dates = min_dates,
+    min_dates_strict = min_dates_strict,
     max_dates = max_dates,
+    max_dates_strict = max_dates_strict,
     preserve = preserve
   )
 
@@ -366,15 +380,15 @@ convert_dtc_to_dtm <- function(dtc,
 #'   level are imputed.
 #'
 #'   If a component at a higher level than the highest imputation level is
-#'   missing, `NA_character_` is returned. For example, for `highest_imputation
-#'   = "D"` `"2020"` results in `NA_character_` because the month is missing.
+#'   missing, `NA` is returned. For example, for `highest_imputation = "D"`
+#'   `"2020"` results in `NA` because the month is missing.
 #'
 #'   If `"n"` is specified, no imputation is performed, i.e., if any component is
-#'   missing, `NA_character_` is returned.
+#'   missing, `NA` is returned.
 #'
 #'   If `"Y"` is specified, `date_imputation` should be `"first"` or `"last"`
 #'   and `min_dates` or `max_dates` should be specified respectively. Otherwise,
-#'   `NA_character_` is returned if the year component is missing.
+#'   `NA` is returned if the year component is missing.
 #'
 #' @permitted [date_time_high_imp]
 #'
@@ -401,7 +415,8 @@ convert_dtc_to_dtm <- function(dtc,
 #' A date or date-time object is expected.
 #' For example
 #'
-#' ```{r echo=TRUE, eval=FALSE}
+#' ```{r echo=TRUE, eval=TRUE}
+#' library(lubridate)
 #' impute_dtc_dtm(
 #'   "2020-11",
 #'   min_dates = list(
@@ -412,7 +427,7 @@ convert_dtc_to_dtm <- function(dtc,
 #' )
 #' ```
 #'
-#' returns `"2020-11-11T11:11:11"` because the possible dates for `"2020-11"`
+#' returns `"2020-11-11T11:11:00"` because the possible dates for `"2020-11"`
 #' range from `"2020-11-01T00:00:00"` to `"2020-11-30T23:59:59"`. Therefore
 #' `"2020-12-06T12:12:12"` is ignored. Returning `"2020-12-06T12:12:12"` would
 #' have changed the month although it is not missing (in the `dtc` date).
@@ -420,6 +435,51 @@ convert_dtc_to_dtm <- function(dtc,
 #' For date variables (not datetime) in the list the time is imputed to
 #' `"00:00:00"`. Specifying date variables makes sense only if the date is
 #' imputed. If only time is imputed, date variables do not affect the result.
+#'
+#' @permitted [date_list]
+#'
+#' @param min_dates_strict Minimum dates (strict)
+#'
+#' The argument works like the `min_dates` argument but it affects the behavior
+#' of the `min_dates` and `max_dates` arguments. The range that is used to
+#' determine which of the `min_dates` and `max_dates` are considered is
+#' restricted by the dates specified for `min_dates_strict` (see example below
+#' and the example in the "Avoid Imputed Dates Before a Particular Date" section
+#' in `vignette("imputation")`).
+#'
+#' This argument is useful if the `max_dates` argument is used and there are
+#' strict restrictions on the imputed date, like the event start date when the
+#' event end date is imputed.
+#'
+#' For example
+#' ```{r echo=TRUE, eval=TRUE}
+#' library(lubridate)
+#' impute_dtc_dtm(
+#'   c("2020-11", "2020-11"),
+#'   min_dates_strict = list(
+#'    c(ymd_hm("2020-11-24T00:00"), ymd_hm("2020-11-11T11:11"))
+#'   ),
+#'   max_dates = list(
+#'     c(ymd_hm("2020-11-22T12:12"), ymd_hm("2020-11-22T12:12"))
+#'   ),
+#'   highest_imputation = "M",
+#'   date_imputation = "last",
+#'   time_imputation = "last"
+#' )
+#' ```
+#' returns (`"2020-11-30T23:59:59"`, `"2020-11-22T12:12:00"`). The possible
+#' dates for `"2020-11"` range from `"2020-11-01T00:00:00"` to
+#' `"2020-11-30T23:59:59"`.
+#'
+#' For the first element, the `min_dates_strict` argument restricts this range
+#' to `"2020-11-24T00:00:00"` to `"2020-11-30T23:59:59"`. Therefore
+#' `"2020-11-22T12:12:00"` (from the `max_dates` argument) is ignored as it is
+#' not within the restricted range.
+#'
+#' For the second element, the `min_dates_strict` argument restricts this range
+#' to `"2020-11-11T11:11:00"` to `"2020-11-30T23:59:59"`. In this case
+#' `"2020-11-22T12:12:00"` (from the `max_dates` argument) is within the
+#' restricted range and is considered.
 #'
 #' @permitted [date_list]
 #'
@@ -436,6 +496,49 @@ convert_dtc_to_dtm <- function(dtc,
 #'
 #' @permitted [date_list]
 #'
+#' @param max_dates_strict Maximum dates (strict)
+#'
+#' The argument works like the `max_dates` argument but it affects the behavior
+#' of the `min_dates` and `max_dates` arguments. The range that is used to
+#' determine which of the `min_dates` and `max_dates` are considered is
+#' restricted by the dates specified for `max_dates_strict` (see example below).
+#'
+#' This argument is useful if the `min_dates` argument is used and there are
+#' strict restrictions on the imputed date, like date of death or the event end
+#' date when the event start date is imputed.
+#'
+#' For example
+#' ```{r echo=TRUE, eval=TRUE}
+#' library(lubridate)
+#' impute_dtc_dtm(
+#'   c("2020-11", "2020-11"),
+#'   max_dates_strict = list(
+#'    c(ymd_hm("2020-11-24T00:00"), ymd_hm("2020-11-11T11:11"))
+#'   ),
+#'   min_dates = list(
+#'     c(ymd_hm("2020-11-22T12:12"), ymd_hm("2020-11-22T12:12"))
+#'   ),
+#'   highest_imputation = "M",
+#'   date_imputation = "first",
+#'   time_imputation = "first"
+#' )
+#' ```
+#' returns (`"2020-11-22T12:12:00"`, `"2020-11-01T00:00:00"`). The possible
+#' dates for `"2020-11"` range from `"2020-11-01T00:00:00"` to
+#' `"2020-11-30T23:59:59"`.
+#'
+#' For the first element, the `max_dates_strict` argument restricts this range
+#' to `"2020-11-01T00:00:00"` to `"2020-11-24T00:00:00"`. The date
+#' `"2020-11-22T12:12:00"` (from the `min_dates` argument) is within the
+#' restricted range and is therefore considered.
+#'
+#' For the second element, the `max_dates_strict` argument restricts this range
+#' to `"2020-11-01T00:00:00"` to `"2020-11-11T11:11:00"`. In this case
+#' `"2020-11-22T12:12:00"` (from the `max_dates` argument) is outside the
+#' restricted range and thus it is ignored.
+#'
+#' @permitted [date_list]
+#'
 #' @param preserve Preserve lower level date/time part when higher order part
 #' is missing, e.g. preserve day if month is missing or
 #' preserve minute when hour is missing.
@@ -447,7 +550,8 @@ convert_dtc_to_dtm <- function(dtc,
 #'
 #' @inheritParams impute_dtc_dt
 #'
-#' @details Usually this computation function can not be used with `%>%`.
+#' @details This is a vector-oriented helper and is not usually called directly on a data
+#' frame with `%>%`.
 #'
 #' @return A character vector
 #'
@@ -544,7 +648,9 @@ impute_dtc_dtm <- function(dtc,
                            date_imputation = "first",
                            time_imputation = "first",
                            min_dates = NULL,
+                           min_dates_strict = NULL,
                            max_dates = NULL,
+                           max_dates_strict = NULL,
                            preserve = FALSE) {
   # Check arguments ----
   assert_character_vector(dtc)
@@ -560,12 +666,19 @@ impute_dtc_dtm <- function(dtc,
     year = "Y"
   )
 
+  assert_dates_strict(
+    min_dates_strict = min_dates_strict,
+    max_dates_strict = max_dates_strict
+  )
+
   assert_highest_imputation(
     highest_imputation = highest_imputation,
     highest_imputation_values = imputation_levels,
     date_imputation = date_imputation,
     min_dates = min_dates,
-    max_dates = max_dates
+    min_dates_strict = min_dates_strict,
+    max_dates = max_dates,
+    max_dates_strict = max_dates_strict
   )
 
 
@@ -620,15 +733,28 @@ impute_dtc_dtm <- function(dtc,
     imputed_dtc <- adjust_last_day_imputation(imputed_dtc, partial)
   }
 
+  # Check if any invalid dates (e.g. 2020-02-31) have been generated
+  if (!all(is_valid_dtc(imputed_dtc, check_dtc = TRUE))) {
+    cli_abort(c(
+      "Some imputed dates are invalid.",
+      "i" = paste(
+        "{.arg date_imputation} is set to {.val {date_imputation}}.",
+        "Are you sure that with this value you are generating all valid dates?",
+        "E.g. {.code date_imputation = 31} would impute \"2020-02\" to \"2020-02-31\",",
+        "which is invalid."
+      )
+    ))
+  }
+
   # Handle min_dates and max_dates argument ----
-  restricted <- restrict_imputed_dtc_dtm(
+  restrict_imputed_dtc_dtm(
     dtc,
     imputed_dtc = imputed_dtc,
     min_dates = min_dates,
-    max_dates = max_dates
+    min_dates_strict = min_dates_strict,
+    max_dates = max_dates,
+    max_dates_strict = max_dates_strict
   )
-
-  restricted
 }
 
 #' Restrict Imputed `--DTC` date to Minimum/Maximum Dates
@@ -638,13 +764,18 @@ impute_dtc_dtm <- function(dtc,
 #' @inheritParams impute_dtc_dtm
 #'
 #' @returns
-#'   - The last of the minimum dates (`min_dates`) which are in the range of the
-#'   partial `--DTC` date (`dtc`)
-#'   - The first of the maximum dates (`max_dates`) which are in the range of the
-#'   partial `--DTC` date (`dtc`)
+#'   - The last of the minimum dates (`min_dates` and `min_dates_strict`) which
+#'    are in the range of the partial `--DTC` date (`dtc`)
+#'   - The first of the maximum dates (`max_dates` and `max_dates_strict`) which
+#'    are in the range of the partial `--DTC` date (`dtc`)
 #'   - `imputed_dtc` if the partial `--DTC` date (`dtc`) is not in range of any of
 #'   the minimum or maximum dates.
 #'
+#' @details
+#'
+#' The function will throw an error if imputation rules cause an
+#' invalid datetime (e.g. "2020-02-01T25:00:00") to be generated. In this case,
+#' the user should adjust the imputation rules.
 #'
 #' @family utils_impute
 #'
@@ -654,25 +785,36 @@ impute_dtc_dtm <- function(dtc,
 restrict_imputed_dtc_dtm <- function(dtc,
                                      imputed_dtc,
                                      min_dates,
-                                     max_dates) {
-  any_mindate <- !(is.null(min_dates) || length(min_dates) == 0)
-  any_maxdate <- !(is.null(max_dates) || length(max_dates) == 0)
+                                     min_dates_strict,
+                                     max_dates,
+                                     max_dates_strict) {
+  any_mindate <- !((is.null(min_dates) || length(min_dates) == 0) &&
+    (is.null(min_dates_strict) || length(min_dates_strict) == 0))
+  any_maxdate <- !((is.null(max_dates) || length(max_dates) == 0) &&
+    (is.null(max_dates_strict) || length(max_dates_strict) == 0))
   if (any_mindate || any_maxdate) {
     dtc_range <-
       get_dt_dtm_range(
         dtc,
+        lower_bounds = min_dates_strict,
+        upper_bounds = max_dates_strict,
         create_datetime = TRUE
       )
     min_dtc <- dtc_range[["lower"]]
     max_dtc <- dtc_range[["upper"]]
   }
+
   if (any_mindate) {
-    if (length(unique(c(length(imputed_dtc), unlist(lapply(min_dates, length))))) != 1) {
-      cli_abort("Length of {.arg min_dates} do not match length of dates to be imputed.")
+    all_min_dates <- c(min_dates, min_dates_strict)
+    if (length(unique(c(length(imputed_dtc), lengths(all_min_dates)))) != 1) {
+      cli_abort(paste(
+        "Length of {.arg min_dates} or {.arg min_dates_strict} does not match",
+        "length of dates to be imputed."
+      ))
     }
     # for each minimum date within the range ensure that the imputed date is not
     # before it
-    for (min_date in min_dates) {
+    for (min_date in all_min_dates) {
       assert_date_vector(min_date)
       min_date_iso <- strftime(min_date, format = "%Y-%m-%dT%H:%M:%S", tz = "UTC")
       imputed_dtc <- if_else(
@@ -684,12 +826,16 @@ restrict_imputed_dtc_dtm <- function(dtc,
     }
   }
   if (any_maxdate) {
-    if (length(unique(c(length(imputed_dtc), unlist(lapply(max_dates, length))))) != 1) {
-      cli_abort("Length of {.arg max_dates} do not match length of dates to be imputed.")
+    all_max_dates <- c(max_dates, max_dates_strict)
+    if (length(unique(c(length(imputed_dtc), lengths(all_max_dates)))) != 1) {
+      cli_abort(paste(
+        "Length of {.arg max_dates} or {.arg max_dates_strict} does not match",
+        "length of dates to be imputed."
+      ))
     }
     # for each maximum date within the range ensure that the imputed date is not
     # after it
-    for (max_date in max_dates) {
+    for (max_date in all_max_dates) {
       assert_date_vector(max_date)
       max_date <- convert_date_to_dtm(
         max_date,
@@ -732,7 +878,8 @@ restrict_imputed_dtc_dtm <- function(dtc,
 #'
 #' @permitted [boolean]
 #'
-#' @details Usually this computation function can not be used with `%>%`.
+#' @details This is a vector-oriented helper and is not usually called directly on a data
+#' frame with `%>%`.
 #'
 #' @return The time imputation flag (`*TMF`) (character value of `"H"`, `"M"` , `"S"` or `NA`)
 #'

@@ -133,6 +133,20 @@
   },
   {
     "SOC": "Investigations",
+    "TERM": "Blood lactate dehydrogenase increased",
+    "GRADE_1": ">ULN",
+    "GRADE_2": "-",
+    "GRADE_3": "-",
+    "GRADE_4": "-",
+    "GRADE_5": "-",
+    "Definition": "A finding based on laboratory test results that indicate increased levels of lactate dehydrogenase (LDH) in the blood specimen.",
+    "GRADE_NA_CODE": "is.na(AVAL) | is.na(ANRHI) ~ NA_character_",
+    "GRADE_1_CODE": "signif(AVAL, signif_dig) > signif(ANRHI, signif_dig) ~ \"1\"",
+    "VAR_CHECK": "AVAL, ANRHI",
+    "DIRECTION": "H"
+  },
+  {
+    "SOC": "Investigations",
     "TERM": "CD4 lymphocytes decreased",
     "GRADE_1": "<LLN - 500/mm3; <LLN - 0.5 x 10e9 /L",
     "GRADE_2": "<500 - 200/mm3; <0.5 - 0.2 x 10e9 /L",

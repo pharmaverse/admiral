@@ -44,4 +44,5 @@ test_that("derive_vars_extreme_event Test 1: derive_vars_extreme_event", {
     compare = actual,
     keys = c("STUDYID", "USUBJID")
   )
+  expect_s3_class(actual, "admiral_df")
 })

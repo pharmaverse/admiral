@@ -51,7 +51,7 @@ adsl \%>\%
 \seealso{
 \link{dose_freq_lookup}
 
-Other metadata: 
+Other metadata:
 \code{\link{atoxgr_criteria_ctcv4}},
 \code{\link{atoxgr_criteria_ctcv4_uscv}},
 \code{\link{atoxgr_criteria_ctcv5}},

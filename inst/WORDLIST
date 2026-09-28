@@ -40,6 +40,7 @@ Alkalosis
 Analyte
 Andrii
 Ania
+Arianna
 Asha
 Aspartate
 Assuied
@@ -53,6 +54,7 @@ Basetype
 Bazett
 Bazett's
 Biologics
+Bundfuss
 CBOR
 CDISC
 CKD
@@ -69,6 +71,7 @@ CTCAEv
 CTEP
 CVD
 Carlucci
+Cascone
 Celine
 Chakma
 Chemistries
@@ -86,6 +89,7 @@ DT
 DTC
 DTM
 DURD
+Dahnert
 Daniil
 Datetime
 Declan
@@ -99,6 +103,7 @@ EOI
 EOSSTT
 EOT
 EPI
+Edoardo
 Ehmann
 Enki
 Estimand
@@ -107,6 +112,7 @@ Evt
 FACM
 FCVD
 FRLTU
+Farrugia
 Fibrinogen
 Findability
 Framingham
@@ -188,6 +194,7 @@ Modularity
 Morrish
 Mosteller
 Mubasheer
+Musca
 NCA
 NCI
 NCICTCAEv
@@ -213,6 +220,8 @@ PLDOSE
 PRE
 PTT
 Param
+Patel
+Patil
 Pavan
 Pharma
 Pharmacokinetic
@@ -259,6 +268,7 @@ Sjoberg
 Slama
 Solveig
 Stefonishin
+Straub
 Subperiod
 Subperiods
 Sukalpo
@@ -281,6 +291,7 @@ Thanikachalam
 Thrombocytopenia
 Timepoint
 Titer
+Tooltips
 ULN
 USCV
 USUBJID
@@ -319,6 +330,7 @@ analytes
 analytics
 anticoagulation
 aspartate
+atalanta
 basetypes
 bds
 censorings
@@ -348,6 +360,7 @@ estimand
 estimands
 evaluable
 exprs
+failsafe
 fil
 findable
 fmt

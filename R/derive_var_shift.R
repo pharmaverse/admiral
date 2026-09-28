@@ -86,5 +86,6 @@ derive_var_shift <- function(dataset,
     mutate(
       !!new_var := paste(temp_from_var, temp_to_var, sep = !!sep_val)
     ) %>%
-    select(-starts_with("temp_"))
+    select(-starts_with("temp_")) %>%
+    as_admiral_df()
 }

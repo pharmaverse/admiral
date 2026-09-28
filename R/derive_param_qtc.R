@@ -181,7 +181,8 @@ derive_param_qtc <- function(dataset,
       )
       cnd_muffle(cnd)
     }
-  )
+  ) %>%
+    as_admiral_df()
 }
 
 #' Get Default Parameter Code for Corrected QT
@@ -239,7 +240,8 @@ default_qtc_paramcd <- function(method) {
 #' *Sagie*: \deqn{1000\left(\frac{QT}{1000} + 0.154\left(1 - \frac{RR}{1000}\right)\right)}{
 #' 1000(QT/1000 + 0.154(1 - RR/1000))}
 #'
-#' Usually this computation function can not be used with `%>%`.
+#' @details This is a vector-oriented helper and is not usually called directly on a data
+#' frame with `%>%`.
 #'
 #' @family com_bds_findings
 #'

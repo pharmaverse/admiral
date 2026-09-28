@@ -69,10 +69,10 @@ adsl <- rbind(admiral_adsl[1L, ], admiral_adsl)
 signal_duplicate_records(adsl, exprs(USUBJID), cnd_type = "message")
 }
 \seealso{
-Other internal: 
+Other internal:
 \code{\link{admiral-package}},
-\code{\link{extract_duplicate_records}()},
-\code{\link{format.basket_select}()}
+\code{\link[=extract_duplicate_records]{extract_duplicate_records()}},
+\code{\link[=format.basket_select]{format.basket_select()}}
 }
 \concept{internal}
 \keyword{internal}

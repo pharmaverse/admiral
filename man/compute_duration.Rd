@@ -159,6 +159,9 @@ length is \code{30.4375}, i.e. \code{29 / 30.4375 = 0.95}.
 
 For additional details, review the
 \href{https://lubridate.tidyverse.org/reference/timespan.html}{lubridate time span reference page}.
+
+This is a vector-oriented helper and is not usually called directly on a data
+frame with \verb{\%>\%}.
 }
 
 \examples{
@@ -200,15 +203,15 @@ compute_duration(
 \code{\link[=derive_vars_duration]{derive_vars_duration()}}
 
 Date/Time Computation Functions that returns a vector:
-\code{\link{compute_age_years}()},
-\code{\link{compute_dtf}()},
-\code{\link{compute_tmf}()},
-\code{\link{convert_date_to_dtm}()},
-\code{\link{convert_dtc_to_dt}()},
-\code{\link{convert_dtc_to_dtm}()},
-\code{\link{convert_xxtpt_to_hours}()},
-\code{\link{impute_dtc_dt}()},
-\code{\link{impute_dtc_dtm}()}
+\code{\link[=compute_age_years]{compute_age_years()}},
+\code{\link[=compute_dtf]{compute_dtf()}},
+\code{\link[=compute_tmf]{compute_tmf()}},
+\code{\link[=convert_date_to_dtm]{convert_date_to_dtm()}},
+\code{\link[=convert_dtc_to_dt]{convert_dtc_to_dt()}},
+\code{\link[=convert_dtc_to_dtm]{convert_dtc_to_dtm()}},
+\code{\link[=convert_xxtpt_to_hours]{convert_xxtpt_to_hours()}},
+\code{\link[=impute_dtc_dt]{impute_dtc_dt()}},
+\code{\link[=impute_dtc_dtm]{impute_dtc_dtm()}}
 }
 \concept{com_date_time}
 \keyword{com_date_time}

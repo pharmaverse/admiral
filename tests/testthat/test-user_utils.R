@@ -155,20 +155,8 @@ test_that("print.source Test 13: `source` objects are printed as intended", {
       SRCSEQ = AESEQ
     )
   )
-  expected_print_output <- c(
-    "<event_source> object",
-    "dataset_name: \"ae\"",
-    "filter: NULL",
-    "date: AESTDTC",
-    "censor: 0",
-    "set_values_to:",
-    "  EVENTDESC: \"AE\"",
-    "  SRCDOM: \"AE\"",
-    "  SRCVAR: \"AESTDTC\"",
-    "  SRCSEQ: AESEQ",
-    "order: NULL"
-  )
-  expect_identical(capture.output(print(ttae)), expected_print_output)
+
+  expect_snapshot(print(ttae))
 })
 
 ## Test 14: `source` objects containing `source` objects ----

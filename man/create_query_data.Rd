@@ -214,9 +214,9 @@ create_query_data(
 \code{vignette("queries_dataset")}
 
 Creating auxiliary datasets:
-\code{\link{consolidate_metadata}()},
-\code{\link{create_period_dataset}()},
-\code{\link{create_single_dose_dataset}()}
+\code{\link[=consolidate_metadata]{consolidate_metadata()}},
+\code{\link[=create_period_dataset]{create_period_dataset()}},
+\code{\link[=create_single_dose_dataset]{create_single_dose_dataset()}}
 }
 \concept{create_aux}
 \keyword{create_aux}

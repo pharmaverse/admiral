@@ -1,11 +1,11 @@
 #' Adds a Parameter Computed from the Analysis Value of Other Parameters
 #'
-#' Adds a parameter computed from the analysis value of other parameters. It is
-#' expected that the analysis value of the new parameter is defined by an
-#' expression using the analysis values of other parameters, such as addition/sum,
-#' subtraction/difference, multiplication/product, division/ratio,
-#' exponentiation/logarithm, or by formula.
-#' <br/><br/>
+#' @description Adds a parameter computed from the analysis value of other
+#' parameters. It is expected that the analysis value of the new parameter is
+#' defined by an expression using the analysis values of other parameters, such
+#' as addition/sum, subtraction/difference, multiplication/product,
+#' division/ratio, exponentiation/logarithm, or by formula.
+#'
 #' For example mean arterial pressure (MAP) can be derived from systolic (SYSBP)
 #' and diastolic blood pressure (DIABP) with the formula
 #' \deqn{MAP = \frac{SYSBP + 2 DIABP}{3}}{MAP = (SYSBP + 2 DIABP) / 3}
@@ -127,7 +127,7 @@
 #'   be avoided unless the list of variable-value pairs is clearly
 #'   specified in a statement via the `set_values_to` argument.
 #'
-#' @permitted [expr_list_formula]
+#' @permitted [expr_list_named]
 #'
 #' @param keep_nas Keep observations with `NA`s
 #'
@@ -462,7 +462,7 @@ derive_param_computed <- function(dataset = NULL,
   )
   hori_data <- hori_return[["hori_data"]]
   if (is.null(hori_data)) {
-    return(dataset)
+    return(as_admiral_df(dataset))
   }
   analysis_vars_chr <- hori_return[["analysis_vars_chr"]]
 
@@ -476,7 +476,7 @@ derive_param_computed <- function(dataset = NULL,
     )[["hori_data"]]
 
     if (is.null(hori_const_data)) {
-      return(dataset)
+      return(as_admiral_df(dataset))
     }
 
     hori_data <- inner_join(hori_data, hori_const_data, by = vars2chr(constant_by_vars))
@@ -522,7 +522,8 @@ derive_param_computed <- function(dataset = NULL,
     process_set_values_to(set_values_to) %>%
     select(-all_of(analysis_vars_chr[str_detect(analysis_vars_chr, "\\.")]))
 
-  bind_rows(dataset, hori_data)
+  bind_rows(dataset, hori_data) %>%
+    as_admiral_df()
 }
 
 #' Asserts `parameters` Argument and Converts to List of Expressions
@@ -641,15 +642,25 @@ get_hori_data <- function(dataset,
     bind_rows(new_data) %>%
     filter(PARAMCD %in% param_values)
 
+  filter_msg <- if (is.null(filter)) {
+    paste0(
+      "The input dataset does not contain any observations for the ",
+      "parameter codes ({.code PARAMCD}): "
+    )
+  } else {
+    paste0(
+      "The input dataset does not contain any observations fulfilling the filter condition (",
+      "{.code {rlang::expr_text(filter)}}",
+      ") for the parameter codes ({.code PARAMCD}): "
+    )
+  }
+
   if (nrow(data_parameters) == 0L) {
     cli_warn(
-      c(paste0(
-        "The input dataset does not contain any observations fullfiling the filter condition (",
-        "{.code {expr_label(filter)}}}",
-        ") for the parameter codes (PARAMCD) ",
-        "{.val {param_values}}",
+      c(
+        paste0(filter_msg, "{.val {param_values}}."),
         i = "No new observations were added."
-      ))
+      )
     )
     return(list(hori_data = NULL))
   }
@@ -658,11 +669,8 @@ get_hori_data <- function(dataset,
   params_missing <- setdiff(param_values, params_available)
   if (length(params_missing) > 0) {
     cli_warn(
-      paste0(
-        "The input dataset does not contain any observations fullfiling the filter condition (",
-        "{.code {expr_label(filter)}}",
-        ") for the parameter codes (PARAMCD) ",
-        "{.val {params_missing}}",
+      c(
+        paste0(filter_msg, "{.val {params_missing}}."),
         i = "No new observations were added."
       )
     )

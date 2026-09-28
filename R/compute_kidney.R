@@ -82,6 +82,9 @@
 #'
 #' units = mL/min/1.73 m2
 #'
+#' This is a vector-oriented helper and is not usually called directly on a data
+#' frame with `%>%`.
+#'
 #' @return A numeric vector of egfr values
 #'
 #' @keywords com_bds_findings
@@ -176,23 +179,11 @@ compute_egfr <- function(creat, creatu = "SI", age, weight, sex, race = NULL, me
       TRUE ~ NA_real_
     )
   } else if (method == "CKD-EPI") {
-    kappa <- case_when(
-      sex == "F" ~ 0.7,
-      sex == "M" ~ 0.9,
-      TRUE ~ NA_real_
-    )
+    kappa <- recode_values(sex, "F" ~ 0.7, "M" ~ 0.9)
 
-    alpha <- case_when(
-      sex == "F" ~ -0.241,
-      sex == "M" ~ -0.302,
-      TRUE ~ NA_real_
-    )
+    alpha <- recode_values(sex, "F" ~ -0.241, "M" ~ -0.302)
 
-    gender_coefficent <- case_when(
-      sex == "F" ~ 1.012,
-      sex == "M" ~ 1,
-      TRUE ~ NA_real_
-    )
+    gender_coefficent <- recode_values(sex, "F" ~ 1.012, "M" ~ 1)
 
     egfr <- 142 * pmin(scr / kappa, 1)^(alpha) *
       pmax(scr / kappa, 1)^(-1.200) *

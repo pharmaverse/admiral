@@ -464,7 +464,7 @@ adpc_chg <- restrict_derivation(
 # ---- Add ASEQ ----
 
 adpc_aseq <- adpc_chg %>%
-  # Calculate ASEQ
+  # Calculate ASEQ (Optional Variable)
   derive_var_obs_number(
     new_var = ASEQ,
     by_vars = exprs(STUDYID, USUBJID),

@@ -15,12 +15,14 @@ test_that("derive_var_anrind Test 1: two-sided reference ranges work", {
     "P03",    "PUL",        2,    40,     60,    100,    40,   110,       "LOW"
   )
   input <- select(expected_output, USUBJID:A1HI)
+  actual_output <- derive_var_anrind(input, use_a1hia1lo = TRUE)
 
   expect_dfs_equal(
-    derive_var_anrind(input, use_a1hia1lo = TRUE),
+    actual_output,
     expected_output,
     keys = c("USUBJID", "PARAMCD", "ASEQ")
   )
+  expect_s3_class(actual_output, "admiral_df")
 })
 
 ## Test 2: explicitly requesting to use `A1LO` and `A1HI` works ----
@@ -130,18 +132,16 @@ test_that("derive_var_anrind Test 6: missing `AVAL` is handled properly", {
   )
 })
 
-# Show floating point issue ----
-expected_output_fp <- tibble::tribble(
-  ~USUBJID, ~PARAMCD, ~ASEQ, ~AVAL, ~ANRLO, ~ANRHI,  ~ANRIND,
-  "P01",       "PUL",     1,   100,     60,    110, "NORMAL",
-) %>%
-  mutate(AVAL = 1.1 * AVAL)
-
-input_fp <- select(expected_output_fp, USUBJID:ANRHI)
-
-
 ## Test 7: Show floating points handled properly ----
 test_that("derive_var_anrind Test 7: missing `AVAL` is handled properly", {
+  expected_output_fp <- tibble::tribble(
+    ~USUBJID, ~PARAMCD, ~ASEQ, ~AVAL, ~ANRLO, ~ANRHI,  ~ANRIND,
+    "P01",       "PUL",     1,   100,     60,    110, "NORMAL",
+  ) %>%
+    mutate(AVAL = 1.1 * AVAL)
+
+  input_fp <- select(expected_output_fp, USUBJID:ANRHI)
+
   expect_dfs_equal(
     derive_var_anrind(input_fp),
     expected_output_fp,
@@ -153,6 +153,14 @@ test_that("derive_var_anrind Test 7: missing `AVAL` is handled properly", {
 test_that("derive_var_anrind Test 8: Show floating points not handled correctly", {
   # when SIGNIFICANT DIGITS = 17 then AVAL > ANRHI
   # even though 1.1 * 100 should equal 110
+  expected_output_fp <- tibble::tribble(
+    ~USUBJID, ~PARAMCD, ~ASEQ, ~AVAL, ~ANRLO, ~ANRHI,  ~ANRIND,
+    "P01",       "PUL",     1,   100,     60,    110, "NORMAL",
+  ) %>%
+    mutate(AVAL = 1.1 * AVAL)
+
+  input_fp <- select(expected_output_fp, USUBJID:ANRHI)
+
   expected_output_fpx <- expected_output_fp %>%
     mutate(ANRIND = "HIGH")
 

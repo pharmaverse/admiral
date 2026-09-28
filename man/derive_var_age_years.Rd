@@ -85,9 +85,9 @@ derive_var_age_years(data, AGE, age_unit = "months", new_var = AAGE)
 \code{\link[=derive_vars_duration]{derive_vars_duration()}}
 
 ADSL Functions that returns variable appended to dataset:
-\code{\link{derive_vars_aage}()},
-\code{\link{derive_vars_extreme_event}()},
-\code{\link{derive_vars_period}()}
+\code{\link[=derive_vars_aage]{derive_vars_aage()}},
+\code{\link[=derive_vars_extreme_event]{derive_vars_extreme_event()}},
+\code{\link[=derive_vars_period]{derive_vars_period()}}
 }
 \concept{der_adsl}
 \keyword{der_adsl}

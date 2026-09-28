@@ -47,7 +47,7 @@ From these variables only 'TERM' is used in the \code{{admiral}} code, the rest 
 traceability only.
 }
 \seealso{
-Other metadata: 
+Other metadata:
 \code{\link{atoxgr_criteria_ctcv4}},
 \code{\link{atoxgr_criteria_ctcv4_uscv}},
 \code{\link{atoxgr_criteria_ctcv5}},

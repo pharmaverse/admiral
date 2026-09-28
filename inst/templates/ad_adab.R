@@ -1226,7 +1226,7 @@ adab_params <- adab_adafl %>%
 
 # Sort by the key variables then compute ASEQ
 adab_prefinal <- adab_params %>%
-  # Calculate ASEQ
+  # Calculate ASEQ (Optional Variable)
   derive_var_obs_number(
     new_var = ASEQ,
     by_vars = exprs(STUDYID, USUBJID),

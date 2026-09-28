@@ -1,4 +1,4 @@
-url: https://pharmaverse.github.io/admiral
+url: https://pharmaverse.github.io/admiral/
 
 template:
   math-rendering: mathjax
@@ -63,18 +63,39 @@ home:
     href: articles/templates.html
 
 authors:
-  before: "We define *authors* as those who are actively maintaining the code base, and *contributors* as those who made a significant contribution in the past. For all acknowledgements, see the eponymous section in the [Home Page](https://pharmaverse.github.io/admiral/cran-release/)."
   footer:
     roles: [aut, ctb, cre]
     text: "Developed by F. Hoffmann-La Roche AG, GlaxoSmithKline LLC,"
   sidebar:
     roles: [aut, fnd]
+  Edoardo Mancini:
+    href: https://manciniedoardo.github.io/
+  Stefan Bundfuss:
+    href: https://github.com/bundfussr
+  Arianna Cascone:
+    href: https://arianna-cascone.quarto.pub/
+  Kristin Dahnert:
+    href: https://github.com/Kcdahn
+  Jeffrey Dickinson:
+    href: https://github.com/jeffreyad
+  Ross Farrugia:
+    href: https://github.com/rossfarrugia
+  Fanny Gautier:
+    href: https://github.com/Fanny-Gautier
+  Liam Hobby:
+    href: https://github.com/LiamHobby
+  Gordon Miller:
+    href: https://github.com/millerg23
+  Lina Patil:
+    href: https://github.com/Lina2689
+  Ben Straub:
+    href: https://github.com/bms63
   F. Hoffmann-La Roche AG:
     html: "<a href='https://www.roche.com/'><img src='man/figures/roche_logo.png' height='34' alt='Roche logo' /></a>"
-    href: https://roche.com/
+    href: https://www.roche.com/
   GlaxoSmithKline LLC:
-    html: "<a href='https://www.gsk.com/'><img src='man/figures/gsk_logo.png' height='20' alt='GSK logo' /></a>"
-    href: https://gsk.com/
+    html: "<a href='https://www.gsk.com/en-gb/'><img src='man/figures/gsk_logo.png' height='20' alt='GSK logo' /></a>"
+    href: https://www.gsk.com/en-gb/
 
 reference:
 - title: Derivations for Adding Variables
@@ -228,6 +249,8 @@ navbar:
         href: articles/templates.html
       - text: Presentation Archive
         href: https://pharmaverse.github.io/admiraldiscovery/articles/presentation_archive.html
+      - text: Agent Skills 🤖
+        href: https://github.com/RConsortium/pharma-skills/tree/main/admiral
     reference:
       text: Reference
       href: reference/
@@ -258,7 +281,7 @@ navbar:
       - text: Creating a PK NCA or Population PK ADaM
         href: articles/pk_adnca.html
       - text: Creating an Antidrug Antibody ADaM
-        href: articles/adab.html
+        href: articles/adab_web.html
       - text: Hy's Law Implementation
         href: articles/hys_law.html
       - text: -------
@@ -267,12 +290,14 @@ navbar:
         href: articles/imputation.html
       - text: Visit and Period Variables
         href: articles/visits_periods.html
+      - text: Time-to-Event Analyses
+        href: articles/tte_analyses_web.html
       - text: Queries Dataset Documentation
         href: articles/queries_dataset.html
       - text: Lab Grading
         href: articles/lab_grading.html
       - text: Estimands
-        href: articles/estimands.html
+        href: articles/estimands_web.html
       - text: -------
       - text: FAQ
         href: articles/faq.html

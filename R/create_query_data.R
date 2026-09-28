@@ -285,7 +285,7 @@ create_query_data <- function(queries,
       VERSION = version
     )
   }
-  queries
+  as_admiral_df(queries)
 }
 
 #' Get Terms from the Queries Database
