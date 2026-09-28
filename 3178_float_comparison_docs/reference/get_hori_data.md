@@ -69,6 +69,12 @@ get_hori_data(dataset, by_vars, parameters, set_values_to, filter)
   The specified filter condition is used in the warnings only. It is not
   applied to the input dataset.
 
+  Comparing derived numeric variables to fixed values, e.g.,
+  `PCHG <= -90`, may give unexpected results due to floating point
+  representation. For details and solutions see the "Floating Point
+  Comparisons" section in
+  [`vignette("concepts_conventions")`](https:/pharmaverse.github.io/admiral/3178_float_comparison_docs/articles/concepts_conventions.md).
+
   Permitted values
 
   :   An unquoted expression
