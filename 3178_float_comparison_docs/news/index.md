@@ -4,6 +4,14 @@
 
 ### New Features
 
+- Added function
+  [`as_admiral_df()`](https:/pharmaverse.github.io/admiral/3178_float_comparison_docs/reference/as_admiral_df.md).
+  Tags a data frame with the `admiral_df` S3 class, preserving its
+  existing classes. All
+  [admiral](https://pharmaverse.github.io/admiral/) dataset functions
+  now tag their output datasets with this class.
+  ([\#3160](https://github.com/pharmaverse/admiral/issues/3160))
+
 ### Updates of Existing Functions
 
 - The `min_dates_strict` and `max_dates_strict` arguments were added to
@@ -93,6 +101,17 @@
   argument in
   [`derive_var_atoxgr_dir()`](https:/pharmaverse.github.io/admiral/3178_float_comparison_docs/reference/derive_var_atoxgr_dir.md).
 
+- [admiral](https://pharmaverse.github.io/admiral/)’s README was updated
+  to remove redundant information and consolidate a number of sections
+  together. Additionally, the package manifesto was moved to the
+  [admiraldev](https://pharmaverse.github.io/admiraldev/) website.
+  ([\#3154](https://github.com/pharmaverse/admiral/issues/3154))
+
+- Referenced the [{admiral} agent
+  skills](https://github.com/RConsortium/pharma-skills/tree/main/admiral)
+  in the README and the “Get Started” navigation bar.
+  ([\#3159](https://github.com/pharmaverse/admiral/issues/3159))
+
 - Added a “Floating Point Comparisons” section to the “Programming
   Concepts and Conventions” vignette explaining how comparisons of
   derived numeric variables to fixed values in conditions can give
@@ -100,10 +119,20 @@
   the documentation of all function arguments which accept conditions,
   e.g., `condition` of
   [`derive_vars_crit_flag()`](https:/pharmaverse.github.io/admiral/3178_float_comparison_docs/reference/derive_vars_crit_flag.md)
-  or `filter_add`.
+  or `filter_add` of
+  [`derive_vars_merged()`](https:/pharmaverse.github.io/admiral/3178_float_comparison_docs/reference/derive_vars_merged.md).
   ([\#3178](https://github.com/pharmaverse/admiral/issues/3178))
 
 ### Various
+
+- The minimum `dplyr` version was bumped to `1.2.0` to make use of the
+  new
+  [`recode_values()`](https://dplyr.tidyverse.org/reference/recode-and-replace-values.html),
+  [`filter_out()`](https://dplyr.tidyverse.org/reference/filter.html),
+  and
+  [`replace_when()`](https://dplyr.tidyverse.org/reference/case-and-replace-when.html)
+  functions.
+  ([\#3163](https://github.com/pharmaverse/admiral/issues/3163))
 
 - Updated the default `ae_event`, `ae_ser_event`, `ae_gr1_event`,
   `ae_gr2_event`, `ae_gr3_event`, `ae_gr4_event`, `ae_gr5_event`,

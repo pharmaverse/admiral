@@ -71,6 +71,12 @@ filter_relative(
   output dataset contains all observations before or after (`selection`
   parameter) the reference observation.
 
+  Comparing derived numeric variables to fixed values, e.g.,
+  `PCHG <= -90`, may give unexpected results due to floating point
+  representation. For details and solutions see the "Floating Point
+  Comparisons" section in
+  [`vignette("concepts_conventions")`](https:/pharmaverse.github.io/admiral/3178_float_comparison_docs/articles/concepts_conventions.md).
+
   Default value
 
   :   none

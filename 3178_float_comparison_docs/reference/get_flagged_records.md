@@ -42,6 +42,12 @@ get_flagged_records(dataset, new_var, condition, filter = NULL)
   where it evaluates as `TRUE` the new variable is set to `1` in the new
   column. Otherwise, it is set to `0`.
 
+  Comparing derived numeric variables to fixed values, e.g.,
+  `PCHG <= -90`, may give unexpected results due to floating point
+  representation. For details and solutions see the "Floating Point
+  Comparisons" section in
+  [`vignette("concepts_conventions")`](https:/pharmaverse.github.io/admiral/3178_float_comparison_docs/articles/concepts_conventions.md).
+
   Default value
 
   :   none
@@ -77,6 +83,7 @@ flag for the condition.
 ## See also
 
 Utilities used within Derivation functions:
+[`as_admiral_df()`](https:/pharmaverse.github.io/admiral/3178_float_comparison_docs/reference/as_admiral_df.md),
 [`extract_unit()`](https:/pharmaverse.github.io/admiral/3178_float_comparison_docs/reference/extract_unit.md),
 [`get_not_mapped()`](https:/pharmaverse.github.io/admiral/3178_float_comparison_docs/reference/get_not_mapped.md),
 [`get_vars_query()`](https:/pharmaverse.github.io/admiral/3178_float_comparison_docs/reference/get_vars_query.md)

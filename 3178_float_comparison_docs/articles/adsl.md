@@ -235,10 +235,11 @@ Example function `format_eosstt()`:
 
 ``` r
 format_eosstt <- function(x) {
-  case_when(
-    x %in% c("COMPLETED") ~ "COMPLETED",
-    x %in% c("SCREEN FAILURE") ~ NA_character_,
-    TRUE ~ "DISCONTINUED"
+  recode_values(
+    x,
+    "COMPLETED" ~ "COMPLETED",
+    "SCREEN FAILURE" ~ NA_character_,
+    default = "DISCONTINUED"
   )
 }
 ```
@@ -709,10 +710,11 @@ format_agegr1 <- function(var_input) {
   )
 }
 format_region1 <- function(var_input) {
-  case_when(
-    var_input %in% c("CAN", "USA") ~ "North America",
-    !is.na(var_input) ~ "Rest of the World",
-    TRUE ~ "Missing"
+  recode_values(
+    var_input,
+    c("CAN", "USA") ~ "North America",
+    NA_character_ ~ "Missing",
+    default = "Rest of the World"
   )
 }
 
