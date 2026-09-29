@@ -51,6 +51,14 @@ sequence makes the key unique by construction, so the \code{OCCDS} structure
 check is not looking for semantic duplicates but for whole records
 duplicated by a fanned-out merge.
 
+The subject part of the key follows the \code{subject_keys} admiral option, as
+\code{\link[=is_adsl_structure]{is_adsl_structure()}} does, reduced to those of its variables which
+actually distinguish subjects in the dataset at hand. With the default
+option that is \code{USUBJID} alone for a single-study dataset, because
+\code{STUDYID} is constant there and would only overstate the record structure;
+a pooled dataset whose subject identifiers repeat across studies keeps
+\code{STUDYID} as well.
+
 A dataset with no records cannot show what it has one record per -- every
 candidate key is trivially unique -- so nothing is inferred for it.
 }

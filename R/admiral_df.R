@@ -227,7 +227,7 @@ get_admiral_df_type <- function(dataset) {
   # diagnostic
   assert_data_frame(dataset, check_is_grouped = FALSE, check_is_rowwise = FALSE)
   cols <- colnames(dataset)
-  has <- function(x) all(x %in% cols)
+  has <- function(x) x %in% cols
   has_paramcd <- has("PARAMCD")
   # occurrence datasets are record-level, so a subject identifier is what
   # corroborates the naming signals below
@@ -238,15 +238,13 @@ get_admiral_df_type <- function(dataset) {
   is_occds <- !has_paramcd && has_subject &&
     any(str_detect(cols, "^[A-Z]{2}(DECOD|TERM)$|^AOCC[0-9A-Z]*FL$|^TRTEMFL$"))
   is_bds <- has_paramcd && (has("AVAL") || has("AVALC"))
-  is_adsl <- !has_paramcd && is_adsl_structure(dataset)
 
-  case_when(
-    is_tte ~ "TTE",
-    is_occds ~ "OCCDS",
-    is_bds ~ "BDS",
-    is_adsl ~ "ADSL",
-    TRUE ~ "other"
-  )
+  # Check dataset type
+  if (is_tte) return("TTE")
+  if (is_occds) return("OCCDS")
+  if (is_bds) return("BDS")
+  if (!has_paramcd && is_adsl_structure(dataset)) return("ADSL")
+  return("other")
 }
 
 #' Check Whether a Dataset Has an ADSL (Subject-Level) Structure
@@ -323,8 +321,11 @@ is_adsl_structure <- function(dataset) {
 minimal_unique_key <- function(dataset, must_have, optional) {
   # `ungroup()` for the reason given in `is_adsl_structure()`
   dataset <- ungroup(dataset)
+  # `n_distinct()` rather than `nrow(distinct())`: the count is all that is
+  # wanted, and this runs often enough (up to twice per candidate) that
+  # materializing the deduplicated data frame each time is worth avoiding
   is_unique <- function(key) {
-    length(key) > 0 && nrow(dataset) == nrow(distinct(dataset, !!!syms(key)))
+    length(key) > 0 && nrow(dataset) == n_distinct(dataset[key])
   }
   key <- must_have
   if (is_unique(key)) {
@@ -335,8 +336,10 @@ minimal_unique_key <- function(dataset, must_have, optional) {
     if (is_unique(key)) {
       # the walk stops at the first unique *prefix* of `optional`, so the key
       # can carry variables passed over on the way which contribute nothing to
-      # uniqueness. Drop those, lowest priority first.
-      for (redundant in rev(setdiff(key, must_have))) {
+      # uniqueness. Drop those, lowest priority first -- but not `v` itself,
+      # which is what made the key unique, so the key without it is the one
+      # just tested and found not to be.
+      for (redundant in rev(setdiff(key, c(must_have, v)))) {
         if (is_unique(setdiff(key, redundant))) {
           key <- setdiff(key, redundant)
         }
@@ -379,6 +382,14 @@ minimal_unique_key <- function(dataset, must_have, optional) {
 #'   check is not looking for semantic duplicates but for whole records
 #'   duplicated by a fanned-out merge.
 #'
+#'   The subject part of the key follows the `subject_keys` admiral option, as
+#'   [is_adsl_structure()] does, reduced to those of its variables which
+#'   actually distinguish subjects in the dataset at hand. With the default
+#'   option that is `USUBJID` alone for a single-study dataset, because
+#'   `STUDYID` is constant there and would only overstate the record structure;
+#'   a pooled dataset whose subject identifiers repeat across studies keeps
+#'   `STUDYID` as well.
+#'
 #'   A dataset with no records cannot show what it has one record per -- every
 #'   candidate key is trivially unique -- so nothing is inferred for it.
 #'
@@ -389,29 +400,41 @@ minimal_unique_key <- function(dataset, must_have, optional) {
 #' @family internal
 infer_admiral_keys <- function(dataset, type = get_admiral_df_type(dataset)) {
   cols <- colnames(dataset)
+  # `type` is forced before `dataset` is ungrouped below, so that the default
+  # argument classifies the dataset it was called with
+  force(type)
+  # `n_distinct()` on a grouped dataset would count within group
+  dataset <- ungroup(dataset)
 
   # with no records every candidate key is trivially unique
   if (nrow(dataset) == 0) {
     return(character(0))
   }
 
-  # `USUBJID` identifies a subject on its own, and is preferred over the full
-  # set of subject keys because the others (e.g. `STUDYID`) may be `NA` on
-  # records added by a derivation which only populates its `by_vars`
-  subject_keys <- if ("USUBJID" %in% cols) {
-    "USUBJID"
-  } else {
-    intersect(vars2chr(get_admiral_option("subject_keys")), cols)
+  # the subject keys as configured, minus any which do not distinguish subjects
+  # in this dataset: `STUDYID` is constant within a single study, and carrying
+  # it would overstate the record structure in the way `minimal_unique_key()`
+  # exists to avoid. So the default keys reduce to `USUBJID`, while a pooled
+  # dataset whose subject identifiers repeat across studies keeps both.
+  subject_keys <- intersect(vars2chr(get_admiral_option("subject_keys")), cols)
+  if (length(subject_keys) > 1) {
+    n_subjects <- n_distinct(dataset[subject_keys])
+    for (v in subject_keys) {
+      rest <- setdiff(subject_keys, v)
+      if (length(rest) > 0 && n_distinct(dataset[rest]) == n_subjects) {
+        subject_keys <- rest
+      }
+    }
   }
 
   if (type == "OCCDS") {
-    seq_var <- occds_seq_var(dataset, cols)
+    seq_var <- occds_seq_var(dataset)
     # without the sequence there is no record key at all: the subject keys alone
     # would claim one record per subject, which an occurrence dataset never has
     if (length(seq_var) == 0) {
       return(character(0))
     }
-    return(intersect(c(subject_keys, seq_var), cols))
+    return(c(subject_keys, seq_var))
   }
 
   core <- switch(type,
@@ -430,12 +453,13 @@ infer_admiral_keys <- function(dataset, type = get_admiral_df_type(dataset)) {
   # then `DTYPE` last -- a derived record (LOCF, AVERAGE, ...) shares every
   # analysis variable with the record it was derived from, so it is only
   # `DTYPE` which separates them.
-  # NOTE: no surrogate/sequence keys (ASEQ, SRCSEQ, ...) -- see minimal_unique_key()
+  # NOTE: no surrogate/sequence/identifier keys (ASEQ, SRCSEQ, ASPID, ...) --
+  # see minimal_unique_key()
   extra <- c(
     "AVISITN", "AVISIT", "ATPTN", "ATPT",
     "NFRLT", "AFRLT",
-    "ADTM", "ADT", "ASTDTM", "ASTDT", "AENDT",
-    "APERIOD", "APERIODC", "ASPID", "DTYPE"
+    "ADTM", "ADT", "ASTDTM", "ASTDT", "AENDTM", "AENDT",
+    "APERIOD", "APERIODC", "DTYPE"
   )
   minimal_unique_key(
     dataset,
@@ -447,7 +471,6 @@ infer_admiral_keys <- function(dataset, type = get_admiral_df_type(dataset)) {
 #' Find the Record Key of an Occurrence Dataset
 #'
 #' @param dataset A data frame
-#' @param cols The column names of `dataset`
 #'
 #' @details
 #'   `ASEQ` is preferred, falling back to a populated SDTM domain sequence. If
@@ -461,7 +484,8 @@ infer_admiral_keys <- function(dataset, type = get_admiral_df_type(dataset)) {
 #'
 #' @keywords internal
 #' @family internal
-occds_seq_var <- function(dataset, cols) {
+occds_seq_var <- function(dataset) {
+  cols <- colnames(dataset)
   # a sequence which is present but entirely `NA` has not been derived yet;
   # treating it as the record key would make the key unique without meaning
   # anything

@@ -4,16 +4,10 @@
 \alias{occds_seq_var}
 \title{Find the Record Key of an Occurrence Dataset}
 \usage{
-occds_seq_var(dataset, cols)
+occds_seq_var(dataset)
 }
 \arguments{
 \item{dataset}{A data frame
-
-\describe{
-\item{Default value}{none}
-}}
-
-\item{cols}{The column names of \code{dataset}
 
 \describe{
 \item{Default value}{none}

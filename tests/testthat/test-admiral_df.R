@@ -109,7 +109,8 @@ test_that("set_admiral_keys Test 7: attributes of the supplied keys are dropped"
   )
   # keys extracted from a specification table carry a variable label, which
   # must not end up on the stored attribute
-  labelled_keys <- structure("USUBJID", label = "Unique Subject Identifier")
+  labelled_keys <- "USUBJID"
+  attr(labelled_keys, "label") <- "Unique Subject Identifier"
 
   actual <- set_admiral_keys(input, keys = labelled_keys)
 
@@ -608,8 +609,43 @@ test_that("infer_admiral_keys Test 28: nothing is inferred for a dataset with no
   expect_identical(infer_admiral_keys(empty_bds), character(0))
 })
 
-## Test 29: a grouped dataset is keyed on its records overall ----
-test_that("infer_admiral_keys Test 29: a grouped dataset is keyed on its records overall", {
+## Test 29: the subject keys option is respected ----
+test_that("infer_admiral_keys Test 29: the subject keys option is respected", {
+  subject_keys <- get_admiral_option("subject_keys")
+  withr::defer(set_admiral_options(subject_keys = subject_keys))
+
+  # one study, so `STUDYID` distinguishes nothing and is left out of the
+  # reported record structure
+  one_study <- tibble::tribble(
+    ~STUDYID, ~USUBJID, ~SUBJID, ~PARAMCD, ~AVAL,
+    "A",      "A-1",    "1",     "SYSBP",    121,
+    "A",      "A-2",    "2",     "SYSBP",    130
+  )
+  expect_identical(infer_admiral_keys(one_study), c("USUBJID", "PARAMCD"))
+
+  # the subject part of the key follows the option, as the ADSL structure check
+  # does
+  set_admiral_options(subject_keys = exprs(SUBJID))
+  expect_identical(infer_admiral_keys(one_study), c("SUBJID", "PARAMCD"))
+
+  # `SUBJID` repeats across the two studies and neither variable identifies a
+  # subject on its own, so both are doing real work here and both are kept
+  pooled <- tibble::tribble(
+    ~STUDYID, ~SUBJID, ~PARAMCD, ~AVAL,
+    "A",      "1",     "SYSBP",    121,
+    "A",      "2",     "SYSBP",    130,
+    "B",      "1",     "SYSBP",    118,
+    "B",      "2",     "SYSBP",    125
+  )
+  set_admiral_options(subject_keys = exprs(STUDYID, SUBJID))
+  expect_identical(
+    infer_admiral_keys(pooled),
+    c("STUDYID", "SUBJID", "PARAMCD")
+  )
+})
+
+## Test 30: a grouped dataset is keyed on its records overall ----
+test_that("infer_admiral_keys Test 30: a grouped dataset is keyed on its records overall", {
   input <- tibble::tribble(
     ~USUBJID, ~PARAMCD, ~AVISITN, ~AVAL,
     "1",      "SYSBP",         2,   121,
@@ -624,8 +660,8 @@ test_that("infer_admiral_keys Test 29: a grouped dataset is keyed on its records
   )
 })
 
-## Test 30: inference holds up against the {pharmaverseadam} datasets ----
-test_that("infer_admiral_keys Test 30: inference holds up against the {pharmaverseadam} datasets", { # nolint
+## Test 31: inference holds up against the {pharmaverseadam} datasets ----
+test_that("infer_admiral_keys Test 31: inference holds up against the {pharmaverseadam} datasets", { # nolint
   skip_on_cran()
   skip_if_not_installed("pharmaverseadam")
 
