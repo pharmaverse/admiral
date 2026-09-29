@@ -19,10 +19,10 @@ library(admiraldev)
 # Preface
 
 Before reading this article, you should already be familiar with the purpose of estimands
-and the standards recommendations. For implementation guidelines, see this
-[White Paper](https://www.cdisc.org/sites/default/files/2025-09/3a.3_introduction_of_phuse_whitepaper_on_cdisc_data_standards_e9_r1.pdf)
-and [Worked Example](https://advance.hub.phuse.global/wiki/spaces/WEL/pages/26804860/Optimizing+the+Use+of+Data+Standards)
-from PHUSE.
+and the standards recommendations. For implementation guidelines, see the following PHUSE documents:
+
+- **White Paper** - ["Implementation of ICH E9(R1) Estimands Framework using Data Standards"](https://phuse.s3.eu-central-1.amazonaws.com/Deliverables/Optimizing+the+Use+of+Data+Standards/WP-092.pdf)
+- **Worked Example** - ["Implementation of ICH E9(R1) Estimands Framework using Data Standards - Example Document"](https://advance.hub.phuse.global/wiki/spaces/WEL/pages/26804860/Optimizing+the+Use+of+Data+Standards).
 
 # Introduction
 
