@@ -6,6 +6,16 @@
 class, preserving its existing classes. All `{admiral}` dataset functions now tag their
 output datasets with this class. (#3160)
 
+- Added function `set_admiral_keys()`. Stores the key variables of a dataset --
+the variables it is intended to have exactly one record per -- in its
+`"admiral_keys"` attribute, optionally stores the dataset name in an
+`"admiral_ds_name"` attribute, and tags the dataset with the `admiral_df` class.
+The keys are accepted both as `exprs()` and as a character vector, so they can
+come from anywhere: the `by_vars` of a derivation, a dataset specification, or a
+hand-written vector. There is no behavioral effect yet; the `summary()` method
+which reads the attributes to check the record structure lands in a later
+release. (#3198)
+
 ## Updates of Existing Functions
 
 - The `min_dates_strict` and `max_dates_strict` arguments were added to

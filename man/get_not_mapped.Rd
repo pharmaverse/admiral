@@ -17,7 +17,8 @@ Utilities used within Derivation functions:
 \code{\link[=as_admiral_df]{as_admiral_df()}},
 \code{\link[=extract_unit]{extract_unit()}},
 \code{\link[=get_flagged_records]{get_flagged_records()}},
-\code{\link[=get_vars_query]{get_vars_query()}}
+\code{\link[=get_vars_query]{get_vars_query()}},
+\code{\link[=set_admiral_keys]{set_admiral_keys()}}
 }
 \concept{utils_help}
 \keyword{utils_help}
