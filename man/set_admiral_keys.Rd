@@ -77,13 +77,11 @@ admiral tooling no longer recognizes.
 Call this function afterwards (or re-apply it as needed) if the dataset
 passes through any of those.
 
-Because the keys are stored as plain variable names, they are not updated by
-\code{rename()} and not removed by \code{select()}. Keys which are not (or not yet) in
-the dataset are accepted without complaint, so that a partially derived
-dataset can declare the structure it is being built towards; it is the
-admiral tooling which reads the attribute that reports keys no longer
-matching the dataset, once the derivation is finished and a missing key is
-unambiguously wrong.
+The keys are stored as plain variable names, so they are not updated by
+\code{rename()} or removed by \code{select()}. Keys which are not (or not yet) in the
+dataset are accepted, so that a partially derived dataset can declare the
+structure it is being built towards; the admiral tooling reading the
+attribute is what reports keys which no longer match.
 }
 \seealso{
 Utilities used within Derivation functions:

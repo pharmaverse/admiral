@@ -37,10 +37,8 @@ subject-level if it carries a period-numbered treatment variable (\code{TRT01P},
 
 A partially derived ADSL which has not yet reached one record per subject is
 therefore not recognized here, and is typed \code{"other"} by
-\code{\link[=get_admiral_df_type]{get_admiral_df_type()}}. This is a known limitation rather than an
-oversight: at that point nothing in the dataset distinguishes it from any
-other record-level data frame, and guessing would misreport a dataset which
-is genuinely still being built.
+\code{\link[=get_admiral_df_type]{get_admiral_df_type()}}: nothing in it yet distinguishes it from any other
+record-level data frame.
 }
 \seealso{
 Other internal:

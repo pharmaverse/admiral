@@ -26,8 +26,13 @@ zero-length vector (with a warning) when none can be determined.
 \description{
 Find the Record Key of an Occurrence Dataset
 }
+\details{
+\code{ASEQ} is preferred, falling back to a populated SDTM domain sequence. If
+no sequence is left -- or several domain sequences are, making the record
+key ambiguous -- a warning is issued and nothing is returned.
+}
 \seealso{
-\code{\link[=infer_admiral_keys]{infer_admiral_keys()}}, which documents the choice this makes
+\code{\link[=infer_admiral_keys]{infer_admiral_keys()}}, which uses this for \code{OCCDS} datasets
 
 Other internal:
 \code{\link{admiral-package}},

@@ -45,15 +45,12 @@ contains a \code{--DECOD}/\code{--TERM} variable, an \code{AOCCxxFL} occurrence 
 }
 
 The \code{--DECOD}/\code{--TERM} test requires the two-letter SDTM domain prefix the
-convention gives those variables (\code{AEDECOD}, \code{CMTERM}, ...) and requires the
-dataset to identify a subject as well. Matching a bare \verb{TERM$} suffix with
-no structural corroboration classified any data frame with a variable whose
-name happens to end in \code{TERM} as an occurrence dataset.
+convention gives those variables (\code{AEDECOD}, \code{CMTERM}, ...), so that a
+variable whose name merely ends in \code{TERM} is not taken as a signal.
 
 A dataset which has not yet been derived far enough to carry any of these
-signals is \code{"other"}, which is a deliberate under-claim: reporting on an
-unrecognized dataset is confined to what holds for any data frame, whereas
-claiming the wrong type would report the wrong things about it.
+signals is \code{"other"}; reporting on it is then confined to what holds for
+any data frame.
 }
 \seealso{
 Other internal:

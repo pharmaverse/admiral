@@ -32,13 +32,10 @@ A character vector of key variable names.
 \description{
 Starting from \code{must_have}, adds variables from \code{optional} one at a time (in
 the given order) until the combination is a unique key of \code{dataset}, then
-drops any added variable which is not needed for uniqueness (lowest priority
-first) and returns what is left. Without that second pass the result would
-depend on where a genuinely needed variable sits in \code{optional}: everything
-ahead of it would be carried along whether it discriminates or not, and the
-reported record structure would overstate the key. If uniqueness is never
-reached, the full set (\code{must_have} plus all of \code{optional}) is returned -- the
-caller can detect this because the returned key still yields duplicates.
+drops any added variable which is not needed for uniqueness. If uniqueness is
+never reached, the full set (\code{must_have} plus all of \code{optional}) is returned
+-- the caller can detect this because the returned key still yields
+duplicates.
 }
 \details{
 This is used by \code{\link[=infer_admiral_keys]{infer_admiral_keys()}} to discover the record structure from

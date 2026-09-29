@@ -46,18 +46,10 @@ For \code{BDS}/\code{TTE}, surrogate/sequence keys such as \code{ASEQ} are delib
 \code{OCCDS}, however, the sequence number \emph{is} the intended record key (there is
 no analysis-value structure to fall back on: two adverse events for the same
 subject need not differ in any analysis variable), so it is required rather
-than excluded. \code{ASEQ} is preferred, falling back to the SDTM domain sequence
-(\code{AESEQ}, \code{CMSEQ}, \code{MHSEQ}, ...) which is what occurrence datasets most
-often carry; the two-letter domain prefix is what distinguishes those from
-provenance variables such as \code{SRCSEQ}. A sequence variable which is present
-but entirely \code{NA} has not been derived yet and is passed over, as an empty
-sequence would otherwise make the key unique without meaning anything. If no
-sequence is left -- or several domain sequences are, making the record key
-ambiguous -- the record structure cannot be checked and a warning is issued.
-
-Note that a well-formed sequence makes the key unique by construction, so
-the \code{OCCDS} structure check is not looking for semantic duplicates but for
-whole records duplicated by a fanned-out merge.
+than excluded; see \code{\link[=occds_seq_var]{occds_seq_var()}} for how it is chosen. A well-formed
+sequence makes the key unique by construction, so the \code{OCCDS} structure
+check is not looking for semantic duplicates but for whole records
+duplicated by a fanned-out merge.
 
 A dataset with no records cannot show what it has one record per -- every
 candidate key is trivially unique -- so nothing is inferred for it.
