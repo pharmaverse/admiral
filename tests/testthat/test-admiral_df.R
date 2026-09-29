@@ -483,3 +483,267 @@ test_that("get_admiral_df_type Test 27: an error is issued for a non-data-frame 
   expect_error(get_admiral_df_type(matrix(1:4, nrow = 2)))
   expect_error(get_admiral_df_type("ADSL"))
 })
+
+# minimal_unique_key ----
+## Test 28: returns must_have when it is already unique ----
+test_that("minimal_unique_key Test 28: returns must_have when it is already unique", {
+  input <- tibble::tribble(
+    ~USUBJID, ~PARAMCD, ~AVISIT,
+    "1",      "DIABP",  "BASELINE",
+    "2",      "DIABP",  "BASELINE"
+  )
+
+  expect_identical(
+    minimal_unique_key(input, must_have = "USUBJID", optional = "AVISIT"),
+    "USUBJID"
+  )
+})
+
+## Test 29: drops candidates which do not discriminate ----
+test_that("minimal_unique_key Test 29: drops candidates which do not discriminate", {
+  # `AVISIT` is redundant with `AVISITN`, and `ATPT` is constant; both sit ahead
+  # of `DTYPE` in the candidate order, so the walk carries them on its way to the
+  # variable which actually separates the records
+  input <- tibble::tribble(
+    ~USUBJID, ~AVISITN, ~AVISIT,  ~ATPT, ~DTYPE,
+    "1",             2, "WEEK 2", "PRE", NA,
+    "1",             2, "WEEK 2", "PRE", "LOCF",
+    "1",             4, "WEEK 4", "PRE", NA,
+    "1",             4, "WEEK 4", "PRE", "LOCF"
+  )
+
+  expect_identical(
+    minimal_unique_key(
+      input,
+      must_have = "USUBJID",
+      optional = c("AVISITN", "AVISIT", "ATPT", "DTYPE")
+    ),
+    c("USUBJID", "AVISITN", "DTYPE")
+  )
+})
+
+## Test 30: returns everything when uniqueness is never reached ----
+test_that("minimal_unique_key Test 30: returns everything when uniqueness is never reached", {
+  # wholly duplicated records: no combination of the candidates separates them,
+  # so the caller sees duplicates against the returned key and can report them
+  input <- tibble::tribble(
+    ~USUBJID, ~PARAMCD, ~AVISIT,
+    "1",      "DIABP",  "BASELINE",
+    "1",      "DIABP",  "BASELINE"
+  )
+
+  expect_identical(
+    minimal_unique_key(input, must_have = "USUBJID", optional = c("PARAMCD", "AVISIT")),
+    c("USUBJID", "PARAMCD", "AVISIT")
+  )
+})
+
+# infer_admiral_keys ----
+## Test 31: the inferred key spans the common BDS shapes ----
+test_that("infer_admiral_keys Test 31: the inferred key spans the common BDS shapes", {
+  # exposure: one record per subject, parameter and dosing interval, keyed by
+  # the interval start rather than by an analysis date or a visit
+  adex <- tibble::tribble(
+    ~USUBJID, ~PARAMCD, ~AVAL, ~ASTDT,                ~AENDT,
+    "1",      "DOSE",      54, as.Date("2024-01-01"), as.Date("2024-01-31"),
+    "1",      "DOSE",      81, as.Date("2024-02-01"), as.Date("2024-02-28")
+  )
+  expect_identical(infer_admiral_keys(adex), c("USUBJID", "PARAMCD", "ASTDT"))
+
+  # population PK: keyed by relative time, with no visit structure at all
+  adppk <- tibble::tribble(
+    ~USUBJID, ~PARAMCD, ~NFRLT, ~AVAL,
+    "1",      "CONC",        0,     0,
+    "1",      "CONC",        1,    12,
+    "1",      "CONC",        2,     8
+  )
+  expect_identical(infer_admiral_keys(adppk), c("USUBJID", "PARAMCD", "NFRLT"))
+
+  # a derived record shares every analysis variable with the record it was
+  # derived from, so only DTYPE separates the two within a visit
+  locf <- tibble::tribble(
+    ~USUBJID, ~PARAMCD, ~AVISITN, ~AVAL, ~DTYPE,
+    "1",      "SYSBP",         2,   121, NA,
+    "1",      "SYSBP",         2,   121, "LOCF",
+    "1",      "SYSBP",         4,   130, NA,
+    "1",      "SYSBP",         4,   130, "LOCF"
+  )
+  expect_identical(
+    infer_admiral_keys(locf),
+    c("USUBJID", "PARAMCD", "AVISITN", "DTYPE")
+  )
+})
+
+## Test 32: multi-period designs are keyed by period ----
+test_that("infer_admiral_keys Test 32: multi-period designs are keyed by period", {
+  # the same visit recurs in each period, so nothing but APERIOD separates the
+  # records -- a vaccine study shape
+  input <- tibble::tribble(
+    ~USUBJID, ~PARAMCD, ~AVISITN, ~APERIOD, ~AVAL,
+    "1",      "SYSBP",         1,        1,   121,
+    "1",      "SYSBP",         1,        2,   130,
+    "1",      "SYSBP",         2,        1,   118,
+    "1",      "SYSBP",         2,        2,   125
+  )
+
+  expect_identical(
+    infer_admiral_keys(input),
+    c("USUBJID", "PARAMCD", "AVISITN", "APERIOD")
+  )
+})
+
+## Test 33: ADSL, TTE and unrecognized datasets ----
+test_that("infer_admiral_keys Test 33: ADSL, TTE and unrecognized datasets", {
+  adsl <- tibble::tribble(
+    ~STUDYID, ~USUBJID, ~TRT01P,
+    "P",      "1",      "Placebo",
+    "P",      "2",      "Drug"
+  )
+  expect_identical(infer_admiral_keys(adsl), "USUBJID")
+
+  adtte <- tibble::tribble(
+    ~USUBJID, ~PARAMCD, ~AVAL, ~CNSR, ~STARTDT,
+    "1",      "OS",       100,     0, as.Date("2020-01-01"),
+    "1",      "PFS",       60,     1, as.Date("2020-01-01")
+  )
+  expect_identical(infer_admiral_keys(adtte), c("USUBJID", "PARAMCD"))
+
+  # nothing is inferred for a dataset whose type could not be determined
+  other <- tibble::tribble(
+    ~FOO, ~BAR,
+    1,    2,
+    1,    3
+  )
+  expect_identical(infer_admiral_keys(other), character(0))
+})
+
+## Test 34: OCCDS is keyed by its sequence variable ----
+test_that("infer_admiral_keys Test 34: OCCDS is keyed by its sequence variable", {
+  occds <- function(...) {
+    tibble::tibble(
+      STUDYID = "P", USUBJID = c("1", "1"),
+      AEDECOD = c("HEADACHE", "NAUSEA"), ...
+    )
+  }
+
+  # `ASEQ` is preferred when present and populated
+  expect_identical(
+    infer_admiral_keys(occds(ASEQ = 1:2, AESEQ = 3:4)),
+    c("USUBJID", "ASEQ")
+  )
+
+  # occurrence datasets most often carry only the domain sequence
+  expect_identical(infer_admiral_keys(occds(AESEQ = 1:2)), c("USUBJID", "AESEQ"))
+  expect_identical(infer_admiral_keys(occds(CMSEQ = 1:2)), c("USUBJID", "CMSEQ"))
+})
+
+## Test 35: an unusable OCCDS sequence is reported rather than guessed ----
+test_that("infer_admiral_keys Test 35: an unusable OCCDS sequence is reported rather than guessed", { # nolint
+  occds <- function(...) {
+    tibble::tibble(
+      STUDYID = "P", USUBJID = c("1", "1"),
+      AEDECOD = c("HEADACHE", "NAUSEA"), ...
+    )
+  }
+
+  # `SRCSEQ` is provenance added by a merge, not a record key: three letters
+  # before SEQ, so it must not be mistaken for a domain sequence
+  expect_warning(
+    result <- infer_admiral_keys(occds(SRCSEQ = 1:2)),
+    regexp = "domain sequence"
+  )
+  expect_identical(result, character(0))
+
+  # several domain sequences make the record key ambiguous rather than obvious
+  expect_warning(
+    ambiguous <- infer_admiral_keys(occds(AESEQ = 1:2, CESEQ = 1:2)),
+    regexp = "ambiguous"
+  )
+  expect_identical(ambiguous, character(0))
+
+  # an all-NA sequence has not been derived yet, so `ASEQ` gives way to the
+  # populated domain sequence rather than keying the dataset on nothing
+  expect_identical(
+    infer_admiral_keys(occds(ASEQ = NA_integer_, AESEQ = 1:2)),
+    c("USUBJID", "AESEQ")
+  )
+  expect_warning(
+    empty_seq <- infer_admiral_keys(occds(ASEQ = NA_integer_)),
+    regexp = "populated"
+  )
+  expect_identical(empty_seq, character(0))
+})
+
+## Test 36: nothing is inferred for a dataset with no records ----
+test_that("infer_admiral_keys Test 36: nothing is inferred for a dataset with no records", {
+  # every candidate key is trivially unique over no records, so inference would
+  # report a structure the dataset has not demonstrated
+  empty_bds <- tibble::tibble(
+    USUBJID = character(0), PARAMCD = character(0), AVAL = numeric(0)
+  )
+
+  expect_identical(infer_admiral_keys(empty_bds), character(0))
+})
+
+## Test 37: a grouped dataset is keyed on its records overall ----
+test_that("infer_admiral_keys Test 37: a grouped dataset is keyed on its records overall", {
+  input <- tibble::tribble(
+    ~USUBJID, ~PARAMCD, ~AVISITN, ~AVAL,
+    "1",      "SYSBP",         2,   121,
+    "1",      "SYSBP",         4,   130
+  )
+
+  # without `ungroup()` the uniqueness test would run within group, so the key
+  # would stop at USUBJID + PARAMCD and the visit structure would be lost
+  expect_identical(
+    infer_admiral_keys(group_by(input, AVISITN)),
+    c("USUBJID", "PARAMCD", "AVISITN")
+  )
+})
+
+## Test 38: inference holds up against the {pharmaverseadam} datasets ----
+test_that("infer_admiral_keys Test 38: inference holds up against the {pharmaverseadam} datasets", { # nolint
+  skip_on_cran()
+  skip_if_not_installed("pharmaverseadam")
+
+  ds_names <- utils::data(package = "pharmaverseadam")$results[, "Item"]
+  load_ds <- function(nm) {
+    env <- new.env()
+    suppressWarnings(utils::data(list = nm, package = "pharmaverseadam", envir = env))
+    env[[nm]]
+  }
+
+  keys <- lapply(setNames(ds_names, ds_names), function(nm) {
+    infer_admiral_keys(load_ds(nm))
+  })
+
+  # every one of these is a real dataset written by somebody who had never heard
+  # of this feature, so a shape the candidate list does not cover shows up here
+  # as a dataset whose record structure cannot be checked at all
+  expect_identical(names(keys)[lengths(keys) == 0], character(0))
+
+  # the shapes the candidate list was extended to cover, each of which was once
+  # inferred as USUBJID + PARAMCD and reported thousands of false duplicates
+  expect_identical(keys$adex, c("USUBJID", "PARAMCD", "ASTDTM")) # dosing interval
+  expect_identical(keys$adppk, c("USUBJID", "PARAMCD", "NFRLT", "AFRLT")) # relative time
+  expect_identical(
+    keys$adpc, # derived records alongside their source
+    c("USUBJID", "PARAMCD", "AVISITN", "ATPTN", "DTYPE")
+  )
+  # occurrence datasets carrying only the SDTM domain sequence
+  expect_identical(keys$adae, c("USUBJID", "AESEQ"))
+  expect_identical(keys$adcm, c("USUBJID", "CMSEQ"))
+  expect_identical(keys$admh, c("USUBJID", "MHSEQ"))
+
+  # the remaining duplicates were each checked by hand and are true positives in
+  # the test data, not inference failures -- see `keys_design_notes.md`. Pinned
+  # so that an inference regression cannot hide among them.
+  dups <- vapply(ds_names, function(nm) {
+    ds <- load_ds(nm)
+    nrow(ds) - nrow(distinct(ds, !!!syms(keys[[nm]])))
+  }, integer(1))
+  expect_identical(
+    dups[dups > 0],
+    c(adeg = 63L, adpp = 1008L, advs = 39L)
+  )
+})

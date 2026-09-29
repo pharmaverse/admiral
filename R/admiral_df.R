@@ -306,3 +306,212 @@ is_adsl_structure <- function(dataset) {
   length(subject_keys) > 0 &&
     nrow(dataset) == nrow(distinct(ungroup(dataset), !!!syms(subject_keys)))
 }
+
+#' Find the Minimal Set of Variables that Uniquely Identifies Rows
+#'
+#' Starting from `must_have`, adds variables from `optional` one at a time (in
+#' the given order) until the combination is a unique key of `dataset`, then
+#' drops any added variable which is not needed for uniqueness (lowest priority
+#' first) and returns what is left. Without that second pass the result would
+#' depend on where a genuinely needed variable sits in `optional`: everything
+#' ahead of it would be carried along whether it discriminates or not, and the
+#' reported record structure would overstate the key. If uniqueness is never
+#' reached, the full set (`must_have` plus all of `optional`) is returned -- the
+#' caller can detect this because the returned key still yields duplicates.
+#'
+#' This is used by [infer_admiral_keys()] to discover the record structure from
+#' the data rather than assuming a fixed key. Only *semantic* key variables
+#' should be passed as `optional`; surrogate/sequence keys (e.g. `ASEQ`) must be
+#' excluded, otherwise uniqueness is reached trivially and genuine duplicates are
+#' masked.
+#'
+#' @param dataset A data frame
+#' @param must_have Character vector of variables always kept in the key
+#' @param optional Character vector of candidate variables to add, in priority
+#'   order
+#'
+#' @return A character vector of key variable names.
+#'
+#' @keywords internal
+#' @family internal
+minimal_unique_key <- function(dataset, must_have, optional) {
+  # `ungroup()` because `distinct()` on a grouped dataset silently adds the
+  # grouping variables, which would make any key look unique within group
+  dataset <- ungroup(dataset)
+  is_unique <- function(key) {
+    length(key) > 0 && nrow(dataset) == nrow(distinct(dataset, !!!syms(key)))
+  }
+  key <- must_have
+  if (is_unique(key)) {
+    return(key)
+  }
+  for (v in setdiff(optional, key)) {
+    key <- c(key, v)
+    if (is_unique(key)) {
+      # the walk stops at the first unique *prefix* of `optional`, so the key
+      # can carry variables passed over on the way which contribute nothing to
+      # uniqueness. Drop those, lowest priority first, so the reported record
+      # structure is the one the dataset actually has rather than an artefact
+      # of the candidate ordering.
+      for (redundant in rev(setdiff(key, must_have))) {
+        if (is_unique(setdiff(key, redundant))) {
+          key <- setdiff(key, redundant)
+        }
+      }
+      return(key)
+    }
+  }
+  key
+}
+
+#' Infer the Record Structure of a Dataset from its Type and Data
+#'
+#' Works out which variables a dataset appears to have one record per. This is
+#' the fallback for when no keys have been declared with [set_admiral_keys()],
+#' and is the least trustworthy of the ways the record structure can be
+#' established -- it reports the structure the data happens to have, which is not
+#' necessarily the structure the dataset was meant to have.
+#'
+#' It starts from the semantic core of the detected ADaM dataset type (e.g.
+#' `USUBJID` + `PARAMCD` for `BDS`) and adds standard ADaM key variables
+#' (analysis visit, timepoint, relative time, date, interval start/end, period,
+#' derivation type) only as far as needed to make the key unique, then drops
+#' those which turn out not to discriminate (see [minimal_unique_key()]). The
+#' candidate list has to span several dataset shapes: findings data is keyed by
+#' visit and timepoint, exposure by interval start, population-PK by relative
+#' time and not by visit at all, and any of them may carry derived records
+#' separated only by `DTYPE`.
+#'
+#' @param dataset A data frame
+#' @param type The dataset type, see [get_admiral_df_type()]
+#'
+#' @details
+#'   For `BDS`/`TTE`, surrogate/sequence keys such as `ASEQ` are deliberately
+#'   *not* used, so that unintended duplicate records remain detectable. For
+#'   `OCCDS`, however, the sequence number *is* the intended record key (there is
+#'   no analysis-value structure to fall back on: two adverse events for the same
+#'   subject need not differ in any analysis variable), so it is required rather
+#'   than excluded. `ASEQ` is preferred, falling back to the SDTM domain sequence
+#'   (`AESEQ`, `CMSEQ`, `MHSEQ`, ...) which is what occurrence datasets most
+#'   often carry; the two-letter domain prefix is what distinguishes those from
+#'   provenance variables such as `SRCSEQ`. A sequence variable which is present
+#'   but entirely `NA` has not been derived yet and is passed over, as an empty
+#'   sequence would otherwise make the key unique without meaning anything. If no
+#'   sequence is left -- or several domain sequences are, making the record key
+#'   ambiguous -- the record structure cannot be checked and a warning is issued.
+#'
+#'   Note that a well-formed sequence makes the key unique by construction, so
+#'   the `OCCDS` structure check is not looking for semantic duplicates but for
+#'   whole records duplicated by a fanned-out merge.
+#'
+#'   A dataset with no records cannot show what it has one record per -- every
+#'   candidate key is trivially unique -- so nothing is inferred for it.
+#'
+#' @return A character vector of inferred key variable names, or a zero-length
+#'   vector when no plausible record structure can be determined.
+#'
+#' @keywords internal
+#' @family internal
+infer_admiral_keys <- function(dataset, type = get_admiral_df_type(dataset)) {
+  cols <- colnames(dataset)
+
+  # with no records every candidate key is trivially unique, so inference would
+  # report a structure the dataset has not demonstrated
+  if (nrow(dataset) == 0) {
+    return(character(0))
+  }
+
+  # `USUBJID` identifies a subject on its own, and is preferred over the full
+  # set of subject keys because the others (e.g. `STUDYID`) may be `NA` on
+  # records added by a derivation which only populates its `by_vars`
+  subject_keys <- if ("USUBJID" %in% cols) {
+    "USUBJID"
+  } else {
+    intersect(vars2chr(get_admiral_option("subject_keys")), cols)
+  }
+
+  # OCCDS has no analysis-value structure to fall back on; the sequence number
+  # is its genuine record key, so (unlike BDS/TTE) it is required rather than
+  # excluded as a surrogate
+  if (type == "OCCDS") {
+    seq_var <- occds_seq_var(dataset, cols)
+    # without the sequence there is no record key at all: the subject keys alone
+    # would claim one record per subject, which an occurrence dataset never has
+    if (length(seq_var) == 0) {
+      return(character(0))
+    }
+    return(intersect(c(subject_keys, seq_var), cols))
+  }
+
+  core <- switch(type,
+    ADSL = subject_keys,
+    BDS = c(subject_keys, "PARAMCD"),
+    TTE = c(subject_keys, "PARAMCD"),
+    return(character(0))
+  )
+  core <- intersect(core, cols)
+  if (length(core) == 0) {
+    return(character(0))
+  }
+
+  # standard "within-core" key variables, in ADaM precedence order: visit,
+  # timepoint, relative time (PK), analysis date, interval start/end, period,
+  # then `DTYPE` last -- a derived record (LOCF, AVERAGE, ...) shares every
+  # analysis variable with the record it was derived from, so `DTYPE` is what
+  # separates them, but only after the semantic variables have had their turn.
+  # NOTE: no surrogate/sequence keys (ASEQ, SRCSEQ, ...) -- see minimal_unique_key()
+  extra <- c(
+    "AVISITN", "AVISIT", "ATPTN", "ATPT",
+    "NFRLT", "AFRLT",
+    "ADTM", "ADT", "ASTDTM", "ASTDT", "AENDT",
+    "APERIOD", "APERIODC", "ASPID", "DTYPE"
+  )
+  minimal_unique_key(
+    dataset,
+    must_have = core,
+    optional = intersect(extra, cols)
+  )
+}
+
+#' Find the Record Key of an Occurrence Dataset
+#'
+#' @param dataset A data frame
+#' @param cols The column names of `dataset`
+#'
+#' @return The name of the sequence variable which keys `dataset`, or a
+#'   zero-length vector (with a warning) when none can be determined.
+#'
+#' @seealso [infer_admiral_keys()], which documents the choice this makes
+#'
+#' @keywords internal
+#' @family internal
+occds_seq_var <- function(dataset, cols) {
+  # a sequence which is present but entirely `NA` has not been derived yet;
+  # treating it as the record key would make the key unique without meaning
+  # anything, which is the opposite of what the structure check is for
+  is_populated <- function(v) any(!is.na(dataset[[v]]))
+
+  # `ASEQ` is the ADaM analysis sequence, but many occurrence datasets carry
+  # only the SDTM domain sequence (`AESEQ`, `CMSEQ`, `MHSEQ`, ...). The
+  # two-letter domain prefix is what distinguishes those from provenance
+  # variables such as `SRCSEQ`, which is not a record key.
+  if ("ASEQ" %in% cols && is_populated("ASEQ")) {
+    return("ASEQ")
+  }
+  domain_seq <- str_subset(cols, "^[A-Z]{2}SEQ$")
+  domain_seq <- domain_seq[vapply(domain_seq, is_populated, logical(1))]
+  if (length(domain_seq) == 1) {
+    return(domain_seq)
+  }
+
+  cli_warn(c(
+    "Cannot determine the record structure of an {.val OCCDS} dataset without
+     {.var ASEQ} or a single populated domain sequence variable.",
+    i = if (length(domain_seq) > 1) {
+      "{.var {domain_seq}} are all candidates, so the record key is ambiguous."
+    },
+    i = "Declare the intended keys with {.fun set_admiral_keys} to check that
+         the dataset has one record per key."
+  ))
+  character(0)
+}
