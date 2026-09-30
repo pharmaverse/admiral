@@ -22,7 +22,7 @@ Before reading this article, you should already be familiar with the purpose of 
 and the standards recommendations. For implementation guidelines, see the following PHUSE documents:
 
 - **White Paper** - [Implementation of ICH E9(R1) Estimands Framework using Data Standards](https://phuse.s3.eu-central-1.amazonaws.com/Deliverables/Optimizing+the+Use+of+Data+Standards/WP-092.pdf)
-- **Worked Example** - [Implementation of ICH E9(R1) Estimands Framework using Data Standards - Example Document](https://advance.hub.phuse.global/wiki/spaces/WEL/pages/26804860/Optimizing+the+Use+of+Data+Standards).
+- **Worked Example** - [Implementation of ICH E9(R1) Estimands Framework using Data Standards - Example Document](https://phuse.s3.eu-central-1.amazonaws.com/Deliverables/Optimizing+the+Use+of+Data+Standards/WP-092-APP.pdf).
 
 # Introduction
 
