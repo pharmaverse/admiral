@@ -57,7 +57,7 @@ argument will thus be deprecated. (#3188)
 
 ## Documentation
 
-- Corrected the ADLB template label for `PARAMCD = "CK"` from `"Creatinine Kinase"` to `"Creatine Kinase"` (#3170).
+- Corrected the `ADLB` template label for `PARAMCD = "CK"` from `"Creatinine Kinase"` to `"Creatine Kinase"` (#3170).
 
 - Updated the "Lab Grading" vignette to replace the deprecated `abnormal_indicator` argument reference
   with the new `high_indicator` argument in `derive_var_atoxgr_dir()`.
@@ -67,6 +67,8 @@ together. Additionally, the package manifesto was moved to the `{admiraldev}` we
 
 - Referenced the [{admiral} agent skills](https://github.com/RConsortium/pharma-skills/tree/main/admiral)
   in the README and the "Get Started" navigation bar. (#3159)
+  
+- Fixed broken links to PHUSE resources in the "Estimands" User Guide. (#3196)
 
 ## Various
 
