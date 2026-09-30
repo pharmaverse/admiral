@@ -30,6 +30,8 @@
 #'   See description of the `values_yn` argument for details on how the
 #'   `CRITyFL` variable is populated.
 #'
+#'   `r roxygen_float_comparison()`
+#'
 #' @permitted [condition]
 #'
 #' @param description The description of the criterion

@@ -177,6 +177,8 @@ condition.
 The condition can include summary functions like \code{all()} or \code{any()}. The
 additional dataset is grouped by the by variables (\code{by_vars}).
 
+Comparing derived numeric variables to fixed values, e.g., \code{PCHG <= -90}, may give unexpected results due to floating point representation. For details and solutions see the "Floating Point Comparisons" section in \code{vignette("concepts_conventions")}.
+
 \describe{
 \item{Permitted values}{an unquoted condition, e.g., \code{AVISIT == "BASELINE"}}
 \item{Default value}{\code{NULL}}
@@ -195,6 +197,8 @@ functions which should not apply to all observations but only from a
 certain observation before the current observation up to the current
 observation. For an example, see the "Examples" section below.
 
+Comparing derived numeric variables to fixed values, e.g., \code{PCHG <= -90}, may give unexpected results due to floating point representation. For details and solutions see the "Floating Point Comparisons" section in \code{vignette("concepts_conventions")}.
+
 \describe{
 \item{Permitted values}{an unquoted condition, e.g., \code{AVISIT == "BASELINE"}}
 \item{Default value}{\code{NULL}}
@@ -211,6 +215,8 @@ This argument should be specified if \code{filter_join} contains summary
 functions which should not apply to all observations but only up to the
 confirmation assessment. For an example, see the "Examples" section below.
 
+Comparing derived numeric variables to fixed values, e.g., \code{PCHG <= -90}, may give unexpected results due to floating point representation. For details and solutions see the "Floating Point Comparisons" section in \code{vignette("concepts_conventions")}.
+
 \describe{
 \item{Permitted values}{an unquoted condition, e.g., \code{AVISIT == "BASELINE"}}
 \item{Default value}{\code{NULL}}
@@ -226,6 +232,8 @@ condition.
 
 The condition can include summary functions like \code{all()} or \code{any()}. The
 joined dataset is grouped by the original observations.
+
+Comparing derived numeric variables to fixed values, e.g., \code{PCHG <= -90}, may give unexpected results due to floating point representation. For details and solutions see the "Floating Point Comparisons" section in \code{vignette("concepts_conventions")}.
 
 \describe{
 \item{Permitted values}{an unquoted condition, e.g., \code{AVISIT == "BASELINE"}}

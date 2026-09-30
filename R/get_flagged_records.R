@@ -19,11 +19,15 @@
 #'   all rows where it evaluates as `TRUE` the new variable
 #'   is set to `1` in the new column. Otherwise, it is set to `0`.
 #'
+#'   `r roxygen_float_comparison()`
+#'
 #' @param filter Filter for additional data
 #'
 #'   Only observations fulfilling the specified condition are taken into account
 #'   for flagging. If the argument is not specified, all observations are
 #'   considered.
+#'
+#'   `r roxygen_float_comparison()`
 #'
 #' @permitted a condition
 #'

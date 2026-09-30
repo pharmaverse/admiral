@@ -147,6 +147,8 @@ derive_var_extreme_dt <- function(dataset,
 #'
 #' @param filter An unquoted condition for filtering `dataset`.
 #'
+#'   `r roxygen_float_comparison()`
+#'
 #' @param date A variable or an expression providing a date. A date or a
 #'   datetime can be specified. An unquoted symbol or expression is expected.
 #'

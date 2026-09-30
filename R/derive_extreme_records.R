@@ -49,6 +49,8 @@
 #'   Only observations in `dataset_add` fulfilling the specified condition are
 #'   considered.
 #'
+#'   `r roxygen_float_comparison()`
+#'
 #' @permitted [condition]
 #'
 #' @param mode Selection mode (first or last)
