@@ -92,7 +92,7 @@
 
 ### Documentation
 
-- Corrected the ADLB template label for `PARAMCD = "CK"` from
+- Corrected the `ADLB` template label for `PARAMCD = "CK"` from
   `"Creatinine Kinase"` to `"Creatine Kinase"`
   ([\#3170](https://github.com/pharmaverse/admiral/issues/3170)).
 
@@ -111,6 +111,9 @@
   skills](https://github.com/RConsortium/pharma-skills/tree/main/admiral)
   in the README and the “Get Started” navigation bar.
   ([\#3159](https://github.com/pharmaverse/admiral/issues/3159))
+
+- Fixed broken links to PHUSE resources in the “Estimands” User Guide.
+  ([\#3196](https://github.com/pharmaverse/admiral/issues/3196))
 
 ### Various
 
