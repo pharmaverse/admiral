@@ -14,7 +14,9 @@ derive_var_nfrlt(
   first_dose_day = 1,
   treatment_duration = 0,
   range_method = "midpoint",
-  set_values_to_na = NULL
+  set_values_to_na = NULL,
+  special_values = NULL,
+  keep_unit_for_special = TRUE
 )
 }
 \arguments{
@@ -123,6 +125,34 @@ also be set to \code{NA} for these records.
 \describe{
 \item{Permitted values}{Condition (optional)}
 \item{Default value}{\code{NULL}}
+}}
+
+\item{special_values}{Special values to assign
+
+A list of \code{nfrlt_special()} objects. For records where the \code{condition} of
+an object is \code{TRUE}, the new variable is set to the \code{value} of the object
+instead of the derived nominal time, e.g., \code{99998} for unscheduled visits.
+No visit day, timepoint, treatment duration, or unit conversion is applied
+to these values. If a record fulfills the conditions of more than one
+object, the first object in the list is used. Records which fulfill the
+\code{set_values_to_na} condition are set to \code{NA} even if they fulfill a
+condition of \code{special_values}.
+
+\describe{
+\item{Permitted values}{a list of \code{nfrlt_special()} objects}
+\item{Default value}{\code{NULL}}
+}}
+
+\item{keep_unit_for_special}{Populate the unit variable for special values?
+
+If set to \code{TRUE}, the unit variable (\code{new_var_unit}) is set to \code{out_unit}
+for records which got a special value (see \code{special_values}). If set to
+\code{FALSE}, it is set to \code{NA} for these records. The argument is ignored if
+\code{new_var_unit} or \code{special_values} is not specified.
+
+\describe{
+\item{Permitted values}{\code{TRUE}, \code{FALSE}}
+\item{Default value}{\code{TRUE}}
 }}
 }
 \value{
@@ -260,19 +290,25 @@ is converted to the specified unit
 \strong{Setting Special Values:}
 
 If you need to set NFRLT to a specific value (e.g., 99999) for certain
-visits instead of \code{NA}, use \code{set_values_to_na} first to set them to \code{NA},
-then use a subsequent \code{mutate()} call to replace those \code{NA} values:
+visits instead of the derived nominal time, use \code{special_values}:
 
 \if{html}{\out{<div class="sourceCode r">}}\preformatted{dataset \%>\%
   derive_var_nfrlt(
     ...,
-    set_values_to_na = VISIT == "UNSCHEDULED"
-  ) \%>\%
-  mutate(NFRLT = if_else(is.na(NFRLT) & VISIT == "UNSCHEDULED", 99999, NFRLT))
+    special_values = list(
+      nfrlt_special(condition = VISIT == "UNSCHEDULED", value = 99998),
+      nfrlt_special(condition = VISIT == "END OF STUDY", value = 99999)
+    )
+  )
 }\if{html}{\out{</div>}}
+
+The special values are used as provided, i.e., they are not converted to
+\code{out_unit}. Whether the unit variable is populated for these records is
+controlled by \code{keep_unit_for_special}.
 }
 \seealso{
-\code{\link[=convert_xxtpt_to_hours]{convert_xxtpt_to_hours()}}, \code{\link[=derive_vars_duration]{derive_vars_duration()}}
+\code{\link[=convert_xxtpt_to_hours]{convert_xxtpt_to_hours()}}, \code{\link[=derive_vars_duration]{derive_vars_duration()}},
+\code{\link[=nfrlt_special]{nfrlt_special()}}
 
 BDS-Findings Functions that returns variable appended to dataset:
 \code{\link[=derive_var_analysis_ratio]{derive_var_analysis_ratio()}},
@@ -729,35 +765,59 @@ derive_var_nfrlt(
 #> 3 001          NA STUDY DRUG EARLY DISCONTINUATION Pre-dose    NA <NA> }\if{html}{\out{</div>}}}
 \subsection{Setting special values instead of NA}{
 
-Using mutate to set NFRLT to 99999 for unscheduled visits
+Using \code{special_values} to set NFRLT to 99998 for unscheduled visits
+and to 99999 for end of study visits. The timepoint is not considered for
+these records.
 
-\if{html}{\out{<div class="sourceCode r">}}\preformatted{adpc_unsched_value <- tribble(
-  ~USUBJID, ~VISITDY, ~VISIT,        ~PCTPT,
-  "001",    1,        "VISIT 1",     "Pre-dose",
-  "001",    1,        "VISIT 1",     "2H Post-dose",
-  "001",    NA_real_, "UNSCHEDULED", "Pre-dose",
-  "001",    NA_real_, "UNSCHEDULED", "2H Post-dose"
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{adpc_special <- tribble(
+  ~USUBJID, ~VISITDY, ~VISIT,          ~PCTPT,
+  "001",    1,        "CYCLE 1 DAY 1", "Pre-dose",
+  "001",    1,        "CYCLE 1 DAY 1", "2H Post-dose",
+  "001",    999,      "UNSCHEDULED",   "Post-dose",
+  "001",    998,      "END OF STUDY",  "Post-dose"
 )
 
-adpc_unsched_value \%>\%
-  derive_var_nfrlt(
-    new_var = NFRLT,
-    new_var_unit = FRLTU,
-    tpt_var = PCTPT,
-    visit_day = VISITDY,
-    set_values_to_na = VISIT == "UNSCHEDULED"
-  ) \%>\%
-  mutate(
-    NFRLT = if_else(is.na(NFRLT) & VISIT == "UNSCHEDULED", 99999, NFRLT),
-    FRLTU = if_else(is.na(FRLTU) & VISIT == "UNSCHEDULED", NA_character_, FRLTU)
+derive_var_nfrlt(
+  adpc_special,
+  new_var = NFRLT,
+  new_var_unit = FRLTU,
+  tpt_var = PCTPT,
+  visit_day = VISITDY,
+  special_values = list(
+    nfrlt_special(condition = VISIT == "UNSCHEDULED", value = 99998),
+    nfrlt_special(condition = VISIT == "END OF STUDY", value = 99999)
   )
+)
 #> # A tibble: 4 × 6
-#>   USUBJID VISITDY VISIT       PCTPT        NFRLT FRLTU
-#>   <chr>     <dbl> <chr>       <chr>        <dbl> <chr>
-#> 1 001           1 VISIT 1     Pre-dose         0 HOURS
-#> 2 001           1 VISIT 1     2H Post-dose     2 HOURS
-#> 3 001          NA UNSCHEDULED Pre-dose     99999 <NA> 
-#> 4 001          NA UNSCHEDULED 2H Post-dose 99999 <NA> }\if{html}{\out{</div>}}}
+#>   USUBJID VISITDY VISIT         PCTPT        NFRLT FRLTU
+#>   <chr>     <dbl> <chr>         <chr>        <dbl> <chr>
+#> 1 001           1 CYCLE 1 DAY 1 Pre-dose         0 HOURS
+#> 2 001           1 CYCLE 1 DAY 1 2H Post-dose     2 HOURS
+#> 3 001         999 UNSCHEDULED   Post-dose    99998 HOURS
+#> 4 001         998 END OF STUDY  Post-dose    99999 HOURS}\if{html}{\out{</div>}}}
+\subsection{Special values without unit}{
+
+Setting the unit variable to \code{NA} for special values
+
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{derive_var_nfrlt(
+  adpc_special,
+  new_var = NFRLT,
+  new_var_unit = FRLTU,
+  tpt_var = PCTPT,
+  visit_day = VISITDY,
+  special_values = list(
+    nfrlt_special(condition = VISIT == "UNSCHEDULED", value = 99998),
+    nfrlt_special(condition = VISIT == "END OF STUDY", value = 99999)
+  ),
+  keep_unit_for_special = FALSE
+)
+#> # A tibble: 4 × 6
+#>   USUBJID VISITDY VISIT         PCTPT        NFRLT FRLTU
+#>   <chr>     <dbl> <chr>         <chr>        <dbl> <chr>
+#> 1 001           1 CYCLE 1 DAY 1 Pre-dose         0 HOURS
+#> 2 001           1 CYCLE 1 DAY 1 2H Post-dose     2 HOURS
+#> 3 001         999 UNSCHEDULED   Post-dose    99998 <NA> 
+#> 4 001         998 END OF STUDY  Post-dose    99999 <NA> }\if{html}{\out{</div>}}}
 \subsection{Custom range method}{
 
 Using end of range instead of midpoint

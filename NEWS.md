@@ -26,6 +26,11 @@ which allows users to control whether a message, warning, error, or no message a
 is issued when some records are not mapped using the lookup dataset. The `print_not_mapped`
 argument will thus be deprecated. (#3188)
 
+- `derive_var_nfrlt()` gained the `special_values` and `keep_unit_for_special`
+arguments. `special_values` expects a list of `nfrlt_special()` objects (new
+function) and allows assigning fixed values, e.g., `99998` for unscheduled
+visits, instead of the derived nominal relative time. (#3168)
+
 ## Breaking Changes
 
 - The following functions are entering the next phase of the [deprecation process](https://pharmaverse.github.io/admiraldev/articles/programming_strategy.html#deprecation):
