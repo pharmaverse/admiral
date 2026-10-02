@@ -788,13 +788,13 @@ derive_var_nfrlt(
     nfrlt_special(condition = VISIT == "END OF STUDY", value = 99999)
   )
 )
-#> # A tibble: 4 × 7
-#>   USUBJID VISITDY VISIT         PCTPT        NFRLT FRLTU tmp_special_fl_1
-#>   <chr>     <dbl> <chr>         <chr>        <dbl> <chr> <lgl>           
-#> 1 001           1 CYCLE 1 DAY 1 Pre-dose         0 HOURS FALSE           
-#> 2 001           1 CYCLE 1 DAY 1 2H Post-dose     2 HOURS FALSE           
-#> 3 001         999 UNSCHEDULED   Post-dose    99998 HOURS TRUE            
-#> 4 001         998 END OF STUDY  Post-dose    99999 HOURS TRUE            }\if{html}{\out{</div>}}}
+#> # A tibble: 4 × 6
+#>   USUBJID VISITDY VISIT         PCTPT        NFRLT FRLTU
+#>   <chr>     <dbl> <chr>         <chr>        <dbl> <chr>
+#> 1 001           1 CYCLE 1 DAY 1 Pre-dose         0 HOURS
+#> 2 001           1 CYCLE 1 DAY 1 2H Post-dose     2 HOURS
+#> 3 001         999 UNSCHEDULED   Post-dose    99998 HOURS
+#> 4 001         998 END OF STUDY  Post-dose    99999 HOURS}\if{html}{\out{</div>}}}
 \subsection{Special values without unit}{
 
 Setting the unit variable to \code{NA} for special values
@@ -811,13 +811,13 @@ Setting the unit variable to \code{NA} for special values
   ),
   keep_unit_for_special = FALSE
 )
-#> # A tibble: 4 × 7
-#>   USUBJID VISITDY VISIT         PCTPT        NFRLT FRLTU tmp_special_fl_1
-#>   <chr>     <dbl> <chr>         <chr>        <dbl> <chr> <lgl>           
-#> 1 001           1 CYCLE 1 DAY 1 Pre-dose         0 HOURS FALSE           
-#> 2 001           1 CYCLE 1 DAY 1 2H Post-dose     2 HOURS FALSE           
-#> 3 001         999 UNSCHEDULED   Post-dose    99998 <NA>  TRUE            
-#> 4 001         998 END OF STUDY  Post-dose    99999 <NA>  TRUE            }\if{html}{\out{</div>}}}
+#> # A tibble: 4 × 6
+#>   USUBJID VISITDY VISIT         PCTPT        NFRLT FRLTU
+#>   <chr>     <dbl> <chr>         <chr>        <dbl> <chr>
+#> 1 001           1 CYCLE 1 DAY 1 Pre-dose         0 HOURS
+#> 2 001           1 CYCLE 1 DAY 1 2H Post-dose     2 HOURS
+#> 3 001         999 UNSCHEDULED   Post-dose    99998 <NA> 
+#> 4 001         998 END OF STUDY  Post-dose    99999 <NA> }\if{html}{\out{</div>}}}
 \subsection{Custom range method}{
 
 Using end of range instead of midpoint
