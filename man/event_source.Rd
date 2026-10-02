@@ -91,6 +91,7 @@ Source Objects:
 \code{\link[=event]{event()}},
 \code{\link[=event_joined]{event_joined()}},
 \code{\link[=flag_event]{flag_event()}},
+\code{\link[=nfrlt_special]{nfrlt_special()}},
 \code{\link[=query]{query()}},
 \code{\link[=tte_source]{tte_source()}}
 }
