@@ -18,6 +18,20 @@
   },
   {
     "SOC": "Blood and lymphatic system disorders",
+    "TERM": "Eosinophilia",
+    "GRADE_1": ">ULN and >Baseline",
+    "GRADE_2": "-",
+    "GRADE_3": "Steroids initiated",
+    "GRADE_4": "-",
+    "GRADE_5": "-",
+    "Definition": "A disorder characterized by laboratory test results that indicate an increased number of eosinophils in the blood.",
+    "GRADE_NA_CODE": "is.na(AVAL) | is.na(ANRHI) | is.na(BASE) ~ NA_character_",
+    "GRADE_1_CODE": "signif(AVAL, signif_dig) > signif(ANRHI, signif_dig) & signif(AVAL, signif_dig) > signif(BASE, signif_dig) ~ \"1\"",
+    "VAR_CHECK": "AVAL, ANRHI, BASE",
+    "DIRECTION": "H"
+  },
+  {
+    "SOC": "Blood and lymphatic system disorders",
     "TERM": "Leukocytosis",
     "GRADE_1": "-",
     "GRADE_2": "-",

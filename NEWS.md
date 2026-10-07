@@ -26,6 +26,10 @@ which allows users to control whether a message, warning, error, or no message a
 is issued when some records are not mapped using the lookup dataset. The `print_not_mapped`
 argument will thus be deprecated. (#3188)
 
+- The NCICTCAEv5 + NCICTCAEv6 grading criteria (`atoxgr_criteria_ctcv5`, 
+`atoxgr_criteria_ctcv5_uscv`, `atoxgr_criteria_ctcv6`, `atoxgr_criteria_ctcv6_uscv`)
+were updated to add the term `"Eosinophilia"` (#3191).
+
 ## Breaking Changes
 
 - The following functions are entering the next phase of the [deprecation process](https://pharmaverse.github.io/admiraldev/articles/programming_strategy.html#deprecation):
