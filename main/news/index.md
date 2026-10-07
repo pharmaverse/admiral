@@ -43,6 +43,12 @@
   dataset. The `print_not_mapped` argument will thus be deprecated.
   ([\#3188](https://github.com/pharmaverse/admiral/issues/3188))
 
+- The NCICTCAEv5 + NCICTCAEv6 grading criteria (`atoxgr_criteria_ctcv5`,
+  `atoxgr_criteria_ctcv5_uscv`, `atoxgr_criteria_ctcv6`,
+  `atoxgr_criteria_ctcv6_uscv`) were updated to add the term
+  `"Eosinophilia"`
+  ([\#3191](https://github.com/pharmaverse/admiral/issues/3191)).
+
 ### Breaking Changes
 
 - The following functions are entering the next phase of the

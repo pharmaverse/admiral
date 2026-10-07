@@ -555,13 +555,15 @@ Note: These are the same terms identified for NCI-CTCAEv4, except
 “Hypophosphatemia” and “Hyperglycemia” which are not gradable by
 quantitative lab values in NCICTCAEv5 grading criteria.
 
-From the SOC = “Blood and lymphatic system disorders” there are 2 CTCAE
+From the SOC = “Blood and lymphatic system disorders” there are 3 CTCAE
 v5.0 Terms:
 
 - Anemia
+- Eosinophilia
 - Leukocytosis
 
-Note: These are the same terms identified for NCI-CTCAEv4.
+Note: These are the same terms identified for NCI-CTCAEv4, except
+Eosinophilia that is new.
 
 ### Updates made to TERM
 
@@ -720,10 +722,11 @@ v6.0 Terms:
 Note: These are the same terms identified for NCI-CTCAEv5, except
 “Hyperglycemia” which has been added to NCICTCAEv6 grading criteria.
 
-From the SOC = “Blood and lymphatic system disorders” there are 3 CTCAE
+From the SOC = “Blood and lymphatic system disorders” there are 4 CTCAE
 v6.0 Terms:
 
 - Anemia
+- Eosinophilia
 - Leukocytosis
 - Thrombocytopenia
 
