@@ -105,6 +105,8 @@
 #'   certain observation before the current observation up to the current
 #'   observation. For an example see the last example below.
 #'
+#'   `r roxygen_float_comparison()`
+#'
 #' @permitted [condition]
 #'
 #' @param first_cond_upper Condition for selecting range of data (after)
@@ -118,6 +120,8 @@
 #'   functions which should not apply to all observations but only up to the
 #'   confirmation assessment. For an example see the last example below.
 #'
+#'   `r roxygen_float_comparison()`
+#'
 #' @permitted [condition]
 #'
 #' @param filter_join Filter for the joined dataset
@@ -130,6 +134,8 @@
 #'
 #'   The condition can include summary functions like `all()` or `any()`. The
 #'   joined dataset is grouped by the original observations.
+#'
+#'   `r roxygen_float_comparison()`
 #'
 #' @permitted [condition]
 #'

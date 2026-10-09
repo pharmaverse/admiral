@@ -40,6 +40,8 @@
 #'   new parameter, i.e., only observations fulfilling the condition are taken
 #'   into account.
 #'
+#'   `r roxygen_float_comparison()`
+#'
 #' @permitted [condition]
 #'
 #' @param parameters Required parameter codes
@@ -599,6 +601,8 @@ assert_parameters_argument <- function(parameters, optional = TRUE) {
 #'
 #'    The specified filter condition is used in the warnings only. It is not
 #'    applied to the input dataset.
+#'
+#'   `r roxygen_float_comparison()`
 #'
 #' @permitted An unquoted expression
 #'

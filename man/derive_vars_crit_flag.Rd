@@ -33,6 +33,8 @@ derive_vars_crit_flag(
 See description of the \code{values_yn} argument for details on how the
 \code{CRITyFL} variable is populated.
 
+Comparing derived numeric variables to fixed values, e.g., \code{PCHG <= -90}, may give unexpected results due to floating point representation. For details and solutions see the "Floating Point Comparisons" section in \code{vignette("concepts_conventions")}.
+
 \describe{
 \item{Permitted values}{an unquoted condition, e.g., \code{AVISIT == "BASELINE"}}
 \item{Default value}{none}

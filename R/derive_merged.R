@@ -74,6 +74,8 @@
 #'   Variables defined by the `new_vars` argument can be used in the filter
 #'   condition.
 #'
+#'   `r roxygen_float_comparison()`
+#'
 #' @permitted [condition]
 #'
 #' @param mode Selection mode
@@ -576,6 +578,8 @@ derive_vars_merged <- function(dataset,
 #'   value (`missing_value`) for by groups not present in the additional
 #'   dataset.
 #'
+#'   `r roxygen_float_comparison()`
+#'
 #' @permitted [condition]
 #'
 #' @param true_value True value
@@ -598,6 +602,8 @@ derive_vars_merged <- function(dataset,
 #'   Only observations fulfilling the specified condition are taken into account
 #'   for flagging. If the argument is not specified, all observations are
 #'   considered.
+#'
+#'   `r roxygen_float_comparison()`
 #'
 #' @permitted [condition]
 #'
@@ -960,6 +966,8 @@ get_not_mapped <- function() {
 #'   for summarizing. If the argument is not specified, all observations are
 #'   considered.
 #'
+#'   `r roxygen_float_comparison()`
+#'
 #' @permitted [condition]
 #'
 #' @inheritParams derive_vars_merged
@@ -1289,6 +1297,8 @@ derive_vars_merged_summary <- function(dataset,
 #'   Only observations fulfilling the specified condition are taken into account
 #'   for summarizing. If the argument is not specified, all observations are
 #'   considered.
+#'
+#'   `r roxygen_float_comparison()`
 #'
 #' @permitted [condition]
 #'

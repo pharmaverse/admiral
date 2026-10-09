@@ -48,6 +48,8 @@ the parameter. E.g., \code{AVAL.WEIGHT} is set to the value of \code{AVAL} where
 The specified filter condition is used in the warnings only. It is not
 applied to the input dataset.
 
+Comparing derived numeric variables to fixed values, e.g., \code{PCHG <= -90}, may give unexpected results due to floating point representation. For details and solutions see the "Floating Point Comparisons" section in \code{vignette("concepts_conventions")}.
+
 \describe{
 \item{Permitted values}{An unquoted expression}
 \item{Default value}{none}

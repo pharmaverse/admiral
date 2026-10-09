@@ -26,6 +26,8 @@
 #'   dataset contains all observations before or after (`selection` parameter)
 #'   the reference observation.
 #'
+#'   `r roxygen_float_comparison()`
+#'
 #' @param mode Selection mode (first or last)
 #'
 #'   If `"first"` is specified, for each by group the observations before or
