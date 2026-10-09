@@ -156,9 +156,6 @@ adbds %>%
   )
 ```
 
-- Alternatively, the derived variable can be rounded when it is derived, e.g.,
-`mutate(PCHG = round(PCHG, 5))`, if this is appropriate for the analysis.
-
 - Use a tolerance-based comparison with `dplyr::near()`.
 
 ```{r}
