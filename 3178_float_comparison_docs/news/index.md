@@ -43,6 +43,12 @@
   dataset. The `print_not_mapped` argument will thus be deprecated.
   ([\#3188](https://github.com/pharmaverse/admiral/issues/3188))
 
+- The NCICTCAEv5 + NCICTCAEv6 grading criteria (`atoxgr_criteria_ctcv5`,
+  `atoxgr_criteria_ctcv5_uscv`, `atoxgr_criteria_ctcv6`,
+  `atoxgr_criteria_ctcv6_uscv`) were updated to add the term
+  `"Eosinophilia"`
+  ([\#3191](https://github.com/pharmaverse/admiral/issues/3191)).
+
 ### Breaking Changes
 
 - The following functions are entering the next phase of the
@@ -92,7 +98,7 @@
 
 ### Documentation
 
-- Corrected the ADLB template label for `PARAMCD = "CK"` from
+- Corrected the `ADLB` template label for `PARAMCD = "CK"` from
   `"Creatinine Kinase"` to `"Creatine Kinase"`
   ([\#3170](https://github.com/pharmaverse/admiral/issues/3170)).
 
@@ -111,6 +117,9 @@
   skills](https://github.com/RConsortium/pharma-skills/tree/main/admiral)
   in the README and the “Get Started” navigation bar.
   ([\#3159](https://github.com/pharmaverse/admiral/issues/3159))
+
+- Fixed broken links to PHUSE resources in the “Estimands” User Guide.
+  ([\#3196](https://github.com/pharmaverse/admiral/issues/3196))
 
 - Added a “Floating Point Comparisons” section to the “Programming
   Concepts and Conventions” vignette explaining how comparisons of

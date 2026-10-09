@@ -4,11 +4,14 @@
 
 Before reading this article, you should already be familiar with the
 purpose of estimands and the standards recommendations. For
-implementation guidelines, see this [White
-Paper](https://phuse.s3.eu-central-1.amazonaws.com/Deliverables/Optimizing+the+Use+of+Data+Standards/WP-92+Implementation+of+Estimands+%28ICH+E9+%28R1%29%29+using+Data+Standards.pdf)
-and [Worked
-Example](https://phuse.s3.eu-central-1.amazonaws.com/Deliverables/Optimizing+the+Use+of+Data+Standards/WP-92+Implementation+of+Estimands+%28ICH+E9+%28R1%29%29+using+Data+Standards-Example+Document.pdf)
-from PHUSE.
+implementation guidelines, see the following PHUSE documents:
+
+- **White Paper** - [Implementation of ICH E9(R1) Estimands Framework
+  using Data
+  Standards](https://phuse.s3.eu-central-1.amazonaws.com/Deliverables/Optimizing+the+Use+of+Data+Standards/WP-092.pdf)
+- **Worked Example** - [Implementation of ICH E9(R1) Estimands Framework
+  using Data Standards - Example
+  Document](https://phuse.s3.eu-central-1.amazonaws.com/Deliverables/Optimizing+the+Use+of+Data+Standards/WP-092-APP.pdf).
 
 ## Introduction
 

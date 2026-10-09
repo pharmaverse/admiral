@@ -195,10 +195,6 @@ adbds %>%
 #> 3 3       ABC       0.3    18 -17.7 -98.3 Y       Reduction >= 90% from baseline
 ```
 
-- Alternatively, the derived variable can be rounded when it is derived,
-  e.g., `mutate(PCHG = round(PCHG, 5))`, if this is appropriate for the
-  analysis.
-
 - Use a tolerance-based comparison with
   [`dplyr::near()`](https://dplyr.tidyverse.org/reference/near.html).
 
