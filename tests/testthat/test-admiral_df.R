@@ -687,11 +687,11 @@ test_that("infer_admiral_keys Test 32: visit, timepoint and DTYPE are all needed
   # candidates picked up on the way have to be dropped again. Reproduces the
   # record structure of `pharmaverseadam::adpc`.
   input <- tibble::tribble(
-    ~USUBJID, ~PARAMCD, ~AVISITN, ~ATPTN, ~NFRLT, ~ADT,                  ~DTYPE,     ~AVAL,
-    "1",      "XAN",           2,     24,     24, as.Date("2024-01-02"), NA,        0.0107,
-    "1",      "XAN",           2,     36,     36, as.Date("2024-01-02"), NA,        NA,
-    "1",      "XAN",           2,     36,     36, as.Date("2024-01-02"), "HALFLLOQ", 0.005,
-    "1",      "XAN",           3,     24,     24, as.Date("2024-01-09"), NA,        0.0098
+    ~USUBJID, ~PARAMCD, ~AVISITN, ~ATPTN, ~NFRLT, ~ADT, ~DTYPE, ~AVAL,
+    "1", "XAN", 2, 24, 24, as.Date("2024-01-02"), NA, 0.0107,
+    "1", "XAN", 2, 36, 36, as.Date("2024-01-02"), NA, NA,
+    "1", "XAN", 2, 36, 36, as.Date("2024-01-02"), "HALFLLOQ", 0.005,
+    "1", "XAN", 3, 24, 24, as.Date("2024-01-09"), NA, 0.0098
   )
 
   expect_identical(

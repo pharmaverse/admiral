@@ -240,11 +240,19 @@ get_admiral_df_type <- function(dataset) {
   is_bds <- has_paramcd && (has("AVAL") || has("AVALC"))
 
   # Check dataset type
-  if (is_tte) return("TTE")
-  if (is_occds) return("OCCDS")
-  if (is_bds) return("BDS")
-  if (!has_paramcd && is_adsl_structure(dataset)) return("ADSL")
-  return("other")
+  if (is_tte) {
+    return("TTE")
+  }
+  if (is_occds) {
+    return("OCCDS")
+  }
+  if (is_bds) {
+    return("BDS")
+  }
+  if (!has_paramcd && is_adsl_structure(dataset)) {
+    return("ADSL")
+  }
+  "other"
 }
 
 #' Check Whether a Dataset Has an ADSL (Subject-Level) Structure
