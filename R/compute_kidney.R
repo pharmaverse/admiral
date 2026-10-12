@@ -147,7 +147,7 @@ compute_egfr <- function(creat, creatu = "SI", age, weight, sex, race = NULL, me
     )
   )
 
-  # Recycle a scalar unit to match creatinine values before using if_else().
+  # Recycle a scalar unit before if_else
   if (length(creatu) == 1L) {
     creatu <- rep(creatu, length(creat))
   }
