@@ -25,6 +25,8 @@
 #'   + `filter_add = (dplyr::n() > 2)` will filter n count of `by_vars` greater
 #'   than 2.
 #'
+#'   `r roxygen_float_comparison()`
+#'
 #' @param input_code Required parameter code
 #'
 #' The observations where `PARAMCD` equals the specified value are considered to compute the
