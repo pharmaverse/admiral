@@ -34,6 +34,12 @@ flag_event(dataset_name, condition = NULL, by_vars = NULL)
   `dataset_name`. For all by groups where it evaluates as `TRUE` at
   least once the new variable is set to the true value (`true_value`).
 
+  Comparing derived numeric variables to fixed values, e.g.,
+  `PCHG <= -90`, may give unexpected results due to floating point
+  representation. For details and solutions see the "Floating Point
+  Comparisons" section in
+  [`vignette("concepts_conventions")`](https:/pharmaverse.github.io/admiral/main/articles/concepts_conventions.md).
+
   Permitted values
 
   :   an unquoted condition, e.g., `AVISIT == "BASELINE"`

@@ -113,6 +113,106 @@ functions such as
 For handling of `NA`s in sorting variables see [Sort
 Order](https:/pharmaverse.github.io/admiral/main/articles/generic.html#sort_order).
 
+## Floating Point Comparisons
+
+Computers store numeric values as floating point numbers, which cannot
+represent most decimal numbers exactly. Therefore, the result of a
+calculation may differ slightly from the mathematically correct value,
+even if the printed value looks correct.
+
+``` r
+pchg <- (0.9 - 9) / 9 * 100
+pchg
+#> [1] -90
+pchg == -90
+#> [1] FALSE
+sprintf("%.20f", pchg)
+#> [1] "-89.99999999999998578915"
+```
+
+This is important to keep in mind when a condition compares a *derived*
+numeric variable (e.g., `CHG`, `PCHG`, ratios, or unit conversions) to a
+fixed value. Values which are mathematically exactly on the boundary may
+be flagged incorrectly. Many
+[admiral](https://pharmaverse.github.io/admiral/) functions accept
+conditions, e.g.,
+[`derive_vars_crit_flag()`](https:/pharmaverse.github.io/admiral/main/reference/derive_vars_crit_flag.md),
+[`derive_vars_cat()`](https:/pharmaverse.github.io/admiral/main/reference/derive_vars_cat.md),
+or any function with a `filter_add` argument, and are thus affected.
+
+``` r
+adbds <- tribble(
+  ~USUBJID, ~PARAMCD, ~AVAL, ~BASE,
+  "1",      "ABC",      8.3,  18.0,
+  "2",      "ABC",      0.9,   9.0,
+  "3",      "ABC",      0.3,  18.0
+) %>%
+  derive_var_chg() %>%
+  derive_var_pchg()
+
+adbds %>%
+  derive_vars_crit_flag(
+    condition = PCHG <= -90,
+    description = "Reduction >= 90% from baseline",
+    values_yn = TRUE
+  )
+#> # A tibble: 3 × 8
+#>   USUBJID PARAMCD  AVAL  BASE   CHG  PCHG CRIT1FL CRIT1                         
+#>   <chr>   <chr>   <dbl> <dbl> <dbl> <dbl> <chr>   <chr>                         
+#> 1 1       ABC       8.3    18  -9.7 -53.9 N       Reduction >= 90% from baseline
+#> 2 2       ABC       0.9     9  -8.1 -90   N       Reduction >= 90% from baseline
+#> 3 3       ABC       0.3    18 -17.7 -98.3 Y       Reduction >= 90% from baseline
+```
+
+In the example above, the second subject is not flagged although their
+percent change from baseline appears to be -90, due to issues with
+floating point comparisons.
+
+To avoid this, one of the following approaches can be used:
+
+- Round the derived variable to a reasonable number of significant
+  digits before comparing it, e.g., by using
+  [`signif()`](https://rdrr.io/r/base/Round.html).
+  [admiral](https://pharmaverse.github.io/admiral/) uses this approach
+  internally, e.g., in
+  [`derive_var_anrind()`](https:/pharmaverse.github.io/admiral/main/reference/derive_var_anrind.md),
+  where the number of significant digits can be specified by the
+  `signif_digits` admiral option (see
+  [`set_admiral_options()`](https:/pharmaverse.github.io/admiral/main/reference/set_admiral_options.md)).
+
+``` r
+adbds %>%
+  derive_vars_crit_flag(
+    condition = signif(PCHG, get_admiral_option("signif_digits")) <= -90,
+    description = "Reduction >= 90% from baseline",
+    values_yn = TRUE
+  )
+#> # A tibble: 3 × 8
+#>   USUBJID PARAMCD  AVAL  BASE   CHG  PCHG CRIT1FL CRIT1                         
+#>   <chr>   <chr>   <dbl> <dbl> <dbl> <dbl> <chr>   <chr>                         
+#> 1 1       ABC       8.3    18  -9.7 -53.9 N       Reduction >= 90% from baseline
+#> 2 2       ABC       0.9     9  -8.1 -90   Y       Reduction >= 90% from baseline
+#> 3 3       ABC       0.3    18 -17.7 -98.3 Y       Reduction >= 90% from baseline
+```
+
+- Use a tolerance-based comparison with
+  [`dplyr::near()`](https://dplyr.tidyverse.org/reference/near.html).
+
+``` r
+adbds %>%
+  derive_vars_crit_flag(
+    condition = PCHG <= -90 | near(PCHG, -90),
+    description = "Reduction >= 90% from baseline",
+    values_yn = TRUE
+  )
+#> # A tibble: 3 × 8
+#>   USUBJID PARAMCD  AVAL  BASE   CHG  PCHG CRIT1FL CRIT1                         
+#>   <chr>   <chr>   <dbl> <dbl> <dbl> <dbl> <chr>   <chr>                         
+#> 1 1       ABC       8.3    18  -9.7 -53.9 N       Reduction >= 90% from baseline
+#> 2 2       ABC       0.9     9  -8.1 -90   Y       Reduction >= 90% from baseline
+#> 3 3       ABC       0.3    18 -17.7 -98.3 Y       Reduction >= 90% from baseline
+```
+
 ## Expressions in Scripts
 
 ### Quoting and Unquoting: Introducing `expr()`, `exprs()`, `!!` and `!!!`

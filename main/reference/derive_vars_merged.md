@@ -151,6 +151,12 @@ derive_vars_merged(
   Variables defined by the `new_vars` argument can be used in the filter
   condition.
 
+  Comparing derived numeric variables to fixed values, e.g.,
+  `PCHG <= -90`, may give unexpected results due to floating point
+  representation. For details and solutions see the "Floating Point
+  Comparisons" section in
+  [`vignette("concepts_conventions")`](https:/pharmaverse.github.io/admiral/main/articles/concepts_conventions.md).
+
   Permitted values
 
   :   an unquoted condition, e.g., `AVISIT == "BASELINE"`

@@ -42,6 +42,12 @@ get_flagged_records(dataset, new_var, condition, filter = NULL)
   where it evaluates as `TRUE` the new variable is set to `1` in the new
   column. Otherwise, it is set to `0`.
 
+  Comparing derived numeric variables to fixed values, e.g.,
+  `PCHG <= -90`, may give unexpected results due to floating point
+  representation. For details and solutions see the "Floating Point
+  Comparisons" section in
+  [`vignette("concepts_conventions")`](https:/pharmaverse.github.io/admiral/main/articles/concepts_conventions.md).
+
   Default value
 
   :   none
@@ -53,6 +59,12 @@ get_flagged_records(dataset, new_var, condition, filter = NULL)
   Only observations fulfilling the specified condition are taken into
   account for flagging. If the argument is not specified, all
   observations are considered.
+
+  Comparing derived numeric variables to fixed values, e.g.,
+  `PCHG <= -90`, may give unexpected results due to floating point
+  representation. For details and solutions see the "Floating Point
+  Comparisons" section in
+  [`vignette("concepts_conventions")`](https:/pharmaverse.github.io/admiral/main/articles/concepts_conventions.md).
 
   Permitted values
 

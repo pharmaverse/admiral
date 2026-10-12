@@ -94,6 +94,12 @@ derive_var_merged_exist_flag(
   is set to the missing value (`missing_value`) for by groups not
   present in the additional dataset.
 
+  Comparing derived numeric variables to fixed values, e.g.,
+  `PCHG <= -90`, may give unexpected results due to floating point
+  representation. For details and solutions see the "Floating Point
+  Comparisons" section in
+  [`vignette("concepts_conventions")`](https:/pharmaverse.github.io/admiral/main/articles/concepts_conventions.md).
+
   Permitted values
 
   :   an unquoted condition, e.g., `AVISIT == "BASELINE"`
@@ -148,6 +154,12 @@ derive_var_merged_exist_flag(
   Only observations fulfilling the specified condition are taken into
   account for flagging. If the argument is not specified, all
   observations are considered.
+
+  Comparing derived numeric variables to fixed values, e.g.,
+  `PCHG <= -90`, may give unexpected results due to floating point
+  representation. For details and solutions see the "Floating Point
+  Comparisons" section in
+  [`vignette("concepts_conventions")`](https:/pharmaverse.github.io/admiral/main/articles/concepts_conventions.md).
 
   Permitted values
 

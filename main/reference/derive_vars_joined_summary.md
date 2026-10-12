@@ -213,6 +213,12 @@ derive_vars_joined_summary(
   [`any()`](https://rdrr.io/r/base/any.html). The additional dataset is
   grouped by the by variables (`by_vars`).
 
+  Comparing derived numeric variables to fixed values, e.g.,
+  `PCHG <= -90`, may give unexpected results due to floating point
+  representation. For details and solutions see the "Floating Point
+  Comparisons" section in
+  [`vignette("concepts_conventions")`](https:/pharmaverse.github.io/admiral/main/articles/concepts_conventions.md).
+
   Permitted values
 
   :   an unquoted condition, e.g., `AVISIT == "BASELINE"`
@@ -236,6 +242,12 @@ derive_vars_joined_summary(
   certain observation before the current observation up to the current
   observation. For an example see the last example below.
 
+  Comparing derived numeric variables to fixed values, e.g.,
+  `PCHG <= -90`, may give unexpected results due to floating point
+  representation. For details and solutions see the "Floating Point
+  Comparisons" section in
+  [`vignette("concepts_conventions")`](https:/pharmaverse.github.io/admiral/main/articles/concepts_conventions.md).
+
   Permitted values
 
   :   an unquoted condition, e.g., `AVISIT == "BASELINE"`
@@ -257,6 +269,12 @@ derive_vars_joined_summary(
   functions which should not apply to all observations but only up to
   the confirmation assessment. For an example see the last example
   below.
+
+  Comparing derived numeric variables to fixed values, e.g.,
+  `PCHG <= -90`, may give unexpected results due to floating point
+  representation. For details and solutions see the "Floating Point
+  Comparisons" section in
+  [`vignette("concepts_conventions")`](https:/pharmaverse.github.io/admiral/main/articles/concepts_conventions.md).
 
   Permitted values
 
@@ -280,6 +298,12 @@ derive_vars_joined_summary(
   [`all()`](https://rdrr.io/r/base/all.html) or
   [`any()`](https://rdrr.io/r/base/any.html). The joined dataset is
   grouped by the original observations.
+
+  Comparing derived numeric variables to fixed values, e.g.,
+  `PCHG <= -90`, may give unexpected results due to floating point
+  representation. For details and solutions see the "Floating Point
+  Comparisons" section in
+  [`vignette("concepts_conventions")`](https:/pharmaverse.github.io/admiral/main/articles/concepts_conventions.md).
 
   Permitted values
 

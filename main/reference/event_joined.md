@@ -56,6 +56,12 @@ event_joined(
 
   A condition to restrict the source dataset before joining
 
+  Comparing derived numeric variables to fixed values, e.g.,
+  `PCHG <= -90`, may give unexpected results due to floating point
+  representation. For details and solutions see the "Floating Point
+  Comparisons" section in
+  [`vignette("concepts_conventions")`](https:/pharmaverse.github.io/admiral/main/articles/concepts_conventions.md).
+
   Permitted values
 
   :   an unquoted condition, e.g., `AVISIT == "BASELINE"`
@@ -81,6 +87,12 @@ event_joined(
   selects observations with response "CR" and for all observations up to
   the confirmation observation the response is "CR" or "NE" and there is
   at most one "NE".
+
+  Comparing derived numeric variables to fixed values, e.g.,
+  `PCHG <= -90`, may give unexpected results due to floating point
+  representation. For details and solutions see the "Floating Point
+  Comparisons" section in
+  [`vignette("concepts_conventions")`](https:/pharmaverse.github.io/admiral/main/articles/concepts_conventions.md).
 
   Permitted values
 
@@ -206,6 +218,12 @@ event_joined(
   certain observation before the current observation up to the current
   observation.
 
+  Comparing derived numeric variables to fixed values, e.g.,
+  `PCHG <= -90`, may give unexpected results due to floating point
+  representation. For details and solutions see the "Floating Point
+  Comparisons" section in
+  [`vignette("concepts_conventions")`](https:/pharmaverse.github.io/admiral/main/articles/concepts_conventions.md).
+
   Permitted values
 
   :   an unquoted condition, e.g., `AVISIT == "BASELINE"`
@@ -227,6 +245,12 @@ event_joined(
   This parameter should be specified if `condition` contains summary
   functions which should not apply to all observations but only up to
   the confirmation assessment.
+
+  Comparing derived numeric variables to fixed values, e.g.,
+  `PCHG <= -90`, may give unexpected results due to floating point
+  representation. For details and solutions see the "Floating Point
+  Comparisons" section in
+  [`vignette("concepts_conventions")`](https:/pharmaverse.github.io/admiral/main/articles/concepts_conventions.md).
 
   Permitted values
 

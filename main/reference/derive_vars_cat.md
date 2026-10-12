@@ -55,6 +55,12 @@ derive_vars_cat(dataset, definition, by_vars = NULL)
             "Height", AVAL >= 140, ">=140 cm",         1,
             "Height",  AVAL < 140,  "<140 cm",         2)
 
+  Comparing derived numeric variables to fixed values, e.g.,
+  `PCHG <= -90`, may give unexpected results due to floating point
+  representation. For details and solutions see the "Floating Point
+  Comparisons" section in
+  [`vignette("concepts_conventions")`](https:/pharmaverse.github.io/admiral/main/articles/concepts_conventions.md).
+
   Default value
 
   :   none
