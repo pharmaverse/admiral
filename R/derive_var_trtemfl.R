@@ -480,11 +480,12 @@ derive_var_trtemfl <- function(dataset,
         mutate(
           !!prev_intensity := lag(!!intensity),
           !!worsen_date :=
-            case_when(
+            if_else(
               !is.na(!!start_date) & !is.na(!!trt_start_date) & !is.na(!!prev_intensity) &
                 !!start_date >= !!trt_start_date &
-                (!!intensity > !!prev_intensity) ~ !!start_date,
-              TRUE ~ NA
+                (!!intensity > !!prev_intensity),
+              !!start_date,
+              NA
             )
         ) %>%
         fill(!!worsen_date, .direction = "down") %>%

@@ -147,9 +147,14 @@ compute_egfr <- function(creat, creatu = "SI", age, weight, sex, race = NULL, me
     )
   )
 
-  scr <- case_when(
-    tolower(creatu) %in% c("cv", "mg/dl") ~ creat,
-    TRUE ~ creat / 88.42
+  # Recycle a scalar unit to match creatinine values before using if_else().
+  if (length(creatu) == 1L) {
+    creatu <- rep(creatu, length(creat))
+  }
+  scr <- if_else(
+    tolower(creatu) %in% c("cv", "mg/dl"),
+    creat,
+    creat / 88.42
   )
 
   if (method == "MDRD") {
