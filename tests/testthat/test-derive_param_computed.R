@@ -200,7 +200,7 @@ test_that("derive_param_computed Test 5: `dataset_add`, creating new parameters"
       by_vars = exprs(USUBJID, AVISIT),
       parameters = exprs(CHSF12, CHSF13 = QSTESTCD %in% c("CHSF113", "CHSF213"), CHSF14),
       set_values_to = exprs(
-        AVAL = case_when(
+        AVAL = dplyr::case_when(
           QSORRES.CHSF13 == "Not applicable" ~ 0,
           QSORRES.CHSF13 == "Yes" ~ 38,
           QSORRES.CHSF13 == "No" ~ if_else(
@@ -245,7 +245,7 @@ test_that("derive_param_computed Test 6: no input dataset", {
         CHSF14 = QSTESTCD == "CHSF114"
       ),
       set_values_to = exprs(
-        AVAL = case_when(
+        AVAL = dplyr::case_when(
           QSORRES.CHSF13 == "Not applicable" ~ 0,
           QSORRES.CHSF13 == "Yes" ~ 38,
           QSORRES.CHSF13 == "No" ~ if_else(
