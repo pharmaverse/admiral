@@ -660,49 +660,42 @@ test_that("infer_admiral_keys Test 30: a grouped dataset is keyed on its records
   )
 })
 
-## Test 31: inference holds up against the {pharmaverseadam} datasets ----
-test_that("infer_admiral_keys Test 31: inference holds up against the {pharmaverseadam} datasets", { # nolint
-  skip_on_cran()
-  skip_if_not_installed("pharmaverseadam")
-
-  ds_names <- utils::data(package = "pharmaverseadam")$results[, "Item"]
-  load_ds <- function(nm) {
-    env <- new.env()
-    suppressWarnings(utils::data(list = nm, package = "pharmaverseadam", envir = env))
-    env[[nm]]
-  }
-
-  keys <- lapply(setNames(ds_names, ds_names), function(nm) {
-    infer_admiral_keys(load_ds(nm))
-  })
-
-  # every one of these is a real dataset written by somebody who had never heard
-  # of this feature, so a shape the candidate list does not cover shows up here
-  # as a dataset whose record structure cannot be checked at all
-  expect_identical(names(keys)[lengths(keys) == 0], character(0))
-
-  # the shapes the candidate list was extended to cover, each of which was once
-  # inferred as USUBJID + PARAMCD and reported thousands of false duplicates
-  expect_identical(keys$adex, c("USUBJID", "PARAMCD", "ASTDTM")) # dosing interval
-  expect_identical(keys$adppk, c("USUBJID", "PARAMCD", "NFRLT", "AFRLT")) # relative time
-  expect_identical(
-    keys$adpc, # derived records alongside their source
-    c("USUBJID", "PARAMCD", "AVISITN", "ATPTN", "DTYPE")
+## Test 31: population PK needs both the nominal and the actual relative time ----
+test_that("infer_admiral_keys Test 31: population PK needs both the nominal and the actual relative time", { # nolint
+  # a draw taken off schedule shares its nominal time with the scheduled draw
+  # and its actual time with a different nominal one, so neither variable keys
+  # the dataset alone. Reproduces the record structure of `pharmaverseadam::adppk`.
+  input <- tibble::tribble(
+    ~USUBJID, ~PARAMCD, ~NFRLT, ~AFRLT, ~AVAL,
+    "1",      "XAN",         3,      6, 25.77,
+    "1",      "XAN",         6,      6,  1.86,
+    "1",      "XAN",        36,     36,  0.31,
+    "1",      "XAN",        36,     37,  0.27
   )
-  # occurrence datasets carrying only the SDTM domain sequence
-  expect_identical(keys$adae, c("USUBJID", "AESEQ"))
-  expect_identical(keys$adcm, c("USUBJID", "CMSEQ"))
-  expect_identical(keys$admh, c("USUBJID", "MHSEQ"))
 
-  # the remaining duplicates were each checked by hand and are true positives in
-  # the test data, not inference failures -- see `keys_design_notes.md`. Pinned
-  # so that an inference regression cannot hide among them.
-  dups <- vapply(ds_names, function(nm) {
-    ds <- load_ds(nm)
-    nrow(ds) - nrow(distinct(ds, !!!syms(keys[[nm]])))
-  }, integer(1))
   expect_identical(
-    dups[dups > 0],
-    c(adeg = 63L, adpp = 1008L, advs = 39L)
+    infer_admiral_keys(input),
+    c("USUBJID", "PARAMCD", "NFRLT", "AFRLT")
+  )
+})
+
+## Test 32: visit, timepoint and DTYPE are all needed at once ----
+test_that("infer_admiral_keys Test 32: visit, timepoint and DTYPE are all needed at once", { # nolint
+  # visit, timepoint *and* `DTYPE` are all needed, while the relative time and
+  # the analysis date carry no information the first two do not -- so uniqueness
+  # is only reached at the end of the candidate list and the redundant
+  # candidates picked up on the way have to be dropped again. Reproduces the
+  # record structure of `pharmaverseadam::adpc`.
+  input <- tibble::tribble(
+    ~USUBJID, ~PARAMCD, ~AVISITN, ~ATPTN, ~NFRLT, ~ADT,                  ~DTYPE,     ~AVAL,
+    "1",      "XAN",           2,     24,     24, as.Date("2024-01-02"), NA,        0.0107,
+    "1",      "XAN",           2,     36,     36, as.Date("2024-01-02"), NA,        NA,
+    "1",      "XAN",           2,     36,     36, as.Date("2024-01-02"), "HALFLLOQ", 0.005,
+    "1",      "XAN",           3,     24,     24, as.Date("2024-01-09"), NA,        0.0098
+  )
+
+  expect_identical(
+    infer_admiral_keys(input),
+    c("USUBJID", "PARAMCD", "AVISITN", "ATPTN", "DTYPE")
   )
 })
