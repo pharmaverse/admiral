@@ -63,6 +63,8 @@ For all groups where it evaluates as \code{FALSE} or \code{NA} for all observati
 For all groups not present in the additional dataset \code{AVALC} is set to
 the missing value (\code{missing_value}).
 
+Comparing derived numeric variables to fixed values, e.g., \code{PCHG <= -90}, may give unexpected results due to floating point representation. For details and solutions see the "Floating Point Comparisons" section in \code{vignette("concepts_conventions")}.
+
 \describe{
 \item{Default value}{none}
 }}
@@ -104,6 +106,8 @@ For all groups without an observation in the additional dataset
 Only observations fulfilling the specified condition are taken into account
 for flagging. If the parameter is not specified, all observations are
 considered.
+
+Comparing derived numeric variables to fixed values, e.g., \code{PCHG <= -90}, may give unexpected results due to floating point representation. For details and solutions see the "Floating Point Comparisons" section in \code{vignette("concepts_conventions")}.
 
 \describe{
 \item{Permitted values}{a condition}

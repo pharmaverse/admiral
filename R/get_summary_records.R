@@ -37,6 +37,8 @@
 #'   + `filter_rows = (dplyr::n() > 2)` will filter n count of `by_vars` greater
 #'   than 2.
 #'
+#'   `r roxygen_float_comparison()`
+#'
 #' @param set_values_to Variables to be set
 #'
 #'   The specified variables are set to the specified values for the new
