@@ -4,10 +4,12 @@ test_that("compute_egfr recycles scalar creatinine units", {
   for (unit in c("SI", "mg/dL")) {
     expect_identical(
       compute_egfr(
-        c(85, 100, NA_real_), creatu = unit, age = 65, sex = "F", method = "CKD-EPI"
+        c(85, 100, NA_real_),
+        creatu = unit, age = 65, sex = "F", method = "CKD-EPI"
       ),
       compute_egfr(
-        c(85, 100, NA_real_), creatu = rep(unit, 3), age = 65, sex = "F", method = "CKD-EPI"
+        c(85, 100, NA_real_),
+        creatu = rep(unit, 3), age = 65, sex = "F", method = "CKD-EPI"
       )
     )
   }
