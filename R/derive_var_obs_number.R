@@ -119,7 +119,7 @@ derive_var_obs_number <- function(dataset,
       if (check_type != "none") {
         signal_duplicate_records(
           data,
-          by_vars = expr_c(by_vars, order),
+          by_vars = c(by_vars, order),
           cnd_type = check_type
         )
       }
@@ -139,5 +139,6 @@ derive_var_obs_number <- function(dataset,
 
   data %>%
     mutate(!!new_var := row_number()) %>%
-    ungroup()
+    ungroup() %>%
+    as_admiral_df()
 }

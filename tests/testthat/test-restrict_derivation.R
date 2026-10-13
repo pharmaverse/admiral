@@ -26,6 +26,7 @@ test_that("restrict_derivation Test 1: restrict derivation with parameters", {
     compare = actual,
     keys = c("USUBJID", "AVISITN")
   )
+  expect_s3_class(actual, "admiral_df")
 })
 
 ## Test 2: restrict derivation without parameters ----

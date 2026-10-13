@@ -41,6 +41,7 @@ test_that("derive_var_obs_number Test 1: create default new variable ASEQ", {
     compare = actual_output,
     keys = c("USUBJID", "VSTESTCD", "VISITNUM", "VSTPTNUM")
   )
+  expect_s3_class(actual_output, "admiral_df")
 })
 
 ## Test 2: sorting missing value  is smallest ----

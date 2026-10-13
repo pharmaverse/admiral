@@ -37,6 +37,8 @@
 #'   For all groups not present in the additional dataset `AVALC` is set to
 #'   the missing value (`missing_value`).
 #'
+#'   `r roxygen_float_comparison()`
+#'
 #' @param true_value True value
 #'
 #'   For all groups with at least one observations in the additional dataset
@@ -65,6 +67,8 @@
 #'   Only observations fulfilling the specified condition are taken into account
 #'   for flagging. If the parameter is not specified, all observations are
 #'   considered.
+#'
+#'   `r roxygen_float_comparison()`
 #'
 #' @permitted a condition
 #'
@@ -201,5 +205,6 @@ derive_param_exist_flag <- function(dataset = NULL,
   )
 
   # Create output dataset
-  bind_rows(dataset, new_obs)
+  bind_rows(dataset, new_obs) %>%
+    as_admiral_df()
 }

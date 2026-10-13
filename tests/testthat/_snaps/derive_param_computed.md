@@ -1,3 +1,39 @@
+# derive_param_computed Test 3: no new observations if filtered dataset is empty
+
+    Code
+      result <- derive_param_computed(input, filter = VISIT == "WEEK 24", parameters = c(
+        "SYSBP", "DIABP"), by_vars = exprs(USUBJID, VISIT), set_values_to = exprs(
+        AVAL = (AVAL.SYSBP + 2 * AVAL.DIABP) / 3, PARAMCD = "MAP", PARAM = "Mean arterial pressure (mmHg)",
+        AVALU = "mmHg"))
+    Condition
+      Warning:
+      The input dataset does not contain any observations fulfilling the filter condition (`VISIT == "WEEK 24"`) for the parameter codes (`PARAMCD`): SYSBP and DIABP.
+      i No new observations were added.
+
+# derive_param_computed Test 4: no new observations are added if a parameter is missing
+
+    Code
+      result <- derive_param_computed(input, filter = PARAMCD == "DIABP", parameters = exprs(
+        SYSBP, DIABP), by_vars = exprs(USUBJID, VISIT), set_values_to = exprs(AVAL = (
+        AVAL.SYSBP + 2 * AVAL.DIABP) / 3, PARAMCD = "MAP", PARAM = "Mean arterial pressure (mmHg)",
+        AVALU = "mmHg"))
+    Condition
+      Warning:
+      The input dataset does not contain any observations fulfilling the filter condition (`PARAMCD == "DIABP"`) for the parameter codes (`PARAMCD`): SYSBP.
+      i No new observations were added.
+
+# derive_param_computed Test 8: no new observations if a constant parameter is missing
+
+    Code
+      output <- derive_param_computed(input, parameters = c("WEIGHT"), by_vars = exprs(
+        USUBJID, VISIT), constant_parameters = c("HEIGHT"), constant_by_vars = exprs(
+        USUBJID), set_values_to = exprs(AVAL = AVAL.WEIGHT / (AVAL.HEIGHT / 100)^2,
+      PARAMCD = "BMI", PARAM = "Body Mass Index (kg/m2)", AVALU = "kg/m2"))
+    Condition
+      Warning:
+      The input dataset does not contain any observations for the parameter codes (`PARAMCD`): HEIGHT.
+      i No new observations were added.
+
 # derive_param_computed Test 11: error if keep_nas is invalid
 
     Code

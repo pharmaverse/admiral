@@ -21,11 +21,13 @@
 #'
 #'
 #' @details The relative day is derived as number of days from the reference
-#'   date to the end date. If it is nonnegative, one is added. I.e., the
+#'   date to the end date. If it is nonnegative, one is added. That is, the
 #'   relative day of the reference date is 1. Unless a name is explicitly
 #'   specified, the name of the resulting relative day variable is generated
 #'   from the source variable name by replacing DT (or DTM as appropriate) with
-#'   DY.
+#'   DY. In the ADaM as in the SDTM, there is no Day 0. If there is a need to
+#'   create a relative day variable that includes Day 0, then its name
+#'   must not end in DY.
 #'
 #' @return The input dataset with `*DY` corresponding to the `*DTM` or `*DT`
 #'   source variable(s) added
@@ -77,7 +79,7 @@ derive_vars_dy <- function(dataset,
   # assertions
   reference_date <- assert_symbol(enexpr(reference_date))
   assert_vars(source_vars)
-  assert_data_frame(dataset, required_vars = expr_c(source_vars, reference_date))
+  assert_data_frame(dataset, required_vars = c(source_vars, reference_date))
 
   # Warn if `*DY` variables already exist
   n_vars <- length(source_vars)
@@ -110,5 +112,6 @@ derive_vars_dy <- function(dataset,
         .fns = ~ compute_duration(start_date = !!reference_date, end_date = .x),
         .names = "{dy_vars}"
       )
-    )
+    ) %>%
+    as_admiral_df()
 }

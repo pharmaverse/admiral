@@ -38,6 +38,7 @@ test_that("Test 1: All Ratio Variables are Created", {
     keys = c("USUBJID", "PARAMCD", "SEQ"),
     tolerance = 0.2
   )
+  expect_s3_class(actual_data, "admiral_df")
 })
 
 test_that("Test 2: All Ratio Variables are Created while NAs present", {

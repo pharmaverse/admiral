@@ -91,6 +91,9 @@
 #'
 #' \deqn{Risk = 100 * (1 - RiskPeriodFactor ^ exp(RiskFactors))}
 #'
+#' This is a vector-oriented helper and is not usually called directly on a data
+#' frame with `%>%`.
+#'
 #' @return A numeric vector of Framingham values
 #'
 #' @keywords com_bds_findings

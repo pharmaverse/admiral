@@ -33,6 +33,8 @@ derive_vars_crit_flag(
 See description of the \code{values_yn} argument for details on how the
 \code{CRITyFL} variable is populated.
 
+Comparing derived numeric variables to fixed values, e.g., \code{PCHG <= -90}, may give unexpected results due to floating point representation. For details and solutions see the "Floating Point Comparisons" section in \code{vignette("concepts_conventions")}.
+
 \describe{
 \item{Permitted values}{an unquoted condition, e.g., \code{AVISIT == "BASELINE"}}
 \item{Default value}{none}
@@ -101,17 +103,16 @@ fulfilled and to \code{NA} otherwise if \code{CRITyFL} is populated with \code{"
 }
 \seealso{
 BDS-Findings Functions that returns variable appended to dataset:
-\code{\link{derive_basetype_records}()},
-\code{\link{derive_var_analysis_ratio}()},
-\code{\link{derive_var_anrind}()},
-\code{\link{derive_var_atoxgr}()},
-\code{\link{derive_var_atoxgr_dir}()},
-\code{\link{derive_var_base}()},
-\code{\link{derive_var_chg}()},
-\code{\link{derive_var_nfrlt}()},
-\code{\link{derive_var_ontrtfl}()},
-\code{\link{derive_var_pchg}()},
-\code{\link{derive_var_shift}()}
+\code{\link[=derive_var_analysis_ratio]{derive_var_analysis_ratio()}},
+\code{\link[=derive_var_anrind]{derive_var_anrind()}},
+\code{\link[=derive_var_atoxgr]{derive_var_atoxgr()}},
+\code{\link[=derive_var_atoxgr_dir]{derive_var_atoxgr_dir()}},
+\code{\link[=derive_var_base]{derive_var_base()}},
+\code{\link[=derive_var_chg]{derive_var_chg()}},
+\code{\link[=derive_var_nfrlt]{derive_var_nfrlt()}},
+\code{\link[=derive_var_ontrtfl]{derive_var_ontrtfl()}},
+\code{\link[=derive_var_pchg]{derive_var_pchg()}},
+\code{\link[=derive_var_shift]{derive_var_shift()}}
 }
 \concept{der_bds_findings}
 \keyword{der_bds_findings}

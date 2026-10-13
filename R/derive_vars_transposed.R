@@ -30,6 +30,8 @@
 #'
 #' @param filter Expression used to restrict the records of `dataset_merge` prior to transposing
 #'
+#'   `r roxygen_float_comparison()`
+#'
 #' @param relationship Expected merge-relationship between the `by_vars`
 #'   variable(s) in `dataset` and `dataset_merge` (after transposition)
 #'
@@ -141,7 +143,7 @@ derive_vars_transposed <- function(dataset,
   assert_vars(by_vars)
   assert_vars(id_vars, optional = TRUE)
   assert_data_frame(dataset, required_vars = replace_values_by_names(by_vars))
-  assert_data_frame(dataset_merge, required_vars = expr_c(by_vars, key_var, value_var))
+  assert_data_frame(dataset_merge, required_vars = c(by_vars, key_var, value_var))
   relationship <- assert_character_scalar(
     relationship,
     values = c("one-to-one", "one-to-many", "many-to-one", "many-to-many"),
@@ -214,5 +216,6 @@ derive_vars_transposed <- function(dataset,
         call = parent.frame(n = 4)
       )
     }
-  )
+  ) %>%
+    as_admiral_df()
 }

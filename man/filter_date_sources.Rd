@@ -11,6 +11,8 @@ filter_date_sources(
   create_datetime = FALSE,
   subject_keys,
   mode,
+  end_date_data = NULL,
+  end_date_var = NULL,
   check_type = "none"
 )
 }

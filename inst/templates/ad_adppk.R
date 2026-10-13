@@ -136,7 +136,7 @@ ex_exp <- ex_dates %>%
     lookup_column = CDISC_VALUE,
     keep_source_vars = exprs(
       STUDYID, USUBJID, EVID, EXDOSFRQ, EXDOSFRM,
-      NFRLT, EXDOSE, EXDOSU, EXTRT, ASTDT, ASTDTM, AENDT, AENDTM,
+      NFRLT, EXDOSE, EXDOSU, EXTRT, EXSTDTC, ASTDT, ASTDTM, AENDT, AENDTM,
       VISIT, VISITNUM, VISITDY,
       TRT01A, TRT01P, DOMAIN, EXSEQ, !!!adsl_vars
     )
@@ -319,7 +319,7 @@ adppk_aval <- adppk_aprlt %>%
       EVID == 1 ~ NA_character_,
       TRUE ~ PCSTRESU
     ),
-    UDTC = format_ISO8601(ADTM),
+    UDTC = coalesce(PCDTC, EXSTDTC),
     II = if_else(EVID == 1, 1, 0),
     SS = if_else(EVID == 1, 1, 0)
   )
@@ -327,7 +327,7 @@ adppk_aval <- adppk_aprlt %>%
 # ---- Add ASEQ ----
 
 adppk_aseq <- adppk_aval %>%
-  # Calculate ASEQ
+  # Calculate ASEQ (Optional Variable)
   derive_var_obs_number(
     new_var = ASEQ,
     by_vars = exprs(STUDYID, USUBJID),

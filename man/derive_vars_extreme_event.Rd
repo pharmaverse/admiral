@@ -260,9 +260,9 @@ derive_vars_extreme_event(
 \code{\link[=event]{event()}}, \code{\link[=event_joined]{event_joined()}}, \code{\link[=derive_extreme_event]{derive_extreme_event()}}
 
 ADSL Functions that returns variable appended to dataset:
-\code{\link{derive_var_age_years}()},
-\code{\link{derive_vars_aage}()},
-\code{\link{derive_vars_period}()}
+\code{\link[=derive_var_age_years]{derive_var_age_years()}},
+\code{\link[=derive_vars_aage]{derive_vars_aage()}},
+\code{\link[=derive_vars_period]{derive_vars_period()}}
 }
 \concept{der_adsl}
 \keyword{der_adsl}

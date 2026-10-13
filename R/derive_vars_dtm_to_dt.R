@@ -10,8 +10,8 @@
 #'
 #'
 #' @return
-#' A data frame containing the input dataset with the corresponding date (`--DT`)
-#' variable(s) of all datetime variables (`--DTM`) specified in `source_vars.`
+#' A data frame containing the input dataset with the corresponding date (`*DT`)
+#' variable(s) of all datetime variables (`*DTM`) specified in `source_vars.`
 #'
 #' @family der_date_time
 #'
@@ -45,8 +45,8 @@ derive_vars_dtm_to_dt <- function(dataset, source_vars) {
   assert_vars(source_vars)
   assert_data_frame(dataset, required_vars = source_vars)
 
-  # Warn if `--TM` variables already exist
-  dtm_vars <- expr_c(source_vars)
+  # Warn if `*DT` variables already exist
+  dtm_vars <- c(source_vars)
   dtm_vars2 <- vars2chr(dtm_vars)
   n_vars <- length(dtm_vars)
 
@@ -58,9 +58,11 @@ derive_vars_dtm_to_dt <- function(dataset, source_vars) {
   if (n_vars > 1L) {
     dataset %>%
       mutate(across(.cols = vars2chr(source_vars), .fns = list(new = date))) %>%
-      rename_with(.cols = ends_with("new"), .fn = ~ str_replace(., "DTM_new", "DT"))
+      rename_with(.cols = ends_with("new"), .fn = ~ str_replace(., "DTM_new", "DT")) %>%
+      as_admiral_df()
   } else {
     dataset %>%
-      mutate(!!sym(dt_vars) := date(!!sym(dtm_vars2)))
+      mutate(!!sym(dt_vars) := date(!!sym(dtm_vars2))) %>%
+      as_admiral_df()
   }
 }

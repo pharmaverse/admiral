@@ -18,6 +18,20 @@
   },
   {
     "SOC": "Blood and lymphatic system disorders",
+    "TERM": "Eosinophilia",
+    "GRADE_1": ">ULN and >Baseline",
+    "GRADE_2": "-",
+    "GRADE_3": "Steroids initiated",
+    "GRADE_4": "-",
+    "GRADE_5": "-",
+    "Definition": "A disorder characterized by laboratory test results that indicate an increased number of eosinophils in the blood.",
+    "GRADE_NA_CODE": "is.na(AVAL) | is.na(ANRHI) | is.na(BASE) ~ NA_character_",
+    "GRADE_1_CODE": "signif(AVAL, signif_dig) > signif(ANRHI, signif_dig) & signif(AVAL, signif_dig) > signif(BASE, signif_dig) ~ \"1\"",
+    "VAR_CHECK": "AVAL, ANRHI, BASE",
+    "DIRECTION": "H"
+  },
+  {
+    "SOC": "Blood and lymphatic system disorders",
     "TERM": "Leukocytosis",
     "GRADE_1": "-",
     "GRADE_2": "-",
@@ -129,6 +143,20 @@
     "GRADE_2_CODE": "!(BNRIND %in% high_indicator) & signif(AVAL, signif_dig) > signif(1.5*ANRHI, signif_dig) ~ \"2\",  BNRIND %in% high_indicator & signif(AVAL, signif_dig) > signif(1.5*BASE, signif_dig) ~ \"2\"",
     "GRADE_1_CODE": "!(BNRIND %in% high_indicator) & signif(AVAL, signif_dig) > signif(ANRHI, signif_dig) ~ \"1\",  BNRIND %in% high_indicator & signif(AVAL, signif_dig) > signif(BASE, signif_dig) ~ \"1\"",
     "VAR_CHECK": "AVAL, ANRHI, BASE, BNRIND",
+    "DIRECTION": "H"
+  },
+  {
+    "SOC": "Investigations",
+    "TERM": "Blood lactate dehydrogenase increased",
+    "GRADE_1": ">ULN",
+    "GRADE_2": "-",
+    "GRADE_3": "-",
+    "GRADE_4": "-",
+    "GRADE_5": "-",
+    "Definition": "A finding based on laboratory test results that indicate increased levels of lactate dehydrogenase (LDH) in the blood specimen.",
+    "GRADE_NA_CODE": "is.na(AVAL) | is.na(ANRHI) ~ NA_character_",
+    "GRADE_1_CODE": "signif(AVAL, signif_dig) > signif(ANRHI, signif_dig) ~ \"1\"",
+    "VAR_CHECK": "AVAL, ANRHI",
     "DIRECTION": "H"
   },
   {

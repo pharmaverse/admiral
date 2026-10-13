@@ -22,6 +22,8 @@ The condition is evaluated at the dataset referenced by \code{dataset_name}. For
 all by groups where it evaluates as \code{TRUE} at least once the new variable
 is set to the true value (\code{true_value}).
 
+Comparing derived numeric variables to fixed values, e.g., \code{PCHG <= -90}, may give unexpected results due to floating point representation. For details and solutions see the "Floating Point Comparisons" section in \code{vignette("concepts_conventions")}.
+
 \describe{
 \item{Permitted values}{an unquoted condition, e.g., \code{AVISIT == "BASELINE"}}
 \item{Default value}{\code{NULL}}
@@ -49,15 +51,14 @@ The \code{flag_event} object is used to define events as input for the
 \code{\link[=derive_var_merged_ef_msrc]{derive_var_merged_ef_msrc()}}
 
 Source Objects:
-\code{\link{basket_select}()},
-\code{\link{censor_source}()},
+\code{\link[=basket_select]{basket_select()}},
+\code{\link[=censor_source]{censor_source()}},
 \code{\link{death_event}},
-\code{\link{event}()},
-\code{\link{event_joined}()},
-\code{\link{event_source}()},
-\code{\link{query}()},
-\code{\link{records_source}()},
-\code{\link{tte_source}()}
+\code{\link[=event]{event()}},
+\code{\link[=event_joined]{event_joined()}},
+\code{\link[=event_source]{event_source()}},
+\code{\link[=query]{query()}},
+\code{\link[=tte_source]{tte_source()}}
 }
 \concept{source_specifications}
 \keyword{source_specifications}

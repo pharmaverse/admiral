@@ -76,6 +76,8 @@ Only observations fulfilling the specified condition are taken into account
 for summarizing. If the argument is not specified, all observations are
 considered.
 
+Comparing derived numeric variables to fixed values, e.g., \code{PCHG <= -90}, may give unexpected results due to floating point representation. For details and solutions see the "Floating Point Comparisons" section in \code{vignette("concepts_conventions")}.
+
 \describe{
 \item{Permitted values}{an unquoted condition, e.g., \code{AVISIT == "BASELINE"}}
 \item{Default value}{\code{NULL}}
@@ -89,7 +91,7 @@ of the specified variables are set to the specified value. Only variables
 specified for \code{new_vars} can be specified for \code{missing_values}.
 
 \describe{
-\item{Permitted values}{list of named expressions created by a formula using \code{exprs()}, e.g., \code{exprs(AVALC = VSSTRESC, AVAL = yn_to_numeric(AVALC))}}
+\item{Permitted values}{list of named expressions created by \code{exprs()}, e.g., \code{exprs(AVALC = VSSTRESC, AVAL = yn_to_numeric(AVALC))}}
 \item{Default value}{\code{NULL}}
 }}
 }
@@ -115,17 +117,16 @@ matching observation in the input dataset are ignored.
 }
 }
 \seealso{
-\code{\link[=derive_summary_records]{derive_summary_records()}}, \code{\link[=get_summary_records]{get_summary_records()}}
+\code{\link[=derive_summary_records]{derive_summary_records()}}
 
-Other deprecated: 
-\code{\link{call_user_fun}()},
-\code{\link{date_source}()},
-\code{\link{derive_param_extreme_record}()},
-\code{\link{derive_var_dthcaus}()},
-\code{\link{derive_var_extreme_dt}()},
-\code{\link{derive_var_extreme_dtm}()},
-\code{\link{dthcaus_source}()},
-\code{\link{get_summary_records}()}
+Other deprecated:
+\code{\link[=date_source]{date_source()}},
+\code{\link[=derive_param_extreme_record]{derive_param_extreme_record()}},
+\code{\link[=derive_var_dthcaus]{derive_var_dthcaus()}},
+\code{\link[=derive_var_extreme_dt]{derive_var_extreme_dt()}},
+\code{\link[=derive_var_extreme_dtm]{derive_var_extreme_dtm()}},
+\code{\link[=dthcaus_source]{dthcaus_source()}},
+\code{\link[=get_summary_records]{get_summary_records()}}
 }
 \concept{deprecated}
 \keyword{deprecated}

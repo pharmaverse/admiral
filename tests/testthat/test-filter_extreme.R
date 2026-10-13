@@ -27,6 +27,7 @@ test_that("first observation for each group are selected", {
     compare = actual_output,
     keys = "USUBJID"
   )
+  expect_s3_class(actual_output, "admiral_df")
 })
 
 test_that("first observation is selected without grouping", {

@@ -35,5 +35,6 @@ derive_var_chg <- function(dataset) {
   assert_data_frame(dataset, required_vars = exprs(AVAL, BASE))
 
   dataset %>%
-    mutate(CHG = AVAL - BASE)
+    mutate(CHG = AVAL - BASE) %>%
+    as_admiral_df()
 }

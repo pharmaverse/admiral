@@ -28,7 +28,7 @@ negate_vars(exprs(USUBJID, STUDYID))
 }
 \seealso{
 Utilities for working with quosures/list of expressions:
-\code{\link{chr2vars}()}
+\code{\link[=chr2vars]{chr2vars()}}
 }
 \concept{utils_quo}
 \keyword{utils_quo}

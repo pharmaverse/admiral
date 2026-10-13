@@ -7,15 +7,18 @@ test_that("derive_vars_crit_flag Test 1: works with defaults", {
     NA,    NA_character_, NA_character_
   )
 
+  actual <- derive_vars_crit_flag(
+    select(expected, AVAL),
+    condition = AVAL > 40,
+    description = "AVAL > 40"
+  )
+
   expect_dfs_equal(
     base = expected,
-    compare = derive_vars_crit_flag(
-      select(expected, AVAL),
-      condition = AVAL > 40,
-      description = "AVAL > 40"
-    ),
+    compare = actual,
     keys = "AVAL"
   )
+  expect_s3_class(actual, "admiral_df")
 })
 
 ## Test 2: create numeric flag ----

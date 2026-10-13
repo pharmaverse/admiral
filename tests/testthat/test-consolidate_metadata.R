@@ -21,16 +21,20 @@ test_that("consolidate_metadata Test 1: consolidation works", {
     3,   "stud_val_3", "study"
   )
 
+  actual_output <- consolidate_metadata(
+    datasets = list(
+      global = glob,
+      project = proj,
+      study = stud
+    ),
+    key_vars = exprs(id)
+  )
+
+  expect_s3_class(actual_output, "admiral_df")
+
   expect_dfs_equal(
     base = expected,
-    comp = consolidate_metadata(
-      datasets = list(
-        global = glob,
-        project = proj,
-        study = stud
-      ),
-      key_vars = exprs(id)
-    ),
+    comp = actual_output,
     keys = c("id")
   )
 })

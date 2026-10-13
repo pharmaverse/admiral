@@ -59,5 +59,6 @@ derive_var_trtdurd <- function(dataset,
     new_var = TRTDURD,
     start_date = !!start_date,
     end_date = !!end_date
-  )
+  ) %>%
+    as_admiral_df()
 }

@@ -35,6 +35,8 @@ test_that("derive_locf_records Test 1: visits are missing", {
     order = exprs(AVISITN, AVISIT)
   )
 
+  expect_s3_class(actual_output, "admiral_df")
+
   expect_dfs_equal(
     base = expected_output,
     compare = actual_output,

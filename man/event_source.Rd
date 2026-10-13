@@ -25,6 +25,8 @@ of \code{derive_param_tte()}.
 \item{filter}{An unquoted condition for selecting the observations from
 \code{dataset} which are events or possible censoring time points.
 
+Comparing derived numeric variables to fixed values, e.g., \code{PCHG <= -90}, may give unexpected results due to floating point representation. For details and solutions see the "Floating Point Comparisons" section in \code{vignette("concepts_conventions")}.
+
 \describe{
 \item{Default value}{\code{NULL}}
 }}
@@ -85,15 +87,14 @@ event_source(
 \code{\link[=derive_param_tte]{derive_param_tte()}}, \code{\link[=censor_source]{censor_source()}}
 
 Source Objects:
-\code{\link{basket_select}()},
-\code{\link{censor_source}()},
+\code{\link[=basket_select]{basket_select()}},
+\code{\link[=censor_source]{censor_source()}},
 \code{\link{death_event}},
-\code{\link{event}()},
-\code{\link{event_joined}()},
-\code{\link{flag_event}()},
-\code{\link{query}()},
-\code{\link{records_source}()},
-\code{\link{tte_source}()}
+\code{\link[=event]{event()}},
+\code{\link[=event_joined]{event_joined()}},
+\code{\link[=flag_event]{flag_event()}},
+\code{\link[=query]{query()}},
+\code{\link[=tte_source]{tte_source()}}
 }
 \concept{source_specifications}
 \keyword{source_specifications}

@@ -26,6 +26,8 @@
 #'   dataset contains all observations before or after (`selection` parameter)
 #'   the reference observation.
 #'
+#'   `r roxygen_float_comparison()`
+#'
 #' @param mode Selection mode (first or last)
 #'
 #'   If `"first"` is specified, for each by group the observations before or
@@ -161,7 +163,7 @@ filter_relative <- function(dataset,
       case_sensitive = FALSE
     )
   assert_logical_scalar(inclusive)
-  assert_data_frame(dataset, required_vars = expr_c(by_vars, extract_vars(order)))
+  assert_data_frame(dataset, required_vars = c(by_vars, extract_vars(order)))
   check_type <-
     assert_character_scalar(
       check_type,
@@ -219,5 +221,6 @@ filter_relative <- function(dataset,
 
   data %>%
     filter(!!parse_expr(selection_condition)) %>%
-    select(-tmp_obs_nr_match_filter_relative, -tmp_obs_nr_filter_relative)
+    select(-tmp_obs_nr_match_filter_relative, -tmp_obs_nr_filter_relative) %>%
+    as_admiral_df()
 }

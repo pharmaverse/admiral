@@ -59,6 +59,8 @@
 #'   ref_start_date`, `filter_pre_timepoint` should be used to denote when the
 #'   on-treatment flag should be set to null. Optional; default is `NULL`.
 #'
+#'   `r roxygen_float_comparison()`
+#'
 #' @param span_period A logical scalar. If `TRUE`, events that started
 #'   prior to the `ref_start_date`and are ongoing or end after the
 #'   `ref_start_date` are flagged as `"Y"`. Optional; default is `FALSE`.
@@ -191,7 +193,7 @@ derive_var_ontrtfl <- function(dataset,
   ref_end_date <- assert_symbol(enexpr(ref_end_date), optional = TRUE)
   assert_data_frame(
     dataset,
-    required_vars = expr_c(start_date, end_date, ref_start_date, ref_end_date)
+    required_vars = c(start_date, end_date, ref_start_date, ref_end_date)
   )
   warn_if_vars_exist(dataset, as_name(new_var))
 
@@ -281,5 +283,5 @@ derive_var_ontrtfl <- function(dataset,
     )
   }
 
-  dataset
+  as_admiral_df(dataset)
 }

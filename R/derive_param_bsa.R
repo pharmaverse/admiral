@@ -235,7 +235,8 @@ derive_param_bsa <- function(dataset,
       )
       cnd_muffle(cnd)
     }
-  )
+  ) %>%
+    as_admiral_df()
 }
 
 #' Compute Body Surface Area (BSA)
@@ -273,7 +274,8 @@ derive_param_bsa <- function(dataset,
 #' @permitted character value
 #'
 #'
-#' @details Usually this computation function can not be used with `%>%`.
+#' @details This is a vector-oriented helper and is not usually called directly on a data
+#' frame with `%>%`.
 #'
 #' @return The BSA (Body Surface Area) in m^2.
 #'

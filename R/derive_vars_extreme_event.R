@@ -225,5 +225,6 @@ derive_vars_extreme_event <- function(dataset,
     dataset_add = new_obs,
     new_vars = new_vars,
     by_vars = by_vars
-  )
+  ) %>%
+    as_admiral_df()
 }

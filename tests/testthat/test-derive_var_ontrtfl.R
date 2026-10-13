@@ -21,6 +21,7 @@ test_that("derive_var_ontrtfl Test 1: `start_date` < `ref_start_date`", {
     actual_output,
     keys = c("STUDYID", "USUBJID", "ADT")
   )
+  expect_s3_class(actual_output, "admiral_df")
 })
 
 ## Test 2: `ref_start_date` is NA ----

@@ -143,6 +143,8 @@ condition.
 The condition can include summary functions like \code{all()} or \code{any()}. The
 additional dataset is grouped by the by variables (\code{by_vars}).
 
+Comparing derived numeric variables to fixed values, e.g., \code{PCHG <= -90}, may give unexpected results due to floating point representation. For details and solutions see the "Floating Point Comparisons" section in \code{vignette("concepts_conventions")}.
+
 \describe{
 \item{Permitted values}{an unquoted condition, e.g., \code{AVISIT == "BASELINE"}}
 \item{Default value}{\code{NULL}}
@@ -161,6 +163,8 @@ functions which should not apply to all observations but only from a
 certain observation before the current observation up to the current
 observation. For an example see the last example below.
 
+Comparing derived numeric variables to fixed values, e.g., \code{PCHG <= -90}, may give unexpected results due to floating point representation. For details and solutions see the "Floating Point Comparisons" section in \code{vignette("concepts_conventions")}.
+
 \describe{
 \item{Permitted values}{an unquoted condition, e.g., \code{AVISIT == "BASELINE"}}
 \item{Default value}{\code{NULL}}
@@ -176,6 +180,8 @@ observations are considered.
 This argument should be specified if \code{filter_join} contains summary
 functions which should not apply to all observations but only up to the
 confirmation assessment. For an example see the last example below.
+
+Comparing derived numeric variables to fixed values, e.g., \code{PCHG <= -90}, may give unexpected results due to floating point representation. For details and solutions see the "Floating Point Comparisons" section in \code{vignette("concepts_conventions")}.
 
 \describe{
 \item{Permitted values}{an unquoted condition, e.g., \code{AVISIT == "BASELINE"}}
@@ -193,6 +199,8 @@ condition.
 The condition can include summary functions like \code{all()} or \code{any()}. The
 joined dataset is grouped by the original observations.
 
+Comparing derived numeric variables to fixed values, e.g., \code{PCHG <= -90}, may give unexpected results due to floating point representation. For details and solutions see the "Floating Point Comparisons" section in \code{vignette("concepts_conventions")}.
+
 \describe{
 \item{Permitted values}{an unquoted condition, e.g., \code{AVISIT == "BASELINE"}}
 \item{Default value}{\code{NULL}}
@@ -206,7 +214,7 @@ of the specified variables are set to the specified value. Only variables
 specified for \code{new_vars} can be specified for \code{missing_values}.
 
 \describe{
-\item{Permitted values}{list of named expressions created by a formula using \code{exprs()}, e.g., \code{exprs(AVALC = VSSTRESC, AVAL = yn_to_numeric(AVALC))}}
+\item{Permitted values}{list of named expressions created by \code{exprs()}, e.g., \code{exprs(AVALC = VSSTRESC, AVAL = yn_to_numeric(AVALC))}}
 \item{Default value}{\code{NULL}}
 }}
 
@@ -283,19 +291,19 @@ This reduces the memory consumption but increases the run-time.
 \code{\link[=derive_var_joined_exist_flag]{derive_var_joined_exist_flag()}}, \code{\link[=filter_joined]{filter_joined()}}
 
 General Derivation Functions for all ADaMs that returns variable appended to dataset:
-\code{\link{derive_var_extreme_flag}()},
-\code{\link{derive_var_joined_exist_flag}()},
-\code{\link{derive_var_merged_ef_msrc}()},
-\code{\link{derive_var_merged_exist_flag}()},
-\code{\link{derive_var_obs_number}()},
-\code{\link{derive_var_relative_flag}()},
-\code{\link{derive_vars_cat}()},
-\code{\link{derive_vars_computed}()},
-\code{\link{derive_vars_joined}()},
-\code{\link{derive_vars_merged}()},
-\code{\link{derive_vars_merged_lookup}()},
-\code{\link{derive_vars_merged_summary}()},
-\code{\link{derive_vars_transposed}()}
+\code{\link[=derive_var_extreme_flag]{derive_var_extreme_flag()}},
+\code{\link[=derive_var_joined_exist_flag]{derive_var_joined_exist_flag()}},
+\code{\link[=derive_var_merged_ef_msrc]{derive_var_merged_ef_msrc()}},
+\code{\link[=derive_var_merged_exist_flag]{derive_var_merged_exist_flag()}},
+\code{\link[=derive_var_obs_number]{derive_var_obs_number()}},
+\code{\link[=derive_var_relative_flag]{derive_var_relative_flag()}},
+\code{\link[=derive_vars_cat]{derive_vars_cat()}},
+\code{\link[=derive_vars_computed]{derive_vars_computed()}},
+\code{\link[=derive_vars_joined]{derive_vars_joined()}},
+\code{\link[=derive_vars_merged]{derive_vars_merged()}},
+\code{\link[=derive_vars_merged_lookup]{derive_vars_merged_lookup()}},
+\code{\link[=derive_vars_merged_summary]{derive_vars_merged_summary()}},
+\code{\link[=derive_vars_transposed]{derive_vars_transposed()}}
 }
 \concept{der_gen}
 \keyword{der_gen}

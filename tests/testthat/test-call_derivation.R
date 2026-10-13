@@ -60,6 +60,8 @@ test_that("call_derivation Test 1:  Test that call_derivation generates expected
     filter_add = dplyr::n() >= 2L
   )
 
+  expect_s3_class(actual_output, "admiral_df")
+
   expect_dfs_equal(
     expected_output,
     actual_output,

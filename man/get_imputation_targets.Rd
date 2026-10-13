@@ -16,10 +16,11 @@ get_imputation_targets(partial, date_imputation = NULL, time_imputation = NULL)
 \item{date_imputation}{The value to impute the day/month when a datepart is
 missing.
 
-A character value is expected, either as a
+A character value is expected, as a:
 \itemize{
 \item format with month and day specified as \code{"mm-dd"}: e.g. \code{"06-15"} for the 15th
 of June,
+\item format with day specified as \code{"dd"}: e.g. \code{"15"} for the 15th day of a month
 \item or as a keyword: \code{"first"}, \code{"mid"}, \code{"last"} to impute to the first/mid/last
 day/month.
 }

@@ -19,12 +19,15 @@ A \code{character} vector of all available templates
 \description{
 List All Available ADaM Templates
 }
+\details{
+The function only lists the \code{.R} templates.
+}
 \examples{
 list_all_templates()
 }
 \seealso{
 Utilities used for examples and template scripts:
-\code{\link{use_ad_template}()}
+\code{\link[=use_ad_template]{use_ad_template()}}
 }
 \concept{utils_examples}
 \keyword{utils_examples}

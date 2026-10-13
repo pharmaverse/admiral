@@ -119,6 +119,8 @@
 #'   certain observation before the current observation up to the current
 #'   observation. For an example, see the "Examples" section below.
 #'
+#'   `r roxygen_float_comparison()`
+#'
 #' @permitted [condition]
 #'
 #' @param first_cond_upper Condition for selecting range of data (after)
@@ -132,6 +134,8 @@
 #'   functions which should not apply to all observations but only up to the
 #'   confirmation assessment. For an example, see the "Examples" section below.
 #'
+#'   `r roxygen_float_comparison()`
+#'
 #' @permitted [condition]
 #'
 #' @param filter_join Filter for the joined dataset
@@ -144,6 +148,8 @@
 #'
 #'   The condition can include summary functions like `all()` or `any()`. The
 #'   joined dataset is grouped by the original observations.
+#'
+#'   `r roxygen_float_comparison()`
 #'
 #' @permitted [condition]
 #'
@@ -660,7 +666,7 @@ derive_vars_joined <- function(dataset,
   assert_data_frame(dataset, required_vars = by_vars_left)
   assert_data_frame(
     dataset_add,
-    required_vars = expr_c(
+    required_vars = c(
       by_vars,
       extract_vars(order),
       setdiff(extract_vars(join_vars), replace_values_by_names(order))
@@ -704,7 +710,7 @@ derive_vars_joined <- function(dataset,
     data,
     dataset_add = dataset_add,
     by_vars = by_vars,
-    join_vars = expr_c(
+    join_vars = c(
       join_vars,
       intersect(unname(extract_vars(new_vars)), chr2vars(colnames(dataset_add)))
     ),
@@ -723,7 +729,7 @@ derive_vars_joined <- function(dataset,
   if (!is.null(order)) {
     data_joined <- filter_extreme(
       data_joined,
-      by_vars = expr_c(by_vars_left, tmp_obs_nr),
+      by_vars = c(by_vars_left, tmp_obs_nr),
       order = add_suffix_to_vars(
         replace_values_by_names(order),
         vars = common_vars,
@@ -757,7 +763,8 @@ derive_vars_joined <- function(dataset,
         sep = "\n"
       )
     ) %>%
-    remove_tmp_vars()
+    remove_tmp_vars() %>%
+    as_admiral_df()
 }
 
 #' Join Data for "joined" functions
@@ -862,6 +869,8 @@ derive_vars_joined <- function(dataset,
 #'   The condition can include summary functions like `all()` or `any()`. The
 #'   additional dataset is grouped by the by variables (`by_vars`).
 #'
+#'   `r roxygen_float_comparison()`
+#'
 #' @permitted [condition]
 #'
 #' @param first_cond_lower Condition for selecting range of data (before)
@@ -877,6 +886,8 @@ derive_vars_joined <- function(dataset,
 #'   certain observation before the current observation up to the current
 #'   observation.
 #'
+#'   `r roxygen_float_comparison()`
+#'
 #' @permitted [condition]
 #'
 #' @param first_cond_upper Condition for selecting range of data (after)
@@ -890,6 +901,8 @@ derive_vars_joined <- function(dataset,
 #'   functions which should not apply to all observations but only up to the
 #'   confirmation assessment.
 #'
+#'   `r roxygen_float_comparison()`
+#'
 #' @permitted [condition]
 #'
 #' @param filter_join Filter for the joined dataset
@@ -902,6 +915,8 @@ derive_vars_joined <- function(dataset,
 #'
 #'   The condition can include summary functions like `all()` or `any()`. The
 #'   joined dataset is grouped by the original observations.
+#'
+#'   `r roxygen_float_comparison()`
 #'
 #' @permitted [condition]
 #'
@@ -979,12 +994,12 @@ get_joined_data <- function(dataset,
 
   assert_data_frame(
     dataset,
-    required_vars = expr_c(by_vars_left, dataset_order_vars)
+    required_vars = c(by_vars_left, dataset_order_vars)
   )
 
   assert_data_frame(
     dataset_add,
-    required_vars = expr_c(
+    required_vars = c(
       by_vars,
       extract_vars(order),
       setdiff(extract_vars(join_vars), replace_values_by_names(order))
@@ -1218,7 +1233,7 @@ get_joined_sub_data <- function(dataset,
     # select all observations up to the first confirmation observation
     data_joined <- filter_relative(
       data_joined,
-      by_vars = expr_c(by_vars, tmp_obs_nr_left),
+      by_vars = c(by_vars, tmp_obs_nr_left),
       condition = !!first_cond_upper,
       order = exprs(!!parse_expr(paste0(as_name(tmp_obs_nr_var), ".join"))),
       mode = "first",
@@ -1232,7 +1247,7 @@ get_joined_sub_data <- function(dataset,
     # select all observations up to the first confirmation observation
     data_joined <- filter_relative(
       data_joined,
-      by_vars = expr_c(by_vars, tmp_obs_nr_left),
+      by_vars = c(by_vars, tmp_obs_nr_left),
       condition = !!first_cond_lower,
       order = exprs(!!parse_expr(paste0("desc(", as_name(tmp_obs_nr_var), ".join)"))),
       mode = "first",

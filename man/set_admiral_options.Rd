@@ -102,8 +102,8 @@ derive_var_anrind(advs)
 \code{\link[=derive_var_dthcaus]{derive_var_dthcaus()}}, \code{\link[=derive_var_extreme_dtm]{derive_var_extreme_dtm()}}, \code{\link[=derive_vars_period]{derive_vars_period()}},
 \code{\link[=create_period_dataset]{create_period_dataset()}}, \code{\link[=derive_var_atoxgr_dir]{derive_var_atoxgr_dir()}}, \code{\link[=derive_var_anrind]{derive_var_anrind()}}
 
-Other admiral_options: 
-\code{\link{get_admiral_option}()}
+Other admiral_options:
+\code{\link[=get_admiral_option]{get_admiral_option()}}
 }
 \concept{admiral_options}
 \keyword{admiral_options}

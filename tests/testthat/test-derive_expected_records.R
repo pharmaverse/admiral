@@ -35,6 +35,8 @@ test_that("derive_expected_records Test 1: missing values in `by_vars`", {
     set_values_to = exprs(DTYPE = "DERIVED")
   )
 
+  expect_s3_class(actual_output, "admiral_df")
+
   expect_dfs_equal(
     base = expected_output,
     compare = actual_output,

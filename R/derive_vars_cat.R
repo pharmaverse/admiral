@@ -31,6 +31,8 @@
 #'       "Height",  AVAL < 140,  "<140 cm",         2)
 #' ```
 #'
+#' `r roxygen_float_comparison()`
+#'
 #' @param by_vars list of expressions with one element. `NULL` by default.
 #' Allows for specifying by groups, e.g. `exprs(PARAMCD)`.
 #' Variable must be present in both `dataset` and `definition`.
@@ -318,7 +320,7 @@ derive_vars_cat <- function(dataset,
       )))
   }, .init = dataset)
 
-  new_dataset
+  as_admiral_df(new_dataset)
 }
 
 #' Extend a condition string by adding a new condition based on a variable and its value

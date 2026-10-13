@@ -35,13 +35,17 @@ test_that("new observations are derived correctly when zero_doses is NULL", {
     select(-AVAL.TSNDOSE, -AVAL.TNDOSE)
   expected_output <- bind_rows(input, new_obs)
 
+  actual_output <- derive_param_doseint(input,
+    by_vars = exprs(USUBJID, VISIT)
+  )
+
   expect_dfs_equal(
-    derive_param_doseint(input,
-      by_vars = exprs(USUBJID, VISIT)
-    ),
+    actual_output,
     expected_output,
     keys = c("USUBJID", "PARAMCD", "VISIT")
   )
+
+  expect_s3_class(actual_output, "admiral_df")
 })
 
 test_that("new observations are derived correctly when zero_doses is Y", {

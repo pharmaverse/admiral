@@ -33,6 +33,8 @@
 #'   dataset all observations before or after (`selection` argument)
 #'   the reference observation are flagged.
 #'
+#'   `r roxygen_float_comparison()`
+#'
 #' @param mode Selection mode (first or last)
 #'
 #'   If `"first"` is specified, for each by group the observations before or
@@ -195,9 +197,10 @@ derive_var_relative_flag <- function(dataset,
   derive_var_merged_exist_flag(
     data,
     dataset_add = flag_obs,
-    by_vars = expr_c(by_vars, tmp_obs_nr),
+    by_vars = c(by_vars, tmp_obs_nr),
     new_var = !!new_var,
     condition = TRUE
   ) %>%
-    remove_tmp_vars()
+    remove_tmp_vars() %>%
+    as_admiral_df()
 }

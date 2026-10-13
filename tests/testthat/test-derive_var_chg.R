@@ -30,7 +30,10 @@ test_that("`CHG` is calculated as `AVAL - BASE`", {
     "TEST01", "PAT02", "PARAM02", 5.35, NA_character_, "LAST", 8.9, -3.55
   )
 
-  expect_equal(derive_var_chg(input)$CHG, expected_output$CHG)
+  actual_output <- derive_var_chg(input)
+
+  expect_equal(actual_output$CHG, expected_output$CHG)
+  expect_s3_class(actual_output, "admiral_df")
 })
 
 test_that("`PCHG` is calculated as `(AVAL - BASE) / abs(BASE) * 100`", {
@@ -66,7 +69,10 @@ test_that("`PCHG` is calculated as `(AVAL - BASE) / abs(BASE) * 100`", {
     "TEST01", "PAT02", "PARAM02", 5.35, NA_character_, "LAST", 8.9, -39.88764
   )
 
-  expect_equal(derive_var_pchg(input)$PCHG, expected_output$PCHG, tolerance = 1e-5)
+  actual_output <- derive_var_pchg(input)
+
+  expect_equal(actual_output$PCHG, expected_output$PCHG, tolerance = 1e-5)
+  expect_s3_class(actual_output, "admiral_df")
 })
 
 test_that("`PCHG` is set to `NA` if `BASE == 0`", {

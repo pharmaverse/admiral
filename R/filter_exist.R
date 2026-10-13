@@ -25,6 +25,7 @@
 #'   Alternatively, if no filter condition is supplied, no subsetting of the source
 #'   dataset will be performed.
 #'
+#'   `r roxygen_float_comparison()`
 #'
 #' @details Returns the records in `dataset` which match an existing by group in `dataset_add`,
 #'   after being filtered according to `filter_add`. If there are no by groups that exist
@@ -90,7 +91,8 @@ filter_exist <- function(dataset,
       dataset_add %>%
         filter_if(filter_add),
       by = vars2chr(by_vars)
-    )
+    ) %>%
+    as_admiral_df()
 }
 
 #' Returns records that don't fit into existing by groups in a filtered source dataset
@@ -175,5 +177,6 @@ filter_not_exist <- function(dataset,
       dataset_add %>%
         filter_if(filter_add),
       by = vars2chr(by_vars)
-    )
+    ) %>%
+    as_admiral_df()
 }

@@ -27,6 +27,8 @@ The condition is evaluated at the dataset (\code{dataset}). For
 all rows where it evaluates as \code{TRUE} the new variable
 is set to \code{1} in the new column. Otherwise, it is set to \code{0}.
 
+Comparing derived numeric variables to fixed values, e.g., \code{PCHG <= -90}, may give unexpected results due to floating point representation. For details and solutions see the "Floating Point Comparisons" section in \code{vignette("concepts_conventions")}.
+
 \describe{
 \item{Default value}{none}
 }}
@@ -36,6 +38,8 @@ is set to \code{1} in the new column. Otherwise, it is set to \code{0}.
 Only observations fulfilling the specified condition are taken into account
 for flagging. If the argument is not specified, all observations are
 considered.
+
+Comparing derived numeric variables to fixed values, e.g., \code{PCHG <= -90}, may give unexpected results due to floating point representation. For details and solutions see the "Floating Point Comparisons" section in \code{vignette("concepts_conventions")}.
 
 \describe{
 \item{Permitted values}{a condition}
@@ -101,9 +105,10 @@ get_flagged_records(
 }
 \seealso{
 Utilities used within Derivation functions:
-\code{\link{extract_unit}()},
-\code{\link{get_not_mapped}()},
-\code{\link{get_vars_query}()}
+\code{\link[=as_admiral_df]{as_admiral_df()}},
+\code{\link[=extract_unit]{extract_unit()}},
+\code{\link[=get_not_mapped]{get_not_mapped()}},
+\code{\link[=get_vars_query]{get_vars_query()}}
 }
 \concept{utils_help}
 \keyword{utils_help}

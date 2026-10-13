@@ -25,6 +25,8 @@
 #'   + `filter_add = (dplyr::n() > 2)` will filter n count of `by_vars` greater
 #'   than 2.
 #'
+#'   `r roxygen_float_comparison()`
+#'
 #' @param input_code Required parameter code
 #'
 #' The observations where `PARAMCD` equals the specified value are considered to compute the
@@ -166,7 +168,7 @@ derive_param_exposure <- function(dataset = NULL,
 
   assert_data_frame(dataset, required_vars = by_vars, optional = TRUE)
   assert_data_frame(dataset_add,
-    required_vars = expr_c(by_vars, exprs(PARAMCD), dates)
+    required_vars = c(by_vars, exprs(PARAMCD), dates)
   )
 
   filter_add <- assert_filter_cond(enexpr(filter_add), optional = TRUE)
@@ -190,5 +192,6 @@ derive_param_exposure <- function(dataset = NULL,
       !!!set_dt,
       !!!set_values_to
     )
-  )
+  ) %>%
+    as_admiral_df()
 }

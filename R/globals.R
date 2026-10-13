@@ -25,6 +25,7 @@ globalVariables(c(
   "BASEC",
   "BASETYPE",
   "BRTHDT",
+  "CNSR",
   "DTHCAUS",
   "EXDOSE",
   "EXENDTC",

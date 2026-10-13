@@ -238,7 +238,8 @@ advs <- derive_vars_merged_lookup(
   advs,
   dataset_add = param_lookup,
   new_vars = exprs(PARAMCD),
-  by_vars = exprs(VSTESTCD)
+  by_vars = exprs(VSTESTCD),
+  check_not_mapped_type = "warning"
 )
 ```
 
@@ -255,6 +256,12 @@ necessary to expand this lookup or create a separate look up for `PARAMCD`.
 If more than one lookup table, e.g., company parameter mappings and project
 parameter mappings, are available, `consolidate_metadata()` can be used to
 consolidate these into a single lookup table.
+
+The `check_not_mapped_type` argument is used to control whether a message, 
+warning, error, or no message at all is issued when some records are not mapped.
+This can be useful as a failsafe to flag that some records are not being mapped 
+using the lookup table, which can often occur in cases where new data comes 
+through and the lookup table has not been updated.
 
 Additionally note that each parameter is mapped to only one `PARCAT1` variable. 
 This is described in section 3.3.4.1 of the ADaM Implementation Guide, 
@@ -394,7 +401,7 @@ derive_param_wbc_abs(
 ```
 
 When all `PARAMCD` have been derived and added to the dataset, the other information 
-from the look-up table (`PARAM`, `PARAMCAT1`,...) should be added.
+from the look-up table (`PARAM`, `PARCAT1`,...) should be added.
 
 ```{r eval=TRUE}
 # Derive PARAM and PARAMN
@@ -1067,10 +1074,13 @@ dataset_vignette(
 
 ## Assign `ASEQ` {#aseq}
 
-The `{admiral}` function `derive_var_obs_number()` can be used to derive `ASEQ`. An 
-example call is:
+The `{admiral}` function `derive_var_obs_number()` can be used to derive `ASEQ`.
+Note that creating `ASEQ` is not required for all ADaM datasets according to the ADaM IG,
+and this is just for demonstration purpose.
+An example call is:
 
 ```{r eval=TRUE}
+# Calculate ASEQ (Optional Variable)
 advs <- derive_var_obs_number(
   advs,
   new_var = ASEQ,
@@ -1108,36 +1118,14 @@ dataset_vignette(
 )
 ```
 
-## Add Labels and Attributes {#attributes}
-
-Note that attributes may not be preserved in some cases after processing
-with `{admiral}`. The recommended approach is to apply variable labels
-and other metadata as a final step in your data derivation process using
-packages like:
-
--   [metacore](https://atorus-research.github.io/metacore/): establish a
-    common foundation for the use of metadata within an R session.
-
--   [metatools](https://pharmaverse.github.io/metatools/): enable the
-    use of metacore objects. Metatools can be used to build datasets or
-    enhance columns in existing datasets as well as checking datasets
-    against the metadata.
-
--   [xportr](https://atorus-research.github.io/xportr/): functionality
-    to associate all metadata information to a local R data frame,
-    perform data set level validation checks and convert into a
-    [transport v5
-    file(xpt)](https://documentation.sas.com/doc/en/pgmsascdc/9.4_3.5/movefile/n1xbwdre0giahfn11c99yjkpi2yb.htm).
-
-NOTE: Together with `{admiral}` these packages comprise an End to End
-pipeline under the umbrella of the 
-[pharmaverse](https://github.com/pharmaverse). An example of applying metadata 
-and perform associated checks can be found at the [pharmaverse E2E example](https://pharmaverse.github.io/examples/adam/adsl).
+```{r, results='asis', echo=FALSE}
+admiral_labels_attrs_section()
+```
 
 # Example Scripts {#example}
 
 ADaM | Sourcing Command
 ---- | --------------
-ADEG | `use_ad_template("ADEG")`
-ADVS | `use_ad_template("ADVS")`
-ADLB | `use_ad_template("ADLB")`
+`ADEG` | `use_ad_template("ADEG")`
+`ADVS` | `use_ad_template("ADVS")`
+`ADLB` | `use_ad_template("ADLB")`

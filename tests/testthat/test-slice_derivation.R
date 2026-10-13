@@ -35,6 +35,7 @@ test_that("slice_derivation Test 1: slice derivation", {
     compare = actual,
     keys = c("USUBJID", "VSSEQ")
   )
+  expect_s3_class(actual, "admiral_df")
 })
 
 ## Test 2: non matching observations ----
@@ -226,7 +227,7 @@ test_that("slice_derivation Test 6: slice on 0-row dataset", {
   )
 
   expect_identical(
-    expected,
+    as_admiral_df(expected),
     actual
   )
 })

@@ -16,6 +16,8 @@ the date.
 
 \item{filter}{An unquoted condition for filtering \code{dataset}.
 
+Comparing derived numeric variables to fixed values, e.g., \code{PCHG <= -90}, may give unexpected results due to floating point representation. For details and solutions see the "Floating Point Comparisons" section in \code{vignette("concepts_conventions")}.
+
 \describe{
 \item{Default value}{\code{NULL}}
 }}
@@ -43,43 +45,17 @@ function has been deprecated in favor of \code{event()}.
 Create a \code{date_source} object as input for \code{derive_var_extreme_dt()} and
 \code{derive_var_extreme_dtm()}.
 }
-\examples{
-
-# treatment end date from ADSL
-trt_end_date <- date_source(
-  dataset_name = "adsl",
-  date = TRTEDT
-)
-
-# lab date from LB where assessment was taken, i.e. not "NOT DONE"
-lb_date <- date_source(
-  dataset_name = "lb",
-  filter = LBSTAT != "NOT DONE" | is.na(LBSTAT),
-  date = convert_dtc_to_dt(LBDTC)
-)
-
-# death date from ADSL including traceability variables
-death_date <- date_source(
-  dataset_name = "adsl",
-  date = DTHDT,
-  set_values_to = exprs(
-    LALVDOM = "ADSL",
-    LALVVAR = "DTHDT"
-  )
-)
-}
 \seealso{
 \code{\link[=derive_var_extreme_dtm]{derive_var_extreme_dtm()}}, \code{\link[=derive_var_extreme_dt]{derive_var_extreme_dt()}}
 
-Other deprecated: 
-\code{\link{call_user_fun}()},
-\code{\link{derive_param_extreme_record}()},
-\code{\link{derive_var_dthcaus}()},
-\code{\link{derive_var_extreme_dt}()},
-\code{\link{derive_var_extreme_dtm}()},
-\code{\link{derive_var_merged_summary}()},
-\code{\link{dthcaus_source}()},
-\code{\link{get_summary_records}()}
+Other deprecated:
+\code{\link[=derive_param_extreme_record]{derive_param_extreme_record()}},
+\code{\link[=derive_var_dthcaus]{derive_var_dthcaus()}},
+\code{\link[=derive_var_extreme_dt]{derive_var_extreme_dt()}},
+\code{\link[=derive_var_extreme_dtm]{derive_var_extreme_dtm()}},
+\code{\link[=derive_var_merged_summary]{derive_var_merged_summary()}},
+\code{\link[=dthcaus_source]{dthcaus_source()}},
+\code{\link[=get_summary_records]{get_summary_records()}}
 }
 \concept{deprecated}
 \keyword{deprecated}

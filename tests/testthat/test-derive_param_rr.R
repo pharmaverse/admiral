@@ -23,20 +23,24 @@ test_that("derive_param_rr Test 1: new observations are derived correctly", {
     )
   expected_output <- bind_rows(input, new_obs)
 
-  expect_dfs_equal(
-    derive_param_rr(
-      input,
-      by_vars = exprs(USUBJID, VISIT),
-      set_values_to = exprs(
-        PARAMCD = "RRR",
-        PARAM = "RR Duration Rederived (ms)",
-        AVALU = "ms"
-      ),
-      get_unit_expr = AVALU
+  actual_output <- derive_param_rr(
+    input,
+    by_vars = exprs(USUBJID, VISIT),
+    set_values_to = exprs(
+      PARAMCD = "RRR",
+      PARAM = "RR Duration Rederived (ms)",
+      AVALU = "ms"
     ),
+    get_unit_expr = AVALU
+  )
+
+  expect_dfs_equal(
+    actual_output,
     expected_output,
     keys = c("USUBJID", "PARAMCD", "VISIT")
   )
+
+  expect_s3_class(actual_output, "admiral_df")
 })
 
 ## Test 2: Message if no new records ----

@@ -206,7 +206,7 @@ derive_param_framingham <- function(dataset,
 
   assert_data_frame(
     dataset,
-    required_vars = expr_c(
+    required_vars = c(
       by_vars,
       exprs(PARAMCD, AVAL),
       age,
@@ -262,7 +262,7 @@ derive_param_framingham <- function(dataset,
     dataset,
     filter = !!filter,
     parameters = c(sysbp_code, chol_code, cholhdl_code),
-    by_vars = expr_c(
+    by_vars = c(
       by_vars,
       age,
       sex,
@@ -274,5 +274,6 @@ derive_param_framingham <- function(dataset,
       AVAL = !!analysis_value,
       !!!set_values_to
     )
-  )
+  ) %>%
+    as_admiral_df()
 }

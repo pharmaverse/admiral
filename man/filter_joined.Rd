@@ -53,9 +53,13 @@ dataset with itself.
 
 The variables needed from the other observations should be specified for
 this parameter. The specified variables are added to the joined dataset
-with suffix ".join". For example to select all observations with \code{AVALC == "Y"} and \code{AVALC == "Y"} for at least one subsequent visit \code{join_vars = exprs(AVALC, AVISITN)} and \code{filter_join = AVALC == "Y" & AVALC.join == "Y" & AVISITN < AVISITN.join} could be specified.
+with suffix \code{.join}. For example to select all observations with \code{AVALC == "Y"} and \code{AVALC == "Y"} for at least one subsequent visit \code{join_vars = exprs(AVALC, AVISITN)} and \code{filter_join = AVALC == "Y" & AVALC.join == "Y" & AVISITN < AVISITN.join} could be specified.
 
 The \verb{*.join} variables are not included in the output dataset.
+
+The variable specified for \code{tmp_obs_nr_var} must not be included in
+\code{join_vars}. It is added automatically to the joined dataset with the
+suffix \code{.join}.
 
 \describe{
 \item{Permitted values}{list of variables created by \code{exprs()}, e.g., \code{exprs(USUBJID, VISIT)}}
@@ -94,6 +98,8 @@ functions which should not apply to all observations but only from a
 certain observation before the current observation up to the current
 observation. For examples see the "Examples" section below.
 
+Comparing derived numeric variables to fixed values, e.g., \code{PCHG <= -90}, may give unexpected results due to floating point representation. For details and solutions see the "Floating Point Comparisons" section in \code{vignette("concepts_conventions")}.
+
 \describe{
 \item{Permitted values}{an unquoted condition, e.g., \code{AVISIT == "BASELINE"}}
 \item{Default value}{\code{NULL}}
@@ -109,6 +115,8 @@ observations are considered, i.e., the observation is not flagged.
 This parameter should be specified if \code{filter_join} contains summary
 functions which should not apply to all observations but only up to the
 confirmation assessment. For examples see the "Examples" section below.
+
+Comparing derived numeric variables to fixed values, e.g., \code{PCHG <= -90}, may give unexpected results due to floating point representation. For details and solutions see the "Floating Point Comparisons" section in \code{vignette("concepts_conventions")}.
 
 \describe{
 \item{Permitted values}{an unquoted condition, e.g., \code{AVISIT == "BASELINE"}}
@@ -155,6 +163,8 @@ Variables created by the \code{order} argument can be used in the condition.
 The condition can include summary functions. The additional dataset is
 grouped by the by variables (\code{by_vars}).
 
+Comparing derived numeric variables to fixed values, e.g., \code{PCHG <= -90}, may give unexpected results due to floating point representation. For details and solutions see the "Floating Point Comparisons" section in \code{vignette("concepts_conventions")}.
+
 \describe{
 \item{Permitted values}{an unquoted condition, e.g., \code{AVISIT == "BASELINE"}}
 \item{Default value}{\code{NULL}}
@@ -170,6 +180,8 @@ observation. For example in the oncology setting when using this function
 for confirmed best overall response,  \code{filter_join = AVALC == "CR" & all(AVALC.join \%in\% c("CR", "NE")) & count_vals(var = AVALC.join, val = "NE") <= 1} selects observations with response "CR" and for all
 observations up to the confirmation observation the response is "CR" or
 "NE" and there is at most one "NE".
+
+Comparing derived numeric variables to fixed values, e.g., \code{PCHG <= -90}, may give unexpected results due to floating point representation. For details and solutions see the "Floating Point Comparisons" section in \code{vignette("concepts_conventions")}.
 
 \describe{
 \item{Permitted values}{an unquoted condition, e.g., \code{AVISIT == "BASELINE"}}
@@ -299,13 +311,13 @@ This reduces the memory consumption but increases the run-time.
 \code{\link[=count_vals]{count_vals()}}, \code{\link[=min_cond]{min_cond()}}, \code{\link[=max_cond]{max_cond()}}
 
 Utilities for Filtering Observations:
-\code{\link{count_vals}()},
-\code{\link{filter_exist}()},
-\code{\link{filter_extreme}()},
-\code{\link{filter_not_exist}()},
-\code{\link{filter_relative}()},
-\code{\link{max_cond}()},
-\code{\link{min_cond}()}
+\code{\link[=count_vals]{count_vals()}},
+\code{\link[=filter_exist]{filter_exist()}},
+\code{\link[=filter_extreme]{filter_extreme()}},
+\code{\link[=filter_not_exist]{filter_not_exist()}},
+\code{\link[=filter_relative]{filter_relative()}},
+\code{\link[=max_cond]{max_cond()}},
+\code{\link[=min_cond]{min_cond()}}
 }
 \concept{utils_fil}
 \keyword{utils_fil}

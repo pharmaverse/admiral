@@ -183,7 +183,8 @@ slice_derivation <- function(dataset,
   }
   # put datasets together again
   bind_rows(ret, dataset[is.na(dataset$temp_slicenr), , drop = FALSE]) %>%
-    select(-temp_slicenr)
+    select(-temp_slicenr) %>%
+    as_admiral_df()
 }
 
 #' Create a `derivation_slice` Object
@@ -192,6 +193,8 @@ slice_derivation <- function(dataset,
 #'
 #' @param filter An unquoted condition for defining the observations of the
 #'   slice
+#'
+#'   `r roxygen_float_comparison()`
 #'
 #' @param args Arguments of the derivation to be used for the slice
 #'

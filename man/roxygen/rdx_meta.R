@@ -8,7 +8,7 @@ list(
     date = "a date or datetime variable",
     date_chr = "a character date variable",
     date_chr_vector = "a character date vector",
-    date_imp = "`\"first\"`, `\"mid\"`, `\"last\"`, or user-defined",
+    date_imp = "a key-word, i.e. `\"first\"`, `\"mid\"`, `\"last\"`, or `\"<mm>-<dd>\"` or `\"<dd>\"`",
     date_high_imp = "`\"Y\"` (year, highest level), `\"M\"` (month), `\"D\"`
     (day), `\"n\"` (none, lowest level)",
     date_list = "a list of dates, e.g. `list(ymd_hms(\"2021-07-01T04:03:01\"), ymd_hms(\"2022-05-12T13:57:23\"))`",
@@ -18,7 +18,7 @@ list(
     (day), `\"h\"` (hour), `\"m\"` (minute), `\"s\"` (second), `\"n\"` (none, lowest
     level)",
     event = "an `event()` or `event_joined()` object",
-    expr_list_formula = "list of named expressions created by a formula using `exprs()`, e.g., `exprs(AVALC = VSSTRESC, AVAL = yn_to_numeric(AVALC))`",
+    expr_list_named = "list of named expressions created by `exprs()`, e.g., `exprs(AVALC = VSSTRESC, AVAL = yn_to_numeric(AVALC))`",
     expr_list_summary = "list of named expressions created by `exprs()`, e.g., `exprs(CUMDOSA = sum(AVAL, na.rm = TRUE), AVALU = \"ml\")`",
     flag_event = "a list of `flag_event()` objects",
     join_type = "`\"before\"`, `\"after\"`, `\"all\"`",

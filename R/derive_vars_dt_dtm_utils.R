@@ -83,9 +83,10 @@ dt_level <- function(level) {
 #' @param date_imputation The value to impute the day/month when a datepart is
 #'   missing.
 #'
-#'   A character value is expected, either as a
+#'   A character value is expected, as a:
 #'   - format with month and day specified as `"mm-dd"`: e.g. `"06-15"` for the 15th
 #'   of June,
+#'   - format with day specified as `"dd"`: e.g. `"15"` for the 15th day of a month
 #'   - or as a keyword: `"first"`, `"mid"`, `"last"` to impute to the first/mid/last
 #'   day/month.
 #'
@@ -96,11 +97,12 @@ dt_level <- function(level) {
 #'
 #' @details
 #'
-#'  - For `date_imputation = "first"` `"0000"`, `"01"`, `"01"` are returned.
-#'  - For `date_imputation = "mid"` `"xxxx"`, `"06"`, `"30"` if `month` is `NA`.
+#'  - For `date_imputation = "first"`, `"0000"`, `"01"`, `"01"` are returned.
+#'  - For `date_imputation = "mid"`, `"xxxx"`, `"06"`, `"30"` if `month` is `NA`.
 #'   otherwise `"15"` returned.
-#'  - For `date_imputation = "last"` `"9999"`, `"12"`, `"28"` are returned.
-#'  - For `date_imputation = "<mm>-<dd>"` `"xxxx"`, `"<mm>"`, `"<dd>"` are returned.
+#'  - For `date_imputation = "last"`, `"9999"`, `"12"`, `"28"` are returned.
+#'  - For `date_imputation = "<mm>-<dd>"`, `"xxxx"`, `"<mm>"`, `"<dd>"` are returned.
+#'  - For `date_imputation = "<dd>"`, `"xxxx"`, `"xx"`, `"<dd>"` are returned.
 #'
 #'  `"xxxx"` indicates that the component is undefined. If an undefined
 #'  component occurs in the imputed `--DTC` value, the imputed `--DTC` value is set to
@@ -108,24 +110,22 @@ dt_level <- function(level) {
 #'
 #' @examples
 #' # Get imputation target for "first"
-#' target_first <- admiral:::get_imputation_target_date("first", month = NA)
-#' print(target_first)
+#' admiral:::get_imputation_target_date("first", month = NA)
 #'
 #' # Get imputation target for "mid" with specified month
-#' target_mid <- admiral:::get_imputation_target_date("mid", month = "03")
-#' print(target_mid)
+#' admiral:::get_imputation_target_date("mid", month = "03")
 #'
 #' # Get imputation target for "mid" with NA month
-#' target_mid_na <- admiral:::get_imputation_target_date("mid", month = NA)
-#' print(target_mid_na)
+#' admiral:::get_imputation_target_date("mid", month = NA)
 #'
 #' # Get imputation target for "last"
-#' target_last <- admiral:::get_imputation_target_date("last", month = NA)
-#' print(target_last)
+#' admiral:::get_imputation_target_date("last", month = NA)
 #'
 #' # Get imputation target for custom date imputation "06-15"
-#' target_custom <- admiral:::get_imputation_target_date("06-15", month = NA)
-#' print(target_custom)
+#' admiral:::get_imputation_target_date("06-15", month = NA)
+#'
+#' # Get imputation target for custom date imputation "11"
+#' admiral:::get_imputation_target_date("11", month = NA)
 #'
 #' @family utils_impute
 #'
@@ -152,6 +152,12 @@ get_imputation_target_date <- function(date_imputation,
       month = "12",
       day = "28"
     )
+  } else if (str_detect(date_imputation, "^(0[1-9]|[12][0-9]|3[01])$")) {
+    list(
+      year = "xxxx",
+      month = "xx",
+      day = date_imputation
+    )
   } else {
     list(
       year = "xxxx",
@@ -176,22 +182,19 @@ get_imputation_target_date <- function(date_imputation,
 #'
 #' @details
 #'
-#'  - For `time_imputation = "first"` `"00"`, `"00"`, `"00"` are returned.
-#'  - For `time_imputation = "last"` `"23"`, `"59"`, `"59"` are returned.
-#'  - For `time_imputation = "<hh>:<mm>:<ss>"` `"<hh>"`, `"<mm>"`, `"<ss>"` are returned.
+#'  - For `time_imputation = "first"`, `"00"`, `"00"`, `"00"` are returned.
+#'  - For `time_imputation = "last"`, `"23"`, `"59"`, `"59"` are returned.
+#'  - For `time_imputation = "<hh>:<mm>:<ss>"`, `"<hh>"`, `"<mm>"`, `"<ss>"` are returned.
 #'
 #' @examples
 #' # Get imputation target for "first" time
-#' target_first_time <- admiral:::get_imputation_target_time("first")
-#' print(target_first_time)
+#' admiral:::get_imputation_target_time("first")
 #'
 #' # Get imputation target for "last" time
-#' target_last_time <- admiral:::get_imputation_target_time("last")
-#' print(target_last_time)
+#' admiral:::get_imputation_target_time("last")
 #'
 #' # Get imputation target for custom time imputation "12-34-56"
-#' target_custom_time <- admiral:::get_imputation_target_time("12-34-56")
-#' print(target_custom_time)
+#' admiral:::get_imputation_target_time("12-34-56")
 #'
 #' @family utils_impute
 #'
@@ -215,7 +218,7 @@ get_imputation_target_time <- function(time_imputation) {
 #' Convert a Date into a Datetime Object
 #'
 #' @description Convert a date (datetime, date, or date character) into a Date
-#' vector (usually `'--DTM'`).
+#' vector (usually `*DTM`).
 #'
 #' **Note:** This is a wrapper function for the function `convert_dtc_to_dtm()`.
 #'
@@ -225,10 +228,10 @@ get_imputation_target_time <- function(time_imputation) {
 #'
 #' @inheritParams convert_dtc_to_dtm
 #'
-#' @details Usually this computation function can not be used with `%>%`.
+#' @details This is a vector-oriented helper and is not usually called directly on a data
+#' frame with `%>%`.
 #'
 #' @returns A datetime object
-#'
 #'
 #' @family com_date_time
 #'
@@ -247,7 +250,9 @@ convert_date_to_dtm <- function(dt,
                                 date_imputation = "first",
                                 time_imputation = "first",
                                 min_dates = NULL,
+                                min_dates_strict = NULL,
                                 max_dates = NULL,
+                                max_dates_strict = NULL,
                                 preserve = FALSE) {
   if (is.POSIXct(dt)) {
     dt
@@ -263,7 +268,9 @@ convert_date_to_dtm <- function(dt,
         date_imputation = date_imputation,
         time_imputation = time_imputation,
         min_dates = min_dates,
+        min_dates_strict = min_dates_strict,
         max_dates = max_dates,
+        max_dates_strict = max_dates_strict,
         preserve = preserve
       )
   }
@@ -271,7 +278,7 @@ convert_date_to_dtm <- function(dt,
 
 #' Parse `--DTC` variable and Determine Components
 #'
-#' @param dtc The `'--DTC'` date to parse
+#' @param dtc The `--DTC` date to parse
 #'
 #'   A character date is expected in a format like `yyyy-mm-dd` or
 #'   `yyyy-mm-ddThh:mm:ss`. Trailing components can be omitted and `-` is a
@@ -384,15 +391,21 @@ assert_date_imputation <- function(date_imputation, highest_imputation) {
 
   date_imputation <- tolower(date_imputation)
   if (highest_imputation == "D") {
-    assert_character_scalar(date_imputation, values = c("first", "mid", "last"))
+    is_dd_format <- str_detect(date_imputation, "^(0[1-9]|[12][0-9]|3[01])$")
+    is_one_of_keys <- date_imputation %in% c("first", "mid", "last")
+    if (!(is_dd_format || is_one_of_keys)) {
+      cli_abort(paste(
+        "If {.code highest_imputation = \"D\"} is specified, {.arg date_imputation} must be",
+        "one of {.val first}, {.val mid}, {.val last}",
+        "or a format with day specified as {.val dd}: e.g. {.val 15}"
+      ))
+    }
   }
 
   if (highest_imputation == "M") {
     is_mm_dd_format <- str_detect(date_imputation, "^(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])$")
     is_one_of_keys <- date_imputation %in% c("first", "mid", "last")
-    if (!{
-      is_mm_dd_format || is_one_of_keys
-    }) {
+    if (!(is_mm_dd_format || is_one_of_keys)) {
       cli_abort(paste(
         "If {.code highest_imputation = \"M\"} is specified, {.arg date_imputation} must be",
         "one of {.val first}, {.val mid}, {.val last}",
@@ -446,9 +459,7 @@ assert_time_imputation <- function(time_imputation, highest_imputation) {
   )
   is_one_of_keys <- time_imputation %in% c("first", "last")
 
-  if (!{
-    is_hh_mm_ss_format || is_one_of_keys
-  } && highest_imputation != "n") {
+  if (!(is_hh_mm_ss_format || is_one_of_keys) && highest_imputation != "n") {
     cli_abort(paste(
       "{.arg time_imputation} must be",
       "one of {.val first}, {.val last}",
@@ -483,9 +494,13 @@ assert_time_imputation <- function(time_imputation, highest_imputation) {
 #' @returns Returns `NULL` invisibly if assertions pass.
 #'
 #' @keywords internal
-assert_highest_imputation <- function(highest_imputation, highest_imputation_values,
+assert_highest_imputation <- function(highest_imputation,
+                                      highest_imputation_values,
                                       date_imputation = NULL,
-                                      max_dates, min_dates) {
+                                      min_dates,
+                                      min_dates_strict,
+                                      max_dates,
+                                      max_dates_strict) {
   assert_character_scalar(
     highest_imputation,
     values = highest_imputation_values,
@@ -497,29 +512,74 @@ assert_highest_imputation <- function(highest_imputation, highest_imputation_val
   }
 
   assert_character_scalar(date_imputation, values = c("first", "last"))
-  no_mindates <- is.null(min_dates) || length(min_dates) == 0
-  no_maxdates <- is.null(max_dates) || length(max_dates) == 0
+  no_mindates <- (is.null(min_dates) || length(min_dates) == 0) &&
+    (is.null(min_dates_strict) || length(min_dates_strict) == 0)
+  no_maxdates <- (is.null(max_dates) || length(max_dates) == 0) &&
+    (is.null(max_dates_strict) || length(max_dates_strict) == 0)
 
   if (no_maxdates && no_mindates) {
     cli_abort(paste(
-      "If {.code highest_imputation = \"Y\"} is specified, {.arg min_dates} or",
-      "{.arg max_dates} must be specified respectively."
+      "If {.code highest_imputation = \"Y\"} is specified, {.arg min_dates},",
+      "{.arg min_dates_strict}, {.arg max_dates}, or {.arg max_dates_strict}",
+      "must be specified."
     ))
   }
-
 
   if (no_mindates && date_imputation == "first") {
     cli_abort(paste(
       "If {.code highest_imputation = \"Y\"} and {.code date_imputation = \"first\"}",
-      "is specified, {.arg min_dates} must be specified."
+      "is specified, {.arg min_dates} or {.arg min_dates_strict} must be specified."
     ))
   }
 
   if (no_maxdates && date_imputation == "last") {
     cli_abort(paste(
       "If {.code highest_imputation = \"Y\"} and {.code date_imputation = \"last\"}",
-      "is specified, {.arg max_dates} must be specified."
+      "is specified, {.arg max_dates} or {.arg max_dates_strict} must be specified."
     ))
+  }
+  invisible(NULL)
+}
+
+#' Assert Strict Date Ranges
+#'
+#' Asserts that the minimum dates specified in `min_dates_strict` are not
+#' greater than the maximum dates specified in `max_dates_strict`.
+#'
+#' @param min_dates_strict A list of minimum dates to check.
+#' @param max_dates_strict A list of maximum dates to check.
+#'
+#' @details
+#' If any minimum date is greater than its corresponding maximum date, an error
+#' is thrown with the invalid combinations of minimum and maximum dates.
+#'
+#' @returns Invisibly returns `NULL` if the assertion passes.
+#'
+#' @keywords internal
+assert_dates_strict <- function(min_dates_strict, max_dates_strict) {
+  if (!is.null(min_dates_strict) && length(min_dates_strict) > 0 &&
+    !is.null(max_dates_strict) && length(max_dates_strict) > 0) {
+    min_dates <- reduce(min_dates_strict, pmax)
+    max_dates <- reduce(max_dates_strict, pmin)
+    bad_i <- which(min_dates > max_dates)
+    if (any(bad_i)) {
+      bads <- data.frame(
+        min_dates = min_dates[bad_i],
+        max_dates = max_dates[bad_i]
+      ) %>% unique()
+      invalids <- c(
+        "{.arg min_dates_strict}, {.arg max_dates_strict}",
+        paste0(bads$min_dates, ", ", bads$max_dates)
+      )
+      cli_abort(c(
+        paste(
+          "The minimum date(s) specified in {.arg min_dates_strict} must not be",
+          "greater than the maximum date(s) specified in {.arg max_dates_strict}."
+        ),
+        "The following combinations of minimum and maximum dates are invalid:",
+        invalids
+      ))
+    }
   }
   invisible(NULL)
 }
@@ -534,26 +594,46 @@ assert_highest_imputation <- function(highest_imputation, highest_imputation_val
 #' (e.g., `"2022-12-15"`, `"2022-12"`, `"2022"`).
 #' Partial dates are allowed.
 #'
+#' @param lower_bounds Lower bounds restricting the range
+#'
+#'   The specified bounds restrict the lower limit of the returned range if it
+#'   is within the range of the possible dates.
+#'
+#' @permitted [date_list]
+#'
+#' @param upper_bounds Upper bounds restricting the range
+#'
+#'   The specified bounds restrict the upper limit of the returned range if it
+#'   is within the range of the possible dates.
+#'
+#' @permitted [date_list]
+#'
 #' @param create_datetime return the range in datetime format.
 #'
 #' @returns A list containing two vectors of fully imputed dates
 #' in `"YYYY-MM-DD"` or `"YYYY-MM-DDThh:mm:ss"` format - the lower and upper limit of the range.
 #'
 #' @examples
+#' library(lubridate)
 #' # Get Range from Partial Dates
 #' dtc_dates <- c("2020-02-29", "2021-03")
-#' imputed_dates_first <- admiral:::get_dt_dtm_range(dtc_dates, create_datetime = FALSE)
-#' print(imputed_dates_first)
-#'
+#' admiral:::get_dt_dtm_range(dtc_dates, create_datetime = FALSE)
 #'
 #' # Get Range from Partial Datetime
 #' dtc_datetimes <- c("2020-02-29T12:00", "2021-03T14:30")
-#' imputed_datetimes_first <- admiral:::get_dt_dtm_range(dtc_datetimes, create_datetime = TRUE)
-#' print(imputed_datetimes_first)
+#' admiral:::get_dt_dtm_range(dtc_datetimes, create_datetime = TRUE)
+#'
+#' # Get Range with Bounds
+#' dtc_dates <- c("2020-02-29", "2021-03")
+#' admiral:::get_dt_dtm_range(
+#'   dtc_dates,
+#'   lower_bounds = list(c(ymd("2020-01-01"), ymd("2021-03-05"))),
+#'   upper_bounds = list(c(ymd("2020-12-31"), ymd("2021-03-25"))),
+#'   create_datetime = FALSE
+#' )
 #'
 #' # Edge case: Return empty character vector for empty input
-#' imputed_empty <- admiral:::get_dt_dtm_range(character(0), create_datetime = TRUE)
-#' print(imputed_empty)
+#' admiral:::get_dt_dtm_range(character(0), create_datetime = TRUE)
 #'
 #' @details
 #' The functions replaces missing components in `dtc` with the earliest (lower bound)
@@ -562,6 +642,8 @@ assert_highest_imputation <- function(highest_imputation, highest_imputation_val
 #'
 #' @keywords internal
 get_dt_dtm_range <- function(dtc,
+                             lower_bounds = NULL,
+                             upper_bounds = NULL,
                              create_datetime) {
   assert_character_vector(dtc)
   valid_dtc <- is_valid_dtc(dtc)
@@ -598,6 +680,46 @@ get_dt_dtm_range <- function(dtc,
   })
 
   imputed_dtcs[[2]] <- adjust_last_day_imputation(imputed_dtcs[[2]], partial)
+  if (create_datetime) {
+    date_function <- ymd_hms
+  } else {
+    date_function <- ymd
+  }
+
+  if (!(is.null(lower_bounds) || length(lower_bounds) == 0)) {
+    upper_dt <- date_function(imputed_dtcs[[2]])
+    for (lower_bound in lower_bounds) {
+      lower_dt <- date_function(imputed_dtcs[[1]])
+      # consider only bounds that are within the imputed range
+      imputed_dtcs[[1]] <- if_else(
+        lower_dt <= lower_bound & lower_bound <= upper_dt,
+        pmax(lower_dt, lower_bound, na.rm = TRUE) %>% format_ISO8601(),
+        imputed_dtcs[[1]],
+        missing = imputed_dtcs[[1]]
+      )
+    }
+  }
+
+  if (!(is.null(upper_bounds) || length(upper_bounds) == 0)) {
+    lower_dt <- date_function(imputed_dtcs[[1]])
+    for (upper_bound in upper_bounds) {
+      if (create_datetime) {
+        # set time to 23:59:59 for dates
+        upper_bound <- convert_date_to_dtm(
+          upper_bound,
+          time_imputation = "last"
+        )
+      }
+      upper_dt <- date_function(imputed_dtcs[[2]])
+      # consider only bounds that are within the imputed range
+      imputed_dtcs[[2]] <- if_else(
+        lower_dt <= upper_bound & upper_bound <= upper_dt,
+        pmin(upper_dt, upper_bound, na.rm = TRUE) %>% format_ISO8601(),
+        imputed_dtcs[[2]],
+        missing = imputed_dtcs[[2]]
+      )
+    }
+  }
 
   names(imputed_dtcs) <- c("lower", "upper")
 

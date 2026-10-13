@@ -183,8 +183,8 @@ See the final example in the examples section below.
 }
 \seealso{
 OCCDS Functions:
-\code{\link{derive_vars_atc}()},
-\code{\link{derive_vars_query}()}
+\code{\link[=derive_vars_atc]{derive_vars_atc()}},
+\code{\link[=derive_vars_query]{derive_vars_query()}}
 }
 \concept{der_occds}
 \keyword{der_occds}

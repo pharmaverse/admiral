@@ -35,6 +35,8 @@ A \code{params()} object is expected.
 
 \item{filter}{Filter condition
 
+Comparing derived numeric variables to fixed values, e.g., \code{PCHG <= -90}, may give unexpected results due to floating point representation. For details and solutions see the "Floating Point Comparisons" section in \code{vignette("concepts_conventions")}.
+
 \describe{
 \item{Default value}{none}
 }}
@@ -96,9 +98,9 @@ restrict_derivation(
 \code{\link[=params]{params()}} \code{\link[=slice_derivation]{slice_derivation()}} \code{\link[=call_derivation]{call_derivation()}}
 
 Higher Order Functions:
-\code{\link{call_derivation}()},
-\code{\link{derivation_slice}()},
-\code{\link{slice_derivation}()}
+\code{\link[=call_derivation]{call_derivation()}},
+\code{\link[=derivation_slice]{derivation_slice()}},
+\code{\link[=slice_derivation]{slice_derivation()}}
 }
 \concept{high_order_function}
 \keyword{high_order_function}

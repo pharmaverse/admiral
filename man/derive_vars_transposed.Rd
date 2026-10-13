@@ -67,6 +67,8 @@ transposed variables
 
 \item{filter}{Expression used to restrict the records of \code{dataset_merge} prior to transposing
 
+Comparing derived numeric variables to fixed values, e.g., \code{PCHG <= -90}, may give unexpected results due to floating point representation. For details and solutions see the "Floating Point Comparisons" section in \code{vignette("concepts_conventions")}.
+
 \describe{
 \item{Default value}{\code{NULL}}
 }}
@@ -171,19 +173,19 @@ try(
 \code{\link[=derive_vars_atc]{derive_vars_atc()}}
 
 General Derivation Functions for all ADaMs that returns variable appended to dataset:
-\code{\link{derive_var_extreme_flag}()},
-\code{\link{derive_var_joined_exist_flag}()},
-\code{\link{derive_var_merged_ef_msrc}()},
-\code{\link{derive_var_merged_exist_flag}()},
-\code{\link{derive_var_obs_number}()},
-\code{\link{derive_var_relative_flag}()},
-\code{\link{derive_vars_cat}()},
-\code{\link{derive_vars_computed}()},
-\code{\link{derive_vars_joined}()},
-\code{\link{derive_vars_joined_summary}()},
-\code{\link{derive_vars_merged}()},
-\code{\link{derive_vars_merged_lookup}()},
-\code{\link{derive_vars_merged_summary}()}
+\code{\link[=derive_var_extreme_flag]{derive_var_extreme_flag()}},
+\code{\link[=derive_var_joined_exist_flag]{derive_var_joined_exist_flag()}},
+\code{\link[=derive_var_merged_ef_msrc]{derive_var_merged_ef_msrc()}},
+\code{\link[=derive_var_merged_exist_flag]{derive_var_merged_exist_flag()}},
+\code{\link[=derive_var_obs_number]{derive_var_obs_number()}},
+\code{\link[=derive_var_relative_flag]{derive_var_relative_flag()}},
+\code{\link[=derive_vars_cat]{derive_vars_cat()}},
+\code{\link[=derive_vars_computed]{derive_vars_computed()}},
+\code{\link[=derive_vars_joined]{derive_vars_joined()}},
+\code{\link[=derive_vars_joined_summary]{derive_vars_joined_summary()}},
+\code{\link[=derive_vars_merged]{derive_vars_merged()}},
+\code{\link[=derive_vars_merged_lookup]{derive_vars_merged_lookup()}},
+\code{\link[=derive_vars_merged_summary]{derive_vars_merged_summary()}}
 }
 \concept{der_gen}
 \keyword{der_gen}

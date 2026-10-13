@@ -103,6 +103,9 @@
 #' refers to time from treatment initiation, while "post end of infusion" refers
 #' to time from treatment completion.
 #'
+#' This is a vector-oriented helper and is not usually called directly on a data
+#' frame with `%>%`.
+#'
 #' **Vectorized Treatment Duration:**
 #'
 #' When `treatment_duration` is a vector, each timepoint uses its corresponding
