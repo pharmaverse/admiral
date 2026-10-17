@@ -115,9 +115,10 @@ ex_dates <- ex %>%
     visit_day = VISITDY
   ) %>%
   # Set missing end dates to start date
-  mutate(AENDTM = case_when(
-    is.na(AENDTM) ~ ASTDTM,
-    TRUE ~ AENDTM
+  mutate(AENDTM = if_else(
+    is.na(AENDTM),
+    ASTDTM,
+    AENDTM
   )) %>%
   # Derive dates from date/times
   derive_vars_dtm_to_dt(exprs(ASTDTM)) %>%
@@ -322,9 +323,11 @@ adpc_nrrlt <- adpc_arrlt %>%
       is.na(NFRLT_prev) ~ NFRLT - min_NFRLT,
       TRUE ~ NFRLT - NFRLT_prev
     ),
-    NXRLT = case_when(
-      EVID == 1 ~ 0,
-      TRUE ~ NFRLT - NFRLT_next
+    NXRLT = if_else(
+      EVID == 1,
+      0,
+      NFRLT - NFRLT_next,
+      missing = NFRLT - NFRLT_next
     )
   )
 
@@ -337,13 +340,17 @@ adpc_nrrlt <- adpc_arrlt %>%
 adpc_aval <- adpc_nrrlt %>%
   mutate(
     PARCAT1 = PCSPEC,
-    ATPTN = case_when(
-      EVID == 1 ~ 0,
-      TRUE ~ PCTPTNUM
+    ATPTN = if_else(
+      EVID == 1,
+      0,
+      PCTPTNUM,
+      missing = PCTPTNUM
     ),
-    ATPT = case_when(
-      EVID == 1 ~ "Dose",
-      TRUE ~ PCTPT
+    ATPT = if_else(
+      EVID == 1,
+      "Dose",
+      PCTPT,
+      missing = PCTPT
     ),
     ATPTREF = case_when(
       EVID == 1 ~ AVISIT,
@@ -372,13 +379,17 @@ adpc_aval <- adpc_nrrlt %>%
     PARAMCD = coalesce(PCTESTCD, "DOSE"),
     ALLOQ = PCLLOQ,
     # Derive AVAL
-    AVAL = case_when(
-      EVID == 1 ~ EXDOSE,
-      TRUE ~ PCSTRESN
+    AVAL = if_else(
+      EVID == 1,
+      EXDOSE,
+      PCSTRESN,
+      missing = PCSTRESN
     ),
-    AVALU = case_when(
-      EVID == 1 ~ EXDOSU,
-      TRUE ~ PCSTRESU
+    AVALU = if_else(
+      EVID == 1,
+      EXDOSU,
+      PCSTRESU,
+      missing = PCSTRESU
     ),
     AVALCAT1 = if_else(PCSTRESC == "<BLQ", PCSTRESC, prettyNum(signif(AVAL, digits = 3))),
   ) %>%
@@ -433,9 +444,10 @@ adpc_dtype <- bind_rows(adpc_lloq, dtype) %>%
   arrange(STUDYID, USUBJID, BASETYPE, ADTM, NFRLT) %>%
   mutate(
     # Derive baseline flag for pre-dose records
-    ABLFL = case_when(
-      ATPT == "Pre-dose" & !is.na(AVAL) ~ "Y",
-      TRUE ~ NA_character_
+    ABLFL = if_else(
+      ATPT == "Pre-dose" & !is.na(AVAL),
+      "Y",
+      NA_character_
     ),
     # Derive MRRLT, ANL01FL and ANL02FL
     MRRLT = if_else(ARRLT < 0, 0, ARRLT),
