@@ -17,7 +17,8 @@ derive_vars_dtm(
   max_dates = NULL,
   max_dates_strict = NULL,
   preserve = FALSE,
-  ignore_seconds_flag = TRUE
+  ignore_seconds_flag = TRUE,
+  check_datetime_type = "error"
 )
 }
 \arguments{
@@ -322,6 +323,19 @@ admiral 1.4.0 and later.
 \item{Permitted values}{\code{TRUE}, \code{FALSE}}
 \item{Default value}{\code{TRUE}}
 }}
+
+\item{check_datetime_type}{Throw an error or issue a warning if invalid datetimes are
+detected?
+
+If any invalid datetimes are detected, either due to a data issue or as a result of
+incorrect imputation, \code{check_datetime_type} controls whether an error is thrown or
+a warning is issued. If a warning is chosen, the function will continue
+executing and return \code{NA} for any invalid datetimes.
+
+\describe{
+\item{Permitted values}{\code{"warning"}, \code{"error"}}
+\item{Default value}{\code{"error"}}
+}}
 }
 \value{
 The input dataset with the datetime \verb{*DTM} (and the date/time imputation
@@ -551,6 +565,43 @@ derive_vars_dtm(
 #> 5 "2019"              2019-06-30 23:59:59 M      H     
 #> 6 "2019---07"         2019-06-07 23:59:59 M      H     
 #> 7 ""                  NA                  <NA>   <NA>  }\if{html}{\out{</div>}}}
+\subsection{Handle invalid datetimes with a warning (\code{check_datetime_type})}{
+
+By default, if imputation causes an invalid datetime (e.g. day 30 in
+February), an error is thrown. Setting \code{check_datetime_type = "warning"}
+issues a warning instead and returns \code{NA} for the invalid datetime(s),
+allowing execution to continue. This can be useful for exploratory work or
+if a temporary data issue needs to be ignored during development.
+
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{aedt <- tribble(
+  ~AEENDTC,
+  "2020-07",
+  "2020-02",
+  "2020-07-14"
+)
+
+derive_vars_dtm(
+  aedt,
+  new_vars_prefix = "AEN",
+  dtc = AEENDTC,
+  highest_imputation = "D",
+  date_imputation = "30",
+  check_datetime_type = "warning"
+)
+#> # A tibble: 3 × 4
+#>   AEENDTC    AENDTM              AENDTF AENTMF
+#>   <chr>      <dttm>              <chr>  <chr> 
+#> 1 2020-07    2020-07-30 00:00:00 D      H     
+#> 2 2020-02    NA                  <NA>   <NA>  
+#> 3 2020-07-14 2020-07-14 00:00:00 <NA>   H     
+#> Warning: 1 date is invalid, possibly due to a data issue or as a result of imputation.
+#> Please review the function arguments and/or your data and correct your
+#> selection. See the problematic date below, where the raw date is what is passed
+#> to the function and the final date is the result of any imputation:
+#> • Raw date 2020-02, final date 2020-02-30T00:00:00.
+#> i You can control whether this message is a warning or an error with the
+#>   `check_datetime_type` argument.
+#> Warning:  1 failed to parse.}\if{html}{\out{</div>}}}
 \subsection{Further examples}{
 
 Further example usages of this function can be found in the

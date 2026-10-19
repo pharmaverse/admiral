@@ -15,7 +15,8 @@ derive_vars_dt(
   min_dates_strict = NULL,
   max_dates = NULL,
   max_dates_strict = NULL,
-  preserve = FALSE
+  preserve = FALSE,
+  check_date_type = "error"
 )
 }
 \arguments{
@@ -265,6 +266,19 @@ For example \code{"2019---07"} would return \verb{"2019-06-07} if \code{preserve
 \describe{
 \item{Permitted values}{\code{TRUE}, \code{FALSE}}
 \item{Default value}{\code{FALSE}}
+}}
+
+\item{check_date_type}{Throw an error or issue a warning if invalid dates are
+detected?
+
+If any invalid dates are detected, either due to a data issue or as a result of
+incorrect imputation, \code{check_date_type} controls whether an error is thrown or
+a warning is issued. If a warning is chosen, the function will continue
+executing and return \code{NA} for any invalid dates.
+
+\describe{
+\item{Permitted values}{\code{"warning"}, \code{"error"}}
+\item{Default value}{\code{"error"}}
 }}
 }
 \value{
@@ -628,6 +642,44 @@ For example, \code{"2019---07"}, will be displayed as \code{"2019-06-07"} rather
 #> 5 "2019"                2019-06-30 M     
 #> 6 "2019---07"           2019-06-07 M     
 #> 7 ""                    NA         <NA>  }\if{html}{\out{</div>}}}
+\subsection{Handle invalid dates with a warning (\code{check_date_type})}{
+
+By default, if imputation causes an invalid date (e.g. day 30 in
+February), an error is thrown. Setting \code{check_date_type = "warning"} issues
+a warning instead and returns \code{NA} for the invalid date(s), allowing
+execution to continue. This can be useful for exploratory work or if a temporary
+data issue needs to be ignored during development.
+
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{derive_vars_dt(
+  mhdt,
+  new_vars_prefix = "AST",
+  dtc = MHSTDTC,
+  highest_imputation = "D",
+  date_imputation = "30",
+  check_date_type = "warning"
+)
+#> # A tibble: 7 × 3
+#>   MHSTDTC               ASTDT      ASTDTF
+#>   <chr>                 <date>     <chr> 
+#> 1 "2019-07-18T15:25:40" 2019-07-18 <NA>  
+#> 2 "2019-07-18T15:25"    2019-07-18 <NA>  
+#> 3 "2019-07-18"          2019-07-18 <NA>  
+#> 4 "2019-02"             NA         <NA>  
+#> 5 "2019"                NA         <NA>  
+#> 6 "2019---07"           NA         <NA>  
+#> 7 ""                    NA         <NA>  
+#> Warning: There were 2 warnings in `mutate()`.
+#> The first warning was:
+#> i In argument: `ASTDT = convert_dtc_to_dt(...)`.
+#> Caused by warning:
+#> ! 1 date is invalid, possibly due to a data issue or as a result of imputation.
+#> Please review the function arguments and/or your data and correct your
+#> selection. See the problematic date below, where the raw date is what is passed
+#> to the function and the final date is the result of any imputation:
+#> • Raw date 2019-02, final date 2019-02-30.
+#> i You can control whether this message is a warning or an error with the
+#>   `check_date_type` argument.
+#> i Run `dplyr::last_dplyr_warnings()` to see the 1 remaining warning.}\if{html}{\out{</div>}}}
 \subsection{Further examples}{
 
 Further example usages of this function can be found in the

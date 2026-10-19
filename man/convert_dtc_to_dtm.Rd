@@ -13,7 +13,8 @@ convert_dtc_to_dtm(
   min_dates_strict = NULL,
   max_dates = NULL,
   max_dates_strict = NULL,
-  preserve = FALSE
+  preserve = FALSE,
+  check_datetime_type = "error"
 )
 }
 \arguments{
@@ -256,6 +257,19 @@ For example \code{"2019---07"} would return \verb{"2019-06-07} if \code{preserve
 \describe{
 \item{Permitted values}{\code{TRUE}, \code{FALSE}}
 \item{Default value}{\code{FALSE}}
+}}
+
+\item{check_datetime_type}{Throw an error or issue a warning if invalid datetimes are
+detected?
+
+If any invalid datetimes are detected, either due to a data issue or as a result of
+incorrect imputation, \code{check_datetime_type} controls whether an error is thrown or
+a warning is issued. If a warning is chosen, the function will continue
+executing and return \code{NA} for any invalid datetimes.
+
+\describe{
+\item{Permitted values}{\code{"warning"}, \code{"error"}}
+\item{Default value}{\code{"error"}}
 }}
 }
 \value{

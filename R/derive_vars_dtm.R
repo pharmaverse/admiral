@@ -204,6 +204,30 @@
 #'   preserve = TRUE,
 #'   ignore_seconds_flag = FALSE
 #' )
+#' @caption Handle invalid datetimes with a warning (`check_datetime_type`)
+#' @info By default, if imputation causes an invalid datetime (e.g. day 30 in
+#' February), an error is thrown. Setting `check_datetime_type = "warning"`
+#' issues a warning instead and returns `NA` for the invalid datetime(s),
+#' allowing execution to continue. This can be useful for exploratory work or
+#' if a temporary data issue needs to be ignored during development.
+#'
+#' @code [expected_cnds = "warning"]
+#' aedt <- tribble(
+#'   ~AEENDTC,
+#'   "2020-07",
+#'   "2020-02",
+#'   "2020-07-14"
+#' )
+#'
+#' derive_vars_dtm(
+#'   aedt,
+#'   new_vars_prefix = "AEN",
+#'   dtc = AEENDTC,
+#'   highest_imputation = "D",
+#'   date_imputation = "30",
+#'   check_datetime_type = "warning"
+#' )
+#'
 #' @caption Further examples
 #' @info Further example usages of this function can be found in the
 #'   `vignette("imputation")`.
@@ -219,7 +243,8 @@ derive_vars_dtm <- function(dataset,
                             max_dates = NULL,
                             max_dates_strict = NULL,
                             preserve = FALSE,
-                            ignore_seconds_flag = TRUE) {
+                            ignore_seconds_flag = TRUE,
+                            check_datetime_type = "error") {
   # check and quote arguments
   dtc <- assert_symbol(enexpr(dtc))
   assert_data_frame(dataset, required_vars = exprs(!!dtc))
@@ -258,7 +283,8 @@ derive_vars_dtm <- function(dataset,
     min_dates_strict = lapply(min_dates_strict, eval_tidy, data = mask),
     max_dates = lapply(max_dates, eval_tidy, data = mask),
     max_dates_strict = lapply(max_dates_strict, eval_tidy, data = mask),
-    preserve = preserve
+    preserve = preserve,
+    check_datetime_type = check_datetime_type
   )
 
   if (flag_imputation %in% c("both", "date") ||
@@ -335,7 +361,8 @@ convert_dtc_to_dtm <- function(dtc,
                                min_dates_strict = NULL,
                                max_dates = NULL,
                                max_dates_strict = NULL,
-                               preserve = FALSE) {
+                               preserve = FALSE,
+                               check_datetime_type = "error") {
   assert_character_vector(dtc)
   warn_if_invalid_dtc(dtc, is_valid_dtc(dtc))
 
@@ -348,7 +375,8 @@ convert_dtc_to_dtm <- function(dtc,
     min_dates_strict = min_dates_strict,
     max_dates = max_dates,
     max_dates_strict = max_dates_strict,
-    preserve = preserve
+    preserve = preserve,
+    check_datetime_type = check_datetime_type
   )
 
   imputed_dtc <- if_else(
@@ -548,6 +576,16 @@ convert_dtc_to_dtm <- function(dtc,
 #'
 #' @permitted [boolean]
 #'
+#' @param check_datetime_type Throw an error or issue a warning if invalid datetimes are
+#'   detected?
+#'
+#' If any invalid datetimes are detected, either due to a data issue or as a result of
+#' incorrect imputation, `check_datetime_type` controls whether an error is thrown or
+#' a warning is issued. If a warning is chosen, the function will continue
+#' executing and return `NA` for any invalid datetimes.
+#'
+#' @permitted [msg_type_warnerror]
+#'
 #' @inheritParams impute_dtc_dt
 #'
 #' @details This is a vector-oriented helper and is not usually called directly on a data
@@ -643,6 +681,16 @@ convert_dtc_to_dtm <- function(dtc,
 #'   ),
 #'   highest_imputation = "Y"
 #' )
+#'
+#' # Control error vs warning behavior for invalid datetimes
+#' # By default (check_datetime_type = "error"), imputing day 30 for February raises an error
+#' # Setting check_datetime_type = "warning" returns NA with a warning instead
+#' impute_dtc_dtm(
+#'   "2020-02",
+#'   highest_imputation = "D",
+#'   date_imputation = "30",
+#'   check_datetime_type = "warning"
+#' )
 impute_dtc_dtm <- function(dtc,
                            highest_imputation = "h",
                            date_imputation = "first",
@@ -651,7 +699,8 @@ impute_dtc_dtm <- function(dtc,
                            min_dates_strict = NULL,
                            max_dates = NULL,
                            max_dates_strict = NULL,
-                           preserve = FALSE) {
+                           preserve = FALSE,
+                           check_datetime_type = "error") {
   # Check arguments ----
   assert_character_vector(dtc)
   valid_dtc <- is_valid_dtc(dtc)
@@ -697,6 +746,13 @@ impute_dtc_dtm <- function(dtc,
   )
   assert_logical_scalar(preserve)
 
+  check_datetime_type <-
+    assert_character_scalar(
+      check_datetime_type,
+      values = c("warning", "error"),
+      case_sensitive = FALSE
+    )
+
   if (length(dtc) == 0) {
     return(vector("character"))
   }
@@ -733,15 +789,39 @@ impute_dtc_dtm <- function(dtc,
     imputed_dtc <- adjust_last_day_imputation(imputed_dtc, partial)
   }
 
-  # Check if any invalid dates (e.g. 2020-02-31) have been generated
-  if (!all(is_valid_dtc(imputed_dtc, check_dtc = TRUE))) {
-    cli_abort(c(
-      "Some imputed dates are invalid.",
-      "i" = paste(
-        "{.arg date_imputation} is set to {.val {date_imputation}}.",
-        "Are you sure that with this value you are generating all valid dates?",
-        "E.g. {.code date_imputation = 31} would impute \"2020-02\" to \"2020-02-31\",",
-        "which is invalid."
+  # Check if any dates (raw or following imputation) are invalid ----
+  is_valid <- is_valid_dtc(imputed_dtc, check_dtc = TRUE)
+  if (!all(is_valid)) {
+    invalid_indices <- which(!is_valid)
+
+    invalid_raw <- dtc[invalid_indices]
+    invalid_imputed <- imputed_dtc[invalid_indices]
+    dedup <- !duplicated(paste(invalid_raw, invalid_imputed))
+    invalid_raw <- invalid_raw[dedup]
+    invalid_imputed <- invalid_imputed[dedup]
+    n_invalid <- length(invalid_raw)
+
+    invalid_bullets <- setNames(
+      paste0("Raw date ", invalid_raw, ", final date ", invalid_imputed, "."),
+      rep("*", n_invalid)
+    )
+
+    cli_function <- switch(check_datetime_type,
+      warning = cli_warn,
+      error = cli_abort
+    )
+
+    cli_function(c(
+      paste0(
+        "{n_invalid} date{?s} {?is/are} invalid, possibly due to a data issue or as a result of ",
+        "imputation. Please review the function arguments and/or your data and correct your ",
+        "selection. See the problematic date{?s} below, where the raw date is what is passed to ",
+        "the function and the final date is the result of any imputation:"
+      ),
+      invalid_bullets,
+      "i" = paste0(
+        "You can control whether this message is a warning or an error with the ",
+        "{.arg check_datetime_type} argument."
       )
     ))
   }

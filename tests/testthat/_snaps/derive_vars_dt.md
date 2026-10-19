@@ -70,7 +70,23 @@
       impute_dtc_dt(dtc = input, highest_imputation = "D", date_imputation = "31")
     Condition
       Error in `impute_dtc_dt()`:
-      ! 1 imputed date is invalid. Please review the function arguments and/or your data and correct your selection. See the problematic date: 2020-02 imputed to 2020-02-31.
+      ! 1 date is invalid, possibly due to a data issue or as a result of imputation. Please review the function arguments and/or your data and correct your selection. See the problematic date below, where the raw date is what is passed to the function and the final date is the result of any imputation:
+      * Raw date 2020-02, final date 2020-02-31.
+      i You can control whether this message is a warning or an error with the `check_date_type` argument.
+
+---
+
+    Code
+      impute_dtc_dt(dtc = input, highest_imputation = "D", date_imputation = "31",
+        check_date_type = "warning")
+    Condition
+      Warning:
+      1 date is invalid, possibly due to a data issue or as a result of imputation. Please review the function arguments and/or your data and correct your selection. See the problematic date below, where the raw date is what is passed to the function and the final date is the result of any imputation:
+      * Raw date 2020-02, final date 2020-02-31.
+      i You can control whether this message is a warning or an error with the `check_date_type` argument.
+    Output
+      [1] "2019-07-18" NA           NA           "2019-07-31" NA          
+      [6] "2020-02-31"
 
 # derive_vars_dt Test 27: NA imputation for highest_imputation = Y & max_dates but date_imputation = first
 

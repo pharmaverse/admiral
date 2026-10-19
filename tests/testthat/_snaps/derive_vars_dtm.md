@@ -80,8 +80,22 @@
       impute_dtc_dtm(dtc = c("2019-02"), highest_imputation = "D", date_imputation = "30")
     Condition
       Error in `impute_dtc_dtm()`:
-      ! Some imputed dates are invalid.
-      i `date_imputation` is set to "30". Are you sure that with this value you are generating all valid dates? E.g. `date_imputation = 31` would impute "2020-02" to "2020-02-31", which is invalid.
+      ! 1 date is invalid, possibly due to a data issue or as a result of imputation. Please review the function arguments and/or your data and correct your selection. See the problematic date below, where the raw date is what is passed to the function and the final date is the result of any imputation:
+      * Raw date 2019-02, final date 2019-02-30T00:00:00.
+      i You can control whether this message is a warning or an error with the `check_datetime_type` argument.
+
+---
+
+    Code
+      impute_dtc_dtm(dtc = c("2019-02"), highest_imputation = "D", date_imputation = "30",
+      check_datetime_type = "warning")
+    Condition
+      Warning:
+      1 date is invalid, possibly due to a data issue or as a result of imputation. Please review the function arguments and/or your data and correct your selection. See the problematic date below, where the raw date is what is passed to the function and the final date is the result of any imputation:
+      * Raw date 2019-02, final date 2019-02-30T00:00:00.
+      i You can control whether this message is a warning or an error with the `check_datetime_type` argument.
+    Output
+      [1] "2019-02-30T00:00:00"
 
 # compute_tmf Test 23: throws ERROR when ignore_seconds_flag  = T and seconds are present
 

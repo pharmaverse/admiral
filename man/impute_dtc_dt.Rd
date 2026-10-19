@@ -12,7 +12,8 @@ impute_dtc_dt(
   min_dates_strict = NULL,
   max_dates = NULL,
   max_dates_strict = NULL,
-  preserve = FALSE
+  preserve = FALSE,
+  check_date_type = "error"
 )
 }
 \arguments{
@@ -225,6 +226,19 @@ For example \code{"2019---07"} would return \verb{"2019-06-07} if \code{preserve
 \item{Permitted values}{\code{TRUE}, \code{FALSE}}
 \item{Default value}{\code{FALSE}}
 }}
+
+\item{check_date_type}{Throw an error or issue a warning if invalid dates are
+detected?
+
+If any invalid dates are detected, either due to a data issue or as a result of
+incorrect imputation, \code{check_date_type} controls whether an error is thrown or
+a warning is issued. If a warning is chosen, the function will continue
+executing and return \code{NA} for any invalid dates.
+
+\describe{
+\item{Permitted values}{\code{"warning"}, \code{"error"}}
+\item{Default value}{\code{"error"}}
+}}
 }
 \value{
 A character vector
@@ -310,6 +324,16 @@ impute_dtc_dt(
     ymd("2020-11-11", NA)
   ),
   highest_imputation = "Y"
+)
+
+# Control error vs warning behavior for invalid dates
+# By default (check_date_type = "error"), imputing day 30 for February raises an error
+# Setting check_date_type = "warning" returns NA with a warning instead
+impute_dtc_dt(
+  "2020-02",
+  highest_imputation = "D",
+  date_imputation = "30",
+  check_date_type = "warning"
 )
 }
 \seealso{
