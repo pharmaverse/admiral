@@ -828,10 +828,11 @@ impute_dtc_dtm <- function(dtc,
 
     cli_function(c(
       paste0(
-        "{n_invalid} datetime{?s} {?is/are} invalid, possibly due to a data issue or as a result of ",
-        "imputation. Please review the function arguments and/or your data and correct your ",
-        "selection. See the problematic datetime{?s} below, where the raw datetime is what ",
-        "is passed to the function and the final datetime is the result of any imputation:"
+        "{n_invalid} datetime{?s} {?is/are} invalid, possibly due to a data issue or as a ",
+        "result of imputation. Please review the function arguments and/or your data and ",
+        "correct your selection. See the problematic datetime{?s} below, where the raw ",
+        "datetime is what is passed to the function and the final datetime is the result ",
+        "of any imputation:"
       ),
       invalid_bullets,
       "i" = paste0(
