@@ -591,7 +591,7 @@ convert_dtc_to_dtm <- function(dtc,
 #'
 #' If any invalid datetimes are detected, either due to a data issue or as a result of
 #' incorrect imputation, `check_datetime_type` controls whether an error is thrown or
-#' a warning is issued.
+#' a warning is issued. If the latter, the function returns `NA`.
 #'
 #' @permitted [msg_type_warnerror]
 #'
@@ -605,10 +605,9 @@ convert_dtc_to_dtm <- function(dtc,
 #' to be generated. In this case, the user should adjust the imputation rules or
 #' set the `check_datetime_type` argument to `"warning"` to allow execution to
 #' continue. Note that with `check_datetime_type = "warning"`, any invalid datetimes
-#' will be returned as `NA_character_`.
+#' will be returned as `NA`.
 #'
 #' @return A character vector
-#'
 #'
 #' @family com_date_time
 #'

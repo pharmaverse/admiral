@@ -268,7 +268,7 @@ detected?
 
 If any invalid datetimes are detected, either due to a data issue or as a result of
 incorrect imputation, \code{check_datetime_type} controls whether an error is thrown or
-a warning is issued.
+a warning is issued. If the latter, the function returns \code{NA}.
 
 \describe{
 \item{Permitted values}{\code{"warning"}, \code{"error"}}
@@ -291,7 +291,7 @@ issue or imputation rules cause an invalid datetime (e.g. "2020-02-01T25:00:00")
 to be generated. In this case, the user should adjust the imputation rules or
 set the \code{check_datetime_type} argument to \code{"warning"} to allow execution to
 continue. Note that with \code{check_datetime_type = "warning"}, any invalid datetimes
-will be returned as \code{NA_character_}.
+will be returned as \code{NA}.
 }
 \examples{
 library(lubridate)

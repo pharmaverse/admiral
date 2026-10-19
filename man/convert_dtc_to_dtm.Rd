@@ -264,7 +264,7 @@ detected?
 
 If any invalid datetimes are detected, either due to a data issue or as a result of
 incorrect imputation, \code{check_datetime_type} controls whether an error is thrown or
-a warning is issued.
+a warning is issued. If the latter, the function returns \code{NA}.
 
 \describe{
 \item{Permitted values}{\code{"warning"}, \code{"error"}}

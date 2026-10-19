@@ -643,7 +643,7 @@ convert_dtc_to_dt <- function(dtc,
 #'
 #' If any invalid dates are detected, either due to a data issue or as a result of
 #' incorrect imputation, `check_date_type` controls whether an error is thrown or
-#' a warning is issued.
+#' a warning is issued. If the latter, the function returns `NA`.
 #'
 #' @permitted [msg_type_warnerror]
 #'
@@ -656,7 +656,7 @@ convert_dtc_to_dt <- function(dtc,
 #' or imputation rules cause an invalid date (e.g. "2020-02-31") to be generated. In
 #' this case, the user should adjust the imputation rules or set the `check_date_type`
 #' argument to `"warning"` to allow execution to continue. Note that with
-#' `check_date_type = "warning"`, any invalid dates will be returned as `NA_character_`.
+#' `check_date_type = "warning"`, any invalid dates will be returned as `NA`.
 #'
 #' @return A character vector
 #'
