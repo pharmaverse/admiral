@@ -80,7 +80,7 @@
       impute_dtc_dtm(dtc = c("2019-02"), highest_imputation = "D", date_imputation = "30")
     Condition
       Error in `impute_dtc_dtm()`:
-      ! 1 datetime is invalid, possibly due to a data issue or as a result of imputation. Please review the function arguments and/or your data and correct your selection. See the problematic date below, where the raw date is what is passed to the function and the final date is the result of any imputation:
+      ! 1 datetime is invalid, possibly due to a data issue or as a result of imputation. Please review the function arguments and/or your data and correct your selection. See the problematic datetime below, where the raw datetime is what is passed to the function and the final datetime is the result of any imputation:
       * Raw datetime 2019-02, final datetime 2019-02-30T00:00:00.
       i You can control whether this message is a warning or an error with the `check_datetime_type` argument.
 
@@ -91,7 +91,7 @@
       check_datetime_type = "warning")
     Condition
       Warning:
-      1 datetime is invalid, possibly due to a data issue or as a result of imputation. Please review the function arguments and/or your data and correct your selection. See the problematic date below, where the raw date is what is passed to the function and the final date is the result of any imputation:
+      1 datetime is invalid, possibly due to a data issue or as a result of imputation. Please review the function arguments and/or your data and correct your selection. See the problematic datetime below, where the raw datetime is what is passed to the function and the final datetime is the result of any imputation:
       * Raw datetime 2019-02, final datetime 2019-02-30T00:00:00.
       i You can control whether this message is a warning or an error with the `check_datetime_type` argument.
     Output

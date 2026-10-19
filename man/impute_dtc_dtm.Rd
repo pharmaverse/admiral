@@ -287,7 +287,7 @@ This is a vector-oriented helper and is not usually called directly on a data
 frame with \verb{\%>\%}.
 
 Additionally, the function will throw an error or issue a warning if a data
-issue or imputation rules cause an invalid date (e.g. "2020-02-01T25:00:00")
+issue or imputation rules cause an invalid datetime (e.g. "2020-02-01T25:00:00")
 to be generated. In this case, the user should adjust the imputation rules or
 set the \code{check_datetime_type} argument to \code{"warning"} to allow execution to
 continue. Note that with \code{check_datetime_type = "warning"}, any invalid datetimes

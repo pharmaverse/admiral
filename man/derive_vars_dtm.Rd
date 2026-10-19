@@ -355,7 +355,7 @@ if it already exists in the input dataset. However, if \verb{*TMF} already exist
 in the input dataset, a warning is issued and \verb{*TMF} will be overwritten.
 
 Additionally, the function will throw an error or issue a warning if a data
-issue or imputation rules cause an invalid date (e.g. "2020-02-01T25:00:00")
+issue or imputation rules cause an invalid datetime (e.g. "2020-02-01T25:00:00")
 to be generated. In this case, the user should adjust the imputation rules or
 set the \code{check_datetime_type} argument to \code{"warning"} to allow execution to
 continue. Note that with \code{check_datetime_type = "warning"}, any invalid datetimes
@@ -598,8 +598,9 @@ derive_vars_dtm(
 #> 3 2020-07-14 2020-07-14 00:00:00 <NA>   H     
 #> Warning: 1 datetime is invalid, possibly due to a data issue or as a result of
 #> imputation. Please review the function arguments and/or your data and correct
-#> your selection. See the problematic date below, where the raw date is what is
-#> passed to the function and the final date is the result of any imputation:
+#> your selection. See the problematic datetime below, where the raw datetime is
+#> what is passed to the function and the final datetime is the result of any
+#> imputation:
 #> • Raw datetime 2020-02, final datetime 2020-02-30T00:00:00.
 #> i You can control whether this message is a warning or an error with the
 #>   `check_datetime_type` argument.}\if{html}{\out{</div>}}}

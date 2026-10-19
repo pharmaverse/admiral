@@ -49,7 +49,7 @@
 #' in the input dataset, a warning is issued and `*TMF` will be overwritten.
 #'
 #' Additionally, the function will throw an error or issue a warning if a data
-#' issue or imputation rules cause an invalid date (e.g. "2020-02-01T25:00:00")
+#' issue or imputation rules cause an invalid datetime (e.g. "2020-02-01T25:00:00")
 #' to be generated. In this case, the user should adjust the imputation rules or
 #' set the `check_datetime_type` argument to `"warning"` to allow execution to
 #' continue. Note that with `check_datetime_type = "warning"`, any invalid datetimes
@@ -345,7 +345,7 @@ derive_vars_dtm <- function(dataset,
 #' frame with `%>%`.
 #'
 #' Additionally, the function will throw an error or issue a warning if a data
-#' issue or imputation rules cause an invalid date (e.g. "2020-02-01T25:00:00")
+#' issue or imputation rules cause an invalid datetime (e.g. "2020-02-01T25:00:00")
 #' to be generated. In this case, the user should adjust the imputation rules or
 #' set the `check_datetime_type` argument to `"warning"` to allow execution to
 #' continue. Note that with `check_datetime_type = "warning"`, any invalid datetimes
@@ -601,7 +601,7 @@ convert_dtc_to_dtm <- function(dtc,
 #' frame with `%>%`.
 #'
 #' Additionally, the function will throw an error or issue a warning if a data
-#' issue or imputation rules cause an invalid date (e.g. "2020-02-01T25:00:00")
+#' issue or imputation rules cause an invalid datetime (e.g. "2020-02-01T25:00:00")
 #' to be generated. In this case, the user should adjust the imputation rules or
 #' set the `check_datetime_type` argument to `"warning"` to allow execution to
 #' continue. Note that with `check_datetime_type = "warning"`, any invalid datetimes
@@ -831,8 +831,8 @@ impute_dtc_dtm <- function(dtc,
       paste0(
         "{n_invalid} datetime{?s} {?is/are} invalid, possibly due to a data issue or as a result of ",
         "imputation. Please review the function arguments and/or your data and correct your ",
-        "selection. See the problematic date{?s} below, where the raw date is what is passed to ",
-        "the function and the final date is the result of any imputation:"
+        "selection. See the problematic datetime{?s} below, where the raw datetime is what ",
+        "is passed to the function and the final datetime is the result of any imputation:"
       ),
       invalid_bullets,
       "i" = paste0(
