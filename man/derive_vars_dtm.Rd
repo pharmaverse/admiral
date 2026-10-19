@@ -596,10 +596,10 @@ derive_vars_dtm(
 #> 1 2020-07    2020-07-30 00:00:00 D      H     
 #> 2 2020-02    NA                  <NA>   <NA>  
 #> 3 2020-07-14 2020-07-14 00:00:00 <NA>   H     
-#> Warning: 1 date is invalid, possibly due to a data issue or as a result of imputation.
-#> Please review the function arguments and/or your data and correct your
-#> selection. See the problematic date below, where the raw date is what is passed
-#> to the function and the final date is the result of any imputation:
+#> Warning: 1 datetime is invalid, possibly due to a data issue or as a result of
+#> imputation. Please review the function arguments and/or your data and correct
+#> your selection. See the problematic date below, where the raw date is what is
+#> passed to the function and the final date is the result of any imputation:
 #> • Raw datetime 2020-02, final datetime 2020-02-30T00:00:00.
 #> i You can control whether this message is a warning or an error with the
 #>   `check_datetime_type` argument.}\if{html}{\out{</div>}}}

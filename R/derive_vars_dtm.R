@@ -829,7 +829,7 @@ impute_dtc_dtm <- function(dtc,
 
     cli_function(c(
       paste0(
-        "{n_invalid} date{?s} {?is/are} invalid, possibly due to a data issue or as a result of ",
+        "{n_invalid} datetime{?s} {?is/are} invalid, possibly due to a data issue or as a result of ",
         "imputation. Please review the function arguments and/or your data and correct your ",
         "selection. See the problematic date{?s} below, where the raw date is what is passed to ",
         "the function and the final date is the result of any imputation:"
@@ -840,11 +840,11 @@ impute_dtc_dtm <- function(dtc,
         "{.arg check_datetime_type} argument."
       )
     ))
-  }
 
-  # Set any invalid datetimes to NA
-  if (check_datetime_type == "warning") {
-    imputed_dtc[invalid_indices] <- NA_character_
+    # Set any invalid datetimes to NA
+    if (check_datetime_type == "warning") {
+      imputed_dtc[invalid_indices] <- NA_character_
+    }
   }
 
   # Handle min_dates and max_dates argument ----

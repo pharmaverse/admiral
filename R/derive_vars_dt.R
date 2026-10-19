@@ -50,7 +50,7 @@
 #' or imputation rules cause an invalid date (e.g. "2020-02-31") to be generated. In
 #' this case, the user should adjust the imputation rules or set the `check_date_type`
 #' argument to `"warning"` to allow execution to continue. Note that with
-#' `check_datetime_type = "warning"`, any invalid dates will be returned as `NA`.
+#' `check_date_type = "warning"`, any invalid dates will be returned as `NA`.
 #'
 #' @seealso `vignette("imputation")`
 #'
@@ -410,7 +410,7 @@ derive_vars_dt <- function(dataset,
 #' or imputation rules cause an invalid date (e.g. "2020-02-31") to be generated. In
 #' this case, the user should adjust the imputation rules or set the `check_date_type`
 #' argument to `"warning"` to allow execution to continue. Note that with
-#' `check_datetime_type = "warning"`, any invalid dates will be returned as `NA`.
+#' `check_date_type = "warning"`, any invalid dates will be returned as `NA`.
 #'
 #' @return a date object
 #'
@@ -656,7 +656,7 @@ convert_dtc_to_dt <- function(dtc,
 #' or imputation rules cause an invalid date (e.g. "2020-02-31") to be generated. In
 #' this case, the user should adjust the imputation rules or set the `check_date_type`
 #' argument to `"warning"` to allow execution to continue. Note that with
-#' `check_datetime_type = "warning"`, any invalid dates will be returned as `NA_character_`.
+#' `check_date_type = "warning"`, any invalid dates will be returned as `NA_character_`.
 #'
 #' @return A character vector
 #'
@@ -865,11 +865,11 @@ impute_dtc_dt <- function(dtc,
         "{.arg check_date_type} argument."
       )
     ))
-  }
 
-  # Set any invalid dates to NA
-  if (check_date_type == "warning") {
-    imputed_dtc[invalid_indices] <- NA_character_
+    # Set any invalid dates to NA
+    if (check_date_type == "warning") {
+      imputed_dtc[invalid_indices] <- NA_character_
+    }
   }
 
   # Handle min_dates and max_dates argument ----
