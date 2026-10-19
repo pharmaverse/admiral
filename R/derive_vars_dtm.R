@@ -48,9 +48,12 @@
 #' if it already exists in the input dataset. However, if `*TMF` already exists
 #' in the input dataset, a warning is issued and `*TMF` will be overwritten.
 #'
-#' Additionally, the function will throw an error if imputation rules cause an
-#' invalid datetime (e.g. "2020-02-01T25:00:00") to be generated. In this case,
-#' the user should adjust the imputation rules.
+#' Additionally, the function will throw an error or issue a warning if a data
+#' issue or imputation rules cause an invalid date (e.g. "2020-02-01T25:00:00")
+#' to be generated. In this case, the user should adjust the imputation rules or
+#' set the `check_datetime_type` argument to `"warning"` to allow execution to
+#' continue. Note that with `check_datetime_type = "warning"`, any invalid datetimes
+#' will be returned as `NA`.
 #'
 #' @return  The input dataset with the datetime `*DTM` (and the date/time imputation
 #' flag `*DTF`, `*TMF`) added.
@@ -341,6 +344,13 @@ derive_vars_dtm <- function(dataset,
 #' @details This is a vector-oriented helper and is not usually called directly on a data
 #' frame with `%>%`.
 #'
+#' Additionally, the function will throw an error or issue a warning if a data
+#' issue or imputation rules cause an invalid date (e.g. "2020-02-01T25:00:00")
+#' to be generated. In this case, the user should adjust the imputation rules or
+#' set the `check_datetime_type` argument to `"warning"` to allow execution to
+#' continue. Note that with `check_datetime_type = "warning"`, any invalid datetimes
+#' will be returned as `NA`.
+#'
 #' @return A datetime object
 #'
 #' @family com_date_time
@@ -581,8 +591,7 @@ convert_dtc_to_dtm <- function(dtc,
 #'
 #' If any invalid datetimes are detected, either due to a data issue or as a result of
 #' incorrect imputation, `check_datetime_type` controls whether an error is thrown or
-#' a warning is issued. If a warning is chosen, the function will continue
-#' executing and return `NA` for any invalid datetimes.
+#' a warning is issued.
 #'
 #' @permitted [msg_type_warnerror]
 #'
@@ -590,6 +599,13 @@ convert_dtc_to_dtm <- function(dtc,
 #'
 #' @details This is a vector-oriented helper and is not usually called directly on a data
 #' frame with `%>%`.
+#'
+#' Additionally, the function will throw an error or issue a warning if a data
+#' issue or imputation rules cause an invalid date (e.g. "2020-02-01T25:00:00")
+#' to be generated. In this case, the user should adjust the imputation rules or
+#' set the `check_datetime_type` argument to `"warning"` to allow execution to
+#' continue. Note that with `check_datetime_type = "warning"`, any invalid datetimes
+#' will be returned as `NA_character_`.
 #'
 #' @return A character vector
 #'
@@ -802,7 +818,7 @@ impute_dtc_dtm <- function(dtc,
     n_invalid <- length(invalid_raw)
 
     invalid_bullets <- setNames(
-      paste0("Raw date ", invalid_raw, ", final date ", invalid_imputed, "."),
+      paste0("Raw datetime ", invalid_raw, ", final datetime ", invalid_imputed, "."),
       rep("*", n_invalid)
     )
 
@@ -824,6 +840,11 @@ impute_dtc_dtm <- function(dtc,
         "{.arg check_datetime_type} argument."
       )
     ))
+  }
+
+  # Set any invalid datetimes to NA
+  if (check_datetime_type == "warning") {
+    imputed_dtc[invalid_indices] <- NA_character_
   }
 
   # Handle min_dates and max_dates argument ----

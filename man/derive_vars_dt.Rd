@@ -273,8 +273,7 @@ detected?
 
 If any invalid dates are detected, either due to a data issue or as a result of
 incorrect imputation, \code{check_date_type} controls whether an error is thrown or
-a warning is issued. If a warning is chosen, the function will continue
-executing and return \code{NA} for any invalid dates.
+a warning is issued.
 
 \describe{
 \item{Permitted values}{\code{"warning"}, \code{"error"}}
@@ -298,9 +297,11 @@ choose to say impute months, but not days.
 The presence of a \verb{*DTF} variable is checked and if it already exists in the input dataset,
 a warning is issued and \verb{*DTF} will be overwritten.
 
-Additionally, the function will throw an error if imputation rules cause an
-invalid date (e.g. "2020-02-31") to be generated. In this case,  the user should adjust
-the imputation rules.
+Additionally, the function will throw an error or issue a warning if a data issue
+or imputation rules cause an invalid date (e.g. "2020-02-31") to be generated. In
+this case, the user should adjust the imputation rules or set the \code{check_date_type}
+argument to \code{"warning"} to allow execution to continue. Note that with
+\code{check_datetime_type = "warning"}, any invalid dates will be returned as \code{NA}.
 }
 \seealso{
 \code{vignette("imputation")}
@@ -668,8 +669,7 @@ data issue needs to be ignored during development.
 #> 5 "2019"                NA         <NA>  
 #> 6 "2019---07"           NA         <NA>  
 #> 7 ""                    NA         <NA>  
-#> Warning: There were 2 warnings in `mutate()`.
-#> The first warning was:
+#> Warning: There was 1 warning in `mutate()`.
 #> i In argument: `ASTDT = convert_dtc_to_dt(...)`.
 #> Caused by warning:
 #> ! 1 date is invalid, possibly due to a data issue or as a result of imputation.
@@ -678,8 +678,7 @@ data issue needs to be ignored during development.
 #> to the function and the final date is the result of any imputation:
 #> • Raw date 2019-02, final date 2019-02-30.
 #> i You can control whether this message is a warning or an error with the
-#>   `check_date_type` argument.
-#> i Run `dplyr::last_dplyr_warnings()` to see the 1 remaining warning.}\if{html}{\out{</div>}}}
+#>   `check_date_type` argument.}\if{html}{\out{</div>}}}
 \subsection{Further examples}{
 
 Further example usages of this function can be found in the

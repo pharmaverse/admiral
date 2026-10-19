@@ -329,8 +329,7 @@ detected?
 
 If any invalid datetimes are detected, either due to a data issue or as a result of
 incorrect imputation, \code{check_datetime_type} controls whether an error is thrown or
-a warning is issued. If a warning is chosen, the function will continue
-executing and return \code{NA} for any invalid datetimes.
+a warning is issued.
 
 \describe{
 \item{Permitted values}{\code{"warning"}, \code{"error"}}
@@ -355,9 +354,12 @@ The presence of a \verb{*DTF} variable is checked and the variable is not derive
 if it already exists in the input dataset. However, if \verb{*TMF} already exists
 in the input dataset, a warning is issued and \verb{*TMF} will be overwritten.
 
-Additionally, the function will throw an error if imputation rules cause an
-invalid datetime (e.g. "2020-02-01T25:00:00") to be generated. In this case,
-the user should adjust the imputation rules.
+Additionally, the function will throw an error or issue a warning if a data
+issue or imputation rules cause an invalid date (e.g. "2020-02-01T25:00:00")
+to be generated. In this case, the user should adjust the imputation rules or
+set the \code{check_datetime_type} argument to \code{"warning"} to allow execution to
+continue. Note that with \code{check_datetime_type = "warning"}, any invalid datetimes
+will be returned as \code{NA}.
 }
 \seealso{
 \code{vignette("imputation")}
@@ -598,10 +600,9 @@ derive_vars_dtm(
 #> Please review the function arguments and/or your data and correct your
 #> selection. See the problematic date below, where the raw date is what is passed
 #> to the function and the final date is the result of any imputation:
-#> • Raw date 2020-02, final date 2020-02-30T00:00:00.
+#> • Raw datetime 2020-02, final datetime 2020-02-30T00:00:00.
 #> i You can control whether this message is a warning or an error with the
-#>   `check_datetime_type` argument.
-#> Warning:  1 failed to parse.}\if{html}{\out{</div>}}}
+#>   `check_datetime_type` argument.}\if{html}{\out{</div>}}}
 \subsection{Further examples}{
 
 Further example usages of this function can be found in the

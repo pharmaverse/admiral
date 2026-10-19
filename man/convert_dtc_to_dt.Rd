@@ -228,8 +228,7 @@ detected?
 
 If any invalid dates are detected, either due to a data issue or as a result of
 incorrect imputation, \code{check_date_type} controls whether an error is thrown or
-a warning is issued. If a warning is chosen, the function will continue
-executing and return \code{NA} for any invalid dates.
+a warning is issued.
 
 \describe{
 \item{Permitted values}{\code{"warning"}, \code{"error"}}
@@ -245,6 +244,12 @@ Convert a date character vector (usually \code{--DTC}) into a Date vector (usual
 \details{
 This is a vector-oriented helper and is not usually called directly on a data
 frame with \verb{\%>\%}.
+
+Additionally, the function will throw an error or issue a warning if a data issue
+or imputation rules cause an invalid date (e.g. "2020-02-31") to be generated. In
+this case, the user should adjust the imputation rules or set the \code{check_date_type}
+argument to \code{"warning"} to allow execution to continue. Note that with
+\code{check_datetime_type = "warning"}, any invalid dates will be returned as \code{NA}.
 }
 \examples{
 convert_dtc_to_dt("2019-07-18")

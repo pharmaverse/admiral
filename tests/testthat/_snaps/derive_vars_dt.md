@@ -86,7 +86,7 @@
       i You can control whether this message is a warning or an error with the `check_date_type` argument.
     Output
       [1] "2019-07-18" NA           NA           "2019-07-31" NA          
-      [6] "2020-02-31"
+      [6] NA          
 
 # derive_vars_dt Test 27: NA imputation for highest_imputation = Y & max_dates but date_imputation = first
 
