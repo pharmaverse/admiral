@@ -1,0 +1,16 @@
+.dt-scroll {
+  overflow-x: auto;
+  width: 100%;
+  max-height: 600px;
+}
+.dt-scroll .dataTable thead tr th,
+.dt-scroll thead tr td {
+  position: sticky;
+  background-color: #FFFFFF;
+}
+.dt-scroll thead tr th {
+  top: 0;
+}
+.dt-scroll thead tr td {
+  top: 2.45em;
+}
