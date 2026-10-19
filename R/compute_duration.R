@@ -5,7 +5,9 @@
 #'
 #' @param start_date The start date
 #'
-#'   A date or date-time object is expected.
+#'   A date or date-time object is expected. Date-times are expected in UTC,
+#'   e.g., as created by `derive_vars_dtm()`. If the time zones of `start_date`
+#'   and `end_date` differ, a warning is issued.
 #'
 #'   Refer to `derive_vars_dt()` to impute and derive a date from a date
 #'   character vector to a date object.
@@ -14,7 +16,9 @@
 #'
 #' @param end_date The end date
 #'
-#'   A date or date-time object is expected.
+#'   A date or date-time object is expected. Date-times are expected in UTC,
+#'   e.g., as created by `derive_vars_dtm()`. If the time zones of `start_date`
+#'   and `end_date` differ, a warning is issued.
 #'
 #'   Refer to `derive_vars_dt()` to impute and derive a date from a date
 #'   character vector to a date object.
@@ -197,6 +201,20 @@ compute_duration <- function(start_date,
   assert_logical_scalar(add_one)
   assert_logical_scalar(trunc_out)
 
+  start_tz <- get_time_zone(start_date)
+  end_tz <- get_time_zone(end_date)
+  if (!identical(start_tz, end_tz)) {
+    cli_warn(c(
+      paste(
+        "{.arg start_date} and {.arg end_date} have different time zones:",
+        "{.val {start_tz}} and {.val {end_tz}}."
+      ),
+      paste(
+        "Date-times are expected in UTC.",
+        "Please use {.fun lubridate::force_tz} to set the time zone to UTC."
+      )
+    ))
+  }
 
   # Derivation
   if (floor_in) {
@@ -245,6 +263,22 @@ compute_duration <- function(start_date,
     duration <- trunc(duration)
   }
   duration
+}
+
+#' Get the time zone of a date or date-time vector
+#'
+#' @param x A date or date-time vector
+#'
+#' @return The time zone of `x`. For dates `"UTC"` is returned, for date-times
+#'   without time zone the local time zone.
+#'
+#' @keywords internal
+#' @family internal
+#'
+#' @noRd
+get_time_zone <- function(x) {
+  time_zone <- tz(x)
+  if (time_zone == "") Sys.timezone() else time_zone
 }
 
 #' Map common units of time into standardized terms

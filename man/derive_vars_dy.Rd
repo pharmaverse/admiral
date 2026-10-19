@@ -18,6 +18,8 @@ The variables specified by the \code{reference_date} and \code{source_vars} argu
 \item{reference_date}{A date or date-time column, e.g., date of first treatment
 or date-time of last exposure to treatment.
 
+Date-times are expected in UTC, e.g., as created by \code{derive_vars_dtm()}.
+
 Refer to \code{derive_vars_dt()} to impute and derive a date from a date
 character vector to a date object.
 

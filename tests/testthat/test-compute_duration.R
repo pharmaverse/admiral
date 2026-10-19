@@ -282,3 +282,18 @@ test_that("compute_duration Test 17: Interval with duration/interval invariant u
     )
   )
 })
+
+## Test 18: warning if time zones differ ----
+test_that("compute_duration Test 18: warning if time zones differ", {
+  expect_snapshot(
+    compute_duration(
+      ymd_hms("2024-01-01T10:00:00", tz = "Asia/Tokyo"),
+      ymd("2024-01-03")
+    )
+  )
+})
+
+## Test 19: no warning if date-time is UTC and other is a date ----
+test_that("compute_duration Test 19: no warning if date-time is UTC and other is a date", {
+  expect_no_warning(compute_duration(ymd_hms("2024-01-01T10:00:00"), ymd("2024-01-03")))
+})
