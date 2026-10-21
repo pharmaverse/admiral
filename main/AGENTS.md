@@ -330,11 +330,11 @@ expressions, etc.) must be a plural version of the word(s), e.g.,
 
 All source code should be formatted according to the
 [tidyverse](https://style.tidyverse.org/) style guide. The
-[lintr](https://github.com/jimhester/lintr) and
+[lintr](https://github.com/r-lib/lintr) and
 [styler](https://github.com/r-lib/styler) packages are used to check and
 enforce this.
 
-With regards to [lintr](https://github.com/jimhester/lintr),
+With regards to [lintr](https://github.com/r-lib/lintr),
 [admiral](https://pharmaverse.github.io/admiral/) and all related
 packages should maintain consistent linting standards by ensuring that
 their `.lintr.R` configuration files use the `admiral_linters()`
