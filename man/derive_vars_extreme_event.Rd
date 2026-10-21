@@ -149,18 +149,56 @@ the selected observations.
 \item The variables are added to input dataset.
 }
 }
-\examples{
-library(tibble)
-library(dplyr)
-library(lubridate)
+\seealso{
+\code{\link[=event]{event()}}, \code{\link[=event_joined]{event_joined()}}, \code{\link[=derive_extreme_event]{derive_extreme_event()}}
+
+ADSL Functions that returns variable appended to dataset:
+\code{\link[=derive_var_age_years]{derive_var_age_years()}},
+\code{\link[=derive_vars_aage]{derive_vars_aage()}},
+\code{\link[=derive_vars_period]{derive_vars_period()}}
+}
+\concept{der_adsl}
+\keyword{der_adsl}
+\section{Examples}{
+\subsection{Derive the last known alive date from multiple sources}{
+
+All records in these examples are synthetic. For each subject, select
+the latest of the death date, a dated laboratory assessment, and treatment
+end. These sources are an illustrative study rule; their eligibility should
+be specified for the study. Keep the selected date and its source in ADSL.
+\itemize{
+\item \code{dataset} is the ADSL dataset to receive the new variables. \code{by_vars}
+identifies subjects by study and subject ID, so records from different
+studies are not combined even if they share a subject ID.
+\item \code{source_datasets} supplies the datasets named by each \code{event()}.
+\item The laboratory event first selects the last nonmissing \code{ADT} per subject
+using its own \code{order} and \code{mode}. The outer \code{order} and \code{mode} then select
+the latest date across all events.
+\item \code{tmp_event_nr_var} numbers events in their listed order. With
+\code{order = exprs(LSTALVDT, desc(event_nr))} and \code{mode = "last"}, an equal-date
+tie favors the event listed first: death, then laboratory, then treatment
+end. Subject \code{09-1088} illustrates a death/laboratory tie.
+\item \code{new_vars} selects the variables to merge into ADSL. All ADSL subjects are
+retained; subject \code{09-1099} has no eligible source record, so both new
+variables are missing. The temporary event number is not retained.
+\item \code{check_type = "error"} stops if candidate records are not unique with
+respect to the grouping and ordering variables. The event number resolves
+equal-date ties across sources in this example; \code{check_type} detects
+duplicates but does not resolve them.
+}
+
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{library(tibble)
+library(dplyr, warn.conflicts = FALSE)
+library(lubridate, warn.conflicts = FALSE)
 
 adsl <- tribble(
   ~STUDYID, ~USUBJID, ~TRTEDT, ~DTHDT,
   "PILOT01", "01-1130", ymd("2014-08-16"), ymd("2014-09-13"),
-  "PILOT01", "01-1133", ymd("2013-04-28"), ymd(""),
-  "PILOT01", "01-1211", ymd("2013-01-12"), ymd(""),
-  "PILOT01", "09-1081", ymd("2014-04-27"), ymd(""),
+  "PILOT01", "01-1133", ymd("2013-04-28"), ymd(NA_character_),
+  "PILOT01", "01-1211", ymd("2013-01-12"), ymd(NA_character_),
+  "PILOT01", "09-1081", ymd("2014-04-27"), ymd(NA_character_),
   "PILOT01", "09-1088", ymd("2014-10-09"), ymd("2014-11-01"),
+  "PILOT01", "09-1099", ymd(NA_character_), ymd(NA_character_)
 )
 
 lb <- tribble(
@@ -174,62 +212,101 @@ lb <- tribble(
   "PILOT01",    "LB", "09-1081",     47, "2014-02-01T10:55",
   "PILOT01",    "LB", "09-1081",    219, "2014-05-10T11:15",
   "PILOT01",    "LB", "09-1088",    283, "2014-09-27T12:13",
-  "PILOT01",    "LB", "09-1088",    322, "2014-10-09T13:25"
+  "PILOT01",    "LB", "09-1088",    322, "2014-11-01T13:25"
 ) \%>\%
   mutate(
     ADT = convert_dtc_to_dt(LBDTC)
   )
 
 derive_vars_extreme_event(
-  adsl,
+  dataset = adsl,
   by_vars = exprs(STUDYID, USUBJID),
   events = list(
     event(
       dataset_name = "adsl",
       condition = !is.na(DTHDT),
-      set_values_to = exprs(LSTALVDT = DTHDT, DTHFL = "Y")
+      set_values_to = exprs(LSTALVDT = DTHDT, LALVSRC = "Death date")
     ),
     event(
       dataset_name = "lb",
       condition = !is.na(ADT),
       order = exprs(ADT),
       mode = "last",
-      set_values_to = exprs(LSTALVDT = ADT, DTHFL = "N")
+      set_values_to = exprs(LSTALVDT = ADT, LALVSRC = "Laboratory")
     ),
     event(
       dataset_name = "adsl",
       condition = !is.na(TRTEDT),
       order = exprs(TRTEDT),
       mode = "last",
-      set_values_to = exprs(LSTALVDT = TRTEDT, DTHFL = "N")
+      set_values_to = exprs(LSTALVDT = TRTEDT, LALVSRC = "Treatment end")
     )
   ),
   source_datasets = list(adsl = adsl, lb = lb),
   tmp_event_nr_var = event_nr,
-  order = exprs(LSTALVDT, event_nr),
+  order = exprs(LSTALVDT, desc(event_nr)),
   mode = "last",
-  new_vars = exprs(LSTALVDT, DTHFL)
+  check_type = "error",
+  new_vars = exprs(LSTALVDT, LALVSRC)
 )
+#> # A tibble: 6 x 6
+#>   STUDYID USUBJID TRTEDT     DTHDT      LSTALVDT   LALVSRC      
+#>   <chr>   <chr>   <date>     <date>     <date>     <chr>        
+#> 1 PILOT01 01-1130 2014-08-16 2014-09-13 2014-09-13 Death date   
+#> 2 PILOT01 01-1133 2013-04-28 NA         2013-05-01 Laboratory   
+#> 3 PILOT01 01-1211 2013-01-12 NA         2013-01-12 Treatment end
+#> 4 PILOT01 09-1081 2014-04-27 NA         2014-05-10 Laboratory   
+#> 5 PILOT01 09-1088 2014-10-09 2014-11-01 2014-11-01 Death date   
+#> 6 PILOT01 09-1099 NA         NA         NA         <NA>         }\if{html}{\out{</div>}}}
+\subsection{Derive a reported death cause with an explicit tie-break rule}{
 
-# Derive DTHCAUS from AE and DS domain data
-adsl <- tribble(
+Select the earliest dated qualifying report from AE or DS and add its
+date and reported cause to ADSL. This is an illustrative source-selection
+rule, not clinical adjudication of conflicting reports.
+\itemize{
+\item Each event maps its source variables to the common names \code{DTHCAUS} and
+\code{DTHDT}. The final \code{order} uses these names across the combined events.
+\item Date takes precedence over source: \code{order = exprs(DTHDT, event_nr)} and
+\code{mode = "first"} choose the earliest date, with AE preferred over DS only
+when dates are equal. Subject \code{PAT04} illustrates this tie.
+\item \code{check_type = "error"} stops if multiple eligible reports from the same
+source share a subject and date. Resolve such ambiguity using a
+study-specific rule before deriving the reported cause.
+\item \code{DTHCAUS} and \code{DTHDT} are taken together from the selected qualifying
+record. \code{DTHDT} is not an independent derivation from all death records.
+The DS record for \code{PAT03} reports death on 2022-03-03, but its text does
+not satisfy this example's cause-selection condition, so both derived
+variables are missing. This does not mean the subject is alive or that
+their death date is unknown. Derive the death date separately if records
+without an eligible reported cause must also contribute to it.
+}
+
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{adsl <- tribble(
   ~STUDYID,  ~USUBJID,
   "STUDY01", "PAT01",
   "STUDY01", "PAT02",
-  "STUDY01", "PAT03"
+  "STUDY01", "PAT03",
+  "STUDY01", "PAT04"
 )
 ae <- tribble(
   ~STUDYID, ~USUBJID, ~AESEQ, ~AEDECOD, ~AEOUT, ~AEDTHDTC,
   "STUDY01", "PAT01", 12, "SUDDEN DEATH", "FATAL", "2021-04-04",
   "STUDY01", "PAT01", 13, "CARDIAC ARREST", "FATAL", "2021-04-03",
+  "STUDY01", "PAT04",  1, "RESPIRATORY FAILURE", "FATAL", "2022-02-01"
 )
 
 ds <- tribble(
   ~STUDYID, ~USUBJID, ~DSSEQ, ~DSDECOD, ~DSTERM, ~DSSTDTC,
-  "STUDY01", "PAT02", 1, "INFORMED CONSENT OBTAINED", "INFORMED CONSENT OBTAINED", "2021-04-03",
-  "STUDY01", "PAT02", 2, "RANDOMIZATION", "RANDOMIZATION", "2021-04-11",
-  "STUDY01", "PAT02", 3, "DEATH", "DEATH DUE TO PROGRESSION OF DISEASE", "2022-02-01",
-  "STUDY01", "PAT03", 1, "DEATH", "POST STUDY REPORTING OF DEATH", "2022-03-03"
+  "STUDY01", "PAT02", 1, "INFORMED CONSENT OBTAINED",
+    "INFORMED CONSENT OBTAINED", "2021-04-03",
+  "STUDY01", "PAT02", 2, "RANDOMIZATION",
+    "RANDOMIZATION", "2021-04-11",
+  "STUDY01", "PAT02", 3, "DEATH",
+    "DEATH DUE TO PROGRESSION OF DISEASE", "2022-02-01",
+  "STUDY01", "PAT03", 1, "DEATH",
+    "POST STUDY REPORTING OF DEATH", "2022-03-03",
+  "STUDY01", "PAT04", 1, "DEATH",
+    "DEATH DUE TO PROGRESSION OF DISEASE", "2022-02-01"
 )
 
 derive_vars_extreme_event(
@@ -239,30 +316,115 @@ derive_vars_extreme_event(
     event(
       dataset_name = "ae",
       condition = AEOUT == "FATAL",
-      set_values_to = exprs(DTHCAUS = AEDECOD, DTHDT = convert_dtc_to_dt(AEDTHDTC)),
-      order = exprs(DTHDT)
+      set_values_to = exprs(
+        DTHCAUS = AEDECOD,
+        DTHDT = convert_dtc_to_dt(AEDTHDTC)
+      )
     ),
     event(
       dataset_name = "ds",
       condition = DSDECOD == "DEATH" & grepl("DEATH DUE TO", DSTERM),
-      set_values_to = exprs(DTHCAUS = DSTERM, DTHDT = convert_dtc_to_dt(DSSTDTC)),
-      order = exprs(DTHDT)
+      set_values_to = exprs(
+        DTHCAUS = DSTERM,
+        DTHDT = convert_dtc_to_dt(DSSTDTC)
+      )
     )
   ),
   source_datasets = list(ae = ae, ds = ds),
   tmp_event_nr_var = event_nr,
   order = exprs(DTHDT, event_nr),
   mode = "first",
+  check_type = "error",
   new_vars = exprs(DTHCAUS, DTHDT)
 )
-}
-\seealso{
-\code{\link[=event]{event()}}, \code{\link[=event_joined]{event_joined()}}, \code{\link[=derive_extreme_event]{derive_extreme_event()}}
+#> # A tibble: 4 x 4
+#>   STUDYID USUBJID DTHCAUS                             DTHDT     
+#>   <chr>   <chr>   <chr>                               <date>    
+#> 1 STUDY01 PAT01   CARDIAC ARREST                      2021-04-03
+#> 2 STUDY01 PAT02   DEATH DUE TO PROGRESSION OF DISEASE 2022-02-01
+#> 3 STUDY01 PAT03   <NA>                                NA        
+#> 4 STUDY01 PAT04   RESPIRATORY FAILURE                 2022-02-01}\if{html}{\out{</div>}}}
+\subsection{Derive a confirmation date using \code{event_joined()}}{
 
-ADSL Functions that returns variable appended to dataset:
-\code{\link[=derive_var_age_years]{derive_var_age_years()}},
-\code{\link[=derive_vars_aage]{derive_vars_aage()}},
-\code{\link[=derive_vars_period]{derive_vars_period()}}
+For this synthetic study, a laboratory elevation is confirmed when ALT
+exceeds three times the upper limit of normal (ULN) on two consecutive
+calendar days. Derive the first confirmation date, i.e., the second date
+of the pair. This illustrates a study-specific programming rule, not a
+diagnosis. \code{AVAL} is the ALT result in U/L and \code{ANRHI} is its ULN in U/L.
+\itemize{
+\item The condition compares each assessment with earlier assessments from the
+same subject using \code{event_joined()}, \code{join_type = "before"}, and
+\code{order = exprs(ADT)}. Variables from earlier records have the \code{.join}
+suffix. \code{ADT == ADT.join + 1} requires consecutive dates, not merely
+consecutive records. The example has one ALT assessment per subject/day.
+\item Both results must exceed their respective ULN threshold. Missing values
+do not establish confirmation. The selected record supplies \code{ADT} from the
+confirming assessment; the outer \code{mode = "first"} selects the first such date.
+\item \code{new_vars} renames \code{ADT} to \code{ALTCDT}. Subjects with a gap between elevated
+results (\code{PAT02}), an unconfirmed elevation (\code{PAT04}), or no laboratory
+records (\code{PAT05}) remain in ADSL with a missing confirmation date.
 }
-\concept{der_adsl}
-\keyword{der_adsl}
+
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{adsl <- tribble(
+  ~STUDYID,  ~USUBJID,
+  "STUDY01", "PAT01",
+  "STUDY01", "PAT02",
+  "STUDY01", "PAT03",
+  "STUDY01", "PAT04",
+  "STUDY01", "PAT05"
+)
+
+adlb <- tribble(
+  ~STUDYID,  ~USUBJID, ~ADT,         ~AVAL, ~ANRHI,
+  "STUDY01", "PAT01",  "2024-01-01",  160,     40,
+  "STUDY01", "PAT01",  "2024-01-02",  200,     40,
+  "STUDY01", "PAT01",  "2024-01-03",  240,     40,
+  "STUDY01", "PAT02",  "2024-01-01",  160,     40,
+  "STUDY01", "PAT02",  "2024-01-03",  200,     40,
+  "STUDY01", "PAT03",  "2024-01-01",   80,     40,
+  "STUDY01", "PAT03",  "2024-01-02",  160,     40,
+  "STUDY01", "PAT03",  "2024-01-03",  200,     40,
+  "STUDY01", "PAT04",  "2024-01-01",  160,     40,
+  "STUDY01", "PAT04",  "2024-01-02",   NA,     40
+) \%>\%
+  mutate(ADT = ymd(ADT))
+
+derive_vars_extreme_event(
+  adsl,
+  by_vars = exprs(STUDYID, USUBJID),
+  events = list(
+    event_joined(
+      dataset_name = "adlb",
+      order = exprs(ADT),
+      join_vars = exprs(ADT, AVAL, ANRHI),
+      join_type = "before",
+      condition = AVAL > 3 * ANRHI & AVAL.join > 3 * ANRHI.join &
+        ADT == ADT.join + 1
+    )
+  ),
+  source_datasets = list(adlb = adlb),
+  order = exprs(ADT),
+  mode = "first",
+  new_vars = exprs(ALTCDT = ADT)
+)
+#> # A tibble: 5 x 3
+#>   STUDYID USUBJID ALTCDT    
+#>   <chr>   <chr>   <date>    
+#> 1 STUDY01 PAT01   2024-01-02
+#> 2 STUDY01 PAT02   NA        
+#> 3 STUDY01 PAT03   2024-01-03
+#> 4 STUDY01 PAT04   NA        
+#> 5 STUDY01 PAT05   NA        }\if{html}{\out{</div>}}}
+\subsection{Further examples}{
+
+See the "Handling duplicates" section of \code{\link[=derive_extreme_records]{derive_extreme_records()}}
+for examples of the default \code{check_type = "warning"}, inspecting duplicate
+records with \code{\link[=get_duplicates_dataset]{get_duplicates_dataset()}}, and using \code{check_type = "none"}.
+Disabling the check does not resolve ties; an explicit selection rule is
+needed if tied records would give different derived values.
+
+See \code{\link[=derive_extreme_event]{derive_extreme_event()}} for further examples of \code{event()} and
+\code{event_joined()}, including event-specific grouping, ordering, and source
+restrictions. Here those events supply variables to \code{dataset} rather than
+adding records.}}
+

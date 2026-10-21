@@ -61,6 +61,10 @@ were updated to add the term `"Eosinophilia"` (#3191).
 
 ## Documentation
 
+- Expanded the `derive_vars_extreme_event()` examples using the custom roclet,
+including source selection, date ties, subjects without matching records,
+duplicate checks, and confirmation across records with `event_joined()`. (#3165)
+
 - Corrected the `ADLB` template label for `PARAMCD = "CK"` from `"Creatinine Kinase"` to `"Creatine Kinase"` (#3170).
 
 - Updated the "Lab Grading" vignette to replace the deprecated `abnormal_indicator` argument reference
