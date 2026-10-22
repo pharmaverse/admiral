@@ -309,12 +309,12 @@ A character vector
 This is a vector-oriented helper and is not usually called directly on a
 data frame with `%>%`.
 
-Additionally, the function will throw an error or issue a warning if a
-data issue or imputation rules cause an invalid date (e.g. "2020-02-31")
-to be generated. In this case, the user should adjust the imputation
-rules or set the `check_date_type` argument to `"warning"` to allow
-execution to continue. Note that with `check_date_type = "warning"`, any
-invalid dates will be returned as `NA`.
+Additionally, the function will throw an error or issue a warning
+(depending on the `check_date_type` argument) if a data issue or
+imputation rules cause an invalid date (e.g. "2020-02-31") to be
+generated. In this case, the user should fix the data issue or adjust
+the imputation rules. Note that any invalid dates will be returned as
+`NA`.
 
 ## See also
 

@@ -374,12 +374,12 @@ i.e. you couldn't choose to say impute months, but not days.
 The presence of a `*DTF` variable is checked and if it already exists in
 the input dataset, a warning is issued and `*DTF` will be overwritten.
 
-Additionally, the function will throw an error or issue a warning if a
-data issue or imputation rules cause an invalid date (e.g. "2020-02-31")
-to be generated. In this case, the user should adjust the imputation
-rules or set the `check_date_type` argument to `"warning"` to allow
-execution to continue. Note that with `check_date_type = "warning"`, any
-invalid dates will be returned as `NA`.
+Additionally, the function will throw an error or issue a warning
+(depending on the `check_date_type` argument) if a data issue or
+imputation rules cause an invalid date (e.g. "2020-02-31") to be
+generated. In this case, the user should fix the data issue or adjust
+the imputation rules. Note that any invalid dates will be returned as
+`NA`.
 
 ## See also
 

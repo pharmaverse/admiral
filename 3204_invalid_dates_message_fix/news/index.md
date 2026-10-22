@@ -71,7 +71,7 @@
   now return `NA_character_` rather than an invalid date/datetime
   string, in line with the updates made to date/datetime functions to
   introduce the `check_date_type` and `check_datetime_type` arguments
-  (see entries under “Updates of Existing Functions).
+  (see entries under “Updates of Existing Functions”).
   ([\#3204](https://github.com/pharmaverse/admiral/issues/3204))
 
 - The following functions are entering the next phase of the

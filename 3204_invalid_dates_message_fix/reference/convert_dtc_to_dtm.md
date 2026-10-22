@@ -346,12 +346,11 @@ A datetime object
 This is a vector-oriented helper and is not usually called directly on a
 data frame with `%>%`.
 
-Additionally, the function will throw an error or issue a warning if a
-data issue or imputation rules cause an invalid datetime (e.g.
-"2020-02-01T25:00:00") to be generated. In this case, the user should
-adjust the imputation rules or set the `check_datetime_type` argument to
-`"warning"` to allow execution to continue. Note that with
-`check_datetime_type = "warning"`, any invalid datetimes will be
+Additionally, the function will throw an error or issue a warning
+(depending on the `check_datetime_type` argument) if a data issue or
+imputation rules cause an invalid datetime (e.g. "2020-01-28T25:00:00")
+to be generated. In this case, the user should fix the data issue or
+adjust the imputation rules. Note that any invalid datetimes will be
 returned as `NA`.
 
 ## See also
