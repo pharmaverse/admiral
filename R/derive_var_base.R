@@ -21,6 +21,8 @@
 #'
 #'   By default `ABLFL == "Y"`
 #'
+#'   `r roxygen_float_comparison()`
+#'
 #' @return
 #' A new `data.frame` containing all records and variables of the input
 #' dataset plus the `new_var` variable

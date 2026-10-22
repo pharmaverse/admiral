@@ -25,6 +25,8 @@ of \code{derive_param_tte()}.
 \item{filter}{An unquoted condition for selecting the observations from
 \code{dataset} which are events or possible censoring time points.
 
+Comparing derived numeric variables to fixed values, e.g., \code{PCHG <= -90}, may give unexpected results due to floating point representation. For details and solutions see the "Floating Point Comparisons" section in \code{vignette("concepts_conventions")}.
+
 \describe{
 \item{Default value}{\code{NULL}}
 }}

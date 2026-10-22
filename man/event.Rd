@@ -29,6 +29,8 @@ dataset (\code{dataset}) of \code{derive_extreme_event()} is used.
 will contribute to the extreme event. If the condition contains summary
 functions like \code{all()}, they are evaluated for each by group separately.
 
+Comparing derived numeric variables to fixed values, e.g., \code{PCHG <= -90}, may give unexpected results due to floating point representation. For details and solutions see the "Floating Point Comparisons" section in \code{vignette("concepts_conventions")}.
+
 \describe{
 \item{Permitted values}{an unquoted condition}
 \item{Default value}{\code{NULL}}

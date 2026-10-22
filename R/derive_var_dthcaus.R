@@ -58,6 +58,8 @@ derive_var_dthcaus <- function(dataset,
 #'
 #' @param filter An expression used for filtering `dataset`.
 #'
+#'   `r roxygen_float_comparison()`
+#'
 #' @param date A date or datetime variable or an expression to be used for
 #'   sorting `dataset`.
 #'

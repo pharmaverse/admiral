@@ -6951,12 +6951,45 @@ test_that("derive_var_atoxgr_dir Test 129: CTCAEv6 Creat. clear. dec. (SI unit)"
   test_low(expected = exp_crcl_d, meta = atoxgr_criteria_ctcv6)
 })
 
+### Eosinophilia
+### GRADE_1: >ULN and >Baseline
+
+## Test 130: Eosinophilia (SI unit) ----
+test_that("derive_var_atoxgr_dir Test 130: CTCAEv6 + v5  Eosinophilia (SI unit)", {
+  exp_eosin_i <- tibble::tribble(
+    ~ATOXDSCH,      ~AVAL,  ~BASE, ~ANRHI,  ~ATOXGRH,       ~TESTNUM,
+    "Not a term",   27,     25,    25,      NA_character_,  1,
+    NA_character_,  27,     25,    25,      NA_character_,  2,
+    # AVAL > ANRHI and BASELINE grade = 1
+    "Eosinophilia", 26,     25,    25,      "1",            3,
+    # AVAL = ANRHI and > BASELINE grade = 0
+    "Eosinophilia", 25,     24,    25,      "0",            4,
+    # AVAL > ANRHI and = BASELINE grade = 0
+    "Eosinophilia", 26,     26,    25,      "0",            5,
+    # AVAL = ANRHI and = BASELINE grade = 0
+    "Eosinophilia", 26,     26,    26,      "0",            6,
+    # AVAL missing
+    "Eosinophilia", NA,     26,    26,      NA_character_,  7,
+    # ANRHI missing
+    "Eosinophilia", 26,     26,    NA,      NA_character_,  8,
+    # ANRHI missing
+    "Eosinophilia", 26,     NA,    26,      NA_character_,  9,
+  ) %>%
+    mutate(AVALU = NA_character_)
+
+  test_high(expected = exp_eosin_i, meta = atoxgr_criteria_ctcv6)
+  test_high(expected = exp_eosin_i, meta = atoxgr_criteria_ctcv6_uscv)
+  test_high(expected = exp_eosin_i, meta = atoxgr_criteria_ctcv5)
+  test_high(expected = exp_eosin_i, meta = atoxgr_criteria_ctcv5_uscv)
+})
+
+
 input_bili_ctcv6 <- exp_bili_ctcv6 %>%
   select(-ATOXGRH)
 
 ## Test when deprecated abnormal_indicator used - should map to high_indicator
-## Test 130: CTCAEv6  Blood bilirubin increased ----
-test_that("derive_var_atoxgr_dir Test 130: CTCAEv6  Blood bilirubin increased", {
+## Test 131: CTCAEv6  Blood bilirubin increased ----
+test_that("derive_var_atoxgr_dir Test 131: CTCAEv6  Blood bilirubin increased", {
   expect_snapshot(
     actual_bili_ctcv6 <- derive_var_atoxgr_dir(
       input_bili_ctcv6,
@@ -6977,8 +7010,8 @@ test_that("derive_var_atoxgr_dir Test 130: CTCAEv6  Blood bilirubin increased", 
 })
 
 ## Test when high_indicator not defined - should map to high_indicator
-## Test 131: CTCAEv6  Blood bili incr. high_indicator not defined ----
-test_that("derive_var_atoxgr_dir Test 131: CTCAEv6  Blood bili incr. high_indicator not defined", {
+## Test 132: CTCAEv6  Blood bili incr. high_indicator not defined ----
+test_that("derive_var_atoxgr_dir Test 132: CTCAEv6  Blood bili incr. high_indicator not defined", {
   expect_error(
     actual_bili_ctcv6 <- derive_var_atoxgr_dir(
       input_bili_ctcv6,
@@ -6993,8 +7026,8 @@ test_that("derive_var_atoxgr_dir Test 131: CTCAEv6  Blood bili incr. high_indica
   )
 })
 
-## Test 132: CTCAEv6 Creatinine incr. low_indicator not defined ----
-test_that("derive_var_atoxgr_dir Test 132: CTCAEv6 Creatinine incr. low_indicator not defined", {
+## Test 133: CTCAEv6 Creatinine incr. low_indicator not defined ----
+test_that("derive_var_atoxgr_dir Test 133: CTCAEv6 Creatinine incr. low_indicator not defined", {
   exp_creatn <- tibble::tribble(
     ~ATOXDSCH,               ~AVAL,  ~BASE, ~ANRHI, ~AVALU,         ~BNRIND,        ~ATOXGRH,
     "Creatinine increased",  241,    40,    40,     NA_character_,  "NORMAL",       "4",
@@ -7018,8 +7051,8 @@ test_that("derive_var_atoxgr_dir Test 132: CTCAEv6 Creatinine incr. low_indicato
   )
 })
 
-## Test 133: ERROR when CRITERIA different with same TERM and UNIT ----
-test_that("derive_var_atoxgr_dir Test 133: ERROR when CRITERIA different with same TERM and UNIT", {
+## Test 134: ERROR when CRITERIA different with same TERM and UNIT ----
+test_that("derive_var_atoxgr_dir Test 134: ERROR when CRITERIA different with same TERM and UNIT", {
   atoxgr_criteria_ctcv6 <- bind_rows(
     admiral::atoxgr_criteria_ctcv6,
     admiral::atoxgr_criteria_ctcv6 %>%
