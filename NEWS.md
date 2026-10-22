@@ -44,7 +44,7 @@ were updated to add the term `"Eosinophilia"` (#3191).
 - `impute_dtc_dt()` and `impute_dtc_dtm()` now return `NA_character_` rather than an 
   invalid date/datetime string, in line with the updates made to date/datetime functions
   to introduce the `check_date_type` and `check_datetime_type` arguments (see entries under
-  "Updates of Existing Functions). (#3204)
+  "Updates of Existing Functions"). (#3204)
 
 - The following functions are entering the next phase of the [deprecation process](https://pharmaverse.github.io/admiraldev/articles/programming_strategy.html#deprecation):
 

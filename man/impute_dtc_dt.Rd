@@ -249,11 +249,11 @@ Imputation partial date portion of a \code{--DTC} variable based on user input.
 This is a vector-oriented helper and is not usually called directly on a data
 frame with \verb{\%>\%}.
 
-Additionally, the function will throw an error or issue a warning if a data issue
-or imputation rules cause an invalid date (e.g. "2020-02-31") to be generated. In
-this case, the user should adjust the imputation rules or set the \code{check_date_type}
-argument to \code{"warning"} to allow execution to continue. Note that with
-\code{check_date_type = "warning"}, any invalid dates will be returned as \code{NA}.
+Additionally, the function will throw an error or issue a warning (depending on
+the \code{check_date_type} argument) if a data issue or imputation rules cause an
+invalid date (e.g. "2020-02-31") to be generated. In this case, the user should
+fix the data issue or adjust the imputation rules. Note that any invalid dates will
+be returned as \code{NA}.
 }
 \examples{
 library(lubridate)
