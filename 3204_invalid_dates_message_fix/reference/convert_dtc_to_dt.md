@@ -281,7 +281,7 @@ convert_dtc_to_dt(
 
 - check_date_type:
 
-  Throw an error or issue a warning if invalid dates are detected?
+  Check if any invalid dates are detected?
 
   If any invalid dates are detected, either due to a data issue or as a
   result of incorrect imputation, `check_date_type` controls whether an
@@ -290,7 +290,7 @@ convert_dtc_to_dt(
 
   Permitted values
 
-  :   `"warning"`, `"error"`
+  :   `"none"`, `"message"`, `"warning"`, `"error"`
 
   Default value
 
@@ -305,12 +305,13 @@ a date object
 This is a vector-oriented helper and is not usually called directly on a
 data frame with `%>%`.
 
-Additionally, the function will throw an error or issue a warning
-(depending on the `check_date_type` argument) if a data issue or
-imputation rules cause an invalid date (e.g. "2020-02-31") to be
+Additionally, the function can output a message, throw an error or issue
+a warning (depending on the `check_date_type` argument) if a data issue
+or imputation rules cause an invalid date (e.g. `"2020-02-31"`) to be
 generated. In this case, the user should fix the data issue or adjust
-the imputation rules. Note that any invalid dates will be returned as
-`NA`.
+the imputation rules. It is also possible to specify
+`check_date_type = "none` to silently ignore any issues. Note that any
+invalid dates will be always returned as `NA`.
 
 ## See also
 

@@ -116,8 +116,8 @@ impute_dtc_dtm(
 #>   what is passed to the function and the final datetime is the result of any
 #>   imputation:
 #> • Raw datetime 2019-02, final datetime 2019-02-31T00:00:00.
-#> ℹ You can control whether this message is a warning or an error with the
-#>   `check_datetime_type` argument.
+#> ℹ You can control whether this is a message/warning/error, or switch it off
+#>   entirely, through the `check_datetime_type` argument.
 ```
 
 Note the text in the error message, which reminds you that if you wish

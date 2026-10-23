@@ -285,7 +285,7 @@ impute_dtc_dt(
 
 - check_date_type:
 
-  Throw an error or issue a warning if invalid dates are detected?
+  Check if any invalid dates are detected?
 
   If any invalid dates are detected, either due to a data issue or as a
   result of incorrect imputation, `check_date_type` controls whether an
@@ -294,7 +294,7 @@ impute_dtc_dt(
 
   Permitted values
 
-  :   `"warning"`, `"error"`
+  :   `"none"`, `"message"`, `"warning"`, `"error"`
 
   Default value
 
@@ -309,12 +309,13 @@ A character vector
 This is a vector-oriented helper and is not usually called directly on a
 data frame with `%>%`.
 
-Additionally, the function will throw an error or issue a warning
-(depending on the `check_date_type` argument) if a data issue or
-imputation rules cause an invalid date (e.g. "2020-02-31") to be
+Additionally, the function can output a message, throw an error or issue
+a warning (depending on the `check_date_type` argument) if a data issue
+or imputation rules cause an invalid date (e.g. `"2020-02-31"`) to be
 generated. In this case, the user should fix the data issue or adjust
-the imputation rules. Note that any invalid dates will be returned as
-`NA`.
+the imputation rules. It is also possible to specify
+`check_date_type = "none` to silently ignore any issues. Note that any
+invalid dates will be always returned as `NA`.
 
 ## See also
 
@@ -431,7 +432,7 @@ impute_dtc_dt(
 #> selection. See the problematic date below, where the raw date is what is passed
 #> to the function and the final date is the result of any imputation:
 #> • Raw date 2020-02, final date 2020-02-30.
-#> ℹ You can control whether this message is a warning or an error with the
-#>   `check_date_type` argument.
+#> ℹ You can control whether this is a message/warning/error, or switch it off
+#>   entirely, through the `check_date_type` argument.
 #> [1] NA
 ```
