@@ -268,15 +268,14 @@ For example \code{"2019---07"} would return \verb{"2019-06-07} if \code{preserve
 \item{Default value}{\code{FALSE}}
 }}
 
-\item{check_date_type}{Throw an error or issue a warning if invalid dates are
-detected?
+\item{check_date_type}{Check if any invalid dates are detected?
 
 If any invalid dates are detected, either due to a data issue or as a result of
 incorrect imputation, \code{check_date_type} controls whether an error is thrown or
 a warning is issued. If the latter, the function returns \code{NA}.
 
 \describe{
-\item{Permitted values}{\code{"warning"}, \code{"error"}}
+\item{Permitted values}{\code{"none"}, \code{"message"}, \code{"warning"}, \code{"error"}}
 \item{Default value}{\code{"error"}}
 }}
 }
@@ -297,11 +296,12 @@ choose to say impute months, but not days.
 The presence of a \verb{*DTF} variable is checked and if it already exists in the input dataset,
 a warning is issued and \verb{*DTF} will be overwritten.
 
-Additionally, the function will throw an error or issue a warning (depending on
-the \code{check_date_type} argument) if a data issue or imputation rules cause an
-invalid date (e.g. "2020-02-31") to be generated. In this case, the user should
-fix the data issue or adjust the imputation rules. Note that any invalid dates will
-be returned as \code{NA}.
+Additionally, the function can output a message, throw an error or issue a warning
+(depending on the \code{check_date_type} argument) if a data issue or imputation
+rules cause an invalid date (e.g. \code{"2020-02-31"}) to be generated. In
+this case, the user should fix the data issue or adjust the imputation rules. It is
+also possible to specify \verb{check_date_type = "none} to silently ignore any issues.
+Note that any invalid dates will be always returned as \code{NA}.
 }
 \seealso{
 \code{vignette("imputation")}
@@ -646,29 +646,33 @@ For example, \code{"2019---07"}, will be displayed as \code{"2019-06-07"} rather
 \subsection{Handle invalid dates with a warning (\code{check_date_type})}{
 
 By default, if imputation causes an invalid date (e.g. day 30 in
-February), an error is thrown. Setting \code{check_date_type = "warning"} issues
-a warning instead and returns \code{NA} for the invalid date(s), allowing
-execution to continue. This can be useful for exploratory work or if a temporary
-data issue needs to be ignored during development.
+February), an error is thrown. Setting \code{check_date_type = "warning"}, \code{"message"} or
+\code{"none"} issues a warning, message or nothing at all instead, and returns \code{NA} for
+the invalid date(s), allowing execution to continue. This can be useful for
+exploratory work or if a  temporary data issue needs to be ignored during
+development.
 
-\if{html}{\out{<div class="sourceCode r">}}\preformatted{derive_vars_dt(
-  mhdt,
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{mhdt2 <- tribble(
+  ~MHSTDTC,
+  "2019-01",
+  "2019-02",
+  "2019-01-29"
+)
+
+derive_vars_dt(
+  mhdt2,
   new_vars_prefix = "AST",
   dtc = MHSTDTC,
   highest_imputation = "D",
   date_imputation = "30",
   check_date_type = "warning"
 )
-#> # A tibble: 7 × 3
-#>   MHSTDTC               ASTDT      ASTDTF
-#>   <chr>                 <date>     <chr> 
-#> 1 "2019-07-18T15:25:40" 2019-07-18 <NA>  
-#> 2 "2019-07-18T15:25"    2019-07-18 <NA>  
-#> 3 "2019-07-18"          2019-07-18 <NA>  
-#> 4 "2019-02"             NA         <NA>  
-#> 5 "2019"                NA         <NA>  
-#> 6 "2019---07"           NA         <NA>  
-#> 7 ""                    NA         <NA>  
+#> # A tibble: 3 × 3
+#>   MHSTDTC    ASTDT      ASTDTF
+#>   <chr>      <date>     <chr> 
+#> 1 2019-01    2019-01-30 D     
+#> 2 2019-02    NA         <NA>  
+#> 3 2019-01-29 2019-01-29 <NA>  
 #> Warning: There was 1 warning in `mutate()`.
 #> i In argument: `ASTDT = convert_dtc_to_dt(...)`.
 #> Caused by warning:
@@ -677,8 +681,8 @@ data issue needs to be ignored during development.
 #> selection. See the problematic date below, where the raw date is what is passed
 #> to the function and the final date is the result of any imputation:
 #> • Raw date 2019-02, final date 2019-02-30.
-#> i You can control whether this message is a warning or an error with the
-#>   `check_date_type` argument.}\if{html}{\out{</div>}}}
+#> i You can control whether this is a message/warning/error, or switch it off
+#>   entirely, through the `check_date_type` argument.}\if{html}{\out{</div>}}}
 \subsection{Further examples}{
 
 Further example usages of this function can be found in the

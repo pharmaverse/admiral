@@ -307,8 +307,8 @@
 #' development.
 #'
 #' @code [expected_cnds = "warning"]
-#'
-#' mhdt2 <- c(
+#' mhdt2 <- tribble(
+#'   ~MHSTDTC,
 #'   "2019-01",
 #'   "2019-02",
 #'   "2019-01-29"

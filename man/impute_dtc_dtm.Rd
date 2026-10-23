@@ -263,15 +263,15 @@ For example \code{"2019---07"} would return \verb{"2019-06-07} if \code{preserve
 \item{Default value}{\code{FALSE}}
 }}
 
-\item{check_datetime_type}{Throw an error or issue a warning if invalid datetimes are
-detected?
+\item{check_datetime_type}{Check if any invalid datetimes are detected?
 
-If any invalid datetimes are detected, either due to a data issue or as a result of
-incorrect imputation, \code{check_datetime_type} controls whether an error is thrown or
-a warning is issued. If the latter, the function returns \code{NA}.
+If \code{"warning"}, \code{"message"}, or \code{"error"} is specified, the specified message is issued
+if any invalid datetimes are detected, either due to a data issue or as a result of
+incorrect imputation. In that case, if \code{check_datetime_type} is not \code{"error"}, the
+function returns \code{NA}.
 
 \describe{
-\item{Permitted values}{\code{"warning"}, \code{"error"}}
+\item{Permitted values}{\code{"none"}, \code{"message"}, \code{"warning"}, \code{"error"}}
 \item{Default value}{\code{"error"}}
 }}
 }
@@ -286,11 +286,12 @@ input.
 This is a vector-oriented helper and is not usually called directly on a data
 frame with \verb{\%>\%}.
 
-Additionally, the function will throw an error or issue a warning (depending on
-the \code{check_datetime_type} argument) if a data issue or imputation rules cause an
-invalid datetime (e.g. "2020-01-28T25:00:00") to be generated. In this case, the user
-should fix the data issue or adjust the imputation rules. Note that any invalid
-datetimes will be returned as \code{NA}.
+Additionally, the function can output a message, throw an error or issue a warning
+(depending on the \code{check_datetime_type} argument) if a data issue or imputation
+rules cause an invalid datetime (e.g. \code{"2020-01-28T25:00:00"}) to be generated. In
+this case, the user should fix the data issue or adjust the imputation rules. It is
+also possible to specify \verb{check_datetime_type = "none} to silently ignore any issues.
+Note that any invalid datetimes will be always returned as \code{NA}.
 }
 \examples{
 library(lubridate)

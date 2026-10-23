@@ -227,15 +227,14 @@ For example \code{"2019---07"} would return \verb{"2019-06-07} if \code{preserve
 \item{Default value}{\code{FALSE}}
 }}
 
-\item{check_date_type}{Throw an error or issue a warning if invalid dates are
-detected?
+\item{check_date_type}{Check if any invalid dates are detected?
 
 If any invalid dates are detected, either due to a data issue or as a result of
 incorrect imputation, \code{check_date_type} controls whether an error is thrown or
 a warning is issued. If the latter, the function returns \code{NA}.
 
 \describe{
-\item{Permitted values}{\code{"warning"}, \code{"error"}}
+\item{Permitted values}{\code{"none"}, \code{"message"}, \code{"warning"}, \code{"error"}}
 \item{Default value}{\code{"error"}}
 }}
 }
@@ -249,11 +248,12 @@ Imputation partial date portion of a \code{--DTC} variable based on user input.
 This is a vector-oriented helper and is not usually called directly on a data
 frame with \verb{\%>\%}.
 
-Additionally, the function will throw an error or issue a warning (depending on
-the \code{check_date_type} argument) if a data issue or imputation rules cause an
-invalid date (e.g. "2020-02-31") to be generated. In this case, the user should
-fix the data issue or adjust the imputation rules. Note that any invalid dates will
-be returned as \code{NA}.
+Additionally, the function can output a message, throw an error or issue a warning
+(depending on the \code{check_date_type} argument) if a data issue or imputation
+rules cause an invalid date (e.g. \code{"2020-02-31"}) to be generated. In
+this case, the user should fix the data issue or adjust the imputation rules. It is
+also possible to specify \verb{check_date_type = "none} to silently ignore any issues.
+Note that any invalid dates will be always returned as \code{NA}.
 }
 \examples{
 library(lubridate)

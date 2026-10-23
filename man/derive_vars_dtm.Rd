@@ -324,15 +324,15 @@ admiral 1.4.0 and later.
 \item{Default value}{\code{TRUE}}
 }}
 
-\item{check_datetime_type}{Throw an error or issue a warning if invalid datetimes are
-detected?
+\item{check_datetime_type}{Check if any invalid datetimes are detected?
 
-If any invalid datetimes are detected, either due to a data issue or as a result of
-incorrect imputation, \code{check_datetime_type} controls whether an error is thrown or
-a warning is issued. If the latter, the function returns \code{NA}.
+If \code{"warning"}, \code{"message"}, or \code{"error"} is specified, the specified message is issued
+if any invalid datetimes are detected, either due to a data issue or as a result of
+incorrect imputation. In that case, if \code{check_datetime_type} is not \code{"error"}, the
+function returns \code{NA}.
 
 \describe{
-\item{Permitted values}{\code{"warning"}, \code{"error"}}
+\item{Permitted values}{\code{"none"}, \code{"message"}, \code{"warning"}, \code{"error"}}
 \item{Default value}{\code{"error"}}
 }}
 }
@@ -354,11 +354,12 @@ The presence of a \verb{*DTF} variable is checked and the variable is not derive
 if it already exists in the input dataset. However, if \verb{*TMF} already exists
 in the input dataset, a warning is issued and \verb{*TMF} will be overwritten.
 
-Additionally, the function will throw an error or issue a warning (depending on
-the \code{check_datetime_type} argument) if a data issue or imputation rules cause an
-invalid datetime (e.g. "2020-01-28T25:00:00") to be generated. In this case, the user
-should fix the data issue or adjust the imputation rules. Note that any invalid
-datetimes will be returned as \code{NA}.
+Additionally, the function can output a message, throw an error or issue a warning
+(depending on the \code{check_datetime_type} argument) if a data issue or imputation
+rules cause an invalid datetime (e.g. \code{"2020-01-28T25:00:00"}) to be generated. In
+this case, the user should fix the data issue or adjust the imputation rules. It is
+also possible to specify \verb{check_datetime_type = "none} to silently ignore any issues.
+Note that any invalid datetimes will be always returned as \code{NA}.
 }
 \seealso{
 \code{vignette("imputation")}
@@ -569,10 +570,11 @@ derive_vars_dtm(
 \subsection{Handle invalid datetimes with a warning (\code{check_datetime_type})}{
 
 By default, if imputation causes an invalid datetime (e.g. day 30 in
-February), an error is thrown. Setting \code{check_datetime_type = "warning"}
-issues a warning instead and returns \code{NA} for the invalid datetime(s),
-allowing execution to continue. This can be useful for exploratory work or
-if a temporary data issue needs to be ignored during development.
+February), an error is thrown. Setting \code{check_datetime_type = "warning"},
+\code{"message"} or \code{"none"} issues a warning, message or nothing at all instead,
+and returns \code{NA} for the invalid datetime(s), allowing execution to continue.
+This can be useful for exploratory work or if a temporary data issue needs
+to be ignored during development.
 
 \if{html}{\out{<div class="sourceCode r">}}\preformatted{aedt <- tribble(
   ~AEENDTC,
@@ -604,8 +606,8 @@ derive_vars_dtm(
 #> imputation:
 #> • Raw datetime 2020-02, final datetime 2020-02-30T00:00:00.
 #> • Raw datetime 2020-13-01, final datetime 2020-13-01T00:00:00.
-#> i You can control whether this message is a warning or an error with the
-#>   `check_datetime_type` argument.}\if{html}{\out{</div>}}}
+#> i You can control whether this is a message/warning/error, or switch it off
+#>   entirely, through the `check_datetime_type` argument.}\if{html}{\out{</div>}}}
 \subsection{Further examples}{
 
 Further example usages of this function can be found in the
