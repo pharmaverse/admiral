@@ -42,12 +42,12 @@
 
   - The `check_date_type` and `check_datetime_type` arguments were added
     to the date/datetime functions respectively. These allow users to
-    control whether an error is thrown or a warning is issued when a
-    date/datetime is invalid, either as a result of a raw data issue or
-    following imputation. With a warning, the functions continue
-    executing and return `NA` for any invalid dates/datetimes. The
-    resulting message was also improved and aligned across the
-    functions.
+    control whether a message, warning or error is issued (or nothing at
+    all) when a date/datetime is invalid, either as a result of a raw
+    data issue or following imputation. When not throwing an error, the
+    functions continue executing and return `NA` for any invalid
+    dates/datetimes. The informative note was also improved and aligned
+    across the functions.
     ([\#3204](https://github.com/pharmaverse/admiral/issues/3204))
 
 - [`derive_vars_merged_lookup()`](https:/pharmaverse.github.io/admiral/3204_invalid_dates_message_fix/reference/derive_vars_merged_lookup.md)
