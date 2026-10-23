@@ -48,11 +48,12 @@
 #' if it already exists in the input dataset. However, if `*TMF` already exists
 #' in the input dataset, a warning is issued and `*TMF` will be overwritten.
 #'
-#' Additionally, the function will throw an error or issue a warning (depending on
-#' the `check_datetime_type` argument) if a data issue or imputation rules cause an
-#' invalid datetime (e.g. "2020-01-28T25:00:00") to be generated. In this case, the user
-#' should fix the data issue or adjust the imputation rules. Note that any invalid
-#' datetimes will be returned as `NA`.
+#' Additionally, the function can output a message, throw an error or issue a warning
+#' (depending on the `check_datetime_type` argument) if a data issue or imputation
+#' rules cause an invalid datetime (e.g. `"2020-01-28T25:00:00"`) to be generated. In
+#' this case, the user should fix the data issue or adjust the imputation rules. It is
+#' also possible to specify `check_datetime_type = "none` to silently ignore any issues.
+#' Note that any invalid datetimes will be always returned as `NA`.
 #'
 #' @return  The input dataset with the datetime `*DTM` (and the date/time imputation
 #' flag `*DTF`, `*TMF`) added.
@@ -208,10 +209,11 @@
 #' )
 #' @caption Handle invalid datetimes with a warning (`check_datetime_type`)
 #' @info By default, if imputation causes an invalid datetime (e.g. day 30 in
-#' February), an error is thrown. Setting `check_datetime_type = "warning"`
-#' issues a warning instead and returns `NA` for the invalid datetime(s),
-#' allowing execution to continue. This can be useful for exploratory work or
-#' if a temporary data issue needs to be ignored during development.
+#' February), an error is thrown. Setting `check_datetime_type = "warning"`,
+#' `"message"` or `"none"` issues a warning, message or nothing at all instead,
+#' and returns `NA` for the invalid datetime(s), allowing execution to continue.
+#' This can be useful for exploratory work or if a temporary data issue needs
+#' to be ignored during development.
 #'
 #' @code [expected_cnds = "warning"]
 #' aedt <- tribble(
@@ -344,11 +346,12 @@ derive_vars_dtm <- function(dataset,
 #' @details This is a vector-oriented helper and is not usually called directly on a data
 #' frame with `%>%`.
 #'
-#' Additionally, the function will throw an error or issue a warning (depending on
-#' the `check_datetime_type` argument) if a data issue or imputation rules cause an
-#' invalid datetime (e.g. "2020-01-28T25:00:00") to be generated. In this case, the user
-#' should fix the data issue or adjust the imputation rules. Note that any invalid
-#' datetimes will be returned as `NA`.
+#' Additionally, the function can output a message, throw an error or issue a warning
+#' (depending on the `check_datetime_type` argument) if a data issue or imputation
+#' rules cause an invalid datetime (e.g. `"2020-01-28T25:00:00"`) to be generated. In
+#' this case, the user should fix the data issue or adjust the imputation rules. It is
+#' also possible to specify `check_datetime_type = "none` to silently ignore any issues.
+#' Note that any invalid datetimes will be always returned as `NA`.
 #'
 #' @return A datetime object
 #'
@@ -585,25 +588,26 @@ convert_dtc_to_dtm <- function(dtc,
 #'
 #' @permitted [boolean]
 #'
-#' @param check_datetime_type Throw an error or issue a warning if invalid datetimes are
-#'   detected?
+#' @param check_datetime_type Check if any invalid datetimes are detected?
 #'
-#' If any invalid datetimes are detected, either due to a data issue or as a result of
-#' incorrect imputation, `check_datetime_type` controls whether an error is thrown or
-#' a warning is issued. If the latter, the function returns `NA`.
+#' If `"warning"`, `"message"`, or `"error"` is specified, the specified message is issued
+#' if any invalid datetimes are detected, either due to a data issue or as a result of
+#' incorrect imputation. In that case, if `check_datetime_type` is not `"error"`, the
+#' function returns `NA`.
 #'
-#' @permitted [msg_type_warnerror]
+#' @permitted [msg_type]
 #'
 #' @inheritParams impute_dtc_dt
 #'
 #' @details This is a vector-oriented helper and is not usually called directly on a data
 #' frame with `%>%`.
 #'
-#' Additionally, the function will throw an error or issue a warning (depending on
-#' the `check_datetime_type` argument) if a data issue or imputation rules cause an
-#' invalid datetime (e.g. "2020-01-28T25:00:00") to be generated. In this case, the user
-#' should fix the data issue or adjust the imputation rules. Note that any invalid
-#' datetimes will be returned as `NA`.
+#' Additionally, the function can output a message, throw an error or issue a warning
+#' (depending on the `check_datetime_type` argument) if a data issue or imputation
+#' rules cause an invalid datetime (e.g. `"2020-01-28T25:00:00"`) to be generated. In
+#' this case, the user should fix the data issue or adjust the imputation rules. It is
+#' also possible to specify `check_datetime_type = "none` to silently ignore any issues.
+#' Note that any invalid datetimes will be always returned as `NA`.
 #'
 #' @return A character vector
 #'
@@ -762,7 +766,7 @@ impute_dtc_dtm <- function(dtc,
   check_datetime_type <-
     assert_character_scalar(
       check_datetime_type,
-      values = c("warning", "error"),
+      values = c("none", "message", "warning", "error"),
       case_sensitive = FALSE
     )
 
@@ -807,37 +811,41 @@ impute_dtc_dtm <- function(dtc,
   if (!all(is_valid)) {
     invalid_indices <- which(!is_valid)
 
-    invalid_raw <- dtc[invalid_indices]
-    invalid_imputed <- imputed_dtc[invalid_indices]
-    dedup <- !duplicated(paste(invalid_raw, invalid_imputed))
-    invalid_raw <- invalid_raw[dedup]
-    invalid_imputed <- invalid_imputed[dedup]
-    n_invalid <- length(invalid_raw)
 
-    invalid_bullets <- setNames(
-      paste0("Raw datetime ", invalid_raw, ", final datetime ", invalid_imputed, "."),
-      rep("*", n_invalid)
-    )
+    if (check_datetime_type != "none") {
+      invalid_raw <- dtc[invalid_indices]
+      invalid_imputed <- imputed_dtc[invalid_indices]
+      dedup <- !duplicated(paste(invalid_raw, invalid_imputed))
+      invalid_raw <- invalid_raw[dedup]
+      invalid_imputed <- invalid_imputed[dedup]
+      n_invalid <- length(invalid_raw)
 
-    cli_function <- switch(check_datetime_type,
-      warning = cli_warn,
-      error = cli_abort
-    )
-
-    cli_function(c(
-      paste0(
-        "{n_invalid} datetime{?s} {?is/are} invalid, possibly due to a data issue or as a ",
-        "result of imputation. Please review the function arguments and/or your data and ",
-        "correct your selection. See the problematic datetime{?s} below, where the raw ",
-        "datetime is what is passed to the function and the final datetime is the result ",
-        "of any imputation:"
-      ),
-      invalid_bullets,
-      "i" = paste0(
-        "You can control whether this message is a warning or an error with the ",
-        "{.arg check_datetime_type} argument."
+      invalid_bullets <- setNames(
+        paste0("Raw datetime ", invalid_raw, ", final datetime ", invalid_imputed, "."),
+        rep("*", n_invalid)
       )
-    ))
+
+      cli_function <- switch(check_datetime_type,
+        message = cli_inform,
+        warning = cli_warn,
+        error = cli_abort
+      )
+
+      cli_function(c(
+        paste0(
+          "{n_invalid} datetime{?s} {?is/are} invalid, possibly due to a data issue or as a ",
+          "result of imputation. Please review the function arguments and/or your data and ",
+          "correct your selection. See the problematic datetime{?s} below, where the raw ",
+          "datetime is what is passed to the function and the final datetime is the result ",
+          "of any imputation:"
+        ),
+        invalid_bullets,
+        "i" = paste0(
+          "You can control whether this is a message/warning/error, or switch ",
+          "it off entirely, through the {.arg check_datetime_type} argument."
+        )
+      ))
+    }
 
     # Set any invalid datetimes to NA
     imputed_dtc[invalid_indices] <- NA_character_

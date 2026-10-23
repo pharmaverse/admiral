@@ -72,7 +72,7 @@
       Error in `impute_dtc_dt()`:
       ! 1 date is invalid, possibly due to a data issue or as a result of imputation. Please review the function arguments and/or your data and correct your selection. See the problematic date below, where the raw date is what is passed to the function and the final date is the result of any imputation:
       * Raw date 2020-02, final date 2020-02-31.
-      i You can control whether this message is a warning or an error with the `check_date_type` argument.
+      i You can control whether this is a message/warning/error, or switch it off entirely, through the `check_date_type` argument.
 
 ---
 
@@ -83,7 +83,7 @@
       Warning:
       1 date is invalid, possibly due to a data issue or as a result of imputation. Please review the function arguments and/or your data and correct your selection. See the problematic date below, where the raw date is what is passed to the function and the final date is the result of any imputation:
       * Raw date 2020-02, final date 2020-02-31.
-      i You can control whether this message is a warning or an error with the `check_date_type` argument.
+      i You can control whether this is a message/warning/error, or switch it off entirely, through the `check_date_type` argument.
     Output
       [1] "2019-07-18" NA           NA           "2019-07-31" NA          
       [6] NA          

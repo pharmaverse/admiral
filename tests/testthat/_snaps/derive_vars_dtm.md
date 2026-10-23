@@ -82,7 +82,7 @@
       Error in `impute_dtc_dtm()`:
       ! 1 datetime is invalid, possibly due to a data issue or as a result of imputation. Please review the function arguments and/or your data and correct your selection. See the problematic datetime below, where the raw datetime is what is passed to the function and the final datetime is the result of any imputation:
       * Raw datetime 2019-02, final datetime 2019-02-30T00:00:00.
-      i You can control whether this message is a warning or an error with the `check_datetime_type` argument.
+      i You can control whether this is a message/warning/error, or switch it off entirely, through the `check_datetime_type` argument.
 
 ---
 
@@ -93,7 +93,7 @@
       Warning:
       1 datetime is invalid, possibly due to a data issue or as a result of imputation. Please review the function arguments and/or your data and correct your selection. See the problematic datetime below, where the raw datetime is what is passed to the function and the final datetime is the result of any imputation:
       * Raw datetime 2019-02, final datetime 2019-02-30T00:00:00.
-      i You can control whether this message is a warning or an error with the `check_datetime_type` argument.
+      i You can control whether this is a message/warning/error, or switch it off entirely, through the `check_datetime_type` argument.
     Output
       [1] NA
 
