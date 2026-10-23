@@ -13,7 +13,8 @@ convert_dtc_to_dtm(
   min_dates_strict = NULL,
   max_dates = NULL,
   max_dates_strict = NULL,
-  preserve = FALSE
+  preserve = FALSE,
+  check_datetime_type = "error"
 )
 }
 \arguments{
@@ -257,6 +258,18 @@ For example \code{"2019---07"} would return \verb{"2019-06-07} if \code{preserve
 \item{Permitted values}{\code{TRUE}, \code{FALSE}}
 \item{Default value}{\code{FALSE}}
 }}
+
+\item{check_datetime_type}{Check if any invalid datetimes are detected?
+
+If \code{"warning"}, \code{"message"}, or \code{"error"} is specified, the specified message is issued
+if any invalid datetimes are detected, either due to a data issue or as a result of
+incorrect imputation. In that case, if \code{check_datetime_type} is not \code{"error"}, the
+function returns \code{NA}.
+
+\describe{
+\item{Permitted values}{\code{"none"}, \code{"message"}, \code{"warning"}, \code{"error"}}
+\item{Default value}{\code{"error"}}
+}}
 }
 \value{
 A datetime object
@@ -267,6 +280,13 @@ Convert a date character vector (usually \code{--DTC}) into a Date vector (usual
 \details{
 This is a vector-oriented helper and is not usually called directly on a data
 frame with \verb{\%>\%}.
+
+Additionally, the function can output a message, throw an error or issue a warning
+(depending on the \code{check_datetime_type} argument) if a data issue or imputation
+rules cause an invalid datetime (e.g. \code{"2020-01-28T25:00:00"}) to be generated. In
+this case, the user should fix the data issue or adjust the imputation rules. It is
+also possible to specify \verb{check_datetime_type = "none} to silently ignore any issues.
+Note that any invalid datetimes will be always returned as \code{NA}.
 }
 \examples{
 convert_dtc_to_dtm("2019-07-18T15:25:00")

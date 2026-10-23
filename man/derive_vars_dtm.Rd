@@ -17,7 +17,8 @@ derive_vars_dtm(
   max_dates = NULL,
   max_dates_strict = NULL,
   preserve = FALSE,
-  ignore_seconds_flag = TRUE
+  ignore_seconds_flag = TRUE,
+  check_datetime_type = "error"
 )
 }
 \arguments{
@@ -322,6 +323,18 @@ admiral 1.4.0 and later.
 \item{Permitted values}{\code{TRUE}, \code{FALSE}}
 \item{Default value}{\code{TRUE}}
 }}
+
+\item{check_datetime_type}{Check if any invalid datetimes are detected?
+
+If \code{"warning"}, \code{"message"}, or \code{"error"} is specified, the specified message is issued
+if any invalid datetimes are detected, either due to a data issue or as a result of
+incorrect imputation. In that case, if \code{check_datetime_type} is not \code{"error"}, the
+function returns \code{NA}.
+
+\describe{
+\item{Permitted values}{\code{"none"}, \code{"message"}, \code{"warning"}, \code{"error"}}
+\item{Default value}{\code{"error"}}
+}}
 }
 \value{
 The input dataset with the datetime \verb{*DTM} (and the date/time imputation
@@ -341,9 +354,12 @@ The presence of a \verb{*DTF} variable is checked and the variable is not derive
 if it already exists in the input dataset. However, if \verb{*TMF} already exists
 in the input dataset, a warning is issued and \verb{*TMF} will be overwritten.
 
-Additionally, the function will throw an error if imputation rules cause an
-invalid datetime (e.g. "2020-02-01T25:00:00") to be generated. In this case,
-the user should adjust the imputation rules.
+Additionally, the function can output a message, throw an error or issue a warning
+(depending on the \code{check_datetime_type} argument) if a data issue or imputation
+rules cause an invalid datetime (e.g. \code{"2020-01-28T25:00:00"}) to be generated. In
+this case, the user should fix the data issue or adjust the imputation rules. It is
+also possible to specify \verb{check_datetime_type = "none} to silently ignore any issues.
+Note that any invalid datetimes will be always returned as \code{NA}.
 }
 \seealso{
 \code{vignette("imputation")}
@@ -551,6 +567,47 @@ derive_vars_dtm(
 #> 5 "2019"              2019-06-30 23:59:59 M      H     
 #> 6 "2019---07"         2019-06-07 23:59:59 M      H     
 #> 7 ""                  NA                  <NA>   <NA>  }\if{html}{\out{</div>}}}
+\subsection{Handle invalid datetimes with a warning (\code{check_datetime_type})}{
+
+By default, if imputation causes an invalid datetime (e.g. day 30 in
+February), an error is thrown. Setting \code{check_datetime_type = "warning"},
+\code{"message"} or \code{"none"} issues a warning, message or nothing at all instead,
+and returns \code{NA} for the invalid datetime(s), allowing execution to continue.
+This can be useful for exploratory work or if a temporary data issue needs
+to be ignored during development.
+
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{aedt <- tribble(
+  ~AEENDTC,
+  "2020-07",
+  "2020-02",
+  "2020-07-14",
+  "2020-13-01"
+)
+
+derive_vars_dtm(
+  aedt,
+  new_vars_prefix = "AEN",
+  dtc = AEENDTC,
+  highest_imputation = "D",
+  date_imputation = "30",
+  check_datetime_type = "warning"
+)
+#> # A tibble: 4 × 4
+#>   AEENDTC    AENDTM              AENDTF AENTMF
+#>   <chr>      <dttm>              <chr>  <chr> 
+#> 1 2020-07    2020-07-30 00:00:00 D      H     
+#> 2 2020-02    NA                  <NA>   <NA>  
+#> 3 2020-07-14 2020-07-14 00:00:00 <NA>   H     
+#> 4 2020-13-01 NA                  <NA>   <NA>  
+#> Warning: 2 datetimes are invalid, possibly due to a data issue or as a result of
+#> imputation. Please review the function arguments and/or your data and correct
+#> your selection. See the problematic datetimes below, where the raw datetime is
+#> what is passed to the function and the final datetime is the result of any
+#> imputation:
+#> • Raw datetime 2020-02, final datetime 2020-02-30T00:00:00.
+#> • Raw datetime 2020-13-01, final datetime 2020-13-01T00:00:00.
+#> i You can control whether this is a message/warning/error, or switch it off
+#>   entirely, through the `check_datetime_type` argument.}\if{html}{\out{</div>}}}
 \subsection{Further examples}{
 
 Further example usages of this function can be found in the
