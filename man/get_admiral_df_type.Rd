@@ -15,7 +15,8 @@ get_admiral_df_type(dataset)
 }
 \value{
 A character scalar: one of \code{"ADSL"}, \code{"BDS"}, \code{"OCCDS"}, \code{"TTE"}, or
-\code{"other"}.
+\code{"other"}; or \code{NA} if the dataset has no records and its variables do not
+decide the type.
 }
 \description{
 Attempts to classify a data frame as one of the common ADaM dataset types based
@@ -56,9 +57,11 @@ variable whose name merely ends in \code{TERM} is not taken as a signal.
 \code{ADSL} is the one type decided by the records rather than the variables:
 treatment variables are no evidence of it, because the first step of a
 typical \code{BDS}/\code{OCCDS} derivation is to merge them on from ADSL (see the
-\code{admiral} template scripts). A dataset with no records cannot show one
-record per subject, so it is \code{"other"} unless its variables make it one of
-the other types.
+\code{admiral} template scripts). A dataset with no records cannot show whether
+it has one record per subject, so its type is unknown (\code{NA}) unless its
+variables already decide it -- e.g. an empty dataset with \code{PARAMCD} and
+\code{AVAL} is still \code{"BDS"}, and one without the subject keys is still
+\code{"other"}.
 
 A dataset which has not yet been derived far enough to carry any of these
 signals is \code{"other"}.

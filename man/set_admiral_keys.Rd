@@ -16,13 +16,12 @@ already; the class is added if it is missing.
 }}
 
 \item{keys}{The key variables of \code{dataset}, in key order, e.g.
-\code{exprs(USUBJID, PARAMCD, AVISIT)} or
-\code{c("USUBJID", "PARAMCD", "AVISIT")}. A zero-length vector records that the
-dataset has no key variables defined, which is distinct from its keys never
-having been set.
+\code{exprs(USUBJID, PARAMCD, AVISIT)}. An empty list, \code{exprs()}, records that
+the dataset has no key variables defined, which is distinct from its keys
+never having been set.
 
 \describe{
-\item{Permitted values}{list of variables created by \code{exprs()}, or a character vector}
+\item{Permitted values}{list of variables created by \code{exprs()}}
 \item{Default value}{none}
 }}
 
@@ -49,12 +48,11 @@ records when they are stored.
 }
 \details{
 The keys can come from anywhere: the \code{by_vars} of the derivation which
-produced the dataset, a dataset specification, or a hand-written vector.
-They are accepted both as \code{exprs()} -- matching \code{by_vars} and the
-\code{subject_keys} admiral option -- and as a character vector, which is what a
-specification provides. admiral does not read specification objects itself;
-to use the keys defined in a \code{{metacore}} specification, extract them in the
-calling code, e.g. \code{metacore::get_keys(spec, "ADVS")$variable}.
+produced the dataset, a dataset specification, or a hand-written list.
+A specification provides them as a character vector, which \code{\link[=chr2vars]{chr2vars()}}
+converts. admiral does not read specification objects itself; to use the
+keys defined in a \code{{metacore}} specification, extract them in the calling
+code, e.g. \code{chr2vars(metacore::get_keys(spec, "ADVS")$variable)}.
 
 The core \code{{dplyr}} verbs (\code{mutate()}, \code{filter()}, \code{arrange()}, \code{select()},
 \code{rename()}, \code{slice()}, \code{distinct()}, joins where \code{dataset} is \code{x}, ...)
@@ -115,27 +113,27 @@ attr(advs, "admiral_ds_name")
 #> [1] "ADVS"
 class(advs)
 #> [1] "admiral_df" "tbl_df"     "tbl"        "data.frame"}\if{html}{\out{</div>}}}
-\subsection{Keys as a character vector}{
+\subsection{Keys from a dataset specification}{
 
-Keys are equally accepted as a character vector, which is the form a
-dataset specification provides them in. {admiral} does not read specification
-objects itself, so they are extracted in the calling code; e.g. with a
+A dataset specification provides the keys as a character vector, which
+\code{\link[=chr2vars]{chr2vars()}} converts. {admiral} does not read specification objects
+itself, so they are extracted in the calling code; e.g. with a
 \code{{metacore}} specification that is \code{metacore::get_keys()}:
 
-\if{html}{\out{<div class="sourceCode r">}}\preformatted{set_admiral_keys(advs, metacore::get_keys(spec, "ADVS")$variable, "ADVS")
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{set_admiral_keys(advs, chr2vars(metacore::get_keys(spec, "ADVS")$variable), "ADVS")
 }\if{html}{\out{</div>}}
 
-\if{html}{\out{<div class="sourceCode r">}}\preformatted{advs <- set_admiral_keys(advs, keys = c("USUBJID", "PARAMCD", "AVISIT"))
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{advs <- set_admiral_keys(advs, keys = chr2vars(c("USUBJID", "PARAMCD", "AVISIT")))
 
 # `dataset_name` was not repeated, so the name from the previous call stands
 attr(advs, "admiral_ds_name")
 #> [1] "ADVS"}\if{html}{\out{</div>}}}
 \subsection{Declaring that a dataset has no key variables}{
 
-A zero-length \code{keys} attribute is stored all the same. It is not the same as
-leaving the attribute unset: it records that no key variables are defined.
+An empty \code{keys} is stored all the same. It is not the same as leaving
+the attribute unset: it records that no key variables are defined.
 
-\if{html}{\out{<div class="sourceCode r">}}\preformatted{advs_no_keys <- set_admiral_keys(advs, keys = character(0))
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{advs_no_keys <- set_admiral_keys(advs, keys = exprs())
 
 attr(advs_no_keys, "admiral_keys")
 #> character(0)}\if{html}{\out{</div>}}}}

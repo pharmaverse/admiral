@@ -52,12 +52,11 @@ as_admiral_df <- function(dataset) {
 #' @permitted a data frame
 #'
 #' @param keys The key variables of `dataset`, in key order, e.g.
-#'   `exprs(USUBJID, PARAMCD, AVISIT)` or
-#'   `c("USUBJID", "PARAMCD", "AVISIT")`. A zero-length vector records that the
-#'   dataset has no key variables defined, which is distinct from its keys never
-#'   having been set.
+#'   `exprs(USUBJID, PARAMCD, AVISIT)`. An empty list, `exprs()`, records that
+#'   the dataset has no key variables defined, which is distinct from its keys
+#'   never having been set.
 #'
-#' @permitted list of variables created by `exprs()`, or a character vector
+#' @permitted list of variables created by `exprs()`
 #'
 #' @param dataset_name The name of the dataset, e.g. `"ADVS"`, stored in the
 #'   `"admiral_ds_name"` attribute. `NULL` leaves a name stored by a previous
@@ -71,12 +70,11 @@ as_admiral_df <- function(dataset) {
 #'
 #' @details
 #'   The keys can come from anywhere: the `by_vars` of the derivation which
-#'   produced the dataset, a dataset specification, or a hand-written vector.
-#'   They are accepted both as `exprs()` -- matching `by_vars` and the
-#'   `subject_keys` admiral option -- and as a character vector, which is what a
-#'   specification provides. admiral does not read specification objects itself;
-#'   to use the keys defined in a `{metacore}` specification, extract them in the
-#'   calling code, e.g. `metacore::get_keys(spec, "ADVS")$variable`.
+#'   produced the dataset, a dataset specification, or a hand-written list.
+#'   A specification provides them as a character vector, which [chr2vars()]
+#'   converts. admiral does not read specification objects itself; to use the
+#'   keys defined in a `{metacore}` specification, extract them in the calling
+#'   code, e.g. `chr2vars(metacore::get_keys(spec, "ADVS")$variable)`.
 #'
 #'   The core `{dplyr}` verbs (`mutate()`, `filter()`, `arrange()`, `select()`,
 #'   `rename()`, `slice()`, `distinct()`, joins where `dataset` is `x`, ...)
@@ -131,64 +129,55 @@ as_admiral_df <- function(dataset) {
 #' attr(advs, "admiral_ds_name")
 #' class(advs)
 #'
-#' @caption Keys as a character vector
+#' @caption Keys from a dataset specification
 #'
-#' @info Keys are equally accepted as a character vector, which is the form a
-#'   dataset specification provides them in. {admiral} does not read specification
-#'   objects itself, so they are extracted in the calling code; e.g. with a
+#' @info A dataset specification provides the keys as a character vector, which
+#'   [chr2vars()] converts. {admiral} does not read specification objects
+#'   itself, so they are extracted in the calling code; e.g. with a
 #'   `{metacore}` specification that is `metacore::get_keys()`:
 #'
 #'   ```r
-#'   set_admiral_keys(advs, metacore::get_keys(spec, "ADVS")$variable, "ADVS")
+#'   set_admiral_keys(advs, chr2vars(metacore::get_keys(spec, "ADVS")$variable), "ADVS")
 #'   ```
 #'
 #' @code
-#' advs <- set_admiral_keys(advs, keys = c("USUBJID", "PARAMCD", "AVISIT"))
+#' advs <- set_admiral_keys(advs, keys = chr2vars(c("USUBJID", "PARAMCD", "AVISIT")))
 #'
 #' # `dataset_name` was not repeated, so the name from the previous call stands
 #' attr(advs, "admiral_ds_name")
 #'
 #' @caption Declaring that a dataset has no key variables
 #'
-#' @info A zero-length `keys` attribute is stored all the same. It is not the same as
-#'   leaving the attribute unset: it records that no key variables are defined.
+#' @info An empty `keys` is stored all the same. It is not the same as leaving
+#'   the attribute unset: it records that no key variables are defined.
 #'
 #' @code
-#' advs_no_keys <- set_admiral_keys(advs, keys = character(0))
+#' advs_no_keys <- set_admiral_keys(advs, keys = exprs())
 #'
 #' attr(advs_no_keys, "admiral_keys")
 set_admiral_keys <- function(dataset, keys, dataset_name = NULL) {
   assert_data_frame(dataset)
-  # a data frame is a list too, so the shape is checked up front rather than
-  # left to the assertion of whichever form `keys` happens to resemble
-  if (!is.character(keys) && !is_bare_list(keys)) {
+  # keys taken from a specification are a character vector, so that case gets
+  # a pointer to the conversion rather than the generic "must be a list"
+  if (is.character(keys)) {
     cli_abort(c(
       paste(
-        "Argument {.arg keys} must be a list of variables created by {.fun exprs}",
-        "or a character vector, but is {.obj_type_friendly {keys}}."
+        "Argument {.arg keys} must be a list of variables created by {.fun exprs},",
+        "but is {.obj_type_friendly {keys}}."
       ),
-      i = "For example, {.code exprs(USUBJID, PARAMCD)} or {.code c(\"USUBJID\", \"PARAMCD\")}.",
       i = paste(
-        "Keys defined in a {.pkg metacore} specification can be passed as",
-        "{.code metacore::get_keys(spec, \"ADVS\")$variable}."
+        "Use {.fun chr2vars} to convert a character vector, e.g.",
+        "{.code chr2vars(metacore::get_keys(spec, \"ADVS\")$variable)}."
       )
     ))
   }
-  # keys are always stored as character: they are metadata about the dataset,
-  # not expressions to evaluate against it
-  if (is.list(keys)) {
-    keys <- vars2chr(assert_vars(keys))
-  } else {
-    assert_character_vector(keys)
-  }
+  assert_vars(keys)
   assert_character_scalar(dataset_name, optional = TRUE)
 
-  # a key vector extracted from a specification, e.g.
-  # `metacore::get_keys(spec, "ADVS")$variable`, carries the column's `label`
-  # attribute; `as.character()` drops it so the keys are stored the same way
-  # whichever form they were given in, and compare `identical()` to a plain
-  # character vector
-  attr(dataset, "admiral_keys") <- as.character(keys)
+  # keys are stored as character: they are metadata about the dataset, not
+  # expressions to evaluate against it. `unname()` because `vars2chr()` returns
+  # a named vector, which would not compare `identical()` to a plain one
+  attr(dataset, "admiral_keys") <- unname(vars2chr(keys))
   if (!is.null(dataset_name)) {
     attr(dataset, "admiral_ds_name") <- dataset_name
   }
@@ -236,15 +225,18 @@ set_admiral_keys <- function(dataset, keys, dataset_name = NULL) {
 #'   `ADSL` is the one type decided by the records rather than the variables:
 #'   treatment variables are no evidence of it, because the first step of a
 #'   typical `BDS`/`OCCDS` derivation is to merge them on from ADSL (see the
-#'   `admiral` template scripts). A dataset with no records cannot show one
-#'   record per subject, so it is `"other"` unless its variables make it one of
-#'   the other types.
+#'   `admiral` template scripts). A dataset with no records cannot show whether
+#'   it has one record per subject, so its type is unknown (`NA`) unless its
+#'   variables already decide it -- e.g. an empty dataset with `PARAMCD` and
+#'   `AVAL` is still `"BDS"`, and one without the subject keys is still
+#'   `"other"`.
 #'
 #'   A dataset which has not yet been derived far enough to carry any of these
 #'   signals is `"other"`.
 #'
 #' @return A character scalar: one of `"ADSL"`, `"BDS"`, `"OCCDS"`, `"TTE"`, or
-#'   `"other"`.
+#'   `"other"`; or `NA` if the dataset has no records and its variables do not
+#'   decide the type.
 #'
 #' @keywords internal
 #' @family internal
@@ -279,11 +271,15 @@ get_admiral_df_type <- function(dataset) {
     return("OCCDS")
   }
 
-  # ADSL is decided by the records: one record per subject. `ungroup()` because
-  # `distinct()` silently adds the grouping variables, which would test
-  # uniqueness within group rather than overall
-  if (nrow(dataset) > 0 &&
-    nrow(dataset) == nrow(distinct(ungroup(dataset), !!!syms(subject_keys)))) {
+  # ADSL is decided by the records: one record per subject. With no records
+  # that cannot be shown either way -- the record and subject counts are
+  # trivially equal -- so the type is unknown rather than "other"
+  if (nrow(dataset) == 0) {
+    return(NA_character_)
+  }
+  # `ungroup()` because `distinct()` silently adds the grouping variables, which
+  # would test uniqueness within group rather than overall
+  if (nrow(dataset) == nrow(distinct(ungroup(dataset), !!!syms(subject_keys)))) {
     return("ADSL")
   }
 

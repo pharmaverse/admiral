@@ -30,7 +30,7 @@
 #' @importFrom rlang
 #'   := arg_match as_data_mask as_label as_name as_string call2 caller_env
 #'   cnd_muffle cnd_signal current_env .data enexpr enexprs eval_tidy expr
-#'   exec expr_label exprs inform is_bare_list is_call is_expression is_missing
+#'   exec expr_label exprs inform is_call is_expression is_missing
 #'   is_named list2 new_environment parse_expr parse_exprs set_names sym syms zap
 #'
 #' @importFrom stats setNames

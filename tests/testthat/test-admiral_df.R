@@ -62,18 +62,20 @@ test_that("set_admiral_keys Test 4: stores the keys, the dataset name, and the a
   expect_equal(stripped, input)
 })
 
-## Test 5: keys are equally accepted as a character vector ----
-test_that("set_admiral_keys Test 5: keys are equally accepted as a character vector", {
+## Test 5: keys from a specification are passed via chr2vars() ----
+test_that("set_admiral_keys Test 5: keys from a specification are passed via chr2vars()", {
   input <- tibble::tribble(
     ~USUBJID, ~PARAMCD, ~AVAL,
     "1",      "DIABP",     51
   )
+  # keys extracted from a specification table carry a variable label
+  spec_keys <- c("USUBJID", "PARAMCD")
+  attr(spec_keys, "label") <- "Variable Name"
 
   from_exprs <- set_admiral_keys(input, keys = exprs(USUBJID, PARAMCD))
-  from_chr <- set_admiral_keys(input, keys = c("USUBJID", "PARAMCD"))
+  from_spec <- set_admiral_keys(input, keys = chr2vars(spec_keys))
 
-  expect_equal(attr(from_chr, "admiral_keys"), c("USUBJID", "PARAMCD"))
-  expect_equal(attr(from_exprs, "admiral_keys"), attr(from_chr, "admiral_keys"))
+  expect_identical(attr(from_spec, "admiral_keys"), attr(from_exprs, "admiral_keys"))
 })
 
 ## Test 6: the dataset name is stored, preserved, and replaced ----
@@ -84,37 +86,35 @@ test_that("set_admiral_keys Test 6: the dataset name is stored, preserved, and r
   )
 
   # nothing is stored when there is no name to store
-  unnamed <- set_admiral_keys(input, keys = "USUBJID")
+  unnamed <- set_admiral_keys(input, keys = exprs(USUBJID))
   expect_equal(attr(unnamed, "admiral_keys"), "USUBJID")
   expect_null(attr(unnamed, "admiral_ds_name"))
 
   # `dataset_name` is not repeated, so the name of the dataset is not lost by
   # a call which only revises its keys
-  named <- set_admiral_keys(input, keys = "USUBJID", dataset_name = "ADVS")
-  rekeyed <- set_admiral_keys(named, keys = c("USUBJID", "PARAMCD"))
+  named <- set_admiral_keys(input, keys = exprs(USUBJID), dataset_name = "ADVS")
+  rekeyed <- set_admiral_keys(named, keys = exprs(USUBJID, PARAMCD))
   expect_equal(attr(rekeyed, "admiral_keys"), c("USUBJID", "PARAMCD"))
   expect_equal(attr(rekeyed, "admiral_ds_name"), "ADVS")
 
   # both the keys and the name give way when a later call supplies them
-  renamed <- set_admiral_keys(named, keys = c("USUBJID", "PARAMCD"), dataset_name = "ADSL")
+  renamed <- set_admiral_keys(named, keys = exprs(USUBJID, PARAMCD), dataset_name = "ADSL")
   expect_equal(attr(renamed, "admiral_keys"), c("USUBJID", "PARAMCD"))
   expect_equal(attr(renamed, "admiral_ds_name"), "ADSL")
 })
 
-## Test 7: attributes of the supplied keys are dropped ----
-test_that("set_admiral_keys Test 7: attributes of the supplied keys are dropped", {
+## Test 7: the keys are stored as a plain character vector ----
+test_that("set_admiral_keys Test 7: the keys are stored as a plain character vector", {
   input <- tibble::tribble(
     ~USUBJID, ~AVAL,
     "1",      10
   )
-  # keys extracted from a specification table carry a variable label, which
-  # must not end up on the stored attribute
-  labelled_keys <- "USUBJID"
-  attr(labelled_keys, "label") <- "Unique Subject Identifier"
 
-  actual <- set_admiral_keys(input, keys = labelled_keys)
+  # `vars2chr()` returns a named vector, which must not end up on the stored
+  # attribute
+  actual <- set_admiral_keys(input, keys = exprs(USUBJID, AVAL))
 
-  expect_identical(attr(actual, "admiral_keys"), "USUBJID")
+  expect_identical(attr(actual, "admiral_keys"), c("USUBJID", "AVAL"))
 })
 
 ## Test 8: keys which are empty or not in the dataset are stored quietly ----
@@ -126,7 +126,7 @@ test_that("set_admiral_keys Test 8: keys which are empty or not in the dataset a
 
   # the empty attribute is a statement that the dataset has no key variables,
   # so it must be distinguishable from an attribute which was never set
-  expect_silent(empty <- set_admiral_keys(input, keys = character(0)))
+  expect_silent(empty <- set_admiral_keys(input, keys = exprs()))
   expect_identical(attr(empty, "admiral_keys"), character(0))
   expect_false(is.null(attr(empty, "admiral_keys")))
   expect_s3_class(empty, "admiral_df")
@@ -135,7 +135,7 @@ test_that("set_admiral_keys Test 8: keys which are empty or not in the dataset a
   # towards; reporting keys which no longer match the dataset is the job of the
   # tooling which reads the attribute, once the derivation is finished
   expect_silent(
-    absent <- set_admiral_keys(input, keys = c("USUBJID", "PARAMCD", "AVISIT"))
+    absent <- set_admiral_keys(input, keys = exprs(USUBJID, PARAMCD, AVISIT))
   )
   expect_equal(
     attr(absent, "admiral_keys"),
@@ -182,15 +182,15 @@ test_that("set_admiral_keys Test 10: an error is issued for invalid arguments", 
     "1",      10
   )
 
-  expect_error(set_admiral_keys(list(), keys = "USUBJID"))
+  expect_error(set_admiral_keys(list(), keys = exprs(USUBJID)))
   expect_error(set_admiral_keys(input, keys = 1))
+  expect_error(set_admiral_keys(input, keys = iris))
   expect_error(set_admiral_keys(input, keys = exprs(USUBJID + 1)))
-  expect_error(set_admiral_keys(input, keys = "USUBJID", dataset_name = c("A", "B")))
+  expect_error(set_admiral_keys(input, keys = exprs(USUBJID), dataset_name = c("A", "B")))
 
-  # keys of neither accepted form are told about both forms; a data frame is a
-  # list, so it must not be mistaken for the output of `exprs()`
-  expect_snapshot(set_admiral_keys(input, keys = iris), error = TRUE)
-  expect_snapshot(set_admiral_keys(input, keys = 1), error = TRUE)
+  # keys taken from a specification are a character vector, so the error
+  # points to the conversion
+  expect_snapshot(set_admiral_keys(input, keys = c("USUBJID", "PARAMCD")), error = TRUE)
 })
 
 # get_admiral_df_type ----
@@ -338,18 +338,26 @@ test_that("get_admiral_df_type Test 15: an empty dataset is typed from the varia
   )
   expect_identical(get_admiral_df_type(empty_bds), "BDS")
 
-  # ADSL is decided by the records, and an empty dataset cannot demonstrate one
-  # record per subject -- the record and subject counts are trivially equal --
-  # so neither a treatment variable nor the subject keys alone make it ADSL
+  # ADSL is decided by the records, and an empty dataset cannot show whether it
+  # has one record per subject -- the record and subject counts are trivially
+  # equal -- so the type is unknown, whatever treatment variables it carries
   empty_adsl <- tibble::tibble(
     STUDYID = character(0), USUBJID = character(0), TRT01P = character(0)
   )
-  expect_identical(get_admiral_df_type(empty_adsl), "other")
+  expect_identical(get_admiral_df_type(empty_adsl), NA_character_)
 
   empty_shell <- tibble::tibble(
     STUDYID = character(0), USUBJID = character(0), AVAL = numeric(0)
   )
-  expect_identical(get_admiral_df_type(empty_shell), "other")
+  expect_identical(get_admiral_df_type(empty_shell), NA_character_)
+
+  # where the variables decide the type, the missing records do not matter:
+  # without the subject keys it is not subject data at all
+  empty_lookup <- tibble::tibble(AEDECOD = character(0), AETERM = character(0))
+  expect_identical(get_admiral_df_type(empty_lookup), "other")
+
+  # nothing is inferred for an empty dataset, whatever its type
+  expect_identical(infer_admiral_keys(empty_adsl), character(0))
 })
 
 ## Test 16: an error is issued for a non-data-frame dataset ----
