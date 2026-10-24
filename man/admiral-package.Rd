@@ -22,6 +22,11 @@ Useful links:
 Other internal:
 \code{\link[=extract_duplicate_records]{extract_duplicate_records()}},
 \code{\link[=format.basket_select]{format.basket_select()}},
+\code{\link[=get_admiral_df_type]{get_admiral_df_type()}},
+\code{\link[=infer_admiral_keys]{infer_admiral_keys()}},
+\code{\link[=is_adsl_structure]{is_adsl_structure()}},
+\code{\link[=minimal_unique_key]{minimal_unique_key()}},
+\code{\link[=occds_seq_var]{occds_seq_var()}},
 \code{\link[=signal_duplicate_records]{signal_duplicate_records()}}
 }
 \author{
