@@ -44,6 +44,41 @@ should be passed as \code{optional}; surrogate/sequence keys (e.g. \code{ASEQ}) 
 excluded, otherwise uniqueness is reached trivially and genuine duplicates are
 masked.
 }
+\examples{
+library(tibble)
+
+advs <- tribble(
+  ~USUBJID, ~PARAMCD, ~AVISIT,    ~ATPT,     ~AVAL,
+  "1",      "SYSBP",  "BASELINE", "MORNING",   121,
+  "1",      "SYSBP",  "BASELINE", "EVENING",   125,
+  "1",      "SYSBP",  "WEEK 2",   "MORNING",   118,
+  "1",      "SYSBP",  "WEEK 2",   "EVENING",   120
+)
+
+# candidates are added in order until the key is unique
+admiral:::minimal_unique_key(
+  advs,
+  must_have = c("USUBJID", "PARAMCD"),
+  optional = c("AVISIT", "ATPT")
+)
+
+# an added candidate which turns out not to be needed is dropped again:
+# with one timepoint only, `ATPT` distinguishes nothing
+admiral:::minimal_unique_key(
+  advs[advs$ATPT == "MORNING", ],
+  must_have = c("USUBJID", "PARAMCD"),
+  optional = c("ATPT", "AVISIT")
+)
+
+# if uniqueness is never reached, the full set is returned; the duplicated
+# record shows up as duplicates of that key
+admiral:::minimal_unique_key(
+  rbind(advs, advs[1, ]),
+  must_have = c("USUBJID", "PARAMCD"),
+  optional = c("AVISIT", "ATPT")
+)
+
+}
 \seealso{
 Other internal:
 \code{\link{admiral-package}},

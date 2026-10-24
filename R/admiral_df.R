@@ -312,6 +312,40 @@ get_admiral_df_type <- function(dataset) {
 #'
 #' @return A character vector of key variable names.
 #'
+#' @examples
+#' library(tibble)
+#'
+#' advs <- tribble(
+#'   ~USUBJID, ~PARAMCD, ~AVISIT,    ~ATPT,     ~AVAL,
+#'   "1",      "SYSBP",  "BASELINE", "MORNING",   121,
+#'   "1",      "SYSBP",  "BASELINE", "EVENING",   125,
+#'   "1",      "SYSBP",  "WEEK 2",   "MORNING",   118,
+#'   "1",      "SYSBP",  "WEEK 2",   "EVENING",   120
+#' )
+#'
+#' # candidates are added in order until the key is unique
+#' admiral:::minimal_unique_key(
+#'   advs,
+#'   must_have = c("USUBJID", "PARAMCD"),
+#'   optional = c("AVISIT", "ATPT")
+#' )
+#'
+#' # an added candidate which turns out not to be needed is dropped again:
+#' # with one timepoint only, `ATPT` distinguishes nothing
+#' admiral:::minimal_unique_key(
+#'   advs[advs$ATPT == "MORNING", ],
+#'   must_have = c("USUBJID", "PARAMCD"),
+#'   optional = c("ATPT", "AVISIT")
+#' )
+#'
+#' # if uniqueness is never reached, the full set is returned; the duplicated
+#' # record shows up as duplicates of that key
+#' admiral:::minimal_unique_key(
+#'   rbind(advs, advs[1, ]),
+#'   must_have = c("USUBJID", "PARAMCD"),
+#'   optional = c("AVISIT", "ATPT")
+#' )
+#'
 #' @keywords internal
 #' @family internal
 minimal_unique_key <- function(dataset, must_have, optional) {
@@ -391,6 +425,40 @@ minimal_unique_key <- function(dataset, must_have, optional) {
 #'
 #' @return A character vector of inferred key variable names, or a zero-length
 #'   vector when no plausible record structure can be determined.
+#'
+#' @examples
+#' library(tibble)
+#'
+#' # BDS: subject and parameter, plus the visit needed for uniqueness. `STUDYID`
+#' # is constant in a single study, so it is left out
+#' advs <- tribble(
+#'   ~STUDYID, ~USUBJID, ~PARAMCD, ~AVISIT,    ~AVAL,
+#'   "P",      "P-1",    "SYSBP",  "BASELINE",   121,
+#'   "P",      "P-1",    "SYSBP",  "WEEK 2",     118,
+#'   "P",      "P-1",    "DIABP",  "BASELINE",    79,
+#'   "P",      "P-2",    "SYSBP",  "BASELINE",   130
+#' )
+#' admiral:::infer_admiral_keys(advs)
+#'
+#' # OCCDS: keyed by its sequence variable
+#' adae <- tribble(
+#'   ~STUDYID, ~USUBJID, ~AEDECOD,   ~AESEQ,
+#'   "P",      "P-1",    "HEADACHE",      1,
+#'   "P",      "P-1",    "NAUSEA",        2,
+#'   "P",      "P-2",    "HEADACHE",      1
+#' )
+#' admiral:::infer_admiral_keys(adae)
+#'
+#' # ADSL: one record per subject
+#' adsl <- tribble(
+#'   ~STUDYID, ~USUBJID, ~AGE,
+#'   "P",      "P-1",      63,
+#'   "P",      "P-2",      71
+#' )
+#' admiral:::infer_admiral_keys(adsl)
+#'
+#' # nothing is inferred for a dataset whose type is not recognized
+#' admiral:::infer_admiral_keys(tibble(FOO = 1:2))
 #'
 #' @keywords internal
 #' @family internal

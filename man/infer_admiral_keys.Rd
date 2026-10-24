@@ -62,6 +62,41 @@ a pooled dataset whose subject identifiers repeat across studies keeps
 A dataset with no records cannot show what it has one record per -- every
 candidate key is trivially unique -- so nothing is inferred for it.
 }
+\examples{
+library(tibble)
+
+# BDS: subject and parameter, plus the visit needed for uniqueness. `STUDYID`
+# is constant in a single study, so it is left out
+advs <- tribble(
+  ~STUDYID, ~USUBJID, ~PARAMCD, ~AVISIT,    ~AVAL,
+  "P",      "P-1",    "SYSBP",  "BASELINE",   121,
+  "P",      "P-1",    "SYSBP",  "WEEK 2",     118,
+  "P",      "P-1",    "DIABP",  "BASELINE",    79,
+  "P",      "P-2",    "SYSBP",  "BASELINE",   130
+)
+admiral:::infer_admiral_keys(advs)
+
+# OCCDS: keyed by its sequence variable
+adae <- tribble(
+  ~STUDYID, ~USUBJID, ~AEDECOD,   ~AESEQ,
+  "P",      "P-1",    "HEADACHE",      1,
+  "P",      "P-1",    "NAUSEA",        2,
+  "P",      "P-2",    "HEADACHE",      1
+)
+admiral:::infer_admiral_keys(adae)
+
+# ADSL: one record per subject
+adsl <- tribble(
+  ~STUDYID, ~USUBJID, ~AGE,
+  "P",      "P-1",      63,
+  "P",      "P-2",      71
+)
+admiral:::infer_admiral_keys(adsl)
+
+# nothing is inferred for a dataset whose type is not recognized
+admiral:::infer_admiral_keys(tibble(FOO = 1:2))
+
+}
 \seealso{
 Other internal:
 \code{\link{admiral-package}},
