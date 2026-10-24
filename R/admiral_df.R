@@ -40,8 +40,8 @@ as_admiral_df <- function(dataset) {
 
 #' Tag a Dataset with its Key Variables
 #'
-#' Stores the key variables of a dataset -- the variables it is intended to have
-#' exactly one record per -- in its `"admiral_keys"` attribute, and tags it with
+#' Stores the key variables of a dataset, i.e. those variable which uniquely identify
+#' a record, in its `"admiral_keys"` attribute, and tags it with
 #' the `admiral_df` class (see [as_admiral_df()]). Downstream admiral tooling
 #' reads the attribute to check that the dataset really does have one record per
 #' key, e.g. after a derivation which was expected to preserve the record
