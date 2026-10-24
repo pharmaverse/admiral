@@ -33,6 +33,7 @@ print_named_list(death_event)
 \seealso{
 Utilities for printing:
 \code{\link[=print.adam_templates]{print.adam_templates()}},
+\code{\link[=print.admiral_df]{print.admiral_df()}},
 \code{\link[=print.duplicates]{print.duplicates()}},
 \code{\link[=print.source]{print.source()}}
 }

@@ -733,3 +733,52 @@ test_that("infer_admiral_keys Test 32: visit, timepoint and DTYPE are all needed
     c("USUBJID", "PARAMCD", "AVISITN", "ATPTN", "DTYPE")
   )
 })
+
+# print.admiral_df ----
+## Test 33: the name, type and keys are printed in a header ----
+test_that("print.admiral_df Test 33: the name, type and keys are printed in a header", {
+  input <- tibble::tribble(
+    ~STUDYID, ~USUBJID, ~PARAMCD, ~AVISIT,    ~AVAL,
+    "P",      "1",      "DIABP",  "BASELINE",    51,
+    "P",      "1",      "SYSBP",  "BASELINE",   121
+  )
+
+  expect_snapshot(
+    print(set_admiral_keys(input, keys = exprs(USUBJID, PARAMCD, AVISIT), dataset_name = "ADVS"))
+  )
+
+  # either attribute is shown on its own
+  expect_snapshot(print(set_admiral_keys(input, keys = exprs(USUBJID, PARAMCD, AVISIT))))
+
+  # empty keys record that no keys are defined, so they are shown as such
+  expect_snapshot(print(set_admiral_keys(input, keys = exprs(), dataset_name = "ADVS")))
+
+  # a plain data frame prints with its own method below the header
+  expect_snapshot(
+    print(set_admiral_keys(as.data.frame(input), keys = exprs(USUBJID), dataset_name = "ADVS"))
+  )
+
+  # a type which cannot be determined is left out rather than shown as
+  # "other": without the subject keys this is not subject data
+  lookup <- tibble::tribble(
+    ~PARAMCD, ~PARAM,
+    "DIABP",  "Diastolic Blood Pressure (mmHg)"
+  )
+  expect_snapshot(print(set_admiral_keys(lookup, keys = exprs(PARAMCD), dataset_name = "PARAMS")))
+})
+
+## Test 34: a dataset with only the class prints as before ----
+test_that("print.admiral_df Test 34: a dataset with only the class prints as before", {
+  input <- tibble::tribble(
+    ~USUBJID, ~AVAL,
+    "1",      10
+  )
+
+  # every derivation tags its output with the class, so a header without
+  # anything to show would change how every admiral dataset prints
+  expect_identical(
+    capture.output(print(as_admiral_df(input))),
+    capture.output(print(input))
+  )
+  expect_invisible(print(as_admiral_df(input)))
+})

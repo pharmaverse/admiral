@@ -184,6 +184,63 @@ set_admiral_keys <- function(dataset, keys, dataset_name = NULL) {
   as_admiral_df(dataset)
 }
 
+#' Print `admiral_df` Objects
+#'
+#' Prints the dataset name and key variables stored by [set_admiral_keys()] in a
+#' header line, followed by the dataset as it would print without the
+#' `admiral_df` class. The header is only printed if a name or keys have been
+#' stored, so that the output of a derivation which merely carries the class
+#' (see [as_admiral_df()]) prints as before.
+#'
+#' The header also shows the ADaM dataset type (`ADSL`, `BDS`, `OCCDS`, or
+#' `TTE`) if it can be determined from the dataset, see
+#' [get_admiral_df_type()].
+#'
+#' @param x An `admiral_df` object
+#' @param ... Passed on to the next print method
+#'
+#' @return `x`, invisibly
+#'
+#' @keywords internal
+#' @family utils_print
+#'
+#' @export
+#'
+#' @examples
+#' library(tibble)
+#'
+#' advs <- tribble(
+#'   ~STUDYID, ~USUBJID, ~PARAMCD, ~AVISIT,    ~AVAL,
+#'   "P",      "1",      "DIABP",  "BASELINE",    51,
+#'   "P",      "1",      "SYSBP",  "BASELINE",   121,
+#'   "P",      "2",      "DIABP",  "BASELINE",    79
+#' )
+#'
+#' set_admiral_keys(advs, keys = exprs(USUBJID, PARAMCD, AVISIT), dataset_name = "ADVS")
+print.admiral_df <- function(x, ...) {
+  name <- attr(x, "admiral_ds_name")
+  keys <- attr(x, "admiral_keys")
+  # the type is only worked out when there is a header to add it to, so that
+  # printing the output of a derivation which merely carries the class costs
+  # nothing extra
+  if (!is.null(name) || !is.null(keys)) {
+    type <- get_admiral_df_type(x)
+    details <- c(
+      if (!is.null(name)) paste0("name: ", name),
+      # only a recognized type is shown: "other" and `NA` say nothing about
+      # the dataset worth a place in the header
+      if (type %in% c("ADSL", "BDS", "OCCDS", "TTE")) paste0("type: ", type),
+      # an empty attribute records that no keys are defined, so it is shown
+      # rather than omitted as if the keys had never been set
+      if (!is.null(keys)) {
+        paste0("keys: ", if (length(keys) > 0) paste(keys, collapse = ", ") else "none")
+      }
+    )
+    cat("# An admiral dataset (", paste(details, collapse = ", "), ")\n", sep = "")
+  }
+  NextMethod()
+}
+
 #' Determine the ADaM Dataset Type
 #'
 #' Attempts to classify a data frame as one of the common ADaM dataset types based
