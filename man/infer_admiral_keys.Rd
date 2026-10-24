@@ -24,7 +24,7 @@ A character vector of inferred key variable names, or a zero-length
 vector when no plausible record structure can be determined.
 }
 \description{
-Works out which variables a dataset appears to have one record per. This is
+Works out which variables uniquely identify the records of a dataset. This is
 the fallback for when no keys have been declared with \code{\link[=set_admiral_keys]{set_admiral_keys()}},
 and is the least trustworthy of the ways the record structure can be
 established -- it reports the structure the data happens to have, which is not
@@ -59,8 +59,9 @@ option that is \code{USUBJID} alone for a single-study dataset, because
 a pooled dataset whose subject identifiers repeat across studies keeps
 \code{STUDYID} as well.
 
-A dataset with no records cannot show what it has one record per -- every
-candidate key is trivially unique -- so nothing is inferred for it.
+A dataset with no records cannot show which variables uniquely identify its
+records -- every candidate key is trivially unique -- so nothing is
+inferred for it.
 }
 \examples{
 library(tibble)

@@ -40,8 +40,8 @@ as_admiral_df <- function(dataset) {
 
 #' Tag a Dataset with its Key Variables
 #'
-#' Stores the key variables of a dataset -- the variables it is intended to have
-#' exactly one record per -- in its `"admiral_keys"` attribute, and tags it with
+#' Stores the key variables of a dataset -- the variables which uniquely identify
+#' its records -- in its `"admiral_keys"` attribute, and tags it with
 #' the `admiral_df` class (see [as_admiral_df()]). The keys describe the record
 #' structure the dataset is intended to have; they are not checked against its
 #' records when they are stored.
@@ -201,8 +201,8 @@ set_admiral_keys <- function(dataset, keys, dataset_name = NULL) {
 #' on the variables it contains.
 #'
 #' Note that this is the *type* of the dataset (`ADSL`, `BDS`, ...), not its
-#' record structure: the latter is the set of key variables it has one record
-#' per, see [set_admiral_keys()].
+#' record structure: the latter is the set of key variables which uniquely
+#' identify its records, see [set_admiral_keys()].
 #'
 #' @param dataset A data frame
 #'
@@ -382,7 +382,7 @@ minimal_unique_key <- function(dataset, must_have, optional) {
 
 #' Infer the Record Structure of a Dataset from its Type and Data
 #'
-#' Works out which variables a dataset appears to have one record per. This is
+#' Works out which variables uniquely identify the records of a dataset. This is
 #' the fallback for when no keys have been declared with [set_admiral_keys()],
 #' and is the least trustworthy of the ways the record structure can be
 #' established -- it reports the structure the data happens to have, which is not
@@ -420,8 +420,9 @@ minimal_unique_key <- function(dataset, must_have, optional) {
 #'   a pooled dataset whose subject identifiers repeat across studies keeps
 #'   `STUDYID` as well.
 #'
-#'   A dataset with no records cannot show what it has one record per -- every
-#'   candidate key is trivially unique -- so nothing is inferred for it.
+#'   A dataset with no records cannot show which variables uniquely identify its
+#'   records -- every candidate key is trivially unique -- so nothing is
+#'   inferred for it.
 #'
 #' @return A character vector of inferred key variable names, or a zero-length
 #'   vector when no plausible record structure can be determined.

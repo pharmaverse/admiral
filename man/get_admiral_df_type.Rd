@@ -23,8 +23,8 @@ on the variables it contains.
 }
 \details{
 Note that this is the \emph{type} of the dataset (\code{ADSL}, \code{BDS}, ...), not its
-record structure: the latter is the set of key variables it has one record
-per, see \code{\link[=set_admiral_keys]{set_admiral_keys()}}.
+record structure: the latter is the set of key variables which uniquely
+identify its records, see \code{\link[=set_admiral_keys]{set_admiral_keys()}}.
 
 Every ADaM dataset type is subject data, so a dataset which does not contain
 all the subject keys (\code{get_admiral_option("subject_keys")}, by default

@@ -41,8 +41,8 @@ attribute if \code{dataset_name} was supplied or had been stored by a previous
 call, and the \code{admiral_df} class.
 }
 \description{
-Stores the key variables of a dataset -- the variables it is intended to have
-exactly one record per -- in its \code{"admiral_keys"} attribute, and tags it with
+Stores the key variables of a dataset -- the variables which uniquely identify
+its records -- in its \code{"admiral_keys"} attribute, and tags it with
 the \code{admiral_df} class (see \code{\link[=as_admiral_df]{as_admiral_df()}}). The keys describe the record
 structure the dataset is intended to have; they are not checked against its
 records when they are stored.
