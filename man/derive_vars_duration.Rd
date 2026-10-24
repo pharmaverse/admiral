@@ -42,7 +42,9 @@ specified, no variable for the unit is created.
 
 \item{start_date}{The start date
 
-A date or date-time object is expected.
+A date or date-time object is expected. Date-times are expected in UTC,
+e.g., as created by \code{derive_vars_dtm()}. If the time zones of \code{start_date}
+and \code{end_date} differ, a warning is issued.
 
 Refer to \code{derive_vars_dt()} to impute and derive a date from a date
 character vector to a date object.
@@ -55,7 +57,9 @@ Refer to \code{convert_dtc_to_dt()} to obtain a vector of imputed dates.
 
 \item{end_date}{The end date
 
-A date or date-time object is expected.
+A date or date-time object is expected. Date-times are expected in UTC,
+e.g., as created by \code{derive_vars_dtm()}. If the time zones of \code{start_date}
+and \code{end_date} differ, a warning is issued.
 
 Refer to \code{derive_vars_dt()} to impute and derive a date from a date
 character vector to a date object.
