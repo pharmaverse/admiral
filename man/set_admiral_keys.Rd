@@ -7,7 +7,8 @@
 set_admiral_keys(dataset, keys, dataset_name = NULL)
 }
 \arguments{
-\item{dataset}{A data frame
+\item{dataset}{A data frame. It does not need to have the \code{admiral_df} class
+already; the class is added if it is missing.
 
 \describe{
 \item{Permitted values}{a data frame}
@@ -17,8 +18,8 @@ set_admiral_keys(dataset, keys, dataset_name = NULL)
 \item{keys}{The key variables of \code{dataset}, in key order, e.g.
 \code{exprs(USUBJID, PARAMCD, AVISIT)} or
 \code{c("USUBJID", "PARAMCD", "AVISIT")}. A zero-length vector records that the
-dataset has no key variables defined, which suppresses the record structure
-check rather than leaving the keys to be guessed.
+dataset has no key variables defined, which is distinct from its keys never
+having been set.
 
 \describe{
 \item{Permitted values}{list of variables created by \code{exprs()}, or a character vector}
@@ -26,8 +27,7 @@ check rather than leaving the keys to be guessed.
 }}
 
 \item{dataset_name}{The name of the dataset, e.g. \code{"ADVS"}, stored in the
-\code{"admiral_ds_name"} attribute and used as a heading by the admiral tooling
-which reports on the dataset. \code{NULL} leaves a name stored by a previous
+\code{"admiral_ds_name"} attribute. \code{NULL} leaves a name stored by a previous
 call untouched, so re-keying a dataset does not lose its name.
 
 \describe{
@@ -43,10 +43,9 @@ call, and the \code{admiral_df} class.
 \description{
 Stores the key variables of a dataset -- the variables it is intended to have
 exactly one record per -- in its \code{"admiral_keys"} attribute, and tags it with
-the \code{admiral_df} class (see \code{\link[=as_admiral_df]{as_admiral_df()}}). Downstream admiral tooling
-reads the attribute to check that the dataset really does have one record per
-key, e.g. after a derivation which was expected to preserve the record
-structure.
+the \code{admiral_df} class (see \code{\link[=as_admiral_df]{as_admiral_df()}}). The keys describe the record
+structure the dataset is intended to have; they are not checked against its
+records when they are stored.
 }
 \details{
 The keys can come from anywhere: the \code{by_vars} of the derivation which
@@ -70,9 +69,9 @@ operations which build a new data frame, in particular:
 \item joins where \code{dataset} is the \code{y} (rather than the \code{x}) argument.
 }
 
-\code{group_by()} and \code{rowwise()} are a case of their own: they keep the keys but
-drop the \code{admiral_df} class, leaving the attribute behind on a dataset the
-admiral tooling no longer recognizes.
+\code{group_by()} and \code{rowwise()} are a case of their own: they keep the
+\code{"admiral_keys"} and \code{"admiral_ds_name"} attributes but drop the
+\code{admiral_df} class.
 
 Call this function afterwards (or re-apply it as needed) if the dataset
 passes through any of those.
@@ -80,8 +79,7 @@ passes through any of those.
 The keys are stored as plain variable names, so they are not updated by
 \code{rename()} or removed by \code{select()}. Keys which are not (or not yet) in the
 dataset are accepted, so that a partially derived dataset can declare the
-structure it is being built towards; the admiral tooling reading the
-attribute is what reports keys which no longer match.
+structure it is being built towards.
 }
 \seealso{
 Utilities used within Derivation functions:
@@ -113,13 +111,15 @@ advs <- set_admiral_keys(
 
 attr(advs, "admiral_keys")
 #> [1] "USUBJID" "PARAMCD" "AVISIT" 
+attr(advs, "admiral_ds_name")
+#> [1] "ADVS"
 class(advs)
 #> [1] "admiral_df" "tbl_df"     "tbl"        "data.frame"}\if{html}{\out{</div>}}}
 \subsection{Keys as a character vector}{
 
 Keys are equally accepted as a character vector, which is the form a
-dataset specification provides them in. admiral does not read specification
-objects itself, so they are extracted in the calling code; with a
+dataset specification provides them in. {admiral} does not read specification
+objects itself, so they are extracted in the calling code; e.g. with a
 \code{{metacore}} specification that is \code{metacore::get_keys()}:
 
 \if{html}{\out{<div class="sourceCode r">}}\preformatted{set_admiral_keys(advs, metacore::get_keys(spec, "ADVS")$variable, "ADVS")
@@ -132,9 +132,8 @@ attr(advs, "admiral_ds_name")
 #> [1] "ADVS"}\if{html}{\out{</div>}}}
 \subsection{Declaring that a dataset has no key variables}{
 
-A zero-length \code{keys} is stored all the same. It is not the same as
-leaving the attribute unset: it records that no key variables are defined,
-so the record structure is not checked against a guess.
+A zero-length \code{keys} attribute is stored all the same. It is not the same as
+leaving the attribute unset: it records that no key variables are defined.
 
 \if{html}{\out{<div class="sourceCode r">}}\preformatted{advs_no_keys <- set_admiral_keys(advs, keys = character(0))
 

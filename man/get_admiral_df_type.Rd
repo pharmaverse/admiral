@@ -18,29 +18,34 @@ A character scalar: one of \code{"ADSL"}, \code{"BDS"}, \code{"OCCDS"}, \code{"T
 \code{"other"}.
 }
 \description{
-Classifies a data frame as one of the common ADaM dataset types based on the
-variables it contains. This lets admiral tooling tailor what it reports to the
-kind of dataset it has been given.
+Attempts to classify a data frame as one of the common ADaM dataset types based
+on the variables it contains.
 }
 \details{
 Note that this is the \emph{type} of the dataset (\code{ADSL}, \code{BDS}, ...), not its
 record structure: the latter is the set of key variables it has one record
 per, see \code{\link[=set_admiral_keys]{set_admiral_keys()}}.
 
-The following precedence is used. The order matters, because the types are
-not mutually exclusive by variable content -- a \code{TTE} dataset contains
-\code{PARAMCD} just as a \code{BDS} one does, and an occurrence dataset which has had
-a parameter added is structurally both.
+Every ADaM dataset type is subject data, so a dataset which does not contain
+all the subject keys (\code{get_admiral_option("subject_keys")}, by default
+\code{STUDYID} and \code{USUBJID}) is \code{"other"}. This keeps a data frame which merely
+shares variable names with an ADaM dataset -- a coding dictionary with
+\code{AETERM}/\code{AEDECOD} columns, a summary table with \code{PARAMCD} and \code{AVAL} --
+from being taken for one.
+
+Otherwise the following precedence is used. The order matters, because the
+types are not mutually exclusive by variable content -- a \code{TTE} dataset
+contains \code{PARAMCD} just as a \code{BDS} one does, and an occurrence dataset which
+has had a parameter added is structurally both.
 \enumerate{
 \item \code{"TTE"} -- contains \code{PARAMCD}, \code{CNSR}, and \code{STARTDT}. Tested first
 because a time-to-event dataset is a \code{BDS} dataset by variable content;
 only the censoring and origin-date variables distinguish it.
-\item \code{"OCCDS"} -- does not contain \code{PARAMCD}, identifies a subject, and
-contains a \code{--DECOD}/\code{--TERM} variable, an \code{AOCCxxFL} occurrence flag, or
-\code{TRTEMFL}.
+\item \code{"OCCDS"} -- does not contain \code{PARAMCD}, and contains a \code{--DECOD}/\code{--TERM}
+variable, an \code{AOCCxxFL} occurrence flag, or \code{TRTEMFL}.
 \item \code{"BDS"} -- contains \code{PARAMCD} and \code{AVAL} or \code{AVALC}.
-\item \code{"ADSL"} -- does not contain \code{PARAMCD} and has an ADSL structure, see
-\code{\link[=is_adsl_structure]{is_adsl_structure()}}.
+\item \code{"ADSL"} -- does not contain \code{PARAMCD} and has one record per subject,
+i.e. per combination of the subject keys.
 \item \code{"other"} -- none of the above.
 }
 
@@ -48,9 +53,15 @@ The \code{--DECOD}/\code{--TERM} test requires the two-letter SDTM domain prefix
 convention gives those variables (\code{AEDECOD}, \code{CMTERM}, ...), so that a
 variable whose name merely ends in \code{TERM} is not taken as a signal.
 
+\code{ADSL} is the one type decided by the records rather than the variables:
+treatment variables are no evidence of it, because the first step of a
+typical \code{BDS}/\code{OCCDS} derivation is to merge them on from ADSL (see the
+\code{admiral} template scripts). A dataset with no records cannot show one
+record per subject, so it is \code{"other"} unless its variables make it one of
+the other types.
+
 A dataset which has not yet been derived far enough to carry any of these
-signals is \code{"other"}; reporting on it is then confined to what holds for
-any data frame.
+signals is \code{"other"}.
 }
 \seealso{
 Other internal:
@@ -58,7 +69,6 @@ Other internal:
 \code{\link[=extract_duplicate_records]{extract_duplicate_records()}},
 \code{\link[=format.basket_select]{format.basket_select()}},
 \code{\link[=infer_admiral_keys]{infer_admiral_keys()}},
-\code{\link[=is_adsl_structure]{is_adsl_structure()}},
 \code{\link[=minimal_unique_key]{minimal_unique_key()}},
 \code{\link[=occds_seq_var]{occds_seq_var()}},
 \code{\link[=signal_duplicate_records]{signal_duplicate_records()}}

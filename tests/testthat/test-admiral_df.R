@@ -186,34 +186,41 @@ test_that("set_admiral_keys Test 10: an error is issued for invalid arguments", 
   expect_error(set_admiral_keys(input, keys = 1))
   expect_error(set_admiral_keys(input, keys = exprs(USUBJID + 1)))
   expect_error(set_admiral_keys(input, keys = "USUBJID", dataset_name = c("A", "B")))
+
+  # keys of neither accepted form are told about both forms; a data frame is a
+  # list, so it must not be mistaken for the output of `exprs()`
+  expect_snapshot(set_admiral_keys(input, keys = iris), error = TRUE)
+  expect_snapshot(set_admiral_keys(input, keys = 1), error = TRUE)
 })
 
 # get_admiral_df_type ----
 ## Test 11: classifies the common ADaM structures ----
 test_that("get_admiral_df_type Test 11: classifies the common ADaM structures", {
   bds <- tibble::tribble(
-    ~USUBJID, ~PARAMCD, ~AVAL, ~AVISIT,
-    "1",      "MAP",       90, "BASELINE"
+    ~STUDYID, ~USUBJID, ~PARAMCD, ~AVAL, ~AVISIT,
+    "P",      "1",      "MAP",       90, "BASELINE"
   )
   expect_identical(get_admiral_df_type(bds), "BDS")
 
   # BDS is satisfied by either analysis value variable
   expect_identical(
-    get_admiral_df_type(tibble::tibble(USUBJID = "1", PARAMCD = "A", AVALC = "X")),
+    get_admiral_df_type(tibble::tibble(STUDYID = "P", USUBJID = "1", PARAMCD = "A", AVALC = "X")),
     "BDS"
   )
   # with neither, it is not a BDS dataset
   expect_identical(
-    get_admiral_df_type(tibble::tibble(USUBJID = c("1", "1"), PARAMCD = "A", FOO = 1)),
+    get_admiral_df_type(tibble::tibble(
+      STUDYID = "P", USUBJID = c("1", "1"), PARAMCD = "A", FOO = 1
+    )),
     "other"
   )
 
   # two records per subject, so that dropping `PARAMCD` below does not leave a
   # dataset which is subject-level by structure
   tte <- tibble::tribble(
-    ~USUBJID, ~PARAMCD, ~AVAL, ~CNSR, ~STARTDT,
-    "1",      "OS",       100,     0, as.Date("2020-01-01"),
-    "1",      "PFS",       60,     1, as.Date("2020-01-01")
+    ~STUDYID, ~USUBJID, ~PARAMCD, ~AVAL, ~CNSR, ~STARTDT,
+    "P",      "1",      "OS",       100,     0, as.Date("2020-01-01"),
+    "P",      "1",      "PFS",       60,     1, as.Date("2020-01-01")
   )
   expect_identical(get_admiral_df_type(tte), "TTE")
 
@@ -235,6 +242,15 @@ test_that("get_admiral_df_type Test 11: classifies the common ADaM structures", 
     1,    2
   )
   expect_identical(get_admiral_df_type(other), "other")
+
+  # a summary of a BDS dataset shares its `PARAMCD` and `AVAL` but has no
+  # subjects, so it is not a BDS dataset itself
+  bds_summary <- tibble::tribble(
+    ~TRT01A, ~PARAMCD, ~AVAL,
+    "A",     "SYSBP",    125,
+    "B",     "SYSBP",    125
+  )
+  expect_identical(get_admiral_df_type(bds_summary), "other")
 })
 
 ## Test 12: each occurrence signal is recognized on its own ----
@@ -242,7 +258,7 @@ test_that("get_admiral_df_type Test 12: each occurrence signal is recognized on 
   # two records for one subject, so that a dataset which fails every occurrence
   # test is not subject-level either and the fallback is visible as "other"
   occds <- function(...) {
-    tibble::tibble(USUBJID = c("1", "1"), ...)
+    tibble::tibble(STUDYID = "P", USUBJID = c("1", "1"), ...)
   }
 
   # the occurrence flag family of the ADaM OCCDS implementation guide, plus the
@@ -264,9 +280,9 @@ test_that("get_admiral_df_type Test 13: an occurrence signal which is not corrob
   # `LONGTERM` ends in TERM but is not a `--TERM` variable, and the two-letter
   # SDTM domain prefix is what distinguishes the two
   not_occds <- tibble::tribble(
-    ~USUBJID, ~LONGTERM, ~AVAL,
-    "1",      "Y",          10,
-    "1",      "N",          20
+    ~STUDYID, ~USUBJID, ~LONGTERM, ~AVAL,
+    "P",      "1",      "Y",          10,
+    "P",      "1",      "N",          20
   )
   expect_identical(get_admiral_df_type(not_occds), "other")
 
@@ -277,9 +293,18 @@ test_that("get_admiral_df_type Test 13: an occurrence signal which is not corrob
   )
   expect_identical(get_admiral_df_type(no_subject), "other")
 
+  # nor is a subset of the subject keys: `STUDYID` is constant within a study,
+  # so a lookup table carrying it still identifies no subject
+  study_only <- tibble::tribble(
+    ~STUDYID, ~AEDECOD,
+    "P",      "HEADACHE",
+    "P",      "NAUSEA"
+  )
+  expect_identical(get_admiral_df_type(study_only), "other")
+
   # a lone severity variable is not an occurrence signal either
   severity_only <- tibble::tibble(
-    USUBJID = c("1", "1"), AESEV = c("MILD", "SEVERE")
+    STUDYID = "P", USUBJID = c("1", "1"), AESEV = c("MILD", "SEVERE")
   )
   expect_identical(get_admiral_df_type(severity_only), "other")
 })
@@ -289,8 +314,8 @@ test_that("get_admiral_df_type Test 14: the type precedence resolves datasets ma
   # BDS over OCCDS: an occurrence dataset which has acquired a parameter is
   # reported per parameter, so `PARAMCD` excludes the OCCDS branch outright
   bds_and_occds <- tibble::tribble(
-    ~USUBJID, ~PARAMCD, ~AVAL, ~AEDECOD,   ~TRTEMFL,
-    "1",      "AEHLT",      1, "HEADACHE", "Y"
+    ~STUDYID, ~USUBJID, ~PARAMCD, ~AVAL, ~AEDECOD,   ~TRTEMFL,
+    "P",      "1",      "AEHLT",      1, "HEADACHE", "Y"
   )
   expect_identical(get_admiral_df_type(bds_and_occds), "BDS")
 
@@ -298,9 +323,9 @@ test_that("get_admiral_df_type Test 14: the type precedence resolves datasets ma
   # dataset, even though it is trivially one record per subject and carries a
   # treatment variable merged from ADSL
   occds_and_adsl <- tibble::tribble(
-    ~USUBJID, ~AEDECOD,   ~TRT01P,   ~TRTSDT,
-    "1",      "HEADACHE", "Placebo", as.Date("2020-01-01"),
-    "2",      "NAUSEA",   "Drug",    as.Date("2020-01-02")
+    ~STUDYID, ~USUBJID, ~AEDECOD,   ~TRT01P,   ~TRTSDT,
+    "P",      "1",      "HEADACHE", "Placebo", as.Date("2020-01-01"),
+    "P",      "2",      "NAUSEA",   "Drug",    as.Date("2020-01-02")
   )
   expect_identical(get_admiral_df_type(occds_and_adsl), "OCCDS")
 })
@@ -308,17 +333,22 @@ test_that("get_admiral_df_type Test 14: the type precedence resolves datasets ma
 ## Test 15: an empty dataset is typed from the variables it declares ----
 test_that("get_admiral_df_type Test 15: an empty dataset is typed from the variables it declares", { # nolint
   empty_bds <- tibble::tibble(
-    USUBJID = character(0), PARAMCD = character(0), AVAL = numeric(0)
+    STUDYID = character(0), USUBJID = character(0), PARAMCD = character(0),
+    AVAL = numeric(0)
   )
   expect_identical(get_admiral_df_type(empty_bds), "BDS")
 
-  empty_adsl <- tibble::tibble(USUBJID = character(0), TRT01P = character(0))
-  expect_identical(get_admiral_df_type(empty_adsl), "ADSL")
+  # ADSL is decided by the records, and an empty dataset cannot demonstrate one
+  # record per subject -- the record and subject counts are trivially equal --
+  # so neither a treatment variable nor the subject keys alone make it ADSL
+  empty_adsl <- tibble::tibble(
+    STUDYID = character(0), USUBJID = character(0), TRT01P = character(0)
+  )
+  expect_identical(get_admiral_df_type(empty_adsl), "other")
 
-  # an empty dataset cannot demonstrate one record per subject -- the record and
-  # subject counts are trivially equal -- so the subject key alone does not make
-  # it subject-level
-  empty_shell <- tibble::tibble(USUBJID = character(0), AVAL = numeric(0))
+  empty_shell <- tibble::tibble(
+    STUDYID = character(0), USUBJID = character(0), AVAL = numeric(0)
+  )
   expect_identical(get_admiral_df_type(empty_shell), "other")
 })
 
@@ -328,36 +358,33 @@ test_that("get_admiral_df_type Test 16: an error is issued for a non-data-frame 
   expect_error(get_admiral_df_type("ADSL"))
 })
 
-# is_adsl_structure ----
-## Test 17: the records decide the structure ----
-test_that("is_adsl_structure Test 17: the records decide the structure", {
+## Test 17: ADSL is decided by the records ----
+test_that("get_admiral_df_type Test 17: ADSL is decided by the records", {
   one_per_subject <- tibble::tribble(
     ~STUDYID, ~USUBJID, ~AGE,
     "P",      "1",        63,
     "P",      "2",        71
   )
-  expect_true(is_adsl_structure(one_per_subject))
+  expect_identical(get_admiral_df_type(one_per_subject), "ADSL")
 
   many_per_subject <- tibble::tribble(
     ~STUDYID, ~USUBJID, ~AVAL,
     "P",      "1",         10,
     "P",      "1",         20
   )
-  expect_false(is_adsl_structure(many_per_subject))
+  expect_identical(get_admiral_df_type(many_per_subject), "other")
 
-  # a partially derived ADSL is not recognized -- a known limitation, pinned so
-  # that it stays a deliberate choice: until it reaches one record per subject
-  # nothing distinguishes it from any other record-level dataset
-  wip_adsl <- tibble::tribble(
-    ~STUDYID, ~USUBJID, ~AGE, ~SEX,
-    "P",      "1",        63, "M",
-    "P",      "1",        63, "M"
+  # all the subject keys are needed: `STUDYID` is constant within a study, so a
+  # single-study lookup table carrying it is one record per study, not subject
+  study_only <- tibble::tribble(
+    ~STUDYID, ~PARAM,
+    "P",      "Code list A"
   )
-  expect_identical(get_admiral_df_type(wip_adsl), "other")
+  expect_identical(get_admiral_df_type(study_only), "other")
 })
 
-## Test 18: treatment variables are no evidence of a subject-level structure ----
-test_that("is_adsl_structure Test 18: treatment variables are no evidence of a subject-level structure", { # nolint
+## Test 18: treatment variables are no evidence of ADSL ----
+test_that("get_admiral_df_type Test 18: treatment variables are no evidence of ADSL", {
   # the shape every BDS/OCCDS derivation passes through: the ADSL variables have
   # been merged on, but `PARAMCD` has not been assigned yet. It carries every
   # treatment variable ADSL does while having many records per subject, so
@@ -370,10 +397,9 @@ test_that("is_adsl_structure Test 18: treatment variables are no evidence of a s
     "P",      "2",      "DIABP",          85, "Drug",    "Drug",    as.Date("2020-01-02")
   )
 
-  expect_false(is_adsl_structure(mid_derivation))
   expect_identical(get_admiral_df_type(mid_derivation), "other")
   # the period-numbered form is equally no evidence
-  expect_false(is_adsl_structure(mutate(mid_derivation, TRT02A = "Drug")))
+  expect_identical(get_admiral_df_type(mutate(mid_derivation, TRT02A = "Drug")), "other")
 
   # the finished ADSL, with the same variables and one record per subject, is
   expect_identical(
@@ -383,7 +409,7 @@ test_that("is_adsl_structure Test 18: treatment variables are no evidence of a s
 })
 
 ## Test 19: a grouped dataset is judged on its records overall ----
-test_that("is_adsl_structure Test 19: a grouped dataset is judged on its records overall", {
+test_that("get_admiral_df_type Test 19: a grouped dataset is judged on its records overall", {
   many_per_subject <- tibble::tribble(
     ~STUDYID, ~USUBJID, ~AVISIT,    ~AVAL,
     "P",      "1",      "BASELINE",    10,
@@ -393,12 +419,11 @@ test_that("is_adsl_structure Test 19: a grouped dataset is judged on its records
   # `distinct()` on a grouped dataset silently adds the grouping variables, so
   # without `ungroup()` this would test one record per subject *per visit* and
   # report a findings dataset as subject-level
-  expect_false(is_adsl_structure(group_by(many_per_subject, AVISIT)))
   expect_identical(get_admiral_df_type(group_by(many_per_subject, AVISIT)), "other")
 })
 
 ## Test 20: the subject keys option is respected ----
-test_that("is_adsl_structure Test 20: the subject keys option is respected", {
+test_that("get_admiral_df_type Test 20: the subject keys option is respected", {
   # one record per STUDYID + USUBJID (the default subject keys), but `SUBJID`
   # repeats across the two studies
   input <- tibble::tribble(
@@ -407,7 +432,7 @@ test_that("is_adsl_structure Test 20: the subject keys option is respected", {
     "B",      "B-1",    "1",       71
   )
 
-  expect_true(is_adsl_structure(input))
+  expect_identical(get_admiral_df_type(input), "ADSL")
 
   subject_keys <- get_admiral_option("subject_keys")
   withr::defer(set_admiral_options(subject_keys = subject_keys))
@@ -415,7 +440,7 @@ test_that("is_adsl_structure Test 20: the subject keys option is respected", {
 
   # what counts as one record per subject follows the option, so the same
   # dataset is no longer subject-level
-  expect_false(is_adsl_structure(input))
+  expect_identical(get_admiral_df_type(input), "other")
 })
 
 # minimal_unique_key ----
@@ -478,29 +503,29 @@ test_that("infer_admiral_keys Test 24: the inferred key spans the common BDS sha
   # exposure: one record per subject, parameter and dosing interval, keyed by
   # the interval start rather than by an analysis date or a visit
   adex <- tibble::tribble(
-    ~USUBJID, ~PARAMCD, ~AVAL, ~ASTDT,                ~AENDT,
-    "1",      "DOSE",      54, as.Date("2024-01-01"), as.Date("2024-01-31"),
-    "1",      "DOSE",      81, as.Date("2024-02-01"), as.Date("2024-02-28")
+    ~STUDYID, ~USUBJID, ~PARAMCD, ~AVAL, ~ASTDT,                ~AENDT,
+    "P",      "1",      "DOSE",      54, as.Date("2024-01-01"), as.Date("2024-01-31"),
+    "P",      "1",      "DOSE",      81, as.Date("2024-02-01"), as.Date("2024-02-28")
   )
   expect_identical(infer_admiral_keys(adex), c("USUBJID", "PARAMCD", "ASTDT"))
 
   # population PK: keyed by relative time, with no visit structure at all
   adppk <- tibble::tribble(
-    ~USUBJID, ~PARAMCD, ~NFRLT, ~AVAL,
-    "1",      "CONC",        0,     0,
-    "1",      "CONC",        1,    12,
-    "1",      "CONC",        2,     8
+    ~STUDYID, ~USUBJID, ~PARAMCD, ~NFRLT, ~AVAL,
+    "P",      "1",      "CONC",        0,     0,
+    "P",      "1",      "CONC",        1,    12,
+    "P",      "1",      "CONC",        2,     8
   )
   expect_identical(infer_admiral_keys(adppk), c("USUBJID", "PARAMCD", "NFRLT"))
 
   # a derived record shares every analysis variable with the record it was
   # derived from, so only DTYPE separates the two within a visit
   locf <- tibble::tribble(
-    ~USUBJID, ~PARAMCD, ~AVISITN, ~AVAL, ~DTYPE,
-    "1",      "SYSBP",         2,   121, NA,
-    "1",      "SYSBP",         2,   121, "LOCF",
-    "1",      "SYSBP",         4,   130, NA,
-    "1",      "SYSBP",         4,   130, "LOCF"
+    ~STUDYID, ~USUBJID, ~PARAMCD, ~AVISITN, ~AVAL, ~DTYPE,
+    "P",      "1",      "SYSBP",         2,   121, NA,
+    "P",      "1",      "SYSBP",         2,   121, "LOCF",
+    "P",      "1",      "SYSBP",         4,   130, NA,
+    "P",      "1",      "SYSBP",         4,   130, "LOCF"
   )
   expect_identical(
     infer_admiral_keys(locf),
@@ -513,11 +538,11 @@ test_that("infer_admiral_keys Test 25: multi-period designs are keyed by period"
   # the same visit recurs in each period, so nothing but APERIOD separates the
   # records -- a vaccine study shape
   input <- tibble::tribble(
-    ~USUBJID, ~PARAMCD, ~AVISITN, ~APERIOD, ~AVAL,
-    "1",      "SYSBP",         1,        1,   121,
-    "1",      "SYSBP",         1,        2,   130,
-    "1",      "SYSBP",         2,        1,   118,
-    "1",      "SYSBP",         2,        2,   125
+    ~STUDYID, ~USUBJID, ~PARAMCD, ~AVISITN, ~APERIOD, ~AVAL,
+    "P",      "1",      "SYSBP",         1,        1,   121,
+    "P",      "1",      "SYSBP",         1,        2,   130,
+    "P",      "1",      "SYSBP",         2,        1,   118,
+    "P",      "1",      "SYSBP",         2,        2,   125
   )
 
   expect_identical(
@@ -536,9 +561,9 @@ test_that("infer_admiral_keys Test 26: ADSL, TTE and unrecognized datasets", {
   expect_identical(infer_admiral_keys(adsl), "USUBJID")
 
   adtte <- tibble::tribble(
-    ~USUBJID, ~PARAMCD, ~AVAL, ~CNSR, ~STARTDT,
-    "1",      "OS",       100,     0, as.Date("2020-01-01"),
-    "1",      "PFS",       60,     1, as.Date("2020-01-01")
+    ~STUDYID, ~USUBJID, ~PARAMCD, ~AVAL, ~CNSR, ~STARTDT,
+    "P",      "1",      "OS",       100,     0, as.Date("2020-01-01"),
+    "P",      "1",      "PFS",       60,     1, as.Date("2020-01-01")
   )
   expect_identical(infer_admiral_keys(adtte), c("USUBJID", "PARAMCD"))
 
@@ -603,7 +628,8 @@ test_that("infer_admiral_keys Test 28: nothing is inferred for a dataset with no
   # every candidate key is trivially unique over no records, so inference would
   # report a structure the dataset has not demonstrated
   empty_bds <- tibble::tibble(
-    USUBJID = character(0), PARAMCD = character(0), AVAL = numeric(0)
+    STUDYID = character(0), USUBJID = character(0), PARAMCD = character(0),
+    AVAL = numeric(0)
   )
 
   expect_identical(infer_admiral_keys(empty_bds), character(0))
@@ -647,9 +673,9 @@ test_that("infer_admiral_keys Test 29: the subject keys option is respected", {
 ## Test 30: a grouped dataset is keyed on its records overall ----
 test_that("infer_admiral_keys Test 30: a grouped dataset is keyed on its records overall", {
   input <- tibble::tribble(
-    ~USUBJID, ~PARAMCD, ~AVISITN, ~AVAL,
-    "1",      "SYSBP",         2,   121,
-    "1",      "SYSBP",         4,   130
+    ~STUDYID, ~USUBJID, ~PARAMCD, ~AVISITN, ~AVAL,
+    "P",      "1",      "SYSBP",         2,   121,
+    "P",      "1",      "SYSBP",         4,   130
   )
 
   # without `ungroup()` the uniqueness test would run within group, so the key
@@ -666,11 +692,11 @@ test_that("infer_admiral_keys Test 31: population PK needs both the nominal and 
   # and its actual time with a different nominal one, so neither variable keys
   # the dataset alone. Reproduces the record structure of `pharmaverseadam::adppk`.
   input <- tibble::tribble(
-    ~USUBJID, ~PARAMCD, ~NFRLT, ~AFRLT, ~AVAL,
-    "1",      "XAN",         3,      6, 25.77,
-    "1",      "XAN",         6,      6,  1.86,
-    "1",      "XAN",        36,     36,  0.31,
-    "1",      "XAN",        36,     37,  0.27
+    ~STUDYID, ~USUBJID, ~PARAMCD, ~NFRLT, ~AFRLT, ~AVAL,
+    "P",      "1",      "XAN",         3,      6, 25.77,
+    "P",      "1",      "XAN",         6,      6,  1.86,
+    "P",      "1",      "XAN",        36,     36,  0.31,
+    "P",      "1",      "XAN",        36,     37,  0.27
   )
 
   expect_identical(
@@ -687,11 +713,11 @@ test_that("infer_admiral_keys Test 32: visit, timepoint and DTYPE are all needed
   # candidates picked up on the way have to be dropped again. Reproduces the
   # record structure of `pharmaverseadam::adpc`.
   input <- tibble::tribble(
-    ~USUBJID, ~PARAMCD, ~AVISITN, ~ATPTN, ~NFRLT, ~ADT, ~DTYPE, ~AVAL,
-    "1", "XAN", 2, 24, 24, as.Date("2024-01-02"), NA, 0.0107,
-    "1", "XAN", 2, 36, 36, as.Date("2024-01-02"), NA, NA,
-    "1", "XAN", 2, 36, 36, as.Date("2024-01-02"), "HALFLLOQ", 0.005,
-    "1", "XAN", 3, 24, 24, as.Date("2024-01-09"), NA, 0.0098
+    ~STUDYID, ~USUBJID, ~PARAMCD, ~AVISITN, ~ATPTN, ~NFRLT, ~ADT, ~DTYPE, ~AVAL,
+    "P",      "1", "XAN", 2, 24, 24, as.Date("2024-01-02"), NA, 0.0107,
+    "P",      "1", "XAN", 2, 36, 36, as.Date("2024-01-02"), NA, NA,
+    "P",      "1", "XAN", 2, 36, 36, as.Date("2024-01-02"), "HALFLLOQ", 0.005,
+    "P",      "1", "XAN", 3, 24, 24, as.Date("2024-01-09"), NA, 0.0098
   )
 
   expect_identical(

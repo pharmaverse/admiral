@@ -52,7 +52,7 @@ check is not looking for semantic duplicates but for whole records
 duplicated by a fanned-out merge.
 
 The subject part of the key follows the \code{subject_keys} admiral option, as
-\code{\link[=is_adsl_structure]{is_adsl_structure()}} does, reduced to those of its variables which
+\code{\link[=get_admiral_df_type]{get_admiral_df_type()}} does, reduced to those of its variables which
 actually distinguish subjects in the dataset at hand. With the default
 option that is \code{USUBJID} alone for a single-study dataset, because
 \code{STUDYID} is constant there and would only overstate the record structure;
@@ -68,7 +68,6 @@ Other internal:
 \code{\link[=extract_duplicate_records]{extract_duplicate_records()}},
 \code{\link[=format.basket_select]{format.basket_select()}},
 \code{\link[=get_admiral_df_type]{get_admiral_df_type()}},
-\code{\link[=is_adsl_structure]{is_adsl_structure()}},
 \code{\link[=minimal_unique_key]{minimal_unique_key()}},
 \code{\link[=occds_seq_var]{occds_seq_var()}},
 \code{\link[=signal_duplicate_records]{signal_duplicate_records()}}

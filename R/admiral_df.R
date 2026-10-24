@@ -42,26 +42,25 @@ as_admiral_df <- function(dataset) {
 #'
 #' Stores the key variables of a dataset -- the variables it is intended to have
 #' exactly one record per -- in its `"admiral_keys"` attribute, and tags it with
-#' the `admiral_df` class (see [as_admiral_df()]). Downstream admiral tooling
-#' reads the attribute to check that the dataset really does have one record per
-#' key, e.g. after a derivation which was expected to preserve the record
-#' structure.
+#' the `admiral_df` class (see [as_admiral_df()]). The keys describe the record
+#' structure the dataset is intended to have; they are not checked against its
+#' records when they are stored.
 #'
-#' @param dataset A data frame
+#' @param dataset A data frame. It does not need to have the `admiral_df` class
+#'   already; the class is added if it is missing.
 #'
 #' @permitted a data frame
 #'
 #' @param keys The key variables of `dataset`, in key order, e.g.
 #'   `exprs(USUBJID, PARAMCD, AVISIT)` or
 #'   `c("USUBJID", "PARAMCD", "AVISIT")`. A zero-length vector records that the
-#'   dataset has no key variables defined, which suppresses the record structure
-#'   check rather than leaving the keys to be guessed.
+#'   dataset has no key variables defined, which is distinct from its keys never
+#'   having been set.
 #'
 #' @permitted list of variables created by `exprs()`, or a character vector
 #'
 #' @param dataset_name The name of the dataset, e.g. `"ADVS"`, stored in the
-#'   `"admiral_ds_name"` attribute and used as a heading by the admiral tooling
-#'   which reports on the dataset. `NULL` leaves a name stored by a previous
+#'   `"admiral_ds_name"` attribute. `NULL` leaves a name stored by a previous
 #'   call untouched, so re-keying a dataset does not lose its name.
 #'
 #' @permitted character scalar or `NULL`
@@ -91,9 +90,9 @@ as_admiral_df <- function(dataset) {
 #'   * `bind_rows()` when `dataset` is not the *first* argument,
 #'   * joins where `dataset` is the `y` (rather than the `x`) argument.
 #'
-#'   `group_by()` and `rowwise()` are a case of their own: they keep the keys but
-#'   drop the `admiral_df` class, leaving the attribute behind on a dataset the
-#'   admiral tooling no longer recognizes.
+#'   `group_by()` and `rowwise()` are a case of their own: they keep the
+#'   `"admiral_keys"` and `"admiral_ds_name"` attributes but drop the
+#'   `admiral_df` class.
 #'
 #'   Call this function afterwards (or re-apply it as needed) if the dataset
 #'   passes through any of those.
@@ -101,8 +100,7 @@ as_admiral_df <- function(dataset) {
 #'   The keys are stored as plain variable names, so they are not updated by
 #'   `rename()` or removed by `select()`. Keys which are not (or not yet) in the
 #'   dataset are accepted, so that a partially derived dataset can declare the
-#'   structure it is being built towards; the admiral tooling reading the
-#'   attribute is what reports keys which no longer match.
+#'   structure it is being built towards.
 #'
 #' @keywords utils_help
 #' @family utils_help
@@ -130,13 +128,14 @@ as_admiral_df <- function(dataset) {
 #' )
 #'
 #' attr(advs, "admiral_keys")
+#' attr(advs, "admiral_ds_name")
 #' class(advs)
 #'
 #' @caption Keys as a character vector
 #'
 #' @info Keys are equally accepted as a character vector, which is the form a
-#'   dataset specification provides them in. admiral does not read specification
-#'   objects itself, so they are extracted in the calling code; with a
+#'   dataset specification provides them in. {admiral} does not read specification
+#'   objects itself, so they are extracted in the calling code; e.g. with a
 #'   `{metacore}` specification that is `metacore::get_keys()`:
 #'
 #'   ```r
@@ -151,9 +150,8 @@ as_admiral_df <- function(dataset) {
 #'
 #' @caption Declaring that a dataset has no key variables
 #'
-#' @info A zero-length `keys` is stored all the same. It is not the same as
-#'   leaving the attribute unset: it records that no key variables are defined,
-#'   so the record structure is not checked against a guess.
+#' @info A zero-length `keys` attribute is stored all the same. It is not the same as
+#'   leaving the attribute unset: it records that no key variables are defined.
 #'
 #' @code
 #' advs_no_keys <- set_admiral_keys(advs, keys = character(0))
@@ -161,6 +159,21 @@ as_admiral_df <- function(dataset) {
 #' attr(advs_no_keys, "admiral_keys")
 set_admiral_keys <- function(dataset, keys, dataset_name = NULL) {
   assert_data_frame(dataset)
+  # a data frame is a list too, so the shape is checked up front rather than
+  # left to the assertion of whichever form `keys` happens to resemble
+  if (!is.character(keys) && !is_bare_list(keys)) {
+    cli_abort(c(
+      paste(
+        "Argument {.arg keys} must be a list of variables created by {.fun exprs}",
+        "or a character vector, but is {.obj_type_friendly {keys}}."
+      ),
+      i = "For example, {.code exprs(USUBJID, PARAMCD)} or {.code c(\"USUBJID\", \"PARAMCD\")}.",
+      i = paste(
+        "Keys defined in a {.pkg metacore} specification can be passed as",
+        "{.code metacore::get_keys(spec, \"ADVS\")$variable}."
+      )
+    ))
+  }
   # keys are always stored as character: they are metadata about the dataset,
   # not expressions to evaluate against it
   if (is.list(keys)) {
@@ -170,9 +183,11 @@ set_admiral_keys <- function(dataset, keys, dataset_name = NULL) {
   }
   assert_character_scalar(dataset_name, optional = TRUE)
 
-  # `as.character()` drops attributes a key vector pulled out of a specification
-  # table carries (e.g. a variable label), which would break comparison against
-  # a plain character vector
+  # a key vector extracted from a specification, e.g.
+  # `metacore::get_keys(spec, "ADVS")$variable`, carries the column's `label`
+  # attribute; `as.character()` drops it so the keys are stored the same way
+  # whichever form they were given in, and compare `identical()` to a plain
+  # character vector
   attr(dataset, "admiral_keys") <- as.character(keys)
   if (!is.null(dataset_name)) {
     attr(dataset, "admiral_ds_name") <- dataset_name
@@ -182,9 +197,8 @@ set_admiral_keys <- function(dataset, keys, dataset_name = NULL) {
 
 #' Determine the ADaM Dataset Type
 #'
-#' Classifies a data frame as one of the common ADaM dataset types based on the
-#' variables it contains. This lets admiral tooling tailor what it reports to the
-#' kind of dataset it has been given.
+#' Attempts to classify a data frame as one of the common ADaM dataset types based
+#' on the variables it contains.
 #'
 #' Note that this is the *type* of the dataset (`ADSL`, `BDS`, ...), not its
 #' record structure: the latter is the set of key variables it has one record
@@ -193,29 +207,41 @@ set_admiral_keys <- function(dataset, keys, dataset_name = NULL) {
 #' @param dataset A data frame
 #'
 #' @details
-#'   The following precedence is used. The order matters, because the types are
-#'   not mutually exclusive by variable content -- a `TTE` dataset contains
-#'   `PARAMCD` just as a `BDS` one does, and an occurrence dataset which has had
-#'   a parameter added is structurally both.
+#'   Every ADaM dataset type is subject data, so a dataset which does not contain
+#'   all the subject keys (`get_admiral_option("subject_keys")`, by default
+#'   `STUDYID` and `USUBJID`) is `"other"`. This keeps a data frame which merely
+#'   shares variable names with an ADaM dataset -- a coding dictionary with
+#'   `AETERM`/`AEDECOD` columns, a summary table with `PARAMCD` and `AVAL` --
+#'   from being taken for one.
+#'
+#'   Otherwise the following precedence is used. The order matters, because the
+#'   types are not mutually exclusive by variable content -- a `TTE` dataset
+#'   contains `PARAMCD` just as a `BDS` one does, and an occurrence dataset which
+#'   has had a parameter added is structurally both.
 #'
 #'   1. `"TTE"` -- contains `PARAMCD`, `CNSR`, and `STARTDT`. Tested first
 #'      because a time-to-event dataset is a `BDS` dataset by variable content;
 #'      only the censoring and origin-date variables distinguish it.
-#'   2. `"OCCDS"` -- does not contain `PARAMCD`, identifies a subject, and
-#'      contains a `--DECOD`/`--TERM` variable, an `AOCCxxFL` occurrence flag, or
-#'      `TRTEMFL`.
+#'   2. `"OCCDS"` -- does not contain `PARAMCD`, and contains a `--DECOD`/`--TERM`
+#'      variable, an `AOCCxxFL` occurrence flag, or `TRTEMFL`.
 #'   3. `"BDS"` -- contains `PARAMCD` and `AVAL` or `AVALC`.
-#'   4. `"ADSL"` -- does not contain `PARAMCD` and has an ADSL structure, see
-#'      [is_adsl_structure()].
+#'   4. `"ADSL"` -- does not contain `PARAMCD` and has one record per subject,
+#'      i.e. per combination of the subject keys.
 #'   5. `"other"` -- none of the above.
 #'
 #'   The `--DECOD`/`--TERM` test requires the two-letter SDTM domain prefix the
 #'   convention gives those variables (`AEDECOD`, `CMTERM`, ...), so that a
 #'   variable whose name merely ends in `TERM` is not taken as a signal.
 #'
+#'   `ADSL` is the one type decided by the records rather than the variables:
+#'   treatment variables are no evidence of it, because the first step of a
+#'   typical `BDS`/`OCCDS` derivation is to merge them on from ADSL (see the
+#'   `admiral` template scripts). A dataset with no records cannot show one
+#'   record per subject, so it is `"other"` unless its variables make it one of
+#'   the other types.
+#'
 #'   A dataset which has not yet been derived far enough to carry any of these
-#'   signals is `"other"`; reporting on it is then confined to what holds for
-#'   any data frame.
+#'   signals is `"other"`.
 #'
 #' @return A character scalar: one of `"ADSL"`, `"BDS"`, `"OCCDS"`, `"TTE"`, or
 #'   `"other"`.
@@ -227,79 +253,41 @@ get_admiral_df_type <- function(dataset) {
   # diagnostic
   assert_data_frame(dataset, check_is_grouped = FALSE, check_is_rowwise = FALSE)
   cols <- colnames(dataset)
-  has <- function(x) x %in% cols
-  has_paramcd <- has("PARAMCD")
-  # occurrence datasets are record-level, so a subject identifier is what
-  # corroborates the naming signals below
-  has_subject <-
-    length(intersect(vars2chr(get_admiral_option("subject_keys")), cols)) > 0
+  subject_keys <- vars2chr(get_admiral_option("subject_keys"))
 
-  is_tte <- has_paramcd && has("CNSR") && has("STARTDT")
-  is_occds <- !has_paramcd && has_subject &&
-    any(str_detect(cols, "^[A-Z]{2}(DECOD|TERM)$|^AOCC[0-9A-Z]*FL$|^TRTEMFL$"))
-  is_bds <- has_paramcd && (has("AVAL") || has("AVALC"))
-
-  # Check dataset type
-  if (is_tte) {
-    return("TTE")
+  # every ADaM dataset type is subject data, so a data frame without the subject
+  # keys -- a lookup table, a summary table -- is none of them, whatever
+  # variables it shares with them. All the keys are required, as only together
+  # do they identify a subject (`STUDYID` alone identifies nothing)
+  if (!all(subject_keys %in% cols)) {
+    return("other")
   }
-  if (is_occds) {
+
+  # `PARAMCD` decides between the parameter-based types and the rest; TTE is
+  # tested before BDS because a TTE dataset is a BDS dataset by variable content
+  if ("PARAMCD" %in% cols) {
+    if (all(c("CNSR", "STARTDT") %in% cols)) {
+      return("TTE")
+    }
+    if (any(c("AVAL", "AVALC") %in% cols)) {
+      return("BDS")
+    }
+    return("other")
+  }
+
+  if (any(str_detect(cols, "^[A-Z]{2}(DECOD|TERM)$|^AOCC[0-9A-Z]*FL$|^TRTEMFL$"))) {
     return("OCCDS")
   }
-  if (is_bds) {
-    return("BDS")
-  }
-  if (!has_paramcd && is_adsl_structure(dataset)) {
+
+  # ADSL is decided by the records: one record per subject. `ungroup()` because
+  # `distinct()` silently adds the grouping variables, which would test
+  # uniqueness within group rather than overall
+  if (nrow(dataset) > 0 &&
+    nrow(dataset) == nrow(distinct(ungroup(dataset), !!!syms(subject_keys)))) {
     return("ADSL")
   }
+
   "other"
-}
-
-#' Check Whether a Dataset Has an ADSL (Subject-Level) Structure
-#'
-#' @param dataset A data frame
-#'
-#' @details
-#'   A dataset is subject-level if it has one record per subject, with respect to
-#'   `get_admiral_option("subject_keys")`. The records decide this, not the
-#'   variables: treatment variables are no evidence of a subject-level structure,
-#'   because the first step of a typical `BDS`/`OCCDS` derivation is to merge
-#'   them on from ADSL (see the `admiral` template scripts), which would make
-#'   every findings dataset look subject-level between that merge and the point
-#'   at which it acquires `PARAMCD`.
-#'
-#'   The exception is a dataset with no records, which cannot demonstrate its
-#'   structure either way -- record and subject counts are trivially equal. There
-#'   the declared variables are all there is to go on, so a zero-row dataset is
-#'   subject-level if it carries a period-numbered treatment variable (`TRT01P`,
-#'   `TRT02A`, ...) or a treatment start date.
-#'
-#'   A partially derived ADSL which has not yet reached one record per subject is
-#'   therefore not recognized here, and is typed `"other"` by
-#'   [get_admiral_df_type()]: nothing in it yet distinguishes it from any other
-#'   record-level data frame.
-#'
-#' @return `TRUE` if the dataset has a subject-level structure, `FALSE`
-#'   otherwise.
-#'
-#' @keywords internal
-#' @family internal
-is_adsl_structure <- function(dataset) {
-  cols <- colnames(dataset)
-
-  # with no records there is nothing to test the structure against
-  if (nrow(dataset) == 0) {
-    return(
-      any(str_detect(cols, "^TRT[0-9]{2}[PA]$")) ||
-        any(c("TRTSDT", "TRTSDTM") %in% cols)
-    )
-  }
-
-  subject_keys <- intersect(vars2chr(get_admiral_option("subject_keys")), cols)
-  # `ungroup()` because `distinct()` silently adds the grouping variables, which
-  # would test uniqueness within group rather than overall
-  length(subject_keys) > 0 &&
-    nrow(dataset) == nrow(distinct(ungroup(dataset), !!!syms(subject_keys)))
 }
 
 #' Find the Minimal Set of Variables that Uniquely Identifies Rows
@@ -327,7 +315,7 @@ is_adsl_structure <- function(dataset) {
 #' @keywords internal
 #' @family internal
 minimal_unique_key <- function(dataset, must_have, optional) {
-  # `ungroup()` for the reason given in `is_adsl_structure()`
+  # `ungroup()` for the reason given in `get_admiral_df_type()`
   dataset <- ungroup(dataset)
   # `n_distinct()` rather than `nrow(distinct())`: the count is all that is
   # wanted, and this runs often enough (up to twice per candidate) that
@@ -391,7 +379,7 @@ minimal_unique_key <- function(dataset, must_have, optional) {
 #'   duplicated by a fanned-out merge.
 #'
 #'   The subject part of the key follows the `subject_keys` admiral option, as
-#'   [is_adsl_structure()] does, reduced to those of its variables which
+#'   [get_admiral_df_type()] does, reduced to those of its variables which
 #'   actually distinguish subjects in the dataset at hand. With the default
 #'   option that is `USUBJID` alone for a single-study dataset, because
 #'   `STUDYID` is constant there and would only overstate the record structure;
