@@ -75,7 +75,7 @@ as_admiral_df <- function(dataset) {
 #'   produced the dataset, a dataset specification, or a hand-written vector.
 #'   They are accepted both as `exprs()` -- matching `by_vars` and the
 #'   `subject_keys` admiral option -- and as a character vector, which is what a
-#'   specification provides. admiral does not read specification objects itself;
+#'   specification provides. `{admiral}` does not read specification objects itself;
 #'   to use the keys defined in a `{metacore}` specification, extract them in the
 #'   calling code, e.g. `metacore::get_keys(spec, "ADVS")$variable`.
 #'
