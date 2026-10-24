@@ -30,6 +30,10 @@ which allows users to control whether a message, warning, error, or no message a
 is issued when some records are not mapped using the lookup dataset. The `print_not_mapped`
 argument will thus be deprecated. (#3188)
 
+- The NCICTCAEv5 + NCICTCAEv6 grading criteria (`atoxgr_criteria_ctcv5`, 
+`atoxgr_criteria_ctcv5_uscv`, `atoxgr_criteria_ctcv6`, `atoxgr_criteria_ctcv6_uscv`)
+were updated to add the term `"Eosinophilia"` (#3191).
+
 ## Breaking Changes
 
 - The following functions are entering the next phase of the [deprecation process](https://pharmaverse.github.io/admiraldev/articles/programming_strategy.html#deprecation):
@@ -73,6 +77,12 @@ together. Additionally, the package manifesto was moved to the `{admiraldev}` we
   in the README and the "Get Started" navigation bar. (#3159)
   
 - Fixed broken links to PHUSE resources in the "Estimands" User Guide. (#3196)
+
+- Added a "Floating Point Comparisons" section to the "Programming Concepts and Conventions"
+  vignette explaining how comparisons of derived numeric variables to fixed values in conditions
+  can give unexpected results and how to avoid this. The section is referenced in the
+  documentation of all function arguments which accept conditions, e.g., `condition` of
+  `derive_vars_crit_flag()` or `filter_add` of `derive_vars_merged()`. (#3178)
 
 ## Various
 

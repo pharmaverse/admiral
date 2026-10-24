@@ -43,6 +43,8 @@ e.g. if \code{by_vars} is specified as \code{exprs(VSTEST)}:
       "Height",  AVAL < 140,  "<140 cm",         2)
 }\if{html}{\out{</div>}}
 
+Comparing derived numeric variables to fixed values, e.g., \code{PCHG <= -90}, may give unexpected results due to floating point representation. For details and solutions see the "Floating Point Comparisons" section in \code{vignette("concepts_conventions")}.
+
 \describe{
 \item{Default value}{none}
 }}

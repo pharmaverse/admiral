@@ -30,6 +30,8 @@
 #'
 #' @param filter Expression used to restrict the records of `dataset_merge` prior to transposing
 #'
+#'   `r roxygen_float_comparison()`
+#'
 #' @param relationship Expected merge-relationship between the `by_vars`
 #'   variable(s) in `dataset` and `dataset_merge` (after transposition)
 #'

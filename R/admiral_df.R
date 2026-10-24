@@ -72,7 +72,7 @@ as_admiral_df <- function(dataset) {
 #'   The keys can come from anywhere: the `by_vars` of the derivation which
 #'   produced the dataset, a dataset specification, or a hand-written list.
 #'   A specification provides them as a character vector, which [chr2vars()]
-#'   converts. admiral does not read specification objects itself; to use the
+#'   converts. `{admiral}` does not read specification objects itself; to use the
 #'   keys defined in a `{metacore}` specification, extract them in the calling
 #'   code, e.g. `chr2vars(metacore::get_keys(spec, "ADVS")$variable)`.
 #'

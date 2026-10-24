@@ -50,7 +50,7 @@ records when they are stored.
 The keys can come from anywhere: the \code{by_vars} of the derivation which
 produced the dataset, a dataset specification, or a hand-written list.
 A specification provides them as a character vector, which \code{\link[=chr2vars]{chr2vars()}}
-converts. admiral does not read specification objects itself; to use the
+converts. \code{{admiral}} does not read specification objects itself; to use the
 keys defined in a \code{{metacore}} specification, extract them in the calling
 code, e.g. \code{chr2vars(metacore::get_keys(spec, "ADVS")$variable)}.
 

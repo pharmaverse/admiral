@@ -18,6 +18,8 @@
 #'
 #' @param filter Filter condition
 #'
+#'   `r roxygen_float_comparison()`
+#'
 #' @details
 #'
 #'   It is also possible to pass functions from outside the `{admiral}` package

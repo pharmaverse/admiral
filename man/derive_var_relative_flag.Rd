@@ -60,6 +60,8 @@ The specified condition determines the reference observation. In the output
 dataset all observations before or after (\code{selection} argument)
 the reference observation are flagged.
 
+Comparing derived numeric variables to fixed values, e.g., \code{PCHG <= -90}, may give unexpected results due to floating point representation. For details and solutions see the "Floating Point Comparisons" section in \code{vignette("concepts_conventions")}.
+
 \describe{
 \item{Default value}{none}
 }}
