@@ -1,3 +1,20 @@
+# set_admiral_keys Test 8: empty keys are stored, keys not in the dataset are not
+
+    Code
+      typo <- set_admiral_keys(input, keys = exprs(USUBJID, PARMACD), dataset_name = "ADVS")
+    Condition
+      Warning:
+      Key variable `PARMACD` is not in `dataset`, so no keys were set.
+
+---
+
+    Code
+      rekeyed <- set_admiral_keys(keyed, keys = exprs(USUBJID, PARMACD, AVISIT))
+    Condition
+      Warning:
+      Key variables `PARMACD` and `AVISIT` are not in `dataset`, so no keys were set.
+      i The keys set previously are kept: `USUBJID` and `PARAMCD`.
+
 # set_admiral_keys Test 10: an error is issued for invalid arguments
 
     Code

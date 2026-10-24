@@ -16,7 +16,9 @@ already; the class is added if it is missing.
 }}
 
 \item{keys}{The key variables of \code{dataset}, in key order, e.g.
-\code{exprs(USUBJID, PARAMCD, AVISIT)}. An empty list, \code{exprs()}, records that
+\code{exprs(USUBJID, PARAMCD, AVISIT)}. They must be variables of \code{dataset}:
+if any is not, a warning is issued and the keys are not set, so any keys
+set by a previous call are kept. An empty list, \code{exprs()}, records that
 the dataset has no key variables defined, which is distinct from its keys
 never having been set.
 
@@ -35,9 +37,9 @@ call untouched, so re-keying a dataset does not lose its name.
 }}
 }
 \value{
-\code{dataset} with an \code{"admiral_keys"} attribute, an \code{"admiral_ds_name"}
-attribute if \code{dataset_name} was supplied or had been stored by a previous
-call, and the \code{admiral_df} class.
+\code{dataset} with an \code{"admiral_keys"} attribute (unless a key is not in
+\code{dataset}), an \code{"admiral_ds_name"} attribute if \code{dataset_name} was supplied
+or had been stored by a previous call, and the \code{admiral_df} class.
 }
 \description{
 Stores the key variables of a dataset -- the variables which uniquely identify
@@ -75,9 +77,8 @@ Call this function afterwards (or re-apply it as needed) if the dataset
 passes through any of those.
 
 The keys are stored as plain variable names, so they are not updated by
-\code{rename()} or removed by \code{select()}. Keys which are not (or not yet) in the
-dataset are accepted, so that a partially derived dataset can declare the
-structure it is being built towards.
+\code{rename()} or removed by \code{select()}: a key which is no longer in the
+dataset means it has changed since its keys were set.
 }
 \seealso{
 Utilities used within Derivation functions:

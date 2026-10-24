@@ -117,8 +117,8 @@ test_that("set_admiral_keys Test 7: the keys are stored as a plain character vec
   expect_identical(attr(actual, "admiral_keys"), c("USUBJID", "AVAL"))
 })
 
-## Test 8: keys which are empty or not in the dataset are stored quietly ----
-test_that("set_admiral_keys Test 8: keys which are empty or not in the dataset are stored quietly", { # nolint
+## Test 8: empty keys are stored, keys not in the dataset are not ----
+test_that("set_admiral_keys Test 8: empty keys are stored, keys not in the dataset are not", { # nolint
   input <- tibble::tribble(
     ~USUBJID, ~PARAMCD, ~AVAL,
     "1",      "DIABP",     51
@@ -131,16 +131,22 @@ test_that("set_admiral_keys Test 8: keys which are empty or not in the dataset a
   expect_false(is.null(attr(empty, "admiral_keys")))
   expect_s3_class(empty, "admiral_df")
 
-  # a partially derived dataset can declare the structure it is being built
-  # towards; reporting keys which no longer match the dataset is the job of the
-  # tooling which reads the attribute, once the derivation is finished
-  expect_silent(
-    absent <- set_admiral_keys(input, keys = exprs(USUBJID, PARAMCD, AVISIT))
+  # a key which is not in the dataset is most likely a typo, so the keys are
+  # not set and a warning says so; the name and the class are still applied
+  expect_snapshot(
+    typo <- set_admiral_keys(input, keys = exprs(USUBJID, PARMACD), dataset_name = "ADVS")
   )
-  expect_equal(
-    attr(absent, "admiral_keys"),
-    c("USUBJID", "PARAMCD", "AVISIT")
+  expect_null(attr(typo, "admiral_keys"))
+  expect_identical(attr(typo, "admiral_ds_name"), "ADVS")
+  expect_s3_class(typo, "admiral_df")
+
+  # re-keying with a typo keeps the keys set previously, and the warning says
+  # which they are
+  keyed <- set_admiral_keys(input, keys = exprs(USUBJID, PARAMCD))
+  expect_snapshot(
+    rekeyed <- set_admiral_keys(keyed, keys = exprs(USUBJID, PARMACD, AVISIT))
   )
+  expect_identical(attr(rekeyed, "admiral_keys"), c("USUBJID", "PARAMCD"))
 })
 
 ## Test 9: the keys and the class survive a dplyr pipeline ----

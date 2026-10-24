@@ -52,7 +52,9 @@ as_admiral_df <- function(dataset) {
 #' @permitted a data frame
 #'
 #' @param keys The key variables of `dataset`, in key order, e.g.
-#'   `exprs(USUBJID, PARAMCD, AVISIT)`. An empty list, `exprs()`, records that
+#'   `exprs(USUBJID, PARAMCD, AVISIT)`. They must be variables of `dataset`:
+#'   if any is not, a warning is issued and the keys are not set, so any keys
+#'   set by a previous call are kept. An empty list, `exprs()`, records that
 #'   the dataset has no key variables defined, which is distinct from its keys
 #'   never having been set.
 #'
@@ -64,9 +66,9 @@ as_admiral_df <- function(dataset) {
 #'
 #' @permitted character scalar or `NULL`
 #'
-#' @return `dataset` with an `"admiral_keys"` attribute, an `"admiral_ds_name"`
-#'   attribute if `dataset_name` was supplied or had been stored by a previous
-#'   call, and the `admiral_df` class.
+#' @return `dataset` with an `"admiral_keys"` attribute (unless a key is not in
+#'   `dataset`), an `"admiral_ds_name"` attribute if `dataset_name` was supplied
+#'   or had been stored by a previous call, and the `admiral_df` class.
 #'
 #' @details
 #'   The keys can come from anywhere: the `by_vars` of the derivation which
@@ -96,9 +98,8 @@ as_admiral_df <- function(dataset) {
 #'   passes through any of those.
 #'
 #'   The keys are stored as plain variable names, so they are not updated by
-#'   `rename()` or removed by `select()`. Keys which are not (or not yet) in the
-#'   dataset are accepted, so that a partially derived dataset can declare the
-#'   structure it is being built towards.
+#'   `rename()` or removed by `select()`: a key which is no longer in the
+#'   dataset means it has changed since its keys were set.
 #'
 #' @keywords utils_help
 #' @family utils_help
@@ -156,7 +157,6 @@ as_admiral_df <- function(dataset) {
 #'
 #' attr(advs_no_keys, "admiral_keys")
 set_admiral_keys <- function(dataset, keys, dataset_name = NULL) {
-  assert_data_frame(dataset)
   # keys taken from a specification are a character vector, so that case gets
   # a pointer to the conversion rather than the generic "must be a list"
   if (is.character(keys)) {
@@ -172,12 +172,32 @@ set_admiral_keys <- function(dataset, keys, dataset_name = NULL) {
     ))
   }
   assert_vars(keys)
+  assert_data_frame(dataset)
   assert_character_scalar(dataset_name, optional = TRUE)
 
   # keys are stored as character: they are metadata about the dataset, not
   # expressions to evaluate against it. `unname()` because `vars2chr()` returns
   # a named vector, which would not compare `identical()` to a plain one
-  attr(dataset, "admiral_keys") <- unname(vars2chr(keys))
+  keys <- unname(vars2chr(keys))
+
+  # keys which are not in the dataset are not stored, so that a typo is caught
+  # here rather than when the attribute is read. A warning rather than an error,
+  # as the rest of the call -- the name and the class -- is still valid
+  missing_keys <- setdiff(keys, colnames(dataset))
+  if (length(missing_keys) > 0) {
+    previous_keys <- attr(dataset, "admiral_keys")
+    cli_warn(c(
+      paste(
+        "{qty(missing_keys)}Key variable{?s} {.var {missing_keys}}",
+        "{qty(missing_keys)}{?is/are} not in {.arg dataset}, so no keys were set."
+      ),
+      i = if (length(previous_keys) > 0) {
+        "The keys set previously are kept: {.var {previous_keys}}."
+      }
+    ))
+  } else {
+    attr(dataset, "admiral_keys") <- keys
+  }
   if (!is.null(dataset_name)) {
     attr(dataset, "admiral_ds_name") <- dataset_name
   }
