@@ -680,8 +680,12 @@ occds_seq_var <- function(dataset) {
 #' observations and variables, and the record structure. It then adds the
 #' information for the dataset type (see [get_admiral_df_type()]):
 #'
-#' * `ADSL`: subjects per treatment arm and the population flag counts.
-#' * `BDS`: records and subjects per parameter, and the analysis visits.
+#' * `ADSL`: subjects per treatment arm, the population flag counts, the subject
+#'   flow (randomized, treated, completed), the treatment duration, the end of
+#'   study status, the deaths and their causes, and the age and sex of the
+#'   subjects.
+#' * `BDS`: records, subjects, visits, and the distribution of `AVAL` per
+#'   parameter, the analysis visits, and the derived records per `DTYPE`.
 #' * `OCCDS`: the number of distinct terms, and the treatment-emergent vs total
 #'   records.
 #' * `TTE`: events and censored per parameter.
@@ -862,12 +866,24 @@ summarize_structure <- function(dataset, declared_keys, type) {
 #' @param dataset A data frame
 #' @param subject_vars The variables subjects are counted by
 #'
+#' @details
+#'   The ADSL items other than the treatment arms and population flags are
+#'   taken from the first record of each subject, so that duplicated subject
+#'   records -- which the record structure check reports -- do not inflate them.
+#'
 #' @return A named list:
 #'
 #'   * `summarize_adsl()`: `trt_var` and `trt` (subjects per treatment arm),
-#'     `pops` (named count of subjects with `"Y"` per population flag).
-#'   * `summarize_bds()`: `params` (records and subjects per `PARAMCD`),
-#'     `visits` (the analysis visits, in `AVISITN` order if available).
+#'     `pops` (named count of subjects with `"Y"` per population flag), `flow`
+#'     (subjects randomized, treated, and completed), `trtdur` (median, minimum,
+#'     and maximum of `TRTDURD`), `eosstt` (subjects per end of study status),
+#'     `n_deaths` and `dthcaus` (subjects who died, and per cause of death),
+#'     `age` (median, minimum, and maximum of `AGE`), `sex` (subjects per
+#'     `SEX`).
+#'   * `summarize_bds()`: `params` (per `PARAMCD`: the `PARAM` values, the
+#'     records, subjects, and analysis visits, and the missing values, minimum,
+#'     median, and maximum of a numeric `AVAL`), `visits` (the analysis visits,
+#'     in `AVISITN` order if available), `dtype` (records per `DTYPE`).
 #'   * `summarize_occds()`: `terms` (named count of distinct values per coding
 #'     variable), `trtem` (treatment-emergent and total records).
 #'   * `summarize_tte()`: `events` (events and censored per `PARAMCD`).
@@ -903,6 +919,37 @@ summarize_adsl <- function(dataset, subject_vars) {
     )
   }
 
+  # one record per subject for the remaining items, so that each counts
+  # subjects, and so that a subject's age or duration is only counted once
+  subjects <- distinct(dataset, !!!syms(subject_vars), .keep_all = TRUE)
+  cols <- colnames(subjects)
+
+  out$flow <- summarize_subject_flow(subjects)
+
+  if ("TRTDURD" %in% cols) {
+    out$trtdur <- summarize_distribution(subjects$TRTDURD)
+  }
+  if ("EOSSTT" %in% cols && any(!is.na(subjects$EOSSTT))) {
+    out$eosstt <- count_values(subjects$EOSSTT)
+  }
+
+  # the causes only among the deaths, so that the subjects alive do not show up
+  # as a missing cause
+  if ("DTHFL" %in% cols && any(!is.na(subjects$DTHFL))) {
+    deaths <- filter(subjects, DTHFL %in% "Y")
+    out$n_deaths <- nrow(deaths)
+    if ("DTHCAUS" %in% cols && nrow(deaths) > 0) {
+      out$dthcaus <- count_values(deaths$DTHCAUS)
+    }
+  }
+
+  if ("AGE" %in% cols) {
+    out$age <- summarize_distribution(subjects$AGE)
+  }
+  if ("SEX" %in% cols && any(!is.na(subjects$SEX))) {
+    out$sex <- count_values(subjects$SEX)
+  }
+
   out
 }
 
@@ -911,18 +958,31 @@ summarize_bds <- function(dataset, subject_vars) {
   out <- list()
   cols <- colnames(dataset)
 
+  # per parameter, as that is where most BDS defects show: a parameter with too
+  # few subjects or visits, values which were not derived, implausible values
   if (nrow(dataset) > 0) {
-    params <- count(dataset, PARAMCD, name = "records")
-    if (length(subject_vars) > 0) {
-      params <- left_join(
-        params,
-        dataset %>%
-          distinct(PARAMCD, !!!syms(subject_vars)) %>%
-          count(PARAMCD, name = "subjects"),
-        by = "PARAMCD"
-      )
+    stats <- exprs(records = n())
+    if ("PARAM" %in% cols) {
+      # all values rather than the first, so that a `PARAMCD` with more than one
+      # `PARAM` is visible
+      stats$PARAM <- expr(paste(unique(PARAM[!is.na(PARAM)]), collapse = " / "))
     }
-    out$params <- params
+    if (length(subject_vars) > 0) {
+      stats$subjects <- expr(n_distinct(pick(all_of(!!subject_vars))))
+    }
+    if ("AVISIT" %in% cols) {
+      stats$visits <- expr(n_distinct(AVISIT, na.rm = TRUE))
+    }
+    if ("AVAL" %in% cols && is.numeric(dataset$AVAL)) {
+      stats$missing <- expr(sum(is.na(AVAL)))
+      stats$min <- expr(if (all(is.na(AVAL))) NA_real_ else min(AVAL, na.rm = TRUE))
+      stats$median <- expr(median(AVAL, na.rm = TRUE))
+      stats$max <- expr(if (all(is.na(AVAL))) NA_real_ else max(AVAL, na.rm = TRUE))
+    }
+    out$params <- dataset %>%
+      group_by(PARAMCD) %>%
+      summarise(!!!stats, .groups = "drop") %>%
+      select(PARAMCD, any_of("PARAM"), everything())
   }
 
   if ("AVISIT" %in% cols && any(!is.na(dataset$AVISIT))) {
@@ -935,7 +995,75 @@ summarize_bds <- function(dataset, subject_vars) {
     out$visits <- unique(visits$AVISIT)
   }
 
+  # what the derivations added, by type (`AVERAGE`, `LOCF`, ...)
+  if ("DTYPE" %in% cols && any(!is.na(dataset$DTYPE))) {
+    out$dtype <- count_values(dataset$DTYPE[!is.na(dataset$DTYPE)])
+  }
+
   out
+}
+
+#' Count the Subjects Randomized, Treated, and Completed
+#'
+#' @param subjects A data frame with one record per subject
+#'
+#' @return A named integer vector with any of the elements `randomized` (from
+#'   `RANDDT`, or `RANDFL` if not available), `treated` (from `TRTSDT`, or
+#'   `TRTSDTM`), and `completed` (from `EOSSTT`), depending on the variables in
+#'   `subjects`; `NULL` if there are none.
+#'
+#' @keywords internal
+#' @family internal
+summarize_subject_flow <- function(subjects) {
+  cols <- colnames(subjects)
+  # how far subjects got: the differences to the subject count are the screen
+  # failures, the subjects randomized but not treated, and the dropouts
+  c(
+    if ("RANDDT" %in% cols) {
+      c(randomized = sum(!is.na(subjects$RANDDT)))
+    } else if ("RANDFL" %in% cols) {
+      c(randomized = sum(subjects$RANDFL %in% "Y"))
+    },
+    if ("TRTSDT" %in% cols) {
+      c(treated = sum(!is.na(subjects$TRTSDT)))
+    } else if ("TRTSDTM" %in% cols) {
+      c(treated = sum(!is.na(subjects$TRTSDTM)))
+    },
+    if ("EOSSTT" %in% cols) {
+      c(completed = sum(subjects$EOSSTT %in% "COMPLETED"))
+    }
+  )
+}
+
+#' Summarize the Distribution of a Numeric Variable
+#'
+#' @param x A numeric vector
+#'
+#' @return A named numeric vector with the elements `median`, `min`, and `max`,
+#'   or `NULL` if `x` has no non-missing values.
+#'
+#' @keywords internal
+#' @family internal
+summarize_distribution <- function(x) {
+  x <- x[!is.na(x)]
+  if (length(x) == 0) {
+    return(NULL)
+  }
+  c(median = median(x), min = min(x), max = max(x))
+}
+
+#' Count the Values of a Vector
+#'
+#' @param x A vector
+#'
+#' @return A named integer vector of counts per value, in value order with `NA`
+#'   (named `"NA"`) last.
+#'
+#' @keywords internal
+#' @family internal
+count_values <- function(x) {
+  counts <- table(x, useNA = "ifany")
+  set_names(as.integer(counts), coalesce(names(counts), "NA"))
 }
 
 #' @rdname summarize_admiral_df_type
@@ -1009,110 +1137,274 @@ summarize_tte <- function(dataset) {
 #'
 #' print(summary(set_admiral_keys(adsl, keys = exprs(USUBJID), dataset_name = "ADSL")))
 print.summary_admiral_df <- function(x, ...) {
-  type <- if (is.na(x$type)) "unknown type" else x$type
-  title <- if (is.null(x$name)) type else paste0(x$name, " (", type, ")")
-  cat("# Summary of an admiral dataset: ", title, "\n", sep = "")
+  # the type is what tailors the summary, so it heads the title; "other" and an
+  # unknown type would read oddly there ("other summary"), hence the fallback
+  title <- if (x$type %in% c("ADSL", "BDS", "OCCDS", "TTE")) {
+    paste(x$type, "summary")
+  } else {
+    "Dataset summary"
+  }
+  # a name which only repeats the type ("ADSL: ADSL summary") is left out
+  if (!is.null(x$name) && !identical(x$name, x$type)) {
+    title <- paste0(x$name, ": ", title)
+  }
+  cli_rule(left = title)
 
-  dims <- c(
-    if (!is.na(x$n_subjects)) paste0("Subjects: ", x$n_subjects),
-    paste0("Observations: ", x$n_obs),
-    paste0("Variables: ", x$n_vars)
-  )
-  cat(paste(dims, collapse = " | "), "\n", sep = "")
-  cat("Record structure: ", format_structure(x$structure), "\n", sep = "")
+  if (!is.na(x$n_subjects)) {
+    subject_vars <- paste(x$subject_vars, collapse = ", ")
+    cli_text("Subjects ({subject_vars}): {x$n_subjects}")
+  }
+  cli_text("Observations: {x$n_obs} | Variables: {x$n_vars}")
+  print_summary_structure(x$structure)
 
   d <- x$details
-  if (!is.null(d[["trt"]])) {
-    cat(
-      "Subjects per treatment arm (", d[["trt_var"]], "): ",
-      paste0(d[["trt"]][[d[["trt_var"]]]], ": ", d[["trt"]]$subjects, collapse = " | "), "\n",
-      sep = ""
-    )
-  }
-  if (!is.null(d[["pops"]])) {
-    cat("Population flags (\"Y\"): ", format_counts(d[["pops"]]), "\n", sep = "")
-  }
-  if (!is.null(d[["params"]])) {
-    cat("Parameters (", nrow(d[["params"]]), "):\n", sep = "")
-    print_summary_table(d[["params"]])
-  }
-  if (!is.null(d[["visits"]])) {
-    cat(
-      "Analysis visits (", length(d[["visits"]]), "): ",
-      paste(d[["visits"]], collapse = ", "), "\n",
-      sep = ""
-    )
-  }
+  print_adsl_details(d)
+  print_bds_details(d)
   if (!is.null(d[["terms"]])) {
-    cat("Distinct terms: ", format_counts(d[["terms"]]), "\n", sep = "")
+    terms <- format_counts(d[["terms"]])
+    cli_text("Distinct terms: {terms}")
   }
   if (!is.null(d[["trtem"]])) {
-    cat(
-      "Treatment-emergent records (TRTEMFL): ", d[["trtem"]][["emergent"]], " of ",
-      d[["trtem"]][["total"]], "\n",
-      sep = ""
+    cli_text(
+      "Treatment emergent (TRTEMFL): {d[['trtem']][['emergent']]} of
+       {d[['trtem']][['total']]} records"
     )
   }
   if (!is.null(d[["events"]])) {
-    cat("Events and censored per parameter:\n")
+    cli_text("Events and censored per parameter (CNSR):")
     print_summary_table(d[["events"]])
   }
 
   invisible(x)
 }
 
-#' Format the Record Structure of a Summary
+#' Print the Type-Specific Part of a Summary
 #'
-#' @param structure The `structure` element of a `summary_admiral_df` object,
-#'   see [summarize_structure()]
+#' Print the lines of [print.summary_admiral_df()] for the type-specific items
+#' collected by [summarize_adsl()] and [summarize_bds()]. Each line is only
+#' printed if its item is present.
 #'
-#' @return A character scalar
-#'
-#' @keywords internal
-#' @family internal
-format_structure <- function(structure) {
-  keys <- paste(structure$keys, collapse = ", ")
-  source <- paste0(" (", structure$source, " keys)")
-  if (length(structure$missing_keys) > 0) {
-    paste0(
-      "not checked, key variable(s) ", paste(structure$missing_keys, collapse = ", "),
-      " not in the dataset", source
-    )
-  } else if (length(structure$keys) == 0) {
-    # empty declared keys record that no keys are defined, which is not the
-    # same as being unable to infer any
-    if (structure$source == "declared") "no key variables defined" else "could not be determined"
-  } else if (structure$n_duplicates == 0) {
-    paste0("one record per ", keys, source)
-  } else {
-    paste0(
-      "not one record per ", keys, ", ", structure$n_duplicates,
-      " duplicate record", if (structure$n_duplicates > 1) "s", source
-    )
-  }
-}
-
-#' Format Named Counts as `name n | name n`
-#'
-#' @param counts A named numeric vector
-#'
-#' @return A character scalar
-#'
-#' @keywords internal
-#' @family internal
-format_counts <- function(counts) {
-  paste(names(counts), counts, collapse = " | ")
-}
-
-#' Print a Table of a Summary Indented and Without Row Names
-#'
-#' @param tbl A data frame
+#' @param d The `details` element of a `summary_admiral_df` object
 #'
 #' @return No return value, called for side effects
 #'
 #' @keywords internal
 #' @family internal
-print_summary_table <- function(tbl) {
-  lines <- capture.output(print(as.data.frame(tbl), row.names = FALSE))
-  cat(paste0("  ", lines), sep = "\n")
+#' @rdname print_admiral_df_details
+print_adsl_details <- function(d) {
+  if (!is.null(d[["trt"]])) {
+    trt <- format_counts(set_names(d[["trt"]]$subjects, d[["trt"]][[d[["trt_var"]]]]), ": ")
+    cli_text("Subjects per treatment arm ({d[['trt_var']]}): {trt}")
+  }
+  if (!is.null(d[["pops"]])) {
+    pops <- format_counts(d[["pops"]])
+    cli_text("Populations: {pops}")
+  }
+  if (!is.null(d[["flow"]])) {
+    flow <- format_counts(d[["flow"]])
+    cli_text("Subject flow: {flow}")
+  }
+  if (!is.null(d[["trtdur"]])) {
+    trtdur <- format_distribution(d[["trtdur"]])
+    cli_text("Treatment duration (TRTDURD, days): {trtdur}")
+  }
+  if (!is.null(d[["eosstt"]])) {
+    eosstt <- format_counts(d[["eosstt"]], ": ")
+    cli_text("End of study (EOSSTT): {eosstt}")
+  }
+  if (!is.null(d[["n_deaths"]])) {
+    dthcaus <- if (!is.null(d[["dthcaus"]])) {
+      paste0(" (", format_counts(d[["dthcaus"]], ": "), ")")
+    } else {
+      ""
+    }
+    cli_text("Deaths (DTHFL): {d[['n_deaths']]}{dthcaus}")
+  }
+  if (!is.null(d[["age"]]) || !is.null(d[["sex"]])) {
+    demographics <- paste(
+      c(
+        if (!is.null(d[["age"]])) paste("AGE", format_distribution(d[["age"]])),
+        if (!is.null(d[["sex"]])) paste("SEX", format_counts(d[["sex"]], ": "))
+      ),
+      collapse = " | "
+    )
+    cli_text("Demographics: {demographics}")
+  }
+
+  invisible(NULL)
+}
+
+#' @rdname print_admiral_df_details
+print_bds_details <- function(d) {
+  if (!is.null(d[["params"]])) {
+    cli_text("Parameters ({nrow(d[['params']])}):")
+    # `PARAM` is left out as it would make the table too wide for the console;
+    # it is in the summary object
+    print_summary_table(
+      select(d[["params"]], -any_of("PARAM")),
+      max_rows = 10,
+      what = "parameter"
+    )
+  }
+  if (!is.null(d[["visits"]])) {
+    visits <- paste(d[["visits"]], collapse = ", ")
+    cli_text("Analysis visits (AVISIT): {visits}")
+  }
+  if (!is.null(d[["dtype"]])) {
+    dtype <- format_counts(d[["dtype"]], ": ")
+    cli_text("Derived records (DTYPE): {dtype}")
+  }
+
+  invisible(NULL)
+}
+
+#' Print the Record Structure of a Summary
+#'
+#' Prints the record structure check as a bullet: a tick if the dataset has one
+#' record per key, a cross with the number of extra records if it does not, and
+#' a warning sign if the check could not be run.
+#'
+#' @param structure The `structure` element of a `summary_admiral_df` object,
+#'   see [summarize_structure()]
+#'
+#' @return No return value, called for side effects
+#'
+#' @keywords internal
+#' @family internal
+print_summary_structure <- function(structure) {
+  keys <- paste(structure$keys, collapse = ", ")
+  # declared keys are what the dataset is meant to have, so only inferred ones
+  # are qualified
+  src <- if (structure$source == "inferred") " (inferred)" else ""
+  n_extra <- structure$n_duplicates
+  if (length(structure$missing_keys) > 0) {
+    missing_keys <- paste(structure$missing_keys, collapse = ", ")
+    cli_bullets(c("!" = "Structure: not checked,
+       {qty(length(structure$missing_keys))}declared key{?s} {missing_keys}
+       {?is/are} not in the dataset"))
+  } else if (length(structure$keys) == 0) {
+    # empty declared keys record that no keys are defined, which is not the
+    # same as being unable to infer any
+    if (structure$source == "declared") {
+      cli_bullets(c(i = "Structure: no key variables defined"))
+    } else {
+      cli_bullets(c(i = "Structure: could not be determined"))
+    }
+  } else if (n_extra == 0) {
+    cli_bullets(c(v = "Structure{src}: one record per {keys}"))
+  } else {
+    cli_bullets(c(x = "Structure{src}: expected one record per {keys}, found
+       {n_extra} extra record{?s}"))
+  }
+
+  invisible(NULL)
+}
+
+#' Format a Number for a Summary
+#'
+#' @param x A numeric scalar
+#'
+#' @return A character scalar: a whole number in full (rounding a count would
+#'   misreport it), any other number to 4 significant digits, and `NA` as `.`.
+#'
+#' @keywords internal
+#' @family internal
+format_number <- function(x) {
+  if (is.na(x)) {
+    "."
+  } else {
+    format(if (x %% 1 == 0) x else signif(x, 4), scientific = FALSE)
+  }
+}
+
+#' Format a Distribution as `median m (range min-max)`
+#'
+#' @param stats A named numeric vector created by [summarize_distribution()]
+#'
+#' @return A character scalar
+#'
+#' @keywords internal
+#' @family internal
+format_distribution <- function(stats) {
+  paste0(
+    "median ", format_number(stats[["median"]]),
+    " (range ", format_number(stats[["min"]]), "-", format_number(stats[["max"]]), ")"
+  )
+}
+
+#' Format Named Counts as `name n | name n`
+#'
+#' @param counts A named numeric vector
+#' @param sep The separator between a name and its count
+#'
+#' @return A character scalar
+#'
+#' @keywords internal
+#' @family internal
+format_counts <- function(counts, sep = " ") {
+  paste0(names(counts), sep, counts, collapse = " | ")
+}
+
+#' Print a Table of a Summary as Aligned Text
+#'
+#' Prints a header line and one line per row, indented, with character columns
+#' left-aligned and numeric columns right-aligned. Fractional numbers are
+#' shown to 4 significant digits, whole numbers in full, and missing values as
+#' `.`.
+#'
+#' @param tbl A data frame
+#' @param max_rows The maximum number of rows to print. The number of rows left
+#'   out is reported below the table.
+#' @param what What a row is, used to report the rows left out
+#'
+#' @return No return value, called for side effects
+#'
+#' @keywords internal
+#' @family internal
+print_summary_table <- function(tbl, max_rows = Inf, what = "row") {
+  n_more <- nrow(tbl) - max_rows
+  tbl <- tbl[seq_len(min(nrow(tbl), max_rows)), , drop = FALSE]
+
+  # formatted per value rather than per column, as `format()` on a column pads
+  # every value to the decimals of the most precise one
+  cells <- lapply(tbl, function(col) {
+    out <- if (is.numeric(col)) {
+      # whole numbers (the counts) are shown in full: rounding them would
+      # misreport them
+      vapply(col, format_number, character(1))
+    } else {
+      as.character(col)
+    }
+    out[is.na(col)] <- "."
+    out
+  })
+  right <- vapply(tbl, is.numeric, logical(1))
+  widths <- vapply(
+    names(cells),
+    function(nm) max(nchar(c(nm, cells[[nm]]), type = "width")),
+    integer(1)
+  )
+  line <- function(txt_by_col) {
+    # `formatC()` takes a single width for character input, so one column at a
+    # time
+    padded <- vapply(
+      seq_along(txt_by_col),
+      function(j) formatC(txt_by_col[[j]], width = if (right[[j]]) widths[[j]] else -widths[[j]]),
+      character(1)
+    )
+    paste0("  ", paste(padded, collapse = "  "))
+  }
+
+  # `cli_verbatim()` because `cli_text()` collapses the alignment spaces
+  cli_verbatim(line(names(cells)))
+  for (i in seq_len(nrow(tbl))) {
+    cli_verbatim(line(vapply(cells, `[[`, character(1), i)))
+  }
+  if (n_more > 0) {
+    # the plural is built here as cli would take the quantity from `what`
+    what <- if (n_more > 1) paste0(what, "s") else what
+    cli_text("... and {n_more} more {what}")
+  }
+
+  invisible(NULL)
 }

@@ -83,70 +83,189 @@
         <chr>   <chr>                          
       1 DIABP   Diastolic Blood Pressure (mmHg)
 
+# summary.admiral_df Test 38: duplicate, missing and empty declared keys
+
+    Code
+      print(duplicated)
+    Message
+      -- BDS summary -----------------------------------------------------------------
+      Subjects (USUBJID): 2
+      Observations: 3 | Variables: 5
+      x Structure: expected one record per USUBJID, PARAMCD, found 1 extra record
+      Parameters (1):
+        PARAMCD  records  subjects  visits  missing  min  median  max
+        SYSBP          3         2       2        0  118     121  130
+      Analysis visits (AVISIT): BASELINE, WEEK 2
+
+---
+
+    Code
+      print(summary(renamed))
+    Message
+      -- renamed: BDS summary --------------------------------------------------------
+      Subjects (USUBJID): 2
+      Observations: 3 | Variables: 5
+      ! Structure: not checked, declared key AVISIT is not in the dataset
+      Parameters (1):
+        PARAMCD  records  subjects  missing  min  median  max
+        SYSBP          3         2        0  118     121  130
+
+---
+
+    Code
+      print(no_keys)
+    Message
+      -- BDS summary -----------------------------------------------------------------
+      Subjects (USUBJID): 2
+      Observations: 3 | Variables: 5
+      i Structure: no key variables defined
+      Parameters (1):
+        PARAMCD  records  subjects  visits  missing  min  median  max
+        SYSBP          3         2       2        0  118     121  130
+      Analysis visits (AVISIT): BASELINE, WEEK 2
+
 # summary.admiral_df Test 39: the ADSL summary
 
     Code
       print(actual)
-    Output
-      # Summary of an admiral dataset: ADSL (ADSL)
-      Subjects: 3 | Observations: 3 | Variables: 5
-      Record structure: one record per USUBJID (declared keys)
+    Message
+      -- ADSL summary ----------------------------------------------------------------
+      Subjects (USUBJID): 3
+      Observations: 3 | Variables: 5
+      v Structure: one record per USUBJID
       Subjects per treatment arm (TRT01P): Drug A: 2 | Placebo: 1
-      Population flags ("Y"): SAFFL 2 | ITTFL 3
+      Populations: SAFFL 2 | ITTFL 3
 
 # summary.admiral_df Test 40: the BDS summary
 
     Code
       print(actual)
-    Output
-      # Summary of an admiral dataset: input (BDS)
-      Subjects: 2 | Observations: 4 | Variables: 6
-      Record structure: one record per USUBJID, PARAMCD, AVISITN (inferred keys)
+    Message
+      -- input: BDS summary ----------------------------------------------------------
+      Subjects (USUBJID): 2
+      Observations: 4 | Variables: 6
+      v Structure (inferred): one record per USUBJID, PARAMCD, AVISITN
       Parameters (2):
-         PARAMCD records subjects
-           DIABP       1        1
-           SYSBP       3        2
-      Analysis visits (2): BASELINE, WEEK 2
+        PARAMCD  records  subjects  visits  missing  min  median  max
+        DIABP          1         1       1        0   79      79   79
+        SYSBP          3         2       2        0  118     121  130
+      Analysis visits (AVISIT): BASELINE, WEEK 2
+
+---
+
+    Code
+      print(many_summary)
+    Message
+      -- many_params: BDS summary ----------------------------------------------------
+      Subjects (USUBJID): 1
+      Observations: 12 | Variables: 4
+      v Structure (inferred): one record per USUBJID, PARAMCD
+      Parameters (12):
+        PARAMCD  records  subjects  missing  min  median  max
+        P01            1         1        0    1       1    1
+        P02            1         1        0    1       1    1
+        P03            1         1        0    1       1    1
+        P04            1         1        0    1       1    1
+        P05            1         1        0    1       1    1
+        P06            1         1        0    1       1    1
+        P07            1         1        0    1       1    1
+        P08            1         1        0    1       1    1
+        P09            1         1        0    1       1    1
+        P10            1         1        0    1       1    1
+      ... and 2 more parameters
 
 # summary.admiral_df Test 41: the OCCDS summary
 
     Code
       print(actual)
-    Output
-      # Summary of an admiral dataset: input (OCCDS)
-      Subjects: 2 | Observations: 3 | Variables: 6
-      Record structure: one record per USUBJID, AESEQ (inferred keys)
+    Message
+      -- input: OCCDS summary --------------------------------------------------------
+      Subjects (USUBJID): 2
+      Observations: 3 | Variables: 6
+      v Structure (inferred): one record per USUBJID, AESEQ
       Distinct terms: AEBODSYS 2 | AEDECOD 2
-      Treatment-emergent records (TRTEMFL): 2 of 3
+      Treatment emergent (TRTEMFL): 2 of 3 records
 
 # summary.admiral_df Test 42: the TTE summary
 
     Code
       print(actual)
-    Output
-      # Summary of an admiral dataset: input (TTE)
-      Subjects: 2 | Observations: 3 | Variables: 6
-      Record structure: one record per USUBJID, PARAMCD (inferred keys)
-      Events and censored per parameter:
-         PARAMCD events censored
-              OS      1        1
-             PFS      0        1
+    Message
+      -- input: TTE summary ----------------------------------------------------------
+      Subjects (USUBJID): 2
+      Observations: 3 | Variables: 6
+      v Structure (inferred): one record per USUBJID, PARAMCD
+      Events and censored per parameter (CNSR):
+        PARAMCD  events  censored
+        OS            1         1
+        PFS           0         1
 
 # summary.admiral_df Test 43: datasets with little to report do not error
 
     Code
       print(summary(lookup))
-    Output
-      # Summary of an admiral dataset: lookup (other)
+    Message
+      -- lookup: Dataset summary -----------------------------------------------------
       Observations: 2 | Variables: 1
-      Record structure: could not be determined
+      i Structure: could not be determined
 
 ---
 
     Code
       print(summary(empty))
-    Output
-      # Summary of an admiral dataset: empty (unknown type)
-      Subjects: 0 | Observations: 0 | Variables: 2
-      Record structure: could not be determined
+    Message
+      -- empty: Dataset summary ------------------------------------------------------
+      Subjects (USUBJID): 0
+      Observations: 0 | Variables: 2
+      i Structure: could not be determined
+
+# print_summary_table Test 45: tables are aligned, counts are not rounded, NA is shown as `.`
+
+    Code
+      print_summary_table(tbl)
+    Message
+        PARAMCD  records   mean  subjects
+        DIABP      11509  80.12       254
+        SYSBP          7      .         3
+        .              1      1         .
+
+---
+
+    Code
+      print_summary_table(tbl, max_rows = 1, what = "parameter")
+    Message
+        PARAMCD  records   mean  subjects
+        DIABP      11509  80.12       254
+      ... and 2 more parameters
+
+# summary.admiral_df Test 46: the ADSL subject flow, outcome and demographics
+
+    Code
+      print(summary(input))
+    Message
+      -- ADSL summary ----------------------------------------------------------------
+      Subjects (USUBJID): 4
+      Observations: 4 | Variables: 10
+      v Structure: one record per USUBJID
+      Subject flow: randomized 3 | treated 2 | completed 1
+      Treatment duration (TRTDURD, days): median 60 (range 20-100)
+      End of study (EOSSTT): COMPLETED: 1 | DISCONTINUED: 2 | NA: 1
+      Deaths (DTHFL): 1 (ADVERSE EVENT: 1)
+      Demographics: AGE median 59 (range 40-71) | SEX F: 2 | M: 2
+
+# summary.admiral_df Test 47: the BDS per-parameter statistics and derived records
+
+    Code
+      print(summary(input))
+    Message
+      -- input: BDS summary ----------------------------------------------------------
+      Subjects (USUBJID): 2
+      Observations: 5 | Variables: 7
+      v Structure (inferred): one record per USUBJID, PARAMCD, AVISIT, DTYPE
+      Parameters (2):
+        PARAMCD  records  subjects  visits  missing  min  median    max
+        DIABP          1         1       0        1    .       .      .
+        SYSBP          4         2       2        1  120     125  130.5
+      Analysis visits (AVISIT): BASELINE, WEEK 2
+      Derived records (DTYPE): LOCF: 1
 

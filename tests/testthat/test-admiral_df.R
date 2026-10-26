@@ -894,6 +894,11 @@ test_that("summary.admiral_df Test 38: duplicate, missing and empty declared key
   no_keys <- summary(set_admiral_keys(input, keys = exprs()))
   expect_identical(no_keys$structure$keys, character(0))
   expect_identical(no_keys$structure$source, "declared")
+
+  # each outcome of the check is printed as its own kind of bullet
+  expect_snapshot(print(duplicated))
+  expect_snapshot(print(summary(renamed)))
+  expect_snapshot(print(no_keys))
 })
 
 ## Test 39: the ADSL summary ----
@@ -941,6 +946,15 @@ test_that("summary.admiral_df Test 40: the BDS summary", {
   # visits are in `AVISITN` order
   expect_identical(actual$details$visits, c("BASELINE", "WEEK 2"))
   expect_snapshot(print(actual))
+
+  # a long parameter table is truncated on printing, but kept in the object
+  many_params <- tibble::tibble(
+    STUDYID = "P", USUBJID = "1", PARAMCD = sprintf("P%02d", 1:12), AVAL = 1
+  ) %>%
+    as_admiral_df()
+  many_summary <- summary(many_params)
+  expect_identical(nrow(many_summary$details$params), 12L)
+  expect_snapshot(print(many_summary))
 })
 
 ## Test 41: the OCCDS summary ----
@@ -1000,7 +1014,111 @@ test_that("print.summary_admiral_df Test 44: returns its input invisibly", {
   input <- as_admiral_df(tibble::tibble(STUDYID = "P", USUBJID = "1"))
   actual <- summary(input)
 
-  expect_output(res <- withVisible(print(actual)), "Summary of an admiral dataset")
+  # cli prints through messages
+  msgs <- capture.output(res <- withVisible(print(actual)), type = "message")
+  expect_match(msgs[1], "ADSL summary")
   expect_false(res$visible)
   expect_identical(res$value, actual)
+})
+
+# print_summary_table ----
+## Test 45: tables are aligned, counts are not rounded, NA is shown as `.` ----
+test_that("print_summary_table Test 45: tables are aligned, counts are not rounded, NA is shown as `.`", { # nolint
+  tbl <- tibble::tibble(
+    PARAMCD = c("DIABP", "SYSBP", NA),
+    records = c(11509L, 7L, 1L),
+    mean = c(80.123456, NA, 1),
+    subjects = c(254, 3, NA)
+  )
+
+  expect_snapshot(print_summary_table(tbl))
+  expect_snapshot(print_summary_table(tbl, max_rows = 1, what = "parameter"))
+})
+
+## Test 46: the ADSL subject flow, outcome and demographics ----
+test_that("summary.admiral_df Test 46: the ADSL subject flow, outcome and demographics", { # nolint
+  input <- tibble::tibble(
+    STUDYID = "P",
+    USUBJID = c("1", "2", "3", "4"),
+    RANDDT = lubridate::ymd(c("2020-01-01", "2020-01-01", "2020-01-01", NA)),
+    TRTSDT = lubridate::ymd(c("2020-01-02", "2020-01-03", NA, NA)),
+    TRTDURD = c(100, 20, NA, NA),
+    EOSSTT = c("COMPLETED", "DISCONTINUED", "DISCONTINUED", NA),
+    DTHFL = c("N", "Y", "N", NA),
+    DTHCAUS = c(NA, "ADVERSE EVENT", NA, NA),
+    AGE = c(63, 71, 55, 40),
+    SEX = c("F", "M", "F", "M")
+  ) %>%
+    set_admiral_keys(keys = exprs(USUBJID), dataset_name = "ADSL")
+
+  actual <- summary(input)$details
+
+  expect_identical(actual$flow, c(randomized = 3L, treated = 2L, completed = 1L))
+  expect_identical(actual$trtdur, c(median = 60, min = 20, max = 100))
+  expect_identical(actual$eosstt, c(COMPLETED = 1L, DISCONTINUED = 2L, "NA" = 1L))
+  # the causes are counted among the deaths only
+  expect_identical(actual$n_deaths, 1L)
+  expect_identical(actual$dthcaus, c("ADVERSE EVENT" = 1L))
+  expect_identical(actual$age, c(median = 59, min = 40, max = 71))
+  expect_identical(actual$sex, c(F = 2L, M = 2L))
+  expect_snapshot(print(summary(input)))
+
+  # duplicated subject records do not inflate the counts or skew the
+  # distributions
+  duplicated <- summary(dplyr::bind_rows(input, input[2, ], input[2, ]))$details
+  expect_identical(duplicated[names(actual)], actual)
+
+  # the flow falls back to `RANDFL` and `TRTSDTM`; items whose variables are
+  # missing or not derived yet are left out
+  fallback <- tibble::tibble(
+    STUDYID = "P", USUBJID = c("1", "2"), RANDFL = c("Y", NA),
+    TRTSDTM = lubridate::ymd_hms("2020-01-01 10:00:00", NA), DTHFL = NA, AGE = NA_real_
+  ) %>%
+    as_admiral_df()
+  fallback_details <- summary(fallback)$details
+  expect_identical(fallback_details$flow, c(randomized = 1L, treated = 1L))
+  expect_null(fallback_details$n_deaths)
+  expect_null(fallback_details$age)
+  expect_null(fallback_details$sex)
+})
+
+## Test 47: the BDS per-parameter statistics and derived records ----
+test_that("summary.admiral_df Test 47: the BDS per-parameter statistics and derived records", { # nolint
+  input <- tibble::tribble(
+    ~STUDYID, ~USUBJID, ~PARAMCD, ~PARAM,                  ~AVISIT,    ~AVAL, ~DTYPE,
+    "P",      "1",      "SYSBP",  "Systolic BP (mmHg)",    "BASELINE",   120, NA,
+    "P",      "1",      "SYSBP",  "Systolic BP (mmHg)",    "WEEK 2",      NA, NA,
+    "P",      "1",      "SYSBP",  "Systolic BP (mmHg)",    "WEEK 2",     125, "LOCF",
+    "P",      "2",      "SYSBP",  "Systolic BP (mm Hg)",   "BASELINE",  130.5, NA,
+    "P",      "2",      "DIABP",  "Diastolic BP (mmHg)",   NA,            NA, NA
+  ) %>%
+    as_admiral_df()
+
+  actual <- summary(input)$details
+
+  expect_identical(
+    actual$params,
+    tibble::tibble(
+      PARAMCD = c("DIABP", "SYSBP"),
+      # every `PARAM` of a `PARAMCD` is shown
+      PARAM = c("Diastolic BP (mmHg)", "Systolic BP (mmHg) / Systolic BP (mm Hg)"),
+      records = c(1L, 4L),
+      subjects = c(1L, 2L),
+      visits = c(0L, 2L),
+      missing = c(1L, 1L),
+      min = c(NA, 120),
+      median = c(NA, 125),
+      max = c(NA, 130.5)
+    )
+  )
+  expect_identical(actual$dtype, c(LOCF = 1L))
+  # `PARAM` is not printed, the fractional maximum is
+  expect_snapshot(print(summary(input)))
+
+  # without `AVAL`, `AVISIT`, `PARAM`, or `DTYPE` only the counts are reported
+  minimal <- summary(as_admiral_df(tibble::tibble(
+    STUDYID = "P", USUBJID = "1", PARAMCD = "A", AVALC = "X"
+  )))$details
+  expect_named(minimal$params, c("PARAMCD", "records", "subjects"))
+  expect_null(minimal$dtype)
 })
