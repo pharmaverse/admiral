@@ -24,7 +24,7 @@
       ! Argument `keys` must be a list of variables created by `exprs()`, but is a character vector.
       i Use `chr2vars()` to convert a character vector, e.g. `chr2vars(metacore::get_keys(spec, "ADVS")$variable)`.
 
-# print.admiral_df Test 33: the name, type and keys are printed in a header
+# print.admiral_df Test 21: the name, type and keys are printed in a header
 
     Code
       print(set_admiral_keys(input, keys = exprs(USUBJID, PARAMCD, AVISIT),

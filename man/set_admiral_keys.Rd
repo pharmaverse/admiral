@@ -49,6 +49,9 @@ its records -- in its \code{"admiral_keys"} attribute, and tags it with
 the \code{admiral_df} class (see \code{\link[=as_admiral_df]{as_admiral_df()}}). The keys describe the record
 structure the dataset is intended to have; they are not checked against its
 records when they are stored.
+
+\code{{admiral}} never infers the keys of a dataset: if they have not been set with
+this function, functions which need them ask for them to be set.
 }
 \details{
 The keys can come from anywhere: the \code{by_vars} of the derivation which
