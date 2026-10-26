@@ -4,8 +4,8 @@
 #' present), preserving the existing classes such as `tbl_df`/`data.frame`.
 #' This is the tagging primitive that admiral's `derive_*()` and related
 #' dataset-producing functions apply to their output, so that a dataset
-#' built with admiral can be recognized as such downstream (e.g. by a
-#' future dedicated `summary()` method).
+#' built with admiral can be recognized as such downstream, e.g. by
+#' [summary.admiral_df()].
 #'
 #' @param dataset A data frame (or `NULL`)
 #'
@@ -652,4 +652,448 @@ occds_seq_var <- function(dataset) {
          the dataset has one record per key."
   ))
   character(0)
+}
+
+#' Summarize an `admiral_df` Dataset
+#'
+#' Reports what a dataset contains and whether it has one record per key
+#' variable combination. This is useful after a derivation, e.g. to check that
+#' [derive_param_computed()] added the records that were expected.
+#'
+#' The summary always shows the dataset name and type, the number of subjects,
+#' observations and variables, and the record structure. It then adds the
+#' information for the dataset type (see [get_admiral_df_type()]):
+#'
+#' * `ADSL`: subjects per treatment arm and the population flag counts.
+#' * `BDS`: records and subjects per parameter, and the analysis visits.
+#' * `OCCDS`: the number of distinct terms, and the treatment-emergent vs total
+#'   records.
+#' * `TTE`: events and censored per parameter.
+#'
+#' @param object An `admiral_df` object
+#' @param ... Not used
+#'
+#' @details
+#'   The summary reports facts only, apart from the record structure check.
+#'   Each item is only reported when the variables it needs are in the dataset,
+#'   so a dataset which is still being derived gives a shorter summary rather
+#'   than an error.
+#'
+#'   The record structure is checked against the keys stored by
+#'   [set_admiral_keys()]. If no keys were stored, they are inferred from the
+#'   dataset type and its data (see [infer_admiral_keys()]); inferred keys
+#'   describe the structure the data happens to have, which is not necessarily
+#'   the structure it was meant to have.
+#'
+#'   Subjects are counted by `USUBJID` if it is present, as the other subject
+#'   keys (e.g. `STUDYID`) may not be populated on records added by a
+#'   derivation. Otherwise the subject keys
+#'   (`get_admiral_option("subject_keys")`) are used.
+#'
+#'   The dataset name is the one stored by [set_admiral_keys()] or, failing
+#'   that, the name of the variable `summary()` was called on.
+#'
+#' @return An object of class `summary_admiral_df`, a named list which is
+#'   printed by [print.summary_admiral_df()].
+#'
+#' @keywords utils_ds_chk
+#' @family utils_ds_chk
+#'
+#' @export
+#'
+#' @examplesx
+#'
+#' @caption Summarizing a BDS dataset after a derivation
+#'
+#' @code
+#' library(tibble)
+#' library(dplyr, warn.conflicts = FALSE)
+#'
+#' advs <- tribble(
+#'   ~USUBJID,      ~PARAMCD, ~AVAL, ~AVISIT,
+#'   "01-701-1015", "DIABP",     51, "BASELINE",
+#'   "01-701-1015", "SYSBP",    121, "BASELINE",
+#'   "01-701-1028", "DIABP",     79, "BASELINE",
+#'   "01-701-1028", "SYSBP",    130, "BASELINE"
+#' ) %>%
+#'   mutate(STUDYID = "PILOT01")
+#'
+#' advs <- derive_param_computed(
+#'   advs,
+#'   by_vars = exprs(STUDYID, USUBJID, AVISIT),
+#'   parameters = c("SYSBP", "DIABP"),
+#'   set_values_to = exprs(
+#'     AVAL = (AVAL.SYSBP + 2 * AVAL.DIABP) / 3,
+#'     PARAMCD = "MAP"
+#'   )
+#' )
+#'
+#' summary(advs)
+#'
+#' @caption Checking against declared keys
+#'
+#' @info The record structure is checked against the keys stored by
+#'   [set_admiral_keys()] rather than inferred ones.
+#'
+#' @code
+#' advs <- set_admiral_keys(
+#'   advs,
+#'   keys = exprs(USUBJID, PARAMCD, AVISIT),
+#'   dataset_name = "ADVS"
+#' )
+#'
+#' summary(advs)
+summary.admiral_df <- function(object, ...) {
+  name <- attr(object, "admiral_ds_name")
+  if (is.null(name)) {
+    # the variable `summary()` was called on, unless it is a pipe placeholder
+    # or a more complex expression than a name
+    obj_expr <- substitute(object)
+    if (is.name(obj_expr) && !as.character(obj_expr) %in% c(".", "_")) {
+      name <- as.character(obj_expr)
+    }
+  }
+  declared_keys <- attr(object, "admiral_keys")
+
+  # a plain, ungrouped data frame, so that the tables derived from it do not
+  # carry the class
+  class(object) <- setdiff(class(object), "admiral_df")
+  dataset <- ungroup(object)
+  cols <- colnames(dataset)
+  type <- get_admiral_df_type(dataset)
+
+  subject_vars <- if ("USUBJID" %in% cols) {
+    "USUBJID"
+  } else {
+    intersect(vars2chr(get_admiral_option("subject_keys")), cols)
+  }
+
+  out <- list(
+    name = name,
+    type = type,
+    n_subjects = if (length(subject_vars) > 0) {
+      n_distinct(dataset[subject_vars])
+    } else {
+      NA_integer_
+    },
+    n_obs = nrow(dataset),
+    n_vars = ncol(dataset),
+    subject_vars = subject_vars,
+    structure = summarize_structure(dataset, declared_keys, type)
+  )
+
+  # the type is `NA` for a dataset with no records whose variables do not
+  # decide it, which has nothing type-specific to report
+  out$details <- switch(coalesce(type, "other"),
+    ADSL = summarize_adsl(dataset, subject_vars),
+    BDS = summarize_bds(dataset, subject_vars),
+    OCCDS = summarize_occds(dataset),
+    TTE = summarize_tte(dataset),
+    list()
+  )
+
+  class(out) <- c("summary_admiral_df", "list")
+  out
+}
+
+#' Check the Record Structure of a Dataset
+#'
+#' @param dataset A data frame
+#' @param declared_keys The keys stored by [set_admiral_keys()], or `NULL`
+#' @param type The dataset type, see [get_admiral_df_type()]
+#'
+#' @return A list with the elements `keys`, `source` (`"declared"` or
+#'   `"inferred"`), `missing_keys` (declared keys which are not in `dataset`),
+#'   and `n_duplicates` (the number of records beyond one per key, `NA` if
+#'   the structure was not checked).
+#'
+#' @keywords internal
+#' @family internal
+summarize_structure <- function(dataset, declared_keys, type) {
+  if (!is.null(declared_keys)) {
+    keys <- declared_keys
+    source <- "declared"
+  } else {
+    keys <- infer_admiral_keys(dataset, type = coalesce(type, "other"))
+    source <- "inferred"
+  }
+
+  # declared keys are plain names, so a `rename()` or `select()` since they
+  # were set can leave them pointing at nothing; the check is skipped rather
+  # than run on part of the key
+  missing_keys <- setdiff(keys, colnames(dataset))
+  n_duplicates <- if (length(keys) > 0 && length(missing_keys) == 0) {
+    nrow(dataset) - n_distinct(dataset[keys])
+  } else {
+    NA_integer_
+  }
+
+  list(
+    keys = keys,
+    source = source,
+    missing_keys = missing_keys,
+    n_duplicates = n_duplicates
+  )
+}
+
+#' Summarize the Type-Specific Content of a Dataset
+#'
+#' Collect the information [summary.admiral_df()] reports for a dataset of
+#' type `ADSL`, `BDS`, `OCCDS`, or `TTE`. An element is only returned when
+#' the variables it needs are in the dataset.
+#'
+#' @param dataset A data frame
+#' @param subject_vars The variables subjects are counted by
+#'
+#' @return A named list:
+#'
+#'   * `summarize_adsl()`: `trt_var` and `trt` (subjects per treatment arm),
+#'     `pops` (named count of `"Y"` per population flag).
+#'   * `summarize_bds()`: `params` (records and subjects per `PARAMCD`),
+#'     `visits` (the analysis visits, in `AVISITN` order if available).
+#'   * `summarize_occds()`: `terms` (named count of distinct values per coding
+#'     variable), `trtem` (treatment-emergent and total records).
+#'   * `summarize_tte()`: `events` (events and censored per `PARAMCD`).
+#'
+#' @keywords internal
+#' @family internal
+#' @rdname summarize_admiral_df_type
+summarize_adsl <- function(dataset, subject_vars) {
+  out <- list()
+
+  # planned treatment first, falling back to actual treatment and `ARM`; a
+  # variable which is entirely `NA` has not been derived yet
+  trt_var <- intersect(c("TRT01P", "TRT01A", "ARM"), colnames(dataset))
+  trt_var <- keep(trt_var, ~ any(!is.na(dataset[[.x]])))
+  if (length(trt_var) > 0) {
+    out$trt_var <- trt_var[1]
+    out$trt <- dataset %>%
+      distinct(!!sym(trt_var[1]), !!!syms(subject_vars)) %>%
+      count(!!sym(trt_var[1]), name = "subjects")
+  }
+
+  pop_vars <- intersect(
+    c("RANDFL", "ENRLFL", "SAFFL", "ITTFL", "FASFL", "EFFFL", "PPROTFL", "COMPLFL"),
+    colnames(dataset)
+  )
+  if (length(pop_vars) > 0) {
+    out$pops <- vapply(
+      set_names(pop_vars),
+      function(v) sum(dataset[[v]] == "Y", na.rm = TRUE),
+      integer(1)
+    )
+  }
+
+  out
+}
+
+#' @rdname summarize_admiral_df_type
+summarize_bds <- function(dataset, subject_vars) {
+  out <- list()
+  cols <- colnames(dataset)
+
+  if (nrow(dataset) > 0) {
+    params <- count(dataset, PARAMCD, name = "records")
+    if (length(subject_vars) > 0) {
+      params <- left_join(
+        params,
+        dataset %>%
+          distinct(PARAMCD, !!!syms(subject_vars)) %>%
+          count(PARAMCD, name = "subjects"),
+        by = "PARAMCD"
+      )
+    }
+    out$params <- params
+  }
+
+  if ("AVISIT" %in% cols && any(!is.na(dataset$AVISIT))) {
+    visits <- filter(dataset, !is.na(AVISIT))
+    visits <- if ("AVISITN" %in% cols) {
+      arrange(distinct(visits, AVISITN, AVISIT), AVISITN, AVISIT)
+    } else {
+      arrange(distinct(visits, AVISIT), AVISIT)
+    }
+    out$visits <- unique(visits$AVISIT)
+  }
+
+  out
+}
+
+#' @rdname summarize_admiral_df_type
+summarize_occds <- function(dataset) {
+  out <- list()
+  cols <- colnames(dataset)
+
+  # the same `--BODSYS`/`--DECOD`/`--TERM` naming `get_admiral_df_type()` relies
+  # on, from the highest coding level to the reported term
+  term_vars <- c(
+    str_subset(cols, "^[A-Z]{2}BODSYS$"),
+    str_subset(cols, "^[A-Z]{2}DECOD$"),
+    str_subset(cols, "^[A-Z]{2}TERM$")
+  )
+  if (length(term_vars) > 0) {
+    out$terms <- vapply(
+      set_names(term_vars),
+      function(v) n_distinct(dataset[[v]], na.rm = TRUE),
+      integer(1)
+    )
+  }
+
+  if ("TRTEMFL" %in% cols) {
+    out$trtem <- c(
+      emergent = sum(dataset$TRTEMFL == "Y", na.rm = TRUE),
+      total = nrow(dataset)
+    )
+  }
+
+  out
+}
+
+#' @rdname summarize_admiral_df_type
+summarize_tte <- function(dataset) {
+  out <- list()
+
+  # each parameter is a separate endpoint, so a single total would mislead
+  if (nrow(dataset) > 0) {
+    out$events <- dataset %>%
+      group_by(PARAMCD) %>%
+      summarise(
+        events = sum(CNSR == 0, na.rm = TRUE),
+        censored = sum(CNSR != 0, na.rm = TRUE)
+      )
+  }
+
+  out
+}
+
+#' Print a Summary of an `admiral_df` Dataset
+#'
+#' @param x A `summary_admiral_df` object created by [summary.admiral_df()]
+#' @param ... Not used
+#'
+#' @return `x`, invisibly
+#'
+#' @keywords internal
+#' @family utils_print
+#'
+#' @export
+#'
+#' @examples
+#' library(tibble)
+#'
+#' adsl <- tribble(
+#'   ~STUDYID, ~USUBJID, ~TRT01P,   ~SAFFL,
+#'   "P",      "P-1",    "Placebo", "Y",
+#'   "P",      "P-2",    "Drug A",  "Y",
+#'   "P",      "P-3",    "Drug A",  "N"
+#' )
+#'
+#' print(summary(set_admiral_keys(adsl, keys = exprs(USUBJID), dataset_name = "ADSL")))
+print.summary_admiral_df <- function(x, ...) {
+  type <- if (is.na(x$type)) "unknown type" else x$type
+  title <- if (is.null(x$name)) type else paste0(x$name, " (", type, ")")
+  cat("# Summary of an admiral dataset: ", title, "\n", sep = "")
+
+  dims <- c(
+    if (!is.na(x$n_subjects)) paste0("Subjects: ", x$n_subjects),
+    paste0("Observations: ", x$n_obs),
+    paste0("Variables: ", x$n_vars)
+  )
+  cat(paste(dims, collapse = " | "), "\n", sep = "")
+  cat("Record structure: ", format_structure(x$structure), "\n", sep = "")
+
+  d <- x$details
+  if (!is.null(d[["trt"]])) {
+    cat(
+      "Subjects per treatment arm (", d[["trt_var"]], "): ",
+      paste0(d[["trt"]][[d[["trt_var"]]]], ": ", d[["trt"]]$subjects, collapse = " | "), "\n",
+      sep = ""
+    )
+  }
+  if (!is.null(d[["pops"]])) {
+    cat("Population flags (\"Y\"): ", format_counts(d[["pops"]]), "\n", sep = "")
+  }
+  if (!is.null(d[["params"]])) {
+    cat("Parameters (", nrow(d[["params"]]), "):\n", sep = "")
+    print_summary_table(d[["params"]])
+  }
+  if (!is.null(d[["visits"]])) {
+    cat(
+      "Analysis visits (", length(d[["visits"]]), "): ",
+      paste(d[["visits"]], collapse = ", "), "\n",
+      sep = ""
+    )
+  }
+  if (!is.null(d[["terms"]])) {
+    cat("Distinct terms: ", format_counts(d[["terms"]]), "\n", sep = "")
+  }
+  if (!is.null(d[["trtem"]])) {
+    cat(
+      "Treatment-emergent records (TRTEMFL): ", d[["trtem"]][["emergent"]], " of ",
+      d[["trtem"]][["total"]], "\n",
+      sep = ""
+    )
+  }
+  if (!is.null(d[["events"]])) {
+    cat("Events and censored per parameter:\n")
+    print_summary_table(d[["events"]])
+  }
+
+  invisible(x)
+}
+
+#' Format the Record Structure of a Summary
+#'
+#' @param structure The `structure` element of a `summary_admiral_df` object,
+#'   see [summarize_structure()]
+#'
+#' @return A character scalar
+#'
+#' @keywords internal
+#' @family internal
+format_structure <- function(structure) {
+  keys <- paste(structure$keys, collapse = ", ")
+  source <- paste0(" (", structure$source, " keys)")
+  if (length(structure$missing_keys) > 0) {
+    paste0(
+      "not checked, key variable(s) ", paste(structure$missing_keys, collapse = ", "),
+      " not in the dataset", source
+    )
+  } else if (length(structure$keys) == 0) {
+    # empty declared keys record that no keys are defined, which is not the
+    # same as being unable to infer any
+    if (structure$source == "declared") "no key variables defined" else "could not be determined"
+  } else if (structure$n_duplicates == 0) {
+    paste0("one record per ", keys, source)
+  } else {
+    paste0(
+      "not one record per ", keys, ", ", structure$n_duplicates,
+      " duplicate record", if (structure$n_duplicates > 1) "s", source
+    )
+  }
+}
+
+#' Format Named Counts as `name n | name n`
+#'
+#' @param counts A named numeric vector
+#'
+#' @return A character scalar
+#'
+#' @keywords internal
+#' @family internal
+format_counts <- function(counts) {
+  paste(names(counts), counts, collapse = " | ")
+}
+
+#' Print a Table of a Summary Indented and Without Row Names
+#'
+#' @param tbl A data frame
+#'
+#' @return No return value, called for side effects
+#'
+#' @keywords internal
+#' @family internal
+print_summary_table <- function(tbl) {
+  lines <- capture.output(print(as.data.frame(tbl), row.names = FALSE))
+  cat(paste0("  ", lines), sep = "\n")
 }

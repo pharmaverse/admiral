@@ -83,3 +83,70 @@
         <chr>   <chr>                          
       1 DIABP   Diastolic Blood Pressure (mmHg)
 
+# summary.admiral_df Test 38: the ADSL summary
+
+    Code
+      print(actual)
+    Output
+      # Summary of an admiral dataset: ADSL (ADSL)
+      Subjects: 3 | Observations: 3 | Variables: 5
+      Record structure: one record per USUBJID (declared keys)
+      Subjects per treatment arm (TRT01P): Drug A: 2 | Placebo: 1
+      Population flags ("Y"): SAFFL 2 | ITTFL 3
+
+# summary.admiral_df Test 39: the BDS summary
+
+    Code
+      print(actual)
+    Output
+      # Summary of an admiral dataset: input (BDS)
+      Subjects: 2 | Observations: 4 | Variables: 6
+      Record structure: one record per USUBJID, PARAMCD, AVISITN (inferred keys)
+      Parameters (2):
+         PARAMCD records subjects
+           DIABP       1        1
+           SYSBP       3        2
+      Analysis visits (2): BASELINE, WEEK 2
+
+# summary.admiral_df Test 40: the OCCDS summary
+
+    Code
+      print(actual)
+    Output
+      # Summary of an admiral dataset: input (OCCDS)
+      Subjects: 2 | Observations: 3 | Variables: 6
+      Record structure: one record per USUBJID, AESEQ (inferred keys)
+      Distinct terms: AEBODSYS 2 | AEDECOD 2
+      Treatment-emergent records (TRTEMFL): 2 of 3
+
+# summary.admiral_df Test 41: the TTE summary
+
+    Code
+      print(actual)
+    Output
+      # Summary of an admiral dataset: input (TTE)
+      Subjects: 2 | Observations: 3 | Variables: 6
+      Record structure: one record per USUBJID, PARAMCD (inferred keys)
+      Events and censored per parameter:
+         PARAMCD events censored
+              OS      1        1
+             PFS      0        1
+
+# summary.admiral_df Test 42: datasets with little to report do not error
+
+    Code
+      print(summary(lookup))
+    Output
+      # Summary of an admiral dataset: lookup (other)
+      Observations: 2 | Variables: 1
+      Record structure: could not be determined
+
+---
+
+    Code
+      print(summary(empty))
+    Output
+      # Summary of an admiral dataset: empty (unknown type)
+      Subjects: 0 | Observations: 0 | Variables: 2
+      Record structure: could not be determined
+

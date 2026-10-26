@@ -728,10 +728,10 @@ test_that("infer_admiral_keys Test 32: visit, timepoint and DTYPE are all needed
   # record structure of `pharmaverseadam::adpc`.
   input <- tibble::tribble(
     ~STUDYID, ~USUBJID, ~PARAMCD, ~AVISITN, ~ATPTN, ~NFRLT, ~ADT, ~DTYPE, ~AVAL,
-    "P",      "1", "XAN", 2, 24, 24, as.Date("2024-01-02"), NA, 0.0107,
-    "P",      "1", "XAN", 2, 36, 36, as.Date("2024-01-02"), NA, NA,
-    "P",      "1", "XAN", 2, 36, 36, as.Date("2024-01-02"), "HALFLLOQ", 0.005,
-    "P",      "1", "XAN", 3, 24, 24, as.Date("2024-01-09"), NA, 0.0098
+    "P", "1", "XAN", 2, 24, 24, as.Date("2024-01-02"), NA, 0.0107,
+    "P", "1", "XAN", 2, 36, 36, as.Date("2024-01-02"), NA, NA,
+    "P", "1", "XAN", 2, 36, 36, as.Date("2024-01-02"), "HALFLLOQ", 0.005,
+    "P", "1", "XAN", 3, 24, 24, as.Date("2024-01-09"), NA, 0.0098
   )
 
   expect_identical(
@@ -787,4 +787,176 @@ test_that("print.admiral_df Test 34: a dataset with only the class prints as bef
     capture.output(print(input))
   )
   expect_invisible(print(as_admiral_df(input)))
+})
+
+# summary.admiral_df ----
+## Test 35: the common facts and the declared record structure are reported ----
+test_that("summary.admiral_df Test 35: the common facts and the declared record structure are reported", { # nolint
+  input <- tibble::tribble(
+    ~STUDYID, ~USUBJID, ~PARAMCD, ~AVISIT,    ~AVAL,
+    "P",      "1",      "DIABP",  "BASELINE",    51,
+    "P",      "1",      "SYSBP",  "BASELINE",   121,
+    "P",      "2",      "DIABP",  "BASELINE",    79
+  ) %>%
+    set_admiral_keys(keys = exprs(USUBJID, PARAMCD, AVISIT), dataset_name = "ADVS")
+
+  actual <- summary(input)
+
+  expect_s3_class(actual, "summary_admiral_df")
+  expect_identical(actual$name, "ADVS")
+  expect_identical(actual$type, "BDS")
+  expect_identical(actual$n_subjects, 2L)
+  expect_identical(actual$n_obs, 3L)
+  expect_identical(actual$n_vars, 5L)
+  expect_identical(
+    actual$structure,
+    list(
+      keys = c("USUBJID", "PARAMCD", "AVISIT"),
+      source = "declared",
+      missing_keys = character(0),
+      n_duplicates = 0L
+    )
+  )
+})
+
+## Test 36: the keys are inferred if none were declared ----
+test_that("summary.admiral_df Test 36: the keys are inferred if none were declared", {
+  input <- tibble::tribble(
+    ~STUDYID, ~USUBJID, ~PARAMCD, ~AVISIT,    ~AVAL,
+    "P",      "1",      "SYSBP",  "BASELINE",   121,
+    "P",      "1",      "SYSBP",  "WEEK 2",     118,
+    "P",      "2",      "SYSBP",  "BASELINE",   130
+  ) %>%
+    as_admiral_df()
+
+  actual <- summary(input)
+
+  expect_identical(actual$name, "input")
+  expect_identical(actual$structure$keys, c("USUBJID", "PARAMCD", "AVISIT"))
+  expect_identical(actual$structure$source, "inferred")
+  expect_identical(actual$structure$n_duplicates, 0L)
+})
+
+## Test 37: duplicate, missing and empty declared keys ----
+test_that("summary.admiral_df Test 37: duplicate, missing and empty declared keys", {
+  input <- tibble::tribble(
+    ~STUDYID, ~USUBJID, ~PARAMCD, ~AVISIT,    ~AVAL,
+    "P",      "1",      "SYSBP",  "BASELINE",   121,
+    "P",      "1",      "SYSBP",  "WEEK 2",     118,
+    "P",      "2",      "SYSBP",  "BASELINE",   130
+  )
+
+  duplicated <- summary(set_admiral_keys(input, keys = exprs(USUBJID, PARAMCD)))
+  expect_identical(duplicated$structure$n_duplicates, 1L)
+
+  # a renamed key cannot be checked, rather than being checked on part of the key
+  renamed <- set_admiral_keys(input, keys = exprs(USUBJID, PARAMCD, AVISIT)) %>%
+    dplyr::rename(VISIT = AVISIT)
+  expect_identical(summary(renamed)$structure$missing_keys, "AVISIT")
+  expect_identical(summary(renamed)$structure$n_duplicates, NA_integer_)
+
+  no_keys <- summary(set_admiral_keys(input, keys = exprs()))
+  expect_identical(no_keys$structure$keys, character(0))
+  expect_identical(no_keys$structure$source, "declared")
+})
+
+## Test 38: the ADSL summary ----
+test_that("summary.admiral_df Test 38: the ADSL summary", {
+  input <- tibble::tribble(
+    ~STUDYID, ~USUBJID, ~TRT01P,   ~SAFFL, ~ITTFL,
+    "P",      "1",      "Placebo", "Y",    "Y",
+    "P",      "2",      "Drug A",  "Y",    "Y",
+    "P",      "3",      "Drug A",  "N",    "Y"
+  ) %>%
+    set_admiral_keys(keys = exprs(USUBJID), dataset_name = "ADSL")
+
+  actual <- summary(input)
+
+  expect_identical(actual$details$trt_var, "TRT01P")
+  expect_identical(actual$details$trt$subjects, c(2L, 1L))
+  expect_identical(actual$details$pops, c(SAFFL = 2L, ITTFL = 3L))
+  expect_snapshot(print(actual))
+})
+
+## Test 39: the BDS summary ----
+test_that("summary.admiral_df Test 39: the BDS summary", {
+  input <- tibble::tribble(
+    ~STUDYID, ~USUBJID, ~PARAMCD, ~AVISIT,    ~AVISITN, ~AVAL,
+    "P",      "1",      "SYSBP",  "WEEK 2",          2,   118,
+    "P",      "1",      "SYSBP",  "BASELINE",        0,   121,
+    "P",      "1",      "DIABP",  "BASELINE",        0,    79,
+    "P",      "2",      "SYSBP",  "BASELINE",        0,   130
+  ) %>%
+    as_admiral_df()
+
+  actual <- summary(input)
+
+  expect_identical(actual$details$params$PARAMCD, c("DIABP", "SYSBP"))
+  expect_identical(actual$details$params$records, c(1L, 3L))
+  expect_identical(actual$details$params$subjects, c(1L, 2L))
+  # visits are in `AVISITN` order
+  expect_identical(actual$details$visits, c("BASELINE", "WEEK 2"))
+  expect_snapshot(print(actual))
+})
+
+## Test 40: the OCCDS summary ----
+test_that("summary.admiral_df Test 40: the OCCDS summary", {
+  input <- tibble::tribble(
+    ~STUDYID, ~USUBJID, ~AESEQ, ~AEBODSYS,                ~AEDECOD,   ~TRTEMFL,
+    "P",      "1",           1, "NERVOUS SYSTEM",         "HEADACHE", "Y",
+    "P",      "1",           2, "GASTROINTESTINAL",       "NAUSEA",   NA,
+    "P",      "2",           1, "NERVOUS SYSTEM",         "HEADACHE", "Y"
+  ) %>%
+    as_admiral_df()
+
+  actual <- summary(input)
+
+  expect_identical(actual$details$terms, c(AEBODSYS = 2L, AEDECOD = 2L))
+  expect_identical(actual$details$trtem, c(emergent = 2L, total = 3L))
+  expect_snapshot(print(actual))
+})
+
+## Test 41: the TTE summary ----
+test_that("summary.admiral_df Test 41: the TTE summary", {
+  input <- tibble::tribble(
+    ~STUDYID, ~USUBJID, ~PARAMCD, ~STARTDT, ~CNSR, ~AVAL,
+    "P", "1", "OS", lubridate::ymd("2020-01-01"), 0, 10,
+    "P", "2", "OS", lubridate::ymd("2020-01-01"), 1, 12,
+    "P", "1", "PFS", lubridate::ymd("2020-01-01"), 1, 3
+  ) %>%
+    as_admiral_df()
+
+  actual <- summary(input)
+
+  expect_identical(actual$details$events$PARAMCD, c("OS", "PFS"))
+  expect_identical(actual$details$events$events, c(1L, 0L))
+  expect_identical(actual$details$events$censored, c(1L, 1L))
+  expect_snapshot(print(actual))
+})
+
+## Test 42: datasets with little to report do not error ----
+test_that("summary.admiral_df Test 42: datasets with little to report do not error", {
+  # not subject data: no subject count and no record structure
+  lookup <- as_admiral_df(tibble::tibble(PARAMCD = c("DIABP", "SYSBP")))
+  expect_snapshot(print(summary(lookup)))
+
+  # no records: the type cannot be determined
+  empty <- as_admiral_df(tibble::tibble(STUDYID = character(), USUBJID = character()))
+  expect_identical(summary(empty)$type, NA_character_)
+  expect_identical(summary(empty)$details, list())
+  expect_snapshot(print(summary(empty)))
+
+  # a work-in-progress ADSL without treatment or population flags
+  adsl <- as_admiral_df(tibble::tibble(STUDYID = "P", USUBJID = c("1", "2"), TRT01P = NA))
+  expect_identical(summary(adsl)$details, list())
+})
+
+## Test 43: print.summary_admiral_df returns its input invisibly ----
+test_that("print.summary_admiral_df Test 43: returns its input invisibly", {
+  input <- as_admiral_df(tibble::tibble(STUDYID = "P", USUBJID = "1"))
+  actual <- summary(input)
+
+  expect_output(res <- withVisible(print(actual)), "Summary of an admiral dataset")
+  expect_false(res$visible)
+  expect_identical(res$value, actual)
 })

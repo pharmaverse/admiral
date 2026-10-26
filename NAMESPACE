@@ -13,6 +13,8 @@ S3method(print,adam_templates)
 S3method(print,admiral_df)
 S3method(print,duplicates)
 S3method(print,source)
+S3method(print,summary_admiral_df)
+S3method(summary,admiral_df)
 export("%>%")
 export(admiral_labels_attrs_section)
 export(ae_event)
@@ -181,6 +183,7 @@ importFrom(dplyr,
   bind_rows,
   case_when,
   coalesce,
+  count,
   cross_join,
   desc,
   distinct,

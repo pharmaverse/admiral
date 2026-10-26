@@ -10,6 +10,13 @@ output datasets with this class. (#3160)
 the variables which uniquely identify its records -- in its `"admiral_keys"`
 attribute. See the function documentation for details. (#3198)
 
+- Calling `summary()` on an `admiral_df` dataset now prints a short report: the
+dataset name and type, the number of subjects, observations and variables, and
+whether the dataset has one record per key. Depending on the dataset type
+(`ADSL`, `BDS`, `OCCDS`, `TTE`) it also reports e.g. the subjects per treatment
+arm, the records and subjects per parameter, or the events and censored per
+parameter. (#3209)
+
 ## Updates of Existing Functions
 
 - The `min_dates_strict` and `max_dates_strict` arguments were added to
