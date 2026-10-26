@@ -73,6 +73,9 @@ Other internal:
 \code{\link{admiral-package}},
 \code{\link[=extract_duplicate_records]{extract_duplicate_records()}},
 \code{\link[=format.basket_select]{format.basket_select()}},
+\code{\link[=get_admiral_df_type]{get_admiral_df_type()}},
+\code{\link[=guess_admiral_df_type]{guess_admiral_df_type()}},
+\code{\link[=guess_structure_type]{guess_structure_type()}},
 \code{\link[=new_admiral_df]{new_admiral_df()}}
 }
 \concept{internal}

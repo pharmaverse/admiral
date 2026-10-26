@@ -41,7 +41,7 @@
       Dataset type "MDBDS" is a medical device type, but `dataset` does not contain `SPDEVID`.
       i Check that `dataset_type` is correct.
 
-# print.admiral_df Test 13: the name, type and keys are printed in a header
+# print.admiral_df Test 25: the name, type and keys are printed in a header
 
     Code
       print(set_admiral_attrs(input, keys = exprs(USUBJID, PARAMCD, AVISIT),
@@ -59,7 +59,7 @@
     Code
       print(set_admiral_attrs(input, keys = exprs(USUBJID, PARAMCD, AVISIT)))
     Output
-      # An admiral dataset (keys: USUBJID, PARAMCD, AVISIT)
+      # An admiral dataset (type: BDS (inferred), keys: USUBJID, PARAMCD, AVISIT)
       # A tibble: 2 x 5
         STUDYID USUBJID PARAMCD AVISIT    AVAL
         <chr>   <chr>   <chr>   <chr>    <dbl>
@@ -81,9 +81,32 @@
 ---
 
     Code
+      print(set_admiral_attrs(input, keys = exprs(USUBJID), dataset_type = "TTE"))
+    Output
+      # An admiral dataset (type: TTE, keys: USUBJID)
+      # A tibble: 2 x 5
+        STUDYID USUBJID PARAMCD AVISIT    AVAL
+        <chr>   <chr>   <chr>   <chr>    <dbl>
+      1 P       1       DIABP   BASELINE    51
+      2 P       1       SYSBP   BASELINE   121
+
+---
+
+    Code
+      print(set_admiral_attrs(lookup, keys = exprs(PARAMCD), dataset_name = "PARAMS"))
+    Output
+      # An admiral dataset (name: PARAMS, keys: PARAMCD)
+      # A tibble: 1 x 2
+        PARAMCD PARAM                          
+        <chr>   <chr>                          
+      1 DIABP   Diastolic Blood Pressure (mmHg)
+
+---
+
+    Code
       print(set_admiral_attrs(input, keys = exprs(), dataset_name = "ADVS"))
     Output
-      # An admiral dataset (name: ADVS, keys: none)
+      # An admiral dataset (name: ADVS, type: BDS (inferred), keys: none)
       # A tibble: 2 x 5
         STUDYID USUBJID PARAMCD AVISIT    AVAL
         <chr>   <chr>   <chr>   <chr>    <dbl>
@@ -96,7 +119,7 @@
       print(set_admiral_attrs(as.data.frame(input), keys = exprs(USUBJID),
       dataset_name = "ADVS"))
     Output
-      # An admiral dataset (name: ADVS, keys: USUBJID)
+      # An admiral dataset (name: ADVS, type: BDS (inferred), keys: USUBJID)
         STUDYID USUBJID PARAMCD   AVISIT AVAL
       1       P       1   DIABP BASELINE   51
       2       P       1   SYSBP BASELINE  121

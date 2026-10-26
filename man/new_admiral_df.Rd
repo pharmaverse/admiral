@@ -49,14 +49,16 @@ dataset-producing functions apply to their output. Users call
 }
 \details{
 An argument left as \code{NULL} leaves the corresponding attribute untouched, so
-that a derivation which merely tags its output does not lose the metadata
-set by the user on its input.
+that tagging a dataset which already carries metadata does not remove it.
 }
 \seealso{
 Other internal:
 \code{\link{admiral-package}},
 \code{\link[=extract_duplicate_records]{extract_duplicate_records()}},
 \code{\link[=format.basket_select]{format.basket_select()}},
+\code{\link[=get_admiral_df_type]{get_admiral_df_type()}},
+\code{\link[=guess_admiral_df_type]{guess_admiral_df_type()}},
+\code{\link[=guess_structure_type]{guess_structure_type()}},
 \code{\link[=signal_duplicate_records]{signal_duplicate_records()}}
 }
 \concept{internal}

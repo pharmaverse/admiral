@@ -66,13 +66,17 @@ stored by a previous call).
 
 Tags a data frame with the \code{admiral_df} class and stores its metadata: the
 key variables -- the variables which uniquely identify its records -- the
-dataset name, and the ADaM dataset type. All \code{{admiral}} dataset functions
-tag their output with the class, and keep any metadata set on their input.
+dataset name, and the ADaM dataset type. Call it on the finished dataset,
+once it has been derived, e.g. just before summarising it: the metadata is
+not guaranteed to survive the derivations which build the dataset (see
+Details).
 
 The keys describe the record structure the dataset is intended to have; they
 are not checked against its records when they are stored. \code{{admiral}} never
-infers the keys or the type of a dataset: if they have not been set with
-this function, functions which need them ask for them to be set.
+infers the keys of a dataset: if they have not been set with this function,
+functions which need them ask for them to be set. The type, by contrast, is
+inferred from the dataset if it has not been set (see
+\code{\link[=guess_admiral_df_type]{guess_admiral_df_type()}}), but a type set here always takes precedence.
 }
 \details{
 The keys can come from anywhere: the \code{by_vars} of the derivation which
@@ -82,24 +86,25 @@ converts. \code{{admiral}} does not read specification objects itself; to use th
 keys defined in a \code{{metacore}} specification, extract them in the calling
 code, e.g. \code{chr2vars(metacore::get_keys(spec, "ADVS")$variable)}.
 
-The core \code{{dplyr}} verbs (\code{mutate()}, \code{filter()}, \code{arrange()}, \code{select()},
-\code{rename()}, \code{slice()}, \code{distinct()}, joins where \code{dataset} is \code{x}, ...)
-restore data frame attributes, so the metadata and the \code{admiral_df} class
-normally survive a derivation pipeline. They are \emph{not} preserved by
+All \code{{admiral}} dataset functions tag their output with the \code{admiral_df}
+class, but they do not carry the metadata through. The core \code{{dplyr}} verbs
+(\code{mutate()}, \code{filter()}, \code{arrange()}, \code{select()}, \code{rename()}, \code{slice()},
+\code{distinct()}, joins where \code{dataset} is \code{x}, ...) restore data frame
+attributes, so the metadata survives those. It is \emph{not} preserved by
 operations which build a new data frame, in particular:
 \itemize{
 \item \code{summarise()},
 \item \code{tidyr::pivot_longer()}/\code{pivot_wider()}, \code{nest()}/\code{unnest()},
 \code{complete()},
 \item \code{bind_rows()} when \code{dataset} is not the \emph{first} argument,
-\item joins where \code{dataset} is the \code{y} (rather than the \code{x}) argument.
+\item joins where \code{dataset} is the \code{y} (rather than the \code{x}) argument,
+\item \code{ungroup()}, after \code{group_by()} or \code{rowwise()} (which themselves keep the
+attributes but drop the \code{admiral_df} class).
 }
 
-\code{group_by()} and \code{rowwise()} are a case of their own: they keep the
-attributes but drop the \code{admiral_df} class.
-
-Call this function afterwards (or re-apply it as needed) if the dataset
-passes through any of those.
+Many derivations use these internally, so metadata set at the start of a
+derivation pipeline is lost along the way. Set it once the dataset is
+finished, or re-apply this function if the dataset changes afterwards.
 
 The keys are stored as plain variable names, so they are not updated by
 \code{rename()} or removed by \code{select()}: a key which is no longer in the

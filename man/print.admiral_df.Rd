@@ -30,6 +30,10 @@ in a header line, followed by the dataset as it would print without the
 \code{admiral_df} class. The header is only printed if any of them have been
 stored, so that the output of a derivation which merely carries the class
 prints as before.
+
+If no type has been stored, the type inferred from the dataset (see
+\code{\link[=guess_admiral_df_type]{guess_admiral_df_type()}}) is shown instead, marked as inferred, provided it
+is one of the ADaM dataset types.
 }
 \examples{
 library(tibble)
