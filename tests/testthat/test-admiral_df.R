@@ -247,9 +247,33 @@ test_that("set_admiral_attrs Test 11: an error is issued for invalid arguments",
   expect_snapshot(set_admiral_attrs(input, dataset_type = "ADAE"), error = TRUE)
 })
 
+## Test 12: device types are accepted, and checked for SPDEVID ----
+test_that("set_admiral_attrs Test 12: device types are accepted, and checked for SPDEVID", {
+  input <- tibble::tribble(
+    ~STUDYID, ~SPDEVID, ~PARAMCD, ~AVAL,
+    "P",      "D-1",    "BATTV",    3.1,
+    "P",      "D-2",    "BATTV",    2.9
+  )
+
+  for (type in c("ADDL", "MDBDS", "MDOCCDS")) {
+    expect_silent(actual <- set_admiral_attrs(input, dataset_type = type))
+    expect_identical(attr(actual, "admiral_ds_type"), type)
+  }
+
+  # a device type for a dataset without the device identifier is most likely
+  # the wrong type, so a warning says so; the type is still stored, as the
+  # declaration is the user's to make
+  no_device <- select(input, -SPDEVID)
+  expect_snapshot(actual <- set_admiral_attrs(no_device, dataset_type = "MDBDS"))
+  expect_identical(attr(actual, "admiral_ds_type"), "MDBDS")
+
+  # a non-device type is not checked for the device identifier
+  expect_silent(set_admiral_attrs(no_device, dataset_type = "BDS"))
+})
+
 # print.admiral_df ----
-## Test 12: the name, type and keys are printed in a header ----
-test_that("print.admiral_df Test 12: the name, type and keys are printed in a header", {
+## Test 13: the name, type and keys are printed in a header ----
+test_that("print.admiral_df Test 13: the name, type and keys are printed in a header", {
   input <- tibble::tribble(
     ~STUDYID, ~USUBJID, ~PARAMCD, ~AVISIT,    ~AVAL,
     "P",      "1",      "DIABP",  "BASELINE",    51,
@@ -278,8 +302,8 @@ test_that("print.admiral_df Test 12: the name, type and keys are printed in a he
   )
 })
 
-## Test 13: a dataset with only the class prints as before ----
-test_that("print.admiral_df Test 13: a dataset with only the class prints as before", {
+## Test 14: a dataset with only the class prints as before ----
+test_that("print.admiral_df Test 14: a dataset with only the class prints as before", {
   input <- tibble::tribble(
     ~USUBJID, ~AVAL,
     "1",      10

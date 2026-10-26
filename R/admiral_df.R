@@ -46,6 +46,11 @@ new_admiral_df <- function(x, keys = NULL, dataset_name = NULL, dataset_type = N
   x
 }
 
+# the ADaM dataset types `set_admiral_attrs()` accepts, and those of them which
+# are medical device types
+admiral_md_ds_types <- c("ADDL", "MDBDS", "MDOCCDS")
+admiral_ds_types <- c("ADSL", "BDS", "OCCDS", "TTE", admiral_md_ds_types)
+
 #' Set the Metadata of a Dataset
 #'
 #' @description
@@ -83,9 +88,14 @@ new_admiral_df <- function(x, keys = NULL, dataset_name = NULL, dataset_type = N
 #' @permitted character scalar or `NULL`
 #'
 #' @param dataset_type The ADaM dataset type, stored in the `"admiral_ds_type"`
-#'   attribute. `NULL` leaves a type stored by a previous call untouched.
+#'   attribute. `"ADDL"`, `"MDBDS"`, and `"MDOCCDS"` are the medical device
+#'   types (device-level, and the device versions of `"BDS"` and `"OCCDS"`);
+#'   a device dataset is identified by `SPDEVID`, so if `dataset` does not
+#'   contain it a warning is issued, but the type is stored all the same.
+#'   `NULL` leaves a type stored by a previous call untouched.
 #'
-#' @permitted `"ADSL"`, `"BDS"`, `"OCCDS"`, `"TTE"`, or `NULL`
+#' @permitted `"ADSL"`, `"BDS"`, `"OCCDS"`, `"TTE"`, `"ADDL"`, `"MDBDS"`,
+#'   `"MDOCCDS"`, or `NULL`
 #'
 #' @return `dataset` with the `admiral_df` class, and the `"admiral_keys"`,
 #'   `"admiral_ds_name"`, and `"admiral_ds_type"` attributes for those of
@@ -207,11 +217,21 @@ set_admiral_attrs <- function(dataset,
   assert_vars(keys, optional = TRUE)
   assert_data_frame(dataset)
   assert_character_scalar(dataset_name, optional = TRUE)
-  assert_character_scalar(
-    dataset_type,
-    values = c("ADSL", "BDS", "OCCDS", "TTE"),
-    optional = TRUE
-  )
+  assert_character_scalar(dataset_type, values = admiral_ds_types, optional = TRUE)
+
+  # the type is not inferred, but a device type declared for a dataset without
+  # the device identifier is most likely the wrong type (or the wrong dataset).
+  # Only a warning, as the declaration is the user's to make
+  if (!is.null(dataset_type) && dataset_type %in% admiral_md_ds_types &&
+    !"SPDEVID" %in% colnames(dataset)) {
+    cli_warn(c(
+      paste(
+        "Dataset type {.val {dataset_type}} is a medical device type, but",
+        "{.arg dataset} does not contain {.var SPDEVID}."
+      ),
+      i = "Check that {.arg dataset_type} is correct."
+    ))
+  }
 
   if (!is.null(keys)) {
     # keys are stored as character: they are metadata about the dataset, not
