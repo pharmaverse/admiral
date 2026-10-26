@@ -157,5 +157,5 @@ derive_param_doseint <- function(dataset,
     by_vars = by_vars,
     set_values_to = c(set_values_to, analysis_value, update_aval)
   ) %>%
-    as_admiral_df()
+    new_admiral_df()
 }

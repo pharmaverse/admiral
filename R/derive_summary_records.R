@@ -419,5 +419,5 @@ derive_summary_records <- function(dataset = NULL,
     )
   }
 
-  as_admiral_df(df_return)
+  new_admiral_df(df_return)
 }

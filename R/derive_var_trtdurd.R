@@ -60,5 +60,5 @@ derive_var_trtdurd <- function(dataset,
     start_date = !!start_date,
     end_date = !!end_date
   ) %>%
-    as_admiral_df()
+    new_admiral_df()
 }

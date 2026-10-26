@@ -25,15 +25,11 @@
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
 
-Prints the dataset name and key variables stored by \code{\link[=set_admiral_keys]{set_admiral_keys()}} in a
-header line, followed by the dataset as it would print without the
-\code{admiral_df} class. The header is only printed if a name or keys have been
+Prints the dataset name, type, and key variables stored by \code{\link[=set_admiral_attrs]{set_admiral_attrs()}}
+in a header line, followed by the dataset as it would print without the
+\code{admiral_df} class. The header is only printed if any of them have been
 stored, so that the output of a derivation which merely carries the class
-(see \code{\link[=as_admiral_df]{as_admiral_df()}}) prints as before.
-
-The header also shows the ADaM dataset type (\code{ADSL}, \code{BDS}, \code{OCCDS}, or
-\code{TTE}) if it can be determined from the dataset, see
-\code{\link[=get_admiral_df_type]{get_admiral_df_type()}}.
+prints as before.
 }
 \examples{
 library(tibble)
@@ -45,7 +41,12 @@ advs <- tribble(
   "P",      "2",      "DIABP",  "BASELINE",    79
 )
 
-set_admiral_keys(advs, keys = exprs(USUBJID, PARAMCD, AVISIT), dataset_name = "ADVS")
+set_admiral_attrs(
+  advs,
+  keys = exprs(USUBJID, PARAMCD, AVISIT),
+  dataset_name = "ADVS",
+  dataset_type = "BDS"
+)
 }
 \seealso{
 Utilities for printing:

@@ -464,7 +464,7 @@ derive_param_computed <- function(dataset = NULL,
   )
   hori_data <- hori_return[["hori_data"]]
   if (is.null(hori_data)) {
-    return(as_admiral_df(dataset))
+    return(new_admiral_df(dataset))
   }
   analysis_vars_chr <- hori_return[["analysis_vars_chr"]]
 
@@ -478,7 +478,7 @@ derive_param_computed <- function(dataset = NULL,
     )[["hori_data"]]
 
     if (is.null(hori_const_data)) {
-      return(as_admiral_df(dataset))
+      return(new_admiral_df(dataset))
     }
 
     hori_data <- inner_join(hori_data, hori_const_data, by = vars2chr(constant_by_vars))
@@ -525,7 +525,7 @@ derive_param_computed <- function(dataset = NULL,
     select(-all_of(analysis_vars_chr[str_detect(analysis_vars_chr, "\\.")]))
 
   bind_rows(dataset, hori_data) %>%
-    as_admiral_df()
+    new_admiral_df()
 }
 
 #' Asserts `parameters` Argument and Converts to List of Expressions

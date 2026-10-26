@@ -90,7 +90,7 @@ extract_duplicate_records <- function(dataset, by_vars = NULL) {
     select(!!!syms(map(replace_values_by_names(by_vars), as_label)), everything()) %>%
     filter(is_duplicate) %>%
     arrange(!!!by_vars) %>%
-    as_admiral_df()
+    new_admiral_df()
 }
 
 #' Signal Duplicate Records

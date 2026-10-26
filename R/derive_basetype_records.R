@@ -111,5 +111,5 @@ derive_basetype_records <- function(dataset, basetypes) {
   records_without_basetype <- filter(dataset, !(!!complementary_condition))
 
   bind_rows(records_without_basetype, records_with_basetype) %>%
-    as_admiral_df()
+    new_admiral_df()
 }

@@ -773,5 +773,5 @@ derive_var_nfrlt <- function(dataset,
     }
   }
 
-  as_admiral_df(result)
+  new_admiral_df(result)
 }

@@ -202,5 +202,5 @@ derive_var_relative_flag <- function(dataset,
     condition = TRUE
   ) %>%
     remove_tmp_vars() %>%
-    as_admiral_df()
+    new_admiral_df()
 }
