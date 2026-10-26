@@ -271,6 +271,8 @@ print.admiral_df <- function(x, ...) {
 #' identify its records, see [set_admiral_keys()].
 #'
 #' @param dataset A data frame
+#' @param keys The declared key variables of `dataset`, see
+#'   [set_admiral_keys()], or `NULL` if none were declared
 #'
 #' @details
 #'   Every ADaM dataset type is subject data, so a dataset which does not contain
@@ -291,8 +293,10 @@ print.admiral_df <- function(x, ...) {
 #'   2. `"OCCDS"` -- does not contain `PARAMCD`, and contains a `--DECOD`/`--TERM`
 #'      variable, an `AOCCxxFL` occurrence flag, or `TRTEMFL`.
 #'   3. `"BDS"` -- contains `PARAMCD` and `AVAL` or `AVALC`.
-#'   4. `"ADSL"` -- does not contain `PARAMCD` and has one record per subject,
-#'      i.e. per combination of the subject keys.
+#'   4. `"ADSL"` -- does not contain `PARAMCD` and is one record per subject,
+#'      i.e. per combination of the subject keys. If `keys` are declared, they
+#'      decide this: `"ADSL"` if they are all subject keys. Otherwise the
+#'      records decide it.
 #'   5. `"other"` -- none of the above.
 #'
 #'   The `--DECOD`/`--TERM` test requires the two-letter SDTM domain prefix the
@@ -302,11 +306,14 @@ print.admiral_df <- function(x, ...) {
 #'   `ADSL` is the one type decided by the records rather than the variables:
 #'   treatment variables are no evidence of it, because the first step of a
 #'   typical `BDS`/`OCCDS` derivation is to merge them on from ADSL (see the
-#'   `admiral` template scripts). A dataset with no records cannot show whether
-#'   it has one record per subject, so its type is unknown (`NA`) unless its
-#'   variables already decide it -- e.g. an empty dataset with `PARAMCD` and
-#'   `AVAL` is still `"BDS"`, and one without the subject keys is still
-#'   `"other"`.
+#'   `admiral` template scripts). Declared keys take precedence over the
+#'   records because they state the intended structure: an ADSL with duplicated
+#'   records is still an ADSL, and the duplicates are what
+#'   [summary.admiral_df()] reports. Without declared keys, a dataset with no
+#'   records cannot show whether it has one record per subject, so its type is
+#'   unknown (`NA`) unless its variables already decide it -- e.g. an empty
+#'   dataset with `PARAMCD` and `AVAL` is still `"BDS"`, and one without the
+#'   subject keys is still `"other"`.
 #'
 #'   A dataset which has not yet been derived far enough to carry any of these
 #'   signals is `"other"`.
@@ -317,10 +324,11 @@ print.admiral_df <- function(x, ...) {
 #'
 #' @keywords internal
 #' @family internal
-get_admiral_df_type <- function(dataset) {
+get_admiral_df_type <- function(dataset, keys = attr(dataset, "admiral_keys")) {
   # a grouped or rowwise dataset is classified rather than refused: this is a
   # diagnostic
   assert_data_frame(dataset, check_is_grouped = FALSE, check_is_rowwise = FALSE)
+  assert_character_vector(keys, optional = TRUE)
   cols <- colnames(dataset)
   subject_keys <- vars2chr(get_admiral_option("subject_keys"))
 
@@ -348,8 +356,16 @@ get_admiral_df_type <- function(dataset) {
     return("OCCDS")
   }
 
-  # ADSL is decided by the records: one record per subject. With no records
-  # that cannot be shown either way -- the record and subject counts are
+  # declared keys state the intended record structure, so they decide ADSL
+  # rather than the records: duplicated subject records are a defect of an
+  # ADSL, not evidence that it is something else. Empty keys declare no
+  # structure, so the records decide as if none were declared
+  if (length(keys) > 0) {
+    return(if (all(keys %in% subject_keys)) "ADSL" else "other")
+  }
+
+  # otherwise ADSL is decided by the records: one record per subject. With no
+  # records that cannot be shown either way -- the record and subject counts are
   # trivially equal -- so the type is unknown rather than "other"
   if (nrow(dataset) == 0) {
     return(NA_character_)
@@ -760,7 +776,8 @@ summary.admiral_df <- function(object, ...) {
   class(object) <- setdiff(class(object), "admiral_df")
   dataset <- ungroup(object)
   cols <- colnames(dataset)
-  type <- get_admiral_df_type(dataset)
+  # the keys are passed explicitly as `ungroup()` need not keep the attribute
+  type <- get_admiral_df_type(dataset, keys = declared_keys)
 
   subject_vars <- if ("USUBJID" %in% cols) {
     "USUBJID"
@@ -848,7 +865,7 @@ summarize_structure <- function(dataset, declared_keys, type) {
 #' @return A named list:
 #'
 #'   * `summarize_adsl()`: `trt_var` and `trt` (subjects per treatment arm),
-#'     `pops` (named count of `"Y"` per population flag).
+#'     `pops` (named count of subjects with `"Y"` per population flag).
 #'   * `summarize_bds()`: `params` (records and subjects per `PARAMCD`),
 #'     `visits` (the analysis visits, in `AVISITN` order if available).
 #'   * `summarize_occds()`: `terms` (named count of distinct values per coding
@@ -876,10 +893,12 @@ summarize_adsl <- function(dataset, subject_vars) {
     c("RANDFL", "ENRLFL", "SAFFL", "ITTFL", "FASFL", "EFFFL", "PPROTFL", "COMPLFL"),
     colnames(dataset)
   )
+  # subjects rather than records are counted, as the treatment arms are, so
+  # that duplicated subject records do not inflate the counts
   if (length(pop_vars) > 0) {
     out$pops <- vapply(
       set_names(pop_vars),
-      function(v) sum(dataset[[v]] == "Y", na.rm = TRUE),
+      function(v) n_distinct(dataset[dataset[[v]] %in% "Y", subject_vars]),
       integer(1)
     )
   }

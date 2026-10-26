@@ -457,9 +457,45 @@ test_that("get_admiral_df_type Test 20: the subject keys option is respected", {
   expect_identical(get_admiral_df_type(input), "other")
 })
 
+## Test 21: declared keys decide ADSL rather than the records ----
+test_that("get_admiral_df_type Test 21: declared keys decide ADSL rather than the records", { # nolint
+  duplicated_adsl <- tibble::tribble(
+    ~STUDYID, ~USUBJID, ~TRT01P,
+    "P",      "1",      "Placebo",
+    "P",      "1",      "Placebo",
+    "P",      "2",      "Drug A"
+  )
+  # without declared keys the duplicated subject makes it not ADSL ...
+  expect_identical(get_admiral_df_type(duplicated_adsl), "other")
+  # ... but keys declaring one record per subject keep the type, so that the
+  # duplicates are reported as a defect of the ADSL
+  expect_identical(
+    get_admiral_df_type(set_admiral_keys(duplicated_adsl, keys = exprs(USUBJID))),
+    "ADSL"
+  )
+  expect_identical(get_admiral_df_type(duplicated_adsl, keys = c("STUDYID", "USUBJID")), "ADSL")
+
+  # keys declaring more than one record per subject are not ADSL, even where
+  # the records happen to be one per subject
+  one_per_subject <- dplyr::distinct(duplicated_adsl)
+  expect_identical(get_admiral_df_type(one_per_subject), "ADSL")
+  expect_identical(get_admiral_df_type(one_per_subject, keys = c("USUBJID", "TRT01P")), "other")
+
+  # empty keys declare no structure, so the records decide
+  expect_identical(get_admiral_df_type(duplicated_adsl, keys = character(0)), "other")
+  expect_identical(get_admiral_df_type(one_per_subject, keys = character(0)), "ADSL")
+
+  # an empty dataset is ADSL if its keys say so
+  expect_identical(get_admiral_df_type(duplicated_adsl[0, ], keys = "USUBJID"), "ADSL")
+
+  # the variables still take precedence over the keys
+  bds <- tibble::tibble(STUDYID = "P", USUBJID = "1", PARAMCD = "A", AVAL = 1)
+  expect_identical(get_admiral_df_type(bds, keys = "USUBJID"), "BDS")
+})
+
 # minimal_unique_key ----
-## Test 21: returns must_have when it is already unique ----
-test_that("minimal_unique_key Test 21: returns must_have when it is already unique", {
+## Test 22: returns must_have when it is already unique ----
+test_that("minimal_unique_key Test 22: returns must_have when it is already unique", {
   input <- tibble::tribble(
     ~USUBJID, ~PARAMCD, ~AVISIT,
     "1",      "DIABP",  "BASELINE",
@@ -472,8 +508,8 @@ test_that("minimal_unique_key Test 21: returns must_have when it is already uniq
   )
 })
 
-## Test 22: drops candidates which do not discriminate ----
-test_that("minimal_unique_key Test 22: drops candidates which do not discriminate", {
+## Test 23: drops candidates which do not discriminate ----
+test_that("minimal_unique_key Test 23: drops candidates which do not discriminate", {
   # `AVISIT` is redundant with `AVISITN`, and `ATPT` is constant; both sit ahead
   # of `DTYPE` in the candidate order, so the walk carries them on its way to the
   # variable which actually separates the records
@@ -495,8 +531,8 @@ test_that("minimal_unique_key Test 22: drops candidates which do not discriminat
   )
 })
 
-## Test 23: returns everything when uniqueness is never reached ----
-test_that("minimal_unique_key Test 23: returns everything when uniqueness is never reached", {
+## Test 24: returns everything when uniqueness is never reached ----
+test_that("minimal_unique_key Test 24: returns everything when uniqueness is never reached", {
   # wholly duplicated records: no combination of the candidates separates them,
   # so the caller sees duplicates against the returned key and can report them
   input <- tibble::tribble(
@@ -512,8 +548,8 @@ test_that("minimal_unique_key Test 23: returns everything when uniqueness is nev
 })
 
 # infer_admiral_keys ----
-## Test 24: the inferred key spans the common BDS shapes ----
-test_that("infer_admiral_keys Test 24: the inferred key spans the common BDS shapes", {
+## Test 25: the inferred key spans the common BDS shapes ----
+test_that("infer_admiral_keys Test 25: the inferred key spans the common BDS shapes", {
   # exposure: one record per subject, parameter and dosing interval, keyed by
   # the interval start rather than by an analysis date or a visit
   adex <- tibble::tribble(
@@ -547,8 +583,8 @@ test_that("infer_admiral_keys Test 24: the inferred key spans the common BDS sha
   )
 })
 
-## Test 25: multi-period designs are keyed by period ----
-test_that("infer_admiral_keys Test 25: multi-period designs are keyed by period", {
+## Test 26: multi-period designs are keyed by period ----
+test_that("infer_admiral_keys Test 26: multi-period designs are keyed by period", {
   # the same visit recurs in each period, so nothing but APERIOD separates the
   # records -- a vaccine study shape
   input <- tibble::tribble(
@@ -565,8 +601,8 @@ test_that("infer_admiral_keys Test 25: multi-period designs are keyed by period"
   )
 })
 
-## Test 26: ADSL, TTE and unrecognized datasets ----
-test_that("infer_admiral_keys Test 26: ADSL, TTE and unrecognized datasets", {
+## Test 27: ADSL, TTE and unrecognized datasets ----
+test_that("infer_admiral_keys Test 27: ADSL, TTE and unrecognized datasets", {
   adsl <- tibble::tribble(
     ~STUDYID, ~USUBJID, ~TRT01P,
     "P",      "1",      "Placebo",
@@ -590,8 +626,8 @@ test_that("infer_admiral_keys Test 26: ADSL, TTE and unrecognized datasets", {
   expect_identical(infer_admiral_keys(other), character(0))
 })
 
-## Test 27: OCCDS is keyed by its sequence variable ----
-test_that("infer_admiral_keys Test 27: OCCDS is keyed by its sequence variable", {
+## Test 28: OCCDS is keyed by its sequence variable ----
+test_that("infer_admiral_keys Test 28: OCCDS is keyed by its sequence variable", {
   occds <- function(...) {
     tibble::tibble(
       STUDYID = "P", USUBJID = c("1", "1"),
@@ -637,8 +673,8 @@ test_that("infer_admiral_keys Test 27: OCCDS is keyed by its sequence variable",
   expect_identical(empty_seq, character(0))
 })
 
-## Test 28: nothing is inferred for a dataset with no records ----
-test_that("infer_admiral_keys Test 28: nothing is inferred for a dataset with no records", {
+## Test 29: nothing is inferred for a dataset with no records ----
+test_that("infer_admiral_keys Test 29: nothing is inferred for a dataset with no records", {
   # every candidate key is trivially unique over no records, so inference would
   # report a structure the dataset has not demonstrated
   empty_bds <- tibble::tibble(
@@ -649,8 +685,8 @@ test_that("infer_admiral_keys Test 28: nothing is inferred for a dataset with no
   expect_identical(infer_admiral_keys(empty_bds), character(0))
 })
 
-## Test 29: the subject keys option is respected ----
-test_that("infer_admiral_keys Test 29: the subject keys option is respected", {
+## Test 30: the subject keys option is respected ----
+test_that("infer_admiral_keys Test 30: the subject keys option is respected", {
   subject_keys <- get_admiral_option("subject_keys")
   withr::defer(set_admiral_options(subject_keys = subject_keys))
 
@@ -684,8 +720,8 @@ test_that("infer_admiral_keys Test 29: the subject keys option is respected", {
   )
 })
 
-## Test 30: a grouped dataset is keyed on its records overall ----
-test_that("infer_admiral_keys Test 30: a grouped dataset is keyed on its records overall", {
+## Test 31: a grouped dataset is keyed on its records overall ----
+test_that("infer_admiral_keys Test 31: a grouped dataset is keyed on its records overall", {
   input <- tibble::tribble(
     ~STUDYID, ~USUBJID, ~PARAMCD, ~AVISITN, ~AVAL,
     "P",      "1",      "SYSBP",         2,   121,
@@ -700,8 +736,8 @@ test_that("infer_admiral_keys Test 30: a grouped dataset is keyed on its records
   )
 })
 
-## Test 31: population PK needs both the nominal and the actual relative time ----
-test_that("infer_admiral_keys Test 31: population PK needs both the nominal and the actual relative time", { # nolint
+## Test 32: population PK needs both the nominal and the actual relative time ----
+test_that("infer_admiral_keys Test 32: population PK needs both the nominal and the actual relative time", { # nolint
   # a draw taken off schedule shares its nominal time with the scheduled draw
   # and its actual time with a different nominal one, so neither variable keys
   # the dataset alone. Reproduces the record structure of `pharmaverseadam::adppk`.
@@ -719,8 +755,8 @@ test_that("infer_admiral_keys Test 31: population PK needs both the nominal and 
   )
 })
 
-## Test 32: visit, timepoint and DTYPE are all needed at once ----
-test_that("infer_admiral_keys Test 32: visit, timepoint and DTYPE are all needed at once", { # nolint
+## Test 33: visit, timepoint and DTYPE are all needed at once ----
+test_that("infer_admiral_keys Test 33: visit, timepoint and DTYPE are all needed at once", { # nolint
   # visit, timepoint *and* `DTYPE` are all needed, while the relative time and
   # the analysis date carry no information the first two do not -- so uniqueness
   # is only reached at the end of the candidate list and the redundant
@@ -741,8 +777,8 @@ test_that("infer_admiral_keys Test 32: visit, timepoint and DTYPE are all needed
 })
 
 # print.admiral_df ----
-## Test 33: the name, type and keys are printed in a header ----
-test_that("print.admiral_df Test 33: the name, type and keys are printed in a header", {
+## Test 34: the name, type and keys are printed in a header ----
+test_that("print.admiral_df Test 34: the name, type and keys are printed in a header", {
   input <- tibble::tribble(
     ~STUDYID, ~USUBJID, ~PARAMCD, ~AVISIT,    ~AVAL,
     "P",      "1",      "DIABP",  "BASELINE",    51,
@@ -773,8 +809,8 @@ test_that("print.admiral_df Test 33: the name, type and keys are printed in a he
   expect_snapshot(print(set_admiral_keys(lookup, keys = exprs(PARAMCD), dataset_name = "PARAMS")))
 })
 
-## Test 34: a dataset with only the class prints as before ----
-test_that("print.admiral_df Test 34: a dataset with only the class prints as before", {
+## Test 35: a dataset with only the class prints as before ----
+test_that("print.admiral_df Test 35: a dataset with only the class prints as before", {
   input <- tibble::tribble(
     ~USUBJID, ~AVAL,
     "1",      10
@@ -790,8 +826,8 @@ test_that("print.admiral_df Test 34: a dataset with only the class prints as bef
 })
 
 # summary.admiral_df ----
-## Test 35: the common facts and the declared record structure are reported ----
-test_that("summary.admiral_df Test 35: the common facts and the declared record structure are reported", { # nolint
+## Test 36: the common facts and the declared record structure are reported ----
+test_that("summary.admiral_df Test 36: the common facts and the declared record structure are reported", { # nolint
   input <- tibble::tribble(
     ~STUDYID, ~USUBJID, ~PARAMCD, ~AVISIT,    ~AVAL,
     "P",      "1",      "DIABP",  "BASELINE",    51,
@@ -819,8 +855,8 @@ test_that("summary.admiral_df Test 35: the common facts and the declared record 
   )
 })
 
-## Test 36: the keys are inferred if none were declared ----
-test_that("summary.admiral_df Test 36: the keys are inferred if none were declared", {
+## Test 37: the keys are inferred if none were declared ----
+test_that("summary.admiral_df Test 37: the keys are inferred if none were declared", {
   input <- tibble::tribble(
     ~STUDYID, ~USUBJID, ~PARAMCD, ~AVISIT,    ~AVAL,
     "P",      "1",      "SYSBP",  "BASELINE",   121,
@@ -837,8 +873,8 @@ test_that("summary.admiral_df Test 36: the keys are inferred if none were declar
   expect_identical(actual$structure$n_duplicates, 0L)
 })
 
-## Test 37: duplicate, missing and empty declared keys ----
-test_that("summary.admiral_df Test 37: duplicate, missing and empty declared keys", {
+## Test 38: duplicate, missing and empty declared keys ----
+test_that("summary.admiral_df Test 38: duplicate, missing and empty declared keys", {
   input <- tibble::tribble(
     ~STUDYID, ~USUBJID, ~PARAMCD, ~AVISIT,    ~AVAL,
     "P",      "1",      "SYSBP",  "BASELINE",   121,
@@ -860,8 +896,8 @@ test_that("summary.admiral_df Test 37: duplicate, missing and empty declared key
   expect_identical(no_keys$structure$source, "declared")
 })
 
-## Test 38: the ADSL summary ----
-test_that("summary.admiral_df Test 38: the ADSL summary", {
+## Test 39: the ADSL summary ----
+test_that("summary.admiral_df Test 39: the ADSL summary", {
   input <- tibble::tribble(
     ~STUDYID, ~USUBJID, ~TRT01P,   ~SAFFL, ~ITTFL,
     "P",      "1",      "Placebo", "Y",    "Y",
@@ -876,10 +912,18 @@ test_that("summary.admiral_df Test 38: the ADSL summary", {
   expect_identical(actual$details$trt$subjects, c(2L, 1L))
   expect_identical(actual$details$pops, c(SAFFL = 2L, ITTFL = 3L))
   expect_snapshot(print(actual))
+
+  # duplicated subject records are reported without losing the ADSL details
+  duplicated <- summary(dplyr::bind_rows(input, input[1, ]))
+  expect_identical(duplicated$type, "ADSL")
+  expect_identical(duplicated$structure$n_duplicates, 1L)
+  expect_identical(duplicated$details$trt$subjects, c(2L, 1L))
+  # the population flags count subjects, not the duplicated records
+  expect_identical(duplicated$details$pops, c(SAFFL = 2L, ITTFL = 3L))
 })
 
-## Test 39: the BDS summary ----
-test_that("summary.admiral_df Test 39: the BDS summary", {
+## Test 40: the BDS summary ----
+test_that("summary.admiral_df Test 40: the BDS summary", {
   input <- tibble::tribble(
     ~STUDYID, ~USUBJID, ~PARAMCD, ~AVISIT,    ~AVISITN, ~AVAL,
     "P",      "1",      "SYSBP",  "WEEK 2",          2,   118,
@@ -899,8 +943,8 @@ test_that("summary.admiral_df Test 39: the BDS summary", {
   expect_snapshot(print(actual))
 })
 
-## Test 40: the OCCDS summary ----
-test_that("summary.admiral_df Test 40: the OCCDS summary", {
+## Test 41: the OCCDS summary ----
+test_that("summary.admiral_df Test 41: the OCCDS summary", {
   input <- tibble::tribble(
     ~STUDYID, ~USUBJID, ~AESEQ, ~AEBODSYS,                ~AEDECOD,   ~TRTEMFL,
     "P",      "1",           1, "NERVOUS SYSTEM",         "HEADACHE", "Y",
@@ -916,8 +960,8 @@ test_that("summary.admiral_df Test 40: the OCCDS summary", {
   expect_snapshot(print(actual))
 })
 
-## Test 41: the TTE summary ----
-test_that("summary.admiral_df Test 41: the TTE summary", {
+## Test 42: the TTE summary ----
+test_that("summary.admiral_df Test 42: the TTE summary", {
   input <- tibble::tribble(
     ~STUDYID, ~USUBJID, ~PARAMCD, ~STARTDT, ~CNSR, ~AVAL,
     "P", "1", "OS", lubridate::ymd("2020-01-01"), 0, 10,
@@ -934,8 +978,8 @@ test_that("summary.admiral_df Test 41: the TTE summary", {
   expect_snapshot(print(actual))
 })
 
-## Test 42: datasets with little to report do not error ----
-test_that("summary.admiral_df Test 42: datasets with little to report do not error", {
+## Test 43: datasets with little to report do not error ----
+test_that("summary.admiral_df Test 43: datasets with little to report do not error", {
   # not subject data: no subject count and no record structure
   lookup <- as_admiral_df(tibble::tibble(PARAMCD = c("DIABP", "SYSBP")))
   expect_snapshot(print(summary(lookup)))
@@ -951,8 +995,8 @@ test_that("summary.admiral_df Test 42: datasets with little to report do not err
   expect_identical(summary(adsl)$details, list())
 })
 
-## Test 43: print.summary_admiral_df returns its input invisibly ----
-test_that("print.summary_admiral_df Test 43: returns its input invisibly", {
+## Test 44: print.summary_admiral_df returns its input invisibly ----
+test_that("print.summary_admiral_df Test 44: returns its input invisibly", {
   input <- as_admiral_df(tibble::tibble(STUDYID = "P", USUBJID = "1"))
   actual <- summary(input)
 

@@ -24,7 +24,7 @@
       ! Argument `keys` must be a list of variables created by `exprs()`, but is a character vector.
       i Use `chr2vars()` to convert a character vector, e.g. `chr2vars(metacore::get_keys(spec, "ADVS")$variable)`.
 
-# print.admiral_df Test 33: the name, type and keys are printed in a header
+# print.admiral_df Test 34: the name, type and keys are printed in a header
 
     Code
       print(set_admiral_keys(input, keys = exprs(USUBJID, PARAMCD, AVISIT),
@@ -83,7 +83,7 @@
         <chr>   <chr>                          
       1 DIABP   Diastolic Blood Pressure (mmHg)
 
-# summary.admiral_df Test 38: the ADSL summary
+# summary.admiral_df Test 39: the ADSL summary
 
     Code
       print(actual)
@@ -94,7 +94,7 @@
       Subjects per treatment arm (TRT01P): Drug A: 2 | Placebo: 1
       Population flags ("Y"): SAFFL 2 | ITTFL 3
 
-# summary.admiral_df Test 39: the BDS summary
+# summary.admiral_df Test 40: the BDS summary
 
     Code
       print(actual)
@@ -108,7 +108,7 @@
            SYSBP       3        2
       Analysis visits (2): BASELINE, WEEK 2
 
-# summary.admiral_df Test 40: the OCCDS summary
+# summary.admiral_df Test 41: the OCCDS summary
 
     Code
       print(actual)
@@ -119,7 +119,7 @@
       Distinct terms: AEBODSYS 2 | AEDECOD 2
       Treatment-emergent records (TRTEMFL): 2 of 3
 
-# summary.admiral_df Test 41: the TTE summary
+# summary.admiral_df Test 42: the TTE summary
 
     Code
       print(actual)
@@ -132,7 +132,7 @@
               OS      1        1
              PFS      0        1
 
-# summary.admiral_df Test 42: datasets with little to report do not error
+# summary.admiral_df Test 43: datasets with little to report do not error
 
     Code
       print(summary(lookup))
