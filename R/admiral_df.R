@@ -133,7 +133,7 @@ as_admiral_df <- function(dataset) {
 #' @caption Keys from a dataset specification
 #'
 #' @info A dataset specification provides the keys as a character vector, which
-#'   [chr2vars()] converts. {admiral} does not read specification objects
+#'   [chr2vars()] converts. `{admiral}` does not read specification objects
 #'   itself, so they are extracted in the calling code; e.g. with a
 #'   `{metacore}` specification that is `metacore::get_keys()`:
 #'
