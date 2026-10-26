@@ -30,14 +30,15 @@ order
 A character vector of key variable names.
 }
 \description{
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
+
 Starting from \code{must_have}, adds variables from \code{optional} one at a time (in
 the given order) until the combination is a unique key of \code{dataset}, then
 drops any added variable which is not needed for uniqueness. If uniqueness is
 never reached, the full set (\code{must_have} plus all of \code{optional}) is returned
 -- the caller can detect this because the returned key still yields
 duplicates.
-}
-\details{
+
 This is used by \code{\link[=infer_admiral_keys]{infer_admiral_keys()}} to discover the record structure from
 the data rather than assuming a fixed key. Only \emph{semantic} key variables
 should be passed as \code{optional}; surrogate/sequence keys (e.g. \code{ASEQ}) must be

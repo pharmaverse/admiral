@@ -19,14 +19,16 @@ A character scalar: one of \code{"ADSL"}, \code{"BDS"}, \code{"OCCDS"}, \code{"T
 decide the type.
 }
 \description{
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
+
 Attempts to classify a data frame as one of the common ADaM dataset types based
 on the variables it contains.
-}
-\details{
+
 Note that this is the \emph{type} of the dataset (\code{ADSL}, \code{BDS}, ...), not its
 record structure: the latter is the set of key variables which uniquely
 identify its records, see \code{\link[=set_admiral_keys]{set_admiral_keys()}}.
-
+}
+\details{
 Every ADaM dataset type is subject data, so a dataset which does not contain
 all the subject keys (\code{get_admiral_option("subject_keys")}, by default
 \code{STUDYID} and \code{USUBJID}) is \code{"other"}. This keeps a data frame which merely

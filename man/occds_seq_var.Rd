@@ -18,7 +18,7 @@ The name of the sequence variable which keys \code{dataset}, or a
 zero-length vector (with a warning) when none can be determined.
 }
 \description{
-Find the Record Key of an Occurrence Dataset
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
 }
 \details{
 \code{ASEQ} is preferred, falling back to a populated SDTM domain sequence. If

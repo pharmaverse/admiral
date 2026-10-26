@@ -24,13 +24,14 @@ A character vector of inferred key variable names, or a zero-length
 vector when no plausible record structure can be determined.
 }
 \description{
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
+
 Works out which variables uniquely identify the records of a dataset. This is
 the fallback for when no keys have been declared with \code{\link[=set_admiral_keys]{set_admiral_keys()}},
 and is the least trustworthy of the ways the record structure can be
 established -- it reports the structure the data happens to have, which is not
 necessarily the structure the dataset was meant to have.
-}
-\details{
+
 It starts from the semantic core of the detected ADaM dataset type (e.g.
 \code{USUBJID} + \code{PARAMCD} for \code{BDS}) and adds standard ADaM key variables
 (analysis visit, timepoint, relative time, date, interval start/end, period,
@@ -40,7 +41,8 @@ candidate list has to span several dataset shapes: findings data is keyed by
 visit and timepoint, exposure by interval start, population-PK by relative
 time and not by visit at all, and any of them may carry derived records
 separated only by \code{DTYPE}.
-
+}
+\details{
 For \code{BDS}/\code{TTE}, surrogate/sequence keys such as \code{ASEQ} are deliberately
 \emph{not} used, so that unintended duplicate records remain detectable. For
 \code{OCCDS}, however, the sequence number \emph{is} the intended record key (there is

@@ -40,6 +40,9 @@ as_admiral_df <- function(dataset) {
 
 #' Tag a Dataset with its Key Variables
 #'
+#' @description
+#' `r lifecycle::badge("experimental")`
+#'
 #' Stores the key variables of a dataset -- the variables which uniquely identify
 #' its records -- in its `"admiral_keys"` attribute, and tags it with
 #' the `admiral_df` class (see [as_admiral_df()]). The keys describe the record
@@ -206,6 +209,9 @@ set_admiral_keys <- function(dataset, keys, dataset_name = NULL) {
 
 #' Print `admiral_df` Objects
 #'
+#' @description
+#' `r lifecycle::badge("experimental")`
+#'
 #' Prints the dataset name and key variables stored by [set_admiral_keys()] in a
 #' header line, followed by the dataset as it would print without the
 #' `admiral_df` class. The header is only printed if a name or keys have been
@@ -262,6 +268,9 @@ print.admiral_df <- function(x, ...) {
 }
 
 #' Determine the ADaM Dataset Type
+#'
+#' @description
+#' `r lifecycle::badge("experimental")`
 #'
 #' Attempts to classify a data frame as one of the common ADaM dataset types based
 #' on the variables it contains.
@@ -365,6 +374,9 @@ get_admiral_df_type <- function(dataset) {
 
 #' Find the Minimal Set of Variables that Uniquely Identifies Rows
 #'
+#' @description
+#' `r lifecycle::badge("experimental")`
+#'
 #' Starting from `must_have`, adds variables from `optional` one at a time (in
 #' the given order) until the combination is a unique key of `dataset`, then
 #' drops any added variable which is not needed for uniqueness. If uniqueness is
@@ -454,6 +466,9 @@ minimal_unique_key <- function(dataset, must_have, optional) {
 }
 
 #' Infer the Record Structure of a Dataset from its Type and Data
+#'
+#' @description
+#' `r lifecycle::badge("experimental")`
 #'
 #' Works out which variables uniquely identify the records of a dataset. This is
 #' the fallback for when no keys have been declared with [set_admiral_keys()],
@@ -607,6 +622,9 @@ infer_admiral_keys <- function(dataset, type = get_admiral_df_type(dataset)) {
 }
 
 #' Find the Record Key of an Occurrence Dataset
+#'
+#' @description
+#' `r lifecycle::badge("experimental")`
 #'
 #' @param dataset A data frame
 #'

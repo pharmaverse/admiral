@@ -42,6 +42,8 @@ call untouched, so re-keying a dataset does not lose its name.
 or had been stored by a previous call, and the \code{admiral_df} class.
 }
 \description{
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
+
 Stores the key variables of a dataset -- the variables which uniquely identify
 its records -- in its \code{"admiral_keys"} attribute, and tags it with
 the \code{admiral_df} class (see \code{\link[=as_admiral_df]{as_admiral_df()}}). The keys describe the record
