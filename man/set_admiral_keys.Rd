@@ -117,7 +117,7 @@ class(advs)
 \subsection{Keys from a dataset specification}{
 
 A dataset specification provides the keys as a character vector, which
-\code{\link[=chr2vars]{chr2vars()}} converts. {admiral} does not read specification objects
+\code{\link[=chr2vars]{chr2vars()}} converts. \code{{admiral}} does not read specification objects
 itself, so they are extracted in the calling code; e.g. with a
 \code{{metacore}} specification that is \code{metacore::get_keys()}:
 
