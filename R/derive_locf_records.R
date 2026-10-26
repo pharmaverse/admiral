@@ -337,5 +337,5 @@ derive_locf_records <- function(dataset,
   # If imputation == 'update', keep non-missing + newly added LOCF records
 
   bind_rows(aval_locf, aval_missing) %>%
-    as_admiral_df()
+    new_admiral_df()
 }

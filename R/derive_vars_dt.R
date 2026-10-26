@@ -369,7 +369,7 @@ derive_vars_dt <- function(dataset,
     }
   }
 
-  as_admiral_df(dataset)
+  new_admiral_df(dataset)
 }
 
 #' Convert a Date Character Vector into a Date Object

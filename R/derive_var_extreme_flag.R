@@ -386,5 +386,5 @@ derive_var_extreme_flag <- function(dataset,
   # Remove temporary variable
   data %>%
     remove_tmp_vars() %>%
-    as_admiral_df()
+    new_admiral_df()
 }

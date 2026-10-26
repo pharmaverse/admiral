@@ -113,5 +113,5 @@ derive_vars_dy <- function(dataset,
         .names = "{dy_vars}"
       )
     ) %>%
-    as_admiral_df()
+    new_admiral_df()
 }

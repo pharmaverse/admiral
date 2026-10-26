@@ -28,6 +28,7 @@ Print \code{duplicates} Objects
 \seealso{
 Utilities for printing:
 \code{\link[=print.adam_templates]{print.adam_templates()}},
+\code{\link[=print.admiral_df]{print.admiral_df()}},
 \code{\link[=print.source]{print.source()}},
 \code{\link[=print_named_list]{print_named_list()}}
 }

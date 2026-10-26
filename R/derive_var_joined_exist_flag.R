@@ -660,5 +660,5 @@ derive_var_joined_exist_flag <- function(dataset,
     missing_value = false_value
   ) %>%
     remove_tmp_vars() %>%
-    as_admiral_df()
+    new_admiral_df()
 }

@@ -217,5 +217,5 @@ derive_vars_transposed <- function(dataset,
       )
     }
   ) %>%
-    as_admiral_df()
+    new_admiral_df()
 }
