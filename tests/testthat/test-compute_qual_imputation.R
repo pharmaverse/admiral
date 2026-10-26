@@ -111,3 +111,12 @@ test_that("compute_qual_imputation Test 26: Method 2, No Qualifier, Character Va
 test_that("compute_qual_imputation Test 27: Vector of Values", {
   expect_equal(compute_qual_imputation(c("3", ">30.2")), c(3.0, 30.2))
 })
+
+test_that("compute_qual_imputation_dec preserves precision and missing-value fallback", {
+  expect_identical(
+    compute_qual_imputation_dec(c(" <40.10 ", "40", NA_character_, "", "0.001")),
+    c(0.01, 1, 1, 1, 0.001)
+  )
+  expect_identical(compute_qual_imputation_dec(NA_character_), 1)
+  expect_identical(compute_qual_imputation_dec(character()), numeric())
+})

@@ -112,9 +112,10 @@ ex_dates <- ex %>%
     visit_day = VISITDY
   ) %>%
   # Set missing end dates to start date
-  mutate(AENDTM = case_when(
-    is.na(AENDTM) ~ ASTDTM,
-    TRUE ~ AENDTM
+  mutate(AENDTM = if_else(
+    is.na(AENDTM),
+    ASTDTM,
+    AENDTM
   )) %>%
   # Derive dates from date/times
   derive_vars_dtm_to_dt(exprs(ASTDTM)) %>%
@@ -278,9 +279,11 @@ adppk_aval <- adppk_aprlt %>%
       TRT01P == "Placebo" ~ 0
     ),
     # Derive PARAMCD
-    PARAMCD = case_when(
-      EVID == 1 ~ "DOSE",
-      TRUE ~ PCTESTCD
+    PARAMCD = if_else(
+      EVID == 1,
+      "DOSE",
+      PCTESTCD,
+      missing = PCTESTCD
     ),
     ALLOQ = PCLLOQ,
     # Derive CMT
@@ -290,24 +293,30 @@ adppk_aval <- adppk_aprlt %>%
       TRUE ~ 3
     ),
     # Derive BLQFL/BLQFN
-    BLQFL = case_when(
-      PCSTRESC == "<BLQ" ~ "Y",
-      TRUE ~ "N"
+    BLQFL = if_else(
+      PCSTRESC == "<BLQ",
+      "Y",
+      "N",
+      missing = "N"
     ),
-    BLQFN = case_when(
-      PCSTRESC == "<BLQ" ~ 1,
-      TRUE ~ 0
+    BLQFN = if_else(
+      PCSTRESC == "<BLQ",
+      1,
+      0,
+      missing = 0
     ),
-    AMT = case_when(
-      EVID == 1 ~ EXDOSE,
-      TRUE ~ NA_real_
+    AMT = if_else(
+      EVID == 1,
+      EXDOSE,
+      NA_real_
     ),
     # Derive DV and AVAL
     DV = PCSTRESN,
     AVAL = DV,
-    DVL = case_when(
-      DV != 0 ~ log(DV),
-      TRUE ~ NA_real_
+    DVL = if_else(
+      DV != 0,
+      log(DV),
+      NA_real_
     ),
     # Derive MDV
     MDV = case_when(
@@ -315,9 +324,11 @@ adppk_aval <- adppk_aprlt %>%
       is.na(DV) ~ 1,
       TRUE ~ 0
     ),
-    AVALU = case_when(
-      EVID == 1 ~ NA_character_,
-      TRUE ~ PCSTRESU
+    AVALU = if_else(
+      EVID == 1,
+      NA_character_,
+      PCSTRESU,
+      missing = PCSTRESU
     ),
     UDTC = coalesce(PCDTC, EXSTDTC),
     II = if_else(EVID == 1, 1, 0),
@@ -396,14 +407,17 @@ covar <- adsl %>%
     COHORT = ARMN,
     COHORTC = ARM,
     ROUTE = unique(ex$EXROUTE),
-    ROUTEN = case_when(
-      ROUTE == "TRANSDERMAL" ~ 3,
-      TRUE ~ NA_real_
+    ROUTEN = if_else(
+      ROUTE == "TRANSDERMAL",
+      3,
+      NA_real_
     ),
     FORM = unique(ex$EXDOSFRM),
-    FORMN = case_when(
-      FORM == "PATCH" ~ 3,
-      TRUE ~ 4
+    FORMN = if_else(
+      FORM == "PATCH",
+      3,
+      4,
+      missing = 4
     )
   ) %>%
   select(
