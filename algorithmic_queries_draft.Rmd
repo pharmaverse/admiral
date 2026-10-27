@@ -38,10 +38,10 @@ a case**, so it cannot be resolved by looking at a single record in isolation.
 
 This article shows how to derive such a query in two steps:
 
-1. Use `derive_vars_query()` to flag the full SMQ (narrow/broad) **and** each
-   algorithm category as its own query variable. Keeping one variable per
-   category in the dataset makes the derivation traceable --- a reviewer can see
-   exactly which term contributed which category.
+1. Use `create_query_data()` to set up one query per algorithm category, and
+   `derive_vars_query()` to add them all to the dataset. Keeping one variable
+   per category makes the derivation traceable --- a reviewer can see exactly
+   which term contributed which category.
 1. Use `derive_vars_joined()` to evaluate the algorithm across all records of a
    subject and derive the final query variable.
 
@@ -67,80 +67,169 @@ A case qualifies if it includes either
 
 i.e. `A or (B and C) or (D and (B or C))`.
 
-**Note**: *MedDRA is a licensed dictionary, so the terms used below are
-illustrative placeholders rather than the actual content of the SMQ. In
-practice the queries dataset is built by `create_query_data()` with a
-company-specific `get_terms_fun` that reads the real MedDRA database.*
+# Accessing the MedDRA Database {#get_terms}
+
+The terms of an SMQ are read from the MedDRA database by a company-specific
+function passed to the `get_terms_fun` argument of `create_query_data()` ---
+admiral does not provide one, as the database layout is company-specific. See
+`create_query_data()` for the interface this function has to implement.
+
+For an algorithmic SMQ the function additionally has to be able to return a
+single algorithm category. `basket_select()` accepts any number of *named*
+arguments via `...`, which are passed on unchanged inside the `basket_select`
+object, so the category can be requested with e.g.
+`basket_select(..., algorithm_category = "B")`.
+
+The function below stands in for the company function so that this article can
+be run. It serves a small, made-up term list rather than the real SMQ --- MedDRA
+is a licensed dictionary, so its content cannot be shipped here.
+
+```{r}
+# stand-in for the company MedDRA database
+smq_anaphylaxis_db <- tribble(
+  ~TERMCHAR,                   ~SCOPE,   ~ALGCAT,
+  "ANAPHYLACTIC REACTION",     "NARROW", NA,
+  "ANAPHYLACTIC SHOCK",        "NARROW", NA,
+  "ANAPHYLACTOID REACTION",    "NARROW", NA,
+  "CIRCULATORY COLLAPSE",      "BROAD",  "A",
+  "SHOCK",                     "BROAD",  "A",
+  "BRONCHOSPASM",              "BROAD",  "B",
+  "DYSPNOEA",                  "BROAD",  "B",
+  "STRIDOR",                   "BROAD",  "B",
+  "WHEEZING",                  "BROAD",  "B",
+  "ANGIOEDEMA",                "BROAD",  "C",
+  "FLUSHING",                  "BROAD",  "C",
+  "PRURITUS",                  "BROAD",  "C",
+  "URTICARIA",                 "BROAD",  "C",
+  "BLOOD PRESSURE DECREASED",  "BROAD",  "D",
+  "HYPOTENSION",               "BROAD",  "D",
+  "TACHYCARDIA",               "BROAD",  "D"
+)
+
+# stand-in for the company get_terms() function
+get_terms <- function(basket_select, version, keep_id, temp_env) {
+  terms <- smq_anaphylaxis_db
+
+  # a narrow search returns the narrow terms only, a broad search returns all
+  # terms of the SMQ
+  if (basket_select$scope == "NARROW") {
+    terms <- filter(terms, SCOPE == "NARROW")
+  }
+
+  # `algorithm_category` is passed in via the `...` argument of
+  # `basket_select()` and restricts the terms to one algorithm category
+  if (!is.null(basket_select$algorithm_category)) {
+    terms <- filter(terms, !is.na(ALGCAT) & ALGCAT == basket_select$algorithm_category)
+  }
+
+  out <- transmute(
+    terms,
+    SRCVAR = "AEDECOD",
+    TERMCHAR,
+    GRPNAME = "Anaphylactic reaction (SMQ)"
+  )
+  if (keep_id) {
+    out <- mutate(out, GRPID = 20000021L)
+  }
+  out
+}
+```
 
 # Set up the Queries Dataset {#queries}
 
-The queries dataset follows the structure described in the
-[Queries dataset documentation](queries_dataset.html). Here we start from a
-simple term list which assigns each term to its algorithm category, and build
-the queries dataset from it. This keeps the mapping between terms and
-categories in one place.
+Each part of the algorithm is defined by its own `query()` object:
+
+* `SMQ01` is the SMQ itself, retrieved with a broad search. This is the
+  standard narrow/broad retrieval the algorithm is applied on top of, and it
+  creates `SMQ01NAM`, `SMQ01CD`, `SMQ01SC` and `SMQ01SCN`.
+* `CQ01` to `CQ05` are the building blocks of the algorithm: the narrow terms
+  and the four categories.
+
+The building blocks are defined as *customized queries based on a basket*, i.e.
+the `basket_select()` object is wrapped in a `list()`. That way only `CQzzNAM`
+is created for them --- a plain `basket_select()` would additionally populate
+`SCOPE`, giving non-standard `CQzzSC` variables which add nothing here, as the
+scope is already captured by `SMQ01SC`.
 
 ```{r}
-anaphylaxis_terms <- tribble(
-  ~TERMCHAR,                   ~ALGCAT,
-  # Narrow (core) terms
-  "ANAPHYLACTIC REACTION",     "NARROW",
-  "ANAPHYLACTIC SHOCK",        "NARROW",
-  "ANAPHYLACTOID REACTION",    "NARROW",
-  # Category A - broad terms which qualify on their own
-  "CIRCULATORY COLLAPSE",      "A",
-  "SHOCK",                     "A",
-  # Category B - upper airway / respiratory
-  "BRONCHOSPASM",              "B",
-  "DYSPNOEA",                  "B",
-  "STRIDOR",                   "B",
-  "WHEEZING",                  "B",
-  # Category C - angioedema / urticaria / pruritus / flush
-  "ANGIOEDEMA",                "C",
-  "FLUSHING",                  "C",
-  "PRURITUS",                  "C",
-  "URTICARIA",                 "C",
-  # Category D - cardiovascular / hypotension
-  "BLOOD PRESSURE DECREASED",  "D",
-  "HYPOTENSION",               "D",
-  "TACHYCARDIA",               "D"
-)
-```
-
-The first part of the queries dataset is the SMQ itself, with the narrow terms
-flagged via `SCOPE`/`SCOPEN`. This is the standard narrow/broad retrieval which
-the algorithm is applied on top of.
-
-```{r}
-smq_anaphylaxis <- anaphylaxis_terms %>%
-  transmute(
-    PREFIX = "SMQ01",
-    GRPNAME = "Anaphylactic reaction (SMQ)",
-    GRPID = 20000021,
-    SCOPE = if_else(ALGCAT == "NARROW", "NARROW", "BROAD"),
-    SCOPEN = if_else(ALGCAT == "NARROW", 2L, 1L),
-    SRCVAR = "AEDECOD",
-    TERMCHAR
+anaphylaxis_queries <- list(
+  query(
+    prefix = "SMQ01",
+    name = auto,
+    id = auto,
+    add_scope_num = TRUE,
+    definition = basket_select(
+      name = "Anaphylactic reaction (SMQ)",
+      scope = "BROAD",
+      type = "smq"
+    )
+  ),
+  query(
+    prefix = "CQ01",
+    name = "Anaphylaxis narrow terms",
+    definition = list(
+      basket_select(
+        name = "Anaphylactic reaction (SMQ)",
+        scope = "NARROW",
+        type = "smq"
+      )
+    )
+  ),
+  query(
+    prefix = "CQ02",
+    name = "Anaphylaxis algorithm category A",
+    definition = list(
+      basket_select(
+        name = "Anaphylactic reaction (SMQ)",
+        scope = "BROAD",
+        type = "smq",
+        algorithm_category = "A"
+      )
+    )
+  ),
+  query(
+    prefix = "CQ03",
+    name = "Anaphylaxis algorithm category B (upper airway/respiratory)",
+    definition = list(
+      basket_select(
+        name = "Anaphylactic reaction (SMQ)",
+        scope = "BROAD",
+        type = "smq",
+        algorithm_category = "B"
+      )
+    )
+  ),
+  query(
+    prefix = "CQ04",
+    name = "Anaphylaxis algorithm category C (angioedema/urticaria/pruritus/flush)",
+    definition = list(
+      basket_select(
+        name = "Anaphylactic reaction (SMQ)",
+        scope = "BROAD",
+        type = "smq",
+        algorithm_category = "C"
+      )
+    )
+  ),
+  query(
+    prefix = "CQ05",
+    name = "Anaphylaxis algorithm category D (cardiovascular/hypotension)",
+    definition = list(
+      basket_select(
+        name = "Anaphylactic reaction (SMQ)",
+        scope = "BROAD",
+        type = "smq",
+        algorithm_category = "D"
+      )
+    )
   )
-```
-
-The second part defines one customized query per algorithm category. These are
-the building blocks of the algorithm and are kept in the output dataset.
-
-```{r}
-alg_categories <- tribble(
-  ~ALGCAT, ~PREFIX, ~GRPNAME,
-  "A",     "CQ01",  "Anaphylaxis algorithm category A",
-  "B",     "CQ02",  "Anaphylaxis algorithm category B (upper airway/respiratory)",
-  "C",     "CQ03",  "Anaphylaxis algorithm category C (angioedema/urticaria/pruritus/flush)",
-  "D",     "CQ04",  "Anaphylaxis algorithm category D (cardiovascular/hypotension)"
 )
 
-cq_anaphylaxis <- anaphylaxis_terms %>%
-  inner_join(alg_categories, by = "ALGCAT") %>%
-  transmute(PREFIX, GRPNAME, SRCVAR = "AEDECOD", TERMCHAR)
-
-queries_anaphylaxis <- bind_rows(smq_anaphylaxis, cq_anaphylaxis)
+queries_anaphylaxis <- create_query_data(
+  queries = anaphylaxis_queries,
+  get_terms_fun = get_terms,
+  version = "29.1"
+)
 ```
 
 ```{r, echo=FALSE}
@@ -169,10 +258,7 @@ adae <- tribble(
 
 # Step 1: Derive One Query Variable per Category {#step1}
 
-A single `derive_vars_query()` call derives all prefixes at once. `SMQ01NAM`,
-`SMQ01CD`, `SMQ01SC` and `SMQ01SCN` describe the standard narrow/broad SMQ,
-while `CQ01NAM` to `CQ04NAM` identify which algorithm category the reported
-term belongs to.
+A single `derive_vars_query()` call derives all prefixes at once.
 
 ```{r}
 adae_query <- adae %>%
@@ -183,14 +269,15 @@ adae_query <- adae %>%
 dataset_vignette(
   adae_query,
   display_vars = exprs(
-    USUBJID, AESEQ, AEDECOD, SMQ01NAM, SMQ01SC, CQ01NAM, CQ02NAM, CQ03NAM, CQ04NAM
+    USUBJID, AESEQ, AEDECOD, SMQ01NAM, SMQ01SC,
+    CQ01NAM, CQ02NAM, CQ03NAM, CQ04NAM, CQ05NAM
   )
 )
 ```
 
 Note that none of these variables on their own answers whether the subject
-qualifies for the algorithmic query: subject `03` has a category B term on one
-record and a category C term on another.
+qualifies for the algorithmic query: subject `03` has a category B term
+(`CQ03NAM`) on one record and a category C term (`CQ04NAM`) on another.
 
 # Step 2: Combine the Categories with `derive_vars_joined()` {#step2}
 
@@ -203,7 +290,7 @@ with a `.join` suffix.
 Because the condition has to hold across the whole case rather than for an
 individual pair of records, `filter_join` uses the summary function `any()` ---
 inside `filter_join` the joined dataset is grouped by the original observation,
-so `any(!is.na(CQ02NAM.join))` reads as *"this subject has at least one category
+so `any(!is.na(CQ03NAM.join))` reads as *"this subject has at least one category
 B term"*.
 
 ```{r}
@@ -213,17 +300,16 @@ adae_alg <- adae_query %>%
     by_vars = exprs(USUBJID),
     order = exprs(AESEQ),
     mode = "first",
-    join_vars = exprs(SMQ01SCN, CQ01NAM, CQ02NAM, CQ03NAM, CQ04NAM),
+    join_vars = exprs(CQ01NAM, CQ02NAM, CQ03NAM, CQ04NAM, CQ05NAM),
     join_type = "all",
     filter_join =
     # narrow term or category A
-      any(!is.na(SMQ01SCN.join) & SMQ01SCN.join == 2) |
-        any(!is.na(CQ01NAM.join)) |
+      any(!is.na(CQ01NAM.join)) | any(!is.na(CQ02NAM.join)) |
         # category B and category C
-        (any(!is.na(CQ02NAM.join)) & any(!is.na(CQ03NAM.join))) |
+        (any(!is.na(CQ03NAM.join)) & any(!is.na(CQ04NAM.join))) |
         # category D and (category B or category C)
-        (any(!is.na(CQ04NAM.join)) &
-          (any(!is.na(CQ02NAM.join)) | any(!is.na(CQ03NAM.join)))),
+        (any(!is.na(CQ05NAM.join)) &
+          (any(!is.na(CQ03NAM.join)) | any(!is.na(CQ04NAM.join)))),
     new_vars = exprs(SMQ02NAM = "Anaphylactic reaction (algorithmic)")
   )
 ```
@@ -232,8 +318,8 @@ adae_alg <- adae_query %>%
 dataset_vignette(
   adae_alg,
   display_vars = exprs(
-    USUBJID, AESEQ, AEDECOD, SMQ01NAM, SMQ01SC, CQ01NAM, CQ02NAM, CQ03NAM,
-    CQ04NAM, SMQ02NAM
+    USUBJID, AESEQ, AEDECOD, SMQ01NAM, CQ01NAM, CQ02NAM, CQ03NAM, CQ04NAM,
+    CQ05NAM, SMQ02NAM
   )
 )
 ```
@@ -245,9 +331,9 @@ selected.
 
 Walking through the subjects:
 
-* `01` qualifies on the narrow term *Anaphylactic reaction* (rule A). Both
-  records of the subject are flagged, including the unrelated *Headache*,
-  because the algorithm qualifies the **case**.
+* `01` qualifies on the narrow term *Anaphylactic reaction*. Both records of
+  the subject are flagged, including the unrelated *Headache*, because the
+  algorithm qualifies the **case**.
 * `02` qualifies on the category A term *Circulatory collapse*.
 * `03` qualifies on *Dyspnoea* (B) **and** *Urticaria* (C).
 * `04` qualifies on *Hypotension* (D) **and** *Wheezing* (B).
@@ -273,14 +359,14 @@ adae_alg_rec <- adae_query %>%
     by_vars = exprs(USUBJID),
     order = exprs(AESEQ),
     new_var = ANAPTFL,
-    join_vars = exprs(CQ01NAM, CQ02NAM, CQ03NAM, CQ04NAM),
+    join_vars = exprs(CQ03NAM, CQ04NAM, CQ05NAM),
     join_type = "all",
     filter_join =
-      (!is.na(SMQ01SCN) & SMQ01SCN == 2) | !is.na(CQ01NAM) |
-        (!is.na(CQ02NAM) & !is.na(CQ03NAM.join)) |
-        (!is.na(CQ03NAM) & !is.na(CQ02NAM.join)) |
-        (!is.na(CQ04NAM) & (!is.na(CQ02NAM.join) | !is.na(CQ03NAM.join))) |
-        ((!is.na(CQ02NAM) | !is.na(CQ03NAM)) & !is.na(CQ04NAM.join))
+      !is.na(CQ01NAM) | !is.na(CQ02NAM) |
+        (!is.na(CQ03NAM) & !is.na(CQ04NAM.join)) |
+        (!is.na(CQ04NAM) & !is.na(CQ03NAM.join)) |
+        (!is.na(CQ05NAM) & (!is.na(CQ03NAM.join) | !is.na(CQ04NAM.join))) |
+        ((!is.na(CQ03NAM) | !is.na(CQ04NAM)) & !is.na(CQ05NAM.join))
   )
 ```
 
@@ -288,7 +374,7 @@ adae_alg_rec <- adae_query %>%
 dataset_vignette(
   adae_alg_rec,
   display_vars = exprs(
-    USUBJID, AESEQ, AEDECOD, CQ01NAM, CQ02NAM, CQ03NAM, CQ04NAM, ANAPTFL
+    USUBJID, AESEQ, AEDECOD, CQ01NAM, CQ02NAM, CQ03NAM, CQ04NAM, CQ05NAM, ANAPTFL
   )
 )
 ```
@@ -299,7 +385,9 @@ The MedDRA algorithm is defined at case level, but a study may want to require
 that the contributing events occur close to each other in time. Since the
 joined dataset also exposes the dates, this is a matter of adding a condition on
 `ASTDT` --- e.g. requiring the contributing terms to start within 7 days of each
-other:
+other. Note that the window condition has to go **inside** each `any()`: placed
+outside, it would be evaluated per record while the category check would still
+look at the whole case.
 
 ```{r}
 adae_alg_window <- adae_query %>%
@@ -308,16 +396,16 @@ adae_alg_window <- adae_query %>%
     by_vars = exprs(USUBJID),
     order = exprs(AESEQ),
     mode = "first",
-    join_vars = exprs(ASTDT, SMQ01SCN, CQ01NAM, CQ02NAM, CQ03NAM, CQ04NAM),
+    join_vars = exprs(ASTDT, CQ01NAM, CQ02NAM, CQ03NAM, CQ04NAM, CQ05NAM),
     join_type = "all",
     filter_join =
-      any(abs(ASTDT.join - ASTDT) <= 7 & !is.na(SMQ01SCN.join) & SMQ01SCN.join == 2) |
-        any(abs(ASTDT.join - ASTDT) <= 7 & !is.na(CQ01NAM.join)) |
-        (any(abs(ASTDT.join - ASTDT) <= 7 & !is.na(CQ02NAM.join)) &
-          any(abs(ASTDT.join - ASTDT) <= 7 & !is.na(CQ03NAM.join))) |
-        (any(abs(ASTDT.join - ASTDT) <= 7 & !is.na(CQ04NAM.join)) &
-          (any(abs(ASTDT.join - ASTDT) <= 7 & !is.na(CQ02NAM.join)) |
-            any(abs(ASTDT.join - ASTDT) <= 7 & !is.na(CQ03NAM.join)))),
+      any(abs(ASTDT.join - ASTDT) <= 7 & !is.na(CQ01NAM.join)) |
+        any(abs(ASTDT.join - ASTDT) <= 7 & !is.na(CQ02NAM.join)) |
+        (any(abs(ASTDT.join - ASTDT) <= 7 & !is.na(CQ03NAM.join)) &
+          any(abs(ASTDT.join - ASTDT) <= 7 & !is.na(CQ04NAM.join))) |
+        (any(abs(ASTDT.join - ASTDT) <= 7 & !is.na(CQ05NAM.join)) &
+          (any(abs(ASTDT.join - ASTDT) <= 7 & !is.na(CQ03NAM.join)) |
+            any(abs(ASTDT.join - ASTDT) <= 7 & !is.na(CQ04NAM.join)))),
     new_vars = exprs(SMQ02NAM = "Anaphylactic reaction (algorithmic)")
   )
 ```
@@ -326,7 +414,8 @@ adae_alg_window <- adae_query %>%
 dataset_vignette(
   adae_alg_window,
   display_vars = exprs(
-    USUBJID, AESEQ, ASTDT, AEDECOD, CQ01NAM, CQ02NAM, CQ03NAM, CQ04NAM, SMQ02NAM
+    USUBJID, AESEQ, ASTDT, AEDECOD, CQ01NAM, CQ02NAM, CQ03NAM, CQ04NAM,
+    CQ05NAM, SMQ02NAM
   )
 )
 ```
