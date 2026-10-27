@@ -5,9 +5,9 @@
 #'
 #' @param start_date The start date
 #'
-#'   A date or date-time object is expected. Date-times are expected in UTC,
-#'   e.g., as created by `derive_vars_dtm()`. If the time zones of `start_date`
-#'   and `end_date` differ, a warning is issued.
+#'   A date or date-time object is expected. Date-times must have a time zone,
+#'   and it must be the same as the time zone of the other date. Dates are
+#'   treated as UTC.
 #'
 #'   Refer to `derive_vars_dt()` to impute and derive a date from a date
 #'   character vector to a date object.
@@ -16,9 +16,9 @@
 #'
 #' @param end_date The end date
 #'
-#'   A date or date-time object is expected. Date-times are expected in UTC,
-#'   e.g., as created by `derive_vars_dtm()`. If the time zones of `start_date`
-#'   and `end_date` differ, a warning is issued.
+#'   A date or date-time object is expected. Date-times must have a time zone,
+#'   and it must be the same as the time zone of the other date. Dates are
+#'   treated as UTC.
 #'
 #'   Refer to `derive_vars_dt()` to impute and derive a date from a date
 #'   character vector to a date object.
@@ -97,6 +97,15 @@
 #' @details The output is a numeric vector providing the duration as time from
 #' start to end date in the specified unit. If the end date is before the start
 #' date, the duration is negative.
+#'
+#' @section Time Zones:
+#'
+#' Date-times must have a time zone, and `start_date` and `end_date` must have
+#' the same time zone. Otherwise an error is issued. Dates are treated as UTC.
+#' If needed, use `lubridate::force_tz()` to set the time zone.
+#'
+#' admiral functions that convert character dates into date-times, e.g.,
+#' `derive_vars_dtm()` and `convert_dtc_to_dtm()`, always assign UTC.
 #'
 #' @section Duration Type:
 #'
@@ -201,18 +210,21 @@ compute_duration <- function(start_date,
   assert_logical_scalar(add_one)
   assert_logical_scalar(trunc_out)
 
-  start_tz <- get_time_zone(start_date)
-  end_tz <- get_time_zone(end_date)
-  if (!identical(start_tz, end_tz)) {
-    cli_warn(c(
+  start_tz <- tz(start_date)
+  end_tz <- tz(end_date)
+  if (start_tz == "" || end_tz == "") {
+    cli_abort(c(
+      "{.arg start_date} and {.arg end_date} must have a time zone.",
+      i = "Please use {.fun lubridate::force_tz} to set the time zone."
+    ))
+  }
+  if (start_tz != end_tz) {
+    cli_abort(c(
       paste(
-        "{.arg start_date} and {.arg end_date} have different time zones:",
-        "{.val {start_tz}} and {.val {end_tz}}."
+        "{.arg start_date} and {.arg end_date} must have the same time zone",
+        "but have {.val {start_tz}} and {.val {end_tz}}."
       ),
-      paste(
-        "Date-times are expected in UTC.",
-        "Please use {.fun lubridate::force_tz} to set the time zone to UTC."
-      )
+      i = "Please use {.fun lubridate::force_tz} to set the time zone."
     ))
   }
 
@@ -263,22 +275,6 @@ compute_duration <- function(start_date,
     duration <- trunc(duration)
   }
   duration
-}
-
-#' Get the time zone of a date or date-time vector
-#'
-#' @param x A date or date-time vector
-#'
-#' @return The time zone of `x`. For dates `"UTC"` is returned, for date-times
-#'   without time zone the local time zone.
-#'
-#' @keywords internal
-#' @family internal
-#'
-#' @noRd
-get_time_zone <- function(x) {
-  time_zone <- tz(x)
-  if (time_zone == "") Sys.timezone() else time_zone
 }
 
 #' Map common units of time into standardized terms

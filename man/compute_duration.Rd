@@ -18,9 +18,9 @@ compute_duration(
 \arguments{
 \item{start_date}{The start date
 
-A date or date-time object is expected. Date-times are expected in UTC,
-e.g., as created by \code{derive_vars_dtm()}. If the time zones of \code{start_date}
-and \code{end_date} differ, a warning is issued.
+A date or date-time object is expected. Date-times must have a time zone,
+and it must be the same as the time zone of the other date. Dates are
+treated as UTC.
 
 Refer to \code{derive_vars_dt()} to impute and derive a date from a date
 character vector to a date object.
@@ -33,9 +33,9 @@ Refer to \code{convert_dtc_to_dt()} to obtain a vector of imputed dates.
 
 \item{end_date}{The end date
 
-A date or date-time object is expected. Date-times are expected in UTC,
-e.g., as created by \code{derive_vars_dtm()}. If the time zones of \code{start_date}
-and \code{end_date} differ, a warning is issued.
+A date or date-time object is expected. Date-times must have a time zone,
+and it must be the same as the time zone of the other date. Dates are
+treated as UTC.
 
 Refer to \code{derive_vars_dt()} to impute and derive a date from a date
 character vector to a date object.
@@ -143,6 +143,17 @@ The output is a numeric vector providing the duration as time from
 start to end date in the specified unit. If the end date is before the start
 date, the duration is negative.
 }
+\section{Time Zones}{
+
+
+Date-times must have a time zone, and \code{start_date} and \code{end_date} must have
+the same time zone. Otherwise an error is issued. Dates are treated as UTC.
+If needed, use \code{lubridate::force_tz()} to set the time zone.
+
+admiral functions that convert character dates into date-times, e.g.,
+\code{derive_vars_dtm()} and \code{convert_dtc_to_dtm()}, always assign UTC.
+}
+
 \section{Duration Type}{
 
 

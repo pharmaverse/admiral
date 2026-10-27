@@ -283,17 +283,46 @@ test_that("compute_duration Test 17: Interval with duration/interval invariant u
   )
 })
 
-## Test 18: warning if time zones differ ----
-test_that("compute_duration Test 18: warning if time zones differ", {
+## Test 18: error if time zones differ ----
+test_that("compute_duration Test 18: error if time zones differ", {
   expect_snapshot(
     compute_duration(
       ymd_hms("2024-01-01T10:00:00", tz = "Asia/Tokyo"),
       ymd("2024-01-03")
-    )
+    ),
+    error = TRUE
   )
 })
 
-## Test 19: no warning if date-time is UTC and other is a date ----
-test_that("compute_duration Test 19: no warning if date-time is UTC and other is a date", {
-  expect_no_warning(compute_duration(ymd_hms("2024-01-01T10:00:00"), ymd("2024-01-03")))
+## Test 19: no error if date-time is UTC and other is a date ----
+test_that("compute_duration Test 19: no error if date-time is UTC and other is a date", {
+  expect_equal(
+    compute_duration(ymd_hms("2024-01-01T12:00:00"), ymd("2024-01-03")),
+    3
+  )
+})
+
+## Test 20: error if a date-time has no time zone ----
+test_that("compute_duration Test 20: error if a date-time has no time zone", {
+  expect_snapshot(
+    compute_duration(
+      as.POSIXct("2024-01-01 10:00:00", tz = ""),
+      ymd_hms("2024-01-03T10:00:00")
+    ),
+    error = TRUE
+  )
+})
+
+## Test 21: duration is computed if both date-times have the same time zone ----
+test_that("compute_duration Test 21: duration is computed if both date-times have the same time zone", { # nolint
+  expect_equal(
+    compute_duration(
+      ymd_hms("2024-01-01T10:00:00", tz = "Asia/Tokyo"),
+      ymd_hms("2024-01-03T10:00:00", tz = "Asia/Tokyo"),
+      in_unit = "hours",
+      out_unit = "hours",
+      add_one = FALSE
+    ),
+    48
+  )
 })

@@ -52,6 +52,8 @@
 #' invalid datetime (e.g. "2020-02-01T25:00:00") to be generated. In this case,
 #' the user should adjust the imputation rules.
 #'
+#' The datetime is created in UTC.
+#'
 #' @return  The input dataset with the datetime `*DTM` (and the date/time imputation
 #' flag `*DTF`, `*TMF`) added.
 #'
@@ -315,7 +317,7 @@ derive_vars_dtm <- function(dataset,
 #' @details This is a vector-oriented helper and is not usually called directly on a data
 #' frame with `%>%`.
 #'
-#' @return A datetime object
+#' @return A datetime object in UTC
 #'
 #' @family com_date_time
 #'

@@ -30,10 +30,10 @@ argument will thus be deprecated. (#3188)
 `atoxgr_criteria_ctcv5_uscv`, `atoxgr_criteria_ctcv6`, `atoxgr_criteria_ctcv6_uscv`)
 were updated to add the term `"Eosinophilia"` (#3191).
 
-- `compute_duration()` now issues a warning if the time zones of `start_date`
-and `end_date` differ. The documentation of `compute_duration()` and
-`derive_vars_dy()` was updated to state that date-times are expected in UTC.
-(#2763)
+- `compute_duration()` now issues an error if `start_date` or `end_date` is a
+date-time without time zone, or if their time zones differ. The documentation
+of `compute_duration()`, `derive_vars_dtm()`, and `convert_dtc_to_dtm()` was
+updated to state that admiral creates date-times in UTC. (#2763)
 
 ## Breaking Changes
 
