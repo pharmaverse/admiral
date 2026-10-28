@@ -1,0 +1,903 @@
+# Creating an OCCDS ADaM
+
+## Introduction
+
+This article describes creating an OCCDS ADaM. Examples are currently
+presented and tested in the context of `ADAE`. However, the examples
+could be applied to other OCCDS ADaMs such as `ADCM`, `ADMH`, `ADDV`,
+etc.
+
+**Note**: *All examples assume CDISC SDTM and/or ADaM format as input
+unless otherwise specified.*
+
+## Programming Workflow
+
+- [Read in Data](#readdata)
+- [Derive/Impute End and Start Analysis Date/time and Relative
+  Day](#datetime)
+- [Derive Durations](#duration)
+- [Derive ATC variables](#atc)
+- [Derive Planned and Actual Treatment](#trtpa)
+- [Derive Date/Date-time of Last Dose](#last_dose)
+- [Derive Treatment Dose and Unit](#dose_unit)
+- [Derive Severity, Causality, and Toxicity Grade](#severity)
+- [Derive Treatment Emergent Flag](#trtflag)
+- [Derive Occurrence Flags](#occflag)
+- [Derive Query Variables](#query)
+  - [Simple MedDRA Queries and Standardized Drug
+    Groupings](#simple_query)
+  - [Algorithmic MedDRA Queries](#algorithmic_query)
+- [Add ADSL variables](#adsl_vars)
+- [Derive Analysis Sequence Number](#aseq)
+- [Add Labels and Attributes](#attributes)
+
+### Read in Data
+
+To start, all data frames needed for the creation of `ADAE` should be
+read into the environment. This will be a company specific process. Some
+of the data frames needed may be `AE` and `ADSL`.
+
+For example purpose, the CDISC Pilot SDTM and ADaM datasets —which are
+included in
+[pharmaversesdtm](https://pharmaverse.github.io/pharmaversesdtm/)— are
+used.
+
+``` r
+library(admiral)
+library(dplyr, warn.conflicts = FALSE)
+library(pharmaversesdtm)
+library(lubridate)
+
+ae <- pharmaversesdtm::ae
+adsl <- admiral::admiral_adsl
+ex <- pharmaversesdtm::ex
+
+ae <- convert_blanks_to_na(ae)
+ex <- convert_blanks_to_na(ex)
+```
+
+As the start and end datetime of the dosing records is required by
+multiple derivations, it is derived once at the beginning. Please note
+that it depends on the study whether imputation is required and if so,
+which imputation method is appropriate. In the example below, we impute
+the time as the first time of the day. The `min_dates` argument is used
+in the second call to ensure that the end datetime is not imputed to be
+before the start datetime.
+
+``` r
+ex <- ex %>%
+  derive_vars_dtm(
+    dtc = EXSTDTC,
+    new_vars_prefix = "EXST",
+    time_imputation = "first",
+    flag_imputation = "none"
+  ) %>%
+  derive_vars_dtm(
+    dtc = EXENDTC,
+    new_vars_prefix = "EXEN",
+    time_imputation = "first",
+    flag_imputation = "none",
+    min_dates = exprs(EXSTDTM)
+  ) %>%
+  derive_vars_dtm_to_dt(exprs(EXSTDTM, EXENDTM))
+```
+
+At this step, it may be useful to join `ADSL` to your `AE` domain as
+well. Only the `ADSL` variables used for derivations are selected at
+this step. The rest of the relevant `ADSL` variables would be added
+later.
+
+``` r
+adsl_vars <- exprs(TRTSDT, TRTEDT, TRTEDTM, TRT01A, TRT01P, DTHDT, EOSDT)
+
+adae <- derive_vars_merged(
+  ae,
+  dataset_add = adsl,
+  new_vars = adsl_vars,
+  by = exprs(STUDYID, USUBJID)
+)
+```
+
+### Derive/Impute End and Start Analysis Date/time and Relative Day
+
+This part derives `ASTDTM`, `ASTDT`, `ASTDY`, `AENDTM`, `AENDT`, and
+`AENDY`. The function
+[`derive_vars_dtm()`](https:/pharmaverse.github.io/admiral/3184_alogrithmic_smq/reference/derive_vars_dtm.md)
+can be used to derive `ASTDTM` and `AENDTM` where `ASTDTM` could be
+company-specific. `ASTDT` and `AENDT` can be derived from `ASTDTM` and
+`AENDTM`, respectively, using function
+[`derive_vars_dtm_to_dt()`](https:/pharmaverse.github.io/admiral/3184_alogrithmic_smq/reference/derive_vars_dtm_to_dt.md).
+[`derive_vars_dy()`](https:/pharmaverse.github.io/admiral/3184_alogrithmic_smq/reference/derive_vars_dy.md)
+can be used to create `ASTDY` and `AENDY`.
+
+``` r
+adae <- adae %>%
+  derive_vars_dtm(
+    dtc = AEENDTC,
+    new_vars_prefix = "AEN",
+    highest_imputation = "M",
+    date_imputation = "last",
+    time_imputation = "last",
+    max_dates = exprs(DTHDT, EOSDT)
+  ) %>%
+  derive_vars_dtm(
+    dtc = AESTDTC,
+    new_vars_prefix = "AST",
+    highest_imputation = "M",
+    min_dates = exprs(TRTSDT),
+    max_dates_strict = exprs(AENDTM)
+  ) %>%
+  derive_vars_dtm_to_dt(exprs(ASTDTM, AENDTM)) %>%
+  derive_vars_dy(
+    reference_date = TRTSDT,
+    source_vars = exprs(ASTDT, AENDT)
+  )
+```
+
+Please note that using the `max_dates_strict` argument in the `ASTDTM`
+derivation ensures the imputed event start date is not after the event
+end date. See the examples of
+[`derive_vars_dt()`](https:/pharmaverse.github.io/admiral/3184_alogrithmic_smq/reference/derive_vars_dt.md)
+and the example in the “Avoid Imputed Dates Before a Particular Date”
+section of the [Date and Time
+Imputation](https:/pharmaverse.github.io/admiral/3184_alogrithmic_smq/articles/imputation.html#avoid-imputed-dates-before-a-particular-date)
+vignette for more details.
+
+See also [Date and Time
+Imputation](https:/pharmaverse.github.io/admiral/3184_alogrithmic_smq/articles/imputation.md).
+
+### Derive Durations
+
+The function
+[`derive_vars_duration()`](https:/pharmaverse.github.io/admiral/3184_alogrithmic_smq/reference/derive_vars_duration.md)
+can be used to create the variables `ADURN` and `ADURU`.
+
+``` r
+adae <- adae %>%
+  derive_vars_duration(
+    new_var = ADURN,
+    new_var_unit = ADURU,
+    start_date = ASTDT,
+    end_date = AENDT
+  )
+```
+
+### Derive ATC variables
+
+The function
+[`derive_vars_atc()`](https:/pharmaverse.github.io/admiral/3184_alogrithmic_smq/reference/derive_vars_atc.md)
+can be used to derive ATC Class Variables.
+
+It helps to add Anatomical Therapeutic Chemical class variables from
+`FACM` to `ADCM`.
+
+The expected result is the input dataset with ATC variables added.
+
+``` r
+cm <- tibble::tribble(
+  ~STUDYID,  ~USUBJID,       ~CMGRPID, ~CMREFID,  ~CMDECOD,
+  "STUDY01", "BP40257-1001", "14",     "1192056", "PARACETAMOL",
+  "STUDY01", "BP40257-1001", "18",     "2007001", "SOLUMEDROL",
+  "STUDY01", "BP40257-1002", "19",     "2791596", "SPIRONOLACTONE"
+)
+facm <- tibble::tribble(
+  ~STUDYID,  ~USUBJID,       ~FAGRPID, ~FAREFID,  ~FATESTCD,  ~FASTRESC,
+  "STUDY01", "BP40257-1001", "1",      "1192056", "CMATC1CD", "N",
+  "STUDY01", "BP40257-1001", "1",      "1192056", "CMATC2CD", "N02",
+  "STUDY01", "BP40257-1001", "1",      "1192056", "CMATC3CD", "N02B",
+  "STUDY01", "BP40257-1001", "1",      "1192056", "CMATC4CD", "N02BE",
+  "STUDY01", "BP40257-1001", "1",      "2007001", "CMATC1CD", "D",
+  "STUDY01", "BP40257-1001", "1",      "2007001", "CMATC2CD", "D10",
+  "STUDY01", "BP40257-1001", "1",      "2007001", "CMATC3CD", "D10A",
+  "STUDY01", "BP40257-1001", "1",      "2007001", "CMATC4CD", "D10AA",
+  "STUDY01", "BP40257-1001", "2",      "2007001", "CMATC1CD", "D",
+  "STUDY01", "BP40257-1001", "2",      "2007001", "CMATC2CD", "D07",
+  "STUDY01", "BP40257-1001", "2",      "2007001", "CMATC3CD", "D07A",
+  "STUDY01", "BP40257-1001", "2",      "2007001", "CMATC4CD", "D07AA",
+  "STUDY01", "BP40257-1001", "3",      "2007001", "CMATC1CD", "H",
+  "STUDY01", "BP40257-1001", "3",      "2007001", "CMATC2CD", "H02",
+  "STUDY01", "BP40257-1001", "3",      "2007001", "CMATC3CD", "H02A",
+  "STUDY01", "BP40257-1001", "3",      "2007001", "CMATC4CD", "H02AB",
+  "STUDY01", "BP40257-1002", "1",      "2791596", "CMATC1CD", "C",
+  "STUDY01", "BP40257-1002", "1",      "2791596", "CMATC2CD", "C03",
+  "STUDY01", "BP40257-1002", "1",      "2791596", "CMATC3CD", "C03D",
+  "STUDY01", "BP40257-1002", "1",      "2791596", "CMATC4CD", "C03DA"
+)
+
+derive_vars_atc(cm, dataset_facm = facm, id_vars = exprs(FAGRPID))
+#> # A tibble: 5 × 9
+#>   STUDYID USUBJID      CMGRPID CMREFID CMDECOD       ATC1CD ATC2CD ATC3CD ATC4CD
+#>   <chr>   <chr>        <chr>   <chr>   <chr>         <chr>  <chr>  <chr>  <chr> 
+#> 1 STUDY01 BP40257-1001 14      1192056 PARACETAMOL   N      N02    N02B   N02BE 
+#> 2 STUDY01 BP40257-1001 18      2007001 SOLUMEDROL    D      D10    D10A   D10AA 
+#> 3 STUDY01 BP40257-1001 18      2007001 SOLUMEDROL    D      D07    D07A   D07AA 
+#> 4 STUDY01 BP40257-1001 18      2007001 SOLUMEDROL    H      H02    H02A   H02AB 
+#> 5 STUDY01 BP40257-1002 19      2791596 SPIRONOLACTO… C      C03    C03D   C03DA
+```
+
+### Derive Planned and Actual Treatment
+
+`TRTA` and `TRTP` must match at least one value of the character
+treatment variables in ADSL (e.g., `TRTxxA`/`TRTxxP`,
+`TRTSEQA`/`TRTSEQP`, `TRxxAGy`/`TRxxPGy`).
+
+An example of a simple implementation for a study without periods could
+be:
+
+``` r
+adae <- mutate(adae, TRTP = TRT01P, TRTA = TRT01A)
+
+count(adae, TRTP, TRTA, TRT01P, TRT01A)
+#> # A tibble: 2 × 5
+#>   TRTP                TRTA                TRT01P              TRT01A           n
+#>   <chr>               <chr>               <chr>               <chr>        <int>
+#> 1 Placebo             Placebo             Placebo             Placebo         10
+#> 2 Xanomeline Low Dose Xanomeline Low Dose Xanomeline Low Dose Xanomeline …    15
+```
+
+For studies with periods see the [“Visit and Period Variables”
+vignette](https:/pharmaverse.github.io/admiral/3184_alogrithmic_smq/articles/visits_periods.html#treatment_bds).
+
+### Derive Date/Date-time of Last Dose
+
+Before deriving the last dose date, it may be necessary to create an
+`ex_single` dataset from the `EX` domain. If the exposure dataset
+contains multi-day dosing records (e.g., one record per treatment period
+rather than one record per dose), use
+[`create_single_dose_dataset()`](https:/pharmaverse.github.io/admiral/3184_alogrithmic_smq/reference/create_single_dose_dataset.md)
+to expand them into one record per dose. Whether this step is necessary
+depends on how dosing data were collected in your study. For ongoing
+studies, you may also need to impute missing end dates (e.g., with the
+data cut-off date) before calling
+[`create_single_dose_dataset()`](https:/pharmaverse.github.io/admiral/3184_alogrithmic_smq/reference/create_single_dose_dataset.md).
+For examples including handling of missing end dates, see
+[`?create_single_dose_dataset`](https:/pharmaverse.github.io/admiral/3184_alogrithmic_smq/reference/create_single_dose_dataset.md).
+
+The test data contains one record per treatment period and the dose
+frequency is daily (`QD`). The following call creates one record per
+day.
+
+``` r
+ex_single <- ex %>%
+  filter(!is.na(EXSTDT), !is.na(EXENDT)) %>%
+  create_single_dose_dataset(
+    dose_freq = EXDOSFRQ,
+    start_date = EXSTDT,
+    start_datetime = EXSTDTM,
+    end_date = EXENDT,
+    end_datetime = EXENDTM,
+    keep_source_vars = exprs(
+      STUDYID, USUBJID, EXTRT, EXDOSE, EXDOSU, EXSTDT, EXENDT, EXSTDTM, EXENDTM
+    )
+  )
+```
+
+The function
+[`derive_vars_joined()`](https:/pharmaverse.github.io/admiral/3184_alogrithmic_smq/reference/derive_vars_joined.md)
+can be used to derive the last dose date before the start of the event.
+
+``` r
+adae <- derive_vars_joined(
+  adae,
+  ex_single,
+  by_vars = exprs(STUDYID, USUBJID),
+  new_vars = exprs(LDOSEDTM = EXSTDTM),
+  join_vars = exprs(EXSTDTM),
+  join_type = "all",
+  order = exprs(EXSTDTM),
+  filter_add = (EXDOSE > 0 | (EXDOSE == 0 & grepl("PLACEBO", EXTRT))) & !is.na(EXSTDTM),
+  filter_join = EXSTDTM <= ASTDTM,
+  mode = "last"
+)
+```
+
+### Derive Treatment Dose and Unit
+
+In a similar manner, you could derive the treatment dose (`DOSEON`) and
+unit (`DOSEU`) at the time of the event. Please note that drug clearance
+duration should be considered when matching exposure records with
+adverse events. `EXSTDTC` and `EXENDTC` typically represent the
+administration period only, not the time the drug remains in the body.
+To account for drug clearance, you may extend the last exposure end date
+by the appropriate clearance duration. For example, if the exposure
+dataset contains one records per dose and the drug administration is
+instantaneous, e.g., a pill, we have `EXSTDTC == EXENDTC`. I.e., without
+adding a clearance duration, the dose will only be considered as active
+at the exact time of administration.
+
+Adding a clearance duration to the end date may result in overlapping
+dosing intervals for some subjects. Therefore the last dosing record
+before the adverse event is selected in the example below. If
+overlapping is not expected based on the study design and data
+collection, the `order` and the `mode` argument in the
+[`derive_vars_joined()`](https:/pharmaverse.github.io/admiral/3184_alogrithmic_smq/reference/derive_vars_joined.md)
+call below can be removed. Then the function will throw an error if
+overlapping dosing intervals are found.
+
+Replace `days(1)` in `filter_join` below with the study-specific drug
+clearance period.
+
+``` r
+adae <- derive_vars_joined(
+  adae,
+  ex,
+  by_vars = exprs(STUDYID, USUBJID),
+  new_vars = exprs(DOSEON = EXDOSE, DOSEU = EXDOSU),
+  order = exprs(EXSTDTM),
+  mode = "last",
+  join_vars = exprs(EXSTDTM, EXENDTM),
+  join_type = "all",
+  filter_add = (EXDOSE > 0 | (EXDOSE == 0 & grepl("PLACEBO", EXTRT))) & !is.na(EXSTDTM),
+  filter_join = EXSTDTM <= ASTDTM & (ASTDTM < EXENDTM + days(1) | is.na(EXENDTM))
+)
+```
+
+If no time is collected for exposure or adverse events, it may be better
+to use the date variables (`EXSTDT`, `EXENDT`, and `ASTDT`) instead of
+the datetime variables.
+
+### Derive Severity, Causality, and Toxicity Grade
+
+The variables `ASEV`, `AREL`, and `ATOXGR` can be added using simple
+[`dplyr::mutate()`](https://dplyr.tidyverse.org/reference/mutate.html)
+assignments, if no imputation is required.
+
+``` r
+adae <- adae %>%
+  mutate(
+    ASEV = AESEV,
+    AREL = AEREL
+  )
+```
+
+### Derive Treatment Emergent Flag
+
+To derive the treatment emergent flag `TRTEMFL`, one can call
+[`derive_var_trtemfl()`](https:/pharmaverse.github.io/admiral/3184_alogrithmic_smq/reference/derive_var_trtemfl.md).
+In the example below, we use 30 days in the flag derivation.
+
+``` r
+adae <- adae %>%
+  derive_var_trtemfl(
+    trt_start_date = TRTSDT,
+    trt_end_date = TRTEDT,
+    end_window = 30
+  )
+```
+
+To derive on-treatment flag (`ONTRTFL`) in an ADaM dataset with a single
+occurrence date, we use
+[`derive_var_ontrtfl()`](https:/pharmaverse.github.io/admiral/3184_alogrithmic_smq/reference/derive_var_ontrtfl.md).
+
+The expected result is the input dataset with an additional column named
+`ONTRTFL` with a value of `"Y"` or `NA`.
+
+If you want to also check an end date, you could add the `end_date`
+argument. Note that in this scenario you could set `span_period = TRUE`
+if you want occurrences that started prior to drug intake, and was
+ongoing or ended after this time to be considered as on-treatment.
+
+``` r
+bds1 <- tibble::tribble(
+  ~USUBJID, ~ADT,              ~TRTSDT,           ~TRTEDT,
+  "P01",    ymd("2020-02-24"), ymd("2020-01-01"), ymd("2020-03-01"),
+  "P02",    ymd("2020-01-01"), ymd("2020-01-01"), ymd("2020-03-01"),
+  "P03",    ymd("2019-12-31"), ymd("2020-01-01"), ymd("2020-03-01")
+)
+derive_var_ontrtfl(
+  bds1,
+  start_date = ADT,
+  ref_start_date = TRTSDT,
+  ref_end_date = TRTEDT
+)
+#> # A tibble: 3 × 5
+#>   USUBJID ADT        TRTSDT     TRTEDT     ONTRTFL
+#>   <chr>   <date>     <date>     <date>     <chr>  
+#> 1 P01     2020-02-24 2020-01-01 2020-03-01 Y      
+#> 2 P02     2020-01-01 2020-01-01 2020-03-01 Y      
+#> 3 P03     2019-12-31 2020-01-01 2020-03-01 NA
+
+bds2 <- tibble::tribble(
+  ~USUBJID, ~ADT,              ~TRTSDT,           ~TRTEDT,
+  "P01",    ymd("2020-07-01"), ymd("2020-01-01"), ymd("2020-03-01"),
+  "P02",    ymd("2020-04-30"), ymd("2020-01-01"), ymd("2020-03-01"),
+  "P03",    ymd("2020-03-15"), ymd("2020-01-01"), ymd("2020-03-01")
+)
+derive_var_ontrtfl(
+  bds2,
+  start_date = ADT,
+  ref_start_date = TRTSDT,
+  ref_end_date = TRTEDT,
+  ref_end_window = 60
+)
+#> # A tibble: 3 × 5
+#>   USUBJID ADT        TRTSDT     TRTEDT     ONTRTFL
+#>   <chr>   <date>     <date>     <date>     <chr>  
+#> 1 P01     2020-07-01 2020-01-01 2020-03-01 NA     
+#> 2 P02     2020-04-30 2020-01-01 2020-03-01 Y      
+#> 3 P03     2020-03-15 2020-01-01 2020-03-01 Y
+
+bds3 <- tibble::tribble(
+  ~ADTM,              ~TRTSDTM,           ~TRTEDTM,           ~TPT,
+  "2020-01-02T12:00", "2020-01-01T12:00", "2020-03-01T12:00", NA,
+  "2020-01-01T12:00", "2020-01-01T12:00", "2020-03-01T12:00", "PRE",
+  "2019-12-31T12:00", "2020-01-01T12:00", "2020-03-01T12:00", NA
+) %>%
+  mutate(
+    ADTM = ymd_hm(ADTM),
+    TRTSDTM = ymd_hm(TRTSDTM),
+    TRTEDTM = ymd_hm(TRTEDTM)
+  )
+derive_var_ontrtfl(
+  bds3,
+  start_date = ADTM,
+  ref_start_date = TRTSDTM,
+  ref_end_date = TRTEDTM,
+  filter_pre_timepoint = TPT == "PRE"
+)
+#> # A tibble: 3 × 5
+#>   ADTM                TRTSDTM             TRTEDTM             TPT   ONTRTFL
+#>   <dttm>              <dttm>              <dttm>              <chr> <chr>  
+#> 1 2020-01-02 12:00:00 2020-01-01 12:00:00 2020-03-01 12:00:00 NA    Y      
+#> 2 2020-01-01 12:00:00 2020-01-01 12:00:00 2020-03-01 12:00:00 PRE   NA     
+#> 3 2019-12-31 12:00:00 2020-01-01 12:00:00 2020-03-01 12:00:00 NA    NA
+```
+
+### Derive Occurrence Flags
+
+The function
+[`derive_var_extreme_flag()`](https:/pharmaverse.github.io/admiral/3184_alogrithmic_smq/reference/derive_var_extreme_flag.md)
+can help derive variables such as `AOCCIFL`, `AOCCPIFL`, `AOCCSIFL`, and
+`AOCCzzFL`.
+
+If grades were collected, `ATOXGR` should first be derived from the
+source data (e.g., `mutate(ATOXGR = AETOXGR)`) and then the following
+can be used to flag first occurrence of maximum toxicity grade. Note
+that the example below is for illustration only and is not evaluated as
+the test data does not contain toxicity grade information.
+
+``` r
+adae <- adae %>%
+  restrict_derivation(
+    derivation = derive_var_extreme_flag,
+    args = params(
+      by_vars = exprs(USUBJID),
+      order = exprs(desc(ATOXGR), ASTDTM, AESEQ),
+      new_var = AOCCIFL,
+      mode = "first"
+    ),
+    filter = TRTEMFL == "Y"
+  )
+```
+
+Similarly, `ASEV` can also be used to derive the occurrence flags, if
+severity is collected. In this case, the variable will need to be
+recoded to a numeric variable. Flag first occurrence of most severe
+adverse event:
+
+``` r
+adae <- adae %>%
+  restrict_derivation(
+    derivation = derive_var_extreme_flag,
+    args = params(
+      by_vars = exprs(USUBJID),
+      order = exprs(
+        as.integer(factor(
+          ASEV,
+          levels = c("DEATH THREATENING", "SEVERE", "MODERATE", "MILD")
+        )),
+        ASTDTM, AESEQ
+      ),
+      new_var = AOCCIFL,
+      mode = "first"
+    ),
+    filter = TRTEMFL == "Y"
+  )
+```
+
+### Derive Query Variables
+
+Most Standardized MedDRA Queries (SMQs) and their associated variables
+`SMQzzNAM`, `SMQzzCD`, `SMQzzSC`, `SMQzzSCN` and `CQzzNAM` are “simple”:
+a term belongs to the query as soon as it is part of the narrow or the
+broad search. These can be derived in a single
+[`derive_vars_query()`](https:/pharmaverse.github.io/admiral/3184_alogrithmic_smq/reference/derive_vars_query.md)
+call, as shown in the [Simple MedDRA Queries and Standardized Drug
+Groupings](#simple_query).
+
+However, a handful of SMQs are **algorithmic**. For these, the broad
+search terms are split into categories and a term only counts towards
+the query if it occurs *together with* a term from another category.
+Whether a record contributes therefore depends on the other records of
+the same subject, which is something
+[`derive_vars_query()`](https:/pharmaverse.github.io/admiral/3184_alogrithmic_smq/reference/derive_vars_query.md)
+cannot express on its own. An example of how to implement such a
+derivation is shown in the [Algorithmic MedDRA
+Queries](#algorithmic_query) section.
+
+#### Simple MedDRA Queries and Standardized Drug Groupings
+
+The
+[`derive_vars_query()`](https:/pharmaverse.github.io/admiral/3184_alogrithmic_smq/reference/derive_vars_query.md)
+function can be used to easily set up query variables for Simple MedDRA
+queries. As input it expects a queries dataset, which provides the
+definition of the queries. See [Queries dataset
+documentation](https:/pharmaverse.github.io/admiral/3184_alogrithmic_smq/articles/queries_dataset.md)
+for a detailed description of the queries dataset. The
+[`create_query_data()`](https:/pharmaverse.github.io/admiral/3184_alogrithmic_smq/reference/create_query_data.md)
+function can be used to create queries datasets.
+
+The following example shows how to derive query variables for a number
+of simple Standardized MedDRA Queries (SMQs) in ADAE.
+
+``` r
+queries <- admiral::queries
+```
+
+``` r
+adae1 <- tibble::tribble(
+  ~USUBJID, ~ASTDTM, ~AETERM, ~AESEQ, ~AEDECOD, ~AELLT, ~AELLTCD,
+  "01", "2020-06-02 23:59:59", "ALANINE AMINOTRANSFERASE ABNORMAL",
+  3, "Alanine aminotransferase abnormal", NA_character_, NA_integer_,
+  "02", "2020-06-05 23:59:59", "BASEDOW'S DISEASE",
+  5, "Basedow's disease", NA_character_, 1L,
+  "03", "2020-06-07 23:59:59", "SOME TERM",
+  2, "Some query", "Some term", NA_integer_,
+  "05", "2020-06-09 23:59:59", "ALVEOLAR PROTEINOSIS",
+  7, "Alveolar proteinosis", NA_character_, NA_integer_
+)
+
+adae_query <- derive_vars_query(dataset = adae1, dataset_queries = queries)
+```
+
+Similarly to SMQ, the
+[`derive_vars_query()`](https:/pharmaverse.github.io/admiral/3184_alogrithmic_smq/reference/derive_vars_query.md)
+function can be used to derive Standardized Drug Groupings (SDG).
+
+``` r
+sdg <- tibble::tribble(
+  ~PREFIX, ~GRPNAME,          ~GRPID, ~SCOPE,  ~SCOPEN, ~SRCVAR,   ~TERMCHAR,          ~TERMNUM,
+  "SDG01", "Diuretics",           11, "BROAD", 1,       "CMDECOD", "Diuretic 1",       NA,
+  "SDG01", "Diuretics",           11, "BROAD", 1,       "CMDECOD", "Diuretic 2",       NA,
+  "SDG02", "Costicosteroids",     12, "BROAD", 1,       "CMDECOD", "Costicosteroid 1", NA,
+  "SDG02", "Costicosteroids",     12, "BROAD", 1,       "CMDECOD", "Costicosteroid 2", NA,
+  "SDG02", "Costicosteroids",     12, "BROAD", 1,       "CMDECOD", "Costicosteroid 3", NA,
+)
+adcm <- tibble::tribble(
+  ~USUBJID, ~ASTDTM,               ~CMDECOD,
+  "01",     "2020-06-02 23:59:59", "Diuretic 1",
+  "02",     "2020-06-05 23:59:59", "Diuretic 1",
+  "03",     "2020-06-07 23:59:59", "Costicosteroid 2",
+  "05",     "2020-06-09 23:59:59", "Diuretic 2"
+)
+adcm_query <- derive_vars_query(adcm, sdg)
+```
+
+#### Algorithmic MedDRA Queries
+
+The example below shows how to derive a flag associated to an
+algorithmic MedDRA query in two steps:
+
+1.  Use
+    [`create_query_data()`](https:/pharmaverse.github.io/admiral/3184_alogrithmic_smq/reference/create_query_data.md)
+    and
+    [`derive_vars_query()`](https:/pharmaverse.github.io/admiral/3184_alogrithmic_smq/reference/derive_vars_query.md)
+    to add one query variable per algorithm category. Keeping one
+    variable per category in the dataset makes the derivation traceable
+    — a reviewer can see exactly which term contributed which category.
+2.  Use
+    [`derive_var_joined_exist_flag()`](https:/pharmaverse.github.io/admiral/3184_alogrithmic_smq/reference/derive_var_joined_exist_flag.md)
+    to look across the records of a subject and flag the terms which
+    contribute to the algorithm.
+
+The following *Anaphylactic reaction* SMQ will be used as for the
+example. Its algorithm combines the narrow search with four categories
+of broad terms:
+
+| Category | Content                                             |
+|----------|-----------------------------------------------------|
+| Narrow   | Core anaphylactic reaction terms                    |
+| A        | Broad terms specific enough to qualify on their own |
+| B        | Upper airway / respiratory                          |
+| C        | Angioedema / urticaria / pruritus / flush           |
+| D        | Cardiovascular / hypotension                        |
+
+A term contributes if it is
+
+- a **narrow** term, or a term from **category A**; or
+- a term from **category B** occurring together with a term from
+  **category C** (and vice versa); or
+- a term from **category D** occurring together with a term from
+  **category B** or **category C** (and vice versa).
+
+i.e. `A or (B and C) or (D and (B or C))`.
+
+The terms of an SMQ are read from the MedDRA dictionary by a
+company-specific function passed to the `get_terms_fun` argument of
+[`create_query_data()`](https:/pharmaverse.github.io/admiral/3184_alogrithmic_smq/reference/create_query_data.md).
+[admiral](https://pharmaverse.github.io/admiral/) does not provide one,
+as the database layout is company-specific. See
+[`create_query_data()`](https:/pharmaverse.github.io/admiral/3184_alogrithmic_smq/reference/create_query_data.md)
+for the interface this function has to implement.
+
+An algorithmic SMQ needs one addition to that function: it must be able
+to return the terms of a **single algorithm category**. No
+[admiral](https://pharmaverse.github.io/admiral/)-side change is
+required for this, because
+[`basket_select()`](https:/pharmaverse.github.io/admiral/3184_alogrithmic_smq/reference/basket_select.md)
+accepts any number of *named* arguments through its `...` argument and
+passes them on unchanged. Requesting
+`basket_select(..., algorithm_category = "B")` therefore makes
+`basket_select$algorithm_category` available inside your `get_terms()`
+function, where it can be used to subset the terms of the SMQ.
+
+**Note**: *MedDRA is a licensed dictionary, so the examples below run
+against a small made-up term list rather than the real SMQ.*
+
+Each part of the algorithm is defined by its own
+[`query()`](https:/pharmaverse.github.io/admiral/3184_alogrithmic_smq/reference/query.md)
+object:
+
+- `SMQ01` and `SMQ02` are the standard narrow and broad searches of the
+  SMQ. They create `SMQ01NAM`, `SMQ01CD`, `SMQ01SC`, `SMQ01SCN` and
+  their `SMQ02` counterparts, and the algorithm is applied on top of
+  them.
+- `CQ01` to `CQ04` are the four algorithm categories.
+
+The categories are defined as *customized queries based on a basket*,
+i.e. the
+[`basket_select()`](https:/pharmaverse.github.io/admiral/3184_alogrithmic_smq/reference/basket_select.md)
+object is wrapped in a [`list()`](https://rdrr.io/r/base/list.html).
+That way only `CQzzNAM` is created for them — a plain
+[`basket_select()`](https:/pharmaverse.github.io/admiral/3184_alogrithmic_smq/reference/basket_select.md)
+would additionally populate `SCOPE`, giving non-standard `CQzzSC`
+variables which add nothing here, as the scope is already captured by
+`SMQ01SC`/`SMQ02SC`.
+
+``` r
+anaphylaxis_queries <- list(
+  query(
+    prefix = "SMQ01",
+    name = auto,
+    id = auto,
+    add_scope_num = TRUE,
+    definition = basket_select(
+      name = "Anaphylactic reaction (SMQ)",
+      scope = "NARROW",
+      type = "smq"
+    )
+  ),
+  query(
+    prefix = "SMQ02",
+    name = auto,
+    id = auto,
+    add_scope_num = TRUE,
+    definition = basket_select(
+      name = "Anaphylactic reaction (SMQ)",
+      scope = "BROAD",
+      type = "smq"
+    )
+  ),
+  query(
+    prefix = "CQ01",
+    name = "Anaphylaxis algorithm category A",
+    definition = list(
+      basket_select(
+        name = "Anaphylactic reaction (SMQ)",
+        scope = "BROAD",
+        type = "smq",
+        algorithm_category = "A"
+      )
+    )
+  ),
+  query(
+    prefix = "CQ02",
+    name = "Anaphylaxis algorithm category B (upper airway/respiratory)",
+    definition = list(
+      basket_select(
+        name = "Anaphylactic reaction (SMQ)",
+        scope = "BROAD",
+        type = "smq",
+        algorithm_category = "B"
+      )
+    )
+  ),
+  query(
+    prefix = "CQ03",
+    name = "Anaphylaxis algorithm category C (angioedema/urticaria/pruritus/flush)",
+    definition = list(
+      basket_select(
+        name = "Anaphylactic reaction (SMQ)",
+        scope = "BROAD",
+        type = "smq",
+        algorithm_category = "C"
+      )
+    )
+  ),
+  query(
+    prefix = "CQ04",
+    name = "Anaphylaxis algorithm category D (cardiovascular/hypotension)",
+    definition = list(
+      basket_select(
+        name = "Anaphylactic reaction (SMQ)",
+        scope = "BROAD",
+        type = "smq",
+        algorithm_category = "D"
+      )
+    )
+  )
+)
+
+queries_anaphylaxis <- create_query_data(
+  queries = anaphylaxis_queries,
+  get_terms_fun = get_terms,
+  version = "29.1"
+)
+```
+
+The following ADAE data will be used as an example.
+
+``` r
+adae2 <- tribble(
+  ~USUBJID, ~AESEQ, ~ASTDT,       ~AEDECOD,
+  "01",     1,      "2021-03-05", "Anaphylactic reaction",
+  "01",     2,      "2021-05-12", "Headache",
+  "02",     1,      "2021-02-11", "Circulatory collapse",
+  "03",     1,      "2021-04-02", "Dyspnoea",
+  "03",     2,      "2021-04-02", "Urticaria",
+  "04",     1,      "2021-06-18", "Hypotension",
+  "04",     2,      "2021-06-18", "Wheezing",
+  "05",     1,      "2021-07-21", "Hypotension",
+  "06",     1,      "2021-08-03", "Urticaria",
+  "06",     2,      "2021-08-04", "Pruritus",
+  "07",     1,      "2021-09-09", "Nausea",
+  "08",     1,      "2021-01-05", "Dyspnoea",
+  "08",     2,      "2021-06-20", "Urticaria"
+) %>%
+  mutate(ASTDT = ymd(ASTDT))
+```
+
+Once again, we can use
+[`derive_vars_query()`](https:/pharmaverse.github.io/admiral/3184_alogrithmic_smq/reference/derive_vars_query.md)
+to create the query variables for the algorithm categories.
+
+``` r
+adae_algquery <- adae2 %>%
+  derive_vars_query(dataset_queries = queries_anaphylaxis)
+```
+
+Note that none of these variables on their own answers whether a term
+contributes to the algorithm: subject `03` has a category B term
+(`CQ02NAM`) on one record and a category C term (`CQ03NAM`) on another,
+and subject `05` has a category D term with nothing to combine it with.
+
+For this reason, a `derive_vars_joined_exist_flag()` call is used to
+look **across** all the records for a subject (`join_type = "all"`) to
+derive a flag `ANAPTFL` which is set to `"Y"` for every record which
+contributes to the algorithmic query being satisfied.
+
+Note that the MedDRA algorithm is defined at case level, but in practice
+a study will usually also require the combined terms to occur close to
+each other in time. As such, in the example below for exposition
+purposes the contributing terms have to start within 7 days of each
+other. Since `join_type = "all"` also joins a record with itself, the
+same window condition can be applied to the narrow and category A
+branches without excluding them.
+
+``` r
+adae_algquery1 <- adae_algquery %>%
+  derive_var_joined_exist_flag(
+    dataset_add = adae_algquery,
+    by_vars = exprs(USUBJID),
+    new_var = ANAPTFL,
+    join_vars = exprs(ASTDT, CQ02NAM, CQ03NAM, CQ04NAM),
+    join_type = "all",
+    filter_join = abs(ASTDT.join - ASTDT) <= 7 &
+      (
+        # a narrow term or a category A term contributes on its own
+        !is.na(SMQ01NAM) | !is.na(CQ01NAM) |
+          # category B together with category C
+          (!is.na(CQ02NAM) & !is.na(CQ03NAM.join)) |
+          (!is.na(CQ03NAM) & !is.na(CQ02NAM.join)) |
+          # category D together with category B or category C
+          (!is.na(CQ04NAM) & (!is.na(CQ02NAM.join) | !is.na(CQ03NAM.join))) |
+          ((!is.na(CQ02NAM) | !is.na(CQ03NAM)) & !is.na(CQ04NAM.join))
+      )
+  )
+```
+
+Walking through the subjects:
+
+- `01` — *Anaphylactic reaction* is a narrow term and contributes on its
+  own. The unrelated *Headache* is not flagged.
+- `02` — *Circulatory collapse* is a category A term and contributes on
+  its own.
+- `03` — *Dyspnoea* (B) and *Urticaria* (C) occur on the same day, so
+  both contribute.
+- `04` — *Hypotension* (D) and *Wheezing* (B) occur on the same day, so
+  both contribute.
+- `05` — a category D term with no category B or C term, so nothing
+  contributes.
+- `06` — two category C terms, which is not a qualifying combination.
+- `07` — not part of the SMQ at all.
+- `08` — a category B and a category C term, but more than 7 days apart,
+  so neither contributes.
+
+### Add the `ADSL` variables
+
+If needed, the other `ADSL` variables can now be added:
+
+``` r
+adae <- adae %>%
+  derive_vars_merged(
+    dataset_add = select(adsl, !!!negate_vars(adsl_vars)),
+    by_vars = exprs(STUDYID, USUBJID)
+  )
+```
+
+### Derive Analysis Sequence Number
+
+The function
+[`derive_var_obs_number()`](https:/pharmaverse.github.io/admiral/3184_alogrithmic_smq/reference/derive_var_obs_number.md)
+can be used for deriving `ASEQ` variable to ensure the uniqueness of
+subject records within the dataset. Note that creating `ASEQ` is not
+required for all ADaM datasets according to the ADaM IG, and this is
+just for demonstration purpose.
+
+For example, there can be multiple records present in `ADCM` for a
+single subject with the same `ASTDTM` and `CMSEQ` variables. But these
+records still differ at ATC level:
+
+``` r
+adcm <- tibble::tribble(
+  ~USUBJID,       ~ASTDTM,          ~CMSEQ, ~CMDECOD,         ~ATC1CD, ~ATC2CD, ~ATC3CD, ~ATC4CD,
+  "BP40257-1001", "2013-07-05 UTC", "14",   "PARACETAMOL",    "N",     "N02",   "N02B",  "N02BE",
+  "BP40257-1001", "2013-08-15 UTC", "18",   "SOLUMEDROL",     "D",     "D10",   "D10A",  "D10AA",
+  "BP40257-1001", "2013-08-15 UTC", "18",   "SOLUMEDROL",     "D",     "D07",   "D07A",  "D07AA",
+  "BP40257-1001", "2013-08-15 UTC", "18",   "SOLUMEDROL",     "H",     "H02",   "H02A",  "H02AB",
+  "BP40257-1002", "2012-12-15 UTC", "19",   "SPIRONOLACTONE", "C",     "C03",   "C03D",  "C03DA"
+)
+
+adcm_aseq <- adcm %>%
+  # Calculate ASEQ (Optional Variable)
+  derive_var_obs_number(
+    by_vars    = exprs(USUBJID),
+    order      = exprs(ASTDTM, CMSEQ, ATC1CD, ATC2CD, ATC3CD, ATC4CD),
+    new_var    = ASEQ,
+    check_type = "error"
+  )
+```
+
+### Add Labels and Attributes
+
+Note that attributes may not be preserved in some cases after processing
+with [admiral](https://pharmaverse.github.io/admiral/). The recommended
+approach is to apply variable labels and other metadata as a final step
+in your data derivation process using packages like:
+
+- [metacore](https://atorus-research.github.io/metacore/): establish a
+  common foundation for the use of metadata within an R session.
+
+- [metatools](https://pharmaverse.github.io/metatools/): enable the use
+  of metacore objects. Metatools can be used to build datasets or
+  enhance columns in existing datasets as well as checking datasets
+  against the metadata.
+
+- [xportr](https://atorus-research.github.io/xportr/): functionality to
+  associate all metadata information to a local R data frame, perform
+  data set level validation checks and convert into a [transport v5
+  file(xpt)](https://documentation.sas.com/doc/en/pgmsascdc/9.4_3.5/movefile/n1xbwdre0giahfn11c99yjkpi2yb.htm).
+
+NOTE: Together with [admiral](https://pharmaverse.github.io/admiral/)
+these packages comprise an End to End pipeline under the umbrella of the
+[pharmaverse](https://github.com/pharmaverse). An example of applying
+metadata and performing associated checks can be found at the
+[pharmaverse E2E
+example](https://pharmaverse.github.io/examples/adam/adsl).
+
+## Example Scripts
+
+| ADaM   | Sourcing Command          |
+|--------|---------------------------|
+| `ADAE` | `use_ad_template("ADAE")` |
+| `ADCM` | `use_ad_template("ADCM")` |
