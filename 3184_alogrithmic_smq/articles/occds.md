@@ -513,7 +513,9 @@ the same subject, which is something
 [`derive_vars_query()`](https:/pharmaverse.github.io/admiral/3184_alogrithmic_smq/reference/derive_vars_query.md)
 cannot express on its own. An example of how to implement such a
 derivation is shown in the [Algorithmic MedDRA
-Queries](#algorithmic_query) section.
+Queries](#algorithmic_query) section. You can see the full set of
+algorithmic queries
+[here](https://admin.meddra.org/sites/default/files/guidance/file/SMQ_intguide_29_0_English.pdf).
 
 #### Simple MedDRA Queries and Standardized Drug Groupings
 
@@ -621,13 +623,11 @@ as the database layout is company-specific. See
 for the interface this function has to implement.
 
 An algorithmic SMQ needs one addition to that function: it must be able
-to return the terms of a **single algorithm category**. No
-[admiral](https://pharmaverse.github.io/admiral/)-side change is
-required for this, because
+to return the terms of a **single algorithm category**. As
 [`basket_select()`](https:/pharmaverse.github.io/admiral/3184_alogrithmic_smq/reference/basket_select.md)
 accepts any number of *named* arguments through its `...` argument and
-passes them on unchanged. Requesting
-`basket_select(..., algorithm_category = "B")` therefore makes
+passes them on unchanged, requesting
+`basket_select(..., algorithm_category = "B")` makes
 `basket_select$algorithm_category` available inside your `get_terms()`
 function, where it can be used to subset the terms of the SMQ.
 
@@ -766,23 +766,20 @@ adae_algquery <- adae2 %>%
   derive_vars_query(dataset_queries = queries_anaphylaxis)
 ```
 
-Note that none of these variables on their own answers whether a term
-contributes to the algorithm: subject `03` has a category B term
-(`CQ02NAM`) on one record and a category C term (`CQ03NAM`) on another,
-and subject `05` has a category D term with nothing to combine it with.
-
-For this reason, a `derive_vars_joined_exist_flag()` call is used to
-look **across** all the records for a subject (`join_type = "all"`) to
-derive a flag `ANAPTFL` which is set to `"Y"` for every record which
-contributes to the algorithmic query being satisfied.
+To decide whether a record (adverse event) belongs to the algorithmic
+SMQ or not other records needs to be considered. Thus,
+`derive_vars_joined_exist_flag()` is used to look *across* all the
+records for a subject (`join_type = "all"`) to derive a flag `ANAPTFL`
+which is set to `"Y"` for every record which contributes to the
+algorithmic query being satisfied.
 
 Note that the MedDRA algorithm is defined at case level, but in practice
 a study will usually also require the combined terms to occur close to
 each other in time. As such, in the example below for exposition
 purposes the contributing terms have to start within 7 days of each
 other. Since `join_type = "all"` also joins a record with itself, the
-same window condition can be applied to the narrow and category A
-branches without excluding them.
+same window condition can be applied to the narrow and category A terms
+without excluding them.
 
 ``` r
 adae_algquery1 <- adae_algquery %>%
@@ -822,6 +819,17 @@ Walking through the subjects:
 - `07` — not part of the SMQ at all.
 - `08` — a category B and a category C term, but more than 7 days apart,
   so neither contributes.
+
+Please note that if more than two categories are combined by an `and`
+operator, more than one `derive_vars_joined_exist_flag()` call is
+necessary to derive the flag. For example, the algorithm for the
+*Anticholinergic syndrome (SMQ)* is `A or (B and C and D)`. A
+[`derive_vars_joined()`](https:/pharmaverse.github.io/admiral/3184_alogrithmic_smq/reference/derive_vars_joined.md)
+call could be used to derive a temporary flag (`TEMP_BC_FL`) flagging
+records with `B and C`. Then a second
+[`derive_vars_joined()`](https:/pharmaverse.github.io/admiral/3184_alogrithmic_smq/reference/derive_vars_joined.md)
+call could derive the final flag identifying records with
+`A or (TEMP_BL_FL and D)`.
 
 ### Add the `ADSL` variables
 
