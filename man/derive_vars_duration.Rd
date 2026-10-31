@@ -42,8 +42,8 @@ specified, no variable for the unit is created.
 
 \item{start_date}{The start date
 
-A date or date-time object is expected. Date-times must have a time zone,
-and it must be the same as the time zone of the other date. Dates are
+A date or datetime object is expected. Datetimes must have a time zone,
+and the timezone of the start date must match that of the end date. Dates are
 treated as UTC.
 
 Refer to \code{derive_vars_dt()} to impute and derive a date from a date
@@ -57,8 +57,8 @@ Refer to \code{convert_dtc_to_dt()} to obtain a vector of imputed dates.
 
 \item{end_date}{The end date
 
-A date or date-time object is expected. Date-times must have a time zone,
-and it must be the same as the time zone of the other date. Dates are
+A date or datetime object is expected. Datetimes must have a time zone,
+and the timezone of the start date must match that of the end date. Dates are
 treated as UTC.
 
 Refer to \code{derive_vars_dt()} to impute and derive a date from a date

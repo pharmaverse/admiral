@@ -9,7 +9,7 @@
 #' @param reference_date A date or date-time column, e.g., date of first treatment
 #'   or date-time of last exposure to treatment.
 #'
-#'   Date-times must have the same time zone as `source_vars`, e.g., UTC as
+#'   Datetimes must have the same time zone as `source_vars`, e.g., UTC as
 #'   created by `derive_vars_dtm()`.
 #'
 #'   Refer to `derive_vars_dt()` to impute and derive a date from a date

@@ -5,8 +5,8 @@
 #'
 #' @param start_date The start date
 #'
-#'   A date or date-time object is expected. Date-times must have a time zone,
-#'   and it must be the same as the time zone of the other date. Dates are
+#'   A date or datetime object is expected. Datetimes must have a time zone,
+#'   and the timezone of the start date must match that of the end date. Dates are
 #'   treated as UTC.
 #'
 #'   Refer to `derive_vars_dt()` to impute and derive a date from a date
@@ -16,8 +16,8 @@
 #'
 #' @param end_date The end date
 #'
-#'   A date or date-time object is expected. Date-times must have a time zone,
-#'   and it must be the same as the time zone of the other date. Dates are
+#'   A date or datetime object is expected. Datetimes must have a time zone,
+#'   and the timezone of the start date must match that of the end date. Dates are
 #'   treated as UTC.
 #'
 #'   Refer to `derive_vars_dt()` to impute and derive a date from a date
@@ -100,12 +100,9 @@
 #'
 #' @section Time Zones:
 #'
-#' Date-times must have a time zone, and `start_date` and `end_date` must have
+#' Datetimes must have a time zone, and `start_date` and `end_date` must have
 #' the same time zone. Otherwise an error is issued. Dates are treated as UTC.
 #' If needed, use `lubridate::force_tz()` to set the time zone.
-#'
-#' admiral functions that convert character dates into date-times, e.g.,
-#' `derive_vars_dtm()` and `convert_dtc_to_dtm()`, always assign UTC.
 #'
 #' @section Duration Type:
 #'
@@ -224,7 +221,7 @@ compute_duration <- function(start_date,
         "{.arg start_date} and {.arg end_date} must have the same time zone",
         "but have {.val {start_tz}} and {.val {end_tz}}."
       ),
-      i = "Please use {.fun lubridate::force_tz} to set the time zone."
+      i = "Please review the input data and/or use {.fun lubridate::force_tz} to set the time zone."
     ))
   }
 

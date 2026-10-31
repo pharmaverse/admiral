@@ -6,7 +6,7 @@
     Condition
       Error in `compute_duration()`:
       ! `start_date` and `end_date` must have the same time zone but have "Asia/Tokyo" and "UTC".
-      i Please use `lubridate::force_tz()` to set the time zone.
+      i Please review the input data and/or use `lubridate::force_tz()` to set the time zone.
 
 # compute_duration Test 20: error if a date-time has no time zone
 
