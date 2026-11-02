@@ -285,7 +285,7 @@ Additionally, the function can output a message, throw an error or issue a warni
 (depending on the \code{check_datetime_type} argument) if a data issue or imputation
 rules cause an invalid datetime (e.g. \code{"2020-01-28T25:00:00"}) to be generated. In
 this case, the user should fix the data issue or adjust the imputation rules. It is
-also possible to specify \verb{check_datetime_type = "none} to silently ignore any issues.
+also possible to specify \code{check_datetime_type = "none"} to silently ignore any issues.
 Note that any invalid datetimes will be always returned as \code{NA}.
 }
 \examples{

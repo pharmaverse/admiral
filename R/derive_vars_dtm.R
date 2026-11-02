@@ -52,7 +52,7 @@
 #' (depending on the `check_datetime_type` argument) if a data issue or imputation
 #' rules cause an invalid datetime (e.g. `"2020-01-28T25:00:00"`) to be generated. In
 #' this case, the user should fix the data issue or adjust the imputation rules. It is
-#' also possible to specify `check_datetime_type = "none` to silently ignore any issues.
+#' also possible to specify `check_datetime_type = "none"` to silently ignore any issues.
 #' Note that any invalid datetimes will be always returned as `NA`.
 #'
 #' @return  The input dataset with the datetime `*DTM` (and the date/time imputation
@@ -350,7 +350,7 @@ derive_vars_dtm <- function(dataset,
 #' (depending on the `check_datetime_type` argument) if a data issue or imputation
 #' rules cause an invalid datetime (e.g. `"2020-01-28T25:00:00"`) to be generated. In
 #' this case, the user should fix the data issue or adjust the imputation rules. It is
-#' also possible to specify `check_datetime_type = "none` to silently ignore any issues.
+#' also possible to specify `check_datetime_type = "none"` to silently ignore any issues.
 #' Note that any invalid datetimes will be always returned as `NA`.
 #'
 #' @return A datetime object
@@ -606,7 +606,7 @@ convert_dtc_to_dtm <- function(dtc,
 #' (depending on the `check_datetime_type` argument) if a data issue or imputation
 #' rules cause an invalid datetime (e.g. `"2020-01-28T25:00:00"`) to be generated. In
 #' this case, the user should fix the data issue or adjust the imputation rules. It is
-#' also possible to specify `check_datetime_type = "none` to silently ignore any issues.
+#' also possible to specify `check_datetime_type = "none"` to silently ignore any issues.
 #' Note that any invalid datetimes will be always returned as `NA`.
 #'
 #' @return A character vector
