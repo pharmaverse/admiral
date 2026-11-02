@@ -310,7 +310,7 @@ a warning (depending on the `check_date_type` argument) if a data issue
 or imputation rules cause an invalid date (e.g. `"2020-02-31"`) to be
 generated. In this case, the user should fix the data issue or adjust
 the imputation rules. It is also possible to specify
-`check_date_type = "none` to silently ignore any issues. Note that any
+`check_date_type = "none"` to silently ignore any issues. Note that any
 invalid dates will be always returned as `NA`.
 
 ## See also
