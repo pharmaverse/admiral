@@ -682,7 +682,7 @@ get_terms <- function(basket_select, version, keep_id, temp_env) {
 
   # a narrow search returns the narrow terms only, a broad search returns all
   # terms of the SMQ
-  if (basket_select$scope == "NARROW") {
+  if (!is.na(basket_select$scope) && basket_select$scope == "NARROW") {
     terms <- filter(terms, SCOPE == "NARROW")
   }
 
@@ -728,38 +728,35 @@ anaphylaxis_queries <- list(
   query(
     prefix = "CQ01",
     name = "Anaphylaxis algorithm category B (upper airway/respiratory)",
-    definition = list(
+    definition =
       basket_select(
         name = "Anaphylactic reaction (SMQ)",
         scope = NA_character_,
         type = "smq",
         algorithm_category = "B"
       )
-    )
   ),
   query(
     prefix = "CQ02",
     name = "Anaphylaxis algorithm category C (angioedema/urticaria/pruritus/flush)",
-    definition = list(
+    definition =
       basket_select(
         name = "Anaphylactic reaction (SMQ)",
         scope = NA_character_,
         type = "smq",
         algorithm_category = "C"
       )
-    )
   ),
   query(
     prefix = "CQ03",
     name = "Anaphylaxis algorithm category D (cardiovascular/hypotension)",
-    definition = list(
+    definition =
       basket_select(
         name = "Anaphylactic reaction (SMQ)",
         scope = NA_character_,
         type = "smq",
         algorithm_category = "D"
       )
-    )
   )
 )
 
