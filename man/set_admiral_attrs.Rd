@@ -44,10 +44,8 @@ call untouched, so re-keying a dataset does not lose its name.
 
 \item{dataset_type}{The ADaM dataset type, stored in the \code{"admiral_ds_type"}
 attribute. \code{"ADDL"}, \code{"MDBDS"}, and \code{"MDOCCDS"} are the medical device
-types (device-level, and the device versions of \code{"BDS"} and \code{"OCCDS"});
-a device dataset is identified by \code{SPDEVID}, so if \code{dataset} does not
-contain it a warning is issued, but the type is stored all the same.
-\code{NULL} leaves a type stored by a previous call untouched.
+types (device-level, and the device versions of \code{"BDS"} and \code{"OCCDS"}).
+The type is not checked against the variables of \code{dataset}. \code{NULL} leaves a type stored by a previous call untouched.
 
 \describe{
 \item{Permitted values}{\code{"ADSL"}, \code{"BDS"}, \code{"OCCDS"}, \code{"TTE"}, \code{"ADDL"}, \code{"MDBDS"},

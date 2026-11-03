@@ -32,15 +32,6 @@
       Error in `set_admiral_attrs()`:
       ! Argument `dataset_type` must be equal to one of "ADSL", "BDS", "OCCDS", "TTE", "ADDL", "MDBDS", or "MDOCCDS".
 
-# set_admiral_attrs Test 12: device types are accepted, and checked for SPDEVID
-
-    Code
-      actual <- set_admiral_attrs(no_device, dataset_type = "MDBDS")
-    Condition
-      Warning:
-      Dataset type "MDBDS" is a medical device type, but `dataset` does not contain `SPDEVID`.
-      i Check that `dataset_type` is correct.
-
 # print.admiral_df Test 25: the name, type and keys are printed in a header
 
     Code

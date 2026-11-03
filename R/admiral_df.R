@@ -45,10 +45,8 @@ new_admiral_df <- function(x, keys = NULL, dataset_name = NULL, dataset_type = N
   x
 }
 
-# the ADaM dataset types `set_admiral_attrs()` accepts, and those of them which
-# are medical device types
-admiral_md_ds_types <- c("ADDL", "MDBDS", "MDOCCDS")
-admiral_ds_types <- c("ADSL", "BDS", "OCCDS", "TTE", admiral_md_ds_types)
+# the ADaM dataset types `set_admiral_attrs()` accepts
+admiral_ds_types <- c("ADSL", "BDS", "OCCDS", "TTE", "ADDL", "MDBDS", "MDOCCDS")
 
 #' Set the Metadata of a Dataset
 #'
@@ -92,10 +90,8 @@ admiral_ds_types <- c("ADSL", "BDS", "OCCDS", "TTE", admiral_md_ds_types)
 #'
 #' @param dataset_type The ADaM dataset type, stored in the `"admiral_ds_type"`
 #'   attribute. `"ADDL"`, `"MDBDS"`, and `"MDOCCDS"` are the medical device
-#'   types (device-level, and the device versions of `"BDS"` and `"OCCDS"`);
-#'   a device dataset is identified by `SPDEVID`, so if `dataset` does not
-#'   contain it a warning is issued, but the type is stored all the same.
-#'   `NULL` leaves a type stored by a previous call untouched.
+#'   types (device-level, and the device versions of `"BDS"` and `"OCCDS"`).
+#'   The type is not checked against the variables of `dataset`. `NULL` leaves a type stored by a previous call untouched.
 #'
 #' @permitted `"ADSL"`, `"BDS"`, `"OCCDS"`, `"TTE"`, `"ADDL"`, `"MDBDS"`,
 #'   `"MDOCCDS"`, or `NULL`
@@ -222,21 +218,6 @@ set_admiral_attrs <- function(dataset,
   assert_data_frame(dataset)
   assert_character_scalar(dataset_name, optional = TRUE)
   assert_character_scalar(dataset_type, values = admiral_ds_types, optional = TRUE)
-
-  # a declared type is not checked against the inferred one, but a device type
-  # declared for a dataset without the device identifier is most likely the
-  # wrong type (or the wrong dataset). Only a warning, as the declaration is the
-  # user's to make
-  if (!is.null(dataset_type) && dataset_type %in% admiral_md_ds_types &&
-    !"SPDEVID" %in% colnames(dataset)) {
-    cli_warn(c(
-      paste(
-        "Dataset type {.val {dataset_type}} is a medical device type, but",
-        "{.arg dataset} does not contain {.var SPDEVID}."
-      ),
-      i = "Check that {.arg dataset_type} is correct."
-    ))
-  }
 
   if (!is.null(keys)) {
     # keys are stored as character: they are metadata about the dataset, not
