@@ -453,6 +453,8 @@ fix the data issue or adjust the imputation rules. It is also possible
 to specify `check_datetime_type = "none"` to silently ignore any issues.
 Note that any invalid datetimes will be always returned as `NA`.
 
+The datetime is created in UTC.
+
 ## See also
 
 [`vignette("imputation")`](https:/pharmaverse.github.io/admiral/3204_invalid_dates_message_fix/articles/imputation.md)
