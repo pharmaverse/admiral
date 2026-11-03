@@ -505,11 +505,12 @@ broad search. These can be derived in a single
 call, as shown in the [Simple MedDRA Queries and Standardized Drug
 Groupings](#simple_query).
 
-However, a handful of SMQs are **algorithmic**. For these, the broad
-search terms are split into categories and a term only counts towards
-the query if it occurs *together with* a term from another category.
-Whether a record contributes therefore depends on the other records of
-the same subject, which is something
+However, a handful of SMQs are **algorithmic** - these are a halfway
+point between narrow and broad searches. For algorithmic queries, the
+broad search terms are split into categories and a term only counts
+towards the query if it occurs *together with* a term from another
+category. Whether a record contributes therefore depends on the other
+records of the same subject, which is something
 [`derive_vars_query()`](https:/pharmaverse.github.io/admiral/3184_alogrithmic_smq/reference/derive_vars_query.md)
 cannot express on its own. An example of how to implement such a
 derivation is shown in the [Algorithmic MedDRA
@@ -585,31 +586,31 @@ algorithmic MedDRA query in two steps:
     and
     [`derive_vars_query()`](https:/pharmaverse.github.io/admiral/3184_alogrithmic_smq/reference/derive_vars_query.md)
     to add one query variable per algorithm category. Keeping one
-    variable per category in the dataset makes the derivation traceable
-    — a reviewer can see exactly which term contributed which category.
+    variable per category in the dataset makes the derivation traceable:
+    a reviewer can see exactly which term contributed which category.
 2.  Use
     [`derive_var_joined_exist_flag()`](https:/pharmaverse.github.io/admiral/3184_alogrithmic_smq/reference/derive_var_joined_exist_flag.md)
     to look across the records of a subject and flag the terms which
     contribute to the algorithm.
 
 The following *Anaphylactic reaction* SMQ will be used as for the
-example. Its algorithm combines the narrow search with four categories
+example. Its algorithm combines the narrow search with three categories
 of broad terms:
 
-| Category | Content                                             |
-|----------|-----------------------------------------------------|
-| Narrow   | Core anaphylactic reaction terms                    |
-| A        | Broad terms specific enough to qualify on their own |
-| B        | Upper airway / respiratory                          |
-| C        | Angioedema / urticaria / pruritus / flush           |
-| D        | Cardiovascular / hypotension                        |
+| Category   | Content                                   |
+|------------|-------------------------------------------|
+| A (Narrow) | Core anaphylactic reaction terms          |
+| B (Broad)  | Upper airway / respiratory                |
+| C (Broad)  | Angioedema / urticaria / pruritus / flush |
+| D (Broad)  | Cardiovascular / hypotension              |
 
-A term contributes if it is
+To flag a term or set of terms for the query, one of the following must
+hold:
 
-- a **narrow** term, or a term from **category A**; or
-- a term from **category B** occurring together with a term from
+- We have a **narrow** term (**category A**); or
+- We have a term from **category B** occurring together with a term from
   **category C** (and vice versa); or
-- a term from **category D** occurring together with a term from
+- We have a term from **category D** occurring together with a term from
   **category B** or **category C** (and vice versa).
 
 i.e. `A or (B and C) or (D and (B or C))`.
@@ -626,7 +627,7 @@ An algorithmic SMQ needs one addition to that function: it must be able
 to return the terms of a **single algorithm category**. As
 [`basket_select()`](https:/pharmaverse.github.io/admiral/3184_alogrithmic_smq/reference/basket_select.md)
 accepts any number of *named* arguments through its `...` argument and
-passes them on unchanged, requesting
+passes them on unchanged, a request such as
 `basket_select(..., algorithm_category = "B")` makes
 `basket_select$algorithm_category` available inside your `get_terms()`
 function, where it can be used to subset the terms of the SMQ.
@@ -638,21 +639,9 @@ Each part of the algorithm is defined by its own
 [`query()`](https:/pharmaverse.github.io/admiral/3184_alogrithmic_smq/reference/query.md)
 object:
 
-- `SMQ01` and `SMQ02` are the standard narrow and broad searches of the
-  SMQ. They create `SMQ01NAM`, `SMQ01CD`, `SMQ01SC`, `SMQ01SCN` and
-  their `SMQ02` counterparts, and the algorithm is applied on top of
-  them.
-- `CQ01` to `CQ04` are the four algorithm categories.
-
-The categories are defined as *customized queries based on a basket*,
-i.e. the
-[`basket_select()`](https:/pharmaverse.github.io/admiral/3184_alogrithmic_smq/reference/basket_select.md)
-object is wrapped in a [`list()`](https://rdrr.io/r/base/list.html).
-That way only `CQzzNAM` is created for them — a plain
-[`basket_select()`](https:/pharmaverse.github.io/admiral/3184_alogrithmic_smq/reference/basket_select.md)
-would additionally populate `SCOPE`, giving non-standard `CQzzSC`
-variables which add nothing here, as the scope is already captured by
-`SMQ01SC`/`SMQ02SC`.
+- `SMQ01` is the narrow search of the SMQ. It create `SMQ01NAM`,
+  `SMQ01CD`, `SMQ01SC` and `SMQ01SCN`.
+- `CQ01` to `CQ03` are the three broad categories.
 
 ``` r
 anaphylaxis_queries <- list(
@@ -668,63 +657,37 @@ anaphylaxis_queries <- list(
     )
   ),
   query(
-    prefix = "SMQ02",
-    name = auto,
-    id = auto,
-    add_scope_num = TRUE,
-    definition = basket_select(
-      name = "Anaphylactic reaction (SMQ)",
-      scope = "BROAD",
-      type = "smq"
-    )
-  ),
-  query(
     prefix = "CQ01",
-    name = "Anaphylaxis algorithm category A",
-    definition = list(
-      basket_select(
-        name = "Anaphylactic reaction (SMQ)",
-        scope = "BROAD",
-        type = "smq",
-        algorithm_category = "A"
-      )
-    )
-  ),
-  query(
-    prefix = "CQ02",
     name = "Anaphylaxis algorithm category B (upper airway/respiratory)",
-    definition = list(
+    definition =
       basket_select(
         name = "Anaphylactic reaction (SMQ)",
-        scope = "BROAD",
+        scope = NA_character_,
         type = "smq",
         algorithm_category = "B"
       )
-    )
   ),
   query(
-    prefix = "CQ03",
+    prefix = "CQ02",
     name = "Anaphylaxis algorithm category C (angioedema/urticaria/pruritus/flush)",
-    definition = list(
+    definition =
       basket_select(
         name = "Anaphylactic reaction (SMQ)",
-        scope = "BROAD",
+        scope = NA_character_,
         type = "smq",
         algorithm_category = "C"
       )
-    )
   ),
   query(
-    prefix = "CQ04",
+    prefix = "CQ03",
     name = "Anaphylaxis algorithm category D (cardiovascular/hypotension)",
-    definition = list(
+    definition =
       basket_select(
         name = "Anaphylactic reaction (SMQ)",
-        scope = "BROAD",
+        scope = NA_character_,
         type = "smq",
         algorithm_category = "D"
       )
-    )
   )
 )
 
@@ -742,7 +705,7 @@ adae2 <- tribble(
   ~USUBJID, ~AESEQ, ~ASTDT,       ~AEDECOD,
   "01",     1,      "2021-03-05", "Anaphylactic reaction",
   "01",     2,      "2021-05-12", "Headache",
-  "02",     1,      "2021-02-11", "Circulatory collapse",
+  "02",     1,      "2021-02-11", "Confusion",
   "03",     1,      "2021-04-02", "Dyspnoea",
   "03",     2,      "2021-04-02", "Urticaria",
   "04",     1,      "2021-06-18", "Hypotension",
@@ -787,18 +750,18 @@ adae_algquery1 <- adae_algquery %>%
     dataset_add = adae_algquery,
     by_vars = exprs(USUBJID),
     new_var = ANAPTFL,
-    join_vars = exprs(ASTDT, CQ02NAM, CQ03NAM, CQ04NAM),
+    join_vars = exprs(ASTDT, CQ01NAM, CQ02NAM, CQ03NAM),
     join_type = "all",
     filter_join = abs(ASTDT.join - ASTDT) <= 7 &
       (
-        # a narrow term or a category A term contributes on its own
-        !is.na(SMQ01NAM) | !is.na(CQ01NAM) |
+        # a narrow term contributes on its own
+        !is.na(SMQ01NAM) |
           # category B together with category C
-          (!is.na(CQ02NAM) & !is.na(CQ03NAM.join)) |
-          (!is.na(CQ03NAM) & !is.na(CQ02NAM.join)) |
+          (!is.na(CQ01NAM) & !is.na(CQ02NAM.join)) |
+          (!is.na(CQ02NAM) & !is.na(CQ01NAM.join)) |
           # category D together with category B or category C
-          (!is.na(CQ04NAM) & (!is.na(CQ02NAM.join) | !is.na(CQ03NAM.join))) |
-          ((!is.na(CQ02NAM) | !is.na(CQ03NAM)) & !is.na(CQ04NAM.join))
+          (!is.na(CQ03NAM) & (!is.na(CQ01NAM.join) | !is.na(CQ02NAM.join))) |
+          ((!is.na(CQ01NAM) | !is.na(CQ02NAM)) & !is.na(CQ03NAM.join))
       )
   )
 ```
@@ -807,8 +770,7 @@ Walking through the subjects:
 
 - `01` — *Anaphylactic reaction* is a narrow term and contributes on its
   own. The unrelated *Headache* is not flagged.
-- `02` — *Circulatory collapse* is a category A term and contributes on
-  its own.
+- `02` — *Confusion* is unrelated to the search and so is not flagged.
 - `03` — *Dyspnoea* (B) and *Urticaria* (C) occur on the same day, so
   both contribute.
 - `04` — *Hypotension* (D) and *Wheezing* (B) occur on the same day, so
@@ -824,12 +786,10 @@ Please note that if more than two categories are combined by an `and`
 operator, more than one `derive_vars_joined_exist_flag()` call is
 necessary to derive the flag. For example, the algorithm for the
 *Anticholinergic syndrome (SMQ)* is `A or (B and C and D)`. A
-[`derive_vars_joined()`](https:/pharmaverse.github.io/admiral/3184_alogrithmic_smq/reference/derive_vars_joined.md)
-call could be used to derive a temporary flag (`TEMP_BC_FL`) flagging
-records with `B and C`. Then a second
-[`derive_vars_joined()`](https:/pharmaverse.github.io/admiral/3184_alogrithmic_smq/reference/derive_vars_joined.md)
-call could derive the final flag identifying records with
-`A or (TEMP_BL_FL and D)`.
+`derive_vars_joined_exist_flag()` call could be used to derive a
+temporary flag (`TEMP_BC_FL`) flagging records with `B and C`. Then a
+second `derive_vars_joined_exist_flag()` call could derive the final
+flag identifying records with `A or (TEMP_BL_FL and D)`.
 
 ### Add the `ADSL` variables
 
