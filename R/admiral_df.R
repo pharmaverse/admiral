@@ -474,25 +474,26 @@ get_dataset_type <- function(dataset) {
 #' @details
 #'   A dataset is first classed as device data or subject data:
 #'
-#'   * **Device data** contains `SPDEVID`, the device identifier, and is not
-#'     keyed by subject: it does not contain all the subject keys
+#'   * **Device data** contains `SPDEVID`, the device identifier, populated
+#'     (neither `NA` nor `""`) for every record. Its type is one of the medical
+#'     device types `"ADDL"`, `"MDBDS"`, and `"MDOCCDS"`.
+#'   * **Subject data** is otherwise data which contains all the subject keys
 #'     (`get_admiral_option("subject_keys")`, by default `STUDYID` and
-#'     `USUBJID`), or they are missing for some of its records. Its type is one
-#'     of the medical device types `"ADDL"`, `"MDBDS"`, and `"MDOCCDS"`.
-#'   * **Subject data** contains all the subject keys. Its type is one of
-#'     `"ADSL"`, `"BDS"`, `"OCCDS"`, and `"TTE"`.
+#'     `USUBJID`). Its type is one of `"ADSL"`, `"BDS"`, `"OCCDS"`, and `"TTE"`.
 #'
 #'   A dataset which is neither is `"other"`. This keeps a data frame which merely
 #'   shares variable names with an ADaM dataset -- a coding dictionary with
 #'   `AETERM`/`AEDECOD` columns, a summary table with `PARAMCD` and `AVAL` --
 #'   from being taken for one.
 #'
-#'   `SPDEVID` is not enough on its own to make a dataset device data, because
-#'   subject datasets record it too, e.g. the device involved in an adverse
-#'   event. A dataset whose records are all keyed by subject is therefore subject
-#'   data whether or not it contains `SPDEVID`; a device dataset which also
-#'   identifies the subject of every record is inferred as the corresponding
-#'   subject type, so declare its type with [admiral_df()] instead.
+#'   The subject keys do not decide the class: in the ADaMIG-MD `STUDYID` is
+#'   required in a device dataset and `USUBJID` is conditional, so a device
+#'   dataset may identify the subject of every record. Nor does the presence of
+#'   `SPDEVID`, as subject datasets record it too, e.g. the device involved in
+#'   an adverse event; but there it is populated only for the records which
+#'   involve a device. A subject dataset in which every record involves a device
+#'   (e.g. an `ADAE` restricted to device-related events) is therefore inferred
+#'   as device data, so declare its type with [admiral_df()] instead.
 #'
 #'   Within each class the following precedence is used. The order matters,
 #'   because the types are not mutually exclusive by variable content -- a `TTE`
@@ -509,7 +510,7 @@ get_dataset_type <- function(dataset) {
 #'      `TRTEMFL`.
 #'   4. `"ADSL"`/`"ADDL"` -- does not contain `PARAMCD` and has one record per
 #'      subject (per combination of the subject keys) or per device (per
-#'      combination of `STUDYID`, where present, and `SPDEVID`).
+#'      combination of `STUDYID` and `SPDEVID`).
 #'   5. `"other"` -- none of the above.
 #'
 #'   The `--DECOD`/`--TERM` test requires the two-letter SDTM domain prefix the
@@ -545,10 +546,13 @@ guess_admiral_df_type <- function(dataset) {
   # subject (`STUDYID` alone identifies nothing)
   has_subject_keys <- all(subject_keys %in% cols)
 
-  # `SPDEVID` is recorded in subject datasets too, so it only makes a dataset
-  # device data where the records are not all keyed by subject
+  # `SPDEVID` is recorded in subject datasets too, but there only for the
+  # records involving a device, so it makes a dataset device data only where it
+  # is populated for every record. The subject keys do not decide it, as
+  # `USUBJID` is conditional in a device dataset. A blank counts as missing, as
+  # data read from SAS has `""` rather than `NA`
   if ("SPDEVID" %in% cols &&
-    !(has_subject_keys && !any(is.na(dataset[subject_keys])))) {
+    !any(is.na(dataset$SPDEVID) | dataset$SPDEVID == "")) {
     return(guess_structure_type(
       dataset,
       id_vars = intersect(c("STUDYID", "SPDEVID"), cols),

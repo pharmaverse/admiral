@@ -34,13 +34,12 @@ only ever declared with \code{\link[=admiral_df]{admiral_df()}}.
 \details{
 A dataset is first classed as device data or subject data:
 \itemize{
-\item \strong{Device data} contains \code{SPDEVID}, the device identifier, and is not
-keyed by subject: it does not contain all the subject keys
+\item \strong{Device data} contains \code{SPDEVID}, the device identifier, populated
+(neither \code{NA} nor \code{""}) for every record. Its type is one of the medical
+device types \code{"ADDL"}, \code{"MDBDS"}, and \code{"MDOCCDS"}.
+\item \strong{Subject data} is otherwise data which contains all the subject keys
 (\code{get_admiral_option("subject_keys")}, by default \code{STUDYID} and
-\code{USUBJID}), or they are missing for some of its records. Its type is one
-of the medical device types \code{"ADDL"}, \code{"MDBDS"}, and \code{"MDOCCDS"}.
-\item \strong{Subject data} contains all the subject keys. Its type is one of
-\code{"ADSL"}, \code{"BDS"}, \code{"OCCDS"}, and \code{"TTE"}.
+\code{USUBJID}). Its type is one of \code{"ADSL"}, \code{"BDS"}, \code{"OCCDS"}, and \code{"TTE"}.
 }
 
 A dataset which is neither is \code{"other"}. This keeps a data frame which merely
@@ -48,12 +47,14 @@ shares variable names with an ADaM dataset -- a coding dictionary with
 \code{AETERM}/\code{AEDECOD} columns, a summary table with \code{PARAMCD} and \code{AVAL} --
 from being taken for one.
 
-\code{SPDEVID} is not enough on its own to make a dataset device data, because
-subject datasets record it too, e.g. the device involved in an adverse
-event. A dataset whose records are all keyed by subject is therefore subject
-data whether or not it contains \code{SPDEVID}; a device dataset which also
-identifies the subject of every record is inferred as the corresponding
-subject type, so declare its type with \code{\link[=admiral_df]{admiral_df()}} instead.
+The subject keys do not decide the class: in the ADaMIG-MD \code{STUDYID} is
+required in a device dataset and \code{USUBJID} is conditional, so a device
+dataset may identify the subject of every record. Nor does the presence of
+\code{SPDEVID}, as subject datasets record it too, e.g. the device involved in
+an adverse event; but there it is populated only for the records which
+involve a device. A subject dataset in which every record involves a device
+(e.g. an \code{ADAE} restricted to device-related events) is therefore inferred
+as device data, so declare its type with \code{\link[=admiral_df]{admiral_df()}} instead.
 
 Within each class the following precedence is used. The order matters,
 because the types are not mutually exclusive by variable content -- a \code{TTE}
@@ -70,7 +71,7 @@ device time-to-event type, so for device data this is \code{"MDBDS"}.
 \code{TRTEMFL}.
 \item \code{"ADSL"}/\code{"ADDL"} -- does not contain \code{PARAMCD} and has one record per
 subject (per combination of the subject keys) or per device (per
-combination of \code{STUDYID}, where present, and \code{SPDEVID}).
+combination of \code{STUDYID} and \code{SPDEVID}).
 \item \code{"other"} -- none of the above.
 }
 

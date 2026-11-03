@@ -555,23 +555,54 @@ test_that("guess_admiral_df_type Test 23: device datasets are inferred as the de
   )
   expect_identical(guess_admiral_df_type(device_other), "other")
 
-  # subject keys which are missing for some records do not key the dataset by
-  # subject, so it is device data
-  partly_subject <- tibble::tribble(
+  # `USUBJID` is conditional in a device dataset, so the subject keys do not
+  # decide the class: populated for every record, missing for some, or absent,
+  # a dataset with `SPDEVID` for every record is device data
+  mdbds_subject <- tibble::tribble(
     ~STUDYID, ~USUBJID, ~SPDEVID, ~PARAMCD, ~AVAL,
     "P",      "1",      "D-1",    "BATTV",    3.1,
-    "P",      NA,       "D-2",    "BATTV",    2.9
+    "P",      "2",      "D-2",    "BATTV",    2.9
   )
-  expect_identical(guess_admiral_df_type(partly_subject), "MDBDS")
+  expect_identical(guess_admiral_df_type(mdbds_subject), "MDBDS")
+  expect_identical(
+    guess_admiral_df_type(mutate(mdbds_subject, USUBJID = c("1", NA))),
+    "MDBDS"
+  )
+  mdoccds_subject <- tibble::tribble(
+    ~STUDYID, ~USUBJID, ~SPDEVID, ~DEDECOD,
+    "P",      "1",      "D-1",    "OCCLUSION",
+    "P",      "1",      "D-1",    "LEAK"
+  )
+  expect_identical(guess_admiral_df_type(mdoccds_subject), "MDOCCDS")
 
-  # `SPDEVID` alongside subject keys for every record is subject data, e.g. an
-  # adverse event dataset which records the device involved
+  # one record per device is ADDL, not ADSL, whether each subject has one
+  # device or several
+  addl_one_per_subject <- tibble::tribble(
+    ~STUDYID, ~USUBJID, ~SPDEVID, ~DEVTYPE,
+    "P",      "1",      "D-1",    "INSULIN PUMP",
+    "P",      "2",      "D-2",    "INSULIN PUMP"
+  )
+  expect_identical(guess_admiral_df_type(addl_one_per_subject), "ADDL")
+  addl_many_per_subject <- tibble::tribble(
+    ~STUDYID, ~USUBJID, ~SPDEVID, ~DEVTYPE,
+    "P",      "1",      "D-1",    "INSULIN PUMP",
+    "P",      "1",      "D-2",    "CGM SENSOR"
+  )
+  expect_identical(guess_admiral_df_type(addl_many_per_subject), "ADDL")
+
+  # a subject dataset records `SPDEVID` only for the records involving a
+  # device, e.g. an adverse event dataset, so it is subject data -- whether the
+  # missing values are `NA` or blank, as in data read from SAS
   adae <- tibble::tribble(
     ~STUDYID, ~USUBJID, ~SPDEVID, ~AEDECOD,
     "P",      "1",      "D-1",    "HEADACHE",
-    "P",      "2",      "D-2",    "NAUSEA"
+    "P",      "2",      NA,       "NAUSEA"
   )
   expect_identical(guess_admiral_df_type(adae), "OCCDS")
+  expect_identical(guess_admiral_df_type(mutate(adae, SPDEVID = c("D-1", ""))), "OCCDS")
+
+  # without the subject keys, a partly populated `SPDEVID` is neither class
+  expect_identical(guess_admiral_df_type(select(adae, -USUBJID)), "other")
 
   # with no records, the variables decide as far as they can
   empty_mdbds <- tibble::tibble(
@@ -587,18 +618,19 @@ test_that("guess_admiral_df_type Test 23: device datasets are inferred as the de
 ## Test 24: the declared type takes precedence over the guess ----
 test_that("get_dataset_type Test 24: the declared type takes precedence over the guess", {
   input <- tibble::tribble(
-    ~STUDYID, ~USUBJID, ~SPDEVID, ~PARAMCD, ~AVAL,
-    "P",      "1",      "D-1",    "BATTV",    3.1
+    ~STUDYID, ~USUBJID, ~SPDEVID, ~AEDECOD,
+    "P",      "1",      "D-1",    "DEVICE SITE PAIN"
   )
 
-  # without a declared type, the type is inferred: every record is keyed by
-  # subject, so this is inferred as subject data despite `SPDEVID`
-  expect_identical(get_dataset_type(input), "BDS")
+  # without a declared type, the type is inferred: `SPDEVID` is populated for
+  # every record, so this is inferred as device data
+  expect_identical(get_dataset_type(input), "MDOCCDS")
 
-  # a declared type is returned as is, even where the guess differs
+  # a declared type is returned as is, even where the guess differs -- here an
+  # adverse event dataset restricted to device-related events
   expect_identical(
-    get_dataset_type(admiral_df(input, dataset_type = "MDBDS")),
-    "MDBDS"
+    get_dataset_type(admiral_df(input, dataset_type = "OCCDS")),
+    "OCCDS"
   )
 })
 
