@@ -731,7 +731,7 @@ anaphylaxis_queries <- list(
     definition = list(
       basket_select(
         name = "Anaphylactic reaction (SMQ)",
-        scope = "BROAD",
+        scope = "NA_character_",
         type = "smq",
         algorithm_category = "B"
       )
@@ -743,7 +743,7 @@ anaphylaxis_queries <- list(
     definition = list(
       basket_select(
         name = "Anaphylactic reaction (SMQ)",
-        scope = "BROAD",
+        scope = "NA_character_",
         type = "smq",
         algorithm_category = "C"
       )
@@ -755,7 +755,7 @@ anaphylaxis_queries <- list(
     definition = list(
       basket_select(
         name = "Anaphylactic reaction (SMQ)",
-        scope = "BROAD",
+        scope = "NA_character_",
         type = "smq",
         algorithm_category = "D"
       )
