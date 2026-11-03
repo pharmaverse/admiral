@@ -14,7 +14,8 @@ impute_dtc_dt(
   min_dates_strict = NULL,
   max_dates = NULL,
   max_dates_strict = NULL,
-  preserve = FALSE
+  preserve = FALSE,
+  check_date_type = "error"
 )
 ```
 
@@ -282,6 +283,23 @@ impute_dtc_dt(
 
   :   `FALSE`
 
+- check_date_type:
+
+  Check if any invalid dates are detected?
+
+  If any invalid dates are detected, either due to a data issue or as a
+  result of incorrect imputation, `check_date_type` controls whether an
+  error is thrown or a warning is issued. If the latter, the function
+  returns `NA`.
+
+  Permitted values
+
+  :   `"none"`, `"message"`, `"warning"`, `"error"`
+
+  Default value
+
+  :   `"error"`
+
 ## Value
 
 A character vector
@@ -291,9 +309,13 @@ A character vector
 This is a vector-oriented helper and is not usually called directly on a
 data frame with `%>%`.
 
-Additionally, the function will throw an error if imputation rules cause
-an invalid datetime (e.g. "2020-02-31") to be generated. In this case,
-the user should adjust the imputation rules.
+Additionally, the function can output a message, throw an error or issue
+a warning (depending on the `check_date_type` argument) if a data issue
+or imputation rules cause an invalid date (e.g. `"2020-02-31"`) to be
+generated. In this case, the user should fix the data issue or adjust
+the imputation rules. It is also possible to specify
+`check_date_type = "none"` to silently ignore any issues. Note that any
+invalid dates will be always returned as `NA`.
 
 ## See also
 
@@ -395,4 +417,22 @@ impute_dtc_dt(
   highest_imputation = "Y"
 )
 #> [1] "2020-12-06" "2020-01-01"
+
+# Control error vs warning behavior for invalid dates
+# By default (check_date_type = "error"), imputing day 30 for February raises an error
+# Setting check_date_type = "warning" returns NA with a warning instead
+impute_dtc_dt(
+  "2020-02",
+  highest_imputation = "D",
+  date_imputation = "30",
+  check_date_type = "warning"
+)
+#> Warning: 1 date is invalid, possibly due to a data issue or as a result of imputation.
+#> Please review the function arguments and/or your data and correct your
+#> selection. See the problematic date below, where the raw date is what is passed
+#> to the function and the final date is the result of any imputation:
+#> • Raw date 2020-02, final date 2020-02-30.
+#> ℹ You can control whether this is a message/warning/error, or switch it off
+#>   entirely, through the `check_date_type` argument.
+#> [1] NA
 ```

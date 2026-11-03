@@ -14,27 +14,41 @@
 
 ### Updates of Existing Functions
 
-- The `min_dates_strict` and `max_dates_strict` arguments were added to
+- Various enhancements were made to the
   [`derive_vars_dt()`](https:/pharmaverse.github.io/admiral/3184_alogrithmic_smq/reference/derive_vars_dt.md),
   [`derive_vars_dtm()`](https:/pharmaverse.github.io/admiral/3184_alogrithmic_smq/reference/derive_vars_dtm.md),
   [`convert_dtc_to_dt()`](https:/pharmaverse.github.io/admiral/3184_alogrithmic_smq/reference/convert_dtc_to_dt.md),
   [`convert_dtc_to_dtm()`](https:/pharmaverse.github.io/admiral/3184_alogrithmic_smq/reference/convert_dtc_to_dtm.md),
-  [`impute_dtc_dt()`](https:/pharmaverse.github.io/admiral/3184_alogrithmic_smq/reference/impute_dtc_dt.md),
-  [`impute_dtc_dtm()`](https:/pharmaverse.github.io/admiral/3184_alogrithmic_smq/reference/impute_dtc_dtm.md).
-  The new arguments can be used to avoid invalid imputed dates. E.g., if
-  `AESTDTC` is imputed with `min_dates = exprs(TRTSDTM)`,
-  `max_dates_strict = exprs(AENDTM)` can be specified to ensure the
-  imputed event start date is not after the event end date (the `ADAE`
-  template and the “Creating an OCCDS ADaM” vignette were updated
-  accordingly).
+  [`impute_dtc_dt()`](https:/pharmaverse.github.io/admiral/3184_alogrithmic_smq/reference/impute_dtc_dt.md)
+  and
+  [`impute_dtc_dtm()`](https:/pharmaverse.github.io/admiral/3184_alogrithmic_smq/reference/impute_dtc_dtm.md)
+  functions:
 
-  See the
-  [`derive_vars_dt()`](https:/pharmaverse.github.io/admiral/3184_alogrithmic_smq/reference/derive_vars_dt.md)
-  documentation and the “Avoid Imputed Dates Before a Particular Date”
-  section of the “Date and Time Imputation” vignette
-  ([`vignette("imputation")`](https:/pharmaverse.github.io/admiral/3184_alogrithmic_smq/articles/imputation.md))
-  for details and examples.
-  ([\#2708](https://github.com/pharmaverse/admiral/issues/2708))
+  - The `min_dates_strict` and `max_dates_strict` arguments were added.
+    The new arguments can be used to avoid invalid imputed dates. E.g.,
+    if `AESTDTC` is imputed with `min_dates = exprs(TRTSDTM)`,
+    `max_dates_strict = exprs(AENDTM)` can be specified to ensure the
+    imputed event start date is not after the event end date (the `ADAE`
+    template and the “Creating an OCCDS ADaM” vignette were updated
+    accordingly).
+
+    See the
+    [`derive_vars_dt()`](https:/pharmaverse.github.io/admiral/3184_alogrithmic_smq/reference/derive_vars_dt.md)
+    documentation and the “Avoid Imputed Dates Before a Particular Date”
+    section of the “Date and Time Imputation” vignette
+    ([`vignette("imputation")`](https:/pharmaverse.github.io/admiral/3184_alogrithmic_smq/articles/imputation.md))
+    for details and examples.
+    ([\#2708](https://github.com/pharmaverse/admiral/issues/2708))
+
+  - The `check_date_type` and `check_datetime_type` arguments were added
+    to the date/datetime functions respectively. These allow users to
+    control whether a message, warning or error is issued (or nothing at
+    all) when a date/datetime is invalid, either as a result of a raw
+    data issue or following imputation. When not throwing an error, the
+    functions continue executing and return `NA` for any invalid
+    dates/datetimes. The informative note was also improved and aligned
+    across the functions.
+    ([\#3204](https://github.com/pharmaverse/admiral/issues/3204))
 
 - [`derive_vars_merged_lookup()`](https:/pharmaverse.github.io/admiral/3184_alogrithmic_smq/reference/derive_vars_merged_lookup.md)
   was enhanced with a new `check_not_mapped_type` argument which allows
@@ -49,7 +63,28 @@
   `"Eosinophilia"`
   ([\#3191](https://github.com/pharmaverse/admiral/issues/3191)).
 
+- [`compute_duration()`](https:/pharmaverse.github.io/admiral/3184_alogrithmic_smq/reference/compute_duration.md)
+  now issues an error if either of `start_date` or `end_date` is a
+  datetime without time zone, or if their time zones differ. The
+  documentation of
+  [`compute_duration()`](https:/pharmaverse.github.io/admiral/3184_alogrithmic_smq/reference/compute_duration.md),
+  [`derive_vars_dtm()`](https:/pharmaverse.github.io/admiral/3184_alogrithmic_smq/reference/derive_vars_dtm.md),
+  and
+  [`convert_dtc_to_dtm()`](https:/pharmaverse.github.io/admiral/3184_alogrithmic_smq/reference/convert_dtc_to_dtm.md)
+  was updated to state that
+  [admiral](https://pharmaverse.github.io/admiral/) creates date-times
+  in UTC. ([\#2763](https://github.com/pharmaverse/admiral/issues/2763))
+
 ### Breaking Changes
+
+- [`impute_dtc_dt()`](https:/pharmaverse.github.io/admiral/3184_alogrithmic_smq/reference/impute_dtc_dt.md)
+  and
+  [`impute_dtc_dtm()`](https:/pharmaverse.github.io/admiral/3184_alogrithmic_smq/reference/impute_dtc_dtm.md)
+  now return `NA_character_` rather than an invalid date/datetime
+  string, in line with the updates made to date/datetime functions to
+  introduce the `check_date_type` and `check_datetime_type` arguments
+  (see entries under “Updates of Existing Functions”).
+  ([\#3204](https://github.com/pharmaverse/admiral/issues/3204))
 
 - The following functions are entering the next phase of the
   [deprecation

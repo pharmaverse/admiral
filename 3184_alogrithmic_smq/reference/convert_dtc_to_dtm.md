@@ -15,7 +15,8 @@ convert_dtc_to_dtm(
   min_dates_strict = NULL,
   max_dates = NULL,
   max_dates_strict = NULL,
-  preserve = FALSE
+  preserve = FALSE,
+  check_datetime_type = "error"
 )
 ```
 
@@ -319,14 +320,39 @@ convert_dtc_to_dtm(
 
   :   `FALSE`
 
+- check_datetime_type:
+
+  Check if any invalid datetimes are detected?
+
+  If `"warning"`, `"message"`, or `"error"` is specified, the specified
+  message is issued if any invalid datetimes are detected, either due to
+  a data issue or as a result of incorrect imputation. In that case, if
+  `check_datetime_type` is not `"error"`, the function returns `NA`.
+
+  Permitted values
+
+  :   `"none"`, `"message"`, `"warning"`, `"error"`
+
+  Default value
+
+  :   `"error"`
+
 ## Value
 
-A datetime object
+A datetime object in UTC
 
 ## Details
 
 This is a vector-oriented helper and is not usually called directly on a
 data frame with `%>%`.
+
+Additionally, the function can output a message, throw an error or issue
+a warning (depending on the `check_datetime_type` argument) if a data
+issue or imputation rules cause an invalid datetime (e.g.
+`"2020-01-28T25:00:00"`) to be generated. In this case, the user should
+fix the data issue or adjust the imputation rules. It is also possible
+to specify `check_datetime_type = "none"` to silently ignore any issues.
+Note that any invalid datetimes will be always returned as `NA`.
 
 ## See also
 

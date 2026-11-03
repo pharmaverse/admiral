@@ -24,7 +24,9 @@ compute_duration(
 
   The start date
 
-  A date or date-time object is expected.
+  A date or datetime object is expected. Datetimes must have a time
+  zone, and the timezone of the start date must match that of the end
+  date. Dates are treated as UTC.
 
   Refer to
   [`derive_vars_dt()`](https:/pharmaverse.github.io/admiral/3184_alogrithmic_smq/reference/derive_vars_dt.md)
@@ -43,7 +45,9 @@ compute_duration(
 
   The end date
 
-  A date or date-time object is expected.
+  A date or datetime object is expected. Datetimes must have a time
+  zone, and the timezone of the start date must match that of the end
+  date. Dates are treated as UTC.
 
   Refer to
   [`derive_vars_dt()`](https:/pharmaverse.github.io/admiral/3184_alogrithmic_smq/reference/derive_vars_dt.md)
@@ -176,6 +180,14 @@ The duration between the two date in the specified unit
 The output is a numeric vector providing the duration as time from start
 to end date in the specified unit. If the end date is before the start
 date, the duration is negative.
+
+## Time Zones
+
+Datetimes must have a time zone, and `start_date` and `end_date` must
+have the same time zone. Otherwise an error is issued. Dates are treated
+as UTC. If needed, use
+[`lubridate::force_tz()`](https://lubridate.tidyverse.org/reference/force_tz.html)
+to set the time zone.
 
 ## Duration Type
 
