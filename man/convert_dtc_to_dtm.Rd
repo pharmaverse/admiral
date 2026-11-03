@@ -259,7 +259,7 @@ For example \code{"2019---07"} would return \verb{"2019-06-07} if \code{preserve
 }}
 }
 \value{
-A datetime object
+A datetime object in UTC
 }
 \description{
 Convert a date character vector (usually \code{--DTC}) into a Date vector (usually \verb{*DTM}).

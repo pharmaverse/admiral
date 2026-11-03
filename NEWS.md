@@ -30,6 +30,11 @@ argument will thus be deprecated. (#3188)
 `atoxgr_criteria_ctcv5_uscv`, `atoxgr_criteria_ctcv6`, `atoxgr_criteria_ctcv6_uscv`)
 were updated to add the term `"Eosinophilia"` (#3191).
 
+- `compute_duration()` now issues an error if either of `start_date` or `end_date` is a
+datetime without time zone, or if their time zones differ. The documentation
+of `compute_duration()`, `derive_vars_dtm()`, and `convert_dtc_to_dtm()` was
+updated to state that `{admiral}` creates date-times in UTC. (#2763)
+
 ## Breaking Changes
 
 - The following functions are entering the next phase of the [deprecation process](https://pharmaverse.github.io/admiraldev/articles/programming_strategy.html#deprecation):
