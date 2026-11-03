@@ -40,14 +40,14 @@ call untouched, so re-keying a dataset does not lose its name.
 \item{dataset_class}{The ADaM dataset class, stored in the
 \code{"admiral_dataset_class"} attribute. This is the CDISC class of the
 dataset, not its R class (which is \code{admiral_df}). \code{"TTE"} is the
-time-to-event subclass of \code{"BDS"}. \code{"ADDL"}, \code{"MDBDS"}, and \code{"MDOCCDS"}
-are the medical device classes (device-level, and the device versions of
-\code{"BDS"} and \code{"OCCDS"}). The class is not checked against the variables of
+time-to-event subclass of \code{"BDS"}. \code{"ADDL"}, \code{"MDBDS"}, \code{"MDTTE"}, and
+\code{"MDOCCDS"} are the medical device classes (device-level, and the device
+versions of \code{"BDS"}, \code{"TTE"}, and \code{"OCCDS"}). The class is not checked against the variables of
 \code{dataset}. \code{NULL} leaves a class stored by a previous call untouched.
 
 \describe{
 \item{Permitted values}{\code{"ADSL"}, \code{"BDS"}, \code{"OCCDS"}, \code{"TTE"}, \code{"ADDL"}, \code{"MDBDS"},
-\code{"MDOCCDS"}, or \code{NULL}}
+\code{"MDTTE"}, \code{"MDOCCDS"}, or \code{NULL}}
 \item{Default value}{\code{NULL}}
 }}
 }

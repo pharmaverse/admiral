@@ -30,7 +30,7 @@
       admiral_df(input, dataset_class = "ADAE")
     Condition
       Error in `admiral_df()`:
-      ! Argument `dataset_class` must be equal to one of "ADSL", "BDS", "OCCDS", "TTE", "ADDL", "MDBDS", or "MDOCCDS".
+      ! Argument `dataset_class` must be equal to one of "ADSL", "BDS", "OCCDS", "TTE", "ADDL", "MDBDS", "MDTTE", or "MDOCCDS".
 
 # print.admiral_df Test 27: the name, class and keys are printed in a header
 

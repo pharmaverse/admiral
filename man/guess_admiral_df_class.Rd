@@ -15,16 +15,14 @@ guess_admiral_df_class(dataset)
 }
 \value{
 A character scalar: one of \code{"ADSL"}, \code{"BDS"}, \code{"OCCDS"}, \code{"TTE"},
-\code{"ADDL"}, \code{"MDBDS"}, \code{"MDOCCDS"}, or \code{"other"}; or \code{NA} if the dataset has
-no records and its variables do not decide the class.
+\code{"ADDL"}, \code{"MDBDS"}, \code{"MDTTE"}, \code{"MDOCCDS"}, or \code{"other"}; or \code{NA} if the
+dataset has no records and its variables do not decide the class.
 }
 \description{
-\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
-
 Attempts to classify a data frame as one of the common ADaM dataset classes
-based on the variables it contains. This is the fallback for when no class has been
-declared with \code{\link[=admiral_df]{admiral_df()}}; use \code{\link[=get_dataset_class]{get_dataset_class()}} to get the
-declared class where there is one.
+from its variables and records. It ignores any class declared with
+\code{\link[=admiral_df]{admiral_df()}}: \code{\link[=get_dataset_class]{get_dataset_class()}} returns the declared class if there is
+one, and only falls back to this function otherwise.
 
 Note that this is the \emph{class} of the dataset (\code{ADSL}, \code{BDS}, ...), not its
 record structure: the latter is the set of key variables which uniquely
@@ -36,7 +34,7 @@ A dataset is first classed as device data or subject data:
 \itemize{
 \item \strong{Device data} contains \code{SPDEVID}, the device identifier, populated
 (neither \code{NA} nor \code{""}) for every record. Its class is one of the medical
-device classes \code{"ADDL"}, \code{"MDBDS"}, and \code{"MDOCCDS"}.
+device classes \code{"ADDL"}, \code{"MDBDS"}, \code{"MDTTE"}, and \code{"MDOCCDS"}.
 \item \strong{Subject data} is otherwise data which contains all the subject keys
 (\code{get_admiral_option("subject_keys")}, by default \code{STUDYID} and
 \code{USUBJID}). Its class is one of \code{"ADSL"}, \code{"BDS"}, \code{"OCCDS"}, and \code{"TTE"}.
@@ -61,35 +59,22 @@ because the classes are not mutually exclusive by variable content -- a \code{TT
 dataset contains \code{PARAMCD} just as a \code{BDS} one does, and an occurrence
 dataset which has had a parameter added is structurally both.
 \enumerate{
-\item \code{"TTE"} -- contains \code{PARAMCD}, \code{CNSR}, and \code{STARTDT}. Tested first
-because a time-to-event dataset is a \code{BDS} dataset by variable content;
-only the censoring and origin-date variables distinguish it. There is no
-device time-to-event class, so for device data this is \code{"MDBDS"}.
+\item \code{"TTE"}/\code{"MDTTE"} -- contains \code{PARAMCD}, \code{CNSR}, and \code{STARTDT}. Tested
+first because a time-to-event dataset is a \code{BDS} dataset by variable
+content; only the censoring and origin-date variables distinguish it.
 \item \code{"BDS"}/\code{"MDBDS"} -- contains \code{PARAMCD} and \code{AVAL} or \code{AVALC}.
 \item \code{"OCCDS"}/\code{"MDOCCDS"} -- does not contain \code{PARAMCD}, and contains a
-\code{--DECOD}/\code{--TERM} variable, an \code{AOCCxxFL} occurrence flag, or
-\code{TRTEMFL}.
+\code{--DECOD}/\code{--TERM} variable with a two-letter SDTM domain prefix
+(\code{AEDECOD}, \code{DETERM}, ...; a variable merely ending in \code{TERM} does not
+count), an \code{AOCCxxFL} occurrence flag, or \code{TRTEMFL}.
 \item \code{"ADSL"}/\code{"ADDL"} -- does not contain \code{PARAMCD} and has one record per
 subject (per combination of the subject keys) or per device (per
-combination of \code{STUDYID} and \code{SPDEVID}).
-\item \code{"other"} -- none of the above.
+combination of \code{STUDYID} and \code{SPDEVID}). This is decided by the records:
+treatment variables are no evidence of ADSL, as \code{BDS}/\code{OCCDS}
+derivations merge them on from ADSL.
+\item \code{"other"} -- none of the above, if there is at least one record.
+\item \code{NA} -- none of the above.
 }
-
-The \code{--DECOD}/\code{--TERM} test requires the two-letter SDTM domain prefix the
-convention gives those variables (\code{AEDECOD}, \code{DETERM}, ...), so that a
-variable whose name merely ends in \code{TERM} is not taken as a signal.
-
-\code{ADSL}/\code{ADDL} are the classes decided by the records rather than the
-variables: treatment variables are no evidence of ADSL, because the first
-step of a typical \code{BDS}/\code{OCCDS} derivation is to merge them on from ADSL
-(see the \code{admiral} template scripts). A dataset with no records cannot show
-whether it has one record per subject or device, so its class is unknown
-(\code{NA}) unless its variables already decide it -- e.g. an empty dataset with
-the subject keys, \code{PARAMCD}, and \code{AVAL} is still \code{"BDS"}, and one with
-neither the subject keys nor \code{SPDEVID} is still \code{"other"}.
-
-A dataset which has not yet been derived far enough to carry any of these
-signals is \code{"other"}.
 }
 \seealso{
 Other internal:

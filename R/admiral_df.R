@@ -46,7 +46,9 @@ new_admiral_df <- function(x, keys = NULL, dataset_name = NULL, dataset_class = 
 }
 
 # the ADaM dataset classes `admiral_df()` accepts
-admiral_dataset_classes <- c("ADSL", "BDS", "OCCDS", "TTE", "ADDL", "MDBDS", "MDOCCDS")
+admiral_dataset_classes <- c(
+  "ADSL", "BDS", "OCCDS", "TTE", "ADDL", "MDBDS", "MDTTE", "MDOCCDS"
+)
 
 #' Create an `admiral_df` Dataset
 #'
@@ -96,13 +98,13 @@ admiral_dataset_classes <- c("ADSL", "BDS", "OCCDS", "TTE", "ADDL", "MDBDS", "MD
 #' @param dataset_class The ADaM dataset class, stored in the
 #'   `"admiral_dataset_class"` attribute. This is the CDISC class of the
 #'   dataset, not its R class (which is `admiral_df`). `"TTE"` is the
-#'   time-to-event subclass of `"BDS"`. `"ADDL"`, `"MDBDS"`, and `"MDOCCDS"`
-#'   are the medical device classes (device-level, and the device versions of
-#'   `"BDS"` and `"OCCDS"`). The class is not checked against the variables of
+#'   time-to-event subclass of `"BDS"`. `"ADDL"`, `"MDBDS"`, `"MDTTE"`, and
+#'   `"MDOCCDS"` are the medical device classes (device-level, and the device
+#'   versions of `"BDS"`, `"TTE"`, and `"OCCDS"`). The class is not checked against the variables of
 #'   `dataset`. `NULL` leaves a class stored by a previous call untouched.
 #'
 #' @permitted `"ADSL"`, `"BDS"`, `"OCCDS"`, `"TTE"`, `"ADDL"`, `"MDBDS"`,
-#'   `"MDOCCDS"`, or `NULL`
+#'   `"MDTTE"`, `"MDOCCDS"`, or `NULL`
 #'
 #' @return `dataset` with the `admiral_df` class, and the `"admiral_keys"`,
 #'   `"admiral_dataset_name"`, and `"admiral_dataset_class"` attributes for those of
@@ -459,12 +461,10 @@ get_dataset_class <- function(dataset) {
 #' Guess the ADaM Dataset Class
 #'
 #' @description
-#' `r lifecycle::badge("experimental")`
-#'
 #' Attempts to classify a data frame as one of the common ADaM dataset classes
-#' based on the variables it contains. This is the fallback for when no class has been
-#' declared with [admiral_df()]; use [get_dataset_class()] to get the
-#' declared class where there is one.
+#' from its variables and records. It ignores any class declared with
+#' [admiral_df()]: [get_dataset_class()] returns the declared class if there is
+#' one, and only falls back to this function otherwise.
 #'
 #' Note that this is the *class* of the dataset (`ADSL`, `BDS`, ...), not its
 #' record structure: the latter is the set of key variables which uniquely
@@ -478,7 +478,7 @@ get_dataset_class <- function(dataset) {
 #'
 #'   * **Device data** contains `SPDEVID`, the device identifier, populated
 #'     (neither `NA` nor `""`) for every record. Its class is one of the medical
-#'     device classes `"ADDL"`, `"MDBDS"`, and `"MDOCCDS"`.
+#'     device classes `"ADDL"`, `"MDBDS"`, `"MDTTE"`, and `"MDOCCDS"`.
 #'   * **Subject data** is otherwise data which contains all the subject keys
 #'     (`get_admiral_option("subject_keys")`, by default `STUDYID` and
 #'     `USUBJID`). Its class is one of `"ADSL"`, `"BDS"`, `"OCCDS"`, and `"TTE"`.
@@ -502,38 +502,25 @@ get_dataset_class <- function(dataset) {
 #'   dataset contains `PARAMCD` just as a `BDS` one does, and an occurrence
 #'   dataset which has had a parameter added is structurally both.
 #'
-#'   1. `"TTE"` -- contains `PARAMCD`, `CNSR`, and `STARTDT`. Tested first
-#'      because a time-to-event dataset is a `BDS` dataset by variable content;
-#'      only the censoring and origin-date variables distinguish it. There is no
-#'      device time-to-event class, so for device data this is `"MDBDS"`.
+#'   1. `"TTE"`/`"MDTTE"` -- contains `PARAMCD`, `CNSR`, and `STARTDT`. Tested
+#'      first because a time-to-event dataset is a `BDS` dataset by variable
+#'      content; only the censoring and origin-date variables distinguish it.
 #'   2. `"BDS"`/`"MDBDS"` -- contains `PARAMCD` and `AVAL` or `AVALC`.
 #'   3. `"OCCDS"`/`"MDOCCDS"` -- does not contain `PARAMCD`, and contains a
-#'      `--DECOD`/`--TERM` variable, an `AOCCxxFL` occurrence flag, or
-#'      `TRTEMFL`.
+#'      `--DECOD`/`--TERM` variable with a two-letter SDTM domain prefix
+#'      (`AEDECOD`, `DETERM`, ...; a variable merely ending in `TERM` does not
+#'      count), an `AOCCxxFL` occurrence flag, or `TRTEMFL`.
 #'   4. `"ADSL"`/`"ADDL"` -- does not contain `PARAMCD` and has one record per
 #'      subject (per combination of the subject keys) or per device (per
-#'      combination of `STUDYID` and `SPDEVID`).
-#'   5. `"other"` -- none of the above.
-#'
-#'   The `--DECOD`/`--TERM` test requires the two-letter SDTM domain prefix the
-#'   convention gives those variables (`AEDECOD`, `DETERM`, ...), so that a
-#'   variable whose name merely ends in `TERM` is not taken as a signal.
-#'
-#'   `ADSL`/`ADDL` are the classes decided by the records rather than the
-#'   variables: treatment variables are no evidence of ADSL, because the first
-#'   step of a typical `BDS`/`OCCDS` derivation is to merge them on from ADSL
-#'   (see the `admiral` template scripts). A dataset with no records cannot show
-#'   whether it has one record per subject or device, so its class is unknown
-#'   (`NA`) unless its variables already decide it -- e.g. an empty dataset with
-#'   the subject keys, `PARAMCD`, and `AVAL` is still `"BDS"`, and one with
-#'   neither the subject keys nor `SPDEVID` is still `"other"`.
-#'
-#'   A dataset which has not yet been derived far enough to carry any of these
-#'   signals is `"other"`.
+#'      combination of `STUDYID` and `SPDEVID`). This is decided by the records:
+#'      treatment variables are no evidence of ADSL, as `BDS`/`OCCDS`
+#'      derivations merge them on from ADSL.
+#'   5. `"other"` -- none of the above, if there is at least one record.
+#'   6. `NA` -- none of the above.
 #'
 #' @return A character scalar: one of `"ADSL"`, `"BDS"`, `"OCCDS"`, `"TTE"`,
-#'   `"ADDL"`, `"MDBDS"`, `"MDOCCDS"`, or `"other"`; or `NA` if the dataset has
-#'   no records and its variables do not decide the class.
+#'   `"ADDL"`, `"MDBDS"`, `"MDTTE"`, `"MDOCCDS"`, or `"other"`; or `NA` if the
+#'   dataset has no records and its variables do not decide the class.
 #'
 #' @keywords internal
 #' @family internal
@@ -602,7 +589,9 @@ guess_structure_type <- function(dataset, id_vars, classes) {
     if (any(c("AVAL", "AVALC") %in% cols)) {
       return(classes[["bds"]])
     }
-    return("other")
+    # "other" is a conclusion drawn from the records, so a dataset without any
+    # is unknown instead
+    return(if (nrow(dataset) == 0) NA_character_ else "other")
   }
 
   if (any(str_detect(cols, "^[A-Z]{2}(DECOD|TERM)$|^AOCC[0-9A-Z]*FL$|^TRTEMFL$"))) {
