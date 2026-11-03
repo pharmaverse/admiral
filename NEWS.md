@@ -7,12 +7,12 @@ output datasets with this class, preserving their existing classes. (#3160)
 
 - Added function `admiral_df()`. Tags a data frame with the `admiral_df` class and
 stores its metadata: the key variables -- the variables which uniquely identify its
-records -- the dataset name, and the ADaM dataset type. See the function
+records -- the dataset name, and the ADaM dataset class. See the function
 documentation for details. (#3198)
 
 - Added functions `get_dataset_keys()`, `get_dataset_name()`, and
-`get_dataset_type()` to read the metadata stored by `admiral_df()`. If no type has
-been stored, `get_dataset_type()` infers it from the dataset. (#3198)
+`get_dataset_class()` to read the metadata stored by `admiral_df()`. If no class has
+been stored, `get_dataset_class()` infers it from the dataset. (#3198)
 
 ## Updates of Existing Functions
 

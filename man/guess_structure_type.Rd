@@ -4,7 +4,7 @@
 \alias{guess_structure_type}
 \title{Guess the ADaM Dataset Structure from the Variables and Records}
 \usage{
-guess_structure_type(dataset, id_vars, types)
+guess_structure_type(dataset, id_vars, classes)
 }
 \arguments{
 \item{dataset}{A data frame
@@ -20,7 +20,7 @@ class (the subject keys, or \code{STUDYID} and \code{SPDEVID})
 \item{Default value}{none}
 }}
 
-\item{types}{Named character vector of the type to return for each
+\item{classes}{Named character vector of the class to return for each
 structure: \code{tte}, \code{bds}, \code{occds}, and \code{level} (one record per unit)
 
 \describe{
@@ -28,10 +28,10 @@ structure: \code{tte}, \code{bds}, \code{occds}, and \code{level} (one record pe
 }}
 }
 \value{
-A character scalar: one of \code{types}, \code{"other"}, or \code{NA}.
+A character scalar: one of \code{classes}, \code{"other"}, or \code{NA}.
 }
 \description{
-Applies the precedence described in \code{\link[=guess_admiral_df_type]{guess_admiral_df_type()}} for one class
+Applies the precedence described in \code{\link[=guess_admiral_df_class]{guess_admiral_df_class()}} for one class
 of data, subject or device.
 }
 \seealso{
@@ -39,7 +39,7 @@ Other internal:
 \code{\link{admiral-package}},
 \code{\link[=extract_duplicate_records]{extract_duplicate_records()}},
 \code{\link[=format.basket_select]{format.basket_select()}},
-\code{\link[=guess_admiral_df_type]{guess_admiral_df_type()}},
+\code{\link[=guess_admiral_df_class]{guess_admiral_df_class()}},
 \code{\link[=new_admiral_df]{new_admiral_df()}},
 \code{\link[=signal_duplicate_records]{signal_duplicate_records()}}
 }

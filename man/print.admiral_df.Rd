@@ -25,15 +25,15 @@
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
 
-Prints the dataset name, type, and key variables stored by \code{\link[=admiral_df]{admiral_df()}} in
+Prints the dataset name, ADaM class, and key variables stored by \code{\link[=admiral_df]{admiral_df()}} in
 a header line, followed by the dataset as it would print without the
 \code{admiral_df} class. The header is only printed if any of them have been
 stored, so that the output of a derivation which merely carries the class
 prints as before.
 
-If no type has been stored, the type inferred from the dataset (see
-\code{\link[=guess_admiral_df_type]{guess_admiral_df_type()}}) is shown instead, marked as inferred, provided it
-is one of the ADaM dataset types.
+If no class has been stored, the class inferred from the dataset (see
+\code{\link[=guess_admiral_df_class]{guess_admiral_df_class()}}) is shown instead, marked as inferred, provided it
+is one of the ADaM dataset classes.
 }
 \examples{
 library(tibble)
@@ -49,7 +49,7 @@ admiral_df(
   advs,
   keys = exprs(USUBJID, PARAMCD, AVISIT),
   dataset_name = "ADVS",
-  dataset_type = "BDS"
+  dataset_class = "BDS"
 )
 }
 \seealso{

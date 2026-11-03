@@ -27,18 +27,18 @@
 ---
 
     Code
-      admiral_df(input, dataset_type = "ADAE")
+      admiral_df(input, dataset_class = "ADAE")
     Condition
       Error in `admiral_df()`:
-      ! Argument `dataset_type` must be equal to one of "ADSL", "BDS", "OCCDS", "TTE", "ADDL", "MDBDS", or "MDOCCDS".
+      ! Argument `dataset_class` must be equal to one of "ADSL", "BDS", "OCCDS", "TTE", "ADDL", "MDBDS", or "MDOCCDS".
 
-# print.admiral_df Test 27: the name, type and keys are printed in a header
+# print.admiral_df Test 27: the name, class and keys are printed in a header
 
     Code
       print(admiral_df(input, keys = exprs(USUBJID, PARAMCD, AVISIT), dataset_name = "ADVS",
-      dataset_type = "BDS"))
+      dataset_class = "BDS"))
     Output
-      # An admiral dataset (name: ADVS, type: BDS, keys: USUBJID, PARAMCD, AVISIT)
+      # An admiral dataset (name: ADVS, class: BDS, keys: USUBJID, PARAMCD, AVISIT)
       # A tibble: 2 x 5
         STUDYID USUBJID PARAMCD AVISIT    AVAL
         <chr>   <chr>   <chr>   <chr>    <dbl>
@@ -50,7 +50,7 @@
     Code
       print(admiral_df(input, keys = exprs(USUBJID, PARAMCD, AVISIT)))
     Output
-      # An admiral dataset (type: BDS (inferred), keys: USUBJID, PARAMCD, AVISIT)
+      # An admiral dataset (class: BDS (inferred), keys: USUBJID, PARAMCD, AVISIT)
       # A tibble: 2 x 5
         STUDYID USUBJID PARAMCD AVISIT    AVAL
         <chr>   <chr>   <chr>   <chr>    <dbl>
@@ -60,9 +60,9 @@
 ---
 
     Code
-      print(admiral_df(input, dataset_type = "BDS"))
+      print(admiral_df(input, dataset_class = "BDS"))
     Output
-      # An admiral dataset (type: BDS)
+      # An admiral dataset (class: BDS)
       # A tibble: 2 x 5
         STUDYID USUBJID PARAMCD AVISIT    AVAL
         <chr>   <chr>   <chr>   <chr>    <dbl>
@@ -72,9 +72,9 @@
 ---
 
     Code
-      print(admiral_df(input, keys = exprs(USUBJID), dataset_type = "TTE"))
+      print(admiral_df(input, keys = exprs(USUBJID), dataset_class = "TTE"))
     Output
-      # An admiral dataset (type: TTE, keys: USUBJID)
+      # An admiral dataset (class: TTE, keys: USUBJID)
       # A tibble: 2 x 5
         STUDYID USUBJID PARAMCD AVISIT    AVAL
         <chr>   <chr>   <chr>   <chr>    <dbl>
@@ -97,7 +97,7 @@
     Code
       print(admiral_df(input, keys = exprs(), dataset_name = "ADVS"))
     Output
-      # An admiral dataset (name: ADVS, type: BDS (inferred), keys: none)
+      # An admiral dataset (name: ADVS, class: BDS (inferred), keys: none)
       # A tibble: 2 x 5
         STUDYID USUBJID PARAMCD AVISIT    AVAL
         <chr>   <chr>   <chr>   <chr>    <dbl>
@@ -109,7 +109,7 @@
     Code
       print(admiral_df(as.data.frame(input), keys = exprs(USUBJID), dataset_name = "ADVS"))
     Output
-      # An admiral dataset (name: ADVS, type: BDS (inferred), keys: USUBJID)
+      # An admiral dataset (name: ADVS, class: BDS (inferred), keys: USUBJID)
         STUDYID USUBJID PARAMCD   AVISIT AVAL
       1       P       1   DIABP BASELINE   51
       2       P       1   SYSBP BASELINE  121

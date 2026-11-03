@@ -4,7 +4,7 @@
 \alias{admiral_df}
 \title{Create an \code{admiral_df} Dataset}
 \usage{
-admiral_df(dataset, keys = NULL, dataset_name = NULL, dataset_type = NULL)
+admiral_df(dataset, keys = NULL, dataset_name = NULL, dataset_class = NULL)
 }
 \arguments{
 \item{dataset}{A data frame. It does not need to have the \code{admiral_df} class
@@ -37,11 +37,13 @@ call untouched, so re-keying a dataset does not lose its name.
 \item{Default value}{\code{NULL}}
 }}
 
-\item{dataset_type}{The ADaM dataset type, stored in the \code{"admiral_dataset_type"}
-attribute. \code{"ADDL"}, \code{"MDBDS"}, and \code{"MDOCCDS"} are the medical device
-types (device-level, and the device versions of \code{"BDS"} and \code{"OCCDS"}).
-The type is not checked against the variables of \code{dataset}. \code{NULL} leaves
-a type stored by a previous call untouched.
+\item{dataset_class}{The ADaM dataset class, stored in the
+\code{"admiral_dataset_class"} attribute. This is the CDISC class of the
+dataset, not its R class (which is \code{admiral_df}). \code{"TTE"} is the
+time-to-event subclass of \code{"BDS"}. \code{"ADDL"}, \code{"MDBDS"}, and \code{"MDOCCDS"}
+are the medical device classes (device-level, and the device versions of
+\code{"BDS"} and \code{"OCCDS"}). The class is not checked against the variables of
+\code{dataset}. \code{NULL} leaves a class stored by a previous call untouched.
 
 \describe{
 \item{Permitted values}{\code{"ADSL"}, \code{"BDS"}, \code{"OCCDS"}, \code{"TTE"}, \code{"ADDL"}, \code{"MDBDS"},
@@ -51,8 +53,8 @@ a type stored by a previous call untouched.
 }
 \value{
 \code{dataset} with the \code{admiral_df} class, and the \code{"admiral_keys"},
-\code{"admiral_dataset_name"}, and \code{"admiral_dataset_type"} attributes for those of
-\code{keys}, \code{dataset_name}, and \code{dataset_type} which were supplied (or had been
+\code{"admiral_dataset_name"}, and \code{"admiral_dataset_class"} attributes for those of
+\code{keys}, \code{dataset_name}, and \code{dataset_class} which were supplied (or had been
 stored by a previous call).
 }
 \description{
@@ -60,11 +62,11 @@ stored by a previous call).
 
 Tags a data frame with the \code{admiral_df} class and stores its metadata: the
 key variables -- the variables which uniquely identify its records -- the
-dataset name, and the ADaM dataset type. Call it on the finished dataset,
+dataset name, and the ADaM dataset class. Call it on the finished dataset,
 once it has been derived, e.g. just before summarising it: the metadata is
 not guaranteed to survive the derivations which build the dataset (see
 Details). The metadata is read back with \code{\link[=get_dataset_keys]{get_dataset_keys()}},
-\code{\link[=get_dataset_name]{get_dataset_name()}}, and \code{\link[=get_dataset_type]{get_dataset_type()}}.
+\code{\link[=get_dataset_name]{get_dataset_name()}}, and \code{\link[=get_dataset_class]{get_dataset_class()}}.
 
 Called on a dataset which is already an \code{admiral_df}, it updates the
 metadata rather than rebuilding it: an argument left as \code{NULL} keeps the
@@ -73,9 +75,9 @@ value stored by the previous call, so each item can be set on its own.
 The keys describe the record structure the dataset is intended to have; they
 are not checked against its records when they are stored. \code{{admiral}} never
 infers the keys of a dataset: if they have not been set with this function,
-functions which need them ask for them to be set. The type, by contrast, is
+functions which need them ask for them to be set. The class, by contrast, is
 inferred from the dataset if it has not been set (see
-\code{\link[=guess_admiral_df_type]{guess_admiral_df_type()}}), but a type set here always takes precedence.
+\code{\link[=guess_admiral_df_class]{guess_admiral_df_class()}}), but a class set here always takes precedence.
 }
 \details{
 The keys can come from anywhere: the \code{by_vars} of the derivation which
@@ -112,9 +114,9 @@ dataset means it has changed since its keys were set.
 \seealso{
 Utilities used within Derivation functions:
 \code{\link[=extract_unit]{extract_unit()}},
+\code{\link[=get_dataset_class]{get_dataset_class()}},
 \code{\link[=get_dataset_keys]{get_dataset_keys()}},
 \code{\link[=get_dataset_name]{get_dataset_name()}},
-\code{\link[=get_dataset_type]{get_dataset_type()}},
 \code{\link[=get_flagged_records]{get_flagged_records()}},
 \code{\link[=get_not_mapped]{get_not_mapped()}},
 \code{\link[=get_vars_query]{get_vars_query()}}
@@ -137,7 +139,7 @@ advs <- admiral_df(
   advs,
   keys = exprs(USUBJID, PARAMCD, AVISIT),
   dataset_name = "ADVS",
-  dataset_type = "BDS"
+  dataset_class = "BDS"
 )
 
 get_dataset_keys(advs)
@@ -152,7 +154,7 @@ get_dataset_keys(advs)
 #> 
 get_dataset_name(advs)
 #> [1] "ADVS"
-get_dataset_type(advs)
+get_dataset_class(advs)
 #> [1] "BDS"
 class(advs)
 #> [1] "admiral_df" "tbl_df"     "tbl"        "data.frame"}\if{html}{\out{</div>}}}

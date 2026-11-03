@@ -4,7 +4,7 @@
 \alias{new_admiral_df}
 \title{Construct an \code{admiral_df} Object}
 \usage{
-new_admiral_df(x, keys = NULL, dataset_name = NULL, dataset_type = NULL)
+new_admiral_df(x, keys = NULL, dataset_name = NULL, dataset_class = NULL)
 }
 \arguments{
 \item{x}{A data frame (or \code{NULL})
@@ -27,7 +27,7 @@ attribute
 \item{Default value}{\code{NULL}}
 }}
 
-\item{dataset_type}{Character scalar, stored in the \code{"admiral_dataset_type"}
+\item{dataset_class}{Character scalar, stored in the \code{"admiral_dataset_class"}
 attribute
 
 \describe{
@@ -56,7 +56,7 @@ Other internal:
 \code{\link{admiral-package}},
 \code{\link[=extract_duplicate_records]{extract_duplicate_records()}},
 \code{\link[=format.basket_select]{format.basket_select()}},
-\code{\link[=guess_admiral_df_type]{guess_admiral_df_type()}},
+\code{\link[=guess_admiral_df_class]{guess_admiral_df_class()}},
 \code{\link[=guess_structure_type]{guess_structure_type()}},
 \code{\link[=signal_duplicate_records]{signal_duplicate_records()}}
 }

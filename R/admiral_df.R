@@ -12,7 +12,7 @@
 #'   `"admiral_keys"` attribute
 #' @param dataset_name Character scalar, stored in the `"admiral_dataset_name"`
 #'   attribute
-#' @param dataset_type Character scalar, stored in the `"admiral_dataset_type"`
+#' @param dataset_class Character scalar, stored in the `"admiral_dataset_class"`
 #'   attribute
 #'
 #' @details
@@ -26,7 +26,7 @@
 #'
 #' @keywords internal
 #' @family internal
-new_admiral_df <- function(x, keys = NULL, dataset_name = NULL, dataset_type = NULL) {
+new_admiral_df <- function(x, keys = NULL, dataset_name = NULL, dataset_class = NULL) {
   if (is.null(x)) {
     return(x)
   }
@@ -36,8 +36,8 @@ new_admiral_df <- function(x, keys = NULL, dataset_name = NULL, dataset_type = N
   if (!is.null(dataset_name)) {
     attr(x, "admiral_dataset_name") <- dataset_name
   }
-  if (!is.null(dataset_type)) {
-    attr(x, "admiral_dataset_type") <- dataset_type
+  if (!is.null(dataset_class)) {
+    attr(x, "admiral_dataset_class") <- dataset_class
   }
   if (!inherits(x, "admiral_df")) {
     class(x) <- c("admiral_df", class(x))
@@ -45,8 +45,8 @@ new_admiral_df <- function(x, keys = NULL, dataset_name = NULL, dataset_type = N
   x
 }
 
-# the ADaM dataset types `admiral_df()` accepts
-admiral_dataset_types <- c("ADSL", "BDS", "OCCDS", "TTE", "ADDL", "MDBDS", "MDOCCDS")
+# the ADaM dataset classes `admiral_df()` accepts
+admiral_dataset_classes <- c("ADSL", "BDS", "OCCDS", "TTE", "ADDL", "MDBDS", "MDOCCDS")
 
 #' Create an `admiral_df` Dataset
 #'
@@ -55,11 +55,11 @@ admiral_dataset_types <- c("ADSL", "BDS", "OCCDS", "TTE", "ADDL", "MDBDS", "MDOC
 #'
 #' Tags a data frame with the `admiral_df` class and stores its metadata: the
 #' key variables -- the variables which uniquely identify its records -- the
-#' dataset name, and the ADaM dataset type. Call it on the finished dataset,
+#' dataset name, and the ADaM dataset class. Call it on the finished dataset,
 #' once it has been derived, e.g. just before summarising it: the metadata is
 #' not guaranteed to survive the derivations which build the dataset (see
 #' Details). The metadata is read back with [get_dataset_keys()],
-#' [get_dataset_name()], and [get_dataset_type()].
+#' [get_dataset_name()], and [get_dataset_class()].
 #'
 #' Called on a dataset which is already an `admiral_df`, it updates the
 #' metadata rather than rebuilding it: an argument left as `NULL` keeps the
@@ -68,9 +68,9 @@ admiral_dataset_types <- c("ADSL", "BDS", "OCCDS", "TTE", "ADDL", "MDBDS", "MDOC
 #' The keys describe the record structure the dataset is intended to have; they
 #' are not checked against its records when they are stored. `{admiral}` never
 #' infers the keys of a dataset: if they have not been set with this function,
-#' functions which need them ask for them to be set. The type, by contrast, is
+#' functions which need them ask for them to be set. The class, by contrast, is
 #' inferred from the dataset if it has not been set (see
-#' [guess_admiral_df_type()]), but a type set here always takes precedence.
+#' [guess_admiral_df_class()]), but a class set here always takes precedence.
 #'
 #' @param dataset A data frame. It does not need to have the `admiral_df` class
 #'   already; the class is added if it is missing.
@@ -93,18 +93,20 @@ admiral_dataset_types <- c("ADSL", "BDS", "OCCDS", "TTE", "ADDL", "MDBDS", "MDOC
 #'
 #' @permitted character scalar or `NULL`
 #'
-#' @param dataset_type The ADaM dataset type, stored in the `"admiral_dataset_type"`
-#'   attribute. `"ADDL"`, `"MDBDS"`, and `"MDOCCDS"` are the medical device
-#'   types (device-level, and the device versions of `"BDS"` and `"OCCDS"`).
-#'   The type is not checked against the variables of `dataset`. `NULL` leaves
-#'   a type stored by a previous call untouched.
+#' @param dataset_class The ADaM dataset class, stored in the
+#'   `"admiral_dataset_class"` attribute. This is the CDISC class of the
+#'   dataset, not its R class (which is `admiral_df`). `"TTE"` is the
+#'   time-to-event subclass of `"BDS"`. `"ADDL"`, `"MDBDS"`, and `"MDOCCDS"`
+#'   are the medical device classes (device-level, and the device versions of
+#'   `"BDS"` and `"OCCDS"`). The class is not checked against the variables of
+#'   `dataset`. `NULL` leaves a class stored by a previous call untouched.
 #'
 #' @permitted `"ADSL"`, `"BDS"`, `"OCCDS"`, `"TTE"`, `"ADDL"`, `"MDBDS"`,
 #'   `"MDOCCDS"`, or `NULL`
 #'
 #' @return `dataset` with the `admiral_df` class, and the `"admiral_keys"`,
-#'   `"admiral_dataset_name"`, and `"admiral_dataset_type"` attributes for those of
-#'   `keys`, `dataset_name`, and `dataset_type` which were supplied (or had been
+#'   `"admiral_dataset_name"`, and `"admiral_dataset_class"` attributes for those of
+#'   `keys`, `dataset_name`, and `dataset_class` which were supplied (or had been
 #'   stored by a previous call).
 #'
 #' @details
@@ -161,12 +163,12 @@ admiral_dataset_types <- c("ADSL", "BDS", "OCCDS", "TTE", "ADDL", "MDBDS", "MDOC
 #'   advs,
 #'   keys = exprs(USUBJID, PARAMCD, AVISIT),
 #'   dataset_name = "ADVS",
-#'   dataset_type = "BDS"
+#'   dataset_class = "BDS"
 #' )
 #'
 #' get_dataset_keys(advs)
 #' get_dataset_name(advs)
-#' get_dataset_type(advs)
+#' get_dataset_class(advs)
 #' class(advs)
 #'
 #' @caption Keys from a dataset specification
@@ -205,7 +207,7 @@ admiral_dataset_types <- c("ADSL", "BDS", "OCCDS", "TTE", "ADDL", "MDBDS", "MDOC
 admiral_df <- function(dataset,
                        keys = NULL,
                        dataset_name = NULL,
-                       dataset_type = NULL) {
+                       dataset_class = NULL) {
   # keys taken from a specification are a character vector, so that case gets
   # a pointer to the conversion rather than the generic "must be a list"
   if (is.character(keys)) {
@@ -223,7 +225,7 @@ admiral_df <- function(dataset,
   assert_vars(keys, optional = TRUE)
   assert_data_frame(dataset)
   assert_character_scalar(dataset_name, optional = TRUE)
-  assert_character_scalar(dataset_type, values = admiral_dataset_types, optional = TRUE)
+  assert_character_scalar(dataset_class, values = admiral_dataset_classes, optional = TRUE)
 
   if (!is.null(keys)) {
     # keys are stored as character: they are metadata about the dataset, not
@@ -234,7 +236,7 @@ admiral_df <- function(dataset,
 
     # keys which are not in the dataset are not stored, so that a typo is
     # caught here rather than when the attribute is read. A warning rather than
-    # an error, as the rest of the call -- the name, type and class -- is still
+    # an error, as the rest of the call -- the name, ADaM class and R class -- is still
     # valid
     missing_keys <- setdiff(keys, colnames(dataset))
     if (length(missing_keys) > 0) {
@@ -256,7 +258,7 @@ admiral_df <- function(dataset,
     dataset,
     keys = keys,
     dataset_name = dataset_name,
-    dataset_type = dataset_type
+    dataset_class = dataset_class
   )
 }
 
@@ -265,15 +267,15 @@ admiral_df <- function(dataset,
 #' @description
 #' `r lifecycle::badge("experimental")`
 #'
-#' Prints the dataset name, type, and key variables stored by [admiral_df()] in
+#' Prints the dataset name, ADaM class, and key variables stored by [admiral_df()] in
 #' a header line, followed by the dataset as it would print without the
 #' `admiral_df` class. The header is only printed if any of them have been
 #' stored, so that the output of a derivation which merely carries the class
 #' prints as before.
 #'
-#' If no type has been stored, the type inferred from the dataset (see
-#' [guess_admiral_df_type()]) is shown instead, marked as inferred, provided it
-#' is one of the ADaM dataset types.
+#' If no class has been stored, the class inferred from the dataset (see
+#' [guess_admiral_df_class()]) is shown instead, marked as inferred, provided it
+#' is one of the ADaM dataset classes.
 #'
 #' @param x An `admiral_df` object
 #' @param ... Passed on to the next print method
@@ -299,29 +301,29 @@ admiral_df <- function(dataset,
 #'   advs,
 #'   keys = exprs(USUBJID, PARAMCD, AVISIT),
 #'   dataset_name = "ADVS",
-#'   dataset_type = "BDS"
+#'   dataset_class = "BDS"
 #' )
 print.admiral_df <- function(x, ...) {
   name <- attr(x, "admiral_dataset_name")
-  type <- attr(x, "admiral_dataset_type")
+  dataset_class <- attr(x, "admiral_dataset_class")
   keys <- attr(x, "admiral_keys")
   # the header is only printed if something has been stored, so that the output
   # of a derivation which merely carries the class prints as before -- and the
-  # type is only inferred then, so that printing such output costs nothing extra
-  if (is.null(name) && is.null(type) && is.null(keys)) {
+  # class is only inferred then, so that printing such output costs nothing extra
+  if (is.null(name) && is.null(dataset_class) && is.null(keys)) {
     return(NextMethod())
   }
-  if (is.null(type)) {
-    inferred <- guess_admiral_df_type(x)
-    # only a recognized type is shown: "other" and `NA` say nothing about the
+  if (is.null(dataset_class)) {
+    inferred <- guess_admiral_df_class(x)
+    # only a recognized class is shown: "other" and `NA` say nothing about the
     # dataset worth a place in the header
-    if (inferred %in% admiral_dataset_types) {
-      type <- paste(inferred, "(inferred)")
+    if (inferred %in% admiral_dataset_classes) {
+      dataset_class <- paste(inferred, "(inferred)")
     }
   }
   details <- c(
     if (!is.null(name)) paste0("name: ", name),
-    if (!is.null(type)) paste0("type: ", type),
+    if (!is.null(dataset_class)) paste0("class: ", dataset_class),
     # an empty attribute records that no keys are defined, so it is shown
     # rather than omitted as if the keys had never been set
     if (!is.null(keys)) {
@@ -410,21 +412,21 @@ get_dataset_name <- function(dataset) {
   attr(dataset, "admiral_dataset_name")
 }
 
-#' Get the ADaM Dataset Type
+#' Get the ADaM Dataset Class
 #'
 #' @description
 #' `r lifecycle::badge("experimental")`
 #'
-#' Returns the type declared for a dataset with [admiral_df()] if there is one,
-#' and otherwise the type inferred from its variables and records, see
-#' [guess_admiral_df_type()].
+#' Returns the ADaM class declared for a dataset with [admiral_df()] if there is
+#' one, and otherwise the class inferred from its variables and records, see
+#' [guess_admiral_df_class()].
 #'
 #' @param dataset A data frame
 #'
 #' @permitted a data frame
 #'
-#' @return A character scalar: the declared type, or the inferred one (which may
-#'   be `"other"` or `NA`, see [guess_admiral_df_type()]).
+#' @return A character scalar: the declared class, or the inferred one (which may
+#'   be `"other"` or `NA`, see [guess_admiral_df_class()]).
 #'
 #' @keywords utils_help
 #' @family utils_help
@@ -440,33 +442,33 @@ get_dataset_name <- function(dataset) {
 #'   "P",      "1",      "SYSBP",    121
 #' )
 #'
-#' # no type has been declared, so it is inferred
-#' get_dataset_type(advs)
+#' # no class has been declared, so it is inferred
+#' get_dataset_class(advs)
 #'
-#' # a declared type takes precedence
-#' advs <- admiral_df(advs, dataset_type = "TTE")
-#' get_dataset_type(advs)
-get_dataset_type <- function(dataset) {
-  declared <- attr(dataset, "admiral_dataset_type")
+#' # a declared class takes precedence
+#' advs <- admiral_df(advs, dataset_class = "TTE")
+#' get_dataset_class(advs)
+get_dataset_class <- function(dataset) {
+  declared <- attr(dataset, "admiral_dataset_class")
   if (!is.null(declared)) {
     return(declared)
   }
-  guess_admiral_df_type(dataset)
+  guess_admiral_df_class(dataset)
 }
 
-#' Guess the ADaM Dataset Type
+#' Guess the ADaM Dataset Class
 #'
 #' @description
 #' `r lifecycle::badge("experimental")`
 #'
-#' Attempts to classify a data frame as one of the common ADaM dataset types based
-#' on the variables it contains. This is the fallback for when no type has been
-#' declared with [admiral_df()]; use [get_dataset_type()] to get the
-#' declared type where there is one.
+#' Attempts to classify a data frame as one of the common ADaM dataset classes
+#' based on the variables it contains. This is the fallback for when no class has been
+#' declared with [admiral_df()]; use [get_dataset_class()] to get the
+#' declared class where there is one.
 #'
-#' Note that this is the *type* of the dataset (`ADSL`, `BDS`, ...), not its
+#' Note that this is the *class* of the dataset (`ADSL`, `BDS`, ...), not its
 #' record structure: the latter is the set of key variables which uniquely
-#' identify its records. Unlike the type, the keys are never inferred; they are
+#' identify its records. Unlike the class, the keys are never inferred; they are
 #' only ever declared with [admiral_df()].
 #'
 #' @param dataset A data frame
@@ -475,11 +477,11 @@ get_dataset_type <- function(dataset) {
 #'   A dataset is first classed as device data or subject data:
 #'
 #'   * **Device data** contains `SPDEVID`, the device identifier, populated
-#'     (neither `NA` nor `""`) for every record. Its type is one of the medical
-#'     device types `"ADDL"`, `"MDBDS"`, and `"MDOCCDS"`.
+#'     (neither `NA` nor `""`) for every record. Its class is one of the medical
+#'     device classes `"ADDL"`, `"MDBDS"`, and `"MDOCCDS"`.
 #'   * **Subject data** is otherwise data which contains all the subject keys
 #'     (`get_admiral_option("subject_keys")`, by default `STUDYID` and
-#'     `USUBJID`). Its type is one of `"ADSL"`, `"BDS"`, `"OCCDS"`, and `"TTE"`.
+#'     `USUBJID`). Its class is one of `"ADSL"`, `"BDS"`, `"OCCDS"`, and `"TTE"`.
 #'
 #'   A dataset which is neither is `"other"`. This keeps a data frame which merely
 #'   shares variable names with an ADaM dataset -- a coding dictionary with
@@ -493,17 +495,17 @@ get_dataset_type <- function(dataset) {
 #'   an adverse event; but there it is populated only for the records which
 #'   involve a device. A subject dataset in which every record involves a device
 #'   (e.g. an `ADAE` restricted to device-related events) is therefore inferred
-#'   as device data, so declare its type with [admiral_df()] instead.
+#'   as device data, so declare its class with [admiral_df()] instead.
 #'
 #'   Within each class the following precedence is used. The order matters,
-#'   because the types are not mutually exclusive by variable content -- a `TTE`
+#'   because the classes are not mutually exclusive by variable content -- a `TTE`
 #'   dataset contains `PARAMCD` just as a `BDS` one does, and an occurrence
 #'   dataset which has had a parameter added is structurally both.
 #'
 #'   1. `"TTE"` -- contains `PARAMCD`, `CNSR`, and `STARTDT`. Tested first
 #'      because a time-to-event dataset is a `BDS` dataset by variable content;
 #'      only the censoring and origin-date variables distinguish it. There is no
-#'      device time-to-event type, so for device data this is `"MDBDS"`.
+#'      device time-to-event class, so for device data this is `"MDBDS"`.
 #'   2. `"BDS"`/`"MDBDS"` -- contains `PARAMCD` and `AVAL` or `AVALC`.
 #'   3. `"OCCDS"`/`"MDOCCDS"` -- does not contain `PARAMCD`, and contains a
 #'      `--DECOD`/`--TERM` variable, an `AOCCxxFL` occurrence flag, or
@@ -517,11 +519,11 @@ get_dataset_type <- function(dataset) {
 #'   convention gives those variables (`AEDECOD`, `DETERM`, ...), so that a
 #'   variable whose name merely ends in `TERM` is not taken as a signal.
 #'
-#'   `ADSL`/`ADDL` are the types decided by the records rather than the
+#'   `ADSL`/`ADDL` are the classes decided by the records rather than the
 #'   variables: treatment variables are no evidence of ADSL, because the first
 #'   step of a typical `BDS`/`OCCDS` derivation is to merge them on from ADSL
 #'   (see the `admiral` template scripts). A dataset with no records cannot show
-#'   whether it has one record per subject or device, so its type is unknown
+#'   whether it has one record per subject or device, so its class is unknown
 #'   (`NA`) unless its variables already decide it -- e.g. an empty dataset with
 #'   the subject keys, `PARAMCD`, and `AVAL` is still `"BDS"`, and one with
 #'   neither the subject keys nor `SPDEVID` is still `"other"`.
@@ -531,11 +533,11 @@ get_dataset_type <- function(dataset) {
 #'
 #' @return A character scalar: one of `"ADSL"`, `"BDS"`, `"OCCDS"`, `"TTE"`,
 #'   `"ADDL"`, `"MDBDS"`, `"MDOCCDS"`, or `"other"`; or `NA` if the dataset has
-#'   no records and its variables do not decide the type.
+#'   no records and its variables do not decide the class.
 #'
 #' @keywords internal
 #' @family internal
-guess_admiral_df_type <- function(dataset) {
+guess_admiral_df_class <- function(dataset) {
   # a grouped or rowwise dataset is classified rather than refused: this is a
   # diagnostic
   assert_data_frame(dataset, check_is_grouped = FALSE, check_is_rowwise = FALSE)
@@ -556,12 +558,12 @@ guess_admiral_df_type <- function(dataset) {
     return(guess_structure_type(
       dataset,
       id_vars = intersect(c("STUDYID", "SPDEVID"), cols),
-      types = c(tte = "MDBDS", bds = "MDBDS", occds = "MDOCCDS", level = "ADDL")
+      classes = c(tte = "MDTTE", bds = "MDBDS", occds = "MDOCCDS", level = "ADDL")
     ))
   }
 
   # without the subject keys -- a lookup table, a summary table -- a data frame
-  # is none of the subject types, whatever variables it shares with them
+  # is none of the subject classes, whatever variables it shares with them
   if (!has_subject_keys) {
     return("other")
   }
@@ -569,54 +571,54 @@ guess_admiral_df_type <- function(dataset) {
   guess_structure_type(
     dataset,
     id_vars = subject_keys,
-    types = c(tte = "TTE", bds = "BDS", occds = "OCCDS", level = "ADSL")
+    classes = c(tte = "TTE", bds = "BDS", occds = "OCCDS", level = "ADSL")
   )
 }
 
 #' Guess the ADaM Dataset Structure from the Variables and Records
 #'
-#' Applies the precedence described in [guess_admiral_df_type()] for one class
+#' Applies the precedence described in [guess_admiral_df_class()] for one class
 #' of data, subject or device.
 #'
 #' @param dataset A data frame
 #' @param id_vars Character vector of the variables identifying the unit of the
 #'   class (the subject keys, or `STUDYID` and `SPDEVID`)
-#' @param types Named character vector of the type to return for each
+#' @param classes Named character vector of the class to return for each
 #'   structure: `tte`, `bds`, `occds`, and `level` (one record per unit)
 #'
-#' @return A character scalar: one of `types`, `"other"`, or `NA`.
+#' @return A character scalar: one of `classes`, `"other"`, or `NA`.
 #'
 #' @keywords internal
 #' @family internal
-guess_structure_type <- function(dataset, id_vars, types) {
+guess_structure_type <- function(dataset, id_vars, classes) {
   cols <- colnames(dataset)
 
-  # `PARAMCD` decides between the parameter-based types and the rest; TTE is
+  # `PARAMCD` decides between the parameter-based classes and the rest; TTE is
   # tested before BDS because a TTE dataset is a BDS dataset by variable content
   if ("PARAMCD" %in% cols) {
     if (all(c("CNSR", "STARTDT") %in% cols)) {
-      return(types[["tte"]])
+      return(classes[["tte"]])
     }
     if (any(c("AVAL", "AVALC") %in% cols)) {
-      return(types[["bds"]])
+      return(classes[["bds"]])
     }
     return("other")
   }
 
   if (any(str_detect(cols, "^[A-Z]{2}(DECOD|TERM)$|^AOCC[0-9A-Z]*FL$|^TRTEMFL$"))) {
-    return(types[["occds"]])
+    return(classes[["occds"]])
   }
 
   # ADSL/ADDL is decided by the records: one record per subject or device. With
   # no records that cannot be shown either way -- the record and unit counts are
-  # trivially equal -- so the type is unknown rather than "other"
+  # trivially equal -- so the class is unknown rather than "other"
   if (nrow(dataset) == 0) {
     return(NA_character_)
   }
   # `ungroup()` because `distinct()` silently adds the grouping variables, which
   # would test uniqueness within group rather than overall
   if (nrow(dataset) == nrow(distinct(ungroup(dataset), !!!syms(id_vars)))) {
-    return(types[["level"]])
+    return(classes[["level"]])
   }
 
   "other"
