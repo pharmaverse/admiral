@@ -321,7 +321,7 @@ convert_dtc_to_dtm(
 
 ## Value
 
-A datetime object
+A datetime object in UTC
 
 ## Details
 

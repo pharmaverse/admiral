@@ -49,6 +49,18 @@
   `"Eosinophilia"`
   ([\#3191](https://github.com/pharmaverse/admiral/issues/3191)).
 
+- [`compute_duration()`](https:/pharmaverse.github.io/admiral/main/reference/compute_duration.md)
+  now issues an error if either of `start_date` or `end_date` is a
+  datetime without time zone, or if their time zones differ. The
+  documentation of
+  [`compute_duration()`](https:/pharmaverse.github.io/admiral/main/reference/compute_duration.md),
+  [`derive_vars_dtm()`](https:/pharmaverse.github.io/admiral/main/reference/derive_vars_dtm.md),
+  and
+  [`convert_dtc_to_dtm()`](https:/pharmaverse.github.io/admiral/main/reference/convert_dtc_to_dtm.md)
+  was updated to state that
+  [admiral](https://pharmaverse.github.io/admiral/) creates date-times
+  in UTC. ([\#2763](https://github.com/pharmaverse/admiral/issues/2763))
+
 ### Breaking Changes
 
 - The following functions are entering the next phase of the

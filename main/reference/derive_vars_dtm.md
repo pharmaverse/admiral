@@ -431,6 +431,8 @@ Additionally, the function will throw an error if imputation rules cause
 an invalid datetime (e.g. "2020-02-01T25:00:00") to be generated. In
 this case, the user should adjust the imputation rules.
 
+The datetime is created in UTC.
+
 ## See also
 
 [`vignette("imputation")`](https:/pharmaverse.github.io/admiral/main/articles/imputation.md)

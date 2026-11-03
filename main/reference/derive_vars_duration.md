@@ -56,7 +56,9 @@ derive_vars_duration(
 
   The start date
 
-  A date or date-time object is expected.
+  A date or datetime object is expected. Datetimes must have a time
+  zone, and the timezone of the start date must match that of the end
+  date. Dates are treated as UTC.
 
   Refer to
   [`derive_vars_dt()`](https:/pharmaverse.github.io/admiral/main/reference/derive_vars_dt.md)
@@ -75,7 +77,9 @@ derive_vars_duration(
 
   The end date
 
-  A date or date-time object is expected.
+  A date or datetime object is expected. Datetimes must have a time
+  zone, and the timezone of the start date must match that of the end
+  date. Dates are treated as UTC.
 
   Refer to
   [`derive_vars_dt()`](https:/pharmaverse.github.io/admiral/main/reference/derive_vars_dt.md)
