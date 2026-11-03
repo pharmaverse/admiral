@@ -63,7 +63,7 @@ stored by a previous call).
 Tags a data frame with the \code{admiral_df} class and stores its metadata: the
 key variables -- the variables which uniquely identify its records -- the
 dataset name, and the ADaM dataset class. Call it on the finished dataset,
-once it has been derived, e.g. just before summarising it: the metadata is
+once it has been derived, e.g. just before summarizing it: the metadata is
 not guaranteed to survive the derivations which build the dataset (see
 Details). The metadata is read back with \code{\link[=get_dataset_keys]{get_dataset_keys()}},
 \code{\link[=get_dataset_name]{get_dataset_name()}}, and \code{\link[=get_dataset_class]{get_dataset_class()}}.

@@ -232,12 +232,18 @@ test_that("admiral_df Test 11: an error is issued for invalid arguments", {
     "1",      10
   )
 
-  expect_error(admiral_df(list(), keys = exprs(USUBJID)))
-  expect_error(admiral_df(input, keys = 1))
-  expect_error(admiral_df(input, keys = iris))
-  expect_error(admiral_df(input, keys = exprs(USUBJID + 1)))
-  expect_error(admiral_df(input, keys = exprs(USUBJID), dataset_name = c("A", "B")))
-  expect_error(admiral_df(input, dataset_class = c("BDS", "TTE")))
+  expect_error(admiral_df(list(), keys = exprs(USUBJID)), class = "assert_data_frame")
+  expect_error(admiral_df(input, keys = 1), class = "assert_vars")
+  expect_error(admiral_df(input, keys = iris), class = "assert_vars")
+  expect_error(admiral_df(input, keys = exprs(USUBJID + 1)), class = "assert_vars")
+  expect_error(
+    admiral_df(input, keys = exprs(USUBJID), dataset_name = c("A", "B")),
+    class = "assert_character_scalar"
+  )
+  expect_error(
+    admiral_df(input, dataset_class = c("BDS", "TTE")),
+    class = "assert_character_scalar"
+  )
 
   # keys taken from a specification are a character vector, so the error
   # points to the conversion
@@ -255,7 +261,7 @@ test_that("admiral_df Test 12: device classes are accepted", {
     "P",      "D-2",    "BATTV",    2.9
   )
 
-  for (dataset_class in c("ADDL", "MDBDS", "MDOCCDS")) {
+  for (dataset_class in c("ADDL", "MDBDS", "MDTTE", "MDOCCDS")) {
     expect_silent(actual <- admiral_df(input, dataset_class = dataset_class))
     expect_identical(attr(actual, "admiral_dataset_class"), dataset_class)
   }
@@ -421,6 +427,13 @@ test_that("guess_admiral_df_class Test 17: an empty dataset is classified from t
   )
   expect_identical(guess_admiral_df_class(empty_shell), NA_character_)
 
+  # the same holds with `PARAMCD` but no analysis value: with records this is
+  # "other", without any it is unknown
+  empty_paramcd <- tibble::tibble(
+    STUDYID = character(0), USUBJID = character(0), PARAMCD = character(0)
+  )
+  expect_identical(guess_admiral_df_class(empty_paramcd), NA_character_)
+
   # where the variables decide the class, the missing records do not matter:
   # without the subject keys it is not subject data at all
   empty_lookup <- tibble::tibble(AEDECOD = character(0), AETERM = character(0))
@@ -429,8 +442,8 @@ test_that("guess_admiral_df_class Test 17: an empty dataset is classified from t
 
 ## Test 18: an error is issued for a non-data-frame dataset ----
 test_that("guess_admiral_df_class Test 18: an error is issued for a non-data-frame dataset", {
-  expect_error(guess_admiral_df_class(matrix(1:4, nrow = 2)))
-  expect_error(guess_admiral_df_class("ADSL"))
+  expect_error(guess_admiral_df_class(matrix(1:4, nrow = 2)), class = "assert_data_frame")
+  expect_error(guess_admiral_df_class("ADSL"), class = "assert_data_frame")
 })
 
 ## Test 19: ADSL is decided by the records ----
@@ -542,12 +555,12 @@ test_that("guess_admiral_df_class Test 23: device datasets are inferred as the d
   )
   expect_identical(guess_admiral_df_class(mdoccds), "MDOCCDS")
 
-  # there is no device time-to-event class, so it is the device BDS class
+  # TTE is tested before BDS for device data too
   mdtte <- tibble::tribble(
     ~STUDYID, ~SPDEVID, ~PARAMCD, ~AVAL, ~CNSR, ~STARTDT,
     "P",      "D-1",    "TTFAIL",   120,     0, lubridate::ymd("2022-01-01")
   )
-  expect_identical(guess_admiral_df_class(mdtte), "MDBDS")
+  expect_identical(guess_admiral_df_class(mdtte), "MDTTE")
 
   # more than one record per device, and no parameter or occurrence signal
   device_other <- tibble::tribble(
@@ -660,7 +673,7 @@ test_that("get_dataset_keys Test 25: the stored keys are returned as symbols", {
   # empty keys are returned as an empty list, distinct from `NULL`
   expect_identical(get_dataset_keys(admiral_df(input, keys = exprs())), list())
 
-  expect_error(get_dataset_keys("ADVS"))
+  expect_error(get_dataset_keys("ADVS"), class = "assert_data_frame")
 })
 
 # get_dataset_name ----
@@ -674,7 +687,7 @@ test_that("get_dataset_name Test 26: the stored name is returned", {
   expect_null(get_dataset_name(input))
   expect_identical(get_dataset_name(admiral_df(input, dataset_name = "ADVS")), "ADVS")
 
-  expect_error(get_dataset_name("ADVS"))
+  expect_error(get_dataset_name("ADVS"), class = "assert_data_frame")
 })
 
 # print.admiral_df ----
