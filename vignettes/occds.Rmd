@@ -731,7 +731,7 @@ anaphylaxis_queries <- list(
     definition = list(
       basket_select(
         name = "Anaphylactic reaction (SMQ)",
-        scope = "NA_character_",
+        scope = NA_character_,
         type = "smq",
         algorithm_category = "B"
       )
@@ -743,7 +743,7 @@ anaphylaxis_queries <- list(
     definition = list(
       basket_select(
         name = "Anaphylactic reaction (SMQ)",
-        scope = "NA_character_",
+        scope = NA_character_,
         type = "smq",
         algorithm_category = "C"
       )
@@ -755,7 +755,7 @@ anaphylaxis_queries <- list(
     definition = list(
       basket_select(
         name = "Anaphylactic reaction (SMQ)",
-        scope = "NA_character_",
+        scope = NA_character_,
         type = "smq",
         algorithm_category = "D"
       )
@@ -838,7 +838,7 @@ adae_algquery1 <- adae_algquery %>%
     filter_join = abs(ASTDT.join - ASTDT) <= 7 &
       (
         # a narrow term contributes on its own
-        !is.na(SMQ01NAM) | 
+        !is.na(SMQ01NAM) |
           # category B together with category C
           (!is.na(CQ01NAM) & !is.na(CQ02NAM.join)) |
           (!is.na(CQ02NAM) & !is.na(CQ01NAM.join)) |
