@@ -55,6 +55,8 @@
 #' also possible to specify `check_datetime_type = "none"` to silently ignore any issues.
 #' Note that any invalid datetimes will be always returned as `NA`.
 #'
+#' The datetime is created in UTC.
+#'
 #' @return  The input dataset with the datetime `*DTM` (and the date/time imputation
 #' flag `*DTF`, `*TMF`) added.
 #'
@@ -353,7 +355,7 @@ derive_vars_dtm <- function(dataset,
 #' also possible to specify `check_datetime_type = "none"` to silently ignore any issues.
 #' Note that any invalid datetimes will be always returned as `NA`.
 #'
-#' @return A datetime object
+#' @return A datetime object in UTC
 #'
 #' @family com_date_time
 #'

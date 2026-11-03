@@ -360,6 +360,8 @@ rules cause an invalid datetime (e.g. \code{"2020-01-28T25:00:00"}) to be genera
 this case, the user should fix the data issue or adjust the imputation rules. It is
 also possible to specify \code{check_datetime_type = "none"} to silently ignore any issues.
 Note that any invalid datetimes will be always returned as \code{NA}.
+
+The datetime is created in UTC.
 }
 \seealso{
 \code{vignette("imputation")}
