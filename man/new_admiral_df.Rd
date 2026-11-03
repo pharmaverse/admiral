@@ -20,14 +20,14 @@ new_admiral_df(x, keys = NULL, dataset_name = NULL, dataset_type = NULL)
 \item{Default value}{\code{NULL}}
 }}
 
-\item{dataset_name}{Character scalar, stored in the \code{"admiral_ds_name"}
+\item{dataset_name}{Character scalar, stored in the \code{"admiral_dataset_name"}
 attribute
 
 \describe{
 \item{Default value}{\code{NULL}}
 }}
 
-\item{dataset_type}{Character scalar, stored in the \code{"admiral_ds_type"}
+\item{dataset_type}{Character scalar, stored in the \code{"admiral_dataset_type"}
 attribute
 
 \describe{
@@ -45,7 +45,7 @@ frame (unless it is already present), preserving the existing classes such
 as \code{tbl_df}/\code{data.frame}, and stores any metadata supplied. The arguments are
 not checked, so this is what admiral's \verb{derive_*()} and related
 dataset-producing functions apply to their output. Users call
-\code{\link[=set_admiral_attrs]{set_admiral_attrs()}}, which validates its arguments before calling this.
+\code{\link[=admiral_df]{admiral_df()}}, which validates its arguments before calling this.
 }
 \details{
 An argument left as \code{NULL} leaves the corresponding attribute untouched, so
@@ -56,7 +56,6 @@ Other internal:
 \code{\link{admiral-package}},
 \code{\link[=extract_duplicate_records]{extract_duplicate_records()}},
 \code{\link[=format.basket_select]{format.basket_select()}},
-\code{\link[=get_admiral_df_type]{get_admiral_df_type()}},
 \code{\link[=guess_admiral_df_type]{guess_admiral_df_type()}},
 \code{\link[=guess_structure_type]{guess_structure_type()}},
 \code{\link[=signal_duplicate_records]{signal_duplicate_records()}}

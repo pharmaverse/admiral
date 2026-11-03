@@ -23,13 +23,13 @@ no records and its variables do not decide the type.
 
 Attempts to classify a data frame as one of the common ADaM dataset types based
 on the variables it contains. This is the fallback for when no type has been
-declared with \code{\link[=set_admiral_attrs]{set_admiral_attrs()}}; use \code{\link[=get_admiral_df_type]{get_admiral_df_type()}} to get the
+declared with \code{\link[=admiral_df]{admiral_df()}}; use \code{\link[=get_dataset_type]{get_dataset_type()}} to get the
 declared type where there is one.
 
 Note that this is the \emph{type} of the dataset (\code{ADSL}, \code{BDS}, ...), not its
 record structure: the latter is the set of key variables which uniquely
 identify its records. Unlike the type, the keys are never inferred; they are
-only ever declared with \code{\link[=set_admiral_attrs]{set_admiral_attrs()}}.
+only ever declared with \code{\link[=admiral_df]{admiral_df()}}.
 }
 \details{
 A dataset is first classed as device data or subject data:
@@ -53,7 +53,7 @@ subject datasets record it too, e.g. the device involved in an adverse
 event. A dataset whose records are all keyed by subject is therefore subject
 data whether or not it contains \code{SPDEVID}; a device dataset which also
 identifies the subject of every record is inferred as the corresponding
-subject type, so declare its type with \code{\link[=set_admiral_attrs]{set_admiral_attrs()}} instead.
+subject type, so declare its type with \code{\link[=admiral_df]{admiral_df()}} instead.
 
 Within each class the following precedence is used. The order matters,
 because the types are not mutually exclusive by variable content -- a \code{TTE}
@@ -95,7 +95,6 @@ Other internal:
 \code{\link{admiral-package}},
 \code{\link[=extract_duplicate_records]{extract_duplicate_records()}},
 \code{\link[=format.basket_select]{format.basket_select()}},
-\code{\link[=get_admiral_df_type]{get_admiral_df_type()}},
 \code{\link[=guess_structure_type]{guess_structure_type()}},
 \code{\link[=new_admiral_df]{new_admiral_df()}},
 \code{\link[=signal_duplicate_records]{signal_duplicate_records()}}

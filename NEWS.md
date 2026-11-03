@@ -5,10 +5,14 @@
 - Added the `admiral_df` S3 class. All `{admiral}` dataset functions now tag their
 output datasets with this class, preserving their existing classes. (#3160)
 
-- Added function `set_admiral_attrs()`. Tags a data frame with the `admiral_df` class and
+- Added function `admiral_df()`. Tags a data frame with the `admiral_df` class and
 stores its metadata: the key variables -- the variables which uniquely identify its
 records -- the dataset name, and the ADaM dataset type. See the function
 documentation for details. (#3198)
+
+- Added functions `get_dataset_keys()`, `get_dataset_name()`, and
+`get_dataset_type()` to read the metadata stored by `admiral_df()`. If no type has
+been stored, `get_dataset_type()` infers it from the dataset. (#3198)
 
 ## Updates of Existing Functions
 

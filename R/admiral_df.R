@@ -5,14 +5,14 @@
 #' as `tbl_df`/`data.frame`, and stores any metadata supplied. The arguments are
 #' not checked, so this is what admiral's `derive_*()` and related
 #' dataset-producing functions apply to their output. Users call
-#' [set_admiral_attrs()], which validates its arguments before calling this.
+#' [admiral_df()], which validates its arguments before calling this.
 #'
 #' @param x A data frame (or `NULL`)
 #' @param keys Character vector of key variables, stored in the
 #'   `"admiral_keys"` attribute
-#' @param dataset_name Character scalar, stored in the `"admiral_ds_name"`
+#' @param dataset_name Character scalar, stored in the `"admiral_dataset_name"`
 #'   attribute
-#' @param dataset_type Character scalar, stored in the `"admiral_ds_type"`
+#' @param dataset_type Character scalar, stored in the `"admiral_dataset_type"`
 #'   attribute
 #'
 #' @details
@@ -34,10 +34,10 @@ new_admiral_df <- function(x, keys = NULL, dataset_name = NULL, dataset_type = N
     attr(x, "admiral_keys") <- keys
   }
   if (!is.null(dataset_name)) {
-    attr(x, "admiral_ds_name") <- dataset_name
+    attr(x, "admiral_dataset_name") <- dataset_name
   }
   if (!is.null(dataset_type)) {
-    attr(x, "admiral_ds_type") <- dataset_type
+    attr(x, "admiral_dataset_type") <- dataset_type
   }
   if (!inherits(x, "admiral_df")) {
     class(x) <- c("admiral_df", class(x))
@@ -45,10 +45,10 @@ new_admiral_df <- function(x, keys = NULL, dataset_name = NULL, dataset_type = N
   x
 }
 
-# the ADaM dataset types `set_admiral_attrs()` accepts
-admiral_ds_types <- c("ADSL", "BDS", "OCCDS", "TTE", "ADDL", "MDBDS", "MDOCCDS")
+# the ADaM dataset types `admiral_df()` accepts
+admiral_dataset_types <- c("ADSL", "BDS", "OCCDS", "TTE", "ADDL", "MDBDS", "MDOCCDS")
 
-#' Set the Metadata of a Dataset
+#' Create an `admiral_df` Dataset
 #'
 #' @description
 #' `r lifecycle::badge("experimental")`
@@ -58,7 +58,12 @@ admiral_ds_types <- c("ADSL", "BDS", "OCCDS", "TTE", "ADDL", "MDBDS", "MDOCCDS")
 #' dataset name, and the ADaM dataset type. Call it on the finished dataset,
 #' once it has been derived, e.g. just before summarising it: the metadata is
 #' not guaranteed to survive the derivations which build the dataset (see
-#' Details).
+#' Details). The metadata is read back with [get_dataset_keys()],
+#' [get_dataset_name()], and [get_dataset_type()].
+#'
+#' Called on a dataset which is already an `admiral_df`, it updates the
+#' metadata rather than rebuilding it: an argument left as `NULL` keeps the
+#' value stored by the previous call, so each item can be set on its own.
 #'
 #' The keys describe the record structure the dataset is intended to have; they
 #' are not checked against its records when they are stored. `{admiral}` never
@@ -83,21 +88,22 @@ admiral_ds_types <- c("ADSL", "BDS", "OCCDS", "TTE", "ADDL", "MDBDS", "MDOCCDS")
 #' @permitted list of variables created by `exprs()` or `NULL`
 #'
 #' @param dataset_name The name of the dataset, e.g. `"ADVS"`, stored in the
-#'   `"admiral_ds_name"` attribute. `NULL` leaves a name stored by a previous
+#'   `"admiral_dataset_name"` attribute. `NULL` leaves a name stored by a previous
 #'   call untouched, so re-keying a dataset does not lose its name.
 #'
 #' @permitted character scalar or `NULL`
 #'
-#' @param dataset_type The ADaM dataset type, stored in the `"admiral_ds_type"`
+#' @param dataset_type The ADaM dataset type, stored in the `"admiral_dataset_type"`
 #'   attribute. `"ADDL"`, `"MDBDS"`, and `"MDOCCDS"` are the medical device
 #'   types (device-level, and the device versions of `"BDS"` and `"OCCDS"`).
-#'   The type is not checked against the variables of `dataset`. `NULL` leaves a type stored by a previous call untouched.
+#'   The type is not checked against the variables of `dataset`. `NULL` leaves
+#'   a type stored by a previous call untouched.
 #'
 #' @permitted `"ADSL"`, `"BDS"`, `"OCCDS"`, `"TTE"`, `"ADDL"`, `"MDBDS"`,
 #'   `"MDOCCDS"`, or `NULL`
 #'
 #' @return `dataset` with the `admiral_df` class, and the `"admiral_keys"`,
-#'   `"admiral_ds_name"`, and `"admiral_ds_type"` attributes for those of
+#'   `"admiral_dataset_name"`, and `"admiral_dataset_type"` attributes for those of
 #'   `keys`, `dataset_name`, and `dataset_type` which were supplied (or had been
 #'   stored by a previous call).
 #'
@@ -151,16 +157,16 @@ admiral_ds_types <- c("ADSL", "BDS", "OCCDS", "TTE", "ADDL", "MDBDS", "MDOCCDS")
 #'   "2",      "DIABP",  "BASELINE",    79
 #' )
 #'
-#' advs <- set_admiral_attrs(
+#' advs <- admiral_df(
 #'   advs,
 #'   keys = exprs(USUBJID, PARAMCD, AVISIT),
 #'   dataset_name = "ADVS",
 #'   dataset_type = "BDS"
 #' )
 #'
-#' attr(advs, "admiral_keys")
-#' attr(advs, "admiral_ds_name")
-#' attr(advs, "admiral_ds_type")
+#' get_dataset_keys(advs)
+#' get_dataset_name(advs)
+#' get_dataset_type(advs)
 #' class(advs)
 #'
 #' @caption Keys from a dataset specification
@@ -171,7 +177,7 @@ admiral_ds_types <- c("ADSL", "BDS", "OCCDS", "TTE", "ADDL", "MDBDS", "MDOCCDS")
 #'   `{metacore}` specification that is `metacore::get_keys()`:
 #'
 #'   ```r
-#'   set_admiral_attrs(
+#'   admiral_df(
 #'     advs,
 #'     keys = chr2vars(metacore::get_keys(spec, "ADVS")$variable),
 #'     dataset_name = "ADVS"
@@ -179,13 +185,13 @@ admiral_ds_types <- c("ADSL", "BDS", "OCCDS", "TTE", "ADDL", "MDBDS", "MDOCCDS")
 #'   ```
 #'
 #' @code
-#' advs <- set_admiral_attrs(
+#' advs <- admiral_df(
 #'   advs,
 #'   keys = chr2vars(c("USUBJID", "PARAMCD", "AVISIT"))
 #' )
 #'
 #' # `dataset_name` was not repeated, so the name from the previous call stands
-#' attr(advs, "admiral_ds_name")
+#' get_dataset_name(advs)
 #'
 #' @caption Declaring that a dataset has no key variables
 #'
@@ -193,13 +199,13 @@ admiral_ds_types <- c("ADSL", "BDS", "OCCDS", "TTE", "ADDL", "MDBDS", "MDOCCDS")
 #'   the attribute unset: it records that no key variables are defined.
 #'
 #' @code
-#' advs_no_keys <- set_admiral_attrs(advs, keys = exprs())
+#' advs_no_keys <- admiral_df(advs, keys = exprs())
 #'
-#' attr(advs_no_keys, "admiral_keys")
-set_admiral_attrs <- function(dataset,
-                              keys = NULL,
-                              dataset_name = NULL,
-                              dataset_type = NULL) {
+#' get_dataset_keys(advs_no_keys)
+admiral_df <- function(dataset,
+                       keys = NULL,
+                       dataset_name = NULL,
+                       dataset_type = NULL) {
   # keys taken from a specification are a character vector, so that case gets
   # a pointer to the conversion rather than the generic "must be a list"
   if (is.character(keys)) {
@@ -217,7 +223,7 @@ set_admiral_attrs <- function(dataset,
   assert_vars(keys, optional = TRUE)
   assert_data_frame(dataset)
   assert_character_scalar(dataset_name, optional = TRUE)
-  assert_character_scalar(dataset_type, values = admiral_ds_types, optional = TRUE)
+  assert_character_scalar(dataset_type, values = admiral_dataset_types, optional = TRUE)
 
   if (!is.null(keys)) {
     # keys are stored as character: they are metadata about the dataset, not
@@ -259,8 +265,8 @@ set_admiral_attrs <- function(dataset,
 #' @description
 #' `r lifecycle::badge("experimental")`
 #'
-#' Prints the dataset name, type, and key variables stored by [set_admiral_attrs()]
-#' in a header line, followed by the dataset as it would print without the
+#' Prints the dataset name, type, and key variables stored by [admiral_df()] in
+#' a header line, followed by the dataset as it would print without the
 #' `admiral_df` class. The header is only printed if any of them have been
 #' stored, so that the output of a derivation which merely carries the class
 #' prints as before.
@@ -289,15 +295,15 @@ set_admiral_attrs <- function(dataset,
 #'   "P",      "2",      "DIABP",  "BASELINE",    79
 #' )
 #'
-#' set_admiral_attrs(
+#' admiral_df(
 #'   advs,
 #'   keys = exprs(USUBJID, PARAMCD, AVISIT),
 #'   dataset_name = "ADVS",
 #'   dataset_type = "BDS"
 #' )
 print.admiral_df <- function(x, ...) {
-  name <- attr(x, "admiral_ds_name")
-  type <- attr(x, "admiral_ds_type")
+  name <- attr(x, "admiral_dataset_name")
+  type <- attr(x, "admiral_dataset_type")
   keys <- attr(x, "admiral_keys")
   # the header is only printed if something has been stored, so that the output
   # of a derivation which merely carries the class prints as before -- and the
@@ -309,7 +315,7 @@ print.admiral_df <- function(x, ...) {
     inferred <- guess_admiral_df_type(x)
     # only a recognized type is shown: "other" and `NA` say nothing about the
     # dataset worth a place in the header
-    if (inferred %in% admiral_ds_types) {
+    if (inferred %in% admiral_dataset_types) {
       type <- paste(inferred, "(inferred)")
     }
   }
@@ -326,24 +332,122 @@ print.admiral_df <- function(x, ...) {
   NextMethod()
 }
 
+#' Get the Key Variables of a Dataset
+#'
+#' @description
+#' `r lifecycle::badge("experimental")`
+#'
+#' Returns the key variables stored for a dataset with [admiral_df()].
+#'
+#' @param dataset A data frame
+#'
+#' @permitted a data frame
+#'
+#' @return The key variables as a list of symbols, in key order, so that they
+#'   can be passed to a `by_vars` argument or back to [admiral_df()]; an empty
+#'   list if the dataset has been declared to have no key variables; or `NULL` if
+#'   its keys have not been set. The keys are never inferred.
+#'
+#' @keywords utils_help
+#' @family utils_help
+#'
+#' @export
+#'
+#' @examples
+#' library(tibble)
+#'
+#' advs <- tribble(
+#'   ~USUBJID, ~PARAMCD, ~AVISIT,    ~AVAL,
+#'   "1",      "DIABP",  "BASELINE",    51,
+#'   "1",      "SYSBP",  "BASELINE",   121
+#' )
+#'
+#' get_dataset_keys(advs)
+#'
+#' advs <- admiral_df(advs, keys = exprs(USUBJID, PARAMCD, AVISIT))
+#' get_dataset_keys(advs)
+get_dataset_keys <- function(dataset) {
+  assert_data_frame(dataset, check_is_grouped = FALSE, check_is_rowwise = FALSE)
+  keys <- attr(dataset, "admiral_keys")
+  if (is.null(keys)) {
+    return(NULL)
+  }
+  chr2vars(keys)
+}
+
+#' Get the Name of a Dataset
+#'
+#' @description
+#' `r lifecycle::badge("experimental")`
+#'
+#' Returns the dataset name stored for a dataset with [admiral_df()].
+#'
+#' @param dataset A data frame
+#'
+#' @permitted a data frame
+#'
+#' @return A character scalar, or `NULL` if no name has been set.
+#'
+#' @keywords utils_help
+#' @family utils_help
+#'
+#' @export
+#'
+#' @examples
+#' library(tibble)
+#'
+#' advs <- tribble(
+#'   ~USUBJID, ~PARAMCD, ~AVAL,
+#'   "1",      "DIABP",     51
+#' )
+#'
+#' get_dataset_name(advs)
+#'
+#' advs <- admiral_df(advs, dataset_name = "ADVS")
+#' get_dataset_name(advs)
+get_dataset_name <- function(dataset) {
+  assert_data_frame(dataset, check_is_grouped = FALSE, check_is_rowwise = FALSE)
+  attr(dataset, "admiral_dataset_name")
+}
+
 #' Get the ADaM Dataset Type
 #'
 #' @description
 #' `r lifecycle::badge("experimental")`
 #'
-#' Returns the type declared for a dataset with [set_admiral_attrs()] if there
-#' is one, and otherwise the type inferred from its variables and records, see
+#' Returns the type declared for a dataset with [admiral_df()] if there is one,
+#' and otherwise the type inferred from its variables and records, see
 #' [guess_admiral_df_type()].
 #'
 #' @param dataset A data frame
 #'
+#' @permitted a data frame
+#'
 #' @return A character scalar: the declared type, or the inferred one (which may
 #'   be `"other"` or `NA`, see [guess_admiral_df_type()]).
 #'
-#' @keywords internal
-#' @family internal
-get_admiral_df_type <- function(dataset) {
-  declared <- attr(dataset, "admiral_ds_type")
+#' @keywords utils_help
+#' @family utils_help
+#'
+#' @export
+#'
+#' @examples
+#' library(tibble)
+#'
+#' advs <- tribble(
+#'   ~STUDYID, ~USUBJID, ~PARAMCD, ~AVAL,
+#'   "P",      "1",      "DIABP",     51,
+#'   "P",      "1",      "SYSBP",    121
+#' )
+#'
+#' # no type has been declared, so it is inferred
+#' get_dataset_type(advs)
+#'
+#' # a declared type takes precedence
+#' advs <- admiral_df(advs, dataset_type = "TTE")
+#' get_dataset_type(advs)
+get_dataset_type <- function(dataset) {
+  declared <- attr(dataset, "admiral_dataset_type")
   if (!is.null(declared)) {
     return(declared)
   }
@@ -357,13 +461,13 @@ get_admiral_df_type <- function(dataset) {
 #'
 #' Attempts to classify a data frame as one of the common ADaM dataset types based
 #' on the variables it contains. This is the fallback for when no type has been
-#' declared with [set_admiral_attrs()]; use [get_admiral_df_type()] to get the
+#' declared with [admiral_df()]; use [get_dataset_type()] to get the
 #' declared type where there is one.
 #'
 #' Note that this is the *type* of the dataset (`ADSL`, `BDS`, ...), not its
 #' record structure: the latter is the set of key variables which uniquely
 #' identify its records. Unlike the type, the keys are never inferred; they are
-#' only ever declared with [set_admiral_attrs()].
+#' only ever declared with [admiral_df()].
 #'
 #' @param dataset A data frame
 #'
@@ -388,7 +492,7 @@ get_admiral_df_type <- function(dataset) {
 #'   event. A dataset whose records are all keyed by subject is therefore subject
 #'   data whether or not it contains `SPDEVID`; a device dataset which also
 #'   identifies the subject of every record is inferred as the corresponding
-#'   subject type, so declare its type with [set_admiral_attrs()] instead.
+#'   subject type, so declare its type with [admiral_df()] instead.
 #'
 #'   Within each class the following precedence is used. The order matters,
 #'   because the types are not mutually exclusive by variable content -- a `TTE`

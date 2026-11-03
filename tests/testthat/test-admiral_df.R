@@ -35,7 +35,7 @@ test_that("new_admiral_df Test 3: returns NULL unchanged", {
 
 ## Test 4: keeps the metadata already set ----
 test_that("new_admiral_df Test 4: keeps the metadata already set", {
-  input <- set_admiral_attrs(
+  input <- admiral_df(
     tibble::tribble(
       ~USUBJID, ~AVAL,
       "1",      10
@@ -50,20 +50,20 @@ test_that("new_admiral_df Test 4: keeps the metadata already set", {
   actual <- new_admiral_df(input)
 
   expect_identical(attr(actual, "admiral_keys"), "USUBJID")
-  expect_identical(attr(actual, "admiral_ds_name"), "ADSL")
-  expect_identical(attr(actual, "admiral_ds_type"), "ADSL")
+  expect_identical(attr(actual, "admiral_dataset_name"), "ADSL")
+  expect_identical(attr(actual, "admiral_dataset_type"), "ADSL")
 })
 
-# set_admiral_attrs ----
+# admiral_df ----
 ## Test 5: stores the keys, name, type, and the admiral_df class ----
-test_that("set_admiral_attrs Test 5: stores the keys, name, type, and the admiral_df class", {
+test_that("admiral_df Test 5: stores the keys, name, type, and the admiral_df class", {
   input <- tibble::tribble(
     ~USUBJID, ~PARAMCD, ~AVISIT,    ~AVAL,
     "1",      "DIABP",  "BASELINE",    51,
     "1",      "SYSBP",  "BASELINE",   121
   )
 
-  actual <- set_admiral_attrs(
+  actual <- admiral_df(
     input,
     keys = exprs(USUBJID, PARAMCD, AVISIT),
     dataset_name = "ADVS",
@@ -74,20 +74,20 @@ test_that("set_admiral_attrs Test 5: stores the keys, name, type, and the admira
     attr(actual, "admiral_keys"),
     c("USUBJID", "PARAMCD", "AVISIT")
   )
-  expect_equal(attr(actual, "admiral_ds_name"), "ADVS")
-  expect_equal(attr(actual, "admiral_ds_type"), "BDS")
+  expect_equal(attr(actual, "admiral_dataset_name"), "ADVS")
+  expect_equal(attr(actual, "admiral_dataset_type"), "BDS")
   expect_s3_class(actual, "admiral_df")
   # Test that the data itself is not changed
   stripped <- actual
   attr(stripped, "admiral_keys") <- NULL
-  attr(stripped, "admiral_ds_name") <- NULL
-  attr(stripped, "admiral_ds_type") <- NULL
+  attr(stripped, "admiral_dataset_name") <- NULL
+  attr(stripped, "admiral_dataset_type") <- NULL
   class(stripped) <- class(input)
   expect_equal(stripped, input)
 })
 
 ## Test 6: keys from a specification are passed via chr2vars() ----
-test_that("set_admiral_attrs Test 6: keys from a specification are passed via chr2vars()", {
+test_that("admiral_df Test 6: keys from a specification are passed via chr2vars()", {
   input <- tibble::tribble(
     ~USUBJID, ~PARAMCD, ~AVAL,
     "1",      "DIABP",     51
@@ -96,57 +96,57 @@ test_that("set_admiral_attrs Test 6: keys from a specification are passed via ch
   spec_keys <- c("USUBJID", "PARAMCD")
   attr(spec_keys, "label") <- "Variable Name"
 
-  from_exprs <- set_admiral_attrs(input, keys = exprs(USUBJID, PARAMCD))
-  from_spec <- set_admiral_attrs(input, keys = chr2vars(spec_keys))
+  from_exprs <- admiral_df(input, keys = exprs(USUBJID, PARAMCD))
+  from_spec <- admiral_df(input, keys = chr2vars(spec_keys))
 
   expect_identical(attr(from_spec, "admiral_keys"), attr(from_exprs, "admiral_keys"))
 })
 
 ## Test 7: the metadata is stored, preserved, and replaced ----
-test_that("set_admiral_attrs Test 7: the metadata is stored, preserved, and replaced", {
+test_that("admiral_df Test 7: the metadata is stored, preserved, and replaced", {
   input <- tibble::tribble(
     ~USUBJID, ~PARAMCD, ~AVAL,
     "1",      "DIABP",     51
   )
 
   # nothing is stored when there is nothing to store
-  bare <- set_admiral_attrs(input)
+  bare <- admiral_df(input)
   expect_s3_class(bare, "admiral_df")
   expect_null(attr(bare, "admiral_keys"))
-  expect_null(attr(bare, "admiral_ds_name"))
-  expect_null(attr(bare, "admiral_ds_type"))
+  expect_null(attr(bare, "admiral_dataset_name"))
+  expect_null(attr(bare, "admiral_dataset_type"))
 
   # an argument which is not repeated is not lost by a call which only revises
   # another
-  named <- set_admiral_attrs(
+  named <- admiral_df(
     input,
     keys = exprs(USUBJID),
     dataset_name = "ADVS",
     dataset_type = "BDS"
   )
-  rekeyed <- set_admiral_attrs(named, keys = exprs(USUBJID, PARAMCD))
+  rekeyed <- admiral_df(named, keys = exprs(USUBJID, PARAMCD))
   expect_equal(attr(rekeyed, "admiral_keys"), c("USUBJID", "PARAMCD"))
-  expect_equal(attr(rekeyed, "admiral_ds_name"), "ADVS")
-  expect_equal(attr(rekeyed, "admiral_ds_type"), "BDS")
+  expect_equal(attr(rekeyed, "admiral_dataset_name"), "ADVS")
+  expect_equal(attr(rekeyed, "admiral_dataset_type"), "BDS")
 
-  retyped <- set_admiral_attrs(named, dataset_type = "TTE")
+  retyped <- admiral_df(named, dataset_type = "TTE")
   expect_equal(attr(retyped, "admiral_keys"), "USUBJID")
-  expect_equal(attr(retyped, "admiral_ds_type"), "TTE")
+  expect_equal(attr(retyped, "admiral_dataset_type"), "TTE")
 
   # all give way when a later call supplies them
-  renamed <- set_admiral_attrs(
+  renamed <- admiral_df(
     named,
     keys = exprs(USUBJID, PARAMCD),
     dataset_name = "ADSL",
     dataset_type = "ADSL"
   )
   expect_equal(attr(renamed, "admiral_keys"), c("USUBJID", "PARAMCD"))
-  expect_equal(attr(renamed, "admiral_ds_name"), "ADSL")
-  expect_equal(attr(renamed, "admiral_ds_type"), "ADSL")
+  expect_equal(attr(renamed, "admiral_dataset_name"), "ADSL")
+  expect_equal(attr(renamed, "admiral_dataset_type"), "ADSL")
 })
 
 ## Test 8: the keys are stored as a plain character vector ----
-test_that("set_admiral_attrs Test 8: the keys are stored as a plain character vector", {
+test_that("admiral_df Test 8: the keys are stored as a plain character vector", {
   input <- tibble::tribble(
     ~USUBJID, ~AVAL,
     "1",      10
@@ -154,13 +154,13 @@ test_that("set_admiral_attrs Test 8: the keys are stored as a plain character ve
 
   # `vars2chr()` returns a named vector, which must not end up on the stored
   # attribute
-  actual <- set_admiral_attrs(input, keys = exprs(USUBJID, AVAL))
+  actual <- admiral_df(input, keys = exprs(USUBJID, AVAL))
 
   expect_identical(attr(actual, "admiral_keys"), c("USUBJID", "AVAL"))
 })
 
 ## Test 9: empty keys are stored, keys not in the dataset are not ----
-test_that("set_admiral_attrs Test 9: empty keys are stored, keys not in the dataset are not", {
+test_that("admiral_df Test 9: empty keys are stored, keys not in the dataset are not", {
   input <- tibble::tribble(
     ~USUBJID, ~PARAMCD, ~AVAL,
     "1",      "DIABP",     51
@@ -168,7 +168,7 @@ test_that("set_admiral_attrs Test 9: empty keys are stored, keys not in the data
 
   # the empty attribute is a statement that the dataset has no key variables,
   # so it must be distinguishable from an attribute which was never set
-  expect_silent(empty <- set_admiral_attrs(input, keys = exprs()))
+  expect_silent(empty <- admiral_df(input, keys = exprs()))
   expect_identical(attr(empty, "admiral_keys"), character(0))
   expect_false(is.null(attr(empty, "admiral_keys")))
   expect_s3_class(empty, "admiral_df")
@@ -176,24 +176,24 @@ test_that("set_admiral_attrs Test 9: empty keys are stored, keys not in the data
   # a key which is not in the dataset is most likely a typo, so the keys are
   # not set and a warning says so; the name and the class are still applied
   expect_snapshot(
-    typo <- set_admiral_attrs(input, keys = exprs(USUBJID, PARMACD), dataset_name = "ADVS")
+    typo <- admiral_df(input, keys = exprs(USUBJID, PARMACD), dataset_name = "ADVS")
   )
   expect_null(attr(typo, "admiral_keys"))
-  expect_identical(attr(typo, "admiral_ds_name"), "ADVS")
+  expect_identical(attr(typo, "admiral_dataset_name"), "ADVS")
   expect_s3_class(typo, "admiral_df")
 
   # re-keying with a typo keeps the keys set previously, and the warning says
   # which they are
-  keyed <- set_admiral_attrs(input, keys = exprs(USUBJID, PARAMCD))
+  keyed <- admiral_df(input, keys = exprs(USUBJID, PARAMCD))
   expect_snapshot(
-    rekeyed <- set_admiral_attrs(keyed, keys = exprs(USUBJID, PARMACD, AVISIT))
+    rekeyed <- admiral_df(keyed, keys = exprs(USUBJID, PARMACD, AVISIT))
   )
   expect_identical(attr(rekeyed, "admiral_keys"), c("USUBJID", "PARAMCD"))
 })
 
 ## Test 10: the metadata and the class survive a dplyr pipeline ----
-test_that("set_admiral_attrs Test 10: the metadata and the class survive a dplyr pipeline", {
-  input <- set_admiral_attrs(
+test_that("admiral_df Test 10: the metadata and the class survive a dplyr pipeline", {
+  input <- admiral_df(
     tibble::tribble(
       ~USUBJID, ~PARAMCD, ~AVAL,
       "1",      "DIABP",     51,
@@ -220,35 +220,35 @@ test_that("set_admiral_attrs Test 10: the metadata and the class survive a dplyr
     left_join(adsl, by = "USUBJID")
 
   expect_equal(attr(actual, "admiral_keys"), c("USUBJID", "PARAMCD"))
-  expect_equal(attr(actual, "admiral_ds_name"), "ADVS")
-  expect_equal(attr(actual, "admiral_ds_type"), "BDS")
+  expect_equal(attr(actual, "admiral_dataset_name"), "ADVS")
+  expect_equal(attr(actual, "admiral_dataset_type"), "BDS")
   expect_s3_class(actual, "admiral_df")
 })
 
 ## Test 11: an error is issued for invalid arguments ----
-test_that("set_admiral_attrs Test 11: an error is issued for invalid arguments", {
+test_that("admiral_df Test 11: an error is issued for invalid arguments", {
   input <- tibble::tribble(
     ~USUBJID, ~AVAL,
     "1",      10
   )
 
-  expect_error(set_admiral_attrs(list(), keys = exprs(USUBJID)))
-  expect_error(set_admiral_attrs(input, keys = 1))
-  expect_error(set_admiral_attrs(input, keys = iris))
-  expect_error(set_admiral_attrs(input, keys = exprs(USUBJID + 1)))
-  expect_error(set_admiral_attrs(input, keys = exprs(USUBJID), dataset_name = c("A", "B")))
-  expect_error(set_admiral_attrs(input, dataset_type = c("BDS", "TTE")))
+  expect_error(admiral_df(list(), keys = exprs(USUBJID)))
+  expect_error(admiral_df(input, keys = 1))
+  expect_error(admiral_df(input, keys = iris))
+  expect_error(admiral_df(input, keys = exprs(USUBJID + 1)))
+  expect_error(admiral_df(input, keys = exprs(USUBJID), dataset_name = c("A", "B")))
+  expect_error(admiral_df(input, dataset_type = c("BDS", "TTE")))
 
   # keys taken from a specification are a character vector, so the error
   # points to the conversion
-  expect_snapshot(set_admiral_attrs(input, keys = c("USUBJID", "PARAMCD")), error = TRUE)
+  expect_snapshot(admiral_df(input, keys = c("USUBJID", "PARAMCD")), error = TRUE)
 
   # the type is one of the ADaM dataset types
-  expect_snapshot(set_admiral_attrs(input, dataset_type = "ADAE"), error = TRUE)
+  expect_snapshot(admiral_df(input, dataset_type = "ADAE"), error = TRUE)
 })
 
 ## Test 12: device types are accepted ----
-test_that("set_admiral_attrs Test 12: device types are accepted", {
+test_that("admiral_df Test 12: device types are accepted", {
   input <- tibble::tribble(
     ~STUDYID, ~SPDEVID, ~PARAMCD, ~AVAL,
     "P",      "D-1",    "BATTV",    3.1,
@@ -256,8 +256,8 @@ test_that("set_admiral_attrs Test 12: device types are accepted", {
   )
 
   for (type in c("ADDL", "MDBDS", "MDOCCDS")) {
-    expect_silent(actual <- set_admiral_attrs(input, dataset_type = type))
-    expect_identical(attr(actual, "admiral_ds_type"), type)
+    expect_silent(actual <- admiral_df(input, dataset_type = type))
+    expect_identical(attr(actual, "admiral_dataset_type"), type)
   }
 })
 
@@ -583,9 +583,9 @@ test_that("guess_admiral_df_type Test 23: device datasets are inferred as the de
   expect_identical(guess_admiral_df_type(empty_addl), NA_character_)
 })
 
-# get_admiral_df_type ----
+# get_dataset_type ----
 ## Test 24: the declared type takes precedence over the guess ----
-test_that("get_admiral_df_type Test 24: the declared type takes precedence over the guess", {
+test_that("get_dataset_type Test 24: the declared type takes precedence over the guess", {
   input <- tibble::tribble(
     ~STUDYID, ~USUBJID, ~SPDEVID, ~PARAMCD, ~AVAL,
     "P",      "1",      "D-1",    "BATTV",    3.1
@@ -593,18 +593,59 @@ test_that("get_admiral_df_type Test 24: the declared type takes precedence over 
 
   # without a declared type, the type is inferred: every record is keyed by
   # subject, so this is inferred as subject data despite `SPDEVID`
-  expect_identical(get_admiral_df_type(input), "BDS")
+  expect_identical(get_dataset_type(input), "BDS")
 
   # a declared type is returned as is, even where the guess differs
   expect_identical(
-    get_admiral_df_type(set_admiral_attrs(input, dataset_type = "MDBDS")),
+    get_dataset_type(admiral_df(input, dataset_type = "MDBDS")),
     "MDBDS"
   )
 })
 
+# get_dataset_keys ----
+## Test 25: the stored keys are returned as symbols ----
+test_that("get_dataset_keys Test 25: the stored keys are returned as symbols", {
+  input <- tibble::tribble(
+    ~USUBJID, ~PARAMCD, ~AVAL,
+    "1",      "DIABP",     51
+  )
+
+  # keys which have not been set are not inferred
+  expect_null(get_dataset_keys(input))
+  expect_null(get_dataset_keys(admiral_df(input, dataset_name = "ADVS")))
+
+  # the keys come back in the form `admiral_df()` takes them, so they can be
+  # passed straight to a `by_vars` argument
+  keyed <- admiral_df(input, keys = exprs(USUBJID, PARAMCD))
+  expect_equal(get_dataset_keys(keyed), exprs(USUBJID, PARAMCD), ignore_attr = TRUE)
+  expect_identical(
+    get_dataset_keys(admiral_df(input, keys = get_dataset_keys(keyed))),
+    get_dataset_keys(keyed)
+  )
+
+  # empty keys are returned as an empty list, distinct from `NULL`
+  expect_identical(get_dataset_keys(admiral_df(input, keys = exprs())), list())
+
+  expect_error(get_dataset_keys("ADVS"))
+})
+
+# get_dataset_name ----
+## Test 26: the stored name is returned ----
+test_that("get_dataset_name Test 26: the stored name is returned", {
+  input <- tibble::tribble(
+    ~USUBJID, ~AVAL,
+    "1",      10
+  )
+
+  expect_null(get_dataset_name(input))
+  expect_identical(get_dataset_name(admiral_df(input, dataset_name = "ADVS")), "ADVS")
+
+  expect_error(get_dataset_name("ADVS"))
+})
+
 # print.admiral_df ----
-## Test 25: the name, type and keys are printed in a header ----
-test_that("print.admiral_df Test 25: the name, type and keys are printed in a header", {
+## Test 27: the name, type and keys are printed in a header ----
+test_that("print.admiral_df Test 27: the name, type and keys are printed in a header", {
   input <- tibble::tribble(
     ~STUDYID, ~USUBJID, ~PARAMCD, ~AVISIT,    ~AVAL,
     "P",      "1",      "DIABP",  "BASELINE",    51,
@@ -612,7 +653,7 @@ test_that("print.admiral_df Test 25: the name, type and keys are printed in a he
   )
 
   expect_snapshot(
-    print(set_admiral_attrs(
+    print(admiral_df(
       input,
       keys = exprs(USUBJID, PARAMCD, AVISIT),
       dataset_name = "ADVS",
@@ -622,11 +663,11 @@ test_that("print.admiral_df Test 25: the name, type and keys are printed in a he
 
   # each attribute is shown on its own; without a declared type, the inferred
   # type is shown and marked as such
-  expect_snapshot(print(set_admiral_attrs(input, keys = exprs(USUBJID, PARAMCD, AVISIT))))
-  expect_snapshot(print(set_admiral_attrs(input, dataset_type = "BDS")))
+  expect_snapshot(print(admiral_df(input, keys = exprs(USUBJID, PARAMCD, AVISIT))))
+  expect_snapshot(print(admiral_df(input, dataset_type = "BDS")))
 
   # a declared type is shown instead of the guess, even where they differ
-  expect_snapshot(print(set_admiral_attrs(input, keys = exprs(USUBJID), dataset_type = "TTE")))
+  expect_snapshot(print(admiral_df(input, keys = exprs(USUBJID), dataset_type = "TTE")))
 
   # a inferred type which is not an ADaM dataset type is left out rather than
   # shown as "other": without the subject keys this is not subject data
@@ -635,20 +676,20 @@ test_that("print.admiral_df Test 25: the name, type and keys are printed in a he
     "DIABP",  "Diastolic Blood Pressure (mmHg)"
   )
   expect_snapshot(
-    print(set_admiral_attrs(lookup, keys = exprs(PARAMCD), dataset_name = "PARAMS"))
+    print(admiral_df(lookup, keys = exprs(PARAMCD), dataset_name = "PARAMS"))
   )
 
   # empty keys record that no keys are defined, so they are shown as such
-  expect_snapshot(print(set_admiral_attrs(input, keys = exprs(), dataset_name = "ADVS")))
+  expect_snapshot(print(admiral_df(input, keys = exprs(), dataset_name = "ADVS")))
 
   # a plain data frame prints with its own method below the header
   expect_snapshot(
-    print(set_admiral_attrs(as.data.frame(input), keys = exprs(USUBJID), dataset_name = "ADVS"))
+    print(admiral_df(as.data.frame(input), keys = exprs(USUBJID), dataset_name = "ADVS"))
   )
 })
 
-## Test 26: a dataset with only the class prints as before ----
-test_that("print.admiral_df Test 26: a dataset with only the class prints as before", {
+## Test 28: a dataset with only the class prints as before ----
+test_that("print.admiral_df Test 28: a dataset with only the class prints as before", {
   input <- tibble::tribble(
     ~USUBJID, ~AVAL,
     "1",      10
