@@ -9,6 +9,9 @@
 #' @param reference_date A date or date-time column, e.g., date of first treatment
 #'   or date-time of last exposure to treatment.
 #'
+#'   Datetimes must have the same time zone as `source_vars`, e.g., UTC as
+#'   created by `derive_vars_dtm()`.
+#'
 #'   Refer to `derive_vars_dt()` to impute and derive a date from a date
 #'   character vector to a date object.
 #'
@@ -18,7 +21,6 @@
 #'   variables e.g. `exprs(TRTSDTM, ASTDTM, AENDT)` or `exprs(TRTSDT, ASTDTM,
 #'   AENDT, DEATHDY = DTHDT)`. If the source variable does not end in `*DT(M)`, a
 #'   name for the resulting `*DY` variable must be provided.
-#'
 #'
 #' @details The relative day is derived as number of days from the reference
 #'   date to the end date. If it is nonnegative, one is added. That is, the

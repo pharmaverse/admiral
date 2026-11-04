@@ -112,6 +112,13 @@ impute_dtc_dtm(
 )
 ```
 
+Note the text in the error message, which reminds you that if you wish
+to allow the function to continue executing and just throw a warning (for instance
+if the source of the problem is a temporary data issue rather than the imputation
+itself, e.g. a source value of `2019-13`), you can set the `check_datetime_type`
+argument to `"warning"`, which will turn any invalid datetime strings to
+`NA` rather than stop execution entirely.
+
 Therefore the keywords `"first"` or `"last"` can be specified in
 `date_imputation` to request that missing parts are replaced by the
 first or last possible value - giving us a valid date!
