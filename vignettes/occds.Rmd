@@ -821,7 +821,7 @@ Note that the MedDRA algorithm is defined at case level, but in practice a study
 will usually also require the combined terms to occur close to each other in time.
 As such, in the example below for exposition purposes the contributing terms have 
 to start within 7 days of each other. Since `join_type = "all"` also joins a
-record with itself, the same window condition can be applied to the narrow and 
+record with itself, the same window condition can be applied to the narrow
 category A terms without excluding them.
 
 ```{r}
