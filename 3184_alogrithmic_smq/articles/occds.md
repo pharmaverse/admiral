@@ -741,7 +741,7 @@ a study will usually also require the combined terms to occur close to
 each other in time. As such, in the example below for exposition
 purposes the contributing terms have to start within 7 days of each
 other. Since `join_type = "all"` also joins a record with itself, the
-same window condition can be applied to the narrow and category A terms
+same window condition can be applied to the narrow category A terms
 without excluding them.
 
 ``` r
@@ -754,7 +754,7 @@ adae_algquery1 <- adae_algquery %>%
     join_type = "all",
     filter_join = abs(ASTDT.join - ASTDT) <= 7 &
       (
-        # a narrow term contributes on its own
+        # a narrow term (Category A) contributes on its own
         !is.na(SMQ01NAM) |
           # category B together with category C
           (!is.na(CQ01NAM) & !is.na(CQ02NAM.join)) |
