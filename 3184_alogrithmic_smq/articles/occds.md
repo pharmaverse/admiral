@@ -730,7 +730,7 @@ adae_algquery <- adae2 %>%
 ```
 
 To decide whether a record (adverse event) belongs to the algorithmic
-SMQ or not other records needs to be considered. Thus,
+SMQ or not, other records need to be considered. Thus,
 `derive_vars_joined_exist_flag()` is used to look *across* all the
 records for a subject (`join_type = "all"`) to derive a flag `ANAPTFL`
 which is set to `"Y"` for every record which contributes to the
