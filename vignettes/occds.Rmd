@@ -834,7 +834,7 @@ adae_algquery1 <- adae_algquery %>%
     join_type = "all",
     filter_join = abs(ASTDT.join - ASTDT) <= 7 &
       (
-        # a narrow term contributes on its own
+        # a narrow term (Category A) contributes on its own
         !is.na(SMQ01NAM) |
           # category B together with category C
           (!is.na(CQ01NAM) & !is.na(CQ02NAM.join)) |
