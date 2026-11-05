@@ -8,18 +8,33 @@ output datasets with this class. (#3160)
 
 ## Updates of Existing Functions
 
-- The `min_dates_strict` and `max_dates_strict` arguments were added to
-`derive_vars_dt()`, `derive_vars_dtm()`, `convert_dtc_to_dt()`,
-`convert_dtc_to_dtm()`, `impute_dtc_dt()`, `impute_dtc_dtm()`. The new arguments
-can be used to avoid invalid imputed dates. E.g., if `AESTDTC` is imputed with
-`min_dates = exprs(TRTSDTM)`, `max_dates_strict = exprs(AENDTM)` can be
-specified to ensure the imputed event start date is not after the event end
-date (the `ADAE` template and the "Creating an OCCDS ADaM" vignette were updated
-accordingly).
+- Updated `compute_qual_imputation()` with named methods `"strip"` and `"shift"`,
+  an additive `offset` argument, argument validation, and clearer documentation.
+  Malformed qualified results now return missing values without warnings. Numeric
+  methods `1` and `2`, and the `factor` argument, remain supported with deprecation
+  messages. (#2922)
 
-    See the `derive_vars_dt()` documentation and the "Avoid Imputed Dates Before
-    a Particular Date" section of the "Date and Time Imputation" vignette
-    (`vignette("imputation")`) for details and examples. (#2708)
+- Various enhancements were made to the `derive_vars_dt()`, `derive_vars_dtm()`, 
+`convert_dtc_to_dt()`, `convert_dtc_to_dtm()`, `impute_dtc_dt()` and `impute_dtc_dtm()` 
+functions: 
+
+  - The `min_dates_strict` and `max_dates_strict` arguments were added. The new arguments
+    can be used to avoid invalid imputed dates. E.g., if `AESTDTC` is imputed with
+    `min_dates = exprs(TRTSDTM)`, `max_dates_strict = exprs(AENDTM)` can be
+    specified to ensure the imputed event start date is not after the event end
+    date (the `ADAE` template and the "Creating an OCCDS ADaM" vignette were updated
+    accordingly).
+
+      See the `derive_vars_dt()` documentation and the "Avoid Imputed Dates Before
+      a Particular Date" section of the "Date and Time Imputation" vignette
+      (`vignette("imputation")`) for details and examples. (#2708)
+  
+  - The `check_date_type` and `check_datetime_type` arguments were added to the
+    date/datetime functions respectively. These allow users to control whether a message,
+    warning or error is issued (or nothing at all) when a date/datetime is invalid, either 
+    as a result of a raw data issue or following imputation. When not throwing an error,
+    the functions continue executing and return `NA` for any invalid dates/datetimes. 
+    The informative note was also improved and aligned across the functions. (#3204)
     
 - `derive_vars_merged_lookup()` was enhanced with a new `check_not_mapped_type` argument
 which allows users to control whether a message, warning, error, or no message at all
@@ -30,7 +45,23 @@ argument will thus be deprecated. (#3188)
 `atoxgr_criteria_ctcv5_uscv`, `atoxgr_criteria_ctcv6`, `atoxgr_criteria_ctcv6_uscv`)
 were updated to add the term `"Eosinophilia"` (#3191).
 
+- `compute_duration()` now issues an error if either of `start_date` or `end_date` is a
+datetime without time zone, or if their time zones differ. The documentation
+of `compute_duration()`, `derive_vars_dtm()`, and `convert_dtc_to_dtm()` was
+updated to state that `{admiral}` creates date-times in UTC. (#2763)
+
 ## Breaking Changes
+
+- `compute_qual_imputation()` now requires qualified results to match
+  `^[<>]=?[0-9]+[.]?[0-9]*$`. Malformed strings previously converted to numbers,
+  such as `"0>1"` and `"-<0.9>"`, now return `NA_real_`. Whitespace and signed
+  qualified results are not accepted. Unqualified signed decimal numbers remain
+  supported. Invalid method and offset arguments now raise errors. (#2922)
+
+- `impute_dtc_dt()` and `impute_dtc_dtm()` now return `NA_character_` rather than an 
+  invalid date/datetime string, in line with the updates made to date/datetime functions
+  to introduce the `check_date_type` and `check_datetime_type` arguments (see entries under
+  "Updates of Existing Functions"). (#3204)
 
 - The following functions are entering the next phase of the [deprecation process](https://pharmaverse.github.io/admiraldev/articles/programming_strategy.html#deprecation):
 
@@ -61,10 +92,8 @@ were updated to add the term `"Eosinophilia"` (#3191).
 
 ## Documentation
 
-- Corrected the documentation of `compute_qual_imputation()` to describe the
-decimal offset, the direction of shifts for strict inequalities, and the use of
-`factor`. Added vector examples showing both methods and unchanged inclusive
-qualifiers. The calculations are unchanged. (#2922)
+- The OCCDS vignette was updated to add a section describing how to derive SMQ variables for
+  algorithmic queries. (#3184)
 
 - Corrected the `ADLB` template label for `PARAMCD = "CK"` from `"Creatinine Kinase"` to `"Creatine Kinase"` (#3170).
 
