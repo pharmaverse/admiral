@@ -162,14 +162,10 @@ ADSL Functions that returns variable appended to dataset:
 \section{Examples}{
 \subsection{Derive the last known alive date from multiple sources}{
 
-All records in these examples are synthetic. For each subject, select
-the latest of the death date, a dated laboratory assessment, and treatment
-end. These sources are an illustrative study rule; their eligibility should
-be specified for the study. Keep the selected date and its source in ADSL.
+For each subject, we wish to select the latest date out of
+the death date, a dated laboratory assessment, and treatment
+end.
 \itemize{
-\item \code{dataset} is the ADSL dataset to receive the new variables. \code{by_vars}
-identifies subjects by study and subject ID, so records from different
-studies are not combined even if they share a subject ID.
 \item \code{source_datasets} supplies the datasets named by each \code{event()}.
 \item The laboratory event first selects the last nonmissing \code{ADT} per subject
 using its own \code{order} and \code{mode}. The outer \code{order} and \code{mode} then select
@@ -178,7 +174,7 @@ the latest date across all events.
 \code{order = exprs(LSTALVDT, desc(event_nr))} and \code{mode = "last"}, an equal-date
 tie favors the event listed first: death, then laboratory, then treatment
 end. Subject \code{09-1088} illustrates a death/laboratory tie.
-\item \code{new_vars} selects the variables to merge into ADSL. All ADSL subjects are
+\item \code{new_vars} selects the variables to merge into \code{ADSL}. All \code{ADSL} subjects are
 retained; subject \code{09-1099} has no eligible source record, so both new
 variables are missing. The temporary event number is not retained.
 \item \code{check_type = "error"} stops if candidate records are not unique with
@@ -249,7 +245,7 @@ derive_vars_extreme_event(
   check_type = "error",
   new_vars = exprs(LSTALVDT, LALVSRC)
 )
-#> # A tibble: 6 x 6
+#> # A tibble: 6 × 6
 #>   STUDYID USUBJID TRTEDT     DTHDT      LSTALVDT   LALVSRC      
 #>   <chr>   <chr>   <date>     <date>     <date>     <chr>        
 #> 1 PILOT01 01-1130 2014-08-16 2014-09-13 2014-09-13 Death date   
@@ -260,25 +256,22 @@ derive_vars_extreme_event(
 #> 6 PILOT01 09-1099 NA         NA         NA         <NA>         }\if{html}{\out{</div>}}}
 \subsection{Derive a reported death cause with an explicit tie-break rule}{
 
-Select the earliest dated qualifying report from AE or DS and add its
-date and reported cause to ADSL. This is an illustrative source-selection
-rule, not clinical adjudication of conflicting reports.
+For each subject, we wish to select the earliest dated qualifying report
+from \code{AE} or \code{DS} and add its date and reported cause to \code{ADSL}.
 \itemize{
 \item Each event maps its source variables to the common names \code{DTHCAUS} and
 \code{DTHDT}. The final \code{order} uses these names across the combined events.
 \item Date takes precedence over source: \code{order = exprs(DTHDT, event_nr)} and
-\code{mode = "first"} choose the earliest date, with AE preferred over DS only
+\code{mode = "first"} choose the earliest date, with \code{AE} preferred over \code{DS} only
 when dates are equal. Subject \code{PAT04} illustrates this tie.
 \item \code{check_type = "error"} stops if multiple eligible reports from the same
 source share a subject and date. Resolve such ambiguity using a
 study-specific rule before deriving the reported cause.
 \item \code{DTHCAUS} and \code{DTHDT} are taken together from the selected qualifying
 record. \code{DTHDT} is not an independent derivation from all death records.
-The DS record for \code{PAT03} reports death on 2022-03-03, but its text does
+The \code{DS} record for \code{PAT03} reports death on 2022-03-03, but its text does
 not satisfy this example's cause-selection condition, so both derived
-variables are missing. This does not mean the subject is alive or that
-their death date is unknown. Derive the death date separately if records
-without an eligible reported cause must also contribute to it.
+variables are missing.
 }
 
 \if{html}{\out{<div class="sourceCode r">}}\preformatted{adsl <- tribble(
@@ -289,10 +282,10 @@ without an eligible reported cause must also contribute to it.
   "STUDY01", "PAT04"
 )
 ae <- tribble(
-  ~STUDYID, ~USUBJID, ~AESEQ, ~AEDECOD, ~AEOUT, ~AEDTHDTC,
-  "STUDY01", "PAT01", 12, "SUDDEN DEATH", "FATAL", "2021-04-04",
-  "STUDY01", "PAT01", 13, "CARDIAC ARREST", "FATAL", "2021-04-03",
-  "STUDY01", "PAT04",  1, "RESPIRATORY FAILURE", "FATAL", "2022-02-01"
+   ~STUDYID, ~USUBJID, ~AESEQ,              ~AEDECOD,  ~AEOUT,    ~AEDTHDTC,
+  "STUDY01",  "PAT01",     12,        "SUDDEN DEATH", "FATAL", "2021-04-04",
+  "STUDY01",  "PAT01",     13,      "CARDIAC ARREST", "FATAL", "2021-04-03",
+  "STUDY01",  "PAT04",      1, "RESPIRATORY FAILURE", "FATAL", "2022-02-01"
 )
 
 ds <- tribble(
@@ -337,7 +330,7 @@ derive_vars_extreme_event(
   check_type = "error",
   new_vars = exprs(DTHCAUS, DTHDT)
 )
-#> # A tibble: 4 x 4
+#> # A tibble: 4 × 4
 #>   STUDYID USUBJID DTHCAUS                             DTHDT     
 #>   <chr>   <chr>   <chr>                               <date>    
 #> 1 STUDY01 PAT01   CARDIAC ARREST                      2021-04-03
@@ -346,23 +339,22 @@ derive_vars_extreme_event(
 #> 4 STUDY01 PAT04   RESPIRATORY FAILURE                 2022-02-01}\if{html}{\out{</div>}}}
 \subsection{Derive a confirmation date using \code{event_joined()}}{
 
-For this synthetic study, a laboratory elevation is confirmed when ALT
+In this example, a laboratory elevation is confirmed when ALT
 exceeds three times the upper limit of normal (ULN) on two consecutive
-calendar days. Derive the first confirmation date, i.e., the second date
-of the pair. This illustrates a study-specific programming rule, not a
-diagnosis. \code{AVAL} is the ALT result in U/L and \code{ANRHI} is its ULN in U/L.
+calendar days. We wish to derive the first confirmation date, i.e., the second
+date of the pair. \code{AVAL} is the ALT result in U/L and \code{ANRHI} is its ULN in U/L.
 \itemize{
 \item The condition compares each assessment with earlier assessments from the
 same subject using \code{event_joined()}, \code{join_type = "before"}, and
 \code{order = exprs(ADT)}. Variables from earlier records have the \code{.join}
-suffix. \code{ADT == ADT.join + 1} requires consecutive dates, not merely
-consecutive records. The example has one ALT assessment per subject/day.
+suffix. \code{ADT == ADT.join + 1} requires consecutive dates. The example has
+one ALT assessment per subject/day.
 \item Both results must exceed their respective ULN threshold. Missing values
 do not establish confirmation. The selected record supplies \code{ADT} from the
 confirming assessment; the outer \code{mode = "first"} selects the first such date.
 \item \code{new_vars} renames \code{ADT} to \code{ALTCDT}. Subjects with a gap between elevated
 results (\code{PAT02}), an unconfirmed elevation (\code{PAT04}), or no laboratory
-records (\code{PAT05}) remain in ADSL with a missing confirmation date.
+records (\code{PAT05}) remain in \code{ADSL} with a missing confirmation date.
 }
 
 \if{html}{\out{<div class="sourceCode r">}}\preformatted{adsl <- tribble(
@@ -407,7 +399,7 @@ derive_vars_extreme_event(
   mode = "first",
   new_vars = exprs(ALTCDT = ADT)
 )
-#> # A tibble: 5 x 3
+#> # A tibble: 5 × 3
 #>   STUDYID USUBJID ALTCDT    
 #>   <chr>   <chr>   <date>    
 #> 1 STUDY01 PAT01   2024-01-02

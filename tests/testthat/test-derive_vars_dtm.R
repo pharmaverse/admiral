@@ -565,7 +565,7 @@ test_that("impute_dtc_dtm Test 20: wrong input to `date_imputation`", {
     error = TRUE
   )
 
-  # impossible date/time after imputation
+  # impossible date/time after imputation (error)
   expect_snapshot(
     impute_dtc_dtm(
       dtc = c("2019-02"),
@@ -573,6 +573,16 @@ test_that("impute_dtc_dtm Test 20: wrong input to `date_imputation`", {
       date_imputation = "30"
     ),
     error = TRUE
+  )
+
+  # impossible date/time after imputation (warning)
+  expect_snapshot(
+    impute_dtc_dtm(
+      dtc = c("2019-02"),
+      highest_imputation = "D",
+      date_imputation = "30",
+      check_datetime_type = "warning"
+    )
   )
 })
 

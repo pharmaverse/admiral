@@ -5,7 +5,9 @@
 #'
 #' @param start_date The start date
 #'
-#'   A date or date-time object is expected.
+#'   A date or datetime object is expected. Datetimes must have a time zone,
+#'   and the timezone of the start date must match that of the end date. Dates are
+#'   treated as UTC.
 #'
 #'   Refer to `derive_vars_dt()` to impute and derive a date from a date
 #'   character vector to a date object.
@@ -14,7 +16,9 @@
 #'
 #' @param end_date The end date
 #'
-#'   A date or date-time object is expected.
+#'   A date or datetime object is expected. Datetimes must have a time zone,
+#'   and the timezone of the start date must match that of the end date. Dates are
+#'   treated as UTC.
 #'
 #'   Refer to `derive_vars_dt()` to impute and derive a date from a date
 #'   character vector to a date object.
@@ -93,6 +97,12 @@
 #' @details The output is a numeric vector providing the duration as time from
 #' start to end date in the specified unit. If the end date is before the start
 #' date, the duration is negative.
+#'
+#' @section Time Zones:
+#'
+#' Datetimes must have a time zone, and `start_date` and `end_date` must have
+#' the same time zone. Otherwise an error is issued. Dates are treated as UTC.
+#' If needed, use `lubridate::force_tz()` to set the time zone.
 #'
 #' @section Duration Type:
 #'
@@ -197,6 +207,23 @@ compute_duration <- function(start_date,
   assert_logical_scalar(add_one)
   assert_logical_scalar(trunc_out)
 
+  start_tz <- tz(start_date)
+  end_tz <- tz(end_date)
+  if (start_tz == "" || end_tz == "") {
+    cli_abort(c(
+      "{.arg start_date} and {.arg end_date} must have a time zone.",
+      i = "Please use {.fun lubridate::force_tz} to set the time zone."
+    ))
+  }
+  if (start_tz != end_tz) {
+    cli_abort(c(
+      paste(
+        "{.arg start_date} and {.arg end_date} must have the same time zone",
+        "but have {.val {start_tz}} and {.val {end_tz}}."
+      ),
+      i = "Please review the input data and/or use {.fun lubridate::force_tz} to set the time zone."
+    ))
+  }
 
   # Derivation
   if (floor_in) {

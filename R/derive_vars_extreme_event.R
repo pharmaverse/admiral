@@ -95,14 +95,10 @@
 #'
 #' @caption Derive the last known alive date from multiple sources
 #'
-#' @info All records in these examples are synthetic. For each subject, select
-#'   the latest of the death date, a dated laboratory assessment, and treatment
-#'   end. These sources are an illustrative study rule; their eligibility should
-#'   be specified for the study. Keep the selected date and its source in ADSL.
+#' @info For each subject, we wish to select the latest date out of
+#'   the death date, a dated laboratory assessment, and treatment
+#'   end.
 #'
-#' - `dataset` is the ADSL dataset to receive the new variables. `by_vars`
-#'   identifies subjects by study and subject ID, so records from different
-#'   studies are not combined even if they share a subject ID.
 #' - `source_datasets` supplies the datasets named by each `event()`.
 #' - The laboratory event first selects the last nonmissing `ADT` per subject
 #'   using its own `order` and `mode`. The outer `order` and `mode` then select
@@ -111,7 +107,7 @@
 #'   `order = exprs(LSTALVDT, desc(event_nr))` and `mode = "last"`, an equal-date
 #'   tie favors the event listed first: death, then laboratory, then treatment
 #'   end. Subject `09-1088` illustrates a death/laboratory tie.
-#' - `new_vars` selects the variables to merge into ADSL. All ADSL subjects are
+#' - `new_vars` selects the variables to merge into `ADSL`. All `ADSL` subjects are
 #'   retained; subject `09-1099` has no eligible source record, so both new
 #'   variables are missing. The temporary event number is not retained.
 #' - `check_type = "error"` stops if candidate records are not unique with
@@ -185,25 +181,22 @@
 #'
 #' @caption Derive a reported death cause with an explicit tie-break rule
 #'
-#' @info Select the earliest dated qualifying report from AE or DS and add its
-#'   date and reported cause to ADSL. This is an illustrative source-selection
-#'   rule, not clinical adjudication of conflicting reports.
+#' @info For each subject, we wish to select the earliest dated qualifying report
+#'   from `AE` or `DS` and add its date and reported cause to `ADSL`.
 #'
 #' - Each event maps its source variables to the common names `DTHCAUS` and
 #'   `DTHDT`. The final `order` uses these names across the combined events.
 #' - Date takes precedence over source: `order = exprs(DTHDT, event_nr)` and
-#'   `mode = "first"` choose the earliest date, with AE preferred over DS only
+#'   `mode = "first"` choose the earliest date, with `AE` preferred over `DS` only
 #'   when dates are equal. Subject `PAT04` illustrates this tie.
 #' - `check_type = "error"` stops if multiple eligible reports from the same
 #'   source share a subject and date. Resolve such ambiguity using a
 #'   study-specific rule before deriving the reported cause.
 #' - `DTHCAUS` and `DTHDT` are taken together from the selected qualifying
 #'   record. `DTHDT` is not an independent derivation from all death records.
-#'   The DS record for `PAT03` reports death on 2022-03-03, but its text does
+#'   The `DS` record for `PAT03` reports death on 2022-03-03, but its text does
 #'   not satisfy this example's cause-selection condition, so both derived
-#'   variables are missing. This does not mean the subject is alive or that
-#'   their death date is unknown. Derive the death date separately if records
-#'   without an eligible reported cause must also contribute to it.
+#'   variables are missing.
 #'
 #' @code
 #' adsl <- tribble(
@@ -214,10 +207,10 @@
 #'   "STUDY01", "PAT04"
 #' )
 #' ae <- tribble(
-#'   ~STUDYID, ~USUBJID, ~AESEQ, ~AEDECOD, ~AEOUT, ~AEDTHDTC,
-#'   "STUDY01", "PAT01", 12, "SUDDEN DEATH", "FATAL", "2021-04-04",
-#'   "STUDY01", "PAT01", 13, "CARDIAC ARREST", "FATAL", "2021-04-03",
-#'   "STUDY01", "PAT04",  1, "RESPIRATORY FAILURE", "FATAL", "2022-02-01"
+#'    ~STUDYID, ~USUBJID, ~AESEQ,              ~AEDECOD,  ~AEOUT,    ~AEDTHDTC,
+#'   "STUDY01",  "PAT01",     12,        "SUDDEN DEATH", "FATAL", "2021-04-04",
+#'   "STUDY01",  "PAT01",     13,      "CARDIAC ARREST", "FATAL", "2021-04-03",
+#'   "STUDY01",  "PAT04",      1, "RESPIRATORY FAILURE", "FATAL", "2022-02-01"
 #' )
 #'
 #' ds <- tribble(
@@ -265,23 +258,22 @@
 #'
 #' @caption Derive a confirmation date using `event_joined()`
 #'
-#' @info For this synthetic study, a laboratory elevation is confirmed when ALT
+#' @info In this example, a laboratory elevation is confirmed when ALT
 #'   exceeds three times the upper limit of normal (ULN) on two consecutive
-#'   calendar days. Derive the first confirmation date, i.e., the second date
-#'   of the pair. This illustrates a study-specific programming rule, not a
-#'   diagnosis. `AVAL` is the ALT result in U/L and `ANRHI` is its ULN in U/L.
+#'   calendar days. We wish to derive the first confirmation date, i.e., the second
+#'   date of the pair. `AVAL` is the ALT result in U/L and `ANRHI` is its ULN in U/L.
 #'
 #' - The condition compares each assessment with earlier assessments from the
 #'   same subject using `event_joined()`, `join_type = "before"`, and
 #'   `order = exprs(ADT)`. Variables from earlier records have the `.join`
-#'   suffix. `ADT == ADT.join + 1` requires consecutive dates, not merely
-#'   consecutive records. The example has one ALT assessment per subject/day.
+#'   suffix. `ADT == ADT.join + 1` requires consecutive dates. The example has
+#'   one ALT assessment per subject/day.
 #' - Both results must exceed their respective ULN threshold. Missing values
 #'   do not establish confirmation. The selected record supplies `ADT` from the
 #'   confirming assessment; the outer `mode = "first"` selects the first such date.
 #' - `new_vars` renames `ADT` to `ALTCDT`. Subjects with a gap between elevated
 #'   results (`PAT02`), an unconfirmed elevation (`PAT04`), or no laboratory
-#'   records (`PAT05`) remain in ADSL with a missing confirmation date.
+#'   records (`PAT05`) remain in `ADSL` with a missing confirmation date.
 #'
 #' @code
 #' adsl <- tribble(
