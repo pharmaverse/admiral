@@ -80,6 +80,9 @@ updated to state that `{admiral}` creates date-times in UTC. (#2763)
 
 ## Documentation
 
+- The OCCDS vignette was updated to add a section describing how to derive SMQ variables for
+  algorithmic queries. (#3184)
+
 - Corrected the `ADLB` template label for `PARAMCD = "CK"` from `"Creatinine Kinase"` to `"Creatine Kinase"` (#3170).
 
 - Updated the "Lab Grading" vignette to replace the deprecated `abnormal_indicator` argument reference
