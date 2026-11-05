@@ -110,11 +110,23 @@ impute_dtc_dtm(
   time_imputation = "00:00:00"
 )
 #> Error in `impute_dtc_dtm()`:
-#> ! Some imputed dates are invalid.
-#> ℹ `date_imputation` is set to "12-31". Are you sure that with this value you
-#>   are generating all valid dates? E.g. `date_imputation = 31` would impute
-#>   "2020-02" to "2020-02-31", which is invalid.
+#> ! 1 datetime is invalid, possibly due to a data issue or as a result of
+#>   imputation. Please review the function arguments and/or your data and correct
+#>   your selection. See the problematic datetime below, where the raw datetime is
+#>   what is passed to the function and the final datetime is the result of any
+#>   imputation:
+#> • Raw datetime 2019-02, final datetime 2019-02-31T00:00:00.
+#> ℹ You can control whether this is a message/warning/error, or switch it off
+#>   entirely, through the `check_datetime_type` argument.
 ```
+
+Note the text in the error message, which reminds you that if you wish
+to allow the function to continue executing and just throw a warning
+(for instance if the source of the problem is a temporary data issue
+rather than the imputation itself, e.g. a source value of `2019-13`),
+you can set the `check_datetime_type` argument to `"warning"`, which
+will turn any invalid datetime strings to `NA` rather than stop
+execution entirely.
 
 Therefore the keywords `"first"` or `"last"` can be specified in
 `date_imputation` to request that missing parts are replaced by the

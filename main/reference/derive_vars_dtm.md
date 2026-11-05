@@ -21,7 +21,8 @@ derive_vars_dtm(
   max_dates = NULL,
   max_dates_strict = NULL,
   preserve = FALSE,
-  ignore_seconds_flag = TRUE
+  ignore_seconds_flag = TRUE,
+  check_datetime_type = "error"
 )
 ```
 
@@ -411,6 +412,23 @@ derive_vars_dtm(
 
   :   `TRUE`
 
+- check_datetime_type:
+
+  Check if any invalid datetimes are detected?
+
+  If `"warning"`, `"message"`, or `"error"` is specified, the specified
+  message is issued if any invalid datetimes are detected, either due to
+  a data issue or as a result of incorrect imputation. In that case, if
+  `check_datetime_type` is not `"error"`, the function returns `NA`.
+
+  Permitted values
+
+  :   `"none"`, `"message"`, `"warning"`, `"error"`
+
+  Default value
+
+  :   `"error"`
+
 ## Value
 
 The input dataset with the datetime `*DTM` (and the date/time imputation
@@ -427,9 +445,13 @@ derived if it already exists in the input dataset. However, if `*TMF`
 already exists in the input dataset, a warning is issued and `*TMF` will
 be overwritten.
 
-Additionally, the function will throw an error if imputation rules cause
-an invalid datetime (e.g. "2020-02-01T25:00:00") to be generated. In
-this case, the user should adjust the imputation rules.
+Additionally, the function can output a message, throw an error or issue
+a warning (depending on the `check_datetime_type` argument) if a data
+issue or imputation rules cause an invalid datetime (e.g.
+`"2020-01-28T25:00:00"`) to be generated. In this case, the user should
+fix the data issue or adjust the imputation rules. It is also possible
+to specify `check_datetime_type = "none"` to silently ignore any issues.
+Note that any invalid datetimes will be always returned as `NA`.
 
 The datetime is created in UTC.
 
@@ -645,6 +667,49 @@ partial dates. For example, `"2019---18T15:-:05"`, will be displayed as
     #> 5 "2019"              2019-06-30 23:59:59 M      H
     #> 6 "2019---07"         2019-06-07 23:59:59 M      H
     #> 7 ""                  NA                  <NA>   <NA>  
+
+### Handle invalid datetimes with a warning (`check_datetime_type`)
+
+By default, if imputation causes an invalid datetime (e.g. day 30 in
+February), an error is thrown. Setting
+`check_datetime_type = "warning"`, `"message"` or `"none"` issues a
+warning, message or nothing at all instead, and returns `NA` for the
+invalid datetime(s), allowing execution to continue. This can be useful
+for exploratory work or if a temporary data issue needs to be ignored
+during development.
+
+    aedt <- tribble(
+      ~AEENDTC,
+      "2020-07",
+      "2020-02",
+      "2020-07-14",
+      "2020-13-01"
+    )
+
+    derive_vars_dtm(
+      aedt,
+      new_vars_prefix = "AEN",
+      dtc = AEENDTC,
+      highest_imputation = "D",
+      date_imputation = "30",
+      check_datetime_type = "warning"
+    )
+    #> # A tibble: 4 × 4
+    #>   AEENDTC    AENDTM              AENDTF AENTMF
+    #>   <chr>      <dttm>              <chr>  <chr>
+    #> 1 2020-07    2020-07-30 00:00:00 D      H
+    #> 2 2020-02    NA                  <NA>   <NA>
+    #> 3 2020-07-14 2020-07-14 00:00:00 <NA>   H
+    #> 4 2020-13-01 NA                  <NA>   <NA>
+    #> Warning: 2 datetimes are invalid, possibly due to a data issue or as a result of
+    #> imputation. Please review the function arguments and/or your data and correct
+    #> your selection. See the problematic datetimes below, where the raw datetime is
+    #> what is passed to the function and the final datetime is the result of any
+    #> imputation:
+    #> • Raw datetime 2020-02, final datetime 2020-02-30T00:00:00.
+    #> • Raw datetime 2020-13-01, final datetime 2020-13-01T00:00:00.
+    #> i You can control whether this is a message/warning/error, or switch it off
+    #>   entirely, through the `check_datetime_type` argument.
 
 ### Further examples
 

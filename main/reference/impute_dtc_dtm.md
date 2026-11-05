@@ -15,7 +15,8 @@ impute_dtc_dtm(
   min_dates_strict = NULL,
   max_dates = NULL,
   max_dates_strict = NULL,
-  preserve = FALSE
+  preserve = FALSE,
+  check_datetime_type = "error"
 )
 ```
 
@@ -323,6 +324,23 @@ impute_dtc_dtm(
 
   :   `FALSE`
 
+- check_datetime_type:
+
+  Check if any invalid datetimes are detected?
+
+  If `"warning"`, `"message"`, or `"error"` is specified, the specified
+  message is issued if any invalid datetimes are detected, either due to
+  a data issue or as a result of incorrect imputation. In that case, if
+  `check_datetime_type` is not `"error"`, the function returns `NA`.
+
+  Permitted values
+
+  :   `"none"`, `"message"`, `"warning"`, `"error"`
+
+  Default value
+
+  :   `"error"`
+
 ## Value
 
 A character vector
@@ -331,6 +349,14 @@ A character vector
 
 This is a vector-oriented helper and is not usually called directly on a
 data frame with `%>%`.
+
+Additionally, the function can output a message, throw an error or issue
+a warning (depending on the `check_datetime_type` argument) if a data
+issue or imputation rules cause an invalid datetime (e.g.
+`"2020-01-28T25:00:00"`) to be generated. In this case, the user should
+fix the data issue or adjust the imputation rules. It is also possible
+to specify `check_datetime_type = "none"` to silently ignore any issues.
+Note that any invalid datetimes will be always returned as `NA`.
 
 ## See also
 
@@ -451,4 +477,23 @@ impute_dtc_dtm(
   highest_imputation = "Y"
 )
 #> [1] "2020-12-06T12:12:00" "2020-01-01T01:01:00"
+
+# Control error vs warning behavior for invalid datetimes
+# By default (check_datetime_type = "error"), imputing day 30 for February raises an error
+# Setting check_datetime_type = "warning" returns NA with a warning instead
+impute_dtc_dtm(
+  "2020-02",
+  highest_imputation = "D",
+  date_imputation = "30",
+  check_datetime_type = "warning"
+)
+#> Warning: 1 datetime is invalid, possibly due to a data issue or as a result of
+#> imputation. Please review the function arguments and/or your data and correct
+#> your selection. See the problematic datetime below, where the raw datetime is
+#> what is passed to the function and the final datetime is the result of any
+#> imputation:
+#> • Raw datetime 2020-02, final datetime 2020-02-30T00:00:00.
+#> ℹ You can control whether this is a message/warning/error, or switch it off
+#>   entirely, through the `check_datetime_type` argument.
+#> [1] NA
 ```
