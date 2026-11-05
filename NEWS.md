@@ -8,6 +8,12 @@ output datasets with this class. (#3160)
 
 ## Updates of Existing Functions
 
+- Updated `compute_qual_imputation()` with named methods `"strip"` and `"shift"`,
+  an additive `offset` argument, argument validation, and clearer documentation.
+  Malformed qualified results now return missing values without warnings. Numeric
+  methods `1` and `2`, and the `factor` argument, remain supported with deprecation
+  messages. (#2922)
+
 - Various enhancements were made to the `derive_vars_dt()`, `derive_vars_dtm()`, 
 `convert_dtc_to_dt()`, `convert_dtc_to_dtm()`, `impute_dtc_dt()` and `impute_dtc_dtm()` 
 functions: 
@@ -45,6 +51,12 @@ of `compute_duration()`, `derive_vars_dtm()`, and `convert_dtc_to_dtm()` was
 updated to state that `{admiral}` creates date-times in UTC. (#2763)
 
 ## Breaking Changes
+
+- `compute_qual_imputation()` now requires qualified results to match
+  `^[<>]=?[0-9]+[.]?[0-9]*$`. Malformed strings previously converted to numbers,
+  such as `"0>1"` and `"-<0.9>"`, now return `NA_real_`. Whitespace and signed
+  qualified results are not accepted. Unqualified signed decimal numbers remain
+  supported. Invalid method and offset arguments now raise errors. (#2922)
 
 - `impute_dtc_dt()` and `impute_dtc_dtm()` now return `NA_character_` rather than an 
   invalid date/datetime string, in line with the updates made to date/datetime functions
