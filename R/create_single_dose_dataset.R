@@ -477,10 +477,10 @@ create_single_dose_dataset <- function(dataset,
     data_not_once <-
       mutate(
         data_not_once,
-        !!end_datetime := case_when(
-          DOSE_WINDOW %in% c("MINUTE", "HOUR") ~ !!start_datetime,
-          DOSE_WINDOW %in% c("DAY", "WEEK", "MONTH", "YEAR") ~
-            ymd_hms(paste0(!!start_date, " ", format(!!end_datetime, format = "%H:%M:%S")))
+        !!end_datetime := if_else(
+          DOSE_WINDOW %in% c("MINUTE", "HOUR"),
+          !!start_datetime,
+          ymd_hms(paste0(!!start_date, " ", format(!!end_datetime, format = "%H:%M:%S")))
         )
       )
   }
