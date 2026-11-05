@@ -196,6 +196,10 @@ test_that("compute_qual_imputation Test 30: validate argument types and method",
   for (method in list(0, 3, 1.5, NA_real_, numeric(), c(1, 2), Inf)) {
     expect_error(compute_qual_imputation("<40", method), class = "compute_qual_imputation_method")
   }
+  expect_snapshot(
+    compute_qual_imputation("<40", imputation_type = 0),
+    error = TRUE, cnd_class = TRUE
+  )
 })
 
 ## Test 31: validate offsets ----
@@ -209,10 +213,14 @@ test_that("compute_qual_imputation Test 31: validate offsets", {
       class = "compute_qual_imputation_offset"
     )
   }
+  expect_snapshot(
+    compute_qual_imputation("<40", offset = -1),
+    error = TRUE, cnd_class = TRUE
+  )
   expect_error(compute_qual_imputation("<40", factor = "1"), class = "assert_numeric_vector")
-  expect_error(
+  expect_snapshot(
     compute_qual_imputation("<40", factor = 1, offset = 1),
-    class = "compute_qual_imputation_arguments"
+    error = TRUE, cnd_class = TRUE
   )
   expect_equal(compute_qual_imputation("<40", "shift", offset = 100), 39)
 })
