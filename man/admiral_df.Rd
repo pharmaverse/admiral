@@ -34,8 +34,9 @@ variables defined, which is distinct from its keys never having been set.
 }}
 
 \item{dataset_name}{The name of the dataset, e.g. \code{"ADVS"}, stored in the
-\code{"admiral_dataset_name"} attribute. \code{NULL} leaves a name stored by a previous
-call untouched, so re-keying a dataset does not lose its name.
+\code{"admiral_dataset_name"} attribute. There are no restrictions on its
+casing: it is stored exactly as given. \code{NULL} leaves a name stored by a
+previous call untouched, so re-keying a dataset does not lose its name.
 
 \describe{
 \item{Permitted values}{character scalar or \code{NULL}}
@@ -44,11 +45,12 @@ call untouched, so re-keying a dataset does not lose its name.
 
 \item{dataset_class}{The ADaM dataset class, stored in the
 \code{"admiral_dataset_class"} attribute. This is the ADaM class of the
-dataset, not its R class (which is \code{admiral_df}). \code{"TTE"} is the
-time-to-event subclass of \code{"BDS"}. \code{"ADDL"}, \code{"MDBDS"}, \code{"MDTTE"}, and
-\code{"MDOCCDS"} are the medical device classes (device-level, and the device
-versions of \code{"BDS"}, \code{"TTE"}, and \code{"OCCDS"}). The class is not checked against the variables of
-\code{dataset}. \code{NULL} leaves a class stored by a previous call untouched.
+dataset, not its R class (which is \code{admiral_df}). It must be given in upper
+case, as listed below. \code{"TTE"} is the time-to-event subclass of \code{"BDS"}.
+\code{"ADDL"}, \code{"MDBDS"}, \code{"MDTTE"}, and \code{"MDOCCDS"} are the medical device
+classes (device-level, and the device versions of \code{"BDS"}, \code{"TTE"}, and
+\code{"OCCDS"}). The class is not checked against the variables of \code{dataset}.
+\code{NULL} leaves a class stored by a previous call untouched.
 
 \describe{
 \item{Permitted values}{\code{"ADSL"}, \code{"BDS"}, \code{"OCCDS"}, \code{"TTE"}, \code{"ADDL"}, \code{"MDBDS"},

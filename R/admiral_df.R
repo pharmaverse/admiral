@@ -90,18 +90,20 @@ admiral_dataset_classes <- c(
 #' @permitted list of variables created by `exprs()` or `NULL`
 #'
 #' @param dataset_name The name of the dataset, e.g. `"ADVS"`, stored in the
-#'   `"admiral_dataset_name"` attribute. `NULL` leaves a name stored by a previous
-#'   call untouched, so re-keying a dataset does not lose its name.
+#'   `"admiral_dataset_name"` attribute. There are no restrictions on its
+#'   casing: it is stored exactly as given. `NULL` leaves a name stored by a
+#'   previous call untouched, so re-keying a dataset does not lose its name.
 #'
 #' @permitted character scalar or `NULL`
 #'
 #' @param dataset_class The ADaM dataset class, stored in the
 #'   `"admiral_dataset_class"` attribute. This is the ADaM class of the
-#'   dataset, not its R class (which is `admiral_df`). `"TTE"` is the
-#'   time-to-event subclass of `"BDS"`. `"ADDL"`, `"MDBDS"`, `"MDTTE"`, and
-#'   `"MDOCCDS"` are the medical device classes (device-level, and the device
-#'   versions of `"BDS"`, `"TTE"`, and `"OCCDS"`). The class is not checked against the variables of
-#'   `dataset`. `NULL` leaves a class stored by a previous call untouched.
+#'   dataset, not its R class (which is `admiral_df`). It must be given in upper
+#'   case, as listed below. `"TTE"` is the time-to-event subclass of `"BDS"`.
+#'   `"ADDL"`, `"MDBDS"`, `"MDTTE"`, and `"MDOCCDS"` are the medical device
+#'   classes (device-level, and the device versions of `"BDS"`, `"TTE"`, and
+#'   `"OCCDS"`). The class is not checked against the variables of `dataset`.
+#'   `NULL` leaves a class stored by a previous call untouched.
 #'
 #' @permitted `"ADSL"`, `"BDS"`, `"OCCDS"`, `"TTE"`, `"ADDL"`, `"MDBDS"`,
 #'   `"MDTTE"`, `"MDOCCDS"`, or `NULL`
