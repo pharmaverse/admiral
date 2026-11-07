@@ -36,7 +36,7 @@ advs <- tribble(
 
 get_dataset_keys(advs)
 
-advs <- admiral_df(advs, keys = exprs(USUBJID, PARAMCD, AVISIT))
+advs <- admiral_df(advs, dataset_keys = exprs(USUBJID, PARAMCD, AVISIT))
 get_dataset_keys(advs)
 }
 \seealso{

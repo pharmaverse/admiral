@@ -8,8 +8,8 @@
 #' [admiral_df()], which validates its arguments before calling this.
 #'
 #' @param x A data frame (or `NULL`)
-#' @param keys Character vector of key variables, stored in the
-#'   `"admiral_keys"` attribute
+#' @param dataset_keys Character vector of key variables, stored in the
+#'   `"admiral_dataset_keys"` attribute
 #' @param dataset_name Character scalar, stored in the `"admiral_dataset_name"`
 #'   attribute
 #' @param dataset_class Character scalar, stored in the `"admiral_dataset_class"`
@@ -26,12 +26,12 @@
 #'
 #' @keywords internal
 #' @family internal
-new_admiral_df <- function(x, keys = NULL, dataset_name = NULL, dataset_class = NULL) {
+new_admiral_df <- function(x, dataset_keys = NULL, dataset_name = NULL, dataset_class = NULL) {
   if (is.null(x)) {
     return(x)
   }
-  if (!is.null(keys)) {
-    attr(x, "admiral_keys") <- keys
+  if (!is.null(dataset_keys)) {
+    attr(x, "admiral_dataset_keys") <- dataset_keys
   }
   if (!is.null(dataset_name)) {
     attr(x, "admiral_dataset_name") <- dataset_name
@@ -72,15 +72,15 @@ admiral_dataset_classes <- c(
 #' infers the keys of a dataset: if they have not been set with this function,
 #' functions which need them ask for them to be set. The class, by contrast, is
 #' inferred from the dataset if it has not been set (see
-#' [guess_admiral_df_class()]), but a class set here always takes precedence.
+#' [infer_dataset_class()]), but a class set here always takes precedence.
 #'
 #' @param dataset A data frame. It does not need to have the `admiral_df` class
 #'   already; the class is added if it is missing.
 #'
 #' @permitted a data frame
 #'
-#' @param keys The key variables of `dataset`, in key order, e.g.
-#'   `exprs(USUBJID, PARAMCD, AVISIT)`, stored in the `"admiral_keys"`
+#' @param dataset_keys The key variables of `dataset`, in key order, e.g.
+#'   `exprs(USUBJID, PARAMCD, AVISIT)`, stored in the `"admiral_dataset_keys"`
 #'   attribute. They must be variables of `dataset`: if any is not, a warning is
 #'   issued and the keys are not set, so any keys set by a previous call are
 #'   kept. An empty list, `exprs()`, records that the dataset has no key
@@ -96,7 +96,7 @@ admiral_dataset_classes <- c(
 #' @permitted character scalar or `NULL`
 #'
 #' @param dataset_class The ADaM dataset class, stored in the
-#'   `"admiral_dataset_class"` attribute. This is the CDISC class of the
+#'   `"admiral_dataset_class"` attribute. This is the ADaM class of the
 #'   dataset, not its R class (which is `admiral_df`). `"TTE"` is the
 #'   time-to-event subclass of `"BDS"`. `"ADDL"`, `"MDBDS"`, `"MDTTE"`, and
 #'   `"MDOCCDS"` are the medical device classes (device-level, and the device
@@ -106,9 +106,9 @@ admiral_dataset_classes <- c(
 #' @permitted `"ADSL"`, `"BDS"`, `"OCCDS"`, `"TTE"`, `"ADDL"`, `"MDBDS"`,
 #'   `"MDTTE"`, `"MDOCCDS"`, or `NULL`
 #'
-#' @return `dataset` with the `admiral_df` class, and the `"admiral_keys"`,
+#' @return `dataset` with the `admiral_df` class, and the `"admiral_dataset_keys"`,
 #'   `"admiral_dataset_name"`, and `"admiral_dataset_class"` attributes for those of
-#'   `keys`, `dataset_name`, and `dataset_class` which were supplied (or had been
+#'   `dataset_keys`, `dataset_name`, and `dataset_class` which were supplied (or had been
 #'   stored by a previous call).
 #'
 #' @details
@@ -163,7 +163,7 @@ admiral_dataset_classes <- c(
 #'
 #' advs <- admiral_df(
 #'   advs,
-#'   keys = exprs(USUBJID, PARAMCD, AVISIT),
+#'   dataset_keys = exprs(USUBJID, PARAMCD, AVISIT),
 #'   dataset_name = "ADVS",
 #'   dataset_class = "BDS"
 #' )
@@ -183,7 +183,7 @@ admiral_dataset_classes <- c(
 #'   ```r
 #'   admiral_df(
 #'     advs,
-#'     keys = chr2vars(metacore::get_keys(spec, "ADVS")$variable),
+#'     dataset_keys = chr2vars(metacore::get_keys(spec, "ADVS")$variable),
 #'     dataset_name = "ADVS"
 #'   )
 #'   ```
@@ -191,7 +191,7 @@ admiral_dataset_classes <- c(
 #' @code
 #' advs <- admiral_df(
 #'   advs,
-#'   keys = chr2vars(c("USUBJID", "PARAMCD", "AVISIT"))
+#'   dataset_keys = chr2vars(c("USUBJID", "PARAMCD", "AVISIT"))
 #' )
 #'
 #' # `dataset_name` was not repeated, so the name from the previous call stands
@@ -199,50 +199,36 @@ admiral_dataset_classes <- c(
 #'
 #' @caption Declaring that a dataset has no key variables
 #'
-#' @info An empty `keys` is stored all the same. It is not the same as leaving
+#' @info An empty `dataset_keys` is stored all the same. It is not the same as leaving
 #'   the attribute unset: it records that no key variables are defined.
 #'
 #' @code
-#' advs_no_keys <- admiral_df(advs, keys = exprs())
+#' advs_no_keys <- admiral_df(advs, dataset_keys = exprs())
 #'
 #' get_dataset_keys(advs_no_keys)
 admiral_df <- function(dataset,
-                       keys = NULL,
+                       dataset_keys = NULL,
                        dataset_name = NULL,
                        dataset_class = NULL) {
-  # keys taken from a specification are a character vector, so that case gets
-  # a pointer to the conversion rather than the generic "must be a list"
-  if (is.character(keys)) {
-    cli_abort(c(
-      paste(
-        "Argument {.arg keys} must be a list of variables created by {.fun exprs},",
-        "but is {.obj_type_friendly {keys}}."
-      ),
-      i = paste(
-        "Use {.fun chr2vars} to convert a character vector, e.g.",
-        "{.code chr2vars(metacore::get_keys(spec, \"ADVS\")$variable)}."
-      )
-    ))
-  }
-  assert_vars(keys, optional = TRUE)
+  assert_vars(dataset_keys, optional = TRUE)
   assert_data_frame(dataset)
   assert_character_scalar(dataset_name, optional = TRUE)
   assert_character_scalar(dataset_class, values = admiral_dataset_classes, optional = TRUE)
 
-  if (!is.null(keys)) {
+  if (!is.null(dataset_keys)) {
     # keys are stored as character: they are metadata about the dataset, not
     # expressions to evaluate against it. `unname()` because `vars2chr()`
     # returns a named vector, which would not compare `identical()` to a plain
     # one
-    keys <- unname(vars2chr(keys))
+    dataset_keys <- unname(vars2chr(dataset_keys))
 
     # keys which are not in the dataset are not stored, so that a typo is
     # caught here rather than when the attribute is read. A warning rather than
     # an error, as the rest of the call -- the name, ADaM class and R class -- is still
     # valid
-    missing_keys <- setdiff(keys, colnames(dataset))
+    missing_keys <- setdiff(dataset_keys, colnames(dataset))
     if (length(missing_keys) > 0) {
-      previous_keys <- attr(dataset, "admiral_keys")
+      previous_keys <- attr(dataset, "admiral_dataset_keys")
       cli_warn(c(
         paste(
           "{qty(missing_keys)}Key variable{?s} {.var {missing_keys}}",
@@ -252,13 +238,13 @@ admiral_df <- function(dataset,
           "The keys set previously are kept: {.var {previous_keys}}."
         }
       ))
-      keys <- NULL
+      dataset_keys <- NULL
     }
   }
 
   new_admiral_df(
     dataset,
-    keys = keys,
+    dataset_keys = dataset_keys,
     dataset_name = dataset_name,
     dataset_class = dataset_class
   )
@@ -276,7 +262,7 @@ admiral_df <- function(dataset,
 #' prints as before.
 #'
 #' If no class has been stored, the class inferred from the dataset (see
-#' [guess_admiral_df_class()]) is shown instead, marked as inferred, provided it
+#' [infer_dataset_class()]) is shown instead, marked as inferred, provided it
 #' is one of the ADaM dataset classes.
 #'
 #' @param x An `admiral_df` object
@@ -301,22 +287,22 @@ admiral_df <- function(dataset,
 #'
 #' admiral_df(
 #'   advs,
-#'   keys = exprs(USUBJID, PARAMCD, AVISIT),
+#'   dataset_keys = exprs(USUBJID, PARAMCD, AVISIT),
 #'   dataset_name = "ADVS",
 #'   dataset_class = "BDS"
 #' )
 print.admiral_df <- function(x, ...) {
-  name <- attr(x, "admiral_dataset_name")
+  dataset_name <- attr(x, "admiral_dataset_name")
   dataset_class <- attr(x, "admiral_dataset_class")
-  keys <- attr(x, "admiral_keys")
+  dataset_keys <- attr(x, "admiral_dataset_keys")
   # the header is only printed if something has been stored, so that the output
   # of a derivation which merely carries the class prints as before -- and the
   # class is only inferred then, so that printing such output costs nothing extra
-  if (is.null(name) && is.null(dataset_class) && is.null(keys)) {
+  if (is.null(dataset_name) && is.null(dataset_class) && is.null(dataset_keys)) {
     return(NextMethod())
   }
   if (is.null(dataset_class)) {
-    inferred <- guess_admiral_df_class(x)
+    inferred <- infer_dataset_class(x)
     # only a recognized class is shown: "other" and `NA` say nothing about the
     # dataset worth a place in the header
     if (inferred %in% admiral_dataset_classes) {
@@ -324,12 +310,15 @@ print.admiral_df <- function(x, ...) {
     }
   }
   details <- c(
-    if (!is.null(name)) paste0("name: ", name),
+    if (!is.null(dataset_name)) paste0("name: ", dataset_name),
     if (!is.null(dataset_class)) paste0("class: ", dataset_class),
     # an empty attribute records that no keys are defined, so it is shown
     # rather than omitted as if the keys had never been set
-    if (!is.null(keys)) {
-      paste0("keys: ", if (length(keys) > 0) paste(keys, collapse = ", ") else "none")
+    if (!is.null(dataset_keys)) {
+      paste0(
+        "keys: ",
+        if (length(dataset_keys) > 0) paste(dataset_keys, collapse = ", ") else "none"
+      )
     }
   )
   cat("# An admiral dataset (", paste(details, collapse = ", "), ")\n", sep = "")
@@ -368,15 +357,15 @@ print.admiral_df <- function(x, ...) {
 #'
 #' get_dataset_keys(advs)
 #'
-#' advs <- admiral_df(advs, keys = exprs(USUBJID, PARAMCD, AVISIT))
+#' advs <- admiral_df(advs, dataset_keys = exprs(USUBJID, PARAMCD, AVISIT))
 #' get_dataset_keys(advs)
 get_dataset_keys <- function(dataset) {
   assert_data_frame(dataset, check_is_grouped = FALSE, check_is_rowwise = FALSE)
-  keys <- attr(dataset, "admiral_keys")
-  if (is.null(keys)) {
+  dataset_keys <- attr(dataset, "admiral_dataset_keys")
+  if (is.null(dataset_keys)) {
     return(NULL)
   }
-  chr2vars(keys)
+  chr2vars(dataset_keys)
 }
 
 #' Get the Name of a Dataset
@@ -421,14 +410,14 @@ get_dataset_name <- function(dataset) {
 #'
 #' Returns the ADaM class declared for a dataset with [admiral_df()] if there is
 #' one, and otherwise the class inferred from its variables and records, see
-#' [guess_admiral_df_class()].
+#' [infer_dataset_class()].
 #'
 #' @param dataset A data frame
 #'
 #' @permitted a data frame
 #'
 #' @return A character scalar: the declared class, or the inferred one (which may
-#'   be `"other"` or `NA`, see [guess_admiral_df_class()]).
+#'   be `"other"` or `NA`, see [infer_dataset_class()]).
 #'
 #' @keywords utils_help
 #' @family utils_help
@@ -455,10 +444,10 @@ get_dataset_class <- function(dataset) {
   if (!is.null(declared)) {
     return(declared)
   }
-  guess_admiral_df_class(dataset)
+  infer_dataset_class(dataset)
 }
 
-#' Guess the ADaM Dataset Class
+#' Infer the ADaM Dataset Class
 #'
 #' @description
 #' Attempts to classify a data frame as one of the common ADaM dataset classes
@@ -524,7 +513,7 @@ get_dataset_class <- function(dataset) {
 #'
 #' @keywords internal
 #' @family internal
-guess_admiral_df_class <- function(dataset) {
+infer_dataset_class <- function(dataset) {
   # a grouped or rowwise dataset is classified rather than refused: this is a
   # diagnostic
   assert_data_frame(dataset, check_is_grouped = FALSE, check_is_rowwise = FALSE)
@@ -542,7 +531,7 @@ guess_admiral_df_class <- function(dataset) {
   # data read from SAS has `""` rather than `NA`
   if ("SPDEVID" %in% cols &&
     !any(is.na(dataset$SPDEVID) | dataset$SPDEVID == "")) {
-    return(guess_structure_type(
+    return(infer_class_by_structure(
       dataset,
       id_vars = intersect(c("STUDYID", "SPDEVID"), cols),
       classes = c(tte = "MDTTE", bds = "MDBDS", occds = "MDOCCDS", level = "ADDL")
@@ -555,16 +544,16 @@ guess_admiral_df_class <- function(dataset) {
     return("other")
   }
 
-  guess_structure_type(
+  infer_class_by_structure(
     dataset,
     id_vars = subject_keys,
     classes = c(tte = "TTE", bds = "BDS", occds = "OCCDS", level = "ADSL")
   )
 }
 
-#' Guess the ADaM Dataset Structure from the Variables and Records
+#' Infer the ADaM Dataset Class of Subject or Device Data
 #'
-#' Applies the precedence described in [guess_admiral_df_class()] for one class
+#' Applies the precedence described in [infer_dataset_class()] for one class
 #' of data, subject or device.
 #'
 #' @param dataset A data frame
@@ -577,7 +566,7 @@ guess_admiral_df_class <- function(dataset) {
 #'
 #' @keywords internal
 #' @family internal
-guess_structure_type <- function(dataset, id_vars, classes) {
+infer_class_by_structure <- function(dataset, id_vars, classes) {
   cols <- colnames(dataset)
 
   # `PARAMCD` decides between the parameter-based classes and the rest; TTE is

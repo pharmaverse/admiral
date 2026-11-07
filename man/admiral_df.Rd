@@ -4,7 +4,12 @@
 \alias{admiral_df}
 \title{Create an \code{admiral_df} Dataset}
 \usage{
-admiral_df(dataset, keys = NULL, dataset_name = NULL, dataset_class = NULL)
+admiral_df(
+  dataset,
+  dataset_keys = NULL,
+  dataset_name = NULL,
+  dataset_class = NULL
+)
 }
 \arguments{
 \item{dataset}{A data frame. It does not need to have the \code{admiral_df} class
@@ -15,8 +20,8 @@ already; the class is added if it is missing.
 \item{Default value}{none}
 }}
 
-\item{keys}{The key variables of \code{dataset}, in key order, e.g.
-\code{exprs(USUBJID, PARAMCD, AVISIT)}, stored in the \code{"admiral_keys"}
+\item{dataset_keys}{The key variables of \code{dataset}, in key order, e.g.
+\code{exprs(USUBJID, PARAMCD, AVISIT)}, stored in the \code{"admiral_dataset_keys"}
 attribute. They must be variables of \code{dataset}: if any is not, a warning is
 issued and the keys are not set, so any keys set by a previous call are
 kept. An empty list, \code{exprs()}, records that the dataset has no key
@@ -38,7 +43,7 @@ call untouched, so re-keying a dataset does not lose its name.
 }}
 
 \item{dataset_class}{The ADaM dataset class, stored in the
-\code{"admiral_dataset_class"} attribute. This is the CDISC class of the
+\code{"admiral_dataset_class"} attribute. This is the ADaM class of the
 dataset, not its R class (which is \code{admiral_df}). \code{"TTE"} is the
 time-to-event subclass of \code{"BDS"}. \code{"ADDL"}, \code{"MDBDS"}, \code{"MDTTE"}, and
 \code{"MDOCCDS"} are the medical device classes (device-level, and the device
@@ -52,9 +57,9 @@ versions of \code{"BDS"}, \code{"TTE"}, and \code{"OCCDS"}). The class is not ch
 }}
 }
 \value{
-\code{dataset} with the \code{admiral_df} class, and the \code{"admiral_keys"},
+\code{dataset} with the \code{admiral_df} class, and the \code{"admiral_dataset_keys"},
 \code{"admiral_dataset_name"}, and \code{"admiral_dataset_class"} attributes for those of
-\code{keys}, \code{dataset_name}, and \code{dataset_class} which were supplied (or had been
+\code{dataset_keys}, \code{dataset_name}, and \code{dataset_class} which were supplied (or had been
 stored by a previous call).
 }
 \description{
@@ -77,7 +82,7 @@ are not checked against its records when they are stored. \code{{admiral}} never
 infers the keys of a dataset: if they have not been set with this function,
 functions which need them ask for them to be set. The class, by contrast, is
 inferred from the dataset if it has not been set (see
-\code{\link[=guess_admiral_df_class]{guess_admiral_df_class()}}), but a class set here always takes precedence.
+\code{\link[=infer_dataset_class]{infer_dataset_class()}}), but a class set here always takes precedence.
 }
 \details{
 The keys can come from anywhere: the \code{by_vars} of the derivation which
@@ -137,7 +142,7 @@ advs <- tribble(
 
 advs <- admiral_df(
   advs,
-  keys = exprs(USUBJID, PARAMCD, AVISIT),
+  dataset_keys = exprs(USUBJID, PARAMCD, AVISIT),
   dataset_name = "ADVS",
   dataset_class = "BDS"
 )
@@ -167,14 +172,14 @@ itself, so they are extracted in the calling code; e.g. with a
 
 \if{html}{\out{<div class="sourceCode r">}}\preformatted{admiral_df(
   advs,
-  keys = chr2vars(metacore::get_keys(spec, "ADVS")$variable),
+  dataset_keys = chr2vars(metacore::get_keys(spec, "ADVS")$variable),
   dataset_name = "ADVS"
 )
 }\if{html}{\out{</div>}}
 
 \if{html}{\out{<div class="sourceCode r">}}\preformatted{advs <- admiral_df(
   advs,
-  keys = chr2vars(c("USUBJID", "PARAMCD", "AVISIT"))
+  dataset_keys = chr2vars(c("USUBJID", "PARAMCD", "AVISIT"))
 )
 
 # `dataset_name` was not repeated, so the name from the previous call stands
@@ -182,10 +187,10 @@ get_dataset_name(advs)
 #> [1] "ADVS"}\if{html}{\out{</div>}}}
 \subsection{Declaring that a dataset has no key variables}{
 
-An empty \code{keys} is stored all the same. It is not the same as leaving
+An empty \code{dataset_keys} is stored all the same. It is not the same as leaving
 the attribute unset: it records that no key variables are defined.
 
-\if{html}{\out{<div class="sourceCode r">}}\preformatted{advs_no_keys <- admiral_df(advs, keys = exprs())
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{advs_no_keys <- admiral_df(advs, dataset_keys = exprs())
 
 get_dataset_keys(advs_no_keys)
 #> list()}\if{html}{\out{</div>}}}}

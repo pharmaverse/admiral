@@ -32,7 +32,7 @@ stored, so that the output of a derivation which merely carries the class
 prints as before.
 
 If no class has been stored, the class inferred from the dataset (see
-\code{\link[=guess_admiral_df_class]{guess_admiral_df_class()}}) is shown instead, marked as inferred, provided it
+\code{\link[=infer_dataset_class]{infer_dataset_class()}}) is shown instead, marked as inferred, provided it
 is one of the ADaM dataset classes.
 }
 \examples{
@@ -47,7 +47,7 @@ advs <- tribble(
 
 admiral_df(
   advs,
-  keys = exprs(USUBJID, PARAMCD, AVISIT),
+  dataset_keys = exprs(USUBJID, PARAMCD, AVISIT),
   dataset_name = "ADVS",
   dataset_class = "BDS"
 )

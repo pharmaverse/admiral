@@ -47,8 +47,8 @@ extract_duplicate_records(adsl, exprs(USUBJID))
 Other internal:
 \code{\link{admiral-package}},
 \code{\link[=format.basket_select]{format.basket_select()}},
-\code{\link[=guess_admiral_df_class]{guess_admiral_df_class()}},
-\code{\link[=guess_structure_type]{guess_structure_type()}},
+\code{\link[=infer_class_by_structure]{infer_class_by_structure()}},
+\code{\link[=infer_dataset_class]{infer_dataset_class()}},
 \code{\link[=new_admiral_df]{new_admiral_df()}},
 \code{\link[=signal_duplicate_records]{signal_duplicate_records()}}
 }

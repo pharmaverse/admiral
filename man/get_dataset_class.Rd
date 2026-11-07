@@ -16,14 +16,14 @@ get_dataset_class(dataset)
 }
 \value{
 A character scalar: the declared class, or the inferred one (which may
-be \code{"other"} or \code{NA}, see \code{\link[=guess_admiral_df_class]{guess_admiral_df_class()}}).
+be \code{"other"} or \code{NA}, see \code{\link[=infer_dataset_class]{infer_dataset_class()}}).
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
 
 Returns the ADaM class declared for a dataset with \code{\link[=admiral_df]{admiral_df()}} if there is
 one, and otherwise the class inferred from its variables and records, see
-\code{\link[=guess_admiral_df_class]{guess_admiral_df_class()}}.
+\code{\link[=infer_dataset_class]{infer_dataset_class()}}.
 }
 \examples{
 library(tibble)
