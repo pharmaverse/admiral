@@ -130,7 +130,7 @@ We use the following for support and communications between user and developer c
 
 Along with the authors and contributors, thanks to the following people for their work on the package:
 
-Jaxon Abercrombie, Mahdi About, Teckla Akinyi, Jorge Alcántara Espinosa (Algoria Biometrics),
+Jaxon Abercrombie, Mahdi About, Teckla Akinyi, Jorge Alcántara Espinosa,
 Anthony Arroyo, Alex Assuied, James Black, Claudia Carlucci, Asha Chakma,
 Liming Clark, Bill Denney, Kamila Duniec, Alice Ehmann, Romain Francois, G Gayatri, Ania Golab, Alana Harris, Declan Hodges,
 Solveig Holmgaard, Anthony Howard, Shimeng Huang, Samia Kabi, Leena Khatri, James Kim, John Kirkpatrick, Robin Koeger, Konstantina Koukourikou, 

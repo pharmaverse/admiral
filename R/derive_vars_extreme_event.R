@@ -214,16 +214,17 @@
 #' )
 #'
 #' ds <- tribble(
-#'   ~STUDYID, ~USUBJID, ~DSSEQ, ~DSDECOD, ~DSTERM, ~DSSTDTC,
-#'   "STUDY01", "PAT02", 1, "INFORMED CONSENT OBTAINED",
-#'     "INFORMED CONSENT OBTAINED", "2021-04-03",
-#'   "STUDY01", "PAT02", 2, "RANDOMIZATION",
-#'     "RANDOMIZATION", "2021-04-11",
-#'   "STUDY01", "PAT02", 3, "DEATH",
+#'    ~STUDYID, ~USUBJID, ~DSSEQ,                    ~DSDECOD,
+#'                                   ~DSTERM,     ~DSSTDTC,
+#'   "STUDY01",  "PAT02",      1, "INFORMED CONSENT OBTAINED",
+#'               "INFORMED CONSENT OBTAINED", "2021-04-03",
+#'   "STUDY01",  "PAT02",      2,             "RANDOMIZATION",
+#'                           "RANDOMIZATION", "2021-04-11",
+#'   "STUDY01",  "PAT02",      3,                     "DEATH",
 #'     "DEATH DUE TO PROGRESSION OF DISEASE", "2022-02-01",
-#'   "STUDY01", "PAT03", 1, "DEATH",
-#'     "POST STUDY REPORTING OF DEATH", "2022-03-03",
-#'   "STUDY01", "PAT04", 1, "DEATH",
+#'   "STUDY01",  "PAT03",      1,                     "DEATH",
+#'           "POST STUDY REPORTING OF DEATH", "2022-03-03",
+#'   "STUDY01",  "PAT04",      1,                     "DEATH",
 #'     "DEATH DUE TO PROGRESSION OF DISEASE", "2022-02-01"
 #' )
 #'
