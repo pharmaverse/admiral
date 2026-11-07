@@ -69,10 +69,10 @@ derive_vars_dtm_to_tm <- function(dataset, source_vars) {
     dataset %>%
       mutate(across(.cols = vars2chr(source_vars), .fns = list(new = as_hms))) %>%
       rename_with(.fn = ~ str_replace(., "DTM_new", "TM"), .cols = ends_with("new")) %>%
-      as_admiral_df()
+      new_admiral_df()
   } else {
     dataset %>%
       mutate(!!sym(tm_vars) := as_hms(!!sym(dtm_vars2))) %>%
-      as_admiral_df()
+      new_admiral_df()
   }
 }

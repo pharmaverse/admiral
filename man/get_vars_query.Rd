@@ -81,8 +81,11 @@ get_vars_query(adae, queries)
 \code{\link[=create_query_data]{create_query_data()}}
 
 Utilities used within Derivation functions:
-\code{\link[=as_admiral_df]{as_admiral_df()}},
+\code{\link[=admiral_df]{admiral_df()}},
 \code{\link[=extract_unit]{extract_unit()}},
+\code{\link[=get_dataset_class]{get_dataset_class()}},
+\code{\link[=get_dataset_keys]{get_dataset_keys()}},
+\code{\link[=get_dataset_name]{get_dataset_name()}},
 \code{\link[=get_flagged_records]{get_flagged_records()}},
 \code{\link[=get_not_mapped]{get_not_mapped()}}
 }

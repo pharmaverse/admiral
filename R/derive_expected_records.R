@@ -119,5 +119,5 @@ derive_expected_records <- function(dataset,
   # Combine dataset + newly added records
   bind_rows(dataset, new_obs) %>%
     arrange(!!!chr2vars(exp_obs_vars)) %>%
-    as_admiral_df()
+    new_admiral_df()
 }

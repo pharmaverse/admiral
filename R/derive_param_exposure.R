@@ -193,5 +193,5 @@ derive_param_exposure <- function(dataset = NULL,
       !!!set_values_to
     )
   ) %>%
-    as_admiral_df()
+    new_admiral_df()
 }

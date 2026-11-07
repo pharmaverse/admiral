@@ -490,5 +490,5 @@ create_single_dose_dataset <- function(dataset,
 
   bind_rows(data_once, data_not_once) %>%
     select(!!!keep_source_vars) %>%
-    as_admiral_df()
+    new_admiral_df()
 }
