@@ -1075,3 +1075,57 @@ test_that("summary.admiral_df Test 41: a declared class does not require the var
   )
   expect_identical(summary(adsl)$details, list())
 })
+
+## Test 42: more than one baseline per subject and parameter is reported ----
+test_that("summary.admiral_df Test 42: more than one baseline per subject and parameter is reported", { # nolint
+  input <- tibble::tribble(
+    ~STUDYID, ~USUBJID, ~PARAMCD, ~AVISIT,     ~ABLFL, ~AVAL,
+    "P",      "1",      "SYSBP",  "SCREENING", "Y",      120,
+    "P",      "1",      "SYSBP",  "BASELINE",  "Y",      121,
+    "P",      "1",      "DIABP",  "BASELINE",  "Y",       80,
+    "P",      "1",      "DIABP",  "WEEK 2",    NA,        82,
+    "P",      "2",      "SYSBP",  "WEEK 2",    NA,       130
+  ) %>%
+    admiral_df()
+
+  actual <- summary(input)$details
+  expect_identical(actual$baseline_by, c("USUBJID", "PARAMCD"))
+  # each combination is counted once, however many baselines it has; subject 2
+  # has no baseline, which is not a defect
+  expect_identical(actual$multiple_baselines, 1L)
+  expect_identical(summary(input[-1, ])$details$multiple_baselines, 0L)
+  expect_snapshot(print(summary(input)))
+  expect_snapshot(print(summary(input[-1, ])))
+
+  # a baseline per baseline type, timepoint, or period is not a duplicate
+  for (by_var in c("BASETYPE", "ATPT", "APERIOD")) {
+    by_input <- dplyr::mutate(input, !!by_var := c("A", "B", "A", "A", "A"))
+    by_actual <- summary(by_input)$details
+    expect_identical(by_actual$baseline_by, c("USUBJID", "PARAMCD", by_var))
+    expect_identical(by_actual$multiple_baselines, 0L)
+  }
+
+  # without `ABLFL` the check is not run, and not mentioned
+  no_ablfl <- summary(dplyr::select(input, -ABLFL))
+  expect_null(no_ablfl$details$multiple_baselines)
+  expect_no_match(
+    paste(capture.output(print(no_ablfl), type = "message"), collapse = "\n"),
+    "Checks|baseline"
+  )
+})
+
+# print_summary_checks ----
+## Test 43: failed checks are listed, passed ones combined, absent ones left out ----
+test_that("print_summary_checks Test 43: failed checks are listed, passed ones combined, absent ones left out", { # nolint
+  checks <- list(
+    a = list(failed = "{d$a} a failure{?s}", passed = "no a"),
+    b = list(failed = "{d$b} b failure{?s}", passed = "no b"),
+    c = list(failed = "{d$c} c failure{?s}", passed = "no c"),
+    d = list(failed = "{d$d} d failure{?s}", passed = "no d")
+  )
+  d <- list(a = 2L, b = 0L, c = 0L)
+
+  expect_snapshot(print_summary_checks(d, checks))
+  # nothing is printed if no check ran
+  expect_silent(print_summary_checks(list(), checks))
+})

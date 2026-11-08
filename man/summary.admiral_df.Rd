@@ -38,12 +38,16 @@ flow (randomized, treated, completed), the treatment duration, the end of
 study status, the deaths and their causes, and the age and sex of the
 subjects.
 \item \code{BDS}/\code{MDBDS}: records, subjects, visits, and the distribution of \code{AVAL}
-per parameter, the analysis visits, and the derived records per \code{DTYPE}.
+per parameter, the analysis visits, the derived records per \code{DTYPE}, and a
+check for more than one baseline record (\code{ABLFL}) per subject and
+parameter.
 \item \code{OCCDS}/\code{MDOCCDS}: the number of distinct terms, and the
 treatment-emergent vs total records.
 \item \code{TTE}/\code{MDTTE}: events and censored per parameter.
 
-The summary reports facts only, apart from the record structure check.
+The summary reports facts only, apart from the record structure check and
+the checks for the dataset class, which report problems without signaling
+them.
 Each item is only reported when the variables it needs are in the dataset,
 so a dataset which is still being derived gives a shorter summary rather
 than an error.

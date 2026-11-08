@@ -41,7 +41,10 @@ and maximum of \code{TRTDURD}), \code{eosstt} (subjects per end of study status)
 \item \code{summarize_bds()}: \code{params} (per \code{PARAMCD}: the \code{PARAM} values, the
 records, subjects, and analysis visits, and the missing values, minimum,
 median, and maximum of a numeric \code{AVAL}), \code{visits} (the analysis visits,
-in \code{AVISITN} order if available), \code{dtype} (records per \code{DTYPE}).
+in \code{AVISITN} order if available), \code{dtype} (records per \code{DTYPE}),
+\code{baseline_by} and \code{multiple_baselines} (the variables a baseline is
+unique within, and the number of their combinations with more than one
+\code{ABLFL == "Y"} record).
 \item \code{summarize_occds()}: \code{terms} (named count of distinct values per coding
 variable), \code{trtem} (treatment-emergent and total records).
 \item \code{summarize_tte()}: \code{events} (events and censored per \code{PARAMCD}).
@@ -61,10 +64,19 @@ taken from the first record of each subject, so that duplicated subject
 records -- which the record structure check reports -- do not inflate them.
 Every ADSL item counts subjects, so none is returned for a dataset without
 any of the variables subjects are counted by.
+
+A BDS dataset is expected to have at most one baseline record
+(\code{ABLFL == "Y"}) per subject and parameter, and per \code{BASETYPE}, \code{ATPT}, and
+\code{APERIOD} where these are in the dataset: a baseline per timepoint or per
+period (e.g. in a crossover study) is correct, not a duplicate. More than
+one silently corrupts \code{BASE}, \code{CHG}, and \code{PCHG}, and the record structure
+check cannot see it, as the records differ in their visit. Fewer than one
+is legitimate, as not every parameter has a baseline.
 }
 \seealso{
 Other internal:
 \code{\link{admiral-package}},
+\code{\link[=count_multiple_baselines]{count_multiple_baselines()}},
 \code{\link[=count_values]{count_values()}},
 \code{\link[=extract_duplicate_records]{extract_duplicate_records()}},
 \code{\link[=format.basket_select]{format.basket_select()}},
@@ -75,9 +87,11 @@ Other internal:
 \code{\link[=infer_dataset_class]{infer_dataset_class()}},
 \code{\link[=new_admiral_df]{new_admiral_df()}},
 \code{\link[=print_adsl_details]{print_adsl_details()}},
+\code{\link[=print_summary_checks]{print_summary_checks()}},
 \code{\link[=print_summary_structure]{print_summary_structure()}},
 \code{\link[=print_summary_table]{print_summary_table()}},
 \code{\link[=signal_duplicate_records]{signal_duplicate_records()}},
+\code{\link[=summarize_bds_params]{summarize_bds_params()}},
 \code{\link[=summarize_distribution]{summarize_distribution()}},
 \code{\link[=summarize_structure]{summarize_structure()}},
 \code{\link[=summarize_subject_flow]{summarize_subject_flow()}}

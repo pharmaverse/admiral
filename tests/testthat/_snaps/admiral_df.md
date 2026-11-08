@@ -306,3 +306,43 @@
       Analysis visits (AVISIT): BASELINE, WEEK 2
       Derived records (DTYPE): LOCF: 1
 
+# summary.admiral_df Test 42: more than one baseline per subject and parameter is reported
+
+    Code
+      print(summary(input))
+    Message
+      -- input: BDS summary ----------------------------------------------------------
+      Subjects (USUBJID): 2
+      Observations: 5 | Variables: 6
+      i Structure: not checked, no keys set (see `admiral_df()`)
+      Parameters (2):
+        PARAMCD  records  subjects  visits  missing  min  median  max
+        DIABP          2         1       2        0   80      81   82
+        SYSBP          3         2       3        0  120     121  130
+      Analysis visits (AVISIT): BASELINE, SCREENING, WEEK 2
+      x 1 combination of USUBJID, PARAMCD has more than one baseline record (`ABLFL`)
+
+---
+
+    Code
+      print(summary(input[-1, ]))
+    Message
+      -- BDS summary -----------------------------------------------------------------
+      Subjects (USUBJID): 2
+      Observations: 4 | Variables: 6
+      i Structure: not checked, no keys set (see `admiral_df()`)
+      Parameters (2):
+        PARAMCD  records  subjects  visits  missing  min  median  max
+        DIABP          2         1       2        0   80      81   82
+        SYSBP          2         2       2        0  121   125.5  130
+      Analysis visits (AVISIT): BASELINE, WEEK 2
+      v Checks passed: at most one baseline record per USUBJID, PARAMCD
+
+# print_summary_checks Test 43: failed checks are listed, passed ones combined, absent ones left out
+
+    Code
+      print_summary_checks(d, checks)
+    Message
+      x 2 a failures
+      v Checks passed: no b; no c
+

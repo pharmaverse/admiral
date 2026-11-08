@@ -619,7 +619,9 @@ infer_class_by_structure <- function(dataset, id_vars, classes) {
 #'   study status, the deaths and their causes, and the age and sex of the
 #'   subjects.
 #' * `BDS`/`MDBDS`: records, subjects, visits, and the distribution of `AVAL`
-#'   per parameter, the analysis visits, and the derived records per `DTYPE`.
+#'   per parameter, the analysis visits, the derived records per `DTYPE`, and a
+#'   check for more than one baseline record (`ABLFL`) per subject and
+#'   parameter.
 #' * `OCCDS`/`MDOCCDS`: the number of distinct terms, and the
 #'   treatment-emergent vs total records.
 #' * `TTE`/`MDTTE`: events and censored per parameter.
@@ -628,7 +630,9 @@ infer_class_by_structure <- function(dataset, id_vars, classes) {
 #' @param ... Not used
 #'
 #' @details
-#'   The summary reports facts only, apart from the record structure check.
+#'   The summary reports facts only, apart from the record structure check and
+#'   the checks for the dataset class, which report problems without signaling
+#'   them.
 #'   Each item is only reported when the variables it needs are in the dataset,
 #'   so a dataset which is still being derived gives a shorter summary rather
 #'   than an error.
@@ -802,6 +806,14 @@ summarize_structure <- function(dataset, keys) {
 #'   Every ADSL item counts subjects, so none is returned for a dataset without
 #'   any of the variables subjects are counted by.
 #'
+#'   A BDS dataset is expected to have at most one baseline record
+#'   (`ABLFL == "Y"`) per subject and parameter, and per `BASETYPE`, `ATPT`, and
+#'   `APERIOD` where these are in the dataset: a baseline per timepoint or per
+#'   period (e.g. in a crossover study) is correct, not a duplicate. More than
+#'   one silently corrupts `BASE`, `CHG`, and `PCHG`, and the record structure
+#'   check cannot see it, as the records differ in their visit. Fewer than one
+#'   is legitimate, as not every parameter has a baseline.
+#'
 #' @return A named list:
 #'
 #'   * `summarize_adsl()`: `trt_var` and `trt` (subjects per treatment arm),
@@ -814,7 +826,10 @@ summarize_structure <- function(dataset, keys) {
 #'   * `summarize_bds()`: `params` (per `PARAMCD`: the `PARAM` values, the
 #'     records, subjects, and analysis visits, and the missing values, minimum,
 #'     median, and maximum of a numeric `AVAL`), `visits` (the analysis visits,
-#'     in `AVISITN` order if available), `dtype` (records per `DTYPE`).
+#'     in `AVISITN` order if available), `dtype` (records per `DTYPE`),
+#'     `baseline_by` and `multiple_baselines` (the variables a baseline is
+#'     unique within, and the number of their combinations with more than one
+#'     `ABLFL == "Y"` record).
 #'   * `summarize_occds()`: `terms` (named count of distinct values per coding
 #'     variable), `trtem` (treatment-emergent and total records).
 #'   * `summarize_tte()`: `events` (events and censored per `PARAMCD`).
@@ -897,28 +912,7 @@ summarize_bds <- function(dataset, subject_vars) {
   # per parameter, as that is where most BDS defects show: a parameter with too
   # few subjects or visits, values which were not derived, implausible values
   if ("PARAMCD" %in% cols && nrow(dataset) > 0) {
-    stats <- exprs(records = n())
-    if ("PARAM" %in% cols) {
-      # all values rather than the first, so that a `PARAMCD` with more than one
-      # `PARAM` is visible
-      stats$PARAM <- expr(paste(unique(PARAM[!is.na(PARAM)]), collapse = " / "))
-    }
-    if (length(subject_vars) > 0) {
-      stats$subjects <- expr(n_distinct(pick(all_of(!!subject_vars))))
-    }
-    if ("AVISIT" %in% cols) {
-      stats$visits <- expr(n_distinct(AVISIT, na.rm = TRUE))
-    }
-    if ("AVAL" %in% cols && is.numeric(dataset$AVAL)) {
-      stats$missing <- expr(sum(is.na(AVAL)))
-      stats$min <- expr(if (all(is.na(AVAL))) NA_real_ else min(AVAL, na.rm = TRUE))
-      stats$median <- expr(median(AVAL, na.rm = TRUE))
-      stats$max <- expr(if (all(is.na(AVAL))) NA_real_ else max(AVAL, na.rm = TRUE))
-    }
-    out$params <- dataset %>%
-      group_by(PARAMCD) %>%
-      summarise(!!!stats, .groups = "drop") %>%
-      select(PARAMCD, any_of("PARAM"), everything())
+    out$params <- summarize_bds_params(dataset, subject_vars)
   }
 
   if ("AVISIT" %in% cols && any(!is.na(dataset$AVISIT))) {
@@ -936,7 +930,65 @@ summarize_bds <- function(dataset, subject_vars) {
     out$dtype <- count_values(dataset$DTYPE[!is.na(dataset$DTYPE)])
   }
 
+  if (length(subject_vars) > 0 && all(c("PARAMCD", "ABLFL") %in% cols)) {
+    out$baseline_by <- c(
+      subject_vars, "PARAMCD", intersect(c("BASETYPE", "ATPT", "APERIOD"), cols)
+    )
+    out$multiple_baselines <- count_multiple_baselines(dataset, out$baseline_by)
+  }
+
   out
+}
+
+#' Summarize the Parameters of a BDS Dataset
+#'
+#' @param dataset A data frame with a `PARAMCD` variable
+#' @param subject_vars The variables subjects are counted by
+#'
+#' @return The `params` element described in [summarize_bds()]: a data frame
+#'   with one row per `PARAMCD`.
+#'
+#' @keywords internal
+#' @family internal
+summarize_bds_params <- function(dataset, subject_vars) {
+  cols <- colnames(dataset)
+  stats <- exprs(records = n())
+  if ("PARAM" %in% cols) {
+    # all values rather than the first, so that a `PARAMCD` with more than one
+    # `PARAM` is visible
+    stats$PARAM <- expr(paste(unique(PARAM[!is.na(PARAM)]), collapse = " / "))
+  }
+  if (length(subject_vars) > 0) {
+    stats$subjects <- expr(n_distinct(pick(all_of(!!subject_vars))))
+  }
+  if ("AVISIT" %in% cols) {
+    stats$visits <- expr(n_distinct(AVISIT, na.rm = TRUE))
+  }
+  if ("AVAL" %in% cols && is.numeric(dataset$AVAL)) {
+    stats$missing <- expr(sum(is.na(AVAL)))
+    stats$min <- expr(if (all(is.na(AVAL))) NA_real_ else min(AVAL, na.rm = TRUE))
+    stats$median <- expr(median(AVAL, na.rm = TRUE))
+    stats$max <- expr(if (all(is.na(AVAL))) NA_real_ else max(AVAL, na.rm = TRUE))
+  }
+  dataset %>%
+    group_by(PARAMCD) %>%
+    summarise(!!!stats, .groups = "drop") %>%
+    select(PARAMCD, any_of("PARAM"), everything())
+}
+
+#' Count the Groups with More than One Baseline Record
+#'
+#' @param dataset A data frame with an `ABLFL` variable
+#' @param by The variables a baseline record is unique within
+#'
+#' @return The number of combinations of `by` with more than one
+#'   `ABLFL == "Y"` record, each counted once however many it has.
+#'
+#' @keywords internal
+#' @family internal
+count_multiple_baselines <- function(dataset, by) {
+  baselines <- dataset[dataset$ABLFL %in% "Y", by]
+  n_distinct(baselines[duplicated(baselines), ])
 }
 
 #' Count the Subjects Randomized, Treated, and Completed
@@ -1189,6 +1241,52 @@ print_bds_details <- function(d) {
   if (!is.null(d[["dtype"]])) {
     dtype <- format_counts(d[["dtype"]], ": ")
     cli_text("Derived records (DTYPE): {dtype}")
+  }
+
+  baseline_by <- paste(d[["baseline_by"]], collapse = ", ")
+  print_summary_checks(d, checks = list(
+    multiple_baselines = list(
+      failed = "{d[['multiple_baselines']]} combination{?s} of {baseline_by}
+                {qty(d[['multiple_baselines']])}{?has/have} more than one
+                baseline record ({.var ABLFL})",
+      passed = paste("at most one baseline record per", baseline_by)
+    )
+  ))
+
+  invisible(NULL)
+}
+
+#' Print the Checks of a Summary
+#'
+#' Prints each failed check as its own bullet, and the passed checks together
+#' as a single bullet. A check whose element is not in `d` -- because the
+#' variables it needs are not in the dataset -- was not run and is not
+#' mentioned.
+#'
+#' @param d The `details` element of a `summary_admiral_df` object. Each check
+#'   is read from `d[[name]]`, the number of failures, and fails if it is
+#'   greater than zero.
+#' @param checks A named list with an element per check, named as in `d`. Each
+#'   element is a list with `failed`, a cli message evaluated in the calling
+#'   function, and `passed`, a plain character scalar.
+#'
+#' @return No return value, called for side effects
+#'
+#' @keywords internal
+#' @family internal
+print_summary_checks <- function(d, checks) {
+  # the messages are written in, and refer to the variables of, the caller
+  caller_env <- parent.frame()
+  ran <- keep(names(checks), ~ !is.null(d[[.x]]))
+  failed <- keep(ran, ~ d[[.x]] > 0)
+  passed <- setdiff(ran, failed)
+
+  for (check in failed) {
+    cli_bullets(c(x = checks[[check]]$failed), .envir = caller_env)
+  }
+  if (length(passed) > 0) {
+    passed <- paste(map_chr(checks[passed], "passed"), collapse = "; ")
+    cli_bullets(c(v = "Checks passed: {passed}"))
   }
 
   invisible(NULL)

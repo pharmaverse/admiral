@@ -59,6 +59,7 @@ that tagging a dataset which already carries metadata does not remove it.
 \seealso{
 Other internal:
 \code{\link{admiral-package}},
+\code{\link[=count_multiple_baselines]{count_multiple_baselines()}},
 \code{\link[=count_values]{count_values()}},
 \code{\link[=extract_duplicate_records]{extract_duplicate_records()}},
 \code{\link[=format.basket_select]{format.basket_select()}},
@@ -68,10 +69,12 @@ Other internal:
 \code{\link[=infer_class_by_structure]{infer_class_by_structure()}},
 \code{\link[=infer_dataset_class]{infer_dataset_class()}},
 \code{\link[=print_adsl_details]{print_adsl_details()}},
+\code{\link[=print_summary_checks]{print_summary_checks()}},
 \code{\link[=print_summary_structure]{print_summary_structure()}},
 \code{\link[=print_summary_table]{print_summary_table()}},
 \code{\link[=signal_duplicate_records]{signal_duplicate_records()}},
 \code{\link[=summarize_adsl]{summarize_adsl()}},
+\code{\link[=summarize_bds_params]{summarize_bds_params()}},
 \code{\link[=summarize_distribution]{summarize_distribution()}},
 \code{\link[=summarize_structure]{summarize_structure()}},
 \code{\link[=summarize_subject_flow]{summarize_subject_flow()}}
