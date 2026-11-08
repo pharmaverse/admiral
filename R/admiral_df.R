@@ -786,8 +786,11 @@ summarize_structure <- function(dataset, keys) {
 #' Summarize the Type-Specific Content of a Dataset
 #'
 #' Collect the information [summary.admiral_df()] reports for a dataset of
-#' class `ADSL`, `BDS`, `OCCDS`, or `TTE` (or their medical device counterparts). An element is only returned when
-#' the variables it needs are in the dataset.
+#' class `ADSL`, `BDS`, `OCCDS`, or `TTE` (or their medical device
+#' counterparts). An element is only returned when the variables it needs are in
+#' the dataset. This matters because a class set with [admiral_df()] is not
+#' checked against the variables, so e.g. a dataset declared as `"TTE"` need
+#' not have `CNSR`.
 #'
 #' @param dataset A data frame
 #' @param subject_vars The variables subjects are counted by
@@ -796,6 +799,8 @@ summarize_structure <- function(dataset, keys) {
 #'   The ADSL items other than the treatment arms and population flags are
 #'   taken from the first record of each subject, so that duplicated subject
 #'   records -- which the record structure check reports -- do not inflate them.
+#'   Every ADSL item counts subjects, so none is returned for a dataset without
+#'   any of the variables subjects are counted by.
 #'
 #' @return A named list:
 #'
@@ -819,6 +824,11 @@ summarize_structure <- function(dataset, keys) {
 #' @rdname summarize_admiral_df_type
 summarize_adsl <- function(dataset, subject_vars) {
   out <- list()
+
+  # every item counts subjects, which cannot be identified without these
+  if (length(subject_vars) == 0) {
+    return(out)
+  }
 
   # planned treatment first, falling back to actual treatment and `ARM`; a
   # variable which is entirely `NA` has not been derived yet
@@ -886,7 +896,7 @@ summarize_bds <- function(dataset, subject_vars) {
 
   # per parameter, as that is where most BDS defects show: a parameter with too
   # few subjects or visits, values which were not derived, implausible values
-  if (nrow(dataset) > 0) {
+  if ("PARAMCD" %in% cols && nrow(dataset) > 0) {
     stats <- exprs(records = n())
     if ("PARAM" %in% cols) {
       # all values rather than the first, so that a `PARAMCD` with more than one
@@ -1027,7 +1037,7 @@ summarize_tte <- function(dataset) {
   out <- list()
 
   # each parameter is a separate endpoint, so a single total would mislead
-  if (nrow(dataset) > 0) {
+  if (all(c("PARAMCD", "CNSR") %in% colnames(dataset)) && nrow(dataset) > 0) {
     out$events <- dataset %>%
       group_by(PARAMCD) %>%
       summarise(

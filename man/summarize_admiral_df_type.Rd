@@ -49,13 +49,18 @@ variable), \code{trtem} (treatment-emergent and total records).
 }
 \description{
 Collect the information \code{\link[=summary.admiral_df]{summary.admiral_df()}} reports for a dataset of
-class \code{ADSL}, \code{BDS}, \code{OCCDS}, or \code{TTE} (or their medical device counterparts). An element is only returned when
-the variables it needs are in the dataset.
+class \code{ADSL}, \code{BDS}, \code{OCCDS}, or \code{TTE} (or their medical device
+counterparts). An element is only returned when the variables it needs are in
+the dataset. This matters because a class set with \code{\link[=admiral_df]{admiral_df()}} is not
+checked against the variables, so e.g. a dataset declared as \code{"TTE"} need
+not have \code{CNSR}.
 }
 \details{
 The ADSL items other than the treatment arms and population flags are
 taken from the first record of each subject, so that duplicated subject
 records -- which the record structure check reports -- do not inflate them.
+Every ADSL item counts subjects, so none is returned for a dataset without
+any of the variables subjects are counted by.
 }
 \seealso{
 Other internal:

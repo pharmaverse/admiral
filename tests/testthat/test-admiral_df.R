@@ -1050,3 +1050,28 @@ test_that("summary.admiral_df Test 40: the BDS per-parameter statistics and deri
   expect_named(minimal$params, c("PARAMCD", "records", "subjects"))
   expect_null(minimal$dtype)
 })
+
+## Test 41: a declared class does not require the variables of that class ----
+test_that("summary.admiral_df Test 41: a declared class does not require the variables of that class", { # nolint
+  # a declared class is not checked against the variables, so the details of
+  # the class must not assume them
+  input <- tibble::tibble(FOO = 1:2)
+  for (dataset_class in admiral_dataset_classes) {
+    actual <- summary(admiral_df(input, dataset_class = dataset_class))
+    expect_identical(actual$dataset_class, dataset_class)
+    expect_identical(actual$details, list())
+    expect_no_error(capture.output(print(actual), type = "message"))
+  }
+
+  # TTE needs `CNSR` as well as `PARAMCD`
+  tte <- admiral_df(tibble::tibble(PARAMCD = "OS", AVAL = 1), dataset_class = "TTE")
+  expect_null(summary(tte)$details$events)
+
+  # without a subject variable none of the ADSL items, which all count
+  # subjects, can be reported
+  adsl <- admiral_df(
+    tibble::tibble(TRT01P = c("A", "B"), SAFFL = c("Y", "N"), AGE = c(40, 50)),
+    dataset_class = "ADSL"
+  )
+  expect_identical(summary(adsl)$details, list())
+})
