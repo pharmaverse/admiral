@@ -23,6 +23,7 @@ Count the Values of a Vector
 \seealso{
 Other internal:
 \code{\link{admiral-package}},
+\code{\link[=check_occurrence_flags]{check_occurrence_flags()}},
 \code{\link[=count_multiple_baselines]{count_multiple_baselines()}},
 \code{\link[=extract_duplicate_records]{extract_duplicate_records()}},
 \code{\link[=format.basket_select]{format.basket_select()}},

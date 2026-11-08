@@ -1129,3 +1129,96 @@ test_that("print_summary_checks Test 43: failed checks are listed, passed ones c
   # nothing is printed if no check ran
   expect_silent(print_summary_checks(list(), checks))
 })
+
+## Test 44: the OCCDS severity and seriousness ----
+test_that("summary.admiral_df Test 44: the OCCDS severity and seriousness", {
+  input <- tibble::tribble(
+    ~STUDYID, ~USUBJID, ~AEDECOD,   ~ASEV,      ~AESEV,     ~AETOXGR, ~AESER,
+    "P",      "1",      "HEADACHE", "MILD",     "MILD",     "1",      "N",
+    "P",      "1",      "NAUSEA",   "SEVERE",   "MODERATE", "3",      "Y",
+    "P",      "2",      "HEADACHE", NA,         NA,         NA,       NA
+  ) %>%
+    admiral_df()
+
+  # the analysis severity is preferred, and a missing value is counted
+  actual <- summary(input)$details
+  expect_identical(actual$sev_var, "ASEV")
+  expect_identical(actual$sev, c(MILD = 1L, SEVERE = 1L, "NA" = 1L))
+  expect_identical(actual$ser_var, "AESER")
+  expect_identical(actual$serious, c(serious = 1L, total = 3L))
+  expect_snapshot(print(summary(input)))
+
+  # a severity which is not derived yet gives way to the next, then to the
+  # toxicity grade
+  expect_identical(
+    summary(dplyr::mutate(input, ASEV = NA))$details$sev_var,
+    "AESEV"
+  )
+  expect_identical(
+    summary(dplyr::select(input, -ASEV, -AESEV))$details$sev_var,
+    "AETOXGR"
+  )
+
+  # neither is reported without the variables
+  none <- summary(dplyr::select(input, -ASEV, -AESEV, -AETOXGR, -AESER))$details
+  expect_null(none$sev)
+  expect_null(none$serious)
+})
+
+# check_occurrence_flags ----
+## Test 45: each flag is checked within the group its name defines ----
+test_that("check_occurrence_flags Test 45: each flag is checked within the group its name defines", { # nolint
+  input <- tibble::tribble(
+    ~USUBJID, ~AEBODSYS, ~AEDECOD,   ~AOCCFL, ~AOCCSFL, ~AOCCPFL, ~AOCCPIFL, ~AOCC01FL,
+    "1",      "NERV",    "HEADACHE", "Y",     "Y",      "Y",      "Y",       "Y",
+    "1",      "NERV",    "DIZZY",    NA,      NA,       "Y",      "Y",       "Y",
+    "1",      "GI",      "NAUSEA",   NA,      "Y",      "Y",      "Y",       NA,
+    "2",      "NERV",    "HEADACHE", "Y",     "Y",      "Y",      NA,        NA
+  )
+
+  actual <- check_occurrence_flags(input, "USUBJID")
+  expect_identical(
+    actual$occ_flag_by,
+    list(
+      AOCCFL = "USUBJID",
+      AOCCSFL = c("USUBJID", "AEBODSYS"),
+      AOCCPFL = c("USUBJID", "AEDECOD"),
+      AOCCPIFL = c("USUBJID", "AEDECOD")
+    )
+  )
+  expect_identical(
+    actual$occ_flag_dups,
+    c(AOCCFL = 0L, AOCCSFL = 0L, AOCCPFL = 0L, AOCCPIFL = 0L)
+  )
+  # the level of a sponsor-defined flag cannot be told from its name
+  expect_identical(actual$occ_flags_unchecked, "AOCC01FL")
+
+  # a second "Y" in the same group, each group counted once
+  dup <- dplyr::bind_rows(input, input[1:2, ])
+  expect_identical(
+    check_occurrence_flags(dup, "USUBJID")$occ_flag_dups,
+    c(AOCCFL = 1L, AOCCSFL = 1L, AOCCPFL = 2L, AOCCPIFL = 2L)
+  )
+
+  # the first occurrence is flagged per period where there are periods
+  per_period <- dplyr::mutate(dup, APERIOD = c(1, 1, 1, 1, 2, 2))
+  per_period_actual <- check_occurrence_flags(per_period, "USUBJID")
+  expect_identical(per_period_actual$occ_flag_by$AOCCFL, c("USUBJID", "APERIOD"))
+  expect_true(all(per_period_actual$occ_flag_dups == 0L))
+
+  # without the level variable the flag cannot be checked
+  no_bodsys <- check_occurrence_flags(dplyr::select(input, -AEBODSYS), "USUBJID")
+  expect_identical(no_bodsys$occ_flags_unchecked, c("AOCCSFL", "AOCC01FL"))
+
+  # a single grouping variable works on a plain data frame too
+  expect_identical(
+    check_occurrence_flags(as.data.frame(dup[, c("USUBJID", "AOCCFL")]), "USUBJID"),
+    list(occ_flag_by = list(AOCCFL = "USUBJID"), occ_flag_dups = c(AOCCFL = 1L))
+  )
+
+  # nothing to check without flags or subjects
+  expect_identical(check_occurrence_flags(input[, 1:3], "USUBJID"), list())
+  expect_identical(check_occurrence_flags(input, character(0)), list())
+
+  expect_snapshot(print(summary(admiral_df(dplyr::mutate(dup, STUDYID = "P")))))
+})

@@ -23,6 +23,7 @@ Format a Number for a Summary
 \seealso{
 Other internal:
 \code{\link{admiral-package}},
+\code{\link[=check_occurrence_flags]{check_occurrence_flags()}},
 \code{\link[=count_multiple_baselines]{count_multiple_baselines()}},
 \code{\link[=count_values]{count_values()}},
 \code{\link[=extract_duplicate_records]{extract_duplicate_records()}},

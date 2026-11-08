@@ -346,3 +346,33 @@
       x 2 a failures
       v Checks passed: no b; no c
 
+# summary.admiral_df Test 44: the OCCDS severity and seriousness
+
+    Code
+      print(summary(input))
+    Message
+      -- input: OCCDS summary --------------------------------------------------------
+      Subjects (USUBJID): 2
+      Observations: 3 | Variables: 7
+      i Structure: not checked, no keys set (see `admiral_df()`)
+      Distinct terms: AEDECOD 2
+      Records per severity (ASEV): MILD: 1 | SEVERE: 1 | NA: 1
+      Serious (AESER): 1 of 3 records
+
+# check_occurrence_flags Test 45: each flag is checked within the group its name defines
+
+    Code
+      print(summary(admiral_df(dplyr::mutate(dup, STUDYID = "P"))))
+    Message
+      -- OCCDS summary ---------------------------------------------------------------
+      Subjects (USUBJID): 2
+      Observations: 6 | Variables: 9
+      i Structure: not checked, no keys set (see `admiral_df()`)
+      Distinct terms: AEBODSYS 2 | AEDECOD 3
+      x 4 occurrence flags have more than one "Y" per group:
+        AOCCFL per USUBJID: 1 group
+        AOCCSFL per USUBJID, AEBODSYS: 1 group
+        AOCCPFL per USUBJID, AEDECOD: 2 groups
+        AOCCPIFL per USUBJID, AEDECOD: 2 groups
+      i Not checked, as their level is not known: `AOCC01FL`
+

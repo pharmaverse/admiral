@@ -46,6 +46,7 @@ extract_duplicate_records(adsl, exprs(USUBJID))
 \seealso{
 Other internal:
 \code{\link{admiral-package}},
+\code{\link[=check_occurrence_flags]{check_occurrence_flags()}},
 \code{\link[=count_multiple_baselines]{count_multiple_baselines()}},
 \code{\link[=count_values]{count_values()}},
 \code{\link[=format.basket_select]{format.basket_select()}},

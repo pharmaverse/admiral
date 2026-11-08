@@ -622,8 +622,10 @@ infer_class_by_structure <- function(dataset, id_vars, classes) {
 #'   per parameter, the analysis visits, the derived records per `DTYPE`, and a
 #'   check for more than one baseline record (`ABLFL`) per subject and
 #'   parameter.
-#' * `OCCDS`/`MDOCCDS`: the number of distinct terms, and the
-#'   treatment-emergent vs total records.
+#' * `OCCDS`/`MDOCCDS`: the number of distinct terms, the treatment-emergent,
+#'   and the serious vs total records, the records per severity or toxicity
+#'   grade, and a check for more than one `"Y"` per group in the occurrence
+#'   flags (`AOCCFL`, `AOCCSFL`, `AOCCPFL`, ...).
 #' * `TTE`/`MDTTE`: events and censored per parameter.
 #'
 #' @param object An `admiral_df` object
@@ -747,7 +749,7 @@ summary.admiral_df <- function(object, ...) {
     BDS = ,
     MDBDS = summarize_bds(dataset, subject_vars),
     OCCDS = ,
-    MDOCCDS = summarize_occds(dataset),
+    MDOCCDS = summarize_occds(dataset, subject_vars),
     TTE = ,
     MDTTE = summarize_tte(dataset),
     list()
@@ -806,6 +808,10 @@ summarize_structure <- function(dataset, keys) {
 #'   Every ADSL item counts subjects, so none is returned for a dataset without
 #'   any of the variables subjects are counted by.
 #'
+#'   The OCCDS severity is the first populated of `ASEV`, `--SEV`, `ATOXGR`,
+#'   and `--TOXGR`, and the seriousness the first populated `--SER`. See
+#'   [check_occurrence_flags()] for the occurrence flag check.
+#'
 #'   A BDS dataset is expected to have at most one baseline record
 #'   (`ABLFL == "Y"`) per subject and parameter, and per `BASETYPE`, `ATPT`, and
 #'   `APERIOD` where these are in the dataset: a baseline per timepoint or per
@@ -831,7 +837,13 @@ summarize_structure <- function(dataset, keys) {
 #'     unique within, and the number of their combinations with more than one
 #'     `ABLFL == "Y"` record).
 #'   * `summarize_occds()`: `terms` (named count of distinct values per coding
-#'     variable), `trtem` (treatment-emergent and total records).
+#'     variable), `trtem` (treatment-emergent and total records), `sev_var`
+#'     and `sev` (the severity or toxicity grade variable, and the records per
+#'     value), `ser_var` and `serious` (the seriousness variable, and the
+#'     serious and total records), `occ_flag_by` (per occurrence flag checked,
+#'     the variables it is unique within), `occ_flag_dups` (per occurrence flag
+#'     checked, the number of combinations of those with more than one `"Y"`),
+#'     `occ_flags_unchecked` (the occurrence flags whose level is not known).
 #'   * `summarize_tte()`: `events` (events and censored per `PARAMCD`).
 #'
 #' @keywords internal
@@ -987,7 +999,7 @@ summarize_bds_params <- function(dataset, subject_vars) {
 #' @keywords internal
 #' @family internal
 count_multiple_baselines <- function(dataset, by) {
-  baselines <- dataset[dataset$ABLFL %in% "Y", by]
+  baselines <- dataset[dataset$ABLFL %in% "Y", by, drop = FALSE]
   n_distinct(baselines[duplicated(baselines), ])
 }
 
@@ -1055,7 +1067,7 @@ count_values <- function(x) {
 }
 
 #' @rdname summarize_admiral_df_type
-summarize_occds <- function(dataset) {
+summarize_occds <- function(dataset, subject_vars) {
   out <- list()
   cols <- colnames(dataset)
 
@@ -1081,6 +1093,101 @@ summarize_occds <- function(dataset) {
     )
   }
 
+  # the analysis version ahead of the SDTM one, and severity ahead of toxicity
+  # grade; a variable which is entirely `NA` has not been derived yet
+  sev_var <- c(
+    intersect("ASEV", cols), str_subset(cols, "^[A-Z]{2}SEV$"),
+    intersect("ATOXGR", cols), str_subset(cols, "^[A-Z]{2}TOXGR$")
+  )
+  sev_var <- keep(sev_var, ~ any(!is.na(dataset[[.x]])))
+  if (length(sev_var) > 0) {
+    out$sev_var <- sev_var[1]
+    out$sev <- count_values(dataset[[sev_var[1]]])
+  }
+
+  ser_var <- keep(str_subset(cols, "^[A-Z]{2}SER$"), ~ any(!is.na(dataset[[.x]])))
+  if (length(ser_var) > 0) {
+    out$ser_var <- ser_var[1]
+    out$serious <- c(
+      serious = sum(dataset[[ser_var[1]]] %in% "Y"),
+      total = nrow(dataset)
+    )
+  }
+
+  c(out, check_occurrence_flags(dataset, subject_vars))
+}
+
+#' Check the Occurrence Flags of an OCCDS Dataset
+#'
+#' Counts, for each occurrence flag (`AOCC...FL`), the groups with more than
+#' one `"Y"` record. An occurrence flag marks the first occurrence per subject,
+#' or per subject and body system or dictionary term, so more than one `"Y"`
+#' per group counts a subject twice in every "n (%) of subjects" table built
+#' from it -- which the record structure check cannot see, as the records
+#' differ in other variables.
+#'
+#' @param dataset A data frame
+#' @param subject_vars The variables subjects are counted by
+#'
+#' @details
+#'   The group a flag is unique within is taken from its name, following the
+#'   ADaMIG for OCCDS: `AOCCFL` per subject, `AOCCSFL` per subject and body
+#'   system (`--BODSYS`), and `AOCCPFL` per subject and dictionary term
+#'   (`--DECOD`). The maximum intensity versions (`AOCCIFL`, `AOCCSIFL`,
+#'   `AOCCPIFL`) are unique within the same groups. `APERIOD` is added to every
+#'   group if it is populated, as multi-period designs (e.g. vaccine studies)
+#'   flag the first occurrence per period.
+#'
+#'   Any other flag, e.g. a sponsor-defined `AOCC01FL`, is not checked, as its
+#'   group cannot be told from its name; neither is a flag whose body system or
+#'   dictionary term variable is not in the dataset. Fewer than one `"Y"` per
+#'   group is not a defect, as the flags are often restricted to a subset of
+#'   the records, such as the treatment-emergent ones.
+#'
+#' @return A named list with the elements `occ_flag_by`, `occ_flag_dups`, and
+#'   `occ_flags_unchecked`, see [summarize_occds()]; each only if not empty.
+#'
+#' @keywords internal
+#' @family internal
+check_occurrence_flags <- function(dataset, subject_vars) {
+  cols <- colnames(dataset)
+  flags <- str_subset(cols, "^AOCC[0-9A-Z]*FL$")
+  if (length(flags) == 0 || length(subject_vars) == 0) {
+    return(list())
+  }
+
+  base_by <- c(
+    subject_vars,
+    if ("APERIOD" %in% cols && any(!is.na(dataset$APERIOD))) "APERIOD"
+  )
+  level_vars <- list(
+    AOCCFL = character(0),
+    AOCCSFL = str_subset(cols, "^[A-Z]{2}BODSYS$")[1],
+    AOCCPFL = str_subset(cols, "^[A-Z]{2}DECOD$")[1]
+  )
+  # the maximum intensity flags are unique within the same groups
+  level_vars <- c(level_vars, set_names(level_vars, c("AOCCIFL", "AOCCSIFL", "AOCCPIFL")))
+
+  # a flag whose level variable is not in the dataset cannot be checked either
+  checked <- keep(flags, ~ .x %in% names(level_vars) && !anyNA(level_vars[[.x]]))
+  unchecked <- setdiff(flags, checked)
+
+  out <- list()
+  if (length(checked) > 0) {
+    out$occ_flag_by <- map(set_names(checked), ~ c(base_by, level_vars[[.x]]))
+    out$occ_flag_dups <- vapply(
+      checked,
+      function(flag) {
+        flagged <- dataset[dataset[[flag]] %in% "Y", out$occ_flag_by[[flag]], drop = FALSE]
+        # the groups with a second "Y", each counted once
+        n_distinct(flagged[duplicated(flagged), ])
+      },
+      integer(1)
+    )
+  }
+  if (length(unchecked) > 0) {
+    out$occ_flags_unchecked <- unchecked
+  }
   out
 }
 
@@ -1148,16 +1255,7 @@ print.summary_admiral_df <- function(x, ...) {
   d <- x$details
   print_adsl_details(d)
   print_bds_details(d)
-  if (!is.null(d[["terms"]])) {
-    terms <- format_counts(d[["terms"]])
-    cli_text("Distinct terms: {terms}")
-  }
-  if (!is.null(d[["trtem"]])) {
-    cli_text(
-      "Treatment emergent (TRTEMFL): {d[['trtem']][['emergent']]} of
-       {d[['trtem']][['total']]} records"
-    )
-  }
+  print_occds_details(d)
   if (!is.null(d[["events"]])) {
     cli_text("Events and censored per parameter (CNSR):")
     print_summary_table(d[["events"]])
@@ -1252,6 +1350,60 @@ print_bds_details <- function(d) {
       passed = paste("at most one baseline record per", baseline_by)
     )
   ))
+
+  invisible(NULL)
+}
+
+#' @rdname print_admiral_df_details
+print_occds_details <- function(d) {
+  if (!is.null(d[["terms"]])) {
+    terms <- format_counts(d[["terms"]])
+    cli_text("Distinct terms: {terms}")
+  }
+  if (!is.null(d[["trtem"]])) {
+    cli_text(
+      "Treatment emergent (TRTEMFL): {d[['trtem']][['emergent']]} of
+       {d[['trtem']][['total']]} records"
+    )
+  }
+  if (!is.null(d[["sev"]])) {
+    sev <- format_counts(d[["sev"]], ": ")
+    cli_text("Records per severity ({d[['sev_var']]}): {sev}")
+  }
+  if (!is.null(d[["serious"]])) {
+    cli_text(
+      "Serious ({d[['ser_var']]}): {d[['serious']][['serious']]} of
+       {d[['serious']][['total']]} records"
+    )
+  }
+
+  dups <- d[["occ_flag_dups"]]
+  failed <- names(dups)[dups > 0]
+  print_summary_checks(
+    list(occ_flag_dups = if (!is.null(dups)) length(failed)),
+    checks = list(
+      occ_flag_dups = list(
+        failed = "{length(failed)} occurrence flag{?s} {?has/have} more than one
+                  {.val Y} per group:",
+        passed = paste(
+          "at most one \"Y\" per group in", paste(names(dups), collapse = ", ")
+        )
+      )
+    )
+  )
+  # one line per flag below the bullet, e.g. "AOCCPFL per USUBJID, AEDECOD: 2
+  # groups"
+  if (length(failed) > 0) {
+    lines <- paste0(
+      failed, " per ", map_chr(d[["occ_flag_by"]][failed], paste, collapse = ", "),
+      ": ", dups[failed], if_else(dups[failed] == 1, " group", " groups")
+    )
+    cli_bullets(set_names(lines, rep(" ", length(lines))))
+  }
+  if (!is.null(d[["occ_flags_unchecked"]])) {
+    unchecked <- d[["occ_flags_unchecked"]]
+    cli_bullets(c(i = "Not checked, as their level is not known: {.var {unchecked}}"))
+  }
 
   invisible(NULL)
 }

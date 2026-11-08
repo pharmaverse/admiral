@@ -21,7 +21,7 @@ and whether the dataset has one record per key (if the keys were set with
 or their medical device counterparts) it also reports e.g. the subjects per treatment
 arm, the records and subjects per parameter, or the events and censored per
 parameter, and checks e.g. for more than one baseline record per subject and
-parameter. (#3209)
+parameter, or for more than one first occurrence flagged per subject. (#3209)
 
 ## Updates of Existing Functions
 

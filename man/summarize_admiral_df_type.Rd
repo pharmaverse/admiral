@@ -11,7 +11,7 @@ summarize_adsl(dataset, subject_vars)
 
 summarize_bds(dataset, subject_vars)
 
-summarize_occds(dataset)
+summarize_occds(dataset, subject_vars)
 
 summarize_tte(dataset)
 }
@@ -46,7 +46,13 @@ in \code{AVISITN} order if available), \code{dtype} (records per \code{DTYPE}),
 unique within, and the number of their combinations with more than one
 \code{ABLFL == "Y"} record).
 \item \code{summarize_occds()}: \code{terms} (named count of distinct values per coding
-variable), \code{trtem} (treatment-emergent and total records).
+variable), \code{trtem} (treatment-emergent and total records), \code{sev_var}
+and \code{sev} (the severity or toxicity grade variable, and the records per
+value), \code{ser_var} and \code{serious} (the seriousness variable, and the
+serious and total records), \code{occ_flag_by} (per occurrence flag checked,
+the variables it is unique within), \code{occ_flag_dups} (per occurrence flag
+checked, the number of combinations of those with more than one \code{"Y"}),
+\code{occ_flags_unchecked} (the occurrence flags whose level is not known).
 \item \code{summarize_tte()}: \code{events} (events and censored per \code{PARAMCD}).
 }
 }
@@ -65,6 +71,10 @@ records -- which the record structure check reports -- do not inflate them.
 Every ADSL item counts subjects, so none is returned for a dataset without
 any of the variables subjects are counted by.
 
+The OCCDS severity is the first populated of \code{ASEV}, \code{--SEV}, \code{ATOXGR},
+and \code{--TOXGR}, and the seriousness the first populated \code{--SER}. See
+\code{\link[=check_occurrence_flags]{check_occurrence_flags()}} for the occurrence flag check.
+
 A BDS dataset is expected to have at most one baseline record
 (\code{ABLFL == "Y"}) per subject and parameter, and per \code{BASETYPE}, \code{ATPT}, and
 \code{APERIOD} where these are in the dataset: a baseline per timepoint or per
@@ -76,6 +86,7 @@ is legitimate, as not every parameter has a baseline.
 \seealso{
 Other internal:
 \code{\link{admiral-package}},
+\code{\link[=check_occurrence_flags]{check_occurrence_flags()}},
 \code{\link[=count_multiple_baselines]{count_multiple_baselines()}},
 \code{\link[=count_values]{count_values()}},
 \code{\link[=extract_duplicate_records]{extract_duplicate_records()}},

@@ -41,8 +41,10 @@ subjects.
 per parameter, the analysis visits, the derived records per \code{DTYPE}, and a
 check for more than one baseline record (\code{ABLFL}) per subject and
 parameter.
-\item \code{OCCDS}/\code{MDOCCDS}: the number of distinct terms, and the
-treatment-emergent vs total records.
+\item \code{OCCDS}/\code{MDOCCDS}: the number of distinct terms, the treatment-emergent,
+and the serious vs total records, the records per severity or toxicity
+grade, and a check for more than one \code{"Y"} per group in the occurrence
+flags (\code{AOCCFL}, \code{AOCCSFL}, \code{AOCCPFL}, ...).
 \item \code{TTE}/\code{MDTTE}: events and censored per parameter.
 
 The summary reports facts only, apart from the record structure check and

@@ -3,11 +3,14 @@
 \name{print_adsl_details}
 \alias{print_adsl_details}
 \alias{print_bds_details}
+\alias{print_occds_details}
 \title{Print the Type-Specific Part of a Summary}
 \usage{
 print_adsl_details(d)
 
 print_bds_details(d)
+
+print_occds_details(d)
 }
 \arguments{
 \item{d}{The \code{details} element of a \code{summary_admiral_df} object
@@ -27,6 +30,7 @@ printed if its item is present.
 \seealso{
 Other internal:
 \code{\link{admiral-package}},
+\code{\link[=check_occurrence_flags]{check_occurrence_flags()}},
 \code{\link[=count_multiple_baselines]{count_multiple_baselines()}},
 \code{\link[=count_values]{count_values()}},
 \code{\link[=extract_duplicate_records]{extract_duplicate_records()}},
