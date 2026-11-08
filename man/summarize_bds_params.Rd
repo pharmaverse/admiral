@@ -4,7 +4,7 @@
 \alias{summarize_bds_params}
 \title{Summarize the Parameters of a BDS Dataset}
 \usage{
-summarize_bds_params(dataset, subject_vars)
+summarize_bds_params(dataset, unit_vars, unit = "subjects")
 }
 \arguments{
 \item{dataset}{A data frame with a \code{PARAMCD} variable
@@ -13,10 +13,17 @@ summarize_bds_params(dataset, subject_vars)
 \item{Default value}{none}
 }}
 
-\item{subject_vars}{The variables subjects are counted by
+\item{unit_vars}{The variables subjects, or devices, are identified by
 
 \describe{
 \item{Default value}{none}
+}}
+
+\item{unit}{The name of the column they are counted in, \code{"subjects"} or
+\code{"devices"}
+
+\describe{
+\item{Default value}{\code{"subjects"}}
 }}
 }
 \value{
@@ -32,9 +39,10 @@ Other internal:
 \code{\link[=check_occurrence_flags]{check_occurrence_flags()}},
 \code{\link[=count_incidence]{count_incidence()}},
 \code{\link[=count_multiple_baselines]{count_multiple_baselines()}},
+\code{\link[=count_units]{count_units()}},
 \code{\link[=count_values]{count_values()}},
 \code{\link[=extract_duplicate_records]{extract_duplicate_records()}},
-\code{\link[=filter_subject_records]{filter_subject_records()}},
+\code{\link[=filter_unit_records]{filter_unit_records()}},
 \code{\link[=format.basket_select]{format.basket_select()}},
 \code{\link[=format_counts]{format_counts()}},
 \code{\link[=format_distribution]{format_distribution()}},

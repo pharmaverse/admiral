@@ -86,9 +86,16 @@ checked.
 Subjects are counted by \code{USUBJID} if it is present, as the other subject
 keys (e.g. \code{STUDYID}) may not be populated on records added by a
 derivation. Otherwise the subject keys
-(\code{get_admiral_option("subject_keys")}) are used. A record with any of
+(\code{get_admiral_option("subject_keys")}) are used if all of them are in the
+dataset, as only together do they identify a subject. A record with any of
 these missing (\code{NA} or \code{""}) belongs to no subject, so it is not counted
 as one.
+
+The records of a medical device dataset (\code{ADDL}, \code{MDBDS}, \code{MDTTE},
+\code{MDOCCDS}) belong to a device rather than a subject, so devices are counted
+by \code{SPDEVID}, and the per-parameter counts and the checks are per device.
+\code{USUBJID} is optional in these datasets; if it is present the subjects
+are counted as well, and it is what \code{adsl} is matched by.
 
 The dataset name is the one stored by \code{\link[=admiral_df]{admiral_df()}} or, failing that, the
 name of the variable \code{summary()} was called on.

@@ -4,7 +4,7 @@
 \alias{check_occurrence_flags}
 \title{Check the Occurrence Flags of an OCCDS Dataset}
 \usage{
-check_occurrence_flags(dataset, subject_vars)
+check_occurrence_flags(dataset, unit_vars)
 }
 \arguments{
 \item{dataset}{A data frame
@@ -13,7 +13,7 @@ check_occurrence_flags(dataset, subject_vars)
 \item{Default value}{none}
 }}
 
-\item{subject_vars}{The variables subjects are counted by
+\item{unit_vars}{The variables subjects, or devices, are identified by
 
 \describe{
 \item{Default value}{none}
@@ -29,7 +29,8 @@ one \code{"Y"} record. An occurrence flag marks the first occurrence per subject
 or per subject and body system or dictionary term, so more than one \code{"Y"}
 per group counts a subject twice in every "n (\%) of subjects" table built
 from it -- which the record structure check cannot see, as the records
-differ in other variables.
+differ in other variables. In a medical device dataset, the flags are per
+device instead.
 }
 \details{
 The group a flag is unique within is taken from its name, following the
@@ -45,16 +46,17 @@ group cannot be told from its name; neither is a flag whose body system or
 dictionary term variable is not in the dataset. Fewer than one \code{"Y"} per
 group is not a defect, as the flags are often restricted to a subset of
 the records, such as the treatment-emergent ones. Records which belong to
-no subject (see \code{\link[=filter_subject_records]{filter_subject_records()}}) are not checked.
+no subject or device (see \code{\link[=filter_unit_records]{filter_unit_records()}}) are not checked.
 }
 \seealso{
 Other internal:
 \code{\link{admiral-package}},
 \code{\link[=count_incidence]{count_incidence()}},
 \code{\link[=count_multiple_baselines]{count_multiple_baselines()}},
+\code{\link[=count_units]{count_units()}},
 \code{\link[=count_values]{count_values()}},
 \code{\link[=extract_duplicate_records]{extract_duplicate_records()}},
-\code{\link[=filter_subject_records]{filter_subject_records()}},
+\code{\link[=filter_unit_records]{filter_unit_records()}},
 \code{\link[=format.basket_select]{format.basket_select()}},
 \code{\link[=format_counts]{format_counts()}},
 \code{\link[=format_distribution]{format_distribution()}},

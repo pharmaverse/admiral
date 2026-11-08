@@ -447,3 +447,31 @@
       Warning:
       `adsl` is ignored for a dataset of class "ADSL", as it is meant for comparing another dataset with its ADSL.
 
+# summary.admiral_df Test 50: a device dataset is summarized per device
+
+    Code
+      print(actual)
+    Message
+      -- mdbds: MDBDS summary --------------------------------------------------------
+      Devices (SPDEVID): 2
+      Observations: 4 | Variables: 6
+      i Structure: not checked, no keys set (see `admiral_df()`)
+      Parameters (1):
+        PARAMCD  records  devices  visits  missing  min  median  max
+        BATTV          4        2       2        0  2.8    2.95  3.1
+      Analysis visits (AVISIT): BASELINE, WEEK 4
+      v Checks passed: at most one baseline record per SPDEVID, PARAMCD
+
+---
+
+    Code
+      print(addl_actual)
+    Message
+      -- addl: ADDL summary ----------------------------------------------------------
+      Devices (SPDEVID): 3
+      Subjects (USUBJID): 2
+      Observations: 3 | Variables: 4
+      i Structure: not checked, no keys set (see `admiral_df()`)
+      Subjects with records out of ADSL: 2 of 3 (66.7%)
+      v Checks passed: all subjects with records are in ADSL
+

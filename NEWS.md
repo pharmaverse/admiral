@@ -24,6 +24,7 @@ parameter, and checks e.g. for more than one baseline record per subject and
 parameter, or for more than one first occurrence flagged per subject. Its `adsl`
 argument compares the dataset with the ADSL: the subjects with records overall,
 in the safety population and per arm, and the subjects which are not in ADSL.
+Medical device datasets are summarized and checked per device (`SPDEVID`).
 (#3209)
 
 ## Updates of Existing Functions

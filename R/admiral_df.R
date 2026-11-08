@@ -50,6 +50,9 @@ admiral_dataset_classes <- c(
   "ADSL", "BDS", "OCCDS", "TTE", "ADDL", "MDBDS", "MDTTE", "MDOCCDS"
 )
 
+# the medical device classes, whose records belong to a device
+device_classes <- c("ADDL", "MDBDS", "MDTTE", "MDOCCDS")
+
 #' Create an `admiral_df` Dataset
 #'
 #' @description
@@ -668,9 +671,16 @@ infer_class_by_structure <- function(dataset, id_vars, classes) {
 #'   Subjects are counted by `USUBJID` if it is present, as the other subject
 #'   keys (e.g. `STUDYID`) may not be populated on records added by a
 #'   derivation. Otherwise the subject keys
-#'   (`get_admiral_option("subject_keys")`) are used. A record with any of
+#'   (`get_admiral_option("subject_keys")`) are used if all of them are in the
+#'   dataset, as only together do they identify a subject. A record with any of
 #'   these missing (`NA` or `""`) belongs to no subject, so it is not counted
 #'   as one.
+#'
+#'   The records of a medical device dataset (`ADDL`, `MDBDS`, `MDTTE`,
+#'   `MDOCCDS`) belong to a device rather than a subject, so devices are counted
+#'   by `SPDEVID`, and the per-parameter counts and the checks are per device.
+#'   `USUBJID` is optional in these datasets; if it is present the subjects
+#'   are counted as well, and it is what `adsl` is matched by.
 #'
 #'   The dataset name is the one stored by [admiral_df()] or, failing that, the
 #'   name of the variable `summary()` was called on.
@@ -760,20 +770,38 @@ summary.admiral_df <- function(object, adsl = NULL, ...) {
   dataset <- ungroup(object)
   cols <- colnames(dataset)
 
+  subject_keys <- vars2chr(get_admiral_option("subject_keys"))
   subject_vars <- if ("USUBJID" %in% cols) {
     "USUBJID"
+  } else if (all(subject_keys %in% cols)) {
+    # only together do the subject keys identify a subject: `STUDYID` alone
+    # would count the whole study as one
+    subject_keys
   } else {
-    intersect(vars2chr(get_admiral_option("subject_keys")), cols)
+    character(0)
+  }
+
+  # the records of a device dataset belong to a device; `SPDEVID` alone, as
+  # `USUBJID` alone for subjects, since `STUDYID` may not be populated on
+  # records added by a derivation
+  device_vars <- if (dataset_class %in% device_classes && "SPDEVID" %in% cols) {
+    "SPDEVID"
+  }
+  # what the per-parameter counts and the checks are per
+  if (is.null(device_vars)) {
+    unit_vars <- subject_vars
+    unit <- "subjects"
+  } else {
+    unit_vars <- device_vars
+    unit <- "devices"
   }
 
   out <- list(
     name = name,
     dataset_class = dataset_class,
-    n_subjects = if (length(subject_vars) > 0) {
-      n_distinct(filter_subject_records(dataset[subject_vars], subject_vars))
-    } else {
-      NA_integer_
-    },
+    n_devices = if (!is.null(device_vars)) count_units(dataset, device_vars),
+    device_vars = device_vars,
+    n_subjects = count_units(dataset, subject_vars),
     n_obs = nrow(dataset),
     n_vars = ncol(dataset),
     subject_vars = subject_vars,
@@ -782,13 +810,13 @@ summary.admiral_df <- function(object, adsl = NULL, ...) {
 
   # the class is `NA` for a dataset with no records whose variables do not
   # decide it, which has nothing class-specific to report. The medical device
-  # classes share the content of their subject counterparts
+  # classes share the content of their subject counterparts, per device
   out$details <- switch(coalesce(dataset_class, "other"),
     ADSL = summarize_adsl(dataset, subject_vars),
     BDS = ,
-    MDBDS = summarize_bds(dataset, subject_vars),
+    MDBDS = summarize_bds(dataset, unit_vars, unit),
     OCCDS = ,
-    MDOCCDS = summarize_occds(dataset, subject_vars),
+    MDOCCDS = summarize_occds(dataset, unit_vars),
     TTE = ,
     MDTTE = summarize_tte(dataset),
     list()
@@ -802,25 +830,43 @@ summary.admiral_df <- function(object, adsl = NULL, ...) {
   out
 }
 
-#' Keep the Records which Belong to a Subject
+#' Keep the Records which Belong to a Subject or Device
 #'
 #' @param dataset A data frame
-#' @param subject_vars The variables subjects are counted by
+#' @param unit_vars The variables subjects, or devices, are identified by
 #'
 #' @details
-#'   A record belongs to a subject if none of `subject_vars` is missing. A blank
-#'   (`""`) counts as missing, as data read from SAS has `""` rather than `NA`.
-#'   Such records are typically added by a derivation which does not populate
-#'   the subject variables, and counting them would add a subject which does
-#'   not exist.
+#'   A record belongs to a subject (or device) if none of `unit_vars` is
+#'   missing. A blank (`""`) counts as missing, as data read from SAS has `""`
+#'   rather than `NA`. Such records are typically added by a derivation which
+#'   does not populate these variables, and counting them would add a subject
+#'   which does not exist.
 #'
-#' @return The records of `dataset` which belong to a subject.
+#' @return The records of `dataset` which belong to a subject (or device).
 #'
 #' @keywords internal
 #' @family internal
-filter_subject_records <- function(dataset, subject_vars) {
-  has_subject <- map(subject_vars, ~ !is.na(dataset[[.x]]) & dataset[[.x]] != "")
-  dataset[reduce(has_subject, `&`, .init = rep(TRUE, nrow(dataset))), , drop = FALSE]
+filter_unit_records <- function(dataset, unit_vars) {
+  has_unit <- map(unit_vars, ~ !is.na(dataset[[.x]]) & dataset[[.x]] != "")
+  dataset[reduce(has_unit, `&`, .init = rep(TRUE, nrow(dataset))), , drop = FALSE]
+}
+
+#' Count the Subjects or Devices of a Dataset
+#'
+#' @param dataset A data frame
+#' @param unit_vars The variables subjects, or devices, are identified by
+#'
+#' @return The number of distinct combinations of `unit_vars` among the records
+#'   which belong to a subject or device (see [filter_unit_records()]), or `NA`
+#'   if `unit_vars` is empty.
+#'
+#' @keywords internal
+#' @family internal
+count_units <- function(dataset, unit_vars) {
+  if (length(unit_vars) == 0) {
+    return(NA_integer_)
+  }
+  n_distinct(filter_unit_records(dataset[unit_vars], unit_vars))
 }
 
 #' Compare a Dataset with its ADSL
@@ -840,7 +886,7 @@ filter_subject_records <- function(dataset, subject_vars) {
 #'   gives a warning, as the rest of the summary is still valid.
 #'
 #'   Records of `dataset` with a missing subject variable are left out, as they
-#'   belong to no subject (see [filter_subject_records()]).
+#'   belong to no subject (see [filter_unit_records()]).
 #'
 #'   The treatment arm is the first populated of `TRT01A`, `TRT01P`, and `ARM`
 #'   in `adsl`: the actual treatment ahead of the planned one, as the subjects
@@ -896,7 +942,7 @@ summarize_vs_adsl <- function(dataset, adsl, subject_vars, dataset_class) {
     ), call = call)
   }
 
-  ds_subjects <- distinct(filter_subject_records(dataset[subject_vars], subject_vars))
+  ds_subjects <- distinct(filter_unit_records(dataset[subject_vars], subject_vars))
   adsl_with_records <- semi_join(adsl, ds_subjects, by = subject_vars)
   orphans <- anti_join(ds_subjects, adsl, by = subject_vars)
 
@@ -1005,6 +1051,11 @@ summarize_structure <- function(dataset, keys) {
 #'
 #' @param dataset A data frame
 #' @param subject_vars The variables subjects are counted by
+#' @param unit_vars The variables the per-parameter counts and the checks are
+#'   per: `subject_vars`, or for a medical device dataset the variables devices
+#'   are identified by
+#' @param unit The name of the per-parameter count column, `"subjects"` or
+#'   `"devices"`
 #'
 #' @details
 #'   The ADSL items other than the treatment arms and population flags are
@@ -1024,7 +1075,7 @@ summarize_structure <- function(dataset, keys) {
 #'   one silently corrupts `BASE`, `CHG`, and `PCHG`, and the record structure
 #'   check cannot see it, as the records differ in their visit. Fewer than one
 #'   is legitimate, as not every parameter has a baseline. Records which belong
-#'   to no subject (see [filter_subject_records()]) are not checked.
+#'   to no subject (see [filter_unit_records()]) are not checked.
 #'
 #' @return A named list:
 #'
@@ -1036,7 +1087,7 @@ summarize_structure <- function(dataset, keys) {
 #'     `age` (median, minimum, and maximum of `AGE`), `sex` (subjects per
 #'     `SEX`).
 #'   * `summarize_bds()`: `params` (per `PARAMCD`: the `PARAM` values, the
-#'     records, subjects, and analysis visits, and the missing values, minimum,
+#'     records, subjects (or devices), and analysis visits, and the missing values, minimum,
 #'     median, and maximum of a numeric `AVAL`), `visits` (the analysis visits,
 #'     in `AVISITN` order if available), `dtype` (records per `DTYPE`),
 #'     `baseline_by` and `multiple_baselines` (the variables a baseline is
@@ -1062,7 +1113,7 @@ summarize_adsl <- function(dataset, subject_vars) {
   if (length(subject_vars) == 0) {
     return(out)
   }
-  dataset <- filter_subject_records(dataset, subject_vars)
+  dataset <- filter_unit_records(dataset, subject_vars)
 
   # planned treatment first, falling back to actual treatment and `ARM`; a
   # variable which is entirely `NA` has not been derived yet
@@ -1124,14 +1175,14 @@ summarize_adsl <- function(dataset, subject_vars) {
 }
 
 #' @rdname summarize_admiral_df_type
-summarize_bds <- function(dataset, subject_vars) {
+summarize_bds <- function(dataset, unit_vars, unit = "subjects") {
   out <- list()
   cols <- colnames(dataset)
 
   # per parameter, as that is where most BDS defects show: a parameter with too
   # few subjects or visits, values which were not derived, implausible values
   if ("PARAMCD" %in% cols && nrow(dataset) > 0) {
-    out$params <- summarize_bds_params(dataset, subject_vars)
+    out$params <- summarize_bds_params(dataset, unit_vars, unit)
   }
 
   if ("AVISIT" %in% cols && any(!is.na(dataset$AVISIT))) {
@@ -1149,13 +1200,13 @@ summarize_bds <- function(dataset, subject_vars) {
     out$dtype <- count_values(dataset$DTYPE[!is.na(dataset$DTYPE)])
   }
 
-  if (length(subject_vars) > 0 && all(c("PARAMCD", "ABLFL") %in% cols)) {
+  if (length(unit_vars) > 0 && all(c("PARAMCD", "ABLFL") %in% cols)) {
     out$baseline_by <- c(
-      subject_vars, "PARAMCD", intersect(c("BASETYPE", "ATPT", "APERIOD"), cols)
+      unit_vars, "PARAMCD", intersect(c("BASETYPE", "ATPT", "APERIOD"), cols)
     )
     # records of no subject are no subject's baseline
     out$multiple_baselines <- count_multiple_baselines(
-      filter_subject_records(dataset, subject_vars),
+      filter_unit_records(dataset, unit_vars),
       out$baseline_by
     )
   }
@@ -1166,14 +1217,16 @@ summarize_bds <- function(dataset, subject_vars) {
 #' Summarize the Parameters of a BDS Dataset
 #'
 #' @param dataset A data frame with a `PARAMCD` variable
-#' @param subject_vars The variables subjects are counted by
+#' @param unit_vars The variables subjects, or devices, are identified by
+#' @param unit The name of the column they are counted in, `"subjects"` or
+#'   `"devices"`
 #'
 #' @return The `params` element described in [summarize_bds()]: a data frame
 #'   with one row per `PARAMCD`.
 #'
 #' @keywords internal
 #' @family internal
-summarize_bds_params <- function(dataset, subject_vars) {
+summarize_bds_params <- function(dataset, unit_vars, unit = "subjects") {
   cols <- colnames(dataset)
   stats <- exprs(records = n())
   if ("PARAM" %in% cols) {
@@ -1181,9 +1234,9 @@ summarize_bds_params <- function(dataset, subject_vars) {
     # `PARAM` is visible
     stats$PARAM <- expr(paste(unique(PARAM[!is.na(PARAM)]), collapse = " / "))
   }
-  if (length(subject_vars) > 0) {
-    stats$subjects <- expr(
-      n_distinct(filter_subject_records(pick(all_of(!!subject_vars)), !!subject_vars))
+  if (length(unit_vars) > 0) {
+    stats[[unit]] <- expr(
+      n_distinct(filter_unit_records(pick(all_of(!!unit_vars)), !!unit_vars))
     )
   }
   if ("AVISIT" %in% cols) {
@@ -1280,7 +1333,7 @@ count_values <- function(x) {
 }
 
 #' @rdname summarize_admiral_df_type
-summarize_occds <- function(dataset, subject_vars) {
+summarize_occds <- function(dataset, unit_vars) {
   out <- list()
   cols <- colnames(dataset)
 
@@ -1327,7 +1380,7 @@ summarize_occds <- function(dataset, subject_vars) {
     )
   }
 
-  c(out, check_occurrence_flags(dataset, subject_vars))
+  c(out, check_occurrence_flags(dataset, unit_vars))
 }
 
 #' Check the Occurrence Flags of an OCCDS Dataset
@@ -1337,10 +1390,11 @@ summarize_occds <- function(dataset, subject_vars) {
 #' or per subject and body system or dictionary term, so more than one `"Y"`
 #' per group counts a subject twice in every "n (%) of subjects" table built
 #' from it -- which the record structure check cannot see, as the records
-#' differ in other variables.
+#' differ in other variables. In a medical device dataset, the flags are per
+#' device instead.
 #'
 #' @param dataset A data frame
-#' @param subject_vars The variables subjects are counted by
+#' @param unit_vars The variables subjects, or devices, are identified by
 #'
 #' @details
 #'   The group a flag is unique within is taken from its name, following the
@@ -1356,24 +1410,24 @@ summarize_occds <- function(dataset, subject_vars) {
 #'   dictionary term variable is not in the dataset. Fewer than one `"Y"` per
 #'   group is not a defect, as the flags are often restricted to a subset of
 #'   the records, such as the treatment-emergent ones. Records which belong to
-#'   no subject (see [filter_subject_records()]) are not checked.
+#'   no subject or device (see [filter_unit_records()]) are not checked.
 #'
 #' @return A named list with the elements `occ_flag_by`, `occ_flag_dups`, and
 #'   `occ_flags_unchecked`, see [summarize_occds()]; each only if not empty.
 #'
 #' @keywords internal
 #' @family internal
-check_occurrence_flags <- function(dataset, subject_vars) {
+check_occurrence_flags <- function(dataset, unit_vars) {
   cols <- colnames(dataset)
   flags <- str_subset(cols, "^AOCC[0-9A-Z]*FL$")
-  if (length(flags) == 0 || length(subject_vars) == 0) {
+  if (length(flags) == 0 || length(unit_vars) == 0) {
     return(list())
   }
   # records of no subject are no subject's first occurrence
-  dataset <- filter_subject_records(dataset, subject_vars)
+  dataset <- filter_unit_records(dataset, unit_vars)
 
   base_by <- c(
-    subject_vars,
+    unit_vars,
     if ("APERIOD" %in% cols && any(!is.na(dataset$APERIOD))) "APERIOD"
   )
   level_vars <- list(
@@ -1461,6 +1515,10 @@ print.summary_admiral_df <- function(x, ...) {
   }
   cli_rule(left = title)
 
+  if (!is.null(x$n_devices)) {
+    device_vars <- paste(x$device_vars, collapse = ", ")
+    cli_text("Devices ({device_vars}): {x$n_devices}")
+  }
   if (!is.na(x$n_subjects)) {
     subject_vars <- paste(x$subject_vars, collapse = ", ")
     cli_text("Subjects ({subject_vars}): {x$n_subjects}")

@@ -1385,3 +1385,73 @@ test_that("summary.admiral_df Test 49: the checks leave out records without a su
     c(AOCCFL = 1L)
   )
 })
+
+## Test 50: a device dataset is summarized per device ----
+test_that("summary.admiral_df Test 50: a device dataset is summarized per device", {
+  # no `USUBJID`, which is optional in a device dataset: `STUDYID` alone must
+  # not be taken for the subject, which would make the devices one
+  mdbds <- tibble::tribble(
+    ~STUDYID, ~SPDEVID, ~PARAMCD, ~AVISIT,    ~ABLFL, ~AVAL,
+    "P",      "D-1",    "BATTV",  "BASELINE", "Y",      3.1,
+    "P",      "D-2",    "BATTV",  "BASELINE", "Y",      3.0,
+    "P",      "D-1",    "BATTV",  "WEEK 4",   NA,       2.9,
+    # a derived record without a device belongs to none
+    "P",      NA,       "BATTV",  "WEEK 4",   NA,       2.8
+  ) %>%
+    # declared, as the record without a device would keep it from being
+    # inferred as device data
+    admiral_df(dataset_class = "MDBDS")
+
+  actual <- summary(mdbds)
+  expect_identical(actual$dataset_class, "MDBDS")
+  expect_identical(actual$n_devices, 2L)
+  expect_identical(actual$device_vars, "SPDEVID")
+  expect_identical(actual$n_subjects, NA_integer_)
+  expect_identical(actual$subject_vars, character(0))
+  expect_identical(actual$details$params$devices, 2L)
+  # one baseline per device is correct
+  expect_identical(actual$details$baseline_by, c("SPDEVID", "PARAMCD"))
+  expect_identical(actual$details$multiple_baselines, 0L)
+  expect_snapshot(print(actual))
+
+  # occurrence flags are per device
+  mdoccds <- tibble::tribble(
+    ~STUDYID, ~SPDEVID, ~DEDECOD,    ~AOCCFL,
+    "P",      "D-1",    "OCCLUSION", "Y",
+    "P",      "D-2",    "LEAK",      "Y"
+  ) %>%
+    admiral_df()
+  expect_identical(summary(mdoccds)$details$occ_flag_dups, c(AOCCFL = 0L))
+
+  # the subjects are counted as well where `USUBJID` is present, and `adsl` is
+  # matched by them
+  addl <- tibble::tribble(
+    ~STUDYID, ~USUBJID, ~SPDEVID, ~DEVTYPE,
+    "P",      "1",      "D-1",    "INSULIN PUMP",
+    "P",      "1",      "D-2",    "CGM SENSOR",
+    "P",      "2",      "D-3",    "INSULIN PUMP"
+  ) %>%
+    admiral_df()
+  adsl <- tibble::tibble(STUDYID = "P", USUBJID = c("1", "2", "3"))
+  addl_actual <- summary(addl, adsl = adsl)
+  expect_identical(addl_actual$n_devices, 3L)
+  expect_identical(addl_actual$n_subjects, 2L)
+  expect_identical(addl_actual$vs_adsl$n_common, 2L)
+  expect_snapshot(print(addl_actual))
+
+  # without `USUBJID` there is nothing to match `adsl` by
+  expect_warning(
+    no_subjects <- summary(mdbds, adsl = adsl),
+    regexp = "no variables to match subjects by"
+  )
+  expect_null(no_subjects$vs_adsl)
+})
+
+## Test 51: the subject keys only count subjects if all are present ----
+test_that("summary.admiral_df Test 51: the subject keys only count subjects if all are present", { # nolint
+  # `STUDYID` alone identifies no subject
+  study_only <- admiral_df(tibble::tibble(STUDYID = "P", PARAMCD = c("A", "B")))
+  actual <- summary(study_only)
+  expect_identical(actual$n_subjects, NA_integer_)
+  expect_identical(actual$subject_vars, character(0))
+})

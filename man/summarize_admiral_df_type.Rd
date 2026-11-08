@@ -9,9 +9,9 @@
 \usage{
 summarize_adsl(dataset, subject_vars)
 
-summarize_bds(dataset, subject_vars)
+summarize_bds(dataset, unit_vars, unit = "subjects")
 
-summarize_occds(dataset, subject_vars)
+summarize_occds(dataset, unit_vars)
 
 summarize_tte(dataset)
 }
@@ -27,6 +27,21 @@ summarize_tte(dataset)
 \describe{
 \item{Default value}{none}
 }}
+
+\item{unit_vars}{The variables the per-parameter counts and the checks are
+per: \code{subject_vars}, or for a medical device dataset the variables devices
+are identified by
+
+\describe{
+\item{Default value}{\code{NULL}}
+}}
+
+\item{unit}{The name of the per-parameter count column, \code{"subjects"} or
+\code{"devices"}
+
+\describe{
+\item{Default value}{\code{NULL}}
+}}
 }
 \value{
 A named list:
@@ -39,7 +54,7 @@ and maximum of \code{TRTDURD}), \code{eosstt} (subjects per end of study status)
 \code{age} (median, minimum, and maximum of \code{AGE}), \code{sex} (subjects per
 \code{SEX}).
 \item \code{summarize_bds()}: \code{params} (per \code{PARAMCD}: the \code{PARAM} values, the
-records, subjects, and analysis visits, and the missing values, minimum,
+records, subjects (or devices), and analysis visits, and the missing values, minimum,
 median, and maximum of a numeric \code{AVAL}), \code{visits} (the analysis visits,
 in \code{AVISITN} order if available), \code{dtype} (records per \code{DTYPE}),
 \code{baseline_by} and \code{multiple_baselines} (the variables a baseline is
@@ -82,7 +97,7 @@ period (e.g. in a crossover study) is correct, not a duplicate. More than
 one silently corrupts \code{BASE}, \code{CHG}, and \code{PCHG}, and the record structure
 check cannot see it, as the records differ in their visit. Fewer than one
 is legitimate, as not every parameter has a baseline. Records which belong
-to no subject (see \code{\link[=filter_subject_records]{filter_subject_records()}}) are not checked.
+to no subject (see \code{\link[=filter_unit_records]{filter_unit_records()}}) are not checked.
 }
 \seealso{
 Other internal:
@@ -90,9 +105,10 @@ Other internal:
 \code{\link[=check_occurrence_flags]{check_occurrence_flags()}},
 \code{\link[=count_incidence]{count_incidence()}},
 \code{\link[=count_multiple_baselines]{count_multiple_baselines()}},
+\code{\link[=count_units]{count_units()}},
 \code{\link[=count_values]{count_values()}},
 \code{\link[=extract_duplicate_records]{extract_duplicate_records()}},
-\code{\link[=filter_subject_records]{filter_subject_records()}},
+\code{\link[=filter_unit_records]{filter_unit_records()}},
 \code{\link[=format.basket_select]{format.basket_select()}},
 \code{\link[=format_counts]{format_counts()}},
 \code{\link[=format_distribution]{format_distribution()}},

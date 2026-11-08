@@ -59,7 +59,7 @@ would be wrong. A \code{dataset} which cannot be compared, by contrast, only
 gives a warning, as the rest of the summary is still valid.
 
 Records of \code{dataset} with a missing subject variable are left out, as they
-belong to no subject (see \code{\link[=filter_subject_records]{filter_subject_records()}}).
+belong to no subject (see \code{\link[=filter_unit_records]{filter_unit_records()}}).
 
 The treatment arm is the first populated of \code{TRT01A}, \code{TRT01P}, and \code{ARM}
 in \code{adsl}: the actual treatment ahead of the planned one, as the subjects
@@ -71,9 +71,10 @@ Other internal:
 \code{\link[=check_occurrence_flags]{check_occurrence_flags()}},
 \code{\link[=count_incidence]{count_incidence()}},
 \code{\link[=count_multiple_baselines]{count_multiple_baselines()}},
+\code{\link[=count_units]{count_units()}},
 \code{\link[=count_values]{count_values()}},
 \code{\link[=extract_duplicate_records]{extract_duplicate_records()}},
-\code{\link[=filter_subject_records]{filter_subject_records()}},
+\code{\link[=filter_unit_records]{filter_unit_records()}},
 \code{\link[=format.basket_select]{format.basket_select()}},
 \code{\link[=format_counts]{format_counts()}},
 \code{\link[=format_distribution]{format_distribution()}},
