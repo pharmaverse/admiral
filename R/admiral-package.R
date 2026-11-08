@@ -3,7 +3,7 @@
 #' @import admiraldev
 #' @importFrom cli
 #'   ansi_collapse cli_abort cli_bullets cli_div cli_inform cli_rule cli_text
-#'   cli_verbatim cli_warn qty
+#'   cli_vec cli_verbatim cli_warn qty
 #'
 #' @importFrom dplyr
 #'   across anti_join arrange between bind_cols bind_rows case_when coalesce

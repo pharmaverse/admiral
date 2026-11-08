@@ -376,3 +376,74 @@
         AOCCPIFL per USUBJID, AEDECOD: 2 groups
       i Not checked, as their level is not known: `AOCC01FL`
 
+# summary.admiral_df Test 46: the dataset is compared with the supplied ADSL
+
+    Code
+      print(summary(adae, adsl = adsl))
+    Message
+      -- adae: OCCDS summary ---------------------------------------------------------
+      Subjects (USUBJID): 3
+      Observations: 5 | Variables: 4
+      i Structure: not checked, no keys set (see `admiral_df()`)
+      Distinct terms: AEDECOD 2
+      Treatment emergent (TRTEMFL): 4 of 5 records
+      Subjects with records out of ADSL: 2 of 4 (50.0%) | safety population 2 of 3
+      (66.7%)
+      Subjects with records per arm (TRT01A): Drug A: 1 of 2 | Placebo: 1 of 1 | NA:
+      0 of 1
+      Subjects with a treatment-emergent record (TRTEMFL): 1 of 3 subjects in the
+      safety population (33.3%)
+      x 1 subject with records is not in ADSL: "9"
+
+---
+
+    Code
+      print(summary(advs, adsl = adsl))
+    Message
+      -- advs: BDS summary -----------------------------------------------------------
+      Subjects (USUBJID): 1
+      Observations: 1 | Variables: 4
+      i Structure: not checked, no keys set (see `admiral_df()`)
+      Parameters (1):
+        PARAMCD  records  subjects  missing  min  median  max
+        SYSBP          1         1        0  120     120  120
+      Subjects with records out of ADSL: 1 of 4 (25.0%) | safety population 1 of 3
+      (33.3%)
+      Subjects with records per arm (TRT01A): Drug A: 0 of 2 | Placebo: 1 of 1 | NA:
+      0 of 1
+      v Checks passed: all subjects with records are in ADSL
+
+---
+
+    Code
+      print(summary(many_orphans, adsl = adsl))
+    Message
+      -- many_orphans: OCCDS summary -------------------------------------------------
+      Subjects (USUBJID): 10
+      Observations: 10 | Variables: 3
+      i Structure: not checked, no keys set (see `admiral_df()`)
+      Distinct terms: AEDECOD 1
+      Subjects with records out of ADSL: 0 of 4 (0.0%) | safety population 0 of 3
+      (0.0%)
+      Subjects with records per arm (TRT01A): Drug A: 0 of 2 | Placebo: 0 of 1 | NA:
+      0 of 1
+      x 10 subjects with records are not in ADSL: "11", "12", "13", ..., "19", and
+        "20"
+
+# summary.admiral_df Test 47: an ADSL which cannot be compared with is an error
+
+    Code
+      summary(adae, adsl = adsl[c(1, 1, 2), ])
+    Condition
+      Error in `summary()`:
+      ! `adsl` must have one record per subject (`USUBJID`).
+      i Found 1 extra subject record.
+
+---
+
+    Code
+      actual <- summary(admiral_df(adsl), adsl = adsl)
+    Condition
+      Warning:
+      `adsl` is ignored for a dataset of class "ADSL", as it is meant for comparing another dataset with its ADSL.
+

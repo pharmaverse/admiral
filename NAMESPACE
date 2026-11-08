@@ -175,6 +175,7 @@ importFrom(cli,
   cli_inform,
   cli_rule,
   cli_text,
+  cli_vec,
   cli_verbatim,
   cli_warn,
   qty

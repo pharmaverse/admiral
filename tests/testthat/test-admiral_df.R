@@ -1222,3 +1222,166 @@ test_that("check_occurrence_flags Test 45: each flag is checked within the group
 
   expect_snapshot(print(summary(admiral_df(dplyr::mutate(dup, STUDYID = "P")))))
 })
+
+## Test 46: the dataset is compared with the supplied ADSL ----
+test_that("summary.admiral_df Test 46: the dataset is compared with the supplied ADSL", {
+  adsl <- tibble::tribble(
+    ~STUDYID, ~USUBJID, ~SAFFL, ~TRT01P,   ~TRT01A,
+    "P",      "1",      "Y",    "Placebo", "Placebo",
+    "P",      "2",      "Y",    "Drug A",  "Drug A",
+    "P",      "3",      "N",    "Drug A",  NA,
+    "P",      "4",      "Y",    "Drug A",  "Drug A"
+  )
+  adae <- tibble::tribble(
+    ~STUDYID, ~USUBJID, ~AEDECOD,   ~TRTEMFL,
+    "P",      "1",      "HEADACHE", "Y",
+    "P",      "1",      "NAUSEA",   "Y",
+    "P",      "2",      "NAUSEA",   NA,
+    "P",      "9",      "NAUSEA",   "Y",
+    # a record which belongs to no subject is not compared
+    NA,       NA,       "NAUSEA",   "Y"
+  ) %>%
+    admiral_df()
+
+  actual <- summary(adae, adsl = adsl)$vs_adsl
+  expect_identical(actual$n_adsl, 4L)
+  expect_identical(actual$n_common, 2L)
+  expect_identical(actual$n_orphans, 1L)
+  expect_identical(actual$orphans, tibble::tibble(USUBJID = "9"))
+  expect_identical(actual$saffl, c(covered = 2L, total = 3L))
+  # the actual treatment ahead of the planned one; subjects without one are
+  # counted too
+  expect_identical(actual$arm_var, "TRT01A")
+  expect_identical(
+    actual$arm,
+    tibble::tibble(
+      TRT01A = c("Drug A", "Placebo", NA),
+      subjects = c(1L, 1L, 0L),
+      total = c(2L, 1L, 1L)
+    )
+  )
+  # treatment-emergent subjects out of the safety population
+  expect_identical(actual$incidence, c(subjects = 1L, total = 3L))
+  expect_identical(actual$incidence_denom, "in the safety population")
+  expect_snapshot(print(summary(adae, adsl = adsl)))
+
+  # without a safety population, out of all ADSL subjects
+  no_saffl <- summary(adae, adsl = dplyr::select(adsl, -SAFFL))$vs_adsl
+  expect_null(no_saffl$saffl)
+  expect_identical(no_saffl$incidence, c(subjects = 1L, total = 4L))
+  expect_identical(no_saffl$incidence_denom, "in ADSL")
+
+  # the incidence is for occurrence data only
+  advs <- admiral_df(
+    tibble::tibble(STUDYID = "P", USUBJID = "1", PARAMCD = "SYSBP", AVAL = 120)
+  )
+  expect_null(summary(advs, adsl = adsl)$vs_adsl$incidence)
+  expect_snapshot(print(summary(advs, adsl = adsl)))
+
+  # only the first and last few of the subjects not in ADSL are printed
+  many_orphans <- admiral_df(tibble::tibble(
+    STUDYID = "P", USUBJID = as.character(11:20), AEDECOD = "NAUSEA"
+  ))
+  expect_identical(summary(many_orphans, adsl = adsl)$vs_adsl$n_orphans, 10L)
+  expect_snapshot(print(summary(many_orphans, adsl = adsl)))
+})
+
+## Test 47: an ADSL which cannot be compared with is an error ----
+test_that("summary.admiral_df Test 47: an ADSL which cannot be compared with is an error", {
+  adsl <- tibble::tibble(STUDYID = "P", USUBJID = c("1", "2"))
+  adae <- admiral_df(tibble::tibble(STUDYID = "P", USUBJID = "1", AEDECOD = "NAUSEA"))
+
+  expect_snapshot(summary(adae, adsl = adsl[c(1, 1, 2), ]), error = TRUE)
+  expect_error(
+    summary(adae, adsl = dplyr::select(adsl, -USUBJID)),
+    class = "assert_data_frame"
+  )
+  expect_error(summary(adae, adsl = "ADSL"), class = "assert_data_frame")
+
+  # a dataset which cannot be compared is only a warning, as the rest of the
+  # summary is valid
+  expect_snapshot(actual <- summary(admiral_df(adsl), adsl = adsl))
+  expect_null(actual$vs_adsl)
+  lookup <- admiral_df(tibble::tibble(PARAMCD = "SYSBP"))
+  expect_warning(
+    no_subjects <- summary(lookup, adsl = adsl),
+    regexp = "no variables to match subjects by"
+  )
+  expect_null(no_subjects$vs_adsl)
+
+  # a grouped ADSL is compared as a whole
+  expect_identical(
+    summary(adae, adsl = dplyr::group_by(adsl, STUDYID))$vs_adsl$n_common,
+    1L
+  )
+})
+
+## Test 48: a record without a subject is not counted as a subject ----
+test_that("summary.admiral_df Test 48: a record without a subject is not counted as a subject", { # nolint
+  # e.g. records added by a derivation which does not populate `USUBJID`; a
+  # blank counts as missing, as in data read from SAS
+  advs <- tibble::tibble(
+    STUDYID = "P",
+    USUBJID = c("1", "2", NA, ""),
+    PARAMCD = "SYSBP",
+    AVAL = c(120, 130, 125, 128)
+  ) %>%
+    admiral_df()
+
+  actual <- summary(advs)
+  expect_identical(actual$n_subjects, 2L)
+  expect_identical(actual$details$params$subjects, 2L)
+
+  adsl <- tibble::tibble(
+    STUDYID = "P",
+    USUBJID = c("1", "2", NA),
+    SAFFL = "Y",
+    TRT01P = "Placebo",
+    AGE = c(40, 50, 99)
+  ) %>%
+    admiral_df(dataset_class = "ADSL")
+
+  adsl_details <- summary(adsl)$details
+  expect_identical(adsl_details$trt$subjects, 2L)
+  expect_identical(adsl_details$pops, c(SAFFL = 2L))
+  expect_identical(adsl_details$age, c(median = 45, min = 40, max = 50))
+
+  # the subject keys are used without `USUBJID`, numeric ones too
+  subject_keys <- get_admiral_option("subject_keys")
+  withr::defer(set_admiral_options(subject_keys = subject_keys))
+  set_admiral_options(subject_keys = exprs(STUDYID, SUBJID))
+  by_subjid <- admiral_df(tibble::tibble(STUDYID = "P", SUBJID = c(1, NA, 2), AGE = 1:3))
+  expect_identical(summary(by_subjid)$n_subjects, 2L)
+})
+
+## Test 49: the checks leave out records without a subject ----
+test_that("summary.admiral_df Test 49: the checks leave out records without a subject", {
+  # two baselines without a subject belong to no subject, so they are not a
+  # second baseline of anyone
+  advs <- tibble::tibble(
+    STUDYID = "P",
+    USUBJID = c("1", NA, NA, "", ""),
+    PARAMCD = "SYSBP",
+    ABLFL = "Y",
+    AVAL = c(120, 125, 126, 127, 128)
+  ) %>%
+    admiral_df()
+  expect_identical(summary(advs)$details$multiple_baselines, 0L)
+
+  adae <- tibble::tibble(
+    STUDYID = "P",
+    USUBJID = c("1", NA, NA, "", ""),
+    AEDECOD = "NAUSEA",
+    AOCCFL = "Y"
+  )
+  expect_identical(
+    check_occurrence_flags(adae, "USUBJID")$occ_flag_dups,
+    c(AOCCFL = 0L)
+  )
+
+  # duplicates of a real subject are still reported
+  expect_identical(
+    check_occurrence_flags(dplyr::bind_rows(adae, adae[1, ]), "USUBJID")$occ_flag_dups,
+    c(AOCCFL = 1L)
+  )
+})

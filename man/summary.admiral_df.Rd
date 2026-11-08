@@ -4,13 +4,34 @@
 \alias{summary.admiral_df}
 \title{Summarize an \code{admiral_df} Dataset}
 \usage{
-\method{summary}{admiral_df}(object, ...)
+\method{summary}{admiral_df}(object, adsl = NULL, ...)
 }
 \arguments{
 \item{object}{An \code{admiral_df} object
 
 \describe{
 \item{Default value}{none}
+}}
+
+\item{adsl}{The subject-level dataset to compare \code{object} with
+
+ADSL holds every subject of the study, so it shows what \code{object} cannot
+show by itself: the subjects without any records, and the subjects in
+\code{object} which should not be there. If it is supplied, the summary also
+reports how many of the ADSL subjects have records, overall, within the
+safety population (\code{SAFFL}), and per treatment arm; checks that every
+subject of \code{object} is in ADSL; and, for an \code{OCCDS} dataset, reports the
+subjects with a treatment-emergent record (\code{TRTEMFL}) out of the safety
+population, or out of ADSL if there is no \code{SAFFL}.
+
+Subjects are matched by the variables they are counted by (see Details),
+which must be in \code{adsl}, and \code{adsl} must have one record per subject.
+\code{adsl} is ignored, with a warning, for a dataset of class \code{"ADSL"} and for a
+dataset without any of these variables.
+
+\describe{
+\item{Permitted values}{a data frame or \code{NULL}}
+\item{Default value}{\code{NULL}}
 }}
 
 \item{...}{Not used
@@ -46,6 +67,10 @@ and the serious vs total records, the records per severity or toxicity
 grade, and a check for more than one \code{"Y"} per group in the occurrence
 flags (\code{AOCCFL}, \code{AOCCSFL}, \code{AOCCPFL}, ...).
 \item \code{TTE}/\code{MDTTE}: events and censored per parameter.
+}
+
+If \code{adsl} is supplied, the summary also compares the dataset with it, see
+the \code{adsl} argument.
 
 The summary reports facts only, apart from the record structure check and
 the checks for the dataset class, which report problems without signaling
@@ -61,11 +86,12 @@ checked.
 Subjects are counted by \code{USUBJID} if it is present, as the other subject
 keys (e.g. \code{STUDYID}) may not be populated on records added by a
 derivation. Otherwise the subject keys
-(\code{get_admiral_option("subject_keys")}) are used.
+(\code{get_admiral_option("subject_keys")}) are used. A record with any of
+these missing (\code{NA} or \code{""}) belongs to no subject, so it is not counted
+as one.
 
 The dataset name is the one stored by \code{\link[=admiral_df]{admiral_df()}} or, failing that, the
 name of the variable \code{summary()} was called on.
-}
 }
 \seealso{
 Utilities for Dataset Checking:
@@ -132,5 +158,33 @@ summary(advs)
 #>   DIABP          2         2       1        0     51      65   79
 #>   MAP            2         2       1        0  74.33   85.17   96
 #>   SYSBP          2         2       1        0    121   125.5  130
-#> Analysis visits (AVISIT): BASELINE}\if{html}{\out{</div>}}}}
+#> Analysis visits (AVISIT): BASELINE}\if{html}{\out{</div>}}}
+\subsection{Comparing with ADSL}{
+
+Supplying the ADSL shows the subjects without records, and checks that
+every subject of the dataset is in the ADSL.
+
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{adsl <- tribble(
+  ~STUDYID,  ~USUBJID,      ~SAFFL, ~TRT01A,
+  "PILOT01", "01-701-1015", "Y",    "Placebo",
+  "PILOT01", "01-701-1028", "Y",    "Xanomeline High Dose",
+  "PILOT01", "01-701-1034", "N",    NA
+)
+
+summary(advs, adsl = adsl)
+#> ── ADVS: BDS summary ───────────────────────────────────────────────────────────
+#> Subjects (USUBJID): 2
+#> Observations: 6 | Variables: 5
+#> ✔ Structure: one record per USUBJID, PARAMCD, AVISIT
+#> Parameters (3):
+#>   PARAMCD  records  subjects  visits  missing    min  median  max
+#>   DIABP          2         2       1        0     51      65   79
+#>   MAP            2         2       1        0  74.33   85.17   96
+#>   SYSBP          2         2       1        0    121   125.5  130
+#> Analysis visits (AVISIT): BASELINE
+#> Subjects with records out of ADSL: 2 of 3 (66.7\%) | safety population 2 of 2
+#> (100.0\%)
+#> Subjects with records per arm (TRT01A): Placebo: 1 of 1 | Xanomeline High Dose:
+#> 1 of 1 | NA: 0 of 1
+#> ✔ Checks passed: all subjects with records are in ADSL}\if{html}{\out{</div>}}}}
 

@@ -44,18 +44,22 @@ Any other flag, e.g. a sponsor-defined \code{AOCC01FL}, is not checked, as its
 group cannot be told from its name; neither is a flag whose body system or
 dictionary term variable is not in the dataset. Fewer than one \code{"Y"} per
 group is not a defect, as the flags are often restricted to a subset of
-the records, such as the treatment-emergent ones.
+the records, such as the treatment-emergent ones. Records which belong to
+no subject (see \code{\link[=filter_subject_records]{filter_subject_records()}}) are not checked.
 }
 \seealso{
 Other internal:
 \code{\link{admiral-package}},
+\code{\link[=count_incidence]{count_incidence()}},
 \code{\link[=count_multiple_baselines]{count_multiple_baselines()}},
 \code{\link[=count_values]{count_values()}},
 \code{\link[=extract_duplicate_records]{extract_duplicate_records()}},
+\code{\link[=filter_subject_records]{filter_subject_records()}},
 \code{\link[=format.basket_select]{format.basket_select()}},
 \code{\link[=format_counts]{format_counts()}},
 \code{\link[=format_distribution]{format_distribution()}},
 \code{\link[=format_number]{format_number()}},
+\code{\link[=format_percent]{format_percent()}},
 \code{\link[=infer_class_by_structure]{infer_class_by_structure()}},
 \code{\link[=infer_dataset_class]{infer_dataset_class()}},
 \code{\link[=new_admiral_df]{new_admiral_df()}},
@@ -63,12 +67,14 @@ Other internal:
 \code{\link[=print_summary_checks]{print_summary_checks()}},
 \code{\link[=print_summary_structure]{print_summary_structure()}},
 \code{\link[=print_summary_table]{print_summary_table()}},
+\code{\link[=print_vs_adsl]{print_vs_adsl()}},
 \code{\link[=signal_duplicate_records]{signal_duplicate_records()}},
 \code{\link[=summarize_adsl]{summarize_adsl()}},
 \code{\link[=summarize_bds_params]{summarize_bds_params()}},
 \code{\link[=summarize_distribution]{summarize_distribution()}},
 \code{\link[=summarize_structure]{summarize_structure()}},
-\code{\link[=summarize_subject_flow]{summarize_subject_flow()}}
+\code{\link[=summarize_subject_flow]{summarize_subject_flow()}},
+\code{\link[=summarize_vs_adsl]{summarize_vs_adsl()}}
 }
 \concept{internal}
 \keyword{internal}
